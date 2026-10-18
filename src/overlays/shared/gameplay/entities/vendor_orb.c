@@ -2000,6 +2000,9 @@ extern short D_L00_00161D10 __attribute__((sda));
 extern short D_L00_00161D80 __attribute__((sda));
 void FUN_L00_002e4fe8(char *m, float *out_focus_velocity) {
     enum {
+        CAM_ATTACH_PROJECT_HERO_FOCUS_VELOCITY = 4
+    };
+    enum {
         CAM_ATTACH_HOLD_FOCUS_VELOCITY = 8
     };
     float cam[4];
@@ -2130,7 +2133,7 @@ void FUN_L00_002e4fe8(char *m, float *out_focus_velocity) {
         FUN_001f9a28(e, cam, out_focus_velocity);
         lerp_vector(*(float *)&D_L00_00161D80, out_focus_velocity, out_focus_velocity, e + 0x20);
         break;
-    case 4:
+    case CAM_ATTACH_PROJECT_HERO_FOCUS_VELOCITY:
     default:
         x = fast_vec_dot(cam, g + 0x30);
         FUN_001f9a68_c2(out_focus_velocity, g + 0x30, x);
