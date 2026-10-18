@@ -47,15 +47,15 @@ int map_filter_l02_0(void) {
    `arg1 >= 0xC8` is retail's second test of $a1. */
 int map_filter_l01_3(void *arg0, int arg1, float unused1, float unused2, float arg3) __asm__("func_002069D0");
 
-int map_filter_l01_3(void *arg0, int arg1, float unused1, float unused2, float arg3) {
+int map_filter_l01_3(void *unused_input, int arg1, float unused1, float unused2, float reveal_test_value) {
     struct Hero *s = &hero;
     int b = s->state.control_mode == 16;
     int a = s->state.control_mode == 17 || s->state.control_mode == 18 || s->base_condition == 1;
 
-    if (arg1 < 0xC8 && arg3 >= 39.5f && arg3 <= 42.5f && !a) {
+    if (arg1 < 0xC8 && reveal_test_value >= 39.5f && reveal_test_value <= 42.5f && !a) {
         return 1;
     }
-    if (arg1 >= 0xC8 && arg3 >= 87.0f && !b) {
+    if (arg1 >= 0xC8 && reveal_test_value >= 87.0f && !b) {
         return 1;
     }
     return 0;
