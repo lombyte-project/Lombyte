@@ -49,6 +49,7 @@ extern s32 sceSifSetReg();
 extern void _sceSifCmdIntrHdlr();
 /* Initializes the fixed command state once, then submits a warm or cold SIF
  * handshake. The cold path polls register 4 until bit 0x20000 is set. */
+void FlushCache__void() __asm__("FlushCache");
 void sceSifInitCmd(void) {
     struct M2c_var_3_42 *var_3_42;
     struct M2c_var_3_42 *handlers;
@@ -98,7 +99,7 @@ block_3:
     D_00154E80[1].unk4 = &D_00154E58;
     ipval = 0x20;
     EnableInterrupts();
-    FlushCache(0);
+    FlushCache__void(0);
     {
         volatile u32 *ip0 = (volatile u32 *)0x1000E010;
         if (*ip0 & 0x20) {
