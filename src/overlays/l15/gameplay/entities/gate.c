@@ -864,6 +864,9 @@ void construction_arm_update(struct Moby *moby) __asm__("FUN_L15_002c2938");
 void construction_arm_update(struct Moby *moby)
 {
     enum {
+        CONSTRUCTION_ARM_WAIT_TO_TURN = 1
+    };
+    enum {
         CONSTRUCTION_ARM_INITIALIZE = 0,
         CONSTRUCTION_ARM_TURN_TO_TARGET_YAW = 2,
         CONSTRUCTION_ARM_DESTROY = 6
@@ -897,7 +900,7 @@ void construction_arm_update(struct Moby *moby)
         moby->update_dist = 0xff;
         moby->state = 1;
         break;
-    case 1:
+    case CONSTRUCTION_ARM_WAIT_TO_TURN:
         if (fast_dec_timer_s16(&d->timer) && FUN_001f9b48(D_L15_001673C0, &moby->pos) < 42.0f) {
             ready = 1;
             if (moby->group != 0xff) {
