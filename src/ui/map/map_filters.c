@@ -617,10 +617,10 @@ int map_filter_l11_5(void) {
    is ps2eeas's (tools/ps2eeas_nops.py). */
 int map_filter_l12_0(void *arg0, int arg1, float unused1, float unused2, float arg3) __asm__("func_002079D8");
 
-int map_filter_l12_0(void *unused_input, int arg1, float unused1, float unused2, float reveal_test_value) {
+int map_filter_l12_0(void *unused_input, int reveal_test_selector, float unused1, float unused2, float reveal_test_value) {
     int r = 1;
 
-    if (arg1 < 0x141 && !(63.5f <= reveal_test_value)) {
+    if (reveal_test_selector < 0x141 && !(63.5f <= reveal_test_value)) {
         r = 0;
     }
     return r;
