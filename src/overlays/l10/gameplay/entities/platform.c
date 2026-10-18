@@ -1080,7 +1080,7 @@ extern void FUN_L00_001ff660(void *, void *, void *);
 extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void scale_vector_xyz_c(void *, void *, float) __asm__("FUN_001f9a68");
 
-int FUN_L10_002d8170(char *m, char *c, float *a2) {
+int FUN_L10_002d8170(char *m, char *c, float *previous_position) {
     float v0[4] __attribute__((aligned(16)));
     float v10[4] __attribute__((aligned(16)));
     float v20[4] __attribute__((aligned(16)));
@@ -1093,7 +1093,7 @@ int FUN_L10_002d8170(char *m, char *c, float *a2) {
     float one = 1.0f;
     float k;
 
-    *(u128 *)v0 = *(u128 *)a2;
+    *(u128 *)v0 = *(u128 *)previous_position;
     *(u128 *)v10 = 0;
     v10[2] = one;
     if (*(short *)(c + 0x14) == 0) {
