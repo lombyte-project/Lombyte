@@ -1834,7 +1834,7 @@ extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F
 
 void FUN_L10_002d9eb8(char *moby) {
     typedef union { u128 q; float f[4]; } UVec;
-    UVec zero_vector, transformed_offset, v40, translated_position;
+    UVec zero_vector, transformed_offset, debris_vector, translated_position;
     unsigned short id = *(unsigned short *)(moby + 0xB2);
     int n;
     int k;
@@ -1857,14 +1857,14 @@ void FUN_L10_002d9eb8(char *moby) {
         n = 0x1D;
         do {
             k = 0x70F;
-            v40.q = 0;
-            v40.f[0] = -1.0f;
-            v40.f[1] = random_float_between(-3.0f, 3.0f);
-            v40.f[2] = random_float_between(-3.0f, 3.0f);
+            debris_vector.q = 0;
+            debris_vector.f[0] = -1.0f;
+            debris_vector.f[1] = random_float_between(-3.0f, 3.0f);
+            debris_vector.f[2] = random_float_between(-3.0f, 3.0f);
             n--;
-            transformed_offset.q = v40.q;
+            transformed_offset.q = debris_vector.q;
             transform_vector_by_basis(&transformed_offset, &transformed_offset, c0);
-            normalize_vector_xyz(&v40, &transformed_offset, random_float_between(5.0f, 10.0f) * D_0015ED6C);
+            normalize_vector_xyz(&debris_vector, &transformed_offset, random_float_between(5.0f, 10.0f) * D_0015ED6C);
             FUN_L00_001ff290(&translated_position, &transformed_offset, moby + 0x10);
             if (random_integer_below(1) == 0)
                 k = 0x70E;
@@ -1872,7 +1872,7 @@ void FUN_L10_002d9eb8(char *moby) {
             c16 = random_int_between(0x3C, 0x78);
             f20 = random_float_between(2.0f, 3.0f);
             r2 = random_integer_below(4);
-            spawn_debris_chunk(&transformed_offset, &v40, k, f21, c16, f20, 1.0f, 3.0f, r2 == 0);
+            spawn_debris_chunk(&transformed_offset, &debris_vector, k, f21, c16, f20, 1.0f, 3.0f, r2 == 0);
         } while (n >= 0);
         transformed_offset.q = 0;
         transformed_offset.f[0] = 2.8599999f;
