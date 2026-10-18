@@ -309,8 +309,8 @@ extern int D_001A03B8 NOT_SDA;
    c.lt/bc1t; the second arm's `return 0` cross-jumps into the first's. */
 int map_filter_l07_5(void *arg0, int arg1, float unused1, float unused2, float arg3) __asm__("func_00207250");
 
-int map_filter_l07_5(void *unused_input, int arg1, float unused1, float unused2, float reveal_test_value) {
-    if (arg1 < 0x9D) {
+int map_filter_l07_5(void *unused_input, int reveal_test_selector, float unused1, float unused2, float reveal_test_value) {
+    if (reveal_test_selector < 0x9D) {
         if (reveal_test_value < 73.5f || reveal_test_value > 80.0f || D_001A03C0 == 0) {
             return 0;
         }
