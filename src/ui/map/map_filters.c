@@ -68,14 +68,14 @@ extern unsigned char D_0013D396 NOT_SDA;
    return 0 per arm becomes sltu. */
 int map_filter_l01_4(int arg0, float unused1, float unused2, float arg1) __asm__("func_00206A90");
 
-int map_filter_l01_4(int arg0, float unused1, float unused2, float arg1) {
+int map_filter_l01_4(int arg0, float unused1, float unused2, float reveal_test_value) {
     int is16 = D_001413DC[0] == 0x10;
 
     if (arg0 < 0x100) {
         if (D_0013D396 != 0) {
             return 1;
         }
-    } else if (arg1 >= 58.0f && arg1 <= 86.0f && !is16) {
+    } else if (reveal_test_value >= 58.0f && reveal_test_value <= 86.0f && !is16) {
         return 1;
     }
     return 0;
