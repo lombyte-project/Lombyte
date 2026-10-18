@@ -226,7 +226,7 @@ void FUN_L00_00232128(void) {
 }
 extern s16 *D_001415CC[];
 /* Looks a0 up in the -1-terminated pair list at D_001415CC[0]; stores the pair value in *a1. */
-s32 FUN_L00_002321c0(s32 a0, s32 *a1) {
+s32 FUN_L00_002321c0(s32 key, s32 *out_value) {
     s16 *q = D_001415CC[0];
     s16 *p;
     if (q == 0) {
@@ -237,14 +237,14 @@ s32 FUN_L00_002321c0(s32 a0, s32 *a1) {
     }
     p = q;
     do {
-        if (a0 == p[0]) {
-            *a1 = p[1];
+        if (key == p[0]) {
+            *out_value = p[1];
             return 1;
         }
         p += 2;
     } while (p[0] != -1);
 end:
-    *a1 = 0;
+    *out_value = 0;
     return 0;
 }
 /* Ported from rac1-decomp (src/overlays/shared/help_00232560.c: func_L00_00232A78), where it is exact; names translated to the US level program. */
