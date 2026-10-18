@@ -37,7 +37,7 @@ typedef struct {
 
 extern char D_L00_001E8640[];
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
-extern int debug_print_alt() __asm__("FUN_001e93b0");
+extern void debug_print(const char *, ...) __asm__("FUN_001e93b0");
 extern int fptodp(float) __asm__("FUN_00120478");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 
@@ -75,7 +75,7 @@ void FUN_L00_00241788(int *record, int n) {
     } while (!done);
     for (k = 0; k < n; k++) {
         int id = truncate_float_to_s32(entries[k].id);
-        debug_print_alt(D_L00_001E8640, id, fptodp(entries[k].length));
+        debug_print(D_L00_001E8640, id, fptodp(entries[k].length));
     }
 }
 /* Reads the gameplay file of a level, which lists the objects placed in the
@@ -455,7 +455,6 @@ extern int D_L00_00160FCC MACRO_ADDR;
 extern int D_L00_0016C058[];
 extern int D_L00_001AB840[];
 extern int D_L00_001BA4D0[];
-extern int debug_print_alt() __asm__("FUN_001e93b0");
 extern int fast_decompress(void *, void *) __asm__("FUN_L00_0024d8d0");
 extern int FUN_L00_00284d90(int, int);
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
@@ -589,7 +588,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
 
         p += 0x10;
         if (n >= 12) {
-            debug_print_alt(D_L00_001E8658);
+            debug_print(D_L00_001E8658);
             n = 12;
         }
         if (n != 0) {
@@ -1563,13 +1562,13 @@ char *load_level_gameplay(int skip_gameplay_read) {
                 }
             }
             if (flag) {
-                debug_print_alt(D_L00_001E86A8, cnt, k);
+                debug_print(D_L00_001E86A8, cnt, k);
             }
         }
         if (bad1) {
             int i;
 
-            debug_print_alt(D_L00_001E86E0);
+            debug_print(D_L00_001E86E0);
             for (i = 0; i < D_L00_00160F50; i++) {
                 D_L00_00160F4C[i].f3A = 0x7F80;
             }
@@ -1609,7 +1608,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
                     t->f18 = ((w >> 3) << 8) | (1 << (w & 7));
                 }
             }
-            debug_print_alt(D_L00_001E8708, cnt, k);
+            debug_print(D_L00_001E8708, cnt, k);
         } else {
             int i;
 
@@ -1627,7 +1626,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
         TieInst *t;
         int i;
 
-        debug_print_alt(D_L00_001E8740);
+        debug_print(D_L00_001E8740);
         for (m = D_L00_0015FFD8; m != D_L00_0015FFE0; m++) {
             m->f36 = 0x7F80;
         }
@@ -1804,7 +1803,6 @@ extern void unpack_point_records(void *, s32) __asm__("FUN_00202800");
 extern void FUN_L00_0023f120(char *);
 extern void FUN_L00_0023f0d8(char *);
 extern void parse_particle_textures(void *, char *, void *, s32) __asm__("FUN_002026c8");
-extern void printf_1e93b0(const char *, ...) __asm__("FUN_001e93b0");
 extern void fill_transfer_words(void *, s32, s32) __asm__("FUN_001f97e8");
 extern char *FUN_L00_0023fa00(char *, s32 *);
 extern char *FUN_L00_00241940_244110(s32) __asm__("FUN_L00_00241940");
@@ -1981,7 +1979,7 @@ s32 FUN_L00_00244110(s32 full, s32 keep) {
         e = tbl + span->off;
         for (sound_slot_index = 0; sound_slot_index < D_L00_0015F5F0; sound_slot_index++) {
             if (D_L00_0015F5F4[sound_slot_index].sound >= span->count) {
-                printf_1e93b0(D_L00_001E8780);
+                debug_print(D_L00_001E8780);
                 D_L00_0015F5F4[sound_slot_index].sound = -1;
             } else {
                 D_L00_0015F5F4[sound_slot_index].sound = *(u16 *)(e + D_L00_0015F5F4[sound_slot_index].sound * 4);
@@ -2004,7 +2002,7 @@ s32 FUN_L00_00244110(s32 full, s32 keep) {
                 }
             } else {
                 if (span->count != cls->count0D)
-                    printf_1e93b0(D_L00_001E87A0, D_L00_00197A00[ci]);
+                    debug_print(D_L00_001E87A0, D_L00_00197A00[ci]);
                 e = tbl + span->off;
                 for (k = 0; k < D_L00_00197300[ci]->count0D; k++, e += 4) {
                     D_L00_00197300[ci]->f28[k].sound = *(u16 *)e;
@@ -2017,54 +2015,54 @@ s32 FUN_L00_00244110(s32 full, s32 keep) {
     D_L00_00173E00_244110.f1C = FUN_L00_00241940_244110(full);
     if (full) {
         char *top;
-        printf_1e93b0(D_L00_001E87D0);
-        printf_1e93b0(D_L00_001E87E8, KB(0x100000));
+        debug_print(D_L00_001E87D0);
+        debug_print(D_L00_001E87E8, KB(0x100000));
         top = D_L00_002F0CD0;
-        printf_1e93b0(D_L00_001E8800, KB(top - 0x100000));
-        printf_1e93b0(D_L00_001E8818, KB(D_L00_00173E00_244110.f0 - top));
-        printf_1e93b0(D_L00_001E8830, KB(D_L00_00173E00_244110.fC - D_L00_00173E00_244110.f0));
-        printf_1e93b0(D_L00_001E8848, KB(D_L00_00173E00_244110.f10 - D_L00_00173E00_244110.fC));
-        printf_1e93b0(D_L00_001E8860, KB(D_L00_00173E00_244110.f14 - D_L00_00173E00_244110.f10));
+        debug_print(D_L00_001E8800, KB(top - 0x100000));
+        debug_print(D_L00_001E8818, KB(D_L00_00173E00_244110.f0 - top));
+        debug_print(D_L00_001E8830, KB(D_L00_00173E00_244110.fC - D_L00_00173E00_244110.f0));
+        debug_print(D_L00_001E8848, KB(D_L00_00173E00_244110.f10 - D_L00_00173E00_244110.fC));
+        debug_print(D_L00_001E8860, KB(D_L00_00173E00_244110.f14 - D_L00_00173E00_244110.f10));
         if (D_L00_0015F600_244110 != 0)
-            printf_1e93b0(D_L00_001E8878, KB(D_L00_0015F600_244110 - D_L00_00173E00_244110.f14));
+            debug_print(D_L00_001E8878, KB(D_L00_0015F600_244110 - D_L00_00173E00_244110.f14));
         else if (D_L00_0016051C != 0)
-            printf_1e93b0(D_L00_001E8878, KB((char *)D_L00_0016051C - D_L00_00173E00_244110.f14));
+            debug_print(D_L00_001E8878, KB((char *)D_L00_0016051C - D_L00_00173E00_244110.f14));
         else
-            printf_1e93b0(D_L00_001E8890);
+            debug_print(D_L00_001E8890);
         if (D_L00_0015F600_244110 != 0) {
             if (D_L00_0016051C != 0)
-                printf_1e93b0(D_L00_001E88B0, KB(D_L00_0016051C - (s32)D_L00_0015F600_244110));
+                debug_print(D_L00_001E88B0, KB(D_L00_0016051C - (s32)D_L00_0015F600_244110));
             else
-                printf_1e93b0(D_L00_001E88B0, KB(D_L00_00173E40_244110[0] - D_L00_0015F600_244110));
+                debug_print(D_L00_001E88B0, KB(D_L00_00173E40_244110[0] - D_L00_0015F600_244110));
         }
         if (h[4])
-            printf_1e93b0(D_L00_001E88C8, KB(D_L00_00173E40_244110[0] - (char *)D_L00_0016051C));
-        printf_1e93b0(D_L00_001E88E0, KB(D_L00_0015F40C - (s32)D_L00_00173E40_244110[0]));
-        printf_1e93b0(D_L00_001E88F8, KB((D_L00_001B1A80[1] >> 4) - D_L00_0015F40C));
-        printf_1e93b0(D_L00_001E8910, KB((s32)D_L00_0015F420 - (D_L00_001B1A80[1] >> 4)));
-        printf_1e93b0(D_L00_001E8928, KB((char *)D_L00_00197300[0] - D_L00_0015F420));
-        printf_1e93b0(D_L00_001E8940, KB(D_L00_001C5800_244110[0] - (char *)D_L00_00197300[0]));
+            debug_print(D_L00_001E88C8, KB(D_L00_00173E40_244110[0] - (char *)D_L00_0016051C));
+        debug_print(D_L00_001E88E0, KB(D_L00_0015F40C - (s32)D_L00_00173E40_244110[0]));
+        debug_print(D_L00_001E88F8, KB((D_L00_001B1A80[1] >> 4) - D_L00_0015F40C));
+        debug_print(D_L00_001E8910, KB((s32)D_L00_0015F420 - (D_L00_001B1A80[1] >> 4)));
+        debug_print(D_L00_001E8928, KB((char *)D_L00_00197300[0] - D_L00_0015F420));
+        debug_print(D_L00_001E8940, KB(D_L00_001C5800_244110[0] - (char *)D_L00_00197300[0]));
         if (h[0xA])
-            printf_1e93b0(D_L00_001E8958, KB(D_L00_001BC030_244110[0] - D_L00_001C5800_244110[0]));
+            debug_print(D_L00_001E8958, KB(D_L00_001BC030_244110[0] - D_L00_001C5800_244110[0]));
         else
-            printf_1e93b0(D_L00_001E8958, KB(D_L00_00160FC0_244110 - D_L00_001C5800_244110[0]));
+            debug_print(D_L00_001E8958, KB(D_L00_00160FC0_244110 - D_L00_001C5800_244110[0]));
         if (h[0xA])
-            printf_1e93b0(D_L00_001E8970, KB(D_L00_00197300[0]->seqs[0] - D_L00_001BC030_244110[0]));
-        printf_1e93b0(D_L00_001E8988, KB(D_L00_00160FC0_244110 - D_L00_00197300[0]->seqs[0]));
-        printf_1e93b0(D_L00_001E89A0, KB(D_L00_00160494_244110 - D_L00_00160FC0_244110));
-        printf_1e93b0(D_L00_001E89B8, KB(D_L00_0015FFD8_244110 - D_L00_00160494_244110));
-        printf_1e93b0(D_L00_001E89D0, KB(D_L00_0015FFE8 - D_L00_0015FFD8_244110));
-        printf_1e93b0(D_L00_001E89E8, KB(D_L00_00160108 - D_L00_0015FFE8));
-        printf_1e93b0(D_L00_001E8A00, KB(D_L00_0016016C - D_L00_00160108));
-        printf_1e93b0(D_L00_001E8A18, 128.0);
-        printf_1e93b0(D_L00_0015FC80);
-        printf_1e93b0(D_L00_001E8A30, int_to_float((s32)D_L00_0016016C + 0x20000) * (1.0f / 1048576.0f));
-        printf_1e93b0(D_L00_0015FC80);
+            debug_print(D_L00_001E8970, KB(D_L00_00197300[0]->seqs[0] - D_L00_001BC030_244110[0]));
+        debug_print(D_L00_001E8988, KB(D_L00_00160FC0_244110 - D_L00_00197300[0]->seqs[0]));
+        debug_print(D_L00_001E89A0, KB(D_L00_00160494_244110 - D_L00_00160FC0_244110));
+        debug_print(D_L00_001E89B8, KB(D_L00_0015FFD8_244110 - D_L00_00160494_244110));
+        debug_print(D_L00_001E89D0, KB(D_L00_0015FFE8 - D_L00_0015FFD8_244110));
+        debug_print(D_L00_001E89E8, KB(D_L00_00160108 - D_L00_0015FFE8));
+        debug_print(D_L00_001E8A00, KB(D_L00_0016016C - D_L00_00160108));
+        debug_print(D_L00_001E8A18, 128.0);
+        debug_print(D_L00_0015FC80);
+        debug_print(D_L00_001E8A30, int_to_float((s32)D_L00_0016016C + 0x20000) * (1.0f / 1048576.0f));
+        debug_print(D_L00_0015FC80);
         {
             char *lo = D_L00_00173E00_244110.f0 - 0x2D0000;
-            printf_1e93b0(D_L00_001E8A48, int_to_float(D_L00_00173E00_244110.f1C - lo) * (1.0f / 1048576.0f));
+            debug_print(D_L00_001E8A48, int_to_float(D_L00_00173E00_244110.f1C - lo) * (1.0f / 1048576.0f));
         }
-        printf_1e93b0(D_L00_0015FC80);
+        debug_print(D_L00_0015FC80);
     }
     if (keep) {
         FUN_L00_00285008();
