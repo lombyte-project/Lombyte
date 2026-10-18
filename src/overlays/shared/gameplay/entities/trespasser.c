@@ -3184,7 +3184,7 @@ extern void FUN_L00_002c7320_2c7548(float *pos, float *tgt, float *out, float sp
    or along the camera aim (and up to a collision hit) while pad bits 0x5 are held. */
 void FUN_L00_002c7548(struct Moby *moby, CarrierVars *vars, OvlVec4 *grip)
 {
-    Vec_2c7548 v0;
+    Vec_2c7548 throw_origin;
     Mat3_2c7548 basis;
     Mat_2c7548 matrix;
     Vec_2c7548 direction, target, arc, saved, probe;
@@ -3193,7 +3193,7 @@ void FUN_L00_002c7548(struct Moby *moby, CarrierVars *vars, OvlVec4 *grip)
     float horizontal, radius, angle, vertical, slope, distance, root;
     int hit;
     float speed;
-    float *pos = v0;
+    float *pos = throw_origin;
 
     *(u128 *)pos = grip->q;
     setup_matrix_2c7548(basis, camera_2c7548);
