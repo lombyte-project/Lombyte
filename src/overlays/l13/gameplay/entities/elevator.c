@@ -693,6 +693,9 @@ extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
 void FUN_L13_002b4a58(struct Moby *m, char *p) {
+    enum {
+        HIT_REACTION_NONE = 11
+    };
     float *tm = (float *)(p + 0x20);
     char *q;
     int k;
@@ -732,7 +735,7 @@ void FUN_L13_002b4a58(struct Moby *m, char *p) {
         case 8:
         case 9:
         case 10:
-        case 11:
+        case HIT_REACTION_NONE:
             break;
         }
         if (k >= 2) {
