@@ -28,7 +28,11 @@ void draw_scrolling_sky_shells(void) __asm__("FUN_0022abd8");
 
 void draw_scrolling_sky_shells(void) {
     enum {
-        SKY_SHELL_TRIPLE_SCALE_LAYER = 1
+        SKY_SHELL_TRIPLE_SCALE_LAYER = 1,
+        SKY_SHELL_TWO_AND_HALF_SCALE_LAYER = 2,
+        SKY_SHELL_DOUBLE_SCALE_LAYER = 3,
+        SKY_SHELL_ONE_AND_HALF_SCALE_LAYER = 4,
+        SKY_SHELL_ONE_AND_QUARTER_SCALE_LAYER = 5
     };
     f32 rotation_angles[4];
     f32 shell_scale;
@@ -53,22 +57,22 @@ void draw_scrolling_sky_shells(void) {
                 *shell_angle += D_00160400 * 0.55f;
                 shell_scale = 3.0f;
                 break;
-            case 2:
+            case SKY_SHELL_TWO_AND_HALF_SCALE_LAYER:
                 rotation_angles[1] = -0.02f;
                 *shell_angle += D_00160400 * 0.6f;
                 shell_scale = 2.5f;
                 break;
-            case 3:
+            case SKY_SHELL_DOUBLE_SCALE_LAYER:
                 rotation_angles[1] = 0.01f;
                 *shell_angle += D_00160400 * 0.7f;
                 shell_scale = 2.0f;
                 break;
-            case 4:
+            case SKY_SHELL_ONE_AND_HALF_SCALE_LAYER:
                 rotation_angles[1] = -0.01f;
                 *shell_angle += D_00160400 * 0.75f;
                 shell_scale = 1.5f;
                 break;
-            case 5:
+            case SKY_SHELL_ONE_AND_QUARTER_SCALE_LAYER:
                 *shell_angle += D_00160400 * 0.8f;
                 shell_scale = 1.25f;
                 break;
