@@ -1818,6 +1818,11 @@ void attach_manipulator(void *owner, s32 slot_index, void *manip) __asm__("FUN_0
 
 void bombomatic_update(char *m) __asm__("FUN_L07_0030d4d8");
 void bombomatic_update(char *m) {
+    enum {
+        BOMBOMATIC_INITIALIZE = 0,
+        BOMBOMATIC_WAIT_TO_LAUNCH = 1,
+        BOMBOMATIC_LAUNCH_BURST = 2
+    };
     char *d;
     char *hit_info;
     char *t;
@@ -1917,7 +1922,7 @@ eb20:
     trooper_anim_finish(m, d + 0x60);
     get_target_sight(m, target_buffer, 20.0f);
     switch (((unsigned char *)m)[0x20]) {
-    case 0: {
+    case BOMBOMATIC_INITIALIZE: {
             int r1 = scale_game_frames(*(int *)(d + 0xB0));
             int r2;
             int r3;
@@ -1931,7 +1936,7 @@ eb20:
             *(int *)(d + 0xC4) = 0;
         break;
     }
-    case 1: {
+    case BOMBOMATIC_WAIT_TO_LAUNCH: {
         if (*(int *)(d + 0xB4) <= D_L07_0015F5CC) {
             int r9 = scale_game_frames(0xB4);
             *(int *)(d + 0xB4) = D_L07_0015F5CC + r9;
@@ -1942,7 +1947,7 @@ eb20:
         }
         break;
     }
-    case 2: {
+    case BOMBOMATIC_LAUNCH_BURST: {
             int i;
             if (fast_dec_timer_s16(d + 0xB8) != 0) {
                 *(short *)(d + 0xB8) = scale_game_frames(7);
