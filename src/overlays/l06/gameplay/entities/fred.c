@@ -5700,6 +5700,10 @@ extern int D_L06_00162044 __attribute__((sda));
 extern float D_L06_00162050 __attribute__((sda));
 void FUN_L06_002ffcb0(char *moby) {
     enum {
+        WAIT_CAMERA_START_DELAY = 2,
+        BLEND_CAMERA_TO_HERO = 3
+    };
+    enum {
         INITIALIZE_DRAW_SELECTION = 0
     };
     int *data = *(int **)(moby + 0x78);
@@ -5724,7 +5728,7 @@ void FUN_L06_002ffcb0(char *moby) {
             moby[0x20] = 4;
         }
         break;
-    case 2:
+    case WAIT_CAMERA_START_DELAY:
         if (count_down_ffcb0(data + 9)) {
             {
                 int state;
@@ -5769,7 +5773,7 @@ void FUN_L06_002ffcb0(char *moby) {
         if (data[9] < D_L06_00162044)
             D_L06_0015F3FC = 1.0f - normalize_timer_ffcb0(data[9]) / (float)D_L06_00162044;
         break;
-    case 3:
+    case BLEND_CAMERA_TO_HERO:
         if (data[9] < D_L06_00162044) {
             data[9]++;
             D_L06_0015F3FC = 1.0f - normalize_timer_ffcb0(data[9]) / (float)D_L06_00162044;
