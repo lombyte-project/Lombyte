@@ -1167,7 +1167,8 @@ void commando_update(WM *m) {
     enum {
         COMMANDO_INITIALIZE = 0,
         COMMANDO_DIALOGUE_BEFORE_REPOSITION = 1,
-        COMMANDO_DIALOGUE_AFTER_REPOSITION = 2
+        COMMANDO_DIALOGUE_AFTER_REPOSITION = 2,
+        COMMANDO_POST_DIALOGUE = 3
     };
     L16WatchScratch scratch;
     WD8 *d = (WD8 *)m->data;
@@ -1223,7 +1224,7 @@ void commando_update(WM *m) {
             begin_dialogue_camera_transition(m, 2.2f);
         }
         break;
-    case 3:
+    case COMMANDO_POST_DIALOGUE:
         if (D_L08_0015F5C4 != 2) {
             d->b28 = 1;
             if (d->h24 == 3) {
