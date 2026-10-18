@@ -776,8 +776,8 @@ void woodcut_bot_update(WBMoby *m) {
     unsigned char *p;
     float tgt[4];
     float unused[16];
-    float v60[4];
-    float v70[4];
+    float position_snapshot[4];
+    float duplicate_position_snapshot[4];
     float adiff;
     float dist;
     float hd;
@@ -797,8 +797,8 @@ void woodcut_bot_update(WBMoby *m) {
                                               fast_arc_tan(tgt[0] - m->pos[0], tgt[1] - m->pos[1]));
     dist = vector_distance(pos, tgt);
     hd = compute_interpolated_record_value(m);
-    qcopy(v60, pos);
-    qcopy(v70, pos);
+    qcopy(position_snapshot, pos);
+    qcopy(duplicate_position_snapshot, pos);
     fast_dec_timer_s16(&d->t3C4);
 
     if (m->state != 0xB && m->state != 0) {
