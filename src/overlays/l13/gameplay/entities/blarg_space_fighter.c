@@ -420,7 +420,7 @@ extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68
 void FUN_L13_002c25b8(unsigned char *moby) {
     unsigned char *d = *(unsigned char **)(moby + 0x78);
     unsigned char *target;
-    float v0[4], shot_direction_vector[4], z[4];
+    float scratch_vector[4], shot_direction_vector[4], z[4];
     float f;
     float *rot;
     float *pos;
@@ -460,10 +460,10 @@ void FUN_L13_002c25b8(unsigned char *moby) {
         pos = (float *)(moby + 0x10);
         z[0] = 0.0f;
         f = distance_xyz(pos, D_L13_001600EC + index + 0x30);
-        subtract_vector_xyz(v0, D_L13_001600EC + *(int *)(d + 0xD4) * 128 + 0x30, pos);
+        subtract_vector_xyz(scratch_vector, D_L13_001600EC + *(int *)(d + 0xD4) * 128 + 0x30, pos);
         advance_accelerated_scalar(f, frame_time_sq * 10.0f, frame_time_sq * 10.0f, frame_time * 20.0f, z, (float *)(d + 0xF0));
-        normalize_vector_xyz(v0, v0, *(float *)(d + 0xF0));
-        add_vector_xyz(pos, pos, v0);
+        normalize_vector_xyz(scratch_vector, scratch_vector, *(float *)(d + 0xF0));
+        add_vector_xyz(pos, pos, scratch_vector);
         if (f < 0.1f && *(float *)(d + 0xF0) < 0.01f) {
             if (moby[0x53] != 0) blend_moby_animation_c13(moby, 0, 0, 10);
             moby[0xBC] = 0;
@@ -499,9 +499,9 @@ void FUN_L13_002c25b8(unsigned char *moby) {
         case 3:
             if (tick_countdown_32_alt(d + 0xE8)) {
                 *(int *)(d + 0xE8) = scale_game_frames_alt(60);
-                if (*(int *)(d + 0xF4) != 0) moby_point_position(moby, 1, v0);
-                else moby_point_position(moby, 0, v0);
-                subtract_vector_xyz(shot_direction_vector, target + 0x10, v0);
+                if (*(int *)(d + 0xF4) != 0) moby_point_position(moby, 1, scratch_vector);
+                else moby_point_position(moby, 0, scratch_vector);
+                subtract_vector_xyz(shot_direction_vector, target + 0x10, scratch_vector);
                 normalize_vector_xyz(shot_direction_vector, shot_direction_vector, D_L13_0016149C * frame_time);
                 if (*(int *)(d + 0xF4) != 0) {
                     if (*(void **)(d + 0xF8)) {
@@ -556,8 +556,8 @@ void FUN_L13_002c25b8(unsigned char *moby) {
         }
         break;
     case 8:
-        clear_u64_value(v0);
-        func_L00_0025F4A8_alt(moby, v0, moby + 0x10, 0.0f, 0.0f, 10, 3, 16, 4.0f, 2.0f, 9.0f, 1.0f, 2, 15.0f, 1, 1, -1, 0);
+        clear_u64_value(scratch_vector);
+        func_L00_0025F4A8_alt(moby, scratch_vector, moby + 0x10, 0.0f, 0.0f, 10, 3, 16, 4.0f, 2.0f, 9.0f, 1.0f, 2, 15.0f, 1, 1, -1, 0);
         if (*(void **)(d + 0xF8)) mark_moby_for_removal(*(void **)(d + 0xF8));
         if (*(void **)(d + 0xFC)) mark_moby_for_removal(*(void **)(d + 0xFC));
         mark_moby_for_removal(moby);
