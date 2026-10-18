@@ -61,7 +61,7 @@ unsigned char *FUN_L15_002647f0(void *pos, float *p, float *c, int d, int e, int
     unsigned char *r = create_part(0x47);
     if (r != 0) {
         int *q, *q2;
-        float t0[4], t1[4];
+        float p_vector_scratch[4], c_vector_scratch[4];
         qcopy(r + 0x10, pos);
         q = (int *)(r + 0x20);
         q2 = (int *)(r + 0x24);
@@ -75,8 +75,8 @@ unsigned char *FUN_L15_002647f0(void *pos, float *p, float *c, int d, int e, int
         *(short *)(r + 0xA) = f;
         pack_vector_xyz_with_shared_scale(p, q);
         pack_vector_xyz_with_shared_scale(c, q2);
-        load_display_text_resource_entry(t0, q);
-        load_display_text_resource_entry(t1, q2);
+        load_display_text_resource_entry(p_vector_scratch, q);
+        load_display_text_resource_entry(c_vector_scratch, q2);
         q[2] = d;
         q[3] = e;
         *(short *)(q + 4) = f;
