@@ -392,15 +392,15 @@ extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 
 void FUN_L01_0028ba80(float t, void *out, void *p1, void *p2, void *p3, void *p4) {
     char tmp[16];
-    float t2 = t * t;
-    float t3 = t2 * t;
-    float b = t2 * 3.0f;
-    float a = t3 + t3;
-    float c = t2 + t2;
+    float t_squared = t * t;
+    float t_cubed = t_squared * t;
+    float b = t_squared * 3.0f;
+    float a = t_cubed + t_cubed;
+    float c = t_squared + t_squared;
     fast_vec_scale(out, p1, a - b + 1.0f);
-    fast_vec_scale(tmp, p3, t3 - c + t);
+    fast_vec_scale(tmp, p3, t_cubed - c + t);
     fast_vec_add(out, out, tmp);
-    fast_vec_scale(tmp, p4, t3 - t2);
+    fast_vec_scale(tmp, p4, t_cubed - t_squared);
     fast_vec_add(out, out, tmp);
     fast_vec_scale(tmp, p2, b - a);
     fast_vec_add(out, out, tmp);
