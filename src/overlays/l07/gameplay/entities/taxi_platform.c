@@ -1819,7 +1819,7 @@ void attach_manipulator(void *owner, s32 slot_index, void *manip) __asm__("FUN_0
 void bombomatic_update(char *m) __asm__("FUN_L07_0030d4d8");
 void bombomatic_update(char *m) {
     char *d;
-    char *s16;
+    char *hit_info;
     char *t;
     int ia;
     int r;
@@ -1827,13 +1827,13 @@ void bombomatic_update(char *m) {
     float lim;
     float tv;
     float v20[4];
-    float v30[20];
-    float v80[4];
-    float v90[4];
+    float target_buffer[20];
+    float launch_rotation[4];
+    float debris_velocity[4];
     float vA0[4];
     float vB0[16];
     float vF0[4];
-    float v100[4];
+    float candidate_point_position[4];
 
     if (m == 0) {
         return;
@@ -1848,9 +1848,9 @@ void bombomatic_update(char *m) {
     if (d == 0) {
         return;
     }
-    s16 = FUN_L00_0025a420(m, 0x230000, 0);
+    hit_info = FUN_L00_0025a420(m, 0x230000, 0);
     t = d + 0x20;
-    r = fun_00213928(m, s16, t, 0, &ia, 0, 0, 4);
+    r = fun_00213928(m, hit_info, t, 0, &ia, 0, 0, 4);
     switch (r) {
     case 0:
         break;
@@ -1882,17 +1882,17 @@ void bombomatic_update(char *m) {
 
     if (ia >= 2) {
         char *o;
-        if (s16 == 0) {
-            lim = *(float *)(s16 + 0x2C);
+        if (hit_info == 0) {
+            lim = *(float *)(hit_info + 0x2C);
         } else {
-            o = *(char **)(s16 + 0x20);
+            o = *(char **)(hit_info + 0x20);
             if (o == 0) {
-                lim = *(float *)(s16 + 0x2C);
+                lim = *(float *)(hit_info + 0x2C);
             } else {
                 if (*(short *)(o + 0xA6) == 0x372) {
                     goto eb20;
                 }
-                lim = *(float *)(s16 + 0x2C);
+                lim = *(float *)(hit_info + 0x2C);
             }
         }
         tv = *(float *)t;
@@ -1915,7 +1915,7 @@ void bombomatic_update(char *m) {
 eb20:
     ((unsigned char *)m)[0xA4] = 0xFF;
     trooper_anim_finish(m, d + 0x60);
-    get_target_sight(m, v30, 20.0f);
+    get_target_sight(m, target_buffer, 20.0f);
     switch (((unsigned char *)m)[0x20]) {
     case 0: {
             int r1 = scale_game_frames(*(int *)(d + 0xB0));
@@ -1954,8 +1954,8 @@ eb20:
                     }
                 }
                 *(int *)(d + 0xC4) ^= 1;
-                if (vector_distance_xy_alt(m + 0x10, v30) < 20.0f) {
-                    *(float *)(d + 0xBC) = fast_arc_tan_c(v30[0] - *(float *)(m + 0x10), v30[1] - *(float *)(m + 0x14));
+                if (vector_distance_xy_alt(m + 0x10, target_buffer) < 20.0f) {
+                    *(float *)(d + 0xBC) = fast_arc_tan_c(target_buffer[0] - *(float *)(m + 0x10), target_buffer[1] - *(float *)(m + 0x14));
                 }
                 v20[0] = random_float_between_c(3.0f, 11.0f);
                 v20[1] = random_float_between_c(-2.0f, 2.0f);
@@ -1967,26 +1967,26 @@ eb20:
                     for (i = 1; i < 4; i++) {
                         float f;
                         float g;
-                        FUN_L00_0024f7c8(m, i, v100);
-                        f = fast_arc_tan_c(v100[0] - *(float *)(m + 0x10), v100[1] - *(float *)(m + 0x14));
+                        FUN_L00_0024f7c8(m, i, candidate_point_position);
+                        f = fast_arc_tan_c(candidate_point_position[0] - *(float *)(m + 0x10), candidate_point_position[1] - *(float *)(m + 0x14));
                         g = fast_subtract_rotations(*(float *)(d + 0xBC), D_0015ED6C_gp * 17.80235863f);
                         f = fast_difference_between_rotations_c(f, g);
                         if (f < best) {
-                            qcopy(vF0, v100);
+                            qcopy(vF0, candidate_point_position);
                             best = f;
                         }
                     }
                     qcopy(vA0, vF0);
                 }
-                qzero(v80);
-                v80[2] = *(float *)(d + 0xBC);
-                euler_rotation_matrix(vB0, v80);
+                qzero(launch_rotation);
+                launch_rotation[2] = *(float *)(d + 0xBC);
+                euler_rotation_matrix(vB0, launch_rotation);
                 transform_vector(v20, v20, vB0);
-                fast_vec_normalize_c(v90, v20, D_0015ED6C_gp * 7.0f);
+                fast_vec_normalize_c(debris_velocity, v20, D_0015ED6C_gp * 7.0f);
                 add_vector_xyz(v20, v20, m + 0x10);
-                v90[2] = FUN_L00_0025abf0(vA0, v20, 0, D_0015ED6C_gp * 7.0f, -(D_0015ED70 * 9.8f));
-                add_vector_xyz(vA0, vA0, v90);
-                FUN_L07_0030ba90_c(vA0, v90, (int)m, *(short *)(d + 0xBA));
+                debris_velocity[2] = FUN_L00_0025abf0(vA0, v20, 0, D_0015ED6C_gp * 7.0f, -(D_0015ED70 * 9.8f));
+                add_vector_xyz(vA0, vA0, debris_velocity);
+                FUN_L07_0030ba90_c(vA0, debris_velocity, (int)m, *(short *)(d + 0xBA));
                 *(short *)(d + 0xBA) = *(short *)(d + 0xBA) + 1;
             }
         eeE4:
