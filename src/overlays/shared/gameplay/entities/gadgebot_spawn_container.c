@@ -2417,6 +2417,9 @@ extern float fast_normalize_angle(f32) __asm__("FUN_001fa610");
 extern Moby *D_L06_0015FFD8;
 
 int FUN_L06_002f2c28(char *ctx, char *ow, char *moby, int flag, int *out) {
+    enum {
+        MOBY_CLASS_RELOCATION_TRIGGER_WITH_SOUND = 0x515
+    };
     float candidate_position[4];
     float vB[4];
     float vA[4];
@@ -2437,7 +2440,7 @@ int FUN_L06_002f2c28(char *ctx, char *ow, char *moby, int flag, int *out) {
     switch (*(short *)(moby + 0xA6)) {
     case 0x15F:
     case 0x3B1:
-    case 0x515:
+    case MOBY_CLASS_RELOCATION_TRIGGER_WITH_SOUND:
         if (!(vector_distance_xy_alt(ctx + 0x10, candidate_position) < 1.0f)) return 0;
         st = *(char **)(moby + 0x78);
         if (*(int *)st < 0) return 0;
