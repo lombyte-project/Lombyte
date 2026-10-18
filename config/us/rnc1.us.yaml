@@ -1069,7 +1069,7 @@ segments:
           - [0xf7c38, c, ui/text/font_print_wrapped]
           - [0xf7f50, c, ui/text/font_print_wrapped_small]
           - [0xf7ff0, textbin, text_gap_001f7070_after_fun_001f6fd0]
-          - [0xf8010, c, assembly/textbin/ui/text/font_print_window]
+          - [0xf8010, c, ui/text/font_print_window]
           - [0xf8500, c, ui/text/font_print_window_regular]
           - [0xf856c, textbin, text_gap_001f75ec_before_fun_001f75f0]
           - [0xf8570, c, ui/text/font_print_window_small]

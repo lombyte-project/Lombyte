@@ -1,11 +1,4 @@
 #include "types.h"
-#include "asm.h"
-
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/expected/asm/assembly/textbin/ui/text/font_print_window/FUN_001f7090.s",
-            FUN_001f7090);
-#else
-#include "types.h"
 #include "rnc/ui/text/text_region.h"
 
 typedef struct TextRegion FontWindow;
@@ -23,7 +16,7 @@ extern s32 GlobalStateFlag __asm__("D_0015F49C");
 #include "rnc/rendering/screen.h"
 extern void vu1_set_scissor(s32, s32, s32, s32) __asm__("func_00233A40");
 extern s32 measure_text_width(u8 *, s32, struct Glyph *) __asm__("func_001F6200");
-extern void font_print(s32, s32, u64, u8 *, s32, s64, struct Glyph *) __asm__("func_001F62B0");
+extern void font_print(s32, s32, u64, u8 *, s32, s64, struct Glyph *) __asm__("FUN_001f62b0");
 extern void process_bgm_display_text_event(s32, u8 *, s32, s64, struct Glyph *, f32, f32,
                                            f32) __asm__("func_001F6638");
 
@@ -149,7 +142,11 @@ layout:
     draw_y = draw_window->anchor_y;
     draw_window->rendered_height = line_count * draw_window->line_advance;
     if (draw_window->flags & TEXT_REGION_CENTER_VERTICALLY) {
-        draw_y -= (line_count * draw_window->line_advance) >> 1;
+        /* Fakematch: the loop level raises draw_y's allocation weight so it gets
+         * retail's saved register. */
+        do {
+            draw_y -= (line_count * draw_window->line_advance) >> 1;
+        } while (0);
     }
     for (line_index = 0; line_index < line_count;
          line_index++, draw_y += draw_window->line_advance) {
@@ -195,4 +192,3 @@ layout:
 }
 
 extern __typeof__(font_print_window) func_001F7090 __attribute__((alias("FUN_001f7090")));
-#endif /* NON_MATCHING */
