@@ -55,11 +55,11 @@ char *FUN_L13_003058a8(struct Moby *src, short cls) {
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void FUN_L00_00250df8(void *);
 
-void FUN_L13_00305988(struct Moby *moby, char *pos, int arg2, float arg3) {
+void FUN_L13_00305988(struct Moby *moby, char *pos, int arg2, float max_travel_distance) {
     char *d = (char *)moby->pvars;
     char *s = *(char **)(d + 0x20);
     char *mp;
-    *(float *)(d + 0x28) = arg3;
+    *(float *)(d + 0x28) = max_travel_distance;
     qcopy(&moby->rot, s + 0x40);
     mp = &moby->pos;
     *(OvlQuad *)&moby->rot_row0 = *(OvlQuad *)(s + 0xC0);
