@@ -1993,6 +1993,10 @@ extern int memcard_save_data(int, int) __asm__("FUN_0020b178");
 
 void FUN_L13_0030b628(struct Moby *moby) {
     enum {
+        WAIT_INITIAL_SCENE = 2,
+        START_FOLLOWUP_SCENE = 9
+    };
+    enum {
         START_INITIAL_SCENE = 1,
         CHECK_CLIP_VOLUME_FOR_SCENE = 4
     };
@@ -2010,7 +2014,7 @@ void FUN_L13_0030b628(struct Moby *moby) {
         }
         moby->state = 3;
         break;
-    case 2:
+    case WAIT_INITIAL_SCENE:
         if (D_L13_0015F5C4 != 2) moby->state = 3;
         break;
     case 3:
@@ -2106,7 +2110,7 @@ after_state_4:
             FUN_L00_00299460(14);
         }
         break;
-    case 9:
+    case START_FOLLOWUP_SCENE:
         if (D_L13_0015F5C4 != 2) {
             start_scene(3);
             moby->state = 10;
