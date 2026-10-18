@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/rendering/sky_shell.h"
 
 struct LevelSkyEffectData {
     u8 pad_0[4];
@@ -43,7 +44,6 @@ extern f32 fast_add_rotations(f32, f32) __asm__("func_001FA580");
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern f32 random_angle_radians() __asm__("func_00213308");
-extern void sky_draw_shell(s32) __asm__("func_0022B690");
 extern void sky_sprite_proc() __asm__("func_0022BBA0");
 extern void vu1_add_g_sregister(s32, u64) __asm__("func_00233980");
 extern s32 rand() __asm__("FUN_001160d8");

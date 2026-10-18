@@ -1,6 +1,7 @@
 /* Level 00 moby classes: clank_cutscene_trigger. */
 /* Mostly per-level sky drawing; also holds the per-level moby hooks and a door moby update. */
 #include "types.h"
+#include "rnc/rendering/sky_shell.h"
 #include "rnc/gameplay/hero.h"
 #include "rnc/globals.h"
 #include "asm.h"
@@ -222,7 +223,6 @@ extern void sky_sprite_proc(void) __asm__("FUN_0022bba0");
 extern void FUN_L00_00288ec0(int, int);
 extern void FUN_L00_00289108(void);
 extern void fun_001fa070(void *, void *) __asm__("FUN_001fa070");
-void sky_draw_shell(s32 arg0) __asm__("FUN_0022b690");
 void vu1_add_g_sregister(s32 a0, s64 a1) __asm__("FUN_00233980");
 
 void FUN_L00_00289330(void) {
