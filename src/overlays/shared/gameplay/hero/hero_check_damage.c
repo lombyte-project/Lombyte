@@ -2103,7 +2103,8 @@ void FUN_L00_00210748(void) {
     struct Hero *hero_state = &hero;
     int i = 0;
     do {
-        struct Hero *slot_hero = (struct Hero *)((char *)&hero + i * sizeof(struct HeroItemSlot));
+        /* Fakematch: subtracting the negated offset gives retail's mtlo/madd address. */
+        struct Hero *slot_hero = (struct Hero *)((char *)&hero - -(i * sizeof(struct HeroItemSlot)));
         struct Moby *moby = slot_hero->items[0].moby;
         if (moby != 0) {
             switch (slot_hero->items[0].state) {
