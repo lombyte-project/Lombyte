@@ -1785,6 +1785,10 @@ s32 scale_game_frames_2db8f8(s32) __asm__("FUN_001f96f8");
 void blend_moby_animation_2db8f8(void *, s32, s32, s32) __asm__("FUN_00212f90");
 f32 vector_distance_2db8f8(void *, void *) __asm__("FUN_001f9b80");
 s32 FUN_L00_002db8f8(u8 *moby, u8 *position, u8 *target) {
+    enum {
+        SUCK_DISPATCH_BEING_PULLED_IN = 2,
+        SUCK_DISPATCH_STORED = 3
+    };
     u8 *record = FUN_L00_002db890_002db8f8(moby);
     s16 state;
     if (record == 0)
@@ -1819,9 +1823,9 @@ s32 FUN_L00_002db8f8(u8 *moby, u8 *position, u8 *target) {
         if (!(1.0f <= *(f32 *)(record + 0x6C)))
             return 1;
         return 2;
-    case 2:
+    case SUCK_DISPATCH_BEING_PULLED_IN:
         break;
-    case 3:
+    case SUCK_DISPATCH_STORED:
         return 3;
     case 4:
     case 5:
