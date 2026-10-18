@@ -1834,7 +1834,7 @@ segments:
           - [0x1269e4, textbin, text_gap_00225a64_before_fun_00225a68]
           - [0x1269e8, c, rendering/entities/draw_moby_entries_from_object]
           - [0x126a38, c, ui/menus/fun_00225ab8]
-          - [0x126a40, c, assembly/textbin/rendering/buffers/initialize_graphics_buffer_descriptors]
+          - [0x126a40, c, rendering/buffers/initialize_graphics_buffer_descriptors]
           - [0x126b94, textbin, text_gap_00225c14_before_fun_00225c18]
           - [0x126b98, c, audio/streaming/select_next_stream_buffer]
           - [0x126c54, textbin, text_gap_00225cd4_before_fun_00225cd8]
