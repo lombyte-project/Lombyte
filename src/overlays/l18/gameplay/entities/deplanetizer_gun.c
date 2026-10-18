@@ -788,14 +788,18 @@ extern void update_entity_matrix(char *a, void *b, void *c, void *d) __asm__("FU
 extern char *func_0020D348_m(int) __asm__("FUN_0020c4f8");
 
 void FUN_L18_002fa728(char *moby) {
+    enum {
+        INITIALIZE_TRANSFORM_HISTORY = 0,
+        UPDATE_TRANSFORM_FROM_HISTORY = 1
+    };
     char *data = *(char **)(moby + 0x78);
     char tmp[16];
     char *child;
     switch (*(unsigned char *)(moby + 0x20)) {
-    case 0:
+    case INITIALIZE_TRANSFORM_HISTORY:
         moby[0x20] = 1;
         break;
-    case 1:
+    case UPDATE_TRANSFORM_FROM_HISTORY:
         fast_vec_sub(tmp, moby + 0x10, data + 0x60);
         update_entity_matrix(data + 0x20, tmp, data + 0x70, moby + 0x40);
         break;
