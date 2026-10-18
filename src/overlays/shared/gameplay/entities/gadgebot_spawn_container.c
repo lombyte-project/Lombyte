@@ -866,13 +866,13 @@ extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
 
 extern float D_L06_00161C00 __attribute__((sda));
-void FUN_L06_002e9998(char *m, float *a1, float *a2) {
+void FUN_L06_002e9998(char *m, float *reference_axis, float *facing_direction) {
     float d;
     float A[4], B[4], C[4], D[4], E[4], F[4], G[4], H[4];
-    fast_vec_normalize(C, a1, 1.0f);
-    d = fast_vec_dot(C, a2);
+    fast_vec_normalize(C, reference_axis, 1.0f);
+    d = fast_vec_dot(C, facing_direction);
     fast_vec_normalize(E, C, d);
-    fast_vec_sub(D, a2, E);
+    fast_vec_sub(D, facing_direction, E);
     fast_vec_normalize(D, D, 1.0f);
     qcopy(H, C);
     qcopy(F, D);
