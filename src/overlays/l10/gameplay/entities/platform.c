@@ -942,6 +942,10 @@ extern OvlQuad D_L10_00167240;
 extern struct Moby *D_001413D0_d7b80 __asm__("D_001413D0") __attribute__((section(".data")));
 
 void FUN_L10_002d7b80(struct Moby *moby) {
+    enum {
+        HEIGHT_MODE_APPROACH_FIXED_HEIGHT = 1,
+        HEIGHT_MODE_FOLLOW_COLLISION_HEIGHT = 2
+    };
     char *data = (char *)moby->pvars;
     float old[4] __attribute__((aligned(16)));
     float found[20] __attribute__((aligned(16)));
@@ -957,10 +961,10 @@ void FUN_L10_002d7b80(struct Moby *moby) {
     switch (*(short *)(data + 0x12)) {
     case 0:
         break;
-    case 1:
+    case HEIGHT_MODE_APPROACH_FIXED_HEIGHT:
         FUN_L10_002d7b18(moby, *(float *)(data + 0x1c));
         break;
-    case 2:
+    case HEIGHT_MODE_FOLLOW_COLLISION_HEIGHT:
         qcopy(check, &moby->pos);
         qcopy(raised, &moby->pos);
         check[2] += 0.1f;
