@@ -418,6 +418,12 @@ extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 
 void FUN_L13_002c25b8(unsigned char *moby) {
+    enum {
+        UPDATE_INITIALIZE = 0,
+        MOVE_TO_TABLE_POINT = 6,
+        EMIT_EFFECT_AND_REMOVE = 8,
+        FIRE_ALTERNATING_SHOTS = 3
+    };
     unsigned char *d = *(unsigned char **)(moby + 0x78);
     unsigned char *target;
     float scratch_vector[4], shot_direction_vector[4], z[4];
@@ -428,7 +434,7 @@ void FUN_L13_002c25b8(unsigned char *moby) {
     FUN_L13_002c2d30(moby);
     target = *(unsigned char **)(d + 0xB0);
     switch (moby[0x20]) {
-    case 0:
+    case UPDATE_INITIALIZE:
         qcopy(d + 0xC0, moby + 0x10);
         *(unsigned short *)(moby + 0x34) |= 0x5000;
         *(float *)(d + 0x20) = 4.0f;
@@ -455,7 +461,7 @@ void FUN_L13_002c25b8(unsigned char *moby) {
         moby[0xBC] = 0;
         moby[0x20] = 6;
         break;
-    case 6:
+    case MOVE_TO_TABLE_POINT:
         index = *(int *)(d + 0xD4) * 128;
         pos = (float *)(moby + 0x10);
         z[0] = 0.0f;
@@ -496,7 +502,7 @@ void FUN_L13_002c25b8(unsigned char *moby) {
             moby[0xBC] = 3;
             if (moby[0x53] != 3) blend_moby_animation_c13(moby, 3, 0, 2);
             break;
-        case 3:
+        case FIRE_ALTERNATING_SHOTS:
             if (tick_countdown_32_alt(d + 0xE8)) {
                 *(int *)(d + 0xE8) = scale_game_frames_alt(60);
                 if (*(int *)(d + 0xF4) != 0) moby_point_position(moby, 1, scratch_vector);
@@ -555,7 +561,7 @@ void FUN_L13_002c25b8(unsigned char *moby) {
             break;
         }
         break;
-    case 8:
+    case EMIT_EFFECT_AND_REMOVE:
         clear_u64_value(scratch_vector);
         func_L00_0025F4A8_alt(moby, scratch_vector, moby + 0x10, 0.0f, 0.0f, 10, 3, 16, 4.0f, 2.0f, 9.0f, 1.0f, 2, 15.0f, 1, 1, -1, 0);
         if (*(void **)(d + 0xF8)) mark_moby_for_removal(*(void **)(d + 0xF8));
