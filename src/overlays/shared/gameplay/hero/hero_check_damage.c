@@ -3156,7 +3156,7 @@ extern CollisionHit HH __asm__("D_L00_00173E40") __attribute__((section(".data")
 #define HF(o) (*(f32 *)(D_L00_00173E40 + (o)))
 
 void FUN_L00_002127b8(void) {
-    V v0, v10, v20, v30, v40, v50, v60;
+    V collision_ray_end, ground_ray_start, v20, side_ray_start, v40, v50, v60;
     f32 f;
     s32 r;
     s32 i;
@@ -3187,8 +3187,8 @@ void FUN_L00_002127b8(void) {
     if (hero.state.control_mode == 2) {
         g = hero.unk234 * 2.9f;
     }
-    hero_get_collision_ray_endpoints((Vec4_002126b8 *)&v10, (Vec4_002126b8 *)&v0, k, g, -48.0f);
-    if (collision_line(&v10, &v0, 2, hero.moby, 0) == 0) {
+    hero_get_collision_ray_endpoints((Vec4_002126b8 *)&ground_ray_start, (Vec4_002126b8 *)&collision_ray_end, k, g, -48.0f);
+    if (collision_line(&ground_ray_start, &collision_ray_end, 2, hero.moby, 0) == 0) {
         goto tail;
     }
     r = coll_sound_class();
@@ -3202,7 +3202,7 @@ void FUN_L00_002127b8(void) {
         if (hero.motion.pos.f[2] < hero.water_surface_z && hero.unk2F8 <= 0) {
             hero.unk2F8 = 1;
         }
-        if (collision_line(&v10, &v0, 0x24, hero.moby, 0) == 0) {
+        if (collision_line(&ground_ray_start, &collision_ray_end, 0x24, hero.moby, 0) == 0) {
             goto d1;
         }
         r = coll_sound_class();
@@ -3213,15 +3213,15 @@ void FUN_L00_002127b8(void) {
     }
     if (hero.ground_type == 0xD) {
         hero.water_surface_z = D_L00_00173E68;
-        v10.f[2] = D_L00_00173E68 - 0.01f;
-        if (collision_line(&v10, &v0, 4, hero.moby, 0) == 0) {
+        ground_ray_start.f[2] = D_L00_00173E68 - 0.01f;
+        if (collision_line(&ground_ray_start, &collision_ray_end, 4, hero.moby, 0) == 0) {
             goto d1;
         }
     }
     if (hero.ground_type == 3) {
         hero.unk2F4 = D_L00_00173E68;
-        v10.f[2] = D_L00_00173E68 - 0.01f;
-        if (collision_line(&v10, &v0, 4, hero.moby, 0) == 0) {
+        ground_ray_start.f[2] = D_L00_00173E68 - 0.01f;
+        if (collision_line(&ground_ray_start, &collision_ray_end, 4, hero.moby, 0) == 0) {
             goto d1;
         }
     }
@@ -3313,9 +3313,9 @@ d1:
         if (i == 1) {
             a = -a;
         }
-        FUN_L00_002335c8(&v30, 0.2f, a, 0.45f);
+        FUN_L00_002335c8(&side_ray_start, 0.2f, a, 0.45f);
         FUN_L00_002335c8(&v40, 0.2f, a, -0.45f);
-        if (collision_line(&v30, &v0, 0x22, hero.moby, 0)) {
+        if (collision_line(&side_ray_start, &collision_ray_end, 0x22, hero.moby, 0)) {
             f = HH.point.f[2] - hero.ground_z.f;
             hero.unk2C0.f[i] = f;
             if (0.4f < FUN_001f99c0(f)) {
