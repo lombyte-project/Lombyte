@@ -1165,6 +1165,9 @@ extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_002
 void commando_update(WM *m) __asm__("FUN_L08_00302ce8");
 void commando_update(WM *m) {
     enum {
+        COMMANDO_DIALOGUE_BEFORE_REPOSITION = 1
+    };
+    enum {
         COMMANDO_INITIALIZE = 0
     };
     L16WatchScratch scratch;
@@ -1201,7 +1204,7 @@ void commando_update(WM *m) {
         }
         initialize_npc_dialogue(m, (char *)d + 0x20);
         break;
-    case 1:
+    case COMMANDO_DIALOGUE_BEFORE_REPOSITION:
         if (update_npc_dialogue(m, (char *)d + 0x20)) {
             char *b = D_L08_001600EC;
             int j = d->joint;
