@@ -1847,11 +1847,11 @@ extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 void FUN_L00_002d3a10(unsigned char *m) {
     unsigned char *o;
     Vx tp;
-    Vx t2;
-    Vx t3;
-    unsigned char *v21;
-    void *v20;
-    void *v19;
+    Vx base_position;
+    Vx position_offset;
+    unsigned char *moby_position;
+    void *base_position_ptr;
+    void *position_offset_ptr;
     int c0;
     int c1 = 0;
     int c2 = 0;
@@ -1905,48 +1905,48 @@ void FUN_L00_002d3a10(unsigned char *m) {
         unsigned char *s = m + 0x10;
         qcopy(&tp, s);
         tp.w = *(float *)(o + 0x60);
-        v21 = s;
+        moby_position = s;
         s = (unsigned char *)&tp;
         r = fast_bsphere_check(s, 255.0f);
     }
     if (r != -1) {
         if (*(unsigned char **)(o + 0x20) != 0) {
-            qcopy(&t2, *(unsigned char **)(o + 0x20) + 0x10);
+            qcopy(&base_position, *(unsigned char **)(o + 0x20) + 0x10);
         } else {
-            qcopy(&t2, o + 0x10);
+            qcopy(&base_position, o + 0x10);
         }
-        v20 = &t2;
+        base_position_ptr = &base_position;
         if (!(*(int *)(o + 0x4C) & 0x800000)) {
             if (*(int *)(o + 0x4C) & 0x100000) {
                 if (*(int *)(o + 0x4C) & 0x200000) {
-                    t3.x = random_float_between_c(-*(float *)(o + 0x0), *(float *)(o + 0x0));
-                    t3.y = random_float_between_c(-*(float *)(o + 0x4), *(float *)(o + 0x4));
-                    t3.z = random_float_between_c(-*(float *)(o + 0x8), *(float *)(o + 0x8));
-                    v19 = &t3;
+                    position_offset.x = random_float_between_c(-*(float *)(o + 0x0), *(float *)(o + 0x0));
+                    position_offset.y = random_float_between_c(-*(float *)(o + 0x4), *(float *)(o + 0x4));
+                    position_offset.z = random_float_between_c(-*(float *)(o + 0x8), *(float *)(o + 0x8));
+                    position_offset_ptr = &position_offset;
                 } else {
                     int c = *(int *)(o + 0xC);
-                    void *p = &t3;
+                    void *p = &position_offset;
                     *(int *)(o + 0xC) = 0;
                     fast_vec_scale_c(p, o, random_float_between_c(*(float *)(o + 0xC), 1.0f));
                     *(int *)(o + 0xC) = c;
-                    v19 = p;
+                    position_offset_ptr = p;
                 }
             } else {
                 int c = *(int *)(o + 0xC);
-                void *p = &t3;
+                void *p = &position_offset;
                 *(int *)(o + 0xC) = 0;
                 qcopy(p, o);
                 *(int *)(o + 0xC) = c;
-                v19 = p;
+                position_offset_ptr = p;
             }
             if (*(int *)(o + 0x4C) & 0x400000) {
                 if (*(unsigned char **)(o + 0x20) != 0) {
-                    transform_vector_by_basis(v19, v19, *(unsigned char **)(o + 0x20) + 0xC0);
+                    transform_vector_by_basis(position_offset_ptr, position_offset_ptr, *(unsigned char **)(o + 0x20) + 0xC0);
                 }
             }
-            add_vector_xyz(v21, v20, v19);
+            add_vector_xyz(moby_position, base_position_ptr, position_offset_ptr);
         } else {
-            qcopy(v21, &t2);
+            qcopy(moby_position, &base_position);
         }
         if (*(unsigned short *)(o + 0x72) != 0) {
             if (fast_dec_timer_s16(o + 0x7A)) {
@@ -2136,10 +2136,10 @@ void FUN_L00_002d3a10(unsigned char *m) {
         r = *(int *)(o + 0x50);
         if (r == -1) {
             float kk = convert_integer_to_float_c(o[0x24]) / 100.0f;
-            *(int *)(o + 0x50) = FUN_L00_0023e738((float *)v21, *(float *)(o + 0x60), kk, *(float *)(o + 0x54), *(float *)(o + 0x58), *(float *)(o + 0x5C));
+            *(int *)(o + 0x50) = FUN_L00_0023e738((float *)moby_position, *(float *)(o + 0x60), kk, *(float *)(o + 0x54), *(float *)(o + 0x58), *(float *)(o + 0x5C));
         } else {
             unsigned char *e = D_L00_001802C0 + (r << 5);
-            qcopy(e + 0x10, v21);
+            qcopy(e + 0x10, moby_position);
             *(float *)(e + 0x1C) = *(float *)(o + 0x60);
             *(float *)(e + 0x0) = *(float *)(o + 0x54);
             *(float *)(e + 0x4) = *(float *)(o + 0x58);
