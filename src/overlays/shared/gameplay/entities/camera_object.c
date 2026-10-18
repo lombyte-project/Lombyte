@@ -1339,8 +1339,8 @@ struct Moby *FUN_L00_002a7438(struct Moby *src, void *pos, void *vel, int flags,
 {
     enum {
         BOLT_VALUE_ONE = 1,
-        BOLT_VALUE_TWENTY = 20,
         BOLT_VALUE_FIVE = 5,
+        BOLT_VALUE_TWENTY = 20,
         BOLT_VALUE_FIFTY = 50
     };
     f32 dir[4] __attribute__((aligned(16)));
