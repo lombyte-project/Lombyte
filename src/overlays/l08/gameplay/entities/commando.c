@@ -1164,6 +1164,9 @@ extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_002
 /* Watcher update, same routine as batalia_deserter_update with two more states and the joint pose copy. */
 void commando_update(WM *m) __asm__("FUN_L08_00302ce8");
 void commando_update(WM *m) {
+    enum {
+        COMMANDO_INITIALIZE = 0
+    };
     L16WatchScratch scratch;
     WD8 *d = (WD8 *)m->data;
     float rate;
@@ -1177,7 +1180,7 @@ void commando_update(WM *m) {
         }
     }
     switch (m->state) {
-    case 0:
+    case COMMANDO_INITIALIZE:
         ((unsigned char *)m)[0x30] = 0xFF;
         if (m->animation != 1)
             blend_moby_animation(m, 1, 0, scale_game_frames(10));
