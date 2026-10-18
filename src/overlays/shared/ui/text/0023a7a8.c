@@ -34,7 +34,7 @@ int FUN_L00_0023a7a8(char *m) {
     char *q = m + 0x70;
     int x4;
     int y = 0x12;
-    int x, a, alpha, w, s16, tex, c1, wd, v74;
+    int x, a, alpha, w, text_color, tex, c1, wd, v74;
     float f21, f20;
     if (pal_mode)
         y = 0xA;
@@ -73,15 +73,15 @@ int FUN_L00_0023a7a8(char *m) {
         v74 = *(int *)(m + 0x74);
         sprintf_alt(buf, D_L00_0015F7C8, v74, *(int *)(m + 8));
         if (v74 != 0)
-            s16 = fast_tween_color(*(int *)&D_L00_0015F92C, *(int *)&D_L00_0015F930, f20);
+            text_color = fast_tween_color(*(int *)&D_L00_0015F92C, *(int *)&D_L00_0015F930, f20);
         else
-            s16 = fast_tween_color(*(int *)&D_L00_0015F934, *(int *)&D_L00_0015F938, f20);
+            text_color = fast_tween_color(*(int *)&D_L00_0015F934, *(int *)&D_L00_0015F938, f20);
         c1 = fast_tween_color(0, 0x80000000, f20);
         {
             int tx = x + *(int *)&D_L00_0015F93C + w;
             font_print_right(tx + 1, y + *(int *)&D_L00_0015F940 + 1, c1, buf, -1);
         }
-        font_print_right(x + *(int *)&D_L00_0015F93C + w, y + *(int *)&D_L00_0015F940, s16, buf,
+        font_print_right(x + *(int *)&D_L00_0015F93C + w, y + *(int *)&D_L00_0015F940, text_color, buf,
                          -1);
     }
     return *(int *)(m + 0x58);
