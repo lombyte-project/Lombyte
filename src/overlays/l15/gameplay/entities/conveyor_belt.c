@@ -253,7 +253,7 @@ void poison_vessel_update(Moby_2E9358 *moby) __asm__("FUN_L15_002e7f68");
 void poison_vessel_update(Moby_2E9358 *moby) {
     Vec_2E9358 previous_position;
     Vec_2E9358 s30;
-    Vec_2E9358 s40;
+    Vec_2E9358 temporary_vector;
     Data_2E9358 *data = moby->data;
     char *p20 = 0;
     unsigned char state;
@@ -277,7 +277,7 @@ void poison_vessel_update(Moby_2E9358 *moby) {
     switch (state) {
     case 0:
         data->f8 = data->f8 - D_L15_00161FBC * frame_time_sq;
-        func_L00_001FF240_2E9358(&s40, &moby->pos, data);
+        func_L00_001FF240_2E9358(&temporary_vector, &moby->pos, data);
         if (collision_line(&previous_position, &moby->pos, 0x10, moby, 0)) {
             if (((Tb_2E9358 *)D_L15_001744C0_2E9358)->f18 != 0 && FUN_L00_002603d0(((Tb_2E9358 *)D_L15_001744C0_2E9358)->f18) != 0) {
                 data->target = (Moby_2E9358 *)((Tb_2E9358 *)D_L15_001744C0_2E9358)->f18;
@@ -304,8 +304,8 @@ void poison_vessel_update(Moby_2E9358 *moby) {
                 p20 = FUN_L00_002603d0(D_L15_001744D8_2E9358);
                 if (p20 != 0) {
                     func_L00_00261478_2E9358(moby, data->target, &moby->pos, &moby->v40, &moby->pos, &moby->v40);
-                    subtract_vector_xyz(&s40, &moby->pos, &previous_position);
-                    *(OvlQuad *)data = s40.q;
+                    subtract_vector_xyz(&temporary_vector, &moby->pos, &previous_position);
+                    *(OvlQuad *)data = temporary_vector.q;
                 }
             }
         }
@@ -321,8 +321,8 @@ void poison_vessel_update(Moby_2E9358 *moby) {
         func_L00_0025F4A8_2E9358(moby, data, 0, 0.0f, 0.0f, 3, 3, 5, 2.0f, 1.0f, 4.0f, 1.0f, -1, 7.0f, 0, 1, -1, 0);
         trooper_play_sound(0, 0, moby, 0x79);
         ret = probe_world_sphere(&moby->pos, 0x10, moby, 0, 2.0f);
-        s40.q = moby->pos;
-        mine_blast_mobys(moby, &s40, D_L15_00178500, ret, 0, 0x830001, 2, 1, 1.0f, 1.0f, 1.0f);
+        temporary_vector.q = moby->pos;
+        mine_blast_mobys(moby, &temporary_vector, D_L15_00178500, ret, 0, 0x830001, 2, 1, 1.0f, 1.0f, 1.0f);
         mark_moby_for_removal(moby);
     }
 }
