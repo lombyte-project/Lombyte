@@ -1073,7 +1073,7 @@ extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern unsigned char *D_L00_001B2180[];
 extern unsigned char D_0013F3D0_c[] __asm__("D_0013F3D0");
 
-unsigned char *FUN_L00_002738e8(void *pos, void *vel, float scale, int life, float f1, int col, float f2, int a4, int big) {
+unsigned char *FUN_L00_002738e8(void *pos, void *vel, float scale, int life, float f1, int col, float f2, int secondary_color, int big) {
     unsigned char *r = p27fe00_alloc(0x40);
     unsigned char *u;
     if (r != 0) {
@@ -1094,7 +1094,7 @@ unsigned char *FUN_L00_002738e8(void *pos, void *vel, float scale, int life, flo
         qcopy(u, vel);
         *(float *)(u + 0x10) = f1;
         *(float *)(u + 0x14) = f2;
-        *(int *)(u + 0x18) = a4;
+        *(int *)(u + 0x18) = secondary_color;
     }
     return r;
 }
