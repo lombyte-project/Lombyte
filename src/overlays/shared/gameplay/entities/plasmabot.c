@@ -300,6 +300,9 @@ void attach_manipulator(void *owner, s32 slot_index, void *manip) __asm__("FUN_0
 
 void FUN_L14_002b17d8(char *moby);
 void FUN_L14_002b17d8(char *moby) {
+    enum {
+        PLASMABOT_INITIALIZE = 0
+    };
     char *data;
     char *owner;
     int state;
@@ -346,7 +349,7 @@ void FUN_L14_002b17d8(char *moby) {
         *(unsigned short *)(moby + 0x34) &= 0xFFFE;
     }
     switch (((unsigned char *)moby)[0x20]) {
-    case 0: {
+    case PLASMABOT_INITIALIZE: {
         if (((unsigned char *)data)[0x24A] != 0) {
             if (*(int *)(data + 0x240) == -1) {
                 DebugPrint(D_L14_001FBB60, *(short *)(moby + 0xB2));
