@@ -66,7 +66,7 @@ extern void FUN_L00_00269958(void *, void *, int, int, int, int, int, int);
 extern void add_vector_xyz(void *, void *, void *);
 extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 
-void FUN_L00_0025c398(void *a0, void *a1, void *a2) {
+void FUN_L00_0025c398(void *a0, void *base_vector, void *a2) {
     V4 buf[20];
     float tmp[4];
     int n, i;
@@ -82,7 +82,7 @@ void FUN_L00_0025c398(void *a0, void *a1, void *a2) {
         int a, b;
 
         build_spherical_offset(tmp, frame_time * 1.8f, y, z);
-        add_vector_xyz(tmp, tmp, a1);
+        add_vector_xyz(tmp, tmp, base_vector);
         tmp[2] += frame_time * 0.9f;
         if (flag[0x10]) {
             a = scale_game_frames(random_int_between(20, 35));
