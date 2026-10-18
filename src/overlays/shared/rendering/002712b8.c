@@ -553,7 +553,7 @@ extern u8 *D_L00_001B215C __attribute__((section(".data")));
 P_2725d8 *FUN_L00_002678b8_c2(s32) __asm__("FUN_L00_002678b8");
 s32 FUN_001fa6d0(f32);
 void add_vector_xyz_cf(u8 *, u8 *, void *) __asm__("FUN_L00_0024f7c8");
-P_2725d8 *FUN_L00_002725d8(u8 *owner, u8 *a1, s32 color, s32 a3, f32 a4, f32 a5) {
+P_2725d8 *FUN_L00_002725d8(u8 *owner, u8 *attachment_point_selector, s32 color, s32 a3, f32 a4, f32 a5) {
     P_2725d8 *p = FUN_L00_002678b8_c2(0x37);
     /* Fakematch: the dead update gives a0 and a3 retail's saved registers. */
     a3++;
@@ -566,14 +566,14 @@ P_2725d8 *FUN_L00_002725d8(u8 *owner, u8 *a1, s32 color, s32 a3, f32 a4, f32 a5)
         p->b3 = 0x48;
         p->b1 = 3;
         p->b2 = *D_L00_001B215C;
-        add_vector_xyz_cf(owner, a1, p->v10);
+        add_vector_xyz_cf(owner, attachment_point_selector, p->v10);
         qcopy(p->v20, p->v10);
         p->unk2C = a5;
         *(f32 *)((u8 *)p + 0x1C) = a4;
         s = &p->s;
         p->s.o = owner;
         s->k = *(s16 *)(owner + 0xA6);
-        s->b = a1;
+        s->b = attachment_point_selector;
         s->f = a4;
     }
     return p;
