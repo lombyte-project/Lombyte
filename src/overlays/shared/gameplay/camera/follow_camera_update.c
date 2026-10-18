@@ -1346,7 +1346,7 @@ void FUN_L00_002ebbd8(void *arg) {
     int lvl;
     char *p = *(char **)(m + 0x70) + 0x40;
     float f;
-    char *t, *q, *r, *w, *s19, *src;
+    char *t, *q, *r, *w, *camera_data, *src;
     char *gg, *gg0, *h;
     *(int *)(p + 0x40) = 0;
     f = 1.5f;
@@ -1380,8 +1380,8 @@ void FUN_L00_002ebbd8(void *arg) {
     *(float *)(t + 8) = 0.2f;
     *(int *)(t + 0xC) = 0;
     *(int *)(q + 0x30) = 0;
-    s19 = *(char **)(m + 0x70);
-    w = s19 + 0xB8;
+    camera_data = *(char **)(m + 0x70);
+    w = camera_data + 0xB8;
     *(int *)(w + 4) = 0;
     gg0 = (char *)&D_L00_00166C80;
     src = *(char **)(gg0 + 0x184);
@@ -1396,14 +1396,14 @@ void FUN_L00_002ebbd8(void *arg) {
         *(float *)(p + 0x30) = fast_cos(*(float *)(g + 0x9AC));
         *(float *)(p + 0x34) = fast_sin(*(float *)(g + 0x9AC));
         *(int *)(p + 0x38) = 0;
-        *(float *)(s19 + 0xB8) = *(float *)(g + 0x9AC);
+        *(float *)(camera_data + 0xB8) = *(float *)(g + 0x9AC);
         *(int *)(w + 8) = *(int *)(g + 0x994);
     } else {
         subtract_vector_xyz_c(p + 0x30, *(char **)(g + 0x964) + 0x10, m + 0x30);
         *(int *)(p + 0x38) = 0;
         *(int *)(p + 0x3C) = 0;
         fast_vec_normalize(p + 0x30, p + 0x30, 1.0f);
-        *(float *)(s19 + 0xB8) = fast_arc_tan_c(*(float *)(p + 0x30), *(float *)(p + 0x34));
+        *(float *)(camera_data + 0xB8) = fast_arc_tan_c(*(float *)(p + 0x30), *(float *)(p + 0x34));
         *(int *)(w + 8) = *(int *)(g + 0x964);
     }
     gg = (char *)&D_L00_00166C80;
