@@ -434,8 +434,8 @@ int map_filter_l08_3(int frame, float unused0, float unused1, float value) {
    and after the compare, are ps2eeas's (tools/ps2eeas_nops.py). */
 int map_filter_l08_4(int arg0, float unused1, float unused2, float arg1) __asm__("func_002075F8");
 
-int map_filter_l08_4(int arg0, float unused1, float unused2, float reveal_test_value) {
-    if (arg0 >= 0xE0) {
+int map_filter_l08_4(int reveal_test_selector, float unused1, float unused2, float reveal_test_value) {
+    if (reveal_test_selector >= 0xE0) {
         return 0;
     }
     return (reveal_test_value <= 38.0f) ? 1 : 0;
