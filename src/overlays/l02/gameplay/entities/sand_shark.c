@@ -2916,6 +2916,9 @@ void blend_moby_animation(MobyAnim *moby, int new_seq, int frame_index, int blen
 extern short D_L02_00161C68 __attribute__((sda));
 void crane_update(struct Moby *moby) __asm__("FUN_L02_002df1a8");
 void crane_update(struct Moby *moby) {
+    enum {
+        CRANE_ANIM_WAIT_FOR_RANDOM_TRANSITION = 2
+    };
     int *d = (int *)moby->pvars;
     moby->anim_speed = *(float *)&D_L02_00161C68;
     switch (moby->prev_seq) {
@@ -2950,7 +2953,7 @@ void crane_update(struct Moby *moby) {
             d[0] = FUN_0022da68(0, 4, (int)moby);
         }
         break;
-    case 2:
+    case CRANE_ANIM_WAIT_FOR_RANDOM_TRANSITION:
         if (FUN_L00_001fefc8(&moby->command)) {
             if (random_integer_below(0xFF) & 1) {
                 if (moby->prev_seq != 3) {
