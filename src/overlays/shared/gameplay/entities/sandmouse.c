@@ -20,7 +20,7 @@ extern s32 FUN_L00_0023e738(void *, f32, f32, f32, f32, f32);
 extern void FUN_L00_0023e838(s32);
 extern void mark_moby_for_removal_b618(void *) __asm__("FUN_0020c828");
 extern char D_L01_00167240_b618[] __asm__("D_L01_00167240");
-extern char *D_L01_0015FFD8_b618 __asm__("D_L01_0015FFD8") __attribute__((sda));
+extern char *D_L01_0015FFD8_b618 __asm__("D_L01_0015FFD8");
 
 extern char D_L01_00180740[];
 void FUN_L01_0030b618(u8 *m) {
@@ -781,13 +781,13 @@ extern char *D_L01_00167280 __attribute__((section(".data")));
 extern char D_0013F350[] __attribute__((section(".data")));
 extern char D_L01_0020BA10[] __attribute__((section(".data")));
 extern char D_L01_0020BA30[] __attribute__((section(".data")));
-extern f32 D_0015ED60 __attribute__((section(".data")));
+extern f32 D_0015ED60;
 extern f32 D_L01_001DEB4C __attribute__((section(".data")));
 extern f32 fast_arc_tan(f32, f32) __asm__("func_001F9E90");
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern f32 vector_distance_df40(void *, s32 *) __asm__("FUN_001f9b80");
-extern float D_0015ED6C __attribute__((section(".data")));
-extern float D_0015ED70 __attribute__((section(".data")));
+extern float D_0015ED6C;
+extern float D_0015ED70;
 extern float fast_add_rotations(float, float) __asm__("func_001FA580");
 extern float fast_vec_dist(void *, void *);
 extern int D_0015ED84 __attribute__((section(".data")));
@@ -812,7 +812,7 @@ extern short D_L01_001620B4 __attribute__((sda));
 extern short D_L01_001620B8 __attribute__((sda));
 extern short D_L01_001620BC __attribute__((sda));
 extern short D_L01_001620C0 __attribute__((sda));
-extern unsigned char D_0013F3D0[] __attribute__((section(".data")));
+extern unsigned char D_0013D4C5 __attribute__((section(".data")));
 extern unsigned char D_0014C190[] __attribute__((section(".data")));
 extern unsigned char D_0015EDB0[] __attribute__((section(".data")));
 extern void *FUN_L00_00272060(void *, int, f32, f32, int, int, int, void *, f32);
@@ -915,7 +915,7 @@ void FUN_L01_0030df40(Moby *m) {
         m->draw_dist = 0;
         break;
     case 1:
-        if (D_0013F3D0[3] != 0) {
+        if (D_0013D4C5 != 0) {
             char *h;
             {
                 char *h1 = D_0013F350;
@@ -957,7 +957,7 @@ void FUN_L01_0030df40(Moby *m) {
                     && (*(Moby **)(h + 0x1130))->state != 0xFE && (*(Moby **)(h + 0x1130))->state != 0xFD) {
                     (*(Moby **)(h + 0x1130))->state = 1;
                 }
-                D_0013E550_df40 = m;
+                D_L01_001DEB38_df40.owner = m;
                 FUN_L01_0023cf98(0x1F, 0);
                 FUN_L00_002323b8((float)scale_game_frames(6), 0, 0);
                 if (p->link != -1) {
