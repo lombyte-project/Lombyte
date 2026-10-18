@@ -1039,11 +1039,11 @@ extern void refresh_moby_spatial_bounds_from_basis(void *) __asm__("FUN_0020e098
 
 /* Composes the 0xC0 matrix of a with the one built from c into b+0xC0 and flags b for update. */
 void FUN_L00_002d9fd0(char *a, char *b, void *c) {
-    V t0, t1, t2;
-    euler_rotation_matrix(&t0, c);
-    copy_matrix_rotation(&t1, a + 0xC0);
-    multiply_matrix(&t2, &t1, &t0);
-    copy_matrix3x4(b + 0xC0, &t2);
+    V euler_rotation, source_rotation, composed_rotation;
+    euler_rotation_matrix(&euler_rotation, c);
+    copy_matrix_rotation(&source_rotation, a + 0xC0);
+    multiply_matrix(&composed_rotation, &source_rotation, &euler_rotation);
+    copy_matrix3x4(b + 0xC0, &composed_rotation);
     *(unsigned short *)(b + 0x34) |= 4;
     refresh_moby_spatial_bounds_from_basis(b);
 }
