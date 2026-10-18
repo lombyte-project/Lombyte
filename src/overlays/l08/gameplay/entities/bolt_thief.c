@@ -62,7 +62,7 @@ extern void FUN_L00_00250df8(void *);
 
 void *FUN_L08_002e1c98(struct Moby *parent, int oClass, int joint, int pjoint) {
     unsigned char *m = func_0020D348_m(oClass);
-    float v0[4], v10[4];
+    float child_joint_position[4], parent_joint_position[4];
     if (m != 0) {
         m[0x30] = 0xFF;
         *(short *)(m + 0x32) = 0xFF;
@@ -70,9 +70,9 @@ void *FUN_L08_002e1c98(struct Moby *parent, int oClass, int joint, int pjoint) {
         *(unsigned short *)(m + 0x34) |= 0x4000;
         *(long *)(m + 0x38) = *(long *)(*(char **)(D_0013E533 + 0x2E9D) + 0x38);
         qcopy(m + 0x40, &parent->rot);
-        moby_point_position(m, joint, v0);
-        moby_point_position(parent, pjoint, v10);
-        fast_vec_sub(m + 0x10, v10, v0);
+        moby_point_position(m, joint, child_joint_position);
+        moby_point_position(parent, pjoint, parent_joint_position);
+        fast_vec_sub(m + 0x10, parent_joint_position, child_joint_position);
         FUN_L00_00250df8(m);
     }
     return m;
