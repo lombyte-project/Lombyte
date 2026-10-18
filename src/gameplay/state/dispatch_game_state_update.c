@@ -10,6 +10,9 @@ void dispatch_game_state_update(void) __asm__("FUN_00230ee8");
 
 extern s32 draw_enable_mask_gp __asm__("D_0015F434") __attribute__((sda));
 void dispatch_game_state_update(void) {
+    enum {
+        LEVEL_FRAME_RENDER = 4
+    };
     s32 state;
 
     if (space_load_in_progress != 0) {
@@ -29,7 +32,7 @@ void dispatch_game_state_update(void) {
         draw_enable_mask_gp = 0x7F;
         draw_debug_profiler();
         return;
-    case 4:
+    case LEVEL_FRAME_RENDER:
         render_level_frame();
         break;
     }
