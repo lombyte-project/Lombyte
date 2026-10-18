@@ -2091,65 +2091,62 @@ void hero_switch_item(int i) {
         }
     }
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00210748.s", FUN_L00_00210748);
-#else
+/* Per-frame update of the hero's seven item slots. */
+/* Ported from rac1-decomp (src/overlays/shared/help_0020CDF0.c: func_L00_00210E00), where it is exact; names translated to the US level program. */
 #include "rnc/gameplay/entities/moby.h"
 extern void FUN_L00_00205168(void *);
-extern void set_moby_sequence(void *, int, int, int) __asm__("FUN_L00_00257880");
 extern s32 D_L00_0015F3F8;
 
+/* Through hero_lui the slot address is built as in retail (lui, then the index); through hero it is not. */
+#define ITEM_SLOT(i) ((struct Hero *)((char *)&hero_lui + (i) * sizeof(struct HeroItemSlot)))
+
 void FUN_L00_00210748(void) {
-    struct Hero *hero_state = &hero;
-    int i = 0;
-    do {
-        /* Fakematch: subtracting the negated offset gives retail's mtlo/madd address. */
-        struct Hero *slot_hero = (struct Hero *)((char *)&hero - -(i * sizeof(struct HeroItemSlot)));
-        struct Moby *moby = slot_hero->items[0].moby;
+    int i;
+    int k;
+    struct Moby *moby;
+
+    for (i = 0; i < 7; i++) {
+        moby = ITEM_SLOT(i)->items[0].moby;
         if (moby != 0) {
-            switch (slot_hero->items[0].state) {
-            case 2: {
-                slot_hero->items[0].unk20++;
+            switch (ITEM_SLOT(i)->items[0].state) {
+            case 2:
+                ITEM_SLOT(i)->items[0].unk20++;
                 hero_switch_item(i);
                 if (i == 0) {
-                    int p = 0;
-                    int end = 3;
-                    struct HeroEase *e;
-                    do {
-                        if (hero_state->unk18F0[p].unkA0 != -1) {
-                            hero_state->unk18F0[p].kind = 5;
-                            e = &hero_state->unk18F0[p];
-                            FUN_L00_00205168(e);
+                    for (k = 0; k < 3; k++) {
+                        if (hero_lui.unk18F0[k].unkA0 != -1) {
+                            hero_lui.unk18F0[k].kind = 5;
+                            FUN_L00_00205168(&hero_lui.unk18F0[k]);
                         }
-                        p++;
-                    } while (p < end);
+                    }
                 }
-                if ((moby->anim_flags & 2) && moby->prev_seq == 0)
-                    set_moby_sequence(moby, 1, 0, 2);
+                if ((moby->anim_flags & 2) && moby->prev_seq == 0) {
+                    blend_moby_animation(moby, 1, 0, 2);
+                }
+                break;
+            case 3:
+                ITEM_SLOT(i)->items[0].unk1B++;
+                if ((moby->anim_flags & 2) || i == 1 || i == 0) {
+                    FUN_L00_0020fca8(i, D_L00_0015F3F8 + 2);
+                }
                 break;
             }
-            case 3: {
-                slot_hero->items[0].unk1B++;
-                if ((moby->anim_flags & 2) || i == 1 || i == 0)
-                    FUN_L00_0020fca8(i, D_L00_0015F3F8 + 2);
+            if (moby != 0 && moby->state != 0xFE && moby->state != 0xFD) {
+                if (i != 6 && moby->update != 0) {
+                    moby->update(moby);
+                }
             }
-            }
-            if (moby != 0 && (u32)moby->state != 0xfe && (u32)moby->state != 0xfd &&
-                i != 6 && moby->update)
-                moby->update(moby);
         } else {
             hero_switch_item(i);
         }
-        i++;
-    } while (i < 7);
+    }
 }
-#endif /* NON_MATCHING */
 s32 FUN_L00_0020d568_u() __asm__("FUN_L00_0020d568");
 void spawn_hero_item_mobies() __asm__("FUN_L00_0020ea80");
 void FUN_L00_0020f580();
 void FUN_L00_00234808();
 void FUN_L00_002080b0();
-void FUN_L00_00210748();
+void FUN_L00_00210748_u() __asm__("FUN_L00_00210748");
 void FUN_L00_00210928(void) {
     if (hero.unk308 == 1 || (u32)(hero.state.control_mode - 0x15) < 2 ||
         FUN_L00_0020d568_u()) {
@@ -2167,7 +2164,7 @@ void FUN_L00_00210928(void) {
     FUN_L00_0020f580();
     FUN_L00_00234808();
     FUN_L00_002080b0();
-    FUN_L00_00210748();
+    FUN_L00_00210748_u();
 }
 void FUN_L00_0020e698_210a08(void) __asm__("FUN_L00_0020e698");
 void FUN_L00_00210748_210a08(void) __asm__("FUN_L00_00210748");

@@ -27,67 +27,57 @@ void FUN_L00_00241728(s32 *h) {
         }
     }
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00241788.s", FUN_L00_00241788);
-#else
+/* Debug print: lists the records (0x20 bytes: start offset, id) by length, longest first. */
+/* Ported from rac1-decomp (src/overlays/shared/loaders_00240398.c: func_L00_00242120), where it is exact; names translated to the US level program. */
+
 typedef struct {
     f32 id;
     f32 length;
 } P_241788;
 
-extern f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
-extern s32 FUN_001fa6d0(f32);
-extern s32 fptodp(f32) __asm__("FUN_00120478");
-extern void debug_print(void *, s32, s32) __asm__("FUN_001e93b0");
-extern u8 D_L00_001E8640[];
+extern char D_L00_001E8640[];
+extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
+extern int debug_print_alt() __asm__("FUN_001e93b0");
+extern int fptodp(float) __asm__("FUN_00120478");
+extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 
-void FUN_L00_00241788(u8 *src, s32 n) {
+void FUN_L00_00241788(int *record, int n) {
     P_241788 entries[512];
-    s32 i;
-    s32 done;
-    s32 k;
-    s32 j;
+    int i, j, k, done;
 
-    for (i = 0; i < n; i++) {
-        entries[i].id = (f32)*(s32 *)(src + 4);
-        if (*(s32 *)(src + 0) == 0) {
-            entries[i].length = 0.0f;
+    for (i = 0; i < n; i++, record += 8) {
+        entries[i].id = (float)record[1];
+        if (record[0] == 0) {
+            entries[i].length = 0;
         } else {
-            s32 next_start = *(s32 *)(src + 0x20);
-
-            if (next_start == 0) {
-                next_start = *(s32 *)(src + 0x40);
+            if (record[8] != 0) {
+                entries[i].length = convert_integer_to_float(record[8] - record[0]) * 0.0009765625f;
+            } else {
+                entries[i].length = convert_integer_to_float(record[0x10] - record[0]) * 0.0009765625f;
             }
-            entries[i].length = convert_integer_to_float(next_start - *(s32 *)(src + 0)) * 0.0009765625f;
             entries[i + 1].id = -1.0f;
-            entries[i + 1].length = 0.0f;
+            entries[i + 1].length = 0;
         }
-        src += 0x20;
     }
     do {
         done = 1;
         for (j = 0; j < n; j++) {
             if (entries[j].length < entries[j + 1].length) {
-                f32 id = entries[j].id;
-                f32 length = entries[j].length;
-
+                float id = entries[j].id;
+                float length = entries[j].length;
+                done = 0;
                 entries[j].id = entries[j + 1].id;
                 entries[j].length = entries[j + 1].length;
                 entries[j + 1].id = id;
                 entries[j + 1].length = length;
-                done = 0;
             }
         }
-    } while (done == 0);
+    } while (!done);
     for (k = 0; k < n; k++) {
-        s32 entry_id = FUN_001fa6d0(entries[k].id);
-        s32 entry_length = fptodp(entries[k].length);
-
-        debug_print(D_L00_001E8640, entry_id, entry_length);
+        int id = truncate_float_to_s32(entries[k].id);
+        debug_print_alt(D_L00_001E8640, id, fptodp(entries[k].length));
     }
-
 }
-#endif
 /* Reads the gameplay file of a level, which lists the objects placed in the
  * world. The file header holds offsets to lists. Each list starts with the
  * number of entries, then 12 bytes of padding, then the entries:
