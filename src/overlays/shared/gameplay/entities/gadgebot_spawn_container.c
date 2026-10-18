@@ -2420,7 +2420,8 @@ int FUN_L06_002f2c28(char *ctx, char *ow, char *moby, int flag, int *out) {
     enum {
         MOBY_CLASS_RELOCATION_TRIGGER = 0x15F,
         MOBY_CLASS_OFFSET_RELOCATION_TRIGGER = 0x3B1,
-        MOBY_CLASS_RELOCATION_TRIGGER_WITH_SOUND = 0x515
+        MOBY_CLASS_RELOCATION_TRIGGER_WITH_SOUND = 0x515,
+        MOBY_CLASS_GADGEBOT_ABSORPTION_TARGET = 0x516
     };
     float candidate_position[4];
     float vB[4];
@@ -2532,7 +2533,7 @@ int FUN_L06_002f2c28(char *ctx, char *ow, char *moby, int flag, int *out) {
         }
         return 0;
     case 0x400:
-    case 0x516:
+    case MOBY_CLASS_GADGEBOT_ABSORPTION_TARGET:
         if (flag != 0) return 0;
         if (*(unsigned char *)(moby + 0x20) == 2) return 0;
         if (!(vector_distance_xy_alt(ctx + 0x10, candidate_position) < 1.0f)) return 0;
