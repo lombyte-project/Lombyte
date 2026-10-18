@@ -1034,13 +1034,13 @@ extern float fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
 extern void fast_vec_sub(float *, float *, float *) __asm__("FUN_001f9a28");
 
 /* For arg1 1: true when (D_L00_00173E60 - arg2) points against the object's +0x130 vector. */
-int FUN_L00_002e79c8(void *arg0, int arg1, float *arg2) {
+int FUN_L00_002e79c8(void *camera_moby, int step_index, float *sample_position) {
     V diff;
     char *ptr2;
 
-    if (arg1 == 1) {
-        ptr2 = *(char **)((char *)arg0 + 0x70) + 0x130;
-        fast_vec_sub(diff, D_L00_00173E60, arg2);
+    if (step_index == 1) {
+        ptr2 = *(char **)((char *)camera_moby + 0x70) + 0x130;
+        fast_vec_sub(diff, D_L00_00173E60, sample_position);
         if (fast_vec_dot(diff, ptr2) < 0.0f) {
             return 1;
         }
