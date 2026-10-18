@@ -1396,7 +1396,7 @@ void gadgebot_update(GbMoby *moby) {
     float v50[4];
     float v60[4];
     float v70[4];
-    float v80[4];
+    float attack_probe_near_position[4];
     float ang;
     float step;
     GbVars *d = moby->vars;
@@ -1793,10 +1793,10 @@ void gadgebot_update(GbMoby *moby) {
                     v70[2] += 0.4f;
                     v70[0] += fast_cos(moby->rot) * 0.4f;
                     v70[1] += fast_sin(moby->rot) * 0.4f;
-                    qcopy(v80, v70);
+                    qcopy(attack_probe_near_position, v70);
                     v70[0] += fast_cos(moby->rot) * 0.3f;
                     v70[1] += fast_sin(moby->rot) * 0.3f;
-                    if (collision_line(v70, v80, 0, (int)moby, 0) != 0 &&
+                    if (collision_line(v70, attack_probe_near_position, 0, (int)moby, 0) != 0 &&
                         D_L06_001745D8 == d->target) {
                         moby->sub = 2;
                     }
@@ -1972,19 +1972,19 @@ void gadgebot_update(GbMoby *moby) {
         return;
     }
     if (moby->state != 1) {
-        float s10;
-        float s24;
+        float saved_control_f10;
+        float saved_control_f24;
 
         qcopy(v10, moby->pos);
         v10[2] += D_L06_00161CE0 + 0.02f;
         qcopy(v40, moby->pos);
-        s10 = d->ctl.unk10;
-        s24 = d->ctl.unk24;
+        saved_control_f10 = d->ctl.unk10;
+        saved_control_f24 = d->ctl.unk24;
         d->ctl.unk10 = 0.0f;
         d->ctl.unk24 = 0.0f;
         FUN_L00_00258b50(moby, &d->ctl, moby->pos, out, 1.0f);
-        d->ctl.unk10 = s10;
-        d->ctl.unk24 = s24;
+        d->ctl.unk10 = saved_control_f10;
+        d->ctl.unk24 = saved_control_f24;
         moby->pos[2] = v40[2];
         if (FUN_001f9b48(v40, moby->pos) > 0.005f) {
             float max;
