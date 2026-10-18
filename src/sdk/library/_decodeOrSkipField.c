@@ -7,7 +7,7 @@ extern s32 _nextHeader();
 extern s32 _sceMpegFlush();
 extern s32 _updateRefImage();
 extern void _outputFrame();
-s32 _decodeOrSkipField(struct sceMpeg *decoder, s32 arg1, s32 arg2) {
+s32 _decodeOrSkipField(struct sceMpeg *decoder, s32 skip_comparison_value, s32 skip_threshold) {
     struct MpegDecoder *p;
     s32 should_decode;
     unsigned int new_var2;
@@ -20,7 +20,7 @@ s32 _decodeOrSkipField(struct sceMpeg *decoder, s32 arg1, s32 arg2) {
     should_decode = 0;
     p = decoder->sys;
     p->second_field = 0;
-    if ((arg2 == (-1)) || (arg1 < arg2)) {
+    if ((skip_threshold == (-1)) || (skip_comparison_value < skip_threshold)) {
         should_decode = 1;
     };
     if (p->unk8 == 0) {
