@@ -2081,6 +2081,10 @@ extern char D_0013F350_c2[] __asm__("D_0013F350");
 
 void magnet_elevator_update(struct Moby *moby) __asm__("FUN_L17_002ee2b0");
 void magnet_elevator_update(struct Moby *moby) {
+    enum {
+        MAGNET_ELEVATOR_STATE_INITIALIZE = 0,
+        MAGNET_ELEVATOR_STATE_BLEND_CAMERA = 1
+    };
     char *state = P(moby, 0x78);
     float delta[4];
     float rot[4];
@@ -2104,7 +2108,7 @@ void magnet_elevator_update(struct Moby *moby) {
         (*(float *)((char *)(moby) + (0x44))) = normalize_angle(f * 3.1415927f);
     }
     switch (B(moby, 0x20)) {
-    case 0:
+    case MAGNET_ELEVATOR_STATE_INITIALIZE:
         (*(float *)((char *)(state) + (0x78))) = random_angle_radians();
         W(state, 0x6C) = -1;
         if (W(state, 0x80) == -1 || **(int **)(D_L17_001B0DB0 + W(state, 0x80) * 4) != 0xB) {
@@ -2113,7 +2117,7 @@ void magnet_elevator_update(struct Moby *moby) {
         }
         B(moby, 0x20) = 6;
         break;
-    case 1: {
+    case MAGNET_ELEVATOR_STATE_BLEND_CAMERA: {
         float old = (*(float *)((char *)(state) + (0x70)));
         advance_accelerated_scalar((float *)(state + 0x70), (float *)(state + 0x74), 1.0f,
                                    frame_time_sq * 4.0f, frame_time_sq * 4.0f, frame_time * 4.0f);
