@@ -2588,7 +2588,7 @@ extern void FUN_L00_002a9c50_c(void) __asm__("FUN_L00_002a9c50");
 extern void enqueue_callback_list_1_alt(void (*)(void), void *) __asm__("FUN_001f4600");
 extern void scale_vector_xyz_c(void *, void *, float) __asm__("FUN_001f9a68");
 
-int FUN_L00_002aa2a8(char *a0, char *o, int mode) {
+int FUN_L00_002aa2a8(char *trajectory_state, char *o, int mode) {
     float w[4];
     float B[4];
     float C[4];
@@ -2606,20 +2606,20 @@ int FUN_L00_002aa2a8(char *a0, char *o, int mode) {
         *(int *)&w[2] = 0;
         add_vector_xyz(w, w, base + 0x80);
         w[2] = w[2] + 0.49082f;
-        qcopy(B, a0);
+        qcopy(B, trajectory_state);
         if (*(int *)(base + 0x2FC) != 0 && FUN_L00_002603d0_u((void *)*(int *)(base + 0x2FC)) != 0 && mode != 0) {
             add_vector_xyz(B, B, base + 0x100);
         }
         x = scale_game_frames_alt(0x78);
     } else {
-        tmp = *(char **)(*(char **)(a0 + 0x30) + 0x78);
+        tmp = *(char **)(*(char **)(trajectory_state + 0x30) + 0x78);
         qcopy(w, o + 0x10);
-        qcopy(B, a0);
+        qcopy(B, trajectory_state);
         {
-            short xs = *(short *)(a0 + 0x34);
+            short xs = *(short *)(trajectory_state + 0x34);
             int c50 = *(int *)(tmp + 0x50);
             x = xs;
-            if (c50 != 0) *(short *)(a0 + 0x36) = 1;
+            if (c50 != 0) *(short *)(trajectory_state + 0x36) = 1;
         }
     }
     {
@@ -2629,7 +2629,7 @@ int FUN_L00_002aa2a8(char *a0, char *o, int mode) {
         box[2] = w[2];
         if (FUN_001efa68(box, w, 0x10, (int)b2, 0) != 0) {
             if (collision_hit_material() != 0 && D_L00_00173E40_u[7] > 0) {
-                qcopy(a0 + 0x10, (char *)D_L00_00173E40_u + 0x20);
+                qcopy(trajectory_state + 0x10, (char *)D_L00_00173E40_u + 0x20);
             }
         }
     }
@@ -2643,7 +2643,7 @@ int FUN_L00_002aa2a8(char *a0, char *o, int mode) {
         if (FUN_001efa68(C, w, 0x12, (int)o, 0) == 0) continue;
         if (collision_hit_material() == 0 && 0.0f < B[2]) continue;
         if (D_L00_00173E40_u[7] > 0) {
-            qcopy(a0 + 0x10, (char *)D_L00_00173E40_u + 0x20);
+            qcopy(trajectory_state + 0x10, (char *)D_L00_00173E40_u + 0x20);
             break;
         }
     }
@@ -2657,8 +2657,8 @@ int FUN_L00_002aa2a8(char *a0, char *o, int mode) {
         }
         {
             char *g = (char *)&D_L00_00166DC0;
-            char *hit_position = a0 + 0x10;
-            *(u128 *)(a0 + 0x20) = *(u128 *)D_L00_00173E80;
+            char *hit_position = trajectory_state + 0x10;
+            *(u128 *)(trajectory_state + 0x20) = *(u128 *)D_L00_00173E80;
             subtract_vector_xyz(C, hit_position, g);
             scale_vector_xyz_c(C, C, 0.95f);
             add_vector_xyz(hit_position, C, g);
