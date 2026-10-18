@@ -3200,15 +3200,15 @@ void energy_sphere_update(struct Moby *m) {
         m->flags |= 0x20;
         *(int *)(d + 0x60) = -1;
     case 1: {
-        float a0 = D_L06_00161E74 * DEG_TO_RAD * D_0015ED6C;
-        float a1, a2;
-        float x = fast_add_rotations(m->rot.x, a0);
-        a1 = D_L06_00161E78 * DEG_TO_RAD * D_0015ED6C;
+        float rotation_delta_x = D_L06_00161E74 * DEG_TO_RAD * D_0015ED6C;
+        float rotation_delta_y, rotation_delta_z;
+        float x = fast_add_rotations(m->rot.x, rotation_delta_x);
+        rotation_delta_y = D_L06_00161E78 * DEG_TO_RAD * D_0015ED6C;
         m->rot.x = x;
-        x = fast_add_rotations(m->rot.y, a1);
-        a2 = D_L06_00161E7C * DEG_TO_RAD * D_0015ED6C;
+        x = fast_add_rotations(m->rot.y, rotation_delta_y);
+        rotation_delta_z = D_L06_00161E7C * DEG_TO_RAD * D_0015ED6C;
         m->rot.y = x;
-        m->rot.z = fast_add_rotations(m->rot.z, a2);
+        m->rot.z = fast_add_rotations(m->rot.z, rotation_delta_z);
     }
     }
     if (voice_is_playing(m, *(int *)(d + 0x60)) == 0) {
