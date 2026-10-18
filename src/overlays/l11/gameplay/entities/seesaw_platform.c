@@ -1078,6 +1078,12 @@ extern struct Moby *D_L11_00174858 __attribute__((section(".data")));
 /* Ship ammo / health pickup: falls and bounces, is pulled toward the hero's ship, and refills it on contact. */
 void ammocrate_update(struct Moby *m) __asm__("FUN_L11_0030f728");
 void ammocrate_update(struct Moby *m) {
+    enum {
+        OCLASS_SHIP_AMMO_PICKUP = 0x4C2,
+        OCLASS_SHIP_HEALTH_PICKUP = 0x4C4,
+        AMMOCRATE_STATE_INITIALIZE = 0,
+        AMMOCRATE_STATE_REMOVE = 5
+    };
     struct Moby *ship = hero.ship_moby;
     char *pv = m->pvars;
     float dist = 100000.0f;
@@ -1110,7 +1116,7 @@ void ammocrate_update(struct Moby *m) {
                 (*(struct Moby **)(pv + 0x34))->collision = 0;
             }
             switch (m->oclass) {
-            case 0x4C2:
+            case OCLASS_SHIP_AMMO_PICKUP:
                 hero.ship_ammo += 5;
                 if (hero.ship_moby != 0 && hero.ship_moby->state != 0xFE && hero.ship_moby->state != 0xFD) {
                     FUN_0022da68_f728(4, 0, hero.ship_moby);
@@ -1120,7 +1126,7 @@ void ammocrate_update(struct Moby *m) {
                 }
                 m->state = 4;
                 break;
-            case 0x4C4:
+            case OCLASS_SHIP_HEALTH_PICKUP:
                 hero.ship_hp += hero.ship_hp_max * 0.25f;
                 if (hero.ship_moby != 0 && hero.ship_moby->state != 0xFE && hero.ship_moby->state != 0xFD) {
                     FUN_0022da68_f728(5, 0, hero.ship_moby);
@@ -1137,7 +1143,7 @@ void ammocrate_update(struct Moby *m) {
         }
     }
     switch (m->state) {
-    case 0:
+    case AMMOCRATE_STATE_INITIALIZE:
         *(struct Moby **)(pv + 0x34) = 0;
         FUN_L11_0030f660(m, pv);
         *(float *)(pv + 0x30) = 0.0f;
@@ -1184,7 +1190,7 @@ void ammocrate_update(struct Moby *m) {
     case 4:
         m->state = 5;
         break;
-    case 5:
+    case AMMOCRATE_STATE_REMOVE:
         mark_moby_for_removal_f728(m);
         return;
     }
