@@ -1244,6 +1244,9 @@ extern s32 fast_dec_timer(void *) __asm__("FUN_001f9740");
 
 void plasmabot_hatch_update(struct Moby *moby) __asm__("FUN_L14_002d96e0");
 void plasmabot_hatch_update(struct Moby *moby) {
+    enum {
+        HATCH_WAIT_ACTIVATION_DELAY = 1
+    };
     char *data = (char *)moby->pvars;
     if (hero.vehicle_mode == 2) {
         moby->collision = 0;
@@ -1257,7 +1260,7 @@ void plasmabot_hatch_update(struct Moby *moby) {
             *(s32 *)(data + 8) = FUN_001f96f8_c(*(s32 *)(data + 4));
         }
         break;
-    case 1:
+    case HATCH_WAIT_ACTIVATION_DELAY:
         if (fast_dec_timer(data + 8) != 0) {
             moby->state = 2;
             set_moby_animation(moby, 1, 0);
