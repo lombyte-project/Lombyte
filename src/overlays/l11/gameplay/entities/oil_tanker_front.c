@@ -370,11 +370,18 @@ struct L11GateVars {
 
 /* Two-door gate: spawns both 0x4DF doors, then once the hero is close lifts, swings and tilts them open. */
 void FUN_L11_00316320(struct Moby *moby) {
+    enum {
+        GATE_INITIALIZE_DOORS = 0,
+        GATE_WAIT_FOR_HERO_TRIGGER = 1,
+        GATE_RAISE_DOORS = 2,
+        GATE_ZERO_DOOR_Y_ROTATION = 3,
+        GATE_TILT_DOORS_APART = 4
+    };
     struct L11GateVars *d = (struct L11GateVars *)moby->pvars;
     float v[4];
 
     switch (moby->state) {
-    case 0: {
+    case GATE_INITIALIZE_DOORS: {
         struct Moby *c;
         struct Moby *r;
         u8 *pv;
@@ -412,7 +419,7 @@ void FUN_L11_00316320(struct Moby *moby) {
         moby->state = 1;
         break;
     }
-    case 1:
+    case GATE_WAIT_FOR_HERO_TRIGGER:
         if (vector_distance(&moby->pos.x, &hero.motion.pos.f[0]) < 12.0f &&
             FUN_00214720(&hero.motion.pos, d->unk10) != 0) {
             d->t = 0.0f;
@@ -420,7 +427,7 @@ void FUN_L11_00316320(struct Moby *moby) {
             FUN_0022da68(0, 4, d->left);
         }
         break;
-    case 2:
+    case GATE_RAISE_DOORS:
         advance_accelerated_scalar(&d->t, &d->speed, 1.0f, frame_time_sq * 8.0f, frame_time_sq * 16.0f,
                                    frame_time * 8.0f);
         fast_vec_normalize(v, &moby->rot_row0, 0.5f);
@@ -435,7 +442,7 @@ void FUN_L11_00316320(struct Moby *moby) {
             moby->state = 3;
         }
         break;
-    case 3: {
+    case GATE_ZERO_DOOR_Y_ROTATION: {
         float a;
         advance_accelerated_scalar(&d->t, &d->speed, 1.0f, frame_time_sq * 10.0f, frame_time_sq * 20.0f,
                                    frame_time * 10.0f);
@@ -450,7 +457,7 @@ void FUN_L11_00316320(struct Moby *moby) {
         }
         break;
     }
-    case 4: {
+    case GATE_TILT_DOORS_APART: {
         float a;
         advance_accelerated_scalar(&d->t, &d->speed, 1.0f, frame_time_sq * 12.0f, frame_time_sq * 24.0f,
                                    frame_time * 12.0f);
