@@ -1504,13 +1504,9 @@ unsigned char *FUN_L00_002b46a8(int ign, V_2b46a8 *from, float *yaw, float *pitc
     }
     return best;
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002b49a8.s", FUN_L00_002b49a8);
-#else
 /* Blaster (class 168) update: aims (reticle in first person, auto-aim otherwise), fires a shot with its sparks,
    keeps the usage statistics, returns to idle and moves the muzzle light. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B33E8.c: func_L00_002B5C98), where it is exact; names translated to the US level program. */
-/* NEAR: a dozen spots; this compiler hoists the 3.0f spray constant out of the loop and rebuilds the zero target before its conditional move. */
 
 typedef struct Hero Hero;
 
@@ -1718,8 +1714,10 @@ void blaster_update(struct Moby *moby) {
             func_001F9BD8_2B5C98(&end, &reach, &launch);
             reach.q = end.q;
             if (func_L00_001EFFF0_2B5C98(player_camera_2B33E8 + 0x140, &reach, 0, (int)moby, 0)) {
-                target = coll_hit_moby_2B5C98;
-                if (target && !(target->flags & 0x1000)) target = 0;
+                struct Moby *hit = coll_hit_moby_2B5C98;
+                /* Fakematch: hides that target is still 0, which retail's conditional move keeps in fp. */
+                __asm__("" : "=r"(target) : "0"(target));
+                if (hit && (hit->flags & 0x1000)) target = hit;
             }
         }
     } else {
@@ -1856,7 +1854,6 @@ void blaster_update(struct Moby *moby) {
         data->glow = 0;
     }
 }
-#endif
 
 #define NOT_SDA
 
