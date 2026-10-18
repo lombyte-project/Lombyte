@@ -1532,7 +1532,7 @@ void peckbot_update(Mob577 *self) {
     Vec577 oldpos;
     Mob577Target target;
     Vec577 v70;
-    Vec577 v80;
+    Vec577 position_scratch;
     Vec577 home_to_target;
     s32 hitA0;
     f32 hitA4;
@@ -1679,11 +1679,11 @@ void peckbot_update(Mob577 *self) {
             v->idle_timer = scale_game_frames(0x78);
             rad = random_float_between(0.0f, 3.0f);
             dir = random_angle_radians();
-            v80.f[0] = fast_cos(dir) * rad;
-            v80.f[1] = fast_sin(dir) * rad;
-            v80.f[2] = 0.0f;
-            v80.f[2] = random_float_between(5.0f, 7.0f);
-            fast_vec_add(&v->dest, &v80, &v->home);
+            position_scratch.f[0] = fast_cos(dir) * rad;
+            position_scratch.f[1] = fast_sin(dir) * rad;
+            position_scratch.f[2] = 0.0f;
+            position_scratch.f[2] = random_float_between(5.0f, 7.0f);
+            fast_vec_add(&v->dest, &position_scratch, &v->home);
             self->state = 15;
         }
         break;
@@ -1843,17 +1843,17 @@ void peckbot_update(Mob577 *self) {
         r3 = FUN_001f99c0(self->pos.f[2] - target.pos.f[2]);
         r3 = r3 / vector_distance(&self->pos, &target.pos);
         if (v->path != -1) {
-            FUN_L01_0028b5e0(self, D_L01_001B0930[v->path], &target.pos, &v80);
+            FUN_L01_0028b5e0(self, D_L01_001B0930[v->path], &target.pos, &position_scratch);
         } else {
-            qcopy(&v80, &target.pos);
+            qcopy(&position_scratch, &target.pos);
         }
         ang =
-            FUN_L00_001ff8b0_cf(v80.f[0] - self->pos.f[0], v80.f[1] - self->pos.f[1]) + v->turn_off;
+            FUN_L00_001ff8b0_cf(position_scratch.f[0] - self->pos.f[0], position_scratch.f[1] - self->pos.f[1]) + v->turn_off;
         FUN_L00_00258278(self, v->turn, ang, 0.05f, 0.3f, 0.2f);
         v70.f[0] = fast_cos(self->rot.f[2]) * 2.0f;
         v70.f[1] = fast_sin(self->rot.f[2]) * 2.0f;
         v70.f[2] = 0.0f;
-        res = FUN_L00_00258b50(self, &v->x180, &v70, &v80, 1.0f);
+        res = FUN_L00_00258b50(self, &v->x180, &v70, &position_scratch, 1.0f);
         if (tick_countdown_32(&v->turn_timer) != 0) {
             v->turn_timer = scale_game_frames(random_float_between(30.0f, 90.0f));
             v->turn_off = -v->turn_off;
@@ -1895,10 +1895,10 @@ void peckbot_update(Mob577 *self) {
             v70.f[0] = fast_cos(self->rot.f[2]) * 0.2f;
             v70.f[1] = fast_sin(self->rot.f[2]) * 0.2f;
             v70.f[2] = 0.0f;
-            qcopy(&v80, &target.pos);
-            v80.f[2] = v80.f[2] + 0.75f;
+            qcopy(&position_scratch, &target.pos);
+            position_scratch.f[2] = position_scratch.f[2] + 0.75f;
             if (p60 != NULL) {
-                spawn_nearby_effect(p60, self, 1, &v80, &v70, 1.0f);
+                spawn_nearby_effect(p60, self, 1, &position_scratch, &v70, 1.0f);
             }
         }
         if ((self->anim_flags & 2) && vector_distance(&self->pos, &target.pos) > 1.5f) {
@@ -1915,16 +1915,16 @@ void peckbot_update(Mob577 *self) {
         break;
     case 5:
         if (v->path != -1) {
-            FUN_L01_0028b5e0(self, D_L01_001B0930[v->path], &v->home, &v80);
+            FUN_L01_0028b5e0(self, D_L01_001B0930[v->path], &v->home, &position_scratch);
         } else {
-            qcopy(&v80, &v->home);
+            qcopy(&position_scratch, &v->home);
         }
-        ang = FUN_L00_001ff8b0_cf(v80.f[0] - self->pos.f[0], v80.f[1] - self->pos.f[1]);
+        ang = FUN_L00_001ff8b0_cf(position_scratch.f[0] - self->pos.f[0], position_scratch.f[1] - self->pos.f[1]);
         FUN_L00_00258278(self, v->turn, ang, 0.02f, 0.3f, 0.1f);
         v70.f[0] = fast_cos(self->rot.f[2]) * 2.0f;
         v70.f[1] = fast_sin(self->rot.f[2]) * 2.0f;
         v70.f[2] = 0.0f;
-        res = FUN_L00_00258b50(self, &v->x180, &v70, &v80, 1.0f);
+        res = FUN_L00_00258b50(self, &v->x180, &v70, &position_scratch, 1.0f);
         if (vector_distance(&self->pos, &v->home) < 2.0f) {
             self->state = 1;
             SET_ANIM(self, 4, 0, scale_game_frames(3));
@@ -2002,16 +2002,16 @@ void peckbot_update(Mob577 *self) {
         r12 = FUN_001f99c0(self->pos.f[2] - target.pos.f[2]);
         r12 = r12 / vector_distance(&self->pos, &target.pos);
         if (v->path != -1) {
-            FUN_L01_0028b5e0(self, D_L01_001B0930[v->path], &v->home, &v80);
+            FUN_L01_0028b5e0(self, D_L01_001B0930[v->path], &v->home, &position_scratch);
         } else {
-            qcopy(&v80, &v->home);
+            qcopy(&position_scratch, &v->home);
         }
-        ang = FUN_L00_001ff8b0_cf(v80.f[0] - self->pos.f[0], v80.f[1] - self->pos.f[1]);
+        ang = FUN_L00_001ff8b0_cf(position_scratch.f[0] - self->pos.f[0], position_scratch.f[1] - self->pos.f[1]);
         FUN_L00_00258278(self, v->turn, ang, 0.05f, 0.3f, 0.2f);
         v70.f[0] = fast_cos(self->rot.f[2]) * 2.0f;
         v70.f[1] = fast_sin(self->rot.f[2]) * 2.0f;
         v70.f[2] = 0.0f;
-        res12 = FUN_L00_00258b50(self, &v->x180, &v70, &v80, 1.0f);
+        res12 = FUN_L00_00258b50(self, &v->x180, &v70, &position_scratch, 1.0f);
         fast_vec_sub(&home_to_target, &target.pos, &v->home);
         if (vector_distance(&self->pos, &target.pos) < 1.5f && r12 <= 1.0f) {
             self->state = 4;
@@ -2041,13 +2041,13 @@ void peckbot_update(Mob577 *self) {
         v70.f[0] = fast_cos(self->rot.f[2]) * (v->speed * frame_time);
         v70.f[1] = fast_sin(self->rot.f[2]) * (v->speed * frame_time);
         v70.f[2] = 0.0f;
-        fast_vec_add(&v80, &self->pos, &v70);
+        fast_vec_add(&position_scratch, &self->pos, &v70);
         for (m = D_L01_0015FFE4; m != NULL; m = m->next) {
             if (m == (MobyNode *)self || m->state < 0) {
                 continue;
             }
             if (m->oclass == 0 || m->oclass == 0x241) {
-                if (vector_distance(&v80, &m->pos) < 2.0f) {
+                if (vector_distance(&position_scratch, &m->pos) < 2.0f) {
                     z = self->pos.f[2];
                     d13 = fast_subtract_rotations(
                         self->rot.f[2], FUN_L00_001ff8b0_cf(m->pos.f[0] - self->pos.f[0],
@@ -2057,14 +2057,14 @@ void peckbot_update(Mob577 *self) {
                         turn = -turn;
                     }
                     self->rot.f[2] = fast_add_rotations(self->rot.f[2], turn);
-                    fast_vec_sub(&v80, &self->pos, &m->pos);
-                    FUN_L00_001ff500_cf(&v80, &v80, 2.0f);
-                    fast_vec_add(&v80, &v80, &m->pos);
-                    v80.f[2] = z;
+                    fast_vec_sub(&position_scratch, &self->pos, &m->pos);
+                    FUN_L00_001ff500_cf(&position_scratch, &position_scratch, 2.0f);
+                    fast_vec_add(&position_scratch, &position_scratch, &m->pos);
+                    position_scratch.f[2] = z;
                 }
             }
         }
-        qcopy(&self->pos, &v80);
+        qcopy(&self->pos, &position_scratch);
         g13 = FUN_00213508(&self->pos, 0, 0.5f);
         v->x198 = v->x198 - frame_time_sq * 9.8f;
         self->pos.f[2] = self->pos.f[2] + v->x198;
