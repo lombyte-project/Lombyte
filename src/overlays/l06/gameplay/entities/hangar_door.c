@@ -362,7 +362,7 @@ extern void FUN_L06_00312a78(void *);
 extern void FUN_L06_00312ad0(void *);
 
 int FUN_L06_002fb668(char *moby) {
-    float v0[4], m[4], v1[4], v2[4];
+    float output_position[4], m[4], moby_offset_position[4], hero_offset_position[4];
     char *data;
     char *pos;
     struct Hero *x;
@@ -370,26 +370,26 @@ int FUN_L06_002fb668(char *moby) {
     data = *(char **)(moby + 0x78);
     clear_u64_value(m);
     if (*(unsigned char *)(moby + 0x53) == 6) {
-        qcopy(v0, D_L06_00167540);
+        qcopy(output_position, D_L06_00167540);
         pos = moby + 0x10;
     } else {
         t = frame_time_sq * 0.5f;
         FUN_00213f38((float *)(data + 0x118), (float *)(data + 0x11C), 1.0f, t, t,
                      frame_time * 0.5f);
-        fast_vec_normalize(v1, moby + 0xC0, 8.0f);
-        fast_vec_add(v1, v1, moby + 0x10);
+        fast_vec_normalize(moby_offset_position, moby + 0xC0, 8.0f);
+        fast_vec_add(moby_offset_position, moby_offset_position, moby + 0x10);
         x = &hero;
-        v1[2] = x->motion.pos.f[2] + 2.0f;
-        fast_vec_normalize(v2, x->unk0, -7.0f);
-        fast_vec_add(v2, v2, &x->motion.pos);
-        v2[2] += 4.0f;
+        moby_offset_position[2] = x->motion.pos.f[2] + 2.0f;
+        fast_vec_normalize(hero_offset_position, x->unk0, -7.0f);
+        fast_vec_add(hero_offset_position, hero_offset_position, &x->motion.pos);
+        hero_offset_position[2] += 4.0f;
         pos = moby + 0x10;
-        lerp_vector(v0, v1, v2, *(float *)(data + 0x118));
+        lerp_vector(output_position, moby_offset_position, hero_offset_position, *(float *)(data + 0x118));
     }
-    m[2] = fast_arc_tan(*(float *)(moby + 0x10) - v0[0], *(float *)(moby + 0x14) - v0[1]);
-    m[1] = -fast_arc_tan(vector_distance(v0, pos), *(float *)(moby + 0x18) - v0[2]) -
+    m[2] = fast_arc_tan(*(float *)(moby + 0x10) - output_position[0], *(float *)(moby + 0x14) - output_position[1]);
+    m[1] = -fast_arc_tan(vector_distance(output_position, pos), *(float *)(moby + 0x18) - output_position[2]) -
            (1.0f - *(float *)(data + 0x118)) * 30.0f * DEG_TO_RAD;
-    FUN_L06_00312a78(v0);
+    FUN_L06_00312a78(output_position);
     FUN_L06_00312ad0(m);
     if (*(float *)(data + 0x118) >= 1.0f && *(unsigned char *)(moby + 0x53) == 1)
         return 1;
