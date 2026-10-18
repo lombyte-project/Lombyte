@@ -207,7 +207,7 @@ f32 FUN_001f9b48_c(void *, V_cf58 *) __asm__("FUN_001f9b48");
 #include "rnc/overlay/path.h"
 void find_grind_rail(void) __asm__("FUN_L00_0020cf58");
 void find_grind_rail(void) {
-    V_cf58 v0, v1, third_proximity_point;
+    V_cf58 proximity_or_rail_point, proximity_or_query_position, third_proximity_point;
 
     s32 a, b, e;
     f32 c;
@@ -219,29 +219,29 @@ void find_grind_rail(void) {
     if (hero.unk1C8 != 0)
         return;
     if (current_level_index == 16) {
-        *(OvlQuad *)&v0 = 0;
-        v0.x = 115.0f;
-        v0.y = 264.0f;
-        v0.z = 133.0f;
-        if (12.0f < FUN_001f9b48_c(&hero.motion.pos, &v0)) {
-            *(OvlQuad *)&v1 = 0;
-            v1.x = 257.0f;
-            v1.y = 301.0f;
-            v1.z = 128.0f;
-            if (12.0f < FUN_001f9b48_c(&hero.motion.pos, &v1))
+        *(OvlQuad *)&proximity_or_rail_point = 0;
+        proximity_or_rail_point.x = 115.0f;
+        proximity_or_rail_point.y = 264.0f;
+        proximity_or_rail_point.z = 133.0f;
+        if (12.0f < FUN_001f9b48_c(&hero.motion.pos, &proximity_or_rail_point)) {
+            *(OvlQuad *)&proximity_or_query_position = 0;
+            proximity_or_query_position.x = 257.0f;
+            proximity_or_query_position.y = 301.0f;
+            proximity_or_query_position.z = 128.0f;
+            if (12.0f < FUN_001f9b48_c(&hero.motion.pos, &proximity_or_query_position))
                 return;
         }
     } else if (current_level_index == 14) {
-        *(OvlQuad *)&v0 = 0;
-        v0.x = 157.0f;
-        v0.y = 265.0f;
-        v0.z = 51.0f;
-        if (12.0f < FUN_001f9b48_c(&hero.motion.pos, &v0)) {
-            *(OvlQuad *)&v1 = 0;
-            v1.x = 162.0f;
-            v1.y = 341.0f;
-            v1.z = 48.0f;
-            if (12.0f < FUN_001f9b48_c(&hero.motion.pos, &v1)) {
+        *(OvlQuad *)&proximity_or_rail_point = 0;
+        proximity_or_rail_point.x = 157.0f;
+        proximity_or_rail_point.y = 265.0f;
+        proximity_or_rail_point.z = 51.0f;
+        if (12.0f < FUN_001f9b48_c(&hero.motion.pos, &proximity_or_rail_point)) {
+            *(OvlQuad *)&proximity_or_query_position = 0;
+            proximity_or_query_position.x = 162.0f;
+            proximity_or_query_position.y = 341.0f;
+            proximity_or_query_position.z = 48.0f;
+            if (12.0f < FUN_001f9b48_c(&hero.motion.pos, &proximity_or_query_position)) {
                 *(OvlQuad *)&third_proximity_point = 0;
                 third_proximity_point.x = 308.0f;
                 third_proximity_point.y = 104.0f;
@@ -251,11 +251,11 @@ void find_grind_rail(void) {
             }
         }
     } else if (current_level_index == 6) {
-        *(OvlQuad *)&v0 = 0;
-        v0.x = 177.0f;
-        v0.y = 304.0f;
-        v0.z = 143.0f;
-        if (14.0f < FUN_001f9b48_c(&hero.motion.pos, &v0))
+        *(OvlQuad *)&proximity_or_rail_point = 0;
+        proximity_or_rail_point.x = 177.0f;
+        proximity_or_rail_point.y = 304.0f;
+        proximity_or_rail_point.z = 143.0f;
+        if (14.0f < FUN_001f9b48_c(&hero.motion.pos, &proximity_or_rail_point))
             return;
     }
     s = hero.state.control_mode;
@@ -269,17 +269,17 @@ void find_grind_rail(void) {
                 return;
         }
     }
-    *(OvlQuad *)&v1 = *(OvlQuad *)&hero.motion.pos;
-    if (!nearest_rail_point((OvlQuad *)&v1, &a, &v0, &b, &c, &e, 0, 0))
+    *(OvlQuad *)&proximity_or_query_position = *(OvlQuad *)&hero.motion.pos;
+    if (!nearest_rail_point((OvlQuad *)&proximity_or_query_position, &a, &proximity_or_rail_point, &b, &c, &e, 0, 0))
         return;
     if (hero.state.current == 41 && hero.unk5C4 != 0 && a == hero.unk560)
         return;
-    d = hero.motion.pos.f[2] - v0.z;
+    d = hero.motion.pos.f[2] - proximity_or_rail_point.z;
     if (!(-0.5f < d))
         return;
     if (!(d < 0.57f) && hero.unk1CA == 0)
         return;
-    qcopy(&hero.unk500, &v0);
+    qcopy(&hero.unk500, &proximity_or_rail_point);
     hero.unk560 = a;
     hero.unk564 = b;
     hero.unk568 = c;
