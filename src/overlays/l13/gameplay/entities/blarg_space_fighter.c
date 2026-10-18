@@ -599,6 +599,9 @@ extern int frame_count __asm__("D_L13_0015F5CC");
 extern float D_L13_00161490 __attribute__((sda));
 
 void FUN_L13_002c2d30(unsigned char *moby) {
+    enum {
+        HIT_REACTION_LETHAL = 1
+    };
     unsigned char *d;
     char *r;
     int st;
@@ -676,7 +679,7 @@ void FUN_L13_002c2d30(unsigned char *moby) {
         case 8:
             d[0x67] = 0x78;
             break;
-        case 1:
+        case HIT_REACTION_LETHAL:
         case 2:
             FUN_L00_00257470(moby, 0, -1);
             moby[0x20] = 8;
