@@ -914,10 +914,10 @@ int FUN_L02_002fb788(char *moby, float a, float b) {
     fast_vec_sub(r, *(char **)(g + 0x180), p);
     lenr = fast_vec_length(r);
     if (b != 0.0f) {
-        float t1 = fast_arc_tan(lenq, dot1);
-        float t2 = fast_arc_tan(lenr, dot2);
-        float t3 = fast_difference_between_rotations(t1, t2);
-        if (b * DEG_TO_RAD < t3) {
+        float target_axis_angle = fast_arc_tan(lenq, dot1);
+        float reference_axis_angle = fast_arc_tan(lenr, dot2);
+        float axis_angle_difference = fast_difference_between_rotations(target_axis_angle, reference_axis_angle);
+        if (b * DEG_TO_RAD < axis_angle_difference) {
             return 0;
         }
     }
