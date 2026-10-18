@@ -1935,9 +1935,9 @@ void ultramech_unlimited_update(UMoby *m) {
     UVec v10;
     UVec v20;
     UVec v30;
-    UVec v40;
-    UVec v50;
-    UVec v60;
+    UVec hit_direction;
+    UVec attack_start;
+    UVec attack_end;
     int seg;
     float frac;
     int moving;
@@ -2295,19 +2295,19 @@ void ultramech_unlimited_update(UMoby *m) {
             }
         } else {
             float h = compute_interpolated_record_value(m);
-            moby_point_position(m, 1, &v60);
+            moby_point_position(m, 1, &attack_end);
             if (h >= 17.0f && h <= 24.0f) {
-                qcopy(&v50, &m->pos);
-                v50.f[2] += 0.5f;
-                v40.f[0] = fast_cos(m->rot.f[2]);
-                v40.f[1] = fast_sin(m->rot.f[2]);
-                v40.f[2] = 1.0f;
-                make_hit_descriptor(&v10, m, 0x10007, &v40, 4.0f);
-                collect_mobies_in_sphere(&v60, 9, m, &v10, 2.5f);
-                coll_line_fix(&v50, &v60, 0, m, &v10);
-                sweep_hit_segment(&v50, &v60, &v50, &d->v1A0, m, &v10, 5);
-                no_op_main_callback(&v50, &v60);
-                qcopy(&d->v1A0, &v60);
+                qcopy(&attack_start, &m->pos);
+                attack_start.f[2] += 0.5f;
+                hit_direction.f[0] = fast_cos(m->rot.f[2]);
+                hit_direction.f[1] = fast_sin(m->rot.f[2]);
+                hit_direction.f[2] = 1.0f;
+                make_hit_descriptor(&v10, m, 0x10007, &hit_direction, 4.0f);
+                collect_mobies_in_sphere(&attack_end, 9, m, &v10, 2.5f);
+                coll_line_fix(&attack_start, &attack_end, 0, m, &v10);
+                sweep_hit_segment(&attack_start, &attack_end, &attack_start, &d->v1A0, m, &v10, 5);
+                no_op_main_callback(&attack_start, &attack_end);
+                qcopy(&d->v1A0, &attack_end);
             }
         }
         break;
