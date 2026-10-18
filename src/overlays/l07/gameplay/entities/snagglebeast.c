@@ -507,6 +507,7 @@ struct HeroView_313af0 {
 };
 
 extern s32 level_frame_count __asm__("D_L07_0015F5CC");
+extern s32 level_frame_count_lui __asm__("D_L07_0015F5CC");
 extern float D_0015ED6C;
 extern struct ChaserTarget D_L07_00173EC0;
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
@@ -1007,7 +1008,7 @@ void snagglebeast_update(unsigned char *moby) {
         float rot;
         rot = *(float *)(moby + 0x48);
         if (level_frame_count % 6 == 0) FUN_L07_0029b8d8((char *)moby, 0, 600000.0f, 5.0f);
-        if ((frame_count_l07 - 2) % 6 == 0) FUN_L07_0029b8d8((char *)moby, 1, 600000.0f, 5.0f);
+        if ((level_frame_count_lui - 2) % 6 == 0) FUN_L07_0029b8d8((char *)moby, 1, 600000.0f, 5.0f);
         if (FUN_L07_00313de8(moby, data, (float *)(((char *)&hero) + 0x80), 9, 0)) break;
         FUN_L00_00258278((struct Moby *)moby, target_angle, (float *)(data + 0x168), frame_time_sq * 2.0943952f, frame_time_sq * 0.6981317f, frame_time * 2.0943952f);
         if (fast_difference_between_rotations(*(float *)(moby + 0x48), rot) > frame_time * 0.17453292f) {

@@ -535,7 +535,6 @@ void FUN_L05_0030c220(struct Moby *m) {
     float offset_a_x, offset_a_z, offset_b_x, offset_b_z;
     int i, j, color;
     float *vertex_a, *vertex_b;
-    int *color_a, *color_b;
     char *vars = (char *)m->pvars;
 
     get_moby_position(m, 0, position);
@@ -550,7 +549,7 @@ void FUN_L05_0030c220(struct Moby *m) {
     up = matrix + 8;
     cross_vector_xyz_30c220(side, direction, up);
     cross_vector_xyz_30c220(direction, up, side);
-    *(u128 *)(matrix + 12) = *(u128 *)position;
+    qcopy(matrix + 12, position);
 
     texture = get_effect_texture_30c220(D_L05_00161D0C);
     flags = (u64)(s64)D_L05_00161CF4 |
@@ -589,20 +588,18 @@ void FUN_L05_0030c220(struct Moby *m) {
     }
     for (i = 0; i < 10; i++) {
         pass = (float)i;
-        j = 0;
         vertex_a = a.vertex[0];
+        j = 0;
         vertex_b = b.vertex[0];
-        color_b = b.color;
-        color_a = a.color;
         do {
-            qcopy_nc(vertex_a, D_L05_001D67D0[j]);
-            *(u128 *)b.vertex[j] = *(u128 *)D_L05_001D6810[j];
+            qcopy(vertex_a, D_L05_001D67D0[j]);
+            qcopy(b.vertex[j], D_L05_001D6810[j]);
             phase = (float)(i + (j & 1)) * 0.1f;
             sign = 1.0f;
             if (j > 1) sign = -1.0f;
             color = fast_tween_color(D_L05_00161D04, D_L05_00161D08, phase);
-            *color_b++ = color;
-            *color_a++ = color;
+            b.color[j] = color;
+            a.color[j] = color;
             offset_a_x = phase * 8.0f * sign;
             offset_a_z = pass * 10.0f;
             offset_b_x = phase * 6.0f * sign;

@@ -1349,7 +1349,7 @@ extern void matrix_to_euler(void *, void *) __asm__("FUN_00214598");
 void normalize_vector_triplet(f32 *vectors) __asm__("FUN_00214128");
 extern struct Hero hero_lui __asm__("D_0013F350") __attribute__((section(".data")));
 
-void FUN_L00_0020f160(char *arg) {
+void FUN_L00_0020f160(char *arg, u8 *entry) {
     V4_F7F8 vv[4];
     float fa[16];
     int ri;
