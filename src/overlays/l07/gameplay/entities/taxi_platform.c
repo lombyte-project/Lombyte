@@ -1826,7 +1826,7 @@ void bombomatic_update(char *m) {
 
     float lim;
     float tv;
-    float v20[4];
+    float launch_work_vector[4];
     float target_buffer[20];
     float launch_rotation[4];
     float debris_velocity[4];
@@ -1899,8 +1899,8 @@ void bombomatic_update(char *m) {
         if (tv <= lim) {
             FUN_L00_00257470(m, 0, -1);
             *(float *)t = 0.0f;
-            clear_u64_value(v20);
-            FUN_L00_0025e450_c(m, v20, 0, 0.0f, 0.0f, 10, 3, 16, 4.0f, 2.0f, 9.0f, 1.0f, 1, 15.0f, 1, 1, -1, 0);
+            clear_u64_value(launch_work_vector);
+            FUN_L00_0025e450_c(m, launch_work_vector, 0, 0.0f, 0.0f, 10, 3, 16, 4.0f, 2.0f, 9.0f, 1.0f, 1, 15.0f, 1, 1, -1, 0);
             FUN_L00_00263fd8(m, 0x621, (float *)(m + 0x10), m + 0x40, 0, 0, 0.0f, D_L07_0015F580, D_L07_0015F580, D_L07_0015F580);
             FUN_L00_00263fd8(m, 0x622, (float *)(m + 0x10), m + 0x40, 0, 0, 0.0f, D_L07_0015F580, D_L07_0015F580, D_L07_0015F580);
             mark_moby_for_removal_c3(m);
@@ -1957,9 +1957,9 @@ eb20:
                 if (vector_distance_xy_alt(m + 0x10, target_buffer) < 20.0f) {
                     *(float *)(d + 0xBC) = fast_arc_tan_c(target_buffer[0] - *(float *)(m + 0x10), target_buffer[1] - *(float *)(m + 0x14));
                 }
-                v20[0] = random_float_between_c(3.0f, 11.0f);
-                v20[1] = random_float_between_c(-2.0f, 2.0f);
-                v20[2] = 0.0f;
+                launch_work_vector[0] = random_float_between_c(3.0f, 11.0f);
+                launch_work_vector[1] = random_float_between_c(-2.0f, 2.0f);
+                launch_work_vector[2] = 0.0f;
                 vF0[3] = -1.0f;
                 {
                     float best = 3.1415927f;
@@ -1981,10 +1981,10 @@ eb20:
                 qzero(launch_rotation);
                 launch_rotation[2] = *(float *)(d + 0xBC);
                 euler_rotation_matrix(vB0, launch_rotation);
-                transform_vector(v20, v20, vB0);
-                fast_vec_normalize_c(debris_velocity, v20, D_0015ED6C_gp * 7.0f);
-                add_vector_xyz(v20, v20, m + 0x10);
-                debris_velocity[2] = FUN_L00_0025abf0(vA0, v20, 0, D_0015ED6C_gp * 7.0f, -(D_0015ED70 * 9.8f));
+                transform_vector(launch_work_vector, launch_work_vector, vB0);
+                fast_vec_normalize_c(debris_velocity, launch_work_vector, D_0015ED6C_gp * 7.0f);
+                add_vector_xyz(launch_work_vector, launch_work_vector, m + 0x10);
+                debris_velocity[2] = FUN_L00_0025abf0(vA0, launch_work_vector, 0, D_0015ED6C_gp * 7.0f, -(D_0015ED70 * 9.8f));
                 add_vector_xyz(vA0, vA0, debris_velocity);
                 FUN_L07_0030ba90_c(vA0, debris_velocity, (int)m, *(short *)(d + 0xBA));
                 *(short *)(d + 0xBA) = *(short *)(d + 0xBA) + 1;
