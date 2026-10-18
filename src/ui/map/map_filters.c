@@ -278,12 +278,12 @@ extern s32 D_001A03B4[];
 
 s32 map_filter_l07_4(s32 arg0, s32 arg1) __asm__("func_002071C0");
 
-s32 map_filter_l07_4(s32 arg0, s32 arg1) {
+s32 map_filter_l07_4(s32 point_x, s32 point_y) {
     s32 ret1;
     s32 ret2;
 
-    ret1 = point_is_clockwise(arg0, arg1, 0x99, 0xED, 0x160, 0x117);
-    ret2 = point_is_clockwise(arg0, arg1, 0x10E, 0xF7, 0x13D, 0x119);
+    ret1 = point_is_clockwise(point_x, point_y, 0x99, 0xED, 0x160, 0x117);
+    ret2 = point_is_clockwise(point_x, point_y, 0x10E, 0xF7, 0x13D, 0x119);
     if (D_001A03B4[0] == 0) {
         return 0;
     }
