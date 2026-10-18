@@ -2034,8 +2034,8 @@ void FUN_L00_002dbf28(char *self, char *q) {
     float d[4];
     float e[4];
     float g[4];
-    I6_DD3D8 t1;
-    I6_DD3D8 t2;
+    I6_DD3D8 first_color_choices;
+    I6_DD3D8 second_color_choices;
     int r0, g0, b0;
     int r1, g1, b1;
     float f22, dist, f24, sc, dt;
@@ -2117,10 +2117,10 @@ void FUN_L00_002dbf28(char *self, char *q) {
             float sh = f22 * random_float_between(8.0f, 10.0f) * D_0015ED6C - f24 * D_0015ED6C;
             int A, B, r1, r2;
             float big;
-            t1 = D_L00_001EA100;
-            t2 = D_L00_001EA118;
-            A = FUN_L00_0025c0e8(t1.v[random_integer_below_c2(6)], (&D_0013E520)->b9);
-            B = FUN_L00_0025c0e8(t2.v[random_integer_below_c2(6)], (&D_0013E520)->b9);
+            first_color_choices = D_L00_001EA100;
+            second_color_choices = D_L00_001EA118;
+            A = FUN_L00_0025c0e8(first_color_choices.v[random_integer_below_c2(6)], (&D_0013E520)->b9);
+            B = FUN_L00_0025c0e8(second_color_choices.v[random_integer_below_c2(6)], (&D_0013E520)->b9);
             big = f22 * 400000.0f;
             r1 = FUN_L00_00257b90_c(scale_game_frames_c(15), scale_game_frames_c(20));
             r2 = FUN_L00_00257b90_c(scale_game_frames_c(25), scale_game_frames_c(30));
