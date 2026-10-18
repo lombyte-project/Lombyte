@@ -20,7 +20,7 @@ extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void FUN_L00_00250df8(void *);
 
 char *FUN_L08_00307190(char *pos, char *dir, int a2, int a3, int a4, int a5);
-char *FUN_L08_00307190(char *pos, char *dir, int a2, int a3, int a4, int a5) {
+char *FUN_L08_00307190(char *pos, char *dir, int a2, int a3, int lifetime_frames, int a5) {
     char *m = func_0020D348_m(0x50C);
     if (m != 0) {
         char *d;
@@ -31,7 +31,7 @@ char *FUN_L08_00307190(char *pos, char *dir, int a2, int a3, int a4, int a5) {
         m[0x20] = 1;
         qcopy(m + 0x10, dir);
         qcopy(d, pos);
-        *(int *)(d + 0x18) = scale_game_frames(a4);
+        *(int *)(d + 0x18) = scale_game_frames(lifetime_frames);
         *(int *)(d + 0x10) = a2;
         *(int *)(d + 0x14) = a3;
         *(int *)(d + 0x2C) = a5;
