@@ -165,7 +165,7 @@ extern void FUN_L00_00250df8(void *);
 extern float D_L08_00161D28 __attribute__((sda));
 void FUN_L08_002e8ba0(struct Moby *a) {
     char *data = (char *)a->pvars;
-    float v0[4], v10[4], v20[4];
+    float part_joint_position[4], anchor_joint_position[4], joint_alignment_offset[4];
     char *base = data + 0x60;
     int i;
     for (i = 0; i < 12; i++) {
@@ -173,10 +173,10 @@ void FUN_L08_002e8ba0(struct Moby *a) {
         char *m = (char *)e[-3];
         if (m != 0) {
             *(float *)(m + 0x48) = a->rot.z;
-            moby_point_position(m, e[-1], v0);
-            moby_point_position((void *)e[-2], e[0], v10);
-            fast_vec_sub(v20, v10, v0);
-            fast_vec_add(m + 0x10, m + 0x10, v20);
+            moby_point_position(m, e[-1], part_joint_position);
+            moby_point_position((void *)e[-2], e[0], anchor_joint_position);
+            fast_vec_sub(joint_alignment_offset, anchor_joint_position, part_joint_position);
+            fast_vec_add(m + 0x10, m + 0x10, joint_alignment_offset);
         }
     }
     if (*(int *)(data + 0x90) != 0) {
