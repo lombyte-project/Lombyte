@@ -372,9 +372,8 @@ void FUN_L00_00269d20(unsigned char *m) {
             if (p[0x1b] & 0x20) green -= *(float *)(e + 0x50) * step;
             else green += *(float *)(e + 0x50) * step;
         }
-        step = frame_scale;
-        if (p[0x1b] & 0x40) blue -= *(float *)(e + 0x54) * step;
-        else blue += *(float *)(e + 0x54) * step;
+        if (p[0x1b] & 0x40) blue -= *(float *)(e + 0x54) * frame_scale;
+        else blue += *(float *)(e + 0x54) * frame_scale;
         limit = *(float *)(e + 0x64);
         if (limit < red) {
             red = limit;
@@ -400,7 +399,8 @@ void FUN_L00_00269d20(unsigned char *m) {
             blue = limit;
             if (*(unsigned int *)(e + 0x70) & 0x400) p[0x1b] ^= 0x40;
         }
-        limit = *(float *)(e + 0x60);
+        /* Fakematch: the dead copy into step puts the 65535 and 255 constants in retail's order. */
+        limit = step = *(float *)(e + 0x60);
         if (blue < limit) {
             blue = limit;
             if (*(unsigned int *)(e + 0x70) & 0x40) p[0x1b] ^= 0x40;

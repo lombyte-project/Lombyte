@@ -538,11 +538,12 @@ int FUN_L00_0025aca0(float density, unsigned char *entity, int maximum, Vec4_25a
             do {
                 float radius, extent;
                 int type;
+                unsigned int active;
                 flags = *(unsigned int *)(list - 4);
                 last = flags >> 31;
                 type = flags & 0xff;
-                chosen = (mask >> index) ^ 1;
-                if (!(chosen & 1) && (flags & 0x20000)) {
+                active = flags & 0x20000;
+                if (!(((mask >> index) ^ 1) & 1) && active) {
                     entries[count] = entry;
                     switch (type) {
                     case 0:

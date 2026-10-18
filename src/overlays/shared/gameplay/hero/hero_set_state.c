@@ -3702,7 +3702,7 @@ void FUN_L00_00228c18(void) {
                         int old_offset = previous_step * 8;
                         offset = *(s32 *)((u8 *)&D_L00_0015F6C8_228c18 + old_offset + step * 4);
                     }
-                    frame = (offset + (moby->prev_frame * new_length) / old_length) % new_length;
+                    frame = ((moby->prev_frame * new_length) / old_length + offset) % new_length;
                     set_hero_animation(next_step, frame, (float)scale_game_frames(8));
                 }
             }
