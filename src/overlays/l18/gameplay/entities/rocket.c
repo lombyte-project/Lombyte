@@ -2284,7 +2284,7 @@ void FUN_L18_002df608(struct Moby *moby) {
 extern float D_0015EE70 __asm__("D_0015ED70");
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 
-void FUN_L18_002dfaa0(struct Moby *moby, void *v0, void *v1, void *v2, void *v3, void *v4, int a6, int a7,
+void FUN_L18_002dfaa0(struct Moby *moby, void *v0, void *v1, void *v2, void *v3, void *v4, int invulnerability_duration_frames, int transition_delay_frames,
                       int a8) {
     char *data = (char *)moby->pvars;
     *(int *)(data + 0x60) = 0;
@@ -2296,10 +2296,10 @@ void FUN_L18_002dfaa0(struct Moby *moby, void *v0, void *v1, void *v2, void *v3,
     qcopy(data + 0x40, v4);
     moby->state = 2;
     *(float *)(data + 0x68) = D_0015EE70 * 0.333f;
-    *(float *)(data + 0x70) = 1.0f / (float)scale_game_frames(a6);
-    *(int *)(data + 0x74) = scale_game_frames(a7);
+    *(float *)(data + 0x70) = 1.0f / (float)scale_game_frames(invulnerability_duration_frames);
+    *(int *)(data + 0x74) = scale_game_frames(transition_delay_frames);
     *(int *)(data + 0x78) = a8;
-    hero.invulnerable_frames = scale_game_frames(a6);
+    hero.invulnerable_frames = scale_game_frames(invulnerability_duration_frames);
 }
 /* Maps states 2 and 3 to results 1 and 2; all other states return 0. */
 s32 FUN_L18_002dfba0(const u8 *moby) {
