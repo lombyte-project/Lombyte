@@ -987,6 +987,9 @@ char *FUN_L03_002bad40(struct Moby *parent, int unused, int color, int a3, int a
 /* Hit effects for the Kerwan train and turret classes: sparks or smoke puffs pushed along the hit velocity,
  * with countdowns in the moby data (0x12E, 0x12F) limiting how often they spawn. */
 void FUN_L03_0029caa8(char *moby, void *vel_in, int quiet) {
+    enum {
+        MOBY_CLASS_TWO_JOINT_PARTICLE_EMITTER = 0x74
+    };
     float vel[4];
     float *vp;
     float pos[4];
@@ -1007,7 +1010,7 @@ void FUN_L03_0029caa8(char *moby, void *vel_in, int quiet) {
         return;
     }
     switch (*(short *)(moby + 0xA6)) {
-    case 0x74:
+    case MOBY_CLASS_TWO_JOINT_PARTICLE_EMITTER:
         if (quiet == 0) {
             scale_vector_xyz(vp, vp, 0.35f);
             for (i = 0; i < 2; i++) {
