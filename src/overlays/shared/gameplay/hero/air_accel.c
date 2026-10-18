@@ -45,8 +45,8 @@ int FUN_L01_00226f10(int a) {
 
 extern int FUN_L00_0028de68(int a0, int a1, int a2, int a3, int a4);
 
-void FUN_L01_00227e48(int a0, int a1, int a2) {
-    if (a2 != 0) {
+void FUN_L01_00227e48(int a0, int a1, int call_enabled) {
+    if (call_enabled != 0) {
         char *g = (char *)D_0013E533 + 0xE1D;
         char *m = *(char **)(g + 0x10E0);
         int flag = 0;
