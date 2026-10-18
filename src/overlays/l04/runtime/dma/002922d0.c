@@ -113,18 +113,18 @@ void FUN_L04_002923b8(struct Moby *moby, LegRig *rig) {
 
 extern int walker_gait_mask(int *a, char *b) __asm__("FUN_L00_002a13f0");
 
-int FUN_L04_002927d0(char *arg0, char *arg1) {
-    int **p = (int **)(arg1 + 0x70);
+int FUN_L04_002927d0(char *moby, char *rig) {
+    int **p = (int **)(rig + 0x70);
     int *found = 0;
     int i;
     for (i = 12; i >= 0; i--) {
         int *e = *p++;
-        if (*e == (int)(unsigned char)arg0[0x52])
+        if (*e == (int)(unsigned char)moby[0x52])
             found = e;
     }
     if (found == 0)
-        return (unsigned char)arg1[0xB6];
-    return walker_gait_mask(found, arg1);
+        return (unsigned char)rig[0xB6];
+    return walker_gait_mask(found, rig);
 }
 /* Ported from rac1-decomp src/overlays/l04_eudora/vuchain_00293490.c (func_L04_002939E8) */
 
