@@ -824,7 +824,7 @@ void FUN_L00_0028ac88(void) {
     int i, j;
     Star28ac88 *s;
     f32 a, b;
-    int t16, t18, r;
+    int color_channel_offset, color_high_byte_offset, r;
     SKY->s4 = 0;
     set_identity_matrix(D_L00_001BD7E0);
     FUN_0022b690(0);
@@ -857,17 +857,17 @@ void FUN_L00_0028ac88(void) {
                 s->x = fast_cos(a) * fast_sin(b) * 50.0f;
                 s->y = fast_sin(a) * fast_sin(b) * 50.0f;
                 s->z = fast_cos(b) * 50.0f;
-                t16 = random_integer_below(0x18) + 8;
-                t18 = random_integer_below(0x20) << 24;
+                color_channel_offset = random_integer_below(0x18) + 8;
+                color_high_byte_offset = random_integer_below(0x20) << 24;
                 {
                     u32 u, w;
                     if ((FUN_001160d8() >> 16) & 1) {
-                        u = (t16 << 16) + 0x30505050;
-                        w = t18 + u;
+                        u = (color_channel_offset << 16) + 0x30505050;
+                        w = color_high_byte_offset + u;
                     } else {
-                        u = (t16 << 8) + 0x30505050;
-                        w = t18 + u;
-                        w |= t16;
+                        u = (color_channel_offset << 8) + 0x30505050;
+                        w = color_high_byte_offset + u;
+                        w |= color_channel_offset;
                     }
                     s->c.w = w;
                 }
