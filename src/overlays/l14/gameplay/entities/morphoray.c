@@ -1804,12 +1804,12 @@ void FUN_L14_00315d48(char *cam) {
     float ang;
     float a;
     float b;
-    float v0[4];
+    float camera_placement_parameters[4];
     float unused[4];
     CamKey5d48 *keys;
     int next;
-    float v2[4];
-    float v3[4];
+    float look_direction[4];
+    float scaled_up_vector[4];
 
     D_L14_001624B4 = data->st.count;
     D_L14_001624B8 = st->idx;
@@ -1987,24 +1987,24 @@ void FUN_L14_00315d48(char *cam) {
             st->fC = b;
         }
     }
-    v0[1] = cur->f4;
-    v0[0] = ang;
-    v0[2] = cur->f8;
-    FUN_L00_001ed580_5d48(cam + 0x30, v0, &hero.motion.pos);
-    vec_sub_5d48(v2, &hero.motion.pos, cam + 0x30);
-    vec_scale_5d48(v3, &hero.gravity_dir, -1.5f);
-    vec_add_5d48(v2, v2, v3);
-    vec_normalize_5d48(cam, v2, 1.0f);
-    vec_cross_5d48(cam + 0x10, cam, v3);
+    camera_placement_parameters[1] = cur->f4;
+    camera_placement_parameters[0] = ang;
+    camera_placement_parameters[2] = cur->f8;
+    FUN_L00_001ed580_5d48(cam + 0x30, camera_placement_parameters, &hero.motion.pos);
+    vec_sub_5d48(look_direction, &hero.motion.pos, cam + 0x30);
+    vec_scale_5d48(scaled_up_vector, &hero.gravity_dir, -1.5f);
+    vec_add_5d48(look_direction, look_direction, scaled_up_vector);
+    vec_normalize_5d48(cam, look_direction, 1.0f);
+    vec_cross_5d48(cam + 0x10, cam, scaled_up_vector);
     if (cur->fC != 0.0f) {
         rotate_axis_5d48(cam, cam, cam + 0x10, cur->fC);
         vec_normalize_5d48(cam, cam, 1.0f);
-        vec_cross_5d48(cam + 0x10, cam, v3);
+        vec_cross_5d48(cam + 0x10, cam, scaled_up_vector);
     }
     if (cur->f10 != 0.0f) {
-        rotate_axis_5d48(cam, cam, v3, cur->f10);
+        rotate_axis_5d48(cam, cam, scaled_up_vector, cur->f10);
         vec_normalize_5d48(cam, cam, 1.0f);
-        vec_cross_5d48(cam + 0x10, cam, v3);
+        vec_cross_5d48(cam + 0x10, cam, scaled_up_vector);
     }
     vec_normalize_5d48(cam + 0x10, cam + 0x10, 1.0f);
     vec_cross_5d48(cam + 0x20, cam + 0x10, cam);
