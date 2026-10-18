@@ -2003,20 +2003,20 @@ extern float D_L18_00161C88 __attribute__((sda));
 extern int D_L18_00161C8C __attribute__((sda));
 extern int D_L18_00161C90 __attribute__((sda));
 extern float D_L18_00161C98 __attribute__((sda));
-void FUN_L18_002dc0c8(struct Moby *moby, void *a1, void *a2) {
+void FUN_L18_002dc0c8(struct Moby *moby, void *segment_start, void *segment_end) {
     float buf[4];
     float v[4];
     float w[4];
     char *d = (char *)moby->pvars;
     int col;
 
-    lerp_vector(buf, a1, a2, 0.5f);
-    buf[3] = FUN_001f9b48(a1, a2) * 0.5f;
+    lerp_vector(buf, segment_start, segment_end, 0.5f);
+    buf[3] = FUN_001f9b48(segment_start, segment_end) * 0.5f;
     if (fast_bsphere_check((char *)buf, D_L18_00161BF4) == -1) {
         return;
     }
     if (random_float_between(0.0f, 1.0f) < D_L18_00161C98) {
-        lerp_vector(v, a1, a2, random_float_between(0.0f, 1.0f));
+        lerp_vector(v, segment_start, segment_end, random_float_between(0.0f, 1.0f));
         fast_vec_sub(w, v, &moby->pos);
         fast_vec_normalize(w, w, *(float *)(d + 0x20));
         col = FUN_001fa6e0(D_L18_00161C80, D_L18_00161C84,
