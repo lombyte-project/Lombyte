@@ -367,8 +367,8 @@ extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a
 char *FUN_L09_002c2500(struct Moby *src, char *pos, int cls) {
     char *m = func_0020D348_m(cls);
     if (m) {
-        OvlQuad v0;
-        OvlQuad v1;
+        OvlQuad point_position;
+        OvlQuad position_offset;
         char *p = m + 0x10;
         char *d;
         ((unsigned char *)m)[0x30] = 0xFF;
@@ -380,10 +380,10 @@ char *FUN_L09_002c2500(struct Moby *src, char *pos, int cls) {
         qcopy(d + 0x10, pos);
         *(char **)(d + 0x2C) = src;
         FUN_L00_00250df8(m);
-        moby_point_position(m, 0, &v0);
-        subtract_vector_xyz(&v1, pos, &v0);
-        transform_vector_by_basis(&v1, &v1, &src->rot_row0);
-        add_vector_xyz(p, pos, &v1);
+        moby_point_position(m, 0, &point_position);
+        subtract_vector_xyz(&position_offset, pos, &point_position);
+        transform_vector_by_basis(&position_offset, &position_offset, &src->rot_row0);
+        add_vector_xyz(p, pos, &position_offset);
         qcopy(m + 0x40, &src->rot);
         *(OvlQuad *)(m + 0xC0) = *(OvlQuad *)&src->rot_row0;
         *(OvlQuad *)(m + 0xD0) = *(OvlQuad *)&src->rot_row1;
