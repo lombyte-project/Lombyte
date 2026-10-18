@@ -2001,6 +2001,7 @@ extern short D_L00_00161D80 __attribute__((sda));
 void FUN_L00_002e4fe8(char *m, float *out_focus_velocity) {
     enum {
         CAM_ATTACH_PROJECT_HERO_FOCUS_VELOCITY = 4,
+        CAM_ATTACH_BLEND_BACK_FOCUS_VELOCITY = 7,
         CAM_ATTACH_HOLD_FOCUS_VELOCITY = 8,
         CAM_ATTACH_BLEND_PROJECTED_HERO_FOCUS_VELOCITY = 9
     };
@@ -2085,7 +2086,7 @@ void FUN_L00_002e4fe8(char *m, float *out_focus_velocity) {
     case 3:
     case 5:
     case 6:
-    case 7:
+    case CAM_ATTACH_BLEND_BACK_FOCUS_VELOCITY:
         lerp_vector((float)*(short *)(e + 0xD4) * *(float *)(e + 0xCC), e + 0x10, e + 0x30,
                      e + 0x20);
         if (*(unsigned char *)(e + 0xD7) == 0) {
