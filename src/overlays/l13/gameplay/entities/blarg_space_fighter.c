@@ -2145,12 +2145,15 @@ void asteroid_update(struct Moby *moby) {
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002E56C8), where it is exact; names translated to the US level program. */
 
 int FUN_L13_002e4300(struct Moby *m, char *arg, float *t) {
+    enum {
+        HIT_REACTION_NONE = 0
+    };
     char *r = find_moby_hit(m, 0x330000, 0);
     int n;
     int result = 0;
     char *e;
     switch (hit_reaction(m, r, t, 0, &n, 0, 0, 4)) {
-    case 0:
+    case HIT_REACTION_NONE:
         break;
     case 1:
         *(int *)t = 0;
