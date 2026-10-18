@@ -45,11 +45,11 @@ void follow_camera_build_view(u8 *p) {
     f32 r0;
     f32 g2, g3, e2, h2;
     f32 g, r, d, e, t, x, h;
-    f32 v0[4];
+    f32 vector_scratch[4];
     f32 projected_reference_position[4];
     f32 projected_camera_position[4];
     f32 view_direction[4];
-    f32 v4[4];
+    f32 adjusted_aim_position[4];
 
     base = D_L00_00166E10_2e9010;
     q = *(u8 **)(p + 0x70);
@@ -66,13 +66,13 @@ void follow_camera_build_view(u8 *p) {
         up = D_L00_00166E30;
         tb = base + 0x20;
         g = FUN_001f9ab0_2e9010(q + 0x80, tb);
-        FUN_001f9a68_2e9010(v0, tb, g);
-        FUN_001f9a28_2e9010(projected_reference_position, q + 0x80, v0);
+        FUN_001f9a68_2e9010(vector_scratch, tb, g);
+        FUN_001f9a28_2e9010(projected_reference_position, q + 0x80, vector_scratch);
         q2 = *(u8 **)(p + 0x70);
         q130 = q2 + 0x130;
         g = FUN_001f9ab0_2e9010(p + 0x30, tb);
-        FUN_001f9a68_2e9010(v0, tb, g);
-        FUN_001f9a28_2e9010(projected_camera_position, p + 0x30, v0);
+        FUN_001f9a68_2e9010(vector_scratch, tb, g);
+        FUN_001f9a28_2e9010(projected_camera_position, p + 0x30, vector_scratch);
         FUN_001f9a28_2e9010(view_direction, projected_reference_position, projected_camera_position);
         r0 = FUN_001f9af0_2e9010(view_direction);
         if (0.05f <= r0) {
@@ -89,12 +89,12 @@ void follow_camera_build_view(u8 *p) {
                                0.004f, 0.2f, 0.0f);
         d = *(f32 *)(q20 + 0x8) - g2;
         *(f32 *)(q20 + 0x4) = g2;
-        FUN_001f9a68_2e9010(v0, up, -FUN_001f9ab0_2e9010(q2 + 0x140, up));
-        FUN_001f9a28_2e9010(v0, v0, view_direction);
-        w = (u8 *)v4;
-        FUN_001f9a28_2e9010(w, p + 0x30, v0);
-        FUN_001f9a68_2e9010(v0, up, -d);
-        FUN_001f9a28_2e9010(w, w, v0);
+        FUN_001f9a68_2e9010(vector_scratch, up, -FUN_001f9ab0_2e9010(q2 + 0x140, up));
+        FUN_001f9a28_2e9010(vector_scratch, vector_scratch, view_direction);
+        w = (u8 *)adjusted_aim_position;
+        FUN_001f9a28_2e9010(w, p + 0x30, vector_scratch);
+        FUN_001f9a68_2e9010(vector_scratch, up, -d);
+        FUN_001f9a28_2e9010(w, w, vector_scratch);
         FUN_001f9a28_2e9010(view_direction, w, p + 0x30);
         r = FUN_001f9af0_2e9010(view_direction);
         if (r != 0.0f) {
