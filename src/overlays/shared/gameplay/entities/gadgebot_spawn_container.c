@@ -157,10 +157,11 @@ void gadgebot_spawn_container_update(unsigned char *moby) {
 
 typedef struct { float corner[4][4]; int color[4]; float uv[4][2]; long unk70; long tex; long unk80; long unk88; } L06BackdropQuad;
 
-extern char D_L06_00167400[];
+typedef struct { char pad[0x140]; float position[4]; } L06ReferencePosition;
+extern L06ReferencePosition referencePosition __asm__("D_L06_00167400");
 extern char D_L06_00167540[];
-extern f32 fast_vec_dot_c(void *a, void *b) __asm__("func_001F9AB0");
-extern f32 square_root_scalar(f32) __asm__("func_001F9988");
+extern float fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
+extern f32 square_root(f32) __asm__("func_001F9988");
 extern float D_L06_001D3290[][4];
 extern float D_L06_001D38C0[][2];
 extern float D_L06_001D3A90[][4];
@@ -179,13 +180,13 @@ extern short D_L06_00161888 __attribute__((sda));
 extern short D_L06_0016188C __attribute__((sda));
 extern short D_L06_001D3620[][8];
 extern void fast_draw_quad_real(void *, int, int) __asm__("func_001F7D30");
-extern void fast_vec_normalize_c2(void *, void *, f32) __asm__("FUN_001f9bf8");
+extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void fast_vec_scale(void *, void *, f32) __asm__("func_001F9A68");
 extern void transform_vector(void *, void *, void *) __asm__("func_001F9D20");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F9CF8");
 float absolute_float(float input) __asm__("func_001F99C0");
 
-static inline void TransformPoint(float *dst, float *src, float (*m)[4]) {
+static inline void transform_point(float *dst, float *src, float (*m)[4]) {
     transform_vector(dst, src, m);
 }
 
@@ -200,7 +201,6 @@ void FUN_L06_002d8738(char *moby) {
     int near;
     int i;
     float scale;
-    float *g;
     qcopy(matrix[0], moby + 0xc0);
     qcopy(matrix[1], moby + 0xd0);
     qcopy(matrix[2], moby + 0xe0);
@@ -209,9 +209,8 @@ void FUN_L06_002d8738(char *moby) {
     pos[2] = *(float *)(moby + 0x18);
     pos[3] = 1.0f;
     near = 0;
-    g = (float *)D_L06_00167400;
-    if (absolute_float(g[0x140 / 4] - pos[0]) < 16.0f &&
-        absolute_float(g[0x144 / 4] - *(float *)(moby + 0x14)) < 16.0f) {
+    if (absolute_float(referencePosition.position[0] - pos[0]) < 16.0f &&
+        absolute_float(referencePosition.position[1] - *(float *)(moby + 0x14)) < 16.0f) {
         near = 1;
     }
     if (near) {
@@ -219,15 +218,15 @@ void FUN_L06_002d8738(char *moby) {
         for (i = 0; i < 57; i++) {
             transform_vector(D_L06_001D4530[i], D_L06_001D3290[i], matrix);
             subtract_vector_xyz(direction, D_L06_001D4530[i], D_L06_00167540);
-            fast_vec_normalize_c2(direction, direction, 1.0f);
+            fast_vec_normalize(direction, direction, 1.0f);
             transform_vector(normal, D_L06_001D3D30[i], matrix);
-            fast_vec_normalize_c2(normal, normal, *(float *)&D_L06_0016188C);
-            scale = fast_vec_dot_c(normal, direction);
+            fast_vec_normalize(normal, normal, *(float *)&D_L06_0016188C);
+            scale = fast_vec_dot(normal, direction);
             fast_vec_scale(projected, normal, scale + scale);
             subtract_vector_xyz(projected, direction, projected);
-            fast_vec_normalize_c2(projected, projected, 1.0f);
+            fast_vec_normalize(projected, projected, 1.0f);
             projected[2] += 1.0f;
-            scale = square_root_scalar(projected[2] + projected[2]);
+            scale = square_root(projected[2] + projected[2]);
             uv[0] = projected[0] / (scale + scale) + 0.5f;
             uv[1] = projected[1] / (scale + scale) + 0.5f;
             uv += 2;
@@ -250,22 +249,22 @@ void FUN_L06_002d8738(char *moby) {
     i = 0;
     do {
         float *center = facePos;
-        TransformPoint(center, D_L06_001D40C0[i], matrix);
+        transform_point(center, D_L06_001D40C0[i], matrix);
         subtract_vector_xyz(direction, center, D_L06_00167540);
-        fast_vec_normalize_c2(direction, direction, 1.0f);
+        fast_vec_normalize(direction, direction, 1.0f);
         transform_vector_by_basis(center, D_L06_001D3A90[i], matrix);
-        if (!(0.0f < fast_vec_dot_c(direction, center))) {
-            short *idx = D_L06_001D3620[i];
+        if (!(0.0f < fast_vec_dot(direction, center))) {
+            short *indices = D_L06_001D3620[i];
             int j;
-            for (j = 0; j < 4; j++, idx += 2) {
-                short v = idx[0];
-                qcopy(quad.corner[j], D_L06_001D4530[v]);
+            for (j = 0; j < 4; j++, indices += 2) {
+                short vertex = indices[0];
+                qcopy(quad.corner[j], D_L06_001D4530[vertex]);
                 if (near) {
-                    quad.uv[j][0] = D_L06_001D4360[v][0];
-                    quad.uv[j][1] = D_L06_001D4360[v][1];
+                    quad.uv[j][0] = D_L06_001D4360[vertex][0];
+                    quad.uv[j][1] = D_L06_001D4360[vertex][1];
                 } else {
-                    quad.uv[j][0] = D_L06_001D38C0[idx[1]][0];
-                    quad.uv[j][1] = D_L06_001D38C0[idx[1]][1];
+                    quad.uv[j][0] = D_L06_001D38C0[indices[1]][0];
+                    quad.uv[j][1] = D_L06_001D38C0[indices[1]][1];
                 }
             }
             fast_draw_quad_real(&quad, 0, 0);
@@ -2140,202 +2139,205 @@ typedef struct {
 
 typedef struct {
     char p0[0x174];
-    char *unk174;
-    int unk178;
-    float unk17C;
+    char *target;
+    int claimed_target;
+    float spread_angle;
     char p180[0xC];
-    int unk18C;
+    int search_frame;
     char p190[2];
-    short n192;
+    short candidate_count;
     char p194[4];
     short unk198;
-    short unk19A;
+    short target_searched;
     char p19C[4];
-    int tgt[8];
-    float dst[8];
+    int candidates[8];
+    float candidate_scores[8];
 } GbSlots;
 
 extern int D_L06_001AC180[];
-extern f32 vector_distance_c(void *, s32 *) __asm__("FUN_001f9b80");
-extern float FUN_L06_002f2148_c(char *a, char *b, int c) __asm__("FUN_L06_002f2148");
-extern float fast_add_rotations_c3(float, float) __asm__("func_001FA580");
-extern int D_L06_0015F5CC;
+extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
+extern float FUN_L06_002f2148(char *a, char *b, int kind);
+extern float fast_add_rotations(float, float) __asm__("func_001FA580");
 extern unsigned char *suck_get_aim_height(int);
 float absolute_float(float input) __asm__("func_001F99C0");
 
-#define V78(p) (*(char **)((p) + 0x78))
-#define S16(p, o) (*(short *)((p) + (o)))
-#define I32(p, o) (*(int *)((p) + (o)))
-#define F32(p, o) (*(float *)((p) + (o)))
-#define TGT(d) (((GbSlots *)(d))->tgt)
-#define DST(d) (((GbSlots *)(d))->dst)
+#define PVARS(p) (*(char **)((p) + 0x78))
+#define S16(p, current_target) (*(short *)((p) + (current_target)))
+#define I32(p, current_target) (*(int *)((p) + (current_target)))
+#define F32(p, current_target) (*(float *)((p) + (current_target)))
+#define CANDIDATES(vars) (((GbSlots *)(vars))->candidates)
+#define CANDIDATE_SCORES(vars) (((GbSlots *)(vars))->candidate_scores)
+#define CANDIDATE_COUNT(vars) (((GbSlots *)(vars))->candidate_count)
 
+/* Shares targets among the idle class-0x359 mobys: each one ranks up to 8 candidates
+   by score, each target goes to its best-scoring mobys, and their approach angles
+   are spread apart. */
 void FUN_L06_002f2250(void) {
-    char *outv[50];
-    char vD[16];
-    char vE[16];
-    int sel[50];
-    signed char fl[50];
-    char *ptrs[16];
-    int n;
+    char *mobys[50];
+    char end[16];
+    char start[16];
+    int targets[50];
+    signed char weights[50];
+    char *selected[16];
+    int moby_count;
     int i;
-    int jc;
-    int kq;
-    int bi;
+    int target_count;
+    int pass;
+    int index;
 
-    n = 0;
+    moby_count = 0;
     {
-        char *pp;
-        for (i = 0; (pp = (char *)D_L06_001AC180[i]) != 0; i++) {
-            if (*(short *)(pp + 0xA6) == 0x359 && ((unsigned char *)pp)[0x20] == 5 &&
-                ((unsigned char *)pp)[0xBC] != 2 && n != 0x32) {
-                char *o = *(char **)(V78(pp) + 0x174);
-                if (o == 0 || ((unsigned char *)o)[0x20] == 0xFE || ((unsigned char *)o)[0x20] == 0xFD) {
-                    outv[n++] = pp;
+        char *entry;
+        for (i = 0; (entry = (char *)D_L06_001AC180[i]) != 0; i++) {
+            if (*(short *)(entry + 0xA6) == 0x359 && ((unsigned char *)entry)[0x20] == 5 &&
+                ((unsigned char *)entry)[0xBC] != 2 && moby_count != 0x32) {
+                char *current_target = ((GbSlots *)PVARS(entry))->target;
+                if (current_target == 0 || ((unsigned char *)current_target)[0x20] == 0xFE || ((unsigned char *)current_target)[0x20] == 0xFD) {
+                    mobys[moby_count++] = entry;
                 }
             }
         }
     }
 
-    for (i = 0; i < n; i++) {
-        char *pi = outv[i];
-        char *d = V78(pi);
-        char *q;
+    for (i = 0; i < moby_count; i++) {
+        char *moby = mobys[i];
+        char *vars = PVARS(moby);
+        char *candidate;
         int j;
-        S16(d, 0x192) = 0;
+        CANDIDATE_COUNT(vars) = 0;
         j = 0;
-        if ((q = (char *)D_L06_001AC180[j]) != 0) do {
+        if ((candidate = (char *)D_L06_001AC180[j]) != 0) do {
             int k;
-            float lim;
-            float dist;
-            int c;
-            c = 0;
-            if (*(char **)(q + 0x24) != 0) c = *(short *)(*(char **)(q + 0x24) + 0x46);
-            if (c != 5) continue;
-            lim = 12.0f;
-            if (S16(d, 0x198) != 0) lim = 5.0f;
-            if (lim < vector_distance_c(pi + 0x10, q + 0x10)) continue;
-            if (1.0f < absolute_float(F32(pi, 0x18) - F32(q, 0x18))) continue;
-            *(u128_c *)vE = *(u128_c *)(pi + 0x10);
-            *(u128_c *)vD = *(u128_c *)(q + 0x10);
-            *(float *)(vE + 8) += 0.25f;
-            *(float *)(vD + 8) += 0.25f;
-            if (collision_line(vE, vD, 2, (int)pi, 0) != 0 &&
-                (char *)((GbHit_2f2250 *)(void *)&D_L06_001745C0)->unk18 != q) continue;
-            dist = FUN_L06_002f2148_c(pi, q, 5);
-            for (k = 0; k < S16(d, 0x192); k++) {
-                if (dist < DST(d)[k]) {
-                    int t = S16(d, 0x192) - 1;
-                    int last = (t < 7) ? t : 6;
+            float range;
+            float score;
+            int kind;
+            kind = 0;
+            if (*(char **)(candidate + 0x24) != 0) kind = *(short *)(*(char **)(candidate + 0x24) + 0x46);
+            if (kind != 5) continue;
+            range = 12.0f;
+            if (S16(vars, 0x198) != 0) range = 5.0f;
+            if (range < vector_distance(moby + 0x10, candidate + 0x10)) continue;
+            if (1.0f < absolute_float(F32(moby, 0x18) - F32(candidate, 0x18))) continue;
+            *(u128_c *)start = *(u128_c *)(moby + 0x10);
+            *(u128_c *)end = *(u128_c *)(candidate + 0x10);
+            *(float *)(start + 8) += 0.25f;
+            *(float *)(end + 8) += 0.25f;
+            if (collision_line(start, end, 2, (int)moby, 0) != 0 &&
+                (char *)D_L06_001745C0.unk18 != candidate) continue;
+            score = FUN_L06_002f2148(moby, candidate, 5);
+            for (k = 0; k < CANDIDATE_COUNT(vars); k++) {
+                if (score < CANDIDATE_SCORES(vars)[k]) {
+                    int last_index = CANDIDATE_COUNT(vars) - 1;
+                    int shift_from = (last_index < 7) ? last_index : 6;
                     int m;
-                    for (m = last; m >= k; m--) {
-                        TGT(d)[m + 1] = TGT(d)[m];
-                        DST(d)[m + 1] = DST(d)[m];
+                    for (m = shift_from; m >= k; m--) {
+                        CANDIDATES(vars)[m + 1] = CANDIDATES(vars)[m];
+                        CANDIDATE_SCORES(vars)[m + 1] = CANDIDATE_SCORES(vars)[m];
                     }
                     break;
                 }
             }
             if (k < 8) {
-                TGT(d)[k] = (int)q;
-                DST(d)[k] = dist;
-                S16(d, 0x192)++;
-                if (S16(d, 0x192) >= 9) S16(d, 0x192) = 8;
+                CANDIDATES(vars)[k] = (int)candidate;
+                CANDIDATE_SCORES(vars)[k] = score;
+                CANDIDATE_COUNT(vars)++;
+                if (CANDIDATE_COUNT(vars) >= 9) CANDIDATE_COUNT(vars) = 8;
             }
-        } while ((q = (char *)D_L06_001AC180[++j]) != 0);
+        } while ((candidate = (char *)D_L06_001AC180[++j]) != 0);
     }
 
-    jc = 0;
-    for (i = 0; i < n; i++) {
-        char *d = V78(outv[i]);
+    target_count = 0;
+    for (i = 0; i < moby_count; i++) {
+        char *vars = PVARS(mobys[i]);
         int k;
-        for (k = 0; k < S16(d, 0x192); k++) {
-            if (jc < 0x32) {
-                int dd = 8 - k;
+        for (k = 0; k < CANDIDATE_COUNT(vars); k++) {
+            if (target_count < 0x32) {
+                int rank_weight = 8 - k;
                 int m;
-                for (m = 0; m < jc; m++) {
-                    if (sel[m] == TGT(d)[k]) {
-                        fl[m] += dd;
+                for (m = 0; m < target_count; m++) {
+                    if (targets[m] == CANDIDATES(vars)[k]) {
+                        weights[m] += rank_weight;
                         break;
                     }
                 }
-                if (m == jc) {
-                    sel[jc] = TGT(d)[k];
-                    fl[jc] = dd;
-                    jc++;
+                if (m == target_count) {
+                    targets[target_count] = CANDIDATES(vars)[k];
+                    weights[target_count] = rank_weight;
+                    target_count++;
                 }
             }
         }
     }
 
-    for (i = 0; i < n; i++) {
-        I32(V78(outv[i]), 0x178) = 0;
+    for (i = 0; i < moby_count; i++) {
+        ((GbSlots *)PVARS(mobys[i]))->claimed_target = 0;
     }
 
-    for (kq = 0; kq < jc; kq++) {
+    for (pass = 0; pass < target_count; pass++) {
         float spread_per_gap = 0.5235988f;
         float max_spread = 1.7453293f;
-        int bestv = 0;
+        int weight = 0;
         int m;
-        int found;
-        int cnt2;
-        int selv;
+        int count;
+        int wanted;
+        int target;
         char *p;
-        bi = 0;
-        for (m = 0; m < jc; m++) {
-            if (bestv < fl[m]) {
-                bestv = fl[m];
-                bi = m;
+        index = 0;
+        for (m = 0; m < target_count; m++) {
+            if (weight < weights[m]) {
+                weight = weights[m];
+                index = m;
             }
         }
-        fl[bi] = -1;
-        selv = sel[bi];
-        found = 0;
-        cnt2 = 1;
-        p = (char *)suck_get_aim_height(selv);
-        if (p != 0) cnt2 = S16(p, 4);
-        while (found < cnt2) {
-            float bd = 9999999.0f;
-            char *best = 0;
-            for (i = 0; i < n; i++) {
-                char *pi = outv[i];
-                char *d = V78(pi);
+        weights[index] = -1;
+        target = targets[index];
+        count = 0;
+        wanted = 1;
+        p = (char *)suck_get_aim_height(target);
+        if (p != 0) wanted = S16(p, 4);
+        while (count < wanted) {
+            float best_score = 9999999.0f;
+            char *best_moby = 0;
+            for (i = 0; i < moby_count; i++) {
+                char *moby = mobys[i];
+                char *vars = PVARS(moby);
                 int k;
-                if (I32(d, 0x178) != 0) continue;
-                for (k = 0; k < S16(d, 0x192); k++) {
-                    if (TGT(d)[k] == selv && DST(d)[k] < bd) {
-                        bd = DST(d)[k];
-                        best = pi;
+                if (((GbSlots *)vars)->claimed_target != 0) continue;
+                for (k = 0; k < CANDIDATE_COUNT(vars); k++) {
+                    if (CANDIDATES(vars)[k] == target && CANDIDATE_SCORES(vars)[k] < best_score) {
+                        best_score = CANDIDATE_SCORES(vars)[k];
+                        best_moby = moby;
                     }
                 }
             }
-            if (best == 0) break;
-            I32(V78(best), 0x178) = selv;
-            ptrs[found] = best;
-            found++;
+            if (best_moby == 0) break;
+            ((GbSlots *)PVARS(best_moby))->claimed_target = target;
+            selected[count] = best_moby;
+            count++;
         }
-        if (found != 0) {
-            float gaps = (float)(found - 1);
-            float sp = gaps * spread_per_gap;
-            float st;
-            float base;
-            if (max_spread < sp) sp = 1.7453293f;
-            st = 0.0f;
-            if (found >= 2) st = sp / gaps;
-            base = sp * -0.5f;
-            for (i = 0; i < found; i++) {
-                char *d = V78(ptrs[i]);
-                F32(d, 0x17C) = fast_add_rotations_c3(base, (float)i * st);
+        if (count != 0) {
+            float gaps = (float)(count - 1);
+            float spread = gaps * spread_per_gap;
+            float step;
+            float first_angle;
+            if (max_spread < spread) spread = 1.7453293f;
+            step = 0.0f;
+            if (count >= 2) step = spread / gaps;
+            first_angle = spread * -0.5f;
+            for (i = 0; i < count; i++) {
+                char *vars = PVARS(selected[i]);
+                ((GbSlots *)vars)->spread_angle = fast_add_rotations(first_angle, (float)i * step);
             }
         }
     }
 
-    for (i = 0; i < n; i++) {
-        GbSlots *g = (GbSlots *)V78(outv[i]);
-        int v = g->unk178;
-        g->unk18C = D_L06_0015F5CC;
-        g->unk174 = (char *)v;
-        g->unk19A = 1;
-        if (v != 0) g->unk198 = 1;
+    for (i = 0; i < moby_count; i++) {
+        GbSlots *slots = (GbSlots *)PVARS(mobys[i]);
+        int claimed = slots->claimed_target;
+        slots->search_frame = level_frame_count;
+        slots->target = (char *)claimed;
+        slots->target_searched = 1;
+        if (claimed != 0) slots->unk198 = 1;
     }
 }
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");

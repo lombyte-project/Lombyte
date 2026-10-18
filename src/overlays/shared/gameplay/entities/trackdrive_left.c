@@ -450,7 +450,7 @@ void FUN_L00_002eac18(int mode);
 void FUN_L01_002405a0(void);
 void FUN_L02_002d8910_c(float *pos, float *rot, char *moby) __asm__("FUN_L02_002d8910");
 void FUN_L02_002d92f0_c(char *moby) __asm__("FUN_L02_002d92f0");
-void FUN_L02_002d93e8_u(char *moby) __asm__("FUN_L02_002d93e8");
+void FUN_L02_002d93e8(char *moby);
 /* Fakematch: the first parameter is an int; as a long the 0 passed after the 64-bit pad test is set again instead of taken from the mask register, like retail. */
 extern int func_0022ED80_2D9F08(long, int, Moby *) __asm__("FUN_0022da68");
 extern int func_001F9850_2D9F08(int) __asm__("FUN_001f96f8");
@@ -1499,30 +1499,31 @@ f32 D_L18_001D3790[1] __attribute__((section(".data"))) = {0};
 f32 D_L18_001D37A0[1] __attribute__((section(".data"))) = {0};
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A5218.c: func_L02_002DA820), where it is exact; names translated to the US level program. */
 
-typedef struct { int v[12]; } Ring12;
+/* One ring of 12 slots: 0 empty, 1 lit, 2 occupied, 3 just reached. */
+typedef struct { int slot[12]; } Ring12;
 
 extern s32 fast_tween_color(s32, s32, f32) __asm__("func_001FA6E0");
-extern short D_L02_00161B30 __attribute__((sda));
-extern short D_L02_00161B34 __attribute__((sda));
-extern short D_L02_00161B38 __attribute__((sda));
-extern short D_L02_00161B3C __attribute__((sda));
-extern short D_L02_00161B40 __attribute__((sda));
-extern short D_L02_00161B44 __attribute__((sda));
-extern short D_L02_00161B48 __attribute__((sda));
-extern short D_L02_00161B4C __attribute__((sda));
-extern short D_L02_00161B50 __attribute__((sda));
-extern short D_L02_00161B54 __attribute__((sda));
-extern short D_L02_00161B58 __attribute__((sda));
-extern short D_L02_00161B5C __attribute__((sda));
-extern short D_L02_00161BA0 __attribute__((sda));
-extern short D_L02_00161BA4 __attribute__((sda));
-extern short D_L02_00161BA8 __attribute__((sda));
-extern short D_L02_00161BAC __attribute__((sda));
-extern short D_L02_00161BB0 __attribute__((sda));
-extern short D_L02_00161BB4 __attribute__((sda));
-extern short D_L02_00161BBC __attribute__((sda));
-extern short D_L02_00161BC0 __attribute__((sda));
-extern short D_L02_00161BC4 __attribute__((sda));
+extern int D_L02_00161B30 __attribute__((sda));
+extern int D_L02_00161B34 __attribute__((sda));
+extern int D_L02_00161B38 __attribute__((sda));
+extern int D_L02_00161B3C __attribute__((sda));
+extern int D_L02_00161B40 __attribute__((sda));
+extern int D_L02_00161B44 __attribute__((sda));
+extern int D_L02_00161B48 __attribute__((sda));
+extern int D_L02_00161B4C __attribute__((sda));
+extern int D_L02_00161B50 __attribute__((sda));
+extern int D_L02_00161B54 __attribute__((sda));
+extern int D_L02_00161B58 __attribute__((sda));
+extern int D_L02_00161B5C __attribute__((sda));
+extern int D_L02_00161BA0 __attribute__((sda));
+extern int D_L02_00161BA4 __attribute__((sda));
+extern int D_L02_00161BA8 __attribute__((sda));
+extern int D_L02_00161BAC __attribute__((sda));
+extern int D_L02_00161BB0 __attribute__((sda));
+extern int D_L02_00161BB4 __attribute__((sda));
+extern int D_L02_00161BBC __attribute__((sda));
+extern int D_L02_00161BC0 __attribute__((sda));
+extern int D_L02_00161BC4 __attribute__((sda));
 extern void FUN_L02_002da3d8_c(int, u32, float, float, float, float) __asm__("FUN_L02_002da3d8");
 extern void FUN_L02_002da6c0_c(int, int, int, float, float) __asm__("FUN_L02_002da6c0");
 extern void FUN_L02_002da938_c(void *, f32, f32, f32, s32) __asm__("FUN_L02_002da938");
@@ -1535,13 +1536,14 @@ extern void vu1_add_g_sregister(s32, u64) __asm__("func_00233980");
 #define FUN_L02_002da938_c ((void (*)(u64, f32, f32, f32, s32))FUN_L02_002da938_c)
 
 void FUN_L02_002d93e8(char *moby) {
-    struct { char unk0[0x78]; u64 texture; char unk80[0x10]; } ctx;
-    int st0, st1;
+    /* Fakematch: the texture sits at retail's stack offset inside this frame. */
+    struct { char pad0[0x78]; u64 texture; char pad80[0x10]; } ctx;
+    int first_step, second_step;
     char *data = *(char **)(moby + 0x78);
     Ring12 *markers = (Ring12 *)(data + 0xb0);
     Ring12 *first, *second, *third;
 
-    int i, state, st2;
+    int i, state, third_step;
     float phase;
 
     vu1_add_g_sregister(0x47, 0x5380b);
@@ -1549,21 +1551,21 @@ void FUN_L02_002d93e8(char *moby) {
     FUN_L02_002dae88_c();
     {
         int n, *q;
-        for (n = 11, q = markers->v; n >= 0; --n, ++q) {
+        for (n = 11, q = markers->slot; n >= 0; --n, ++q) {
             if (*q != 0) *q = 1;
         }
     }
-    st0 = 0; st1 = 0; st2 = 0;
+    first_step = 0; second_step = 0; third_step = 0;
     if (*(float *)(data + 0xe4) > 0.31415927f) {
         state = *(int *)(data + 0xe0);
-        if (state == 1) st0 = 1;
-        else if (state == 2) st1 = 1;
-        else st2 = 1;
+        if (state == 1) first_step = 1;
+        else if (state == 2) second_step = 1;
+        else third_step = 1;
     } else if (*(float *)(data + 0xe4) < -0.31415927f) {
         state = *(int *)(data + 0xe0);
-        if (state == 1) st0 = -1;
-        else if (state == 2) st1 = -1;
-        else st2 = -1;
+        if (state == 1) first_step = -1;
+        else if (state == 2) second_step = -1;
+        else third_step = -1;
     }
 
     i = 0;
@@ -1580,32 +1582,32 @@ void FUN_L02_002d93e8(char *moby) {
         angle = fast_add_rotations(phase, (float)(i * 30) * 0.017453292f);
         index = i + *(int *)(data + 0x14);
         slot = index % 12;
-        if (first->v[slot] == 2) {
-            other = i + *(int *)(data + 0x18) + st0 - st1;
-            color = (*(int *)&D_L02_00161BAC);
-            if (second->v[other % 12] != 0) distance = (float)(*(int *)&D_L02_00161B44);
+        if (first->slot[slot] == 2) {
+            other = i + *(int *)(data + 0x18) + first_step - second_step;
+            color = D_L02_00161BAC;
+            if (second->slot[other % 12] != 0) distance = (float)D_L02_00161B44;
             else {
-                int t = i + *(int *)(data + 0x1c) + st0 - st2;
-                if (third->v[t % 12] != 0) distance = (float)(*(int *)&D_L02_00161B38);
-                else if (third->v[(t + 6) % 12] != 0) distance = (float)-(*(int *)&D_L02_00161B38);
-                else if (second->v[(other + 6) % 12] != 0) distance = (float)-(*(int *)&D_L02_00161B44);
-                else if (first->v[(index + 6) % 12] != 0) distance = (float)-(*(int *)&D_L02_00161B50);
+                int third_index = i + *(int *)(data + 0x1c) + first_step - third_step;
+                if (third->slot[third_index % 12] != 0) distance = (float)D_L02_00161B38;
+                else if (third->slot[(third_index + 6) % 12] != 0) distance = (float)-D_L02_00161B38;
+                else if (second->slot[(other + 6) % 12] != 0) distance = (float)-D_L02_00161B44;
+                else if (first->slot[(index + 6) % 12] != 0) distance = (float)-D_L02_00161B50;
                 else {
-                    int k;
-                    distance = (float)-(*(int *)&D_L02_00161B5C);
+                    int opposite;
+                    distance = (float)-D_L02_00161B5C;
                     draw_second = 0;
-                    k = st0 + 6;
-                    if (markers->v[(i + k) % 12] != 0) {
-                        int m = (i + k) % 12;
-                        first->v[slot] = 3;
-                        markers->v[m] = 2;
-                        color = (*(int *)&D_L02_00161BB0);
+                    opposite = first_step + 6;
+                    if (markers->slot[(i + opposite) % 12] != 0) {
+                        int marker = (i + opposite) % 12;
+                        first->slot[slot] = 3;
+                        markers->slot[marker] = 2;
+                        color = D_L02_00161BB0;
                     }
                 }
             }
-            FUN_L02_002da938_c(ctx.texture, fast_add_rotations(angle, 0.31415927f), (float)(*(int *)&D_L02_00161B50), distance, color);
+            FUN_L02_002da938_c(ctx.texture, fast_add_rotations(angle, 0.31415927f), (float)D_L02_00161B50, distance, color);
             if (draw_second) {
-                FUN_L02_002da938_c(ctx.texture, fast_add_rotations(angle, 0.31415927f), distance, (float)(*(int *)&D_L02_00161B50), (*(int *)&D_L02_00161BB4));
+                FUN_L02_002da938_c(ctx.texture, fast_add_rotations(angle, 0.31415927f), distance, (float)D_L02_00161B50, D_L02_00161BB4);
             }
         }
     }
@@ -1616,32 +1618,32 @@ void FUN_L02_002d93e8(char *moby) {
     for (i = 0; i < 12; ++i) {
         draw_second = 1;
         phase = -0.31415927f;
-        color = (*(int *)&D_L02_00161BAC);
+        color = D_L02_00161BAC;
         if (*(int *)(data + 0xe0) == 2) phase = fast_add_rotations(phase, *(float *)(data + 0xe4));
         angle = fast_add_rotations(phase, (float)(i * 30) * 0.017453292f);
         index = i + *(int *)(data + 0x18);
         slot = index % 12;
-        if (second->v[slot] == 2) {
-            other = i + *(int *)(data + 0x1c) + st1 - st2;
-            if (third->v[other % 12] != 0) distance = (float)(*(int *)&D_L02_00161B38);
-            else if (third->v[(other + 6) % 12] != 0) distance = (float)-(*(int *)&D_L02_00161B38);
-            else if (second->v[(index + 6) % 12] != 0) distance = (float)-(*(int *)&D_L02_00161B44);
-            else if (first->v[(i + *(int *)(data + 0x14) + st1 - st0 + 6) % 12] != 0) distance = (float)-(*(int *)&D_L02_00161B50);
+        if (second->slot[slot] == 2) {
+            other = i + *(int *)(data + 0x1c) + second_step - third_step;
+            if (third->slot[other % 12] != 0) distance = (float)D_L02_00161B38;
+            else if (third->slot[(other + 6) % 12] != 0) distance = (float)-D_L02_00161B38;
+            else if (second->slot[(index + 6) % 12] != 0) distance = (float)-D_L02_00161B44;
+            else if (first->slot[(i + *(int *)(data + 0x14) + second_step - first_step + 6) % 12] != 0) distance = (float)-D_L02_00161B50;
             else {
-                int k;
-                distance = (float)-(*(int *)&D_L02_00161B5C);
+                int opposite;
+                distance = (float)-D_L02_00161B5C;
                 draw_second = 0;
-                k = st1 + 6;
-                if (markers->v[(i + k) % 12] != 0) {
-                    int m = (i + k) % 12;
-                    second->v[slot] = 3;
-                    markers->v[m] = 2;
-                    color = (*(int *)&D_L02_00161BB0);
+                opposite = second_step + 6;
+                if (markers->slot[(i + opposite) % 12] != 0) {
+                    int marker = (i + opposite) % 12;
+                    second->slot[slot] = 3;
+                    markers->slot[marker] = 2;
+                    color = D_L02_00161BB0;
                 }
             }
-            FUN_L02_002da938_c(ctx.texture, fast_add_rotations(angle, 0.31415927f), (float)(*(int *)&D_L02_00161B44), distance, color);
+            FUN_L02_002da938_c(ctx.texture, fast_add_rotations(angle, 0.31415927f), (float)D_L02_00161B44, distance, color);
             if (draw_second) {
-                FUN_L02_002da938_c(ctx.texture, fast_add_rotations(angle, 0.31415927f), distance, (float)(*(int *)&D_L02_00161B44), (*(int *)&D_L02_00161BB4));
+                FUN_L02_002da938_c(ctx.texture, fast_add_rotations(angle, 0.31415927f), distance, (float)D_L02_00161B44, D_L02_00161BB4);
             }
         }
     }
@@ -1652,30 +1654,30 @@ void FUN_L02_002d93e8(char *moby) {
     for (i = 0; i < 12; ++i) {
         draw_second = 1;
         phase = -0.31415927f;
-        color = (*(int *)&D_L02_00161BAC);
+        color = D_L02_00161BAC;
         if (*(int *)(data + 0xe0) == 3) phase = fast_add_rotations(phase, *(float *)(data + 0xe4));
         angle = fast_add_rotations(phase, (float)(i * 30) * 0.017453292f);
         index = i + *(int *)(data + 0x1c);
         slot = index % 12;
-        if (third->v[slot] == 2) {
-            if (third->v[(index + 6) % 12] != 0) distance = (float)-(*(int *)&D_L02_00161B38);
-            else if (second->v[(i + *(int *)(data + 0x18) + st2 - st1 + 6) % 12] != 0) distance = (float)-(*(int *)&D_L02_00161B44);
-            else if (first->v[(i + *(int *)(data + 0x14) + st2 - st0 + 6) % 12] != 0) distance = (float)-(*(int *)&D_L02_00161B50);
+        if (third->slot[slot] == 2) {
+            if (third->slot[(index + 6) % 12] != 0) distance = (float)-D_L02_00161B38;
+            else if (second->slot[(i + *(int *)(data + 0x18) + third_step - second_step + 6) % 12] != 0) distance = (float)-D_L02_00161B44;
+            else if (first->slot[(i + *(int *)(data + 0x14) + third_step - first_step + 6) % 12] != 0) distance = (float)-D_L02_00161B50;
             else {
-                int k;
-                distance = (float)-(*(int *)&D_L02_00161B5C);
+                int opposite;
+                distance = (float)-D_L02_00161B5C;
                 draw_second = 0;
-                k = st2 + 6;
-                if (markers->v[(i + k) % 12] != 0) {
-                    int m = (i + k) % 12;
-                    third->v[slot] = 3;
-                    markers->v[m] = 2;
-                    color = (*(int *)&D_L02_00161BB0);
+                opposite = third_step + 6;
+                if (markers->slot[(i + opposite) % 12] != 0) {
+                    int marker = (i + opposite) % 12;
+                    third->slot[slot] = 3;
+                    markers->slot[marker] = 2;
+                    color = D_L02_00161BB0;
                 }
             }
-            FUN_L02_002da938_c(ctx.texture, fast_add_rotations(angle, 0.31415927f), (float)(*(int *)&D_L02_00161B38), distance, color);
+            FUN_L02_002da938_c(ctx.texture, fast_add_rotations(angle, 0.31415927f), (float)D_L02_00161B38, distance, color);
             if (draw_second) {
-                FUN_L02_002da938_c(ctx.texture, fast_add_rotations(angle, 0.31415927f), distance, (float)(*(int *)&D_L02_00161B38), (*(int *)&D_L02_00161BB4));
+                FUN_L02_002da938_c(ctx.texture, fast_add_rotations(angle, 0.31415927f), distance, (float)D_L02_00161B38, D_L02_00161BB4);
             }
         }
     }
@@ -1686,21 +1688,21 @@ void FUN_L02_002d93e8(char *moby) {
     for (i = 0; i < 12; ++i) {
         angle = -0.2617994f;
         if (*(int *)(data + 0xe0) == 1) {
-            color = fast_tween_color((*(int *)&D_L02_00161BA0), (*(int *)&D_L02_00161BA0) & 0xffffff,
+            color = fast_tween_color(D_L02_00161BA0, D_L02_00161BA0 & 0xffffff,
                                   fast_sin((float)((D_L02_0015F5CC % 60) * 6) * 0.017453292f) * 0.5f + 0.5f);
             if (*(float *)(data + 0xe4) != 0.0f) angle = fast_add_rotations(angle, *(float *)(data + 0xe4));
-        } else color = (*(int *)&D_L02_00161BA4);
+        } else color = D_L02_00161BA4;
         angle = fast_add_rotations(angle, (float)(i * 30) * 0.017453292f);
         phase = fast_add_rotations(angle, 0.5235988f);
-        FUN_L02_002da3d8_c(ctx.texture, angle, phase, (float)(*(int *)&D_L02_00161B4C), (float)(*(int *)&D_L02_00161B48), color);
-        if (first->v[(i + *(int *)(data + 0x14)) % 12] != 0) {
-            if (first->v[(i + *(int *)(data + 0x14)) % 12] >= 3) {
-                FUN_L02_002da6c0_c(ctx.texture, (*(int *)&D_L02_00161BA8), 0, fast_add_rotations(angle, 0.2617994f), (float)(*(int *)&D_L02_00161B50));
-                first->v[(i + *(int *)(data + 0x14)) % 12] = 2;
-            } else if (first->v[(i + *(int *)(data + 0x14)) % 12] == 2) {
-                FUN_L02_002da6c0_c(ctx.texture, (*(int *)&D_L02_00161BA8), 1, fast_add_rotations(angle, 0.2617994f), (float)(*(int *)&D_L02_00161B50));
+        FUN_L02_002da3d8_c(ctx.texture, angle, phase, (float)D_L02_00161B4C, (float)D_L02_00161B48, color);
+        if (first->slot[(i + *(int *)(data + 0x14)) % 12] != 0) {
+            if (first->slot[(i + *(int *)(data + 0x14)) % 12] >= 3) {
+                FUN_L02_002da6c0_c(ctx.texture, D_L02_00161BA8, 0, fast_add_rotations(angle, 0.2617994f), (float)D_L02_00161B50);
+                first->slot[(i + *(int *)(data + 0x14)) % 12] = 2;
+            } else if (first->slot[(i + *(int *)(data + 0x14)) % 12] == 2) {
+                FUN_L02_002da6c0_c(ctx.texture, D_L02_00161BA8, 1, fast_add_rotations(angle, 0.2617994f), (float)D_L02_00161B50);
             } else {
-                FUN_L02_002da6c0_c(ctx.texture, (*(int *)&D_L02_00161BA8), 2, fast_add_rotations(angle, 0.2617994f), (float)(*(int *)&D_L02_00161B50));
+                FUN_L02_002da6c0_c(ctx.texture, D_L02_00161BA8, 2, fast_add_rotations(angle, 0.2617994f), (float)D_L02_00161B50);
             }
         }
     }
@@ -1711,21 +1713,21 @@ void FUN_L02_002d93e8(char *moby) {
     for (i = 0; i < 12; ++i) {
         angle = -0.2617994f;
         if (*(int *)(data + 0xe0) == 2) {
-            color = fast_tween_color((*(int *)&D_L02_00161BA0), (*(int *)&D_L02_00161BA0) & 0xffffff,
+            color = fast_tween_color(D_L02_00161BA0, D_L02_00161BA0 & 0xffffff,
                                   fast_sin((float)((D_L02_0015F5CC % 60) * 6) * 0.017453292f) * 0.5f + 0.5f);
             if (*(float *)(data + 0xe4) != 0.0f) angle = fast_add_rotations(angle, *(float *)(data + 0xe4));
-        } else color = (*(int *)&D_L02_00161BA4);
+        } else color = D_L02_00161BA4;
         angle = fast_add_rotations(angle, (float)(i * 30) * 0.017453292f);
         phase = fast_add_rotations(angle, 0.5235988f);
-        FUN_L02_002da3d8_c(ctx.texture, angle, phase, (float)(*(int *)&D_L02_00161B40), (float)(*(int *)&D_L02_00161B3C), color);
-        if (second->v[(i + *(int *)(data + 0x18)) % 12] != 0) {
-            if (second->v[(i + *(int *)(data + 0x18)) % 12] >= 3) {
-                FUN_L02_002da6c0_c(ctx.texture, (*(int *)&D_L02_00161BA8), 0, fast_add_rotations(angle, 0.2617994f), (float)(*(int *)&D_L02_00161B44));
-                second->v[(i + *(int *)(data + 0x18)) % 12] = 2;
-            } else if (second->v[(i + *(int *)(data + 0x18)) % 12] == 2) {
-                FUN_L02_002da6c0_c(ctx.texture, (*(int *)&D_L02_00161BA8), 1, fast_add_rotations(angle, 0.2617994f), (float)(*(int *)&D_L02_00161B44));
+        FUN_L02_002da3d8_c(ctx.texture, angle, phase, (float)D_L02_00161B40, (float)D_L02_00161B3C, color);
+        if (second->slot[(i + *(int *)(data + 0x18)) % 12] != 0) {
+            if (second->slot[(i + *(int *)(data + 0x18)) % 12] >= 3) {
+                FUN_L02_002da6c0_c(ctx.texture, D_L02_00161BA8, 0, fast_add_rotations(angle, 0.2617994f), (float)D_L02_00161B44);
+                second->slot[(i + *(int *)(data + 0x18)) % 12] = 2;
+            } else if (second->slot[(i + *(int *)(data + 0x18)) % 12] == 2) {
+                FUN_L02_002da6c0_c(ctx.texture, D_L02_00161BA8, 1, fast_add_rotations(angle, 0.2617994f), (float)D_L02_00161B44);
             } else {
-                FUN_L02_002da6c0_c(ctx.texture, (*(int *)&D_L02_00161BA8), 2, fast_add_rotations(angle, 0.2617994f), (float)(*(int *)&D_L02_00161B44));
+                FUN_L02_002da6c0_c(ctx.texture, D_L02_00161BA8, 2, fast_add_rotations(angle, 0.2617994f), (float)D_L02_00161B44);
             }
         }
     }
@@ -1736,21 +1738,21 @@ void FUN_L02_002d93e8(char *moby) {
     for (i = 0; i < 12; ++i) {
         angle = -0.2617994f;
         if (*(int *)(data + 0xe0) == 3) {
-            color = fast_tween_color((*(int *)&D_L02_00161BA0), (*(int *)&D_L02_00161BA0) & 0xffffff,
+            color = fast_tween_color(D_L02_00161BA0, D_L02_00161BA0 & 0xffffff,
                                   fast_sin((float)((D_L02_0015F5CC % 60) * 6) * 0.017453292f) * 0.5f + 0.5f);
             if (*(float *)(data + 0xe4) != 0.0f) angle = fast_add_rotations(angle, *(float *)(data + 0xe4));
-        } else color = (*(int *)&D_L02_00161BA4);
+        } else color = D_L02_00161BA4;
         angle = fast_add_rotations(angle, (float)(i * 30) * 0.017453292f);
         phase = fast_add_rotations(angle, 0.5235988f);
-        FUN_L02_002da3d8_c(ctx.texture, angle, phase, (float)(*(int *)&D_L02_00161B34), (float)(*(int *)&D_L02_00161B30), color);
-        if (third->v[(i + *(int *)(data + 0x1c)) % 12] != 0) {
-            if (third->v[(i + *(int *)(data + 0x1c)) % 12] >= 3) {
-                FUN_L02_002da6c0_c(ctx.texture, (*(int *)&D_L02_00161BA8), 0, fast_add_rotations(angle, 0.2617994f), (float)(*(int *)&D_L02_00161B38));
-                third->v[(i + *(int *)(data + 0x1c)) % 12] = 2;
-            } else if (third->v[(i + *(int *)(data + 0x1c)) % 12] == 2) {
-                FUN_L02_002da6c0_c(ctx.texture, (*(int *)&D_L02_00161BA8), 1, fast_add_rotations(angle, 0.2617994f), (float)(*(int *)&D_L02_00161B38));
+        FUN_L02_002da3d8_c(ctx.texture, angle, phase, (float)D_L02_00161B34, (float)D_L02_00161B30, color);
+        if (third->slot[(i + *(int *)(data + 0x1c)) % 12] != 0) {
+            if (third->slot[(i + *(int *)(data + 0x1c)) % 12] >= 3) {
+                FUN_L02_002da6c0_c(ctx.texture, D_L02_00161BA8, 0, fast_add_rotations(angle, 0.2617994f), (float)D_L02_00161B38);
+                third->slot[(i + *(int *)(data + 0x1c)) % 12] = 2;
+            } else if (third->slot[(i + *(int *)(data + 0x1c)) % 12] == 2) {
+                FUN_L02_002da6c0_c(ctx.texture, D_L02_00161BA8, 1, fast_add_rotations(angle, 0.2617994f), (float)D_L02_00161B38);
             } else {
-                FUN_L02_002da6c0_c(ctx.texture, (*(int *)&D_L02_00161BA8), 2, fast_add_rotations(angle, 0.2617994f), (float)(*(int *)&D_L02_00161B38));
+                FUN_L02_002da6c0_c(ctx.texture, D_L02_00161BA8, 2, fast_add_rotations(angle, 0.2617994f), (float)D_L02_00161B38);
             }
         }
     }
@@ -1761,12 +1763,12 @@ void FUN_L02_002d93e8(char *moby) {
     for (i = 0; i < 12; ++i) {
         angle = fast_add_rotations(-0.08726646f, (float)(i * 30) * 0.017453292f);
         phase = fast_add_rotations(angle, 0.17453292f);
-        value = markers->v[i];
+        value = markers->slot[i];
         if (value != 0) {
-            if (value == 2) color = (*(int *)&D_L02_00161BC4);
-            else if (D_L02_0015F5CC & 0x20) color = (*(int *)&D_L02_00161BC0);
-            else color = (*(int *)&D_L02_00161BBC);
-            FUN_L02_002da3d8_c(ctx.texture, angle, phase, (float)(*(int *)&D_L02_00161B58), (float)(*(int *)&D_L02_00161B54), color);
+            if (value == 2) color = D_L02_00161BC4;
+            else if (D_L02_0015F5CC & 0x20) color = D_L02_00161BC0;
+            else color = D_L02_00161BBC;
+            FUN_L02_002da3d8_c(ctx.texture, angle, phase, (float)D_L02_00161B58, (float)D_L02_00161B54, color);
         }
     }
     }

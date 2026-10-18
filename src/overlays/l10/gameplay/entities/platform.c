@@ -1891,7 +1891,7 @@ extern char D_L10_001DD1D0[] __asm__("D_L10_001DD1D0");
 extern char D_L10_001DD210[] __asm__("D_L10_001DD210");
 extern unsigned char D_L10_00161CA8[] __asm__("D_L10_00161CA8");
 extern unsigned char D_001413F4[];
-extern void FUN_L10_002da690_u(u8 *) __asm__("FUN_L10_002da690");
+void FUN_L10_002da690(u8 *moby);
 extern int stub_printf() __asm__("FUN_001e93b0");
 extern void delete_moby(void *) __asm__("FUN_0020c828");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
@@ -1963,7 +1963,7 @@ void FUN_L10_002da2c8(struct Moby *moby) {
         position1[2] += half_height;
         position1[3] = square_root(radius_squared + half_width * half_width);
         if (fast_vec_dist(&moby->pos, &D_L10_00167240) < 80.0f && 0.0f <= (float)fast_bsphere_check(position1, 80.0f))
-            enqueue_callback_list_1((void *)FUN_L10_002da690_u, moby);
+            enqueue_callback_list_1((void *)FUN_L10_002da690, moby);
         if (voice_is_playing(moby, *(int *)(data + 0x30)) == 0)
             *(int *)(data + 0x30) = allocate_voice_for_target_entry(0, 4, (int)moby);
         break;
@@ -1986,7 +1986,7 @@ void FUN_L10_002da2c8(struct Moby *moby) {
         scratch.position2[2] += half_height;
         scratch.position2[3] = square_root(radius_squared + half_width * half_width);
         if (fast_vec_dist(&moby->pos, &D_L10_00167240) < 80.0f && 0.0f <= (float)fast_bsphere_check(scratch.position2, 80.0f))
-            enqueue_callback_list_1((void *)FUN_L10_002da690_u, moby);
+            enqueue_callback_list_1((void *)FUN_L10_002da690, moby);
         break;
     }
     }
@@ -2002,7 +2002,7 @@ extern f32 D_L10_001D9FF0[];
 extern f32 D_L10_001DA010[];
 extern s32 D_L10_00161D64;
 extern s32 D_L10_00161D68;
-extern s32 fast_tween_color_da690(s32, s32, f32) __asm__("FUN_001fa6e0");
+extern s32 fast_tween_color(s32, s32, f32) __asm__("FUN_001fa6e0");
 extern int D_L10_00161C70 __attribute__((sda));
 extern int D_L10_00161C74 __attribute__((sda));
 extern int D_L10_00161C78 __attribute__((sda));
@@ -2010,16 +2010,16 @@ extern int D_L10_00161C7C __attribute__((sda));
 extern int D_L10_00161C90 __attribute__((sda));
 extern int D_L10_00161C94 __attribute__((sda));
 
-extern f32 vector_distance_da690(void *, void *) __asm__("FUN_001f9b48");
-extern void rotation_matrix_y_da690(void *, f32) __asm__("FUN_001f9ff8");
-extern void rotation_matrix_da690(void *, void *) __asm__("FUN_001fa050");
-extern void multiply_matrix_da690(void *, void *, void *) __asm__("FUN_001fa378");
-extern f32 convert_integer_to_float_da690(s32) __asm__("FUN_001fa6c0");
+extern f32 vector_distance(void *, void *) __asm__("FUN_001f9b48");
+extern void rotation_matrix_y(void *, f32) __asm__("FUN_001f9ff8");
+extern void rotation_matrix(void *, void *) __asm__("FUN_001fa050");
+extern void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
+extern f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
 extern s32 truncate_float_to_s32_da690(f32) __asm__("FUN_001fa6d0");
-extern f32 multiply_global_factor_da690(f32) __asm__("FUN_001f96b0");
-extern u64 get_effect_texture_da690(s32) __asm__("FUN_001f44b8");
-extern void add_vector_xyz_da690(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void draw_geometry_quad_da690(void *, void *, s32) __asm__("FUN_001f7d30");
+extern f32 multiply_global_factor(f32) __asm__("FUN_001f96b0");
+extern u64 get_effect_texture(s32) __asm__("FUN_001f44b8");
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void draw_geometry_quad(void *, void *, s32) __asm__("FUN_001f7d30");
 
 void FUN_L10_002da690(u8 *moby) {
     char *data = *(char **)(moby + 0x78);
@@ -2046,11 +2046,11 @@ void FUN_L10_002da690(u8 *moby) {
     float *matrix2, *uv1, *uv2;
 
     {
-        float distance = vector_distance_da690(moby + 0x10, (u8 *)&D_L10_00167240);
+        float distance = vector_distance(moby + 0x10, (u8 *)&D_L10_00167240);
         if (distance > 48.0f) fade = (80.0f - distance) * 0.03125f;
         else fade = 1.0f;
     }
-    rotation_matrix_y_da690(buffers.rotation, *(float *)data * 0.5f);
+    rotation_matrix_y(buffers.rotation, *(float *)data * 0.5f);
     matrix1 = buffers.matrix1;
     matrix2 = buffers.packet.fields.matrix2;
     uv1 = matrix1 + 1;
@@ -2058,14 +2058,14 @@ void FUN_L10_002da690(u8 *moby) {
     {
         int n;
         for (n = 0; n < *(int *)(data + 4); n++) {
-            rotation_matrix_da690(scratch + n * 0x40, moby + 0x40);
-            multiply_matrix_da690(scratch + n * 0x40, scratch + n * 0x40, buffers.rotation);
+            rotation_matrix(scratch + n * 0x40, moby + 0x40);
+            multiply_matrix(scratch + n * 0x40, scratch + n * 0x40, buffers.rotation);
             *(u128_c *)(scratch + n * 0x40 + 0x30) = *(u128_c *)(moby + 0x10);
-            *(float *)(scratch + n * 0x40 + 0x38) += convert_integer_to_float_da690(n + 1) * *(float *)(data + 8);
+            *(float *)(scratch + n * 0x40 + 0x38) += convert_integer_to_float(n + 1) * *(float *)(data + 8);
         }
     }
     {
-        u64 texture = get_effect_texture_da690(14);
+        u64 texture = get_effect_texture(14);
         u64 packet_flags = ((u64)D_L10_00161C70) | ((u64)D_L10_00161C74 << 2) |
                 ((u64)D_L10_00161C78 << 4) | ((u64)D_L10_00161C7C << 6) | 0x8000000000ULL;
         ((u64 *)buffers.packet.fields.matrix2)[5] = texture;
@@ -2109,19 +2109,19 @@ void FUN_L10_002da690(u8 *moby) {
                 age = *(int *)(ages + (order[i] * 4 + group_age));
                 group_vertices = group * 0x2580;
                 if (age > D_L10_00161D68) {
-                    progress = convert_integer_to_float_da690(age - D_L10_00161D68) /
-                               convert_integer_to_float_da690(D_L10_00161D64 - D_L10_00161D68);
+                    progress = convert_integer_to_float(age - D_L10_00161D68) /
+                               convert_integer_to_float(D_L10_00161D64 - D_L10_00161D68);
                 } else {
-                    progress = 1.0f - convert_integer_to_float_da690(age) /
-                               convert_integer_to_float_da690(D_L10_00161D68);
+                    progress = 1.0f - convert_integer_to_float(age) /
+                               convert_integer_to_float(D_L10_00161D68);
                 }
-                color = fast_tween_color_da690(D_L10_00161C90, D_L10_00161C94, progress);
+                color = fast_tween_color(D_L10_00161C90, D_L10_00161C94, progress);
                 color = (color & 0xffffff) +
                         (truncate_float_to_s32_da690(fade * fade *
-                         convert_integer_to_float_da690((int)color >> 24)) << 24);
+                         convert_integer_to_float((int)color >> 24)) << 24);
                 if (moby[0x20] == 2) {
-                    float alpha = convert_integer_to_float_da690(*(int *)(data + 0x34));
-                    float duration = multiply_global_factor_da690(D_L10_00161C98 * 60.0f);
+                    float alpha = convert_integer_to_float(*(int *)(data + 0x34));
+                    float duration = multiply_global_factor(D_L10_00161C98 * 60.0f);
                     color = (truncate_float_to_s32_da690(alpha * 255.0f / duration) << 24) | 0xffffff;
                 }
                 vertex = 0;
@@ -2132,10 +2132,10 @@ void FUN_L10_002da690(u8 *moby) {
                 *(unsigned int *)(buffers.packet.quad + 0x44) = color;
                 *(unsigned int *)(buffers.packet.quad + 0x40) = color;
                 for (; vertex < 4; vertex++) {
-                    add_vector_xyz_da690(buffers.packet.quad + vertex * 0x10, (char *)D_L10_001DA010 + vertex * 0x10,
+                    add_vector_xyz(buffers.packet.quad + vertex * 0x10, (char *)D_L10_001DA010 + vertex * 0x10,
                         base + group_vertices + (row + (vertex >> 1)) * 0x140 + order[i] * 0x10);
                 }
-                draw_geometry_quad_da690(buffers.packet.quad, scratch + offset, 0);
+                draw_geometry_quad(buffers.packet.quad, scratch + offset, 0);
             }
             row = next_row;
         } while (row < 19);

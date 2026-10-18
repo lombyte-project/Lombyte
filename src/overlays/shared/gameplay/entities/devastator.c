@@ -2540,6 +2540,7 @@ s32 FUN_L00_002b6bc8(Moby *m, f32 radius) {
     if (other != 0) {
         i = 0;
         do {
+            /* Fakematch: the extra block brings the draft closer to retail's scheduling. */
             do { state = FUN_L00_0025c338_b6bc8(other); } while (0);
             if (state != 0) {
                 motion = &hero.motion;

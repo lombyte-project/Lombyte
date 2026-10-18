@@ -146,106 +146,106 @@ extern f32 square_root_scalar(f32) __asm__("func_001F9988");
 float absolute_float(float input) __asm__("func_001F99C0");
 
 /* Splash on the pool height tiles: raises the heights around (x, z) and copies the edges into the neighbour tiles. */
-void FUN_L00_002a3ec8(HeightTile *g, int count, int mode, float x, float z, float radius, float amount) {
-    HeightTile *buf = g;
-    int r;
+void FUN_L00_002a3ec8(HeightTile *tile, int count, int mode, float x, float z, float radius, float amount) {
+    HeightTile *tiles = tile;
+    int row;
     int i;
 
     for (i = 0; i < count; i++) {
-        float oy = g->z + D_L00_001CA880.origin_z;
-        float fy = (z - oy) / D_L00_001CA880.cell_height;
-        float fx = (x - (g->x + D_L00_001CA880.origin_x)) / D_L00_001CA880.cell_width;
-        int r0, r1, c0, c1;
-        float py;
+        float tile_z = tile->z + D_L00_001CA880.origin_z;
+        float cell_z = (z - tile_z) / D_L00_001CA880.cell_height;
+        float cell_x = (x - (tile->x + D_L00_001CA880.origin_x)) / D_L00_001CA880.cell_width;
+        int row_first, row_last, col_first, col_last;
+        float row_z;
 
-        r0 = (int)(fy - radius);
-        r1 = (int)(fy + radius);
-        if (r0 < 0) r0 = 0;
-        if (r1 >= 16) r1 = 15;
-        c0 = (int)(fx - radius);
-        c1 = (int)(fx + radius);
-        if (c1 >= 16) c1 = 15;
-        if (c0 < 0) c0 = 0;
-        py = oy + D_L00_001CA880.cell_height * (float)r0;
+        row_first = (int)(cell_z - radius);
+        row_last = (int)(cell_z + radius);
+        if (row_first < 0) row_first = 0;
+        if (row_last >= 16) row_last = 15;
+        col_first = (int)(cell_x - radius);
+        col_last = (int)(cell_x + radius);
+        if (col_last >= 16) col_last = 15;
+        if (col_first < 0) col_first = 0;
+        row_z = tile_z + D_L00_001CA880.cell_height * (float)row_first;
 
-        for (r = r0; r <= r1; r++) {
-            float px = (g->x + D_L00_001CA880.origin_x) + D_L00_001CA880.cell_width * (float)c0;
-            int c;
+        for (row = row_first; row <= row_last; row++) {
+            float col_x = (tile->x + D_L00_001CA880.origin_x) + D_L00_001CA880.cell_width * (float)col_first;
+            int col;
 
-            for (c = c0; c <= c1; c++) {
-                float d2 = (x - px) * (x - px) + (z - py) * (z - py);
-                float v;
+            for (col = col_first; col <= col_last; col++) {
+                float dist_sq = (x - col_x) * (x - col_x) + (z - row_z) * (z - row_z);
+                float height;
 
-                if (d2 < 1.0f) {
-                    v = amount;
+                if (dist_sq < 1.0f) {
+                    height = amount;
                 } else {
-                    v = amount / square_root_scalar(d2);
+                    height = amount / square_root_scalar(dist_sq);
                 }
                 if (mode == 0) {
-                    float a = absolute_float(v);
-                    if (a < absolute_float(g->heights[D_L00_00161218][r][c])) {
-                        v = g->heights[D_L00_00161218][r][c];
+                    float magnitude = absolute_float(height);
+                    if (magnitude < absolute_float(tile->heights[D_L00_00161218][row][col])) {
+                        height = tile->heights[D_L00_00161218][row][col];
                     }
                 } else {
-                    v += g->heights[D_L00_00161220][r][c];
+                    height += tile->heights[D_L00_00161220][row][col];
                 }
                 {
                 int cur = D_L00_00161218;
-                g->heights[cur][r][c] = v;
+                tile->heights[cur][row][col] = height;
 
-                if (r < 2 && g->neighbours[0] != 0xFF) {
-                    if (r == 0) {
-                        buf[g->neighbours[0]].heights[cur][18][c] = g->heights[cur][0][c];
+                if (row < 2 && tile->neighbours[0] != 0xFF) {
+                    if (row == 0) {
+                        tiles[tile->neighbours[0]].heights[cur][18][col] = tile->heights[cur][0][col];
                     } else {
-                        buf[g->neighbours[0]].heights[cur][20][c] = v;
+                        tiles[tile->neighbours[0]].heights[cur][20][col] = height;
                     }
                 }
                 }
-                if (c < 2 && g->neighbours[1] != 0xFF) {
-                    if (c == 0) {
-                        buf[g->neighbours[1]].heights[D_L00_00161218][19][r] = g->heights[D_L00_00161218][r][0];
+                if (col < 2 && tile->neighbours[1] != 0xFF) {
+                    if (col == 0) {
+                        tiles[tile->neighbours[1]].heights[D_L00_00161218][19][row] = tile->heights[D_L00_00161218][row][0];
                     } else {
-                        buf[g->neighbours[1]].heights[D_L00_00161218][21][r] = g->heights[D_L00_00161218][r][c];
+                        tiles[tile->neighbours[1]].heights[D_L00_00161218][21][row] = tile->heights[D_L00_00161218][row][col];
                     }
                 }
-                if (r == 15 && g->neighbours[2] != 0xFF) {
+                if (row == 15 && tile->neighbours[2] != 0xFF) {
                     int cur = D_L00_00161218;
-                    buf[g->neighbours[2]].heights[cur][16][c] = g->heights[cur][r][c];
+                    tiles[tile->neighbours[2]].heights[cur][16][col] = tile->heights[cur][row][col];
                 }
-                if (c == 15 && g->neighbours[3] != 0xFF) {
+                if (col == 15 && tile->neighbours[3] != 0xFF) {
                     int cur = D_L00_00161218;
-                    buf[g->neighbours[3]].heights[cur][17][r] = g->heights[cur][r][c];
+                    tiles[tile->neighbours[3]].heights[cur][17][row] = tile->heights[cur][row][col];
                 }
-                if (g->neighbours[4] != 0xFF) {
-                    if (c == 0 && r == 0) {
+                if (tile->neighbours[4] != 0xFF) {
+                    if (col == 0 && row == 0) {
                         int cur = D_L00_00161218;
-                        buf[g->neighbours[4]].heights[cur][22][3] = g->heights[cur][r][c];
+                        tiles[tile->neighbours[4]].heights[cur][22][3] = tile->heights[cur][row][col];
                     }
-                    if (c == 1 && r == 0) {
+                    if (col == 1 && row == 0) {
                         int cur = D_L00_00161218;
-                        buf[g->neighbours[4]].heights[cur][22][4] = g->heights[cur][0][1];
+                        tiles[tile->neighbours[4]].heights[cur][22][4] = tile->heights[cur][0][1];
                     }
-                    if (c == 0 && r == 1) {
+                    if (col == 0 && row == 1) {
                         int cur = D_L00_00161218;
-                        buf[g->neighbours[4]].heights[cur][22][5] = g->heights[cur][1][0];
+                        tiles[tile->neighbours[4]].heights[cur][22][5] = tile->heights[cur][1][0];
                     }
                 }
-                if (g->neighbours[5] != 0xFF && c == 15 && r == 0) {
+                if (tile->neighbours[5] != 0xFF && col == 15 && row == 0) {
                     int cur = D_L00_00161218;
-                    buf[g->neighbours[5]].heights[cur][22][2] = g->heights[cur][0][15];
+                    tiles[tile->neighbours[5]].heights[cur][22][2] = tile->heights[cur][0][15];
                 }
-                if (g->neighbours[6] != 0xFF && c == 0 && r == 15) {
+                if (tile->neighbours[6] != 0xFF && col == 0 && row == 15) {
                     int cur = D_L00_00161218;
-                    buf[g->neighbours[6]].heights[cur][22][1] = g->heights[cur][15][0];
+                    tiles[tile->neighbours[6]].heights[cur][22][1] = tile->heights[cur][15][0];
                 }
-                if (g->neighbours[7] != 0xFF && c == 15 && r == 15) {
+                if (tile->neighbours[7] != 0xFF && col == 15 && row == 15) {
                     int cur = D_L00_00161218;
-                    buf[g->neighbours[7]].heights[cur][22][0] = g->heights[cur][15][15];
+                    tiles[tile->neighbours[7]].heights[cur][22][0] = tile->heights[cur][15][15];
                 }
-                px += D_L00_001CA880.cell_width;
+                col_x += D_L00_001CA880.cell_width;
             }
-            py += D_L00_001CA880.cell_height;
+            row_z += D_L00_001CA880.cell_height;
         }
-        g++;
+        tile++;
     }
 }

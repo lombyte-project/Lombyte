@@ -1220,11 +1220,11 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00254058.s", FUN_L05_00254058);
 #else
 extern u8 D_0013D388;
 extern f32 D_L05_002169F8[];
-extern f32 multiply_global_factor_4058(f32) __asm__("FUN_001f96b0");
+extern f32 multiply_global_factor(f32) __asm__("FUN_001f96b0");
 
-struct ScoreTable_4058 { f32 values[5]; };
+struct ScoreTable { f32 values[5]; };
 
-struct HeroTally_4058 {
+struct HeroTally {
     u8 pad0[0x6D0];
     f32 spin[3];          /* 0x6D0 */
     u8 pad6DC[4];
@@ -1239,7 +1239,7 @@ struct HeroTally_4058 {
     s32 total_score;      /* 0x714 */
 };
 
-#define TALLY ((struct HeroTally_4058 *)&hero)
+#define TALLY ((struct HeroTally *)&hero)
 
 void FUN_L05_00254058(void) {
     struct UsageStats *stats;
@@ -1297,9 +1297,9 @@ void FUN_L05_00254058(void) {
         }
     }
     {
-        struct ScoreTable_4058 table = *(struct ScoreTable_4058 *)D_L05_002169F8;
+        struct ScoreTable table = *(struct ScoreTable *)D_L05_002169F8;
         TALLY->rank_scale = table.values[TALLY->flag_count];
-        TALLY->score = truncate_float_to_s32((f32)((TALLY->time_score_base * 100) / (s32)(multiply_global_factor_4058(1.0f) * 60.0f)));
+        TALLY->score = truncate_float_to_s32((f32)((TALLY->time_score_base * 100) / (s32)(multiply_global_factor(1.0f) * 60.0f)));
         TALLY->score += TALLY->flag_count * 25;
         TALLY->score = truncate_float_to_s32((f32)TALLY->score * TALLY->rank_scale);
         TALLY->total_score = TALLY->spin_score + TALLY->score;

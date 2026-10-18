@@ -3775,16 +3775,14 @@ void FUN_L00_00213de8(float s) {
     f[0x194 / 4] = f[0x194 / 4] * s;
 }
 #define HERO_OF(v) ((struct Hero *)((char *)(v) - 0xE0))
-extern Vec4 hero_velocity_34358 __asm__("D_0013F430");
-extern f32 FUN_L00_00213350_34358(void *) __asm__("FUN_L00_00213350");
-extern f32 FUN_L00_002339d0_34358(void *) __asm__("FUN_L00_002339d0");
-extern f32 approach_value_34358(f32, f32, f32 *) __asm__("FUN_00213ed8");
-extern void FUN_L00_00233ba0_34358(void *, void *, f32) __asm__("FUN_L00_00233ba0");
-extern void FUN_L00_00233708_34358(void *, void *, f32) __asm__("FUN_L00_00233708");
-extern void subtract_vector_xyz_34358(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void add_vector_xyz_34358(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void FUN_001f9c48_34358(void *, void *, f32) __asm__("FUN_001f9c48");
-extern f32 vector_length_xy_34358(void *) __asm__("FUN_001f9b20");
+extern Vec4 hero_velocity __asm__("D_0013F430");
+extern f32 FUN_L00_002339d0(void *);
+extern f32 approach_value(f32 *p, f32 target, f32 maxstep) __asm__("FUN_00213ed8");
+extern void FUN_L00_00233708(void *, void *, f32);
+extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void FUN_001f9c48(void *, void *, f32);
+extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00213e68.s", FUN_L00_00213e68);
@@ -3823,8 +3821,8 @@ void FUN_L00_00213e68(float amount) {
             delta[1] = fast_sin(angle) * speed;
             delta[2] = hero.motion.velocity.f[2];
             factor = -(hero.motion.velocity.f[0] * delta[0] + hero.motion.velocity.f[1] * delta[1]);
-            length = vector_length_xy_34358(delta);
-            current_length = vector_length_xy_34358(&hero.motion.velocity);
+            length = vector_length_xy(delta);
+            current_length = vector_length_xy(&hero.motion.velocity);
             if (length == 0.0f) {
                 factor = 0.0f;
                 goto ratio_done;
@@ -3849,24 +3847,24 @@ void FUN_L00_00213e68(float amount) {
             if (factor < 1.0f)
                 factor = 1.0f;
             amount *= factor;
-            velocity = &hero_velocity_34358;
-            subtract_vector_xyz_34358(delta, delta, velocity);
-            length = vector_length_xy_34358(delta);
+            velocity = &hero_velocity;
+            subtract_vector_xyz(delta, delta, velocity);
+            length = vector_length_xy(delta);
             if (amount < length)
-                FUN_001f9c48_34358(delta, delta, amount);
-            add_vector_xyz_34358(velocity, velocity, delta);
+                FUN_001f9c48(delta, delta, amount);
+            add_vector_xyz(velocity, velocity, delta);
             qcopy(&HERO_OF(velocity)->motion.unk130, velocity);
             saved.q = HERO_OF(velocity)->move_impulse.q;
-            length = FUN_L00_00213350_34358(&saved);
+            length = forward_component(&saved);
             h = HERO_OF(velocity);
             h->ground_speed = h->motion.unk168 - length;
         break;
     case 1:
     case 2:
-        value = FUN_L00_002339d0_34358(&hero_velocity_34358);
-        approach_value_34358(HERO_OF(&hero_velocity_34358)->target_speed, amount, &value);
-        FUN_L00_00233ba0_34358(&hero_velocity_34358, &hero_velocity_34358, 0.0f);
-        FUN_L00_00233708_34358(&hero_velocity_34358, &hero_velocity_34358, value);
+        value = FUN_L00_002339d0(&hero_velocity);
+        approach_value(&value, HERO_OF(&hero_velocity)->target_speed, amount);
+        FUN_L00_00233ba0((float *)&hero_velocity, (float *)&hero_velocity, 0.0f);
+        FUN_L00_00233708(&hero_velocity, &hero_velocity, value);
         break;
     }
 }
@@ -3910,8 +3908,8 @@ void air_accel(float amount) {
             delta[1] = fast_sin(angle) * speed;
             delta[2] = hero.motion.velocity.f[2];
             factor = -(hero.motion.velocity.f[0] * delta[0] + hero.motion.velocity.f[1] * delta[1]);
-            length = vector_length_xy_34358(delta);
-            current_length = vector_length_xy_34358(&hero.motion.velocity);
+            length = vector_length_xy(delta);
+            current_length = vector_length_xy(&hero.motion.velocity);
             if (length == 0.0f) {
                 factor = 0.0f;
                 goto ratio_done;
@@ -3936,24 +3934,24 @@ void air_accel(float amount) {
             if (factor < 1.0f)
                 factor = 1.0f;
             amount *= factor;
-            velocity = &hero_velocity_34358;
-            subtract_vector_xyz_34358(delta, delta, velocity);
-            length = vector_length_xy_34358(delta);
+            velocity = &hero_velocity;
+            subtract_vector_xyz(delta, delta, velocity);
+            length = vector_length_xy(delta);
             if (amount < length)
-                FUN_001f9c48_34358(delta, delta, amount);
-            add_vector_xyz_34358(velocity, velocity, delta);
+                FUN_001f9c48(delta, delta, amount);
+            add_vector_xyz(velocity, velocity, delta);
 
             saved.q = HERO_OF(velocity)->move_impulse.q;
-            length = FUN_L00_00213350_34358(&saved);
+            length = forward_component(&saved);
             h = HERO_OF(velocity);
             h->ground_speed = h->motion.unk168 - length;
         break;
     case 1:
     case 2:
-        value = FUN_L00_002339d0_34358(&hero_velocity_34358);
-        approach_value_34358(HERO_OF(&hero_velocity_34358)->target_speed, amount, &value);
-        FUN_L00_00233ba0_34358(&hero_velocity_34358, &hero_velocity_34358, 0.0f);
-        FUN_L00_00233708_34358(&hero_velocity_34358, &hero_velocity_34358, value);
+        value = FUN_L00_002339d0(&hero_velocity);
+        approach_value(&value, HERO_OF(&hero_velocity)->target_speed, amount);
+        FUN_L00_00233ba0((float *)&hero_velocity, (float *)&hero_velocity, 0.0f);
+        FUN_L00_00233708(&hero_velocity, &hero_velocity, value);
         break;
     }
 }
