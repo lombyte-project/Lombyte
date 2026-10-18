@@ -353,9 +353,9 @@ extern void *func_001153FC_c(void *, int, unsigned int) __asm__("FUN_001153fc");
 
 void FUN_L01_0028b8c8(void *out, int *l, int idx, float a, float b) {
     void *p[3];
-    float v1[4];
-    float v2[4];
-    float v3[4];
+    float weighted_incoming_delta[4];
+    float weighted_outgoing_delta[4];
+    float blended_delta[4];
     float d1, d2, m, len;
     float wa, wb;
     func_001153FC_c(p, 0, 12);
@@ -372,17 +372,17 @@ void FUN_L01_0028b8c8(void *out, int *l, int idx, float a, float b) {
         m = d1;
     else
         m = d2;
-    subtract_vector_xyz(v1, p[1], p[0]);
-    scale_vector_xyz(v1, v1, wb);
-    subtract_vector_xyz(v2, p[2], p[1]);
-    scale_vector_xyz(v2, v2, wa);
-    add_vector_xyz(v3, v1, v2);
+    subtract_vector_xyz(weighted_incoming_delta, p[1], p[0]);
+    scale_vector_xyz(weighted_incoming_delta, weighted_incoming_delta, wb);
+    subtract_vector_xyz(weighted_outgoing_delta, p[2], p[1]);
+    scale_vector_xyz(weighted_outgoing_delta, weighted_outgoing_delta, wa);
+    add_vector_xyz(blended_delta, weighted_incoming_delta, weighted_outgoing_delta);
     m = m * 1.1f;
-    len = vector_length_xyz(v3);
+    len = vector_length_xyz(blended_delta);
     if (m < len) {
-        normalize_vector_xyz(out, v3, m);
+        normalize_vector_xyz(out, blended_delta, m);
     } else {
-        *(OvlQuad *)out = *(OvlQuad *)v3;
+        *(OvlQuad *)out = *(OvlQuad *)blended_delta;
     }
 }
 /* Ported from rac1-decomp (src/overlays/shared/partupd_00280428.c: func_L01_0028C848), where it is exact; names translated to the US level program. */
