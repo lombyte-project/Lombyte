@@ -42,12 +42,6 @@ void FUN_L00_001f36f8(void) {
     D_L00_0015EFC4 = 0;
     D_L00_0015EFC0 = D_L00_0016A040;
 }
-/* Pending C: keep the oracle until the placed overlay bytes match. */
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001f3770.s", FUN_L00_001f3770);
-#else
-#include "types.h"
-
 typedef struct {
     s32 width;
     s32 height;
@@ -57,9 +51,19 @@ typedef struct {
     s32 top;
 } DebugViewport;
 
+typedef struct {
+    u64 *cursor;
+} PacketBuffer;
+
+typedef struct {
+    u64 tex0;
+} DebugFontTexture;
+
 extern DebugViewport D_0013E500;
 extern s32 D_L00_00169980[];
 extern s32 D_L00_00169B00[];
+extern PacketBuffer debug_packet __asm__("D_L00_001611C0");
+extern DebugFontTexture debug_font_texture __asm__("D_0015EEC8");
 extern void vu1_add_g_sregister(s32, u64) __asm__("FUN_00233980");
 
 void FUN_L00_001f3770(s32 x, s32 y, s32 color, s32 text_address) {
@@ -68,64 +72,55 @@ void FUN_L00_001f3770(s32 x, s32 y, s32 color, s32 text_address) {
     u32 quadwords;
     u32 glyph;
     s32 texture_coordinates;
-    s32 left;
-    s32 top;
     u64 *packet;
-    volatile u64 *tags;
     u64 *glyph_tag;
     u64 *cursor;
-    u64 texture_state;
 
     vu1_add_g_sregister(0x42, 0x8000000044ULL);
     vu1_add_g_sregister(0x47, 0x5360B);
-    packet = D_L00_001611C0;
-    D_L00_001611C0 = packet + 2;
+    packet = debug_packet.cursor;
+    debug_packet.cursor = packet + 2;
     packet[2] = 0x10AB400000000001ULL;
-    tags = packet + 2;
-    tags[6] = color & 0xFFFFFFFFULL;
-    tags[1] = 0xE;
-    tags[2] = 1;
-    tags[3] = 0x14;
-    tags[4] = 0x2400000000000001ULL;
-    tags[5] = 0x61;
-    texture_state = debug_font_pif_header;
-    tags[9] = 0x5353;
-    tags[7] = texture_state;
-    tags[8] = 0x4400000000008003ULL;
+    cursor = packet + 2;
+    cursor[1] = 0xE;
+    cursor[2] = 1;
+    cursor[3] = 0x14;
+    cursor[4] = 0x2400000000000001ULL;
+    cursor[5] = 0x61;
+    cursor[6] = color & 0xFFFFFFFFULL;
+    cursor[7] = debug_font_texture.tex0;
+    cursor[8] = 0x4400000000008003ULL;
+    cursor[9] = 0x5353;
     glyph_tag = packet + 10;
-    D_L00_001611C0 = D_L00_001611C0 + 10;
+    debug_packet.cursor = debug_packet.cursor + 10;
     quadwords = 5;
     while (*text != 0) {
-        cursor = D_L00_001611C0;
+        cursor = debug_packet.cursor;
         glyph = (u8)(*text - 0x20);
         if (glyph >= 0x60)
             glyph = 0x20;
-        glyph *= 4;
-        texture_coordinates = *(s32 *)((u8 *)D_L00_00169980 + glyph);
+        texture_coordinates = D_L00_00169980[glyph];
         text++;
         if (texture_coordinates != -1) {
             cursor[0] = (s64)texture_coordinates;
-            top = D_0013E500.top;
-            left = D_0013E500.left;
-            glyph_count++;
+            cursor[1] = (s64)((x * 16) + D_0013E500.left - 8) |
+                        ((u64)(s64)((y * 16) + D_0013E500.top - 8) << 16) | 0xFFFFF300000000ULL;
             cursor[2] = (s64)(texture_coordinates + 0xC000A0);
-            cursor[1] = (s64)((x * 16) + left - 8) |
-                        ((u64)(s64)((y * 16) + top - 8) << 16) | 0xFFFFF300000000ULL;
+            glyph_count++;
             quadwords += 2;
-            ((volatile u64 *)cursor)[3] = (s64)(((x + 10) * 16) + D_0013E500.left - 8) |
+            cursor[3] = (s64)(((x + 10) * 16) + D_0013E500.left - 8) |
                         ((u64)(s64)(((y + 12) * 16) + D_0013E500.top - 8) << 16) |
                         0xFFFFF300000000ULL;
-            D_L00_001611C0 = D_L00_001611C0 + 4;
+            debug_packet.cursor = debug_packet.cursor + 4;
         }
-        x += *(s32 *)((u8 *)D_L00_00169B00 + glyph);
+        x += D_L00_00169B00[glyph];
     }
     ((u32 *)packet)[0] = quadwords | 0x10000000;
-    ((u32 *)packet)[3] = quadwords | 0x50000000;
-    ((u32 *)packet)[2] = 0;
     ((u32 *)packet)[1] = 0;
+    ((u32 *)packet)[2] = 0;
+    ((u32 *)packet)[3] = quadwords | 0x50000000;
     *glyph_tag = (s64)(glyph_count | 0x8000) | 0x4400000000000000ULL;
 }
-#endif /* NON_MATCHING */
 #include "types.h"
 #include "qcopy.h"
 #include "sda.h"
