@@ -3048,7 +3048,7 @@ void FUN_L00_0026ff10(Moby_26ff10 *p) {
     VV_26ff10 v0u;
     VV_26ff10 v1u;
     S_26ff10 c;
-    f32 v2[4];
+    f32 collision_offset[4];
     PV_26ff10 *pv;
     Moby_26ff10 *r;
     u8 *tab;
@@ -3127,11 +3127,11 @@ void FUN_L00_0026ff10(Moby_26ff10 *p) {
     }
     hit = FUN_001efa68_26ff10(pa, pb, mode, col, aux) != 0;
     if (hit) {
-        FUN_001f9bf8_26ff10(v2, D_L00_00173E80_26ff10, 1.0f);
+        FUN_001f9bf8_26ff10(collision_offset, D_L00_00173E80_26ff10, 1.0f);
         FUN_L00_001ff660_26ff10(pv, pv, D_L00_00173E80_26ff10);
         FUN_001f9a68_26ff10(pv, pv, 0.02f);
-        FUN_001f9bf8_26ff10(v2, D_L00_00173E80_26ff10, 0.055f);
-        FUN_001f9a10_26ff10(p->posv.f, D_L00_00173E80_26ff10 - 8, v2);
+        FUN_001f9bf8_26ff10(collision_offset, D_L00_00173E80_26ff10, 0.055f);
+        FUN_001f9a10_26ff10(p->posv.f, D_L00_00173E80_26ff10 - 8, collision_offset);
         if (p->f0C < 200000.0f && (pv->f18 & 8) == 0) {
             p->f0C = p->f0C + p->f0C;
         }
