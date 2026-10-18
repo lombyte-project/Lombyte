@@ -660,7 +660,7 @@ void FUN_L00_002167d0(void) {
     struct Hero *m;
     struct Hero *q;
     Vec4 *r;
-    V4 target_velocity, target_velocity_before_impulse, saved_move_impulse, v3, slope_velocity_delta;
+    V4 target_velocity, target_velocity_before_impulse, saved_move_impulse, xy_velocity_scratch, slope_velocity_delta;
     f32 f20, f21, f22, a, b, c, d, e, h, k;
 
     FUN_L00_002118c8_c(0, 1.0f);
@@ -733,13 +733,13 @@ void FUN_L00_002167d0(void) {
             f21 = b;
         }
     }
-    fast_vec_sub(&v3, &target_velocity, &hero.motion.unk130);
-    v3.f[2] = 0.0f;
-    if (f21 < fast_vec_length(&v3)) {
-        fast_vec_normalize(&v3, &v3, f21);
+    fast_vec_sub(&xy_velocity_scratch, &target_velocity, &hero.motion.unk130);
+    xy_velocity_scratch.f[2] = 0.0f;
+    if (f21 < fast_vec_length(&xy_velocity_scratch)) {
+        fast_vec_normalize(&xy_velocity_scratch, &xy_velocity_scratch, f21);
     }
     r = &hero.motion.velocity;
-    FUN_001f9a10_c(r, &hero.motion.unk130, &v3);
+    FUN_001f9a10_c(r, &hero.motion.unk130, &xy_velocity_scratch);
     q = &hero;
     if (0.0872664601f < q->ground_slope.f) {
         f21 = FUN_001f9e90_c(q->unk270.f[0], q->unk270.f[1]);
@@ -748,20 +748,20 @@ void FUN_L00_002167d0(void) {
         f20 = f20 * q->ground_slope.f;
         f20 = f20 / 0.785398185f;
         f22 = frame_time_sq * 8.5f * q->ground_slope.f / 0.785398185f;
-        v3.f[0] = fast_cos(f21) * f20;
-        v3.f[1] = fast_sin(f21) * f20;
-        v3.f[2] = 0.0f;
-        fast_vec_sub(&slope_velocity_delta, &v3, r);
+        xy_velocity_scratch.f[0] = fast_cos(f21) * f20;
+        xy_velocity_scratch.f[1] = fast_sin(f21) * f20;
+        xy_velocity_scratch.f[2] = 0.0f;
+        fast_vec_sub(&slope_velocity_delta, &xy_velocity_scratch, r);
         slope_velocity_delta.f[2] = 0.0f;
         if (f22 < fast_vec_length(&slope_velocity_delta)) {
             fast_vec_normalize(&slope_velocity_delta, &slope_velocity_delta, f22);
         }
         FUN_001f9a10_c(r, r, &slope_velocity_delta);
     }
-    qcopy(&v3, &hero.motion.velocity);
-    v3.f[2] = 0.0f;
+    qcopy(&xy_velocity_scratch, &hero.motion.velocity);
+    xy_velocity_scratch.f[2] = 0.0f;
     m = &hero;
-    m->unk3B0 = fast_vec_dot(&v3, &target_velocity);
+    m->unk3B0 = fast_vec_dot(&xy_velocity_scratch, &target_velocity);
     k = fast_vec_length(&target_velocity);
     if (0.0f < k) {
         m->unk3B0 = m->unk3B0 / (k * (frame_time * 5.9f));
