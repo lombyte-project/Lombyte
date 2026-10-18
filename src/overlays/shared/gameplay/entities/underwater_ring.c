@@ -297,6 +297,9 @@ extern void FUN_L00_00210a08(int, int, struct Moby *);
 void giant_clank_pad_update(struct Moby *moby) __asm__("FUN_L15_002ed068");
 void giant_clank_pad_update(struct Moby *moby) {
     enum {
+        GIANT_CLANK_PAD_ARM_ACTIVATION = 1
+    };
+    enum {
         GIANT_CLANK_PAD_INITIALIZE = 0,
         GIANT_CLANK_PAD_CHECK_ACTIVATION = 2
     };
@@ -322,7 +325,7 @@ void giant_clank_pad_update(struct Moby *moby) {
             D_0014C050[0x120 + moby->mission] != 0xff) ? 1 : 3;
         break;
     }
-    case 1:
+    case GIANT_CLANK_PAD_ARM_ACTIVATION:
         /* Fakematch: the second store gives retail's register for moby. */
         if (moby) moby->state = 2; else moby->state = 2;
         return;
