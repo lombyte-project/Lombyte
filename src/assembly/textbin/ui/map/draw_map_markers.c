@@ -40,9 +40,9 @@ void draw_map_markers(s32 left, s32 top, s32 right, s32 bottom) {
     u8 height_log2;
 
     one = 1;
-    remaining = level_map_selection.marker_count - 1;
+    remaining = level_map_selection.marker_count;
     marker = level_map_selection.markers;
-    for (; remaining != -1; remaining--) {
+    for (remaining--; remaining != -1; remaining--) {
         world_to_map_coords(&normalized_x, &normalized_y, current_level_index, marker->x,
                             marker->y);
         offset_x = (s32)((f32)(right - left) * normalized_x);
