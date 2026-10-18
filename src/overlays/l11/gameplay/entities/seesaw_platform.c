@@ -2627,6 +2627,14 @@ extern int FUN_L11_0031a7d8(int);
 s32 hp_bar_saved __asm__("D_L11_00162170") = 0;
 void jet_fighter_update(struct Moby *moby) __asm__("FUN_L11_00313290");
 void jet_fighter_update(struct Moby *moby) {
+    enum {
+        JET_FIGHTER_STATE_INITIALIZE = 0,
+        JET_FIGHTER_STATE_WAIT_FOR_BOARDING = 1,
+        JET_FIGHTER_STATE_BOARD = 2,
+        JET_FIGHTER_STATE_FLIGHT = 4,
+        JET_FIGHTER_STATE_DISMOUNT = 5,
+        JET_FIGHTER_STATE_WAIT_FOR_RESPAWN = 7
+    };
     ShipVars_2838 *v;
     ShipHit_3290 *hit;
     W4_2838 dir;
@@ -2682,7 +2690,7 @@ void jet_fighter_update(struct Moby *moby) {
             }
         }
         switch (moby->state) {
-        case 0:
+        case JET_FIGHTER_STATE_INITIALIZE:
             moby->state = 1;
             v->sel = 0;
             moby->scale = *(float *)((char *)moby->pclass + 0x24);
@@ -2710,7 +2718,7 @@ void jet_fighter_update(struct Moby *moby) {
                 moby->visible = 0;
             }
             break;
-        case 1: {
+        case JET_FIGHTER_STATE_WAIT_FOR_BOARDING: {
             struct Hero *g = &hero;
             if (jet_distance(moby, g->moby) < D_L11_00161FD0) {
                 if (item_available[7] != 0) {
@@ -2736,7 +2744,7 @@ void jet_fighter_update(struct Moby *moby) {
             }
             break;
         }
-        case 2:
+        case JET_FIGHTER_STATE_BOARD:
             approach_value_c788(&v->fade, 1.0f, frame_time * 4.0f);
             D_L11_0015F3FC = v->fade;
             if (v->fade == 1.0f) {
@@ -2787,7 +2795,7 @@ void jet_fighter_update(struct Moby *moby) {
                 g->unk20A5 = 1;
             }
             break;
-        case 4:
+        case JET_FIGHTER_STATE_FLIGHT:
             if (v->fade != 0.0f) {
                 approach_value_c788(&v->fade, 0.0f, frame_time * 4.0f);
                 D_L11_0015F3FC = v->fade;
@@ -2809,7 +2817,7 @@ void jet_fighter_update(struct Moby *moby) {
                 moby->state = 5;
             }
             break;
-        case 5: {
+        case JET_FIGHTER_STATE_DISMOUNT: {
             char *p;
             struct Hero *g = &hero;
             g->unk20A5 = 0;
@@ -2845,7 +2853,7 @@ void jet_fighter_update(struct Moby *moby) {
             D_L11_0015F3FC = 0.99f;
             break;
         }
-        case 7:
+        case JET_FIGHTER_STATE_WAIT_FOR_RESPAWN:
             D_L11_0015F608 = 2;
             if (timer_3290(&v->iF8)) {
                 hero_respawn();
