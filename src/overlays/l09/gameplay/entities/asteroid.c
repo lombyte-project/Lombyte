@@ -126,8 +126,8 @@ void FUN_L09_0021e8c0(char *list, int count, float unused, long tex0, long tex1)
     int c;
     int *sp;
     int idx;
-    float s0;
-    float s1;
+    float first_scroll_offset;
+    float second_scroll_offset;
     FUN_L09_0021e560_u(tex0, tex1);
     D_L09_001611B8[2][0] = 0x30000009;
     D_L09_001611B8[2][1] = (int)D_L09_0016EAA0;
@@ -135,8 +135,8 @@ void FUN_L09_0021e8c0(char *list, int count, float unused, long tex0, long tex1)
     D_L09_001611B8[2][3] = 0x50000009;
     D_L09_001611C0 = D_L09_001611B8[2] + 4;
     font_queue_vu_state();
-    s0 = 1.0f - (float)(D_L09_0015F5CC & 0x7FF) * 0.00048828125f;
-    s1 = s0 + s0 + 0.5f;
+    first_scroll_offset = 1.0f - (float)(D_L09_0015F5CC & 0x7FF) * 0.00048828125f;
+    second_scroll_offset = first_scroll_offset + first_scroll_offset + 0.5f;
     sp = (int *)0x70000000;
     for (i = 0; i < 256; i++) {
         sp[i] = ((i * 0x89) & 0xF) * 0x20200 + 0x80787070;
@@ -157,8 +157,8 @@ void FUN_L09_0021e8c0(char *list, int count, float unused, long tex0, long tex1)
                 float f = *src++;
                 *b++ = f;
                 *a++ = f;
-                *a++ = *src + s0;
-                *b++ = *src++ + s1;
+                *a++ = *src + first_scroll_offset;
+                *b++ = *src++ + second_scroll_offset;
             }
             FUN_L01_0021fa98(n, *(int *)(e + 0x10) + ((Strip *)e)->idx[j] * 12, 0x70000000,
                              0x70001000, 0x70002000, idx == 0);
