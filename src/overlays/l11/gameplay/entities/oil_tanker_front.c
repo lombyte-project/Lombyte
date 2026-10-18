@@ -1089,21 +1089,21 @@ void FUN_L11_00318ed8(struct Moby *m) {
     float spark_position[4];
     float radial_offset[4];
     float row1_offset[4];
-    float v3[4];
-    float v4[4];
+    float first_spark_vector[4];
+    float second_spark_vector[4];
     float s = random_float_between_alt(2.5f, 3.0f);
     float a = random_angle_radians();
     fast_vec_normalize(row1_offset, &m->rot_row1, s * fast_sin(a));
     fast_vec_normalize(radial_offset, &m->rot_row2, s * fast_cos(a));
     fast_vec_add(radial_offset, radial_offset, row1_offset);
     fast_vec_sub(spark_position, &m->pos, radial_offset);
-    fast_vec_scale(v3, radial_offset,
+    fast_vec_scale(first_spark_vector, radial_offset,
                  1.0f / (float)scale_game_frames(*(int *)&D_L11_00162394 + *(int *)&D_L11_00162398 +
                                             *(int *)&D_L11_0016239C));
-    qcopy(v4, v3);
-    v3[3] = *(float *)&D_L11_001623A0;
-    v4[3] = *(float *)&D_L11_001623A4;
-    spawn_spark(spark_position, v3, v4, *(int *)&D_L11_0016238C, *(int *)&D_L11_00162390,
+    qcopy(second_spark_vector, first_spark_vector);
+    first_spark_vector[3] = *(float *)&D_L11_001623A0;
+    second_spark_vector[3] = *(float *)&D_L11_001623A4;
+    spawn_spark(spark_position, first_spark_vector, second_spark_vector, *(int *)&D_L11_0016238C, *(int *)&D_L11_00162390,
                  *(int *)&D_L11_00162394, *(int *)&D_L11_00162398, *(int *)&D_L11_0016239C,
                  *(int *)&D_L11_001623A8);
 }
