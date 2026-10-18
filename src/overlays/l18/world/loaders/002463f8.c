@@ -194,9 +194,9 @@ s32 FUN_L18_002463f8(s32 full, s32 keep) {
     char *end;
     Span2463f8 *span;
     TexRef2463f8 *tex;
-    TexRef2463f8 *t1;
-    TexRef2463f8 *t3;
-    TexRef2463f8 *t4;
+    TexRef2463f8 *tfrag_texture_refs;
+    TexRef2463f8 *object_texture_refs;
+    TexRef2463f8 *shrub_texture_refs;
     char *tbl;
     s32 i;
     s32 j;
@@ -212,7 +212,7 @@ s32 FUN_L18_002463f8(s32 full, s32 keep) {
     s32 ci;
     char *x;
     char *y;
-    s32 a1, a2, a3;
+    s32 a1, a2, sound_slot_index;
     char *q1, *q2;
     u64 *t;
 
@@ -242,23 +242,23 @@ s32 FUN_L18_002463f8(s32 full, s32 keep) {
         D_L18_001831F0[1] = 0x0000FFA0000000E0;
         D_L18_001831F0[2] = 0x0040000400004000;
 
-        t1 = (TexRef2463f8 *)((char *)h + h[0xD]);
+        tfrag_texture_refs = (TexRef2463f8 *)((char *)h + h[0xD]);
         D_L18_00160F54 = h[0xC];
         for (c1 = 0; c1 < D_L18_00160F54; c1++)
-            D_L18_001C5400[c1] = D_L18_0015F40C + t1[c1].offset + (log2dim(t1[c1].kind) << 28);
+            D_L18_001C5400[c1] = D_L18_0015F40C + tfrag_texture_refs[c1].offset + (log2dim(tfrag_texture_refs[c1].kind) << 28);
         tex = (TexRef2463f8 *)((char *)h + h[0xF]);
         D_L18_0015FFC8 = h[0xE];
         for (c2 = 0; c2 < D_L18_0015FFC8; c2++)
             D_L18_0019A480[c2] = D_L18_0015F40C + tex[c2].offset + (log2dim(tex[c2].kind) << 28);
         fast_mem_copy(D_L18_001AF5C0, tex, D_L18_0015FFC8 * 16);
-        t3 = (TexRef2463f8 *)((char *)h + h[0x11]);
+        object_texture_refs = (TexRef2463f8 *)((char *)h + h[0x11]);
         D_L18_00160FD4 = h[0x10];
         for (c3 = 0; c3 < D_L18_00160FD4; c3++)
-            D_L18_001C7100[c3] = D_L18_0015F40C + t3[c3].offset + (log2dim(t3[c3].kind) << 28);
-        t4 = (TexRef2463f8 *)((char *)h + h[0x13]);
+            D_L18_001C7100[c3] = D_L18_0015F40C + object_texture_refs[c3].offset + (log2dim(object_texture_refs[c3].kind) << 28);
+        shrub_texture_refs = (TexRef2463f8 *)((char *)h + h[0x13]);
         D_L18_001604AC = h[0x12];
         for (c4 = 0; c4 < D_L18_001604AC; c4++)
-            D_L18_001BCFB0[c4] = D_L18_0015F40C + t4[c4].offset + (log2dim(t4[c4].kind) << 28);
+            D_L18_001BCFB0[c4] = D_L18_0015F40C + shrub_texture_refs[c4].offset + (log2dim(shrub_texture_refs[c4].kind) << 28);
 
         initialize_tfrag_render_data(base + h[2], (char *)h + h[0xD]);
         if (h[3])
@@ -333,14 +333,14 @@ s32 FUN_L18_002463f8(s32 full, s32 keep) {
         span++;
         free += n * 32;
         e = tbl + span->off;
-        for (a3 = 0; a3 < D_L18_0015F5F0; a3++) {
-            if (D_L18_0015F5F4[a3].sound >= span->count) {
+        for (sound_slot_index = 0; sound_slot_index < D_L18_0015F5F0; sound_slot_index++) {
+            if (D_L18_0015F5F4[sound_slot_index].sound >= span->count) {
                 printf_1e93b0(D_L18_001F0EB0);
-                D_L18_0015F5F4[a3].sound = -1;
+                D_L18_0015F5F4[sound_slot_index].sound = -1;
             } else {
-                D_L18_0015F5F4[a3].sound = *(u16 *)(e + D_L18_0015F5F4[a3].sound * 4);
+                D_L18_0015F5F4[sound_slot_index].sound = *(u16 *)(e + D_L18_0015F5F4[sound_slot_index].sound * 4);
             }
-            D_L18_0015F5F4[a3].time = sound_bank_handle;
+            D_L18_0015F5F4[sound_slot_index].time = sound_bank_handle;
         }
         end = free + 0x3F;
         span++;
