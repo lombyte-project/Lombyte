@@ -443,6 +443,7 @@ RODATA_OVERLAYS = {
     "sdk/callbacks/report_mpeg_picture_spatial_scalable_unsupported": (0x153B90, 0x54B10, 50),
     "sdk/callbacks/report_mpeg_picture_temporal_scalable_unsupported": (0x153BC8, 0x54B48, 51),
     "sdk/library/GetRomName": (0x153C00, 0x54B80, 12),
+    "draw_scrolling_sky_shells": (0x1E88F0, 0xE9870, 20),  # switch table
 }
 
 # Recovered C units that define the small-data variables their original
