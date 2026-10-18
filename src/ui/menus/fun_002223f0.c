@@ -21,6 +21,10 @@ u8 D_001D5298[] NOT_SDA = "9Q";
 extern u8 D_001D52B0[];
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 s32 FUN_002223f0(struct Menu *menu) {
+    enum {
+        INITIALIZE_MENU_SEQUENCE = 0,
+        WAIT_FOR_FINAL_DELAY = 19
+    };
     int flag;
     s32 n;
 
@@ -46,7 +50,7 @@ s32 FUN_002223f0(struct Menu *menu) {
         menu->unk40 = 0;
     }
     switch (menu->unk50) {
-    case 0:
+    case INITIALIZE_MENU_SEQUENCE:
         menu->unk50 = menu->unk50 + 1;
         menu->unk40 = scale_game_frames(0xB4);
         menu->unk3C = 0;
@@ -168,7 +172,7 @@ s32 FUN_002223f0(struct Menu *menu) {
         }
         break;
 
-    case 19:
+    case WAIT_FOR_FINAL_DELAY:
         if (menu->unk40 == 0) {
             if (menu_system.unkDC != 0) {
                 return 1;
