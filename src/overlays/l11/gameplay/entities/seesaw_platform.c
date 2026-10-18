@@ -489,9 +489,9 @@ extern float D_L11_00161F48 __attribute__((sda));
 
 /* Lays out the 4x6 grid of child mobys around this one, fanned by the progress value at pvars+0x6C. */
 void FUN_L11_0030dd18(struct Moby *m) {
-    Vec4f v0;
-    Vec4f v1;
-    Vec4f v2;
+    Vec4f parent_axis0_offset;
+    Vec4f parent_axis1_offset;
+    Vec4f child_position_offset;
     char *data;
     struct Moby *(*grid)[6];
     float progress;
@@ -504,8 +504,8 @@ void FUN_L11_0030dd18(struct Moby *m) {
 
     data = m->pvars;
     grid = (struct Moby *(*)[6])data;
-    normalize_vector_xyz(&v0, &m->rot_row0, D_L11_00161F40);
-    normalize_vector_xyz(&v1, &m->rot_row1, D_L11_00161F44);
+    normalize_vector_xyz(&parent_axis0_offset, &m->rot_row0, D_L11_00161F40);
+    normalize_vector_xyz(&parent_axis1_offset, &m->rot_row1, D_L11_00161F44);
     progress = *(float *)(data + 0x6C);
     hi = 90.0f - progress * 180.0f;
     if (hi < -90.0f) {
@@ -521,9 +521,9 @@ void FUN_L11_0030dd18(struct Moby *m) {
         for (col = 0; col < 6; col++) {
             lim = (row < 2) ? hi : lo;
             if (row < 2) {
-                add_vector_xyz(&grid[row][col]->pos, &m->pos, &v0);
+                add_vector_xyz(&grid[row][col]->pos, &m->pos, &parent_axis0_offset);
             } else {
-                subtract_vector_xyz(&grid[row][col]->pos, &m->pos, &v0);
+                subtract_vector_xyz(&grid[row][col]->pos, &m->pos, &parent_axis0_offset);
             }
             angle = ((float)col - 2.5f) * 0.2617994f;
             if (row & 1) {
@@ -546,13 +546,13 @@ void FUN_L11_0030dd18(struct Moby *m) {
             }
             grid[row][col]->rot.z = fast_add_rotations(grid[row][col]->rot.z, angle);
             euler_rotation_basis(&grid[row][col]->rot_row0, &grid[row][col]->rot);
-            normalize_vector_xyz(&v2, &grid[row][col]->rot_row1, -D_L11_00161F48);
+            normalize_vector_xyz(&child_position_offset, &grid[row][col]->rot_row1, -D_L11_00161F48);
             if (row & 1) {
-                add_vector_xyz(&v2, &v2, &v1);
+                add_vector_xyz(&child_position_offset, &child_position_offset, &parent_axis1_offset);
             } else {
-                subtract_vector_xyz(&v2, &v2, &v1);
+                subtract_vector_xyz(&child_position_offset, &child_position_offset, &parent_axis1_offset);
             }
-            add_vector_xyz(&grid[row][col]->pos, &grid[row][col]->pos, &v2);
+            add_vector_xyz(&grid[row][col]->pos, &grid[row][col]->pos, &child_position_offset);
             FUN_L00_00250df8(grid[row][col]);
         }
     }
