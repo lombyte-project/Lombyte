@@ -1,9 +1,5 @@
 #include "types.h"
-#include "asm.h"
 
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/expected/asm/assembly/textbin/ui/menus/update_menu_grid_selection/FUN_0021b858.s", FUN_0021b858);
-#else
 #include "types.h"
 #include "rnc/ui/menus/menu_system.h"
 
@@ -201,5 +197,3 @@ s32 update_menu_grid_selection(struct MenuScreen *grid) {
 }
 
 extern __typeof__(update_menu_grid_selection) func_0021B858 __attribute__((alias("FUN_0021b858")));
-
-#endif /* NON_MATCHING */

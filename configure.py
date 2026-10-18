@@ -115,7 +115,6 @@ ROUTE_EXCEPTIONS = {
     # fun_00208030: expand a 4bpp coverage map through the 16-entry weight table
     # into a 1bpp threshold mask (4 source rows per output row)
     "ui/map/downsample_map_coverage": "cc_sn",
-    "ui/menus/update_menu_cycle_selection": "cc_sn",
     # Game code still built by SN cc1 plus the SN assembler Ps2EeAs (the padless route).
     "rendering/packets/emit_rgba_draw_packet": "cc_sn_padless",
     # parse_particle_textures: The a1/a3 induction-pointer swap was the ORDER OF
