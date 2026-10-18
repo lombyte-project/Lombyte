@@ -1645,7 +1645,7 @@ extern void FUN_001f9a68_c(void *, void *, float) __asm__("FUN_001f9a68");
 
 void FUN_L00_002e46b8(char *a) {
     Vq4 t;
-    Vq4 v1, v2;
+    Vq4 camera_translation_adjustment, lateral_displacement;
     char *b = D_L00_00166E10;
     char *m = *(char **)(a + 0x70);
     char *m40 = m + 0x40;
@@ -1672,16 +1672,16 @@ void FUN_L00_002e46b8(char *a) {
         char *s = b + 0x30;
         float f;
         *(short *)(m2 + 0x10) = 0;
-        FUN_001f9a68_c(&v1, b + 0x80, *(float *)(b + 0xA4));
+        FUN_001f9a68_c(&camera_translation_adjustment, b + 0x80, *(float *)(b + 0xA4));
         f = fast_vec_dot(s, &t);
-        FUN_001f9a68_c(&v2, s, f);
-        FUN_001f9a28((float *)&v2, (float *)&t, (float *)&v2);
-        FUN_001f9a28((float *)&v1, (float *)&v1, (float *)&v2);
-        FUN_001f9a10_c(a + 0x30, &v1, a + 0x30);
-        FUN_001f9a10_c(m40 + 0x60, &v1, m40 + 0x60);
-        FUN_001f9a10_c(m40, &v1, m40);
-        FUN_001f9a10_c(m40 + 0x90, &v1, m40 + 0x90);
-        FUN_001f9a10_c(m2, &v1, m2);
+        FUN_001f9a68_c(&lateral_displacement, s, f);
+        FUN_001f9a28((float *)&lateral_displacement, (float *)&t, (float *)&lateral_displacement);
+        FUN_001f9a28((float *)&camera_translation_adjustment, (float *)&camera_translation_adjustment, (float *)&lateral_displacement);
+        FUN_001f9a10_c(a + 0x30, &camera_translation_adjustment, a + 0x30);
+        FUN_001f9a10_c(m40 + 0x60, &camera_translation_adjustment, m40 + 0x60);
+        FUN_001f9a10_c(m40, &camera_translation_adjustment, m40);
+        FUN_001f9a10_c(m40 + 0x90, &camera_translation_adjustment, m40 + 0x90);
+        FUN_001f9a10_c(m2, &camera_translation_adjustment, m2);
     }
 }
 typedef float V4[4] __attribute__((aligned(16)));
