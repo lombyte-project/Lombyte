@@ -2151,98 +2151,68 @@ extern int D_L10_00161D68;
 extern float D_L10_00161D54 __attribute__((sda));
 extern float D_L10_00161D58 __attribute__((sda));
 extern float D_L10_00161D5C __attribute__((sda));
-extern void FUN_001f28c8(void *) __asm__("FUN_001f99f8");
-extern void FUN_001f28e0(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void FUN_001f2968(float, void *, void *) __asm__("FUN_001f9a68");
-extern void FUN_L10_0024a7f0(float, float, void *) __asm__("FUN_L00_00257d78");
+extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
+extern void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
+extern void random_vector(void *, f32, f32) __asm__("FUN_L00_00257d78");
+
+typedef struct {
+    Vec4 pos[4][30][20];
+    Vec4 vel[4][30][20];
+    int timers[4][30];
+    f32 phase;
+} PlatformWaveVars;
+
+/* Four groups of ten wave strands, 20 points each: on a staggered timer a strand
+   gets new random offsets and its point velocities are the three-point average. */
 
 void FUN_L10_002dcc58(struct Moby *moby) {
-    char *data = (char *)moby->pvars;
-    float scratch[0xC80 / 4];
-    int group;
-    long item;
-    float phase;
+    PlatformWaveVars *vars = (PlatformWaveVars *)moby->pvars;
+    Vec4 jitter[20][10];
+    int group, item, row;
 
     switch (moby->state) {
     case 0:
         if (current_level_index == 10 && D_001413F4[0] == 1) {
             delete_moby(moby);
-        } else {
-            int value = 0;
-            long increment = 45;
-            int item;
-            D_L10_00161D68 = 0x16;
-            D_L10_00161D64 = 0x2d;
-            for (item = 0; item < 10; item++) {
-                int quotient = value / 10;
-                *(int *)(data + 0x12c00 + item * 4) = quotient;
-                *(int *)(data + 0x12c78 + item * 4) = quotient + 11;
-                *(int *)(data + 0x12cf0 + item * 4) = quotient + 23;
-                *(int *)(data + 0x12d68 + item * 4) = quotient + 34;
-                value += increment;
-            }
-            moby->state = 1;
+            break;
         }
+        D_L10_00161D68 = 22;
+        D_L10_00161D64 = 45;
+        {
+            int i;
+            for (i = 0; i < 10; i++) {
+                int start = i * D_L10_00161D64 / 10;
+                vars->timers[0][i] = start;
+                vars->timers[1][i] = start + 11;
+                vars->timers[2][i] = start + 23;
+                vars->timers[3][i] = start + 34;
+            }
+        }
+        moby->state = 1;
         break;
     case 1:
-        phase = *(float *)(data + 0x12de0) + D_L10_00161D5C * frame_time;
-        *(float *)(data + 0x12de0) = phase;
-        if (phase > 1.0f) *(float *)(data + 0x12de0) = phase - 1.0f;
-        {
-            int group_table = 0x12c00;
-            for (group = 0; group < 4; group++) {
-                int group_offset = group * 0x2580;
-                int timer_offset = group * 0x78;
-                for (item = 0; item < 10; item++) {
-                    char *entry = (data + group_table) + timer_offset + item * 4;
-                    char *base = data + group_offset;
-                    char *other = data + (group_offset + 0x9600);
-                    char *buffer = (char *)scratch + item * 0x10;
-                    if (fast_dec_timer(entry) != 0) {
-                        char *dst = data + (item * 0x10 + group_offset);
-                        char *current = base + item * 0x10;
-                        char *out = buffer;
-                        int row;
-                        for (row = 0; row < 20; row++) {
-                            float phase;
-                            float value;
-                            float quotient, half;
-                            FUN_001f28c8(current);
-                            current += 0x140;
-                            phase = D_L10_00161D58;
-                            value = D_L10_00161D54 * frame_time;
-                            quotient = phase / 20.0f;
-                            half = phase * 0.5f;
-                            *(float *)(dst + 0xc) = 1.0f;
-                            *(float *)(dst + 4) = (float)row * quotient - half;
-                            FUN_L10_0024a7f0(0.0f, value, out);
-                            dst += 0x140;
-                            out += 0xa0;
-                        }
-                        {
-                            char *dst = other + item * 0x10 + 0x140;
-                            char *current = buffer;
-                            char *out = buffer + 0x140;
-                            int row;
-                            for (row = 17; row >= 0; row--) {
-                                FUN_001f28e0(dst, current, current + 0xa0);
-                                FUN_001f28e0(dst, dst, out);
-                                FUN_001f2968(0.333f, dst, dst);
-                                dst += 0x140;
-                                current += 0xa0;
-                                out += 0xa0;
-                            }
-                        }
-                        *(int *)entry = D_L10_00161D64;
-                    } else {
-                        char *dst = base + item * 0x10 + 0x140;
-                        char *out = other + item * 0x10 + 0x140;
-                        int row;
-                        for (row = 17; row >= 0; row--) {
-                            FUN_001f28e0(dst, dst, out);
-                            dst += 0x140;
-                            out += 0x140;
-                        }
+        vars->phase += D_L10_00161D5C * frame_time;
+        if (vars->phase > 1.0f) vars->phase -= 1.0f;
+        for (group = 0; group < 4; group++) {
+            for (item = 0; item < 10; item++) {
+                if (fast_dec_timer(&vars->timers[group][item])) {
+                    for (row = 0; row < 20; row++) {
+                        clear_u64_value(&vars->pos[group][row][item]);
+                        vars->pos[group][row][item].f[1] = row * (D_L10_00161D58 / 20.0f) - D_L10_00161D58 * 0.5f;
+                        vars->pos[group][row][item].f[3] = 1.0f;
+                        random_vector(&jitter[row][item], 0.0f, D_L10_00161D54 * frame_time);
+                    }
+                    for (row = 1; row < 19; row++) {
+                        fast_vec_add(&vars->vel[group][row][item], &jitter[row - 1][item], &jitter[row][item]);
+                        fast_vec_add(&vars->vel[group][row][item], &vars->vel[group][row][item], &jitter[row + 1][item]);
+                        fast_vec_scale(&vars->vel[group][row][item], &vars->vel[group][row][item], 0.333f);
+                    }
+                    vars->timers[group][item] = D_L10_00161D64;
+                } else {
+                    int k;
+                    for (k = 1; k < 19; k++) {
+                        int row = k;
+                        fast_vec_add(&vars->pos[group][row][item], &vars->pos[group][row][item], &vars->vel[group][row][item]);
                     }
                 }
             }

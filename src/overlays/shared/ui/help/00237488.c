@@ -1775,7 +1775,7 @@ change_state:
     return 1;
 continue_fall:
     if (D_0013D388_254608[0]) {
-        if (current_level_index == 5 && (&hero)->unk6E0[4] == 4 && *(int *)((char *)&hero + 0x70C) > 3 && D_0013D408_254608[7] == 0) {
+        if (current_level_index == 5 && (&hero)->unk6E0[4] == 4 && (&hero)->unk70C > 3 && D_0013D408_254608[7] == 0) {
             D_0013D408_254608[7] = 1;
             allocate_voice_for_bank_entry_254608(1, 0, 0);
             queue_dialogue_message_254608(0x53D6, -1);

@@ -456,7 +456,10 @@ struct Hero {
     u8 pad_6D8[0x8];
     s32 unk6E0[6];                 /* 0x6E0: one flag per pose, indexed by unk88F */
     s32 unk6F8;                    /* 0x6F8: counts the flags set in unk6E0 */
-    u8 pad_6FC[0x24];
+    u8 pad_6FC[0x4];
+    s32 unk700[3];                 /* 0x700: cleared with unk6E0 when the HUD combo ends (FUN_L05_00262b58) */
+    s32 unk70C;                    /* 0x70C: combo count the HUD keeps the best of (FUN_L05_00262b58) */
+    u8 pad_710[0x10];
     Vec4 unk720;                   /* 0x720 */
     u8 pad_730[0x10];
     Vec4 unk740;                   /* 0x740 */
