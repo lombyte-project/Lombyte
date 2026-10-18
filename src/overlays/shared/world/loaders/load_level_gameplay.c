@@ -66,7 +66,7 @@ void FUN_L00_00241788(u8 *src, s32 n) {
     }
     do {
         done = 1;
-        for (j = 0; j < n - 1; j++) {
+        for (j = 0; j < n; j++) {
             if (entries[j].length < entries[j + 1].length) {
                 f32 id = entries[j].id;
                 f32 length = entries[j].length;
