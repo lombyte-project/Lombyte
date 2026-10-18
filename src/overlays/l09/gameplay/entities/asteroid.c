@@ -706,7 +706,7 @@ void FUN_L09_002eaea8(Moby *m) {
     float movement_step[4];
     float collision_probe_offset[4];
     float v2[4];
-    float v3[4];
+    float offset_position[4];
     Data_2EC188 *d = (*(Data_2EC188 **)&m->pvars);
     float len;
     float t;
@@ -734,8 +734,8 @@ void FUN_L09_002eaea8(Moby *m) {
             v2[1] = random_float_between_c2(-5.0f, 5.0f);
             v2[2] = random_float_between_c2(-5.0f, 5.0f);
             add_vector_xyz(v2, v2, d->pos);
-            add_vector_xyz(v3, v2, collision_probe_offset);
-            if (FUN_001efa68(v2, v3, 4, (int)m, 0) != 0 && D_L09_00173FE8 > 26.5f) {
+            add_vector_xyz(offset_position, v2, collision_probe_offset);
+            if (FUN_001efa68(v2, offset_position, 4, (int)m, 0) != 0 && D_L09_00173FE8 > 26.5f) {
                 float scaled_movement_step[4];
                 V6_2EC188 A;
                 V6_2EC188 B;
@@ -822,10 +822,10 @@ void FUN_L09_002eaea8(Moby *m) {
                     A = D_L09_00208B00;
                     B = D_L09_00208B18;
                     sc = s * D_0015ED6C - extra * D_0015ED6C;
-                    v3[0] = random_float_between_c2(-3.0f, 3.0f);
-                    v3[1] = random_float_between_c2(-3.0f, 3.0f);
-                    v3[2] = random_float_between_c2(-3.0f, 3.0f);
-                    add_vector_xyz(v3, v3, d->pos);
+                    offset_position[0] = random_float_between_c2(-3.0f, 3.0f);
+                    offset_position[1] = random_float_between_c2(-3.0f, 3.0f);
+                    offset_position[2] = random_float_between_c2(-3.0f, 3.0f);
+                    add_vector_xyz(offset_position, offset_position, d->pos);
                     pa = &A.v[random_integer_below_c2(6)];
                     pb = &B.v[random_integer_below_c2(6)];
                     {
@@ -836,7 +836,7 @@ void FUN_L09_002eaea8(Moby *m) {
                         int lo = scale_game_frames(25), hi = scale_game_frames(30);
                         b = FUN_L00_00257b90(lo, hi);
                     }
-                    FUN_L00_0026a9f0(v3, v2, *pa, *pb, a, b, 0, 0, 1200000.0f, sc);
+                    FUN_L00_0026a9f0(offset_position, v2, *pa, *pb, a, b, 0, 0, 1200000.0f, sc);
                 }
                 for (i = 9; i >= 0; i--) {
                     FUN_L09_002ea528_c((char *)m, movement_step);
@@ -889,10 +889,10 @@ void FUN_L09_002eaea8(Moby *m) {
                 A = D_L09_00208B00;
                 B = D_L09_00208B18;
                 sc = s * D_0015ED6C - extra * D_0015ED6C;
-                v3[0] = random_float_between_c2(-1.0f, 1.0f);
-                v3[1] = random_float_between_c2(-1.0f, 1.0f);
-                v3[2] = random_float_between_c2(-1.0f, 1.0f);
-                add_vector_xyz(v3, v3, d->pos);
+                offset_position[0] = random_float_between_c2(-1.0f, 1.0f);
+                offset_position[1] = random_float_between_c2(-1.0f, 1.0f);
+                offset_position[2] = random_float_between_c2(-1.0f, 1.0f);
+                add_vector_xyz(offset_position, offset_position, d->pos);
                 pa = &A.v[random_integer_below_c2(6)];
                 pb = &B.v[random_integer_below_c2(6)];
                 {
@@ -903,7 +903,7 @@ void FUN_L09_002eaea8(Moby *m) {
                     int lo = scale_game_frames(25), hi = scale_game_frames(30);
                     b = FUN_L00_00257b90(lo, hi);
                 }
-                FUN_L00_0026a9f0(v3, v2, *pa, *pb, a, b, 0, 0, 1200000.0f, sc);
+                FUN_L00_0026a9f0(offset_position, v2, *pa, *pb, a, b, 0, 0, 1200000.0f, sc);
             }
             if (m->state >= 3) {
                 mark_moby_for_removal(m);
