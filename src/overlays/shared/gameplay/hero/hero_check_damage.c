@@ -567,8 +567,8 @@ char *FUN_L00_0020d8f8(float a, float b, float c, float d) {
     return best;
 }
 /* Maps 1, 2, 3 to 0x79, 0x77, 0x75; others to 0. */
-s32 FUN_L00_0020da10(s32 a0) {
-    switch (a0) {
+s32 FUN_L00_0020da10(s32 animation_selector) {
+    switch (animation_selector) {
     case 1:
         return 0x79;
     case 2:
