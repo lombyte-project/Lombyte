@@ -1757,17 +1757,17 @@ extern int FUN_L11_00318050(char *moby, void **out);
 extern short *D_L11_001AC240[];
 void FUN_L11_00311be8(void *moby, void *a1, void *a2);
 
-void *FUN_L11_00311948(void *moby, char *a1, float *a2, float *a3, float f0, float f1, float f2, void *a4, int a5) {
+void *FUN_L11_00311948(void *moby, char *ship_vars, float *a2, float *a3, float f0, float f1, float f2, void *current_target, int a5) {
     void *best = 0;
     float bestd = 1000.0f;
     short *p;
     void *list[12];
-    FUN_L11_00311be8(moby, a1 + 0xE8, a1 + 0xEA);
-    if (a4 != 0) {
-        if (FUN_L11_00311a88_u(moby, a4) < bestd)
-            return a4;
+    FUN_L11_00311be8(moby, ship_vars + 0xE8, ship_vars + 0xEA);
+    if (current_target != 0) {
+        if (FUN_L11_00311a88_u(moby, current_target) < bestd)
+            return current_target;
     }
-    p = D_L11_001AC240[*(short *)(a1 + 0x108)];
+    p = D_L11_001AC240[*(short *)(ship_vars + 0x108)];
     if (p == 0)
         return 0;
     do {
