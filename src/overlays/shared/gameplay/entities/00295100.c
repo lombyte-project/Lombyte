@@ -1689,7 +1689,7 @@ void FUN_L00_0029b4d8(int a) {
     char *b;
     unsigned char *m;
     int s;
-    int s2;
+    int moby_state;
     int r0;
     int r1;
     if (D_L00_00161188 == 0)
@@ -1725,8 +1725,8 @@ void FUN_L00_0029b4d8(int a) {
         break;
     case 2:
     case 3:
-        s2 = m[0x20];
-        if (s2 == 2 || s2 == 0) {
+        moby_state = m[0x20];
+        if (moby_state == 2 || moby_state == 0) {
             char *q = D_L00_001CA4C0;
             *(int *)(q + 0x34) = 0;
         }
