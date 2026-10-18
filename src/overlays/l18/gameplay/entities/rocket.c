@@ -828,7 +828,7 @@ extern f32 D_L18_00161994_q __asm__("D_L18_00161994") __attribute__((sda));
 extern void trooper_scale(void *, void *, float) __asm__("FUN_001f9c48");
 void blend_moby_animation_q(MobyAnim_q *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
-char *FUN_L18_002d5cf8(float f, int a0, int idx, float *p6, float *p7, int a8) {
+char *FUN_L18_002d5cf8(float f, int a0, int idx, float *p6, float *p7, int detonation_countdown) {
     float v[4];
     float r;
     float g;
@@ -886,7 +886,7 @@ char *FUN_L18_002d5cf8(float f, int a0, int idx, float *p6, float *p7, int a8) {
         *(float *)(data + 0x188) = FUN_L00_0025abf0_q(p6, v, 0, f, -g);
         *(float *)(moby + 0x48) =
             angle_atan2(*(float *)(data + 0x180), *(float *)(data + 0x184));
-        *(int *)(data + 0x194) = a8;
+        *(int *)(data + 0x194) = detonation_countdown;
         *(int *)(data + 0x198) = a0;
         *(int *)(data + 0x19C) = 0;
         allocate_voice_for_target_entry(0, 0, (int)moby);
