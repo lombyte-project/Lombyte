@@ -1648,6 +1648,9 @@ extern char D_L13_001f49a8[];
 #include "rnc/audio/voice_pool.h"
 
 void FUN_L13_002cecb8(struct Moby *moby, unsigned char *d, float *health) {
+    enum {
+        HIT_REACTION_LETHAL = 1
+    };
     char *src;
     int hit;
     float position[4];
@@ -1663,7 +1666,7 @@ void FUN_L13_002cecb8(struct Moby *moby, unsigned char *d, float *health) {
                        fptodp(*(float *)(src + 4)), fptodp(*(float *)(src + 8)));
         }
         switch (FUN_00213928(moby, src, health, 0, &hit, 0, 0, 4)) {
-        case 1:
+        case HIT_REACTION_LETHAL:
         case 2:
             *health = 0.0f;
             break;
