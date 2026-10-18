@@ -590,7 +590,7 @@ extern float D_L13_00161388 __attribute__((sda));
 int D_L13_0016138C = 2;
 void FUN_L13_002b47a0(struct Moby *moby) {
     float v[4];
-    float v2[4];
+    float horizontal_offset[4];
     char *data;
     float d, x, ang;
     data = (char *)moby->pvars;
@@ -600,11 +600,11 @@ void FUN_L13_002b47a0(struct Moby *moby) {
         x = (20.0f - d) / 20.0f * 5.0f + 2.5f;
         ang = fast_add_rotations(random_float_between(-x, x) * DEG_TO_RAD,
                                  moby->rot.z);
-        v2[0] = fast_cos(ang) * (D_L13_00161388 * frame_time);
-        v2[1] = fast_sin(ang) * (D_L13_00161388 * frame_time);
-        v2[2] = 0;
-        fast_vec_add(v, v, v2);
-        FUN_L13_003061c8(*(float *)(data + 0x68), v, v2, moby);
+        horizontal_offset[0] = fast_cos(ang) * (D_L13_00161388 * frame_time);
+        horizontal_offset[1] = fast_sin(ang) * (D_L13_00161388 * frame_time);
+        horizontal_offset[2] = 0;
+        fast_vec_add(v, v, horizontal_offset);
+        FUN_L13_003061c8(*(float *)(data + 0x68), v, horizontal_offset, moby);
     }
 }
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002B2020.c: func_L13_002B5A88), where it is exact; names translated to the US level program. */
