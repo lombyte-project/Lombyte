@@ -84,6 +84,10 @@ extern void init_camera_system(void) __asm__("FUN_L00_001ed280");
 extern void FUN_L00_002852c0(void);
 
 void FUN_L00_00285008(void) {
+    enum {
+        VEHICLE_MODE_CLANK = 1,
+        VEHICLE_MODE_GIANT_CLANK = 2
+    };
     char *s = D_L00_001BB230;
     int i;
     short id;
@@ -112,10 +116,10 @@ void FUN_L00_00285008(void) {
     if (*(int *)(s + 0x44) != 0 && *(int *)(s + 0x44) != 3) {
         id = 0;
         switch (*(int *)(s + 0x44)) {
-        case 1:
+        case VEHICLE_MODE_CLANK:
             id = 0x57;
             break;
-        case 2:
+        case VEHICLE_MODE_GIANT_CLANK:
             id = 0x1A3;
             break;
         default:
