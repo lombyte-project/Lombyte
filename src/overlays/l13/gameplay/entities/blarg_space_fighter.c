@@ -1520,7 +1520,7 @@ extern void spawn_crate_debris(void *, void *, void *, void *, int, int, float, 
 extern void clear_u64_value(void *) __asm__("func_001F99F8");
 extern void subtract_vector_xyz_c2(void *, void *, void *) __asm__("FUN_001f9a28");
 
-void FUN_L13_002ce688(unsigned char *a0, void *a1, int a2)
+void FUN_L13_002ce688(unsigned char *source_moby, void *effect_position, int emit_extra_effects)
 {
     int k;
     int j;
@@ -1552,7 +1552,7 @@ void FUN_L13_002ce688(unsigned char *a0, void *a1, int a2)
 
     char *pA;
     pA = (char *)vA;
-    *(u128z *)vA = *(u128z *)a1;
+    *(u128z *)vA = *(u128z *)effect_position;
     qcopy(vB, pA);
     vB[2] = vB[2] + 0.3f;
     FUN_L00_0026b790(vB, 1, 0x40808080, 0.3f, 1.01f, 1.205f, 0.05f, 150000.0f);
@@ -1568,7 +1568,7 @@ void FUN_L13_002ce688(unsigned char *a0, void *a1, int a2)
         add_vector_xyz(vD, vD, vB);
         subtract_vector_xyz_c2(vE, vD, pA);
         normalize_vector_xyz(vE, vE, random_float_between(0.025f, 0.23f));
-        spawn_crate_debris(a0, vE, vD, &D_L13_0015F580, 0x162, 0, 0.90000004f, 2.1f);
+        spawn_crate_debris(source_moby, vE, vD, &D_L13_0015F580, 0x162, 0, 0.90000004f, 2.1f);
     }
     for (k = 0; k < 4; k++) {
         *(u128z *)vC = 0;
@@ -1580,9 +1580,9 @@ void FUN_L13_002ce688(unsigned char *a0, void *a1, int a2)
         subtract_vector_xyz_c2(vE, vD, pA);
         normalize_vector_xyz(vE, vE, random_float_between(0.025f, 0.23f));
         t = random_integer_below_c(2);
-        spawn_crate_debris(a0, vE, vD, &D_L13_0015F580, t + 0x163, 0, 1.2f, 2.4f);
+        spawn_crate_debris(source_moby, vE, vD, &D_L13_0015F580, t + 0x163, 0, 1.2f, 2.4f);
     }
-    if (a2 == 0) {
+    if (emit_extra_effects == 0) {
         return;
     }
     subtract_vector_xyz_c2(vD, D_L13_001670C0, pA);
@@ -1615,16 +1615,16 @@ void FUN_L13_002ce688(unsigned char *a0, void *a1, int a2)
     }
     if (D_L13_0015F5D0 < 0.95f) {
         s = scale_game_frames_alt(15);
-        spawn_glow_particle(a0, pA, vC, 9.0f, s, 0x7F, 0x7F, 0x7F, 0x20);
+        spawn_glow_particle(source_moby, pA, vC, 9.0f, s, 0x7F, 0x7F, 0x7F, 0x20);
         s = scale_game_frames_alt(24);
-        spawn_glow_particle(a0, pA, vC, 6.0f, s, 0x7F, 0x20, 0, 0x20);
+        spawn_glow_particle(source_moby, pA, vC, 6.0f, s, 0x7F, 0x20, 0, 0x20);
     }
     s = scale_game_frames_alt(20);
-    spawn_glow_particle(a0, pA, vC, 9.0f, s, 0x7F, 0x40, 0, 0x30);
+    spawn_glow_particle(source_moby, pA, vC, 9.0f, s, 0x7F, 0x40, 0, 0x30);
     s = scale_game_frames_alt(27);
-    spawn_glow_particle(a0, pA, vC, 6.0f, s, 0x60, 0x10, 0, 0x40);
+    spawn_glow_particle(source_moby, pA, vC, 6.0f, s, 0x60, 0x10, 0, 0x40);
     s = scale_game_frames_alt(29);
-    spawn_glow_particle(a0, pA, vC, 3.0f, s, 0x20, 0, 0, 0x20);
+    spawn_glow_particle(source_moby, pA, vC, 3.0f, s, 0x20, 0, 0, 0x20);
 }
 #include "rnc/overlay/quad.h"
 extern int fptodp(float) __asm__("FUN_00120478");
