@@ -30,7 +30,7 @@ extern u8 D_L02_00174480[] __attribute__((section(".data")));
 f32 FUN_L02_002360c8(f32 a, f32 b, f32 c) {
     f32 t[4];
     V4_32b90 v;
-    V4_32b90 t1;
+    V4_32b90 vector_scratch;
     V4_32b90 hero_position_copy;
     f32 o[6];
     f32 x, y, z;
@@ -63,8 +63,8 @@ f32 FUN_L02_002360c8(f32 a, f32 b, f32 c) {
         FUN_001f9bf8_32b90(&v, &v, b);
         FUN_001f9a68_32b90(&v, &v, -1.0f);
         FUN_001f9a68_32b90(t, &hero.motion.velocity, a);
-        FUN_001f9a68_32b90(&t1, &v, ((a * a + a) * 0.5f) * b);
-        FUN_001f9a10_32b90(t, &t1, t);
+        FUN_001f9a68_32b90(&vector_scratch, &v, ((a * a + a) * 0.5f) * b);
+        FUN_001f9a10_32b90(t, &vector_scratch, t);
         FUN_001f9a10_32b90(t, &hero.motion.pos, t);
         hero_position_copy.q = hero.motion.pos.q;
         FUN_L00_0025d238_32b90(&hero_position_copy, t);
@@ -80,15 +80,15 @@ f32 FUN_L02_002360c8(f32 a, f32 b, f32 c) {
         }
         break;
     case 2:
-        t1.f[2] = 100.0f;
-        t1.f[1] = 100.0f;
-        t1.f[0] = 100.0f;
-        FUN_001f9a28_32b90(&v, &hero.motion.pos, &t1);
+        vector_scratch.f[2] = 100.0f;
+        vector_scratch.f[1] = 100.0f;
+        vector_scratch.f[0] = 100.0f;
+        FUN_001f9a28_32b90(&v, &hero.motion.pos, &vector_scratch);
         FUN_001f9bf8_32b90(&v, &v, b);
         FUN_001f9a68_32b90(&v, &v, -1.0f);
         FUN_001f9a68_32b90(t, &hero.motion.velocity, a);
-        FUN_001f9a68_32b90(&t1, &v, ((a * a + a) * 0.5f) * b);
-        FUN_001f9a10_32b90(t, &t1, t);
+        FUN_001f9a68_32b90(&vector_scratch, &v, ((a * a + a) * 0.5f) * b);
+        FUN_001f9a10_32b90(t, &vector_scratch, t);
         FUN_001f9a10_32b90(t, &hero.motion.pos, t);
         hero_position_copy.q = hero.motion.pos.q;
         FUN_L00_0025d238_32b90(&hero_position_copy, t);
