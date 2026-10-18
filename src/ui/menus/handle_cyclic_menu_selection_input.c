@@ -4,7 +4,9 @@
 #include "rnc/ui/menus/menu_screen.h"
 
 extern s32 allocate_voice_for_target_entry() __asm__("func_0022DA68");
-s32 FUN_00221d68(struct MenuScreen *menu) {
+s32 handle_cyclic_menu_selection_input(struct MenuScreen *menu) __asm__("FUN_00221d68");
+
+s32 handle_cyclic_menu_selection_input(struct MenuScreen *menu) {
     s32 prev;
 
     if ((controller_state.pressed_unmasked & (PAD_SELECT | PAD_R3 | PAD_START)) && menu_system.close_locked == 0) {

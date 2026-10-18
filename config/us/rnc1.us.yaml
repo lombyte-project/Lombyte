@@ -1783,7 +1783,7 @@ segments:
           - [0x122ca4, textbin, text_gap_00221d24_before_fun_00221d68]
           - [0x122ca8, c, ui/menus/fun_00221d28]
           - [0x122ce4, textbin, text_gap_00221d64_after_fun_00221d28]
-          - [0x122ce8, c, ui/menus/fun_00221d68]
+          - [0x122ce8, c, ui/menus/handle_cyclic_menu_selection_input]
           - [0x122dcc, textbin, text_gap_00221e4c_before_fun_00221e50]
           - [0x122dd0, c, ui/menus/update_menu_cycle_selection]
           - [0x122ed8, c, ui/menus/fun_00221f58]
