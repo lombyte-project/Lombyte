@@ -1337,6 +1337,12 @@ extern void FUN_L00_001ff500(void *, void *, float);
  */
 struct Moby *FUN_L00_002a7438(struct Moby *src, void *pos, void *vel, int flags, int value, int counted)
 {
+    enum {
+        BOLT_VALUE_ONE = 1,
+        BOLT_VALUE_TWENTY = 20,
+        BOLT_VALUE_FIVE = 5,
+        BOLT_VALUE_FIFTY = 50
+    };
     f32 dir[4] __attribute__((aligned(16)));
     f32 tmp[4] __attribute__((aligned(16)));
     struct Moby *m;
@@ -1349,19 +1355,19 @@ struct Moby *FUN_L00_002a7438(struct Moby *src, void *pos, void *vel, int flags,
 
     switch (value) {
     default:
-    case 1:
+    case BOLT_VALUE_ONE:
         m = (struct Moby *)create_moby(0xD);
         scale = 0.65f;
         break;
-    case 5:
+    case BOLT_VALUE_FIVE:
         m = (struct Moby *)create_moby(0xE);
         scale = 0.7f;
         break;
-    case 20:
+    case BOLT_VALUE_TWENTY:
         m = (struct Moby *)create_moby(0xF);
         scale = 0.75f;
         break;
-    case 50:
+    case BOLT_VALUE_FIFTY:
         m = (struct Moby *)create_moby(0x10);
         scale = 0.6f;
         break;
