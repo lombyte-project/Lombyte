@@ -601,14 +601,14 @@ int hero_set_state(int a, int b) {
             p->unk690 = -0.2f;
         }
         {
-            char *v2 = (char *)&hero.motion.velocity;
+            char *velocity_bytes = (char *)&hero.motion.velocity;
             char *w;
-            clear_vector(v2);
-            w = v2 + 0x70;
-            qcopy(w, v2 + 0x30);
+            clear_vector(velocity_bytes);
+            w = velocity_bytes + 0x70;
+            qcopy(w, velocity_bytes + 0x30);
             gravity_flatten((float *)w, (float *)w);
             FUN_L00_0025f730(w, frame_time * 9.5f);
-            *(int *)(v2 + 0xF18) = 0x68;
+            *(int *)(velocity_bytes + 0xF18) = 0x68;
             if (b)
                 set_hero_animation(0x3A, 0, (float)scale_game_frames(0x11));
         }
