@@ -972,12 +972,17 @@ extern void func_L00_0025F4A8_alt(void *, void *, void *, float, float, int, int
 
 void gadgebot_update(unsigned char *m) __asm__("FUN_L18_002fbb98");
 void gadgebot_update(unsigned char *m) {
+    enum {
+        GADGEBOT_INITIALIZE = 0,
+        GADGEBOT_LAUNCH_FLIGHT = 1,
+        GADGEBOT_APPROACH_TARGET = 3
+    };
     char tmp[16];
     unsigned char *e = *(unsigned char **)(m + 0x78);
     unsigned char *moby_transform_ptr;
     FUN_L18_002fc100((struct Moby *)m);
     switch (m[0x20]) {
-    case 0: {
+    case GADGEBOT_INITIALIZE: {
         unsigned short h;
         m[0x20] = 8;
         if (random_integer_below(2))
@@ -1003,7 +1008,7 @@ void gadgebot_update(unsigned char *m) {
         *(unsigned short *)(m + 0x34) = h;
         break;
     }
-    case 1: {
+    case GADGEBOT_LAUNCH_FLIGHT: {
         float a = 10.0f;
         float r;
         moby_transform_ptr = m + 0x10;
@@ -1037,7 +1042,7 @@ void gadgebot_update(unsigned char *m) {
         if (m[0x53] != 1)
             blend_moby_animation(m, 1, 0, scale_game_frames(10));
         break;
-    case 3: {
+    case GADGEBOT_APPROACH_TARGET: {
         float f;
         *(QVd058 *)tmp = *(QVd058 *)(e + 0x180);
         f = FUN_L18_002fc4e0_c(m, tmp);
