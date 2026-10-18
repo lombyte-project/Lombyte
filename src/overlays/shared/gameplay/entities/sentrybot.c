@@ -1733,7 +1733,7 @@ extern char D_0013F350[];
 void FUN_L15_0029d6c0(M_29E8A0 *m) {
     Tbl_29E8A0 tbl;
     float v50[4];
-    float v60[4];
+    float previous_position[4];
     float v70[4];
     float v80[4];
     float v90[4];
@@ -1857,7 +1857,7 @@ void FUN_L15_0029d6c0(M_29E8A0 *m) {
             transform_vector_by_basis(dv, dv, m->mtx);
             build_look_at_matrix(dv, dv, m->mtx, random_angle_radians());
             FUN_L00_0026cbb0(v90, dv, 0x4F007FFF, 0x1FFFFFFF, scale_game_frames(5), 1, 20000.0f);
-            qcopy(v60, m->pos);
+            qcopy(previous_position, m->pos);
             FUN_L00_001ff290(delta, vel, up);
         }
     }
@@ -1881,7 +1881,7 @@ void FUN_L15_0029d6c0(M_29E8A0 *m) {
         coll.id = m->id;
         coll.v[2] = 1.0f;
         coll.one = 1;
-        if (collision_line(v60, m->pos, 0, *(char **)(hero + 0x2080), &coll) != 0) {
+        if (collision_line(previous_position, m->pos, 0, *(char **)(hero + 0x2080), &coll) != 0) {
             char *hit = D_L15_00174440;
             char *hm = *(char **)(hit + 0x18);
             if (hm != 0) {
@@ -1954,8 +1954,8 @@ void FUN_L15_0029d6c0(M_29E8A0 *m) {
                     fast_vec_normalize(v100, v100, random_float_between(8.5f, 16.5f) * D_0015ED6C);
                 } else {
                     float sp = random_float_between(8.5f, 16.5f) * D_0015ED6C;
-                    float a1 = random_angle_radians();
-                    build_spherical_offset_c(v100, sp, a1, random_angle_radians());
+                    float random_yaw = random_angle_radians();
+                    build_spherical_offset_c(v100, sp, random_yaw, random_angle_radians());
                 }
                 v100[2] = v100[2] + D_0015ED6C * 5.0f;
                 add_vector_xyz(v100, v100, v70);
