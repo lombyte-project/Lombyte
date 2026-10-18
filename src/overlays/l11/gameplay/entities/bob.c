@@ -987,6 +987,9 @@ typedef struct {
 
 /* Guard head update: in its watching states it turns its body and head toward the hero. */
 void FUN_L11_002d27b0(WM11 *m) {
+    enum {
+        RESORT_OWNER_INITIALIZE = 0
+    };
     WS11 scratch;
     WD11b *d = (WD11b *)m->data;
     float rate;
@@ -995,7 +998,7 @@ void FUN_L11_002d27b0(WM11 *m) {
     rate = 0.02f;
     head_rate = 0.3f;
     switch (m->state) {
-    case 0:
+    case RESORT_OWNER_INITIALIZE:
     case 1:
     case 2:
     case 3:
