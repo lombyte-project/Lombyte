@@ -313,8 +313,8 @@ extern float D_L08_00174660[];
 void FUN_L08_002d23f0(char *moby) {
     union Coll_36F8 c;
     blk16 t70;
-    float t80[4];
-    float t90[4];
+    float normalized_direction[4];
+    float random_direction[4];
     char *d;
     int st;
     int two;
@@ -345,14 +345,14 @@ void FUN_L08_002d23f0(char *moby) {
             float hi = 1.0f;
             int *q;
             t70 = D_L08_00161868;
-            *(v128_36F8 *)t90 = 0;
-            t90[0] = random_float_between_c5(lo, hi);
-            t90[1] = random_float_between_c5(lo, hi);
-            t90[2] = random_float_between_c5(lo, hi);
-            *(v128_36F8 *)t80 = *(v128_36F8 *)t90;
-            fast_vec_normalize(t80, t80, D_0015ED6C);
+            *(v128_36F8 *)random_direction = 0;
+            random_direction[0] = random_float_between_c5(lo, hi);
+            random_direction[1] = random_float_between_c5(lo, hi);
+            random_direction[2] = random_float_between_c5(lo, hi);
+            *(v128_36F8 *)normalized_direction = *(v128_36F8 *)random_direction;
+            fast_vec_normalize(normalized_direction, normalized_direction, D_0015ED6C);
             q = (int *)t70.b + random_integer_below_c3(4);
-            FUN_L00_00269958_c((moby + 0x10), t80, *q, 0x4FFF, scale_game_frames_c(0x2D), 0x32, 0x78, 1);
+            FUN_L00_00269958_c((moby + 0x10), normalized_direction, *q, 0x4FFF, scale_game_frames_c(0x2D), 0x32, 0x78, 1);
         }
         qcopy(c.r.start, moby + 0x10);
         f20 = 0.16f;
