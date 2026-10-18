@@ -27,6 +27,12 @@ extern s32 clear_record_flag_by_key() __asm__("FUN_00225e20");
 s32 update_menu_resource_stream(struct MenuScreen *stream) __asm__("FUN_0021fdc8");
 
 s32 update_menu_resource_stream(struct MenuScreen *stream) {
+    enum {
+        STREAM_START_INITIAL_PRIMARY_READ = 0,
+        STREAM_WAIT_INITIAL_PRIMARY_READ = 1,
+        STREAM_WAIT_SECONDARY_READ = 3,
+        STREAM_WAIT_PRIMARY_REPLACEMENT_READ = 5
+    };
     LanguageResourceOffsets language_offsets;
     s32 *completed_buffer_slot;
     s32 primary_entry_offset;
@@ -133,7 +139,7 @@ s32 update_menu_resource_stream(struct MenuScreen *stream) {
         }
         stream_state = stream->data.stream.state;
         switch (stream_state) {
-        case 0:
+        case STREAM_START_INITIAL_PRIMARY_READ:
             primary_buffer = stream->data.stream.buffer[0];
             if (primary_buffer != 0 && cd_read_active[0] == 0) {
                 primary_entry_offset = resource_index * 8;
@@ -172,9 +178,9 @@ s32 update_menu_resource_stream(struct MenuScreen *stream) {
                 }
             }
             break;
-        case 1:
-        case 3:
-        case 5:
+        case STREAM_WAIT_INITIAL_PRIMARY_READ:
+        case STREAM_WAIT_SECONDARY_READ:
+        case STREAM_WAIT_PRIMARY_REPLACEMENT_READ:
             if (cd_read_active[0] == 0) {
                 stream_flags = stream->data.stream.flags;
                 if (stream_flags & 0x20) {
