@@ -481,6 +481,9 @@ extern s32 D_L01_00161494 __attribute__((sda));
 extern f32 D_L01_0016149C __attribute__((sda));
 void FUN_L01_002c7530(char *moby) {
     enum {
+        COLLISION_CHECK_AND_COUNTDOWN = 1
+    };
+    enum {
         TIMED_REMOVAL = 2
     };
     int *data = *(int **)(moby + 0x78);
@@ -497,7 +500,7 @@ void FUN_L01_002c7530(char *moby) {
     *(float *)(moby + 0x40) = fast_add_rotations(*(float *)(moby + 0x40), *(float *)(data + 3));
     fast_vec_add(moby + 0x10, moby + 0x10, data + 8);
     switch ((u8)moby[0x20]) {
-    case 1:
+    case COLLISION_CHECK_AND_COUNTDOWN:
         FUN_L01_00280970(D_L01_00161494, moby);
         fast_vec_normalize(normal, data + 8, 1.0f);
         make_hit_descriptor(hit, moby, 0, 0.0f, normal);
