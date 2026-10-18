@@ -1831,7 +1831,7 @@ extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern s32 rand();
 
-char *FUN_L13_002e1140(char *owner, char *pos, char *vec, int a3, float f) {
+char *FUN_L13_002e1140(char *owner, char *pos, char *vec, int remaining_split_count, float f) {
     char *moby = func_0020D348_m(0x584);
     if (moby != 0) {
         char *d;
@@ -1849,7 +1849,7 @@ char *FUN_L13_002e1140(char *owner, char *pos, char *vec, int a3, float f) {
         *(char **)(d + 0x48) = owner;
         *(int *)(d + 0x40) = 1;
         *(short *)(d + 0x4C) = scale_game_frames(0x1E);
-        *(short *)(d + 0x4E) = a3;
+        *(short *)(d + 0x4E) = remaining_split_count;
         *(int *)(moby + 0x94) = 0;
         r = random_float_between_alt(-30.0f, 30.0f) * DEG_TO_RAD * frame_time;
         switch (rand() % 3) {
