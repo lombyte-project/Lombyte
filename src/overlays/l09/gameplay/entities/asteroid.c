@@ -736,7 +736,7 @@ void FUN_L09_002eaea8(Moby *m) {
             add_vector_xyz(v2, v2, d->pos);
             add_vector_xyz(v3, v2, collision_probe_offset);
             if (FUN_001efa68(v2, v3, 4, (int)m, 0) != 0 && D_L09_00173FE8 > 26.5f) {
-                float v4[4];
+                float scaled_movement_step[4];
                 V6_2EC188 A;
                 V6_2EC188 B;
                 float extra;
@@ -744,7 +744,7 @@ void FUN_L09_002eaea8(Moby *m) {
                 int h;
                 extra = 0.0f;
                 if (len < 7.0f) extra = 7.0f - len;
-                scale_vector_xyz_c(v4, movement_step, 0.1f);
+                scale_vector_xyz_c(scaled_movement_step, movement_step, 0.1f);
                 for (i = 7; i >= 0; i--) {
                     float s;
                     float sc;
@@ -766,7 +766,7 @@ void FUN_L09_002eaea8(Moby *m) {
                         int lo = scale_game_frames(25), hi = scale_game_frames(30);
                         b = FUN_L00_00257b90(lo, hi);
                     }
-                    FUN_L00_0026a9f0(d->pos, v4, *pa, *pb, a, b, 0, 0, 400000.0f, sc);
+                    FUN_L00_0026a9f0(d->pos, scaled_movement_step, *pa, *pb, a, b, 0, 0, 400000.0f, sc);
                 }
                 for (i = 9; i >= 0; i--) {
                     FUN_L09_002ea528_c((char *)m, movement_step);
