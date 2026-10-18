@@ -1863,7 +1863,7 @@ void FUN_L11_00246b70(void) {
     case 0x5E:
     case 0x69: {
         s32 t198;
-        s32 t420;
+        s32 position_capture_frame;
         if (hero.state.current == 0x1C && hero.unk22D8 == 0 && hero.items[3].item_id == 3) {
             if (FUN_L00_00211870(10.0f) != 0) {
                 FUN_L00_00216de8(4, 0);
@@ -1890,11 +1890,11 @@ void FUN_L11_00246b70(void) {
             }
         }
         t198 = hero.state_timer;
-        t420 = hero.unk420;
-        if (t198 == t420) {
+        position_capture_frame = hero.unk420;
+        if (t198 == position_capture_frame) {
             qcopy(&hero.unk400, &hero.motion.pos);
         }
-        if (hero.unk418 != 0 || (t198 < t420 && hero.state.current != HERO_STATE_HIGH_JUMP && hero.state.current != HERO_STATE_PACK_LONG_JUMP && hero.state.current != 0xC &&
+        if (hero.unk418 != 0 || (t198 < position_capture_frame && hero.state.current != HERO_STATE_HIGH_JUMP && hero.state.current != HERO_STATE_PACK_LONG_JUMP && hero.state.current != 0xC &&
                             hero.state.current != 0x11 && hero.state.current != 0x1C && hero.state.current != 0x4C)) {
             f32 sv;
             turn_to(0, frame_scale_sq * 0.015f, frame_scale_sq * 0.2f, frame_time * 15.009831f);
