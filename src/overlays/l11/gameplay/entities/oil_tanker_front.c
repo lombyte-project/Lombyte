@@ -1692,18 +1692,18 @@ extern short D_L11_0016244C __attribute__((sda));
 extern short D_L11_00162450 __attribute__((sda));
 extern short D_L11_00162454 __attribute__((sda));
 void FUN_L11_0031b098(struct Moby *m) {
-    float v1[4];
-    float v2[4];
+    float randomized_velocity[4];
+    float vertical_spark_vector[4];
     char *d;
     int c0, c1, c2, c3, c4;
     d = (char *)m->pvars;
-    random_vector(v1, 0.0f, *(float *)&D_L11_00162428 * D_0015ED6C_n[1]);
-    add_vector_xyz(v1, v1, d);
-    clear_vector(v2);
-    v2[2] = random_float_between_alt(*(float *)&D_L11_0016242C, *(float *)&D_L11_00162430) *
+    random_vector(randomized_velocity, 0.0f, *(float *)&D_L11_00162428 * D_0015ED6C_n[1]);
+    add_vector_xyz(randomized_velocity, randomized_velocity, d);
+    clear_vector(vertical_spark_vector);
+    vertical_spark_vector[2] = random_float_between_alt(*(float *)&D_L11_0016242C, *(float *)&D_L11_00162430) *
             D_0015ED6C_n[1];
-    v1[3] = *(float *)&D_L11_00162434;
-    v2[3] = *(float *)&D_L11_00162438;
+    randomized_velocity[3] = *(float *)&D_L11_00162434;
+    vertical_spark_vector[3] = *(float *)&D_L11_00162438;
     c0 = fast_tween_color(*(int *)&D_L11_0016243C, *(int *)&D_L11_00162440,
                       random_float_between_alt(0.0f, 1.0f));
     c1 = fast_tween_color(*(int *)&D_L11_00162444, *(int *)&D_L11_00162448,
@@ -1714,7 +1714,7 @@ void FUN_L11_0031b098(struct Moby *m) {
         (float)*(int *)&D_L11_00162450 * 0.8f, (float)*(int *)&D_L11_00162450 * 1.2f)));
     c4 = func_001FA898_r(multiply_global_factor_ed64(random_float_between_alt(
         (float)*(int *)&D_L11_00162454 * 0.8f, (float)*(int *)&D_L11_00162454 * 1.2f)));
-    spawn_spark(&m->pos, v1, v2, c0, c1, c2, c3, c4, -1);
+    spawn_spark(&m->pos, randomized_velocity, vertical_spark_vector, c0, c1, c2, c3, c4, -1);
 }
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_0031ED48), where it is exact; names translated to the US level program. */
 
