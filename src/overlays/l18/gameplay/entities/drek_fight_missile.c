@@ -3590,10 +3590,13 @@ extern void func_L18_002F9AB8_v(void *) __asm__("FUN_L18_002f8658");
 
 void rocket_tank_update(M1454 *m) __asm__("FUN_L18_002f7c40");
 void rocket_tank_update(M1454 *m) {
+    enum {
+        ROCKET_TANK_INITIALIZE = 0
+    };
     D1454 *d = m->data;
     FUN_L18_002f8050(m);
     switch (m->state) {
-    case 0:
+    case ROCKET_TANK_INITIALIZE:
         attach_manipulator((char *)m, 0, d->buf);
         *(short *)((char *)d + 0x24) = 6;
         *(unsigned char *)((char *)d + 0x28) = 3;
