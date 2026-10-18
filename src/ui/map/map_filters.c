@@ -409,11 +409,11 @@ int map_filter_l08_1(int arg0, float unused1, float unused2, float reveal_test_v
    a plain `? 1 : 0`. */
 int map_filter_l08_2(int arg0, float unused1, float unused2, float arg1) __asm__("func_00207508");
 
-int map_filter_l08_2(int arg0, float unused1, float unused2, float arg1) {
+int map_filter_l08_2(int arg0, float unused1, float unused2, float reveal_test_value) {
     if (arg0 < 0xE0) {
-        return (arg1 >= 44.0f && arg1 <= 45.0f) ? 1 : 0;
+        return (reveal_test_value >= 44.0f && reveal_test_value <= 45.0f) ? 1 : 0;
     }
-    return (arg1 >= 37.0f) ? 1 : 0;
+    return (reveal_test_value >= 37.0f) ? 1 : 0;
 }
 
 /* map_filter_l08_2's twin with other thresholds. The function is 116 bytes:
