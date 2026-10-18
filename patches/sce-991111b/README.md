@@ -9,7 +9,7 @@ and the stack through `0055` builds `66c253915a6fa851…`, the full stack throug
 `0056` `fc69951c0ec883e1…`, on the Linux cloud host (see the build notes below). That last stack still held
 `0034`, which is retired. The current stack (through `0056`, without `0034`)
 builds `c2b8e013b797f4ff…` there and gives the same objects (full-ELF gate
-PASS); with `0057` it builds `5241bdbb904a71a8…`. Check a rebuilt compiler by
+PASS); with `0057` it builds `5241bdbb904a71a8…`, with `0058` `acd9a6aa2ac7a6ad…`. Check a rebuilt compiler by
 its output.
 
 - Archive: `gnu-ee-binutils-gcc-1.1.tar.gz`, 16,510,927 bytes
@@ -42,7 +42,7 @@ Apply with `git apply` at the root of the extracted archive, in this order:
 2. `0001`, `0015`, `0016`, `0019`, `0020`, `0021`, `0022`, `0025`, `0026`,
    `0027`, `0028`, `0029`, `0030`, `0031`, `0032`, `0033`, `0037`
 3. `0036`, `0044`, `0045`, `0046`, `0047`, `0048`, `0049`,
-   `0050`, `0051`, `0052`, `0053`, `0054`, `0055`, `0056`, `0057`
+   `0050`, `0051`, `0052`, `0053`, `0054`, `0055`, `0056`, `0057`, `0058`
 
 Configure for `--target=mips64r5900-sf-elf --host=i686-linux-gnu
 --build=i686-linux-gnu --disable-nls --enable-languages=c --without-headers`
@@ -76,6 +76,19 @@ differs. `make` does not track header dependencies: after changing
 `mips.h`, remove `toplev.o` (or build from a fresh tree).
 
 ## Published patches
+
+- `0058-reorg-trap-if-sets-volatile.patch` SHA-256: `1171f8e37de070d8ff418ea9812b8c1f27313eeb19fcbb49fd8b6aef45590346`
+  - role: default. `mark_set_resources` had no `TRAP_IF` case, so reorg's
+    backward scan walked past a divide-by-zero trap and took an insn at a
+    branch target as a copy of one above the trap, and the branch skipped it.
+    `mark_referenced_resources` already treats `TRAP_IF` as volatile; the
+    patch does the same here. Retail and SN's cc1 keep the branch on the insn. Of 1,530 game-range units, 9
+    change: the fixtures, and five overlay files whose changed functions are
+    not exact either way
+  - fixtures: `textbin/ui/menus/update_menu_grid_selection` (the `beqz`
+    targets the `addiu $3` again), `ui/menus/update_menu_cycle_selection`
+    (exact on the game compiler, was an SN route), `FUN_L05_0024bdc0`,
+    `FUN_L00_00221310`
 
 - `0057-reorg-sticky-volatile-set.patch` SHA-256: `6cdde99d4d4e2854d31ee6d2433a638b6eb564fcb70cb3a00d78c4aceae402e2`
   - role: default. In `mark_set_resources` a store's volatile flag was
