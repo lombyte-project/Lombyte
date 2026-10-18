@@ -498,6 +498,9 @@ extern int D_L00_00161478 __attribute__((sda));
 extern int D_L00_00161480 __attribute__((sda));
 void FUN_L00_002b3458(unsigned char *m) {
     enum {
+        STATE_ACTIVE = 1
+    };
+    enum {
         STATE_INITIALIZE = 0
     };
     V_2b3458 *v = *(V_2b3458 **)(m + 0x78);
@@ -512,7 +515,7 @@ void FUN_L00_002b3458(unsigned char *m) {
         v->p[2] = D_L00_0015FFD8 + (v->idx[2] << 8);
         v->p[3] = D_L00_0015FFD8 + (v->idx[3] << 8);
         break;
-    case 1:
+    case STATE_ACTIVE:
         r = FUN_L00_0025a420_2b3458(m, 0x10000, 0);
         FUN_001f9740_2b3458(&v->wC);
         if (r && v->wC == 0) {
