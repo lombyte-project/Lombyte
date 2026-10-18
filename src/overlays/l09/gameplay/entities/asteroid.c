@@ -703,18 +703,18 @@ extern void scale_vector_xyz_c(void *, void *, float) __asm__("FUN_001f9a68");
 
 extern f32 frame_scale_macro __asm__("D_0015ED60") __attribute__((section(".sdata")));
 void FUN_L09_002eaea8(Moby *m) {
-    float v0[4];
-    float v1[4];
+    float movement_step[4];
+    float collision_probe_offset[4];
     float v2[4];
     float v3[4];
     Data_2EC188 *d = (*(Data_2EC188 **)&m->pvars);
     float len;
     float t;
 
-    subtract_vector_xyz(v0, d->target, d->pos);
-    normalize_vector_xyz(v1, v0, 25.0f);
-    normalize_vector_xyz(v0, v0, d->f54);
-    add_vector_xyz(d->pos, d->pos, v0);
+    subtract_vector_xyz(movement_step, d->target, d->pos);
+    normalize_vector_xyz(collision_probe_offset, movement_step, 25.0f);
+    normalize_vector_xyz(movement_step, movement_step, d->f54);
+    add_vector_xyz(d->pos, d->pos, movement_step);
     subtract_vector_xyz(((f32 *)&m->pos), d->pos, D_L09_00166F40);
     len = vector_length_xyz(((f32 *)&m->pos));
     if (len > 100.0f && d->pos[2] > 27.0f) {
@@ -734,7 +734,7 @@ void FUN_L09_002eaea8(Moby *m) {
             v2[1] = random_float_between_c2(-5.0f, 5.0f);
             v2[2] = random_float_between_c2(-5.0f, 5.0f);
             add_vector_xyz(v2, v2, d->pos);
-            add_vector_xyz(v3, v2, v1);
+            add_vector_xyz(v3, v2, collision_probe_offset);
             if (FUN_001efa68(v2, v3, 4, (int)m, 0) != 0 && D_L09_00173FE8 > 26.5f) {
                 float v4[4];
                 V6_2EC188 A;
@@ -744,7 +744,7 @@ void FUN_L09_002eaea8(Moby *m) {
                 int h;
                 extra = 0.0f;
                 if (len < 7.0f) extra = 7.0f - len;
-                scale_vector_xyz_c(v4, v0, 0.1f);
+                scale_vector_xyz_c(v4, movement_step, 0.1f);
                 for (i = 7; i >= 0; i--) {
                     float s;
                     float sc;
@@ -769,7 +769,7 @@ void FUN_L09_002eaea8(Moby *m) {
                     FUN_L00_0026a9f0(d->pos, v4, *pa, *pb, a, b, 0, 0, 400000.0f, sc);
                 }
                 for (i = 9; i >= 0; i--) {
-                    FUN_L09_002ea528_c((char *)m, v0);
+                    FUN_L09_002ea528_c((char *)m, movement_step);
                 }
                 d->f58 = h = trooper_play_sound(6, 0, (int)m, 0xC1);
                 if (h != 0) {
@@ -793,7 +793,7 @@ void FUN_L09_002eaea8(Moby *m) {
                 qcopy(v2, d->pos);
                 v2[2] = 25.0f;
                 for (j = 4; j >= 0; j--) {
-                    FUN_L09_002efe48_c(m, v2, v0, d->f50 * 4.0f, d->f50 * 12.0f);
+                    FUN_L09_002efe48_c(m, v2, movement_step, d->f50 * 4.0f, d->f50 * 12.0f);
                 }
                 d->f54 = d->f54 * (frame_scale_macro * -0.100000024f + 1.0f);
                 if (d->f58 <= 0) {
@@ -810,7 +810,7 @@ void FUN_L09_002eaea8(Moby *m) {
                 int h;
                 extra = 0.0f;
                 if (len < 7.0f) extra = 7.0f - len;
-                scale_vector_xyz_c(v2, v0, 0.5f);
+                scale_vector_xyz_c(v2, movement_step, 0.5f);
                 for (i = 0; i < 8; i++) {
                     float s;
                     float sc;
@@ -839,7 +839,7 @@ void FUN_L09_002eaea8(Moby *m) {
                     FUN_L00_0026a9f0(v3, v2, *pa, *pb, a, b, 0, 0, 1200000.0f, sc);
                 }
                 for (i = 9; i >= 0; i--) {
-                    FUN_L09_002ea528_c((char *)m, v0);
+                    FUN_L09_002ea528_c((char *)m, movement_step);
                 }
                 d->f58 = h = trooper_play_sound(6, 0, (int)m, 0xC1);
                 if (h != 0) {
@@ -865,7 +865,7 @@ void FUN_L09_002eaea8(Moby *m) {
             qcopy(v2, d->pos);
             v2[2] = 25.0f;
             for (j = 1; j >= 0; j--) {
-                FUN_L09_002efe48_c(m, v2, v0, d->f50 * 4.0f, d->f50 * 12.0f);
+                FUN_L09_002efe48_c(m, v2, movement_step, d->f50 * 4.0f, d->f50 * 12.0f);
             }
             if (m->state > scale_game_frames(10)) {
                 mark_moby_for_removal(m);
@@ -877,7 +877,7 @@ void FUN_L09_002eaea8(Moby *m) {
             int k;
             extra = 0.0f;
             if (len < 7.0f) extra = 7.0f - len;
-            scale_vector_xyz_c(v2, v0, 0.25f);
+            scale_vector_xyz_c(v2, movement_step, 0.25f);
             for (k = 0; k < 3; k++) {
                 float s;
                 float sc;
