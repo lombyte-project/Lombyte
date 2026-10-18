@@ -520,7 +520,7 @@ extern unsigned char D_L00_001BB684[];
 extern f32 frame_scale __asm__("D_0015ED60") MACRO_ADDR;
 extern s32 pal_mode __asm__("D_0015ED80") MACRO_ADDR;
 extern s32 game_language __asm__("D_0015ED88") MACRO_ADDR;
-char *load_level_gameplay(int arg0) {
+char *load_level_gameplay(int skip_gameplay_read) {
     LevelHeader *hdr;
     char *mem;
     float *ship;
@@ -529,7 +529,7 @@ char *load_level_gameplay(int arg0) {
 
     hdr = D_L00_00173E00.f4;
     mem = D_L00_00173E00.f18;
-    if (arg0 == 0) {
+    if (skip_gameplay_read == 0) {
         if (pal_mode != 0) {
             load(mem, D_00137B80.f2978, D_00137B80.f297C);
         } else {
