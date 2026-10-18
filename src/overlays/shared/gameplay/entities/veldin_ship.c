@@ -797,145 +797,129 @@ void FUN_L00_002d1428(M2d1428 *m) {
         }
     } while (p != 0);
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d19b0.s", FUN_L00_002d19b0);
-#else
+#include "rnc/gameplay/entities/moby.h"
+
+
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002D1168.c: func_L00_002D2E60), where it is exact; names translated to the US level program. */
+
 typedef struct {
     u128 points[4];
     u32 colors[4];
-    f32 texcoords[8];
+    struct { f32 u, v; } uv[4];
     u64 texture[4];
 } __attribute__((aligned(16))) Quad_2d19b0;
+
 typedef struct {
     f32 x, y, z, w;
 } __attribute__((aligned(16))) Vec_2d19b0;
-extern s32 D_L00_001618DC __attribute__((sda));
-extern s32 D_L00_001618E0 __attribute__((sda));
-extern s32 D_L00_001618E4 __attribute__((sda));
-extern s32 D_L00_001618E8 __attribute__((sda));
-extern s32 D_L00_001618EC __attribute__((sda));
-extern s32 D_L00_001618F0 __attribute__((sda));
-extern s32 D_L00_001618F4 __attribute__((sda));
-extern f32 D_L00_00166C80_2d19b0[] __asm__("D_L00_00166C80");
-extern char camera_position[] __asm__("D_L00_00166DC0");
-extern Vec_2d19b0 D_L00_001DE7B0_2d19b0[] __asm__("D_L00_001DE7B0");
-extern s16 D_L00_001DEE10_2d19b0[] __asm__("D_L00_001DEE10");
-extern Vec_2d19b0 D_L00_001DF9A0_2d19b0[] __asm__("D_L00_001DF9A0");
-extern Vec_2d19b0 D_L00_001E04A0_2d19b0[] __asm__("D_L00_001E04A0");
-extern f32 D_L00_001E0B00_2d19b0[][2] __asm__("D_L00_001E0B00");
-extern f32 D_L00_001E0E30_2d19b0[][2] __asm__("D_L00_001E0E30");
-extern u64 get_effect_texture_2d19b0(s32) __asm__("FUN_001f44b8");
-extern f32 absolute_float_2d19b0(f32) __asm__("FUN_001f99c0");
-extern s32 scale_game_frames_2d19b0(s32) __asm__("FUN_001f96f8");
-extern s32 check_timer_2d19b0(s32 *) __asm__("FUN_001f9740");
-extern f32 convert_integer_to_float_2d19b0(s32) __asm__("FUN_001fa6c0");
-extern void transform_vector_2d19b0(void *, void *, void *) __asm__("FUN_001f9d20");
-extern void subtract_vector_2d19b0(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void normalize_vector_2d19b0(void *, void *, f32) __asm__("FUN_001f9bf8");
-extern f32 dot_vector_2d19b0(void *, void *) __asm__("FUN_001f9ab0");
-extern void scale_vector_2d19b0(void *, void *, f32) __asm__("FUN_001f9a68");
-extern f32 fast_sqrt_2d19b0(f32) __asm__("FUN_001f9988");
-extern void transform_vectors_2d19b0(void *, s32, s32) __asm__("FUN_001f7d30");
+
+extern Vec_2d19b0 D_L00_001DF9A0[];
+extern Vec_2d19b0 D_L00_001E04A0[];
+extern Vec_2d19b0 D_L00_001DE7B0[];
+extern f32 D_L00_001E0B00[][2];
+extern f32 D_L00_001E0E30[][2];
+extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
+extern f32 fast_vec_dot(void *a, void *b) __asm__("func_001F9AB0");
+extern f32 square_root_scalar(f32) __asm__("func_001F9988");
+extern s16 D_L00_001DEE10[][4][3];
+extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
+extern s32 tick_countdown_32_alt(s32 *) __asm__("FUN_001f9740");
+extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
+extern short D_L00_001618E8 __attribute__((sda));
+extern short D_L00_001618E0 __attribute__((sda));
+extern short D_L00_001618EC __attribute__((sda));
+extern short D_L00_001618F0 __attribute__((sda));
+extern short D_L00_001618F4 __attribute__((sda));
+extern short D_L00_001618DC __attribute__((sda));
+extern short D_L00_001618E4 __attribute__((sda));
+extern void fast_draw_quad_real(void *, int, int) __asm__("func_001F7D30");
+extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
+extern void fast_vec_scale(void *, void *, f32) __asm__("func_001F9A68");
+extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void transform_vector(void *, void *, void *) __asm__("func_001F9D20");
+float absolute_float(float input) __asm__("func_001F99C0");
+
+#define G_DC (*(s32 *)&D_L00_001618DC)
+#define G_E0 (*(s32 *)&D_L00_001618E0)
+#define G_E4 (*(s32 *)&D_L00_001618E4)
+#define G_E8 (*(s32 *)&D_L00_001618E8)
+#define G_EC (*(s32 *)&D_L00_001618EC)
+#define G_F0 (*(s32 *)&D_L00_001618F0)
+#define G_F4 (*(s32 *)&D_L00_001618F4)
+#define XFORM(a, b, c) transform_vector((Vec4f *)(a), (Vec4f *)(b), (c))
 
 void FUN_L00_002d19b0(u8 *m) {
     Quad_2d19b0 quad;
     Vec_2d19b0 a, c, b;
     u8 *vars = *(u8 **)(m + 0x78);
-    s16 *indices;
-    f32 (*uv)[2];
-    f32 *uv_y, *texcoords;
-    f32 (*old_uv)[2];
-    s32 i, index, active = 0;
-    u32 j;
+    s32 i, j, index, active = 0;
     f32 blend, len, x, y;
 
-    quad.texture[1] = get_effect_texture_2d19b0(D_L00_001618F0);
+    quad.texture[1] = get_effect_texture(G_F0);
     quad.texture[2] = 0xff9000000260ULL;
-    quad.texture[3] = (u64)(s64)D_L00_001618DC | ((u64)(s64)D_L00_001618E0 << 2) |
-                      ((u64)(s64)D_L00_001618E4 << 4) | ((u64)(s64)D_L00_001618E8 << 6) |
-                      ((u64)(s64)D_L00_001618EC << 32);
+    quad.texture[3] = (u64)(s64)G_DC | ((u64)(s64)G_E0 << 2) |
+                      ((u64)(s64)G_E4 << 4) | ((u64)(s64)G_E8 << 6) |
+                      ((u64)(s64)G_EC << 32);
     quad.texture[0] = 0;
-    quad.colors[0] = quad.colors[1] = quad.colors[2] = quad.colors[3] = D_L00_001618F4;
-    if (absolute_float_2d19b0(D_L00_00166C80_2d19b0[80] - *(f32 *)(m + 0x10)) < 16.0f &&
-        absolute_float_2d19b0(D_L00_00166C80_2d19b0[81] - *(f32 *)(m + 0x14)) < 16.0f)
+    quad.colors[0] = quad.colors[1] = quad.colors[2] = quad.colors[3] = G_F4;
+    if (absolute_float(D_L00_00166C80_2d19b0[80] - *(f32 *)(m + 0x10)) < 16.0f &&
+        absolute_float(D_L00_00166C80_2d19b0[81] - *(f32 *)(m + 0x14)) < 16.0f)
         active = 1;
     if (active || m[0x20] == 1) {
         m[0xbc] = 1;
-        check_timer_2d19b0((s32 *)(vars + 0x40));
-        blend = convert_integer_to_float_2d19b0(*(s32 *)(vars + 0x40));
-        blend /= convert_integer_to_float_2d19b0(scale_game_frames_2d19b0(0x3c));
-        uv = D_L00_001E0B00_2d19b0;
-        texcoords = quad.texcoords;
-        uv_y = quad.texcoords + 1;
-        old_uv = D_L00_001E0E30_2d19b0;
+        tick_countdown_32_alt((s32 *)(vars + 0x40));
+        blend = convert_integer_to_float(*(s32 *)(vars + 0x40));
+        blend /= convert_integer_to_float(scale_game_frames(0x3c));
         for (i = 0; i < 0x66; i++) {
-            transform_vector_2d19b0(&D_L00_001E04A0_2d19b0[i], &D_L00_001DE7B0_2d19b0[i], vars);
-            subtract_vector_2d19b0(&b, &D_L00_001E04A0_2d19b0[i], &(*(Vec_2d19b0 *)camera_position));
-            normalize_vector_2d19b0(&b, &b, 1.0f);
-            transform_vector_2d19b0(&a, &D_L00_001DF9A0_2d19b0[i], vars);
-            normalize_vector_2d19b0(&a, &a, 0.1f);
-            len = dot_vector_2d19b0(&a, &b);
-            scale_vector_2d19b0(&c, &a, len + len);
-            subtract_vector_2d19b0(&c, &b, &c);
-            normalize_vector_2d19b0(&c, &c, 1.0f);
+            XFORM(&D_L00_001E04A0[i], &D_L00_001DE7B0[i], vars);
+            subtract_vector_xyz(&b, &D_L00_001E04A0[i], camera_position);
+            fast_vec_normalize(&b, &b, 1.0f);
+            XFORM(&a, &D_L00_001DF9A0[i], vars);
+            fast_vec_normalize(&a, &a, 0.1f);
+            len = fast_vec_dot(&a, &b);
+            fast_vec_scale(&c, &a, len + len);
+            subtract_vector_xyz(&c, &b, &c);
+            fast_vec_normalize(&c, &c, 1.0f);
             c.z += 1.0f;
-            len = fast_sqrt_2d19b0(c.z + c.z);
+            len = square_root_scalar(c.z + c.z);
             len += len;
             if (m[0x20] == 1 || *(s32 *)(vars + 0x40) == 0) {
-                uv[0][0] = c.x / len + 0.5f;
-                uv[0][1] = c.y / len + 0.5f;
+                D_L00_001E0B00[i][0] = c.x / len + 0.5f;
+                D_L00_001E0B00[i][1] = c.y / len + 0.5f;
             } else {
-                y = c.y / len;
                 x = c.x / len + 0.5f;
-                uv[0][0] = x + (old_uv[0][0] - x) * blend;
+                y = c.y / len;
+                D_L00_001E0B00[i][0] = x + (D_L00_001E0E30[i][0] - x) * blend;
                 x = y + 0.5f;
-                uv[0][1] = x + (old_uv[0][1] - x) * blend;
+                D_L00_001E0B00[i][1] = x + (D_L00_001E0E30[i][1] - x) * blend;
             }
-            uv++;
-            old_uv++;
         }
         if (m[0x20] == 1)
             m[0x20] = 2;
     } else {
         if (m[0xbc] == 1) {
             m[0xbc] = 0;
-            texcoords = quad.texcoords;
-            uv_y = quad.texcoords + 1;
             for (i = 0; i < 0x66; i++) {
-                D_L00_001E0E30_2d19b0[i][0] = D_L00_001E0B00_2d19b0[i][0];
-                D_L00_001E0E30_2d19b0[i][1] = D_L00_001E0B00_2d19b0[i][1];
-                transform_vector_2d19b0(&D_L00_001E04A0_2d19b0[i], &D_L00_001DE7B0_2d19b0[i], vars);
+                D_L00_001E0E30[i][0] = D_L00_001E0B00[i][0];
+                D_L00_001E0E30[i][1] = D_L00_001E0B00[i][1];
+                XFORM(&D_L00_001E04A0[i], &D_L00_001DE7B0[i], vars);
             }
         } else {
-            texcoords = quad.texcoords;
-            uv_y = quad.texcoords + 1;
             for (i = 0; i < 0x66; i++)
-                transform_vector_2d19b0(&D_L00_001E04A0_2d19b0[i], &D_L00_001DE7B0_2d19b0[i], vars);
+                XFORM(&D_L00_001E04A0[i], &D_L00_001DE7B0[i], vars);
         }
-        *(s32 *)(vars + 0x40) = scale_game_frames_2d19b0(0x3c);
+        *(s32 *)(vars + 0x40) = scale_game_frames(0x3c);
     }
-    indices = D_L00_001DEE10_2d19b0;
     for (i = 0; i < 0x4a; i++) {
-        f32 *uv_second = uv_y;
-        f32 *uv_x = texcoords;
-        u128 *points = quad.points;
-        s16 *face_indices = indices + i * 12;
-        j = 3;
-        do {
-            index = *face_indices;
-            qcopy(points, &D_L00_001E04A0_2d19b0[index]);
-            points++;
-            *uv_x = D_L00_001E0B00_2d19b0[index][0];
-            *uv_second = D_L00_001E0B00_2d19b0[index][1];
-            face_indices += 3;
-            uv_x += 2;
-            uv_second += 2;
-        } while (j-- != 0);
-        transform_vectors_2d19b0(&quad, 0, 0);
+        for (j = 0; j < 4; j++) {
+            index = D_L00_001DEE10[i][j][0];
+            qcopy(&quad.points[j], &D_L00_001E04A0[index]);
+            quad.uv[j].u = D_L00_001E0B00[index][0];
+            quad.uv[j].v = D_L00_001E0B00[index][1];
+        }
+        fast_draw_quad_real(&quad, 0, 0);
     }
 }
-#define FUN_L00_002d19b0(x) FUN_L00_002d19b0(u8 *m)
-#endif
 typedef struct M2d1e80 {
     u8 p0[0x20];
     u8 state;
@@ -952,7 +936,7 @@ extern s32 D_L00_0015F5C4;
 extern s32 D_L00_0016C890[];
 extern void build_moby_bone_transform(void *, int, void *) __asm__("FUN_0020cca8");
 void enqueue_callback_list_1(void *, void *) __asm__("FUN_001f4600");
-void FUN_L00_002d19b0(void);
+void FUN_L00_002d19b0(u8 *);
 void veldin_ship_update(M2d1e80 *m) __asm__("FUN_L00_002d1e80");
 void veldin_ship_update(M2d1e80 *m) {
     s32 *v = m->vars;
