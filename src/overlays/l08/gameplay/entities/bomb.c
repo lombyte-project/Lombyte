@@ -1560,6 +1560,10 @@ extern char camera_state_bytes[] __asm__("D_L08_00167480");
 void blarg_bombthrower_update(struct Moby *moby) __asm__("FUN_L08_002dabf0");
 void blarg_bombthrower_update(struct Moby *moby) {
     enum {
+        BOMBTHROWER_STATE_WAIT_TO_THROW = 3,
+        BOMBTHROWER_STATE_MOVE_TO_THROW_POSITION = 4
+    };
+    enum {
         BOMBTHROWER_STATE_INITIALIZE = 0,
         BOMBTHROWER_STATE_APPROACH_WAYPOINT = 1,
         BOMBTHROWER_STATE_THROW_BOMB = 5,
@@ -1728,7 +1732,7 @@ void blarg_bombthrower_update(struct Moby *moby) {
             moby->collision = 0;
         }
         break;
-    case 3: {
+    case BOMBTHROWER_STATE_WAIT_TO_THROW: {
         float dist = vector_distance_xy_alt(&moby->pos, &target->pos);
         func_L00_002592B0_x(fast_arc_tan_c2(target->pos.x - moby->pos.x, target->pos.y - moby->pos.y),
                             moby, vars->blk12C, 0.02f, 0.3f, 0.2f);
@@ -1751,7 +1755,7 @@ void blarg_bombthrower_update(struct Moby *moby) {
         moby->collision = moby->pclass->collision;
         break;
     }
-    case 4:
+    case BOMBTHROWER_STATE_MOVE_TO_THROW_POSITION:
         point[0] = fast_cos_c4(moby->rot.z) * 2.0f;
         point[1] = fast_sin(moby->rot.z) * 2.0f;
         point[2] = 0.0f;
