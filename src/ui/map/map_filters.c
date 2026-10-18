@@ -257,7 +257,7 @@ s32 map_filter_l07_2(s32 px, s32 py) {
 extern u32 D_001A03BC[];
 s32 map_filter_l07_3(s32 px, s32 py, f32 unused1, f32 unused2, f32 arg3) __asm__("func_00207100");
 
-s32 map_filter_l07_3(s32 px, s32 py, f32 unused1, f32 unused2, f32 arg3) {
+s32 map_filter_l07_3(s32 px, s32 py, f32 unused1, f32 unused2, f32 reveal_test_value) {
     if (py < 0xBB) {
         struct Hero *s = &hero;
         s32 a = s->state.control_mode == 17 || s->state.control_mode == 18 || s->base_condition == 1;
@@ -267,7 +267,7 @@ s32 map_filter_l07_3(s32 px, s32 py, f32 unused1, f32 unused2, f32 arg3) {
         }
         return 0;
     }
-    if (arg3 >= 51.5f && arg3 <= 54.0f &&
+    if (reveal_test_value >= 51.5f && reveal_test_value <= 54.0f &&
         point_is_clockwise(px, py, 0x10A, 0xE5, 0x124, 0xF9) != 0) {
         return 1;
     }
