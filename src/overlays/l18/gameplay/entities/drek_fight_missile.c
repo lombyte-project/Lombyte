@@ -3592,6 +3592,7 @@ void rocket_tank_update(M1454 *m) __asm__("FUN_L18_002f7c40");
 void rocket_tank_update(M1454 *m) {
     enum {
         ROCKET_TANK_INITIALIZE = 0,
+        ROCKET_TANK_PATROLLING = 1,
         ROCKET_TANK_FIRING = 2
     };
     D1454 *d = m->data;
@@ -3649,7 +3650,7 @@ void rocket_tank_update(M1454 *m) {
         }
         m->state = 1;
         break;
-    case 1:
+    case ROCKET_TANK_PATROLLING:
         func_L18_002F9AB8_v(m);
         if (*(int *)((char *)d + 0xB4) != 2) {
             d->f134 = 0;
