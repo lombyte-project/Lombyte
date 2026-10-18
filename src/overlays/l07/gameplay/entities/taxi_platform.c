@@ -1000,6 +1000,10 @@ typedef struct { char pad[0x90]; int segment; int next_segment; } FollowerSegmen
 
 void boltcrate_possibly_for_metal_detector_update(struct Moby *moby) __asm__("FUN_L07_0030b000");
 void boltcrate_possibly_for_metal_detector_update(struct Moby *moby) {
+    enum {
+        INITIALIZE_PATH_CHILDREN = 0,
+        ADVANCE_PATH_CHILDREN = 1
+    };
     char *data;
     char *path;
     float *remaining;
@@ -1059,7 +1063,7 @@ void boltcrate_possibly_for_metal_detector_update(struct Moby *moby) {
     if (*(int *)(data + 0x70) == -1) return;
     path = D_L07_001B0530[*(int *)(data + 0x70)];
     switch (moby->state) {
-    case 0: {
+    case INITIALIZE_PATH_CHILDREN: {
         int j;
         int placed, follower;
         current = 0;
@@ -1106,7 +1110,7 @@ void boltcrate_possibly_for_metal_detector_update(struct Moby *moby) {
         moby->state = 1;
         break;
     }
-    case 1: {
+    case ADVANCE_PATH_CHILDREN: {
         int cursor = 0;
         FUN_L00_002591d0(&cursor, ((CrateGroupView *)data)->group, 1, 0);
         for (i = 0; i < *(int *)(data + 0x78); i++) {
