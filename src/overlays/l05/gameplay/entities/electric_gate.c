@@ -1952,6 +1952,10 @@ extern L16WatchPlayer D_0013E633_watch __asm__("D_0013E533");
 
 void shady_salesman_update(WM *m) __asm__("FUN_L05_003180a0");
 void shady_salesman_update(WM *m) {
+    enum {
+        SHADY_SALESMAN_INITIALIZE = 0,
+        SHADY_SALESMAN_UPDATE_DIALOGUE = 1
+    };
     L16WatchScratch scratch;
     WD *d = m->data;
     float rate;
@@ -1965,7 +1969,7 @@ void shady_salesman_update(WM *m) {
         }
     }
     switch (m->state) {
-    case 0:
+    case SHADY_SALESMAN_INITIALIZE:
         if (D_0013D4FF) {
             mark_moby_for_removal(m);
             return;
@@ -1976,7 +1980,7 @@ void shady_salesman_update(WM *m) {
         m->state = 1;
         initialize_npc_dialogue(m, d);
         break;
-    case 1:
+    case SHADY_SALESMAN_UPDATE_DIALOGUE:
         if (update_npc_dialogue(m, d))
             begin_dialogue_camera_transition(m, 2.0f);
         if ((unsigned)(d->sub - 3) < 2) {
