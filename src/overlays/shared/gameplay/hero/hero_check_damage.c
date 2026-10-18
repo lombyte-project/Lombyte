@@ -207,7 +207,7 @@ f32 FUN_001f9b48_c(void *, V_cf58 *) __asm__("FUN_001f9b48");
 #include "rnc/overlay/path.h"
 void find_grind_rail(void) __asm__("FUN_L00_0020cf58");
 void find_grind_rail(void) {
-    V_cf58 v0, v1, v2;
+    V_cf58 v0, v1, third_proximity_point;
 
     s32 a, b, e;
     f32 c;
@@ -242,11 +242,11 @@ void find_grind_rail(void) {
             v1.y = 341.0f;
             v1.z = 48.0f;
             if (12.0f < FUN_001f9b48_c(&hero.motion.pos, &v1)) {
-                *(OvlQuad *)&v2 = 0;
-                v2.x = 308.0f;
-                v2.y = 104.0f;
-                v2.z = 69.0f;
-                if (12.0f < FUN_001f9b48_c(&hero.motion.pos, &v2))
+                *(OvlQuad *)&third_proximity_point = 0;
+                third_proximity_point.x = 308.0f;
+                third_proximity_point.y = 104.0f;
+                third_proximity_point.z = 69.0f;
+                if (12.0f < FUN_001f9b48_c(&hero.motion.pos, &third_proximity_point))
                     return;
             }
         }
