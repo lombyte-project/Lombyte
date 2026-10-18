@@ -251,7 +251,7 @@ end:
 
 void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
-void FUN_L00_00232220(int animation_id, int a1, float blend_frames) {
+void FUN_L00_00232220(int animation_id, int frame_index, float blend_frames) {
     struct Hero *base = &hero;
     int buf[4];
     int ok;
@@ -260,7 +260,7 @@ void FUN_L00_00232220(int animation_id, int a1, float blend_frames) {
         if (base->unk227C != 0) {
             ok = FUN_L00_002321c0_u(animation_id, buf);
             if (ok != 0) {
-                blend_moby_animation(((void *)base->unk2278), buf[0], a1, (int)blend_frames);
+                blend_moby_animation(((void *)base->unk2278), buf[0], frame_index, (int)blend_frames);
             } else if (*(unsigned char *)(((char *)base->unk2278) + 0x53) != 0) {
                 blend_moby_animation(((void *)base->unk2278), 0, 0, scale_game_frames(7));
             }
