@@ -1713,6 +1713,9 @@ extern void scale_vector_xyz(void *, void *, float);
 
 void FUN_L18_002db460(struct Moby *moby) {
     enum {
+        STATE_EXPANDING_RING = 2
+    };
+    enum {
         STATE_BALLISTIC_FLIGHT = 0,
         STATE_GROUND_IMPACT_DELAY = 1,
         STATE_REMOVE = 3
@@ -1799,7 +1802,7 @@ void FUN_L18_002db460(struct Moby *moby) {
             moby->flags |= 1;
         }
         break;
-    case 2:
+    case STATE_EXPANDING_RING:
         d[9] = d[9] + d[8];
         FUN_L18_002dbe80_c(moby);
         enqueue_callback_list_1(FUN_L18_002dba20, moby);
