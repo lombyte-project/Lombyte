@@ -468,7 +468,7 @@ extern char D_L13_001670C0[];
 typedef struct { int v[6]; } L13EffectColors;
 extern L13EffectColors D_L13_001F5560, D_L13_001F5578;
 extern char *FUN_L13_0030c138(void *, void *, int, int);
-extern void FUN_L00_0026a9f0(void *, void *, int, int, int, int, int, int, float, float);
+extern void FUN_L00_0026a9f0(void *, void *, int, int, float, int, int, int, int, float);
 extern char *FUN_L00_002df808(void *, void *, void *, int, int, int, int, int, float);
 
 void FUN_L13_003073c8(struct Moby *moby, void *vars) {
@@ -589,7 +589,7 @@ void FUN_L13_003073c8(struct Moby *moby, void *vars) {
                 duration2 = random_int_between(lo, hi);
             }
             FUN_L00_0026a9f0(&work.pos, &work.velocity, *color, *second_color,
-                duration, duration2, 0, 0, amount, speed);
+                amount, duration, duration2, 0, 0, speed);
         } while (i != 0);
     }
     if (distance > 9.0f) {
