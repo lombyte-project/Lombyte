@@ -298,7 +298,7 @@ extern f32 D_L00_001618CC __attribute__((sda));
 extern f32 D_L00_001618D0 __attribute__((sda));
 void crate_drop_bolts(u8 *a) {
     T_2d0538 tmp;
-    V_2d0538 v20, v30, v40;
+    V_2d0538 trajectory_vector, adjusted_position, v40;
     s32 n;
     f32 f54, f58;
     s32 cnt, i;
@@ -313,12 +313,12 @@ void crate_drop_bolts(u8 *a) {
     if (h == 0x1F5)
         n = 0;
     if (n) {
-        clear_u64_value(&v20);
+        clear_u64_value(&trajectory_vector);
         if (*(s32 *)(b + 0xF0)) {
             if (a)
                 *(s16 *)(a + 0x36) = 0x7F80;
-            FUN_L00_00260400_2d0538(a, *(s32 *)(b + 0xF0), a + 0x10, a + 0x40, &v30, &v40);
-            subtract_vector_xyz(&v20, &v30, a + 0x10);
+            FUN_L00_00260400_2d0538(a, *(s32 *)(b + 0xF0), a + 0x10, a + 0x40, &adjusted_position, &v40);
+            subtract_vector_xyz(&trajectory_vector, &adjusted_position, a + 0x10);
         }
         if (D_0015ED84 == 0xF && absolute_float(*(f32 *)(a + 0x10) - 166.0f) < 6.0f &&
             absolute_float(*(f32 *)(a + 0x14) - 193.0f) < 6.0f) {
@@ -399,16 +399,16 @@ void crate_drop_bolts(u8 *a) {
                 e = 120.0f;
                 if ((f32)k >= 1.0f && f54 > 0.0f && f54 < 120.0f)
                     e = f54;
-                scale_vector_xyz(&v20, q + 0x10, e);
-                add_vector_xyz(&v20, &v20, a + 0x10);
-                FUN_L00_00261b48(*(s32 *)(b + 0xC0), a + 0x10, &v20, &v30);
-                subtract_vector_xyz(&v20, &v30, p + 0x10);
-                v20.f[2] = 0.0f;
-                normalize_vector_xyz(&v40, &v20, 0.25f);
-                subtract_vector_xyz(&v20, &v20, &v40);
-                scale_vector_xyz(&v20, &v20, 1.0f / e);
-                *(f32 *)(q + 0x10) = v20.f[0];
-                *(f32 *)(q + 0x14) = v20.f[1];
+                scale_vector_xyz(&trajectory_vector, q + 0x10, e);
+                add_vector_xyz(&trajectory_vector, &trajectory_vector, a + 0x10);
+                FUN_L00_00261b48(*(s32 *)(b + 0xC0), a + 0x10, &trajectory_vector, &adjusted_position);
+                subtract_vector_xyz(&trajectory_vector, &adjusted_position, p + 0x10);
+                trajectory_vector.f[2] = 0.0f;
+                normalize_vector_xyz(&v40, &trajectory_vector, 0.25f);
+                subtract_vector_xyz(&trajectory_vector, &trajectory_vector, &v40);
+                scale_vector_xyz(&trajectory_vector, &trajectory_vector, 1.0f / e);
+                *(f32 *)(q + 0x10) = trajectory_vector.f[0];
+                *(f32 *)(q + 0x14) = trajectory_vector.f[1];
             }
         }
     }
