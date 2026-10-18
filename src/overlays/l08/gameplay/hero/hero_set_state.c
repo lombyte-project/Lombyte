@@ -87,6 +87,10 @@ extern int hero_set_state(int, int) __asm__("FUN_L08_00230b38");
 extern char D_L08_0017C760[];
 extern char D_L08_0017C720[];
 int hero_set_state(int a, int b) {
+    enum {
+        ENTER_IDLE = 0,
+        ENTER_SLIP = 0x79
+    };
     int old2088;
     char *moby;
     int old20A7;
@@ -141,7 +145,7 @@ int hero_set_state(int a, int b) {
         p->rand_timer.range = 0;
     }
     switch (a) {
-    case 0: {
+    case ENTER_IDLE: {
         struct Hero *p = &hero;
         p->state.control_mode = 0;
         p->unk2284 = 0;
@@ -912,7 +916,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0x25, 0, (float)scale_game_frames(6));
         break;
     }
-    case 0x79: {
+    case ENTER_SLIP: {
         struct Hero *p = &hero;
         p->state.control_mode = 2;
         p->unk2284 = 0;
