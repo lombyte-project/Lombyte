@@ -348,6 +348,7 @@ OVERLAY_SN_UNITS = {
     "shared/gameplay/state/0027b268.c",
     "shared/gameplay/state/00284e50.c",
     "shared/gameplay/state/unlock_planet.c",
+    "shared/gameplay/vendor/0029ead8.c",
     "shared/gameplay/vendor/002e3de8.c",
     "shared/gameplay/vendor/003015d0.c",
     "shared/gameplay/vendor/00316f48.c",
