@@ -1192,7 +1192,7 @@ extern int func_L00_0025A8E8_2cf180(void *, float, void *, int, float, float, in
 
 void test_dummy_update(unsigned char *m) __asm__("FUN_L16_002cddb8");
 void test_dummy_update(unsigned char *m) {
-    L16SparkVector v0, v1, launch_velocity;
+    L16SparkVector position_or_delta, v1, launch_velocity;
     L16SparkQuery fx;
     L16DummyData *d = *(L16DummyData **)(m + 0x78);
     /* A count, then 16-byte points from +0x10. A point copied whole is `path + i * 16 + 16`; its x and y are read
@@ -1244,8 +1244,8 @@ void test_dummy_update(unsigned char *m) {
         break;
     case 2: /* turn to the path's first node, then start by variant */
         FUN_L16_002d5e80(d->route);
-        v0.quad = *(u128 *)(path + 0x10);
-        if (FUN_L16_002ced20(m, v0.f, *(float *)(m + 0x48))) {
+        position_or_delta.quad = *(u128 *)(path + 0x10);
+        if (FUN_L16_002ced20(m, position_or_delta.f, *(float *)(m + 0x48))) {
             d->timer = scale_game_frames(30);
             d->node = 1;
             d->step = 1;
@@ -1260,9 +1260,9 @@ void test_dummy_update(unsigned char *m) {
         break;
     case 3: /* thrower: wait, face the node, wind up */
         if (tick_countdown_32_alt(&d->timer)) {
-            v0.quad = *(u128 *)(path + d->node * 16 + 16);
+            position_or_delta.quad = *(u128 *)(path + d->node * 16 + 16);
             if (FUN_L16_002ced20(
-                    m, v0.f,
+                    m, position_or_delta.f,
                     fast_arc_tan(((float *)(path + (d->node << 4)))[4] - *(float *)(m + 16),
                                  ((float *)(path + (d->node << 4)))[5] - *(float *)(m + 20)))) {
                 d->timer = scale_game_frames(30);
@@ -1281,19 +1281,19 @@ void test_dummy_update(unsigned char *m) {
         break;
     case 4: /* thrower: launch the held object at the target, then face it or the next node */
         if (d->mode == 2) {
-            qcopy(v0.f, D_L16_001600EC_c + d->aim[d->node] * 0x80 + 0x30);
+            qcopy(position_or_delta.f, D_L16_001600EC_c + d->aim[d->node] * 0x80 + 0x30);
         } else {
-            qcopy(v0.f, d->target);
+            qcopy(position_or_delta.f, d->target);
         }
         if (is_value_within_interpolated_window(m, 15.0f) && d->child) {
             float speed = D_L16_001619CC * D_0015ED6C;
             float gravity = frame_time_sq * 10.0f;
-            v0.f[2] = probe_ground_height(v0.f, 0, 0.5f);
+            position_or_delta.f[2] = probe_ground_height(position_or_delta.f, 0, 0.5f);
             moby_point_position(d->child, 0, v1.f);
-            subtract_vector_xyz(launch_velocity.f, v0.f, v1.f);
+            subtract_vector_xyz(launch_velocity.f, position_or_delta.f, v1.f);
             launch_velocity.f[2] = 0.0f;
             normalize_vector_xyz(launch_velocity.f, launch_velocity.f, speed);
-            launch_velocity.f[2] = FUN_L00_0025abf0(v1.f, v0.f, 0, speed, -gravity);
+            launch_velocity.f[2] = FUN_L00_0025abf0(v1.f, position_or_delta.f, 0, speed, -gravity);
             func_L16_002C75D0_2cf180((int)m, v1.f, launch_velocity.f, gravity, scale_game_frames(300));
         } else if (m[0x70] & 2) {
             d->node = (d->node + 1) & 1;
@@ -1305,7 +1305,7 @@ void test_dummy_update(unsigned char *m) {
         if (compute_interpolated_record_value(m) < 15.0f) {
             v1.quad = *(u128 *)(m + 16);
             FUN_L16_002ced20(
-                m, v1.f, fast_arc_tan(v0.f[0] - *(float *)(m + 16), v0.f[1] - *(float *)(m + 20)));
+                m, v1.f, fast_arc_tan(position_or_delta.f[0] - *(float *)(m + 16), position_or_delta.f[1] - *(float *)(m + 20)));
         } else {
             int node = (d->node + 1) & 1;
             v1.quad = *(u128 *)(m + 16);
@@ -1322,16 +1322,16 @@ void test_dummy_update(unsigned char *m) {
         } else {
             char *position = (char *)m + 16;
             struct Hero *g;
-            subtract_vector_xyz(v0.f, path + (d->node * 16 + 16), position);
-            FUN_L00_0025f730(v0.f, D_L16_001619D0 * D_0015ED6C);
-            add_vector_xyz(position, position, v0.f);
+            subtract_vector_xyz(position_or_delta.f, path + (d->node * 16 + 16), position);
+            FUN_L00_0025f730(position_or_delta.f, D_L16_001619D0 * D_0015ED6C);
+            add_vector_xyz(position, position, position_or_delta.f);
             moby_point_position(m, D_L16_001619C8_gp, v1.f);
             func_L00_0025A8E8_2cf180(m, 0.333f, v1.f, 1, 1.0f, 1.0f, 0, 1, 0);
             g = &hero;
             if (D_L16_00174258 == ((char *)g->moby) && g->invulnerable_frames == 0) {
                 func_0022ED80_i(6, 0, m);
             }
-            if (vector_length_xyz(v0.f) < 0.0001f) {
+            if (vector_length_xyz(position_or_delta.f) < 0.0001f) {
                 if (m[0x53] != 9) {
                     blend_moby_animation(m, 9, 0, scale_game_frames(20));
                 }
@@ -1363,8 +1363,8 @@ void test_dummy_update(unsigned char *m) {
     }
     case 7: /* sprayer: wait, face the node, start */
         if (tick_countdown_32_alt(&d->timer)) {
-            v0.quad = *(u128 *)(path + d->node * 16 + 16);
-            if (FUN_L16_002ced20(m, v0.f, *(float *)(m + 0x48))) {
+            position_or_delta.quad = *(u128 *)(path + d->node * 16 + 16);
+            if (FUN_L16_002ced20(m, position_or_delta.f, *(float *)(m + 0x48))) {
                 d->timer = scale_game_frames(30);
                 m[0x20] = 8;
                 if (m[0x53] != 1) {
@@ -1381,21 +1381,21 @@ void test_dummy_update(unsigned char *m) {
         break;
     case 8: /* sprayer: face the target and emit from the child toward it */
         if (d->mode != 2) {
-            v0.quad = *(u128 *)(m + 16);
+            position_or_delta.quad = *(u128 *)(m + 16);
             FUN_L16_002ced20(
-                m, v0.f,
+                m, position_or_delta.f,
                 fast_arc_tan(d->target[0] - *(float *)(m + 16), d->target[1] - *(float *)(m + 20)));
         }
         if (d->child) {
             char *slots;
-            moby_point_position(d->child, 0, v0.f);
+            moby_point_position(d->child, 0, position_or_delta.f);
             slots = d->slots;
             v1.f[0] =
-                fast_cos(fast_arc_tan(v0.f[0] - *(float *)(m + 16), v0.f[1] - *(float *)(m + 20)));
+                fast_cos(fast_arc_tan(position_or_delta.f[0] - *(float *)(m + 16), position_or_delta.f[1] - *(float *)(m + 20)));
             v1.f[1] =
-                fast_sin(fast_arc_tan(v0.f[0] - *(float *)(m + 16), v0.f[1] - *(float *)(m + 20)));
+                fast_sin(fast_arc_tan(position_or_delta.f[0] - *(float *)(m + 16), position_or_delta.f[1] - *(float *)(m + 20)));
             v1.f[2] = 0.0f;
-            FUN_L02_00264e70(slots, v0.f, v1.f, D_L16_001619D4);
+            FUN_L02_00264e70(slots, position_or_delta.f, v1.f, D_L16_001619D4);
             v1.f[3] = 5627.925f;
             v1.f[2] = 1.0f;
             make_hit_descriptor(&fx, m, 0x10001, 1.0f, v1.f);
@@ -1413,8 +1413,8 @@ void test_dummy_update(unsigned char *m) {
         }
         break;
     case 9: /* turn back to the node, then resume the saved state and animation */
-        v0.quad = *(u128 *)(path + d->node * 16 + 16);
-        FUN_L16_002ced20(m, v0.f, d->f10C);
+        position_or_delta.quad = *(u128 *)(path + d->node * 16 + 16);
+        FUN_L16_002ced20(m, position_or_delta.f, d->f10C);
         if (m[0x70] & 2) {
             m[0x20] = d->next_state;
             if (m[0x53] != d->next_anim) {
@@ -1435,9 +1435,9 @@ void test_dummy_update(unsigned char *m) {
                          &D_L16_0015F580_c);
         FUN_L00_00263fd8(m, 0x657, position, rot, 0, 0, burst, &D_L16_0015F580_c, &D_L16_0015F580_c,
                          &D_L16_0015F580_c);
-        qcopy(v0.f, position);
-        v0.f[2] += 1.2f;
-        cart_burst(m, v0.f, -1, 0.5f, 10.0f);
+        qcopy(position_or_delta.f, position);
+        position_or_delta.f[2] += 1.2f;
+        cart_burst(m, position_or_delta.f, -1, 0.5f, 10.0f);
         FUN_L00_00257470(m, 0, -1);
         func_0022ED80_i(7, 0, m);
         d->lives--;
