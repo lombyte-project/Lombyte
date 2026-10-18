@@ -661,7 +661,7 @@ void follow_camera_setup(Moby_2E8210 *m) {
     int r;
     float t;
     float v0[4];
-    float v1[4];
+    float orbit_offset_remainder[4];
 
     D_L00_00161D8C = 0;
     D_L00_00161D90 = 0;
@@ -783,8 +783,8 @@ void follow_camera_setup(Moby_2E8210 *m) {
     qcopy(c->pos, m->v30);
     qcopy(g->v20, m->v30);
     scale_vector_xyz(v0, D_0013F6E0_2E8210, dot_vectors_xyz_c(b->v0, D_0013F6E0_2E8210));
-    subtract_vector_xyz(v1, b->v0, v0);
-    t = b->f2C - func_001F9CB8_2E8210(v1);
+    subtract_vector_xyz(orbit_offset_remainder, b->v0, v0);
+    t = b->f2C - func_001F9CB8_2E8210(orbit_offset_remainder);
     g->f30 = t;
     if (t < -0.1f) {
         g->h3A = 1;
