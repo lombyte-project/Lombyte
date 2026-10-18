@@ -3100,6 +3100,9 @@ extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
  * attacker (the hero when hit by the wrench or by nothing) and starts a knock-back jump whose size depends
  * on the hit kind; a lethal hit starts the death jump. */
 void FUN_L03_002c95a8(Moby2C8398 *m) {
+    enum {
+        DEATH_KNOCKBACK_RESPONSE = 1
+    };
     float vec[4];
     int kind;
     float damage;
@@ -3203,7 +3206,7 @@ void FUN_L03_002c95a8(Moby2C8398 *m) {
             m->state = 10;
             allocate_voice_for_target_entry(1, 0, (int)m);
             break;
-        case 1:
+        case DEATH_KNOCKBACK_RESPONSE:
             d->q.f10 = frame_time_sq * 40.0f;
             d->q.f14 = D_L03_001618E8 * frame_time_sq;
             d->q.f18 = 3.0f / (2.0f * square_root(2.0f * 2.0f * d->q.f10) / (frame_time_sq * 40.0f)) +
