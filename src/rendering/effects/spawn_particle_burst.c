@@ -25,6 +25,11 @@ extern void append_rotated_sprite_quad(float, float, float, float, float, int, i
 void spawn_particle_burst(void *effect, float x, float y) __asm__("FUN_001ee008");
 
 void spawn_particle_burst(void *effect, float x, float y) {
+    enum {
+        ROTATED_SPRITE_ANGLE_FAN = 0,
+        ROTATED_SPRITE_MIRRORED_QUAD = 1,
+        ROTATED_SPRITE_CENTERED_SINGLE = 2
+    };
     float forty = 40.0f;
     char *p = (char *)effect;
     int handle = get_effect_texture(*(int *)(p + 0x18));
@@ -34,7 +39,7 @@ void spawn_particle_burst(void *effect, float x, float y) {
     int i;
 
     switch (mode) {
-    case 0:
+    case ROTATED_SPRITE_ANGLE_FAN:
         for (i = 0; i < *(short *)(p + 0x26); i++) {
             append_rotated_sprite_quad(x, y, forty * *(float *)(p + 0x10),
                                        forty * *(float *)(p + 0x10), angle, 0x3F, 0x3F, handle,
@@ -42,7 +47,7 @@ void spawn_particle_burst(void *effect, float x, float y) {
             angle = fast_add_rotations(angle, *(float *)(p + 0x28));
         }
         break;
-    case 1: {
+    case ROTATED_SPRITE_MIRRORED_QUAD: {
         float tmp[6];
 
         tmp[0] = fast_sin(angle) * forty * *(float *)(p + 0x10);
@@ -71,7 +76,7 @@ void spawn_particle_burst(void *effect, float x, float y) {
                                    0.0f);
         break;
     }
-    case 2:
+    case ROTATED_SPRITE_CENTERED_SINGLE:
         k = *(float *)(p + 0x10);
         k *= forty;
         append_rotated_sprite_quad(x, y, k, k, angle, 0x3F, 0x3F, handle, 0xFFFFF3,
