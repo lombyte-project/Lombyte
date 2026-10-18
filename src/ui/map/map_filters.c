@@ -409,8 +409,8 @@ int map_filter_l08_1(int reveal_test_selector, float unused1, float unused2, flo
    a plain `? 1 : 0`. */
 int map_filter_l08_2(int arg0, float unused1, float unused2, float arg1) __asm__("func_00207508");
 
-int map_filter_l08_2(int arg0, float unused1, float unused2, float reveal_test_value) {
-    if (arg0 < 0xE0) {
+int map_filter_l08_2(int reveal_test_selector, float unused1, float unused2, float reveal_test_value) {
+    if (reveal_test_selector < 0xE0) {
         return (reveal_test_value >= 44.0f && reveal_test_value <= 45.0f) ? 1 : 0;
     }
     return (reveal_test_value >= 37.0f) ? 1 : 0;
