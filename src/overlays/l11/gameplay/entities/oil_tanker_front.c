@@ -1221,7 +1221,7 @@ void blend_moby_animation_c(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm_
 extern short D_L11_001623D0 __attribute__((sda));
 void blarg_ship_update(struct Moby *moby) __asm__("FUN_L11_00319838");
 void blarg_ship_update(struct Moby *moby) {
-    float s0[4];
+    float scratch_vector[4];
     float target_position[4];
     float hero_position_delta[4];
     float basis_rotation_angles[4];
@@ -1293,8 +1293,8 @@ void blarg_ship_update(struct Moby *moby) {
         }
         break;
     case 3:
-        qcopy(s0, &moby->pos);
-        s0[3] = 3.0f;
+        qcopy(scratch_vector, &moby->pos);
+        scratch_vector[3] = 3.0f;
         if (FUN_001fa728_u((char *)&moby->pos, 512.0f) == -1) {
             if (FUN_001f9b48(&moby->pos, &hero.motion.pos) > 32.0f) {
                 *(int *)(d + 0x84) += 1;
@@ -1329,14 +1329,14 @@ void blarg_ship_update(struct Moby *moby) {
         qcopy(d + 0xB0, &hero.motion.pos);
         add_vector_xyz(&moby->pos, &moby->pos, hero_position_delta);
         f = fast_add_rotations(0.7853982f, (float)*(int *)(d + 0x88) * 1.5707964f);
-        normalize_vector_xyz(s0, m50, fast_sin(f) * 8.0f);
-        add_vector_xyz(target_position, D_L11_001677C0_c, s0);
-        normalize_vector_xyz(s0, m60, fast_cos(f) * 8.0f);
-        add_vector_xyz(target_position, target_position, s0);
-        normalize_vector_xyz(s0, m40, 20.0f);
-        add_vector_xyz(target_position, target_position, s0);
-        subtract_vector_xyz(s0, target_position, &moby->pos);
-        len = vector_length_xyz(s0);
+        normalize_vector_xyz(scratch_vector, m50, fast_sin(f) * 8.0f);
+        add_vector_xyz(target_position, D_L11_001677C0_c, scratch_vector);
+        normalize_vector_xyz(scratch_vector, m60, fast_cos(f) * 8.0f);
+        add_vector_xyz(target_position, target_position, scratch_vector);
+        normalize_vector_xyz(scratch_vector, m40, 20.0f);
+        add_vector_xyz(target_position, target_position, scratch_vector);
+        subtract_vector_xyz(scratch_vector, target_position, &moby->pos);
+        len = vector_length_xyz(scratch_vector);
         if (*(char *)&hero.ship_flags & 2) {
             advance_accelerated_scalar(&c0, (float *)(d + 0x6C), len, frame_time_sq + frame_time_sq,
                                        frame_time_sq * 20.0f, D_0015ED6C_n[1]);
@@ -1347,8 +1347,8 @@ void blarg_ship_update(struct Moby *moby) {
             advance_accelerated_scalar(&c0, (float *)(d + 0x6C), len, frame_time_sq + frame_time_sq,
                                        frame_time_sq * 20.0f, D_0015ED6C_n[1] * 5.0f);
         }
-        FUN_L00_0025f730(s0, *(float *)(d + 0x6C));
-        add_vector_xyz(&moby->pos.x, &moby->pos.x, s0);
+        FUN_L00_0025f730(scratch_vector, *(float *)(d + 0x6C));
+        add_vector_xyz(&moby->pos.x, &moby->pos.x, scratch_vector);
         if (moby->command) {
             if (moby->visible) {
                 *(int *)(d + 0x98) += 1;
@@ -1400,9 +1400,9 @@ void blarg_ship_update(struct Moby *moby) {
         break;
     case 6:
         *(unsigned short *)(D_00141C18) = 0xFFFF;
-        subtract_vector_xyz(s0, &hero.motion.pos, d + 0xB0);
+        subtract_vector_xyz(scratch_vector, &hero.motion.pos, d + 0xB0);
         qcopy(d + 0xB0, &hero.motion.pos);
-        add_vector_xyz(&moby->pos, &moby->pos, s0);
+        add_vector_xyz(&moby->pos, &moby->pos, scratch_vector);
         cart_burst(moby, &moby->pos, -1, 2.0f, 13.0f);
         if (random_integer_below_c2(2)) {
             FUN_L11_0030f5a8(&moby->pos, D_L11_0015F580, 0x4C4);
