@@ -3216,6 +3216,11 @@ extern int D_L06_00161F58 __attribute__((sda));
 extern float D_L06_00161F5C __attribute__((sda));
 
 void FUN_L06_002fbfb0(char *moby) {
+    enum {
+        INITIALIZE_CHILD_AND_TRANSFORMS = 0,
+        WAIT_FOR_HERO_IN_CLIP_VOLUME = 1,
+        WAIT_FOR_RESET = 5
+    };
     char *data = *(char **)(moby + 0x78);
     char *child;
     float v[4];
@@ -3229,7 +3234,7 @@ void FUN_L06_002fbfb0(char *moby) {
     int phase;
 
     switch ((unsigned char)moby[0x20]) {
-    case 0:
+    case INITIALIZE_CHILD_AND_TRANSFORMS:
         qcopy(data + 0x10, moby + 0x10);
         qcopy(data + 0x20, moby + 0x40);
         qcopy(data + 0x30, moby + 0xe0);
@@ -3256,7 +3261,7 @@ void FUN_L06_002fbfb0(char *moby) {
         FUN_L00_00250df8(*(char **)(data + 0x40));
         moby[0x20] = 5;
         return;
-    case 1:
+    case WAIT_FOR_HERO_IN_CLIP_VOLUME:
         if (!is_point_inside_clip_volume(&hero.motion.pos, *(int *)data)) return;
         if (*(int *)(data + 4) == 1) {
             moby[0x20] = 4;
@@ -3351,7 +3356,7 @@ void FUN_L06_002fbfb0(char *moby) {
             if (absolute_float(phase_b - D_L06_00161F28) < 0.01f) moby[0x20] = 5;
         }
         return;
-    case 5:
+    case WAIT_FOR_RESET:
         if (D_L06_00161F5C == 0.0f) return;
         moby[0xbc] = 0;
         moby[0x20] = 1;
