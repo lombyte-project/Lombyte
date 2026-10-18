@@ -3667,13 +3667,17 @@ void shuttle_update(struct Moby *m) {
 s32 try_set_help_message(s32 arg0, s32 arg1) __asm__("FUN_00215130");
 
 void FUN_L17_002f20d8(struct Moby *moby) {
+    enum {
+        SHUTTLE_STOP_FIRST = 0,
+        SHUTTLE_STOP_SECOND = 1
+    };
     char *data = (char *)moby->pvars;
     int mode = *(int *)(data + 0x94);
     switch (mode) {
-    case 0:
+    case SHUTTLE_STOP_FIRST:
         *(int *)(data + 0x80) = 0;
         break;
-    case 1:
+    case SHUTTLE_STOP_SECOND:
         *(int *)(data + 0x80) = mode;
         break;
     }
