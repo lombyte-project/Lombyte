@@ -3098,21 +3098,21 @@ extern void FUN_L00_00216f90(void *, void *, int, int);
 extern void jet_mount(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0");
 
 void FUN_L06_002fb148(char *moby) {
-    float v0[4], m[4], v1[4];
+    float output_position[4], m[4], moby_offset_vector[4];
     char *data = *(char **)(moby + 0x78);
     char *base = D_L06_0016016C + (*(int *)(data + 0xF8) << 7);
     *(int *)(data + 0x118) = 0;
     FUN_L00_00216f90(base + 0x30, base + 0x70, 0x72, 0);
-    qcopy(v0, moby + 0x10);
-    v0[2] = hero.motion.pos.f[2] + 2.0f;
-    normalize_vector_xyz(v1, moby + 0xC0, 8.0f);
-    add_vector_xyz(v0, v0, v1);
+    qcopy(output_position, moby + 0x10);
+    output_position[2] = hero.motion.pos.f[2] + 2.0f;
+    normalize_vector_xyz(moby_offset_vector, moby + 0xC0, 8.0f);
+    add_vector_xyz(output_position, output_position, moby_offset_vector);
     clear_u64_value(m);
-    m[2] = fast_arc_tan(*(float *)(moby + 0x10) - v0[0], *(float *)(moby + 0x14) - v0[1]);
+    m[2] = fast_arc_tan(*(float *)(moby + 0x10) - output_position[0], *(float *)(moby + 0x14) - output_position[1]);
     m[1] =
-        -fast_arc_tan(vector_distance(v0, moby + 0x10), *(float *)(moby + 0x18) - v0[2]) - 0.5235988f;
-    jet_mount(v0, m, 1, 0, 0);
-    FUN_L00_002ea9d8(v0);
+        -fast_arc_tan(vector_distance(output_position, moby + 0x10), *(float *)(moby + 0x18) - output_position[2]) - 0.5235988f;
+    jet_mount(output_position, m, 1, 0, 0);
+    FUN_L00_002ea9d8(output_position);
     FUN_L00_002eaa30(m);
     *D_L06_001B0FB0[*(int *)(data + 0xEC)] = 0;
 }
