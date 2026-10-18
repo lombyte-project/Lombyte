@@ -301,6 +301,9 @@ void attach_manipulator(void *owner, s32 slot_index, void *manip) __asm__("FUN_0
 void FUN_L14_002b17d8(char *moby);
 void FUN_L14_002b17d8(char *moby) {
     enum {
+        PLASMABOT_RETURN_TO_PATH_START = 9
+    };
+    enum {
         PLASMABOT_INITIALIZE = 0
     };
     char *data;
@@ -449,7 +452,7 @@ void FUN_L14_002b17d8(char *moby) {
             *(float *)(moby + 0x58) = 1.0f;
         }
         break;
-    case 9: {
+    case PLASMABOT_RETURN_TO_PATH_START: {
         float *path = (float *)D_L14_001B0BB0[*(int *)(data + 0x240)];
         vendor_spring((float *)(moby + 0x10), (float *)(data + 0x254), path[4], 0.01f, 0.2f, 0.0f);
         vendor_spring((float *)(moby + 0x14), (float *)(data + 0x258), path[5], 0.01f, 0.2f, 0.0f);
