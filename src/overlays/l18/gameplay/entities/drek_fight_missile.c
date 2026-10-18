@@ -1493,7 +1493,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
     float v1[4];
     float v2[4];
     float v3[4];
-    float v4[4];
+    float node_position_and_yaw[4];
     float slow;
     float ang;
     float *aim;
@@ -1895,10 +1895,10 @@ void drek_final_boss_robot_update(BossMoby *moby) {
             char *recs = D_L18_001600EC;
             int idx = d->f298;
 
-            qcopy(v4, recs + idx * 0x80 + 0x30);
-            v4[3] = *(float *)(recs + idx * 0x80 + 0x78);
+            qcopy(node_position_and_yaw, recs + idx * 0x80 + 0x30);
+            node_position_and_yaw[3] = *(float *)(recs + idx * 0x80 + 0x78);
         }
-        FUN_L18_002dfaa0((char *)d->f334, v0, v1, v2, v3, v4, *(int *)&D_L18_00162394,
+        FUN_L18_002dfaa0((char *)d->f334, v0, v1, v2, v3, node_position_and_yaw, *(int *)&D_L18_00162394,
                          *(int *)&D_L18_00162398, 1);
         hero.pending_item[3] = 3;
         moby->f20 = 8;
