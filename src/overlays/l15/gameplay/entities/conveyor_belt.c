@@ -966,6 +966,9 @@ extern float scale_time(float) __asm__("FUN_L15_001f8648");
 void codebot_slot_update(struct Moby *moby) __asm__("FUN_L15_002ec030");
 void codebot_slot_update(struct Moby *moby) {
     enum {
+        CODEBOT_SLOT_COMPLETED = 4
+    };
+    enum {
         CODEBOT_SLOT_INITIALIZE = 0,
         CODEBOT_SLOT_WAIT_FOR_PROXIMITY = 1,
         CODEBOT_SLOT_ANIMATE_EFFECT = 3
@@ -1054,7 +1057,7 @@ void codebot_slot_update(struct Moby *moby) {
             }
         }
         break;
-    case 4:
+    case CODEBOT_SLOT_COMPLETED:
         D_L15_00184AAC = 1;
         if (*(volatile int *)(data + 1) == 0) {
             vec[0] = fast_cos(fast_add_rotations(moby->rot.z, -1.5707964f)) * 0.5f;
