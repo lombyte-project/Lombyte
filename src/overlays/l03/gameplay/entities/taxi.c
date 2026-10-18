@@ -735,6 +735,13 @@ extern s32 D_0014C190_257218[][64] __asm__("D_0014C190");
    flies the outbound path, lets the hero off, flies back (or onward) and returns
    to waiting. With the debug flag set it draws its first route's paths. */
 void FUN_L03_002d3198(struct Moby *m) {
+    enum {
+        TAXI_INITIALIZE = 0,
+        TAXI_WAIT_FOR_ROUTE_TRIGGER = 1,
+        TAXI_FOLLOW_OUTBOUND_PATH = 2,
+        TAXI_FOLLOW_RETURN_PATH = 5,
+        TAXI_FOLLOW_ONWARD_PATH = 7
+    };
     struct RailTaxiVars *v = (struct RailTaxiVars *)m->pvars;
     Vec4 oldPos, oldRot, move;
     struct RailPath *p;
@@ -756,7 +763,7 @@ void FUN_L03_002d3198(struct Moby *m) {
     qcopy(&oldPos, &m->pos);
     qcopy(&oldRot, &m->rot);
     switch (m->state) {
-    case 0:
+    case TAXI_INITIALIZE:
         if (v->out[0] != -1) {
             qcopy_nc(&m->pos, &D_L03_001B05B0[v->out[0]]->pts[0]);
             m->rot.z = taxi_atan2(D_L03_001B05B0[v->out[0]]->pts[1].f[0] - m->pos.x, D_L03_001B05B0[v->out[0]]->pts[1].f[1] - m->pos.y);
@@ -775,7 +782,7 @@ void FUN_L03_002d3198(struct Moby *m) {
             return;
         }
         break;
-    case 1:
+    case TAXI_WAIT_FOR_ROUTE_TRIGGER:
         if (v->active == 0) {
             break;
         }
@@ -802,7 +809,7 @@ void FUN_L03_002d3198(struct Moby *m) {
             }
         }
         break;
-    case 2:
+    case TAXI_FOLLOW_OUTBOUND_PATH:
         if (v->out[m->command] == -1 || FUN_L03_002d3918(m, v->out[m->command], &v->snd)) {
             m->state = 3;
             v->unkE4 = -1;
@@ -827,7 +834,7 @@ void FUN_L03_002d3198(struct Moby *m) {
             m->state = 5;
         }
         break;
-    case 5:
+    case TAXI_FOLLOW_RETURN_PATH:
         if (FUN_L01_00277fb8(m)) {
             hero.unk1F2 = 4;
             hero.unk1F4 = 4;
@@ -848,7 +855,7 @@ void FUN_L03_002d3198(struct Moby *m) {
             m->state = 1;
         }
         break;
-    case 7:
+    case TAXI_FOLLOW_ONWARD_PATH:
         if (FUN_L03_002d3918(m, v->onward[m->command], &v->snd)) {
             m->draw_dist = 0;
             m->state = 1;
