@@ -9,7 +9,7 @@ extern char *FUN_0020c4f8_8670(int) __asm__("FUN_0020c4f8");
 extern void FUN_001f9810_8670(void *, int) __asm__("FUN_001f9810");
 extern void FUN_L00_00250df8_8670(void *) __asm__("FUN_L00_00250df8");
 
-char *FUN_L12_00308670(char *a0) {
+char *FUN_L12_00308670(char *source_object) {
     unsigned char *m = (unsigned char *)FUN_0020c4f8_8670(0x55B);
     if (m != 0) {
         char *d = *(char **)(m + 0x78);
@@ -17,9 +17,9 @@ char *FUN_L12_00308670(char *a0) {
         *(short *)(m + 0x32) = 0x7F;
         m[0x31] = 1;
         m[0x20] = 0;
-        *(OvlQuad *)(m + 0x10) = *(OvlQuad *)(a0 + 0x10);
-        *(OvlQuad *)(m + 0x40) = *(OvlQuad *)(a0 + 0x40);
-        *(char **)(m + 0xB8) = a0;
+        *(OvlQuad *)(m + 0x10) = *(OvlQuad *)(source_object + 0x10);
+        *(OvlQuad *)(m + 0x40) = *(OvlQuad *)(source_object + 0x40);
+        *(char **)(m + 0xB8) = source_object;
         FUN_001f9810_8670(d, 0x20);
         *(int *)(d + 0x10) = (int)(d + 0x20);
         FUN_L00_00250df8_8670(m);
