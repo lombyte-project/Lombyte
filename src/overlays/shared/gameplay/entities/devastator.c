@@ -1504,9 +1504,6 @@ unsigned char *FUN_L00_002b46a8(int ign, V_2b46a8 *from, float *yaw, float *pitc
     }
     return best;
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002b49a8.s", FUN_L00_002b49a8);
-#else
 /* Blaster (class 168) update: aims (reticle in first person, auto-aim otherwise), fires a shot with its sparks,
    keeps the usage statistics, returns to idle and moves the muzzle light. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B33E8.c: func_L00_002B5C98), where it is exact; names translated to the US level program. */
@@ -1687,9 +1684,11 @@ void blaster_update(struct Moby *moby) {
     Data_2B5C98 *data;
     Stats_2B5C98 *stats;
     int i;
+    int never;
 
     velocity.q = 0;
     target = 0;
+    never = 0;
     pitch = 0.0f;
     data = (Data_2B5C98 *)moby->pvars;
     if (moby->state == 0) {
@@ -1717,9 +1716,12 @@ void blaster_update(struct Moby *moby) {
             func_L00_001FF4B0_2B5C98(&reach, &velocity, 20.0f);
             func_001F9BD8_2B5C98(&end, &reach, &launch);
             reach.q = end.q;
+            /* Fakematch: a never-taken set of target on this path keeps gcse from
+               folding target's 0 into the hit test below (retail keeps it in $fp). */
+            if (never) target = (struct Moby *)moby->pvars;
             if (func_L00_001EFFF0_2B5C98(player_camera_2B33E8 + 0x140, &reach, 0, (int)moby, 0)) {
-                target = coll_hit_moby_2B5C98;
-                if (target && !(target->flags & 0x1000)) target = 0;
+                struct Moby *hit = coll_hit_moby_2B5C98;
+                if (hit && (hit->flags & 0x1000)) target = hit;
             }
         }
     } else {
@@ -1856,7 +1858,6 @@ void blaster_update(struct Moby *moby) {
         data->glow = 0;
     }
 }
-#endif
 
 #define NOT_SDA
 
