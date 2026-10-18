@@ -598,12 +598,12 @@ void FUN_L13_002c2d30(unsigned char *moby) {
     int st;
     int flag;
     int r2;
-    float a1;
+    float damage_amount;
     float t;
     float fl;
-    char v0[16];
-    char v1[16];
-    char v2[16];
+    char point_2_position[16];
+    char point_3_position[16];
+    char downward_effect_vector[16];
     float z[4];
 
     d = *(unsigned char **)(moby + 0x78);
@@ -620,37 +620,37 @@ void FUN_L13_002c2d30(unsigned char *moby) {
     fl = random_float_between(4.5f, 5.5f);
     t = -(fl * frame_time);
     z[2] = t;
-    *(Q_2C27B0 *)v2 = *(Q_2C27B0 *)z;
-    FUN_L00_0024f7c8(moby, 2, v0);
-    FUN_L00_0024f7c8(moby, 3, v1);
+    *(Q_2C27B0 *)downward_effect_vector = *(Q_2C27B0 *)z;
+    FUN_L00_0024f7c8(moby, 2, point_2_position);
+    FUN_L00_0024f7c8(moby, 3, point_3_position);
     if (frame_count & 1) {
-        FUN_L00_00269958(v0, v2, 0xCF0000FF, 0xCF, scale_game_frames(FUN_L00_00257b90(0x12, 0x16)), 0x32, -0xA, 1);
-        FUN_L00_00269958(v1, v2, 0xCF0000FF, 0xCF, scale_game_frames(FUN_L00_00257b90(0x12, 0x16)), 0x32, -0xA, 1);
+        FUN_L00_00269958(point_2_position, downward_effect_vector, 0xCF0000FF, 0xCF, scale_game_frames(FUN_L00_00257b90(0x12, 0x16)), 0x32, -0xA, 1);
+        FUN_L00_00269958(point_3_position, downward_effect_vector, 0xCF0000FF, 0xCF, scale_game_frames(FUN_L00_00257b90(0x12, 0x16)), 0x32, -0xA, 1);
     } else {
-        FUN_L00_00269958(v0, v2, 0x6000FFFF, 0x80, scale_game_frames(FUN_L00_00257b90(0x14, 0x18)), 0x64, -0xA, 1);
-        FUN_L00_00269958(v1, v2, 0x6000FFFF, 0x80, scale_game_frames(FUN_L00_00257b90(0x14, 0x18)), 0x64, -0xA, 1);
+        FUN_L00_00269958(point_2_position, downward_effect_vector, 0x6000FFFF, 0x80, scale_game_frames(FUN_L00_00257b90(0x14, 0x18)), 0x64, -0xA, 1);
+        FUN_L00_00269958(point_3_position, downward_effect_vector, 0x6000FFFF, 0x80, scale_game_frames(FUN_L00_00257b90(0x14, 0x18)), 0x64, -0xA, 1);
     }
     {
         int ra = FUN_L00_00257b90(0xA, 0x19);
         int rb = FUN_L00_00257b90(0xA, 0xF);
-        FUN_L00_00269958(v0, v2, 0xEFFF7F4F, 0xFF0000, scale_game_frames(rb), ra, -ra, 1);
+        FUN_L00_00269958(point_2_position, downward_effect_vector, 0xEFFF7F4F, 0xFF0000, scale_game_frames(rb), ra, -ra, 1);
         ra = FUN_L00_00257b90(0xA, 0x19);
         rb = FUN_L00_00257b90(0xA, 0xF);
-        FUN_L00_00269958(v1, v2, 0xEFFF7F4F, 0xFF0000, scale_game_frames(rb), ra, -ra, 1);
+        FUN_L00_00269958(point_3_position, downward_effect_vector, 0xEFFF7F4F, 0xFF0000, scale_game_frames(rb), ra, -ra, 1);
     }
     *(float *)(moby + 0x2C) = *(float *)(*(char **)(moby + 0x24) + 0x24) * D_L13_00161490;
-    a1 = 0.0f;
+    damage_amount = 0.0f;
     r = FUN_L00_0025a420(moby, 0x330000, 0);
-    st = FUN_L13_002c2d30_collision(moby, r, d + 0x20, 0, &flag, &a1, 0, 4);
+    st = FUN_L13_002c2d30_collision(moby, r, d + 0x20, 0, &flag, &damage_amount, 0, 4);
     if (r != 0) {
         char *q = *(char **)(r + 0x20);
         if (q != 0 && *(short *)(q + 0xA6) == 0x4D1) {
             flag = 1;
-            a1 = 0.0f;
+            damage_amount = 0.0f;
         }
     }
     if (flag != 1) {
-        *(float *)(d + 0x20) = *(float *)(d + 0x20) - a1;
+        *(float *)(d + 0x20) = *(float *)(d + 0x20) - damage_amount;
         if (moby[0x53] != 7) blend_moby_animation_c13(moby, 7, 0, 5);
         if (*(float *)(d + 0x20) <= 0.0f) {
             st = 1;
