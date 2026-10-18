@@ -514,7 +514,7 @@ extern float func_L00_00258E58_2D9EA0(float, float, float, float, float) __asm__
 
 void nanotech_ball_update(Moby *moby) __asm__("FUN_L00_002d89f0");
 void nanotech_ball_update(Moby *moby) {
-    V_2D9EA0 v0, v10, v20, v30, v40, v50, v60;
+    V_2D9EA0 v0, v10, v20, v30, v40, v50, slot_curve_offset;
     D_2D9EA0 *data = (D_2D9EA0 *)moby->pvars;
 
     switch (moby->state) {
@@ -622,12 +622,12 @@ void nanotech_ball_update(Moby *moby) {
                     if (data->slots[i] != 0) {
                         Ext_2D9EA0 *ext = (Ext_2D9EA0 *)(data->slots[i] + 1);
                         func_002156E0_2D9EA0(&v10, &v0, (float)i * 0.448549628f, &v20);
-                        func_001F9BD8_2D9EA0(&v60, &v50, &v10);
+                        func_001F9BD8_2D9EA0(&slot_curve_offset, &v50, &v10);
                         {
                             V3_2D9EA0 *dst = &ext->u.a;
-                            dst->x = v60.x;
-                            dst->y = v60.y;
-                            dst->z = v60.z;
+                            dst->x = slot_curve_offset.x;
+                            dst->y = slot_curve_offset.y;
+                            dst->z = slot_curve_offset.z;
                         }
                         {
                             V3_2D9EA0 *dst = &ext->b;
