@@ -1,0 +1,15 @@
+diff --git a/gcc/resource.c b/gcc/resource.c
+index f8e424a..0653f15 100644
+--- a/gcc/resource.c
++++ b/gcc/resource.c
+@@ -710,7 +710,9 @@ mark_set_resources (x, res, in_dest, include_delayed_effects)
+ 	{
+ 	  res->memory = 1;
+ 	  res->unch_memory = RTX_UNCHANGING_P (x);
+-	  res->volatil = MEM_VOLATILE_P (x);
++	  /* Sticky: a later plain store must not clear it, or reorg moves an
++	     insn across a volatile store into a delay slot.  */
++	  res->volatil |= MEM_VOLATILE_P (x);
+ 	}
+ 
+       mark_set_resources (XEXP (x, 0), res, 0, 0);
