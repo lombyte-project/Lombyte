@@ -1165,6 +1165,9 @@ extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_002
 void commando_update(WM *m) __asm__("FUN_L08_00302ce8");
 void commando_update(WM *m) {
     enum {
+        COMMANDO_DIALOGUE_AFTER_REPOSITION = 2
+    };
+    enum {
         COMMANDO_DIALOGUE_BEFORE_REPOSITION = 1
     };
     enum {
@@ -1214,7 +1217,7 @@ void commando_update(WM *m) {
             D_0013D3B4 = 1;
         }
         break;
-    case 2:
+    case COMMANDO_DIALOGUE_AFTER_REPOSITION:
         if (m->flags70 & 2) {
             if (m->animation != random_integer_below(2) + 1)
                 blend_moby_animation(m, random_integer_below(2) + 1, 0, scale_game_frames(20));
