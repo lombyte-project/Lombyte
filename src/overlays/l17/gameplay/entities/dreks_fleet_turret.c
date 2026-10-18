@@ -102,8 +102,8 @@ void FUN_L17_002a8da0(struct Moby *m) {
     float c[4];
     float a[4];
     float b[4];
-    float v30[4];
-    float v40[4];
+    float hero_offset[4];
+    float axis_aligned_hero_offset[4];
     float e50[4];
     float v60[12];
     char *d;
@@ -218,10 +218,10 @@ void FUN_L17_002a8da0(struct Moby *m) {
         lerp_vector(b, d + 0x10, d + 0x20, 0.5f);
         b[3] = len * 0.5f;
         if (fast_bsphere_check((char *)b, 32.0f) != -1) {
-            subtract_vector_xyz(v30, &hero.motion.pos, &m->pos);
-            normalize_vector_xyz(v40, &m->rot_row0, dot_vectors_xyz(&m->rot_row0, v30));
-            subtract_vector_xyz(v30, v30, v40);
-            func_L00_0025A8C0_alt((char *)v60, (int)m, 0x10001, 1.0f, v30);
+            subtract_vector_xyz(hero_offset, &hero.motion.pos, &m->pos);
+            normalize_vector_xyz(axis_aligned_hero_offset, &m->rot_row0, dot_vectors_xyz(&m->rot_row0, hero_offset));
+            subtract_vector_xyz(hero_offset, hero_offset, axis_aligned_hero_offset);
+            func_L00_0025A8C0_alt((char *)v60, (int)m, 0x10001, 1.0f, hero_offset);
             collision_line(&m->pos, d + 0x20, 9, m, v60);
             len = vector_length_xyz(d + 0x30);
             *(OvlQuad *)e50 = *(OvlQuad *)(d + 0x10);
