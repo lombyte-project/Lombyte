@@ -900,63 +900,58 @@ void FUN_L00_002995d0(s32 sector, s32 size, s32 language) {
         FUN_001f97b0();
     }
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002997c8.s", FUN_L00_002997c8);
-#else
 typedef struct { u8 pad[0x38]; s16 h38; } S_2997c8;
 typedef struct { u8 pad[0x6B]; u8 f; } M_2997c8;
-extern int D_0015ED80;
-extern s32 D_0015EE88_2997c8 __asm__("D_0015EE88");
-extern s32 D_0015EE78_2997c8 __asm__("D_0015EE78");
-extern s32 D_0015EED8_2997c8 __asm__("D_0015EED8");
 extern S_2997c8 D_001516D0_2997c8 __asm__("D_001516D0") __attribute__((section(".data")));
 extern s32 D_L00_0015F5C4_2997c8 __asm__("D_L00_0015F5C4");
 extern struct ActiveSceneTrigger active_scene_trigger_lui __asm__("D_L00_00179100") __attribute__((section(".data")));
 extern char D_0013E550[] __attribute__((section(".data")));
-int FUN_00122298_2997c8(s32) __asm__("FUN_00122298");
 void FUN_00120558_2997c8(s32, s32) __asm__("FUN_00120558");
 void FUN_00122e68_2997c8(void *) __asm__("FUN_00122e68");
-void FUN_0012f1c8_2997c8(void) __asm__("FUN_0012f1c8");
 void FUN_00122518_2997c8(void *, short, int, int, int, int, int, int) __asm__("FUN_00122518");
 void FUN_00118a80_2997c8(int) __asm__("FUN_00118a80");
 void FUN_001227d8_2997c8(void *, int) __asm__("FUN_001227d8");
-void FUN_001f4a58_2997c8(s32) __asm__("FUN_001f4a58");
-void FUN_00215b68_2997c8(s32, s32, s32) __asm__("FUN_00215b68");
 void FUN_00216c48_2997c8(struct Moby *, struct SceneTrigger *, s32) __asm__("FUN_00216c48");
+void music_start_track(s32 track, s32 track_flags, s32 volume) __asm__("FUN_00215c40");
+void count_vsync(void) __asm__("FUN_0012f1c8");
 void FUN_L00_002997c8(void) {
     char buf[0x70] __attribute__((aligned(16)));
-    s32 large_count, small_count, src, vram, i;
+    s32 large_count, small_count, gs_address, source, i, j;
     struct ActiveSceneTrigger *active;
     D_L00_0015F5D8 = 1;
-    FUN_00122298_2997c8(0);
-    FUN_00120558_2997c8(0, 0);
-    FUN_00122e68_2997c8(FUN_0012f1c8_2997c8);
-    large_count = D_0015ED80 ? 14 : 13;
-    small_count = D_0015ED80 ? 14 : 17;
-    src = D_L00_00161058;
-    vram = D_0015EE88_2997c8;
-    for (i = 0; i < large_count; i++) {
-        FUN_00122518_2997c8(buf, vram >> 8, 2, 1, 0, 0, 0x80, 0x80);
-        vram += 0x10000;
-        FUN_00118a80_2997c8(0);
-        FUN_001227d8_2997c8(buf, src);
-        src += 0xC000;
-        FUN_00120558_2997c8(0, 0);
+    f122298_298840(0);
+    wait_for_graphics_pipeline_idle(0, 0);
+    FUN_00122e68_2997c8(count_vsync);
+    source = D_L00_00161058_macro;
+    gs_address = D_0015EE78_macro[4];
+    large_count = D_0015ED80 != 0 ? 0xE : 0xD;
+    small_count = D_0015ED80 != 0 ? 0xE : 0x11;
+    i = 0;
+    while (i < large_count) {
+        FUN_00122518_2997c8(buf, gs_address >> 8, 2, 1, 0, 0, 0x80, 0x80);
+        i++;
+        gs_address += 0x10000;
+        flush_cache(0);
+        FUN_001227d8_2997c8(buf, source);
+        source += 0xC000;
+        wait_for_graphics_pipeline_idle(0, 0);
     }
-    vram = D_0015EE78_2997c8;
-    for (i = 0; i < small_count; i++) {
-        FUN_00122518_2997c8(buf, vram >> 8, 1, 0, 0, 0, 0x40, 0x40);
-        vram += 0x4000;
-        FUN_00118a80_2997c8(0);
-        FUN_001227d8_2997c8(buf, src);
-        src += 0x4000;
-        FUN_00120558_2997c8(0, 0);
+    gs_address = D_0015EE78_macro[0];
+    j = 0;
+    while (j < small_count) {
+        FUN_00122518_2997c8(buf, gs_address >> 8, 1, 0, 0, 0, 0x40, 0x40);
+        j++;
+        gs_address += 0x4000;
+        flush_cache(0);
+        FUN_001227d8_2997c8(buf, source);
+        source += 0x4000;
+        wait_for_graphics_pipeline_idle(0, 0);
     }
-    if (D_0015EED8_2997c8 == 2) {
-        D_0015EED8_2997c8 = 0;
+    if (decode_mode == 2) {
+        decode_mode = 0;
     }
-    FUN_001f4a58_2997c8(4);
-    FUN_00215b68_2997c8(D_001516D0_2997c8.h38, 1, 0x400);
+    fade_to_black(4);
+    music_start_track(D_001516D0_2997c8.h38, 1, 0x400);
     D_L00_0015F5C4_2997c8 = 0;
     active = &active_scene_trigger_lui;
     if (active->moby != 0) {
@@ -968,7 +963,6 @@ void FUN_L00_002997c8(void) {
     }
     (*(M_2997c8 *)D_0013E550).f |= 0x10;
 }
-#endif
 /* Stop sound, wait for the loader to go idle, then start the movie load. */
 /* Ported from rac1-decomp (src/overlays/shared/tieproc_00299108.c: func_L00_0029AD18), where it is exact; names translated to the US level program. */
 
