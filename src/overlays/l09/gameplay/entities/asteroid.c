@@ -961,7 +961,7 @@ void asteroid_update(struct Moby *m) {
     Data_2ECC50 *d = (*(Data_2ECC50 **)&m->pvars);
     Path_2ECC50 *path;
     float v0[4];
-    float v1[4];
+    float endpoint_offset[4];
     float len;
     float dot;
     int i;
@@ -1044,8 +1044,8 @@ void asteroid_update(struct Moby *m) {
         subtract_vector_xyz(v0, path->pts[1], path->pts[0]);
         len = vector_length_xyz_c3(v0);
         normalize_vector_xyz_c3(v0, v0, 1.0f);
-        subtract_vector_xyz(v1, ((f32 *)&m->pos), path->pts[0]);
-        dot = fast_vec_dot(v1, v0);
+        subtract_vector_xyz(endpoint_offset, ((f32 *)&m->pos), path->pts[0]);
+        dot = fast_vec_dot(endpoint_offset, v0);
         if (dot < 0.0f) {
             dot = 0.0f;
         }
@@ -1057,8 +1057,8 @@ void asteroid_update(struct Moby *m) {
         subtract_vector_xyz(v0, path->pts[path->n - 2], path->pts[path->n - 1]);
         len = vector_length_xyz_c3(v0);
         normalize_vector_xyz_c3(v0, v0, 1.0f);
-        subtract_vector_xyz(v1, ((f32 *)&m->pos), path->pts[path->n - 1]);
-        dot = fast_vec_dot(v1, v0);
+        subtract_vector_xyz(endpoint_offset, ((f32 *)&m->pos), path->pts[path->n - 1]);
+        dot = fast_vec_dot(endpoint_offset, v0);
         if (dot < 0.0f) {
             dot = 0.0f;
         }
