@@ -1008,7 +1008,7 @@ void FUN_L00_002bbbc8(void *mv, int a, int b, int n, float sx, float sy, float s
     RT t;
     RW q2[4];
     RT u;
-    RW w120, w130, w140, w150, r160, r170, a180, b190, s1A0, s1B0;
+    RW w120, w130, w140, w150, r160, r170, segment_start_camera_offset, b190, s1A0, s1B0;
     int i, col0, col1;
     float len, len0, l0, l1;
     t.q0 = get_effect_texture(*(int *)&D_L00_001616B0);
@@ -1079,22 +1079,22 @@ void FUN_L00_002bbbc8(void *mv, int a, int b, int n, float sx, float sy, float s
         qcopy(q[1], q[3]);
     }
     for (i = 0; i < n - 1; i++) {
-        subtract_vector_xyz(a180, m + i * 16, D_L00_00166DC0);
+        subtract_vector_xyz(segment_start_camera_offset, m + i * 16, D_L00_00166DC0);
         subtract_vector_xyz(b190, m + i * 16 + 16, D_L00_00166DC0);
-        l0 = vector_length_xyz(a180);
+        l0 = vector_length_xyz(segment_start_camera_offset);
         l1 = vector_length_xyz(b190);
         if (l1 < l0) {
             if (l1 == 0)
-                qcopy(b190, a180);
+                qcopy(b190, segment_start_camera_offset);
             else
                 scale_vector_xyz(b190, b190, l0 / l1);
         } else {
             if (l0 == 0)
-                qcopy(a180, b190);
+                qcopy(segment_start_camera_offset, b190);
             else
-                scale_vector_xyz(a180, a180, l1 / l0);
+                scale_vector_xyz(segment_start_camera_offset, segment_start_camera_offset, l1 / l0);
         }
-        add_vector_xyz(r160, D_L00_00166DC0, a180);
+        add_vector_xyz(r160, D_L00_00166DC0, segment_start_camera_offset);
         add_vector_xyz(r170, D_L00_00166DC0, b190);
         subtract_vector_xyz(w150, r170, r160);
         scale_vector_xyz(s1B0, w150, sz);
