@@ -1,10 +1,3 @@
-#include "types.h"
-#include "asm.h"
-#include "rnc/globals.h"
-
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/expected/asm/assembly/textbin/gameplay/state/fun_001e9b10/FUN_001e9b10.s", FUN_001e9b10);
-#else
 #include "rnc/globals.h"
 #include "types.h"
 #include "eetypes.h"
@@ -155,11 +148,11 @@ extern s32 part_clip_dist __asm__("D_001600BC");
 extern u8 requested_video_mode __asm__("D_0016034C");
 extern s32 D_001603D0;
 extern Tie *D_001603D4;
-extern Tie *volatile D_001603D8;
+extern Tie *D_001603D8;
 extern TieData *D_001603DC;
 extern u8 *D_001603E0;
 extern f32 occl_fog_density_set __asm__("D_001603E4");
-extern volatile S160AB0 D_00160AB0 NOT_SDA;
+extern S160AB0 D_00160AB0 NOT_SDA;
 extern Ent40 *D_00160E8C __attribute__((sda));
 extern s32 D_00160E90;
 extern f32 D_00160EC0;
@@ -189,26 +182,26 @@ extern u8 object_render_class_slot_by_id[] __asm__("D_001E1A00");
 extern char D_001E76D8[];
 
 extern void DebugPrint(char *fmt, ...);
-extern void fill_transfer_words(void *, s32, s32) __asm__("func_001F97E8");
+extern void fill_transfer_words(void *, s32, s32) __asm__("FUN_001f97e8");
 extern void PackDmaTag(s32 arg0, u64 arg1, u64 arg2);
 extern void update_fog(void) __asm__("func_001F2588");
 extern void reset_draw_globals(void) __asm__("func_001F37E8");
 extern void enable_global_flag(void) __asm__("func_001F61E8");
-extern void fast_mem_zero16(void *, s32) __asm__("func_001F9810");
-extern void copy_memory_aligned(void *, void *, s32) __asm__("func_001F9838");
-extern f32 max_float(f32, f32) __asm__("func_001F99C8");
-extern void add_vector_xyz(void *, void *, void *) __asm__("func_001F9A10");
-extern void scale_vector(void *, void *, f32) __asm__("func_001F9A80");
-extern f32 fast_vec_length(void *) __asm__("func_001F9AF0");
-extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F9CF8");
+extern void fast_mem_zero16(void *, s32) __asm__("FUN_001f9810");
+extern void copy_memory_aligned(void *, void *, s32) __asm__("FUN_001f9838");
+extern f32 max_float(f32, f32) __asm__("FUN_001f99c8");
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void scale_vector(void *, void *, f32) __asm__("FUN_001f9a80");
+extern f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
+extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
-extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
+extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern void set_video_timing(s32) __asm__("func_00214970");
 extern void reset_global_state(void) __asm__("func_00217020");
-extern void func_0022A5E0(void *);
+extern void FUN_0022a5e0(void *);
 extern void vu0_load_micro_program(void *) __asm__("func_002334D8");
-extern void light_tfrags(void *) __asm__("func_00234F98");
-extern void light_ties(void *) __asm__("func_00237370");
+extern void light_tfrags(void *) __asm__("FUN_00234f98");
+extern void light_ties(void *) __asm__("FUN_00237370");
 
 u8 *FUN_001e9b10(LevelHeader *hdr) {
     u8 *p;
@@ -417,7 +410,6 @@ u8 *FUN_001e9b10(LevelHeader *hdr) {
        the end of the tie array, and the next pool base in this order. */
     D_00160AB0.x4 = D_001603E0;
     D_001603D8 = &D_001603D4[D_001603D0];
-    p2 = p + 0x4000;
     for (i = 0; i < D_001603D0; i++) {
         tie = &D_001603D4[i];
         cls = shrub_render_class_slot_by_id[*(s32 *)tc];
@@ -485,7 +477,7 @@ u8 *FUN_001e9b10(LevelHeader *hdr) {
         *spb++ = i5;
     }
     *spb = 0xFFFF;
-    func_0022A5E0((void *)0x70000000);
+    FUN_0022a5e0((void *)0x70000000);
 
     for (i6 = 0; i6 < D_001603D0; i6++) {
         s32 cr;
@@ -512,7 +504,7 @@ u8 *FUN_001e9b10(LevelHeader *hdr) {
 
     D_0015FF18 = (Ent100 *)p;
     fill_transfer_words(p, 0, 0x4000);
-    p = p2;
+    p += 0x4000;
     moby_instance_end = D_0015FF18;
     *((u8 *)D_0015FF18 + 0x20) = 0xFF;
     moby_vars = p;
@@ -541,4 +533,5 @@ u8 *FUN_001e9b10(LevelHeader *hdr) {
     sequence = 1.0f;
     return p;
 }
-#endif /* NON_MATCHING */
+
+extern __typeof__(FUN_001e9b10) func_001E9B10 __attribute__((alias("FUN_001e9b10")));

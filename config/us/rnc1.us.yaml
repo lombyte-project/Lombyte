@@ -914,7 +914,7 @@ segments:
           - [0xea5d8, c, textbin/world/startlevel]
           - [0xeaa34, textbin, text_gap_001e9ab4_before_fun_001e9ab8]
           - [0xeaa38, c, gameplay/state/transition_draw_sky]
-          - [0xeaa90, c, assembly/textbin/gameplay/state/fun_001e9b10]
+          - [0xeaa90, c, gameplay/state/fun_001e9b10]
           - [0xeb7ac, textbin, text_gap_001ea82c_before_fun_001ea830]
           - [0xeb7b0, c, gameplay/state/transition_load_wad]
           - [0xebecc, textbin, text_gap_001eaf4c_after_fun_001ea830]
