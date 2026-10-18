@@ -99,7 +99,7 @@ void FUN_L12_003054b0(char *moby) {
     float position_buffer[4];
     float v1[4];
     float aim_target_position[4];
-    float v3[4];
+    float particle_random_vector[4];
     float *pv1;
     float *hp;
 
@@ -205,14 +205,14 @@ void FUN_L12_003054b0(char *moby) {
                                 int c0;
                                 int c1;
                                 int life;
-                                v3[0] = FUN_L00_00257c48(0.0f, D_0015ED6C_gp * 1.7f);
-                                v3[1] = FUN_L00_00257c48(0.0f, D_0015ED6C_gp * 1.7f);
-                                v3[2] = FUN_L00_00257c48(0.0f, D_0015ED6C_gp * 1.7f);
+                                particle_random_vector[0] = FUN_L00_00257c48(0.0f, D_0015ED6C_gp * 1.7f);
+                                particle_random_vector[1] = FUN_L00_00257c48(0.0f, D_0015ED6C_gp * 1.7f);
+                                particle_random_vector[2] = FUN_L00_00257c48(0.0f, D_0015ED6C_gp * 1.7f);
                                 c0 = FUN_L00_00257b90(0xAA, 0xF0);
                                 c1 = FUN_L00_00257b90(0x6E, 0xC8);
                                 c1 = 0x7F000000 | (c1 << 8) | c0;
                                 life = scale_game_frames(FUN_L00_00257b90(0xF, 0x1E));
-                                FUN_L00_00269958(position_buffer, v3, c1, 0xFF, life, 0x37, FUN_L00_00257b90(0xB4, 0x10E), 1);
+                                FUN_L00_00269958(position_buffer, particle_random_vector, c1, 0xFF, life, 0x37, FUN_L00_00257b90(0xB4, 0x10E), 1);
                             }
                         }
                         md->h9C = scale_game_frames(7);
