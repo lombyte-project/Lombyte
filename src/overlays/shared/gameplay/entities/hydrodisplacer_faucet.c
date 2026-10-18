@@ -791,6 +791,9 @@ extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F
 void blarg_gun_update(char *moby) __asm__("FUN_L05_003186f8");
 void blarg_gun_update(char *moby)
 {
+    enum {
+        BLARG_GUN_STATE_MOVING = 1
+    };
     char *data = *(char **)(moby + 0x78);
     char buf[0x70];
     char *hs;
@@ -803,7 +806,7 @@ void blarg_gun_update(char *moby)
             *(unsigned short *)(moby + 0x34) |= 0x8000;
         moby[0x20] = 2;
         break;
-    case 1:
+    case BLARG_GUN_STATE_MOVING:
         n = *(int *)(data + 4);
         if (n > 0) {
             moby_point_position(moby, n, buf + 0x40);
