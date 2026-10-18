@@ -276,10 +276,14 @@ extern float random_angle_radians_87a8(void) __asm__("FUN_00213308");
 extern void spawn_effect_87a8(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");
 extern void spawn_second_effect_87a8(void *, void *, int, int, int, int, float) __asm__("FUN_L00_0026cbb0");
 extern void FUN_L05_0024cee8_87a8(int, int) __asm__("FUN_L05_0024cee8");
-extern int D_0014F5CC_87a8 __asm__("D_0014F5CC") __attribute__((sda));
-extern int D_00151928_87a8 __asm__("D_00151928") __attribute__((sda));
-extern int D_0015190C_87a8 __asm__("D_0015190C") __attribute__((sda));
-extern int D_00151910_87a8 __asm__("D_00151910") __attribute__((sda));
+extern int D_0014F5CC_87a8 __asm__("D_L05_0015F5CC") __attribute__((sda));
+extern char D_0013F3D0_87a8[] __asm__("D_0013F3D0");
+extern unsigned short D_00141938 __attribute__((section(".data")));
+extern unsigned short D_00141C60 __attribute__((section(".data")));
+extern int D_L05_0015F6A8 __attribute__((section(".data")));
+extern int D_00151928_87a8 __asm__("D_L05_00161928") __attribute__((sda));
+extern int D_0015190C_87a8 __asm__("D_L05_0016190C") __attribute__((sda));
+extern int D_00151910_87a8 __asm__("D_L05_00161910") __attribute__((sda));
 
 void hoverboard_update(unsigned char *moby) __asm__("FUN_L05_002f87a8");
 void hoverboard_update(unsigned char *moby) {
@@ -290,25 +294,27 @@ void hoverboard_update(unsigned char *moby) {
     struct Hero *g;
 
     switch (state) {
-    case 0:
-        g = &hero;
-        if (distance_xyz_87a8(&g->motion.pos, moby + 0x10) < 5.5f &&
-            D_0014F5CC_87a8 > 3 && g->state.control_mode != 0x15 &&
-            g->state.control_mode != 0x16) {
-            g->unk86C = moby;
+    case 0: {
+        char *pos = D_0013F3D0_87a8;
+        struct Hero *player;
+        if (distance_xyz_87a8(pos, moby + 0x10) < 5.5f && D_0014F5CC_87a8 > 3 &&
+            (player = (struct Hero *)(pos - 0x80))->state.control_mode != 0x15 &&
+            player->state.control_mode != 0x16) {
+            player->unk86C = moby;
             FUN_L05_0024cee8_87a8(0x6b, 1);
             if (*(int *)(data + 0x50) == 0) {
-                *(u128 *)(data + 0x10) = *(u128 *)(moby + 0x10);
+                qcopy(data + 0x10, moby + 0x10);
             }
             moby[0x20] = 1;
             *(unsigned char *)(moby + 0x30) = 0xff;
         }
         break;
+    }
     case 1:
         if (*(int *)(data + 0x50) == 0 && alternate_item_available[0] != 0 &&
-            *(unsigned short *)0x141938 == 0 && *(int *)0x15f6a8 != 0 &&
-            scale_game_frames_87a8(0x4b0) < (g = &hero)->unk19C &&
-            *(unsigned short *)0x141c60 == 0) {
+            D_00141938 == 0 && D_L05_0015F6A8 != 0 &&
+            (g = &hero, scale_game_frames_87a8(0x4b0) < g->unk19C) &&
+            D_00141C60 == 0) {
             play_sound_87a8(0x138f, 0x5f);
         }
         if (hero.state.control_mode != 0x16) {
