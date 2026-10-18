@@ -2417,37 +2417,37 @@ extern float fast_normalize_angle(f32) __asm__("FUN_001fa610");
 extern Moby *D_L06_0015FFD8;
 
 int FUN_L06_002f2c28(char *ctx, char *ow, char *moby, int flag, int *out) {
-    float v0[4];
+    float candidate_position[4];
     float vB[4];
     float vA[4];
     float vC[4];
     float vD[4];
-    int v58;
+    int placement_index;
     int k;
     char *st;
     char *g;
     float f20;
 
     if (*(short *)(moby + 0xA6) != 0x515 && *(short *)(moby + 0xA6) != 0x15F) {
-        add_vector_xyz(v0, moby + 0x10, moby + 0xC0);
+        add_vector_xyz(candidate_position, moby + 0x10, moby + 0xC0);
     } else {
-        *(u128_F4058 *)v0 = *(u128_F4058 *)(moby + 0x10);
+        *(u128_F4058 *)candidate_position = *(u128_F4058 *)(moby + 0x10);
     }
 
     switch (*(short *)(moby + 0xA6)) {
     case 0x15F:
     case 0x3B1:
     case 0x515:
-        if (!(vector_distance_xy_alt(ctx + 0x10, v0) < 1.0f)) return 0;
+        if (!(vector_distance_xy_alt(ctx + 0x10, candidate_position) < 1.0f)) return 0;
         st = *(char **)(moby + 0x78);
         if (*(int *)st < 0) return 0;
-        v58 = 0;
+        placement_index = 0;
         if (*(short *)(moby + 0xA6) == 0x3B1) {
-            v58 = *(int *)(st + 4);
-            *(int *)(st + 4) = v58 + 1;
+            placement_index = *(int *)(st + 4);
+            *(int *)(st + 4) = placement_index + 1;
         } else if (*(short *)(moby + 0xA6) == 0x515 || *(short *)(moby + 0xA6) == 0x15F) {
-            v58 = *(int *)(st + 4);
-            *(int *)(st + 4) = v58 + 1;
+            placement_index = *(int *)(st + 4);
+            *(int *)(st + 4) = placement_index + 1;
         }
         if (*(short *)(moby + 0xA6) == 0x515) {
             trooper_play_sound(0, 0, (int)moby, 0x515);
@@ -2479,7 +2479,7 @@ int FUN_L06_002f2c28(char *ctx, char *ow, char *moby, int flag, int *out) {
         }
 
         g = (*(char * *)&D_L06_0015FFD8) + (*(int *)st << 8);
-        f20 = fast_normalize_angle(convert_integer_to_float(v58) * 60.0f * 0.017453292f);
+        f20 = fast_normalize_angle(convert_integer_to_float(placement_index) * 60.0f * 0.017453292f);
         vB[0] = fast_cos_c2(fast_add_rotations_c2(*(float *)(g + 0x48), f20));
         vB[1] = fast_sin(fast_add_rotations_c2(*(float *)(g + 0x48), f20));
         vB[2] = 0.0f;
@@ -2530,7 +2530,7 @@ int FUN_L06_002f2c28(char *ctx, char *ow, char *moby, int flag, int *out) {
     case 0x516:
         if (flag != 0) return 0;
         if (*(unsigned char *)(moby + 0x20) == 2) return 0;
-        if (!(vector_distance_xy_alt(ctx + 0x10, v0) < 1.0f)) return 0;
+        if (!(vector_distance_xy_alt(ctx + 0x10, candidate_position) < 1.0f)) return 0;
         *(char *)(ctx + 0x20) = 8;
         *(int *)(ow + 0x304) = (int)moby;
         *out = 2;
