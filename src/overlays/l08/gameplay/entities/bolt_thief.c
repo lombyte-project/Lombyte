@@ -198,9 +198,9 @@ extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern float D_L08_00161D38 __attribute__((sda));
 void FUN_L08_002e9a18(struct Moby *arg) {
     char *data = (char *)arg->pvars;
-    float v0[4];
-    float v1[4];
-    float v2[4];
+    float part_joint_position[4];
+    float anchor_joint_position[4];
+    float joint_alignment_offset[4];
     int i;
     char *p;
     char *parts = data + 0x60;
@@ -209,10 +209,10 @@ void FUN_L08_002e9a18(struct Moby *arg) {
         char *part = *(char **)(e - 0xC);
         if (part != 0) {
             *(float *)(part + 0x48) = arg->rot.z;
-            moby_point_position(part, *(int *)(e - 4), v0);
-            moby_point_position(*(void **)(e - 8), *(int *)e, v1);
-            fast_vec_sub(v2, v1, v0);
-            fast_vec_add(part + 0x10, part + 0x10, v2);
+            moby_point_position(part, *(int *)(e - 4), part_joint_position);
+            moby_point_position(*(void **)(e - 8), *(int *)e, anchor_joint_position);
+            fast_vec_sub(joint_alignment_offset, anchor_joint_position, part_joint_position);
+            fast_vec_add(part + 0x10, part + 0x10, joint_alignment_offset);
         }
     }
     if (*(char **)(data + 0x90) != 0) {
