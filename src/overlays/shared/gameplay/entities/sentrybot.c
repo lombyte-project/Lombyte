@@ -2181,7 +2181,7 @@ extern f32 frame_scale_macro __asm__("D_0015ED60") __attribute__((section(".sdat
 void FUN_L15_0029edb0(Moby29FF90 *moby) {
     float w[4];
     float v[4];
-    float v2[4];
+    float temporary_position[4];
     Data29FF90 *d = moby->data;
 
     switch (moby->state) {
@@ -2275,7 +2275,7 @@ void FUN_L15_0029edb0(Moby29FF90 *moby) {
             }
         }
         if (scale_game_frames_alt(0x3C) < d->f14 || *(unsigned char *)(((char *)&D_001413F4)) != 2
-            || (FUN_L00_001ff290(v2, moby->pos, d), moby->pos[0] < 2.0f) || moby->pos[0] > 1021.0f
+            || (FUN_L00_001ff290(temporary_position, moby->pos, d), moby->pos[0] < 2.0f) || moby->pos[0] > 1021.0f
             || moby->pos[1] < 2.0f || moby->pos[1] > 1021.0f
             || moby->pos[2] < 2.0f || moby->pos[2] > 1021.0f) {
             mark_moby_for_removal_c2(D_L15_00161484);
@@ -2283,8 +2283,8 @@ void FUN_L15_0029edb0(Moby29FF90 *moby) {
             return;
         }
         n = func_L00_001F2BE8_29FF90(moby->pos, r, 0x10, moby, 0);
-        *(u128_29FF90 *)v2 = *(u128_29FF90 *)moby->pos;
-        send_blast_hits(moby, v2, D_L15_00178500, n, 0, 0x8B0000, 2, 1, 20.0f, 1.0f, 1.0f);
+        *(u128_29FF90 *)temporary_position = *(u128_29FF90 *)moby->pos;
+        send_blast_hits(moby, temporary_position, D_L15_00178500, n, 0, 0x8B0000, 2, 1, 20.0f, 1.0f, 1.0f);
         cnt = scale_game_frames_alt(0x3C) - d->f14 < scale_game_frames_alt(5) ? scale_game_frames_alt(0x3C) - d->f14 : scale_game_frames_alt(5);
         func_L00_0026E940_29FF90(r * 0.5f * 210000.0f, (char *)moby,
                                  (0x4F << 24) | (random_int_between(0x3F, 0x7F) << 16) | (random_int_between(0x2F, 0x3F) << 8) | random_int_between(0xF, 0x2F),
@@ -2300,7 +2300,7 @@ void FUN_L15_0029edb0(Moby29FF90 *moby) {
 
                 random_spherical_offset(w, r * D_0015ED6C, r * 2.0f * D_0015ED6C);
                 random_spherical_offset(v, 0.0f, r * 0.5f);
-                FUN_L00_001ff290(v2, v, moby->pos);
+                FUN_L00_001ff290(temporary_position, v, moby->pos);
                 p = (Part29FF90 *)FUN_L00_00274948(v, w, 0x7F, moby);
                 if (p != 0) {
                     p->fC = random_float_between(6000.0f, 32000.0f) * r * 0.4f;
