@@ -2384,7 +2384,7 @@ typedef struct {
     short f84;
 } O842e83c0;
 int FUN_L00_002e83c0(int arg1, int arg2);
-int FUN_L00_002e83c0(int arg1, int arg2) {
+int FUN_L00_002e83c0(int candidate_object, int arg2) {
     void *a = D_L00_00166E00_c2;
     C842e83c0 *cur;
     u8 x;
@@ -2395,17 +2395,17 @@ int FUN_L00_002e83c0(int arg1, int arg2) {
     }
     cur = (C842e83c0 *)(u32)((B2842e83c0 *)a)->f70;
     if (cur->f220 == 0) {
-        cur->f220 = arg1;
+        cur->f220 = candidate_object;
         return 1;
     }
-    if (cur->f220 == arg1) {
+    if (cur->f220 == candidate_object) {
         return 1;
     }
     tab = (u32)D_L00_0015EF50;
     x = *(u8 *)(*(u32 *)(tab + ((O842e83c0 *)(u32)cur->f220)->f84 * 0x20 + 0x1C) + 0x1C);
-    y = *(u8 *)(*(u32 *)(tab + ((O842e83c0 *)(u32)arg1)->f84 * 0x20 + 0x1C) + 0x1C);
+    y = *(u8 *)(*(u32 *)(tab + ((O842e83c0 *)(u32)candidate_object)->f84 * 0x20 + 0x1C) + 0x1C);
     if (x < y) {
-        cur->f220 = arg1;
+        cur->f220 = candidate_object;
         return 1;
     }
     return 0;
