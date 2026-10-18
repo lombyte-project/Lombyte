@@ -1049,7 +1049,7 @@ extern f32 D_L08_00161FA8 __attribute__((sda));
 void FUN_L08_002f5830(char *m) {
     f32 spark_motion_primary[4], spark_motion_secondary[4], c[4], d[4], e[16];
     char *v;
-    s32 s0, s16, s2;
+    s32 spark_frame_count, spark_second_frame_count, spark_third_frame_count;
 
     v = *(char **)(m + 0x78);
     if (fast_dec_timer((int *)(v + 0x3C)) == 0)
@@ -1075,13 +1075,13 @@ void FUN_L08_002f5830(char *m) {
         spark_motion_secondary[2] += random_float_between(D_L08_00161F84, D_L08_00161F84 * 1.5f) * frame_time;
         spark_motion_primary[3] = D_L08_00161F9C;
         spark_motion_secondary[3] = D_L08_00161FA0;
-        s0 = truncate_float_to_s32(
+        spark_frame_count = truncate_float_to_s32(
             multiply_global_factor_ed64(random_float_between((f32)D_L08_00161F8C, (f32)D_L08_00161F8C * 1.2f)));
-        s16 = truncate_float_to_s32(
+        spark_second_frame_count = truncate_float_to_s32(
             multiply_global_factor_ed64(random_float_between((f32)D_L08_00161F90, (f32)D_L08_00161F90 * 1.2f)));
-        s2 = truncate_float_to_s32(
+        spark_third_frame_count = truncate_float_to_s32(
             multiply_global_factor_ed64(random_float_between((f32)D_L08_00161F94, (f32)D_L08_00161F94 * 1.2f)));
-        spawn_spark(c, spark_motion_primary, spark_motion_secondary, D_L08_00161F74, D_L08_00161F78, s0, s16, s2, -1);
+        spawn_spark(c, spark_motion_primary, spark_motion_secondary, D_L08_00161F74, D_L08_00161F78, spark_frame_count, spark_second_frame_count, spark_third_frame_count, -1);
     } else {
         *(s32 *)(v + 0x3C) = *(s32 *)(v + 0x14);
         euler_rotation_matrix(e, m + 0x40);
@@ -1107,13 +1107,13 @@ void FUN_L08_002f5830(char *m) {
         spark_motion_secondary[2] += random_float_between(*(f32 *)(v + 0x24), *(f32 *)(v + 0x24) * 1.5f) * frame_time;
         spark_motion_primary[3] = *(f32 *)(v + 0x28);
         spark_motion_secondary[3] = *(f32 *)(v + 0x2C);
-        s0 = truncate_float_to_s32(multiply_global_factor_ed64(
+        spark_frame_count = truncate_float_to_s32(multiply_global_factor_ed64(
             random_float_between((f32) * (s32 *)(v + 0x08), (f32) * (s32 *)(v + 0x08) * 1.2f)));
-        s16 = truncate_float_to_s32(multiply_global_factor_ed64(
+        spark_second_frame_count = truncate_float_to_s32(multiply_global_factor_ed64(
             random_float_between((f32) * (s32 *)(v + 0x0C), (f32) * (s32 *)(v + 0x0C) * 1.2f)));
-        s2 = truncate_float_to_s32(multiply_global_factor_ed64(
+        spark_third_frame_count = truncate_float_to_s32(multiply_global_factor_ed64(
             random_float_between((f32) * (s32 *)(v + 0x10), (f32) * (s32 *)(v + 0x10) * 1.2f)));
-        spawn_spark(c, spark_motion_primary, spark_motion_secondary, *(s32 *)(v + 0x00), *(s32 *)(v + 0x04), s0, s16, s2, -1);
+        spawn_spark(c, spark_motion_primary, spark_motion_secondary, *(s32 *)(v + 0x00), *(s32 *)(v + 0x04), spark_frame_count, spark_second_frame_count, spark_third_frame_count, -1);
     }
 }
 /* Paratrooper: initializes its path and steering, patrols, attacks its target,
