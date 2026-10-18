@@ -1341,7 +1341,7 @@ extern f32 frame_time_sq_macro __asm__("D_0015ED70") __attribute__((section(".sd
 /* The hero on a moving platform: finds the platform the hero stands on or hangs from, tracks the platform's motion
    between frames (its attach points at 0x310-0x330) and carries the hero (position, facing, ledge-grab point) with it. */
 void FUN_L00_00233f80(void) {
-    Vec_234800 v0, v10, v20, v30, v40, v50, v60, v70, v80, v90, vA0;
+    Vec_234800 probed_position, v10, v20, v30, v40, v50, primary_attachment_position, v70, secondary_attachment_position, v90, vA0;
     float sB0, sB4;
     float amt, ang;
     int mode;
@@ -1434,14 +1434,14 @@ void FUN_L00_00233f80(void) {
         }
         qcopy(&v30, &v20);
     } else if (mode == 1) {
-        probe_ground_height_cf(((Hero_234800 *)hero_233f80)->i2080, ((Hero_234800 *)hero_233f80)->p360, &((Hero_234800 *)hero_233f80)->pos, &((Hero_234800 *)hero_233f80)->v90, &v0, &v10);
+        probe_ground_height_cf(((Hero_234800 *)hero_233f80)->i2080, ((Hero_234800 *)hero_233f80)->p360, &((Hero_234800 *)hero_233f80)->pos, &((Hero_234800 *)hero_233f80)->v90, &probed_position, &v10);
         ((Hero_234800 *)hero_233f80)->v90.z = v10.z;
-        f_001f9a28(&v20, &v0, &((Hero_234800 *)hero_233f80)->pos);
+        f_001f9a28(&v20, &probed_position, &((Hero_234800 *)hero_233f80)->pos);
         qcopy((Vec_234800 *)(hero_233f80 + 0x350), &v20);
     } else if (mode == 2) {
         probe_ground_height_cf(((Hero_234800 *)hero_233f80)->i2080, ((Hero_234800 *)hero_233f80)->p360, &((Hero_234800 *)hero_233f80)->pos, &((Hero_234800 *)hero_233f80)->v90, &v40, &v50);
-        FUN_L00_002604f0(((Hero_234800 *)hero_233f80)->i2080, ((Hero_234800 *)hero_233f80)->p360, &((Hero_234800 *)hero_233f80)->v310, &((Hero_234800 *)hero_233f80)->v320, &v60, &v70);
-        FUN_L00_002604f0(((Hero_234800 *)hero_233f80)->i2080, ((Hero_234800 *)hero_233f80)->p360, &((Hero_234800 *)hero_233f80)->v330, &((Hero_234800 *)hero_233f80)->v320, &v80, &v90);
+        FUN_L00_002604f0(((Hero_234800 *)hero_233f80)->i2080, ((Hero_234800 *)hero_233f80)->p360, &((Hero_234800 *)hero_233f80)->v310, &((Hero_234800 *)hero_233f80)->v320, &primary_attachment_position, &v70);
+        FUN_L00_002604f0(((Hero_234800 *)hero_233f80)->i2080, ((Hero_234800 *)hero_233f80)->p360, &((Hero_234800 *)hero_233f80)->v330, &((Hero_234800 *)hero_233f80)->v320, &secondary_attachment_position, &v90);
         if ((((Hero_234800 *)hero_233f80)->i2084 == 1 || ((Hero_234800 *)hero_233f80)->i2084 == 0x1E) && ((Hero_234800 *)hero_233f80)->b20A5 != 0) {
             ((Hero_234800 *)hero_233f80)->v90.z = v50.z;
         } else if (((Hero_234800 *)hero_233f80)->i364 & 2) {
@@ -1454,19 +1454,19 @@ void FUN_L00_00233f80(void) {
                 vA0.x = f_001f9dc8(((Hero_234800 *)hero_233f80)->f4E4) * 0.45f;
                 vA0.y = f_001f9de0(((Hero_234800 *)hero_233f80)->f4E4) * 0.45f;
                 vA0.z = 0.0f;
-                f_001f9a10(&vA0, &vA0, &v80);
+                f_001f9a10(&vA0, &vA0, &secondary_attachment_position);
                 vA0.z += -1.43f;
                 f_001f9a28(&v20, &v40, &((Hero_234800 *)hero_233f80)->pos);
                 qcopy(&((Hero_234800 *)hero_233f80)->v4D0, &vA0);
-                ((Hero_234800 *)hero_233f80)->f4E4 = f_001f9e90(v60.x - v80.x, v60.y - v80.y);
+                ((Hero_234800 *)hero_233f80)->f4E4 = f_001f9e90(primary_attachment_position.x - secondary_attachment_position.x, primary_attachment_position.y - secondary_attachment_position.y);
             } else {
                 float len;
 
-                f_001f9a28(&v20, &v60, &((Hero_234800 *)hero_233f80)->pos);
+                f_001f9a28(&v20, &primary_attachment_position, &((Hero_234800 *)hero_233f80)->pos);
                 len = vector_length_xyz(&v20);
                 if (len < 0.0001f) {
                     f_001f99f8(&v20);
-                    qcopy(&((Hero_234800 *)hero_233f80)->pos, &v60);
+                    qcopy(&((Hero_234800 *)hero_233f80)->pos, &primary_attachment_position);
                 } else if (2.0f < len) {
                     f_001f99f8(&v20);
                     ((Hero_234800 *)hero_233f80)->i364 &= ~2;
