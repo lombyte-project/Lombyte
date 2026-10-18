@@ -3614,7 +3614,7 @@ extern int FUN_L00_00221d98(void);
 extern int pad_pressed_within(int, void *, void *) __asm__("FUN_L00_00266d60");
 extern int FUN_L00_00266e00(int, void *, void *, int);
 
-int FUN_L00_00228b78(void *a0, int a1) {
+int FUN_L00_00228b78(void *a0, int suppress_normal_jump) {
     s32 buf;
     int len;
 
@@ -3630,7 +3630,7 @@ int FUN_L00_00228b78(void *a0, int a1) {
         }
     }
 
-    if (a1 != 0)
+    if (suppress_normal_jump != 0)
         return 0;
 
     hero_set_state(HERO_STATE_JUMP, 1);
