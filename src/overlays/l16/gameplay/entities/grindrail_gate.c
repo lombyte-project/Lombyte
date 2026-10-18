@@ -1457,6 +1457,10 @@ extern L16ChallengePlayer D_0013E633_challenge __asm__("D_0013E533");
 
 void gadgetron_ceo_update(L16ChallengeMoby *m) __asm__("FUN_L16_002e6808");
 void gadgetron_ceo_update(L16ChallengeMoby *m) {
+    enum {
+        GADGETRON_CEO_INITIALIZE_DIALOGUE = 0,
+        GADGETRON_CEO_POLL_DIALOGUE = 1
+    };
     L16ChallengeScratch scratch;
     L16ChallengeData *d = m->data;
     L16ChallengeActivation *activation = (L16ChallengeActivation *)d->activation;
@@ -1468,7 +1472,7 @@ void gadgetron_ceo_update(L16ChallengeMoby *m) {
     }
     FUN_L02_002e0cd8(m);
     switch (m->state) {
-    case 0:
+    case GADGETRON_CEO_INITIALIZE_DIALOGUE:
         m->opacity = 255;
         m->state = 1;
         initialize_npc_dialogue(m, activation);
@@ -1478,7 +1482,7 @@ void gadgetron_ceo_update(L16ChallengeMoby *m) {
             m->yaw = fast_add_rotations(m->yaw, 3.14159265f);
         FUN_L16_002e7168((char *)m);
         break;
-    case 1: {
+    case GADGETRON_CEO_POLL_DIALOGUE: {
         if (((L16ChallengePlayer *)((char *)&D_0013E633_challenge + 0xE1D))->mode != 15)
             D_L16_0015F638 = 115.0f;
         else
