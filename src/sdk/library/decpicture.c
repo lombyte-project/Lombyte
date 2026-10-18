@@ -26,6 +26,9 @@ extern s32 _Error();
 extern s32 _pictureData0();
 
 s32 _decPicture(struct MpegDecoderState *decoder) {
+    enum {
+        FRAME_PICTURE = 3
+    };
     s32 result;
     struct MpegReferenceImage *reference;
 
@@ -34,7 +37,7 @@ s32 _decPicture(struct MpegDecoderState *decoder) {
         decoder->second_field = 0;
     }
     switch (decoder->picture_coding_type) {
-    case 3:
+    case FRAME_PICTURE:
         reference = decoder->forward_reference;
         break;
     case 1:
