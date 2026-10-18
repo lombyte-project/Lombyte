@@ -420,7 +420,7 @@ extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68
 void FUN_L13_002c25b8(unsigned char *moby) {
     unsigned char *d = *(unsigned char **)(moby + 0x78);
     unsigned char *target;
-    float v0[4], v1[4], z[4];
+    float v0[4], shot_direction_vector[4], z[4];
     float f;
     float *rot;
     float *pos;
@@ -501,18 +501,18 @@ void FUN_L13_002c25b8(unsigned char *moby) {
                 *(int *)(d + 0xE8) = scale_game_frames_alt(60);
                 if (*(int *)(d + 0xF4) != 0) moby_point_position(moby, 1, v0);
                 else moby_point_position(moby, 0, v0);
-                subtract_vector_xyz(v1, target + 0x10, v0);
-                normalize_vector_xyz(v1, v1, D_L13_0016149C * frame_time);
+                subtract_vector_xyz(shot_direction_vector, target + 0x10, v0);
+                normalize_vector_xyz(shot_direction_vector, shot_direction_vector, D_L13_0016149C * frame_time);
                 if (*(int *)(d + 0xF4) != 0) {
                     if (*(void **)(d + 0xF8)) {
-                        FUN_L13_00305988(*(void **)(d + 0xF8), v1, target, *(float *)(d + 0xEC));
+                        FUN_L13_00305988(*(void **)(d + 0xF8), shot_direction_vector, target, *(float *)(d + 0xEC));
                         allocate_voice_for_target_entry(0, 0, (int)moby);
                     }
                     *(unsigned char **)(d + 0xF8) = FUN_L13_003058a8(moby, 1);
                     *(int *)(d + 0xF4) = 0;
                 } else {
                     if (*(void **)(d + 0xFC)) {
-                        FUN_L13_00305988(*(void **)(d + 0xFC), v1, target, *(float *)(d + 0xEC));
+                        FUN_L13_00305988(*(void **)(d + 0xFC), shot_direction_vector, target, *(float *)(d + 0xEC));
                         allocate_voice_for_target_entry(0, 0, (int)moby);
                     }
                     *(unsigned char **)(d + 0xFC) = FUN_L13_003058a8(moby, 0);
