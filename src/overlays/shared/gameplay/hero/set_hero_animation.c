@@ -535,7 +535,7 @@ f32 FUN_L00_00232b90(f32 a, f32 b, f32 c) {
     f32 t[4];
     V4_32b90 v;
     V4_32b90 t1;
-    V4_32b90 v2;
+    V4_32b90 hero_position_copy;
     f32 o[6];
     f32 x, y, z;
 
@@ -570,8 +570,8 @@ f32 FUN_L00_00232b90(f32 a, f32 b, f32 c) {
         FUN_001f9a68_32b90(&t1, &v, ((a * a + a) * 0.5f) * b);
         FUN_001f9a10_32b90(t, &t1, t);
         FUN_001f9a10_32b90(t, &hero.motion.pos, t);
-        v2.q = hero.motion.pos.q;
-        FUN_L00_0025d238_32b90(&v2, t);
+        hero_position_copy.q = hero.motion.pos.q;
+        FUN_L00_0025d238_32b90(&hero_position_copy, t);
         if (collision_line(&hero.motion.pos, t, 0x24, 0, 0) != 0) {
             f32 nb;
             nb = b * -0.5f;
@@ -594,8 +594,8 @@ f32 FUN_L00_00232b90(f32 a, f32 b, f32 c) {
         FUN_001f9a68_32b90(&t1, &v, ((a * a + a) * 0.5f) * b);
         FUN_001f9a10_32b90(t, &t1, t);
         FUN_001f9a10_32b90(t, &hero.motion.pos, t);
-        v2.q = hero.motion.pos.q;
-        FUN_L00_0025d238_32b90(&v2, t);
+        hero_position_copy.q = hero.motion.pos.q;
+        FUN_L00_0025d238_32b90(&hero_position_copy, t);
         if (collision_line(&hero.motion.pos, t, 0x24, 0, 0) != 0) {
             f32 nb;
             nb = b * -0.5f;
