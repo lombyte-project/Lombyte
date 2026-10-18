@@ -448,7 +448,7 @@ typedef union {
 float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 float vector_length_xy(void *) __asm__("FUN_001f9b20");
 void trooper_knockback_arc(OvlQuad *v, float *ang, float *s1, float *s2) __asm__("FUN_L00_0025ab48");
-void trooper_knockback_arc(OvlQuad *v, float *ang, float *s1, float *s2) {
+void trooper_knockback_arc(OvlQuad *v, float *ang, float *xy_scaled_value, float *z_scaled_value) {
     U25ab48 t;
     t.q = *v;
     if (t.f[3] != 5627.9248046875f) {
@@ -456,9 +456,9 @@ void trooper_knockback_arc(OvlQuad *v, float *ang, float *s1, float *s2) {
         return;
     }
     *ang = fast_arc_tan(t.f[0], t.f[1]);
-    *s1 *= vector_length_xy(&t);
+    *xy_scaled_value *= vector_length_xy(&t);
     t.f[3] = 0;
-    *s2 *= t.f[2];
+    *z_scaled_value *= t.f[2];
 }
 #define NOT_SDA
 
