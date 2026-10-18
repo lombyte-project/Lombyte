@@ -10,14 +10,23 @@ extern struct Upgrade D_0013D5B0[];
 s32 check_mission_condition(s16 kind, s32 value) __asm__("FUN_0020baf0");
 
 s32 check_mission_condition(s16 kind, s32 value) {
+    enum {
+        MISSION_CONDITION_ALWAYS_TRUE = 0,
+        MISSION_CONDITION_LEVEL_AVAILABLE = 1,
+        MISSION_CONDITION_ITEM_AVAILABLE = 2,
+        MISSION_CONDITION_ITEM_ACQUIRED = 3,
+        MISSION_CONDITION_ALTERNATE_ITEM_AVAILABLE = 6,
+        MISSION_CONDITION_CALLBACK_NONZERO = 7,
+        MISSION_CONDITION_ALWAYS_FALSE = 9
+    };
     switch (kind) {
-    case 0:
+    case MISSION_CONDITION_ALWAYS_TRUE:
         return 1;
-    case 1:
+    case MISSION_CONDITION_LEVEL_AVAILABLE:
         return level_available[value] != 0;
-    case 2:
+    case MISSION_CONDITION_ITEM_AVAILABLE:
         return item_available[value] != 0;
-    case 3:
+    case MISSION_CONDITION_ITEM_ACQUIRED:
         return items_acquired[value] != 0;
     case 4:
         if (value < 121) {
@@ -29,13 +38,13 @@ s32 check_mission_condition(s16 kind, s32 value) {
             return D_0013D5B0[value].level >= 2;
         }
         break;
-    case 6:
+    case MISSION_CONDITION_ALTERNATE_ITEM_AVAILABLE:
         return alternate_item_available[value] != 0;
-    case 7:
+    case MISSION_CONDITION_CALLBACK_NONZERO:
         return ((s32(*)(void))value)() != 0;
     case 8:
         return D_0014BEC0[(value & 0xFFFF) + (value >> 16) * 4] != 0;
-    case 9:
+    case MISSION_CONDITION_ALWAYS_FALSE:
         return 0;
     }
     return 0;
