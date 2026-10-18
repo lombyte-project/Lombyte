@@ -953,6 +953,11 @@ extern void FUN_L00_001fff28(void *, int, float);
 
 void turret_update(struct Moby *moby) __asm__("FUN_L09_00304c80");
 void turret_update(struct Moby *moby) {
+    enum {
+        TURRET_STATE_INITIALIZE = 0,
+        TURRET_STATE_IDLE = 4,
+        TURRET_STATE_MOUNTED = 5
+    };
     Vec4 seat;
     Vec4 offset;
     Vec4 tmp;
@@ -1011,7 +1016,7 @@ void turret_update(struct Moby *moby) {
         }
     }
     switch (moby->state) {
-    case 0:
+    case TURRET_STATE_INITIALIZE:
         attach_manipulator(moby, 0, vars);
         tmp.q = *(u128 *)&moby->pos;
         FUN_L09_002efda8(moby, &tmp);
@@ -1026,7 +1031,7 @@ void turret_update(struct Moby *moby) {
         vars->unk40 = 0;
         sound_probe_ignore[0] = moby;
         return;
-    case 4:
+    case TURRET_STATE_IDLE:
         if (vector_distance(&moby->pos, &hero.motion.pos) < 4.0f || hero.ground_moby == moby) {
             moby->pos.z += ((vars->rest_z - 1.0f) - moby->pos.z) * 0.11f;
             vars->yaw_speed = fast_add_rotations(vars->yaw_speed,
@@ -1069,7 +1074,7 @@ void turret_update(struct Moby *moby) {
             }
         }
         break;
-    case 5:
+    case TURRET_STATE_MOUNTED:
         sound_probe_ignore[0] = moby;
         if (moby->pos.z < vars->rest_z) {
             moby->pos.z += frame_time;
