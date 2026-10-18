@@ -1348,10 +1348,10 @@ void FUN_L05_00254358(float *out, float *rot) {
                 float d;
                 if (D_0015ED84_gp == 0x10 && *(char **)(h + 0x8B4) != 0) {
                     char *verts = *(char **)(h + 0x8B4);
-                    char *v1 = verts + *(short *)(h + 0x8C8) * 16;
-                    char *v2 = verts + *(short *)(h + 0x898) * 16;
-                    float z1 = *(float *)(v1 + 0x18);
-                    float z2 = *(float *)(v2 + 0x18);
+                    char *first_height_sample_point = verts + *(short *)(h + 0x8C8) * 16;
+                    char *second_height_sample_point = verts + *(short *)(h + 0x898) * 16;
+                    float z1 = *(float *)(first_height_sample_point + 0x18);
+                    float z2 = *(float *)(second_height_sample_point + 0x18);
                     if (z1 < z2) {
                         if (absolute_float_c(z2 - *(float *)(p + 0x18)) > limit)
                             goto next_point;
