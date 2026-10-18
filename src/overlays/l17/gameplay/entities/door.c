@@ -1630,6 +1630,9 @@ extern ShipShake D_L17_00167580;
 void fighter_jet_update(ShipMoby *moby) __asm__("FUN_L17_002ed018");
 void fighter_jet_update(ShipMoby *moby) {
     enum {
+        FIGHTER_JET_STATE_VICTORY_EXIT = 8
+    };
+    enum {
         FIGHTER_JET_STATE_INITIALIZE = 0,
         FIGHTER_JET_STATE_WAIT_FOR_BOARDING = 1,
         FIGHTER_JET_STATE_BOARDING_FADE = 2,
@@ -1902,7 +1905,7 @@ void fighter_jet_update(ShipMoby *moby) {
                 moby->state = 0;
             }
             break;
-        case 8:
+        case FIGHTER_JET_STATE_VICTORY_EXIT:
             force_help_message(6, 0);
             D_L17_0015F608 = 2;
             FUN_L17_002ec360((Moby *)moby, (Obj *)v);
