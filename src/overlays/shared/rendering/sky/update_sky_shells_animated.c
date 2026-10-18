@@ -219,7 +219,7 @@ void FUN_L00_002895a0(void) {
     int i, j;
     Star2895a0 *s;
     f32 a, b;
-    int t16, t18, r;
+    int color_channel_offset, color_high_byte_offset, r;
     SKY->s4 = 0;
     FUN_001f9fc8_2895a0(D_L00_001BD7E0);
     FUN_0022b690_2895a0(0);
@@ -252,17 +252,17 @@ void FUN_L00_002895a0(void) {
                 s->x = FUN_001f9dc8_2895a0(a) * FUN_001f9de0_2895a0(b) * 50.0f;
                 s->y = FUN_001f9de0_2895a0(a) * FUN_001f9de0_2895a0(b) * 50.0f;
                 s->z = FUN_001f9dc8_2895a0(b) * FUN_001f9dc8_2895a0(b) * 36.0f + 16.0f;
-                t16 = FUN_00213260_2895a0(0x18);
-                t18 = FUN_00213260_2895a0(0x20) << 24;
+                color_channel_offset = FUN_00213260_2895a0(0x18);
+                color_high_byte_offset = FUN_00213260_2895a0(0x20) << 24;
                 {
                     u32 u, w;
                     if ((FUN_001160d8_2895a0() >> 16) & 1) {
-                        u = (t16 << 16) + 0x30505050;
-                        w = t18 + u;
+                        u = (color_channel_offset << 16) + 0x30505050;
+                        w = color_high_byte_offset + u;
                     } else {
-                        u = (t16 << 8) + 0x30505050;
-                        w = t18 + u;
-                        w |= t16;
+                        u = (color_channel_offset << 8) + 0x30505050;
+                        w = color_high_byte_offset + u;
+                        w |= color_channel_offset;
                     }
                     s->c.w = w;
                 }
