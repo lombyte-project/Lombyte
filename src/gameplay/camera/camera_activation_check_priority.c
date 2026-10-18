@@ -29,6 +29,11 @@ extern CamPrioHook D_001E8C00[];
 int camera_activation_check_priority(void *cur, void *other) __asm__("FUN_001ec210");
 
 int camera_activation_check_priority(void *cur, void *other) {
+    enum {
+        CAMERA_COMPARE_ACCEPT = 1,
+        CAMERA_ACTIVATION_BY_PRIORITY = 0,
+        CAMERA_ACTIVATION_IN_CLIP_VOLUME = 4
+    };
     char *c = (char *)cur;
     char *o = (char *)other;
     unsigned char *state = (unsigned char *)(c + 0x74);
@@ -42,7 +47,7 @@ int camera_activation_check_priority(void *cur, void *other) {
             switch (fn(cur, other)) {
             case -1:
                 return 0;
-            case 1:
+            case CAMERA_COMPARE_ACCEPT:
                 return 1;
             }
         }
@@ -54,7 +59,7 @@ int camera_activation_check_priority(void *cur, void *other) {
             return 0;
         }
         /* fallthrough */
-    case 0:
+    case CAMERA_ACTIVATION_BY_PRIORITY:
         if (o == 0) {
             return 1;
         }
@@ -65,7 +70,7 @@ int camera_activation_check_priority(void *cur, void *other) {
             return 1;
         }
         break;
-    case 4: {
+    case CAMERA_ACTIVATION_IN_CLIP_VOLUME: {
         char *p = (char *)D_0015EF90[*(short *)(c + 0x84)].unk1C;
 
         if (o != 0 && *(short *)(o + 0x7E) == 0 && !(state[8] > *(unsigned char *)(o + 0x7C))) {
