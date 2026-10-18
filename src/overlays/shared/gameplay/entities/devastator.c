@@ -2446,10 +2446,6 @@ void visibomb_missile_update(struct Moby *m) {
     }
     if (d->f14 != 0) func_L00_002ECAF8_2b6140(d->f14, m);
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002b6bc8.s", FUN_L00_002b6bc8);
-#else
-#endif
 typedef struct {
     f32 x;
     f32 y;
@@ -2505,7 +2501,6 @@ extern s32 D_L00_001614CC;
 extern s32 D_L00_001614D4;
 extern s32 D_0015EEA4;
 extern s32 D_L00_0015F5CC;
-#ifdef NON_MATCHING
 extern s32 FUN_L00_00257b50_b6bc8(s32) __asm__("FUN_L00_00257b50");
 extern u8 *FUN_L00_0025c338_b6bc8(Moby *) __asm__("FUN_L00_0025c338");
 extern f32 FUN_001ff488_b6bc8(void *, void *) __asm__("FUN_001f9b80");
@@ -2518,7 +2513,6 @@ extern s32 FUN_001fef20_b6bc8(s32) __asm__("FUN_001f96f8");
 extern Moby *D_001ABA00_b6bc8[] __asm__("D_L00_001ABA00");
 extern s16 D_L00_001B07B0[] __asm__("D_L00_001B07B0");
 extern u8 *D_0015FFD8_b6bc8 __asm__("D_L00_0015FFD8");
-extern f32 D_0013F3D0_b6bc8[] __asm__("D_0013F3D0");
 
 s32 FUN_L00_002b6bc8(Moby *m, f32 radius) {
     u128 velocity __attribute__((aligned(16)));
@@ -2526,7 +2520,7 @@ s32 FUN_L00_002b6bc8(Moby *m, f32 radius) {
     Moby *other;
     u8 *state;
     Vars *vars;
-    struct HeroMotion *motion;
+    struct Hero *player;
     s32 limit;
     s32 count = 0;
     s32 i;
@@ -2541,10 +2535,11 @@ s32 FUN_L00_002b6bc8(Moby *m, f32 radius) {
     if (other != 0) {
         i = 0;
         do {
-            /* Fakematch: the extra block brings the draft closer to retail's scheduling. */
+            /* Fakematch: the extra block keeps retail's scheduling of the moby lookup. */
             do { state = FUN_L00_0025c338_b6bc8(other); } while (0);
             if (state != 0) {
-                motion = &hero.motion;
+                /* Fakematch: &hero through the motion label keeps retail's &hero + 0x98 load below. */
+                player = (struct Hero *)(D_0013F3D0 - 0x80);
                 distance = FUN_001ff488_b6bc8(&pos, (u8 *)other + 0x10);
                 if (distance < 12.0f &&
                     ((u16)(*(u16 *)((u8 *)other + 0xa6) - 500) < 2 ||
@@ -2568,8 +2563,7 @@ s32 FUN_L00_002b6bc8(Moby *m, f32 radius) {
                     struct Hero *g = &hero;
                     angle = FUN_001ff8b0_b6bc8(*(f32 *)((u8 *)other + 0x10) - g->motion.pos.f[0],
                                                *(f32 *)((u8 *)other + 0x14) - g->motion.pos.f[1]);
-                    angle = FUN_002001f0_b6bc8(
-                        motion->rot.f[2], angle);
+                    angle = FUN_002001f0_b6bc8(player->motion.rot.f[2], angle);
                     if (angle < 0.9599311f) {
                         Moby *current = *(Moby **)(state + 0x18);
                         if (current == 0 || distance < FUN_001ff488_b6bc8((u8 *)current + 0x10, (u8 *)other + 0x10)) {
@@ -2601,7 +2595,6 @@ s32 FUN_L00_002b6bc8(Moby *m, f32 radius) {
     }
     return count;
 }
-#endif
 
 
 void taunter_update(Moby *m) __asm__("FUN_L00_002b6f10");
