@@ -1629,6 +1629,15 @@ extern ShipLevelEntry D_L17_0016DA80[];
 extern ShipShake D_L17_00167580;
 void fighter_jet_update(ShipMoby *moby) __asm__("FUN_L17_002ed018");
 void fighter_jet_update(ShipMoby *moby) {
+    enum {
+        FIGHTER_JET_STATE_INITIALIZE = 0,
+        FIGHTER_JET_STATE_WAIT_FOR_BOARDING = 1,
+        FIGHTER_JET_STATE_BOARDING_FADE = 2,
+        FIGHTER_JET_STATE_PILOTED_FLIGHT = 4,
+        FIGHTER_JET_STATE_DISMOUNT = 5,
+        FIGHTER_JET_STATE_DEATH_RESPAWN_DELAY = 7,
+        FIGHTER_JET_STATE_FADE_THEN_REMOVE = 9
+    };
     ShipVars *v;
     ShipHit *hit;
     W4 dir;
@@ -1694,7 +1703,7 @@ void fighter_jet_update(ShipMoby *moby) {
             }
         }
         switch (moby->state) {
-        case 0:
+        case FIGHTER_JET_STATE_INITIALIZE:
             moby->state = 1;
             v->b60 = 0;
             moby->scale = *(float *)(moby->pclass + 0x24);
@@ -1726,7 +1735,7 @@ void fighter_jet_update(ShipMoby *moby) {
             FUN_L17_00253a90(0x325, 1, 1, -1);
             v->i124 = -1;
             break;
-        case 1: {
+        case FIGHTER_JET_STATE_WAIT_FOR_BOARDING: {
             struct Hero *g = &hero;
             board = jet_distance(moby, (ShipCamera *)g->moby) < D_L17_00161FE0 &&
                     FUN_00215130(7, 0x53E4) != 0 && (*(int *)D_0013CAE4_ed & 0x10);
@@ -1741,7 +1750,7 @@ void fighter_jet_update(ShipMoby *moby) {
             jet_animate(moby, D_L17_00162054 * D_L17_0016209C);
             break;
         }
-        case 2:
+        case FIGHTER_JET_STATE_BOARDING_FADE:
             FUN_00213ed8(&v->fade, 1.0f, frame_time * 4.0f);
             D_L17_0015F3FC = v->fade;
             if (v->fade == 1.0f) {
@@ -1801,7 +1810,7 @@ void fighter_jet_update(ShipMoby *moby) {
                 moby->state = 4;
             }
             break;
-        case 4:
+        case FIGHTER_JET_STATE_PILOTED_FLIGHT:
             force_help_message(6, 0);
             D_L17_0015F608 = 2;
             e = D_0013E550_ed + v->voice * 0x70;
@@ -1825,7 +1834,7 @@ void fighter_jet_update(ShipMoby *moby) {
                 }
             }
             break;
-        case 5: {
+        case FIGHTER_JET_STATE_DISMOUNT: {
             char *p;
             struct Hero *g = &hero;
             g->unk20A5 = 0;
@@ -1861,7 +1870,7 @@ void fighter_jet_update(ShipMoby *moby) {
             D_L17_0015F3FC = 0.99f;
             break;
         }
-        case 7:
+        case FIGHTER_JET_STATE_DEATH_RESPAWN_DELAY:
             force_help_message(6, 0);
             D_L17_0015F608 = 2;
             if (fast_dec_timer_s16(&v->hit_timer)) {
@@ -1955,7 +1964,7 @@ void fighter_jet_update(ShipMoby *moby) {
             break;
         case 10:
             break;
-        case 9:
+        case FIGHTER_JET_STATE_FADE_THEN_REMOVE:
             if (v->fade == 0.0f) {
                 mark_moby_for_removal((struct Obj *)moby);
                 return;
