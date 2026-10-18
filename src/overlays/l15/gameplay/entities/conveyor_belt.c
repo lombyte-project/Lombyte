@@ -251,7 +251,7 @@ extern void mine_blast_mobys(void *, void *, void *, int, int, int, int, int, fl
 
 void poison_vessel_update(Moby_2E9358 *moby) __asm__("FUN_L15_002e7f68");
 void poison_vessel_update(Moby_2E9358 *moby) {
-    Vec_2E9358 s20;
+    Vec_2E9358 previous_position;
     Vec_2E9358 s30;
     Vec_2E9358 s40;
     Data_2E9358 *data = moby->data;
@@ -260,7 +260,7 @@ void poison_vessel_update(Moby_2E9358 *moby) {
     int ret;
     Res_2E9358 *r;
 
-    s20.q = moby->pos;
+    previous_position.q = moby->pos;
     clear_u64_value(&s30);
     if (coll_sphere(0.5f, &moby->pos, 1, moby)) {
         if (D_L15_001744D8_2E9358 == 0 || FUN_L00_002603d0(D_L15_001744D8_2E9358) == 0) {
@@ -278,7 +278,7 @@ void poison_vessel_update(Moby_2E9358 *moby) {
     case 0:
         data->f8 = data->f8 - D_L15_00161FBC * frame_time_sq;
         func_L00_001FF240_2E9358(&s40, &moby->pos, data);
-        if (collision_line(&s20, &moby->pos, 0x10, moby, 0)) {
+        if (collision_line(&previous_position, &moby->pos, 0x10, moby, 0)) {
             if (((Tb_2E9358 *)D_L15_001744C0_2E9358)->f18 != 0 && FUN_L00_002603d0(((Tb_2E9358 *)D_L15_001744C0_2E9358)->f18) != 0) {
                 data->target = (Moby_2E9358 *)((Tb_2E9358 *)D_L15_001744C0_2E9358)->f18;
                 moby->state = 1;
@@ -304,7 +304,7 @@ void poison_vessel_update(Moby_2E9358 *moby) {
                 p20 = FUN_L00_002603d0(D_L15_001744D8_2E9358);
                 if (p20 != 0) {
                     func_L00_00261478_2E9358(moby, data->target, &moby->pos, &moby->v40, &moby->pos, &moby->v40);
-                    subtract_vector_xyz(&s40, &moby->pos, &s20);
+                    subtract_vector_xyz(&s40, &moby->pos, &previous_position);
                     *(OvlQuad *)data = s40.q;
                 }
             }
