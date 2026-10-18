@@ -2121,10 +2121,10 @@ void FUN_L15_002f88e8(char *m) {
     char *s = *(char **)(D_L15_0015EF50 + *(short *)(m + 0x84) * 32 + 0x1C);
     char *o = D_L15_001600EC + (*(int *)(s + 0x48) << 7);
     int done;
-    int t1;
-    int t2;
-    int t3;
-    int t4;
+    int hold_start_frames;
+    int cone_check_delay_frames;
+    int cycle_reset_frames;
+    int spin_ramp_frames;
     float r;
     float a;
     if (FUN_L00_002e83c0(m) <= 0) {
@@ -2139,31 +2139,31 @@ void FUN_L15_002f88e8(char *m) {
     *(int *)(*(char **)(D_L15_00167400_lui + 0x70) + 0x230) = 2;
     done = 1;
     (*(short *)(s + 0x20))++;
-    t1 = frames_s(300);
-    t2 = frames_s(400);
-    t3 = frames_s(560);
-    t4 = frames_s(200);
+    hold_start_frames = frames_s(300);
+    cone_check_delay_frames = frames_s(400);
+    cycle_reset_frames = frames_s(560);
+    spin_ramp_frames = frames_s(200);
     FUN_L02_002f6598(1.0f, 12.0f, 0.11f);
     if (D_0013C940_s.x != 0.0f)
-        *(short *)(s + 0x20) = t1;
+        *(short *)(s + 0x20) = hold_start_frames;
     else if (D_0013C940_s.y != 0.0f)
-        *(short *)(s + 0x20) = t1;
-    if (*(short *)(s + 0x20) >= t1) {
-        if (++*(int *)(s + 0x3C) >= t2 && FUN_L15_002f8698(m, 30.0f, 0.0f))
-            *(short *)(s + 0x20) = t3;
+        *(short *)(s + 0x20) = hold_start_frames;
+    if (*(short *)(s + 0x20) >= hold_start_frames) {
+        if (++*(int *)(s + 0x3C) >= cone_check_delay_frames && FUN_L15_002f8698(m, 30.0f, 0.0f))
+            *(short *)(s + 0x20) = cycle_reset_frames;
         else
             done = 0;
     }
-    if (*(short *)(s + 0x20) >= t3) {
+    if (*(short *)(s + 0x20) >= cycle_reset_frames) {
         done = 1;
         *(int *)(s + 0x3C) = 0;
         *(short *)(s + 0x20) = 1;
     }
-    if (t4 < *(short *)(s + 0x20) && *(short *)(s + 0x20) < t1) {
-        *(int *)(s + 0x3C) = t1;
-        *(short *)(s + 0x20) = t4;
+    if (spin_ramp_frames < *(short *)(s + 0x20) && *(short *)(s + 0x20) < hold_start_frames) {
+        *(int *)(s + 0x3C) = hold_start_frames;
+        *(short *)(s + 0x20) = spin_ramp_frames;
     }
-    r = itof_s(*(short *)(s + 0x20)) / itof_s(t4);
+    r = itof_s(*(short *)(s + 0x20)) / itof_s(spin_ramp_frames);
     a = *(float *)s * DEG_TO_RAD * r;
     if (done)
         FUN_L00_002e8970(o + 0x30, a, 0.0f);
