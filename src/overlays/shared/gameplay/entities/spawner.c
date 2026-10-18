@@ -280,28 +280,28 @@ extern void FUN_L00_0025d458_c(void *, void *) __asm__("FUN_L00_0025d458");
 extern void FUN_L00_0025d538_c(void *, void *) __asm__("FUN_L00_0025d538");
 extern void FUN_L00_00257470_c(void *, int, int) __asm__("FUN_L00_00257470");
 
-void FUN_L09_0030a9e8(unsigned char *a0, char *a1) {
+void FUN_L09_0030a9e8(unsigned char *moby, char *spawner_vars) {
     char *r;
     int st;
     float f;
 
-    r = FUN_L00_0025a420_c(a0, 0xC30000, 0);
-    FUN_L00_0025a478_c(a0, r, a1 + 0x20, 0, &st, 0, 0, 4);
+    r = FUN_L00_0025a420_c(moby, 0xC30000, 0);
+    FUN_L00_0025a478_c(moby, r, spawner_vars + 0x20, 0, &st, 0, 0, 4);
     if (st >= 2) {
-        f = *(float *)(a1 + 0x20) - *(float *)(r + 0x2C);
-        *(float *)(a1 + 0x20) = f;
+        f = *(float *)(spawner_vars + 0x20) - *(float *)(r + 0x2C);
+        *(float *)(spawner_vars + 0x20) = f;
         if (0.0f < f) {
-            a1[0x67] = 0x5A;
-            FUN_L00_0025d458_c(a0, a1 + 0x60);
+            spawner_vars[0x67] = 0x5A;
+            FUN_L00_0025d458_c(moby, spawner_vars + 0x60);
         } else {
-            FUN_L00_00257470_c(a0, 0, -1);
-            a0[0x20] = 2;
-            a1[0x67] = 0x78;
-            FUN_L00_0025d458_c(a0, a1 + 0x60);
+            FUN_L00_00257470_c(moby, 0, -1);
+            moby[0x20] = 2;
+            spawner_vars[0x67] = 0x78;
+            FUN_L00_0025d458_c(moby, spawner_vars + 0x60);
         }
     }
-    a0[0xA4] = 0xFF;
-    FUN_L00_0025d538_c(a0, a1 + 0x60);
+    moby[0xA4] = 0xFF;
+    FUN_L00_0025d538_c(moby, spawner_vars + 0x60);
 }
 /* Counts the live level-0x75E mobys among the 20 slots at +0xB0 and returns the last slot not counted. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C6B30.c: func_L09_0030BEE8), where it is exact; names translated to the US level program. */
