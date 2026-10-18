@@ -1836,21 +1836,21 @@ float FUN_L11_00311a88(void *moby_v, void *o_v) {
 extern int D_L11_0015FFD8; /* no foreign declaration */
 extern short *D_L11_001AC240[];
 
-void FUN_L11_00311be8(void *moby, void *a1, void *a2) {
+void FUN_L11_00311be8(void *moby, void *active_moby_count, void *visible_moby_count) {
     char *d = *(char **)((char *)moby + 0x78);
     int type = *(short *)(d + 0x108);
     short *p;
-    *(unsigned short *)a1 = 0;
-    *(unsigned short *)a2 = 0;
+    *(unsigned short *)active_moby_count = 0;
+    *(unsigned short *)visible_moby_count = 0;
     p = D_L11_001AC240[type];
     if (p == 0)
         return;
     do {
         int off = (*(unsigned short *)p & 0x7FFF) << 8;
         if (((char *)D_L11_0015FFD8)[off + 0x20] >= 0) {
-            (*(unsigned short *)a1)++;
+            (*(unsigned short *)active_moby_count)++;
             if (((unsigned char *)D_L11_0015FFD8)[off + 0x31] != 0) {
-                (*(unsigned short *)a2)++;
+                (*(unsigned short *)visible_moby_count)++;
             }
         }
     } while (*p++ >= 0);
