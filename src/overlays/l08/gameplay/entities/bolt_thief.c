@@ -62,7 +62,7 @@ extern void FUN_L00_00250df8(void *);
 
 void *FUN_L08_002e1c98(struct Moby *parent, int oClass, int joint, int pjoint) {
     unsigned char *m = func_0020D348_m(oClass);
-    float v0[4], v10[4];
+    float child_joint_position[4], parent_joint_position[4];
     if (m != 0) {
         m[0x30] = 0xFF;
         *(short *)(m + 0x32) = 0xFF;
@@ -70,9 +70,9 @@ void *FUN_L08_002e1c98(struct Moby *parent, int oClass, int joint, int pjoint) {
         *(unsigned short *)(m + 0x34) |= 0x4000;
         *(long *)(m + 0x38) = *(long *)(*(char **)(D_0013E533 + 0x2E9D) + 0x38);
         qcopy(m + 0x40, &parent->rot);
-        moby_point_position(m, joint, v0);
-        moby_point_position(parent, pjoint, v10);
-        fast_vec_sub(m + 0x10, v10, v0);
+        moby_point_position(m, joint, child_joint_position);
+        moby_point_position(parent, pjoint, parent_joint_position);
+        fast_vec_sub(m + 0x10, parent_joint_position, child_joint_position);
         FUN_L00_00250df8(m);
     }
     return m;
@@ -165,7 +165,7 @@ extern void FUN_L00_00250df8(void *);
 extern float D_L08_00161D28 __attribute__((sda));
 void FUN_L08_002e8ba0(struct Moby *a) {
     char *data = (char *)a->pvars;
-    float v0[4], v10[4], v20[4];
+    float part_joint_position[4], anchor_joint_position[4], joint_alignment_offset[4];
     char *base = data + 0x60;
     int i;
     for (i = 0; i < 12; i++) {
@@ -173,10 +173,10 @@ void FUN_L08_002e8ba0(struct Moby *a) {
         char *m = (char *)e[-3];
         if (m != 0) {
             *(float *)(m + 0x48) = a->rot.z;
-            moby_point_position(m, e[-1], v0);
-            moby_point_position((void *)e[-2], e[0], v10);
-            fast_vec_sub(v20, v10, v0);
-            fast_vec_add(m + 0x10, m + 0x10, v20);
+            moby_point_position(m, e[-1], part_joint_position);
+            moby_point_position((void *)e[-2], e[0], anchor_joint_position);
+            fast_vec_sub(joint_alignment_offset, anchor_joint_position, part_joint_position);
+            fast_vec_add(m + 0x10, m + 0x10, joint_alignment_offset);
         }
     }
     if (*(int *)(data + 0x90) != 0) {
@@ -198,9 +198,9 @@ extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern float D_L08_00161D38 __attribute__((sda));
 void FUN_L08_002e9a18(struct Moby *arg) {
     char *data = (char *)arg->pvars;
-    float v0[4];
-    float v1[4];
-    float v2[4];
+    float part_joint_position[4];
+    float anchor_joint_position[4];
+    float joint_alignment_offset[4];
     int i;
     char *p;
     char *parts = data + 0x60;
@@ -209,10 +209,10 @@ void FUN_L08_002e9a18(struct Moby *arg) {
         char *part = *(char **)(e - 0xC);
         if (part != 0) {
             *(float *)(part + 0x48) = arg->rot.z;
-            moby_point_position(part, *(int *)(e - 4), v0);
-            moby_point_position(*(void **)(e - 8), *(int *)e, v1);
-            fast_vec_sub(v2, v1, v0);
-            fast_vec_add(part + 0x10, part + 0x10, v2);
+            moby_point_position(part, *(int *)(e - 4), part_joint_position);
+            moby_point_position(*(void **)(e - 8), *(int *)e, anchor_joint_position);
+            fast_vec_sub(joint_alignment_offset, anchor_joint_position, part_joint_position);
+            fast_vec_add(part + 0x10, part + 0x10, joint_alignment_offset);
         }
     }
     if (*(char **)(data + 0x90) != 0) {
@@ -1074,10 +1074,10 @@ extern char *func_00219780_2E2A38(void *, void *, void *, int, int, int, int, in
 
 void FUN_L08_002e16c0(Moby_2E2A38 *m) {
     Data_2E2A38 *d = m->data;
-    float v10[4];
+    float particle_primary_vector[4];
     Pair_2E2A38 tab;
-    float v30[4];
-    float a40[4];
+    float particle_secondary_vector[4];
+    float particle_spawn_position[4];
     int i;
 
     switch (m->state) {
@@ -1100,7 +1100,7 @@ void FUN_L08_002e16c0(Moby_2E2A38 *m) {
             int *q;
             int a;
             int b;
-            clear_u64_value(v10);
+            clear_u64_value(particle_primary_vector);
             tab = D_L08_00161C30;
             q = &tab.v[random_integer_below_c(2)];
             {
@@ -1111,7 +1111,7 @@ void FUN_L08_002e16c0(Moby_2E2A38 *m) {
                 int lo = scale_game_frames_alt(25);
                 b = FUN_L00_00257b90(lo, scale_game_frames_alt(30));
             }
-            func_L00_0026B890_2E2A38(m->pos, v10, 0x2F3F3F7F, *q, a, b, 0, 0, 400000.0f,
+            func_L00_0026B890_2E2A38(m->pos, particle_primary_vector, 0x2F3F3F7F, *q, a, b, 0, 0, 400000.0f,
                                      random_float_between_c2(8.0f, 16.0f) * D_0015ED6C_gp);
         }
         if (m->pos[2] < 15.2f) {
@@ -1120,21 +1120,21 @@ void FUN_L08_002e16c0(Moby_2E2A38 *m) {
                 int c1;
                 int c2;
                 int c3;
-                qcopy(a40, m->pos);
-                a40[0] += random_float_between_c2(-3.0f, 3.0f);
-                a40[1] += random_float_between_c2(-3.0f, 3.0f);
-                v10[2] = D_L08_00161C0C * D_0015ED6C_gp;
-                v10[0] += fast_cos(ang) * D_L08_00161C14;
-                v10[1] += fast_sin(ang) * D_L08_00161C14;
-                v30[2] = D_L08_00161C10 * D_0015ED6C_gp;
-                v30[0] += fast_cos(ang) * D_L08_00161C18;
-                v30[1] += fast_sin(ang) * D_L08_00161C18;
-                v10[3] = D_L08_00161C28;
-                v30[3] = D_L08_00161C2C;
+                qcopy(particle_spawn_position, m->pos);
+                particle_spawn_position[0] += random_float_between_c2(-3.0f, 3.0f);
+                particle_spawn_position[1] += random_float_between_c2(-3.0f, 3.0f);
+                particle_primary_vector[2] = D_L08_00161C0C * D_0015ED6C_gp;
+                particle_primary_vector[0] += fast_cos(ang) * D_L08_00161C14;
+                particle_primary_vector[1] += fast_sin(ang) * D_L08_00161C14;
+                particle_secondary_vector[2] = D_L08_00161C10 * D_0015ED6C_gp;
+                particle_secondary_vector[0] += fast_cos(ang) * D_L08_00161C18;
+                particle_secondary_vector[1] += fast_sin(ang) * D_L08_00161C18;
+                particle_primary_vector[3] = D_L08_00161C28;
+                particle_secondary_vector[3] = D_L08_00161C2C;
                 c1 = truncate_float_to_s32_c2(FUN_001f96b0_c(random_float_between_c2((float)D_L08_00161C1C, (float)(D_L08_00161C1C * 2))));
                 c2 = truncate_float_to_s32_c2(FUN_001f96b0_c(random_float_between_c2((float)D_L08_00161C20, (float)(D_L08_00161C20 * 2))));
                 c3 = truncate_float_to_s32_c2(FUN_001f96b0_c(random_float_between_c2((float)D_L08_00161C24, (float)(D_L08_00161C24 * 2))));
-                func_00219780_2E2A38(a40, v10, v30, D_L08_00161C04, D_L08_00161C08, c1, c2, c3, -1);
+                func_00219780_2E2A38(particle_spawn_position, particle_primary_vector, particle_secondary_vector, D_L08_00161C04, D_L08_00161C08, c1, c2, c3, -1);
             }
             m->state = 3;
         }

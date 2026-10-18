@@ -542,27 +542,27 @@ extern u8 *D_L00_001B215C __attribute__((section(".data")));
 P_2725d8 *FUN_L00_002678b8_c2(s32) __asm__("FUN_L00_002678b8");
 s32 FUN_001fa6d0(f32);
 void add_vector_xyz_cf(u8 *, u8 *, void *) __asm__("FUN_L00_0024f7c8");
-P_2725d8 *FUN_L00_002725d8(u8 *a0, u8 *a1, s32 a2, s32 a3, f32 a4, f32 a5) {
+P_2725d8 *FUN_L00_002725d8(u8 *owner, u8 *attachment_point_selector, s32 color, s32 a3, f32 a4, f32 a5) {
     P_2725d8 *p = FUN_L00_002678b8_c2(0x37);
     /* Fakematch: the dead update gives a0 and a3 retail's saved registers. */
     a3++;
     a3--;
     if (p) {
         S_2725d8 *s;
-        p->w4 = a2;
+        p->w4 = color;
         p->wC = a3;
         p->b9 = FUN_001fa6d0(0.4f) + 0x20;
         p->b3 = 0x48;
         p->b1 = 3;
         p->b2 = *D_L00_001B215C;
-        add_vector_xyz_cf(a0, a1, p->v10);
+        add_vector_xyz_cf(owner, attachment_point_selector, p->v10);
         qcopy(p->v20, p->v10);
         p->unk2C = a5;
         *(f32 *)((u8 *)p + 0x1C) = a4;
         s = &p->s;
-        p->s.o = a0;
-        s->k = *(s16 *)(a0 + 0xA6);
-        s->b = a1;
+        p->s.o = owner;
+        s->k = *(s16 *)(owner + 0xA6);
+        s->b = attachment_point_selector;
         s->f = a4;
     }
     return p;
@@ -1062,7 +1062,7 @@ extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern unsigned char *D_L00_001B2180[];
 extern unsigned char D_0013F3D0_c[] __asm__("D_0013F3D0");
 
-unsigned char *FUN_L00_002738e8(void *pos, void *vel, float scale, int life, float f1, int col, float f2, int a4, int big) {
+unsigned char *FUN_L00_002738e8(void *pos, void *vel, float scale, int life, float f1, int col, float f2, int secondary_color, int big) {
     unsigned char *r = p27fe00_alloc(0x40);
     unsigned char *u;
     if (r != 0) {
@@ -1083,7 +1083,7 @@ unsigned char *FUN_L00_002738e8(void *pos, void *vel, float scale, int life, flo
         qcopy(u, vel);
         *(float *)(u + 0x10) = f1;
         *(float *)(u + 0x14) = f2;
-        *(int *)(u + 0x18) = a4;
+        *(int *)(u + 0x18) = secondary_color;
     }
     return r;
 }
@@ -1746,8 +1746,8 @@ extern void FUN_L00_002634f8_275320(void *) __asm__("FUN_L00_002634f8");
 
 void FUN_L00_00275320(O_275320 *o) {
     V_275320 tmp;
-    V_275320 t2;
-    V_275320 t3;
+    V_275320 ground_probe_position;
+    V_275320 ground_recheck_position;
     V_275320 *vel = &o->vel;
     float h;
     int ix;
@@ -1772,17 +1772,17 @@ void FUN_L00_00275320(O_275320 *o) {
     FUN_001f9a10_275320(&o->pos, &o->pos, &tmp);
     FUN_001f9a10_275320(&o->pos, &o->pos, particle_drift);
     if (ix != (int)o->pos.f[0] || iy != (int)o->pos.f[1]) {
-        t2.q = o->pos.q;
-        h = ground_height_at(&t2);
+        ground_probe_position.q = o->pos.q;
+        h = ground_height_at(&ground_probe_position);
         if (h < particle_min_ground) {
             h = particle_min_ground;
         } else {
-            t3.q = o->pos.q;
-            h = ground_height_at(&t3);
+            ground_recheck_position.q = o->pos.q;
+            h = ground_height_at(&ground_recheck_position);
         }
         if (o->pos.f[2] < h) {
-            t2.q = o->pos.q;
-            FUN_L00_002634f8_275320(&t2);
+            ground_probe_position.q = o->pos.q;
+            FUN_L00_002634f8_275320(&ground_probe_position);
             free_effect_particle(o);
             return;
         }

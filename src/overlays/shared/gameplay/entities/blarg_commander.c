@@ -9,7 +9,7 @@ extern char *FUN_0020c4f8_8670(int) __asm__("FUN_0020c4f8");
 extern void FUN_001f9810_8670(void *, int) __asm__("FUN_001f9810");
 extern void FUN_L00_00250df8_8670(void *) __asm__("FUN_L00_00250df8");
 
-char *FUN_L12_00308670(char *a0) {
+char *FUN_L12_00308670(char *source_object) {
     unsigned char *m = (unsigned char *)FUN_0020c4f8_8670(0x55B);
     if (m != 0) {
         char *d = *(char **)(m + 0x78);
@@ -17,9 +17,9 @@ char *FUN_L12_00308670(char *a0) {
         *(short *)(m + 0x32) = 0x7F;
         m[0x31] = 1;
         m[0x20] = 0;
-        *(OvlQuad *)(m + 0x10) = *(OvlQuad *)(a0 + 0x10);
-        *(OvlQuad *)(m + 0x40) = *(OvlQuad *)(a0 + 0x40);
-        *(char **)(m + 0xB8) = a0;
+        *(OvlQuad *)(m + 0x10) = *(OvlQuad *)(source_object + 0x10);
+        *(OvlQuad *)(m + 0x40) = *(OvlQuad *)(source_object + 0x40);
+        *(char **)(m + 0xB8) = source_object;
         FUN_001f9810_8670(d, 0x20);
         *(int *)(d + 0x10) = (int)(d + 0x20);
         FUN_L00_00250df8_8670(m);
@@ -62,7 +62,7 @@ void FUN_L12_00308708(void *unused, struct Moby *m) {
     LobbedVars *d = (LobbedVars *)m->pvars;
     float dir[4];
     float ang;
-    float t1, t2;
+    float rise_sqrt_term, frame_rise_sqrt_term;
     float a;
     float g;
 
@@ -82,10 +82,10 @@ void FUN_L12_00308708(void *unused, struct Moby *m) {
     g = frame_time_sq;
     d->rise = g * 40.0f;
     d->fall = g * 100.0f;
-    t1 = fast_sqrt(d->rise * 4.0f);
-    t2 = fast_sqrt(frame_time_sq * 40.0f * 4.0f);
+    rise_sqrt_term = fast_sqrt(d->rise * 4.0f);
+    frame_rise_sqrt_term = fast_sqrt(frame_time_sq * 40.0f * 4.0f);
     a = frame_time_sq * 40.0f;
-    d->launch_speed = 3.0f / ((t1 + t1) / a) + frame_time_sq * 100.0f * 0.5f * ((t2 + t2) / a);
+    d->launch_speed = 3.0f / ((rise_sqrt_term + rise_sqrt_term) / a) + frame_time_sq * 100.0f * 0.5f * ((frame_rise_sqrt_term + frame_rise_sqrt_term) / a);
     d->unk3C = fast_sqrt(a * 4.0f);
     d->unk5D = 0;
     d->unk44 = 1;

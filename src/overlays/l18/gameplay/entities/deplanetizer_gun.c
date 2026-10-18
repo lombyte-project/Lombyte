@@ -697,18 +697,18 @@ extern char *func_L00_0026DEA0_c(void *, int, void *, float, float, float, float
                                  int) __asm__("FUN_L00_0026d000");
 
 void FUN_L18_002fa250(void *a, void *b, void *c, float f0, float f1) {
-    char v0[16];
-    char v1[16];
+    char first_effect_position[16];
+    char second_effect_position[16];
     int i;
     char *m;
     char *p;
     int x;
     int k2, k7f;
-    qcopy(v0, a);
-    qcopy(v1, b);
+    qcopy(first_effect_position, a);
+    qcopy(second_effect_position, b);
     for (i = 1; i >= 0; i--) {
         m = (char *)random_integer_below(16);
-        m = func_L00_0026DEA0_c(v0, random_integer_below(2) ? -(int)m : (int)m, c, 0.0f, 1.0f, 0.9f,
+        m = func_L00_0026DEA0_c(first_effect_position, random_integer_below(2) ? -(int)m : (int)m, c, 0.0f, 1.0f, 0.9f,
                                 f0, 0x7F204080);
         p = m + 0x20;
         if (m) {
@@ -726,7 +726,7 @@ void FUN_L18_002fa250(void *a, void *b, void *c, float f0, float f1) {
     do {
         int y = x;
         x = -x;
-        m = func_L00_0026DEA0_c(v1, y, c, 0.0f, 1.0f, 0.97f, f1, 0x7FFFFFFF);
+        m = func_L00_0026DEA0_c(second_effect_position, y, c, 0.0f, 1.0f, 0.97f, f1, 0x7FFFFFFF);
         p = m + 0x20;
         if (m) {
             m[9] = func_001FA898_r(4.0f) + 0x40;
@@ -974,7 +974,7 @@ void gadgebot_update(unsigned char *m) __asm__("FUN_L18_002fbb98");
 void gadgebot_update(unsigned char *m) {
     char tmp[16];
     unsigned char *e = *(unsigned char **)(m + 0x78);
-    unsigned char *s0;
+    unsigned char *moby_transform_ptr;
     FUN_L18_002fc100((struct Moby *)m);
     switch (m[0x20]) {
     case 0: {
@@ -1006,10 +1006,10 @@ void gadgebot_update(unsigned char *m) {
     case 1: {
         float a = 10.0f;
         float r;
-        s0 = m + 0x10;
+        moby_transform_ptr = m + 0x10;
         *(float *)(e + 0x1D8) = *(float *)(e + 0x1D8) - frame_time_sq * a;
-        add_vector_xyz(s0, s0, e + 0x1D0);
-        qcopy(tmp, s0);
+        add_vector_xyz(moby_transform_ptr, moby_transform_ptr, e + 0x1D0);
+        qcopy(tmp, moby_transform_ptr);
         ((float *)tmp)[2] += 1.0f;
         r = probe_ground_height(tmp, 0, 0.5f);
         if (*(float *)(m + 0x18) < r) {
@@ -1058,13 +1058,13 @@ void gadgebot_update(unsigned char *m) {
     }
     case 4: {
         float r, k, b, d;
-        s0 = m + 0x48;
+        moby_transform_ptr = m + 0x48;
         r = fast_arc_tan(*(float *)(e + 0x180) - *(float *)(m + 0x10),
                          *(float *)(e + 0x184) - *(float *)(m + 0x14));
         k = 6.2831855f;
         b = frame_time_sq * k;
         d = frame_time * k;
-        approach_angle((float *)s0, (float *)(e + 0x1E8), r, b, b, d);
+        approach_angle((float *)moby_transform_ptr, (float *)(e + 0x1E8), r, b, b, d);
         if (is_value_within_interpolated_window((char *)m, 14.0f))
             FUN_L00_002599e8(m, 0.5f, 1.0f, 1.0f, 1, 1, 0, 1, 0);
         if (m[0x70] & 2) {
@@ -1098,15 +1098,15 @@ void gadgebot_update(unsigned char *m) {
         *(unsigned short *)(m + 0x34) = (*(unsigned short *)(m + 0x34) | 0x41) & 0xEFFF;
         break;
     }
-    s0 = m + 0xC0;
-    vu_euler_rotation_basis(s0, m + 0x40);
+    moby_transform_ptr = m + 0xC0;
+    vu_euler_rotation_basis(moby_transform_ptr, m + 0x40);
     if (*(float *)(e + 0x1F4) != 0.0f) {
         float g;
         approach_value((float *)(e + 0x1F4), 0.0f, frame_time * 4.0f);
         g = 1.0f;
         scale_vector_xyz(m + 0xE0, m + 0xE0, *(float *)(e + 0x1F4) + g);
         g = g - *(float *)(e + 0x1F4);
-        scale_vector_xyz(s0, s0, g);
+        scale_vector_xyz(moby_transform_ptr, moby_transform_ptr, g);
         scale_vector_xyz(m + 0xD0, m + 0xD0, g);
         enqueue_callback_list_1(FUN_L18_002fc860, m);
     }

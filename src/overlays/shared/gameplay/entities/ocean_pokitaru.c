@@ -14,12 +14,12 @@ extern unsigned char D_0013D389[];
 extern char D_L11_00179B18[];
 extern char D_L11_0021A900[];
 extern int D_L11_0015F640;
-void FUN_L11_002cb790(char *a0) {
-    if (FUN_001f9b48_b7(a0 + 0x10, &hero.motion.pos) < 2.0f) {
+void FUN_L11_002cb790(char *moby) {
+    if (FUN_001f9b48_b7(moby + 0x10, &hero.motion.pos) < 2.0f) {
         D_0013D389[0] = 1;
         FUN_00116248_b7(D_L11_00179B18, D_L11_0021A900);
         D_L11_0015F640 = FUN_001f96f8_b7(0xB4);
-        FUN_0020c828_b7(a0);
+        FUN_0020c828_b7(moby);
     }
 }
 #define NOT_SDA
@@ -526,8 +526,8 @@ extern float wave_speed[2] __asm__("D_L11_00161DF8") __attribute__((sda));
 extern float tide_level_macro __asm__("D_L11_00161E18") __attribute__((section(".sdata")));
 /* Draws the level's water sheet: a fading edge strip, a far quad, and two scrolling layers of grid cells around the camera. */
 void FUN_L11_0030a908(struct Moby *moby) {
-    Vec4f v0;
-    Vec4f v1;
+    Vec4f scratch_vector;
+    Vec4f side_offset;
     Vec4f a;
     Vec4f b;
     Vec4f c[4];
@@ -535,7 +535,7 @@ void FUN_L11_0030a908(struct Moby *moby) {
     Vec4f d1;
     Quad_30a908 q;
     Data_30a908 *d = (Data_30a908 *)moby->pvars;
-    float s228 = ((Fog_30a908 *)D_L11_0016D440)->f228;
+    float saved_fog_228 = ((Fog_30a908 *)D_L11_0016D440)->f228;
     float s22C = ((Fog_30a908 *)D_L11_0016D440)->f22C;
     int i;
     int layer;
@@ -570,16 +570,16 @@ void FUN_L11_0030a908(struct Moby *moby) {
     FUN_001f9bf8_30a908(&a, &a, 1.0f);
     b.z = 0.0f;
     FUN_001f9bf8_30a908(&b, &b, 1.0f);
-    FUN_001f9bf8_30a908(&v0, &a, -75.0f);
-    FUN_001f9bf8_30a908(&v1, &b, -87.0f);
-    FUN_001f9a10_30a908(&c[0], &v0, &v1);
-    FUN_001f9bf8_30a908(&v1, &b, 87.0f);
-    FUN_001f9a10_30a908(&c[2], &v0, &v1);
-    FUN_001f9bf8_30a908(&v0, &a, d->f28);
-    FUN_001f9bf8_30a908(&v1, &b, -750.0f);
-    FUN_001f9a10_30a908(&c[1], &v0, &v1);
-    FUN_001f9bf8_30a908(&v1, &b, 750.0f);
-    FUN_001f9a10_30a908(&c[3], &v0, &v1);
+    FUN_001f9bf8_30a908(&scratch_vector, &a, -75.0f);
+    FUN_001f9bf8_30a908(&side_offset, &b, -87.0f);
+    FUN_001f9a10_30a908(&c[0], &scratch_vector, &side_offset);
+    FUN_001f9bf8_30a908(&side_offset, &b, 87.0f);
+    FUN_001f9a10_30a908(&c[2], &scratch_vector, &side_offset);
+    FUN_001f9bf8_30a908(&scratch_vector, &a, d->f28);
+    FUN_001f9bf8_30a908(&side_offset, &b, -750.0f);
+    FUN_001f9a10_30a908(&c[1], &scratch_vector, &side_offset);
+    FUN_001f9bf8_30a908(&side_offset, &b, 750.0f);
+    FUN_001f9a10_30a908(&c[3], &scratch_vector, &side_offset);
     for (i = 0; i < 4; i++) {
         Vec4f *p = &c[i];
         FUN_001f9a10_30a908(p, p, D_L11_001677C0_30a908);
@@ -591,22 +591,22 @@ void FUN_L11_0030a908(struct Moby *moby) {
     for (i = 0; i < 12; i += 2) {
         float f = FUN_001fa6c0_30a908(i) / 10.0f;
         int col = FUN_001fa6e0_30a908(d->f0, d->f4, FUN_001fa6c0_30a908(i) / t);
-        FUN_001f9a68_30a908(&v0, &d0, f);
+        FUN_001f9a68_30a908(&scratch_vector, &d0, f);
         D_L11_001D9E08[i] = col;
         D_L11_001DA310[i].u = 0.0f;
         D_L11_001DA310[i].v = 0.0f;
-        FUN_001f9a10_30a908(&v0, &v0, &c[0]);
-        D_L11_001D9B08[i].x = v0.x;
-        D_L11_001D9B08[i].y = v0.y;
-        D_L11_001D9B08[i].z = v0.z;
-        FUN_001f9a68_30a908(&v0, &d1, f);
+        FUN_001f9a10_30a908(&scratch_vector, &scratch_vector, &c[0]);
+        D_L11_001D9B08[i].x = scratch_vector.x;
+        D_L11_001D9B08[i].y = scratch_vector.y;
+        D_L11_001D9B08[i].z = scratch_vector.z;
+        FUN_001f9a68_30a908(&scratch_vector, &d1, f);
         D_L11_001D9E08[i + 1] = col;
         D_L11_001DA310[i + 1].u = 0.0f;
         D_L11_001DA310[i + 1].v = 0.0f;
-        FUN_001f9a10_30a908(&v0, &v0, &c[2]);
-        D_L11_001D9B08[i + 1].x = v0.x;
-        D_L11_001D9B08[i + 1].y = v0.y;
-        D_L11_001D9B08[i + 1].z = v0.z;
+        FUN_001f9a10_30a908(&scratch_vector, &scratch_vector, &c[2]);
+        D_L11_001D9B08[i + 1].x = scratch_vector.x;
+        D_L11_001D9B08[i + 1].y = scratch_vector.y;
+        D_L11_001D9B08[i + 1].z = scratch_vector.z;
     }
     func_L00_001FDE48_30a908(0xC, D_L11_001D9B08, D_L11_001D9E08, D_L11_001DA310, 1);
     q.z78 = FUN_001f44b8_30a908(0x16);
@@ -678,11 +678,11 @@ void FUN_L11_0030a908(struct Moby *moby) {
                     D_L11_001D9F08[i].y = y + d->f18 + ((Cam_30a908 *)D_L11_00167680)->y + 1.0f;
                     D_L11_001D9F08[i].z = tide_level_macro;
                     for (i = n; i < n + 4; i++) {
-                        v0.x = D_L11_001D9F08[i].x - ((Cam_30a908 *)D_L11_00167680)->x;
-                        v0.y = D_L11_001D9F08[i].y - ((Cam_30a908 *)D_L11_00167680)->y;
-                        v0.z = D_L11_001D9F08[i].z - ((Cam_30a908 *)D_L11_00167680)->z;
-                        v0.w = 1.0f;
-                        t = FUN_001f9b20_30a908(&v0) / (d->f18 * 2.0f);
+                        scratch_vector.x = D_L11_001D9F08[i].x - ((Cam_30a908 *)D_L11_00167680)->x;
+                        scratch_vector.y = D_L11_001D9F08[i].y - ((Cam_30a908 *)D_L11_00167680)->y;
+                        scratch_vector.z = D_L11_001D9F08[i].z - ((Cam_30a908 *)D_L11_00167680)->z;
+                        scratch_vector.w = 1.0f;
+                        t = FUN_001f9b20_30a908(&scratch_vector) / (d->f18 * 2.0f);
                         if (t > 1.0f) {
                             t = 1.0f;
                         }
@@ -697,7 +697,7 @@ void FUN_L11_0030a908(struct Moby *moby) {
             }
         }
     }
-    ((Fog_30a908 *)D_L11_0016D440)->f228 = s228;
+    ((Fog_30a908 *)D_L11_0016D440)->f228 = saved_fog_228;
     ((Fog_30a908 *)D_L11_0016D440)->f22C = s22C;
     FUN_00233980_30a908(0x47, 0x5360B);
 }

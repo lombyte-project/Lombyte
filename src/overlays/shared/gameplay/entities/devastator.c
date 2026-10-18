@@ -2607,7 +2607,7 @@ void taunter_update(Moby *m) {
     s32 r1;
     s32 r2;
     u8 *e;
-    s32 v2;
+    s32 play_time_stat_value;
 
     if (m == 0)
         return;
@@ -2649,8 +2649,8 @@ void taunter_update(Moby *m) {
             }
             if (D_00141680.cnt < 0xFFFF)
                 D_00141680.cnt++;
-            v2 = FUN_001f96f8_c(D_0015EEA4) / 600;
-            if (D_00141680.last < v2) {
+            play_time_stat_value = FUN_001f96f8_c(D_0015EEA4) / 600;
+            if (D_00141680.last < play_time_stat_value) {
                 D_00141680.last = FUN_001f96f8_c(D_0015EEA4) / 600;
             }
             D_00141680.flags |= 1 << current_level_index;
@@ -3249,8 +3249,8 @@ void FUN_L00_002b8438(char *moby) {
     float vec[4];
     char buf[0x30];
     char qv[16];
-    float v2[4];
-    float v3[4];
+    float spark_random_vector[4];
+    float spark_position[4];
     char *slots_base = *(char **)(moby + 0x78) + 4;
     unsigned char *q = (unsigned char *)D_0013E520;
     int i;
@@ -3281,19 +3281,19 @@ void FUN_L00_002b8438(char *moby) {
                     int c3;
                     int c4;
                     qcopy(qv, src);
-                    FUN_L00_00257d78(v2, 0.0f, *(float *)&D_L00_00161538 * D_0015ED6C_c2);
+                    FUN_L00_00257d78(spark_random_vector, 0.0f, *(float *)&D_L00_00161538 * D_0015ED6C_c2);
                     *(float *)(qv + 0xC) = *(float *)&D_L00_0016153C;
-                    v2[2] = D_0015ED6C_c2 * 4.0f;
-                    v2[3] = *(float *)&D_L00_00161540;
+                    spark_random_vector[2] = D_0015ED6C_c2 * 4.0f;
+                    spark_random_vector[3] = *(float *)&D_L00_00161540;
                     c1 = fast_tween_color(*(int *)&D_L00_00161544, *(int *)&D_L00_00161548, random_float_between_c(0.0f, 1.0f));
                     FUN_L00_0025c0e8(c1, q[0x10]);
                     c2 = fast_tween_color(*(int *)&D_L00_0016154C, *(int *)&D_L00_00161550, random_float_between_c(0.0f, 1.0f));
                     FUN_L00_0025c0e8(c2, q[0x10]);
                     c3 = func_001FA898_r(multiply_global_factor_ed64(random_float_between_c((float)*(int *)&D_L00_00161554, (float)*(int *)&D_L00_00161558)));
                     c4 = func_001FA898_r(multiply_global_factor_ed64(random_float_between_c((float)*(int *)&D_L00_00161554, (float)*(int *)&D_L00_00161558)));
-                    FUN_L00_00257d78(v3, 0.0f, f20 + f20);
-                    add_vector_xyz(v3, v3, (entry + 0x10));
-                    spawn_spark(v3, qv, v2, c1, c2, 0xA, c3, c4, *(int *)&D_L00_0016152C);
+                    FUN_L00_00257d78(spark_position, 0.0f, f20 + f20);
+                    add_vector_xyz(spark_position, spark_position, (entry + 0x10));
+                    spawn_spark(spark_position, qv, spark_random_vector, c1, c2, 0xA, c3, c4, *(int *)&D_L00_0016152C);
                 }
             } else if (sub_type < 2) {
                 *(int *)(slots_base - (-(i * 4))) = 0;

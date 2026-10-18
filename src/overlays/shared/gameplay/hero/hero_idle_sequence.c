@@ -524,7 +524,7 @@ extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern float probe_ground_height(float *, int, float) __asm__("FUN_00213508");
 extern void FUN_L00_00274cf8_205f60(float *, int, float) __asm__("FUN_L00_00274cf8");
 
-void FUN_L00_00205f60(int a0, char *a1, int a2) {
+void FUN_L00_00205f60(int record_group_index, char *joint_index_offset, int a2) {
     float v[4];
     if (a2) {
         struct Hero *g = &hero;
@@ -532,17 +532,17 @@ void FUN_L00_00205f60(int a0, char *a1, int a2) {
         if (((char *)g->items[1].moby)) {
             c = *(s16 *)(((char *)g->items[1].moby) + 0xA6) == 0xAD;
         }
-        FUN_L00_0028de68_205f60(a0, a1, c, 0, ((int)g->moby));
+        FUN_L00_0028de68_205f60(record_group_index, joint_index_offset, c, 0, ((int)g->moby));
     }
     if (current_level_index == 12) {
         struct Hero *g = &hero;
         if (g->unk12ED == 0 && ((int)g->ground_moby) == 0) {
             float k = 0.15f;
-            add_vector_xyz_cf(((int)g->moby), a1 + 0x16, v);
+            add_vector_xyz_cf(((int)g->moby), joint_index_offset + 0x16, v);
             v[0] += fast_cos(g->motion.rot.f[2]) * k;
             v[1] += fast_sin(g->motion.rot.f[2]) * k;
             v[2] = probe_ground_height(v, 0, 0.5f) + 0.04f;
-            FUN_L00_00274cf8_205f60(v, a1 == 0, g->motion.rot.f[2]);
+            FUN_L00_00274cf8_205f60(v, joint_index_offset == 0, g->motion.rot.f[2]);
         }
     }
 }
@@ -2575,7 +2575,7 @@ void FUN_L00_0020a318(void) {
     char *p2;
     char *h;
     char *g2;
-    float f12, f13, f, s, s2;
+    float f12, f13, f, s, frame_scale_squared;
     *(short *)(g + 0x22C8) = 0;
     if (*(unsigned char *)(g + 0x20AB) == 0)
         return;
@@ -2602,10 +2602,10 @@ void FUN_L00_0020a318(void) {
                 return;
         }
     }
-    s2 = frame_scale_sq;
+    frame_scale_squared = frame_scale_sq;
     p2 = D_L00_0017A680_d;
-    *(float *)(p2 + 0x6D4) = s2 * 0.05f;
-    *(float *)(p2 + 0x6D8) = s2 * 0.3f;
+    *(float *)(p2 + 0x6D4) = frame_scale_squared * 0.05f;
+    *(float *)(p2 + 0x6D8) = frame_scale_squared * 0.3f;
     h = (char *)((unsigned char *)&D_0013E533) + 0xE9D;
     f = fast_vec_dist(h, collision_hit_point);
     g2 = (char *)((unsigned char *)&D_0013E533) + 0xE1D;

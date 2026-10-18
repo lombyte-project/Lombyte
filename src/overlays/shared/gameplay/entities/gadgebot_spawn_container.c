@@ -866,13 +866,13 @@ extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
 
 extern float D_L06_00161C00 __attribute__((sda));
-void FUN_L06_002e9998(char *m, float *a1, float *a2) {
+void FUN_L06_002e9998(char *m, float *reference_axis, float *facing_direction) {
     float d;
     float A[4], B[4], C[4], D[4], E[4], F[4], G[4], H[4];
-    fast_vec_normalize(C, a1, 1.0f);
-    d = fast_vec_dot(C, a2);
+    fast_vec_normalize(C, reference_axis, 1.0f);
+    d = fast_vec_dot(C, facing_direction);
     fast_vec_normalize(E, C, d);
-    fast_vec_sub(D, a2, E);
+    fast_vec_sub(D, facing_direction, E);
     fast_vec_normalize(D, D, 1.0f);
     qcopy(H, C);
     qcopy(F, D);
@@ -1389,14 +1389,14 @@ extern void subtract_vector_xyz(void *, void *, void *);
 void gadgebot_update(GbMoby *moby) __asm__("FUN_L06_002f0040");
 void gadgebot_update(GbMoby *moby) {
     float out[4];
-    float v10[4];
+    float raised_position_snapshot[4];
     float save0[4];
     float save1[4];
     float v40[4];
     float v50[4];
     float v60[4];
     float v70[4];
-    float v80[4];
+    float attack_probe_near_position[4];
     float ang;
     float step;
     GbVars *d = moby->vars;
@@ -1793,10 +1793,10 @@ void gadgebot_update(GbMoby *moby) {
                     v70[2] += 0.4f;
                     v70[0] += fast_cos(moby->rot) * 0.4f;
                     v70[1] += fast_sin(moby->rot) * 0.4f;
-                    qcopy(v80, v70);
+                    qcopy(attack_probe_near_position, v70);
                     v70[0] += fast_cos(moby->rot) * 0.3f;
                     v70[1] += fast_sin(moby->rot) * 0.3f;
-                    if (collision_line(v70, v80, 0, (int)moby, 0) != 0 &&
+                    if (collision_line(v70, attack_probe_near_position, 0, (int)moby, 0) != 0 &&
                         D_L06_001745D8 == d->target) {
                         moby->sub = 2;
                     }
@@ -1972,19 +1972,19 @@ void gadgebot_update(GbMoby *moby) {
         return;
     }
     if (moby->state != 1) {
-        float s10;
-        float s24;
+        float saved_control_f10;
+        float saved_control_f24;
 
-        qcopy(v10, moby->pos);
-        v10[2] += D_L06_00161CE0 + 0.02f;
+        qcopy(raised_position_snapshot, moby->pos);
+        raised_position_snapshot[2] += D_L06_00161CE0 + 0.02f;
         qcopy(v40, moby->pos);
-        s10 = d->ctl.unk10;
-        s24 = d->ctl.unk24;
+        saved_control_f10 = d->ctl.unk10;
+        saved_control_f24 = d->ctl.unk24;
         d->ctl.unk10 = 0.0f;
         d->ctl.unk24 = 0.0f;
         FUN_L00_00258b50(moby, &d->ctl, moby->pos, out, 1.0f);
-        d->ctl.unk10 = s10;
-        d->ctl.unk24 = s24;
+        d->ctl.unk10 = saved_control_f10;
+        d->ctl.unk24 = saved_control_f24;
         moby->pos[2] = v40[2];
         if (FUN_001f9b48(v40, moby->pos) > 0.005f) {
             float max;
@@ -2417,37 +2417,37 @@ extern float fast_normalize_angle(f32) __asm__("FUN_001fa610");
 extern Moby *D_L06_0015FFD8;
 
 int FUN_L06_002f2c28(char *ctx, char *ow, char *moby, int flag, int *out) {
-    float v0[4];
+    float candidate_position[4];
     float vB[4];
     float vA[4];
     float vC[4];
     float vD[4];
-    int v58;
+    int placement_index;
     int k;
     char *st;
     char *g;
     float f20;
 
     if (*(short *)(moby + 0xA6) != 0x515 && *(short *)(moby + 0xA6) != 0x15F) {
-        add_vector_xyz(v0, moby + 0x10, moby + 0xC0);
+        add_vector_xyz(candidate_position, moby + 0x10, moby + 0xC0);
     } else {
-        *(u128_F4058 *)v0 = *(u128_F4058 *)(moby + 0x10);
+        *(u128_F4058 *)candidate_position = *(u128_F4058 *)(moby + 0x10);
     }
 
     switch (*(short *)(moby + 0xA6)) {
     case 0x15F:
     case 0x3B1:
     case 0x515:
-        if (!(vector_distance_xy_alt(ctx + 0x10, v0) < 1.0f)) return 0;
+        if (!(vector_distance_xy_alt(ctx + 0x10, candidate_position) < 1.0f)) return 0;
         st = *(char **)(moby + 0x78);
         if (*(int *)st < 0) return 0;
-        v58 = 0;
+        placement_index = 0;
         if (*(short *)(moby + 0xA6) == 0x3B1) {
-            v58 = *(int *)(st + 4);
-            *(int *)(st + 4) = v58 + 1;
+            placement_index = *(int *)(st + 4);
+            *(int *)(st + 4) = placement_index + 1;
         } else if (*(short *)(moby + 0xA6) == 0x515 || *(short *)(moby + 0xA6) == 0x15F) {
-            v58 = *(int *)(st + 4);
-            *(int *)(st + 4) = v58 + 1;
+            placement_index = *(int *)(st + 4);
+            *(int *)(st + 4) = placement_index + 1;
         }
         if (*(short *)(moby + 0xA6) == 0x515) {
             trooper_play_sound(0, 0, (int)moby, 0x515);
@@ -2479,7 +2479,7 @@ int FUN_L06_002f2c28(char *ctx, char *ow, char *moby, int flag, int *out) {
         }
 
         g = (*(char * *)&D_L06_0015FFD8) + (*(int *)st << 8);
-        f20 = fast_normalize_angle(convert_integer_to_float(v58) * 60.0f * 0.017453292f);
+        f20 = fast_normalize_angle(convert_integer_to_float(placement_index) * 60.0f * 0.017453292f);
         vB[0] = fast_cos_c2(fast_add_rotations_c2(*(float *)(g + 0x48), f20));
         vB[1] = fast_sin(fast_add_rotations_c2(*(float *)(g + 0x48), f20));
         vB[2] = 0.0f;
@@ -2530,7 +2530,7 @@ int FUN_L06_002f2c28(char *ctx, char *ow, char *moby, int flag, int *out) {
     case 0x516:
         if (flag != 0) return 0;
         if (*(unsigned char *)(moby + 0x20) == 2) return 0;
-        if (!(vector_distance_xy_alt(ctx + 0x10, v0) < 1.0f)) return 0;
+        if (!(vector_distance_xy_alt(ctx + 0x10, candidate_position) < 1.0f)) return 0;
         *(char *)(ctx + 0x20) = 8;
         *(int *)(ow + 0x304) = (int)moby;
         *out = 2;
@@ -3200,15 +3200,15 @@ void energy_sphere_update(struct Moby *m) {
         m->flags |= 0x20;
         *(int *)(d + 0x60) = -1;
     case 1: {
-        float a0 = D_L06_00161E74 * DEG_TO_RAD * D_0015ED6C;
-        float a1, a2;
-        float x = fast_add_rotations(m->rot.x, a0);
-        a1 = D_L06_00161E78 * DEG_TO_RAD * D_0015ED6C;
+        float rotation_delta_x = D_L06_00161E74 * DEG_TO_RAD * D_0015ED6C;
+        float rotation_delta_y, rotation_delta_z;
+        float x = fast_add_rotations(m->rot.x, rotation_delta_x);
+        rotation_delta_y = D_L06_00161E78 * DEG_TO_RAD * D_0015ED6C;
         m->rot.x = x;
-        x = fast_add_rotations(m->rot.y, a1);
-        a2 = D_L06_00161E7C * DEG_TO_RAD * D_0015ED6C;
+        x = fast_add_rotations(m->rot.y, rotation_delta_y);
+        rotation_delta_z = D_L06_00161E7C * DEG_TO_RAD * D_0015ED6C;
         m->rot.y = x;
-        m->rot.z = fast_add_rotations(m->rot.z, a2);
+        m->rot.z = fast_add_rotations(m->rot.z, rotation_delta_z);
     }
     }
     if (voice_is_playing(m, *(int *)(d + 0x60)) == 0) {

@@ -56,7 +56,7 @@ extern s32 compute_clamped_count_difference(void) __asm__("FUN_00215248");
 
 #define SCRATCH ((char *)0x70000000)
 
-void FUN_00216c48(void *arg0, Menu *menu, s32 arg2) {
+void FUN_00216c48(void *arg0, Menu *menu, s32 follow_entry_link) {
     char buf[0x100];
     Suffixes sfx;
     char num[0x20];
@@ -73,7 +73,7 @@ void FUN_00216c48(void *arg0, Menu *menu, s32 arg2) {
     if (menu->unk3C == 0) {
         return;
     }
-    if (arg2 != 0) {
+    if (follow_entry_link != 0) {
         menu->unk4 = menu->unk36;
         menu->unk38 = world_update_time;
         n = e->unk6;

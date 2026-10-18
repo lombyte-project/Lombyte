@@ -45,6 +45,9 @@ extern void set_vector_length_xy(void *, void *, f32) __asm__("FUN_001f9c48");
 s32 fun_00213928(O_25a478 *obj, P_25a478 *p, Q_25a478 *q, u32 flags, s32 *out, f32 *fp, s32 *kp, s32 idx) __asm__("FUN_00213928");
 
 s32 fun_00213928(O_25a478 *obj, P_25a478 *p, Q_25a478 *q, u32 flags, s32 *out, f32 *fp, s32 *kp, s32 idx) {
+    enum {
+        DEFAULT_HIT_RESPONSE = 1
+    };
     V_25a478 v;
     V_25a478 t;
     s32 r;
@@ -142,7 +145,7 @@ s32 fun_00213928(O_25a478 *obj, P_25a478 *p, Q_25a478 *q, u32 flags, s32 *out, f
     if (fast_dec_timer_s16(&q->h1C)) {
         switch (r) {
         case 0: q->h1C = scale_game_frames(0x25); break;
-        case 1: q->h1C = scale_game_frames(0xF); break;
+        case DEFAULT_HIT_RESPONSE: q->h1C = scale_game_frames(0xF); break;
         case 4: q->h1C = scale_game_frames(0x3C); break;
         case 7:
             if (D_0013E533[0]) q->h1C = scale_game_frames(0x2D);

@@ -1686,7 +1686,7 @@ void machinegun_turret_update(char *moby) {
     float v70[4];
     float m80[16];
     float g0;
-    float t1, t2, t3, t4;
+    float phase_angle, sine_input_angle, sine_scale, target_heading;
     int r, rem, sel, c17, m52, d80;
     char *p16;
     char *p6;
@@ -1786,18 +1786,18 @@ void machinegun_turret_update(char *moby) {
         } else {
             g0 = D_L14_00161514;
         }
-        t1 = func_001FA748_2B4E40(*(float *)(data + 0x8C), g0);
-        *(float *)(data + 0x8C) = t1;
-        t2 = func_001FA748_2B4E40(t1, *(float *)(data + 0x84) * 0.01745329238474369f);
+        phase_angle = func_001FA748_2B4E40(*(float *)(data + 0x8C), g0);
+        *(float *)(data + 0x8C) = phase_angle;
+        sine_input_angle = func_001FA748_2B4E40(phase_angle, *(float *)(data + 0x84) * 0.01745329238474369f);
         d80 = *(int *)(data + 0x80);
         p16 = D_L14_001600EC + (d80 << 7) + 0x10;
-        t3 = func_001F9FA8_2B4E40(t2);
-        func_001F9C30_2B4E40(v20, p16, t3);
+        sine_scale = func_001F9FA8_2B4E40(sine_input_angle);
+        func_001F9C30_2B4E40(v20, p16, sine_scale);
         d80 = *(int *)(data + 0x80);
         p6 = D_L14_001600EC + (d80 << 7) + 0x30;
         func_001F9BD8_2B4E40(v20, v20, p6);
-        t4 = func_L00_001FF860_2B4E40(v20[0] - *(float *)(moby + 0x10), v20[1] - *(float *)(moby + 0x14));
-        *(float *)(moby + 0x48) = t4;
+        target_heading = func_L00_001FF860_2B4E40(v20[0] - *(float *)(moby + 0x10), v20[1] - *(float *)(moby + 0x14));
+        *(float *)(moby + 0x48) = target_heading;
         func_001F9938_2B4E40(data + 0x9C);
         rem = D_L14_0015F5CC % D_L14_00161530;
         if (rem == 0) {
@@ -2593,10 +2593,10 @@ extern void steer_5730(char *moby, float *vel, float target, float k, float d,
                        float max) __asm__("FUN_L00_00258278");
 
 extern int FUN_L00_0025d808_5730() __asm__("FUN_L00_0025d808");
-int FUN_L14_002b5730(struct Moby *moby, char *a1, int a2, int a3, float *v, float *vel, float f12,
+int FUN_L14_002b5730(struct Moby *moby, char *path, int segment_index_address, int segment_distance_address, float *v, float *vel, float f12,
                      float f13, float f14, float f15, float f16, float f17, float f18) {
     float tmp[3];
-    int r = FUN_L00_0025d808_5730(a1, tmp, a2, a3, 0);
+    int r = FUN_L00_0025d808_5730(path, tmp, segment_index_address, segment_distance_address, 0);
     FUN_L00_0025b8c0_5730(&moby->pos.x, v, tmp[0], f13, f14, f15);
     FUN_L00_0025b8c0_5730(&moby->pos.y, v + 1, tmp[1], f13, f14, f15);
     FUN_L00_0025b8c0_5730(&moby->pos.z, v + 2, tmp[2], f13, f14, f15);
@@ -2998,25 +2998,25 @@ unsigned char *FUN_L14_002bb310(struct Moby *owner, float angle, char *posp) {
     unsigned char *m;
     char *d;
     char *g;
-    float *v0 = vec;
-    float *v1;
-    *(OvlQuad *)v0 = *(OvlQuad *)posp;
+    float *spawn_position = vec;
+    float *launch_vector;
+    *(OvlQuad *)spawn_position = *(OvlQuad *)posp;
     m = (unsigned char *)func_0020D348_m(0x51);
     if (m != 0) {
         d = *(char **)(m + 0x78);
-        qcopy(m + 0x10, v0);
-        v1 = vec + 4;
+        qcopy(m + 0x10, spawn_position);
+        launch_vector = vec + 4;
         *(float *)(m + 0x48) = angle;
         m[0x20] = 0;
         m[0x30] = 0xFF;
         *(short *)(m + 0x32) = 0xFF;
         m[0x31] = 1;
-        subtract_vector_xyz(v1, v0, &owner->pos);
+        subtract_vector_xyz(launch_vector, spawn_position, &owner->pos);
         vec[6] = 0.0f;
-        normalize_vector_xyz(v1, v1, random_float_between(frame_scale * 0.075f, frame_scale * 0.2f));
+        normalize_vector_xyz(launch_vector, launch_vector, random_float_between(frame_scale * 0.075f, frame_scale * 0.2f));
         g = (char *)&hero.gravity_dir;
-        cross_vectors_xyz(vec + 8, g, v1);
-        build_look_at_matrix(d, v1, g, randf_sym(0.0f, 0.7853982f));
+        cross_vectors_xyz(vec + 8, g, launch_vector);
+        build_look_at_matrix(d, launch_vector, g, randf_sym(0.0f, 0.7853982f));
         *(float *)(d + 8) = random_float_between(frame_scale * 0.05f, frame_scale * 0.32f);
         *(float *)(d + 0x14) = randf_sym(0.0f, 0.034906585f);
         *(float *)(d + 0x18) = randf_sym(0.0f, 0.034906585f);

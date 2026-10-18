@@ -293,17 +293,17 @@ void FUN_L05_0031cf58(char *m) {
 extern char *FUN_0020c4f8_d160(int) __asm__("FUN_0020c4f8");
 extern void FUN_L00_00250df8_d160(void *) __asm__("FUN_L00_00250df8");
 
-char *FUN_L05_0031d160(unsigned char *a0) {
+char *FUN_L05_0031d160(unsigned char *source_moby) {
     unsigned char *m = (unsigned char *)FUN_0020c4f8_d160(0x5EA);
     if (m != 0) {
-        m[0x30] = a0[0x30];
-        *(unsigned short *)(m + 0x32) = *(unsigned short *)(a0 + 0x32);
+        m[0x30] = source_moby[0x30];
+        *(unsigned short *)(m + 0x32) = *(unsigned short *)(source_moby + 0x32);
         m[0x31] = 1;
-        *(float *)(m + 0x40) = *(float *)(a0 + 0x40);
-        *(float *)(m + 0x44) = *(float *)(a0 + 0x44);
-        *(float *)(m + 0x48) = *(float *)(a0 + 0x48);
-        *(long *)(m + 0x38) = *(long *)(a0 + 0x38);
-        qcopy(m + 0x10, a0 + 0x10);
+        *(float *)(m + 0x40) = *(float *)(source_moby + 0x40);
+        *(float *)(m + 0x44) = *(float *)(source_moby + 0x44);
+        *(float *)(m + 0x48) = *(float *)(source_moby + 0x48);
+        *(long *)(m + 0x38) = *(long *)(source_moby + 0x38);
+        qcopy(m + 0x10, source_moby + 0x10);
         FUN_L00_00250df8_d160(m);
     }
     return (char *)m;
@@ -385,26 +385,26 @@ void FUN_L05_00329540(char *m) {
     struct Hero *g;
     char *a;
     char *b;
-    float v0[4];
-    float v1[4];
-    float v2[4];
-    float v3[4];
-    float v4[4];
+    float target_height_offset[4];
+    float look_direction[4];
+    float look_target[4];
+    float camera_offset[4];
+    float gravity_up[4];
     FUN_L05_00329358_c(m);
     g = &hero;
     a = d + 0x80;
     b = d + 0xE0;
-    normalize_vector_xyz(v3, ((char *)g->moby) + 0xC0, 1.0f);
-    normalize_vector_xyz(v3, v3, *(float *)(d + 0xE0));
-    subtract_vector_xyz(at, a, v3);
-    normalize_vector_xyz(v4, &g->gravity_dir, -1.0f);
-    normalize_vector_xyz(v3, v4, *(float *)(b + 0x10));
-    add_vector_xyz(at, at, v3);
-    normalize_vector_xyz(v0, v4, *(float *)(a + 0x4C));
-    add_vector_xyz(v2, v0, a);
-    subtract_vector_xyz(v1, v2, at);
-    normalize_vector_xyz(m, v1, 1.0f);
-    cross_vectors_xyz(up, m, v4);
+    normalize_vector_xyz(camera_offset, ((char *)g->moby) + 0xC0, 1.0f);
+    normalize_vector_xyz(camera_offset, camera_offset, *(float *)(d + 0xE0));
+    subtract_vector_xyz(at, a, camera_offset);
+    normalize_vector_xyz(gravity_up, &g->gravity_dir, -1.0f);
+    normalize_vector_xyz(camera_offset, gravity_up, *(float *)(b + 0x10));
+    add_vector_xyz(at, at, camera_offset);
+    normalize_vector_xyz(target_height_offset, gravity_up, *(float *)(a + 0x4C));
+    add_vector_xyz(look_target, target_height_offset, a);
+    subtract_vector_xyz(look_direction, look_target, at);
+    normalize_vector_xyz(m, look_direction, 1.0f);
+    cross_vectors_xyz(up, m, gravity_up);
     cross_vectors_xyz(side, up, m);
     normalize_vector_xyz(up, up, 1.0f);
     normalize_vector_xyz(side, side, 1.0f);

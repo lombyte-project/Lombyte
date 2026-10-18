@@ -1819,21 +1819,21 @@ void attach_manipulator(void *owner, s32 slot_index, void *manip) __asm__("FUN_0
 void bombomatic_update(char *m) __asm__("FUN_L07_0030d4d8");
 void bombomatic_update(char *m) {
     char *d;
-    char *s16;
+    char *hit_info;
     char *t;
     int ia;
     int r;
 
     float lim;
     float tv;
-    float v20[4];
-    float v30[20];
-    float v80[4];
-    float v90[4];
+    float launch_work_vector[4];
+    float target_buffer[20];
+    float launch_rotation[4];
+    float debris_velocity[4];
     float vA0[4];
     float vB0[16];
     float vF0[4];
-    float v100[4];
+    float candidate_point_position[4];
 
     if (m == 0) {
         return;
@@ -1848,9 +1848,9 @@ void bombomatic_update(char *m) {
     if (d == 0) {
         return;
     }
-    s16 = FUN_L00_0025a420(m, 0x230000, 0);
+    hit_info = FUN_L00_0025a420(m, 0x230000, 0);
     t = d + 0x20;
-    r = fun_00213928(m, s16, t, 0, &ia, 0, 0, 4);
+    r = fun_00213928(m, hit_info, t, 0, &ia, 0, 0, 4);
     switch (r) {
     case 0:
         break;
@@ -1882,25 +1882,25 @@ void bombomatic_update(char *m) {
 
     if (ia >= 2) {
         char *o;
-        if (s16 == 0) {
-            lim = *(float *)(s16 + 0x2C);
+        if (hit_info == 0) {
+            lim = *(float *)(hit_info + 0x2C);
         } else {
-            o = *(char **)(s16 + 0x20);
+            o = *(char **)(hit_info + 0x20);
             if (o == 0) {
-                lim = *(float *)(s16 + 0x2C);
+                lim = *(float *)(hit_info + 0x2C);
             } else {
                 if (*(short *)(o + 0xA6) == 0x372) {
                     goto eb20;
                 }
-                lim = *(float *)(s16 + 0x2C);
+                lim = *(float *)(hit_info + 0x2C);
             }
         }
         tv = *(float *)t;
         if (tv <= lim) {
             FUN_L00_00257470(m, 0, -1);
             *(float *)t = 0.0f;
-            clear_u64_value(v20);
-            FUN_L00_0025e450_c(m, v20, 0, 0.0f, 0.0f, 10, 3, 16, 4.0f, 2.0f, 9.0f, 1.0f, 1, 15.0f, 1, 1, -1, 0);
+            clear_u64_value(launch_work_vector);
+            FUN_L00_0025e450_c(m, launch_work_vector, 0, 0.0f, 0.0f, 10, 3, 16, 4.0f, 2.0f, 9.0f, 1.0f, 1, 15.0f, 1, 1, -1, 0);
             FUN_L00_00263fd8(m, 0x621, (float *)(m + 0x10), m + 0x40, 0, 0, 0.0f, D_L07_0015F580, D_L07_0015F580, D_L07_0015F580);
             FUN_L00_00263fd8(m, 0x622, (float *)(m + 0x10), m + 0x40, 0, 0, 0.0f, D_L07_0015F580, D_L07_0015F580, D_L07_0015F580);
             mark_moby_for_removal_c3(m);
@@ -1915,7 +1915,7 @@ void bombomatic_update(char *m) {
 eb20:
     ((unsigned char *)m)[0xA4] = 0xFF;
     trooper_anim_finish(m, d + 0x60);
-    get_target_sight(m, v30, 20.0f);
+    get_target_sight(m, target_buffer, 20.0f);
     switch (((unsigned char *)m)[0x20]) {
     case 0: {
             int r1 = scale_game_frames(*(int *)(d + 0xB0));
@@ -1954,12 +1954,12 @@ eb20:
                     }
                 }
                 *(int *)(d + 0xC4) ^= 1;
-                if (vector_distance_xy_alt(m + 0x10, v30) < 20.0f) {
-                    *(float *)(d + 0xBC) = fast_arc_tan_c(v30[0] - *(float *)(m + 0x10), v30[1] - *(float *)(m + 0x14));
+                if (vector_distance_xy_alt(m + 0x10, target_buffer) < 20.0f) {
+                    *(float *)(d + 0xBC) = fast_arc_tan_c(target_buffer[0] - *(float *)(m + 0x10), target_buffer[1] - *(float *)(m + 0x14));
                 }
-                v20[0] = random_float_between_c(3.0f, 11.0f);
-                v20[1] = random_float_between_c(-2.0f, 2.0f);
-                v20[2] = 0.0f;
+                launch_work_vector[0] = random_float_between_c(3.0f, 11.0f);
+                launch_work_vector[1] = random_float_between_c(-2.0f, 2.0f);
+                launch_work_vector[2] = 0.0f;
                 vF0[3] = -1.0f;
                 {
                     float best = 3.1415927f;
@@ -1967,26 +1967,26 @@ eb20:
                     for (i = 1; i < 4; i++) {
                         float f;
                         float g;
-                        FUN_L00_0024f7c8(m, i, v100);
-                        f = fast_arc_tan_c(v100[0] - *(float *)(m + 0x10), v100[1] - *(float *)(m + 0x14));
+                        FUN_L00_0024f7c8(m, i, candidate_point_position);
+                        f = fast_arc_tan_c(candidate_point_position[0] - *(float *)(m + 0x10), candidate_point_position[1] - *(float *)(m + 0x14));
                         g = fast_subtract_rotations(*(float *)(d + 0xBC), D_0015ED6C_gp * 17.80235863f);
                         f = fast_difference_between_rotations_c(f, g);
                         if (f < best) {
-                            qcopy(vF0, v100);
+                            qcopy(vF0, candidate_point_position);
                             best = f;
                         }
                     }
                     qcopy(vA0, vF0);
                 }
-                qzero(v80);
-                v80[2] = *(float *)(d + 0xBC);
-                euler_rotation_matrix(vB0, v80);
-                transform_vector(v20, v20, vB0);
-                fast_vec_normalize_c(v90, v20, D_0015ED6C_gp * 7.0f);
-                add_vector_xyz(v20, v20, m + 0x10);
-                v90[2] = FUN_L00_0025abf0(vA0, v20, 0, D_0015ED6C_gp * 7.0f, -(D_0015ED70 * 9.8f));
-                add_vector_xyz(vA0, vA0, v90);
-                FUN_L07_0030ba90_c(vA0, v90, (int)m, *(short *)(d + 0xBA));
+                qzero(launch_rotation);
+                launch_rotation[2] = *(float *)(d + 0xBC);
+                euler_rotation_matrix(vB0, launch_rotation);
+                transform_vector(launch_work_vector, launch_work_vector, vB0);
+                fast_vec_normalize_c(debris_velocity, launch_work_vector, D_0015ED6C_gp * 7.0f);
+                add_vector_xyz(launch_work_vector, launch_work_vector, m + 0x10);
+                debris_velocity[2] = FUN_L00_0025abf0(vA0, launch_work_vector, 0, D_0015ED6C_gp * 7.0f, -(D_0015ED70 * 9.8f));
+                add_vector_xyz(vA0, vA0, debris_velocity);
+                FUN_L07_0030ba90_c(vA0, debris_velocity, (int)m, *(short *)(d + 0xBA));
                 *(short *)(d + 0xBA) = *(short *)(d + 0xBA) + 1;
             }
         eeE4:
@@ -3503,7 +3503,7 @@ extern char D_L07_00173EE0_2cd2b0[] __asm__("D_L07_00173EE0");
 
 void FUN_L07_00312420(struct Moby *arg)
 {
-    float v0[4], v10[4], v20[4], v30[4], v40[4], v50[4], m[4], c2[4], h[4], ii[4], jj[4];
+    float line_endpoint[4], v10[4], quad_side_offset[4], attachment_position[4], endpoint_to_attachment[4], oscillating_reference_position[4], m[4], c2[4], h[4], ii[4], jj[4];
     float f20, t;
     int flag = 1;
     EffData_313800 *p = ((EffData_313800 *)arg->pvars);
@@ -3511,35 +3511,35 @@ void FUN_L07_00312420(struct Moby *arg)
     Packet_313800 pkt;
 
     f20 = FUN_001fa6c0_2cd2b0(D_L07_0015F5CC_lui);
-    qcopy(v50, p->f140);
+    qcopy(oscillating_reference_position, p->f140);
     t = FUN_001f9dc8_2cd2b0(FUN_L00_0025e310_2cd2b0(f20 / 11.0f));
     f20 = f20 / 10.0f;
     t = FUN_L00_0025e310_2cd2b0(f20 + t * 1.5707964f);
-    v50[0] = v50[0] + FUN_001f9de0_2cd2b0(t);
-    add_vector_xyz_cf(arg, 2, v30);
-    subtract_vector_xyz(v10, v50, v30);
+    oscillating_reference_position[0] = oscillating_reference_position[0] + FUN_001f9de0_2cd2b0(t);
+    add_vector_xyz_cf(arg, 2, attachment_position);
+    subtract_vector_xyz(v10, oscillating_reference_position, attachment_position);
     FUN_001f9bf8_2cd2b0(v10, v10, 30.0f);
-    add_vector_xyz(v0, v50, v10);
-    if (FUN_001efa68_2cd2b0(v30, v0, 2, arg, 0)) {
-        qcopy(v0, D_L07_00173EE0_2cd2b0);
+    add_vector_xyz(line_endpoint, oscillating_reference_position, v10);
+    if (FUN_001efa68_2cd2b0(attachment_position, line_endpoint, 2, arg, 0)) {
+        qcopy(line_endpoint, D_L07_00173EE0_2cd2b0);
     } else {
         flag = 0;
     }
-    subtract_vector_xyz(v40, v30, v0);
-    cross_vectors_xyz(v20, D_L07_00167050_2cd2b0, v40);
-    FUN_001f9bf8_2cd2b0(v20, v20, 0.25f);
-    add_vector_xyz(v10, v20, v0);
+    subtract_vector_xyz(endpoint_to_attachment, attachment_position, line_endpoint);
+    cross_vectors_xyz(quad_side_offset, D_L07_00167050_2cd2b0, endpoint_to_attachment);
+    FUN_001f9bf8_2cd2b0(quad_side_offset, quad_side_offset, 0.25f);
+    add_vector_xyz(v10, quad_side_offset, line_endpoint);
     if (flag) {
-        FUN_L00_002729c8_2cd2b0(v0, 0, FUN_001f96f8_2cd2b0((rand_e50() & 1) + 0x2D),
+        FUN_L00_002729c8_2cd2b0(line_endpoint, 0, FUN_001f96f8_2cd2b0((rand_e50() & 1) + 0x2D),
             FUN_001f96f8_2cd2b0((rand_e50() & 7) + 0x37), 1,
             FUN_001f96f8_2cd2b0((rand_e50() & 3) + 0xD), arg, 1.0f, 1.0f);
         if (p->f15C != 0.0f) {
-            subtract_vector_xyz(c2, v0, p->f150);
+            subtract_vector_xyz(c2, line_endpoint, p->f150);
             FUN_001f9bf8_2cd2b0(c2, c2, 0.2f);
             qcopy(m, p->f150);
             for (k = 0; k < 4; k++) {
                 add_vector_xyz(m, m, c2);
-                subtract_vector_xyz(h, m, v30);
+                subtract_vector_xyz(h, m, attachment_position);
                 FUN_001f9bf8_2cd2b0(h, h, 5.0f);
                 subtract_vector_xyz(ii, m, h);
                 add_vector_xyz(jj, m, h);
@@ -3557,7 +3557,7 @@ void FUN_L07_00312420(struct Moby *arg)
                 }
             }
         }
-        qcopy(p->f150, v0);
+        qcopy(p->f150, line_endpoint);
         p->f15C = 1.0f;
     } else {
         p->f15C = 0.0f;
@@ -3571,9 +3571,9 @@ void FUN_L07_00312420(struct Moby *arg)
     pkt.uv[6] = pkt.uv[2] = 1.0f;
     pkt.uv[3] = pkt.uv[1] = 0.0f;
     pkt.uv[7] = pkt.uv[5] = 1.0f;
-    qcopy_nc(pkt.a, v30);
-    add_vector_xyz(pkt.b, pkt.a, v20);
-    qcopy(pkt.c, v0);
+    qcopy_nc(pkt.a, attachment_position);
+    add_vector_xyz(pkt.b, pkt.a, quad_side_offset);
+    qcopy(pkt.c, line_endpoint);
     qcopy(pkt.d, v10);
     draw_geometry_quad(&pkt, 0, 1);
 }

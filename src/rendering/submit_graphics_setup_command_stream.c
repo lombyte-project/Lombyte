@@ -27,7 +27,7 @@ extern void prepare_scaled_direction_and_perpendicular(f32 *, f32) __asm__("func
 extern u8 *parse_typed_resource_record(u8 *) __asm__("func_002270E8");
 extern void func_00228520(f32 *, f32 *);
 extern void func_00227A08(u32, s32, s32);
-extern void func_00227140(s32, s32, s32);
+extern void emit_selected_graphics_dma_packets(s32, s32, s32) __asm__("func_00227140");
 extern void emit_gs_register_write(s32, s64) __asm__("func_00233980");
 extern void append_fullscreen_clear_strips(s64) __asm__("func_00227378");
 void submit_graphics_setup_command_stream(u8 *command_stream) __asm__("FUN_00227548");
@@ -59,8 +59,8 @@ void submit_graphics_setup_command_stream(u8 *command_stream) {
             command_stream = parse_typed_resource_record(command_stream);
             func_00228520(first_vector, second_vector);
             func_00227A08(0x70000000, graphics_setup_word, record->command_flags);
-            func_00227140(2, 1, 2);
-            func_00227140(1, 0, 2);
+            emit_selected_graphics_dma_packets(2, 1, 2);
+            emit_selected_graphics_dma_packets(1, 0, 2);
         }
         record = (struct GraphicsSetupRecord *)command_stream;
     }

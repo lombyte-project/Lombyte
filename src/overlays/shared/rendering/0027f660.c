@@ -234,12 +234,12 @@ extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 float absolute_float(float input) __asm__("func_001F99C0");
 
 int FUN_L01_0028b510(void *arg0, List *arg1, float target);
-int FUN_L01_0028b510(void *arg0, List *arg1, float target) {
+int FUN_L01_0028b510(void *reference_point, List *point_list, float target) {
     int best = 0;
     int i;
     float bestDiff = 1e11f;
-    for (i = 0; i < arg1->count; i++) {
-        float d = fast_vec_dist(arg1->e[i], arg0);
+    for (i = 0; i < point_list->count; i++) {
+        float d = fast_vec_dist(point_list->e[i], reference_point);
         if (absolute_float(d - target) < bestDiff) {
             bestDiff = d;
             best = i;
@@ -248,17 +248,17 @@ int FUN_L01_0028b510(void *arg0, List *arg1, float target) {
     return best;
 }
 int FUN_L01_0028b5e0(char *a0, List *list, char *pt, char *out);
-int FUN_L01_0028b5e0(char *a0, List *list, char *pt, char *out) {
+int FUN_L01_0028b5e0(char *reference_object, List *list, char *pt, char *out) {
     int idx0 = -1;
     int idx1 = -1;
     float best0 = 10000.0f;
     float best1 = 10000.0f;
-    float d_init = fast_vec_dist(a0 + 0x10, pt);
+    float d_init = fast_vec_dist(reference_object + 0x10, pt);
     int i;
 
     for (i = 0; i < list->count; i++) {
         float d_pt = fast_vec_dist(list->e[i], pt);
-        float d_a0 = fast_vec_dist(list->e[i], a0 + 0x10);
+        float d_a0 = fast_vec_dist(list->e[i], reference_object + 0x10);
         if (d_a0 < best0) {
             best0 = d_a0;
             idx0 = i;
@@ -353,9 +353,9 @@ extern void *func_001153FC_c(void *, int, unsigned int) __asm__("FUN_001153fc");
 
 void FUN_L01_0028b8c8(void *out, int *l, int idx, float a, float b) {
     void *p[3];
-    float v1[4];
-    float v2[4];
-    float v3[4];
+    float weighted_incoming_delta[4];
+    float weighted_outgoing_delta[4];
+    float blended_delta[4];
     float d1, d2, m, len;
     float wa, wb;
     func_001153FC_c(p, 0, 12);
@@ -372,17 +372,17 @@ void FUN_L01_0028b8c8(void *out, int *l, int idx, float a, float b) {
         m = d1;
     else
         m = d2;
-    subtract_vector_xyz(v1, p[1], p[0]);
-    scale_vector_xyz(v1, v1, wb);
-    subtract_vector_xyz(v2, p[2], p[1]);
-    scale_vector_xyz(v2, v2, wa);
-    add_vector_xyz(v3, v1, v2);
+    subtract_vector_xyz(weighted_incoming_delta, p[1], p[0]);
+    scale_vector_xyz(weighted_incoming_delta, weighted_incoming_delta, wb);
+    subtract_vector_xyz(weighted_outgoing_delta, p[2], p[1]);
+    scale_vector_xyz(weighted_outgoing_delta, weighted_outgoing_delta, wa);
+    add_vector_xyz(blended_delta, weighted_incoming_delta, weighted_outgoing_delta);
     m = m * 1.1f;
-    len = vector_length_xyz(v3);
+    len = vector_length_xyz(blended_delta);
     if (m < len) {
-        normalize_vector_xyz(out, v3, m);
+        normalize_vector_xyz(out, blended_delta, m);
     } else {
-        *(OvlQuad *)out = *(OvlQuad *)v3;
+        *(OvlQuad *)out = *(OvlQuad *)blended_delta;
     }
 }
 /* Ported from rac1-decomp (src/overlays/shared/partupd_00280428.c: func_L01_0028C848), where it is exact; names translated to the US level program. */
@@ -392,15 +392,15 @@ extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 
 void FUN_L01_0028ba80(float t, void *out, void *p1, void *p2, void *p3, void *p4) {
     char tmp[16];
-    float t2 = t * t;
-    float t3 = t2 * t;
-    float b = t2 * 3.0f;
-    float a = t3 + t3;
-    float c = t2 + t2;
+    float t_squared = t * t;
+    float t_cubed = t_squared * t;
+    float b = t_squared * 3.0f;
+    float a = t_cubed + t_cubed;
+    float c = t_squared + t_squared;
     fast_vec_scale(out, p1, a - b + 1.0f);
-    fast_vec_scale(tmp, p3, t3 - c + t);
+    fast_vec_scale(tmp, p3, t_cubed - c + t);
     fast_vec_add(out, out, tmp);
-    fast_vec_scale(tmp, p4, t3 - t2);
+    fast_vec_scale(tmp, p4, t_cubed - t_squared);
     fast_vec_add(out, out, tmp);
     fast_vec_scale(tmp, p2, b - a);
     fast_vec_add(out, out, tmp);

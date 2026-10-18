@@ -84,7 +84,7 @@ extern int D_L01_001CB1B0[];
 
 void FUN_L01_002b80d0(float *m) {
     int i;
-    float u0, v0, u1, v1;
+    float u0, first_v_offset, u1, second_v_offset;
     float f;
     float *src, *dst;
     f = m[8] + m[10];
@@ -106,16 +106,16 @@ void FUN_L01_002b80d0(float *m) {
     m[12] = fast_add_rotations(m[12], m[14]);
     m[13] = fast_add_rotations(m[13], m[15]);
     u0 = m[8] + fast_cos(m[12]) * m[16];
-    v0 = m[9] + fast_sin(m[12]) * m[16];
+    first_v_offset = m[9] + fast_sin(m[12]) * m[16];
     u1 = m[8] + fast_cos(m[13]) * m[16];
-    v1 = m[9] + fast_sin(m[13]) * m[16];
+    second_v_offset = m[9] + fast_sin(m[13]) * m[16];
     for (i = 0; i < 0x5C; i += 2) {
         if (D_L01_001CB1B0[i >> 1] == 0) {
             D_L01_001CAE60[i] = D_L01_001CAFE0[i] + u0;
-            D_L01_001CAE60[i + 1] = D_L01_001CAFE0[i + 1] + v0;
+            D_L01_001CAE60[i + 1] = D_L01_001CAFE0[i + 1] + first_v_offset;
         } else {
             D_L01_001CAE60[i] = D_L01_001CAFE0[i] + u1;
-            D_L01_001CAE60[i + 1] = D_L01_001CAFE0[i + 1] + v1;
+            D_L01_001CAE60[i + 1] = D_L01_001CAFE0[i + 1] + second_v_offset;
         }
     }
 }

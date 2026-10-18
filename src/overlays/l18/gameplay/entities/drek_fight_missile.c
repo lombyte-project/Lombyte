@@ -534,9 +534,9 @@ extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 void FUN_L18_002f16f0(struct Moby *moby) {
     VData *d = (VData *)moby->pvars;
     if (d) {
-        float a1 = D_L18_00162290 * frame_time_sq;
-        float a2 = D_L18_00162294 * frame_time_sq;
-        float a3 = D_L18_00162298 * frame_time;
+        float initial_acceleration_step = D_L18_00162290 * frame_time_sq;
+        float initial_braking_step = D_L18_00162294 * frame_time_sq;
+        float initial_maximum_speed = D_L18_00162298 * frame_time;
         float b1 = D_L18_0016229C * frame_time_sq;
         float b2 = D_L18_001622A0 * frame_time_sq;
         float b3 = D_L18_001622A4 * frame_time;
@@ -569,12 +569,12 @@ void FUN_L18_002f16f0(struct Moby *moby) {
             break;
         }
         case 2: {
-            int v9;
+            int hero_on_group_or_class_764_moby;
             int i;
             unsigned char *p;
             if (D_L18_00162288 != 0) {
                 if (d->f330 < 1.5f) {
-                    advance_accelerated_scalar(1.5f, a1, a2, a3, &d->f330, &d->f334);
+                    advance_accelerated_scalar(1.5f, initial_acceleration_step, initial_braking_step, initial_maximum_speed, &d->f330, &d->f334);
                 } else {
                     advance_accelerated_scalar(2.0f, b1, b2, b3, &d->f330, &d->f334);
                 }
@@ -585,12 +585,12 @@ void FUN_L18_002f16f0(struct Moby *moby) {
             if (d->f330 > D_L18_001622B4 && d->i8 != 0) {
                 moby->state = 4;
             }
-            v9 = 0;
+            hero_on_group_or_class_764_moby = 0;
             for (i = 0; i < d->cnt; i++) {
                 unsigned char *e = D_L18_0015FFD8 + (d->ent[i].idx << 8);
                 if (hero.ground_moby == e) {
                     d->f348 = 1;
-                    v9 = 1;
+                    hero_on_group_or_class_764_moby = 1;
                     break;
                 }
             }
@@ -598,9 +598,9 @@ void FUN_L18_002f16f0(struct Moby *moby) {
             if (p != 0) {
                 short s = *(short *)(p + 0xA6);
                 if (s == 0x764)
-                    v9 = 1;
+                    hero_on_group_or_class_764_moby = 1;
             }
-            if (d->f348 != 0 && v9 == 0 && hero.air_frames.s == 0) {
+            if (d->f348 != 0 && hero_on_group_or_class_764_moby == 0 && hero.air_frames.s == 0) {
                 if (tick_countdown_32(&d->f34C))
                     moby->state = 4;
             }
@@ -1492,8 +1492,8 @@ void drek_final_boss_robot_update(BossMoby *moby) {
     float v0[4];
     float v1[4];
     float v2[4];
-    float v3[4];
-    float v4[4];
+    float second_rotation_angles[4];
+    float node_position_and_yaw[4];
     float slow;
     float ang;
     float *aim;
@@ -1886,19 +1886,19 @@ void drek_final_boss_robot_update(BossMoby *moby) {
         v1[2] = v1[2] + 7.0f;
         clear_vector(v2);
         v2[2] = 3.1415927f;
-        clear_vector(v3);
-        v3[2] = 3.9269907f;
+        clear_vector(second_rotation_angles);
+        second_rotation_angles[2] = 3.9269907f;
         v2[1] = 0.17453292f;
-        v3[1] = 0.5235988f;
+        second_rotation_angles[1] = 0.5235988f;
         {
             /* In locals: retail does not load them again after the copy. */
             char *recs = D_L18_001600EC;
             int idx = d->f298;
 
-            qcopy(v4, recs + idx * 0x80 + 0x30);
-            v4[3] = *(float *)(recs + idx * 0x80 + 0x78);
+            qcopy(node_position_and_yaw, recs + idx * 0x80 + 0x30);
+            node_position_and_yaw[3] = *(float *)(recs + idx * 0x80 + 0x78);
         }
-        FUN_L18_002dfaa0((char *)d->f334, v0, v1, v2, v3, v4, *(int *)&D_L18_00162394,
+        FUN_L18_002dfaa0((char *)d->f334, v0, v1, v2, second_rotation_angles, node_position_and_yaw, *(int *)&D_L18_00162394,
                          *(int *)&D_L18_00162398, 1);
         hero.pending_item[3] = 3;
         moby->f20 = 8;
@@ -3090,7 +3090,7 @@ extern int D_L18_0015FFD8_d __asm__("D_L18_0015FFD8");
  * Ported from rac1-decomp, where it is exact; names translated to
  * the US level program (data still reached through the MACRO_ADDR form). */
 // Walks a list of moby indices and resets the flags of each live moby.
-void FUN_L18_002f7028(int a0, int idx) {
+void FUN_L18_002f7028(int unused, int idx) {
     short *p = D_L18_001AC240_u[idx];
     if (p != 0) {
         do {

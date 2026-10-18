@@ -251,16 +251,16 @@ extern void mine_blast_mobys(void *, void *, void *, int, int, int, int, int, fl
 
 void poison_vessel_update(Moby_2E9358 *moby) __asm__("FUN_L15_002e7f68");
 void poison_vessel_update(Moby_2E9358 *moby) {
-    Vec_2E9358 s20;
+    Vec_2E9358 previous_position;
     Vec_2E9358 s30;
-    Vec_2E9358 s40;
+    Vec_2E9358 temporary_vector;
     Data_2E9358 *data = moby->data;
     char *p20 = 0;
     unsigned char state;
     int ret;
     Res_2E9358 *r;
 
-    s20.q = moby->pos;
+    previous_position.q = moby->pos;
     clear_u64_value(&s30);
     if (coll_sphere(0.5f, &moby->pos, 1, moby)) {
         if (D_L15_001744D8_2E9358 == 0 || FUN_L00_002603d0(D_L15_001744D8_2E9358) == 0) {
@@ -277,8 +277,8 @@ void poison_vessel_update(Moby_2E9358 *moby) {
     switch (state) {
     case 0:
         data->f8 = data->f8 - D_L15_00161FBC * frame_time_sq;
-        func_L00_001FF240_2E9358(&s40, &moby->pos, data);
-        if (collision_line(&s20, &moby->pos, 0x10, moby, 0)) {
+        func_L00_001FF240_2E9358(&temporary_vector, &moby->pos, data);
+        if (collision_line(&previous_position, &moby->pos, 0x10, moby, 0)) {
             if (((Tb_2E9358 *)D_L15_001744C0_2E9358)->f18 != 0 && FUN_L00_002603d0(((Tb_2E9358 *)D_L15_001744C0_2E9358)->f18) != 0) {
                 data->target = (Moby_2E9358 *)((Tb_2E9358 *)D_L15_001744C0_2E9358)->f18;
                 moby->state = 1;
@@ -304,8 +304,8 @@ void poison_vessel_update(Moby_2E9358 *moby) {
                 p20 = FUN_L00_002603d0(D_L15_001744D8_2E9358);
                 if (p20 != 0) {
                     func_L00_00261478_2E9358(moby, data->target, &moby->pos, &moby->v40, &moby->pos, &moby->v40);
-                    subtract_vector_xyz(&s40, &moby->pos, &s20);
-                    *(OvlQuad *)data = s40.q;
+                    subtract_vector_xyz(&temporary_vector, &moby->pos, &previous_position);
+                    *(OvlQuad *)data = temporary_vector.q;
                 }
             }
         }
@@ -321,8 +321,8 @@ void poison_vessel_update(Moby_2E9358 *moby) {
         func_L00_0025F4A8_2E9358(moby, data, 0, 0.0f, 0.0f, 3, 3, 5, 2.0f, 1.0f, 4.0f, 1.0f, -1, 7.0f, 0, 1, -1, 0);
         trooper_play_sound(0, 0, moby, 0x79);
         ret = probe_world_sphere(&moby->pos, 0x10, moby, 0, 2.0f);
-        s40.q = moby->pos;
-        mine_blast_mobys(moby, &s40, D_L15_00178500, ret, 0, 0x830001, 2, 1, 1.0f, 1.0f, 1.0f);
+        temporary_vector.q = moby->pos;
+        mine_blast_mobys(moby, &temporary_vector, D_L15_00178500, ret, 0, 0x830001, 2, 1, 1.0f, 1.0f, 1.0f);
         mark_moby_for_removal(moby);
     }
 }
@@ -789,8 +789,8 @@ void FUN_L15_002eb6b8(void) {
     int val = 0;
     char *s = D_L15_0016CE60;
     int n;
-    char *s2;
-    char *s3;
+    char *second_message_timing_state;
+    char *third_message_timing_state;
     if (*(int *)(s + 0x30) == 3) {
         if (scale_game_frames(0xB5) < *(int *)(s + 0x34)) {
             if (*(int *)(s + 0x34) < scale_game_frames(0x104)) {
@@ -799,20 +799,20 @@ void FUN_L15_002eb6b8(void) {
                 val = (*(int *)(s + 0x34) - scale_game_frames(0xB5)) >> 2;
             }
         }
-        s2 = D_L15_0016CE60;
-        if (scale_game_frames(0x1C2) < *(int *)(s2 + 0x34)) {
-            if (*(int *)(s2 + 0x34) < scale_game_frames(0x280)) {
+        second_message_timing_state = D_L15_0016CE60;
+        if (scale_game_frames(0x1C2) < *(int *)(second_message_timing_state + 0x34)) {
+            if (*(int *)(second_message_timing_state + 0x34) < scale_game_frames(0x280)) {
                 flag = 1;
                 sprintf(buf, D_L15_00162190, msg_string(0x526B));
-                val = (*(int *)(s2 + 0x34) - scale_game_frames(0x1C2)) >> 2;
+                val = (*(int *)(second_message_timing_state + 0x34) - scale_game_frames(0x1C2)) >> 2;
             }
         }
-        s3 = D_L15_0016CE60;
-        if (scale_game_frames(0x2EE) < *(int *)(s3 + 0x34)) {
-            if (*(int *)(s3 + 0x34) < scale_game_frames(0x3A2)) {
+        third_message_timing_state = D_L15_0016CE60;
+        if (scale_game_frames(0x2EE) < *(int *)(third_message_timing_state + 0x34)) {
+            if (*(int *)(third_message_timing_state + 0x34) < scale_game_frames(0x3A2)) {
                 flag = 1;
                 sprintf(buf, D_L15_00162190, msg_string(0x526C));
-                val = (*(int *)(s3 + 0x34) - scale_game_frames(0x2EE)) >> 2;
+                val = (*(int *)(third_message_timing_state + 0x34) - scale_game_frames(0x2EE)) >> 2;
             }
         }
     } else if (*(int *)(s + 0x30) == 4) {
@@ -2082,10 +2082,10 @@ int FUN_L15_002f8698(char *moby, float a, float b) {
     fast_vec_sub(r, *(char **)(g + 0x180), p);
     lenr = fast_vec_length(r);
     if (b != 0.0f) {
-        float t1 = fast_arc_tan(lenq, dot1);
-        float t2 = fast_arc_tan(lenr, dot2);
-        float t3 = fast_difference_between_rotations(t1, t2);
-        if (b * DEG_TO_RAD < t3) {
+        float target_axis_angle = fast_arc_tan(lenq, dot1);
+        float reference_axis_angle = fast_arc_tan(lenr, dot2);
+        float axis_angle_difference = fast_difference_between_rotations(target_axis_angle, reference_axis_angle);
+        if (b * DEG_TO_RAD < axis_angle_difference) {
             return 0;
         }
     }
@@ -2121,10 +2121,10 @@ void FUN_L15_002f88e8(char *m) {
     char *s = *(char **)(D_L15_0015EF50 + *(short *)(m + 0x84) * 32 + 0x1C);
     char *o = D_L15_001600EC + (*(int *)(s + 0x48) << 7);
     int done;
-    int t1;
-    int t2;
-    int t3;
-    int t4;
+    int hold_start_frames;
+    int cone_check_delay_frames;
+    int cycle_reset_frames;
+    int spin_ramp_frames;
     float r;
     float a;
     if (FUN_L00_002e83c0(m) <= 0) {
@@ -2139,31 +2139,31 @@ void FUN_L15_002f88e8(char *m) {
     *(int *)(*(char **)(D_L15_00167400_lui + 0x70) + 0x230) = 2;
     done = 1;
     (*(short *)(s + 0x20))++;
-    t1 = frames_s(300);
-    t2 = frames_s(400);
-    t3 = frames_s(560);
-    t4 = frames_s(200);
+    hold_start_frames = frames_s(300);
+    cone_check_delay_frames = frames_s(400);
+    cycle_reset_frames = frames_s(560);
+    spin_ramp_frames = frames_s(200);
     FUN_L02_002f6598(1.0f, 12.0f, 0.11f);
     if (D_0013C940_s.x != 0.0f)
-        *(short *)(s + 0x20) = t1;
+        *(short *)(s + 0x20) = hold_start_frames;
     else if (D_0013C940_s.y != 0.0f)
-        *(short *)(s + 0x20) = t1;
-    if (*(short *)(s + 0x20) >= t1) {
-        if (++*(int *)(s + 0x3C) >= t2 && FUN_L15_002f8698(m, 30.0f, 0.0f))
-            *(short *)(s + 0x20) = t3;
+        *(short *)(s + 0x20) = hold_start_frames;
+    if (*(short *)(s + 0x20) >= hold_start_frames) {
+        if (++*(int *)(s + 0x3C) >= cone_check_delay_frames && FUN_L15_002f8698(m, 30.0f, 0.0f))
+            *(short *)(s + 0x20) = cycle_reset_frames;
         else
             done = 0;
     }
-    if (*(short *)(s + 0x20) >= t3) {
+    if (*(short *)(s + 0x20) >= cycle_reset_frames) {
         done = 1;
         *(int *)(s + 0x3C) = 0;
         *(short *)(s + 0x20) = 1;
     }
-    if (t4 < *(short *)(s + 0x20) && *(short *)(s + 0x20) < t1) {
-        *(int *)(s + 0x3C) = t1;
-        *(short *)(s + 0x20) = t4;
+    if (spin_ramp_frames < *(short *)(s + 0x20) && *(short *)(s + 0x20) < hold_start_frames) {
+        *(int *)(s + 0x3C) = hold_start_frames;
+        *(short *)(s + 0x20) = spin_ramp_frames;
     }
-    r = itof_s(*(short *)(s + 0x20)) / itof_s(t4);
+    r = itof_s(*(short *)(s + 0x20)) / itof_s(spin_ramp_frames);
     a = *(float *)s * DEG_TO_RAD * r;
     if (done)
         FUN_L00_002e8970(o + 0x30, a, 0.0f);

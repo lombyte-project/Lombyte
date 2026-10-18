@@ -45,15 +45,15 @@ int FUN_L01_00226f10(int a) {
 
 extern int FUN_L00_0028de68(int a0, int a1, int a2, int a3, int a4);
 
-void FUN_L01_00227e48(int a0, int a1, int a2) {
-    if (a2 != 0) {
+void FUN_L01_00227e48(int voice_group_index, int voice_pair_index, int call_enabled) {
+    if (call_enabled != 0) {
         char *g = (char *)D_0013E533 + 0xE1D;
         char *m = *(char **)(g + 0x10E0);
         int flag = 0;
         if (m != 0) {
             flag = *(short *)(m + 0xA6) == 0xAD;
         }
-        FUN_L00_0028de68(a0, a1, flag, 0, *(int *)(g + 0x2080));
+        FUN_L00_0028de68(voice_group_index, voice_pair_index, flag, 0, *(int *)(g + 0x2080));
     }
 }
 #include "rnc/gameplay/entities/moby.h"
@@ -1128,7 +1128,7 @@ extern CollisionHit HH __asm__("D_L01_001742C0") __attribute__((section(".data")
 #define HF(o) (*(f32 *)(D_L01_001742C0 + (o)))
 
 void FUN_L01_00232dc0(void) {
-    V v0, v10, v20, v30, v40, v50, v60;
+    V collision_ray_end, ground_ray_start, v20, side_ray_start, v40, side_hit_angles, normalized_side_hit_normal;
     f32 f;
     s32 r;
     s32 i;
@@ -1159,8 +1159,8 @@ void FUN_L01_00232dc0(void) {
     if (hero.state.control_mode == 2) {
         g = hero.unk234 * 2.9f;
     }
-    hero_get_collision_ray_endpoints(&v10, &v0, k, g, -48.0f);
-    if (FUN_001efa68_c(&v10, &v0, 2, (s32)hero.moby, 0) == 0) {
+    hero_get_collision_ray_endpoints(&ground_ray_start, &collision_ray_end, k, g, -48.0f);
+    if (FUN_001efa68_c(&ground_ray_start, &collision_ray_end, 2, (s32)hero.moby, 0) == 0) {
         goto tail;
     }
     r = coll_sound_class();
@@ -1174,7 +1174,7 @@ void FUN_L01_00232dc0(void) {
         if (hero.motion.pos.f[2] < hero.water_surface_z && hero.unk2F8 <= 0) {
             hero.unk2F8 = 1;
         }
-        if (FUN_001efa68_c(&v10, &v0, 0x24, (s32)hero.moby, 0) == 0) {
+        if (FUN_001efa68_c(&ground_ray_start, &collision_ray_end, 0x24, (s32)hero.moby, 0) == 0) {
             goto d1;
         }
         r = coll_sound_class();
@@ -1185,8 +1185,8 @@ void FUN_L01_00232dc0(void) {
     }
     if (hero.ground_type == 0xD) {
         hero.water_surface_z = HH.point.f[2];
-        v10.f[2] = HH.point.f[2] - 0.01f;
-        if (FUN_001efa68_c(&v10, &v0, 4, (s32)hero.moby, 0) == 0) {
+        ground_ray_start.f[2] = HH.point.f[2] - 0.01f;
+        if (FUN_001efa68_c(&ground_ray_start, &collision_ray_end, 4, (s32)hero.moby, 0) == 0) {
             goto d1;
         }
     }
@@ -1275,21 +1275,21 @@ d1:
         if (i == 1) {
             a = -a;
         }
-        FUN_L00_002335c8(&v30, 0.2f, a, 0.45f);
+        FUN_L00_002335c8(&side_ray_start, 0.2f, a, 0.45f);
         FUN_L00_002335c8(&v40, 0.2f, a, -0.45f);
-        if (FUN_001efa68_c(&v30, &v0, 0x22, (s32)hero.moby, 0)) {
+        if (FUN_001efa68_c(&side_ray_start, &collision_ray_end, 0x22, (s32)hero.moby, 0)) {
             f = HH.point.f[2] - hero.ground_z.f;
             hero.unk2C0.f[i] = f;
             if (0.4f < FUN_001f99c0(f)) {
                 hero.unk2C0.f[i] = 0.0f;
             }
-            FUN_00125180_c(&v60, (u8 *)&HH.normal_x);
-            FUN_L00_00216078(&v60, &v50);
-            if (-0.78539819f < v50.f[1] && v50.f[1] < 0.78539819f) {
-                hero.unk2C8.f[i] = v50.f[1];
+            FUN_00125180_c(&normalized_side_hit_normal, (u8 *)&HH.normal_x);
+            FUN_L00_00216078(&normalized_side_hit_normal, &side_hit_angles);
+            if (-0.78539819f < side_hit_angles.f[1] && side_hit_angles.f[1] < 0.78539819f) {
+                hero.unk2C8.f[i] = side_hit_angles.f[1];
             }
-            if (-0.78539819f < v50.f[0] && v50.f[0] < 0.78539819f) {
-                hero.unk2D0.f[i] = v50.f[0];
+            if (-0.78539819f < side_hit_angles.f[0] && side_hit_angles.f[0] < 0.78539819f) {
+                hero.unk2D0.f[i] = side_hit_angles.f[0];
             }
         } else {
             hero.unk2C0.i[i] = 0;

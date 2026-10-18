@@ -1122,13 +1122,13 @@ float FUN_L14_002b35d8(char *moby, int flag, float target_angle) {
 extern short *D_L14_001ABF40_3920[] __asm__("D_L14_001ABF40");
 extern char *D_L14_0015FFD8_3920 __asm__("D_L14_0015FFD8");
 
-int FUN_L14_002b3920(int a0) {
+int FUN_L14_002b3920(int moby_list_index) {
     int count = 0;
     short *p;
 
-    if (a0 == -1)
+    if (moby_list_index == -1)
         return 0;
-    p = D_L14_001ABF40_3920[a0];
+    p = D_L14_001ABF40_3920[moby_list_index];
     if (p == 0)
         return 0;
     do {

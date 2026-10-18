@@ -436,7 +436,7 @@ extern void upd_a(struct Moby *) __asm__("FUN_L00_00250df8");
 
 struct Moby *spawn_debris_chunk(Vec4f *pos, Vec4f *vel, s32 oclass, s32 a3, s32 a4,
                               f32 scale, f32 gravity, f32 spin, f32 seconds) __asm__("FUN_L01_002f8530");
-struct Moby *spawn_debris_chunk(Vec4f *pos, Vec4f *vel, s32 oclass, s32 a3, s32 a4,
+struct Moby *spawn_debris_chunk(Vec4f *pos, Vec4f *vel, s32 oclass, s32 initial_timer, s32 fade_out,
                               f32 scale, f32 gravity, f32 spin, f32 seconds) {
     u128 p;
     u128 v;
@@ -469,12 +469,12 @@ struct Moby *spawn_debris_chunk(Vec4f *pos, Vec4f *vel, s32 oclass, s32 a3, s32 
         } else {
             s = r * spin;
         }
-        pv->unk10 = a3;
-        pv->unk28 = a3;
+        pv->unk10 = initial_timer;
+        pv->unk28 = initial_timer;
         pv->scale = scale;
         pv->spin = s;
         pv->life = truncate_float_to_s32(scale_time(seconds * 60.0f));
-        pv->unk20 = a4;
+        pv->unk20 = fade_out;
         pv->gravity = gravity * 9.8f * frame_time_sq;
         upd_a(m);
     }

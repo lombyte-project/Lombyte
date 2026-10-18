@@ -1,6 +1,8 @@
 /* Level 00 moby classes: clank_cutscene_trigger. */
 /* Mostly per-level sky drawing; also holds the per-level moby hooks and a door moby update. */
 #include "types.h"
+#include "rnc/rendering/sky_shell.h"
+#include "rnc/rendering/sky_particles.h"
 #include "rnc/gameplay/hero.h"
 #include "rnc/globals.h"
 #include "asm.h"
@@ -219,10 +221,7 @@ typedef union {
 
 extern void set_identity_matrix(void *) __asm__("FUN_001f9fc8");
 extern void sky_sprite_proc(void) __asm__("FUN_0022bba0");
-extern void FUN_L00_00288ec0(int, int);
-extern void FUN_L00_00289108(void);
 extern void fun_001fa070(void *, void *) __asm__("FUN_001fa070");
-void sky_draw_shell(s32 arg0) __asm__("FUN_0022b690");
 void vu1_add_g_sregister(s32 a0, s64 a1) __asm__("FUN_00233980");
 
 void FUN_L00_00289330(void) {
@@ -232,8 +231,8 @@ void FUN_L00_00289330(void) {
     sky_draw_shell(0);
     sky_draw_shell(1);
     if (*(short *)(D_L00_0016051C + 8) == 0)
-        FUN_L00_00288ec0(0xF4, 0xC);
-    FUN_L00_00289108();
+        sky_particles_init(0xF4, 0xC);
+    sky_particles_update();
     sky_sprite_proc();
     vu1_add_g_sregister(0x42, 0x8000000044L);
     sky_draw_shell(2);

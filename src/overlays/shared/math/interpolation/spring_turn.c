@@ -128,15 +128,15 @@ typedef struct {
 extern G002583f0 D_L00_00173E40_u __asm__("D_L00_00173E40");
 s32 collision_line(void *, void *, s32, s32, s32) __asm__("FUN_001efa68");
 s32 FUN_L00_002583f0(void *pos, s32 a, s32 flag, f32 up, f32 down) {
-    V002583f0 t0, t1;
+    V002583f0 raised_pos, lowered_pos;
     s32 r;
-    qcopy(&t0, pos);
-    t0.f[2] += up;
-    qcopy(&t1, pos);
-    t1.f[2] -= down;
-    if (t1.f[2] < 0.0f)
-        t1.f[2] = 0.0f;
-    r = collision_line(&t0, &t1, 0x22, a, 0);
+    qcopy(&raised_pos, pos);
+    raised_pos.f[2] += up;
+    qcopy(&lowered_pos, pos);
+    lowered_pos.f[2] -= down;
+    if (lowered_pos.f[2] < 0.0f)
+        lowered_pos.f[2] = 0.0f;
+    r = collision_line(&raised_pos, &lowered_pos, 0x22, a, 0);
     if (D_L00_00173E40_u.x1c < 0)
         r = 0;
     if (flag && D_L00_00173E40_u.x18 != 0)
@@ -288,34 +288,34 @@ extern int func_L00_001F10E0_l(void *, float, int, void *) __asm__("FUN_L00_001f
 int FUN_L00_00258830_c(char *m, char *v, int flags, float a, float b,
                        float c) __asm__("FUN_L00_00258830");
 int FUN_L00_00258830_c(char *m, char *v, int flags, float a, float b, float c) {
-    Vs t0;
-    Vs t1;
-    Vs t2;
-    Vs t3;
+    Vs original_position;
+    Vs raised_position;
+    Vs probe_end;
+    Vs scaled_displacement;
     int r = 0;
     int fl = (flags * 2) & 0x20;
     char *p = m + 0x10;
     int i;
     char *q;
 
-    qcopy(&t0, p);
+    qcopy(&original_position, p);
     add_vector_xyz(p, p, v);
     if (b < vector_length_xyz(v)) {
-        qcopy(&t1, &t0);
-        t1.a[2] += a;
-        normalize_vector_xyz(&t3, v, b);
-        add_vector_xyz(&t2, &t3, p);
-        t2.a[2] += a;
-        if (collision_line(&t1, &t2, fl, (int)m, 0)) {
-            subtract_vector_xyz(p, (char *)&D_94C8_60, &t3);
+        qcopy(&raised_position, &original_position);
+        raised_position.a[2] += a;
+        normalize_vector_xyz(&scaled_displacement, v, b);
+        add_vector_xyz(&probe_end, &scaled_displacement, p);
+        probe_end.a[2] += a;
+        if (collision_line(&raised_position, &probe_end, fl, (int)m, 0)) {
+            subtract_vector_xyz(p, (char *)&D_94C8_60, &scaled_displacement);
             r = 1;
             *(float *)(m + 0x18) -= a;
         }
     }
     for (i = 0, q = m + 0x10; i < 6; i++) {
-        qcopy(&t1, q);
-        t1.a[2] += a;
-        if (func_L00_001F10E0_l(&t1, b, fl | 4, m)) {
+        qcopy(&raised_position, q);
+        raised_position.a[2] += a;
+        if (func_L00_001F10E0_l(&raised_position, b, fl | 4, m)) {
             qcopy(q, &D_L00_00173E70);
             r |= 1;
             *(float *)(m + 0x18) -= a;
@@ -324,11 +324,11 @@ int FUN_L00_00258830_c(char *m, char *v, int flags, float a, float b, float c) {
         }
     }
     b = *(float *)(m + 0x18) - c;
-    qcopy(&t1, q);
-    qcopy(&t2, q);
-    t1.a[2] += a;
-    t2.a[2] = b - 0.05f;
-    if (collision_line(&t1, &t2, fl | 2, (int)m, 0)) {
+    qcopy(&raised_position, q);
+    qcopy(&probe_end, q);
+    raised_position.a[2] += a;
+    probe_end.a[2] = b - 0.05f;
+    if (collision_line(&raised_position, &probe_end, fl | 2, (int)m, 0)) {
         if (D_L00_00173E40[7] > 0) {
             float g;
             r |= 2;
@@ -343,7 +343,7 @@ int FUN_L00_00258830_c(char *m, char *v, int flags, float a, float b, float c) {
             }
         }
     }
-    subtract_vector_xyz(v, q, &t0);
+    subtract_vector_xyz(v, q, &original_position);
     return r;
 }
 float convert_integer_to_float(int) __asm__("FUN_001fa6c0");

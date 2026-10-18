@@ -312,9 +312,9 @@ extern float D_L08_00174660[];
 
 void FUN_L08_002d23f0(char *moby) {
     union Coll_36F8 c;
-    blk16 t70;
-    float t80[4];
-    float t90[4];
+    blk16 table_or_bounce_scratch;
+    float normalized_direction[4];
+    float random_direction[4];
     char *d;
     int st;
     int two;
@@ -344,15 +344,15 @@ void FUN_L08_002d23f0(char *moby) {
             float lo = -1.0f;
             float hi = 1.0f;
             int *q;
-            t70 = D_L08_00161868;
-            *(v128_36F8 *)t90 = 0;
-            t90[0] = random_float_between_c5(lo, hi);
-            t90[1] = random_float_between_c5(lo, hi);
-            t90[2] = random_float_between_c5(lo, hi);
-            *(v128_36F8 *)t80 = *(v128_36F8 *)t90;
-            fast_vec_normalize(t80, t80, D_0015ED6C);
-            q = (int *)t70.b + random_integer_below_c3(4);
-            FUN_L00_00269958_c((moby + 0x10), t80, *q, 0x4FFF, scale_game_frames_c(0x2D), 0x32, 0x78, 1);
+            table_or_bounce_scratch = D_L08_00161868;
+            *(v128_36F8 *)random_direction = 0;
+            random_direction[0] = random_float_between_c5(lo, hi);
+            random_direction[1] = random_float_between_c5(lo, hi);
+            random_direction[2] = random_float_between_c5(lo, hi);
+            *(v128_36F8 *)normalized_direction = *(v128_36F8 *)random_direction;
+            fast_vec_normalize(normalized_direction, normalized_direction, D_0015ED6C);
+            q = (int *)table_or_bounce_scratch.b + random_integer_below_c3(4);
+            FUN_L00_00269958_c((moby + 0x10), normalized_direction, *q, 0x4FFF, scale_game_frames_c(0x2D), 0x32, 0x78, 1);
         }
         qcopy(c.r.start, moby + 0x10);
         f20 = 0.16f;
@@ -386,10 +386,10 @@ void FUN_L08_002d23f0(char *moby) {
                     qcopy((moby + 0x10), tbl + 0x20);
                     *(float *)(moby + 0x18) += f20;
                     FUN_L00_001ff660_c((d + 0x10), (d + 0x10), tbl + 0x40);
-                    cross_vectors_xyz(&t70, (d + 0x10), tbl + 0x40);
+                    cross_vectors_xyz(&table_or_bounce_scratch, (d + 0x10), tbl + 0x40);
                     k = D_0015ED6C * 1.5f;
-                    fast_vec_normalize(&t70, &t70, random_float_between_c5(-k, k));
-                    add_vector_xyz((d + 0x10), (d + 0x10), &t70);
+                    fast_vec_normalize(&table_or_bounce_scratch, &table_or_bounce_scratch, random_float_between_c5(-k, k));
+                    add_vector_xyz((d + 0x10), (d + 0x10), &table_or_bounce_scratch);
                     fast_vec_scale_c((d + 0x10), (d + 0x10), 0.4f);
                     *(int *)(d + 0x24) += 1;
                     *(int *)(d + 0x20) = scale_game_frames_c(0xB4);
@@ -1054,11 +1054,11 @@ extern char *func_00219780_2D6C58(void *, void *, void *, int, int, int, int, in
 
 void FUN_L08_002d5950(char *moby, int joint, int count) {
     char *data = *(char **)(moby + 0x78);
-    char t10[32];
-    float t30[8];
+    char joint_transform_buffer[32];
+    float jitter_direction_source[8];
     float joint_pos[4];
     float velocity[4];
-    float t70[4];
+    float spread_vector[4];
     float jitter[4];
     float spawn_pos[4];
     int i;
@@ -1066,7 +1066,7 @@ void FUN_L08_002d5950(char *moby, int joint, int count) {
     float random_angle, offset;
 
     func_L00_00250800_2D6C58(moby, joint, joint_pos);
-    func_0020DAF8_2D6C58(moby, joint, t10);
+    func_0020DAF8_2D6C58(moby, joint, joint_transform_buffer);
     for (i = 0; i < count; i++) {
         float *spawn_ptr = spawn_pos;
 
@@ -1076,36 +1076,36 @@ void FUN_L08_002d5950(char *moby, int joint, int count) {
         spawn_pos[1] += func_002140F8_2D6C58(-0.05f, 0.05f);
         spawn_pos[2] += func_002140F8_2D6C58(-0.05f, 0.05f);
         qcopy(velocity, data + 0x40);
-        qcopy(t70, data + 0x40);
+        qcopy(spread_vector, data + 0x40);
         if (count / 3 < i) {
-            func_L00_001FF4B0_2D6C58(jitter, t30, func_002140F8_2D6C58(D_L08_001618DC, D_L08_001618DC * 1.2f) * D_0015ED6C);
+            func_L00_001FF4B0_2D6C58(jitter, jitter_direction_source, func_002140F8_2D6C58(D_L08_001618DC, D_L08_001618DC * 1.2f) * D_0015ED6C);
             fast_vec_add(velocity, velocity, jitter);
-            fast_vec_scale(t70, t70, 0.5f);
+            fast_vec_scale(spread_vector, spread_vector, 0.5f);
             offset = func_001F9F90_2D6C58(random_angle);
             offset = offset * (func_002140F8_2D6C58(0.0f, D_L08_001618E8) * D_0015ED6C);
-            t70[0] = t70[0] + offset;
+            spread_vector[0] = spread_vector[0] + offset;
             offset = func_001F9FA8_2D6C58(random_angle);
             offset = offset * (func_002140F8_2D6C58(0.0f, D_L08_001618E8) * D_0015ED6C);
-            t70[1] = t70[1] + offset;
-            t70[2] = D_L08_001618E0 * D_0015ED6C;
+            spread_vector[1] = spread_vector[1] + offset;
+            spread_vector[2] = D_L08_001618E0 * D_0015ED6C;
         } else {
-            func_L00_001FF4B0_2D6C58(jitter, t30, func_002140F8_2D6C58(0.0f, D_L08_001618DC) * D_0015ED6C);
+            func_L00_001FF4B0_2D6C58(jitter, jitter_direction_source, func_002140F8_2D6C58(0.0f, D_L08_001618DC) * D_0015ED6C);
             fast_vec_add(velocity, velocity, jitter);
-            fast_vec_scale(t70, t70, 0.5f);
+            fast_vec_scale(spread_vector, spread_vector, 0.5f);
             offset = func_001F9F90_2D6C58(random_angle);
             offset = offset * (func_002140F8_2D6C58(0.0f, D_L08_001618E8 * 0.25f) * D_0015ED6C);
-            t70[0] = t70[0] + offset;
+            spread_vector[0] = spread_vector[0] + offset;
             offset = func_001F9FA8_2D6C58(random_angle);
             offset = offset * (func_002140F8_2D6C58(0.0f, D_L08_001618E8 * 0.25f) * D_0015ED6C);
-            t70[1] = t70[1] + offset;
-            t70[2] = D_L08_001618E0 * D_0015ED6C;
+            spread_vector[1] = spread_vector[1] + offset;
+            spread_vector[2] = D_L08_001618E0 * D_0015ED6C;
         }
         velocity[3] = D_L08_001618F8;
-        t70[3] = D_L08_001618FC;
+        spread_vector[3] = D_L08_001618FC;
         frames1 = func_001FA898_2D6C58(func_001F9878_2D6C58(func_002140F8_2D6C58((float)D_L08_001618EC, (float)D_L08_001618EC * 1.2f)));
         frames2 = func_001FA898_2D6C58(func_001F9878_2D6C58(func_002140F8_2D6C58((float)D_L08_001618F0, (float)D_L08_001618F0 * 1.2f)));
         frames3 = func_001FA898_2D6C58(func_001F9878_2D6C58(func_002140F8_2D6C58((float)D_L08_001618F4, (float)D_L08_001618F4 * 1.5f)));
-        func_00219780_2D6C58(joint_pos, velocity, t70, D_L08_001618D4, D_L08_001618D8, frames1, frames2, frames3, -1);
+        func_00219780_2D6C58(joint_pos, velocity, spread_vector, D_L08_001618D4, D_L08_001618D8, frames1, frames2, frames3, -1);
     }
 }
 /* Spawns debris mobys while the level counter allows, then scatters or bursts the group's other mobys. */
@@ -2831,26 +2831,26 @@ extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void FUN_L08_002dec90(struct Moby *m, char *pos) {
-    float v10[4];
-    float v20[4];
-    float v30[4];
-    float v40[4];
-    float v50[4];
-    float v60[4];
+    float scaled_displacement_vector[4];
+    float jittered_displacement_vector[4];
+    float frame_displacement[4];
+    float random_jitter[4];
+    float spark_position[4];
+    float local_spawn_offset[4];
     int a, b, c, d, e;
     char *r;
-    subtract_vector_xyz(v30, &m->pos, pos);
-    *(OvlQuad *)v60 = 0;
-    v60[0] = -2.3f;
-    v60[2] = 0.3f;
-    transform_vector_by_basis(v50, v60, &m->rot_row0);
-    add_vector_xyz(v50, v50, &m->pos);
-    scale_vector_xyz(v10, v30, D_L08_00161A48);
-    scale_vector_xyz(v20, v30, D_L08_00161A4C);
-    random_vector(v40, 0.0f, D_L08_00161A50 * frame_time);
-    add_vector_xyz(v20, v20, v40);
-    v10[3] = random_float_between(D_L08_00161A64, D_L08_00161A68);
-    v20[3] = random_float_between(D_L08_00161A6C, D_L08_00161A70);
+    subtract_vector_xyz(frame_displacement, &m->pos, pos);
+    *(OvlQuad *)local_spawn_offset = 0;
+    local_spawn_offset[0] = -2.3f;
+    local_spawn_offset[2] = 0.3f;
+    transform_vector_by_basis(spark_position, local_spawn_offset, &m->rot_row0);
+    add_vector_xyz(spark_position, spark_position, &m->pos);
+    scale_vector_xyz(scaled_displacement_vector, frame_displacement, D_L08_00161A48);
+    scale_vector_xyz(jittered_displacement_vector, frame_displacement, D_L08_00161A4C);
+    random_vector(random_jitter, 0.0f, D_L08_00161A50 * frame_time);
+    add_vector_xyz(jittered_displacement_vector, jittered_displacement_vector, random_jitter);
+    scaled_displacement_vector[3] = random_float_between(D_L08_00161A64, D_L08_00161A68);
+    jittered_displacement_vector[3] = random_float_between(D_L08_00161A6C, D_L08_00161A70);
     a = fast_tween_color(D_L08_00161A74, D_L08_00161A78,
                      random_float_between(0.0f, 1.0f));
     b = fast_tween_color(D_L08_00161A7C, D_L08_00161A80,
@@ -2863,7 +2863,7 @@ void FUN_L08_002dec90(struct Moby *m, char *pos) {
     e = func_001FA898_r(multiply_global_factor_ed64(
         (float)D_L08_00161A5C *
         (random_float_between(-D_L08_00161A60, D_L08_00161A60) + 1.0f)));
-    r = spawn_spark(v50, v10, v20, a, b, c, d, e, -1);
+    r = spawn_spark(spark_position, scaled_displacement_vector, jittered_displacement_vector, a, b, c, d, e, -1);
     if (r != 0) {
         r[9] = func_001FA898_r(8.0f) - 0x70;
     }

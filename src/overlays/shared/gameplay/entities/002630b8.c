@@ -505,8 +505,8 @@ extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void *FUN_L00_00263fd8(char *src, int cls, float *pos, void *mat, int a8, int a9, float *v10,
                        float *v11, float scale, float *v12);
-void *FUN_L00_00263fd8(char *src, int cls, float *pos, void *mat, int a8, int a9, float *v10,
-                       float *v11, float scale, float *v12) {
+void *FUN_L00_00263fd8(char *src, int cls, float *pos, void *mat, int a8, int a9, float *initial_velocity,
+                       float *v11, float scale, float *class_vector_override) {
     char *m = (char *)func_0020D348_m(cls);
     char *d;
     float t[4];
@@ -535,7 +535,7 @@ void *FUN_L00_00263fd8(char *src, int cls, float *pos, void *mat, int a8, int a9
             *(float *)(d + 0x38) = random_float_between_alt(10.0f, 15.0f) * frame_time_sq;
         else
             *(float *)(d + 0x38) = scale;
-        if (fast_vec_length(v10) == 0.0f) {
+        if (fast_vec_length(initial_velocity) == 0.0f) {
             f21 = random_angle_radians();
             k = random_float_between_alt(2.0f, 4.0f) * frame_time;
             t[0] = fast_cos(f21) * k;
@@ -544,7 +544,7 @@ void *FUN_L00_00263fd8(char *src, int cls, float *pos, void *mat, int a8, int a9
             t[2] = random_float_between_alt(5.0f, 8.0f) * frame_time;
             qcopy(d, t);
         } else {
-            qcopy(d, v10);
+            qcopy(d, initial_velocity);
         }
         if (fast_vec_length(v11) == 0.0f) {
             float g = D_0015ED6C_s[0];
@@ -553,7 +553,7 @@ void *FUN_L00_00263fd8(char *src, int cls, float *pos, void *mat, int a8, int a9
         } else {
             qcopy(d + 0x10, v11);
         }
-        if (fast_vec_length(v12) == 0.0f && v12[3] == 0.0f) {
+        if (fast_vec_length(class_vector_override) == 0.0f && class_vector_override[3] == 0.0f) {
             qcopy(t, *(char **)(m + 0x24) + 0x30);
             k2 = *(float *)(m + 0x2C);
             k2 = k2 * 0.0009765625f;
@@ -561,7 +561,7 @@ void *FUN_L00_00263fd8(char *src, int cls, float *pos, void *mat, int a8, int a9
             t[3] = t[3] * k2;
             qcopy(d + 0x20, t);
         } else {
-            qcopy(d + 0x20, v12);
+            qcopy(d + 0x20, class_vector_override);
         }
         FUN_L00_00250df8(m);
     }

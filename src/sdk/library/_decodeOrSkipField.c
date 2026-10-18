@@ -7,33 +7,33 @@ extern s32 _nextHeader();
 extern s32 _sceMpegFlush();
 extern s32 _updateRefImage();
 extern void _outputFrame();
-s32 _decodeOrSkipField(struct sceMpeg *decoder, s32 arg1, s32 arg2) {
+s32 _decodeOrSkipField(struct sceMpeg *decoder, s32 skip_comparison_value, s32 skip_threshold) {
     struct MpegDecoder *p;
     s32 should_decode;
     unsigned int new_var2;
     s32 expected_second_field_structure;
-    long lVar5;
-    s32 uVar2;
+    long helper_result;
+    s32 frame_count_snapshot;
     s32 second_field_decode_nonzero;
     short new_var;
     s32 gate;
     should_decode = 0;
     p = decoder->sys;
     p->second_field = 0;
-    if ((arg2 == (-1)) || (arg1 < arg2)) {
+    if ((skip_threshold == (-1)) || (skip_comparison_value < skip_threshold)) {
         should_decode = 1;
     };
     if (p->unk8 == 0) {
         decoder->frameCount = 0;
         p->unk8 = 1;
     }
-    lVar5 = _updateRefImage(p, 0);
-    if ((lVar5 != 0) && (should_decode != 0)) {
+    helper_result = _updateRefImage(p, 0);
+    if ((helper_result != 0) && (should_decode != 0)) {
         _decPicture(p);
     }
     p->second_field = 1;
-    lVar5 = _nextHeader(p);
-    if (lVar5 == 0) {
+    helper_result = _nextHeader(p);
+    if (helper_result == 0) {
         _sceMpegFlush(decoder);
         p->unk0 = 1;
         return 0;
@@ -53,11 +53,11 @@ s32 _decodeOrSkipField(struct sceMpeg *decoder, s32 arg1, s32 arg2) {
     second_field_decode_nonzero = 0;
     if (gate != 0) {
         if (should_decode == 0) {
-            uVar2 = p->frame_count;
+            frame_count_snapshot = p->frame_count;
             goto out;
         }
-        lVar5 = _decPicture(p);
-        if (lVar5 != 0) {
+        helper_result = _decPicture(p);
+        if (helper_result != 0) {
             second_field_decode_nonzero = 1;
         }
     };

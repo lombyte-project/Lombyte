@@ -176,7 +176,7 @@ extern CollisionHit HH __asm__("D_L12_001742C0") __attribute__((section(".data")
 #define HF(o) (*(f32 *)(D_L12_001742C0 + (o)))
 
 void FUN_L12_00233e80(void) {
-    V v0, v10, v20, v30, v40, v50, v60;
+    V collision_ray_second_endpoint, ground_ray_first_endpoint, v20, ground_probe_first_endpoint, v40, hit_surface_angles, normalized_hit_normal;
     f32 f;
     s32 r;
     s32 i;
@@ -207,8 +207,8 @@ void FUN_L12_00233e80(void) {
     if (hero.state.control_mode == 2) {
         g = hero.unk234 * 2.9f;
     }
-    hero_get_collision_ray_endpoints(&v10, &v0, k, g, -48.0f);
-    if (FUN_001efa68_u(&v10, &v0, 2, (s32)hero.moby, 0) == 0) {
+    hero_get_collision_ray_endpoints(&ground_ray_first_endpoint, &collision_ray_second_endpoint, k, g, -48.0f);
+    if (FUN_001efa68_u(&ground_ray_first_endpoint, &collision_ray_second_endpoint, 2, (s32)hero.moby, 0) == 0) {
         goto tail;
     }
     r = coll_sound_class();
@@ -222,7 +222,7 @@ void FUN_L12_00233e80(void) {
         if (hero.motion.pos.f[2] < hero.water_surface_z && hero.unk2F8 <= 0) {
             hero.unk2F8 = 1;
         }
-        if (FUN_001efa68_u(&v10, &v0, 0x24, (s32)hero.moby, 0) == 0) {
+        if (FUN_001efa68_u(&ground_ray_first_endpoint, &collision_ray_second_endpoint, 0x24, (s32)hero.moby, 0) == 0) {
             goto d1;
         }
         r = coll_sound_class();
@@ -233,8 +233,8 @@ void FUN_L12_00233e80(void) {
     }
     if (hero.ground_type == 0xD) {
         hero.water_surface_z = HH.point.f[2];
-        v10.f[2] = HH.point.f[2] - 0.01f;
-        if (FUN_001efa68_u(&v10, &v0, 4, (s32)hero.moby, 0) == 0) {
+        ground_ray_first_endpoint.f[2] = HH.point.f[2] - 0.01f;
+        if (FUN_001efa68_u(&ground_ray_first_endpoint, &collision_ray_second_endpoint, 4, (s32)hero.moby, 0) == 0) {
             goto d1;
         }
     }
@@ -319,21 +319,21 @@ d1:
         if (i == 1) {
             a = -a;
         }
-        FUN_L00_002335c8(&v30, 0.2f, a, 0.45f);
+        FUN_L00_002335c8(&ground_probe_first_endpoint, 0.2f, a, 0.45f);
         FUN_L00_002335c8(&v40, 0.2f, a, -0.45f);
-        if (FUN_001efa68_u(&v30, &v0, 0x22, (s32)hero.moby, 0)) {
+        if (FUN_001efa68_u(&ground_probe_first_endpoint, &collision_ray_second_endpoint, 0x22, (s32)hero.moby, 0)) {
             f = HH.point.f[2] - hero.ground_z.f;
             hero.unk2C0.f[i] = f;
             if (0.4f < FUN_001f99c0(f)) {
                 hero.unk2C0.f[i] = 0.0f;
             }
-            sceVu0Normalize(&v60, (u8 *)&HH.normal_x);
-            FUN_L00_00216078(&v60, &v50);
-            if (-0.78539819f < v50.f[1] && v50.f[1] < 0.78539819f) {
-                hero.unk2C8.f[i] = v50.f[1];
+            sceVu0Normalize(&normalized_hit_normal, (u8 *)&HH.normal_x);
+            FUN_L00_00216078(&normalized_hit_normal, &hit_surface_angles);
+            if (-0.78539819f < hit_surface_angles.f[1] && hit_surface_angles.f[1] < 0.78539819f) {
+                hero.unk2C8.f[i] = hit_surface_angles.f[1];
             }
-            if (-0.78539819f < v50.f[0] && v50.f[0] < 0.78539819f) {
-                hero.unk2D0.f[i] = v50.f[0];
+            if (-0.78539819f < hit_surface_angles.f[0] && hit_surface_angles.f[0] < 0.78539819f) {
+                hero.unk2D0.f[i] = hit_surface_angles.f[0];
             }
         } else {
             hero.unk2C0.i[i] = 0;
@@ -2242,8 +2242,8 @@ void FUN_L12_00238900(void) {
     case 0x4C:
     case 0x5E:
     case 0x69: {
-        s32 t198;
-        s32 t420;
+        s32 state_timer_or_trail_control;
+        s32 state_timer_threshold;
         if (hero.state.current == 0x1C && hero.unk22D8 == 0 && hero.items[3].item_id == 3) {
             if (FUN_L00_00211870(10.0f) != 0) {
                 FUN_L00_00216de8(4, 0);
@@ -2269,12 +2269,12 @@ void FUN_L12_00238900(void) {
                 FUN_L00_00209a40(7, 0);
             }
         }
-        t198 = hero.state_timer;
-        t420 = hero.unk420;
-        if (t198 == t420) {
+        state_timer_or_trail_control = hero.state_timer;
+        state_timer_threshold = hero.unk420;
+        if (state_timer_or_trail_control == state_timer_threshold) {
             qcopy(&hero.unk400, &hero.motion.pos);
         }
-        if (hero.unk418 != 0 || (t198 < t420 && hero.state.current != HERO_STATE_HIGH_JUMP && hero.state.current != HERO_STATE_PACK_LONG_JUMP && hero.state.current != 0xC &&
+        if (hero.unk418 != 0 || (state_timer_or_trail_control < state_timer_threshold && hero.state.current != HERO_STATE_HIGH_JUMP && hero.state.current != HERO_STATE_PACK_LONG_JUMP && hero.state.current != 0xC &&
                             hero.state.current != 0x11 && hero.state.current != 0x1C && hero.state.current != 0x4C)) {
             if (hero.unk4A8 != 0) {
                 FUN_L00_002167d0();
@@ -2356,8 +2356,8 @@ void FUN_L12_00238900(void) {
             FUN_L00_00215340();
         }
         if (hero.state.current == HERO_STATE_PACK_LONG_JUMP || hero.state.current == 0xD) {
-            t198 = (scale_game_frames(12) < hero.state_timer) * 2;
-            FUN_L00_00262608(&hero.trail.pos[0], t198);
+            state_timer_or_trail_control = (scale_game_frames(12) < hero.state_timer) * 2;
+            FUN_L00_00262608(&hero.trail.pos[0], state_timer_or_trail_control);
         }
         if (hero.state.current == HERO_STATE_PACK_LONG_JUMP && scale_game_frames(8) < hero.state_timer && hero.anim_frame < 28.0f) {
             s32 n;

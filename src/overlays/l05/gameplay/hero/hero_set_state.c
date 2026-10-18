@@ -587,14 +587,14 @@ int hero_set_state(int a, int b) {
             p->unk690 = -0.2f;
         }
         {
-            char *v2 = (char *)&hero.motion.velocity;
+            char *hero_velocity_bytes = (char *)&hero.motion.velocity;
             char *w;
-            clear_vector(v2);
-            w = v2 + 0x70;
-            qcopy(w, v2 + 0x30);
+            clear_vector(hero_velocity_bytes);
+            w = hero_velocity_bytes + 0x70;
+            qcopy(w, hero_velocity_bytes + 0x30);
             gravity_flatten((float *)w, (float *)w);
             FUN_L00_0025f730(w, frame_time * 9.5f);
-            *(int *)(v2 + 0xF18) = 0x68;
+            *(int *)(hero_velocity_bytes + 0xF18) = 0x68;
             if (b)
                 set_hero_animation(0x3A, 0, (float)scale_game_frames(0x11));
         }
@@ -1089,7 +1089,7 @@ int hero_set_state(int a, int b) {
     }
     case 8: {
         struct Hero *p = &hero;
-        int t8 = -2;
+        int animation_timing_setting = -2;
         p->state.control_mode = 5;
         p->rand_timer.range = 0x68;
         p->unk2284 = 0;
@@ -1098,7 +1098,7 @@ int hero_set_state(int a, int b) {
         }
         qcopy(&p->motion.velocity, &p->motion.displacement);
         if (b) {
-            set_hero_animation(0x13, 0, (float)t8);
+            set_hero_animation(0x13, 0, (float)animation_timing_setting);
         }
         break;
     }

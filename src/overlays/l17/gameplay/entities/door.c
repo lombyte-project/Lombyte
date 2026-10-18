@@ -516,7 +516,7 @@ float absolute_float(float input) __asm__("func_001F99C0");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 short D_L17_00162188 = 2;
-int FUN_L17_002eace8(int a, char *p, char *a2, char *a3, float f0, float f1, float f2, char *cur,
+int FUN_L17_002eace8(int a, char *p, char *radar_origin, char *radar_rotation, float f0, float f1, float f2, char *cur,
                      char *g) {
     float v[4];
     float w[4];
@@ -576,17 +576,17 @@ int FUN_L17_002eace8(int a, char *p, char *a2, char *a3, float f0, float f1, flo
         switch (*(short *)(m + 0xA6)) {
         case 0xE0:
         case 0x4C2:
-            FUN_L17_002eaae0(a3, a2, m, 2, 0x70808080, *(int *)(p + 0x104));
+            FUN_L17_002eaae0(radar_rotation, radar_origin, m, 2, 0x70808080, *(int *)(p + 0x104));
             break;
         case 0xE4:
         case 0x4C4:
-            FUN_L17_002eaae0(a3, a2, m, 2, 0x70808080, *(int *)(p + 0x104));
+            FUN_L17_002eaae0(radar_rotation, radar_origin, m, 2, 0x70808080, *(int *)(p + 0x104));
             break;
         case 0x52:
-            FUN_L17_002eaae0(a3, a2, m, 1, 0x70004080, *(int *)(p + 0x104));
+            FUN_L17_002eaae0(radar_rotation, radar_origin, m, 1, 0x70004080, *(int *)(p + 0x104));
             break;
         case 0x53:
-            FUN_L17_002eaae0(a3, a2, m, 1, 0x70007080, *(int *)(p + 0x104));
+            FUN_L17_002eaae0(radar_rotation, radar_origin, m, 1, 0x70007080, *(int *)(p + 0x104));
             break;
         case 0x184:
         case 0x191:
@@ -614,7 +614,7 @@ int FUN_L17_002eace8(int a, char *p, char *a2, char *a3, float f0, float f1, flo
             if (*(short *)(m + 0xA6) != 0x191) {
                 *(int *)(p + 0xE8) = *(int *)(p + 0xE8) + 1;
             }
-            FUN_L17_002eaae0(a3, a2, m, 0, 0x70808080, *(int *)(p + 0x104));
+            FUN_L17_002eaae0(radar_rotation, radar_origin, m, 0, 0x70808080, *(int *)(p + 0x104));
             break;
         case 0x15B:
             qcopy(w, m + 0x10);
@@ -640,7 +640,7 @@ int FUN_L17_002eace8(int a, char *p, char *a2, char *a3, float f0, float f1, flo
                 near = m;
                 bestd = dd;
             }
-            FUN_L17_002eaae0(a3, (char *)w, m, 0, 0x70808080, *(int *)(p + 0x104));
+            FUN_L17_002eaae0(radar_rotation, (char *)w, m, 0, 0x70808080, *(int *)(p + 0x104));
             *(int *)(p + 0xE8) = *(int *)(p + 0xE8) + 1;
             break;
         case 0x6F:
@@ -656,7 +656,7 @@ int FUN_L17_002eace8(int a, char *p, char *a2, char *a3, float f0, float f1, flo
                                          -ang);
                     }
                 }
-                FUN_L17_002eaae0(a3, a2, m, 1, 0x70808080, *(int *)(p + 0x104));
+                FUN_L17_002eaae0(radar_rotation, radar_origin, m, 1, 0x70808080, *(int *)(p + 0x104));
             }
             break;
         case 0x4BF:
@@ -671,7 +671,7 @@ int FUN_L17_002eace8(int a, char *p, char *a2, char *a3, float f0, float f1, flo
                                          -ang);
                     }
                 }
-                FUN_L17_002eaae0(a3, a2, m, 1, 0x70808080, *(int *)(p + 0x104));
+                FUN_L17_002eaae0(radar_rotation, radar_origin, m, 1, 0x70808080, *(int *)(p + 0x104));
             }
             break;
         case 0x185:
@@ -695,7 +695,7 @@ int FUN_L17_002eace8(int a, char *p, char *a2, char *a3, float f0, float f1, flo
         default:
             if (m != 0 && *(char **)(m + 0x24) != 0 &&
                 *(short *)(*(char **)(m + 0x24) + 0x46) == 5) {
-                FUN_L17_002eaae0(a3, a2, m, 1, 0x70808080, *(int *)(p + 0x104));
+                FUN_L17_002eaae0(radar_rotation, radar_origin, m, 1, 0x70808080, *(int *)(p + 0x104));
             }
             break;
         }
@@ -3731,25 +3731,25 @@ int FUN_L17_002f2180(char *moby, int idx) {
     Path_3CC0_f2180 *c1 = ((Path_3CC0_f2180 **)D_L17_001B0DB0)[d->a[idx]];
     Path_3CC0_f2180 *c2 = ((Path_3CC0_f2180 **)D_L17_001B0DB0)[d->b[idx]];
     Path_3CC0_f2180 *c3 = ((Path_3CC0_f2180 **)D_L17_001B0DB0)[d->c[idx]];
-    float t, f, t1, t2, t3, ang, turn;
+    float t, f, camera_position_blend, camera_aim_blend, moby_path_blend, ang, turn;
     int i1, i2, i3;
 
     func_00214D28_f2180(&d->fA4, 1.0f, 1.0f / (float)func_001F9850_f2180(0x384));
     t = d->fA4 * (float)(c1->n - 1);
     i1 = func_001FA898_r_f2180(t);
     f = (float)i1;
-    t1 = t - f;
-    t2 = d->fA4 * 1.02f;
-    if (t2 > 1.0f)
-        t2 = 1.0f;
-    t = t2 * (float)(c2->n - 1);
+    camera_position_blend = t - f;
+    camera_aim_blend = d->fA4 * 1.02f;
+    if (camera_aim_blend > 1.0f)
+        camera_aim_blend = 1.0f;
+    t = camera_aim_blend * (float)(c2->n - 1);
     i2 = func_001FA898_r_f2180(t);
-    t2 = t - (float)i2;
+    camera_aim_blend = t - (float)i2;
     t = d->fA4 * (float)(c3->n - 1);
-    t3 = t - f;
+    moby_path_blend = t - f;
     i3 = func_001FA898_r_f2180(t);
-    func_001F9C08_f2180(pos, &c1->p[i1], &c1->p[i1 + 1], t1);
-    func_001F9C08_f2180(moby + 0x10, &c3->p[i3], &c3->p[i3 + 1], t3);
+    func_001F9C08_f2180(pos, &c1->p[i1], &c1->p[i1 + 1], camera_position_blend);
+    func_001F9C08_f2180(moby + 0x10, &c3->p[i3], &c3->p[i3 + 1], moby_path_blend);
     func_L00_002EBE88_f2180(pos);
     {
         char *base = D_L17_001600EC + (d->e84 << 7);
@@ -3761,7 +3761,7 @@ int FUN_L17_002f2180(char *moby, int idx) {
             func_001FA790_f2180(func_L00_001FF860_f2180(c3->p[i3 + 1].x - c3->p[i3].x,
                                                         c3->p[i3 + 1].y - c3->p[i3].y),
                                 ang) *
-                t3,
+                moby_path_blend,
             ang);
         ang = -func_L00_001FF860_f2180(func_001F9D48_f2180(&c3->p[i3 - 1], &c3->p[i3]),
                                        c3->p[i3].z - c3->p[i3 - 1].z);
@@ -3770,7 +3770,7 @@ int FUN_L17_002f2180(char *moby, int idx) {
                 -func_L00_001FF860_f2180(func_001F9D48_f2180(&c3->p[i3], &c3->p[i3 + 1]),
                                          c3->p[i3 + 1].z - c3->p[i3].z),
                 ang) *
-                t3,
+                moby_path_blend,
             ang);
         *(float *)(moby + 0x44) = *(float *)(moby + 0x44) * func_001F9F90_f2180(d->f88);
         *(float *)(moby + 0x48) = func_001FA748_f2180(*(float *)(moby + 0x48), d->f88);
@@ -3786,14 +3786,14 @@ int FUN_L17_002f2180(char *moby, int idx) {
         m[2] = func_001FA748_f2180(
             func_001FA790_f2180(
                 func_L00_001FF860_f2180(c2->p[i2 + 1].x - pos[0], c2->p[i2 + 1].y - pos[1]), ang) *
-                t2,
+                camera_aim_blend,
             ang);
         ang = -func_L00_001FF860_f2180(func_001F9D48_f2180(pos, &c2->p[i2]), c2->p[i2].z - pos[2]);
         m[1] = func_001FA748_f2180(
             func_001FA790_f2180(-func_L00_001FF860_f2180(func_001F9D48_f2180(pos, &c2->p[i2 + 1]),
                                                          c2->p[i2 + 1].z - pos[2]),
                                 ang) *
-                t2,
+                camera_aim_blend,
             ang);
         func_L00_002EBEE0_f2180(m);
     }

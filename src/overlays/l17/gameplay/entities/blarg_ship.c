@@ -443,9 +443,9 @@ extern float D_L17_001DE070[];
 extern float D_L17_001623D4 __attribute__((sda));
 void FUN_L17_002f3848(struct Moby *moby) {
     char *d = (char *)moby->pvars;
-    float t0[4];
-    float t1[4];
-    float t2[4];
+    float offset_accumulator[4];
+    float pvar_angle_offset[4];
+    float vector_sum[4];
     int i;
     if (*(int *)(d + 0x4C) != -1) {
         struct Hero *g = &hero;
@@ -466,14 +466,14 @@ done:
         }
         qcopy(d, &moby->pos);
         build_spherical_offset(
-            t0, (D_L17_001623D4 + D_L17_001623D0) / D_L17_001623D8,
+            offset_accumulator, (D_L17_001623D4 + D_L17_001623D0) / D_L17_001623D8,
             moby->rot.z, 0.0f);
-        build_spherical_offset(t1, D_L17_001623D0 / D_L17_001623D8,
+        build_spherical_offset(pvar_angle_offset, D_L17_001623D0 / D_L17_001623D8,
                                *(float *)(d + 0x44), 0.0f);
-        add_vector_xyz(t2, t0, t1);
-        *(OvlQuad *)t0 = *(OvlQuad *)t2;
-        add_vector_xyz(t2, d, t0);
-        *(OvlQuad *)(d + 0x10) = *(OvlQuad *)t2;
+        add_vector_xyz(vector_sum, offset_accumulator, pvar_angle_offset);
+        *(OvlQuad *)offset_accumulator = *(OvlQuad *)vector_sum;
+        add_vector_xyz(vector_sum, d, offset_accumulator);
+        *(OvlQuad *)(d + 0x10) = *(OvlQuad *)vector_sum;
         moby->update_dist = 0xFF;
         *(float *)(d + 0x10) -= 300.0f;
     } else {
@@ -549,15 +549,15 @@ extern float D_L17_001623E8 __attribute__((sda));
 void blarg_ship_update(struct Moby *moby) __asm__("FUN_L17_002f40d8");
 void blarg_ship_update(struct Moby *moby) {
     float s0[4];
-    float s10[4];
-    float s20[4];
-    float s30[4];
+    float movement_target_position[4];
+    float hero_position_delta[4];
+    float clamped_euler_angles[4];
     float m40[4];
     float m50[4];
     float m60[4];
-    float s70[4];
-    float s80[4];
-    float s90[4];
+    float hero_relative_position[4];
+    float firing_target_delta[4];
+    float firing_direction[4];
     float sA0[4];
     float sB0[4];
     float c0;
@@ -643,25 +643,25 @@ void blarg_ship_update(struct Moby *moby) {
         break;
     case 5:
         c0 = 0.0f;
-        qcopy(s30, D_L17_001676D0);
-        s30[0] = 0.0f;
-        if (s30[1] > 0.2617994f) {
-            s30[1] = 0.2617994f;
-        } else if (s30[1] < -0.2617994f) {
-            s30[1] = -0.2617994f;
+        qcopy(clamped_euler_angles, D_L17_001676D0);
+        clamped_euler_angles[0] = 0.0f;
+        if (clamped_euler_angles[1] > 0.2617994f) {
+            clamped_euler_angles[1] = 0.2617994f;
+        } else if (clamped_euler_angles[1] < -0.2617994f) {
+            clamped_euler_angles[1] = -0.2617994f;
         }
-        vu_euler_rotation_basis(m40, s30);
-        subtract_vector_xyz(s20, &hero.motion.pos, d + 0xB0);
+        vu_euler_rotation_basis(m40, clamped_euler_angles);
+        subtract_vector_xyz(hero_position_delta, &hero.motion.pos, d + 0xB0);
         qcopy(d + 0xB0, &hero.motion.pos);
-        add_vector_xyz(&moby->pos, &moby->pos, s20);
+        add_vector_xyz(&moby->pos, &moby->pos, hero_position_delta);
         f = fast_add_rotations(0.7853982f, (float)*(int *)(d + 0x88) * 1.5707964f);
         normalize_vector_xyz(s0, m50, fast_sin(f) * 8.0f);
-        add_vector_xyz(s10, D_L17_001676C0, s0);
+        add_vector_xyz(movement_target_position, D_L17_001676C0, s0);
         normalize_vector_xyz(s0, m60, fast_cos(f) * 8.0f);
-        add_vector_xyz(s10, s10, s0);
+        add_vector_xyz(movement_target_position, movement_target_position, s0);
         normalize_vector_xyz(s0, m40, 20.0f);
-        add_vector_xyz(s10, s10, s0);
-        subtract_vector_xyz(s0, s10, &moby->pos);
+        add_vector_xyz(movement_target_position, movement_target_position, s0);
+        subtract_vector_xyz(s0, movement_target_position, &moby->pos);
         len = vector_length_xyz(s0);
         if (*(char *)&hero.ship_flags & 2) {
             advance_accelerated_scalar(&c0, (float *)(d + 0x6C), len, frame_time_sq + frame_time_sq,
@@ -679,7 +679,7 @@ void blarg_ship_update(struct Moby *moby) {
             if (moby->visible) {
                 *(int *)(d + 0x98) += 1;
             }
-            if (FUN_001f9b48(s10, &moby->pos.x) < 2.0f) {
+            if (FUN_001f9b48(movement_target_position, &moby->pos.x) < 2.0f) {
                 moby->command = 0;
             } else if (scale_game_frames(120) < *(int *)(d + 0x98)) {
                 moby->command = 0;
@@ -689,17 +689,17 @@ void blarg_ship_update(struct Moby *moby) {
             float *yaw = &moby->rot.z;
             float *pitch = &moby->rot.y;
             float ang;
-            subtract_vector_xyz(s70, tgt, &moby->pos.x);
-            ang = fast_arc_tan(s70[0], s70[1]);
+            subtract_vector_xyz(hero_relative_position, tgt, &moby->pos.x);
+            ang = fast_arc_tan(hero_relative_position[0], hero_relative_position[1]);
             approach_angle(yaw, (float *)(d + 0x8C), ang, frame_time_sq * 12.566371f,
                              frame_time_sq * 12.566371f, frame_time * 12.566371f);
-            ang = -fast_arc_tan(vector_length_xy(s70), s70[2]);
+            ang = -fast_arc_tan(vector_length_xy(hero_relative_position), hero_relative_position[2]);
             approach_angle(pitch, (float *)(d + 0x90), ang, frame_time_sq * 12.566371f,
                              frame_time_sq * 12.566371f, frame_time * 12.566371f);
             if (D_L17_0015F5CC % 10 == 0) {
                 FUN_0022da68(2, 0, (int)moby);
                 approach_value((float *)(d + 0x94), 0.0f, 0.25f);
-                normalize_vector_xyz(sB0, s20, *(float *)(d + 0x94));
+                normalize_vector_xyz(sB0, hero_position_delta, *(float *)(d + 0x94));
                 add_vector_xyz(sB0, sB0, tgt);
                 if (D_L17_0015F5CC % 20 == 0) {
                     transform_vector_by_basis(sA0, D_L17_001DE110, &moby->rot_row0);
@@ -707,14 +707,14 @@ void blarg_ship_update(struct Moby *moby) {
                     transform_vector_by_basis(sA0, D_L17_001DE120, &moby->rot_row0);
                 }
                 add_vector_xyz(sA0, sA0, &moby->pos.x);
-                subtract_vector_xyz(s80, sB0, sA0);
-                normalize_vector_xyz(s90, s80, D_L17_001623E8 * frame_time);
-                add_vector_xyz(s90, s90, s20);
-                p = FUN_L11_00308f48((int)moby, s90, sA0, 128.0f, -1.0f, 10.0f);
+                subtract_vector_xyz(firing_target_delta, sB0, sA0);
+                normalize_vector_xyz(firing_direction, firing_target_delta, D_L17_001623E8 * frame_time);
+                add_vector_xyz(firing_direction, firing_direction, hero_position_delta);
+                p = FUN_L11_00308f48((int)moby, firing_direction, sA0, 128.0f, -1.0f, 10.0f);
                 if (p) {
-                    subtract_vector_xyz(s90, s90, s20);
-                    *(float *)(p + 0x44) = -fast_arc_tan(vector_length_xy(s90), s90[2]);
-                    *(float *)(p + 0x48) = fast_arc_tan(s90[0], s90[1]);
+                    subtract_vector_xyz(firing_direction, firing_direction, hero_position_delta);
+                    *(float *)(p + 0x44) = -fast_arc_tan(vector_length_xy(firing_direction), firing_direction[2]);
+                    *(float *)(p + 0x48) = fast_arc_tan(firing_direction[0], firing_direction[1]);
                 }
             }
             if (moby->visible == 0) {
@@ -903,7 +903,7 @@ extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 
 void FUN_L17_002f54d8(int n, V3 *b, V3 *a, int unused, float *out) {
-    V4 v0;
+    V4 normalized_position_delta;
     V4 p;
     V4 r;
     V4 q;
@@ -915,16 +915,16 @@ void FUN_L17_002f54d8(int n, V3 *b, V3 *a, int unused, float *out) {
         p.v.x = a[i].x;
         p.v.y = a[i].y;
         p.v.z = a[i].z;
-        fast_vec_sub(&v0, &p, D_L17_001676C0);
-        fast_vec_normalize(&v0, &v0, 1.0f);
+        fast_vec_sub(&normalized_position_delta, &p, D_L17_001676C0);
+        fast_vec_normalize(&normalized_position_delta, &normalized_position_delta, 1.0f);
         q.w = 1.0f;
         q.v.x = b[i].x;
         q.v.y = b[i].y;
         q.v.z = b[i].z;
         fast_vec_normalize(&q, &q, 1.0f);
-        d = fast_vec_dot(&q, &v0);
+        d = fast_vec_dot(&q, &normalized_position_delta);
         fast_vec_scale(&r, &q, d + d);
-        fast_vec_sub(&r, &v0, &r);
+        fast_vec_sub(&r, &normalized_position_delta, &r);
         fast_vec_normalize(&r, &r, 1.0f);
         r.v.z = r.v.z + 1.0f;
         len = fast_vec_length(&r);

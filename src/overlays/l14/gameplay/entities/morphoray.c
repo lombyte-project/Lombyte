@@ -23,7 +23,7 @@ extern u8 *D_L14_00167500 __attribute__((section(".data")));
 /* 0x003135B8, 80 bytes.  When the level record's field at 0x86 is 7, seed the
  * sub-record reached through +0x70 with the caller's argument and two float
  * constants, and set both floats on the record itself. */
-void FUN_L14_003135b8(u8 *arg0) {
+void FUN_L14_003135b8(u8 *flying_car_moby) {
     u8 *g = D_L14_00167500;
     u8 *q;
     u8 *p;
@@ -33,7 +33,7 @@ void FUN_L14_003135b8(u8 *arg0) {
     }
     q = *(u8 **)(g + 0x70) + 0x40;
     *(s32 *)(q + 0x40) = 1;
-    *(s32 *)(q + 0x44) = (s32)arg0;
+    *(s32 *)(q + 0x44) = (s32)flying_car_moby;
     *(f32 *)(q + 0x4C) = 2.0f;
     p = *(u8 **)(g + 0x70);
     *(f32 *)(p + 0xA0) = 7.0f;
@@ -42,9 +42,9 @@ void FUN_L14_003135b8(u8 *arg0) {
 
 /* 0x003167E0, 36 bytes.  While the executable's mode word is not 0xF, mark the
  * object's field at 0x7E as 3. */
-void FUN_L14_003167e0(u8 *arg0) {
+void FUN_L14_003167e0(u8 *target_object) {
     if (D_001413DC != 0x0F) {
-        *(s16 *)(arg0 + 0x7E) = 3;
+        *(s16 *)(target_object + 0x7E) = 3;
     }
 }
 
@@ -302,7 +302,7 @@ extern void FUN_L00_00250df8_f(char *) __asm__("FUN_L00_00250df8");
 extern unsigned short D_L14_0016208C_g __asm__("D_L14_0016208C") __attribute__((sda));
 
 extern float D_L14_00162098 __attribute__((sda));
-char *FUN_L14_003014e0(int a0, float *pos, float *a2, int a3, float f) {
+char *FUN_L14_003014e0(int owner, float *pos, float *initial_velocity, int fade_timer, float f) {
     char *moby = FUN_0020c4f8_c(0x4A9);
     float t, u;
     unsigned short g;
@@ -312,17 +312,17 @@ char *FUN_L14_003014e0(int a0, float *pos, float *a2, int a3, float f) {
         *(short *)(moby + 0x32) = 0xFF;
         moby[0x31] = 1;
         moby[0x20] = 0;
-        *(int *)(d + 0x24) = a0;
+        *(int *)(d + 0x24) = owner;
         qcopy(moby + 0x10, pos);
-        qcopy(d + 0x10, a2);
+        qcopy(d + 0x10, initial_velocity);
         g = D_L14_0016208C_g;
         *(float *)(d + 0x1C) = f;
-        *(int *)(d + 0x20) = a3;
+        *(int *)(d + 0x20) = fade_timer;
         *(unsigned short *)(d + 0x28) = g;
         *(short *)(d + 0x2A) = 0;
         *(int *)(moby + 0x40) = 0;
         *(int *)(moby + 0x44) = 0;
-        t = FUN_001f9e90_a(a2[0], a2[1]);
+        t = FUN_001f9e90_a(initial_velocity[0], initial_velocity[1]);
         u = *(float *)(moby + 0x2C) * D_L14_00162098;
         *(float *)(moby + 0x48) = t;
         *(float *)(moby + 0x2C) = u;
@@ -1804,12 +1804,12 @@ void FUN_L14_00315d48(char *cam) {
     float ang;
     float a;
     float b;
-    float v0[4];
+    float camera_placement_parameters[4];
     float unused[4];
     CamKey5d48 *keys;
     int next;
-    float v2[4];
-    float v3[4];
+    float look_direction[4];
+    float scaled_up_vector[4];
 
     D_L14_001624B4 = data->st.count;
     D_L14_001624B8 = st->idx;
@@ -1987,24 +1987,24 @@ void FUN_L14_00315d48(char *cam) {
             st->fC = b;
         }
     }
-    v0[1] = cur->f4;
-    v0[0] = ang;
-    v0[2] = cur->f8;
-    FUN_L00_001ed580_5d48(cam + 0x30, v0, &hero.motion.pos);
-    vec_sub_5d48(v2, &hero.motion.pos, cam + 0x30);
-    vec_scale_5d48(v3, &hero.gravity_dir, -1.5f);
-    vec_add_5d48(v2, v2, v3);
-    vec_normalize_5d48(cam, v2, 1.0f);
-    vec_cross_5d48(cam + 0x10, cam, v3);
+    camera_placement_parameters[1] = cur->f4;
+    camera_placement_parameters[0] = ang;
+    camera_placement_parameters[2] = cur->f8;
+    FUN_L00_001ed580_5d48(cam + 0x30, camera_placement_parameters, &hero.motion.pos);
+    vec_sub_5d48(look_direction, &hero.motion.pos, cam + 0x30);
+    vec_scale_5d48(scaled_up_vector, &hero.gravity_dir, -1.5f);
+    vec_add_5d48(look_direction, look_direction, scaled_up_vector);
+    vec_normalize_5d48(cam, look_direction, 1.0f);
+    vec_cross_5d48(cam + 0x10, cam, scaled_up_vector);
     if (cur->fC != 0.0f) {
         rotate_axis_5d48(cam, cam, cam + 0x10, cur->fC);
         vec_normalize_5d48(cam, cam, 1.0f);
-        vec_cross_5d48(cam + 0x10, cam, v3);
+        vec_cross_5d48(cam + 0x10, cam, scaled_up_vector);
     }
     if (cur->f10 != 0.0f) {
-        rotate_axis_5d48(cam, cam, v3, cur->f10);
+        rotate_axis_5d48(cam, cam, scaled_up_vector, cur->f10);
         vec_normalize_5d48(cam, cam, 1.0f);
-        vec_cross_5d48(cam + 0x10, cam, v3);
+        vec_cross_5d48(cam + 0x10, cam, scaled_up_vector);
     }
     vec_normalize_5d48(cam + 0x10, cam + 0x10, 1.0f);
     vec_cross_5d48(cam + 0x20, cam + 0x10, cam);

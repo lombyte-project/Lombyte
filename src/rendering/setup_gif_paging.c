@@ -32,7 +32,7 @@ extern PageSlot effect_texture_definitions[] __asm__("D_0018D440");
 extern s32 gs_texture_allocation_start __asm__("D_0015EE78") MACRO_ADDR;
 extern s32 gs_texture_allocation_cursor __asm__("D_0015EE74") MACRO_ADDR;
 extern s32 gs_texture_allocation_base_macro __asm__("D_0015EE8C") MACRO_ADDR;
-void setup_gif_paging(int arg0) {
+void setup_gif_paging(int skip_paging_entry_reset) {
     int *p = render_packet_cursor.words;
     int i;
 
@@ -48,7 +48,7 @@ void setup_gif_paging(int arg0) {
             effect_texture_definitions[k].unk0 = 0;
         }
     }
-    if (arg0 == 0) {
+    if (skip_paging_entry_reset == 0) {
         for (i = 0; i < *(int *)(*(char **)(PagingArena() + 0x18) + 0x44); i++) {
             unsigned short *el = (unsigned short *)(i * 8 + *(int *)(PagingArena() + 0x24) + 4);
 

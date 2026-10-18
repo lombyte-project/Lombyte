@@ -362,6 +362,7 @@ OVERLAY_SN_UNITS = {
     "shared/rendering/002712b8.c",
     "shared/rendering/0027f660.c",
     "shared/rendering/commands/0020bc88.c",
+    "shared/rendering/sky/sky_particle_effects.c",
     "shared/rendering/sky/update_sky_shells_animated.c",
     "shared/runtime/dma/002b7a48.c",
     "shared/ui/help/001fe778.c",

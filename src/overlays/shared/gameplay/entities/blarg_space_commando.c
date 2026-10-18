@@ -872,8 +872,8 @@ void FUN_L06_002ff978(char *moby) {
     int i, n;
     for (i = 0; i < 15; i = n) {
         float f21, f22;
-        int s18, s19, s17;
-        int s10[4];
+        int frame_count, second_frame_count, third_frame_count;
+        int spark_position[4];
         float v[4], w[4];
         char *p;
         int off = i * 16;
@@ -899,19 +899,19 @@ void FUN_L06_002ff978(char *moby) {
         w[2] = 0;
         v[2] = random_float_between(D_L06_00162034, D_L06_00162038);
         w[2] = random_float_between(D_L06_00162034, D_L06_00162038);
-        s18 = func_001FA898_r(multiply_global_factor_ed64(
+        frame_count = func_001FA898_r(multiply_global_factor_ed64(
             random_float_between(D_L06_00162014, D_L06_00162018)));
-        s19 = func_001FA898_r(multiply_global_factor_ed64(
+        second_frame_count = func_001FA898_r(multiply_global_factor_ed64(
             random_float_between(D_L06_0016201C, D_L06_00162020)));
-        s17 = func_001FA898_r(multiply_global_factor_ed64(
+        third_frame_count = func_001FA898_r(multiply_global_factor_ed64(
             random_float_between(D_L06_00162024, D_L06_00162028)));
-        scale_vector_xyz(v, v, 1.0f / (float)s18);
+        scale_vector_xyz(v, v, 1.0f / (float)frame_count);
         v[3] = D_L06_0016200C;
-        scale_vector_xyz(w, w, 1.0f / (float)s17);
+        scale_vector_xyz(w, w, 1.0f / (float)third_frame_count);
         w[3] = D_L06_00162010;
         p = data + (off + 0x230);
-        lerp_vector(s10, p, p, random_float_between(0.0f, 1.0f));
-        spawn_spark(s10, v, w, D_L06_00162004, D_L06_00162008, s18, s19, s17,
+        lerp_vector(spark_position, p, p, random_float_between(0.0f, 1.0f));
+        spawn_spark(spark_position, v, w, D_L06_00162004, D_L06_00162008, frame_count, second_frame_count, third_frame_count,
                      D_L06_00162040);
     }
 }

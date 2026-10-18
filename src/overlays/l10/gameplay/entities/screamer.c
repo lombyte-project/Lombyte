@@ -2100,7 +2100,7 @@ void FUN_L10_002e3ef0(void *mv) {
     D_2E52B0 *d = (D_2E52B0 *)m->pvars;
     Hit_2E52B0 *r;
     Moby *q;
-    int v21;
+    int hit_response_code;
 
     if (((Hero *)(((char *)&hero)))->items[0].item_id == 0x15) {
         if (((D_2E52B0 *)((Hero *)(((char *)&hero)))->items[0].moby->pvars)->f10 == m) {
@@ -2117,7 +2117,7 @@ void FUN_L10_002e3ef0(void *mv) {
     A = 1;
     B = 0.0f;
     r = func_L00_0025B478_2E52B0(m, 0xB30000, 0);
-    v21 = update_collision_l08(m, r, &d->f20, 0, &A, &B, 0, 4);
+    hit_response_code = update_collision_l08(m, r, &d->f20, 0, &A, &B, 0, 4);
     func_001F9938_2E52B0(&d->h26);
     if ((unsigned int)A >= 2 && m->state != 0xB && m->state != 0xC) {
         if (current_level_index == 10 && r != 0 && r->f20 != 0 && r->f20->oclass == 0x31A) {
@@ -2128,7 +2128,7 @@ void FUN_L10_002e3ef0(void *mv) {
             }
         }
         if (d->h26 != 0 && r->b28 == 0) {
-            v21 = 11;
+            hit_response_code = 11;
             if (B < 3.0f) B = 0.0f;
         }
         if (((Hero *)(((char *)&hero)))->state.current == 32
@@ -2138,13 +2138,13 @@ void FUN_L10_002e3ef0(void *mv) {
         }
         if (r->h2A == m->oclass) {
             B = 0.0f;
-            v21 = 11;
+            hit_response_code = 11;
         }
         if ((unsigned int)(m->prev_seq - 6) < 2) {
             if (((Hero *)(((char *)&hero)))->vehicle_mode == 1
                 && r->f20 == ((Hero *)(((char *)&hero)))->moby) {
                 B = 0.0f;
-                v21 = 11;
+                hit_response_code = 11;
             }
         }
         if (r->h2A == 0x47) {
@@ -2153,7 +2153,7 @@ void FUN_L10_002e3ef0(void *mv) {
             vA.z += 1.0f;
             vB.z += 1.0f;
             if (collision_line(&vA, &vB, 2, m, 0) != 0) {
-                v21 = 11;
+                hit_response_code = 11;
                 B = 0.0f;
             }
         } else if ((q = r->f20) != 0 && q->oclass != 0x359) {
@@ -2168,19 +2168,19 @@ void FUN_L10_002e3ef0(void *mv) {
                 fast_vec_normalize(&X, &D_L10_00174380_2E52B0, 1.0f);
                 if (0.5f < func_001F9B88_2E52B0(fast_vec_dot(&W, &X))) {
                     B = 0.0f;
-                    v21 = 11;
+                    hit_response_code = 11;
                 }
             }
         }
         d->f20 -= B;
-        if (d->f20 <= 0.0f) v21 = 1;
+        if (d->f20 <= 0.0f) hit_response_code = 1;
         func_L10_002E14F8_2E52B0(m);
         d->f90 = func_001FA898_2E52B0(768.0f);
         d->f98 = 0.75f;
         d->f94 = 9;
         d->bAD = 0;
         fx = func_L00_001FF860_2E52B0(r->pos.x, r->pos.y);
-        switch (v21) {
+        switch (hit_response_code) {
         case 3:
         case 6:
         case 7:

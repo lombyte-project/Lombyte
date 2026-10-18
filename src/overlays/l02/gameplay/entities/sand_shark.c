@@ -956,8 +956,8 @@ int D_L02_00161960 = -1;
 void FUN_L02_002d57f8(void *pos, int n) {
     float v[4];
     float w[4];
-    float v3[4];
-    float v4[4];
+    float vertical_motion[4];
+    float radial_motion[4];
     float r;
     float *p;
     int i;
@@ -975,18 +975,18 @@ void FUN_L02_002d57f8(void *pos, int n) {
         w[2] = w[2] + rand_between_d57f8(-0.25f, -0.75f);
         w[0] = w[0] + rand_between_d57f8(-0.25f, 0.25f);
         w[1] = w[1] + rand_between_d57f8(-0.25f, 0.25f);
-        clear_vec_d57f8(v3);
-        v4[0] = fast_cos_d57f8(r) * (rand_between_d57f8(D_L02_00161930, D_L02_00161934) * D_0015ED6C);
-        v4[1] = fast_sin_d57f8(r) * (rand_between_d57f8(D_L02_00161930, D_L02_00161934) * D_0015ED6C);
-        *(int *)&v4[2] = 0;
-        v3[2] = rand_between_d57f8(D_L02_00161920, D_L02_00161924) * D_0015ED6C;
-        v4[2] = rand_between_d57f8(D_L02_00161928, D_L02_0016192C) * D_0015ED6C;
-        v3[3] = D_L02_00161938;
-        v4[3] = D_L02_0016193C;
+        clear_vec_d57f8(vertical_motion);
+        radial_motion[0] = fast_cos_d57f8(r) * (rand_between_d57f8(D_L02_00161930, D_L02_00161934) * D_0015ED6C);
+        radial_motion[1] = fast_sin_d57f8(r) * (rand_between_d57f8(D_L02_00161930, D_L02_00161934) * D_0015ED6C);
+        *(int *)&radial_motion[2] = 0;
+        vertical_motion[2] = rand_between_d57f8(D_L02_00161920, D_L02_00161924) * D_0015ED6C;
+        radial_motion[2] = rand_between_d57f8(D_L02_00161928, D_L02_0016192C) * D_0015ED6C;
+        vertical_motion[3] = D_L02_00161938;
+        radial_motion[3] = D_L02_0016193C;
         a = trunc_d57f8(rand_between_d57f8((float)D_L02_00161940, (float)D_L02_00161944));
         b = trunc_d57f8(rand_between_d57f8((float)D_L02_00161948, (float)D_L02_0016194C));
         c = trunc_d57f8(rand_between_d57f8((float)D_L02_00161950, (float)D_L02_00161954));
-        spawn_spark(w, v3, v4, D_L02_00161958, D_L02_0016195C, a, b, c, D_L02_00161960);
+        spawn_spark(w, vertical_motion, radial_motion, D_L02_00161958, D_L02_0016195C, a, b, c, D_L02_00161960);
     }
 }
 

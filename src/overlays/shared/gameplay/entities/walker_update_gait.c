@@ -39,12 +39,12 @@ int walker_gait_mask(float *a, float v) {
     return r;
 }
 void FUN_L00_001fff28(void *, s32, f32);
-void FUN_L00_002a1538(u8 *a0) {
+void FUN_L00_002a1538(u8 *gait_data) {
     s32 i;
-    u8 *r = a0 + 0x130;
-    u8 *q = a0 + 0x170;
+    u8 *r = gait_data + 0x130;
+    u8 *q = gait_data + 0x170;
     for (i = 0; i < 2; i++) {
-        u8 *p = a0 + i * 0xB0;
+        u8 *p = gait_data + i * 0xB0;
         if (p[0x161] != 0)
             FUN_L00_001fff28(q + i * 0xB0, 2, 0.0f);
         if (p[0x121] != 0)

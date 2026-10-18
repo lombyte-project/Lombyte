@@ -144,8 +144,8 @@ void FUN_L13_00309bc8(struct Moby *moby) {
     int i, n;
     for (i = 0; i < 15; i = n) {
         float f21, f22;
-        int s18, s19, s17;
-        int s10[4];
+        int frame_count, second_frame_count, third_frame_count;
+        int spawn_position[4];
         float v[4], w[4];
         char *p;
         int off = i * 16;
@@ -171,19 +171,19 @@ void FUN_L13_00309bc8(struct Moby *moby) {
         w[2] = 0;
         v[2] = random_float_between_alt(*(float *)&D_L13_00161EE0, *(float *)&D_L13_00161EE4);
         w[2] = random_float_between_alt(*(float *)&D_L13_00161EE0, *(float *)&D_L13_00161EE4);
-        s18 = func_001FA898_r(multiply_global_factor_ed64(
+        frame_count = func_001FA898_r(multiply_global_factor_ed64(
             random_float_between_alt(*(float *)&D_L13_00161EC0, *(float *)&D_L13_00161EC4)));
-        s19 = func_001FA898_r(multiply_global_factor_ed64(
+        second_frame_count = func_001FA898_r(multiply_global_factor_ed64(
             random_float_between_alt(*(float *)&D_L13_00161EC8, *(float *)&D_L13_00161ECC)));
-        s17 = func_001FA898_r(multiply_global_factor_ed64(
+        third_frame_count = func_001FA898_r(multiply_global_factor_ed64(
             random_float_between_alt(*(float *)&D_L13_00161ED0, *(float *)&D_L13_00161ED4)));
-        scale_vector_xyz(v, v, 1.0f / (float)s18);
+        scale_vector_xyz(v, v, 1.0f / (float)frame_count);
         v[3] = *(float *)&D_L13_00161EB8;
-        scale_vector_xyz(w, w, 1.0f / (float)s17);
+        scale_vector_xyz(w, w, 1.0f / (float)third_frame_count);
         w[3] = *(float *)&D_L13_00161EBC;
         p = data + (off + 0x210);
-        lerp_vector(s10, p, p, random_float_between_alt(0.0f, 1.0f));
-        spawn_spark(s10, v, w, D_L13_00161EB0, D_L13_00161EB4, s18, s19, s17,
+        lerp_vector(spawn_position, p, p, random_float_between_alt(0.0f, 1.0f));
+        spawn_spark(spawn_position, v, w, D_L13_00161EB0, D_L13_00161EB4, frame_count, second_frame_count, third_frame_count,
                      D_L13_00161EEC);
     }
 }

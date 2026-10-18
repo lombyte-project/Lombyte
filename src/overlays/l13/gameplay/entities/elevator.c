@@ -590,7 +590,7 @@ extern float D_L13_00161388 __attribute__((sda));
 int D_L13_0016138C = 2;
 void FUN_L13_002b47a0(struct Moby *moby) {
     float v[4];
-    float v2[4];
+    float horizontal_offset[4];
     char *data;
     float d, x, ang;
     data = (char *)moby->pvars;
@@ -600,11 +600,11 @@ void FUN_L13_002b47a0(struct Moby *moby) {
         x = (20.0f - d) / 20.0f * 5.0f + 2.5f;
         ang = fast_add_rotations(random_float_between(-x, x) * DEG_TO_RAD,
                                  moby->rot.z);
-        v2[0] = fast_cos(ang) * (D_L13_00161388 * frame_time);
-        v2[1] = fast_sin(ang) * (D_L13_00161388 * frame_time);
-        v2[2] = 0;
-        fast_vec_add(v, v, v2);
-        FUN_L13_003061c8(*(float *)(data + 0x68), v, v2, moby);
+        horizontal_offset[0] = fast_cos(ang) * (D_L13_00161388 * frame_time);
+        horizontal_offset[1] = fast_sin(ang) * (D_L13_00161388 * frame_time);
+        horizontal_offset[2] = 0;
+        fast_vec_add(v, v, horizontal_offset);
+        FUN_L13_003061c8(*(float *)(data + 0x68), v, horizontal_offset, moby);
     }
 }
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002B2020.c: func_L13_002B5A88), where it is exact; names translated to the US level program. */
@@ -2107,7 +2107,7 @@ extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
 extern void transform_vector(void *, void *, void *) __asm__("func_001F9D20");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-int FUN_L13_002b8be0(int a, char *p, char *a2, void *a3, float f0, float f1, float f2, char *cur, char *g) {
+int FUN_L13_002b8be0(int a, char *p, char *radar_origin_position, void *radar_rotation, float f0, float f1, float f2, char *cur, char *g) {
     float v[4];
     float mat[16];
     float u[4];
@@ -2159,17 +2159,17 @@ int FUN_L13_002b8be0(int a, char *p, char *a2, void *a3, float f0, float f1, flo
         switch (*(short *)(m + 0xA6)) {
         case 0xE0:
         case 0x4C2:
-            FUN_L13_002b89f8(a3, a2, m, 2, 0x75808080, *(int *)(p + 0x104));
+            FUN_L13_002b89f8(radar_rotation, radar_origin_position, m, 2, 0x75808080, *(int *)(p + 0x104));
             break;
         case 0xE4:
         case 0x4C4:
-            FUN_L13_002b89f8(a3, a2, m, 2, 0x75808080, *(int *)(p + 0x104));
+            FUN_L13_002b89f8(radar_rotation, radar_origin_position, m, 2, 0x75808080, *(int *)(p + 0x104));
             break;
         case 0x52:
-            FUN_L13_002b89f8(a3, a2, m, 1, 0x75004080, *(int *)(p + 0x104));
+            FUN_L13_002b89f8(radar_rotation, radar_origin_position, m, 1, 0x75004080, *(int *)(p + 0x104));
             break;
         case 0x53:
-            FUN_L13_002b89f8(a3, a2, m, 1, 0x75007080, *(int *)(p + 0x104));
+            FUN_L13_002b89f8(radar_rotation, radar_origin_position, m, 1, 0x75007080, *(int *)(p + 0x104));
             break;
         case 0x184:
         case 0x191:
@@ -2234,7 +2234,7 @@ int FUN_L13_002b8be0(int a, char *p, char *a2, void *a3, float f0, float f1, flo
                         FUN_L13_002b7d50(&D_L13_001613C8, 3, 0xFFFFF3, (c << 24) | 0x8000, u[0], u[1], 240.0f / dist + 1.5f, ang);
                     }
                 }
-                FUN_L13_002b89f8(a3, a2, m, 0, 0x75808080, *(int *)(p + 0x104));
+                FUN_L13_002b89f8(radar_rotation, radar_origin_position, m, 0, 0x75808080, *(int *)(p + 0x104));
                 if (*(short *)(m + 0xA6) != 0x191) {
                     *(int *)(p + 0xE8) = *(int *)(p + 0xE8) + 1;
                 }
@@ -2252,7 +2252,7 @@ int FUN_L13_002b8be0(int a, char *p, char *a2, void *a3, float f0, float f1, flo
                         FUN_L13_002b7d50(D_L13_001CBD40, 0x1E, 0xFFFFF3, 0xFF00FF00, x, y, 1.0f, -ang);
                     }
                 }
-                FUN_L13_002b89f8(a3, a2, m, 1, 0x75808080, *(int *)(p + 0x104));
+                FUN_L13_002b89f8(radar_rotation, radar_origin_position, m, 1, 0x75808080, *(int *)(p + 0x104));
             }
             break;
         case 0x4BF:
@@ -2266,7 +2266,7 @@ int FUN_L13_002b8be0(int a, char *p, char *a2, void *a3, float f0, float f1, flo
                         FUN_L13_002b7d50(D_L13_001CBD40, 0x1E, 0xFFFFF3, 0xFF00FF00, x, y, 1.0f, -ang);
                     }
                 }
-                FUN_L13_002b89f8(a3, a2, m, 1, 0x75808080, *(int *)(p + 0x104));
+                FUN_L13_002b89f8(radar_rotation, radar_origin_position, m, 1, 0x75808080, *(int *)(p + 0x104));
             }
             break;
         case 0x185: case 0x186: case 0x187: case 0x188:

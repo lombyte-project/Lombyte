@@ -281,7 +281,7 @@ void FUN_L00_00221b68(void) {
     char *q = (char *)D_0013E533 + 0xE1D;
     char *p;
     char *r;
-    float t0;
+    float distance_error;
     float d;
     float lim;
     float ang;
@@ -307,8 +307,8 @@ void FUN_L00_00221b68(void) {
             if (d < *(float *)(p + 0x234) * 0.05f) {
                 ang = *(float *)(p + 0x98);
             }
-            t0 = d - lim;
-            vendor_spring(&t0, (float *)(p + 0x244), 0.0f, frame_scale_sq * 0.03f, frame_scale_sq * 0.3f,
+            distance_error = d - lim;
+            vendor_spring(&distance_error, (float *)(p + 0x244), 0.0f, frame_scale_sq * 0.03f, frame_scale_sq * 0.3f,
                              frame_time * 2.8f);
             *(float *)(p + 0xF0) = fast_cos(ang) * *(float *)(p + 0x244);
             *(float *)(p + 0xF4) = fast_sin(ang) * *(float *)(p + 0x244);
@@ -416,7 +416,7 @@ void FUN_L00_00221ee0(void) {
     M_221ee0 *m;
     M_221ee0 *best;
     Q_221ee0 *q;
-    f32 x, t, a13, bestd, d, a14, a15;
+    f32 x, t, max_target_distance, bestd, d, target_angle_limit, target_elevation_angle_limit;
     s32 k;
     best = 0;
     G.h99E = 0;
@@ -434,22 +434,22 @@ void FUN_L00_00221ee0(void) {
         if (q->f20 != 0.0f && q->f20 < FUN_001f9b48_221ee0(&G.q80, &m->q10))
             continue;
         k = G.i2084;
-        a14 = 0.7853982f;
+        target_angle_limit = 0.7853982f;
         if (k == 0x2D)
-            a14 = 1.2217305f;
-        a15 = 0.7853982f;
+            target_angle_limit = 1.2217305f;
+        target_elevation_angle_limit = 0.7853982f;
         if (k == 0x2D)
-            a15 = 1.134464f;
+            target_elevation_angle_limit = 1.134464f;
         if (k == 1 || k == 0x1E) {
-            a15 = 0.08726646f;
-            a14 = a15;
+            target_elevation_angle_limit = 0.08726646f;
+            target_angle_limit = target_elevation_angle_limit;
         }
         t = q->f20;
-        a13 = 16.0f;
+        max_target_distance = 16.0f;
         x = G.f98;
         if (t != 0.0f)
-            a13 = t;
-        d = FUN_L00_0020d6b0_221ee0(m, &out, x, a13, a14, a15);
+            max_target_distance = t;
+        d = FUN_L00_0020d6b0_221ee0(m, &out, x, max_target_distance, target_angle_limit, target_elevation_angle_limit);
         if (out != 0)
             continue;
         if (m->b31 == 0)
@@ -486,7 +486,7 @@ int FUN_L00_00222158(void) {
     char *m;
     char *best;
     char *q;
-    float bestd, d, a13, a14, a15, x;
+    float bestd, d, max_target_distance, target_angle_limit, target_elevation_angle_limit, x;
     int k;
     int out;
     float v[4];
@@ -512,20 +512,20 @@ int FUN_L00_00222158(void) {
             continue;
         g = (char *)((char *)&D_0013F350);
         k = *(int *)(g + 0x2084);
-        a14 = 0.5235988f;
-        a15 = -1.0f;
+        target_angle_limit = 0.5235988f;
+        target_elevation_angle_limit = -1.0f;
         if (k == 1 || k == 0x1E) {
-            a15 = 0.08726646f;
-            a14 = a15;
+            target_elevation_angle_limit = 0.08726646f;
+            target_angle_limit = target_elevation_angle_limit;
         }
         gb = (char *)((char *)&D_0013F350);
         x = *(float *)(gb + 0x98);
         if (*(int *)(gb + 0x208C) == 0xF)
             x = *(float *)(gb + 0x57C);
-        a13 = 30.0f;
+        max_target_distance = 30.0f;
         if (*(float *)(q + 0x20) != 0.0f)
-            a13 = *(float *)(q + 0x20);
-        d = FUN_L00_0020d6b0(m, &out, x, a13, a14, a15);
+            max_target_distance = *(float *)(q + 0x20);
+        d = FUN_L00_0020d6b0(m, &out, x, max_target_distance, target_angle_limit, target_elevation_angle_limit);
         if (out != 0)
             continue;
         gb += 0x80;
@@ -3053,8 +3053,8 @@ int FUN_L00_002279b0(void) {
     struct Hero *q;
     struct Hero *u;
     int r;
-    float v1[4];
-    float v2[4];
+    float ray_start[4];
+    float ray_end[4];
     float t;
     float scale;
     if (p->state.current == 0x6A) {
@@ -3110,13 +3110,13 @@ int FUN_L00_002279b0(void) {
         if ((D_L00_0015F5CC & 0x3F) == 0) {
             scale = 16.0f;
         }
-        hero_get_collision_ray_endpoints(v1, v2, 0, scale, 1.3f);
-        if (collision_line(v1, v2, 2, u->moby, 0) != 0) {
+        hero_get_collision_ray_endpoints(ray_start, ray_end, 0, scale, 1.3f);
+        if (collision_line(ray_start, ray_end, 2, u->moby, 0) != 0) {
             int s = collision_hit_material();
             u->ground_type = s;
             if ((short)s == 0) {
-                v1[2] = D_L00_00173E68 - 0.01f;
-                if (collision_line(v1, v2, 2, u->moby, 0) == 0) {
+                ray_start[2] = D_L00_00173E68 - 0.01f;
+                if (collision_line(ray_start, ray_end, 2, u->moby, 0) == 0) {
                     hero_set_state(0x34, 1);
                     return 1;
                 }
@@ -3614,23 +3614,23 @@ extern int FUN_L00_00221d98(void);
 extern int pad_pressed_within(int, void *, void *) __asm__("FUN_L00_00266d60");
 extern int FUN_L00_00266e00(int, void *, void *, int);
 
-int FUN_L00_00228b78(void *a0, int a1) {
+int FUN_L00_00228b78(void *jump_press_window_frames, int suppress_normal_jump) {
     s32 buf;
     int len;
 
-    if (!pad_pressed_within(0x40, a0, &buf))
+    if (!pad_pressed_within(0x40, jump_press_window_frames, &buf))
         return 0;
 
     len = FUN_L00_00221d98();
 
     if ((*(int *)((char *)D_0013A4E0 + 0x2600) & 0xA) != 0) {
-        if (len > 0 && FUN_L00_00266e00(0x40, (void *)0x1F000, (char *)a0 + len, len)) {
+        if (len > 0 && FUN_L00_00266e00(0x40, (void *)0x1F000, (char *)jump_press_window_frames + len, len)) {
             hero_set_state(HERO_STATE_HIGH_JUMP, 1);
             return 1;
         }
     }
 
-    if (a1 != 0)
+    if (suppress_normal_jump != 0)
         return 0;
 
     hero_set_state(HERO_STATE_JUMP, 1);

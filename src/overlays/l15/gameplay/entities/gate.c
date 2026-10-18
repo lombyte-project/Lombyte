@@ -1934,10 +1934,10 @@ void ultramech_unlimited_update(UMoby *m) __asm__("FUN_L15_002cf3a8");
 void ultramech_unlimited_update(UMoby *m) {
     UVec v10;
     UVec v20;
-    UVec v30;
-    UVec v40;
-    UVec v50;
-    UVec v60;
+    UVec vector_arithmetic_result;
+    UVec hit_direction;
+    UVec attack_start;
+    UVec attack_end;
     int seg;
     float frac;
     int moving;
@@ -2151,7 +2151,7 @@ void ultramech_unlimited_update(UMoby *m) {
                 func_L10_002CD578_v(&v20, 3.0f, &v10, (int)m, (int)tgt,
                                     scale_game_frames(D_L15_00161B1C));
                 normalize_vector_xyz(&v20, &v20, 3.0f);
-                FUN_L00_001ff290(&v30, &v10, &v20);
+                FUN_L00_001ff290(&vector_arithmetic_result, &v10, &v20);
                 FUN_L03_00250ae8(m, &v10, 0);
                 d->shots++;
             } else if ((float)d->shots >= 6.0f && (m->animFlags & 2)) {
@@ -2249,10 +2249,10 @@ void ultramech_unlimited_update(UMoby *m) {
         FUN_L00_00258278((char *)m, &d->turnVel, ang, frame_time_sq * 1.0471976f,
                          frame_time_sq * 3.1415927f, frame_time * 3.1415927f);
         qcopy(&v10, &m->pos);
-        subtract_vector_xyz(&v30, &v20, &m->pos);
-        v20.q = v30.q;
+        subtract_vector_xyz(&vector_arithmetic_result, &v20, &m->pos);
+        v20.q = vector_arithmetic_result.q;
         normalize_vector_xyz(&v20, &v20, frame_time * 6.5f);
-        FUN_L00_001ff290(&v30, &v20, &m->pos);
+        FUN_L00_001ff290(&vector_arithmetic_result, &v20, &m->pos);
         if (!FUN_L00_00258490(m, &v10, &v20, 1, 2.25f, 1.75f, 0.5f, 0.5235988f) ||
             point_in_path_xy(&v10, D_L15_001B0AB0[d->side]->pt, D_L15_001B0AB0[d->side]->n)) {
             qcopy(&m->pos, &v10);
@@ -2295,19 +2295,19 @@ void ultramech_unlimited_update(UMoby *m) {
             }
         } else {
             float h = compute_interpolated_record_value(m);
-            moby_point_position(m, 1, &v60);
+            moby_point_position(m, 1, &attack_end);
             if (h >= 17.0f && h <= 24.0f) {
-                qcopy(&v50, &m->pos);
-                v50.f[2] += 0.5f;
-                v40.f[0] = fast_cos(m->rot.f[2]);
-                v40.f[1] = fast_sin(m->rot.f[2]);
-                v40.f[2] = 1.0f;
-                make_hit_descriptor(&v10, m, 0x10007, &v40, 4.0f);
-                collect_mobies_in_sphere(&v60, 9, m, &v10, 2.5f);
-                coll_line_fix(&v50, &v60, 0, m, &v10);
-                sweep_hit_segment(&v50, &v60, &v50, &d->v1A0, m, &v10, 5);
-                no_op_main_callback(&v50, &v60);
-                qcopy(&d->v1A0, &v60);
+                qcopy(&attack_start, &m->pos);
+                attack_start.f[2] += 0.5f;
+                hit_direction.f[0] = fast_cos(m->rot.f[2]);
+                hit_direction.f[1] = fast_sin(m->rot.f[2]);
+                hit_direction.f[2] = 1.0f;
+                make_hit_descriptor(&v10, m, 0x10007, &hit_direction, 4.0f);
+                collect_mobies_in_sphere(&attack_end, 9, m, &v10, 2.5f);
+                coll_line_fix(&attack_start, &attack_end, 0, m, &v10);
+                sweep_hit_segment(&attack_start, &attack_end, &attack_start, &d->v1A0, m, &v10, 5);
+                no_op_main_callback(&attack_start, &attack_end);
+                qcopy(&d->v1A0, &attack_end);
             }
         }
         break;

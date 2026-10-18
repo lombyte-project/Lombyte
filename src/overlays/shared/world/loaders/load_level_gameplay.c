@@ -510,7 +510,7 @@ extern unsigned char D_L00_001BB684[];
 extern f32 frame_scale __asm__("D_0015ED60") MACRO_ADDR;
 extern s32 pal_mode __asm__("D_0015ED80") MACRO_ADDR;
 extern s32 game_language __asm__("D_0015ED88") MACRO_ADDR;
-char *load_level_gameplay(int arg0) {
+char *load_level_gameplay(int skip_gameplay_read) {
     LevelHeader *hdr;
     char *mem;
     float *ship;
@@ -519,7 +519,7 @@ char *load_level_gameplay(int arg0) {
 
     hdr = D_L00_00173E00.f4;
     mem = D_L00_00173E00.f18;
-    if (arg0 == 0) {
+    if (skip_gameplay_read == 0) {
         if (pal_mode != 0) {
             load(mem, D_00137B80.f2978, D_00137B80.f297C);
         } else {
@@ -1840,9 +1840,9 @@ s32 FUN_L00_00244110(s32 full, s32 keep) {
     char *end;
     Span244110 *span;
     TexRef244110 *tex;
-    TexRef244110 *t1;
-    TexRef244110 *t3;
-    TexRef244110 *t4;
+    TexRef244110 *tfrag_texture_refs;
+    TexRef244110 *tie_texture_refs;
+    TexRef244110 *shrub_texture_refs;
     char *tbl;
     s32 i;
     s32 j;
@@ -1858,7 +1858,7 @@ s32 FUN_L00_00244110(s32 full, s32 keep) {
     s32 ci;
     char *x;
     char *y;
-    s32 a1, a2, a3;
+    s32 a1, a2, sound_slot_index;
     char *q1, *q2;
     u64 *t;
 
@@ -1888,23 +1888,23 @@ s32 FUN_L00_00244110(s32 full, s32 keep) {
         D_L00_001827F0[1] = 0x0000FFA0000000E0;
         D_L00_001827F0[2] = 0x0040000400004000;
 
-        t1 = (TexRef244110 *)((char *)h + h[0xD]);
+        tfrag_texture_refs = (TexRef244110 *)((char *)h + h[0xD]);
         D_L00_00160F54 = h[0xC];
         for (c1 = 0; c1 < D_L00_00160F54; c1++)
-            D_L00_001C4A00[c1] = D_L00_0015F40C + t1[c1].offset + (log2dim(t1[c1].kind) << 28);
+            D_L00_001C4A00[c1] = D_L00_0015F40C + tfrag_texture_refs[c1].offset + (log2dim(tfrag_texture_refs[c1].kind) << 28);
         tex = (TexRef244110 *)((char *)h + h[0xF]);
         texture_count = h[0xE];
         for (c2 = 0; c2 < texture_count; c2++)
             D_L00_00199A80[c2] = D_L00_0015F40C + tex[c2].offset + (log2dim(tex[c2].kind) << 28);
         fast_mem_copy(D_L00_001AEBC0, tex, texture_count * 16);
-        t3 = (TexRef244110 *)((char *)h + h[0x11]);
+        tie_texture_refs = (TexRef244110 *)((char *)h + h[0x11]);
         D_L00_00160FD4 = h[0x10];
         for (c3 = 0; c3 < D_L00_00160FD4; c3++)
-            D_L00_001C6700[c3] = D_L00_0015F40C + t3[c3].offset + (log2dim(t3[c3].kind) << 28);
-        t4 = (TexRef244110 *)((char *)h + h[0x13]);
+            D_L00_001C6700[c3] = D_L00_0015F40C + tie_texture_refs[c3].offset + (log2dim(tie_texture_refs[c3].kind) << 28);
+        shrub_texture_refs = (TexRef244110 *)((char *)h + h[0x13]);
         D_L00_001604AC = h[0x12];
         for (c4 = 0; c4 < D_L00_001604AC; c4++)
-            D_L00_001BC5B0[c4] = D_L00_0015F40C + t4[c4].offset + (log2dim(t4[c4].kind) << 28);
+            D_L00_001BC5B0[c4] = D_L00_0015F40C + shrub_texture_refs[c4].offset + (log2dim(shrub_texture_refs[c4].kind) << 28);
 
         initialize_tfrag_render_data(base + h[2], (char *)h + h[0xD]);
         if (h[3])
@@ -1979,14 +1979,14 @@ s32 FUN_L00_00244110(s32 full, s32 keep) {
         span++;
         free += n * 32;
         e = tbl + span->off;
-        for (a3 = 0; a3 < D_L00_0015F5F0; a3++) {
-            if (D_L00_0015F5F4[a3].sound >= span->count) {
+        for (sound_slot_index = 0; sound_slot_index < D_L00_0015F5F0; sound_slot_index++) {
+            if (D_L00_0015F5F4[sound_slot_index].sound >= span->count) {
                 printf_1e93b0(D_L00_001E8780);
-                D_L00_0015F5F4[a3].sound = -1;
+                D_L00_0015F5F4[sound_slot_index].sound = -1;
             } else {
-                D_L00_0015F5F4[a3].sound = *(u16 *)(e + D_L00_0015F5F4[a3].sound * 4);
+                D_L00_0015F5F4[sound_slot_index].sound = *(u16 *)(e + D_L00_0015F5F4[sound_slot_index].sound * 4);
             }
-            D_L00_0015F5F4[a3].time = sound_bank_handle;
+            D_L00_0015F5F4[sound_slot_index].time = sound_bank_handle;
         }
         end = free + 0x3F;
         span++;

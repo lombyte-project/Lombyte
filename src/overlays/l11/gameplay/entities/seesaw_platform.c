@@ -489,9 +489,9 @@ extern float D_L11_00161F48 __attribute__((sda));
 
 /* Lays out the 4x6 grid of child mobys around this one, fanned by the progress value at pvars+0x6C. */
 void FUN_L11_0030dd18(struct Moby *m) {
-    Vec4f v0;
-    Vec4f v1;
-    Vec4f v2;
+    Vec4f parent_axis0_offset;
+    Vec4f parent_axis1_offset;
+    Vec4f child_position_offset;
     char *data;
     struct Moby *(*grid)[6];
     float progress;
@@ -504,8 +504,8 @@ void FUN_L11_0030dd18(struct Moby *m) {
 
     data = m->pvars;
     grid = (struct Moby *(*)[6])data;
-    normalize_vector_xyz(&v0, &m->rot_row0, D_L11_00161F40);
-    normalize_vector_xyz(&v1, &m->rot_row1, D_L11_00161F44);
+    normalize_vector_xyz(&parent_axis0_offset, &m->rot_row0, D_L11_00161F40);
+    normalize_vector_xyz(&parent_axis1_offset, &m->rot_row1, D_L11_00161F44);
     progress = *(float *)(data + 0x6C);
     hi = 90.0f - progress * 180.0f;
     if (hi < -90.0f) {
@@ -521,9 +521,9 @@ void FUN_L11_0030dd18(struct Moby *m) {
         for (col = 0; col < 6; col++) {
             lim = (row < 2) ? hi : lo;
             if (row < 2) {
-                add_vector_xyz(&grid[row][col]->pos, &m->pos, &v0);
+                add_vector_xyz(&grid[row][col]->pos, &m->pos, &parent_axis0_offset);
             } else {
-                subtract_vector_xyz(&grid[row][col]->pos, &m->pos, &v0);
+                subtract_vector_xyz(&grid[row][col]->pos, &m->pos, &parent_axis0_offset);
             }
             angle = ((float)col - 2.5f) * 0.2617994f;
             if (row & 1) {
@@ -546,13 +546,13 @@ void FUN_L11_0030dd18(struct Moby *m) {
             }
             grid[row][col]->rot.z = fast_add_rotations(grid[row][col]->rot.z, angle);
             euler_rotation_basis(&grid[row][col]->rot_row0, &grid[row][col]->rot);
-            normalize_vector_xyz(&v2, &grid[row][col]->rot_row1, -D_L11_00161F48);
+            normalize_vector_xyz(&child_position_offset, &grid[row][col]->rot_row1, -D_L11_00161F48);
             if (row & 1) {
-                add_vector_xyz(&v2, &v2, &v1);
+                add_vector_xyz(&child_position_offset, &child_position_offset, &parent_axis1_offset);
             } else {
-                subtract_vector_xyz(&v2, &v2, &v1);
+                subtract_vector_xyz(&child_position_offset, &child_position_offset, &parent_axis1_offset);
             }
-            add_vector_xyz(&grid[row][col]->pos, &grid[row][col]->pos, &v2);
+            add_vector_xyz(&grid[row][col]->pos, &grid[row][col]->pos, &child_position_offset);
             FUN_L00_00250df8(grid[row][col]);
         }
     }
@@ -1757,17 +1757,17 @@ extern int FUN_L11_00318050(char *moby, void **out);
 extern short *D_L11_001AC240[];
 void FUN_L11_00311be8(void *moby, void *a1, void *a2);
 
-void *FUN_L11_00311948(void *moby, char *a1, float *a2, float *a3, float f0, float f1, float f2, void *a4, int a5) {
+void *FUN_L11_00311948(void *moby, char *ship_vars, float *reference_position, float *reference_rotation, float f0, float f1, float f2, void *current_target, int a5) {
     void *best = 0;
     float bestd = 1000.0f;
     short *p;
     void *list[12];
-    FUN_L11_00311be8(moby, a1 + 0xE8, a1 + 0xEA);
-    if (a4 != 0) {
-        if (FUN_L11_00311a88_u(moby, a4) < bestd)
-            return a4;
+    FUN_L11_00311be8(moby, ship_vars + 0xE8, ship_vars + 0xEA);
+    if (current_target != 0) {
+        if (FUN_L11_00311a88_u(moby, current_target) < bestd)
+            return current_target;
     }
-    p = D_L11_001AC240[*(short *)(a1 + 0x108)];
+    p = D_L11_001AC240[*(short *)(ship_vars + 0x108)];
     if (p == 0)
         return 0;
     do {
@@ -1836,21 +1836,21 @@ float FUN_L11_00311a88(void *moby_v, void *o_v) {
 extern int D_L11_0015FFD8; /* no foreign declaration */
 extern short *D_L11_001AC240[];
 
-void FUN_L11_00311be8(void *moby, void *a1, void *a2) {
+void FUN_L11_00311be8(void *moby, void *active_moby_count, void *visible_moby_count) {
     char *d = *(char **)((char *)moby + 0x78);
     int type = *(short *)(d + 0x108);
     short *p;
-    *(unsigned short *)a1 = 0;
-    *(unsigned short *)a2 = 0;
+    *(unsigned short *)active_moby_count = 0;
+    *(unsigned short *)visible_moby_count = 0;
     p = D_L11_001AC240[type];
     if (p == 0)
         return;
     do {
         int off = (*(unsigned short *)p & 0x7FFF) << 8;
         if (((char *)D_L11_0015FFD8)[off + 0x20] >= 0) {
-            (*(unsigned short *)a1)++;
+            (*(unsigned short *)active_moby_count)++;
             if (((unsigned char *)D_L11_0015FFD8)[off + 0x31] != 0) {
-                (*(unsigned short *)a2)++;
+                (*(unsigned short *)visible_moby_count)++;
             }
         }
     } while (*p++ >= 0);

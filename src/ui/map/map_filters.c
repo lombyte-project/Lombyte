@@ -47,15 +47,15 @@ int map_filter_l02_0(void) {
    `arg1 >= 0xC8` is retail's second test of $a1. */
 int map_filter_l01_3(void *arg0, int arg1, float unused1, float unused2, float arg3) __asm__("func_002069D0");
 
-int map_filter_l01_3(void *arg0, int arg1, float unused1, float unused2, float arg3) {
+int map_filter_l01_3(void *unused_input, int reveal_test_selector, float unused1, float unused2, float reveal_test_value) {
     struct Hero *s = &hero;
     int b = s->state.control_mode == 16;
     int a = s->state.control_mode == 17 || s->state.control_mode == 18 || s->base_condition == 1;
 
-    if (arg1 < 0xC8 && arg3 >= 39.5f && arg3 <= 42.5f && !a) {
+    if (reveal_test_selector < 0xC8 && reveal_test_value >= 39.5f && reveal_test_value <= 42.5f && !a) {
         return 1;
     }
-    if (arg1 >= 0xC8 && arg3 >= 87.0f && !b) {
+    if (reveal_test_selector >= 0xC8 && reveal_test_value >= 87.0f && !b) {
         return 1;
     }
     return 0;
@@ -68,14 +68,14 @@ extern unsigned char D_0013D396 NOT_SDA;
    return 0 per arm becomes sltu. */
 int map_filter_l01_4(int arg0, float unused1, float unused2, float arg1) __asm__("func_00206A90");
 
-int map_filter_l01_4(int arg0, float unused1, float unused2, float arg1) {
+int map_filter_l01_4(int reveal_test_selector, float unused1, float unused2, float reveal_test_value) {
     int is16 = D_001413DC[0] == 0x10;
 
-    if (arg0 < 0x100) {
+    if (reveal_test_selector < 0x100) {
         if (D_0013D396 != 0) {
             return 1;
         }
-    } else if (arg1 >= 58.0f && arg1 <= 86.0f && !is16) {
+    } else if (reveal_test_value >= 58.0f && reveal_test_value <= 86.0f && !is16) {
         return 1;
     }
     return 0;
@@ -86,12 +86,12 @@ int map_filter_l01_4(int arg0, float unused1, float unused2, float arg1) {
    field reads. */
 int map_filter_l01_5(int arg0, float unused1, float unused2, float arg1) __asm__("func_00206B10");
 
-int map_filter_l01_5(int arg0, float unused1, float unused2, float arg1) {
-    if (arg0 < 0x100) {
+int map_filter_l01_5(int reveal_test_selector, float unused1, float unused2, float reveal_test_value) {
+    if (reveal_test_selector < 0x100) {
         struct Hero *s = &hero;
         return s->state.control_mode == 17 || s->state.control_mode == 18 || s->base_condition == 1;
     }
-    return (arg1 >= 95.0f) ? 1 : 0;
+    return (reveal_test_value >= 95.0f) ? 1 : 0;
 }
 
 extern u32 menu_selection_count __asm__("D_0015FD64") __attribute__((sda));
@@ -199,12 +199,12 @@ s32 region_enabled NOT_SDA = 0;
 
 s32 map_filter_l07_1(s32 px, s32 py, f32 unused1, f32 unused2, f32 arg3) __asm__("func_00206E18");
 
-s32 map_filter_l07_1(s32 px, s32 py, f32 unused1, f32 unused2, f32 arg3) {
+s32 map_filter_l07_1(s32 px, s32 py, f32 unused1, f32 unused2, f32 reveal_test_value) {
     struct Hero *s = &hero;
     s32 a = s->state.control_mode == 17 || s->state.control_mode == 18 || s->base_condition == 1;
 
     if (point_is_clockwise(px, py, 0x93, 0x168, 0x182, 0x168) != 0 && py >= 0x135 &&
-        D_001A03A8[0] != 0 && arg3 >= 47.7f) {
+        D_001A03A8[0] != 0 && reveal_test_value >= 47.7f) {
         return 1;
     }
     if (!a) {
@@ -257,7 +257,7 @@ s32 map_filter_l07_2(s32 px, s32 py) {
 extern u32 D_001A03BC[];
 s32 map_filter_l07_3(s32 px, s32 py, f32 unused1, f32 unused2, f32 arg3) __asm__("func_00207100");
 
-s32 map_filter_l07_3(s32 px, s32 py, f32 unused1, f32 unused2, f32 arg3) {
+s32 map_filter_l07_3(s32 px, s32 py, f32 unused1, f32 unused2, f32 reveal_test_value) {
     if (py < 0xBB) {
         struct Hero *s = &hero;
         s32 a = s->state.control_mode == 17 || s->state.control_mode == 18 || s->base_condition == 1;
@@ -267,7 +267,7 @@ s32 map_filter_l07_3(s32 px, s32 py, f32 unused1, f32 unused2, f32 arg3) {
         }
         return 0;
     }
-    if (arg3 >= 51.5f && arg3 <= 54.0f &&
+    if (reveal_test_value >= 51.5f && reveal_test_value <= 54.0f &&
         point_is_clockwise(px, py, 0x10A, 0xE5, 0x124, 0xF9) != 0) {
         return 1;
     }
@@ -278,12 +278,12 @@ extern s32 D_001A03B4[];
 
 s32 map_filter_l07_4(s32 arg0, s32 arg1) __asm__("func_002071C0");
 
-s32 map_filter_l07_4(s32 arg0, s32 arg1) {
+s32 map_filter_l07_4(s32 point_x, s32 point_y) {
     s32 ret1;
     s32 ret2;
 
-    ret1 = point_is_clockwise(arg0, arg1, 0x99, 0xED, 0x160, 0x117);
-    ret2 = point_is_clockwise(arg0, arg1, 0x10E, 0xF7, 0x13D, 0x119);
+    ret1 = point_is_clockwise(point_x, point_y, 0x99, 0xED, 0x160, 0x117);
+    ret2 = point_is_clockwise(point_x, point_y, 0x10E, 0xF7, 0x13D, 0x119);
     if (D_001A03B4[0] == 0) {
         return 0;
     }
@@ -309,14 +309,14 @@ extern int D_001A03B8 NOT_SDA;
    c.lt/bc1t; the second arm's `return 0` cross-jumps into the first's. */
 int map_filter_l07_5(void *arg0, int arg1, float unused1, float unused2, float arg3) __asm__("func_00207250");
 
-int map_filter_l07_5(void *arg0, int arg1, float unused1, float unused2, float arg3) {
-    if (arg1 < 0x9D) {
-        if (arg3 < 73.5f || arg3 > 80.0f || D_001A03C0 == 0) {
+int map_filter_l07_5(void *unused_input, int reveal_test_selector, float unused1, float unused2, float reveal_test_value) {
+    if (reveal_test_selector < 0x9D) {
+        if (reveal_test_value < 73.5f || reveal_test_value > 80.0f || D_001A03C0 == 0) {
             return 0;
         }
         return 1;
     } else {
-        if (arg3 < 51.5f || arg3 > 54.0f || D_001A03B8 == 0) {
+        if (reveal_test_value < 51.5f || reveal_test_value > 54.0f || D_001A03B8 == 0) {
             return 0;
         }
         return 1;
@@ -384,8 +384,8 @@ s32 map_filter_l07_7(s32 px, s32 py, f32 fparg0, f32 fparg1, f32 fparg2) {
 extern unsigned char menu_item_enabled_41 __asm__("D_0013D3BD") NOT_SDA;
 int map_filter_l08_0(int arg0, int arg1) __asm__("func_00207480");
 
-int map_filter_l08_0(int arg0, int arg1) {
-    if (arg1 >= 0x101) {
+int map_filter_l08_0(int unused_input, int reveal_test_selector) {
+    if (reveal_test_selector >= 0x101) {
         return D_001413DC[0] == 0xF;
     }
     return menu_item_enabled_41 != 0;
@@ -397,11 +397,11 @@ int map_filter_l08_0(int arg0, int arg1) {
    and the compare are ps2eeas's (tools/ps2eeas_nops.py). */
 int map_filter_l08_1(int arg0, float unused1, float unused2, float arg1) __asm__("func_002074B0");
 
-int map_filter_l08_1(int arg0, float unused1, float unused2, float arg1) {
-    if (arg0 < 0xE0) {
-        return (arg1 >= 47.75f) ? 1 : 0;
+int map_filter_l08_1(int reveal_test_selector, float unused1, float unused2, float reveal_test_value) {
+    if (reveal_test_selector < 0xE0) {
+        return (reveal_test_value >= 47.75f) ? 1 : 0;
     }
-    return (arg1 < 29.0f) ? 1 : 0;
+    return (reveal_test_value < 29.0f) ? 1 : 0;
 }
 
 /* Ported from rac1-decomp (src/game/menu.c, func_00207D38). */
@@ -409,11 +409,11 @@ int map_filter_l08_1(int arg0, float unused1, float unused2, float arg1) {
    a plain `? 1 : 0`. */
 int map_filter_l08_2(int arg0, float unused1, float unused2, float arg1) __asm__("func_00207508");
 
-int map_filter_l08_2(int arg0, float unused1, float unused2, float arg1) {
-    if (arg0 < 0xE0) {
-        return (arg1 >= 44.0f && arg1 <= 45.0f) ? 1 : 0;
+int map_filter_l08_2(int reveal_test_selector, float unused1, float unused2, float reveal_test_value) {
+    if (reveal_test_selector < 0xE0) {
+        return (reveal_test_value >= 44.0f && reveal_test_value <= 45.0f) ? 1 : 0;
     }
-    return (arg1 >= 37.0f) ? 1 : 0;
+    return (reveal_test_value >= 37.0f) ? 1 : 0;
 }
 
 /* map_filter_l08_2's twin with other thresholds. The function is 116 bytes:
@@ -434,11 +434,11 @@ int map_filter_l08_3(int frame, float unused0, float unused1, float value) {
    and after the compare, are ps2eeas's (tools/ps2eeas_nops.py). */
 int map_filter_l08_4(int arg0, float unused1, float unused2, float arg1) __asm__("func_002075F8");
 
-int map_filter_l08_4(int arg0, float unused1, float unused2, float arg1) {
-    if (arg0 >= 0xE0) {
+int map_filter_l08_4(int reveal_test_selector, float unused1, float unused2, float reveal_test_value) {
+    if (reveal_test_selector >= 0xE0) {
         return 0;
     }
-    return (arg1 <= 38.0f) ? 1 : 0;
+    return (reveal_test_value <= 38.0f) ? 1 : 0;
 }
 
 extern unsigned char menu_item_enabled_36 __asm__("D_0013D3B8") NOT_SDA;
@@ -495,10 +495,10 @@ int map_filter_l09_2(void) {
    residual. */
 int map_filter_l10_0(int arg0, float unused1, float unused2, float arg1) __asm__("func_00207690");
 
-int map_filter_l10_0(int arg0, float unused1, float unused2, float arg1) {
-    if (arg0 >= 0xBE)
+int map_filter_l10_0(int reveal_test_selector, float unused1, float unused2, float reveal_test_value) {
+    if (reveal_test_selector >= 0xBE)
         return menu_item_enabled_68[0] != 0;
-    return (arg1 >= 58.5f) ? 1 : 0;
+    return (reveal_test_value >= 58.5f) ? 1 : 0;
 }
 
 extern unsigned char menu_item_enabled_64 __asm__("D_0013D3D4") NOT_SDA;
@@ -545,33 +545,33 @@ int map_filter_l10_5(void) {
 extern unsigned char D_0013D3DE NOT_SDA;
 int map_filter_l11_0(int arg0, float unused1, float unused2, float arg1) __asm__("func_00207720");
 
-int map_filter_l11_0(int arg0, float unused1, float unused2, float arg1) {
-    if (arg0 < 0xDD) {
-        return arg1 >= 232.0f && arg1 <= 235.0f && D_0013D3DE != 0;
+int map_filter_l11_0(int reveal_test_selector, float unused1, float unused2, float reveal_test_value) {
+    if (reveal_test_selector < 0xDD) {
+        return reveal_test_value >= 232.0f && reveal_test_value <= 235.0f && D_0013D3DE != 0;
     }
-    return (arg1 <= 180.0f) ? 1 : 0;
+    return (reveal_test_value <= 180.0f) ? 1 : 0;
 }
 
 /* Ported from rac1-decomp (src/game/menu.c, func_00207FD0). */
 extern unsigned char D_0013D3DF NOT_SDA;
 int map_filter_l11_1(int arg0, float unused1, float unused2, float arg1) __asm__("func_002077A0");
 
-int map_filter_l11_1(int arg0, float unused1, float unused2, float arg1) {
-    if (arg0 < 0xDD) {
-        return (arg1 >= 242.0f) ? 1 : 0;
+int map_filter_l11_1(int reveal_test_selector, float unused1, float unused2, float reveal_test_value) {
+    if (reveal_test_selector < 0xDD) {
+        return (reveal_test_value >= 242.0f) ? 1 : 0;
     }
-    return arg1 <= 180.0f && D_0013D3DF != 0;
+    return reveal_test_value <= 180.0f && D_0013D3DF != 0;
 }
 
 /* Ported from rac1-decomp (src/game/menu.c, downsample_map_coverage). */
 extern unsigned char D_0013D3E0 NOT_SDA;
 int map_filter_l11_2(int arg0, float unused1, float unused2, float arg1) __asm__("func_00207800");
 
-int map_filter_l11_2(int arg0, float unused1, float unused2, float arg1) {
-    if (arg0 < 0xDD) {
-        return (arg1 >= 238.0f && arg1 <= 241.0f) ? 1 : 0;
+int map_filter_l11_2(int reveal_test_selector, float unused1, float unused2, float reveal_test_value) {
+    if (reveal_test_selector < 0xDD) {
+        return (reveal_test_value >= 238.0f && reveal_test_value <= 241.0f) ? 1 : 0;
     }
-    return arg1 <= 180.0f && D_0013D3E0 != 0;
+    return reveal_test_value <= 180.0f && D_0013D3E0 != 0;
 }
 
 /* Ported from rac1-decomp (src/game/menu.c, func_002080B0). */
@@ -580,14 +580,14 @@ int map_filter_l11_2(int arg0, float unused1, float unused2, float arg1) {
    other arm is func_00208160's second test with D_0013D3E2. */
 int map_filter_l11_3(int arg0, float unused1, float unused2, float arg1) __asm__("func_00207880");
 
-int map_filter_l11_3(int arg0, float unused1, float unused2, float arg1) {
+int map_filter_l11_3(int reveal_test_selector, float unused1, float unused2, float reveal_test_value) {
     struct Hero *s = &hero;
     int a = s->state.control_mode == 17 || s->state.control_mode == 18 || s->base_condition == 1;
 
-    if (arg0 < 0x15F) {
-        return (arg1 >= 200.0f) ? a : 0;
+    if (reveal_test_selector < 0x15F) {
+        return (reveal_test_value >= 200.0f) ? a : 0;
     }
-    return arg1 >= 233.0f && arg1 <= 235.0f && D_0013D3E2[0] != 0;
+    return reveal_test_value >= 233.0f && reveal_test_value <= 235.0f && D_0013D3E2[0] != 0;
 }
 
 /* Ported from rac1-decomp (src/game/menu.c, func_00208160). */
@@ -617,10 +617,10 @@ int map_filter_l11_5(void) {
    is ps2eeas's (tools/ps2eeas_nops.py). */
 int map_filter_l12_0(void *arg0, int arg1, float unused1, float unused2, float arg3) __asm__("func_002079D8");
 
-int map_filter_l12_0(void *arg0, int arg1, float unused1, float unused2, float arg3) {
+int map_filter_l12_0(void *unused_input, int reveal_test_selector, float unused1, float unused2, float reveal_test_value) {
     int r = 1;
 
-    if (arg1 < 0x141 && !(63.5f <= arg3)) {
+    if (reveal_test_selector < 0x141 && !(63.5f <= reveal_test_value)) {
         r = 0;
     }
     return r;

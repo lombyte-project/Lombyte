@@ -514,7 +514,7 @@ extern float func_L00_00258E58_2D9EA0(float, float, float, float, float) __asm__
 
 void nanotech_ball_update(Moby *moby) __asm__("FUN_L00_002d89f0");
 void nanotech_ball_update(Moby *moby) {
-    V_2D9EA0 v0, v10, v20, v30, v40, v50, v60;
+    V_2D9EA0 v0, v10, v20, v30, v40, half_displacement_or_spark_position, slot_curve_offset;
     D_2D9EA0 *data = (D_2D9EA0 *)moby->pvars;
 
     switch (moby->state) {
@@ -617,17 +617,17 @@ void nanotech_ball_update(Moby *moby) {
                 fast_vec_cross(&v0, &v40, &v20);
                 func_002156E0_2D9EA0(&v0, &v0, -1.5707964f, &v20);
                 func_L00_001FF4B0_2D9EA0(&v0, &v0, D_L00_00161A50);
-                func_001F9C30_2D9EA0(&v50, &v20, 0.5f);
+                func_001F9C30_2D9EA0(&half_displacement_or_spark_position, &v20, 0.5f);
                 for (i = 0; i < 8; i++) {
                     if (data->slots[i] != 0) {
                         Ext_2D9EA0 *ext = (Ext_2D9EA0 *)(data->slots[i] + 1);
                         func_002156E0_2D9EA0(&v10, &v0, (float)i * 0.448549628f, &v20);
-                        func_001F9BD8_2D9EA0(&v60, &v50, &v10);
+                        func_001F9BD8_2D9EA0(&slot_curve_offset, &half_displacement_or_spark_position, &v10);
                         {
                             V3_2D9EA0 *dst = &ext->u.a;
-                            dst->x = v60.x;
-                            dst->y = v60.y;
-                            dst->z = v60.z;
+                            dst->x = slot_curve_offset.x;
+                            dst->y = slot_curve_offset.y;
+                            dst->z = slot_curve_offset.z;
                         }
                         {
                             V3_2D9EA0 *dst = &ext->b;
@@ -768,20 +768,20 @@ void nanotech_ball_update(Moby *moby) {
                     part->pos.x = func_L00_00258E58_2D9EA0(v0.x, v10.x, v20.x, v30.x, progress);
                     part->pos.y = func_L00_00258E58_2D9EA0(v0.y, v10.y, v20.y, v30.y, progress);
                     part->pos.z = func_L00_00258E58_2D9EA0(v0.z, v10.z, v20.z, v30.z, progress);
-                    v50.x = func_L00_00258C80_2D9EA0(0.0f, 0.00999999978f) + part->pos.x;
-                    v50.y = func_L00_00258C80_2D9EA0(0.0f, 0.00999999978f) + part->pos.y;
-                    v50.z = func_L00_00258C80_2D9EA0(0.0f, 0.00999999978f) + part->pos.z;
-                    spark = func_L00_002745A8_2D9EA0(&v50, func_001F9850_2D9EA0(0x14), 0);
+                    half_displacement_or_spark_position.x = func_L00_00258C80_2D9EA0(0.0f, 0.00999999978f) + part->pos.x;
+                    half_displacement_or_spark_position.y = func_L00_00258C80_2D9EA0(0.0f, 0.00999999978f) + part->pos.y;
+                    half_displacement_or_spark_position.z = func_L00_00258C80_2D9EA0(0.0f, 0.00999999978f) + part->pos.z;
+                    spark = func_L00_002745A8_2D9EA0(&half_displacement_or_spark_position, func_001F9850_2D9EA0(0x14), 0);
                     if (spark != 0) {
                         spark->f4 = D_L00_00161A00;
                         spark->fC = D_L00_001619F8;
                     }
                     func_001F9BD8_2D9EA0(&v40, &part->pos, &v40);
                     func_001F9C30_2D9EA0(&v40, &v40, 0.5f);
-                    v50.x = func_L00_00258C80_2D9EA0(0.0f, 0.00999999978f) + v40.x;
-                    v50.y = func_L00_00258C80_2D9EA0(0.0f, 0.00999999978f) + v40.y;
-                    v50.z = func_L00_00258C80_2D9EA0(0.0f, 0.00999999978f) + v40.z;
-                    spark = func_L00_002745A8_2D9EA0(&v50, func_001F9850_2D9EA0(0x14), 0);
+                    half_displacement_or_spark_position.x = func_L00_00258C80_2D9EA0(0.0f, 0.00999999978f) + v40.x;
+                    half_displacement_or_spark_position.y = func_L00_00258C80_2D9EA0(0.0f, 0.00999999978f) + v40.y;
+                    half_displacement_or_spark_position.z = func_L00_00258C80_2D9EA0(0.0f, 0.00999999978f) + v40.z;
+                    spark = func_L00_002745A8_2D9EA0(&half_displacement_or_spark_position, func_001F9850_2D9EA0(0x14), 0);
                     if (spark != 0) {
                         spark->f4 = D_L00_00161A00;
                         spark->fC = D_L00_001619F8;
@@ -1039,11 +1039,11 @@ extern void refresh_moby_spatial_bounds_from_basis(void *) __asm__("FUN_0020e098
 
 /* Composes the 0xC0 matrix of a with the one built from c into b+0xC0 and flags b for update. */
 void FUN_L00_002d9fd0(char *a, char *b, void *c) {
-    V t0, t1, t2;
-    euler_rotation_matrix(&t0, c);
-    copy_matrix_rotation(&t1, a + 0xC0);
-    multiply_matrix(&t2, &t1, &t0);
-    copy_matrix3x4(b + 0xC0, &t2);
+    V euler_rotation, source_rotation, composed_rotation;
+    euler_rotation_matrix(&euler_rotation, c);
+    copy_matrix_rotation(&source_rotation, a + 0xC0);
+    multiply_matrix(&composed_rotation, &source_rotation, &euler_rotation);
+    copy_matrix3x4(b + 0xC0, &composed_rotation);
     *(unsigned short *)(b + 0x34) |= 4;
     refresh_moby_spatial_bounds_from_basis(b);
 }
@@ -2034,8 +2034,8 @@ void FUN_L00_002dbf28(char *self, char *q) {
     float d[4];
     float e[4];
     float g[4];
-    I6_DD3D8 t1;
-    I6_DD3D8 t2;
+    I6_DD3D8 first_color_choices;
+    I6_DD3D8 second_color_choices;
     int r0, g0, b0;
     int r1, g1, b1;
     float f22, dist, f24, sc, dt;
@@ -2117,10 +2117,10 @@ void FUN_L00_002dbf28(char *self, char *q) {
             float sh = f22 * random_float_between(8.0f, 10.0f) * D_0015ED6C - f24 * D_0015ED6C;
             int A, B, r1, r2;
             float big;
-            t1 = D_L00_001EA100;
-            t2 = D_L00_001EA118;
-            A = FUN_L00_0025c0e8(t1.v[random_integer_below_c2(6)], (&D_0013E520)->b9);
-            B = FUN_L00_0025c0e8(t2.v[random_integer_below_c2(6)], (&D_0013E520)->b9);
+            first_color_choices = D_L00_001EA100;
+            second_color_choices = D_L00_001EA118;
+            A = FUN_L00_0025c0e8(first_color_choices.v[random_integer_below_c2(6)], (&D_0013E520)->b9);
+            B = FUN_L00_0025c0e8(second_color_choices.v[random_integer_below_c2(6)], (&D_0013E520)->b9);
             big = f22 * 400000.0f;
             r1 = FUN_L00_00257b90_c(scale_game_frames_c(15), scale_game_frames_c(20));
             r2 = FUN_L00_00257b90_c(scale_game_frames_c(25), scale_game_frames_c(30));
@@ -3200,7 +3200,7 @@ extern void scale_vector_xyz(void *, void *, float);
 extern void subtract_vector_xyz(void *, void *, void *);
 void normalize_vector_xyz(void *, void *, f32);
 
-void FUN_L00_002df048(int arg0) {
+void FUN_L00_002df048(int callback_context) {
     VQ a, b, c;
     int i;
     float len;
@@ -3225,7 +3225,7 @@ void FUN_L00_002df048(int arg0) {
             *(short *)(p + 0xA) = 0x46;
         }
     }
-    FUN_L00_002defe0(arg0);
+    FUN_L00_002defe0(callback_context);
 }
 typedef struct {
     u8 pad[0x46];

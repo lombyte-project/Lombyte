@@ -392,7 +392,7 @@ extern char *mk_b(int) __asm__("FUN_0020c4f8");
 extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 
 
-void FUN_L06_0030bef8(char *src, int a1, int a2, int a3) {
+void FUN_L06_0030bef8(char *src, int duration_updates, int start_color, int end_color) {
     OvlQuad v;
     char *vp = (char *)&v;
     unsigned char *m;
@@ -402,9 +402,9 @@ void FUN_L06_0030bef8(char *src, int a1, int a2, int a3) {
         char *e = *(char **)(m + 0x78);
         float f;
         qcopy(m + 0x10, vp);
-        f = convert_integer_to_float(a1);
-        *(int *)(e + 0xC) = a3;
-        *(int *)(e + 0x8) = a2;
+        f = convert_integer_to_float(duration_updates);
+        *(int *)(e + 0xC) = end_color;
+        *(int *)(e + 0x8) = start_color;
         *(float *)(e + 0x4) = 2.0f / f;
         m[0x30] = 0xFF;
         m[0x20] = 1;

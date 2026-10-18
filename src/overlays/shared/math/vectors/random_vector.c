@@ -26,7 +26,7 @@ float cubic_hermite_scalar(float a, float b, float c, float d, float t) __asm__(
 float cubic_hermite_scalar(float a, float b, float c, float d, float t) {
     float p = (d - c) - (a - b);
     float q = (a - b) - p;
-    float t2 = t * t;
-    float t3 = t2 * t;
-    return p * t3 + q * t2 + (c - a) * t + b;
+    float t_squared = t * t;
+    float t_cubed = t_squared * t;
+    return p * t_cubed + q * t_squared + (c - a) * t + b;
 }

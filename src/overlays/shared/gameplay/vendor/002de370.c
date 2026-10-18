@@ -123,15 +123,15 @@ void FUN_L03_002e8730(char *m) {
 extern int D_L03_0015EF50;
 extern int is_point_inside_clip_volume_alt(void *arg0, int arg1) __asm__("FUN_00214720");
 
-int FUN_L03_002e8870(char *a0, char *a1) {
-    char *entry = (char *)(D_L03_0015EF50 + (*(short *)(a0 + 0x84) << 5));
+int FUN_L03_002e8870(char *candidate_object, char *comparison_object) {
+    char *entry = (char *)(D_L03_0015EF50 + (*(short *)(candidate_object + 0x84) << 5));
     char *sub = *(char **)(entry + 0x1C);
     char *q;
     int five;
-    if (*(int *)(a0 + 0x74) != 4)
+    if (*(int *)(candidate_object + 0x74) != 4)
         return 0;
-    if (a1 != 0 && *(short *)(a1 + 0x7E) == 0 &&
-        !(*(unsigned char *)(a0 + 0x7C) > *(unsigned char *)(a1 + 0x7C)))
+    if (comparison_object != 0 && *(short *)(comparison_object + 0x7E) == 0 &&
+        !(*(unsigned char *)(candidate_object + 0x7C) > *(unsigned char *)(comparison_object + 0x7C)))
         return 0;
     if (is_point_inside_clip_volume_alt(D_0013E533 + 0xE9D, *(int *)(sub + 0xC)) != 0) {
         if (is_point_inside_clip_volume_alt(D_L03_00166EC0, *(int *)(sub + 0xC)) != 0)

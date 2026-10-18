@@ -661,7 +661,7 @@ void follow_camera_setup(Moby_2E8210 *m) {
     int r;
     float t;
     float v0[4];
-    float v1[4];
+    float orbit_offset_remainder[4];
 
     D_L00_00161D8C = 0;
     D_L00_00161D90 = 0;
@@ -783,8 +783,8 @@ void follow_camera_setup(Moby_2E8210 *m) {
     qcopy(c->pos, m->v30);
     qcopy(g->v20, m->v30);
     scale_vector_xyz(v0, D_0013F6E0_2E8210, dot_vectors_xyz_c(b->v0, D_0013F6E0_2E8210));
-    subtract_vector_xyz(v1, b->v0, v0);
-    t = b->f2C - func_001F9CB8_2E8210(v1);
+    subtract_vector_xyz(orbit_offset_remainder, b->v0, v0);
+    t = b->f2C - func_001F9CB8_2E8210(orbit_offset_remainder);
     g->f30 = t;
     if (t < -0.1f) {
         g->h3A = 1;
@@ -941,16 +941,16 @@ typedef struct {
 } O002e7530;
 void FUN_L00_002e7530(O002e7530 *o, V002e7530 *a, V002e7530 *b, V002e7530 *c, V002e7530 *out,
                       f32 k1, f32 k2) {
-    V002e7530 t0, t1, t2, t3;
+    V002e7530 separation_vector, separation_step, radial_offset, adjusted_position;
     u8 *m = o->m;
-    subtract_vector_xyz(&t0, b, c);
+    subtract_vector_xyz(&separation_vector, b, c);
     m += 0x90;
-    normalize_vector_xyz(&t1, &t0, k1);
-    add_vector_xyz(b, b, &t1);
-    subtract_vector_xyz(&t2, b, m);
-    normalize_vector_xyz(&t2, &t2, k2);
-    add_vector_xyz(&t3, m, &t2);
-    subtract_vector_xyz(a, &t3, out);
+    normalize_vector_xyz(&separation_step, &separation_vector, k1);
+    add_vector_xyz(b, b, &separation_step);
+    subtract_vector_xyz(&radial_offset, b, m);
+    normalize_vector_xyz(&radial_offset, &radial_offset, k2);
+    add_vector_xyz(&adjusted_position, m, &radial_offset);
+    subtract_vector_xyz(a, &adjusted_position, out);
 }
 extern char *current_follow_cam __asm__("D_L00_00166E00") __attribute__((section(".data")));
 extern int D_L00_0015EF5C __asm__("D_L00_0015EF5C");
@@ -1034,13 +1034,13 @@ extern float fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
 extern void fast_vec_sub(float *, float *, float *) __asm__("FUN_001f9a28");
 
 /* For arg1 1: true when (D_L00_00173E60 - arg2) points against the object's +0x130 vector. */
-int FUN_L00_002e79c8(void *arg0, int arg1, float *arg2) {
+int FUN_L00_002e79c8(void *camera_moby, int step_index, float *sample_position) {
     V diff;
     char *ptr2;
 
-    if (arg1 == 1) {
-        ptr2 = *(char **)((char *)arg0 + 0x70) + 0x130;
-        fast_vec_sub(diff, D_L00_00173E60, arg2);
+    if (step_index == 1) {
+        ptr2 = *(char **)((char *)camera_moby + 0x70) + 0x130;
+        fast_vec_sub(diff, D_L00_00173E60, sample_position);
         if (fast_vec_dot(diff, ptr2) < 0.0f) {
             return 1;
         }
@@ -1200,7 +1200,7 @@ void follow_camera_avoid_mobies(u8 *m) __asm__("FUN_L00_002e7d20");
 extern s32 current_level_index_macro __asm__("D_0015ED84") __attribute__((section(".sdata")));
 extern s32 camera_collision_mask __asm__("D_L00_0015EF58") __attribute__((sda));
 void follow_camera_avoid_mobies(u8 *m) {
-    V_2e7d20 v0, v10, v20, v30, v40;
+    V_2e7d20 probe_center, v10, v20, planar_moby_direction, orbit_side_direction;
     W_2e7d20 w;
     u8 *x;
     u8 *a;
@@ -1229,8 +1229,8 @@ void follow_camera_avoid_mobies(u8 *m) {
     if (current_level_index_macro == 0xF) {
         any = D_0013F350_2e7d20.b20A4 == 2;
     }
-    lerp_vector(&v0, x + 0x90, base - 0x50, 0.5f);
-    n = probe_world_sphere(&v0, 1, D_0013F350_2e7d20.p2080, 0, h * 0.5f);
+    lerp_vector(&probe_center, x + 0x90, base - 0x50, 0.5f);
+    n = probe_world_sphere(&probe_center, 1, D_0013F350_2e7d20.p2080, 0, h * 0.5f);
     if (n > 0) {
         i = n;
         j = 0;
@@ -1251,14 +1251,14 @@ void follow_camera_avoid_mobies(u8 *m) {
             }
             FUN_001f9a28_2e7d20(&v10, o + 0x10, (x + 0x90));
             FUN_001f9a68_2e7d20(&v20, base + 0x30, FUN_001f9ab0_2e7d20(base + 0x30, &v10));
-            FUN_001f9a28_2e7d20(&v30, &v10, &v20);
-            FUN_001f9bf8_2e7d20(&v30, &v30, 1.0f);
-            f = FUN_001f9ab0_2e7d20(&v30, a);
+            FUN_001f9a28_2e7d20(&planar_moby_direction, &v10, &v20);
+            FUN_001f9bf8_2e7d20(&planar_moby_direction, &planar_moby_direction, 1.0f);
+            f = FUN_001f9ab0_2e7d20(&planar_moby_direction, a);
             f = fast_arc_sin(f / (AF_2e7d20(0x2C) - BF_2e7d20(0x30)));
             if (FUN_001f99c0_2e7d20(1.5707964f - f) < 0.43633232f) {
-                fast_vec_cross(&v40, a, base + 0x30);
-                FUN_001f9bf8_2e7d20(&v40, &v40, 1.0f);
-                if (0.0f < FUN_001f9ab0_2e7d20(&v40, &v10)) {
+                fast_vec_cross(&orbit_side_direction, a, base + 0x30);
+                FUN_001f9bf8_2e7d20(&orbit_side_direction, &orbit_side_direction, 1.0f);
+                if (0.0f < FUN_001f9ab0_2e7d20(&orbit_side_direction, &v10)) {
                     build_look_at_matrix(a, a, base + 0x20, -0.017453292f);
                 } else {
                     build_look_at_matrix(a, a, base + 0x20, 0.017453292f);

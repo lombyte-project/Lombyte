@@ -352,8 +352,8 @@ int D_L12_001618CC = 0x10017;
 void FUN_L12_002e19a8(void *pos) {
     float v[4];
     float w[4];
-    float v3[4];
-    float v4[4];
+    float vertical_spark_vector[4];
+    float radial_spark_vector[4];
     float r;
     int i;
     int a, b, c;
@@ -365,27 +365,27 @@ void FUN_L12_002e19a8(void *pos) {
         w[2] = w[2] + random_float_between_alt(-0.25f, -0.75f);
         w[0] = w[0] + random_float_between_alt(-0.25f, 0.25f);
         w[1] = w[1] + random_float_between_alt(-0.25f, 0.25f);
-        clear_u64_value(v3);
-        v4[0] = fast_cos(r) * (random_float_between_alt(D_L12_00161898,
+        clear_u64_value(vertical_spark_vector);
+        radial_spark_vector[0] = fast_cos(r) * (random_float_between_alt(D_L12_00161898,
                                                         D_L12_0016189C) *
                                frame_time);
-        v4[1] = fast_sin(r) * (random_float_between_alt(D_L12_00161898,
+        radial_spark_vector[1] = fast_sin(r) * (random_float_between_alt(D_L12_00161898,
                                                         D_L12_0016189C) *
                                frame_time);
-        *(int *)&v4[2] = 0;
-        v3[2] = random_float_between_alt(D_L12_00161888, D_L12_0016188C) *
+        *(int *)&radial_spark_vector[2] = 0;
+        vertical_spark_vector[2] = random_float_between_alt(D_L12_00161888, D_L12_0016188C) *
                 frame_time;
-        v4[2] = random_float_between_alt(D_L12_00161890, D_L12_00161894) *
+        radial_spark_vector[2] = random_float_between_alt(D_L12_00161890, D_L12_00161894) *
                 frame_time;
-        v3[3] = D_L12_001618A0;
-        v4[3] = D_L12_001618A4;
+        vertical_spark_vector[3] = D_L12_001618A0;
+        radial_spark_vector[3] = D_L12_001618A4;
         a = func_001FA898_r(random_float_between_alt((float)D_L12_001618AC,
                                                      (float)D_L12_001618B0));
         b = func_001FA898_r(random_float_between_alt((float)D_L12_001618B4,
                                                      (float)D_L12_001618B8));
         c = func_001FA898_r(random_float_between_alt((float)D_L12_001618BC,
                                                      (float)D_L12_001618C0));
-        spawn_spark(w, v3, v4, D_L12_001618C4, D_L12_001618C8, a, b, c,
+        spawn_spark(w, vertical_spark_vector, radial_spark_vector, D_L12_001618C4, D_L12_001618C8, a, b, c,
                      D_L12_001618CC);
     } while (--i >= 0);
 }
@@ -3133,11 +3133,11 @@ void helicopter_update(char *m) {
             *(float *)(m + 0x40) = fast_add_rotations_c(*(float *)(m + 0x40),
                 fast_subtract_rotations(ang * D_L12_001619AC, *(float *)(m + 0x40)) / D_L12_001619B0);
             if (distance_xyz(m + 0x10, C) < D_L12_001619A8 * D_0015ED6C) {
-                char *t3;
+                char *path;
                 *(int *)(d + 0x60) = next;
-                t3 = *(char **)(p + 0x10);
-                if (next == *(int *)t3 - 1) {
-                    qcopy((m + 0x10), t3 + 0x10);
+                path = *(char **)(p + 0x10);
+                if (next == *(int *)path - 1) {
+                    qcopy((m + 0x10), path + 0x10);
                 }
             }
             subtract_vector_xyz_c(E, C, m + 0x10);

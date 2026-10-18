@@ -48,7 +48,7 @@ void FUN_L01_00233de0(void)
 {
     Vec4 old_pos;
     Vec4 tmp;
-    Vec4 tmp2;
+    Vec4 projection_velocity;
     f32 limit;
     f32 d;
     f32 w;
@@ -117,15 +117,15 @@ void FUN_L01_00233de0(void)
     }
     normalize_vector_xyz(&hero.motion.unk130, &tmp, d);
 
-    qcopy(&tmp2, &hero.motion.velocity);
-    FUN_L00_00233ba0((float *)&tmp2, (float *)&tmp2, 0.0f);
+    qcopy(&projection_velocity, &hero.motion.velocity);
+    FUN_L00_00233ba0((float *)&projection_velocity, (float *)&projection_velocity, 0.0f);
     FUN_L00_00233ba0((float *)&hero.motion.unk120, (float *)&hero.motion.unk120, 0.0f);
     normalize_vector_xyz(&hero.motion.unk120, &hero.motion.unk120, 1.0f);
-    d = dot_vectors_xyz(&hero.motion.unk120, &tmp2);
+    d = dot_vectors_xyz(&hero.motion.unk120, &projection_velocity);
     if (d < 0.0f) {
         d = 0.0f;
     }
-    normalize_vector_xyz(&hero.motion.unk120, &tmp2, d);
+    normalize_vector_xyz(&hero.motion.unk120, &projection_velocity, d);
 
     hero.motion.speed_xy = vector_length_xyz(&hero.motion.unk110);
     hero.motion.unk164 = vector_length_xy(&hero.motion.unk110);
@@ -1727,8 +1727,8 @@ void FUN_L01_002370b8(void) {
         break;
     case 0x1A:
     case 0x1B: {
-        float a0;
-        float a1;
+        float original_probe_yaw;
+        float offset_probe_yaw;
 
         hero.motion.velocity.f[0] = 0.0f;
         hero.motion.velocity.f[1] = 0.0f;
@@ -1755,18 +1755,18 @@ void FUN_L01_002370b8(void) {
         FUN_L01_0022d090();
         if (hero.unk4E8 != 0) {
             qcopy(vec[0], hero.unk4D0.f);
-            a0 = build_spherical_offset_cf(hero.unk4E4, 3.1415927f);
+            original_probe_yaw = build_spherical_offset_cf(hero.unk4E4, 3.1415927f);
             qcopy(hero.motion.pos.f, vec[3]);
             FUN_L01_0022d090();
             qcopy(hero.motion.pos.f, vec[2]);
             if (hero.unk4E8 != 0) {
                 qcopy(vec[1], hero.unk4D0.f);
-                a1 = build_spherical_offset_cf(hero.unk4E4, 3.1415927f);
-                if (!(fast_difference_between_rotations(a0, a1) > 0.5235988f)) {
+                offset_probe_yaw = build_spherical_offset_cf(hero.unk4E4, 3.1415927f);
+                if (!(fast_difference_between_rotations(original_probe_yaw, offset_probe_yaw) > 0.5235988f)) {
                     float mid;
                     float spd;
 
-                    mid = build_spherical_offset_cf(FUN_L00_0024f7c8_cf(a0, a1) * 0.5f, a0);
+                    mid = build_spherical_offset_cf(FUN_L00_0024f7c8_cf(original_probe_yaw, offset_probe_yaw) * 0.5f, original_probe_yaw);
                     normalize_vector_xyz_cf(vec[5], vec[0], vec[1]);
                     scale_vector_xyz(vec[5], vec[5], 0.5f);
                     hero.motion.move_yaw = mid;
