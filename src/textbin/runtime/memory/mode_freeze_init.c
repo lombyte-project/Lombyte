@@ -26,6 +26,7 @@ void mode_freeze_init(u32 mode, s32 arg1) __asm__("FUN_001fbab8");
 
 void mode_freeze_init(u32 mode, s32 freeze_context) {
     enum {
+        FREEZE_ERROR = 3,
         FREEZE_VIDEO_MODE_CHANGE = 6
     };
     struct FreezeModeState *st;
@@ -69,7 +70,7 @@ void mode_freeze_init(u32 mode, s32 freeze_context) {
         freeze.unk20 = 0;
         freeze.unk24 = scale_game_frames(0x1E);
         break;
-    case 3:
+    case FREEZE_ERROR:
         freeze.unk4 = scale_game_frames(0x1E);
         freeze.unk20 = 0;
         freeze.unk24 = scale_game_frames(0x1E);
