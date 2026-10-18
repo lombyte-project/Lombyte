@@ -62,7 +62,7 @@ void FUN_L12_00308708(void *unused, struct Moby *m) {
     LobbedVars *d = (LobbedVars *)m->pvars;
     float dir[4];
     float ang;
-    float t1, t2;
+    float rise_sqrt_term, frame_rise_sqrt_term;
     float a;
     float g;
 
@@ -82,10 +82,10 @@ void FUN_L12_00308708(void *unused, struct Moby *m) {
     g = frame_time_sq;
     d->rise = g * 40.0f;
     d->fall = g * 100.0f;
-    t1 = fast_sqrt(d->rise * 4.0f);
-    t2 = fast_sqrt(frame_time_sq * 40.0f * 4.0f);
+    rise_sqrt_term = fast_sqrt(d->rise * 4.0f);
+    frame_rise_sqrt_term = fast_sqrt(frame_time_sq * 40.0f * 4.0f);
     a = frame_time_sq * 40.0f;
-    d->launch_speed = 3.0f / ((t1 + t1) / a) + frame_time_sq * 100.0f * 0.5f * ((t2 + t2) / a);
+    d->launch_speed = 3.0f / ((rise_sqrt_term + rise_sqrt_term) / a) + frame_time_sq * 100.0f * 0.5f * ((frame_rise_sqrt_term + frame_rise_sqrt_term) / a);
     d->unk3C = fast_sqrt(a * 4.0f);
     d->unk5D = 0;
     d->unk44 = 1;
