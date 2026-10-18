@@ -1197,6 +1197,9 @@ extern void mark_moby_for_removal_8d10(struct Moby *) __asm__("FUN_0020c828");
 
 /* Walker update: takes hits (knocked back, or dies at no health), picks its target and falls onto or slides off the ground. */
 void FUN_L13_00308d10(struct Moby *moby) {
+    enum {
+        HIT_RESULT_DEATH = 1
+    };
     struct WalkerVars_8d10 *vars = (struct WalkerVars_8d10 *)moby->pvars;
     char *hit;
     s32 code;
@@ -1247,7 +1250,7 @@ void FUN_L13_00308d10(struct Moby *moby) {
             knock_back_8d10(moby, vars->anim, 7, 1, 0, atan2_f_8d10(*(f32 *)(hit + 0x10), *(f32 *)(hit + 0x14)));
             vars->flash_time = 0xFA;
             break;
-        case 1:
+        case HIT_RESULT_DEATH:
         case 2:
             moby->state = 0x10;
             moby->flags &= ~0x1000;
