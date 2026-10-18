@@ -2182,13 +2182,17 @@ extern void *func_L00_0026CA10_29FF90(void *, void *, int, int, float, int, int,
 
 extern f32 frame_scale_macro __asm__("D_0015ED60") __attribute__((section(".sdata")));
 void FUN_L15_0029edb0(Moby29FF90 *moby) {
+    enum {
+        CHARGING = 0,
+        EXPANDING_BLAST = 1
+    };
     float w[4];
     float v[4];
     float temporary_position[4];
     Data29FF90 *d = moby->data;
 
     switch (moby->state) {
-    case 0:
+    case CHARGING:
         if (d->active != 0 && ((Hero29FF90 *)&hero)->f20A4 == 2) {
             float t;
             int i;
@@ -2263,7 +2267,7 @@ void FUN_L15_0029edb0(Moby29FF90 *moby) {
             d->f14 = 0;
         }
         break;
-    case 1: {
+    case EXPANDING_BLAST: {
         float r = D_0015ED6C * 40.0f * convert_integer_to_float_c(d->f14) * 0.5f + 3.0f;
         int cnt;
         int n;
