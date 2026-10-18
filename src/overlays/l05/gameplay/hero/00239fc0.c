@@ -144,7 +144,7 @@ extern CollisionHit HH __asm__("D_L05_00174240") __attribute__((section(".data")
 #define HF(o) (*(f32 *)(D_L05_00174240 + (o)))
 
 void FUN_L05_002402a8(void) {
-    V v0, v10, v20, v30, v40, hit_normal_angles, normalized_hit_normal;
+    V shared_probe_endpoint, ground_probe_endpoint, ground_vector_scratch, side_probe_endpoint, v40, hit_normal_angles, normalized_hit_normal;
     f32 f;
     s32 r;
     s32 i;
@@ -175,8 +175,8 @@ void FUN_L05_002402a8(void) {
     if (hero.state.control_mode == 2) {
         g = hero.unk234 * 2.9f;
     }
-    hero_get_collision_ray_endpoints(&v10, &v0, k, g, -48.0f);
-    if (collision_line(&v10, &v0, 2, (s32)hero.moby, 0) == 0) {
+    hero_get_collision_ray_endpoints(&ground_probe_endpoint, &shared_probe_endpoint, k, g, -48.0f);
+    if (collision_line(&ground_probe_endpoint, &shared_probe_endpoint, 2, (s32)hero.moby, 0) == 0) {
         goto tail;
     }
     r = coll_sound_class();
@@ -190,7 +190,7 @@ void FUN_L05_002402a8(void) {
         if (hero.motion.pos.f[2] < hero.water_surface_z && hero.unk2F8 <= 0) {
             hero.unk2F8 = 1;
         }
-        if (collision_line(&v10, &v0, 0x24, (s32)hero.moby, 0) == 0) {
+        if (collision_line(&ground_probe_endpoint, &shared_probe_endpoint, 0x24, (s32)hero.moby, 0) == 0) {
             goto d1;
         }
         r = coll_sound_class();
@@ -201,15 +201,15 @@ void FUN_L05_002402a8(void) {
     }
     if (hero.ground_type == 0xD) {
         hero.water_surface_z = D_L05_00174268;
-        v10.f[2] = D_L05_00174268 - 0.01f;
-        if (collision_line(&v10, &v0, 4, (s32)hero.moby, 0) == 0) {
+        ground_probe_endpoint.f[2] = D_L05_00174268 - 0.01f;
+        if (collision_line(&ground_probe_endpoint, &shared_probe_endpoint, 4, (s32)hero.moby, 0) == 0) {
             goto d1;
         }
     }
     if (hero.ground_type == 3) {
         hero.unk2F4 = D_L05_00174268;
-        v10.f[2] = D_L05_00174268 - 0.01f;
-        if (collision_line(&v10, &v0, 4, (s32)hero.moby, 0) == 0) {
+        ground_probe_endpoint.f[2] = D_L05_00174268 - 0.01f;
+        if (collision_line(&ground_probe_endpoint, &shared_probe_endpoint, 4, (s32)hero.moby, 0) == 0) {
             goto d1;
         }
     }
@@ -240,8 +240,8 @@ void FUN_L05_002402a8(void) {
         sceVu0Normalize((u8 *)&hero.unk270, (u8 *)&HH.normal_x);
         hero.ground_slope.f = FUN_L00_00233d30((u8 *)&HH.normal_x);
         hero.downhill_yaw = FUN_001f9e90_c(HH.normal_x, HH.normal_y);
-        fast_vec_sub(&v20, (u8 *)&hero.ground_point, (u8 *)&hero.motion.pos);
-        if (0.0f < FUN_001f9ab0_c(&v20, (u8 *)&hero.unk270)) {
+        fast_vec_sub(&ground_vector_scratch, (u8 *)&hero.ground_point, (u8 *)&hero.motion.pos);
+        if (0.0f < FUN_001f9ab0_c(&ground_vector_scratch, (u8 *)&hero.unk270)) {
             hero.ground_distance = -hero.ground_distance;
         }
         if (hero.ground_distance < 0.02f) {
@@ -292,21 +292,21 @@ d1:
     if (!(hero.ground_distance < 0.25f)) {
         return;
     }
-    FUN_L00_00216078((u8 *)&hero.unk270, &v20);
-    if (-0.78539819f < v20.f[1] && v20.f[1] < 0.78539819f) {
-        hero.ground_pitch.f = v20.f[1];
+    FUN_L00_00216078((u8 *)&hero.unk270, &ground_vector_scratch);
+    if (-0.78539819f < ground_vector_scratch.f[1] && ground_vector_scratch.f[1] < 0.78539819f) {
+        hero.ground_pitch.f = ground_vector_scratch.f[1];
     }
-    if (-0.78539819f < v20.f[0] && v20.f[0] < 0.78539819f) {
-        hero.unk2E8.f = v20.f[0];
+    if (-0.78539819f < ground_vector_scratch.f[0] && ground_vector_scratch.f[0] < 0.78539819f) {
+        hero.unk2E8.f = ground_vector_scratch.f[0];
     }
     for (i = 0; i < 2; i++) {
         a = 1.5707964f;
         if (i == 1) {
             a = -a;
         }
-        FUN_L00_002335c8(&v30, 0.2f, a, 0.45f);
+        FUN_L00_002335c8(&side_probe_endpoint, 0.2f, a, 0.45f);
         FUN_L00_002335c8(&v40, 0.2f, a, -0.45f);
-        if (collision_line(&v30, &v0, 0x22, (s32)hero.moby, 0)) {
+        if (collision_line(&side_probe_endpoint, &shared_probe_endpoint, 0x22, (s32)hero.moby, 0)) {
             f = HH.point.f[2] - hero.ground_z.f;
             hero.unk2C0.f[i] = f;
             if (0.4f < FUN_001f99c0(f)) {
