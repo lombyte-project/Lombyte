@@ -232,9 +232,9 @@ void follow_camera_orbit(int arg) {
     float projected_reference_offset[4];
     float current_up_projection[4];
     float projected_current_offset[4];
-    float t4[4];
+    float orbit_cross_scratch[4];
     float rotated_orbit_offset[4];
-    float t6[4];
+    float scaled_up_offset[4];
     float t7[4];
     float forward_clamp_axis[4];
     float tb[4];
@@ -268,16 +268,16 @@ void follow_camera_orbit(int arg) {
     r = 1.5707964f - fast_arc_sin(e / x);
     x = rope_spring_turn(d + 0x150, 0.0f, r, *(float *)&D_L00_00161CF4,
                          *(float *)&D_L00_00161CF8, 0.0f);
-    fast_vec_cross(t4, projected_current_offset, up);
-    s = (fast_vec_dot(t4, projected_reference_offset) >= 0.0f) ? 1.0f : -1.0f;
+    fast_vec_cross(orbit_cross_scratch, projected_current_offset, up);
+    s = (fast_vec_dot(orbit_cross_scratch, projected_reference_offset) >= 0.0f) ? 1.0f : -1.0f;
     base2 = D_L00_00166E10;
     fw = base2 + 0x30;
     build_look_at_matrix(rotated_orbit_offset, projected_current_offset, up, x * s);
-    fast_vec_cross(t4, up, rotated_orbit_offset);
-    build_look_at_matrix(rotated_orbit_offset, rotated_orbit_offset, t4, i);
+    fast_vec_cross(orbit_cross_scratch, up, rotated_orbit_offset);
+    build_look_at_matrix(rotated_orbit_offset, rotated_orbit_offset, orbit_cross_scratch, i);
     fast_vec_normalize(p140, rotated_orbit_offset, bc);
-    fast_vec_scale(t6, up, *(float *)(p130 + 0x30));
-    add_vector_xyz(t7, t6, d + 0xA0);
+    fast_vec_scale(scaled_up_offset, up, *(float *)(p130 + 0x30));
+    add_vector_xyz(t7, scaled_up_offset, d + 0xA0);
     e = fast_vec_dot(p140, fw);
     len = fast_vec_length(p140);
     if (len != 0.0f) {
