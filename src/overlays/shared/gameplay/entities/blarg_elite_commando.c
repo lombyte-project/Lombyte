@@ -547,6 +547,9 @@ extern s32 tick_countdown_32(void *) __asm__("func_001F9740");
 s32 allocate_voice_for_bank_entry(s32 arg1, s32 arg0, s32 arg2) __asm__("FUN_0022db10");
 
 void FUN_L16_002d38b0(struct Moby *m) {
+    enum {
+        HIT_RESPONSE_FATAL = 1
+    };
     L16DamageScratch scratch;
     L16DamageData *d = (L16DamageData *)m->pvars;
     char *hit;
@@ -608,7 +611,7 @@ void FUN_L16_002d38b0(struct Moby *m) {
             d->animation = 0x78;
             break;
         }
-        case 1:
+        case HIT_RESPONSE_FATAL:
         case 2: {
             char *source;
             if (current_level_index == 18 && d->reward_hits) {
