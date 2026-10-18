@@ -809,7 +809,7 @@ void FUN_L00_0025f3e8(char *owner, char *pos, float scale, float flash) {
     S6y10 c1;
     int rgb[3];
     int i;
-    float k5, sp, big, t1, t2;
+    float k5, sp, big, first_glow_scale, second_glow_scale;
     clear_u64_value(&zero_vec);
     k5 = 500000.0f;
     for (i = 2; i >= 0; i--) {
@@ -824,12 +824,12 @@ void FUN_L00_0025f3e8(char *owner, char *pos, float scale, float flash) {
     if (owner != 0) {
         rgb[0] = 0x7F; rgb[1] = 0x40; rgb[2] = 0;
         FUN_L00_0025c088(&rgb[0], &rgb[1], &rgb[2], 1);
-        t1 = scale * 4.0f;
-        spawn_glow_particle(owner, pos, &zero_vec, t1, scale_game_frames_c(0x14), *(unsigned char *)&rgb[0], *(unsigned char *)&rgb[1], *(unsigned char *)&rgb[2], 0x30);
+        first_glow_scale = scale * 4.0f;
+        spawn_glow_particle(owner, pos, &zero_vec, first_glow_scale, scale_game_frames_c(0x14), *(unsigned char *)&rgb[0], *(unsigned char *)&rgb[1], *(unsigned char *)&rgb[2], 0x30);
         rgb[0] = 0x60; rgb[1] = 0x20; rgb[2] = 0;
         FUN_L00_0025c088(&rgb[0], &rgb[1], &rgb[2], 1);
-        t2 = scale * 3.0f;
-        spawn_glow_particle(owner, pos, &zero_vec, t2, scale_game_frames_c(0x1D), *(unsigned char *)&rgb[0], *(unsigned char *)&rgb[1], *(unsigned char *)&rgb[2], 0x20);
+        second_glow_scale = scale * 3.0f;
+        spawn_glow_particle(owner, pos, &zero_vec, second_glow_scale, scale_game_frames_c(0x1D), *(unsigned char *)&rgb[0], *(unsigned char *)&rgb[1], *(unsigned char *)&rgb[2], 0x20);
     }
     if (flash != 0.0f) {
         if (flash > 0.0f) {
