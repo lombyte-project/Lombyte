@@ -683,10 +683,10 @@ void FUN_L11_00310ad0(short *pts, int n, float x0, float y0, unsigned int col, u
         primitive_payload[1] = prim;
     }
     {
-        char *t3 = (char *)D_L11_001611C0;
-        D_L11_001611C0 = (int)(t3 + 0x10);
+        char *saved_packet_cursor = (char *)D_L11_001611C0;
+        D_L11_001611C0 = (int)(saved_packet_cursor + 0x10);
         qcopy((void *)D_L11_001611C0, &D_L11_001608F0);
-        *(short *)(t3 + 0x10) = n - 0x8000;
+        *(short *)(saved_packet_cursor + 0x10) = n - 0x8000;
     }
     D_L11_001611C0 += 0x10;
     o = (unsigned long long *)D_L11_001611C0;
