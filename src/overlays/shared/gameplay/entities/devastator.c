@@ -2525,7 +2525,6 @@ s32 FUN_L00_002b6bc8(Moby *m, f32 radius) {
     s32 limit;
     s32 count = 0;
     s32 i;
-    s16 *entry;
     f32 distance;
     f32 angle;
 
@@ -2578,29 +2577,21 @@ s32 FUN_L00_002b6bc8(Moby *m, f32 radius) {
             other = D_001ABA00_b6bc8[i];
         } while (other != 0);
     }
-    i = 1;
-    if (D_L00_001B07B0[0] > 0) {
-        struct Hero *g = &hero;
-        s16 *entryCount = D_L00_001B07B0;
-        entry = entryCount + 1;
-        do {
-            other = (Moby *)(D_0015FFD8_b6bc8 + *entry * 0x100);
-            if (other != 0 && (s8)other->state >= 0) {
-                Vars *vars = other->vars;
-                distance = FUN_001ff488_b6bc8(&pos, (u8 *)other + 0x10);
-                if (distance < radius) {
-                    angle = FUN_002001f0_b6bc8(g->motion.rot.f[2],
-                        FUN_001ff8b0_b6bc8(*(f32 *)((u8 *)other + 0x10) - g->motion.pos.f[0],
-                                               *(f32 *)((u8 *)other + 0x14) - g->motion.pos.f[1]));
-                    if (angle < 0.9599311f) {
-                        *(Moby **)((u8 *)vars + 0x78) = m;
-                        count++;
-                    }
+    for (i = 1; i <= D_L00_001B07B0[0]; i++) {
+        other = (Moby *)(D_0015FFD8_b6bc8 + D_L00_001B07B0[i] * 0x100);
+        if (other != 0 && (s8)other->state >= 0) {
+            Vars *vars = other->vars;
+            distance = FUN_001ff488_b6bc8(&pos, (u8 *)other + 0x10);
+            if (distance < radius) {
+                angle = FUN_002001f0_b6bc8(hero.motion.rot.f[2],
+                    FUN_001ff8b0_b6bc8(*(f32 *)((u8 *)other + 0x10) - hero.motion.pos.f[0],
+                                           *(f32 *)((u8 *)other + 0x14) - hero.motion.pos.f[1]));
+                if (angle < 0.9599311f) {
+                    *(Moby **)((u8 *)vars + 0x78) = m;
+                    count++;
                 }
             }
-            i++;
-            entry++;
-        } while (i <= entryCount[0]);
+        }
     }
     return count;
 }
