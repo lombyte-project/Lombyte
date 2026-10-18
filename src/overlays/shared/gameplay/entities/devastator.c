@@ -2522,6 +2522,7 @@ s32 FUN_L00_002b6bc8(Moby *m, f32 radius) {
     Moby *other;
     u8 *state;
     Vars *vars;
+    struct HeroMotion *motion;
     s32 limit;
     s32 count = 0;
     s32 i;
@@ -2536,8 +2537,9 @@ s32 FUN_L00_002b6bc8(Moby *m, f32 radius) {
     if (other != 0) {
         i = 0;
         do {
-            state = FUN_L00_0025c338_b6bc8(other);
+            do { state = FUN_L00_0025c338_b6bc8(other); } while (0);
             if (state != 0) {
+                motion = &hero.motion;
                 distance = FUN_001ff488_b6bc8(&pos, (u8 *)other + 0x10);
                 if (distance < 12.0f &&
                     ((u16)(*(u16 *)((u8 *)other + 0xa6) - 500) < 2 ||
@@ -2561,9 +2563,8 @@ s32 FUN_L00_002b6bc8(Moby *m, f32 radius) {
                     struct Hero *g = &hero;
                     angle = FUN_001ff8b0_b6bc8(*(f32 *)((u8 *)other + 0x10) - g->motion.pos.f[0],
                                                *(f32 *)((u8 *)other + 0x14) - g->motion.pos.f[1]);
-                    /* D_0013F3D0 is hero.motion.pos; reload yaw after the angle helper. */
                     angle = FUN_002001f0_b6bc8(
-                        ((struct Hero *)((u8 *)D_0013F3D0_b6bc8 - 0x80))->motion.rot.f[2], angle);
+                        motion->rot.f[2], angle);
                     if (angle < 0.9599311f) {
                         Moby *current = *(Moby **)(state + 0x18);
                         if (current == 0 || distance < FUN_001ff488_b6bc8((u8 *)current + 0x10, (u8 *)other + 0x10)) {
