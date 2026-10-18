@@ -772,6 +772,10 @@ extern void initialize_global_state_entry(int) __asm__("FUN_0022e188");
 void FUN_L07_002f5ba0(struct Moby *moby)
 {
     enum {
+        CONTROLLER_START_INITIAL_SCENE = 1,
+        CONTROLLER_WAIT_FOR_INITIAL_SCENE = 2
+    };
+    enum {
         CONTROLLER_WAIT_FOR_OPEN_VOLUME = 4,
         CONTROLLER_WAIT_FOR_FINISH_VOLUME = 8
     };
@@ -789,7 +793,7 @@ void FUN_L07_002f5ba0(struct Moby *moby)
         }
         if (scene_state == 0) moby->state = 1;
         break;
-    case 1:
+    case CONTROLLER_START_INITIAL_SCENE:
         if (alternate_item_available[0x28] == 0) {
             alternate_item_available[0x28] = 1;
             moby->state = 2;
@@ -798,7 +802,7 @@ void FUN_L07_002f5ba0(struct Moby *moby)
             moby->state = 3;
         }
         break;
-    case 2:
+    case CONTROLLER_WAIT_FOR_INITIAL_SCENE:
         if (scene_state != 2) moby->state = 3;
         break;
     case 3:
