@@ -957,7 +957,7 @@ int hero_set_state(int a, int b) {
     }
     case 0x81: {
         struct Hero *p = &hero;
-        int t81 = -2;
+        int animation_transition_code = -2;
         p->state.control_mode = 1;
         p->unk22CA = 1;
         p->rand_timer.range = 0x68;
@@ -967,7 +967,7 @@ int hero_set_state(int a, int b) {
         }
         qcopy(&p->motion.velocity, &p->motion.unk110);
         if (b) {
-            set_hero_animation(0x13, 0, (float)t81);
+            set_hero_animation(0x13, 0, (float)animation_transition_code);
         }
         break;
     }
