@@ -2251,7 +2251,8 @@ extern short *lists_2ef478[] __asm__("D_L01_001ABCC0");
 extern char *D_L01_0015FFD8;
 extern void FUN_L00_00250df8(void *);
 
-char *FUN_L01_002ef350(char *self) {
+char *FUN_L01_002ef350(void *arg) {
+    char *self = arg;
     short *list;
     char *entities;
     int entry;

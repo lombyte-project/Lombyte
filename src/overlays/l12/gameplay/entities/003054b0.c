@@ -1234,7 +1234,6 @@ extern int D_L12_002059E0[];
 extern int D_L12_00205A08[];
 extern int D_L12_00205A58[];
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
-extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
 extern void FUN_L00_001fde98(int, int, int, void *, int);
 extern void FUN_L08_00258090(void *, int, int, void *);
 extern void FUN_L08_002f0c18(int);
