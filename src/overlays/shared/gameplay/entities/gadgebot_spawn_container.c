@@ -2418,6 +2418,9 @@ extern Moby *D_L06_0015FFD8;
 
 int FUN_L06_002f2c28(char *ctx, char *ow, char *moby, int flag, int *out) {
     enum {
+        MOBY_CLASS_OFFSET_RELOCATION_TRIGGER = 0x3B1
+    };
+    enum {
         MOBY_CLASS_RELOCATION_TRIGGER = 0x15F
     };
     enum {
@@ -2442,7 +2445,7 @@ int FUN_L06_002f2c28(char *ctx, char *ow, char *moby, int flag, int *out) {
 
     switch (*(short *)(moby + 0xA6)) {
     case MOBY_CLASS_RELOCATION_TRIGGER:
-    case 0x3B1:
+    case MOBY_CLASS_OFFSET_RELOCATION_TRIGGER:
     case MOBY_CLASS_RELOCATION_TRIGGER_WITH_SOUND:
         if (!(vector_distance_xy_alt(ctx + 0x10, candidate_position) < 1.0f)) return 0;
         st = *(char **)(moby + 0x78);
