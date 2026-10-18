@@ -514,7 +514,7 @@ extern float func_L00_00258E58_2D9EA0(float, float, float, float, float) __asm__
 
 void nanotech_ball_update(Moby *moby) __asm__("FUN_L00_002d89f0");
 void nanotech_ball_update(Moby *moby) {
-    V_2D9EA0 v0, v10, v20, v30, v40, v50, slot_curve_offset;
+    V_2D9EA0 v0, v10, v20, v30, v40, half_displacement_or_spark_position, slot_curve_offset;
     D_2D9EA0 *data = (D_2D9EA0 *)moby->pvars;
 
     switch (moby->state) {
@@ -617,12 +617,12 @@ void nanotech_ball_update(Moby *moby) {
                 fast_vec_cross(&v0, &v40, &v20);
                 func_002156E0_2D9EA0(&v0, &v0, -1.5707964f, &v20);
                 func_L00_001FF4B0_2D9EA0(&v0, &v0, D_L00_00161A50);
-                func_001F9C30_2D9EA0(&v50, &v20, 0.5f);
+                func_001F9C30_2D9EA0(&half_displacement_or_spark_position, &v20, 0.5f);
                 for (i = 0; i < 8; i++) {
                     if (data->slots[i] != 0) {
                         Ext_2D9EA0 *ext = (Ext_2D9EA0 *)(data->slots[i] + 1);
                         func_002156E0_2D9EA0(&v10, &v0, (float)i * 0.448549628f, &v20);
-                        func_001F9BD8_2D9EA0(&slot_curve_offset, &v50, &v10);
+                        func_001F9BD8_2D9EA0(&slot_curve_offset, &half_displacement_or_spark_position, &v10);
                         {
                             V3_2D9EA0 *dst = &ext->u.a;
                             dst->x = slot_curve_offset.x;
@@ -768,20 +768,20 @@ void nanotech_ball_update(Moby *moby) {
                     part->pos.x = func_L00_00258E58_2D9EA0(v0.x, v10.x, v20.x, v30.x, progress);
                     part->pos.y = func_L00_00258E58_2D9EA0(v0.y, v10.y, v20.y, v30.y, progress);
                     part->pos.z = func_L00_00258E58_2D9EA0(v0.z, v10.z, v20.z, v30.z, progress);
-                    v50.x = func_L00_00258C80_2D9EA0(0.0f, 0.00999999978f) + part->pos.x;
-                    v50.y = func_L00_00258C80_2D9EA0(0.0f, 0.00999999978f) + part->pos.y;
-                    v50.z = func_L00_00258C80_2D9EA0(0.0f, 0.00999999978f) + part->pos.z;
-                    spark = func_L00_002745A8_2D9EA0(&v50, func_001F9850_2D9EA0(0x14), 0);
+                    half_displacement_or_spark_position.x = func_L00_00258C80_2D9EA0(0.0f, 0.00999999978f) + part->pos.x;
+                    half_displacement_or_spark_position.y = func_L00_00258C80_2D9EA0(0.0f, 0.00999999978f) + part->pos.y;
+                    half_displacement_or_spark_position.z = func_L00_00258C80_2D9EA0(0.0f, 0.00999999978f) + part->pos.z;
+                    spark = func_L00_002745A8_2D9EA0(&half_displacement_or_spark_position, func_001F9850_2D9EA0(0x14), 0);
                     if (spark != 0) {
                         spark->f4 = D_L00_00161A00;
                         spark->fC = D_L00_001619F8;
                     }
                     func_001F9BD8_2D9EA0(&v40, &part->pos, &v40);
                     func_001F9C30_2D9EA0(&v40, &v40, 0.5f);
-                    v50.x = func_L00_00258C80_2D9EA0(0.0f, 0.00999999978f) + v40.x;
-                    v50.y = func_L00_00258C80_2D9EA0(0.0f, 0.00999999978f) + v40.y;
-                    v50.z = func_L00_00258C80_2D9EA0(0.0f, 0.00999999978f) + v40.z;
-                    spark = func_L00_002745A8_2D9EA0(&v50, func_001F9850_2D9EA0(0x14), 0);
+                    half_displacement_or_spark_position.x = func_L00_00258C80_2D9EA0(0.0f, 0.00999999978f) + v40.x;
+                    half_displacement_or_spark_position.y = func_L00_00258C80_2D9EA0(0.0f, 0.00999999978f) + v40.y;
+                    half_displacement_or_spark_position.z = func_L00_00258C80_2D9EA0(0.0f, 0.00999999978f) + v40.z;
+                    spark = func_L00_002745A8_2D9EA0(&half_displacement_or_spark_position, func_001F9850_2D9EA0(0x14), 0);
                     if (spark != 0) {
                         spark->f4 = D_L00_00161A00;
                         spark->fC = D_L00_001619F8;
