@@ -2822,6 +2822,9 @@ extern Moby *create_moby(int) __asm__("FUN_0020c4f8");
 extern int func_0022ED80_2F6330(int, int, void *) __asm__("FUN_0022da68");
 
 void FUN_L06_002f4f00(Moby *m) {
+    enum {
+        SPAWN_CHILD_MOBYS = 0
+    };
     Vars_2F6330 *d = (Vars_2F6330 *)(*(void **)&m->pvars);
     float tmp[4];
     int i;
@@ -2830,7 +2833,7 @@ void FUN_L06_002f4f00(Moby *m) {
     int flag;
 
     switch (m->state) {
-    case 0:
+    case SPAWN_CHILD_MOBYS:
         d->unk10 = (*(float (*)[4])&m->rot)[0];
         qcopy(d->pos, (*(float (*)[4])&m->pos));
         m->state = 2;
