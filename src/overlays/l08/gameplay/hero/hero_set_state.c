@@ -88,6 +88,9 @@ extern char D_L08_0017C760[];
 extern char D_L08_0017C720[];
 int hero_set_state(int a, int b) {
     enum {
+        ENTER_ATTACK_COMBO = 0x13
+    };
+    enum {
         ENTER_IDLE = 0,
         ENTER_SLIP = 0x79
     };
@@ -1407,7 +1410,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x13:
+    case ENTER_ATTACK_COMBO:
     case 0x14:
     case 0x15:
     case 0x20:
