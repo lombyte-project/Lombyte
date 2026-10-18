@@ -789,6 +789,9 @@ void blarg_gun_update(char *moby) __asm__("FUN_L05_003186f8");
 void blarg_gun_update(char *moby)
 {
     enum {
+        BLARG_GUN_STATE_INITIALIZE = 0
+    };
+    enum {
         BLARG_GUN_STATE_MOVING = 1
     };
     char *data = *(char **)(moby + 0x78);
@@ -798,7 +801,7 @@ void blarg_gun_update(char *moby)
     float t;
 
     switch ((unsigned char)moby[0x20]) {
-    case 0:
+    case BLARG_GUN_STATE_INITIALIZE:
         if (*(unsigned short *)(moby + 0x32) & 1)
             *(unsigned short *)(moby + 0x34) |= 0x8000;
         moby[0x20] = 2;
