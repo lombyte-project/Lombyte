@@ -2613,7 +2613,7 @@ void taunter_update(Moby *m) {
     s32 r1;
     s32 r2;
     u8 *e;
-    s32 v2;
+    s32 play_time_stat_value;
 
     if (m == 0)
         return;
@@ -2655,8 +2655,8 @@ void taunter_update(Moby *m) {
             }
             if (D_00141680.cnt < 0xFFFF)
                 D_00141680.cnt++;
-            v2 = FUN_001f96f8_c(D_0015EEA4) / 600;
-            if (D_00141680.last < v2) {
+            play_time_stat_value = FUN_001f96f8_c(D_0015EEA4) / 600;
+            if (D_00141680.last < play_time_stat_value) {
                 D_00141680.last = FUN_001f96f8_c(D_0015EEA4) / 600;
             }
             D_00141680.flags |= 1 << current_level_index;
