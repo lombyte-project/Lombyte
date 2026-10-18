@@ -42,9 +42,9 @@ void FUN_L14_003135b8(u8 *arg0) {
 
 /* 0x003167E0, 36 bytes.  While the executable's mode word is not 0xF, mark the
  * object's field at 0x7E as 3. */
-void FUN_L14_003167e0(u8 *arg0) {
+void FUN_L14_003167e0(u8 *target_object) {
     if (D_001413DC != 0x0F) {
-        *(s16 *)(arg0 + 0x7E) = 3;
+        *(s16 *)(target_object + 0x7E) = 3;
     }
 }
 
