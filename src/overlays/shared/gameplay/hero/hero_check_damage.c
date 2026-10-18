@@ -948,7 +948,7 @@ extern void FUN_L00_002323b8_c(s32, s32, f32) __asm__("FUN_L00_002323b8");
 
 void FUN_L00_0020e4c8(void);
 void FUN_L00_0020e4c8(void) {
-    s32 t, v19, v20, v21, i;
+    s32 t, hero_animation_id, v20, v21, i;
     u8 *o;
     struct Hero *P;
     t = FUN_L00_0020d498_c(0);
@@ -956,7 +956,7 @@ void FUN_L00_0020e4c8(void) {
         return;
     P = &hero;
     P->unk2298 = t;
-    v19 = D_L00_00179AC0_c[t].unk24;
+    hero_animation_id = D_L00_00179AC0_c[t].unk24;
     v21 = D_L00_00179AC0_c[t].f28;
     if ((s32)P->state.control_mode == 12)
         v21 = D_L00_00179AC0_c[t].f2C;
@@ -969,8 +969,8 @@ void FUN_L00_0020e4c8(void) {
     if (D_L00_00179AC0_c[t].f18 == 0)
         v20 = FUN_001f96f8_c(11);
     if (P->state.control_mode == 0 && P->unk22C8 == 0) {
-        P->unk2294 = v19;
-        FUN_L00_002323b8_c(v19, 0, (f32)v20);
+        P->unk2294 = hero_animation_id;
+        FUN_L00_002323b8_c(hero_animation_id, 0, (f32)v20);
         return;
     }
     if (v21 == -1)
