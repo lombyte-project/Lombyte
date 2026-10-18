@@ -384,8 +384,8 @@ s32 map_filter_l07_7(s32 px, s32 py, f32 fparg0, f32 fparg1, f32 fparg2) {
 extern unsigned char menu_item_enabled_41 __asm__("D_0013D3BD") NOT_SDA;
 int map_filter_l08_0(int arg0, int arg1) __asm__("func_00207480");
 
-int map_filter_l08_0(int unused_input, int arg1) {
-    if (arg1 >= 0x101) {
+int map_filter_l08_0(int unused_input, int reveal_test_selector) {
+    if (reveal_test_selector >= 0x101) {
         return D_001413DC[0] == 0xF;
     }
     return menu_item_enabled_41 != 0;
