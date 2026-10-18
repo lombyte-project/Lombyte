@@ -1899,17 +1899,17 @@ extern char D_L01_00167240[];
 extern int play_voice(int, int, int, int) __asm__("FUN_L00_0028ddd8");
 extern void release_voice_slot(int) __asm__("FUN_0022d798");
 
-void FUN_L01_0031a078(int a0) {
-    char *p = *(char **)(a0 + 8);
+void FUN_L01_0031a078(int sound_owner) {
+    char *p = *(char **)(sound_owner + 8);
     int n = *(int *)(p + 4);
     char *r;
     int flag;
     qcopy(D_0013E5E0 + n * 0x70, D_L01_00167240);
     r = D_0013E5E0 - 0x90 + n * 0x70;
-    flag = *(int *)(r + 0x8C) == a0 && *(unsigned char *)(r + 0x74) != 0;
+    flag = *(int *)(r + 0x8C) == sound_owner && *(unsigned char *)(r + 0x74) != 0;
     if (*(int *)(D_L01_00167240 + 0x254) != 0) {
         if (!flag) {
-            *(int *)(p + 4) = play_voice(*(int *)p, 0x15, a0, 0x400);
+            *(int *)(p + 4) = play_voice(*(int *)p, 0x15, sound_owner, 0x400);
         }
     } else {
         if (flag) {
