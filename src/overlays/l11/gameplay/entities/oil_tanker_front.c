@@ -1123,27 +1123,27 @@ extern int func_001FA898_r_q(float) __asm__("FUN_001fa6d0");
 extern short D_L11_00162384 __attribute__((sda));
 extern short D_L11_00162380 __attribute__((sda));
 void FUN_L11_00319028(struct Moby *moby) {
-    float v0[4];
-    float v1[4];
+    float effect_position[4];
+    float position_step[4];
     char *data = (char *)moby->pvars;
     unsigned char *q;
     float *p = &moby->pos.x;
     int i;
-    subtract_vector_xyz_q(v0, D_L11_001677C0_q, p);
+    subtract_vector_xyz_q(effect_position, D_L11_001677C0_q, p);
     q = (unsigned char *)(data + 0x10);
-    normalize_vector_xyz_q(v0, v0, -0.3f);
-    normalize_vector_xyz_q(v1, v0, 0.1f);
-    add_vector_xyz_q(v0, v0, p);
+    normalize_vector_xyz_q(effect_position, effect_position, -0.3f);
+    normalize_vector_xyz_q(position_step, effect_position, 0.1f);
+    add_vector_xyz_q(effect_position, effect_position, p);
     for (i = 0; i < 4; i++) {
         int a =
             FUN_001fa6e0_q(*(int *)&D_L11_00162380, *(int *)&D_L11_00162384, (float)i * 0.333f);
         unsigned char c;
         q[0] += q[4];
         c = func_001FA898_r_q((float)q[0]);
-        FUN_L00_00272f68_q(*(float *)(data + 0x1C) * convert_integer_to_float_q(q[8]) * 0.025f, v0, a,
+        FUN_L00_00272f68_q(*(float *)(data + 0x1C) * convert_integer_to_float_q(q[8]) * 0.025f, effect_position, a,
                            c, 0x35, 1, 2, 0);
         q++;
-        add_vector_xyz_q(v0, v0, v1);
+        add_vector_xyz_q(effect_position, effect_position, position_step);
     }
 }
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_0031A630), where it is exact; names translated to the US level program. */
