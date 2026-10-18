@@ -28,6 +28,11 @@ extern void fill_transfer_words(u8 *, s32, s32) __asm__("func_001F97E8");
 void build_occlusion_visibility(void) __asm__("FUN_001f2820");
 
 void build_occlusion_visibility(void) {
+    enum {
+        OCCLUSION_FALLBACK_PREVIOUS_MASK = 0,
+        OCCLUSION_FALLBACK_ALL_VISIBLE = 1,
+        OCCLUSION_FALLBACK_OCTANT_MASK = 2
+    };
     f32 scale = 0.25f;
     s32 x, y, z;
     u8 *vis;
@@ -70,17 +75,17 @@ void build_occlusion_visibility(void) {
         }
         if (vis == 0) {
             switch (D_0015F648) {
-            case 0:
+            case OCCLUSION_FALLBACK_PREVIOUS_MASK:
                 if (camera_position_publication_suppressed[0] == 0 && occl_previous_grid != 0) {
                     fast_mem_copy(occl_visibility, occl_previous_grid, 0x80);
                 } else {
                     fill_transfer_words(occl_visibility, -1, 0x80);
                 }
                 break;
-            case 1:
+            case OCCLUSION_FALLBACK_ALL_VISIBLE:
                 fill_transfer_words(occl_visibility, -1, 0x80);
                 break;
-            case 2:
+            case OCCLUSION_FALLBACK_OCTANT_MASK:
                 p = occl_oct;
                 if (p != 0) {
                     bx = 0.0f < D_00186F40.x - p[0];
