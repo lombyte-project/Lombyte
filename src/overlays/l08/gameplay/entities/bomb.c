@@ -1560,12 +1560,10 @@ extern char camera_state_bytes[] __asm__("D_L08_00167480");
 void blarg_bombthrower_update(struct Moby *moby) __asm__("FUN_L08_002dabf0");
 void blarg_bombthrower_update(struct Moby *moby) {
     enum {
-        BOMBTHROWER_STATE_WAIT_TO_THROW = 3,
-        BOMBTHROWER_STATE_MOVE_TO_THROW_POSITION = 4
-    };
-    enum {
         BOMBTHROWER_STATE_INITIALIZE = 0,
         BOMBTHROWER_STATE_APPROACH_WAYPOINT = 1,
+        BOMBTHROWER_STATE_WAIT_TO_THROW = 3,
+        BOMBTHROWER_STATE_MOVE_TO_THROW_POSITION = 4,
         BOMBTHROWER_STATE_THROW_BOMB = 5,
         BOMBTHROWER_STATE_DAMAGE_KNOCKBACK = 0x5A,
         BOMBTHROWER_STATE_DYING = 0x63
@@ -1926,10 +1924,8 @@ void FUN_L08_002dc7f0(struct Moby *moby);
 void shuttle_update(struct Moby *moby) __asm__("FUN_L08_002dbdb0");
 void shuttle_update(struct Moby *moby) {
     enum {
+        SHUTTLE_STATE_INITIALIZE = 0,
         SHUTTLE_STATE_TRAVEL = 3
-    };
-    enum {
-        SHUTTLE_STATE_INITIALIZE = 0
     };
     LiftVars *vars = (LiftVars *)moby->pvars;
     Vec4 old_pos;

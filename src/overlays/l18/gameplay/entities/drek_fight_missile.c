@@ -3591,10 +3591,8 @@ extern void func_L18_002F9AB8_v(void *) __asm__("FUN_L18_002f8658");
 void rocket_tank_update(M1454 *m) __asm__("FUN_L18_002f7c40");
 void rocket_tank_update(M1454 *m) {
     enum {
+        ROCKET_TANK_INITIALIZE = 0,
         ROCKET_TANK_FIRING = 2
-    };
-    enum {
-        ROCKET_TANK_INITIALIZE = 0
     };
     D1454 *d = m->data;
     FUN_L18_002f8050(m);

@@ -481,9 +481,7 @@ extern s32 D_L01_00161494 __attribute__((sda));
 extern f32 D_L01_0016149C __attribute__((sda));
 void FUN_L01_002c7530(char *moby) {
     enum {
-        COLLISION_CHECK_AND_COUNTDOWN = 1
-    };
-    enum {
+        COLLISION_CHECK_AND_COUNTDOWN = 1,
         TIMED_REMOVAL = 2
     };
     int *data = *(int **)(moby + 0x78);
@@ -1585,9 +1583,7 @@ extern char D_L01_00174340_c[] __asm__("D_L01_001742C0");
 
 void FUN_L01_002eda00(char *m) {
     enum {
-        MOVE_UNTIL_COLLISION_OR_TIMEOUT = 1
-    };
-    enum {
+        MOVE_UNTIL_COLLISION_OR_TIMEOUT = 1,
         BURST_AND_REMOVE = 2
     };
     char *d = *(char **)(m + 0x78);

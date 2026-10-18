@@ -2418,12 +2418,8 @@ extern Moby *D_L06_0015FFD8;
 
 int FUN_L06_002f2c28(char *ctx, char *ow, char *moby, int flag, int *out) {
     enum {
-        MOBY_CLASS_OFFSET_RELOCATION_TRIGGER = 0x3B1
-    };
-    enum {
-        MOBY_CLASS_RELOCATION_TRIGGER = 0x15F
-    };
-    enum {
+        MOBY_CLASS_RELOCATION_TRIGGER = 0x15F,
+        MOBY_CLASS_OFFSET_RELOCATION_TRIGGER = 0x3B1,
         MOBY_CLASS_RELOCATION_TRIGGER_WITH_SOUND = 0x515
     };
     float candidate_position[4];

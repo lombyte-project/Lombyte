@@ -1165,13 +1165,9 @@ extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_002
 void commando_update(WM *m) __asm__("FUN_L08_00302ce8");
 void commando_update(WM *m) {
     enum {
+        COMMANDO_INITIALIZE = 0,
+        COMMANDO_DIALOGUE_BEFORE_REPOSITION = 1,
         COMMANDO_DIALOGUE_AFTER_REPOSITION = 2
-    };
-    enum {
-        COMMANDO_DIALOGUE_BEFORE_REPOSITION = 1
-    };
-    enum {
-        COMMANDO_INITIALIZE = 0
     };
     L16WatchScratch scratch;
     WD8 *d = (WD8 *)m->data;

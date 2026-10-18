@@ -297,10 +297,8 @@ extern void FUN_L00_00210a08(int, int, struct Moby *);
 void giant_clank_pad_update(struct Moby *moby) __asm__("FUN_L15_002ed068");
 void giant_clank_pad_update(struct Moby *moby) {
     enum {
-        GIANT_CLANK_PAD_ARM_ACTIVATION = 1
-    };
-    enum {
         GIANT_CLANK_PAD_INITIALIZE = 0,
+        GIANT_CLANK_PAD_ARM_ACTIVATION = 1,
         GIANT_CLANK_PAD_CHECK_ACTIVATION = 2
     };
     struct Moby *linked = moby->pvars;

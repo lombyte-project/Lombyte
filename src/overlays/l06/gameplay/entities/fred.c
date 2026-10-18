@@ -5700,11 +5700,9 @@ extern int D_L06_00162044 __attribute__((sda));
 extern float D_L06_00162050 __attribute__((sda));
 void FUN_L06_002ffcb0(char *moby) {
     enum {
+        INITIALIZE_DRAW_SELECTION = 0,
         WAIT_CAMERA_START_DELAY = 2,
         BLEND_CAMERA_TO_HERO = 3
-    };
-    enum {
-        INITIALIZE_DRAW_SELECTION = 0
     };
     int *data = *(int **)(moby + 0x78);
     float pos[4], rot[4], from[4], target[4], offset[4];

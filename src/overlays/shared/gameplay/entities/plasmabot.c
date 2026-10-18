@@ -301,10 +301,8 @@ void attach_manipulator(void *owner, s32 slot_index, void *manip) __asm__("FUN_0
 void FUN_L14_002b17d8(char *moby);
 void FUN_L14_002b17d8(char *moby) {
     enum {
+        PLASMABOT_INITIALIZE = 0,
         PLASMABOT_RETURN_TO_PATH_START = 9
-    };
-    enum {
-        PLASMABOT_INITIALIZE = 0
     };
     char *data;
     char *owner;

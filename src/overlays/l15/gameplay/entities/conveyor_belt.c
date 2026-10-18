@@ -966,12 +966,10 @@ extern float scale_time(float) __asm__("FUN_L15_001f8648");
 void codebot_slot_update(struct Moby *moby) __asm__("FUN_L15_002ec030");
 void codebot_slot_update(struct Moby *moby) {
     enum {
-        CODEBOT_SLOT_COMPLETED = 4
-    };
-    enum {
         CODEBOT_SLOT_INITIALIZE = 0,
         CODEBOT_SLOT_WAIT_FOR_PROXIMITY = 1,
-        CODEBOT_SLOT_ANIMATE_EFFECT = 3
+        CODEBOT_SLOT_ANIMATE_EFFECT = 3,
+        CODEBOT_SLOT_COMPLETED = 4
     };
     int *data = (int *)moby->pvars;
     float vec[4] __attribute__((aligned(16)));

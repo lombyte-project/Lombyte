@@ -388,13 +388,11 @@ void FUN_L11_0030dd18(struct Moby *m);
    points (pos at 0x30, rotation at 0x70) before handing back to the hero. */
 void FUN_L11_0030d800(struct Moby *m) {
     enum {
-        CHILD_GRID_STATE_FADE_TO_POINT_POSE = 2,
-        CHILD_GRID_STATE_FADE_TO_HERO_POSE = 4
-    };
-    enum {
         CHILD_GRID_STATE_CREATE_CHILDREN = 0,
         CHILD_GRID_STATE_WAIT_LINK_COMMAND = 1,
-        CHILD_GRID_STATE_BLEND_POINT_POSES = 3
+        CHILD_GRID_STATE_FADE_TO_POINT_POSE = 2,
+        CHILD_GRID_STATE_BLEND_POINT_POSES = 3,
+        CHILD_GRID_STATE_FADE_TO_HERO_POSE = 4
     };
     GridVars_d800 *pv = (GridVars_d800 *)m->pvars;
     Vec4f pos;
@@ -2632,16 +2630,14 @@ s32 hp_bar_saved __asm__("D_L11_00162170") = 0;
 void jet_fighter_update(struct Moby *moby) __asm__("FUN_L11_00313290");
 void jet_fighter_update(struct Moby *moby) {
     enum {
-        JET_FIGHTER_STATE_DELAYED_EXIT = 8,
-        JET_FIGHTER_STATE_INACTIVE = 9
-    };
-    enum {
         JET_FIGHTER_STATE_INITIALIZE = 0,
         JET_FIGHTER_STATE_WAIT_FOR_BOARDING = 1,
         JET_FIGHTER_STATE_BOARD = 2,
         JET_FIGHTER_STATE_FLIGHT = 4,
         JET_FIGHTER_STATE_DISMOUNT = 5,
-        JET_FIGHTER_STATE_WAIT_FOR_RESPAWN = 7
+        JET_FIGHTER_STATE_WAIT_FOR_RESPAWN = 7,
+        JET_FIGHTER_STATE_DELAYED_EXIT = 8,
+        JET_FIGHTER_STATE_INACTIVE = 9
     };
     ShipVars_2838 *v;
     ShipHit_3290 *hit;

@@ -798,20 +798,18 @@ extern void FUN_L00_002a7210_c(Bolt *, void *, f32, f32) __asm__("FUN_L00_002a72
 void bolt_update(Bolt *obj) __asm__("FUN_L00_002a5dd8");
 void bolt_update(Bolt *obj) {
     enum {
-        BOLT_INITIALIZE_CLASS_ONE = 0xD,
-        BOLT_INITIALIZE_CLASS_FIVE = 0xE,
-        BOLT_INITIALIZE_CLASS_TWENTY = 0xF,
-        BOLT_INITIALIZE_CLASS_FIFTY = 0x10,
-        BOLT_FALLING_CLASS_ONE = 0xD,
-        BOLT_FALLING_CLASS_FIVE = 0xE,
-        BOLT_FALLING_CLASS_TWENTY = 0xF
-    };
-    enum {
         BOLT_INITIALIZE = 0,
         BOLT_FALLING = 1,
         BOLT_SETTLING = 2,
         BOLT_IDLE = 3,
-        BOLT_MOVE_TO_HERO = 4
+        BOLT_MOVE_TO_HERO = 4,
+        BOLT_INITIALIZE_CLASS_ONE = 0xD,
+        BOLT_FALLING_CLASS_ONE = 0xD,
+        BOLT_INITIALIZE_CLASS_FIVE = 0xE,
+        BOLT_FALLING_CLASS_FIVE = 0xE,
+        BOLT_INITIALIZE_CLASS_TWENTY = 0xF,
+        BOLT_FALLING_CLASS_TWENTY = 0xF,
+        BOLT_INITIALIZE_CLASS_FIFTY = 0x10
     };
     BoltVars *v = obj->vars;
     Vec4 a;

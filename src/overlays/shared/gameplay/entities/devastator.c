@@ -498,10 +498,8 @@ extern int D_L00_00161478 __attribute__((sda));
 extern int D_L00_00161480 __attribute__((sda));
 void FUN_L00_002b3458(unsigned char *m) {
     enum {
+        STATE_INITIALIZE = 0,
         STATE_ACTIVE = 1
-    };
-    enum {
-        STATE_INITIALIZE = 0
     };
     V_2b3458 *v = *(V_2b3458 **)(m + 0x78);
     int r, i;

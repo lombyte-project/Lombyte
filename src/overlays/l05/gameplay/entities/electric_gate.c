@@ -2175,16 +2175,12 @@ extern void func_00215CA8_f5848(float, int *, int, void *, float *, int) __asm__
 void taxi_update(struct Moby *moby) __asm__("FUN_L05_00318c78");
 void taxi_update(struct Moby *moby) {
     enum {
-        TAXI_WAIT_FOR_ACTIVATION = 6
-    };
-    enum {
-        TAXI_FOLLOW_PATH = 4
-    };
-    enum {
         TAXI_INITIALIZE = 0,
         TAXI_WAIT_FOR_PICKUP = 1,
         TAXI_BLEND_TO_PATH_START = 3,
-        TAXI_BLEND_TO_DESTINATION = 5
+        TAXI_FOLLOW_PATH = 4,
+        TAXI_BLEND_TO_DESTINATION = 5,
+        TAXI_WAIT_FOR_ACTIVATION = 6
     };
     char *d = (char *)moby->pvars;
     float old_position[4], old_rotation[4], position_delta[4], v30[4], interpolation_end_position[4], interpolation_start_angles[4], interpolation_end_angles[4], hero_offset[4];

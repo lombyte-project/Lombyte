@@ -3211,12 +3211,10 @@ extern float D_L06_00161F5C __attribute__((sda));
 
 void FUN_L06_002fbfb0(char *moby) {
     enum {
-        MOVE_PAIR_TO_FIXED_OFFSETS = 3,
-        ANIMATE_PAIR_WITH_TIMED_PHASES = 4
-    };
-    enum {
         INITIALIZE_CHILD_AND_TRANSFORMS = 0,
         WAIT_FOR_HERO_IN_CLIP_VOLUME = 1,
+        MOVE_PAIR_TO_FIXED_OFFSETS = 3,
+        ANIMATE_PAIR_WITH_TIMED_PHASES = 4,
         WAIT_FOR_RESET = 5
     };
     char *data = *(char **)(moby + 0x78);

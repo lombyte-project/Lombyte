@@ -789,9 +789,7 @@ void blarg_gun_update(char *moby) __asm__("FUN_L05_003186f8");
 void blarg_gun_update(char *moby)
 {
     enum {
-        BLARG_GUN_STATE_INITIALIZE = 0
-    };
-    enum {
+        BLARG_GUN_STATE_INITIALIZE = 0,
         BLARG_GUN_STATE_MOVING = 1
     };
     char *data = *(char **)(moby + 0x78);

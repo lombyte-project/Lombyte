@@ -600,10 +600,8 @@ extern float D_L13_00161490 __attribute__((sda));
 
 void FUN_L13_002c2d30(unsigned char *moby) {
     enum {
+        HIT_REACTION_LETHAL = 1,
         HIT_REACTION_NO_HIT = 11
-    };
-    enum {
-        HIT_REACTION_LETHAL = 1
     };
     unsigned char *d;
     char *r;
@@ -1655,9 +1653,7 @@ extern char D_L13_001f49a8[];
 
 void FUN_L13_002cecb8(struct Moby *moby, unsigned char *d, float *health) {
     enum {
-        HIT_REACTION_NONE = 0
-    };
-    enum {
+        HIT_REACTION_NONE = 0,
         HIT_REACTION_LETHAL = 1
     };
     char *src;

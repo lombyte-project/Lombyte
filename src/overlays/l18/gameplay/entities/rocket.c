@@ -1713,11 +1713,9 @@ extern void scale_vector_xyz(void *, void *, float);
 
 void FUN_L18_002db460(struct Moby *moby) {
     enum {
-        STATE_EXPANDING_RING = 2
-    };
-    enum {
         STATE_BALLISTIC_FLIGHT = 0,
         STATE_GROUND_IMPACT_DELAY = 1,
+        STATE_EXPANDING_RING = 2,
         STATE_REMOVE = 3
     };
     float v[4];

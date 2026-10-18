@@ -103,11 +103,9 @@ extern L16WatchFlags D_0013D355_watch __asm__("D_0013D24D");
 void help_desk_lady_update(L16WatchMoby *m) __asm__("FUN_L16_002e3190");
 void help_desk_lady_update(L16WatchMoby *m) {
     enum {
-        HELP_DESK_REQUEST_HELP_AND_SAVE = 2
-    };
-    enum {
         HELP_DESK_INITIALIZE_DIALOGUE = 0,
-        HELP_DESK_POLL_DIALOGUE = 1
+        HELP_DESK_POLL_DIALOGUE = 1,
+        HELP_DESK_REQUEST_HELP_AND_SAVE = 2
     };
     L16WatchScratch scratch;
     L16WatchData *d = m->data;

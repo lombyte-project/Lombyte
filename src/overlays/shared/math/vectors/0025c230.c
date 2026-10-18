@@ -188,9 +188,7 @@ extern int func_L00_001F2BE8_d6f0(float, void *, int, void *, void *) __asm__("F
 int mine_fall(char *moby, char *st) __asm__("FUN_L00_0025c698");
 int mine_fall(char *moby, char *st) {
     enum {
-        MOTION_RISING = 0
-    };
-    enum {
+        MOTION_RISING = 0,
         MOTION_FALLING = 1,
         MOTION_GROUNDED = 2
     };
