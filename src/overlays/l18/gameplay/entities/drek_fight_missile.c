@@ -3090,7 +3090,7 @@ extern int D_L18_0015FFD8_d __asm__("D_L18_0015FFD8");
  * Ported from rac1-decomp, where it is exact; names translated to
  * the US level program (data still reached through the MACRO_ADDR form). */
 // Walks a list of moby indices and resets the flags of each live moby.
-void FUN_L18_002f7028(int a0, int idx) {
+void FUN_L18_002f7028(int unused, int idx) {
     short *p = D_L18_001AC240_u[idx];
     if (p != 0) {
         do {
