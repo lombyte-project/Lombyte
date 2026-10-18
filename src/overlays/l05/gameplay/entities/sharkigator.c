@@ -2038,6 +2038,12 @@ typedef char *(*Spawn_305778)(void *, void *, void *, int, int, long, long, long
 
 void extermitank_update(unsigned char *m) __asm__("FUN_L05_00304320");
 void extermitank_update(unsigned char *m) {
+    enum {
+        EXTERMITANK_INITIALIZE = 0,
+        EXTERMITANK_FOLLOW_PATH = 1,
+        EXTERMITANK_FIRE_PARTICLES = 2,
+        EXTERMITANK_REMOVE = 3
+    };
     char *d = *(char **)(m + 0x78);
     float origin_position[4];
     float particle_vector_a[4];
@@ -2059,7 +2065,7 @@ void extermitank_update(unsigned char *m) {
         }
     }
     switch (m[0x20]) {
-    case 0: {
+    case EXTERMITANK_INITIALIZE: {
         char *c;
         char *g;
         if (*(char **)(d + 0x184) == 0) {
@@ -2127,7 +2133,7 @@ void extermitank_update(unsigned char *m) {
         d[0x5A] = truncate_float_to_s32_c5(D_L05_00161B7C * 8.0f);
         break;
     }
-    case 1: {
+    case EXTERMITANK_FOLLOW_PATH: {
         char *pp = d + 0xC0;
         char *path = *(char **)(pp + 0x10);
         int n = *(int *)path;
@@ -2176,7 +2182,7 @@ void extermitank_update(unsigned char *m) {
         FUN_L00_001fff28(d + 0x100, 2, fast_subtract_rotations(*(float *)(d + 0x194), *(float *)(m + 0x48)));
         break;
     }
-    case 2: {
+    case EXTERMITANK_FIRE_PARTICLES: {
         char *pp = d + 0xC0;
         char *path = *(char **)(pp + 0x10);
         int n = *(int *)path;
@@ -2281,7 +2287,7 @@ void extermitank_update(unsigned char *m) {
         FUN_L00_001fff28(d + 0x100, 2, fast_subtract_rotations(*(float *)(d + 0x194), *(float *)(m + 0x48)));
         break;
     }
-    case 3:
+    case EXTERMITANK_REMOVE:
         if (*(char **)(d + 0x184) != 0) mark_moby_for_removal_c3(*(char **)(d + 0x184));
         if (*(char **)(d + 0x188) != 0) mark_moby_for_removal_c3(*(char **)(d + 0x188));
         mark_moby_for_removal_c3(m);
