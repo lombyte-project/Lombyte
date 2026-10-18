@@ -1885,6 +1885,9 @@ void machinegun_turret_update(char *moby) {
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002B5590), where it is exact; names translated to the US level program. */
 
 void FUN_L14_002b4340(struct Moby *m) {
+    enum {
+        HIT_REACTION_LETHAL = 1
+    };
     unsigned char *d = m->pvars;
     int loc0;
     float f4 = 0.0f;
@@ -1921,7 +1924,7 @@ void FUN_L14_002b4340(struct Moby *m) {
         case 8:
             d[0x67] = 200;
             break;
-        case 1:
+        case HIT_REACTION_LETHAL:
         case 2:
             m->state = 6;
             m->flags &= 0xEFFF;
