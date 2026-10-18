@@ -2303,6 +2303,9 @@ extern void trooper_anim_update(void *, short *) __asm__("FUN_L00_0025d458");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 
 void FUN_L07_0030e998(char *m, char *x, float *hp) {
+    enum {
+        HIT_REACTION_NO_ANIMATION_RESPONSE = 11
+    };
     char *info;
     int hit;
     int r;
@@ -2334,7 +2337,7 @@ void FUN_L07_0030e998(char *m, char *x, float *hp) {
             }
             m[0x20] = 0xD;
             break;
-        case 11:
+        case HIT_REACTION_NO_ANIMATION_RESPONSE:
             break;
         }
         if (hit >= 2) {
