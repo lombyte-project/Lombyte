@@ -1996,7 +1996,9 @@ void FUN_L13_0030b628(struct Moby *moby) {
         START_INITIAL_SCENE = 1,
         WAIT_INITIAL_SCENE = 2,
         CHECK_CLIP_VOLUME_FOR_SCENE = 4,
-        START_FOLLOWUP_SCENE = 9
+        WAIT_CLIP_VOLUME_SCENE = 5,
+        START_FOLLOWUP_SCENE = 9,
+        WAIT_FOLLOWUP_SCENE = 10
     };
     int *data = (int *)moby->pvars;
     switch (moby->state) {
@@ -2043,7 +2045,7 @@ after_state_4:
         }
         break;
     }
-    case 5: {
+    case WAIT_CLIP_VOLUME_SCENE: {
         char *object;
         char *entity;
         int index;
@@ -2114,7 +2116,7 @@ after_state_4:
             moby->state = 10;
         }
         break;
-    case 10: {
+    case WAIT_FOLLOWUP_SCENE: {
         if (D_L13_0015F5C4 != 2) {
             if (data[4] != -1) {
                 struct Moby *other = (struct Moby *)(D_L13_0015FFD8_m + data[4] * 0x100);
