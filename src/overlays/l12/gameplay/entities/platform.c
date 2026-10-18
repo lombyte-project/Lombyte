@@ -3167,15 +3167,19 @@ extern void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
 
 void crane_arm_update(unsigned char *m) __asm__("FUN_L12_002ec1d0");
 void crane_arm_update(unsigned char *m) {
+    enum {
+        CRANE_ARM_INITIALIZE = 0,
+        CRANE_ARM_WAIT_DELAY = 1
+    };
     float dist = vector_distance(m + 0x10, &hero.motion.pos);
     switch (m[0x20]) {
-    case 0:
+    case CRANE_ARM_INITIALIZE:
         if (m[0x53] != 0)
             blend_moby_animation(m, 0, 0, 0);
         m[0x20] = 1;
         m[0xBC] = random_integer_below(scale_game_frames(0xB4));
         break;
-    case 1:
+    case CRANE_ARM_WAIT_DELAY:
         if (m[0x52] == 0 && dist < 9.0f && m[0xBC] < 2)
             m[0xBC] = 2;
         if (dist < 12.0f && m[0x52] == m[0x53] && m[0x52] != 0)
