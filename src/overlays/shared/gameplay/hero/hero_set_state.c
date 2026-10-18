@@ -416,7 +416,7 @@ void FUN_L00_00221ee0(void) {
     M_221ee0 *m;
     M_221ee0 *best;
     Q_221ee0 *q;
-    f32 x, t, a13, bestd, d, a14, a15;
+    f32 x, t, max_target_distance, bestd, d, target_angle_limit, target_elevation_angle_limit;
     s32 k;
     best = 0;
     G.h99E = 0;
@@ -434,22 +434,22 @@ void FUN_L00_00221ee0(void) {
         if (q->f20 != 0.0f && q->f20 < FUN_001f9b48_221ee0(&G.q80, &m->q10))
             continue;
         k = G.i2084;
-        a14 = 0.7853982f;
+        target_angle_limit = 0.7853982f;
         if (k == 0x2D)
-            a14 = 1.2217305f;
-        a15 = 0.7853982f;
+            target_angle_limit = 1.2217305f;
+        target_elevation_angle_limit = 0.7853982f;
         if (k == 0x2D)
-            a15 = 1.134464f;
+            target_elevation_angle_limit = 1.134464f;
         if (k == 1 || k == 0x1E) {
-            a15 = 0.08726646f;
-            a14 = a15;
+            target_elevation_angle_limit = 0.08726646f;
+            target_angle_limit = target_elevation_angle_limit;
         }
         t = q->f20;
-        a13 = 16.0f;
+        max_target_distance = 16.0f;
         x = G.f98;
         if (t != 0.0f)
-            a13 = t;
-        d = FUN_L00_0020d6b0_221ee0(m, &out, x, a13, a14, a15);
+            max_target_distance = t;
+        d = FUN_L00_0020d6b0_221ee0(m, &out, x, max_target_distance, target_angle_limit, target_elevation_angle_limit);
         if (out != 0)
             continue;
         if (m->b31 == 0)
