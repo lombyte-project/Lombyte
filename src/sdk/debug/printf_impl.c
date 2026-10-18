@@ -8,6 +8,9 @@ extern void (*D_0012FC00[])(s32);
 #define ARG(T) (ap += 8, *(T *)(ap - 8))
 
 void _printf(const char *fmt, char *ap) {
+    enum {
+        FORMAT_ZERO_PAD_WIDTH = 0
+    };
     char buf[32];
     char *pad;
     char *p;
@@ -28,7 +31,7 @@ void _printf(const char *fmt, char *ap) {
         again:
             fmt++;
             switch ((char)(*fmt - '0')) {
-            case 0:
+            case FORMAT_ZERO_PAD_WIDTH:
                 n = fmt[1] - '0';
                 second = fmt[2];
                 if ((u8)n < 10) {
