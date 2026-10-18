@@ -3503,7 +3503,7 @@ extern char D_L07_00173EE0_2cd2b0[] __asm__("D_L07_00173EE0");
 
 void FUN_L07_00312420(struct Moby *arg)
 {
-    float line_endpoint[4], v10[4], quad_side_offset[4], attachment_position[4], endpoint_to_attachment[4], oscillating_reference_position[4], m[4], c2[4], h[4], ii[4], jj[4];
+    float line_endpoint[4], endpoint_work_vector[4], quad_side_offset[4], attachment_position[4], endpoint_to_attachment[4], oscillating_reference_position[4], m[4], c2[4], h[4], ii[4], jj[4];
     float f20, t;
     int flag = 1;
     EffData_313800 *p = ((EffData_313800 *)arg->pvars);
@@ -3517,9 +3517,9 @@ void FUN_L07_00312420(struct Moby *arg)
     t = FUN_L00_0025e310_2cd2b0(f20 + t * 1.5707964f);
     oscillating_reference_position[0] = oscillating_reference_position[0] + FUN_001f9de0_2cd2b0(t);
     add_vector_xyz_cf(arg, 2, attachment_position);
-    subtract_vector_xyz(v10, oscillating_reference_position, attachment_position);
-    FUN_001f9bf8_2cd2b0(v10, v10, 30.0f);
-    add_vector_xyz(line_endpoint, oscillating_reference_position, v10);
+    subtract_vector_xyz(endpoint_work_vector, oscillating_reference_position, attachment_position);
+    FUN_001f9bf8_2cd2b0(endpoint_work_vector, endpoint_work_vector, 30.0f);
+    add_vector_xyz(line_endpoint, oscillating_reference_position, endpoint_work_vector);
     if (FUN_001efa68_2cd2b0(attachment_position, line_endpoint, 2, arg, 0)) {
         qcopy(line_endpoint, D_L07_00173EE0_2cd2b0);
     } else {
@@ -3528,7 +3528,7 @@ void FUN_L07_00312420(struct Moby *arg)
     subtract_vector_xyz(endpoint_to_attachment, attachment_position, line_endpoint);
     cross_vectors_xyz(quad_side_offset, D_L07_00167050_2cd2b0, endpoint_to_attachment);
     FUN_001f9bf8_2cd2b0(quad_side_offset, quad_side_offset, 0.25f);
-    add_vector_xyz(v10, quad_side_offset, line_endpoint);
+    add_vector_xyz(endpoint_work_vector, quad_side_offset, line_endpoint);
     if (flag) {
         FUN_L00_002729c8_2cd2b0(line_endpoint, 0, FUN_001f96f8_2cd2b0((rand_e50() & 1) + 0x2D),
             FUN_001f96f8_2cd2b0((rand_e50() & 7) + 0x37), 1,
@@ -3574,7 +3574,7 @@ void FUN_L07_00312420(struct Moby *arg)
     qcopy_nc(pkt.a, attachment_position);
     add_vector_xyz(pkt.b, pkt.a, quad_side_offset);
     qcopy(pkt.c, line_endpoint);
-    qcopy(pkt.d, v10);
+    qcopy(pkt.d, endpoint_work_vector);
     draw_geometry_quad(&pkt, 0, 1);
 }
 
