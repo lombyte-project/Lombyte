@@ -102,10 +102,10 @@ void FUN_L13_002b7d50(short *pts, int n, float x0, float y0, unsigned int col, u
         primitive_payload[1] = prim;
     }
     {
-        char *t3 = (char *)D_L13_001611C0;
-        D_L13_001611C0 = (int)(t3 + 0x10);
+        char *saved_packet_cursor = (char *)D_L13_001611C0;
+        D_L13_001611C0 = (int)(saved_packet_cursor + 0x10);
         qcopy((void *)D_L13_001611C0, &D_L13_001608F0);
-        *(short *)(t3 + 0x10) = n - 0x8000;
+        *(short *)(saved_packet_cursor + 0x10) = n - 0x8000;
     }
     *(u128_7d50 *)rot = 0;
     rot[2] = ang;
