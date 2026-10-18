@@ -486,7 +486,7 @@ int FUN_L00_00222158(void) {
     char *m;
     char *best;
     char *q;
-    float bestd, d, max_target_distance, a14, a15, x;
+    float bestd, d, max_target_distance, target_angle_limit, target_elevation_angle_limit, x;
     int k;
     int out;
     float v[4];
@@ -512,11 +512,11 @@ int FUN_L00_00222158(void) {
             continue;
         g = (char *)((char *)&D_0013F350);
         k = *(int *)(g + 0x2084);
-        a14 = 0.5235988f;
-        a15 = -1.0f;
+        target_angle_limit = 0.5235988f;
+        target_elevation_angle_limit = -1.0f;
         if (k == 1 || k == 0x1E) {
-            a15 = 0.08726646f;
-            a14 = a15;
+            target_elevation_angle_limit = 0.08726646f;
+            target_angle_limit = target_elevation_angle_limit;
         }
         gb = (char *)((char *)&D_0013F350);
         x = *(float *)(gb + 0x98);
@@ -525,7 +525,7 @@ int FUN_L00_00222158(void) {
         max_target_distance = 30.0f;
         if (*(float *)(q + 0x20) != 0.0f)
             max_target_distance = *(float *)(q + 0x20);
-        d = FUN_L00_0020d6b0(m, &out, x, max_target_distance, a14, a15);
+        d = FUN_L00_0020d6b0(m, &out, x, max_target_distance, target_angle_limit, target_elevation_angle_limit);
         if (out != 0)
             continue;
         gb += 0x80;
