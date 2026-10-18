@@ -943,6 +943,9 @@ extern struct Moby *D_001413D0_d7b80 __asm__("D_001413D0") __attribute__((sectio
 
 void FUN_L10_002d7b80(struct Moby *moby) {
     enum {
+        HEIGHT_MODE_FOLLOW_SELECTED_MOBY_HEIGHT = 3
+    };
+    enum {
         HEIGHT_MODE_APPROACH_FIXED_HEIGHT = 1,
         HEIGHT_MODE_FOLLOW_COLLISION_HEIGHT = 2
     };
@@ -974,7 +977,7 @@ void FUN_L10_002d7b80(struct Moby *moby) {
         else
             FUN_L10_002d7b18(moby, moby->pos.z - 0.1f);
         break;
-    case 3:
+    case HEIGHT_MODE_FOLLOW_SELECTED_MOBY_HEIGHT:
         if (*(int *)((char *)found + 0x40) != 0)
             FUN_L10_002d7b18(moby, found[2] + *(float *)(data + 0x1c));
         break;
