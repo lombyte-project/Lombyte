@@ -749,6 +749,9 @@ float D_L11_00161400 = -3.0f;
 extern int D_L11_0015FFD8;
 
 void FUN_L11_002d2088(struct Moby *moby, unsigned char state) {
+    enum {
+        RESORT_OWNER_JUMP_TO_TARGET = 7
+    };
     char *d = (char *)moby->pvars;
     float tmp[4];
 
@@ -778,7 +781,7 @@ void FUN_L11_002d2088(struct Moby *moby, unsigned char state) {
             FUN_00212f90(moby, 3, 0, scale_game_frames(0x14));
         *(float *)(d + 0x154) = D_L11_001613D4 * frame_time;
         break;
-    case 7:
+    case RESORT_OWNER_JUMP_TO_TARGET:
         if (moby->prev_seq != 4)
             FUN_00212f90(moby, 4, 0, scale_game_frames(0x14));
         clear_u64_value(d + 0x130);
