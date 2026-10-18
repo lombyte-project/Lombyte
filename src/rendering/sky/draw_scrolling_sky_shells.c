@@ -1,14 +1,7 @@
 #include "types.h"
-#include "rnc/rendering/sky_shell.h"
-#include "asm.h"
-
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_0022abc0/FUN_0022abc0.s", FUN_0022abc0);
-#else
-#include "rnc/rendering/sky_shell.h"
-#include "types.h"
 #include "eetypes.h"
 #include "qcopy.h"
+#include "rnc/rendering/sky_shell.h"
 
 struct SkyShell {
     u8 pad_0[8];
@@ -23,7 +16,7 @@ struct SkyShellSet {
     struct SkyShell *shells[1];
 };
 
-extern f32 D_00160404 __attribute__((sda));
+extern f32 D_00160400 __attribute__((sda));
 extern struct SkyShellSet *D_0016045C;
 extern u8 sky_matrix[] __asm__("D_001D96E0");
 extern void set_identity_matrix(void *) __asm__("FUN_001f9fc8");
@@ -32,7 +25,9 @@ extern void fun_001fa070(void *, f32 *) __asm__("FUN_001fa070");
 extern void scale_vector(void *, void *, f32) __asm__("FUN_001f9a80");
 extern void sky_draw_shell(s32) __asm__("FUN_0022b690");
 
-void FUN_0022abc0(void) {
+void draw_scrolling_sky_shells(void) __asm__("FUN_0022abd8");
+
+void draw_scrolling_sky_shells(void) {
     f32 rotation_angles[4];
     f32 shell_scale;
     struct SkyShellSet *shell_set;
@@ -53,26 +48,26 @@ void FUN_0022abc0(void) {
             switch (shell_index) {
             case 1:
                 rotation_angles[1] = 0.02f;
-                *shell_angle += D_00160404 * 0.55f;
+                *shell_angle += D_00160400 * 0.55f;
                 shell_scale = 3.0f;
                 break;
             case 2:
                 rotation_angles[1] = -0.02f;
-                *shell_angle += D_00160404 * 0.6f;
+                *shell_angle += D_00160400 * 0.6f;
                 shell_scale = 2.5f;
                 break;
             case 3:
                 rotation_angles[1] = 0.01f;
-                *shell_angle += D_00160404 * 0.7f;
+                *shell_angle += D_00160400 * 0.7f;
                 shell_scale = 2.0f;
                 break;
             case 4:
                 rotation_angles[1] = -0.01f;
-                *shell_angle += D_00160404 * 0.75f;
+                *shell_angle += D_00160400 * 0.75f;
                 shell_scale = 1.5f;
                 break;
             case 5:
-                *shell_angle += D_00160404 * 0.8f;
+                *shell_angle += D_00160400 * 0.8f;
                 shell_scale = 1.25f;
                 break;
             default:
@@ -98,4 +93,5 @@ void FUN_0022abc0(void) {
         } while (shell_index < shell_set->shell_count);
     }
 }
-#endif /* NON_MATCHING */
+
+extern __typeof__(draw_scrolling_sky_shells) func_0022ABD8 __attribute__((alias("FUN_0022abd8")));

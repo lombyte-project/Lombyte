@@ -51,14 +51,17 @@ typedef struct {
     ShrubRenderGroup *group;
     s32 pad4;
 } ShrubRenderGroupReference;
+struct ShrubInstance;
+
 typedef struct {
-    u8 pad0[0x10];
-    f32 scale;
+    f32 bounding_sphere[4]; /* 0x00: center xyz, radius */
+    f32 scale;              /* 0x10 */
     u8 pad14[2];
-    s16 runtime_count;
-    s32 runtime_data;
-    ShrubMipPacket *mip_packet;
-    u8 pad20[6];
+    u16 instance_count;                  /* 0x16 */
+    struct ShrubInstance *first_instance; /* 0x18 */
+    ShrubMipPacket *mip_packet;           /* 0x1C */
+    f32 unk20;                            /* 0x20 */
+    u8 pad24[2];
     u16 class_slot;
     s16 group_count;
     u8 pad2A[2];

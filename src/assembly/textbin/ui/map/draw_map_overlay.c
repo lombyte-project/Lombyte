@@ -405,7 +405,7 @@ void draw_map_overlay(void) {
                         if (icon->flags & 0x10) {
                             label_width = icon->label_width;
                             label_offset_x = icon->label_offset_x;
-                            label_height = icon->label_height;
+                            label_height = (s16)icon->label_height;
                             label_offset_y = icon->label_offset_y;
                             if (label_offset_x == 0) {
                                 label_x = ((icon_bounds[i].x0 + icon_bounds[i].x1) >> 5) -

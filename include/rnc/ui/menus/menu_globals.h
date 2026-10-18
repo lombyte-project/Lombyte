@@ -17,7 +17,20 @@ extern s32 menu_fade_duration __asm__("D_001601B4") __attribute__((sda));
 extern s32 *menu_level_indices __asm__("D_001601E0");
 extern u8 requested_video_mode __asm__("D_0016034C");
 extern s32 preview_request_count __asm__("D_00160350");
-extern char preview_binding_table[] __asm__("D_001863D0");
+/* One record per item id. */
+typedef struct MenuItemInfo {
+    u8 pad0[0x8];
+    s32 slot; /* 0x08: equip slot the item goes in */
+    u8 padC[0x2C];
+    u16 unk38;          /* 0x38: copied into the pause item list */
+    s16 preview_class;  /* 0x3A: preview moby class, -1 for none */
+    u8 pad3C[4];
+    s16 unk40;          /* 0x40: pause list value for the plain text */
+    s16 unk42;          /* 0x42: pause list value when item_text_variant is set */
+    u8 pad44[8];
+} MenuItemInfo;
+
+extern MenuItemInfo menu_item_info[] __asm__("D_001863D0");
 extern char preview_camera[] __asm__("D_00186F40");
 extern s32 menu_action_messages[] __asm__("D_00199478");
 extern s32 help_msg_count[] __asm__("D_001996FC");

@@ -111,12 +111,15 @@ int render_configured_text_label(struct MenuScreen *label) {
         value_index = page->data.grid.selected_cell;
         entry = &page->data.grid.cells[value_index];
         if (entry->kind == 0) {
-            flags = item_available[entry->id];
+            availability_table = item_available;
+            flags = availability_table[entry->id];
         } else {
-            flags = alternate_item_available[entry->id];
+            availability_table = alternate_item_available;
+            flags = availability_table[entry->id];
         }
         if (flags == 0) {
             value_index = -1;
+            remaining_frames = 0;
         }
     } else if (selector_flags & 0x1000) {
         struct MenuScreen *page = menu_system.current->focus;
@@ -217,7 +220,6 @@ int render_configured_text_label(struct MenuScreen *label) {
     setup_gif_paging(0);
     texture_tex0 = get_effect_texture(font_texture_index);
     {
-        struct TextRegion *window;
         struct TextRegion c = {text_vertical_inset,
                                label->height - text_vertical_inset,
                                1,
@@ -228,7 +230,6 @@ int render_configured_text_label(struct MenuScreen *label) {
                                text_style,
                                .subpixel_y_sixteenths = -(label->data.label.scroll_offset & 0xF)};
 
-        window = &c;
         if (label->data.label.flags & 0x10000) {
             c.bottom = label->height - 1;
         }
@@ -236,7 +237,7 @@ int render_configured_text_label(struct MenuScreen *label) {
                               fast_tween_color(panel_clear_color_gp, 0x80FFA888, 0.5f), 0x80FFA888);
         c.flags |= 4;
         font_print_window(&c, color, text, -1, texture_tex0, font);
-        window->flags = c.flags ^ 4;
+        c.flags ^= 4;
         draw_flags = label->data.label.flags;
         text_extent = c.rendered_height + 4;
         visible_height = c.bottom - c.top;
@@ -296,5 +297,4 @@ int render_configured_text_label(struct MenuScreen *label) {
 
 extern __typeof__(render_configured_text_label) func_0021A328
     __attribute__((alias("FUN_0021a328")));
-
 #endif /* NON_MATCHING */

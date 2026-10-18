@@ -1,8 +1,8 @@
 /* Ported from rac1-decomp (src/game/pause.c, func_00225FB8). */
 #include "qcopy.h"
 #include "rnc/ui/menus/pause_moby.h"
+#include "rnc/ui/menus/menu_globals.h"
 extern void copy_matrix3x4(void *, void *) __asm__("func_001FA2B8");
-extern char preview_binding_table[] __asm__("D_001863D0");
 extern char preview_binding_table_alias[] __asm__("D_001863D0");
 extern int advance_moby_animation(void *) __asm__("FUN_0020d580");
 extern void refresh_moby_spatial_bounds(void *) __asm__("FUN_0020def8");
@@ -26,16 +26,16 @@ void update_menu_preview_animation_transform(PauseMoby *moby) {
     normalize_vector_triplet(moby->basis);
     refresh_moby_spatial_bounds_from_basis(moby);
     if (moby->oclass == 0x1B1) {
-        noop_callback_s(preview_binding_table_alias, preview_binding_table, moby->resource_address,
+        noop_callback_s(preview_binding_table_alias, menu_item_info, moby->resource_address,
                         6, source_moby_address);
     } else {
-        noop_callback_s(preview_binding_table_alias, preview_binding_table, moby->resource_address,
+        noop_callback_s(preview_binding_table_alias, menu_item_info, moby->resource_address,
                         0, source_moby_address);
     }
     moby->binding_state = 0;
-    moby->primary_binding = preview_binding_table;
+    moby->primary_binding = (char *)menu_item_info;
     moby->binding_blend_word = 0;
-    moby->secondary_binding = preview_binding_table;
+    moby->secondary_binding = (char *)menu_item_info;
 }
 
 extern __typeof__(update_menu_preview_animation_transform) func_00224D28

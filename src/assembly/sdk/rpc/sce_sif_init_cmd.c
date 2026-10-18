@@ -41,7 +41,7 @@ extern s32 LookupTable[32] __asm__("D_00154F80");
 extern s32 AddDmacHandler();
 extern s32 DIntr();
 extern s32 EnableInterrupts();
-extern s32 FlushCache();
+extern void FlushCache(s32);
 extern s32 enable_dmac() __asm__("func_00119160");
 extern s32 sceSifGetReg();
 extern s32 sceSifSetDChain();

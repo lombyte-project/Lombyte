@@ -4,6 +4,8 @@
 #include "types.h"
 #include "rnc/rendering/resident_class.h"
 
+struct TieInstance;
+
 typedef struct {
     u64 tex0;
     u64 pad8;
@@ -33,10 +35,12 @@ typedef struct {
     u8 stream_counts[3];
     u8 record_count;
     u8 pad24[2];
-    s16 runtime_index;
-    s32 runtime_data;
+    u16 instance_count;                 /* 0x26 */
+    struct TieInstance *first_instance; /* 0x28 */
     ObjectRenderRecord *records;
-    u8 pad30[0x16];
+    f32 bounding_sphere[4]; /* 0x30: center xyz, radius */
+    f32 unk40;              /* 0x40 */
+    u8 pad44[2];
     u16 class_slot;
     f32 scale;
 } ObjectRenderClass;

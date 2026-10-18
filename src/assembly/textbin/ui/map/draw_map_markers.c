@@ -37,12 +37,13 @@ void draw_map_markers(s32 left, s32 top, s32 right, s32 bottom) {
     s16 *references;
     u8 *texture;
     u8 width_log2;
+    s32 *one_ptr;
     u8 height_log2;
 
     one = 1;
-    remaining = level_map_selection.marker_count - 1;
+    remaining = level_map_selection.marker_count;
     marker = level_map_selection.markers;
-    for (; remaining != -1; remaining--) {
+    for (remaining--; remaining != -1; remaining--) {
         world_to_map_coords(&normalized_x, &normalized_y, current_level_index, marker->x,
                             marker->y);
         offset_x = (s32)((f32)(right - left) * normalized_x);
@@ -64,15 +65,16 @@ void draw_map_markers(s32 left, s32 top, s32 right, s32 bottom) {
             texture_index = resolve_indexed_texture_variant(marker->texture_group,
                                                             marker->texture_variant_or_color);
             references = (s16 *)hud_state.frame_refs;
+            one_ptr = &one;
             texture = (u8 *)hud_state.image_pages + references[texture_index * 2 + 1] * 8;
             width_log2 = texture[6];
             height_log2 = texture[7];
             scale = (2.0f * marker_scale_by_level[selected_map_state.level] + 5.0f) /
                     13.0f;
-            full_width_scaled = scale * (f32)(one << (width_log2 + 4));
+            full_width_scaled = scale * (f32)(*one_ptr << (width_log2 + 4));
             append_indexed_screen_sprite(
                 texture_index, screen_x - (s32)(scale * (f32)(one << (width_log2 + 3))),
-                screen_y - (s32)(scale * (f32)(one << (height_log2 + 3))),
+                screen_y - (s32)(scale * (f32)(*one_ptr << (height_log2 + 3))),
                 (s32)full_width_scaled, (s32)(scale * (f32)(one << (height_log2 + 4))), 0x80);
         }
         marker++;

@@ -55,8 +55,8 @@ void register_shrub_render_class(ShrubRenderClass *render_class,
     fixed_threshold = convert_float_to_word(render_class->scale * 1024.0f);
     shrub_render_class_fixed_thresholds[registered_shrub_render_class_count] = fixed_threshold;
     registered_shrub_render_class_count++;
-    render_class->runtime_data = 0;
-    render_class->runtime_count = 0;
+    render_class->first_instance = 0;
+    render_class->instance_count = 0;
     if (render_class->packed_geometry != 0) {
         render_class->packed_geometry += (s32)render_class;
     }

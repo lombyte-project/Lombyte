@@ -1,14 +1,5 @@
 #include "types.h"
-#include "asm.h"
 #include "rnc/globals.h"
-
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/expected/asm/assembly/textbin/gameplay/state/transition_do_transition/"
-            "FUN_001eb798.s",
-            FUN_001eb798);
-#else
-#include "rnc/globals.h"
-#include "types.h"
 #include "rnc/storage/disc_table.h"
 #include "sda.h"
 
@@ -59,7 +50,7 @@ extern void read_global_table_entry(void) __asm__("ReadGlobalTableEntry");
 extern s32 rand(void);
 extern void sceGsResetGraph(s16 mode, s16 inter, s16 out, s16 ff);
 extern s32 sceGsSyncV(s32 mode);
-extern s32 reset_vif1_gif() __asm__("func_001204B8");
+extern s32 reset_vif1_gif() __asm__("FUN_001204b8");
 extern s32 snd_flush_sound_commands() __asm__("func_0012DC80");
 extern s32 snd_reset_state_and_flush_commands() __asm__("func_0012EB00");
 extern void start_level(int level) __asm__("FUN_001e9488");
@@ -69,8 +60,8 @@ extern void transition_default_draw() __asm__("FUN_001eb410");
 extern s32 is_active_state_entry(s32 arg0, s32 arg1) __asm__("FUN_001eb740");
 extern s32 set_pal_mode() __asm__("func_001F34E8");
 extern void fade_to_black(s32) __asm__("func_001F4A58");
-extern s32 scale_game_frames() __asm__("func_001F96F8");
-extern void put_draw_buffer_large(void) __asm__("func_001FB2D0");
+extern s32 scale_game_frames() __asm__("FUN_001f96f8");
+extern void put_draw_buffer_large(void) __asm__("FUN_001fb2d0");
 extern void put_draw_buffer_small(void) __asm__("func_001FB3D0");
 extern void append_palette_transfer_packet() __asm__("func_001FB6E0");
 extern void init_hud(void) __asm__("FUN_001fee88");
@@ -219,4 +210,5 @@ void transition_do_transition(void) {
     }
     gs_texture_allocation_cursor = gs_texture_allocation_start = D_0015EE8C;
 }
-#endif /* NON_MATCHING */
+
+extern __typeof__(transition_do_transition) func_001EB798 __attribute__((alias("FUN_001eb798")));

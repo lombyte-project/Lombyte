@@ -1,37 +1,12 @@
 #include "types.h"
-#include "asm.h"
-
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/expected/asm/assembly/textbin/ui/menus/update_menu_grid_selection/FUN_0021b858.s", FUN_0021b858);
-#else
-#include "types.h"
+#include "rnc/gameplay/hero.h"
+#include "rnc/gameplay/state/item_state.h"
+#include "rnc/input/pad_state.h"
+#include "rnc/ui/menus/menu_globals.h"
+#include "rnc/ui/menus/menu_screen.h"
 #include "rnc/ui/menus/menu_system.h"
 
-#include "rnc/ui/menus/menu_screen.h"
-
-typedef struct {
-    u8 pad0[0x1C4];
-    s32 pressed_buttons;
-} MenuControllerState;
-
-typedef struct {
-    u8 pad0[0x8];
-    s32 slot;
-    u8 padC[0x40];
-} MenuItemInfo;
-
-typedef struct {
-    u8 pad0[0x1FF5];
-    u8 gadget_enabled;
-    u8 pad1FF6;
-    u8 gadget_count;
-} MenuPlayerState;
-
-extern MenuControllerState controller_state __asm__("D_0013C940");
-#include "rnc/gameplay/state/item_state.h"
-extern MenuPlayerState player_state __asm__("D_0013F350");
-extern MenuItemInfo menu_item_info[] __asm__("D_001863D0");
-extern s32 func_001E9468();
+extern int fun_001e9468(s32 item) __asm__("func_001E9468");
 extern s32 allocate_voice_for_target_entry() __asm__("func_0022DA68");
 
 s32 update_menu_grid_selection(struct MenuScreen *grid) __asm__("FUN_0021b858");
@@ -56,10 +31,10 @@ s32 update_menu_grid_selection(struct MenuScreen *grid) {
     if (menu_system.current->focus != grid) {
         return 0;
     }
-    if ((controller_state.pressed_buttons & 0xD00) && menu_system.close_locked == 0) {
+    if ((controller_state.pressed_unmasked & 0xD00) && menu_system.close_locked == 0) {
         return 1;
     }
-    if (controller_state.pressed_buttons & 0x10) {
+    if (controller_state.pressed_unmasked & 0x10) {
         back_page = menu_system.current->back;
         if (back_page != 0) {
             menu_system.next = back_page;
@@ -77,7 +52,7 @@ s32 update_menu_grid_selection(struct MenuScreen *grid) {
 
     /* Process every pressed direction in order; a page change can also adjust
        column before the following direction checks. */
-    if (controller_state.pressed_buttons & 0x1000) {
+    if (controller_state.pressed_unmasked & 0x1000) {
         if (row != 0) {
             grid->data.grid.selected_cell -= column_count;
         } else if (grid->data.grid.up != NULL) {
@@ -113,7 +88,7 @@ s32 update_menu_grid_selection(struct MenuScreen *grid) {
         }
     }
 
-    if (controller_state.pressed_buttons & 0x4000) {
+    if (controller_state.pressed_unmasked & 0x4000) {
         if (row + 1 < row_count) {
             grid->data.grid.selected_cell = grid->data.grid.selected_cell + column_count;
         } else if (grid->data.grid.down != NULL) {
@@ -149,7 +124,7 @@ s32 update_menu_grid_selection(struct MenuScreen *grid) {
         }
     }
 
-    if (controller_state.pressed_buttons & 0x8000) {
+    if (controller_state.pressed_unmasked & 0x8000) {
         if (column != 0) {
             grid->data.grid.selected_cell = grid->data.grid.selected_cell - 1;
         } else if (grid->data.grid.left != NULL) {
@@ -159,7 +134,7 @@ s32 update_menu_grid_selection(struct MenuScreen *grid) {
         }
     }
 
-    if (controller_state.pressed_buttons & 0x2000) {
+    if (controller_state.pressed_unmasked & 0x2000) {
         if (column + 1 < column_count) {
             grid->data.grid.selected_cell = grid->data.grid.selected_cell + 1;
         } else if (grid->data.grid.right != NULL) {
@@ -173,7 +148,7 @@ s32 update_menu_grid_selection(struct MenuScreen *grid) {
         allocate_voice_for_target_entry(1, 0x11, grid->moby);
     }
 
-    if ((controller_state.pressed_buttons & 0x40) && ((grid->data.grid.flags ^ 1) & 1)) {
+    if ((controller_state.pressed_unmasked & 0x40) && ((grid->data.grid.flags ^ 1) & 1)) {
         entry = &grid->data.grid.cells[grid->data.grid.selected_cell];
         if (entry->id != 0 && item_available[entry->id] != 0) {
             slot = menu_item_info[entry->id].slot;
@@ -181,14 +156,14 @@ s32 update_menu_grid_selection(struct MenuScreen *grid) {
             if (menu_system.equipped[slot] == entry->id && slot != 0 && slot != 3) {
                 menu_system.equipped[slot] = 0;
             } else if (entry->id == 0x18) {
-                if (func_001E9468(0x18) != 0 && menu_system.state == 3) {
-                    next_columns = func_001E9468(0x18);
-                    player_state.gadget_enabled = 1;
-                    total = player_state.gadget_count + next_columns;
+                if (fun_001e9468(0x18) != 0 && menu_system.state == 3) {
+                    next_columns = fun_001e9468(0x18);
+                    hero.unk1FF5 = 1;
+                    total = hero.ammo_capacity + next_columns;
                     if (total > 6) {
                         total = 6;
                     }
-                    player_state.gadget_count = total;
+                    hero.ammo_capacity = total;
                 }
             } else {
                 menu_system.equipped[slot] = entry->id;
@@ -201,5 +176,3 @@ s32 update_menu_grid_selection(struct MenuScreen *grid) {
 }
 
 extern __typeof__(update_menu_grid_selection) func_0021B858 __attribute__((alias("FUN_0021b858")));
-
-#endif /* NON_MATCHING */

@@ -2,6 +2,7 @@
 #define LOMBYTE_RNC_RENDERING_DRAW_ENVIRONMENT_H
 
 #include "types.h"
+#include "sda.h"
 
 /* GS drawing environment as A+D register/data pairs, filled by set_pal_mode. */
 typedef struct GraphicsDrawEnvironment {
@@ -24,7 +25,7 @@ typedef struct GraphicsDrawEnvironment {
 } GraphicsDrawEnvironment;
 
 extern GraphicsDrawEnvironment draw_environment __asm__("D_0013CF10");
-extern u64 depth_buffer_register __asm__("D_0013D100");
-extern u64 masked_depth_buffer_register __asm__("D_0013D170");
+extern u64 depth_buffer_register __asm__("D_0013D100") NOT_SDA;
+extern u64 masked_depth_buffer_register __asm__("D_0013D170") NOT_SDA;
 
 #endif /* LOMBYTE_RNC_RENDERING_DRAW_ENVIRONMENT_H */

@@ -1,0 +1,16 @@
+diff --git a/gcc/resource.c b/gcc/resource.c
+--- a/gcc/resource.c
++++ b/gcc/resource.c
+@@ -705,6 +705,12 @@ mark_set_resources (x, res, in_dest, include_delayed_effects)
+       mark_set_resources (XEXP (x, 2), res, 0, 0);
+       return;
+ 
++    /* No insn may move across a conditional trap into a delay slot;
++       mark_referenced_resources says the same.  */
++    case TRAP_IF:
++      res->volatil = 1;
++      break;
++
+     case MEM:
+       if (in_dest)
+ 	{

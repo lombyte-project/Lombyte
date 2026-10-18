@@ -28,15 +28,15 @@ int build_pause_item_list(void) {
         int id = D_001CF120[i].id;
         if (item_available[id] != 0) {
             Item0A *out = &D_001D60E0[n];
-            char *rec = preview_binding_table + id * 0x4C;
+            MenuItemInfo *rec = &menu_item_info[id];
             unsigned char b = item_text_variant[id];
             int f = b != 0;
-            out->a = *(unsigned short *)(rec + 0x38);
+            out->a = rec->unk38;
             out->b = f << 2;
             out->c = 0;
             out->id = id;
             out->idx = i;
-            D_001D6178[n] = b ? *(short *)(rec + 0x42) : *(short *)(rec + 0x40);
+            D_001D6178[n] = b ? rec->unk42 : rec->unk40;
             n++;
         }
     }
