@@ -789,8 +789,8 @@ void FUN_L15_002eb6b8(void) {
     int val = 0;
     char *s = D_L15_0016CE60;
     int n;
-    char *s2;
-    char *s3;
+    char *second_message_timing_state;
+    char *third_message_timing_state;
     if (*(int *)(s + 0x30) == 3) {
         if (scale_game_frames(0xB5) < *(int *)(s + 0x34)) {
             if (*(int *)(s + 0x34) < scale_game_frames(0x104)) {
@@ -799,20 +799,20 @@ void FUN_L15_002eb6b8(void) {
                 val = (*(int *)(s + 0x34) - scale_game_frames(0xB5)) >> 2;
             }
         }
-        s2 = D_L15_0016CE60;
-        if (scale_game_frames(0x1C2) < *(int *)(s2 + 0x34)) {
-            if (*(int *)(s2 + 0x34) < scale_game_frames(0x280)) {
+        second_message_timing_state = D_L15_0016CE60;
+        if (scale_game_frames(0x1C2) < *(int *)(second_message_timing_state + 0x34)) {
+            if (*(int *)(second_message_timing_state + 0x34) < scale_game_frames(0x280)) {
                 flag = 1;
                 sprintf(buf, D_L15_00162190, msg_string(0x526B));
-                val = (*(int *)(s2 + 0x34) - scale_game_frames(0x1C2)) >> 2;
+                val = (*(int *)(second_message_timing_state + 0x34) - scale_game_frames(0x1C2)) >> 2;
             }
         }
-        s3 = D_L15_0016CE60;
-        if (scale_game_frames(0x2EE) < *(int *)(s3 + 0x34)) {
-            if (*(int *)(s3 + 0x34) < scale_game_frames(0x3A2)) {
+        third_message_timing_state = D_L15_0016CE60;
+        if (scale_game_frames(0x2EE) < *(int *)(third_message_timing_state + 0x34)) {
+            if (*(int *)(third_message_timing_state + 0x34) < scale_game_frames(0x3A2)) {
                 flag = 1;
                 sprintf(buf, D_L15_00162190, msg_string(0x526C));
-                val = (*(int *)(s3 + 0x34) - scale_game_frames(0x2EE)) >> 2;
+                val = (*(int *)(third_message_timing_state + 0x34) - scale_game_frames(0x2EE)) >> 2;
             }
         }
     } else if (*(int *)(s + 0x30) == 4) {
