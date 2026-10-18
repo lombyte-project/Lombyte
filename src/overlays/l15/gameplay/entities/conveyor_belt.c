@@ -251,6 +251,10 @@ extern void mine_blast_mobys(void *, void *, void *, int, int, int, int, int, fl
 
 void poison_vessel_update(Moby_2E9358 *moby) __asm__("FUN_L15_002e7f68");
 void poison_vessel_update(Moby_2E9358 *moby) {
+    enum {
+        POISON_VESSEL_FREE_FLIGHT = 0,
+        POISON_VESSEL_FOLLOW_TARGET = 1
+    };
     Vec_2E9358 previous_position;
     Vec_2E9358 s30;
     Vec_2E9358 temporary_vector;
@@ -275,7 +279,7 @@ void poison_vessel_update(Moby_2E9358 *moby) {
 
     state = moby->state;
     switch (state) {
-    case 0:
+    case POISON_VESSEL_FREE_FLIGHT:
         data->f8 = data->f8 - D_L15_00161FBC * frame_time_sq;
         func_L00_001FF240_2E9358(&temporary_vector, &moby->pos, data);
         if (collision_line(&previous_position, &moby->pos, 0x10, moby, 0)) {
@@ -292,7 +296,7 @@ void poison_vessel_update(Moby_2E9358 *moby) {
             }
         }
         break;
-    case 1:
+    case POISON_VESSEL_FOLLOW_TARGET:
         probe_ground_height(&moby->pos, 0, 0.5f);
         if (data->target != 0) {
             Moby_2E9358 *t = data->target;
