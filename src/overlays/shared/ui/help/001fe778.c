@@ -95,6 +95,9 @@ extern CollisionHit HH __asm__("D_L15_00174440") __attribute__((section(".data")
 
 extern struct Hero hero_lui __asm__("D_0013F350") __attribute__((section(".data")));
 void FUN_L15_0020a7a0(void) {
+    enum {
+        GRAVITY_WORLD_DOWN = 0
+    };
     V shared_ray_endpoint, ground_ray_endpoint, v20, surface_probe_endpoint, v40, probe_surface_angles, probe_surface_normal;
     f32 f;
     s32 r;
@@ -203,7 +206,7 @@ tail:
 d1:
     FUN_001f99f8_c(&hero.gravity_dir);
     switch (hero.unk20B3) {
-    case 0:
+    case GRAVITY_WORLD_DOWN:
         hero.gravity_dir.f[2] = -1.0f;
         break;
     case 1:
