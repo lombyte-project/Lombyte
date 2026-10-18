@@ -47,6 +47,10 @@ extern s32 iSignalSema(s32);
 extern void *memcpy(void *, const void *, u32);
 
 void _sceFs_Rcv_Intr(s32 *arg) {
+    enum {
+        FS_COMPLETION_COPY_DIRENT = 11,
+        FS_COMPLETION_COPY_STAT = 12
+    };
     FsRcvHead h;
     FsRcvHead *src;
     FsRcvBuf *bs;
@@ -95,11 +99,11 @@ void _sceFs_Rcv_Intr(s32 *arg) {
             }
         }
         break;
-    case 11:
+    case FS_COMPLETION_COPY_DIRENT:
         u.p = *(FsRcvPtr *)(pkt + 0x14);
         *(FsDirent *)u.p.dest = *(FsDirent *)(pkt + 0x18);
         break;
-    case 12:
+    case FS_COMPLETION_COPY_STAT:
         u.p = *(FsRcvPtr *)(pkt + 0x14);
         *(FsStat *)u.p.dest = *(FsStat *)(pkt + 0x18);
         break;
