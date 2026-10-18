@@ -2183,7 +2183,7 @@ void taxi_update(struct Moby *moby) {
         TAXI_WAIT_FOR_ACTIVATION = 6
     };
     char *d = (char *)moby->pvars;
-    float old_position[4], old_rotation[4], position_delta[4], v30[4], interpolation_end_position[4], interpolation_start_angles[4], interpolation_end_angles[4], hero_offset[4];
+    float old_position[4], old_rotation[4], position_delta[4], rotation_or_start_position_scratch[4], interpolation_end_position[4], interpolation_start_angles[4], interpolation_end_angles[4], hero_offset[4];
     struct Hero *g;
     struct Hero *g2;
     float z;
@@ -2204,10 +2204,10 @@ void taxi_update(struct Moby *moby) {
     case TAXI_WAIT_FOR_PICKUP:
         g = &hero;
         if (((char *)g->ground_moby) == moby && g->air_frames.s == 0) {
-            transpose_rotation_matrix(v30, &moby->rot_row0);
+            transpose_rotation_matrix(rotation_or_start_position_scratch, &moby->rot_row0);
             subtract_vector_xyz(hero_offset, &g->motion.pos, &moby->pos);
             hero_offset[3] = 0;
-            FUN_001f9d20(hero_offset, hero_offset, v30);
+            FUN_001f9d20(hero_offset, hero_offset, rotation_or_start_position_scratch);
             if (absolute_float(hero_offset[1]) < 1.2f && hero_offset[0] < 1.0f && hero_offset[0] > -0.75f) {
                 FUN_L05_003193a8_u(moby);
                 FUN_L05_00319690(moby);
@@ -2227,14 +2227,14 @@ void taxi_update(struct Moby *moby) {
     case TAXI_BLEND_TO_PATH_START:
         advance_accelerated_scalar_c(1.0f, frame_time_sq, frame_time_sq, frame_time * 0.5f,
                                      (float *)(d + 0xC0), (float *)(d + 0xC4));
-        qa = v30;
+        qa = rotation_or_start_position_scratch;
         s = *(int *)(d + 0x80 - (-(*(short *)(d + 0xB4) * 4)));
         tab = D_L05_001600EC_p;
         qcopy(qa, tab[s].position);
         qcopy(interpolation_start_angles, tab[s].direction);
         z = 0.0f;
         func_00215CA8_f5848(z, *(int **)(d + 0xAC), 0, interpolation_end_position, interpolation_end_angles, 0);
-        lerp_vector(d + 0x60, v30, interpolation_end_position, *(float *)(d + 0xC0));
+        lerp_vector(d + 0x60, rotation_or_start_position_scratch, interpolation_end_position, *(float *)(d + 0xC0));
         *(float *)(d + 0x74) = fast_add_rotations(
             fast_subtract_rotations(interpolation_end_angles[1], interpolation_start_angles[1]) * *(float *)(d + 0xC0), interpolation_start_angles[1]);
         *(float *)(d + 0x78) = fast_add_rotations(
@@ -2260,8 +2260,8 @@ void taxi_update(struct Moby *moby) {
         tab = D_L05_001600EC_p;
         qcopy(qa, tab[s].position);
         qcopy(interpolation_end_angles, tab[s].direction);
-        sample_camera_path(*(int **)(d + 0xAC), 0, v30, interpolation_start_angles, 0, (float)**(int **)(d + 0xAC));
-        lerp_vector(d + 0x60, v30, interpolation_end_position, *(float *)(d + 0xC0));
+        sample_camera_path(*(int **)(d + 0xAC), 0, rotation_or_start_position_scratch, interpolation_start_angles, 0, (float)**(int **)(d + 0xAC));
+        lerp_vector(d + 0x60, rotation_or_start_position_scratch, interpolation_end_position, *(float *)(d + 0xC0));
         *(float *)(d + 0x74) = fast_add_rotations(
             fast_subtract_rotations(interpolation_end_angles[1], interpolation_start_angles[1]) * *(float *)(d + 0xC0), interpolation_start_angles[1]);
         *(float *)(d + 0x78) = fast_add_rotations(
