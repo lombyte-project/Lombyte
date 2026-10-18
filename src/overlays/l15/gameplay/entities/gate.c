@@ -867,6 +867,8 @@ void construction_arm_update(struct Moby *moby)
         CONSTRUCTION_ARM_INITIALIZE = 0,
         CONSTRUCTION_ARM_WAIT_TO_TURN = 1,
         CONSTRUCTION_ARM_TURN_TO_TARGET_YAW = 2,
+        CONSTRUCTION_ARM_WAIT_FOR_ENTRY_ANIMATION = 3,
+        CONSTRUCTION_ARM_WAIT_FOR_EXIT_ANIMATION = 5,
         CONSTRUCTION_ARM_DESTROY = 6
     };
     UpdateVars_2938 *d = (UpdateVars_2938 *)moby->pvars;
@@ -934,7 +936,7 @@ void construction_arm_update(struct Moby *moby)
                              frame_time_sq * 1.5707964f, frame_time_sq * 0.7853982f,
                              frame_time * 0.7853982f);
         break;
-    case 3:
+    case CONSTRUCTION_ARM_WAIT_FOR_ENTRY_ANIMATION:
         if (moby->prev_seq == d->side * 2 + 1 && (moby->anim_flags & 2)) {
             d->timer = scale_game_frames(FUN_L00_00257b90(15, 45));
             animation = d->side;
@@ -971,7 +973,7 @@ void construction_arm_update(struct Moby *moby)
             moby->state = 5;
         }
         break;
-    case 5:
+    case CONSTRUCTION_ARM_WAIT_FOR_EXIT_ANIMATION:
         if (moby->prev_seq == d->side * 2 + 3 && (moby->anim_flags & 2)) {
             minimum = FUN_L15_001f8648(D_L15_00161A00 * 60.0f);
             maximum = FUN_L15_001f8648(D_L15_00161A04 * 60.0f);
