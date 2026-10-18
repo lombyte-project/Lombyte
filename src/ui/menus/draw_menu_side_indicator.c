@@ -15,7 +15,9 @@ extern void draw_rotated_sprite(float, float, int, int, int, float, float,
 /* Draws the glyph "\x10" (menu->0x38 set) or "\x11" and a gauge sprite
    below it, rotated by pi in the second case. The glyph string is a
    2-byte char struct copied onto the stack (retail's lb/lb/sb/sb). */
-int FUN_00221f58(char *menu) {
+int draw_menu_side_indicator(char *menu) __asm__("FUN_00221f58");
+
+int draw_menu_side_indicator(char *menu) {
     Glyph2 buf;
 
     setup_gif_paging(0);
@@ -37,4 +39,4 @@ int FUN_00221f58(char *menu) {
     return 2;
 }
 
-extern __typeof__(FUN_00221f58) func_00221F58 __attribute__((alias("FUN_00221f58")));
+extern __typeof__(draw_menu_side_indicator) func_00221F58 __attribute__((alias("FUN_00221f58")));
