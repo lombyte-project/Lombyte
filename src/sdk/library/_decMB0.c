@@ -23,7 +23,7 @@ extern void _sendIpuCommand();
 extern void _waitIpuIdle();
 extern void receiveDataFromIPU();
 int _decMB0(struct MpegDecoder *decoder, int *mb_type, int *motion_type, int *dct_type_out, struct MpegMbState *motion_vector_state,
-            int *motion_field_select, int arg6) {
+            int *motion_field_select, int differential_motion_vector) {
     int *sp20;
     int *sp24;
     u32 g1;
@@ -89,22 +89,22 @@ int _decMB0(struct MpegDecoder *decoder, int *mb_type, int *motion_type, int *dc
     }
     if (((*mb_type) & 8) || (((*mb_type) & 1) && (decoder->concealment_motion_vectors != 0))) {
         if (decoder->unk848 != 0) {
-            _motionVectors(decoder, motion_vector_state, arg6, sp24, 0, var_19_84, var_20_86, decoder->f_code_forward_h - 1,
+            _motionVectors(decoder, motion_vector_state, differential_motion_vector, sp24, 0, var_19_84, var_20_86, decoder->f_code_forward_h - 1,
                            decoder->f_code_forward_v - 1, motion_flag, var_23_95);
         } else {
             temp_7_163 = decoder->unk158 - 1;
-            _motionVector(decoder, motion_vector_state, arg6, temp_7_163, temp_7_163, 0, 0, decoder->unk154);
+            _motionVector(decoder, motion_vector_state, differential_motion_vector, temp_7_163, temp_7_163, 0, 0, decoder->unk154);
         }
     }
     var_2_172 = 0;
     if (decoder->unk11C == 0) {
         if ((*mb_type) & 4) {
             if (decoder->unk848 != 0) {
-                _motionVectors(decoder, motion_vector_state, arg6, sp24, 1, var_19_84, var_20_86, decoder->f_code_backward_h - 1,
+                _motionVectors(decoder, motion_vector_state, differential_motion_vector, sp24, 1, var_19_84, var_20_86, decoder->f_code_backward_h - 1,
                                decoder->f_code_backward_v - 1, 0, var_23_95);
             } else {
                 temp_7_200 = decoder->unk160 - 1;
-                _motionVector(decoder, ((u8 *)motion_vector_state) + 8, arg6, temp_7_200, temp_7_200, 0, 0,
+                _motionVector(decoder, ((u8 *)motion_vector_state) + 8, differential_motion_vector, temp_7_200, temp_7_200, 0, 0,
                               decoder->unk15C);
             }
         }
