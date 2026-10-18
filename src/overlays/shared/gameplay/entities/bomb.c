@@ -979,10 +979,10 @@ int FUN_L00_002caf10(char *a) {
     return r;
 }
 /* Returns the word at +0x14 of the moby data, or 0 when either pointer is null. */
-s32 FUN_L00_002caf40(s32 arg0) {
+s32 FUN_L00_002caf40(s32 moby_address) {
     s32 ptr;
-    if (arg0 != 0) {
-        ptr = *(s32 *)((u8 *)arg0 + 0x78);
+    if (moby_address != 0) {
+        ptr = *(s32 *)((u8 *)moby_address + 0x78);
         if (ptr != 0) {
             return *(s32 *)((u8 *)ptr + 0x14);
         }
