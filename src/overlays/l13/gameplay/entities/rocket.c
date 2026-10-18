@@ -1989,12 +1989,16 @@ extern void FUN_L00_0028e8a0(void *);
 extern int memcard_save_data(int, int) __asm__("FUN_0020b178");
 
 void FUN_L13_0030b628(struct Moby *moby) {
+    enum {
+        START_INITIAL_SCENE = 1,
+        CHECK_CLIP_VOLUME_FOR_SCENE = 4
+    };
     int *data = (int *)moby->pvars;
     switch (moby->state) {
     case 0:
         if (D_L13_0015F5C4 == 0) moby->state = 1;
         break;
-    case 1:
+    case START_INITIAL_SCENE:
         if (alternate_item_available[0x64] == 0) {
             alternate_item_available[0x64] = 1;
             moby->state = 2;
@@ -2009,7 +2013,7 @@ void FUN_L13_0030b628(struct Moby *moby) {
     case 3:
         moby->state = 4;
         break;
-    case 4: {
+    case CHECK_CLIP_VOLUME_FOR_SCENE: {
         if (alternate_item_available[0x65] == 0) {
             if (data[0] == -1)
                 goto set_state_4;
