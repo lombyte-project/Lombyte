@@ -1386,7 +1386,7 @@ extern float coll_hit_normal[] __asm__("D_L00_00173E80") __attribute__((section(
 void robot_arm_update(char *m) __asm__("FUN_L00_002e3d88");
 void robot_arm_update(char *m) {
     char *d = *(char **)(m + 0x78);
-    float a20[4];
+    float effect_offset_or_world_position[4];
     float rotation_step_basis[12];
     float offset_after_rotation[4];
     float rotation_offset_delta[4];
@@ -1410,13 +1410,13 @@ void robot_arm_update(char *m) {
         }
         break;
     case 2:
-        transform_vector_by_basis(a20, d + 0x20, m + 0xC0);
-        add_vector_xyz(a20, a20, m + 0x10);
+        transform_vector_by_basis(effect_offset_or_world_position, d + 0x20, m + 0xC0);
+        add_vector_xyz(effect_offset_or_world_position, effect_offset_or_world_position, m + 0x10);
         if (*(int *)(d + 0x34) & 2) {
-            FUN_L00_0025f3e8(m, a20, -1, *(float *)(d + 0x2C) * 0.5f, 0.0f);
+            FUN_L00_0025f3e8(m, effect_offset_or_world_position, -1, *(float *)(d + 0x2C) * 0.5f, 0.0f);
         } else {
             float h = *(float *)(d + 0x2C) * 0.5f;
-            spawn_explosion(m, D_L00_0015F580, a20, 0.0f, 0.0f, 5, *(float *)(d + 0x2C), 3, h, 9.0f, 5, h, -1, 0.0f, 0, 0, -1, 0);
+            spawn_explosion(m, D_L00_0015F580, effect_offset_or_world_position, 0.0f, 0.0f, 5, *(float *)(d + 0x2C), 3, h, 9.0f, 5, h, -1, 0.0f, 0, 0, -1, 0);
         }
         mark_moby_for_removal(m);
         return;
@@ -1430,10 +1430,10 @@ void robot_arm_update(char *m) {
     }
     rotation_step_euler = d + 0x10;
     vu_euler_rotation_basis(rotation_step_basis, rotation_step_euler);
-    transform_vector_by_basis(a20, d + 0x20, m + 0xC0);
+    transform_vector_by_basis(effect_offset_or_world_position, d + 0x20, m + 0xC0);
     multiply_matrix_basis_columns(m + 0xC0, rotation_step_basis, m + 0xC0);
     transform_vector_by_basis(offset_after_rotation, d + 0x20, m + 0xC0);
-    subtract_vector_xyz(rotation_offset_delta, offset_after_rotation, a20);
+    subtract_vector_xyz(rotation_offset_delta, offset_after_rotation, effect_offset_or_world_position);
     subtract_vector_xyz((float *)(m + 0x10), (float *)(m + 0x10), rotation_offset_delta);
     add_vector_xyz(m + 0x10, m + 0x10, d);
     r = *(float *)(d + 0x2C);
