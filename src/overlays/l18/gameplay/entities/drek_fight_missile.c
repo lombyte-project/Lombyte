@@ -534,9 +534,9 @@ extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 void FUN_L18_002f16f0(struct Moby *moby) {
     VData *d = (VData *)moby->pvars;
     if (d) {
-        float a1 = D_L18_00162290 * frame_time_sq;
-        float a2 = D_L18_00162294 * frame_time_sq;
-        float a3 = D_L18_00162298 * frame_time;
+        float initial_acceleration_step = D_L18_00162290 * frame_time_sq;
+        float initial_braking_step = D_L18_00162294 * frame_time_sq;
+        float initial_maximum_speed = D_L18_00162298 * frame_time;
         float b1 = D_L18_0016229C * frame_time_sq;
         float b2 = D_L18_001622A0 * frame_time_sq;
         float b3 = D_L18_001622A4 * frame_time;
@@ -574,7 +574,7 @@ void FUN_L18_002f16f0(struct Moby *moby) {
             unsigned char *p;
             if (D_L18_00162288 != 0) {
                 if (d->f330 < 1.5f) {
-                    advance_accelerated_scalar(1.5f, a1, a2, a3, &d->f330, &d->f334);
+                    advance_accelerated_scalar(1.5f, initial_acceleration_step, initial_braking_step, initial_maximum_speed, &d->f330, &d->f334);
                 } else {
                     advance_accelerated_scalar(2.0f, b1, b2, b3, &d->f330, &d->f334);
                 }
