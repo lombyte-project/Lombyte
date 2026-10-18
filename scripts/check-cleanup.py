@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Check a change against the rules in docs/code-cleanup.md and docs/recovered-names.md.
+"""Check a change against the rules in docs/code-cleanup.md.
 
 Every check runs on the base tree and on the working tree.  Only problems the
 change adds are reported, so older code on main never fails the check; a
@@ -22,7 +22,6 @@ import ast
 import bisect
 import collections
 import importlib.util
-import json
 import re
 import subprocess
 import sys
@@ -36,10 +35,8 @@ SCRIPTS = Path(__file__).resolve().parent
 
 # Files read from the base revision.
 TREE = ["src", "include", "configure.py", "config/us/rnc1.us.yaml",
-        "config/us/recovered_names.json", "config/us/symbol_addrs.txt",
-        "config/overlays/us/functions.tsv"]
+        "config/us/symbol_addrs.txt", "config/overlays/us/functions.tsv"]
 YAML = "config/us/rnc1.us.yaml"
-NAMES = "config/us/recovered_names.json"
 TEXT_SUFFIXES = {".c", ".h", ".py", ".md", ".json", ".yaml", ".yml", ".sh", ".txt",
                  ".tsv", ".s", ".inc", ".ld", ".toml", ".cfg"}
 # A line with this marker is skipped by the forbidden-mention scan (its own patterns, test data).
@@ -523,84 +520,9 @@ def route_exceptions(root: Path) -> dict:
     return {}
 
 
-ENTRY_KEYS = {"unit", "source_path", "address", "current_name", "proposed_name", "logical_group",
-              "status", "confidence", "evidence"}
-SYMBOL_KEYS = {"name", "unit", "unit_size", "match", "address", "unit_address"}
-
-
-def check_recovered_names(tree: Tree) -> list[Problem]:
-    raw = read(tree.root, NAMES)
-    if not raw:
-        return []
-    out = []
-
-    def bad(msg):
-        out.append(Problem("recovered-names", NAMES, msg))
-    try:
-        data = json.loads(raw)
-    except json.JSONDecodeError as e:
-        bad(f"not valid JSON: {e}")
-        return out
-    if raw != json.dumps(data, indent=2, ensure_ascii=False) + "\n":
-        bad("not formatted as json.dumps(indent=2, ensure_ascii=False) plus a newline")
-    if data.get("schema") != "rnc-recovered-names-v2":
-        bad("schema is not rnc-recovered-names-v2")
-    symbols = data.get("symbols", [])
-    for s in symbols:
-        if set(s) != SYMBOL_KEYS:
-            bad(f"symbol {s.get('name')}: fields must be {', '.join(sorted(SYMBOL_KEYS))}")
-        if s.get("match") not in ("full", "fragment", "entry_size_unknown", "no_unit"):
-            bad(f"symbol {s.get('name')}: match {s.get('match')!r} is not full, fragment, "
-                "entry_size_unknown or no_unit")
-    counts = collections.Counter(s.get("match") for s in symbols)
-    if data.get("match_counts") and {k: counts.get(k, 0) for k in data["match_counts"]} != data["match_counts"]:
-        bad("match_counts do not match the symbols")
-    proposals = data.get("rename_proposals", {})
-    if proposals.get("schema") != "rnc-function-name-proposals-v1":
-        bad("rename_proposals schema is not rnc-function-name-proposals-v1")
-    seen = collections.Counter()
-    for e in proposals.get("entries", []):
-        addr = str(e.get("address", ""))
-        tag = e.get("current_name") or addr
-        seen[addr.lower()] += 1
-        if not ENTRY_KEYS <= set(e):
-            bad(f"{tag}: missing {', '.join(sorted(ENTRY_KEYS - set(e)))}")
-        if not re.fullmatch(r"0x[0-9a-fA-F]{8}", addr):
-            bad(f"{tag}: address {addr!r} is not 0x<8 hex digits>")
-        elif e.get("current_name", "").upper() != "FUN_" + addr[2:].upper():
-            bad(f"{tag}: current_name is not FUN_<address>")
-        if e.get("status") not in ("proposed", "needs_review", "unresolved"):
-            bad(f"{tag}: status {e.get('status')!r} is not proposed, needs_review or unresolved")
-        name = e.get("proposed_name")
-        if name is not None and not (SNAKE.match(name) or SDK_NAME.match(name)):
-            bad(f"{tag}: proposed_name {name} is not lower_snake_case")
-        if name is None and e.get("status") == "proposed":
-            bad(f"{tag}: status proposed without a proposed_name")
-        if name and address_in_name(name):
-            bad(f"{tag}: proposed_name {name}: {address_in_name(name)}")
-        group = str(e.get("logical_group", ""))
-        if group.split("/")[0] in ("EE", "VU", "ee", "vu"):
-            bad(f"{tag}: logical_group {group} starts with EE or VU")
-        unit = e.get("unit")
-        configured = [u for u in (unit, f"assembly/{unit}") if u in tree.units]
-        if not configured:
-            bad(f"{tag}: unit {unit} is not in {YAML}")
-        elif e.get("source_path") not in {f"src/{u}.c" for u in configured}:
-            bad(f"{tag}: source_path {e.get('source_path')} is not src/{configured[0]}.c")
-        elif e.get("status") == "proposed" and name:
-            text = tree.code.get(e["source_path"], "")
-            here = {m.group(1) for m in FUNC_DECL.finditer(text) if m.group(3).upper() == tag.upper()}
-            if here and name not in here:
-                bad(f"{tag}: proposed_name {name} but {e['source_path']} calls it {', '.join(sorted(here))}")
-    for addr, n in seen.items():
-        if n > 1:
-            bad(f"{addr}: {n} entries for one address")
-    return out
-
-
 def tree_problems(tree: Tree, base: bool = False) -> list[Problem]:
     return (check_label_names(tree, base) + check_header_duplicates(tree, base) + check_symbol_addrs(tree)
-            + check_config_paths(tree) + check_recovered_names(tree))
+            + check_config_paths(tree))
 
 
 # —— Commit and pull request text ——
@@ -776,7 +698,7 @@ def main() -> int:
     for p in problems:
         print(p)
     if problems:
-        print(f"\n{len(problems)} new problems (docs/code-cleanup.md, docs/recovered-names.md)", file=sys.stderr)
+        print(f"\n{len(problems)} new problems (docs/code-cleanup.md)", file=sys.stderr)
         return 1
     print("cleanup check: no new problems")
     return 0

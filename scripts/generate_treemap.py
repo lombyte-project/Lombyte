@@ -66,7 +66,6 @@ from overlay_units import category_of, load_levels, overlay_functions  # noqa: E
 from progress_groups import (  # noqa: E402
     committed_function_scores,
     group_for_owner,
-    load_group_assignments,
     report_category_for_owner,
     report_group_name,
 )
@@ -109,12 +108,11 @@ ROW_RE = re.compile(
 # path and its FUN_xxxx symbol) never changes; every renderer keeps it in the
 # tile tooltip.  Sources, in priority order:
 #   1. the first function name in the unit's C source,
-#   2. ``config/us/recovered_names.json`` entries with ``match == "full"``
-#      whose recovered function starts exactly at the unit start,
+#   2. a boot match in the overlay name tables (``load_overlay_names``),
 #   3. no evidence -> the unit basename (address name).
 # --------------------------------------------------------------------------
 FUNC_DEF_RE = re.compile(
-    r"(?m)^[A-Za-z_][A-Za-z0-9_ \t\*]*?\b([A-Za-z_]\w*)\s*\([^;{]*\)\s*\{"
+    r"(?m)^(?!typedef\b)[A-Za-z_][A-Za-z0-9_ \t\*]*?\b([A-Za-z_]\w*)\s*\([^;{]*\)\s*\{"
 )
 INCLUDE_ASM_RE = re.compile(r'INCLUDE_ASM\s*\(\s*"[^"]*"\s*,\s*([A-Za-z_]\w*)\s*\)')
 ADDR_SYMBOL_RE = re.compile(r"^(?:FUN_|func_|D_|DAT_)[0-9A-Fa-f]+$")
@@ -124,32 +122,6 @@ def demangle_cfront(name: str) -> str:
     """`videoDecAbort__FP8VideoDec` -> `videoDecAbort` (display only)."""
     stem = name.split("__F", 1)[0]
     return stem if stem[:1].isalpha() else name
-
-
-def load_recovered_full(config_dir: Path) -> dict[str, str]:
-    """owner -> recovered name for `full` matches starting at the unit start."""
-    path = config_dir / "recovered_names.json"
-    if not path.is_file():
-        return {}
-    try:
-        payload = json.loads(path.read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError):
-        return {}
-    names: dict[str, str] = {}
-    for entry in payload.get("symbols", []):
-        if entry.get("match") != "full":
-            continue
-        unit = entry.get("unit")
-        name = str(entry.get("name") or "")
-        if not unit or not name:
-            continue
-        address, unit_address = entry.get("address"), entry.get("unit_address")
-        if address and unit_address and address != unit_address:
-            continue
-        # The yaml owner and the recovered table agree on one of these forms.
-        names.setdefault(unit, name)
-        names.setdefault(unit.removeprefix("assembly/"), name)
-    return names
 
 
 def load_overlay_names(repo: Path) -> dict[int, str]:
@@ -187,13 +159,12 @@ def source_symbol(source: Path) -> str | None:
     return match.group(1) if match else None
 
 
-def display_for(owner: str, source: Path, recovered: dict[str, str]) -> str | None:
+def display_for(source: Path) -> str | None:
     if source.is_file():
         name = source_symbol(source)
         if name and not ADDR_SYMBOL_RE.match(name):
             return demangle_cfront(name)
-    name = recovered.get(owner) or recovered.get(owner.removeprefix("assembly/"))
-    return demangle_cfront(name) if name else None
+    return None
 
 
 def tile_tooltip(tile) -> str:
@@ -420,9 +391,7 @@ def non_label_asm(source: Path) -> bool:
 
 def build_units(repo: Path, config: Path, categories: Path | None):
     exact_assembly, intentional = load_categories(categories)
-    recovered = load_recovered_full(config.parent)
     overlay = load_overlay_names(repo)
-    assignments = load_group_assignments(repo)
     result = []
     for owner, address, size in parse_units(config):
         source = repo / "src" / f"{owner}.c"
@@ -441,11 +410,8 @@ def build_units(repo: Path, config: Path, categories: Path | None):
                 "address": address,
                 "size": size,
                 "category": category,
-                "logical_group": group_for_owner(owner, assignments),
-                "display": assignments.get(owner.removeprefix("assembly/"), {}).get(
-                    "proposed_name"
-                )
-                or display_for(owner, source, recovered)
+                "logical_group": group_for_owner(owner),
+                "display": display_for(source)
                 or (demangle_cfront(overlay[address]) if address in overlay else None),
             }
         )

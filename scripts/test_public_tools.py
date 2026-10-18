@@ -1109,7 +1109,6 @@ class ListFunctionsTests(unittest.TestCase):
             )
         )
         (tmp / "config" / "us" / "unit_categories.json").write_text(json.dumps({}))
-        (tmp / "config" / "us" / "recovered_names.json").write_text(json.dumps({}))
 
     def test_default_lists_only_units_with_a_c_body(self):
         with tempfile.TemporaryDirectory() as name:
@@ -1780,67 +1779,6 @@ class PatchedToolchainArtifactTests(unittest.TestCase):
             self.assertEqual(len(digest), 64, name)
 
 
-class RenameCatalogUnitTests(unittest.TestCase):
-    """One rename proposal per unit, or the progress workflow cannot load.
-
-    The rename tool rewrites the unit of every catalog entry that shares an
-    address with a moved unit. A catalog that already carried two rows for one
-    function - a proposal plus the unresolved row it replaced - therefore ends up
-    with both rows naming the same unit, and progress_groups.py refuses to read
-    it. That is how the 2026-09-26 music-track renames turned the progress
-    workflow red.
-    """
-
-    def setUp(self):
-        self.tool = load_module(
-            "rename_tool", ROOT / "scripts/rename-function-proposals.py"
-        )
-
-    @staticmethod
-    def _payload(paths):
-        return {"rename_proposals": {"entries": [{"source_path": p} for p in paths]}}
-
-    def test_one_row_per_unit_is_accepted(self):
-        payload = self._payload(["src/textbin/a.c", "src/textbin/b.c"])
-        self.assertEqual(self.tool.find_duplicate_catalog_units(payload), [])
-
-    def test_two_rows_for_one_unit_are_reported(self):
-        payload = self._payload(
-            ["src/audio/music/music_start_track_10000.c"] * 2
-        )
-        self.assertEqual(
-            self.tool.find_duplicate_catalog_units(payload),
-            ["audio/music/music_start_track_10000"],
-        )
-
-    def test_two_functions_of_one_unit_are_accepted(self):
-        payload = self._payload(["src/rendering/vu1_chain.c"] * 2)
-        for entry, address in zip(
-            payload["rename_proposals"]["entries"], ("0x002336a0", "0x002337b0")
-        ):
-            entry["address"] = address
-        self.assertEqual(self.tool.find_duplicate_catalog_units(payload), [])
-
-    def test_a_pending_and_a_promoted_path_are_the_same_unit(self):
-        # assembly/<x>.c and <x>.c are one unit before and after promotion.
-        payload = self._payload(
-            ["src/assembly/textbin/fun_002158a0.c", "src/textbin/fun_002158a0.c"]
-        )
-        self.assertEqual(
-            self.tool.find_duplicate_catalog_units(payload), ["textbin/fun_002158a0"]
-        )
-
-    def test_rows_without_a_source_path_are_ignored(self):
-        payload = self._payload(["src/textbin/a.c"])
-        payload["rename_proposals"]["entries"].append({"address": "0x1"})
-        self.assertEqual(self.tool.find_duplicate_catalog_units(payload), [])
-
-    def test_the_committed_catalog_has_no_duplicate(self):
-        catalog = ROOT / "config/us/recovered_names.json"
-        payload = json.loads(catalog.read_text(encoding="utf-8"))
-        self.assertEqual(self.tool.find_duplicate_catalog_units(payload), [])
-
-
 class NoGameDataTests(unittest.TestCase):
     """Nothing cut from the disc (ELF, overlay records, their asm) is tracked."""
 
@@ -2132,19 +2070,6 @@ class CleanupCheckTests(unittest.TestCase):
         self.assertIn("src/new_helper.c:4: [fakematch] x++; x--", out)
         self.assertIn("src/new_helper.c:7: [fakematch] do { } while (0)", out)
         self.assertEqual(out.count("[fakematch]"), 2)
-
-    def test_recovered_names_format_and_config(self):
-        entry = {"unit": "missing", "source_path": "src/missing.c", "address": "0x00100000",
-                 "current_name": "FUN_00100000", "proposed_name": "OldHelper", "logical_group": "EE/x",
-                 "status": "done", "confidence": "high", "evidence": []}
-        data = {"schema": "rnc-recovered-names-v2", "symbols": [],
-                "rename_proposals": {"schema": "rnc-function-name-proposals-v1", "entries": [entry]}}
-        self.write("config/us/recovered_names.json", json.dumps(data, indent=2) + "\n")
-        code, out = self.check()
-        self.assertEqual(code, 1)
-        for msg in ("unit missing is not in", "status 'done'", "proposed_name OldHelper is not lower_snake_case",
-                    "starts with EE or VU"):
-            self.assertIn(msg, out)
 
     def test_commit_subjects_and_pull_request_text(self):
         self.write("src/new_helper.c", "void new_helper(void) __asm__(\"FUN_00100100\");\nvoid new_helper(void) {}\n")

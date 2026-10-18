@@ -6,8 +6,7 @@
   (`shared/`, `lNN/`, functions named `FUN_LNN_xxxxxxxx`) and are not part of
   the boot link.
 - `us/unit_categories.json` lists the intentional-asm units excluded from the
-  C goal; `us/recovered_names.json` records the recovered function names
-  (`docs/recovered-names.md`); `us/checksum.sha1` is the retail ELF's SHA-1.
+  C goal; `us/checksum.sha1` is the retail ELF's SHA-1.
 - `us/symbol_addrs.txt`, `us/undefined_syms.txt`, and
   `us/undefined_funcs_auto.txt` are active symbol inputs.
 - `ghidra/` contains function, call-graph, and data-reference exports used by

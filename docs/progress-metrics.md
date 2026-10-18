@@ -104,9 +104,9 @@ C body at all** — a body there can never be measured, staged or promoted, whic
 makes it the ideal hiding place for a wrong one. Evidence behind the
 classification is kept by the maintainers.
 
-Group assignments and proposed semantic names come from
-`config/us/recovered_names.json`; the naming rules are in
-[recovered-names.md](recovered-names.md).
+The report groups boot functions by their source folder (`src/ui/menus/`
+is the `ui/menus` group): move a file to change its group. Function names
+come from the source (the C name bound to the `FUN_<address>` label).
 
 ## Oracles
 
