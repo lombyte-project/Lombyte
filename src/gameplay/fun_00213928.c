@@ -47,7 +47,8 @@ s32 fun_00213928(O_25a478 *obj, P_25a478 *p, Q_25a478 *q, u32 flags, s32 *out, f
 s32 fun_00213928(O_25a478 *obj, P_25a478 *p, Q_25a478 *q, u32 flags, s32 *out, f32 *fp, s32 *kp, s32 idx) {
     enum {
         FALLBACK_HIT_RESPONSE = 1,
-        DEFAULT_HIT_RESPONSE = 1
+        DEFAULT_HIT_RESPONSE = 1,
+        DAMAGE_PRESERVING_COOLDOWN_RESPONSE = 11
     };
     V_25a478 v;
     V_25a478 t;
@@ -152,7 +153,7 @@ s32 fun_00213928(O_25a478 *obj, P_25a478 *p, Q_25a478 *q, u32 flags, s32 *out, f
             if (D_0013E533[0]) q->h1C = scale_game_frames(0x2D);
             else q->h1C = scale_game_frames(0x3C);
             break;
-        case 11: q->h1C = scale_game_frames(0x3C); break;
+        case DAMAGE_PRESERVING_COOLDOWN_RESPONSE: q->h1C = scale_game_frames(0x3C); break;
         default: q->h1C = scale_game_frames(0x1E); break;
         }
     } else {
@@ -172,7 +173,7 @@ s32 fun_00213928(O_25a478 *obj, P_25a478 *p, Q_25a478 *q, u32 flags, s32 *out, f
         z:
             p->f2C = 0;
             break;
-        case 11:
+        case DAMAGE_PRESERVING_COOLDOWN_RESPONSE:
             res = 0xC;
             break;
         default:
