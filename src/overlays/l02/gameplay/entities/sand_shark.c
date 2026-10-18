@@ -3314,6 +3314,9 @@ int D_L02_00161C9C = 0x6f707070;
 int D_L02_00161CA0 = 0x707070;
 void sandshark_egg_update(struct Moby *moby) __asm__("FUN_L02_002e0280");
 void sandshark_egg_update(struct Moby *moby) {
+    enum {
+        SANDSHARK_EGG_HANDOFF_TO_LINKED_MOBY = 2
+    };
     float u[4];
     float v[4];
     char *d = (char *)moby->pvars;
@@ -3342,7 +3345,7 @@ void sandshark_egg_update(struct Moby *moby) {
             i--;
         } while (i >= 0);
         break;
-    case 2:
+    case SANDSHARK_EGG_HANDOFF_TO_LINKED_MOBY:
         c = *(char **)(d + 0x60);
         qcopy(c + 0x10, &moby->pos);
         c[0x20] = 0x11;
