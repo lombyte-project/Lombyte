@@ -23,6 +23,7 @@ s32 update_menu_stream_image(struct MenuScreen *stream) __asm__("FUN_0021f990");
 
 s32 update_menu_stream_image(struct MenuScreen *stream) {
     enum {
+        MENU_STREAM_IMAGE_READ_PENDING = 1,
         MENU_STREAM_IMAGE_READY = 2
     };
     s32 flags;
@@ -105,7 +106,7 @@ s32 update_menu_stream_image(struct MenuScreen *stream) {
             stream->data.stream.state = -1;
         }
         break;
-    case 1:
+    case MENU_STREAM_IMAGE_READ_PENDING:
     case 3:
         if (cd_read_active[0] != 0) {
             break;
