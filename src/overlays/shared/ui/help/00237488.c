@@ -1219,103 +1219,93 @@ void FUN_L05_00253b48(void) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00254058.s", FUN_L05_00254058);
 #else
 extern u8 D_0013D388;
+extern f32 D_L05_002169F8[];
+extern f32 multiply_global_factor_4058(f32) __asm__("FUN_001f96b0");
 
-extern s32 D_0015ED84 __attribute__((sda));
-extern s32 D_0015EEA4_gp __asm__("D_0015EEA4") __attribute__((sda));
-extern f32 D_L05_002169F8[] __asm__("D_L05_002169F8");
-extern f32 FUN_L05_0022dbc8(f32);
+struct ScoreTable_4058 { f32 values[5]; };
+
+struct HeroTally_4058 {
+    u8 pad0[0x6D0];
+    f32 spin[3];          /* 0x6D0 */
+    u8 pad6DC[4];
+    s32 flags[4];         /* 0x6E0 */
+    s32 flag_count;       /* 0x6F0 */
+    f32 rank_scale;       /* 0x6F4 */
+    s32 time_score_base;  /* 0x6F8 */
+    s32 score;            /* 0x6FC */
+    s32 spin_count[3];    /* 0x700 */
+    s32 max_spins;        /* 0x70C */
+    s32 spin_score;       /* 0x710 */
+    s32 total_score;      /* 0x714 */
+};
+
+#define TALLY ((struct HeroTally_4058 *)&hero)
 
 void FUN_L05_00254058(void) {
-    s32 *counter;
-    int i;
-    int total;
-    int step;
-    struct ScoreTable { f32 values[5]; } table;
-    f32 frames;
+    struct UsageStats *stats;
+    s32 play_time;
+    s32 unit;
+    s32 i;
+    f32 spin;
 
     if (D_0013D388 == 0) return;
     if (hero.unk8A8 != 0) {
-        struct UsageStats *stats = &usage_stats;
-        s32 duration = D_0015EEA4_gp;
-        s32 frame_count;
-        s32 level;
-        if (stats->stat[30].count <= 0xFFFE) {
+        stats = &usage_stats;
+        if (stats->stat[30].count < 0xFFFF) {
             stats->stat[30].count++;
-            duration = *(s32 *)0x0015EEA4;
         }
-        frame_count = scale_game_frames(duration) / 600;
-        level = D_0015ED84;
-        if (stats->stat[30].unk2 < frame_count) {
-            stats->stat[30].unk2 = scale_game_frames(D_0015EEA4_gp) / 600;
-            level = *(s32 *)0x0015ED84;
+        play_time = scale_game_frames(D_0015EEA4_macro);
+        unit = 600;
+        if (play_time / unit > stats->stat[30].unk2) {
+            stats->stat[30].unk2 = scale_game_frames(D_0015EEA4_macro) / 600;
         }
-        stats->stat[30].level_mask = 0x80000000U | (1U << level) | stats->stat[30].level_mask;
+        stats->stat[30].level_mask = stats->stat[30].level_mask | (1 << D_0015ED84_gp) | 0x80000000;
     }
-    {
-        counter = (s32 *)((char *)&hero + 0x6D0);
-        counter += 12;
-        for (i = 2; i >= 0; i--, counter++) {
-            if (absolute_float(*(f32 *)(counter - 12)) > 3.3161256f) {
-                f32 rotation = *(f32 *)(counter - 12);
-                s32 count = *counter;
-                if (0.0f < rotation) rotation -= 6.2831855f;
-                else rotation += 6.2831855f;
-                *(f32 *)(counter - 12) = rotation;
-                *counter = count + 1;
-            }
+    for (i = 0; i < 3; i++) {
+        if (absolute_float(TALLY->spin[i]) > 3.3161256f) {
+            s32 count = TALLY->spin_count[i];
+            spin = TALLY->spin[i];
+            if (0.0f < spin) spin -= 6.2831855f;
+            else spin += 6.2831855f;
+            TALLY->spin[i] = spin;
+            TALLY->spin_count[i] = count + 1;
         }
     }
     {
-        struct Hero *g = &hero;
-        *(s32 *)((char *)g + 0x70C) = 0;
-        {
-            s32 *counter = (s32 *)g;
-            counter += 0x700 / 4;
-            i = 2;
-            do {
-                if (*(s32 *)((char *)g + 0x70C) < *counter)
-                    *(s32 *)((char *)g + 0x70C) = *counter;
-                counter++;
-            } while (--i >= 0);
+        TALLY->max_spins = 0;
+        for (i = 0; i < 3; i++) {
+            if (TALLY->max_spins < TALLY->spin_count[i]) TALLY->max_spins = TALLY->spin_count[i];
         }
     }
     {
-        struct Hero *g = &hero;
-        step = 100;
-        *(s32 *)((char *)g + 0x710) = 0;
-        total = *(s32 *)((char *)g + 0x70C);
-        if (total > 0) {
-            i = total;
-            total = 0;
-            do {
+        s32 step = 100;
+        s32 n = TALLY->max_spins;
+        TALLY->spin_score = 0;
+        if (n > 0) {
+            s32 total = 0;
+            for (i = 0; i < n; i++) {
                 total += step;
                 step += 50;
-            } while (--i != 0);
-            *(s32 *)((char *)g + 0x710) = total;
+            }
+            TALLY->spin_score = total;
         }
     }
     {
-        struct Hero *g = &hero;
-        s32 *counter;
-        *(s32 *)((char *)g + 0x6F0) = 0;
-        counter = (s32 *)((char *)g + 0x6E0);
-        i = 3;
-        do {
-            if (*counter != 0) (*(s32 *)((char *)g + 0x6F0))++;
-            counter++;
-        } while (--i >= 0);
+        TALLY->flag_count = 0;
+        for (i = 0; i < 4; i++) {
+            if (TALLY->flags[i] != 0) TALLY->flag_count++;
+        }
     }
     {
-        struct Hero *g = &hero;
-        table = *(struct ScoreTable *)D_L05_002169F8;
-        *(f32 *)((char *)g + 0x6F4) = table.values[*(s32 *)((char *)g + 0x6F0)];
-        frames = FUN_L05_0022dbc8(1.0f);
-        *(s32 *)((char *)g + 0x6FC) = truncate_float_to_s32((f32)((*(s32 *)((char *)g + 0x6F8) * 100) / (s32)(frames * 60.0f)));
-        *(s32 *)((char *)g + 0x6FC) += *(s32 *)((char *)g + 0x6F0) * 25;
-        *(s32 *)((char *)g + 0x6FC) = truncate_float_to_s32((f32)*(s32 *)((char *)g + 0x6FC) * *(f32 *)((char *)g + 0x6F4));
-        *(s32 *)((char *)g + 0x714) = *(s32 *)((char *)g + 0x710) + *(s32 *)((char *)g + 0x6FC);
+        struct ScoreTable_4058 table = *(struct ScoreTable_4058 *)D_L05_002169F8;
+        TALLY->rank_scale = table.values[TALLY->flag_count];
+        TALLY->score = truncate_float_to_s32((f32)((TALLY->time_score_base * 100) / (s32)(multiply_global_factor_4058(1.0f) * 60.0f)));
+        TALLY->score += TALLY->flag_count * 25;
+        TALLY->score = truncate_float_to_s32((f32)TALLY->score * TALLY->rank_scale);
+        TALLY->total_score = TALLY->spin_score + TALLY->score;
     }
 }
+#undef TALLY
 #endif
 /* Finds the nearest path node ahead of the hero (behind the facing test) and returns its position and heading. */
 /* Ported from rac1-decomp (src/overlays/shared/help_00237B00.c: func_L05_00254B38), where it is exact; names translated to the US level program. */
