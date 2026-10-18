@@ -212,8 +212,8 @@ extern void free_effect_particle(FallingParticle *) __asm__("FUN_L00_00267a08");
 void FUN_L00_00268d48(FallingParticle *p)
 {
     Vec4 step;
-    Vec4 tmp1;
-    Vec4 tmp2;
+    Vec4 ground_test_probe;
+    Vec4 ground_sample_probe;
     Vec4 *vel = &p->vel;
     f32 ground = vel->f[3];
     s32 cell_x;
@@ -230,12 +230,12 @@ void FUN_L00_00268d48(FallingParticle *p)
     add_vector_xyz(&p->pos, &p->pos, &step);
     if (p->unk0A != 2) {
         if (cell_x != (s32)p->probe.f[0] || cell_y != (s32)p->probe.f[1]) {
-            tmp1.q = p->probe.q;
-            if (ground_height_at(&tmp1) < particle_min_ground) {
+            ground_test_probe.q = p->probe.q;
+            if (ground_height_at(&ground_test_probe) < particle_min_ground) {
                 ground = particle_min_ground;
             } else {
-                tmp2.q = p->probe.q;
-                ground = ground_height_at(&tmp2);
+                ground_sample_probe.q = p->probe.q;
+                ground = ground_height_at(&ground_sample_probe);
             }
             if (p->probe.f[2] < ground) {
                 /* shared exit; retail has one call site for all kill paths */
