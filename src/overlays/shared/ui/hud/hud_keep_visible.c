@@ -417,7 +417,7 @@ extern int FUN_001fef20(int) __asm__("FUN_001f96f8");
 extern float FUN_001fef10(float) __asm__("FUN_001f96b0");
 extern void FUN_L00_00216de8(int, int);
 extern void *FUN_0023b208(int, int) __asm__("FUN_001ff960");
-extern void FUN_L00_0023bac0(void *, int, int, int, int, int);
+extern void FUN_L00_0023bac0(int, int, int, int, int, int);
 extern void FUN_L00_0023bd20(void *, int, int, int, int, int) __asm__("FUN_00200080");
 extern void FUN_L00_001ff348(void *, void *, void *);
 extern void FUN_001ff260(void *) __asm__("FUN_001f99f8");
@@ -520,78 +520,75 @@ int FUN_L00_002365a8(HudElem *e) {
     return e->w;
 }
 #endif
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00236e50.s", FUN_L00_00236e50);
-#else
+/* Draws a HUD element's backdrop, then the stars of D_L00_0017E660 that the element's progress has reached. */
+/* Ported from rac1-decomp (src/overlays/shared/hud_00235960.c: func_L00_002377E0), where it is exact; names translated to the US level program. */
+
+
 extern int D_L00_0015F760 __attribute__((sda));
 extern int D_L00_0015F764 __attribute__((sda));
 extern float D_L00_0015F768 __attribute__((sda));
 extern float D_L00_0015F76C __attribute__((sda));
-extern void *FUN_0023b208(int, int) __asm__("FUN_001ff960");
-extern void FUN_L00_0023bac0(void *, int, int, int, int, int);
-extern void FUN_L00_0023bd20(void *, int, int, int, int, int) __asm__("FUN_00200080");
+extern s32 get_icon_frame(s32, s32) __asm__("func_001FF960");
+extern void FUN_L00_0023bac0(int, int, int, int, int, int);
 extern void FUN_L00_001ff348(void *, void *, void *);
-extern void FUN_001ff260(void *) __asm__("FUN_001f99f8");
-extern void FUN_001ff2a8(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void FUN_001ff278(void *, void *, void *) __asm__("FUN_001f9a10");
-int FUN_L00_00236e50(HudElem *e) {
-    int x = e->unk50, y = e->unk54;
-    int i, star_width = 0;
-    float half_h, offset, half_w;
-    int xbase, ybase;
-    struct { float x, y, z, w; } origin, direction, first_step, second_step, third_step, star_position;
-    void *image;
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void clear_u64_value(void *) __asm__("func_001F99F8");
+extern void draw_hud_sprite_subpixel(s32, s32, s32, s32, s32, s32) __asm__("func_00200080");
 
+int FUN_L00_00236e50(HudElem *e) {
+    float origin[4], direction[4], first_step[4], second_step[4], third_step[4], star_position[4];
+    int x, y;
+    float offset;
+    s32 image;
+    int star_width, i;
+
+    x = e->unk50;
+    y = e->unk54;
     e->w = D_L00_0015F760;
     e->h = D_L00_0015F764;
     hud_screen_position(e, &x, &y);
     FUN_L00_00235ad8(e, &x, &y, e->unk6C, 0);
-    image = FUN_0023b208(*(int *)e, 0);
-    FUN_L00_0023bac0(image, x + e->unk48, y + e->unk4A,
-                       D_L00_0015F760, D_L00_0015F764, 0x80);
-    origin.z = 1.0f;
-    origin.w = 1.0f;
-    half_h = (float)D_L00_0015F764 * D_L00_0015F76C * 0.5f;
-    offset = (float)(10000 - e->unk74) / 10000.0f;
-    half_w = (float)D_L00_0015F760 * D_L00_0015F768 * 0.5f;
-    xbase = x + e->unk48;
-    ybase = y + e->unk4A;
-    origin.x = half_w / 17.0f;
-    origin.y = -half_h / 116.0f;
-    direction.z = 0.0f;
-    direction.w = 0.0f;
-    direction.y = half_h + (float)ybase;
-    direction.x = half_w + (float)xbase;
-    direction.x += (1.0f - D_L00_0015F768) * 0.5f * (float)D_L00_0015F760;
-    direction.y += (1.0f - D_L00_0015F76C) * 0.5f * (float)D_L00_0015F764;
-    direction.x *= 16.0f;
-    direction.y *= 16.0f;
-    origin.x *= 16.0f;
-    origin.y *= 16.0f;
+    image = get_icon_frame(*(int *)e, 0);
+    FUN_L00_0023bac0(image, x + e->unk48, y + e->unk4A, D_L00_0015F760, D_L00_0015F764, 0x80);
+    {
+        float center_x, center_y, half_w, half_h;
+        half_w = (D_L00_0015F760 * D_L00_0015F768 * 0.5f) / 17.0f;
+        half_h = -(D_L00_0015F764 * D_L00_0015F76C * 0.5f) / 116.0f;
+        origin[2] = 1.0f;
+        origin[3] = 1.0f;
+        center_x = D_L00_0015F760 * D_L00_0015F768 * 0.5f + (x + e->unk48);
+        center_y = D_L00_0015F764 * D_L00_0015F76C * 0.5f + (y + e->unk4A);
+        direction[0] = (center_x + (1.0f - D_L00_0015F768) * 0.5f * D_L00_0015F760) * 16.0f;
+        direction[1] = (center_y + (1.0f - D_L00_0015F76C) * 0.5f * D_L00_0015F764) * 16.0f;
+        direction[2] = 0.0f;
+        direction[3] = 0.0f;
+        origin[0] = half_w * 16.0f;
+        origin[1] = half_h * 16.0f;
+    }
+    offset = (10000 - e->unk74) / 10000.0f;
     offset = 116.0f - (offset + offset) * 116.0f;
-    image = FUN_0023b208(*(int *)e, 1);
-    FUN_001ff260(&first_step);
-    FUN_001ff260(&second_step);
-    FUN_001ff260(&third_step);
-    first_step.y = first_step.x = star_init_limit0_gp * 16.0f;
-    second_step.y = second_step.x = (star_init_limit1_gp - star_init_limit0_gp) * 16.0f;
-    third_step.y = third_step.x = (star_init_limit2_gp - star_init_limit1_gp) * 16.0f;
+    image = get_icon_frame(*(int *)e, 1);
+    clear_u64_value(first_step);
+    clear_u64_value(second_step);
+    clear_u64_value(third_step);
+    first_step[1] = first_step[0] = star_init_limit0_gp * 16.0f;
+    second_step[1] = second_step[0] = (star_init_limit1_gp - star_init_limit0_gp) * 16.0f;
+    third_step[1] = third_step[0] = (star_init_limit2_gp - star_init_limit1_gp) * 16.0f;
+    star_width = 0;
     for (i = 0; i < 100; i++) {
         if (i == 0) {
-            FUN_001ff2a8(&direction, &direction, &first_step);
-            offset += star_init_limit0_gp;
+            subtract_vector_xyz(direction, direction, first_step);
             star_width = (int)(star_init_limit0_gp * 32.0f);
+            offset += star_init_limit0_gp;
         }
-        if (!(offset < D_L00_0017E660[i].y)) {
-            FUN_L00_001ff348(&star_position, &D_L00_0017E660[i], &origin);
-            FUN_001ff278(&star_position, &star_position, &direction);
-            FUN_L00_0023bd20(image, (int)star_position.x, (int)star_position.y,
-                              star_width, star_width, 0x80);
-        }
+        if (offset < D_L00_0017E660[i].y) continue;
+        FUN_L00_001ff348(star_position, &D_L00_0017E660[i], origin);
+        add_vector_xyz(star_position, star_position, direction);
+        draw_hud_sprite_subpixel(image, (int)star_position[0], (int)star_position[1], star_width, star_width, 0x80);
     }
     return e->w;
 }
-#endif
 void FUN_L00_00235ea0();
 /* Calls FUN_L00_00235ea0. */
 void mine_blend_color(void) __asm__("FUN_L00_002371e0");

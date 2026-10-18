@@ -431,63 +431,52 @@ unsigned char *FUN_L00_00272060(void *pos, int s, int color, int mode, int b, fl
     }
     return m;
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002721f0.s", FUN_L00_002721f0);
-#else
-extern float FUN_001fa6c0_2721f0(int) __asm__("FUN_001fa6c0");
-extern int FUN_001fa6d0_2721f0(float) __asm__("FUN_001fa6d0");
-extern void FUN_001f9a10_2721f0(void *, void *, void *) __asm__("FUN_001f9a10");
-extern int FUN_001f9770_2721f0(void *) __asm__("FUN_001f9770");
-extern void FUN_L00_00267a08_2721f0(void *) __asm__("FUN_L00_00267a08");
+/* Particle update: adds data[0xA] to byte 8, fades the alpha over the last frames, moves by the velocity and frees the particle outside 2..1021 or when its timer ends. */
+/* Ported from rac1-decomp (src/overlays/shared/partupd_00272158.c: func_L00_00273090), where it is exact; names translated to the US level program. */
 
-void FUN_L00_002721f0(unsigned char *p) {
-    unsigned char *q = p + 0x20;
-    float *r;
-    float v[4];
+extern s32 fast_dec_timer_s16_c(s16 *) __asm__("func_001F9770");
+extern s32 truncate_float_to_s32_c2(f32) __asm__("func_001FA6D0");
+extern void FUN_L00_00267a08(void *);
+extern void add_vector_xyz_c2(void *, void *, void *) __asm__("FUN_001f9a10");
+
+static __inline__ void vcopy_273090(float *d, float *s) {
+    d[0] = s[0];
+    d[1] = s[1];
+    d[2] = s[2];
+    *(int *)&d[3] = 0;
+}
+
+void FUN_L00_002721f0(char *part) {
+    char *data = part + 0x20;
     float t;
-    float a;
+    float velocity[4] __attribute__((aligned(16)));
     int alpha;
-    int originalAlpha;
-    p[8] += q[0xA];
-    if (*(short *)(q + 8) - *(short *)(p + 0xA) < 6) {
-        t = (float)(*(short *)(q + 8) - *(short *)(p + 0xA)) / 5.0f;
-        *(float *)(p + 0xC) = *(float *)(q + 4) +
-            ((*(float *)q + *(float *)(q + 4)) * 0.5f - *(float *)(q + 4)) * t;
-        alpha = q[0xB];
-        originalAlpha = alpha;
-        alpha = (unsigned int)alpha >> 1;
-        a = (float)(alpha - originalAlpha);
-        a *= t;
-        t = (float)originalAlpha + a;
-        a = t;
+    part[8] += data[0xA];
+    if (*(short *)(data + 8) - *(short *)(part + 0xA) < 6) {
+        int start;
+        int end;
+        t = (float)(*(short *)(data + 8) - *(short *)(part + 0xA)) / 5.0f;
+        *(float *)(part + 0xC) = *(float *)(data + 4) + ((*(float *)(part + 0x20) + *(float *)(data + 4)) * 0.5f - *(float *)(data + 4)) * t;
+        end = (unsigned char)data[0xB] >> 1;
+        start = (unsigned char)data[0xB];
+        alpha = truncate_float_to_s32_c2((float)start + (float)(end - start) * t);
     } else {
-        t = (float)*(short *)(p + 0xA) / FUN_001fa6c0_2721f0(*(short *)(q + 8) - 6);
-        *(float *)(p + 0xC) = *(float *)q +
-            ((*(float *)q + *(float *)(q + 4)) * 0.5f - *(float *)q) * t;
-        a = (float)(q[0xB] >> 1);
-        a *= t;
-        a += 0.0f;
+        t = (float)*(short *)(part + 0xA) / convert_integer_to_float(*(short *)(data + 8) - 6);
+        *(float *)(part + 0xC) = *(float *)(part + 0x20) + ((*(float *)(part + 0x20) + *(float *)(data + 4)) * 0.5f - *(float *)(part + 0x20)) * t;
+        alpha = truncate_float_to_s32_c2((float)((unsigned char)data[0xB] >> 1) * t + 0.0f);
     }
-    alpha = FUN_001fa6d0_2721f0(a);
-    *(unsigned int *)(p + 4) = (alpha << 24) |
-                                (*(unsigned int *)(p + 4) & 0xFFFFFF);
-    r = (float *)(q + 0xC);
-    *(volatile float *)&v[0] = *(float *)(q + 0xC);
-    t = *(volatile float *)&r[1];
-    *(volatile float *)&v[1] = t;
-    *(volatile float *)&v[2] = *(volatile float *)&r[2];
-    *(int *)&v[3] = 0;
-    FUN_001f9a10_2721f0(p + 0x10, p + 0x10, &v);
-    *(float *)(q + 0x14) -= *(float *)(q + 0x18);
-    if (*(float *)(p + 0x10) < 2.0f || 1021.0f < *(float *)(p + 0x10) ||
-        *(float *)(p + 0x14) < 2.0f || 1021.0f < *(float *)(p + 0x14) ||
-        *(float *)(p + 0x18) < 2.0f || 1021.0f < *(float *)(p + 0x18)) {
-        FUN_L00_00267a08_2721f0(p);
-    } else if (FUN_001f9770_2721f0(p + 0xA)) {
-        FUN_L00_00267a08_2721f0(p);
+    *(int *)(part + 4) = (alpha << 24) | (*(int *)(part + 4) & 0xFFFFFF);
+    vcopy_273090(velocity, (float *)(data + 0xC));
+    add_vector_xyz_c2(part + 0x10, part + 0x10, velocity);
+    *(float *)(data + 0x14) -= *(float *)(data + 0x18);
+    if (*(float *)(part + 0x10) < 2.0f || *(float *)(part + 0x10) > 1021.0f ||
+        *(float *)(part + 0x14) < 2.0f || *(float *)(part + 0x14) > 1021.0f ||
+        *(float *)(part + 0x18) < 2.0f || *(float *)(part + 0x18) > 1021.0f) {
+        FUN_L00_00267a08(part);
+    } else if (fast_dec_timer_s16_c(part + 0xA)) {
+        FUN_L00_00267a08(part);
     }
 }
-#endif
 typedef unsigned int u128_272438 __attribute__((mode(TI), aligned(16)));
 extern unsigned char D_L00_00177F00_272438[] __asm__("D_L00_00177F00");
 void FUN_L00_00262360_272438(int, float *, float *, void *, float,
