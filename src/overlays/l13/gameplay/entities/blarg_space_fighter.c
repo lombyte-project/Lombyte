@@ -1847,6 +1847,11 @@ extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern s32 rand();
 
 char *FUN_L13_002e1140(char *owner, char *pos, char *vec, int remaining_split_count, float f) {
+    enum {
+        SPIN_AXIS_X = 0,
+        SPIN_AXIS_Y = 1,
+        SPIN_AXIS_Z = 2
+    };
     char *moby = func_0020D348_m(0x584);
     if (moby != 0) {
         char *d;
@@ -1868,13 +1873,13 @@ char *FUN_L13_002e1140(char *owner, char *pos, char *vec, int remaining_split_co
         *(int *)(moby + 0x94) = 0;
         r = random_float_between_alt(-30.0f, 30.0f) * DEG_TO_RAD * frame_time;
         switch (rand() % 3) {
-        case 0:
+        case SPIN_AXIS_X:
             *(float *)(d + 0x30) = r;
             break;
-        case 1:
+        case SPIN_AXIS_Y:
             *(float *)(d + 0x34) = r;
             break;
-        case 2:
+        case SPIN_AXIS_Z:
             *(float *)(d + 0x38) = r;
             break;
         }
