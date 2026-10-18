@@ -2146,7 +2146,6 @@ void spawn_hero_item_mobies() __asm__("FUN_L00_0020ea80");
 void FUN_L00_0020f580();
 void FUN_L00_00234808();
 void FUN_L00_002080b0();
-void FUN_L00_00210748_u() __asm__("FUN_L00_00210748");
 void FUN_L00_00210928(void) {
     if (hero.unk308 == 1 || (u32)(hero.state.control_mode - 0x15) < 2 ||
         FUN_L00_0020d568_u()) {
@@ -2164,10 +2163,9 @@ void FUN_L00_00210928(void) {
     FUN_L00_0020f580();
     FUN_L00_00234808();
     FUN_L00_002080b0();
-    FUN_L00_00210748_u();
+    FUN_L00_00210748();
 }
 void FUN_L00_0020e698_210a08(void) __asm__("FUN_L00_0020e698");
-void FUN_L00_00210748_210a08(void) __asm__("FUN_L00_00210748");
 void FUN_L00_00262840_210a08(void *) __asm__("FUN_L00_00262840");
 void FUN_L00_00232fe8_210a08(void) __asm__("FUN_L00_00232fe8");
 void FUN_L00_00206c08_210a08(void) __asm__("FUN_L00_00206c08");
@@ -2182,7 +2180,7 @@ void FUN_L00_00210a08(int mode, int b, char *m) {
     FUN_L00_0020e698_210a08();
     g = &hero;
     g->unk20A6 = 1;
-    FUN_L00_00210748_210a08();
+    FUN_L00_00210748();
     g->moby = (struct Moby *)g->unkA88;
     FUN_L00_00262840_210a08(&g->trail);
     *(int *)((char *)g->moby + 0x98) = -1;

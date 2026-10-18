@@ -496,7 +496,7 @@ extern f32 D_0015ED6C_2d09b8 __asm__("D_0015ED6C");
 extern f32 D_L00_0015F5D0 __asm__("D_L00_0015F5D0");
 extern s32 D_001413DC_2d09b8 __asm__("D_001413DC") __attribute__((section(".data")));
 extern int D_001413D0[] __attribute__((section(".data")));
-extern f32 D_L00_00166C80_2d19b0[] __asm__("D_L00_00166C80");
+extern f32 player_camera[] __asm__("D_L00_00166C80");
 extern char camera_position[] __asm__("D_L00_00166DC0");
 extern V2d09b8 D_L00_001DE6F0_2d09b8[] __asm__("D_L00_001DE6F0");
 extern V2d09b8 D_L00_001DE750_2d09b8[] __asm__("D_L00_001DE750");
@@ -603,8 +603,8 @@ void break_crate(M2d1428 *moby, s32 hit, s32 source) {
             if (D_L00_0015FFBC >= 51) { count = 1; trail_count = 0; }
             else { count = 1; trail_count = 0; }
         }
-        angle = D_L00_00166C80_2d19b0[80] - moby->pos.x;
-        speed = D_L00_00166C80_2d19b0[81] - moby->pos.y;
+        angle = player_camera[80] - moby->pos.x;
+        speed = player_camera[81] - moby->pos.y;
         angle = FUN_001ff8b0_2d09b8(angle, speed);
         angle = FUN_00200130_2d09b8(angle, moby->v40.z);
         angle += 3.1415925f;
@@ -862,8 +862,8 @@ void FUN_L00_002d19b0(u8 *m) {
                       ((u64)(s64)G_EC << 32);
     quad.texture[0] = 0;
     quad.colors[0] = quad.colors[1] = quad.colors[2] = quad.colors[3] = G_F4;
-    if (absolute_float(D_L00_00166C80_2d19b0[80] - *(f32 *)(m + 0x10)) < 16.0f &&
-        absolute_float(D_L00_00166C80_2d19b0[81] - *(f32 *)(m + 0x14)) < 16.0f)
+    if (absolute_float(player_camera[80] - *(f32 *)(m + 0x10)) < 16.0f &&
+        absolute_float(player_camera[81] - *(f32 *)(m + 0x14)) < 16.0f)
         active = 1;
     if (active || m[0x20] == 1) {
         m[0xbc] = 1;
