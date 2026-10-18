@@ -55,7 +55,7 @@ extern f32 seg_fabs(f32) __asm__("FUN_001f99c0");
    from the surface (0 when within 1% of the radius). */
 f32 FUN_L07_0029e6d8(Vec4f *out, Vec4f *ref, Vec4f *center, Vec4f *a, Vec4f *b, f32 radius) {
     Vec4f w, dir, p, p1, p2;
-    f32 t, t0, t1, h, dd, dist, e1, e2, eps;
+    f32 t, lower_segment_t, upper_segment_t, h, dd, dist, e1, e2, eps;
     Vec4f *q;
 
     seg_vec_sub(&w, a, center);
@@ -68,24 +68,24 @@ f32 FUN_L07_0029e6d8(Vec4f *out, Vec4f *ref, Vec4f *center, Vec4f *a, Vec4f *b, 
     if (dist < radius) {
         h = seg_sqrt(radius * radius - dist * dist);
         h /= seg_len(&dir);
-        t0 = t - h;
-        if (t0 < 0.0f)
-            t0 = 0.0f;
-        else if (1.0f < t0)
-            t0 = 1.0f;
-        t1 = t + h;
-        if (t1 < 0.0f)
-            t1 = 0.0f;
-        else if (1.0f < t1)
-            t1 = 1.0f;
-        seg_vec_scale(&p1, &dir, t0);
+        lower_segment_t = t - h;
+        if (lower_segment_t < 0.0f)
+            lower_segment_t = 0.0f;
+        else if (1.0f < lower_segment_t)
+            lower_segment_t = 1.0f;
+        upper_segment_t = t + h;
+        if (upper_segment_t < 0.0f)
+            upper_segment_t = 0.0f;
+        else if (1.0f < upper_segment_t)
+            upper_segment_t = 1.0f;
+        seg_vec_scale(&p1, &dir, lower_segment_t);
         seg_vec_add(&p1, &p1, a);
         e1 = seg_fabs(seg_dist(&p1, center) - radius);
         eps = radius * 0.01f;
         if (e1 < eps)
             e1 = 0.0f;
         q = &p2;
-        seg_vec_scale(q, &dir, t1);
+        seg_vec_scale(q, &dir, upper_segment_t);
         seg_vec_add(q, q, a);
         e2 = seg_fabs(seg_dist(q, center) - radius);
         if (e2 < eps)
