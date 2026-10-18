@@ -34,7 +34,7 @@ int FUN_L00_0023a7a8(char *m) {
     char *q = m + 0x70;
     int x4;
     int y = 0x12;
-    int x, a, alpha, w, text_color, tex, c1, wd, v74;
+    int x, a, alpha, w, text_color, tex, c1, wd, displayed_numerator;
     float f21, f20;
     if (pal_mode)
         y = 0xA;
@@ -70,9 +70,9 @@ int FUN_L00_0023a7a8(char *m) {
         tex = find_valid_animation_frame_index_alt(*(int *)m, 3);
         *(int *)(m + 0x44) = tex;
         hud_frame(m, tex, x, y, 0, alpha);
-        v74 = *(int *)(m + 0x74);
-        sprintf_alt(buf, D_L00_0015F7C8, v74, *(int *)(m + 8));
-        if (v74 != 0)
+        displayed_numerator = *(int *)(m + 0x74);
+        sprintf_alt(buf, D_L00_0015F7C8, displayed_numerator, *(int *)(m + 8));
+        if (displayed_numerator != 0)
             text_color = fast_tween_color(*(int *)&D_L00_0015F92C, *(int *)&D_L00_0015F930, f20);
         else
             text_color = fast_tween_color(*(int *)&D_L00_0015F934, *(int *)&D_L00_0015F938, f20);
