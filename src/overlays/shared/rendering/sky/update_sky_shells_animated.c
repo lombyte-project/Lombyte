@@ -3,7 +3,7 @@
 #include "types.h"
 #include "rnc/rendering/sky_shell.h"
 #include "asm.h"
-#include "overlays/shared/rendering/sky/sky_particle_effects.h"
+#include "rnc/rendering/sky_particles.h"
 #include "sda.h"
 #include "qzero.h"
 #include "rnc/overlay/quad.h"
@@ -127,8 +127,8 @@ void FUN_L00_00289bd8(void) {
     set_identity_matrix(D_L00_001BD7E0);
     sky_draw_shell(0);
     if (*(short *)(D_L00_0016051C + 8) == 0)
-        FUN_L00_00288ec0(0x78, 8);
-    FUN_L00_00289108();
+        sky_particles_init(0x78, 8);
+    sky_particles_update();
     sky_sprite_proc();
     FUN_00233980(0x42, (0x8000L << 24) | 0x44);
     qzero(v);
@@ -148,8 +148,8 @@ void FUN_L00_0028a208(void) {
     set_identity_matrix(D_L00_001BD7E0);
     sky_draw_shell(0);
     if (*(short *)(D_L00_0016051C + 8) == 0)
-        FUN_L00_00288ec0(0x78, 8);
-    FUN_L00_00289108();
+        sky_particles_init(0x78, 8);
+    sky_particles_update();
     sky_sprite_proc();
     FUN_00233980(0x42, (0x8000L << 24) | 0x44);
     sky_draw_shell(1);
@@ -289,8 +289,8 @@ void FUN_L00_0028a920(void) {
     sky_draw_shell(0);
     sky_draw_shell(1);
     if (*(short *)(D_L00_0016051C + 8) == 0)
-        FUN_L00_00288ec0(0x78, 8);
-    FUN_L00_00289108();
+        sky_particles_init(0x78, 8);
+    sky_particles_update();
     sky_sprite_proc();
     vu1_add_g_sregister(0x42, 0x8000000044L);
     sky_draw_shell(2);
@@ -312,16 +312,14 @@ void FUN_L00_0028a998(void) {
 extern char D_L00_001BD7E0[] __asm__("D_L00_001BD7E0");
 extern u8 *D_L00_0016051C_0028aa98 __asm__("D_L00_0016051C");
 void FUN_001f9fc8_0028aa98(void *) __asm__("FUN_001f9fc8");
-void FUN_L00_00288ec0_0028aa98(s32, s32) __asm__("FUN_L00_00288ec0");
-void FUN_L00_00289108_0028aa98(void) __asm__("FUN_L00_00289108");
 void FUN_0022bba0_0028aa98(void) __asm__("FUN_0022bba0");
 void FUN_00233980_0028aa98(s32, u64) __asm__("FUN_00233980");
 void FUN_L00_0028aa98(void) {
     FUN_001f9fc8_0028aa98(D_L00_001BD7E0);
     sky_draw_shell(0);
     if (*(s16 *)(D_L00_0016051C_0028aa98 + 8) == 0)
-        FUN_L00_00288ec0_0028aa98(0x78, 8);
-    FUN_L00_00289108_0028aa98();
+        sky_particles_init(0x78, 8);
+    sky_particles_update();
     FUN_0022bba0_0028aa98();
     FUN_00233980_0028aa98(0x42, 0x8000000044ULL);
     sky_draw_shell(1);
