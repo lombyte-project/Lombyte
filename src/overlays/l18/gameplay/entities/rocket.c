@@ -418,7 +418,7 @@ extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 
-char *FUN_L18_002a75f0(struct Moby *owner, float *pos, float *vec, int arg3) {
+char *FUN_L18_002a75f0(struct Moby *owner, float *pos, float *vec, int homing_enabled) {
     char *moby = func_0020D348_m(0x29);
     if (moby != 0) {
         char *data;
@@ -432,7 +432,7 @@ char *FUN_L18_002a75f0(struct Moby *owner, float *pos, float *vec, int arg3) {
         data = *(char **)(moby + 0x78);
         qcopy(data, vec);
         *(short *)(data + 0x10) = scale_game_frames(0xF0);
-        *(short *)(data + 0x12) = arg3;
+        *(short *)(data + 0x12) = homing_enabled;
         *(char **)(data + 0x14) = owner;
         *(float *)(moby + 0x48) = fast_arc_tan(vec[0], vec[1]);
         *(float *)(moby + 0x44) = -fast_arc_tan(vector_length_xy(vec), vec[2]);
