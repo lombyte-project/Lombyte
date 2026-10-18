@@ -22,6 +22,10 @@ s32 actuator_calc_power(s32 *p1) __asm__("FUN_001e8d08");
 
 s32 actuator_calc_power(s32 *p1)
 {
+    enum {
+        ACTUATOR_WAVE_RECTANGULAR = 1,
+        ACTUATOR_WAVE_TRIANGULAR = 2
+    };
     s32 aa[3][4];
     s32 *q2;
     s32 *q1;
@@ -63,14 +67,14 @@ s32 actuator_calc_power(s32 *p1)
         switch (e->f00) {
         case 0:
             break;
-        case 1:
+        case ACTUATOR_WAVE_RECTANGULAR:
             if (rem < e->f0a) {
                 res = e->f0e + e->f0f;
             } else {
                 res = e->f0f;
             }
             break;
-        case 2:
+        case ACTUATOR_WAVE_TRIANGULAR:
             if (rem < e->f0a) {
                 res = (e->f0e * rem) / e->f0a;
             } else {
