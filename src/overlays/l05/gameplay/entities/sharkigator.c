@@ -164,19 +164,19 @@ int FUN_L05_00307470(int arg) {
 extern int FUN_L05_00307470(int);
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 
-void FUN_L05_00307480(char *moby, int a1, int a2, int a3) {
+void FUN_L05_00307480(char *moby, int animation_index, int a2, int a3) {
     char *data;
     char *child;
     float ratio;
     float f;
     float max;
     int idx;
-    blend_moby_animation(moby, a1, a2, a3);
+    blend_moby_animation(moby, animation_index, a2, a3);
     data = *(char **)(moby + 0x78);
     child = *(char **)(data + 0x268);
     if (child != 0) {
         ratio = *(float *)(child + 0x5C) / *(float *)(moby + 0x5C);
-        idx = FUN_L05_00307470(a1);
+        idx = FUN_L05_00307470(animation_index);
         f = (float)a2 * ratio;
         max = (float)*(unsigned char *)(*(char **)(*(char **)(*(char **)(data + 0x268) + 0x24) -
                                                    (-(idx * 4)) + 0x48) +
