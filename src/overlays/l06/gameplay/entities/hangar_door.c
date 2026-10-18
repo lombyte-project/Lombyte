@@ -3211,6 +3211,10 @@ extern float D_L06_00161F5C __attribute__((sda));
 
 void FUN_L06_002fbfb0(char *moby) {
     enum {
+        MOVE_PAIR_TO_FIXED_OFFSETS = 3,
+        ANIMATE_PAIR_WITH_TIMED_PHASES = 4
+    };
+    enum {
         INITIALIZE_CHILD_AND_TRANSFORMS = 0,
         WAIT_FOR_HERO_IN_CLIP_VOLUME = 1,
         WAIT_FOR_RESET = 5
@@ -3267,7 +3271,7 @@ void FUN_L06_002fbfb0(char *moby) {
         }
         allocate_voice_for_target_entry(0, 0, (int)*(char **)(data + 0x40));
         return;
-    case 3:
+    case MOVE_PAIR_TO_FIXED_OFFSETS:
         target_delta = FUN_001f9b48(moby + 0x10, data + 0x10);
         child = *(char **)(data + 0x40);
         a = target_delta;
@@ -3281,7 +3285,7 @@ void FUN_L06_002fbfb0(char *moby) {
         FUN_L00_00250df8(*(char **)(data + 0x40));
         if (absolute_float(a - D_L06_00161F1C) < 0.01f && absolute_float(b - D_L06_00161F20) < 0.01f) moby[0x20] = 5;
         return;
-    case 4:
+    case ANIMATE_PAIR_WITH_TIMED_PHASES:
         target_delta = FUN_001f9b48(moby + 0x10, data + 0x10);
         child = *(char **)(data + 0x40);
         phase_a = target_delta;
