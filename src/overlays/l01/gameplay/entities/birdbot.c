@@ -1533,7 +1533,7 @@ void peckbot_update(Mob577 *self) {
     Mob577Target target;
     Vec577 v70;
     Vec577 v80;
-    Vec577 v90;
+    Vec577 home_to_target;
     s32 hitA0;
     f32 hitA4;
     f32 angle;
@@ -1858,7 +1858,7 @@ void peckbot_update(Mob577 *self) {
             v->turn_timer = scale_game_frames(random_float_between(30.0f, 90.0f));
             v->turn_off = -v->turn_off;
         }
-        fast_vec_sub(&v90, &target.pos, &v->home);
+        fast_vec_sub(&home_to_target, &target.pos, &v->home);
         if (vector_distance(&self->pos, &target.pos) < 1.5f && !(res & 2)) {
             self->state = 4;
             SET_ANIM(self, 3, 0, scale_game_frames(3));
@@ -1867,7 +1867,7 @@ void peckbot_update(Mob577 *self) {
             self->pos.f[1] = oldpos.f[1];
             self->state = 12;
             SET_ANIM(self, 5, 0, scale_game_frames(3));
-        } else if (fast_vec_length(&v90) < v->range + 4.0f &&
+        } else if (fast_vec_length(&home_to_target) < v->range + 4.0f &&
                    FUN_001f99c0(self->pos.f[2] - target.pos.f[2]) < 8.0f) {
             if (self->group != 0xFF) {
                 FUN_L01_0026e090(self->group, 1);
@@ -1929,8 +1929,8 @@ void peckbot_update(Mob577 *self) {
             self->state = 1;
             SET_ANIM(self, 4, 0, scale_game_frames(3));
         }
-        fast_vec_sub(&v90, &target.pos, &v->home);
-        if (fast_vec_length(&v90) < v->range) {
+        fast_vec_sub(&home_to_target, &target.pos, &v->home);
+        if (fast_vec_length(&home_to_target) < v->range) {
             if (self->group != 0xFF) {
                 FUN_L01_0026e090(self->group, 1);
             }
@@ -2012,7 +2012,7 @@ void peckbot_update(Mob577 *self) {
         v70.f[1] = fast_sin(self->rot.f[2]) * 2.0f;
         v70.f[2] = 0.0f;
         res12 = FUN_L00_00258b50(self, &v->x180, &v70, &v80, 1.0f);
-        fast_vec_sub(&v90, &target.pos, &v->home);
+        fast_vec_sub(&home_to_target, &target.pos, &v->home);
         if (vector_distance(&self->pos, &target.pos) < 1.5f && r12 <= 1.0f) {
             self->state = 4;
             SET_ANIM(self, 3, 0, scale_game_frames(3));
