@@ -33,14 +33,14 @@ extern char D_0013E550_c[] __asm__("D_0013E550");
 extern unsigned char D_L00_001BD820[];
 extern int D_L00_0015F574;
 
-int FUN_L00_0028de68(int a0, int a1, int a2, int a3, int a4) {
+int FUN_L00_0028de68(int a0, int a1, int voice_index_offset, int a3, int a4) {
     int idx;
     int h;
     int t;
 
     t = D_L00_001BD820[current_level_index] + a0 * 4;
     t += a1 * 2;
-    t += a2;
+    t += voice_index_offset;
     idx = t + D_L00_0015F574;
 
     if (idx >= D_L00_0015F5F0) {
