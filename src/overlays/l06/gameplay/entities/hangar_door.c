@@ -2952,6 +2952,9 @@ extern int *D_L06_001B0C30[];
 
 /* Updates the object's health, hit response, recovery timer and path motion. */
 void FUN_L06_002fa9c0(char *moby) {
+    enum {
+        HIT_RESPONSE_DEATH = 1
+    };
     char *data;
     char *hit;
     int out;
@@ -3012,7 +3015,7 @@ start_recovery:
         case 3: case 4: case 5: case 6: case 7: case 8: case 9: case 10:
             *(unsigned char *)(data + 0x67) = 200;
             break;
-        case 1:
+        case HIT_RESPONSE_DEATH:
         case 2: {
             char *base;
             if (*(int *)(data + 0x10C) != -1) {
