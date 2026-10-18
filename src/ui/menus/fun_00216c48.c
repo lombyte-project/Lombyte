@@ -57,6 +57,12 @@ extern s32 compute_clamped_count_difference(void) __asm__("FUN_00215248");
 #define SCRATCH ((char *)0x70000000)
 
 void FUN_00216c48(void *arg0, Menu *menu, s32 follow_entry_link) {
+    enum {
+        MENU_CONDITION_PURCHASE_PRICE_MET = 1,
+        MENU_CONDITION_ITEM_AVAILABLE = 2,
+        MENU_CONDITION_ITEM_AVAILABLE_NOT_ACQUIRED = 3,
+        MENU_CONDITION_ALTERNATE_ITEM_AVAILABLE = 4
+    };
     char buf[0x100];
     Suffixes sfx;
     char num[0x20];
@@ -124,19 +130,19 @@ void FUN_00216c48(void *arg0, Menu *menu, s32 follow_entry_link) {
     }
     ok = 0;
     switch (e->unk8) {
-    case 1:
+    case MENU_CONDITION_PURCHASE_PRICE_MET:
         ok = !(current_bolt_count < D_001DFFB0[e->unkA].unk0);
         break;
-    case 2:
+    case MENU_CONDITION_ITEM_AVAILABLE:
         ok = item_available[e->unkA] != 0;
         break;
-    case 3:
+    case MENU_CONDITION_ITEM_AVAILABLE_NOT_ACQUIRED:
         ok = 0;
         if (item_available[e->unkA] != 0) {
             ok = items_acquired[e->unkA] == 0;
         }
         break;
-    case 4:
+    case MENU_CONDITION_ALTERNATE_ITEM_AVAILABLE:
         ok = alternate_item_available[e->unkA] != 0;
         break;
     case 5:
