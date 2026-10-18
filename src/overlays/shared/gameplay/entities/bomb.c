@@ -2029,12 +2029,12 @@ void rocket_update(char *m) {
     char *q;
     char *p;
     char *gg;
-    V4_cd v20;
+    V4_cd previous_position;
     V4_cd dir;
     V4_cd z;
-    V4_cd v50;
+    V4_cd forward_step;
     union { struct { V4_cd a; V4_cd b; V4_cd c; } v; RocketHit h; } u;
-    V4_cd v90;
+    V4_cd intercept_direction;
     V4_cd va0[4];
     int r;
     unsigned char flag;
@@ -2090,24 +2090,24 @@ void rocket_update(char *m) {
                 float fA = *(float *)(d + 0x30) * *(float *)(d + 0x30) - r1;
                 float r2f = FUN_L00_001ff430(&u.v.a);
                 float sq = square_root_scalar(fB * fB - (4.0f * fA) * (-r2f));
-                float t1 = (-fB + sq) / (fA + fA);
-                float t2 = (-fB - sq) / (fA + fA);
-                if (0.0f < t1 && 0.0f < t2) {
-                    t = (t2 < t1) ? t1 : t2;
-                } else if (0.0f < t1) {
-                    t = t1;
-                } else if (0.0f < t2) {
-                    t = t2;
+                float intercept_root_plus = (-fB + sq) / (fA + fA);
+                float intercept_root_minus = (-fB - sq) / (fA + fA);
+                if (0.0f < intercept_root_plus && 0.0f < intercept_root_minus) {
+                    t = (intercept_root_minus < intercept_root_plus) ? intercept_root_plus : intercept_root_minus;
+                } else if (0.0f < intercept_root_plus) {
+                    t = intercept_root_plus;
+                } else if (0.0f < intercept_root_minus) {
+                    t = intercept_root_minus;
                 } else {
                     t = -1.0f;
                 }
             }
             if (0.0f < t) {
-                fast_vec_scale(&v90, &u.v.b, t);
-                add_vector_xyz(&v90, &v90, &u.v.a);
-                g = fast_arc_tan_c(v90.f[0], v90.f[1]);
+                fast_vec_scale(&intercept_direction, &u.v.b, t);
+                add_vector_xyz(&intercept_direction, &intercept_direction, &u.v.a);
+                g = fast_arc_tan_c(intercept_direction.f[0], intercept_direction.f[1]);
                 *(float *)(m + 0x48) = FUN_L00_00258110((float *)(d + 0x34), *(float *)(m + 0x48), g, D_0015ED70 * 188.49556f, 0.0f, 0.0f);
-                g = fast_arc_tan_c(vector_length_xy(&v90), v90.f[2]);
+                g = fast_arc_tan_c(vector_length_xy(&intercept_direction), intercept_direction.f[2]);
                 *(float *)(m + 0x44) = FUN_L00_00258110((float *)(d + 0x38), *(float *)(m + 0x44), -g, D_0015ED70 * 188.49556f, 0.0f, 0.0f);
             }
             s = fast_vec_length(&u.v.a);
@@ -2119,23 +2119,23 @@ void rocket_update(char *m) {
         }
     }
 
-    build_spherical_offset(&v50, *(float *)(d + 0x30), *(float *)(m + 0x48), -*(float *)(m + 0x44));
+    build_spherical_offset(&forward_step, *(float *)(d + 0x30), *(float *)(m + 0x48), -*(float *)(m + 0x44));
     *(u128_cd *)&u.v.b = 0;
     u.v.b.f[0] = random_float_between_c(-1.0f, 1.0f);
     u.v.b.f[1] = random_float_between_c(-1.0f, 1.0f);
     u.v.b.f[2] = random_float_between_c(-1.0f, 1.0f);
     *(u128_cd *)&u.v.a = *(u128_cd *)&u.v.b;
     fast_vec_normalize(&u.v.a, &u.v.a, random_float_between_c(0.1f, 0.2f) * D_0015ED6C);
-    fast_vec_normalize(&z, &v50, -random_float_between_c(D_0015ED6C * 0.1f, D_0015ED6C));
+    fast_vec_normalize(&z, &forward_step, -random_float_between_c(D_0015ED6C * 0.1f, D_0015ED6C));
     add_vector_xyz(&u.v.a, &u.v.a, &z);
-    fast_vec_normalize(&z, &v50, random_float_between_c(0.0f, 1.0f) * *(float *)(d + 0x30));
+    fast_vec_normalize(&z, &forward_step, random_float_between_c(0.0f, 1.0f) * *(float *)(d + 0x30));
     add_vector_xyz(&z, &z, m + 0x10);
     {
         int c1 = scale_game_frames_c(FUN_L00_00257b90_c(0x1C, 0x28));
         FUN_L00_00269958(&z, &u.v.a, 0x6F00AFFF, 0x100000FF, c1, 0x28, FUN_L00_00257b90_c(0x28, 0x46), 1);
     }
-    qcopy(&v20, m + 0x10);
-    add_vector_xyz(d + 0x10, d + 0x10, &v50);
+    qcopy(&previous_position, m + 0x10);
+    add_vector_xyz(d + 0x10, d + 0x10, &forward_step);
     *(float *)(d + 0x48) = fast_add_rotations(*(float *)(d + 0x48), *(float *)(d + 0x50));
     *(float *)(d + 0x4C) = fast_add_rotations(*(float *)(d + 0x4C), *(float *)(d + 0x54));
     *(float *)(d + 0x48) = fast_add_rotations(*(float *)(d + 0x48), fast_sin_c(*(float *)(d + 0x4C)) * 0.15f);
@@ -2157,7 +2157,7 @@ void rocket_update(char *m) {
         euler_rotation_matrix(va0, m + 0x40);
         transform_vector(&u.v.a, &u.v.a, va0);
         add_vector_xyz(m + 0x10, d + 0x10, &u.v.a);
-        if (collision_line(&v20, m + 0x10, 6, (int)m, 0) == 0) goto done;
+        if (collision_line(&previous_position, m + 0x10, 6, (int)m, 0) == 0) goto done;
         goto hit;
     top:;
     }
@@ -2169,8 +2169,8 @@ hit:
 done:
 
     if (flag) {
-        *(float *)(m + 0x48) = fast_arc_tan_c(*(float *)(m + 0x10) - v20.f[0], *(float *)(m + 0x14) - v20.f[1]);
-        *(float *)(m + 0x44) = -fast_arc_tan_c(vector_distance_xy_alt(&v20, m + 0x10), *(float *)(m + 0x18) - v20.f[2]);
+        *(float *)(m + 0x48) = fast_arc_tan_c(*(float *)(m + 0x10) - previous_position.f[0], *(float *)(m + 0x14) - previous_position.f[1]);
+        *(float *)(m + 0x44) = -fast_arc_tan_c(vector_distance_xy_alt(&previous_position, m + 0x10), *(float *)(m + 0x18) - previous_position.f[2]);
         *(int *)(d + 0x34) = 0;
         *(int *)(d + 0x38) = 0;
     }
@@ -2180,14 +2180,14 @@ done:
     u.h.e = 3.0f;
     u.h.p = m;
     u.h.i = 1;
-    qcopy(&u.v.a, &v50);
+    qcopy(&u.v.a, &forward_step);
     set_vector_length_xy(&u.v.a, &u.v.a, 1.0f);
     u.h.z = 1.0f;
     u.h.b18 = 3;
     u.h.w = 5627.925f;
     u.h.b19 = 3;
     u.h.s = *(unsigned short *)(m + 0xA6);
-    if (collision_line(&v20, m + 0x10, 0, (int)m, (int)&u.v.a)) {
+    if (collision_line(&previous_position, m + 0x10, 0, (int)m, (int)&u.v.a)) {
         gg = (char *)((int *)&D_L00_00173E40);
         p = *(char **)(gg + 0x18);
         if (p != 0) {
@@ -2195,7 +2195,7 @@ done:
                 || *(short *)(p + 0xA6) == 0x1C9 || *(short *)(p + 0xA6) == 0) goto keep;
             m[0xBC] = 2;
             qcopy(m + 0x10, gg + 0x20);
-            FUN_L00_001ff660(&dir, &v50, gg + 0x40);
+            FUN_L00_001ff660(&dir, &forward_step, gg + 0x40);
             fast_vec_normalize(&dir, &dir, D_0015ED6C + D_0015ED6C);
             func_L00_0025F4A8_alt(m, &dir, 0, 0.0f, 0.0f, 10, 3, 9, 4.0f, 2.0f, 9.0f, 1.0f, 0, 15.0f, 1, 1, -1, 0);
             mark_moby_for_removal_c(m);
@@ -2204,7 +2204,7 @@ done:
             if (*(int *)(gg + 0x1C) <= 0) goto keep;
             m[0xBC] = 1;
             qcopy(m + 0x10, gg + 0x20);
-            FUN_L00_001ff660(&dir, &v50, gg + 0x40);
+            FUN_L00_001ff660(&dir, &forward_step, gg + 0x40);
             fast_vec_normalize(&dir, &dir, D_0015ED6C + D_0015ED6C);
             func_L00_0025F4A8_alt(m, &dir, 0, 0.0f, 1.0f, 10, 3, 9, 4.0f, 2.0f, 9.0f, 1.0f, 0, 15.0f, 1, 1, -1, 0);
             mark_moby_for_removal_c(m);
