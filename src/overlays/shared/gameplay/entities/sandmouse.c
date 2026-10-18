@@ -479,7 +479,7 @@ extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa6
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern void *suck_get_aim_height(void *) __asm__("FUN_002141f8");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
-extern void allocate_voice_for_target_entry(int, int, char *) __asm__("FUN_0022da68");
+extern s32 allocate_voice_for_target_entry(s32 entry_index, s32 flags, struct VoiceTarget *target) __asm__("FUN_0022da68");
 struct Moby *FUN_L01_0030d308(struct Moby *moby, f32 *from, f32 *ang, f32 yawMax, f32 pitchMax,
                               f32 range, f32 near, f32 nearYaw, f32 nearPitch);
 extern void FUN_L01_0030c898_c(void *, void *, float, float, float,
@@ -536,7 +536,7 @@ void FUN_L01_0030d5f0(char *moby, char *state) {
                     dist = vector_distance(&v, &q);
                     d = -fast_arc_tan(dist, q.f[2] - v.f[2]);
                     FUN_L01_0030c898_c(moby, &v, a, b, c, d);
-                    allocate_voice_for_target_entry(0, 0, moby);
+                    allocate_voice_for_target_entry(0, 0, (struct VoiceTarget *)moby);
                     *(short *)(state + 0x54) = scale_game_frames(D_L01_00162080_i);
                     *(int *)(state + 0x5C) = *(int *)(state + 0x5C) + 1;
                 }
@@ -561,10 +561,16 @@ struct HoverVars {
 /* steering constants */
 struct HoverTuning {
     s32 unk0;             /* passed to FUN_L00_00258ad0 */
-    u8 pad4[0x10];
+    f32 unk4, unk8, unkC, unk10;
     f32 yaw_speed;        /* 0x14: turn speed FUN_L00_00258278 keeps (D_L01_001DEB4C) */
-    u8 pad18[0x18];
+    f32 unk18, unk1C, unk20, unk24, unk28, unk2C;
     f32 unk30;
+    f32 unk34;
+    s32 unk38;
+    f32 unk3C, unk40, unk44;
+    s32 unk48;
+    s32 unk4C;
+    struct Moby *owner; /* 0x50 */
 };
 
 extern struct HoverTuning D_L01_001DEB38;
@@ -742,17 +748,8 @@ typedef u32 VecQuad __attribute__((mode(TI), aligned(16)));
 
 typedef struct Moby Moby;
 
-typedef struct { char pad0[0x454]; unsigned char collected[1]; } TpLevelState;
-
-typedef struct {
-    s32 f0;
-    f32 f4, f8, fC, f10, f14, f18, f1C, f20, f24, f28, f2C, f30, f34;
-    s32 f38;
-    f32 f3C, f40, f44;
-    s32 f48;
-    s32 f4C;
-    Moby *owner; /* 0x50 */
-} Tune_30F318;
+/* Per-level pickup state; collected[] is indexed by the moby's save id. */
+typedef struct { u8 pad0[0x454]; u8 collected[1]; } L01LevelState;
 
 typedef struct {
     Vec4 goal;      /* 0x00 */
@@ -772,11 +769,11 @@ typedef struct {
     s32 slot;       /* 0x64 */
 } Pv_30F318;
 
-extern Moby *D_0013E550_df40 __asm__("D_0013E550") __attribute__((section(".data")));
-extern Moby *D_L01_001742D8 __attribute__((section(".data")));
-extern TpLevelState D_L01_001BB6B0 __attribute__((section(".data")));
-extern Tune_30F318 D_L01_001DEB38_df40 __asm__("D_L01_001DEB38") __attribute__((section(".data")));
-extern char *D_L01_0015FFD8_df40 __asm__("D_L01_0015FFD8");
+extern char voice_pool_lui[] __asm__("D_0013E550") __attribute__((section(".data")));
+extern struct Moby *D_L01_001742D8 __attribute__((section(".data")));
+extern L01LevelState D_L01_001BB6B0 __attribute__((section(".data")));
+extern struct HoverTuning D_L01_001DEB38_lui __asm__("D_L01_001DEB38") __attribute__((section(".data")));
+extern char *D_L01_0015FFD8;
 extern char *D_L01_00167280 __attribute__((section(".data")));
 extern char D_0013F350[] __attribute__((section(".data")));
 extern char D_L01_0020BA10[] __attribute__((section(".data")));
@@ -795,8 +792,7 @@ extern int DebugPrint_alt() __asm__("FUN_001e93b0");
 extern int FUN_L00_00257b90(int, int);
 extern int FUN_L00_00259028(void *, void *, void *, void *);
 extern int FUN_L01_0023cf98(int, int);
-extern int allocate_voice_for_target_entry_alt(int, int, int) __asm__("FUN_0022da68");
-extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("func_00214720");
+extern int is_point_inside_clip_volume(void *point, int volume) __asm__("func_00214720");
 extern int tick_countdown_32_alt(void *) __asm__("FUN_001f9740");
 extern s32 collision_line(void *, void *, s32, void *, s32);
 extern s32 fast_dec_timer_s16_df40(s16 *) __asm__("func_001F9770");
@@ -833,8 +829,8 @@ void FUN_L01_0030ded0(char *moby);
 void attach_manipulator(void *owner, s32 slot_index, void *manip) __asm__("FUN_0020cb10");
 void detach_manipulator(void *moby, void *manip) __asm__("FUN_0020cb88");
 
-#define LNK(i) (((Moby *)D_L01_0015FFD8_df40) + (i))
-#define VOICE(i) ((char *)&D_0013E550_df40 + (i) * 0x70)
+#define LNK(i) (((Moby *)D_L01_0015FFD8) + (i))
+#define VOICE(i) (voice_pool_lui + (i) * 0x70)
 
 void FUN_L01_0030df40(Moby *m) {
     Pv_30F318 *p;
@@ -895,22 +891,22 @@ void FUN_L01_0030df40(Moby *m) {
         }
         qcopy(&p->a20, &m->pos);
         qcopy(&p->a30, &m->pos);
-        FUN_L01_0026d930(&D_L01_001DEB38_df40);
-        D_L01_001DEB38_df40.f0 = 500;
-        D_L01_001DEB38_df40.f8 = 0.15f;
-        D_L01_001DEB38_df40.fC = 0.15f;
-        D_L01_001DEB38_df40.f14 = D_0015ED60 * 0.4f;
-        D_L01_001DEB38_df40.f10 = D_0015ED60 * 0.01f;
-        D_L01_001DEB38_df40.f24 = D_0015ED6C * 2.7f;
-        D_L01_001DEB38_df40.f1C = D_0015ED60 * 0.01f;
-        D_L01_001DEB38_df40.f4 = 0.3f;
-        D_L01_001DEB38_df40.f30 = 0.005f;
-        D_L01_001DEB38_df40.f38 |= 8;
-        D_L01_001DEB38_df40.f3C = D_0015ED70 * 6.2831855f;
-        D_L01_001DEB38_df40.f40 = D_0015ED70 * 3.1415927f;
-        D_L01_001DEB38_df40.f44 = D_0015ED6C * 11.519173f;
-        D_L01_001DEB38_df40.f48 = scale_game_frames(4);
-        D_L01_001DEB38_df40.f28 = 3.1415927f;
+        FUN_L01_0026d930(&D_L01_001DEB38_lui);
+        D_L01_001DEB38_lui.unk0 = 500;
+        D_L01_001DEB38_lui.unk8 = 0.15f;
+        D_L01_001DEB38_lui.unkC = 0.15f;
+        D_L01_001DEB38_lui.yaw_speed = D_0015ED60 * 0.4f;
+        D_L01_001DEB38_lui.unk10 = D_0015ED60 * 0.01f;
+        D_L01_001DEB38_lui.unk24 = D_0015ED6C * 2.7f;
+        D_L01_001DEB38_lui.unk1C = D_0015ED60 * 0.01f;
+        D_L01_001DEB38_lui.unk4 = 0.3f;
+        D_L01_001DEB38_lui.unk30 = 0.005f;
+        D_L01_001DEB38_lui.unk38 |= 8;
+        D_L01_001DEB38_lui.unk3C = D_0015ED70 * 6.2831855f;
+        D_L01_001DEB38_lui.unk40 = D_0015ED70 * 3.1415927f;
+        D_L01_001DEB38_lui.unk44 = D_0015ED6C * 11.519173f;
+        D_L01_001DEB38_lui.unk48 = scale_game_frames(4);
+        D_L01_001DEB38_lui.unk28 = 3.1415927f;
         m->state = 1;
         m->draw_dist = 0;
         break;
@@ -939,10 +935,10 @@ void FUN_L01_0030df40(Moby *m) {
             if (*(int *)(h + 0x1130) != 0) {
                 Vec4 a;
                 Vec4 b;
-                f32 a1;
+                f32 angle_to_hero;
                 if (*(int *)(h + 0x1158) != 5) break;
-                a1 = fast_arc_tan(*(f32 *)(h + 0x80) - m->pos.x, *(f32 *)(h + 0x84) - m->pos.y);
-                FUN_L00_00258278_df40(m, a1, &D_L01_001DEB4C,
+                angle_to_hero = fast_arc_tan(*(f32 *)(h + 0x80) - m->pos.x, *(f32 *)(h + 0x84) - m->pos.y);
+                FUN_L00_00258278_df40(m, angle_to_hero, &D_L01_001DEB4C,
                     D_0015ED70 * 6.2831855f, D_0015ED70 * 3.1415927f, D_0015ED6C * 11.519173f);
                 qcopy(&a, &LNK(p->link)->pos);
                 a.f[2] += 0.5f;
@@ -957,7 +953,7 @@ void FUN_L01_0030df40(Moby *m) {
                     && (*(Moby **)(h + 0x1130))->state != 0xFE && (*(Moby **)(h + 0x1130))->state != 0xFD) {
                     (*(Moby **)(h + 0x1130))->state = 1;
                 }
-                D_L01_001DEB38_df40.owner = m;
+                D_L01_001DEB38_lui.owner = m;
                 FUN_L01_0023cf98(0x1F, 0);
                 FUN_L00_002323b8((float)scale_game_frames(6), 0, 0);
                 if (p->link != -1) {
@@ -990,7 +986,7 @@ void FUN_L01_0030df40(Moby *m) {
                 blend_moby_animation(m, 0, 0, scale_game_frames(20));
             }
             if (p->slot == -1) {
-                p->slot = allocate_voice_for_target_entry_alt(1, 4, (int)m);
+                p->slot = allocate_voice_for_target_entry(1, 4, (struct VoiceTarget *)m);
             }
             m->state = 3;
         }
@@ -1001,11 +997,11 @@ void FUN_L01_0030df40(Moby *m) {
             char *v = VOICE(p->slot);
             if (*(Moby **)(v + 0x88) != m || *(u8 *)(v + 0x74) == 0) {
                 p->slot = -1;
-                p->slot = allocate_voice_for_target_entry_alt(1, 4, (int)m);
+                p->slot = allocate_voice_for_target_entry(1, 4, (struct VoiceTarget *)m);
             }
         }
         if (0.6f < vector_distance_df40(&m->pos, &p->a30) && p->timer == 0) {
-            D_L01_001DEB38_df40.f4 = 0.7f;
+            D_L01_001DEB38_lui.unk4 = 0.7f;
             FUN_L01_0030d260(m, p);
             FUN_L01_0030d880_df40(m, p);
             r = p->stuck < 0x15;
@@ -1013,10 +1009,10 @@ void FUN_L01_0030df40(Moby *m) {
         } else {
             FUN_L01_002e30b8(m, p);
             ang = fast_arc_tan(p->goal.f[0] - m->pos.x, p->goal.f[1] - m->pos.y);
-            FUN_L00_00258278_df40(m, ang, &D_L01_001DEB38_df40.f14,
+            FUN_L00_00258278_df40(m, ang, &D_L01_001DEB38_lui.yaw_speed,
                 D_0015ED70 * 6.2831855f, D_0015ED70 * 3.1415927f, D_0015ED6C * 11.519173f);
             p->vel.f[2] = 0;
-            r = FUN_L00_00259028(m, &D_L01_001DEB38_df40, p, &p->vel);
+            r = FUN_L00_00259028(m, &D_L01_001DEB38_lui, p, &p->vel);
         }
         if ((r & 6) != 0 || fast_vec_dist(&m->pos, p) < 0.25f) {
             if (m->prev_seq != 2) {
@@ -1039,7 +1035,7 @@ void FUN_L01_0030df40(Moby *m) {
             char *v = VOICE(p->slot);
             if (*(Moby **)(v + 0x88) != m || *(u8 *)(v + 0x74) == 0) {
                 p->slot = -1;
-                p->slot = allocate_voice_for_target_entry_alt(1, 4, (int)m);
+                p->slot = allocate_voice_for_target_entry(1, 4, (struct VoiceTarget *)m);
             }
         }
         FUN_L01_0023cf98(0, 1);
@@ -1054,7 +1050,7 @@ void FUN_L01_0030df40(Moby *m) {
             char *v = VOICE(p->slot);
             if (*(Moby **)(v + 0x88) != m || *(u8 *)(v + 0x74) == 0) {
                 p->slot = -1;
-                p->slot = allocate_voice_for_target_entry_alt(1, 4, (int)m);
+                p->slot = allocate_voice_for_target_entry(1, 4, (struct VoiceTarget *)m);
             }
         }
         if (p->timer == scale_game_frames(20) || *(int *)&D_L01_0016209C - 5 < p->k5C) {
@@ -1085,7 +1081,7 @@ void FUN_L01_0030df40(Moby *m) {
                     }
                 }
                 p->slot = -1;
-                allocate_voice_for_target_entry_alt(2, 0, (int)m);
+                allocate_voice_for_target_entry(2, 0, (struct VoiceTarget *)m);
                 m->state = 6;
                 if (p->link != -1) {
                     LNK(p->link)->command = 5;
@@ -1142,9 +1138,9 @@ void FUN_L01_0030df40(Moby *m) {
         p->slot = -1;
         qzero(&p->vel);
         qcopy(p, &LNK(p->link)->pos);
-        D_L01_001DEB38_df40.owner = 0;
+        D_L01_001DEB38_lui.owner = 0;
         ang = fast_arc_tan(p->goal.f[0] - m->pos.x, p->goal.f[1] - m->pos.y);
-        FUN_L00_00258278_df40(m, ang, &D_L01_001DEB38_df40.f14,
+        FUN_L00_00258278_df40(m, ang, &D_L01_001DEB38_lui.yaw_speed,
             D_0015ED70 * 6.2831855f, D_0015ED70 * 3.1415927f, D_0015ED6C * 11.519173f);
         if (m->prev_seq != 0) {
             blend_moby_animation(m, 0, 0, scale_game_frames(6));
@@ -1401,16 +1397,16 @@ typedef struct {
 
 typedef struct {
     char p00[0x20];
-    float f20;
+    float unk20;
     char p24[0x10];
-    float f34;
+    float unk34;
     char p38[0x18];
 } SubA_316730;
 
 typedef struct {
     float pos[4];
     char p10[0x3C];
-    float f4C;
+    float unk4C;
     char p50[0x80];
 } SubB_316730;
 
@@ -1418,13 +1414,13 @@ typedef struct {
     int idx;
     float t;
     int p08[2];
-    int f10;
+    int unk10;
 } SubC_316730;
 
 typedef struct {
     float vel[3];
-    float f0C;
-    float f10;
+    float unk0C;
+    float unk10;
     char p14[0x1C];
     SubA_316730 a;
     SubB_316730 b;
@@ -1432,39 +1428,39 @@ typedef struct {
 } Data_316730;
 
 typedef struct {
-    float f0;
+    float unk0;
     char p04[0x1C];
-    int f20;
-    int f24;
-    int f28;
-    int f2C;
-    int f30;
-    short f34;
-    short f36;
-    float f38;
+    int unk20;
+    int unk24;
+    int unk28;
+    int unk2C;
+    int unk30;
+    short unk34;
+    short unk36;
+    float unk38;
 } Parm_316730;
 
 typedef struct {
     char p00[0x1C];
-    Parm_316730 *f1C;
+    Parm_316730 *unk1C;
 } Ent50_316730;
 
 typedef struct {
     char p00[0x10];
-    Path_316730 *f10;
+    Path_316730 *unk10;
     char p14[0xC];
 } Ent7EC_316730;
 
 typedef struct {
-    float f0[4];
-    float f10[4];
-    float f20[4];
+    float unk0[4];
+    float unk10[4];
+    float unk20[4];
     float pos[4];
-    float f40[4];
+    float unk40[4];
     char p50[0x20];
     Data_316730 *data;
     char p74[0x10];
-    short f84;
+    short unk84;
 } Cam_316730;
 
 extern Ent50_316730 *D_L01_0015EF50_c __asm__("D_L01_0015EF50") __attribute__((section(".sdata")));
@@ -1502,11 +1498,11 @@ void FUN_L01_00315358(Cam_316730 *cam) {
     SubA_316730 *look = &data->a;
     SubB_316730 *follow = &data->b;
     SubC_316730 *progress = &data->c;
-    Parm_316730 *params = D_L01_0015EF50_c[cam->f84].f1C;
+    Parm_316730 *params = D_L01_0015EF50_c[cam->unk84].unk1C;
     float rate = 0.01f;
-    int mode = params->f30;
-    int path_index = params->f20;
-    float lead = params->f0;
+    int mode = params->unk30;
+    int path_index = params->unk20;
+    float lead = params->unk0;
     float pitch_error;
     float look_length;
     float pitch_step;
@@ -1531,9 +1527,9 @@ void FUN_L01_00315358(Cam_316730 *cam) {
         cam->pos[2] = cam_interp_values(cam->pos[2], rail_point[2], &data->vel[2], rate, 0.175f, 0.0f);
     } else if (mode == 2) {
         Path_316730 *pathA = D_L01_001B0C30_316730[path_index];
-        Path_316730 *pathD = D_L01_0015F70C_c[params->f24].f10;
-        Path_316730 *pathC = D_L01_001B0C30_316730[params->f28];
-        Path_316730 *pathB = D_L01_001B0C30_316730[params->f2C];
+        Path_316730 *pathD = D_L01_0015F70C_c[params->unk24].unk10;
+        Path_316730 *pathC = D_L01_001B0C30_316730[params->unk28];
+        Path_316730 *pathB = D_L01_001B0C30_316730[params->unk2C];
         int i;
         int prev = 0;
         int range_start = 0;
@@ -1564,7 +1560,7 @@ void FUN_L01_00315358(Cam_316730 *cam) {
             }
             prev = i;
         }
-        progress->f10 = i;
+        progress->unk10 = i;
         sum = 0.0f;
         j = (i - 1 + pathB->n) % pathB->n;
         hero_length = pathB->nodes[i].y;
@@ -1592,27 +1588,27 @@ void FUN_L01_00315358(Cam_316730 *cam) {
             rate *= speed_scale;
             speed_scale *= 0.01f;
         }
-        if (absolute_float(data->f10 - speed_scale) < 0.00015f) {
-            data->f10 = speed_scale;
-        } else if (data->f10 < speed_scale) {
-            data->f10 = data->f10 + 0.00015f;
+        if (absolute_float(data->unk10 - speed_scale) < 0.00015f) {
+            data->unk10 = speed_scale;
+        } else if (data->unk10 < speed_scale) {
+            data->unk10 = data->unk10 + 0.00015f;
         } else {
-            data->f10 = data->f10 - 0.00015f;
+            data->unk10 = data->unk10 - 0.00015f;
         }
-        cam->pos[0] = cam_interp_values(cam->pos[0], look_target[0], &data->vel[0], data->f10, 0.175f, 0.0f);
-        cam->pos[1] = cam_interp_values(cam->pos[1], look_target[1], &data->vel[1], data->f10, 0.175f, 0.0f);
-        cam->pos[2] = cam_interp_values(cam->pos[2], look_target[2], &data->vel[2], data->f10, 0.175f, 0.0f);
+        cam->pos[0] = cam_interp_values(cam->pos[0], look_target[0], &data->vel[0], data->unk10, 0.175f, 0.0f);
+        cam->pos[1] = cam_interp_values(cam->pos[1], look_target[1], &data->vel[1], data->unk10, 0.175f, 0.0f);
+        cam->pos[2] = cam_interp_values(cam->pos[2], look_target[2], &data->vel[2], data->unk10, 0.175f, 0.0f);
     } else {
         Path_316730 *path = D_L01_001B0C30_316730[path_index];
 
-        if (params->f24 < 0) {
+        if (params->unk24 < 0) {
             float lead_offset;
 
             FUN_L00_0025df68(path, ((Hero *)(((char *)((char *)&hero))))->motion.pos.f, path_point, &segment, &fraction, 0, 20.0f, 1.0f, 0.0f);
-            if (params->f36 == 1) {
-                lead_offset = -(params->f38 * 4.0f);
+            if (params->unk36 == 1) {
+                lead_offset = -(params->unk38 * 4.0f);
             } else {
-                lead_offset = params->f38;
+                lead_offset = params->unk38;
             }
             sample_path(path, path_point, &segment, &fraction, lead_offset, 1);
             qcopy(camera_goal, path_point);
@@ -1622,18 +1618,18 @@ void FUN_L01_00315358(Cam_316730 *cam) {
 
             hero_segment = ((Hero *)(((char *)((char *)&hero))))->unk564;
             hero_fraction = ((Hero *)(((char *)((char *)&hero))))->unk568;
-            sample_path((Path_316730 *)((Hero *)(((char *)((char *)&hero))))->unk560, path_point, &hero_segment, &hero_fraction, params->f38, 1);
+            sample_path((Path_316730 *)((Hero *)(((char *)((char *)&hero))))->unk560, path_point, &hero_segment, &hero_fraction, params->unk38, 1);
             FUN_L00_0025df68(path, path_point, camera_goal, &segment, &fraction, 0, 20.0f, 1.0f, 0.0f);
         }
         cam->pos[0] = cam_interp_values(cam->pos[0], camera_goal[0], &data->vel[0], rate, 0.175f, 0.0f);
         cam->pos[1] = cam_interp_values(cam->pos[1], camera_goal[1], &data->vel[1], rate, 0.175f, 0.0f);
         cam->pos[2] = cam_interp_values(cam->pos[2], camera_goal[2], &data->vel[2], rate, 0.175f, 0.0f);
     }
-    if (params->f24 < 0) {
-        Path_316730 *path = D_L01_001B0C30_316730[params->f20];
+    if (params->unk24 < 0) {
+        Path_316730 *path = D_L01_001B0C30_316730[params->unk20];
 
         FUN_L00_0025df68(path, ((Hero *)(((char *)((char *)&hero))))->motion.pos.f, look_target, &segment, &fraction, 0, 20.0f, 1.0f, 0.0f);
-        if (D_0015EE84_c == 0xE && params->f30 == 0) {
+        if (D_0015EE84_c == 0xE && params->unk30 == 0) {
             sample_path(path, delta, &segment, &fraction, lead, 0);
         } else {
             sample_path(path, delta, &segment, &fraction, lead, 1);
@@ -1648,31 +1644,31 @@ void FUN_L01_00315358(Cam_316730 *cam) {
         hero_fraction = ((Hero *)(((char *)((char *)&hero))))->unk568;
         sample_path((Path_316730 *)((Hero *)(((char *)((char *)&hero))))->unk560, look_target, &hero_segment, &hero_fraction, lead, 1);
     }
-    normalize_vector_xyz(look_offset, D_L01_001672B0, follow->f4C);
+    normalize_vector_xyz(look_offset, D_L01_001672B0, follow->unk4C);
     add_vector_xyz(path_point, look_offset, look_target);
     subtract_vector_xyz(look_dir, path_point, cam->pos);
     look_length = vector_length_xyz(look_dir);
     if (look_length != 0.0f) {
         scale_vector_xyz(look_dir, look_dir, 1.0f / look_length);
-        pitch_error = 1.5707964f - approximate_arcsine(dot_vectors_xyz(look_dir, cam->f0));
+        pitch_error = 1.5707964f - approximate_arcsine(dot_vectors_xyz(look_dir, cam->unk0));
     } else {
         pitch_error = 0.0f;
     }
-    if (absolute_float(look->f20 - rate) < 0.00015f) {
-        look->f20 = rate;
-    } else if (look->f20 < rate) {
-        look->f20 = look->f20 + 0.00015f;
+    if (absolute_float(look->unk20 - rate) < 0.00015f) {
+        look->unk20 = rate;
+    } else if (look->unk20 < rate) {
+        look->unk20 = look->unk20 + 0.00015f;
     } else {
-        look->f20 = look->f20 - 0.00015f;
+        look->unk20 = look->unk20 - 0.00015f;
     }
-    pitch_step = rope_spring_turn(&look->f34, 0.0f, pitch_error, look->f20, 0.175f, 0.0f);
-    cross_vectors_xyz(delta, look_dir, cam->f40);
-    build_look_at_matrix(cam->f0, cam->f40, delta, pitch_step);
-    normalize_vector_xyz(cam->f40, cam->f0, 1.0f);
-    normalize_vector_xyz(cam->f0, cam->f0, 1.0f);
-    cross_vectors_xyz(cam->f10, cam->f0, D_L01_001672B0);
-    normalize_vector_xyz(cam->f10, cam->f10, 1.0f);
-    cross_vectors_xyz(cam->f20, cam->f10, cam->f0);
+    pitch_step = rope_spring_turn(&look->unk34, 0.0f, pitch_error, look->unk20, 0.175f, 0.0f);
+    cross_vectors_xyz(delta, look_dir, cam->unk40);
+    build_look_at_matrix(cam->unk0, cam->unk40, delta, pitch_step);
+    normalize_vector_xyz(cam->unk40, cam->unk0, 1.0f);
+    normalize_vector_xyz(cam->unk0, cam->unk0, 1.0f);
+    cross_vectors_xyz(cam->unk10, cam->unk0, D_L01_001672B0);
+    normalize_vector_xyz(cam->unk10, cam->unk10, 1.0f);
+    cross_vectors_xyz(cam->unk20, cam->unk10, cam->unk0);
 }
 extern Camera *D_L01_00167284 __attribute__((section(".data")));
 extern OvlVec4 D_0013F3D0_315de0 __asm__("D_0013F3D0");

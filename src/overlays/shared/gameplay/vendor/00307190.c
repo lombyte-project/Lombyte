@@ -450,7 +450,7 @@ void FUN_L08_00313ba8(void) {
 
 extern char D_0013E533[];
 extern char D_L08_0016C588[];
-extern float D_0015ED7C;
+extern float frame_delta_time __asm__("D_0015ED7C");
 extern int FUN_L00_00263468();
 extern int FUN_L00_0028ddd8(int a, int b, int c, int d);
 extern int FUN_L01_002a1968(int, int);
@@ -482,9 +482,9 @@ void FUN_L08_00316fa8(char *m) {
         ang += 0.31415927f;
     } while (ang < 6.2831855f);
     if (D_L08_001625E8 < open) {
-        D_L08_001625E8 += D_0015ED7C * 0.2f;
+        D_L08_001625E8 += frame_delta_time * 0.2f;
     } else {
-        D_L08_001625E8 -= D_0015ED7C * 0.75f;
+        D_L08_001625E8 -= frame_delta_time * 0.75f;
     }
     if (1.0f < D_L08_001625E8) {
         D_L08_001625E8 = 1.0f;

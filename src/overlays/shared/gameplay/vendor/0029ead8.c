@@ -128,131 +128,8 @@ purchase: {
 
 }
 #endif
-#ifndef NON_MATCHING
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A5138.c: func_L00_002A5158), where it is exact; names translated to the US level program. */
 
-typedef struct WaterPatch {
-    float x, y;
-    int pad8;
-    unsigned char nb[8];
-    char pad14[0x3C];
-    float h[2][23][16];
-    char rest[0x1190 - 0xBD0];
-} WaterPatch;
-
-extern f32 square_root_scalar(f32) __asm__("func_001F9988");
-extern float D_L00_001CA880[];
-extern short D_L00_00161218 __attribute__((sda));
-extern short D_L00_00161220 __attribute__((sda));
-float absolute_float(float input) __asm__("func_001F99C0");
-
-#define WATER_CUR (*(int *)&D_L00_00161218)
-#define WATER_OTH (*(int *)&D_L00_00161220)
-
-void FUN_L00_002a3ec8(WaterPatch *g, int count, int mode, float x, float y, float radius, float amount) {
-    WaterPatch *buf = g;
-    int r;
-    int i;
-
-    for (i = 0; i < count; i++) {
-        float oy = g->y + D_L00_001CA880[3];
-        float fy = (y - oy) / D_L00_001CA880[5];
-        float fx = (x - (g->x + D_L00_001CA880[2])) / D_L00_001CA880[4];
-        int r0, r1, c0, c1;
-        float py;
-
-        r0 = (int)(fy - radius);
-        r1 = (int)(fy + radius);
-        if (r0 < 0) r0 = 0;
-        if (r1 >= 16) r1 = 15;
-        c0 = (int)(fx - radius);
-        c1 = (int)(fx + radius);
-        if (c1 >= 16) c1 = 15;
-        if (c0 < 0) c0 = 0;
-        py = oy + D_L00_001CA880[5] * (float)r0;
-
-        for (r = r0; r <= r1; r++) {
-            float px = (g->x + D_L00_001CA880[2]) + D_L00_001CA880[4] * (float)c0;
-            int c;
-
-            for (c = c0; c <= c1; c++) {
-                float d2 = (x - px) * (x - px) + (y - py) * (y - py);
-                float v;
-
-                if (d2 < 1.0f) {
-                    v = amount;
-                } else {
-                    v = amount / square_root_scalar(d2);
-                }
-                if (mode == 0) {
-                    float a = absolute_float(v);
-                    if (a < absolute_float(g->h[WATER_CUR][r][c])) {
-                        v = g->h[WATER_CUR][r][c];
-                    }
-                } else {
-                    v += g->h[WATER_OTH][r][c];
-                }
-                {
-                int cur = WATER_CUR;
-                g->h[cur][r][c] = v;
-
-                if (r < 2 && g->nb[0] != 0xFF) {
-                    if (r == 0) {
-                        buf[g->nb[0]].h[cur][18][c] = g->h[cur][0][c];
-                    } else {
-                        buf[g->nb[0]].h[cur][20][c] = v;
-                    }
-                }
-                }
-                if (c < 2 && g->nb[1] != 0xFF) {
-                    if (c == 0) {
-                        buf[g->nb[1]].h[WATER_CUR][19][r] = g->h[WATER_CUR][r][0];
-                    } else {
-                        buf[g->nb[1]].h[WATER_CUR][21][r] = g->h[WATER_CUR][r][c];
-                    }
-                }
-                if (r == 15 && g->nb[2] != 0xFF) {
-                    int cur = WATER_CUR;
-                    buf[g->nb[2]].h[cur][16][c] = g->h[cur][r][c];
-                }
-                if (c == 15 && g->nb[3] != 0xFF) {
-                    int cur = WATER_CUR;
-                    buf[g->nb[3]].h[cur][17][r] = g->h[cur][r][c];
-                }
-                if (g->nb[4] != 0xFF) {
-                    if (c == 0 && r == 0) {
-                        int cur = WATER_CUR;
-                        buf[g->nb[4]].h[cur][22][3] = g->h[cur][r][c];
-                    }
-                    if (c == 1 && r == 0) {
-                        int cur = WATER_CUR;
-                        buf[g->nb[4]].h[cur][22][4] = g->h[cur][0][1];
-                    }
-                    if (c == 0 && r == 1) {
-                        int cur = WATER_CUR;
-                        buf[g->nb[4]].h[cur][22][5] = g->h[cur][1][0];
-                    }
-                }
-                if (g->nb[5] != 0xFF && c == 15 && r == 0) {
-                    int cur = WATER_CUR;
-                    buf[g->nb[5]].h[cur][22][2] = g->h[cur][0][15];
-                }
-                if (g->nb[6] != 0xFF && c == 0 && r == 15) {
-                    int cur = WATER_CUR;
-                    buf[g->nb[6]].h[cur][22][1] = g->h[cur][15][0];
-                }
-                if (g->nb[7] != 0xFF && c == 15 && r == 15) {
-                    int cur = WATER_CUR;
-                    buf[g->nb[7]].h[cur][22][0] = g->h[cur][15][15];
-                }
-                px += D_L00_001CA880[4];
-            }
-            py += D_L00_001CA880[5];
-        }
-        g++;
-    }
-}
-#else
 typedef struct {
     f32 x, z;
     u8 pad_8[4];
@@ -265,71 +142,110 @@ typedef struct { u8 pad_0[8]; f32 origin_x, origin_z, cell_width, cell_height; }
 extern HeightGridLayout D_L00_001CA880;
 extern s32 D_L00_00161218 __attribute__((sda));
 extern s32 D_L00_00161220 __attribute__((sda));
-extern f32 square_root(f32) __asm__("FUN_001f9988");
-extern f32 absolute_float(f32) __asm__("FUN_001f99c0");
-#define NEIGHBOUR(k) (grids + tile->neighbours[k])
-void pool_splash(HeightTile *grids, s32 count, s32 mode, f32 x, f32 z, f32 radius, f32 amount) __asm__("FUN_L00_002a3ec8");
-void pool_splash(HeightTile *grids, s32 count, s32 mode, f32 x, f32 z, f32 radius, f32 amount)
-{
-    HeightTile *tile = grids;
-    s32 k, i, j, row_first, row_last, col_first, col_last;
-    f32 tile_z, cell_x, cell_z, row_z, col_x, dz_sq, dist_sq, height, magnitude;
+extern f32 square_root_scalar(f32) __asm__("func_001F9988");
+float absolute_float(float input) __asm__("func_001F99C0");
 
-    for (k = 0; k < count; k++, tile++) {
-        tile_z = tile->z + D_L00_001CA880.origin_z;
-        cell_z = (z - tile_z) / D_L00_001CA880.cell_height;
-        cell_x = (x - (tile->x + D_L00_001CA880.origin_x)) / D_L00_001CA880.cell_width;
-        row_first = cell_z - radius;
-        if (row_first < 0) row_first = 0;
-        row_last = cell_z + radius;
-        col_last = cell_x + radius;
-        col_first = cell_x - radius;
-        if (row_last >= 16) row_last = 15;
-        if (col_last >= 16) col_last = 15;
-        if (col_first < 0) col_first = 0;
-        row_z = tile_z + D_L00_001CA880.cell_height * (f32)row_first;
-        for (i = row_first; i <= row_last; i++) {
-            col_x = tile->x + D_L00_001CA880.origin_x + D_L00_001CA880.cell_width * (f32)col_first;
-            dz_sq = (z - row_z) * (z - row_z);
-            for (j = col_first; j <= col_last; j++) {
-                dist_sq = (x - col_x) * (x - col_x) + dz_sq;
-                height = amount;
-                if (!(dist_sq < 1.0f)) height = amount / square_root(dist_sq);
-                if (mode == 0) {
-                    magnitude = absolute_float(height);
-                    if (magnitude < absolute_float(tile->heights[D_L00_00161218][i][j]))
-                        height = tile->heights[D_L00_00161218][i][j];
+/* Splash on the pool height tiles: raises the heights around (x, z) and copies the edges into the neighbour tiles. */
+void FUN_L00_002a3ec8(HeightTile *g, int count, int mode, float x, float z, float radius, float amount) {
+    HeightTile *buf = g;
+    int r;
+    int i;
+
+    for (i = 0; i < count; i++) {
+        float oy = g->z + D_L00_001CA880.origin_z;
+        float fy = (z - oy) / D_L00_001CA880.cell_height;
+        float fx = (x - (g->x + D_L00_001CA880.origin_x)) / D_L00_001CA880.cell_width;
+        int r0, r1, c0, c1;
+        float py;
+
+        r0 = (int)(fy - radius);
+        r1 = (int)(fy + radius);
+        if (r0 < 0) r0 = 0;
+        if (r1 >= 16) r1 = 15;
+        c0 = (int)(fx - radius);
+        c1 = (int)(fx + radius);
+        if (c1 >= 16) c1 = 15;
+        if (c0 < 0) c0 = 0;
+        py = oy + D_L00_001CA880.cell_height * (float)r0;
+
+        for (r = r0; r <= r1; r++) {
+            float px = (g->x + D_L00_001CA880.origin_x) + D_L00_001CA880.cell_width * (float)c0;
+            int c;
+
+            for (c = c0; c <= c1; c++) {
+                float d2 = (x - px) * (x - px) + (z - py) * (z - py);
+                float v;
+
+                if (d2 < 1.0f) {
+                    v = amount;
                 } else {
-                    height += tile->heights[D_L00_00161220][i][j];
+                    v = amount / square_root_scalar(d2);
                 }
-                tile->heights[D_L00_00161218][i][j] = height;
-                if (i < 2 && tile->neighbours[0] != 0xFF) {
-                    if (i == 0) NEIGHBOUR(0)->heights[D_L00_00161218][18][j] = tile->heights[D_L00_00161218][0][j];
-                    else NEIGHBOUR(0)->heights[D_L00_00161218][20][j] = height;
+                if (mode == 0) {
+                    float a = absolute_float(v);
+                    if (a < absolute_float(g->heights[D_L00_00161218][r][c])) {
+                        v = g->heights[D_L00_00161218][r][c];
+                    }
+                } else {
+                    v += g->heights[D_L00_00161220][r][c];
                 }
-                if (j < 2 && tile->neighbours[1] != 0xFF) {
-                    if (j == 0) NEIGHBOUR(1)->heights[D_L00_00161218][19][i] = tile->heights[D_L00_00161218][i][0];
-                    else NEIGHBOUR(1)->heights[D_L00_00161218][21][i] = tile->heights[D_L00_00161218][i][j];
+                {
+                int cur = D_L00_00161218;
+                g->heights[cur][r][c] = v;
+
+                if (r < 2 && g->neighbours[0] != 0xFF) {
+                    if (r == 0) {
+                        buf[g->neighbours[0]].heights[cur][18][c] = g->heights[cur][0][c];
+                    } else {
+                        buf[g->neighbours[0]].heights[cur][20][c] = v;
+                    }
                 }
-                if (i == 15 && tile->neighbours[2] != 0xFF)
-                    NEIGHBOUR(2)->heights[D_L00_00161218][16][j] = tile->heights[D_L00_00161218][15][j];
-                if (j == 15 && tile->neighbours[3] != 0xFF)
-                    NEIGHBOUR(3)->heights[D_L00_00161218][17][i] = tile->heights[D_L00_00161218][i][15];
-                if (tile->neighbours[4] != 0xFF) {
-                    if (j == 0 && i == 0) NEIGHBOUR(4)->heights[D_L00_00161218][22][3] = tile->heights[D_L00_00161218][0][0];
-                    if (j == 1 && i == 0) NEIGHBOUR(4)->heights[D_L00_00161218][22][4] = tile->heights[D_L00_00161218][0][1];
-                    if (j == 0 && i == 1) NEIGHBOUR(4)->heights[D_L00_00161218][22][5] = tile->heights[D_L00_00161218][1][0];
                 }
-                if (tile->neighbours[5] != 0xFF && j == 15 && i == 0)
-                    NEIGHBOUR(5)->heights[D_L00_00161218][22][2] = tile->heights[D_L00_00161218][0][15];
-                if (tile->neighbours[6] != 0xFF && j == 0 && i == 15)
-                    NEIGHBOUR(6)->heights[D_L00_00161218][22][1] = tile->heights[D_L00_00161218][15][0];
-                if (tile->neighbours[7] != 0xFF && j == 15 && i == 15)
-                    NEIGHBOUR(7)->heights[D_L00_00161218][22][0] = tile->heights[D_L00_00161218][15][15];
-                col_x += D_L00_001CA880.cell_width;
+                if (c < 2 && g->neighbours[1] != 0xFF) {
+                    if (c == 0) {
+                        buf[g->neighbours[1]].heights[D_L00_00161218][19][r] = g->heights[D_L00_00161218][r][0];
+                    } else {
+                        buf[g->neighbours[1]].heights[D_L00_00161218][21][r] = g->heights[D_L00_00161218][r][c];
+                    }
+                }
+                if (r == 15 && g->neighbours[2] != 0xFF) {
+                    int cur = D_L00_00161218;
+                    buf[g->neighbours[2]].heights[cur][16][c] = g->heights[cur][r][c];
+                }
+                if (c == 15 && g->neighbours[3] != 0xFF) {
+                    int cur = D_L00_00161218;
+                    buf[g->neighbours[3]].heights[cur][17][r] = g->heights[cur][r][c];
+                }
+                if (g->neighbours[4] != 0xFF) {
+                    if (c == 0 && r == 0) {
+                        int cur = D_L00_00161218;
+                        buf[g->neighbours[4]].heights[cur][22][3] = g->heights[cur][r][c];
+                    }
+                    if (c == 1 && r == 0) {
+                        int cur = D_L00_00161218;
+                        buf[g->neighbours[4]].heights[cur][22][4] = g->heights[cur][0][1];
+                    }
+                    if (c == 0 && r == 1) {
+                        int cur = D_L00_00161218;
+                        buf[g->neighbours[4]].heights[cur][22][5] = g->heights[cur][1][0];
+                    }
+                }
+                if (g->neighbours[5] != 0xFF && c == 15 && r == 0) {
+                    int cur = D_L00_00161218;
+                    buf[g->neighbours[5]].heights[cur][22][2] = g->heights[cur][0][15];
+                }
+                if (g->neighbours[6] != 0xFF && c == 0 && r == 15) {
+                    int cur = D_L00_00161218;
+                    buf[g->neighbours[6]].heights[cur][22][1] = g->heights[cur][15][0];
+                }
+                if (g->neighbours[7] != 0xFF && c == 15 && r == 15) {
+                    int cur = D_L00_00161218;
+                    buf[g->neighbours[7]].heights[cur][22][0] = g->heights[cur][15][15];
+                }
+                px += D_L00_001CA880.cell_width;
             }
-            row_z += D_L00_001CA880.cell_height;
+            py += D_L00_001CA880.cell_height;
         }
+        g++;
     }
 }
-#endif

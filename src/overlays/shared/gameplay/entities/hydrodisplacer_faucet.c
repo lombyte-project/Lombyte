@@ -276,14 +276,13 @@ extern float random_angle_radians_87a8(void) __asm__("FUN_00213308");
 extern void spawn_effect_87a8(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");
 extern void spawn_second_effect_87a8(void *, void *, int, int, int, int, float) __asm__("FUN_L00_0026cbb0");
 extern void FUN_L05_0024cee8_87a8(int, int) __asm__("FUN_L05_0024cee8");
-extern int D_0014F5CC_87a8 __asm__("D_L05_0015F5CC") __attribute__((sda));
-extern char D_0013F3D0_87a8[] __asm__("D_0013F3D0");
+extern int frame_number_gp __asm__("D_L05_0015F5CC") __attribute__((sda));
 extern unsigned short D_00141938 __attribute__((section(".data")));
 extern unsigned short D_00141C60 __attribute__((section(".data")));
 extern int D_L05_0015F6A8 __attribute__((section(".data")));
-extern int D_00151928_87a8 __asm__("D_L05_00161928") __attribute__((sda));
-extern int D_0015190C_87a8 __asm__("D_L05_0016190C") __attribute__((sda));
-extern int D_00151910_87a8 __asm__("D_L05_00161910") __attribute__((sda));
+extern int D_L05_00161928 __attribute__((sda));
+extern int D_L05_0016190C __attribute__((sda));
+extern int D_L05_00161910 __attribute__((sda));
 
 void hoverboard_update(unsigned char *moby) __asm__("FUN_L05_002f87a8");
 void hoverboard_update(unsigned char *moby) {
@@ -295,9 +294,9 @@ void hoverboard_update(unsigned char *moby) {
 
     switch (state) {
     case 0: {
-        char *pos = D_0013F3D0_87a8;
+        char *pos = D_0013F3D0;
         struct Hero *player;
-        if (distance_xyz_87a8(pos, moby + 0x10) < 5.5f && D_0014F5CC_87a8 > 3 &&
+        if (distance_xyz_87a8(pos, moby + 0x10) < 5.5f && frame_number_gp > 3 &&
             (player = (struct Hero *)(pos - 0x80))->state.control_mode != 0x15 &&
             player->state.control_mode != 0x16) {
             player->unk86C = moby;
@@ -335,7 +334,7 @@ void hoverboard_update(unsigned char *moby) {
     }
     delta_length = vector_length_xyz_87a8(delta);
     if ((unsigned char)moby[0xbc] != 2 && delta_length < 2.0f) {
-        get_moby_position_87a8(moby, D_0014F5CC_87a8 & 1, position);
+        get_moby_position_87a8(moby, frame_number_gp & 1, position);
         angle = random_angle_radians_87a8();
         distance_scale = frame_time * 0.25f;
         normalize_vector_xyz_87a8(effect_position, moby + 0xe0, distance_scale * fast_cos_87a8(angle));
@@ -343,21 +342,21 @@ void hoverboard_update(unsigned char *moby) {
         add_vector_xyz_87a8(effect_position, effect_position, delta);
         add_vector_xyz_87a8(effect_position, effect_position, offset);
         qcopy(effect_position, delta);
-        effect_position[3] = (float)D_00151928_87a8;
+        effect_position[3] = (float)D_L05_00161928;
         if ((unsigned char)moby[0xbc] == 0) {
             int size = random_int_between_87a8(scale_game_frames_87a8(10), scale_game_frames_87a8(13));
-            spawn_effect_87a8(position, effect_position, D_0015190C_87a8, D_00151910_87a8, size, 15, 15, 1);
+            spawn_effect_87a8(position, effect_position, D_L05_0016190C, D_L05_00161910, size, 15, 15, 1);
             moby[0xbc] = 0;
             return;
         }
         scale_vector_xyz_87a8(0.920f, second_position, delta);
         {
             int size = random_int_between_87a8(scale_game_frames_87a8(15), scale_game_frames_87a8(18));
-            spawn_effect_87a8(position, second_position, 0x5032f0d2, D_00151910_87a8, size, 30, 20, 1);
+            spawn_effect_87a8(position, second_position, 0x5032f0d2, D_L05_00161910, size, 30, 20, 1);
         }
         {
             int size = random_int_between_87a8(scale_game_frames_87a8(8), scale_game_frames_87a8(17));
-            spawn_second_effect_87a8(position, effect_position, D_0015190C_87a8, D_00151910_87a8, size, 1, 15000.0f);
+            spawn_second_effect_87a8(position, effect_position, D_L05_0016190C, D_L05_00161910, size, 1, 15000.0f);
         }
     }
     moby[0xbc] = 0;

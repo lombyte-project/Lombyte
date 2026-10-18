@@ -3774,7 +3774,6 @@ void FUN_L00_00213de8(float s) {
     f = (float *)(p - 0x100);
     f[0x194 / 4] = f[0x194 / 4] * s;
 }
-/* Steers the velocity's xy toward the move yaw at the target speed. */
 #define HERO_OF(v) ((struct Hero *)((char *)(v) - 0xE0))
 extern Vec4 hero_velocity_34358 __asm__("D_0013F430");
 extern f32 FUN_L00_00213350_34358(void *) __asm__("FUN_L00_00213350");
@@ -3787,6 +3786,11 @@ extern void add_vector_xyz_34358(void *, void *, void *) __asm__("FUN_001f9a10")
 extern void FUN_001f9c48_34358(void *, void *, f32) __asm__("FUN_001f9c48");
 extern f32 vector_length_xy_34358(void *) __asm__("FUN_001f9b20");
 
+#ifndef NON_MATCHING
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00213e68.s", FUN_L00_00213e68);
+#else
+/* Steers the velocity's xy toward the move yaw at the target speed. Three
+   instructions off retail: a v0 / v1 swap at 0x213FD0..0x213FF4. */
 void FUN_L00_00213e68(float amount) {
     f32 delta[4];
 
@@ -3838,12 +3842,8 @@ void FUN_L00_00213e68(float amount) {
             max = 1.5f;
             factor *= max;
             max = 3.0f;
-            {
-                /* Fakematch: retail keeps the hero address in v1 and the state in v0. */
-                register struct Hero *hp asm("$3") = &hero;
-                if (hp->state.current == 0x81)
-                    max = 1.7f;
-            }
+            if (hero.state.current == 0x81)
+                max = 1.7f;
             if (max < factor)
                 factor = max;
             if (factor < 1.0f)
@@ -3870,9 +3870,14 @@ void FUN_L00_00213e68(float amount) {
         break;
     }
 }
+#endif /* NON_MATCHING */
 
-/* Same steering as FUN_L00_00213e68, without the copy into motion.unk130. */
 void air_accel(float amount) __asm__("FUN_L01_00234358");
+#ifndef NON_MATCHING
+INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00234358.s", FUN_L01_00234358);
+#else
+/* Same steering as FUN_L00_00213e68, without the copy into motion.unk130.
+   Off retail by the same v0 / v1 swap. */
 void air_accel(float amount) {
     f32 delta[4];
 
@@ -3924,12 +3929,8 @@ void air_accel(float amount) {
             max = 1.5f;
             factor *= max;
             max = 3.0f;
-            {
-                /* Fakematch: retail keeps the hero address in v1 and the state in v0. */
-                register struct Hero *hp asm("$3") = &hero;
-                if (hp->state.current == 0x81)
-                    max = 1.7f;
-            }
+            if (hero.state.current == 0x81)
+                max = 1.7f;
             if (max < factor)
                 factor = max;
             if (factor < 1.0f)
@@ -3956,6 +3957,7 @@ void air_accel(float amount) {
         break;
     }
 }
+#endif /* NON_MATCHING */
 #include "types.h"
 #include "rnc/gameplay/hero.h"
 extern int nearest_rail_point() __asm__("FUN_L00_0020cd08");

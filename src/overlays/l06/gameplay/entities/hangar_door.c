@@ -1206,13 +1206,8 @@ extern float D_L06_00161D74 __attribute__((sda));
 extern float D_L06_00161D78 __attribute__((sda));
 extern float D_L06_00161D7C __attribute__((sda));
 extern float D_L06_00161D80 __attribute__((sda));
-extern float D_L06_00161DA0_c __asm__("D_L06_00161DA0") __attribute__((sda));
-extern float D_L06_00161DA4_c __asm__("D_L06_00161DA4") __attribute__((sda));
 extern void fast_vec_normalize_c(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F9CF8");
-extern float D_L06_00161E08_2F69D0 __asm__("D_L06_00161D78") __attribute__((sda));
-extern float D_L06_00161E0C_2F69D0 __asm__("D_L06_00161D7C") __attribute__((sda));
-extern float D_L06_00161E10_2F69D0 __asm__("D_L06_00161D80") __attribute__((sda));
 
 void FUN_L06_002f5d78(Moby *m)
 {
@@ -1222,7 +1217,7 @@ void FUN_L06_002f5d78(Moby *m)
     float t, ang, a, b, c, d;
 
     for (i = 0; i < 20; i++) {
-        t = D_L06_00161E08_2F69D0 - (float)i;
+        t = D_L06_00161D78 - (float)i;
         if (t < 0.0f) t = 0.0f;
         fast_vec_normalize_c(&w, &m->rot_row0, t);
         transform_vector_by_basis(&v, (Vec_2F69D0 *)D_L06_00161D50, &m->rot_row0);
@@ -1233,7 +1228,7 @@ void FUN_L06_002f5d78(Moby *m)
         add_vector_xyz(&v, &v, &m->pos);
         add_vector_xyz(&v, &v, &w);
         qcopy(&s->b[i]->pos, &v);
-        ang = D_L06_00161E0C_2F69D0 * 0.017453292f - (float)(i * 45) * 0.017453292f;
+        ang = D_L06_00161D7C * 0.017453292f - (float)(i * 45) * 0.017453292f;
         if (ang > 1.5707964f) ang = 1.5707964f;
         else if (ang < 0.0f) ang = 0.0f;
         s->a[i]->rot.x = -ang;
@@ -1244,7 +1239,7 @@ void FUN_L06_002f5d78(Moby *m)
 
     for (j = 0; j < 10; j++) {
         b = D_L06_00161D70 + (float)(4 - j) * D_L06_00161D74;
-        t = D_L06_00161E08_2F69D0 - j * 2.0f;
+        t = D_L06_00161D78 - j * 2.0f;
         c = t - 1.0f;
         if (t < b) t = b;
         if (c < b) c = b;
@@ -1259,7 +1254,7 @@ void FUN_L06_002f5d78(Moby *m)
         add_vector_xyz(&v, &v, &x);
         qcopy(&s->d[j]->pos, &v);
 
-        a = D_L06_00161E0C_2F69D0 * 0.017453292f - (float)(j * 2) * 0.7853982f;
+        a = D_L06_00161D7C * 0.017453292f - (float)(j * 2) * 0.7853982f;
         d = a - D_L06_00161E30_2F69D0 * 0.017453292f;
         if (a > 1.5707964f) a = 1.5707964f;
         else if (a < 0.0f) a = 0.0f;
@@ -1267,7 +1262,7 @@ void FUN_L06_002f5d78(Moby *m)
         else if (d < 0.0f) d = 0.0f;
         if (a != 0.0f && d == 0.0f) func_0022ED80_2F69D0(1, 0, s->c[j]);
 
-        c = D_L06_00161E0C_2F69D0 * 0.017453292f - (float)(j * 2) * 0.7853982f - 0.7853982f;
+        c = D_L06_00161D7C * 0.017453292f - (float)(j * 2) * 0.7853982f - 0.7853982f;
         d = c - D_L06_00161E30_2F69D0 * 0.017453292f;
         if (c > 1.5707964f) c = 1.5707964f;
         else if (c < 0.0f) c = 0.0f;
@@ -1278,7 +1273,7 @@ void FUN_L06_002f5d78(Moby *m)
         s->c[j]->rot.x = -a;
         s->d[j]->rot.x = c;
 
-        a = D_L06_00161E10_2F69D0 * 0.017453292f - (float)(j * 2) * 0.7853982f;
+        a = D_L06_00161D80 * 0.017453292f - (float)(j * 2) * 0.7853982f;
         d = a - D_L06_00161E34_2F69D0 * 0.017453292f;
         if (a > 1.5707964f) a = 1.5707964f;
         else if (a < 0.0f) a = 0.0f;
@@ -1286,7 +1281,7 @@ void FUN_L06_002f5d78(Moby *m)
         else if (d < 0.0f) d = 0.0f;
         if (a != 0.0f && d == 0.0f) func_0022ED80_2F69D0(2, 0, s->c[j]);
 
-        c = D_L06_00161E10_2F69D0 * 0.017453292f - (float)(j * 2) * 0.7853982f - 0.7853982f;
+        c = D_L06_00161D80 * 0.017453292f - (float)(j * 2) * 0.7853982f - 0.7853982f;
         d = a - D_L06_00161E34_2F69D0 * 0.017453292f;
         if (c > 1.5707964f) c = 1.5707964f;
         else if (c < 0.0f) c = 0.0f;

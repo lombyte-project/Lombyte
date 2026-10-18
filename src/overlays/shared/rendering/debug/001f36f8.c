@@ -62,8 +62,9 @@ typedef struct {
 extern DebugViewport D_0013E500;
 extern s32 D_L00_00169980[];
 extern s32 D_L00_00169B00[];
-extern PacketBuffer debug_packet __asm__("D_L00_001611C0");
-extern DebugFontTexture debug_font_texture __asm__("D_0015EEC8");
+/* Struct views of the two globals: retail reads them after the packet stores. */
+#define debug_packet (*(PacketBuffer *)&D_L00_001611C0)
+#define debug_font_texture (*(DebugFontTexture *)&debug_font_pif_header)
 extern void vu1_add_g_sregister(s32, u64) __asm__("FUN_00233980");
 
 void FUN_L00_001f3770(s32 x, s32 y, s32 color, s32 text_address) {

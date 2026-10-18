@@ -2,6 +2,9 @@
 #include "types.h"
 #include "asm.h"
 
+#ifndef NON_MATCHING
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002648e0.s", FUN_L00_002648e0);
+#else
 #include "rnc/gameplay/entities/moby.h"
 
 typedef struct {
@@ -53,21 +56,17 @@ void FUN_L00_002648e0(void) {
     moby = D_L00_0015FFE4 = FUN_L00_00250768();
     while (moby != 0) {
         s32 current_ticks;
-        register void (*update)(struct Moby *) asm("$3");
+        void (*update)(struct Moby *);
         if ((s8)moby->state >= 0) {
             *(volatile u32 *)0x10000000 = 0;
+            update = moby->update;
             if (!(moby->flags & 0x40)) {
                 FUN_L00_00250480(moby);
+                update = moby->update;
             }
-            update = moby->update;
             if (update != 0) {
-                /* Fakematch: retail leaves both delay slots before the update call empty
-                 * and keeps the pointer in v1. */
-                register struct Moby *arg asm("$4");
-                asm volatile("");
-                arg = moby;
-                asm volatile("" : : "r"(arg));
-                update(arg);
+                update = ((volatile struct Moby *)moby)->update;
+                update(moby);
             }
             if (!(((volatile struct Moby *)moby)->flags & 4)) {
                 FUN_L00_00250df8(moby);
@@ -118,3 +117,4 @@ void FUN_L00_002648e0(void) {
         current_ticks = next_ticks;
     } while (next_ticks != 0);
 }
+#endif

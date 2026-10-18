@@ -1007,7 +1007,8 @@ extern Tab D_00137B80;
 extern float fade_level_gp __asm__("D_L00_0015F3FC") __attribute__((section(".sdata")));
 extern int D_L00_0015F5C4 __attribute__((section(".sdata")));
 extern int D_L00_0015F5D8_gp __asm__("D_L00_0015F5D8") __attribute__((section(".sdata")));
-extern short D_L00_0015F620 __attribute__((section(".sdata")));
+typedef struct { s16 state; s16 slide; s16 timer; s16 frame; s32 *dst; s32 *src; } Slideshow;
+extern Slideshow slideshow __asm__("D_L00_0015F620") __attribute__((section(".sdata")));
 extern int D_L00_00173E00[];
 extern int D_L00_001611CC __attribute__((section(".sdata")));
 extern int update_audio_stream_until_idle(int) __asm__("FUN_002168a8");
@@ -1023,22 +1024,22 @@ void FUN_L00_00299a68(void) {
     D_L00_0015F5D8_gp = 1;
     fade_level_gp = 1.0f;
     D_L00_0015F5C4 = 7;
-    FillTransferWords(((int *)&D_L00_0015F620), 0, 16);
+    FillTransferWords(&slideshow, 0, 16);
     t = D_L00_001611CC - 0xE0000;
-    ((int *)&D_L00_0015F620)[2] = D_L00_00173E00[1] + t;
-    ((int *)&D_L00_0015F620)[3] = D_L00_00173E00[2] + t;
+    slideshow.dst = (s32 *)(D_L00_00173E00[1] + t);
+    slideshow.src = (s32 *)(D_L00_00173E00[2] + t);
     D_L00_001611CC = t;
     if (D_0015ED80_gp != 0) {
-        start_audio_stream_read(((int *)&D_L00_0015F620)[2], (*(G9 *)&D_00137B80).alt[((short *)((int *)&D_L00_0015F620))[1]].a, (*(G9 *)&D_00137B80).alt[((short *)((int *)&D_L00_0015F620))[1]].b);
+        start_audio_stream_read((s32)slideshow.dst, (*(G9 *)&D_00137B80).alt[slideshow.slide].a, (*(G9 *)&D_00137B80).alt[slideshow.slide].b);
     } else {
-        start_audio_stream_read(((int *)&D_L00_0015F620)[2], (*(G9 *)&D_00137B80).normal[((short *)((int *)&D_L00_0015F620))[1]].a, (*(G9 *)&D_00137B80).normal[((short *)((int *)&D_L00_0015F620))[1]].b);
+        start_audio_stream_read((s32)slideshow.dst, (*(G9 *)&D_00137B80).normal[slideshow.slide].a, (*(G9 *)&D_00137B80).normal[slideshow.slide].b);
     }
     update_audio_stream_until_idle(1);
-    ((short *)((int *)&D_L00_0015F620))[1]++;
+    slideshow.slide++;
     if (D_0015ED80_gp != 0) {
-        start_audio_stream_read(((int *)&D_L00_0015F620)[3], (*(G9 *)&D_00137B80).alt[((short *)((int *)&D_L00_0015F620))[1]].a, (*(G9 *)&D_00137B80).alt[((short *)((int *)&D_L00_0015F620))[1]].b);
+        start_audio_stream_read((s32)slideshow.src, (*(G9 *)&D_00137B80).alt[slideshow.slide].a, (*(G9 *)&D_00137B80).alt[slideshow.slide].b);
     } else {
-        start_audio_stream_read(((int *)&D_L00_0015F620)[3], (*(G9 *)&D_00137B80).normal[((short *)((int *)&D_L00_0015F620))[1]].a, (*(G9 *)&D_00137B80).normal[((short *)((int *)&D_L00_0015F620))[1]].b);
+        start_audio_stream_read((s32)slideshow.src, (*(G9 *)&D_00137B80).normal[slideshow.slide].a, (*(G9 *)&D_00137B80).normal[slideshow.slide].b);
     }
 }
 extern s32 D_L00_0015F3FC;
@@ -1056,10 +1057,8 @@ void FUN_L00_00299c00(void) {
     D_L00_0015F3FC = 0;
     calculate_dma_transfer_address();
 }
-typedef struct { s16 state; s16 slide; s16 timer; s16 frame; s32 *dst; s32 *src; } Slideshow;
-extern Slideshow slideshow __asm__("D_L00_0015F620") __attribute__((section(".sdata")));
 extern s16 cd_read_active[] __asm__("D_001516D8");
-extern u8 D_0013D1D0[];
+extern char D_0013D1D0[];
 extern s32 D_L00_00173BF0[];
 extern void FUN_0022ca50(void);
 
@@ -1076,7 +1075,7 @@ void FUN_L00_00299c48(void) {
         fade_level_gp = 0.0f;
     }
     skip_check = 1;
-    if (D_0013D1D0[2] != 'A') {
+    if ((u8)D_0013D1D0[2] != 'A') {
         skip_check = 0;
     }
     if (slideshow.state == 0) {
@@ -1898,6 +1897,7 @@ extern VendorItemSlot40 D_L00_001C8FF0[];
 extern VendorItemSlot30 D_L00_001C9930[];
 extern VendorRow D_L00_00165E80[];
 extern s16 cd_read_active[] __asm__("D_001516D8");
+extern char D_0013D1D0[];
 extern u8 D_L00_00161128[];
 extern u8 D_L00_00161138[];
 extern u8 D_L00_00161148[];

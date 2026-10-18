@@ -2009,8 +2009,6 @@ extern int D_L10_00161C78 __attribute__((sda));
 extern int D_L10_00161C7C __attribute__((sda));
 extern int D_L10_00161C90 __attribute__((sda));
 extern int D_L10_00161C94 __attribute__((sda));
-extern char *D_L10_0015FFD8_da690 __asm__("D_L10_0015FFD8");
-extern char D_L10_00167240_da690[] __asm__("D_L10_00167240");
 
 extern f32 vector_distance_da690(void *, void *) __asm__("FUN_001f9b48");
 extern void rotation_matrix_y_da690(void *, f32) __asm__("FUN_001f9ff8");
@@ -2025,7 +2023,7 @@ extern void draw_geometry_quad_da690(void *, void *, s32) __asm__("FUN_001f7d30"
 
 void FUN_L10_002da690(u8 *moby) {
     char *data = *(char **)(moby + 0x78);
-    char *base = *(char **)((*(int *)(data + 0xc) << 8) + (int)D_L10_0015FFD8_da690 + 0x78);
+    char *base = *(char **)((*(int *)(data + 0xc) << 8) + (int)D_L10_0015FFD8 + 0x78);
     char scratch[(unsigned int)*(int *)(data + 4) * 0x40];
     struct {
         unsigned char vertices[0x50];
@@ -2048,7 +2046,7 @@ void FUN_L10_002da690(u8 *moby) {
     float *matrix2, *uv1, *uv2;
 
     {
-        float distance = vector_distance_da690(moby + 0x10, ((u8 *)D_L10_00167240_da690));
+        float distance = vector_distance_da690(moby + 0x10, (u8 *)&D_L10_00167240);
         if (distance > 48.0f) fade = (80.0f - distance) * 0.03125f;
         else fade = 1.0f;
     }

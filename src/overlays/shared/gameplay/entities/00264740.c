@@ -2,6 +2,9 @@
 #include "types.h"
 #include "asm.h"
 
+#ifndef NON_MATCHING
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00264740.s", FUN_L00_00264740);
+#else
 #include "rnc/gameplay/entities/moby.h"
 extern struct Moby *D_L00_0015FFD8;
 extern struct Moby *D_L00_0015FFE4;
@@ -14,7 +17,7 @@ void FUN_L00_00264740(void)
     struct Moby *moby;
     struct Moby *last;
     struct Moby *current;
-    register void (*update)(struct Moby *) asm("$3");
+    void (*update)(struct Moby *);
 
     active_mobies[0] = 0;
     D_L00_0015FFE4 = 0;
@@ -38,18 +41,13 @@ void FUN_L00_00264740(void)
     current = D_L00_0015FFE4;
     while (current != 0) {
         if ((s8)current->state >= 0) {
+            update = current->update;
             if (!(current->flags & 0x40)) {
                 FUN_L00_00250480(current);
+                update = current->update;
             }
-            update = current->update;
-            if (update != 0) {
-                /* Fakematch: retail leaves both delay slots before the update call empty
-                 * and keeps the pointer in v1. */
-                register struct Moby *arg asm("$4");
-                asm volatile("");
-                arg = current;
-                asm volatile("" : : "r"(arg));
-                update(arg);
+            for (; update != 0; update = 0) {
+                update(current);
             }
             if (!(((volatile struct Moby *)current)->flags & 4)) {
                 FUN_L00_00250df8(current);
@@ -58,3 +56,4 @@ void FUN_L00_00264740(void)
         current = current->next;
     }
 }
+#endif
