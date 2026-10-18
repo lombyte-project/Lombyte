@@ -3483,12 +3483,12 @@ extern unsigned char alternate_item_available[] __asm__("D_0013D388");
 extern char D_0013A5E0_2FDA70[] __asm__("D_0013CAE4");
 
 void FUN_L06_002fc640(Moby_2FDA70 *moby) {
-    Vec_2FDA70 v0;
-    Vec_2FDA70 v10;
+    Vec_2FDA70 position_delta;
+    Vec_2FDA70 initial_rotation;
     Data_2FDA70 *d = moby->data;
 
-    scale_vector_xyz_c(&v0, &moby->pos, -1.0f);
-    qcopy(&v10, &moby->rot);
+    scale_vector_xyz_c(&position_delta, &moby->pos, -1.0f);
+    qcopy(&initial_rotation, &moby->rot);
     moby->f2C = moby->cls->f24 * D_L06_00161F60;
     switch (moby->state) {
     case 0:
@@ -3693,6 +3693,6 @@ void FUN_L06_002fc640(Moby_2FDA70 *moby) {
         }
         moby->f90 = FUN_001fa6e0(D_L06_00161F6C, D_L06_00161F70, f);
     }
-    add_vector_xyz(&v0, &v0, &moby->pos);
-    update_entity_matrix(d->f20, &v0, &v10, &moby->rot);
+    add_vector_xyz(&position_delta, &position_delta, &moby->pos);
+    update_entity_matrix(d->f20, &position_delta, &initial_rotation, &moby->rot);
 }
