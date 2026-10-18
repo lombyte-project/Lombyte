@@ -863,6 +863,11 @@ extern void FUN_0025c2f0(float, void *, void *, int, int, int, int) __asm__("FUN
 void construction_arm_update(struct Moby *moby) __asm__("FUN_L15_002c2938");
 void construction_arm_update(struct Moby *moby)
 {
+    enum {
+        CONSTRUCTION_ARM_INITIALIZE = 0,
+        CONSTRUCTION_ARM_TURN_TO_TARGET_YAW = 2,
+        CONSTRUCTION_ARM_DESTROY = 6
+    };
     UpdateVars_2938 *d = (UpdateVars_2938 *)moby->pvars;
     int hit = 0;
     char *slot;
@@ -885,7 +890,7 @@ void construction_arm_update(struct Moby *moby)
         FUN_00251fd0(frame_scale_sq * 0.03f, frame_scale_sq * 0.3f, moby, d, 0);
     }
     switch (moby->state) {
-    case 0:
+    case CONSTRUCTION_ARM_INITIALIZE:
         d->timer = truncate_float_to_s32(random_float_between(
             FUN_L15_001f8648(D_L15_00161A00 * 60.0f), FUN_L15_001f8648(D_L15_00161A04 * 60.0f)));
         *(int *)&d->yaw_velocity = d->side = *(int *)&d->yaw = 0;
@@ -916,7 +921,7 @@ void construction_arm_update(struct Moby *moby)
             }
         }
         break;
-    case 2:
+    case CONSTRUCTION_ARM_TURN_TO_TARGET_YAW:
         d->side = FUN_L00_00257b90(0, 1);
         if (fast_difference_between_rotations(d->yaw, d->target_yaw) < 0.008726646f) {
             animation = d->side;
@@ -975,7 +980,7 @@ void construction_arm_update(struct Moby *moby)
             moby->state = 1;
         }
         break;
-    case 6:
+    case CONSTRUCTION_ARM_DESTROY:
         allocate_voice_for_target_entry(0, 0, (int)moby);
         cart_burst(1.5f, 13.0f, moby, &moby->pos, -1);
         FUN_L01_002787a0(moby);
