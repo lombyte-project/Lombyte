@@ -392,7 +392,8 @@ void FUN_L11_0030d800(struct Moby *m) {
         CHILD_GRID_STATE_WAIT_LINK_COMMAND = 1,
         CHILD_GRID_STATE_FADE_TO_POINT_POSE = 2,
         CHILD_GRID_STATE_BLEND_POINT_POSES = 3,
-        CHILD_GRID_STATE_FADE_TO_HERO_POSE = 4
+        CHILD_GRID_STATE_FADE_TO_HERO_POSE = 4,
+        CHILD_GRID_STATE_IDLE = 5
     };
     GridVars_d800 *pv = (GridVars_d800 *)m->pvars;
     Vec4f pos;
@@ -478,7 +479,7 @@ void FUN_L11_0030d800(struct Moby *m) {
             m->state = 5;
         }
         break;
-    case 5:
+    case CHILD_GRID_STATE_IDLE:
         break;
     }
     FUN_L11_0030dd18(m);
