@@ -567,8 +567,8 @@ int map_filter_l11_1(int reveal_test_selector, float unused1, float unused2, flo
 extern unsigned char D_0013D3E0 NOT_SDA;
 int map_filter_l11_2(int arg0, float unused1, float unused2, float arg1) __asm__("func_00207800");
 
-int map_filter_l11_2(int arg0, float unused1, float unused2, float reveal_test_value) {
-    if (arg0 < 0xDD) {
+int map_filter_l11_2(int reveal_test_selector, float unused1, float unused2, float reveal_test_value) {
+    if (reveal_test_selector < 0xDD) {
         return (reveal_test_value >= 238.0f && reveal_test_value <= 241.0f) ? 1 : 0;
     }
     return reveal_test_value <= 180.0f && D_0013D3E0 != 0;
