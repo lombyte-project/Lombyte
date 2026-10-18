@@ -771,6 +771,10 @@ extern void initialize_global_state_entry(int) __asm__("FUN_0022e188");
 
 void FUN_L07_002f5ba0(struct Moby *moby)
 {
+    enum {
+        CONTROLLER_CLEANUP_LINKED_MOBY = 12,
+        CONTROLLER_DELETE_SELF = 13
+    };
     Class436Vars *data = (Class436Vars *)moby->pvars;
     float v[4];
 
@@ -900,7 +904,7 @@ void FUN_L07_002f5ba0(struct Moby *moby)
         initialize_global_state_entry(8);
         moby->state = 12;
         break;
-    case 12:
+    case CONTROLLER_CLEANUP_LINKED_MOBY:
         if (data->moby_10 != -1) {
             struct Moby *e = &level_mobys[data->moby_10];
             if (e != 0 && e->state != 0xFE && e->state != 0xFD) {
@@ -909,7 +913,7 @@ void FUN_L07_002f5ba0(struct Moby *moby)
         }
         moby->state = 13;
         break;
-    case 13:
+    case CONTROLLER_DELETE_SELF:
         delete_moby_m(moby);
         break;
     }
