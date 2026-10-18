@@ -569,7 +569,7 @@ void FUN_L18_002f16f0(struct Moby *moby) {
             break;
         }
         case 2: {
-            int v9;
+            int hero_on_group_or_class_764_moby;
             int i;
             unsigned char *p;
             if (D_L18_00162288 != 0) {
@@ -585,12 +585,12 @@ void FUN_L18_002f16f0(struct Moby *moby) {
             if (d->f330 > D_L18_001622B4 && d->i8 != 0) {
                 moby->state = 4;
             }
-            v9 = 0;
+            hero_on_group_or_class_764_moby = 0;
             for (i = 0; i < d->cnt; i++) {
                 unsigned char *e = D_L18_0015FFD8 + (d->ent[i].idx << 8);
                 if (hero.ground_moby == e) {
                     d->f348 = 1;
-                    v9 = 1;
+                    hero_on_group_or_class_764_moby = 1;
                     break;
                 }
             }
@@ -598,9 +598,9 @@ void FUN_L18_002f16f0(struct Moby *moby) {
             if (p != 0) {
                 short s = *(short *)(p + 0xA6);
                 if (s == 0x764)
-                    v9 = 1;
+                    hero_on_group_or_class_764_moby = 1;
             }
-            if (d->f348 != 0 && v9 == 0 && hero.air_frames.s == 0) {
+            if (d->f348 != 0 && hero_on_group_or_class_764_moby == 0 && hero.air_frames.s == 0) {
                 if (tick_countdown_32(&d->f34C))
                     moby->state = 4;
             }
