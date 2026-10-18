@@ -1056,9 +1056,6 @@ void FUN_L00_00299c00(void) {
     D_L00_0015F3FC = 0;
     calculate_dma_transfer_address();
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00299c48.s", FUN_L00_00299c48);
-#else
 typedef struct { s16 state; s16 slide; s16 timer; s16 frame; s32 *dst; s32 *src; } Slideshow;
 extern Slideshow slideshow __asm__("D_L00_0015F620") __attribute__((section(".sdata")));
 extern s16 cd_read_active[] __asm__("D_001516D8");
@@ -1078,7 +1075,10 @@ void FUN_L00_00299c48(void) {
     if (fade_level_gp < 0.0f) {
         fade_level_gp = 0.0f;
     }
-    skip_check = D_0013D1D0[2] == 'A';
+    skip_check = 1;
+    if (D_0013D1D0[2] != 'A') {
+        skip_check = 0;
+    }
     if (slideshow.state == 0) {
         if (slideshow.frame >= D_L00_00173BF0[slideshow.slide] - 0x24) {
             if (cd_read_active[0] != 0) {
@@ -1141,7 +1141,6 @@ void FUN_L00_00299c48(void) {
     }
     FUN_0022ca50();
 }
-#endif
 /* Ported from rac1-decomp (src/overlays/shared/update_0029B6A0.c: func_L00_0029B6A0), where it is exact; names translated to the US level program. */
 
 extern char *D_L00_00197300_d[] __asm__("D_L00_00197300") __attribute__((section(".data")));
