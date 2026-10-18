@@ -1686,7 +1686,7 @@ void machinegun_turret_update(char *moby) {
     float v70[4];
     float m80[16];
     float g0;
-    float t1, t2, sine_scale, target_heading;
+    float phase_angle, sine_input_angle, sine_scale, target_heading;
     int r, rem, sel, c17, m52, d80;
     char *p16;
     char *p6;
@@ -1786,12 +1786,12 @@ void machinegun_turret_update(char *moby) {
         } else {
             g0 = D_L14_00161514;
         }
-        t1 = func_001FA748_2B4E40(*(float *)(data + 0x8C), g0);
-        *(float *)(data + 0x8C) = t1;
-        t2 = func_001FA748_2B4E40(t1, *(float *)(data + 0x84) * 0.01745329238474369f);
+        phase_angle = func_001FA748_2B4E40(*(float *)(data + 0x8C), g0);
+        *(float *)(data + 0x8C) = phase_angle;
+        sine_input_angle = func_001FA748_2B4E40(phase_angle, *(float *)(data + 0x84) * 0.01745329238474369f);
         d80 = *(int *)(data + 0x80);
         p16 = D_L14_001600EC + (d80 << 7) + 0x10;
-        sine_scale = func_001F9FA8_2B4E40(t2);
+        sine_scale = func_001F9FA8_2B4E40(sine_input_angle);
         func_001F9C30_2B4E40(v20, p16, sine_scale);
         d80 = *(int *)(data + 0x80);
         p6 = D_L14_001600EC + (d80 << 7) + 0x30;
