@@ -1200,7 +1200,7 @@ void follow_camera_avoid_mobies(u8 *m) __asm__("FUN_L00_002e7d20");
 extern s32 current_level_index_macro __asm__("D_0015ED84") __attribute__((section(".sdata")));
 extern s32 camera_collision_mask __asm__("D_L00_0015EF58") __attribute__((sda));
 void follow_camera_avoid_mobies(u8 *m) {
-    V_2e7d20 v0, v10, v20, v30, v40;
+    V_2e7d20 probe_center, v10, v20, planar_moby_direction, orbit_side_direction;
     W_2e7d20 w;
     u8 *x;
     u8 *a;
@@ -1229,8 +1229,8 @@ void follow_camera_avoid_mobies(u8 *m) {
     if (current_level_index_macro == 0xF) {
         any = D_0013F350_2e7d20.b20A4 == 2;
     }
-    lerp_vector(&v0, x + 0x90, base - 0x50, 0.5f);
-    n = probe_world_sphere(&v0, 1, D_0013F350_2e7d20.p2080, 0, h * 0.5f);
+    lerp_vector(&probe_center, x + 0x90, base - 0x50, 0.5f);
+    n = probe_world_sphere(&probe_center, 1, D_0013F350_2e7d20.p2080, 0, h * 0.5f);
     if (n > 0) {
         i = n;
         j = 0;
@@ -1251,14 +1251,14 @@ void follow_camera_avoid_mobies(u8 *m) {
             }
             FUN_001f9a28_2e7d20(&v10, o + 0x10, (x + 0x90));
             FUN_001f9a68_2e7d20(&v20, base + 0x30, FUN_001f9ab0_2e7d20(base + 0x30, &v10));
-            FUN_001f9a28_2e7d20(&v30, &v10, &v20);
-            FUN_001f9bf8_2e7d20(&v30, &v30, 1.0f);
-            f = FUN_001f9ab0_2e7d20(&v30, a);
+            FUN_001f9a28_2e7d20(&planar_moby_direction, &v10, &v20);
+            FUN_001f9bf8_2e7d20(&planar_moby_direction, &planar_moby_direction, 1.0f);
+            f = FUN_001f9ab0_2e7d20(&planar_moby_direction, a);
             f = fast_arc_sin(f / (AF_2e7d20(0x2C) - BF_2e7d20(0x30)));
             if (FUN_001f99c0_2e7d20(1.5707964f - f) < 0.43633232f) {
-                fast_vec_cross(&v40, a, base + 0x30);
-                FUN_001f9bf8_2e7d20(&v40, &v40, 1.0f);
-                if (0.0f < FUN_001f9ab0_2e7d20(&v40, &v10)) {
+                fast_vec_cross(&orbit_side_direction, a, base + 0x30);
+                FUN_001f9bf8_2e7d20(&orbit_side_direction, &orbit_side_direction, 1.0f);
+                if (0.0f < FUN_001f9ab0_2e7d20(&orbit_side_direction, &v10)) {
                     build_look_at_matrix(a, a, base + 0x20, -0.017453292f);
                 } else {
                     build_look_at_matrix(a, a, base + 0x20, 0.017453292f);
