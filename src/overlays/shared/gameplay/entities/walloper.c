@@ -462,7 +462,7 @@ void FUN_L00_002baae0(void *mv, int a, int b, int n, float sx, float sy, float s
     RT_2baae0 t;
     RW_2baae0 q2[4];
     RT_2baae0 u;
-    RW_2baae0 w120, w130, w140, w150, r160, r170, a180, b190, s1A0, s1B0;
+    RW_2baae0 w120, w130, w140, w150, r160, r170, segment_start_camera_offset, b190, s1A0, s1B0;
     int i, col0, col1;
     float len, len0, l0, l1, l2;
     t.q0 = tex_2baae0(D_L00_00161638);
@@ -533,22 +533,22 @@ void FUN_L00_002baae0(void *mv, int a, int b, int n, float sx, float sy, float s
         qcopy(q[1], q[3]);
     }
     for (i = 0; i < n - 1; i++) {
-        fast_vec_sub(a180, m + i * 16, g_debug_camera);
+        fast_vec_sub(segment_start_camera_offset, m + i * 16, g_debug_camera);
         fast_vec_sub(b190, m + i * 16 + 16, g_debug_camera);
-        l0 = fast_vec_length(a180);
+        l0 = fast_vec_length(segment_start_camera_offset);
         l1 = fast_vec_length(b190);
         if (l1 < l0) {
             if (l1 == 0)
-                qcopy(b190, a180);
+                qcopy(b190, segment_start_camera_offset);
             else
                 fast_vec_scale(l0 / l1, b190, b190);
         } else {
             if (l0 == 0)
-                qcopy(a180, b190);
+                qcopy(segment_start_camera_offset, b190);
             else
-                fast_vec_scale(l1 / l0, a180, a180);
+                fast_vec_scale(l1 / l0, segment_start_camera_offset, segment_start_camera_offset);
         }
-        fast_vec_add(r160, g_debug_camera, a180);
+        fast_vec_add(r160, g_debug_camera, segment_start_camera_offset);
         fast_vec_add(r170, g_debug_camera, b190);
         fast_vec_sub(w150, r170, r160);
         fast_vec_scale(sz, s1B0, w150);
