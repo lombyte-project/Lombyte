@@ -524,7 +524,7 @@ extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern float probe_ground_height(float *, int, float) __asm__("FUN_00213508");
 extern void FUN_L00_00274cf8_205f60(float *, int, float) __asm__("FUN_L00_00274cf8");
 
-void FUN_L00_00205f60(int a0, char *joint_index_offset, int a2) {
+void FUN_L00_00205f60(int record_group_index, char *joint_index_offset, int a2) {
     float v[4];
     if (a2) {
         struct Hero *g = &hero;
@@ -532,7 +532,7 @@ void FUN_L00_00205f60(int a0, char *joint_index_offset, int a2) {
         if (((char *)g->items[1].moby)) {
             c = *(s16 *)(((char *)g->items[1].moby) + 0xA6) == 0xAD;
         }
-        FUN_L00_0028de68_205f60(a0, joint_index_offset, c, 0, ((int)g->moby));
+        FUN_L00_0028de68_205f60(record_group_index, joint_index_offset, c, 0, ((int)g->moby));
     }
     if (current_level_index == 12) {
         struct Hero *g = &hero;
