@@ -3591,6 +3591,9 @@ extern void func_L18_002F9AB8_v(void *) __asm__("FUN_L18_002f8658");
 void rocket_tank_update(M1454 *m) __asm__("FUN_L18_002f7c40");
 void rocket_tank_update(M1454 *m) {
     enum {
+        ROCKET_TANK_FIRING = 2
+    };
+    enum {
         ROCKET_TANK_INITIALIZE = 0
     };
     D1454 *d = m->data;
@@ -3659,7 +3662,7 @@ void rocket_tank_update(M1454 *m) {
             m->state = 2;
         }
         break;
-    case 2:
+    case ROCKET_TANK_FIRING:
         func_L18_002F9AB8_v(m);
         approach_value(&d->f130, 30.0f, frame_time * 6.0f);
         d->f134 = fast_add_rotations(d->f134, frame_time * 6.2831855f);
