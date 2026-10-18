@@ -35,6 +35,7 @@ typedef struct {
     E_288ec0 *list;
 } G_288ec0;
 extern G_288ec0 *D_L00_0016051C_288ec0 __asm__("D_L00_0016051C");
+void sky_particles_init(s32 randomized_count, s32 orbiting_count) __asm__("FUN_L00_00288ec0");
 void sky_particles_init(s32 randomized_count, s32 orbiting_count) {
     s32 i;
     E_288ec0 *e;
@@ -96,6 +97,7 @@ typedef struct {
     E_289108 *list;
 } G_289108;
 extern G_289108 *D_L00_0016051C_289108 __asm__("D_L00_0016051C");
+void sky_particles_update(void) __asm__("FUN_L00_00289108");
 void sky_particles_update(void) {
     int i;
     for (i = 0; i < D_L00_0016051C_289108->n; i++) {
