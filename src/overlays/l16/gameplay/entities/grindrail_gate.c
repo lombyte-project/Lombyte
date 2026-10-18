@@ -103,6 +103,9 @@ extern L16WatchFlags D_0013D355_watch __asm__("D_0013D24D");
 void help_desk_lady_update(L16WatchMoby *m) __asm__("FUN_L16_002e3190");
 void help_desk_lady_update(L16WatchMoby *m) {
     enum {
+        HELP_DESK_REQUEST_HELP_AND_SAVE = 2
+    };
+    enum {
         HELP_DESK_INITIALIZE_DIALOGUE = 0,
         HELP_DESK_POLL_DIALOGUE = 1
     };
@@ -131,7 +134,7 @@ void help_desk_lady_update(L16WatchMoby *m) {
         }
         break;
     }
-    case 2:
+    case HELP_DESK_REQUEST_HELP_AND_SAVE:
         if (*(int *)&D_L16_0015F5C4 != 2) {
             char *player;
             m->state = 1;
