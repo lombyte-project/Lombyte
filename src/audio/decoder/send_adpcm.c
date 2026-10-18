@@ -17,19 +17,23 @@ extern void send_to_spu(struct AudioDec *, unsigned char *, int, int) __asm__("f
 void send_adpcm(void *arg0) __asm__("FUN_0023afc0");
 
 void send_adpcm(void *audio_decoder) {
+    enum {
+        ADPCM_IOP_BUFFER_FILL = 1,
+        ADPCM_SPU_POSITION_REFILL = 2
+    };
     struct AudioDec *ad = audio_decoder;
     int avail = 0;
     int i, j, n;
     unsigned char *src, *dst;
 
     switch (ad->state) {
-    case 1:
+    case ADPCM_IOP_BUFFER_FILL:
         if (ad->count < 0x1000) {
             return;
         }
         avail = 0x1000 - ad->iopLastPos;
         break;
-    case 2:
+    case ADPCM_SPU_POSITION_REFILL:
         avail = (snd_get_movie_nax() - ad->spuPos) & 0xFFF;
         break;
     case 3:
