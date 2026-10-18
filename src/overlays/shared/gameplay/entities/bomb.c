@@ -471,7 +471,7 @@ extern void FUN_L00_00250df8(void *);
 
 struct Moby *FUN_L00_002c9348(State *a) {
     struct Moby *n;
-    Sub *s2;
+    Sub *moby_vars;
     Loc loc;
     struct Moby *p;
     void *q;
@@ -485,7 +485,7 @@ struct Moby *FUN_L00_002c9348(State *a) {
         n->update_dist = 0x7F;
         n->draw_dist = 0x7F;
         n->visible = 1;
-        s2 = (Sub *)n->pvars;
+        moby_vars = (Sub *)n->pvars;
         if ((a->flags34 & 0x20) != 0) {
             o = a->unk78->unk0C;
             if (o != NULL) {
@@ -519,13 +519,13 @@ struct Moby *FUN_L00_002c9348(State *a) {
         n->collision = ((Part *)n->pclass)->unk10;
         FUN_0022da68_c(1, 0, n);
         n->state = 1;
-        s2->unk66 = 0;
-        s2->unk64 = FUN_L00_00257b90(scale_game_frames(0x78), scale_game_frames(0x12C));
+        moby_vars->unk66 = 0;
+        moby_vars->unk64 = FUN_L00_00257b90(scale_game_frames(0x78), scale_game_frames(0x12C));
         g = convert_integer_to_float(D_0013E520[0x15]);
-        s2->unk70 = -1;
-        s2->unk78 = g * 3.0f + 1.0f;
-        s2->unk74 = D_0013E520[0x15];
-        n->command = s2->unk74;
+        moby_vars->unk70 = -1;
+        moby_vars->unk78 = g * 3.0f + 1.0f;
+        moby_vars->unk74 = D_0013E520[0x15];
+        n->command = moby_vars->unk74;
         FUN_L00_00257470(a, 0, -1);
         q = suck_get_aim_height(a);
         if (q != NULL && *(u8 *)((u8 *)q + 0xE) == 1) {
@@ -535,30 +535,30 @@ struct Moby *FUN_L00_002c9348(State *a) {
         }
         c1 = 0.0f;
         FUN_L00_00269b70(&n->pos, 0x7F, 0x7F, 0x7F, scale_game_frames(0xF), 1000000.0f, c1);
-        fill_transfer_words(s2, 0, 0x20);
+        fill_transfer_words(moby_vars, 0, 0x20);
         p = D_L00_001DD100[D_L00_00161854];
         if (p != NULL && p->oclass == 0x10E && p->state != 0xFE && p->state != 0xFD) {
             if (p->state == 5) {
-                s2->unk78 = c1;
+                moby_vars->unk78 = c1;
                 n->flags &= ~0x20;
-            } else if (!s2->unk74) {
-                s2->unk14 = (void *)&D_L00_001DD150[D_L00_00161854];
-                s2->unk10 = (void *)(D_L00_001DDF10 + D_L00_00161854 * 0x60);
+            } else if (!moby_vars->unk74) {
+                moby_vars->unk14 = (void *)&D_L00_001DD150[D_L00_00161854];
+                moby_vars->unk10 = (void *)(D_L00_001DDF10 + D_L00_00161854 * 0x60);
                 n->flags |= 0x1020;
-                ((Node *)s2->unk14)->unk70 = (void *)D_L00_00161840;
+                ((Node *)moby_vars->unk14)->unk70 = (void *)D_L00_00161840;
             }
             ((Sub *)D_L00_001DD100[D_L00_00161854]->pvars)->unk70 = (void *)1;
-        } else if (!s2->unk74) {
-            s2->unk14 = (void *)&D_L00_001DD150[D_L00_00161854];
-            s2->unk10 = (void *)(D_L00_001DDF10 + D_L00_00161854 * 0x60);
+        } else if (!moby_vars->unk74) {
+            moby_vars->unk14 = (void *)&D_L00_001DD150[D_L00_00161854];
+            moby_vars->unk10 = (void *)(D_L00_001DDF10 + D_L00_00161854 * 0x60);
             n->flags |= 0x1020;
-            ((Node *)s2->unk14)->unk70 = (void *)D_L00_00161840;
+            ((Node *)moby_vars->unk14)->unk70 = (void *)D_L00_00161840;
         }
-        FUN_L00_002c92d8_c(s2->unk14);
+        FUN_L00_002c92d8_c(moby_vars->unk14);
         D_L00_001DD100[D_L00_00161854] = n;
         D_L00_00161854_gp = D_L00_00161854 + 1;
         D_L00_00161854 = (D_L00_00161854 + 1) % 20;
-        if (s2->unk74) {
+        if (moby_vars->unk74) {
             n->flags &= ~0x20;
         }
         FUN_L00_00250df8(n);
