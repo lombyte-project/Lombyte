@@ -1606,7 +1606,7 @@ extern s32 D_001413D0_lui[] __asm__("D_001413D0") __attribute__((section(".data"
 
 void FUN_L05_00303390(Moby *m) {
     Vec_3047E8 v0;
-    Vec_3047E8 v10;
+    Vec_3047E8 hit_test_endpoint;
     int cnt;
     float dmg;
     float ang;
@@ -1625,16 +1625,16 @@ void FUN_L05_00303390(Moby *m) {
         v0[2] = v0[2] + 0.5f;
         if (r->who != 0) {
             if (r->who->oclass == 0x47) {
-                qcopy(v10, D_0013F420);
+                qcopy(hit_test_endpoint, D_0013F420);
             } else if ((*(struct Moby **)&r->who->pclass != 0 && *(short *)((u8 *)((struct Moby *)r->who->pclass) + 0x46) == 5) || r->who->oclass == 0xBA) {
-                qcopy(v10, v0);
+                qcopy(hit_test_endpoint, v0);
             } else {
-                qcopy(v10, ((float *)&r->who->pos));
+                qcopy(hit_test_endpoint, ((float *)&r->who->pos));
             }
         } else {
-            qcopy(v10, r->at);
+            qcopy(hit_test_endpoint, r->at);
         }
-        if (func_001F9D10_3047E8(v0, v10) < 24.0f && collision_line(v0, v10, 2, m, 0) != 0) {
+        if (func_001F9D10_3047E8(v0, hit_test_endpoint) < 24.0f && collision_line(v0, hit_test_endpoint, 2, m, 0) != 0) {
             r = 0;
         }
     }
