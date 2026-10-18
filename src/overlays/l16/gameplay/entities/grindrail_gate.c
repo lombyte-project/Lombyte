@@ -1085,6 +1085,11 @@ extern int func_001FA898_caa18(float) __asm__("FUN_001fa6d0");
 short D_L16_00161E48 = 0;
 void chomper_update(struct Moby *m) __asm__("FUN_L16_002e5e08");
 void chomper_update(struct Moby *m) {
+    enum {
+        CHOMPER_INITIALIZE = 0,
+        CHOMPER_APPROACH_TARGET = 4,
+        CHOMPER_RETURN_HOME = 6
+    };
     char *d = (char *)m->pvars;
     FUN_L16_002e6208(m);
     FUN_L00_00263ac8(2.1f, (int)m, 1, (unsigned char *)(d + 0x220));
@@ -1093,7 +1098,7 @@ void chomper_update(struct Moby *m) {
         m->shadow_range = 23;
     }
     switch (m->state) {
-    case 0:
+    case CHOMPER_INITIALIZE:
         if (*(int *)(d + 0x1F0) == -1) {
             mark_moby_for_removal_u(m);
             return;
@@ -1121,7 +1126,7 @@ void chomper_update(struct Moby *m) {
     case 2:
     case 3:
         break;
-    case 4:
+    case CHOMPER_APPROACH_TARGET:
         if (FUN_L16_002e6428_u(m, d + 0x180) < 1.25f) {
             m->state = 5;
             if (m->prev_seq != 1)
@@ -1144,7 +1149,7 @@ void chomper_update(struct Moby *m) {
         }
         break;
     }
-    case 6:
+    case CHOMPER_RETURN_HOME:
         if (FUN_L16_002e6428_u(m, d + 0x1D0) < 1.0f) {
             m->state = 1;
             if (m->prev_seq != 2)
