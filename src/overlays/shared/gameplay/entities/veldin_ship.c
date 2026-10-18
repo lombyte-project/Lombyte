@@ -297,6 +297,9 @@ extern f32 D_L00_001618C8 __attribute__((sda));
 extern f32 D_L00_001618CC __attribute__((sda));
 extern f32 D_L00_001618D0 __attribute__((sda));
 void crate_drop_bolts(u8 *a) {
+    enum {
+        CRATE_DROP_AUTO_SELECT = 0
+    };
     T_2d0538 tmp;
     V_2d0538 trajectory_vector, adjusted_position, scratch_vector;
     s32 n;
@@ -366,7 +369,7 @@ void crate_drop_bolts(u8 *a) {
         case 9:
             n = 25;
             break;
-        case 0:
+        case CRATE_DROP_AUTO_SELECT:
         default:
             n = -1;
             break;
