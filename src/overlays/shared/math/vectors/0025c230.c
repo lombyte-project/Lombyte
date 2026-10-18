@@ -188,11 +188,11 @@ extern int func_L00_001F2BE8_d6f0(float, void *, int, void *, void *) __asm__("F
 int mine_fall(char *moby, char *st) __asm__("FUN_L00_0025c698");
 int mine_fall(char *moby, char *st) {
     float eye[4];
-    float v10[4];
-    float v20[4];
-    float v30[4];
-    float v40[4];
-    float v50[4];
+    float height_probe_position[4];
+    float collision_probe_position[4];
+    float predicted_query_position[4];
+    float surface_normal[4];
+    float normal_response_vector[4];
     float f60, f64, f68, f6c;
     
     Vec4 *g;
@@ -217,20 +217,20 @@ int mine_fall(char *moby, char *st) {
         *(float *)(st + 0x8) = *(float *)(st + 0x1C);
     }
 
-    qcopy(v10, moby + 0x10);
-    v10[2] = v10[2] + *(float *)(st + 0x28);
-    f21 = probe_ground_height(v10, 0, 0.5f);
+    qcopy(height_probe_position, moby + 0x10);
+    height_probe_position[2] = height_probe_position[2] + *(float *)(st + 0x28);
+    f21 = probe_ground_height(height_probe_position, 0, 0.5f);
     if (collision_hit_material() == 0) {
-        if (*(float *)(st + 0x5C) == 0.0f && f21 <= v10[2] && v10[2] + *(float *)(st + 0x8) < f21) {
+        if (*(float *)(st + 0x5C) == 0.0f && f21 <= height_probe_position[2] && height_probe_position[2] + *(float *)(st + 0x8) < f21) {
             *(float *)(st + 0x5C) = 1.0f;
-            v10[2] = f21;
-            FUN_L00_002d7e90(v10, 3.0f);
+            height_probe_position[2] = f21;
+            FUN_L00_002d7e90(height_probe_position, 3.0f);
         }
         f21 = func_L00_0025A748_f((moby + 0x10));
     } else {
         if ((*(int *)(st + 0x24) & 0x10) || *(short *)(st + 0x3E) == 2) {
-            add_vector_xyz_c(v20, (moby + 0x10), st);
-            if (func_L00_0025A748_f(v20) < f21 - 0.25f) {
+            add_vector_xyz_c(collision_probe_position, (moby + 0x10), st);
+            if (func_L00_0025A748_f(collision_probe_position) < f21 - 0.25f) {
                 set_vector_length_xy((float *)st, (float *)st, 0.0f);
             }
         }
@@ -306,10 +306,10 @@ int mine_fall(char *moby, char *st) {
     qcopy(eye, (moby + 0x10));
     eye[2] = eye[2] + *(float *)(st + 0x28);
     add_vector_xyz_c((moby + 0x10), (moby + 0x10), st);
-    qcopy(v20, (moby + 0x10));
-    v20[2] = v20[2] + *(float *)(st + 0x28);
-    add_vector_xyz_c(v30, v20, st);
-    n = func_L00_001F2BE8_d6f0(convert_integer_to_float(*(int *)(st + 0x20)) * 0.0010742187732830644f, v30, 16, moby, 0);
+    qcopy(collision_probe_position, (moby + 0x10));
+    collision_probe_position[2] = collision_probe_position[2] + *(float *)(st + 0x28);
+    add_vector_xyz_c(predicted_query_position, collision_probe_position, st);
+    n = func_L00_001F2BE8_d6f0(convert_integer_to_float(*(int *)(st + 0x20)) * 0.0010742187732830644f, predicted_query_position, 16, moby, 0);
     if (i < n) {
         int **pp = D_L00_00177F00;
         int k = n;
@@ -330,26 +330,26 @@ int mine_fall(char *moby, char *st) {
     sc = 0.0009765625f;
     t = fast_vec_length(st);
     if ((float)*(int *)(st + 0x20) * sc < t) {
-        collision_line(eye, v20, 36, moby, 0);
-        qcopy(v20, &D_94C8_60);
+        collision_line(eye, collision_probe_position, 36, moby, 0);
+        qcopy(collision_probe_position, &D_94C8_60);
     }
-    if (func_L00_001F10E0_l(v20, convert_integer_to_float(*(int *)(st + 0x20)) * sc, 36, moby) != 0) {
+    if (func_L00_001F10E0_l(collision_probe_position, convert_integer_to_float(*(int *)(st + 0x20)) * sc, 36, moby) != 0) {
         flags |= 2;
         g = &D_L00_00173E70;
         qcopy((moby + 0x10), g);
         one = 1.0f;
         *(float *)(moby + 0x18) = *(float *)(moby + 0x18) - *(float *)(st + 0x28);
-        fast_vec_normalize_c(v40, (char *)g + 0x10, one);
-        if (0.7070000171661377f <= v40[2]) {
-            float e = fast_vec_dot_c(st, v40);
+        fast_vec_normalize_c(surface_normal, (char *)g + 0x10, one);
+        if (0.7070000171661377f <= surface_normal[2]) {
+            float e = fast_vec_dot_c(st, surface_normal);
             if (e < 0.0f) {
                 q = (char *)g - 0x30;
                 if (*(int *)(q + 0x18) == 0 || *(int *)(q + 0x1C) > 0) {
                     flags |= 1;
                     *(short *)(st + 0x3E) = 2;
                 }
-                fast_vec_normalize_c(v50, v40, e);
-                subtract_vector_xyz(st, st, v50);
+                fast_vec_normalize_c(normal_response_vector, surface_normal, e);
+                subtract_vector_xyz(st, st, normal_response_vector);
                 if (*(short *)(st + 0x3E) == 2) {
                     f6c = fast_vec_length(st);
                     approach_value(&f6c, 0.0f, *(float *)(st + 0x10));
@@ -357,11 +357,11 @@ int mine_fall(char *moby, char *st) {
                 }
             }
         } else {
-            float d = fast_vec_dot_c(st, v40);
+            float d = fast_vec_dot_c(st, surface_normal);
             if (d < 0.0f) {
                 d = d * -(*(float *)(st + 0x30) + one);
-                fast_vec_normalize_c(v50, v40, d);
-                add_vector_xyz_c(st, st, v50);
+                fast_vec_normalize_c(normal_response_vector, surface_normal, d);
+                add_vector_xyz_c(st, st, normal_response_vector);
             }
         }
     }
