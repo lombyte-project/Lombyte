@@ -2384,7 +2384,7 @@ typedef struct {
     short f84;
 } O842e83c0;
 int FUN_L00_002e83c0(int arg1, int arg2);
-int FUN_L00_002e83c0(int candidate_object, int arg2) {
+int FUN_L00_002e83c0(int candidate_object, int unused) {
     void *a = D_L00_00166E00_c2;
     C842e83c0 *cur;
     u8 x;
