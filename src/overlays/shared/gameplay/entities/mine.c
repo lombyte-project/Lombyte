@@ -1382,12 +1382,13 @@ int FUN_L00_002ad410(LandingVars_2ad410 *v, M910 *m, int mode) {
                     if (v->last_hit != h->moby) {
                         v->hit_count = 0;
                         v->last_hit = h->moby;
+                        v->previous_hit.q = h->moby->pos.q;
                     } else {
                         v->hit_count++;
                         FUN_001ff2a8_2ad410(&start, (char *)h->moby + 0x10, &v->previous_hit);
                         v->difference.q = start.q;
+                        v->previous_hit.q = h->moby->pos.q;
                     }
-                    v->previous_hit.q = h->moby->pos.q;
                 }
                 hit.object_hit = 1;
                 qcopy(&v->landing, (char *)coll_hit.moby + 0x10);
@@ -1429,12 +1430,13 @@ int FUN_L00_002ad410(LandingVars_2ad410 *v, M910 *m, int mode) {
                 if (v->last_hit != h->moby) {
                     v->hit_count = 0;
                     v->last_hit = h->moby;
+                    v->previous_hit.q = h->moby->pos.q;
                 } else {
                     v->hit_count++;
                     FUN_001ff2a8_2ad410(&start, (char *)h->moby + 0x10, &v->previous_hit);
                     v->difference.q = start.q;
+                    v->previous_hit.q = h->moby->pos.q;
                 }
-                v->previous_hit.q = h->moby->pos.q;
             }
             hit.object_hit = 1;
             qcopy(&v->landing, (char *)coll_hit.moby + 0x10);
