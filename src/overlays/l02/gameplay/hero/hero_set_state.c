@@ -1874,6 +1874,9 @@ extern int func_001F9908_r(int *) __asm__("FUN_001f9740");
 
 extern f32 frame_scale_gp __asm__("D_0015ED60") __attribute__((sda));
 void FUN_L02_00230988(void) {
+    enum {
+        HERO_STATE_DEATH_FALL = 119
+    };
     unsigned char *moby;
     int prevSub;
     int prevState;
@@ -2944,7 +2947,7 @@ void FUN_L02_00230988(void) {
                         hero_set_state(0x18, 1);
                     }
                     break;
-                case 119:
+                case HERO_STATE_DEATH_FALL:
                     if ((current_level_index == 3 && 5.0f > hero.motion.pos.f[2]) ||
                         (current_level_index == 6 && 50.0f > hero.motion.pos.f[2]) ||
                         (current_level_index == 0x10 &&
