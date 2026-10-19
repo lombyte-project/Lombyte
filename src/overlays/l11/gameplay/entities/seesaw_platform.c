@@ -644,7 +644,9 @@ extern void enqueue_e088(void *, void *) __asm__("FUN_001f4600");
 void FUN_L11_0030e088(struct Moby *m) {
     enum {
         WATER_TILE_STATE_INITIALIZE = 0,
-        WATER_TILE_STATE_FIND_NEIGHBORS = 1
+        WATER_TILE_STATE_FIND_NEIGHBORS = 1,
+        WATER_TILE_STATE_APPROACH_UPPER_HEIGHT = 2,
+        WATER_TILE_STATE_APPROACH_LOWER_HEIGHT = 3
     };
     int *pv = (int *)m->pvars;
     int i;
@@ -710,7 +712,7 @@ void FUN_L11_0030e088(struct Moby *m) {
         FUN_L11_0030e730(pv[1]);
         m->state = 2;
         break;
-    case 3:
+    case WATER_TILE_STATE_APPROACH_LOWER_HEIGHT:
         if (m->command & 4) {
             pv[2] = 1;
             FUN_L01_0026e0e0(m->group, 2);
@@ -727,7 +729,7 @@ void FUN_L11_0030e088(struct Moby *m) {
             pool_splash(x, t->y + y, 1.0f, -0.03f, t, 1, 1);
         }
         break;
-    case 2:
+    case WATER_TILE_STATE_APPROACH_UPPER_HEIGHT:
         if (m->command & 8) {
             pv[2] = 1;
             FUN_L01_0026e0e0(m->group, 3);
