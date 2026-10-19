@@ -2877,6 +2877,11 @@ typedef struct {
 
 /* Cart update: follows its path, bursts when shot and respawns at the path start after a delay. */
 void FUN_L14_002fc0f0(struct Moby *moby) {
+    enum {
+        ENEMY_FIGHTER_STATE_INITIALIZE = 0,
+        ENEMY_FIGHTER_STATE_FOLLOW_PATH = 1,
+        ENEMY_FIGHTER_STATE_WAIT_FOR_RESPAWN = 2
+    };
     L14CartVars *data = (L14CartVars *)moby->pvars;
     int hit = cart_hit(moby, 0x800000, 0);
     int index;
@@ -2905,7 +2910,7 @@ void FUN_L14_002fc0f0(struct Moby *moby) {
         data->sound = -1;
     }
     switch (moby->state) {
-    case 0:
+    case ENEMY_FIGHTER_STATE_INITIALIZE:
         path_index = data->path;
         if (path_index == -1) {
             cart_print(D_L14_001FCE10, moby->save_id);
@@ -2924,10 +2929,10 @@ void FUN_L14_002fc0f0(struct Moby *moby) {
         data->sound = -1;
         data->timer = cart_frames(D_L14_00161F5C);
         break;
-    case 1:
+    case ENEMY_FIGHTER_STATE_FOLLOW_PATH:
         FUN_L14_002fc9a0(moby);
         break;
-    case 2:
+    case ENEMY_FIGHTER_STATE_WAIT_FOR_RESPAWN:
       if (cart_tick(&data->timer)) {
         path = D_L14_001B0BB0_cart[data->path];
         moby->flags &= 0xffbe;
