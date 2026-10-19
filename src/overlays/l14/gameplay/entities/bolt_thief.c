@@ -248,7 +248,11 @@ void bolt_thief_update(L16CrateMoby *moby) __asm__("FUN_L14_002fe2a0");
 void bolt_thief_update(L16CrateMoby *moby) {
     enum {
         BOLT_THIEF_STATE_INITIALIZE = 0,
+        BOLT_THIEF_STATE_FACE_HERO = 1,
         BOLT_THIEF_STATE_WAIT_FOR_TRIGGER = 2,
+        BOLT_THIEF_STATE_SETTLE_AT_PATH_END = 3,
+        BOLT_THIEF_STATE_FOLLOW_PRIMARY_PATH = 4,
+        BOLT_THIEF_STATE_FOLLOW_SECONDARY_PATH = 5,
         BOLT_THIEF_STATE_KNOCKBACK = 6
     };
     L16CrateData *d = moby->data;
@@ -317,7 +321,7 @@ void bolt_thief_update(L16CrateMoby *moby) {
         }
         d->child = 0;
         break;
-    case 1: {
+    case BOLT_THIEF_STATE_FACE_HERO: {
         struct Hero *player = &hero;
 
         FUN_L00_00258278((char *)moby,
@@ -340,7 +344,7 @@ void bolt_thief_update(L16CrateMoby *moby) {
             moby->state = 4;
         }
         break;
-    case 4:
+    case BOLT_THIEF_STATE_FOLLOW_PRIMARY_PATH:
         if (d->mode == 0)
             FUN_L14_002fec28(moby);
         if (FUN_L14_002fea80((char *)moby)) {
@@ -349,7 +353,7 @@ void bolt_thief_update(L16CrateMoby *moby) {
         }
         FUN_L14_002feca8(moby);
         break;
-    case 3: {
+    case BOLT_THIEF_STATE_SETTLE_AT_PATH_END: {
         L16CrateData *a = moby->data;
         char *path = D_L14_001B0BB0[a->path];
         float target[4];
@@ -381,7 +385,7 @@ void bolt_thief_update(L16CrateMoby *moby) {
         FUN_L14_002feca8(moby);
         break;
     }
-    case 5:
+    case BOLT_THIEF_STATE_FOLLOW_SECONDARY_PATH:
         if (FUN_L14_002fea80((char *)moby)) {
             char *path;
 
