@@ -802,6 +802,7 @@ void woodcut_bot_update(WBMoby *m) {
         WOODCUT_BOT_INITIALIZE = 0,
         WOODCUT_BOT_IDLE = 1,
         WOODCUT_BOT_WAIT_FOR_ANIMATION_BEFORE_PURSUIT = 2,
+        WOODCUT_BOT_PLAY_ANIMATION_AND_EMIT_DEBRIS = 3,
         WOODCUT_BOT_SELECT_ACTION_WHILE_EXCITED = 4,
         WOODCUT_BOT_MOVE_TOWARD_TARGET = 5,
         WOODCUT_BOT_RETURN_TO_SAVED_POSITION = 6,
@@ -1069,7 +1070,7 @@ void woodcut_bot_update(WBMoby *m) {
             }
         }
         break;
-    case 3: {
+    case WOODCUT_BOT_PLAY_ANIMATION_AND_EMIT_DEBRIS: {
         if (m->anim != 0 && (m->f70 & 2)) {
             blend_moby_animation(m, 0xC, 0, scale_game_frames(10));
             m->f58 = random_float_between(0.8f, 1.2f);
