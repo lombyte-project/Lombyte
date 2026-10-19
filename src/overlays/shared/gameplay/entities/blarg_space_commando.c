@@ -114,6 +114,9 @@ void blarg_space_commando_update(struct Moby *moby) __asm__("FUN_L06_002fdbd0");
 void blarg_space_commando_update(struct Moby *moby) {
     enum {
         BLARG_COMMANDO_STATE_INITIALIZE = 0,
+        BLARG_COMMANDO_STATE_RANGED_ATTACK_WINDUP = 2,
+        BLARG_COMMANDO_STATE_RANGED_ATTACK_RECOVERY = 3,
+        BLARG_COMMANDO_STATE_RANGED_ATTACK_COOLDOWN = 4,
         BLARG_COMMANDO_STATE_MELEE_ATTACK = 5,
         BLARG_COMMANDO_STATE_MELEE_RECOVERY = 6,
         BLARG_COMMANDO_STATE_CHASE_TARGET = 11,
@@ -230,7 +233,7 @@ void blarg_space_commando_update(struct Moby *moby) {
             FUN_L00_00258b50(moby, &vars->ctl, &b, &c, 1.0f);
         }
         break;
-    case 2:
+    case BLARG_COMMANDO_STATE_RANGED_ATTACK_WINDUP:
         approach_angle(&moby->rot.z, fast_arc_tan(target->pos.x - moby->pos.x, target->pos.y - moby->pos.y),
                          &vars->turn_speed, frame_time_sq * 6.2831855f, frame_time_sq * 6.2831855f,
                          frame_time * 3.1415927f);
@@ -242,7 +245,7 @@ void blarg_space_commando_update(struct Moby *moby) {
             }
         }
         break;
-    case 3:
+    case BLARG_COMMANDO_STATE_RANGED_ATTACK_RECOVERY:
         if (moby->anim_flags & 2) {
             if (vars->unk164 != 2) {
                 moby->state = 4;
@@ -258,7 +261,7 @@ void blarg_space_commando_update(struct Moby *moby) {
             }
         }
         break;
-    case 4:
+    case BLARG_COMMANDO_STATE_RANGED_ATTACK_COOLDOWN:
         approach_angle(&moby->rot.z, fast_arc_tan(target->pos.x - moby->pos.x, target->pos.y - moby->pos.y),
                          &vars->turn_speed, frame_time_sq * 6.2831855f, frame_time_sq * 6.2831855f,
                          frame_time * 3.1415927f);
