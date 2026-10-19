@@ -125,6 +125,10 @@ extern float add_rot_0e00(float, float) __asm__("FUN_001fa580");
 
 void FUN_L14_00300e00(struct Moby *m)
 {
+    enum {
+        SPARK_ROLL_AND_FADE = 2,
+        SPARK_BURST_AND_REMOVE = 3
+    };
   Spark_0e00 *d = (Spark_0e00 *) m->pvars;
   Vec4f next;
   Vec4f t;
@@ -236,7 +240,7 @@ void FUN_L14_00300e00(struct Moby *m)
       break;
     }
 
-    case 2:
+    case SPARK_ROLL_AND_FADE:
     {
       float f;
       int r;
@@ -261,7 +265,7 @@ void FUN_L14_00300e00(struct Moby *m)
       break;
     }
 
-    case 3:
+    case SPARK_BURST_AND_REMOVE:
       burst_0e00(m, &d->vel, &m->pos, 2.0f, 1.0f, 5, 2, 4, 2.0f, 1.0f, 9.0f, 0, 1.0f, 15.0f, 1, 1, -1, 0);
       remove_0e00(m);
       return;
