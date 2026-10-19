@@ -650,6 +650,7 @@ int FUN_L05_00251be8(void) {
         ITEM_WRENCH = 8,
         ITEM_TARGET_INTERACTION_DEVICE = 12,
         ITEM_HELD_SOUND_DEVICE = 15,
+        ITEM_HERO_SOUND_REQUEST_DEVICE = 31,
         ITEM_AMMO_MENU_DEVICE = 32,
         ITEM_RACE_PROJECTILE = 36
     };
@@ -811,7 +812,7 @@ int FUN_L05_00251be8(void) {
             }
         }
         break;
-    case 31:
+    case ITEM_HERO_SOUND_REQUEST_DEVICE:
         if ((*(Hero *)((char *)&hero)).vehicle_mode != 0) {
             break;
         }
