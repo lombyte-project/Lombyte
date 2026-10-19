@@ -1629,6 +1629,7 @@ extern s32 D_001413D0_lui[] __asm__("D_001413D0") __attribute__((section(".data"
 
 void FUN_L05_00303390(Moby *m) {
     enum {
+        EXTERMIBOT_HIT_NO_RESPONSE = 0,
         EXTERMIBOT_HIT_LETHAL = 1,
         EXTERMIBOT_HIT_DEATH_KNOCKBACK = 2,
         EXTERMIBOT_HIT_NONLETHAL_KNOCKBACK = 3,
@@ -1680,7 +1681,7 @@ void FUN_L05_00303390(Moby *m) {
         d->f94 = 9;
         d->bAD = 0;
         switch (res) {
-        case 0:
+        case EXTERMIBOT_HIT_NO_RESPONSE:
         case EXTERMIBOT_HIT_NO_REACTION:
             break;
         case 9:
