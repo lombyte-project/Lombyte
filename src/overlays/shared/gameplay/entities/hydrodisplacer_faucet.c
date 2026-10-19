@@ -596,8 +596,8 @@ void FUN_L05_0030c220(struct Moby *m) {
     }
     for (i = 0; i < 10; i++) {
         pass = (float)i;
-        vertex_a = a.vertex[0];
         j = 0;
+        vertex_a = a.vertex[0];
         vertex_b = b.vertex[0];
         do {
             qcopy(vertex_a, D_L05_001D67D0[j]);

@@ -195,7 +195,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L05_002d1688.s", FUN_L05_002d1688);
 typedef unsigned int U128_2d1688 __attribute__((mode(TI)));
 extern char *D_L05_001B0930[];
 extern float D_L05_00161388 __attribute__((sda));
-extern volatile float D_L05_001612E8;
+extern float D_L05_001612E0_macro[4] __asm__("D_L05_001612E0") __attribute__((section(".sdata")));
 extern float D_L05_0013F640 __asm__("D_L05_0013F640");
 extern float D_0013F3D0[4] __asm__("D_0013F3D0");
 extern char D_L05_0013F3E0[] __asm__("D_L05_0013F3E0");
@@ -211,7 +211,7 @@ extern int timer_2d1688(int) __asm__("FUN_001f96f8");
 extern void mark_moby_2d1688(char *) __asm__("FUN_0020c828");
 extern void set_action_2d1688(char *, int, int, int) __asm__("FUN_00212f90");
 extern float angle_2d1688(float, float) __asm__("FUN_001f9e90");
-extern void steer_2d1688(float, float, float, float, void *, void *) __asm__("FUN_L00_0025be00");
+extern float steer_2d1688(float *, float *, float, float, float, float) __asm__("FUN_L00_0025be00");
 extern void fast_vec_normalize(float, void *, void *) __asm__("FUN_001f9bf8");
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
@@ -219,7 +219,7 @@ extern float distance_2d1688(void *, void *) __asm__("FUN_001f9b48");
 extern int tick_2d1688(void *) __asm__("FUN_001f9740");
 extern float absolute_2d1688(float) __asm__("FUN_001f99c0");
 extern float distance_to_2d1688(void *, void *) __asm__("FUN_001f9b80");
-extern void move_2d1688(float, float, float, float, void *, void *) __asm__("FUN_00213f38");
+extern float move_2d1688(float *, float, float *, float, float, float) __asm__("FUN_00213f38");
 extern float angle_from_2d1688(float, float) __asm__("FUN_001fa580");
 extern void copy_direction_2d1688(void *, void *) __asm__("FUN_001fa030");
 extern int check_path_2d1688(void *, void *, int) __asm__("FUN_L00_00259740");
@@ -292,7 +292,7 @@ state_one:
         {
             float pi = 3.1415927f;
             float turn_step = frame_time_sq * pi;
-            steer_2d1688(height, turn_step, turn_step, frame_time * pi, point, data + 0x70);
+            steer_2d1688((float *)(point), (float *)(data + 0x70), height, turn_step, turn_step, frame_time * pi);
         }
         fast_vec_normalize(frame_time * 3.0f, w, moby + 0xc0);
         fast_vec_add(moby + 0x10, moby + 0x10, w);
@@ -304,15 +304,12 @@ state_one:
         }
         if ((hero.state.control_mode == 0x12 || hero.state.current == 0x12) &&
             distance_to_2d1688(moby + 0x10, &hero.motion.pos) < 8.0f) {
-            float sea = D_L05_00161388;
-            speed = (D_L05_001612E8 - sea) - 2.0f;
+            speed = (D_L05_001612E0_macro[2] - D_L05_00161388) - 2.0f;
         } else {
-            speed = (D_L05_001612E8 - (D_L05_00161388)) - 0.5f;
+            speed = (D_L05_001612E0_macro[2] - D_L05_00161388) - 0.5f;
             FUN_L05_002d1e30(moby);
         }
-        move_2d1688(speed, frame_time_sq + frame_time_sq,
-                     frame_time_sq + frame_time_sq,
-                     frame_time + frame_time, moby + 0x18, data + 0x78);
+        move_2d1688((float *)(moby + 0x18), speed, (float *)(data + 0x78), frame_time_sq + frame_time_sq, frame_time_sq + frame_time_sq, frame_time + frame_time);
         return;
     }
 state_two:
@@ -367,23 +364,21 @@ state_three:
                 }
                 h->unk20A5 = one;
                 h->motion.pos.f[2] += 20.0f;
+                speed = *(float *)(data + 0x78);
+            } else {
+                speed = *(float *)(data + 0x78);
             }
         }
-        height = *(float *)(data + 0x78);
-        speed = *(float *)(moby + 0x18);
         {
             float acceleration = frame_time_sq * 10.0f;
             float threshold = frame_time + frame_time;
-            *(float *)(moby + 0x18) = speed + height;
+            *(float *)(moby + 0x18) = *(float *)(moby + 0x18) + speed;
             {
                 float speed = *(float *)(data + 0x78) - acceleration;
                 *(float *)(data + 0x78) = speed;
                 if (speed < threshold) {
                     fast_vec_normalize((D_L05_00161388), v, moby + 0xe0);
-                    height = frame_time_sq;
-                    steer_2d1688(1.5533431f, height * 12.566371f,
-                                  height * 12.566371f, frame_time * 25.132742f,
-                                  moby + 0x44, data + 0x70);
+                    steer_2d1688((float *)(moby + 0x44), (float *)(data + 0x70), 1.5533431f, frame_time_sq * 12.566371f, frame_time_sq * 12.566371f, frame_time * 25.132742f);
                     copy_direction_2d1688(moby + 0xc0, moby + 0x40);
                     fast_vec_normalize((D_L05_00161388), w, moby + 0xe0);
                     fast_vec_sub(z, w, v);

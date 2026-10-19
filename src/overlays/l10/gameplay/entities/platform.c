@@ -2222,7 +2222,6 @@ typedef struct {
 void FUN_L10_002dcc58(struct Moby *moby) {
     PlatformWaveVars *vars = (PlatformWaveVars *)moby->pvars;
     Vec4 jitter[20][10];
-    int group, item, row;
 
     switch (moby->state) {
     case 0:
@@ -2244,7 +2243,9 @@ void FUN_L10_002dcc58(struct Moby *moby) {
         }
         moby->state = 1;
         break;
-    case 1:
+    case 1: {
+        int group, item, row;
+
         vars->phase += D_L10_00161D5C * frame_time;
         if (vars->phase > 1.0f) vars->phase -= 1.0f;
         for (group = 0; group < 4; group++) {
@@ -2272,6 +2273,7 @@ void FUN_L10_002dcc58(struct Moby *moby) {
             }
         }
         break;
+    }
     }
 }
 #endif

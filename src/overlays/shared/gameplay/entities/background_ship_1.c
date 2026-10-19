@@ -984,6 +984,7 @@ int FUN_L02_002fb9c8(char *moby) {
     char *data = *(char **)(D_L02_0015EF50 + *(short *)(moby + 0x84) * 32 + 0x1c);
     char *target;
     unsigned short *group;
+    int id;
     int index;
     int duration;
     int count;
@@ -1006,12 +1007,14 @@ int FUN_L02_002fb9c8(char *moby) {
     if (index >= 0) {
         group = (unsigned short *)D_L02_001ABE40[index];
         if (group == 0) goto invalid;
-        target = (char *)(D_L02_0015FFD8 + ((*group & 0x7fff) << 8));
+        id = *group;
+        target = (char *)(D_L02_0015FFD8 + ((id & 0x7fff) << 8));
         if (*(signed char *)(target + 0x20) < 0) {
             do {
                 if ((int)(*group << 16) < 0) goto invalid;
                 group++;
-                target = (char *)(D_L02_0015FFD8 + ((*group & 0x7fff) << 8));
+                id = *group;
+                target = (char *)(D_L02_0015FFD8 + ((id & 0x7fff) << 8));
             } while (*(signed char *)(target + 0x20) < 0);
         }
     } else {
