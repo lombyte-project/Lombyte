@@ -901,11 +901,15 @@ extern int func_001F9908_v(void *) __asm__("FUN_001f9740");
 
 void amoeboid_update(struct Moby *m) __asm__("FUN_L05_002dac80");
 void amoeboid_update(struct Moby *m) {
+    enum {
+        AMOEBOID_INITIALIZE = 0,
+        AMOEBOID_FOLLOW_PATH = 1
+    };
     char *d = (char *)m->pvars;
     float dir[4];
     FUN_L05_002daf58_c(m);
     switch (m->state) {
-    case 0:
+    case AMOEBOID_INITIALIZE:
         m->state = 1;
         m->update_dist = 0x40;
         if (m->prev_seq != 0)
@@ -924,7 +928,7 @@ void amoeboid_update(struct Moby *m) {
             *(float *)(d + 0x84) = f;
         }
         break;
-    case 1: {
+    case AMOEBOID_FOLLOW_PATH: {
         char *p = D_L05_001B0CB0_x[*(int *)(d + 0xB0)] + *(int *)(d + 0xB4) * 16;
         float yaw = fast_arc_tan(*(float *)(p + 0x10) - m->pos.x,
                                  *(float *)(p + 0x14) - m->pos.y);
