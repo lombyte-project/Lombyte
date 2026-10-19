@@ -123,6 +123,7 @@ extern int func_001F9908_r(int *) __asm__("FUN_001f9740");
 void FUN_L11_00253a18(void) {
     enum {
         HERO_STATE_ITEM_BUTTON_RELEASE_WAIT = 23,
+        HERO_STATE_CIRCLE_RELEASE_WAIT = 89,
         HERO_STATE_APPROACH_TARGET_POSE = 101,
         HERO_STATE_TARGET_POSE_ANIMATION_WAIT = 102,
         HERO_STATE_AT_TARGET_POSE = 103,
@@ -1820,7 +1821,7 @@ void FUN_L11_00253a18(void) {
                     }
                     hero_set_state(0x53, 1);
                     break;
-                case 89:
+                case HERO_STATE_CIRCLE_RELEASE_WAIT:
                     if (hero.state_timer > scale_game_frames(0x2D) && !(controller_state.held & 0x20)) {
                         hero_set_state(0x53, 0);
                         set_hero_animation(0, 0, scale_game_frames(0x14));
