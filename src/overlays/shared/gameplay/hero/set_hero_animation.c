@@ -1213,7 +1213,8 @@ f32 FUN_001f9e90_00233d30(f32, f32) __asm__("FUN_001f9e90");
 f32 FUN_L00_00233d30(f32 *v) {
     enum {
         GRAVITY_MODE_WORLD_Z = 0,
-        GRAVITY_MODE_VECTOR_AXIS = 1
+        GRAVITY_MODE_VECTOR_AXIS = 1,
+        GRAVITY_MODE_DIRECTION_AXIS = 2
     };
     struct Hero *b = &hero;
     V00233d30 t;
@@ -1224,7 +1225,7 @@ f32 FUN_L00_00233d30(f32 *v) {
         z = v[2];
         goto call;
     case GRAVITY_MODE_VECTOR_AXIS:
-    case 2:
+    case GRAVITY_MODE_DIRECTION_AXIS:
         qcopy(&t, v);
         FUN_001f9d20_00233d30(&t, &t, &b->unk40);
         d = FUN_001f9b20_00233d30(&t);
