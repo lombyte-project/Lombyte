@@ -2983,6 +2983,9 @@ void FUN_L06_002fa9c0(char *moby) {
         HIT_RESPONSE_NONLETHAL_FALLBACK = 5,
         HIT_RESPONSE_NO_REACTION = 11
     };
+    enum {
+        REDUCED_DAMAGE_SOURCE_CLASS = 0x131
+    };
     char *data;
     char *hit;
     int out;
@@ -3005,7 +3008,7 @@ void FUN_L06_002fa9c0(char *moby) {
         if (*(char **)(hit + 0x20) != 0) {
             int oclass = *(short *)(*(char **)(hit + 0x20) + 0xA6);
             switch (oclass) {
-            case 0x131:
+            case REDUCED_DAMAGE_SOURCE_CLASS:
                 dmg *= 0.666f;
                 break;
             case 0xB0: case 0x79: case 0x33B:
