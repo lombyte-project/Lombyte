@@ -1157,8 +1157,13 @@ void robosquawker_update(RsMoby *m) __asm__("FUN_L13_002b50d8");
 void robosquawker_update(RsMoby *m) {
     enum {
         ROBOSQUAWKER_STATE_INITIALIZE = 0,
+        ROBOSQUAWKER_STATE_GROUND_IDLE = 1,
+        ROBOSQUAWKER_STATE_CHASE_TARGET = 3,
+        ROBOSQUAWKER_STATE_PECK_ATTACK = 4,
         ROBOSQUAWKER_STATE_RETURN_HOME = 5,
         ROBOSQUAWKER_STATE_DAMAGE_KNOCKBACK = 6,
+        ROBOSQUAWKER_STATE_BLOCKED_RETURN_HOME = 0xC,
+        ROBOSQUAWKER_STATE_FLIGHT_IDLE = 0xE,
         ROBOSQUAWKER_STATE_FLY_TO_RANDOM_POINT = 0xF,
         ROBOSQUAWKER_STATE_TAKEOFF = 0x10,
         ROBOSQUAWKER_STATE_LAND = 0x11,
@@ -1302,7 +1307,7 @@ void robosquawker_update(RsMoby *m) {
             v->w224 = FUN_L01_0028b510(&m->pos, D_L13_001B07B0[v->w220], 0.0f);
         }
         break;
-    case 0xE: {
+    case ROBOSQUAWKER_STATE_FLIGHT_IDLE: {
         float d;
 
         FUN_L13_002b4f28((unsigned char *)m, (char *)v);
@@ -1527,7 +1532,7 @@ void robosquawker_update(RsMoby *m) {
         FUN_L13_002b4f28((unsigned char *)m, (char *)v);
         break;
     }
-    case 1:
+    case ROBOSQUAWKER_STATE_GROUND_IDLE:
         subtract_vector_xyz(&va, &tgt, &m->pos);
         if (vector_length_xyz(&va) < v->f1FC + 4.0f
             && absolute_float(m->pos.f[2] - tgt.pos.f[2]) < 8.0f
@@ -1655,7 +1660,7 @@ void robosquawker_update(RsMoby *m) {
         FUN_L13_002b4ff0((char *)m, (char *)v);
         break;
     }
-    case 3: {
+    case ROBOSQUAWKER_STATE_CHASE_TARGET: {
         float r;
         int res;
         float a;
@@ -1704,7 +1709,7 @@ void robosquawker_update(RsMoby *m) {
         FUN_L13_002b4ff0((char *)m, (char *)v);
         break;
     }
-    case 4: {
+    case ROBOSQUAWKER_STATE_PECK_ATTACK: {
         float a;
         int same;
         float hh;
@@ -1840,7 +1845,7 @@ void robosquawker_update(RsMoby *m) {
         }
         break;
     }
-    case 0xC: {
+    case ROBOSQUAWKER_STATE_BLOCKED_RETURN_HOME: {
         float r;
         int res;
         float a;
