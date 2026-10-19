@@ -2956,13 +2956,14 @@ extern short D_L02_00161C68 __attribute__((sda));
 void crane_update(struct Moby *moby) __asm__("FUN_L02_002df1a8");
 void crane_update(struct Moby *moby) {
     enum {
+        CRANE_ANIM_TRANSITION_TO_RANDOM_WAIT = 1,
         CRANE_ANIM_WAIT_FOR_RANDOM_TRANSITION = 2,
         CRANE_ANIM_WAIT_FOR_TRANSITION_TO_RANDOM_WAIT = 4
     };
     int *d = (int *)moby->pvars;
     moby->anim_speed = *(float *)&D_L02_00161C68;
     switch (moby->prev_seq) {
-    case 1:
+    case CRANE_ANIM_TRANSITION_TO_RANDOM_WAIT:
     case 3:
     case 5:
     case 7:
