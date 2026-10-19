@@ -650,6 +650,7 @@ int FUN_L05_00251be8(void) {
         ITEM_WRENCH = 8,
         ITEM_TARGET_INTERACTION_DEVICE = 12,
         ITEM_HELD_SOUND_DEVICE = 15,
+        ITEM_STATE_CHANGING_SOUND_DEVICE = 18,
         ITEM_PRESS_ACTIVATED_DEVICE = 21,
         ITEM_HERO_SOUND_REQUEST_DEVICE = 31,
         ITEM_AMMO_MENU_DEVICE = 32,
@@ -902,7 +903,7 @@ int FUN_L05_00251be8(void) {
             }
         }
         break;
-    case 18:
+    case ITEM_STATE_CHANGING_SOUND_DEVICE:
         if ((*(Hero *)((char *)&hero)).state.control_mode < 2U || ((*(Hero *)((char *)&hero)).state.control_mode == 4 && (*(Hero *)((char *)&hero)).unk418 != 0)) {
             if ((*(Hero *)((char *)&hero)).state.current != 1) {
                 int window = scale_game_frames_alt(0xA);
