@@ -552,10 +552,16 @@ void FUN_L11_002d14b0(void *arg) {
     enum {
         RESORT_OWNER_INITIALIZE = 0,
         RESORT_OWNER_INITIAL_DIALOGUE = 2,
+        RESORT_OWNER_WAIT_TO_FOLLOW_HERO = 3,
         RESORT_OWNER_MOVE_TO_PATH_POINT = 6,
-        RESORT_OWNER_JUMP_TO_TARGET = 7
+        RESORT_OWNER_JUMP_TO_TARGET = 7,
+        RESORT_OWNER_CHECK_PATH_COMPLETION_DIALOGUE = 12,
+        RESORT_OWNER_WAIT_FOR_PATH_COMPLETION_DIALOGUE_END = 13,
+        RESORT_OWNER_CHECK_POST_PATH_DIALOGUE = 14,
+        RESORT_OWNER_WAIT_FOR_POST_PATH_DIALOGUE_END = 15
     };
     enum {
+        RESORT_OWNER_PENULTIMATE_PATH_LEG = 2,
         RESORT_OWNER_FINAL_PATH_LEG = 3
     };
     struct Moby *moby = arg;
@@ -638,7 +644,7 @@ void FUN_L11_002d14b0(void *arg) {
         if (D_L11_0015F5C4 != 2)
             FUN_L11_002d2088_c(moby, 3);
         break;
-    case 3:
+    case RESORT_OWNER_WAIT_TO_FOLLOW_HERO:
         if (vector_distance(&moby->pos, &hero.motion.pos) > 6.0f &&
             FUN_L11_002d2340(moby, (char *)&hero.motion.pos) && proximity == 1)
             FUN_L11_002d2088_c(moby, 4);
@@ -688,7 +694,7 @@ void FUN_L11_002d14b0(void *arg) {
                 FUN_L11_002d2088_c(moby, 7);
                 break;
             }
-            case 2:
+            case RESORT_OWNER_PENULTIMATE_PATH_LEG:
                 FUN_L11_002d2088_c(moby, 0xB);
                 break;
             case RESORT_OWNER_FINAL_PATH_LEG:
@@ -698,7 +704,7 @@ void FUN_L11_002d14b0(void *arg) {
             }
         }
         break;
-    case 12:
+    case RESORT_OWNER_CHECK_PATH_COMPLETION_DIALOGUE:
         d->talk_range = 255.0f;
         if (update_npc_dialogue(moby, d->talk)) {
             jet_clear_persistent(d->unk10C);
@@ -718,7 +724,7 @@ void FUN_L11_002d14b0(void *arg) {
             FUN_L11_002d2088_c(moby, 0xD);
         }
         break;
-    case 13:
+    case RESORT_OWNER_WAIT_FOR_PATH_COMPLETION_DIALOGUE_END:
         if (D_L11_0015F5C4 != 2) {
             FUN_L11_002cb990((struct Moby *)(D_L11_0015FFD8 + (d->unk104 << 8)));
             FUN_L11_002d2088_c(moby, 0xE);
@@ -753,14 +759,14 @@ void FUN_L11_002d14b0(void *arg) {
             FUN_L11_002d2088_c(moby, 3);
         }
         break;
-    case 14:
+    case RESORT_OWNER_CHECK_POST_PATH_DIALOGUE:
         if (D_0014C050[d->unk118 + D_0015ED84 * 16] == 0xFF && D_001413D4_14b0 != 0x32 &&
             update_npc_dialogue(moby, d->talk)) {
             begin_dialogue_camera_transition(moby, 2.5f);
             FUN_L11_002d2088_c(moby, 0xF);
         }
         break;
-    case 15:
+    case RESORT_OWNER_WAIT_FOR_POST_PATH_DIALOGUE_END:
         if (D_L11_0015F5C4 != 2) {
             FUN_L00_00260860(6, 1);
             memcard_save_data(0, -1);
