@@ -802,57 +802,54 @@ void nanotech_ball_update(Moby *moby) {
         break;
     }
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d9810.s", FUN_L00_002d9810);
-#else
+/* Ported from rac1-decomp (nonmatching/shared/func_L00_002DACC0.c: func_L00_002DACC0), a near miss there; names translated to the US level program. */
+typedef struct { float x, y, z; } Vec3_002d9810;
 typedef struct {
     u128 points[4];
     u32 colors[4];
     float texcoords[8];
     u64 texture[4];
 } __attribute__((aligned(16))) Quad_002d9810;
-extern float D_L00_00161A10_gp __asm__("D_L00_00161A10") __attribute__((sda));
-extern int D_L00_00161B10_002d9810 __asm__("D_L00_00161B10") __attribute__((section(".data")));
-extern int D_L00_00161AD0_002d9810 __asm__("D_L00_00161AD0") __attribute__((sda));
-extern u32 D_L00_00161AE0_002d9810 __asm__("D_L00_00161AE0") __attribute__((sda));
-extern int D_L00_00161AC0_002d9810 __asm__("D_L00_00161AC0") __attribute__((sda));
-extern int D_L00_00161AC4_002d9810 __asm__("D_L00_00161AC4") __attribute__((sda));
-extern int D_L00_00161AC8_002d9810 __asm__("D_L00_00161AC8") __attribute__((sda));
-extern int D_L00_00161ACC_002d9810 __asm__("D_L00_00161ACC") __attribute__((sda));
-extern int D_L00_00161AD4_002d9810 __asm__("D_L00_00161AD4") __attribute__((sda));
-extern u32 D_L00_00161AD8_002d9810 __asm__("D_L00_00161AD8") __attribute__((sda));
-extern float D_L00_00161ADC_002d9810 __asm__("D_L00_00161ADC") __attribute__((sda));
-extern int D_L00_00161AE4_002d9810 __asm__("D_L00_00161AE4") __attribute__((sda));
-extern float D_L00_00161AE8_002d9810 __asm__("D_L00_00161AE8") __attribute__((sda));
-extern float D_L00_00161AEC_002d9810 __asm__("D_L00_00161AEC") __attribute__((sda));
-extern char D_L00_00161AF0_002d9810[] __asm__("D_L00_00161AF0") __attribute__((section(".data")));
-extern char g_debug_camera[] __asm__("D_L00_00166DC0");
-extern char D_L00_001E14C0_002d9810[] __asm__("D_L00_001E14C0");
-extern char D_L00_001E3DA0_002d9810[] __asm__("D_L00_001E3DA0");
-extern char D_L00_001E2FF0_002d9810[] __asm__("D_L00_001E2FF0");
-extern char D_L00_001E26E0_002d9810[] __asm__("D_L00_001E26E0");
-extern char D_L00_001E3A80_002d9810[] __asm__("D_L00_001E3A80");
-extern char D_L00_001E3480_002d9810[] __asm__("D_L00_001E3480");
-extern char D_L00_001E3B80_002d9810[] __asm__("D_L00_001E3B80");
-extern char D_L00_001E3C80_002d9810[] __asm__("D_L00_001E3C80");
-u64 FUN_001f44b8_002d9810(int) __asm__("FUN_001f44b8");
-void FUN_00233980_002d9810(int, u64) __asm__("FUN_00233980");
-void FUN_001f9a10_002d9810(void *, void *, void *) __asm__("FUN_001f9a10");
-void FUN_001f9a28_002d9810(void *, void *, void *) __asm__("FUN_001f9a28");
-void FUN_001f9bf8_002d9810(float, void *, void *) __asm__("FUN_001f9bf8");
-void FUN_001f9ad8_002d9810(void *, void *, void *) __asm__("FUN_001f9ad8");
-void FUN_001f76a0_002d9810(void) __asm__("FUN_001f76a0");
-void FUN_001f9d20_002d9810(void *, void *, void *) __asm__("FUN_001f9d20");
-void FUN_L00_001fde98_002d9810(int, void *, void *, void *, int) __asm__("FUN_L00_001fde98");
-int FUN_001fa6d0_002d9810(float) __asm__("FUN_001fa6d0");
-void FUN_001f9a68_002d9810(float, void *, void *) __asm__("FUN_001f9a68");
-void FUN_001f7d30_002d9810(void *, void *, int) __asm__("FUN_001f7d30");
-void FUN_001f9c48_002d9810(float, void *, void *) __asm__("FUN_001f9c48");
-float FUN_L00_00200260_002d9810(float, float) __asm__("FUN_L00_00200260");
+extern int D_L00_00161B10_macro __asm__("D_L00_00161B10") __attribute__((section(".sdata")));
+extern int D_L00_00161AC0_gp __asm__("D_L00_00161AC0") __attribute__((sda));
+extern int D_L00_00161AC4_gp __asm__("D_L00_00161AC4") __attribute__((sda));
+extern int D_L00_00161AC8_gp __asm__("D_L00_00161AC8") __attribute__((sda));
+extern int D_L00_00161ACC_gp __asm__("D_L00_00161ACC") __attribute__((sda));
+extern int D_L00_00161AD0_gp __asm__("D_L00_00161AD0") __attribute__((sda));
+extern int D_L00_00161AD4_gp __asm__("D_L00_00161AD4") __attribute__((sda));
+extern u32 D_L00_00161AD8_gp __asm__("D_L00_00161AD8") __attribute__((sda));
+extern float D_L00_00161ADC_gp __asm__("D_L00_00161ADC") __attribute__((sda));
+extern u32 D_L00_00161AE0_gp __asm__("D_L00_00161AE0") __attribute__((sda));
+extern int D_L00_00161AE4_gp __asm__("D_L00_00161AE4") __attribute__((sda));
+extern float D_L00_00161AE8_gp __asm__("D_L00_00161AE8") __attribute__((sda));
+extern float D_L00_00161AEC_gp __asm__("D_L00_00161AEC") __attribute__((sda));
+extern char D_L00_00161AF0_macro[] __asm__("D_L00_00161AF0") __attribute__((section(".sdata")));
+extern char D_L00_001E14C0[];
+extern char D_L00_001E26E0[];
+extern char D_L00_001E2FF0[];
+extern char D_L00_001E3480[];
+extern char D_L00_001E3A80[];
+extern char D_L00_001E3B80[];
+extern char D_L00_001E3C80[];
+extern char D_L00_001E3DA0[];
+extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
+extern void vu1_add_g_sregister(s32, u64) __asm__("func_00233980");
+void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
+void FUN_001f9a28(void *, void *, void *);
+void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
+void font_queue_vu_state(void) __asm__("FUN_001f76a0");
+extern void transform_vector(void *, void *, void *) __asm__("func_001F9D20");
+void FUN_L00_001fde98(int, void *, void *, void *, int);
+s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
+void FUN_001f9a68(void *, void *, f32);
+extern void draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
+void FUN_001f9c48(void *, void *, f32);
+float FUN_L00_00200260(float, float);
 
 void FUN_L00_002d9810(u8 *m) {
     Quad_002d9810 quad;
     float shifted[4] __attribute__((aligned(16)));
+    float *shiftedVector;
     float cross[4] __attribute__((aligned(16)));
     float normal[4] __attribute__((aligned(16)));
     float position[4] __attribute__((aligned(16)));
@@ -863,88 +860,83 @@ void FUN_L00_002d9810(u8 *m) {
     char *shape;
     float ratio = data[0] / D_L00_00161A10_gp;
     int i, j, color;
-    unsigned short *indices;
+    short *indices;
+    short *row;
+    short *rows;
     char *source;
-    char *destination = D_L00_001E3DA0_002d9810;
     char *pointB, *pointA;
     float *u, *v;
-    float *uBase, *vBase;
-    float *shiftedVector = shifted;
+    float *vBase, *uBase;
 
-    quad.texture[1] = FUN_001f44b8_002d9810(D_L00_00161AD4_002d9810);
+    quad.texture[1] = get_effect_texture(D_L00_00161AD4_gp);
     quad.texture[2] = 0xff9000000260ULL;
-    quad.texture[3] = (u64)D_L00_00161AC0_002d9810 |
-                      ((u64)D_L00_00161AC4_002d9810 << 2) |
-                      ((u64)D_L00_00161AC8_002d9810 << 4) |
-                      ((u64)D_L00_00161ACC_002d9810 << 6) |
-                      ((u64)D_L00_00161AD0_002d9810 << 32);
+    quad.texture[3] = (u64)D_L00_00161AC0_gp |
+                      ((u64)D_L00_00161AC4_gp << 2) |
+                      ((u64)D_L00_00161AC8_gp << 4) |
+                      ((u64)D_L00_00161ACC_gp << 6) |
+                      ((u64)D_L00_00161AD0_gp << 32);
     quad.texture[0] = 0;
-    FUN_00233980_002d9810(0x47, 0x53001);
-    ((float *)&position)[0] = *(float *)(m + 0x10);
-    ((float *)&position)[1] = *(float *)(m + 0x14);
-    ((float *)&position)[2] = *(float *)(m + 0x18) + 0.5f;
-    ((float *)&position)[2] += data[0];
-    ((float *)&position)[3] = 1.0f;
-    FUN_001f9a10_002d9810(&position, &position, D_L00_00161AF0_002d9810);
-    FUN_001f9a28_002d9810(&rotated, g_debug_camera, &position);
-    FUN_001f9bf8_002d9810(1.0f, shiftedVector, &rotated);
+    vu1_add_g_sregister(0x47, 0x53001);
+    shiftedVector = shifted;
+    position[0] = *(float *)(m + 0x10);
+    position[1] = *(float *)(m + 0x14);
+    position[2] = *(float *)(m + 0x18) + 0.5f;
+    position[2] += data[0];
+    position[3] = 1.0f;
+    fast_vec_add(&position, &position, D_L00_00161AF0_macro);
+    FUN_001f9a28(&rotated, g_debug_camera, &position);
+    fast_vec_normalize(shiftedVector, &rotated, 1.0f);
     shape = *(char **)((char *)data + 0xc);
-    FUN_001f9ad8_002d9810(&cross, shiftedVector, shape + 0xe0);
-    FUN_001f9bf8_002d9810(1.0f, &cross, &cross);
-    FUN_001f9ad8_002d9810(&normal, &cross, shiftedVector);
-    quad.colors[3] = D_L00_00161AD8_002d9810;
-    quad.colors[2] = D_L00_00161AD8_002d9810;
-    quad.colors[1] = D_L00_00161AD8_002d9810;
-    quad.colors[0] = D_L00_00161AD8_002d9810;
-    FUN_00233980_002d9810(6, FUN_001f44b8_002d9810(D_L00_00161AD4_002d9810));
-    FUN_00233980_002d9810(0x42, 0x8000000044ULL);
-    FUN_00233980_002d9810(8, 0);
-    FUN_00233980_002d9810(0x14, 0xff9000000260ULL);
-    FUN_00233980_002d9810(0x4a, 0);
-    FUN_001f76a0_002d9810();
-    j = 0x121;
-    source = D_L00_001E14C0_002d9810;
-    do {
-        FUN_001f9d20_002d9810(&transformed, source, shiftedVector);
-        source += 16;
-        j--;
+    fast_vec_cross(&cross, shiftedVector, shape + 0xe0);
+    fast_vec_normalize(&cross, &cross, 1.0f);
+    fast_vec_cross(&normal, &cross, shiftedVector);
+    quad.colors[3] = D_L00_00161AD8_gp;
+    quad.colors[2] = D_L00_00161AD8_gp;
+    quad.colors[1] = D_L00_00161AD8_gp;
+    quad.colors[0] = D_L00_00161AD8_gp;
+    vu1_add_g_sregister(6, get_effect_texture(D_L00_00161AD4_gp));
+    vu1_add_g_sregister(0x42, 0x8000000044ULL);
+    vu1_add_g_sregister(8, 0);
+    vu1_add_g_sregister(0x14, 0xff9000000260ULL);
+    vu1_add_g_sregister(0x4a, 0);
+    font_queue_vu_state();
+    for (j = 0; j < 0x122; j++) {
+        transform_vector(&transformed, D_L00_001E14C0 + j * 16, shifted);
         {
             float x = transformed[0], y = transformed[1], z = transformed[2];
-            ((float *)destination)[0] = x;
-            ((float *)destination)[1] = y;
-            ((float *)destination)[2] = z;
+            ((Vec3_002d9810 *)D_L00_001E3DA0)[j].x = x;
+            ((Vec3_002d9810 *)D_L00_001E3DA0)[j].y = y;
+            ((Vec3_002d9810 *)D_L00_001E3DA0)[j].z = z;
         }
-        destination += 12;
-    } while (j >= 0);
-    FUN_L00_001fde98_002d9810(0x94, D_L00_001E3DA0_002d9810,
-                                D_L00_001E2FF0_002d9810, D_L00_001E26E0_002d9810, 1);
-    FUN_L00_001fde98_002d9810(0x6d, D_L00_001E3DA0_002d9810 + 0x6d8,
-                                D_L00_001E2FF0_002d9810 + 0x248,
-                                D_L00_001E26E0_002d9810 + 0x490, 1);
-    FUN_L00_001fde98_002d9810(0x24, D_L00_001E3DA0_002d9810 + 0xbe8,
-                                D_L00_001E2FF0_002d9810 + 0x3f8,
-                                D_L00_001E26E0_002d9810 + 0x7f0, 1);
-    quad.texture[1] = FUN_001f44b8_002d9810(0xb);
+    }
+    FUN_L00_001fde98(0x94, D_L00_001E3DA0,
+                                D_L00_001E2FF0, D_L00_001E26E0, 1);
+    FUN_L00_001fde98(0x6d, D_L00_001E3DA0 + 0x6d8,
+                                D_L00_001E2FF0 + 0x248,
+                                D_L00_001E26E0 + 0x490, 1);
+    FUN_L00_001fde98(0x24, D_L00_001E3DA0 + 0xbe8,
+                                D_L00_001E2FF0 + 0x3f8,
+                                D_L00_001E26E0 + 0x7f0, 1);
+    quad.texture[1] = get_effect_texture(0xb);
     quad.texture[3] = 0x8000000048ULL;
-    color = FUN_001fa6d0_002d9810(ratio * 64.0f + 128.0f);
-    color = ((u32)(D_L00_00161B10_002d9810 + color) << 24) | D_L00_00161AE0_002d9810;
+    color = truncate_float_to_s32(ratio * 64.0f + 128.0f);
+    color = ((u32)(color + D_L00_00161B10_macro) << 24) | D_L00_00161AE0_gp;
     quad.colors[3] = 0;
     quad.colors[2] = 0;
     quad.colors[1] = color;
     quad.colors[0] = color;
     for (i = 0; i < 32; i++) {
-        indices = (short *)(D_L00_001E3A80_002d9810 + i * 8);
+        indices = (short *)(D_L00_001E3A80 + i * 8);
         j = 0;
         pointA = (char *)quad.points;
         pointB = (char *)quad.points;
         for (; j < 4; j++) {
             short index = *indices;
             if (j >= 2)
-                FUN_001f9a68_002d9810(D_L00_00161ADC_002d9810 * D_L00_00161AEC_002d9810,
-                                        pointB, D_L00_001E3480_002d9810 + index * 16);
+                FUN_001f9a68(pointB, D_L00_001E3480 + index * 16,
+                             D_L00_00161ADC_gp * D_L00_00161AEC_gp);
             else
-                FUN_001f9a68_002d9810(D_L00_00161ADC_002d9810, pointA,
-                                        D_L00_001E3480_002d9810 + index * 16);
+                FUN_001f9a68(pointA, D_L00_001E3480 + index * 16, D_L00_00161ADC_gp);
             pointA += 16;
             pointB += 16;
             indices++;
@@ -957,10 +949,10 @@ void FUN_L00_002d9810(u8 *m) {
         quad.texcoords[5] = 1.0f;
         quad.texcoords[6] = 0.5f;
         quad.texcoords[7] = 1.0f;
-        FUN_001f7d30_002d9810(&quad, shiftedVector, 0);
+        draw_geometry_quad(&quad, shifted, 0);
     }
     if (FUN_L00_002d8128(m)) {
-        quad.texture[1] = FUN_001f44b8_002d9810(D_L00_00161AE4_002d9810);
+        quad.texture[1] = get_effect_texture(D_L00_00161AE4_gp);
         quad.colors[3] = 0x107f7f7f;
         quad.colors[2] = 0x107f7f7f;
         quad.colors[1] = 0x107f7f7f;
@@ -968,38 +960,38 @@ void FUN_L00_002d9810(u8 *m) {
         quad.texture[3] = 0x8000000044ULL;
         {
             char *shape = *(char **)((char *)data + 0xc);
-            qcopy(shiftedVector, shape + 0xc0);
+            qcopy(shifted, shape + 0xc0);
             qcopy(&cross, shape + 0xd0);
             qcopy(&normal, shape + 0xe0);
         }
-        uBase = &quad.texcoords[1];
+        position[2] = *(float *)(m + 0x18);
         vBase = &quad.texcoords[0];
-        ((float *)&position)[2] = *(float *)(m + 0x18);
+        uBase = &quad.texcoords[1];
+        rows = (short *)D_L00_001E3C80;
         for (i = 0; i < 4; i++) {
-            v = vBase;
             u = uBase;
-            indices = (short *)(D_L00_001E3C80_002d9810 + i * 8);
+            v = vBase;
+            row = (short *)(i * 8 + (u32)rows);
             source = (char *)quad.points;
             for (j = 3; j >= 0; j--) {
-                FUN_001f9d20_002d9810(source, D_L00_001E3B80_002d9810 + (*indices++) * 16,
-                                       shiftedVector);
-                FUN_001f9a28_002d9810(projection, source, g_debug_camera);
+                transform_vector(source, D_L00_001E3B80 + (*row++) * 16,
+                                       shifted);
+                FUN_001f9a28(projection, source, g_debug_camera);
                 source += 16;
                 projection[1] = projection[2];
-                FUN_001f9c48_002d9810(D_L00_00161AE8_002d9810, projection, projection);
+                FUN_001f9c48(projection, projection, D_L00_00161AE8_gp);
                 *v = projection[0] * 0.5f + 0.5f;
-                *v = FUN_L00_00200260_002d9810(*v, 8.0f);
+                *v = FUN_L00_00200260(*v, 8.0f);
                 v += 2;
                 *u = projection[1] * 0.5f + 0.5f;
-                *u = FUN_L00_00200260_002d9810(*u, 8.0f);
+                *u = FUN_L00_00200260(*u, 8.0f);
                 u += 2;
             }
-            FUN_001f7d30_002d9810(&quad, 0, 0);
+            draw_geometry_quad(&quad, 0, 0);
         }
     }
-    FUN_00233980_002d9810(0x47, 0x5360b);
+    vu1_add_g_sregister(0x47, 0x5360b);
 }
-#endif
 int collision_line(Vec4 *, Vec4 *, int, int, int) __asm__("FUN_001efa68");
 /* True when coll_line_fix returns 0 for the moby and (*(char * *)&D_001413D0_lui) positions, both raised by 0.5. */
 int FUN_L00_002d8980(char *a) {

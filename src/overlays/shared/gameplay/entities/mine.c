@@ -1205,7 +1205,10 @@ unsigned char *spawn_bomb(int owner, void *pos) {
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002acfd8.s", FUN_L00_002acfd8);
 #else
-extern int D_0013CAE0_2acfd8 __asm__("D_0013CAE0");
+/* Best near miss so far: SN BYTES 65/269 (the do/while (0) wrapper only shifts register allocation; left: callee-saved register order and the scaled-offset call). */
+typedef struct { char p0[0xA]; unsigned char bA; } Opt_2acfd8;
+extern Opt_2acfd8 D_0013E520_2acfd8 __asm__("D_0013E520") __attribute__((section(".data")));
+extern int D_0013CAE0_2acfd8 __asm__("D_0013CAE0") __attribute__((section(".data")));
 extern float D_0015ED70_2acfd8 __asm__("D_0015ED70");
 extern float D_L00_00173E60_2acfd8[4] __asm__("D_L00_00173E60");
 extern short scale_game_frames_2acfd8(int) __asm__("FUN_001f96f8");
@@ -1231,6 +1234,7 @@ void FUN_L00_002acfd8(float *pos, unsigned char *moby, float *velocity) {
     float result[4] __attribute__((aligned(16)));
     float working[4] __attribute__((aligned(16)));
     float desired[4] __attribute__((aligned(16)));
+    float *source, *dvec, *dir;
     float dot, length, distance, angle, height, total;
 
     *(short *)((char *)v + 0x6a) = scale_game_frames_2acfd8(30);
@@ -1244,19 +1248,22 @@ void FUN_L00_002acfd8(float *pos, unsigned char *moby, float *velocity) {
         short cls = *(short *)(*(char **)((char *)v + 0x60) + 0xa6);
         if (cls == 0x56e || cls == 0x58e) {
             add_vector_xyz_2acfd8(v, v, v + 0x10);
-        } else if (*(int *)((char *)v + 0x64) != 0) {
+        } else do { if (*(int *)((char *)v + 0x64) != 0) {
             length = vector_length_xy(velocity);
+            dvec = direction;
             subtract_vector_xyz_2acfd8(difference, &hero.motion.pos, *(char **)((char *)v + 0x60) + 0x10);
             normalize_vector_xyz_2acfd8(difference, difference, 1.0f);
             dot = dot_vectors_xyz_2acfd8(difference, v + 0x10);
             total = dot + length;
             distance = vector_distance(pos, *(char **)((char *)v + 0x60) + 0x10) / total;
+            dir = dvec;
             if (dot > 0.0f) {
-                scale_vector_xyz_2acfd8(direction, difference, distance * dot);
+                distance = distance * dot;
+                scale_vector_xyz_2acfd8(dir, difference, distance);
             } else {
-                scale_vector_xyz_2acfd8(direction, v + 0x10, distance);
+                scale_vector_xyz_2acfd8(dir, v + 0x10, distance);
             }
-            add_vector_xyz_2acfd8(working, direction, *(char **)((char *)v + 0x60) + 0x10);
+            add_vector_xyz_2acfd8(working, dvec, *(char **)((char *)v + 0x60) + 0x10);
             *(OvlQuad *)direction = *(OvlQuad *)working;
             {
                 float heading = atan2_2acfd8(hero.unk670, hero.unk674);
@@ -1266,35 +1273,30 @@ void FUN_L00_002acfd8(float *pos, unsigned char *moby, float *velocity) {
             }
             if (angle > 1.5707964f) {
                 working[0] = fast_cos_2acfd8(atan2_2acfd8(hero.unk670, hero.unk674)) *
-                            vector_distance(&hero.motion.pos, direction) * 0.5f;
+                            vector_distance(&hero.motion.pos, dvec) * 0.5f;
                 angle = fast_sin_2acfd8(atan2_2acfd8(hero.unk670, hero.unk674));
                 working[2] = 0.0f;
-                working[1] = angle * vector_distance(&hero.motion.pos, direction) * 0.5f;
+                working[1] = angle * vector_distance(&hero.motion.pos, dvec) * 0.5f;
                 add_vector_xyz_2acfd8(desired, working, &hero.motion.pos);
-                qcopy(direction, desired);
+                *(OvlQuad *)direction = *(OvlQuad *)desired;
             }
-            total = D_0015ED70_2acfd8 * 11.0f;
-            height = 8.5f;
-            if (D_0013CAE0_2acfd8 & 5) {
-                height = convert_integer_to_float_2acfd8(*((unsigned char *)&D_0013E520 + 0xa)) * 2.5f + 8.5f;
-            }
-            FUN_L00_002c2488_2acfd8(pos, direction, result, total,
-                                       0.00001f, height);
+            FUN_L00_002c2488_2acfd8(pos, dvec, result, D_0015ED70_2acfd8 * 11.0f, 0.00001f,
+                                    (D_0013CAE0_2acfd8 & 5) ? convert_integer_to_float_2acfd8(D_0013E520_2acfd8.bA) * 2.5f + 8.5f : 8.5f);
             scale_vector_xyz_2acfd8(result, result, 0.65f);
             scale_vector_xyz_2acfd8(v, v, 0.35f);
             add_vector_xyz_2acfd8(working, v, result);
             *(OvlQuad *)v = *(OvlQuad *)working;
-        }
+        } } while (0);
     }
     *(short *)((char *)v + 0x54) = scale_game_frames_2acfd8(300);
-    *(OvlQuad *)(moby + 0x10) = *(OvlQuad *)pos;
-    qcopy_nc(difference, (char *)hero.moby + 0x10);
+    qcopy(moby + 0x10, pos);
+    *(OvlQuad *)difference = *(OvlQuad *)((char *)hero.moby + 0x10);
     difference[2] = pos[2];
     if (FUN_001efa68_2acfd8(difference, pos, 0, hero.moby, 0) != 0) {
         moby[0xbc] = 1;
         qcopy(moby + 0x10, D_L00_00173E60_2acfd8);
     }
-    if (*((unsigned char *)&D_0013E520 + 0xa) != 0 && hero.state.current == HERO_STATE_LOOK) {
+    if (D_0013E520_2acfd8.bA != 0 && hero.state.current == HERO_STATE_LOOK) {
         float z = v[2];
         scale_vector_xyz_2acfd8(v, v, 1.5f);
         v[2] = z / 1.5f;
