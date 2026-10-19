@@ -179,7 +179,9 @@ void hydrodisplacer_update(Moby *moby) {
         HYDRODISPLACER_WAIT_FOR_TIMER = 5
     };
     enum {
-        HYDRODISPLACER_CAMERA_INTERPOLATE = 1
+        HYDRODISPLACER_CAMERA_PREPARE_INTERPOLATION = 0,
+        HYDRODISPLACER_CAMERA_INTERPOLATE = 1,
+        HYDRODISPLACER_CAMERA_RETURN_TO_ACTIVATION = 2
     };
     Vec_2E0E50 camera_pos, camera_rot;
     Data_2E0E50 *data = (void *)moby->pvars;
@@ -301,7 +303,7 @@ void hydrodisplacer_update(Moby *moby) {
             return;
         }
         switch (moby->command) {
-        case 0: {
+        case HYDRODISPLACER_CAMERA_PREPARE_INTERPOLATION: {
             char *linked;
 
             func_00214D28_2E0E50(&D_L00_0015F4FC_2E0E50, 1.0f, 1.0f / func_001F9850_2E0E50(15));
@@ -347,7 +349,7 @@ void hydrodisplacer_update(Moby *moby) {
             D_L00_0015F404_macro = 0;
             func_L00_002EC0C8_2E0E50(3);
             return;
-        case 2:
+        case HYDRODISPLACER_CAMERA_RETURN_TO_ACTIVATION:
             if (0.0f < D_L00_0015F4FC_2E0E50) {
                 func_00214D28_2E0E50(&D_L00_0015F4FC_2E0E50, 0.0f, 1.0f / func_001F9850_2E0E50(15));
                 return;
