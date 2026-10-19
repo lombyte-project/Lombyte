@@ -3199,6 +3199,10 @@ void mark_moby_for_removal_u(struct Obj *obj) __asm__("FUN_0020c828");
 
 void energy_sphere_update(struct Moby *m) __asm__("FUN_L06_002f7ab8");
 void energy_sphere_update(struct Moby *m) {
+    enum {
+        ENERGY_SPHERE_INITIALIZE = 0,
+        ENERGY_SPHERE_UPDATE_ROTATION = 1
+    };
     char *d = (char *)m->pvars;
     if (find_moby_hit(m, 0x330000, 0) != 0) {
         int idx;
@@ -3216,14 +3220,14 @@ void energy_sphere_update(struct Moby *m) {
         return;
     }
     switch (m->state) {
-    case 0:
+    case ENERGY_SPHERE_INITIALIZE:
         set_moby_color(m, 0x80, 0x80, 0x80);
         m->scale = m->pclass->scale * D_L06_00161E80;
         *(char **)d = d + 0x20;
         m->state = 1;
         m->flags |= 0x20;
         *(int *)(d + 0x60) = -1;
-    case 1: {
+    case ENERGY_SPHERE_UPDATE_ROTATION: {
         float rotation_delta_x = D_L06_00161E74 * DEG_TO_RAD * D_0015ED6C;
         float rotation_delta_y, rotation_delta_z;
         float x = fast_add_rotations(m->rot.x, rotation_delta_x);
