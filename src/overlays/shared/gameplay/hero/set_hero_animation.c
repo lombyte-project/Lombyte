@@ -986,7 +986,8 @@ void FUN_L00_00233810(f32 *out, f32 *in, f32 z);
 void FUN_L00_00233810(f32 *out, f32 *in, f32 z) {
     enum {
         GRAVITY_MODE_WORLD_Z = 0,
-        GRAVITY_MODE_VECTOR_AXIS = 1
+        GRAVITY_MODE_VECTOR_AXIS = 1,
+        GRAVITY_MODE_DIRECTION_AXIS = 2
     };
     struct Hero *b = &hero;
     M00233810 m;
@@ -997,7 +998,7 @@ void FUN_L00_00233810(f32 *out, f32 *in, f32 z) {
         out[2] += z;
         break;
     case GRAVITY_MODE_VECTOR_AXIS:
-    case 2:
+    case GRAVITY_MODE_DIRECTION_AXIS:
         FUN_001f99f8_00233810(&t);
         t.v[2] = z;
         FUN_001fa050_00233810(&m, ((u8 *)b->moby) + 0x40);
