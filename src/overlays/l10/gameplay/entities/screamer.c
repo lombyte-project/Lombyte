@@ -2670,6 +2670,9 @@ extern int follow_5968(float, void *, void *, int, int, void *, int) __asm__("FU
 extern char *D_L10_001B0930_5968[] __asm__("D_L10_001B0930");
 
 void FUN_L10_002e5968(struct Moby *m) {
+    enum {
+        LETHAL_HIT_RESPONSE = 1
+    };
     unsigned char *d = m->pvars;
     char *info = info_5968(m, 0x370000, 0);
     int out;
@@ -2691,7 +2694,7 @@ void FUN_L10_002e5968(struct Moby *m) {
             d[0xC7] = 0xFA;
             trooper_anim_update(m, d + 0xC0);
             break;
-        case 1:
+        case LETHAL_HIT_RESPONSE:
             d[0xC7] = 0xFA;
             trooper_anim_update(m, d + 0xC0);
             m->state = 8;
