@@ -531,6 +531,7 @@ int FUN_L17_002eace8(int a, char *p, char *radar_origin, char *radar_rotation, f
                      char *g) {
     enum {
         MOBY_CLASS_OFFSCREEN_ARROW_TARGET = 0x15B,
+        MOBY_CLASS_UNMARKED_COUNTED_TARGET = 0x184,
         MOBY_CLASS_UNCOUNTED_MARKED_TARGET = 0x191
     };
     float v[4];
@@ -603,7 +604,7 @@ int FUN_L17_002eace8(int a, char *p, char *radar_origin, char *radar_rotation, f
         case 0x53:
             FUN_L17_002eaae0(radar_rotation, radar_origin, m, 1, 0x70007080, *(int *)(p + 0x104));
             break;
-        case 0x184:
+        case MOBY_CLASS_UNMARKED_COUNTED_TARGET:
         case MOBY_CLASS_UNCOUNTED_MARKED_TARGET:
         case 0x3EB:
         case 0x504:
