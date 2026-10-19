@@ -1896,6 +1896,7 @@ void FUN_L02_00230988(void) {
         HERO_STATE_MOVE_TO_TARGET = 101,
         HERO_STATE_STOP_AT_TARGET = 102,
         HERO_STATE_IDLE_AT_TARGET = 103,
+        HERO_STATE_WRENCH_COMBO_ALT = 112,
         HERO_STATE_DEATH_FALL = 119
     };
     unsigned char *moby;
@@ -2562,7 +2563,7 @@ void FUN_L02_00230988(void) {
                         }
                     }
                     break;
-                case 112:
+                case HERO_STATE_WRENCH_COMBO_ALT:
                     if (hero.anim_frame > (float)D_L02_0017C2A8_rec[hero.attack_record].f18) {
                         hero_set_state(HERO_STATE_IDLE, 1);
                     }
