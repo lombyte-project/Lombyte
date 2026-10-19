@@ -2103,6 +2103,7 @@ extern Path_2E52B0 *D_L10_001B0C30_2E52B0[] __asm__("D_L10_001B0930");
 void FUN_L10_002e3ef0(void *mv) {
     enum {
         LETHAL_HIT_RESPONSE = 1,
+        DEATH_HIT_RESPONSE = 2,
         SUPPRESSED_HIT_RESPONSE = 11
     };
     Moby *m = mv;
@@ -2234,7 +2235,7 @@ void FUN_L10_002e3ef0(void *mv) {
             break;
         }
         case LETHAL_HIT_RESPONSE:
-        case 2:
+        case DEATH_HIT_RESPONSE:
             m->state = 11;
             m->flags &= 0xEFFF;
             break;
