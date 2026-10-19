@@ -486,6 +486,11 @@ extern unsigned char D_0013F420_2b0e80[] __asm__("D_0013F420");
 
 void blarg_turret_update(Moby_2B5368 *m) __asm__("FUN_L13_002b41b8");
 void blarg_turret_update(Moby_2B5368 *m) {
+    enum {
+        BLARG_TURRET_STATE_INITIALIZE = 0,
+        BLARG_TURRET_STATE_DESTROY = 4,
+        BLARG_TURRET_STATE_DESTRUCTION_DELAY = 5
+    };
     Data_2B5368 *data = m->data;
     Moby_2B5368 *t;
     Moby_2B5368 *gun;
@@ -497,7 +502,7 @@ void blarg_turret_update(Moby_2B5368 *m) {
         FUN_L00_00263ac8_2b0e80(2.7f, data->gun, 1, data->fx);
     }
     switch ((unsigned char)m->state) {
-    case 0:
+    case BLARG_TURRET_STATE_INITIALIZE:
         m->scale = m->cls->scale * 1.5f;
         data->gun = FUN_L13_002b4958_2b0e80(m);
         data->f54 = m->rot.z;
@@ -558,7 +563,7 @@ void blarg_turret_update(Moby_2B5368 *m) {
             }
         }
         break;
-    case 4: {
+    case BLARG_TURRET_STATE_DESTROY: {
         V4_2B5368 v;
         random_vector(&v.x, 0.5f, 1.0f);
         mark_moby_for_removal_cf(m, 0, -1);
@@ -566,7 +571,7 @@ void blarg_turret_update(Moby_2B5368 *m) {
         delete_moby(m);
         return;
     }
-    case 5:
+    case BLARG_TURRET_STATE_DESTRUCTION_DELAY:
         approach_angle(&m->rot.z, data->f54, &data->f60, D_0015ED70_c * 12.566371f, D_0015ED70_c * 12.566371f, frame_time * 25.132742f);
         data->f64 -= 1.0f;
         if (data->f64 <= 0.0f) {
