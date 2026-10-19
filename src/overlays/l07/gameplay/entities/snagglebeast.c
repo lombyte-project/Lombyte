@@ -2513,6 +2513,12 @@ extern void jet_animate(struct Moby *, f32) __asm__("FUN_L00_00259fe8");
 
 /* Swooper: holds at its goal, dives at the hero once it sees it and bursts on contact. */
 void FUN_L07_003196e0(struct Moby *moby) {
+    enum {
+        SWOOPER_INITIALIZE = 0,
+        SWOOPER_WAIT_AT_GOAL = 1,
+        SWOOPER_CHASE_TARGET = 2,
+        SWOOPER_EXPLODE = 3
+    };
     SwooperVars *vars;
     SwooperSpawnerVars *spawner_vars;
     SwooperSight sight;
@@ -2548,7 +2554,7 @@ void FUN_L07_003196e0(struct Moby *moby) {
         FUN_L07_00319698(moby, spawner_vars);
     }
     switch (moby->state) {
-    case 0:
+    case SWOOPER_INITIALIZE:
         if (spawner_vars == NULL) {
             break;
         }
@@ -2561,7 +2567,7 @@ void FUN_L07_003196e0(struct Moby *moby) {
         moby->state = 1;
         moby->command = 0;
         break;
-    case 1:
+    case SWOOPER_WAIT_AT_GOAL:
         subtract_vector_xyz(&vars->velocity, &vars->goal, &moby->pos);
         FUN_L00_00258278(moby, fast_arc_tan(vars->goal.f[0] - moby->pos.x, vars->goal.f[1] - moby->pos.y),
                          &vars->turn_speed, frame_time_sq * 6.2831855f, D_0015ED6C * 3.1415927f,
@@ -2584,7 +2590,7 @@ void FUN_L07_003196e0(struct Moby *moby) {
             moby->state = 2;
         }
         break;
-    case 2:
+    case SWOOPER_CHASE_TARGET:
         if ((moby->anim_flags & 2) && moby->seq == 1 && moby->prev_seq != 2) {
             blend_moby_animation((MobyAnim *)moby, 2, 0, 10);
         }
@@ -2637,7 +2643,7 @@ void FUN_L07_003196e0(struct Moby *moby) {
             FUN_L07_00319698(moby, spawner_vars);
         }
         break;
-    case 3:
+    case SWOOPER_EXPLODE:
         spawn_explosion(moby, &vars->velocity, NULL, 0.0f, 0.0f, 3, 3, 5, 2.0f, 1.0f, 4.0f, 1.0f, 2, 7.0f, 0, 1, -1, 0);
         FUN_L07_00319698(moby, spawner_vars);
         break;
