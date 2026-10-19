@@ -473,6 +473,7 @@ void FUN_L06_002feb40(char *m) {
         SCALED_DURATION_KNOCKBACK_HIT_RESPONSE = 7,
         TIMED_KNOCKBACK_HIT_RESPONSE = 8,
         FRAME_SCALED_KNOCKBACK_HIT_RESPONSE = 9,
+        SIXTY_FRAME_KNOCKBACK_HIT_RESPONSE = 10,
         HIT_RESPONSE_PRESERVING_MOBY_STATE = 11
     };
     extern unsigned char D_0013D408[];
@@ -521,7 +522,7 @@ void FUN_L06_002feb40(char *m) {
         case SCALED_DURATION_KNOCKBACK_HIT_RESPONSE:
         case TIMED_KNOCKBACK_HIT_RESPONSE:
         case FRAME_SCALED_KNOCKBACK_HIT_RESPONSE:
-        case 10:
+        case SIXTY_FRAME_KNOCKBACK_HIT_RESPONSE:
         {
             char *q;
             int n;
