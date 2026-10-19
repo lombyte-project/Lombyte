@@ -1167,6 +1167,9 @@ extern void build_moby_bone_transform(void *, int, void *) __asm__("FUN_0020cca8
 
 void decoy_glove_update(unsigned char *moby) __asm__("FUN_L00_002d2670");
 void decoy_glove_update(unsigned char *moby) {
+    enum {
+        DECOY_GLOVE_INITIALIZE = 0
+    };
     extern void mark_moby_for_removal();
     extern void transform_vector_alt();
     extern int allocate_voice_for_target_entry(int, int, void *);
@@ -1231,7 +1234,7 @@ L3D34:
     FUN_L00_002d2158_c((int)moby, (void *)d, (float *)&loc);
 
     switch (moby[0x20]) {
-    case 0:
+    case DECOY_GLOVE_INITIALIZE:
         *(int *)(d + 0x50) = 0;
         if (!(moby[0x70] & 2)) moby[0x20] = 1; else moby[0x20] = 2;
     case 1:
