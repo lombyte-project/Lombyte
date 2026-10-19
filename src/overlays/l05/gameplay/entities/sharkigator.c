@@ -1629,6 +1629,7 @@ void FUN_L05_00303390(Moby *m) {
     enum {
         EXTERMIBOT_HIT_LETHAL = 1,
         EXTERMIBOT_HIT_DEATH_KNOCKBACK = 2,
+        EXTERMIBOT_HIT_NONLETHAL_KNOCKBACK = 3,
         EXTERMIBOT_HIT_NO_REACTION = 11
     };
     Vec_3047E8 working_vector;
@@ -1684,7 +1685,7 @@ void FUN_L05_00303390(Moby *m) {
         case 10:
             d->b67 = 0xFA;
             break;
-        case 3:
+        case EXTERMIBOT_HIT_NONLETHAL_KNOCKBACK:
         case 4:
         case 5:
         case 6:
