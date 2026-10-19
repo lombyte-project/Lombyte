@@ -1633,6 +1633,11 @@ extern void memcard_save_data(int, int) __asm__("FUN_0020b178");
 
 void suck_cannon_update(struct Moby *moby) __asm__("FUN_L04_002e1a10");
 void suck_cannon_update(struct Moby *moby) {
+    enum {
+        SUCK_CANNON_INITIALIZE = 0,
+        SUCK_CANNON_WAIT_FOR_HERO = 1,
+        SUCK_CANNON_REMOVE = 3
+    };
     struct PortalVars *vars = (struct PortalVars *)moby->pvars;
     struct Moby *exit;
 
@@ -1642,7 +1647,7 @@ void suck_cannon_update(struct Moby *moby) {
     else if (moby->flags & 1)
         moby->flags &= ~0x41;
     switch (moby->state) {
-    case 0:
+    case SUCK_CANNON_INITIALIZE:
         FUN_L00_002d6bf0(moby);
         if (D_0013D4F1[0]) {
             remove_moby_2e1a10(moby);
@@ -1651,7 +1656,7 @@ void suck_cannon_update(struct Moby *moby) {
         moby->state = 1;
         moby->pos.z += 1.0f;
         break;
-    case 1:
+    case SUCK_CANNON_WAIT_FOR_HERO:
         FUN_L04_002e1d00_m(moby);
         if (vector_distance(&moby->pos, &hero.motion.pos) < 3.0f) {
             moby->flags |= 0x41;
@@ -1677,7 +1682,7 @@ void suck_cannon_update(struct Moby *moby) {
         moby->state = 3;
         memcard_save_data(0, -1);
         break;
-    case 3:
+    case SUCK_CANNON_REMOVE:
         remove_moby_2e1a10(moby);
         break;
     }
