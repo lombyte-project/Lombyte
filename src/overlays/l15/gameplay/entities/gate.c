@@ -2482,6 +2482,7 @@ extern float FUN_001f8bc8(void *, void *) __asm__("FUN_001f9b48");
 
 void FUN_L15_002d0fa8(void *arg) {
     enum {
+        HIT_REACTION_NO_ACTION = 0,
         HIT_REACTION_DEATH = 1,
         HIT_REACTION_NONE = 11
     };
@@ -2542,7 +2543,7 @@ void FUN_L15_002d0fa8(void *arg) {
                 *(unsigned char *)((char *)d + 0xAD) = 0;
             }
             switch (code) {
-            case 0:
+            case HIT_REACTION_NO_ACTION:
             case HIT_REACTION_NONE:
                 break;
             case 9:
