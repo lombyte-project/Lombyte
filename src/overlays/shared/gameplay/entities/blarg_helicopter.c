@@ -339,6 +339,10 @@ extern f32 frame_scale_macro __asm__("D_0015ED60") __attribute__((section(".sdat
 /* Update of moby class 455 (spawner): counts its living children, takes hits, runs its state machine and spawns class 0x221 children at a point picked by its mode. */
 void spawner_update(struct Moby *moby) __asm__("FUN_L03_002bef68");
 void spawner_update(struct Moby *moby) {
+    enum {
+        SPAWNER_INITIALIZE = 0,
+        SPAWNER_DESTROY = 8
+    };
     int used[4];
     Vec4A_2bef68 launch_origin;
     Vec4A_2bef68 launch_velocity;
@@ -428,7 +432,7 @@ void spawner_update(struct Moby *moby) {
     }
     moby->hit_slot = 0xFF;
     switch (moby->state) {
-    case 0: {
+    case SPAWNER_INITIALIZE: {
         int k;
         for (k = 0; k < kids; k++) {
             struct Moby *o;
@@ -492,7 +496,7 @@ void spawner_update(struct Moby *moby) {
     case 7:
         spawn = 1;
         break;
-    case 8: {
+    case SPAWNER_DESTROY: {
         float z;
         float *p;
         Vec4A_2bef68 *vel;
