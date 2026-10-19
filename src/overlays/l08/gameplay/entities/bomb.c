@@ -2049,6 +2049,9 @@ extern int D_L08_0015F5CC; /* no foreign declaration */
 extern Route_2dd4f8 *D_L08_001B0FB0_r[] __asm__("D_L08_001B0CB0");
 
 void FUN_L08_002dc180(struct Moby *moby) {
+    enum {
+        SHUTTLE_SELECT_ROUTE_END = 0
+    };
     char *data = (char *)moby->pvars;
     char *pl = (char *)&hero.motion.pos;
     Route_2dd4f8 *a = D_L08_001B0FB0_r[*(int *)(data + 0x88)];
@@ -2073,7 +2076,7 @@ void FUN_L08_002dc180(struct Moby *moby) {
     *(int *)(data + 0x124) = 1;
     moby->collision = moby->pclass->collision;
     switch (sel) {
-    case 0: {
+    case SHUTTLE_SELECT_ROUTE_END: {
         int n = a->count;
         unsigned char *t;
         int f94, f98;
