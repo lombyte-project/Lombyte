@@ -25,6 +25,10 @@ extern char *D_L01_0015FFD8_b618 __asm__("D_L01_0015FFD8");
 
 extern char D_L01_00180740[];
 void FUN_L01_0030b618(u8 *m) {
+    enum {
+        EFFECT_STATE_INITIALIZE = 0,
+        EFFECT_STATE_UPDATE = 1
+    };
     s32 state = m[0x20];
     char *e = *(char **)(m + 0x78);
     s32 i;
@@ -40,7 +44,7 @@ void FUN_L01_0030b618(u8 *m) {
     OvlQuad second;
 
     switch (state) {
-    case 0:
+    case EFFECT_STATE_INITIALIZE:
         if (*(s32 *)(e + 0x58) < 2) {
             mark_moby_for_removal_b618(m);
             return;
@@ -60,7 +64,7 @@ void FUN_L01_0030b618(u8 *m) {
             m[0x30] = truncate_float_to_s32_b618(*(f32 *)(e + 0x5c)) + 4;
         m[0x20] = 1;
         return;
-    case 1:
+    case EFFECT_STATE_UPDATE:
         break;
     default:
         return;
