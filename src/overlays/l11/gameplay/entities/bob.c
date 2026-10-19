@@ -810,6 +810,7 @@ void FUN_L11_002d2088(struct Moby *moby, unsigned char state) {
         RESORT_OWNER_MOVE_TO_PATH_POINT = 6,
         RESORT_OWNER_JUMP_TO_TARGET = 7,
         RESORT_OWNER_MOVE_TO_GATE_TARGET = 8,
+        RESORT_OWNER_WAIT_AT_GATE = 9,
         RESORT_OWNER_MOVE_TO_GATE_DEPARTURE_TARGET = 10,
         RESORT_OWNER_WAIT_TO_ADVANCE_FINAL_PATH_LEG = 11,
         RESORT_OWNER_CHECK_PATH_COMPLETION_DIALOGUE = 12,
@@ -866,7 +867,7 @@ void FUN_L11_002d2088(struct Moby *moby, unsigned char state) {
             fast_vec_add(d + 0x120, d + 0x120, tmp);
         }
         break;
-    case 9:
+    case RESORT_OWNER_WAIT_AT_GATE:
     case 16:
         if (moby->prev_seq != 0)
             FUN_00212f90(moby, 0, 0, scale_game_frames(0x14));
