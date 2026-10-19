@@ -1965,8 +1965,11 @@ void ultramech_unlimited_update(UMoby *m) __asm__("FUN_L15_002cf3a8");
 void ultramech_unlimited_update(UMoby *m) {
     enum {
         ULTRAMECH_INITIALIZE = 0,
+        ULTRAMECH_FOLLOW_ENTRY_PATH = 2,
+        ULTRAMECH_BALLISTIC_PATH_MOVE = 3,
         ULTRAMECH_FIRE_BURST = 5,
-        ULTRAMECH_WAIT_BETWEEN_BURSTS = 6
+        ULTRAMECH_WAIT_BETWEEN_BURSTS = 6,
+        ULTRAMECH_MELEE_ATTACK = 8
     };
     UVec v10;
     UVec v20;
@@ -2067,7 +2070,7 @@ void ultramech_unlimited_update(UMoby *m) {
             }
         }
         break;
-    case 2: {
+    case ULTRAMECH_FOLLOW_ENTRY_PATH: {
         UPath *path = D_L15_001B0AB0[d->path];
         float speed = frame_time * 12.0f;
         float dist;
@@ -2109,7 +2112,7 @@ void ultramech_unlimited_update(UMoby *m) {
         add_vector_xyz(&m->pos, &m->pos, &v10);
         break;
     }
-    case 3:
+    case ULTRAMECH_BALLISTIC_PATH_MOVE:
         if (m->anim == 3 && (m->animFlags & 2))
             blend_moby_animation(m, 4, 0, scale_game_frames(6));
         add_vector_xyz(&m->pos, &m->pos, &d->vel);
@@ -2300,7 +2303,7 @@ void ultramech_unlimited_update(UMoby *m) {
         }
         break;
     }
-    case 8:
+    case ULTRAMECH_MELEE_ATTACK:
         approach_angle(
             &m->rot.f[2], fast_arc_tan(tgt->pos.f[0] - m->pos.f[0], tgt->pos.f[1] - m->pos.f[1]),
             &d->turnVel, frame_time_sq * 8.726646f, frame_time_sq * 8.726646f, frame_time * 12.566371f);
