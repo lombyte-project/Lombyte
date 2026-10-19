@@ -1876,6 +1876,11 @@ extern void FUN_L00_0026ced0(void *, void *, u32, u32, s32, f32);
  * it breaks, records its save bit, and keeps sparking. */
 void robot_qwark_update(struct Moby *m) __asm__("FUN_L03_002dbd90");
 void robot_qwark_update(struct Moby *m) {
+    enum {
+        ROBOT_QWARK_INITIALIZE = 0,
+        ROBOT_QWARK_UPDATE_DIALOGUE = 1,
+        ROBOT_QWARK_BROKEN_SPARKING = 3
+    };
     struct TalkerVars *d = (struct TalkerVars *)m->pvars;
     TalkerHit *hit;
     u8 type;
@@ -1918,7 +1923,7 @@ void robot_qwark_update(struct Moby *m) {
         return;
     }
     switch (m->state) {
-    case 0:
+    case ROBOT_QWARK_INITIALIZE:
         m->spawn_frame = *(u64 *)(D_001413D0[0] + 0x38);
         m->state = 1;
         talker_init(m, d);
@@ -1927,7 +1932,7 @@ void robot_qwark_update(struct Moby *m) {
             d->unk36 = 2;
         }
         break;
-    case 1:
+    case ROBOT_QWARK_UPDATE_DIALOGUE:
         if (talker_update(m, d)) {
             D_0013D388[0x19] = 1;
             begin_dialogue_camera_transition(m, 2.7f);
@@ -1944,7 +1949,7 @@ void robot_qwark_update(struct Moby *m) {
             jet_reset_camera(w + 0x30, w + 0x70);
         }
         break;
-    case 3:
+    case ROBOT_QWARK_BROKEN_SPARKING:
         vel.f[0] = talker_cos(talker_rand_angle()) * (talker_rand_range(0.0f, 0.25f) * frame_time);
         vel.f[1] = talker_sin(talker_rand_angle()) * (talker_rand_range(0.0f, 0.25f) * frame_time);
         vel.f[2] = 0.0f;
