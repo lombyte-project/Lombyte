@@ -1709,6 +1709,7 @@ void FUN_L13_002cecb8(struct Moby *moby, unsigned char *d, float *health) {
         HIT_REACTION_LETHAL = 1,
         HIT_REACTION_REMOVE = 2,
         HIT_REACTION_LOW_INTERPOLATION_TARGET = 3,
+        HIT_REACTION_LOW_INTERPOLATION_TARGET_ALTERNATE = 4,
         HIT_REACTION_HIGH_INTERPOLATION_TARGET = 9,
         HIT_REACTION_HIGH_INTERPOLATION_TARGET_ALTERNATE = 10,
         HIT_REACTION_NO_HIT = 11
@@ -1734,7 +1735,7 @@ void FUN_L13_002cecb8(struct Moby *moby, unsigned char *d, float *health) {
             break;
         case HIT_REACTION_NONE:
         case HIT_REACTION_LOW_INTERPOLATION_TARGET:
-        case 4:
+        case HIT_REACTION_LOW_INTERPOLATION_TARGET_ALTERNATE:
         case 5:
         case 6:
         case 7:
