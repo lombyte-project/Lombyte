@@ -147,6 +147,11 @@ float absolute_float(float input) __asm__("FUN_001f99c0");
 extern s32 D_0014C190_257218[][64] __asm__("D_0014C190");
 void FUN_L14_002aba80(struct Moby *moby);
 void FUN_L14_002aba80(struct Moby *moby) {
+    enum {
+        PATH_MOVER_COMMAND_WAIT_AT_LAST_POINT = 0,
+        PATH_MOVER_COMMAND_WAIT_AT_FIRST_POINT = 1,
+        PATH_MOVER_COMMAND_TRAVERSE_PATH = 2
+    };
     PathMoverVars *vars = (PathMoverVars *)moby->pvars;
     MoverPath *path;
     Vec4 orig;
@@ -213,7 +218,7 @@ void FUN_L14_002aba80(struct Moby *moby) {
         vars->voice = -1;
     }
     switch (moby->command) {
-    case 0:
+    case PATH_MOVER_COMMAND_WAIT_AT_LAST_POINT:
         if (on) {
             f32 far;
 
@@ -226,7 +231,7 @@ void FUN_L14_002aba80(struct Moby *moby) {
             }
         }
         break;
-    case 1:
+    case PATH_MOVER_COMMAND_WAIT_AT_FIRST_POINT:
         if (on) {
             f32 near;
 
@@ -239,7 +244,7 @@ void FUN_L14_002aba80(struct Moby *moby) {
             }
         }
         break;
-    case 2:
+    case PATH_MOVER_COMMAND_TRAVERSE_PATH:
         if (vars->silent == 0 && FUN_L01_00277fb8(moby)) {
             hero.unk1F2 = 4;
             hero.unk1F4 = 4;
