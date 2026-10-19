@@ -310,12 +310,18 @@ extern void spawn_explosion(void *, void *, void *, float, float, int, int, int,
 
 void refueling_station_update(struct Moby *m) __asm__("FUN_L09_00303d10");
 void refueling_station_update(struct Moby *m) {
+    enum {
+        REFUELING_STATION_STATE_INITIALIZE = 0,
+        REFUELING_STATION_STATE_WAIT_COMMAND = 1,
+        REFUELING_STATION_STATE_EXPLOSION_DELAY = 2,
+        REFUELING_STATION_STATE_EXPLODE = 3
+    };
     char *d = (char *)m->pvars;
     float v[4];
     unsigned char *q;
     FUN_L09_00303b30(m, d, d + 0x20);
     switch (m->state) {
-    case 0:
+    case REFUELING_STATION_STATE_INITIALIZE:
         if (*(short *)(d + 0x76) != -1 &&
             (q = (unsigned char *)D_0013D388 + *(short *)(d + 0x76))[0x39] != 0) {
             mark_moby_for_removal(m);
@@ -324,7 +330,7 @@ void refueling_station_update(struct Moby *m) {
         *(int *)(d + 0x7C) = -1;
         m->state = 1;
         break;
-    case 1:
+    case REFUELING_STATION_STATE_WAIT_COMMAND:
         if ((D_L09_0015F5CC & 7) == (((int)m >> 8) & 7)) {
             if (*(int *)(d + 0x7C) == -1 ||
                 (voice_is_playing(m, *(int *)(d + 0x7C)) == 0 && *(int *)(d + 0x7C) == -1)) {
@@ -349,7 +355,7 @@ void refueling_station_update(struct Moby *m) {
             m->state = 2;
         }
         break;
-    case 2:
+    case REFUELING_STATION_STATE_EXPLOSION_DELAY:
         if (fast_dec_timer_s16(d + 0x74)) {
             if (*(int *)(d + 0x70) != -1) {
                 unsigned char *o = (unsigned char *)(D_L09_0015FFD8_u + (*(int *)(d + 0x70) << 8));
@@ -363,7 +369,7 @@ void refueling_station_update(struct Moby *m) {
             m->state = 3;
         }
         break;
-    case 3:
+    case REFUELING_STATION_STATE_EXPLODE:
         subtract_vector_xyz_c(v, D_L09_00166F40, &m->pos);
         spawn_explosion(m, v, 0, 0.0f, 0.0f, 0x14, 9, 0x20, 10.0f, 7.0f, 20.0f, 2.0f, 0,
                               40.0f, 0, 1, -1, 0);
