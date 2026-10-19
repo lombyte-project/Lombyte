@@ -1171,7 +1171,7 @@ void FUN_L03_0020ef60(void) {
         }
         break;
     }
-    case 0x14: {
+    case HERO_STATE_WRENCH_SLAM: {
         s32 t1;
         s32 t2;
         f32 r;
@@ -1293,7 +1293,7 @@ void FUN_L03_0020ef60(void) {
         }
         break;
     }
-    case 0x13: {
+    case HERO_STATE_WRENCH_COMBO: {
         struct HeroTableRow2C *tb;
         if (hero.unkA9C != 0 || hero.anim_frame < D_L03_0017BD28[hero.attack_record].f20) {
             hero.items[0].timer = 2;
