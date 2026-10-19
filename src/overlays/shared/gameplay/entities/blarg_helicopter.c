@@ -351,6 +351,7 @@ void spawner_update(struct Moby *moby) {
     };
     enum {
         SPAWNER_TARGET_COUNT_ANGULAR_SPREAD = 0,
+        SPAWNER_TARGET_UNUSED_POINT = 2,
         SPAWNER_TARGET_COUNT_INDEXED_POINT = 4
     };
     int used[4];
@@ -573,7 +574,7 @@ void spawner_update(struct Moby *moby) {
                 }
                 break;
             }
-            case 2: {
+            case SPAWNER_TARGET_UNUSED_POINT: {
                 float best = 100000.0f;
                 int bi = -1;
                 int j;
