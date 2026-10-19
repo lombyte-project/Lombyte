@@ -2380,8 +2380,11 @@ extern void func_001E9730_2DDEA0(void *) __asm__("FUN_001e93b0");
 int FUN_L00_002dc9f0(struct Moby *moby, char *vars);
 int FUN_L00_002dc9f0(struct Moby *moby, char *vars) {
     enum {
+        SUCK_UPDATE_ALIGNING_FOR_SUCTION = 0,
+        SUCK_UPDATE_RISING_FOR_SUCTION = 1,
         SUCK_UPDATE_BEING_PULLED_IN = 2,
         SUCK_UPDATE_STORED = 3,
+        SUCK_UPDATE_FLYING_PROJECTILE = 4,
         SUCK_UPDATE_FALLING_AFTER_CANCEL = 6
     };
     Frame_2DDEA0 work;
@@ -2392,7 +2395,7 @@ int FUN_L00_002dc9f0(struct Moby *moby, char *vars) {
     if (record != 0) {
         *(u128 *)&record->v30 = *(u128 *)&moby->pos;
         switch ((short)(record->state - 1)) {
-        case 0: {
+        case SUCK_UPDATE_ALIGNING_FOR_SUCTION: {
             float yaw, tolerance;
             tolerance = 0.01f;
             yaw = func_001FA748_2DDEA0(func_L00_001FF860_2DDEA0(record->x - moby->pos.x, record->y - moby->pos.y), 3.1415927f);
@@ -2404,7 +2407,7 @@ int FUN_L00_002dc9f0(struct Moby *moby, char *vars) {
             func_001F9BC0_2DDEA0(&record->vel);
             break;
         }
-        case 1:
+        case SUCK_UPDATE_RISING_FOR_SUCTION:
             moby->anim_speed = record->f6C + 1.0f;
             record->f6C = record->f6C + 1.0f / func_001FA888_2DDEA0(func_001F9850_2DDEA0(1));
             if (1.0f < record->f6C) record->f6C = 1.0f;
@@ -2492,7 +2495,7 @@ int FUN_L00_002dc9f0(struct Moby *moby, char *vars) {
                 qzero(&moby->rot);
             }
             break;
-        case 4:
+        case SUCK_UPDATE_FLYING_PROJECTILE:
         case 5: {
             float spin, one;
             int hit_wall, surface;
