@@ -1404,6 +1404,7 @@ void gadgebot_update(GbMoby *moby) {
         GADGEBOT_FOLLOW_HERO = 3,
         GADGEBOT_STAND_AND_FACE_HERO = 4,
         GADGEBOT_SEEK_AND_ATTACK_TARGET = 5,
+        GADGEBOT_SEEK_INTERACTION_TARGET = 7,
         GADGEBOT_ABSORB_INTO_OWNER = 8,
         GADGEBOT_UPDATE_KNOCKBACK = 9
     };
@@ -1416,7 +1417,8 @@ void gadgebot_update(GbMoby *moby) {
     enum {
         GADGEBOT_COMMAND_FOLLOW_HERO = 1,
         GADGEBOT_COMMAND_STAND_AND_FACE_HERO = 2,
-        GADGEBOT_COMMAND_SEEK_AND_ATTACK_TARGET = 3
+        GADGEBOT_COMMAND_SEEK_AND_ATTACK_TARGET = 3,
+        GADGEBOT_COMMAND_SEEK_INTERACTION_TARGET = 4
     };
     enum {
         GADGEBOT_FOLLOW_INITIALIZE = 0,
@@ -1476,7 +1478,7 @@ void gadgebot_update(GbMoby *moby) {
                 case GADGEBOT_COMMAND_STAND_AND_FACE_HERO:
                     moby->state = 4;
                     break;
-                case 4:
+                case GADGEBOT_COMMAND_SEEK_INTERACTION_TARGET:
                     moby->sub = 0;
                     moby->state = 7;
                     break;
@@ -1901,7 +1903,7 @@ void gadgebot_update(GbMoby *moby) {
             break;
         }
         break;
-    case 7:
+    case GADGEBOT_SEEK_INTERACTION_TARGET:
         switch (moby->sub) {
         case GADGEBOT_INTERACTION_SEARCH_TARGET:
             moby->sub = 1;
