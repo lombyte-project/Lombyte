@@ -3207,6 +3207,7 @@ void water_update(struct Moby *moby) {
         WATER_MOVE_TO_RAISED_HEIGHT = 1,
         WATER_MOVE_TO_LOWERED_HEIGHT = 2,
         WATER_WAIT_FOR_RISE_TRIGGER = 3,
+        WATER_RISE_COMPLETE = 7,
         WATER_TIMED_RISE = 8
     };
     WaterVars_30ca80 *d = *(WaterVars_30ca80 **)&moby->pvars;
@@ -3374,7 +3375,7 @@ void water_update(struct Moby *moby) {
             pool_splash_30ca80(e, 1, 1, x, e->y + r, 1.0f, -0.01f);
         }
         break;
-    case 7:
+    case WATER_RISE_COMPLETE:
         if (d->f10 >= 0) {
             Hero *h = &hero;
             if (h->state.current == 0x6A && h->state_timer == 2) {
