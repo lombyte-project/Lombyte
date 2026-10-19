@@ -2424,16 +2424,23 @@ extern void FUN_L00_0024efb0(unsigned char *, int, int);
 
 /* Fades the moby in (state 1), holds until its owner is gone or dying (state 2), fades it out (state 3) and removes it (state 4), easing its scale toward the class scale and spinning it all the while. */
 void FUN_L13_002e84d8(struct Moby *moby) {
+    enum {
+        INITIALIZE_COLLISION = 0,
+        FADE_IN = 1,
+        WAIT_FOR_OWNER_REMOVAL = 2,
+        FADE_OUT = 3,
+        REMOVE_MOBY = 4
+    };
     int *d = (int *)moby->pvars;
     int old;
     int step;
 
     switch (moby->state) {
-    case 0:
+    case INITIALIZE_COLLISION:
         moby->collision = moby->pclass->collision;
         moby->state = 1;
         break;
-    case 1: {
+    case FADE_IN: {
         float fade = frame_scale * 0.02f;
         moby->scale +=
             (moby->pclass->scale * 4.0f - moby->scale) * 0.1f;
@@ -2445,14 +2452,14 @@ void FUN_L13_002e84d8(struct Moby *moby) {
         moby->alpha = truncate_float_to_s32(((float *)d)[1] * 60.0f);
         break;
     }
-    case 2:
+    case WAIT_FOR_OWNER_REMOVAL:
         moby->scale +=
             (moby->pclass->scale * 4.0f - moby->scale) * 0.1f;
         if (d[0] == 0 || ((unsigned char *)d[0])[0x20] == 0xFE || ((unsigned char *)d[0])[0x20] == 0xFD) {
             moby->state = 3;
         }
         break;
-    case 3: {
+    case FADE_OUT: {
         float fade = frame_scale * 0.02f;
         moby->scale +=
             (moby->pclass->scale - moby->scale) * 0.1f;
@@ -2464,7 +2471,7 @@ void FUN_L13_002e84d8(struct Moby *moby) {
         moby->alpha = truncate_float_to_s32(((float *)d)[1] * 60.0f);
         break;
     }
-    case 4:
+    case REMOVE_MOBY:
         mark_moby_for_removal(moby);
         return;
     }
