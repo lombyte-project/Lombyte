@@ -847,6 +847,8 @@ void gold_weapon_case_update(struct Moby *m) {
     enum {
         GOLD_WEAPON_CASE_INITIALIZE = 0,
         GOLD_WEAPON_CASE_PROCESS_SALE = 1,
+        GOLD_WEAPON_CASE_REMOVE_WHEN_PURCHASED = 2,
+        GOLD_WEAPON_CASE_IDLE = 3,
         GOLD_WEAPON_CASE_WAIT_FOR_CUTSCENE_END = 4
     };
     SaleVars_2e1ac0 *v = (SaleVars_2e1ac0 *)m->pvars;
@@ -880,7 +882,7 @@ void gold_weapon_case_update(struct Moby *m) {
             FUN_L01_002aea70_2e1ac0(m, item, price);
         }
         break;
-    case 3: /* sold out or done: idle */
+    case GOLD_WEAPON_CASE_IDLE: /* sold out or done: idle */
         break;
     case GOLD_WEAPON_CASE_WAIT_FOR_CUTSCENE_END:
         if (cutscene_mode == 0) {
@@ -888,7 +890,7 @@ void gold_weapon_case_update(struct Moby *m) {
             m->state = 3;
         }
         break;
-    case 2:
+    case GOLD_WEAPON_CASE_REMOVE_WHEN_PURCHASED:
         if (D_0013E520_2e1ac0[D_L01_001DEB10[v->slot]] != 0) {
             FUN_0020c828_2e1ac0(m);
         }
