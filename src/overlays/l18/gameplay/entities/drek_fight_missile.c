@@ -1535,8 +1535,11 @@ void drek_final_boss_robot_update(BossMoby *moby) {
         DREK_BOSS_DEATH_EXPLOSIONS = 0x1A
     };
     enum {
+        DREK_BOSS_WAIT_FOR_ENCOUNTER_TRIGGER = 1,
         DREK_BOSS_WAIT_FOR_GROUNDED_HERO_TO_START_SCENE = 4,
-        DREK_BOSS_FINISH_PATH_AND_WAIT_FOR_HERO = 0xB
+        DREK_BOSS_FOLLOW_PATH_AND_FIRE_AT_MOBYS = 10,
+        DREK_BOSS_FINISH_PATH_AND_WAIT_FOR_HERO = 0xB,
+        DREK_BOSS_RUN_ENDING_SEQUENCE = 0x1B
     };
     BossData *d = (BossData *)moby->f78;
     BossMoby *tgt;
@@ -1622,7 +1625,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
             }
         }
         break;
-    case 1:
+    case DREK_BOSS_WAIT_FOR_ENCOUNTER_TRIGGER:
         if (is_point_inside_clip_volume(hero.motion.pos.f, d->f274) != 0 &&
             hero.vehicle_mode == 2) {
             moby->f20 = 7;
@@ -1835,7 +1838,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
         }
         break;
     }
-    case 10: {
+    case DREK_BOSS_FOLLOW_PATH_AND_FIRE_AT_MOBYS: {
         unsigned char *h;
 
         aim = &moby->f40[2];
@@ -2470,7 +2473,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
         }
         break;
     }
-    case 0x1B:
+    case DREK_BOSS_RUN_ENDING_SEQUENCE:
         moby->f94 = 0;
         moby->f34 |= 0x41;
         moby->f34 &= 0xEFFF;
