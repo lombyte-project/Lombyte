@@ -659,6 +659,7 @@ void poison_vessel_update(struct Moby *moby) {
     enum {
         HIT_RESULT_NONE = 0,
         HIT_RESULT_DEATH = 1,
+        HIT_RESULT_DYING_KNOCKBACK = 2,
         HIT_RESULT_NO_REACTION = 11
     };
     struct BlastVars *vars = (struct BlastVars *)moby->pvars;
@@ -682,7 +683,7 @@ void poison_vessel_update(struct Moby *moby) {
         }
         switch (hit_check_7b10(moby, hit, health, 0, &kind, 0, 0, 4)) {
         case HIT_RESULT_DEATH:
-        case 2:
+        case HIT_RESULT_DYING_KNOCKBACK:
             *health = 0;
             break;
         case HIT_RESULT_NONE:
