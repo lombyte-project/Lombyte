@@ -1178,7 +1178,8 @@ void red_ship_1_update(char *moby) __asm__("FUN_L03_0029dba8");
 void FUN_L03_0029d2e0(char *moby, void *vel_in, int flag) {
     enum {
         MOBY_CLASS_TWO_JOINT_PARTICLE_EMITTER = 0x74,
-        MOBY_CLASS_FIFTEEN_PARTICLE_BURST_EMITTER = 0x76
+        MOBY_CLASS_FIFTEEN_PARTICLE_BURST_EMITTER = 0x76,
+        MOBY_CLASS_DEFAULT_COLOR_CHILD_EFFECT_EMITTER = 0x77
     };
     float spot[4];
     float vel[4];
@@ -1231,7 +1232,7 @@ void FUN_L03_0029d2e0(char *moby, void *vel_in, int flag) {
             SPAWN_DEBRIS(0x6B3);
             SPAWN_DEBRIS(0x6B4);
             break;
-        case 0x77:
+        case MOBY_CLASS_DEFAULT_COLOR_CHILD_EFFECT_EMITTER:
             SPAWN_DEBRIS(0x6B5);
             SPAWN_DEBRIS(0x6B6);
             SPAWN_DEBRIS(0x6B7);
