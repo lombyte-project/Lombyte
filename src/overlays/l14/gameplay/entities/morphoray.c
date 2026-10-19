@@ -354,11 +354,16 @@ extern void FUN_L14_00305680(struct Moby *);
 extern s32 D_0014C190_257218[][64] __asm__("D_0014C190");
 /* Moby that unlocks once: skips straight to done if this level already recorded it, otherwise waits for its trigger moby to reach state 2, records the unlock in the level's bit sets and runs a countdown. */
 void FUN_L14_00305408(unsigned char *moby) {
+    enum {
+        UNLOCK_SEQUENCE_INITIALIZE = 0,
+        UNLOCK_SEQUENCE_WAIT_FOR_TRIGGER = 1,
+        UNLOCK_SEQUENCE_COUNTDOWN = 2
+    };
     int *d = *(int **)(moby + 0x78);
     short id;
 
     switch (moby[0x20]) {
-    case 0:
+    case UNLOCK_SEQUENCE_INITIALIZE:
         if (d[3] < 0 || d[0] < 0 || d[4] < 0) {
             mark_moby_for_removal(moby);
             return;
@@ -375,7 +380,7 @@ void FUN_L14_00305408(unsigned char *moby) {
         moby[0x20] = 1;
         FUN_L14_00305600((char *)moby);
         break;
-    case 1:
+    case UNLOCK_SEQUENCE_WAIT_FOR_TRIGGER:
         if (((unsigned char *)D_L14_0015FFD8)[d[3] * 0x100 + 0x20] != 2) {
             return;
         }
@@ -386,7 +391,7 @@ void FUN_L14_00305408(unsigned char *moby) {
         ((float *)d)[2] = 1.0f / convert_integer_to_float(d[1]);
         FUN_L10_002f5a50(d[4]);
         break;
-    case 2:
+    case UNLOCK_SEQUENCE_COUNTDOWN:
         fast_dec_timer(&d[1]);
         FUN_L14_00305680((char *)moby);
         if (d[1] == 0) {
