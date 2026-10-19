@@ -545,6 +545,7 @@ extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 void FUN_L18_002f16f0(struct Moby *moby) {
     enum {
         MOBY_INITIALIZE = 0,
+        MOBY_APPROACH_TARGET_TRANSFORM = 2,
         MOBY_FALL_AND_REMOVE = 4
     };
     VData *d = (VData *)moby->pvars;
@@ -583,7 +584,7 @@ void FUN_L18_002f16f0(struct Moby *moby) {
             moby->state = 1;
             break;
         }
-        case 2: {
+        case MOBY_APPROACH_TARGET_TRANSFORM: {
             int hero_on_group_or_class_764_moby;
             int i;
             unsigned char *p;
