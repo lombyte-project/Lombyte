@@ -1338,11 +1338,15 @@ extern int allocate_voice_int_7b20(int, int, int) __asm__("FUN_0022da68");
 
 void thruster_pack_lock_red_update(struct Moby *moby) __asm__("FUN_L18_002d7b20");
 void thruster_pack_lock_red_update(struct Moby *moby) {
+    enum {
+        STATE_INITIALIZE = 0,
+        STATE_SETTLE_DEPRESSED_HEIGHT = 5
+    };
     char *data = (char *)moby->pvars;
     int index;
 
     switch (moby->state) {
-    case 0:
+    case STATE_INITIALIZE:
         *(float *)(data + 0x64) = moby->pos.z;
         *(unsigned short *)(data + 0x3E) |= 8;
         if (*(int *)(data + 0x60) != 0) {
@@ -1409,7 +1413,7 @@ void thruster_pack_lock_red_update(struct Moby *moby) {
             }
         }
         break;
-    case 5:
+    case STATE_SETTLE_DEPRESSED_HEIGHT:
         if (approach_value((float *)&moby->pos.z, *(float *)(data + 0x64) - 1.5f,
                            0.15f) != 0.0f)
             return;
