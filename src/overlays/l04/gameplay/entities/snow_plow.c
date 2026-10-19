@@ -796,6 +796,7 @@ void woodcut_bot_update(WBMoby *m) {
         WOODCUT_BOT_RETURN_TO_SAVED_POSITION = 6,
         WOODCUT_BOT_STOP_MOVEMENT = 7,
         WOODCUT_BOT_MELEE_ATTACK = 8,
+        WOODCUT_BOT_HIT_RECOVERY_AND_REPOSITION = 9,
         WOODCUT_BOT_TURN_BEFORE_MOVEMENT = 10,
         WOODCUT_BOT_DEATH_KNOCKBACK = 11
     };
@@ -1238,7 +1239,7 @@ void woodcut_bot_update(WBMoby *m) {
             m->state = 1;
         }
         break;
-    case 9:
+    case WOODCUT_BOT_HIT_RECOVERY_AND_REPOSITION:
         if (m->anim2 != 5 || (m->anim == 5 && (m->f70 & 2))) {
             if (m->fBC & 4) {
                 m->fBC &= ~4;
