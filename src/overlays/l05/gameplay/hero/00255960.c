@@ -139,7 +139,9 @@ extern int func_001F9908_r(int *) __asm__("FUN_001f9740");
 extern int D_L05_0015F6EC;
 void FUN_L05_00255960(void) {
     enum {
-        HERO_STATE_LEDGE_HANG = 25
+        HERO_STATE_LEDGE_HANG = 25,
+        HERO_STATE_LEDGE_SHIMMY_POSITIVE_YAW_OFFSET = 26,
+        HERO_STATE_LEDGE_SHIMMY_NEGATIVE_YAW_OFFSET = 27
     };
     unsigned char *moby;
     int prevSub;
@@ -1198,8 +1200,8 @@ void FUN_L05_00255960(void) {
                         }
                     }
                     break;
-                case 26:
-                case 27: {
+                case HERO_STATE_LEDGE_SHIMMY_POSITIVE_YAW_OFFSET:
+                case HERO_STATE_LEDGE_SHIMMY_NEGATIVE_YAW_OFFSET: {
                     float ang;
 
                     qcopy(v0, hero.motion.pos.f);
