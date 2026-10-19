@@ -358,7 +358,9 @@ void FUN_L11_002d1030(void *mp) {
         RESORT_OWNER_MOVE_TO_PATH_POINT = 6,
         RESORT_OWNER_JUMP_TO_TARGET = 7,
         RESORT_OWNER_MOVE_TO_GATE_TARGET = 8,
+        RESORT_OWNER_WAIT_AT_GATE = 9,
         RESORT_OWNER_MOVE_TO_GATE_DEPARTURE_TARGET = 10,
+        RESORT_OWNER_WAIT_TO_ADVANCE_FINAL_PATH_LEG = 11,
         RESORT_OWNER_CHECK_PATH_COMPLETION_DIALOGUE = 12,
         RESORT_OWNER_WAIT_FOR_PATH_COMPLETION_DIALOGUE_END = 13
     };
@@ -375,7 +377,7 @@ void FUN_L11_002d1030(void *mp) {
     case RESORT_OWNER_CHECK_INITIAL_DIALOGUE:
     case RESORT_OWNER_INITIAL_DIALOGUE:
     case RESORT_OWNER_WAIT_TO_FOLLOW_HERO:
-    case 11:
+    case RESORT_OWNER_WAIT_TO_ADVANCE_FINAL_PATH_LEG:
     case RESORT_OWNER_CHECK_PATH_COMPLETION_DIALOGUE:
         break;
     case RESORT_OWNER_FOLLOW_HERO:
@@ -424,7 +426,7 @@ void FUN_L11_002d1030(void *mp) {
             *(float *)((char *)moby + 0x58) = 1.0f;
         }
         break;
-    case 9:
+    case RESORT_OWNER_WAIT_AT_GATE:
     {
         int *tbl = (int *)(d + 0xF0);
         unsigned int idx = 0U < *(unsigned int *)(d + 0x158);
