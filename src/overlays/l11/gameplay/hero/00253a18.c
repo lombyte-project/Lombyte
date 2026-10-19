@@ -123,6 +123,7 @@ extern int func_001F9908_r(int *) __asm__("FUN_001f9740");
 void FUN_L11_00253a18(void) {
     enum {
         HERO_STATE_ITEM_BUTTON_RELEASE_WAIT = 23,
+        HERO_STATE_ANIMATION_RECOVERY_WITH_JUMP_CANCEL = 35,
         HERO_STATE_ITEM_ANIMATION_BUTTON_HOLD_CHECK = 46,
         HERO_STATE_ANIMATION_WAIT_TO_IDLE = 58,
         HERO_STATE_CIRCLE_RELEASE_WAIT = 89,
@@ -1930,7 +1931,7 @@ void FUN_L11_00253a18(void) {
                         hero_set_state(HERO_STATE_IDLE, 0);
                     }
                     break;
-                case 35:
+                case HERO_STATE_ANIMATION_RECOVERY_WITH_JUMP_CANCEL:
                     if (19.0f < hero.anim_frame &&
                         pad_pressed_within(0x40, scale_game_frames(0xB), 0)) {
                         if (controller_state.held & 0xA) {
