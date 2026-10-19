@@ -1489,7 +1489,9 @@ void mmr_q(struct Obj_q *obj) __asm__("FUN_0020c828");
 extern char D_L13_001F51B0[] __attribute__((section(".data")));
 void FUN_L13_002f8880(char *moby) {
     enum {
-        STATE_RELAY_INITIALIZE = 0
+        STATE_RELAY_INITIALIZE = 0,
+        STATE_RELAY_WAIT_FOR_SECOND_STATE_SET = 1,
+        STATE_RELAY_WAIT_FOR_FIRST_STATE_SET = 2
     };
     char *data = *(char **)(moby + 0x78);
     char *m = 0;
@@ -1510,7 +1512,7 @@ void FUN_L13_002f8880(char *moby) {
             data[0x1C] = 2;
         }
         break;
-    case 1:
+    case STATE_RELAY_WAIT_FOR_SECOND_STATE_SET:
         found = 0;
         for (i = 0; i < 6; i++) {
             if ((unsigned char)m[0x20] == (data + i)[0xA]) {
@@ -1534,7 +1536,7 @@ void FUN_L13_002f8880(char *moby) {
             data[0x1C] = 2;
         }
         break;
-    case 2:
+    case STATE_RELAY_WAIT_FOR_FIRST_STATE_SET:
         found = 0;
         for (i = 0; i < 6; i++) {
             if ((unsigned char)m[0x20] == (data + i)[4]) {
