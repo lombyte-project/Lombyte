@@ -119,7 +119,9 @@ void blarg_space_commando_update(struct Moby *moby) {
         BLARG_COMMANDO_STATE_CHASE_TARGET = 11,
         BLARG_COMMANDO_STATE_CHASE_MELEE_ATTACK = 12,
         BLARG_COMMANDO_STATE_RETURN_HOME = 13,
-        BLARG_COMMANDO_STATE_APPROACH_ROUTE_DESTINATION = 14
+        BLARG_COMMANDO_STATE_APPROACH_ROUTE_DESTINATION = 14,
+        BLARG_COMMANDO_STATE_KNOCKBACK = 15,
+        BLARG_COMMANDO_STATE_DEATH_KNOCKBACK = 16
     };
     Moby1068Vars *vars = (Moby1068Vars *)moby->pvars;
     struct Moby *target;
@@ -387,7 +389,7 @@ void blarg_space_commando_update(struct Moby *moby) {
             }
         }
         break;
-    case 15:
+    case BLARG_COMMANDO_STATE_KNOCKBACK:
         hit = mine_fall(moby, &vars->vel);
         if (hit & 0x40) {
             moby->state = 1;
@@ -398,7 +400,7 @@ void blarg_space_commando_update(struct Moby *moby) {
             mark_moby_for_removal(moby);
         }
         break;
-    case 16:
+    case BLARG_COMMANDO_STATE_DEATH_KNOCKBACK:
         if (mine_fall(moby, &vars->vel) & 0x160) {
             s32 none;
 
