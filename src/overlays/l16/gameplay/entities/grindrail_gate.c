@@ -868,6 +868,11 @@ int D_L16_00161DD8 = 600;
 int D_L16_00161DDC = 0x80808080;
 int D_L16_00161DE0 = 0x80202020;
 void FUN_L16_002e5010(struct Moby *m) {
+    enum {
+        GRINDRAIL_GATE_INITIALIZE = 0,
+        GRINDRAIL_GATE_CHECK_HERO_BOUNDS = 1,
+        GRINDRAIL_GATE_WAIT_FOR_COMMAND_TIMEOUT = 2
+    };
     char *d = (char *)m->pvars;
     char *g;
     float pos[16];
@@ -878,11 +883,11 @@ void FUN_L16_002e5010(struct Moby *m) {
     m->glow_color = FUN_001fa6e0_u(fast_sin(f * 6.28318f - 3.14159f) * 0.5f + 0.5f,
                                         D_L16_00161DDC, D_L16_00161DE0);
     switch (m->state) {
-    case 0:
+    case GRINDRAIL_GATE_INITIALIZE:
         m->state = 1;
         m->update_dist = 0xFF;
         break;
-    case 1:
+    case GRINDRAIL_GATE_CHECK_HERO_BOUNDS:
         g = (char *)&hero.motion.pos;
         if (FUN_001f9b48(&m->pos, g) < 16.0f) {
             transpose_rotation_matrix(pos, &m->rot_row0);
@@ -898,7 +903,7 @@ void FUN_L16_002e5010(struct Moby *m) {
             }
         }
         break;
-    case 2:
+    case GRINDRAIL_GATE_WAIT_FOR_COMMAND_TIMEOUT:
         if (tick_countdown_32_u((int *)d)) {
             m->state = 1;
             m->command = 0;
