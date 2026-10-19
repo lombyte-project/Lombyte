@@ -1355,6 +1355,7 @@ void thruster_pack_lock_red_update(struct Moby *moby) __asm__("FUN_L18_002d7b20"
 void thruster_pack_lock_red_update(struct Moby *moby) {
     enum {
         STATE_INITIALIZE = 0,
+        STATE_APPROACH_CONFIGURED_HEIGHT = 1,
         STATE_WAIT_FOR_GROUNDED_HERO_TRIGGER = 2,
         STATE_WAIT_FOR_DEPRESSION_TRIGGER = 4,
         STATE_SETTLE_DEPRESSED_HEIGHT = 5
@@ -1373,7 +1374,7 @@ void thruster_pack_lock_red_update(struct Moby *moby) {
         }
         moby->state = 4;
         return;
-    case 1:
+    case STATE_APPROACH_CONFIGURED_HEIGHT:
     case 3:
         advance_accelerated_scalar(&moby->pos.z, (float *)(data + 0x68),
                                    *(float *)(data + 0x64) + D_L18_00161A18,
