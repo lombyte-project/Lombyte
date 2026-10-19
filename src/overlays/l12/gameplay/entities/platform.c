@@ -1709,13 +1709,17 @@ extern char D_L12_00167240[];
 extern void FUN_L12_002e71b0(void);
 
 void FUN_L12_002e7208(struct Moby *moby) {
+    enum {
+        DRAW_CALLBACK_INITIALIZE = 0,
+        DRAW_CALLBACK_CHECK_VOLUME_AND_REGISTER = 1
+    };
     char *data = (char *)moby->pvars;
     switch (moby->state) {
-    case 0:
+    case DRAW_CALLBACK_INITIALIZE:
         moby->state = 1;
         moby->update_dist = 0xFF;
         break;
-    case 1: {
+    case DRAW_CALLBACK_CHECK_VOLUME_AND_REGISTER: {
         int value = *(int *)(data + 0xC);
         if (value == -1 || is_point_inside_clip_volume(D_L12_00167240, value)) {
             add_draw_callback((void *)FUN_L12_002e71b0, moby);
