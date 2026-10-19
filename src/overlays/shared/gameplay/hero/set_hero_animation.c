@@ -1113,10 +1113,13 @@ extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void set_vector_length_xy(float *, float *, float) __asm__("FUN_001f9c48");
 
 void FUN_L00_00233ba0(float *dst, float *src, float z) {
+    enum {
+        GRAVITY_MODE_WORLD_Z = 0
+    };
     struct Hero *base = &hero;
 
     switch (base->unk20B3) {
-    case 0:
+    case GRAVITY_MODE_WORLD_Z:
         set_vector_length_xy(dst, src, z);
         break;
     case 1:
