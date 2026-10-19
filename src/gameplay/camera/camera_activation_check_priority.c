@@ -31,13 +31,13 @@ int camera_activation_check_priority(void *cur, void *other) __asm__("FUN_001ec2
 int camera_activation_check_priority(void *cur, void *other) {
     enum {
         CAMERA_ACTIVATION_BY_PRIORITY = 0,
-        CAMERA_COMPARE_ACCEPT = 1,
+        CAMERA_ACTIVATION_HANDOFF_GATED_PRIORITY = 1,
+        CAMERA_ACTIVATION_REQUIRE_HANDOFF_PRIORITY = 2,
         CAMERA_ACTIVATION_IN_CLIP_VOLUME = 4,
         CAMERA_ACTIVATION_MATCH_LISTENER_GROUP = 7
     };
     enum {
-        CAMERA_ACTIVATION_HANDOFF_GATED_PRIORITY = 1,
-        CAMERA_ACTIVATION_REQUIRE_HANDOFF_PRIORITY = 2
+        CAMERA_COMPARE_ACCEPT = 1
     };
     char *c = (char *)cur;
     char *o = (char *)other;
