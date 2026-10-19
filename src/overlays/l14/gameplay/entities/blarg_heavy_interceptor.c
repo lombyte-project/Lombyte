@@ -1908,6 +1908,7 @@ void machinegun_turret_update(char *moby) {
 void FUN_L14_002b4340(struct Moby *m) {
     enum {
         HIT_REACTION_LETHAL = 1,
+        HIT_REACTION_DESTROY = 2,
         HIT_REACTION_NONE = 11
     };
     unsigned char *d = m->pvars;
@@ -1947,7 +1948,7 @@ void FUN_L14_002b4340(struct Moby *m) {
             d[0x67] = 200;
             break;
         case HIT_REACTION_LETHAL:
-        case 2:
+        case HIT_REACTION_DESTROY:
             m->state = 6;
             m->flags &= 0xEFFF;
             d[0x67] = 0xF0;
