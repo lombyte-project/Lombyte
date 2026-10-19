@@ -52,6 +52,11 @@ extern s32 mark_stream_buffer_read_active(u8 *) __asm__("FUN_00225dd8");
 s32 update_streamed_moby_animation(MobyAnimationStream *stream) __asm__("FUN_002256e8");
 
 s32 update_streamed_moby_animation(MobyAnimationStream *stream) {
+    enum {
+        ANIMATION_STREAM_START_READ = 0,
+        ANIMATION_STREAM_FINISH_READ = 1,
+        ANIMATION_STREAM_UPDATE_MOBY = 2
+    };
     StreamedAnimationMoby *moby;
     AnimationTableHeader *header;
     StreamedClassResource **class_resource;
@@ -64,7 +69,7 @@ s32 update_streamed_moby_animation(MobyAnimationStream *stream) {
     u16 class_slot;
 
     switch (stream->state) {
-    case 0:
+    case ANIMATION_STREAM_START_READ:
         if (cd_read_active[0] != 0) {
             break;
         }
@@ -79,7 +84,7 @@ s32 update_streamed_moby_animation(MobyAnimationStream *stream) {
         }
         stream->state = 3;
         break;
-    case 1:
+    case ANIMATION_STREAM_FINISH_READ:
         /* Decompress the completed read and relocate three animation tables. */
         if (cd_read_active[0] != 0) {
             break;
@@ -104,7 +109,7 @@ s32 update_streamed_moby_animation(MobyAnimationStream *stream) {
         }
         stream->moby->animation_frame_counter = 0;
         break;
-    case 2:
+    case ANIMATION_STREAM_UPDATE_MOBY:
         /* Even phases queue dialogue; odd phases wait for animation completion. */
         moby = stream->moby;
         switch (moby->moby_state) {
