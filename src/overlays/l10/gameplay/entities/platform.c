@@ -260,10 +260,15 @@ extern int memcard_save_data(int, int) __asm__("FUN_0020b178");
 extern int D_L10_0015F640;
 void magnetboots_update(struct Moby *m) __asm__("FUN_L10_00298668");
 void magnetboots_update(struct Moby *m) {
+    enum {
+        MAGNETBOOTS_STATE_INITIALIZE = 0,
+        MAGNETBOOTS_STATE_WAIT_FOR_HERO_PROXIMITY = 1,
+        MAGNETBOOTS_STATE_REMOVE = 3
+    };
     char *d = (char *)m->pvars;
     m->rot.z = fast_add_rotations(m->rot.z, frame_time * 1.5707964f);
     switch (m->state) {
-    case 0:
+    case MAGNETBOOTS_STATE_INITIALIZE:
         FUN_L00_002d6bf0_p(m);
         if (D_0013D504[0] != 0) {
             delete_moby(m);
@@ -273,7 +278,7 @@ void magnetboots_update(struct Moby *m) {
         m->pos.z = m->pos.z + 0.5f;
         m->scale = m->scale * 0.667f;
         break;
-    case 1:
+    case MAGNETBOOTS_STATE_WAIT_FOR_HERO_PROXIMITY:
         FUN_L10_00298940_p(m);
         if (vector_distance(&m->pos, &hero.motion.pos) < 3.0f) {
             struct Hero *h = &hero;
@@ -297,7 +302,7 @@ void magnetboots_update(struct Moby *m) {
             m->state = 3;
         }
         break;
-    case 3:
+    case MAGNETBOOTS_STATE_REMOVE:
         delete_moby(m);
         break;
     }
