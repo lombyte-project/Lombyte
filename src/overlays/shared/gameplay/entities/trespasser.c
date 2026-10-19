@@ -1039,10 +1039,11 @@ destroy:
         flags = FUN_L00_00258ad0_2bffa8(moby,&vars->velocity,HI_2bffa8(0x1ec0),0,size*0.7f,HF_2bffa8(0x1ef0));
         if (flags & 2) { vars->velocity.f[2] = 0.0f; fast_vec_scale(&vars->velocity,&vars->velocity,0.5f); }
         FUN_001f9c90_2bffa8(&vars->velocity,&vars->velocity,frame_scale*0.05f);
-        if (flags & 2) moby->state = 2;
-        else {
+        if (!(flags & 2)) {
 falling_anim:
             if (moby->prev_seq != 5) ANIM_2bffa8(5,5);
+        } else {
+            moby->state = 2;
         }
 turn:
         angle = atan2_f(vars->velocity.f[0],vars->velocity.f[1]);

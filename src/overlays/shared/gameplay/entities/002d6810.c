@@ -195,8 +195,7 @@ next_path:      i -= 8; p += 8;
             } while (i >= 0);
             if (best) {
                 count = 8;
-                if (*best == -1) count = 0;
-                else { for (index = 1; index < 8; index++) { if (best[index] == -1) { count = index; break; } } }
+                if (*best != -1) { for (index = 1; index < 8; index++) { if (best[index] == -1) { count = index; break; } } } else count = 0;
                 if (count > 1) {
                     index = random_int_between(0, count - 2);
                     *(u128 *)((char *)data + 0xf0) = *(u128 *)(D_L15_001600EC + best[index] * 0x80 + 0x30);
