@@ -2232,6 +2232,10 @@ typedef struct EffectRecord_2DC9A8 {
 
 extern CollisionHit D_L08_00174640;
 void FUN_L08_002dc9a8(struct Moby *moby) {
+    enum {
+        PROJECTILE_STATE_FLYING = 1,
+        PROJECTILE_STATE_DETONATE = 99
+    };
     char *m = (char *)moby;
     char *data = *(char **)(m + 0x78);
     float original[4];
@@ -2250,7 +2254,7 @@ void FUN_L08_002dc9a8(struct Moby *moby) {
         m[0x20] = 99;
     }
     switch ((unsigned char)m[0x20]) {
-    case 1: {
+    case PROJECTILE_STATE_FLYING: {
         position = (float *)(m + 0x10);
         qcopy(original, position);
         FUN_L08_002dc9a8_transform(position, position, data);
@@ -2273,7 +2277,7 @@ void FUN_L08_002dc9a8(struct Moby *moby) {
             if (FUN_L08_002dc9a8_test(data + 0x10) != 0) m[0x20] = 99;
         }
     } break;
-    case 99: {
+    case PROJECTILE_STATE_DETONATE: {
         record.pos[0] = D_0015ED6C_lui * 14.0f;
         record.pos[1] = D_0015ED6C_lui * 22.0f;
         record.pos[2] = D_0015ED6C_lui * 12.0f;
