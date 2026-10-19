@@ -1931,13 +1931,17 @@ extern unsigned char D_L03_001DC1A0[];
 extern void register_audio_stream_callback(void) __asm__("FUN_00215420");
 
 void FUN_L03_002dc9b0(unsigned char *moby) {
+    enum {
+        DRAW_CALLBACK_INITIALIZE = 0,
+        DRAW_CALLBACK_REGISTER = 1
+    };
     switch (moby[0x20]) {
-    case 0:
+    case DRAW_CALLBACK_INITIALIZE:
         FUN_L02_002a4058(D_L03_001DC1A0, 0x20, 0.6666667f);
         moby[0x20] = 1;
         moby[0x30] = 0xFF;
         break;
-    case 1:
+    case DRAW_CALLBACK_REGISTER:
         add_draw_callback(register_audio_stream_callback, moby);
         break;
     }
