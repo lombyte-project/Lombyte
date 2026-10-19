@@ -144,6 +144,10 @@ extern int func_001F9908_r(int *) __asm__("FUN_001f9740");
 
 int r1_repeat_timer __asm__("D_L08_0015F678") = 0;
 void FUN_L08_002370d8(void) {
+    enum {
+        HERO_STATE_GRIND_JUMP = 41,
+        HERO_STATE_GRIND_RAIL_TRANSFER = 42
+    };
     unsigned char *moby;
     int prevSub;
     int prevState;
@@ -1173,8 +1177,8 @@ void FUN_L08_002370d8(void) {
                     }
                     break;
                 case HERO_STATE_GRIND:
-                case 41:
-                case 42:
+                case HERO_STATE_GRIND_JUMP:
+                case HERO_STATE_GRIND_RAIL_TRANSFER:
                 case 43:
                 case 66:
                     if (hero.state.current == 0x42) {
