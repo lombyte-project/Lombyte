@@ -1406,7 +1406,9 @@ void robot_arm_update(char *m) __asm__("FUN_L00_002e3d88");
 void robot_arm_update(char *m) {
     enum {
         ROBOT_ARM_REMOVE = 0,
-        ROBOT_ARM_SPAWN_EFFECT_AND_REMOVE = 2
+        ROBOT_ARM_WAIT_FOR_TIMER = 1,
+        ROBOT_ARM_SPAWN_EFFECT_AND_REMOVE = 2,
+        ROBOT_ARM_FADE_AND_REMOVE = 3
     };
     char *d = *(char **)(m + 0x78);
     float effect_offset_or_world_position[4];
@@ -1425,7 +1427,7 @@ void robot_arm_update(char *m) {
     case ROBOT_ARM_REMOVE:
         mark_moby_for_removal(m);
         return;
-    case 1:
+    case ROBOT_ARM_WAIT_FOR_TIMER:
         if (func_001F9908_r((int *)(d + 0x30))) {
             m[0x20] = (*(int *)(d + 0x34) & 1) ? 3 : 2;
             *(int *)(d + 0x30) = func_001FA898_r(multiply_global_factor_ed64(10.0f));
@@ -1443,7 +1445,7 @@ void robot_arm_update(char *m) {
         }
         mark_moby_for_removal(m);
         return;
-    case 3:
+    case ROBOT_ARM_FADE_AND_REMOVE:
         if (func_001F9908_r((int *)(d + 0x30))) {
             mark_moby_for_removal(m);
             return;
