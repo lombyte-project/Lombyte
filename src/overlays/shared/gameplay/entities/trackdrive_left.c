@@ -1138,6 +1138,9 @@ extern float func_L00_0025CE58_f(float *, float, float *, float, float,
 
 void swingshot_versatarget_update(char *m) __asm__("FUN_L02_002e0450");
 void swingshot_versatarget_update(char *m) {
+    enum {
+        VERSATARGET_STATE_ACTIVE = 1
+    };
     char *d = *(char **)(m + 0x78);
     float v[4];
     float w[4];
@@ -1157,7 +1160,7 @@ void swingshot_versatarget_update(char *m) {
             m[0x20] = 1;
         }
         break;
-    case 1:
+    case VERSATARGET_STATE_ACTIVE:
         if (*(short *)(m + 0xA6) == 0x323) {
             struct Hero *g = &hero;
             float *rz = (float *)(m + 0x48);
