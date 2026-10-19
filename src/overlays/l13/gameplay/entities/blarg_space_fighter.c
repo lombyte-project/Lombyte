@@ -3158,8 +3158,10 @@ void FUN_L13_002e9a48(Moby_2EAE80 *m, Data_2EAE80 *d) {
         DAMAGE_STAGE_QUEUE_RANDOM_LINE = 1,
         DAMAGE_STAGE_START_TIMER_AND_QUEUE_LINE = 2,
         DAMAGE_STAGE_QUEUE_SINGLE_LINE = 3,
+        DAMAGE_STAGE_SKIP_LINE_QUEUE_ALTERNATE = 4,
         DAMAGE_STAGE_QUEUE_ALTERNATE_SINGLE_LINE = 5,
-        DAMAGE_STAGE_QUEUE_LATE_SINGLE_LINE = 6
+        DAMAGE_STAGE_QUEUE_LATE_SINGLE_LINE = 6,
+        DAMAGE_STAGE_SKIP_LINE_QUEUE_SECOND_ALTERNATE = 7
     };
     int hit;
     int rf;
@@ -3367,7 +3369,7 @@ void FUN_L13_002e9a48(Moby_2EAE80 *m, Data_2EAE80 *d) {
                 case DAMAGE_STAGE_QUEUE_SINGLE_LINE:
                     func_L13_002E9B30_2EAE80(m, d, 0x11, 1);
                     break;
-                case 4:
+                case DAMAGE_STAGE_SKIP_LINE_QUEUE_ALTERNATE:
                     break;
                 case DAMAGE_STAGE_QUEUE_ALTERNATE_SINGLE_LINE:
                     func_L13_002E9B30_2EAE80(m, d, 0x13, 1);
@@ -3375,7 +3377,7 @@ void FUN_L13_002e9a48(Moby_2EAE80 *m, Data_2EAE80 *d) {
                 case DAMAGE_STAGE_QUEUE_LATE_SINGLE_LINE:
                     func_L13_002E9B30_2EAE80(m, d, 0x16, 1);
                     break;
-                case 7:
+                case DAMAGE_STAGE_SKIP_LINE_QUEUE_SECOND_ALTERNATE:
                     break;
                 }
             } else if (m->bBC == 7 && d->b148 != 0) {
