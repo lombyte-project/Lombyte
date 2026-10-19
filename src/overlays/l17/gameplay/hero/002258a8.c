@@ -502,7 +502,7 @@ void FUN_L17_002258a8(void) {
                         return;
                     }
                     break;
-                case 127:
+                case HERO_STATE_SINK:
                     if (hero.state_timer > scale_game_frames(0xDC)) {
                         hero_respawn();
                         return;
@@ -788,7 +788,7 @@ void FUN_L17_002258a8(void) {
                     }
                     break;
                 case 33:
-                case 122:
+                case HERO_STATE_WALL_BONK:
                     if (hero.unkA98 & 2) {
                         hero_set_state(HERO_STATE_IDLE, 1);
                     }
@@ -1896,7 +1896,7 @@ void FUN_L17_002258a8(void) {
                     set_hero_animation(FUN_L17_002020a8(0), 0, -2.0f);
                     FUN_L00_00233288(0.016f, 0.002f, 5, 2, 0, 1);
                     break;
-                case 8:
+                case HERO_STATE_LAND:
                     if (hero.unk1B4 != 0) {
                         if (scale_game_frames(9) > hero.state_timer) {
                             int hit = 0;
@@ -1984,13 +1984,13 @@ void FUN_L17_002258a8(void) {
                     break;
                 case HERO_STATE_JUMP:
                 case HERO_STATE_RUN_JUMP:
-                case 10:
-                case 11:
+                case HERO_STATE_PACK_JUMP:
+                case HERO_STATE_HIGH_JUMP:
                 case 12:
                 case 13:
                 case 14:
                 case 15:
-                case 16:
+                case HERO_STATE_PACK_LONG_JUMP:
                 case 17:
                 case 18:
                 case 28:
@@ -2314,7 +2314,7 @@ void FUN_L17_002258a8(void) {
                         hero_set_state(0x18, 1);
                     }
                     break;
-                case 22:
+                case HERO_STATE_HURT:
                     if (12.5f < hero.anim_frame && hero.air_frames.s != 0 && hero.ground_distance > 1.0f) {
                         hero_set_state(HERO_STATE_FALL, 1);
                         break;
