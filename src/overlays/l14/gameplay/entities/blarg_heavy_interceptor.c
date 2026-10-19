@@ -2217,6 +2217,7 @@ void minibomber_update(Moby_2B5938 *moby) {
         MINIBOMBER_STATE_WAIT_TO_FOLLOW_PATH = 1,
         MINIBOMBER_STATE_FOLLOW_INTRO_OR_EXIT_PATH = 2,
         MINIBOMBER_STATE_RETRACE_INTRO_OR_EXIT_PATH = 3,
+        MINIBOMBER_STATE_HOLD_AT_PATH_END = 4,
         MINIBOMBER_STATE_AIM_AT_BOMB_POINT = 5,
         MINIBOMBER_STATE_RELEASE_BOMB = 6,
         MINIBOMBER_STATE_TRAVERSE_PATH = 7,
@@ -2375,7 +2376,7 @@ void minibomber_update(Moby_2B5938 *moby) {
         }
         break;
     }
-    case 4:
+    case MINIBOMBER_STATE_HOLD_AT_PATH_END:
         tg = 0.0f;
         a = blend_scalar_alt(tg, d->f104, (float)d->f102 / convert_integer_to_float(scale_game_frames_c(D_L14_00161560)));
         FUN_L00_001fff28(d->f120, 2, a);
