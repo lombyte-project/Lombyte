@@ -185,7 +185,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x41: {
+    case HERO_STATE_FIDGET_ALT: {
         int t = scale_game_frames(9);
         set_hero_animation(FUN_L06_0021d0a0(0), 0, (float)t);
         {
@@ -275,7 +275,7 @@ int hero_set_state(int a, int b) {
         set_hero_animation(0x2E, 0, (float)scale_game_frames(5));
         break;
     }
-    case 2:
+    case HERO_STATE_RUN:
     case 0x3F:
     case 0x73: {
         struct Hero *p = &hero;
@@ -354,7 +354,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 3: {
+    case HERO_STATE_STOP: {
         struct Hero *p = &hero;
         p->state.control_mode = 1;
         p->unk2284 = 0;
@@ -397,7 +397,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 4: {
+    case HERO_STATE_CROUCH: {
         struct Hero *p = &hero;
         p->state.control_mode = 0xC;
         p->unk2284 = 0;
@@ -1195,8 +1195,8 @@ int hero_set_state(int a, int b) {
         break;
     }
     case HERO_STATE_WRENCH_COMBO:
-    case 0x14:
-    case 0x15:
+    case HERO_STATE_WRENCH_SLAM:
+    case HERO_STATE_CROUCH_SWING:
     case 0x20:
     case 0x23:
     case 0x51: {
@@ -1208,7 +1208,7 @@ int hero_set_state(int a, int b) {
         *(int *)&p->unkA54 = 0;
         p->unkA64 = 0;
         switch (p->state.current) {
-        case 0x14: {
+        case HERO_STATE_WRENCH_SLAM: {
             struct UsageStat *h = usage_stats.stat;
             struct Hero *q;
             if (h[0].count <= 0xFFFE) {
@@ -1237,7 +1237,7 @@ int hero_set_state(int a, int b) {
             }
             break;
         }
-        case 0x15: {
+        case HERO_STATE_CROUCH_SWING: {
             struct UsageStat *h = usage_stats.stat;
             char *h2;
             struct Hero *q;
@@ -1422,7 +1422,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x7A: {
+    case HERO_STATE_WALL_BONK: {
         struct Hero *p = &hero;
         p->state.control_mode = 0xA;
         p->unk2284 = 0;
