@@ -255,21 +255,26 @@ void fun_001fa070(void *, void *) __asm__("FUN_001fa070");
 extern short D_L00_0015F6B0_s __asm__("D_L00_0015F5CC");
 
 void FUN_L00_0028a620(void) {
+    enum {
+        SKY_SHELL_SLOW_ROTATION = 1,
+        SKY_SHELL_MEDIUM_ROTATION = 2,
+        SKY_SHELL_FAST_ROTATION = 3
+    };
     float v[4] __attribute__((aligned(16)));
     int i;
     *(short *)(D_L00_0016051C + 4) = 0;
     qzero(v);
     for (i = 0; i < *(short *)(D_L00_0016051C + 6); i++) {
         switch (i) {
-        case 1:
+        case SKY_SHELL_SLOW_ROTATION:
             v[2] = (D_L00_0015F5CC & 0x3FFFF) * (3.14159265f / 131072.0f) - 3.14159265f;
             fun_001fa070(D_L00_001BD7E0, v);
             break;
-        case 2:
+        case SKY_SHELL_MEDIUM_ROTATION:
             v[2] = (D_L00_0015F5CC & 0x1FFFF) * (3.14159265f / 65536.0f) - 3.14159265f;
             fun_001fa070(D_L00_001BD7E0, v);
             break;
-        case 3:
+        case SKY_SHELL_FAST_ROTATION:
             v[2] = *(unsigned short *)&D_L00_0015F6B0_s * (3.14159265f / 32768.0f) - 3.14159265f;
             fun_001fa070(D_L00_001BD7E0, v);
             break;
