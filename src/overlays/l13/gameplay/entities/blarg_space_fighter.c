@@ -2198,6 +2198,7 @@ int FUN_L13_002e4300(struct Moby *m, char *arg, float *t) {
     enum {
         HIT_REACTION_NONE = 0,
         HIT_REACTION_LETHAL = 1,
+        HIT_REACTION_REMOVE = 2,
         HIT_REACTION_NO_HIT = 11
     };
     char *r = find_moby_hit(m, 0x330000, 0);
@@ -2210,7 +2211,7 @@ int FUN_L13_002e4300(struct Moby *m, char *arg, float *t) {
     case HIT_REACTION_LETHAL:
         *(int *)t = 0;
         break;
-    case 2:
+    case HIT_REACTION_REMOVE:
         *(int *)t = 0;
         break;
     case 3:
