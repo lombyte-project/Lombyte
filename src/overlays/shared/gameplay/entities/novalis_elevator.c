@@ -1303,6 +1303,7 @@ void sand_mouse_update(struct Moby *moby) {
         SAND_MOUSE_WAIT_FOR_HERO_IN_VOLUME = 1,
         SAND_MOUSE_WAIT_FOR_PARENT_READY = 2,
         SAND_MOUSE_MOVE_TOWARD_HERO = 3,
+        SAND_MOUSE_BEGIN_FOLLOW_HERO = 4,
         SAND_MOUSE_FOLLOW_HERO = 5,
         SAND_MOUSE_FADE_OUT_AND_RESET_HOME = 6,
         SAND_MOUSE_DAMP_VELOCITY_BEFORE_RETURN = 19,
@@ -1468,7 +1469,7 @@ void sand_mouse_update(struct Moby *moby) {
             }
         }
         break;
-    case 4:
+    case SAND_MOUSE_BEGIN_FOLLOW_HERO:
         FUN_L01_0023cf98(0, 1);
         moby->flags &= 0xFFBE;
         if (d->parent != -1) {
