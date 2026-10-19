@@ -57,7 +57,8 @@ extern int D_L14_001620D8 __attribute__((sda));
 void FUN_L14_003015d0(unsigned char *m) {
     enum {
         BEAM_STATE_INITIALIZE = 0,
-        BEAM_STATE_WAIT_FOR_TIMED_PULSE = 2
+        BEAM_STATE_WAIT_FOR_TIMED_PULSE = 2,
+        BEAM_STATE_REPEAT_PULSES = 3
     };
     D1224 *d = *(D1224 **)(m + 0x78);
     float v[4] __attribute__((aligned(16)));
@@ -98,7 +99,7 @@ void FUN_L14_003015d0(unsigned char *m) {
             FUN_L14_003017f8((char *)m);
         }
         break;
-    case 3:
+    case BEAM_STATE_REPEAT_PULSES:
         if (fast_dec_timer_s16(&d->s10) != 0) {
             if (d->s6 != 0) {
                 m[0x20] = 2;
