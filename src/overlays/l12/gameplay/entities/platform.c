@@ -3253,10 +3253,14 @@ void crane_arm_update(unsigned char *m) {
         CRANE_ARM_WAIT_ANIMATION_FLAG = 2
     };
     enum {
-        CRANE_ARM_ANIM_BASE = 0
+        CRANE_ARM_ANIM_BASE = 0,
+        CRANE_ARM_ANIM_DELAY_A = 1,
+        CRANE_ARM_ANIM_DELAY_B = 2
     };
     enum {
+        CRANE_ARM_ANIM_BASE_TO_DELAY_A = 3,
         CRANE_ARM_ANIM_RETURN_TO_BASE_A = 4,
+        CRANE_ARM_ANIM_BASE_TO_DELAY_B = 5,
         CRANE_ARM_ANIM_RETURN_TO_BASE_B = 6
     };
     float dist = vector_distance(m + 0x10, &hero.motion.pos);
@@ -3283,11 +3287,11 @@ void crane_arm_update(unsigned char *m) {
                         blend_moby_animation(m, 5, 0, 0);
                 }
                 break;
-            case 1:
+            case CRANE_ARM_ANIM_DELAY_A:
                 if (m[0x53] != 4)
                     blend_moby_animation(m, 4, 0, 0);
                 break;
-            case 2:
+            case CRANE_ARM_ANIM_DELAY_B:
                 if (m[0x53] != 6)
                     blend_moby_animation(m, 6, 0, 0);
                 break;
@@ -3298,7 +3302,7 @@ void crane_arm_update(unsigned char *m) {
     case CRANE_ARM_WAIT_ANIMATION_FLAG:
         if (m[0x70] & 2) {
             switch (m[0x52]) {
-            case 3:
+            case CRANE_ARM_ANIM_BASE_TO_DELAY_A:
                 if (m[0x53] != 1)
                     blend_moby_animation(m, 1, 0, 0);
                 break;
@@ -3307,7 +3311,7 @@ void crane_arm_update(unsigned char *m) {
                 if (m[0x53] != 0)
                     blend_moby_animation(m, 0, 0, 0);
                 break;
-            case 5:
+            case CRANE_ARM_ANIM_BASE_TO_DELAY_B:
                 if (m[0x53] != 2)
                     blend_moby_animation(m, 2, 0, 0);
                 break;
