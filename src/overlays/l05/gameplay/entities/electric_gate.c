@@ -2374,6 +2374,9 @@ void FUN_L05_00319208(void *moby_v) {
 /* Picks the path for the current point (five points, point 2 chosen by the table entry) and sets the travel speeds; same source as FUN_L16_002e4a58. */
 
 void FUN_L05_003193a8(char *moby) {
+    enum {
+        TAXI_BRANCHING_STOP = 2
+    };
     char *d = *(char **)(moby + 0x78);
     char *p;
     float inv, a, b, r;
@@ -2386,7 +2389,7 @@ void FUN_L05_003193a8(char *moby) {
         *(char **)(d + 0xAC) = D_L05_001B0930[*(int *)(d + 0x98)];
         *(short *)(d + 0xB6) = 0;
         break;
-    case 2:
+    case TAXI_BRANCHING_STOP:
         if (D_0014C050[current_level_index][*(int *)(d + 0xB8)] != 0xFF) {
             *(char **)(d + 0xAC) = D_L05_001B0930[*(int *)(d + 0x9C)];
             *(short *)(d + 0xB6) = 3;
