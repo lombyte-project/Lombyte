@@ -579,7 +579,8 @@ extern void FUN_L00_002163f0_2165b8(void) __asm__("FUN_L00_002163f0");
 
 void FUN_L00_002165b8(void) {
     enum {
-        HERO_TILT_RETURN_TO_ZERO = 0
+        HERO_TILT_RETURN_TO_ZERO = 0,
+        HERO_TILT_USE_NEGATED_REFERENCE_VECTOR = 2
     };
     struct Hero *g = &hero;
     float v[2];
@@ -609,7 +610,7 @@ void FUN_L00_002165b8(void) {
                                 frame_scale_sq * 0.3f, frame_time * 5.2359877f);
         break;
     case 1:
-    case 2:
+    case HERO_TILT_USE_NEGATED_REFERENCE_VECTOR:
         FUN_L00_002163f0_2165b8();
         break;
     }
