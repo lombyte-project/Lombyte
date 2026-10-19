@@ -78,6 +78,9 @@ extern int func_0022ED80_i(int, int, void *) __asm__("FUN_0022da68");
 extern short D_L05_00161D38 __attribute__((sda));
 void electric_gate_update(char *m) __asm__("FUN_L05_0030dc68");
 void electric_gate_update(char *m) {
+    enum {
+        ELECTRIC_GATE_INITIALIZE = 0
+    };
     char *data = *(char **)(m + 0x78);
     int state = *(unsigned char *)(m + 0x20);
     char *base;
@@ -88,7 +91,7 @@ void electric_gate_update(char *m) {
     float d;
     int idx;
     switch (state) {
-    case 0:
+    case ELECTRIC_GATE_INITIALIZE:
         *(unsigned short *)(m + 0x34) |= 1;
         *(unsigned char *)(m + 0x20) = 1;
         *(unsigned char *)(m + 0x31) = 0;
