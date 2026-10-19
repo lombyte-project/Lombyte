@@ -447,6 +447,9 @@ extern void FUN_L00_00299560(void *);
 extern void FUN_L00_00299a68(void);
 
 void FUN_L00_00276bd0(void) {
+    enum {
+        SCENE_STATE_DEFAULT = 2
+    };
     Own *owner;
     Own *u8p;
     Mth *m;
@@ -461,7 +464,7 @@ void FUN_L00_00276bd0(void) {
 
     D_L00_001B9CF0.progress = D_L00_001B9CF0.progress + 1;
     switch (D_L00_001B9CF0.state) {
-    case 2:
+    case SCENE_STATE_DEFAULT:
     case 0x1A:
     case 0x1E:
     case 0x1F:
