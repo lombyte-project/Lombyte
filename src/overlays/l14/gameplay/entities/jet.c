@@ -3569,6 +3569,10 @@ extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68"
 
 void rocket_update(struct Moby *moby) __asm__("FUN_L14_002fdbb8");
 void rocket_update(struct Moby *moby) {
+    enum {
+        ROCKET_STATE_INITIALIZE = 0,
+        ROCKET_STATE_FLY_TO_POINT = 2
+    };
     FlyerVars *vars = (FlyerVars *)moby->pvars;
     Vec4f diff;
     OvlVec4 step;
@@ -3578,7 +3582,7 @@ void rocket_update(struct Moby *moby) {
     struct Moby *target;
 
     switch (moby->state) {
-    case 0:
+    case ROCKET_STATE_INITIALIZE:
         if (vars->point < 0 || vars->target < 0) {
             mark_moby_for_removal(moby);
             return;
@@ -3591,7 +3595,7 @@ void rocket_update(struct Moby *moby) {
         return;
     case 1:
         return;
-    case 2:
+    case ROCKET_STATE_FLY_TO_POINT:
         fast_vec_sub(&diff, D_L14_001600EC + vars->point * 0x80 + 0x30, &moby->pos);
         dist = fast_vec_length(&diff);
         fast_dec_timer(&vars->timer);
