@@ -154,6 +154,10 @@ extern char D_00141968[];
 extern s32 D_0014EE90[];
 
 void FUN_L02_002ee890(struct Moby *moby) {
+    enum {
+        AIRBORNE_DIALOGUE_UNARMED = 0,
+        AIRBORNE_DIALOGUE_ARMED = 1
+    };
     int *data = (int *)moby->pvars;
     moby->update_dist = 0xFF;
 
@@ -177,14 +181,14 @@ void FUN_L02_002ee890(struct Moby *moby) {
     }
 
     switch (data[0x15]) {
-    case 0:
+    case AIRBORNE_DIALOGUE_UNARMED:
         if (is_point_inside_clip_volume(&hero.motion.pos, data[0x12]) != 0) {
             if (hero.state.current == 0x2C) {
                 data[0x15] = 1;
             }
         }
         break;
-    case 1: {
+    case AIRBORNE_DIALOGUE_ARMED: {
         struct Hero *h = &hero;
         if (h->grounded_frames != 0) {
             data[0x15] = 0;
