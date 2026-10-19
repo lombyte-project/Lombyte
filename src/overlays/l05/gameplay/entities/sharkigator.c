@@ -1122,6 +1122,10 @@ void extermibot_update(unsigned char *m) __asm__("FUN_L05_00301f48");
 void extermibot_update(unsigned char *m) {
     enum {
         EXTERMIBOT_INITIALIZE = 0,
+        EXTERMIBOT_WANDER_NEAR_START = 2,
+        EXTERMIBOT_FOLLOW_TARGET = 4,
+        EXTERMIBOT_AIM_BEFORE_STRIKE = 7,
+        EXTERMIBOT_STRIKE_TARGET = 8,
         EXTERMIBOT_RETURN_TO_START = 10
     };
     char *d = *(char **)(m + 0x78);
@@ -1231,7 +1235,7 @@ void extermibot_update(unsigned char *m) {
             }
         }
         break;
-    case 2:
+    case EXTERMIBOT_WANDER_NEAR_START:
         rot = (float *)(m + 0x48);
         pos0 = m + 0x10;
         yaw = fast_arc_tan(*(float *)(d + 0x280) - *(float *)(m + 0x10),
@@ -1322,7 +1326,7 @@ void extermibot_update(unsigned char *m) {
             }
         }
         break;
-    case 4: {
+    case EXTERMIBOT_FOLLOW_TARGET: {
         float dist = vector_distance_xy_alt(m + 0x10, t + 0x10);
         FUN_L05_00303b08_c((struct Moby *)m, (s32)(t + 0x10), *(float *)(d + 0x294));
         if (dist < 3.0f
@@ -1338,7 +1342,7 @@ void extermibot_update(unsigned char *m) {
         }
         break;
     }
-    case 7:
+    case EXTERMIBOT_AIM_BEFORE_STRIKE:
         rot = (float *)(m + 0x48);
         yaw = fast_arc_tan(*(float *)(t + 0x10) - *(float *)(m + 0x10),
                                 *(float *)(t + 0x14) - *(float *)(m + 0x14));
@@ -1392,7 +1396,7 @@ void extermibot_update(unsigned char *m) {
             }
         }
         break;
-    case 8: {
+    case EXTERMIBOT_STRIKE_TARGET: {
         int fl;
         float a = fast_add_rotations_c4(*(float *)(m + 0x48), 0.0f);
         if (compute_interpolated_record_value(m) < 1.5f
