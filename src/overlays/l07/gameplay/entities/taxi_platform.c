@@ -1834,7 +1834,8 @@ void bombomatic_update(char *m) {
     enum {
         BOMBOMATIC_INITIALIZE = 0,
         BOMBOMATIC_WAIT_TO_LAUNCH = 1,
-        BOMBOMATIC_LAUNCH_BURST = 2
+        BOMBOMATIC_LAUNCH_BURST = 2,
+        HIT_REACTION_NO_ANIMATION_RESPONSE = 11
     };
     char *d;
     char *hit_info;
@@ -1894,7 +1895,7 @@ void bombomatic_update(char *m) {
         break;
     case 10:
         break;
-    case 11:
+    case HIT_REACTION_NO_ANIMATION_RESPONSE:
         break;
     }
 
