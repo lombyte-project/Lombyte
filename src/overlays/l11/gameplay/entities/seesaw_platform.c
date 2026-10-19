@@ -1322,6 +1322,10 @@ void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__(
 void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
 void FUN_L11_00310028(struct Moby *moby) {
+    enum {
+        LINKED_MOBY_STATE_FADE_OUT = 3,
+        LINKED_MOBY_STATE_REMOVE = 4
+    };
     char *data = (char *)moby->pvars;
     char *u = data + 0x20;
     unsigned char *t = *(unsigned char **)(data + 0x70);
@@ -1349,7 +1353,7 @@ void FUN_L11_00310028(struct Moby *moby) {
             blend_moby_animation(moby, 1, 0, 0xA);
         }
         break;
-    case 3:
+    case LINKED_MOBY_STATE_FADE_OUT:
         if (moby->alpha != 0) {
             moby->alpha--;
         }
@@ -1357,7 +1361,7 @@ void FUN_L11_00310028(struct Moby *moby) {
             moby->state = 4;
         }
         break;
-    case 4:
+    case LINKED_MOBY_STATE_REMOVE:
         mark_moby_for_removal(moby);
         break;
     }
