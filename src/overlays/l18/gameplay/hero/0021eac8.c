@@ -299,6 +299,11 @@ extern f32 set_planar_vel(f32) __asm__("FUN_L00_002120d8");
 extern s32 FUN_L00_00211870(f32);
 
 void FUN_L18_0021eac8(void) {
+    enum {
+        ATTACK_RECORD_POINT_3_STRIKE = 0,
+        ATTACK_RECORD_POINT_4_STRIKE = 1,
+        ATTACK_RECORD_POINTS_3_AND_4_STRIKE = 2
+    };
     struct MobyView *moby = (struct MobyView *)hero.moby;
     s32 sub = hero.state.step;
     s32 anim = moby->b53;
@@ -2382,19 +2387,19 @@ void FUN_L18_0021eac8(void) {
             ((u8 *)&v20)[9] = 1;
             ((s16 *)&v20)[5] = ((struct MobyView *)hero.moby)->hA6;
             switch (hero.attack_record) {
-            case 0:
+            case ATTACK_RECORD_POINT_3_STRIKE:
                 if (hero.anim_frame > 7.0f && hero.anim_frame < 14.0f) {
                     moby_point_position((struct MobyView *)hero.moby, 3, &v0);
                     collect_mobies_in_sphere(2.0f, &v0, 0x10, (struct MobyView *)hero.moby, &v10);
                 }
                 break;
-            case 1:
+            case ATTACK_RECORD_POINT_4_STRIKE:
                 if (hero.anim_frame > 7.0f && hero.anim_frame < 14.0f) {
                     moby_point_position((struct MobyView *)hero.moby, 4, &v0);
                     collect_mobies_in_sphere(2.0f, &v0, 0x10, (struct MobyView *)hero.moby, &v10);
                 }
                 break;
-            case 2:
+            case ATTACK_RECORD_POINTS_3_AND_4_STRIKE:
                 if (hero.anim_frame > 14.0f && hero.anim_frame < 21.0f) {
                     f32 sphere_radius = 2.0f;
                     moby_point_position((struct MobyView *)hero.moby, 3, &v0);
