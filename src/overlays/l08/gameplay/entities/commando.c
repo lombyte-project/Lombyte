@@ -224,6 +224,7 @@ void FUN_L08_002ea398(char *m)
 {
     enum {
         POSITION_BASELINE_INITIALIZE = 0,
+        POSITION_FOLLOW_DRIVER = 1,
         POSITION_APPROACH_TARGET = 2
     };
     char *d = *(char **)(m + 0x78);
@@ -234,7 +235,7 @@ void FUN_L08_002ea398(char *m)
         *(float *)(d + 4) = *(float *)(m + 0x18);
         *(u8 *)(m + 0x20) = 1;
         break;
-    case 1:
+    case POSITION_FOLLOW_DRIVER:
         i = *(int *)(d + 8);
         if (i < 0) break;
         o = (char *)((i << 8) + (int)D_L08_0015FFD8_g);
