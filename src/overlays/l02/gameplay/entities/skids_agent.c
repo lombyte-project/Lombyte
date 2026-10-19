@@ -130,6 +130,7 @@ void skids_agent_update(struct Moby *moby) {
         SKIDS_AGENT_INITIALIZE = 0,
         SKIDS_AGENT_IDLE_AND_TALK = 1,
         SKIDS_AGENT_CONVERSATION_ACTIVE = 2,
+        SKIDS_AGENT_INTERPOLATE_TRANSFORM_AND_FADE = 3,
         SKIDS_AGENT_FADE_TO_ZERO_AND_DELETE = 4,
         SKIDS_AGENT_END_CONVERSATION = 5
     };
@@ -226,7 +227,7 @@ void skids_agent_update(struct Moby *moby) {
         FUN_L00_00260860(5, 1);
         end_conversation(0, -1);
         goto kill;
-    case 3: {
+    case SKIDS_AGENT_INTERPOLATE_TRANSFORM_AND_FADE: {
         Vec4 pos;
         Vec4 rot;
         Vec4 from;
