@@ -158,6 +158,7 @@ void FUN_L18_0022e8f8(void) {
         HERO_STATE_LEDGE_HANG = 25,
         HERO_STATE_LEDGE_SHIMMY_CCW = 26,
         HERO_STATE_LEDGE_SHIMMY_CW = 27,
+        HERO_STATE_LEDGE_JUMP = 28,
         HERO_STATE_GRIND_JUMP = 41,
         HERO_STATE_GRIND_RAIL_TRANSFER = 42,
         HERO_STATE_GRIND_ATTACK = 43,
@@ -1900,7 +1901,7 @@ void FUN_L18_0022e8f8(void) {
                 case HERO_STATE_PACK_LONG_JUMP:
                 case 17:
                 case 18:
-                case 28:
+                case HERO_STATE_LEDGE_JUMP:
                 case 60:
                 case 105:
                     if (hero.unk4AE != 0) {
