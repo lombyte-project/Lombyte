@@ -1489,7 +1489,8 @@ void gadgetron_ceo_update(L16ChallengeMoby *m) __asm__("FUN_L16_002e6808");
 void gadgetron_ceo_update(L16ChallengeMoby *m) {
     enum {
         GADGETRON_CEO_INITIALIZE_DIALOGUE = 0,
-        GADGETRON_CEO_POLL_DIALOGUE = 1
+        GADGETRON_CEO_POLL_DIALOGUE = 1,
+        GADGETRON_CEO_WAIT_TO_SAVE = 4
     };
     L16ChallengeScratch scratch;
     L16ChallengeData *d = m->data;
@@ -1571,7 +1572,7 @@ void gadgetron_ceo_update(L16ChallengeMoby *m) {
             }
         }
         break;
-    case 4:
+    case GADGETRON_CEO_WAIT_TO_SAVE:
         if (*(int *)&D_L16_0015F5C4 == 0) {
             m->state = 1;
             FUN_L00_00260860(31, 1);
