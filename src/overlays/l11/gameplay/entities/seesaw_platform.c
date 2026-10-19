@@ -62,13 +62,20 @@ void FUN_L11_0030d1b0(struct Moby *m);
 /* Controller for the child moby sets laid out by FUN_L11_0030d1b0: spawns them, waits for its linked
    moby, fades in, then unfolds the sets one after another while blending between two D_L11_001600EC points. */
 void FUN_L11_0030c788(struct Moby *m) {
+    enum {
+        CHILD_SETS_STATE_CREATE_CHILDREN = 0,
+        CHILD_SETS_STATE_WAIT_FOR_LINK_TRIGGER = 1,
+        CHILD_SETS_STATE_FADE_BEFORE_ACTIVATION = 2,
+        CHILD_SETS_STATE_UNFOLD_AND_BLEND_POSES = 3,
+        CHILD_SETS_STATE_FADE_AFTER_HERO_HANDOFF = 4
+    };
     CamVars_c788 *pv = (CamVars_c788 *)m->pvars;
     Vec4f pos;
     Vec4f rot;
     int i;
 
     switch (m->state) {
-    case 0:
+    case CHILD_SETS_STATE_CREATE_CHILDREN:
         m->visible = 0;
         m->collision = 0;
         m->flags |= 1;
@@ -132,12 +139,12 @@ void FUN_L11_0030c788(struct Moby *m) {
         FUN_L11_0030d1b0(m);
         m->state = 1;
         break;
-    case 1:
+    case CHILD_SETS_STATE_WAIT_FOR_LINK_TRIGGER:
         if (pv->link != -1 && FUN_L11_0030f270_c788((void *)(D_L11_0015FFD8_c788 + (pv->link << 8)))) {
             m->state = 2;
         }
         break;
-    case 2:
+    case CHILD_SETS_STATE_FADE_BEFORE_ACTIVATION:
         approach_value_c788(&pv->fade, 1.0f, frame_time * 4.0f);
         D_L11_0015F3FC = pv->fade;
         if (1.0f <= pv->fade) {
@@ -174,7 +181,7 @@ void FUN_L11_0030c788(struct Moby *m) {
             FUN_0022da68_c788(0, 0, m);
         }
         break;
-    case 3:
+    case CHILD_SETS_STATE_UNFOLD_AND_BLEND_POSES:
         if (D_L11_00161EC4 < 1.0f) {
             approach_c788(&D_L11_00161EC4, &D_L11_00161EE0, 1.0f, frame_time_sq, frame_time_sq, frame_time);
         }
@@ -236,7 +243,7 @@ void FUN_L11_0030c788(struct Moby *m) {
             alternate_item_available_c788[0x56] = 1;
         }
         break;
-    case 4:
+    case CHILD_SETS_STATE_FADE_AFTER_HERO_HANDOFF:
         approach_value_c788(&pv->fade, 0.0f, frame_time * 4.0f);
         D_L11_0015F3FC = pv->fade;
         if (pv->fade == 0.0f) {
