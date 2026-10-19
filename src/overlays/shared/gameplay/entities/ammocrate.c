@@ -150,6 +150,8 @@ extern void FUN_L00_00262b00_1cc8(float, float, void *, void *, void *) __asm__(
 void ammocrate_update(char *moby) __asm__("FUN_L13_002e1cc8");
 void ammocrate_update(char *moby) {
     enum {
+        SHIP_PICKUP_INITIALIZE = 0,
+        SHIP_PICKUP_SELECT_ACTIVATION_GATE = 1,
         SHIP_PICKUP_WAIT_FOR_TARGET_STATE = 2,
         SHIP_PICKUP_WAIT_FOR_ACTIVATION_TIMER = 3,
         SHIP_PICKUP_ACTIVE = 4,
@@ -166,7 +168,7 @@ void ammocrate_update(char *moby) {
     short cls;
     float speed;
     switch ((unsigned char)moby[0x20]) {
-    case 0:
+    case SHIP_PICKUP_INITIALIZE:
         if (*((unsigned char *)vars + 0xc) != 0) {
             *(float *)(moby + 0x2c) = *(float *)(*(char **)(moby + 0x24) + 0x24);
             moby[0x20] = 4;
@@ -179,7 +181,7 @@ void ammocrate_update(char *moby) {
         moby[0x20] = 1;
         *(float *)(moby + 0x2c) = start_size * 0.1f;
         break;
-    case 1:
+    case SHIP_PICKUP_SELECT_ACTIVATION_GATE:
         if (vars[0] != -1) {
             moby[0x20] = 2;
             break;
