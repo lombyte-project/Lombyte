@@ -994,7 +994,8 @@ char *FUN_L03_002bad40(struct Moby *parent, int unused, int color, int a3, int a
  * with countdowns in the moby data (0x12E, 0x12F) limiting how often they spawn. */
 void FUN_L03_0029caa8(char *moby, void *vel_in, int quiet) {
     enum {
-        MOBY_CLASS_TWO_JOINT_PARTICLE_EMITTER = 0x74
+        MOBY_CLASS_TWO_JOINT_PARTICLE_EMITTER = 0x74,
+        MOBY_CLASS_FIFTEEN_PARTICLE_BURST_EMITTER = 0x76
     };
     float vel[4];
     float *vp;
@@ -1048,7 +1049,7 @@ void FUN_L03_0029caa8(char *moby, void *vel_in, int quiet) {
             data[0x12E] = random_int_between(scale_game_frames(7), scale_game_frames(20));
         }
         break;
-    case 0x76:
+    case MOBY_CLASS_FIFTEEN_PARTICLE_BURST_EMITTER:
         if (quiet == 0 && FUN_L00_001fefc8(data + 0x12E)) {
             if (fast_vec_length(vp) < frame_time * 40.0f && FUN_001f9b48(moby + 0x10, D_L03_00166EC0) < 90.0f) {
                 scale_vector_xyz(vp, vp, 0.5f);
