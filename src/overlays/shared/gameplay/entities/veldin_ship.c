@@ -2922,9 +2922,13 @@ void infobot_update(struct Moby *moby)
 {
     enum {
         INFOBOT_INITIALIZE = 0,
+        INFOBOT_WAIT_FOR_PLAYER = 2,
+        INFOBOT_WAIT_TO_FOLLOW_SLOT_PATH = 3,
         INFOBOT_FOLLOW_SLOT_PATH = 4,
+        INFOBOT_ORBIT_CARRIER = 5,
         INFOBOT_FOLLOW_PATH = 6,
-        INFOBOT_ORBIT_PATH_ENDPOINT = 7
+        INFOBOT_ORBIT_PATH_ENDPOINT = 7,
+        INFOBOT_SAVE_AND_REMOVE = 11
     };
     Vec offset;
     Vec step;
@@ -2985,7 +2989,7 @@ void infobot_update(struct Moby *moby)
         break;
     case 1:
         break;
-    case 2:
+    case INFOBOT_WAIT_FOR_PLAYER:
         range = 1.0f;
         if (infobot->waiting != 0 && (moby->flags & 1)) {
             range = 3.0f;
@@ -3005,7 +3009,7 @@ void infobot_update(struct Moby *moby)
             moby->state = 8;
         }
         break;
-    case 3:
+    case INFOBOT_WAIT_TO_FOLLOW_SLOT_PATH:
         FUN_L00_002d6cd0_2d5de8(moby);
         if (level_available[infobot->planet] != 0) {
             FUN_0020c828(moby);
@@ -3031,7 +3035,7 @@ void infobot_update(struct Moby *moby)
             infobot->seg++;
         }
         break;
-    case 5:
+    case INFOBOT_ORBIT_CARRIER:
         FUN_L00_002d6cd0_2d5de8(moby);
         if (level_available[infobot->planet] != 0) {
             FUN_0020c828(moby);
@@ -3165,7 +3169,7 @@ void infobot_update(struct Moby *moby)
         }
         moby->state = 11;
         break;
-    case 11:
+    case INFOBOT_SAVE_AND_REMOVE:
         if (D_L00_0015F5C4 == 2) {
             return;
         }
