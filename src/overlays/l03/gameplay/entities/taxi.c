@@ -1671,6 +1671,11 @@ extern GameFlags_db558 race_gates __asm__("D_0013D5B0");
    its head toward the hero or random points while idle. */
 void big_al_update(struct Moby *m) __asm__("FUN_L03_002db558");
 void big_al_update(struct Moby *m) {
+    enum {
+        BIG_AL_INITIALIZE = 0,
+        BIG_AL_UPDATE_DIALOGUE = 1,
+        BIG_AL_RESOLVE_DIALOGUE = 2
+    };
     struct GuideVars *v = (struct GuideVars *)m->pvars;
     struct Moby *t;
     struct Moby *o;
@@ -1688,7 +1693,7 @@ void big_al_update(struct Moby *m) {
 
     FUN_L03_002db480(m);
     switch (m->state) {
-    case 0:
+    case BIG_AL_INITIALIZE:
         if (race_gates.unk14C == 0) {
             m->rot.z = fast_add_rotations(m->rot.z, 3.1415927f);
             v->turned = 0;
@@ -1709,7 +1714,7 @@ void big_al_update(struct Moby *m) {
             v->talk.unk36 = -1;
         }
         break;
-    case 1:
+    case BIG_AL_UPDATE_DIALOGUE:
         if (item_available[2] != 0 && v->reward != -1) {
             t = (struct Moby *)((v->reward << 8) + D_L03_0015FFD8_i);
             if (t->oclass == 0x3E5 && t->state == 0) {
@@ -1739,7 +1744,7 @@ void big_al_update(struct Moby *m) {
             m->state = 2;
         }
         break;
-    case 2:
+    case BIG_AL_RESOLVE_DIALOGUE:
         if (D_L03_0015F5C4 == 2) {
             break;
         }
