@@ -630,8 +630,11 @@ void taxi_update(struct Moby *moby) __asm__("FUN_L16_002e43e0");
 void taxi_update(struct Moby *moby) {
     enum {
         TAXI_INITIALIZE = 0,
+        TAXI_WAIT_FOR_DEPARTURE = 1,
         TAXI_BLEND_TO_PATH_START = 3,
-        TAXI_BLEND_TO_DESTINATION_POSE = 5
+        TAXI_FOLLOW_PATH = 4,
+        TAXI_BLEND_TO_DESTINATION_POSE = 5,
+        TAXI_WAIT_FOR_ENABLE = 6
     };
     char *d = (char *)moby->pvars;
     float previous_position[4], previous_rotation[4], position_delta[4], v30[4], transition_end_position[4], transition_start_rotation[4], transition_end_rotation[4], hero_local_offset[4];
@@ -652,7 +655,7 @@ void taxi_update(struct Moby *moby) {
         *(short *)(d + 0xAA) = -1;
         FUN_L16_002e4900_c(moby);
         break;
-    case 1:
+    case TAXI_WAIT_FOR_DEPARTURE:
         g = &hero;
         if (((char *)g->ground_moby) == moby && g->air_frames.s == 0) {
             transpose_rotation_matrix(v30, &moby->rot_row0);
@@ -696,7 +699,7 @@ void taxi_update(struct Moby *moby) {
             moby->state = 4;
         }
         break;
-    case 4:
+    case TAXI_FOLLOW_PATH:
         if (FUN_L05_003195f8(moby)) {
             *(int *)(d + 0xB0) = 0;
             *(int *)(d + 0xB4) = 0;
@@ -724,7 +727,7 @@ void taxi_update(struct Moby *moby) {
             FUN_L05_00319510(moby);
         }
         break;
-    case 6:
+    case TAXI_WAIT_FOR_ENABLE:
         if (D_0013D4E1) {
             char *model = moby->pclass;
             unsigned short flags = moby->flags;
