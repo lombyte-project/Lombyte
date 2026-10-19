@@ -1676,6 +1676,7 @@ void robot_dog_update(char *moby) {
         ROBOT_DOG_MELEE_ATTACK = 6,
         ROBOT_DOG_RETURN_HOME = 7,
         ROBOT_DOG_FALL_RECOVERY = 8,
+        ROBOT_DOG_WAIT_TO_REINITIALIZE = 9,
         ROBOT_DOG_DEATH_FALL = 21
     };
     Tgt2c5bb8 tgt;
@@ -1906,7 +1907,7 @@ void robot_dog_update(char *moby) {
             break;
         }
         goto low;
-    case 9:
+    case ROBOT_DOG_WAIT_TO_REINITIALIZE:
         if (FUN_L00_002dc9f0(moby, data->m120)) {
             moby[0x20] = 0;
             data->sC8 = 0;
