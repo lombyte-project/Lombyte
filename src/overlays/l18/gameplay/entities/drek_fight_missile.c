@@ -3162,6 +3162,7 @@ s32 random_integer_below(s32 arg0) __asm__("FUN_00213260");
 int FUN_L18_002f70b8(struct Moby *moby) {
     enum {
         BOSS_ACTION_CHOICE_REPOSITION_AND_AIM = 1,
+        BOSS_ACTION_CHOICE_TARGET_GROUND_POINTS = 2,
         BOSS_ACTION_CHOICE_TARGET_RANDOM_ARENA_POINTS = 3,
         BOSS_ACTION_CHOICE_FOLLOW_HERO = 5
     };
@@ -3179,7 +3180,7 @@ int FUN_L18_002f70b8(struct Moby *moby) {
         case BOSS_ACTION_CHOICE_REPOSITION_AND_AIM:
             state = 0xE;
             break;
-        case 2:
+        case BOSS_ACTION_CHOICE_TARGET_GROUND_POINTS:
             state = 0xF;
             break;
         case BOSS_ACTION_CHOICE_TARGET_RANDOM_ARENA_POINTS:
