@@ -1391,6 +1391,10 @@ extern int func_L00_001F10E0_s(void *, float, int, void *) __asm__("FUN_L00_001f
 extern float coll_hit_normal[] __asm__("D_L00_00173E80") __attribute__((section(".data")));
 void robot_arm_update(char *m) __asm__("FUN_L00_002e3d88");
 void robot_arm_update(char *m) {
+    enum {
+        ROBOT_ARM_REMOVE = 0,
+        ROBOT_ARM_SPAWN_EFFECT_AND_REMOVE = 2
+    };
     char *d = *(char **)(m + 0x78);
     float effect_offset_or_world_position[4];
     float rotation_step_basis[12];
@@ -1405,7 +1409,7 @@ void robot_arm_update(char *m) {
     float *q;
 
     switch (*(unsigned char *)(m + 0x20)) {
-    case 0:
+    case ROBOT_ARM_REMOVE:
         mark_moby_for_removal(m);
         return;
     case 1:
@@ -1415,7 +1419,7 @@ void robot_arm_update(char *m) {
             return;
         }
         break;
-    case 2:
+    case ROBOT_ARM_SPAWN_EFFECT_AND_REMOVE:
         transform_vector_by_basis(effect_offset_or_world_position, d + 0x20, m + 0xC0);
         add_vector_xyz(effect_offset_or_world_position, effect_offset_or_world_position, m + 0x10);
         if (*(int *)(d + 0x34) & 2) {
