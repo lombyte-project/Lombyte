@@ -89,6 +89,7 @@ struct TextRegion D_001E78F0 = {0x50, 0x154, 0x60, 0x1a0, 0x100, 0x54, 0, 0, 0x1
 struct TextRegion D_001E7908 = {0x64, 0x12c, 0x60, 0x1a0, 0x100, 0x68, 0, 0, 0x10, 1, 0, 0};
 void draw_dialog_text(void) {
     enum {
+        FREEZE_SCALED_OUTLINE_DIALOG = 0,
         FREEZE_TITLE_DIALOG = 2,
         FREEZE_MODE_MESSAGE_DIALOG = 3,
         FREEZE_SPLIT_TEXT_ICON_DIALOG = 5,
@@ -315,7 +316,7 @@ void draw_dialog_text(void) {
         }
         break;
     }
-    case 0: {
+    case FREEZE_SCALED_OUTLINE_DIALOG: {
         char line[0x40];
         s32 pulse;
         s32 c1;
