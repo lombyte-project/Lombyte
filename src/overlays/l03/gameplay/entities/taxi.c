@@ -1901,6 +1901,7 @@ void robot_qwark_update(struct Moby *m) {
     enum {
         ROBOT_QWARK_INITIALIZE = 0,
         ROBOT_QWARK_UPDATE_DIALOGUE = 1,
+        ROBOT_QWARK_RESOLVE_DIALOGUE = 2,
         ROBOT_QWARK_BROKEN_SPARKING = 3
     };
     struct TalkerVars *d = (struct TalkerVars *)m->pvars;
@@ -1961,7 +1962,7 @@ void robot_qwark_update(struct Moby *m) {
             m->state = 2;
         }
         break;
-    case 2:
+    case ROBOT_QWARK_RESOLVE_DIALOGUE:
         if (D_L03_0015F5C4 == 2) {
             break;
         }
