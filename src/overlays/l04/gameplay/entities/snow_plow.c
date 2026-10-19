@@ -798,6 +798,7 @@ void woodcut_bot_update(WBMoby *m) {
     enum {
         WOODCUT_BOT_INITIALIZE = 0,
         WOODCUT_BOT_IDLE = 1,
+        WOODCUT_BOT_SELECT_ACTION_WHILE_EXCITED = 4,
         WOODCUT_BOT_MOVE_TOWARD_TARGET = 5,
         WOODCUT_BOT_RETURN_TO_SAVED_POSITION = 6,
         WOODCUT_BOT_STOP_MOVEMENT = 7,
@@ -1120,7 +1121,7 @@ void woodcut_bot_update(WBMoby *m) {
         }
         break;
     }
-    case 4:
+    case WOODCUT_BOT_SELECT_ACTION_WHILE_EXCITED:
         if (excited) {
             if (dist < 3.0f && adiff < 1.5707964f) {
                 blend_moby_animation(m, 4, 0, scale_game_frames(10));
