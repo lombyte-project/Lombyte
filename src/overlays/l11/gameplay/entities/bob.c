@@ -27,8 +27,12 @@ int memcard_save_data(int slot, int flags) __asm__("FUN_0020b178");
 void mark_moby_for_removal(struct Moby *obj) __asm__("FUN_0020c828");
 
 void FUN_L11_002cb668(struct Moby *moby) {
+    enum {
+        PICKUP_INITIALIZE = 0,
+        PICKUP_CHECK_PROXIMITY = 2
+    };
     switch (moby->state) {
-    case 0:
+    case PICKUP_INITIALIZE:
         if (D_0013D4C2[4] != 0) {
             mark_moby_for_removal(moby);
         } else {
@@ -39,7 +43,7 @@ void FUN_L11_002cb668(struct Moby *moby) {
         break;
     case 1:
         break;
-    case 2:
+    case PICKUP_CHECK_PROXIMITY:
         fast_add_rotations(moby->rot.z, frame_time * 4.7123890f);
         if (vector_distance(&moby->pos, D_0013E533 + 0xE9D) < 2.0f) {
             D_0013D4C2[4] = 1;
