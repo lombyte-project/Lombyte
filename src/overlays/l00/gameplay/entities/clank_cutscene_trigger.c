@@ -37,6 +37,7 @@ extern void FUN_L00_0028b1a0(void);
 void FUN_L00_0023d968(void) {
     enum {
         LEVEL_WITH_SKY_PARTICLES_AND_ROTATING_SHELL = 0,
+        LEVEL_WITH_THREE_SKY_SHELL_ROTATION_RATES = 1,
         LEVEL_WITH_TWO_ROTATING_SKY_SHELLS = 3,
         LEVEL_WITH_FAST_AND_SLOW_ROTATING_SKY_SHELLS = 4
     };
@@ -45,7 +46,7 @@ void FUN_L00_0023d968(void) {
     case LEVEL_WITH_SKY_PARTICLES_AND_ROTATING_SHELL:
         FUN_L00_00289330();
         break;
-    case 1:
+    case LEVEL_WITH_THREE_SKY_SHELL_ROTATION_RATES:
         update_sky_shells_animated();
         break;
     case 2:
