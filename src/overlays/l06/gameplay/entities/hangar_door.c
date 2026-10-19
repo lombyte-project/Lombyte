@@ -2354,6 +2354,7 @@ extern unsigned char D_0013E633_2FA618[] __asm__("D_0013F350");
 void FUN_L06_002f91e8(Moby *moby)
 {
     enum {
+        REACTION_SKIP_RESPONSE = 0,
         REACTION_DEATH = 1,
         REACTION_NO_RESPONSE = 11
     };
@@ -2392,7 +2393,7 @@ void FUN_L06_002f91e8(Moby *moby)
         }
 
         switch (reaction) {
-        case 0:
+        case REACTION_SKIP_RESPONSE:
             break;
         case 3:
         case 4:
