@@ -565,6 +565,7 @@ void FUN_L16_002d38b0(struct Moby *m) {
         HIT_RESPONSE_FATAL_FALL = 2,
         HIT_RESPONSE_KNOCKBACK_RECOVERY = 3,
         HIT_RESPONSE_RECOVERABLE_KNOCKBACK = 4,
+        HIT_RESPONSE_NONFATAL_KNOCKBACK = 5,
         HIT_RESPONSE_ANIMATION_ONLY = 9,
         HIT_RESPONSE_DAMAGE_ANIMATION_ONLY = 10,
         HIT_RESPONSE_NO_REACTION = 11
@@ -606,7 +607,7 @@ void FUN_L16_002d38b0(struct Moby *m) {
             break;
         case HIT_RESPONSE_KNOCKBACK_RECOVERY:
         case HIT_RESPONSE_RECOVERABLE_KNOCKBACK:
-        case 5:
+        case HIT_RESPONSE_NONFATAL_KNOCKBACK:
         case 6:
         case 7:
         case 8: {
