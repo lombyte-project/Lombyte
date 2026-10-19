@@ -214,7 +214,11 @@ void blarg_elite_commando_update(char *m) __asm__("FUN_L16_002d2cf0");
 void blarg_elite_commando_update(char *m) {
     enum {
         COMMANDO_STATE_INITIALIZE = 0,
+        COMMANDO_STATE_IDLE = 2,
+        COMMANDO_STATE_MOVE_TO_PATROL_NODE = 3,
+        COMMANDO_STATE_PREPARE_ROCKET_FIRE = 4,
         COMMANDO_STATE_FIRE_ROCKETS = 5,
+        COMMANDO_STATE_MOVE_TO_ATTACK_NODE = 7,
         COMMANDO_STATE_KNOCKBACK_RECOVERY = 8,
         COMMANDO_STATE_FATAL_FALL = 9,
         COMMANDO_STATE_FOLLOW_PARENT_TRANSFORM = 10
@@ -308,7 +312,7 @@ void blarg_elite_commando_update(char *m) {
                 m[0x20] = 2;
         }
         break;
-    case 2:
+    case COMMANDO_STATE_IDLE:
         fast_dec_timer_s16(d + 0x2DC);
         if (*(int *)(d + 0x114) != 2) {
             if (*(short *)(d + 0x2DC) == 0) {
@@ -334,7 +338,7 @@ void blarg_elite_commando_update(char *m) {
             }
         }
         break;
-    case 3: {
+    case COMMANDO_STATE_MOVE_TO_PATROL_NODE: {
         float path_distance = func_L16_002D5280_update(
             m, D_L16_001B0930[*(int *)(d + 0x120)] + (*(short *)(d + 0x300) * 16 + 0x10), 1);
         if (path_distance < 0.01f) {
@@ -358,7 +362,7 @@ void blarg_elite_commando_update(char *m) {
         }
         break;
     }
-    case 4:
+    case COMMANDO_STATE_PREPARE_ROCKET_FIRE:
         heading = (float *)(m + 0x48);
         angle = fast_arc_tan(target[0] - *(float *)(m + 0x10), target[1] - *(float *)(m + 0x14));
         approach_angle(heading, (float *)(d + 0x2D8), angle, frame_time_sq * 12.566371f,
@@ -394,7 +398,7 @@ void blarg_elite_commando_update(char *m) {
             }
         }
         break;
-    case 7:
+    case COMMANDO_STATE_MOVE_TO_ATTACK_NODE:
         distance = func_L16_002D5280_update(
             m, D_L16_001B0930[*(int *)(d + 0x120)] + (*(short *)(d + 0x300) * 16 + 0x10), 1);
         fast_dec_timer_s16(d + 0x2DC);
