@@ -7461,6 +7461,12 @@ extern float D_L06_001621B0 __attribute__((sda));
 extern char D_0013E633[], D_0014171B[], D_0013D24D[], D_L16_00167240[] __attribute__((section(".data")));
 void red_button_update(struct Moby *moby) __asm__("FUN_L06_00304098");
 void red_button_update(struct Moby *moby) {
+    enum {
+        INITIALIZE_RED_BUTTON = 0,
+        ROTATE_BUTTON_AND_LINKED_MOBYS = 2,
+        WAIT_FOR_NEARBY_HELP_TRIGGER = 3,
+        WAIT_CAMERA_START_DELAY = 4
+    };
     Data_304098 *data = *(struct Data_304098 **)&moby->pvars;
     Vector_304098 camera_position;
     Vector_304098 camera_rotation;
@@ -7474,7 +7480,7 @@ void red_button_update(struct Moby *moby) {
     int timer;
 
     switch (moby->state) {
-    case 0:
+    case INITIALIZE_RED_BUTTON:
         moby->update_dist = 0xFF;
         moby->rot.x = fast_subtract_rotations_304098(moby->rot.x, 0.78539819f);
         moby->state = 1;
@@ -7482,7 +7488,7 @@ void red_button_update(struct Moby *moby) {
         break;
     case 1:
         break;
-    case 2: {
+    case ROTATE_BUTTON_AND_LINKED_MOBYS: {
         float angle;
         approach_two_stage_304098(&data->t, &data->vel, 1.0f, frame_time_sq, frame_time_sq, frame_time);
         angle = data->vel * 0.78539819f;
@@ -7498,7 +7504,7 @@ void red_button_update(struct Moby *moby) {
         }
         break;
     }
-    case 3:
+    case WAIT_FOR_NEARBY_HELP_TRIGGER:
         if (vector_distance_304098(D_0013F3D0, &moby->pos) < 3.7f) {
             help_message_available = try_set_help_message_304098(4, 0x1783) != 0;
             if ((*(int *)(D_0013A5E0 + 0x2504) & 0x10) && help_message_available) {
@@ -7509,7 +7515,7 @@ void red_button_update(struct Moby *moby) {
             }
         }
         break;
-    case 4:
+    case WAIT_CAMERA_START_DELAY:
         if (tick_countdown_304098(&data->timer)) {
             qcopy_nc(&camera_position, &D_L06_001600EC_304098[data->cut].a);
             qcopy(&camera_rotation, &D_L06_001600EC_304098[data->cut].b);
