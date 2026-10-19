@@ -197,7 +197,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x41: {
+    case HERO_STATE_FIDGET_ALT: {
         int t = scale_game_frames(9);
         set_hero_animation(FUN_L01_00226f10(0), 0, (float)t);
         {
@@ -1104,8 +1104,8 @@ int hero_set_state(int a, int b) {
     }
     case HERO_STATE_JUMP:
     case HERO_STATE_RUN_JUMP:
-    case 0xA:
-    case 0xB:
+    case HERO_STATE_PACK_JUMP:
+    case HERO_STATE_HIGH_JUMP:
     case 0xC:
     case 0xD:
     case 0xE:
