@@ -1473,6 +1473,12 @@ extern int allocate_voice_82c0(int, int, struct Moby *) __asm__("FUN_0022da68");
 /* Sinking platform update: arms its tilt, then sinks it under the hero until it is removed. */
 void floating_platform_update(struct Moby *moby) __asm__("FUN_L18_002d82c0");
 void floating_platform_update(struct Moby *moby) {
+    enum {
+        STATE_INITIALIZE = 0,
+        STATE_TILT_DELAY = 3,
+        STATE_WAIT_FOR_SINK_TRIGGER = 4,
+        STATE_SINKING = 5
+    };
     char *data;
     float delta[4] __attribute__((aligned(16)));
     float old_rot[4] __attribute__((aligned(16)));
@@ -1485,7 +1491,7 @@ void floating_platform_update(struct Moby *moby) {
     scale_vector_xyz(delta, &moby->pos, -1.0f);
     qcopy(old_rot, &moby->rot);
     switch (moby->state) {
-    case 0:
+    case STATE_INITIALIZE:
         *(float *)(data + 0x60) = moby->pos.z;
         *(float *)(data + 0x64) = moby->pos.z;
         *(int *)(data + 0x70) = 0;
@@ -1500,7 +1506,7 @@ void floating_platform_update(struct Moby *moby) {
             moby->state = 1;
         }
         break;
-    case 3:
+    case STATE_TILT_DELAY:
         if (tick_countdown_32((int *)(data + 0x7C)) == 0) {
             break;
         }
@@ -1519,7 +1525,7 @@ void floating_platform_update(struct Moby *moby) {
         *(float *)(data + 0x6C) = rate * DEG_TO_RAD * frame_time;
         moby->state = 4;
         break;
-    case 4:
+    case STATE_WAIT_FOR_SINK_TRIGGER:
         if (moby->visible != 0 && tick_countdown_32((int *)(data + 0x8C)) != 0) {
             FUN_L18_002d88b8(moby);
             *(int *)(data + 0x8C) = scale_ticks(random_int_between(0x5A, 0x78));
@@ -1537,7 +1543,7 @@ void floating_platform_update(struct Moby *moby) {
             *(short *)(data + 0x92) = allocate_voice_82c0(1, 0, moby);
         }
         break;
-    case 5:
+    case STATE_SINKING:
         if (moby->visible != 0 && tick_countdown_32((int *)(data + 0x8C)) != 0) {
             FUN_L18_002d88b8(moby);
             *(int *)(data + 0x8C) = scale_ticks(random_int_between(0xF, 0x1E));
