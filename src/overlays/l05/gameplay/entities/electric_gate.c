@@ -2140,7 +2140,8 @@ extern float D_L05_001612EC;
  * target position and sets the bob height from the frame counter. */
 void FUN_L05_00318a68(char *m) {
     enum {
-        MOBY_INITIALIZE = 0
+        MOBY_INITIALIZE = 0,
+        MOBY_CHECK_HERO_VOLUME = 1
     };
     int state = *(unsigned char *)(m + 0x20);
     int *v = *(int **)(m + 0x78);
@@ -2153,7 +2154,7 @@ void FUN_L05_00318a68(char *m) {
         *(unsigned char *)(m + 0x30) = 0xFF;
         *(int *)(m + 0x94) = 0;
         break;
-    case 1:
+    case MOBY_CHECK_HERO_VOLUME:
         t = (char *)&hero.motion.pos;
         if (find_318a68(t, *v) != 0) {
             D_L05_001612D8_318a68[1] = state;
