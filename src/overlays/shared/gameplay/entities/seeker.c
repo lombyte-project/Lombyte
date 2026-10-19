@@ -379,6 +379,7 @@ void FUN_L09_002c6230(Moby *moby) {
     enum {
         RESPONSE_NONE = 0,
         RESPONSE_FATAL_KNOCKBACK = 1,
+        RESPONSE_HURT_KNOCKBACK = 3,
         RESPONSE_NO_REACTION = 11
     };
     char hit_pos[16];
@@ -428,7 +429,7 @@ void FUN_L09_002c6230(Moby *moby) {
         case 10:
             data->reactTime = 0xFA;
             break;
-        case 3:
+        case RESPONSE_HURT_KNOCKBACK:
         case 4:
         case 5:
         case 6:
