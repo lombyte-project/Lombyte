@@ -67,14 +67,23 @@ void memcard_update_state(void) {
         MEMCARD_PROCESS_FORMAT_RESULT = 4,
         MEMCARD_REQUEST_UNFORMAT = 5,
         MEMCARD_PROCESS_UNFORMAT_RESULT = 6,
-        MEMCARD_REQUEST_CHDIR = 7
+        MEMCARD_REQUEST_CHDIR = 7,
+        MEMCARD_PROBE_SAVE_HEADER = 8
     };
     enum {
+        MEMCARD_PROBE_PROCESS_CHDIR_RESULT = 0,
         MEMCARD_PROBE_REQUEST_OPEN = 1,
         MEMCARD_PROBE_PROCESS_OPEN_RESULT = 2,
         MEMCARD_PROBE_REQUEST_HEADER_READ = 3,
         MEMCARD_PROBE_PROCESS_HEADER_READ_RESULT = 4,
         MEMCARD_PROBE_REQUEST_CLOSE = 5
+    };
+    enum {
+        MEMCARD_CREATE_CHECK_FREE_SPACE = 0,
+        MEMCARD_CREATE_REQUEST_MKDIR = 1,
+        MEMCARD_CREATE_PROCESS_MKDIR_RESULT = 2,
+        MEMCARD_CREATE_REQUEST_RESOURCE_READ = 3,
+        MEMCARD_CREATE_WAIT_RESOURCE_READ = 4
     };
     char name[0x40];
 
@@ -179,9 +188,9 @@ void memcard_update_state(void) {
         }
         break;
 
-    case 8:
+    case MEMCARD_PROBE_SAVE_HEADER:
         switch (MC.sub) {
-        case 0:
+        case MEMCARD_PROBE_PROCESS_CHDIR_RESULT:
             if (MC.result == 0) {
                 s32 *p = &CARD.save_index;
                 if (*p < 0) {
@@ -294,7 +303,7 @@ void memcard_update_state(void) {
         CARD.save_index = 0;
     case 10:
         switch (MC.sub) {
-        case 0:
+        case MEMCARD_CREATE_CHECK_FREE_SPACE:
             if (CARD.free >= 350) {
                 MC.sub = 1;
             } else {
@@ -305,12 +314,12 @@ void memcard_update_state(void) {
             }
             MC.busy = 0;
             break;
-        case 1:
+        case MEMCARD_CREATE_REQUEST_MKDIR:
             if (sceMcMkdir(CARD.port, CARD.slot, D_0013D1D0) == 0) {
                 MC.sub = 2;
             }
             break;
-        case 2:
+        case MEMCARD_CREATE_PROCESS_MKDIR_RESULT:
             if (MC.result == 0 || MC.result == -4) {
                 MC.sub = 3;
                 break;
@@ -327,7 +336,7 @@ void memcard_update_state(void) {
             MC.cur = 0;
             MC.busy = 0;
             break;
-        case 3: {
+        case MEMCARD_CREATE_REQUEST_RESOURCE_READ: {
             McChunk *chunk;
             s32 size;
 
@@ -337,7 +346,7 @@ void memcard_update_state(void) {
             MC.busy = 0;
             break;
         }
-        case 4:
+        case MEMCARD_CREATE_WAIT_RESOURCE_READ:
             if (cd_read_active[0] == 0) {
                 MC.sub = 5;
             }
