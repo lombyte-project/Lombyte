@@ -1282,7 +1282,8 @@ void FUN_L15_0029a570(void *object, int flag) {
     enum {
         LETHAL_HIT_RESPONSE = 1,
         DEATH_KNOCKBACK_HIT_RESPONSE = 2,
-        NONLETHAL_KNOCKBACK_HIT_RESPONSE = 3
+        NONLETHAL_KNOCKBACK_HIT_RESPONSE = 3,
+        NONLETHAL_ARC_HIT_RESPONSE = 4
     };
     unsigned char *moby = object;
     unsigned char *data = *(unsigned char **)(moby + 0x78);
@@ -1329,7 +1330,7 @@ void FUN_L15_0029a570(void *object, int flag) {
             data[0x67] = 0xFA;
             break;
         case NONLETHAL_KNOCKBACK_HIT_RESPONSE:
-        case 4:
+        case NONLETHAL_ARC_HIT_RESPONSE:
         case 5:
         case 6:
         case 7:
