@@ -617,6 +617,7 @@ void FUN_L13_002c2d30(unsigned char *moby) {
         HIT_REACTION_NONE = 0,
         HIT_REACTION_LETHAL = 1,
         HIT_REACTION_REMOVE = 2,
+        HIT_REACTION_HIGH_INTERPOLATION_TARGET = 9,
         HIT_REACTION_NO_HIT = 11
     };
     unsigned char *d;
@@ -684,7 +685,7 @@ void FUN_L13_002c2d30(unsigned char *moby) {
             moby[0x20] = 7;
         }
         switch (st) {
-        case 9:
+        case HIT_REACTION_HIGH_INTERPOLATION_TARGET:
         case 10:
             d[0x67] = 0xFA;
             break;
