@@ -1128,7 +1128,9 @@ void extermibot_update(unsigned char *m) {
         EXTERMIBOT_AIM_BEFORE_STRIKE = 7,
         EXTERMIBOT_STRIKE_TARGET = 8,
         EXTERMIBOT_RECOVER_AFTER_STRIKE = 9,
-        EXTERMIBOT_RETURN_TO_START = 10
+        EXTERMIBOT_RETURN_TO_START = 10,
+        EXTERMIBOT_NONLETHAL_KNOCKBACK = 11,
+        EXTERMIBOT_DEATH_KNOCKBACK = 14
     };
     char *d = *(char **)(m + 0x78);
     char *t;
@@ -1448,7 +1450,7 @@ void extermibot_update(unsigned char *m) {
             m[0x20] = 6;
         }
         break;
-    case 11:
+    case EXTERMIBOT_NONLETHAL_KNOCKBACK:
         if (mine_fall(m, d + 0x70) & 0x60) {
             if (follow_path(d + 0x2C0, 1, *(int *)(d + 0x2C4), m + 0x10, (s32)(d + 0x270), dir,
                                   (D_L05_00161A98) * 0.4f) != 0) {
@@ -1471,7 +1473,7 @@ void extermibot_update(unsigned char *m) {
             if (m[0x53] != 0) blend_moby_animation(m, 0, 0, scale_game_frames(10));
         }
         break;
-    case 14:
+    case EXTERMIBOT_DEATH_KNOCKBACK:
         if (mine_fall(m, d + 0x70) & 0x60) {
             cart_burst(m, m + 0x10, -1, 0.5f, 13.0f);
             FUN_L00_00263fd8_c(m, 0x6DA, m + 0x10, m + 0x40, 0, 0, 0.0f, D_L05_0015F580, D_L05_0015F580, D_L05_0015F580);
