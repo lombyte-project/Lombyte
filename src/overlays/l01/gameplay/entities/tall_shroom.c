@@ -592,16 +592,21 @@ void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 
 void tall_shroom_update(TriggerMoby *obj) __asm__("FUN_L01_0030d0f0");
 void tall_shroom_update(TriggerMoby *obj) {
+    enum {
+        TALL_SHROOM_STATE_INITIALIZE = 0,
+        TALL_SHROOM_STATE_WAIT_FOR_HIT = 1,
+        TALL_SHROOM_STATE_REMOVE_WITH_EFFECTS = 2
+    };
     TriggerHit *hit;
     s32 flag;
 
     flag = 0;
     hit = find_moby_hit(obj, 0x10000, 0);
     switch (obj->state) {
-    case 0:
+    case TALL_SHROOM_STATE_INITIALIZE:
         obj->state = 1;
         break;
-    case 1:
+    case TALL_SHROOM_STATE_WAIT_FOR_HIT:
         if (hit != 0 && hit->f2c > 0.0f) {
             flag = 1;
         }
@@ -609,7 +614,7 @@ void tall_shroom_update(TriggerMoby *obj) {
             obj->state = 2;
         }
         break;
-    case 2:
+    case TALL_SHROOM_STATE_REMOVE_WITH_EFFECTS:
         allocate_voice_for_target_entry(0, 0, obj);
         FUN_L01_002787a0(obj);
         FUN_L00_00263fd8(obj, 0x717, obj->pos, obj->rot, 0, 0, &D_L01_0015F580, &D_L01_0015F580,
