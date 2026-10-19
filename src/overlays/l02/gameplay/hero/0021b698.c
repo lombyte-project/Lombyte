@@ -813,7 +813,7 @@ void FUN_L02_00225c20(void) {
     prevAnim = moby->f53;
     slideAngle = 0.6981317f;
     switch (hero.state.current) {
-    case 0x0:
+    case HERO_STATE_IDLE:
     case HERO_STATE_LOOK:
     case HERO_STATE_STOP:
     case HERO_STATE_CROUCH:
@@ -1714,7 +1714,7 @@ void FUN_L02_00225c20(void) {
             FUN_L00_002334d0(hero.motion.velocity.f, hero.motion.velocity.f, frame_time_sq * 54.0f);
         }
     } break;
-    case 0x2:
+    case HERO_STATE_RUN:
     case 0x73: {
         float k;
         float up;
@@ -1869,7 +1869,7 @@ void FUN_L02_00225c20(void) {
         air_accel(frame_time_sq * 25.0f);
         FUN_L00_002334d0(hero.motion.velocity.f, hero.motion.unk120.f, frame_time_sq * 18.0f);
         break;
-    case 0x6:
+    case HERO_STATE_FALL:
     case 0x2D:
         if (hero.state.current == 0x2D) {
             float t;
@@ -2003,7 +2003,7 @@ void FUN_L02_00225c20(void) {
     case 0x7:
     case HERO_STATE_RUN_JUMP:
     case HERO_STATE_PACK_JUMP:
-    case 0xB:
+    case HERO_STATE_HIGH_JUMP:
     case 0xC:
     case 0xD:
     case 0xE:
