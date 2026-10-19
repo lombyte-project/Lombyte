@@ -1213,6 +1213,9 @@ void mine_glove_update(struct Moby *moby) {
     enum {
         MINE_GLOVE_INITIALIZE = 0,
         MINE_GLOVE_WAIT_FOR_ANIMATION = 1,
+        MINE_GLOVE_RELEASE_HELD_MOBY = 3,
+        MINE_GLOVE_POST_RELEASE_WAIT = 4,
+        MINE_GLOVE_BEGIN_HELD_MOBY_REMOVAL = 5,
         MINE_GLOVE_REMOVE_HELD_MOBY = 6
     };
     GloveVars_2c1ad0 *vars;
@@ -1326,7 +1329,7 @@ void mine_glove_update(struct Moby *moby) {
         if (moby->anim_flags & 2)
             moby->state = 2;
         break;
-    case 3:
+    case MINE_GLOVE_RELEASE_HELD_MOBY:
         if (vars->held != 0) {
             FUN_L00_002aa008(&pos, vars->held, vars->held->pvars);
             if (D_00141680_2c1ad0.deliveries <= 0xfffe)
@@ -1345,11 +1348,11 @@ void mine_glove_update(struct Moby *moby) {
         moby->state = 4;
         vars->timer58 = scale_game_frames(0x14);
         break;
-    case 4:
+    case MINE_GLOVE_POST_RELEASE_WAIT:
         if (hero.state.current != 0x23 && !hero.unk20A8)
             moby->state = 2;
         break;
-    case 5:
+    case MINE_GLOVE_BEGIN_HELD_MOBY_REMOVAL:
         moby->state = 6;
         break;
     case MINE_GLOVE_REMOVE_HELD_MOBY:
