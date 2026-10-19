@@ -513,6 +513,8 @@ extern s32 D_0013CB14[];
 
 void FUN_L01_002370b8(void) {
     enum {
+        HERO_STATE_MOVE_VIA_POSITIVE_LATERAL_PROBE = 0x1A,
+        HERO_STATE_MOVE_VIA_NEGATIVE_LATERAL_PROBE = 0x1B,
         HERO_STATE_DOWNHILL_SLIDE = 0x58,
         HERO_STATE_MOVE_TO_TARGET_POSITION = 0x65,
         HERO_STATE_BRAKE_AT_TARGET_POSITION = 0x66
@@ -1730,8 +1732,8 @@ void FUN_L01_002370b8(void) {
         FUN_L00_0025f730(hero.motion.velocity.f, frame_time * 4.0f);
         fast_cos_cf(&hero.unk4F0, hero.motion.pos.f[2], frame_time * 3.0f);
         break;
-    case 0x1A:
-    case 0x1B: {
+    case HERO_STATE_MOVE_VIA_POSITIVE_LATERAL_PROBE:
+    case HERO_STATE_MOVE_VIA_NEGATIVE_LATERAL_PROBE: {
         float original_probe_yaw;
         float offset_probe_yaw;
 
