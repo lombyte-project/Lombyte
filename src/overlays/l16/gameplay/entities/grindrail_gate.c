@@ -2153,6 +2153,11 @@ float absolute_float(float input) __asm__("func_001F99C0");
 
 void elevator_update(L16PlatformMoby *moby) __asm__("FUN_L16_002e7f80");
 void elevator_update(L16PlatformMoby *moby) {
+    enum {
+        ELEVATOR_INITIALIZE = 0,
+        ELEVATOR_WAIT_FOR_HERO = 2,
+        ELEVATOR_UPDATE_HEIGHT = 3
+    };
     L16PlatformVector delta, old_rotation, motion;
     L16PlatformData *d = moby->data;
     float *position = moby->position;
@@ -2162,7 +2167,7 @@ void elevator_update(L16PlatformMoby *moby) {
     qcopy(old_rotation.v, rotation);
     if (d) {
         switch (moby->state) {
-        case 0:
+        case ELEVATOR_INITIALIZE:
             motion.q = 0;
             motion.v[2] = 1.0f;
             d->particle = -1;
@@ -2172,7 +2177,7 @@ void elevator_update(L16PlatformMoby *moby) {
             moby->reverse = 1;
             moby->state = 2;
             break;
-        case 2:
+        case ELEVATOR_WAIT_FOR_HERO:
             if (voice_is_playing(moby, d->particle)) {
                 release_voice_slot(d->particle);
                 d->particle = -1;
@@ -2208,7 +2213,7 @@ void elevator_update(L16PlatformMoby *moby) {
                 moby->state = 3;
             }
             break;
-        case 3: {
+        case ELEVATOR_UPDATE_HEIGHT: {
             float *hero_position = hero.motion.pos.f;
             float speed;
 
