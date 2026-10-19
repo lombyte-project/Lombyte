@@ -488,10 +488,10 @@ int FUN_L11_003192c8(char *moby) {
         next_list = list + 1;
         skip = 1;
         other = (char *)(((*list & 0x7FFF) << 8) + D_L11_0015FFD8);
-        own_class = *(short *)(other + 0xA6);
-        other_class = *(short *)(moby + 0xA6);
+        other_class = *(short *)(other + 0xA6);
+        own_class = *(short *)(moby + 0xA6);
         visible = *(unsigned char *)(other + 0x31);
-        if ((own_class ^ other_class) == 0) {
+        if ((other_class ^ own_class) == 0) {
             skip = 0;
         }
         if (visible == 0) {

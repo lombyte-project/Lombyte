@@ -2101,7 +2101,7 @@ void shady_salesman_update(WM *m) {
 }
 
 extern int D_L05_001612D8_318a68[] __asm__("D_L05_001612D8") MACRO_ADDR;
-extern char D_L05_001612E0_318a68[16] __asm__("D_L05_001612E0") MACRO_ADDR __attribute__((sda));
+extern float D_L05_001612E0_gp[4] __asm__("D_L05_001612E0") MACRO_ADDR __attribute__((sda));
 extern float D_L05_001612E8 __asm__("D_L05_001612E8");
 extern int D_L05_0015F5C4_318a68[] __asm__("D_L05_0015F5C4") MACRO_ADDR;
 extern int find_318a68(void *, int) __asm__("FUN_00214720");
@@ -2131,7 +2131,7 @@ void FUN_L05_00318a68(char *m) {
         t = (char *)&hero.motion.pos;
         if (find_318a68(t, *v) != 0) {
             D_L05_001612D8_318a68[1] = state;
-            qcopy(D_L05_001612E0_318a68, t);
+            qcopy(D_L05_001612E0_gp, t);
             *(short *)(t + 0x15E) = 5;
             D_L05_001612EC = 48.0f;
             *(volatile float *)&D_L05_001612E8 = sin_318a68((float)(D_L05_0015F5C4_318a68[2] % 360) * 0.017444444f - 3.14f) * 0.25f + 59.5f;

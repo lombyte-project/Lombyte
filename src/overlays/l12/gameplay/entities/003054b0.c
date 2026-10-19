@@ -1228,8 +1228,7 @@ void FUN_L12_003094a0(struct Moby *moby) {
     int never;
     int held;
 
-    /* Fakematch: only gcse folds never, so the dead call below keeps a real insn in front of
-     * the helper's test until flow and the second jump-threading pass leaves its branch alone. */
+    /* Fakematch: the dead call guarded by never keeps retail's branch shape. */
     never = 0;
     switch (moby->state) {
     case 0:

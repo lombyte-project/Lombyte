@@ -413,6 +413,7 @@ void FUN_L00_00260860(int id, int flag) {
     }
 }
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00261B00.c: func_L00_00261B00). */
+#include "rnc/gameplay/entities/moby.h"
 
 extern char *D_L00_001B04B0[];
 extern char D_L00_001600A0[];
@@ -441,7 +442,7 @@ extern int FUN_L00_002595a0(float *, float *, float, float, float);
 extern int FUN_L00_00261b48(int, void *, void *, void *);
 extern void FUN_L00_002a7438(void *, void *, void *, int, int, int);
 
-void FUN_L00_00260a88(char *moby, int min_bolts, int max_bolts, int flags, int path_index)
+void FUN_L00_00260a88(struct Moby *moby, int min_bolts, int max_bolts, int flags, int path_index)
 {
     float base_velocity[4], position[4], velocity[4], spread[4], landing[4], path_point[4], quarter[4];
     float first_root, second_root;
@@ -458,9 +459,9 @@ void FUN_L00_00260a88(char *moby, int min_bolts, int max_bolts, int flags, int p
     fifties = 0;
     clear_u64_value(base_velocity);
     if (!(flags & 0x20)) {
-        if (*(unsigned char *)(moby + 0xB0) != 0xFF
-            && (unsigned)(*(unsigned short *)(moby + 0xA6) - 0x1F4) >= 0x29) {
-            D_L00_0015F598 = D_L00_0015FC88_macro[*(unsigned char *)(moby + 0xB0)] == 0xFF;
+        if (moby->mission != 0xFF
+            && (unsigned)((unsigned short)moby->oclass - 0x1F4) >= 0x29) {
+            D_L00_0015F598 = D_L00_0015FC88_macro[moby->mission] == 0xFF;
         }
     }
     counted = 0;
@@ -604,7 +605,7 @@ void FUN_L00_00260a88(char *moby, int min_bolts, int max_bolts, int flags, int p
         }
     }
     while (ones || fives || twenties || fifties) {
-        qcopy(position, moby + 0x10);
+        qcopy(position, &moby->pos);
         position[2] = position[2] + 0.5f;
         angle = random_angle_radians();
         velocity[0] = fast_cos(angle) * (random_float_between(0.0f, 3.0f) * frame_time_macro);
@@ -630,8 +631,8 @@ void FUN_L00_00260a88(char *moby, int min_bolts, int max_bolts, int flags, int p
                 }
             }
             fast_vec_scale(landing, velocity, time);
-            add_vector_xyz(landing, landing, moby + 0x10);
-            roots = FUN_L00_00261b48(path_index, moby + 0x10, landing, path_point);
+            add_vector_xyz(landing, landing, &moby->pos);
+            roots = FUN_L00_00261b48(path_index, &moby->pos, landing, path_point);
             subtract_vector_xyz(landing, path_point, position);
             landing[2] = 0.0f;
             fast_vec_normalize(quarter, landing, 0.25f);

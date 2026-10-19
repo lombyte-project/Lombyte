@@ -3281,7 +3281,7 @@ typedef struct {
 typedef struct {
     char p0[0xC];
     int fC;
-    int f10;
+    int next_move_frame; /* compared with hero.anim_frame before a follow-up move */
     char p14[0x18];
 } Rec2C_228770;
 extern Hero_228770 D_0013F450_h228770 __asm__("D_0013F350");
@@ -3407,7 +3407,7 @@ int FUN_L00_00227fa0(void) {
                     if (D_0013F450_h228770.fA9C != 0) {
                         break;
                     }
-                    if (D_0013F450_h228770.fAA8 >= (float)rec->f10 && (D_0013CA40_p228770.f1A0 & 0xA) && f_fun_l00_00266d60_227fa0(mask, f_fun_001f96f8_227fa0(0xF), 0)) {
+                    if (D_0013F450_h228770.fAA8 >= (float)rec->next_move_frame && (D_0013CA40_p228770.f1A0 & 0xA) && f_fun_l00_00266d60_227fa0(mask, f_fun_001f96f8_227fa0(0xF), 0)) {
                         f_fun_l00_002223f8_227fa0(0x15, 1);
                         break;
                     }
@@ -3416,7 +3416,7 @@ int FUN_L00_00227fa0(void) {
             if (D_0013F450_h228770.fA9C != 0) {
                 break;
             }
-            if (!(D_0013F450_h228770.fAA8 >= (float)rec->f10)) {
+            if (!(D_0013F450_h228770.fAA8 >= (float)rec->next_move_frame)) {
                 break;
             }
             t = (f_fun_001fa6d0_227fa0(D_0013F450_h228770.fAA8) - rec->fC) * 2;
@@ -3708,10 +3708,10 @@ void FUN_L00_00228c18(void) {
                         int sequence = step + 3;
                         int previous_sequence = previous_step + 3;
                         struct Moby *moby = clamped->moby;
-                        struct { char pad[0x48]; unsigned char *seqs[1]; } *moby_class = (void *)moby->pclass;
+                        struct MobyClass *moby_class = moby->pclass;
                         int frame = moby->prev_frame;
-                        unsigned char *new_seq = moby_class->seqs[sequence];
-                        unsigned char *old_seq = moby_class->seqs[previous_sequence];
+                        unsigned char *new_seq = (unsigned char *)moby_class->seqs[sequence];
+                        unsigned char *old_seq = (unsigned char *)moby_class->seqs[previous_sequence];
                         int offset = *(int *)((char *)&D_L00_0015F6C8_gp + step * 4 + previous_step * 8);
                         int start = ((frame * new_seq[0x10]) / old_seq[0x10] + offset) % new_seq[0x10];
                         set_hero_animation(sequence, start, (float)scale_game_frames(8));
