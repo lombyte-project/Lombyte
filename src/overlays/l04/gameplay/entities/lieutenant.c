@@ -60,6 +60,7 @@ void lieutenant_update(struct Moby *moby) {
     enum {
         LIEUTENANT_STATE_INITIALIZE = 0,
         LIEUTENANT_STATE_UPDATE_DIALOGUE = 1,
+        LIEUTENANT_STATE_UNLOCK_PLANET_AND_DISABLE = 2,
         LIEUTENANT_STATE_DISABLED = 3
     };
     Vec4 pos;
@@ -91,7 +92,7 @@ void lieutenant_update(struct Moby *moby) {
         if (update_npc_dialogue(moby, vars))
             moby->state = 2;
         break;
-    case 2:
+    case LIEUTENANT_STATE_UNLOCK_PLANET_AND_DISABLE:
         if (vars->phase == 2) {
             unlock_planet(6);
             jet_clear_persistent(((struct VendorMobyView *)moby)->slot);
