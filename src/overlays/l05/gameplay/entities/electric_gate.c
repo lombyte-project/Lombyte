@@ -933,16 +933,21 @@ extern float FUN_L00_0025be00(float *, float *, float, float, float, float);
 
 /* Gate: waits for its trigger moby, then rises to topZ and swings its yaw back to 0, with sounds per class. */
 void FUN_L05_00314eb0(struct Moby *m) {
+    enum {
+        GATE_INITIALIZE = 0,
+        GATE_WAIT_FOR_TRIGGER = 1,
+        GATE_RAISE_AND_SWING = 2
+    };
     struct GateVars *d = (struct GateVars *)m->pvars;
     struct Moby *t;
 
     switch (m->state) {
-    case 0:
+    case GATE_INITIALIZE:
         d->topZ = m->pos.z + 1.0f;
         m->state = 1;
         m->pos.z -= 8.0f;
         break;
-    case 1:
+    case GATE_WAIT_FOR_TRIGGER:
         t = (struct Moby *)((d->trigger << 8) + gate_mobys_314eb0);
         if (t->command == 1) {
             m->state = 2;
@@ -954,7 +959,7 @@ void FUN_L05_00314eb0(struct Moby *m) {
             m->rot.y = 0.0f;
         }
         break;
-    case 2:
+    case GATE_RAISE_AND_SWING:
         if (gate_tick_314eb0(&d->riseTimer)) {
             advance_accelerated_scalar(d->topZ, D_L05_00161E80 * frame_time_sq, D_L05_00161E84 * frame_time_sq,
                                        D_L05_00161E88 * frame_time, &m->pos.z, &d->riseSpeed);
