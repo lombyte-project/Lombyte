@@ -239,6 +239,7 @@ void codebot_update(struct Moby *moby) {
     enum {
         CODEBOT_INITIALIZE = 0,
         CODEBOT_CHECK_HERO_PROXIMITY = 1,
+        CODEBOT_RECORD_COLLECTION = 2,
         CODEBOT_REMOVE = 3
     };
     unsigned char *p;
@@ -267,7 +268,7 @@ void codebot_update(struct Moby *moby) {
                 }
             }
             break;
-        case 2:
+        case CODEBOT_RECORD_COLLECTION:
             if (D_L15_0015F5C4 != 2) {
                 queue_dialogue_message(0x426A, -1);
                 D_L15_0015F640 = scale_game_frames(0xB4);
