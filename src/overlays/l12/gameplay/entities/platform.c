@@ -3226,6 +3226,10 @@ void crane_arm_update(unsigned char *m) {
     enum {
         CRANE_ARM_ANIM_BASE = 0
     };
+    enum {
+        CRANE_ARM_ANIM_RETURN_TO_BASE_A = 4,
+        CRANE_ARM_ANIM_RETURN_TO_BASE_B = 6
+    };
     float dist = vector_distance(m + 0x10, &hero.motion.pos);
     switch (m[0x20]) {
     case CRANE_ARM_INITIALIZE:
@@ -3269,8 +3273,8 @@ void crane_arm_update(unsigned char *m) {
                 if (m[0x53] != 1)
                     blend_moby_animation(m, 1, 0, 0);
                 break;
-            case 4:
-            case 6:
+            case CRANE_ARM_ANIM_RETURN_TO_BASE_A:
+            case CRANE_ARM_ANIM_RETURN_TO_BASE_B:
                 if (m[0x53] != 0)
                     blend_moby_animation(m, 0, 0, 0);
                 break;
