@@ -2518,6 +2518,7 @@ void FUN_L14_002b5290(struct Moby *m) {
         HIT_REACTION_LETHAL = 1,
         HIT_REACTION_DESTROY = 2,
         HIT_REACTION_PLAY_HIT_ANIMATION = 3,
+        HIT_REACTION_RED_FLASH_ONLY = 9,
         HIT_REACTION_NONE = 11
     };
     unsigned char *d = m->pvars;
@@ -2556,7 +2557,7 @@ void FUN_L14_002b5290(struct Moby *m) {
         case 8:
             FUN_00212f90(m, 2, 0, 5);
             m->anim_speed = 1.75f;
-        case 9:
+        case HIT_REACTION_RED_FLASH_ONLY:
         case 10:
             d[0x67] = 0xFA;
             break;
