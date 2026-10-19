@@ -24,6 +24,10 @@ s32 FUN_002223f0(struct Menu *menu) {
     enum {
         INITIALIZE_MENU_SEQUENCE = 0,
         WAIT_FOR_INITIAL_DELAY = 1,
+        WAIT_BEFORE_SECOND_PROGRESS_PHASE = 5,
+        WAIT_BEFORE_THIRD_PROGRESS_PHASE = 8,
+        WAIT_BEFORE_FOURTH_PROGRESS_PHASE = 12,
+        WAIT_BEFORE_FIFTH_PROGRESS_PHASE = 16,
         BEGIN_FINAL_DELAY = 18,
         WAIT_FOR_FINAL_DELAY = 19
     };
@@ -62,13 +66,13 @@ s32 FUN_002223f0(struct Menu *menu) {
 
     case WAIT_FOR_INITIAL_DELAY:
 
-    case 5:
+    case WAIT_BEFORE_SECOND_PROGRESS_PHASE:
 
-    case 8:
+    case WAIT_BEFORE_THIRD_PROGRESS_PHASE:
 
-    case 12:
+    case WAIT_BEFORE_FOURTH_PROGRESS_PHASE:
 
-    case 16:
+    case WAIT_BEFORE_FIFTH_PROGRESS_PHASE:
         if (menu->unk40 == 0) {
             menu->unk54 = 0;
             menu->unk50 = *(volatile u32 *)(&menu->unk50) + 1;
