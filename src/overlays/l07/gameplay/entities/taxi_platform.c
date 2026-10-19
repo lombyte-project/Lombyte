@@ -1042,7 +1042,10 @@ void boltcrate_possibly_for_metal_detector_update(struct Moby *moby) {
         BOLTCRATE_CLEAR_HEALTH_RESPONSE = 1,
         BOLTCRATE_ALTERNATE_CLEAR_HEALTH_RESPONSE = 2,
         HIT_REACTION_START_KNOCKBACK = 3,
-        HIT_REACTION_HIT_ANIMATION_RESPONSE = 9
+        HIT_REACTION_KNOCKBACK_RESPONSE = 4,
+        HIT_REACTION_ALTERNATE_KNOCKBACK_RESPONSE = 5,
+        HIT_REACTION_HIT_ANIMATION_RESPONSE = 9,
+        HIT_REACTION_ALTERNATE_HIT_ANIMATION_RESPONSE = 10
     };
     char *data;
     char *path;
@@ -1068,13 +1071,13 @@ void boltcrate_possibly_for_metal_detector_update(struct Moby *moby) {
         switch ((unsigned)result) {
         case HIT_REACTION_NONE:
         case HIT_REACTION_START_KNOCKBACK:
-        case 4:
-        case 5:
+        case HIT_REACTION_KNOCKBACK_RESPONSE:
+        case HIT_REACTION_ALTERNATE_KNOCKBACK_RESPONSE:
         case 6:
         case 7:
         case 8:
         case HIT_REACTION_HIT_ANIMATION_RESPONSE:
-        case 10:
+        case HIT_REACTION_ALTERNATE_HIT_ANIMATION_RESPONSE:
         case HIT_REACTION_NO_ANIMATION_RESPONSE:
             break;
         case BOLTCRATE_CLEAR_HEALTH_RESPONSE:
@@ -1894,7 +1897,10 @@ void bombomatic_update(char *m) {
         BOMBOMATIC_CLEAR_HEALTH_RESPONSE = 1,
         BOMBOMATIC_ALTERNATE_CLEAR_HEALTH_RESPONSE = 2,
         HIT_REACTION_START_KNOCKBACK = 3,
-        HIT_REACTION_HIT_ANIMATION_RESPONSE = 9
+        HIT_REACTION_KNOCKBACK_RESPONSE = 4,
+        HIT_REACTION_ALTERNATE_KNOCKBACK_RESPONSE = 5,
+        HIT_REACTION_HIT_ANIMATION_RESPONSE = 9,
+        HIT_REACTION_ALTERNATE_HIT_ANIMATION_RESPONSE = 10
     };
     char *d;
     char *hit_info;
@@ -1940,9 +1946,9 @@ void bombomatic_update(char *m) {
         break;
     case HIT_REACTION_START_KNOCKBACK:
         break;
-    case 4:
+    case HIT_REACTION_KNOCKBACK_RESPONSE:
         break;
-    case 5:
+    case HIT_REACTION_ALTERNATE_KNOCKBACK_RESPONSE:
         break;
     case 6:
         break;
@@ -1952,7 +1958,7 @@ void bombomatic_update(char *m) {
         break;
     case HIT_REACTION_HIT_ANIMATION_RESPONSE:
         break;
-    case 10:
+    case HIT_REACTION_ALTERNATE_HIT_ANIMATION_RESPONSE:
         break;
     case HIT_REACTION_NO_ANIMATION_RESPONSE:
         break;
@@ -2373,6 +2379,9 @@ void FUN_L07_0030e998(char *m, char *x, float *hp) {
         SHARKIGATOR_CLEAR_HEALTH_RESPONSE = 1,
         SHARKIGATOR_ALTERNATE_CLEAR_HEALTH_RESPONSE = 2,
         HIT_REACTION_START_KNOCKBACK = 3,
+        SHARKIGATOR_KNOCKBACK_RESPONSE = 4,
+        SHARKIGATOR_ALTERNATE_KNOCKBACK_RESPONSE = 5,
+        SHARKIGATOR_START_HIT_KNOCKBACK_RECOVERY = 6,
         SHARKIGATOR_HIT_ANIMATION_RESPONSE = 9,
         SHARKIGATOR_ALTERNATE_HIT_ANIMATION_RESPONSE = 10,
         HIT_REACTION_NO_ANIMATION_RESPONSE = 11
@@ -2393,9 +2402,9 @@ void FUN_L07_0030e998(char *m, char *x, float *hp) {
             *hp = 0.0f;
             break;
         case HIT_REACTION_START_KNOCKBACK:
-        case 4:
-        case 5:
-        case 6:
+        case SHARKIGATOR_KNOCKBACK_RESPONSE:
+        case SHARKIGATOR_ALTERNATE_KNOCKBACK_RESPONSE:
+        case SHARKIGATOR_START_HIT_KNOCKBACK_RECOVERY:
         case 7:
         case 8:
             FUN_L07_0030e858(m, x + 0x70, info + 0x10);
@@ -2702,6 +2711,7 @@ extern void func_L00_002A5158_30D8E8(void *, int, int, float, float, float, floa
 void sharkigator_update(unsigned char *moby) __asm__("FUN_L07_0030f5f0");
 void sharkigator_update(unsigned char *moby) {
     enum {
+        SHARKIGATOR_INITIALIZE = 0,
         SHARKIGATOR_SWIM_IDLE = 1,
         SHARKIGATOR_SWIM_WANDER = 2,
         SHARKIGATOR_TARGET_PURSUIT = 4,
@@ -2714,7 +2724,10 @@ void sharkigator_update(unsigned char *moby) {
         SHARKIGATOR_TARGET_CONTACT_RECOIL_RECOVERY = 11,
         SHARKIGATOR_HIT_KNOCKBACK_RECOVERY = 12,
         SHARKIGATOR_HIT_ANIMATION_RECOVERY = 13,
-        SHARKIGATOR_DEATH_FALL_AND_REMOVE = 14
+        SHARKIGATOR_DEATH_FALL_AND_REMOVE = 14,
+        SHARKIGATOR_SMALL_WATER_GAP_GRAVITY_IDLE = 15,
+        SHARKIGATOR_DAMPED_GRAVITY_RECOVERY = 16,
+        SHARKIGATOR_DAMPED_RECOVERY = 17
     };
     char *data;
     struct WalkerTarget target;
@@ -2827,7 +2840,7 @@ void sharkigator_update(unsigned char *moby) {
     }
 
     switch (moby[0x20]) {
-    case 0:
+    case SHARKIGATOR_INITIALIZE:
         DebugPrint_alt(D_L07_00211838);
         goto end;
     case SHARKIGATOR_SWIM_IDLE:
@@ -3162,7 +3175,7 @@ void sharkigator_update(unsigned char *moby) {
             return;
         }
         goto end;
-    case 16:
+    case SHARKIGATOR_DAMPED_GRAVITY_RECOVERY:
         fast_vec_scale_c(data + 0xD0, data + 0xD0, frame_scale * (0.95f - 1.0f) + 1.0f);
         F(data, 0xD8) -= frame_time * 9.8f;
         FUN_L00_00258ad0((int)moby, (int)(data + 0xD0), 0x400, 0x10, 1.0f, 0.0f);
@@ -3170,7 +3183,7 @@ void sharkigator_update(unsigned char *moby) {
             ((void (*)(char *, char *))FUN_L07_0030ec58_c)((char *)moby, data);
         }
         goto end;
-    case 15:
+    case SHARKIGATOR_SMALL_WATER_GAP_GRAVITY_IDLE:
         fast_vec_scale_c(data + 0xD0, data + 0xD0, frame_scale * (0.95f - 1.0f) + 1.0f);
         F(data, 0xD8) -= frame_time * 9.8f;
         FUN_L00_00258ad0((int)moby, (int)(data + 0xD0), 0x400, 0x10, 1.0f, 0.0f);
@@ -3181,7 +3194,7 @@ void sharkigator_update(unsigned char *moby) {
             moby[0x20] = next_state;
         }
         goto end;
-    case 17:
+    case SHARKIGATOR_DAMPED_RECOVERY:
         fast_vec_scale_c(data + 0xD0, data + 0xD0, frame_scale * (0.95f - 1.0f) + 1.0f);
         if (moby[0x70] & 2) {
             ((void (*)(char *, char *))FUN_L07_0030ec58_c)((char *)moby, data);

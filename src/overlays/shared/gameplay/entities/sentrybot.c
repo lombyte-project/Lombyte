@@ -101,7 +101,11 @@ void sentrybot_update(unsigned char *moby) {
         SENTRYBOT_TURN_AROUND = 8,
         SENTRYBOT_RETURN_HOME = 9,
         SENTRYBOT_PATROL_MOVE_FAST = 13,
-        SENTRYBOT_RETURN_HOME_FAST = 20
+        SENTRYBOT_APPROACH_LINKED_MOBY = 14,
+        SENTRYBOT_ACTIVATE_LINKED_MOBY = 15,
+        SENTRYBOT_RETURN_HOME_FAST = 20,
+        SENTRYBOT_RECOVERABLE_KNOCKBACK = 21,
+        SENTRYBOT_DEATH_KNOCKBACK = 23
     };
     enum {
         SENTRYBOT_PATROL_MOVE = 4
@@ -577,7 +581,7 @@ void sentrybot_update(unsigned char *moby) {
             }
         }
         break;
-    case 14:
+    case SENTRYBOT_APPROACH_LINKED_MOBY:
         FUN_L15_002cbba0((unsigned char *)(D_L15_0015FFD8_m + (*(int *)(data + 0x128) << 8)));
         subtract_vector_xyz(va, (char *)(D_L15_0015FFD8_m + (*(int *)(data + 0x128) << 8)) + 0x10,
                             moby + 0x10);
@@ -589,7 +593,7 @@ void sentrybot_update(unsigned char *moby) {
                 blend_moby_animation(moby, 9, 0, scale_game_frames(10));
         }
         break;
-    case 15:
+    case SENTRYBOT_ACTIVATE_LINKED_MOBY:
         if (moby[0x52] == moby[0x53] && compute_interpolated_record_value(moby) >= 12.0f) {
             FUN_L15_002cbac0((char *)(D_L15_0015FFD8_m + (*(int *)(data + 0x128) << 8)), 0xB4);
         }
@@ -804,7 +808,7 @@ void sentrybot_update(unsigned char *moby) {
             }
         }
         break;
-    case 21: {
+    case SENTRYBOT_RECOVERABLE_KNOCKBACK: {
         int r = mine_fall(moby, data + 0x70);
         if (r & 0x40) {
             probe_ground_height(moby + 0x10, 0, 0.5f);
@@ -849,7 +853,7 @@ void sentrybot_update(unsigned char *moby) {
         }
         break;
     }
-    case 23:
+    case SENTRYBOT_DEATH_KNOCKBACK:
         if (mine_fall(moby, data + 0x70) & 0x160) {
             if (*(int *)(data + 0x12C) != -1) {
                 FUN_L15_002a35d8(D_L15_0015FFD8_m + (*(int *)(data + 0x12C) << 8));
@@ -1297,13 +1301,16 @@ extern int FUN_L00_0025ff38(void *, void *, float, int, int, void *, int);
 
 void FUN_L15_0029a570(void *object, int flag) {
     enum {
+        SENTRYBOT_NO_KNOCKBACK_SETUP_RESPONSE = 0,
         LETHAL_HIT_RESPONSE = 1,
         DEATH_KNOCKBACK_HIT_RESPONSE = 2,
         NONLETHAL_KNOCKBACK_HIT_RESPONSE = 3,
         NONLETHAL_ARC_HIT_RESPONSE = 4,
         NONLETHAL_ARC_KNOCKBACK_HIT_RESPONSE = 5,
         NONLETHAL_FALL_HIT_RESPONSE = 6,
-        SENTRYBOT_RECOVERABLE_KNOCKBACK_RESPONSE = 7
+        SENTRYBOT_RECOVERABLE_KNOCKBACK_RESPONSE = 7,
+        SENTRYBOT_RECOVERABLE_ARC_KNOCKBACK_RESPONSE = 8,
+        SENTRYBOT_NO_KNOCKBACK_START_RESPONSE = 11
     };
     unsigned char *moby = object;
     unsigned char *data = *(unsigned char **)(moby + 0x78);
@@ -1342,8 +1349,8 @@ void FUN_L15_0029a570(void *object, int flag) {
         *(float *)(data + 0x80) = speed;
         data[0xAD] = 0;
         switch (code) {
-        case 0:
-        case 11:
+        case SENTRYBOT_NO_KNOCKBACK_SETUP_RESPONSE:
+        case SENTRYBOT_NO_KNOCKBACK_START_RESPONSE:
             break;
         case 9:
         case 10:
@@ -1354,7 +1361,7 @@ void FUN_L15_0029a570(void *object, int flag) {
         case NONLETHAL_ARC_KNOCKBACK_HIT_RESPONSE:
         case NONLETHAL_FALL_HIT_RESPONSE:
         case SENTRYBOT_RECOVERABLE_KNOCKBACK_RESPONSE:
-        case 8:
+        case SENTRYBOT_RECOVERABLE_ARC_KNOCKBACK_RESPONSE:
             {
                 float step;
                 float step_sq;
@@ -1941,13 +1948,13 @@ void FUN_L15_0029d6c0(M_29E8A0 *m) {
             return;
         }
         if (m->bc != 0) {
-            float v100[4];
+            float burst_position_or_velocity[4];
             float dist;
             char *cam;
             int i, j;
             int r = collect_mobies_in_sphere(m->pos, 2.0f, 0x10, m, 0);
-            *(u128_29E8A0 *)v100 = *(u128_29E8A0 *)m->pos;
-            FUN_L00_0025a9f8(m, v100, ((char * *)D_L15_00178500), r, (int)owner, 0x810000, 3, 1, 3.0f, 1.0f, 1.0f);
+            *(u128_29E8A0 *)burst_position_or_velocity = *(u128_29E8A0 *)m->pos;
+            FUN_L00_0025a9f8(m, burst_position_or_velocity, ((char * *)D_L15_00178500), r, (int)owner, 0x810000, 3, 1, 3.0f, 1.0f, 1.0f);
             {
             float K[16];
             float K2[16];
@@ -1981,16 +1988,16 @@ void FUN_L15_0029d6c0(M_29E8A0 *m) {
                     FUN_L00_001ffe20(M2, M2, M1);
                     set_identity_matrix(M1);
                     FUN_L00_001ffe20(M3, M2, M1);
-                    transform_vector_c(v100, vB0, M3);
-                    fast_vec_normalize(v100, v100, random_float_between(8.5f, 16.5f) * D_0015ED6C);
+                    transform_vector_c(burst_position_or_velocity, vB0, M3);
+                    fast_vec_normalize(burst_position_or_velocity, burst_position_or_velocity, random_float_between(8.5f, 16.5f) * D_0015ED6C);
                 } else {
                     float sp = random_float_between(8.5f, 16.5f) * D_0015ED6C;
                     float random_yaw = random_angle_radians();
-                    build_spherical_offset_c(v100, sp, random_yaw, random_angle_radians());
+                    build_spherical_offset_c(burst_position_or_velocity, sp, random_yaw, random_angle_radians());
                 }
-                v100[2] = v100[2] + D_0015ED6C * 5.0f;
-                add_vector_xyz(v100, v100, burst_drift_velocity);
-                FUN_L00_0026bb70_c(m->pos, v100, 0x4F007FFF, 0x1F00007F, 40000.0f,
+                burst_position_or_velocity[2] = burst_position_or_velocity[2] + D_0015ED6C * 5.0f;
+                add_vector_xyz(burst_position_or_velocity, burst_position_or_velocity, burst_drift_velocity);
+                FUN_L00_0026bb70_c(m->pos, burst_position_or_velocity, 0x4F007FFF, 0x1F00007F, 40000.0f,
                     FUN_L00_00257b90(scale_game_frames(0x3C), scale_game_frames(0x78)), 1, -1, -1);
             }
             {
@@ -2000,17 +2007,17 @@ void FUN_L15_0029d6c0(M_29E8A0 *m) {
                     r4[0] = random_float_between(-1.0f, 1.0f);
                     r4[1] = random_float_between(-1.0f, 1.0f);
                     r4[2] = random_float_between(-1.0f, 1.0f);
-                    *(u128_29E8A0 *)v100 = *(u128_29E8A0 *)r4;
+                    *(u128_29E8A0 *)burst_position_or_velocity = *(u128_29E8A0 *)r4;
                 }
             }
             subtract_vector_xyz_c2(effect_bias_velocity, D_L15_001673C0, m->pos);
             dist = fast_vec_length(effect_bias_velocity);
             effect_bias_velocity[2] = effect_bias_velocity[2] + dist * 0.5f;
-            fast_vec_normalize(v100, v100, dist / 5.0f * D_0015ED6C);
+            fast_vec_normalize(burst_position_or_velocity, burst_position_or_velocity, dist / 5.0f * D_0015ED6C);
             fast_vec_normalize(effect_bias_velocity, effect_bias_velocity, (dist + dist) * D_0015ED6C);
-            add_vector_xyz(v100, v100, effect_bias_velocity);
-            clamp_vector_length(v100, v100, D_0015ED6C * 10.0f);
-            FUN_L00_002af450((char *)m->pos, (char *)v100, FUN_L00_00257b90(scale_game_frames(0x3C), scale_game_frames(0x5A)), 0, 0);
+            add_vector_xyz(burst_position_or_velocity, burst_position_or_velocity, effect_bias_velocity);
+            clamp_vector_length(burst_position_or_velocity, burst_position_or_velocity, D_0015ED6C * 10.0f);
+            FUN_L00_002af450((char *)m->pos, (char *)burst_position_or_velocity, FUN_L00_00257b90(scale_game_frames(0x3C), scale_game_frames(0x5A)), 0, 0);
             {
                 int n;
                 float under;

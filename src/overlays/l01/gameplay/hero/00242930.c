@@ -130,7 +130,11 @@ extern int func_001F9908_r(int *) __asm__("FUN_001f9740");
 int r1_repeat_timer __asm__("D_L01_0015F678") = 0;
 void FUN_L01_00242930(void) {
     enum {
+        HERO_STATE_LATERAL_MOVE_HOLD = 25,
+        HERO_STATE_LATERAL_MOVE_POSITIVE_YAW = 26,
+        HERO_STATE_LATERAL_MOVE_NEGATIVE_YAW = 27,
         HERO_STATE_TARGET_POSE_APPROACH = 101,
+        HERO_STATE_TARGET_POSE_ANIMATION_WAIT = 102,
         HERO_STATE_TARGET_POSE_HOLD = 103,
         HERO_STATE_DEATH_PLANE_FALL = 119
     };
@@ -882,7 +886,7 @@ void FUN_L01_00242930(void) {
                     }
                     FUN_L00_00228c18();
                     break;
-                case 102:
+                case HERO_STATE_TARGET_POSE_ANIMATION_WAIT:
                     if (hero.unkA98 & 2) {
                         hero_set_state(0x65, 1);
                     }
@@ -1024,7 +1028,7 @@ void FUN_L01_00242930(void) {
                         hero_set_state(0x19, 0);
                     }
                     break;
-                case 25:
+                case HERO_STATE_LATERAL_MOVE_HOLD:
                     if ((hero.unkA98 & 2) && ((unsigned char *)hero.moby)[0x53] == 0x20) {
                         set_hero_animation(0x21, 0, scale_game_frames(6));
                     }
@@ -1077,8 +1081,8 @@ void FUN_L01_00242930(void) {
                         }
                     }
                     break;
-                case 26:
-                case 27: {
+                case HERO_STATE_LATERAL_MOVE_POSITIVE_YAW:
+                case HERO_STATE_LATERAL_MOVE_NEGATIVE_YAW: {
                     float ang;
 
                     qcopy(v0, hero.motion.pos.f);

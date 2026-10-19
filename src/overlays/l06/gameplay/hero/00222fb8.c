@@ -395,7 +395,8 @@ extern struct Hero hero_lui __asm__("D_0013F350") __attribute__((section(".data"
 void FUN_L06_00229650(void) {
     enum {
         GRAVITY_MODE_WORLD_DOWN = 0,
-        GRAVITY_MODE_OPPOSITE_GROUND_NORMAL = 1
+        GRAVITY_MODE_OPPOSITE_GROUND_NORMAL = 1,
+        GRAVITY_MODE_TOWARD_REFERENCE_POINT = 2
     };
     V collision_ray_end, ground_ray_start, ground_offset_or_angles, surface_probe_start, unused_surface_probe_point, hit_surface_angles, normalized_hit_normal;
     f32 f;
@@ -511,7 +512,7 @@ d1:
         qcopy((u8 *)&hero_lui + 0x290, ((u8 *)&hero_lui + 0x290) - 0x20);
         FUN_001f9a68_c(((u8 *)&hero_lui + 0x290), ((u8 *)&hero_lui + 0x290), -1.0f);
         break;
-    case 2:
+    case GRAVITY_MODE_TOWARD_REFERENCE_POINT:
         subtract_vector_xyz(((u8 *)&hero_lui + 0x290), ((u8 *)&hero_lui + 0x290) - 0x1E0, ((u8 *)&hero_lui + 0x290) - 0x210);
         FUN_001f9bf8_c(((u8 *)&hero_lui + 0x290), ((u8 *)&hero_lui + 0x290), 1.0f);
         break;
@@ -1539,7 +1540,7 @@ void FUN_L06_0022e020(void) {
         }
         break;
     }
-    case 0x15: {
+    case HERO_STATE_CROUCH_SWING: {
         s32 jumping;
         hero.target_speed = 0.0f;
         if (hero.unkA9C != 0 || hero.anim_frame < D_L06_0017C3A8[hero.attack_record].f18) {
@@ -1690,7 +1691,7 @@ void FUN_L06_0022e020(void) {
         break;
     }
     case 0x21:
-    case 0x7A:
+    case HERO_STATE_WALL_BONK:
         approach_value(&hero.ground_speed, 0.0f, frame_time_sq * 24.0f);
         hero.motion.velocity.f[0] = fast_cos(hero.unkA68) * hero.ground_speed;
         hero.motion.velocity.f[1] = fast_sin(hero.unkA68) * hero.ground_speed;
@@ -2373,7 +2374,7 @@ void FUN_L06_0022e020(void) {
         FUN_L00_0020b5b8();
         break;
     }
-    case 7:
+    case HERO_STATE_JUMP:
     case HERO_STATE_RUN_JUMP:
     case HERO_STATE_PACK_JUMP:
     case HERO_STATE_HIGH_JUMP:

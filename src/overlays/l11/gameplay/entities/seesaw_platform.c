@@ -1642,6 +1642,7 @@ void FUN_L11_00310698(struct Moby *m) {
         HIT_REACTION_DEATH = 1,
         HIT_REACTION_DEATH_KNOCKBACK = 2,
         HIT_REACTION_KNOCKBACK = 3,
+        HIT_REACTION_HURT_WITHOUT_KNOCKBACK = 9,
         HIT_REACTION_NO_RESPONSE = 11
     };
     struct PokiPathVars *pv = (struct PokiPathVars *)m->pvars;
@@ -1681,7 +1682,7 @@ void FUN_L11_00310698(struct Moby *m) {
         case HIT_REACTION_NONE:
         case HIT_REACTION_NO_RESPONSE:
             break;
-        case 9:
+        case HIT_REACTION_HURT_WITHOUT_KNOCKBACK:
         case 10:
             pv->unk67 = 0xFA;
             break;
@@ -3198,6 +3199,7 @@ void puffoid_update(struct Moby *moby) {
         PUFFOID_STATE_RETURN_HOME = 6,
         PUFFOID_STATE_JUMP_HOME = 7,
         PUFFOID_STATE_KNOCKBACK = 9,
+        PUFFOID_STATE_REPOSITION_AND_FACE_TARGET = 10,
         PUFFOID_STATE_DEATH_KNOCKBACK = 11,
         PUFFOID_STATE_WAIT_FOR_CARRIER_JUMP = 12,
         PUFFOID_STATE_CARRIER_JUMP = 13,
@@ -3206,9 +3208,11 @@ void puffoid_update(struct Moby *moby) {
         PUFFOID_STATE_CARRIER_SPRAY_ATTACK = 16,
         PUFFOID_STATE_CARRIER_KNOCKBACK = 17,
         PUFFOID_STATE_CARRIER_DEATH_KNOCKBACK = 18,
-        PUFFOID_STATE_FOLLOW_PATH = 19
+        PUFFOID_STATE_FOLLOW_PATH = 19,
+        PUFFOID_STATE_WAIT_TO_RESUME_COMMAND = 20
     };
     enum {
+        PUFFOID_PATH_ANIM_TRAVEL = 4,
         PUFFOID_PATH_ANIM_ENTER_SPRAY_ATTACK = 5,
         PUFFOID_PATH_ANIM_SPRAY_ATTACK = 6,
         PUFFOID_PATH_ANIM_EXIT_SPRAY_ATTACK = 7
@@ -3360,7 +3364,7 @@ void puffoid_update(struct Moby *moby) {
             moby->state = 6;
         }
         break;
-    case 10:
+    case PUFFOID_STATE_REPOSITION_AND_FACE_TARGET:
         sub_vector_4318(pos, d->unk1D0, &moby->pos);
         pos[2] = 0.0f;
         normalize_4318(pos, pos, 2.5f);
@@ -3610,7 +3614,7 @@ void puffoid_update(struct Moby *moby) {
         if (moby->anim_time == 0.0f) {
             dist = vector_distance_4318(&moby->pos, D_0013F3D0_4318);
             switch (moby->prev_seq) {
-            case 4:
+            case PUFFOID_PATH_ANIM_TRAVEL:
                 if (dist < 6.0f) {
                     set_anim_4318(moby, 5, 0, frames_4318(10));
                 }
@@ -3635,7 +3639,7 @@ void puffoid_update(struct Moby *moby) {
         }
         break;
     }
-    case 20:
+    case PUFFOID_STATE_WAIT_TO_RESUME_COMMAND:
         if (d->unkC8 != 0 && FUN_L00_002dc9f0_4318(moby, d->unk120)) {
             moby->state = moby->command;
             d->unkC8 = 0;

@@ -379,6 +379,8 @@ void FUN_L09_002c6230(Moby *moby) {
     enum {
         RESPONSE_NONE = 0,
         RESPONSE_FATAL_KNOCKBACK = 1,
+        RESPONSE_HURT_KNOCKBACK = 3,
+        RESPONSE_REACTION_ONLY = 9,
         RESPONSE_NO_REACTION = 11
     };
     char hit_pos[16];
@@ -424,11 +426,11 @@ void FUN_L09_002c6230(Moby *moby) {
         func_0022ED80_2C73D0(8, 0, moby);
 
         switch (response) {
-        case 9:
+        case RESPONSE_REACTION_ONLY:
         case 10:
             data->reactTime = 0xFA;
             break;
-        case 3:
+        case RESPONSE_HURT_KNOCKBACK:
         case 4:
         case 5:
         case 6:
@@ -694,6 +696,7 @@ void FUN_L09_002e27d8(Moby *moby) {
         GROUND_ENEMY_STATE_MELEE_ATTACK = 4,
         GROUND_ENEMY_STATE_RETURN_HOME = 5,
         GROUND_ENEMY_STATE_HURT_KNOCKBACK = 6,
+        GROUND_ENEMY_STATE_RECOVER_TO_IDLE = 7,
         GROUND_ENEMY_STATE_HURT_RECOVERY = 9,
         GROUND_ENEMY_STATE_BLOCKED_RETURN_HOME = 12,
         GROUND_ENEMY_STATE_LEASHED_FORWARD_WALK = 13,
@@ -953,7 +956,7 @@ void FUN_L09_002e27d8(Moby *moby) {
             return;
         }
         break;
-    case 7:
+    case GROUND_ENEMY_STATE_RECOVER_TO_IDLE:
         if (recover_2E39E0(moby, data->motion)) {
             moby->state = 1;
             if (moby->prev_seq != 2) animate_2E39E0(moby, 2, 0, 0);

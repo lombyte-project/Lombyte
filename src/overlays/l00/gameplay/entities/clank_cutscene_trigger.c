@@ -42,7 +42,10 @@ void FUN_L00_0023d968(void) {
         LEVEL_WITH_TWO_ROTATING_SKY_SHELLS = 3,
         LEVEL_WITH_FAST_AND_SLOW_ROTATING_SKY_SHELLS = 4,
         LEVEL_WITH_MODULO_50000_SKY_SHELL_ROTATION = 5,
-        LEVEL_WITH_THREE_SKY_SHELLS_AND_PARTICLES = 13
+        LEVEL_WITH_THREE_SKY_SHELLS_AND_PARTICLES = 13,
+        LEVEL_WITH_MODULO_50000_AND_100000_SKY_SHELL_ROTATIONS = 14,
+        LEVEL_WITH_TWO_SKY_SHELLS_AND_PARTICLES = 15,
+        LEVEL_WITH_MODULO_10000_SKY_SHELL_ROTATIONS = 19
     };
     setup_sky_gif_paging();
     switch (current_level_index) {
@@ -88,10 +91,10 @@ void FUN_L00_0023d968(void) {
     case LEVEL_WITH_THREE_SKY_SHELLS_AND_PARTICLES:
         FUN_L00_0028a920();
         break;
-    case 14:
+    case LEVEL_WITH_MODULO_50000_AND_100000_SKY_SHELL_ROTATIONS:
         FUN_L00_0028a998();
         break;
-    case 15:
+    case LEVEL_WITH_TWO_SKY_SHELLS_AND_PARTICLES:
         FUN_L00_0028aa98();
         break;
     case 16:
@@ -103,7 +106,7 @@ void FUN_L00_0023d968(void) {
     case 18:
         FUN_L00_0028b080();
         break;
-    case 19:
+    case LEVEL_WITH_MODULO_10000_SKY_SHELL_ROTATIONS:
         FUN_L00_0028b1a0();
         break;
     default:

@@ -2398,10 +2398,13 @@ void FUN_L06_002f91e8(Moby *moby)
         REACTION_SKIP_RESPONSE = 0,
         REACTION_DEATH = 1,
         HIT_RESPONSE_DEATH_SEQUENCE = 2,
+        HIT_RESPONSE_NONLETHAL_REACTION = 3,
+        HIT_RESPONSE_NONLETHAL_ANIMATION_REACTION = 4,
         HIT_RESPONSE_NONLETHAL_FALLBACK = 5,
         REACTION_NO_RESPONSE = 11
     };
     enum {
+        SNAPPER_APPROACH_TARGET = 8,
         SNAPPER_RETURN_HOME = 12,
         SNAPPER_RETREAT_FROM_TARGET = 13
     };
@@ -2439,8 +2442,8 @@ void FUN_L06_002f91e8(Moby *moby)
         switch (reaction) {
         case REACTION_SKIP_RESPONSE:
             break;
-        case 3:
-        case 4:
+        case HIT_RESPONSE_NONLETHAL_REACTION:
+        case HIT_RESPONSE_NONLETHAL_ANIMATION_REACTION:
         case HIT_RESPONSE_NONLETHAL_FALLBACK:
         case 6:
         case 7:
@@ -2476,7 +2479,7 @@ void FUN_L06_002f91e8(Moby *moby)
     moby->hit_slot = 0xFF;
     func_L00_0025E590_2FA618(moby, data->f60);
     switch (moby->state) {
-    case 8:
+    case SNAPPER_APPROACH_TARGET:
     case 9:
     case SNAPPER_RETURN_HOME:
     case SNAPPER_RETREAT_FROM_TARGET:
@@ -3016,10 +3019,13 @@ void FUN_L06_002fa9c0(char *moby) {
         HIT_RESPONSE_SKIP_REACTION = 0,
         HIT_RESPONSE_DEATH = 1,
         HIT_RESPONSE_DEATH_SEQUENCE = 2,
+        HIT_RESPONSE_NONLETHAL_REACTION = 3,
+        HIT_RESPONSE_NONLETHAL_ANIMATION_REACTION = 4,
         HIT_RESPONSE_NONLETHAL_FALLBACK = 5,
         HIT_RESPONSE_NO_REACTION = 11
     };
     enum {
+        DAMAGE_AMPLIFYING_SOURCE_CLASS = 0x79,
         AMPLIFIED_DAMAGE_SOURCE_CLASS = 0xB0,
         REDUCED_DAMAGE_SOURCE_CLASS = 0x131
     };
@@ -3048,7 +3054,7 @@ void FUN_L06_002fa9c0(char *moby) {
             case REDUCED_DAMAGE_SOURCE_CLASS:
                 dmg *= 0.666f;
                 break;
-            case AMPLIFIED_DAMAGE_SOURCE_CLASS: case 0x79: case 0x33B:
+            case AMPLIFIED_DAMAGE_SOURCE_CLASS: case DAMAGE_AMPLIFYING_SOURCE_CLASS: case 0x33B:
                 dmg *= 1.5f;
                 break;
             }
@@ -3080,7 +3086,7 @@ start_recovery:
         switch (kind) {
         case HIT_RESPONSE_SKIP_REACTION: case HIT_RESPONSE_NO_REACTION: default:
             goto hit_response_done;
-        case 3: case 4: case HIT_RESPONSE_NONLETHAL_FALLBACK: case 6: case 7: case 8: case 9: case 10:
+        case HIT_RESPONSE_NONLETHAL_REACTION: case HIT_RESPONSE_NONLETHAL_ANIMATION_REACTION: case HIT_RESPONSE_NONLETHAL_FALLBACK: case 6: case 7: case 8: case 9: case 10:
             *(unsigned char *)(data + 0x67) = 200;
             break;
         case HIT_RESPONSE_DEATH:

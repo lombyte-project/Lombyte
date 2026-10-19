@@ -1127,6 +1127,7 @@ void extermibot_update(unsigned char *m) {
         EXTERMIBOT_RECOVER_AFTER_STRIKE = 9,
         EXTERMIBOT_RETURN_TO_START = 10,
         EXTERMIBOT_NONLETHAL_KNOCKBACK = 11,
+        EXTERMIBOT_WAIT_FOR_ANIMATION_BEFORE_IDLE = 13,
         EXTERMIBOT_DEATH_KNOCKBACK = 14,
         EXTERMIBOT_WAIT_FOR_ACTIVATION_TRIGGER = 15
     };
@@ -1465,7 +1466,7 @@ void extermibot_update(unsigned char *m) {
             return;
         }
         break;
-    case 13:
+    case EXTERMIBOT_WAIT_FOR_ANIMATION_BEFORE_IDLE:
         if (m[0x70] & 2) {
             m[0x20] = 1;
             if (m[0x53] != 0) blend_moby_animation(m, 0, 0, scale_game_frames(10));
@@ -1631,6 +1632,9 @@ void FUN_L05_00303390(Moby *m) {
         EXTERMIBOT_HIT_LETHAL = 1,
         EXTERMIBOT_HIT_DEATH_KNOCKBACK = 2,
         EXTERMIBOT_HIT_NONLETHAL_KNOCKBACK = 3,
+        EXTERMIBOT_HIT_KNOCKBACK_AND_FLASH = 4,
+        EXTERMIBOT_HIT_FLASH = 9,
+        EXTERMIBOT_HIT_FLASH_ONLY = 10,
         EXTERMIBOT_HIT_NO_REACTION = 11
     };
     Vec_3047E8 working_vector;
@@ -1682,12 +1686,12 @@ void FUN_L05_00303390(Moby *m) {
         case EXTERMIBOT_HIT_NO_RESPONSE:
         case EXTERMIBOT_HIT_NO_REACTION:
             break;
-        case 9:
-        case 10:
+        case EXTERMIBOT_HIT_FLASH:
+        case EXTERMIBOT_HIT_FLASH_ONLY:
             d->b67 = 0xFA;
             break;
         case EXTERMIBOT_HIT_NONLETHAL_KNOCKBACK:
-        case 4:
+        case EXTERMIBOT_HIT_KNOCKBACK_AND_FLASH:
         case 5:
         case 6:
         case 7:

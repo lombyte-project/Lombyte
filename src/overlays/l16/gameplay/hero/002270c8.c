@@ -155,7 +155,10 @@ void FUN_L16_002270c8(void) {
     enum {
         HERO_STATE_GRIND_JUMP = 41,
         HERO_STATE_GRIND_RAIL_TRANSFER = 42,
-        HERO_STATE_WATER_DEATH = 106
+        HERO_STATE_GRIND_ATTACK = 43,
+        HERO_STATE_GRIND_COLLISION_RECOVERY = 66,
+        HERO_STATE_WATER_DEATH = 106,
+        HERO_STATE_DEATH_FALL = 119
     };
     unsigned char *moby;
     int prevSub;
@@ -1188,8 +1191,8 @@ void FUN_L16_002270c8(void) {
                 case HERO_STATE_GRIND:
                 case HERO_STATE_GRIND_JUMP:
                 case HERO_STATE_GRIND_RAIL_TRANSFER:
-                case 43:
-                case 66:
+                case HERO_STATE_GRIND_ATTACK:
+                case HERO_STATE_GRIND_COLLISION_RECOVERY:
                     if (hero.state.current == 0x42) {
                         hero.unk5BE = 0;
                     } else {
@@ -1712,7 +1715,7 @@ void FUN_L16_002270c8(void) {
                         hero_set_state(HERO_STATE_GRIND, 1);
                     }
                     break;
-                case 119:
+                case HERO_STATE_DEATH_FALL:
                     if ((current_level_index == 3 && 5.0f > hero.motion.pos.f[2]) ||
                         (current_level_index == 6 && 50.0f > hero.motion.pos.f[2]) ||
                         (current_level_index == 0x10 && (77.0f > hero.motion.pos.f[2] ||

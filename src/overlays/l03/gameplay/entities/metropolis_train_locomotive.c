@@ -977,7 +977,8 @@ void FUN_L03_0029c9d0(struct Moby *moby) {
         MOBY_CLASS_TWO_JOINT_PARTICLE_EMITTER = 0x74,
         MOBY_CLASS_JOINT_ZERO_TEN_PARTICLE_EMITTER = 0x75,
         MOBY_CLASS_FIFTEEN_PARTICLE_BURST_EMITTER = 0x76,
-        MOBY_CLASS_DEFAULT_COLOR_CHILD_EFFECT_EMITTER = 0x77
+        MOBY_CLASS_DEFAULT_COLOR_CHILD_EFFECT_EMITTER = 0x77,
+        MOBY_CLASS_GRAY_JOINT_ZERO_TEN_PARTICLE_EMITTER = 0x78
     };
     char *data = (char *)moby->pvars;
     if (moby->state == 0) {
@@ -994,7 +995,7 @@ void FUN_L03_0029c9d0(struct Moby *moby) {
     }
     switch (moby->oclass) {
     case MOBY_CLASS_JOINT_ZERO_TEN_PARTICLE_EMITTER:
-    case 0x78:
+    case MOBY_CLASS_GRAY_JOINT_ZERO_TEN_PARTICLE_EMITTER:
         *(int *)(data + 0x150) = allocate_voice_for_target_entry(0, 4, (int)moby);
         break;
     case MOBY_CLASS_ALTERNATE_COLOR_CHILD_EFFECT_EMITTER:
@@ -1025,7 +1026,8 @@ void FUN_L03_0029caa8(char *moby, void *vel_in, int quiet) {
         MOBY_CLASS_JOINT_ZERO_TEN_PARTICLE_EMITTER = 0x75,
         MOBY_CLASS_FIFTEEN_PARTICLE_BURST_EMITTER = 0x76,
         MOBY_CLASS_DEFAULT_COLOR_CHILD_EFFECT_EMITTER = 0x77,
-        MOBY_CLASS_GRAY_JOINT_ZERO_TEN_PARTICLE_EMITTER = 0x78
+        MOBY_CLASS_GRAY_JOINT_ZERO_TEN_PARTICLE_EMITTER = 0x78,
+        MOBY_CLASS_TEN_GRAY_PARTICLE_BURST_EMITTER = 0x84
     };
     float vel[4];
     float *vp;
@@ -1063,7 +1065,7 @@ void FUN_L03_0029caa8(char *moby, void *vel_in, int quiet) {
     case MOBY_CLASS_TEN_PARTICLE_BURST_EMITTER:
     case MOBY_CLASS_JOINT_ZERO_TEN_PARTICLE_EMITTER:
     case MOBY_CLASS_GRAY_JOINT_ZERO_TEN_PARTICLE_EMITTER:
-    case 0x84:
+    case MOBY_CLASS_TEN_GRAY_PARTICLE_BURST_EMITTER:
         if (quiet == 0 && FUN_L00_001fefc8(data + 0x12E)) {
             if (fast_vec_length(vp) < frame_time * 40.0f && FUN_001f9b48(moby + 0x10, D_L03_00166EC0) < 75.0f) {
                 scale_vector_xyz(vp, vp, 0.7f);
@@ -2328,6 +2330,10 @@ void FUN_L03_002c6fd0(Moby2C8398 *m) {
         ENEMY_HIDDEN_AT_PATH_START = 14,
         ENEMY_RESPAWN_AT_PATH_START = 15
     };
+    enum {
+        ENEMY_ANIM_LOCOMOTION = 1,
+        ENEMY_ANIM_HEADING_TURN = 9
+    };
     Tgt2C8398 tgt;
     Data2C8398 *d = m->data;
     float dist;
@@ -2933,7 +2939,7 @@ void FUN_L03_002c6fd0(Moby2C8398 *m) {
     }
     case ENEMY_TURN_TO_HEADING:
         switch (m->anim) {
-        case 1:
+        case ENEMY_ANIM_LOCOMOTION:
             FUN_001f9c48_cf((char *)m, &d->f258, d->f28C, 0.09f, 0.27f, 0.15f);
             if (FUN_L03_002c9ca0_cf(m->rot[2], d->f28C) < 0.034906585f) {
                 d->b263 = FUN_L03_002c6d98_cf(0x3C);
@@ -2955,7 +2961,7 @@ void FUN_L03_002c6fd0(Moby2C8398 *m) {
                 }
             }
             break;
-        case 9:
+        case ENEMY_ANIM_HEADING_TURN:
             FUN_001f9c48_cf((char *)m, &d->f258, d->f28C, 0.01f, 0.3f, 0.2f);
             if (FUN_L03_002c9ca0_cf(m->rot[2], d->f28C) < 0.034906585f) {
                 d->b263 = FUN_L03_002c6d98_cf(0x3C);
@@ -3191,6 +3197,8 @@ void FUN_L03_002c95a8(Moby2C8398 *m) {
         ALTERNATE_ANIMATION_KNOCKBACK_RESPONSE = 4,
         ANIMATION_SIX_KNOCKBACK_RESPONSE = 5,
         TURN_AWAY_KNOCKBACK_RESPONSE = 6,
+        ANIMATION_FIVE_KNOCKBACK_RESPONSE = 7,
+        ANIMATION_FIVE_KNOCKBACK_WITHOUT_FACING_CHANGE_RESPONSE = 8,
         NO_KNOCKBACK_HIT_RESPONSE = 12,
         ZERO_DAMAGE_NO_KNOCKBACK_RESPONSE = 13
     };
@@ -3259,8 +3267,8 @@ void FUN_L03_002c95a8(Moby2C8398 *m) {
             allocate_voice_for_target_entry(1, 0, (int)m);
             break;
         case KNOCKBACK_WITHOUT_FACING_CHANGE_RESPONSE:
-        case 7:
-        case 8:
+        case ANIMATION_FIVE_KNOCKBACK_RESPONSE:
+        case ANIMATION_FIVE_KNOCKBACK_WITHOUT_FACING_CHANGE_RESPONSE:
             d->b67 = 0x78;
             d->q.f10 = frame_time_sq * 80.0f;
             d->q.f14 = D_L03_001618E8 * frame_time_sq;

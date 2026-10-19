@@ -538,7 +538,10 @@ extern void FUN_002ac910_2d09b8(void *, void *, void *, f32, s32, s32, s32, s32,
 void break_crate(M2d1428 *moby, s32 hit, s32 source) __asm__("FUN_L00_002d09b8");
 void break_crate(M2d1428 *moby, s32 hit, s32 source) {
     enum {
+        CRATE_VARIANT_DAMAGE_FLAG_GATED = 2,
         CRATE_VARIANT_IMPACT_TRIGGERED = 5,
+        CRATE_VARIANT_INITIAL_DAMAGE_STAGE = 7,
+        CRATE_VARIANT_SECOND_DAMAGE_STAGE = 8,
         CRATE_VARIANT_PENULTIMATE_DAMAGE_STAGE = 9,
         CRATE_VARIANT_FINAL_DAMAGE_STAGE = 10
     };
@@ -591,7 +594,7 @@ void break_crate(M2d1428 *moby, s32 hit, s32 source) {
         switch ((s16)((u16)moby->oclass - 500)) {
         case 1: kind = 0x15C; break;
         case 3: kind = 0x15F; break;
-        case 2:
+        case CRATE_VARIANT_DAMAGE_FLAG_GATED:
             if (!angle) {
             }
             kind = 0x162;
@@ -600,7 +603,7 @@ void break_crate(M2d1428 *moby, s32 hit, s32 source) {
         case 4: kind = 0x168; break;
         case CRATE_VARIANT_IMPACT_TRIGGERED: kind = 0x16B; break;
         case 6: kind = 0x16E; break;
-        case 7: case 8: case CRATE_VARIANT_PENULTIMATE_DAMAGE_STAGE: case CRATE_VARIANT_FINAL_DAMAGE_STAGE: kind = 0x171; break;
+        case CRATE_VARIANT_INITIAL_DAMAGE_STAGE: case CRATE_VARIANT_SECOND_DAMAGE_STAGE: case CRATE_VARIANT_PENULTIMATE_DAMAGE_STAGE: case CRATE_VARIANT_FINAL_DAMAGE_STAGE: kind = 0x171; break;
         default: kind = 0x95; break;
         }
         if (D_L00_0015FFBC >= 201) { count = 4; trail_count = 4; }
@@ -1179,6 +1182,7 @@ void decoy_glove_update(unsigned char *moby) {
     enum {
         DECOY_GLOVE_INITIALIZE = 0,
         DECOY_GLOVE_WAIT_FOR_MOBY_FLAG = 1,
+        DECOY_GLOVE_TARGET_FOLLOW_AND_SPAWN = 2,
         DECOY_GLOVE_RELEASE_DECOY = 3,
         DECOY_GLOVE_WAIT_AFTER_RELEASE = 4,
         DECOY_GLOVE_ENTER_SKIP_TARGET_FOLLOW_AND_SPAWN = 5,
@@ -1254,7 +1258,7 @@ L3D34:
     case DECOY_GLOVE_WAIT_FOR_MOBY_FLAG:
         if (moby[0x70] & 2) moby[0x20] = 2;
         break;
-    case 2:
+    case DECOY_GLOVE_TARGET_FOLLOW_AND_SPAWN:
         break;
     case DECOY_GLOVE_RELEASE_DECOY:
         if (*(char **)(d + 0x50)) {
@@ -1529,7 +1533,8 @@ void metal_detector_update(struct Moby *moby) __asm__("FUN_L00_002d2ee8");
 void metal_detector_update(struct Moby *moby) {
     enum {
         METAL_DETECTOR_INITIALIZE = 0,
-        METAL_DETECTOR_ACTIVE = 1
+        METAL_DETECTOR_ACTIVE = 1,
+        METAL_DETECTOR_TRACK_AND_COLLECT = 2
     };
     Vars2d2ee8 *vars;
     struct Moby *t;
@@ -1576,7 +1581,7 @@ void metal_detector_update(struct Moby *moby) {
     case 4:
         break;
     case METAL_DETECTOR_ACTIVE:
-    case 2:
+    case METAL_DETECTOR_TRACK_AND_COLLECT:
         one = 1.0f;
         *(u128 *)v = 0;
         v[2] = one;
@@ -2259,8 +2264,10 @@ void horny_toad_update(Moby *moby) {
         HORNY_TOAD_FOLLOW_PATH = 4,
         HORNY_TOAD_ROAM = 5,
         HORNY_TOAD_APPROACH_AND_FACE_TARGET = 6,
+        HORNY_TOAD_PLAY_TARGET_ANIMATION = 7,
         HORNY_TOAD_RETURN_HOME = 8,
         HORNY_TOAD_MOVE_TO_POINT_OR_FACE_TARGET = 10,
+        HORNY_TOAD_RECOVER_FROM_REACTION = 11,
         HORNY_TOAD_DYING = 12
     };
     ToadVars *data;
@@ -2383,7 +2390,7 @@ void horny_toad_update(Moby *moby) {
             if (moby->prev_seq != 4) FUN_00212f90_2d4610(moby, 4, 0, scale_game_frames(10));
         }
         break;
-    case 7:
+    case HORNY_TOAD_PLAY_TARGET_ANIMATION:
         if (is_value_within_interpolated_window(moby, 34.0f) != 0) {
             FUN_L00_002599e8_2d4610(moby, 0.333f, 1.0f, 1.0f, 0, 1, 0, 1, 0);
         } else if (moby->anim_flags & 2) {
@@ -2431,7 +2438,7 @@ void horny_toad_update(Moby *moby) {
         }
         break;
     }
-    case 11:
+    case HORNY_TOAD_RECOVER_FROM_REACTION:
         if (FUN_L00_0025c698_2d4610(moby, data->unk70) & 0x140) {
             moby->state = 5;
             if (moby->prev_seq != 1) FUN_00212f90_2d4610(moby, 1, 0, scale_game_frames(10));
@@ -2935,6 +2942,7 @@ void infobot_update(struct Moby *moby)
 {
     enum {
         INFOBOT_INITIALIZE = 0,
+        INFOBOT_IDLE = 1,
         INFOBOT_WAIT_FOR_PLAYER = 2,
         INFOBOT_WAIT_TO_FOLLOW_SLOT_PATH = 3,
         INFOBOT_FOLLOW_SLOT_PATH = 4,
@@ -3003,7 +3011,7 @@ void infobot_update(struct Moby *moby)
         infobot->seg = 0;
         moby->state = 3;
         break;
-    case 1:
+    case INFOBOT_IDLE:
         break;
     case INFOBOT_WAIT_FOR_PLAYER:
         range = 1.0f;

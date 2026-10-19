@@ -352,14 +352,18 @@ void spawner_update(struct Moby *moby) {
     };
     enum {
         SPAWNER_TARGET_COUNT_ANGULAR_SPREAD = 0,
+        SPAWNER_TARGET_HALF_REFERENCE_OFFSET = 1,
         SPAWNER_TARGET_UNUSED_POINT = 2,
         SPAWNER_TARGET_COUNT_INDEXED_POINT = 4
+    };
+    enum {
+        SPAWNER_ACTIVATION_STAY_IN_PROXIMITY_WAIT = 6
     };
     int used[4];
     Vec4A_2bef68 launch_origin;
     Vec4A_2bef68 launch_velocity;
     Vec4A_2bef68 target_position;
-    Vec4A_2bef68 v60;
+    Vec4A_2bef68 spawn_position;
     Vec4A_2bef68 v70;
     int st;
     Data_2C0330 *d;
@@ -483,7 +487,7 @@ void spawner_update(struct Moby *moby) {
             case 5:
                 moby->state = 5;
                 break;
-            case 6:
+            case SPAWNER_ACTIVATION_STAY_IN_PROXIMITY_WAIT:
             default:
                 moby->state = 1;
                 break;
@@ -555,7 +559,7 @@ void spawner_update(struct Moby *moby) {
                 }
                 break;
             }
-            case 1: {
+            case SPAWNER_TARGET_HALF_REFERENCE_OFFSET: {
                 float len;
                 FUN_001f9a28_2bef68(&launch_velocity, D_0013E533_2bef68 + 0xE9D, &launch_origin);
                 launch_velocity.z = 0.0f;
@@ -586,7 +590,7 @@ void spawner_update(struct Moby *moby) {
                     if (FUN_L03_002beba0(d->pts[j], (float *)&v70) != 0) continue;
                     dd = FUN_001f9b80_2bef68(&moby->pos, D_0013E533_2bef68 + 0xE9D);
                     if (dd < best) {
-                        qcopy(&v60, &v70);
+                        qcopy(&spawn_position, &v70);
                         best = dd;
                         bi = j;
                     }
@@ -594,12 +598,12 @@ void spawner_update(struct Moby *moby) {
                 if (bi != -1) {
                     used[bi] = 1;
                 }
-                FUN_001f9a28_2bef68(&launch_velocity, &v60, &launch_origin);
+                FUN_001f9a28_2bef68(&launch_velocity, &spawn_position, &launch_origin);
                 len = FUN_001f9af0_2bef68(&launch_velocity);
                 if (d->b83 & 8) {
                     FUN_001f9bf8_2bef68(&launch_velocity, &launch_velocity, FUN_002132a8_2bef68(len, 3.0f));
                 }
-                qcopy(&target_position, &v60);
+                qcopy(&target_position, &spawn_position);
                 break;
             }
             case 3: {
@@ -616,15 +620,15 @@ void spawner_update(struct Moby *moby) {
                 for (j = 0; j < 4; j++) {
                     if (p[j] != -1) k--;
                     if (k != 0) continue;
-                    if (FUN_L03_002beba0(p[j], (float *)&v60) != 0) continue;
+                    if (FUN_L03_002beba0(p[j], (float *)&spawn_position) != 0) continue;
                     break;
                 }
-                FUN_001f9a28_2bef68(&launch_velocity, &v60, &launch_origin);
+                FUN_001f9a28_2bef68(&launch_velocity, &spawn_position, &launch_origin);
                 len = FUN_001f9af0_2bef68(&launch_velocity);
                 if (d->b83 & 8) {
                     FUN_001f9bf8_2bef68(&launch_velocity, &launch_velocity, FUN_002132a8_2bef68(len, 3.0f));
                 }
-                qcopy(&target_position, &v60);
+                qcopy(&target_position, &spawn_position);
                 break;
             }
             case SPAWNER_TARGET_COUNT_INDEXED_POINT: {
@@ -642,15 +646,15 @@ void spawner_update(struct Moby *moby) {
                 for (j = 0; j < 4; j++) {
                     if (p[j] != -1) k--;
                     if (k != 0) continue;
-                    if (FUN_L03_002beba0(p[j], (float *)&v60) != 0) continue;
+                    if (FUN_L03_002beba0(p[j], (float *)&spawn_position) != 0) continue;
                     break;
                 }
-                FUN_001f9a28_2bef68(&launch_velocity, &v60, &launch_origin);
+                FUN_001f9a28_2bef68(&launch_velocity, &spawn_position, &launch_origin);
                 len = FUN_001f9af0_2bef68(&launch_velocity);
                 if (d->b83 & 8) {
                     FUN_001f9bf8_2bef68(&launch_velocity, &launch_velocity, FUN_002132a8_2bef68(len, 3.0f));
                 }
-                qcopy(&target_position, &v60);
+                qcopy(&target_position, &spawn_position);
                 break;
             }
             case 5:
@@ -662,11 +666,11 @@ void spawner_update(struct Moby *moby) {
                 speed = FUN_001f9af0_2bef68(&launch_velocity) * (d->fE4 * frame_scale_macro);
                 launch_velocity.z = 0.0f;
                 FUN_001f9bf8_2bef68(&launch_velocity, &launch_velocity, speed);
-                FUN_001f9bf8_2bef68(&v60, &launch_velocity, 0.05f);
-                FUN_L00_0025f8e0_2bef68((float *)&v60, 0.025f);
-                FUN_L00_001ff290_2bef68(&v70, &v60, &launch_origin);
-                launch_velocity.z = FUN_L00_0025abf0_2bef68(&v60, &target_position, 0, speed, -(d->fDC * frame_time_sq_macro));
-                m = FUN_L03_002c45d8_2bef68((char *)moby, (float *)&v60, (float *)&launch_velocity, d->h8C, d->b83);
+                FUN_001f9bf8_2bef68(&spawn_position, &launch_velocity, 0.05f);
+                FUN_L00_0025f8e0_2bef68((float *)&spawn_position, 0.025f);
+                FUN_L00_001ff290_2bef68(&v70, &spawn_position, &launch_origin);
+                launch_velocity.z = FUN_L00_0025abf0_2bef68(&spawn_position, &target_position, 0, speed, -(d->fDC * frame_time_sq_macro));
+                m = FUN_L03_002c45d8_2bef68((char *)moby, (float *)&spawn_position, (float *)&launch_velocity, d->h8C, d->b83);
                 if (m != 0) {
                     *(unsigned char *)(m + 0x30) = 0xFF;
                 }

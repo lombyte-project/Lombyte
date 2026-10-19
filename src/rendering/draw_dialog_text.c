@@ -97,8 +97,13 @@ void draw_dialog_text(void) {
     };
     enum {
         FREEZE_CHOICE_PAIRED_FOOTER_MESSAGE = 0,
+        FREEZE_CHOICE_SHARED_PAIRED_FOOTER_MESSAGE = 1,
         FREEZE_CHOICE_ALTERNATE_PAIRED_FOOTER_MESSAGE = 2,
         FREEZE_CHOICE_CENTERED_FOOTER_MESSAGE = 3
+    };
+    enum {
+        MODE_FREEZE_TIMER_GATED_CENTERED_FOOTER_MESSAGE = 2,
+        MODE_FREEZE_FORMATTED_PAIRED_FOOTER_MESSAGE = 24
     };
     char buf[0x200];
     struct TextRegion box;
@@ -204,7 +209,7 @@ void draw_dialog_text(void) {
             mid = 0x524A;
             text = get_help_message_text(0x4FBC);
             break;
-        case 2:
+        case MODE_FREEZE_TIMER_GATED_CENTERED_FOOTER_MESSAGE:
             mid = 0x524A;
             text = get_help_message_text(0x4FA6);
             if (freeze.timer != 0) {
@@ -233,7 +238,7 @@ void draw_dialog_text(void) {
             mid = 0x524A;
             text = get_help_message_text(0x4FBB);
             break;
-        case 24:
+        case MODE_FREEZE_FORMATTED_PAIRED_FOOTER_MESSAGE:
             left = 0x524E;
             right = 0x524B;
             sprintf(buf, freeze_fmt_scsc, get_help_message_text(0x4FAE), 1, 1, get_help_message_text(0x4FAA));
@@ -298,7 +303,7 @@ void draw_dialog_text(void) {
         button_color = fast_tween_color(0x20FFFF, 0x8020FFFF, alpha);
         switch (freeze.choice) {
         case FREEZE_CHOICE_PAIRED_FOOTER_MESSAGE:
-        case 1:
+        case FREEZE_CHOICE_SHARED_PAIRED_FOOTER_MESSAGE:
             font_print_center(0xCA, 0x118, button_color, get_help_message_text(0x524E), -1);
             font_print_center(0x135, 0x118, button_color, get_help_message_text(0x524B), -1);
             id = 0x522A;

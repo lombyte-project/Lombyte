@@ -154,10 +154,13 @@ extern int func_001F9908_r(int *) __asm__("FUN_001f9740");
 
 void FUN_L18_0022e8f8(void) {
     enum {
+        HERO_STATE_LEDGE_HANG = 25,
         HERO_STATE_GRIND_JUMP = 41,
         HERO_STATE_GRIND_RAIL_TRANSFER = 42,
         HERO_STATE_GRIND_ATTACK = 43,
         HERO_STATE_GRIND_COLLISION_RECOVERY = 66,
+        HERO_STATE_APPROACH_TARGET = 101,
+        HERO_STATE_TARGET_ARRIVAL = 103,
         HERO_STATE_DROWNING_DEATH = 106,
         HERO_STATE_DEATH_FALL = 119
     };
@@ -919,7 +922,7 @@ void FUN_L18_0022e8f8(void) {
                         }
                     }
                     break;
-                case 101:
+                case HERO_STATE_APPROACH_TARGET:
                     if (vector_distance(hero.motion.pos.f, hero.unk1640.f) < 0.2f) {
                         if (frame_time * 2.7f > hero.motion.speed_xy) {
                             if (fast_difference_between_rotations(
@@ -940,7 +943,7 @@ void FUN_L18_0022e8f8(void) {
                         hero_set_state(0x65, 1);
                     }
                     break;
-                case 103:
+                case HERO_STATE_TARGET_ARRIVAL:
                     if ((hero.unkA98 & 2) || hero.unk1650 != 0) {
                         hero_set_state(HERO_STATE_IDLE, 1);
                     }
@@ -1529,7 +1532,7 @@ void FUN_L18_0022e8f8(void) {
                         hero_set_state(0x19, 0);
                     }
                     break;
-                case 25:
+                case HERO_STATE_LEDGE_HANG:
                     if ((hero.unkA98 & 2) && ((unsigned char *)hero.moby)[0x53] == 0x20) {
                         set_hero_animation(0x21, 0, scale_game_frames(6));
                     }

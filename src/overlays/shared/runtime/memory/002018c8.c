@@ -100,7 +100,10 @@ void level_draw_dialog_text(void) {
     };
     enum {
         FREEZE_DIALOG_TIMER_GATED_CENTERED_BUTTON = 2,
-        FREEZE_DIALOG_FORMATTED_BODY_CENTERED_BUTTON = 5
+        FREEZE_DIALOG_FORMATTED_BODY_CENTERED_BUTTON = 5,
+        FREEZE_DIALOG_FLAG_GATED_PAIRED_BUTTONS = 12,
+        FREEZE_DIALOG_CONDITIONAL_FORMATTED_BODY = 19,
+        FREEZE_DIALOG_FORMATTED_BODY_PAIRED_BUTTONS = 24
     };
     char buf[0x200];
     struct TextRegion box;
@@ -175,7 +178,7 @@ void level_draw_dialog_text(void) {
             right = 0x524B;
             text = get_help_message_text(0x4FAF);
             break;
-        case 12:
+        case FREEZE_DIALOG_FLAG_GATED_PAIRED_BUTTONS:
             if (!(mode_freeze_flags & 2)) {
                 mid = 0x4FA8;
                 text = get_help_message_text(0x4FA7);
@@ -213,7 +216,7 @@ void level_draw_dialog_text(void) {
                 mid = 0;
             }
             break;
-        case 19:
+        case FREEZE_DIALOG_CONDITIONAL_FORMATTED_BODY:
             if (mode_freeze_flags & 4) {
                 mid = 0x4FA8;
                 text = get_help_message_text(0x4FA7);
@@ -235,7 +238,7 @@ void level_draw_dialog_text(void) {
             mid = 0x524A;
             text = get_help_message_text(0x4FBB);
             break;
-        case 24:
+        case FREEZE_DIALOG_FORMATTED_BODY_PAIRED_BUTTONS:
             left = 0x524E;
             right = 0x524B;
             sprintf(buf, D_L00_0015F510, get_help_message_text(0x4FAE), 1, 1, get_help_message_text(0x4FAA));

@@ -20,7 +20,9 @@ extern u8 D_001D5208[];
 u8 D_001D5298[] NOT_SDA = "9Q";
 extern u8 D_001D52B0[];
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
-s32 FUN_002223f0(struct Menu *menu) {
+s32 update_timed_menu_sequence(struct Menu *menu) __asm__("FUN_002223f0");
+
+s32 update_timed_menu_sequence(struct Menu *menu) {
     enum {
         INITIALIZE_MENU_SEQUENCE = 0,
         WAIT_FOR_INITIAL_DELAY = 1,
@@ -202,4 +204,4 @@ s32 FUN_002223f0(struct Menu *menu) {
     return 0;
 }
 
-extern __typeof__(FUN_002223f0) func_002223F0 __attribute__((alias("FUN_002223f0")));
+extern __typeof__(update_timed_menu_sequence) func_002223F0 __attribute__((alias("FUN_002223f0")));

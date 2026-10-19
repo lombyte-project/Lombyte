@@ -79,6 +79,11 @@ extern int hero_set_state(int, int) __asm__("FUN_L02_0022b728");
 extern char D_L02_0017C520[];
 int hero_set_state(int a, int b) {
     enum {
+        HERO_STATE_VEHICLE_IDLE = 0x53,
+        HERO_STATE_VEHICLE_RUN = 0x54,
+        HERO_STATE_VEHICLE_FALL = 0x55,
+        HERO_STATE_VEHICLE_HURT = 0x56,
+        HERO_STATE_VEHICLE_DYING = 0x57,
         HERO_STATE_MOVE_TO_TARGET = 0x65,
         HERO_STATE_STOP_AT_TARGET = 0x66,
         HERO_STATE_IDLE_AT_TARGET = 0x67,
@@ -1331,7 +1336,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0x71, 0, (float)scale_game_frames(8));
         break;
     }
-    case 0x53: {
+    case HERO_STATE_VEHICLE_IDLE: {
         struct Hero *p = &hero;
         p->state.control_mode = 0;
         p->unk2284 = 0;
@@ -1358,7 +1363,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(6, 0, (float)scale_game_frames(0xC));
         break;
     }
-    case 0x55: {
+    case HERO_STATE_VEHICLE_FALL: {
         struct Hero *p = &hero;
         p->state.control_mode = 2;
         p->unk2284 = 0;
@@ -1369,7 +1374,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(6, 0, (float)scale_game_frames(7));
         break;
     }
-    case 0x54: {
+    case HERO_STATE_VEHICLE_RUN: {
         struct Hero *p = &hero;
         p->state.control_mode = 1;
         p->unk2284 = 0;
@@ -1387,7 +1392,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x57: {
+    case HERO_STATE_VEHICLE_DYING: {
         struct Hero *p = &hero;
         p->state.control_mode = 0x14;
         p->unk2284 = 0;
@@ -1396,7 +1401,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(3, 0, (float)scale_game_frames(0xC));
         break;
     }
-    case 0x56: {
+    case HERO_STATE_VEHICLE_HURT: {
         struct Hero *p = &hero;
         p->state.control_mode = 7;
         p->unk2284 = 0;
@@ -1881,7 +1886,12 @@ extern int func_001F9908_r(int *) __asm__("FUN_001f9740");
 extern f32 frame_scale_gp __asm__("D_0015ED60") __attribute__((sda));
 void FUN_L02_00230988(void) {
     enum {
+        HERO_STATE_VEHICLE_IDLE = 83,
+        HERO_STATE_VEHICLE_RUN = 84,
+        HERO_STATE_VEHICLE_FALL = 85,
         HERO_STATE_VEHICLE_HURT = 86,
+        HERO_STATE_VEHICLE_DYING = 87,
+        HERO_STATE_VEHICLE_SLIP = 88,
         HERO_STATE_MOVE_TO_TARGET = 101,
         HERO_STATE_STOP_AT_TARGET = 102,
         HERO_STATE_IDLE_AT_TARGET = 103,
@@ -2201,7 +2211,7 @@ void FUN_L02_00230988(void) {
                     break;
                 case HERO_STATE_DYING:
                 case 71:
-                case 87:
+                case HERO_STATE_VEHICLE_DYING:
                 case 98:
                 case 106:
                 case 128:
@@ -3443,7 +3453,7 @@ void FUN_L02_00230988(void) {
                         hero_set_state(HERO_STATE_IDLE, 0);
                     }
                     break;
-                case 83:
+                case HERO_STATE_VEHICLE_IDLE:
                     if (hero.unkA98 & 2) {
                         if (((unsigned char *)hero.moby)[0x53] != 0) {
                             set_hero_animation(0, 0, scale_game_frames(0xC));
@@ -3477,7 +3487,7 @@ void FUN_L02_00230988(void) {
                         hero_set_state(0x54, 1);
                     }
                     break;
-                case 88:
+                case HERO_STATE_VEHICLE_SLIP:
                     if (scale_game_frames(0x12C) < hero.state_timer) {
                         hero_respawn();
                     }
@@ -3496,7 +3506,7 @@ void FUN_L02_00230988(void) {
                         set_hero_animation(0, 0, scale_game_frames(0x14));
                     }
                     break;
-                case 85:
+                case HERO_STATE_VEHICLE_FALL:
                     if (hero.air_frames.s != 0) {
                         break;
                     }
@@ -3520,7 +3530,7 @@ void FUN_L02_00230988(void) {
                     hero.anim_speed = 0.35f;
                     hero.unk1C4 = scale_game_frames(0x14);
                     break;
-                case 84:
+                case HERO_STATE_VEHICLE_RUN:
                     hero.anim_speed = hero.motion.speed_xy * 54.0f;
                     if (!(hero.air_frames.s < scale_game_frames(5))) {
                         if (hero.ground_distance > 0.8f || hero.ground_slope.f > 0.87266463f) {

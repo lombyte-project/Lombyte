@@ -213,7 +213,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x41: {
+    case HERO_STATE_FIDGET_ALT: {
         int t = scale_game_frames(9);
         set_hero_animation(FUN_L17_002020a8(0), 0, (float)t);
         {
@@ -502,7 +502,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0x48, 0, (float)scale_game_frames(8));
         break;
     }
-    case 1: {
+    case HERO_STATE_LOOK: {
         struct Hero *p = &hero;
         int t;
         p->state.control_mode = 0;
@@ -545,7 +545,7 @@ int hero_set_state(int a, int b) {
         set_hero_animation(0x2E, 0, (float)scale_game_frames(5));
         break;
     }
-    case 2:
+    case HERO_STATE_RUN:
     case 0x2F:
     case 0x3F:
     case 0x73: {
@@ -665,7 +665,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0x64, 0, (float)scale_game_frames(0xF));
         break;
     }
-    case 3: {
+    case HERO_STATE_STOP: {
         struct Hero *p = &hero;
         p->state.control_mode = 1;
         p->unk2284 = 0;
@@ -712,7 +712,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 4: {
+    case HERO_STATE_CROUCH: {
         struct Hero *p = &hero;
         p->state.control_mode = 0xC;
         p->unk2284 = 0;
@@ -1083,14 +1083,14 @@ int hero_set_state(int a, int b) {
         break;
     }
     case HERO_STATE_JUMP:
-    case 9:
-    case 0xA:
+    case HERO_STATE_RUN_JUMP:
+    case HERO_STATE_PACK_JUMP:
     case HERO_STATE_HIGH_JUMP:
     case 0xC:
     case 0xD:
     case 0xE:
     case 0xF:
-    case 0x10:
+    case HERO_STATE_PACK_LONG_JUMP:
     case 0x11:
     case 0x12:
     case 0x1C:
@@ -1590,7 +1590,7 @@ int hero_set_state(int a, int b) {
     }
     case HERO_STATE_WRENCH_COMBO:
     case HERO_STATE_WRENCH_SLAM:
-    case 0x15:
+    case HERO_STATE_CROUCH_SWING:
     case 0x20:
     case 0x23:
     case 0x51: {
@@ -1631,7 +1631,7 @@ int hero_set_state(int a, int b) {
             }
             break;
         }
-        case 0x15: {
+        case HERO_STATE_CROUCH_SWING: {
             struct UsageStat *h = usage_stats.stat;
             char *h2;
             struct Hero *q;

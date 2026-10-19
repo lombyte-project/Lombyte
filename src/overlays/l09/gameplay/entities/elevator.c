@@ -243,6 +243,9 @@ extern void trooper_anim_finish(struct Moby *, u8 *) __asm__("FUN_L00_0025d538")
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 
 void FUN_L09_00303b30(struct Moby *moby, VendorVars *vars, f32 *health) {
+    enum {
+        DAMAGE_RESULT_UNAVAILABLE = 0
+    };
     VendorHitSource *src;
     struct Moby *link;
     s32 hit;
@@ -257,7 +260,7 @@ void FUN_L09_00303b30(struct Moby *moby, VendorVars *vars, f32 *health) {
         case 2:
             *health = 0.0f;
             break;
-        case 0:
+        case DAMAGE_RESULT_UNAVAILABLE:
         case 3:
         case 4:
         case 5:
@@ -391,6 +394,9 @@ typedef struct {
 } VendorVars2;
 
 void FUN_L09_00303fc8(struct Moby *moby, VendorVars2 *vars, f32 *health) {
+    enum {
+        DAMAGE_RESULT_UNAVAILABLE = 0
+    };
     VendorHitSource *src;
     struct Moby *link;
     s32 hit;
@@ -405,7 +411,7 @@ void FUN_L09_00303fc8(struct Moby *moby, VendorVars2 *vars, f32 *health) {
         case 2:
             *health = 0.0f;
             break;
-        case 0:
+        case DAMAGE_RESULT_UNAVAILABLE:
         case 3:
         case 4:
         case 5:

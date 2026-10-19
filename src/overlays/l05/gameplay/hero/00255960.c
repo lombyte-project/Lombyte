@@ -142,7 +142,10 @@ void FUN_L05_00255960(void) {
         HERO_STATE_LEDGE_HANG_ENTRY = 24,
         HERO_STATE_LEDGE_HANG = 25,
         HERO_STATE_LEDGE_SHIMMY_POSITIVE_YAW_OFFSET = 26,
-        HERO_STATE_LEDGE_SHIMMY_NEGATIVE_YAW_OFFSET = 27
+        HERO_STATE_LEDGE_SHIMMY_NEGATIVE_YAW_OFFSET = 27,
+        HERO_STATE_LEDGE_JUMP = 28,
+        HERO_STATE_BELOW_LEVEL_RESPAWN_WAIT = 119,
+        HERO_STATE_TIMED_RESPAWN_WAIT = 127
     };
     unsigned char *moby;
     int prevSub;
@@ -466,7 +469,7 @@ void FUN_L05_00255960(void) {
                         return;
                     }
                     break;
-                case 127:
+                case HERO_STATE_TIMED_RESPAWN_WAIT:
                     if (hero.state_timer > scale_game_frames(0xDC)) {
                         hero_respawn();
                         return;
@@ -1360,7 +1363,7 @@ void FUN_L05_00255960(void) {
                         hero_set_state(0x18, 1);
                     }
                     break;
-                case 119:
+                case HERO_STATE_BELOW_LEVEL_RESPAWN_WAIT:
                     if ((current_level_index == 3 && 5.0f > hero.motion.pos.f[2]) ||
                         (current_level_index == 6 && 50.0f > hero.motion.pos.f[2]) ||
                         (current_level_index == 0x10 && (77.0f > hero.motion.pos.f[2] ||
@@ -1509,7 +1512,7 @@ void FUN_L05_00255960(void) {
                 case HERO_STATE_PACK_LONG_JUMP:
                 case 17:
                 case 18:
-                case 28:
+                case HERO_STATE_LEDGE_JUMP:
                 case 60:
                 case 105:
                     if (hero.unk4AE != 0) {

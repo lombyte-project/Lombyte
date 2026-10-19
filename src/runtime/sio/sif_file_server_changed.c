@@ -10,7 +10,9 @@ extern u8 D_0012FBEC[];
 extern u32 D_0012FCA8[];
 extern s32 memcmp();
 extern u8 FsResetBuffer[] __asm__("D_00157FA8");
-s32 FUN_0011bbb8(void) {
+s32 sif_file_server_changed(void) __asm__("FUN_0011bbb8");
+
+s32 sif_file_server_changed(void) {
     s32 result;
     u8 *new_var;
     result = 0;

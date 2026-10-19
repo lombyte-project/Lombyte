@@ -61,7 +61,10 @@ s32 fun_00213928(O_25a478 *obj, P_25a478 *p, Q_25a478 *q, u32 flags, s32 *out, f
     };
     enum {
         KIND_GATED_HIT_STATE = 0,
-        COOLDOWN_RESETTING_HIT_STATE = 3
+        SUBSTATE_GATED_DAMAGE_PRESERVING_HIT_STATE = 1,
+        COOLDOWN_RESETTING_HIT_STATE = 3,
+        FIXED_RESPONSE_HIT_STATE = 4,
+        SUBSTATE_GATED_AUXILIARY_FLAG_HIT_STATE = 5
     };
     V_25a478 v;
     V_25a478 t;
@@ -124,7 +127,7 @@ s32 fun_00213928(O_25a478 *obj, P_25a478 *p, Q_25a478 *q, u32 flags, s32 *out, f
     case KIND_GATED_HIT_STATE:
         if (p->kind == 1 || p->kind == 2) { *out = 2; r = 0; break; }
         goto dflt;
-    case 1:
+    case SUBSTATE_GATED_DAMAGE_PRESERVING_HIT_STATE:
         if (p->sub < 2) { *out = 2; r = 0xB; break; }
         if (p->sub == 2) { *out = 2; r = 5; break; }
         *out = 2; r = 9;
@@ -138,10 +141,10 @@ s32 fun_00213928(O_25a478 *obj, P_25a478 *p, Q_25a478 *q, u32 flags, s32 *out, f
         if (p->sub < 3) { *out = 2; r = 0xF; break; }
         *out = 2; r = 0x10; q->h14 = -1; q->h1C = 0;
         break;
-    case 4:
+    case FIXED_RESPONSE_HIT_STATE:
         *out = 2; r = 0xE;
         break;
-    case 5:
+    case SUBSTATE_GATED_AUXILIARY_FLAG_HIT_STATE:
         if (p->sub < 2) { *out = 3; r = 4; break; }
         *out = 4; r = 7;
         break;

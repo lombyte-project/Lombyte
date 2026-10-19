@@ -2122,6 +2122,9 @@ void FUN_L10_002e3ef0(void *mv) {
         DEATH_HIT_RESPONSE = 2,
         KNOCKBACK_HIT_RESPONSE = 3,
         VEHICLE_SCALED_KNOCKBACK_HIT_RESPONSE = 4,
+        VEHICLE_DEPENDENT_KNOCKBACK_HIT_RESPONSE = 5,
+        FIXED_STRENGTH_KNOCKBACK_HIT_RESPONSE = 6,
+        TIMED_KNOCKBACK_HIT_RESPONSE = 7,
         SUPPRESSED_HIT_RESPONSE = 11
     };
     Moby *m = mv;
@@ -2218,8 +2221,8 @@ void FUN_L10_002e3ef0(void *mv) {
         fx = func_L00_001FF860_2E52B0(r->pos.x, r->pos.y);
         switch (hit_response_code) {
         case KNOCKBACK_HIT_RESPONSE:
-        case 6:
-        case 7:
+        case FIXED_STRENGTH_KNOCKBACK_HIT_RESPONSE:
+        case TIMED_KNOCKBACK_HIT_RESPONSE:
         case 8:
         case 9:
         case 10:
@@ -2236,7 +2239,7 @@ void FUN_L10_002e3ef0(void *mv) {
             func_L00_0025E4B0_2E52B0(m, d->a60);
             break;
         case VEHICLE_SCALED_KNOCKBACK_HIT_RESPONSE:
-        case 5: {
+        case VEHICLE_DEPENDENT_KNOCKBACK_HIT_RESPONSE: {
             float s;
             m->state = 10;
             d->h26 = func_001F9850_2E52B0(60);

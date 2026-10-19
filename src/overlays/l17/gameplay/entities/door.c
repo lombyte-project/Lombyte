@@ -530,10 +530,13 @@ short D_L17_00162188 = 2;
 int FUN_L17_002eace8(int a, char *p, char *radar_origin, char *radar_rotation, float f0, float f1, float f2, char *cur,
                      char *g) {
     enum {
+        MOBY_CLASS_FLAG_GATED_MARKED_TARGET = 0x6F,
+        MOBY_CLASS_GRAY_RADAR_CONTACT = 0xE0,
         MOBY_CLASS_OFFSCREEN_ARROW_TARGET = 0x15B,
         MOBY_CLASS_UNMARKED_COUNTED_TARGET = 0x184,
         MOBY_CLASS_UNCOUNTED_MARKED_TARGET = 0x191,
         MOBY_CLASS_PRIORITY_LOCK_TARGET = 0x3EB,
+        MOBY_CLASS_FLAG_GATED_SCREEN_MARKER_TARGET = 0x4BE,
         MOBY_CLASS_STATE_GATED_MARKED_TARGET = 0x4BF,
         MOBY_CLASS_MARKED_COUNTED_TARGET = 0x504
     };
@@ -593,7 +596,7 @@ int FUN_L17_002eace8(int a, char *p, char *radar_origin, char *radar_rotation, f
             }
         }
         switch (*(short *)(m + 0xA6)) {
-        case 0xE0:
+        case MOBY_CLASS_GRAY_RADAR_CONTACT:
         case 0x4C2:
             FUN_L17_002eaae0(radar_rotation, radar_origin, m, 2, 0x70808080, *(int *)(p + 0x104));
             break;
@@ -662,8 +665,8 @@ int FUN_L17_002eace8(int a, char *p, char *radar_origin, char *radar_rotation, f
             FUN_L17_002eaae0(radar_rotation, (char *)w, m, 0, 0x70808080, *(int *)(p + 0x104));
             *(int *)(p + 0xE8) = *(int *)(p + 0xE8) + 1;
             break;
-        case 0x6F:
-        case 0x4BE:
+        case MOBY_CLASS_FLAG_GATED_MARKED_TARGET:
+        case MOBY_CLASS_FLAG_GATED_SCREEN_MARKER_TARGET:
             if (!(*(unsigned short *)(m + 0x34) & 1)) {
                 project_to_screen(v, m + 0x10);
                 if (*(unsigned char *)(m + 0x31) != 0) {
@@ -2426,10 +2429,13 @@ void robot_dog_update(unsigned char *m) __asm__("FUN_L17_002eeb68");
 void robot_dog_update(unsigned char *m) {
     enum {
         ROBOT_DOG_STATE_INITIALIZE = 0,
+        ROBOT_DOG_STATE_WAIT_FOR_DETECTION_TRIGGER = 1,
+        ROBOT_DOG_STATE_SELECT_RESPONSE_ON_ANIMATION_COMPLETION = 2,
         ROBOT_DOG_STATE_WAIT_FOR_IDLE_ANIMATION_COMPLETION = 3,
         ROBOT_DOG_STATE_FALL_UNTIL_LANDING = 4,
         ROBOT_DOG_STATE_TRACK_TARGET_FACING = 5,
         ROBOT_DOG_STATE_WAIT_FOR_CHASE_TRIGGER = 6,
+        ROBOT_DOG_STATE_WAIT_FOR_CHASE_TRIGGER_FAST_PULSE = 7,
         ROBOT_DOG_STATE_TURN_TOWARD_TARGET = 8,
         ROBOT_DOG_STATE_APPROACH_TARGET = 9,
         ROBOT_DOG_STATE_ATTACK_TARGET = 10,
@@ -2506,7 +2512,7 @@ void robot_dog_update(unsigned char *m) {
             d->sC8 = 0;
         }
         break;
-    case 1:
+    case ROBOT_DOG_STATE_WAIT_FOR_DETECTION_TRIGGER:
         if (d->mode != 0 && random_integer_below(0x1F) == 0) {
             m[0x20] = 2;
             if (m[0x53] != 1) {
@@ -2514,7 +2520,7 @@ void robot_dog_update(unsigned char *m) {
             }
         }
         break;
-    case 2:
+    case ROBOT_DOG_STATE_SELECT_RESPONSE_ON_ANIMATION_COMPLETION:
         if (m[0x70] & 2) {
             int s = d->mode;
             if (s == 2) {
@@ -2614,7 +2620,7 @@ void robot_dog_update(unsigned char *m) {
         }
         break;
     case ROBOT_DOG_STATE_WAIT_FOR_CHASE_TRIGGER:
-    case 7: {
+    case ROBOT_DOG_STATE_WAIT_FOR_CHASE_TRIGGER_FAST_PULSE: {
         int s = d->mode;
         if (s != 2) {
             if (random_integer_below(20) == 0) {
@@ -3048,6 +3054,7 @@ void FUN_L17_002f0210(struct Moby *moby) {
         ROBOT_DOG_STATE_FALL_UNTIL_LANDING = 4,
         ROBOT_DOG_STATE_TRACK_TARGET_FACING = 5,
         ROBOT_DOG_STATE_WAIT_FOR_CHASE_TRIGGER = 6,
+        ROBOT_DOG_STATE_WAIT_FOR_CHASE_TRIGGER_FAST_PULSE = 7,
         ROBOT_DOG_STATE_TURN_TOWARD_TARGET = 8,
         ROBOT_DOG_STATE_APPROACH_TARGET = 9,
         ROBOT_DOG_STATE_ATTACK_TARGET = 10,
@@ -3087,7 +3094,7 @@ void FUN_L17_002f0210(struct Moby *moby) {
     case ROBOT_DOG_STATE_WAIT_FOR_CHASE_TRIGGER:
         mode = 1;
         break;
-    case 7:
+    case ROBOT_DOG_STATE_WAIT_FOR_CHASE_TRIGGER_FAST_PULSE:
     case ROBOT_DOG_STATE_TURN_TOWARD_TARGET:
     case ROBOT_DOG_STATE_APPROACH_TARGET:
     case ROBOT_DOG_STATE_ATTACK_TARGET:

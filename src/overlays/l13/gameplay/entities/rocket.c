@@ -832,11 +832,14 @@ void blarg_space_commando_update(struct Moby *moby) {
     enum {
         BLARG_SPACE_COMMANDO_INITIALIZE = 0,
         BLARG_SPACE_COMMANDO_FACE_TARGET_AND_SELECT_ACTION = 1,
+        BLARG_SPACE_COMMANDO_ENTER_ACTION_SELECTION_AFTER_ANIMATION = 2,
         BLARG_SPACE_COMMANDO_SELECT_ACTION_AFTER_ANIMATION = 3,
         BLARG_SPACE_COMMANDO_FACE_TARGET_AND_WAIT_FOR_TIMER = 4,
+        BLARG_SPACE_COMMANDO_FACE_TARGET_AND_PROBE_DURING_ANIMATION = 5,
         BLARG_SPACE_COMMANDO_RESUME_SAVED_STATE_AFTER_ANIMATION = 6,
         BLARG_SPACE_COMMANDO_APPROACH_TARGET_WITH_TURN_OFFSET = 7,
         BLARG_SPACE_COMMANDO_APPROACH_TARGET_UNTIL_BLOCKED_OR_NEAR = 11,
+        BLARG_SPACE_COMMANDO_PROBE_DURING_ANIMATION_THEN_RESUME_APPROACH = 12,
         BLARG_SPACE_COMMANDO_RETURN_HOME = 13,
         BLARG_SPACE_COMMANDO_KNOCKBACK = 15,
         BLARG_SPACE_COMMANDO_DYING = 16
@@ -907,7 +910,7 @@ void blarg_space_commando_update(struct Moby *moby) {
             }
         }
         break;
-    case 2:
+    case BLARG_SPACE_COMMANDO_ENTER_ACTION_SELECTION_AFTER_ANIMATION:
         if (moby->anim_flags & 2) {
             moby->state = 3;
             FUN_L13_00309370_c((char *)moby);
@@ -955,7 +958,7 @@ void blarg_space_commando_update(struct Moby *moby) {
             }
         }
         break;
-    case 5:
+    case BLARG_SPACE_COMMANDO_FACE_TARGET_AND_PROBE_DURING_ANIMATION:
         approach_angle(&moby->rot.z, fast_arc_tan_c(target->pos.x - moby->pos.x, target->pos.y - moby->pos.y),
                           &vars->turn, frame_time_sq * 6.2831855f, frame_time_sq * 6.2831855f, frame_time * 3.1415927f);
         FUN_L00_0024f7c8(moby, 0, &point);
@@ -1061,7 +1064,7 @@ void blarg_space_commando_update(struct Moby *moby) {
             }
         }
         break;
-    case 12:
+    case BLARG_SPACE_COMMANDO_PROBE_DURING_ANIMATION_THEN_RESUME_APPROACH:
         FUN_L00_0024f7c8(moby, 0, &point);
         qcopy(&origin, &moby->pos);
         origin.f[2] += 1.5f;
@@ -2022,7 +2025,10 @@ void FUN_L13_0030b628(struct Moby *moby) {
         WAIT_SCENE_BEFORE_FOLLOWUP = 8,
         START_FOLLOWUP_SCENE = 9,
         WAIT_FOLLOWUP_SCENE = 10,
-        WAIT_LINKED_MOBY_REMOVAL_BEFORE_SAVE = 11
+        WAIT_LINKED_MOBY_REMOVAL_BEFORE_SAVE = 11,
+        ENTER_LINKED_MOBY_CLEANUP_WAIT = 12,
+        WAIT_TO_REMOVE_LINKED_MOBY = 13,
+        FINALIZE_LINKED_MOBY_CLEANUP = 14
     };
     int *data = (int *)moby->pvars;
     switch (moby->state) {
@@ -2173,10 +2179,10 @@ after_state_4:
         moby->state = 12;
         break;
     }
-    case 12:
+    case ENTER_LINKED_MOBY_CLEANUP_WAIT:
         moby->state = 13;
         break;
-    case 13:
+    case WAIT_TO_REMOVE_LINKED_MOBY:
         if (data[4] != -1) {
             if (D_L13_0015FC88[*(unsigned char *)(D_L13_0015FFD8_m + data[4] * 0x100 + 0xb0)] == 0xff) {
                 if (data[8] != -1)
@@ -2187,7 +2193,7 @@ after_state_4:
             mark_moby_for_removal(moby);
         }
         break;
-    case 14:
+    case FINALIZE_LINKED_MOBY_CLEANUP:
         moby->flags |= 2;
         break;
     }

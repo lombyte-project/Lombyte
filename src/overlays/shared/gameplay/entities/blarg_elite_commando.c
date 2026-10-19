@@ -564,6 +564,9 @@ void FUN_L16_002d38b0(struct Moby *m) {
         HIT_RESPONSE_FATAL = 1,
         HIT_RESPONSE_FATAL_FALL = 2,
         HIT_RESPONSE_KNOCKBACK_RECOVERY = 3,
+        HIT_RESPONSE_RECOVERABLE_KNOCKBACK = 4,
+        HIT_RESPONSE_NONFATAL_KNOCKBACK = 5,
+        HIT_RESPONSE_KNOCKBACK_TO_IDLE = 6,
         HIT_RESPONSE_ANIMATION_ONLY = 9,
         HIT_RESPONSE_DAMAGE_ANIMATION_ONLY = 10,
         HIT_RESPONSE_NO_REACTION = 11
@@ -604,9 +607,9 @@ void FUN_L16_002d38b0(struct Moby *m) {
             d->animation = 0xFA;
             break;
         case HIT_RESPONSE_KNOCKBACK_RECOVERY:
-        case 4:
-        case 5:
-        case 6:
+        case HIT_RESPONSE_RECOVERABLE_KNOCKBACK:
+        case HIT_RESPONSE_NONFATAL_KNOCKBACK:
+        case HIT_RESPONSE_KNOCKBACK_TO_IDLE:
         case 7:
         case 8: {
             float impulse = frame_time * 6.0f;

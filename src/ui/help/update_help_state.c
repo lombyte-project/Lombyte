@@ -62,6 +62,8 @@ void update_help_state(void) {
     enum {
         HELP_STATE_IDLE = 0,
         HELP_STATE_DISPLAY_START_DELAY = 1,
+        HELP_STATE_DISMISSAL_WAIT_AUDIO_GATE = 2,
+        HELP_STATE_DISMISSAL_WAIT_TRANSITION_DELAY = 3,
         HELP_STATE_DISMISSAL_WAIT_START_DELAY = 4,
         HELP_STATE_WAIT_FOR_DISMISSAL = 5,
         HELP_STATE_DISMISS_DELAY = 6,
@@ -141,7 +143,7 @@ void update_help_state(void) {
         break;
     }
 
-    case 2: {
+    case HELP_STATE_DISMISSAL_WAIT_AUDIO_GATE: {
         s32 id;
 
         force_help_message(5, 0);
@@ -161,7 +163,7 @@ void update_help_state(void) {
         break;
     }
 
-    case 3:
+    case HELP_STATE_DISMISSAL_WAIT_TRANSITION_DELAY:
         force_help_message(5, 0);
         if (controller_state.pressed & PAD_TRIANGLE) {
             RECORD_COUNT();

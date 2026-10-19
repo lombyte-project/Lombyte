@@ -513,7 +513,9 @@ extern s32 D_0013CB14[];
 
 void FUN_L01_002370b8(void) {
     enum {
-        HERO_STATE_MOVE_TO_TARGET_POSITION = 0x65
+        HERO_STATE_DOWNHILL_SLIDE = 0x58,
+        HERO_STATE_MOVE_TO_TARGET_POSITION = 0x65,
+        HERO_STATE_BRAKE_AT_TARGET_POSITION = 0x66
     };
     FVec4 vec[6];
     Moby *moby;
@@ -534,7 +536,7 @@ void FUN_L01_002370b8(void) {
     case 0x1D:
     case 0x1E:
     case 0x1F:
-    case 0x3D:
+    case HERO_STATE_DYING:
     case 0x70:
     case 0x71:
     case 0x72:
@@ -2141,7 +2143,7 @@ void FUN_L01_002370b8(void) {
             FUN_L00_002334d0(hero.motion.velocity.f, hero.motion.velocity.f, frame_time_sq * 54.0f);
         }
     } break;
-    case 0x66: {
+    case HERO_STATE_BRAKE_AT_TARGET_POSITION: {
 
         subtract_vector_xyz(vec[0], hero.unk1640.f, hero.motion.pos.f);
         if (dot_vectors_xyz(vec[0], hero.motion.unk150.f) < 0.0f) {
@@ -2178,7 +2180,7 @@ void FUN_L01_002370b8(void) {
             FUN_L00_002334d0(hero.motion.velocity.f, hero.motion.velocity.f, frame_time_sq * 54.0f);
         }
         break;
-    case 0x58:
+    case HERO_STATE_DOWNHILL_SLIDE:
         hero.motion.move_yaw = hero.downhill_yaw;
         hero.target_speed = frame_time * 5.5f;
         air_accel(frame_time_sq * 25.0f);

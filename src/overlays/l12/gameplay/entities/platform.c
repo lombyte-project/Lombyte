@@ -558,6 +558,7 @@ void FUN_L12_002e1be0(AnklebiterMoby_2E2EF0 *moby) {
         ANKLEBITER_MELEE_ATTACK = 5,
         ANKLEBITER_RETURN_HOME = 6,
         ANKLEBITER_KNOCKBACK_FALL = 7,
+        ANKLEBITER_CONTROLLED_MOTION_UNTIL_RETURN_HOME = 8,
         ANKLEBITER_DORMANT = 9,
         ANKLEBITER_RECOVER_AFTER_KNOCKBACK = 10,
         ANKLEBITER_WAIT_FOR_LEAP_TRIGGER = 11,
@@ -775,7 +776,7 @@ void FUN_L12_002e1be0(AnklebiterMoby_2E2EF0 *moby) {
         }
         if(moby->pos[2]<27.0f) { func_0020D678_2E2EF0(moby); return; }
         break;
-    case 8:
+    case ANKLEBITER_CONTROLLED_MOTION_UNTIL_RETURN_HOME:
         if(func_L00_002DDEA0_2E2EF0(moby,data->fall)) { moby->state=6; data->return_timer=0; data->stuck=0; }
         break;
     case ANKLEBITER_RECOVER_AFTER_KNOCKBACK:

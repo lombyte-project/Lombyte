@@ -87,6 +87,9 @@ extern int hero_set_state(int, int) __asm__("FUN_L03_00216648");
 extern char D_L03_0017C020[];
 extern char D_L03_0017C060[];
 int hero_set_state(int a, int b) {
+    enum {
+        HERO_STATE_DROWN = 0x6A
+    };
     int old2088;
     char *moby;
     int old20A7;
@@ -183,7 +186,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x41: {
+    case HERO_STATE_FIDGET_ALT: {
         int t = scale_game_frames(9);
         set_hero_animation(FUN_L01_00226f10(0), 0, (float)t);
         {
@@ -400,7 +403,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0x65, 0, (float)scale_game_frames(0x11));
         break;
     }
-    case 0x6A: {
+    case HERO_STATE_DROWN: {
         struct Hero *p = &hero;
         p->state.control_mode = 0x14;
         p->unk20A7 = 1;
@@ -453,7 +456,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0x80, 0, (float)scale_game_frames(0xA));
         break;
     }
-    case 1: {
+    case HERO_STATE_LOOK: {
         struct Hero *p = &hero;
         int t;
         p->state.control_mode = 0;
@@ -1308,8 +1311,8 @@ int hero_set_state(int a, int b) {
         break;
     }
     case HERO_STATE_WRENCH_COMBO:
-    case 0x14:
-    case 0x15:
+    case HERO_STATE_WRENCH_SLAM:
+    case HERO_STATE_CROUCH_SWING:
     case 0x20:
     case 0x23:
     case 0x51: {
@@ -1321,7 +1324,7 @@ int hero_set_state(int a, int b) {
         *(int *)&p->unkA54 = 0;
         p->unkA64 = 0;
         switch (p->state.current) {
-        case 0x14: {
+        case HERO_STATE_WRENCH_SLAM: {
             struct UsageStat *h = usage_stats.stat;
             struct Hero *q;
             if (h[0].count <= 0xFFFE) {
@@ -1350,7 +1353,7 @@ int hero_set_state(int a, int b) {
             }
             break;
         }
-        case 0x15: {
+        case HERO_STATE_CROUCH_SWING: {
             struct UsageStat *h = usage_stats.stat;
             char *h2;
             struct Hero *q;
@@ -1489,7 +1492,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x7A: {
+    case HERO_STATE_WALL_BONK: {
         struct Hero *p = &hero;
         p->state.control_mode = 0xA;
         p->unk2284 = 0;

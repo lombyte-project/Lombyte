@@ -1534,6 +1534,13 @@ void drek_final_boss_robot_update(BossMoby *moby) {
         DREK_BOSS_APPROACH_SELECTED_MOBY = 0x15,
         DREK_BOSS_DEATH_EXPLOSIONS = 0x1A
     };
+    enum {
+        DREK_BOSS_WAIT_FOR_ENCOUNTER_TRIGGER = 1,
+        DREK_BOSS_WAIT_FOR_GROUNDED_HERO_TO_START_SCENE = 4,
+        DREK_BOSS_FOLLOW_PATH_AND_FIRE_AT_MOBYS = 10,
+        DREK_BOSS_FINISH_PATH_AND_WAIT_FOR_HERO = 0xB,
+        DREK_BOSS_RUN_ENDING_SEQUENCE = 0x1B
+    };
     BossData *d = (BossData *)moby->f78;
     BossMoby *tgt;
     float v0[4];
@@ -1618,7 +1625,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
             }
         }
         break;
-    case 1:
+    case DREK_BOSS_WAIT_FOR_ENCOUNTER_TRIGGER:
         if (is_point_inside_clip_volume(hero.motion.pos.f, d->f274) != 0 &&
             hero.vehicle_mode == 2) {
             moby->f20 = 7;
@@ -1831,7 +1838,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
         }
         break;
     }
-    case 10: {
+    case DREK_BOSS_FOLLOW_PATH_AND_FIRE_AT_MOBYS: {
         unsigned char *h;
 
         aim = &moby->f40[2];
@@ -1870,7 +1877,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
         }
         break;
     }
-    case 0xB:
+    case DREK_BOSS_FINISH_PATH_AND_WAIT_FOR_HERO:
         if (d->f348 != *d->f340) {
             approach_value(&d->f374, frame_time * 10.0f, D_0015ED6C_e[1] * 20.0f);
             subtract_vector_xyz(v0, (char *)d->f340 + (d->f348 * 0x10 + 0x10), d->f3C0);
@@ -1901,7 +1908,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
             moby->f20 = 0xC;
         }
         break;
-    case 4:
+    case DREK_BOSS_WAIT_FOR_GROUNDED_HERO_TO_START_SCENE:
         if (hero.air_frames.s == 0 && (((BossMoby *)hero.ground_moby) == 0 || ((BossMoby *)hero.ground_moby)->fA6 != 0x24B)) {
             int i;
 
@@ -2073,7 +2080,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
             break;
         }
         break;
-    case 0xE:
+    case DREK_BOSS_ACTION_REPOSITION_AND_AIM:
         aim = &moby->f40[2];
         ang = fast_arc_tan(d->f320[0] - moby->f10[0], d->f320[1] - moby->f10[1]);
         approach_angle(aim, &d->f370, ang, D_0015ED6C_e[1] * 6.2831855f,
@@ -2466,7 +2473,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
         }
         break;
     }
-    case 0x1B:
+    case DREK_BOSS_RUN_ENDING_SEQUENCE:
         moby->f94 = 0;
         moby->f34 |= 0x41;
         moby->f34 &= 0xEFFF;

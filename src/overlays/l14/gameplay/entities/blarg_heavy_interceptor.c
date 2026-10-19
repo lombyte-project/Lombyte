@@ -834,6 +834,7 @@ void FUN_L14_002ad8b8(struct Moby *moby) {
         HIT_REACTION_NO_ACTION = 0,
         HIT_REACTION_LETHAL = 1,
         HIT_REACTION_DEATH_FALL = 2,
+        HIT_REACTION_PLAY_HIT_ANIMATION = 3,
         HIT_REACTION_NONE = 11
     };
     char *data = (char *)moby->pvars;
@@ -857,7 +858,7 @@ void FUN_L14_002ad8b8(struct Moby *moby) {
             data[0x67] = 0x64;
             blend_moby_animation(moby, 1, 0, 5);
             break;
-        case 3:
+        case HIT_REACTION_PLAY_HIT_ANIMATION:
         case 4:
         case 5:
         case 6:
@@ -1709,7 +1710,8 @@ void machinegun_turret_update(char *moby) {
         TURRET_STATE_DESTROY = 6
     };
     enum {
-        TURRET_SPAWN_CENTER = 0
+        TURRET_SPAWN_CENTER = 0,
+        TURRET_SPAWN_UNNEGATED_OFFSET = 1
     };
     char *data;
     float target_point_scratch[4];
@@ -1840,7 +1842,7 @@ void machinegun_turret_update(char *moby) {
             case TURRET_SPAWN_CENTER:
                 func_L00_001FF4B0_2B4E40(spawn_position, moby + 0xE0, D_L14_00161520);
                 break;
-            case 1:
+            case TURRET_SPAWN_UNNEGATED_OFFSET:
                 func_L00_001FF4B0_2B4E40(spawn_position, moby + 0xE0, D_L14_00161524);
                 func_L00_001FF4B0_2B4E40(spawn_position_offset, moby + 0xD0, D_L14_0016152C);
                 func_001F9BD8_2B4E40(spawn_position, spawn_position, spawn_position_offset);
@@ -1920,6 +1922,7 @@ void FUN_L14_002b4340(struct Moby *m) {
         HIT_REACTION_NO_ACTION = 0,
         HIT_REACTION_LETHAL = 1,
         HIT_REACTION_DESTROY = 2,
+        HIT_REACTION_PLAY_HIT_ANIMATION = 3,
         HIT_REACTION_NONE = 11
     };
     unsigned char *d = m->pvars;
@@ -1950,7 +1953,7 @@ void FUN_L14_002b4340(struct Moby *m) {
         case 10:
             d[0x67] = 100;
             break;
-        case 3:
+        case HIT_REACTION_PLAY_HIT_ANIMATION:
         case 4:
         case 5:
         case 6:
@@ -2214,6 +2217,7 @@ void minibomber_update(Moby_2B5938 *moby) {
         MINIBOMBER_STATE_WAIT_TO_FOLLOW_PATH = 1,
         MINIBOMBER_STATE_FOLLOW_INTRO_OR_EXIT_PATH = 2,
         MINIBOMBER_STATE_RETRACE_INTRO_OR_EXIT_PATH = 3,
+        MINIBOMBER_STATE_HOLD_AT_PATH_END = 4,
         MINIBOMBER_STATE_AIM_AT_BOMB_POINT = 5,
         MINIBOMBER_STATE_RELEASE_BOMB = 6,
         MINIBOMBER_STATE_TRAVERSE_PATH = 7,
@@ -2372,7 +2376,7 @@ void minibomber_update(Moby_2B5938 *moby) {
         }
         break;
     }
-    case 4:
+    case MINIBOMBER_STATE_HOLD_AT_PATH_END:
         tg = 0.0f;
         a = blend_scalar_alt(tg, d->f104, (float)d->f102 / convert_integer_to_float(scale_game_frames_c(D_L14_00161560)));
         FUN_L00_001fff28(d->f120, 2, a);
@@ -2511,6 +2515,7 @@ void FUN_L14_002b5290(struct Moby *m) {
         HIT_REACTION_NO_ACTION = 0,
         HIT_REACTION_LETHAL = 1,
         HIT_REACTION_DESTROY = 2,
+        HIT_REACTION_PLAY_HIT_ANIMATION = 3,
         HIT_REACTION_NONE = 11
     };
     unsigned char *d = m->pvars;
@@ -2541,7 +2546,7 @@ void FUN_L14_002b5290(struct Moby *m) {
         case HIT_REACTION_NO_ACTION:
         case HIT_REACTION_NONE:
             break;
-        case 3:
+        case HIT_REACTION_PLAY_HIT_ANIMATION:
         case 4:
         case 5:
         case 6:

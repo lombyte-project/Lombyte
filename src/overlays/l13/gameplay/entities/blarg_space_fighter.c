@@ -618,6 +618,9 @@ void FUN_L13_002c2d30(unsigned char *moby) {
         HIT_REACTION_LETHAL = 1,
         HIT_REACTION_REMOVE = 2,
         HIT_REACTION_LOW_INTERPOLATION_TARGET = 3,
+        HIT_REACTION_LOW_INTERPOLATION_TARGET_ALTERNATE = 4,
+        HIT_REACTION_LOW_INTERPOLATION_TARGET_SECOND_ALTERNATE = 5,
+        HIT_REACTION_LOW_INTERPOLATION_TARGET_THIRD_ALTERNATE = 6,
         HIT_REACTION_HIGH_INTERPOLATION_TARGET = 9,
         HIT_REACTION_HIGH_INTERPOLATION_TARGET_ALTERNATE = 10,
         HIT_REACTION_NO_HIT = 11
@@ -692,9 +695,9 @@ void FUN_L13_002c2d30(unsigned char *moby) {
             d[0x67] = 0xFA;
             break;
         case HIT_REACTION_LOW_INTERPOLATION_TARGET:
-        case 4:
-        case 5:
-        case 6:
+        case HIT_REACTION_LOW_INTERPOLATION_TARGET_ALTERNATE:
+        case HIT_REACTION_LOW_INTERPOLATION_TARGET_SECOND_ALTERNATE:
+        case HIT_REACTION_LOW_INTERPOLATION_TARGET_THIRD_ALTERNATE:
         case 7:
         case 8:
             d[0x67] = 0x78;
@@ -752,6 +755,11 @@ void FUN_L13_002c37e0(struct Moby *moby, unsigned char *d, float *fp) {
         HIT_REACTION_LETHAL = 1,
         HIT_REACTION_REMOVE = 2,
         HIT_REACTION_LOW_INTERPOLATION_TARGET = 3,
+        HIT_REACTION_LOW_INTERPOLATION_TARGET_ALTERNATE = 4,
+        HIT_REACTION_LOW_INTERPOLATION_TARGET_SECOND_ALTERNATE = 5,
+        HIT_REACTION_LOW_INTERPOLATION_TARGET_THIRD_ALTERNATE = 6,
+        HIT_REACTION_LOW_INTERPOLATION_TARGET_FOURTH_ALTERNATE = 7,
+        HIT_REACTION_LOW_INTERPOLATION_TARGET_FIFTH_ALTERNATE = 8,
         HIT_REACTION_HIGH_INTERPOLATION_TARGET = 9,
         HIT_REACTION_HIGH_INTERPOLATION_TARGET_ALTERNATE = 10,
         HIT_REACTION_NO_HIT = 11
@@ -767,11 +775,11 @@ void FUN_L13_002c37e0(struct Moby *moby, unsigned char *d, float *fp) {
             break;
         case HIT_REACTION_NONE:
         case HIT_REACTION_LOW_INTERPOLATION_TARGET:
-        case 4:
-        case 5:
-        case 6:
-        case 7:
-        case 8:
+        case HIT_REACTION_LOW_INTERPOLATION_TARGET_ALTERNATE:
+        case HIT_REACTION_LOW_INTERPOLATION_TARGET_SECOND_ALTERNATE:
+        case HIT_REACTION_LOW_INTERPOLATION_TARGET_THIRD_ALTERNATE:
+        case HIT_REACTION_LOW_INTERPOLATION_TARGET_FOURTH_ALTERNATE:
+        case HIT_REACTION_LOW_INTERPOLATION_TARGET_FIFTH_ALTERNATE:
         case HIT_REACTION_HIGH_INTERPOLATION_TARGET:
         case HIT_REACTION_HIGH_INTERPOLATION_TARGET_ALTERNATE:
         case HIT_REACTION_NO_HIT:
@@ -1173,8 +1181,13 @@ void FUN_L13_002c4428(Moby_2C56B0 *moby) {
         FIGHTER_DESTRUCTION_SPAWN_CLASS_E0 = 0,
         FIGHTER_DESTRUCTION_SPAWN_CLASS_E4 = 1,
         FIGHTER_DESTRUCTION_SPAWN_CLASS_E4_ALTERNATE = 2,
+        FIGHTER_DESTRUCTION_SPAWN_CLASS_E4_SECOND_ALTERNATE = 3,
+        FIGHTER_DESTRUCTION_SPAWN_CLASS_E4_THIRD_ALTERNATE = 4,
+        FIGHTER_DESTRUCTION_SPAWN_CLASS_E4_FOURTH_ALTERNATE = 5,
+        FIGHTER_DESTRUCTION_SPAWN_CLASS_E4_FIFTH_ALTERNATE = 6,
         FIGHTER_DESTRUCTION_SKIP_SPAWN = 7,
-        FIGHTER_DESTRUCTION_SKIP_SPAWN_ALTERNATE = 8
+        FIGHTER_DESTRUCTION_SKIP_SPAWN_ALTERNATE = 8,
+        FIGHTER_DESTRUCTION_SKIP_SPAWN_SECOND_ALTERNATE = 9
     };
     Data_2C56B0 *d;
     Moby_2C56B0 *veh;
@@ -1374,15 +1387,15 @@ void FUN_L13_002c4428(Moby_2C56B0 *moby) {
             break;
         case FIGHTER_DESTRUCTION_SPAWN_CLASS_E4:
         case FIGHTER_DESTRUCTION_SPAWN_CLASS_E4_ALTERNATE:
-        case 3:
-        case 4:
-        case 5:
-        case 6:
+        case FIGHTER_DESTRUCTION_SPAWN_CLASS_E4_SECOND_ALTERNATE:
+        case FIGHTER_DESTRUCTION_SPAWN_CLASS_E4_THIRD_ALTERNATE:
+        case FIGHTER_DESTRUCTION_SPAWN_CLASS_E4_FOURTH_ALTERNATE:
+        case FIGHTER_DESTRUCTION_SPAWN_CLASS_E4_FIFTH_ALTERNATE:
             FUN_L13_002e1c50((char *)spawn_position, 0xE4);
             break;
         case FIGHTER_DESTRUCTION_SKIP_SPAWN:
         case FIGHTER_DESTRUCTION_SKIP_SPAWN_ALTERNATE:
-        case 9:
+        case FIGHTER_DESTRUCTION_SKIP_SPAWN_SECOND_ALTERNATE:
             break;
         }
         boss = 0;
@@ -1707,7 +1720,10 @@ void FUN_L13_002cecb8(struct Moby *moby, unsigned char *d, float *health) {
         HIT_REACTION_NONE = 0,
         HIT_REACTION_LETHAL = 1,
         HIT_REACTION_REMOVE = 2,
+        HIT_REACTION_LOW_INTERPOLATION_TARGET = 3,
+        HIT_REACTION_LOW_INTERPOLATION_TARGET_ALTERNATE = 4,
         HIT_REACTION_HIGH_INTERPOLATION_TARGET = 9,
+        HIT_REACTION_HIGH_INTERPOLATION_TARGET_ALTERNATE = 10,
         HIT_REACTION_NO_HIT = 11
     };
     char *src;
@@ -1730,14 +1746,14 @@ void FUN_L13_002cecb8(struct Moby *moby, unsigned char *d, float *health) {
             *health = 0.0f;
             break;
         case HIT_REACTION_NONE:
-        case 3:
-        case 4:
+        case HIT_REACTION_LOW_INTERPOLATION_TARGET:
+        case HIT_REACTION_LOW_INTERPOLATION_TARGET_ALTERNATE:
         case 5:
         case 6:
         case 7:
         case 8:
         case HIT_REACTION_HIGH_INTERPOLATION_TARGET:
-        case 10:
+        case HIT_REACTION_HIGH_INTERPOLATION_TARGET_ALTERNATE:
         case HIT_REACTION_NO_HIT:
             break;
         }
@@ -2242,6 +2258,11 @@ int FUN_L13_002e4300(struct Moby *m, char *arg, float *t) {
         HIT_REACTION_LETHAL = 1,
         HIT_REACTION_REMOVE = 2,
         HIT_REACTION_LOW_INTERPOLATION_TARGET = 3,
+        HIT_REACTION_LOW_INTERPOLATION_TARGET_ALTERNATE = 4,
+        HIT_REACTION_LOW_INTERPOLATION_TARGET_SECOND_ALTERNATE = 5,
+        HIT_REACTION_LOW_INTERPOLATION_TARGET_THIRD_ALTERNATE = 6,
+        HIT_REACTION_LOW_INTERPOLATION_TARGET_FOURTH_ALTERNATE = 7,
+        HIT_REACTION_LOW_INTERPOLATION_TARGET_FIFTH_ALTERNATE = 8,
         HIT_REACTION_HIGH_INTERPOLATION_TARGET = 9,
         HIT_REACTION_HIGH_INTERPOLATION_TARGET_ALTERNATE = 10,
         HIT_REACTION_NO_HIT = 11
@@ -2260,11 +2281,11 @@ int FUN_L13_002e4300(struct Moby *m, char *arg, float *t) {
         *(int *)t = 0;
         break;
     case HIT_REACTION_LOW_INTERPOLATION_TARGET:
-    case 4:
-    case 5:
-    case 6:
-    case 7:
-    case 8:
+    case HIT_REACTION_LOW_INTERPOLATION_TARGET_ALTERNATE:
+    case HIT_REACTION_LOW_INTERPOLATION_TARGET_SECOND_ALTERNATE:
+    case HIT_REACTION_LOW_INTERPOLATION_TARGET_THIRD_ALTERNATE:
+    case HIT_REACTION_LOW_INTERPOLATION_TARGET_FOURTH_ALTERNATE:
+    case HIT_REACTION_LOW_INTERPOLATION_TARGET_FIFTH_ALTERNATE:
     case HIT_REACTION_HIGH_INTERPOLATION_TARGET:
     case HIT_REACTION_HIGH_INTERPOLATION_TARGET_ALTERNATE:
     case HIT_REACTION_NO_HIT:
@@ -3141,8 +3162,14 @@ void FUN_L13_002e9a48(Moby_2EAE80 *m, Data_2EAE80 *d) {
         DAMAGE_STAGE_QUEUE_RANDOM_LINE = 1,
         DAMAGE_STAGE_START_TIMER_AND_QUEUE_LINE = 2,
         DAMAGE_STAGE_QUEUE_SINGLE_LINE = 3,
+        DAMAGE_STAGE_SKIP_LINE_QUEUE_ALTERNATE = 4,
         DAMAGE_STAGE_QUEUE_ALTERNATE_SINGLE_LINE = 5,
-        DAMAGE_STAGE_QUEUE_LATE_SINGLE_LINE = 6
+        DAMAGE_STAGE_QUEUE_LATE_SINGLE_LINE = 6,
+        DAMAGE_STAGE_SKIP_LINE_QUEUE_SECOND_ALTERNATE = 7
+    };
+    enum {
+        CHILD_HIT_HALF_DAMAGE = 0x127,
+        CHILD_HIT_FIXED_DAMAGE = 0x3F1
     };
     int hit;
     int rf;
@@ -3261,10 +3288,10 @@ void FUN_L13_002e9a48(Moby_2EAE80 *m, Data_2EAE80 *d) {
             }
             if (0.0f < r->f2C) {
                 switch (r->h2A) {
-                case 0x3F1:
+                case CHILD_HIT_FIXED_DAMAGE:
                     r->f2C = 0.1f;
                     break;
-                case 0x127:
+                case CHILD_HIT_HALF_DAMAGE:
                     r->f2C = r->f2C * 0.5f;
                     break;
                 }
@@ -3350,7 +3377,7 @@ void FUN_L13_002e9a48(Moby_2EAE80 *m, Data_2EAE80 *d) {
                 case DAMAGE_STAGE_QUEUE_SINGLE_LINE:
                     func_L13_002E9B30_2EAE80(m, d, 0x11, 1);
                     break;
-                case 4:
+                case DAMAGE_STAGE_SKIP_LINE_QUEUE_ALTERNATE:
                     break;
                 case DAMAGE_STAGE_QUEUE_ALTERNATE_SINGLE_LINE:
                     func_L13_002E9B30_2EAE80(m, d, 0x13, 1);
@@ -3358,7 +3385,7 @@ void FUN_L13_002e9a48(Moby_2EAE80 *m, Data_2EAE80 *d) {
                 case DAMAGE_STAGE_QUEUE_LATE_SINGLE_LINE:
                     func_L13_002E9B30_2EAE80(m, d, 0x16, 1);
                     break;
-                case 7:
+                case DAMAGE_STAGE_SKIP_LINE_QUEUE_SECOND_ALTERNATE:
                     break;
                 }
             } else if (m->bBC == 7 && d->b148 != 0) {

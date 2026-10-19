@@ -1392,7 +1392,7 @@ void FUN_L02_00225c20(void) {
             }
         }
     } break;
-    case 0x15: {
+    case HERO_STATE_CROUCH_SWING: {
         int skip;
 
         hero.target_speed = 0.0f;
@@ -1558,7 +1558,7 @@ void FUN_L02_00225c20(void) {
         FUN_L00_00217118(3.7f, 0.0f);
     } break;
     case 0x21:
-    case 0x7A:
+    case HERO_STATE_WALL_BONK:
         approach_value(&hero.ground_speed, 0.0f, frame_time_sq * 24.0f);
         hero.motion.velocity.f[0] = fast_cos(hero.unkA68) * hero.ground_speed;
         hero.motion.velocity.f[1] = fast_sin(hero.unkA68) * hero.ground_speed;
@@ -2001,7 +2001,7 @@ void FUN_L02_00225c20(void) {
         }
         FUN_L00_00216de8_cf();
     } break;
-    case 0x7:
+    case HERO_STATE_JUMP:
     case HERO_STATE_RUN_JUMP:
     case HERO_STATE_PACK_JUMP:
     case HERO_STATE_HIGH_JUMP:

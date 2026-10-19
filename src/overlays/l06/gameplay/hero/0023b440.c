@@ -134,10 +134,13 @@ extern int func_001F9908_r(int *) __asm__("FUN_001f9740");
 extern float D_L06_00167558_lui __asm__("D_L06_00167558") __attribute__((section(".data")));
 void FUN_L06_0023b440(void) {
     enum {
+        HERO_STATE_DOUBLE_JUMP = 14,
         HERO_STATE_GRIND_JUMP = 41,
         HERO_STATE_GRIND_RAIL_TRANSFER = 42,
         HERO_STATE_GRIND_ATTACK = 43,
-        HERO_STATE_GRIND_COLLISION_RECOVERY = 66
+        HERO_STATE_GRIND_COLLISION_RECOVERY = 66,
+        HERO_STATE_APPROACH_TARGET_POSE = 101,
+        HERO_STATE_DEATH_FALL = 119
     };
     unsigned char *moby;
     int prevSub;
@@ -735,7 +738,7 @@ void FUN_L06_0023b440(void) {
                         break;
                     }
                     break;
-                case 101:
+                case HERO_STATE_APPROACH_TARGET_POSE:
                     if (vector_distance(hero.motion.pos.f, hero.unk1640.f) < 0.2f) {
                         if (frame_time * 2.7f > hero.motion.speed_xy) {
                             if (fast_difference_between_rotations(
@@ -1486,7 +1489,7 @@ void FUN_L06_0023b440(void) {
                         hero_set_state(HERO_STATE_GRIND, 1);
                     }
                     break;
-                case 119:
+                case HERO_STATE_DEATH_FALL:
                     if ((current_level_index == 3 && 5.0f > hero.motion.pos.f[2]) ||
                         (current_level_index == 6 && 50.0f > hero.motion.pos.f[2]) ||
                         (current_level_index == 0x10 && (77.0f > hero.motion.pos.f[2] ||
@@ -1631,7 +1634,7 @@ void FUN_L06_0023b440(void) {
                 case HERO_STATE_HIGH_JUMP:
                 case 12:
                 case 13:
-                case 14:
+                case HERO_STATE_DOUBLE_JUMP:
                 case 15:
                 case HERO_STATE_PACK_LONG_JUMP:
                 case 17:

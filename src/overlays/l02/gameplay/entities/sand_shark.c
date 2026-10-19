@@ -313,17 +313,23 @@ void sand_shark_update(struct Moby *moby) __asm__("FUN_L02_002d3e50");
 void sand_shark_update(struct Moby *moby) {
     enum {
         SAND_SHARK_INITIALIZE = 0,
+        SAND_SHARK_BEGIN_RETURN_HOME_WITH_HEIGHT_OFFSET = 1,
         SAND_SHARK_WANDER_AROUND_HOME = 2,
         SAND_SHARK_WAIT_FOR_TARGET_IN_VOLUME = 3,
         SAND_SHARK_APPROACH_TARGET = 5,
         SAND_SHARK_RETURN_HOME = 7,
         SAND_SHARK_WAIT_FOR_HERO_LAUNCH_TRIGGER = 12,
         SAND_SHARK_BALLISTIC_FLIGHT = 13,
+        SAND_SHARK_APPROACH_TARGET_WITH_PATH_PROXIMITY_CHECK = 14,
         SAND_SHARK_FACE_TARGET = 15,
+        SAND_SHARK_ALIGN_TO_GROUND_BEFORE_APPROACH_TARGET_WITH_HEIGHT_OFFSET = 17,
+        SAND_SHARK_ALIGN_TO_GROUND_BEFORE_RETURN_HOME_WITH_HEIGHT_OFFSET = 18,
         SAND_SHARK_ALIGN_TO_GROUND_BEFORE_APPROACH_TARGET = 19,
         SAND_SHARK_ALIGN_TO_GROUND_BEFORE_RETURN_HOME = 20,
+        SAND_SHARK_ALIGN_TO_GROUND_BEFORE_APPROACH_TARGET_WITH_PATH_PROXIMITY_CHECK = 21,
         SAND_SHARK_APPROACH_TARGET_WITH_HEIGHT_OFFSET = 22,
         SAND_SHARK_RETURN_HOME_WITH_HEIGHT_OFFSET = 23,
+        SAND_SHARK_DEATH_KNOCKBACK = 24,
         SAND_SHARK_FADE_OUT = 25,
         SAND_SHARK_BALLISTIC_FLIGHT_WITH_PARTICLES = 27
     };
@@ -421,7 +427,7 @@ void sand_shark_update(struct Moby *moby) {
             moby->pos.z -= D_L02_0016191C;
         }
         break;
-    case 1:
+    case SAND_SHARK_BEGIN_RETURN_HOME_WITH_HEIGHT_OFFSET:
         fast_vec_sub(&v0, &hero.motion.pos, &moby->pos);
         moby->state = 0x12;
         if (moby->prev_seq != 0) {
@@ -481,7 +487,7 @@ void sand_shark_update(struct Moby *moby) {
             }
         }
         break;
-    case 14: {
+    case SAND_SHARK_APPROACH_TARGET_WITH_PATH_PROXIMITY_CHECK: {
         int hit14;
         qcopy(&v1, &vars->target);
         hit14 = 0;
@@ -537,8 +543,8 @@ void sand_shark_update(struct Moby *moby) {
             moby->state = 0x12;
         }
         break;
-    case 17:
-    case 18: {
+    case SAND_SHARK_ALIGN_TO_GROUND_BEFORE_APPROACH_TARGET_WITH_HEIGHT_OFFSET:
+    case SAND_SHARK_ALIGN_TO_GROUND_BEFORE_RETURN_HOME_WITH_HEIGHT_OFFSET: {
         float g;
         moby->pos.z += D_L02_0016191C;
         g = ground_e50(&moby->pos, 0, 0.5f);
@@ -566,7 +572,7 @@ void sand_shark_update(struct Moby *moby) {
     }
     case SAND_SHARK_ALIGN_TO_GROUND_BEFORE_APPROACH_TARGET:
     case SAND_SHARK_ALIGN_TO_GROUND_BEFORE_RETURN_HOME:
-    case 21: {
+    case SAND_SHARK_ALIGN_TO_GROUND_BEFORE_APPROACH_TARGET_WITH_PATH_PROXIMITY_CHECK: {
         float g;
         moby->pos.z += D_L02_0016191C;
         g = ground_e50(&moby->pos, 0, 0.5f);
@@ -823,7 +829,7 @@ void sand_shark_update(struct Moby *moby) {
         }
         break;
     }
-    case 24: {
+    case SAND_SHARK_DEATH_KNOCKBACK: {
         int res = FUN_L00_0025c698_e50(moby, vars->unk120);
         if ((res & 1) && vars->unk29C == 0) {
             vars->unk29C = 1;

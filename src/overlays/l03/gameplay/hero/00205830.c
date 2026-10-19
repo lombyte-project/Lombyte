@@ -485,7 +485,7 @@ void FUN_L03_0020ef60(void) {
             }
         }
         break;
-    case 0x7F:
+    case HERO_STATE_SINK:
         if (MV(hero.unk6A4) == NULL) {
             struct MobyView *m = create_moby(0x52A);
             s32 h40 = 0x40;
@@ -1236,7 +1236,7 @@ void FUN_L03_0020ef60(void) {
         }
         break;
     }
-    case 0x15: {
+    case HERO_STATE_CROUCH_SWING: {
         s32 jumping;
         hero.target_speed = 0.0f;
         if (hero.unkA9C != 0 || hero.anim_frame < D_L03_0017BD28[hero.attack_record].f18) {
@@ -2113,7 +2113,7 @@ void FUN_L03_0020ef60(void) {
             FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.velocity, frame_time_sq * 54.0f);
         }
         break;
-    case 0x40:
+    case HERO_STATE_FIDGET:
     case 0x67:
         clear_u64_value(&hero.motion.velocity);
         break;

@@ -30,6 +30,7 @@ s32 update_menu_entry_actions(struct MenuScreen *menu) {
         MENU_ACTION_ALLOCATE_VOICE = 2,
         MENU_ACTION_SET_NEXT_PAGE = 3,
         MENU_ACTION_REQUEST_CLOSE_WITH_OPTIONAL_MESSAGE = 6,
+        MENU_ACTION_REQUEST_CLOSE_WITH_WORD_PAYLOAD = 7,
         MENU_ACTION_SET_LANGUAGE = 9,
         MENU_ACTION_REQUEST_CLOSE_PRESERVING_PAYLOAD = 11
     };
@@ -122,7 +123,7 @@ s32 update_menu_entry_actions(struct MenuScreen *menu) {
                 menu->data.list.items[menu->data.list.selected].param.half.lo;
             allocate_voice_for_target_entry(0, 0x11, menu->moby);
             return 0;
-        case 7:
+        case MENU_ACTION_REQUEST_CLOSE_WITH_WORD_PAYLOAD:
             menu_system.unkF4 = 2;
             menu_system.unkF0 = menu_system.current;
             menu_system.close_request = 3;

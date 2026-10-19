@@ -79,6 +79,10 @@ extern void subtract_vector_xyz(void *dst, void *a, void *b);
 extern int hero_set_state(int, int) __asm__("FUN_L14_0022ff58");
 extern char D_L14_0017C620[];
 int hero_set_state(int a, int b) {
+    enum {
+        HERO_STATE_GRIND_HURT = 0x42,
+        HERO_STATE_VEHICLE_IDLE = 0x53
+    };
     int old2088;
     char *moby;
     int old20A7;
@@ -184,7 +188,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x41: {
+    case HERO_STATE_FIDGET_ALT: {
         int t = scale_game_frames(9);
         set_hero_animation(FUN_L12_00227f10(0), 0, (float)t);
         {
@@ -231,7 +235,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0x74, 0, (float)scale_game_frames(0xB));
         break;
     }
-    case 1: {
+    case HERO_STATE_LOOK: {
         struct Hero *p = &hero;
         int t;
         p->state.control_mode = 0;
@@ -1377,7 +1381,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x7A: {
+    case HERO_STATE_WALL_BONK: {
         struct Hero *p = &hero;
         p->state.control_mode = 0xA;
         p->unk2284 = 0;
@@ -1413,7 +1417,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x53: {
+    case HERO_STATE_VEHICLE_IDLE: {
         struct Hero *p = &hero;
         p->state.control_mode = 0;
         p->unk2284 = 0;
@@ -1494,7 +1498,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x42: {
+    case HERO_STATE_GRIND_HURT: {
         struct Hero *p = &hero;
         p->state.control_mode = 0xF;
         p->unk2284 = 0;

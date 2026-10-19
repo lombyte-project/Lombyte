@@ -650,6 +650,9 @@ int FUN_L05_00251be8(void) {
         ITEM_WRENCH = 8,
         ITEM_TARGET_INTERACTION_DEVICE = 12,
         ITEM_HELD_SOUND_DEVICE = 15,
+        ITEM_STATE_CHANGING_SOUND_DEVICE = 18,
+        ITEM_PRESS_ACTIVATED_DEVICE = 21,
+        ITEM_HERO_SOUND_REQUEST_DEVICE = 31,
         ITEM_AMMO_MENU_DEVICE = 32,
         ITEM_RACE_PROJECTILE = 36
     };
@@ -811,7 +814,7 @@ int FUN_L05_00251be8(void) {
             }
         }
         break;
-    case 31:
+    case ITEM_HERO_SOUND_REQUEST_DEVICE:
         if ((*(Hero *)((char *)&hero)).vehicle_mode != 0) {
             break;
         }
@@ -900,7 +903,7 @@ int FUN_L05_00251be8(void) {
             }
         }
         break;
-    case 18:
+    case ITEM_STATE_CHANGING_SOUND_DEVICE:
         if ((*(Hero *)((char *)&hero)).state.control_mode < 2U || ((*(Hero *)((char *)&hero)).state.control_mode == 4 && (*(Hero *)((char *)&hero)).unk418 != 0)) {
             if ((*(Hero *)((char *)&hero)).state.current != 1) {
                 int window = scale_game_frames_alt(0xA);
@@ -917,7 +920,7 @@ int FUN_L05_00251be8(void) {
             }
         }
         break;
-    case 21:
+    case ITEM_PRESS_ACTIVATED_DEVICE:
         if (((Moby *)(*(Hero *)((char *)&hero)).items[0].moby) != 0) {
             if (D_0013CA40_p2523C8.pressed & mask) {
                 FUN_L00_0020e4c8();

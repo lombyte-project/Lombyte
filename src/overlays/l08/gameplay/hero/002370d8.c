@@ -149,7 +149,10 @@ void FUN_L08_002370d8(void) {
         HERO_STATE_GRIND_RAIL_TRANSFER = 42,
         HERO_STATE_GRIND_ATTACK = 43,
         HERO_STATE_GRIND_COLLISION_RECOVERY = 66,
-        HERO_STATE_APPROACH_TARGET = 101
+        HERO_STATE_APPROACH_TARGET = 101,
+        HERO_STATE_TARGET_ARRIVAL = 103,
+        HERO_STATE_WATER_DEATH = 106,
+        HERO_STATE_FATAL_FALL = 119
     };
     unsigned char *moby;
     int prevSub;
@@ -476,7 +479,7 @@ void FUN_L08_002370d8(void) {
                 case 71:
                 case 87:
                 case 98:
-                case 106:
+                case HERO_STATE_WATER_DEATH:
                 case 128:
                 case 130:
                     if (hero.unkA98 & 2) {
@@ -923,7 +926,7 @@ void FUN_L08_002370d8(void) {
                         hero_set_state(0x65, 1);
                     }
                     break;
-                case 103:
+                case HERO_STATE_TARGET_ARRIVAL:
                     if ((hero.unkA98 & 2) || hero.unk1650 != 0) {
                         hero_set_state(HERO_STATE_IDLE, 1);
                     }
@@ -1706,7 +1709,7 @@ void FUN_L08_002370d8(void) {
                         hero_set_state(HERO_STATE_GRIND, 1);
                     }
                     break;
-                case 119:
+                case HERO_STATE_FATAL_FALL:
                     if ((current_level_index == 3 && 5.0f > hero.motion.pos.f[2]) ||
                         (current_level_index == 6 && 50.0f > hero.motion.pos.f[2]) ||
                         (current_level_index == 0x10 && (77.0f > hero.motion.pos.f[2] ||

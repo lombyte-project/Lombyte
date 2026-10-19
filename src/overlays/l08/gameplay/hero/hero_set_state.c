@@ -189,7 +189,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x41: {
+    case HERO_STATE_FIDGET_ALT: {
         int t = scale_game_frames(9);
         set_hero_animation(FUN_L01_00226f10(0), 0, (float)t);
         {
@@ -459,7 +459,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0x80, 0, (float)scale_game_frames(0xA));
         break;
     }
-    case 1: {
+    case HERO_STATE_LOOK: {
         struct Hero *p = &hero;
         int t;
         p->state.control_mode = 0;
@@ -1409,8 +1409,8 @@ int hero_set_state(int a, int b) {
         break;
     }
     case ENTER_ATTACK_COMBO:
-    case 0x14:
-    case 0x15:
+    case HERO_STATE_WRENCH_SLAM:
+    case HERO_STATE_CROUCH_SWING:
     case 0x20:
     case 0x23:
     case 0x51: {
@@ -1422,7 +1422,7 @@ int hero_set_state(int a, int b) {
         *(int *)&p->unkA54 = 0;
         p->unkA64 = 0;
         switch (p->state.current) {
-        case 0x14: {
+        case HERO_STATE_WRENCH_SLAM: {
             struct UsageStat *h = usage_stats.stat;
             struct Hero *q;
             if (h[0].count <= 0xFFFE) {
@@ -1451,7 +1451,7 @@ int hero_set_state(int a, int b) {
             }
             break;
         }
-        case 0x15: {
+        case HERO_STATE_CROUCH_SWING: {
             struct UsageStat *h = usage_stats.stat;
             char *h2;
             struct Hero *q;
