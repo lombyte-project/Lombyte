@@ -2060,15 +2060,19 @@ extern void normalize_vector_xyz(void *, void *, float);
 extern void subtract_vector_xyz(void *dst, void *a, void *b);
 
 void FUN_L16_002e7e00(struct Moby *moby) {
+    enum {
+        JOINT_TRAIL_INITIALIZE = 0,
+        JOINT_TRAIL_EMIT = 1
+    };
     W a, b, c, d, e, f;
     float k1 = 0.075f, k2 = 20000.0f, k3 = 1000.0f;
     float j1 = 0.075f, j2 = 20000.0f, j3 = 1000.0f;
     switch (moby->state) {
-    case 0:
+    case JOINT_TRAIL_INITIALIZE:
         moby->update_dist = 0xFF;
         moby->state = 1;
         break;
-    case 1:
+    case JOINT_TRAIL_EMIT:
         if (D_L16_0015F5C4 == 2) {
             char *g = D_L16_0016CC60;
             if (*(int *)(g + 0x30) == 0) {
