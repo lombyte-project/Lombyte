@@ -955,6 +955,11 @@ extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
 
 void bridge_half_update(PendulumMoby *self) __asm__("FUN_L01_002fb8a8");
 void bridge_half_update(PendulumMoby *self) {
+    enum {
+        BRIDGE_HALF_INITIALIZE = 0,
+        BRIDGE_HALF_WAIT_FOR_TRIGGER = 1,
+        BRIDGE_HALF_REDUCE_SWING_TO_ZERO = 2
+    };
     PendulumVars *v;
     PendVec4 arm;
     PendVec4 d;
@@ -963,19 +968,19 @@ void bridge_half_update(PendulumMoby *self) {
 
     v = self->vars;
     switch (self->state) {
-    case 0:
+    case BRIDGE_HALF_INITIALIZE:
         qcopy(&v->pivot, &self->pos);
         v->swing = 1.0f;
         self->state = 1;
         v->sound = -1;
         break;
-    case 1:
+    case BRIDGE_HALF_WAIT_FOR_TRIGGER:
         if (self->trigger == 2 || D_0014C050[self->id + current_level_index * 16] == 0xFF) {
             self->state = 2;
             self->trigger = 0;
         }
         break;
-    case 2:
+    case BRIDGE_HALF_REDUCE_SWING_TO_ZERO:
         v->swing -= frame_time * 0.5f;
         if (v->swing < 0.0f) {
             v->swing = 0.0f;
