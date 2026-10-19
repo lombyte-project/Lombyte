@@ -3050,20 +3050,25 @@ extern f32 frame_time_sq_macro __asm__("D_0015ED70") __attribute__((section(".sd
 /* Swivel turret update: waits a random time, turns to a random heading with a loop sound, then fires one shot with debris and fades its colour while the recoil animation plays. */
 void rocket_launcher_update(struct Moby *m) __asm__("FUN_L02_002df3d8");
 void rocket_launcher_update(struct Moby *m) {
+    enum {
+        ROCKET_LAUNCHER_WAIT_BETWEEN_SHOTS = 0,
+        ROCKET_LAUNCHER_TURN_AND_FIRE = 1,
+        ROCKET_LAUNCHER_WAIT_FOR_POST_SHOT_ANIMATION = 2
+    };
     SwivelTurretVars *v = (SwivelTurretVars *)m->pvars;
     Vec4f dir, muzzle;
     f32 t;
 
     FUN_L02_002df730(m);
     switch (m->state) {
-    case 0:
+    case ROCKET_LAUNCHER_WAIT_BETWEEN_SHOTS:
         if (turret_count_down(&v->wait_timer)) {
             v->target_yaw = turret_rand_range(0.0f, 3.14159f);
             m->state = 1;
             turret_play_sound(4, 0, m);
         }
         break;
-    case 1:
+    case ROCKET_LAUNCHER_TURN_AND_FIRE:
         turret_approach_angle(&m->rot.z, v->target_yaw, &v->yaw_vel,
                               D_L02_00161C70 * DEG_TO_RAD * frame_time_sq_macro,
                               D_L02_00161C70 * DEG_TO_RAD * frame_time_sq_macro,
@@ -3092,7 +3097,7 @@ void rocket_launcher_update(struct Moby *m) {
             FUN_L02_002ec228((char *)m, &muzzle, (float *)&dir);
         }
         break;
-    case 2:
+    case ROCKET_LAUNCHER_WAIT_FOR_POST_SHOT_ANIMATION:
         m->flags |= 0x10;
         t = turret_anim_progress(m) / 10.0f;
         if (t > 1.0f)
