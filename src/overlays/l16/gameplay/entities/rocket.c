@@ -887,12 +887,15 @@ s32 is_point_inside_clip_volume(s32 arg0, s32 arg1) __asm__("FUN_00214720");
 extern float D_L16_0016198C __attribute__((sda));
 void conveyor_belt_update(struct Moby *m) __asm__("FUN_L16_002c9878");
 void conveyor_belt_update(struct Moby *m) {
+    enum {
+        CONVEYOR_BELT_STATE_INITIALIZE = 0
+    };
     char *d = (char *)m->pvars;
     float vec[4];
     float target;
     int one = 1;
     switch (m->state) {
-    case 0:
+    case CONVEYOR_BELT_STATE_INITIALIZE:
         *(int *)(d + 0x5C) |= 4;
         m->visible = 0;
         m->flags |= one;
