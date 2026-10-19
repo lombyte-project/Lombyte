@@ -1302,6 +1302,7 @@ void sand_mouse_update(struct Moby *moby) {
         SAND_MOUSE_WAIT_FOR_PARENT_READY = 2,
         SAND_MOUSE_MOVE_TOWARD_HERO = 3,
         SAND_MOUSE_FADE_OUT_AND_RESET_HOME = 6,
+        SAND_MOUSE_DAMP_VELOCITY_BEFORE_RETURN = 19,
         SAND_MOUSE_RETURN_TO_PARENT = 20
     };
     Data_2e3f20 *d;
@@ -1537,7 +1538,7 @@ void sand_mouse_update(struct Moby *moby) {
             moby->rot.z = fast_add_rotations(moby->rot.z, frame_time * 25.132742f);
         }
         break;
-    case 19:
+    case SAND_MOUSE_DAMP_VELOCITY_BEFORE_RETURN:
         {
             float t = frame_scale * -0.050000012f + 1.0f;
             d->vel[0] = d->vel[0] * t;
