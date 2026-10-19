@@ -2436,7 +2436,8 @@ void FUN_L05_00319208(void *moby_v) {
 
 void FUN_L05_003193a8(char *moby) {
     enum {
-        TAXI_BRANCHING_STOP = 2
+        TAXI_BRANCHING_STOP = 2,
+        TAXI_FALLBACK_BRANCH_STOP = 4
     };
     char *d = *(char **)(moby + 0x78);
     char *p;
@@ -2463,7 +2464,7 @@ void FUN_L05_003193a8(char *moby) {
         *(char **)(d + 0xAC) = D_L05_001B0930[*(int *)(d + 0xA0)];
         *(short *)(d + 0xB6) = 2;
         break;
-    case 4:
+    case TAXI_FALLBACK_BRANCH_STOP:
         *(char **)(d + 0xAC) = D_L05_001B0930[*(int *)(d + 0xA8)];
         *(short *)(d + 0xB6) = 2;
         break;
