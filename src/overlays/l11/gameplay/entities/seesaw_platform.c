@@ -1118,6 +1118,9 @@ void ammocrate_update(struct Moby *m) {
         OCLASS_SHIP_AMMO_PICKUP = 0x4C2,
         OCLASS_SHIP_HEALTH_PICKUP = 0x4C4
     };
+    enum {
+        AMMOCRATE_STATE_DAMPED_FALL = 1
+    };
     struct Moby *ship = hero.ship_moby;
     char *pv = m->pvars;
     float dist = 100000.0f;
@@ -1183,7 +1186,7 @@ void ammocrate_update(struct Moby *m) {
         *(float *)(pv + 0x30) = 0.0f;
         m->state = 1;
         break;
-    case 1:
+    case AMMOCRATE_STATE_DAMPED_FALL:
         scale_vector_f728(pv + 0x10, pv + 0x10, 0.9f);
         *(float *)(pv + 0x18) -= frame_time_sq * 9.8f;
         add_vector_f728(pv, pv, pv + 0x10);
