@@ -476,7 +476,8 @@ void morphoray_update(struct Moby *moby) {
     enum {
         MORPHORAY_INITIALIZE = 0,
         MORPHORAY_WAIT_FOR_HERO = 1,
-        MORPHORAY_WAIT_TO_REMOVE = 2
+        MORPHORAY_WAIT_TO_REMOVE = 2,
+        MORPHORAY_APPROACH_ZERO_AND_REMOVE = 3
     };
     u8 *o = (u8 *)moby;
     u8 *d = (u8 *)moby->pvars;
@@ -533,7 +534,7 @@ void morphoray_update(struct Moby *moby) {
         }
         *(u16 *)(o + 0x34) |= 0x41;
         break;
-    case 3:
+    case MORPHORAY_APPROACH_ZERO_AND_REMOVE:
         approach_value((f32 *)(o + 0x2c), 0.0f, *(f32 *)(*(u8 **)(o + 0x24) + 0x24) * 0.02f);
         if (*(f32 *)(o + 0x2c) == 0.0f)
             mark_moby_for_removal(moby);
