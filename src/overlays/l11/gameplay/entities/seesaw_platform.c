@@ -839,6 +839,11 @@ extern void func_001F9BD8_u(void *, void *, void *) __asm__("FUN_001f9a10");
 extern char D_0013D355_t[] __asm__("D_0013D388");
 
 void FUN_L11_0030e978(struct Moby *m) {
+    enum {
+        LINKED_MOTION_STATE_INITIALIZE = 0,
+        LINKED_MOTION_STATE_WAIT_FOR_LINK_TRIGGER = 1,
+        LINKED_MOTION_STATE_MOVE_ALONG_LOCAL_AXIS = 2
+    };
     char *d = (char *)m->pvars;
     float v[4] __attribute__((aligned(16)));
     struct Moby *c;
@@ -846,7 +851,7 @@ void FUN_L11_0030e978(struct Moby *m) {
     char *p;
     struct MobyClass *q;
     switch (m->state) {
-    case 0:
+    case LINKED_MOTION_STATE_INITIALIZE:
         m->pos.z = m->pos.z + *(float *)(d + 0xC) * 1.9f;
         c = (struct Moby *)func_0020D348_c(0x487);
         c->visible = 1;
@@ -867,7 +872,7 @@ void FUN_L11_0030e978(struct Moby *m) {
         c->state = 1;
         m->state = 1;
         break;
-    case 1:
+    case LINKED_MOTION_STATE_WAIT_FOR_LINK_TRIGGER:
         o = (struct Moby *)((*(int *)(d + 8) << 8) + (int)D_L11_0015FFD8);
         if (o->oclass == 0x267 && o->state == 4) {
             goto go;
@@ -879,7 +884,7 @@ void FUN_L11_0030e978(struct Moby *m) {
             func_0022ED80_u(0, 0, m);
         }
         break;
-    case 2:
+    case LINKED_MOTION_STATE_MOVE_ALONG_LOCAL_AXIS:
         func_00214D88_f((float *)d, (float *)(d + 4), *(float *)(d + 0x10), frame_time_sq, frame_time_sq,
                         frame_time + frame_time);
         func_L00_001FF4B0_u(v, &m->rot_row1, -*(float *)(d + 4));
