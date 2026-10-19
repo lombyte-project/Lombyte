@@ -104,6 +104,9 @@ extern int hero_set_state(int, int) __asm__("FUN_L17_0021e530");
 extern char D_L17_0017C860[];
 extern char D_L17_0017C820[];
 int hero_set_state(int a, int b) {
+    enum {
+        HERO_STATE_WATER_DEATH = 0x6A
+    };
     int old2088;
     char *moby;
     int old20A7;
@@ -423,7 +426,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0x65, 0, (float)scale_game_frames(0x11));
         break;
     }
-    case 0x6A: {
+    case HERO_STATE_WATER_DEATH: {
         struct Hero *p = &hero;
         p->state.control_mode = 0x14;
         p->unk20A7 = 1;
