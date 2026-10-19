@@ -3167,6 +3167,10 @@ void FUN_L13_002e9a48(Moby_2EAE80 *m, Data_2EAE80 *d) {
         DAMAGE_STAGE_QUEUE_LATE_SINGLE_LINE = 6,
         DAMAGE_STAGE_SKIP_LINE_QUEUE_SECOND_ALTERNATE = 7
     };
+    enum {
+        CHILD_HIT_HALF_DAMAGE = 0x127,
+        CHILD_HIT_FIXED_DAMAGE = 0x3F1
+    };
     int hit;
     int rf;
     int mode;
@@ -3284,10 +3288,10 @@ void FUN_L13_002e9a48(Moby_2EAE80 *m, Data_2EAE80 *d) {
             }
             if (0.0f < r->f2C) {
                 switch (r->h2A) {
-                case 0x3F1:
+                case CHILD_HIT_FIXED_DAMAGE:
                     r->f2C = 0.1f;
                     break;
-                case 0x127:
+                case CHILD_HIT_HALF_DAMAGE:
                     r->f2C = r->f2C * 0.5f;
                     break;
                 }
