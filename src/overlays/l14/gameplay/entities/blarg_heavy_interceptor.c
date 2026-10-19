@@ -815,7 +815,8 @@ void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__(
 
 void FUN_L14_002ad8b8(struct Moby *moby) {
     enum {
-        HIT_REACTION_LETHAL = 1
+        HIT_REACTION_LETHAL = 1,
+        HIT_REACTION_NONE = 11
     };
     char *data = (char *)moby->pvars;
     int st;
@@ -854,7 +855,7 @@ void FUN_L14_002ad8b8(struct Moby *moby) {
             FUN_L00_00257470(moby, 0, -1);
             break;
         case 0:
-        case 11:
+        case HIT_REACTION_NONE:
             break;
         }
         trooper_anim_update(moby, (short *)(data + 0x60));
