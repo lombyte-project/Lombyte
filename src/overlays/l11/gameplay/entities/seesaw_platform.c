@@ -1111,15 +1111,15 @@ void ammocrate_update(struct Moby *m) __asm__("FUN_L11_0030f728");
 void ammocrate_update(struct Moby *m) {
     enum {
         AMMOCRATE_STATE_INITIALIZE = 0,
+        AMMOCRATE_STATE_DAMPED_FALL = 1,
         AMMOCRATE_STATE_ATTRACT_TO_SHIP = 2,
         AMMOCRATE_STATE_FREE_FALL = 3,
         AMMOCRATE_STATE_COLLECTED = 4,
-        AMMOCRATE_STATE_REMOVE = 5,
-        OCLASS_SHIP_AMMO_PICKUP = 0x4C2,
-        OCLASS_SHIP_HEALTH_PICKUP = 0x4C4
+        AMMOCRATE_STATE_REMOVE = 5
     };
     enum {
-        AMMOCRATE_STATE_DAMPED_FALL = 1
+        OCLASS_SHIP_AMMO_PICKUP = 0x4C2,
+        OCLASS_SHIP_HEALTH_PICKUP = 0x4C4
     };
     struct Moby *ship = hero.ship_moby;
     char *pv = m->pvars;

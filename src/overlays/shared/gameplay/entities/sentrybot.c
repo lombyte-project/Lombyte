@@ -95,7 +95,9 @@ void sentrybot_update(unsigned char *moby) {
     enum {
         SENTRYBOT_INITIALIZE = 0,
         SENTRYBOT_WAIT_FOR_LINKED_MOBY = 1,
+        SENTRYBOT_PATROL_IDLE = 2,
         SENTRYBOT_PATROL_PAUSE = 3,
+        SENTRYBOT_PATROL_MOVE = 4,
         SENTRYBOT_DEACTIVATE_LINKED_MOBYS_AFTER_ANIMATION = 5,
         SENTRYBOT_TURN_NEGATIVE_HEADING_DELTA = 6,
         SENTRYBOT_TURN_POSITIVE_HEADING_DELTA = 7,
@@ -111,15 +113,9 @@ void sentrybot_update(unsigned char *moby) {
         SENTRYBOT_DEATH_KNOCKBACK = 23
     };
     enum {
-        SENTRYBOT_PATROL_MOVE = 4
-    };
-    enum {
         SENTRYBOT_ANIM_TURN_NEGATIVE_HEADING_DELTA = 10,
         SENTRYBOT_ANIM_TURN_POSITIVE_HEADING_DELTA = 11,
         SENTRYBOT_ANIM_TURN_AROUND = 12
-    };
-    enum {
-        SENTRYBOT_PATROL_IDLE = 2
     };
     float va[4];
     float vb[4];

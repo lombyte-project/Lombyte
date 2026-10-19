@@ -90,10 +90,8 @@ int hero_set_state(int a, int b) {
     enum {
         ENTER_IDLE = 0,
         ENTER_ATTACK_COMBO = 0x13,
+        ENTER_DROWN = 0x6A,
         ENTER_SLIP = 0x79
-    };
-    enum {
-        ENTER_DROWN = 0x6A
     };
     int old2088;
     char *moby;
