@@ -1102,7 +1102,8 @@ void chomper_update(struct Moby *m) {
     enum {
         CHOMPER_INITIALIZE = 0,
         CHOMPER_APPROACH_TARGET = 4,
-        CHOMPER_RETURN_HOME = 6
+        CHOMPER_RETURN_HOME = 6,
+        CHOMPER_KNOCKBACK = 8
     };
     char *d = (char *)m->pvars;
     FUN_L16_002e6208(m);
@@ -1177,7 +1178,7 @@ void chomper_update(struct Moby *m) {
             *(unsigned short *)(d + 0xC8) = 0;
         }
         break;
-    case 8:
+    case CHOMPER_KNOCKBACK:
         if (mine_fall(m, d + 0x120) & 0x140) {
             cart_burst(m, &m->pos, 6, 0.5f, 13.0f);
             FUN_L00_00257470(m, 0, -1);
