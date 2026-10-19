@@ -1956,7 +1956,8 @@ void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
 s32 FUN_L00_002dbe20(u8 *m) {
     enum {
         SUCK_CANNON_BEING_PULLED_IN = 3,
-        SUCK_CANNON_STORED = 4
+        SUCK_CANNON_STORED = 4,
+        SUCK_CANNON_FALLING_AFTER_CANCEL = 7
     };
     u8 *o = FUN_L00_002db890_u(m);
     s32 k;
@@ -1989,7 +1990,7 @@ s32 FUN_L00_002dbe20(u8 *m) {
     case 0:
     case 5:
     case 6:
-    case 7:
+    case SUCK_CANNON_FALLING_AFTER_CANCEL:
     case 9:
         return 0;
     }
