@@ -571,6 +571,9 @@ extern void FUN_L00_001ed630(void *, void *, void *);
 
 /* Sets the vendor camera mode; mode 3 also aims it from the hero's position. */
 void FUN_L02_002f8a18(int mode, int arg) {
+    enum {
+        VENDOR_CAMERA_MODE_CAPTURE_HERO_POSITION = 3
+    };
     char *g = D_L02_00167280;
     char *cam = *(char **)(g + 0x180);
     char *d = *(char **)(cam + 0x70);
@@ -578,7 +581,7 @@ void FUN_L02_002f8a18(int mode, int arg) {
 
     cam[0x88] = mode;
     switch (mode) {
-    case 3:
+    case VENDOR_CAMERA_MODE_CAPTURE_HERO_POSITION:
         qcopy(d + 0x110, &hero.motion.pos);
         FUN_L00_001ed630(d + 0xFC, g + 0x140, &hero.motion.pos);
     case 2:
