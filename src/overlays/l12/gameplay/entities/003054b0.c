@@ -888,7 +888,10 @@ void homing_mine_spawner_update(struct Moby *m) {
     enum {
         HOMING_MINE_SPAWNER_CLEAR_LINKED_MOBYS = 0,
         HOMING_MINE_SPAWNER_WAIT_FOR_PROXIMITY = 1,
-        HOMING_MINE_SPAWNER_SPAWN_LINKED_MOBYS = 3
+        HOMING_MINE_SPAWNER_WAIT_FOR_PRESPAWN_ANIMATION = 2,
+        HOMING_MINE_SPAWNER_SPAWN_LINKED_MOBYS = 3,
+        HOMING_MINE_SPAWNER_WAIT_FOR_POSTSPAWN_ANIMATION = 4,
+        HOMING_MINE_SPAWNER_SPAWN_SEQUENCE_COMPLETE = 5
     };
     char *d = (char *)m->pvars;
     int *slots;
@@ -915,7 +918,7 @@ void homing_mine_spawner_update(struct Moby *m) {
             }
         }
         break;
-    case 2:
+    case HOMING_MINE_SPAWNER_WAIT_FOR_PRESPAWN_ANIMATION:
         if (m->prev_seq != 1) {
             blend_moby_animation(m, 1, 0, scale_game_frames(2));
         }
@@ -939,7 +942,7 @@ void homing_mine_spawner_update(struct Moby *m) {
             m->state = 4;
         }
         break;
-    case 4:
+    case HOMING_MINE_SPAWNER_WAIT_FOR_POSTSPAWN_ANIMATION:
         m->flags &= 0xEFFF;
         if (m->prev_seq != 3) {
             blend_moby_animation(m, 3, 0, scale_game_frames(2));
@@ -951,7 +954,7 @@ void homing_mine_spawner_update(struct Moby *m) {
             m->state = 5;
         }
         break;
-    case 5:
+    case HOMING_MINE_SPAWNER_SPAWN_SEQUENCE_COMPLETE:
         break;
     }
 }
