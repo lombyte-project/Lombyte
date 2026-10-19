@@ -1629,7 +1629,8 @@ void FUN_L00_002080b0(void) {
         ITEM_RED_GREEN_GLOW = 13,
         ITEM_SINE_RED_GREEN_GLOW = 16,
         ITEM_GRAY_PULSE_GLOW = 17,
-        ITEM_RED_BLUE_GLOW = 19
+        ITEM_RED_BLUE_GLOW = 19,
+        ITEM_BRIGHT_GRAY_PULSE_GLOW = 20
     };
     Vec4_2080b0 v;
     struct Moby *m;
@@ -1735,7 +1736,7 @@ void FUN_L00_002080b0(void) {
         m->glow_color = fast_tween_color_2080b0(m->glow_color, col, 0.15f);
         break;
     }
-    case 20: {
+    case ITEM_BRIGHT_GRAY_PULSE_GLOW: {
         int c5;
         int x1, x2, col;
         float fr;
