@@ -1110,10 +1110,11 @@ def hoist_sda_externs(assembly, source):
     that did and did not define the symbol), so the directive goes in front
     of the first function defined after the sda declaration instead.  A
     NON_MATCHING `#else` draft is not compiled, so its declarations do not
-    count.
+    count, unless the file defines NON_MATCHING to compile the drafts.
     """
-    source = re.sub(r"^(#ifndef NON_MATCHING\n(?:INCLUDE_ASM[^\n]*\n)*)#else\n.*?^#endif",
-                    r"\1#endif", source, flags=re.M | re.S)
+    if not re.search(r"^#\s*define\s+NON_MATCHING\b", source, re.M):
+        source = re.sub(r"^(#ifndef NON_MATCHING\n(?:INCLUDE_ASM[^\n]*\n)*)#else\n.*?^#endif",
+                        r"\1#endif", source, flags=re.M | re.S)
     sda = {}
     for match in re.finditer(r"^extern[^;]*__attribute__\(\(sda\)\)[^;]*;", source, re.M):
         decl = match.group(0)
