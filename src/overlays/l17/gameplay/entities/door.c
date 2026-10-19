@@ -3027,6 +3027,8 @@ extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void FUN_L17_002f0210(struct Moby *moby) {
     enum {
+        ROBOT_DOG_STATE_FALL_UNTIL_LANDING = 4,
+        ROBOT_DOG_STATE_TURN_TOWARD_TARGET = 8,
         ROBOT_DOG_STATE_APPROACH_TARGET = 9,
         ROBOT_DOG_STATE_ATTACK_TARGET = 10,
         ROBOT_DOG_STATE_RETURN_HOME = 11
@@ -3058,13 +3060,13 @@ void FUN_L17_002f0210(struct Moby *moby) {
     alpha = 0x80;
     mode = 0;
     switch (moby->state) {
-    case 4:
+    case ROBOT_DOG_STATE_FALL_UNTIL_LANDING:
     case 5:
     case 6:
         mode = 1;
         break;
     case 7:
-    case 8:
+    case ROBOT_DOG_STATE_TURN_TOWARD_TARGET:
     case ROBOT_DOG_STATE_APPROACH_TARGET:
     case ROBOT_DOG_STATE_ATTACK_TARGET:
     case ROBOT_DOG_STATE_RETURN_HOME:
