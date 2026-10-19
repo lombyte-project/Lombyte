@@ -558,6 +558,7 @@ void FUN_L11_002d14b0(void *arg) {
         RESORT_OWNER_WAIT_TO_FOLLOW_HERO = 3,
         RESORT_OWNER_MOVE_TO_PATH_POINT = 6,
         RESORT_OWNER_JUMP_TO_TARGET = 7,
+        RESORT_OWNER_MOVE_TO_GATE_TARGET = 8,
         RESORT_OWNER_CHECK_PATH_COMPLETION_DIALOGUE = 12,
         RESORT_OWNER_WAIT_FOR_PATH_COMPLETION_DIALOGUE_END = 13,
         RESORT_OWNER_CHECK_POST_PATH_DIALOGUE = 14,
@@ -739,7 +740,7 @@ void FUN_L11_002d14b0(void *arg) {
         if (moby->anim_flags & 2)
             FUN_L11_002d2088_c(moby, d->next_state);
         break;
-    case 8:
+    case RESORT_OWNER_MOVE_TO_GATE_TARGET:
         if (vector_distance(&moby->pos, &d->target) < 0.5f)
             FUN_L11_002d2088_c(moby, 9);
         break;
