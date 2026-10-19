@@ -1231,6 +1231,7 @@ void test_dummy_update(unsigned char *m) __asm__("FUN_L16_002cddb8");
 void test_dummy_update(unsigned char *m) {
     enum {
         TEST_DUMMY_STATE_INITIALIZE = 0,
+        TEST_DUMMY_STATE_IDLE = 1,
         TEST_DUMMY_STATE_APPROACH_FIRST_PATH_NODE = 2,
         TEST_DUMMY_STATE_APPROACH_THROW_NODE = 3,
         TEST_DUMMY_STATE_THROW_AT_TARGET = 4,
@@ -1295,7 +1296,7 @@ void test_dummy_update(unsigned char *m) {
             *(unsigned char *)(d->child + 0x31) = 1;
         }
         break;
-    case 1:
+    case TEST_DUMMY_STATE_IDLE:
         break;
     case TEST_DUMMY_STATE_APPROACH_FIRST_PATH_NODE: /* turn to the path's first node, then start by variant */
         FUN_L16_002d5e80(d->route);
