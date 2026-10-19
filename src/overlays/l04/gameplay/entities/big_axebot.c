@@ -566,7 +566,8 @@ void big_axebot_update(M_B7B0 *moby) {
         BIG_AXEBOT_STATE_DYING = 10
     };
     enum {
-        BIG_AXEBOT_HIT_REACTION_FATAL = 1
+        BIG_AXEBOT_HIT_REACTION_FATAL = 1,
+        BIG_AXEBOT_HIT_REACTION_KNOCKBACK = 7
     };
     D_B7B0 *data = moby->data;
     T_B7B0 tg;
@@ -682,7 +683,7 @@ void big_axebot_update(M_B7B0 *moby) {
                     data->f404 = scale_game_frames(0x46);
                     data->f406 = scale_game_frames(0xF0);
                     break;
-                case 7:
+                case BIG_AXEBOT_HIT_REACTION_KNOCKBACK:
                     allocate_voice_for_target_entry(0xB, 0, (char *)moby);
                     if (data->f448 <= 0) {
                         data->f408 = -0.5235988f;
