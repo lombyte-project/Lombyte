@@ -1267,6 +1267,11 @@ extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 
 void green_mushroom_update(SparkMoby *m) __asm__("FUN_L01_002fd9a0");
 void green_mushroom_update(SparkMoby *m) {
+    enum {
+        GREEN_MUSHROOM_INITIALIZE = 0,
+        GREEN_MUSHROOM_WAIT_FOR_POSITIVE_HIT = 1,
+        GREEN_MUSHROOM_SPAWN_PIECES_AND_REMOVE = 2
+    };
     SparkHit *hit;
     s32 flag;
     s32 i;
@@ -1278,10 +1283,10 @@ void green_mushroom_update(SparkMoby *m) {
     flag = 0;
     hit = trooper_find_hit(m, 0x10000, 0);
     switch (m->state) {
-    case 0:
+    case GREEN_MUSHROOM_INITIALIZE:
         m->state = 1;
         break;
-    case 1:
+    case GREEN_MUSHROOM_WAIT_FOR_POSITIVE_HIT:
         if (hit != 0 && hit->f2c > 0.0f) {
             flag = 1;
         }
@@ -1289,7 +1294,7 @@ void green_mushroom_update(SparkMoby *m) {
             m->state = 2;
         }
         break;
-    case 2:
+    case GREEN_MUSHROOM_SPAWN_PIECES_AND_REMOVE:
         FUN_0022da68(0, 0, m);
         FUN_L01_002787a0(m);
         s = m->scale / m->pclass->radius;
