@@ -1557,6 +1557,7 @@ void peckbot_update(Mob577 *self) {
         PECKBOT_STATE_RETURN_HOME = 5,
         PECKBOT_STATE_NONFATAL_KNOCKBACK = 6,
         PECKBOT_STATE_WAIT_FOR_CLOSE_TARGET = 8,
+        PECKBOT_STATE_RECOVER_FROM_BLOCKED_MOVEMENT = 12,
         PECKBOT_STATE_MOVE_FORWARD_NEAR_LEADER = 13,
         PECKBOT_STATE_AIRBORNE_IDLE = 14,
         PECKBOT_STATE_MOVE_TO_DESTINATION = 15,
@@ -2033,7 +2034,7 @@ void peckbot_update(Mob577 *self) {
             return;
         }
         break;
-    case 12:
+    case PECKBOT_STATE_RECOVER_FROM_BLOCKED_MOVEMENT:
         r12 = FUN_001f99c0(self->pos.f[2] - target.pos.f[2]);
         r12 = r12 / vector_distance(&self->pos, &target.pos);
         if (v->path != -1) {
