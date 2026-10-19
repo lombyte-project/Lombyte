@@ -3644,6 +3644,9 @@ extern void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L0
 
 void piston_platform_update(LiftMoby *m) __asm__("FUN_L01_002f95c0");
 void piston_platform_update(LiftMoby *m) {
+    enum {
+        PISTON_PLATFORM_MODE_MOVING = 2
+    };
     LiftVars *v;
     u128 old;
     u128 delta;
@@ -3684,7 +3687,7 @@ void piston_platform_update(LiftMoby *m) {
             allocate_voice_for_target_entry(1, 0, m);
         }
         break;
-    case 2:
+    case PISTON_PLATFORM_MODE_MOVING:
         ((f32 *)&m->pos)[2] -= v->speed;
         if (v->timer == 0) {
             if (v->speed < 0.0f) {
