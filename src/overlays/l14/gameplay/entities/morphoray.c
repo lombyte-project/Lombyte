@@ -1280,7 +1280,8 @@ s32 allocate_voice_for_bank_entry(s32 arg1, s32 arg0, s32 arg2) __asm__("FUN_002
 
 void FUN_L14_003087c0(struct Moby *moby) {
     enum {
-        MOBY_UPDATE_DISTANCE_INITIALIZE = 0
+        MOBY_UPDATE_DISTANCE_INITIALIZE = 0,
+        MOBY_UPDATE_CUTSCENE_TARGET = 1
     };
     int *d = (int *)moby->pvars;
     unsigned v;
@@ -1299,7 +1300,7 @@ void FUN_L14_003087c0(struct Moby *moby) {
         moby->update_dist = 0xFF;
         moby->state = 1;
         break;
-    case 1:
+    case MOBY_UPDATE_CUTSCENE_TARGET:
         if (D_L14_0015F5C4 == 2) {
             v = D_L14_0016CF60.state - 3;
             if (v < 3) {
