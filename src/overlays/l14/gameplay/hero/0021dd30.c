@@ -1023,7 +1023,7 @@ void FUN_L14_00228cd0(void) {
         }
         break;
     }
-    case 0x14: {
+    case HERO_STATE_WRENCH_SLAM: {
         s32 t1;
         s32 t2;
         f32 r;
@@ -1174,7 +1174,7 @@ void FUN_L14_00228cd0(void) {
         }
         break;
     }
-    case 0x13: {
+    case HERO_STATE_WRENCH_COMBO: {
         struct HeroTableRow2C *tb;
         if (hero.unk12E2 != 0) {
             FUN_L00_002167d0();
@@ -1424,7 +1424,7 @@ void FUN_L14_00228cd0(void) {
         }
         break;
     }
-    case 2:
+    case HERO_STATE_RUN:
     case 0x73: {
         f32 k;
         if (hero.motion.unk164 < frame_time * 0.3f && hero.unk229C > 0.85f) {
@@ -1909,7 +1909,7 @@ void FUN_L14_00228cd0(void) {
         set_vector_length_xy(&hero.motion.velocity, &hero.motion.velocity, D_L14_001C43B0[truncate_float_to_s32(hero.anim_frame)] * 0.5f);
         break;
     }
-    case 0x79:
+    case HERO_STATE_SLIP:
         hero.motion.move_yaw = hero.downhill_yaw;
         hero.target_speed = frame_time * 5.5f;
         FUN_L00_00213e68(frame_time_sq * 25.0f);
