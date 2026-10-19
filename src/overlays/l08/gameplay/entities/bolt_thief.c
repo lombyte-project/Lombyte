@@ -1670,6 +1670,8 @@ void bolt_thief_update(struct Moby *moby) {
     enum {
         BOLT_THIEF_INITIALIZE = 0,
         BOLT_THIEF_WAIT_FOR_HERO_NEAR_TRIGGER = 1,
+        BOLT_THIEF_FOLLOW_PRIMARY_PATH_TO_COLLECTION_POINT = 2,
+        BOLT_THIEF_PULL_PICKUPS_TO_JOINT = 4,
         BOLT_THIEF_FOLLOW_SECONDARY_PATH = 6,
         BOLT_THIEF_FACE_HERO = 7,
         BOLT_THIEF_KNOCKBACK = 8
@@ -1740,7 +1742,7 @@ void bolt_thief_update(struct Moby *moby) {
             }
         }
         break;
-    case 2: {
+    case BOLT_THIEF_FOLLOW_PRIMARY_PATH_TO_COLLECTION_POINT: {
         SwarmPathFollower *follower;
         SwarmPath *path;
         int next;
@@ -1787,7 +1789,7 @@ void bolt_thief_update(struct Moby *moby) {
             moby->anim_speed = 1.0f;
         }
         break;
-    case 4: {
+    case BOLT_THIEF_PULL_PICKUPS_TO_JOINT: {
         int active_count;
         int i;
 
