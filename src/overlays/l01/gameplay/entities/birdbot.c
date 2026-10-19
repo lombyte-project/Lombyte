@@ -2549,6 +2549,11 @@ extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 /* Rider carrier: waits for the hero in its clip volume, then follows its path carrying up to eight rider mobys (and steers its camera moby), drops them off one by one at the marked node and removes itself at the end of the path. */
 void stationary_ship_update(CarrierMoby *m) __asm__("FUN_L01_002f4960");
 void stationary_ship_update(CarrierMoby *m) {
+    enum {
+        CARRIER_STATE_INITIALIZE = 0,
+        CARRIER_STATE_WAIT_FOR_TRIGGER = 1,
+        CARRIER_STATE_FOLLOW_PATH = 2
+    };
     CarrierVars *v;
     CarrierCamVars *cv;
     PePath *p;
@@ -2571,7 +2576,7 @@ void stationary_ship_update(CarrierMoby *m) {
         return;
     }
     switch (v->state) {
-    case 0:
+    case CARRIER_STATE_INITIALIZE:
         v->unk194 = -1;
         v->state = 1;
         v->arrived = 0;
@@ -2579,7 +2584,7 @@ void stationary_ship_update(CarrierMoby *m) {
         m->unk30 = 0xFF;
         m->flags |= 0x41;
         return;
-    case 1:
+    case CARRIER_STATE_WAIT_FOR_TRIGGER:
         if (is_point_inside_clip_volume(&hero.motion.pos, n) != 0) {
             v->state = 2;
             m->flags &= ~0x41;
@@ -2599,7 +2604,7 @@ void stationary_ship_update(CarrierMoby *m) {
             }
         }
         break;
-    case 2:
+    case CARRIER_STATE_FOLLOW_PATH:
         gunship_follow_path((char *)m);
         if (v->camera != -1) {
             cv = (CarrierCamVars *)D_L01_0015FFD8_m[v->camera].pvars;
