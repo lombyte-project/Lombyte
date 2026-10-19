@@ -908,7 +908,8 @@ void amoeboid_update(struct Moby *m) __asm__("FUN_L05_002dac80");
 void amoeboid_update(struct Moby *m) {
     enum {
         AMOEBOID_INITIALIZE = 0,
-        AMOEBOID_FOLLOW_PATH = 1
+        AMOEBOID_FOLLOW_PATH = 1,
+        AMOEBOID_WAIT_FOR_HERO_TO_LEAVE = 2
     };
     char *d = (char *)m->pvars;
     float dir[4];
@@ -954,7 +955,7 @@ void amoeboid_update(struct Moby *m) {
         FUN_L05_002db018_c(m);
         break;
     }
-    case 2:
+    case AMOEBOID_WAIT_FOR_HERO_TO_LEAVE:
         if (48.0f < vector_distance(&m->pos, &hero.motion.pos)) {
             m->state = 1;
             m->visible = 1;
