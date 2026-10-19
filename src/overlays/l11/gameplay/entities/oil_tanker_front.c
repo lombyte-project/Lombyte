@@ -910,6 +910,7 @@ extern void *func_L00_00265050_s(char *, int, void *, void *, int, int, float *,
 
 void FUN_L11_003181f0(struct Moby *m) {
     enum {
+        TANKER_LINK_EMIT_EFFECT_AND_SAVE_POSITION = 0,
         TANKER_LINK_BURST_AND_HIDE = 1
     };
     char *d = (char *)m->pvars;
@@ -917,7 +918,7 @@ void FUN_L11_003181f0(struct Moby *m) {
     float w[4];
     float r[4];
     switch (m->state) {
-    case 0:
+    case TANKER_LINK_EMIT_EFFECT_AND_SAVE_POSITION:
         if (func_001F9908_i(d + 0x28) == 0 && random_integer_below(*(int *)&D_L11_00162340) == 0 &&
             m->visible != 0 && *(int *)&D_L11_0015FFBC >= 0x47) {
             transform_vector_by_basis(v, &D_L11_00162350, &m->rot_row0);
