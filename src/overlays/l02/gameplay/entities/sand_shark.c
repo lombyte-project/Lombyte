@@ -311,11 +311,16 @@ int D_L02_001619E8 = 0x306058;
 /* Aridia burrowing enemy: profiled with EE timer 0 around its state machine. */
 void sand_shark_update(struct Moby *moby) __asm__("FUN_L02_002d3e50");
 void sand_shark_update(struct Moby *moby) {
+    enum {
+        SAND_SHARK_INITIALIZE = 0,
+        SAND_SHARK_RETURN_HOME = 7,
+        SAND_SHARK_FADE_OUT = 25
+    };
     Varsd3e50 *vars;
     OvlVec4 v0;
     OvlVec4 v1;
     OvlVec4 v2;
-    OvlVec4 v3;
+    OvlVec4 navigation_point;
     OvlVec4 v4;
     float f;
 
@@ -333,7 +338,7 @@ void sand_shark_update(struct Moby *moby) {
     FUN_L02_002d5c88_e50(moby);
     *(volatile unsigned int *)0x10000000;
     switch (moby->state) {
-    case 0:
+    case SAND_SHARK_INITIALIZE:
         if (vars->path == -1) {
             FUN_001e93b0_e50(D_L02_001FA8A0, moby->save_id);
             remove_moby_e50(moby);
@@ -477,7 +482,7 @@ void sand_shark_update(struct Moby *moby) {
         fast_vec_add(&v0, &v0, &moby->pos);
         FUN_L00_00258b50(moby, &vars->walk_mode, &v0, &v2, 1.0f);
         FUN_L02_002d63c0_e50(moby);
-        if (FUN_L00_00261b48(vars->path, &moby->pos, &v1, &v3) && distance_e50(&moby->pos, &v3) < vars->unk294) {
+        if (FUN_L00_00261b48(vars->path, &moby->pos, &v1, &navigation_point) && distance_e50(&moby->pos, &navigation_point) < vars->unk294) {
             hit14 = 1;
         }
         if (vars->unk25E != 0) {
@@ -589,8 +594,8 @@ void sand_shark_update(struct Moby *moby) {
                 FUN_L02_002d5a68_e50(&v4);
             }
         }
-        qcopy(&v3, &vars->target);
-        FUN_L00_00258278_c(moby, atan2_e50(v3.f[0] - moby->pos.x, v3.f[1] - moby->pos.y) + vars->turn_offset, &vars->turn_vel,
+        qcopy(&navigation_point, &vars->target);
+        FUN_L00_00258278_c(moby, atan2_e50(navigation_point.f[0] - moby->pos.x, navigation_point.f[1] - moby->pos.y) + vars->turn_offset, &vars->turn_vel,
                  0.05f, 0.3f, 0.2f);
         v0.f[0] = 2.0f * fast_cos_e50(moby->rot.z);
         v0.f[1] = 2.0f * fast_sin_e50(moby->rot.z);
@@ -606,13 +611,13 @@ void sand_shark_update(struct Moby *moby) {
                 moby->state = 7;
             } else {
             fast_vec_sub(&v2, &vars->target, &vars->home);
-            if (FUN_001f9b80_e50(&moby->pos, &v3) < 12.0f && moby->state == 0x16) {
+            if (FUN_001f9b80_e50(&moby->pos, &navigation_point) < 12.0f && moby->state == 0x16) {
                 moby->state = 0x13;
                 sound_e50(4, 0, moby);
                 if (moby->prev_seq != 0) {
                     blend_e50(moby, 0, 0, scale_ticks_e50(3));
                 }
-            } else if (FUN_001f9b80_e50(&moby->pos, &v3) < 1.5f && moby->state == 5) {
+            } else if (FUN_001f9b80_e50(&moby->pos, &navigation_point) < 1.5f && moby->state == 5) {
                 moby->state = 6;
                 if (moby->prev_seq != 1) {
                     blend_e50(moby, 1, 0, scale_ticks_e50(3));
@@ -652,7 +657,7 @@ void sand_shark_update(struct Moby *moby) {
         }
         }
         break;
-    case 7:
+    case SAND_SHARK_RETURN_HOME:
     case 23:
         if (moby->state == 0x17) {
             moby->pos.z += D_L02_0016191C;
@@ -661,8 +666,8 @@ void sand_shark_update(struct Moby *moby) {
                 FUN_L02_002d5a68_e50(&v4);
             }
         }
-        qcopy(&v3, &vars->home);
-        FUN_L00_00258278_c(moby, atan2_e50(v3.f[0] - moby->pos.x, v3.f[1] - moby->pos.y), &vars->turn_vel, 0.02f, 0.3f, 0.1f);
+        qcopy(&navigation_point, &vars->home);
+        FUN_L00_00258278_c(moby, atan2_e50(navigation_point.f[0] - moby->pos.x, navigation_point.f[1] - moby->pos.y), &vars->turn_vel, 0.02f, 0.3f, 0.1f);
         v0.f[0] = 2.0f * fast_cos_e50(moby->rot.z);
         v0.f[1] = 2.0f * fast_sin_e50(moby->rot.z);
         v0.f[2] = 0.0f;
@@ -837,7 +842,7 @@ void sand_shark_update(struct Moby *moby) {
         }
         break;
     }
-    case 25:
+    case SAND_SHARK_FADE_OUT:
         if (moby->alpha >= 8) {
             moby->alpha -= 8;
         } else {
