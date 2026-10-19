@@ -598,6 +598,16 @@ extern int D_L12_001B0930;
 
 void planetbuster_maximus_part_update(char *moby) __asm__("FUN_L12_003069d0");
 void planetbuster_maximus_part_update(char *moby) {
+    enum {
+        PLANETBUSTER_INITIALIZE_LINKED_PARTS = 0,
+        PLANETBUSTER_FOLLOW_PATH = 2,
+        PLANETBUSTER_DROP_PARTS_AND_TRANSITION = 4
+    };
+    enum {
+        PLANETBUSTER_TRANSITION_SETUP = 0,
+        PLANETBUSTER_TRANSITION_INTERPOLATE = 1,
+        PLANETBUSTER_TRANSITION_CLEANUP = 2
+    };
     float v[4];
     float w[4];
     char *d = *(char **)(moby + 0x78);
@@ -606,7 +616,7 @@ void planetbuster_maximus_part_update(char *moby) {
         qcopy(moby + 0x40, (char *)&D_L12_00161F70_gp);
     }
     switch ((unsigned char)moby[0x20]) {
-    case 0:
+    case PLANETBUSTER_INITIALIZE_LINKED_PARTS:
         D_L12_001619B4 = 0;
         if (visited52[(unsigned char)moby[0xB0] + (current_level_index_gp << 4)] == 0xFF) {
             int i;
@@ -691,7 +701,7 @@ void planetbuster_maximus_part_update(char *moby) {
         }
         break;
     }
-    case 2: {
+    case PLANETBUSTER_FOLLOW_PATH: {
         P_7DB0 *path;
         int nx;
         float f;
@@ -737,17 +747,17 @@ void planetbuster_maximus_part_update(char *moby) {
         FUN_L12_0027b370(moby, d, 0x11);
         FUN_L12_003054b0_u(moby);
         break;
-    case 4:
+    case PLANETBUSTER_DROP_PARTS_AND_TRANSITION:
         if (*(int *)(d + 0x608) != -1 && *(int *)(d + 0x60C) != -1) {
             switch ((unsigned char)moby[0xBC]) {
-            case 0:
+            case PLANETBUSTER_TRANSITION_SETUP:
                 moby[0xBC] = 1;
                 FUN_L00_002ea9d8(D_L12_001600EC + *(int *)(d + 0x608) * 128 + 0x30);
                 FUN_L00_002eaa30(D_L12_001600EC + *(int *)(d + 0x608) * 128 + 0x70);
                 D_L12_0015F404 = 1;
                 D_L12_001619A0 = 1;
                 break;
-            case 1:
+            case PLANETBUSTER_TRANSITION_INTERPOLATE:
                 if (*(float *)(d + 0x610) < 1.0f) {
                     advance_accelerated_scalar((float *)(d + 0x610), (float *)(d + 0x614), 1.0f,
                                   D_0015ED70 * 0.666f, D_0015ED70 * 0.666f, D_0015ED6C_gp * 0.4f);
@@ -771,7 +781,7 @@ void planetbuster_maximus_part_update(char *moby) {
                     FUN_L00_002eac18(3);
                 }
                 break;
-            case 2: {
+            case PLANETBUSTER_TRANSITION_CLEANUP: {
                 int i;
                 for (i = 0; i < 17; i++) {
                     int s = *(int *)(d + i * 0x30 + 0x20);
