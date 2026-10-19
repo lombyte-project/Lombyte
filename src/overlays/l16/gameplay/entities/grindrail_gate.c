@@ -933,6 +933,11 @@ int D_L16_00161DE8 = 0x80202020;
 int D_L16_00161DEC = 0x80808080;
 extern char D_0013F3D0[] __attribute__((section(".data")));
 void FUN_L16_002e5258(struct Moby *m) {
+    enum {
+        GRINDRAIL_TRIGGER_INITIALIZE = 0,
+        GRINDRAIL_TRIGGER_CHECK_LOCAL_BOUNDS = 1,
+        GRINDRAIL_TRIGGER_WAIT_FOR_COMMAND_TIMEOUT = 2
+    };
     char *d = (char *)m->pvars;
     char *g;
     float pos[16];
@@ -943,11 +948,11 @@ void FUN_L16_002e5258(struct Moby *m) {
     m->glow_color = FUN_001fa6e0_q(fast_sin_q(f * 6.28318f - 3.14159f) * 0.5f + 0.5f,
                                         D_L16_00161DE8, D_L16_00161DEC);
     switch (m->state) {
-    case 0:
+    case GRINDRAIL_TRIGGER_INITIALIZE:
         m->state = 1;
         m->update_dist = 0xFF;
         break;
-    case 1:
+    case GRINDRAIL_TRIGGER_CHECK_LOCAL_BOUNDS:
         g = D_0013F3D0;
         if (FUN_001f9b48_q(&m->pos, g) < 16.0f) {
             FUN_001fa2d8_q(pos, &m->rot_row0);
@@ -964,7 +969,7 @@ void FUN_L16_002e5258(struct Moby *m) {
             }
         }
         break;
-    case 2:
+    case GRINDRAIL_TRIGGER_WAIT_FOR_COMMAND_TIMEOUT:
         if (tick_countdown_32_q((int *)d)) {
             m->state = 1;
             m->command = 0;
