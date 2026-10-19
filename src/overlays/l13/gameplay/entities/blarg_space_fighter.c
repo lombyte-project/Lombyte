@@ -2072,7 +2072,8 @@ void asteroid_update(struct Moby *moby) {
         ASTEROID_INITIALIZE = 0,
         ASTEROID_WAIT_TO_LAUNCH = 1,
         ASTEROID_MOVE_AND_COLLIDE = 2,
-        ASTEROID_RESET_AT_HOME = 3
+        ASTEROID_RESET_AT_HOME = 3,
+        ASTEROID_WAIT_TO_RESPAWN = 4
     };
     struct BlobVars *vars = (struct BlobVars *)moby->pvars;
     f32 distance = distance_xyz_1638(&moby->pos, &hero_pos_1638);
@@ -2182,7 +2183,7 @@ void asteroid_update(struct Moby *moby) {
         }
         moby->state = 1;
         break;
-    case 4:
+    case ASTEROID_WAIT_TO_RESPAWN:
         if (FUN_001fa728_1638(moby->draw_dist, &vars->home) < 0) {
             qcopy(&moby->pos, &vars->home);
             moby->collision = moby->pclass->collision;
