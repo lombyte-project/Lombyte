@@ -3123,7 +3123,8 @@ extern int func_L13_002E9B30_2EAE80(void *, void *, int, int) __asm__("FUN_L13_0
 void FUN_L13_002e9a48(Moby_2EAE80 *m, Data_2EAE80 *d) {
     enum {
         DAMAGE_STAGE_QUEUE_RANDOM_LINE = 1,
-        DAMAGE_STAGE_START_TIMER_AND_QUEUE_LINE = 2
+        DAMAGE_STAGE_START_TIMER_AND_QUEUE_LINE = 2,
+        DAMAGE_STAGE_QUEUE_SINGLE_LINE = 3
     };
     int hit;
     int rf;
@@ -3328,7 +3329,7 @@ void FUN_L13_002e9a48(Moby_2EAE80 *m, Data_2EAE80 *d) {
                     d->f100 = func_001F9850_2EAE80(0x78);
                     func_L13_002E9B30_2EAE80(m, d, 0x10, 1);
                     break;
-                case 3:
+                case DAMAGE_STAGE_QUEUE_SINGLE_LINE:
                     func_L13_002E9B30_2EAE80(m, d, 0x11, 1);
                     break;
                 case 4:
