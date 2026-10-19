@@ -1130,6 +1130,9 @@ extern void FUN_L00_0025e450_edc30(struct Moby *, void *, void *, float, float, 
 /* Level 9 breakable stack: when hit, swaps in the next damaged class (0x512 -> 0x513 -> 0x514), bursts debris and smoke and removes itself once gone. */
 void display_update(struct Moby *moby) __asm__("FUN_L09_002edc30");
 void display_update(struct Moby *moby) {
+    enum {
+        BREAKABLE_STACK_PENULTIMATE_CLASS = 0x513
+    };
     float center[4];
     float top[4];
     float push[4];
@@ -1160,7 +1163,7 @@ void display_update(struct Moby *moby) {
         case 0x512:
             next = 0x513;
             break;
-        case 0x513:
+        case BREAKABLE_STACK_PENULTIMATE_CLASS:
             qcopy(center, &moby->pos);
             moby->pos.z += 4.0f;
             FUN_L00_00257470_edc30(moby, 0, -1);
