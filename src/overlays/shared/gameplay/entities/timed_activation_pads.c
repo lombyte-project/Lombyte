@@ -76,6 +76,7 @@ void timed_activation_pads_update(unsigned char *moby)
     enum {
         PAD_INITIALIZE = 0,
         PAD_WAIT_FOR_ACTIVATION = 1,
+        PAD_WAIT_TO_ENTER_FLASH_ACTIVATION_WAIT = 3,
         PAD_ENTER_FLASH_ACTIVATION_WAIT = 4,
         PAD_WAIT_FOR_FLASH_ACTIVATION = 5
     };
@@ -165,7 +166,7 @@ void timed_activation_pads_update(unsigned char *moby)
     case 2:
         moby[0x20] = 3;
         break;
-    case 3:
+    case PAD_WAIT_TO_ENTER_FLASH_ACTIVATION_WAIT:
         if (flag) {
             *(int *)(d + 0x8) = 1;
             glow_n(moby, 0, 0xFF, 0);
