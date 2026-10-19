@@ -350,6 +350,7 @@ void spawner_update(struct Moby *moby) {
         SPAWNER_TRIGGER_VOLUME_OR_DISTANCE = 2
     };
     enum {
+        SPAWNER_TARGET_COUNT_ANGULAR_SPREAD = 0,
         SPAWNER_TARGET_COUNT_INDEXED_POINT = 4
     };
     int used[4];
@@ -530,7 +531,7 @@ void spawner_update(struct Moby *moby) {
         while (d->h8A == 0 ? d->count < d->max : d->timer == 0) {
             FUN_L00_0024f7c8_2bef68(moby, 0, &launch_origin);
             switch (d->b85) {
-            case 0: {
+            case SPAWNER_TARGET_COUNT_ANGULAR_SPREAD: {
                 float ang;
                 float rad;
                 ang = FUN_L00_0025e310_2bef68(FUN_001fa6c0_2bef68(d->count) * 2.0f * 3.1415927f / FUN_001fa6c0_2bef68(d->max + 1) - 3.1415927f);
