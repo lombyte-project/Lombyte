@@ -1507,6 +1507,10 @@ extern void mark_moby_for_removal_c_c(void *) __asm__("func_0020C828");
 extern char D_0013E550[];
 
 void FUN_L03_002d47c0(Moby *moby) {
+    enum {
+        SPARK_HOME_AND_EMIT = 1,
+        SPARK_CLEANUP_AND_REMOVE = 2
+    };
     Tgt_2D5B88 target_info;
     Vec_2D5B88 start_pos;
     Hit_2D5B88 hit;
@@ -1540,7 +1544,7 @@ void FUN_L03_002d47c0(Moby *moby) {
     }
     state = moby->state;
     switch (state) {
-    case 1:
+    case SPARK_HOME_AND_EMIT:
         set_vector_length_xy(&direction, data, 1.0f);
         data->vel.z = 1.0f;
         FUN_L00_00259888(&hit, moby, 0x10003, 2.0f, &direction);
@@ -1654,7 +1658,7 @@ void FUN_L03_002d47c0(Moby *moby) {
             moby->state = 2;
         }
         break;
-    case 2:
+    case SPARK_CLEANUP_AND_REMOVE:
         if (voice_slot != 0) {
             int voice = *voice_slot;
             if (voice != -1) {
