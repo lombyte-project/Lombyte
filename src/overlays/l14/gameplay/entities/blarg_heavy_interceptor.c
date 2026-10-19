@@ -2203,6 +2203,7 @@ void minibomber_update(Moby_2B5938 *moby) {
     enum {
         MINIBOMBER_STATE_INITIALIZE = 0,
         MINIBOMBER_STATE_AIM_AT_BOMB_POINT = 5,
+        MINIBOMBER_STATE_RELEASE_BOMB = 6,
         MINIBOMBER_STATE_DESTROY = 9
     };
     Data_2B5938 *d = moby->d;
@@ -2436,7 +2437,7 @@ void minibomber_update(Moby_2B5938 *moby) {
         }
         break;
     }
-    case 6:
+    case MINIBOMBER_STATE_RELEASE_BOMB:
         if (is_value_within_interpolated_window(moby, 3.0f) != 0) {
             PathNode_2B5938 *q;
             n = (float)scale_game_frames_c(D_L14_00161564);
