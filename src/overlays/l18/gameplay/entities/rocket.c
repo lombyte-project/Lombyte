@@ -1133,10 +1133,14 @@ extern float D_L18_0016199C __attribute__((sda));
 extern float D_L18_001619A0 __attribute__((sda));
 void thruster_pack_lock_green_update(char *moby) __asm__("FUN_L18_002d6600");
 void thruster_pack_lock_green_update(char *moby) {
+    enum {
+        STATE_INITIALIZE = 0,
+        STATE_UPDATE_LOCK_COMPONENTS = 1
+    };
     L18E_q *d = *(L18E_q **)(moby + 0x78);
     *(float *)(moby + 0x2C) = (*(L18Cls_q **)(moby + 0x24))->f24 * D_L18_00161998;
     switch (((unsigned char *)moby)[0x20]) {
-    case 0: {
+    case STATE_INITIALIZE: {
         *(float *)(moby + 0x18) = *(float *)(moby + 0x18) + 1.0f;
         *(int *)(moby + 0x94) = 0;
         *(float *)(moby + 0x18) = probe_ground_height(moby + 0x10, 0, 0.5f);
@@ -1189,7 +1193,7 @@ void thruster_pack_lock_green_update(char *moby) {
         *(int *)(moby + 0x94) = (*(L18Cls_q **)(moby + 0x24))->i10;
         break;
     }
-    case 1: {
+    case STATE_UPDATE_LOCK_COMPONENTS: {
         float v[4];
         if (D_L18_0015F5C4_d == 2) {
             if (d->i38 != 0) {
