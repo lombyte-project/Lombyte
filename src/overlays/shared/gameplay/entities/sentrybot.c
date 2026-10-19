@@ -2947,6 +2947,7 @@ void spiderbot_update(unsigned char *moby) {
     enum {
         SPIDERBOT_INITIALIZE = 0,
         SPIDERBOT_CIRCULAR_MOTION = 1,
+        SPIDERBOT_ARC_OSCILLATION = 2,
         SPIDERBOT_LINEAR_OSCILLATION = 3
     };
     float old[4];
@@ -2996,7 +2997,7 @@ void spiderbot_update(unsigned char *moby) {
         *(unsigned short *)(moby + 0x34) |= 0x100;
         break;
     }
-    case 2: {
+    case SPIDERBOT_ARC_OSCILLATION: {
         float b1;
         float b2;
         *(u128_2A8090 *)C = 0;
