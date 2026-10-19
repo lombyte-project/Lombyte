@@ -2211,6 +2211,7 @@ void minibomber_update(Moby_2B5938 *moby) __asm__("FUN_L14_002b46e8");
 void minibomber_update(Moby_2B5938 *moby) {
     enum {
         MINIBOMBER_STATE_INITIALIZE = 0,
+        MINIBOMBER_STATE_WAIT_TO_FOLLOW_PATH = 1,
         MINIBOMBER_STATE_FOLLOW_INTRO_OR_EXIT_PATH = 2,
         MINIBOMBER_STATE_RETRACE_INTRO_OR_EXIT_PATH = 3,
         MINIBOMBER_STATE_AIM_AT_BOMB_POINT = 5,
@@ -2311,7 +2312,7 @@ void minibomber_update(Moby_2B5938 *moby) {
         moby->f7F = 0x20;
         break;
     }
-    case 1:
+    case MINIBOMBER_STATE_WAIT_TO_FOLLOW_PATH:
         if (d->fB4 != 2) {
             moby->state = 2;
             moby->f34 &= 0xFFBE;
