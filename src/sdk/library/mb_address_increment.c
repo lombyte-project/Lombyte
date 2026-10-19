@@ -15,6 +15,7 @@ const u8 D_001537A8[] = "Invalid macroblock_address_increment code(0x%08x)";
 
 s32 _mbAddressIncrement(MbCtx *ctx) {
     enum {
+        MACROBLOCK_ADDRESS_INCREMENT_VLC_FAILURE = 0,
         MACROBLOCK_ADDRESS_INCREMENT_STUFFING = 0x22,
         MACROBLOCK_ADDRESS_INCREMENT_ESCAPE = 0x23
     };
@@ -33,7 +34,7 @@ s32 _mbAddressIncrement(MbCtx *ctx) {
             ret = 1;
             total += 0x21;
             break;
-        case 0:
+        case MACROBLOCK_ADDRESS_INCREMENT_VLC_FAILURE:
             bits = _peepBit(ctx, 0xB);
             if (ctx->unk848 != 0 && bits == 0xF) {
                 _flushBuf(ctx, 0xB);
