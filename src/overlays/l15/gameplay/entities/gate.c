@@ -230,11 +230,18 @@ extern int D_L15_00184B28_2A48B0 __asm__("D_L15_00184AA8") __attribute__((sectio
 
 void FUN_L15_002a36d0(GateMoby_2A48B0 *m)
 {
+    enum {
+        GATE_INITIALIZE = 0,
+        GATE_WAIT_TO_OPEN = 1,
+        GATE_OPENING = 2,
+        GATE_OPEN = 3,
+        GATE_CLOSING = 4
+    };
     GateVars_2A48B0 *d = m->vars;
     float step;
 
     switch (m->state) {
-    case 0:
+    case GATE_INITIALIZE:
         *(u128 *)&d->home = *(u128 *)&m->pos;
         m->state = 1;
         d->locked = 0;
@@ -246,7 +253,7 @@ void FUN_L15_002a36d0(GateMoby_2A48B0 *m)
             m->state = 5;
         }
         break;
-    case 1:
+    case GATE_WAIT_TO_OPEN:
         d->travel = 0;
         if (d->key != -1) {
             D_L15_00184B28_2A48B0 = 0;
@@ -271,7 +278,7 @@ void FUN_L15_002a36d0(GateMoby_2A48B0 *m)
             m->state = 5;
         }
         break;
-    case 2:
+    case GATE_OPENING:
         step = (D_L15_001614F8 / 0.6f) * D_0015ED6C;
         if (d->key != -1) {
             step = step * 5.0f;
@@ -303,7 +310,7 @@ void FUN_L15_002a36d0(GateMoby_2A48B0 *m)
             m->pos.z = z;
         }
         break;
-    case 3:
+    case GATE_OPEN:
         if (d->key != -1) {
             D_L15_00184B28_2A48B0 = 1;
         }
@@ -317,7 +324,7 @@ void FUN_L15_002a36d0(GateMoby_2A48B0 *m)
             m->state = 4;
         }
         break;
-    case 4:
+    case GATE_CLOSING:
         step = (D_L15_001614F8 / 0.6f) * D_0015ED6C;
         if (d->key != -1) {
             step = step * 5.0f;
