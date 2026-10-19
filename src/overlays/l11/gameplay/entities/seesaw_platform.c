@@ -1289,7 +1289,9 @@ char D_L11_0021B530[] = "Moby class %d Damage Received: %f\n";
 
 void FUN_L11_0030fe50(struct Moby *m, unsigned char *d, float *t) {
     enum {
-        HIT_REACTION_DEATH = 1
+        HIT_REACTION_NONE = 0,
+        HIT_REACTION_DEATH = 1,
+        HIT_REACTION_NO_RESPONSE = 11
     };
     int out;
     char *info;
@@ -1303,10 +1305,10 @@ void FUN_L11_0030fe50(struct Moby *m, unsigned char *d, float *t) {
         case 2:
             *t = 0.0f;
             break;
-        case 0:
+        case HIT_REACTION_NONE:
         case 3:
         case 4:
-        case 11:
+        case HIT_REACTION_NO_RESPONSE:
             break;
         }
         if (out >= 2) {
