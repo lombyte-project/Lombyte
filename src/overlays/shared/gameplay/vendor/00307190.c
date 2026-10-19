@@ -203,6 +203,10 @@ extern void func_L08_002803B8_3091B0(void *, void *, float, void *) __asm__("FUN
 extern void func_L00_00264570_3091B0(void *) __asm__("FUN_L00_002634f8");
 
 void FUN_L08_00307cf0(Moby *m) {
+    enum {
+        GROUND_PARTICLES_STATE_INITIALIZE = 0,
+        GROUND_PARTICLES_STATE_SCATTER = 2
+    };
     V_3091B0 pt;
     V_3091B0 dv;
     V_3091B0 base;
@@ -227,14 +231,14 @@ void FUN_L08_00307cf0(Moby *m) {
         flag = 0;
     }
     switch (flag) {
-    case 1:
+    case TRUE:
         fall = 0.2f;
         big = 0;
         hi = 5.0f;
         spread = frame_time;
         lo = 0.5f;
         break;
-    case 0:
+    case FALSE:
     default:
         {
             float k = frame_time;
@@ -253,12 +257,12 @@ void FUN_L08_00307cf0(Moby *m) {
     }
     obj = (Obj_3091B0 *)m->pvars;
     switch (m->state) {
-    case 0:
+    case GROUND_PARTICLES_STATE_INITIALIZE:
         m->state = 2;
         m->update_dist = 0xFF;
         func_L08_00309050_3091B0(flag);
         break;
-    case 2:
+    case GROUND_PARTICLES_STATE_SCATTER:
         if (update_float_countdown(&D_L08_00162370)) func_L08_00309050_3091B0(flag);
         func_001F9BF0_3091B0(&dv, D_L08_00167640_3091B0, &obj->v30);
         D_L08_00160250 = *(u128_3091B0 *)&dv;
