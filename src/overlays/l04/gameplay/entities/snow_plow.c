@@ -790,6 +790,8 @@ void woodcut_bot_update(WBMoby *m) {
         WOODCUT_BOT_INITIALIZE = 0,
         WOODCUT_BOT_MOVE_TOWARD_TARGET = 5,
         WOODCUT_BOT_RETURN_TO_SAVED_POSITION = 6,
+        WOODCUT_BOT_MELEE_ATTACK = 8,
+        WOODCUT_BOT_TURN_BEFORE_MOVEMENT = 10,
         WOODCUT_BOT_DEATH_KNOCKBACK = 11
     };
     int excited = 0;
@@ -1224,7 +1226,7 @@ void woodcut_bot_update(WBMoby *m) {
             }
         }
         break;
-    case 8:
+    case WOODCUT_BOT_MELEE_ATTACK:
         if (m->anim == 4 && (m->f70 & 2)) {
             d->t3C2 = 0;
             blend_moby_animation(m, 0, 0, scale_game_frames(10));
@@ -1317,7 +1319,7 @@ void woodcut_bot_update(WBMoby *m) {
             }
         }
         break;
-    case 10:
+    case WOODCUT_BOT_TURN_BEFORE_MOVEMENT:
         if (m->anim == 0x10 && (m->f70 & 2)) {
             if ((m->fBC & 0x10) ||
                 point_in_path_xy(tgt, D_L04_001B0630[d->f3DC] + 4, *D_L04_001B0630[d->f3DC]) == 0) {
