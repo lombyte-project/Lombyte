@@ -1553,9 +1553,12 @@ typedef struct {
 
 
 void FUN_L11_002f3350(struct Moby *moby) {
+    enum {
+        MOBY_INITIALIZE = 0
+    };
     char *state = (char *)moby->pvars;
     switch (moby->state) {
-    case 0:
+    case MOBY_INITIALIZE:
         moby->update_dist = 0xFF;
         moby->state = 1;
         if (*(int *)state == -1)
