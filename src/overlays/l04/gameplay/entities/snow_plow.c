@@ -466,6 +466,10 @@ f32 compute_interpolated_record_value(void *anim) __asm__("FUN_0020c9e0");
 
 void floating_platform_update(char *moby) __asm__("FUN_L04_002cdda0");
 void floating_platform_update(char *moby) {
+    enum {
+        FLOATING_PLATFORM_INITIALIZE = 0,
+        FLOATING_PLATFORM_UPDATE_MOTION = 1
+    };
     float old[4];
     float delta[4];
     char *data = *(char **)(moby + 0x78);
@@ -475,7 +479,7 @@ void floating_platform_update(char *moby) {
         return;
     }
     switch (((unsigned char *)moby)[0x20]) {
-    case 0: {
+    case FLOATING_PLATFORM_INITIALIZE: {
         int i;
         *(float *)(moby + 0x58) = random_float_between(0.5f, 0.8f);
         moby[0x20] = 1;
@@ -487,7 +491,7 @@ void floating_platform_update(char *moby) {
         }
         break;
     }
-    case 1: {
+    case FLOATING_PLATFORM_UPDATE_MOTION: {
         float off = 0.0f;
         float bob = fast_cos(fast_normalize_angle(compute_interpolated_record_value(moby) * 6.2831855f / 118.0f)) * 0.75f;
         int i;
