@@ -845,6 +845,7 @@ void blarg_space_commando_update(struct Moby *moby) {
     enum {
         BLARG_SPACE_COMMANDO_INITIALIZE = 0,
         BLARG_SPACE_COMMANDO_FACE_TARGET_AND_SELECT_ACTION = 1,
+        BLARG_SPACE_COMMANDO_SELECT_ACTION_AFTER_ANIMATION = 3,
         BLARG_SPACE_COMMANDO_FACE_TARGET_AND_WAIT_FOR_TIMER = 4,
         BLARG_SPACE_COMMANDO_RESUME_SAVED_STATE_AFTER_ANIMATION = 6,
         BLARG_SPACE_COMMANDO_APPROACH_TARGET_WITH_TURN_OFFSET = 7,
@@ -928,7 +929,7 @@ void blarg_space_commando_update(struct Moby *moby) {
             }
         }
         break;
-    case 3:
+    case BLARG_SPACE_COMMANDO_SELECT_ACTION_AFTER_ANIMATION:
         if (moby->anim_flags & 2) {
             f32 dist = vector_distance_xy_alt(&moby->pos, &target->pos);
             if (vars->unk164 != 2 && dist < 15.0f) {
