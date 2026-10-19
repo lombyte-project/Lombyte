@@ -1696,10 +1696,12 @@ void machinegun_turret_update(char *moby) __asm__("FUN_L14_002b3bf0");
 void machinegun_turret_update(char *moby) {
     enum {
         TURRET_STATE_INITIALIZE = 0,
+        TURRET_STATE_WAIT_FOR_TARGET = 3,
+        TURRET_STATE_AIM_AND_FIRE = 4,
         TURRET_STATE_DESTROY = 6
     };
     char *data;
-    float v20[4];
+    float target_point_scratch[4];
     float spawn_position[4];
     float v40[4];
     float spawn_position_offset[4];
@@ -1782,10 +1784,10 @@ void machinegun_turret_update(char *moby) {
         *(float *)(moby + 0x18) = *(float *)(data + 0x70);
         *(int *)(data + 0x8C) = 0;
         return;
-    case 3:
-        r = func_L00_00260D30_2B4E40(moby, v20, 34.0f);
+    case TURRET_STATE_WAIT_FOR_TARGET:
+        r = func_L00_00260D30_2B4E40(moby, target_point_scratch, 34.0f);
         if (r != 2) {
-            if (func_00215570_2B4E40(v20, *(int *)(data + 0x90)) != 0) {
+            if (func_00215570_2B4E40(target_point_scratch, *(int *)(data + 0x90)) != 0) {
                 *(unsigned char *)(moby + 0x20) = 4;
                 func_00213D28_2B4E40(moby, 3, 0);
                 *(short *)(data + 0x74) = func_001F9850_2B4E40(120);
@@ -1801,7 +1803,7 @@ void machinegun_turret_update(char *moby) {
         }
         *(unsigned char *)(data + 0x8B) = 1;
         return;
-    case 4:
+    case TURRET_STATE_AIM_AND_FIRE:
         if (*(short *)(data + 0x9E) != 0) {
             g0 = -D_L14_00161514;
         } else {
@@ -1813,11 +1815,11 @@ void machinegun_turret_update(char *moby) {
         d80 = *(int *)(data + 0x80);
         p16 = D_L14_001600EC + (d80 << 7) + 0x10;
         sine_scale = func_001F9FA8_2B4E40(sine_input_angle);
-        func_001F9C30_2B4E40(v20, p16, sine_scale);
+        func_001F9C30_2B4E40(target_point_scratch, p16, sine_scale);
         d80 = *(int *)(data + 0x80);
         p6 = D_L14_001600EC + (d80 << 7) + 0x30;
-        func_001F9BD8_2B4E40(v20, v20, p6);
-        target_heading = func_L00_001FF860_2B4E40(v20[0] - *(float *)(moby + 0x10), v20[1] - *(float *)(moby + 0x14));
+        func_001F9BD8_2B4E40(target_point_scratch, target_point_scratch, p6);
+        target_heading = func_L00_001FF860_2B4E40(target_point_scratch[0] - *(float *)(moby + 0x10), target_point_scratch[1] - *(float *)(moby + 0x14));
         *(float *)(moby + 0x48) = target_heading;
         func_001F9938_2B4E40(data + 0x9C);
         rem = D_L14_0015F5CC % D_L14_00161530;
