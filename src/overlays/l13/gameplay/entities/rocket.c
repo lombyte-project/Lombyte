@@ -1196,7 +1196,8 @@ extern void mark_moby_for_removal_8d10(struct Moby *) __asm__("FUN_0020c828");
 /* Walker update: takes hits (knocked back, or dies at no health), picks its target and falls onto or slides off the ground. */
 void FUN_L13_00308d10(struct Moby *moby) {
     enum {
-        HIT_RESULT_DEATH = 1
+        HIT_RESULT_DEATH = 1,
+        HIT_RESULT_NO_REACTION = 11
     };
     struct WalkerVars_8d10 *vars = (struct WalkerVars_8d10 *)moby->pvars;
     char *hit;
@@ -1229,7 +1230,7 @@ void FUN_L13_00308d10(struct Moby *moby) {
         vars->hit_scale = 0.7f;
         switch (code) {
         case 0:
-        case 11:
+        case HIT_RESULT_NO_REACTION:
             break;
         case 3:
         case 4:
