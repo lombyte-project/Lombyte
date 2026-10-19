@@ -1124,8 +1124,10 @@ void extermibot_update(unsigned char *m) {
         EXTERMIBOT_INITIALIZE = 0,
         EXTERMIBOT_WANDER_NEAR_START = 2,
         EXTERMIBOT_FOLLOW_TARGET = 4,
+        EXTERMIBOT_APPROACH_TARGET_DIRECTLY = 6,
         EXTERMIBOT_AIM_BEFORE_STRIKE = 7,
         EXTERMIBOT_STRIKE_TARGET = 8,
+        EXTERMIBOT_RECOVER_AFTER_STRIKE = 9,
         EXTERMIBOT_RETURN_TO_START = 10
     };
     char *d = *(char **)(m + 0x78);
@@ -1258,7 +1260,7 @@ void extermibot_update(unsigned char *m) {
             if (m[0x53] != 0) blend_moby_animation(m, 0, 0, scale_game_frames(20));
         }
         break;
-    case 6: {
+    case EXTERMIBOT_APPROACH_TARGET_DIRECTLY: {
         int near;
         rot = (float *)(m + 0x48);
         pos0 = m + 0x10;
@@ -1418,7 +1420,7 @@ void extermibot_update(unsigned char *m) {
         }
         break;
     }
-    case 9:
+    case EXTERMIBOT_RECOVER_AFTER_STRIKE:
         if (m[0x70] & 2) {
             if (vector_distance_xy_alt(m + 0x10, t + 0x10) < 3.0f
                 && fast_difference_between_rotations(*(float *)(m + 0x48),
