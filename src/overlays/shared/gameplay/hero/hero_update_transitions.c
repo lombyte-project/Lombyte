@@ -160,6 +160,7 @@ extern int func_001F9908_r(int *) __asm__("FUN_001f9740");
 void hero_update_transitions(void) __asm__("FUN_L00_00229b70");
 void hero_update_transitions(void) {
     enum {
+        HERO_STATE_DOUBLE_JUMP = 14,
         HERO_STATE_GRIND_JUMP = 41,
         HERO_STATE_GRIND_RAIL_TRANSFER = 42,
         HERO_STATE_GRIND_ATTACK = 43,
@@ -2009,7 +2010,7 @@ void hero_update_transitions(void) {
                 case HERO_STATE_HIGH_JUMP:
                 case 12:
                 case 13:
-                case 14:
+                case HERO_STATE_DOUBLE_JUMP:
                 case 15:
                 case HERO_STATE_PACK_LONG_JUMP:
                 case 17:
