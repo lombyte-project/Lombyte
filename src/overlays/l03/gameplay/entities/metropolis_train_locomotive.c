@@ -1652,6 +1652,9 @@ void robot_dog_update(char *moby) __asm__("FUN_L03_002c5bb8");
 void robot_dog_update(char *moby) {
     enum {
         ROBOT_DOG_INITIALIZE = 0,
+        ROBOT_DOG_WAIT_FOR_ACTIVATION = 1,
+        ROBOT_DOG_TURN_TO_TARGET = 3,
+        ROBOT_DOG_CHASE_TARGET = 4,
         ROBOT_DOG_FOLLOW_PATH = 5,
         ROBOT_DOG_MELEE_ATTACK = 6,
         ROBOT_DOG_RETURN_HOME = 7,
@@ -1716,7 +1719,7 @@ void robot_dog_update(char *moby) {
             blend_moby_animation_c5bb8(moby, 1, 0, 0);
         }
         break;
-    case 1:
+    case ROBOT_DOG_WAIT_FOR_ACTIVATION:
         if (data->i270 != -1) {
             p = D_L03_001B05B0_c5bb8[data->i270];
             *(OvlQuad *)(moby + 0x10) = *(OvlQuad *)(p + 0x10);
@@ -1753,7 +1756,7 @@ void robot_dog_update(char *moby) {
             }
         }
         break;
-    case 3:
+    case ROBOT_DOG_TURN_TO_TARGET:
         a = fast_arc_tan(tgt.pos[0] - *(float *)(moby + 0x10), tgt.pos[1] - *(float *)(moby + 0x14));
         FUN_L00_00258278(moby, data->v220, a, 0.02f, 0.3f, 0.1f);
         if (((unsigned char *)moby)[0x70] & 2) {
@@ -1764,7 +1767,7 @@ void robot_dog_update(char *moby) {
             }
         }
         break;
-    case 4:
+    case ROBOT_DOG_CHASE_TARGET:
         a = fast_arc_tan(tgt.pos[0] - *(float *)(moby + 0x10), tgt.pos[1] - *(float *)(moby + 0x14));
         FUN_L00_00258278(moby, data->v220, a, 0.05f, 0.3f, 0.2f);
         dir[0] = 2.0f * fast_cos(*(float *)(moby + 0x48));
