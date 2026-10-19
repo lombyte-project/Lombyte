@@ -87,6 +87,10 @@ extern void FUN_L09_002c6230_u(struct Moby *) __asm__("FUN_L09_002c6230");
 
 void seeker_update(struct Moby *moby) __asm__("FUN_L09_002c5990");
 void seeker_update(struct Moby *moby) {
+    enum {
+        SEEKER_STATE_INITIALIZE = 0,
+        SEEKER_STATE_EXPLODE = 7
+    };
     Moby52Vars *vars = (Moby52Vars *)moby->pvars;
     struct Moby *target;
     Vec4 vel;
@@ -111,7 +115,7 @@ void seeker_update(struct Moby *moby) {
         return;
     }
     switch (moby->state) {
-    case 0:
+    case SEEKER_STATE_INITIALIZE:
         vars->unk20 = 3.0f;
         vars->unk24 = 3;
         vars->unk28 = 2;
@@ -270,7 +274,7 @@ void seeker_update(struct Moby *moby) {
             mark_moby_for_removal(moby);
         }
         break;
-    case 7:
+    case SEEKER_STATE_EXPLODE:
         FUN_L00_00257470(moby, 0, -1);
         voice = vars->voice;
         if (voice != -1) {
