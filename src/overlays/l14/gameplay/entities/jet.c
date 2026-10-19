@@ -2240,6 +2240,7 @@ void taxi_update(struct Moby *moby) {
         TAXI_STATE_INITIALIZE = 0,
         TAXI_STATE_WAIT_AT_STOP = 1,
         TAXI_STATE_BLEND_STOP_TO_PATH_START = 3,
+        TAXI_STATE_FOLLOW_PATH = 4,
         TAXI_STATE_BLEND_PATH_END_TO_STOP = 5,
         TAXI_STATE_BLEND_SAVED_POSE_TO_PATH_START = 7
     };
@@ -2371,7 +2372,7 @@ void taxi_update(struct Moby *moby) {
         }
         break;
     }
-    case 4: {
+    case TAXI_STATE_FOLLOW_PATH: {
         struct Hero *g = &hero;
         if (g->ground_moby == moby && g->air_frames.s == 0) {
             FUN_L00_002e8450(0, 7.0f, 0.003f);
