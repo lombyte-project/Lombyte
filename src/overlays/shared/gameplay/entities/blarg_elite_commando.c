@@ -557,6 +557,7 @@ void FUN_L16_002d38b0(struct Moby *m) {
     enum {
         HIT_RESPONSE_UNAVAILABLE = 0,
         HIT_RESPONSE_FATAL = 1,
+        HIT_RESPONSE_FATAL_FALL = 2,
         HIT_RESPONSE_NO_REACTION = 11
     };
     L16DamageScratch scratch;
@@ -621,7 +622,7 @@ void FUN_L16_002d38b0(struct Moby *m) {
             break;
         }
         case HIT_RESPONSE_FATAL:
-        case 2: {
+        case HIT_RESPONSE_FATAL_FALL: {
             char *source;
             if (current_level_index == 18 && d->reward_hits) {
                 ++*(int *)&D_0015EE10;
