@@ -150,6 +150,8 @@ extern int func_001F9908_r(int *) __asm__("FUN_001f9740");
 void FUN_L17_002258a8(void) {
     enum {
         HERO_STATE_LEDGE_HANG = 25,
+        HERO_STATE_LEDGE_SHIMMY_POSITIVE_YAW = 26,
+        HERO_STATE_LEDGE_SHIMMY_NEGATIVE_YAW = 27,
         HERO_STATE_GRIND_JUMP = 41,
         HERO_STATE_GRIND_RAIL_TRANSFER = 42,
         HERO_STATE_GRIND_ATTACK = 43,
@@ -1687,8 +1689,8 @@ void FUN_L17_002258a8(void) {
                         }
                     }
                     break;
-                case 26:
-                case 27: {
+                case HERO_STATE_LEDGE_SHIMMY_POSITIVE_YAW:
+                case HERO_STATE_LEDGE_SHIMMY_NEGATIVE_YAW: {
                     float ang;
 
                     qcopy(v0, hero.motion.pos.f);
