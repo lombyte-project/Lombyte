@@ -3345,16 +3345,20 @@ extern int D_L00_00161B94 __attribute__((sda));
 extern float D_L00_00161B98 __attribute__((sda));
 void red_orb_update(char *m) __asm__("FUN_L00_002df4f8");
 void red_orb_update(char *m) {
+    enum {
+        RED_ORB_STATE_INITIALIZE_PHASE = 0,
+        RED_ORB_STATE_PULSE_COLOR = 1
+    };
     char *p = *(char **)(m + 0x78);
     unsigned char s = m[0x20];
     float a;
     int c, hi, r, g, b, t;
     switch (s) {
-    case 0:
+    case RED_ORB_STATE_INITIALIZE_PHASE:
         *(float *)p = *(float *)p * DEG_TO_RAD;
         m[0x20] = 1;
         break;
-    case 1:
+    case RED_ORB_STATE_PULSE_COLOR:
         a = fast_add_rotations(*(float *)p,
                                D_L00_00161B98 * DEG_TO_RAD * frame_time);
         *(float *)p = a;
