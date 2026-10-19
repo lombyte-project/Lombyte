@@ -350,6 +350,7 @@ extern int D_L11_0015FFD8;
 void FUN_L11_002d1030(void *mp) {
     enum {
         RESORT_OWNER_INITIALIZE = 0,
+        RESORT_OWNER_CHECK_INITIAL_DIALOGUE = 1,
         RESORT_OWNER_INITIAL_DIALOGUE = 2,
         RESORT_OWNER_WAIT_TO_FOLLOW_HERO = 3,
         RESORT_OWNER_MOVE_TO_PATH_POINT = 6,
@@ -368,7 +369,7 @@ void FUN_L11_002d1030(void *mp) {
 
     switch (moby->state) {
     case RESORT_OWNER_INITIALIZE:
-    case 1:
+    case RESORT_OWNER_CHECK_INITIAL_DIALOGUE:
     case RESORT_OWNER_INITIAL_DIALOGUE:
     case RESORT_OWNER_WAIT_TO_FOLLOW_HERO:
     case 11:
