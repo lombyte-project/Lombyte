@@ -431,6 +431,9 @@ void swingshot_hook_update(unsigned char *m) {
         HOOK_INITIAL_ANIMATION = 0,
         HOOK_IDLE_ANIMATION = 1,
         HOOK_REMOVAL_ANIMATION = 2,
+        HOOK_LAUNCH_ANIMATION = 3,
+        HOOK_FLIGHT_ANIMATION = 4,
+        HOOK_ATTACHED_ANIMATION = 5,
         HOOK_RETURN_ANIMATION = 7
     };
     unsigned char **d;
@@ -479,21 +482,21 @@ void swingshot_hook_update(unsigned char *m) {
             return;
         }
         break;
-    case 3:
+    case HOOK_LAUNCH_ANIMATION:
         if (m[0x70] & 2) {
             if (m[0x53] != 4)
                 FUN_00212f90_2c7070(m, 4, 0, FUN_001f96f8_2c7070(10));
             m[0x20] = 4;
         }
         break;
-    case 4:
+    case HOOK_FLIGHT_ANIMATION:
         if ((unsigned char)(d[0][0x20] - 3) < 3) {
             if (m[0x53] != 5)
                 FUN_00212f90_2c7070(m, 5, 0, FUN_001f96f8_2c7070(10));
             m[0x20] = 5;
         }
         break;
-    case 5:
+    case HOOK_ATTACHED_ANIMATION:
         if (m[0x70] & 2)
             *(int *)(m + 0x58) = 0;
         if ((unsigned char)(d[0][0x20] - 6) < 2) {
