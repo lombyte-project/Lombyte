@@ -94,6 +94,9 @@ extern void FUN_00226e08(void);
 extern char D_L00_00165FB0[];
 extern char D_L00_00161E00[];
 void FUN_L00_00245c28(void) {
+    enum {
+        LEVEL_MODE_FREEZE = 4
+    };
     int i;
     int v;
     int quit;
@@ -188,7 +191,7 @@ void FUN_L00_00245c28(void) {
             FUN_L00_00276bd0();
             FUN_L00_001f8f50();
             break;
-        case 4:
+        case LEVEL_MODE_FREEZE:
             register_audio_stream_callback();
             update_mode_freeze();
             FUN_L00_001f8ec8();
