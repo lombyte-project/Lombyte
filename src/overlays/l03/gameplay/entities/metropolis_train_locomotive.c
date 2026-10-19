@@ -506,7 +506,10 @@ void metropolis_train_locomotive_update(char *moby) __asm__("FUN_L03_00292e98");
 void metropolis_train_locomotive_update(char *moby) {
     enum {
         TRAIN_INITIALIZE = 0,
+        TRAIN_SETUP_COUPLING_PATH = 1,
+        TRAIN_POSITION_FOR_BOARDING = 2,
         TRAIN_WAIT_FOR_BOARDING = 3,
+        TRAIN_ACCELERATE_AND_FOLLOW_FIRST_PATH = 4,
         TRAIN_FOLLOW_SECOND_PATH_AND_BRAKE = 5,
         TRAIN_WAIT_FOR_RESET_VOLUME = 6
     };
@@ -579,7 +582,7 @@ void metropolis_train_locomotive_update(char *moby) {
         data->i9C = 3;
         *(unsigned short *)(coupling + 0x34) |= 6;
         break;
-    case 1:
+    case TRAIN_SETUP_COUPLING_PATH:
         *(OvlQuad *)start = *(OvlQuad *)(D_L03_001B05B0_292e98[data->iA4] + 0x10);
         FUN_L03_00292578(moby, start, 0.0f);
         cdata->i74 = data->iA4;
@@ -587,7 +590,7 @@ void metropolis_train_locomotive_update(char *moby) {
         gunship_follow_path(coupling);
         moby[0xBC] = 2;
         break;
-    case 2:
+    case TRAIN_POSITION_FOR_BOARDING:
         *(OvlQuad *)start = *(OvlQuad *)(D_L03_001B05B0_292e98[data->iA8] + 0x10);
         FUN_L03_00292578(moby, start, PATH_HEADING(D_L03_001B05B0_292e98[data->iA8]));
         moby[0xBC] = 3;
@@ -618,7 +621,7 @@ void metropolis_train_locomotive_update(char *moby) {
             data->i108 = -1;
         }
         break;
-    case 4:
+    case TRAIN_ACCELERATE_AND_FOLLOW_FIRST_PATH:
         data->fC8 += data->fC0 / 5.0f * frame_time;
         if (data->fC0 < data->fC8) {
             data->fC8 = data->fC0;
