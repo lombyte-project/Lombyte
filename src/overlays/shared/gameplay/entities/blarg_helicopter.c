@@ -1817,6 +1817,10 @@ extern void FUN_L01_002fb4b8(void *);
 /* Activate the watcher and steer its body and head toward the player. */
 void qwark_rilgar_update(L03WatchMoby *m) __asm__("FUN_L03_002dc478");
 void qwark_rilgar_update(L03WatchMoby *m) {
+    enum {
+        QWARK_RILGAR_INITIALIZE = 0,
+        QWARK_RILGAR_WAIT_FOR_PLAYER_IN_REGION = 1
+    };
     L03WatchScratch scratch;
     L03WatchData *d = (L03WatchData *)m->data;
     float rate;
@@ -1830,7 +1834,7 @@ void qwark_rilgar_update(L03WatchMoby *m) {
         }
     }
     switch (m->state) {
-    case 0:
+    case QWARK_RILGAR_INITIALIZE:
         m->opacity = 0xFF;
         if (d->region_a == -1)
             debug_print(D_L03_001E3628);
@@ -1849,7 +1853,7 @@ void qwark_rilgar_update(L03WatchMoby *m) {
         }
         m->state = 1;
         break;
-    case 1:
+    case QWARK_RILGAR_WAIT_FOR_PLAYER_IN_REGION:
         if (d->region_a != -1 && is_point_inside_clip_volume(&hero.motion.pos, d->region_a)) {
             FUN_L00_00266858(m, 1);
             m->state = 2;
