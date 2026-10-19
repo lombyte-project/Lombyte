@@ -360,6 +360,7 @@ void bolt_grabber_update(struct Moby *m) __asm__("FUN_L15_002ea748");
 void bolt_grabber_update(struct Moby *m) {
     enum {
         BOLT_GRABBER_WAIT_FOR_PROXIMITY = 1,
+        BOLT_GRABBER_FINALIZE_AND_SAVE = 2,
         BOLT_GRABBER_REMOVE = 3
     };
     m->rot.z = fast_add_rotations(m->rot.z, frame_time * 1.5707964f);
@@ -382,7 +383,7 @@ void bolt_grabber_update(struct Moby *m) {
             m->state = 2;
         }
         break;
-    case 2:
+    case BOLT_GRABBER_FINALIZE_AND_SAVE:
         if (D_L15_0015F5C4 != 2) {
             queue_dialogue_message(0x3AA3, -1);
             D_L15_0015F640 = scale_game_frames(0xB4);
