@@ -6775,6 +6775,10 @@ extern unsigned char D_0013D4D5[] __attribute__((section(".data")));
 /* Update of moby class 1109 (shuttle): waits at one of three camera points, takes the hero's choice of destination, flies there through a cutscene and hands over to the level's travel sequence. */
 void shuttle_update(struct Moby *moby) __asm__("FUN_L06_00302578");
 void shuttle_update(struct Moby *moby) {
+    enum {
+        INITIALIZE_SHUTTLE = 0,
+        UPDATE_SHUTTLE_PATH_RIDE = 3
+    };
     Data_302578 *d = *(Data_302578 **)&moby->pvars;
     float old_pos[4];
     float old_rot[4];
@@ -6795,7 +6799,7 @@ void shuttle_update(struct Moby *moby) {
         FUN_L06_0030bef8_302578((char *)b, scale_game_frames_302578(D_L06_00162108), D_L06_0016210C, D_L06_00162110);
     }
     switch (moby->state) {
-    case 0:
+    case INITIALIZE_SHUTTLE:
         D_L06_0015FDF8 = 0;
         if (*(unsigned char *)(d->fF8 + (current_level_index << 4) + (int)visited52) == 0xFF) {
             FUN_L06_00304028((char *)moby);
@@ -6915,7 +6919,7 @@ void shuttle_update(struct Moby *moby) {
             allocate_voice_302578(2, 0, moby);
         }
         break;
-    case 3:
+    case UPDATE_SHUTTLE_PATH_RIDE:
         if (FUN_L06_00303160((char *)moby, d->side) != 0) {
             int ofs;
             int base;
