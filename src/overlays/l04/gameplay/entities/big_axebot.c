@@ -1541,6 +1541,14 @@ extern P_35F0 *D_L04_001B0930_2C35F0[] __asm__("D_L04_001B0630");
 
 void circular_saw_enemy_update(M_35F0 *moby) __asm__("FUN_L04_002c2270");
 void circular_saw_enemy_update(M_35F0 *moby) {
+    enum {
+        CIRCULAR_SAW_STATE_INITIALIZE = 0,
+        CIRCULAR_SAW_STATE_JUMP = 2,
+        CIRCULAR_SAW_STATE_FOLLOW_PATH = 4,
+        CIRCULAR_SAW_STATE_HIT_RECOVERY = 6,
+        CIRCULAR_SAW_STATE_MELEE_ATTACK = 7,
+        CIRCULAR_SAW_STATE_DYING = 8
+    };
     D_35F0 *data = moby->data;
     T_35F0 tg;
     V4_35F0 prev;
@@ -1696,7 +1704,7 @@ void circular_saw_enemy_update(M_35F0 *moby) {
     }
     fast_dec_timer_s16(&data->f146);
     switch (moby->state) {
-    case 0: {
+    case CIRCULAR_SAW_STATE_INITIALIZE: {
         float k;
         data->hp = 1.0f;
         data->f24 = 1;
@@ -1771,7 +1779,7 @@ void circular_saw_enemy_update(M_35F0 *moby) {
         }
         break;
     }
-    case 2:
+    case CIRCULAR_SAW_STATE_JUMP:
         if (moby->f53 != 5) {
             blend_moby_animation(moby, (void *)5, 0, (void *)scale_game_frames(5));
             data->f78 = -(frame_time * 7.668f);
@@ -1801,7 +1809,7 @@ void circular_saw_enemy_update(M_35F0 *moby) {
         func_L00_002592B0_b((char *)moby, rot, &data->f130, frame_time_sq * 1.0471976f,
                             frame_time_sq * 3.1415927f, frame_time * 3.1415927f);
         break;
-    case 4: {
+    case CIRCULAR_SAW_STATE_FOLLOW_PATH: {
         P_35F0 *path = D_L04_001B0930_2C35F0[data->f150];
         int i;
         float *vel;
@@ -1933,7 +1941,7 @@ void circular_saw_enemy_update(M_35F0 *moby) {
         }
         break;
     }
-    case 7:
+    case CIRCULAR_SAW_STATE_MELEE_ATTACK:
         rot = FUN_L04_002c1fb8_u(moby, dest, flag ? data->f140 * 2.0f : data->f140);
         if (data->f146 == 0 && (hd > 44.0f || (moby->f70 & 2))) {
             blend_moby_animation(moby, 0, 0, (void *)scale_game_frames(5));
@@ -1944,7 +1952,7 @@ void circular_saw_enemy_update(M_35F0 *moby) {
         func_L00_002592B0_b((char *)moby, rot, &data->f130, frame_time_sq * 1.0471976f,
                             frame_time_sq * 3.1415927f, frame_time * 3.1415927f);
         break;
-    case 6:
+    case CIRCULAR_SAW_STATE_HIT_RECOVERY:
         if ((moby->f52 == 8 && compute_interpolated_record_value(moby) > 30.0f) ||
             (moby->f70 & 2)) {
             blend_moby_animation(moby, 0, 0, (void *)scale_game_frames(10));
@@ -1952,7 +1960,7 @@ void circular_saw_enemy_update(M_35F0 *moby) {
             data->f146 = 0;
         }
         break;
-    case 8:
+    case CIRCULAR_SAW_STATE_DYING:
         if (moby->f70 & 2) {
             FUN_L04_002c1d70((char *)moby);
             mark_moby_for_removal(moby);
