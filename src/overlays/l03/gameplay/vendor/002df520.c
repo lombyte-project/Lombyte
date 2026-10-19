@@ -50,6 +50,10 @@ extern void queue_dialogue_message(s32, s32) __asm__("FUN_L00_00263d40");
 
 /* Kerwan tutorial hint triggers: plays help messages and counts usage stats while the hero is inside the moby's clip volumes. */
 void FUN_L03_002df520(u8 *moby) {
+    enum {
+        TUTORIAL_HINTS_INITIALIZE = 0,
+        TUTORIAL_HINTS_UPDATE = 1
+    };
     s32 *data = *(s32 **)(moby + 0x78);
     struct Moby *m;
     s32 count;
@@ -58,13 +62,13 @@ void FUN_L03_002df520(u8 *moby) {
 
     tick_countdown(&data[22]);
     switch (moby[0x20]) {
-    case 0:
+    case TUTORIAL_HINTS_INITIALIZE:
         data[20] = 0;
         data[21] = 0;
         moby[0x30] = 0xFF;
         moby[0x20] = 1;
         break;
-    case 1:
+    case TUTORIAL_HINTS_UPDATE:
         if (is_point_inside_clip_volume(&hero.motion.pos, data[30]) &&
             ((u32)hero.state.control_mode < 2 || hero.state.control_mode == 9)) {
             D_0013D388[0x1A] = 1;
