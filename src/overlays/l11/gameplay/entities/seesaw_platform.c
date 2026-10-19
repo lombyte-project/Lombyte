@@ -1091,10 +1091,13 @@ extern struct Moby *D_L11_00174858 __attribute__((section(".data")));
 void ammocrate_update(struct Moby *m) __asm__("FUN_L11_0030f728");
 void ammocrate_update(struct Moby *m) {
     enum {
-        OCLASS_SHIP_AMMO_PICKUP = 0x4C2,
-        OCLASS_SHIP_HEALTH_PICKUP = 0x4C4,
         AMMOCRATE_STATE_INITIALIZE = 0,
-        AMMOCRATE_STATE_REMOVE = 5
+        AMMOCRATE_STATE_ATTRACT_TO_SHIP = 2,
+        AMMOCRATE_STATE_FREE_FALL = 3,
+        AMMOCRATE_STATE_COLLECTED = 4,
+        AMMOCRATE_STATE_REMOVE = 5,
+        OCLASS_SHIP_AMMO_PICKUP = 0x4C2,
+        OCLASS_SHIP_HEALTH_PICKUP = 0x4C4
     };
     struct Moby *ship = hero.ship_moby;
     char *pv = m->pvars;
@@ -1173,7 +1176,7 @@ void ammocrate_update(struct Moby *m) {
             }
         }
         break;
-    case 2: {
+    case AMMOCRATE_STATE_ATTRACT_TO_SHIP: {
         float k = 0.8f;
         m->rot.z = fast_add_rotations_f728(m->rot.z, frame_time * 0.034906585f);
         *(float *)(pv + 0x30) = fast_add_rotations_f728(*(float *)(pv + 0x30), frame_time * 1.5707964f);
@@ -1195,11 +1198,11 @@ void ammocrate_update(struct Moby *m) {
         }
         break;
     }
-    case 3:
+    case AMMOCRATE_STATE_FREE_FALL:
         *(float *)(pv + 0x18) -= frame_time_sq * 9.8f;
         add_vector_f728(&m->pos, &m->pos, pv + 0x10);
         break;
-    case 4:
+    case AMMOCRATE_STATE_COLLECTED:
         m->state = 5;
         break;
     case AMMOCRATE_STATE_REMOVE:
