@@ -7502,6 +7502,7 @@ void red_button_update(struct Moby *moby) __asm__("FUN_L06_00304098");
 void red_button_update(struct Moby *moby) {
     enum {
         INITIALIZE_RED_BUTTON = 0,
+        IDLE_AFTER_INITIALIZATION = 1,
         ROTATE_BUTTON_AND_LINKED_MOBYS = 2,
         WAIT_FOR_NEARBY_HELP_TRIGGER = 3,
         WAIT_CAMERA_START_DELAY = 4,
@@ -7527,7 +7528,7 @@ void red_button_update(struct Moby *moby) {
         moby->state = 1;
         data->f48 = -1;
         break;
-    case 1:
+    case IDLE_AFTER_INITIALIZATION:
         break;
     case ROTATE_BUTTON_AND_LINKED_MOBYS: {
         float angle;
