@@ -17,16 +17,20 @@ extern void func_L10_002EBDC8_a01(float,void *,short *,short *) __asm__("FUN_L10
 void FUN_L10_002ea1f0(char *m) {
     enum {
         EFFECT_STATE_INITIALIZE = 0,
-        EFFECT_STATE_UPDATE_WITH_GROUND_HEIGHT = 2
+        EFFECT_STATE_EMIT_BURST_PARTICLES = 1,
+        EFFECT_STATE_UPDATE_WITH_GROUND_HEIGHT = 2,
+        EFFECT_STATE_EMIT_TIMED_PARTICLES = 3
     };
     enum {
-        EFFECT_MODE_CACHE_GROUND_HEIGHT = 1
+        EFFECT_MODE_BURST_PARTICLES = 0,
+        EFFECT_MODE_CACHE_GROUND_HEIGHT = 1,
+        EFFECT_MODE_TIMED_PARTICLES = 2
     };
  char *d=*(char **)(m+0x78);
  switch((unsigned char)m[0x20]) {
  case EFFECT_STATE_INITIALIZE:
   switch(*(int *)d) {
-  case 0:m[0x20]=1;break;
+  case EFFECT_MODE_BURST_PARTICLES:m[0x20]=1;break;
   case EFFECT_MODE_CACHE_GROUND_HEIGHT:
    if(*(int *)(d+4)!=-1) {
     char *tab=D_L10_001B0930[*(int *)(d+4)];
@@ -37,10 +41,10 @@ void FUN_L10_002ea1f0(char *m) {
     do {*height=probe_ground_height(pos,0,0.5f);pos+=0x10;height+=4;}while(--count);}
    }else *(float *)(d+0x88)=probe_ground_height(m+0x10,0,0.5f);
    m[0x20]=2;break;
-  case 2:m[0x20]=3;break;
+  case EFFECT_MODE_TIMED_PARTICLES:m[0x20]=3;break;
   }
   break;
- case 1:
+ case EFFECT_STATE_EMIT_BURST_PARTICLES:
   if(*(int *)(d+4)==-1)FUN_L10_002ea4e8_c(m+0x10,(short *)(d+8),(short *)(d+0x48));
   else {
    char *tab=D_L10_001B0930[*(int *)(d+4)];int n=*(int *)tab;
@@ -58,7 +62,7 @@ void FUN_L10_002ea1f0(char *m) {
    do {func_L10_002EBDC8_a01(*height,pos,timer,burst);height+=4;++burst;++timer;--count;pos+=0x10;}while(count);}
   }
   break;
- case 3:
+ case EFFECT_STATE_EMIT_TIMED_PARTICLES:
   if(*(int *)(d+4)==-1)FUN_L10_002ea7b0_c(m+0x10,(short *)(d+8));
   else {
    char *tab=D_L10_001B0930[*(int *)(d+4)];int n=*(int *)tab;
