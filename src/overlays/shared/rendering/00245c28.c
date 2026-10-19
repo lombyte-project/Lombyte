@@ -100,6 +100,7 @@ void FUN_L00_00245c28(void) {
         LEVEL_MODE_DEBUG_PROFILER_RENDER = 2,
         LEVEL_MODE_CALLBACK_TABLE_UPDATE = 3,
         LEVEL_MODE_FREEZE = 4,
+        LEVEL_MODE_STATEFUL_RENDER_PIPELINE = 5,
         LEVEL_MODE_GAME_STATE_UPDATE = 6,
         LEVEL_MODE_TIMED_BUFFER_SEQUENCE = 7
     };
@@ -202,7 +203,7 @@ void FUN_L00_00245c28(void) {
             update_mode_freeze();
             FUN_L00_001f8ec8();
             break;
-        case 5:
+        case LEVEL_MODE_STATEFUL_RENDER_PIPELINE:
             register_audio_stream_callback();
             FUN_L00_0029c648();
             FUN_L00_002a02b0();
