@@ -2335,7 +2335,9 @@ s32 hero_check_damage(s32 arg) __asm__("FUN_L00_00210ce8");
 extern T_210ce8 moby_hits[] __asm__("D_L00_00178100");
 s32 hero_check_damage(s32 arg) {
     enum {
-        HERO_VEHICLE_MODE_NONE = 0
+        HERO_VEHICLE_MODE_NONE = 0,
+        VEHICLE_MODE_CLANK = 1,
+        VEHICLE_MODE_GIANT_CLANK = 2
     };
     u8 *m;
     T_210ce8 *tbl;
@@ -2465,11 +2467,11 @@ s32 hero_check_damage(s32 arg) {
             v.f[2] += v.f[2];
         }
         break;
-    case 1:
+    case VEHICLE_MODE_CLANK:
         hero_set_state(0x46, 1);
         FUN_L00_00210c80_210ce8(&v, flag, D_0015ED6C_210ce8 * 5.0f, D_0015ED6C_210ce8 * 3.0f);
         break;
-    case 2:
+    case VEHICLE_MODE_GIANT_CLANK:
         if ((tbl->i24 & 4) || hero.unk1630 <= 0) {
             hero_set_state(0x5D, 1);
             FUN_L00_002a9be0_210ce8();
