@@ -130,9 +130,6 @@ void FUN_L14_003015d0(unsigned char *m) {
         }
     }
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_003017f8.s", FUN_L14_003017f8);
-#else
 extern int random_integer_between(int, int) __asm__("FUN_L00_00257b90");
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
@@ -143,15 +140,13 @@ extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
 extern void set_vector_xyz(void *, float, float) __asm__("FUN_L00_00257d78");
 extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
-extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
-extern void *spawn_spark(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
-extern float D_0015ED6C;
+extern int spawn_spark(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
+extern f32 frame_time __asm__("D_0015ED6C");
 extern int D_L14_001620BC __attribute__((sda));
 extern int D_L14_001620C0 __attribute__((sda));
 extern float D_L14_001620FC __attribute__((sda));
 extern float D_L14_00162100 __attribute__((sda));
-extern float D_L14_00162104 __attribute__((sda));
 extern int D_L14_00162108 __attribute__((sda));
 extern int D_L14_0016210C __attribute__((sda));
 extern float D_L14_00162114 __attribute__((sda));
@@ -160,127 +155,124 @@ extern int D_L14_00162120 __attribute__((sda));
 
 extern char D_L14_001674C0[];
 
-void FUN_L14_003017f8(char *m) {
-    char *d = *(char **)(m + 0x78);
-    float path_a[32][4] __attribute__((aligned(16)));
-    float path_b[32][4] __attribute__((aligned(16)));
-    float work[4] __attribute__((aligned(16)));
-    float delta_a[4] __attribute__((aligned(16)));
-    float matrix[12] __attribute__((aligned(16)));
-    float origin[4] __attribute__((aligned(16)));
-    int i, j, index, next, color;
-    float length, t;
-    float y;
-    int offset;
-    u8 *indices;
-    VendorBeamFrame *frame;
+typedef struct {
+    int frame;              /* 0x0: D_L14_001600EC transform index */
+    u8 pad4[0xE];
+    s16 countdown;          /* 0x12 */
+    int color;              /* 0x14 */
+    u8 branch_start[4];     /* 0x18: main line point each branch leaves from */
+    u8 pad1c[4];
+    Vec4 points[32];        /* 0x20 */
+    Vec4 point_steps[32];   /* 0x220 */
+    Vec4 branches[4][4];    /* 0x420: [point][branch] */
+    Vec4 branch_steps[4][4]; /* 0x520: [point][branch] */
+    int duration;           /* 0x620 */
+} VendorBeamVars;
 
-    D_L14_001600EC[*(int *)d].origin.f[3] = 1.0f;
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002B2A28.c: func_L14_00302C80). */
+void FUN_L14_003017f8(char *m) {
+    VendorBeamVars *beam = *(VendorBeamVars **)(m + 0x78);
+    Vec4 path[32];
+    Vec4 path_steps[32];
+    Vec4 work, delta;
+    Vec4 matrix[4];
+    char *frame;
+    float length;
+    int low, high, duration;
+    int i, j, k, branch;
+
+    frame = (char *)((beam->frame << 7) + (int)D_L14_001600EC);
     {
-        int duration = random_integer_between(scale_game_frames(D_L14_001620BC),
-            scale_game_frames(D_L14_001620C0));
-        frame = &D_L14_001600EC[*(int *)d];
-        *(int *)(d + 0x620) = (short)duration;
-        *(short *)(d + 0x12) = duration;
+        int ticks = D_L14_001620BC;
+        *(float *)(frame + 0x3C) = 1.0f;
+        low = scale_game_frames(ticks);
     }
-    length = vector_length_xyz(&frame->axis[1]);
+    high = scale_game_frames(D_L14_001620C0);
+    duration = random_integer_between(low, high);
+    beam->countdown = (short)duration;
+    beam->duration = (short)duration;
+    length = vector_length_xyz((char *)D_L14_001600EC + (beam->frame << 7) + 0x10);
     length = length + length;
-    {
-        int i;
-        for (i = 0; i < 32; i++) {
-            t = convert_integer_to_float(i) / convert_integer_to_float(31);
-            {
-                float y = 0.5f - t;
-                t = y * length;
-            }
-            if ((unsigned)(i - 3) >= 26) {
-                clear_u64_value(path_a[i]);
-                clear_u64_value(path_b[i]);
-            } else {
-                set_vector_xyz(path_a[i], 0.0f, D_L14_001620FC);
-                set_vector_xyz(path_b[i], 0.0f, D_L14_00162100 * D_0015ED6C);
-            }
-            {
-                float *point = path_a[i];
-                y = point[1];
-                point[3] = 1.0f;
-                point[1] = y + t;
-            }
+
+    for (i = 0; i < 32; i++) {
+        float y_offset = convert_integer_to_float(i);
+        float last = convert_integer_to_float(0x1F);
+        float y;
+        y_offset = y_offset / last;
+        y_offset = (0.5f - y_offset) * length;
+        if (i < 3 || i > 28) {
+            clear_u64_value(&path[i]);
+            clear_u64_value(&path_steps[i]);
+        } else {
+            set_vector_xyz(&path[i], 0.0f, D_L14_001620FC);
+            set_vector_xyz(&path_steps[i], 0.0f, D_L14_00162100 * frame_time);
+        }
+        y = path[i].f[1];
+        path[i].f[3] = 1.0f;
+        path[i].f[1] = y + y_offset;
+    }
+
+    for (j = 0; j < 32; j++) {
+        if (j == 0 || j == 31) {
+            qcopy(&beam->points[j], &path[j]);
+            qcopy(&beam->point_steps[j], &path_steps[j]);
+        } else {
+            add_vector_xyz(&work, &path[j - 1], &path[j]);
+            add_vector_xyz(&work, &work, &path[j + 1]);
+            scale_vector_xyz(&beam->points[j], &work, 0.333f);
+            add_vector_xyz(&work, &path_steps[j - 1], &path_steps[j]);
+            add_vector_xyz(&work, &work, &path_steps[j + 1]);
+            scale_vector_xyz(&beam->point_steps[j], &work, 0.333f);
         }
     }
-    indices = (u8 *)(d + 0x18);
-    {
-        int i;
-        for (i = 0; i < 32; i++) {
-            if (i == 0 || i == 31) {
-                qcopy(d + 0x20 + (i << 4), path_a[i]);
-                qcopy(d + 0x220 + (i << 4), path_b[i]);
-            } else {
-                add_vector_xyz(work, path_a[i - 1], path_a[i]);
-                add_vector_xyz(work, work, path_a[i + 1]);
-                scale_vector_xyz(d + 0x20 + (i << 4), work, 0.333f);
-                add_vector_xyz(work, path_b[i - 1], path_b[i]);
-                add_vector_xyz(work, work, path_b[i + 1]);
-                scale_vector_xyz(d + 0x220 + (i << 4), work, 0.333f);
-            }
+
+    for (branch = 0; branch < 4; branch++) {
+        int start;
+        float spread = D_L14_001620FC;
+        set_vector_xyz(&work, spread, spread);
+        start = truncate_float_to_s32(random_float_between((float)branch * 6.0f, (float)(branch + 1) * 6.0f)) + 4;
+        beam->branch_start[branch] = (unsigned char)start;
+        qcopy(&beam->branches[0][branch], &beam->points[start]);
+        qcopy(&beam->branch_steps[0][branch], &beam->point_steps[start]);
+        for (k = 1; k < 4; k++) {
+            set_vector_xyz(&delta, 0.1f, 0.1f);
+            set_vector_xyz(&beam->branch_steps[k][branch], 0.0f, D_L14_00162100 * frame_time);
+            add_vector_xyz(&beam->branches[k][branch], &beam->branches[k - 1][branch], &work);
+            add_vector_xyz(&beam->branches[k][branch], &beam->branches[k][branch], &delta);
         }
     }
-    {
-        int i;
-        for (i = 0; i < 4; i++) {
-            next = i + 1;
-            set_vector_xyz(work, D_L14_001620FC, D_L14_001620FC);
-            index = truncate_float_to_s32(random_float_between((float)i * 6.0f,
-                (float)next * 6.0f));
-            index += 4;
-            indices[i] = index;
-            offset = (i << 4);
-            qcopy(d + 0x420 + (i << 4), d + 0x20 + (index << 4));
-            qcopy((char *)(offset + (int)d) + 0x520, d + 0x220 + (index << 4));
-            for (j = 2; j >= 0; j--) {
-                set_vector_xyz(delta_a, 0.1f, 0.1f);
-                set_vector_xyz(d + 0x560 + (i << 4) + ((2 - j) << 6), 0.0f,
-                    D_L14_00162100 * D_0015ED6C);
-                add_vector_xyz(d + 0x460 + (i << 4) + ((2 - j) << 6),
-                    d + offset + 0x420 + ((2 - j) << 6), work);
-                add_vector_xyz(d + 0x460 + (i << 4) + ((2 - j) << 6),
-                    d + 0x460 + (i << 4) + ((2 - j) << 6), delta_a);
-            }
+
+    if (vector_distance((char *)D_L14_001600EC + (beam->frame << 7) + 0x30, D_L14_001674C0) >= 4.0f) {
+        int color;
+        int point;
+        int never = 0;
+        euler_rotation_matrix(matrix, (char *)D_L14_001600EC + (beam->frame << 7) + 0x70);
+        qcopy(&matrix[3], (char *)((beam->frame << 7) + (int)D_L14_001600EC) + 0x30);
+        for (point = 0; point < 32; point += 8) {
+            int frames;
+            Vec4 *p = &beam->points[point];
+            transform_vector(&work, p, matrix);
+            qcopy(&delta, &p[32]);
+            delta.f[3] = D_L14_00162114;
+            color = random_integer_below(2) ? D_L14_0016211C : D_L14_00162120;
+            frames = scale_game_frames(random_integer_below(10) + 20);
+            spawn_spark(&work, &delta, &delta, D_L14_00162108, D_L14_0016210C, point >> 1, 15, frames, color);
         }
-    }
-    if (vector_distance(&D_L14_001600EC[*(int *)d].origin, D_L14_001674C0) >= 4.0f) {
-        euler_rotation_matrix(matrix, &D_L14_001600EC[*(int *)d].pad40[0x30]);
-        qcopy(origin, &D_L14_001600EC[*(int *)d].origin);
-        {
-            int i;
-            for (i = 0; i < 32; i += 8) {
-                transform_vector(work, d + 0x20 + (i << 4), matrix);
-                qcopy(delta_a, d + 0x220 + (i << 4));
-                delta_a[3] = D_L14_00162114;
-                index = random_integer_below(2);
-                color = index ? D_L14_0016211C : D_L14_00162120;
-                index = random_integer_below(10);
-                spawn_spark(work, delta_a, delta_a, D_L14_00162108,
-                    D_L14_0016210C, i >> 1, 15, scale_game_frames(index + 20), color);
-            }
-        }
-        {
-            int i;
-            float *pos = work;
-            for (i = 0; i < 2; i++) {
-                transform_vector(pos, d + 0x4e0 + (i << 4), matrix);
-                qcopy(delta_a, d + 0x5e0 + (i << 4));
-                delta_a[3] = D_L14_00162114;
-                random_integer_below(2);
-                index = random_integer_below(10);
-                spawn_spark(work, delta_a, delta_a, D_L14_00162108,
-                    D_L14_0016210C, indices[i] >> 1, 15,
-                    scale_game_frames(index + 20), D_L14_00162120);
-            }
+        for (k = 0; k < 2; k++) {
+            int frames, unused_color;
+            transform_vector(&work, &beam->branches[3][k], matrix);
+            qcopy(&delta, &beam->branch_steps[3][k]);
+            delta.f[3] = D_L14_00162114;
+            unused_color = random_integer_below(2) ? D_L14_0016211C : D_L14_00162120;
+            frames = scale_game_frames(random_integer_below(10) + 20);
+            /* Fakematch: a never-taken exit keeps the spark arguments in their own block until
+             * gcse (retail's dead color pick did), so &delta is reused from the spilled copy. */
+            if (never) continue;
+            spawn_spark(&work, &delta, &delta, D_L14_00162108, D_L14_0016210C,
+                        beam->branch_start[k] >> 1, 15, frames, D_L14_00162120);
         }
     }
 }
-#endif
 extern int D_L14_001620C4 __attribute__((sda));
 extern int D_L14_001620F0 __attribute__((sda));
 extern int D_L14_001620F4 __attribute__((sda));
@@ -336,9 +328,6 @@ void FUN_L14_00301de8(char *moby) {
         *(int *)(vars + 0x14) = 0;
     }
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_00301fa8.s", FUN_L14_00301fa8);
-#else
 typedef struct {
     u128 vertices[4];
     int colors[4];
@@ -353,12 +342,10 @@ extern void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
 extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
 extern void transform_vector_xyz(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void cross_vectors_xyz(void *, void *, void *) __asm__("FUN_001f9ad8");
 extern void normalize_vector_xyz(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern u64 get_effect_texture(int) __asm__("FUN_001f44b8");
-extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 extern void draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
 
 extern int D_L14_001620DC __attribute__((sda));
@@ -369,18 +356,12 @@ extern int D_L14_001620EC __attribute__((sda));
 
 extern char D_L14_001674C0[];
 
-typedef struct {
-    int frame;              /* 0x0: D_L14_001600EC transform index */
-    u8 pad4[0x10];
-    int color;              /* 0x14 */
-    u8 branch_start[4];     /* 0x18: main line point each branch leaves from */
-    u8 pad1c[4];
-    Vec4 points[32];        /* 0x20 */
-    Vec4 point_steps[32];   /* 0x220 */
-    Vec4 branches[4][4];    /* 0x420: [point][branch] */
-} VendorBeamVars;
 extern float D_L14_001E5FD0[4][2];
 
+/* Fakematch: an empty scope with a declaration adds two block notes (see the corner loops). */
+#define EMPTY_SCOPES_4 { typedef int pad; } { typedef int pad; } { typedef int pad; } { typedef int pad; }
+
+/* Ported from rac1-decomp (src/overlays/shared/vendor_00303430.c: func_L14_00303430). */
 void FUN_L14_00301fa8(char *m) {
     VendorBeamVars *beam = *(VendorBeamVars **)(m + 0x78);
     VendorBeamStripPacket packet[3];
@@ -442,16 +423,18 @@ void FUN_L14_00301fa8(char *m) {
                 clear_u64_value(offset);
             }
             for (corner = 0; corner < 4; corner++) {
-                float *side;
                 if (corner < 2) {
                     qcopy(&packet[0].vertices[corner], &beam->points[point]);
-                    side = prev_offset;
+                    if (corner & 1) add_vector_xyz(&packet[0].vertices[corner], &packet[0].vertices[corner], prev_offset);
+                    else subtract_vector_xyz(&packet[0].vertices[corner], &packet[0].vertices[corner], prev_offset);
                 } else {
                     qcopy(&packet[0].vertices[corner], &beam->points[point + 1]);
-                    side = offset;
+                    if (corner & 1) add_vector_xyz(&packet[0].vertices[corner], &packet[0].vertices[corner], offset);
+                    else subtract_vector_xyz(&packet[0].vertices[corner], &packet[0].vertices[corner], offset);
                 }
-                if (corner & 1) add_vector_xyz(&packet[0].vertices[corner], &packet[0].vertices[corner], side);
-                else subtract_vector_xyz(&packet[0].vertices[corner], &packet[0].vertices[corner], side);
+                /* Fakematch: 34 block notes push this loop past haifa-sched's 100-insn region limit,
+                 * so sched1 moves nothing between its blocks, as in retail. */
+                EMPTY_SCOPES_4 EMPTY_SCOPES_4 EMPTY_SCOPES_4 EMPTY_SCOPES_4 { typedef int pad; }
                 packet[0].uv[corner][0] = D_L14_001E5FD0[corner][0] + convert_integer_to_float(point - point / 4 * 4) * 0.25f;
             }
             draw_geometry_quad(&packet[0], world, 0);
@@ -474,23 +457,24 @@ void FUN_L14_00301fa8(char *m) {
             }
             if (node == 0) qcopy(prev_offset, offset);
             for (corner = 0; corner < 4; corner++) {
-                float *side;
                 if (corner < 2) {
                     qcopy(&packet[0].vertices[corner], &beam->branches[node][branch]);
-                    side = prev_offset;
+                    if (corner & 1) add_vector_xyz(&packet[0].vertices[corner], &packet[0].vertices[corner], prev_offset);
+                    else subtract_vector_xyz(&packet[0].vertices[corner], &packet[0].vertices[corner], prev_offset);
                 } else {
                     qcopy(&packet[0].vertices[corner], &beam->branches[node + 1][branch]);
-                    side = offset;
+                    if (corner & 1) add_vector_xyz(&packet[0].vertices[corner], &packet[0].vertices[corner], offset);
+                    else subtract_vector_xyz(&packet[0].vertices[corner], &packet[0].vertices[corner], offset);
                 }
-                if (corner & 1) add_vector_xyz(&packet[0].vertices[corner], &packet[0].vertices[corner], side);
-                else subtract_vector_xyz(&packet[0].vertices[corner], &packet[0].vertices[corner], side);
+                /* Fakematch: 32 block notes push this loop past haifa-sched's 100-insn region limit,
+                 * so sched1 moves nothing between its blocks, as in retail. */
+                EMPTY_SCOPES_4 EMPTY_SCOPES_4 EMPTY_SCOPES_4 EMPTY_SCOPES_4
                 packet[0].uv[corner][0] = D_L14_001E5FD0[corner][0] + convert_integer_to_float(node - node / 4 * 4) * 0.25f;
             }
             draw_geometry_quad(&packet[0], world, 0);
         }
     }
 }
-#endif
 /* Damage request passed to the collision line test (coll_line_fix). */
 typedef struct {
     f32 v[4];          /* 0x0: push direction xy; w 5627.925 */
