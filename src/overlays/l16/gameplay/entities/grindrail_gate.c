@@ -1824,6 +1824,10 @@ extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
 extern void sample_camera_path(void *, f32, s32, void *, void *, s32) __asm__("func_00214E58");
 
 void FUN_L16_002e76b8(unsigned char *m) {
+    enum {
+        PATH_WALKER_INITIALIZE_GROUP = 0,
+        PATH_WALKER_FOLLOW_PATH = 1
+    };
     float old[4], rotation[4], trial[4];
     char *path;
     L16WalkerData_c *d;
@@ -1841,14 +1845,14 @@ void FUN_L16_002e76b8(unsigned char *m) {
         qcopy(old, m + 0x10);
     }
     switch (m[0x20]) {
-    case 0:
+    case PATH_WALKER_INITIALIZE_GROUP:
         if (m[0x21] == 255) {
             mark_moby_for_removal(m);
             return;
         }
         FUN_L16_002e7ba0(m);
         break;
-    case 1: {
+    case PATH_WALKER_FOLLOW_PATH: {
         L16WalkerData_c *other = *(L16WalkerData_c **)(d->owner + 0x78);
         float gap, step, next, height, acceleration;
         /* `playing` again, in a variable of case 1's own. The logic does not need it: tested directly,
