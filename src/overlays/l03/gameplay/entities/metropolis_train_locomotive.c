@@ -1026,7 +1026,8 @@ void FUN_L03_0029caa8(char *moby, void *vel_in, int quiet) {
         MOBY_CLASS_JOINT_ZERO_TEN_PARTICLE_EMITTER = 0x75,
         MOBY_CLASS_FIFTEEN_PARTICLE_BURST_EMITTER = 0x76,
         MOBY_CLASS_DEFAULT_COLOR_CHILD_EFFECT_EMITTER = 0x77,
-        MOBY_CLASS_GRAY_JOINT_ZERO_TEN_PARTICLE_EMITTER = 0x78
+        MOBY_CLASS_GRAY_JOINT_ZERO_TEN_PARTICLE_EMITTER = 0x78,
+        MOBY_CLASS_TEN_GRAY_PARTICLE_BURST_EMITTER = 0x84
     };
     float vel[4];
     float *vp;
@@ -1064,7 +1065,7 @@ void FUN_L03_0029caa8(char *moby, void *vel_in, int quiet) {
     case MOBY_CLASS_TEN_PARTICLE_BURST_EMITTER:
     case MOBY_CLASS_JOINT_ZERO_TEN_PARTICLE_EMITTER:
     case MOBY_CLASS_GRAY_JOINT_ZERO_TEN_PARTICLE_EMITTER:
-    case 0x84:
+    case MOBY_CLASS_TEN_GRAY_PARTICLE_BURST_EMITTER:
         if (quiet == 0 && FUN_L00_001fefc8(data + 0x12E)) {
             if (fast_vec_length(vp) < frame_time * 40.0f && FUN_001f9b48(moby + 0x10, D_L03_00166EC0) < 75.0f) {
                 scale_vector_xyz(vp, vp, 0.7f);
