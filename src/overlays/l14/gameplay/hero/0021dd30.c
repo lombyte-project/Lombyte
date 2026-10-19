@@ -1547,7 +1547,7 @@ void FUN_L14_00228cd0(void) {
         }
         break;
     }
-    case 0x28:
+    case HERO_STATE_GRIND:
     case 0x29:
     case 0x2A:
     case 0x2B:
@@ -2046,14 +2046,14 @@ void FUN_L14_00228cd0(void) {
         break;
     }
     case 7:
-    case 9:
-    case 0xA:
-    case 0xB:
+    case HERO_STATE_RUN_JUMP:
+    case HERO_STATE_PACK_JUMP:
+    case HERO_STATE_HIGH_JUMP:
     case 0xC:
     case 0xD:
     case 0xE:
     case 0xF:
-    case 0x10:
+    case HERO_STATE_PACK_LONG_JUMP:
     case 0x11:
     case 0x12:
     case 0x1C:
@@ -2179,7 +2179,7 @@ void FUN_L14_00228cd0(void) {
         FUN_L00_0020b5b8();
         break;
     }
-    case 0x16: {
+    case HERO_STATE_HURT: {
         f32 l = vector_length_xy(&hero.motion.velocity);
         f32 d = frame_time_sq * 4.0f;
         if (hero.air_frames.s == 0 && scale_game_frames(10) < hero.state_timer) {
