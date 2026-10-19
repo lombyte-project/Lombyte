@@ -513,6 +513,7 @@ extern s32 D_0013CB14[];
 
 void FUN_L01_002370b8(void) {
     enum {
+        HERO_STATE_MOVE_TOWARD_PROBE_POSITION = 0x18,
         HERO_STATE_MOVE_VIA_POSITIVE_LATERAL_PROBE = 0x1A,
         HERO_STATE_MOVE_VIA_NEGATIVE_LATERAL_PROBE = 0x1B,
         HERO_STATE_FALL_WITH_LIMITED_DESCENT = 0x55,
@@ -1724,7 +1725,7 @@ void FUN_L01_002370b8(void) {
             D_L01_0017AB00[1].f60[0] = lean * 3.5f;
         }
         break;
-    case 0x18:
+    case HERO_STATE_MOVE_TOWARD_PROBE_POSITION:
     case 0x19:
         hero.motion.move_yaw = build_spherical_offset_cf(hero.unk4E4, 3.1415927f);
         turn_to(0, frame_scale_sq * 0.04f, frame_scale_sq * 0.2f, frame_time * 6.2831855f);
