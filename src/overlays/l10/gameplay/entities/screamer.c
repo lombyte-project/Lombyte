@@ -2474,10 +2474,12 @@ void blarg_ship_update(Ship_5E48 *m) {
     enum {
         BLARG_SHIP_STATE_INITIALIZE = 0,
         BLARG_SHIP_STATE_WAIT_FOR_TARGET_IN_VOLUME = 1,
+        BLARG_SHIP_STATE_RISE_TO_ENTRY_PATH = 2,
         BLARG_SHIP_STATE_FOLLOW_ENTRY_PATH = 3,
         BLARG_SHIP_STATE_FIRE_AT_TARGET = 4,
         BLARG_SHIP_STATE_FIRE_COOLDOWN = 5,
         BLARG_SHIP_STATE_FLY_AWAY = 6,
+        BLARG_SHIP_STATE_HIT_REACTION = 7,
         BLARG_SHIP_STATE_EXPLODE = 8
     };
     ShipD_5E48 *d = m->d;
@@ -2526,7 +2528,7 @@ void blarg_ship_update(Ship_5E48 *m) {
             FUN_L00_00203908_c(0x2715, 0x5C);
         }
         break;
-    case 2:
+    case BLARG_SHIP_STATE_RISE_TO_ENTRY_PATH:
         a = fast_arc_tan(tgt->pos.x - m->pos.x, tgt->pos.y - m->pos.y);
         FUN_L00_00258278((char *)m, &d->f198, a, 0.02f, 0.3f, D_0015ED6C * 3.1415927f);
         b = fast_arc_tan(vector_distance_xy_alt(&m->pos, &tgt->pos), tgt->pos.z - m->pos.z);
@@ -2660,7 +2662,7 @@ void blarg_ship_update(Ship_5E48 *m) {
         if (250.0f < m->pos.z) goto del;
         if (!(m->f2C < 0.01f)) break;
         goto del;
-    case 7: {
+    case BLARG_SHIP_STATE_HIT_REACTION: {
         unsigned char next;
         if (m->b52 != 4) break;
         if (!(m->b70 & 2)) break;
