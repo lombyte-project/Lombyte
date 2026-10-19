@@ -54,6 +54,10 @@ extern void FUN_L12_002bf770(int);
 extern void FUN_L12_002bf748(void);
 
 void FUN_L12_002bf140(struct Moby *moby) {
+    enum {
+        SLOT_INITIALIZE = 0,
+        SLOT_UPDATE_HEIGHT_AND_MOTION = 2
+    };
     int state = moby->state;
     int *data = (int *)moby->pvars;
     int slot;
@@ -61,7 +65,7 @@ void FUN_L12_002bf140(struct Moby *moby) {
     float other;
     int i;
     switch (state) {
-    case 0:
+    case SLOT_INITIALIZE:
         i = (data[3] = D_L12_00151388) + 1;
         D_L12_00151388 = i;
         if (i > 0x7f) {
@@ -121,7 +125,7 @@ void FUN_L12_002bf140(struct Moby *moby) {
         moby->state = 2;
         *(float *)(data + 4) = moby->pos.z;
         break;
-    case 2:
+    case SLOT_UPDATE_HEIGHT_AND_MOTION:
         if ((moby->command & 4) == 0) {
             moby->command = 1;
         } else {
