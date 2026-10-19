@@ -564,7 +564,11 @@ void blarg_ship_update(struct Moby *moby) __asm__("FUN_L17_002f40d8");
 void blarg_ship_update(struct Moby *moby) {
     enum {
         BLARG_SHIP_INITIALIZE = 0,
-        BLARG_SHIP_INACTIVE = 4
+        BLARG_SHIP_BURST_AND_HIDE = 2,
+        BLARG_SHIP_WAIT_TO_REACTIVATE = 3,
+        BLARG_SHIP_INACTIVE = 4,
+        BLARG_SHIP_TRACK_HERO_AND_FIRE = 5,
+        BLARG_SHIP_BURST_AND_DEACTIVATE = 6
     };
     float scratch_vector[4];
     float movement_target_position[4];
@@ -602,7 +606,7 @@ void blarg_ship_update(struct Moby *moby) {
         }
         break;
     case 1:
-    case 2:
+    case BLARG_SHIP_BURST_AND_HIDE:
         FUN_L11_00319670(moby);
         *(float *)(d + 0x68) += *(float *)(d + 0x6C);
         if (*(float *)(d + 0x68) > 1.0f) {
@@ -636,7 +640,7 @@ void blarg_ship_update(struct Moby *moby) {
             }
         }
         break;
-    case 3:
+    case BLARG_SHIP_WAIT_TO_REACTIVATE:
         qcopy(scratch_vector, &moby->pos);
         scratch_vector[3] = 3.0f;
         if (fast_bsphere_check((char *)&moby->pos, 512.0f) == -1) {
@@ -659,7 +663,7 @@ void blarg_ship_update(struct Moby *moby) {
         break;
     case BLARG_SHIP_INACTIVE:
         break;
-    case 5:
+    case BLARG_SHIP_TRACK_HERO_AND_FIRE:
         c0 = 0.0f;
         qcopy(clamped_euler_angles, D_L17_001676D0);
         clamped_euler_angles[0] = 0.0f;
@@ -742,7 +746,7 @@ void blarg_ship_update(struct Moby *moby) {
             }
         }
         break;
-    case 6:
+    case BLARG_SHIP_BURST_AND_DEACTIVATE:
         subtract_vector_xyz(scratch_vector, &hero.motion.pos, d + 0xB0);
         qcopy(d + 0xB0, &hero.motion.pos);
         add_vector_xyz(&moby->pos, &moby->pos, scratch_vector);
