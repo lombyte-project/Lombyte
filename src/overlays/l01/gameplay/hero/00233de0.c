@@ -515,6 +515,7 @@ void FUN_L01_002370b8(void) {
     enum {
         HERO_STATE_MOVE_VIA_POSITIVE_LATERAL_PROBE = 0x1A,
         HERO_STATE_MOVE_VIA_NEGATIVE_LATERAL_PROBE = 0x1B,
+        HERO_STATE_FALL_WITH_LIMITED_DESCENT = 0x55,
         HERO_STATE_DOWNHILL_SLIDE = 0x58,
         HERO_STATE_MOVE_TO_TARGET_POSITION = 0x65,
         HERO_STATE_BRAKE_AT_TARGET_POSITION = 0x66
@@ -2188,7 +2189,7 @@ void FUN_L01_002370b8(void) {
         air_accel(frame_time_sq * 25.0f);
         FUN_L00_002334d0(hero.motion.velocity.f, hero.motion.unk120.f, frame_time_sq * 18.0f);
         break;
-    case 0x55:
+    case HERO_STATE_FALL_WITH_LIMITED_DESCENT:
         stick_target(frame_time * 1.5f, 0);
         if (hero.unk1C4 == 0) {
             FUN_L01_00234b40();
