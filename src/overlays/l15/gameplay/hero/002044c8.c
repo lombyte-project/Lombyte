@@ -1400,7 +1400,7 @@ void FUN_L15_0020ed50(void) {
         }
         break;
     }
-    case 0x14: {
+    case HERO_STATE_WRENCH_SLAM: {
         s32 t1;
         s32 t2;
         f32 r;
@@ -1465,7 +1465,7 @@ void FUN_L15_0020ed50(void) {
         }
         break;
     }
-    case 0x15: {
+    case HERO_STATE_CROUCH_SWING: {
         s32 jumping;
         hero.target_speed = 0.0f;
         if (hero.unkA9C != 0 || hero.anim_frame < D_L15_0017C228[hero.attack_record].f18) {
@@ -1522,7 +1522,7 @@ void FUN_L15_0020ed50(void) {
         }
         break;
     }
-    case 0x13: {
+    case HERO_STATE_WRENCH_COMBO: {
         struct HeroTableRow2C *tb;
         if (hero.unkA9C != 0 || hero.anim_frame < D_L15_0017C228[hero.attack_record].f20) {
             hero.items[0].timer = 2;
@@ -1922,7 +1922,7 @@ void FUN_L15_0020ed50(void) {
         set_vector_length_xy(&hero.motion.velocity, &hero.motion.velocity, D_L15_001C42B0[truncate_float_to_s32(hero.anim_frame)] * 0.5f);
         break;
     }
-    case 0x79:
+    case HERO_STATE_SLIP:
         hero.motion.move_yaw = hero.downhill_yaw;
         hero.target_speed = frame_time * 5.5f;
         air_accel(frame_time_sq * 25.0f);
