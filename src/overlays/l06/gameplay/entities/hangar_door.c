@@ -3523,6 +3523,8 @@ extern char D_0013A5E0_2FDA70[] __asm__("D_0013CAE4");
 void FUN_L06_002fc640(Moby_2FDA70 *moby) {
     enum {
         INITIALIZE_POSITION_AND_LINKED_MOBYS = 0,
+        WAIT_FOR_HERO_TRIGGER_AT_NODE_OFFSET_HEIGHT = 3,
+        WAIT_FOR_HERO_TRIGGER_AT_NODE_BASE_HEIGHT = 4,
         MOVE_TO_NODE_BASE_HEIGHT = 5,
         MOVE_TO_NODE_OFFSET_HEIGHT = 6,
         WAIT_FOR_HERO_CLEARANCE_AT_NODE_OFFSET_HEIGHT = 7,
@@ -3579,8 +3581,8 @@ void FUN_L06_002fc640(Moby_2FDA70 *moby) {
             moby->state = 3;
         }
         break;
-    case 3:
-    case 4:
+    case WAIT_FOR_HERO_TRIGGER_AT_NODE_OFFSET_HEIGHT:
+    case WAIT_FOR_HERO_TRIGGER_AT_NODE_BASE_HEIGHT:
         if (fast_dec_timer(&d->f90) != 0 && is_point_inside_clip_volume(&((Hero_2FDA70 *)(D_0013F350))->pos, d->f70) != 0) {
             int ok;
             if (((Hero_2FDA70 *)(D_0013F350))->f20A4 == 1) {
