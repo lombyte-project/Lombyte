@@ -1511,6 +1511,11 @@ extern void func_L00_0025F4A8_alt(void *, void *, void *, float, float, int, int
 
 void drek_final_boss_robot_update(BossMoby *moby) __asm__("FUN_L18_002f2bf0");
 void drek_final_boss_robot_update(BossMoby *moby) {
+    enum {
+        DREK_BOSS_INITIALIZE = 0,
+        DREK_BOSS_WAIT_FOR_SCENE = 7,
+        DREK_BOSS_SELECT_NEXT_ACTION = 0xC
+    };
     BossData *d = (BossData *)moby->f78;
     BossMoby *tgt;
     float v0[4];
@@ -1539,7 +1544,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
         moby->f7F = 0x1A;
     }
     switch (moby->f20) {
-    case 0: {
+    case DREK_BOSS_INITIALIZE: {
         int i;
 
         qcopy(d->f3C0, moby->f10);
@@ -1565,7 +1570,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
         }
         break;
     }
-    case 7:
+    case DREK_BOSS_WAIT_FOR_SCENE:
         if (D_L18_0015F5C4 != 2) {
             moby->f34 &= 0xFFBE;
             moby->f94 = moby->f24[4];
@@ -1963,7 +1968,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
             }
         }
         break;
-    case 0xC:
+    case DREK_BOSS_SELECT_NEXT_ACTION:
         aim = &moby->f40[2];
         ang = fast_arc_tan(tgt->f10[0] - moby->f10[0], tgt->f10[1] - moby->f10[1]);
         approach_angle(aim, &d->f370, ang, D_0015ED6C_e[1] * 6.2831855f,
