@@ -2060,7 +2060,8 @@ void FUN_L08_002dc180(struct Moby *moby) {
     enum {
         SHUTTLE_SELECT_ROUTE_END = 0,
         SHUTTLE_SELECT_CONFIGURED_PATH_START = 1,
-        SHUTTLE_SELECT_ROUTE_START = 2
+        SHUTTLE_SELECT_ROUTE_START = 2,
+        SHUTTLE_SELECT_ALTERNATE_PATH_START = 3
     };
     char *data = (char *)moby->pvars;
     char *pl = (char *)&hero.motion.pos;
@@ -2123,7 +2124,7 @@ void FUN_L08_002dc180(struct Moby *moby) {
         y = fast_arc_tan(a->e[1][0] - *(float *)(data + 0x60), a->e[1][1] - *(float *)(data + 0x64));
         *(Route_2dd4f8 **)(data + 0x120) = a;
         break;
-    case 3:
+    case SHUTTLE_SELECT_ALTERNATE_PATH_START:
         qcopy(data + 0x60, c->e[0]);
         y = fast_arc_tan(c->e[1][0] - *(float *)(data + 0x60), c->e[1][1] - *(float *)(data + 0x64));
         *(Route_2dd4f8 **)(data + 0x120) = c;
