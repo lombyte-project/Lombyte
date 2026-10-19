@@ -99,7 +99,7 @@ void FUN_L15_0020a7a0(void) {
         GRAVITY_WORLD_DOWN = 0,
         GRAVITY_OPPOSITE_GROUND_NORMAL = 1
     };
-    V shared_ray_endpoint, ground_ray_endpoint, ground_displacement_or_angles, surface_probe_endpoint, v40, probe_surface_angles, probe_surface_normal;
+    V shared_ray_endpoint, ground_ray_endpoint, ground_displacement_or_angles, surface_probe_endpoint, unused_probe_vector, probe_surface_angles, probe_surface_normal;
     f32 f;
     s32 r;
     s32 i;
@@ -247,7 +247,7 @@ d1:
             a = -a;
         }
         FUN_L00_002335c8(&surface_probe_endpoint, 0.2f, a, 0.45f);
-        FUN_L00_002335c8(&v40, 0.2f, a, -0.45f);
+        FUN_L00_002335c8(&unused_probe_vector, 0.2f, a, -0.45f);
         if (FUN_001efa68_c(&surface_probe_endpoint, &shared_ray_endpoint, 0x22, (s32)hero.moby, 0)) {
             f = HH.point.f[2] - hero.ground_z.f;
             hero.unk2C0.f[i] = f;
