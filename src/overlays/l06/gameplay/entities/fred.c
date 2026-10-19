@@ -7018,7 +7018,9 @@ extern void try_set_help_message(int, int) __asm__("FUN_00215130");
 
 void FUN_L06_00302fd8(char *m) {
     enum {
-        SHUTTLE_AT_INITIAL_STOP = 0
+        SHUTTLE_AT_INITIAL_STOP = 0,
+        SHUTTLE_AT_SECOND_STOP = 1,
+        SHUTTLE_AT_THIRD_STOP = 2
     };
     char *d = *(char **)(m + 0x78);
     switch (*(int *)(d + 0xBC)) {
@@ -7037,10 +7039,10 @@ void FUN_L06_00302fd8(char *m) {
         }
         break;
     }
-    case 1:
+    case SHUTTLE_AT_SECOND_STOP:
         *(int *)(d + 0x9C) = 1;
         break;
-    case 2:
+    case SHUTTLE_AT_THIRD_STOP:
         *(int *)(d + 0x9C) = 4;
         break;
     }
