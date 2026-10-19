@@ -2429,6 +2429,7 @@ void robot_dog_update(unsigned char *m) {
         ROBOT_DOG_STATE_WAIT_FOR_IDLE_ANIMATION_COMPLETION = 3,
         ROBOT_DOG_STATE_FALL_UNTIL_LANDING = 4,
         ROBOT_DOG_STATE_TRACK_TARGET_FACING = 5,
+        ROBOT_DOG_STATE_WAIT_FOR_CHASE_TRIGGER = 6,
         ROBOT_DOG_STATE_TURN_TOWARD_TARGET = 8,
         ROBOT_DOG_STATE_APPROACH_TARGET = 9,
         ROBOT_DOG_STATE_ATTACK_TARGET = 10,
@@ -2611,7 +2612,7 @@ void robot_dog_update(unsigned char *m) {
             }
         }
         break;
-    case 6:
+    case ROBOT_DOG_STATE_WAIT_FOR_CHASE_TRIGGER:
     case 7: {
         int s = d->mode;
         if (s != 2) {
