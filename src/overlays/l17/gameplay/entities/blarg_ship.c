@@ -564,6 +564,7 @@ void blarg_ship_update(struct Moby *moby) __asm__("FUN_L17_002f40d8");
 void blarg_ship_update(struct Moby *moby) {
     enum {
         BLARG_SHIP_INITIALIZE = 0,
+        BLARG_SHIP_FOLLOW_PATH = 1,
         BLARG_SHIP_BURST_AND_HIDE = 2,
         BLARG_SHIP_WAIT_TO_REACTIVATE = 3,
         BLARG_SHIP_INACTIVE = 4,
@@ -605,7 +606,7 @@ void blarg_ship_update(struct Moby *moby) {
             moby->flags |= 1;
         }
         break;
-    case 1:
+    case BLARG_SHIP_FOLLOW_PATH:
     case BLARG_SHIP_BURST_AND_HIDE:
         FUN_L11_00319670(moby);
         *(float *)(d + 0x68) += *(float *)(d + 0x6C);
