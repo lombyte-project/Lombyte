@@ -76,6 +76,7 @@ void timed_activation_pads_update(unsigned char *moby)
     enum {
         PAD_INITIALIZE = 0,
         PAD_WAIT_FOR_ACTIVATION = 1,
+        PAD_ENTER_FLASH_ACTIVATION_WAIT = 4,
         PAD_WAIT_FOR_FLASH_ACTIVATION = 5
     };
     char *d;
@@ -172,7 +173,7 @@ void timed_activation_pads_update(unsigned char *moby)
             func_L01_0026F090_30D370(moby[0x21], 4);
         }
         break;
-    case 4:
+    case PAD_ENTER_FLASH_ACTIVATION_WAIT:
         moby[0x20] = 5;
         break;
     case PAD_WAIT_FOR_FLASH_ACTIVATION:
