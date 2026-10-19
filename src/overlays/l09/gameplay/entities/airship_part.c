@@ -98,8 +98,11 @@ void FUN_L09_002c26c8(struct Moby *moby);
 void FUN_L09_002c26c8(struct Moby *moby) {
     enum {
         AIRSHIP_PART_STATE_INITIALIZE = 0,
+        AIRSHIP_PART_STATE_WAIT_FOR_BREAKUP_COMMAND = 1,
+        AIRSHIP_PART_STATE_WAIT_FOR_BREAKUP_GATE = 2,
         AIRSHIP_PART_STATE_BEGIN_BREAKUP = 3,
-        AIRSHIP_PART_STATE_FALLING_WITH_EFFECTS = 4
+        AIRSHIP_PART_STATE_FALLING_WITH_EFFECTS = 4,
+        AIRSHIP_PART_STATE_FALLING_AFTER_DAMPING = 5
     };
     float vec[4];
     Buf_2c26c8 buf;
@@ -148,8 +151,8 @@ void FUN_L09_002c26c8(struct Moby *moby) {
         moby->state = 1;
         break;
     }
-    case 1:
-    case 2: {
+    case AIRSHIP_PART_STATE_WAIT_FOR_BREAKUP_COMMAND:
+    case AIRSHIP_PART_STATE_WAIT_FOR_BREAKUP_GATE: {
         if (moby->oclass == 0x4A0) {
             FUN_L00_00262b00_2c26c8(d->f48, d->f4C * 0.017453292f * frame_time, (char *)moby, &d->f40, &d->f44);
             FUN_L00_00262b80_2c26c8(moby, (char *)&d->f50, (char *)&d->f54, d->f58 * 0.017453292f, d->f5C * 0.017453292f * frame_time, d->f60 * 0.017453292f * frame_time);
@@ -263,7 +266,7 @@ void FUN_L09_002c26c8(struct Moby *moby) {
             moby->state = 5;
         }
         break;
-    case 5:
+    case AIRSHIP_PART_STATE_FALLING_AFTER_DAMPING:
         d->vel[2] -= frame_time_sq_macro * 10.8f / 3.0f;
         FUN_001f9a10_2c26c8(((f32 *)&moby->pos), ((f32 *)&moby->pos), d->vel);
         moby->rot.x = FUN_001fa580_2c26c8(moby->rot.x, d->f20);
