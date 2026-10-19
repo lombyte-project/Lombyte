@@ -1667,6 +1667,7 @@ void suck_cannon_update(struct Moby *moby) {
     enum {
         SUCK_CANNON_INITIALIZE = 0,
         SUCK_CANNON_WAIT_FOR_HERO = 1,
+        SUCK_CANNON_WAIT_TO_RESET_CAMERA = 2,
         SUCK_CANNON_REMOVE = 3
     };
     struct PortalVars *vars = (struct PortalVars *)moby->pvars;
@@ -1695,7 +1696,7 @@ void suck_cannon_update(struct Moby *moby) {
             moby->state = 2;
         }
         break;
-    case 2:
+    case SUCK_CANNON_WAIT_TO_RESET_CAMERA:
         if (D_L04_0015F5C4 == 2)
             break;
         if (!D_0013D4C9[0])
