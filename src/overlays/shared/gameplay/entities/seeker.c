@@ -92,6 +92,7 @@ void seeker_update(struct Moby *moby) {
         SEEKER_STATE_IDLE_HOVER = 1,
         SEEKER_STATE_CHASE = 2,
         SEEKER_STATE_CHASE_ANIMATION_WAIT = 3,
+        SEEKER_STATE_TIMED_CHASE = 4,
         SEEKER_STATE_HURT_KNOCKBACK = 5,
         SEEKER_STATE_FATAL_KNOCKBACK = 6,
         SEEKER_STATE_EXPLODE = 7
@@ -188,7 +189,7 @@ void seeker_update(struct Moby *moby) {
         }
         break;
     case SEEKER_STATE_CHASE:
-    case 4:
+    case SEEKER_STATE_TIMED_CHASE:
         z = moby->pos.z;
         approach_angle(&moby->rot.z,
                          fast_arc_tan(target->pos.x - moby->pos.x, target->pos.y - moby->pos.y),
