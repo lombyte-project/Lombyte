@@ -176,7 +176,8 @@ void walker_update_gait(WalkMoby *m, WalkData *d, int flags, float speed, float 
     enum {
         WALKER_GAIT_IDLE = 0,
         WALKER_GAIT_RESET_TO_IDLE = 12,
-        WALKER_GAIT_RUN = 13
+        WALKER_GAIT_RUN = 13,
+        WALKER_GAIT_WAIT_FOR_LANDING = 16
     };
     enum {
         WALKER_GAIT_WALK = 1
@@ -876,7 +877,7 @@ void walker_update_gait(WalkMoby *m, WalkData *d, int flags, float speed, float 
             }
         }
         break;
-    case 16:
+    case WALKER_GAIT_WAIT_FOR_LANDING:
         if (m->b52 == d->bB3) {
             float t = FUN_L00_002a15c8_c((char *)m, (char *)d);
             float len = (d->anim[12]->f44 - d->anim[12]->f0C) * 2.0f;
