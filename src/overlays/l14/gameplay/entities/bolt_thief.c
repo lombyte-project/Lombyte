@@ -574,6 +574,7 @@ void sam_update(L14WatchMoby *m) {
     enum {
         SAM_STATE_INITIALIZE = 0,
         SAM_STATE_DIALOGUE = 1,
+        SAM_STATE_POST_DIALOGUE_WAIT = 2,
         SAM_STATE_REMOVE = 3
     };
     L14WatchScratch scratch;
@@ -626,7 +627,7 @@ void sam_update(L14WatchMoby *m) {
             m->state = 2;
         }
         break;
-    case 2:
+    case SAM_STATE_POST_DIALOGUE_WAIT:
         if (D_L14_0015F5C4 != 2) {
             m->state = 1;
             if ((short)d->sub == 4) {
