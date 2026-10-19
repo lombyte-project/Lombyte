@@ -1044,13 +1044,17 @@ extern void func_L00_00264DB8_2F69D0(int, int) __asm__("FUN_L00_00263d40");
 extern int func_0020BFC8_2F69D0(int, int) __asm__("FUN_0020b178");
 
 void FUN_L06_002f55a0(Moby *moby) {
+    enum {
+        INITIALIZE_DRAWBRIDGE_SEGMENTS = 0,
+        ANIMATE_DRAWBRIDGE_AND_CAMERA = 4
+    };
     Vec_2F69D0 position, rotation, from_pos, from_rot, to_pos, to_rot;
     Data_2F69D0 *data = (struct Data_2F69D0 *)moby->pvars;
     float previous_fade, blend;
     int i, j, slot;
 
     switch (moby->state) {
-    case 0: {
+    case INITIALIZE_DRAWBRIDGE_SEGMENTS: {
         int status = D_0014C150_2F69D0[moby->mission + (D_0015EE84_2F69D0 << 4)];
         if (status == 0xFF) {
             moby->state = 6;
@@ -1116,7 +1120,7 @@ void FUN_L06_002f55a0(Moby *moby) {
             moby->command = func_0022ED80_2F69D0(0, 4, data->c[9]);
         }
         break;
-    case 4:
+    case ANIMATE_DRAWBRIDGE_AND_CAMERA:
         func_L00_002512D8_2F69D0(moby->mission);
         if (D_L06_00161D78_gp < 20.0f) {
             func_00214D88_2F69D0(&D_L06_00161D78_gp, &D_L06_00161D9C, 20.0f, D_L06_00161E20_2F69D0 * D_0015EE70_2F69D0, D_L06_00161E20_2F69D0 * D_0015EE70_2F69D0, D_L06_00161E14_2F69D0 * D_0015EE6C_2F69D0);
