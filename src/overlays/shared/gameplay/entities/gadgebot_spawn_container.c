@@ -1423,6 +1423,10 @@ void gadgebot_update(GbMoby *moby) {
         GADGEBOT_FOLLOW_MOVE_TOWARD_HERO = 1,
         GADGEBOT_FOLLOW_WAIT_AND_FACE_HERO = 2
     };
+    enum {
+        GADGEBOT_INTERACTION_SEARCH_TARGET = 0,
+        GADGEBOT_INTERACTION_APPROACH_TARGET = 1
+    };
     float out[4];
     float raised_position_snapshot[4];
     float save0[4];
@@ -1899,11 +1903,11 @@ void gadgebot_update(GbMoby *moby) {
         break;
     case 7:
         switch (moby->sub) {
-        case 0:
+        case GADGEBOT_INTERACTION_SEARCH_TARGET:
             moby->sub = 1;
             FUN_L06_002f2910(moby);
             break;
-        case 1:
+        case GADGEBOT_INTERACTION_APPROACH_TARGET:
             if (d->target != 0) {
                 if (moby->anim != 1) {
                     blend_moby_animation(moby, 1, 0, scale_game_frames(7));
