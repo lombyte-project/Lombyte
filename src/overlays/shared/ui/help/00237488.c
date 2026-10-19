@@ -649,6 +649,7 @@ int FUN_L05_00251be8(void) {
     enum {
         ITEM_WRENCH = 8,
         ITEM_TARGET_INTERACTION_DEVICE = 12,
+        ITEM_HELD_SOUND_DEVICE = 15,
         ITEM_AMMO_MENU_DEVICE = 32,
         ITEM_RACE_PROJECTILE = 36
     };
@@ -840,7 +841,7 @@ int FUN_L05_00251be8(void) {
             }
         }
         break;
-    case 15:
+    case ITEM_HELD_SOUND_DEVICE:
         if ((*(Hero *)((char *)&hero)).state.control_mode < 2U || (*(Hero *)((char *)&hero)).state.control_mode == 0xC || (*(Hero *)((char *)&hero)).state.control_mode == 2 || (*(Hero *)((char *)&hero)).state.control_mode == 4
             || (*(Hero *)((char *)&hero)).state.control_mode == 5 || (*(Hero *)((char *)&hero)).state.control_mode == 0xF || (*(Hero *)((char *)&hero)).state.current == 0x1E) {
             PVar_2523C8 *pv;
