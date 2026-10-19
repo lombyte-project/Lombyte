@@ -3204,6 +3204,9 @@ void water_update(struct Moby *moby) __asm__("FUN_L05_0030ca80");
 void water_update(struct Moby *moby) {
     enum {
         WATER_INITIALIZE = 0,
+        WATER_MOVE_TO_RAISED_HEIGHT = 1,
+        WATER_MOVE_TO_LOWERED_HEIGHT = 2,
+        WATER_WAIT_FOR_RISE_TRIGGER = 3,
         WATER_TIMED_RISE = 8
     };
     WaterVars_30ca80 *d = *(WaterVars_30ca80 **)&moby->pvars;
@@ -3302,7 +3305,7 @@ void water_update(struct Moby *moby) {
             *(int *)&moby->collision = 0;
         }
         break;
-    case 2:
+    case WATER_MOVE_TO_LOWERED_HEIGHT:
         if (moby->command & 4) {
             d->moving = 1;
             FUN_L01_0026e0e0(moby->group, 1);
@@ -3324,7 +3327,7 @@ void water_update(struct Moby *moby) {
             pool_splash_30ca80(e, 1, 1, x, e->y + r, 1.0f, -0.05f);
         }
         break;
-    case 1:
+    case WATER_MOVE_TO_RAISED_HEIGHT:
         if (moby->command & 8) {
             d->moving = 1;
             FUN_L01_0026e0e0(moby->group, 2);
@@ -3342,7 +3345,7 @@ void water_update(struct Moby *moby) {
             pool_splash_30ca80(e, 1, 1, x, e->y + r, 1.0f, -0.05f);
         }
         break;
-    case 3:
+    case WATER_WAIT_FOR_RISE_TRIGGER:
         if (vector_distance_30ca80(((float *)&moby->pos), hero.motion.pos.f) < 16.0f) {
             Hero *h = &hero;
             if (h->motion.pos.f[2] < moby->pos.z) {
