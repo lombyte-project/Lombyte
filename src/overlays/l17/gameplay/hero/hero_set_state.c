@@ -105,6 +105,7 @@ extern char D_L17_0017C860[];
 extern char D_L17_0017C820[];
 int hero_set_state(int a, int b) {
     enum {
+        HERO_STATE_GRIND_HURT = 0x42,
         HERO_STATE_WATER_DEATH = 0x6A
     };
     int old2088;
@@ -2170,7 +2171,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x42: {
+    case HERO_STATE_GRIND_HURT: {
         struct Hero *p = &hero;
         p->state.control_mode = 0xF;
         p->unk2284 = 0;
