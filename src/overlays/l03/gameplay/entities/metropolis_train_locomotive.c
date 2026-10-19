@@ -2311,6 +2311,8 @@ void FUN_L03_002c6fd0(Moby2C8398 *m) {
         ENEMY_INITIALIZE = 0,
         ENEMY_WAIT_FOR_ACTIVATION = 1,
         ENEMY_WAIT_FOR_LINKED_MOBY = 2,
+        ENEMY_PROJECTILE_ATTACK_WINDUP = 4,
+        ENEMY_PROJECTILE_ATTACK = 5,
         ENEMY_MELEE_ATTACK = 6,
         ENEMY_MOVE_TO_PATH_NODE = 7,
         ENEMY_FOLLOW_PATH_TO_END = 8,
@@ -2499,7 +2501,7 @@ void FUN_L03_002c6fd0(Moby2C8398 *m) {
             }
         }
         break;
-    case 4:
+    case ENEMY_PROJECTILE_ATTACK_WINDUP:
         if (m->b70 & 2) {
             m->state = 5;
             d->b254 = 0;
@@ -2530,7 +2532,7 @@ void FUN_L03_002c6fd0(Moby2C8398 *m) {
             }
         }
         break;
-    case 5: {
+    case ENEMY_PROJECTILE_ATTACK: {
         if (FUN_L00_0024f7c8_cf((char *)m, 8.0f)) {
             float a[4];
             float b[4];
