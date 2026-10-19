@@ -6800,6 +6800,7 @@ void shuttle_update(struct Moby *moby) {
         RESTORE_SHUTTLE_IDLE_ANIMATION = 4,
         WAIT_FOR_HERO_NEAR_LINKED_MOBY = 6,
         WAIT_TO_SELECT_SHUTTLE_SAVE_FLOW = 7,
+        WAIT_TO_ENTER_SHUTTLE_SAVE_FLOW = 8,
         WAIT_TO_SAVE_AND_RESUME_SHUTTLE_REQUESTS = 9
     };
     enum {
@@ -7041,7 +7042,7 @@ void shuttle_update(struct Moby *moby) {
             moby->state = 1;
         }
         break;
-    case 8:
+    case WAIT_TO_ENTER_SHUTTLE_SAVE_FLOW:
         if (D_L06_0015F5C4 != 2) {
             FUN_L00_00299460_302578(5);
             moby->state = 7;
