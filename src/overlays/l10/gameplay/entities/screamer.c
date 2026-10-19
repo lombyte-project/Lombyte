@@ -2115,6 +2115,7 @@ void FUN_L10_002e3ef0(void *mv) {
     enum {
         LETHAL_HIT_RESPONSE = 1,
         DEATH_HIT_RESPONSE = 2,
+        KNOCKBACK_HIT_RESPONSE = 3,
         SUPPRESSED_HIT_RESPONSE = 11
     };
     Moby *m = mv;
@@ -2210,7 +2211,7 @@ void FUN_L10_002e3ef0(void *mv) {
         d->bAD = 0;
         fx = func_L00_001FF860_2E52B0(r->pos.x, r->pos.y);
         switch (hit_response_code) {
-        case 3:
+        case KNOCKBACK_HIT_RESPONSE:
         case 6:
         case 7:
         case 8:
