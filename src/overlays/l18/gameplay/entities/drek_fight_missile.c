@@ -921,7 +921,9 @@ extern unsigned char D_0013D406 __attribute__((section(".data")));
 void FUN_L18_002f2310(struct Moby *m) {
     enum {
         LIFT_INITIALIZE = 0,
-        LIFT_SELECT_INITIAL_HEIGHT = 1
+        LIFT_SELECT_INITIAL_HEIGHT = 1,
+        LIFT_APPROACH_BASE_HEIGHT = 2,
+        LIFT_APPROACH_ALTERNATE_HEIGHT = 3
     };
     char *d = (char *)m->pvars;
     int v;
@@ -951,7 +953,7 @@ void FUN_L18_002f2310(struct Moby *m) {
             m->pos.z = *(float *)(d + 4);
         }
         break;
-    case 3:
+    case LIFT_APPROACH_ALTERNATE_HEIGHT:
         if (m->command & 4) {
             D_L18_001622FC = 0;
             m->state = 2;
@@ -964,7 +966,7 @@ void FUN_L18_002f2310(struct Moby *m) {
         FUN_L18_002f2598(m);
         m->command = 1;
         break;
-    case 2:
+    case LIFT_APPROACH_BASE_HEIGHT:
         if (m->command & 8) {
             m->state = 3;
             D_L18_001622FC = 1;
