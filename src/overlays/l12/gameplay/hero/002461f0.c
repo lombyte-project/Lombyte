@@ -123,6 +123,7 @@ extern int func_001F9908_r(int *) __asm__("FUN_001f9740");
 int r1_repeat_timer __asm__("D_L12_0015F678") = 0;
 void FUN_L12_002461f0(void) {
     enum {
+        HERO_STATE_ITEM_BUTTON_RELEASE_WAIT = 23,
         HERO_STATE_LOOK_RELEASE_WAIT = 30,
         HERO_STATE_APPROACH_TARGET_POSE = 101,
         HERO_STATE_TARGET_POSE_APPROACH_RESTART_WAIT = 102,
@@ -657,7 +658,7 @@ void FUN_L12_002461f0(void) {
                         }
                     }
                     break;
-                case 23:
+                case HERO_STATE_ITEM_BUTTON_RELEASE_WAIT:
                     if (controller_state.held & hero.items[0].button_mask) {
                         break;
                     }
