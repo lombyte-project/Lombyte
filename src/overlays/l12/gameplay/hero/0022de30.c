@@ -661,9 +661,9 @@ void FUN_L12_00238900(void) {
 
     switch (hero.state.current) {
     case 0x0:
-    case 0x1:
-    case 0x3:
-    case 0x4:
+    case HERO_STATE_LOOK:
+    case HERO_STATE_STOP:
+    case HERO_STATE_CROUCH:
     case 0x17:
     case 0x1D:
     case 0x1E:
@@ -794,7 +794,7 @@ void FUN_L12_00238900(void) {
             }
         }
         break;
-    case 0x7F:
+    case HERO_STATE_SINK:
         if (MV(hero.unk6A4) == NULL) {
             struct MobyView *m = create_moby(0x52A);
             s32 h40 = 0x40;
