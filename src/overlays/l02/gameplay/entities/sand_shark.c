@@ -313,7 +313,11 @@ void sand_shark_update(struct Moby *moby) __asm__("FUN_L02_002d3e50");
 void sand_shark_update(struct Moby *moby) {
     enum {
         SAND_SHARK_INITIALIZE = 0,
+        SAND_SHARK_APPROACH_TARGET = 5,
         SAND_SHARK_RETURN_HOME = 7,
+        SAND_SHARK_WAIT_FOR_HERO_LAUNCH_TRIGGER = 12,
+        SAND_SHARK_BALLISTIC_FLIGHT = 13,
+        SAND_SHARK_FACE_TARGET = 15,
         SAND_SHARK_FADE_OUT = 25
     };
     Varsd3e50 *vars;
@@ -507,7 +511,7 @@ void sand_shark_update(struct Moby *moby) {
         }
         break;
     }
-    case 15:
+    case SAND_SHARK_FACE_TARGET:
         turn_angle_e50(&moby->rot.z, atan2_e50(vars->target.f[0] - moby->pos.x, vars->target.f[1] - moby->pos.y),
                        &vars->turn_vel, frame_time_sq * 6.2831855f, frame_time_sq * 6.2831855f, D_0015ED6C * 6.2831855f);
         if (vars->unk25E != 0) {
@@ -585,7 +589,7 @@ void sand_shark_update(struct Moby *moby) {
         FUN_L02_002d57f8_e50(&v0, 6);
         break;
     }
-    case 5:
+    case SAND_SHARK_APPROACH_TARGET:
     case 22:
         if (moby->state == 0x16) {
             moby->pos.z += D_L02_0016191C;
@@ -752,7 +756,7 @@ void sand_shark_update(struct Moby *moby) {
             vars->unkC8 = 0;
         }
         break;
-    case 12: {
+    case SAND_SHARK_WAIT_FOR_HERO_LAUNCH_TRIGGER: {
         int in;
         if (inside_e50(&hero.motion.pos, vars->unk26C)) {
             in = 1;
@@ -791,7 +795,7 @@ void sand_shark_update(struct Moby *moby) {
                              random_int_between(0x78, 0x96), 0);
     }
         /* fallthrough */
-    case 13: {
+    case SAND_SHARK_BALLISTIC_FLIGHT: {
         float sink;
         moby->rot.y = sub_rotations_e50(moby->rot.y, D_0015ED6C * 12.566371f);
         fast_vec_add(&moby->pos, &moby->pos, &vars->vel);
