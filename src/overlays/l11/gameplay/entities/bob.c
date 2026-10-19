@@ -354,6 +354,7 @@ void FUN_L11_002d1030(void *mp) {
         RESORT_OWNER_WAIT_TO_FOLLOW_HERO = 3,
         RESORT_OWNER_MOVE_TO_PATH_POINT = 6,
         RESORT_OWNER_JUMP_TO_TARGET = 7,
+        RESORT_OWNER_MOVE_TO_GATE_TARGET = 8,
         RESORT_OWNER_CHECK_PATH_COMPLETION_DIALOGUE = 12,
         RESORT_OWNER_WAIT_FOR_PATH_COMPLETION_DIALOGUE_END = 13
     };
@@ -376,7 +377,7 @@ void FUN_L11_002d1030(void *mp) {
     case 4:
     case 5:
     case RESORT_OWNER_MOVE_TO_PATH_POINT:
-    case 8:
+    case RESORT_OWNER_MOVE_TO_GATE_TARGET:
     case 10:
     {
         char *m48 = (char *)moby + 0x48;
