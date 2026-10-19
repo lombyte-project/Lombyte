@@ -2994,8 +2994,11 @@ int hero_set_state(int a, int b) {
 extern unsigned char D_0013E533[];
 
 void FUN_L00_00227638(void) {
+    enum {
+        HERO_VEHICLE_MODE_NONE = 0
+    };
     switch (D_0013E533[0x2EC1]) {
-    case 0:
+    case HERO_VEHICLE_MODE_NONE:
         hero_set_state(HERO_STATE_IDLE, 1);
         break;
     case 1:
