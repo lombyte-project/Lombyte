@@ -81,6 +81,12 @@ extern void FUN_L00_00263fd8(void *, int, void *, void *, int, int, float, void 
 /* Class-dependent movement, manipulator rotation, hit effects and visibility. */
 void snow_plow_update(struct Moby *moby) __asm__("FUN_L04_002ca420");
 void snow_plow_update(struct Moby *moby) {
+    enum {
+        SNOW_PLOW_SCAN_CLIP_VOLUMES = 0,
+        SNOW_PLOW_MOVE_TO_CLIP_VOLUME = 1,
+        SNOW_PLOW_WAIT_BEFORE_RETURN = 2,
+        SNOW_PLOW_RETURN_TO_SAVED_TRANSFORM = 3
+    };
     Vec4 old;
     Vec4 delta, *d;
     /* The sphere query is its position followed by the record; the hit cases pass one or the other. */
@@ -129,7 +135,7 @@ void snow_plow_update(struct Moby *moby) {
     if (moby->oclass != 0x1e4) {
         fast_dec_timer_s16(data + 0x14a);
         switch (*(unsigned char *)(data + 0x149)) {
-        case 0: {
+        case SNOW_PLOW_SCAN_CLIP_VOLUMES: {
             float length = *(float *)(data + 0xfc);
             float target = *(float *)(data + 0x138);
             if (length < target) {
@@ -154,7 +160,7 @@ void snow_plow_update(struct Moby *moby) {
             } while (i < 4);
             break;
         }
-        case 1:
+        case SNOW_PLOW_MOVE_TO_CLIP_VOLUME:
             FUN_L00_00258278(moby, *(float *)(D_L04_001600EC + *(unsigned char *)(data + 0x148) * 0x80 + 0x78),
                 data + 0x7c, frame_time_sq * 1.0471976f, frame_time_sq * 3.1415927f, frame_time * 3.1415927f);
             if (vector_distance(&moby->pos, D_L04_001600EC + *(unsigned char *)(data + 0x148) * 0x80 + 0x30) < 1.0f &&
@@ -166,13 +172,13 @@ void snow_plow_update(struct Moby *moby) {
             normalize_vector_xyz(&delta, &delta, frame_time * 3.0f);
             add_vector_xyz(&moby->pos, &moby->pos, &delta);
             break;
-        case 2:
+        case SNOW_PLOW_WAIT_BEFORE_RETURN:
             if (*(short *)(data + 0x14a) == 0) {
                 *(float *)(data + 0x7c) = amount;
                 *(unsigned char *)(data + 0x149) = 3;
             }
             break;
-        case 3:
+        case SNOW_PLOW_RETURN_TO_SAVED_TRANSFORM:
             FUN_L00_00258278(moby, *(float *)(data + 0x14c), data + 0x7c,
                 frame_time_sq * 1.0471976f, frame_time_sq * 3.1415927f, frame_time * 3.1415927f);
             if (vector_distance(&moby->pos, data + 0x160) < 1.0f &&
