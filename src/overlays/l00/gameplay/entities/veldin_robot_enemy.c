@@ -781,13 +781,17 @@ extern void FUN_L00_002e2af0();
 void enqueue_callback_list_1(s32 arg0, s32 arg1) __asm__("FUN_001f4600");
 
 void FUN_L00_002e1df0(SlotMoby *m) {
+    enum {
+        SLOT_CONTROLLER_STATE_INITIALIZE = 0,
+        SLOT_CONTROLLER_STATE_PROCESS_SLOTS = 1
+    };
     s32 i;
     s32 j;
     s32 n;
     s32 st;
 
     switch (m->state) {
-    case 0:
+    case SLOT_CONTROLLER_STATE_INITIALIZE:
         for (j = 0; j < 3; j++) {
             D_L00_00161BF8[j] = 0;
             D_L00_00161C88[j] = 0;
@@ -795,7 +799,7 @@ void FUN_L00_002e1df0(SlotMoby *m) {
         m->state = 1;
         m->alpha = 0xFF;
         break;
-    case 1:
+    case SLOT_CONTROLLER_STATE_PROCESS_SLOTS:
         n = 0;
         for (i = 0; i < 3; i++) {
             st = D_L00_00161BF8[i];
