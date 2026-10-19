@@ -664,6 +664,10 @@ extern void remove_7b10(struct Moby *) __asm__("FUN_0020c828");
 
 void poison_vessel_update(struct Moby *moby) __asm__("FUN_L13_00307b10");
 void poison_vessel_update(struct Moby *moby) {
+    enum {
+        POISON_VESSEL_INTACT = 0,
+        POISON_VESSEL_BLASTING = 1
+    };
     struct BlastVars *vars = (struct BlastVars *)moby->pvars;
     struct BlastHit *hit;
     float *health;
@@ -674,7 +678,7 @@ void poison_vessel_update(struct Moby *moby) {
     int timer;
 
     switch (moby->state) {
-    case 0:
+    case POISON_VESSEL_INTACT:
         vars->hit = 0;
         moby->rot.x *= 0.7f;
         moby->rot.y *= 0.7f;
@@ -718,7 +722,7 @@ void poison_vessel_update(struct Moby *moby) {
         moby->hit_slot = 0xFF;
         anim_update_7b10(moby, effects);
         break;
-    case 1:
+    case POISON_VESSEL_BLASTING:
         qcopy(pos, &moby->pos);
         pos[2] += 1.0f;
         hits = collect_mobies_7b10(FUN_L00_0025b6a8(D_L13_00161E30, D_L13_00161E34,
