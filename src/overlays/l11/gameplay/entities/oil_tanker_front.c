@@ -100,6 +100,7 @@ void FUN_L11_00315968(struct Moby *moby) {
         HIT_RESPONSE_DEATH = 1,
         HIT_RESPONSE_DEATH_KNOCKBACK = 2,
         HIT_RESPONSE_KNOCKBACK = 3,
+        HIT_RESPONSE_NON_KNOCKBACK_REACTION = 9,
         HIT_RESPONSE_COOLDOWN_NO_KNOCKBACK = 11
     };
     struct L11PatrolVars *d = (struct L11PatrolVars *)moby->pvars;
@@ -150,7 +151,7 @@ void FUN_L11_00315968(struct Moby *moby) {
             switch (kind) {
             case HIT_RESPONSE_NO_ADDITIONAL_REACTION:
                 break;
-            case 9:
+            case HIT_RESPONSE_NON_KNOCKBACK_REACTION:
             case 10:
                 d->unk117 = 0xFA;
                 break;
