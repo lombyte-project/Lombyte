@@ -95,7 +95,12 @@ void sentrybot_update(unsigned char *moby) {
     enum {
         SENTRYBOT_INITIALIZE = 0,
         SENTRYBOT_WAIT_FOR_LINKED_MOBY = 1,
-        SENTRYBOT_RETURN_HOME = 9
+        SENTRYBOT_PATROL_PAUSE = 3,
+        SENTRYBOT_RETURN_HOME = 9,
+        SENTRYBOT_RETURN_HOME_FAST = 20
+    };
+    enum {
+        SENTRYBOT_PATROL_MOVE = 4
     };
     float va[4];
     float vb[4];
@@ -200,7 +205,7 @@ void sentrybot_update(unsigned char *moby) {
         break;
     }
     case 2:
-    case 3:
+    case SENTRYBOT_PATROL_PAUSE:
         if (*(int *)(data + 0x114) != 2) {
             moby[0xBC] = 1;
             if (data[0x15F] != 0) {
@@ -321,7 +326,7 @@ void sentrybot_update(unsigned char *moby) {
                 if (moby[0x53] != 0)
                     blend_moby_animation(moby, 0, 0, scale_game_frames(10));
                 break;
-            case 4:
+            case SENTRYBOT_PATROL_MOVE:
                 if (moby[0x53] != 0xD)
                     blend_moby_animation(moby, 0xD, 0, scale_game_frames(10));
                 break;
@@ -381,7 +386,7 @@ void sentrybot_update(unsigned char *moby) {
             }
         }
         break;
-    case 4: {
+    case SENTRYBOT_PATROL_MOVE: {
         float sp = frame_time * 2.0f;
         if (FUN_L15_00299ae0((char *)moby,
                              (float *)((char *)D_L15_001B0AB0[*(int *)(data + 0x124)] +
@@ -500,7 +505,7 @@ void sentrybot_update(unsigned char *moby) {
         }
         break;
     }
-    case 20: {
+    case SENTRYBOT_RETURN_HOME_FAST: {
         unsigned char *home = data + 0x160;
         if (FUN_001f9b48(moby + 0x10, home) > 0.2f) {
             FUN_L15_00299ae0((char *)moby, (float *)home, frame_time * 3.0f);
