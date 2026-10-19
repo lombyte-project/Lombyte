@@ -144,7 +144,8 @@ void FUN_L05_00255960(void) {
         HERO_STATE_LEDGE_SHIMMY_POSITIVE_YAW_OFFSET = 26,
         HERO_STATE_LEDGE_SHIMMY_NEGATIVE_YAW_OFFSET = 27,
         HERO_STATE_LEDGE_JUMP = 28,
-        HERO_STATE_BELOW_LEVEL_RESPAWN_WAIT = 119
+        HERO_STATE_BELOW_LEVEL_RESPAWN_WAIT = 119,
+        HERO_STATE_TIMED_RESPAWN_WAIT = 127
     };
     unsigned char *moby;
     int prevSub;
@@ -468,7 +469,7 @@ void FUN_L05_00255960(void) {
                         return;
                     }
                     break;
-                case 127:
+                case HERO_STATE_TIMED_RESPAWN_WAIT:
                     if (hero.state_timer > scale_game_frames(0xDC)) {
                         hero_respawn();
                         return;
