@@ -2240,7 +2240,7 @@ void FUN_L02_00225c20(void) {
             FUN_L00_002334d0(hero.motion.velocity.f, hero.motion.velocity.f, frame_time_sq * 54.0f);
         }
     } break;
-    case 0x40:
+    case HERO_STATE_FIDGET:
     case 0x67:
         clear_vector(hero.motion.velocity.f);
         break;
