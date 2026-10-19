@@ -1586,6 +1586,7 @@ void psytcopus_update(struct Moby *m) {
 /* Hit handling for the psytcopus_update moby: takes damage, picks the hurt or death reaction, keeps it on its path. */
 void FUN_L11_00310698(struct Moby *m) {
     enum {
+        HIT_REACTION_NONE = 0,
         HIT_REACTION_DEATH = 1
     };
     struct PokiPathVars *pv = (struct PokiPathVars *)m->pvars;
@@ -1622,7 +1623,7 @@ void FUN_L11_00310698(struct Moby *m) {
         pv->unk94 = 9;
         pv->unkAD = 0;
         switch (r) {
-        case 0:
+        case HIT_REACTION_NONE:
         case 11:
             break;
         case 9:
