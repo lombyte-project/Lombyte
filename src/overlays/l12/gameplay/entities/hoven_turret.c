@@ -578,7 +578,10 @@ void hoven_turret_update(struct Moby *moby) {
         HOVEN_TURRET_STATE_INITIALIZE = 0,
         HOVEN_TURRET_STATE_WAIT_FOR_BOARDING = 3,
         HOVEN_TURRET_STATE_MANNED = 4,
-        HOVEN_TURRET_STATE_DESTRUCTION_EFFECTS = 7
+        HOVEN_TURRET_STATE_START_SCENE = 5,
+        HOVEN_TURRET_STATE_INACTIVE = 6,
+        HOVEN_TURRET_STATE_DESTRUCTION_EFFECTS = 7,
+        HOVEN_TURRET_STATE_SAVE_DATA = 8
     };
     Data_304920 *data = *(Data_304920 **)&moby->pvars;
 
@@ -815,19 +818,19 @@ void hoven_turret_update(struct Moby *moby) {
             FUN_L00_00211250();
         }
         break;
-    case 5:
+    case HOVEN_TURRET_STATE_START_SCENE:
         if (D_L12_0015F5C4_macro != 2) {
             start_scene(1);
             moby->state = 8;
         }
         break;
-    case 8:
+    case HOVEN_TURRET_STATE_SAVE_DATA:
         if (D_L12_0015F5C4_macro != 2) {
             func_0020BFC8_304920(0, -1);
             moby->state = 6;
         }
         break;
-    case 6:
+    case HOVEN_TURRET_STATE_INACTIVE:
         if (moby->prev_seq != 0) {
             set_moby_animation(moby, 0, 0);
         }
