@@ -109,7 +109,8 @@ int FUN_L00_0023aaa8(O_23aaa8 *o) {
     enum {
         HUD_FRAME_MODE_STATIC = 0,
         HUD_FRAME_MODE_LOOP = 1,
-        HUD_FRAME_MODE_PING_PONG = 2
+        HUD_FRAME_MODE_PING_PONG = 2,
+        HUD_FRAME_MODE_PING_PONG_RESTART = 3
     };
     T_23aaa8 *t = &D_L00_0017E4F4[o->id];
     int r;
@@ -133,7 +134,7 @@ int FUN_L00_0023aaa8(O_23aaa8 *o) {
             }
             r += t->base;
             break;
-        case 3:
+        case HUD_FRAME_MODE_PING_PONG_RESTART:
             if (o->start < D_L00_0015F5CC_23aaa8) {
                 int m;
                 r = (D_L00_0015F5CC_23aaa8 - o->start) / t->rate;
