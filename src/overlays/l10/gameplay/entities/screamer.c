@@ -132,6 +132,7 @@ void screamer_update(Moby *moby) {
         SCREAMER_STATE_RISE_FROM_HOME = 4,
         SCREAMER_STATE_FOLLOW_PATH = 5,
         SCREAMER_STATE_FACE_LEADER_AT_WAYPOINT = 6,
+        SCREAMER_STATE_IDLE_AT_HOME = 7,
         SCREAMER_STATE_RETURN_HOME = 8,
         SCREAMER_STATE_WAIT_TO_WANDER = 9,
         SCREAMER_STATE_WANDER = 10,
@@ -238,7 +239,7 @@ void screamer_update(Moby *moby) {
             if (moby->prev_seq != 4) func_00213DE0_2E0630(moby, 4, 0, func_001F9850_2E0630(10));
         }
         break;
-    case 7:
+    case SCREAMER_STATE_IDLE_AT_HOME:
         break;
     case SCREAMER_STATE_RETURN_HOME: {
         float zero = 0.0f;
