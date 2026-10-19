@@ -64,7 +64,9 @@ void armed_transport_update(char *m) __asm__("FUN_L16_002e22d8");
 void armed_transport_update(char *m) {
     enum {
         ARMED_TRANSPORT_STATE_INITIALIZE = 0,
+        ARMED_TRANSPORT_STATE_WAIT_FOR_ACTIVATION = 1,
         ARMED_TRANSPORT_STATE_FOLLOW_FIRST_PATH = 2,
+        ARMED_TRANSPORT_STATE_RELEASE_PASSENGERS = 3,
         ARMED_TRANSPORT_STATE_ALIGN_SECOND_PATH = 4,
         ARMED_TRANSPORT_STATE_FOLLOW_SECOND_PATH = 5,
         ARMED_TRANSPORT_STATE_TRACK_TARGET = 6,
@@ -104,7 +106,7 @@ void armed_transport_update(char *m) {
         *(unsigned short *)(m + 0x34) = (*(unsigned short *)(m + 0x34) | 1) & 0xEFFF;
         break;
     }
-    case 1: {
+    case ARMED_TRANSPORT_STATE_WAIT_FOR_ACTIVATION: {
         int i;
 
         if (D_L16_0015F5C4 == 0
@@ -150,7 +152,7 @@ void armed_transport_update(char *m) {
         }
         break;
     }
-    case 3: {
+    case ARMED_TRANSPORT_STATE_RELEASE_PASSENGERS: {
         int i, *slot;
 
         if (!fast_dec_timer((int *)(d + 0x184))) break;
