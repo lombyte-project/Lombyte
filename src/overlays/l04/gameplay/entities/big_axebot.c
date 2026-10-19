@@ -2325,6 +2325,7 @@ void blarg_trooper_update(struct Moby *moby) {
         BLARG_TROOPER_STATE_INITIALIZE = 0,
         BLARG_TROOPER_STATE_IDLE = 1,
         BLARG_TROOPER_STATE_MOVE_TO_PATH_POINT = 2,
+        BLARG_TROOPER_STATE_RUN_TO_TARGET_OR_PATH_POINT = 3,
         BLARG_TROOPER_STATE_JUMP = 4,
         BLARG_TROOPER_STATE_AIM = 5,
         BLARG_TROOPER_STATE_FIRE = 6,
@@ -2333,6 +2334,7 @@ void blarg_trooper_update(struct Moby *moby) {
         BLARG_TROOPER_STATE_DYING = 11
     };
     enum {
+        BLARG_TROOPER_HIT_REACTION_NONE = 0,
         BLARG_TROOPER_HIT_REACTION_FATAL = 1
     };
     struct {
@@ -2456,7 +2458,7 @@ void blarg_trooper_update(struct Moby *moby) {
         }
         *(unsigned char *)(data + 0xFE) = scale_game_frames(0xF0);
         switch (r) {
-        case 0:
+        case BLARG_TROOPER_HIT_REACTION_NONE:
             break;
         case BLARG_TROOPER_HIT_REACTION_FATAL:
         case 2:
@@ -2631,7 +2633,7 @@ void blarg_trooper_update(struct Moby *moby) {
             func_L00_002594C8_o(moby, pos, st.w.p.v70, 0.5f, 1.0f, 0.5f, 0.5235988f, 0);
         }
         break;
-    case 3:
+    case BLARG_TROOPER_STATE_RUN_TO_TARGET_OR_PATH_POINT:
         *(int *)(data + 0x108) = scale_game_frames(0x64);
         if (flag) {
             int k;
