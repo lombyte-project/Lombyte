@@ -1122,6 +1122,7 @@ void extermibot_update(unsigned char *m) __asm__("FUN_L05_00301f48");
 void extermibot_update(unsigned char *m) {
     enum {
         EXTERMIBOT_INITIALIZE = 0,
+        EXTERMIBOT_IDLE_AND_CHECK_TARGET_PATH = 1,
         EXTERMIBOT_WANDER_NEAR_START = 2,
         EXTERMIBOT_FOLLOW_TARGET = 4,
         EXTERMIBOT_WAIT_FOR_TARGET_IN_STRIKE_RANGE = 5,
@@ -1209,7 +1210,7 @@ void extermibot_update(unsigned char *m) {
         }
         FUN_L05_0028be78((int *)(d + 0x2C0), 1, *(int *)(d + 0x2C4));
         break;
-    case 1:
+    case EXTERMIBOT_IDLE_AND_CHECK_TARGET_PATH:
         if (*(int *)(d + 0x164) != 2 && random_integer_below_c2(9) == 0) {
             if (follow_path(d + 0x2C0, 1, *(int *)(d + 0x2C4), m + 0x10, (s32)(t + 0x10), dir,
                                   (D_L05_00161A98) * 0.4f) != 0) {
