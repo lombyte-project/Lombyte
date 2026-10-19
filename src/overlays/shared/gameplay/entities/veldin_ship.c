@@ -1171,7 +1171,8 @@ extern void build_moby_bone_transform(void *, int, void *) __asm__("FUN_0020cca8
 void decoy_glove_update(unsigned char *moby) __asm__("FUN_L00_002d2670");
 void decoy_glove_update(unsigned char *moby) {
     enum {
-        DECOY_GLOVE_INITIALIZE = 0
+        DECOY_GLOVE_INITIALIZE = 0,
+        DECOY_GLOVE_RELEASE_DECOY = 3
     };
     extern void mark_moby_for_removal();
     extern void transform_vector_alt();
@@ -1245,7 +1246,7 @@ L3D34:
         break;
     case 2:
         break;
-    case 3:
+    case DECOY_GLOVE_RELEASE_DECOY:
         if (*(char **)(d + 0x50)) {
             char *stats = ((char *)&item_usage);
             if (*(unsigned short *)(stats + 0xC8) <= 0xFFFE) *(unsigned short *)(stats + 0xC8) = *(unsigned short *)(stats + 0xC8) + 1;
