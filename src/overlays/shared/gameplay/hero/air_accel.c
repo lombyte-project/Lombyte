@@ -941,8 +941,11 @@ f32 FUN_001f9b80_231ae0(void *, void *) __asm__("FUN_001f9b80");
 f32 approach_value_231ae0(f32, f32, f32 *) __asm__("FUN_00213ed8");
 void FUN_L00_0025b8c0_231ae0(f32 *, f32 *, f32, f32, f32, f32) __asm__("FUN_L00_0025b8c0");
 void FUN_L01_00231ae0(void) {
+    enum {
+        VEHICLE_MODE_NONE = 0
+    };
     switch (hero.vehicle_mode) {
-    case 0:
+    case VEHICLE_MODE_NONE:
         hero.unk228 = 0.8f;
         hero.unk22C = 0.7f;
         hero.unk230 = 0.45f;
