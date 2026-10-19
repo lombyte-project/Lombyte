@@ -1696,6 +1696,7 @@ void FUN_L13_002cecb8(struct Moby *moby, unsigned char *d, float *health) {
     enum {
         HIT_REACTION_NONE = 0,
         HIT_REACTION_LETHAL = 1,
+        HIT_REACTION_REMOVE = 2,
         HIT_REACTION_NO_HIT = 11
     };
     char *src;
@@ -1714,7 +1715,7 @@ void FUN_L13_002cecb8(struct Moby *moby, unsigned char *d, float *health) {
         }
         switch (FUN_00213928(moby, src, health, 0, &hit, 0, 0, 4)) {
         case HIT_REACTION_LETHAL:
-        case 2:
+        case HIT_REACTION_REMOVE:
             *health = 0.0f;
             break;
         case HIT_REACTION_NONE:
