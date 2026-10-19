@@ -2337,7 +2337,8 @@ extern unsigned char D_0013E633_2FA618[] __asm__("D_0013F350");
 void FUN_L06_002f91e8(Moby *moby)
 {
     enum {
-        REACTION_DEATH = 1
+        REACTION_DEATH = 1,
+        REACTION_NO_RESPONSE = 11
     };
     BlargVars_2FA618 *data = (struct BlargVars_2FA618 *)moby->pvars;
     int hit;
@@ -2401,7 +2402,7 @@ void FUN_L06_002f91e8(Moby *moby)
             data->f67 = 0xFA;
             func_L00_002584A8_2FA618(moby, 0, -1);
             break;
-        case 11:
+        case REACTION_NO_RESPONSE:
             break;
         }
         func_L00_0025E4B0_2FA618(moby, data->f60);
