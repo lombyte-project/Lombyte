@@ -2175,6 +2175,10 @@ void FUN_L00_00257024_210a08(char *) __asm__("FUN_L00_00257024");
 void FUN_L00_00207a58_210a08(void) __asm__("FUN_L00_00207a58");
 extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 void FUN_L00_00210a08(int mode, int b, char *m) {
+    enum {
+        VEHICLE_MODE_CLANK = 1,
+        VEHICLE_MODE_GIANT_CLANK = 2
+    };
     struct Hero *g;
     FUN_L00_0020e698_210a08();
     g = &hero;
@@ -2200,11 +2204,11 @@ void FUN_L00_00210a08(int mode, int b, char *m) {
     FUN_L00_00207a58_210a08();
     g->unk22CC = b;
     switch (mode) {
-    case 1:
+    case VEHICLE_MODE_CLANK:
         g->health.unk22B0 = *(unsigned short *)&g->health.hp;
         g->health.hp = g->health.unk22AC;
         break;
-    case 2:
+    case VEHICLE_MODE_GIANT_CLANK:
         g->unk1630 = 200;
         break;
     }
