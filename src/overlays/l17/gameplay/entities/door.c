@@ -2421,9 +2421,12 @@ void robot_dog_update(unsigned char *m) __asm__("FUN_L17_002eeb68");
 void robot_dog_update(unsigned char *m) {
     enum {
         ROBOT_DOG_STATE_INITIALIZE = 0,
+        ROBOT_DOG_STATE_FALL_UNTIL_LANDING = 4,
+        ROBOT_DOG_STATE_TURN_TOWARD_TARGET = 8,
         ROBOT_DOG_STATE_APPROACH_TARGET = 9,
         ROBOT_DOG_STATE_ATTACK_TARGET = 10,
-        ROBOT_DOG_STATE_RETURN_HOME = 11
+        ROBOT_DOG_STATE_RETURN_HOME = 11,
+        ROBOT_DOG_STATE_FALL_THEN_REMOVE = 15
     };
     Vars1382 *d;
     unsigned char *tgt;
@@ -2641,7 +2644,7 @@ void robot_dog_update(unsigned char *m) {
         }
         break;
     }
-    case 8: {
+    case ROBOT_DOG_STATE_TURN_TOWARD_TARGET: {
         float ang;
         ang = fast_arc_tan(d->v180[0] - *(float *)(m + 0x10), d->v180[1] - *(float *)(m + 0x14));
         FUN_L00_00258278((char *)m, &d->yawvel, ang, 0.03f, 0.3f, frame_time * 7.8539815f);
@@ -2734,7 +2737,7 @@ void robot_dog_update(unsigned char *m) {
         }
         break;
     }
-    case 4:
+    case ROBOT_DOG_STATE_FALL_UNTIL_LANDING:
         if (mine_fall(m, d->a120) & 0x60) {
             clear_vector(tmp);
             m[0x20] = 5;
@@ -2748,7 +2751,7 @@ void robot_dog_update(unsigned char *m) {
             mark_moby_for_removal_c(m);
         }
         break;
-    case 15:
+    case ROBOT_DOG_STATE_FALL_THEN_REMOVE:
         *(unsigned short *)(m + 0x34) &= 0xEFFF;
         if (mine_fall(m, d->a120) & 0x60) {
             float *zero;
