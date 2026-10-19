@@ -13,16 +13,20 @@ float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 void FUN_L00_001fff28(char *, int, float);
 void vendor_orb_update(unsigned char *p) __asm__("FUN_L00_002df730");
 void vendor_orb_update(unsigned char *p) {
+    enum {
+        VENDOR_ORB_INITIALIZE = 0,
+        VENDOR_ORB_ROTATE = 1
+    };
     char *m = *(char **)(p + 0x78);
     float s;
     switch (p[0x20]) {
-    case 0:
+    case VENDOR_ORB_INITIALIZE:
         p[0x20] = 1;
         p[0x73] = 0x20;
         *(float *)(m + 0x40) = random_angle_radians();
         attach_manipulator(p, 1, m);
         break;
-    case 1:
+    case VENDOR_ORB_ROTATE:
         s = D_L00_00161BB0 * DEG_TO_RAD * frame_time;
         *(float *)(p + 0x48) = fast_add_rotations(*(float *)(p + 0x48), s);
         *(float *)(m + 0x40) = fast_add_rotations(*(float *)(m + 0x40), s * -2.0f);
