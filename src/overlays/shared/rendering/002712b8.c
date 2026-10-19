@@ -652,6 +652,8 @@ extern unsigned char *D_L00_001B2168 __attribute__((section(".data")));
 unsigned char *FUN_L00_002729c8(void *pos, unsigned char a, unsigned char b, unsigned char c,
                                 unsigned char d, unsigned char e, int g, float x, float y) {
     enum {
+        PARTICLE_MODE_COLOR_TWEEN_THEN_EMIT = 0,
+        PARTICLE_MODE_COLOR_TWEEN_ONLY = 1,
         PARTICLE_MODE_EMITTED_PARTICLE = 2
     };
     unsigned char *m = p27fe00_alloc(0x3A);
@@ -677,8 +679,8 @@ unsigned char *FUN_L00_002729c8(void *pos, unsigned char a, unsigned char b, uns
         q[0x15] = e;
         mode = q[0x10];
         switch (mode) {
-        case 0:
-        case 1:
+        case PARTICLE_MODE_COLOR_TWEEN_THEN_EMIT:
+        case PARTICLE_MODE_COLOR_TWEEN_ONLY:
             *(short *)(m + 0xA) = b;
             *(int *)(m + 4) = 0xFF808080;
             q[0x14] = 0;
