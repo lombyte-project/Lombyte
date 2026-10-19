@@ -619,6 +619,9 @@ extern void FUN_L01_00316e88(f32, f32);
 /* Turned by the hero (state 0x3B) until progress reaches 1, then lowered and saved as done. */
 void bolt_crank_update(struct Moby *moby) __asm__("FUN_L01_002e0c68");
 void bolt_crank_update(struct Moby *moby) {
+    enum {
+        BOLT_CRANK_CALLBACK_ONLY = 2
+    };
     BoltCrankVars *crank = (BoltCrankVars *)moby->pvars;
     float matrix[16];
     float stick[4], step[4], facing[4];
@@ -732,7 +735,7 @@ void bolt_crank_update(struct Moby *moby) {
         }
         goto done;
     }
-    case 2:
+    case BOLT_CRANK_CALLBACK_ONLY:
         goto done;
     case BOLT_CRANK_TURNING:
         target.q = 0;
