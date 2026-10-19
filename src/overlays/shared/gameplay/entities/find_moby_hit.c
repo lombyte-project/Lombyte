@@ -718,7 +718,8 @@ extern float FUN_00213508_25b440(void *, int, float) __asm__("FUN_00213508");
 
 int FUN_L00_0025b440(O_25b440 *o, S_25b440 *s) {
     enum {
-        DESCEND_TO_GROUND = 2
+        DESCEND_TO_GROUND = 2,
+        WAIT_AFTER_GROUND_CLAMP = 3
     };
     float v[4];
     float t;
@@ -764,7 +765,7 @@ int FUN_L00_0025b440(O_25b440 *o, S_25b440 *s) {
             v[2] = 0.0f;
             FUN_001f9a10_25b440(o->pos, o->pos, v);
         }
-    case 3:
+    case WAIT_AFTER_GROUND_CLAMP:
         if (o->b70 & 2) {
             s->state = 4;
         }
