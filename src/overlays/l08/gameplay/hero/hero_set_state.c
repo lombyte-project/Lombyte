@@ -92,6 +92,9 @@ int hero_set_state(int a, int b) {
         ENTER_ATTACK_COMBO = 0x13,
         ENTER_SLIP = 0x79
     };
+    enum {
+        ENTER_DROWN = 0x6A
+    };
     int old2088;
     char *moby;
     int old20A7;
@@ -406,7 +409,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0x65, 0, (float)scale_game_frames(0x11));
         break;
     }
-    case 0x6A: {
+    case ENTER_DROWN: {
         struct Hero *p = &hero;
         p->state.control_mode = 0x14;
         p->unk20A7 = 1;
