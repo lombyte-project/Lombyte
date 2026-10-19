@@ -57,6 +57,11 @@ extern void memcard_save_data(int, int) __asm__("FUN_0020b178");
 
 void lieutenant_update(struct Moby *moby) __asm__("FUN_L04_002e3078");
 void lieutenant_update(struct Moby *moby) {
+    enum {
+        LIEUTENANT_STATE_INITIALIZE = 0,
+        LIEUTENANT_STATE_UPDATE_DIALOGUE = 1,
+        LIEUTENANT_STATE_DISABLED = 3
+    };
     Vec4 pos;
     Vec4 rot;
     Vec4 *r;
@@ -68,7 +73,7 @@ void lieutenant_update(struct Moby *moby) {
     }
     FUN_L02_002e0cd8(moby);
     switch (moby->state) {
-    case 0:
+    case LIEUTENANT_STATE_INITIALIZE:
         if (D_0014C050[((struct VendorMobyView *)moby)->slot + current_level_index * 16] == 0xFF) {
             moby->state = 3;
             moby->flags |= 0x41;
@@ -78,7 +83,7 @@ void lieutenant_update(struct Moby *moby) {
         moby->state = 1;
         initialize_npc_dialogue(moby, vars);
         break;
-    case 1:
+    case LIEUTENANT_STATE_UPDATE_DIALOGUE:
         if (FUN_00214720(&hero.motion.pos, vars->item))
             vars->alpha = 255.0f;
         else
@@ -107,7 +112,7 @@ void lieutenant_update(struct Moby *moby) {
         if (D_L04_0015F5C4 != 2)
             update_npc_dialogue(moby, vars);
         break;
-    case 3:
+    case LIEUTENANT_STATE_DISABLED:
         moby->flags |= 0x41;
         moby->collision = 0;
         break;
