@@ -1573,10 +1573,15 @@ void FUN_L05_00316258(char *moby) {
     }
 }
 void FUN_L05_003166a0(struct Moby *moby) {
+    enum {
+        MOBY_INITIALIZE_YAW = 0,
+        MOBY_WAIT_FOR_TRIGGER = 1,
+        MOBY_APPROACH_SAVED_YAW_OFFSET = 2
+    };
     int *data = (int *)moby->pvars;
 
     switch (moby->state) {
-    case 0:
+    case MOBY_INITIALIZE_YAW:
         if (data[0] != 0)
             moby->flags |= 0x8000;
         moby->state = 1;
@@ -1586,13 +1591,13 @@ void FUN_L05_003166a0(struct Moby *moby) {
         else
             moby->rot.z = fast_add_rotations(moby->rot.z, 1.5707964f);
         /* fall through */
-    case 1:
+    case MOBY_WAIT_FOR_TRIGGER:
         if (((unsigned char *)*(int *)&D_L05_0015FFD8_d)[data[2] * 256 + 0xBC] != 0) {
             func_0022ED80_i(0, 0, moby);
             moby->state = 2;
         }
         break;
-    case 2: {
+    case MOBY_APPROACH_SAVED_YAW_OFFSET: {
         float target;
         if (data[0] != 0)
             target = fast_subtract_rotations(*(float *)&data[3], 0.6981317f);
