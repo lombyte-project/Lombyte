@@ -818,13 +818,17 @@ extern void subtract_vector_xyz(void *, void *, void *);
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void FUN_L08_003097b0(struct Moby *moby) {
+    enum {
+        MOBY_INITIALIZE = 0,
+        MOBY_ACTIVE = 1
+    };
     int i;
     float v[4];
     float w[4];
     float d;
 
     switch (moby->state) {
-    case 0:
+    case MOBY_INITIALIZE:
         if (D_L08_001623C4 == 0) {
             FUN_L08_002f0f68(D_L08_001F8528, 8, D_L08_001F4C60, 0.5f, 0.5f, 0.65f, 0.5f, 1);
             FUN_L08_002f0f68(D_L08_001623E8, 2, D_L08_001623C8, 0.5f, 0.5f, 0.5f, 1.0f, 1);
@@ -847,7 +851,7 @@ void FUN_L08_003097b0(struct Moby *moby) {
             *(float *)&D_L08_001623F0_e[7 + i * 2] = i * 0.4f;
         }
         break;
-    case 1:
+    case MOBY_ACTIVE:
         v[0] = *(float *)&D_L08_00162380;
         v[1] = D_L08_00162384;
         v[2] = D_L08_00162388;
