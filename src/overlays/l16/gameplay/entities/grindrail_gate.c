@@ -1495,6 +1495,7 @@ void gadgetron_ceo_update(L16ChallengeMoby *m) {
     enum {
         GADGETRON_CEO_INITIALIZE_DIALOGUE = 0,
         GADGETRON_CEO_POLL_DIALOGUE = 1,
+        GADGETRON_CEO_WAIT_AFTER_DIALOGUE = 2,
         GADGETRON_CEO_MONITOR_CHALLENGE_EVENTS = 3,
         GADGETRON_CEO_WAIT_TO_SAVE = 4
     };
@@ -1567,7 +1568,7 @@ void gadgetron_ceo_update(L16ChallengeMoby *m) {
         }
         break;
     }
-    case 2:
+    case GADGETRON_CEO_WAIT_AFTER_DIALOGUE:
         if (*(int *)&D_L16_0015F5C4 != 2) {
             int previous;
             m->state = 1;
