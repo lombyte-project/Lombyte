@@ -743,6 +743,7 @@ void FUN_L03_002d3198(struct Moby *m) {
         TAXI_WAIT_FOR_ROUTE_TRIGGER = 1,
         TAXI_FOLLOW_OUTBOUND_PATH = 2,
         TAXI_FOLLOW_RETURN_PATH = 5,
+        TAXI_WAIT_FOR_HERO_TO_MOVE_AWAY = 6,
         TAXI_FOLLOW_ONWARD_PATH = 7
     };
     struct RailTaxiVars *v = (struct RailTaxiVars *)m->pvars;
@@ -846,7 +847,7 @@ void FUN_L03_002d3198(struct Moby *m) {
             m->state = 6;
         }
         break;
-    case 6:
+    case TAXI_WAIT_FOR_HERO_TO_MOVE_AWAY:
         taxi_approach_angle(&m->rot.y, 0.0f, &v->pitch_vel, D_L03_00161B10 * DEG_TO_RAD * frame_time_sq_macro,
                             D_L03_00161B10 * DEG_TO_RAD * frame_time_sq_macro, frame_time * 12.566371f);
         taxi_approach_angle(&m->rot.x, 0.0f, &v->roll_vel, D_L03_00161B18 * DEG_TO_RAD * frame_time_sq_macro,
