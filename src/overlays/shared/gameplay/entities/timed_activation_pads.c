@@ -233,7 +233,9 @@ void door_update(u8 *moby)
 {
     enum {
         DOOR_INITIALIZE = 0,
+        DOOR_WAIT_TO_MOVE_TO_OFFSET_POSITION = 1,
         DOOR_MOVE_TO_OFFSET_POSITION = 2,
+        DOOR_WAIT_TO_RETURN_TO_INITIAL_POSITION = 3,
         DOOR_RETURN_TO_INITIAL_POSITION = 4
     };
     u8 *data = *(u8 **)(moby + 0x78);
@@ -256,7 +258,7 @@ void door_update(u8 *moby)
         moby[0x20] = 1;
         *(s32 *)(data + 0x0c) = 0;
         return;
-    case 1:
+    case DOOR_WAIT_TO_MOVE_TO_OFFSET_POSITION:
         if (*(s32 *)(data + 0x38) != -1)
             D_L07_00184528[*(s32 *)(data + 0x38)] = 0;
         if (*(s32 *)(data + 0x10) != -1) {
@@ -305,7 +307,7 @@ void door_update(u8 *moby)
         if (*(s32 *)(data + 0x34) != -1)
             play_sound_310df0(*(s32 *)(data + 0x30), 0, moby);
         return;
-    case 3:
+    case DOOR_WAIT_TO_RETURN_TO_INITIAL_POSITION:
         if (*(s32 *)(data + 0x38) != -1)
             D_L07_00184528[*(s32 *)(data + 0x38)] = 1;
         if (*(s32 *)(data + 0x10) == -1)
