@@ -1401,6 +1401,7 @@ void gadgebot_update(GbMoby *moby) {
     enum {
         GADGEBOT_INITIALIZE = 0,
         GADGEBOT_WAIT_FOR_SPAWN_PAD = 1,
+        GADGEBOT_WANDER_NEAR_HOME = 2,
         GADGEBOT_FOLLOW_HERO = 3,
         GADGEBOT_STAND_AND_FACE_HERO = 4,
         GADGEBOT_SEEK_AND_ATTACK_TARGET = 5,
@@ -1590,7 +1591,7 @@ void gadgebot_update(GbMoby *moby) {
             return;
         }
         break;
-    case 2:
+    case GADGEBOT_WANDER_NEAR_HOME:
         if (moby->anim != 1) {
             blend_moby_animation(moby, 1, 0, scale_game_frames(7));
         }
