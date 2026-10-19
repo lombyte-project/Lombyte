@@ -566,6 +566,7 @@ void big_axebot_update(M_B7B0 *moby) {
         BIG_AXEBOT_STATE_DYING = 10
     };
     enum {
+        BIG_AXEBOT_HIT_REACTION_NONE = 0,
         BIG_AXEBOT_HIT_REACTION_FATAL = 1,
         BIG_AXEBOT_HIT_REACTION_KNOCKBACK = 7
     };
@@ -660,7 +661,7 @@ void big_axebot_update(M_B7B0 *moby) {
                 trooper_anim_update(moby, (short *)data->fB0);
             } else {
                 switch (r) {
-                case 0:
+                case BIG_AXEBOT_HIT_REACTION_NONE:
                     break;
                 case 3:
                 case 6:
