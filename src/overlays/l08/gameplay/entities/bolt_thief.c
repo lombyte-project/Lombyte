@@ -716,6 +716,7 @@ extern unsigned char D_0014095F[];
 void FUN_L08_002e0328(Moby *moby) {
     enum {
         CANNON_INITIALIZE = 0,
+        CANNON_UNMOUNTED_IDLE = 4,
         CANNON_MOUNTED_CONTROL = 5,
         CANNON_REMOVE = 6
     };
@@ -961,7 +962,7 @@ void FUN_L08_002e0328(Moby *moby) {
             }
         }
         break;
-    case 4:
+    case CANNON_UNMOUNTED_IDLE:
         break;
     case CANNON_REMOVE:
         func_0020D678_2E16A0(data->guns[0]); func_0020D678_2E16A0(data->guns[1]); func_0020D678_2E16A0(moby); return;
