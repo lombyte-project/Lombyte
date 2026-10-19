@@ -2344,7 +2344,8 @@ void blarg_trooper_update(struct Moby *moby) {
         BLARG_TROOPER_HIT_REACTION_NONE = 0,
         BLARG_TROOPER_HIT_REACTION_FATAL = 1,
         BLARG_TROOPER_HIT_REACTION_FATAL_KNOCKBACK = 2,
-        BLARG_TROOPER_HIT_REACTION_START_HIT_RECOVERY = 3
+        BLARG_TROOPER_HIT_REACTION_START_HIT_RECOVERY = 3,
+        BLARG_TROOPER_HIT_REACTION_START_KNOCKBACK_RECOVERY = 4
     };
     struct {
         float tgt[20];
@@ -2508,7 +2509,7 @@ void blarg_trooper_update(struct Moby *moby) {
             moby->rot.z = fast_add_rotations(3.1415927f, ang2);
             break;
         }
-        case 4:
+        case BLARG_TROOPER_HIT_REACTION_START_KNOCKBACK_RECOVERY:
         case 5:
             *(unsigned char *)(data + 0x67) = 0xFA;
             blend_moby_animation_p(moby, (void *)0xC, 0, (void *)scale_game_frames(5));
