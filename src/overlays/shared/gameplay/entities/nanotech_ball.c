@@ -1969,6 +1969,7 @@ void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
 s32 FUN_L00_002dbe20(u8 *m) {
     enum {
         SUCK_CANNON_ALIGNING_FOR_SUCTION = 1,
+        SUCK_CANNON_RISING_FOR_SUCTION = 2,
         SUCK_CANNON_BEING_PULLED_IN = 3,
         SUCK_CANNON_STORED = 4,
         SUCK_CANNON_FLYING_PROJECTILE = 5,
@@ -1992,7 +1993,7 @@ s32 FUN_L00_002dbe20(u8 *m) {
         }
         /* fall through */
     case SUCK_CANNON_ALIGNING_FOR_SUCTION:
-    case 2: {
+    case SUCK_CANNON_RISING_FOR_SUCTION: {
         if (m[0x53] != *(u8 *)(*(u8 **)(o + 0x70) + 7)) {
             u8 c = *(u8 *)(*(u8 **)(o + 0x70) + 7);
             blend_moby_animation(m, c, 0, scale_game_frames(10));
