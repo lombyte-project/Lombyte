@@ -1352,6 +1352,7 @@ void thruster_pack_lock_red_update(struct Moby *moby) __asm__("FUN_L18_002d7b20"
 void thruster_pack_lock_red_update(struct Moby *moby) {
     enum {
         STATE_INITIALIZE = 0,
+        STATE_WAIT_FOR_DEPRESSION_TRIGGER = 4,
         STATE_SETTLE_DEPRESSED_HEIGHT = 5
     };
     char *data = (char *)moby->pvars;
@@ -1396,7 +1397,7 @@ void thruster_pack_lock_red_update(struct Moby *moby) {
                 D_L18_00162390 = 1;
         }
         break;
-    case 4:
+    case STATE_WAIT_FOR_DEPRESSION_TRIGGER:
         if (hero.air_frames.s == 0 && hero.ground_moby == moby && hero.state.current == 0x22) {
             moby->state = 5;
             moby->command = 1;
