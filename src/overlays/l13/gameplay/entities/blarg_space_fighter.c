@@ -619,6 +619,7 @@ void FUN_L13_002c2d30(unsigned char *moby) {
         HIT_REACTION_REMOVE = 2,
         HIT_REACTION_LOW_INTERPOLATION_TARGET = 3,
         HIT_REACTION_HIGH_INTERPOLATION_TARGET = 9,
+        HIT_REACTION_HIGH_INTERPOLATION_TARGET_ALTERNATE = 10,
         HIT_REACTION_NO_HIT = 11
     };
     unsigned char *d;
@@ -687,7 +688,7 @@ void FUN_L13_002c2d30(unsigned char *moby) {
         }
         switch (st) {
         case HIT_REACTION_HIGH_INTERPOLATION_TARGET:
-        case 10:
+        case HIT_REACTION_HIGH_INTERPOLATION_TARGET_ALTERNATE:
             d[0x67] = 0xFA;
             break;
         case HIT_REACTION_LOW_INTERPOLATION_TARGET:
