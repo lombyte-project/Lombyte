@@ -1011,17 +1011,21 @@ extern int func_0022ED80_6908(int, int, void *) __asm__("FUN_0022da68");
 
 void grindrail_button_update(struct Moby *m) __asm__("FUN_L16_002e54a0");
 void grindrail_button_update(struct Moby *m) {
+    enum {
+        GRINDRAIL_BUTTON_INITIALIZE_GLOW_PHASE = 0,
+        GRINDRAIL_BUTTON_CHECK_ACTIVATION = 1
+    };
     char *d = (char *)m->pvars;
     char *g;
     char *base;
     float v[4];
     float f;
     switch (m->state) {
-    case 0:
+    case GRINDRAIL_BUTTON_INITIALIZE_GLOW_PHASE:
         m->state = 1;
         *(float *)d = random_angle_radians_alt();
         break;
-    case 1:
+    case GRINDRAIL_BUTTON_CHECK_ACTIVATION:
         if (tick_countdown_32((int *)(d + 4))) {
             g = (char *)&hero.motion.pos;
             if (vector_distance(&m->pos, g) < 4.0f) {
