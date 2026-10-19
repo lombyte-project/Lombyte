@@ -1176,7 +1176,7 @@ void FUN_L18_0021eac8(void) {
         }
         break;
     }
-    case 0x15: {
+    case HERO_STATE_CROUCH_SWING: {
         s32 jumping;
         hero.target_speed = 0.0f;
         if (hero.unkA9C != 0 || hero.anim_frame < D_L18_0017C628[hero.attack_record].f18) {
