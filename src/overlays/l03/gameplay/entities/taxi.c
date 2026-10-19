@@ -496,6 +496,12 @@ extern void mine_spawn_drops(struct Moby *, void *) __asm__("FUN_L00_0025f800");
 /* l03 mine update: falls until it lands, sticks to or homes on its target, arms,
    and explodes on contact (debris, camera shake, blast) or shrinks away when old. */
 void FUN_L03_002cbea8(struct Moby *m) {
+    enum {
+        MINE_FALL_UNTIL_LANDING = 1,
+        MINE_HOME_ON_TARGET = 2,
+        MINE_EXPLODE_AND_REMOVE = 4,
+        MINE_SHRINK_AND_REMOVE = 5
+    };
     MineBlast blast = D_L03_001E32B0;
     MineVec tmp;
     MineVars *v = (MineVars *)m->pvars;
@@ -511,7 +517,7 @@ void FUN_L03_002cbea8(struct Moby *m) {
     switch (m->state) {
     case 0:
         break;
-    case 1:
+    case MINE_FALL_UNTIL_LANDING:
         if (mine_fall(m, v) & 1) {
             m->state = 3;
             if (m->prev_seq != 1) {
@@ -523,7 +529,7 @@ void FUN_L03_002cbea8(struct Moby *m) {
             return;
         }
         break;
-    case 2:
+    case MINE_HOME_ON_TARGET:
         mine_vec_sub(tmp, &v->target->pos, &m->pos);
         if (mine_vec_len(tmp) < 0.25f) {
             mine_kill(m);
@@ -558,7 +564,7 @@ void FUN_L03_002cbea8(struct Moby *m) {
             }
         }
         break;
-    case 4: {
+    case MINE_EXPLODE_AND_REMOVE: {
         int cnt;
 
         dist = mine_dist(&m->pos, D_L03_00166EC0);
@@ -622,7 +628,7 @@ void FUN_L03_002cbea8(struct Moby *m) {
         mine_kill(m);
         return;
     }
-    case 5:
+    case MINE_SHRINK_AND_REMOVE:
         m->scale *= frame_scale * -0.074f + 1.0f;
         if (m->scale < m->pclass->scale * 0.01f) {
             mine_spawn_drops(m, D_L03_001B08B0);
