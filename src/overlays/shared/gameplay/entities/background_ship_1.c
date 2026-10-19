@@ -624,19 +624,24 @@ void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
 void white_flower_update(char *m) __asm__("FUN_L02_002f1f60");
 void white_flower_update(char *m) {
+    enum {
+        WHITE_FLOWER_INITIALIZE = 0,
+        WHITE_FLOWER_WAIT_FOR_HIT = 1,
+        WHITE_FLOWER_REMOVE = 2
+    };
     int hit = 0;
     char *r = find_moby_hit(m, 0x10000, 0);
     switch (*(unsigned char *)(m + 0x20)) {
-    case 0:
+    case WHITE_FLOWER_INITIALIZE:
         m[0x20] = 1;
         break;
-    case 1:
+    case WHITE_FLOWER_WAIT_FOR_HIT:
         if (r != 0 && *(float *)(r + 0x2C) > 0.0f)
             hit = 1;
         if (hit)
             m[0x20] = 2;
         break;
-    case 2:
+    case WHITE_FLOWER_REMOVE:
         allocate_voice_for_target_entry(0, 0, (int)m);
         FUN_L01_002787a0(m);
         FUN_L00_00263e30(m, 0x71D, 1, 0x71D, 1, 5, 2);
