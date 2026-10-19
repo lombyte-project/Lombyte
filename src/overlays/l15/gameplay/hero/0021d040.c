@@ -148,6 +148,7 @@ void FUN_L15_0021d040(void) {
         HERO_STATE_APPROACH_TARGET_POSE = 101,
         HERO_STATE_TARGET_POSE_ANIMATION_WAIT = 102,
         HERO_STATE_AT_TARGET_POSE = 103,
+        HERO_STATE_WAIT_FOR_JUMP_OR_RESPAWN = 104,
         HERO_STATE_FALL_TO_RESPAWN = 119,
         HERO_STATE_WAIT_FOR_RESPAWN_HEIGHT_OR_TIMEOUT = 123
     };
@@ -908,7 +909,7 @@ void FUN_L15_0021d040(void) {
                         hero_set_state(0x65, 1);
                     }
                     break;
-                case 104:
+                case HERO_STATE_WAIT_FOR_JUMP_OR_RESPAWN:
                     if (hero.unk1660 < 2) {
                         if (scale_game_frames(0xF) + hero.unk1660 * scale_game_frames(0x19) <
                             hero.state_timer) {
