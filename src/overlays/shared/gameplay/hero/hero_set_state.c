@@ -3312,7 +3312,8 @@ extern int D_L00_0015F674 __attribute__((sda));
 extern s32 D_00141660 __attribute__((section(".data")));
 int FUN_L00_00227fa0(void) {
     enum {
-        ITEM_WRENCH = 8
+        ITEM_WRENCH = 8,
+        ITEM_GRAPPLE = 12
     };
     int out[3];
     int start;
@@ -3441,7 +3442,7 @@ int FUN_L00_00227fa0(void) {
             }
         }
         break;
-    case 12:
+    case ITEM_GRAPPLE:
         {
             int t;
 
