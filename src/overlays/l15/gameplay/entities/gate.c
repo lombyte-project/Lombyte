@@ -1962,6 +1962,11 @@ extern char *func_L10_002CD578_v(void *vel, float scale, void *pos, int a, int b
 
 void ultramech_unlimited_update(UMoby *m) __asm__("FUN_L15_002cf3a8");
 void ultramech_unlimited_update(UMoby *m) {
+    enum {
+        ULTRAMECH_INITIALIZE = 0,
+        ULTRAMECH_FIRE_BURST = 5,
+        ULTRAMECH_WAIT_BETWEEN_BURSTS = 6
+    };
     UVec v10;
     UVec v20;
     UVec vector_arithmetic_result;
@@ -1998,7 +2003,7 @@ void ultramech_unlimited_update(UMoby *m) {
     }
     FUN_L00_00263ac8(2.5f, (int)m, 6, d->v200);
     switch (m->state) {
-    case 0:
+    case ULTRAMECH_INITIALIZE:
         d->f20 = 12.0f;
         d->h24 = 0xC;
         d->b28 = 3;
@@ -2154,7 +2159,7 @@ void ultramech_unlimited_update(UMoby *m) {
             }
         }
         break;
-    case 5:
+    case ULTRAMECH_FIRE_BURST:
         if (m->anim == 6 && (m->animFlags & 2)) {
             blend_moby_animation(m, 7, 0, scale_game_frames(5));
             m->animSpeed = *(float *)&D_L15_00161B34;
@@ -2225,7 +2230,7 @@ void ultramech_unlimited_update(UMoby *m) {
                 blend_moby_animation(m, 0, 0, scale_game_frames(0x14));
         }
         break;
-    case 6:
+    case ULTRAMECH_WAIT_BETWEEN_BURSTS:
         if (d->w164 != 2) {
             approach_angle(&m->rot.f[2],
                              fast_arc_tan(tgt->pos.f[0] - m->pos.f[0], tgt->pos.f[1] - m->pos.f[1]),
