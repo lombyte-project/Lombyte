@@ -144,6 +144,7 @@ void FUN_L15_0021d040(void) {
         HERO_STATE_LEDGE_HANG = 25,
         HERO_STATE_LEDGE_SHIMMY_YAW_PLUS_90 = 26,
         HERO_STATE_LEDGE_SHIMMY_YAW_MINUS_90 = 27,
+        HERO_STATE_LEDGE_JUMP = 28,
         HERO_STATE_APPROACH_TARGET_POSE = 101,
         HERO_STATE_AT_TARGET_POSE = 103,
         HERO_STATE_FALL_TO_RESPAWN = 119
@@ -1490,7 +1491,7 @@ void FUN_L15_0021d040(void) {
                 case HERO_STATE_PACK_LONG_JUMP:
                 case 17:
                 case 18:
-                case 28:
+                case HERO_STATE_LEDGE_JUMP:
                 case 60:
                 case 105:
                     if (hero.unk4AE != 0) {
