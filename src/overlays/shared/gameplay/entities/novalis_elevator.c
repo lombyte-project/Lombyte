@@ -1707,6 +1707,7 @@ void large_amoeboid_update(unsigned char *moby) {
     enum {
         LARGE_AMOEBOID_INITIALIZE = 0,
         LARGE_AMOEBOID_MOVE_TOWARD_STORED_POSITION = 2,
+        LARGE_AMOEBOID_WAIT_FOR_PATH_ACQUISITION_ANIMATION_END = 3,
         LARGE_AMOEBOID_FOLLOW_PATH_TO_TARGET = 4,
         LARGE_AMOEBOID_RETURN_TO_STORED_POSITION = 5,
         LARGE_AMOEBOID_WAIT_FOR_ACTIVATION_VOLUME = 13,
@@ -1961,7 +1962,7 @@ void large_amoeboid_update(unsigned char *moby) {
         }
         break;
     }
-    case 3:
+    case LARGE_AMOEBOID_WAIT_FOR_PATH_ACQUISITION_ANIMATION_END:
     case 7:
         if (!(moby[0x70] & 2)) return;
         moby[0x20] = 4;
