@@ -890,6 +890,10 @@ extern void memcard_save_data(int, int) __asm__("FUN_0020b178");
 /* Watcher moby update with a level-specific state script, then turns its head toward the hero or a random target. */
 void the_plumber_update(L01WatchMoby *m) __asm__("FUN_L01_002ff118");
 void the_plumber_update(L01WatchMoby *m) {
+    enum {
+        PLUMBER_INITIALIZE = 0,
+        PLUMBER_REMOVE = 3
+    };
     L01WatchScratch scratch;
     L01WatchData *d = (L01WatchData *)m->data;
     float rate;
@@ -905,7 +909,7 @@ void the_plumber_update(L01WatchMoby *m) {
         }
     }
     switch (m->state) {
-    case 0:
+    case PLUMBER_INITIALIZE:
         m->opacity = 0xFF;
         d->i44 = 0;
         if (D_0015ED84_m == 1) {
@@ -949,7 +953,7 @@ void the_plumber_update(L01WatchMoby *m) {
             memcard_save_data(0, -1);
         }
         break;
-    case 3:
+    case PLUMBER_REMOVE:
         mark_moby_for_removal(m);
         return;
     case 4:
