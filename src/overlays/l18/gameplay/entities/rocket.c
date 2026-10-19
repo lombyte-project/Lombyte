@@ -2193,7 +2193,8 @@ extern int D_L18_0017EF08 __attribute__((section(".data")));
 void FUN_L18_002df608(struct Moby *moby) {
     enum {
         STATE_INITIALIZE = 0,
-        STATE_INTERPOLATE_TRANSITION = 3
+        STATE_INTERPOLATE_TRANSITION = 3,
+        STATE_POST_TRANSITION_RAMP_DOWN = 5
     };
     char *data = (char *)moby->pvars;
     float v[12];
@@ -2303,7 +2304,7 @@ void FUN_L18_002df608(struct Moby *moby) {
             D_L18_0015F3FC_d = *(float *)(data + 0x6C);
         }
         break;
-    case 5:
+    case STATE_POST_TRANSITION_RAMP_DOWN:
         if (0.0f < *(float *)(data + 0x6C)) {
             approach_value((float *)(data + 0x6C), 0.0f, (*(float *)&D_L18_00161A6C) * 4.0f);
             D_L18_0015F3FC_d = *(float *)(data + 0x6C);
