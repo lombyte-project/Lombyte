@@ -6195,6 +6195,11 @@ extern f32 frame_scale_sq_macro __asm__("D_0015ED64") __attribute__((section(".s
 /* Update of moby class 1105 (fred): steps the conversation and camera states, then turns the head toward the hero. */
 void fred_update(struct Moby *m) __asm__("FUN_L06_00301070");
 void fred_update(struct Moby *m) {
+    enum {
+        INITIALIZE_FRED_DIALOGUE = 0,
+        UPDATE_FRED_DIALOGUE = 1,
+        INTERPOLATE_FRED_CUTSCENE_CAMERA = 3
+    };
     Data_301070 *d = *(struct Data_301070 **)&m->pvars;
     float rate, head_rate;
     int tracking;
@@ -6204,7 +6209,7 @@ void fred_update(struct Moby *m) {
         m->shadow_range = 0x13;
     }
     switch (m->state) {
-    case 0:
+    case INITIALIZE_FRED_DIALOGUE:
         if (D_0013D505[0] != 0) goto del;
         if (D_0013D8AC_lui == 0) {
             if (m->prev_seq != 1) {
@@ -6227,7 +6232,7 @@ void fred_update(struct Moby *m) {
         m->state = 1;
         initialize_npc_dialogue_301070(m, d);
         break;
-    case 1:
+    case UPDATE_FRED_DIALOGUE:
         if (d->f8 == 1 && is_point_inside_clip_volume_301070(&hero.motion.pos, d->f168) != 0) {
             d->fC = 16.0f;
         } else {
@@ -6288,7 +6293,7 @@ void fred_update(struct Moby *m) {
             }
         }
         break;
-    case 3: {
+    case INTERPOLATE_FRED_CUTSCENE_CAMERA: {
       {
         VecQ_301070 p0;
         VecQ_301070 p1;
