@@ -744,13 +744,17 @@ extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
 void FUN_L14_002dee28(struct Moby *moby) {
+    enum {
+        MOBY_STATE_INITIALIZE = 0,
+        MOBY_STATE_UPDATE = 1
+    };
     char *data = (char *)moby->pvars;
     struct Hero *x;
     float v[4];
     float w[4];
     int idx;
     switch (moby->state) {
-    case 0:
+    case MOBY_STATE_INITIALIZE:
         if (*(int *)(data + 0x1F4) == -1 || *(int *)(data + 0x1F8) == -1 ||
             *(int *)(data + 0x1FC) == -1 || *(int *)(data + 0x200) < 0) {
             mark_moby_for_removal(moby);
@@ -760,7 +764,7 @@ void FUN_L14_002dee28(struct Moby *moby) {
         moby->state = 1;
         *(int *)(data + 0x204) = -1;
         break;
-    case 1:
+    case MOBY_STATE_UPDATE:
         x = &hero;
         if (x->state.control_mode != 0xF ||
             (x->unk560 !=
