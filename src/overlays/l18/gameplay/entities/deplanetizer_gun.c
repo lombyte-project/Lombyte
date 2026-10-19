@@ -979,7 +979,10 @@ void gadgebot_update(unsigned char *m) {
     enum {
         GADGEBOT_INITIALIZE = 0,
         GADGEBOT_LAUNCH_FLIGHT = 1,
-        GADGEBOT_APPROACH_TARGET = 3
+        GADGEBOT_WAIT_TO_APPROACH = 2,
+        GADGEBOT_APPROACH_TARGET = 3,
+        GADGEBOT_DEATH_FALL = 5,
+        GADGEBOT_EXPLODE = 6
     };
     char tmp[16];
     unsigned char *e = *(unsigned char **)(m + 0x78);
@@ -1037,7 +1040,7 @@ void gadgebot_update(unsigned char *m) {
             *(short *)(e + 0x138) = 0;
         }
         break;
-    case 2:
+    case GADGEBOT_WAIT_TO_APPROACH:
         if (*(int *)(e + 0x1C4) == 2) {
             if (!(10.0f < f9d48_i(m + 0x10, e + 0x180)))
                 break;
@@ -1092,10 +1095,10 @@ void gadgebot_update(unsigned char *m) {
         }
         break;
     }
-    case 5:
+    case GADGEBOT_DEATH_FALL:
         if (!(mine_fall(m, e + 0x70) & 0x140))
             break;
-    case 6:
+    case GADGEBOT_EXPLODE:
         qcopy(tmp, m + 0x10);
         ((float *)tmp)[2] += 0.5f;
         func_L00_0025F4A8_alt(m, e + 0x40, tmp, 0.0f, 0.0f, 5, 2, 4, 1.0f, 0.5f, 9.0f, 0.5f, 4,
