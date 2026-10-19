@@ -414,7 +414,7 @@ void FUN_L11_00246b70(void) {
     Vec4 vD0;
 
     switch (hero.state.current) {
-    case 0x0:
+    case HERO_STATE_IDLE:
     case HERO_STATE_LOOK:
     case HERO_STATE_STOP:
     case HERO_STATE_CROUCH:
@@ -540,7 +540,7 @@ void FUN_L11_00246b70(void) {
             }
         }
         break;
-    case 0x7F:
+    case HERO_STATE_SINK:
         if (MV(hero.unk6A4) == NULL) {
             struct MobyView *m = create_moby(0x52A);
             s32 h40 = 0x40;
@@ -1848,7 +1848,7 @@ void FUN_L11_00246b70(void) {
     case 7:
     case HERO_STATE_RUN_JUMP:
     case HERO_STATE_PACK_JUMP:
-    case 0xB:
+    case HERO_STATE_HIGH_JUMP:
     case 0xC:
     case 0xD:
     case 0xE:
