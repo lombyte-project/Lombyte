@@ -140,6 +140,7 @@ void FUN_L06_0023b440(void) {
         HERO_STATE_GRIND_ATTACK = 43,
         HERO_STATE_GRIND_COLLISION_RECOVERY = 66,
         HERO_STATE_APPROACH_TARGET_POSE = 101,
+        HERO_STATE_TARGET_POSE_REACHED = 103,
         HERO_STATE_DEATH_FALL = 119
     };
     unsigned char *moby;
@@ -759,7 +760,7 @@ void FUN_L06_0023b440(void) {
                         hero_set_state(0x65, 1);
                     }
                     break;
-                case 103:
+                case HERO_STATE_TARGET_POSE_REACHED:
                     if ((hero.unkA98 & 2) || hero.unk1650 != 0) {
                         hero_set_state(HERO_STATE_IDLE, 1);
                     }
