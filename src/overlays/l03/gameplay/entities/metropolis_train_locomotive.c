@@ -972,6 +972,7 @@ extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 void FUN_L03_0029c9d0(struct Moby *moby) {
     enum {
         MOBY_CLASS_ALTERNATE_COLOR_CHILD_EFFECT_EMITTER = 0x4B,
+        MOBY_CLASS_TEN_PARTICLE_BURST_EMITTER = 0x73,
         MOBY_CLASS_TWO_JOINT_PARTICLE_EMITTER = 0x74,
         MOBY_CLASS_FIFTEEN_PARTICLE_BURST_EMITTER = 0x76,
         MOBY_CLASS_DEFAULT_COLOR_CHILD_EFFECT_EMITTER = 0x77
@@ -995,7 +996,7 @@ void FUN_L03_0029c9d0(struct Moby *moby) {
         *(int *)(data + 0x150) = allocate_voice_for_target_entry(0, 4, (int)moby);
         break;
     case MOBY_CLASS_ALTERNATE_COLOR_CHILD_EFFECT_EMITTER:
-    case 0x73:
+    case MOBY_CLASS_TEN_PARTICLE_BURST_EMITTER:
     case MOBY_CLASS_TWO_JOINT_PARTICLE_EMITTER:
     case MOBY_CLASS_FIFTEEN_PARTICLE_BURST_EMITTER:
     case MOBY_CLASS_DEFAULT_COLOR_CHILD_EFFECT_EMITTER:
