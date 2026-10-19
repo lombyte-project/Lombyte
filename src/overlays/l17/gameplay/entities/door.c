@@ -532,6 +532,7 @@ int FUN_L17_002eace8(int a, char *p, char *radar_origin, char *radar_rotation, f
     enum {
         MOBY_CLASS_FLAG_GATED_MARKED_TARGET = 0x6F,
         MOBY_CLASS_GRAY_RADAR_CONTACT = 0xE0,
+        MOBY_CLASS_GRAY_RADAR_QUAD_CONTACT = 0xE4,
         MOBY_CLASS_OFFSCREEN_ARROW_TARGET = 0x15B,
         MOBY_CLASS_UNMARKED_COUNTED_TARGET = 0x184,
         MOBY_CLASS_UNCOUNTED_MARKED_TARGET = 0x191,
@@ -601,7 +602,7 @@ int FUN_L17_002eace8(int a, char *p, char *radar_origin, char *radar_rotation, f
         case MOBY_CLASS_GRAY_RADAR_ICON_TWO_CONTACT:
             FUN_L17_002eaae0(radar_rotation, radar_origin, m, 2, 0x70808080, *(int *)(p + 0x104));
             break;
-        case 0xE4:
+        case MOBY_CLASS_GRAY_RADAR_QUAD_CONTACT:
         case 0x4C4:
             FUN_L17_002eaae0(radar_rotation, radar_origin, m, 2, 0x70808080, *(int *)(p + 0x104));
             break;
