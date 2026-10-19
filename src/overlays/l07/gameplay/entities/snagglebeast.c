@@ -8,135 +8,121 @@
 #include "rnc/data_labels.h"
 #include "rnc/gameplay/state/options.h"
 
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L07_00312948.s", FUN_L07_00312948);
-#else
 #include "qcopy.h"
 #include "rnc/rendering/geometry_quad.h"
-extern s32 frame_count_l07 __asm__("D_L07_0015F5CC");
+
+/* Ported from rac1-decomp (src/overlays/l07_umbris/effect_00313D28.c: func_L07_00313D28). */
+
+extern s32 level_frame_count __asm__("D_L07_0015F5CC");
+/* [4] is depth_buffer_address. */
+extern s32 D_0015EE78_macro[6] __asm__("D_0015EE78") __attribute__((section(".sdata")));
 extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern u64 get_effect_texture(int) __asm__("FUN_001f44b8");
-extern void vu1_add_g_sregister_l07(int, u64) __asm__("FUN_00233980");
+extern void vu1_add_g_sregister(s32, u64) __asm__("FUN_00233980");
 extern void draw_geometry_quad(void *, int, int) __asm__("FUN_001f7d30");
-extern void FUN_L00_0024f7c8(void *, int, void *);
+extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
+extern float split_float_fraction(void *, float) __asm__("FUN_L00_00200228");
 extern float normalize_angle(float) __asm__("FUN_L00_0025e310");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
+extern void build_spherical_offset(void *, f32, f32, f32) __asm__("FUN_00214db0");
 
-extern float split_float_fraction(float, void *) __asm__("FUN_L00_00200228");
+static inline int tint_color(int color) {
+    int tinted = color | 0x404040;
+    return tinted;
+}
 
-/* Draw successive latitude strips around point 9, preserving the retail
-   alpha OR and the asymmetric vertical adjustment at the equator. */
-void FUN_L07_00312948(char *moby, int phase, float speed, float radius,
-                       float ang, float alpha, float end_alpha) {
+/* Draws a textured sphere around point 9 of the moby, one ring of latitude strips per
+   longitude step, its alpha ramped from alpha to end_alpha. */
+void FUN_L07_00312948(char *moby, int phase, float speed, float radius, float latitude_span,
+                      float alpha, float end_alpha) {
+    char *data = *(char **)(moby + 0x78);
+    int shade = *(unsigned char *)(data + 0x1C6);
+    int grey = (shade << 24) | (shade << 16) | (shade << 8) | shade;
+    u64 texture_state = 0xFF9000000260L;
+    u64 primitive = 0xA000000029L;
     struct GeometryQuad quad;
-    Vec4 position;
+    Vec4 origin;
     Vec4 center;
-    Vec4 scratch;
-    float spin;
-    float step;
-    float alpha_step;
-    float angle;
-    float next_angle;
-    float latitude;
-    float limit;
-    float row_alpha;
-    float wrapped;
-    float u, v;
-    u32 color;
-    u8 color_byte;
-    u32 base_color;
-    u64 texture_state = 0xff9000000260ULL;
-    u64 primitive = 0xa000000029ULL;
+    float whole_part;
     u64 texture;
+    int color;
+    float alpha_step, base, spin, latitude_step, angle_step, angle, next_angle, longitude;
+    float latitude, row_alpha;
 
-    color_byte = *(u8 *)(*(char **)(moby + 0x78) + 0x1c6);
-    color = ((u32)color_byte << 24) | ((u32)color_byte << 16) | ((u32)color_byte << 8) | color_byte;
-    scratch.f[1] = ang;
-    scratch.f[2] = alpha;
-    vu1_add_g_sregister_l07(0x4e, (s64)((depth_buffer_address >> 13) | 0x1000000) | ((u64)0x8000 << 17));
-    row_alpha = scratch.f[2];
-    texture = get_effect_texture(0x3c);
-    quad.colors[0] = quad.colors[1] = quad.colors[2] = quad.colors[3] = ((u32)truncate_float_to_s32(convert_integer_to_float(0) * row_alpha) << 24) | (base_color = color | 0x404040);
+    vu1_add_g_sregister(0x4E, (u64)(depth_buffer_address >> 13) | 0x1000000L | (0x8000L << 17));
+    texture = get_effect_texture(0x3C);
+    row_alpha = alpha;
+    color = truncate_float_to_s32(convert_integer_to_float(0) * row_alpha) << 24;
+    color |= tint_color(grey);
+    quad.colors[3] = color;
+    quad.colors[2] = color;
+    quad.colors[1] = color;
+    quad.colors[0] = color;
     quad.texture = texture;
     quad.texture_state = texture_state;
     quad.primitive = primitive;
-
     quad.reserved.value = 0;
-    spin = convert_integer_to_float(frame_count_l07 + phase) * speed;
-    FUN_L00_0024f7c8(moby, 9, &position);
-    qcopy(&center, &position);
-    u = radius - 0.8f;
-    center.f[2] = center.f[2] - u;
-    angle = -2.7488937f;
-    scratch.i[3] = base_color;
-    u = split_float_fraction(spin * -0.01f, &scratch);
-    quad.texture_coordinates[0][0] = u;
-    quad.texture_coordinates[2][0] = u;
-    quad.texture_coordinates[3][0] = u + 1.0f;
-    quad.texture_coordinates[1][0] = u + 1.0f;
-    v = split_float_fraction(spin * -0.02f, &scratch);
-    quad.texture_coordinates[0][1] = v;
-    quad.texture_coordinates[1][1] = v;
-    v += 1.0f;
-    quad.texture_coordinates[3][1] = v;
-    quad.texture_coordinates[2][1] = v;
-    end_alpha -= row_alpha;
-    alpha_step = end_alpha * 0.0625f;
-    step = scratch.f[1] * 0.0625f;
-    do {
+    spin = convert_integer_to_float(level_frame_count + phase) * speed;
+    moby_point_position(moby, 9, &origin);
+    qcopy(&center, &origin);
+    center.f[2] = center.f[2] - (radius - 0.8f);
+    quad.texture_coordinates[0][0] = split_float_fraction(&whole_part, spin * -0.01f);
+    quad.texture_coordinates[2][0] = quad.texture_coordinates[0][0];
+    quad.texture_coordinates[1][0] = quad.texture_coordinates[0][0] + 1.0f;
+    quad.texture_coordinates[3][0] = quad.texture_coordinates[1][0];
+    quad.texture_coordinates[0][1] = split_float_fraction(&whole_part, spin * -0.02f);
+    quad.texture_coordinates[1][1] = quad.texture_coordinates[0][1];
+    quad.texture_coordinates[2][1] = quad.texture_coordinates[0][1] + 1.0f;
+    quad.texture_coordinates[3][1] = quad.texture_coordinates[2][1];
+    alpha_step = (end_alpha - row_alpha) * 0.0625f;
+    latitude_step = latitude_span * 0.0625f;
+    angle_step = 0.3926991f;
+    for (angle = -2.7488937f; angle < 3.1415927f; angle = next_angle) {
         qcopy(&quad.positions[2], &center);
-        qcopy(&quad.positions[3], &quad.positions[2]);
-
-        next_angle = angle + 0.3926991f;
-        row_alpha = scratch.f[2];
-        quad.colors[2] = ((u32)truncate_float_to_s32(convert_integer_to_float(0) * row_alpha) << 24) | scratch.i[3];
-
-        latitude = step + -1.5707964f;
-        quad.colors[3] = quad.colors[2];
-        if (latitude <= (limit = scratch.f[1] - 1.5707964f)) {
-            float z_adjustment = 0.375f;
-            u32 inner_color = color | 0x404040;
-            do {
-                qcopy(&quad.positions[0], &quad.positions[2]);
-                qcopy(&quad.positions[1], &quad.positions[3]);
-                row_alpha += alpha_step;
-                quad.colors[0] = quad.colors[2];
-                quad.colors[1] = quad.colors[3];
-                quad.colors[3] = ((u32)truncate_float_to_s32(convert_integer_to_float(0) * row_alpha) << 24) | inner_color;
-                quad.colors[2] = quad.colors[3];
-                wrapped = normalize_angle(angle + spin * 0.02f);
-                build_spherical_offset(&quad.positions[2], radius, wrapped, latitude);
-                wrapped = fast_add_rotations(wrapped, 0.3926991f);
-                build_spherical_offset(&quad.positions[3], radius, wrapped, latitude);
-                if (0.0f < latitude) {
-                    quad.positions[2].f[2] += 0.6f;
-                    quad.positions[3].f[2] += 0.6f;
-                } else {
-                    quad.positions[2].f[2] -= z_adjustment;
-                    quad.positions[3].f[2] -= z_adjustment;
-                }
-                latitude += step;
-                add_vector_xyz(&quad.positions[2], &quad.positions[2], &position);
-                add_vector_xyz(&quad.positions[3], &quad.positions[3], &position);
-                draw_geometry_quad(&quad, 0, 1);
-            } while (latitude <= limit);
+        qcopy(&quad.positions[3], &center);
+        next_angle = angle + angle_step;
+        base = convert_integer_to_float(0);
+        row_alpha = alpha;
+        color = truncate_float_to_s32(base * row_alpha) << 24;
+        color |= tint_color(grey);
+        quad.colors[3] = color;
+        quad.colors[2] = color;
+        for (latitude = latitude_step + -1.5707964f; latitude <= latitude_span - 1.5707964f;
+             latitude += latitude_step) {
+            qcopy(&quad.positions[0], &quad.positions[2]);
+            qcopy(&quad.positions[1], &quad.positions[3]);
+            row_alpha += alpha_step;
+            quad.colors[0] = quad.colors[2];
+            quad.colors[1] = quad.colors[3];
+            color = truncate_float_to_s32(convert_integer_to_float(0) * row_alpha) << 24;
+            color |= tint_color(grey);
+            quad.colors[3] = color;
+            quad.colors[2] = color;
+            longitude = normalize_angle(angle + spin * 0.02f);
+            build_spherical_offset(&quad.positions[2], radius, longitude, latitude);
+            build_spherical_offset(&quad.positions[3], radius, fast_add_rotations(longitude, angle_step), latitude);
+            if (0.0f < latitude) {
+                quad.positions[2].f[2] = quad.positions[2].f[2] + 0.6f;
+                quad.positions[3].f[2] = quad.positions[3].f[2] + 0.6f;
+            } else {
+                quad.positions[2].f[2] = quad.positions[2].f[2] - 0.375f;
+                quad.positions[3].f[2] = quad.positions[3].f[2] - 0.375f;
+            }
+            add_vector_xyz(&quad.positions[2], &quad.positions[2], &origin);
+            add_vector_xyz(&quad.positions[3], &quad.positions[3], &origin);
+            draw_geometry_quad(&quad, 0, 1);
         }
-        angle = next_angle;
-    } while (angle < 3.1415927f);
-    vu1_add_g_sregister_l07(0x4e, (s64)(depth_buffer_address >> 13) | 0x1000000);
+    }
+    vu1_add_g_sregister(0x4E, (u64)(D_0015EE78_macro[4] >> 13) | 0x1000000L);
 }
-#endif
 #define NOT_SDA
 
 #define MACRO_ADDR
 
 /* Starts the effect with an angle ramped from the moby's timer, capped at pi. */
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_00313D28.c: func_L07_003141A8), where it is exact; names translated to the US level program. */
-
-extern void FUN_L07_00312948(char *, int, float, float, float, float, float);
 
 void FUN_L07_00312dc8(char *moby) {
     char *data = *(char **)(moby + 0x78);

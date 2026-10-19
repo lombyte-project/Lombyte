@@ -340,146 +340,135 @@ void FUN_L00_002056a8(void) {
         }
     }
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002059d8.s", FUN_L00_002059d8);
-#else
+/* Ported from rac1-decomp (src/overlays/shared/help_00203E98.c: func_L00_00205FF0). */
+#include "rnc/gameplay/entities/moby.h"
+#include "qcopy.h"
 typedef u32 Quad_59d8 __attribute__((mode(TI), aligned(16)));
-extern u8 D_0015EDB3 __asm__("D_0015EDB3");
+/* hero + 0xEF0: four more manipulators after manipulators[7], then a random-delay timer */
+struct HeroManip4_59d8 { u8 pad[0xEF0]; struct HeroManipulator m[4]; u8 pad2[0xC]; s16 delay; s16 timer; };
+#define HV ((struct HeroManip4_59d8 *)&hero)
+#define HM (HV->m)
+
+extern u8 D_0015EDB3_macro __asm__("D_0015EDB3") __attribute__((section(".sdata")));
 extern f32 D_0015EE18 __asm__("D_0015EE18");
-extern u8 D_0013F350_2059d8[] __asm__("D_0013F350");
-extern s32 D_0015F5CC_2059d8 __asm__("D_L00_0015F5CC");
-extern u8 D_L00_0017C1E0_2059d8[] __asm__("D_L00_0017C1E0");
-extern u8 D_L00_0017C220_2059d8[] __asm__("D_L00_0017C220");
-extern u8 D_L00_0017C260_2059d8[] __asm__("D_L00_0017C260");
-extern f32 D_L00_0017C2A0_2059d8[] __asm__("D_L00_0017C2A0");
-extern void FUN_L00_0025b868(f32, f32, void *);
-extern s32 FUN_L00_001fef20(s32);
-extern f32 FUN_L00_00200240(s32);
-extern s32 FUN_L00_00200250(f32);
-extern f32 FUN_L00_001ff800(f32);
-extern s32 FUN_L00_001fef98(void *);
-extern s32 random_int_between_2059d8(s32, s32) __asm__("FUN_L00_00257b90");
-extern void FUN_L00_0024f590(s32, s32, void *);
-extern void FUN_L00_0024f608(s32, void *);
-extern void transform_help_quad_2059d8(f32, void *, void *) __asm__("FUN_L00_001ff300");
+extern s32 D_L00_0015F6F8 __attribute__((sda));
+extern Quad_59d8 D_L00_0017C1E0[];
+extern Quad_59d8 D_L00_0017C220[];
+extern Quad_59d8 D_L00_0017C260[];
+extern f32 D_L00_0017C2A0[];
+extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
+extern f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
+extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
+extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
+extern int fast_dec_timer(void *) __asm__("FUN_001f9770");
+extern s32 random_int_between(s32, s32) __asm__("FUN_L00_00257b90");
+extern void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
 
+/* Pulses the glow colour of the hero's moby (or of the item slot 3 moby2),
+   then attaches the four extra manipulators while their timer runs. */
 void FUN_L00_002059d8(void) {
-    u8 *g;
-    u8 *moby;
-    s32 i;
+    struct Hero *h, *hp, *h2;
+    struct Moby *moby;
+    s32 alpha, blue_swing, green_swing, red, blue, green, red_pulse, green_pulse, blue_pulse, period, low, delay;
+    f32 period_f, phase, wave, wave24;
 
-    if (D_0015EDB3 != 0)
-        FUN_L00_0025b868(1.8f, 0.05f, &D_0015EE18);
+    if (D_0015EDB3_macro != 0)
+        approach_value(&D_0015EE18, 1.8f, 0.05f);
     else
-        FUN_L00_0025b868(1.0f, 0.05f, &D_0015EE18);
+        approach_value(&D_0015EE18, 1.0f, 0.05f);
 
-    if ((u8)(D_0013F350_2059d8[0x20A4] - 1) < 2)
-        moby = *(u8 **)(D_0013F350_2059d8 + 0x2080);
+    h = &hero;
+    if ((u8)(h->vehicle_mode - 1) < 2)
+        moby = h->moby;
     else {
-        if (*(s16 *)(D_0013F350_2059d8 + 0x22D8) != 0)
+        if (h->unk22D8 != 0)
             return;
-        moby = *(u8 **)(D_0013F350_2059d8 + 0x1184);
+        moby = h->items[3].moby2;
     }
     if (moby == 0)
         return;
-    g = (u8 *)&hero;
-    *(u16 *)(moby + 0x34) |= 0x10;
-    {
-        s32 i, k, r, a, b, low, high;
-        f32 f, c, t;
-        a = 0x38;
-        if (*(s32 *)(g + 0x22A8) == 1)
-            a = 0x88;
-        k = FUN_L00_001fef20(0x6E);
-        f = FUN_L00_00200240(k);
-        c = FUN_L00_001ff800(((f32)(D_0015F5CC_2059d8 % k) / f * 2.0f) * 3.1415927f + -3.1415927f);
-        t = c * 24.0f;
-        r = FUN_L00_00200250(t);
-        b = FUN_L00_00200250(c * 48.0f);
-        low = a + r + 0xC;
-        high = b + 0xA0;
-        b += 0x18;
-        a = FUN_L00_00200250(t);
-        i = a + 0x4C;
-        if (*(s16 *)(g + 0x1EE) != 0) {
-            s32 five, twenty, forty_five;
-            f = 1.0f;
-            five = FUN_L00_001fef20(5);
-            twenty = FUN_L00_001fef20(20);
-            forty_five = FUN_L00_001fef20(45);
-            if (forty_five - five < *(s16 *)(g + 0x1EE)) {
-                forty_five = FUN_L00_001fef20(45);
-                f = FUN_L00_00200240(forty_five - *(s16 *)(g + 0x1EE)) /
-                    FUN_L00_00200240(five);
-            }
-            if (*(s16 *)(g + 0x1EE) < twenty) {
-                f = FUN_L00_00200240(*(s16 *)(g + 0x1EE)) /
-                    FUN_L00_00200240(twenty);
-            }
-            low -= FUN_L00_00200250((f32)(r + 0xC) * f);
-            high -= FUN_L00_00200250((f32)b * f);
-            i -= FUN_L00_00200250((f32)(a + 0xC) * f);
-            low += FUN_L00_00200250(f * 112.0f);
-            high -= FUN_L00_00200250(f * 72.0f);
+    hp = &hero;
+    moby->flags |= 0x10;
+    alpha = 0x80;
+    green = 0x88;
+    red = 0x38;
+    if (hp->health.hp == 1)
+        red = green;
+    period = scale_game_frames(0x6E);
+    period_f = convert_integer_to_float(period);
+    phase = (f32)(D_L00_0015F5CC % period) / period_f;
+    phase = phase + phase;
+    phase = phase * 3.1415927f;
+    wave = fast_sin(phase + -3.1415927f);
+    wave24 = wave * 24.0f;
+    red_pulse = truncate_float_to_s32(wave24) + 0xC;
+    red = red + red_pulse;
+    green_swing = truncate_float_to_s32(wave * 48.0f);
+    green_pulse = green_swing + 0x18;
+    blue_swing = truncate_float_to_s32(wave24);
+    green = green_swing + 0xA0;
+    blue_pulse = blue_swing + 0xC;
+    blue = blue_swing + 0x4C;
+    if (hp->unk1EE != 0) {
+        f32 fade = 1.0f;
+        s32 fade_in = scale_game_frames(5);
+        s32 fade_out = scale_game_frames(20);
+        s32 left = hp->unk1EE;
+
+        if (scale_game_frames(45) - fade_in < left) {
+            fade = convert_integer_to_float(scale_game_frames(45) - hp->unk1EE);
+            fade = fade / convert_integer_to_float(fade_in);
         }
-        *(u32 *)(moby + 0x90) = ((0x80U << 24) | (i << 16)) | ((high << 8) | low);
+        if (hp->unk1EE < fade_out) {
+            fade = convert_integer_to_float(hp->unk1EE);
+            fade = fade / convert_integer_to_float(fade_out);
+        }
+        red = red - truncate_float_to_s32((f32)red_pulse * fade);
+        green = green - truncate_float_to_s32((f32)green_pulse * fade);
+        blue = blue - truncate_float_to_s32((f32)blue_pulse * fade);
+        red = red + truncate_float_to_s32(fade * 112.0f);
+        green = green - truncate_float_to_s32(fade * 72.0f);
     }
-    if (g[0x20A4] != 0)
+    moby->glow_color = (alpha << 24) | (blue << 16) | (green << 8) | red;
+    h2 = &hero;
+    if (h2->vehicle_mode != 0)
         return;
-    if (FUN_L00_001fef98(g + 0xFFC) && moby[0x53] == 1) {
-        s32 low, high, a;
-        low = FUN_L00_001fef20(50);
-        high = FUN_L00_001fef20(200);
-        a = random_int_between_2059d8(low, high);
-        *(s16 *)(g + 0xFFE) = 1;
-        *(s16 *)(g + 0xFFC) = a;
+    if (fast_dec_timer(&HV->delay) && moby->prev_seq == 1) {
+        low = scale_game_frames(50);
+        delay = random_int_between(low, scale_game_frames(200));
+        HV->delay = delay;
+        HV->timer = 1;
     }
-    if (*(s16 *)(g + 0xFFE) != 0) {
-        *(s16 *)(g + 0xFFE) += 1;
-        if (*(s16 *)(g + 0xFFE) > 21)
-            *(s16 *)(g + 0xFFE) = 0;
-        if (*(s16 *)(g + 0xFFE) == 0) {
-            u8 *slot = g + 0xEF0;
-            u8 *active = g + 0xEF1;
-            for (i = 3; i >= 0; slot += 0x40, i--, active += 0x40)
-                if (*active)
-                    FUN_L00_0024f608((s32)moby, slot);
-        } else {
-            u32 i;
-            u8 *slot = g + 0xEF0;
-            u8 *active = g + 0xEF1;
-            u8 *dst_a = g + 0xF00;
-            u8 *dst_b = g + 0xF10;
-            u8 *dst_c = g + 0xF20;
-            Quad_59d8 *src_b = (Quad_59d8 *)D_L00_0017C220_2059d8;
-            Quad_59d8 *src_c = (Quad_59d8 *)D_L00_0017C260_2059d8;
-            Quad_59d8 *src_a = (Quad_59d8 *)D_L00_0017C1E0_2059d8;
-            s32 *kind = (s32 *)(g + 0x17A8);
-            for (i = 0; i < 4; i++, dst_c += 0x40, src_c++,
-                 src_a++, src_b++, dst_a += 0x40, kind++,
-                 slot += 0x40, active += 0x40, dst_b += 0x40) {
-                if (*active == 0) {
-                    FUN_L00_0024f590((s32)moby, *kind, slot);
-                    active[2] = 1;
-                    qcopy(dst_a, src_a);
-                    qcopy(dst_b, src_b);
-                    qcopy(dst_c, src_c);
-                    transform_help_quad_2059d8(*(f32 *)(moby + 0x2C), dst_c, dst_c);
-                }
-            }
-            {
-                u8 *g = (u8 *)&hero;
-                s32 i;
-                f32 *yaw = (f32 *)(g + 0xEFC);
-                for (i = 3; i >= 0; i--) {
-                    *yaw = D_L00_0017C2A0_2059d8[*(s16 *)(g + 0xFFE)];
-                    yaw = (f32 *)((u8 *)yaw + 0x40);
-                }
+    if (HV->timer == 0)
+        return;
+    HV->timer++;
+    if (HV->timer > 21)
+        HV->timer = 0;
+    if (HV->timer == 0) {
+        s32 i;
+        for (i = 0; i < 4; i++) {
+            if (HM[i].attached != 0)
+                detach_manipulator((s32)moby, &HM[i]);
+        }
+    } else {
+        s32 i;
+        s32 j;
+        for (i = 0; i < 4; i++) {
+            if (HM[i].attached == 0) {
+                attach_manipulator((s32)moby, ((s32 *)&D_L00_0015F6F8)[i], &HM[i]);
+                HM[i].unk3 = 1;
+                qcopy(&HM[i].quat, &D_L00_0017C1E0[i]);
+                qcopy(&HM[i].scale3, &D_L00_0017C220[i]);
+                qcopy(&HM[i].translation, &D_L00_0017C260[i]);
+                fast_vec_scale(&HM[i].translation, &HM[i].translation, moby->scale);
             }
         }
+        for (j = 0; j < 4; j++)
+            HM[j].unkC = D_L00_0017C2A0[HV->timer];
     }
 }
-#endif
+#undef HM
+#undef HV
 #define NOT_SDA
 
 #define MACRO_ADDR

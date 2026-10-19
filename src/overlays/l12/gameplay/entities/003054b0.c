@@ -1208,35 +1208,42 @@ void FUN_L12_003093c8(struct Moby *moby) {
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_003094a0.s", FUN_L12_003094a0);
 #else
+/* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002EDAA0.c: func_L12_0030A880). */
 typedef struct {
     char pad0[0x30];
     int phase;
     char pad34[0x144];
-    int mobys[1];
+    char *mobys[4];
 } L12VendorMobyList;
 extern L12VendorMobyList D_L12_0016CCE0;
 extern void cutscene_set_camera_target(int) __asm__("FUN_L00_002637f8");
 
+static inline unsigned char camera_target_index(int phase) {
+    if (phase == 1) return 2;
+    return 0;
+}
+
 void FUN_L12_003094a0(struct Moby *moby) {
-    int state = moby->state;
+    L12VendorMobyList *list;
+    L12VendorMobyList *target_list;
     int phase;
     int index;
 
-    switch (state) {
+    switch (moby->state) {
     case 0:
-        moby->update_dist = 0xff;
+        moby->update_dist = 0xFF;
         moby->state = 1;
         break;
     case 1:
-        if (D_L12_0015F5C4 != 2) break;
-
-        phase = D_L12_0016CCE0.phase;
-        switch (phase) {
-        case 7: index = 0; break;
-        case 1: index = 2; break;
-        default: return;
+        if (D_L12_0015F5C4 == 2) {
+            list = &D_L12_0016CCE0;
+            phase = list->phase;
+            if (phase == 1 || phase == 7) {
+                index = camera_target_index(list->phase);
+                target_list = &D_L12_0016CCE0;
+                cutscene_set_camera_target((int)target_list->mobys[index]);
+            }
         }
-        cutscene_set_camera_target(D_L12_0016CCE0.mobys[index]);
         break;
     }
 }

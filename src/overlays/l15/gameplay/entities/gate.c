@@ -1219,442 +1219,479 @@ float FUN_L15_002c52b8(struct Moby *m, float *out, Goal_52b8 goal) {
     }
     return angle_atan2(out[0] - m->pos.x, out[1] - m->pos.y);
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002c5630.s", FUN_L15_002c5630);
-#else
-/* The goal helpers write four vectors, a target at 0x40 and a kind at 0x44. */
-typedef struct {
-    SteeringVec_4f88 pos, rot, first, second;
-    struct Moby *target;
-    int kind;
-} TargetGoal_5630;
+typedef union {
+    OvlQuad q;
+    float f[4];
+} UVec;
+
 typedef struct {
     int n;
     int pad[3];
-    SteeringVec_4f88 pt[1];
-} SteeringPath_5630;
-extern SteeringPath_5630 *D_L15_001B0AB0_5630[] __asm__("D_L15_001B0AB0");
+    UVec pt[1];
+} UPath;
+
+typedef struct {
+    char pad0[0x454];
+    unsigned char collected[1];
+} ULevelState;
+
+/* Ported from rac1-decomp (src/overlays/l15_quartu/vendor_0029C1D0.c: func_L15_002C6950). */
+
+typedef struct {
+    u8 pad0[0x20];
+    f32 health;
+    s16 unk24;
+    u8 pad26[2];
+    u8 unk28;
+    u8 pad29[5];
+    u8 unk2E;
+    u8 pad2F;
+    f32 unk30;
+    u8 pad34[0x24];
+    u8 unk58;
+    u8 unk59;
+    u8 unk5A;
+    u8 pad5B[0x75];
+    u8 turret_yaw_joint[0x40];
+    u8 turret_pitch_joint[0x50];
+    struct Moby *pilot;
+    struct Moby *shot;
+    s16 fire_timer;
+    s16 recoil_timer;
+    f32 bob_angle;
+    f32 speed;
+    f32 pitch_velocity;
+    f32 yaw_velocity;
+    f32 facing_velocity;
+    f32 turret_yaw;
+    f32 turret_yaw_velocity;
+    f32 turret_pitch;
+    f32 turret_pitch_velocity;
+    s32 wait_group;
+    s32 area_path;
+    f32 wake_range;
+    f32 chase_range;
+    f32 range;
+    s32 unk1A4;
+    f32 height;
+    s32 entry_path;
+    s32 trigger_volume;
+} HelicopterVars;
+
+/* Filled by the target search: the target's position, then its moby at 0x40. */
+typedef struct {
+    Vec4 pos;
+    u8 pad10[0x30];
+    struct Moby *target;
+    s32 status;
+    u8 pad48[8];
+} HelicopterGoal;
+
+extern UPath *D_L15_001B0AB0[];
+extern ULevelState D_L15_001BABD0;
+extern ULevelState D_L15_001BB830;
 extern float D_L15_00161A08 __attribute__((sda));
 extern float D_L15_00161A0C __attribute__((sda));
-extern struct Moby *D_001413D0_5630 __asm__("D_001413D0") __attribute__((section(".data")));
-extern char D_L15_001BABD0_5630[] __asm__("D_L15_001BABD0");
-extern struct Moby *FUN_L12_00308670(void);
-extern void FUN_L12_00308708(struct Moby *, struct Moby *);
-extern void FUN_L15_002c6900(struct Moby *);
-extern void FUN_L02_00261c80(float, void *, void *);
-extern void FUN_L00_0025ff38(float, void *, void *, int, int, void *, int);
+
+extern struct Moby *FUN_L12_00308670(struct Moby *);
+extern void FUN_L12_00308708(void *, struct Moby *);
+void FUN_L15_002c6900(struct Moby *m);
+extern void FUN_L02_00261c80(void *, float *, float);
+extern int FUN_L00_0025ff38(float, void *, void *, int, int, void *, int);
 extern int FUN_L01_0026e008(int, int);
-extern int FUN_L00_00259740(void *, void *, int);
-extern void FUN_L00_0025a120(void *);
 extern void FUN_L00_0025df68(void *, void *, void *, int *, float *, int, float, float, float);
-extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
-extern float vector_length_xyz_7880(void *) __asm__("FUN_001f9af0");
-extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
-extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
-extern void set_vector_length_xy(void *, void *, float) __asm__("FUN_001f9c48");
-extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
-extern void attach_manipulator(void *, int, void *) __asm__("FUN_0020cb10");
-extern void detach_manipulator(void *, void *) __asm__("FUN_0020cb88");
-extern void advance_moby_animation(void *) __asm__("FUN_0020d580");
+extern struct Moby *FUN_L03_002d5208(void *, void *, struct Moby *, int, float);
+extern void FUN_L00_0025a120(void *);
 extern void FUN_L00_00250df8(void *);
-extern int FUN_L03_002d5208(float, void *, void *, void *, int);
-extern void FUN_L00_0025e450_5630(void *, void *, void *, float, float, int, int, int, float, float, float, int, float, float, int, int, int, int) __asm__("FUN_L00_0025e450");
-extern void FUN_L00_001fff28(float, void *, int);
-extern void FUN_L15_002c52b8_goal(void *, void *, void *) __asm__("FUN_L15_002c52b8");
+extern void FUN_L00_001fff28(void *, int, float);
+extern int point_in_path_xy(void *, void *, int) __asm__("FUN_L00_00259740");
+extern void attach_manipulator(void *owner, s32 slot_index, void *manip) __asm__("FUN_0020cb10");
+extern void detach_manipulator(void *moby, void *manip) __asm__("FUN_0020cb88");
+extern void advance_moby_animation(void *) __asm__("FUN_0020d580");
+extern f32 random_angle_radians(void) __asm__("FUN_00213308");
+extern float scale_time(float) __asm__("FUN_001f96b0");
+extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 extern float absolute_float(float) __asm__("FUN_001f99c0");
-extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9d20");
+extern f32 fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
+extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
+extern void set_vector_length_xy(void *, void *, float) __asm__("FUN_001f9c48");
+extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
+extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 
+/* Helicopter (moby class 233): waits, flies its path, hovers near and fires at its target, tilts and bobs,
+ * aims its turret, and dies. */
 void helicopter_update(struct Moby *moby) __asm__("FUN_L15_002c5630");
-void helicopter_update(struct Moby *moby)
-{
-    SteeringVec_4f88 origin;
-    TargetGoal_5630 goal;
-    SteeringVec_4f88 delta, point, first, second, attachment, local, difference;
-    char *vars = (char *)moby->pvars;
-    struct Moby *target;
-    SteeringPath_5630 *path;
-    SteeringPath_5630 *volume;
-    SteeringVec_4f88 *p, *next;
-    float *length;
-    int index;
+void helicopter_update(struct Moby *moby) {
+    Vec4 previous_pos;
+    HelicopterGoal goal;
+    Vec4 move;
+    Vec4 point;
+    Vec4 aim;
+    Vec4 target_pos;
+    Vec4 turret_pos;
+    Vec4 local_dir;
+    Vec4 world_dir;
+    int segment;
     float fraction;
-    int i;
-    int trigger;
-    float distance, speed, step, position, angle, facing;
-    float c, yaw_target, pitch_target;
-    float max_turn;
-    void *manip0, *manip1;
+    struct Moby *target;
+    float distance;
+    HelicopterVars *vars;
+    float length;
+    float angle;
+    float spin;
 
-    origin.q = *(u128 *)&moby->pos;
-    if (*(struct Moby **)(vars + 0x160) == 0)
-        *(struct Moby **)(vars + 0x160) = FUN_L12_00308670();
-    if (moby->state != 0 && moby->state != 0x40 && *(int *)(vars + 0x1a4) != 0 && D_001413F4[0] != 2) {
+    previous_pos.q = *(u128 *)&moby->pos;
+    vars = (HelicopterVars *)moby->pvars;
+    if (vars->pilot == 0) {
+        vars->pilot = FUN_L12_00308670(moby);
+    }
+    if (moby->state != 0 && moby->state != 0x40 && vars->unk1A4 != 0 && hero.vehicle_mode != 2) {
         moby->collision = 0;
-        moby->flags = (moby->flags | 0x41) & 0xefff;
-        vars[0x58] = 0;
-        if (*(struct Moby **)(vars + 0x160) != 0)
-            (*(struct Moby **)(vars + 0x160))->flags |= 0x41;
+        moby->flags = (moby->flags | 0x41) & 0xEFFF;
+        vars->unk58 = 0;
+        if (vars->pilot != 0) vars->pilot->flags |= 0x41;
         moby->state = 1;
         return;
     }
     FUN_L15_002c6900(moby);
-    goal.kind = 0;
+    goal.status = 0;
     if (moby->state == 1) {
-        *(float *)(vars + 0x1a0) = *(float *)(vars + 0x198);
-        goto get_goal;
+        vars->range = vars->wake_range;
+        goto near;
     }
-    if (*(int *)(vars + 0x194) == -1) {
-        *(float *)(vars + 0x1a0) = *(float *)(vars + 0x19c);
-get_goal:
-        FUN_L02_00261c80(*(float *)(vars + 0x1a0), moby, &goal);
+    if (vars->area_path == -1) {
+        vars->range = vars->chase_range;
+    near:
+        FUN_L02_00261c80(moby, goal.pos.f, vars->range);
     } else {
-        *(float *)(vars + 0x1a0) = *(float *)(vars + 0x19c);
-        {
-            SteeringPath_5630 *path;
-            path = D_L15_001B0AB0_5630[*(int *)(vars + 0x194)];
-            FUN_L00_0025ff38(*(float *)(vars + 0x1a0), moby, &goal, 0, 0, path->pt, path->n);
-        }
+        UPath *path;
+        vars->range = vars->chase_range;
+        path = D_L15_001B0AB0[vars->area_path];
+        FUN_L00_0025ff38(vars->chase_range, moby, &goal, 0, 0, path->pt, path->n);
     }
-    if (*(float *)(vars + 0x1a0) < FUN_001f9b48(&moby->pos, &goal))
-        goal.kind = 2;
-    if (goal.target == 0)
-        goal.target = D_001413D0_5630;
+    if (vars->range < fast_vec_dist(&moby->pos, &goal)) goal.status = 2;
+    if (goal.target == 0) goal.target = hero.moby;
     target = goal.target;
-    if (moby->state != 0 && (unsigned char)vars[0x2e] != 1) {
-        if (*(struct Moby **)(vars + 0x160) != 0)
-            mark_moby_for_removal_7880(*(struct Moby **)(vars + 0x160));
-        mark_moby_for_removal_7880(moby);
+    if (moby->state != 0 && vars->unk2E != 1) {
+        if (vars->pilot != 0) mark_moby_for_removal(vars->pilot);
+        mark_moby_for_removal(moby);
         return;
     }
     switch (moby->state) {
-    case 0: {
-        SteeringPath_5630 *path;
-        SteeringVec_4f88 *p, *next;
-        manip0 = vars + 0xd0;
-        moby->pos.z = moby->pos.z + 7.5f;
-        manip1 = vars + 0x110;
+    case 0:
+        moby->pos.z += 7.5f;
         moby->shadow_range = 0x20;
-        *(float *)(vars + 0x1a8) = moby->pos.z;
-        *(float *)(vars + 0x20) = 3.0f;
-        *(short *)(vars + 0x24) = truncate_float_to_s32(3.0f);
-        vars[0x28] = 2;
-        vars[0x58] = 0x19;
-        *(float *)(vars + 0x30) = 1.0f;
-        vars[0x2e] = 1;
-        vars[0x59] = 1;
-        vars[0x5a] = 6;
-        moby->update_dist = 0xff;
+        vars->height = moby->pos.z;
+        vars->health = 3.0f;
+        vars->unk24 = truncate_float_to_s32(3.0f);
+        vars->unk28 = 2;
+        vars->unk58 = 0x19;
+        vars->unk30 = 1.0f;
+        vars->unk2E = 1;
+        vars->unk59 = 1;
+        vars->unk5A = 6;
+        moby->update_dist = 0xFF;
         moby->draw_dist = 0x80;
-        if (*(int *)(vars + 0x1ac) != -1) {
-            path = D_L15_001B0AB0_5630[*(int *)(vars + 0x1ac)];
-            i = 0;
-            if (i < path->n - 2) {
-                length = &path->pt[0].f[3];
-                next = path->pt + 1;
-                p = path->pt;
-                do {
-                    *length = FUN_001f9b48(p, next);
-                    i++;
-                    next++;
-                    length += 4;
-                    p++;
-                } while (i < path->n - 2);
+        if (vars->entry_path != -1) {
+            UPath *path;
+            int i;
+            path = D_L15_001B0AB0[vars->entry_path];
+            for (i = 0; i < path->n - 2; i++) {
+                path->pt[i].f[3] = fast_vec_dist(&path->pt[i], &path->pt[i + 1]);
             }
             *(u128 *)&moby->pos = path->pt[0].q;
         }
         moby->state = 1;
-        *(float *)(vars + 0x170) = 0.0f;
-        *(float *)(vars + 0x174) = 0.0f;
-        *(float *)(vars + 0x178) = 0.0f;
-        *(float *)(vars + 0x17c) = 0.0f;
-        *(float *)(vars + 0x19c) = 60.0f;
-        attach_manipulator(moby, 0, manip0);
-        attach_manipulator(moby, 1, manip1);
+        vars->speed = 0.0f;
+        vars->pitch_velocity = 0.0f;
+        vars->yaw_velocity = 0.0f;
+        vars->facing_velocity = 0.0f;
+        vars->chase_range = 60.0f;
+        attach_manipulator(moby, 0, vars->turret_yaw_joint);
+        attach_manipulator(moby, 1, vars->turret_pitch_joint);
         moby->scale *= 0.5f;
-        if (*(struct Moby **)(vars + 0x160) != 0) {
-            (*(struct Moby **)(vars + 0x160))->update_dist = 0;
-            (*(struct Moby **)(vars + 0x160))->flags &= 0xffbe;
-            (*(struct Moby **)(vars + 0x160))->scale *= 0.5f;
+        if (vars->pilot != 0) {
+            vars->pilot->update_dist = 0;
+            vars->pilot->flags &= 0xFFBE;
+            vars->pilot->scale *= 0.5f;
         }
         moby->collision = 0;
-        moby->flags = (moby->flags | 0x41) & 0xefff;
-        vars[0x58] = 0;
-        if (*(struct Moby **)(vars + 0x160) != 0)
-            (*(struct Moby **)(vars + 0x160))->flags |= 0x41;
+        moby->flags = (moby->flags | 0x41) & 0xEFFF;
+        vars->unk58 = 0;
+        if (vars->pilot != 0) vars->pilot->flags |= 0x41;
         break;
-    }
     case 1:
-        if (*(int *)(vars + 0x1a4) != 0 && D_001413F4[0] != 2) {
+        if (vars->unk1A4 != 0 && hero.vehicle_mode != 2) {
             moby->collision = 0;
-            moby->flags = (moby->flags | 0x41) & 0xefff;
-            vars[0x58] = 0;
-            if (*(struct Moby **)(vars + 0x160) != 0)
-                (*(struct Moby **)(vars + 0x160))->flags |= 0x41;
+            moby->flags = (moby->flags | 0x41) & 0xEFFF;
+            vars->unk58 = 0;
+            if (vars->pilot != 0) vars->pilot->flags |= 0x41;
             return;
         }
-        trigger = *(int *)(vars + 0x190);
-        if (trigger == -1) {
-            if (!is_point_inside_clip_volume(D_0013F3D0, *(int *)(vars + 0x1b0))) goto check_volume;
-            if (goal.kind == 2) goto check_volume;
-            if (*(int *)(vars + 0x190) == trigger) goto activate;
+        if (vars->wait_group != -1 ||
+            (is_point_inside_clip_volume(&hero.motion.pos, vars->trigger_volume) && goal.status != 2)) {
+            if (vars->wait_group != -1 && FUN_L01_0026e008(vars->wait_group, 0x40)) break;
+            moby->collision = moby->pclass->collision;
+            moby->flags = (moby->flags & 0xFFBE) | 0x1000;
+            vars->unk58 = 0x19;
+            if (vars->entry_path != -1) moby->state = 2; else moby->state = 3;
+        } else {
+            if (vars->trigger_volume != -1) break;
+            if (goal.status == 2) break;
+            moby->collision = moby->pclass->collision;
+            moby->flags = (moby->flags & 0xFFBE) | 0x1000;
+            vars->unk58 = 0x19;
+            if (vars->entry_path != -1) moby->state = 2; else moby->state = 3;
         }
-        if (FUN_L01_0026e008(*(int *)(vars + 0x190), 0x40)) break;
-activate: {
-        int trigger;
-        trigger = moby->pclass->collision;
-        moby->flags = (moby->flags & 0xffbe) | 0x1000;
-        moby->collision = trigger;
-        vars[0x58] = 0x19;
-        if (*(int *)(vars + 0x1ac) == -1) goto free_move;
-        moby->state = 2;
-        goto show_link;
-        }
-check_volume:
-        if (*(int *)(vars + 0x1b0) != -1) break;
-        if (goal.kind == 2) break;
-        {
-        int trigger;
-        trigger = moby->pclass->collision;
-        moby->flags = (moby->flags & 0xffbe) | 0x1000;
-        moby->collision = trigger;
-        vars[0x58] = 0x19;
-        if (*(int *)(vars + 0x1ac) != -1) { moby->state = 2; goto show_link; }
-        }
-free_move:
-        moby->state = 3;
-show_link:
-        if (*(struct Moby **)(vars + 0x160) != 0)
-            (*(struct Moby **)(vars + 0x160))->flags &= 0xffbe;
+        if (vars->pilot != 0) vars->pilot->flags &= 0xFFBE;
         break;
     case 2: {
-        float distance, speed, step;
-        int i;
-        float position, fraction;
-        SteeringPath_5630 *path;
-        path = D_L15_001B0AB0_5630[*(int *)(vars + 0x1ac)];
-        FUN_L00_0025df68(path, &moby->pos, &point, &index, &fraction, 0, 999.0f, 5.0f, 0.0f);
-        position = convert_integer_to_float(index) * path->pt[0].f[3] + fraction + 2.0f;
-        distance = FUN_001f9b48(&moby->pos, (SteeringVec_4f88 *)path + path->n);
-        speed = *(float *)(vars + 0x170);
-        step = 10.0f;
-        step = frame_time_sq * step;
-        if (distance <= speed * speed / (step + step)) {
-            *(float *)(vars + 0x170) = speed - step;
-            if (speed - step < 0.0f) *(float *)(vars + 0x170) = 0.0f;
+        UPath *path;
+        path = D_L15_001B0AB0[vars->entry_path];
+        FUN_L00_0025df68(path, &moby->pos, &point, &segment, &fraction, 0, 999.0f, 5.0f, 0.0f);
+        distance = convert_integer_to_float(segment) * path->pt[0].f[3] + fraction + 2.0f;
+        if (fast_vec_dist(&moby->pos, &path->pt[path->n - 1]) <=
+            vars->speed * vars->speed / (frame_time_sq * 10.0f + frame_time_sq * 10.0f)) {
+            vars->speed -= frame_time_sq * 10.0f;
+            if (vars->speed < 0.0f) vars->speed = 0.0f;
         } else {
-            *(float *)(vars + 0x170) = speed + step;
-            if (frame_time * 10.0f < speed + step) *(float *)(vars + 0x170) = frame_time * 10.0f;
+            vars->speed += frame_time_sq * 10.0f;
+            if (frame_time * 10.0f < vars->speed) vars->speed = frame_time * 10.0f;
         }
-        index = truncate_float_to_s32(position / path->pt[0].f[3]);
-        fraction = (position - convert_integer_to_float(index) * path->pt[0].f[3]) / path->pt[0].f[3];
-        if (index >= path->n - 1) { index = path->n - 2; fraction = 1.0f; }
-        subtract_vector_xyz(&point, &path->pt[index + 1], &path->pt[index]);
-        FUN_001f9a68_4f88(fraction, &point, &point);
-        add_vector_xyz(&point, &point, &path->pt[index]);
-        if (vector_distance((SteeringVec_4f88 *)path + path->n, &moby->pos) < 1.0f ||
-            (volume = D_L15_001B0AB0_5630[*(int *)(vars + 0x194)], FUN_L00_00259740(&moby->pos, volume->pt, volume->n))) {
-            if (goal.kind != 2) { moby->state = 5; *(short *)(vars + 0x168) = 0; }
-            else moby->state = 4;
+        segment = truncate_float_to_s32(distance / path->pt[0].f[3]);
+        fraction = (distance - convert_integer_to_float(segment) * path->pt[0].f[3]) / path->pt[0].f[3];
+        if (segment >= path->n - 1) {
+            segment = path->n - 2;
+            fraction = 1.0f;
         }
-        i = index + 1;
-        if (i < path->n - 8) {
-            fraction = path->pt[i].f[1] - moby->pos.y;
-            position = path->pt[i].f[0] - moby->pos.x;
+        subtract_vector_xyz(&point, &path->pt[segment + 1], &path->pt[segment]);
+        fast_vec_scale(&point, &point, fraction);
+        add_vector_xyz(&point, &point, &path->pt[segment]);
+        if (vector_distance(&path->pt[path->n - 1], &moby->pos) < 1.0f ||
+            point_in_path_xy(&moby->pos, D_L15_001B0AB0[vars->area_path]->pt, D_L15_001B0AB0[vars->area_path]->n)) {
+            if (goal.status != 2) {
+                moby->state = 5;
+                vars->fire_timer = 0;
+            } else {
+                moby->state = 4;
+            }
+        }
+        if (segment + 1 < path->n - 8) {
+            angle = fast_arc_tan(path->pt[segment + 1].f[0] - moby->pos.x, path->pt[segment + 1].f[1] - moby->pos.y);
+            moby->rot.z = spring_turn(&vars->facing_velocity, moby->rot.z, angle, 0.01f, 0.3f, 0.1f);
         } else {
-            position = goal.pos.f[0] - moby->pos.x;
-            fraction = goal.pos.f[1] - moby->pos.y;
+            angle = fast_arc_tan(goal.pos.f[0] - moby->pos.x, goal.pos.f[1] - moby->pos.y);
+            moby->rot.z = spring_turn(&vars->facing_velocity, moby->rot.z, angle, 0.01f, 0.3f, 0.1f);
         }
-        facing = fast_arc_tan(position, fraction);
-        moby->rot.z = spring_turn((float *)(vars + 0x17c), moby->rot.z, facing, 0.01f, 0.3f, 0.1f);
-        subtract_vector_xyz(&delta, &point, &moby->pos);
-        distance = vector_length_xyz_7880(&delta);
-        if (*(float *)(vars + 0x170) < distance) distance = *(float *)(vars + 0x170);
-        FUN_001f9bf8_4f88(distance, &delta, &delta);
-        max_turn = 1.0471976f;
-        goto apply_delta;
+        subtract_vector_xyz(&move, &point, &moby->pos);
+        length = fast_vec_length(&move);
+        if (vars->speed < length) length = vars->speed;
+        fast_vec_normalize(&move, &move, length);
+        add_vector_xyz(&moby->pos, &moby->pos, &move);
+        {
+            float heading;
+            float tilt_y;
+            float tilt_x;
+            heading = fast_subtract_rotations(fast_arc_tan(move.f[0], move.f[1]), moby->rot.z);
+            tilt_y = vars->speed * 0.34906584f * fast_cos(heading) / (frame_time * 10.0f);
+            tilt_x = vars->speed * -0.34906584f * fast_sin(heading) / (frame_time * 10.0f);
+            moby->rot.y = spring_turn(&vars->yaw_velocity, moby->rot.y, tilt_y, frame_time_sq * 0.5235988f,
+                                      frame_time_sq * 1.0471976f, frame_time * 0.7853982f);
+            moby->rot.x = spring_turn(&vars->pitch_velocity, moby->rot.x, tilt_x, frame_time_sq * 1.0471976f,
+                                      frame_time_sq * 2.0943952f, frame_time * 1.5707964f);
+        }
+        break;
     }
-    case 3:
-        path = D_L15_001B0AB0_5630[*(int *)(vars + 0x194)];
-        delta.q = *(u128 *)&target->pos;
+    case 3: {
+        UPath *path;
+        int i;
+        float best = 9999.999f;
+        path = D_L15_001B0AB0[vars->area_path];
+        move.q = *(u128 *)&target->pos;
         i = 0;
         if (i < path->n) {
-            p = path->pt;
-            next = p;
-            /* Retail keeps the fixed threshold and therefore picks the last qualifying point. */
+            UVec *p = path->pt;
+            UVec *next = p;
             do {
-                if (vector_distance(p, &moby->pos) < 9999.999f) delta.q = next->q;
+                if (vector_distance(p, &moby->pos) < best) move.q = next->q;
                 i++;
                 next++;
                 p++;
             } while (i < path->n);
         }
-        delta.f[2] = target->pos.z + 7.5f;
+        move.f[2] = target->pos.z + 7.5f;
         point.q = *(u128 *)&target->pos;
-        FUN_L15_002c4f88(moby, &delta, &point);
-        if (vector_distance(&delta, &moby->pos) < 1.0f || FUN_L00_00259740(&moby->pos, path->pt, path->n)) {
-            if (goal.kind == 2) goto retreat;
-            goto wait;
+        FUN_L15_002c4f88(moby, (SteeringVec_4f88 *)&move, (SteeringVec_4f88 *)&point);
+        if (vector_distance(&move, &moby->pos) < 1.0f || point_in_path_xy(&moby->pos, path->pt, path->n)) {
+            if (goal.status != 2) {
+                moby->state = 5;
+                vars->fire_timer = 0;
+            } else {
+                moby->state = 4;
+            }
         }
         break;
+    }
     case 4: {
-        SteeringPath_5630 *path;
-        delta.q = *(u128 *)&moby->pos;
+        UPath *path;
+        path = D_L15_001B0AB0[vars->area_path];
+        move.q = *(u128 *)&moby->pos;
         point.q = *(u128 *)&target->pos;
-        path = D_L15_001B0AB0_5630[*(int *)(vars + 0x194)];
-        FUN_L15_002c4f88(moby, &delta, &point);
-        if (goal.kind != 2) {
-            if (FUN_L00_00259740(&moby->pos, path->pt, path->n)) {
-wait:
-                moby->state = 5;
-                *(short *)(vars + 0x168) = 0;
-            } else moby->state = 3;
+        FUN_L15_002c4f88(moby, (SteeringVec_4f88 *)&move, (SteeringVec_4f88 *)&point);
+        if (goal.status == 2) break;
+        if (point_in_path_xy(&moby->pos, path->pt, path->n)) {
+            moby->state = 5;
+            vars->fire_timer = 0;
+        } else {
+            moby->state = 3;
         }
         break;
     }
     case 5:
         moby_point_position(moby, 0, &point);
-        if (goal.kind != 2) {
-            FUN_L15_002c52b8_goal(moby, &delta, &goal);
-            first.q = *(u128 *)&target->pos;
-            FUN_L15_002c4f88(moby, &delta, &first);
-            if (fast_dec_timer_s16(vars + 0x168) && *(int *)(vars + 0x164) == 0) {
-                *(short *)(vars + 0x168) = scale_game_frames(60);
-                second.q = goal.pos.q;
-                subtract_vector_xyz(&first, &second, &point);
-                set_vector_length_xy(&first, &first, frame_time * 6.0f);
-                first.f[2] = 0.0f;
-                i = scale_game_frames(240);
-                *(int *)(vars + 0x164) = FUN_L03_002d5208(goal.pos.f[2], &first, &point, moby, i);
+        if (goal.status != 2) {
+            FUN_L15_002c52b8(moby, move.f, *(Goal_52b8 *)&goal);
+            aim.q = *(u128 *)&target->pos;
+            FUN_L15_002c4f88(moby, (SteeringVec_4f88 *)&move, (SteeringVec_4f88 *)&aim);
+            if (fast_dec_timer_s16(&vars->fire_timer) && vars->shot == 0) {
+                vars->fire_timer = scale_game_frames(0x3C);
+                qcopy(&target_pos, &goal);
+                subtract_vector_xyz(&aim, &target_pos, &point);
+                set_vector_length_xy(&aim, &aim, frame_time * 6.0f);
+                aim.i[2] = 0;
+                vars->shot = FUN_L03_002d5208(&aim, &point, moby, scale_game_frames(0xF0), goal.pos.f[2]);
             }
         } else {
-            first.q = *(u128 *)&moby->pos;
-            second.q = *(u128 *)&target->pos;
-            FUN_L15_002c4f88(moby, &first, &second);
-retreat:
+            aim.q = *(u128 *)&moby->pos;
+            target_pos.q = *(u128 *)&target->pos;
+            FUN_L15_002c4f88(moby, (SteeringVec_4f88 *)&aim, (SteeringVec_4f88 *)&target_pos);
             moby->state = 4;
         }
         break;
     case 6:
-        if (fast_dec_timer_s16(vars + 0x16a)) { moby->state = moby->command; break; }
-        speed = *(float *)(vars + 0x170) - frame_time_sq * 4.0f;
-        *(float *)(vars + 0x170) = speed;
-        if (speed < 0.0f) *(float *)(vars + 0x170) = 0.0f;
-        delta.f[0] = fast_cos(moby->rot.z) * -*(float *)(vars + 0x170);
-        c = fast_sin(moby->rot.z);
-        delta.f[2] = 0.0f;
-        delta.f[1] = c * -*(float *)(vars + 0x170);
-        max_turn = 1.0471976f;
-apply_delta:
-        add_vector_xyz(&moby->pos, &moby->pos, &delta);
-        angle = fast_arc_tan(delta.f[0], delta.f[1]);
-        angle = fast_subtract_rotations(angle, moby->rot.z);
-        c = fast_cos(angle);
-        yaw_target = (*(float *)(vars + 0x170) * 0.34906584f * c) / (frame_time * 10.0f);
-        pitch_target = (*(float *)(vars + 0x170) * -0.34906584f * fast_sin(angle)) / (frame_time * 10.0f);
-        moby->rot.y = spring_turn((float *)(vars + 0x178), moby->rot.y, yaw_target, frame_time_sq * 0.5235988f, frame_time_sq * max_turn, frame_time * 0.7853982f);
-        moby->rot.x = spring_turn((float *)(vars + 0x174), moby->rot.x, pitch_target, frame_time_sq * max_turn, frame_time_sq * 2.0943952f, frame_time * 1.5707964f);
+        if (fast_dec_timer_s16(&vars->recoil_timer)) {
+            moby->state = moby->command;
+            break;
+        }
+        vars->speed -= frame_time_sq * 4.0f;
+        if (vars->speed < 0.0f) vars->speed = 0.0f;
+        move.f[0] = fast_cos(moby->rot.z) * -vars->speed;
+        move.f[1] = fast_sin(moby->rot.z) * -vars->speed;
+        move.f[2] = 0.0f;
+        add_vector_xyz(&moby->pos, &moby->pos, &move);
+        {
+            float heading;
+            float tilt_y;
+            float tilt_x;
+            heading = fast_subtract_rotations(fast_arc_tan(move.f[0], move.f[1]), moby->rot.z);
+            tilt_y = vars->speed * 0.34906584f * fast_cos(heading) / (frame_time * 10.0f);
+            tilt_x = vars->speed * -0.34906584f * fast_sin(heading) / (frame_time * 10.0f);
+            moby->rot.y = spring_turn(&vars->yaw_velocity, moby->rot.y, tilt_y, frame_time_sq * 0.5235988f,
+                                      frame_time_sq * 1.0471976f, frame_time * 0.7853982f);
+            moby->rot.x = spring_turn(&vars->pitch_velocity, moby->rot.x, tilt_x, frame_time_sq * 1.0471976f,
+                                      frame_time_sq * 2.0943952f, frame_time * 1.5707964f);
+        }
         break;
     case 7: {
         int i;
-        float angle;
-        delta.q = 0;
-        angle = random_angle_radians_7880();
-        manip0 = vars + 0xd0;
+        move.q = 0;
+        spin = random_angle_radians();
         moby_point_position(moby, 4, &point);
-        manip1 = vars + 0x110;
-        i = 3;
-        do {
-            i--;
-            first.f[0] = fast_cos(angle) * 1.5f;
-            first.f[1] = fast_sin(angle) * 1.5f;
-            first.f[2] = 0;
-            angle = fast_add_rotations(angle, 1.5707964f);
-            FUN_L00_001ff290(&second, &first, &point);
-        } while (i >= 0);
-        moby_point_position(moby, 5, &first);
-        if (*(struct Moby **)(vars + 0x160) != 0) {
-            FUN_L12_00308708(moby, *(struct Moby **)(vars + 0x160));
-            *(int *)(vars + 0x160) = 0;
+        for (i = 0; i < 4; i++) {
+            aim.f[0] = fast_cos(spin) * 1.5f;
+            aim.f[1] = fast_sin(spin) * 1.5f;
+            aim.i[2] = 0;
+            spin = fast_add_rotations(spin, 1.5707964f);
+            FUN_L00_001ff290(&target_pos, &aim, &point);
         }
-        FUN_L00_0025e450_5630(moby, &delta, &moby->pos, 0.0f, 0.0f, 20, 3, 4, 4.0f, 2.0f, 100000.0f, 2, 3.0f, 15.0f, 1, 1, -1, 0);
-        FUN_L00_00257470_7880(moby, 0x200, -1);
-        detach_manipulator(moby, manip0);
-        detach_manipulator(moby, manip1);
+        moby_point_position(moby, 5, &aim);
+        if (vars->pilot != 0) {
+            FUN_L12_00308708(moby, vars->pilot);
+            vars->pilot = 0;
+        }
+        spawn_explosion(moby, &move, &moby->pos, 0.0f, 0.0f, 0x14, 3, 4, 4.0f, 2.0f, 100000.0f, 3.0f, 2,
+                        15.0f, 1, 1, -1, 0);
+        FUN_L00_00257470(moby, 0x200, -1);
+        detach_manipulator(moby, vars->turret_yaw_joint);
+        detach_manipulator(moby, vars->turret_pitch_joint);
         moby->state = 0x40;
         return;
     }
     case 0x40:
         moby->collision = 0;
-        moby->flags = (moby->flags | 0x41) & 0xefff;
-        vars[0x58] = 0;
-        if (*(struct Moby **)(vars + 0x160) != 0)
-            (*(struct Moby **)(vars + 0x160))->flags |= 0x41;
-        D_L15_001BABD0_5630[(short)moby->save_id + 0x454] = 0;
-        D_L15_001BB830_29aff0.collected[(short)moby->save_id] = 0;
-        *(unsigned int *)(D_0014C190 + ((short)moby->save_id >> 5) * 4 + current_level_index * 0x100) &= ~(1U << (moby->save_id & 31));
-        D_L15_001BAAD0[(short)moby->save_id >> 5] &= ~(1U << (moby->save_id & 31));
-        if (D_001413F4[0] == 2) return;
-        position = *(float *)(vars + 0x1a8);
-        moby->state = 0;
-        moby->scale = moby->scale + moby->scale;
-        moby->pos.z = position - 7.5f;
+        moby->flags = (moby->flags | 0x41) & 0xEFFF;
+        vars->unk58 = 0;
+        if (vars->pilot != 0) vars->pilot->flags |= 0x41;
+        D_L15_001BABD0.collected[(short)moby->save_id] = 0;
+        D_L15_001BB830.collected[(short)moby->save_id] = 0;
+        *(int *)(D_0014C190 + (((short)moby->save_id >> 5) * 4 + (current_level_index << 8))) &=
+            ~(1 << (moby->save_id & 0x1F));
+        D_L15_001BAAD0[(short)moby->save_id >> 5] &= ~(1 << (moby->save_id & 0x1F));
+        if (hero.vehicle_mode != 2) {
+            moby->pos.z = vars->height - 7.5f;
+            moby->scale *= 2.0f;
+            moby->state = 0;
+        }
         return;
     }
-    if (moby->visible && FUN_001f9b48(&moby->pos, D_L15_001673C0) < 40.0f)
+    if (moby->visible != 0 && fast_vec_dist(&moby->pos, D_L15_001673C0) < 40.0f) {
         FUN_L00_0025a120(moby);
-    if (moby->state != 1) {
-        distance = absolute_float(moby->pos.z - origin.f[2]);
-        step = frame_time * 10.0f;
-        if (step < distance) {
-            float position;
-            position = origin.f[2];
-            if (position < moby->pos.z) moby->pos.z = position + step;
-            else moby->pos.z = position - step;
-        }
     }
-    moby->pos.z -= D_L15_00161A0C * fast_cos(*(float *)(vars + 0x16c));
-    *(float *)(vars + 0x16c) = fast_add_rotations(*(float *)(vars + 0x16c), 6.2831855f / FUN_L15_001f8648(D_L15_00161A08 * 60.0f));
-    moby->pos.z += D_L15_00161A0C * fast_cos(*(float *)(vars + 0x16c));
-    if (*(struct Moby **)(vars + 0x160) != 0) {
-        *(u128 *)&(*(struct Moby **)(vars + 0x160))->pos = *(u128 *)&moby->pos;
-        *(u128 *)&(*(struct Moby **)(vars + 0x160))->rot = *(u128 *)&moby->rot;
-        advance_moby_animation(*(struct Moby **)(vars + 0x160));
-        FUN_L00_00250df8(*(struct Moby **)(vars + 0x160));
-        (*(struct Moby **)(vars + 0x160))->flags |= 6;
+    if (moby->state != 1) {
+        float climb = absolute_float(moby->pos.z - previous_pos.f[2]);
+        float limit = frame_time * 10.0f;
+        if (limit < climb) {
+            if (previous_pos.f[2] < moby->pos.z) moby->pos.z = previous_pos.f[2] + limit;
+            else moby->pos.z = previous_pos.f[2] - limit;
+        }
     }
     {
-        struct Moby *target;
-        target = *(struct Moby **)(vars + 0x164);
-        if (target == 0 || target->oclass != 0x350 || target->state == 0xfe || target->state == 0xfd) {
-            moby_point_position(moby, 0, &attachment);
-            subtract_vector_xyz(&difference, &goal.pos, &attachment);
-            local.q = difference.q;
-            transpose_rotation_matrix(&delta, &moby->rot_row0);
-            transform_vector_by_basis(&local, &local, &delta);
-            facing = fast_arc_tan(local.f[0], local.f[1]);
-            *(float *)(vars + 0x180) = spring_turn((float *)(vars + 0x184), *(float *)(vars + 0x180), facing, frame_time_sq * 6.2831855f, frame_time_sq * 12.566371f, frame_time * 6.2831855f);
-            facing = -fast_arc_tan(vector_length_xy(&local), local.f[2]);
-            *(float *)(vars + 0x188) = spring_turn((float *)(vars + 0x18c), *(float *)(vars + 0x188), facing, frame_time_sq * 3.1415927f, frame_time_sq * 6.2831855f, frame_time * 1.5707964f);
-            FUN_L00_001fff28(*(float *)(vars + 0x180), vars + 0xe0, 2);
-            FUN_L00_001fff28(*(float *)(vars + 0x188), vars + 0x120, 2);
-            *(int *)(vars + 0x164) = 0;
-        } else {
-            moby_point_position(moby, 0, &attachment);
-            subtract_vector_xyz(&difference, &(*(struct Moby **)(vars + 0x164))->pos, &attachment);
-            local.q = difference.q;
-            transpose_rotation_matrix(&delta, &moby->rot_row0);
-            transform_vector_by_basis(&local, &local, &delta);
-            facing = fast_arc_tan(local.f[0], local.f[1]);
-            *(float *)(vars + 0x180) = spring_turn((float *)(vars + 0x184), *(float *)(vars + 0x180), facing, frame_time_sq * 6.2831855f, frame_time_sq * 12.566371f, frame_time * 6.2831855f);
-            facing = -fast_arc_tan(vector_length_xy(&local), local.f[2]);
-            *(float *)(vars + 0x188) = spring_turn((float *)(vars + 0x18c), *(float *)(vars + 0x188), facing, frame_time_sq * 3.1415927f, frame_time_sq * 6.2831855f, frame_time * 1.5707964f);
-            FUN_L00_001fff28(*(float *)(vars + 0x180), vars + 0xe0, 2);
-            FUN_L00_001fff28(*(float *)(vars + 0x188), vars + 0x120, 2);
-        }
+        float z = moby->pos.z - D_L15_00161A0C * fast_cos(vars->bob_angle);
+        float period = D_L15_00161A08 * 60.0f;
+        moby->pos.z = z;
+        vars->bob_angle = fast_add_rotations(vars->bob_angle, 6.2831855f / scale_time(period));
+    }
+    moby->pos.z += D_L15_00161A0C * fast_cos(vars->bob_angle);
+    if (vars->pilot != 0) {
+        *(u128 *)&vars->pilot->pos = *(u128 *)&moby->pos;
+        *(u128 *)&vars->pilot->rot = *(u128 *)&moby->rot;
+        advance_moby_animation(vars->pilot);
+        FUN_L00_00250df8(vars->pilot);
+        vars->pilot->flags |= 6;
+    }
+    if (vars->shot == 0 || vars->shot->oclass != 0x350 || vars->shot->state == 0xFE || vars->shot->state == 0xFD) {
+        moby_point_position(moby, 0, &turret_pos);
+        subtract_vector_xyz(&world_dir, &goal.pos, &turret_pos);
+        local_dir.q = world_dir.q;
+        transpose_rotation_matrix(&move, &moby->rot_row0);
+        transform_vector(&local_dir, &local_dir, &move);
+        angle = fast_arc_tan(local_dir.f[0], local_dir.f[1]);
+        vars->turret_yaw = spring_turn(&vars->turret_yaw_velocity, vars->turret_yaw, angle, frame_time_sq * 6.2831855f,
+                                       frame_time_sq * 12.566371f, frame_time * 6.2831855f);
+        angle = fast_arc_tan(vector_length_xy(&local_dir), local_dir.f[2]);
+        vars->turret_pitch = spring_turn(&vars->turret_pitch_velocity, vars->turret_pitch, -angle,
+                                         frame_time_sq * 3.1415927f, frame_time_sq * 6.2831855f,
+                                         frame_time * 1.5707964f);
+        FUN_L00_001fff28(vars->turret_yaw_joint + 0x10, 2, vars->turret_yaw);
+        FUN_L00_001fff28(vars->turret_pitch_joint + 0x10, 2, vars->turret_pitch);
+        vars->shot = 0;
+    } else {
+        moby_point_position(moby, 0, &turret_pos);
+        subtract_vector_xyz(&world_dir, &vars->shot->pos, &turret_pos);
+        local_dir.q = world_dir.q;
+        transpose_rotation_matrix(&move, &moby->rot_row0);
+        transform_vector(&local_dir, &local_dir, &move);
+        angle = fast_arc_tan(local_dir.f[0], local_dir.f[1]);
+        vars->turret_yaw = spring_turn(&vars->turret_yaw_velocity, vars->turret_yaw, angle, frame_time_sq * 6.2831855f,
+                                       frame_time_sq * 12.566371f, frame_time * 6.2831855f);
+        angle = fast_arc_tan(vector_length_xy(&local_dir), local_dir.f[2]);
+        vars->turret_pitch = spring_turn(&vars->turret_pitch_velocity, vars->turret_pitch, -angle,
+                                         frame_time_sq * 3.1415927f, frame_time_sq * 6.2831855f,
+                                         frame_time * 1.5707964f);
+        FUN_L00_001fff28(vars->turret_yaw_joint + 0x10, 2, vars->turret_yaw);
+        FUN_L00_001fff28(vars->turret_pitch_joint + 0x10, 2, vars->turret_pitch);
     }
 }
-
-#endif
 /* Steps a moby's countdown from a helper's output, then aims it at its target. */
 /* Ported from rac1-decomp (src/overlays/l15_quartu/vendor_0029C1D0.c: func_L15_002C7C20), where it is exact; names translated to the US level program. */
 
@@ -1791,16 +1828,7 @@ float FUN_L15_002cf110(void *m_, void *out, float r) {
 /* Ported from rac1-decomp (src/overlays/l15_quartu/vendor_0029C1D0.c: func_L15_002D0798), where it is exact; names translated to the US level program. */
 
 
-typedef union {
-    OvlQuad q;
-    float f[4];
-} UVec;
 
-typedef struct {
-    int n;
-    int pad[3];
-    UVec pt[1];
-} UPath;
 
 typedef struct UData UData;
 
@@ -1880,10 +1908,6 @@ struct UData {
     unsigned char v200[0x10];
 };
 
-typedef struct {
-    char pad0[0x454];
-    unsigned char collected[1];
-} ULevelState;
 
 typedef struct {
     int idx[2];
