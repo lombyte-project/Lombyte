@@ -179,6 +179,12 @@ extern void FUN_L00_00262b80(void *, char *, char *, float, float, float);
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 
 void FUN_L10_00295c20(struct Moby *moby) {
+    enum {
+        PLATFORM_STATE_INITIALIZE = 0,
+        PLATFORM_STATE_BOBBING = 1,
+        PLATFORM_STATE_SINKING_WITH_HERO = 2,
+        PLATFORM_STATE_RETURN_TO_ORIGINAL_HEIGHT = 3
+    };
     char *d = (char *)moby->pvars;
     float prev[4];
     float v[4];
@@ -186,7 +192,7 @@ void FUN_L10_00295c20(struct Moby *moby) {
     if (FUN_L01_00277fb8(moby)) moby->state = 2;
     fast_dec_timer((int *)(d + 0xBC));
     switch (moby->state) {
-    case 0:
+    case PLATFORM_STATE_INITIALIZE:
         d[0x28] = 4;
         *(short *)(d + 0x3E) = 5;
         *(int *)(d + 0x20) = 0;
@@ -201,12 +207,12 @@ void FUN_L10_00295c20(struct Moby *moby) {
             *(float *)(d + 0xB0) = frame_time * 1.5707964f + randf_sym(0.0f, e);
         }
         moby->state = 1;
-    case 1:
+    case PLATFORM_STATE_BOBBING:
         *(int *)(d + 0xA4) = 0;
         FUN_L00_00262b00(0.1f, *(float *)(d + 0xB0), moby, (float *)(d + 0xA8), (float *)(d + 0xAC));
         FUN_L00_00262b80(moby, d + 0xB4, d + 0xB8, 0.047123890f, frame_time * 0.34906584f, frame_time * 0.5235988f);
         break;
-    case 2: {
+    case PLATFORM_STATE_SINKING_WITH_HERO: {
         float a = *(float *)(d + 0xA4) - (frame_time_sq + frame_time_sq);
         float lim = -(frame_time + frame_time);
         *(float *)(d + 0xA4) = a;
@@ -219,7 +225,7 @@ void FUN_L10_00295c20(struct Moby *moby) {
         }
         break;
     }
-    case 3: {
+    case PLATFORM_STATE_RETURN_TO_ORIGINAL_HEIGHT: {
         float vz = *(float *)(d + 0xA4);
         float g = frame_time_sq;
         float dist, sq, t;
