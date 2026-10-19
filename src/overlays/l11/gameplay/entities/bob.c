@@ -454,6 +454,7 @@ extern void FUN_L00_00261d78(float, void *, void *, void *);
 
 void FUN_L11_002d1340(void *mp) {
     enum {
+        RESORT_OWNER_PENULTIMATE_PATH_LEG = 2,
         RESORT_OWNER_FINAL_PATH_LEG = 3
     };
     unsigned char *moby = mp;
@@ -467,7 +468,7 @@ void FUN_L11_002d1340(void *mp) {
         FUN_L00_00261d78(0.3f, *(void **)(d + 0x60 - -(*(int *)(d + 0x158) * 4)), moby + 0x10,
                          moby + 0x10);
         switch (*(int *)(d + 0x158)) {
-        case 2:
+        case RESORT_OWNER_PENULTIMATE_PATH_LEG:
             FUN_L00_00261d78(0.3f, *(void **)(d + 0x80), moby + 0x10, moby + 0x10);
             FUN_L00_00261d78(0.3f, *(void **)(d + 0x84), moby + 0x10, moby + 0x10);
             FUN_L00_00261d78(0.3f, *(void **)(d + 0x88), moby + 0x10, moby + 0x10);
