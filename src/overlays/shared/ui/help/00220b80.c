@@ -387,6 +387,7 @@ s32 FUN_L02_0022ee00(void)
 {
     enum {
         HERO_ITEM_WRENCH = 8,
+        HERO_ITEM_BUFFERED_OR_HELD_ACTIVATE = 12,
         HERO_ITEM_HOLD_TO_FIRE = 15,
         HERO_ITEM_BUFFERED_ACTIVATE_WITH_VOICE = 18,
         HERO_ITEM_PRESS_TO_ACTIVATE = 21,
@@ -485,7 +486,7 @@ s32 FUN_L02_0022ee00(void)
         }
         break;
 
-    case 12:
+    case HERO_ITEM_BUFFERED_OR_HELD_ACTIVATE:
         FUN_L00_00221ee0();
         FUN_L00_00222158();
         window = scale_game_frames(5);
