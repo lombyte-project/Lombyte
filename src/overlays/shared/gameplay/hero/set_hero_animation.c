@@ -1020,7 +1020,8 @@ void gravity_flatten(float *dst, float *src) __asm__("FUN_L00_002338d0");
 void gravity_flatten(float *dst, float *src) {
     enum {
         GRAVITY_MODE_WORLD_Z = 0,
-        GRAVITY_MODE_VECTOR_AXIS = 1
+        GRAVITY_MODE_VECTOR_AXIS = 1,
+        GRAVITY_MODE_DIRECTION_AXIS = 2
     };
     struct Hero *base = &hero;
     float n[4] __attribute__((aligned(16)));
@@ -1035,7 +1036,7 @@ void gravity_flatten(float *dst, float *src) {
         scale_vector_xyz(n, n, dot_vectors_xyz(n, src));
         subtract_vector_xyz(dst, src, n);
         break;
-    case 2:
+    case GRAVITY_MODE_DIRECTION_AXIS:
         scale_vector_xyz(n, &base->gravity_dir, dot_vectors_xyz(&base->gravity_dir, src));
         subtract_vector_xyz(dst, src, n);
         break;
