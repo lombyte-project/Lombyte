@@ -279,7 +279,7 @@ extern void FUN_L05_0024cee8(int, int);
 extern int frame_number_gp __asm__("D_L05_0015F5CC") __attribute__((sda));
 extern unsigned short D_00141938 __attribute__((section(".data")));
 extern unsigned short D_00141C60 __attribute__((section(".data")));
-extern int D_L05_0015F6A8 __attribute__((section(".data")));
+extern int D_L05_0015F6A8;
 extern int D_L05_00161928 __attribute__((sda));
 extern int D_L05_0016190C __attribute__((sda));
 extern int D_L05_00161910 __attribute__((sda));

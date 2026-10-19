@@ -261,14 +261,14 @@ void FUN_L14_003017f8(char *m) {
         }
         {
             int i;
-            float *point = delta_a;
+            float *pos = work;
             for (i = 0; i < 2; i++) {
-                transform_vector(work, d + 0x4e0 + (i << 4), matrix);
+                transform_vector(pos, d + 0x4e0 + (i << 4), matrix);
                 qcopy(delta_a, d + 0x5e0 + (i << 4));
                 delta_a[3] = D_L14_00162114;
                 random_integer_below(2);
                 index = random_integer_below(10);
-                spawn_spark(work, point, point, D_L14_00162108,
+                spawn_spark(work, delta_a, delta_a, D_L14_00162108,
                     D_L14_0016210C, indices[i] >> 1, 15,
                     scale_game_frames(index + 20), D_L14_00162120);
             }
