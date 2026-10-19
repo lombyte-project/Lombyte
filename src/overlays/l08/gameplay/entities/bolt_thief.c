@@ -2761,6 +2761,13 @@ extern void FUN_L08_002e8ba0(struct Moby *);
 
 void shrub_update(struct Moby *moby) __asm__("FUN_L08_002e8cd0");
 void shrub_update(struct Moby *moby) {
+    enum {
+        SHRUB_INITIALIZE = 0,
+        SHRUB_FOLLOW_PRIMARY_PATH_AND_FIRE_AT_TARGET = 1,
+        SHRUB_FOLLOW_SECONDARY_PATH_AND_FIRE_RANDOMLY = 2,
+        SHRUB_BEGIN_PRIMARY_PATH = 3,
+        SHRUB_BREAK_APART_AND_REMOVE = 0x63
+    };
     SwarmVars *vars = (SwarmVars *)moby->pvars;
     SwarmPathFollower *follower;
     struct Moby *target;
@@ -2790,7 +2797,7 @@ void shrub_update(struct Moby *moby) {
         vars->sound = allocate_voice_for_target_entry(3, 4, moby);
     }
     switch (moby->state) {
-    case 0:
+    case SHRUB_INITIALIZE:
         if (D_0014C050[moby->mission + current_level_index * 16] == 0xFF) {
             mark_moby_for_removal(moby);
             return;
@@ -2805,7 +2812,7 @@ void shrub_update(struct Moby *moby) {
         moby->rot.z = fast_arc_tan(vars->follow[1].path->points[1].f[0] - moby->pos.x,
                                    vars->follow[1].path->points[1].f[1] - moby->pos.y);
         break;
-    case 1:
+    case SHRUB_FOLLOW_PRIMARY_PATH_AND_FIRE_AT_TARGET:
         waypoint = (vars->follow[0].point + vars->follow[0].path->count + vars->follow[0].direction) % vars->follow[0].path->count;
         target = &D_L08_0015FFD8_m[vars->target_index];
         FUN_L00_00258278(moby,
@@ -2848,7 +2855,7 @@ void shrub_update(struct Moby *moby) {
             }
         }
         break;
-    case 2:
+    case SHRUB_FOLLOW_SECONDARY_PATH_AND_FIRE_RANDOMLY:
         follower = &vars->follow[1];
         if (D_L08_0015F5C4 == 2 && vars->can_skip != 0 && D_L08_0016D090 == 0x200000000) {
             qcopy(&moby->pos, &follower->path->points[15]);
@@ -2892,7 +2899,7 @@ void shrub_update(struct Moby *moby) {
             bolt->rot.y = 0.0f;
         }
         break;
-    case 3: {
+    case SHRUB_BEGIN_PRIMARY_PATH: {
         SwarmPath *path;
 
         moby->state = 1;
@@ -2902,7 +2909,7 @@ void shrub_update(struct Moby *moby) {
         FUN_L08_002e8ba0((char *)moby);
         break;
     }
-    case 0x63:
+    case SHRUB_BREAK_APART_AND_REMOVE:
         for (i = 0; i < 12; i++) {
             struct Moby *part = vars->parts[i].moby;
             if (part != NULL) {
