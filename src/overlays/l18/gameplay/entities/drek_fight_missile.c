@@ -3561,7 +3561,8 @@ extern int D_L18_0016D290_lui __asm__("D_L18_0016D290") __attribute__((section("
 void FUN_L18_002f7ad8(M *moby);
 void FUN_L18_002f7ad8(M *moby) {
     enum {
-        MOBY_INITIALIZE = 0
+        MOBY_INITIALIZE = 0,
+        MOBY_WAIT_FOR_SCENE_END = 2
     };
     switch (moby->state) {
     case MOBY_INITIALIZE:
@@ -3574,7 +3575,7 @@ void FUN_L18_002f7ad8(M *moby) {
             moby->substate = 0;
         }
         break;
-    case 2:
+    case MOBY_WAIT_FOR_SCENE_END:
         if (D_L18_00162384_w[7] != 0 && moby->f40 == 0.0f) {
             float d = 101.6f - moby->f18;
             moby->f40 = fast_add_rotations(moby->f40, 3.14159274f);
