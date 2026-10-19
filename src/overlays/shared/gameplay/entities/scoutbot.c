@@ -124,6 +124,15 @@ extern float dt_3DF8 __asm__("D_0015ED70");
 
 void scoutbot_update(Moby *moby) __asm__("FUN_L08_002d2af0");
 void scoutbot_update(Moby *moby) {
+    enum {
+        SCOUTBOT_STATE_INITIALIZE = 0,
+        SCOUTBOT_STATE_APPROACH_TARGET = 2,
+        SCOUTBOT_STATE_RETURN_HOME = 3,
+        SCOUTBOT_STATE_ATTACK = 4,
+        SCOUTBOT_STATE_WAIT_FOR_VOICE = 6,
+        SCOUTBOT_STATE_MOVE_TO_WANDER_GOAL = 7,
+        SCOUTBOT_STATE_EXPLODE_AND_REMOVE = 0x63
+    };
     Data_3DF8 *data = (struct Data_3DF8 *)moby->pvars;
     float target_pos[4];
     float offset[4];
@@ -138,7 +147,7 @@ void scoutbot_update(Moby *moby) {
     data->current_target = data->target;
     qcopy(target_pos, data->target_pos);
     switch (moby->state) {
-    case 0:
+    case SCOUTBOT_STATE_INITIALIZE:
         if (data->f21C == -1) {
             delete_3DF8(moby);
             return;
@@ -190,7 +199,7 @@ void scoutbot_update(Moby *moby) {
             moby->state = 7;
         }
         break;
-    case 7: {
+    case SCOUTBOT_STATE_MOVE_TO_WANDER_GOAL: {
         float heading = angle_3DF8(data->wander_goal[0] - moby->pos.x, data->wander_goal[1] - moby->pos.y);
 
         turn_3DF8(moby, heading, &data->yaw_speed, 0.01f, 0.3f, 0.05f);
@@ -206,7 +215,7 @@ void scoutbot_update(Moby *moby) {
         }
         break;
     }
-    case 2: {
+    case SCOUTBOT_STATE_APPROACH_TARGET: {
         float heading = angle_3DF8(target_pos[0] - moby->pos.x, target_pos[1] - moby->pos.y);
 
         turn_3DF8(moby, heading, &data->yaw_speed, 0.01f, 0.3f, 0.05f);
@@ -227,7 +236,7 @@ void scoutbot_update(Moby *moby) {
         }
         break;
     }
-    case 3: {
+    case SCOUTBOT_STATE_RETURN_HOME: {
         float heading = angle_3DF8(data->home[0] - moby->pos.x, data->home[1] - moby->pos.y);
 
         data->f200 = 4.0f;
@@ -245,7 +254,7 @@ void scoutbot_update(Moby *moby) {
         }
         break;
     }
-    case 4: {
+    case SCOUTBOT_STATE_ATTACK: {
         float heading = angle_3DF8(target_pos[0] - moby->pos.x, target_pos[1] - moby->pos.y);
         float frame;
 
@@ -282,7 +291,7 @@ void scoutbot_update(Moby *moby) {
         }
         break;
     }
-    case 6: {
+    case SCOUTBOT_STATE_WAIT_FOR_VOICE: {
         float heading = angle_3DF8(target_pos[0] - moby->pos.x, target_pos[1] - moby->pos.y);
 
         turn_3DF8(moby, heading, &data->yaw_speed, 0.01f, 0.3f, 0.05f);
@@ -304,7 +313,7 @@ void scoutbot_update(Moby *moby) {
             data->hC8 = 0;
         }
         break;
-    case 0x63:
+    case SCOUTBOT_STATE_EXPLODE_AND_REMOVE:
         qcopy(offset, &moby->pos);
         offset[2] += 1.0f;
         sound_id_3DF8(1, 0, moby);
