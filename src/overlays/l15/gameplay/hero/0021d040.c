@@ -146,6 +146,7 @@ void FUN_L15_0021d040(void) {
         HERO_STATE_LEDGE_SHIMMY_YAW_MINUS_90 = 27,
         HERO_STATE_LEDGE_JUMP = 28,
         HERO_STATE_APPROACH_TARGET_POSE = 101,
+        HERO_STATE_TARGET_POSE_ANIMATION_WAIT = 102,
         HERO_STATE_AT_TARGET_POSE = 103,
         HERO_STATE_FALL_TO_RESPAWN = 119
     };
@@ -893,7 +894,7 @@ void FUN_L15_0021d040(void) {
                     }
                     FUN_L00_00228c18();
                     break;
-                case 102:
+                case HERO_STATE_TARGET_POSE_ANIMATION_WAIT:
                     if (hero.unkA98 & 2) {
                         hero_set_state(0x65, 1);
                     }
