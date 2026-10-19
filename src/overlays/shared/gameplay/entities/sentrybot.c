@@ -102,7 +102,9 @@ void sentrybot_update(unsigned char *moby) {
         SENTRYBOT_RETURN_HOME = 9,
         SENTRYBOT_PATROL_MOVE_FAST = 13,
         SENTRYBOT_APPROACH_LINKED_MOBY = 14,
-        SENTRYBOT_RETURN_HOME_FAST = 20
+        SENTRYBOT_RETURN_HOME_FAST = 20,
+        SENTRYBOT_RECOVERABLE_KNOCKBACK = 21,
+        SENTRYBOT_DEATH_KNOCKBACK = 23
     };
     enum {
         SENTRYBOT_PATROL_MOVE = 4
@@ -805,7 +807,7 @@ void sentrybot_update(unsigned char *moby) {
             }
         }
         break;
-    case 21: {
+    case SENTRYBOT_RECOVERABLE_KNOCKBACK: {
         int r = mine_fall(moby, data + 0x70);
         if (r & 0x40) {
             probe_ground_height(moby + 0x10, 0, 0.5f);
@@ -850,7 +852,7 @@ void sentrybot_update(unsigned char *moby) {
         }
         break;
     }
-    case 23:
+    case SENTRYBOT_DEATH_KNOCKBACK:
         if (mine_fall(moby, data + 0x70) & 0x160) {
             if (*(int *)(data + 0x12C) != -1) {
                 FUN_L15_002a35d8(D_L15_0015FFD8_m + (*(int *)(data + 0x12C) << 8));
