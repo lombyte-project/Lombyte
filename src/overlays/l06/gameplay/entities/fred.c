@@ -7498,7 +7498,9 @@ void red_button_update(struct Moby *moby) {
         INITIALIZE_RED_BUTTON = 0,
         ROTATE_BUTTON_AND_LINKED_MOBYS = 2,
         WAIT_FOR_NEARBY_HELP_TRIGGER = 3,
-        WAIT_CAMERA_START_DELAY = 4
+        WAIT_CAMERA_START_DELAY = 4,
+        RAISE_CAMERA_AND_TRIGGER_LISTED_EFFECTS = 5,
+        HOLD_OFFSET_CAMERA_UNTIL_PROGRESS_COMPLETE = 6
     };
     Data_304098 *data = *(struct Data_304098 **)&moby->pvars;
     Vector_304098 camera_position;
@@ -7569,7 +7571,7 @@ void red_button_update(struct Moby *moby) {
             D_L06_0015F3FC = 1.0f - previous_value;
         }
         break;
-    case 5:
+    case RAISE_CAMERA_AND_TRIGGER_LISTED_EFFECTS:
         duration = scale_game_frames_304098(10);
         timer = data->timer;
         if (timer < duration) {
@@ -7611,7 +7613,7 @@ void red_button_update(struct Moby *moby) {
             event_304098(0, 0, moby);
         }
         break;
-    case 6:
+    case HOLD_OFFSET_CAMERA_UNTIL_PROGRESS_COMPLETE:
         approach_two_stage_304098(&data->t, &data->vel, 2.0f, frame_time_sq, frame_time_sq, frame_time + frame_time);
         qcopy(&camera_rotation, &D_L06_001600EC_304098[data->cut2].a);
         camera_rotation.z = camera_rotation.z + 1.0f;
