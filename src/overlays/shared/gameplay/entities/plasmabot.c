@@ -302,6 +302,7 @@ void FUN_L14_002b17d8(char *moby);
 void FUN_L14_002b17d8(char *moby) {
     enum {
         PLASMABOT_INITIALIZE = 0,
+        PLASMABOT_WAIT_TO_START_PATH_TRAVERSAL = 1,
         PLASMABOT_START_PATH_TRAVERSAL = 2,
         PLASMABOT_FOLLOW_PATH_FORWARD = 3,
         PLASMABOT_AIM_AT_TARGET = 4,
@@ -310,6 +311,7 @@ void FUN_L14_002b17d8(char *moby) {
         PLASMABOT_WAIT_ANIMATION_BEFORE_AIM = 7,
         PLASMABOT_FOLLOW_PATH_BACKWARD = 8,
         PLASMABOT_RETURN_TO_PATH_START = 9,
+        PLASMABOT_WAIT_ANIMATION_BEFORE_RESUMING_AIM = 10,
         PLASMABOT_FACE_TARGET_AND_WAIT = 13
     };
     char *data;
@@ -424,7 +426,7 @@ void FUN_L14_002b17d8(char *moby) {
         }
         return;
     }
-    case 1: {
+    case PLASMABOT_WAIT_TO_START_PATH_TRAVERSAL: {
         float *path;
         if (*(int *)(data + 0x114) == 2) return;
         if (fast_dec_timer_s16(data + 0x248) == 0) return;
@@ -623,7 +625,7 @@ void FUN_L14_002b17d8(char *moby) {
             ((unsigned char *)moby)[0x20] = 4;
         }
         break;
-    case 10: {
+    case PLASMABOT_WAIT_ANIMATION_BEFORE_RESUMING_AIM: {
         long n = ((unsigned char *)moby)[0x52];
         if ((moby[0x70] & 2) && (unsigned char)n == ((unsigned char *)moby)[0x53]) {
             if ((unsigned char)n != 7) goto check_next;
