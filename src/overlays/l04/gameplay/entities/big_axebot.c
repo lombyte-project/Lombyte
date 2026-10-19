@@ -2337,6 +2337,7 @@ void blarg_trooper_update(struct Moby *moby) {
         BLARG_TROOPER_STATE_FIRE = 6,
         BLARG_TROOPER_STATE_MELEE_ATTACK = 7,
         BLARG_TROOPER_STATE_HIT_RECOVERY = 8,
+        BLARG_TROOPER_STATE_KNOCKBACK_RECOVERY = 10,
         BLARG_TROOPER_STATE_DYING = 11
     };
     enum {
@@ -2847,7 +2848,7 @@ void blarg_trooper_update(struct Moby *moby) {
         break;
     case BLARG_TROOPER_STATE_HIT_RECOVERY:
     case 9:
-    case 10:
+    case BLARG_TROOPER_STATE_KNOCKBACK_RECOVERY:
         if (*(float *)(data + 0xF4) > 0.0f) {
             st.w.p.v70[0] = fast_cos(fast_add_rotations(moby->rot.z, 3.1415927f)) *
                             *(float *)(data + 0xF4);
