@@ -1,5 +1,6 @@
 /* Ported from rac1-decomp (src/game/pause.c: func_00226978). */
 #include "types.h"
+#include "rnc/globals.h"
 #include "rnc/gameplay/entities/moby_class_tables.h"
 #include "rnc/storage/disc_table.h"
 
@@ -37,7 +38,6 @@ typedef struct {
 extern s16 cd_read_active[] __asm__("D_001516D8");
 extern s32 queued_dialogue_id[] __asm__("D_001516EC");
 extern s16 dialogue_playback_phase[] __asm__("D_0015172A");
-extern s32 dialogue_language __asm__("D_0015ED88");
 extern s32 alternate_animation_sequence __asm__("D_0015EE20");
 extern u8 animation_asset_read_active[] __asm__("D_001D5CBB");
 
@@ -91,7 +91,8 @@ s32 update_streamed_moby_animation(MobyAnimationStream *stream) {
         header = (AnimationTableHeader *)stream->buffer;
         class_resource = &classes[class_slot];
         for (k = 0; k < 3; k++) {
-            animation_table = stream->buffer + ((AnimationTableHeader *)((u8 *)header + (k << 3)))->offset;
+            animation_table =
+                stream->buffer + ((AnimationTableHeader *)((u8 *)header + (k << 3)))->offset;
             (*class_resource)->animation_tables[k + 1] = animation_table;
             relocate_asset_entry_pointers(*class_resource, k + 1);
         }
@@ -110,7 +111,7 @@ s32 update_streamed_moby_animation(MobyAnimationStream *stream) {
         case 0:
         case 2:
         case 4:
-            dialogue_column = dialogue_language - 1;
+            dialogue_column = game_language - 1;
             if (dialogue_column < 0) {
                 dialogue_column = 0;
             }

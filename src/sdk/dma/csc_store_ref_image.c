@@ -10,7 +10,7 @@ typedef struct {
     u8 pad0[0xD8];
     u32 source;
     u8 padDC[0x858 - 0xDC];
-    void *cbData;
+    void *callback_data;
 } CscDecoder;
 
 typedef struct {
@@ -25,10 +25,10 @@ extern s32 AddDmacHandlerSecondary(s32 channel, void *handler, s32 next, void *a
 extern s32 RemoveDmacHandler(s32 channel, s32 handle);
 extern s32 DIntr(void);
 extern s32 EnableInterrupts(void);
-extern s32 _dispatchMpegCallback(void *cb, s32 *arg);
-extern void _doCSC(CscDecoder *d, u32 source, s32 mbs);
-extern void _doCSC2(CscDecoder *d, u32 source, s32 mbs);
-extern void _sendIpuCommand(CscDecoder *d, u32 cmd);
+extern s32 _dispatchMpegCallback(void *callback_data, s32 *callback_args);
+extern void _doCSC(CscDecoder *decoder, u32 source, s32 macroblocks);
+extern void _doCSC2(CscDecoder *decoder, u32 source, s32 macroblocks);
+extern void _sendIpuCommand(CscDecoder *decoder, u32 command);
 extern s32 disable_dmac(s32 channel) __asm__("func_001190F8");
 extern s32 enable_dmac(s32 channel) __asm__("func_00119160");
 
@@ -42,7 +42,7 @@ void _csc_storeRefImage(CscDecoder *decoder, CscImage *image) {
 
     macroblocks = image->width * image->height;
     callback_args[0] = 2;
-    _dispatchMpegCallback(decoder->cbData, callback_args);
+    _dispatchMpegCallback(decoder->callback_data, callback_args);
     if (*IPU_CTRL & 0x4000) {
         *IPU_CTRL = 0x40000000;
     }
@@ -90,5 +90,5 @@ void _csc_storeRefImage(CscDecoder *decoder, CscImage *image) {
         }
     }
     callback_args[0] = 3;
-    _dispatchMpegCallback(decoder->cbData, callback_args);
+    _dispatchMpegCallback(decoder->callback_data, callback_args);
 }

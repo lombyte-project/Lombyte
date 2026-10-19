@@ -41,7 +41,8 @@ extern struct {
     MapIconLink *links;
 } D_001A2C10;
 
-extern void world_to_map_coords(f32 x, f32 y, f32 *outx, f32 *outy, s32 view) __asm__("func_00208408");
+extern void world_to_map_coords(f32 x, f32 y, f32 *map_x, f32 *map_y,
+                                s32 level) __asm__("func_00208408");
 extern void format_menu_item_text(s32 idx, char *dst) __asm__("func_00208280");
 extern void font_print_window_small(struct TextRegion *, long, char *,
                                     int) __asm__("func_001F75F0");
@@ -62,7 +63,8 @@ void update_map_icons(s32 level, s32 flag) {
     }
 
     if (hero.motion.pos.f[2] != 0.0f && level == current_level_index && flag) {
-        world_to_map_coords(hero.motion.pos.f[0], hero.motion.pos.f[1], &map_x, &map_y, D_0015FD60 ? level + 100 : level);
+        world_to_map_coords(hero.motion.pos.f[0], hero.motion.pos.f[1], &map_x, &map_y,
+                            D_0015FD60 ? level + 100 : level);
         level_map_selection.pan_x[level] = (s32)(map_x * 4096.0f) << 16;
         level_map_selection.pan_y[level] = (s32)(map_y * 4096.0f) << 16;
     } else {
@@ -110,11 +112,13 @@ void update_map_icons(s32 level, s32 flag) {
             } else {
                 if (level == current_level_index) {
                     if (D_00199478[icon->id] != 0) {
-                        world_to_map_coords(D_00199478[icon->id]->x, D_00199478[icon->id]->y, &icon->x, &icon->y, level);
+                        world_to_map_coords(D_00199478[icon->id]->x, D_00199478[icon->id]->y,
+                                            &icon->x, &icon->y, level);
                         level_map_selection.icons[icon_index].angle = D_00199478[icon->id]->z;
                     }
                 } else {
-                    world_to_map_coords(D_0013D5B0[icon->id].x, D_0013D5B0[icon->id].y, &icon->x, &icon->y, level);
+                    world_to_map_coords(D_0013D5B0[icon->id].x, D_0013D5B0[icon->id].y, &icon->x,
+                                        &icon->y, level);
                     level_map_selection.icons[icon_index].angle = D_0013D5B0[icon->id].z;
                 }
             }

@@ -12,11 +12,6 @@
 #include "rnc/ui/map/map_state.h"
 
 typedef struct {
-    s32 cell;
-    s32 pad[3];
-} MapHighlightedCell;
-
-typedef struct {
     s32 x0;
     s32 y0;
     s32 x1;
@@ -50,12 +45,15 @@ extern void draw_hud_sprite_subpixel(s32, s32, s32, s32, s32, s32) __asm__("func
 extern void draw_rotated_sprite(f32, f32, f32, f32, f32, s32, s32, u64) __asm__("func_00200600");
 extern void append_screen_rect_packet(s32, s32, s32, s32, u64, s32) __asm__("func_00200E08");
 extern void format_menu_item_text(s32, void *) __asm__("func_00208280");
-extern void world_to_map_coords(f32 x, f32 y, f32 *outx, f32 *outy, s32 view) __asm__("func_00208408");
+extern void world_to_map_coords(f32 x, f32 y, f32 *map_x, f32 *map_y,
+                                s32 level) __asm__("func_00208408");
 extern void draw_map_markers(s32, s32, s32, s32) __asm__("func_00208508");
 extern void vu1_add_g_sregister(s32, s64) __asm__("FUN_00233980");
 extern void *memset(void *, s32, u32);
 
 void draw_map_overlay(void) __asm__("FUN_00205640");
+
+#define MAP_ICON_AT(offset) ((struct MapIcon *)((offset) + (u32)level_map_selection.icons))
 
 void draw_map_overlay(void) {
     union {
@@ -63,7 +61,7 @@ void draw_map_overlay(void) {
         f32 f[2];
     } label_buffer;
     struct TextRegion text_window;
-    s32 rx0, ry0, rx1, ry1;
+    s32 map_left, map_top, map_right, map_bottom;
     struct DmaTag *tag;
     u64 *packet_words;
     u64 background_tex0;
@@ -75,28 +73,18 @@ void draw_map_overlay(void) {
     s32 x0, y0, x1, y1;
     s32 u, v;
     s32 dx, dy;
-    s32 i, j;
+    s32 i;
     s32 cell, cell_y, cell_x;
-    MapHighlightedCell *highlighted_cell;
-    MapIconBounds *r;
     MapIconBounds *icon_bounds;
-    struct MapIcon *icon;
-    struct HudTexPage *texture_info;
     f32 zoom;
     f32 icon_scale;
-    f32 icon_size_multiplier;
-    f32 s;
-    f32 icon_center_x, icon_center_y;
-    s32 pan_x, map_extent, pan_y, oy1;
-    s32 ax, ay, bx, by;
+    f32 scale;
+    s32 pan_x, map_extent, pan_y;
     s32 id, frame_index, texture_width;
     f32 angle, sprite_width, sprite_height, center_x, center_y;
     s16 label_width;
     s32 label_height, label_offset_x, label_offset_y;
     s32 label_x, label_y;
-    s32 image_index;
-    s32 flip;
-    s32 texture_id;
     s32 tile_limit;
 
     if (level_map_selection.unk24 == 0) {
@@ -111,9 +99,9 @@ void draw_map_overlay(void) {
         return;
     }
 
-    rx0 = 0x1000;
+    map_left = 0x1000;
     setup_gif_paging(0);
-    ry0 = 0x800;
+    map_top = 0x800;
     mirror_sign = D_0015EDB4 ? -1 : 1;
     zoom = level_map_selection.zoom[level_map_selection.loaded];
     pan_y = zoom * (f32)(level_map_selection.pan_y[level_map_selection.loaded] >> 15);
@@ -121,18 +109,18 @@ void draw_map_overlay(void) {
     pan_x = zoom * (f32)(level_map_selection.pan_x[level_map_selection.loaded] >> 15);
     tile_size = zoom * 512.0f;
     tile_limit = tile_size + 0x2000;
-    rx0 -= pan_x * mirror_sign;
-    ry0 -= pan_y;
-    rx1 = rx0 + map_extent * mirror_sign;
-    ry1 = ry0 + map_extent;
-    left_tile_count = (rx0 + tile_size - 1) / tile_size;
-    top_tile_count = (ry0 + tile_size - 1) / tile_size;
-    right_tile_count = (tile_limit - rx1 - 1) / tile_size;
-    bottom_tile_count = (tile_limit - ry1 - 1) / tile_size;
-    x0 = rx0 - tile_size * left_tile_count;
-    y0 = ry0 - tile_size * top_tile_count;
-    x1 = rx1 + tile_size * right_tile_count;
-    y1 = ry1 + tile_size * bottom_tile_count;
+    map_left -= pan_x * mirror_sign;
+    map_top -= pan_y;
+    map_right = map_left + map_extent * mirror_sign;
+    map_bottom = map_top + map_extent;
+    left_tile_count = (map_left + tile_size - 1) / tile_size;
+    top_tile_count = (map_top + tile_size - 1) / tile_size;
+    right_tile_count = (tile_limit - map_right - 1) / tile_size;
+    bottom_tile_count = (tile_limit - map_bottom - 1) / tile_size;
+    x0 = map_left - tile_size * left_tile_count;
+    y0 = map_top - tile_size * top_tile_count;
+    x1 = map_right + tile_size * right_tile_count;
+    y1 = map_bottom + tile_size * bottom_tile_count;
     u = ((left_tile_count + right_tile_count) << 9) + 0x2000;
     v = ((top_tile_count + bottom_tile_count) << 9) + 0x2000;
 
@@ -151,10 +139,12 @@ void draw_map_overlay(void) {
     packet_words[3] = 0x156;
     packet_words[4] = 0x80808080;
     packet_words[5] = 0;
-    packet_words[6] = ((x0 + screen_extent.left) - 8) | ((u64)((y0 + screen_extent.top) - 8) << 16) |
+    packet_words[6] = ((x0 + screen_extent.left) - 8) |
+                      ((u64)((y0 + screen_extent.top) - 8) << 16) |
                       ((u64)level_map_selection.z << 32);
     packet_words[7] = u | ((u64)v << 16);
-    packet_words[8] = ((x1 + screen_extent.left) - 8) | ((u64)((y1 + screen_extent.top) - 8) << 16) |
+    packet_words[8] = ((x1 + screen_extent.left) - 8) |
+                      ((u64)((y1 + screen_extent.top) - 8) << 16) |
                       ((u64)level_map_selection.z << 32);
     packet_words[9] = 0;
     render_packet_cursor.tag = (struct DmaTag *)((u8 *)render_packet_cursor.tag + 0x50);
@@ -166,9 +156,10 @@ void draw_map_overlay(void) {
     render_packet_cursor.tag->addr = 0;
     render_packet_cursor.tag->vif0 = 0;
     render_packet_cursor.tag->vif1 = 0x50000005;
-    map_tex0 = (u64)((level_map_selection.map_image_vram >> 8) | (8 << 14) | (0x13 << 20) | (9 << 26)) |
-               ((u64)9 << 30) | ((u64)1 << 34) | ((u64)palette_block << 37) |
-               ((long)0x8000000000000000ULL);
+    map_tex0 =
+        (u64)((level_map_selection.map_image_vram >> 8) | (8 << 14) | (0x13 << 20) | (9 << 26)) |
+        ((u64)9 << 30) | ((u64)1 << 34) | ((u64)palette_block << 37) |
+        ((long)0x8000000000000000ULL);
     tag = render_packet_cursor.tag;
     render_packet_cursor.tag = tag + 1;
     packet_words = (u64 *)(tag + 1);
@@ -178,26 +169,28 @@ void draw_map_overlay(void) {
     packet_words[3] = 0x156;
     packet_words[4] = 0x80808080;
     packet_words[5] = 0;
-    packet_words[6] = ((rx0 + screen_extent.left) - 8) | ((u64)((ry0 + screen_extent.top) - 8) << 16) |
+    packet_words[6] = ((map_left + screen_extent.left) - 8) |
+                      ((u64)((map_top + screen_extent.top) - 8) << 16) |
                       ((u64)level_map_selection.z << 32);
     packet_words[7] = 0x20002000;
-    packet_words[8] = ((rx1 + screen_extent.left) - 8) | ((u64)((ry1 + screen_extent.top) - 8) << 16) |
+    packet_words[8] = ((map_right + screen_extent.left) - 8) |
+                      ((u64)((map_bottom + screen_extent.top) - 8) << 16) |
                       ((u64)level_map_selection.z << 32);
     packet_words[9] = 0;
     render_packet_cursor.tag = (struct DmaTag *)((u8 *)render_packet_cursor.tag + 0x50);
     vu1_add_g_sregister(0x47, 0x360B);
 
     if (level_map_selection.unk2C != 0 && level_map_selection.unk8 != 0) {
-        dx = rx1 - rx0;
-        dy = ry1 - ry0;
+        dx = map_right - map_left;
+        dy = map_bottom - map_top;
         for (i = 0; i < 8; i++) {
             cell = level_map_selection.unk30[i].unk0;
             if (cell >= 0) {
                 cell_x = cell % 16;
                 cell_y = cell / 16;
-                append_screen_rect_packet(rx0 + cell_x * dx / 16, ry0 + cell_y * dy / 16,
-                                          rx0 + (cell_x + 1) * dx / 16,
-                                          ry0 + (cell_y + 1) * dy / 16, 0x20000000, 1);
+                append_screen_rect_packet(map_left + cell_x * dx / 16, map_top + cell_y * dy / 16,
+                                          map_left + (cell_x + 1) * dx / 16,
+                                          map_top + (cell_y + 1) * dy / 16, 0x20000000, 1);
             }
         }
     }
@@ -206,14 +199,12 @@ void draw_map_overlay(void) {
         icon_bounds = SPR;
         icon_scale = (level_map_selection.zoom[level_map_selection.loaded] * 2.0f + 5.0f) / 13.0f;
         if (!(level_map_selection.icons[0].flags & 4)) {
-            MapIconBounds *r;
             s32 i;
-            struct MapIcon *icon;
             f32 icon_size_multiplier;
             s32 image_index;
             f32 icon_center_x, icon_center_y;
             struct HudTexPage *texture_info;
-            f32 s;
+            f32 scale;
             s32 texture_id;
 
             i = 0;
@@ -225,29 +216,31 @@ void draw_map_overlay(void) {
                     if (level_map_selection.icons[i].flags & 0x80) {
                         icon_size_multiplier = 1.5f;
                     }
-                    image_index = get_icon_frame(texture_id,
-                                                                   level_map_selection.icons[i].frame_index);
-                    icon_center_x = (f32)rx0 + level_map_selection.icons[i].x * (f32)(rx1 - rx0);
-                    icon_center_y = (f32)ry0 + level_map_selection.icons[i].y * (f32)(ry1 - ry0);
+                    image_index =
+                        get_icon_frame(texture_id, level_map_selection.icons[i].frame_index);
+                    icon_center_x = (f32)map_left +
+                                    level_map_selection.icons[i].x * (f32)(map_right - map_left);
+                    icon_center_y =
+                        (f32)map_top + level_map_selection.icons[i].y * (f32)(map_bottom - map_top);
                     texture_info =
                         &hud_state.image_pages[hud_state.frame_refs[image_index].image_index];
                     if (level_map_selection.icons[i].flags & 0x200) {
-                        s = level_map_selection.zoom[level_map_selection.loaded];
+                        scale = level_map_selection.zoom[level_map_selection.loaded];
                     } else {
-                        s = icon_scale;
+                        scale = icon_scale;
                     }
                     icon_bounds[i].x0 =
                         icon_center_x -
-                        icon_size_multiplier * s * (f32)(1 << (texture_info->width_log2 + 3));
+                        icon_size_multiplier * scale * (f32)(1 << (texture_info->width_log2 + 3));
                     icon_bounds[i].x1 =
                         (f32)icon_bounds[i].x0 +
-                        icon_size_multiplier * s * (f32)(1 << (texture_info->width_log2 + 4));
+                        icon_size_multiplier * scale * (f32)(1 << (texture_info->width_log2 + 4));
                     icon_bounds[i].y0 =
                         icon_center_y -
-                        icon_size_multiplier * s * (f32)(1 << (texture_info->height_log2 + 3));
+                        icon_size_multiplier * scale * (f32)(1 << (texture_info->height_log2 + 3));
                     icon_bounds[i].y1 =
                         (f32)icon_bounds[i].y0 +
-                        icon_size_multiplier * s * (f32)(1 << (texture_info->height_log2 + 4));
+                        icon_size_multiplier * scale * (f32)(1 << (texture_info->height_log2 + 4));
                 }
                 i++;
             } while (!(level_map_selection.icons[i].flags & 4));
@@ -255,8 +248,8 @@ void draw_map_overlay(void) {
 
         {
             s32 i, j;
-            s32 pan_x, map_extent, pan_y, oy1;
-            s32 ax, ay, bx, by;
+            s32 overlap_left, overlap_right, overlap_top, overlap_bottom;
+            s32 first_dx, first_dy, second_dx, second_dy;
             struct MapIcon *icon;
             s32 inner_offset;
             s32 inner_icon_offset;
@@ -268,70 +261,72 @@ void draw_map_overlay(void) {
                positive edge distance for each pair. */
             i = 0;
             if (!(level_map_selection.icons[1].flags & 4)) {
+                /* Fakematch: the strides in variables keep retail's address arithmetic. */
                 outer_stride = sizeof(struct MapIcon);
                 inner_stride = sizeof(struct MapIcon);
                 do {
-                    if (((struct MapIcon *)(i * outer_stride + (u32)level_map_selection.icons))->active == 0 || ((struct MapIcon *)(i * outer_stride + (u32)level_map_selection.icons))->texture_id == 0 ||
-                        (((struct MapIcon *)(i * outer_stride + (u32)level_map_selection.icons))->flags & 3)) {
+                    if (MAP_ICON_AT(i * outer_stride)->active == 0 ||
+                        MAP_ICON_AT(i * outer_stride)->texture_id == 0 ||
+                        (MAP_ICON_AT(i * outer_stride)->flags & 3)) {
                         goto next_outer_icon;
                     }
                     j = i + 1;
-                    if (!(((struct MapIcon *)(j * outer_stride + (u32)level_map_selection.icons))->flags & 4)) {
+                    if (!(MAP_ICON_AT(j * outer_stride)->flags & 4)) {
                         inner_offset = j * inner_stride;
                         inner_icon_offset = inner_offset;
                         do {
-                            pan_x = icon_bounds[j].x1 - icon_bounds[i].x0;
-                            if (pan_x <= 0)
+                            overlap_left = icon_bounds[j].x1 - icon_bounds[i].x0;
+                            if (overlap_left <= 0)
                                 goto next_inner_icon;
-                            map_extent = icon_bounds[i].x1 - icon_bounds[j].x0;
-                            if (map_extent <= 0)
+                            overlap_right = icon_bounds[i].x1 - icon_bounds[j].x0;
+                            if (overlap_right <= 0)
                                 goto next_inner_icon;
-                            pan_y = icon_bounds[j].y1 - icon_bounds[i].y0;
-                            if (pan_y <= 0)
+                            overlap_top = icon_bounds[j].y1 - icon_bounds[i].y0;
+                            if (overlap_top <= 0)
                                 goto next_inner_icon;
-                            oy1 = icon_bounds[i].y1 - icon_bounds[j].y0;
-                            if (oy1 <= 0)
+                            overlap_bottom = icon_bounds[i].y1 - icon_bounds[j].y0;
+                            if (overlap_bottom <= 0)
                                 goto next_inner_icon;
-                            icon = (struct MapIcon *)(inner_icon_offset + (u32)level_map_selection.icons);
-                            if (icon->active == 0 ||
-                                icon->texture_id == 0 ||
-                                (icon->flags & 3)) {
+                            icon = MAP_ICON_AT(inner_icon_offset);
+                            if (icon->active == 0 || icon->texture_id == 0 || (icon->flags & 3)) {
                                 goto next_inner_icon;
                             }
-                            ax = 0;
-                            ay = 0;
-                            bx = 0;
-                            by = 0;
-                            if (pan_x <= map_extent && pan_x <= pan_y && pan_x <= oy1) {
-                                ax = pan_x >> 1;
-                                bx = ax - pan_x;
-                            } else if (map_extent <= pan_y && map_extent <= oy1) {
-                                bx = map_extent >> 1;
-                                ax = bx - map_extent;
-                            } else if (pan_y <= oy1) {
-                                ay = pan_y >> 1;
-                                by = ay - pan_y;
+                            first_dx = 0;
+                            first_dy = 0;
+                            second_dx = 0;
+                            second_dy = 0;
+                            if (overlap_left <= overlap_right && overlap_left <= overlap_top &&
+                                overlap_left <= overlap_bottom) {
+                                first_dx = overlap_left >> 1;
+                                second_dx = first_dx - overlap_left;
+                            } else if (overlap_right <= overlap_top &&
+                                       overlap_right <= overlap_bottom) {
+                                second_dx = overlap_right >> 1;
+                                first_dx = second_dx - overlap_right;
+                            } else if (overlap_top <= overlap_bottom) {
+                                first_dy = overlap_top >> 1;
+                                second_dy = first_dy - overlap_top;
                             } else {
-                                by = oy1 >> 1;
-                                ay = by - oy1;
+                                second_dy = overlap_bottom >> 1;
+                                first_dy = second_dy - overlap_bottom;
                             }
-                            icon_bounds[i].x0 += ax;
-                            icon_bounds[i].x1 += ax;
-                            icon_bounds[i].y0 += ay;
-                            icon_bounds[i].y1 += ay;
-                            icon_bounds[j].x0 += bx;
-                            icon_bounds[j].x1 += bx;
-                            icon_bounds[j].y0 += by;
-                            icon_bounds[j].y1 += by;
+                            icon_bounds[i].x0 += first_dx;
+                            icon_bounds[i].x1 += first_dx;
+                            icon_bounds[i].y0 += first_dy;
+                            icon_bounds[i].y1 += first_dy;
+                            icon_bounds[j].x0 += second_dx;
+                            icon_bounds[j].x1 += second_dx;
+                            icon_bounds[j].y0 += second_dy;
+                            icon_bounds[j].y1 += second_dy;
                         next_inner_icon:
                             j++;
                             inner_offset += inner_stride;
                             inner_icon_offset += sizeof(struct MapIcon);
-                        } while (!(((struct MapIcon *)(inner_offset + (u32)level_map_selection.icons))->flags & 4));
+                        } while (!(MAP_ICON_AT(inner_offset)->flags & 4));
                     }
                 next_outer_icon:
                     i++;
-                } while (!(((struct MapIcon *)(i * outer_stride + (u32)level_map_selection.icons))[1].flags & 4));
+                } while (!(MAP_ICON_AT(i * outer_stride)[1].flags & 4));
             }
         }
 
@@ -341,7 +336,8 @@ void draw_map_overlay(void) {
             i = 0;
             if (!(level_map_selection.icons[0].flags & 4)) {
                 do {
-                    if (level_map_selection.icons[i].active != 0 && !(level_map_selection.icons[i].flags & 1) &&
+                    if (level_map_selection.icons[i].active != 0 &&
+                        !(level_map_selection.icons[i].flags & 1) &&
                         ((id = level_map_selection.icons[i].texture_id),
                          (frame_index = level_map_selection.icons[i].frame_index), id != 0)) {
                         if (level_map_selection.icons[i].flags & 0x40) {
@@ -350,74 +346,78 @@ void draw_map_overlay(void) {
                                 icon_bounds[i].x1 + 0x20, icon_bounds[i].y1 + 0x20, 0x80000000, 1);
                         }
                         if (level_map_selection.icons[i].flags & 0x200) {
-                            s = level_map_selection.zoom[level_map_selection.loaded];
+                            scale = level_map_selection.zoom[level_map_selection.loaded];
                         } else {
-                            s = icon_scale;
+                            scale = icon_scale;
                         }
                         if (level_map_selection.icons[i].flags & 0x100) {
                             angle = level_map_selection.icons[i].angle;
                             texture_width = 0x20;
-                            sprite_height = s * 256.0f;
+                            sprite_height = scale * 256.0f;
                             sprite_width = sprite_height;
                             if (level_map_selection.icons[i].flags & 0x400) {
                                 angle = fast_add_rotations(angle, 1.5707964f);
                                 texture_width = 0x40;
-                                sprite_width = s * D_0015FD88;
-                                sprite_height = s * D_0015FD8C;
-                                if (*(s32 *)(D_0013D5BC + level_map_selection.icons[i].id * 16) & 2) {
+                                sprite_width = scale * D_0015FD88;
+                                sprite_height = scale * D_0015FD8C;
+                                if (*(s32 *)(D_0013D5BC + level_map_selection.icons[i].id * 16) &
+                                    2) {
                                     frame_index++;
                                 }
                             }
                             if (level_map_selection.icons[i].flags & 0x800) {
                                 angle = fast_add_rotations(angle, 1.5707964f);
                                 texture_width = 0x40;
-                                sprite_width = s * D_0015FD80;
-                                sprite_height = s * D_0015FD84;
-                                if (*(s32 *)(D_0013D5BC + level_map_selection.icons[i].id * 16) & 2) {
+                                sprite_width = scale * D_0015FD80;
+                                sprite_height = scale * D_0015FD84;
+                                if (*(s32 *)(D_0013D5BC + level_map_selection.icons[i].id * 16) &
+                                    2) {
                                     frame_index++;
                                 }
                             }
                             if (level_map_selection.icons[i].flags & 0x1000) {
                                 angle = fast_add_rotations(angle, 1.5707964f);
-                                sprite_width = s * D_0015FD90;
-                                sprite_height = s * D_0015FD94;
+                                sprite_width = scale * D_0015FD90;
+                                sprite_height = scale * D_0015FD94;
                             }
                             center_x = (f32)(icon_bounds[i].x0 + icon_bounds[i].x1) * 0.5f;
                             center_y = (f32)(icon_bounds[i].y0 + icon_bounds[i].y1) * 0.5f;
                             draw_rotated_sprite(center_x, center_y, sprite_width, sprite_height,
                                                 angle, texture_width, 0x20,
-                                                get_frame_texture(get_icon_frame(
-                                                    id, frame_index)));
+                                                get_frame_texture(get_icon_frame(id, frame_index)));
                         } else {
-                            draw_hud_sprite_subpixel(
-                                get_icon_frame(id, frame_index),
-                                icon_bounds[i].x0, icon_bounds[i].y0,
-                                icon_bounds[i].x1 - icon_bounds[i].x0,
-                                icon_bounds[i].y1 - icon_bounds[i].y0, 0x80);
+                            draw_hud_sprite_subpixel(get_icon_frame(id, frame_index),
+                                                     icon_bounds[i].x0, icon_bounds[i].y0,
+                                                     icon_bounds[i].x1 - icon_bounds[i].x0,
+                                                     icon_bounds[i].y1 - icon_bounds[i].y0, 0x80);
                         }
                         if (level_map_selection.icons[i].flags & 0x10) {
                             label_width = level_map_selection.icons[i].label_width;
                             label_offset_x = level_map_selection.icons[i].label_offset_x;
                             label_height = (s16)level_map_selection.icons[i].label_height;
-                            frame_index = level_map_selection.icons[i].label_offset_y;
+                            label_offset_y = level_map_selection.icons[i].label_offset_y;
                             if (label_offset_x == 0) {
                                 label_x = ((icon_bounds[i].x0 + icon_bounds[i].x1) >> 5) -
                                           label_width / 2;
                             } else {
                                 if (label_offset_x > 0) {
-                                    label_x = (icon_bounds[i].x1 >> 4) - label_width / 2 + label_offset_x;
+                                    label_x =
+                                        (icon_bounds[i].x1 >> 4) - label_width / 2 + label_offset_x;
                                 } else {
-                                    label_x = (icon_bounds[i].x0 >> 4) - label_width / 2 + label_offset_x;
+                                    label_x =
+                                        (icon_bounds[i].x0 >> 4) - label_width / 2 + label_offset_x;
                                 }
                             }
-                            if (frame_index == 0) {
+                            if (label_offset_y == 0) {
                                 label_y = ((icon_bounds[i].y0 + icon_bounds[i].y1) >> 5) -
                                           label_height / 2;
                             } else {
-                                if (frame_index > 0) {
-                                    label_y = (icon_bounds[i].y1 >> 4) - label_height / 2 + frame_index;
+                                if (label_offset_y > 0) {
+                                    label_y = (icon_bounds[i].y1 >> 4) - label_height / 2 +
+                                              label_offset_y;
                                 } else {
-                                    label_y = (icon_bounds[i].y0 >> 4) - label_height / 2 + frame_index;
+                                    label_y = (icon_bounds[i].y0 >> 4) - label_height / 2 +
+                                              label_offset_y;
                                 }
                             }
                             draw_ui_frame(label_y, label_y + label_height, label_x,
@@ -446,40 +446,42 @@ void draw_map_overlay(void) {
 
         if (current_level_index == m->loaded) {
             s32 image_index;
-            f32 s;
+            f32 scale;
             f32 angle;
             s32 flip;
 
             image_index = get_icon_frame(0xE99A, 5);
-            s = ((m->zoom[m->loaded] * 4.0f + 10.0f) * 0.75f) / 13.0f;
+            scale = ((m->zoom[m->loaded] * 4.0f + 10.0f) * 0.75f) / 13.0f;
             angle = hero.motion.rot.f[2];
             flip = hero.state.control_mode == 0xF;
             if (flip) {
                 angle = fast_add_rotations(angle, 1.5707964f);
             }
             if (D_0015FD60 != 0) {
-                world_to_map_coords(hero.motion.pos.f[0], hero.motion.pos.f[1], &label_buffer.f[0], &label_buffer.f[1], current_level_index + 100);
+                world_to_map_coords(hero.motion.pos.f[0], hero.motion.pos.f[1], &label_buffer.f[0],
+                                    &label_buffer.f[1], current_level_index + 100);
                 angle = fast_add_rotations(angle, 1.5707964f);
             } else {
-                world_to_map_coords(hero.motion.pos.f[0], hero.motion.pos.f[1], &label_buffer.f[0], &label_buffer.f[1], current_level_index);
+                world_to_map_coords(hero.motion.pos.f[0], hero.motion.pos.f[1], &label_buffer.f[0],
+                                    &label_buffer.f[1], current_level_index);
             }
-            label_buffer.f[0] = (f32)rx0 + label_buffer.f[0] * (f32)(rx1 - rx0);
-            label_buffer.f[1] = (f32)ry0 + label_buffer.f[1] * (f32)(ry1 - ry0);
+            label_buffer.f[0] = (f32)map_left + label_buffer.f[0] * (f32)(map_right - map_left);
+            label_buffer.f[1] = (f32)map_top + label_buffer.f[1] * (f32)(map_bottom - map_top);
             if (D_0015EDB4 != 0) {
                 angle = fast_subtract_rotations(-fast_add_rotations(angle, 1.5707964f), 1.5707964f);
             }
             {
-                f32 sz = s * 256.0f;
+                f32 sprite_size = scale * 256.0f;
 
-                draw_rotated_sprite(label_buffer.f[0], label_buffer.f[1], sz, sz, angle, 0x40, 0x40,
-                                    get_frame_texture(image_index));
+                draw_rotated_sprite(label_buffer.f[0], label_buffer.f[1], sprite_size, sprite_size,
+                                    angle, 0x40, 0x40, get_frame_texture(image_index));
             }
         }
     }
     do_gif_paging();
     if (level_map_selection.markers != 0) {
         setup_gif_paging(0);
-        draw_map_markers(rx0, ry0, rx1, ry1);
+        draw_map_markers(map_left, map_top, map_right, map_bottom);
         do_gif_paging();
     }
 }

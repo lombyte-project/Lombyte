@@ -43,8 +43,7 @@ void append_fullscreen_setup_strips(void) {
     packet_words[8] = 0x2400000000000000 | (strip_count | 0x8000);
     packet_words[9] = 0x44;
     strip_index = 0;
-    /* Fakematch: the two empty loop levels weight the strip counter's references so it
-     * outranks the tag pointer in register allocation (t6/t7 as in retail). */
+    /* Fakematch: two empty loop levels give the strip counter retail's register. */
     do {
         do {
             if (strip_count > 0) {
@@ -55,8 +54,7 @@ void append_fullscreen_setup_strips(void) {
                 right_x = negative_half_width + 0x8200;
                 bottom_y = (u64)(display_height * 8 + 0x7FF0) << 16;
                 do {
-                    /* Fakematch: the volatile store keeps loop from merging the two
-                     * strip_words increments into one. */
+                    /* Fakematch: volatile keeps the two strip_words increments apart. */
                     *(volatile u64 *)strip_words++ = left_x | top_y;
                     strip_index++;
                     *strip_words++ = right_x | bottom_y;

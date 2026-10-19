@@ -13,93 +13,97 @@ extern s32 _initRefImages();
 extern s32 copy_object_field_backward() __asm__("func_0012BC10");
 extern s32 reserve_aligned_buffer_space() __asm__("func_0012BC20");
 
-void func_0012C4C8(struct sceMpeg *arg0) {
-    u8 *sp30;
-    u8 *sp34;
-    u8 *sp38;
-    u8 *sp3C;
-    u8 *sp40;
-    u8 *var_2_53;
-    s32 chroma_height;
+void func_0012C4C8(struct sceMpeg *mpeg) {
+    u8 *field_image0;
+    u8 *field_image1;
+    u8 *field_image2;
+    u8 *field_image3;
+    u8 *field_image4;
+    u8 *field_image5;
+    s32 field_height;
     s32 height;
     s32 width;
-    s32 temp_6_16;
-    s32 var_2_40;
-    u32 temp_16_77;
-    s32 temp_22_48;
-    s32 temp_23_51;
-    s32 temp_18_75;
-    u8 *temp_17_63;
-    u8 *temp_19_67;
-    u8 *temp_20_71;
-    u8 *temp_21_73;
-    struct MpegDecoder *mpeg;
+    s32 mpeg2;
+    s32 mb_height;
+    u32 frame_size;
+    s32 aligned_height;
+    s32 aligned_width;
+    s32 half_height;
+    u8 *buffer_pool;
+    u8 *frame_image0;
+    u8 *frame_image1;
+    u8 *frame_image2;
+    struct MpegDecoder *decoder;
 
-    mpeg = arg0->sys;
-    temp_6_16 = mpeg->unk848;
-    if (temp_6_16 == 0) {
-        mpeg->picture_structure = 3;
-        mpeg->unk13C = 1;
-        mpeg->unk140 = 1;
-        mpeg->progressive_frame = 1;
-        mpeg->frame_pred_frame_dct = 1;
-        mpeg->matrix_coefficients = 5;
+    decoder = mpeg->sys;
+    mpeg2 = decoder->unk848;
+    if (mpeg2 == 0) {
+        decoder->picture_structure = 3;
+        decoder->unk13C = 1;
+        decoder->unk140 = 1;
+        decoder->progressive_frame = 1;
+        decoder->frame_pred_frame_dct = 1;
+        decoder->matrix_coefficients = 5;
     }
-    mpeg->mb_width = (s32)((s32)(mpeg->horizontal_size + 0xF) >> 4);
-    if (temp_6_16 != 0) {
-        if (mpeg->unk13C == 0) {
-            var_2_40 = ((s32)(mpeg->vertical_size + 0x1F) >> 5) * 2;
+    decoder->mb_width = (s32)((s32)(decoder->horizontal_size + 0xF) >> 4);
+    if (mpeg2 != 0) {
+        if (decoder->unk13C == 0) {
+            mb_height = ((s32)(decoder->vertical_size + 0x1F) >> 5) * 2;
         } else {
             goto block_6;
         }
     } else {
     block_6:
-        var_2_40 = (s32)(mpeg->vertical_size + 0xF) >> 4;
+        mb_height = (s32)(decoder->vertical_size + 0xF) >> 4;
     }
-    mpeg->mb_height = var_2_40;
-    temp_22_48 = var_2_40 << 4;
-    temp_23_51 = mpeg->mb_width << 4;
-    if (temp_23_51 == arg0->width) {
-        if (temp_22_48 == arg0->height) {
+    decoder->mb_height = mb_height;
+    aligned_height = mb_height << 4;
+    aligned_width = decoder->mb_width << 4;
+    if (aligned_width == mpeg->width) {
+        if (aligned_height == mpeg->height) {
             return;
         }
-        var_2_53 = ((u8 *)mpeg + 0x528);
+        field_image5 = ((u8 *)decoder + 0x528);
     } else {
-        var_2_53 = ((u8 *)mpeg + 0x528);
+        field_image5 = ((u8 *)decoder + 0x528);
     }
-    temp_17_63 = var_2_53 - 0x420;
+    buffer_pool = field_image5 - 0x420;
     {
-        arg0->height = temp_22_48;
-        arg0->width = temp_23_51;
-        sp30 = ((u8 *)mpeg + (0x320));
-        temp_19_67 = ((u8 *)mpeg + (0x1E8));
-        sp34 = ((u8 *)mpeg + (0x388));
-        temp_20_71 = ((u8 *)mpeg + (0x250));
-        temp_21_73 = ((u8 *)mpeg + (0x2B8));
-        sp38 = ((u8 *)mpeg + (0x3F0));
-        temp_16_77 = ((0x180U * (u32)temp_23_51) * (u32)temp_22_48) >> 8;
-        sp3C = ((u8 *)mpeg + (0x458));
-        sp40 = ((u8 *)mpeg + (0x4C0));
-        width = temp_23_51;
-        height = temp_22_48;
-        copy_object_field_backward(temp_17_63);
-        mpeg->frame_buffers[0] = reserve_aligned_buffer_space(mpeg, temp_17_63, temp_16_77, 0x40);
-        mpeg->frame_buffers[1] = reserve_aligned_buffer_space(mpeg, temp_17_63, temp_16_77, 0x40);
-        mpeg->frame_buffers[2] = reserve_aligned_buffer_space(mpeg, temp_17_63, temp_16_77, 0x40);
-        _initRefImages(temp_19_67, temp_20_71, temp_21_73, sp30, sp34, sp38, sp3C, sp40, var_2_53,
-                       mpeg->frame_buffers[0], mpeg->frame_buffers[1], mpeg->frame_buffers[2], width,
-                       height);
-        InitializeReferenceImage(temp_19_67, width, height);
-        InitializeReferenceImage(temp_20_71, width, height);
-        InitializeReferenceImage(temp_21_73, width, height);
-        temp_18_75 = height >> 1;
-        chroma_height = temp_18_75;
-        InitializeReferenceImage(sp30, width, chroma_height);
-        InitializeReferenceImage(sp34, width, chroma_height);
-        InitializeReferenceImage(sp38, width, chroma_height);
-        InitializeReferenceImage(sp3C, width, chroma_height);
-        InitializeReferenceImage(sp40, width, chroma_height);
-        InitializeReferenceImage(var_2_53, width, chroma_height);
+        mpeg->height = aligned_height;
+        mpeg->width = aligned_width;
+        field_image0 = ((u8 *)decoder + (0x320));
+        frame_image0 = ((u8 *)decoder + (0x1E8));
+        field_image1 = ((u8 *)decoder + (0x388));
+        frame_image1 = ((u8 *)decoder + (0x250));
+        frame_image2 = ((u8 *)decoder + (0x2B8));
+        field_image2 = ((u8 *)decoder + (0x3F0));
+        frame_size = ((0x180U * (u32)aligned_width) * (u32)aligned_height) >> 8;
+        field_image3 = ((u8 *)decoder + (0x458));
+        field_image4 = ((u8 *)decoder + (0x4C0));
+        width = aligned_width;
+        height = aligned_height;
+        copy_object_field_backward(buffer_pool);
+        decoder->frame_buffers[0] =
+            reserve_aligned_buffer_space(decoder, buffer_pool, frame_size, 0x40);
+        decoder->frame_buffers[1] =
+            reserve_aligned_buffer_space(decoder, buffer_pool, frame_size, 0x40);
+        decoder->frame_buffers[2] =
+            reserve_aligned_buffer_space(decoder, buffer_pool, frame_size, 0x40);
+        _initRefImages(frame_image0, frame_image1, frame_image2, field_image0, field_image1,
+                       field_image2, field_image3, field_image4, field_image5,
+                       decoder->frame_buffers[0], decoder->frame_buffers[1],
+                       decoder->frame_buffers[2], width, height);
+        InitializeReferenceImage(frame_image0, width, height);
+        InitializeReferenceImage(frame_image1, width, height);
+        InitializeReferenceImage(frame_image2, width, height);
+        half_height = height >> 1;
+        field_height = half_height;
+        InitializeReferenceImage(field_image0, width, field_height);
+        InitializeReferenceImage(field_image1, width, field_height);
+        InitializeReferenceImage(field_image2, width, field_height);
+        InitializeReferenceImage(field_image3, width, field_height);
+        InitializeReferenceImage(field_image4, width, field_height);
+        InitializeReferenceImage(field_image5, width, field_height);
     }
 }
 #endif /* NON_MATCHING */

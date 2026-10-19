@@ -1,92 +1,117 @@
 /* Ported from rac1-decomp (src/core/00119D88.c: func_0011A780). */
 #include "types.h"
-#include "sda.h"
+#include "eeregs.h"
 
-extern int D_0012FC04 NOT_SDA;
-extern int D_00154E54 NOT_SDA;
-extern int D_00154F80[];
-typedef struct { void (*f)(void *, void *); void *arg; } Hnd;
-typedef struct {
-    void *a0;
-    void *a1;
-    int a2;
-    void *a3;
-    int a4;
-    int a5;
-    int a6;
-    int *a7;
-} CmdData;
-typedef struct { char pad[0xC]; int pad2; void *u10; } CmdPkt;
+typedef void (*SifCmdHandler)(void *packet, void *argument);
+
+typedef struct SifCmdHandlerEntry {
+    SifCmdHandler handler;
+    void *argument;
+} SifCmdHandlerEntry;
+
+typedef struct SifCmdHeader {
+    u32 packet_size : 8;
+    u32 destination_size : 24;
+    u32 destination;
+    s32 command_id;
+    u32 option;
+} SifCmdHeader;
+
+/* The SIF command state of sce_sif_cmd_intr_hdlr.c. Typed pointers in the
+   first and fourth fields reorder the stores below, so they stay void *. */
+typedef struct SifCmdData {
+    void *packet_buffer;
+    void *unk4;
+    s32 unk8;
+    void *system_handlers;
+    s32 system_handler_count;
+    SifCmdHandlerEntry *user_handlers;
+    s32 user_handler_count;
+    s32 *unk1C;
+} SifCmdData;
+
+/* Tells the IOP where the EE receives command packets. */
+typedef struct SifCmdInitPacket {
+    SifCmdHeader header;
+    void *packet_buffer;
+} SifCmdInitPacket;
+
+extern u32 D_0012FC04[];
+extern u32 D_00154E54[];
+extern int LookupTable[] __asm__("D_00154F80");
+extern u8 sif_cmd_packet_buffer[] __asm__("D_00154D80");
+extern u8 D_00154E00[];
+extern SifCmdData sif_cmd_data __asm__("D_00154E58");
+extern SifCmdHandlerEntry sif_system_handlers[] __asm__("D_00154E80");
+extern SifCmdInitPacket sif_init_packet __asm__("D_00154E40");
+
 extern int DIntr(void);
 extern void EnableInterrupts(void);
 extern void FlushCache(int);
 extern void sceSifSetDChain(void);
 extern int AddDmacHandler(int, void *, int);
-extern void func_00119160(int);
+extern s32 enable_dmac(s32 channel) __asm__("func_00119160");
 extern void _sceSifCmdIntrHdlr(void);
-extern int sceSifGetReg(int);
-extern int sceSifSetReg(int, int);
-extern int sceSifSendCmd(int, int, int, int, int, int);
-extern int handle_sif_initialize_command() __asm__("func_0011A448");
-extern void handle_sif_set_system_register() __asm__("func_0011A428");
-extern unsigned char D_00154D80[];
-extern unsigned char D_00154E00[];
-extern CmdData D_00154E58;
-extern Hnd D_00154E80[];
-extern CmdPkt D_00154E40;
+extern u32 sceSifGetReg(u32 reg);
+extern u32 sceSifSetReg(s32 reg, u32 value);
+extern u32 sceSifSendCmd(s32 command, void *packet, s32 size, void *source, void *destination,
+                         s32 data_size);
+extern s32 handle_sif_initialize_command(s32 *packet, s32 *command_state) __asm__("func_0011A448");
+extern void handle_sif_set_system_register(s32 *packet,
+                                           s32 *command_state) __asm__("func_0011A428");
 
 void sceSifInitCmd(void) {
     int i;
-    unsigned t5, t6;
+    u32 uncached_packet_buffer, uncached_unk4;
     DIntr();
-    if (D_0012FC04 != 0) {
+    if (D_0012FC04[0] != 0) {
         EnableInterrupts();
         return;
     }
-    D_0012FC04 = 1;
-    t6 = (unsigned)D_00154D80 | 0x20000000;
-    t5 = (unsigned)D_00154E00 | 0x20000000;
-    D_00154E58.a0 = (void *)t6;
-    D_00154E58.a1 = (void *)t5;
-    D_00154E58.a2 = 0;
-    D_00154E58.a3 = D_00154E80;
-    D_00154E58.a4 = 0x20;
-    D_00154E58.a5 = 0;
-    D_00154E58.a6 = 0;
-    D_00154E58.a7 = D_00154F80;
+    D_0012FC04[0] = 1;
+    uncached_packet_buffer = (u32)sif_cmd_packet_buffer | 0x20000000;
+    uncached_unk4 = (u32)D_00154E00 | 0x20000000;
+    sif_cmd_data.packet_buffer = (void *)uncached_packet_buffer;
+    sif_cmd_data.unk4 = (void *)uncached_unk4;
+    sif_cmd_data.unk8 = 0;
+    sif_cmd_data.system_handlers = sif_system_handlers;
+    sif_cmd_data.system_handler_count = 0x20;
+    sif_cmd_data.user_handlers = 0;
+    sif_cmd_data.user_handler_count = 0;
+    sif_cmd_data.unk1C = LookupTable;
     for (i = 0; i < 32; i++) {
-        D_00154E80[i].f = 0;
-        D_00154E80[i].arg = 0;
+        sif_system_handlers[i].handler = 0;
+        sif_system_handlers[i].argument = 0;
     }
     for (i = 0; i < 32; i++) {
-        D_00154F80[i] = 0;
+        LookupTable[i] = 0;
     }
-    D_00154E80[0].f = (void (*)(void *, void *))handle_sif_initialize_command;
-    D_00154E80[1].f = (void (*)(void *, void *))handle_sif_set_system_register;
-    D_00154E80[0].arg = &D_00154E58;
-    D_00154E80[1].arg = &D_00154E58;
+    sif_system_handlers[0].handler = (SifCmdHandler)handle_sif_initialize_command;
+    sif_system_handlers[1].handler = (SifCmdHandler)handle_sif_set_system_register;
+    sif_system_handlers[0].argument = &sif_cmd_data;
+    sif_system_handlers[1].argument = &sif_cmd_data;
     EnableInterrupts();
     FlushCache(0);
-    if (*(volatile unsigned *)0x1000E010 & 0x20) {
-        *(volatile unsigned *)0x1000E010 = 0x20;
+    if (*REG_DMAC_STAT & 0x20) {
+        *REG_DMAC_STAT = 0x20;
     }
-    if (!(*(volatile unsigned *)0x1000C000 & 0x100)) {
+    if (!(*(vu32 *)0x1000C000 & 0x100)) {
         sceSifSetDChain();
     }
-    D_00154E54 = AddDmacHandler(5, _sceSifCmdIntrHdlr, 0);
-    func_00119160(5);
-    D_00154E58.a2 = ((int (*)(unsigned))sceSifGetReg)(0x80000000);
-    if (D_00154E58.a2 != 0) {
-        D_00154E40.u10 = D_00154D80;
-        sceSifSendCmd(0x80000000, (int)&D_00154E40, 0x14, 0, 0, 0);
+    D_00154E54[0] = AddDmacHandler(5, _sceSifCmdIntrHdlr, 0);
+    enable_dmac(5);
+    sif_cmd_data.unk8 = sceSifGetReg(0x80000000);
+    if (sif_cmd_data.unk8 != 0) {
+        sif_init_packet.packet_buffer = sif_cmd_packet_buffer;
+        sceSifSendCmd(0x80000000, &sif_init_packet, 0x14, 0, 0, 0);
         return;
     }
     do {
     } while (!(sceSifGetReg(4) & 0x20000));
-    D_00154E58.a2 = sceSifGetReg(2);
-    sceSifSetReg(0x80000000, D_00154E58.a2);
-    sceSifSetReg(0x80000001, (int)&D_00154E58);
-    D_00154E40.u10 = D_00154D80;
-    D_00154E40.pad2 = 0;
-    sceSifSendCmd(0x80000002, (int)&D_00154E40, 0x14, 0, 0, 0);
+    sif_cmd_data.unk8 = sceSifGetReg(2);
+    sceSifSetReg(0x80000000, sif_cmd_data.unk8);
+    sceSifSetReg(0x80000001, (u32)&sif_cmd_data);
+    sif_init_packet.packet_buffer = sif_cmd_packet_buffer;
+    sif_init_packet.header.option = 0;
+    sceSifSendCmd(0x80000002, &sif_init_packet, 0x14, 0, 0, 0);
 }

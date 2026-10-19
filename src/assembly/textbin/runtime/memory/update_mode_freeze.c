@@ -11,37 +11,11 @@ INCLUDE_ASM(
 #include "types.h"
 #include "rnc/globals.h"
 
-struct S_0013C940 {
-    u8 pad_0[0x1A4];
-    s32 unk1A4;
-};
-struct S_0013F350_2080 {
-    u8 pad_0[0x31];
-    u8 unk31;
-    u8 pad_31[0x2];
-    u16 unk34;
-    u8 pad_36[0x5E];
-    s32 unk94;
-};
-struct S_0013F350_890 {
-    u8 pad_0[0xBC];
-    u8 unkBC;
-};
-struct S_0013F350 {
-    u8 pad_0[0x19C];
-    s32 unk19C;
-    u8 pad_1A0[0x6E0];
-    s32 unk880;
-    u8 pad_884[0xC];
-    struct S_0013F350_890 *unk890;
-    u8 pad_894[0x6];
-    s16 unk89A;
-    u8 pad_89C[0xD73];
-    u8 unk160F;
-    u8 pad_1610[0xA70];
-    struct S_0013F350_2080 *unk2080;
-};
-struct S_00193300 {
+#include "rnc/gameplay/entities/moby.h"
+#include "rnc/gameplay/hero.h"
+#include "rnc/input/pad_state.h"
+
+struct FreezeModeState {
     s32 unk0;
     s32 unk4;
     s32 unk8;
@@ -52,19 +26,17 @@ struct S_00193300 {
     s32 unk1C;
     s32 unk20;
     s32 unk24;
+    s32 unk28;
 };
-extern struct S_0013C940 D_0013C940;
-#include "rnc/input/pad_state.h"
+
 extern u16 D_0013E05A[];
-extern struct S_0013F350 D_0013F350;
 extern u8 D_00141050[];
 extern s32 D_0015EE38;
 extern s32 D_0015EE3C;
 extern s32 boot_level_active __asm__("D_0015F5E8");
-extern s32 game_mode __asm__("D_0015F604");
 extern s32 D_0015F648;
 extern u8 requested_video_mode __asm__("D_0016034C");
-extern struct S_00193300 freeze __asm__("D_00193300");
+extern struct FreezeModeState freeze __asm__("D_00193300");
 extern s32 pause_current_action_list[] __asm__("D_001D5BF8");
 extern char sound_update() __asm__("func_0022CA50");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
@@ -82,22 +54,22 @@ extern void snd_flush_sound_commands() __asm__("func_0012DC80");
 void update_mode_freeze(void) __asm__("FUN_001fce28");
 
 void update_mode_freeze(void) {
-    s32 fm;
+    s32 video_mode;
     sound_update();
     if (freeze.unk4 != 0) {
         freeze.unk4--;
     }
     switch (freeze.unk0) {
     case 5: {
-        struct S_00193300 *st = &freeze;
-        st->unk20++;
-        if (scale_game_frames(0x5A) < st->unk20) {
-            if (st->unk24 != 0) {
-                st->unk24--;
+        struct FreezeModeState *state = &freeze;
+        state->unk20++;
+        if (scale_game_frames(0x5A) < state->unk20) {
+            if (state->unk24 != 0) {
+                state->unk24--;
             }
         }
-        st = &freeze;
-        if (scale_game_frames(0x78) < st->unk20) {
+        state = &freeze;
+        if (scale_game_frames(0x78) < state->unk20) {
             if (controller_state.pressed & PAD_CROSS) {
                 game_mode = 0;
                 if (current_level_index == 1) {
@@ -110,12 +82,12 @@ void update_mode_freeze(void) {
 
     case 4:
         if (controller_state.pressed & PAD_TRIANGLE) {
-            struct S_0013F350_2080 *p = D_0013F350.unk2080;
-            p->unk31 = 0;
-            p->unk94 = 0;
-            p->unk34 = (u16)(p->unk34 | 1);
+            struct Moby *moby = hero.moby;
+            moby->visible = 0;
+            moby->collision = 0;
+            moby->flags = (u16)(moby->flags | 1);
             noop_main_callback();
-            noop_callback_k(((u8 *)(&D_0013F350)) + 0x1D00, ((u8 *)(&D_0013F350)) + 0x1D10, 0, 1);
+            noop_callback_k(hero.unk1D00, hero.unk1D00 + 0x10, 0, 1);
             game_mode = 0;
         } else if (controller_state.pressed & PAD_CROSS) {
             game_mode = 0;
@@ -176,7 +148,7 @@ void update_mode_freeze(void) {
         D_0015F648 = 2;
         if (controller_state.pressed & PAD_TRIANGLE) {
             game_mode = 0;
-            D_0013F350.unk160F = (u8)(D_0013F350.unk160F | 1);
+            hero.ship_flags = (u8)(hero.ship_flags | 1);
         } else if (controller_state.pressed & PAD_CROSS) {
             game_mode = 0;
         }
@@ -207,10 +179,9 @@ void update_mode_freeze(void) {
             } else if (controller_state.pressed & (PAD_CIRCLE | PAD_START)) {
                 freeze.unk1C = 3;
             }
-            /* Fakematch: an always-true test (combine folds it after block merging)
-             * gives case 2/3 a second predecessor so its block stays in place. */
-            fm = requested_video_mode;
-            if (fm >= 0)
+            /* Fakematch: this always-true test gives case 2/3 a second predecessor. */
+            video_mode = requested_video_mode;
+            if (video_mode >= 0)
                 break;
 
         case 2:
@@ -220,12 +191,12 @@ void update_mode_freeze(void) {
             } else if (freeze.unk20 != 0) {
                 freeze.unk20--;
             } else if (freeze.unk1C == 2) {
-                if (D_0013F350.unk880 != (-1)) {
-                    set_animation_parameter(D_0013F350.unk880, 0);
-                    D_0013F350.unk880 = -1;
+                if (hero.unk880 != (-1)) {
+                    set_animation_parameter(hero.unk880, 0);
+                    hero.unk880 = -1;
                 }
                 update_resource_counter();
-                if (scale_game_frames(0x1068) < D_0013F350.unk19C) {
+                if (scale_game_frames(0x1068) < hero.unk19C) {
                     if (current_level_index == 5) {
                         D_0015EE38++;
                     } else if (current_level_index == 0x10) {
@@ -236,9 +207,9 @@ void update_mode_freeze(void) {
                 noop_callback_k(D_00141050, D_00141050 + 0x10, 0, 1);
             } else {
                 game_mode = 0;
-                if (D_0013F350.unk89A >= 3) {
-                    D_0013F350.unk89A = (s16)(((u16)D_0013F350.unk89A) - 1);
-                    D_0013F350.unk890->unkBC = 3;
+                if (hero.unk89A >= 3) {
+                    hero.unk89A = (s16)(((u16)hero.unk89A) - 1);
+                    hero.unk890[0xBC] = 3;
                 }
             }
             break;
@@ -363,15 +334,15 @@ void update_mode_freeze(void) {
         case 4:
             if (boot_level_active != 0) {
                 if (mode_freeze_flags & 2) {
-                    struct S_0013C940 *p = &D_0013C940;
-                    if (p->unk1A4 & 0x40) {
+                    struct PadState *pad = &controller_state;
+                    if (pad->pressed & PAD_CROSS) {
                         load_and_initialize_level_chunk();
                         mode_freeze_flags = mode_freeze_flags & (~2);
                         mode_freeze_flags = mode_freeze_flags & (~4);
                         initialize_global_state_entry(0);
                         D_0013E05A[0] = 1;
                     }
-                    if (p->unk1A4 & 0x10) {
+                    if (pad->pressed & PAD_TRIANGLE) {
                         mode_freeze_flags = mode_freeze_flags | 0x20;
                         mode_freeze_flags = mode_freeze_flags & (~2);
                         mode_freeze_flags = mode_freeze_flags & (~4);

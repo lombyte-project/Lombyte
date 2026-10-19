@@ -56,8 +56,7 @@ void project_graphics_bounds_float(u128 *first, u128 *opposite, f32 *width, f32 
     first_projected[1] *= scale_y;
     opposite_pointer[0] *= scale_x;
     opposite_pointer[1] *= scale_y;
-    /* Retain the local read before the screen-origin conversion so the compiler
-     * keeps that conversion after the viewport products. */
+    /* Fakematch: this dead read keeps the screen-origin conversion after the viewport products. */
     projected_coordinate = *opposite_y;
     first_x = *(f32 *)&first_projected[0];
     projected_coordinate = (f32)screen_extent.half_width;
