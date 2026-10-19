@@ -755,7 +755,8 @@ extern struct Moby *D_001413D0_e94f0 __asm__("D_001413D0") __attribute__((sectio
 
 void FUN_L06_002e94f0(struct Moby *moby) {
     enum {
-        HIT_RESULT_LETHAL = 1
+        HIT_RESULT_LETHAL = 1,
+        HIT_RESULT_REMOVE_OR_RESPAWN = 2
     };
     struct RespawnVars *vars;
     struct MobyHit *hit;
@@ -784,7 +785,7 @@ void FUN_L06_002e94f0(struct Moby *moby) {
         }
         switch (code) {
         case HIT_RESULT_LETHAL:
-        case 2:
+        case HIT_RESULT_REMOVE_OR_RESPAWN:
             stop_moby_sound_e94f0(moby, 0, -1);
             FUN_L06_002ea198(moby, (Vec4 *)&hit->pos);
             if (vars->sparks_pending == 1) {
