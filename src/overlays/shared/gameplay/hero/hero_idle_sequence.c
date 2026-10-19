@@ -1625,6 +1625,9 @@ extern float D_0015ED6C_gp __asm__("D_0015ED6C") __attribute__((section(".sdata"
 // Hero gadget glow: pulses the colour of the hero's gadget moby (hero state 13, 16, 17, 19, 20) and
 // queues its glow sprites. c and g are shared by cases 17 and 20 (one pseudo each, retail's $s0/$s1).
 void FUN_L00_002080b0(void) {
+    enum {
+        ITEM_RED_GREEN_GLOW = 13
+    };
     Vec4_2080b0 v;
     struct Moby *m;
     int i;
@@ -1758,7 +1761,7 @@ void FUN_L00_002080b0(void) {
         queue_glow_sprite_2080b0(&v, col, 0.17f, 0.1f);
         break;
     }
-    case 13: {
+    case ITEM_RED_GREEN_GLOW: {
         int c5;
         float f = fast_add_rotations_2080b0(hero.items[0].glow_phase, D_0015ED6C_gp * 4.71238899f);
         c5 = 0x2814D214;
