@@ -1122,6 +1122,7 @@ void chomper_update(struct Moby *m) {
         CHOMPER_INITIALIZE = 0,
         CHOMPER_WAIT_TO_APPROACH_TARGET = 1,
         CHOMPER_APPROACH_TARGET = 4,
+        CHOMPER_FACE_TARGET = 5,
         CHOMPER_RETURN_HOME = 6,
         CHOMPER_KNOCKBACK = 8
     };
@@ -1169,7 +1170,7 @@ void chomper_update(struct Moby *m) {
         } else if (*(int *)(d + 0x1C4) == 2)
             m->state = 6;
         break;
-    case 5: {
+    case CHOMPER_FACE_TARGET: {
         float *yaw = &m->rot.z;
         float angle = fast_arc_tan(*(float *)(d + 0x180) - m->pos.x,
                                    *(float *)(d + 0x184) - m->pos.y);
