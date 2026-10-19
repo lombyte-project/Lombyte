@@ -6790,8 +6790,10 @@ void shuttle_update(struct Moby *moby) {
     enum {
         INITIALIZE_SHUTTLE = 0,
         WAIT_FOR_SHUTTLE_ROUTE_REQUEST = 1,
+        WAIT_FOR_FORCED_SHUTTLE_RETURN_TRIGGER = 2,
         UPDATE_SHUTTLE_PATH_RIDE = 3,
-        RESTORE_SHUTTLE_IDLE_ANIMATION = 4
+        RESTORE_SHUTTLE_IDLE_ANIMATION = 4,
+        WAIT_FOR_HERO_NEAR_LINKED_MOBY = 6
     };
     enum {
         SHUTTLE_ROUTE_INITIAL_TO_SECOND_STOP = 0,
@@ -6979,7 +6981,7 @@ void shuttle_update(struct Moby *moby) {
             FUN_L00_002eac18_302578(0);
         }
         break;
-    case 6:
+    case WAIT_FOR_HERO_NEAR_LINKED_MOBY:
         if (vector_distance_302578((char *)&hero.motion.pos, D_L06_0015FFD8_302578 + (d->f10C << 8) + 0x10) < 3.5f) {
             char *o = D_L06_0015FFD8_302578 + (d->f10C << 8);
             qcopy(b, o + 0x10);
@@ -6995,7 +6997,7 @@ void shuttle_update(struct Moby *moby) {
             FUN_L00_00284e50_302578(b, rot);
         }
         break;
-    case 2:
+    case WAIT_FOR_FORCED_SHUTTLE_RETURN_TRIGGER:
         if (is_point_inside_clip_volume((char *)&hero.motion.pos, d->fF0) != 0) {
             d->side = 2;
             d->fC4 = D_L06_001620F4;
