@@ -2124,6 +2124,7 @@ void FUN_L10_002e3ef0(void *mv) {
         VEHICLE_SCALED_KNOCKBACK_HIT_RESPONSE = 4,
         VEHICLE_DEPENDENT_KNOCKBACK_HIT_RESPONSE = 5,
         FIXED_STRENGTH_KNOCKBACK_HIT_RESPONSE = 6,
+        TIMED_KNOCKBACK_HIT_RESPONSE = 7,
         SUPPRESSED_HIT_RESPONSE = 11
     };
     Moby *m = mv;
@@ -2221,7 +2222,7 @@ void FUN_L10_002e3ef0(void *mv) {
         switch (hit_response_code) {
         case KNOCKBACK_HIT_RESPONSE:
         case FIXED_STRENGTH_KNOCKBACK_HIT_RESPONSE:
-        case 7:
+        case TIMED_KNOCKBACK_HIT_RESPONSE:
         case 8:
         case 9:
         case 10:
