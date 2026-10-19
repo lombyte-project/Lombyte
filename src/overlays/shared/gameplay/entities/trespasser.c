@@ -3344,6 +3344,7 @@ void glove_of_doom_update(struct Moby *moby) {
     enum {
         GLOVE_INITIALIZE = 0,
         GLOVE_WAIT_FOR_ANIMATION = 1,
+        GLOVE_IDLE = 2,
         GLOVE_RELEASE_HELD_MOBY = 3,
         GLOVE_POST_RELEASE_WAIT = 4
     };
@@ -3395,7 +3396,7 @@ void glove_of_doom_update(struct Moby *moby) {
             moby->state = 2;
         }
         break;
-    case 2:
+    case GLOVE_IDLE:
         break;
     case GLOVE_RELEASE_HELD_MOBY:
         if (vars->held != 0) {
