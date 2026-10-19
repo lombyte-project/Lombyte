@@ -282,7 +282,7 @@ typedef struct {
 } Vars_2a5040;
 extern f32 D_L00_00161394_2a5040 __asm__("D_L00_00161394") __attribute__((section(".data")));
 extern f32 D_L00_00161398_2a5040 __asm__("D_L00_00161398") __attribute__((sda));
-extern C_2a4e48 D_L00_00166C80_2a5040 __asm__("D_L00_00166C80") __attribute__((section(".data")));
+extern C_2a4e48 D_L00_00166C80_2a5040 __asm__("D_L00_00166C80") __attribute__((section(".sdata")));
 extern s64 get_effect_texture(s32) __asm__("FUN_001f44b8");
 extern void draw_geometry_quad(void *, void *, s32) __asm__("FUN_001f7d30");
 extern void vu_euler_rotation_basis(void *, void *) __asm__("FUN_001fa030");

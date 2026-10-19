@@ -2873,7 +2873,7 @@ extern Vec_2b77f0 D_L00_0015F580_2b77f0 __asm__("D_L00_0015F580");
 extern s32 D_L00_001614F8_2b77f0 __asm__("D_L00_001614F8") __attribute__((sda));
 extern s32 D_L00_00161500_2b77f0 __asm__("D_L00_00161500") __attribute__((sda));
 extern s32 D_L00_00161504_2b77f0 __asm__("D_L00_00161504") __attribute__((sda));
-extern Vec_2b77f0 D_L00_001614F0_2b77f0 __asm__("D_L00_001614F0") __attribute__((sda));
+extern Vec_2b77f0 D_L00_001614F0_2b77f0 __asm__("D_L00_001614F0") __attribute__((section(".sdata")));
 extern f32 D_L00_00161510_2b77f0 __asm__("D_L00_00161510") __attribute__((sda));
 extern s32 D_L00_00161518_2b77f0 __asm__("D_L00_00161518") __attribute__((sda));
 extern s32 D_L00_0016151C_2b77f0 __asm__("D_L00_0016151C") __attribute__((sda));

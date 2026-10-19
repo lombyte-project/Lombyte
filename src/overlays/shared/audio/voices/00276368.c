@@ -14,7 +14,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00276368.s", FUN_L00_00276368);
 #else
 #include "qcopy.h"
 typedef unsigned int u128_init __attribute__((mode(TI), aligned(16)));
-extern struct Own D_L00_001B71F0;
+extern struct Own D_L00_001B71F0 __attribute__((section(".sdata")));
 extern s32 D_L00_00173E04 __attribute__((sda));
 extern s32 D_L00_00173E08 __attribute__((sda));
 extern int D_L00_00173E40_lui[] __asm__("D_L00_00173E40") __attribute__((section(".data")));
@@ -52,7 +52,7 @@ extern u8 D_L00_001B86C8[];
 extern u8 D_L00_001B2588[];
 extern u8 D_L00_00180250[];
 extern u8 D_L00_00160280_init[] __asm__("D_L00_00160280") __attribute__((sda));
-extern u8 D_L00_00160290_init[] __asm__("D_L00_00160290") __attribute__((sda));
+extern u8 D_L00_00160290_init[] __asm__("D_L00_00160290") __attribute__((section(".sdata")));
 extern f32 D_L00_00166DC0_init[] __asm__("D_L00_00166DC0");
 
 extern u8 D_L00_001841F0_init[] __asm__("D_L00_001841F0");

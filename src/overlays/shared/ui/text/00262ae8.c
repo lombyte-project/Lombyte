@@ -59,7 +59,7 @@ extern s32 D_0013FA40;
 extern s32 D_0013FA5C;
 extern s32 D_0013FBB4;
 extern s32 D_0013FBF8;
-extern s32 D_L05_0015FAD4;
+extern s32 D_L05_0015FAD4 __attribute__((sda));
 extern s32 D_L05_0015FAD8 __attribute__((sda));
 extern s32 D_L05_0015FAE0[4];
 extern s32 D_L05_0015FAEC __attribute__((sda));

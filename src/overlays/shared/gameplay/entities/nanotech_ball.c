@@ -812,7 +812,7 @@ extern int D_L00_00161AC0_002d9810 __asm__("D_L00_00161AC0") __attribute__((sda)
 extern int D_L00_00161AC4_002d9810 __asm__("D_L00_00161AC4") __attribute__((sda));
 extern int D_L00_00161AC8_002d9810 __asm__("D_L00_00161AC8") __attribute__((sda));
 extern int D_L00_00161ACC_002d9810 __asm__("D_L00_00161ACC") __attribute__((sda));
-extern int D_L00_00161AD4_002d9810 __asm__("D_L00_00161AD4") __attribute__((sda));
+extern int D_L00_00161AD4_002d9810 __asm__("D_L00_00161AD4") __attribute__((section(".data")));
 extern u32 D_L00_00161AD8_002d9810 __asm__("D_L00_00161AD8") __attribute__((section(".data")));
 extern float D_L00_00161ADC_002d9810 __asm__("D_L00_00161ADC") __attribute__((sda));
 extern int D_L00_00161AE4_002d9810 __asm__("D_L00_00161AE4") __attribute__((sda));
@@ -2815,8 +2815,8 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002ddf60.s", FUN_L00_002ddf60);
 #else
 extern float D_L00_00161B84_lui __asm__("D_L00_00161B84");
 extern float D_L00_00161B80_lui __asm__("D_L00_00161B80");
-extern float D_L00_00161B80_gp __asm__("D_L00_00161B80") __attribute__((sda));
-extern float D_L00_00161B84_gp __asm__("D_L00_00161B84") __attribute__((sda));
+extern float D_L00_00161B80_gp __asm__("D_L00_00161B80");
+extern float D_L00_00161B84_gp __asm__("D_L00_00161B84");
 extern float D_L00_00161B50_gp __asm__("D_L00_00161B50") __attribute__((sda));
 extern int D_L00_00161B54 __attribute__((sda));
 extern int D_L00_00161B58 __attribute__((sda));
