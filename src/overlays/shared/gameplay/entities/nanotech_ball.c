@@ -2362,6 +2362,11 @@ extern void func_001E9730_2DDEA0(void *) __asm__("FUN_001e93b0");
 
 int FUN_L00_002dc9f0(struct Moby *moby, char *vars);
 int FUN_L00_002dc9f0(struct Moby *moby, char *vars) {
+    enum {
+        SUCK_UPDATE_BEING_PULLED_IN = 2,
+        SUCK_UPDATE_STORED = 3,
+        SUCK_UPDATE_FALLING_AFTER_CANCEL = 6
+    };
     Frame_2DDEA0 work;
     R_2DDEA0 *record;
 
@@ -2390,7 +2395,7 @@ int FUN_L00_002dc9f0(struct Moby *moby, char *vars) {
             func_00215328_2DDEA0(&record->q20, &moby->rot_row0);
             func_001F9BC0_2DDEA0(&record->vel);
             break;
-        case 2: {
+        case SUCK_UPDATE_BEING_PULLED_IN: {
             float one, distance, half;
             moby->visible = 1;
             moby->flags &= 0xFFFE;
@@ -2457,7 +2462,7 @@ int FUN_L00_002dc9f0(struct Moby *moby, char *vars) {
             }
             break;
         }
-        case 3:
+        case SUCK_UPDATE_STORED:
             moby->flags = (moby->flags | 3) & 0xFFFB;
             moby->visible = 0;
             moby->collision = 0;
@@ -2599,7 +2604,7 @@ int FUN_L00_002dc9f0(struct Moby *moby, char *vars) {
             func_L00_0026D270_2DDEA0(&moby->pos, &moby->rot_row0);
             break;
         }
-        case 6: {
+        case SUCK_UPDATE_FALLING_AFTER_CANCEL: {
             int landed;
             moby->visible = 1;
             moby->flags &= 0xFFFE;
