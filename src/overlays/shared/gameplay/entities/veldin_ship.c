@@ -2253,6 +2253,7 @@ void horny_toad_update(Moby *moby) {
         HORNY_TOAD_MOVE_TO_PATH_POINT = 2,
         HORNY_TOAD_WAIT_TO_FOLLOW_PATH = 3,
         HORNY_TOAD_FOLLOW_PATH = 4,
+        HORNY_TOAD_APPROACH_AND_FACE_TARGET = 6,
         HORNY_TOAD_RETURN_HOME = 8,
         HORNY_TOAD_DYING = 12
     };
@@ -2366,7 +2367,7 @@ void horny_toad_update(Moby *moby) {
             if (moby->prev_seq != 4) FUN_00212f90_2d4610(moby, 4, 0, scale_game_frames(10));
         }
         break;
-    case 6:
+    case HORNY_TOAD_APPROACH_AND_FACE_TARGET:
         if (FUN_L00_002d54c8_2d4610((unsigned char *)moby, data->unk180, 0.5f) < D_L00_00161980
             && fast_difference_between_rotations(moby->rot.z, angle_atan2((*(ToadVec *)&target->pos)[0] - (*(ToadVec *)&moby->pos)[0], (*(ToadVec *)&target->pos)[1] - (*(ToadVec *)&moby->pos)[1])) < 0.17453292f) {
             moby->state = 7;
