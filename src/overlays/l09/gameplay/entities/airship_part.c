@@ -96,6 +96,11 @@ extern int D_L09_001613C8 __attribute__((sda));
 /* Update for the airship parts (classes 0x49E-0x4A5): attach to the hull, ride it, then break off, tumble away and fall with smoke and sparks. */
 void FUN_L09_002c26c8(struct Moby *moby);
 void FUN_L09_002c26c8(struct Moby *moby) {
+    enum {
+        AIRSHIP_PART_STATE_INITIALIZE = 0,
+        AIRSHIP_PART_STATE_BEGIN_BREAKUP = 3,
+        AIRSHIP_PART_STATE_FALLING_WITH_EFFECTS = 4
+    };
     float vec[4];
     Buf_2c26c8 buf;
     float rotm[4][4];
@@ -105,7 +110,7 @@ void FUN_L09_002c26c8(struct Moby *moby) {
 
     D_L09_001613C8++;
     switch (moby->state) {
-    case 0: {
+    case AIRSHIP_PART_STATE_INITIALIZE: {
         float s;
 
         FUN_L00_0024f7c8_2c26c8(moby, 0, vec);
@@ -182,7 +187,7 @@ void FUN_L09_002c26c8(struct Moby *moby) {
         }
         break;
     }
-    case 3: {
+    case AIRSHIP_PART_STATE_BEGIN_BREAKUP: {
         FUN_001f9770_2c26c8(&d->h2A);
         ((Flags_2c26c8 *)(D_0013D388_2c26c8))->b38 = 1;
         if (d->f68 != -1) {
@@ -216,7 +221,7 @@ void FUN_L09_002c26c8(struct Moby *moby) {
         moby->state = 4;
         break;
     }
-    case 4:
+    case AIRSHIP_PART_STATE_FALLING_WITH_EFFECTS:
         d->vel[2] -= d->f64;
         FUN_001f9a10_2c26c8(((f32 *)&moby->pos), ((f32 *)&moby->pos), d->vel);
         moby->rot.x = FUN_001fa580_2c26c8(moby->rot.x, d->f20);
