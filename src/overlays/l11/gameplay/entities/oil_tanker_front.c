@@ -376,7 +376,8 @@ void FUN_L11_00316320(struct Moby *moby) {
         GATE_WAIT_FOR_HERO_TRIGGER = 1,
         GATE_RAISE_DOORS = 2,
         GATE_ZERO_DOOR_Y_ROTATION = 3,
-        GATE_TILT_DOORS_APART = 4
+        GATE_TILT_DOORS_APART = 4,
+        GATE_OPEN_IDLE = 5
     };
     struct L11GateVars *d = (struct L11GateVars *)moby->pvars;
     float v[4];
@@ -475,7 +476,7 @@ void FUN_L11_00316320(struct Moby *moby) {
         }
         break;
     }
-    case 5:
+    case GATE_OPEN_IDLE:
         break;
     case 6:
         fast_vec_normalize(v, &moby->rot_row0, 0.5f);
