@@ -99,7 +99,8 @@ void level_draw_dialog_text(void) {
         CHOICE_DIALOG_SINGLE_CENTERED_BUTTON = 3
     };
     enum {
-        FREEZE_DIALOG_TIMER_GATED_CENTERED_BUTTON = 2
+        FREEZE_DIALOG_TIMER_GATED_CENTERED_BUTTON = 2,
+        FREEZE_DIALOG_FORMATTED_BODY_CENTERED_BUTTON = 5
     };
     char buf[0x200];
     struct TextRegion box;
@@ -256,7 +257,7 @@ void level_draw_dialog_text(void) {
                 text = get_help_message_text(0x4FAC);
             }
             break;
-        case 5:
+        case FREEZE_DIALOG_FORMATTED_BODY_CENTERED_BUTTON:
             mid = 0x4FA8;
             sprintf(buf, D_L00_0015F510, get_help_message_text(0x4FB0), 1, 1, get_help_message_text(0x4FA7));
             text = buf;
