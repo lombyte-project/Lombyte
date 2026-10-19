@@ -315,6 +315,10 @@ extern CollisionHit HH __asm__("D_L02_00174440") __attribute__((section(".data")
 #define HF(o) (*(f32 *)(D_L02_00174440 + (o)))
 
 void FUN_L02_002216a0(void) {
+    enum {
+        GRAVITY_MODE_NEGATIVE_Z = 0,
+        GRAVITY_MODE_OPPOSITE_GROUND_NORMAL = 1
+    };
     V collision_ray_end, collision_ray_start, v20, probe_ray_start, v40, probe_surface_angles, normalized_probe_hit_normal;
     f32 f;
     s32 r;
@@ -430,10 +434,10 @@ tail:
 d1:
     FUN_001f99f8_c((u8 *)&hero.gravity_dir);
     switch (hero.unk20B3) {
-    case 0:
+    case GRAVITY_MODE_NEGATIVE_Z:
         hero.gravity_dir.f[2] = -1.0f;
         break;
-    case 1:
+    case GRAVITY_MODE_OPPOSITE_GROUND_NORMAL:
         qcopy((u8 *)&hero.gravity_dir, (u8 *)&hero.unk270);
         FUN_001f9a68_c((u8 *)&hero.gravity_dir, (u8 *)&hero.gravity_dir, -1.0f);
         break;
