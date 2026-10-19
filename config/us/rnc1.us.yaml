@@ -1871,7 +1871,7 @@ segments:
           - [0x128068, c, world/data/parse_typed_resource_record]
           - [0x1280bc, textbin, text_gap_0022713c_after_fun_002270e8]
           - [0x1280c0, c, ui/menus/emit_selected_graphics_dma_packets]
-          - [0x128150, c, assembly/textbin/rendering/append_fullscreen_setup_strips]
+          - [0x128150, c, rendering/append_fullscreen_setup_strips]
           - [0x1282f8, c, rendering/append_fullscreen_clear_strips]
           - [0x1284c4, textbin, text_gap_00227544_after_fun_00227378]
           - [0x1284c8, c, rendering/submit_graphics_setup_command_stream]

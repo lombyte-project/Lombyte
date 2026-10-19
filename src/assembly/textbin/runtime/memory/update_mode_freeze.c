@@ -7,7 +7,7 @@ INCLUDE_ASM(
     "config/us/expected/asm/assembly/textbin/runtime/memory/update_mode_freeze/FUN_001fce28.s",
     FUN_001fce28);
 #else
-
+/* Near miss, 2 rows: the reloaded unk1C lands in v1 instead of a1. */
 #include "types.h"
 #include "rnc/globals.h"
 
@@ -82,6 +82,7 @@ extern void snd_flush_sound_commands() __asm__("func_0012DC80");
 void update_mode_freeze(void) __asm__("FUN_001fce28");
 
 void update_mode_freeze(void) {
+    s32 fm;
     sound_update();
     if (freeze.unk4 != 0) {
         freeze.unk4--;
@@ -189,66 +190,59 @@ void update_mode_freeze(void) {
         break;
 
     case 0:
-        if (freeze.unk1C == 1)
-            goto mode0_one;
-        if (freeze.unk1C < 2) {
-            if (freeze.unk1C == 0)
-                goto mode0_zero;
-            goto mode0_done;
-        }
-        if (freeze.unk1C < 4)
-            goto mode0_countdown;
-        break;
-    mode0_zero:
-        if (freeze.unk20 < 8) {
-            freeze.unk20++;
-        } else if (freeze.unk24 < 8) {
-            freeze.unk24++;
-        } else {
-            freeze.unk1C = 1;
-        }
-        goto mode0_done;
-    mode0_one:
-        if (controller_state.pressed & PAD_CROSS) {
-            freeze.unk1C = 2;
-        } else if (controller_state.pressed & (PAD_CIRCLE | PAD_START)) {
-            freeze.unk1C = 3;
-        }
-        goto mode0_done;
-    mode0_countdown:
-        {
-            struct S_00193300 *st = &freeze;
-            if (st->unk24 != 0) {
-                st->unk24--;
-            } else if (st->unk20 != 0) {
-                st->unk20--;
+        switch (freeze.unk1C) {
+        case 0:
+            if (freeze.unk20 < 8) {
+                freeze.unk20++;
+            } else if (freeze.unk24 < 8) {
+                freeze.unk24++;
             } else {
-                /* Retail reloads unk1C after both countdown checks (0x001fd1d0). */
-                if (*(volatile s32 *)&st->unk1C == 2) {
-                    if (D_0013F350.unk880 != (-1)) {
-                        set_animation_parameter(D_0013F350.unk880, 0);
-                        D_0013F350.unk880 = -1;
-                    }
-                    update_resource_counter();
-                    if (scale_game_frames(0x1068) < D_0013F350.unk19C) {
-                        if (current_level_index == 5) {
-                            D_0015EE38++;
-                        } else if (current_level_index == 0x10) {
-                            D_0015EE3C++;
-                        }
-                    }
-                    game_mode = 0;
-                    noop_callback_k(D_00141050, D_00141050 + 0x10, 0, 1);
-                } else {
-                    game_mode = 0;
-                    if (D_0013F350.unk89A >= 3) {
-                        D_0013F350.unk89A = (s16)(((u16)D_0013F350.unk89A) - 1);
-                        D_0013F350.unk890->unkBC = 3;
+                freeze.unk1C = 1;
+            }
+            break;
+
+        case 1:
+            if (controller_state.pressed & PAD_CROSS) {
+                freeze.unk1C = 2;
+            } else if (controller_state.pressed & (PAD_CIRCLE | PAD_START)) {
+                freeze.unk1C = 3;
+            }
+            /* Fakematch: an always-true test (combine folds it after block merging)
+             * gives case 2/3 a second predecessor so its block stays in place. */
+            fm = requested_video_mode;
+            if (fm >= 0)
+                break;
+
+        case 2:
+        case 3:
+            if (freeze.unk24 != 0) {
+                freeze.unk24--;
+            } else if (freeze.unk20 != 0) {
+                freeze.unk20--;
+            } else if (freeze.unk1C == 2) {
+                if (D_0013F350.unk880 != (-1)) {
+                    set_animation_parameter(D_0013F350.unk880, 0);
+                    D_0013F350.unk880 = -1;
+                }
+                update_resource_counter();
+                if (scale_game_frames(0x1068) < D_0013F350.unk19C) {
+                    if (current_level_index == 5) {
+                        D_0015EE38++;
+                    } else if (current_level_index == 0x10) {
+                        D_0015EE3C++;
                     }
                 }
+                game_mode = 0;
+                noop_callback_k(D_00141050, D_00141050 + 0x10, 0, 1);
+            } else {
+                game_mode = 0;
+                if (D_0013F350.unk89A >= 3) {
+                    D_0013F350.unk89A = (s16)(((u16)D_0013F350.unk89A) - 1);
+                    D_0013F350.unk890->unkBC = 3;
+                }
             }
+            break;
         }
-    mode0_done:
         break;
 
     case 3:

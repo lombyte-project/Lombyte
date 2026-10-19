@@ -4,6 +4,7 @@
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/rendering/project_graphics_bounds_float/FUN_00237c80.s", FUN_00237c80);
 #else
+/* Near miss, 2 rows: the dummy volatile read through opposite_y adds one lwc1. */
 #include "types.h"
 #include "eetypes.h"
 
@@ -30,6 +31,7 @@ void project_graphics_bounds_float(u128 *first, u128 *opposite, f32 *width, f32 
     f32 scale_x;
     f32 scale_y;
     f32 projected_coordinate;
+    volatile f32 *opposite_y;
     f32 first_x;
 
     opposite_pointer = opposite_projected;
@@ -37,6 +39,7 @@ void project_graphics_bounds_float(u128 *first, u128 *opposite, f32 *width, f32 
     *(u128 *)opposite_pointer = *opposite;
     fast_vec_sub(first_projected, first_projected, camera_position);
     fast_vec_sub(opposite_pointer, opposite_pointer, camera_position);
+    opposite_y = (volatile f32 *)&opposite_pointer[1];
     fast_vec_scale(first_projected, first_projected, 1024.0f);
     fast_vec_scale(opposite_pointer, opposite_pointer, 1024.0f);
     opposite_pointer[3] = 1.0f;
@@ -55,7 +58,7 @@ void project_graphics_bounds_float(u128 *first, u128 *opposite, f32 *width, f32 
     opposite_pointer[1] *= scale_y;
     /* Retain the local read before the screen-origin conversion so the compiler
      * keeps that conversion after the viewport products. */
-    projected_coordinate = *(volatile f32 *)&opposite_pointer[1];
+    projected_coordinate = *opposite_y;
     first_x = *(f32 *)&first_projected[0];
     projected_coordinate = (f32)screen_extent.half_width;
     *x = first_x * 0.25f + projected_coordinate;
@@ -66,5 +69,4 @@ void project_graphics_bounds_float(u128 *first, u128 *opposite, f32 *width, f32 
 
 extern __typeof__(project_graphics_bounds_float) func_00237C80
     __attribute__((alias("FUN_00237c80")));
-
 #endif /* NON_MATCHING */

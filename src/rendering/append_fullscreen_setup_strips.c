@@ -1,14 +1,9 @@
 #include "types.h"
-#include "asm.h"
-
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/expected/asm/assembly/textbin/rendering/append_fullscreen_setup_strips/FUN_002271d0.s", FUN_002271d0);
-#else
-#include "types.h"
 #include "rnc/rendering/fs_aa_buffer.h"
-
 #include "rnc/rendering/dma_tag.h"
+
 extern void vu1_add_g_sregister(s32, s32) __asm__("func_00233980");
+
 void append_fullscreen_setup_strips(void) __asm__("FUN_002271d0");
 
 void append_fullscreen_setup_strips(void) {
@@ -48,32 +43,33 @@ void append_fullscreen_setup_strips(void) {
     packet_words[8] = 0x2400000000000000 | (strip_count | 0x8000);
     packet_words[9] = 0x44;
     strip_index = 0;
-    /* Each strip writes two packed 64-bit XY coordinates. */
-    if (strip_count > 0) {
-        negative_half_width = -(display_width * 8);
-        top_y = (u64)(0x8000 - display_height * 8) << 16;
-        left_x = negative_half_width + 0x8000;
-        strip_words = packet_words + 10;
-        right_x = negative_half_width + 0x8200;
-        bottom_y = (u64)(display_height * 8 + 0x7FF0) << 16;
-    loop:
-        *strip_words++ = left_x | top_y;
-        strip_index++;
-        *strip_words++ = right_x | bottom_y;
-        right_x += 0x200;
-        left_x += 0x200;
-        if (strip_index < strip_count) {
-            goto loop;
-        }
-    }
-    /* The cursor is already past the DMA tag at this point. */
+    /* Fakematch: the two empty loop levels weight the strip counter's references so it
+     * outranks the tag pointer in register allocation (t6/t7 as in retail). */
     do {
-        render_packet_cursor.tag =
-            (struct DmaTag *)((u8 *)render_packet_cursor.tag + 0x50 + strip_count * 0x10);
+        do {
+            if (strip_count > 0) {
+                negative_half_width = -(display_width * 8);
+                top_y = (u64)(0x8000 - display_height * 8) << 16;
+                left_x = negative_half_width + 0x8000;
+                strip_words = packet_words + 10;
+                right_x = negative_half_width + 0x8200;
+                bottom_y = (u64)(display_height * 8 + 0x7FF0) << 16;
+                do {
+                    /* Fakematch: the volatile store keeps loop from merging the two
+                     * strip_words increments into one. */
+                    *(volatile u64 *)strip_words++ = left_x | top_y;
+                    strip_index++;
+                    *strip_words++ = right_x | bottom_y;
+                    right_x += 0x200;
+                    left_x += 0x200;
+                } while (strip_index < strip_count);
+            }
+        } while (0);
     } while (0);
+    /* The cursor is already past the DMA tag at this point. */
+    render_packet_cursor.tag =
+        (struct DmaTag *)((u8 *)render_packet_cursor.tag + 0x50 + strip_count * 0x10);
 }
 
 extern __typeof__(append_fullscreen_setup_strips) func_002271D0
     __attribute__((alias("FUN_002271d0")));
-
-#endif /* NON_MATCHING */
