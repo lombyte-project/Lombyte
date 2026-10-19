@@ -364,34 +364,37 @@ extern int D_L14_001620EC __attribute__((sda));
 
 extern char D_L14_001674C0[];
 
-void FUN_L14_00301fa8(char *m) {
-    char *d = *(char **)(m + 0x78);
-    VendorBeamFrame *frame = &D_L14_001600EC[*(int *)d];
-    VendorBeamStripPacket packet[3];
-    float base[16] __attribute__((aligned(16)));
-    float matrix[16] __attribute__((aligned(16)));
-    float direction[4] __attribute__((aligned(16)));
-    float end[4] __attribute__((aligned(16)));
-    float start[4] __attribute__((aligned(16)));
-    float work[4] __attribute__((aligned(16)));
-    float side[4] __attribute__((aligned(16)));
-    int i, j, k, strip, point;
-    int rounded;
-    int color;
-    u8 *indices;
-    void *src;
-    float t;
-    float offset;
-    float *uv, *uv_base;
-    int next;
-    int branch_next;
+/* The beam state behind moby->vars: a main line of 32 points and four 4-point branches. */
+typedef struct {
+    int frame;              /* 0x0: D_L14_001600EC transform index */
+    u8 pad4[0x10];
+    int color;              /* 0x14 */
+    u8 branch_start[4];     /* 0x18: main line point each branch leaves from */
+    u8 pad1c[4];
+    Vec4 points[32];        /* 0x20 */
+    Vec4 point_steps[32];   /* 0x220 */
+    Vec4 branches[4][4];    /* 0x420: [point][branch] */
+} VendorBeamVars;
+extern float D_L14_001E5FD0[4][2];
 
-    euler_rotation_matrix(base, &frame->pad40[0x30]);
-    transpose_rotation_matrix(matrix, base);
-    frame = &D_L14_001600EC[*(int *)d];
-    qcopy(base + 12, &frame->origin);
-    subtract_vector_xyz(direction, D_L14_001674C0, &frame->origin);
-    transform_vector_xyz(direction, direction, matrix);
+void FUN_L14_00301fa8(char *m) {
+    VendorBeamVars *beam = *(VendorBeamVars **)(m + 0x78);
+    VendorBeamStripPacket packet[3];
+    float world[16] __attribute__((aligned(16)));
+    float inverse[16] __attribute__((aligned(16)));
+    float camera[4] __attribute__((aligned(16)));
+    float prev_offset[4] __attribute__((aligned(16)));
+    float offset[4] __attribute__((aligned(16)));
+    float view[4] __attribute__((aligned(16)));
+    float tangent[4] __attribute__((aligned(16)));
+    int i, branch, node;
+    int start_point;
+
+    euler_rotation_matrix(world, &D_L14_001600EC[beam->frame].pad40[0x30]);
+    transpose_rotation_matrix(inverse, world);
+    qcopy_nc(&world[12], &D_L14_001600EC[beam->frame].origin);
+    subtract_vector_xyz(camera, D_L14_001674C0, &D_L14_001600EC[beam->frame].origin);
+    transform_vector_xyz(camera, camera, inverse);
 
     {
         u64 texture = get_effect_texture(D_L14_001620DC);
@@ -399,105 +402,74 @@ void FUN_L14_00301fa8(char *m) {
             (u64)D_L14_001620E8 << 4 | (u64)D_L14_001620EC << 6 | 0x8000000000ULL;
         packet[0].texture_state = packet[1].texture_state = packet[2].texture_state = 0xff9000000260ULL;
         packet[0].texture = packet[1].texture = packet[2].texture = texture;
+        packet[0].tag = packet[1].tag = packet[2].tag = 0;
         packet[0].gs_state = packet[1].gs_state = packet[2].gs_state = gs_state;
     }
-    packet[0].tag = packet[1].tag = packet[2].tag = 0;
-    for (i = 0; i < 4; i++) {
-        float v = ((float *)0x001e5fd0)[i * 2 + 1];
-        packet[2].uv[i][1] = v;
-        packet[1].uv[i][1] = v;
-        packet[0].uv[i][1] = v;
-        color = *(int *)(d + 0x14);
-        packet[2].colors[i] = color;
-        packet[1].colors[i] = color;
-        packet[0].colors[i] = color;
+    {
+        int k;
+        for (k = 0; k < 4; k++) {
+            packet[0].uv[k][1] = packet[1].uv[k][1] = packet[2].uv[k][1] = D_L14_001E5FD0[k][1];
+            packet[0].colors[k] = packet[1].colors[k] = packet[2].colors[k] = beam->color;
+        }
     }
 
-    clear_u64_value(start);
-    indices = (u8 *)(d + 0x18);
-    for (point = 0; point < 31; point = next) {
-        qcopy(end, start);
-        if (point < 30) {
-            subtract_vector_xyz(side, (char *)((point << 4) + 0x20 + (int)d), (char *)((point << 4) + 0x40 + (int)d));
-            subtract_vector_xyz(work, (char *)((point << 4) + 0x30 + (int)d), direction);
-            cross_vectors_xyz(start, work, side);
-            normalize_vector_xyz(start, start, 0.1f);
-        } else {
-            clear_u64_value(start);
-        }
-        next = point + 1;
-        rounded = (point / 4) * 4;
-        for (i = 0; i < 4;) {
-            if (i < 2) {
-                packet[0].vertices[i] = *(u128 *)(d + 0x20 + (point << 4));
-                if (!(i & 1)) subtract_vector_xyz(&packet[0].vertices[i], &packet[0].vertices[i], end);
-                else {
-                    src = end;
-                    goto add_main;
-                }
+    clear_u64_value(offset);
+    {
+        int point;
+        for (point = 0; point < 31; point++) {
+            qcopy(prev_offset, offset);
+            if (point < 30) {
+                subtract_vector_xyz(tangent, &beam->points[point], &beam->points[point + 2]);
+                subtract_vector_xyz(view, &beam->points[point + 1], camera);
+                cross_vectors_xyz(offset, view, tangent);
+                normalize_vector_xyz(offset, offset, 0.1f);
             } else {
-                packet[0].vertices[i] = *(u128 *)(d + 0x30 + (point << 4));
-                if (!(i & 1)) subtract_vector_xyz(&packet[0].vertices[i], &packet[0].vertices[i], start);
-                else {
-                    src = start;
-add_main:
-                    add_vector_xyz(&packet[0].vertices[i], &packet[0].vertices[i], src);
-                }
+                clear_u64_value(offset);
             }
-            t = convert_integer_to_float(point - rounded) * 0.25f;
-            j = i++;
-            offset = ((float *)0x001e5fd0)[j * 2];
-            offset += t;
-            packet[0].uv[j][0] = offset;
-        }
-        draw_geometry_quad(&packet[0], base, 0);
-    }
-    for (strip = 0; strip < 4; strip++) {
-        clear_u64_value(start);
-        if (indices[strip] < 31) {
-            for (point = 0; point < 3; point = branch_next) {
-                qcopy(end, start);
-                if (point < 2) {
-                    subtract_vector_xyz(side, d + (point << 6) + 0x420 + (strip << 4),
-                        d + (point << 6) + 0x4a0 + (strip << 4));
-                    subtract_vector_xyz(work, d + (point << 6) + 0x460 + (strip << 4),
-                        direction);
-                    cross_vectors_xyz(start, work, side);
-                    normalize_vector_xyz(start, start, 0.1f);
+            for (i = 0; i < 4; i++) {
+                if (i < 2) {
+                    qcopy(&packet[0].vertices[i], &beam->points[point]);
+                    if (i & 1) add_vector_xyz(&packet[0].vertices[i], &packet[0].vertices[i], prev_offset);
+                    else subtract_vector_xyz(&packet[0].vertices[i], &packet[0].vertices[i], prev_offset);
                 } else {
-                    clear_u64_value(start);
+                    qcopy(&packet[0].vertices[i], &beam->points[point + 1]);
+                    if (i & 1) add_vector_xyz(&packet[0].vertices[i], &packet[0].vertices[i], offset);
+                    else subtract_vector_xyz(&packet[0].vertices[i], &packet[0].vertices[i], offset);
                 }
-                if (point == 0) qcopy(end, start);
-                branch_next = point + 1;
-                rounded = (point / 4) * 4;
-                uv = &packet[0].uv[0][0];
-                uv_base = (float *)0x001e5fd0;
-                for (k = 0; k < 4;) {
-                    if (k < 2) {
-                        packet[0].vertices[k] = *(u128 *)(d + (point << 6) + 0x420 + (strip << 4));
-                        if (!(k & 1)) subtract_vector_xyz(&packet[0].vertices[k], &packet[0].vertices[k], end);
-                        else {
-                            src = end;
-                            goto add_branch;
-                        }
+                packet[0].uv[i][0] = D_L14_001E5FD0[i][0] + convert_integer_to_float(point % 4) * 0.25f;
+            }
+            draw_geometry_quad(&packet[0], world, 0);
+        }
+    }
+    for (branch = 0; branch < 4; branch++) {
+        clear_u64_value(offset);
+        start_point = beam->branch_start[branch];
+        if (start_point < 31) if (start_point > -1) {
+            for (node = 0; node < 3; node++) {
+                qcopy(prev_offset, offset);
+                if (node < 2) {
+                    subtract_vector_xyz(tangent, (char *)&beam->branches[node][0] + (branch << 4),
+                        (char *)&beam->branches[node + 2][0] + (branch << 4));
+                    subtract_vector_xyz(view, (char *)&beam->branches[node + 1][0] + (branch << 4), camera);
+                    cross_vectors_xyz(offset, view, tangent);
+                    normalize_vector_xyz(offset, offset, 0.1f);
+                } else {
+                    clear_u64_value(offset);
+                }
+                if (node == 0) qcopy(prev_offset, offset);
+                for (i = 0; i < 4; i++) {
+                    if (i < 2) {
+                        qcopy(&packet[0].vertices[i], (char *)&beam->branches[node][branch]);
+                        if (i & 1) add_vector_xyz(&packet[0].vertices[i], &packet[0].vertices[i], prev_offset);
+                        else subtract_vector_xyz(&packet[0].vertices[i], &packet[0].vertices[i], prev_offset);
                     } else {
-                        packet[0].vertices[k] = *(u128 *)(d + (point << 6) + 0x460 + (strip << 4));
-                        if (!(k & 1)) subtract_vector_xyz(&packet[0].vertices[k], &packet[0].vertices[k], start);
-                        else {
-                            src = start;
-add_branch:
-                            add_vector_xyz(&packet[0].vertices[k], &packet[0].vertices[k], src);
-                        }
+                        qcopy(&packet[0].vertices[i], (char *)&beam->branches[node + 1][branch]);
+                        if (i & 1) add_vector_xyz(&packet[0].vertices[i], &packet[0].vertices[i], offset);
+                        else subtract_vector_xyz(&packet[0].vertices[i], &packet[0].vertices[i], offset);
                     }
-                    t = convert_integer_to_float(point - rounded) * 0.25f;
-                    j = k++;
-                    offset = *uv_base;
-                    offset += t;
-                    uv_base += 2;
-                    *uv = offset;
-                    uv += 2;
+                    packet[0].uv[i][0] = D_L14_001E5FD0[i][0] + convert_integer_to_float(node % 4) * 0.25f;
                 }
-                draw_geometry_quad(&packet[0], base, 0);
+                draw_geometry_quad(&packet[0], world, 0);
             }
         }
     }
