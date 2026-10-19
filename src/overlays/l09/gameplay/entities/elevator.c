@@ -44,6 +44,11 @@ extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 extern s32 D_0014C190_257218[][64] __asm__("D_0014C190");
 void elevator_update(unsigned char *moby) __asm__("FUN_L09_003033a0");
 void elevator_update(unsigned char *moby) {
+    enum {
+        ELEVATOR_STATE_AT_PATH_END = 0,
+        ELEVATOR_STATE_AT_PATH_START = 1,
+        ELEVATOR_STATE_MOVING = 2
+    };
     char *data = *(char **)(moby + 0x78);
     char *path;
     float orig[4], delta[4], tmp[4];
@@ -94,7 +99,7 @@ void elevator_update(unsigned char *moby) {
         *(int *)(data + 0xC4) = -1;
     }
     switch (moby[0xBC]) {
-    case 0:
+    case ELEVATOR_STATE_AT_PATH_END:
         if (on) {
             float far;
             if ((*(short *)(data + 0xB8) != 0 && FUN_L01_00277fb8(moby)) ||
@@ -109,7 +114,7 @@ void elevator_update(unsigned char *moby) {
             }
         }
         break;
-    case 1:
+    case ELEVATOR_STATE_AT_PATH_START:
         if (on) {
             float near;
             if ((*(short *)(data + 0xB8) != 0 && FUN_L01_00277fb8(moby)) ||
@@ -125,7 +130,7 @@ void elevator_update(unsigned char *moby) {
             }
         }
         break;
-    case 2:
+    case ELEVATOR_STATE_MOVING:
         if (*(short *)(data + 0xBA) != 0 ||
             (F(data, 0xBC) < 0.0f &&
              vector_distance((moby + 0x10), &hero.motion.pos) < 2.0f &&
