@@ -1124,13 +1124,15 @@ void extermibot_update(unsigned char *m) {
         EXTERMIBOT_INITIALIZE = 0,
         EXTERMIBOT_WANDER_NEAR_START = 2,
         EXTERMIBOT_FOLLOW_TARGET = 4,
+        EXTERMIBOT_WAIT_FOR_TARGET_IN_STRIKE_RANGE = 5,
         EXTERMIBOT_APPROACH_TARGET_DIRECTLY = 6,
         EXTERMIBOT_AIM_BEFORE_STRIKE = 7,
         EXTERMIBOT_STRIKE_TARGET = 8,
         EXTERMIBOT_RECOVER_AFTER_STRIKE = 9,
         EXTERMIBOT_RETURN_TO_START = 10,
         EXTERMIBOT_NONLETHAL_KNOCKBACK = 11,
-        EXTERMIBOT_DEATH_KNOCKBACK = 14
+        EXTERMIBOT_DEATH_KNOCKBACK = 14,
+        EXTERMIBOT_WAIT_FOR_ACTIVATION_TRIGGER = 15
     };
     char *d = *(char **)(m + 0x78);
     char *t;
@@ -1299,7 +1301,7 @@ void extermibot_update(unsigned char *m) {
         }
         break;
     }
-    case 5:
+    case EXTERMIBOT_WAIT_FOR_TARGET_IN_STRIKE_RANGE:
         if (*(int *)(d + 0x2B0) == 0) {
             *(float *)(d + 0xF4) = 0.0f;
             m[0x20] = 10;
@@ -1310,7 +1312,7 @@ void extermibot_update(unsigned char *m) {
             if (m[0x53] != 2) blend_moby_animation(m, 2, 0, scale_game_frames(10));
         }
         break;
-    case 15:
+    case EXTERMIBOT_WAIT_FOR_ACTIVATION_TRIGGER:
         if ((*(int *)(d + 0x2B8) != -1 && ((unsigned char *)*(int *)&D_L05_0015FFD8)[*(int *)(d + 0x2B8) * 256 + 0xBC] != 0)
             || (*(int *)(d + 0x2BC) != -1 && is_point_inside_clip_volume(((char *)D_0013F3D0), *(int *)(d + 0x2BC)) != 0)) {
             *(short *)(m + 0x32) = 0x40;
