@@ -3916,6 +3916,11 @@ void air_accel(f32 step) __asm__("FUN_L01_00234358");
 
 /* Same steering as FUN_L00_00213e68, without the copy into motion.unk130. */
 void air_accel(f32 step) {
+    enum {
+        GRAVITY_MODE_WORLD_DOWN = 0,
+        GRAVITY_MODE_NEGATIVE_GROUND_NORMAL = 1,
+        GRAVITY_MODE_TOWARD_REFERENCE_POINT = 2
+    };
     struct Hero *player = &hero;
     f32 delta[4];
     Vec4 impulse;
@@ -3924,7 +3929,7 @@ void air_accel(f32 step) {
     Vec4 *velocity;
 
     switch (player->unk20B3) {
-    case 0:
+    case GRAVITY_MODE_WORLD_DOWN:
         yaw = player->motion.move_yaw;
         speed = player->target_speed;
         if (player->state.control_mode == 4) {
@@ -3986,8 +3991,8 @@ void air_accel(f32 step) {
             owner->ground_speed = owner->motion.unk168 - ratio;
         }
         break;
-    case 1:
-    case 2: {
+    case GRAVITY_MODE_NEGATIVE_GROUND_NORMAL:
+    case GRAVITY_MODE_TOWARD_REFERENCE_POINT: {
         Vec4 *current_velocity = &hero_velocity;
 
         planar_speed = gravity_length_xy(current_velocity);
