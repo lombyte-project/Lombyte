@@ -1226,10 +1226,13 @@ void elevator_with_button_update(struct Moby *moby) __asm__("FUN_L05_003156d0");
 void elevator_with_button_update(struct Moby *moby) {
     enum {
         ELEVATOR_INITIALIZE = 0,
+        ELEVATOR_FADE_BEFORE_CAMERA_MOUNT = 1,
         ELEVATOR_MOVE_TO_TOP = 2,
         ELEVATOR_MOVE_TO_BOTTOM = 3,
         ELEVATOR_WAIT_AT_TOP = 4,
-        ELEVATOR_WAIT_AT_BOTTOM = 5
+        ELEVATOR_WAIT_AT_BOTTOM = 5,
+        ELEVATOR_WAIT_TO_RETURN_FROM_TOP = 6,
+        ELEVATOR_WAIT_TO_RETURN_FROM_BOTTOM = 7
     };
     LiftVars *vars = (LiftVars *)moby->pvars;
     Vec4 delta;
@@ -1251,7 +1254,7 @@ void elevator_with_button_update(struct Moby *moby) {
         vars->base_yaw = moby->rot.z;
         moby->state = 3;
         break;
-    case 1:
+    case ELEVATOR_FADE_BEFORE_CAMERA_MOUNT:
         D_0014162A = vars->marker;
         approach_value(&vars->fade, 1.0f, 0.133f);
         D_L05_0015F3FC = vars->fade;
@@ -1315,8 +1318,8 @@ void elevator_with_button_update(struct Moby *moby) {
             }
         }
         break;
-    case 6:
-    case 7:
+    case ELEVATOR_WAIT_TO_RETURN_FROM_TOP:
+    case ELEVATOR_WAIT_TO_RETURN_FROM_BOTTOM:
         if (voice_is_playing(moby, vars->sound)) {
             release_voice_slot(vars->sound);
             vars->sound = -1;
