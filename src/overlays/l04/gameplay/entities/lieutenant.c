@@ -495,8 +495,11 @@ extern struct L04MissionState D_L04_0016C9E0;
 extern void cutscene_set_camera_target(int) __asm__("FUN_L00_002637f8");
 
 void FUN_L04_002e53a0(struct Moby *m) {
+    enum {
+        MODE_SLOT_STATE_INITIALIZE = 0
+    };
     switch (m->state) {
-    case 0:
+    case MODE_SLOT_STATE_INITIALIZE:
         m->update_dist = 0xFF;
         m->state = 1;
         break;
