@@ -3104,7 +3104,8 @@ extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
  * on the hit kind; a lethal hit starts the death jump. */
 void FUN_L03_002c95a8(Moby2C8398 *m) {
     enum {
-        DEATH_KNOCKBACK_RESPONSE = 1
+        DEATH_KNOCKBACK_RESPONSE = 1,
+        ZERO_DAMAGE_NO_KNOCKBACK_RESPONSE = 13
     };
     float vec[4];
     int kind;
@@ -3145,7 +3146,7 @@ void FUN_L03_002c95a8(Moby2C8398 *m) {
         }
         switch (result) {
         case 12:
-        case 13:
+        case ZERO_DAMAGE_NO_KNOCKBACK_RESPONSE:
             d->b67 = 0x78;
             break;
         case 6:
