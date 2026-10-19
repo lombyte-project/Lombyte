@@ -578,6 +578,9 @@ extern float FUN_L00_0025bc98_2165b8(void *, void *, int, float, float, float,
 extern void FUN_L00_002163f0_2165b8(void) __asm__("FUN_L00_002163f0");
 
 void FUN_L00_002165b8(void) {
+    enum {
+        HERO_TILT_RETURN_TO_ZERO = 0
+    };
     struct Hero *g = &hero;
     float v[2];
     int m, st, k;
@@ -586,7 +589,7 @@ void FUN_L00_002165b8(void) {
         m = 1;
     }
     switch (m) {
-    case 0:
+    case HERO_TILT_RETURN_TO_ZERO:
         st = g->state.current;
         if ((u32)(st - 0x25) < 2) {
             return;
