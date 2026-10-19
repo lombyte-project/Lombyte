@@ -2628,7 +2628,8 @@ extern unsigned char *func_L15_002655D0_2A3DD0(void *, void *, void *, int, int,
 void FUN_L15_002a2bf0(unsigned char *moby) {
     enum {
         INITIALIZE_EFFECT = 0,
-        EMIT_SPARKS = 1
+        EMIT_SPARKS = 1,
+        WAIT_FOR_EFFECT_TIMEOUT = 2
     };
     unsigned char *d = *(unsigned char **)(moby + 0x78);
     float V[4];
@@ -2715,7 +2716,7 @@ void FUN_L15_002a2bf0(unsigned char *moby) {
         }
         break;
     }
-    case 2:
+    case WAIT_FOR_EFFECT_TIMEOUT:
         if ((*(int *)(d + 0x14))++ >= 0x3D) {
             moby[0x20] = 3;
         } else {
