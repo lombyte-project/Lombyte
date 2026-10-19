@@ -122,6 +122,9 @@ void FUN_L00_00210c80_8(void *, s32, f32, f32) __asm__("FUN_L00_00210c80");
 
 extern OvlMobyEntry40 D_L14_00178800[];
 s32 FUN_L14_00222aa8(s32 arg) {
+    enum {
+        HERO_VEHICLE_MODE_ON_FOOT = 0
+    };
     u8 *m;
     OvlMobyEntry40 *tbl;
     u8 *mob;
@@ -182,7 +185,7 @@ s32 FUN_L14_00222aa8(s32 arg) {
         v.i[2] = 0;
     }
     switch (G.vehicle_mode) {
-    case 0:
+    case HERO_VEHICLE_MODE_ON_FOOT:
         mob = (u8 *)G.unk2280;
         if (mob != 0 && (*(s16 *)(mob + 0xA6) == 0x4EB || *(s16 *)(mob + 0xA6) == 0x558)) {
             id = 0x80;
