@@ -420,6 +420,7 @@ void the_plumber_batalia_update(L14WatchMoby *m) {
     enum {
         PLUMBER_INITIALIZE = 0,
         PLUMBER_UPDATE_DIALOGUE = 1,
+        PLUMBER_SCRIPTED_HANDOFF = 2,
         PLUMBER_SAVE_AND_REMOVE = 5
     };
     L14WatchScratch scratch;
@@ -457,7 +458,7 @@ void the_plumber_batalia_update(L14WatchMoby *m) {
             d->sub = -1;
         }
         break;
-    case 2:
+    case PLUMBER_SCRIPTED_HANDOFF:
         break;
     case PLUMBER_SAVE_AND_REMOVE:
         jet_clear_persistent(m->bB0);
