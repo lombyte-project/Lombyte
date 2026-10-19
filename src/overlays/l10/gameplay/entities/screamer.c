@@ -2458,6 +2458,15 @@ extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 
 void blarg_ship_update(Ship_5E48 *m) __asm__("FUN_L10_002e4a88");
 void blarg_ship_update(Ship_5E48 *m) {
+    enum {
+        BLARG_SHIP_STATE_INITIALIZE = 0,
+        BLARG_SHIP_STATE_WAIT_FOR_TARGET_IN_VOLUME = 1,
+        BLARG_SHIP_STATE_FOLLOW_ENTRY_PATH = 3,
+        BLARG_SHIP_STATE_FIRE_AT_TARGET = 4,
+        BLARG_SHIP_STATE_FIRE_COOLDOWN = 5,
+        BLARG_SHIP_STATE_FLY_AWAY = 6,
+        BLARG_SHIP_STATE_EXPLODE = 8
+    };
     ShipD_5E48 *d = m->d;
     Ship_5E48 *tgt;
     V_2E52B0 A;
@@ -2476,7 +2485,7 @@ void blarg_ship_update(Ship_5E48 *m) {
     FUN_L10_002e5968_c((char *)m);
     tgt = d->tgt;
     switch (m->state) {
-    case 0:
+    case BLARG_SHIP_STATE_INITIALIZE:
         m->s34 |= 0x1000;
         d->f20 = 9.0f;
         d->s24 = truncate_float_to_s32_c2(9.0f);
@@ -2492,7 +2501,7 @@ void blarg_ship_update(Ship_5E48 *m) {
         m->state = 1;
         if (visited52[m->bB0 + (D_0015ED84 << 4)] != 0xFF) break;
         goto del;
-    case 1:
+    case BLARG_SHIP_STATE_WAIT_FOR_TARGET_IN_VOLUME:
         if (!is_point_inside_clip_volume(&tgt->pos, d->i148)) break;
         m->state = 2;
         if (m->b53 != 1) blend_moby_animation(m, 1, 0, scale_game_frames_c2(20));
@@ -2516,7 +2525,7 @@ void blarg_ship_update(Ship_5E48 *m) {
             if (m->b53 != 2) blend_moby_animation(m, 2, 0, scale_game_frames_c2(10));
         }
         break;
-    case 3:
+    case BLARG_SHIP_STATE_FOLLOW_ENTRY_PATH:
         qcopy(&A, &D_L10_001B0C30_2E52B0[d->i140]->nodes[d->i158]);
         a = fast_arc_tan(A.x - m->pos.x, A.y - m->pos.y);
         FUN_L00_00258278((char *)m, &d->f198, a, 0.02f, 0.3f, D_0015ED6C * 12.566371f);
@@ -2536,7 +2545,7 @@ void blarg_ship_update(Ship_5E48 *m) {
             }
         }
         break;
-    case 4:
+    case BLARG_SHIP_STATE_FIRE_AT_TARGET:
         if (is_point_inside_clip_volume(&(&hero)->motion.pos, d->i1B0)) {
             m->state = 6;
             break;
@@ -2594,7 +2603,7 @@ void blarg_ship_update(Ship_5E48 *m) {
             if (n < D_L10_001B0C30_2E52B0[d->i144]->count) d->i158 = n;
         }
         break;
-    case 5:
+    case BLARG_SHIP_STATE_FIRE_COOLDOWN:
         if (is_point_inside_clip_volume(&(&hero)->motion.pos, d->i1B0)) {
             m->state = 6;
             break;
@@ -2632,7 +2641,7 @@ void blarg_ship_update(Ship_5E48 *m) {
             if (n < D_L10_001B0C30_2E52B0[d->i144]->count) d->i158 = n;
         }
         break;
-    case 6:
+    case BLARG_SHIP_STATE_FLY_AWAY:
         m->pos.z += D_0015ED6C * 10.0f;
         m->f2C *= frame_scale * -0.015299976f + 1.0f;
         if (250.0f < m->pos.z) goto del;
@@ -2658,7 +2667,7 @@ void blarg_ship_update(Ship_5E48 *m) {
         }
         break;
     }
-    case 8: {
+    case BLARG_SHIP_STATE_EXPLODE: {
         float z = 0.0f;
         spawn_explosion(m, d->a40, &m->pos, z, z, 5, 2, 4, 2.0f, 1.0f, 9.0f, 1.0f, 5, 15.0f, 1, 1, -1, 0);
         FUN_L00_00257470(m, 0, -1);
