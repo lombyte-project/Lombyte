@@ -21,13 +21,17 @@ extern unsigned char *FUN_L00_002743a8(float f0, float f1, int a0, void *pos, in
 
 void hoverboard_ring_update(char *moby) __asm__("FUN_L05_0031abe0");
 void hoverboard_ring_update(char *moby) {
+    enum {
+        HOVERBOARD_RING_STATE_INIT = 0,
+        HOVERBOARD_RING_STATE_ACTIVE = 1
+    };
     switch (((unsigned char *)moby)[0x20]) {
-    case 0:
+    case HOVERBOARD_RING_STATE_INIT:
         ((unsigned char *)moby)[0x30] = 0x80;
         *(unsigned short *)(moby + 0x34) |= 0x41;
         moby[0x20] = 1;
         break;
-    case 1: {
+    case HOVERBOARD_RING_STATE_ACTIVE: {
         float v[4];
         int i;
         qcopy(v, moby + 0x10);
