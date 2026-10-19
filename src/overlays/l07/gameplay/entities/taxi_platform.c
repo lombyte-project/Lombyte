@@ -1668,6 +1668,13 @@ typedef struct {
 /* Slides out from its origin once its linked moby reaches one state and back when it reaches
    another; a level flag is set while it is out. */
 void FUN_L07_0030cf90(struct Moby *moby) {
+    enum {
+        PLATFORM_INITIALIZE = 0,
+        PLATFORM_WAIT_TO_MOVE_OUTWARD = 1,
+        PLATFORM_MOVE_OUTWARD = 2,
+        PLATFORM_WAIT_TO_RETURN = 3,
+        PLATFORM_RETURN_TO_ORIGIN = 4
+    };
     extern char *level_mobys_gp __asm__("D_L07_0015FFD8") __attribute__((sda));
     FUN_L07_0030cf90_Vars *vars = (FUN_L07_0030cf90_Vars *)moby->pvars;
     f32 origin[4];
@@ -1686,7 +1693,7 @@ void FUN_L07_0030cf90(struct Moby *moby) {
         vars->target_index = -1;
 
     switch (moby->state) {
-    case 0:
+    case PLATFORM_INITIALIZE:
     {
         Vec4f *position = &moby->pos;
         vars->origin_x = position->x;
@@ -1698,7 +1705,7 @@ void FUN_L07_0030cf90(struct Moby *moby) {
         moby->state = 1;
         break;
     }
-    case 1:
+    case PLATFORM_WAIT_TO_MOVE_OUTWARD:
         if (vars->target_index != -1) {
             target = (struct Moby *)(level_mobys_gp + vars->target_index * 0x100);
             if (target != 0 && target->state != 0xfe && target->state != 0xfd &&
@@ -1709,7 +1716,7 @@ void FUN_L07_0030cf90(struct Moby *moby) {
             play_moby_sound(vars->trigger_sound, 0, moby);
         moby->state = 2;
         break;
-    case 2:
+    case PLATFORM_MOVE_OUTWARD:
         if (vars->target_index != -1 &&
             (target = (struct Moby *)(level_mobys_gp + vars->target_index * 0x100)) != 0 &&
             target->state != 0xfe && target->state != 0xfd &&
@@ -1736,7 +1743,7 @@ void FUN_L07_0030cf90(struct Moby *moby) {
             return;
         }
         break;
-    case 3:
+    case PLATFORM_WAIT_TO_RETURN:
         if (vars->target_index != -1) {
             target = (struct Moby *)(level_mobys_gp + vars->target_index * 0x100);
             if (target != 0 && target->state != 0xfe && target->state != 0xfd) {
@@ -1748,7 +1755,7 @@ void FUN_L07_0030cf90(struct Moby *moby) {
             }
         }
         break;
-    case 4:
+    case PLATFORM_RETURN_TO_ORIGIN:
         if (vars->target_index == -1 ||
             (target = (struct Moby *)(level_mobys_gp + vars->target_index * 0x100)) == 0 ||
             target->state == 0xfe || target->state == 0xfd ||
