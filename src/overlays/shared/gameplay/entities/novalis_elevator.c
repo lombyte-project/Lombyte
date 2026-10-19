@@ -486,6 +486,7 @@ extern s32 D_L01_00161494 __attribute__((sda));
 extern f32 D_L01_0016149C __attribute__((sda));
 void FUN_L01_002c7530(char *moby) {
     enum {
+        UPDATE_TRANSFORM_ONLY = 0,
         COLLISION_CHECK_AND_COUNTDOWN = 1,
         TIMED_REMOVAL = 2
     };
@@ -522,7 +523,7 @@ void FUN_L01_002c7530(char *moby) {
                 data[4] = 0;
         }
         break;
-    case 0:
+    case UPDATE_TRANSFORM_ONLY:
         break;
     case TIMED_REMOVAL:
         if (fast_dec_timer(data)) {
