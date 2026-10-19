@@ -1536,6 +1536,10 @@ void drek_final_boss_robot_update(BossMoby *moby) {
     enum {
         DREK_BOSS_TARGET_GROUND_POINTS = 0xF
     };
+    enum {
+        DREK_BOSS_LAUNCH_FORWARD_WITH_LATERAL_OFFSET = 0xD,
+        DREK_BOSS_TARGET_SIDE_GROUND_POINTS = 0x11
+    };
     BossData *d = (BossData *)moby->f78;
     BossMoby *tgt;
     float v0[4];
@@ -2007,7 +2011,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
             d->f358 = scale_game_frames(600);
             d->f35C = scale_game_frames(0x168);
             break;
-        case 0xD:
+        case DREK_BOSS_LAUNCH_FORWARD_WITH_LATERAL_OFFSET:
             moby->f20 = 0xD;
             if (moby->f53 != 2) {
                 blend_moby_animation(moby, 2, 0, scale_game_frames(0x14));
@@ -2017,7 +2021,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
             d->f35C = scale_game_frames((6 - d->f34C) * 0x1E);
             d->f3BC = random_float_between_alt(-0.333f, 0.333f);
             break;
-        case 0x11:
+        case DREK_BOSS_TARGET_SIDE_GROUND_POINTS:
             moby->f20 = 0x11;
             if (moby->f53 != 11) {
                 blend_moby_animation(moby, 0xB, 0, scale_game_frames(0x14));
@@ -2188,7 +2192,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
             moby->f20 = 0xC;
         }
         break;
-    case 0xD:
+    case DREK_BOSS_LAUNCH_FORWARD_WITH_LATERAL_OFFSET:
         aim = &moby->f40[2];
         ang = fast_arc_tan(tgt->f10[0] - moby->f10[0], tgt->f10[1] - moby->f10[1]);
         approach_angle(aim, &d->f370, ang, D_0015ED6C_e[1] * 6.2831855f,
@@ -2272,7 +2276,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
             moby->f20 = 0xC;
         }
         break;
-    case 0x11: {
+    case DREK_BOSS_TARGET_SIDE_GROUND_POINTS: {
         int n;
 
         aim = &moby->f40[2];
