@@ -2890,8 +2890,8 @@ state_one:
         memcard_save_data_vendor(0, -1);
         switch (alternate_item_available[5]) {
         default: purchase = 0x271d; break;
-        case 1: purchase = 0x271d; break;
-        case 0: purchase = 0x271c; break;
+        case TRUE: purchase = 0x271d; break;
+        case FALSE: purchase = 0x271c; break;
         }
         FUN_L00_00263d40_vendor(purchase, -1);
         D_L10_0013F640 = 0xb4;
