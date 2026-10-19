@@ -555,12 +555,18 @@ void big_axebot_update(M_B7B0 *moby) __asm__("FUN_L04_002ba520");
 void big_axebot_update(M_B7B0 *moby) {
     enum {
         BIG_AXEBOT_STATE_INITIALIZE = 0,
+        BIG_AXEBOT_STATE_IDLE = 1,
+        BIG_AXEBOT_STATE_ALERT = 2,
         BIG_AXEBOT_STATE_FOLLOW_PATH = 4,
         BIG_AXEBOT_STATE_CHASE_TARGET = 5,
         BIG_AXEBOT_STATE_RETURN_HOME = 6,
         BIG_AXEBOT_STATE_MELEE_ATTACK = 7,
+        BIG_AXEBOT_STATE_HIT_RECOVERY = 8,
         BIG_AXEBOT_STATE_TURN = 9,
         BIG_AXEBOT_STATE_DYING = 10
+    };
+    enum {
+        BIG_AXEBOT_HIT_REACTION_FATAL = 1
     };
     D_B7B0 *data = moby->data;
     T_B7B0 tg;
@@ -708,7 +714,7 @@ void big_axebot_update(M_B7B0 *moby) {
                     data->f404 = scale_game_frames(0x46);
                     data->f406 = scale_game_frames(0xF0);
                     break;
-                case 1:
+                case BIG_AXEBOT_HIT_REACTION_FATAL:
                     data->fE8 = 1.0f;
                     data->fE0 = 0x400;
                     trooper_set_knockback(data->fC0, 5.7f, 4.0f);
@@ -772,7 +778,7 @@ void big_axebot_update(M_B7B0 *moby) {
             moby->state = 1;
         }
         break;
-    case 1: {
+    case BIG_AXEBOT_STATE_IDLE: {
         if (moby->f53 == 6 && data->f402 == scale_game_frames(0x25)) {
             allocate_voice_for_target_entry(2, 0, (char *)moby);
         }
@@ -816,7 +822,7 @@ void big_axebot_update(M_B7B0 *moby) {
         }
         break;
     }
-    case 2:
+    case BIG_AXEBOT_STATE_ALERT:
         if (moby->f52 == 2 && (moby->f70 & 2)) {
             FUN_L04_002ba3e0(
                 (char *)moby,
@@ -979,7 +985,7 @@ void big_axebot_update(M_B7B0 *moby) {
             moby->state = 1;
         }
         break;
-    case 8:
+    case BIG_AXEBOT_STATE_HIT_RECOVERY:
         if (!(moby->f53 == 5 && (moby->f52 != moby->f53 || hd <= 13.0f))) {
             if (moby->fBC & 4) {
                 moby->fBC &= ~4;
