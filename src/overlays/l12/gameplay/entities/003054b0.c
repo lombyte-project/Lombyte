@@ -875,13 +875,18 @@ void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 
 void homing_mine_spawner_update(struct Moby *m) __asm__("FUN_L12_00307840");
 void homing_mine_spawner_update(struct Moby *m) {
+    enum {
+        HOMING_MINE_SPAWNER_CLEAR_LINKED_MOBYS = 0,
+        HOMING_MINE_SPAWNER_WAIT_FOR_PROXIMITY = 1,
+        HOMING_MINE_SPAWNER_SPAWN_LINKED_MOBYS = 3
+    };
     char *d = (char *)m->pvars;
     int *slots;
     int i;
     FUN_L12_00307ab8(m);
     slots = (int *)(d + 0xC0);
     switch (m->state) {
-    case 0:
+    case HOMING_MINE_SPAWNER_CLEAR_LINKED_MOBYS:
         for (i = 0; i < 12; i++) {
             if (slots[i] != -1) {
                 char *o = (D_L12_0015FFD8_p + (slots[i] << 8));
@@ -893,7 +898,7 @@ void homing_mine_spawner_update(struct Moby *m) {
         }
         m->state = 1;
         break;
-    case 1:
+    case HOMING_MINE_SPAWNER_WAIT_FOR_PROXIMITY:
         if (*(int *)(d + 0xB4) != 2) {
             if (vector_distance(&m->pos, d + 0x70) < *(float *)(d + 0xF8)) {
                 m->state = 2;
@@ -911,7 +916,7 @@ void homing_mine_spawner_update(struct Moby *m) {
             m->state = 3;
         }
         break;
-    case 3:
+    case HOMING_MINE_SPAWNER_SPAWN_LINKED_MOBYS:
         if (fast_dec_timer_s16(d + 0xFC)) {
             if (slots[*(int *)(d + 0xF0)] != -1) {
                 FUN_L12_003076e0(m);
