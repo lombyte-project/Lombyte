@@ -95,6 +95,9 @@ void draw_dialog_text(void) {
         FREEZE_SPLIT_TEXT_ICON_DIALOG = 5,
         FREEZE_CHOICE_MESSAGE_DIALOG = 6
     };
+    enum {
+        FREEZE_CHOICE_CENTERED_FOOTER_MESSAGE = 3
+    };
     char buf[0x200];
     struct TextRegion box;
 
@@ -303,7 +306,7 @@ void draw_dialog_text(void) {
             font_print_center(0x135, 0x118, button_color, get_help_message_text(0x524B), -1);
             id = 0x522B;
             break;
-        case 3:
+        case FREEZE_CHOICE_CENTERED_FOOTER_MESSAGE:
             font_print_center(0x100, 0x118, button_color, get_help_message_text(0x524A), -1);
             id = 0x522C;
             break;
