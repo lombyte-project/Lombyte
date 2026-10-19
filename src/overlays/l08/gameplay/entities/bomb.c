@@ -129,6 +129,7 @@ void FUN_L08_002b82a0(Moby_2B94B0 *m)
         MOBY_STATE_INITIALIZE = 0,
         MOBY_STATE_PHYSICS_MOVEMENT = 1,
         MOBY_STATE_CHECK_COLLECTION = 2,
+        MOBY_STATE_VERTICAL_BOB_ONLY = 3,
         MOBY_STATE_REMOVE = 4
     };
     MobyData_2B94B0 *d = m->data;
@@ -207,7 +208,7 @@ void FUN_L08_002b82a0(Moby_2B94B0 *m)
                              func_L00_0023A788_2B94B0, &current_bolt_count, 0x98967F);
         mark_moby_for_removal(m);
         return;
-    case 3:
+    case MOBY_STATE_VERTICAL_BOB_ONLY:
         break;
     case MOBY_STATE_REMOVE:
         if (d->target != 0) d->target->fA = 0;
