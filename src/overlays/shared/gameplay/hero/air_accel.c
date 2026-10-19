@@ -1130,7 +1130,8 @@ extern CollisionHit HH __asm__("D_L01_001742C0") __attribute__((section(".data")
 void FUN_L01_00232dc0(void) {
     enum {
         GRAVITY_WORLD_DOWN = 0,
-        GRAVITY_OPPOSITE_GROUND_NORMAL = 1
+        GRAVITY_OPPOSITE_GROUND_NORMAL = 1,
+        GRAVITY_TOWARD_REFERENCE_POINT = 2
     };
     V collision_ray_end, ground_ray_start, v20, side_ray_start, v40, side_hit_angles, normalized_side_hit_normal;
     f32 f;
@@ -1247,7 +1248,7 @@ d1:
         qcopy((u8 *)&hero.gravity_dir, (u8 *)&hero.unk270);
         FUN_001f9a68_c((u8 *)&hero.gravity_dir, (u8 *)&hero.gravity_dir, -1.0f);
         break;
-    case 2:
+    case GRAVITY_TOWARD_REFERENCE_POINT:
         subtract_vector_xyz((u8 *)&hero.gravity_dir, (u8 *)&hero.motion.unkB0, (u8 *)&hero.motion.pos);
         FUN_001f9bf8_c((u8 *)&hero.gravity_dir, (u8 *)&hero.gravity_dir, 1.0f);
         break;
