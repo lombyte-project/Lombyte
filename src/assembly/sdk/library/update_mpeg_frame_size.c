@@ -2,69 +2,11 @@
 #include "asm.h"
 
 #ifndef NON_MATCHING
-/* Exact SDK/library unit _sequenceHeader; includes target internal entry symbols. */
-INCLUDE_ASM("config/us/expected/asm/assembly/sdk/library/sequenceheader/_sequenceHeader.s",
-            _sequenceHeader);
-INCLUDE_ASM("config/us/expected/asm/assembly/sdk/library/sequenceheader/func_0012C4C8.s",
+INCLUDE_ASM("config/us/expected/asm/assembly/sdk/library/update_mpeg_frame_size/func_0012C4C8.s",
             func_0012C4C8);
 #else
 
 #include "rnc/sdk/libmpeg.h"
-
-extern u8 D_00132FC0[];
-extern u8 D_00133000[];
-extern u8 D_00153AE8[];
-extern s32 _Error();
-extern s32 _extensionAndUserData();
-extern s32 _nextBit();
-extern s32 _sendIpuCommand();
-extern s32 _setDefaultQM();
-extern s32 _waitIpuIdle();
-
-void _sequenceHeader(struct MpegDecoder *mpeg) {
-    s32 height;
-    u32 temp_2_12;
-    u32 temp_2_24;
-    u32 intra_qm_flag;
-    u32 nonintra_qm_flag;
-    u32 temp_vbv;
-
-    mpeg->unkD4 = 0;
-    temp_2_12 = _nextBit(mpeg, 0x20);
-    height = (temp_2_12 >> 8) & 0xFFF;
-    mpeg->horizontal_size = (u32)temp_2_12 >> 0x14;
-    mpeg->vertical_size = height;
-    if (height >= 0xAF1) {
-        _Error(mpeg, D_00153AE8);
-    }
-    temp_2_24 = _nextBit(mpeg, 0x1E);
-    temp_2_12 = temp_2_24;
-    temp_vbv = temp_2_12 >> 1;
-    temp_2_12 >>= 0xC;
-    temp_vbv &= 0x3FF;
-    mpeg->bit_rate = temp_2_12;
-    mpeg->vbv_buffer_size = temp_vbv;
-    intra_qm_flag = _nextBit(mpeg, 1);
-    mpeg->load_intra_quantiser_matrix = intra_qm_flag;
-    if (intra_qm_flag != 0) {
-        _waitIpuIdle(mpeg);
-        _sendIpuCommand(mpeg, 0x50000000);
-        _waitIpuIdle(mpeg);
-    } else {
-        _setDefaultQM(mpeg, 0x50000000, D_00132FC0);
-    }
-    nonintra_qm_flag = _nextBit(mpeg, 1);
-    mpeg->load_non_intra_quantiser_matrix = nonintra_qm_flag;
-    if (nonintra_qm_flag != 0) {
-        _waitIpuIdle(mpeg);
-        _sendIpuCommand(mpeg, 0x58000000);
-        _waitIpuIdle(mpeg);
-    } else {
-        _setDefaultQM(mpeg, 0x58000000, D_00133000);
-    }
-    _extensionAndUserData(mpeg);
-    func_0012C4C8(mpeg->mpeg);
-}
 
 extern s32 InitializeReferenceImage();
 extern s32 _initRefImages();
