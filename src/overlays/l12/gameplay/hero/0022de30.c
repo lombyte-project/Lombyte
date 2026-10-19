@@ -178,9 +178,10 @@ extern CollisionHit HH __asm__("D_L12_001742C0") __attribute__((section(".data")
 void FUN_L12_00233e80(void) {
     enum {
         GRAVITY_NEGATIVE_Z = 0,
-        GRAVITY_OPPOSITE_GROUND_NORMAL = 1
+        GRAVITY_OPPOSITE_GROUND_NORMAL = 1,
+        GRAVITY_TOWARD_REFERENCE_POINT = 2
     };
-    V collision_ray_second_endpoint, ground_ray_first_endpoint, v20, ground_probe_first_endpoint, v40, hit_surface_angles, normalized_hit_normal;
+    V collision_ray_second_endpoint, ground_ray_first_endpoint, ground_geometry_scratch, ground_probe_first_endpoint, v40, hit_surface_angles, normalized_hit_normal;
     f32 f;
     s32 r;
     s32 i;
@@ -259,8 +260,8 @@ void FUN_L12_00233e80(void) {
         sceVu0Normalize((u8 *)&hero.unk270, (u8 *)&HH.normal_x);
         hero.ground_slope.f = FUN_L00_00233d30((u8 *)&HH.normal_x);
         hero.downhill_yaw = FUN_001f9e90_c(HH.normal_x, HH.normal_y);
-        subtract_vector_xyz(&v20, (u8 *)&hero.ground_point, (u8 *)&hero.motion.pos);
-        if (0.0f < FUN_001f9ab0_c(&v20, (u8 *)&hero.unk270)) {
+        subtract_vector_xyz(&ground_geometry_scratch, (u8 *)&hero.ground_point, (u8 *)&hero.motion.pos);
+        if (0.0f < FUN_001f9ab0_c(&ground_geometry_scratch, (u8 *)&hero.unk270)) {
             hero.ground_distance = -hero.ground_distance;
         }
         if (hero.ground_distance < 0.02f) {
@@ -291,7 +292,7 @@ d1:
         qcopy((u8 *)&hero.gravity_dir, (u8 *)&hero.unk270);
         FUN_001f9a68_c((u8 *)&hero.gravity_dir, (u8 *)&hero.gravity_dir, -1.0f);
         break;
-    case 2:
+    case GRAVITY_TOWARD_REFERENCE_POINT:
         subtract_vector_xyz((u8 *)&hero.gravity_dir, (u8 *)&hero.motion.unkB0, (u8 *)&hero.motion.pos);
         FUN_001f9bf8_c((u8 *)&hero.gravity_dir, (u8 *)&hero.gravity_dir, 1.0f);
         break;
@@ -311,12 +312,12 @@ d1:
     if (!(hero.ground_distance < 0.25f)) {
         return;
     }
-    FUN_L00_00216078((u8 *)&hero.unk270, &v20);
-    if (-0.78539819f < v20.f[1] && v20.f[1] < 0.78539819f) {
-        hero.ground_pitch.f = v20.f[1];
+    FUN_L00_00216078((u8 *)&hero.unk270, &ground_geometry_scratch);
+    if (-0.78539819f < ground_geometry_scratch.f[1] && ground_geometry_scratch.f[1] < 0.78539819f) {
+        hero.ground_pitch.f = ground_geometry_scratch.f[1];
     }
-    if (-0.78539819f < v20.f[0] && v20.f[0] < 0.78539819f) {
-        hero.unk2E8.f = v20.f[0];
+    if (-0.78539819f < ground_geometry_scratch.f[0] && ground_geometry_scratch.f[0] < 0.78539819f) {
+        hero.unk2E8.f = ground_geometry_scratch.f[0];
     }
     for (i = 0; i < 2; i++) {
         a = 1.5707964f;
