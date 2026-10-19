@@ -102,7 +102,8 @@ void draw_dialog_text(void) {
         FREEZE_CHOICE_CENTERED_FOOTER_MESSAGE = 3
     };
     enum {
-        MODE_FREEZE_TIMER_GATED_CENTERED_FOOTER_MESSAGE = 2
+        MODE_FREEZE_TIMER_GATED_CENTERED_FOOTER_MESSAGE = 2,
+        MODE_FREEZE_FORMATTED_PAIRED_FOOTER_MESSAGE = 24
     };
     char buf[0x200];
     struct TextRegion box;
@@ -237,7 +238,7 @@ void draw_dialog_text(void) {
             mid = 0x524A;
             text = get_help_message_text(0x4FBB);
             break;
-        case 24:
+        case MODE_FREEZE_FORMATTED_PAIRED_FOOTER_MESSAGE:
             left = 0x524E;
             right = 0x524B;
             sprintf(buf, freeze_fmt_scsc, get_help_message_text(0x4FAE), 1, 1, get_help_message_text(0x4FAA));
