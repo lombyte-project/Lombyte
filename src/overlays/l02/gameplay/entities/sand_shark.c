@@ -313,11 +313,14 @@ void sand_shark_update(struct Moby *moby) __asm__("FUN_L02_002d3e50");
 void sand_shark_update(struct Moby *moby) {
     enum {
         SAND_SHARK_INITIALIZE = 0,
+        SAND_SHARK_WAIT_FOR_TARGET_IN_VOLUME = 3,
         SAND_SHARK_APPROACH_TARGET = 5,
         SAND_SHARK_RETURN_HOME = 7,
         SAND_SHARK_WAIT_FOR_HERO_LAUNCH_TRIGGER = 12,
         SAND_SHARK_BALLISTIC_FLIGHT = 13,
         SAND_SHARK_FACE_TARGET = 15,
+        SAND_SHARK_ALIGN_TO_GROUND_BEFORE_APPROACH_TARGET = 19,
+        SAND_SHARK_ALIGN_TO_GROUND_BEFORE_RETURN_HOME = 20,
         SAND_SHARK_FADE_OUT = 25
     };
     Varsd3e50 *vars;
@@ -466,7 +469,7 @@ void sand_shark_update(struct Moby *moby) {
             vars->unk274 = -1;
         }
         break;
-    case 3:
+    case SAND_SHARK_WAIT_FOR_TARGET_IN_VOLUME:
         if (vars->unk214 != 2 && inside_e50(&vars->target, vars->unk278)) {
             moby->state = 5;
             if (moby->prev_seq != 0) {
@@ -557,8 +560,8 @@ void sand_shark_update(struct Moby *moby) {
         }
         break;
     }
-    case 19:
-    case 20:
+    case SAND_SHARK_ALIGN_TO_GROUND_BEFORE_APPROACH_TARGET:
+    case SAND_SHARK_ALIGN_TO_GROUND_BEFORE_RETURN_HOME:
     case 21: {
         float g;
         moby->pos.z += D_L02_0016191C;
