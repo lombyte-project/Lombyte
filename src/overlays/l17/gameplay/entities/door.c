@@ -3708,10 +3708,10 @@ void FUN_L17_002f20d8(struct Moby *moby) {
         break;
     }
     switch (*(int *)(data + 0x80)) {
-    case 0:
+    case SHUTTLE_STOP_FIRST:
         try_set_help_message(0xA, 0x426C);
         break;
-    case 1:
+    case SHUTTLE_STOP_SECOND:
     case 4:
         try_set_help_message(0xA, 0x426B);
         break;
