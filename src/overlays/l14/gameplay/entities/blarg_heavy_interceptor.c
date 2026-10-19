@@ -835,6 +835,7 @@ void FUN_L14_002ad8b8(struct Moby *moby) {
         HIT_REACTION_LETHAL = 1,
         HIT_REACTION_DEATH_FALL = 2,
         HIT_REACTION_PLAY_HIT_ANIMATION = 3,
+        HIT_REACTION_HIGH_RED_FLASH_AND_HIT_ANIMATION = 4,
         HIT_REACTION_ANIMATE_WITH_LOW_RED_FLASH = 9,
         HIT_REACTION_LOW_RED_FLASH_AND_HIT_ANIMATION = 10,
         HIT_REACTION_NONE = 11
@@ -861,7 +862,7 @@ void FUN_L14_002ad8b8(struct Moby *moby) {
             blend_moby_animation(moby, 1, 0, 5);
             break;
         case HIT_REACTION_PLAY_HIT_ANIMATION:
-        case 4:
+        case HIT_REACTION_HIGH_RED_FLASH_AND_HIT_ANIMATION:
         case 5:
         case 6:
         case 7:
