@@ -543,6 +543,10 @@ extern void func_L12_0027C368_v(char *, void *, int) __asm__("FUN_L12_0027b370")
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void FUN_L18_002f16f0(struct Moby *moby) {
+    enum {
+        MOBY_INITIALIZE = 0,
+        MOBY_FALL_AND_REMOVE = 4
+    };
     VData *d = (VData *)moby->pvars;
     if (d) {
         float initial_acceleration_step = D_L18_00162290 * frame_time_sq;
@@ -552,7 +556,7 @@ void FUN_L18_002f16f0(struct Moby *moby) {
         float b2 = D_L18_001622A0 * frame_time_sq;
         float b3 = D_L18_001622A4 * frame_time;
         switch (moby->state) {
-        case 0: {
+        case MOBY_INITIALIZE: {
             short **tp;
             short *t;
             int j;
@@ -617,7 +621,7 @@ void FUN_L18_002f16f0(struct Moby *moby) {
             }
             break;
         }
-        case 4: {
+        case MOBY_FALL_AND_REMOVE: {
             float t = frame_time_sq * 5.0f;
             moby->pos.z += d->f340;
             d->f340 = d->f340 - t;
