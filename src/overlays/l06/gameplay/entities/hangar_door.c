@@ -3023,6 +3023,7 @@ void FUN_L06_002fa9c0(char *moby) {
         HIT_RESPONSE_NONLETHAL_REACTION = 3,
         HIT_RESPONSE_NONLETHAL_ANIMATION_REACTION = 4,
         HIT_RESPONSE_NONLETHAL_FALLBACK = 5,
+        HIT_RESPONSE_NONLETHAL_ANIMATION_UPDATE = 6,
         HIT_RESPONSE_NO_REACTION = 11
     };
     enum {
@@ -3088,7 +3089,7 @@ start_recovery:
         switch (kind) {
         case HIT_RESPONSE_SKIP_REACTION: case HIT_RESPONSE_NO_REACTION: default:
             goto hit_response_done;
-        case HIT_RESPONSE_NONLETHAL_REACTION: case HIT_RESPONSE_NONLETHAL_ANIMATION_REACTION: case HIT_RESPONSE_NONLETHAL_FALLBACK: case 6: case 7: case 8: case 9: case 10:
+        case HIT_RESPONSE_NONLETHAL_REACTION: case HIT_RESPONSE_NONLETHAL_ANIMATION_REACTION: case HIT_RESPONSE_NONLETHAL_FALLBACK: case HIT_RESPONSE_NONLETHAL_ANIMATION_UPDATE: case 7: case 8: case 9: case 10:
             *(unsigned char *)(data + 0x67) = 200;
             break;
         case HIT_RESPONSE_DEATH:
