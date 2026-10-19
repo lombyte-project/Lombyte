@@ -159,7 +159,7 @@ ret0:
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002c89e8.s", FUN_L00_002c89e8);
 #else
 extern u8 D_0013E534 __attribute__((section(".data")));
-extern int D_L00_0015FFE4;
+extern int D_L00_0015FFE4 __attribute__((sda));
 extern f32 vector_length_xyz_2cb418(void *) __asm__("FUN_001f9af0");
 extern f32 convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
@@ -568,7 +568,7 @@ struct Moby *FUN_L00_002c9348(State *a) {
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002c97e0.s", FUN_L00_002c97e0);
 #else
-extern f32 D_L00_0015F5D4_gp __asm__("D_L00_0015F5D4") __attribute__((sda));
+extern f32 D_L00_0015F5D4_gp __asm__("D_L00_0015F5D4");
 extern f32 D_L00_0015F5D0_macro __asm__("D_L00_0015F5D0") __attribute__((section(".sdata")));
 extern f32 D_L00_0015F5D4_macro __asm__("D_L00_0015F5D4") __attribute__((section(".sdata")));
 
@@ -577,7 +577,7 @@ extern f32 D_L00_00161858_2c97e0 __asm__("D_L00_00161858") __attribute__((sda));
 extern f32 D_L00_0016185C_2c97e0 __asm__("D_L00_0016185C") __attribute__((sda));
 extern f32 D_L00_00161860_2c97e0 __asm__("D_L00_00161860") __attribute__((sda));
 extern f32 D_L00_00161864_2c97e0 __asm__("D_L00_00161864") __attribute__((sda));
-extern f32 D_L00_00161868_2c97e0 __asm__("D_L00_00161868") __attribute__((sda));
+extern f32 D_L00_00161868_2c97e0 __asm__("D_L00_00161868") __attribute__((section(".data")));
 extern f32 D_L00_0016186C_2c97e0 __asm__("D_L00_0016186C") __attribute__((sda));
 extern s32 FUN_L00_00257b50_2c97e0(s32) __asm__("FUN_00213260");
 extern f32 FUN_L00_00257cb0_2c97e0(void) __asm__("FUN_00213308");

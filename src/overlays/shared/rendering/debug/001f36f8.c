@@ -451,7 +451,7 @@ extern s32 D_L00_0015F5C4 NOT_SDA;
 extern s32 D_L00_0015F600 MACRO_ADDR;
 extern s32 D_L00_0015F614 MACRO_ADDR;
 extern u8 mission_state_lui[] __asm__("D_L00_0015FC88") NOT_SDA;
-extern s32 D_L00_0015FFF0 MACRO_ADDR;
+extern s32 D_L00_0015FFF0 MACRO_ADDR __attribute__((sda));
 extern s32 D_L00_0016017C NOT_SDA;
 extern float D_L00_001604A4_macro __asm__("D_L00_001604A4") MACRO_ADDR;
 extern float D_L00_00160F80_macro __asm__("D_L00_00160F80") MACRO_ADDR;
@@ -472,7 +472,7 @@ extern u8 item_defs[] __asm__("D_L00_00179AC0") NOT_SDA;
 extern s32 weapon_ammo_counts[] __asm__("D_0013D428");
 extern int D_0013E520[];
 #include "rnc/gameplay/state/game_globals.h"
-extern const char D_L00_0015EFE0[] __attribute__((sda));
+extern const char D_L00_0015EFE0[];
 extern const char D_L00_0015EFF0[];
 extern const char D_L00_0015EFF8[];
 extern const char D_L00_001E7938[];

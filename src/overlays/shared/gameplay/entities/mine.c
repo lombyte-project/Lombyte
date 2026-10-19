@@ -1200,7 +1200,7 @@ unsigned char *spawn_bomb(int owner, void *pos) {
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002acfd8.s", FUN_L00_002acfd8);
 #else
-extern int D_0013CAE0_2acfd8 __asm__("D_0013CAE0") __attribute__((section(".data")));
+extern int D_0013CAE0_2acfd8 __asm__("D_0013CAE0") __attribute__((sda));
 extern float D_0015ED70_2acfd8 __asm__("D_0015ED70");
 extern float D_L00_00173E60_2acfd8[4] __asm__("D_L00_00173E60");
 extern short scale_game_frames_2acfd8(int) __asm__("FUN_001f96f8");

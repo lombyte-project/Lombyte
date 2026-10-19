@@ -463,7 +463,7 @@ extern int D_L08_001B0CB0[];
 extern s32 D_001413D0[];
 extern char D_0013D388[] __attribute__((section(".data")));
 extern unsigned short D_00141C38 __attribute__((section(".data")));
-extern unsigned char D_0013D4CB;
+extern unsigned char D_0013D4CB __attribute__((section(".data")));
 extern float D_0015ED6C;
 extern float D_L08_001618A8 __attribute__((sda));
 extern float D_L08_001618CC __attribute__((sda));

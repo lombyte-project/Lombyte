@@ -60,14 +60,14 @@ extern s32 D_0013FA5C;
 extern s32 D_0013FBB4;
 extern s32 D_0013FBF8;
 extern s32 D_L05_0015FAD4;
-extern s32 D_L05_0015FAD8;
+extern s32 D_L05_0015FAD8 __attribute__((sda));
 extern s32 D_L05_0015FAE0[4];
-extern s32 D_L05_0015FAEC;
+extern s32 D_L05_0015FAEC __attribute__((sda));
 extern s32 D_L05_0015FAF0;
 extern s32 D_L05_0015FAF4;
 extern s32 D_L05_0015FAF8;
-extern s32 D_L05_0015FB00;
-extern u8 D_L05_0015F87C __attribute__((sda));
+extern s32 D_L05_0015FB00 __attribute__((sda));
+extern u8 D_L05_0015F87C __attribute__((section(".data")));
 
 typedef struct {
     u8 pad0[0xC];
@@ -205,7 +205,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00262f50.s", FUN_L05_00262f50);
 extern s32 D_L05_0015FAE4, D_L05_0015FAE8, D_L05_0015FAEC;
 extern u8 D_0013FBFE;
 extern s32 frame_number __asm__("D_L05_0015F5CC");
-extern s32 D_L05_0015FAD4, D_L05_0015FAD8;
+extern s32 D_L05_0015FAD4, D_L05_0015FAD8 __attribute__((sda));
 extern s32 D_L05_0015FAE0[4], D_L05_0015FAF0, D_L05_0015FAF4, D_L05_0015FAF8, D_L05_0015FB00;
 extern s32 D_L05_0015FAFC;
 extern s32 D_L05_0017E918[15];

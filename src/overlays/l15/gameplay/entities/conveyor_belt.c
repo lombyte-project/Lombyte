@@ -1078,12 +1078,12 @@ void codebot_slot_update(struct Moby *moby) {
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002ec760.s", FUN_L15_002ec760);
 #else
-extern int D_L15_0015F5C4, D_L15_0015FFD8, D_L15_0015FFE4;
-extern int D_L15_0015ED84;
-extern char *D_L15_001600EC;
+extern int D_L15_0015F5C4, D_L15_0015FFD8, D_L15_0015FFE4 __attribute__((sda));
+extern int D_L15_0015ED84 __attribute__((sda));
+extern char *D_L15_001600EC __attribute__((sda));
 extern unsigned int D_001413DC;
-extern unsigned char D_0013DD50;
-extern unsigned char D_001413F4 __attribute__((section(".data")));
+extern unsigned char D_0013DD50 __attribute__((section(".data")));
+extern unsigned char D_001413F4 __attribute__((sda));
 extern float D_0013F420, D_0013F424, D_L15_0015ED64;
 extern unsigned char D_L15_0015EDB0;
 extern float D_0015ED68;

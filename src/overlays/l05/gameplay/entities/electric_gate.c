@@ -151,7 +151,7 @@ extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern u64 get_effect_texture(int) __asm__("FUN_001f44b8");
 extern void copy_matrix_rotation(void *, void *) __asm__("FUN_001fa298");
 extern void fast_draw_quad_real(void *, void *, int) __asm__("FUN_001f7d30");
-extern int D_L05_00161D3C __attribute__((sda));
+extern int D_L05_00161D3C;
 extern int D_L05_00161D40 __attribute__((sda));
 extern int D_L05_00161D44 __attribute__((sda));
 extern int D_L05_00161D48 __attribute__((sda));

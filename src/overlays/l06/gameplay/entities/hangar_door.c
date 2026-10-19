@@ -1305,7 +1305,7 @@ extern float D_L06_00161E08 __attribute__((sda));
 extern float D_L06_00161E18 __attribute__((sda));
 extern int D_L06_00161E1C __attribute__((sda));
 extern int D_L06_00161E20 __attribute__((sda));
-extern float D_L06_00161E24 __attribute__((sda));
+extern float D_L06_00161E24 __attribute__((section(".data")));
 extern float D_L06_00161E28 __attribute__((sda));
 extern int D_L06_00161E2C __attribute__((sda));
 extern int D_L06_00161E30 __attribute__((sda));

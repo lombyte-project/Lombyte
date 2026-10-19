@@ -18,7 +18,7 @@ extern char D_0013E533[];
 extern char *active_mobies[] __asm__("D_L00_001ABA00");
 extern float g_debug_camera[] __asm__("D_L00_00166DC0");
 extern u8 D_L00_001DB5C0[], D_L00_001DBA20[];
-extern char *D_L00_00173E58;
+extern char *D_L00_00173E58 __attribute__((section(".data")));
 extern Vec4 collision_hit_point __asm__("D_L00_00173E60");
 extern float D_L00_00161594 __attribute__((sda));
 extern float D_L00_00161598 __attribute__((sda));

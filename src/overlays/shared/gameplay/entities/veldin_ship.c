@@ -3459,7 +3459,7 @@ float FUN_00200240_2d73e8(s32) __asm__("FUN_001fa6c0");
 s32 FUN_00200250_2d73e8(float) __asm__("FUN_001fa6d0");
 s32 FUN_00257b50_2d73e8(s32) __asm__("FUN_00213260");
 
-extern T *D_L00_001600EC_2d73e8 __asm__("D_L00_001600EC") __attribute__((section(".data")));
+extern T *D_L00_001600EC_2d73e8 __asm__("D_L00_001600EC");
 void FUN_L00_002d73e8(P *p) {
     Q *q = p->q;
     T *t = &D_L00_001600EC_2d73e8[q->idx];

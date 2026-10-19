@@ -1430,7 +1430,7 @@ extern unsigned short *D_L00_001AB840_2ebe70[] __asm__("D_L00_001AB840");
 extern char *D_0015FFD8_2ebe70 __asm__("D_L00_0015FFD8");
 extern OvlQuad D_L00_00173E60_2ebe70 __asm__("D_L00_00173E60");
 extern float D_L00_00173E70_2ebe70[] __asm__("D_L00_00173E70");
-extern float D_L00_00161DD8_2ebe70 __asm__("D_L00_00161DD8") __attribute__((sda));
+extern float D_L00_00161DD8_2ebe70 __asm__("D_L00_00161DD8") __attribute__((section(".data")));
 
 void FUN_L00_002ebe70(char *o) {
     char *m = *(char **)(o + 0x70);
