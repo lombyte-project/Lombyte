@@ -2602,6 +2602,7 @@ extern s32 D_L13_001BA7D0[];
 void blarg_ship_update(struct Moby *moby) __asm__("FUN_L13_0030cdb8");
 void blarg_ship_update(struct Moby *moby) {
     enum {
+        BLARG_SHIP_ENTER_DAMAGE_HANDLING = 0,
         BLARG_SHIP_HANDLE_DAMAGE = 1,
         BLARG_SHIP_EXPLODE = 2
     };
@@ -2619,7 +2620,7 @@ void blarg_ship_update(struct Moby *moby) {
     hit = find_moby_hit(moby, 0x10000, 0);
     fun_00213928(moby, hit, data + 0x20, 0, hit_buffer, 0, 0, 4);
     switch (moby->state) {
-    case 0:
+    case BLARG_SHIP_ENTER_DAMAGE_HANDLING:
         moby->state = 1;
         break;
     case BLARG_SHIP_HANDLE_DAMAGE:
