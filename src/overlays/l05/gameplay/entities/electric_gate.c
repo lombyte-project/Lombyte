@@ -2378,7 +2378,8 @@ extern unsigned char D_0014C050_19208[] __asm__("D_0014C050");
 
 void FUN_L05_00319208(void *moby_v) {
     enum {
-        TAXI_BRANCHING_STOP = 2
+        TAXI_BRANCHING_STOP = 2,
+        TAXI_FALLBACK_BRANCH_STOP = 4
     };
     char *moby = moby_v;
     char *data = *(char **)(moby + 0x78);
@@ -2414,7 +2415,7 @@ void FUN_L05_00319208(void *moby_v) {
     case 0:
     case 1:
     case 3:
-    case 4: {
+    case TAXI_FALLBACK_BRANCH_STOP: {
         int v = *(int *)(*(char **)(moby + 0x24) + 0x10);
         moby[0x31] = 1;
         *(int *)(moby + 0x94) = v;
