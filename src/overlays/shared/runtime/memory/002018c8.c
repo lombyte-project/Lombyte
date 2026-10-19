@@ -89,8 +89,10 @@ extern void vu1_add_g_sregister(s32, s64) __asm__("FUN_00233980");
 void level_draw_dialog_text(void) __asm__("FUN_L00_002018c8");
 void level_draw_dialog_text(void) {
     enum {
+        MESSAGE_BOX_RESULTS_PANEL = 0,
         MESSAGE_BOX_TITLE_ONLY = 2,
-        MESSAGE_BOX_FREEZE_MODE_DIALOG = 3
+        MESSAGE_BOX_FREEZE_MODE_DIALOG = 3,
+        MESSAGE_BOX_CHOICE_DIALOG = 6
     };
     char buf[0x200];
     struct TextRegion box;
@@ -277,7 +279,7 @@ void level_draw_dialog_text(void) {
         }
         break;
     }
-    case 6: {
+    case MESSAGE_BOX_CHOICE_DIALOG: {
         s32 text_color;
         s32 button_color;
         s32 id;
@@ -313,7 +315,7 @@ void level_draw_dialog_text(void) {
         }
         break;
     }
-    case 0: {
+    case MESSAGE_BOX_RESULTS_PANEL: {
         char line[0x40];
         s32 pulse;
         s32 c1;
