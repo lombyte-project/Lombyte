@@ -682,10 +682,13 @@ extern void effects_update_2E39E0(Moby *, void *) __asm__("FUN_L00_0025d538");
 void FUN_L09_002e27d8(Moby *moby) {
     enum {
         GROUND_ENEMY_STATE_INITIALIZE = 0,
+        GROUND_ENEMY_STATE_IDLE = 1,
         GROUND_ENEMY_STATE_CHASE = 3,
         GROUND_ENEMY_STATE_MELEE_ATTACK = 4,
         GROUND_ENEMY_STATE_RETURN_HOME = 5,
         GROUND_ENEMY_STATE_HURT_KNOCKBACK = 6,
+        GROUND_ENEMY_STATE_HURT_RECOVERY = 9,
+        GROUND_ENEMY_STATE_BLOCKED_RETURN_HOME = 12,
         GROUND_ENEMY_STATE_FATAL_KNOCKBACK = 99
     };
     V_2E39E0 previous;
@@ -806,7 +809,7 @@ void FUN_L09_002e27d8(Moby *moby) {
         if (moby->prev_seq != 2) animate_2E39E0(moby, 2, 0, ticks_2E39E0(range_2E39E0(10, 13)));
         ground = moby->pos.z = ground_2E39E0(&moby->pos, 0, 0.5f);
         break;
-    case 1:
+    case GROUND_ENEMY_STATE_IDLE:
         fast_vec_sub(&step, &query, &moby->pos);
         if ((kind < 2 || fast_vec_length(&step) < data->range + 4.0f) && fabs_2E39E0(moby->pos.z - query.z) < 8.0f && !status_2E39E0(19)) {
             moby->state = 2;
@@ -949,7 +952,7 @@ void FUN_L09_002e27d8(Moby *moby) {
             data->fC8 = 0;
         }
         break;
-    case 9:
+    case GROUND_ENEMY_STATE_HURT_RECOVERY:
         if (frame_2E39E0(moby) > 29.0f) {
             moby->state = 3;
             if (moby->prev_seq != 0) animate_2E39E0(moby, 0, 0, ticks_2E39E0(range_2E39E0(10, 13)));
@@ -968,7 +971,7 @@ void FUN_L09_002e27d8(Moby *moby) {
             return;
         }
         break;
-    case 12: {
+    case GROUND_ENEMY_STATE_BLOCKED_RETURN_HOME: {
         int flags;
         float steep;
         steep = fabs_2E39E0(moby->pos.z - query.z);
