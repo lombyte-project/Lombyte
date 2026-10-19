@@ -1835,7 +1835,8 @@ void qwark_rilgar_update(L03WatchMoby *m) __asm__("FUN_L03_002dc478");
 void qwark_rilgar_update(L03WatchMoby *m) {
     enum {
         QWARK_RILGAR_INITIALIZE = 0,
-        QWARK_RILGAR_WAIT_FOR_PLAYER_IN_REGION = 1
+        QWARK_RILGAR_WAIT_FOR_PLAYER_IN_REGION = 1,
+        QWARK_RILGAR_POST_REGION_TRIGGER = 2
     };
     L03WatchScratch scratch;
     L03WatchData *d = (L03WatchData *)m->data;
@@ -1875,7 +1876,7 @@ void qwark_rilgar_update(L03WatchMoby *m) {
             m->state = 2;
         }
         break;
-    case 2:
+    case QWARK_RILGAR_POST_REGION_TRIGGER:
         m->state = 3;
         break;
     }
