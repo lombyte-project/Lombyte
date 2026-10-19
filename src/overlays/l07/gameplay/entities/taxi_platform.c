@@ -2310,6 +2310,7 @@ extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 
 void FUN_L07_0030e998(char *m, char *x, float *hp) {
     enum {
+        HIT_REACTION_NONE = 0,
         HIT_REACTION_NO_ANIMATION_RESPONSE = 11
     };
     char *info;
@@ -2321,7 +2322,7 @@ void FUN_L07_0030e998(char *m, char *x, float *hp) {
     r = hit_reaction(m, info, hp, 0, &hit, 0, 0, 4);
     if (((unsigned char *)m)[0xBC] != 0) {
         switch (r) {
-        case 0:
+        case HIT_REACTION_NONE:
             break;
         case 1:
         case 2:
