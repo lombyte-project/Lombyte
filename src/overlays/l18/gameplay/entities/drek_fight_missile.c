@@ -1525,7 +1525,9 @@ void drek_final_boss_robot_update(BossMoby *moby) {
         DREK_BOSS_SELECT_NEXT_ACTION = 0xC,
         DREK_BOSS_TARGET_RANDOM_ARENA_POINTS = 0x10,
         DREK_BOSS_APPROACH_AIM_NODE = 0x12,
-        DREK_BOSS_ACTIVATE_MISSILE_GROUP = 0x14
+        DREK_BOSS_ACTIVATE_MISSILE_GROUP = 0x14,
+        DREK_BOSS_APPROACH_SELECTED_MOBY = 0x15,
+        DREK_BOSS_DEATH_EXPLOSIONS = 0x1A
     };
     enum {
         DREK_BOSS_FOLLOW_HERO = 0x13
@@ -2388,7 +2390,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
             }
         }
         break;
-    case 0x15:
+    case DREK_BOSS_APPROACH_SELECTED_MOBY:
         aim = &moby->f40[2];
         ang = fast_arc_tan(d->f330->f10[0] - moby->f10[0], d->f330->f10[1] - moby->f10[1]);
         approach_angle(aim, &d->f370, ang, D_0015ED6C_e[1] * 6.2831855f,
@@ -2432,7 +2434,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
             moby->f20 = 5;
         }
         break;
-    case 0x1A: {
+    case DREK_BOSS_DEATH_EXPLOSIONS: {
         int n;
 
         aim = &moby->f40[2];
