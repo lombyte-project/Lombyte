@@ -1244,6 +1244,13 @@ void blend_moby_animation_c(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm_
 extern short D_L11_001623D0 __attribute__((sda));
 void blarg_ship_update(struct Moby *moby) __asm__("FUN_L11_00319838");
 void blarg_ship_update(struct Moby *moby) {
+    enum {
+        BLARG_SHIP_INITIALIZE = 0,
+        BLARG_SHIP_WAIT_TO_REACTIVATE = 3,
+        BLARG_SHIP_INACTIVE = 4,
+        BLARG_SHIP_MANEUVER_AND_FIRE = 5,
+        BLARG_SHIP_BURST_AND_DEACTIVATE = 6
+    };
     float scratch_vector[4];
     float target_position[4];
     float hero_position_delta[4];
@@ -1264,7 +1271,7 @@ void blarg_ship_update(struct Moby *moby) {
 
     FUN_L11_0031a1c0(moby);
     switch (moby->state) {
-    case 0:
+    case BLARG_SHIP_INITIALIZE:
         moby->draw_dist = 0xFF;
         moby->update_dist = 0xFF;
         if (*(int *)(d + 0x88) == 0) {
@@ -1315,7 +1322,7 @@ void blarg_ship_update(struct Moby *moby) {
             }
         }
         break;
-    case 3:
+    case BLARG_SHIP_WAIT_TO_REACTIVATE:
         qcopy(scratch_vector, &moby->pos);
         scratch_vector[3] = 3.0f;
         if (FUN_001fa728_u((char *)&moby->pos, 512.0f) == -1) {
@@ -1336,9 +1343,9 @@ void blarg_ship_update(struct Moby *moby) {
             *(int *)(d + 0x84) = 0;
         }
         break;
-    case 4:
+    case BLARG_SHIP_INACTIVE:
         break;
-    case 5:
+    case BLARG_SHIP_MANEUVER_AND_FIRE:
         c0 = 0.0f;
         qcopy(basis_rotation_angles, D_L11_001677D0);
         basis_rotation_angles[0] = 0.0f;
@@ -1421,7 +1428,7 @@ void blarg_ship_update(struct Moby *moby) {
             }
         }
         break;
-    case 6:
+    case BLARG_SHIP_BURST_AND_DEACTIVATE:
         *(unsigned short *)(D_00141C18) = 0xFFFF;
         subtract_vector_xyz(scratch_vector, &hero.motion.pos, d + 0xB0);
         qcopy(d + 0xB0, &hero.motion.pos);
