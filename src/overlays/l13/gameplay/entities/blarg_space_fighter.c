@@ -432,7 +432,11 @@ void FUN_L13_002c25b8(unsigned char *moby) {
     };
     enum {
         START_ATTACK_ANIMATION_SEQUENCE = 0,
-        WAIT_TO_BEGIN_ALTERNATING_FIRE = 2
+        WAIT_FOR_ATTACK_START_ANIMATION = 1,
+        WAIT_TO_BEGIN_ALTERNATING_FIRE = 2,
+        WAIT_TO_ADVANCE_ATTACK_EXIT_SEQUENCE = 4,
+        SELECT_ATTACK_RESTART_OR_EXIT = 5,
+        WAIT_TO_COMPLETE_ATTACK_EXIT_SEQUENCE = 6
     };
     unsigned char *d = *(unsigned char **)(moby + 0x78);
     unsigned char *target;
@@ -501,7 +505,7 @@ void FUN_L13_002c25b8(unsigned char *moby) {
         f = fast_arc_tan(*(float *)(target + 0x10) - *(float *)(moby + 0x10), *(float *)(target + 0x14) - *(float *)(moby + 0x14));
         approach_angle(rot, (float *)(d + 0xDC), f, frame_time_sq * 12.566371f, frame_time_sq * 25.132742f, frame_time * 6.2831855f);
         switch (moby[0xBC]) {
-        case 1:
+        case WAIT_FOR_ATTACK_START_ANIMATION:
             if (!(moby[0x70] & 2)) return;
             moby[0xBC] = 2;
             if (moby[0x53] != 2) blend_moby_animation_c13(moby, 2, 0, 2);
@@ -543,12 +547,12 @@ void FUN_L13_002c25b8(unsigned char *moby) {
             if (moby[0x53] != 4) blend_moby_animation_c13(moby, 4, 0, 2);
             moby[0xBC] = 4;
             break;
-        case 4:
+        case WAIT_TO_ADVANCE_ATTACK_EXIT_SEQUENCE:
             if (!(moby[0x70] & 2)) return;
             moby[0xBC] = 5;
             if (moby[0x53] != 5) blend_moby_animation_c13(moby, 5, 0, 2);
             break;
-        case 5:
+        case SELECT_ATTACK_RESTART_OR_EXIT:
             if (*(int *)(d + 0xB4) == 2) {
                 if (moby[0x53] != 6) blend_moby_animation_c13(moby, 6, 0, 2);
                 moby[0xBC] = 6;
@@ -557,7 +561,7 @@ void FUN_L13_002c25b8(unsigned char *moby) {
                 if (moby[0x53] != 2) blend_moby_animation_c13(moby, 2, 0, 2);
             }
             break;
-        case 6:
+        case WAIT_TO_COMPLETE_ATTACK_EXIT_SEQUENCE:
             if (!(moby[0x70] & 2)) return;
             if (*(int *)(d + 0xB4) == 2) {
                 if (moby[0x53] != 0) blend_moby_animation_c13(moby, 0, 0, 2);
