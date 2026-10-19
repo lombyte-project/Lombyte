@@ -121,6 +121,9 @@ extern int func_L00_00235790_r(void) __asm__("FUN_L00_00234e00");
 extern int func_001F9908_r(int *) __asm__("FUN_001f9740");
 
 void FUN_L11_00253a18(void) {
+    enum {
+        HERO_STATE_APPROACH_TARGET_POSE = 101
+    };
     struct Moby *moby;
     int prevSub;
     int prevState;
@@ -864,7 +867,7 @@ void FUN_L11_00253a18(void) {
                         }
                     }
                     break;
-                case 101:
+                case HERO_STATE_APPROACH_TARGET_POSE:
                     if (vector_distance(hero.motion.pos.f, hero.unk1640.f) < 0.2f) {
                         if (frame_time * 2.7f > hero.motion.speed_xy) {
                             if (fast_difference_between_rotations(
