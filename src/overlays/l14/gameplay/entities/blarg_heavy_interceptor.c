@@ -3136,7 +3136,8 @@ void FUN_L14_002d5f40(struct Moby *m) {
         RACER_STATE_WAIT_FOR_START_DELAY = 2,
         RACER_STATE_WAIT_FOR_START_ANIMATION = 3,
         RACER_STATE_COMPLETE_START_INTERPOLATION = 4,
-        RACER_STATE_FOLLOW_PATH = 5
+        RACER_STATE_FOLLOW_PATH = 5,
+        RACER_STATE_WAIT_FOR_EXIT_VOLUME = 6
     };
     struct L14RacerVars *d = (struct L14RacerVars *)m->pvars;
     u8 pos[16];
@@ -3199,7 +3200,7 @@ void FUN_L14_002d5f40(struct Moby *m) {
     case RACER_STATE_FOLLOW_PATH:
         FUN_L14_002d7198(m);
         break;
-    case 6:
+    case RACER_STATE_WAIT_FOR_EXIT_VOLUME:
         FUN_L14_002d67e8(m);
         if (is_point_inside_clip_volume(&m->pos, d->volume)) {
             moby_point_position(m, 2, pos);
