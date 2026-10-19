@@ -568,6 +568,7 @@ void FUN_L11_002d14b0(void *arg) {
         RESORT_OWNER_MOVE_TO_PATH_POINT = 6,
         RESORT_OWNER_JUMP_TO_TARGET = 7,
         RESORT_OWNER_MOVE_TO_GATE_TARGET = 8,
+        RESORT_OWNER_WAIT_AT_GATE = 9,
         RESORT_OWNER_MOVE_TO_GATE_DEPARTURE_TARGET = 10,
         RESORT_OWNER_WAIT_TO_ADVANCE_FINAL_PATH_LEG = 11,
         RESORT_OWNER_CHECK_PATH_COMPLETION_DIALOGUE = 12,
@@ -755,7 +756,7 @@ void FUN_L11_002d14b0(void *arg) {
         if (vector_distance(&moby->pos, &d->target) < 0.5f)
             FUN_L11_002d2088_c(moby, 9);
         break;
-    case 9:
+    case RESORT_OWNER_WAIT_AT_GATE:
         {
             int i = d->leg != 0;
             if (FUN_L11_0030a830((struct Moby *)(D_L11_0015FFD8 + (d->gates[i] << 8))))
