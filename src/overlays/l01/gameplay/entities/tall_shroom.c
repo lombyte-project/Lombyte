@@ -84,6 +84,10 @@ extern int D_0015EEA4_macro __asm__("D_0015EEA4") MACRO_ADDR;
 extern s32 current_level_index_macro __asm__("D_0015ED84") MACRO_ADDR;
 /* Novalis tutorial hint triggers: plays help messages and counts usage stats. */
 void FUN_L01_0030acb8(struct Moby *moby) {
+    enum {
+        TUTORIAL_HINT_STATE_INITIALIZE = 0,
+        TUTORIAL_HINT_STATE_UPDATE = 1
+    };
     s32 *data;
     struct Moby *m;
     struct Moby *m2;
@@ -92,13 +96,13 @@ void FUN_L01_0030acb8(struct Moby *moby) {
     data = (s32 *)moby->pvars;
     tick_countdown_32(&data[6]);
     switch (moby->state) {
-    case 0:
+    case TUTORIAL_HINT_STATE_INITIALIZE:
         data[5] = 0;
         moby->update_dist = 0xFF;
         moby->state = 1;
         data[10] = 0;
         break;
-    case 1:
+    case TUTORIAL_HINT_STATE_UPDATE:
         if (level_frame_count < scale_game_frames(400) && usage_stats.stat[12].count != 0 && usage_stats.stat[11].count == 0) {
             if (scale_game_frames(D_0015EEA4_macro) - usage_stats.stat[12].unk2 * 600 < scale_game_frames(1100) && help_records[0x51].v >= 0) {
                 help_request(0x4E27, 0x51);
