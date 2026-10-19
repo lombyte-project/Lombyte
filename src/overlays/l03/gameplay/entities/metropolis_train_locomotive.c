@@ -1634,6 +1634,13 @@ extern void spawn_debris_c5bb8(char *, int, float *, void *, int, int, float, fl
  * (its partner moby data->0x248 is a class 0x23E), attacks in range, returns home, dies (states 8, 9, 21). */
 void robot_dog_update(char *moby) __asm__("FUN_L03_002c5bb8");
 void robot_dog_update(char *moby) {
+    enum {
+        ROBOT_DOG_INITIALIZE = 0,
+        ROBOT_DOG_FOLLOW_PATH = 5,
+        ROBOT_DOG_MELEE_ATTACK = 6,
+        ROBOT_DOG_RETURN_HOME = 7,
+        ROBOT_DOG_DEATH_FALL = 21
+    };
     Tgt2c5bb8 tgt;
     float dir[4];
     float push[4];
@@ -1654,7 +1661,7 @@ void robot_dog_update(char *moby) {
     FUN_L03_002c6a20((struct Moby *)moby);
     fast_dec_timer(&data->i244);
     switch (((unsigned char *)moby)[0x20]) {
-    case 0:
+    case ROBOT_DOG_INITIALIZE:
         *(unsigned short *)(moby + 0x34) |= 0x1000;
         qcopy(data->home, moby + 0x10);
         moby[0x20] = 1;
@@ -1763,7 +1770,7 @@ void robot_dog_update(char *moby) {
             moby[0x20] = 7;
         }
         break;
-    case 5:
+    case ROBOT_DOG_FOLLOW_PATH:
         path = (int *)D_L03_001B05B0_c5bb8[data->i270];
         FUN_L00_0025df68(path, moby + 0x10, dir, &seg, &frac, 0, 999.0f, 5.0f, 0.0f);
         if (data->i278 < seg) {
@@ -1799,7 +1806,7 @@ void robot_dog_update(char *moby) {
             }
         }
         break;
-    case 6:
+    case ROBOT_DOG_MELEE_ATTACK:
         a = fast_arc_tan(tgt.pos[0] - *(float *)(moby + 0x10), tgt.pos[1] - *(float *)(moby + 0x14));
         FUN_L00_00258278(moby, data->v220, a, 0.05f, 0.3f, 0.2f);
         dir[0] = 2.0f * fast_cos(*(float *)(moby + 0x48));
@@ -1830,7 +1837,7 @@ void robot_dog_update(char *moby) {
             data->i244 = scale_game_frames(120);
         }
         break;
-    case 7:
+    case ROBOT_DOG_RETURN_HOME:
         a = fast_arc_tan(data->home[0] - *(float *)(moby + 0x10), data->home[1] - *(float *)(moby + 0x14));
         FUN_L00_00258278(moby, data->v220, a, 0.02f, 0.3f, 0.1f);
         dir[0] = 2.0f * fast_cos(*(float *)(moby + 0x48));
@@ -1868,7 +1875,7 @@ void robot_dog_update(char *moby) {
             data->sC8 = 0;
         }
         break;
-    case 21:
+    case ROBOT_DOG_DEATH_FALL:
         *(unsigned short *)(moby + 0x34) &= 0xEFFF;
         if (mine_fall(moby, data->m120) & 0x60) {
             clear_vector(dir);
