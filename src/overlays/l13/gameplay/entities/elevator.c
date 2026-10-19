@@ -823,6 +823,7 @@ void blarg_gunner_update(struct Moby *moby) __asm__("FUN_L13_002b4c80");
 void blarg_gunner_update(struct Moby *moby) {
     enum {
         BLARG_GUNNER_STATE_INITIALIZE = 0,
+        BLARG_GUNNER_STATE_ACTIVE = 1,
         BLARG_GUNNER_STATE_DESTROY = 2
     };
     unsigned char *d = moby->pvars;
@@ -835,7 +836,7 @@ void blarg_gunner_update(struct Moby *moby) {
         d[0x5A] = 6;
         d[0x58] = 8;
         break;
-    case 1:
+    case BLARG_GUNNER_STATE_ACTIVE:
         if ((*(unsigned char **)(d + 0x70))[0x20] == 3) {
             if (moby->prev_seq != 2) {
                 int x = FUN_L00_00257b90(0, 3);
