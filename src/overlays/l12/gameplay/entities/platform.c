@@ -2857,6 +2857,11 @@ extern void FUN_L00_00260860_b570(int, int) __asm__("FUN_L00_00260860");
 
 void edwina_update(L16WatchMoby *m) __asm__("FUN_L12_002eb570");
 void edwina_update(L16WatchMoby *m) {
+    enum {
+        EDWINA_INITIALIZE = 0,
+        EDWINA_UPDATE_DIALOGUE = 1,
+        EDWINA_APPLY_DIALOGUE_COMPLETION = 2
+    };
     L16WatchScratch scratch;
     L12WatchData *d = (L12WatchData *)m->data;
     float rate;
@@ -2870,7 +2875,7 @@ void edwina_update(L16WatchMoby *m) {
         blend_moby_animation_b570(m, 0, 0, 2);
     }
     switch (m->state) {
-    case 0:
+    case EDWINA_INITIALIZE:
         m->state = 1;
         initialize_npc_dialogue(m, &d->activation);
         d->activation.radius = 1.7f;
@@ -2878,14 +2883,14 @@ void edwina_update(L16WatchMoby *m) {
         if (alternate_item_available[0x13C])
             *(short *)((char *)d + 0x56) = -1;
         break;
-    case 1:
+    case EDWINA_UPDATE_DIALOGUE:
         if (alternate_item_available[0x13C] == 0 && update_npc_dialogue(m, &d->activation)) {
             FUN_L01_002783a8_c(m, 2.52f);
             *(int *)((char *)m + 0x58) = 0;
             m->state = 2;
         }
         break;
-    case 2:
+    case EDWINA_APPLY_DIALOGUE_COMPLETION:
         if (D_L12_0015F5C4 != 2) {
             *(float *)((char *)m + 0x58) = 1.0f;
             jet_clear_persistent(m->widget);
