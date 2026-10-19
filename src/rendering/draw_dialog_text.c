@@ -101,6 +101,9 @@ void draw_dialog_text(void) {
         FREEZE_CHOICE_ALTERNATE_PAIRED_FOOTER_MESSAGE = 2,
         FREEZE_CHOICE_CENTERED_FOOTER_MESSAGE = 3
     };
+    enum {
+        MODE_FREEZE_TIMER_GATED_CENTERED_FOOTER_MESSAGE = 2
+    };
     char buf[0x200];
     struct TextRegion box;
 
@@ -205,7 +208,7 @@ void draw_dialog_text(void) {
             mid = 0x524A;
             text = get_help_message_text(0x4FBC);
             break;
-        case 2:
+        case MODE_FREEZE_TIMER_GATED_CENTERED_FOOTER_MESSAGE:
             mid = 0x524A;
             text = get_help_message_text(0x4FA6);
             if (freeze.timer != 0) {
