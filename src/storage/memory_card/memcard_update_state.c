@@ -77,6 +77,8 @@ void memcard_update_state(void) {
         MEMCARD_READ_SAVE = 14,
         MEMCARD_BEGIN_UPDATE_SAVE = 15,
         MEMCARD_UPDATE_SAVE = 16,
+        MEMCARD_BEGIN_WRITE_FULL_SAVE = 19,
+        MEMCARD_WRITE_FULL_SAVE = 20,
         MEMCARD_BEGIN_SCAN_SAVE_INFO = 21,
         MEMCARD_ADVANCE_SAVE_INFO_SCAN = 22,
         MEMCARD_READ_SCANNED_SAVE_INFO = 23
@@ -126,6 +128,12 @@ void memcard_update_state(void) {
         MEMCARD_UPDATE_SAVE_REQUEST_RECORD_WRITE = 8,
         MEMCARD_UPDATE_SAVE_PROCESS_RECORD_WRITE_RESULT = 9,
         MEMCARD_UPDATE_SAVE_REQUEST_CLOSE = 10
+    };
+    enum {
+        MEMCARD_WRITE_FULL_SAVE_REQUEST_OPEN = 0,
+        MEMCARD_WRITE_FULL_SAVE_PROCESS_OPEN_RESULT_AND_REQUEST_WRITE = 1,
+        MEMCARD_WRITE_FULL_SAVE_PROCESS_WRITE_RESULT_AND_REQUEST_CLOSE = 2,
+        MEMCARD_WRITE_FULL_SAVE_PROCESS_CLOSE_RESULT = 3
     };
     char name[0x40];
 
@@ -989,7 +997,7 @@ void memcard_update_state(void) {
         MC.busy = 0;
         break;
 
-    case 19:
+    case MEMCARD_BEGIN_WRITE_FULL_SAVE:
         if (CARD.errors != 0) {
             MC.busy = 0;
             MC.state = 0;
@@ -1007,15 +1015,15 @@ void memcard_update_state(void) {
         MC.record_index = 0;
         MC.sub = 0;
         MC.state = 20;
-    case 20:
+    case MEMCARD_WRITE_FULL_SAVE:
         switch (MC.sub) {
-        case 0:
+        case MEMCARD_WRITE_FULL_SAVE_REQUEST_OPEN:
             sprintf(name, D_0013D270, CARD.save_index);
             if (sceMcOpen(CARD.port, CARD.slot, name, 2) == 0) {
                 MC.sub = 1;
             }
             break;
-        case 1:
+        case MEMCARD_WRITE_FULL_SAVE_PROCESS_OPEN_RESULT_AND_REQUEST_WRITE:
             if (MC.result >= 0) {
                 s32 n;
 
@@ -1033,7 +1041,7 @@ void memcard_update_state(void) {
             MC.cur = 0;
             MC.busy = 0;
             break;
-        case 2:
+        case MEMCARD_WRITE_FULL_SAVE_PROCESS_WRITE_RESULT_AND_REQUEST_CLOSE:
             if (MC.result == MC.size) {
                 if (sceMcClose(MC.fd) == 0) {
                     MC.sub = 3;
@@ -1063,7 +1071,7 @@ void memcard_update_state(void) {
             MC.cur = 0;
             MC.busy = 0;
             break;
-        case 3:
+        case MEMCARD_WRITE_FULL_SAVE_PROCESS_CLOSE_RESULT:
             if (MC.result != 0) {
                 MC.err = 0x2C;
                 MC.err_card = MC.cur;
