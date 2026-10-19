@@ -2725,6 +2725,8 @@ void machinegun_turret_update(unsigned char *moby) {
     enum {
         TURRET_INITIALIZE = 0,
         TURRET_SWEEP_AND_FIRE = 1,
+        TURRET_HIT_SPIN = 2,
+        TURRET_LOWER_AND_REALIGN = 3,
         TURRET_RESTORE_HEIGHT = 4
     };
     char *data;
@@ -2837,7 +2839,7 @@ void machinegun_turret_update(unsigned char *moby) {
             *(s16 *)(data + 0x7c) = timer << 1;
         }
         break;
-    case 2:
+    case TURRET_HIT_SPIN:
         direction = frame_time;
         if ((u8)moby[0x52] != 4 && ((u8)moby[0x70] & 2) && (u8)moby[0x53] != 4) {
             FUN_00212f90(moby, 4, 0, 1);
@@ -2848,7 +2850,7 @@ void machinegun_turret_update(unsigned char *moby) {
         *(s16 *)(data + 0x7c) = scale_game_frames(180);
         moby[0x20] = 3;
         break;
-    case 3:
+    case TURRET_LOWER_AND_REALIGN:
         if ((u8)moby[0x52] != 4 && ((u8)moby[0x70] & 2) && (u8)moby[0x53] != 4)
             FUN_00212f90(moby, 4, 0, 0);
         if (*(float *)(data + 0x90) - 0.7f < *(float *)(moby + 0x18))
