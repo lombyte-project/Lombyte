@@ -1436,7 +1436,7 @@ void gadgebot_update(GbMoby *moby) {
     float save1[4];
     float v40[4];
     float v50[4];
-    float v60[4];
+    float temporary_position[4];
     float v70[4];
     float attack_probe_near_position[4];
     float ang;
@@ -1659,7 +1659,7 @@ void gadgebot_update(GbMoby *moby) {
                 if (moby->anim != 1) {
                     blend_moby_animation(moby, 1, 0, scale_game_frames(7));
                 }
-                *(OvlQuad *)v60 = *(OvlQuad *)moby->pos;
+                *(OvlQuad *)temporary_position = *(OvlQuad *)moby->pos;
                 if (d->unk27C >= 0) {
                     int *p;
 
@@ -1706,7 +1706,7 @@ void gadgebot_update(GbMoby *moby) {
                 dz = absolute_float(moby->pos[2] - hero.ground_point.f[2]);
                 probe_ground_height(moby->pos, 0, 0.5f);
                 if (D_L06_001745D8 != 0 && D_L06_001745D8->cls_id == 0x3B1) {
-                    *(OvlQuad *)moby->pos = *(OvlQuad *)v60;
+                    *(OvlQuad *)moby->pos = *(OvlQuad *)temporary_position;
                 }
                 hit = 0;
                 if (flags & 1) {
@@ -1720,7 +1720,7 @@ void gadgebot_update(GbMoby *moby) {
                 }
                 if (flags & 0x20) {
                     moby->state = 4;
-                    *(OvlQuad *)moby->pos = *(OvlQuad *)v60;
+                    *(OvlQuad *)moby->pos = *(OvlQuad *)temporary_position;
                 }
                 if (dist < 0.8f || hit != 0 || dz > 1.75f) {
                     qcopy(d->unk0, moby->pos);
@@ -1805,11 +1805,11 @@ void gadgebot_update(GbMoby *moby) {
                                          moby->pos, d->target->pos, v40, 0.1f) == 0) {
                         qcopy(v40, d->target->pos);
                     }
-                    *(OvlQuad *)v60 = *(OvlQuad *)moby->pos;
-                    FUN_L00_00261d78(0.17f, d->paths.id[d->unk27C], moby->pos, v60);
+                    *(OvlQuad *)temporary_position = *(OvlQuad *)moby->pos;
+                    FUN_L00_00261d78(0.17f, d->paths.id[d->unk27C], moby->pos, temporary_position);
                     p = D_L06_001B0C30[d->paths.id[d->unk27C]];
-                    if (point_in_path_xy(v60, p + 4, *p) != 0) {
-                        *(OvlQuad *)moby->pos = *(OvlQuad *)v60;
+                    if (point_in_path_xy(temporary_position, p + 4, *p) != 0) {
+                        *(OvlQuad *)moby->pos = *(OvlQuad *)temporary_position;
                     }
                 } else {
                     qcopy(v40, d->target->pos);
@@ -1995,7 +1995,7 @@ void gadgebot_update(GbMoby *moby) {
                 v50[1] = fast_sin(random_angle_radians()) * random_float_between(0.0f, 0.25f);
                 v50[2] = 0.0f;
                 v50[2] += random_float_between(0.0f, 0.5f);
-                FUN_L00_001ff290(v60, v50, moby->pos);
+                FUN_L00_001ff290(temporary_position, v50, moby->pos);
                 normalize_vector_xyz(v40, v40, random_float_between(0.0f, frame_time));
                 v40[2] = random_float_between(frame_time * 2.5f, frame_time * 5.0f);
                 t = scale_game_frames(random_int_between(0xF, 0x1E));
