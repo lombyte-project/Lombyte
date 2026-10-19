@@ -2930,6 +2930,8 @@ void infobot_update(struct Moby *moby)
         INFOBOT_ORBIT_CARRIER = 5,
         INFOBOT_FOLLOW_PATH = 6,
         INFOBOT_ORBIT_PATH_ENDPOINT = 7,
+        INFOBOT_START_SCENE_SEQUENCE = 8,
+        INFOBOT_WAIT_TO_START_FINAL_SCENE = 10,
         INFOBOT_SAVE_AND_REMOVE = 11
     };
     Vec offset;
@@ -3141,7 +3143,7 @@ void infobot_update(struct Moby *moby)
         moby->rot.x = spring_turn_2d5de8(moby->rot.x, 0.0f, D_0015ED70 * 1.0471976f, D_0015ED70 * 2.0943952f, D_0015ED6C * 1.5707964f, &infobot->spin[0]);
         break;
     }
-    case 8:
+    case INFOBOT_START_SCENE_SEQUENCE:
         moby->flags |= 0x41;
         FUN_L00_002607d0(infobot->planet);
         jet_clear_persistent(moby->mission);
@@ -3162,7 +3164,7 @@ void infobot_update(struct Moby *moby)
             FUN_L00_00299460(infobot->msg1);
         }
         break;
-    case 10:
+    case INFOBOT_WAIT_TO_START_FINAL_SCENE:
         if (D_L00_0015F5C4 == 2) {
             break;
         }
