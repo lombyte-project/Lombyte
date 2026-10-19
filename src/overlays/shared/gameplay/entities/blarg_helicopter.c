@@ -342,6 +342,7 @@ void spawner_update(struct Moby *moby) {
     enum {
         SPAWNER_INITIALIZE = 0,
         SPAWNER_WAIT_FOR_PROXIMITY = 1,
+        SPAWNER_SPAWN_ENABLED = 2,
         SPAWNER_DESTROY = 8,
         SPAWNER_RESET_TO_PROXIMITY_WAIT = 9
     };
@@ -495,7 +496,7 @@ void spawner_update(struct Moby *moby) {
             }
         }
         break;
-    case 2:
+    case SPAWNER_SPAWN_ENABLED:
         spawn = 1;
         break;
     case 3:
