@@ -798,6 +798,7 @@ void woodcut_bot_update(WBMoby *m) {
     enum {
         WOODCUT_BOT_INITIALIZE = 0,
         WOODCUT_BOT_IDLE = 1,
+        WOODCUT_BOT_WAIT_FOR_ANIMATION_BEFORE_PURSUIT = 2,
         WOODCUT_BOT_SELECT_ACTION_WHILE_EXCITED = 4,
         WOODCUT_BOT_MOVE_TOWARD_TARGET = 5,
         WOODCUT_BOT_RETURN_TO_SAVED_POSITION = 6,
@@ -1053,7 +1054,7 @@ void woodcut_bot_update(WBMoby *m) {
             }
         }
         break;
-    case 2:
+    case WOODCUT_BOT_WAIT_FOR_ANIMATION_BEFORE_PURSUIT:
         if (m->anim == 2 && (m->f70 & 2)) {
             if (excited || d->f3DC == -1 ||
                 point_in_path_xy(tgt, D_L04_001B0630[d->f3DC] + 4, *D_L04_001B0630[d->f3DC]) != 0) {
