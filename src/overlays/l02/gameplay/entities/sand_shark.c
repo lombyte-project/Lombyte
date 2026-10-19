@@ -2985,10 +2985,12 @@ extern short D_L02_00161C68 __attribute__((sda));
 void crane_update(struct Moby *moby) __asm__("FUN_L02_002df1a8");
 void crane_update(struct Moby *moby) {
     enum {
+        CRANE_ANIM_RESTART_WAIT = 0,
         CRANE_ANIM_TRANSITION_TO_RANDOM_WAIT = 1,
         CRANE_ANIM_WAIT_FOR_RANDOM_TRANSITION = 2,
         CRANE_ANIM_WAIT_FOR_TRANSITION_TO_RANDOM_WAIT = 4,
-        CRANE_ANIM_TRANSITION_BACK_TO_RANDOM_WAIT = 5
+        CRANE_ANIM_TRANSITION_BACK_TO_RANDOM_WAIT = 5,
+        CRANE_ANIM_TRANSITION_TO_RESTART_WAIT = 7
     };
     int *d = (int *)moby->pvars;
     moby->anim_speed = *(float *)&D_L02_00161C68;
@@ -2996,7 +2998,7 @@ void crane_update(struct Moby *moby) {
     case CRANE_ANIM_TRANSITION_TO_RANDOM_WAIT:
     case 3:
     case CRANE_ANIM_TRANSITION_BACK_TO_RANDOM_WAIT:
-    case 7:
+    case CRANE_ANIM_TRANSITION_TO_RESTART_WAIT:
         if (moby->anim_flags & 2) {
             int idx;
             moby->anim_time = 0;
@@ -3015,7 +3017,7 @@ void crane_update(struct Moby *moby) {
             moby->command = func_001FA898_r(multiply_global_factor_ed64(random_float_between_alt(180.0f, 240.0f)));
         }
         break;
-    case 0:
+    case CRANE_ANIM_RESTART_WAIT:
         if (FUN_L00_001fefc8(&moby->command)) {
             if (moby->prev_seq != 1) {
                 blend_moby_animation(moby, 1, 0, scale_game_frames(10));
