@@ -157,6 +157,7 @@ void FUN_L16_002270c8(void) {
         HERO_STATE_GRIND_RAIL_TRANSFER = 42,
         HERO_STATE_GRIND_ATTACK = 43,
         HERO_STATE_GRIND_COLLISION_RECOVERY = 66,
+        HERO_STATE_APPROACH_TARGET_POSE = 101,
         HERO_STATE_WATER_DEATH = 106,
         HERO_STATE_DEATH_FALL = 119
     };
@@ -911,7 +912,7 @@ void FUN_L16_002270c8(void) {
                         }
                     }
                     break;
-                case 101:
+                case HERO_STATE_APPROACH_TARGET_POSE:
                     if (vector_distance(hero.motion.pos.f, hero.unk1640.f) < 0.2f) {
                         if (frame_time * 2.7f > hero.motion.speed_xy) {
                             if (fast_difference_between_rotations(
