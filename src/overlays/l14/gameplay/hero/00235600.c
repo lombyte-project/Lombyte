@@ -1447,7 +1447,7 @@ void FUN_L14_00235600(void) {
                     }
                     hero_set_state(HERO_STATE_IDLE, 1);
                     break;
-                case 6:
+                case HERO_STATE_FALL:
                 case 45:
                     if (hero.state.step == 0) {
                         if (!(scale_game_frames(0x12) > hero.state_timer) ||
@@ -1613,7 +1613,7 @@ void FUN_L14_00235600(void) {
                     set_hero_animation(FUN_L12_00227f10(0), 0, -2.0f);
                     FUN_L00_00233288(0.016f, 0.002f, 5, 2, 0, 1);
                     break;
-                case 8:
+                case HERO_STATE_LAND:
                     if (hero.unk1B4 != 0) {
                         if (scale_game_frames(9) > hero.state_timer) {
                             int hit = 0;
@@ -1699,15 +1699,15 @@ void FUN_L14_00235600(void) {
                     set_hero_animation(7, 0x17, scale_game_frames(9));
                     FUN_L00_00233288(0.016f, 0.002f, 5, 2, 0, 1);
                     break;
-                case 7:
-                case 9:
-                case 10:
-                case 11:
+                case HERO_STATE_JUMP:
+                case HERO_STATE_RUN_JUMP:
+                case HERO_STATE_PACK_JUMP:
+                case HERO_STATE_HIGH_JUMP:
                 case 12:
                 case 13:
                 case 14:
                 case 15:
-                case 16:
+                case HERO_STATE_PACK_LONG_JUMP:
                 case 17:
                 case 18:
                 case 28:
