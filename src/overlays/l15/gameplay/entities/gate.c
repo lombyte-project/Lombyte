@@ -2456,7 +2456,8 @@ extern float FUN_001f8bc8(void *, void *) __asm__("FUN_001f9b48");
 
 void FUN_L15_002d0fa8(void *arg) {
     enum {
-        HIT_REACTION_DEATH = 1
+        HIT_REACTION_DEATH = 1,
+        HIT_REACTION_NONE = 11
     };
     UMoby *m = arg;
     UData *d = m->data;
@@ -2516,7 +2517,7 @@ void FUN_L15_002d0fa8(void *arg) {
             }
             switch (code) {
             case 0:
-            case 11:
+            case HIT_REACTION_NONE:
                 break;
             case 9:
             case 10:
