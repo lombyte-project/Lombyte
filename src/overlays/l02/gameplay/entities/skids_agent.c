@@ -729,13 +729,17 @@ extern void FUN_L02_002ea048_cb(void) __asm__("FUN_L02_002ea048");
 
 void ocean_aridia_update(struct Moby *moby) __asm__("FUN_L02_002ea198");
 void ocean_aridia_update(struct Moby *moby) {
+    enum {
+        OCEAN_ARIDIA_INITIALIZE = 0,
+        OCEAN_ARIDIA_REGISTER_DRAW_CALLBACK = 1
+    };
     switch (moby->state) {
-    case 0:
+    case OCEAN_ARIDIA_INITIALIZE:
         FUN_L02_002a47f8(0.16666667f);
         moby->state = 1;
         moby->update_dist = 0xFF;
         break;
-    case 1:
+    case OCEAN_ARIDIA_REGISTER_DRAW_CALLBACK:
         add_draw_callback(FUN_L02_002ea048_cb, moby);
         break;
     }
