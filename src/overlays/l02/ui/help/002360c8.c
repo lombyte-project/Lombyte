@@ -29,7 +29,9 @@ extern s32 FUN_L00_002595a0_32b90(f32 *, f32 *, f32, f32, f32) __asm__("FUN_L00_
 extern u8 D_L02_00174480[] __attribute__((section(".data")));
 f32 FUN_L02_002360c8(f32 a, f32 b, f32 c) {
     enum {
-        HERO_TRAJECTORY_Z_AXIS_ACCELERATION = 0
+        HERO_TRAJECTORY_Z_AXIS_ACCELERATION = 0,
+        HERO_TRAJECTORY_STORED_VECTOR_ACCELERATION = 1,
+        HERO_TRAJECTORY_POSITION_OFFSET_ACCELERATION = 2
     };
     f32 t[4];
     V4_32b90 v;
@@ -61,7 +63,7 @@ f32 FUN_L02_002360c8(f32 a, f32 b, f32 c) {
             }
         }
         break;
-    case 1:
+    case HERO_TRAJECTORY_STORED_VECTOR_ACCELERATION:
         qcopy(&v, &hero.unk270);
         FUN_001f9bf8_32b90(&v, &v, b);
         FUN_001f9a68_32b90(&v, &v, -1.0f);
@@ -82,7 +84,7 @@ f32 FUN_L02_002360c8(f32 a, f32 b, f32 c) {
             }
         }
         break;
-    case 2:
+    case HERO_TRAJECTORY_POSITION_OFFSET_ACCELERATION:
         vector_scratch.f[2] = 100.0f;
         vector_scratch.f[1] = 100.0f;
         vector_scratch.f[0] = 100.0f;
