@@ -96,6 +96,7 @@ void draw_dialog_text(void) {
         FREEZE_CHOICE_MESSAGE_DIALOG = 6
     };
     enum {
+        FREEZE_CHOICE_PAIRED_FOOTER_MESSAGE = 0,
         FREEZE_CHOICE_ALTERNATE_PAIRED_FOOTER_MESSAGE = 2,
         FREEZE_CHOICE_CENTERED_FOOTER_MESSAGE = 3
     };
@@ -296,7 +297,7 @@ void draw_dialog_text(void) {
         text_color = fast_tween_color(D_0015F4F0, D_0015F4F4, alpha);
         button_color = fast_tween_color(0x20FFFF, 0x8020FFFF, alpha);
         switch (freeze.choice) {
-        case 0:
+        case FREEZE_CHOICE_PAIRED_FOOTER_MESSAGE:
         case 1:
             font_print_center(0xCA, 0x118, button_color, get_help_message_text(0x524E), -1);
             font_print_center(0x135, 0x118, button_color, get_help_message_text(0x524B), -1);
