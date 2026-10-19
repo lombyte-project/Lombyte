@@ -61,6 +61,7 @@ s32 fun_00213928(O_25a478 *obj, P_25a478 *p, Q_25a478 *q, u32 flags, s32 *out, f
     };
     enum {
         KIND_GATED_HIT_STATE = 0,
+        SUBSTATE_GATED_DAMAGE_PRESERVING_HIT_STATE = 1,
         COOLDOWN_RESETTING_HIT_STATE = 3,
         SUBSTATE_GATED_AUXILIARY_FLAG_HIT_STATE = 5
     };
@@ -125,7 +126,7 @@ s32 fun_00213928(O_25a478 *obj, P_25a478 *p, Q_25a478 *q, u32 flags, s32 *out, f
     case KIND_GATED_HIT_STATE:
         if (p->kind == 1 || p->kind == 2) { *out = 2; r = 0; break; }
         goto dflt;
-    case 1:
+    case SUBSTATE_GATED_DAMAGE_PRESERVING_HIT_STATE:
         if (p->sub < 2) { *out = 2; r = 0xB; break; }
         if (p->sub == 2) { *out = 2; r = 5; break; }
         *out = 2; r = 9;
