@@ -349,6 +349,8 @@ extern int D_L11_0015FFD8;
 void FUN_L11_002d1030(void *mp) {
     enum {
         RESORT_OWNER_INITIALIZE = 0,
+        RESORT_OWNER_INITIAL_DIALOGUE = 2,
+        RESORT_OWNER_MOVE_TO_PATH_POINT = 6,
         RESORT_OWNER_JUMP_TO_TARGET = 7
     };
     struct Moby *moby = mp;
@@ -362,14 +364,14 @@ void FUN_L11_002d1030(void *mp) {
     switch (moby->state) {
     case RESORT_OWNER_INITIALIZE:
     case 1:
-    case 2:
+    case RESORT_OWNER_INITIAL_DIALOGUE:
     case 3:
     case 11:
     case 12:
         break;
     case 4:
     case 5:
-    case 6:
+    case RESORT_OWNER_MOVE_TO_PATH_POINT:
     case 8:
     case 10:
     {
