@@ -42,7 +42,8 @@ void poll_pad_device_state(struct PAD *p) __asm__("FUN_002170c8");
 void poll_pad_device_state(struct PAD *p) {
     enum {
         PAD_PROFILE_INITIALIZATION = 0,
-        PAD_INPUT_POLLING = 1
+        PAD_INPUT_POLLING = 1,
+        PAD_BUTTON_PROFILE_TOO_LARGE = 2
     };
     s32 v;
     s32 r;
@@ -96,7 +97,7 @@ void poll_pad_device_state(struct PAD *p) {
             n = scePad2Read(p->socket, buf);
             process_pad_input(p, buf, n);
             break;
-        case 2:
+        case PAD_BUTTON_PROFILE_TOO_LARGE:
             clear_pad_input(p);
             break;
         }
