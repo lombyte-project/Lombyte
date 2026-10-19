@@ -1226,6 +1226,12 @@ extern int func_L00_0025A8E8_2cf180(void *, float, void *, int, float, float, in
 
 void test_dummy_update(unsigned char *m) __asm__("FUN_L16_002cddb8");
 void test_dummy_update(unsigned char *m) {
+    enum {
+        TEST_DUMMY_STATE_INITIALIZE = 0,
+        TEST_DUMMY_STATE_APPROACH_FIRST_PATH_NODE = 2,
+        TEST_DUMMY_STATE_BURST = 10,
+        TEST_DUMMY_STATE_RESPAWN = 11
+    };
     L16SparkVector position_or_delta, v1, launch_velocity;
     L16SparkQuery fx;
     L16DummyData *d = *(L16DummyData **)(m + 0x78);
@@ -1238,7 +1244,7 @@ void test_dummy_update(unsigned char *m) {
     path = D_L16_001B0930[d->path];
     FUN_L00_00263ac8(2.5f, (int)m, 2, (unsigned char *)d->block140);
     switch (m[0x20]) {
-    case 0: /* set up: lives, home position, the held child for the variant */
+    case TEST_DUMMY_STATE_INITIALIZE: /* set up: lives, home position, the held child for the variant */
         d->b2E = 1;
         if (d->lives > 0) {
             *(short *)(m + 0xB4) /= d->lives;
@@ -1276,7 +1282,7 @@ void test_dummy_update(unsigned char *m) {
         break;
     case 1:
         break;
-    case 2: /* turn to the path's first node, then start by variant */
+    case TEST_DUMMY_STATE_APPROACH_FIRST_PATH_NODE: /* turn to the path's first node, then start by variant */
         FUN_L16_002d5e80(d->route);
         position_or_delta.quad = *(u128 *)(path + 0x10);
         if (FUN_L16_002ced20(m, position_or_delta.f, *(float *)(m + 0x48))) {
@@ -1456,7 +1462,7 @@ void test_dummy_update(unsigned char *m) {
             }
         }
         break;
-    case 10: { /* burst into three pieces; respawn at home or delete */
+    case TEST_DUMMY_STATE_BURST: { /* burst into three pieces; respawn at home or delete */
         char *position = (char *)m + 16;
         char *rot = (char *)m + 0x40;
         float burst;
@@ -1487,7 +1493,7 @@ void test_dummy_update(unsigned char *m) {
         }
         break;
     }
-    case 11: /* respawn: settle to the home height as the timer runs out */
+    case TEST_DUMMY_STATE_RESPAWN: /* respawn: settle to the home height as the timer runs out */
         if (tick_countdown_32_alt(&d->timer)) {
             d->turn = 0.0f;
             m[0x20] = 2;
