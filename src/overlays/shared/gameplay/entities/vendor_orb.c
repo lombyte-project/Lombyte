@@ -2153,7 +2153,8 @@ void FUN_L00_002e55b8(void *mm, void *vv, void *tt, f32 a, f32 b, f32 c) {
 void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 s32 FUN_L00_002e5678(void *mm, void *a, void *b, s32 k) {
     enum {
-        CAM_ATTACH_HERO_POSITION_BASE = 1
+        CAM_ATTACH_HERO_POSITION_BASE = 1,
+        CAM_ATTACH_STORED_FOCUS_POSITION_BASE = 2
     };
     u8 *m = mm;
     s32 r = 1;
@@ -2175,7 +2176,7 @@ s32 FUN_L00_002e5678(void *mm, void *a, void *b, s32 k) {
         follow_camera_hero_target((int)m, t);
         fast_vec_add(b, a, t);
         break;
-    case 2:
+    case CAM_ATTACH_STORED_FOCUS_POSITION_BASE:
     default:
         fast_vec_add(b, a, p);
         break;
