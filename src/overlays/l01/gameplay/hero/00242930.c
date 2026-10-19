@@ -130,6 +130,8 @@ extern int func_001F9908_r(int *) __asm__("FUN_001f9740");
 int r1_repeat_timer __asm__("D_L01_0015F678") = 0;
 void FUN_L01_00242930(void) {
     enum {
+        HERO_STATE_LATERAL_MOVE_POSITIVE_YAW = 26,
+        HERO_STATE_LATERAL_MOVE_NEGATIVE_YAW = 27,
         HERO_STATE_TARGET_POSE_APPROACH = 101,
         HERO_STATE_TARGET_POSE_HOLD = 103,
         HERO_STATE_DEATH_PLANE_FALL = 119
@@ -1077,8 +1079,8 @@ void FUN_L01_00242930(void) {
                         }
                     }
                     break;
-                case 26:
-                case 27: {
+                case HERO_STATE_LATERAL_MOVE_POSITIVE_YAW:
+                case HERO_STATE_LATERAL_MOVE_NEGATIVE_YAW: {
                     float ang;
 
                     qcopy(v0, hero.motion.pos.f);
