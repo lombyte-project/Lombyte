@@ -2318,8 +2318,8 @@ void FUN_L00_002be650(void *o) {
     OvlVec4 scaled;
     OvlVec4 vertex[2];
     struct {
-        volatile int color;
-        OvlVec4 * volatile vertexTarget;
+        int color;
+        OvlVec4 *vertexTarget;
         int nextIndex;
     } state;
     int i, j;
