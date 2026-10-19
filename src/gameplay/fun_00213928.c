@@ -65,7 +65,8 @@ s32 fun_00213928(O_25a478 *obj, P_25a478 *p, Q_25a478 *q, u32 flags, s32 *out, f
         SUBSTATE_GATED_HIT_STATE = 2,
         COOLDOWN_RESETTING_HIT_STATE = 3,
         FIXED_RESPONSE_HIT_STATE = 4,
-        SUBSTATE_GATED_AUXILIARY_FLAG_HIT_STATE = 5
+        SUBSTATE_GATED_AUXILIARY_FLAG_HIT_STATE = 5,
+        SUBSTATE_GATED_COOLDOWN_DAMAGE_CLEARING_HIT_STATE = 7
     };
     V_25a478 v;
     V_25a478 t;
@@ -149,7 +150,7 @@ s32 fun_00213928(O_25a478 *obj, P_25a478 *p, Q_25a478 *q, u32 flags, s32 *out, f
         if (p->sub < 2) { *out = 3; r = 4; break; }
         *out = 4; r = 7;
         break;
-    case 7:
+    case SUBSTATE_GATED_COOLDOWN_DAMAGE_CLEARING_HIT_STATE:
         if (p->sub < 2) { *out = 2; r = 0xC; break; }
         *out = 2; r = 0x11;
         break;
