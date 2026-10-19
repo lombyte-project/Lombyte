@@ -6203,6 +6203,7 @@ void fred_update(struct Moby *m) {
     enum {
         INITIALIZE_FRED_DIALOGUE = 0,
         UPDATE_FRED_DIALOGUE = 1,
+        HANDLE_FRED_DIALOGUE_RESULT = 2,
         INTERPOLATE_FRED_CUTSCENE_CAMERA = 3
     };
     Data_301070 *d = *(struct Data_301070 **)&m->pvars;
@@ -6260,7 +6261,7 @@ void fred_update(struct Moby *m) {
             FUN_L06_002f5360_301070(D_L06_0015FFD8_301070 + (d->f160 << 8));
         }
         break;
-    case 2:
+    case HANDLE_FRED_DIALOGUE_RESULT:
         if (D_L06_0015F5C4_macro != 2) {
             if (m->prev_seq != 0) {
                 blend_moby_animation_301070(m, 0, 0, scale_game_frames_301070(10));
