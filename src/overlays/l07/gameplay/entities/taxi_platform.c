@@ -427,6 +427,11 @@ extern char D_0013E550[];
 #define F(p, o) (*(float *)((p) + (o)))
 
 void FUN_L07_002cd2b0(unsigned char *moby) {
+    enum {
+        TAXI_SHRINK_AND_RESET_TO_PATH_START = 0,
+        TAXI_WAIT_FOR_HERO_BOARDING = 1,
+        TAXI_TRAVERSE_PATH = 2
+    };
     char *data = *(char **)(moby + 0x78);
     char *path;
     float orig[4], delta[4], tmp[4];
@@ -459,7 +464,7 @@ void FUN_L07_002cd2b0(unsigned char *moby) {
         *(int *)(data + 0xC4) = -1;
     }
     switch (moby[0xBC]) {
-    case 0: {
+    case TAXI_SHRINK_AND_RESET_TO_PATH_START: {
         char *cls = *(char **)(moby + 0x24);
         float t = F(moby, 0x2C) - F(cls, 0x24) / 60.0f;
         F(moby, 0x2C) = t;
@@ -471,7 +476,7 @@ void FUN_L07_002cd2b0(unsigned char *moby) {
         }
         break;
     }
-    case 1:
+    case TAXI_WAIT_FOR_HERO_BOARDING:
         if (*(short *)(data + 0xB8) != 0) {
             if (FUN_L01_00277fb8(moby)) {
                 if (*(int *)(data + 0xC8) == 0) {
@@ -485,7 +490,7 @@ void FUN_L07_002cd2b0(unsigned char *moby) {
             }
         }
         break;
-    case 2:
+    case TAXI_TRAVERSE_PATH:
         if (*(short *)(data + 0xBA) != 0 ||
             (F(data, 0xBC) < 0.0f &&
              vector_distance((moby + 0x10), &hero.motion.pos) < 2.0f &&
