@@ -2619,6 +2619,10 @@ extern void func_L15_002A4318_2A3DD0(void) __asm__("FUN_L15_002a3138");
 extern unsigned char *func_L15_002655D0_2A3DD0(void *, void *, void *, int, int, int, int, int, void *) __asm__("FUN_L15_002647f0");
 
 void FUN_L15_002a2bf0(unsigned char *moby) {
+    enum {
+        INITIALIZE_EFFECT = 0,
+        EMIT_SPARKS = 1
+    };
     unsigned char *d = *(unsigned char **)(moby + 0x78);
     float V[4];
     float W[16];
@@ -2627,7 +2631,7 @@ void FUN_L15_002a2bf0(unsigned char *moby) {
     float C[4];
 
     switch (moby[0x20]) {
-    case 0: {
+    case INITIALIZE_EFFECT: {
         unsigned short id;
         *(unsigned short *)(moby + 0x34) |= 1;
         moby[0x31] = 0;
@@ -2641,7 +2645,7 @@ void FUN_L15_002a2bf0(unsigned char *moby) {
         }
         break;
     }
-    case 1: {
+    case EMIT_SPARKS: {
         int idx = *(int *)(d + 0x10);
         if ((idx != -1 && (*(struct Moby **)&D_L15_0015FFD8_d)[idx].state == 2)
             || D_0014C050_c[(unsigned char)moby[0xB0] + (D_0015ED84 << 4)] == 0xFF) {
