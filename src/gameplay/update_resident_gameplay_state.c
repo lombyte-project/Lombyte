@@ -202,8 +202,10 @@ void update_resident_gameplay_state(void) __asm__("FUN_0022f778");
 extern f32 frame_time_sq_gp __asm__("D_0015ED70") __attribute__((sda));
 void update_resident_gameplay_state(void) {
     enum {
+        LEVEL_RENDER_STATE_PLAYBACK_TO_MENU = 0,
         LEVEL_RENDER_STATE_SCRIPTED_CAMERA_AND_PATH = 3,
-        LEVEL_RENDER_STATE_GAMEPLAY = 4
+        LEVEL_RENDER_STATE_GAMEPLAY = 4,
+        LEVEL_RENDER_STATE_PLAYBACK_WITH_MUSIC_RESUME = 8
     };
     Vector4 scratch_vectors[4];
     s32 keyframe_flags;
@@ -231,8 +233,8 @@ void update_resident_gameplay_state(void) {
 
     level_render_state.timer++;
     switch (level_render_state.state) {
-    case 0:
-    case 8:
+    case LEVEL_RENDER_STATE_PLAYBACK_TO_MENU:
+    case LEVEL_RENDER_STATE_PLAYBACK_WITH_MUSIC_RESUME:
         noop_callback_i();
         update_visible_resident_objects();
         enqueue_voice_request();
