@@ -906,6 +906,9 @@ extern void *func_L00_00265050_s(char *, int, void *, void *, int, int, float *,
                                  float *) __asm__("FUN_L00_00263fd8");
 
 void FUN_L11_003181f0(struct Moby *m) {
+    enum {
+        TANKER_LINK_BURST_AND_HIDE = 1
+    };
     char *d = (char *)m->pvars;
     float v[4];
     float w[4];
@@ -926,7 +929,7 @@ void FUN_L11_003181f0(struct Moby *m) {
         }
         qcopy(d, &m->pos);
         break;
-    case 1: {
+    case TANKER_LINK_BURST_AND_HIDE: {
         char *p1 = &m->pos;
         float *dv;
         char *p2;
