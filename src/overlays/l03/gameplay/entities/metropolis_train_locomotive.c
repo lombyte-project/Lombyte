@@ -1292,6 +1292,12 @@ extern void report_29dba8(void *, int, int) __asm__("FUN_001e93b0");
  * steering, banking and spawning its hit/smoke effects; state 2 waits without a path, 3 waits a timer. */
 void red_ship_1_update(char *moby) __asm__("FUN_L03_0029dba8");
 void red_ship_1_update(char *moby) {
+    enum {
+        RED_SHIP_INITIALIZE = 0,
+        RED_SHIP_FOLLOW_PATH_SPLINE = 1,
+        RED_SHIP_WAIT_FOR_PATH = 2,
+        RED_SHIP_WAIT_FOR_MOVEMENT_TIMER = 3
+    };
     float zero[4];
     float old_rot[4];
     float old_pos[4];
@@ -1358,7 +1364,7 @@ void red_ship_1_update(char *moby) {
     FUN_L03_0029c9d0((unsigned char *)moby);
     FUN_L03_0029d1b8(moby);
     switch (((unsigned char *)moby)[0x20]) {
-    case 0:
+    case RED_SHIP_INITIALIZE:
         *(unsigned short *)(moby + 0x34) |= 0x1000;
         if (*(int *)(pm + 0x14) != -1) {
             path = (int *)D_L03_001B05B0_29dba8[*(int *)(pm + 0x14)];
@@ -1430,7 +1436,7 @@ void red_ship_1_update(char *moby) {
             moby[0x20] = 1;
         }
         break;
-    case 2:
+    case RED_SHIP_WAIT_FOR_PATH:
         if (*(int *)(pm + 0x14) != -1) {
             moby[0x20] = 0;
         }
@@ -1443,12 +1449,12 @@ void red_ship_1_update(char *moby) {
         }
         *(int *)(data + 0x150) = -1;
         break;
-    case 3:
+    case RED_SHIP_WAIT_FOR_MOVEMENT_TIMER:
         if (fast_dec_timer_s16(data + 0x12C)) {
             moby[0x20] = 1;
         }
         break;
-    case 1:
+    case RED_SHIP_FOLLOW_PATH_SPLINE:
         *(OvlQuad *)old_rot = *(OvlQuad *)(moby + 0x40);
         *(OvlQuad *)old_pos = *(OvlQuad *)(moby + 0x10);
         cur = data + 0xA0;
