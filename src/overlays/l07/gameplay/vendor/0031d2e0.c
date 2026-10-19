@@ -232,12 +232,16 @@ extern short D_L07_00161CD8 __attribute__((sda));
 extern short D_L07_00161CDC __attribute__((sda));
 extern short D_L07_00161CE0 __attribute__((sda));
 void FUN_L07_0031f900(unsigned char *moby) {
+    enum {
+        TRAIL_STATE_INITIALIZE = 0,
+        TRAIL_STATE_UPDATE = 1
+    };
     switch (moby[0x20]) {
-    case 0:
+    case TRAIL_STATE_INITIALIZE:
         moby[0x30] = 0xFF;
         moby[0x20] = 1;
         break;
-    case 1:
+    case TRAIL_STATE_UPDATE:
         if (scene_state == 2) {
             char *g = D_L07_0016C8E0;
             int s = *(int *)(g + 0x30);
