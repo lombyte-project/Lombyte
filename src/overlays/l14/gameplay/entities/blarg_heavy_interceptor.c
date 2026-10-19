@@ -835,6 +835,7 @@ void FUN_L14_002ad8b8(struct Moby *moby) {
         HIT_REACTION_LETHAL = 1,
         HIT_REACTION_DEATH_FALL = 2,
         HIT_REACTION_PLAY_HIT_ANIMATION = 3,
+        HIT_REACTION_ANIMATE_WITH_LOW_RED_FLASH = 9,
         HIT_REACTION_NONE = 11
     };
     char *data = (char *)moby->pvars;
@@ -853,7 +854,7 @@ void FUN_L14_002ad8b8(struct Moby *moby) {
         if (st == 3)
             moby->command = 1;
         switch (v) {
-        case 9:
+        case HIT_REACTION_ANIMATE_WITH_LOW_RED_FLASH:
         case 10:
             data[0x67] = 0x64;
             blend_moby_animation(moby, 1, 0, 5);
