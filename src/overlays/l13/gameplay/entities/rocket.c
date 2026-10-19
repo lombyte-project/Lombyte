@@ -844,6 +844,8 @@ void blarg_space_commando_update(struct Moby *moby) __asm__("FUN_L13_00307e98");
 void blarg_space_commando_update(struct Moby *moby) {
     enum {
         BLARG_SPACE_COMMANDO_INITIALIZE = 0,
+        BLARG_SPACE_COMMANDO_FACE_TARGET_AND_SELECT_ACTION = 1,
+        BLARG_SPACE_COMMANDO_RESUME_SAVED_STATE_AFTER_ANIMATION = 6,
         BLARG_SPACE_COMMANDO_RETURN_HOME = 13,
         BLARG_SPACE_COMMANDO_KNOCKBACK = 15,
         BLARG_SPACE_COMMANDO_DYING = 16
@@ -883,7 +885,7 @@ void blarg_space_commando_update(struct Moby *moby) {
         FUN_L00_0024f7c8(moby, 0, &vars->unk1E0);
         moby->state = 1;
         break;
-    case 1:
+    case BLARG_SPACE_COMMANDO_FACE_TARGET_AND_SELECT_ACTION:
         approach_angle(&moby->rot.z, fast_arc_tan_c(target->pos.x - moby->pos.x, target->pos.y - moby->pos.y),
                           &vars->turn, frame_time_sq * 6.2831855f, frame_time_sq * 6.2831855f, frame_time * 3.1415927f);
         if (vars->unk164 != 2) {
@@ -991,7 +993,7 @@ void blarg_space_commando_update(struct Moby *moby) {
             }
         }
         break;
-    case 6:
+    case BLARG_SPACE_COMMANDO_RESUME_SAVED_STATE_AFTER_ANIMATION:
         if (moby->anim_flags & 2) {
             moby->state = moby->command;
             if (moby->prev_seq != 0) {
