@@ -763,13 +763,18 @@ extern void FUN_L18_002f1fd8(struct Moby *);
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 
 void FUN_L18_002f1e68(struct Moby *m) {
+    enum {
+        GLOW_INITIALIZE = 0,
+        GLOW_ACTIVE = 1,
+        GLOW_FADE_OUT = 2
+    };
     int *d = (int *)m->pvars;
     switch (m->state) {
-    case 0:
+    case GLOW_INITIALIZE:
         m->state = 1;
         ((float *)d)[3] = 1.0f;
         break;
-    case 1:
+    case GLOW_ACTIVE:
         enqueue_callback_list_1_alt((void (*)(void))FUN_L18_002f1fd8, m);
         if (voice_is_playing(m, d[1]) == 0) {
             d[1] = FUN_0022da68(0, 4, (int)m);
@@ -793,7 +798,7 @@ void FUN_L18_002f1e68(struct Moby *m) {
             }
         }
         break;
-    case 2:
+    case GLOW_FADE_OUT:
         approach_value((float *)(d + 3), 0.0f, frame_time + frame_time);
         break;
     }
