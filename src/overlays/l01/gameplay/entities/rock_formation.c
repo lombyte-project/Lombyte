@@ -1834,16 +1834,20 @@ s32 D_L01_00161E90 = 5;
 
 void beehive_update(SpawnerMoby *m) __asm__("FUN_L01_003021b8");
 void beehive_update(SpawnerMoby *m) {
+    enum {
+        BEEHIVE_INITIALIZE = 0,
+        BEEHIVE_TRY_SPAWN_CLONE = 1
+    };
     SpawnerVars *v = m->pvars;
     SpawnerMoby *n;
     CloneAiVars *nv;
     f32 k;
 
     switch (m->state) {
-    case 0:
+    case BEEHIVE_INITIALIZE:
         m->state = 1;
         break;
-    case 1:
+    case BEEHIVE_TRY_SPAWN_CLONE:
         if (v->src_id < 0) {
             break;
         }
