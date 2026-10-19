@@ -1558,6 +1558,10 @@ extern short D_L11_00162414 __attribute__((sda));
 extern short D_L11_00162418 __attribute__((sda));
 extern short D_L11_0016241C __attribute__((sda));
 void FUN_L11_0031ab08(struct Moby *m) {
+    enum {
+        BUBBLE_MOVE_UNTIL_SURFACE_CROSSING = 1,
+        BUBBLE_SHRINK_TO_REMOVAL = 2
+    };
     char *d = (char *)m->pvars;
     float v[4];
     float len;
@@ -1572,7 +1576,7 @@ void FUN_L11_0031ab08(struct Moby *m) {
         *(short *)(d + 0x22) = 0;
     }
     switch (m->state) {
-    case 1:
+    case BUBBLE_MOVE_UNTIL_SURFACE_CROSSING:
         *(float *)(d + 8) -= *(float *)&D_L11_00162400 * frame_time_sq;
         if (**(float **)(d + 0x24) + 3.0f < m->pos.z) {
             if (random_integer_below_c3(*(int *)&D_L11_00162410) == 0) {
@@ -1585,7 +1589,7 @@ void FUN_L11_0031ab08(struct Moby *m) {
             FUN_L11_0031ae68((struct Moby *)m, *(float **)(d + 0x24), 8, 4);
         }
         break;
-    case 2:
+    case BUBBLE_SHRINK_TO_REMOVAL:
         *(float *)(d + 8) -= *(float *)&D_L11_00162404 * frame_time_sq;
         rate = m->pclass->scale / (float)scale_game_frames(0x3C);
         if ((level_frame & 3) == 0) {
