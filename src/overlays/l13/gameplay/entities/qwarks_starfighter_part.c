@@ -512,6 +512,7 @@ void FUN_L13_002eb098(Moby388 *moby) {
         STARFIGHTER_STATE_INITIALIZE = 0,
         STARFIGHTER_STATE_WAIT_FOR_HERO_SHIP = 1,
         STARFIGHTER_STATE_FOLLOW_INITIAL_PATH = 2,
+        STARFIGHTER_STATE_FOLLOW_COMMAND_PATH = 3,
         STARFIGHTER_STATE_TRACTOR_BEAM = 5,
         STARFIGHTER_STATE_OWNER_UNAVAILABLE = 6,
         STARFIGHTER_STATE_DEATH_FLIGHT = 7,
@@ -649,7 +650,7 @@ void FUN_L13_002eb098(Moby388 *moby) {
         }
         break;
     }
-    case 3:
+    case STARFIGHTER_STATE_FOLLOW_COMMAND_PATH:
     case 4:
         data->hud104 = queue_animation_update_alt(0x11, 0xFFFF, (int)FUN_L00_00235d80, (int)FUN_L00_00235ea0,
                                   (int)FUN_L06_00249738, (int)&data->i108,
