@@ -1410,7 +1410,7 @@ int hero_set_state(int a, int b) {
     }
     case ENTER_ATTACK_COMBO:
     case 0x14:
-    case 0x15:
+    case HERO_STATE_CROUCH_SWING:
     case 0x20:
     case 0x23:
     case 0x51: {
@@ -1451,7 +1451,7 @@ int hero_set_state(int a, int b) {
             }
             break;
         }
-        case 0x15: {
+        case HERO_STATE_CROUCH_SWING: {
             struct UsageStat *h = usage_stats.stat;
             char *h2;
             struct Hero *q;
