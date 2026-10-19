@@ -2119,6 +2119,7 @@ void FUN_L10_002e3ef0(void *mv) {
         LETHAL_HIT_RESPONSE = 1,
         DEATH_HIT_RESPONSE = 2,
         KNOCKBACK_HIT_RESPONSE = 3,
+        VEHICLE_SCALED_KNOCKBACK_HIT_RESPONSE = 4,
         SUPPRESSED_HIT_RESPONSE = 11
     };
     Moby *m = mv;
@@ -2232,7 +2233,7 @@ void FUN_L10_002e3ef0(void *mv) {
             d->b67 = 0xFA;
             func_L00_0025E4B0_2E52B0(m, d->a60);
             break;
-        case 4:
+        case VEHICLE_SCALED_KNOCKBACK_HIT_RESPONSE:
         case 5: {
             float s;
             m->state = 10;
