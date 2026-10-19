@@ -56,6 +56,7 @@ extern void FUN_L12_002bf748(void);
 void FUN_L12_002bf140(struct Moby *moby) {
     enum {
         SLOT_INITIALIZE = 0,
+        SLOT_INITIALIZE_NEIGHBORS_AND_HEIGHT = 1,
         SLOT_UPDATE_HEIGHT_AND_MOTION = 2
     };
     int state = moby->state;
@@ -119,7 +120,7 @@ void FUN_L12_002bf140(struct Moby *moby) {
         copy_slot_c(D_L12_001CBF40_c + data[3] * 0x1190, D_L12_001CBE00_c + data[3] * 16);
         moby->state = 1;
         break;
-    case 1:
+    case SLOT_INITIALIZE_NEIGHBORS_AND_HEIGHT:
         D_L12_00151388 = 0;
         FUN_L12_002bf770(data[3]);
         moby->state = 2;
