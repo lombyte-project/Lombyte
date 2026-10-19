@@ -123,6 +123,7 @@ extern int func_001F9908_r(int *) __asm__("FUN_001f9740");
 void FUN_L11_00253a18(void) {
     enum {
         HERO_STATE_APPROACH_TARGET_POSE = 101,
+        HERO_STATE_TARGET_POSE_ANIMATION_WAIT = 102,
         HERO_STATE_AT_TARGET_POSE = 103,
         HERO_STATE_LOW_ALTITUDE_RESPAWN = 119
     };
@@ -885,7 +886,7 @@ void FUN_L11_00253a18(void) {
                     }
                     FUN_L00_00228c18();
                     break;
-                case 102:
+                case HERO_STATE_TARGET_POSE_ANIMATION_WAIT:
                     if (hero.unkA98 & 2) {
                         hero_set_state(0x65, 1);
                     }
