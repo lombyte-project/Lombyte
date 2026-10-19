@@ -322,6 +322,8 @@ void sand_shark_update(struct Moby *moby) {
         SAND_SHARK_FACE_TARGET = 15,
         SAND_SHARK_ALIGN_TO_GROUND_BEFORE_APPROACH_TARGET = 19,
         SAND_SHARK_ALIGN_TO_GROUND_BEFORE_RETURN_HOME = 20,
+        SAND_SHARK_APPROACH_TARGET_WITH_HEIGHT_OFFSET = 22,
+        SAND_SHARK_RETURN_HOME_WITH_HEIGHT_OFFSET = 23,
         SAND_SHARK_FADE_OUT = 25,
         SAND_SHARK_BALLISTIC_FLIGHT_WITH_PARTICLES = 27
     };
@@ -595,7 +597,7 @@ void sand_shark_update(struct Moby *moby) {
         break;
     }
     case SAND_SHARK_APPROACH_TARGET:
-    case 22:
+    case SAND_SHARK_APPROACH_TARGET_WITH_HEIGHT_OFFSET:
         if (moby->state == 0x16) {
             moby->pos.z += D_L02_0016191C;
             if (rand_below_e50(0xFF) & 1) {
@@ -667,7 +669,7 @@ void sand_shark_update(struct Moby *moby) {
         }
         break;
     case SAND_SHARK_RETURN_HOME:
-    case 23:
+    case SAND_SHARK_RETURN_HOME_WITH_HEIGHT_OFFSET:
         if (moby->state == 0x17) {
             moby->pos.z += D_L02_0016191C;
             if (rand_below_e50(0xFF) & 1) {
