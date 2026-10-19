@@ -219,7 +219,7 @@ esac
 check_installed() {
     local ok=1
     check() { if "$@" >/dev/null 2>&1; then printf 'OK    %s\n' "$LABEL"; else printf 'MISS  %s\n' "$LABEL"; ok=0; fi; }
-    LABEL="game compiler (tools/compilers/game-compiler)";      check test -x "$COMPILERS/game-compiler/cc1" -a -x "$COMPILERS/game-compiler/as" -a -f "$COMPILERS/game-compiler/include/stdarg.h"
+    LABEL="game compiler (tools/compilers/game-compiler)";      check test -x "$COMPILERS/game-compiler/cc1" -a -x "$COMPILERS/game-compiler/as" -a -x "$COMPILERS/game-compiler/sdk-as" -a -f "$COMPILERS/game-compiler/include/stdarg.h"
     LABEL="SDK compiler (tools/compilers/sdk-compiler)";        check test -x "$COMPILERS/sdk-compiler/bin/ee-gcc"
     LABEL="SN compiler (tools/compilers/ee-gcc-2.95.2)";        check test -f "$COMPILERS/ee-gcc-2.95.2/bin/ee-gcc.exe"
     LABEL="SN assembler ps2eeas 1.9.25.758 (no divbug)";        check sha_ok "$COMPILERS/ee-gcc-2.95.2/ee/bin/Ps2EeAs.exe" "$SN_AS_PATCHED_SHA"
@@ -367,7 +367,7 @@ install_sn_compiler() {
 
 game_compiler_current() {
     local target="$COMPILERS/game-compiler"
-    [[ -x "$target/cc1" && -x "$target/as" && -x "$target/ee-gcc" && -f "$target/provenance.json" ]] || return 1
+    [[ -x "$target/cc1" && -x "$target/as" && -x "$target/sdk-as" && -x "$target/ee-gcc" && -f "$target/provenance.json" ]] || return 1
     python3 - "$target/provenance.json" "$ROOT/patches/sce-991111b" <<'EOF'
 import hashlib, json, pathlib, sys
 prov = json.load(open(sys.argv[1]))

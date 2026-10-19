@@ -6,7 +6,9 @@ Downloads the public source archive pinned in ``patches/sce-991111b/README.md``
 ``patches/sce-991111b/`` in order, and builds ``cc1``, ``cpp``, ``xgcc`` and
 the patched GNU ``as`` into ``tools/compilers/game-compiler/`` together with
 the ``ee-gcc`` driver wrapper and the three ``ginclude`` headers the driver
-needs. Nothing proprietary is involved: the archive is GPL source code, the
+needs. From the same archive it also builds ``sdk-as``, the assembler of the
+SDK units: the archive's GNU ``as`` with only the host fixes and the SDK delay
+slot patch (``SDK_AS_PATCH_ORDER``). Nothing proprietary is involved: the archive is GPL source code, the
 patches live in this repository, and the output is checked by ``make elf``
 (the built bytes depend on the host compiler, so hashes are reported, not
 enforced).
@@ -49,6 +51,11 @@ PATCH_ORDER = (
     "0051", "0052", "0053", "0054", "0055", "0056", "0057", "0058",
 )
 
+# The SDK assembler: the archive's GNU as with none of the game's assembler
+# patches, only the host fixes and the delay slot fill of retail's SDK
+# assembler (patches/sce-991111b/README.md).
+SDK_AS_PATCH_ORDER = ("0000", "0059")
+
 BISON_URLS = (
     "https://ftp.gnu.org/gnu/bison/bison-1.28.tar.gz",
     "https://mirrors.kernel.org/gnu/bison/bison-1.28.tar.gz",
@@ -70,6 +77,7 @@ REFERENCE_HASHES = {
     "cpp": "147aa9875b47be026a25e1b7859bf545c364862d9f2731cbbbbc4f6af50eb288",
     "xgcc": "693c6e50b74d5cea3ca61a4af4e3a9002f121d1fc240d0b5db6b7bd0f502dc17",
     "as": "5fb49530da24d8621a561596fcb76ebb8183043bee6d37199064b690274f0ab9",
+    "sdk-as": "ef6bef9e1c1fe4738700240ee15c687a42147e6e12fef4d2e3e9c96ac98aa90b",
 }
 
 # The driver has no builtin include directory; these three headers from the
@@ -184,9 +192,9 @@ def download(urls: tuple[str, ...], target: Path, expected: str) -> None:
     )
 
 
-def patch_files() -> list[Path]:
+def patch_files(order: tuple[str, ...] = PATCH_ORDER) -> list[Path]:
     files = []
-    for prefix in PATCH_ORDER:
+    for prefix in order:
         matches = sorted(PATCH_DIR.glob(f"{prefix}-*.patch"))
         if len(matches) != 1:
             raise BuildError(f"expected exactly one {prefix}-*.patch in {PATCH_DIR}")
@@ -194,8 +202,8 @@ def patch_files() -> list[Path]:
     return files
 
 
-def extract_source(archive: Path, work: Path) -> Path:
-    source = work / "source"
+def extract_source(archive: Path, work: Path, name: str = "source") -> Path:
+    source = work / name
     if source.exists():
         shutil.rmtree(source)
     stage = work / "source.extract"
@@ -216,7 +224,7 @@ def extract_source(archive: Path, work: Path) -> Path:
     return source
 
 
-def apply_patches(source: Path) -> None:
+def apply_patches(source: Path, order: tuple[str, ...] = PATCH_ORDER) -> None:
     # Apply from the repository root with --directory: run from inside the
     # checkout, git resolves the patch paths against the repository root and
     # skips every path that is not there with exit status 0, so no patch lands
@@ -225,7 +233,7 @@ def apply_patches(source: Path) -> None:
         directory = ["--directory", str(source.resolve().relative_to(Path.cwd().resolve()))]
     except ValueError:
         directory = []
-    for patch in patch_files():
+    for patch in patch_files(order):
         check = subprocess.run(
             ["git", "apply", "--check", *directory, str(patch)],
             capture_output=True, text=True,
@@ -323,7 +331,32 @@ def build(source: Path, work: Path, bison: Path, bison_env: dict, jobs: int) -> 
     return build_dir
 
 
-def install(source: Path, build_dir: Path, output: Path, archive: Path, bison: Path) -> dict:
+def build_sdk_as(source: Path, work: Path, jobs: int) -> Path:
+    build_dir = work / "sdk-as-build"
+    if build_dir.exists():
+        shutil.rmtree(build_dir)
+    build_dir.mkdir(parents=True)
+    env = dict(os.environ, CC="gcc -m32", CXX="g++ -m32", CFLAGS=HOST_CFLAGS)
+    log = work / "sdk-as-build.log"
+    run(
+        [
+            "bash", str(source / "configure"),
+            "--target=mips64r5900-sf-elf",
+            "--host=i686-linux-gnu",
+            "--build=i686-linux-gnu",
+            "--disable-nls",
+            "--enable-languages=c",
+            "--without-headers",
+            f"--prefix={work / 'install'}",
+        ],
+        cwd=build_dir, env=env, log=log,
+    )
+    run(["make", f"-j{jobs}", "all-gas"], cwd=build_dir, env=env, log=log)
+    return build_dir / "gas" / "as-new"
+
+
+def install(source: Path, build_dir: Path, sdk_as: Path, output: Path, archive: Path,
+            bison: Path) -> dict:
     stage = output.parent / f".{output.name}.stage"
     if stage.exists():
         shutil.rmtree(stage)
@@ -333,6 +366,7 @@ def install(source: Path, build_dir: Path, output: Path, archive: Path, bison: P
         "cpp": build_dir / "gcc" / "cpp",
         "xgcc": build_dir / "gcc" / "xgcc",
         "as": build_dir / "gas" / "as-new",
+        "sdk-as": sdk_as,
     }
     hashes = {}
     for name, path in built.items():
@@ -354,7 +388,9 @@ def install(source: Path, build_dir: Path, output: Path, archive: Path, bison: P
         "schema": "rnc-game-compiler-v1",
         "source": f"{ARCHIVE_NAME} sha256 {ARCHIVE_SHA256}",
         "patches": [path.name for path in patch_files()],
-        "patch_sha256": {path.name: sha256(path) for path in patch_files()},
+        "sdk_as_patches": [path.name for path in patch_files(SDK_AS_PATCH_ORDER)],
+        "patch_sha256": {path.name: sha256(path)
+                         for path in patch_files() + patch_files(SDK_AS_PATCH_ORDER)},
         "bison": str(bison),
         "hashes": hashes,
         "reference_hashes": REFERENCE_HASHES,
@@ -382,15 +418,16 @@ def smoke_test(output: Path) -> None:
                 "the built compiler cannot compile a test file: "
                 f"{result.stderr.strip()[-400:]}"
             )
-        result = subprocess.run(
-            [str(output / "as"), str(output / "smoke.s"), "-o", str(output / "smoke.o")],
-            capture_output=True, text=True,
-        )
-        if result.returncode != 0:
-            raise BuildError(
-                "the built assembler cannot assemble the test output: "
-                f"{result.stderr.strip()[-400:]}"
+        for assembler in ("as", "sdk-as"):
+            result = subprocess.run(
+                [str(output / assembler), str(output / "smoke.s"), "-o", str(output / "smoke.o")],
+                capture_output=True, text=True,
             )
+            if result.returncode != 0:
+                raise BuildError(
+                    f"the built {assembler} cannot assemble the test output: "
+                    f"{result.stderr.strip()[-400:]}"
+                )
     finally:
         for name in ("smoke.c", "smoke.s", "smoke.o"):
             (output / name).unlink(missing_ok=True)
@@ -421,6 +458,9 @@ def main(argv=None) -> int:
     source = extract_source(archive, work)
     apply_patches(source)
     print(f"{len(PATCH_ORDER)} patches applied")
+    sdk_source = extract_source(archive, work, "sdk-as-source")
+    apply_patches(sdk_source, SDK_AS_PATCH_ORDER)
+    print(f"{len(SDK_AS_PATCH_ORDER)} SDK assembler patches applied")
     if args.check:
         return 0
 
@@ -438,13 +478,14 @@ def main(argv=None) -> int:
     print(f"using bison: {bison}")
 
     build_dir = build(source, work, bison, bison_env, args.jobs)
-    provenance = install(source, build_dir, output, archive, bison)
+    sdk_as = build_sdk_as(sdk_source, work, args.jobs)
+    provenance = install(source, build_dir, sdk_as, output, archive, bison)
     smoke_test(output)
 
     print("\ninstalled to", output)
     for name, digest in provenance["hashes"].items():
         marker = "" if digest == REFERENCE_HASHES[name] else "  (differs from reference)"
-        print(f"  {name:<5} sha256 {digest}{marker}")
+        print(f"  {name:<6} sha256 {digest}{marker}")
     print(
         "\nReference hashes identify the maintainer's build; other hosts may"
         " differ. `make elf` is the check."

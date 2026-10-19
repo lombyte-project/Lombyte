@@ -55,6 +55,15 @@ published and `0034` is retired (no unit selected its option once the units
 it served declared their gp-relative externals `__attribute__((sda))`, see
 `0056`); their records below are kept for the stack history.
 
+## SDK assembler
+
+`sdk-as` assembles the SDK units (`configure.py`, rule `sdk-compiler`). It is
+the archive's GNU `as` with only `0000` and `0059` applied, none of the game's
+assembler patches, built with the same configure line (`make all-gas`).
+`scripts/build-game-compiler.py` builds it next to the game compiler. On the
+SDK units the unpatched `as` gives the same objects as the SDK compiler's own
+`ee/bin/as`.
+
 Patches marked *production dependency* are in that stack but turned no
 fixture exact on their own; they are published so the production compiler is
 reproducible from this directory. Every other entry names its exact fixture.
@@ -77,6 +86,20 @@ differs. `make` does not track header dependencies: after changing
 
 ## Published patches
 
+- `0059-gas-sdk-delay-slots.patch` SHA-256: `9ddacc9317ee7b26dd3b41b9462e7476d1714b36efa29cc13a55aa945ffe4be5`
+  - role: SDK assembler only (gas). Fills an empty jump or branch delay slot
+    the way retail's SDK assembler did: cc1 leaves a jump in reorder mode
+    after a volatile access or a two-line sign extension, and retail moved
+    the instruction before it into the slot. The archive's `as` never does:
+    its `sync` test read `prev_pinfo && INSN_SYNC`, true for every
+    instruction. An `mflo`/`mfhi` (the R5900's HI/LO interlocks no longer
+    count here) and an instruction of a macro expansion stay out of the slot,
+    as in retail. The SDK units build without `-g`, whose line labels would
+    stop the fill
+  - fixtures: `kputchar`, `ftoi`, `sceCdRead`, `_setDefaultQM`,
+    `_csc_storeRefImage`, `SignExtendPackedValue` (filled slots), `_calloc_r`
+    (`mflo`), `_dtoa_r` (`li.d`); every SDK unit gives the same object as the
+    `padless-asm.py slots` step it replaces; full-ELF gate PASS
 - `0058-reorg-trap-if-sets-volatile.patch` SHA-256: `1171f8e37de070d8ff418ea9812b8c1f27313eeb19fcbb49fd8b6aef45590346`
   - role: default. `mark_set_resources` had no `TRAP_IF` case, so reorg's
     backward scan walked past a divide-by-zero trap and took an insn at a

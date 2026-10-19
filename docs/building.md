@@ -72,11 +72,12 @@ every C unit below `GAME_TEXT_START` with the SDK compiler and every unit from
 there on with the game compiler. The game compiler's `cc1` output is assembled
 by `Ps2EeAs`, which pads short loops and `div` instructions itself; the game
 code is compiled without `-g`, whose line labels the assembler would take for
-branch targets. SDK code goes through GNU `as` after one step,
-`padless-asm.py slots`: where `cc1` left a jump or branch delay slot empty,
-retail's SDK assembler moved the instruction before it into the slot, which
-GNU `as` does not. Pending `INCLUDE_ASM` wrappers are assembled by the game
-compiler's GNU `as` instead. The few units that do not reproduce on their
+branch targets. SDK code is compiled without `-g` too and assembled by
+`sdk-as`, the source archive's GNU `as` with patch
+[`0059`](../patches/sce-991111b/0059-gas-sdk-delay-slots.patch): where `cc1`
+left a jump or branch delay slot empty, retail's SDK assembler moved the
+instruction before it into the slot. Pending `INCLUDE_ASM` wrappers are
+assembled by the game compiler's GNU `as` instead. The few units that do not reproduce on their
 compiler yet are listed in `ROUTE_EXCEPTIONS` with the route that still builds
 them; that list only shrinks. It and every other per-unit compiler setting,
 including the overlay SN list, are in the compiler routes section at the top
@@ -93,8 +94,8 @@ includes `<stdarg.h>` cannot compile. Build it from the patch stack in
 pinned source archive, its SHA-256 and the host recipe that reproduces the
 expected `cc1`: `python3 scripts/build-game-compiler.py` downloads the
 archive, applies the stack and installs `cc1`, `cpp`, `xgcc`, the patched `as`,
-the `ee-gcc` wrapper and the headers into `tools/compilers/game-compiler`
-(about a minute; `--archive` reuses a local copy of the source archive). Or
+`sdk-as`, the `ee-gcc` wrapper and the headers into
+`tools/compilers/game-compiler` (about a minute; `--archive` reuses a local copy of the source archive). Or
 point `GAME_COMPILER_ROOT` at an existing build.
 
 The game code is assembled by the EE assembler of SN ProDG 3.01
