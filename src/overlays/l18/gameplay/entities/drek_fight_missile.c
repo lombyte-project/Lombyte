@@ -1533,6 +1533,9 @@ void drek_final_boss_robot_update(BossMoby *moby) {
     enum {
         DREK_BOSS_ACTION_REPOSITION_AND_AIM = 0xE
     };
+    enum {
+        DREK_BOSS_TARGET_GROUND_POINTS = 0xF
+    };
     BossData *d = (BossData *)moby->f78;
     BossMoby *tgt;
     float v0[4];
@@ -1995,7 +1998,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
             break;
         }
         switch (FUN_L18_002f70b8((char *)moby)) {
-        case 0xF:
+        case DREK_BOSS_TARGET_GROUND_POINTS:
             moby->f20 = 0xF;
             if (moby->f53 != 10) {
                 blend_moby_animation(moby, 10, 0, scale_game_frames(0x14));
@@ -2122,7 +2125,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
         }
         tick_countdown_32_alt(&d->f358);
         break;
-    case 0xF:
+    case DREK_BOSS_TARGET_GROUND_POINTS:
         aim = &moby->f40[2];
         ang = fast_arc_tan(tgt->f10[0] - moby->f10[0], tgt->f10[1] - moby->f10[1]);
         approach_angle(aim, &d->f370, ang, D_0015ED6C_e[1] * 6.2831855f,
