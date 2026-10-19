@@ -135,6 +135,7 @@ void FUN_L01_00242930(void) {
         HERO_STATE_LATERAL_MOVE_HOLD = 25,
         HERO_STATE_LATERAL_MOVE_POSITIVE_YAW = 26,
         HERO_STATE_LATERAL_MOVE_NEGATIVE_YAW = 27,
+        HERO_STATE_ITEM_BUTTON_HOLD_ANIMATION_WAIT = 46,
         HERO_STATE_TARGET_POSE_APPROACH = 101,
         HERO_STATE_TARGET_POSE_ANIMATION_WAIT = 102,
         HERO_STATE_TARGET_POSE_HOLD = 103,
@@ -672,7 +673,7 @@ void FUN_L01_00242930(void) {
                     }
                     hero_set_state(HERO_STATE_IDLE, 1);
                     break;
-                case 46: {
+                case HERO_STATE_ITEM_BUTTON_HOLD_ANIMATION_WAIT: {
                     int mask = hero.items[0].button_mask;
                     if (((unsigned char *)hero.moby)[0x52] == 0x2E && hero.anim_frame > 28.0f) {
                         if (controller_state.held & mask) {
