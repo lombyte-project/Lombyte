@@ -1564,6 +1564,7 @@ void circular_saw_enemy_update(M_35F0 *moby) {
         CIRCULAR_SAW_STATE_DYING = 8
     };
     enum {
+        CIRCULAR_SAW_HIT_REACTION_NONE = 0,
         CIRCULAR_SAW_HIT_REACTION_FATAL = 1
     };
     enum {
@@ -1647,7 +1648,7 @@ void circular_saw_enemy_update(M_35F0 *moby) {
             }
             data->f136 = scale_game_frames(0xF0);
             switch (r) {
-            case 0:
+            case CIRCULAR_SAW_HIT_REACTION_NONE:
                 break;
             case CIRCULAR_SAW_HIT_REACTION_FATAL:
             case 2:
