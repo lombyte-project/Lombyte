@@ -1170,6 +1170,10 @@ void red_ship_1_update(char *moby) __asm__("FUN_L03_0029dba8");
  * the class debris, starts the shake/smoke effects and arms the respawn countdown (0x14A); once that runs
  * out the moby is hidden again unless the caller keeps it, and switches its update to the car update. */
 void FUN_L03_0029d2e0(char *moby, void *vel_in, int flag) {
+    enum {
+        MOBY_CLASS_TWO_JOINT_PARTICLE_EMITTER = 0x74,
+        MOBY_CLASS_FIFTEEN_PARTICLE_BURST_EMITTER = 0x76
+    };
     float spot[4];
     float vel[4];
     float push[4];
@@ -1206,7 +1210,7 @@ void FUN_L03_0029d2e0(char *moby, void *vel_in, int flag) {
             SPAWN_DEBRIS(0x6AA);
             SPAWN_DEBRIS(0x6AB);
             break;
-        case 0x74:
+        case MOBY_CLASS_TWO_JOINT_PARTICLE_EMITTER:
             SPAWN_DEBRIS(0x6AC);
             SPAWN_DEBRIS(0x6AD);
             SPAWN_DEBRIS(0x6AE);
@@ -1216,7 +1220,7 @@ void FUN_L03_0029d2e0(char *moby, void *vel_in, int flag) {
             SPAWN_DEBRIS(0x6B0);
             SPAWN_DEBRIS(0x6B1);
             break;
-        case 0x76:
+        case MOBY_CLASS_FIFTEEN_PARTICLE_BURST_EMITTER:
             SPAWN_DEBRIS(0x6B2);
             SPAWN_DEBRIS(0x6B3);
             SPAWN_DEBRIS(0x6B4);
