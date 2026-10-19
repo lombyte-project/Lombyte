@@ -17,8 +17,11 @@ s32 sceGsSetDefLoadImage(sceGsLoadImage *image, s16 destination_base,
         PIXEL_FORMAT_4_BIT = 0x14,
         PIXEL_FORMAT_8_BIT_ALTERNATE = 0x1b,
         PIXEL_FORMAT_4_BIT_ALTERNATE = 0x24,
+        PIXEL_FORMAT_4_BIT_ALTERNATE_2 = 0x2c,
         PIXEL_FORMAT_32_BIT_ALTERNATE = 0x30,
-        PIXEL_FORMAT_24_BIT_ALTERNATE = 0x31
+        PIXEL_FORMAT_24_BIT_ALTERNATE = 0x31,
+        PIXEL_FORMAT_16_BIT_ALTERNATE_2 = 0x32,
+        PIXEL_FORMAT_16_BIT_ALTERNATE_3 = 0x3a
     };
     s32 size = 0;
 
@@ -33,8 +36,8 @@ s32 sceGsSetDefLoadImage(sceGsLoadImage *image, s16 destination_base,
         break;
     case PIXEL_FORMAT_16_BIT:
     case PIXEL_FORMAT_16_BIT_ALTERNATE:
-    case 0x32:
-    case 0x3a:
+    case PIXEL_FORMAT_16_BIT_ALTERNATE_2:
+    case PIXEL_FORMAT_16_BIT_ALTERNATE_3:
         size = (width * height) >> 3;
         break;
     case PIXEL_FORMAT_8_BIT:
@@ -43,7 +46,7 @@ s32 sceGsSetDefLoadImage(sceGsLoadImage *image, s16 destination_base,
         break;
     case PIXEL_FORMAT_4_BIT:
     case PIXEL_FORMAT_4_BIT_ALTERNATE:
-    case 0x2c:
+    case PIXEL_FORMAT_4_BIT_ALTERNATE_2:
         size = (width * height) >> 5;
         break;
     }
