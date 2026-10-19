@@ -7054,6 +7054,7 @@ void FUN_L06_00302fd8(char *m) {
     enum {
         SHUTTLE_ROUTE_INITIAL_TO_SECOND_STOP = 0,
         SHUTTLE_ROUTE_SECOND_TO_INITIAL_STOP = 1,
+        SHUTTLE_ROUTE_FORCED_TO_INITIAL_STOP = 2,
         SHUTTLE_ROUTE_INITIAL_TO_THIRD_STOP = 3,
         SHUTTLE_ROUTE_THIRD_TO_INITIAL_STOP = 4
     };
@@ -7095,7 +7096,7 @@ void FUN_L06_00302fd8(char *m) {
     case SHUTTLE_ROUTE_THIRD_TO_INITIAL_STOP:
         try_set_help_message(10, 0x1785);
         break;
-    case 2:
+    case SHUTTLE_ROUTE_FORCED_TO_INITIAL_STOP:
         try_set_help_message(10, 0x1786);
         break;
     case SHUTTLE_ROUTE_INITIAL_TO_THIRD_STOP:
