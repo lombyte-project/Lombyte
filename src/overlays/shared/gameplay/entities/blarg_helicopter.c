@@ -364,7 +364,7 @@ void spawner_update(struct Moby *moby) {
     Vec4A_2bef68 launch_velocity;
     Vec4A_2bef68 target_position;
     Vec4A_2bef68 spawn_position;
-    Vec4A_2bef68 v70;
+    Vec4A_2bef68 sampled_point_scratch;
     int st;
     Data_2C0330 *d;
     Hit_2C0330 *r;
@@ -587,10 +587,10 @@ void spawner_update(struct Moby *moby) {
                 for (j = 0; j < 4; j++) {
                     float dd;
                     if (used[j] == 1) continue;
-                    if (FUN_L03_002beba0(d->pts[j], (float *)&v70) != 0) continue;
+                    if (FUN_L03_002beba0(d->pts[j], (float *)&sampled_point_scratch) != 0) continue;
                     dd = FUN_001f9b80_2bef68(&moby->pos, D_0013E533_2bef68 + 0xE9D);
                     if (dd < best) {
-                        qcopy(&spawn_position, &v70);
+                        qcopy(&spawn_position, &sampled_point_scratch);
                         best = dd;
                         bi = j;
                     }
@@ -668,7 +668,7 @@ void spawner_update(struct Moby *moby) {
                 FUN_001f9bf8_2bef68(&launch_velocity, &launch_velocity, speed);
                 FUN_001f9bf8_2bef68(&spawn_position, &launch_velocity, 0.05f);
                 FUN_L00_0025f8e0_2bef68((float *)&spawn_position, 0.025f);
-                FUN_L00_001ff290_2bef68(&v70, &spawn_position, &launch_origin);
+                FUN_L00_001ff290_2bef68(&sampled_point_scratch, &spawn_position, &launch_origin);
                 launch_velocity.z = FUN_L00_0025abf0_2bef68(&spawn_position, &target_position, 0, speed, -(d->fDC * frame_time_sq_macro));
                 m = FUN_L03_002c45d8_2bef68((char *)moby, (float *)&spawn_position, (float *)&launch_velocity, d->h8C, d->b83);
                 if (m != 0) {
