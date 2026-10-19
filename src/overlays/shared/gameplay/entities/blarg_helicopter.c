@@ -352,6 +352,7 @@ void spawner_update(struct Moby *moby) {
     };
     enum {
         SPAWNER_TARGET_COUNT_ANGULAR_SPREAD = 0,
+        SPAWNER_TARGET_HALF_REFERENCE_OFFSET = 1,
         SPAWNER_TARGET_UNUSED_POINT = 2,
         SPAWNER_TARGET_COUNT_INDEXED_POINT = 4
     };
@@ -558,7 +559,7 @@ void spawner_update(struct Moby *moby) {
                 }
                 break;
             }
-            case 1: {
+            case SPAWNER_TARGET_HALF_REFERENCE_OFFSET: {
                 float len;
                 FUN_001f9a28_2bef68(&launch_velocity, D_0013E533_2bef68 + 0xE9D, &launch_origin);
                 launch_velocity.z = 0.0f;
