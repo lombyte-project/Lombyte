@@ -707,6 +707,7 @@ void birdbot_update(PeMoby *m) {
         BIRDBOT_STATE_FATAL_KNOCKBACK = 14
     };
     enum {
+        BIRDBOT_HIT_REACTION_KEEP_CURRENT_STATE = 0,
         BIRDBOT_HIT_REACTION_FATAL_KNOCKBACK = 1,
         BIRDBOT_HIT_REACTION_FORCE_FATAL_KNOCKBACK = 2,
         BIRDBOT_HIT_REACTION_NONFATAL_KNOCKBACK = 3
@@ -771,7 +772,7 @@ void birdbot_update(PeMoby *m) {
             kind = 1;
         }
         switch (kind) {
-        case 0:
+        case BIRDBOT_HIT_REACTION_KEEP_CURRENT_STATE:
         case 7:
         case 8:
         case 9:
