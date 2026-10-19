@@ -368,7 +368,9 @@ extern f32 frame_time_sq_macro __asm__("D_0015ED70") __attribute__((section(".sd
 /* Trooper hit handler: takes damage, then knocks back away from the attacker by hit strength (dying on lethal hits). */
 void FUN_L03_002ca808(struct Moby *m) {
     enum {
-        TROOPER_DAMAGE_LETHAL = 1
+        TROOPER_DAMAGE_LETHAL = 1,
+        TROOPER_DAMAGE_SHORT_KNOCKBACK = 3,
+        TROOPER_DAMAGE_LONG_KNOCKBACK = 4
     };
     TrooperVars *v = (TrooperVars *)m->pvars;
     TrooperHit *h;
@@ -394,7 +396,7 @@ void FUN_L03_002ca808(struct Moby *m) {
         if (v->health <= 0.0f)
             r = 1;
         switch (r) {
-        case 3:
+        case TROOPER_DAMAGE_SHORT_KNOCKBACK:
         case 6:
             v->kb_speed = D_L03_001618FC * frame_time_sq_macro;
             trooper_set_knockback(v->knockback, D_L03_00161900, D_L03_00161904);
@@ -408,7 +410,7 @@ void FUN_L03_002ca808(struct Moby *m) {
             v->kb_max = 10.0f;
             m->state = 4;
             break;
-        case 4:
+        case TROOPER_DAMAGE_LONG_KNOCKBACK:
         case 5:
             v->kb_speed = D_L03_001618FC * frame_time_sq_macro;
             trooper_set_knockback(v->knockback, D_L03_00161900, D_L03_00161904);
