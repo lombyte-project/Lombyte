@@ -1718,7 +1718,8 @@ void teleporter_update(struct Moby *moby) {
         TELEPORTER_WAIT_FOR_USE = 1,
         TELEPORTER_PREPARE_TRANSFER = 2,
         TELEPORTER_TRANSFER_TO_DESTINATION = 3,
-        TELEPORTER_RETURN_TO_IDLE = 4
+        TELEPORTER_RETURN_TO_IDLE = 4,
+        TELEPORTER_ENTER_WAIT_FOR_USE = 6
     };
     char *data = (char *)moby->pvars;
     int active = 0;
@@ -1775,7 +1776,7 @@ void teleporter_update(struct Moby *moby) {
         FUN_L01_003092d0_c(moby);
         break;
     }
-    case 6:
+    case TELEPORTER_ENTER_WAIT_FOR_USE:
         if (moby->group != 0xFF) {
             FUN_L01_0026e0e0_c((char *)moby->group, 1);
         }
