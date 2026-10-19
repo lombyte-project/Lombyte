@@ -1039,6 +1039,7 @@ void boltcrate_possibly_for_metal_detector_update(struct Moby *moby) {
     enum {
         HIT_REACTION_NONE = 0,
         BOLTCRATE_CLEAR_HEALTH_RESPONSE = 1,
+        BOLTCRATE_ALTERNATE_CLEAR_HEALTH_RESPONSE = 2,
         HIT_REACTION_START_KNOCKBACK = 3
     };
     char *data;
@@ -1075,7 +1076,7 @@ void boltcrate_possibly_for_metal_detector_update(struct Moby *moby) {
         case HIT_REACTION_NO_ANIMATION_RESPONSE:
             break;
         case BOLTCRATE_CLEAR_HEALTH_RESPONSE:
-        case 2:
+        case BOLTCRATE_ALTERNATE_CLEAR_HEALTH_RESPONSE:
             *remaining = 0.0f;
             break;
         }
