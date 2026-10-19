@@ -2504,7 +2504,9 @@ extern float FUN_001f9b48(void *, void *);
 void FUN_L14_002f1140(struct Moby *moby) {
     enum {
         TAXI_STOP_RETURN_HUB = 0,
-        TAXI_STOP_HUB_OUTBOUND_DESTINATION = 1
+        TAXI_STOP_HUB_OUTBOUND_DESTINATION = 1,
+        TAXI_STOP_RETURN_FEEDER_ORIGIN = 2,
+        TAXI_STOP_RETURN_FEEDER_DESTINATION = 3
     };
     char *d = (char *)moby->pvars;
     char *p;
@@ -2518,11 +2520,11 @@ void FUN_L14_002f1140(struct Moby *moby) {
         *(char **)(d + 0xAC) = D_L14_001B0BB0_c2[*(int *)(d + 0x98)];
         *(short *)(d + 0xB6) = 0;
         break;
-    case 2:
+    case TAXI_STOP_RETURN_FEEDER_ORIGIN:
         *(char **)(d + 0xAC) = D_L14_001B0BB0_c2[*(int *)(d + 0x9C)];
         *(short *)(d + 0xB6) = 3;
         break;
-    case 3:
+    case TAXI_STOP_RETURN_FEEDER_DESTINATION:
         *(char **)(d + 0xAC) = D_L14_001B0BB0_c2[*(int *)(d + 0xA0)];
         *(short *)(d + 0xB6) = 0;
         break;
