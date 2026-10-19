@@ -2206,6 +2206,8 @@ void minibomber_update(Moby_2B5938 *moby) __asm__("FUN_L14_002b46e8");
 void minibomber_update(Moby_2B5938 *moby) {
     enum {
         MINIBOMBER_STATE_INITIALIZE = 0,
+        MINIBOMBER_STATE_FOLLOW_INTRO_OR_EXIT_PATH = 2,
+        MINIBOMBER_STATE_RETRACE_INTRO_OR_EXIT_PATH = 3,
         MINIBOMBER_STATE_AIM_AT_BOMB_POINT = 5,
         MINIBOMBER_STATE_RELEASE_BOMB = 6,
         MINIBOMBER_STATE_DESTROY = 9
@@ -2311,7 +2313,7 @@ void minibomber_update(Moby_2B5938 *moby) {
             FUN_L14_002b5d18_c((char *)moby);
         }
         break;
-    case 2: {
+    case MINIBOMBER_STATE_FOLLOW_INTRO_OR_EXIT_PATH: {
         PathNode_2B5938 *path;
         if (d->f10C == 0) {
             path = D_L14_001B0F30_2B5938[d->fD0];
@@ -2346,7 +2348,7 @@ void minibomber_update(Moby_2B5938 *moby) {
         }
         break;
     }
-    case 3: {
+    case MINIBOMBER_STATE_RETRACE_INTRO_OR_EXIT_PATH: {
         PathNode_2B5938 *path;
         if (d->f10C == 0) {
             path = D_L14_001B0F30_2B5938[d->fD0];
