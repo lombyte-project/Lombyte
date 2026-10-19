@@ -103,6 +103,7 @@ void level_draw_dialog_text(void) {
         FREEZE_DIALOG_FORMATTED_BODY_CENTERED_BUTTON = 5,
         FREEZE_DIALOG_FLAG_GATED_PAIRED_BUTTONS = 12,
         FREEZE_DIALOG_CONDITIONAL_FORMATTED_BODY = 19,
+        FREEZE_DIALOG_PLAIN_BODY_PAIRED_BUTTONS = 23,
         FREEZE_DIALOG_FORMATTED_BODY_PAIRED_BUTTONS = 24
     };
     char buf[0x200];
@@ -244,7 +245,7 @@ void level_draw_dialog_text(void) {
             sprintf(buf, D_L00_0015F510, get_help_message_text(0x4FAE), 1, 1, get_help_message_text(0x4FAA));
             text = buf;
             break;
-        case 23:
+        case FREEZE_DIALOG_PLAIN_BODY_PAIRED_BUTTONS:
             left = 0x524E;
             right = 0x524B;
             text = get_help_message_text(0x4FB1);
