@@ -1965,10 +1965,13 @@ void ultramech_unlimited_update(UMoby *m) __asm__("FUN_L15_002cf3a8");
 void ultramech_unlimited_update(UMoby *m) {
     enum {
         ULTRAMECH_INITIALIZE = 0,
+        ULTRAMECH_WAIT_FOR_ACTIVATION = 1,
         ULTRAMECH_FOLLOW_ENTRY_PATH = 2,
         ULTRAMECH_BALLISTIC_PATH_MOVE = 3,
+        ULTRAMECH_AIM_AND_SELECT_ATTACK = 4,
         ULTRAMECH_FIRE_BURST = 5,
         ULTRAMECH_WAIT_BETWEEN_BURSTS = 6,
+        ULTRAMECH_APPROACH_TARGET = 7,
         ULTRAMECH_MELEE_ATTACK = 8
     };
     UVec v10;
@@ -2034,7 +2037,7 @@ void ultramech_unlimited_update(UMoby *m) {
         if (m->anim != 0)
             blend_moby_animation(m, 0, 0, 5);
         break;
-    case 1:
+    case ULTRAMECH_WAIT_FOR_ACTIVATION:
         if (d->w1CC != -1 || is_point_inside_clip_volume(&hero.motion.pos, d->w1DC)) {
             if (d->w1CC != -1 && FUN_L01_0026e008(d->w1CC, 0x40))
                 break;
@@ -2136,7 +2139,7 @@ void ultramech_unlimited_update(UMoby *m) {
         }
         moving = 1;
         break;
-    case 4:
+    case ULTRAMECH_AIM_AND_SELECT_ATTACK:
         if (m->anim != 0 && (m->animFlags & 2))
             blend_moby_animation(m, 0, 0, scale_game_frames(0x14));
         if (d->w164 != 2) {
@@ -2271,7 +2274,7 @@ void ultramech_unlimited_update(UMoby *m) {
                 blend_moby_animation(m, 0, 0, scale_game_frames(0x14));
         }
         break;
-    case 7: {
+    case ULTRAMECH_APPROACH_TARGET: {
         float ang = fast_arc_tan(tgt->pos.f[0] - m->pos.f[0], tgt->pos.f[1] - m->pos.f[1]);
         if (d->w164 != 2) {
             ang = FUN_L15_002cf110_u(m, &v20, d->f1B8);
