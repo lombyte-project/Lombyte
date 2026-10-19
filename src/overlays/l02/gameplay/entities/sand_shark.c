@@ -1404,10 +1404,15 @@ void FUN_L02_002d7748(struct Moby *moby);
 void FUN_L02_002d7748(struct Moby *moby) {
     enum {
         L02_BOT_INITIALIZE = 0,
+        L02_BOT_ALIGN_TO_GROUND_AT_POST = 3,
+        L02_BOT_MOVE_TO_POST = 5,
         L02_BOT_WANDER = 6,
         L02_BOT_WAIT_FOR_WAKE_TRIGGER = 10,
         L02_BOT_HIT_KNOCKBACK_RECOVERY = 16,
         L02_BOT_DEATH_KNOCKBACK = 17
+    };
+    enum {
+        L02_BOT_START_WAIT_FOR_WAKE_TRIGGER = 1
     };
     float position[4];
     float direction[4];
@@ -1460,7 +1465,7 @@ void FUN_L02_002d7748(struct Moby *moby) {
             }
             moby->state = 7;
             break;
-        case 1:
+        case L02_BOT_START_WAIT_FOR_WAKE_TRIGGER:
             if (moby->prev_seq != 0) {
                 blend_moby_animation_c3(moby, 0, 0, 0);
             }
@@ -1488,7 +1493,7 @@ void FUN_L02_002d7748(struct Moby *moby) {
             }
         }
         break;
-    case 3:
+    case L02_BOT_ALIGN_TO_GROUND_AT_POST:
         target = data->target;
         angle = fast_arc_tan(*(float *)(target + 0x10) - moby->pos.x,
                                   *(float *)(target + 0x14) - moby->pos.y);
@@ -1515,7 +1520,7 @@ void FUN_L02_002d7748(struct Moby *moby) {
             }
         }
         break;
-    case 5:
+    case L02_BOT_MOVE_TO_POST:
         if (FUN_L00_00259028((char *)moby, data->walk, (float *)(D_L02_001600EC + data->post * 0x80 + 0x30), (char *)data->velocity) == 4) {
             if (moby->prev_seq != 0) {
                 blend_moby_animation_c3(moby, 0, 0, scale_game_frames(30));
