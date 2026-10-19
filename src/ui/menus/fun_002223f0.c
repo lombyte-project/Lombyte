@@ -25,12 +25,19 @@ s32 FUN_002223f0(struct Menu *menu) {
         INITIALIZE_MENU_SEQUENCE = 0,
         WAIT_FOR_INITIAL_DELAY = 1,
         ADVANCE_FIRST_PROGRESS_PHASE = 2,
+        BEGIN_DELAY_AFTER_FIRST_PROGRESS_PHASE = 3,
+        PREPARE_SECOND_PROGRESS_PHASE = 4,
         WAIT_BEFORE_SECOND_PROGRESS_PHASE = 5,
         ADVANCE_SECOND_PROGRESS_PHASE = 6,
+        BEGIN_DELAY_AFTER_SECOND_PROGRESS_PHASE = 7,
         WAIT_BEFORE_THIRD_PROGRESS_PHASE = 8,
         ADVANCE_THIRD_PROGRESS_PHASE = 9,
+        BEGIN_DELAY_AFTER_THIRD_PROGRESS_PHASE = 10,
+        PREPARE_FOURTH_PROGRESS_PHASE = 11,
         WAIT_BEFORE_FOURTH_PROGRESS_PHASE = 12,
         ADVANCE_FOURTH_PROGRESS_PHASE = 13,
+        BEGIN_DELAY_AFTER_FOURTH_PROGRESS_PHASE = 14,
+        PREPARE_FIFTH_PROGRESS_PHASE = 15,
         WAIT_BEFORE_FIFTH_PROGRESS_PHASE = 16,
         ADVANCE_FIFTH_PROGRESS_PHASE = 17,
         BEGIN_FINAL_DELAY = 18,
@@ -104,7 +111,7 @@ s32 FUN_002223f0(struct Menu *menu) {
         }
         break;
 
-    case 4:
+    case PREPARE_SECOND_PROGRESS_PHASE:
         if (menu->unk40 == 0) {
             menu->unk50 = 5;
             menu->unk40 = scale_game_frames(0xB4);
@@ -114,7 +121,7 @@ s32 FUN_002223f0(struct Menu *menu) {
         }
         break;
 
-    case 3:
+    case BEGIN_DELAY_AFTER_FIRST_PROGRESS_PHASE:
         if (menu->unk40 == 0) {
             D_001D2AF4[0] = 0x50D4;
             menu->str = 0x50D5;
@@ -124,7 +131,7 @@ s32 FUN_002223f0(struct Menu *menu) {
         }
         break;
 
-    case 7:
+    case BEGIN_DELAY_AFTER_SECOND_PROGRESS_PHASE:
         if (menu->unk40 == 0) {
             D_001D2AF4[0] = 0x5106;
             menu->str = (s32)D_001D5208;
@@ -134,7 +141,7 @@ s32 FUN_002223f0(struct Menu *menu) {
         }
         break;
 
-    case 10:
+    case BEGIN_DELAY_AFTER_THIRD_PROGRESS_PHASE:
         if (menu->unk40 == 0) {
             D_001D2AF4[0] = 0x5136;
             menu->str = 0x5137;
@@ -144,7 +151,7 @@ s32 FUN_002223f0(struct Menu *menu) {
         }
         break;
 
-    case 11:
+    case PREPARE_FOURTH_PROGRESS_PHASE:
         if (menu->unk40 == 0) {
             menu->unk40 = scale_game_frames(0xB4);
             menu->unk3C = 0;
@@ -154,7 +161,7 @@ s32 FUN_002223f0(struct Menu *menu) {
         }
         break;
 
-    case 14:
+    case BEGIN_DELAY_AFTER_FOURTH_PROGRESS_PHASE:
         if (menu->unk40 == 0) {
             D_001D2AF4[0] = 0;
             menu->str = 0x5143;
@@ -164,7 +171,7 @@ s32 FUN_002223f0(struct Menu *menu) {
         }
         break;
 
-    case 15:
+    case PREPARE_FIFTH_PROGRESS_PHASE:
         if (menu->unk40 == 0) {
             menu->unk40 = scale_game_frames(0xB4);
             menu->unk3C = 0;
