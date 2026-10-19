@@ -600,6 +600,7 @@ extern float D_L13_00161490 __attribute__((sda));
 
 void FUN_L13_002c2d30(unsigned char *moby) {
     enum {
+        HIT_REACTION_NONE = 0,
         HIT_REACTION_LETHAL = 1,
         HIT_REACTION_NO_HIT = 11
     };
@@ -686,7 +687,7 @@ void FUN_L13_002c2d30(unsigned char *moby) {
             moby[0x20] = 8;
             d[0x67] = 0xF0;
             break;
-        case 0:
+        case HIT_REACTION_NONE:
         case HIT_REACTION_NO_HIT:
         default:
             break;
