@@ -2583,6 +2583,10 @@ extern void FUN_0020c828(void *);
 extern s32 D_L13_001BA7D0[];
 void blarg_ship_update(struct Moby *moby) __asm__("FUN_L13_0030cdb8");
 void blarg_ship_update(struct Moby *moby) {
+    enum {
+        BLARG_SHIP_HANDLE_DAMAGE = 1,
+        BLARG_SHIP_EXPLODE = 2
+    };
     char *data;
     void *hit;
     OvlVec4 vector;
@@ -2600,7 +2604,7 @@ void blarg_ship_update(struct Moby *moby) {
     case 0:
         moby->state = 1;
         break;
-    case 1:
+    case BLARG_SHIP_HANDLE_DAMAGE:
         if (hit != 0) {
             float cost = *(float *)((char *)hit + 0x2c);
             if (*(float *)(data + 0x20) < cost) {
@@ -2614,7 +2618,7 @@ void blarg_ship_update(struct Moby *moby) {
         }
         trooper_anim_finish(moby, data + 0x60);
         break;
-    case 2: {
+    case BLARG_SHIP_EXPLODE: {
         void *pos;
         void *rot;
         void *zero_vector;
