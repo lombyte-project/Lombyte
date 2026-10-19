@@ -1264,6 +1264,12 @@ extern void *FUN_L00_00263fd8_c(void *, int, void *, void *, int, int, float, vo
 extern char D_L08_001FC600[];
 void blarg_paratrooper_update(char *moby) __asm__("FUN_L08_00301158");
 void blarg_paratrooper_update(char *moby) {
+    enum {
+        PARATROOPER_STATE_INITIALIZE = 0,
+        PARATROOPER_STATE_PATROL_PATH = 1,
+        PARATROOPER_STATE_HOP_BETWEEN_WAYPOINTS = 4,
+        PARATROOPER_STATE_MELEE_ATTACK = 7
+    };
     Paratrooper302618 *data = (Paratrooper302618 *)(*(char * *)((char *)(moby)+0x78));
     char *path;
     char *target;
@@ -1295,7 +1301,7 @@ void blarg_paratrooper_update(char *moby) {
         return;
     }
     switch((*(unsigned char *)((char *)(moby)+0x20))) {
-    case 0: {
+    case PARATROOPER_STATE_INITIALIZE: {
         float turn_rate;
         data->f29=0; data->f28=1; data->f2E=1;
         data->f20=2.0f; data->f24=2;
@@ -1329,7 +1335,7 @@ void blarg_paratrooper_update(char *moby) {
         data->f1DA=0;
         break;
     }
-    case 1:
+    case PARATROOPER_STATE_PATROL_PATH:
         if(fast_distance302618(moby+0x10,path+0x10+data->f1F4*16)<data->fE0) {
             short direction=data->f20C;
             int index = data->f1F4+direction;
@@ -1395,7 +1401,7 @@ void blarg_paratrooper_update(char *moby) {
         }
         break;
     }
-    case 4: {
+    case PARATROOPER_STATE_HOP_BETWEEN_WAYPOINTS: {
         float *rotation=(float *)(moby+0x48);
         float heading;
         float frame;
@@ -1483,7 +1489,7 @@ void blarg_paratrooper_update(char *moby) {
         }
         break;
     }
-    case 7: {
+    case PARATROOPER_STATE_MELEE_ATTACK: {
         float *rotation=(float *)(moby+0x48);
         float heading;
         float frame;
