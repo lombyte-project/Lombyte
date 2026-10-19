@@ -175,6 +175,7 @@ void hydrodisplacer_update(Moby *moby) {
         HYDRODISPLACER_INITIALIZE = 0,
         HYDRODISPLACER_WAIT_FOR_ANIMATION_FLAG = 1,
         HYDRODISPLACER_WAIT_FOR_ACTIVATION = 2,
+        HYDRODISPLACER_WAIT_FOR_HERO_FLAG = 3,
         HYDRODISPLACER_CAMERA_TRANSITION = 4,
         HYDRODISPLACER_WAIT_FOR_TIMER = 5
     };
@@ -248,7 +249,7 @@ void hydrodisplacer_update(Moby *moby) {
             func_L00_00232C10_2E0E50(0x46, 0, func_001F9850_2E0E50(6));
         }
         break;
-    case 3: {
+    case HYDRODISPLACER_WAIT_FOR_HERO_FLAG: {
         int *platform;
         char *linked;
 
