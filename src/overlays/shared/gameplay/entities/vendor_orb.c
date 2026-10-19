@@ -1307,11 +1307,15 @@ extern float D_L00_00161C98 __attribute__((sda));
 extern float D_L00_00161C9C __attribute__((sda));
 void pterodactyl_update(unsigned char *m) __asm__("FUN_L00_002e3a88");
 void pterodactyl_update(unsigned char *m) {
+    enum {
+        PTERODACTYL_INITIALIZE = 0,
+        PTERODACTYL_FOLLOW_PATH = 1
+    };
     D_2e3a88 *d = *(D_2e3a88 **)(m + 0x78);
     int *p = vend_paths[d->path];
     float y;
     switch (m[0x20]) {
-    case 0:
+    case PTERODACTYL_INITIALIZE:
         if (d->path == -1) {
             FUN_0020c828_2e3a88(m);
             return;
@@ -1326,7 +1330,7 @@ void pterodactyl_update(unsigned char *m) {
         m[0x20] = 1;
         *(float *)(m + 0x2C) *= D_L00_00161C9C;
         m[0x30] = 0xFF;
-    case 1:
+    case PTERODACTYL_FOLLOW_PATH:
         y = *(float *)(m + 0x18);
         sample_camera_path(p, d->f6C, d->i70, m + 0x10, m + 0x40, 0);
         *(float *)(m + 0x44) *= 0.5f;
