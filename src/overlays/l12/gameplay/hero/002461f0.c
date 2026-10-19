@@ -450,7 +450,7 @@ void FUN_L12_002461f0(void) {
                         return;
                     }
                     break;
-                case 127:
+                case HERO_STATE_SINK:
                     if (hero.state_timer > scale_game_frames(0xDC)) {
                         hero_respawn();
                         return;
