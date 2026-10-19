@@ -2384,8 +2384,12 @@ void FUN_L16_002e84e8(struct Moby *m) {
 
 void gadgetron_sign_update(struct Moby *moby) __asm__("FUN_L16_002e88d0");
 void gadgetron_sign_update(struct Moby *moby) {
+    enum {
+        GADGETRON_SIGN_INITIALIZE = 0,
+        GADGETRON_SIGN_ROTATE = 1
+    };
     switch (moby->state) {
-    case 0: {
+    case GADGETRON_SIGN_INITIALIZE: {
         float size = moby->scale * 4.0f;
         int ff = 0xFF;
         int twohundred = 0x200;
@@ -2395,7 +2399,7 @@ void gadgetron_sign_update(struct Moby *moby) {
         moby->pos.z = 160.0f;
         moby->scale = size;
     } break;
-    case 1:
+    case GADGETRON_SIGN_ROTATE:
         moby->rot.z =
             fast_add_rotations(moby->rot.z, frame_time * -0.2617993950843811f);
         break;
