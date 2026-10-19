@@ -1293,10 +1293,16 @@ extern s32 D_0014C190_257218[][64] __asm__("D_0014C190");
 extern char D_L13_001F4FB0[];
 void forcefield_update(unsigned char *m) __asm__("FUN_L13_002ed4a8");
 void forcefield_update(unsigned char *m) {
+    enum {
+        FORCEFIELD_STATE_INITIALIZE = 0,
+        FORCEFIELD_STATE_MONITOR_LINKED_MOBY = 1,
+        FORCEFIELD_STATE_FADE_OUT = 2,
+        FORCEFIELD_STATE_REMOVE = 3
+    };
     char *d = *(char **)(m + 0x78);
     int a;
     switch (m[0x20]) {
-    case 0:
+    case FORCEFIELD_STATE_INITIALIZE:
         m[0x20] = 1;
         m[0x23] = 0x14;
         *(unsigned short *)(m + 0x34) |= 0xA08;
@@ -1304,7 +1310,7 @@ void forcefield_update(unsigned char *m) {
         *(float *)(d + 4) = 1.0f;
         glow_n(m, 0x80, 0x80, 0x80);
         break;
-    case 1:
+    case FORCEFIELD_STATE_MONITOR_LINKED_MOBY:
         if (*(int *)d != -1) {
             unsigned char *o = (unsigned char *)(D_L13_0015FFD8_n + (*(int *)d << 8));
             if (o == 0 || o[0x20] == 0xFE || o[0x20] == 0xFD ||
@@ -1319,14 +1325,14 @@ void forcefield_update(unsigned char *m) {
         }
         FUN_L13_002ed158(m, d);
         break;
-    case 2:
+    case FORCEFIELD_STATE_FADE_OUT:
         *(float *)(d + 4) -= frame_scale * 0.05f;
         if (*(float *)(d + 4) < 0.0f)
             m[0x20] = 3;
         else
             m[0x23] = ftoi_n(*(float *)(d + 4) * 20.0f);
         break;
-    case 3:
+    case FORCEFIELD_STATE_REMOVE:
         if (*(short *)(d + 0xE) != -1) {
             FUN_L00_0023e838(*(short *)(d + 0xE));
             *(short *)(d + 0xE) = -1;
