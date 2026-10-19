@@ -1881,6 +1881,7 @@ extern int func_001F9908_r(int *) __asm__("FUN_001f9740");
 extern f32 frame_scale_gp __asm__("D_0015ED60") __attribute__((sda));
 void FUN_L02_00230988(void) {
     enum {
+        HERO_STATE_VEHICLE_HURT = 86,
         HERO_STATE_MOVE_TO_TARGET = 101,
         HERO_STATE_STOP_AT_TARGET = 102,
         HERO_STATE_IDLE_AT_TARGET = 103,
@@ -3544,7 +3545,7 @@ void FUN_L02_00230988(void) {
                         hero_set_state(0x53, 1);
                     }
                     break;
-                case 86:
+                case HERO_STATE_VEHICLE_HURT:
                     if (!(hero.state_timer < scale_game_frames(0x20)) && hero.air_frames.s != 0 &&
                         hero.ground_distance > 1.0f) {
                         hero_set_state(0x55, 1);
