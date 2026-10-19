@@ -972,11 +972,14 @@ void FUN_001f9d20_00233810(void *, void *, void *) __asm__("FUN_001f9d20");
 void FUN_001f9a10_00233810(void *, void *, void *) __asm__("FUN_001f9a10");
 void FUN_L00_00233810(f32 *out, f32 *in, f32 z);
 void FUN_L00_00233810(f32 *out, f32 *in, f32 z) {
+    enum {
+        GRAVITY_MODE_WORLD_Z = 0
+    };
     struct Hero *b = &hero;
     M00233810 m;
     V00233810 t;
     switch (b->unk20B3) {
-    case 0:
+    case GRAVITY_MODE_WORLD_Z:
         qcopy(out, in);
         out[2] += z;
         break;
