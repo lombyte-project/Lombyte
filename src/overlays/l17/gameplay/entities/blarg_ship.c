@@ -273,8 +273,11 @@ extern struct {
     int tbl[3];
 } D_L17_0016D160;
 void FUN_L17_002f2e78(struct Moby *m) {
+    enum {
+        MOBY_UPDATE_DISTANCE_INITIALIZE = 0
+    };
     switch (m->state) {
-    case 0:
+    case MOBY_UPDATE_DISTANCE_INITIALIZE:
         m->update_dist = 0xFF;
         m->state = 1;
         break;
