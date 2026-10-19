@@ -55,6 +55,12 @@ extern int func_0022ED80_2F0F78(int, int, int) __asm__("FUN_0022da68");
 
 void drek_fight_missile_update(struct Moby *moby) __asm__("FUN_L18_002efb88");
 void drek_fight_missile_update(struct Moby *moby) {
+    enum {
+        DREK_MISSILE_INITIALIZE = 0,
+        DREK_MISSILE_WANDER = 2,
+        DREK_MISSILE_DIVE = 3,
+        DREK_MISSILE_WAIT_TO_EXPLODE = 4
+    };
     char *d = (char *)moby->pvars;
     if (moby->state != 4) {
         moby->rot.x = fast_add_rotations(moby->rot.x,
@@ -65,7 +71,7 @@ void drek_fight_missile_update(struct Moby *moby) {
         return;
     }
     switch (moby->state) {
-    case 0: {
+    case DREK_MISSILE_INITIALIZE: {
         float a = D_0015ED6C_a[1];
         float b = frame_time;
         *(float *)(d + 0x158) = a * 10.0f;
@@ -84,7 +90,7 @@ void drek_fight_missile_update(struct Moby *moby) {
         moby->collision = 0;
         break;
     }
-    case 2: {
+    case DREK_MISSILE_WANDER: {
         char *p = d + 0x110;
         if (FUN_L18_002f0120(moby, (float *)p)) {
             FUN_L18_002f02e8(moby, p);
@@ -100,7 +106,7 @@ void drek_fight_missile_update(struct Moby *moby) {
         *(int *)(d + 0x14C) = 0;
         break;
     }
-    case 3: {
+    case DREK_MISSILE_DIVE: {
         float v[4];
         float w[4];
         subtract_vector_xyz(v, d + 0x120, &moby->pos);
@@ -125,7 +131,7 @@ void drek_fight_missile_update(struct Moby *moby) {
         }
         break;
     }
-    case 4: {
+    case DREK_MISSILE_WAIT_TO_EXPLODE: {
         float x = moby->rot.y;
         if (x < 0.87266463f) {
             x = 0.87266463f;
