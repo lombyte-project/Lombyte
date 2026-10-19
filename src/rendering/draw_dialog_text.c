@@ -91,6 +91,7 @@ void draw_dialog_text(void) {
     enum {
         FREEZE_TITLE_DIALOG = 2,
         FREEZE_MODE_MESSAGE_DIALOG = 3,
+        FREEZE_SPLIT_TEXT_ICON_DIALOG = 5,
         FREEZE_CHOICE_MESSAGE_DIALOG = 6
     };
     char buf[0x200];
@@ -98,7 +99,7 @@ void draw_dialog_text(void) {
 
     setup_gif_paging(0);
     switch (freeze.state) {
-    case 5: {
+    case FREEZE_SPLIT_TEXT_ICON_DIALOG: {
         u8 *p;
         s32 color;
         s32 tint;
