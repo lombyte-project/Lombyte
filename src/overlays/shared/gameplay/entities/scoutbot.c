@@ -1281,6 +1281,7 @@ void blarg_paratrooper_update(char *moby) {
         PARATROOPER_STATE_WAIT_FACING_TARGET = 3,
         PARATROOPER_STATE_HOP_BETWEEN_WAYPOINTS = 4,
         PARATROOPER_STATE_FIRE_PROJECTILES = 5,
+        PARATROOPER_STATE_MOVE_TOWARD_FIRST_WAYPOINT = 6,
         PARATROOPER_STATE_MELEE_ATTACK = 7,
         PARATROOPER_STATE_PAUSE_AFTER_HOP_LIMIT = 9,
         PARATROOPER_STATE_KNOCKBACK_RECOVERY = 10,
@@ -1487,7 +1488,7 @@ void blarg_paratrooper_update(char *moby) {
             }
         }
         break;
-    case 6: {
+    case PARATROOPER_STATE_MOVE_TOWARD_FIRST_WAYPOINT: {
         float *rotation=(float *)(moby+0x48);
         float heading;
         float frame;
