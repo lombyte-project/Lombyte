@@ -2932,6 +2932,9 @@ extern unsigned char *func_L00_00273F80_r(float *pos, char *vel, int color, unsi
 
 void spiderbot_update(unsigned char *moby) __asm__("FUN_L15_002a6e68");
 void spiderbot_update(unsigned char *moby) {
+    enum {
+        SPIDERBOT_INITIALIZE = 0
+    };
     float old[4];
     float A[4];
     float B[4];
@@ -2943,7 +2946,7 @@ void spiderbot_update(unsigned char *moby) {
     float M[16];
     float T[4];
     switch (moby[0x20]) {
-    case 0:
+    case SPIDERBOT_INITIALIZE:
         *(u128_2A8090 *)d = *(u128_2A8090 *)old;
         *(float *)(moby + 0x58) = *(float *)(d + 0x30) / 1.5f;
         *(float *)(d + 0x28) = *(float *)(d + 0x28) * 0.017453292f;
