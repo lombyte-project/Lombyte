@@ -384,13 +384,20 @@ extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void dreks_fleet_turret_update(struct Moby *m) __asm__("FUN_L17_002cb310");
 void dreks_fleet_turret_update(struct Moby *m) {
+    enum {
+        FLEET_TURRET_INITIALIZE = 0,
+        FLEET_TURRET_WAIT_FOR_TARGET = 1,
+        FLEET_TURRET_AIM_AND_FIRE_AT_ZONE = 2,
+        FLEET_TURRET_AIM_AND_FIRE_AT_HERO_SHIP = 3,
+        FLEET_TURRET_DESTROY = 4
+    };
     float dir[4];
     float from[4];
     Vars347 *d = (Vars347 *)m->pvars;
 
     FUN_L17_002cbc10(m);
     switch (m->state) {
-    case 0:
+    case FLEET_TURRET_INITIALIZE:
         m->state = 1;
         d->f20 = 15.0f;
         d->s24 = 0xF;
@@ -399,7 +406,7 @@ void dreks_fleet_turret_update(struct Moby *m) {
             mark_moby_for_removal(m);
         }
         break;
-    case 1: {
+    case FLEET_TURRET_WAIT_FOR_TARGET: {
         struct Hero *g = &hero;
         if (g->unk308 != 0) {
             qcopy(dir, &m->pos);
@@ -421,7 +428,7 @@ void dreks_fleet_turret_update(struct Moby *m) {
         }
         break;
     }
-    case 2: {
+    case FLEET_TURRET_AIM_AND_FIRE_AT_ZONE: {
         if (hero.unk308 == 0) {
             m->state = 1;
         }
@@ -479,7 +486,7 @@ void dreks_fleet_turret_update(struct Moby *m) {
         }
         break;
     }
-    case 3: {
+    case FLEET_TURRET_AIM_AND_FIRE_AT_HERO_SHIP: {
         struct Hero *g = &hero;
         if (g->state.current != 0x32 || ((char *)g->ship_moby) == 0 ||
             *(short *)(((char *)g->ship_moby) + 0xA6) != 0x563) {
@@ -534,7 +541,7 @@ void dreks_fleet_turret_update(struct Moby *m) {
         }
         break;
     }
-    case 4:
+    case FLEET_TURRET_DESTROY:
         FUN_L00_00263fd8(m, 0x63A, &m->pos.x, &m->rot, 0, 0, 0.0f, D_L17_0015F580,
                          D_L17_0015F580, D_L17_0015F580);
         FUN_L00_00263fd8(m, 0x63B, &m->pos.x, &m->rot, 0, 0, 0.0f, D_L17_0015F580,
