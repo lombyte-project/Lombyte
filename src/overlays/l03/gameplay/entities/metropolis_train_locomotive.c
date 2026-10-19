@@ -25,6 +25,7 @@ extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 
 void FUN_L03_0029d1b8(struct Moby *moby) {
     enum {
+        MOBY_CLASS_ALTERNATE_COLOR_CHILD_EFFECT_EMITTER = 0x4B,
         MOBY_CLASS_TWO_JOINT_PARTICLE_EMITTER = 0x74,
         MOBY_CLASS_FIFTEEN_PARTICLE_BURST_EMITTER = 0x76
     };
@@ -34,7 +35,7 @@ void FUN_L03_0029d1b8(struct Moby *moby) {
     switch (moby->oclass) {
     case 0x33:
     case 0x40:
-    case 0x4B:
+    case MOBY_CLASS_ALTERNATE_COLOR_CHILD_EFFECT_EMITTER:
     case 0x73:
     case MOBY_CLASS_TWO_JOINT_PARTICLE_EMITTER:
     case MOBY_CLASS_FIFTEEN_PARTICLE_BURST_EMITTER:
