@@ -126,6 +126,8 @@ extern float add_rot_0e00(float, float) __asm__("FUN_001fa580");
 void FUN_L14_00300e00(struct Moby *m)
 {
     enum {
+        SPARK_COUNT_NEXT_BOUNCE = 0,
+        SPARK_WAIT_FOR_DESCENT = 1,
         SPARK_ROLL_AND_FADE = 2,
         SPARK_BURST_AND_REMOVE = 3
     };
@@ -146,9 +148,9 @@ void FUN_L14_00300e00(struct Moby *m)
   }
   switch (m->state)
   {
-    case 0:
+    case SPARK_COUNT_NEXT_BOUNCE:
 
-    case 1:
+    case SPARK_WAIT_FOR_DESCENT:
     {
       add_0e00(&next, &m->pos, &d->vel);
       d->vel.z -= d->vel.w;
