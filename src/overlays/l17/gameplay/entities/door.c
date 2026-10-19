@@ -2093,7 +2093,9 @@ void magnet_elevator_update(struct Moby *moby) __asm__("FUN_L17_002ee2b0");
 void magnet_elevator_update(struct Moby *moby) {
     enum {
         MAGNET_ELEVATOR_STATE_INITIALIZE = 0,
-        MAGNET_ELEVATOR_STATE_BLEND_CAMERA = 1
+        MAGNET_ELEVATOR_STATE_BLEND_CAMERA = 1,
+        MAGNET_ELEVATOR_STATE_WAIT_AT_FIRST_STOP = 6,
+        MAGNET_ELEVATOR_STATE_WAIT_AT_SECOND_STOP = 7
     };
     char *state = P(moby, 0x78);
     float delta[4];
@@ -2211,8 +2213,8 @@ void magnet_elevator_update(struct Moby *moby) {
             }
         }
         break;
-    case 6:
-    case 7: {
+    case MAGNET_ELEVATOR_STATE_WAIT_AT_FIRST_STOP:
+    case MAGNET_ELEVATOR_STATE_WAIT_AT_SECOND_STOP: {
         int i;
         char *g;
         (*(float *)((char *)(state) + (0x78))) =
