@@ -1523,6 +1523,7 @@ void bomb_glove_update(struct Moby *moby) {
     enum {
         BOMB_GLOVE_INITIALIZE = 0,
         BOMB_GLOVE_WAIT_FOR_ANIMATION = 1,
+        BOMB_GLOVE_RELEASE_HELD_MOBY = 3,
         BOMB_GLOVE_POST_RELEASE_WAIT = 4,
         BOMB_GLOVE_BEGIN_HELD_MOBY_REMOVAL = 5,
         BOMB_GLOVE_REMOVE_HELD_MOBY = 6
@@ -1669,7 +1670,7 @@ void bomb_glove_update(struct Moby *moby) {
         if (moby->anim_flags & 2)
             moby->state = 2;
         break;
-    case 3:
+    case BOMB_GLOVE_RELEASE_HELD_MOBY:
         if (vars->held == 0) {
             vars->held = FUN_L00_002ace70(moby, &vars->grip);
         } else {
