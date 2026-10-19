@@ -1516,6 +1516,9 @@ extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern struct PadState controller_state_lui __asm__("D_0013C940") __attribute__((section(".data")));
 void metal_detector_update(struct Moby *moby) __asm__("FUN_L00_002d2ee8");
 void metal_detector_update(struct Moby *moby) {
+    enum {
+        METAL_DETECTOR_INITIALIZE = 0
+    };
     Vars2d2ee8 *vars;
     struct Moby *t;
     TargetVars2d2ee8 *tv;
@@ -1543,7 +1546,7 @@ void metal_detector_update(struct Moby *moby) {
     }
     moby_point_position(moby, 0, &vars->pos);
     switch (moby->state) {
-    case 0:
+    case METAL_DETECTOR_INITIALIZE:
         hero.unk2044 = 100000.0f;
         hero.unk2040 = 0;
         vars->voice0 = -1;
