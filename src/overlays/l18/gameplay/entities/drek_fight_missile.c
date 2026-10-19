@@ -3118,6 +3118,9 @@ extern short D_L18_001DFB40[];
 s32 random_integer_below(s32 arg0) __asm__("FUN_00213260");
 
 int FUN_L18_002f70b8(struct Moby *moby) {
+    enum {
+        BOSS_ACTION_CHOICE_REPOSITION_AND_AIM = 1
+    };
     char *data = (char *)moby->pvars;
     int state = *(int *)(data + 0x350);
     int tries = 0;
@@ -3129,7 +3132,7 @@ int FUN_L18_002f70b8(struct Moby *moby) {
         case 0:
             state = 0xD;
             break;
-        case 1:
+        case BOSS_ACTION_CHOICE_REPOSITION_AND_AIM:
             state = 0xE;
             break;
         case 2:
