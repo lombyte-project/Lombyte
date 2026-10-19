@@ -754,6 +754,7 @@ void FUN_L03_002d3198(struct Moby *m) {
         TAXI_WAIT_FOR_ROUTE_TRIGGER = 1,
         TAXI_FOLLOW_OUTBOUND_PATH = 2,
         TAXI_WAIT_FOR_RETURN_REQUEST = 3,
+        TAXI_WAIT_FOR_RETURN_DEPARTURE = 4,
         TAXI_FOLLOW_RETURN_PATH = 5,
         TAXI_WAIT_FOR_HERO_TO_MOVE_AWAY = 6,
         TAXI_FOLLOW_ONWARD_PATH = 7
@@ -845,7 +846,7 @@ void FUN_L03_002d3198(struct Moby *m) {
             }
         }
         break;
-    case 4:
+    case TAXI_WAIT_FOR_RETURN_DEPARTURE:
         if (!FUN_L00_00233f38()) {
             m->state = 5;
         }
