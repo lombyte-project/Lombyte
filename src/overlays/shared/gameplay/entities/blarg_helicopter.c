@@ -1952,12 +1952,17 @@ extern s32 current_level_index_gp __asm__("D_0015ED84") __attribute__((sda));
 void garage_door_update(struct Moby *m) __asm__("FUN_L03_002dca30");
 void garage_door_update(struct Moby *m)
 {
+    enum {
+        GARAGE_DOOR_WAITING_FOR_COLLECTION = 0,
+        GARAGE_DOOR_RISING = 1,
+        GARAGE_DOOR_RAISED = 2
+    };
     Vec4 *target = (Vec4 *)m->pvars;
     s16 idx;
     u16 id;
 
     switch (m->state) {
-    case 0:
+    case GARAGE_DOOR_WAITING_FOR_COLLECTION:
         /* one quadword copy (lq/sq); qcopy() schedules differently */
         target->q = ((Vec4 *)&m->pos)->q;
         id = m->save_id;
@@ -1968,12 +1973,12 @@ void garage_door_update(struct Moby *m)
         }
         m->state = 1;
         return;
-    case 1:
+    case GARAGE_DOOR_RISING:
         m->pos.z += frame_time;
         if (target->f[2] + 4.0f <= m->pos.z)
             m->state = 2;
         return;
-    case 2:
+    case GARAGE_DOOR_RAISED:
         m->pos.z = target->f[2] + 4.0f;
         return;
     }
