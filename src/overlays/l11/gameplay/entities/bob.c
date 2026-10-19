@@ -780,7 +780,8 @@ extern int D_L11_0015FFD8;
 void FUN_L11_002d2088(struct Moby *moby, unsigned char state) {
     enum {
         RESORT_OWNER_MOVE_TO_PATH_POINT = 6,
-        RESORT_OWNER_JUMP_TO_TARGET = 7
+        RESORT_OWNER_JUMP_TO_TARGET = 7,
+        RESORT_OWNER_CHECK_PATH_COMPLETION_DIALOGUE = 12
     };
     char *d = (char *)moby->pvars;
     float tmp[4];
@@ -790,7 +791,7 @@ void FUN_L11_002d2088(struct Moby *moby, unsigned char state) {
     case 1:
     case 3:
     case 11:
-    case 12:
+    case RESORT_OWNER_CHECK_PATH_COMPLETION_DIALOGUE:
     case 14:
         if (moby->prev_seq != 0)
             FUN_00212f90(moby, 0, 0, scale_game_frames(0x14));
