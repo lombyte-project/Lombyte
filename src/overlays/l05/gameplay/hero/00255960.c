@@ -146,6 +146,7 @@ void FUN_L05_00255960(void) {
         HERO_STATE_LEDGE_JUMP = 28,
         HERO_STATE_BELOW_LEVEL_RESPAWN_WAIT = 119,
         HERO_STATE_HEIGHT_OR_TIMEOUT_RESPAWN_WAIT = 123,
+        HERO_STATE_FATAL_HURT_RESPAWN_WAIT = 124,
         HERO_STATE_TIMED_RESPAWN_WAIT = 127
     };
     unsigned char *moby;
@@ -943,7 +944,7 @@ void FUN_L05_00255960(void) {
                         return;
                     }
                     break;
-                case 124:
+                case HERO_STATE_FATAL_HURT_RESPAWN_WAIT:
                     if (hero.unk2F4 - 1.2f > hero.motion.pos.f[2] ||
                         hero.state_timer > scale_game_frames(0x64)) {
                         hero_respawn();
