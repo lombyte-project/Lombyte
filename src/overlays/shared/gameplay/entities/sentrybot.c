@@ -92,6 +92,11 @@ extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void sentrybot_update(unsigned char *moby) __asm__("FUN_L15_002979d8");
 void sentrybot_update(unsigned char *moby) {
+    enum {
+        SENTRYBOT_INITIALIZE = 0,
+        SENTRYBOT_WAIT_FOR_LINKED_MOBY = 1,
+        SENTRYBOT_RETURN_HOME = 9
+    };
     float va[4];
     float vb[4];
     float pos[4];
@@ -156,7 +161,7 @@ void sentrybot_update(unsigned char *moby) {
     if (moby[0xBC] == 0)
         data[0x15F] = 0;
     switch (moby[0x20]) {
-    case 0:
+    case SENTRYBOT_INITIALIZE:
         if (*(int *)(data + 0x120) == -1 || *D_L15_001B0AB0[*(int *)(data + 0x120)] == 0) {
             mark_moby_for_removal(moby);
             return;
@@ -183,7 +188,7 @@ void sentrybot_update(unsigned char *moby) {
         }
         moby[0xBC] = 0;
         break;
-    case 1: {
+    case SENTRYBOT_WAIT_FOR_LINKED_MOBY: {
         int i;
         for (i = 0; i < 4; i++) {
             if (((unsigned char *)((((Sentry98BB8 *)data)->f180[i] << 8) +
@@ -479,7 +484,7 @@ void sentrybot_update(unsigned char *moby) {
         }
         break;
     }
-    case 9: {
+    case SENTRYBOT_RETURN_HOME: {
         unsigned char *home = data + 0x160;
         if (FUN_001f9b48(moby + 0x10, home) > 0.2f) {
             FUN_L15_00299ae0((char *)moby, (float *)home, frame_time * 2.0f);
