@@ -64,7 +64,8 @@ void update_help_state(void) {
         HELP_STATE_DISPLAY_START_DELAY = 1,
         HELP_STATE_WAIT_FOR_DISMISSAL = 5,
         HELP_STATE_DISMISS_DELAY = 6,
-        HELP_STATE_DISMISSING = 7
+        HELP_STATE_DISMISSING = 7,
+        HELP_STATE_QUEUED_MESSAGE_WAIT = 8
     };
 
     if (D_001996D0.started == 0) {
@@ -87,7 +88,7 @@ void update_help_state(void) {
 
     D_001996D0.timer++;
     switch (D_001996D0.state) {
-    case 8:
+    case HELP_STATE_QUEUED_MESSAGE_WAIT:
         if (D_001996D0.queued != 0) {
             break;
         }
