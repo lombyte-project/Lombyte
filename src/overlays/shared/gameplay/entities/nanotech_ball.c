@@ -1979,6 +1979,7 @@ s32 FUN_L00_002dbe20(u8 *m) {
         SUCK_CANNON_BEING_PULLED_IN = 3,
         SUCK_CANNON_STORED = 4,
         SUCK_CANNON_FLYING_PROJECTILE = 5,
+        SUCK_CANNON_ROLLING_PROJECTILE = 6,
         SUCK_CANNON_FALLING_AFTER_CANCEL = 7
     };
     u8 *o = FUN_L00_002db890_u(m);
@@ -2011,7 +2012,7 @@ s32 FUN_L00_002dbe20(u8 *m) {
         return 1;
     case 0:
     case SUCK_CANNON_FLYING_PROJECTILE:
-    case 6:
+    case SUCK_CANNON_ROLLING_PROJECTILE:
     case SUCK_CANNON_FALLING_AFTER_CANCEL:
     case 9:
         return 0;
