@@ -835,6 +835,8 @@ void sandmouse_update(Moby *m) __asm__("FUN_L01_0030df40");
 void sandmouse_update(Moby *m) {
     enum {
         SANDMOUSE_STATE_INITIALIZE = 0,
+        SANDMOUSE_STATE_WAIT_FOR_LINK = 2,
+        SANDMOUSE_STATE_MOVE_TO_GOAL = 3,
         SANDMOUSE_STATE_FADE_OUT = 6,
         SANDMOUSE_STATE_RESET = 7
     };
@@ -974,7 +976,7 @@ void sandmouse_update(Moby *m) {
             }
         }
         break;
-    case 2:
+    case SANDMOUSE_STATE_WAIT_FOR_LINK:
         if (p->link != -1) {
             if (LNK(p->link)->state == 5) {
                 if (m->prev_seq != 0) {
@@ -996,7 +998,7 @@ void sandmouse_update(Moby *m) {
             m->state = 3;
         }
         break;
-    case 3: {
+    case SANDMOUSE_STATE_MOVE_TO_GOAL: {
         int r;
         {
             char *v = VOICE(p->slot);
