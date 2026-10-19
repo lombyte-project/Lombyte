@@ -427,6 +427,13 @@ void FUN_L13_002c25b8(unsigned char *moby) {
         MOVE_TO_TABLE_POINT = 6,
         EMIT_EFFECT_AND_REMOVE = 8
     };
+    enum {
+        WAIT_TO_RESUME_ATTACK_SEQUENCE = 7
+    };
+    enum {
+        START_ATTACK_ANIMATION_SEQUENCE = 0,
+        WAIT_TO_BEGIN_ALTERNATING_FIRE = 2
+    };
     unsigned char *d = *(unsigned char **)(moby + 0x78);
     unsigned char *target;
     float scratch_vector[4], shot_direction_vector[4], z[4];
@@ -500,7 +507,7 @@ void FUN_L13_002c25b8(unsigned char *moby) {
             if (moby[0x53] != 2) blend_moby_animation_c13(moby, 2, 0, 2);
             *(int *)(d + 0xE8) = 0;
             break;
-        case 2:
+        case WAIT_TO_BEGIN_ALTERNATING_FIRE:
             if (!(moby[0x70] & 2)) return;
             moby[0xBC] = 3;
             if (moby[0x53] != 3) blend_moby_animation_c13(moby, 3, 0, 2);
@@ -558,7 +565,7 @@ void FUN_L13_002c25b8(unsigned char *moby) {
                 moby[0xBC] = 0;
                 break;
             }
-        case 0:
+        case START_ATTACK_ANIMATION_SEQUENCE:
             moby[0xBC] = 1;
             if (moby[0x53] != 1) blend_moby_animation_c13(moby, 1, 0, 2);
             break;
@@ -571,7 +578,7 @@ void FUN_L13_002c25b8(unsigned char *moby) {
         if (*(void **)(d + 0xFC)) mark_moby_for_removal(*(void **)(d + 0xFC));
         mark_moby_for_removal(moby);
         break;
-    case 7:
+    case WAIT_TO_RESUME_ATTACK_SEQUENCE:
         if (!(moby[0x70] & 2)) return;
         if (moby[0x53] != moby[0xBC]) blend_moby_animation_c13(moby, moby[0xBC], 0, 10);
         moby[0x20] = 4;
