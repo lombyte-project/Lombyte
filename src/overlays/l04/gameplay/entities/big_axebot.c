@@ -1151,6 +1151,8 @@ void FUN_L04_002c1b80(struct Moby *m) {
         CIRCULAR_SAW_ANIM_IDLE = 0,
         CIRCULAR_SAW_ANIM_MOVE_FORWARD = 1,
         CIRCULAR_SAW_ANIM_MOVE_BACKWARD = 2,
+        CIRCULAR_SAW_ANIM_STRAFE_NEGATIVE_YAW = 3,
+        CIRCULAR_SAW_ANIM_STRAFE_POSITIVE_YAW = 4,
         CIRCULAR_SAW_ANIM_JUMP = 5,
         CIRCULAR_SAW_ANIM_ALERT = 6,
         CIRCULAR_SAW_ANIM_ATTACK = 7
@@ -1178,8 +1180,8 @@ void FUN_L04_002c1b80(struct Moby *m) {
             pitch = -2.0f;
             volume = engine_int_to_float(0x400);
             break;
-        case 3:
-        case 4:
+        case CIRCULAR_SAW_ANIM_STRAFE_NEGATIVE_YAW:
+        case CIRCULAR_SAW_ANIM_STRAFE_POSITIVE_YAW:
             pitch = 4.0f;
             volume = engine_int_to_float(0x400);
             break;
