@@ -1716,7 +1716,8 @@ void teleporter_update(struct Moby *moby) {
         TELEPORTER_INITIALIZE = 0,
         TELEPORTER_WAIT_FOR_USE = 1,
         TELEPORTER_PREPARE_TRANSFER = 2,
-        TELEPORTER_TRANSFER_TO_DESTINATION = 3
+        TELEPORTER_TRANSFER_TO_DESTINATION = 3,
+        TELEPORTER_RETURN_TO_IDLE = 4
     };
     char *data = (char *)moby->pvars;
     int active = 0;
@@ -1875,7 +1876,7 @@ void teleporter_update(struct Moby *moby) {
             FUN_L01_003092d0_c(moby);
         }
         break;
-    case 4:
+    case TELEPORTER_RETURN_TO_IDLE:
     case 8:
         if (*(float *)(data + 0x34) < 1.95f) {
             enqueue_callback_list_1(FUN_L01_003094f0_u, moby);
