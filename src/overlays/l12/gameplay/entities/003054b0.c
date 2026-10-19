@@ -600,7 +600,9 @@ void planetbuster_maximus_part_update(char *moby) __asm__("FUN_L12_003069d0");
 void planetbuster_maximus_part_update(char *moby) {
     enum {
         PLANETBUSTER_INITIALIZE_LINKED_PARTS = 0,
+        PLANETBUSTER_WAIT_FOR_PATH_TRIGGER = 1,
         PLANETBUSTER_FOLLOW_PATH = 2,
+        PLANETBUSTER_POST_PATH_GUN_UPDATE = 3,
         PLANETBUSTER_DROP_PARTS_AND_TRANSITION = 4
     };
     enum {
@@ -651,7 +653,7 @@ void planetbuster_maximus_part_update(char *moby) {
             moby[0x20] = 1;
         }
         break;
-    case 1: {
+    case PLANETBUSTER_WAIT_FOR_PATH_TRIGGER: {
         char *h;
         int r;
         if (is_point_inside_clip_volume_c(D_L12_00167240, *(int *)(d + 0x624))) {
@@ -737,7 +739,7 @@ void planetbuster_maximus_part_update(char *moby) {
         FUN_L12_003054b0_u(moby);
         break;
     }
-    case 3:
+    case PLANETBUSTER_POST_PATH_GUN_UPDATE:
         D_L12_00161F34++;
         FUN_L00_0025bc98(moby + 0x48, 3.0543261f, d + 0x5F4, -1, D_0015ED64 * 0.0015f, D_0015ED64 * 0.3f, D_0015ED6C_gp * 0.17453292f);
         FUN_L00_00262b00(0.7f, D_0015ED6C_gp * 1.2217305f, moby, (float *)(d + 0x5CC), (float *)(d + 0x5C8));
