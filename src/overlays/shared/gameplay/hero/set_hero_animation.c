@@ -1112,7 +1112,8 @@ void gravity_set_z(f32 *out, f32 *in, f32 z) __asm__("FUN_L00_00233b20");
 void gravity_set_z(f32 *out, f32 *in, f32 z) {
     enum {
         GRAVITY_MODE_WORLD_Z = 0,
-        GRAVITY_MODE_VECTOR_AXIS = 1
+        GRAVITY_MODE_VECTOR_AXIS = 1,
+        GRAVITY_MODE_DIRECTION_AXIS = 2
     };
     struct Hero *b = &hero;
     switch (b->unk20B3) {
@@ -1121,7 +1122,7 @@ void gravity_set_z(f32 *out, f32 *in, f32 z) {
         out[2] = z;
         break;
     case GRAVITY_MODE_VECTOR_AXIS:
-    case 2:
+    case GRAVITY_MODE_DIRECTION_AXIS:
         FUN_001f9d20_00233b20(out, in, b->unk40);
         out[2] = z;
         FUN_001f9d20_00233b20(out, out, b->unk0);
