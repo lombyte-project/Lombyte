@@ -1640,6 +1640,7 @@ void FUN_L11_00310698(struct Moby *m) {
         HIT_REACTION_NONE = 0,
         HIT_REACTION_DEATH = 1,
         HIT_REACTION_DEATH_KNOCKBACK = 2,
+        HIT_REACTION_KNOCKBACK = 3,
         HIT_REACTION_NO_RESPONSE = 11
     };
     struct PokiPathVars *pv = (struct PokiPathVars *)m->pvars;
@@ -1683,7 +1684,7 @@ void FUN_L11_00310698(struct Moby *m) {
         case 10:
             pv->unk67 = 0xFA;
             break;
-        case 3:
+        case HIT_REACTION_KNOCKBACK:
         case 4:
         case 5:
         case 6:
