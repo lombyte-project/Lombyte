@@ -2363,6 +2363,7 @@ void FUN_L07_0030e998(char *m, char *x, float *hp) {
     enum {
         HIT_REACTION_NONE = 0,
         SHARKIGATOR_CLEAR_HEALTH_RESPONSE = 1,
+        SHARKIGATOR_ALTERNATE_CLEAR_HEALTH_RESPONSE = 2,
         HIT_REACTION_START_KNOCKBACK = 3,
         HIT_REACTION_NO_ANIMATION_RESPONSE = 11
     };
@@ -2378,7 +2379,7 @@ void FUN_L07_0030e998(char *m, char *x, float *hp) {
         case HIT_REACTION_NONE:
             break;
         case SHARKIGATOR_CLEAR_HEALTH_RESPONSE:
-        case 2:
+        case SHARKIGATOR_ALTERNATE_CLEAR_HEALTH_RESPONSE:
             *hp = 0.0f;
             break;
         case HIT_REACTION_START_KNOCKBACK:
