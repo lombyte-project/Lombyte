@@ -1539,6 +1539,8 @@ void drek_final_boss_robot_update(BossMoby *moby) {
         DREK_BOSS_CIRCLE_AND_FIRE_AT_HERO = 2,
         DREK_BOSS_WAIT_TO_RESTORE_SAVED_TRANSFORM = 3,
         DREK_BOSS_WAIT_FOR_GROUNDED_HERO_TO_START_SCENE = 4,
+        DREK_BOSS_INITIALIZE_PAIRED_TRANSFORM_TRANSITION = 5,
+        DREK_BOSS_WAIT_FOR_PAIRED_TRANSFORM_TRANSITION = 8,
         DREK_BOSS_FOLLOW_PATH_AND_FIRE_AT_MOBYS = 10,
         DREK_BOSS_FINISH_PATH_AND_WAIT_FOR_HERO = 0xB,
         DREK_BOSS_RUN_ENDING_SEQUENCE = 0x1B
@@ -1925,7 +1927,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
             }
         }
         break;
-    case 5: {
+    case DREK_BOSS_INITIALIZE_PAIRED_TRANSFORM_TRANSITION: {
         unsigned char *b = D_L18_0015FFD8 + d->f21C * 0x100;
 
         b += 0x10;
@@ -1975,7 +1977,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
             d->f33C = (unsigned char *)FUN_L18_002ea0f0(moby, v0, 300);
         }
         break;
-    case 8:
+    case DREK_BOSS_WAIT_FOR_PAIRED_TRANSFORM_TRANSITION:
         moby->f34 |= 0x41;
         if (FUN_L18_002dfb90(d->f334) >= 1.0f) {
             moby->f20 = 0xC;
