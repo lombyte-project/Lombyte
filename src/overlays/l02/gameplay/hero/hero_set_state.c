@@ -1891,6 +1891,7 @@ extern int func_001F9908_r(int *) __asm__("FUN_001f9740");
 extern f32 frame_scale_gp __asm__("D_0015ED60") __attribute__((sda));
 void FUN_L02_00230988(void) {
     enum {
+        HERO_STATE_HELD_ITEM_ATTACK = 32,
         HERO_STATE_VEHICLE_IDLE = 83,
         HERO_STATE_VEHICLE_RUN = 84,
         HERO_STATE_VEHICLE_FALL = 85,
@@ -3608,7 +3609,7 @@ void FUN_L02_00230988(void) {
                     }
                     D_L02_0016CD80 = 0;
                     break;
-                case 32:
+                case HERO_STATE_HELD_ITEM_ATTACK:
                     if (((unsigned char *)hero.items[0].moby) != 0 && hero.unkA9C == 0 &&
                         hero.anim_frame > 20.0f) {
                         hero_set_state(HERO_STATE_IDLE, 0);
