@@ -5706,6 +5706,7 @@ extern float D_L06_00162050 __attribute__((sda));
 void FUN_L06_002ffcb0(char *moby) {
     enum {
         INITIALIZE_DRAW_SELECTION = 0,
+        WAIT_FOR_LINKED_MOBY_TRIGGER = 1,
         WAIT_CAMERA_START_DELAY = 2,
         BLEND_CAMERA_TO_HERO = 3,
         WAIT_FOR_NEARBY_HERO = 4
@@ -5720,7 +5721,7 @@ void FUN_L06_002ffcb0(char *moby) {
         data[1] = 1;
         moby[0x20] = 1;
         break;
-    case 1:
+    case WAIT_FOR_LINKED_MOBY_TRIGGER:
         if ((data[2] < 0 || (unsigned char)D_L06_0015FFD8_ffcb0[(data[2] << 8) + 0xbc] == 0) && data[8] != -1) {
             break;
         }
