@@ -2823,8 +2823,10 @@ void FUN_L16_002d5ef8(struct Moby *m) {
         SCENE_STATE_INITIALIZE = 0,
         SCENE_STATE_WAIT_FOR_TRIGGER = 1,
         SCENE_STATE_WAIT_TO_HIDE = 2,
+        SCENE_STATE_WAIT_FOR_LINKED_MOBYS_AND_TIMER = 3,
         SCENE_STATE_COMPLETE = 4,
-        SCENE_STATE_HIDDEN_WAIT_FOR_TRIGGER = 5
+        SCENE_STATE_HIDDEN_WAIT_FOR_TRIGGER = 5,
+        SCENE_STATE_HIDDEN_WAIT_FOR_LINKED_MOBYS = 6
     };
     float position[4], rotation[4];
     L16SceneData_q *d = (L16SceneData_q *)m->pvars;
@@ -2868,7 +2870,7 @@ void FUN_L16_002d5ef8(struct Moby *m) {
             FUN_L16_002ceca8_q(d->path);
         }
         break;
-    case 3:
+    case SCENE_STATE_WAIT_FOR_LINKED_MOBYS_AND_TIMER:
         FUN_L16_002d6260_q(m, position, rotation);
         FUN_L00_002ea9d8_q(position);
         FUN_L00_002ea9d8_q_002eaa30(rotation);
@@ -2901,7 +2903,7 @@ void FUN_L16_002d5ef8(struct Moby *m) {
             m->state = 6;
         }
         break;
-    case 6: {
+    case SCENE_STATE_HIDDEN_WAIT_FOR_LINKED_MOBYS: {
         char *player = D_0013F3D0;
         if (is_point_inside_clip_volume(player, d->trigger) && d->camera >= 0)
             *(unsigned short *)(player + 0x225A) = *(unsigned short *)&d->camera;
