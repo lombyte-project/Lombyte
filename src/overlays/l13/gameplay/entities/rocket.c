@@ -1753,7 +1753,11 @@ void FUN_L13_0030a6d8(struct Moby *moby) {
     enum {
         LIFT_INITIALIZE = 0,
         LIFT_MOVE_TO_TOP = 2,
-        LIFT_MOVE_TO_BOTTOM = 3
+        LIFT_MOVE_TO_BOTTOM = 3,
+        LIFT_IDLE_AT_TOP = 4,
+        LIFT_IDLE_AT_BOTTOM = 5,
+        LIFT_WAIT_AT_TOP_FOR_HERO_TO_LEAVE = 6,
+        LIFT_WAIT_AT_BOTTOM_FOR_HERO_TO_LEAVE = 7
     };
     LiftVarsA6D8 *vars = (LiftVarsA6D8 *)moby->pvars;
     float delta[4];
@@ -1820,8 +1824,8 @@ void FUN_L13_0030a6d8(struct Moby *moby) {
         }
         break;
     }
-    case 6:
-    case 7:
+    case LIFT_WAIT_AT_TOP_FOR_HERO_TO_LEAVE:
+    case LIFT_WAIT_AT_BOTTOM_FOR_HERO_TO_LEAVE:
         if (vars->timer != 0 && tick_timer(&vars->timer))
             hero_set_state(0, 0);
         if (voice_is_playing(moby, vars->voice)) {
@@ -1835,8 +1839,8 @@ void FUN_L13_0030a6d8(struct Moby *moby) {
                 moby->state = 4;
         }
         break;
-    case 4:
-    case 5: {
+    case LIFT_IDLE_AT_TOP:
+    case LIFT_IDLE_AT_BOTTOM: {
         int i;
         vars->pulse = fast_add_rotations(vars->pulse, D_0015ED6C * 6.2831855f);
         i = float_to_int((fast_sin(vars->pulse) * 4.0f - 3.0f) * 128.0f);
