@@ -89,6 +89,7 @@ void seeker_update(struct Moby *moby) __asm__("FUN_L09_002c5990");
 void seeker_update(struct Moby *moby) {
     enum {
         SEEKER_STATE_INITIALIZE = 0,
+        SEEKER_STATE_IDLE_HOVER = 1,
         SEEKER_STATE_CHASE = 2,
         SEEKER_STATE_HURT_KNOCKBACK = 5,
         SEEKER_STATE_FATAL_KNOCKBACK = 6,
@@ -140,7 +141,7 @@ void seeker_update(struct Moby *moby) {
         }
         vars->voice = -1;
         break;
-    case 1:
+    case SEEKER_STATE_IDLE_HOVER:
         moby->pos.z += (probe_ground_height(&moby->pos, 0, 0.5f) + 0.5f - moby->pos.z) * 0.1f;
         approach_angle(&moby->rot.z,
                          fast_arc_tan(target->pos.x - moby->pos.x, target->pos.y - moby->pos.y),
