@@ -1291,9 +1291,13 @@ typedef struct {
 } M_bff0;
 
 void FUN_L12_0030bff0(M_bff0 *m) {
+    enum {
+        INITIALIZE_SCROLL_PHASES = 0,
+        UPDATE_SCROLL_PHASES_AND_QUEUE_DRAW = 1
+    };
     int i;
     switch (m->state) {
-    case 0:
+    case INITIALIZE_SCROLL_PHASES:
         if (D_L12_001620F0 == 0) {
             FUN_L08_002f0f68(D_L12_00208AE0, 5, D_L12_00205A80, 0.1f, 0.5f, 0.4f, 0.5f, 1);
             FUN_L08_002f0f68(D_L12_00205A58, 10, D_L12_001FBD10, 0.1f, 0.6f, 0.4f, 0.5f, 1);
@@ -1307,7 +1311,7 @@ void FUN_L12_0030bff0(M_bff0 *m) {
             ((float *)&D_L12_001620F0)[i * 2 + 3] = 0.0f;
         }
         break;
-    case 1:
+    case UPDATE_SCROLL_PHASES_AND_QUEUE_DRAW:
         for (i = 0; i < 2; i++) {
             ((float *)&D_L12_001620F0)[i * 2 + 2] += D_L12_001620E0[i * 2] * frame_delta_time;
             if (((float *)&D_L12_001620F0)[i * 2 + 2] > 1.0f) {
