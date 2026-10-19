@@ -2144,13 +2144,13 @@ void rocket_update(char *m) {
     flag = 0;
     goto body;
     for (;;) {
-        float a1;
+        float offset_trig_factor;
         if (!(0.1f < sp)) goto done;
     body:
-        a1 = fast_sin_c(*(float *)(d + 0x48));
-        u.v.a.f[1] = *(float *)(d + 0x44) * a1 * fast_cos_c(*(float *)(d + 0x4C));
-        a1 = fast_cos_c(*(float *)(d + 0x48));
-        u.v.a.f[2] = *(float *)(d + 0x44) * a1 * fast_cos_c(*(float *)(d + 0x4C));
+        offset_trig_factor = fast_sin_c(*(float *)(d + 0x48));
+        u.v.a.f[1] = *(float *)(d + 0x44) * offset_trig_factor * fast_cos_c(*(float *)(d + 0x4C));
+        offset_trig_factor = fast_cos_c(*(float *)(d + 0x48));
+        u.v.a.f[2] = *(float *)(d + 0x44) * offset_trig_factor * fast_cos_c(*(float *)(d + 0x4C));
         zf = 0.0f;
         u.v.a.f[3] = zf;
         u.v.a.f[0] = zf;
