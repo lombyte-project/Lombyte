@@ -725,6 +725,9 @@ void agnogg_ship_front_update(Moby_2FC140 *moby) {
         AGNOGG_SHIP_WAIT_FOR_DESCENT_TRIGGER = 1,
         AGNOGG_SHIP_DESCEND_TO_TARGET_HEIGHT = 2,
         AGNOGG_SHIP_WAIT_BEFORE_SCENE = 5,
+        AGNOGG_SHIP_WAIT_FOR_SCENE_3_END = 6,
+        AGNOGG_SHIP_WAIT_TO_START_SCENE_4 = 7,
+        AGNOGG_SHIP_WAIT_FOR_SCENE_4_END = 8,
         AGNOGG_SHIP_HOLD_TARGET_HEIGHT = 10
     };
     Data_2FC140 *data;
@@ -864,21 +867,21 @@ void agnogg_ship_front_update(Moby_2FC140 *moby) {
         start_scene(3);
         moby->state = 6;
         break;
-    case 6:
+    case AGNOGG_SHIP_WAIT_FOR_SCENE_3_END:
         if (cutscene_mode == 2) {
             break;
         }
         func_L00_0029A7D0_2FC140(3);
         moby->state = 7;
         break;
-    case 7:
+    case AGNOGG_SHIP_WAIT_TO_START_SCENE_4:
         if (cutscene_mode == 2) {
             break;
         }
         start_scene(4);
         moby->state = 8;
         break;
-    case 8:
+    case AGNOGG_SHIP_WAIT_FOR_SCENE_4_END:
         if (cutscene_mode == 2) {
             break;
         }
