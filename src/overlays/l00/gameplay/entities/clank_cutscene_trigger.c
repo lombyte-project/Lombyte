@@ -37,7 +37,8 @@ extern void FUN_L00_0028b1a0(void);
 void FUN_L00_0023d968(void) {
     enum {
         LEVEL_WITH_SKY_PARTICLES_AND_ROTATING_SHELL = 0,
-        LEVEL_WITH_TWO_ROTATING_SKY_SHELLS = 3
+        LEVEL_WITH_TWO_ROTATING_SKY_SHELLS = 3,
+        LEVEL_WITH_FAST_AND_SLOW_ROTATING_SKY_SHELLS = 4
     };
     setup_sky_gif_paging();
     switch (current_level_index) {
@@ -53,7 +54,7 @@ void FUN_L00_0023d968(void) {
     case LEVEL_WITH_TWO_ROTATING_SKY_SHELLS:
         FUN_L00_002899a8();
         break;
-    case 4:
+    case LEVEL_WITH_FAST_AND_SLOW_ROTATING_SKY_SHELLS:
         FUN_L00_00289a90();
         break;
     case 5:
