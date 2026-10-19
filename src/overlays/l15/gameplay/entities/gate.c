@@ -2484,6 +2484,7 @@ void FUN_L15_002d0fa8(void *arg) {
     enum {
         HIT_REACTION_NO_ACTION = 0,
         HIT_REACTION_DEATH = 1,
+        HIT_REACTION_DEATH_ALTERNATE = 2,
         HIT_REACTION_NONE = 11
     };
     UMoby *m = arg;
@@ -2576,7 +2577,7 @@ void FUN_L15_002d0fa8(void *arg) {
                 *(unsigned char *)((char *)d + 0x67) = 0x78;
                 break;
             case HIT_REACTION_DEATH:
-            case 2:
+            case HIT_REACTION_DEATH_ALTERNATE:
                 origin.q = 0;
                 m->flags &= 0xEFFF;
                 FUN_0023ee30(m, 7, &effect);
