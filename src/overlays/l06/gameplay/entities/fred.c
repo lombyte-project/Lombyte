@@ -6485,7 +6485,8 @@ void FUN_L06_00301b90(unsigned char *m) {
         INITIALIZE_ENTITY = 0,
         TRIGGER_LINKED_SEQUENCE_WHEN_GROUP_INACTIVE = 1,
         WAIT_FOR_LINKED_SEQUENCE_COMPLETION = 2,
-        ADVANCE_CAMERA_ALONG_PATH = 3
+        ADVANCE_CAMERA_ALONG_PATH = 3,
+        RAMP_SHARED_VALUE_AFTER_DELAY = 5
     };
     char *d = *(char **)(m + 0x78);
     float va[4] __attribute__((aligned(16)));
@@ -6610,7 +6611,7 @@ void FUN_L06_00301b90(unsigned char *m) {
         allocate_voice_for_group_entry(1, 0, (int)hero.moby);
         return;
     }
-    case 5:
+    case RAMP_SHARED_VALUE_AFTER_DELAY:
         if (*(float *)(d + 0xB8) == 1.0f) {
             FUN_L00_00211250();
             D_L06_0015F400 = 0.0f;
