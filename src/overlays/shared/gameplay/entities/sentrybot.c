@@ -102,6 +102,7 @@ void sentrybot_update(unsigned char *moby) {
         SENTRYBOT_RETURN_HOME = 9,
         SENTRYBOT_PATROL_MOVE_FAST = 13,
         SENTRYBOT_APPROACH_LINKED_MOBY = 14,
+        SENTRYBOT_ACTIVATE_LINKED_MOBY = 15,
         SENTRYBOT_RETURN_HOME_FAST = 20,
         SENTRYBOT_RECOVERABLE_KNOCKBACK = 21,
         SENTRYBOT_DEATH_KNOCKBACK = 23
@@ -592,7 +593,7 @@ void sentrybot_update(unsigned char *moby) {
                 blend_moby_animation(moby, 9, 0, scale_game_frames(10));
         }
         break;
-    case 15:
+    case SENTRYBOT_ACTIVATE_LINKED_MOBY:
         if (moby[0x52] == moby[0x53] && compute_interpolated_record_value(moby) >= 12.0f) {
             FUN_L15_002cbac0((char *)(D_L15_0015FFD8_m + (*(int *)(data + 0x128) << 8)), 0xB4);
         }
