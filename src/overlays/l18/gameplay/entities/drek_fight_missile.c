@@ -3562,12 +3562,13 @@ void FUN_L18_002f7ad8(M *moby);
 void FUN_L18_002f7ad8(M *moby) {
     enum {
         MOBY_INITIALIZE = 0,
+        MOBY_WAIT_FOR_SCENE_TRIGGER = 1,
         MOBY_WAIT_FOR_SCENE_END = 2
     };
     switch (moby->state) {
     case MOBY_INITIALIZE:
         moby->state = 1;
-    case 1:
+    case MOBY_WAIT_FOR_SCENE_TRIGGER:
         if ((D_L18_0015F5C4 == 2 && D_L18_0016D290_lui == 3) ||
             (game_frame < 5 && D_L18_001623A0_gp != 0 && moby->f40 == 0.0f)) {
             moby->state = 2;
