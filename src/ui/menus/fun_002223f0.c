@@ -24,10 +24,15 @@ s32 FUN_002223f0(struct Menu *menu) {
     enum {
         INITIALIZE_MENU_SEQUENCE = 0,
         WAIT_FOR_INITIAL_DELAY = 1,
+        ADVANCE_FIRST_PROGRESS_PHASE = 2,
         WAIT_BEFORE_SECOND_PROGRESS_PHASE = 5,
+        ADVANCE_SECOND_PROGRESS_PHASE = 6,
         WAIT_BEFORE_THIRD_PROGRESS_PHASE = 8,
+        ADVANCE_THIRD_PROGRESS_PHASE = 9,
         WAIT_BEFORE_FOURTH_PROGRESS_PHASE = 12,
+        ADVANCE_FOURTH_PROGRESS_PHASE = 13,
         WAIT_BEFORE_FIFTH_PROGRESS_PHASE = 16,
+        ADVANCE_FIFTH_PROGRESS_PHASE = 17,
         BEGIN_FINAL_DELAY = 18,
         WAIT_FOR_FINAL_DELAY = 19
     };
@@ -79,15 +84,15 @@ s32 FUN_002223f0(struct Menu *menu) {
         }
         break;
 
-    case 2:
+    case ADVANCE_FIRST_PROGRESS_PHASE:
 
-    case 6:
+    case ADVANCE_SECOND_PROGRESS_PHASE:
 
-    case 9:
+    case ADVANCE_THIRD_PROGRESS_PHASE:
 
-    case 13:
+    case ADVANCE_FOURTH_PROGRESS_PHASE:
 
-    case 17:
+    case ADVANCE_FIFTH_PROGRESS_PHASE:
         n = menu->unk3C;
         menu->unk3C = n + 0xA;
         if (flag) {
