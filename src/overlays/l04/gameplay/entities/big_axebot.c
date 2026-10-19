@@ -2289,6 +2289,12 @@ extern int func_L00_002594C8_o(void *, void *, void *, float, float, float, floa
 
 void blarg_trooper_update(struct Moby *moby) __asm__("FUN_L04_002c4850");
 void blarg_trooper_update(struct Moby *moby) {
+    enum {
+        BLARG_TROOPER_STATE_INITIALIZE = 0,
+        BLARG_TROOPER_STATE_JUMP = 4,
+        BLARG_TROOPER_STATE_MELEE_ATTACK = 7,
+        BLARG_TROOPER_STATE_DYING = 11
+    };
     struct {
         float tgt[20];
         float v50[4];
@@ -2478,7 +2484,7 @@ void blarg_trooper_update(struct Moby *moby) {
     FUN_L00_001fefc8(data + 0xFE);
     tick_countdown_32((int *)(data + 0x108));
     switch (moby->state) {
-    case 0:
+    case BLARG_TROOPER_STATE_INITIALIZE:
         moby->flags |= 0x1000;
         *(float *)(data + 0x20) = 2.0f;
         *(short *)(data + 0x24) = 2;
@@ -2657,7 +2663,7 @@ void blarg_trooper_update(struct Moby *moby) {
             }
         }
         break;
-    case 4:
+    case BLARG_TROOPER_STATE_JUMP:
         if (moby->prev_seq != 2) {
             blend_moby_animation_p(moby, (void *)2, 0, (void *)scale_game_frames(7));
             *(float *)(data + 0xD0) = -(frame_time * 7.668f);
@@ -2753,7 +2759,7 @@ void blarg_trooper_update(struct Moby *moby) {
         }
         break;
     }
-    case 7: {
+    case BLARG_TROOPER_STATE_MELEE_ATTACK: {
         float a =
             fast_arc_tan(st.v50[0] - moby->pos.x, st.v50[1] - moby->pos.y);
         FUN_L00_00258278(moby, (float *)(data + 0xEC), a, frame_scale_sq * 0.04f, frame_scale_sq * 0.3f,
@@ -2811,7 +2817,7 @@ void blarg_trooper_update(struct Moby *moby) {
             *(int *)(data + 0x108) = scale_game_frames(0x78);
         }
         break;
-    case 11:
+    case BLARG_TROOPER_STATE_DYING:
         if (mine_fall(moby, data + 0x70) & 0x60) {
             FUN_L04_002c4808_c(moby);
             return;
