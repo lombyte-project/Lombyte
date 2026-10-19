@@ -2514,6 +2514,7 @@ void FUN_L14_002b5290(struct Moby *m) {
         HIT_REACTION_NO_ACTION = 0,
         HIT_REACTION_LETHAL = 1,
         HIT_REACTION_DESTROY = 2,
+        HIT_REACTION_PLAY_HIT_ANIMATION = 3,
         HIT_REACTION_NONE = 11
     };
     unsigned char *d = m->pvars;
@@ -2544,7 +2545,7 @@ void FUN_L14_002b5290(struct Moby *m) {
         case HIT_REACTION_NO_ACTION:
         case HIT_REACTION_NONE:
             break;
-        case 3:
+        case HIT_REACTION_PLAY_HIT_ANIMATION:
         case 4:
         case 5:
         case 6:
