@@ -2755,6 +2755,11 @@ extern void FUN_L08_002dec90_c(char *m, char *pos) __asm__("FUN_L08_002dec90");
 s32 allocate_voice_for_bank_entry(s32 entry_index, s32 flags, s32 owner) __asm__("FUN_0022db10");
 
 void FUN_L08_002de848(char *m) {
+    enum {
+        MOBY_STATE_INITIALIZE_PATH = 0,
+        MOBY_STATE_FOLLOW_PATH = 1,
+        MOBY_STATE_FALLING = 2
+    };
     float a[4];
     float b[4];
     char *d = *(char **)(m + 0x78);
@@ -2763,7 +2768,7 @@ void FUN_L08_002de848(char *m) {
     qcopy(a, pos);
     t = (int *)D_L08_001B0CB0[*(int *)d];
     switch (*(unsigned char *)(m + 0x20)) {
-    case 0:
+    case MOBY_STATE_INITIALIZE_PATH:
         if (*(int *)d == -1) {
             mark_moby_for_removal(m);
             return;
@@ -2777,7 +2782,7 @@ void FUN_L08_002de848(char *m) {
         }
         m[0x20] = 1;
         *(unsigned char *)(m + 0x30) = 0xFF;
-    case 1: {
+    case MOBY_STATE_FOLLOW_PATH: {
         float f;
         sample_camera_path(t, 1, m + 0x10, (float *)(m + 0x40), 0, *(float *)(d + 4));
         *(float *)(m + 0x44) = *(float *)(m + 0x44) * 0.5f;
@@ -2789,7 +2794,7 @@ void FUN_L08_002de848(char *m) {
         }
         break;
     }
-    case 2: {
+    case MOBY_STATE_FALLING: {
         float c15 = 15.0f;
         float c10 = 10.0f;
         float dd;
