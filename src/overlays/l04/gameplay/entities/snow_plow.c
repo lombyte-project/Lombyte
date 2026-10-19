@@ -98,6 +98,9 @@ void snow_plow_update(struct Moby *moby) {
     enum {
         SNOW_PLOW_CLASS_OFFSET_WITH_TWO_POINT_CART_BURST = 0x1b
     };
+    enum {
+        SNOW_PLOW_CLASS_OFFSET_WITH_TWO_ROTATING_MANIPULATORS = 0x16
+    };
     Vec4 old;
     Vec4 delta, *d;
     /* The sphere query is its position followed by the record; the hit cases pass one or the other. */
@@ -221,7 +224,7 @@ void snow_plow_update(struct Moby *moby) {
             attach_manipulator((char *)moby, 0, data + 0x180);
             *(int *)(data + 0x140) = 0;
             break;
-        case 0x16: case SNOW_PLOW_CLASS_OFFSET_WITH_TWO_POINT_CART_BURST:
+        case SNOW_PLOW_CLASS_OFFSET_WITH_TWO_ROTATING_MANIPULATORS: case SNOW_PLOW_CLASS_OFFSET_WITH_TWO_POINT_CART_BURST:
             attach_manipulator((char *)moby, 0, data + 0x180);
             *(int *)(data + 0x140) = 0;
             attach_manipulator((char *)moby, 1, data + 0x1c0);
@@ -238,7 +241,7 @@ void snow_plow_update(struct Moby *moby) {
             *(float *)(data + 0x140) = fast_add_rotations(*(float *)(data + 0x140), frame_time * 12.566371f);
             FUN_L00_001fff28(data + 0x190, 2, *(float *)(data + 0x140));
             break;
-        case 0x16: case SNOW_PLOW_CLASS_OFFSET_WITH_TWO_POINT_CART_BURST:
+        case SNOW_PLOW_CLASS_OFFSET_WITH_TWO_ROTATING_MANIPULATORS: case SNOW_PLOW_CLASS_OFFSET_WITH_TWO_POINT_CART_BURST:
             *(float *)(data + 0x140) = fast_add_rotations(*(float *)(data + 0x140), frame_time * 12.566371f);
             FUN_L00_001fff28(data + 0x190, 2, *(float *)(data + 0x140));
             *(float *)(data + 0x144) = fast_add_rotations(*(float *)(data + 0x144), frame_time * 12.566371f);
@@ -292,7 +295,7 @@ hit:
             clear_vector(&sphere_pos);
             sphere.zero = 0;
             collect_mobies_in_sphere(&moby->pos, 4.0f, 0x10, moby, &sphere_pos);
-        case 0: case SNOW_PLOW_CLASS_OFFSET_WITH_QUARTER_TURN_LINKED_MOBY: case 0x16: case 0x18: case SNOW_PLOW_CLASS_OFFSET_WITH_ALIGNED_LINKED_MOBY: case 0x1d: case 0x20: case 0x59:
+        case 0: case SNOW_PLOW_CLASS_OFFSET_WITH_QUARTER_TURN_LINKED_MOBY: case SNOW_PLOW_CLASS_OFFSET_WITH_TWO_ROTATING_MANIPULATORS: case 0x18: case SNOW_PLOW_CLASS_OFFSET_WITH_ALIGNED_LINKED_MOBY: case 0x1d: case 0x20: case 0x59:
             delta.q = 0;
             delta.f[2] = 0.75f;
             clear_vector(&sphere_pos);
