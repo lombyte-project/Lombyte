@@ -2363,6 +2363,7 @@ void FUN_L06_002f91e8(Moby *moby)
         REACTION_SKIP_RESPONSE = 0,
         REACTION_DEATH = 1,
         HIT_RESPONSE_DEATH_SEQUENCE = 2,
+        HIT_RESPONSE_NONLETHAL_REACTION = 3,
         HIT_RESPONSE_NONLETHAL_FALLBACK = 5,
         REACTION_NO_RESPONSE = 11
     };
@@ -2405,7 +2406,7 @@ void FUN_L06_002f91e8(Moby *moby)
         switch (reaction) {
         case REACTION_SKIP_RESPONSE:
             break;
-        case 3:
+        case HIT_RESPONSE_NONLETHAL_REACTION:
         case 4:
         case HIT_RESPONSE_NONLETHAL_FALLBACK:
         case 6:
