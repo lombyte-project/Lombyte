@@ -79,6 +79,7 @@ extern char D_L01_0017C3A0[];
 extern char D_L01_0017C3E0[];
 int hero_set_state(int a, int b) {
     enum {
+        HERO_STATE_ENTER_WATER_SURFACE = 0x37,
         HERO_STATE_DROWN = 0x6A
     };
     int old2088;
@@ -282,7 +283,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0x3C, 0, (float)n);
         break;
     }
-    case 0x37: {
+    case HERO_STATE_ENTER_WATER_SURFACE: {
         struct Hero *p = &hero;
         p->state.control_mode = 0x12;
         p->unk20A7 = 1;
