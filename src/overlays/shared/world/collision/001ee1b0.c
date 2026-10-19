@@ -71,6 +71,7 @@ extern float FUN_001f9b48_1ee318(void *, void *) __asm__("FUN_001f9b48");
 int FUN_L00_001ee318(V_1ee318 *pt, int *vol, float rad) {
     enum {
         VOLUME_TYPE_BOX = 3,
+        VOLUME_TYPE_SPHERE = 5,
         VOLUME_TYPE_CYLINDER = 6
     };
     V_1ee318 p;
@@ -105,7 +106,7 @@ int FUN_L00_001ee318(V_1ee318 *pt, int *vol, float rad) {
         }
         return r;
     }
-    case 5: {
+    case VOLUME_TYPE_SPHERE: {
         unsigned char *e;
         e = D_L00_001600F4_1ee318;
         e += vol[5] << 7;
