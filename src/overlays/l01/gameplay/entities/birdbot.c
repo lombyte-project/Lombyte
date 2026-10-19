@@ -714,7 +714,8 @@ void birdbot_update(PeMoby *m) {
         BIRDBOT_HIT_REACTION_LOW_SPEED_NONFATAL_KNOCKBACK = 4,
         BIRDBOT_HIT_REACTION_LOW_SPEED_NONFATAL_KNOCKBACK_NO_BLEND = 5,
         BIRDBOT_HIT_REACTION_ANIMATED_NONFATAL_KNOCKBACK = 6,
-        BIRDBOT_HIT_REACTION_NO_KNOCKBACK = 7
+        BIRDBOT_HIT_REACTION_NO_KNOCKBACK = 7,
+        BIRDBOT_HIT_REACTION_SKIP_KNOCKBACK_SETUP = 8
     };
     PeVars *v;
     PeVec old;
@@ -778,7 +779,7 @@ void birdbot_update(PeMoby *m) {
         switch (kind) {
         case BIRDBOT_HIT_REACTION_KEEP_CURRENT_STATE:
         case BIRDBOT_HIT_REACTION_NO_KNOCKBACK:
-        case 8:
+        case BIRDBOT_HIT_REACTION_SKIP_KNOCKBACK_SETUP:
         case 9:
         case 10:
         case 11:
