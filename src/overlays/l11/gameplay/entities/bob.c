@@ -351,7 +351,8 @@ void FUN_L11_002d1030(void *mp) {
         RESORT_OWNER_INITIALIZE = 0,
         RESORT_OWNER_INITIAL_DIALOGUE = 2,
         RESORT_OWNER_MOVE_TO_PATH_POINT = 6,
-        RESORT_OWNER_JUMP_TO_TARGET = 7
+        RESORT_OWNER_JUMP_TO_TARGET = 7,
+        RESORT_OWNER_CHECK_PATH_COMPLETION_DIALOGUE = 12
     };
     struct Moby *moby = mp;
     char *d = (char *)moby->pvars;
@@ -367,7 +368,7 @@ void FUN_L11_002d1030(void *mp) {
     case RESORT_OWNER_INITIAL_DIALOGUE:
     case 3:
     case 11:
-    case 12:
+    case RESORT_OWNER_CHECK_PATH_COMPLETION_DIALOGUE:
         break;
     case 4:
     case 5:
