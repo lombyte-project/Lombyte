@@ -979,6 +979,7 @@ extern void func_L00_0025D5B0_i(void *, void *, float, int, int, int) __asm__("F
 
 void FUN_L14_002b2f60(char *moby) {
     enum {
+        HIT_REACTION_UNAVAILABLE = 0,
         HIT_REACTION_LETHAL = 1,
         HIT_REACTION_DEATH = 2,
         HIT_REACTION_STAGGER = 3,
@@ -1056,7 +1057,7 @@ void FUN_L14_002b2f60(char *moby) {
             *(int *)(moby + 0x94) = 0;
             break;
         }
-        case 0: case HIT_REACTION_NONE:
+        case HIT_REACTION_UNAVAILABLE: case HIT_REACTION_NONE:
             break;
         }
         trooper_anim_update(moby, (short *)(state + 0xC0));
