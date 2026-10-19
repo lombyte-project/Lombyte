@@ -1580,6 +1580,7 @@ void blarg_bombthrower_update(struct Moby *moby) {
         BOMBTHROWER_STATE_MOVE_ONTO_WAYPOINT = 6,
         BOMBTHROWER_STATE_DAMAGE_KNOCKBACK = 0x5A,
         BOMBTHROWER_STATE_WAIT_FOR_FALL_RECOVERY = 0x5B,
+        BOMBTHROWER_STATE_MOTION_RECOVERY = 0x5C,
         BOMBTHROWER_STATE_FALL_RECOVERY = 0x5D,
         BOMBTHROWER_STATE_DYING = 0x63
     };
@@ -1852,7 +1853,7 @@ void blarg_bombthrower_update(struct Moby *moby) {
         }
         break;
     case BOMBTHROWER_STATE_DAMAGE_KNOCKBACK:
-    case 0x5C:
+    case BOMBTHROWER_STATE_MOTION_RECOVERY:
     case BOMBTHROWER_STATE_FALL_RECOVERY:
         if (mine_fall(moby, vars->blk70) & 0x40) {
             old_waypoint = vars->waypoint;
