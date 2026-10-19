@@ -31,6 +31,13 @@ void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
 void door_update(struct Moby *m) __asm__("FUN_L17_002e87d8");
 void door_update(struct Moby *m) {
+    enum {
+        DOOR_STATE_INITIALIZE = 0,
+        DOOR_STATE_WAIT_AT_ORIGIN = 1,
+        DOOR_STATE_MOVE_AWAY_FROM_ORIGIN = 2,
+        DOOR_STATE_WAIT_DISPLACED = 4,
+        DOOR_STATE_RETURN_TO_ORIGIN = 5
+    };
     char *d = (char *)m->pvars;
     float v[4];
     float tmp[4];
@@ -47,7 +54,7 @@ void door_update(struct Moby *m) {
     if (D_L17_0015F5C4 == 2)
         return;
     switch (m->state) {
-    case 0:
+    case DOOR_STATE_INITIALIZE:
         if ((m->oclass) == 0x550 || (m->oclass) == 0x551 ||
             (m->oclass) == 0x553 || (m->oclass) == 0x557 ||
             (m->oclass) == 0x55D) {
@@ -56,7 +63,7 @@ void door_update(struct Moby *m) {
         *(OvlQuad *)d = *(OvlQuad *)&m->pos;
         m->state = 1;
         break;
-    case 2:
+    case DOOR_STATE_MOVE_AWAY_FROM_ORIGIN:
         if (m->pclass->sound_defs != 0 &&
             voice_is_playing(m, (*(int *)(d + ((0x20))))) == 0) {
             (*(int *)(d + ((0x20)))) = allocate_voice_for_target_entry(0, 4, (int)m);
@@ -92,7 +99,7 @@ void door_update(struct Moby *m) {
             m->state = 4;
         }
         break;
-    case 1:
+    case DOOR_STATE_WAIT_AT_ORIGIN:
         (*(float *)(d + ((0x14)))) = 0.0f;
         idx = (*(int *)(d + ((0x20))));
         if (idx != -1) {
@@ -122,7 +129,7 @@ void door_update(struct Moby *m) {
         break;
     case 3:
         break;
-    case 4:
+    case DOOR_STATE_WAIT_DISPLACED:
         idx = (*(int *)(d + ((0x20))));
         if (idx != -1) {
             char *e = (char *)D_0013E633 - 0xE80 + idx * 0x70;
@@ -146,7 +153,7 @@ void door_update(struct Moby *m) {
         }
         m->state = 5;
         break;
-    case 5:
+    case DOOR_STATE_RETURN_TO_ORIGIN:
         if (m->pclass->sound_defs != 0 &&
             voice_is_playing(m, (*(int *)(d + ((0x20))))) == 0) {
             (*(int *)(d + ((0x20)))) = allocate_voice_for_target_entry(0, 4, (int)m);
