@@ -795,7 +795,11 @@ void FUN_L07_002f5ba0(struct Moby *moby)
         CONTROLLER_START_INITIAL_SCENE = 1,
         CONTROLLER_WAIT_FOR_INITIAL_SCENE = 2,
         CONTROLLER_WAIT_FOR_OPEN_VOLUME = 4,
+        CONTROLLER_WAIT_FOR_FIRST_OPEN_SCENE = 5,
+        CONTROLLER_WAIT_FOR_SECOND_OPEN_SCENE = 6,
         CONTROLLER_WAIT_FOR_FINISH_VOLUME = 8,
+        CONTROLLER_WAIT_FOR_FINISH_VOLUME_SCENE = 9,
+        CONTROLLER_WAIT_FOR_FINAL_SCENE_AND_UNLOCK_PLANET = 11,
         CONTROLLER_CLEANUP_LINKED_MOBY = 12,
         CONTROLLER_DELETE_SELF = 13
     };
@@ -850,7 +854,7 @@ void FUN_L07_002f5ba0(struct Moby *moby)
             delete_moby_m(&level_mobys[data->removed_moby]);
         }
         break;
-    case 5:
+    case CONTROLLER_WAIT_FOR_FIRST_OPEN_SCENE:
         if (scene_state == 2) break;
         if (data->moby_0c != -1) {
             struct Moby *e = &level_mobys[data->moby_0c];
@@ -859,7 +863,7 @@ void FUN_L07_002f5ba0(struct Moby *moby)
         moby->state = 6;
         start_scene(2);
         break;
-    case 6:
+    case CONTROLLER_WAIT_FOR_SECOND_OPEN_SCENE:
         if (scene_state == 2) break;
         if (data->points_18 != -1) {
             FUN_L00_00216f90(scene_points[data->points_18].unk30, scene_points[data->points_18].unk70, 0, 1);
@@ -901,7 +905,7 @@ void FUN_L07_002f5ba0(struct Moby *moby)
             e->flags |= 0x41;
         }
         break;
-    case 9:
+    case CONTROLLER_WAIT_FOR_FINISH_VOLUME_SCENE:
         if (scene_state == 2) break;
         moby->state = 10;
         FUN_L00_00299460(8);
@@ -910,7 +914,7 @@ void FUN_L07_002f5ba0(struct Moby *moby)
         if (scene_state == 2) break;
         moby->state = 11;
         start_scene(4);
-    case 11:
+    case CONTROLLER_WAIT_FOR_FINAL_SCENE_AND_UNLOCK_PLANET:
         if (scene_state == 2) break;
         if (data->points_1c != -1) {
             FUN_L00_00216f90(scene_points[data->points_1c].unk30, scene_points[data->points_1c].unk70, 0, 1);
