@@ -2302,6 +2302,12 @@ extern struct Moby *debris_target __asm__("D_L07_00173ED8") __attribute__((secti
    solid moby or when its timer runs out, and is removed once 64 units from home. */
 void homing_mine_update(struct Moby *moby) __asm__("FUN_L07_00319040");
 void homing_mine_update(struct Moby *moby) {
+    enum {
+        HOMING_MINE_INITIALIZE = 0,
+        HOMING_MINE_WAIT_FOR_PROXIMITY = 1,
+        HOMING_MINE_START_CHASE = 2,
+        HOMING_MINE_CHASE = 3
+    };
     Mine_19040 *vars;
     f32 *health;
     char sight[0x50];
@@ -2339,13 +2345,13 @@ void homing_mine_update(struct Moby *moby) {
     }
 
     switch (moby->state) {
-    case 0:
+    case HOMING_MINE_INITIALIZE:
         moby->flags |= 0x1000;
         qcopy(&vars->home, &moby->pos);
         moby->collision = moby->pclass->collision;
         moby->state = 1;
         break;
-    case 1:
+    case HOMING_MINE_WAIT_FOR_PROXIMITY:
         timer = scale_ticks(600);
         turn = D_0015ED6C * 6.2831855f;
         vars->timeout = timer;
@@ -2363,10 +2369,10 @@ void homing_mine_update(struct Moby *moby) {
             moby->state = 2;
         }
         break;
-    case 2:
+    case HOMING_MINE_START_CHASE:
         if (moby->prev_seq != 1) FUN_00212f90(moby, 1, 0, 10);
         moby->state = 3;
-    case 3:
+    case HOMING_MINE_CHASE:
         if ((moby->anim_flags & 2) && moby->seq == 1 && moby->prev_seq != 2) {
             FUN_00212f90(moby, 2, 0, 10);
         }
