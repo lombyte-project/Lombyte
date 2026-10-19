@@ -810,6 +810,12 @@ extern char linked_moby_present_message[] __asm__("D_L10_001DCDD0");
 extern char linked_moby_missing_message[] __asm__("D_L10_001DCE00");
 
 void FUN_L10_002c9c70(struct Moby *moby) {
+    enum {
+        LINKED_HITBOX_STATE_INITIALIZE = 0,
+        LINKED_HITBOX_STATE_WAIT_FOR_LINKED_MOBIES = 1,
+        LINKED_HITBOX_STATE_WAIT_FOR_TARGET_STATE_OR_TIMER = 2,
+        LINKED_HITBOX_STATE_REMOVE = 3
+    };
     char *d = (char *)moby->pvars;
     int differences = 0;
     struct Moby *target = 0;
@@ -842,7 +848,7 @@ void FUN_L10_002c9c70(struct Moby *moby) {
         }
     }
     switch (state = moby->state) {
-    case 0:
+    case LINKED_HITBOX_STATE_INITIALIZE:
         /* Position flags select opposite copy directions; rotation flags have priority. */
         if (target != 0) {
             *(short *)(d + 0x14) = target->oclass;
@@ -886,7 +892,7 @@ void FUN_L10_002c9c70(struct Moby *moby) {
             moby->scale = size;
         }
         break;
-    case 1:
+    case LINKED_HITBOX_STATE_WAIT_FOR_LINKED_MOBIES:
         if (differences == 0) {
             if (target != 0 && *(signed char *)(d + 0x16) != -1)
                 target->state = *(unsigned char *)(d + 0x16);
@@ -895,7 +901,7 @@ void FUN_L10_002c9c70(struct Moby *moby) {
         }
         FUN_L10_002c9958(moby, (HitBox *)d);
         return;
-    case 2:
+    case LINKED_HITBOX_STATE_WAIT_FOR_TARGET_STATE_OR_TIMER:
         if (target != 0) {
             if ((*(int *)(d + 8) & 2) == 0) {
                 float now = FUN_001fa6c0_2c9c70(*(int *)(d + 0x40));
@@ -910,7 +916,7 @@ void FUN_L10_002c9c70(struct Moby *moby) {
             moby->state = 3;
         FUN_L10_002c9958(moby, (HitBox *)d);
         return;
-    case 3:
+    case LINKED_HITBOX_STATE_REMOVE:
         if (target != 0 && (*(int *)(d + 8) & 1) == 0) delete_moby(target);
         delete_moby(moby);
         break;
