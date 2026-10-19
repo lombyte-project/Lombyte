@@ -15,7 +15,7 @@
 
 extern s32 level_frame_count __asm__("D_L07_0015F5CC");
 /* [4] is depth_buffer_address. */
-extern s32 D_0015EE78_macro[6] __asm__("D_0015EE78") __attribute__((section(".sdata")));
+extern s32 gs_texture_allocation_start_macro[6] __asm__("D_0015EE78") __attribute__((section(".sdata")));
 extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern u64 get_effect_texture(int) __asm__("FUN_001f44b8");
@@ -115,7 +115,7 @@ void FUN_L07_00312948(char *moby, int phase, float speed, float radius, float la
             draw_geometry_quad(&quad, 0, 1);
         }
     }
-    vu1_add_g_sregister(0x4E, (u64)(D_0015EE78_macro[4] >> 13) | 0x1000000L);
+    vu1_add_g_sregister(0x4E, (u64)(gs_texture_allocation_start_macro[4] >> 13) | 0x1000000L);
 }
 #define NOT_SDA
 
@@ -1428,14 +1428,14 @@ void snagglebeast_update(unsigned char *moby) {
         }
         break;
     case 15: {
-        int iF0;
+        int point;
         if (FUN_0020c9e0(moby) > 198.0f) {
             if (moby[0x53] != 0xA) FUN_00212f90(moby, 0xA, 0, 0);
             FUN_L00_0024f7c8(moby, 0xA, &position);
             qcopy(data + 0xC0, &position);
             *(float *)(data + 0xC8) = *(float *)(data + 0x128);
-            iF0 = 0xA;
-            FUN_00210850(moby, 1, &iF0, &velocity);
+            point = 0xA;
+            FUN_00210850(moby, 1, &point, &velocity);
             matrix_to_euler(&velocity, &step);
             *(float *)(data + 0xCC) = fast_add_rotations(*(float *)(moby + 0x48), step.f[2]);
         }
@@ -1732,9 +1732,6 @@ void snagglebeast_update(unsigned char *moby) {
     if (moby[0x20] < 0xA) jet_animate((struct Moby *)moby, 2.5f);
     FUN_L07_00312150((char *)data);
 }
-extern u64 get_effect_texture_l07(int) __asm__("FUN_001f44b8");
-extern void vu1_add_g_sregister_l07(int, u64) __asm__("FUN_00233980");
-extern void draw_geometry_quad_l07(void *, int, int) __asm__("FUN_001f7d30");
 float scroll_phase __asm__("D_L07_00161B74") = 0;
 float row_start_phase __asm__("D_L07_00161B78") = 0;
 float row_phase_step_gp __asm__("D_L07_00161B7C") = 0.006f;
@@ -1761,18 +1758,18 @@ void FUN_L07_00317910(void) {
     float phase_step;
     float column_step;
 
-    packet.header[1] = get_effect_texture_l07(0x15);
+    packet.header[1] = get_effect_texture(0x15);
     packet.header[2] = 0xff9000000260ULL;
     packet.header[3] = 0x8000000048ULL;
     packet.header[0] = 0;
     phase = scroll_phase;
     scroll_phase += 0.001f;
     if (scroll_phase > 7.0f) scroll_phase -= 7.0f;
-    vu1_add_g_sregister_l07(0x47, 0x5301b);
+    vu1_add_g_sregister(0x47, 0x5301b);
     phase_step = 0.3f;
     phase += phase_step;
     column_step = 0.05f;
-    vu1_add_g_sregister_l07(0x4e, (depth_buffer_address >> 13) | 0x1000000 | ((u64)0x8000 << 17));
+    vu1_add_g_sregister(0x4e, (depth_buffer_address >> 13) | 0x1000000 | ((u64)0x8000 << 17));
     for (row = 1; row < 10; row++) {
         row_phase = row_start_phase;
         row_start_phase += row_phase_step_gp;
@@ -1807,12 +1804,12 @@ void FUN_L07_00317910(void) {
             packet.uv[6] = phase - phase_step;
             packet.uv[7] = end_phase;
             row_phase = end_phase;
-            draw_geometry_quad_l07(&packet, 0, 0);
+            draw_geometry_quad(&packet, 0, 0);
         }
         phase += phase_step;
     }
-    vu1_add_g_sregister_l07(0x4e, (s64)(depth_buffer_address >> 13) | 0x1000000);
-    vu1_add_g_sregister_l07(0x47, 0x5360b);
+    vu1_add_g_sregister(0x4e, (s64)(depth_buffer_address >> 13) | 0x1000000);
+    vu1_add_g_sregister(0x47, 0x5360b);
 }
 
 extern int D_L07_00161B6C_gp __asm__("D_L07_00161B6C") __attribute__((sda));
@@ -1823,13 +1820,20 @@ extern int D_L07_00161B84;
 extern float D_L07_00161BB0;
 extern char D_L07_00161B90[] __attribute__((section(".sdata")));
 extern char D_L07_00161BA0[] __attribute__((section(".sdata")));
-extern RopeVec D_L07_0020DAF0_c[] __asm__("D_L07_0020DAF0");
-extern RopeVec D_L07_0020DB00_c[] __asm__("D_L07_0020DB00");
+extern RopeVec rope_previous_points[] __asm__("D_L07_0020DAF0");
+extern RopeVec rope_points[] __asm__("D_L07_0020DB00");
+/* A particle travelling down the rope: it moves along segment toward the anchor, and between
+ * ring columns by blend. */
 typedef struct {
-    int pad[5];
-    char *moby;
-} RopeMobySlot;
-extern RopeMobySlot D_L07_0020C840_c[] __asm__("D_L07_0020C840");
+    short segment;
+    short column;
+    float distance;
+    float blend;
+    float blend_speed;
+    float speed;
+    char *particle;
+} RopeParticle;
+extern RopeParticle rope_particles[] __asm__("D_L07_0020C840");
 
 /* Starts the rope when one is pending: lays nine points out from the anchor along the moby's
  * axis, then resets the swing state and, once, clears every entry's link. */
@@ -1850,12 +1854,12 @@ void FUN_L07_00317cb0(char *moby, void *anchor) {
     D_L07_00161B6C_gp = 0;
     normalize_vector_xyz(step, moby + 0xC0, 2.8f);
     normalize_vector_xyz(up, moby + 0xE0, 1.0f);
-    qcopy(D_L07_0020DB00_c, anchor);
+    qcopy(rope_points, anchor);
     pc = &c;
     pd = &d;
     D_L07_0020DBC8[0] = 0;
     for (i = 1; i < 10; i++) {
-        add_vector_xyz(D_L07_0020DB00_c[i], D_L07_0020DAF0_c[i], step);
+        add_vector_xyz(rope_points[i], rope_previous_points[i], step);
         D_L07_0020DBC8[i] = 0;
     }
     clear_u64_value(D_L07_00161B90);
@@ -1874,23 +1878,13 @@ void FUN_L07_00317cb0(char *moby, void *anchor) {
     if (D_L07_00161B70_gp != 0) {
         D_L07_00161B70_gp = 0;
         for (j = 199; j >= 0; j--) {
-            D_L07_0020C840_c[j].moby = 0;
+            rope_particles[j].particle = 0;
         }
     }
 }
 
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_00313D28.c: func_L07_00319230). */
 typedef int RopeU128 __attribute__((mode(TI)));
-
-typedef struct {
-    short idx;
-    short idx2;
-    float f4;
-    float f8;
-    float fC;
-    float f10;
-    char *moby;
-} RopePart;
 
 typedef struct {
     char pad0[4];
@@ -1909,8 +1903,7 @@ typedef struct {
     RopeTail tail;
 } RopePuff;
 
-extern RopePart rope_parts[] __asm__("D_L07_0020C840");
-extern RopeVec D_L07_0020DB00_lui[] __asm__("D_L07_0020DB00");
+extern RopeVec rope_points_lui[] __asm__("D_L07_0020DB00");
 extern RopePuff *FUN_L00_0026d000(void *, float, float, float, int, void *, float, int);
 extern RopeVec D_L07_0020C700[];
 extern RopeVec D_L07_0020DAA0[][20];
@@ -1932,288 +1925,288 @@ extern int D_L07_00161B84_gp __asm__("D_L07_00161B84") __attribute__((sda));
 
 /* Updates the rope points, its ring mesh and the particles travelling along it. */
 float FUN_L07_00317e60(void *moby, void *anchor) {
-    RopeVec v00;
-    RopeVec v10;
-    RopeVec v20;
-    RopeVec v30;
-    RopeVec v40;
-    RopeVec v50;
-    RopeVec v60;
-    RopeVec v70;
-    struct { RopeVec m; RopeVec c; RopeVec r; } rb;
-    RopeVec vB0;
-    RopeVec vC0;
-    RopeVec vD0;
-    RopeVec vE0;
-    RopeVec vF0;
-    RopeVec v100;
-    RopeVec v110;
-    RopeVec v120;
-    RopeVec v130;
-    RopeVec v140;
-    extern RopePart rope_parts[];
-    float best;
+    RopeVec center;
+    RopeVec step;
+    RopeVec axis;
+    RopeVec start;
+    RopeVec end;
+    RopeVec up;
+    RopeVec delta;
+    RopeVec basis;
+    struct { RopeVec matrix; RopeVec cross; RopeVec reference; } ring_basis;
+    RopeVec velocity;
+    RopeVec extension;
+    RopeVec direction;
+    RopeVec tangent;
+    RopeVec side;
+    RopeVec perpendicular;
+    RopeVec normal;
+    RopeVec offset;
+    RopeVec previous;
+    RopeVec previous_cross;
+    extern RopeParticle rope_particles[];
+    float minimum;
 
-    best = 1000.0f;
+    minimum = 1000.0f;
     FUN_L07_00317cb0(moby, anchor);
-    qcopy(v00, D_0013F3D0);
-    v00[2] += 0.6f;
+    qcopy(center, D_0013F3D0);
+    center[2] += 0.6f;
     D_L07_0020DBC8[0] += 4;
     {
-        int n;
-        for (n = 1; n < 10; n++) {
-            D_L07_0020DBC8[n] = D_L07_0020DBC8[n - 1] - 0x20;
+        int row;
+        for (row = 1; row < 10; row++) {
+            D_L07_0020DBC8[row] = D_L07_0020DBC8[row - 1] - 0x20;
         }
     }
-    subtract_vector_xyz(v10, D_0013F3D0, anchor);
-    v10[2] += 0.6f;
-    normalize_vector_xyz(v10, v10, 2.8f);
-    fast_vec_cross(v20, v10, (char *)moby + 0xD0);
-    normalize_vector_xyz(v20, v20, 1.0f);
-    qcopy(D_L07_0020DB00_c, anchor);
-    transform_vector_by_basis(v30, D_L07_00161B90, (char *)moby + 0xC0);
-    add_vector_xyz(v30, v30, v10);
-    transform_vector_by_basis(v40, D_L07_00161BA0, (char *)moby + 0xC0);
-    add_vector_xyz(v40, v40, v10);
+    subtract_vector_xyz(step, D_0013F3D0, anchor);
+    step[2] += 0.6f;
+    normalize_vector_xyz(step, step, 2.8f);
+    fast_vec_cross(axis, step, (char *)moby + 0xD0);
+    normalize_vector_xyz(axis, axis, 1.0f);
+    qcopy(rope_points, anchor);
+    transform_vector_by_basis(start, D_L07_00161B90, (char *)moby + 0xC0);
+    add_vector_xyz(start, start, step);
+    transform_vector_by_basis(end, D_L07_00161BA0, (char *)moby + 0xC0);
+    add_vector_xyz(end, end, step);
     {
-        float t = (float)D_L07_00161B80 / convert_integer_to_float(scale_game_frames(60));
+        float swing_fraction = (float)D_L07_00161B80 / convert_integer_to_float(scale_game_frames(60));
         D_L07_00161B80++;
-        v10[0] = v30[0] + (v40[0] - v30[0]) * t;
-        v10[1] = v30[1] + (v40[1] - v30[1]) * t;
-        v10[2] = v30[2] + (v40[2] - v30[2]) * t;
+        step[0] = start[0] + (end[0] - start[0]) * swing_fraction;
+        step[1] = start[1] + (end[1] - start[1]) * swing_fraction;
+        step[2] = start[2] + (end[2] - start[2]) * swing_fraction;
     }
     if (D_L07_00161B80 >= scale_game_frames(60)) {
         qcopy(D_L07_00161B90, D_L07_00161BA0);
-        normalize_vector_xyz(v50, (char *)moby + 0xC0, 2.8f);
-        *(RopeU128 *)v60 = 0;
-        *(RopeU128 *)v70 = 0;
-        v60[2] = 0.1f;
-        v60[3] = 1.0f;
-        v70[0] = 1.0f;
-        v70[3] = 1.0f;
+        normalize_vector_xyz(up, (char *)moby + 0xC0, 2.8f);
+        *(RopeU128 *)delta = 0;
+        *(RopeU128 *)basis = 0;
+        delta[2] = 0.1f;
+        delta[3] = 1.0f;
+        basis[0] = 1.0f;
+        basis[3] = 1.0f;
         {
-            float r3 = fast_add_rotations(D_L07_00161BB0, random_float_between(45.0f, 315.0f) * 0.017453292f);
-            build_look_at_matrix(D_L07_00161BA0, v60, v70, r3);
-            D_L07_00161BB0 = r3;
+            float turn = fast_add_rotations(D_L07_00161BB0, random_float_between(45.0f, 315.0f) * 0.017453292f);
+            build_look_at_matrix(D_L07_00161BA0, delta, basis, turn);
+            D_L07_00161BB0 = turn;
         }
         D_L07_00161B80 = 0;
     }
     (*(float *)&D_L07_00161B84_gp) = fast_add_rotations((*(float *)&D_L07_00161B84_gp), 0.1f);
-    normalize_vector_xyz(v50, (D_0013F3D0 + 0x210), -1.0f);
-    qcopy(rb.r, v50);
-    fast_vec_cross(rb.c, v10, rb.r);
-    normalize_vector_xyz(rb.c, rb.c, 1.0f);
-    fast_vec_cross(rb.m, rb.r, rb.c);
+    normalize_vector_xyz(up, (D_0013F3D0 + 0x210), -1.0f);
+    qcopy(ring_basis.reference, up);
+    fast_vec_cross(ring_basis.cross, step, ring_basis.reference);
+    normalize_vector_xyz(ring_basis.cross, ring_basis.cross, 1.0f);
+    fast_vec_cross(ring_basis.matrix, ring_basis.reference, ring_basis.cross);
     {
-        int m;
-        for (m = 0; m < 20; m++) {
-            scale_vector_xyz(v60, D_L07_0020C700[m], 0.02f);
-            transform_vector_by_basis(v60, v60, rb.m);
-            add_vector_xyz(rope_grid[0][m], D_L07_0020DB00_c[0], v60);
+        int column;
+        for (column = 0; column < 20; column++) {
+            scale_vector_xyz(delta, D_L07_0020C700[column], 0.02f);
+            transform_vector_by_basis(delta, delta, ring_basis.matrix);
+            add_vector_xyz(rope_grid[0][column], rope_points[0], delta);
         }
     }
     {
     float dot;
-    float len;
-    float ang;
-    float sm;
-    float df;
-    float fi;
+    float length;
+    float angle;
+    float turn;
+    float difference;
+    float index;
     int i;
     for (i = 1; i < 10; i++) {
-        subtract_vector_xyz(v60, D_L07_0020DB00_c[i], D_L07_0020DAF0_c[i]);
-        qcopy(v70, v10);
-        fast_vec_cross(vB0, v70, v60);
-        dot = fast_vec_dot(v60, v70);
-        len = fast_vec_length(v60);
-        ang = 1.5707964f - fast_arc_sin(dot / (len * 2.8f));
-        sm = rope_spring_turn(&D_L07_0020DBA0[i], 0.0f, ang, 0.06f, 0.2f, 0.0f);
-        df = fast_subtract_rotations(ang, sm);
-        if (FUN_001f99c0(df) > 0.31415927f) {
-            sm = fast_add_rotations(sm, fast_subtract_rotations(df, 0.31415927f));
+        subtract_vector_xyz(delta, rope_points[i], rope_previous_points[i]);
+        qcopy(basis, step);
+        fast_vec_cross(velocity, basis, delta);
+        dot = fast_vec_dot(delta, basis);
+        length = fast_vec_length(delta);
+        angle = 1.5707964f - fast_arc_sin(dot / (length * 2.8f));
+        turn = rope_spring_turn(&D_L07_0020DBA0[i], 0.0f, angle, 0.06f, 0.2f, 0.0f);
+        difference = fast_subtract_rotations(angle, turn);
+        if (FUN_001f99c0(difference) > 0.31415927f) {
+            turn = fast_add_rotations(turn, fast_subtract_rotations(difference, 0.31415927f));
         }
-        build_look_at_matrix(vC0, v60, vB0, sm);
-        normalize_vector_xyz(vD0, vC0, 2.8f);
-        lerp_vector(vC0, vC0, vD0, 1.0f);
+        build_look_at_matrix(extension, delta, velocity, turn);
+        normalize_vector_xyz(direction, extension, 2.8f);
+        lerp_vector(extension, extension, direction, 1.0f);
         {
-            float l2 = fast_vec_length(vC0);
-            if (l2 > 3.9f) {
-                scale_vector_xyz(vC0, vC0, 3.9f / l2);
+            float extension_length = fast_vec_length(extension);
+            if (extension_length > 3.9f) {
+                scale_vector_xyz(extension, extension, 3.9f / extension_length);
             }
         }
         if (i >= 6) {
-            lerp_vector(vC0, vC0, v60, (float)i / convert_integer_to_float(10) + 0.0f);
+            lerp_vector(extension, extension, delta, (float)i / convert_integer_to_float(10) + 0.0f);
         }
-        fi = i;
-        add_vector_xyz(D_L07_0020DB00_c[i], D_L07_0020DAF0_c[i], vC0);
+        index = i;
+        add_vector_xyz(rope_points[i], rope_previous_points[i], extension);
         {
-            float dd = FUN_L07_0029e6d8(vE0, v00, v00, D_L07_0020DAF0_c[i], D_L07_0020DB00_c[i], 0.0f);
-            if (dd < best) {
-                best = dd;
+            float distance = FUN_L07_0029e6d8(tangent, center, center, rope_previous_points[i], rope_points[i], 0.0f);
+            if (distance < minimum) {
+                minimum = distance;
             }
         }
-        qcopy(vE0, v10);
-        if (FUN_001f99c0(v10[2]) > 2.1f) {
-            qcopy(v110, v50);
-            fast_vec_cross(v120, v110, v10);
-            subtract_vector_xyz(v140, D_L07_0020DAE0[i], D_L07_0020DAF0_c[i]);
-            fast_vec_cross(v130, v110, v140);
+        qcopy(tangent, step);
+        if (FUN_001f99c0(step[2]) > 2.1f) {
+            qcopy(normal, up);
+            fast_vec_cross(offset, normal, step);
+            subtract_vector_xyz(previous_cross, D_L07_0020DAE0[i], rope_previous_points[i]);
+            fast_vec_cross(previous, normal, previous_cross);
             {
-                float d = fast_vec_dot(v120, v130);
-                if (d > 0.0f) {
-                    scale_vector_xyz(v110, v110, -1.0f);
+                float facing = fast_vec_dot(offset, previous);
+                if (facing > 0.0f) {
+                    scale_vector_xyz(normal, normal, -1.0f);
                 }
             }
         } else {
-            normalize_vector_xyz(v110, (D_0013F3D0 + 0x210), -1.0f);
+            normalize_vector_xyz(normal, (D_0013F3D0 + 0x210), -1.0f);
         }
-        normalize_vector_xyz(vF0, vE0, 1.0f);
-        fast_vec_cross(v100, vF0, v110);
-        normalize_vector_xyz(v100, v100, 1.0f);
-        fast_vec_cross(v110, v100, vF0);
-        qcopy(v50, v110);
+        normalize_vector_xyz(side, tangent, 1.0f);
+        fast_vec_cross(perpendicular, side, normal);
+        normalize_vector_xyz(perpendicular, perpendicular, 1.0f);
+        fast_vec_cross(normal, perpendicular, side);
+        qcopy(up, normal);
         {
-            int m;
-            float sc;
-            for (m = 0; m < 20; m++) {
-                sc = fi * 0.2f + 0.02f;
-                sc += sc * 0.25f * fast_sin(fast_add_rotations((*(float *)&D_L07_00161B84_gp) + fi * 0.7f, 0.0f));
-                scale_vector_xyz(v120, D_L07_0020C700[m], sc);
-                transform_vector_by_basis(v120, v120, vF0);
-                add_vector_xyz(rope_grid[i][m], D_L07_0020DB00_c[i], v120);
+            int column;
+            float radius;
+            for (column = 0; column < 20; column++) {
+                radius = index * 0.2f + 0.02f;
+                radius += radius * 0.25f * fast_sin(fast_add_rotations((*(float *)&D_L07_00161B84_gp) + index * 0.7f, 0.0f));
+                scale_vector_xyz(offset, D_L07_0020C700[column], radius);
+                transform_vector_by_basis(offset, offset, side);
+                add_vector_xyz(rope_grid[i][column], rope_points[i], offset);
             }
         }
-        normalize_vector_xyz(v10, vC0, 2.8f);
+        normalize_vector_xyz(step, extension, 2.8f);
     }
     }
     enqueue_callback_list_1(FUN_L07_00317910, moby);
     {
-    int nspawn;
-    int nfly;
-    int j;
-    float t;
-    float len;
-    float s;
-    float sc;
-    int r;
-    int idx2;
-    RopePuff *p;
-    RopePuff *q;
-    RopeVec *base;
+    int created;
+    int extras;
+    int segment;
+    float fraction;
+    float length;
+    float blend;
+    float lifetime;
+    int random_column;
+    int column;
+    RopePuff *puff;
+    RopePuff *particle;
+    RopeVec *points;
     int k;
-    short lf;
-    lf = 200;
-    nspawn = 0;
-    nfly = 0;
+    short life;
+    life = 200;
+    created = 0;
+    extras = 0;
     for (k = 0; k < 200; k++) {
-        if (rope_parts[k].moby == 0 && nspawn < 5) {
-            for (j = 9; j >= 0; j--) {
-                if (D_L07_0020DBC8[j] >= 0x40) {
+        if (rope_particles[k].particle == 0 && created < 5) {
+            for (segment = 9; segment >= 0; segment--) {
+                if (D_L07_0020DBC8[segment] >= 0x40) {
                     break;
                 }
             }
-            if (j > 0) {
-                if (j >= 2 && nfly < 2) {
-                    r = random_integer_below(20);
-                    s = random_float_between(0.2f, 1.0f);
-                    lerp_vector(v60, rope_grid[0][r], rope_grid[j][r], s);
+            if (segment > 0) {
+                if (segment >= 2 && extras < 2) {
+                    random_column = random_integer_below(20);
+                    blend = random_float_between(0.2f, 1.0f);
+                    lerp_vector(delta, rope_grid[0][random_column], rope_grid[segment][random_column], blend);
                     /* Fakematch: a second label and a dead store keep this address out of the
                      * loop-hoisted constant, so it is built in a1 next to the call. */
-                    base = D_L07_0020DB00_lui;
-                    lerp_vector(vB0, base[0], base[j], s);
-                    base = 0;
-                    sc = random_float_between(60000.0f, 180000.0f);
-                    p = FUN_L00_0026d000(v60, 0.0f, 1.0f, 1.03f, random_integer_below(5) + 1, v70, sc, 0x404040);
-                    if (p != 0) {
-                        RopeTail *tail = &p->tail;
-                        subtract_vector_xyz(vC0, v60, vB0);
-                        nfly++;
-                        normalize_vector_xyz(tail->vel, vC0, 0.01f);
+                    points = rope_points_lui;
+                    lerp_vector(velocity, points[0], points[segment], blend);
+                    points = 0;
+                    lifetime = random_float_between(60000.0f, 180000.0f);
+                    puff = FUN_L00_0026d000(delta, 0.0f, 1.0f, 1.03f, random_integer_below(5) + 1, basis, lifetime, 0x404040);
+                    if (puff != 0) {
+                        RopeTail *tail = &puff->tail;
+                        subtract_vector_xyz(extension, delta, velocity);
+                        extras++;
+                        normalize_vector_xyz(tail->vel, extension, 0.01f);
                         tail->vel[2] += 0.02f;
                     }
                 }
-                qcopy(v60, D_L07_0020DB00_c[j]);
-                clear_u64_value(v70);
-                q = FUN_L00_0026d000(v60, 0.0f, 1.0f, 1.0f, 6, v70, random_float_between(60000.0f, 180000.0f), 0x7F404040);
-                rope_parts[k].moby = (char *)q;
-                if (q != 0) {
+                qcopy(delta, rope_points[segment]);
+                clear_u64_value(basis);
+                particle = FUN_L00_0026d000(delta, 0.0f, 1.0f, 1.0f, 6, basis, random_float_between(60000.0f, 180000.0f), 0x7F404040);
+                rope_particles[k].particle = (char *)particle;
+                if (particle != 0) {
                     RopeTail *tail;
-                    q->life = lf;
-                    tail = &q->tail;
+                    particle->life = life;
+                    tail = &particle->tail;
                     tail->mode = 2;
-                    nspawn++;
+                    created++;
                     tail->tint = 0x7F;
-                    tail->fade = lf;
+                    tail->fade = life;
                 }
-                rope_parts[k].idx = j;
-                rope_parts[k].f4 = 0.0f;
-                rope_parts[k].f8 = 0.0f;
-                rope_parts[k].idx2 = random_integer_below(20);
-                rope_parts[k].fC = random_float_between(0.1f, 0.8f);
-                rope_parts[k].f10 = random_float_between(0.1f, 0.4f);
+                rope_particles[k].segment = segment;
+                rope_particles[k].distance = 0.0f;
+                rope_particles[k].blend = 0.0f;
+                rope_particles[k].column = random_integer_below(20);
+                rope_particles[k].blend_speed = random_float_between(0.1f, 0.8f);
+                rope_particles[k].speed = random_float_between(0.1f, 0.4f);
             }
         }
-        if (rope_parts[k].moby != 0) {
-            subtract_vector_xyz(v60, D_L07_0020DAF0_c[rope_parts[k].idx],
-                          D_L07_0020DB00_c[rope_parts[k].idx]);
-            len = fast_vec_length(v60);
-            rope_parts[k].f4 += rope_parts[k].f10;
-            *(short *)(rope_parts[k].moby + 0xA) = lf;
-            if (len < rope_parts[k].f4) {
-                if (--rope_parts[k].idx <= 0) {
-                    release_particle(rope_parts[k].moby);
-                    rope_parts[k].moby = 0;
+        if (rope_particles[k].particle != 0) {
+            subtract_vector_xyz(delta, rope_previous_points[rope_particles[k].segment],
+                          rope_points[rope_particles[k].segment]);
+            length = fast_vec_length(delta);
+            rope_particles[k].distance += rope_particles[k].speed;
+            *(short *)(rope_particles[k].particle + 0xA) = life;
+            if (length < rope_particles[k].distance) {
+                if (--rope_particles[k].segment <= 0) {
+                    release_particle(rope_particles[k].particle);
+                    rope_particles[k].particle = 0;
                 } else {
-                    rope_parts[k].f4 -= len;
-                    subtract_vector_xyz(v60, D_L07_0020DAF0_c[rope_parts[k].idx],
-                                  D_L07_0020DB00_c[rope_parts[k].idx]);
-                    len = fast_vec_length(v60);
+                    rope_particles[k].distance -= length;
+                    subtract_vector_xyz(delta, rope_previous_points[rope_particles[k].segment],
+                                  rope_points[rope_particles[k].segment]);
+                    length = fast_vec_length(delta);
                 }
             }
-            if (rope_parts[k].moby != 0) {
-                t = rope_parts[k].f4 / len;
-                if (rope_parts[k].idx == 2) {
-                    *(short *)(rope_parts[k].moby + 0xA) = 100;
-                } else if (rope_parts[k].idx < 2) {
-                    *(short *)(rope_parts[k].moby + 0xA) = truncate_float_to_s32((1.0f - t) * 100.0f);
-                    if (*(short *)(rope_parts[k].moby + 0xA) <= 60) {
-                        *(short *)(rope_parts[k].moby + 0xA) = 60;
+            if (rope_particles[k].particle != 0) {
+                fraction = rope_particles[k].distance / length;
+                if (rope_particles[k].segment == 2) {
+                    *(short *)(rope_particles[k].particle + 0xA) = 100;
+                } else if (rope_particles[k].segment < 2) {
+                    *(short *)(rope_particles[k].particle + 0xA) = truncate_float_to_s32((1.0f - fraction) * 100.0f);
+                    if (*(short *)(rope_particles[k].particle + 0xA) <= 60) {
+                        *(short *)(rope_particles[k].particle + 0xA) = 60;
                     }
                 }
-                if (rope_parts[k].idx == 1) {
-                    subtract_vector_xyz(v70, anchor, rope_parts[k].moby + 0x10);
-                    normalize_vector_xyz(v70, v70, rope_parts[k].f10);
-                    add_vector_xyz(rope_parts[k].moby + 0x10, rope_parts[k].moby + 0x10, v70);
-                    *(float *)(rope_parts[k].moby + 0xC) *= frame_scale * -0.050000012f + 1.0f;
+                if (rope_particles[k].segment == 1) {
+                    subtract_vector_xyz(basis, anchor, rope_particles[k].particle + 0x10);
+                    normalize_vector_xyz(basis, basis, rope_particles[k].speed);
+                    add_vector_xyz(rope_particles[k].particle + 0x10, rope_particles[k].particle + 0x10, basis);
+                    *(float *)(rope_particles[k].particle + 0xC) *= frame_scale * -0.050000012f + 1.0f;
                 } else {
-                    scale_vector_xyz(v60, v60, t);
-                    add_vector_xyz(rope_parts[k].moby + 0x10,
-                               D_L07_0020DB00_c[rope_parts[k].idx], v60);
-                    idx2 = rope_parts[k].idx2;
-                    subtract_vector_xyz(v70, rope_grid[rope_parts[k].idx][idx2],
-                                  D_L07_0020DB00_c[rope_parts[k].idx]);
-                    subtract_vector_xyz(vB0, D_L07_0020DAA0[rope_parts[k].idx][idx2],
-                                  D_L07_0020DAF0_c[rope_parts[k].idx]);
-                    interpolate_vector(vC0, v70, vB0, t);
-                    idx2 = (idx2 + 19) % 20;
-                    subtract_vector_xyz(vD0, rope_grid[rope_parts[k].idx][idx2],
-                                  D_L07_0020DB00_c[rope_parts[k].idx]);
-                    subtract_vector_xyz(vE0, D_L07_0020DAA0[rope_parts[k].idx][idx2],
-                                  D_L07_0020DAF0_c[rope_parts[k].idx]);
-                    interpolate_vector(vF0, vD0, vE0, t);
-                    interpolate_vector(vC0, vC0, vF0, rope_parts[k].f8);
-                    rope_parts[k].f8 += rope_parts[k].fC;
-                    if (rope_parts[k].f8 >= 1.0f) {
-                        rope_parts[k].f8 -= 1.0f;
-                        rope_parts[k].idx2 = idx2;
+                    scale_vector_xyz(delta, delta, fraction);
+                    add_vector_xyz(rope_particles[k].particle + 0x10,
+                               rope_points[rope_particles[k].segment], delta);
+                    column = rope_particles[k].column;
+                    subtract_vector_xyz(basis, rope_grid[rope_particles[k].segment][column],
+                                  rope_points[rope_particles[k].segment]);
+                    subtract_vector_xyz(velocity, D_L07_0020DAA0[rope_particles[k].segment][column],
+                                  rope_previous_points[rope_particles[k].segment]);
+                    interpolate_vector(extension, basis, velocity, fraction);
+                    column = (column + 19) % 20;
+                    subtract_vector_xyz(direction, rope_grid[rope_particles[k].segment][column],
+                                  rope_points[rope_particles[k].segment]);
+                    subtract_vector_xyz(tangent, D_L07_0020DAA0[rope_particles[k].segment][column],
+                                  rope_previous_points[rope_particles[k].segment]);
+                    interpolate_vector(side, direction, tangent, fraction);
+                    interpolate_vector(extension, extension, side, rope_particles[k].blend);
+                    rope_particles[k].blend += rope_particles[k].blend_speed;
+                    if (rope_particles[k].blend >= 1.0f) {
+                        rope_particles[k].blend -= 1.0f;
+                        rope_particles[k].column = column;
                     }
-                    add_vector_xyz(rope_parts[k].moby + 0x10, rope_parts[k].moby + 0x10, vC0);
+                    add_vector_xyz(rope_particles[k].particle + 0x10, rope_particles[k].particle + 0x10, extension);
                 }
             }
         }
     }
     }
-    return best;
+    return minimum;
 }
 
 #define NOT_SDA
@@ -2223,29 +2216,18 @@ float FUN_L07_00317e60(void *moby, void *anchor) {
 /* Pulls each pending moby toward its target point and smooths its velocity. */
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_00313D28.c: func_L07_0031A268), where it is exact; names translated to the US level program. */
 
-typedef struct {
-    short idx;
-    short pad;
-    float f;
-    int pad2[3];
-    char *moby;
-} L07Ent;
-
-extern L07Ent D_L07_0020C840[];
-extern char D_L07_0020DB00[];
 extern float vector_length_xyz(void *);
 extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern int D_L07_00161B6C_gp __asm__("D_L07_00161B6C") __attribute__((sda));
 extern int D_L07_00161B70_gp __asm__("D_L07_00161B70") __attribute__((sda));
 extern float row_phase_step_gp __asm__("D_L07_00161B7C") __attribute__((sda));
 extern void FUN_L00_002defe0(int arg0);
-extern char D_L07_0020DDC0_v[] __asm__("D_L07_0020DAF0");
 
 void FUN_L07_00318e98(int target_entry) {
     float a[4];
     float b[4];
     float c[4];
-    L07Ent *e;
+    RopeParticle *e;
     char *m;
     float len;
     int off;
@@ -2256,16 +2238,16 @@ void FUN_L07_00318e98(int target_entry) {
     D_L07_00161B70_gp = 1;
     row_phase_step_gp = row_phase_step_gp * 0.5f;
     allocate_voice_for_target_entry(10, 0, target_entry);
-    base = (char *)D_L07_0020C840;
+    base = (char *)rope_particles;
     for (i = 0; i < 200; i++) {
-        m = D_L07_0020C840[i].moby;
+        m = rope_particles[i].particle;
         if (m != 0) {
-            D_L07_0020C840[i].moby = 0;
-            subtract_vector_xyz(a, D_L07_0020DDC0_v + D_L07_0020C840[i].idx * 16,
-                                D_L07_0020DB00 + D_L07_0020C840[i].idx * 16);
+            rope_particles[i].particle = 0;
+            subtract_vector_xyz(a, (char *)rope_previous_points + rope_particles[i].segment * 16,
+                                (char *)rope_points + rope_particles[i].segment * 16);
             len = vector_length_xyz(a);
-            scale_vector_xyz(a, a, D_L07_0020C840[i].f / len);
-            add_vector_xyz(b, D_L07_0020DB00 + D_L07_0020C840[i].idx * 16, a);
+            scale_vector_xyz(a, a, rope_particles[i].distance / len);
+            add_vector_xyz(b, (char *)rope_points + rope_particles[i].segment * 16, a);
             subtract_vector_xyz(c, m + 0x10, b);
             normalize_vector_xyz(c, c, 0.03f);
             scale_vector_xyz(a, a, 0.1f / len);

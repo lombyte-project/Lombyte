@@ -3311,7 +3311,10 @@ typedef struct {
     u8 pad3F;
     s16 extra;  /* 40 */
     s16 flag42; /* 42 */
-    float f44, f48, pad4C, f50;
+    float f44, f48, f4C, f50;
+    int texture;      /* 54 */
+    int mesh_texture; /* 58 */
+    u8 mesh_alpha, mesh_red, mesh_green, mesh_blue; /* 5C..5F */
 } Q;
 typedef struct {
     V v0, v1, v2;
@@ -3472,190 +3475,161 @@ void particle_spawner_smoke_fire_update(P *p) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d73e8.s", FUN_L00_002d73e8);
 #else
 /* Ported from rac1-decomp (nonmatching/shared/func_L00_002D8898.c: func_L00_002D8898). */
-typedef struct {
-    s16 start; s16 count; int idx; char pad08[0x30];
-    int col; /* 38 */
-    char pad3C[4];
-    s16 extra; s16 flag42; /* 40 42 */
-    float f44, f48, f4C, f50; /* 44..50 */
-    int tex0; /* 54 */
-    int tex1; /* 58 */
-    u8 c5C, c5D, c5E, c5F;
-} Q_2D8898;
-typedef int u128_2D8898 __attribute__((mode(TI)));
-typedef float V_2D8898[4] __attribute__((aligned(16)));
-typedef struct {
-    V_2D8898 v[4];
-    int c[4];
-    float uv[4][2];
-    long g[4];
-} Quad_2D8898;
-extern V_2D8898 ws_camera __asm__("D_L00_00166DC0");
-extern V_2D8898 ws_pos[] __asm__("D_L00_001CB7E0");
-extern u8 ws_flip[] __asm__("D_L00_001D2860");
-extern s16 ws_fade[] __asm__("D_L00_001D5740");
-extern float ws_sx[] __asm__("D_L00_001D02E0");
-extern float ws_sy[] __asm__("D_L00_001D15A0");
-extern float ws_phase[] __asm__("D_L00_001D31C0");
-extern float ws_speed[] __asm__("D_L00_001D4480");
-extern s16 ws_life[] __asm__("D_L00_001D60A0");
-extern u8 ws_burst[] __asm__("D_L00_001D2D10");
-extern s16 ws_wait[] __asm__("D_L00_001D6A00");
-extern float ws_k374 __asm__("D_L00_00161374");
-extern float ws_k384 __asm__("D_L00_00161384");
-extern float ws_k38C __asm__("D_L00_0016138C");
-extern unsigned short ws_k388 __asm__("D_L00_00161388") __attribute__((sda));
-extern int ws_k998 __asm__("D_L00_00161998") __attribute__((sda));
-extern float ws_k99C __asm__("D_L00_0016199C") __attribute__((sda));
-extern u8 ws_rowa[4] __asm__("D_L00_001619A0") __attribute__((sda));
-extern u8 ws_rowb[8] __asm__("D_L00_001619A8") __attribute__((sda));
-extern int ws_idx[][4] __asm__("D_L00_001E1380");
-extern float ws_vtx[][4] __asm__("D_L00_001E12C0");
-extern float ws_uv1[] __asm__("D_L00_001E1440");
-extern float ws_uv1b[] __asm__("D_L00_001E1444");
-extern float ws_quad[][4] __asm__("D_L00_001E11A0");
-extern float ws_quv[] __asm__("D_L00_001E11E0");
-extern float ws_ring[][4] __asm__("D_L00_001E1200");
-extern float ws_uv2[] __asm__("D_L00_001E13E0");
-extern float ws_uv2b[] __asm__("D_L00_001E13E4");
-extern T *ws_types __asm__("D_L00_001600EC");
-extern void ws_sub(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void ws_norm(void *, void *, float) __asm__("FUN_001f9bf8");
-extern void ws_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
-extern void ws_scale(void *, void *, float) __asm__("FUN_001f9a68");
-extern int ws_tex(int) __asm__("FUN_001f44b8");
-extern void ws_gs(int, long) __asm__("FUN_00233980");
-extern void ws_xform(void *, void *, void *) __asm__("FUN_001f9d20");
-extern void ws_draw(void *, void *, int) __asm__("FUN_001f7d30");
-extern int ws_timer(void *) __asm__("FUN_001f9770");
-extern float ws_i2f(int) __asm__("FUN_001fa6c0");
-extern int ws_rand(int) __asm__("FUN_00213260");
-extern int ws_f2i(float) __asm__("FUN_001fa6d0");
+#include "rnc/rendering/geometry_quad.h"
+extern float D_L00_001D02E0[];
+extern float D_L00_001D15A0[];
+extern float D_L00_001D31C0[];
+extern float D_L00_001D4480[];
+extern s16 D_L00_001D60A0[];
+extern u8 D_L00_001D2D10[];
+extern s16 D_L00_001D6A00[];
+extern float D_L00_00161374;
+extern float D_L00_00161384;
+extern float D_L00_0016138C;
+extern unsigned short D_L00_00161388_gp __asm__("D_L00_00161388") __attribute__((sda));
+extern int D_L00_00161998 __attribute__((sda));
+extern float D_L00_0016199C __attribute__((sda));
+extern u8 D_L00_001619A0[4] __attribute__((sda));
+extern u8 D_L00_001619A8[8] __attribute__((sda));
+extern int D_L00_001E1380[][4];
+extern float D_L00_001E12C0[][4];
+extern float D_L00_001E1440[];
+extern float D_L00_001E1444[];
+extern float D_L00_001E11A0[][4];
+extern float D_L00_001E11E0[];
+extern float D_L00_001E1200[][4];
+extern float D_L00_001E13E0[];
+extern float D_L00_001E13E4[];
+extern void vu1_add_g_sregister(s32, s64) __asm__("FUN_00233980");
+extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
+extern void fast_draw_quad_real(void *, int, int) __asm__("FUN_001f7d30");
 void FUN_L00_002d73e8(P *p) {
-    V_2D8898 a, b;
-    V_2D8898 m1[4], m2[4];
-    Quad_2D8898 quad;
-    Q_2D8898 *q = (Q_2D8898 *)p->q;
-    T *t;
-    int alpha, colA, end;
-    V_2D8898 *mat;
-    int alpha2, i, k, j, n, l;
-    float sx, sy, f, one;
-    float *src;
+    Vec4 position, up;
+    Vec4 facing[4], flipped[4];
+    struct GeometryQuad quad;
+    Q *q = p->q;
+    T *volume;
+    int mesh_alpha, mesh_color, end;
+    Vec4 *transform;
+    int alpha, i, k, j, index, l;
+    float width, height, phase, one;
+    float *vertex;
 
-    alpha = q->c5C << 24;
-    colA = q->c5F << 16 | q->c5E << 8 | q->c5D;
-    t = &ws_types[q->idx];
+    mesh_alpha = q->mesh_alpha << 24;
+    mesh_color = q->mesh_blue << 16 | q->mesh_green << 8 | q->mesh_red;
+    volume = &D_L00_001600EC[q->idx];
     end = q->start + q->count + q->extra;
-    qcopy(a, &p->pos);
-    *(u128_2D8898 *)b = 0;
-    a[3] = 1.0f;
-    b[2] = 1.0f;
-    ws_sub(m1[0], &ws_camera, a);
-    ws_norm(m1[0], m1[0], 1.0f);
-    ws_cross(m1[1], m1[0], b);
-    ws_norm(m1[1], m1[1], 1.0f);
-    ws_cross(m1[2], m1[1], m1[0]);
-    qcopy(m1[3], a);
-    /* Fakematch: the do-while(0) gives m2's address s1 and m1's s2 as retail
-     * does (BYTES 29 -> 15). Still off: the burst branch's g[3] constant
+    qcopy(&position, &p->pos);
+    up.q = 0;
+    position.f[3] = 1.0f;
+    up.f[2] = 1.0f;
+    fast_vec_sub(&facing[0], &D_L00_00166DC0, &position);
+    fast_vec_normalize(&facing[0], &facing[0], 1.0f);
+    fast_vec_cross(&facing[1], &facing[0], &up);
+    fast_vec_normalize(&facing[1], &facing[1], 1.0f);
+    fast_vec_cross(&facing[2], &facing[1], &facing[0]);
+    qcopy(&facing[3], &position);
+    /* Fakematch: the do-while(0) gives flipped's address s1 and facing's s2 as retail
+     * does (BYTES 29 -> 15). Still off: the mesh branch's primitive constant
      * register (v0, retail v1) and the ring loop's s2/s3/s5 pointers; the
-     * latter come from the GCSE copy of m1's address at the end of block 0,
+     * latter come from the GCSE copy of facing's address at the end of block 0,
      * which prefers s2. */
     do {
-        ws_scale(m2[0], m1[0], -1.0f);
-        ws_cross(m2[1], m2[0], b);
-        ws_norm(m2[1], m2[1], 1.0f);
-        ws_cross(m2[2], m2[1], m2[0]);
-        qcopy(m2[3], m1[3]);
+        fast_vec_scale(&flipped[0], &facing[0], -1.0f);
+        fast_vec_cross(&flipped[1], &flipped[0], &up);
+        fast_vec_normalize(&flipped[1], &flipped[1], 1.0f);
+        fast_vec_cross(&flipped[2], &flipped[1], &flipped[0]);
+        qcopy(&flipped[3], &facing[3]);
     } while (0);
-    quad.g[1] = ws_tex(q->tex0 + 0x28);
-    quad.g[2] = 0xFF9000000260L;
-    quad.g[3] = 0x8000000048L;
-    quad.g[0] = 0;
-    ws_gs(0x4A, 0);
-    ws_gs(0x47, 0x51001);
+    /* Fakematch: called as returning int (the draw above needs the s64 prototype) so
+     * the texture is sign-extended into the quad as retail does. */
+    quad.texture = ((int (*)(int))get_effect_texture)(q->texture + 0x28);
+    quad.texture_state = 0xFF9000000260L;
+    quad.primitive = 0x8000000048L;
+    quad.reserved.value = 0;
+    vu1_add_g_sregister(0x4A, 0);
+    vu1_add_g_sregister(0x47, 0x51001);
     for (i = q->start; i < end; i++) {
-        f = ws_phase[i] - ws_speed[i] * frame_scale;
-        ws_phase[i] = f;
-        mat = ws_flip[i] ? m2 : m1;
-        if (f <= -8.0f) {
-            ws_phase[i] = f + 8.0f;
+        phase = D_L00_001D31C0[i] - D_L00_001D4480[i] * frame_scale;
+        D_L00_001D31C0[i] = phase;
+        transform = D_L00_001D2860[i] ? flipped : facing;
+        if (phase <= -8.0f) {
+            D_L00_001D31C0[i] = phase + 8.0f;
         }
-        ws_xform(mat[3], &ws_pos[i], t);
-        sx = ws_sx[i];
-        sy = ws_sy[i];
-        if (ws_burst[i]) {
-            quad.g[3] = 0x8000000044L;
+        transform_vector(&transform[3], &D_L00_001CB7E0[i], volume);
+        width = D_L00_001D02E0[i];
+        height = D_L00_001D15A0[i];
+        if (D_L00_001D2D10[i]) {
+            quad.primitive = 0x8000000044L;
             one = 1.0f;
             for (k = 2; k < 4; k++) {
                 for (j = 0; j < 4; j++) {
-                    n = ws_idx[k][j];
-                    src = ws_vtx[n];
-                    quad.v[j][0] = src[0];
-                    quad.v[j][1] = src[1] * sx;
-                    quad.v[j][2] = src[2] * sy;
-                    quad.v[j][3] = one;
-                    ws_xform(quad.v[j], quad.v[j], mat);
-                    quad.uv[j][0] = ws_uv1b[n * 2] + ws_phase[i];
-                    quad.uv[j][1] = ws_uv1[n * 2];
-                    quad.c[j] = alpha * ws_rowb[n] | colA;
+                    index = D_L00_001E1380[k][j];
+                    vertex = D_L00_001E12C0[index];
+                    quad.positions[j].f[0] = vertex[0];
+                    quad.positions[j].f[1] = vertex[1] * width;
+                    quad.positions[j].f[2] = vertex[2] * height;
+                    quad.positions[j].f[3] = one;
+                    transform_vector(&quad.positions[j], &quad.positions[j], transform);
+                    quad.texture_coordinates[j][0] = D_L00_001E1444[index * 2] + D_L00_001D31C0[i];
+                    quad.texture_coordinates[j][1] = D_L00_001E1440[index * 2];
+                    quad.colors[j] = mesh_alpha * D_L00_001619A8[index] | mesh_color;
                 }
-                ws_draw(&quad, 0, 0);
+                fast_draw_quad_real(&quad, 0, 0);
             }
         } else {
-            if (ws_fade[i]) {
-                ws_timer(&ws_fade[i]);
-                alpha2 = ws_f2i((1.0f - ws_i2f(ws_fade[i]) * ws_k384) * ws_k99C);
-            } else if (ws_life[i]) {
-                if (ws_timer(&ws_life[i])) {
+            if (D_L00_001D5740[i]) {
+                fast_dec_timer_s16(&D_L00_001D5740[i]);
+                alpha = truncate_float_to_s32((1.0f - convert_integer_to_float(D_L00_001D5740[i]) * D_L00_00161384) * D_L00_0016199C);
+            } else if (D_L00_001D60A0[i]) {
+                if (fast_dec_timer_s16(&D_L00_001D60A0[i])) {
                     FUN_L00_002d7bf0(p, i);
-                    alpha2 = 0;
-                    ws_flip[i] = ws_rand(2);
+                    alpha = 0;
+                    D_L00_001D2860[i] = random_integer_below(2);
                 } else {
-                    alpha2 = ws_f2i(ws_i2f(ws_life[i]) * ws_k38C * ws_k99C);
+                    alpha = truncate_float_to_s32(convert_integer_to_float(D_L00_001D60A0[i]) * D_L00_0016138C * D_L00_0016199C);
                 }
             } else {
-                if (ws_timer(&ws_wait[i])) {
-                    ws_life[i] = ws_k388;
+                if (fast_dec_timer_s16(&D_L00_001D6A00[i])) {
+                    D_L00_001D60A0[i] = D_L00_00161388_gp;
                 }
-                alpha2 = ws_k998;
+                alpha = D_L00_00161998;
             }
-            alpha2 <<= 24;
-            quad.g[3] = 0x8000000048L;
+            alpha <<= 24;
+            quad.primitive = 0x8000000048L;
             one = 1.0f;
             for (l = 0; l < 4; l++) {
-                quad.v[l][0] = ws_quad[l][0];
-                quad.v[l][1] = ws_quad[l][1] * sx;
-                quad.v[l][2] = ws_quad[l][2] * sy;
-                quad.v[l][3] = one;
-                quad.uv[l][0] = ws_quv[l * 2] - ws_phase[i];
-                quad.uv[l][1] = ws_quv[l * 2 + 1];
-                quad.c[l] = alpha2 * ws_rowa[l] | q->col;
-                ws_xform(quad.v[l], quad.v[l], mat);
+                quad.positions[l].f[0] = D_L00_001E11A0[l][0];
+                quad.positions[l].f[1] = D_L00_001E11A0[l][1] * width;
+                quad.positions[l].f[2] = D_L00_001E11A0[l][2] * height;
+                quad.positions[l].f[3] = one;
+                quad.texture_coordinates[l][0] = D_L00_001E11E0[l * 2] - D_L00_001D31C0[i];
+                quad.texture_coordinates[l][1] = D_L00_001E11E0[l * 2 + 1];
+                quad.colors[l] = alpha * D_L00_001619A0[l] | q->col;
+                transform_vector(&quad.positions[l], &quad.positions[l], transform);
             }
-            ws_draw(&quad, 0, 0);
+            fast_draw_quad_real(&quad, 0, 0);
         }
     }
-    quad.g[1] = ws_tex(q->tex1 + 0x28);
-    quad.g[3] = 0x8000000044L;
-    qcopy(m1[3], t->pos);
-    m1[3][2] -= q->f50;
+    quad.texture = ((int (*)(int))get_effect_texture)(q->mesh_texture + 0x28);
+    quad.primitive = 0x8000000044L;
+    qcopy(&facing[3], volume->pos);
+    facing[3].f[2] -= q->f50;
     if (q->flag42 == 0) {
         for (k = 0; k < 6; k++) {
             for (j = 0; j < 4; j++) {
-                n = ws_idx[k][j];
-                src = ws_ring[n];
-                quad.v[j][0] = src[0];
-                quad.v[j][1] = src[1] * q->f48;
-                quad.v[j][2] = src[2] * q->f4C;
-                quad.v[j][3] = 1.0f;
-                ws_xform(quad.v[j], quad.v[j], m1);
-                quad.uv[j][0] = ws_uv2b[n * 2] + ws_k374;
-                quad.uv[j][1] = ws_uv2[n * 2];
-                quad.c[j] = ws_rowb[n] * 0xFF000000 | colA;
+                index = D_L00_001E1380[k][j];
+                vertex = D_L00_001E1200[index];
+                quad.positions[j].f[0] = vertex[0];
+                quad.positions[j].f[1] = vertex[1] * q->f48;
+                quad.positions[j].f[2] = vertex[2] * q->f4C;
+                quad.positions[j].f[3] = 1.0f;
+                transform_vector(&quad.positions[j], &quad.positions[j], facing);
+                quad.texture_coordinates[j][0] = D_L00_001E13E4[index * 2] + D_L00_00161374;
+                quad.texture_coordinates[j][1] = D_L00_001E13E0[index * 2];
+                quad.colors[j] = D_L00_001619A8[index] * 0xFF000000 | mesh_color;
             }
-            ws_draw(&quad, 0, 0);
+            fast_draw_quad_real(&quad, 0, 0);
         }
     }
 }
