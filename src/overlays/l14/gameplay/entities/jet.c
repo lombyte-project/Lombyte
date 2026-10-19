@@ -3201,6 +3201,12 @@ typedef struct {
 } L14TramVars;
 /* Tram update: carries its rider moby, unlocks once the three items are bought and the camera looks at it. */
 void FUN_L14_002fcbb0(struct Moby *m) {
+    enum {
+        TRAM_STATE_INITIALIZE = 0,
+        TRAM_STATE_WAIT_FOR_UNLOCK = 1,
+        TRAM_STATE_FOLLOW_PATH = 2,
+        TRAM_STATE_WAIT_FOR_RESPAWN = 3
+    };
     L14TramVars *d = (L14TramVars *)m->pvars;
     Vec4 b;
     Vec4 a;
@@ -3239,7 +3245,7 @@ void FUN_L14_002fcbb0(struct Moby *m) {
         }
     }
     switch (m->state) {
-    case 0:
+    case TRAM_STATE_INITIALIZE:
         if (d->path == -1) {
             tram_print(D_L14_001FCE98, m->save_id);
             tram_remove(m);
@@ -3272,7 +3278,7 @@ void FUN_L14_002fcbb0(struct Moby *m) {
         d->sound = -1;
         d->timer = tram_frames(D_L14_00161F8C);
         break;
-    case 1: {
+    case TRAM_STATE_WAIT_FOR_UNLOCK: {
         int lvl = current_level_index * 16;
         u8 v = visited52[d->item[0] + lvl];
         if (v == 0xFF) {
@@ -3307,7 +3313,7 @@ void FUN_L14_002fcbb0(struct Moby *m) {
         }
         break;
     }
-    case 2:
+    case TRAM_STATE_FOLLOW_PATH:
         if (FUN_L14_002fd918(m) != 0)
             return;
         if (d->carrier != 0 && d->stage < 2) {
@@ -3327,7 +3333,7 @@ void FUN_L14_002fcbb0(struct Moby *m) {
             }
         }
         break;
-    case 3:
+    case TRAM_STATE_WAIT_FOR_RESPAWN:
         if (tram_tick(&d->timer) != 0) {
             char *path = D_L14_001B0BB0_t[d->path];
             m->flags &= 0xFFBE;
