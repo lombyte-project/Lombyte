@@ -15,9 +15,12 @@ void FUN_L10_002eaa08_c(void *pos, short *timer, short *burst, float height) __a
 extern void func_L10_002EBDC8_a01(float,void *,short *,short *) __asm__("FUN_L10_002eaa08");
 
 void FUN_L10_002ea1f0(char *m) {
+    enum {
+        EFFECT_STATE_INITIALIZE = 0
+    };
  char *d=*(char **)(m+0x78);
  switch((unsigned char)m[0x20]) {
- case 0:
+ case EFFECT_STATE_INITIALIZE:
   switch(*(int *)d) {
   case 0:m[0x20]=1;break;
   case 1:
