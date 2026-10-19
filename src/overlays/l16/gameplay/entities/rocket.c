@@ -1232,6 +1232,13 @@ void test_dummy_update(unsigned char *m) {
     enum {
         TEST_DUMMY_STATE_INITIALIZE = 0,
         TEST_DUMMY_STATE_APPROACH_FIRST_PATH_NODE = 2,
+        TEST_DUMMY_STATE_APPROACH_THROW_NODE = 3,
+        TEST_DUMMY_STATE_THROW_AT_TARGET = 4,
+        TEST_DUMMY_STATE_MOVE_ALONG_PATH = 5,
+        TEST_DUMMY_STATE_TURN_TO_NEXT_PATH_NODE = 6,
+        TEST_DUMMY_STATE_APPROACH_SPRAY_NODE = 7,
+        TEST_DUMMY_STATE_SPRAY_FROM_CHILD = 8,
+        TEST_DUMMY_STATE_TURN_AND_RESUME_SAVED_STATE = 9,
         TEST_DUMMY_STATE_BURST = 10,
         TEST_DUMMY_STATE_RESPAWN = 11
     };
@@ -1301,7 +1308,7 @@ void test_dummy_update(unsigned char *m) {
             }
         }
         break;
-    case 3: /* thrower: wait, face the node, wind up */
+    case TEST_DUMMY_STATE_APPROACH_THROW_NODE: /* thrower: wait, face the node, wind up */
         if (tick_countdown_32_alt(&d->timer)) {
             position_or_delta.quad = *(u128 *)(path + d->node * 16 + 16);
             if (FUN_L16_002ced20(
@@ -1322,7 +1329,7 @@ void test_dummy_update(unsigned char *m) {
             }
         }
         break;
-    case 4: /* thrower: launch the held object at the target, then face it or the next node */
+    case TEST_DUMMY_STATE_THROW_AT_TARGET: /* thrower: launch the held object at the target, then face it or the next node */
         if (d->mode == 2) {
             qcopy(position_or_delta.f, D_L16_001600EC_c + d->aim[d->node] * 0x80 + 0x30);
         } else {
@@ -1357,7 +1364,7 @@ void test_dummy_update(unsigned char *m) {
                                           ((float *)(path + (node << 4)))[5] - *(float *)(m + 20)));
         }
         break;
-    case 5: /* slider: move toward the node, emit, stop on arrival */
+    case TEST_DUMMY_STATE_MOVE_ALONG_PATH: /* slider: move toward the node, emit, stop on arrival */
         if (m[0x53] == 10) {
             if (m[0x70] & 2) {
                 blend_moby_animation(m, 11, 0, 1);
@@ -1388,7 +1395,7 @@ void test_dummy_update(unsigned char *m) {
             }
         }
         break;
-    case 6: { /* slider: turn toward the next node while the timer runs */
+    case TEST_DUMMY_STATE_TURN_TO_NEXT_PATH_NODE: { /* slider: turn toward the next node while the timer runs */
         float *yaw = (float *)(m + 0x48);
         int next = d->node + d->step;
         float angle = fast_arc_tan(((float *)(path + (next << 4)))[4] - *(float *)(m + 16),
@@ -1404,7 +1411,7 @@ void test_dummy_update(unsigned char *m) {
         }
         break;
     }
-    case 7: /* sprayer: wait, face the node, start */
+    case TEST_DUMMY_STATE_APPROACH_SPRAY_NODE: /* sprayer: wait, face the node, start */
         if (tick_countdown_32_alt(&d->timer)) {
             position_or_delta.quad = *(u128 *)(path + d->node * 16 + 16);
             if (FUN_L16_002ced20(m, position_or_delta.f, *(float *)(m + 0x48))) {
@@ -1422,7 +1429,7 @@ void test_dummy_update(unsigned char *m) {
             }
         }
         break;
-    case 8: /* sprayer: face the target and emit from the child toward it */
+    case TEST_DUMMY_STATE_SPRAY_FROM_CHILD: /* sprayer: face the target and emit from the child toward it */
         if (d->mode != 2) {
             position_or_delta.quad = *(u128 *)(m + 16);
             FUN_L16_002ced20(
@@ -1455,7 +1462,7 @@ void test_dummy_update(unsigned char *m) {
             }
         }
         break;
-    case 9: /* turn back to the node, then resume the saved state and animation */
+    case TEST_DUMMY_STATE_TURN_AND_RESUME_SAVED_STATE: /* turn back to the node, then resume the saved state and animation */
         position_or_delta.quad = *(u128 *)(path + d->node * 16 + 16);
         FUN_L16_002ced20(m, position_or_delta.f, d->f10C);
         if (m[0x70] & 2) {
