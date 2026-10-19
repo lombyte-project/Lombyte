@@ -3199,6 +3199,7 @@ void puffoid_update(struct Moby *moby) {
         PUFFOID_STATE_RETURN_HOME = 6,
         PUFFOID_STATE_JUMP_HOME = 7,
         PUFFOID_STATE_KNOCKBACK = 9,
+        PUFFOID_STATE_REPOSITION_AND_FACE_TARGET = 10,
         PUFFOID_STATE_DEATH_KNOCKBACK = 11,
         PUFFOID_STATE_WAIT_FOR_CARRIER_JUMP = 12,
         PUFFOID_STATE_CARRIER_JUMP = 13,
@@ -3363,7 +3364,7 @@ void puffoid_update(struct Moby *moby) {
             moby->state = 6;
         }
         break;
-    case 10:
+    case PUFFOID_STATE_REPOSITION_AND_FACE_TARGET:
         sub_vector_4318(pos, d->unk1D0, &moby->pos);
         pos[2] = 0.0f;
         normalize_4318(pos, pos, 2.5f);
