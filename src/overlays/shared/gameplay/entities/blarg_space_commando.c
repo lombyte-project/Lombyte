@@ -112,6 +112,12 @@ extern void FUN_L06_002ff100_u(struct Moby *) __asm__("FUN_L06_002ff100");
 
 void blarg_space_commando_update(struct Moby *moby) __asm__("FUN_L06_002fdbd0");
 void blarg_space_commando_update(struct Moby *moby) {
+    enum {
+        BLARG_COMMANDO_STATE_INITIALIZE = 0,
+        BLARG_COMMANDO_STATE_CHASE_TARGET = 11,
+        BLARG_COMMANDO_STATE_RETURN_HOME = 13,
+        BLARG_COMMANDO_STATE_APPROACH_ROUTE_DESTINATION = 14
+    };
     Moby1068Vars *vars = (Moby1068Vars *)moby->pvars;
     struct Moby *target;
     s32 *route;
@@ -135,7 +141,7 @@ void blarg_space_commando_update(struct Moby *moby) {
     }
     moby->anim_speed = 1.0f;
     switch (moby->state) {
-    case 0:
+    case BLARG_COMMANDO_STATE_INITIALIZE:
         vars->unk28 = 1;
         vars->unk20 = 2.0f;
         vars->unk30 = 2.0f;
@@ -189,7 +195,7 @@ void blarg_space_commando_update(struct Moby *moby) {
             }
         }
         break;
-    case 14:
+    case BLARG_COMMANDO_STATE_APPROACH_ROUTE_DESTINATION:
         if (moby->prev_seq != 1) {
             blend_moby_animation(moby, 1, 0, scale_game_frames(12));
         }
@@ -308,7 +314,7 @@ void blarg_space_commando_update(struct Moby *moby) {
             }
         }
         break;
-    case 11:
+    case BLARG_COMMANDO_STATE_CHASE_TARGET:
         near = 0;
         FUN_L00_00258278(moby, fast_arc_tan(target->pos.x - moby->pos.x, target->pos.y - moby->pos.y), &vars->turn_speed, 0.05f, 0.3f,
                          frame_time * 6.2831855f);
@@ -359,7 +365,7 @@ void blarg_space_commando_update(struct Moby *moby) {
             }
         }
         break;
-    case 13:
+    case BLARG_COMMANDO_STATE_RETURN_HOME:
         FUN_L00_00258278(moby, fast_arc_tan(vars->home.f[0] - moby->pos.x, vars->home.f[1] - moby->pos.y), &vars->turn_speed, 0.05f, 0.3f,
                          frame_time * 6.2831855f);
         a.f[0] = 2.0f * fast_cos(moby->rot.z);
