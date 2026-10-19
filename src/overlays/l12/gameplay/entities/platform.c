@@ -305,12 +305,16 @@ extern int scale_game_frames(int);
 extern void blend_moby_animation(void *, int, int, int);
 
 void FUN_L12_002e18e8(struct Moby *moby) {
+    enum {
+        TROLL_PURSUIT_ANIMATION_VARIANT_A = 0,
+        TROLL_PURSUIT_ANIMATION_VARIANT_B = 1
+    };
     switch (random_integer_below(2)) {
-    case 0:
+    case TROLL_PURSUIT_ANIMATION_VARIANT_A:
         if (moby->prev_seq != 3)
             blend_moby_animation(moby, 3, 0, scale_game_frames(8));
         break;
-    case 1:
+    case TROLL_PURSUIT_ANIMATION_VARIANT_B:
         if (moby->prev_seq != 0xF)
             blend_moby_animation(moby, 0xF, 0, scale_game_frames(8));
         break;
