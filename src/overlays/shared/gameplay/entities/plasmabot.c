@@ -1926,6 +1926,11 @@ extern int ftoi_ff640(float) __asm__("FUN_001fa6d0");
 
 /* Floating mine: spins and pulses (and bobs in level 16); blows up on a hit and respawns once out of view. */
 void FUN_L14_002ff640(struct Moby *moby) {
+    enum {
+        FLOAT_MINE_INITIALIZE = 0,
+        FLOAT_MINE_ACTIVE = 1,
+        FLOAT_MINE_WAIT_OFFSCREEN_RESPAWN = 2
+    };
     FloatMineVars_ff640 *vars = (FloatMineVars_ff640 *)moby->pvars;
     union {
         HitInfo_ff640 info;
@@ -1939,7 +1944,7 @@ void FUN_L14_002ff640(struct Moby *moby) {
     int g;
 
     switch (moby->state) {
-    case 0:
+    case FLOAT_MINE_INITIALIZE:
         vars->rest_z = -1.0f;
         if (vars->link == 0) {
             moby->pos.z = probe_ground_height_ff640(0.5f, &moby->pos, 0) + 0.7f;
@@ -1951,7 +1956,7 @@ void FUN_L14_002ff640(struct Moby *moby) {
             moby->state = 1;
         }
         break;
-    case 1: {
+    case FLOAT_MINE_ACTIVE: {
         if (current_level_index == 16) {
             if (vars->rest_z < 0.0f)
                 vars->rest_z = probe_ground_height_ff640(0.5f, &moby->pos, 0) + 0.7f;
@@ -1988,7 +1993,7 @@ void FUN_L14_002ff640(struct Moby *moby) {
         }
         break;
     }
-    case 2: {
+    case FLOAT_MINE_WAIT_OFFSCREEN_RESPAWN: {
         qcopy(scratch.sphere, &moby->pos);
         scratch.sphere[3] = 3.0f;
         if (sphere_visible_ff640(scratch.sphere, 64.0f) == -1) {
