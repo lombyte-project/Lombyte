@@ -2926,347 +2926,311 @@ void fighter_jet_update(Jet *m) {
 #include "eetypes.h"
 /* Flies the player's fighter: throttle and stick input, steering toward the path, camera, and collision response. */
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002B2020.c: func_L13_002BB3E8), where it is exact; names translated to the US level program. */
-typedef float W4_3E8[4] __attribute__((aligned(16)));
+typedef float FlightVec[4] __attribute__((aligned(16)));
 typedef struct {
     char pad00[0x10];
-    W4_3E8 pos;
+    FlightVec pos;
     unsigned char state;
     char pad21[0x13];
     unsigned short flags;
     char pad36[0xA];
-    float r40;
-    float r44;
-    float r48;
+    float rot_x;
+    float rot_y;
+    float rot_z;
     char pad4C[0x70];
-    unsigned char bc;
-} Moby_3E8;
+    unsigned char unkBC;
+} FlightMoby;
 typedef struct {
     char pad00[0x10];
-    W4_3E8 v10;
-    float f20, f24, f28, f2C;
-    float f30, f34, f38, f3C;
+    FlightVec direction;
+    float camera_roll, camera_pitch, camera_yaw, pad2C;
+    float roll, pitch, yaw, pad3C;
     char pad40[0x20];
-    unsigned char sel;
-    unsigned char flip;
-    short s62;
+    unsigned char camera_mode;
+    unsigned char gun_side;
+    short death_timer;
     float speed;
-    short count;
-    short s6A;
-    float f6C;
-    float f70;
+    short launch_frames;
+    short gun_index;
+    float steer_x;
+    float steer_y;
     char pad74[0x1C];
-    float f90, f94, f98, f9C;
-    float fA0, fA4, fA8, fAC;
-    float fB0, fB4, fB8, fBC;
-    float fC0, fC4, fC8, fCC;
-    float fD0, fD4, fD8;
-    int iDC;
+    float steer_x_velocity, steer_y_velocity, roll_velocity, pad9C;
+    float camera_roll_velocity, camera_pitch_velocity, camera_yaw_velocity, padAC;
+    float fov, camera_offset_x, camera_offset_y, camera_offset_z;
+    float fov_velocity, speed_fraction, camera_offset_x_velocity, camera_offset_y_velocity;
+    float camera_offset_z_velocity, padD4, padD8;
+    int hit_cooldown;
     char padE0[0x2C];
-    int i10C;
-    int i110;
-} Obj_3E8;
-typedef float JVec47[4] __attribute__((aligned(16)));
-typedef struct { char pad0[0x30]; JVec47 position; char pad40[0x30]; JVec47 rotation; } JetPath47;
-extern JetPath47 *D_L13_001600EC_ba178 __asm__("D_L13_001600EC") __attribute__((section(".sdata")));
-extern char D_L13_00174140_ba178[] __asm__("D_L13_00174140");
-extern f32 fast_arc_tan_ba178(f32, f32) __asm__("func_001F9E90");
-extern f32 fast_cos_ba178(f32) __asm__("func_001F9DC8");
-extern f32 fast_sin_ba178(f32) __asm__("func_001F9DE0");
-extern f32 fast_subtract_rotations_ba178(f32, f32) __asm__("func_001FA5C8");
-extern f32 fast_vec_length_ba178(void *) __asm__("func_001F9AF0");
-extern f32 vector_distance_ba178(void *, s32 *) __asm__("FUN_001f9b80");
-extern f32 vector_length_xy_ba178(void *) __asm__("FUN_001f9b20");
-extern float D_0015ED60_ba178 __asm__("D_0015ED60") __attribute__((section(".sdata")));
-extern float D_0015ED64_ba178 __asm__("D_0015ED64") __attribute__((section(".sdata")));
-extern float D_0015ED6C_ba178 __asm__("D_0015ED6C") __attribute__((section(".sdata")));
-extern float D_L13_0016CDF0_ba178 __asm__("D_L13_0016CDF0") __attribute__((section(".data")));
-extern float FUN_L00_0025b8c0_ba178(float *, float *, float, float, float, float) __asm__("FUN_L00_0025b8c0");
-extern float FUN_L00_0025bc98_ba178(char *, char *, int, float, float, float, float) __asm__("FUN_L00_0025bc98");
-extern float FUN_L13_002ba088_ba178(int, int, float, float, float, float, float) __asm__("FUN_L13_002ba088");
-extern float fast_add_rotations_ba178(float, float) __asm__("func_001FA580");
-extern int DebugPrint_alt_ba178() __asm__("FUN_001e93b0");
-extern int FUN_L00_001f0d60_ba178(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
-extern int allocate_voice_for_target_entry_alt_ba178(int, int, int) __asm__("FUN_0022da68");
-extern s32 scale_game_frames_ba178(s32) __asm__("FUN_001f96f8");
-extern short D_L13_00161430_ba178 __asm__("D_L13_00161430") __attribute__((sda));
-extern char D_L13_001F4450_ba178[] __asm__("D_L13_001F4450");
-extern unsigned char D_0013A4E0_ba178[] __asm__("D_0013A4E0");
-extern unsigned char D_0013E533_ba178[] __asm__("D_0013E533");
-extern void FUN_L00_001ff660_ba178(void *, void *, void *) __asm__("FUN_L00_001ff660");
-extern void FUN_L00_0025e450_ba178(void *, void *, void *, float, float, int, int, int, float, float, float, int, float, float, int, int, int, int) __asm__("FUN_L00_0025e450");
-extern void FUN_L00_002ea9d8_ba178(void *) __asm__("FUN_L00_002ea9d8");
-extern void FUN_L00_002eaa30_ba178(void *) __asm__("FUN_L00_002eaa30");
-extern void FUN_L00_002eaaa0_ba178(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0");
-extern void add_vector_xyz_ba178(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void build_spherical_offset_ba178(void *, f32, f32, f32) __asm__("func_00214DB0");
-extern void enqueue_callback_list_1_ba178(void *, void *) __asm__("FUN_001f4600");
-extern void fast_vec_normalize_ba178(void *, void *, f32) __asm__("FUN_001f9bf8");
-extern void release_voice_slot_ba178(s32) __asm__("FUN_0022d798");
-extern void subtract_vector_xyz_ba178(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void transform_vector_by_basis_ba178(void *, void *, void *) __asm__("func_001F9CF8");
-extern void update_view_context_ba178() __asm__("func_001F2D98");
-extern void vu_euler_rotation_basis_ba178(void *, void *) __asm__("func_001FA030");
-extern float absolute_float_ba178(float input) __asm__("func_001F99C0");
-extern void FUN_L13_002b97f8_ba178(char *moby) __asm__("FUN_L13_002b97f8");
-extern void FUN_L13_002b9df8_ba178(struct Moby *moby, char *obj, float p2, float p3) __asm__("FUN_L13_002b9df8");
-extern void FUN_L13_002b9f58_ba178(struct Moby *moby, char *obj) __asm__("FUN_L13_002b9f58");
-extern char D_0013C940_ba178[] __asm__("D_0013C940");
-extern char D_0013E550_ba178[] __asm__("D_0013E550");
-extern char D_0013F350_ba178[] __asm__("D_0013F350");
-extern char D_0013CAE0_ba178[] __asm__("D_0013CAE0");
-extern char D_0014094C_ba178[] __asm__("D_0014094C");
-extern char *D_L13_0016016C_c_ba178 __asm__("D_L13_001600EC") __attribute__((section(".sdata")));
-extern char *D_L13_00167100_ba178 __asm__("D_L13_00167100") __attribute__((section(".data")));
+    int boost_sound;
+    int target_path;
+} FlightData;
+extern char *D_L13_001600EC_gp __asm__("D_L13_001600EC") __attribute__((section(".sdata")));
+extern f32 frame_scale_gp __asm__("D_0015ED60") __attribute__((section(".sdata")));
+extern f32 frame_scale_sq_gp __asm__("D_0015ED64") __attribute__((section(".sdata")));
+extern f32 frame_time_gp __asm__("D_0015ED6C") __attribute__((section(".sdata")));
+extern u64 D_L13_00161430 __attribute__((sda));
+extern char *D_L13_00167100 __attribute__((section(".data")));
+extern char D_L13_00174140[];
+extern char D_L13_001F4450[];
+extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
+extern float vendor_spring(float *, float *, float, float, float, float) __asm__("FUN_L00_0025b8c0");
+extern float spring_angle(char *, char *, int, float, float, float, float) __asm__("FUN_L00_0025bc98");
+extern float FUN_L13_002ba088(int, int, float, float, float, float, float);
+extern void enqueue_callback_list_1(void *, void *) __asm__("FUN_001f4600");
+extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
+extern void update_view_context(void) __asm__("FUN_001f2d98");
+extern void euler_rotation_basis(void *, void *) __asm__("FUN_001fa030");
 
-void FUN_L13_002ba178(void *a0, void *a1) {
-    Moby_3E8 *m = a0;
-    Obj_3E8 *o = a1;
-    W4_3E8 old;
-    W4_3E8 vel;
-    W4_3E8 dir;
-    W4_3E8 side;
-    W4_3E8 up;
-    W4_3E8 ang;
-    W4_3E8 target;
-    W4_3E8 diff;
-    float a;
-    float b;
-    float ka;
-    float kb;
-    float lenA;
-    float lenB;
-    float d;
-    float e1, e2;
-    float h, tn;
-    float ratio;
-    char *pad;
-    char *g;
-    char *e;
-    char *p;
-    int idx;
-    int hc;
+void FUN_L13_002ba178(void *moby_arg, void *data_arg) {
+    FlightMoby *moby = moby_arg;
+    FlightData *data = data_arg;
+    FlightVec old_pos;
+    FlightVec impulse;
+    FlightVec velocity;
+    FlightVec cross;
+    FlightVec vertical;
+    FlightVec camera_angles;
+    FlightVec target;
+    FlightVec offset;
+    float steer_x;
+    float steer_y;
+    float steer_rate_x;
+    float steer_rate_y;
+    float pitch_limit;
+    float yaw_limit;
+    float distance;
+    float height, height_again;
+    float half_fov, tan_half_fov;
+    float speed_fraction;
+    char *pad_state;
+    char *player;
+    char *voice;
+    char *hit;
+    int voice_index;
+    int hit_class;
 
-    *(u128 *)dir = 0;
-    *(u128 *)up = 0;
-    up[2] = 1.0f;
-    dir[2] = D_0015ED6C_ba178 * 8.0f;
-    m->flags &= 0xFEFF;
-    *(u128 *)vel = *(u128 *)dir;
-    if (m->bc == 0) {
-        if (o->count > scale_game_frames_ba178(120)) {
-            pad = (char *)D_0013A4E0_ba178 + 0x2460;
-            if (*(int *)(pad + 0x1B4) & 0x40) {
-                idx = o->i10C;
-                if (idx != -1) {
-                    e = (char *)D_0013E533_ba178 + 0x1D + idx * 0x70;
-                    if (*(char **)(e + 0x88) == (char *)m && *(unsigned char *)(e + 0x74) != 0) {
-                        release_voice_slot_ba178(idx);
+    *(u128 *)velocity = 0;
+    *(u128 *)vertical = 0;
+    vertical[2] = 1.0f;
+    velocity[2] = frame_time_gp * 8.0f;
+    moby->flags &= 0xFEFF;
+    *(u128 *)impulse = *(u128 *)velocity;
+    if (moby->unkBC == 0) {
+        if (data->launch_frames > scale_game_frames(120)) {
+            pad_state = (char *)D_0013A4E0 + 0x2460;
+            if (*(int *)(pad_state + 0x1B4) & 0x40) {
+                voice_index = data->boost_sound;
+                if (voice_index != -1) {
+                    voice = (char *)D_0013E533 + 0x1D + voice_index * 0x70;
+                    if (*(char **)(voice + 0x88) == (char *)moby && *(unsigned char *)(voice + 0x74) != 0) {
+                        release_voice_slot(voice_index);
                     }
                 }
-                o->i10C = -1;
-                o->i10C = allocate_voice_for_target_entry_alt_ba178(1, 4, (int)m);
-            } else if (*(int *)(pad + 0x1B8) & 0x40) {
-                idx = o->i10C;
-                if (idx != -1) {
-                    e = (char *)D_0013E533_ba178 + 0x1D + idx * 0x70;
-                    if (*(char **)(e + 0x88) == (char *)m && *(unsigned char *)(e + 0x74) != 0) {
-                        release_voice_slot_ba178(idx);
+                data->boost_sound = -1;
+                data->boost_sound = allocate_voice_for_target_entry(1, 4, (int)moby);
+            } else if (*(int *)(pad_state + 0x1B8) & 0x40) {
+                voice_index = data->boost_sound;
+                if (voice_index != -1) {
+                    voice = (char *)D_0013E533 + 0x1D + voice_index * 0x70;
+                    if (*(char **)(voice + 0x88) == (char *)moby && *(unsigned char *)(voice + 0x74) != 0) {
+                        release_voice_slot(voice_index);
                     }
                 }
-                o->i10C = -1;
+                data->boost_sound = -1;
             }
-            pad = (char *)D_0013A4E0_ba178 + 0x2460;
-            if (*(int *)(pad + 0x1B0) & 0x40) {
-                float f = o->speed + D_0015ED60_ba178 * 0.035f;
-                float max = D_0015ED6C_ba178 * 30.0f;
-                o->speed = f;
-                if (max < f) {
-                    o->speed = max;
+            pad_state = (char *)D_0013A4E0 + 0x2460;
+            if (*(int *)(pad_state + 0x1B0) & 0x40) {
+                float boosted = data->speed + frame_scale_gp * 0.035f;
+                float max_speed = frame_time_gp * 30.0f;
+                data->speed = boosted;
+                if (max_speed < boosted) {
+                    data->speed = max_speed;
                 }
             } else {
-                float hi = D_0015ED6C_ba178 * 24.0f;
-                float step = D_0015ED60_ba178 * 0.025f;
-                float cur = o->speed;
-                if (cur < hi - step) {
-                    o->speed = cur + step;
-                } else if (hi < cur) {
-                    o->speed = cur + (hi - cur) * (D_0015ED60_ba178 * 0.1f);
+                float cruise_speed = frame_time_gp * 24.0f;
+                float step = frame_scale_gp * 0.025f;
+                float speed = data->speed;
+                if (speed < cruise_speed - step) {
+                    data->speed = speed + step;
+                } else if (cruise_speed < speed) {
+                    data->speed = speed + (cruise_speed - speed) * (frame_scale_gp * 0.1f);
                 } else {
-                    o->speed = hi;
+                    data->speed = cruise_speed;
                 }
             }
         } else {
-            o->count += 1;
-            o->speed += D_0015ED60_ba178 * 0.003f;
+            data->launch_frames += 1;
+            data->speed += frame_scale_gp * 0.003f;
         }
     } else {
-        o->speed = 0.0001f;
+        data->speed = 0.0001f;
     }
 
-    if (o->count > scale_game_frames_ba178(5)) {
-        char *h = (char *)D_0013E533_ba178 + 0xE1D;
-        ka = D_0015ED60_ba178 * 0.1f;
-        kb = D_0015ED60_ba178 * 0.25f;
-        a = *(float *)(h + 0x1D20);
-        b = *(float *)(h + 0x1D24);
-        if (*(int *)(D_0013A4E0_ba178 + 0x2600) & 0x200) {
-            a = a / (D_0015ED60_ba178 * 0.012271847f);
-            a = a * (D_0015ED60_ba178 * 0.015707964f);
-            b = b / (D_0015ED60_ba178 * 0.012271847f);
-            b = b * (D_0015ED60_ba178 * 0.015707964f);
-            ka = D_0015ED60_ba178 * 0.08f;
-            kb = D_0015ED60_ba178 * 0.08f;
+    if (data->launch_frames > scale_game_frames(5)) {
+        char *player = (char *)D_0013E533 + 0xE1D;
+        steer_rate_x = frame_scale_gp * 0.1f;
+        steer_rate_y = frame_scale_gp * 0.25f;
+        steer_x = *(float *)(player + 0x1D20);
+        steer_y = *(float *)(player + 0x1D24);
+        if (*(int *)(D_0013A4E0 + 0x2600) & 0x200) {
+            steer_x = steer_x / (frame_scale_gp * 0.012271847f);
+            steer_x = steer_x * (frame_scale_gp * 0.015707964f);
+            steer_y = steer_y / (frame_scale_gp * 0.012271847f);
+            steer_y = steer_y * (frame_scale_gp * 0.015707964f);
+            steer_rate_x = frame_scale_gp * 0.08f;
+            steer_rate_y = frame_scale_gp * 0.08f;
         }
-        FUN_L00_0025b8c0_ba178(&o->f6C, &o->f90, a, D_0015ED64_ba178 * 0.03f, D_0015ED64_ba178, ka);
-        FUN_L00_0025b8c0_ba178(&o->f70, &o->f94, b, D_0015ED64_ba178 * 0.03f, D_0015ED64_ba178, kb);
-        FUN_L00_0025bc98_ba178((char *)&o->f30, (char *)&o->f98, 0, o->f6C, D_0015ED64_ba178 * 0.05f, D_0015ED64_ba178, D_0015ED60_ba178);
-        o->f34 = fast_subtract_rotations_ba178(o->f34, o->f70 * (D_0015ED60_ba178 * 0.012271847f));
-        o->f38 = fast_subtract_rotations_ba178(o->f38, o->f6C * (D_0015ED60_ba178 * 0.012271847f));
-        if (o->f34 > 1.3962634f) {
-            o->f34 = 1.3962634f;
-        } else if (o->f34 < -1.3962634f) {
-            o->f34 = -1.3962634f;
+        vendor_spring(&data->steer_x, &data->steer_x_velocity, steer_x, frame_scale_sq_gp * 0.03f, frame_scale_sq_gp, steer_rate_x);
+        vendor_spring(&data->steer_y, &data->steer_y_velocity, steer_y, frame_scale_sq_gp * 0.03f, frame_scale_sq_gp, steer_rate_y);
+        spring_angle((char *)&data->roll, (char *)&data->roll_velocity, 0, data->steer_x, frame_scale_sq_gp * 0.05f, frame_scale_sq_gp, frame_scale_gp);
+        data->pitch = fast_subtract_rotations(data->pitch, data->steer_y * (frame_scale_gp * 0.012271847f));
+        data->yaw = fast_subtract_rotations(data->yaw, data->steer_x * (frame_scale_gp * 0.012271847f));
+        if (data->pitch > 1.3962634f) {
+            data->pitch = 1.3962634f;
+        } else if (data->pitch < -1.3962634f) {
+            data->pitch = -1.3962634f;
         }
-        if (m->r44 > 1.3962634f) {
-            m->r44 = 1.3962634f;
-        } else if (m->r44 < -1.3962634f) {
-            m->r44 = -1.3962634f;
+        if (moby->rot_y > 1.3962634f) {
+            moby->rot_y = 1.3962634f;
+        } else if (moby->rot_y < -1.3962634f) {
+            moby->rot_y = -1.3962634f;
         }
     }
 
-    lenA = 310.0f;
-    lenB = 500.0f;
-    if (o->i110 != -1) {
-        int off = o->i110 << 7;
-        char *base = D_L13_0016016C_c_ba178;
-        qcopy(target, ((char (*)[128])base)[o->i110] + 0x30);
-        lenA = fast_vec_length_ba178(base + off + 0x20);
-        add_vector_xyz_ba178(diff, (o->i110 << 7) + D_L13_0016016C_c_ba178, (o->i110 << 7) + D_L13_0016016C_c_ba178 + 0x10);
-        lenB = fast_vec_length_ba178(diff);
+    pitch_limit = 310.0f;
+    yaw_limit = 500.0f;
+    if (data->target_path != -1) {
+        int path_offset = data->target_path << 7;
+        char *paths = D_L13_001600EC_gp;
+        qcopy(target, ((char (*)[128])paths)[data->target_path] + 0x30);
+        pitch_limit = fast_vec_length(paths + path_offset + 0x20);
+        add_vector_xyz(offset, (data->target_path << 7) + D_L13_001600EC_gp, (data->target_path << 7) + D_L13_001600EC_gp + 0x10);
+        yaw_limit = fast_vec_length(offset);
     } else {
-        qcopy(target, &D_L13_00161430_ba178);
+        qcopy(target, &D_L13_00161430);
     }
 
-    d = vector_distance_ba178(m->pos, &D_L13_00161430_ba178);
-    o->f38 = FUN_L13_002ba088_ba178(1, 5, d, o->f38, fast_arc_tan_ba178(target[0] - m->pos[0], target[1] - m->pos[1]), 50.0f, lenB);
-    m->r48 = FUN_L13_002ba088_ba178(1, 5, d, m->r48, fast_arc_tan_ba178(target[0] - m->pos[0], target[1] - m->pos[1]), 50.0f, lenB);
-    e1 = absolute_float_ba178(target[2] - m->pos[2]);
-    o->f34 = FUN_L13_002ba088_ba178(1, 5, e1, o->f34, -fast_arc_tan_ba178(vector_distance_ba178(m->pos, target), target[2] - m->pos[2]), 50.0f, lenA);
-    e2 = absolute_float_ba178(target[2] - m->pos[2]);
-    m->r44 = FUN_L13_002ba088_ba178(1, 5, e2, m->r44, -fast_arc_tan_ba178(vector_distance_ba178(m->pos, target), target[2] - m->pos[2]), 50.0f, lenA);
-    build_spherical_offset_ba178(dir, o->speed, o->f38, -o->f34);
-    fast_vec_normalize_ba178(o->v10, dir, 1.0f);
-    qcopy(old, m->pos);
-    if (m->bc == 0) {
-        add_vector_xyz_ba178(m->pos, m->pos, dir);
+    distance = vector_distance(moby->pos, &D_L13_00161430);
+    data->yaw = FUN_L13_002ba088(1, 5, distance, data->yaw, fast_arc_tan(target[0] - moby->pos[0], target[1] - moby->pos[1]), 50.0f, yaw_limit);
+    moby->rot_z = FUN_L13_002ba088(1, 5, distance, moby->rot_z, fast_arc_tan(target[0] - moby->pos[0], target[1] - moby->pos[1]), 50.0f, yaw_limit);
+    height = absolute_float(target[2] - moby->pos[2]);
+    data->pitch = FUN_L13_002ba088(1, 5, height, data->pitch, -fast_arc_tan(vector_distance(moby->pos, target), target[2] - moby->pos[2]), 50.0f, pitch_limit);
+    height_again = absolute_float(target[2] - moby->pos[2]);
+    moby->rot_y = FUN_L13_002ba088(1, 5, height_again, moby->rot_y, -fast_arc_tan(vector_distance(moby->pos, target), target[2] - moby->pos[2]), 50.0f, pitch_limit);
+    build_spherical_offset(velocity, data->speed, data->yaw, -data->pitch);
+    fast_vec_normalize(data->direction, velocity, 1.0f);
+    qcopy(old_pos, moby->pos);
+    if (moby->unkBC == 0) {
+        add_vector_xyz(moby->pos, moby->pos, velocity);
     }
     {
-        float lo = D_0015ED6C_ba178 * 24.0f;
-        float sp = o->speed - lo;
-        float range = D_0015ED6C_ba178 * 30.0f - lo;
-        if (sp < 0.0f) {
-            ratio = 0.0f / range;
+        float min_speed = frame_time_gp * 24.0f;
+        float excess = data->speed - min_speed;
+        float range = frame_time_gp * 30.0f - min_speed;
+        if (excess < 0.0f) {
+            speed_fraction = 0.0f / range;
         } else {
-            ratio = sp / range;
+            speed_fraction = excess / range;
         }
     }
     {
-        W4_3E8 tbl[2];
-        W4_3E8 w;
-        W4_3E8 r;
-        float mat[12];
-        /* Near miss (diff 7, sched1 order of the r stores): the volatile accesses below
+        FlightVec camera_offsets[2];
+        FlightVec camera_pos;
+        FlightVec camera_rot;
+        float basis[12];
+        /* Near miss (diff 7, sched1 order of the camera_rot stores): the volatile accesses below
          * are draft-only scheduling experiments, not believed original. */
-        *(u128 *)w = 0;
-        w[1] = *(volatile float *)&o->f6C * -3.0f * 0.25f;
-        w[0] = (-15.0f - o->f70 - ratio * 4.0f) * 0.25f;
-        *(volatile u128 *)r = 0;
-        ((volatile float *)w)[2] = (4.0f + o->f70 * 2.0f) * 0.25f;
-        ((volatile float *)r)[0] = -1.275f;
-        r[2] = 0.65f;
-        *(volatile float *)&o->fC4 = ratio;
-        *(u128 *)tbl[0] = *(u128 *)w;
-        *(u128 *)tbl[1] = *(u128 *)r;
-        if (m->state == 2) {
-            o->fB4 = tbl[o->sel][0];
-            o->fB8 = tbl[o->sel][1];
-            o->fBC = tbl[o->sel][2];
+        *(u128 *)camera_pos = 0;
+        camera_pos[1] = *(volatile float *)&data->steer_x * -3.0f * 0.25f;
+        camera_pos[0] = (-15.0f - data->steer_y - speed_fraction * 4.0f) * 0.25f;
+        *(volatile u128 *)camera_rot = 0;
+        ((volatile float *)camera_pos)[2] = (4.0f + data->steer_y * 2.0f) * 0.25f;
+        ((volatile float *)camera_rot)[0] = -1.275f;
+        camera_rot[2] = 0.65f;
+        *(volatile float *)&data->speed_fraction = speed_fraction;
+        *(u128 *)camera_offsets[0] = *(u128 *)camera_pos;
+        *(u128 *)camera_offsets[1] = *(u128 *)camera_rot;
+        if (moby->state == 2) {
+            data->camera_offset_x = camera_offsets[data->camera_mode][0];
+            data->camera_offset_y = camera_offsets[data->camera_mode][1];
+            data->camera_offset_z = camera_offsets[data->camera_mode][2];
         } else {
-            FUN_L00_0025b8c0_ba178(&o->fB4, &o->fC8, tbl[o->sel][0], D_0015ED64_ba178 * 0.15f, D_0015ED64_ba178 * 0.8f, D_0015ED60_ba178);
-            FUN_L00_0025b8c0_ba178(&o->fB8, &o->fCC, tbl[o->sel][1], D_0015ED64_ba178 * 0.15f, D_0015ED64_ba178 * 0.8f, D_0015ED60_ba178);
-            FUN_L00_0025b8c0_ba178(&o->fBC, &o->fD0, tbl[o->sel][2], D_0015ED64_ba178 * 0.15f, D_0015ED64_ba178 * 0.8f, D_0015ED60_ba178);
+            vendor_spring(&data->camera_offset_x, &data->camera_offset_x_velocity, camera_offsets[data->camera_mode][0], frame_scale_sq_gp * 0.15f, frame_scale_sq_gp * 0.8f, frame_scale_gp);
+            vendor_spring(&data->camera_offset_y, &data->camera_offset_y_velocity, camera_offsets[data->camera_mode][1], frame_scale_sq_gp * 0.15f, frame_scale_sq_gp * 0.8f, frame_scale_gp);
+            vendor_spring(&data->camera_offset_z, &data->camera_offset_z_velocity, camera_offsets[data->camera_mode][2], frame_scale_sq_gp * 0.15f, frame_scale_sq_gp * 0.8f, frame_scale_gp);
         }
-        diff[0] = o->fB4;
-        diff[1] = o->fB8;
-        diff[2] = o->fBC;
-        diff[3] = 0.0f;
-        vu_euler_rotation_basis_ba178(mat, (char *)&o->f30);
-        transform_vector_by_basis_ba178(target, diff, mat);
-        add_vector_xyz_ba178(w, m->pos, target);
-        FUN_L00_002ea9d8_ba178(w);
-        r[0] = fast_add_rotations_ba178(o->f30 * 0.5f, o->f6C * 0.03125f);
-        r[1] = fast_subtract_rotations_ba178(fast_add_rotations_ba178(o->f34, 0.09817477f), o->f70 * (D_0015ED60_ba178 * 0.012271847f));
-        r[2] = o->f38;
-        if (m->state == 2) {
-            qcopy(&o->f20, r);
+        offset[0] = data->camera_offset_x;
+        offset[1] = data->camera_offset_y;
+        offset[2] = data->camera_offset_z;
+        offset[3] = 0.0f;
+        euler_rotation_basis(basis, (char *)&data->roll);
+        transform_vector_by_basis(target, offset, basis);
+        add_vector_xyz(camera_pos, moby->pos, target);
+        FUN_L00_002ea9d8(camera_pos);
+        camera_rot[0] = fast_add_rotations(data->roll * 0.5f, data->steer_x * 0.03125f);
+        camera_rot[1] = fast_subtract_rotations(fast_add_rotations(data->pitch, 0.09817477f), data->steer_y * (frame_scale_gp * 0.012271847f));
+        camera_rot[2] = data->yaw;
+        if (moby->state == 2) {
+            qcopy(&data->camera_roll, camera_rot);
         } else {
-            FUN_L00_0025bc98_ba178((char *)&o->f20, (char *)&o->fA0, 0, r[0], D_0015ED64_ba178 * 0.15f, D_0015ED64_ba178 * 0.8f, D_0015ED60_ba178);
-            FUN_L00_0025bc98_ba178((char *)&o->f24, (char *)&o->fA4, 0, r[1], D_0015ED64_ba178 * 0.15f, D_0015ED64_ba178 * 0.8f, D_0015ED60_ba178);
-            FUN_L00_0025bc98_ba178((char *)&o->f28, (char *)&o->fA8, 0, r[2], D_0015ED64_ba178 * 0.15f, D_0015ED64_ba178 * 0.8f, D_0015ED60_ba178);
+            spring_angle((char *)&data->camera_roll, (char *)&data->camera_roll_velocity, 0, camera_rot[0], frame_scale_sq_gp * 0.15f, frame_scale_sq_gp * 0.8f, frame_scale_gp);
+            spring_angle((char *)&data->camera_pitch, (char *)&data->camera_pitch_velocity, 0, camera_rot[1], frame_scale_sq_gp * 0.15f, frame_scale_sq_gp * 0.8f, frame_scale_gp);
+            spring_angle((char *)&data->camera_yaw, (char *)&data->camera_yaw_velocity, 0, camera_rot[2], frame_scale_sq_gp * 0.15f, frame_scale_sq_gp * 0.8f, frame_scale_gp);
         }
-        ang[0] = o->f20;
-        ang[2] = o->f28;
-        ang[1] = o->f24;
-        FUN_L00_002eaa30_ba178(ang);
-        if (*(short *)(D_L13_00167100_ba178 + 0x86) != 5) {
-            DebugPrint_alt_ba178(D_L13_001F4450_ba178);
-            FUN_L00_002eaaa0_ba178(w, ang, 0, 0, 0);
+        camera_angles[0] = data->camera_roll;
+        camera_angles[2] = data->camera_yaw;
+        camera_angles[1] = data->camera_pitch;
+        FUN_L00_002eaa30(camera_angles);
+        if (*(short *)(D_L13_00167100 + 0x86) != 5) {
+            stub_printf(D_L13_001F4450);
+            jet_mount(camera_pos, camera_angles, 0, 0, 0);
         }
     }
-    FUN_L00_0025b8c0_ba178(&o->fB0, &o->fC0, 1.134464f + (1.4835298f - 1.134464f) * ratio, 0.05f, 1.0f, 1.0f);
-    h = o->fB0 * 0.5f;
-    tn = fast_sin_ba178(h) / fast_cos_ba178(h);
-    D_L13_0016CDF0_ba178 = tn;
-    update_view_context_ba178();
-    m->r40 = fast_add_rotations_ba178(o->f30, o->f6C * 0.5f);
-    m->r44 = fast_add_rotations_ba178(o->f34, -o->f70 * 0.5f);
-    m->r48 = fast_add_rotations_ba178(o->f38, -o->f6C * 0.0f);
-    if (FUN_L00_001f0d60_ba178(1.2f, m->pos, 0, m)) {
-        p = D_L13_00174140_ba178;
-        if (*(char **)(p + 0x18) == 0 || (hc = *(short *)(*(char **)(p + 0x18) + 0xA6), hc != 0 && hc != 0x192 && hc != 0x4C2 && hc != 0x4C3 && hc != 0x52 && hc != 0x53)) {
-            qcopy(m->pos, p + 0x30);
-            FUN_L00_001ff660_ba178(dir, dir, p + 0x40);
-            o->f38 = fast_add_rotations_ba178(o->f38, fast_subtract_rotations_ba178(fast_arc_tan_ba178(dir[0], dir[1]), o->f38) * (D_0015ED60_ba178 * 0.1f));
-            o->f34 = fast_add_rotations_ba178(o->f34, fast_subtract_rotations_ba178(-fast_arc_tan_ba178(vector_length_xy_ba178(dir), dir[2]), o->f34) * (D_0015ED60_ba178 * 0.1f));
-            o->speed = o->speed * 0.7f;
-            if (*(char **)(p + 0x18) != 0) {
-                if (o->iDC == 0) {
-                    g = (char *)D_0013E533_ba178 + 0xE1D;
-                    *(float *)(g + 0x15FC) = *(float *)(g + 0x15FC) - 5.0f;
-                    if (*(float *)(g + 0x15FC) < 0.0f) {
-                        subtract_vector_xyz_ba178(side, p + 0x50, p + 0x60);
-                        fast_vec_normalize_ba178(side, side, 1.0f);
-                        FUN_L00_001ff660_ba178(vel, dir, p + 0x40);
-                        fast_vec_normalize_ba178(vel, vel, D_0015ED6C_ba178 + D_0015ED6C_ba178);
-                        fast_vec_normalize_ba178(up, p + 0x40, 1.0f);
-                        FUN_L00_0025e450_ba178(m, vel, 0, 8.0f, 100.0f, 0x1E, 0xA, 0x18, 16.0f, 8.0f, 9.0f, 6, 1.0f, 50.0f, 1, 1, -1, 0);
-                        o->s62 = scale_game_frames_ba178(240);
-                        m->state = 6;
+    vendor_spring(&data->fov, &data->fov_velocity, 1.134464f + (1.4835298f - 1.134464f) * speed_fraction, 0.05f, 1.0f, 1.0f);
+    half_fov = data->fov * 0.5f;
+    tan_half_fov = fast_sin(half_fov) / fast_cos(half_fov);
+    D_L13_0016CDF0 = tan_half_fov;
+    update_view_context();
+    moby->rot_x = fast_add_rotations(data->roll, data->steer_x * 0.5f);
+    moby->rot_y = fast_add_rotations(data->pitch, -data->steer_y * 0.5f);
+    moby->rot_z = fast_add_rotations(data->yaw, -data->steer_x * 0.0f);
+    if (coll_sphere(1.2f, moby->pos, 0, moby)) {
+        hit = D_L13_00174140;
+        if (*(char **)(hit + 0x18) == 0 || (hit_class = *(short *)(*(char **)(hit + 0x18) + 0xA6), hit_class != 0 && hit_class != 0x192 && hit_class != 0x4C2 && hit_class != 0x4C3 && hit_class != 0x52 && hit_class != 0x53)) {
+            qcopy(moby->pos, hit + 0x30);
+            jet_reflect_vector(velocity, velocity, hit + 0x40);
+            data->yaw = fast_add_rotations(data->yaw, fast_subtract_rotations(fast_arc_tan(velocity[0], velocity[1]), data->yaw) * (frame_scale_gp * 0.1f));
+            data->pitch = fast_add_rotations(data->pitch, fast_subtract_rotations(-fast_arc_tan(vector_length_xy(velocity), velocity[2]), data->pitch) * (frame_scale_gp * 0.1f));
+            data->speed = data->speed * 0.7f;
+            if (*(char **)(hit + 0x18) != 0) {
+                if (data->hit_cooldown == 0) {
+                    player = (char *)D_0013E533 + 0xE1D;
+                    *(float *)(player + 0x15FC) = *(float *)(player + 0x15FC) - 5.0f;
+                    if (*(float *)(player + 0x15FC) < 0.0f) {
+                        subtract_vector_xyz(cross, hit + 0x50, hit + 0x60);
+                        fast_vec_normalize(cross, cross, 1.0f);
+                        jet_reflect_vector(impulse, velocity, hit + 0x40);
+                        fast_vec_normalize(impulse, impulse, frame_time_gp + frame_time_gp);
+                        fast_vec_normalize(vertical, hit + 0x40, 1.0f);
+                        jet_explosion(moby, impulse, 0, 8.0f, 100.0f, 0x1E, 0xA, 0x18, 16.0f, 8.0f, 9.0f, 6, 1.0f, 50.0f, 1, 1, -1, 0);
+                        data->death_timer = scale_game_frames(240);
+                        moby->state = 6;
                     }
-                    o->iDC = scale_game_frames_ba178(10);
+                    data->hit_cooldown = scale_game_frames(10);
                 }
             } else {
-                *(float *)(D_0013E533_ba178 + 0x2419) = 0.0f;
-                FUN_L00_0025e450_ba178(m, vel, 0, 8.0f, 100.0f, 0x1E, 0xA, 0x18, 16.0f, 8.0f, 9.0f, 6, 1.0f, 50.0f, 1, 1, -1, 0);
-                m->flags |= 0x41;
-                o->s62 = scale_game_frames_ba178(240);
-                m->state = 6;
+                *(float *)(D_0013E533 + 0x2419) = 0.0f;
+                jet_explosion(moby, impulse, 0, 8.0f, 100.0f, 0x1E, 0xA, 0x18, 16.0f, 8.0f, 9.0f, 6, 1.0f, 50.0f, 1, 1, -1, 0);
+                moby->flags |= 0x41;
+                data->death_timer = scale_game_frames(240);
+                moby->state = 6;
             }
         }
     }
-    enqueue_callback_list_1_ba178(FUN_L13_002b97f8_ba178, m);
-    FUN_L13_002b9f58_ba178((char *)m, (char *)o);
-    FUN_L13_002b9df8_ba178((char *)m, (char *)o, fast_add_rotations_ba178(o->f28, -o->f6C / 7.0f),
-                      -fast_add_rotations_ba178(o->f24, -(o->f70 / 7.0f) - 0.1f));
+    enqueue_callback_list_1(FUN_L13_002b97f8, moby);
+    FUN_L13_002b9f58((struct Moby *)moby, (char *)data);
+    FUN_L13_002b9df8((struct Moby *)moby, (char *)data, fast_add_rotations(data->camera_yaw, -data->steer_x / 7.0f),
+                     -fast_add_rotations(data->camera_pitch, -(data->steer_y / 7.0f) - 0.1f));
 }
 #endif
