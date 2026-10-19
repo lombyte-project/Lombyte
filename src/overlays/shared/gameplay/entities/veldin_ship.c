@@ -2245,6 +2245,8 @@ void horny_toad_update(Moby *moby) {
     enum {
         HORNY_TOAD_INITIALIZE = 0,
         HORNY_TOAD_FACE_FOLLOW_MOBY = 1,
+        HORNY_TOAD_MOVE_TO_PATH_POINT = 2,
+        HORNY_TOAD_WAIT_TO_FOLLOW_PATH = 3,
         HORNY_TOAD_FOLLOW_PATH = 4,
         HORNY_TOAD_RETURN_HOME = 8
     };
@@ -2318,13 +2320,13 @@ void horny_toad_update(Moby *moby) {
         }
         break;
     }
-    case 2:
+    case HORNY_TOAD_MOVE_TO_PATH_POINT:
         if (FUN_L00_002d54c8_2d4610((unsigned char *)moby, toad_paths[data->path]->pts[data->path_point], 0.5f) < 1.0f) {
             moby->state = 1;
             if (moby->prev_seq != 2) FUN_00212f90_2d4610(moby, 2, 0, scale_game_frames(10));
         }
         break;
-    case 3:
+    case HORNY_TOAD_WAIT_TO_FOLLOW_PATH:
         if (data->unk1C4 != 2) {
             moby->state = 4;
             if (moby->prev_seq != 4) FUN_00212f90_2d4610(moby, 4, 0, scale_game_frames(10));
