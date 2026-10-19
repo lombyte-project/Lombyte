@@ -223,7 +223,8 @@ extern void FUN_00213ed8_c(char *, float, float) __asm__("FUN_00213ed8");
 void FUN_L08_002ea398(char *m)
 {
     enum {
-        POSITION_BASELINE_INITIALIZE = 0
+        POSITION_BASELINE_INITIALIZE = 0,
+        POSITION_APPROACH_TARGET = 2
     };
     char *d = *(char **)(m + 0x78);
     char *o;
@@ -246,7 +247,7 @@ void FUN_L08_002ea398(char *m)
             FUN_00213ed8_c(m + 0x18, (*(float *)d - *(float *)(d + 4)) * **(float **)(o + 0x78) + *(float *)(d + 4), frame_time * 10.0f);
         }
         break;
-    case 2:
+    case POSITION_APPROACH_TARGET:
         FUN_00213ed8_c(m + 0x18, *(float *)d, frame_time * 10.0f);
         break;
     }
