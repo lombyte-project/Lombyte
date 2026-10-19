@@ -2268,6 +2268,11 @@ typedef struct {
 } SwitchVars;
 #define MIN(a, b) ((a) < (b) ? (a) : (b))
 void FUN_L13_002e4448(char *moby) {
+    enum {
+        INITIALIZE_LINKED_GROUP = 0,
+        RESET_HIT_STATE = 3,
+        UPDATE_OPENED_STATE = 4
+    };
     SwitchVars *data = *(SwitchVars **)(moby + 0x78);
     int hit = 0;
 
@@ -2275,7 +2280,7 @@ void FUN_L13_002e4448(char *moby) {
         hit = FUN_L13_002e4300((struct Moby *)moby, data, &data->unk20);
     }
     switch ((unsigned char)moby[0x20]) {
-    case 0:
+    case INITIALIZE_LINKED_GROUP:
         if (data->unk79 == 0) {
             char *iter[4];
             char *linked;
@@ -2349,7 +2354,7 @@ void FUN_L13_002e4448(char *moby) {
             }
         }
         break;
-    case 3:
+    case RESET_HIT_STATE:
         set_moby_color(moby, 0x80, 0x80, 0x80);
 
         data->unk7A = 0;
@@ -2358,7 +2363,7 @@ void FUN_L13_002e4448(char *moby) {
         moby[0x20] = 1;
 
         break;
-    case 4:
+    case UPDATE_OPENED_STATE:
         if (data->unk79 == 0 && data->unk70 != -1) {
             if (fast_dec_timer_s16(&data->unk70) != 0) {
 
