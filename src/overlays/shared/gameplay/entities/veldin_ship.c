@@ -2267,6 +2267,7 @@ void horny_toad_update(Moby *moby) {
         HORNY_TOAD_APPROACH_AND_FACE_TARGET = 6,
         HORNY_TOAD_PLAY_TARGET_ANIMATION = 7,
         HORNY_TOAD_RETURN_HOME = 8,
+        HORNY_TOAD_RUN_MOVEMENT_SEQUENCE = 9,
         HORNY_TOAD_MOVE_TO_POINT_OR_FACE_TARGET = 10,
         HORNY_TOAD_RECOVER_FROM_REACTION = 11,
         HORNY_TOAD_DYING = 12
@@ -2325,7 +2326,7 @@ void horny_toad_update(Moby *moby) {
         }
         break;
     }
-    case 9:
+    case HORNY_TOAD_RUN_MOVEMENT_SEQUENCE:
         if (FUN_L00_002dc9f0_2d4610(moby, data->unk70) != 0) {
             moby->state = 5;
             data->unk138 = 0;
