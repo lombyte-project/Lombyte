@@ -119,6 +119,11 @@ extern void enqueue_callback_list_1(int, int) __asm__("FUN_001f4600");
 
 void gadgebot_spawn_container_update(unsigned char *moby) __asm__("FUN_L06_002d85a0");
 void gadgebot_spawn_container_update(unsigned char *moby) {
+    enum {
+        GADGEBOT_CONTAINER_ACTIVATE = 0,
+        GADGEBOT_CONTAINER_PULSE_AND_HANDLE_HITS = 1,
+        GADGEBOT_CONTAINER_WAIT_FOR_REMOVAL = 2
+    };
     char *p = find_moby_hit(moby, 0x10000, 0);
     float tmp[4];
     int t;
@@ -126,10 +131,10 @@ void gadgebot_spawn_container_update(unsigned char *moby) {
 
     moby[0xA4] = 0xFF;
     switch (moby[0x20]) {
-    case 0:
+    case GADGEBOT_CONTAINER_ACTIVATE:
         moby[0x20] = 1;
         break;
-    case 1:
+    case GADGEBOT_CONTAINER_PULSE_AND_HANDLE_HITS:
         t = level_frame_count;
         f = (float)(t % 150) / 150.0f * 2.0f * 3.14159274f;
         if (f > 3.14159274f) {
@@ -144,7 +149,7 @@ void gadgebot_spawn_container_update(unsigned char *moby) {
             enqueue_callback_list_1((int)FUN_L06_002d8738_u, (int)moby);
         }
         break;
-    case 2:
+    case GADGEBOT_CONTAINER_WAIT_FOR_REMOVAL:
         qcopy(tmp, moby + 0x10);
         tmp[2] += 0.3f;
         if (FUN_L00_001fefc8(moby + 0xBC) != 0) {
