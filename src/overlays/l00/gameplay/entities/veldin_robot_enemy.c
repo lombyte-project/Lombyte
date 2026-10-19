@@ -232,7 +232,9 @@ void veldin_robot_enemy_update(VendMoby *moby) {
         VELDIN_ROBOT_STATE_WAIT_TO_FOLLOW_PATH = 1,
         VELDIN_ROBOT_STATE_FOLLOW_PATH = 2,
         VELDIN_ROBOT_STATE_FACE_TARGET = 3,
+        VELDIN_ROBOT_STATE_WAIT_TO_START_COLLISION_PROBES = 4,
         VELDIN_ROBOT_STATE_PROCESS_COLLISION_PROBES = 5,
+        VELDIN_ROBOT_STATE_WAIT_TO_RETURN_TO_FACE_TARGET = 6,
         VELDIN_ROBOT_STATE_DAMAGE_KNOCKBACK = 7,
         VELDIN_ROBOT_STATE_DEATH_KNOCKBACK = 8
     };
@@ -333,7 +335,7 @@ void veldin_robot_enemy_update(VendMoby *moby) {
             VEND_ANIM(moby, 5, vend_rand(10));
         }
         break;
-    case 4:
+    case VELDIN_ROBOT_STATE_WAIT_TO_START_COLLISION_PROBES:
         VEND_TURN(
             moby, vars,
             fast_arc_tan(target->pos.f[0] - moby->pos.f[0], target->pos.f[1] - moby->pos.f[1]),
@@ -401,7 +403,7 @@ void veldin_robot_enemy_update(VendMoby *moby) {
         }
         break;
     }
-    case 6:
+    case VELDIN_ROBOT_STATE_WAIT_TO_RETURN_TO_FACE_TARGET:
         VEND_TURN(
             moby, vars,
             fast_arc_tan(target->pos.f[0] - moby->pos.f[0], target->pos.f[1] - moby->pos.f[1]),
