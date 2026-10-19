@@ -96,6 +96,7 @@ void sentrybot_update(unsigned char *moby) {
         SENTRYBOT_INITIALIZE = 0,
         SENTRYBOT_WAIT_FOR_LINKED_MOBY = 1,
         SENTRYBOT_PATROL_PAUSE = 3,
+        SENTRYBOT_DEACTIVATE_LINKED_MOBYS_AFTER_ANIMATION = 5,
         SENTRYBOT_TURN_NEGATIVE_HEADING_DELTA = 6,
         SENTRYBOT_TURN_POSITIVE_HEADING_DELTA = 7,
         SENTRYBOT_TURN_AROUND = 8,
@@ -326,7 +327,7 @@ void sentrybot_update(unsigned char *moby) {
             *(short *)(data + 0x194) = 0;
         }
         break;
-    case 5:
+    case SENTRYBOT_DEACTIVATE_LINKED_MOBYS_AFTER_ANIMATION:
         if (moby[0x70] & 2) {
             *(short *)(data + 0x154) = scale_game_frames(0xF0);
             if (*(int *)(data + 0x150) != -1) {
