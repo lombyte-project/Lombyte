@@ -1736,7 +1736,7 @@ extern char D_0013F350[];
 
 void FUN_L15_0029d6c0(M_29E8A0 *m) {
     Tbl_29E8A0 tbl;
-    float v50[4];
+    float effect_bias_velocity[4];
     float previous_position[4];
     float burst_drift_velocity[4];
     float burst_rotation_axis[4];
@@ -1976,12 +1976,12 @@ void FUN_L15_0029d6c0(M_29E8A0 *m) {
                     *(u128_29E8A0 *)v100 = *(u128_29E8A0 *)r4;
                 }
             }
-            subtract_vector_xyz_c2(v50, D_L15_001673C0, m->pos);
-            dist = fast_vec_length(v50);
-            v50[2] = v50[2] + dist * 0.5f;
+            subtract_vector_xyz_c2(effect_bias_velocity, D_L15_001673C0, m->pos);
+            dist = fast_vec_length(effect_bias_velocity);
+            effect_bias_velocity[2] = effect_bias_velocity[2] + dist * 0.5f;
             fast_vec_normalize(v100, v100, dist / 5.0f * D_0015ED6C);
-            fast_vec_normalize(v50, v50, (dist + dist) * D_0015ED6C);
-            add_vector_xyz(v100, v100, v50);
+            fast_vec_normalize(effect_bias_velocity, effect_bias_velocity, (dist + dist) * D_0015ED6C);
+            add_vector_xyz(v100, v100, effect_bias_velocity);
             clamp_vector_length(v100, v100, D_0015ED6C * 10.0f);
             FUN_L00_002af450((char *)m->pos, (char *)v100, FUN_L00_00257b90(scale_game_frames(0x3C), scale_game_frames(0x5A)), 0, 0);
             {
