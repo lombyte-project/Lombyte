@@ -3524,7 +3524,9 @@ void FUN_L06_002fc640(Moby_2FDA70 *moby) {
     enum {
         INITIALIZE_POSITION_AND_LINKED_MOBYS = 0,
         MOVE_TO_NODE_BASE_HEIGHT = 5,
-        MOVE_TO_NODE_OFFSET_HEIGHT = 6
+        MOVE_TO_NODE_OFFSET_HEIGHT = 6,
+        WAIT_FOR_HERO_CLEARANCE_AT_NODE_OFFSET_HEIGHT = 7,
+        WAIT_FOR_HERO_CLEARANCE_AT_NODE_BASE_HEIGHT = 8
     };
     Vec_2FDA70 position_delta;
     Vec_2FDA70 initial_rotation;
@@ -3706,8 +3708,8 @@ void FUN_L06_002fc640(Moby_2FDA70 *moby) {
         }
         break;
     }
-    case 7:
-    case 8:
+    case WAIT_FOR_HERO_CLEARANCE_AT_NODE_OFFSET_HEIGHT:
+    case WAIT_FOR_HERO_CLEARANCE_AT_NODE_BASE_HEIGHT:
         if (vector_distance(&((Hero_2FDA70 *)(D_0013F350))->pos, &moby->pos) >= 1.0f) {
             if (moby->state == 7) {
                 moby->state = 3;
