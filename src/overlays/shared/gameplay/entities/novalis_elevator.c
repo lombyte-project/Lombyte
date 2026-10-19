@@ -1096,6 +1096,9 @@ extern void blend_moby_animation_3830(void *, int, int, int) __asm__("FUN_00212f
 extern int random_integer_3830(void) __asm__("FUN_001160d8");
 
 void FUN_L01_002e3830(struct Moby *m, char *p) {
+    enum {
+        HOVER_FACE_GOAL_AND_WAIT = 0
+    };
     Vec4 v;
     f32 d, ang, len, ground, near;
     s32 hit;
@@ -1110,7 +1113,7 @@ void FUN_L01_002e3830(struct Moby *m, char *p) {
     vector_distance(&m->pos, p);
 
     switch (m->command) {
-    case 0:
+    case HOVER_FACE_GOAL_AND_WAIT:
         ang = fast_arc_tan(*(f32 *)(p + 0) - m->pos.x, *(f32 *)(p + 4) - m->pos.y);
         FUN_L00_00258278(m, ang, &D_L01_001DEB4C, frame_time_sq * 11.519173f,
                          frame_time_sq * 3.1415927f, frame_time * 11.519173f);
