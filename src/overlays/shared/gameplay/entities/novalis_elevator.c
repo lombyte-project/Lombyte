@@ -2876,8 +2876,8 @@ void gunship_follow_path(char *moby) {
             if (!valid) {
                 FUN_L00_0026e150_2f5168(iterator, B2(moby, 0x21), 0, 0);
                 while (*(char **)iterator != 0) {
-                    child_data = *(char **)(*(char **)iterator + 0x78);
                     B2(*(char **)iterator, 0x20) = 3;
+                    child_data = *(char **)(*(char **)iterator + 0x78);
                     H2(child_data, 0x11c) = FUN_00220e30_2f5168(5);
                     FUN_L00_0026e238_2f5168(iterator, *(char **)iterator, 0, 0);
                 }

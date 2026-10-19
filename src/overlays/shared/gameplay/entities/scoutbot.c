@@ -1674,9 +1674,9 @@ void FUN_L08_003024d8(char *m) {
             *(float *)(d + 0x98) = 0.25f;
             *(float *)(d + 0xc0) = 11.0f;
             *(float *)(d + 0x8c) = angle;
+            *(float *)(d + 0x80) = pose_scale;
             *(float *)(d + 0x88) = timer_scale;
             *(int *)(d + 0x90) = 0x200;
-            *(float *)(d + 0x80) = pose_scale;
             angle = angle_atan2_3024d8(*(float *)(m + 0x10) - *(float *)(*(char **)(h + 0x20) + 0x10),
                 *(float *)(m + 0x14) - *(float *)(*(char **)(h + 0x20) + 0x14));
             *(u128 *)pos = *(u128 *)(h + 0x10);

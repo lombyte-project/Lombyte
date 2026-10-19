@@ -447,8 +447,8 @@ int FUN_L11_003192c8(char *moby) {
         *(float *)&D_L11_001623F0_d = 5.0f;
     }
     position_y_base = (float *)(stack_data + 0x54);
-    position_base = (float *)(stack_data + 0x50);
     colors_base = (int *)(stack_data + 0x40);
+    position_base = (float *)(stack_data + 0x50);
     for (i = 0; i < 16; i++) {
         long long texture;
         long long *packet = (long long *)(stack_data + 0x70);

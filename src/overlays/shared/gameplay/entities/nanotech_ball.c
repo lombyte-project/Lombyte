@@ -2939,8 +2939,8 @@ void FUN_L00_002ddf60(void *frame_context, void *initial_vector) {
         *(u128 *)&temp1 = 0;
         *(u128 *)&temp2 = 0;
         temp1[2] = 0.1f;
-        temp2[3] = 1.0f;
         temp1[3] = 1.0f;
+        temp2[3] = 1.0f;
         temp2[0] = 1.0f;
         sampled = fast_add_rotations(D_L00_00161B80_lui, FUN_00257be8_002ddf60(45.0f, 315.0f) * 0.017453292f);
         FUN_0025fc08_002ddcb8(D_L00_00161B70_lui, sampled, &temp1, &temp2);

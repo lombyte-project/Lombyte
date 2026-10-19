@@ -917,8 +917,8 @@ collision_done:
             }
             distance = FUN_001f9b80_2c1928(pos,&vars->target->pos);
             if (vars->target == hero.moby) {
-                moby->state = 5;
                 rate = frame_scale;
+                moby->state = 5;
                 if (moby->anim_flags & 2) {
                     rate = frame_scale;
                     if (moby->prev_seq != 6) { ANIM_2bffa8(6,0); rate = frame_scale; }

@@ -3005,8 +3005,8 @@ void pyrocitor_update(unsigned char *m) {
         break;
     case 3:
         if (!FUN_L00_0028d8c0_2b77f0(m, *(s16 *)(v + 0x4A)))
-            *(s16 *)(v + 0x4A) = FUN_L00_0028dbe8_2b77f0(1, 4, m);
         h = *(s16 *)(v + 0x44);
+            *(s16 *)(v + 0x4A) = FUN_L00_0028dbe8_2b77f0(1, 4, m);
         if (h != -1 && m[0x20] == 3) {
             dir.q = 0;
             dir.f[2] = 2.0f;

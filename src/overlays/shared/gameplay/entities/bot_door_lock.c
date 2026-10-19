@@ -42,8 +42,8 @@ void FUN_L06_00307578(char *moby) {
     *(volatile u64 *)&quad.primitive = 0x4000000044ULL;
     quad.reserved.value = 0;
     indices = D_L06_001fe9d0;
-    i = 0;
     quad.texture = get_effect_texture(0x18);
+    i = 0;
     result0 = &result[0];
     result1 = &result[1];
     result2 = &result[2];

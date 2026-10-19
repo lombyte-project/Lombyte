@@ -225,8 +225,8 @@ void FUN_L00_00276368(void) {
             *handle = (s32)obj;
             if (obj != 0) {
                 *(u16 *)((u8 *)obj + 0x34) &= 0xfffd;
-                *(void **)((u8 *)*handle + 0x74) = (void *)0x002df638;
                 *(f32 *)((u8 *)*handle + 0x10) = source[80];
+                *(void **)((u8 *)*handle + 0x74) = (void *)0x002df638;
                 *(f32 *)((u8 *)*handle + 0x14) = source[81];
                 *(f32 *)((u8 *)*handle + 0x18) = source[82];
                 *(s32 *)((u8 *)*handle + 0x40) = 0;
@@ -770,8 +770,8 @@ void FUN_L00_002772c0(s32 param_1) {
             object = (VoiceRenderObject *)D_L00_001B9E90_init[i];
             right = object->image[20];
             bottom = object->image[21];
-            texture_width = object->image[22];
             texture_height = object->image[23];
+            texture_width = object->image[22];
             width_shift = 7;
             if (texture_width > 0x80) {
                 for (width_shift = 8; (1 << width_shift) < texture_width; width_shift++) {}

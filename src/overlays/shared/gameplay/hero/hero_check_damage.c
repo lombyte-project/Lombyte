@@ -850,8 +850,8 @@ ordinary_update:
                 } else {
                     if (!same)
                         obj[0x20] = ((u8 *)hero.moby)[0x50];
-                    obj[0x21] = ((u8 *)hero.moby)[0x51];
                     *(f32 *)(obj + 0x24) = *(f32 *)((u8 *)hero.moby + 0x54);
+                    obj[0x21] = ((u8 *)hero.moby)[0x51];
                 }
                 {
                     u8 **texture = (u8 **)(obj + 0x38);
@@ -1072,8 +1072,8 @@ void FUN_L00_0020e728(void) {
                 FUN_00213ed8_e728((f32 *)(*slot + 8), 1.0f, D_0015ED60_e728 * 0.2f);
                 if (((*slot)[5] & 2) && hero.unk20AA == 0) {
                     hero.unkD14 = 1;
-                    *(s32 *)(*slot + 0x28) = 0;
                     hero.unk20A8 = 0;
+                    *(s32 *)(*slot + 0x28) = 0;
                     return;
                 }
             }

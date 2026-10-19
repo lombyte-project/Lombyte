@@ -2153,8 +2153,8 @@ float FUN_L07_00317e60(void *moby, void *anchor) {
                     release_particle(*(char * *)((char *)D_L07_0020C840_c + 20 + i * 24));
                     *(char * *)((char *)D_L07_0020C840_c + 20 + i * 24) = 0;
                 } else {
-                    *(float *)((char *)D_L07_0020C840_c + 4 + i * 24) -= length;
                     segment = *(short *)((char *)D_L07_0020C840_c + 0 + i * 24);
+                    *(float *)((char *)D_L07_0020C840_c + 4 + i * 24) -= length;
                     subtract_vector_xyz(&delta, D_L07_0020DAF0_c[segment], D_L07_0020DB00_c[segment]);
                     length = vector_length_xyz(&delta);
                 }

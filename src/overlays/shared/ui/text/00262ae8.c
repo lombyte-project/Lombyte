@@ -284,8 +284,8 @@ s32 FUN_L05_00262f50(char *e) {
                 D_L05_0015FAF0 = group;
                 D_L05_0015FB00 = D_L05_0017E918[group];
                 count = 1;
-                src = &D_L05_0015FAF4;
                 i = 2;
+                src = &D_L05_0015FAF4;
                 do { count += (*src++ == group); } while (--i >= 0);
                 D_L05_0015FB00 = D_L05_0015FB00 / count;
                 sprintf_alt(buf, D_L05_0015F860, D_L05_0015FB00);

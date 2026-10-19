@@ -1392,8 +1392,8 @@ void FUN_L06_002f6470(char *moby) {
         D_L06_00161E48 = 23;
         D_L06_00161E4C = 34;
         D_L06_00161E40[0] = 0;
-        D_L06_00161E54 = j;
         D_L06_00161E50 = i;
+        D_L06_00161E54 = j;
         *(int *)(data + 0x10) = -1;
         moby[0x20] = 1;
         *(unsigned short *)(moby + 0x34) |= 0x4000;

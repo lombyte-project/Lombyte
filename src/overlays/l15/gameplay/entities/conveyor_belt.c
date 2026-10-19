@@ -1135,8 +1135,8 @@ void ultramech_scientist_update(struct Moby *moby) {
         moby->collision = 0;
         moby->flags |= 0x41;
     } else {
-        moby->collision = moby->pclass->collision;
         moby->flags &= 0xffbe;
+        moby->collision = moby->pclass->collision;
         FUN_002499d8(moby);
     }
     switch (moby->state) {

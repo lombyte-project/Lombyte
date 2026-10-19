@@ -147,8 +147,8 @@ void FUN_L15_002d6810(unsigned char *moby) {
                 if (*p != -1) {
                     other = (char *)(*p * 0x100 + (int)moby_array);
                     if (*(short *)(other + 0xa6) == 0x33e) {
-                        D_L15_001BB024[*(short *)(other + 0xb2)] = 0;
                         D_L15_001BBC84[*(short *)(moby_array + *p * 0x100 + 0xb2)] = 0;
+                        D_L15_001BB024[*(short *)(other + 0xb2)] = 0;
                         id = *(unsigned short *)(moby_array + *p * 0x100 + 0xb2);
                         bits = D_0014C190 + ((int)(id << 16) >> 21) + current_level_index * 64;
                         *bits &= ~(1u << (id & 31));

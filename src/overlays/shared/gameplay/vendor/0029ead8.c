@@ -58,8 +58,8 @@ void FUN_L00_0029ead8(void *m, s32 x, s32 y) {
     FUN_00201560(0, 0, 0x200, 0x80, 0x200, 0x80, 0);
     memset((void *)&box, 0, 0x18);
     box.half_y = y / 2;
-    box.half_x = x / 2;
     box.left = x - 8;
+    box.half_x = x / 2;
     box.top = y - 8;
     box.width = 0x10;
     box.style = 3;

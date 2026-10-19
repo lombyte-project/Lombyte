@@ -3504,8 +3504,8 @@ void FUN_L00_002d73e8(P *p) {
     FUN_002a0ba8_2d73e8(0x47, 0x51001);
 
     for (i = q->start; i < end; i++) {
-        speed = D_L00_001D4480[i];
         f = D_L00_001D31C0[i];
+        speed = D_L00_001D4480[i];
         f -= frame_scale * speed;
         transform = D_L00_001D2860[i] ? negative_transform : positive_transform;
         D_L00_001D31C0[i] = f;
