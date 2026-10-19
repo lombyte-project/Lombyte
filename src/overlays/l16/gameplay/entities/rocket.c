@@ -65,8 +65,12 @@ f32 probe_ground_height(void *arg0, s32 arg1, f32 arg2) __asm__("FUN_00213508");
 float absolute_float(float input) __asm__("func_001F99C0");
 
 void FUN_L16_002c9480(struct Moby *m) {
+    enum {
+        MOBY_STATE_INITIALIZE = 0,
+        MOBY_STATE_SPIN_AND_DRAW_SPRITES = 1
+    };
     switch (m->state) {
-    case 0: {
+    case MOBY_STATE_INITIALIZE: {
         float f;
         float h;
         FUN_L16_002c9568((char *)m);
@@ -79,7 +83,7 @@ void FUN_L16_002c9480(struct Moby *m) {
         m->state = 1;
         break;
     }
-    case 1:
+    case MOBY_STATE_SPIN_AND_DRAW_SPRITES:
         m->rot.z = fast_add_rotations(m->rot.z, D_0015ED6C * 4.1887903f);
         FUN_L16_002c9650_u((char *)m);
         break;
