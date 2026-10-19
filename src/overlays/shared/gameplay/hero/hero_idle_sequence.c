@@ -524,9 +524,9 @@ extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern float probe_ground_height(float *, int, float) __asm__("FUN_00213508");
 extern void FUN_L00_00274cf8_205f60(float *, int, float) __asm__("FUN_L00_00274cf8");
 
-void FUN_L00_00205f60(int record_group_index, char *joint_index_offset, int a2) {
+void FUN_L00_00205f60(int record_group_index, char *joint_index_offset, int enable_record_dispatch) {
     float v[4];
-    if (a2) {
+    if (enable_record_dispatch) {
         struct Hero *g = &hero;
         int c = 0;
         if (((char *)g->items[1].moby)) {
