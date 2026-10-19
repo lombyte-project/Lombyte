@@ -420,9 +420,12 @@ extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68
 void FUN_L13_002c25b8(unsigned char *moby) {
     enum {
         UPDATE_INITIALIZE = 0,
+        TRACK_TARGET_BEFORE_ATTACK = 2,
+        FIRE_ALTERNATING_SHOTS = 3,
+        UPDATE_ATTACK_SEQUENCE = 4,
+        WAIT_TO_MOVE_TO_TABLE_POINT = 5,
         MOVE_TO_TABLE_POINT = 6,
-        EMIT_EFFECT_AND_REMOVE = 8,
-        FIRE_ALTERNATING_SHOTS = 3
+        EMIT_EFFECT_AND_REMOVE = 8
     };
     unsigned char *d = *(unsigned char **)(moby + 0x78);
     unsigned char *target;
@@ -456,7 +459,7 @@ void FUN_L13_002c25b8(unsigned char *moby) {
         *(float *)(d + 0x10C) = random_angle_radians_c();
         *(int *)(d + 0x110) = -1;
         break;
-    case 5:
+    case WAIT_TO_MOVE_TO_TABLE_POINT:
         if (*(int *)(d + 0xB4) == 2) return;
         moby[0xBC] = 0;
         moby[0x20] = 6;
@@ -476,7 +479,7 @@ void FUN_L13_002c25b8(unsigned char *moby) {
             moby[0x20] = 2;
         }
         break;
-    case 2:
+    case TRACK_TARGET_BEFORE_ATTACK:
         rot = (float *)(moby + 0x48);
         f = fast_arc_tan(*(float *)(target + 0x10) - *(float *)(moby + 0x10), *(float *)(target + 0x14) - *(float *)(moby + 0x14));
         approach_angle(rot, (float *)(d + 0xDC), f, frame_time_sq * 4.712389f, frame_time_sq * 4.712389f, frame_time * 10.12291f);
@@ -486,7 +489,7 @@ void FUN_L13_002c25b8(unsigned char *moby) {
         if (moby[0x53] != 1) blend_moby_animation_c13(moby, 1, 0, 0);
         moby[0x20] = 4;
         break;
-    case 4:
+    case UPDATE_ATTACK_SEQUENCE:
         rot = (float *)(moby + 0x48);
         f = fast_arc_tan(*(float *)(target + 0x10) - *(float *)(moby + 0x10), *(float *)(target + 0x14) - *(float *)(moby + 0x14));
         approach_angle(rot, (float *)(d + 0xDC), f, frame_time_sq * 12.566371f, frame_time_sq * 25.132742f, frame_time * 6.2831855f);
