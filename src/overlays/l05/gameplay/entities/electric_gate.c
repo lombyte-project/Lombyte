@@ -381,6 +381,12 @@ extern float advance_accelerated_scalar(float, float, float, float, float *,
    1 waits for the trigger byte 0xBC of its D_L05_0015FFD8 record, 2 eases
    it toward the end point, 3 lowers it to 5.9 below the entry's height. */
 void FUN_L05_0030e508(char *moby) {
+    enum {
+        MOBY_PLACE_AT_POSE_OFFSET = 0,
+        MOBY_WAIT_FOR_TRIGGER = 1,
+        MOBY_SLIDE_TO_END_POINT = 2,
+        MOBY_LOWER_BELOW_POSE_HEIGHT = 3
+    };
     char *data = *(char **)(moby + 0x78);
     float v[4];
     float pos;
@@ -390,7 +396,7 @@ void FUN_L05_0030e508(char *moby) {
     float reach;
 
     switch (*(u8 *)(moby + 0x20)) {
-    case 0: {
+    case MOBY_PLACE_AT_POSE_OFFSET: {
         char *e0;
 
         e0 = (char *)(D_L05_001600EC + (*(int *)(data + 0x10) << 7));
@@ -405,14 +411,14 @@ void FUN_L05_0030e508(char *moby) {
         *(u8 *)(moby + 0x20) = 1;
         break;
     }
-    case 1:
+    case MOBY_WAIT_FOR_TRIGGER:
         if ((*(unsigned char **)&D_L05_0015FFD8_d)[*(int *)(data + 0x14) * 256 + 0xBC] != 0) {
             allocate_voice_for_target_entry(0, 0, moby);
             *(u8 *)(moby + 0x20) = 2;
             clear_u64_value(data);
         }
         break;
-    case 2:
+    case MOBY_SLIDE_TO_END_POINT:
         e = (char *)(D_L05_001600EC + (*(int *)(data + 0x10) << 7));
         reach = *(float *)(data + 0x18) * 3.0f;
         pos = 0.0f;
@@ -432,7 +438,7 @@ void FUN_L05_0030e508(char *moby) {
             *(u8 *)(moby + 0x20) = 3;
         }
         break;
-    case 3:
+    case MOBY_LOWER_BELOW_POSE_HEIGHT:
         e = (char *)D_L05_001600EC;
         e += *(int *)(data + 0x10) << 7;
         advance_accelerated_scalar(*(float *)(e + 0x38) - 5.9f, frame_time_sq * 20.0f,
