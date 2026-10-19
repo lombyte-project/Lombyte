@@ -2829,7 +2829,10 @@ extern int func_0022ED80_2F6330(int, int, void *) __asm__("FUN_0022da68");
 
 void FUN_L06_002f4f00(Moby *m) {
     enum {
-        SPAWN_CHILD_MOBYS = 0
+        SPAWN_CHILD_MOBYS = 0,
+        INITIALIZE_BASE_TRANSFORM = 1,
+        WAIT_FOR_TRIGGER_AND_CHILDREN = 2,
+        UPDATE_POSITION_FROM_BASE = 3
     };
     Vars_2F6330 *d = (Vars_2F6330 *)(*(void **)&m->pvars);
     float tmp[4];
@@ -2857,14 +2860,14 @@ void FUN_L06_002f4f00(Moby *m) {
             vu_euler_rotation_basis((*(float (*)[4])&d->slots[i]->rot_row0), (*(float (*)[4])&d->slots[i]->rot));
         }
         break;
-    case 1:
+    case INITIALIZE_BASE_TRANSFORM:
         d->unk10 = (*(float (*)[4])&m->rot)[0];
         qcopy(d->pos, (*(float (*)[4])&m->pos));
         m->state = 3;
         normalize_vector_xyz(tmp, (*(float (*)[4])&m->rot_row2), D_L06_00161D48);
         add_vector_xyz((*(float (*)[4])&m->pos), tmp, d);
         break;
-    case 2:
+    case WAIT_FOR_TRIGGER_AND_CHILDREN:
         if (m->command == 0) {
             flag = 0;
             if (d->idx >= 0) {
@@ -2899,7 +2902,7 @@ void FUN_L06_002f4f00(Moby *m) {
                 }
             }
         }
-    case 3:
+    case UPDATE_POSITION_FROM_BASE:
         normalize_vector_xyz(tmp, (*(float (*)[4])&m->rot_row2), D_L06_00161D48);
         add_vector_xyz((*(float (*)[4])&m->pos), tmp, d);
         break;
