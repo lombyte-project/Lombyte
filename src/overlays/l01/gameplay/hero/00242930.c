@@ -130,6 +130,7 @@ extern int func_001F9908_r(int *) __asm__("FUN_001f9740");
 int r1_repeat_timer __asm__("D_L01_0015F678") = 0;
 void FUN_L01_00242930(void) {
     enum {
+        HERO_STATE_ITEM_BUTTON_HOLD = 23,
         HERO_STATE_LATERAL_MOVE_HOLD_ANIMATION_WAIT = 24,
         HERO_STATE_LATERAL_MOVE_HOLD = 25,
         HERO_STATE_LATERAL_MOVE_POSITIVE_YAW = 26,
@@ -649,7 +650,7 @@ void FUN_L01_00242930(void) {
                         }
                     }
                     break;
-                case 23:
+                case HERO_STATE_ITEM_BUTTON_HOLD:
                     if (controller_state.held & hero.items[0].button_mask) {
                         break;
                     }
