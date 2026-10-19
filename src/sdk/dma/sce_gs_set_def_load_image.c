@@ -10,7 +10,10 @@ s32 sceGsSetDefLoadImage(sceGsLoadImage *image, s16 destination_base,
                          s16 width, s16 height) {
     enum {
         PIXEL_FORMAT_32_BIT = 0,
-        PIXEL_FORMAT_24_BIT = 1
+        PIXEL_FORMAT_24_BIT = 1,
+        PIXEL_FORMAT_16_BIT = 2,
+        PIXEL_FORMAT_8_BIT = 0x13,
+        PIXEL_FORMAT_4_BIT = 0x14
     };
     s32 size = 0;
 
@@ -23,17 +26,17 @@ s32 sceGsSetDefLoadImage(sceGsLoadImage *image, s16 destination_base,
     case 0x31:
         size = (width * height * 3) >> 4;
         break;
-    case 2:
+    case PIXEL_FORMAT_16_BIT:
     case 10:
     case 0x32:
     case 0x3a:
         size = (width * height) >> 3;
         break;
-    case 0x13:
+    case PIXEL_FORMAT_8_BIT:
     case 0x1b:
         size = (width * height) >> 4;
         break;
-    case 0x14:
+    case PIXEL_FORMAT_4_BIT:
     case 0x24:
     case 0x2c:
         size = (width * height) >> 5;
