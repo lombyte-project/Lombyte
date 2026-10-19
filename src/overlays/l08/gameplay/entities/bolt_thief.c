@@ -2064,6 +2064,12 @@ void FUN_L08_002e3870(struct Moby *moby) {
         BOLT_PICKUP_FALL_AND_BOUNCE = 4,
         BOLT_PICKUP_RETURN_TO_SURFACE = 5
     };
+    enum {
+        MOBY_CLASS_ONE_BOLT_PICKUP = 0x279
+    };
+    enum {
+        MOBY_CLASS_COLLECTED_COUNT_BOLT_BONUS_PICKUP = 0x305
+    };
     char *cam;
     float direction[4];
     float point[4];
@@ -2076,7 +2082,7 @@ void FUN_L08_002e3870(struct Moby *moby) {
         int linked;
 
         switch (moby->oclass) {
-        case 0x279:
+        case MOBY_CLASS_ONE_BOLT_PICKUP:
             moby->scale = moby->pclass->scale * D_L08_00161CB4_gp;
             break;
         case MOBY_CLASS_FIVE_BOLT_PICKUP:
@@ -2286,7 +2292,7 @@ void FUN_L08_002e3870(struct Moby *moby) {
                 BoltSource_4BE8 *source;
 
                 switch (moby->oclass) {
-                case 0x305: {
+                case MOBY_CLASS_COLLECTED_COUNT_BOLT_BONUS_PICKUP: {
                     int i;
                     int j;
                     int n;
