@@ -5706,7 +5706,8 @@ void FUN_L06_002ffcb0(char *moby) {
     enum {
         INITIALIZE_DRAW_SELECTION = 0,
         WAIT_CAMERA_START_DELAY = 2,
-        BLEND_CAMERA_TO_HERO = 3
+        BLEND_CAMERA_TO_HERO = 3,
+        WAIT_FOR_NEARBY_HERO = 4
     };
     int *data = *(int **)(moby + 0x78);
     float pos[4], rot[4], from[4], target[4], offset[4];
@@ -5827,7 +5828,7 @@ void FUN_L06_002ffcb0(char *moby) {
             FUN_L00_002eaa30(from);
         }
         break;
-    case 4:
+    case WAIT_FOR_NEARBY_HERO:
         if (vector_distance_ffcb0(moby + 0x10, D_0013F3D0) < 16.0f) {
             state = data[3];
             state <<= 7;
