@@ -2935,7 +2935,8 @@ void eudora_bridge_update(struct Moby *m) __asm__("FUN_L04_002c6858");
 void eudora_bridge_update(struct Moby *m) {
     enum {
         EUDORA_BRIDGE_STATE_INITIALIZE = 0,
-        EUDORA_BRIDGE_STATE_FOLLOW_LINKED_SWITCH = 1
+        EUDORA_BRIDGE_STATE_FOLLOW_LINKED_SWITCH = 1,
+        EUDORA_BRIDGE_STATE_RELEASE_MOVEMENT_VOICE = 2
     };
     SwitchFollowerVars *v = (SwitchFollowerVars *)m->pvars;
     f32 last = m->anim_time;
@@ -3013,7 +3014,7 @@ void eudora_bridge_update(struct Moby *m) {
             }
         }
         break;
-    case 2:
+    case EUDORA_BRIDGE_STATE_RELEASE_MOVEMENT_VOICE:
         if (voice_is_playing(m, v->voice)) {
             s32 h = v->voice;
             if (h != -1) {
