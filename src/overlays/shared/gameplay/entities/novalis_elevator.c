@@ -1294,6 +1294,12 @@ extern void FUN_L01_002e3830(struct Moby *, char *);
 extern unsigned char D_0013D4C5 __attribute__((section(".data")));
 void sand_mouse_update(struct Moby *moby) __asm__("FUN_L01_002e3f20");
 void sand_mouse_update(struct Moby *moby) {
+    enum {
+        SAND_MOUSE_INITIALIZE = 0,
+        SAND_MOUSE_WAIT_FOR_PARENT_READY = 2,
+        SAND_MOUSE_FADE_OUT_AND_RESET_HOME = 6,
+        SAND_MOUSE_RETURN_TO_PARENT = 20
+    };
     Data_2e3f20 *d;
     float va[4];
     float vb[4];
@@ -1321,7 +1327,7 @@ void sand_mouse_update(struct Moby *moby) {
         }
     }
     switch (moby->state) {
-    case 0:
+    case SAND_MOUSE_INITIALIZE:
         qzero(d->target);
         qzero(d->vel);
         d->s4A = 0;
@@ -1423,7 +1429,7 @@ void sand_mouse_update(struct Moby *moby) {
             }
         }
         break;
-    case 2:
+    case SAND_MOUSE_WAIT_FOR_PARENT_READY:
         if (d->parent != -1) {
             if (ents_2e3f20[d->parent].state == 5) {
                 moby->state = 3;
@@ -1492,7 +1498,7 @@ void sand_mouse_update(struct Moby *moby) {
         }
         FUN_L01_002e35a8((char *)moby, (char *)d);
         break;
-    case 6:
+    case SAND_MOUSE_FADE_OUT_AND_RESET_HOME:
         if (fast_dec_timer_s16(&d->timer)) {
             moby->alpha = 0x80;
             qcopy(((float *)&moby->pos), d->home);
@@ -1539,7 +1545,7 @@ void sand_mouse_update(struct Moby *moby) {
             moby->state = 0x14;
         }
         break;
-    case 20:
+    case SAND_MOUSE_RETURN_TO_PARENT:
         {
             float z;
             int r;
