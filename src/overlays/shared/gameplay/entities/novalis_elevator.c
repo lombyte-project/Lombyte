@@ -2964,8 +2964,8 @@ reset_timer:
         FUN_L01_0028bb90(path_state, B2(data, 0x120) & 0x20, moby, F2(data, 0xf4), F2(data, 0xf8));
         if ((B2(data, 0x120) & 0x1e) && !(B2(data, 0x120) & 1)) {
             i = 0;
-            node = (char *)point;
             link = (int *)(data + 0x140);
+            node = (char *)point;
             for (; i < 4; ++i, node += 0x10, ++link) {
                 if ((B2(data, 0x120) & (2 << i)) && *link != -1) {
                     child = (*(int *)&D_L01_0015FFD8) + (*link << 8);

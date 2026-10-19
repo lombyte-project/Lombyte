@@ -2953,8 +2953,8 @@ void FUN_L00_002ddf60(void *frame_context, void *initial_vector) {
     FUN_001ff3c0_002ddf60(&cross, &scaled_first, &basis);
     FUN_001ff500_002ddcb8(&cross, &cross, 1.0f);
     FUN_001ff3c0_002ddf60(&normal, &basis, &cross);
-    current = D_L00_001E4B40;
     prior = D_L00_001E6020;
+    current = D_L00_001E4B40;
     i = 19;
     do {
         FUN_001ff300_002ddcb8(&temp1, current, 0.1f);

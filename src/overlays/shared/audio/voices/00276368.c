@@ -102,8 +102,8 @@ void FUN_L00_00276368(void) {
         D_L00_001B9CF0.unk8 = (struct Own *)D_L00_001B6088;
         special = 1;
     } else if (D_L00_001B9CF0.state == 0x21) {
-        D_L00_001B9CF0.unk124 = 1;
         D_L00_001B9CF0.unk8 = &D_L00_001B71F0;
+        D_L00_001B9CF0.unk124 = 1;
         D_L00_001B9CF0.state = 0x22;
     } else if (D_L00_001B9CF0.state == 0x23) {
         D_L00_001B9CF0.unk8 = (struct Own *)D_L00_001B6B38;
@@ -801,8 +801,8 @@ void FUN_L00_002772c0(s32 param_1) {
                 out_right = texture_width;
                 out_bottom = texture_height;
             } else {
-                out_right = width;
                 out_bottom = height;
+                out_right = width;
                 if ((flags & 8) != 0) {
                     out_left = (width - texture_width) / 2;
                     out_top = (height - texture_height) / 2;

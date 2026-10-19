@@ -886,8 +886,8 @@ collision_done:
             }
         }
         qcopy(&probe,pos); probe.f[2] += size * 0.3f;
-        hit = FUN_00213260_2bffa8(4);
         rate = frame_scale;
+        hit = FUN_00213260_2bffa8(4);
         if (!hit) { vars->target = FUN_L00_002bed90(moby,&probe,&moby->rot,vars->previous_target,1); rate = frame_scale; }
         vars->move_speed = rate * 0.1f * speed; moby->state = 4;
         if (!vars->target) {

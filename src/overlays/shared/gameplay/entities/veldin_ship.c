@@ -3531,8 +3531,8 @@ void FUN_L00_002d73e8(P *p) {
                     points->z = speed;
                     FUN_001ff6f8_2d73e8(points, points, transform);
                     *texcoords = D_L00_001E1440_2d73e8[index][1] + *phase;
-                    *texcoords_second = D_L00_001E1440_2d73e8[index][0];
                     *colors = alpha_color * D_L00_001DADA8_2d73e8[index] | base_color;
+                    *texcoords_second = D_L00_001E1440_2d73e8[index][0];
                 }
                 FUN_001fd228_2d73e8(&quad, 0, 0);
             }

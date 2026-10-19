@@ -48,8 +48,8 @@ void FUN_L06_00307578(char *moby) {
     result1 = &result[1];
     result2 = &result[2];
     result3 = &result[3];
-    pos0 = &pos[0];
     pos1 = &pos[1];
+    pos0 = &pos[0];
     pos2 = &pos[2];
     pos3 = &pos[3];
     vertices = D_L06_001fe8d0;
