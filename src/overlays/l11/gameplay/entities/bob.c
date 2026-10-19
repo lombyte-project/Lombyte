@@ -1277,7 +1277,8 @@ void teleporter_update(struct Moby *moby) __asm__("FUN_L11_002f2518");
 void teleporter_update(struct Moby *moby) {
     enum {
         TELEPORTER_INITIALIZE = 0,
-        TELEPORTER_WAIT_FOR_ACTIVATION = 1
+        TELEPORTER_WAIT_FOR_ACTIVATION = 1,
+        TELEPORTER_RESET = 4
     };
     char *data = (char *)moby->pvars;
 
@@ -1398,7 +1399,7 @@ void teleporter_update(struct Moby *moby) {
             FUN_L01_003092d0_2518(moby);
         }
         break;
-    case 4:
+    case TELEPORTER_RESET:
         if (D_0013F3D8_lui < 138.0f)
             D_0013D3DD = 1;
         if (*(float *)(data + 0x3C) < 1.95f) {
