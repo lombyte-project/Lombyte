@@ -6476,6 +6476,7 @@ extern float D_L06_0015F400;
 void FUN_L06_00301b90(unsigned char *m) {
     enum {
         INITIALIZE_ENTITY = 0,
+        TRIGGER_LINKED_SEQUENCE_WHEN_GROUP_INACTIVE = 1,
         WAIT_FOR_LINKED_SEQUENCE_COMPLETION = 2,
         ADVANCE_CAMERA_ALONG_PATH = 3
     };
@@ -6495,7 +6496,7 @@ void FUN_L06_00301b90(unsigned char *m) {
         m[0x20] = 1;
         m[0x30] = 0xFF;
         return;
-    case 1:
+    case TRIGGER_LINKED_SEQUENCE_WHEN_GROUP_INACTIVE:
         if (FUN_L01_0026e008(*(int *)(d + 0x1C), -1) != 0) return;
         FUN_L06_003047b8(D_L06_0015FFD8_301b90 + (*(int *)(d + 0x2C) << 8));
         if (FUN_L06_003047f8((const u8 *)D_L06_0015FFD8_301b90 + (*(int *)(d + 0x2C) << 8)) != 1) return;
