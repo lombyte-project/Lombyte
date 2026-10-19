@@ -505,6 +505,12 @@ extern char *D_L13_00160058_m __asm__("D_L13_0015FFD8");
 extern char D_0013E633_snd[] __asm__("D_0013E533");
 
 void FUN_L13_002eb098(Moby388 *moby) {
+    enum {
+        STARFIGHTER_STATE_INITIALIZE = 0,
+        STARFIGHTER_STATE_WAIT_FOR_HERO_SHIP = 1,
+        STARFIGHTER_STATE_EXPLODE_AND_REMOVE = 8,
+        STARFIGHTER_STATE_RESET = 9
+    };
     Ship388 *data = moby->d;
     float offset[4];
     float joint[4];
@@ -525,7 +531,7 @@ void FUN_L13_002eb098(Moby388 *moby) {
     }
 
     switch (moby->state) {
-    case 0: {
+    case STARFIGHTER_STATE_INITIALIZE: {
         int j;
         if (moby->bB0 != 0xFF && visited52[moby->bB0 + (D_0015ED84 << 4)] == 0xFF) {
             mark_moby_for_removal_c(moby);
@@ -573,7 +579,7 @@ void FUN_L13_002eb098(Moby388 *moby) {
         moby->flags |= 0x41;
         break;
     }
-    case 1: {
+    case STARFIGHTER_STATE_WAIT_FOR_HERO_SHIP: {
         char *hero = ((char *)&D_0013F350);
         if (*(int *)(hero + 0x2084) == 0x32 && *(Moby388 **)(hero + 0x15F0) != 0) {
             moby->flags &= 0xFFBE;
@@ -868,7 +874,7 @@ void FUN_L13_002eb098(Moby388 *moby) {
         }
         break;
     }
-    case 8: {
+    case STARFIGHTER_STATE_EXPLODE_AND_REMOVE: {
         char *view;
         if (*(Moby388 **)(((char *)&D_00140940)) != 0 && (*(Moby388 **)(((char *)&D_00140940)))->cls_id == 0x45) {
             (*(Moby388 **)(((char *)&D_00140940)))->bBC = 0;
@@ -895,7 +901,7 @@ void FUN_L13_002eb098(Moby388 *moby) {
         }
         break;
     }
-    case 9: {
+    case STARFIGHTER_STATE_RESET: {
         char *path;
         char **parts;
         if (data->pF0 != 0) {
