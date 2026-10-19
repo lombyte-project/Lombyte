@@ -43,12 +43,16 @@ void FUN_L00_002a4890(void) {
         AMBIENCE_WAIT_AND_SELECT_SECOND_TARGET = 2,
         AMBIENCE_INTERPOLATE_TO_SECOND_TARGET = 3
     };
+    enum {
+        AMBIENCE_SINGLE_TARGET_CYCLE = 2,
+        AMBIENCE_TWO_TARGET_CYCLE = 3
+    };
     struct Amb *s = &D_L00_001CB7C0;
     float a, b, c, d, e;
     switch (s->hC) {
     case 1:
         break;
-    case 2:
+    case AMBIENCE_SINGLE_TARGET_CYCLE:
         switch (s->hE) {
         case AMBIENCE_WAIT_AND_SELECT_TARGET:
             if (fast_dec_timer_s16(&s->h1E)) {
@@ -80,7 +84,7 @@ void FUN_L00_002a4890(void) {
             break;
         }
         break;
-    case 3:
+    case AMBIENCE_TWO_TARGET_CYCLE:
         switch (s->hE) {
         case AMBIENCE_WAIT_AND_SELECT_TARGET:
             if (fast_dec_timer_s16(&s->h1E)) {
