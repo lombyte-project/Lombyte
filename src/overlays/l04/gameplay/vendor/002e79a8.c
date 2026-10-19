@@ -14,19 +14,24 @@ void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
 void pipe_update(char *m) __asm__("FUN_L04_002e79a8");
 void pipe_update(char *m) {
+    enum {
+        PIPE_INITIALIZE = 0,
+        PIPE_WAIT_FOR_HIT = 1,
+        PIPE_REMOVE = 2
+    };
     int hit = 0;
     char *r = find_moby_hit(m, 0x10000, 0);
     switch (*(unsigned char *)(m + 0x20)) {
-    case 0:
+    case PIPE_INITIALIZE:
         m[0x20] = 1;
         break;
-    case 1:
+    case PIPE_WAIT_FOR_HIT:
         if (r != 0 && *(float *)(r + 0x2C) > 0.0f)
             hit = 1;
         if (hit)
             m[0x20] = 2;
         break;
-    case 2:
+    case PIPE_REMOVE:
         allocate_voice_for_target_entry(0, 0, (int)m);
         FUN_L01_002787a0(m);
         FUN_L00_00263e30(m, 0x72c, 1, 0x72c, 1, 0x1, 2);
