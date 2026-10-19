@@ -412,6 +412,11 @@ extern void FUN_L00_00260860(int, int);
 /* Watcher moby update with a scripted reveal, then turns its head toward the hero or a random target. */
 void the_plumber_batalia_update(L14WatchMoby *m) __asm__("FUN_L08_003065d8");
 void the_plumber_batalia_update(L14WatchMoby *m) {
+    enum {
+        PLUMBER_INITIALIZE = 0,
+        PLUMBER_UPDATE_DIALOGUE = 1,
+        PLUMBER_SAVE_AND_REMOVE = 5
+    };
     L14WatchScratch scratch;
     L14WatchData *d = (L14WatchData *)m->data;
     float rate;
@@ -419,7 +424,7 @@ void the_plumber_batalia_update(L14WatchMoby *m) {
     int tracking;
     FUN_L08_003063f0_c(m);
     switch (m->state) {
-    case 0:
+    case PLUMBER_INITIALIZE:
         m->opacity = 0xFF;
         if (visited52[m->bB0 + current_level_index * 16] == 0xFF) {
             mark_moby_for_removal(m);
@@ -429,7 +434,7 @@ void the_plumber_batalia_update(L14WatchMoby *m) {
         m->state = 1;
         FUN_L00_002668a0_c(m, d);
         break;
-    case 1:
+    case PLUMBER_UPDATE_DIALOGUE:
         if (update_npc_dialogue(m, d))
             begin_dialogue_camera_transition(m, 2.7f);
         if (d->h36 == 2) {
@@ -449,7 +454,7 @@ void the_plumber_batalia_update(L14WatchMoby *m) {
         break;
     case 2:
         break;
-    case 5:
+    case PLUMBER_SAVE_AND_REMOVE:
         jet_clear_persistent(m->bB0);
         FUN_L00_00260860(0x1B, 1);
         memcard_save_data(0, -1);
