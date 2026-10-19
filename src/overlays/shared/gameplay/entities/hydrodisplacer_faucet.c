@@ -572,8 +572,8 @@ void FUN_L05_0030c220(struct Moby *m) {
     a.control[0] = 0;
     {
         float *texcoord_b = b.texcoord;
-        float *texcoord_b_v = b.texcoord + 1;
         float *texcoord_a_v = a.texcoord + 1;
+        float *texcoord_b_v = b.texcoord + 1;
         float *texcoord_a = a.texcoord;
         float *texcoord = D_L05_001D67B0;
         int count = 3;
@@ -609,10 +609,8 @@ void FUN_L05_0030c220(struct Moby *m) {
             offset_a_z = pass * 10.0f;
             offset_b_x = phase * 6.0f * sign;
             offset_b_z = pass * 12.0f;
-            offset_a_z = vertex_a[2] + offset_a_z;
-            offset_a_x = vertex_a[0] + offset_a_x;
-            vertex_a[2] = offset_a_z;
-            vertex_a[0] = offset_a_x;
+            vertex_a[0] += offset_a_x;
+            vertex_a[2] += offset_a_z;
             vertex_b[0] += offset_b_x;
             vertex_b[2] += offset_b_z;
             vertex_a += 4;

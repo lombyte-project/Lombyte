@@ -49,8 +49,9 @@ void FUN_L03_00250ae8(char *param_1, u128 *param_2, void *param_3) {
     vectors.position = *param_2;
 
     for (i = 0; i < truncate_float_to_s32(24.0f); i++) {
+        angle = randf_sym(0.0f, 0.1308997f);
         build_look_at_matrix(&vectors.velocity, param_1 + 0xe0, param_1 + 0xc0,
-                             (f32)i * 0.2617994f + randf_sym(0.0f, 0.1308997f));
+                             (f32)i * 0.2617994f + angle);
         fast_vec_normalize(&vectors.velocity, &vectors.velocity, random_float_between(0.05f, 0.1f));
         spin = random_int_between(0, 3);
         if (random_integer_below(2)) spin = -spin;
