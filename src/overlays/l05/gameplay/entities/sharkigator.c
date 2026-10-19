@@ -1638,6 +1638,7 @@ void FUN_L05_00303390(Moby *m) {
         EXTERMIBOT_HIT_DEATH_KNOCKBACK = 2,
         EXTERMIBOT_HIT_NONLETHAL_KNOCKBACK = 3,
         EXTERMIBOT_HIT_FLASH = 9,
+        EXTERMIBOT_HIT_FLASH_ONLY = 10,
         EXTERMIBOT_HIT_NO_REACTION = 11
     };
     Vec_3047E8 working_vector;
@@ -1690,7 +1691,7 @@ void FUN_L05_00303390(Moby *m) {
         case EXTERMIBOT_HIT_NO_REACTION:
             break;
         case EXTERMIBOT_HIT_FLASH:
-        case 10:
+        case EXTERMIBOT_HIT_FLASH_ONLY:
             d->b67 = 0xFA;
             break;
         case EXTERMIBOT_HIT_NONLETHAL_KNOCKBACK:
