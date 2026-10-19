@@ -29,6 +29,7 @@ s32 update_menu_entry_actions(struct MenuScreen *menu) {
         MENU_ACTION_NO_OP = 1,
         MENU_ACTION_ALLOCATE_VOICE = 2,
         MENU_ACTION_SET_NEXT_PAGE = 3,
+        MENU_ACTION_REQUEST_CLOSE_WITH_OPTIONAL_MESSAGE = 6,
         MENU_ACTION_SET_LANGUAGE = 9
     };
     s32 focused;
@@ -107,7 +108,7 @@ s32 update_menu_entry_actions(struct MenuScreen *menu) {
                 mode_freeze_init(3, menu->data.list.items[menu->data.list.selected].param.value);
             }
             break;
-        case 6:
+        case MENU_ACTION_REQUEST_CLOSE_WITH_OPTIONAL_MESSAGE:
             /* This action passes the low halfword; the other indexed actions pass the full word. */
             message_index = menu->data.list.items[menu->data.list.selected].param.half.hi;
             if (message_index != 0) {
