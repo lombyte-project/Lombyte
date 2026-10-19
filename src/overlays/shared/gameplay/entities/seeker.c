@@ -695,6 +695,7 @@ void FUN_L09_002e27d8(Moby *moby) {
         GROUND_ENEMY_STATE_MELEE_ATTACK = 4,
         GROUND_ENEMY_STATE_RETURN_HOME = 5,
         GROUND_ENEMY_STATE_HURT_KNOCKBACK = 6,
+        GROUND_ENEMY_STATE_RECOVER_TO_IDLE = 7,
         GROUND_ENEMY_STATE_HURT_RECOVERY = 9,
         GROUND_ENEMY_STATE_BLOCKED_RETURN_HOME = 12,
         GROUND_ENEMY_STATE_LEASHED_FORWARD_WALK = 13,
@@ -954,7 +955,7 @@ void FUN_L09_002e27d8(Moby *moby) {
             return;
         }
         break;
-    case 7:
+    case GROUND_ENEMY_STATE_RECOVER_TO_IDLE:
         if (recover_2E39E0(moby, data->motion)) {
             moby->state = 1;
             if (moby->prev_seq != 2) animate_2E39E0(moby, 2, 0, 0);
