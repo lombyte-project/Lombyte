@@ -1501,8 +1501,12 @@ extern char *D_001413D0_316258 __asm__("D_001413D0") __attribute__((section(".da
 void FUN_L05_00316258(char *moby) {
     enum {
         MOBY_INITIALIZE = 0,
+        MOBY_WAIT_FOR_TRIGGER = 1,
+        MOBY_WAIT_TO_RETURN_TO_SAVED_POSITION = 2,
         MOBY_MOVE_TO_OFFSET_POSITION = 3,
-        MOBY_RETURN_TO_SAVED_POSITION = 4
+        MOBY_RETURN_TO_SAVED_POSITION = 4,
+        MOBY_SETTLE_AT_UPPER_MANIPULATOR_ANGLE = 5,
+        MOBY_SETTLE_AT_ZERO_MANIPULATOR_ANGLE = 6
     };
     char *data = *(char **)(moby + 0x78);
     float target[4];
@@ -1532,8 +1536,8 @@ void FUN_L05_00316258(char *moby) {
         }
         *(long long *)(moby + 0x38) = *(long long *)(D_001413D0_316258 + 0x38);
         break;
-    case 1:
-    case 2:
+    case MOBY_WAIT_FOR_TRIGGER:
+    case MOBY_WAIT_TO_RETURN_TO_SAVED_POSITION:
         {
             u8 trigger = ((u8 *)*(int *)&D_L05_0015FFD8_d)[*(int *)(data + 0x58) * 256 + 0xBC];
             if (trigger == 0)
@@ -1548,8 +1552,8 @@ void FUN_L05_00316258(char *moby) {
             *(u8 *)(moby + 0x20) = 6;
             return;
         }
-    case 5:
-    case 6:
+    case MOBY_SETTLE_AT_UPPER_MANIPULATOR_ANGLE:
+    case MOBY_SETTLE_AT_ZERO_MANIPULATOR_ANGLE:
         {
             float end;
             float approach;
