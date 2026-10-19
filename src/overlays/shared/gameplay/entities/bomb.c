@@ -1708,6 +1708,7 @@ void ryno_update(struct Moby *m) {
         RYNO_STATE_INITIALIZE = 0,
         RYNO_STATE_WAIT_ANIMATION = 1,
         RYNO_STATE_READY_TO_FIRE = 2,
+        RYNO_STATE_READY_TO_FIRE_WITH_RETICLE = 3,
         RYNO_STATE_FIRE_SALVO = 4,
         RYNO_STATE_COOLDOWN = 5
     };
@@ -1792,7 +1793,7 @@ void ryno_update(struct Moby *m) {
         }
         d->count = 0;
         break;
-    case 3:
+    case RYNO_STATE_READY_TO_FIRE_WITH_RETICLE:
         reticle_2cc608(m, 0xFF0F0FFF, 1.0f, 0.0f, 0, 0x23, -1, 90.0f, 4);
         if ((controller_state.held & 5) == 0) {
             m->state = 2;
