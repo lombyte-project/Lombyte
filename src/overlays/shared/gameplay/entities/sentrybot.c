@@ -96,6 +96,8 @@ void sentrybot_update(unsigned char *moby) {
         SENTRYBOT_INITIALIZE = 0,
         SENTRYBOT_WAIT_FOR_LINKED_MOBY = 1,
         SENTRYBOT_PATROL_PAUSE = 3,
+        SENTRYBOT_TURN_NEGATIVE_HEADING_DELTA = 6,
+        SENTRYBOT_TURN_POSITIVE_HEADING_DELTA = 7,
         SENTRYBOT_TURN_AROUND = 8,
         SENTRYBOT_RETURN_HOME = 9,
         SENTRYBOT_PATROL_MOVE_FAST = 13,
@@ -105,6 +107,8 @@ void sentrybot_update(unsigned char *moby) {
         SENTRYBOT_PATROL_MOVE = 4
     };
     enum {
+        SENTRYBOT_ANIM_TURN_NEGATIVE_HEADING_DELTA = 10,
+        SENTRYBOT_ANIM_TURN_POSITIVE_HEADING_DELTA = 11,
         SENTRYBOT_ANIM_TURN_AROUND = 12
     };
     float va[4];
@@ -338,8 +342,8 @@ void sentrybot_update(unsigned char *moby) {
             }
         }
         break;
-    case 6:
-    case 7:
+    case SENTRYBOT_TURN_NEGATIVE_HEADING_DELTA:
+    case SENTRYBOT_TURN_POSITIVE_HEADING_DELTA:
     case SENTRYBOT_TURN_AROUND:
         if (*(int *)(data + 0x114) != 2 &&
             fast_difference_between_rotations(
@@ -366,10 +370,10 @@ void sentrybot_update(unsigned char *moby) {
             case SENTRYBOT_ANIM_TURN_AROUND:
                 tbl = D_L15_001CC0E0;
                 break;
-            case 10:
+            case SENTRYBOT_ANIM_TURN_NEGATIVE_HEADING_DELTA:
                 tbl = D_L15_001CC060;
                 break;
-            case 11:
+            case SENTRYBOT_ANIM_TURN_POSITIVE_HEADING_DELTA:
                 tbl = D_L15_001CBFE0;
                 break;
             }
