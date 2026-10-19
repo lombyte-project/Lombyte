@@ -577,7 +577,7 @@ void FUN_L14_00228cd0(void) {
     case 0x1D:
     case 0x1E:
     case 0x1F:
-    case 0x3D:
+    case HERO_STATE_DYING:
     case 0x70:
     case 0x71:
     case 0x72:
