@@ -1412,6 +1412,9 @@ void FUN_L02_002d7748(struct Moby *moby) {
         L02_BOT_WANDER = 6,
         L02_BOT_SELECT_ATTACK_OR_WANDER = 7,
         L02_BOT_WAIT_FOR_WAKE_TRIGGER = 10,
+        L02_BOT_WAIT_FOR_ANIMATION_BEFORE_ATTACK = 11,
+        L02_BOT_UPDATE_ATTACK_SHOTS = 12,
+        L02_BOT_WAIT_FOR_ANIMATION_BEFORE_ATTACK_RECHECK = 13,
         L02_BOT_HIT_KNOCKBACK_RECOVERY = 16,
         L02_BOT_DEATH_KNOCKBACK = 17
     };
@@ -1617,7 +1620,7 @@ void FUN_L02_002d7748(struct Moby *moby) {
             }
         }
         break;
-    case 11:
+    case L02_BOT_WAIT_FOR_ANIMATION_BEFORE_ATTACK:
         moby->anim_speed = 2.0f;
         target = data->target;
         angle = fast_arc_tan(*(float *)(target + 0x10) - moby->pos.x,
@@ -1631,7 +1634,7 @@ void FUN_L02_002d7748(struct Moby *moby) {
             }
         }
         break;
-    case 12:
+    case L02_BOT_UPDATE_ATTACK_SHOTS:
         moby->anim_speed = 0.5f;
         moby_point_position(moby, 0, position);
         direction[0] = fast_cos_c(fast_arc_tan(position[0] - moby->pos.x, position[1] - moby->pos.y));
@@ -1657,7 +1660,7 @@ void FUN_L02_002d7748(struct Moby *moby) {
             }
         }
         break;
-    case 13:
+    case L02_BOT_WAIT_FOR_ANIMATION_BEFORE_ATTACK_RECHECK:
         target = data->target;
         angle = fast_arc_tan(*(float *)(target + 0x10) - moby->pos.x,
                                   *(float *)(target + 0x14) - moby->pos.y);
