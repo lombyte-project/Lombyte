@@ -1820,6 +1820,9 @@ void blarg_trooper_update(struct Moby *moby) {
         BLARG_TROOPER_WAIT_FOR_ACTIVATION = 2,
         BLARG_TROOPER_APPROACH_TARGET = 3,
         BLARG_TROOPER_KNOCKBACK_RECOVERY = 4,
+        BLARG_TROOPER_PREPARE_SHOT = 5,
+        BLARG_TROOPER_FIRE_PROJECTILE = 6,
+        BLARG_TROOPER_WAIT_BETWEEN_SHOTS = 7,
         BLARG_TROOPER_RETURN_HOME = 8,
         BLARG_TROOPER_DEATH_FALL = 9
     };
@@ -1981,7 +1984,7 @@ hide:
             blend_moby_animation_ex(moby, 8, 0, scale_game_frames_e81e0(11), 5);
         break;
     }
-    case 5: {
+    case BLARG_TROOPER_PREPARE_SHOT: {
         if (OGRE_F(0x28c) < 8.0f) OGRE_F(0x28c) = 8.0f;
         FUN_L12_002e8608(moby, (float *)&target->pos);
         FUN_L12_002e87b0((char *)moby);
@@ -1994,7 +1997,7 @@ hide:
         }
         break;
     }
-    case 6: {
+    case BLARG_TROOPER_FIRE_PROJECTILE: {
         int count; float angle; float other; float value;
         FUN_L12_002e8608(moby, (float *)&target->pos);
         FUN_L12_002e87b0((char *)moby);
@@ -2018,7 +2021,7 @@ hide:
         }
         break;
     }
-    case 7: {
+    case BLARG_TROOPER_WAIT_BETWEEN_SHOTS: {
         float angle;
         FUN_L12_002e8608(moby, (float *)&target->pos);
         FUN_L12_002e87b0((char *)moby);
