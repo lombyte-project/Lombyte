@@ -2177,6 +2177,10 @@ extern void func_L00_0025F4A8_2B5938(void *, void *, void *, float, float, int, 
 
 void minibomber_update(Moby_2B5938 *moby) __asm__("FUN_L14_002b46e8");
 void minibomber_update(Moby_2B5938 *moby) {
+    enum {
+        MINIBOMBER_STATE_INITIALIZE = 0,
+        MINIBOMBER_STATE_DESTROY = 9
+    };
     Data_2B5938 *d = moby->d;
     float v[12];
     float *tgt;
@@ -2209,7 +2213,7 @@ void minibomber_update(Moby_2B5938 *moby) {
         }
     }
     switch (moby->state) {
-    case 0: {
+    case MINIBOMBER_STATE_INITIALIZE: {
         PathNode_2B5938 *path;
         if (d->fD0 == -1) {
             debug_print_alt(D_L14_001FBDF0, moby->fB2);
@@ -2432,7 +2436,7 @@ void minibomber_update(Moby_2B5938 *moby) {
             }
         }
         break;
-    case 9: {
+    case MINIBOMBER_STATE_DESTROY: {
         int i;
         moby_point_position(moby, 2, v);
         FUN_L14_002bb310_c((char *)moby, moby->rot, (char *)v);
