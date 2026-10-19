@@ -1138,6 +1138,15 @@ extern int func_L13_002C5248_56B0(void *, void *, int) __asm__("FUN_L13_002c3fc0
 extern int func_001FA898_s(float) __asm__("FUN_001fa6d0");
 
 void FUN_L13_002c4428(Moby_2C56B0 *moby) {
+    enum {
+        FIGHTER_INITIALIZE = 0,
+        FIGHTER_FOLLOW_PATH_AND_ATTACK = 2,
+        FIGHTER_EMIT_DESTRUCTION_EFFECTS = 3
+    };
+    enum {
+        FIGHTER_ATTACK_FIRE = 1,
+        FIGHTER_ATTACK_COOLDOWN = 2
+    };
     Data_2C56B0 *d;
     Moby_2C56B0 *veh;
     Veh_2C56B0 *vehd = 0;
@@ -1155,7 +1164,7 @@ void FUN_L13_002c4428(Moby_2C56B0 *moby) {
         path = D_L13_001B07B0[d->fA0];
     }
     switch (moby->state) {
-    case 0:
+    case FIGHTER_INITIALIZE:
         if (moby->b30 == 0 && moby->h32 == 0) {
             mark_moby_for_removal(moby);
             return;
@@ -1199,7 +1208,7 @@ void FUN_L13_002c4428(Moby_2C56B0 *moby) {
         }
         break;
     }
-    case 2: {
+    case FIGHTER_FOLLOW_PATH_AND_ATTACK: {
         Moby_2C56B0 *boss;
         Boss_2C56B0 *bossd;
         float dist;
@@ -1255,7 +1264,7 @@ void FUN_L13_002c4428(Moby_2C56B0 *moby) {
                 moby->bBC = 1;
             }
             break;
-        case 1:
+        case FIGHTER_ATTACK_FIRE:
             if (boss != 0) {
                 bossd->b10F++;
             }
@@ -1306,7 +1315,7 @@ void FUN_L13_002c4428(Moby_2C56B0 *moby) {
                 }
             }
             break;
-        case 2:
+        case FIGHTER_ATTACK_COOLDOWN:
             if (tick_countdown_32_alt(&d->fB8) != 0) {
                 moby->bBC = 0;
             }
@@ -1314,7 +1323,7 @@ void FUN_L13_002c4428(Moby_2C56B0 *moby) {
         }
         break;
     }
-    case 3: {
+    case FIGHTER_EMIT_DESTRUCTION_EFFECTS: {
         Moby_2C56B0 *boss;
         Boss_2C56B0 *bossd;
 
