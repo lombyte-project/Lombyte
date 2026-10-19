@@ -178,8 +178,11 @@ s32 collision_hit_material() __asm__("FUN_001f0b58");
 void FUN_L00_002c3440();
 /* Calls FUN_L00_002c3440 on m for collision_hit_material results 0, 1, 3, 8, 11, 12 and 13. */
 void FUN_L00_002c4328(void *m) {
+    enum {
+        COLLISION_MATERIAL_WATER = 0
+    };
     switch (collision_hit_material()) {
-    case 0:
+    case COLLISION_MATERIAL_WATER:
     case 1:
     case 3:
     case 8:
