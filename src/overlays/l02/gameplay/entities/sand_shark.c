@@ -2590,11 +2590,13 @@ void transport_pod_update(unsigned char *moby) {
     enum {
         TRANSPORT_POD_INITIALIZE = 0,
         TRANSPORT_POD_TIMED_GEAR_MOVEMENT = 2,
+        TRANSPORT_POD_RAISE_FOR_BOARDING = 3,
         TRANSPORT_POD_POSITION_RAILS_FOR_BOARDING = 4,
         TRANSPORT_POD_WAIT_FOR_RIDER_OR_RECALL = 5,
         TRANSPORT_POD_POSITION_RAILS_FOR_DEPARTURE = 7,
         TRANSPORT_POD_LOWER_AND_TRANSFER_TO_OTHER_STOP = 8,
         TRANSPORT_POD_ADVANCE_RIDE_CAMERA = 9,
+        TRANSPORT_POD_RAISE_FOR_DISEMBARKING = 10,
         TRANSPORT_POD_POSITION_RAILS_FOR_DISEMBARKING = 11,
         TRANSPORT_POD_RAISE_TO_STOP_HEIGHT = 12,
         TRANSPORT_POD_WAIT_FOR_RIDER_TO_LEAVE = 13,
@@ -2677,7 +2679,7 @@ void transport_pod_update(unsigned char *moby) {
             FUN_0022da68_dc88(1, 0, moby);
         }
         break;
-    case 3:
+    case TRANSPORT_POD_RAISE_FOR_BOARDING:
         FUN_00213f38((float *)(moby + 0x18), &d->speed, D_L02_001600EC_n[d->node_a].pos[2],
                      D_L02_00161C34_gp * frame_time_sq, D_L02_00161C34_gp * frame_time_sq,
                      D_L02_00161C30_gp * D_0015ED6C);
@@ -2812,7 +2814,7 @@ void transport_pod_update(unsigned char *moby) {
         FUN_L00_002ea9d8(&c);
         FUN_L00_002eaa30(&b);
         break;
-    case 10:
+    case TRANSPORT_POD_RAISE_FOR_DISEMBARKING:
         FUN_00213f38((float *)(moby + 0x18), &d->speed, D_L02_001600EC_n[d->node_a].pos[2],
                      D_L02_00161C34_gp * frame_time_sq, D_L02_00161C34_gp * frame_time_sq,
                      D_L02_00161C30_gp * D_0015ED6C);
