@@ -2021,6 +2021,11 @@ extern char *moby_base_1638 __asm__("D_L13_0015FFD8");
 /* Blob update: waits on its home point, jumps out at the hero when the ship comes near, splits when it hits something, and respawns. */
 void asteroid_update(struct Moby *moby) __asm__("FUN_L13_002e1638");
 void asteroid_update(struct Moby *moby) {
+    enum {
+        SPIN_AXIS_X = 0,
+        SPIN_AXIS_Y = 1,
+        SPIN_AXIS_Z = 2
+    };
     struct BlobVars *vars = (struct BlobVars *)moby->pvars;
     f32 distance = distance_xyz_1638(&moby->pos, &hero_pos_1638);
     f32 size;
@@ -2097,25 +2102,25 @@ void asteroid_update(struct Moby *moby) {
         qzero(&vars->spin);
         spin = random_float_between_1638(-30.0f, 30.0f) * DEG_TO_RAD * frame_time;
         switch (rand_1638() % 3) {
-        case 0:
+        case SPIN_AXIS_X:
             vars->spin.x = spin;
             break;
-        case 1:
+        case SPIN_AXIS_Y:
             vars->spin.y = spin;
             break;
-        case 2:
+        case SPIN_AXIS_Z:
             vars->spin.z = spin;
             break;
         }
         spin = random_float_between_1638(-180.0f, 180.0f) * DEG_TO_RAD * frame_time;
         switch (rand_1638() % 3) {
-        case 0:
+        case SPIN_AXIS_X:
             vars->spin.x = spin;
             break;
-        case 1:
+        case SPIN_AXIS_Y:
             vars->spin.y = spin;
             break;
-        case 2:
+        case SPIN_AXIS_Z:
             vars->spin.z = spin;
             break;
         }
