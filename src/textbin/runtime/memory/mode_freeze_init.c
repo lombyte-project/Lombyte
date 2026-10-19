@@ -27,6 +27,7 @@ void mode_freeze_init(u32 mode, s32 arg1) __asm__("FUN_001fbab8");
 void mode_freeze_init(u32 mode, s32 freeze_context) {
     enum {
         FREEZE_ERROR = 3,
+        FREEZE_VEHICLE_PAUSE = 4,
         FREEZE_VIDEO_MODE_CHANGE = 6
     };
     struct FreezeModeState *st;
@@ -57,7 +58,7 @@ void mode_freeze_init(u32 mode, s32 freeze_context) {
         freeze.unk4 = 0;
         break;
     case 1:
-    case 4:
+    case FREEZE_VEHICLE_PAUSE:
         st = &freeze;
         st->unk8 = (s32)get_help_message_text(0x5229);
         st->unkC = (s32)get_help_message_text(0x4EE0);
