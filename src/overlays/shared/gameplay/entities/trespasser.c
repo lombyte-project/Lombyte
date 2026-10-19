@@ -2025,6 +2025,7 @@ void decoy_update(char *moby) __asm__("FUN_L00_002c4380");
 void decoy_update(char *moby) {
     enum {
         DECOY_INITIALIZE = 0,
+        DECOY_HELD = 1,
         DECOY_THROWN_MOVEMENT = 2,
         DECOY_SETTLED_MOVEMENT = 3,
         DECOY_PRE_REMOVAL_DELAY = 4,
@@ -2083,7 +2084,7 @@ void decoy_update(char *moby) {
         *(short *)(vars + 0x6c) = 0;
         vars[0x6e] = 0;
         break;
-    case 1: {
+    case DECOY_HELD: {
         char *target;
         *(short *)(vars + 0x44) = 0;
         target = *(char **)(vars + 0x40);
