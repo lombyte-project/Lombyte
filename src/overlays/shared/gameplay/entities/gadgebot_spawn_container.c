@@ -1437,7 +1437,7 @@ void gadgebot_update(GbMoby *moby) {
     float v40[4];
     float v50[4];
     float temporary_position[4];
-    float v70[4];
+    float path_and_attack_vector[4];
     float attack_probe_near_position[4];
     float ang;
     float step;
@@ -1667,11 +1667,11 @@ void gadgebot_update(GbMoby *moby) {
                                          moby->pos, hero.motion.pos.f, v50, 0.1f) == 0) {
                         qcopy(v50, hero.motion.pos.f);
                     }
-                    *(OvlQuad *)v70 = *(OvlQuad *)moby->pos;
-                    FUN_L00_00261d78(0.17f, d->paths.id[d->unk27C], moby->pos, v70);
+                    *(OvlQuad *)path_and_attack_vector = *(OvlQuad *)moby->pos;
+                    FUN_L00_00261d78(0.17f, d->paths.id[d->unk27C], moby->pos, path_and_attack_vector);
                     p = D_L06_001B0C30[d->paths.id[d->unk27C]];
-                    if (point_in_path_xy(v70, p + 4, *p) != 0) {
-                        *(OvlQuad *)moby->pos = *(OvlQuad *)v70;
+                    if (point_in_path_xy(path_and_attack_vector, p + 4, *p) != 0) {
+                        *(OvlQuad *)moby->pos = *(OvlQuad *)path_and_attack_vector;
                     }
                 } else {
                     qcopy(v50, hero.motion.pos.f);
@@ -1831,14 +1831,14 @@ void gadgebot_update(GbMoby *moby) {
                     *(OvlQuad *)moby->pos = *(OvlQuad *)save0;
                 }
                 if (vector_distance(moby->pos, d->target->pos) < 1.5f) {
-                    qcopy(v70, moby->pos);
-                    v70[2] += 0.4f;
-                    v70[0] += fast_cos(moby->rot) * 0.4f;
-                    v70[1] += fast_sin(moby->rot) * 0.4f;
-                    qcopy(attack_probe_near_position, v70);
-                    v70[0] += fast_cos(moby->rot) * 0.3f;
-                    v70[1] += fast_sin(moby->rot) * 0.3f;
-                    if (collision_line(v70, attack_probe_near_position, 0, (int)moby, 0) != 0 &&
+                    qcopy(path_and_attack_vector, moby->pos);
+                    path_and_attack_vector[2] += 0.4f;
+                    path_and_attack_vector[0] += fast_cos(moby->rot) * 0.4f;
+                    path_and_attack_vector[1] += fast_sin(moby->rot) * 0.4f;
+                    qcopy(attack_probe_near_position, path_and_attack_vector);
+                    path_and_attack_vector[0] += fast_cos(moby->rot) * 0.3f;
+                    path_and_attack_vector[1] += fast_sin(moby->rot) * 0.3f;
+                    if (collision_line(path_and_attack_vector, attack_probe_near_position, 0, (int)moby, 0) != 0 &&
                         D_L06_001745D8 == d->target) {
                         moby->sub = 2;
                     }
@@ -1857,10 +1857,10 @@ void gadgebot_update(GbMoby *moby) {
                 float t = compute_interpolated_record_value(moby);
 
                 if (t >= 12.0f && t <= 15.0f) {
-                    v70[0] = fast_cos(moby->rot);
-                    v70[1] = fast_sin(moby->rot);
-                    v70[2] = 0.0f;
-                    make_hit_descriptor(v40, moby, 0x10000, v70, 2.0f);
+                    path_and_attack_vector[0] = fast_cos(moby->rot);
+                    path_and_attack_vector[1] = fast_sin(moby->rot);
+                    path_and_attack_vector[2] = 0.0f;
+                    make_hit_descriptor(v40, moby, 0x10000, path_and_attack_vector, 2.0f);
                     FUN_L00_00259a88(d->target, v40);
                 }
             }
