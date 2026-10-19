@@ -6487,6 +6487,7 @@ void FUN_L06_00301b90(unsigned char *m) {
         TRIGGER_LINKED_SEQUENCE_WHEN_GROUP_INACTIVE = 1,
         WAIT_FOR_LINKED_SEQUENCE_COMPLETION = 2,
         ADVANCE_CAMERA_ALONG_PATH = 3,
+        UPDATE_POST_PATH_TIMED_EVENTS = 4,
         RAMP_SHARED_VALUE_AFTER_DELAY = 5
     };
     char *d = *(char **)(m + 0x78);
@@ -6579,7 +6580,7 @@ void FUN_L06_00301b90(unsigned char *m) {
         FUN_L06_00312ad0(vc);
         return;
     }
-    case 4: {
+    case UPDATE_POST_PATH_TIMED_EVENTS: {
         int x;
         char *q;
         x = scale_game_frames(0x708);
