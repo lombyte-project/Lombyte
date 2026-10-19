@@ -1746,9 +1746,13 @@ extern int func_0022EE28_e7208(int, int, int) __asm__("FUN_0022db10");
 extern void func_L00_00264DB8_e7208(int, int) __asm__("FUN_L00_00263d40");
 extern char D_0013D50F_e7208[] __asm__("D_0013D408");
 void FUN_L16_002e7208(char *moby) {
+    enum {
+        CLIP_TRIGGER_WAIT_FOR_ARMING = 0,
+        CLIP_TRIGGER_CHECK_LATCH = 1
+    };
     char *data = *(char **)(moby + 0x78);
     switch (*(int *)(data + 8)) {
-    case 0: {
+    case CLIP_TRIGGER_WAIT_FOR_ARMING: {
         char *g = (char *)&hero.motion.pos;
         if (func_00215570_e7208(g, *(int *)data) != 0) {
             if (*(int *)(g + 0x200C) == 0xF) {
@@ -1757,7 +1761,7 @@ void FUN_L16_002e7208(char *moby) {
         }
         break;
     }
-    case 1: {
+    case CLIP_TRIGGER_CHECK_LATCH: {
         struct Hero *h = &hero;
         if (h->state.current == 0x42) {
             *(int *)(data + 8) = 0;
