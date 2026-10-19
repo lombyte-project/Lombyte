@@ -2908,6 +2908,10 @@ extern s32 play_moby_voice(s32, s32, struct Moby *) __asm__("FUN_0022da68");
 /* Follows a linked switch moby (class 0x118): mirrors its position value, loops a sound while it moves, plays a click at either end and swaps class 0x41C back to 0x1B0 when it reaches 1.0. */
 void eudora_bridge_update(struct Moby *m) __asm__("FUN_L04_002c6858");
 void eudora_bridge_update(struct Moby *m) {
+    enum {
+        EUDORA_BRIDGE_STATE_INITIALIZE = 0,
+        EUDORA_BRIDGE_STATE_FOLLOW_LINKED_SWITCH = 1
+    };
     SwitchFollowerVars *v = (SwitchFollowerVars *)m->pvars;
     f32 last = m->anim_time;
     struct Moby *other;
@@ -2919,7 +2923,7 @@ void eudora_bridge_update(struct Moby *m) {
         return;
     }
     switch (m->state) {
-    case 0:
+    case EUDORA_BRIDGE_STATE_INITIALIZE:
         blend_anim(m, 1, 0, scale_game_frames(300));
         m->state = 1;
         m->anim_speed = 0;
@@ -2936,7 +2940,7 @@ void eudora_bridge_update(struct Moby *m) {
             refresh_moby_spatial_bounds_from_basis(m);
         }
         break;
-    case 1:
+    case EUDORA_BRIDGE_STATE_FOLLOW_LINKED_SWITCH:
         if (v->link == -1)
             break;
         other = (struct Moby *)(moby_array + (v->link << 8));
