@@ -1624,7 +1624,8 @@ void psytcopus_update(struct Moby *m) {
 void FUN_L11_00310698(struct Moby *m) {
     enum {
         HIT_REACTION_NONE = 0,
-        HIT_REACTION_DEATH = 1
+        HIT_REACTION_DEATH = 1,
+        HIT_REACTION_NO_RESPONSE = 11
     };
     struct PokiPathVars *pv = (struct PokiPathVars *)m->pvars;
     Vec4f v;
@@ -1661,7 +1662,7 @@ void FUN_L11_00310698(struct Moby *m) {
         pv->unkAD = 0;
         switch (r) {
         case HIT_REACTION_NONE:
-        case 11:
+        case HIT_REACTION_NO_RESPONSE:
             break;
         case 9:
         case 10:
