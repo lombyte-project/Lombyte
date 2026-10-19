@@ -2978,6 +2978,7 @@ void FUN_L06_002fa9c0(char *moby) {
     enum {
         HIT_RESPONSE_SKIP_REACTION = 0,
         HIT_RESPONSE_DEATH = 1,
+        HIT_RESPONSE_DEATH_SEQUENCE = 2,
         HIT_RESPONSE_NONLETHAL_FALLBACK = 5,
         HIT_RESPONSE_NO_REACTION = 11
     };
@@ -3042,7 +3043,7 @@ start_recovery:
             *(unsigned char *)(data + 0x67) = 200;
             break;
         case HIT_RESPONSE_DEATH:
-        case 2: {
+        case HIT_RESPONSE_DEATH_SEQUENCE: {
             char *base;
             if (*(int *)(data + 0x10C) != -1) {
                 set_animation_parameter(*(int *)(data + 0x10C), 0);
