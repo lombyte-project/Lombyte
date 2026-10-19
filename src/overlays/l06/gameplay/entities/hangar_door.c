@@ -1064,7 +1064,8 @@ void FUN_L06_002f55a0(Moby *moby) {
         WAIT_FOR_DRAWBRIDGE_ACTIVATION = 1,
         FADE_BEFORE_DRAWBRIDGE_ANIMATION = 3,
         ANIMATE_DRAWBRIDGE_AND_CAMERA = 4,
-        FADE_AFTER_DRAWBRIDGE_ANIMATION = 5
+        FADE_AFTER_DRAWBRIDGE_ANIMATION = 5,
+        DRAWBRIDGE_COMPLETE = 6
     };
     Vec_2F69D0 position, rotation, from_pos, from_rot, to_pos, to_rot;
     Data_2F69D0 *data = (struct Data_2F69D0 *)moby->pvars;
@@ -1201,7 +1202,7 @@ void FUN_L06_002f55a0(Moby *moby) {
             func_0020BFC8_2F69D0(0, -1);
         }
         break;
-    case 6:
+    case DRAWBRIDGE_COMPLETE:
         break;
     }
 }
