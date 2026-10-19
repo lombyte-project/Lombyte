@@ -3031,7 +3031,8 @@ void FUN_L17_002f0210(struct Moby *moby) {
         ROBOT_DOG_STATE_TURN_TOWARD_TARGET = 8,
         ROBOT_DOG_STATE_APPROACH_TARGET = 9,
         ROBOT_DOG_STATE_ATTACK_TARGET = 10,
-        ROBOT_DOG_STATE_RETURN_HOME = 11
+        ROBOT_DOG_STATE_RETURN_HOME = 11,
+        ROBOT_DOG_STATE_FALL_THEN_REMOVE = 15
     };
     char *data;
     int n;
@@ -3072,7 +3073,7 @@ void FUN_L17_002f0210(struct Moby *moby) {
     case ROBOT_DOG_STATE_RETURN_HOME:
     case 13:
     case 14:
-    case 15:
+    case ROBOT_DOG_STATE_FALL_THEN_REMOVE:
         mode = 2;
         break;
     case 12:
