@@ -1088,10 +1088,13 @@ void FUN_0020c828_2c1778(void *) __asm__("FUN_0020c828");
 extern const float D_L00_00161828 __attribute__((sda));
 extern float D_L00_00161830 __attribute__((sda));
 void FUN_L00_002c1778(void *mv) {
+    enum {
+        TRESPASSER_INITIALIZE = 0
+    };
     unsigned char *m = mv;
     struct Hero *P;
     switch (m[0x20]) {
-    case 0:
+    case TRESPASSER_INITIALIZE:
         FUN_00213508_2c1778(m + 0x10, 0, 0.5f);
         *(float *)(m + 0x40) = 1.5707964f;
         *(float *)(m + 0x44) = 3.1415927f;
