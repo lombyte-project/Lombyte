@@ -1574,7 +1574,8 @@ void circular_saw_enemy_update(M_35F0 *moby) {
         CIRCULAR_SAW_HIT_REACTION_DESTROY_IMMEDIATELY = 2,
         CIRCULAR_SAW_HIT_REACTION_START_HIT_RECOVERY = 3,
         CIRCULAR_SAW_HIT_REACTION_KNOCKBACK_RECOVERY = 4,
-        CIRCULAR_SAW_HIT_REACTION_BACKWARD_RECOIL = 5
+        CIRCULAR_SAW_HIT_REACTION_BACKWARD_RECOIL = 5,
+        CIRCULAR_SAW_HIT_REACTION_RECOIL_RECOVERY = 6
     };
     enum {
         CIRCULAR_SAW_POINT_ATTACK_APPROACH_AND_ALIGN = 0,
@@ -1667,7 +1668,7 @@ void circular_saw_enemy_update(M_35F0 *moby) {
             case CIRCULAR_SAW_HIT_REACTION_START_HIT_RECOVERY:
             case CIRCULAR_SAW_HIT_REACTION_KNOCKBACK_RECOVERY:
             case CIRCULAR_SAW_HIT_REACTION_BACKWARD_RECOIL:
-            case 6:
+            case CIRCULAR_SAW_HIT_REACTION_RECOIL_RECOVERY:
                 blend_moby_animation(moby, (void *)8, 0, (void *)scale_game_frames(5));
                 if (hit->att->cls.s == 0x131 || hit->att->cls.s == 0xB0) {
                     data->f13C = 10.0f / multiply_global_factor_ed64(15.0f) * 0.5f;
