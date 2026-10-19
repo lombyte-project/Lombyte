@@ -648,6 +648,7 @@ extern int D_0015ED84_gp __asm__("D_0015ED84") __attribute__((section(".sdata"))
 int FUN_L05_00251be8(void) {
     enum {
         ITEM_WRENCH = 8,
+        ITEM_BUFFERED_SOUND_DEVICE = 10,
         ITEM_TARGET_INTERACTION_DEVICE = 12,
         ITEM_HELD_SOUND_DEVICE = 15,
         ITEM_STATE_CHANGING_SOUND_DEVICE = 18,
@@ -870,7 +871,7 @@ int FUN_L05_00251be8(void) {
             }
         }
         break;
-    case 10:
+    case ITEM_BUFFERED_SOUND_DEVICE:
     case 17:
     case 20:
     case 24:
