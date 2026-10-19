@@ -134,6 +134,8 @@ int r1_repeat_timer __asm__("D_L03_0015F678") = 0;
 void FUN_L03_0021c668(void) {
     enum {
         HERO_STATE_LEDGE_HANG = 25,
+        HERO_STATE_LEDGE_SHIMMY_POSITIVE_YAW_OFFSET = 26,
+        HERO_STATE_LEDGE_SHIMMY_NEGATIVE_YAW_OFFSET = 27,
         HERO_STATE_WATER_DEATH = 106,
         HERO_STATE_LOW_ALTITUDE_RESPAWN = 119
     };
@@ -1168,8 +1170,8 @@ void FUN_L03_0021c668(void) {
                         }
                     }
                     break;
-                case 26:
-                case 27: {
+                case HERO_STATE_LEDGE_SHIMMY_POSITIVE_YAW_OFFSET:
+                case HERO_STATE_LEDGE_SHIMMY_NEGATIVE_YAW_OFFSET: {
                     float ang;
 
                     qcopy(v0, hero.motion.pos.f);
