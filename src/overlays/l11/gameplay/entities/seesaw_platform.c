@@ -1264,6 +1264,9 @@ extern void update_fe50(void *, void *) __asm__("FUN_L00_0025d538");
 char D_L11_0021B530[] = "Moby class %d Damage Received: %f\n";
 
 void FUN_L11_0030fe50(struct Moby *m, unsigned char *d, float *t) {
+    enum {
+        HIT_REACTION_DEATH = 1
+    };
     int out;
     char *info;
     if (m->state != 4) {
@@ -1272,7 +1275,7 @@ void FUN_L11_0030fe50(struct Moby *m, unsigned char *d, float *t) {
             print_fe50(D_L11_0021B530, m->oclass, ftoi_fe50(*(float *)(info + 0x2C)));
         }
         switch (hit_fe50(m, info, t, 0, &out, 0, 0, 4)) {
-        case 1:
+        case HIT_REACTION_DEATH:
         case 2:
             *t = 0.0f;
             break;
