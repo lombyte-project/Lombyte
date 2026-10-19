@@ -250,6 +250,10 @@ extern void func_L00_0025A8C0_alt_q(char *arg, int a, int b, float scale,
 
 extern char D_L17_00174760_lui[] __asm__("D_L17_00174760") __attribute__((section(".data")));
 void FUN_L17_002e8e08(struct Moby *moby) {
+    enum {
+        DRONE_STATE_FLIGHT = 0,
+        DRONE_STATE_SPARKS_UNTIL_REMOVAL = 1
+    };
     float a[4];
     float b[4];
     float c[4];
@@ -266,7 +270,7 @@ void FUN_L17_002e8e08(struct Moby *moby) {
     int n;
 
     switch (moby->state) {
-    case 0:
+    case DRONE_STATE_FLIGHT:
         moby->draw_dist = 0;
         moby->visible = 0;
         t = d + 0x10;
@@ -363,7 +367,7 @@ void FUN_L17_002e8e08(struct Moby *moby) {
             mmr_q_q(moby);
         }
         break;
-    case 1: {
+    case DRONE_STATE_SPARKS_UNTIL_REMOVAL: {
         float x = random_float_between_alt_q(frame_time + frame_time, frame_time * 10.0f);
         float y = random_float_between_alt_q(-3.1415927f, 3.1415927f);
         build_spherical_offset_q(a, x, y, random_float_between_alt_q(-3.1415927f, 3.1415927f));
