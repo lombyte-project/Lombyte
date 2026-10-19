@@ -693,6 +693,13 @@ extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void birdbot_update(PeMoby *m) __asm__("FUN_L01_002e6bf0");
 void birdbot_update(PeMoby *m) {
+    enum {
+        BIRDBOT_STATE_INITIALIZE = 0,
+        BIRDBOT_STATE_WAIT_FOR_TRIGGER = 2,
+        BIRDBOT_STATE_BEGIN_PATH_MOVEMENT = 9,
+        BIRDBOT_STATE_MOVE_TO_PATH_NODE = 10,
+        BIRDBOT_STATE_FATAL_KNOCKBACK = 14
+    };
     PeVars *v;
     PeVec old;
     PeTarget tgt;
@@ -827,7 +834,7 @@ void birdbot_update(PeMoby *m) {
     v->w38 = 0;
     fast_dec_timer_s16(&v->h1E2);
     switch (m->state) {
-    case 0: {
+    case BIRDBOT_STATE_INITIALIZE: {
         PeCursor *c;
         int i;
         float fall;
@@ -945,7 +952,7 @@ void birdbot_update(PeMoby *m) {
         }
         break;
     }
-    case 2:
+    case BIRDBOT_STATE_WAIT_FOR_TRIGGER:
         if (vector_distance(&m->pos, &tgt) < v->f1A8 ||
             is_point_inside_clip_volume(&hero.motion.pos, v->w1C0) != 0 || v->w1E8 != 0) {
             if (v->w1C4 != -1) {
@@ -1141,14 +1148,14 @@ void birdbot_update(PeMoby *m) {
         }
         break;
     }
-    case 9:
+    case BIRDBOT_STATE_BEGIN_PATH_MOVEMENT:
         m->f58 = 1.0f;
         v->f1B8 = 0.0f;
         v->f1BC = 0.0f;
         m->state = 0xA;
         FUN_L01_002e6518_c((SplashMoby *)m, (u128 *)&old);
         break;
-    case 10: {
+    case BIRDBOT_STATE_MOVE_TO_PATH_NODE: {
         PeCursor *c;
         float h;
 
@@ -1269,7 +1276,7 @@ void birdbot_update(PeMoby *m) {
             return;
         }
         break;
-    case 14:
+    case BIRDBOT_STATE_FATAL_KNOCKBACK:
         m->h34 &= 0xEFFF;
         if ((mine_fall(m, v->x70) & 6) || m->pos.f[0] < 2.0f || m->pos.f[0] > 1021.0f ||
             m->pos.f[1] < 2.0f || m->pos.f[1] > 1021.0f || m->pos.f[2] < 2.0f ||
