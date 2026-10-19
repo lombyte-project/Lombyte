@@ -1139,7 +1139,7 @@ void FUN_L01_00232dc0(void) {
         GRAVITY_OPPOSITE_GROUND_NORMAL = 1,
         GRAVITY_TOWARD_REFERENCE_POINT = 2
     };
-    V collision_ray_end, ground_ray_start, v20, side_ray_start, v40, side_hit_angles, normalized_side_hit_normal;
+    V collision_ray_end, ground_ray_start, v20, side_ray_start, unused_side_probe_point, side_hit_angles, normalized_side_hit_normal;
     f32 f;
     s32 r;
     s32 i;
@@ -1287,7 +1287,7 @@ d1:
             a = -a;
         }
         FUN_L00_002335c8(&side_ray_start, 0.2f, a, 0.45f);
-        FUN_L00_002335c8(&v40, 0.2f, a, -0.45f);
+        FUN_L00_002335c8(&unused_side_probe_point, 0.2f, a, -0.45f);
         if (FUN_001efa68_c(&side_ray_start, &collision_ray_end, 0x22, (s32)hero.moby, 0)) {
             f = HH.point.f[2] - hero.ground_z.f;
             hero.unk2C0.f[i] = f;
