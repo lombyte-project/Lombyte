@@ -3313,7 +3313,8 @@ extern s32 D_00141660 __attribute__((section(".data")));
 int FUN_L00_00227fa0(void) {
     enum {
         ITEM_WRENCH = 8,
-        ITEM_GRAPPLE = 12
+        ITEM_GRAPPLE = 12,
+        ITEM_REMOTE_VENDOR = 32
     };
     int out[3];
     int start;
@@ -3498,7 +3499,7 @@ int FUN_L00_00227fa0(void) {
         D_0013F450_h228770.f22DE = 0x12;
         D_0013F450_h228770.f22DC = 1;
         break;
-    case 32:
+    case ITEM_REMOTE_VENDOR:
         if (D_0013F450_h228770.f208C < 3U || D_0013F450_h228770.f208C == 4 || D_0013F450_h228770.f208C == 5) {
             if (f_fun_l00_00266d60_227fa0(mask, f_fun_001f96f8_227fa0(8), 0)) {
                 FUN_L00_0029a6b0(0);
