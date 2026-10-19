@@ -2911,6 +2911,7 @@ void crate_update(struct Moby *moby) {
         CRATE_STATE_PROCESS_HITS = 1,
         CRATE_STATE_CLASS_CHANGE_COOLDOWN = 2,
         CRATE_STATE_BROKEN = 3,
+        CRATE_STATE_REACTIVATION_DELAY = 4,
         CRATE_STATE_DETONATION_COUNTDOWN = 5,
         CRATE_STATE_WAIT_RESPAWN = 6
     };
@@ -3199,7 +3200,7 @@ void crate_update(struct Moby *moby) {
         moby->command--;
         break;
 
-    case 4:
+    case CRATE_STATE_REACTIVATION_DELAY:
         if (FUN_L00_001fefc8(&moby->command)) {
             moby->state = 1;
             moby->flags &= ~1;
