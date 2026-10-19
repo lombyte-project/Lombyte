@@ -316,7 +316,7 @@ void FUN_L17_00214760(void) {
     Vec4 vD0;
 
     switch (hero.state.current) {
-    case 0x0:
+    case HERO_STATE_IDLE:
     case HERO_STATE_LOOK:
     case HERO_STATE_STOP:
     case HERO_STATE_CROUCH:
