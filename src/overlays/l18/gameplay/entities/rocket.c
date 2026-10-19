@@ -2189,7 +2189,8 @@ extern int D_L18_00179E10[] __attribute__((section(".data")));
 extern int D_L18_0017EF08 __attribute__((section(".data")));
 void FUN_L18_002df608(struct Moby *moby) {
     enum {
-        STATE_INITIALIZE = 0
+        STATE_INITIALIZE = 0,
+        STATE_INTERPOLATE_TRANSITION = 3
     };
     char *data = (char *)moby->pvars;
     float v[12];
@@ -2221,7 +2222,7 @@ void FUN_L18_002df608(struct Moby *moby) {
             }
         }
         break;
-    case 3:
+    case STATE_INTERPOLATE_TRANSITION:
         D_L18_0017EF08 = 1;
         if (fast_dec_timer((int *)(data + 0x74))) {
             advance_accelerated_scalar((float *)(data + 0x60), (float *)(data + 0x64), 1.0f,
