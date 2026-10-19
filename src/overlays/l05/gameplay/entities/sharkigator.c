@@ -1621,6 +1621,7 @@ extern s32 D_001413D0_lui[] __asm__("D_001413D0") __attribute__((section(".data"
 void FUN_L05_00303390(Moby *m) {
     enum {
         EXTERMIBOT_HIT_LETHAL = 1,
+        EXTERMIBOT_HIT_DEATH_KNOCKBACK = 2,
         EXTERMIBOT_HIT_NO_REACTION = 11
     };
     Vec_3047E8 working_vector;
@@ -1694,7 +1695,7 @@ void FUN_L05_00303390(Moby *m) {
             d->b67 = 0x78;
             break;
         case EXTERMIBOT_HIT_LETHAL:
-        case 2:
+        case EXTERMIBOT_HIT_DEATH_KNOCKBACK:
             m->flags &= 0xEFFF;
             d->f80 = D_L05_00161AD4 * D_0015ED70;
             d->f88 = D_L05_00161A90 * D_0015ED6C;
