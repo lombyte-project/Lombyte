@@ -1798,6 +1798,8 @@ void blend_moby_animation_2db8f8(void *, s32, s32, s32) __asm__("FUN_00212f90");
 f32 vector_distance_2db8f8(void *, void *) __asm__("FUN_001f9b80");
 s32 FUN_L00_002db8f8(u8 *moby, u8 *position, u8 *target) {
     enum {
+        SUCK_DISPATCH_ALIGNING_FOR_SUCTION = 0,
+        SUCK_DISPATCH_RISING_FOR_SUCTION = 1,
         SUCK_DISPATCH_BEING_PULLED_IN = 2,
         SUCK_DISPATCH_STORED = 3,
         SUCK_DISPATCH_FALLING_AFTER_CANCEL = 6
@@ -1813,7 +1815,7 @@ s32 FUN_L00_002db8f8(u8 *moby, u8 *position, u8 *target) {
     *(f32 *)(record + 0xC) = 1.0f;
     state = (s16)(*(u16 *)(record + 0x68) - 1);
     switch (state) {
-    case 0:
+    case SUCK_DISPATCH_ALIGNING_FOR_SUCTION:
         if (1.0f <= *(f32 *)(record + 0x6C)) {
             {
                 u8 *seq = *(u8 **)(record + 0x70);
@@ -1832,7 +1834,7 @@ s32 FUN_L00_002db8f8(u8 *moby, u8 *position, u8 *target) {
             }
         }
         return 1;
-    case 1:
+    case SUCK_DISPATCH_RISING_FOR_SUCTION:
         if (!(1.0f <= *(f32 *)(record + 0x6C)))
             return 1;
         return 2;
