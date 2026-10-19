@@ -882,6 +882,7 @@ extern int follow_path(int *, int, int, void *, void *, void *, float) __asm__("
 
 int FUN_L11_002d2340(struct Moby *moby, char *other) {
     enum {
+        RESORT_OWNER_PENULTIMATE_PATH_LEG = 2,
         RESORT_OWNER_FINAL_PATH_LEG = 3
     };
     struct TgtData *d = (struct TgtData *)moby->pvars;
@@ -894,7 +895,7 @@ int FUN_L11_002d2340(struct Moby *moby, char *other) {
     buf[0] = *(int *)((char *)p - (-(d->idx * 4)));
     n = 1;
     switch (d->idx) {
-    case 2:
+    case RESORT_OWNER_PENULTIMATE_PATH_LEG:
         n = 4;
         buf[1] = d->c[0];
         buf[2] = d->c[1];
