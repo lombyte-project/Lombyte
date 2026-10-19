@@ -1404,14 +1404,18 @@ void FUN_L02_002d7748(struct Moby *moby);
 void FUN_L02_002d7748(struct Moby *moby) {
     enum {
         L02_BOT_INITIALIZE = 0,
+        L02_BOT_WAIT_FOR_WAKE_ANIMATION = 2,
         L02_BOT_ALIGN_TO_GROUND_AT_POST = 3,
+        L02_BOT_WAIT_FOR_ANIMATION_BEFORE_MOVE_TO_POST = 4,
         L02_BOT_MOVE_TO_POST = 5,
         L02_BOT_WANDER = 6,
+        L02_BOT_SELECT_ATTACK_OR_WANDER = 7,
         L02_BOT_WAIT_FOR_WAKE_TRIGGER = 10,
         L02_BOT_HIT_KNOCKBACK_RECOVERY = 16,
         L02_BOT_DEATH_KNOCKBACK = 17
     };
     enum {
+        L02_BOT_START_SELECT_ATTACK_OR_WANDER = 0,
         L02_BOT_START_WAIT_FOR_WAKE_TRIGGER = 1
     };
     float position[4];
@@ -1458,7 +1462,7 @@ void FUN_L02_002d7748(struct Moby *moby) {
         clear_u64_value(data->velocity);
         FUN_L02_00264e40((char *)data->shots);
         switch (data->start) {
-        case 0:
+        case L02_BOT_START_SELECT_ATTACK_OR_WANDER:
         default:
             if (moby->prev_seq != 0) {
                 blend_moby_animation_c3(moby, 0, 0, 0);
@@ -1485,7 +1489,7 @@ void FUN_L02_002d7748(struct Moby *moby) {
             break;
         }
         break;
-    case 2:
+    case L02_BOT_WAIT_FOR_WAKE_ANIMATION:
         if (moby->anim_flags & 2) {
             moby->state = 3;
             if (moby->prev_seq != 4) {
@@ -1512,7 +1516,7 @@ void FUN_L02_002d7748(struct Moby *moby) {
             }
         }
         break;
-    case 4:
+    case L02_BOT_WAIT_FOR_ANIMATION_BEFORE_MOVE_TO_POST:
         if (moby->anim_flags & 2) {
             moby->state = 5;
             if (moby->prev_seq != 6) {
@@ -1542,7 +1546,7 @@ void FUN_L02_002d7748(struct Moby *moby) {
             }
         }
         break;
-    case 7:
+    case L02_BOT_SELECT_ATTACK_OR_WANDER:
         if (distance_xyz(data->target + 0x10, D_L02_001600EC + data->post * 0x80 + 0x30) < data->attack_range
             && absolute_float_c(*(float *)(data->target + 0x18) - moby->pos.z) < 4.0f) {
             if (distance_xyz(&moby->pos, D_L02_001600EC + data->post * 0x80 + 0x30) < 1.0f) {
