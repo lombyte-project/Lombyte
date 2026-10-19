@@ -714,6 +714,11 @@ extern void func_L08_002E0258_2E16A0(void *) __asm__("FUN_L08_002deee0");
 
 extern unsigned char D_0014095F[];
 void FUN_L08_002e0328(Moby *moby) {
+    enum {
+        CANNON_INITIALIZE = 0,
+        CANNON_MOUNTED_CONTROL = 5,
+        CANNON_REMOVE = 6
+    };
     float position[4], offset[4], work[4], direction[4], muzzle[4], scatter[4], random_vec[4];
     CannonData52_2E16A0 *data = (*(CannonData52_2E16A0 **)&moby->pvars);
     int i, target, all_done, dead, best, min_life;
@@ -784,7 +789,7 @@ void FUN_L08_002e0328(Moby *moby) {
         }
     }
     switch (moby->state) {
-    case 0: {
+    case CANNON_INITIALIZE: {
         Moby *node; int *indices; int count;
         moby->state = 4; data->health = 200; data->range = 10.0f;
         node = func_0020D348_2E16A0(0x710); data->visual = node;
@@ -802,7 +807,7 @@ void FUN_L08_002e0328(Moby *moby) {
         else data->visual_angle = 1.5707964f;
         break;
     }
-    case 5:
+    case CANNON_MOUNTED_CONTROL:
         if (data->health < 0) data->health = 0;
         work[0] = hero52.input[0];
         work[1] = invert52 ? hero52.input[1] : -hero52.input[1];
@@ -951,7 +956,7 @@ void FUN_L08_002e0328(Moby *moby) {
         break;
     case 4:
         break;
-    case 6:
+    case CANNON_REMOVE:
         func_0020D678_2E16A0(data->guns[0]); func_0020D678_2E16A0(data->guns[1]); func_0020D678_2E16A0(moby); return;
     }
     if (data->guns[0] == 0) {
