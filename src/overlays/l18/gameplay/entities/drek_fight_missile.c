@@ -1534,6 +1534,10 @@ void drek_final_boss_robot_update(BossMoby *moby) {
         DREK_BOSS_APPROACH_SELECTED_MOBY = 0x15,
         DREK_BOSS_DEATH_EXPLOSIONS = 0x1A
     };
+    enum {
+        DREK_BOSS_WAIT_FOR_GROUNDED_HERO_TO_START_SCENE = 4,
+        DREK_BOSS_FINISH_PATH_AND_WAIT_FOR_HERO = 0xB
+    };
     BossData *d = (BossData *)moby->f78;
     BossMoby *tgt;
     float v0[4];
@@ -1870,7 +1874,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
         }
         break;
     }
-    case 0xB:
+    case DREK_BOSS_FINISH_PATH_AND_WAIT_FOR_HERO:
         if (d->f348 != *d->f340) {
             approach_value(&d->f374, frame_time * 10.0f, D_0015ED6C_e[1] * 20.0f);
             subtract_vector_xyz(v0, (char *)d->f340 + (d->f348 * 0x10 + 0x10), d->f3C0);
@@ -1901,7 +1905,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
             moby->f20 = 0xC;
         }
         break;
-    case 4:
+    case DREK_BOSS_WAIT_FOR_GROUNDED_HERO_TO_START_SCENE:
         if (hero.air_frames.s == 0 && (((BossMoby *)hero.ground_moby) == 0 || ((BossMoby *)hero.ground_moby)->fA6 != 0x24B)) {
             int i;
 
