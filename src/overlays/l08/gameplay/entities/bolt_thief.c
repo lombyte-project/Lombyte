@@ -1648,6 +1648,13 @@ typedef struct {
 
 void bolt_thief_update(struct Moby *moby) __asm__("FUN_L08_002e2df0");
 void bolt_thief_update(struct Moby *moby) {
+    enum {
+        BOLT_THIEF_INITIALIZE = 0,
+        BOLT_THIEF_WAIT_FOR_HERO_NEAR_TRIGGER = 1,
+        BOLT_THIEF_FOLLOW_SECONDARY_PATH = 6,
+        BOLT_THIEF_FACE_HERO = 7,
+        BOLT_THIEF_KNOCKBACK = 8
+    };
     Vec4 point;
     Vec4 step;
     BoltThiefVars *data;
@@ -1687,7 +1694,7 @@ void bolt_thief_update(struct Moby *moby) {
     }
     moby->hit_slot = 0xFF;
     switch (moby->state) {
-    case 0:
+    case BOLT_THIEF_INITIALIZE:
         data->follow[0].path = D_L08_001B0CB0[data->follow[0].path_id];
         qcopy(&moby->pos, &data->follow[0].path->points[0]);
         data->follow[0].point = 1;
@@ -1704,7 +1711,7 @@ void bolt_thief_update(struct Moby *moby) {
             FUN_00212f90(moby, 1, 0, 0);
         }
         break;
-    case 1:
+    case BOLT_THIEF_WAIT_FOR_HERO_NEAR_TRIGGER:
         qcopy(&point, &D_L08_001B0CB0[data->w220]->points[0]);
         if (FUN_001f9b48(hero.motion.pos.f, &point) < 24.0f) {
             FUN_L08_002e2da0((char *)moby);
@@ -1836,7 +1843,7 @@ void bolt_thief_update(struct Moby *moby) {
         }
         break;
     }
-    case 6: {
+    case BOLT_THIEF_FOLLOW_SECONDARY_PATH: {
         SwarmPathFollower *follower;
         int next;
         float heading;
@@ -1857,7 +1864,7 @@ void bolt_thief_update(struct Moby *moby) {
         }
         break;
     }
-    case 7: {
+    case BOLT_THIEF_FACE_HERO: {
         float *hero_position;
         float distance;
         float heading;
@@ -1879,7 +1886,7 @@ void bolt_thief_update(struct Moby *moby) {
         }
         break;
     }
-    case 8:
+    case BOLT_THIEF_KNOCKBACK:
         if (mine_fall(moby, data->x70) & 3) {
             cart_burst(moby, &moby->pos, -1, 1.0f, 13.0f);
             mark_moby_for_removal(moby);
