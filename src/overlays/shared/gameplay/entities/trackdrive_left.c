@@ -782,6 +782,11 @@ extern void clear_vector(void *);
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void FUN_L02_002da6c0(int p0, int p1, int sel, float a, float s) {
+    enum {
+        ARROW_STYLE_NEWLY_REACHED = 0,
+        ARROW_STYLE_OCCUPIED = 1,
+        ARROW_STYLE_LIT = 2
+    };
     long xy[4];
     u32 col[4];
     int uv[4];
@@ -791,19 +796,19 @@ void FUN_L02_002da6c0(int p0, int p1, int sel, float a, float s) {
     long v;
     s64 tex;
     switch (sel) {
-    case 0:
+    case ARROW_STYLE_NEWLY_REACHED:
         uv[0] = D_L02_00161ABC;
         uv[1] = D_L02_00161AC0;
         uv[2] = D_L02_00161AC4;
         uv[3] = D_L02_00161AC8;
         break;
-    case 1:
+    case ARROW_STYLE_OCCUPIED:
         uv[0] = D_L02_00161ACC;
         uv[1] = D_L02_00161AD0;
         uv[2] = D_L02_00161AD4;
         uv[3] = D_L02_00161AD8;
         break;
-    case 2:
+    case ARROW_STYLE_LIT:
     default:
         uv[0] = D_L02_00161ADC;
         uv[1] = D_L02_00161AE0;
