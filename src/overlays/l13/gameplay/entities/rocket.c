@@ -2269,8 +2269,11 @@ extern int D_L13_0015F5C4;
 extern void cutscene_set_camera_target(int) __asm__("FUN_L00_002637f8");
 
 void FUN_L13_0030bdf0(struct Moby *moby) {
+    enum {
+        INITIALIZE_UPDATE_DISTANCE = 0
+    };
     switch (moby->state) {
-    case 0:
+    case INITIALIZE_UPDATE_DISTANCE:
         moby->update_dist = 0xFF;
         moby->state = 1;
         break;
