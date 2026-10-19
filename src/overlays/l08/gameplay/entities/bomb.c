@@ -317,6 +317,10 @@ extern float D_L08_0015F580_macro[] __asm__("D_L08_0015F580") __attribute__((sec
 extern float D_L08_00174660[];
 
 void FUN_L08_002d23f0(char *moby) {
+    enum {
+        BOMB_STATE_MOVING = 1,
+        BOMB_STATE_STATIONARY_FUSE = 2
+    };
     union Coll_36F8 c;
     blk16 table_or_bounce_scratch;
     float normalized_direction[4];
@@ -342,7 +346,7 @@ void FUN_L08_002d23f0(char *moby) {
     st = *(unsigned char *)(moby + 0x20);
     two = 2;
     switch (st) {
-    case 1: {
+    case BOMB_STATE_MOVING: {
         float t;
         t = fast_vec_length_c((d + 0x10));
         *(float *)(moby + 0x40) = fast_add_rotations_c(*(float *)(moby + 0x40), t * 0.5f);
@@ -423,7 +427,7 @@ void FUN_L08_002d23f0(char *moby) {
         }
         break;
     }
-    case 2:
+    case BOMB_STATE_STATIONARY_FUSE:
         if (tick_countdown_32_alt(d + 0x20)) {
             *(unsigned char *)(moby + 0x20) = 0x63;
         } else if (*(int *)(d + 0x20) == scale_game_frames_c(0x3C)
