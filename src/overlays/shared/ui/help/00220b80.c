@@ -386,7 +386,8 @@ extern void FUN_L00_0029a6b0(s32);
 s32 FUN_L02_0022ee00(void)
 {
     enum {
-        HERO_ITEM_WRENCH = 8
+        HERO_ITEM_WRENCH = 8,
+        HERO_ITEM_HOLD_TO_FIRE = 15
     };
     s32 out0;
     s32 out1;
@@ -530,7 +531,7 @@ s32 FUN_L02_0022ee00(void)
         }
         break;
 
-    case 15:
+    case HERO_ITEM_HOLD_TO_FIRE:
         if (hero.state.control_mode == 0 || hero.state.control_mode == 1 || hero.state.control_mode == 0xC ||
             hero.state.control_mode == 2 || hero.state.control_mode == 4 || hero.state.control_mode == 5 ||
             hero.state.control_mode == 0xF || hero.state.current == 0x1E) {
