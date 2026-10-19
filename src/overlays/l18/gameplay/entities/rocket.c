@@ -1000,6 +1000,10 @@ extern float FUN_001f9b48(void *, void *);
 extern char *FUN_L18_002e22c0(void *vector);
 
 void FUN_L18_002d62e8(struct Moby *moby) {
+    enum {
+        STATE_INITIALIZE_PATH_PAIRS = 0,
+        STATE_SELECT_NEARER_PATH = 1
+    };
     PathJunctionVars *vars = (PathJunctionVars *)moby->pvars;
     s32 n;
     s32 i;
@@ -1008,7 +1012,7 @@ void FUN_L18_002d62e8(struct Moby *moby) {
     f32 near_first;
 
     switch (moby->state) {
-    case 0:
+    case STATE_INITIALIZE_PATH_PAIRS:
         moby->state = 1;
         moby->update_dist = 0xFF;
         n = 0;
@@ -1039,7 +1043,7 @@ void FUN_L18_002d62e8(struct Moby *moby) {
             FUN_L18_002e22c0(D_L18_001600EC + vars->node[n] * 0x80 + 0x30);
         }
         break;
-    case 1:
+    case STATE_SELECT_NEARER_PATH:
         hero.unk1CA = 5;
         for (k = 0; k < 4; k++) {
             if (hero.state.control_mode == 0xF &&
