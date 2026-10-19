@@ -3288,13 +3288,18 @@ extern char D_L02_0015FFD8_c3 __asm__("D_L02_0015FFD8");
 
 void tresspasser_door2_update(struct Moby *moby) __asm__("FUN_L02_002e0138");
 void tresspasser_door2_update(struct Moby *moby) {
+    enum {
+        TRESSPASSER_DOOR2_CAPTURE_START_POSITION = 0,
+        TRESSPASSER_DOOR2_WAIT_FOR_LINKED_MOBY = 1,
+        TRESSPASSER_DOOR2_SLIDE_TO_OFFSET_POSITION = 2
+    };
     char *data = (char *)moby->pvars;
     switch (moby->state) {
-    case 0:
+    case TRESSPASSER_DOOR2_CAPTURE_START_POSITION:
         qcopy(data, &moby->pos);
         moby->state = 1;
         break;
-    case 1: {
+    case TRESSPASSER_DOOR2_WAIT_FOR_LINKED_MOBY: {
         int id = *(int *)(data + 0x10);
         if (id >= 0) {
             char *m = (char *)((id << 8) + *(int *)&D_L02_0015FFD8_c3);
@@ -3306,7 +3311,7 @@ void tresspasser_door2_update(struct Moby *moby) {
         }
         break;
     }
-    case 2: {
+    case TRESSPASSER_DOOR2_SLIDE_TO_OFFSET_POSITION: {
         float a[4];
         float b[4];
         char *pos = &moby->pos;
