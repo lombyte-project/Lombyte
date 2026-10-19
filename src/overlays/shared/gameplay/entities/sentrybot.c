@@ -1310,6 +1310,7 @@ void FUN_L15_0029a570(void *object, int flag) {
         NONLETHAL_FALL_HIT_RESPONSE = 6,
         SENTRYBOT_RECOVERABLE_KNOCKBACK_RESPONSE = 7,
         SENTRYBOT_RECOVERABLE_ARC_KNOCKBACK_RESPONSE = 8,
+        SENTRYBOT_FIRST_CHANNEL_BLEND_HIT_RESPONSE = 9,
         SENTRYBOT_NO_KNOCKBACK_START_RESPONSE = 11
     };
     unsigned char *moby = object;
@@ -1352,7 +1353,7 @@ void FUN_L15_0029a570(void *object, int flag) {
         case SENTRYBOT_NO_KNOCKBACK_SETUP_RESPONSE:
         case SENTRYBOT_NO_KNOCKBACK_START_RESPONSE:
             break;
-        case 9:
+        case SENTRYBOT_FIRST_CHANNEL_BLEND_HIT_RESPONSE:
         case 10:
             data[0x67] = 0xFA;
             break;
