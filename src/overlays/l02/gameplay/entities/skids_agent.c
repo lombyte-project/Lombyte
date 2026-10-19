@@ -358,7 +358,8 @@ extern f32 frame_scale_sq_macro __asm__("D_0015ED64") __attribute__((section(".s
 void skid_mcmarx_update(struct Moby *m) __asm__("FUN_L02_002e1950");
 void skid_mcmarx_update(struct Moby *m) {
     enum {
-        SKID_MCMARX_INITIALIZE = 0
+        SKID_MCMARX_INITIALIZE = 0,
+        SKID_MCMARX_IDLE_AND_TALK = 1
     };
     WatcherVars *v = (WatcherVars *)m->pvars;
     WatcherLook look;
@@ -381,7 +382,7 @@ void skid_mcmarx_update(struct Moby *m) {
         watcher_init(m, v);
         initialize_moby_grounding(m);
         break;
-    case 1:
+    case SKID_MCMARX_IDLE_AND_TALK:
         if (v->zone_check == 1 && point_in_clip_volume(&hero.motion.pos, v->zone))
             v->talk_radius = 255.0f;
         else
