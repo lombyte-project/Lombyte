@@ -1537,6 +1537,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
     enum {
         DREK_BOSS_WAIT_FOR_ENCOUNTER_TRIGGER = 1,
         DREK_BOSS_CIRCLE_AND_FIRE_AT_HERO = 2,
+        DREK_BOSS_WAIT_TO_RESTORE_SAVED_TRANSFORM = 3,
         DREK_BOSS_WAIT_FOR_GROUNDED_HERO_TO_START_SCENE = 4,
         DREK_BOSS_FOLLOW_PATH_AND_FIRE_AT_MOBYS = 10,
         DREK_BOSS_FINISH_PATH_AND_WAIT_FOR_HERO = 0xB,
@@ -1960,7 +1961,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
         FUN_L18_002d7f68(D_L18_0015FFD8 + d->f21C * 0x100, scale_game_frames(0x708));
         break;
     }
-    case 3:
+    case DREK_BOSS_WAIT_TO_RESTORE_SAVED_TRANSFORM:
         if (FUN_L18_002dfba0(d->f334) == 2) {
             qcopy(d->f3C0, d->f300);
             qcopy(moby->f40, d->f310);
