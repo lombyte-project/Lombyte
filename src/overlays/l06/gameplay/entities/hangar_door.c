@@ -2365,7 +2365,8 @@ void FUN_L06_002f91e8(Moby *moby)
         REACTION_NO_RESPONSE = 11
     };
     enum {
-        SNAPPER_RETURN_HOME = 12
+        SNAPPER_RETURN_HOME = 12,
+        SNAPPER_RETREAT_FROM_TARGET = 13
     };
     BlargVars_2FA618 *data = (struct BlargVars_2FA618 *)moby->pvars;
     int hit;
@@ -2441,7 +2442,7 @@ void FUN_L06_002f91e8(Moby *moby)
     case 8:
     case 9:
     case SNAPPER_RETURN_HOME:
-    case 13:
+    case SNAPPER_RETREAT_FROM_TARGET:
         if (level_frame_count % 4 == (((int)moby >> 8) & 3)) {
             func_L00_0025A8E8_2FA618(moby, 0.7f, &moby->pos.x, 0x10000, 0.9f, 1.0f, 0, 1, 0);
         }
