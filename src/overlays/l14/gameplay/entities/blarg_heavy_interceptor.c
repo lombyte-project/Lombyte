@@ -1709,7 +1709,8 @@ void machinegun_turret_update(char *moby) {
         TURRET_STATE_DESTROY = 6
     };
     enum {
-        TURRET_SPAWN_CENTER = 0
+        TURRET_SPAWN_CENTER = 0,
+        TURRET_SPAWN_UNNEGATED_OFFSET = 1
     };
     char *data;
     float target_point_scratch[4];
@@ -1840,7 +1841,7 @@ void machinegun_turret_update(char *moby) {
             case TURRET_SPAWN_CENTER:
                 func_L00_001FF4B0_2B4E40(spawn_position, moby + 0xE0, D_L14_00161520);
                 break;
-            case 1:
+            case TURRET_SPAWN_UNNEGATED_OFFSET:
                 func_L00_001FF4B0_2B4E40(spawn_position, moby + 0xE0, D_L14_00161524);
                 func_L00_001FF4B0_2B4E40(spawn_position_offset, moby + 0xD0, D_L14_0016152C);
                 func_001F9BD8_2B4E40(spawn_position, spawn_position, spawn_position_offset);
