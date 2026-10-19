@@ -544,7 +544,8 @@ void break_crate(M2d1428 *moby, s32 hit, s32 source) {
         CRATE_VARIANT_INITIAL_DAMAGE_STAGE = 7,
         CRATE_VARIANT_SECOND_DAMAGE_STAGE = 8,
         CRATE_VARIANT_PENULTIMATE_DAMAGE_STAGE = 9,
-        CRATE_VARIANT_FINAL_DAMAGE_STAGE = 10
+        CRATE_VARIANT_FINAL_DAMAGE_STAGE = 10,
+        CRATE_VARIANT_CONDITIONAL_RESPAWN_START = 11
     };
     u8 *vars = (u8 *)moby->vars;
     V2d09b8 position, away, rotation, basis[3], launch, spawn_pos, spin;
@@ -600,7 +601,7 @@ void break_crate(M2d1428 *moby, s32 hit, s32 source) {
             }
             kind = 0x162;
             break;
-        case 0: case 11: kind = 0x165; break;
+        case 0: case CRATE_VARIANT_CONDITIONAL_RESPAWN_START: kind = 0x165; break;
         case 4: kind = 0x168; break;
         case CRATE_VARIANT_IMPACT_TRIGGERED: kind = 0x16B; break;
         case 6: kind = 0x16E; break;
