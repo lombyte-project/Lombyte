@@ -150,7 +150,8 @@ void FUN_L08_002370d8(void) {
         HERO_STATE_GRIND_ATTACK = 43,
         HERO_STATE_GRIND_COLLISION_RECOVERY = 66,
         HERO_STATE_APPROACH_TARGET = 101,
-        HERO_STATE_TARGET_ARRIVAL = 103
+        HERO_STATE_TARGET_ARRIVAL = 103,
+        HERO_STATE_WATER_DEATH = 106
     };
     unsigned char *moby;
     int prevSub;
@@ -477,7 +478,7 @@ void FUN_L08_002370d8(void) {
                 case 71:
                 case 87:
                 case 98:
-                case 106:
+                case HERO_STATE_WATER_DEATH:
                 case 128:
                 case 130:
                     if (hero.unkA98 & 2) {
