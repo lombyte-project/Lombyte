@@ -25,16 +25,21 @@ struct GameState {
     s32 unkC;
     s32 unk10;
     s32 unk14;
-    u8 pad18[0x28];
+    s32 saved_texture_start;
+    u8 pad1C[0x14];
+    s32 saved_items[4];
     Vec4 v40;
     Vec4 v50;
-    u8 pad60[0x70];
+    u8 pad60[0x6C];
+    s32 saved_seq_count;
     struct Own *unkD0;
     u8 padD4[0x10];
     void *unkE4;
     f32 unkE8;
     void *unkEC;
-    u8 padF0[0xC];
+    struct Own *pending_owner;
+    s32 pending_state;
+    u8 padF8[4];
     s32 first_base;                /* 0xFC: render archive allocation */
     s32 second_base;               /* 0x100 */
     s32 unk104;

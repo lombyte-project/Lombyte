@@ -8,240 +8,82 @@
 #include "rnc/rendering/render_globals.h"
 #include "rnc/video/decoder/decoder_globals.h"
 #include "rnc/overlay/level_globals.h"
-
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00276368.s", FUN_L00_00276368);
-#else
+#include "eetypes.h"
 #include "qcopy.h"
-typedef unsigned int u128_init __attribute__((mode(TI), aligned(16)));
-extern struct Own D_L00_001B71F0 __attribute__((section(".sdata")));
-extern s32 D_L00_00173E04 __attribute__((sda));
-extern s32 D_L00_00173E08 __attribute__((sda));
-extern int D_L00_00173E40_lui[] __asm__("D_L00_00173E40") __attribute__((section(".data")));
-extern void *D_L00_00197300[];
-extern s32 D_L00_0015F3F8_gp __asm__("D_L00_0015F3F8") __attribute__((sda));
-extern s32 frame_size __asm__("D_0013E504") __attribute__((section(".data")));
-extern s32 D_L00_001611CC;
-#define D_L00_00184414 (*(s32 *)(D_L00_001841F0_init + 0x224))
-extern s32 D_L00_001B9E90_init[] __asm__("D_L00_001B9E90");
-extern s32 D_L00_00180260[];
-extern s32 D_L00_001B9D30[];
-extern s32 D_L00_00141660_init[] __asm__("D_00141660");
-extern void *D_L00_001B9DE0 __attribute__((sda));
-extern s32 draw_buffer_address __asm__("D_0015EE84");
-extern s32 D_L00_0015EE78 __asm__("D_0015EE78");
-extern s32 D_L00_0015EED8 __asm__("D_0015EED8");
-extern s32 D_L00_0015F578 __attribute__((sda));
-extern void FUN_L00_001ff300(void *, void *, f32) __asm__("FUN_001f9a68");
-extern void FUN_L00_001f7980(void) __asm__("FUN_001f2d98");
-extern void FUN_L00_00276128(void);
-extern void FUN_L00_001f6e48(void) __asm__("FUN_001f2260");
-extern int FUN_L00_00122298(s32) __asm__("FUN_00122298");
-extern void FUN_L00_00283908(s32);
-extern void FUN_L00_002468b8(void) __asm__("FUN_L00_002468b8");
-extern void FUN_L00_00234fd0(s32) __asm__("FUN_L00_00234fd0");
-extern void FUN_L00_002a0f18(s32, s32, s32) __asm__("FUN_L00_002a0f18");
-extern void *FUN_L00_002830d8(s32);
-extern void FUN_L00_002577c8(void *, s32, s32);
-extern void FUN_L00_00235668(s32);
-extern void FUN_L00_002a07f8(void);
-extern u8 D_L00_001B3518[];
-extern u8 D_L00_001B6088[];
-extern u8 D_L00_001B6B38[];
-extern u8 D_L00_001B86C8[];
-extern u8 D_L00_001B2588[];
-extern u8 D_L00_00180250[];
-extern u8 D_L00_00160280_init[] __asm__("D_L00_00160280") __attribute__((sda));
-extern u8 D_L00_00160290_init[] __asm__("D_L00_00160290") __attribute__((section(".sdata")));
-extern f32 D_L00_00166DC0_init[] __asm__("D_L00_00166DC0");
+#include "qzero.h"
+#include "rnc/gameplay/hero.h"
+#include "rnc/gameplay/entities/moby.h"
 
-extern u8 D_L00_001841F0_init[] __asm__("D_L00_001841F0");
-#define D_L00_001B9E20 (*(s32 *)((u8 *)&D_L00_001B9CF0 + 0x130))
-#define D_L00_001B9DE4 (*(s32 *)((u8 *)&D_L00_001B9CF0 + 0xf4))
-#define D_L00_001B9DD4 (*(s32 *)((u8 *)&D_L00_001B9CF0 + 0xe4))
-#define D_L00_001B9DD8 (*(s32 *)((u8 *)&D_L00_001B9CF0 + 0xe8))
-#define D_L00_001B9D00 (*(s32 *)((u8 *)&D_L00_001B9CF0 + 0x10))
-#define D_L00_001B9DF4 (*(s32 *)((u8 *)&D_L00_001B9CF0 + 0x104))
-#define D_L00_001B9DF8 (*(s32 *)((u8 *)&D_L00_001B9CF0 + 0x108))
-#define D_L00_001B9DEC (*(s32 *)((u8 *)&D_L00_001B9CF0 + 0xfc))
-#define D_L00_001B9DFC (*(s32 *)((u8 *)&D_L00_001B9CF0 + 0x10c))
-#define D_L00_001B9DF0 (*(s32 *)((u8 *)&D_L00_001B9CF0 + 0x100))
-#define D_L00_001B9D20 ((s32 *)((u8 *)&D_L00_001B9CF0 + 0x30))
-#define D_L00_001B9DBC (*(s32 *)((u8 *)&D_L00_001B9CF0 + 0xcc))
-#define D_L00_001B9D08 (*(s32 *)((u8 *)&D_L00_001B9CF0 + 0x18))
-#define D_L00_00184434 (*(s32 *)(D_L00_001841F0_init + 580))
-#define D_L00_00184430 (*(s32 *)(D_L00_001841F0_init + 576))
-#define D_L00_00184438 ((s32 *)(D_L00_001841F0_init + 584))
-#define D_L00_0016CC5C (*(f32 *)(D_L00_0016CA40 + 0x21c))
-#define D_L00_0016CC68 (*(f32 *)(D_L00_0016CA40 + 0x228))
-#define D_L00_0016CC58 (*(s32 *)(D_L00_0016CA40 + 0x218))
-#define D_L00_0016CC6C (*(s32 *)(D_L00_0016CA40 + 0x22c))
-#define D_L00_00180240 ((s32 *)(D_L00_00180250 + -16))
+typedef unsigned int u128d __attribute__((mode(TI), aligned(16)));
+typedef union {
+    u128d q;
+    f32 f[4];
+} V;
 
-extern u8 D_L00_0016CA40[];
-extern u8 D_L00_00166C80[];
-void FUN_L00_00276368(void) {
-    s32 i;
-    s32 special = 0;
-    f32 *source;
-    s32 *handle;
-    void *obj;
-    u8 *table;
-    s32 id;
-    struct Own *owner;
+typedef struct Mth Mth;
+typedef struct NO NO;
+typedef struct Ent Ent;
+typedef struct Own Own;
+typedef struct GameState GameState;
+typedef struct EntClass EntClass;
+typedef struct EntSeq EntSeq;
 
-    { s32 *table = (s32 *)((u8 *)&D_L00_00173E40_lui); table[4] |= 0x80000000; }
-    D_L00_001B9CF0.unk124 = 0;
-    D_L00_001B9CF0.unkD0 = 0;
-    if (D_L00_001B9CF0.state == 10) {
-        D_L00_001B9CF0.state = 11;
-        D_L00_001B9CF0.unk8 = (struct Own *)D_L00_001B3518;
-        special = 1;
-    } else if (D_L00_001B9CF0.state == 14) {
-        D_L00_001B9CF0.state = 15;
-        D_L00_001B9CF0.unk8 = (struct Own *)D_L00_001B6088;
-        special = 1;
-    } else if (D_L00_001B9CF0.state == 0x21) {
-        D_L00_001B9CF0.unk8 = &D_L00_001B71F0;
-        D_L00_001B9CF0.unk124 = 1;
-        D_L00_001B9CF0.state = 0x22;
-    } else if (D_L00_001B9CF0.state == 0x23) {
-        D_L00_001B9CF0.unk8 = (struct Own *)D_L00_001B6B38;
-    } else {
-        if (D_L00_001B9CF0.state == 0x2d) {
-            D_L00_001B9CF0.unk8 = (struct Own *)D_L00_001B86C8;
-        } else {
-            D_L00_001B9CF0.unk8 = (struct Own *)D_L00_001B2588;
-        }
-        D_L00_001B9CF0.state = 2;
-    }
-    D_L00_001B9CF0.owner = D_L00_001B9CF0.unk8;
-    if (D_L00_001B9DE0 != 0) {
-        D_L00_0015EED8 = D_L00_001B9E20;
-        D_L00_001B9CF0.unk8 = D_L00_001B9DE0;
-        D_L00_001B9CF0.owner = D_L00_001B9DE0;
-        D_L00_001B9CF0.state = D_L00_001B9DE4;
-        if (D_L00_001B9DE4 == 11 || D_L00_001B9DE4 == 15) {
-            D_L00_00184414 = D_L00_001B9DD4;
-            special = 1;
-        }
-        D_L00_001B9DE4 = 0;
-        D_L00_001B9DE0 = 0;
-    }
-    FUN_L00_001ff300(D_L00_00180250, D_L00_00160280_init, 1.0f);
-    qcopy((void *)D_L00_00180240, D_L00_00160290_init);
-    *(volatile u128_init *)D_L00_00180260 = 0;
-    *(volatile u128_init *)(D_L00_00180260 + 4) = 0;
-    qcopy((void *)D_L00_001B9D30, (void *)D_L00_00166DC0_init);
-    qcopy((void *)(D_L00_001B9D30 + 4), (void *)(D_L00_00166DC0_init + 4));
-    *(f32 *)((u8 *)&D_L00_001B9CF0 + 0xe8) = *(f32 *)(D_L00_0016CA40 + 0xb0);
-    *(f32 *)(D_L00_0016CA40 + 0xb0) = 0.63f;
-    D_L00_0016CC5C = 524288.0f;
-    D_L00_0016CC68 = 255.0f;
-    D_L00_0016CC58 = 0;
-    D_L00_0016CC6C = 0;
-    FUN_L00_001f7980();
-    FUN_L00_00276128();
-    FUN_L00_001f6e48();
-    FUN_L00_002a09d8(1);
-    FUN_L00_00122298(0);
-    D_L00_0015F3F8_gp = *(s32 *)0x0015f3f8 + 1;
-    if (special) {
-        D_L00_001B9DF4 = D_L00_00173E04 + 0x30000;
-        D_L00_001B9D00 = D_L00_00173E08 + 0x30000;
-        D_L00_001B9DF8 = D_L00_001B9DF4 + 0x3c000;
-        D_L00_001B9DF0 = D_L00_001B9D00 + 0xe0000;
-        D_L00_001B9DEC = D_L00_001B9DF8 + 0x11800;
-        D_L00_001611CC = 0x30000;
-        D_L00_001B9DFC = D_L00_001B9DF0;
-        FUN_L00_00283908(0);
-    } else {
-        D_L00_001B9D00 = D_L00_00173E08 + 0x60000;
-        D_L00_001B9DF4 = D_L00_00173E04 + 0x60000;
-        D_L00_001B9DF8 = D_L00_00173E04 + 0x9c000;
-        D_L00_001B9DFC = D_L00_00173E08 + 0x140000;
-        D_L00_001B9DEC = D_L00_00173E04 + 0x15d000;
-        D_L00_001B9DF0 = D_L00_00173E08 + 0x151800;
-        D_L00_001611CC = 0x60000;
-        FUN_L00_00283908(1);
-    }
-    D_L00_0015F578 = 0x2000;
-    FUN_L00_002a07f8();
-    if (D_L00_001B9CF0.state == 11 || D_L00_001B9CF0.state == 15) {
-        FUN_L00_002468b8();
-    }
-    FUN_L00_00235310(0);
-    if (D_L00_001B9CF0.state == 11 || D_L00_001B9CF0.state == 15 || D_L00_001B9CF0.state == 18) {
-        FUN_L00_00234fd0(1);
-    } else {
-        FUN_L00_00234fd0(0);
-    }
-    FUN_L00_002a0f18(D_L00_001B9D00, draw_buffer_address, frame_size << 11);
-    D_L00_001B9D08 = D_L00_0015EE78;
-    if (D_L00_001B9CF0.state == 11 || D_L00_001B9CF0.state == 15) {
-        short i;
-        s32 *handle;
-        D_L00_00184430 = D_L00_0015EE78;
-        D_L00_00184434 = D_L00_0015EE78 + 0x40000;
-        D_L00_0015EE78 = D_L00_00184434 + 0x400;
-        handle = D_L00_00184438;
-        i = 3;
-        do {
-            i--;
-            *handle++ = D_L00_0015EE78;
-            D_L00_0015EE78 += 0x4000;
-        } while (i >= 0);
-    } else {
-        unsigned int i;
-        s32 *handle;
-        D_L00_00184430 = 0;
-        D_L00_00184434 = 0;
-        handle = D_L00_00184438 + 3;
-        i = 3;
-        do {
-            *handle-- = 0;
-            i--;
-        } while (i >= 0);
-    }
-    FUN_L00_00235668(1);
-    table = D_L00_00197300[0];
-    D_L00_001B9DBC = table[12];
-    table[12] += 28;
-    {
-        short i;
-        s32 *handle = D_L00_001B9D20;
-        s32 *source = D_L00_00141660_init;
-        i = 3;
-        do {
-            *handle++ = *source++;
-            i--;
-        } while (i >= 0);
-    }
-    if (D_L00_001B9CF0.owner != 0) {
-        source = (f32 *)D_L00_00166C80;
-        handle = D_L00_001B9E90_init;
-        for (i = 0; i < 14; i++, handle++) {
-            obj = FUN_L00_002830d8(0x472);
-            *handle = (s32)obj;
-            if (obj != 0) {
-                *(u16 *)((u8 *)obj + 0x34) &= 0xfffd;
-                *(f32 *)((u8 *)*handle + 0x10) = source[80];
-                *(void **)((u8 *)*handle + 0x74) = (void *)0x002df638;
-                *(f32 *)((u8 *)*handle + 0x14) = source[81];
-                *(f32 *)((u8 *)*handle + 0x18) = source[82];
-                *(s32 *)((u8 *)*handle + 0x40) = 0;
-                *(s32 *)((u8 *)*handle + 0x44) = 0;
-                *(s32 *)((u8 *)*handle + 0x48) = 0;
-                id = D_L00_001B9CF0.owner->ids[i];
-                FUN_L00_002577c8(obj, id, *(u8 *)(*(s32 *)(*(s32 *)((u8 *)obj + 0x24) + id * 4 + 0x48) + 0x10) - 1);
-            }
-        }
-    }
-}
-#endif
-struct GameState;
-struct Ent;
-extern struct Ent *D_L00_001B9E90[];
+struct Mth {
+    u8 pad0[8];
+    void (*f8)(Mth *, s32);
+    void (*fC)(Mth *, s32);
+};
+struct NO {
+    s32 (*f0)(NO *);
+    s32 f4;
+    void (*f8)(NO *, s32);
+    void (*fC)(NO *, s32);
+    u8 pad10[4];
+    Ent *f14;
+};
+struct EntSeq {
+    u8 pad0[0x10];
+    u8 frame_count;
+};
+struct EntClass {
+    u8 pad0[0x48];
+    EntSeq *seqs[1];
+};
+struct Ent {
+    u8 pad0[0x10];
+    f32 pos[3];
+    u8 pad1C[8];
+    EntClass *pclass;
+    u8 pad28[0xC];
+    u16 flags;
+    u8 pad36[0xA];
+    f32 rot[3];
+    u8 pad4C[0xC];
+    f32 anim_speed;
+    u8 pad5C[0x18];
+    void (*update)(Ent *);
+};
+
+typedef struct {
+    u8 pad0[0x224];
+    s32 w224;
+    u8 pad228[0x18];
+    s32 unk240;
+    s32 unk244;
+    s32 texture_slots[4];
+} G841F0;
+
+typedef struct {
+    u8 pad0[0xB0];
+    f32 unkB0;
+    u8 padB4[0x164];
+    s32 unk218;
+    f32 unk21C;
+    u8 pad220[8];
+    f32 unk228;
+    s32 unk22C;
+} ViewSettings;
+extern Ent *D_L00_001B9E90[];
 extern s32 D_L00_0015F5D8;
 extern s32 current_bolt_count __asm__("D_0015ED98");
 extern void FUN_L00_00239cc8(void);
@@ -253,16 +95,262 @@ extern void *D_L00_00197300[];
 extern u8 D_L00_0017E4D8[] __attribute__((section(".data")));
 extern int D_L00_00173E40_lui[] __asm__("D_L00_00173E40") __attribute__((section(".data")));
 extern void FUN_L00_002a09d8(s32);
-extern void FUN_L00_002a07f8(void) __asm__("FUN_002335d0");
+extern void vu1_init_chain(void) __asm__("FUN_002335d0");
 extern void FUN_L00_002a08c8(void);
 extern void hud_send_resident_bank(s32, s32, s32) __asm__("FUN_001ff128");
 extern void FUN_L00_00235310(s32);
-extern struct Ent *delete_moby(struct Ent *) __asm__("FUN_00225530");
+extern Ent *delete_moby(Ent *) __asm__("FUN_00225530");
 extern s32 show_health_hud(void) __asm__("FUN_L00_00234e00");
 extern s32 hud_keep_visible(s32, s32) __asm__("FUN_L00_00235e18");
 extern s32 queue_animation_update(s32, s32, void *, void *, void *, void *, s32) __asm__("FUN_001ff308");
+extern V D_L00_00166DC0[];
+extern Own D_L00_001B71F0;
+extern Own D_L00_001B7DD0;
+extern Own D_L00_001B80E0;
+extern Own D_L00_001B63F8;
+extern Own D_L00_001B78F0;
+extern Own D_L00_001B6820;
+extern G841F0 D_L00_001841F0;
+extern s32 D_L00_0015F5AC;
+extern s32 D_L00_0015F578 __attribute__((sda));
+extern s32 level_timer __asm__("D_L00_0015F5C8") __attribute__((sda));
+extern s32 D_L00_0016000C __attribute__((sda));
+extern f32 D_L00_0016CAF0_lui __asm__("D_L00_0016CAF0") __attribute__((section(".data")));
+extern u8 D_L00_001E91B0[];
+extern void snd_flush_sound_commands(void) __asm__("FUN_0012dc80");
+extern void snd_continue_all_sounds_in_group(s32) __asm__("FUN_0012e418");
+extern void debug_print(void *, s32) __asm__("FUN_001e93b0");
+extern void update_fog(void) __asm__("FUN_001f2588");
+extern s32 fade_to_black(s32) __asm__("FUN_001f4a58");
+extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
+extern void mode_freeze_init(s32, void *) __asm__("FUN_001fbab8");
+extern void select_world_object_resource_tables(s32, s32) __asm__("FUN_00204a40");
+extern void update_visible_resident_objects(void) __asm__("FUN_00212e28");
+extern void set_moby_animation(Ent *, s32, s32) __asm__("FUN_00212ed8");
+extern void music_unpause(void) __asm__("FUN_00216088");
+extern int sound_update(void) __asm__("FUN_0022ca50");
+extern void allocate_voice_for_target_entry(s32, s32, void *) __asm__("FUN_0022da68");
+extern void calculate_dma_transfer_address(void) __asm__("FUN_002335a0");
+extern void FUN_L00_00235668(s32);
+extern void FUN_L00_00276368(void);
+extern void FUN_L00_00276908(void);
+extern void FUN_L00_002831c0(void);
+extern void FUN_L00_0028ed58(s32);
+extern void start_scene(void *) __asm__("FUN_L00_00298840");
+extern void FUN_L00_00299460(void *);
+extern void FUN_L00_002994f8(void *);
+extern void FUN_L00_00299560(void *);
+extern void FUN_L00_00299a68(void);
+extern Own D_L00_001B2588;
+extern Own D_L00_001B3518;
+extern Own D_L00_001B6088;
+extern Own D_L00_001B6B38;
+extern Own D_L00_001B86C8;
+extern f32 D_L00_00160280 __attribute__((sda));
+extern f32 D_L00_00160290 __attribute__((sda));
+extern Vec4 D_L00_00180250;
+extern Vec4 D_L00_00180260;
+extern u8 D_L00_0016CA40[];
+extern s32 D_L00_0015F3F8;
+extern int D_L00_00173E00[];
+extern f32 player_camera[] __asm__("D_L00_00166C80");
+extern s32 frame_size __asm__("D_0013E504") __attribute__((section(".data")));
+extern void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
+extern void update_view_context(void) __asm__("FUN_001f2d98");
+extern void reset_active_camera_position_and_basis(void) __asm__("FUN_00218d10");
+extern void update_camera_view_matrices(void) __asm__("FUN_001f2260");
+extern s32 sce_gs_sync_v(s32) __asm__("FUN_00122298");
+extern void initialize_graphics_buffer_descriptors(s32) __asm__("FUN_00225ac0");
+extern Ent *create_menu_preview_moby(s32) __asm__("FUN_00225490");
+extern void FUN_L00_002468b8(void);
+extern void FUN_L00_00234fd0(s32);
+extern void FUN_L00_002a0f18(s32, s32, s32);
+extern void FUN_L00_002df638(Ent *);
 
-#include "rnc/gameplay/hero.h"
+/* Ported from rac1-decomp (src/overlays/shared/pause_00277208.c: func_L00_00277208). */
+void FUN_L00_00276368(void) {
+    struct GameState *state = &D_L00_001B9CF0;
+    Own *page;
+    s32 small_buffers = 0;
+    s32 state_id, i, j, n, id, texture_start, next;
+    s32 *slot;
+
+    D_L00_00173E40_lui[4] |= 0x80000000;
+    state_id = state->state;
+    state->unk124 = 0;
+    state->unkD0 = 0;
+    if (state_id == 10) {
+        D_L00_001B9CF0.state = 11;
+        page = &D_L00_001B3518;
+        state->owner = page;
+        state->unk8 = page;
+        small_buffers = 1;
+    } else if (state_id == 14) {
+        D_L00_001B9CF0.state = 15;
+        page = &D_L00_001B6088;
+        state->owner = page;
+        state->unk8 = page;
+        small_buffers = 1;
+    } else if (state_id == 0x21) {
+        D_L00_001B9CF0.state = 0x22;
+        page = &D_L00_001B71F0;
+        state->owner = page;
+        state->unk8 = page;
+        state->unk124 = 1;
+    } else if (state_id == 0x23) {
+        page = &D_L00_001B6B38;
+        state->owner = page;
+        state->unk8 = page;
+    } else if (state_id == 0x2D) {
+        page = &D_L00_001B86C8;
+        D_L00_001B9CF0.state = 2;
+        state->owner = page;
+        state->unk8 = page;
+    } else {
+        page = &D_L00_001B2588;
+        D_L00_001B9CF0.state = 2;
+        state->owner = page;
+        state->unk8 = page;
+    }
+
+    if (D_L00_001B9CF0.pending_owner != 0) {
+        s32 pending_state;
+        decode_mode = D_L00_001B9CF0.unk130;
+        D_L00_001B9CF0.owner = D_L00_001B9CF0.pending_owner;
+        D_L00_001B9CF0.unk8 = D_L00_001B9CF0.pending_owner;
+        pending_state = D_L00_001B9CF0.pending_state;
+        D_L00_001B9CF0.state = pending_state;
+        if (pending_state == 11 || pending_state == 15) {
+            small_buffers = 1;
+            D_L00_001841F0.w224 = (s32)D_L00_001B9CF0.unkE4;
+        }
+        D_L00_001B9CF0.pending_owner = 0;
+        D_L00_001B9CF0.pending_state = 0;
+    }
+
+    {
+        u8 *row = (u8 *)&D_L00_00180250;
+        fast_vec_scale(row, &D_L00_00160280, 1.0f);
+        qcopy(row - 0x10, &D_L00_00160290);
+        row += 0x20;
+        qzero(row);
+    }
+    qzero(&D_L00_00180260);
+    qcopy(&D_L00_001B9CF0.v40, &D_L00_00166DC0[0]);
+    qcopy(&D_L00_001B9CF0.v50, &D_L00_00166DC0[1]);
+    {
+        f32 unk21C = 524288.0f;
+        f32 unk228 = 255.0f;
+        f32 unkB0 = 0.63f;
+        D_L00_001B9CF0.unkE8 = ((ViewSettings *)D_L00_0016CA40)->unkB0;
+        ((ViewSettings *)D_L00_0016CA40)->unkB0 = unkB0;
+        ((ViewSettings *)D_L00_0016CA40)->unk21C = unk21C;
+        ((ViewSettings *)D_L00_0016CA40)->unk228 = unk228;
+        ((ViewSettings *)D_L00_0016CA40)->unk22C = 0;
+        ((ViewSettings *)D_L00_0016CA40)->unk218 = 0;
+    }
+    update_view_context();
+    reset_active_camera_position_and_basis();
+    update_camera_view_matrices();
+    FUN_L00_002a09d8(1);
+    sce_gs_sync_v(0);
+    D_L00_0015F3F8 = D_L00_0015F3F8 + 1;
+
+    if (small_buffers) {
+        s32 first_a, second_a, first_b, second_b;
+        first_a = D_L00_00173E00[1] + 0x30000;
+        second_a = D_L00_00173E00[2] + 0x30000;
+        first_b = first_a + 0x3C000;
+        second_b = second_a + 0xE0000;
+        D_L00_001B9CF0.first_base = first_b + 0x11800;
+        D_L00_001611CC = 0x30000;
+        D_L00_001B9CF0.unk104 = first_a;
+        D_L00_001B9CF0.unk10 = second_a;
+        D_L00_001B9CF0.unk108 = first_b;
+        D_L00_001B9CF0.unk10C = second_b;
+        D_L00_001B9CF0.second_base = second_b;
+        initialize_graphics_buffer_descriptors(0);
+    } else {
+        s32 first_a, second_a, first_b, second_b, first_c, second_c;
+        first_a = D_L00_00173E00[1] + 0x60000;
+        second_a = D_L00_00173E00[2] + 0x60000;
+        first_b = first_a + 0x3C000;
+        second_b = second_a + 0xE0000;
+        first_c = first_b + 0xC1000;
+        second_c = second_b + 0x11800;
+        D_L00_001B9CF0.first_base = first_c;
+        D_L00_001611CC = 0x60000;
+        D_L00_001B9CF0.unk104 = first_a;
+        D_L00_001B9CF0.unk10 = second_a;
+        D_L00_001B9CF0.unk108 = first_b;
+        D_L00_001B9CF0.unk10C = second_b;
+        D_L00_001B9CF0.second_base = second_c;
+        initialize_graphics_buffer_descriptors(1);
+    }
+    D_L00_0015F578 = 0x2000;
+    vu1_init_chain();
+
+    if (D_L00_001B9CF0.state == 11 || D_L00_001B9CF0.state == 15) {
+        FUN_L00_002468b8();
+    }
+    FUN_L00_00235310(0);
+    if (D_L00_001B9CF0.state == 11 || D_L00_001B9CF0.state == 15 || D_L00_001B9CF0.state == 0x12) {
+        FUN_L00_00234fd0(1);
+    } else {
+        FUN_L00_00234fd0(0);
+    }
+    FUN_L00_002a0f18(D_L00_001B9CF0.unk10, draw_buffer_address, frame_size << 11);
+    texture_start = gs_texture_allocation_start;
+    D_L00_001B9CF0.saved_texture_start = texture_start;
+    if (D_L00_001B9CF0.state == 11 || D_L00_001B9CF0.state == 15) {
+        D_L00_001841F0.unk240 = texture_start;
+        next = texture_start + 0x40000;
+        D_L00_001841F0.unk244 = next;
+        gs_texture_allocation_start = next + 0x400;
+        for (j = 0; j < 4; j++) {
+            s32 start = gs_texture_allocation_start;
+            D_L00_001841F0.texture_slots[j] = start;
+            gs_texture_allocation_start = start + 0x4000;
+        }
+    } else {
+        s32 count;
+        D_L00_001841F0.unk240 = 0;
+        D_L00_001841F0.unk244 = 0;
+        slot = &D_L00_001841F0.texture_slots[3];
+        for (count = 0; count < 4; count++) {
+            *slot = 0;
+            slot--;
+        }
+    }
+    FUN_L00_00235668(1);
+    D_L00_001B9CF0.saved_seq_count = ((struct MobyClass *)D_L00_00197300[0])->seq_count;
+    ((struct MobyClass *)D_L00_00197300[0])->seq_count += 0x1C;
+    for (n = 0; n < 4; n++) {
+        D_L00_001B9CF0.saved_items[n] = D_00141660[n];
+    }
+
+    if (D_L00_001B9CF0.owner != 0) {
+        for (i = 0; i < 14; i++) {
+            Ent *moby = create_menu_preview_moby(0x472);
+            D_L00_001B9E90[i] = moby;
+            if (moby != 0) {
+                f32 *camera;
+                moby->flags &= 0xFFFD;
+                D_L00_001B9E90[i]->update = FUN_L00_002df638;
+                camera = player_camera;
+                D_L00_001B9E90[i]->pos[0] = camera[80];
+                D_L00_001B9E90[i]->pos[1] = camera[81];
+                D_L00_001B9E90[i]->pos[2] = camera[82];
+                D_L00_001B9E90[i]->rot[0] = 0.0f;
+                D_L00_001B9E90[i]->rot[1] = 0.0f;
+                D_L00_001B9E90[i]->rot[2] = 0.0f;
+                id = D_L00_001B9CF0.owner->ids[i];
+                set_moby_animation(D_L00_001B9E90[i], id, D_L00_001B9E90[i]->pclass->seqs[id]->frame_count - 1);
+            }
+        }
+    }
+}
+
 /* Closes the scene once its progress reaches 10: releases its objects, restores the hero's
    items and HUD bank, deletes the 14 scene mobies, shows the health and bolt HUD, enters state 0x14. */
 void FUN_L00_00276908(void) {
@@ -276,7 +364,7 @@ void FUN_L00_00276908(void) {
     if (D_L00_001B9CF0.progress >= 10) {
 
         FUN_L00_002a09d8(1);
-        FUN_L00_002a07f8();
+        vu1_init_chain();
         if (D_L00_001B9CF0.owner != 0) {
             for (i = 0; i < 14; i++) {
                 obj = D_L00_001B9CF0.owner->objs[i];
@@ -293,10 +381,10 @@ void FUN_L00_00276908(void) {
             s32 i;
             s32 value = 0x26;
             for (i = 3; i >= 0; i--) {
-                if (D_00141660[3 - i] != ((s32 *)&D_L00_001B9CF0)[15 - i]) {
+                if (D_00141660[3 - i] != D_L00_001B9CF0.saved_items[3 - i]) {
                     hero.pending_item[3 - i] =
-                        ((s32 *)&D_L00_001B9CF0)[15 - i] != 0
-                            ? ((s32 *)&D_L00_001B9CF0)[15 - i]
+                        D_L00_001B9CF0.saved_items[3 - i] != 0
+                            ? D_L00_001B9CF0.saved_items[3 - i]
                             : value;
                 }
             }
@@ -306,7 +394,7 @@ void FUN_L00_00276908(void) {
             s32 value;
             table = D_L00_0017E4D8;
             value = *(s32 *)((u8 *)*(void **)(table + 0x18) + 0x74);
-            D_0015EE78_gp = *(s32 *)state->pad18;
+            D_0015EE78_gp = state->saved_texture_start;
             hud_send_resident_bank(0, value, 0);
         }
         FUN_L00_00235310(2);
@@ -332,7 +420,7 @@ void FUN_L00_00276908(void) {
         D_L00_001B9CF0.state = 0x14;
         D_L00_001B9CF0.unk14 = 2;
         {
-            s32 value = *(s32 *)((u8 *)&D_L00_001B9CF0 + 0xcc);
+            s32 value = D_L00_001B9CF0.saved_seq_count;
             if (value < ((u8 *)D_L00_00197300[0])[0xc]) {
                 do {
                     s32 *saved = (s32 *)(value * 4 + 0x48 + (u32)D_L00_00197300[0]);
@@ -354,97 +442,6 @@ void FUN_L00_00276908(void) {
         FUN_L00_002a09d8(1);
     }
 }
-#include "eetypes.h"
-#include "qcopy.h"
-
-typedef unsigned int u128d __attribute__((mode(TI), aligned(16)));
-typedef union {
-    u128d q;
-    f32 f[4];
-} V;
-
-typedef struct Mth Mth;
-typedef struct NO NO;
-typedef struct Ent Ent;
-typedef struct Own Own;
-typedef struct GameState GameState;
-typedef struct Ent2 Ent2;
-typedef struct Ent3 Ent3;
-
-struct Mth {
-    u8 pad0[8];
-    void (*f8)(Mth *, s32);
-    void (*fC)(Mth *, s32);
-};
-struct NO {
-    s32 (*f0)(NO *);
-    s32 f4;
-    void (*f8)(NO *, s32);
-    void (*fC)(NO *, s32);
-    u8 pad10[4];
-    Ent *f14;
-};
-struct Ent3 {
-    u8 pad0[0x10];
-    u8 unk10;
-};
-struct Ent2 {
-    u8 pad0[0x48];
-    Ent3 *unk48[1];
-};
-struct Ent {
-    u8 pad0[0x24];
-    Ent2 *unk24;
-    u8 pad28[0x30];
-    f32 unk58;
-};
-
-typedef struct {
-    u8 pad0[0x224];
-    s32 w224;
-} G841F0;
-
-extern Ent *D_L00_001B9E90[];
-extern V D_L00_00166DC0[];
-extern Own D_L00_001B71F0;
-extern Own D_L00_001B7DD0;
-extern Own D_L00_001B80E0;
-extern Own D_L00_001B63F8;
-extern Own D_L00_001B78F0;
-extern Own D_L00_001B6820;
-extern G841F0 D_L00_001841F0;
-extern s32 D_L00_0015F5AC;
-extern s32 D_L00_0015F578 __attribute__((sda));
-extern s32 level_timer __asm__("D_L00_0015F5C8") __attribute__((sda));
-extern s32 D_L00_0015F5D8;
-extern s32 D_L00_0016000C __attribute__((sda));
-extern f32 D_L00_0016CAF0_lui __asm__("D_L00_0016CAF0") __attribute__((section(".data")));
-extern u8 D_L00_001E91B0[];
-
-extern void snd_flush_sound_commands(void) __asm__("FUN_0012dc80");
-extern void snd_continue_all_sounds_in_group(s32) __asm__("FUN_0012e418");
-extern void debug_print(void *, s32) __asm__("FUN_001e93b0");
-extern void update_fog(void) __asm__("FUN_001f2588");
-extern s32 fade_to_black(s32) __asm__("FUN_001f4a58");
-extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
-extern void mode_freeze_init(s32, void *) __asm__("FUN_001fbab8");
-extern void select_world_object_resource_tables(s32, s32) __asm__("FUN_00204a40");
-extern void update_visible_resident_objects(void) __asm__("FUN_00212e28");
-extern void set_moby_animation(Ent *, s32, s32) __asm__("FUN_00212ed8");
-extern void music_unpause(void) __asm__("FUN_00216088");
-extern int sound_update(void) __asm__("FUN_0022ca50");
-extern void allocate_voice_for_target_entry(s32, s32, void *) __asm__("FUN_0022da68");
-extern void calculate_dma_transfer_address(void) __asm__("FUN_002335a0");
-extern void FUN_L00_00235668(s32);
-extern void FUN_L00_00276368(void);
-extern void FUN_L00_00276908(void);
-extern void FUN_L00_002831c0(void);
-extern void FUN_L00_0028ed58(s32);
-extern void start_scene(void *) __asm__("FUN_L00_00298840");
-extern void FUN_L00_00299460(void *);
-extern void FUN_L00_002994f8(void *);
-extern void FUN_L00_00299560(void *);
-extern void FUN_L00_00299a68(void);
 
 void FUN_L00_00276bd0(void) {
     Own *owner;
@@ -594,11 +591,11 @@ void FUN_L00_00276bd0(void) {
             if (flag) {
                 s32 n = D_L00_001B9CF0.owner->ids[j];
                 set_moby_animation(D_L00_001B9E90[j], n,
-                                   D_L00_001B9E90[j]->unk24->unk48[n]->unk10 - 1);
-                D_L00_001B9E90[j]->unk58 = -1.0f;
+                                   D_L00_001B9E90[j]->pclass->seqs[n]->frame_count - 1);
+                D_L00_001B9E90[j]->anim_speed = -1.0f;
             } else {
                 set_moby_animation(D_L00_001B9E90[j], D_L00_001B9CF0.unk8->ids[j], 0);
-                D_L00_001B9E90[j]->unk58 = 1.0f;
+                D_L00_001B9E90[j]->anim_speed = 1.0f;
             }
         }
         D_L00_001B9CF0.state = 1;

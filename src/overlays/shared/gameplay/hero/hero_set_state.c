@@ -3644,104 +3644,100 @@ int FUN_L00_00228b78(void *jump_press_window_frames, int suppress_normal_jump) {
     hero_set_state(HERO_STATE_JUMP, 1);
     return 1;
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00228c18.s", FUN_L00_00228c18);
-#else
+/* Ported from rac1-decomp (src/overlays/shared/help_00221A98.c: func_L00_002293E8). */
+
 typedef struct {
     f32 lower;
     f32 upper;
     u8 pad8[8];
 } SpeedStepThreshold_228c18;
 
-extern SpeedStepThreshold_228c18 D_L00_0017BDB8_228c18[] __asm__("D_L00_0017BDB8");
-extern s32 D_L00_0015F6C8_228c18 __asm__("D_L00_0015F6C8") __attribute__((sda));
-extern void set_hero_animation(int, int, float) __asm__("FUN_L00_002323b8");
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
+extern SpeedStepThreshold_228c18 D_L00_0017BDB8[];
+extern s32 D_L00_0015F6C8_gp __asm__("D_L00_0015F6C8") __attribute__((sda));
 
 void FUN_L00_00228c18(void) {
-    int previous_step;
-    int next_step;
-    int below_lower;
-    float limit;
-
-    if (hero.vehicle_mode == 3) {
-        hero.anim_speed = hero.motion.speed_xy * 54.0f;
-        if (hero.anim_speed < 0.7f)
-            hero.anim_speed = 0.7f;
-        return;
-    }
-    if (hero.vehicle_mode == 1) {
-        hero.anim_speed = hero.motion.speed_xy * 90.0f;
-        if (hero.anim_speed < 0.5f)
-            hero.anim_speed = 0.5f;
-        return;
-    }
-
-    if (scale_game_frames(4) < hero.unk1A0 && hero.unk3BC == 0) {
-        below_lower = hero.ground_speed < D_L00_0017BDB8_228c18[hero.state.step].lower * frame_time;
-        if (below_lower ||
-            D_L00_0017BDB8_228c18[hero.state.step].upper * frame_time < hero.ground_speed) {
-            if (scale_game_frames(4) < hero.unk1A0 && hero.unk3BC == 0) {
-                previous_step = hero.state.step;
-                if (below_lower) {
-                    while (hero.ground_speed < D_L00_0017BDB8_228c18[hero.state.step].lower * frame_time) {
-                        hero.state.step--;
+    struct Hero *player = &hero;
+    int mode = player->vehicle_mode;
+    if (mode == 3) {
+        float speed = player->motion.speed_xy * 54.0f;
+        player->anim_speed = speed;
+        if (speed < 0.7f) player->anim_speed = 0.7f;
+    } else if (mode == 1) {
+        float speed = player->motion.speed_xy * 90.0f;
+        player->anim_speed = speed;
+        if (speed < 0.5f) player->anim_speed = 0.5f;
+    } else {
+        int below_lower, index, previous_step, step;
+        struct Hero *clamped, *current;
+        float *upper;
+        if (scale_game_frames(4) < player->unk1A0 && player->unk3BC == 0) {
+            index = player->state.step;
+            below_lower = player->ground_speed < D_L00_0017BDB8[index].lower * frame_time;
+            if (below_lower || D_L00_0017BDB8[index].upper * frame_time < player->ground_speed) {
+                if (scale_game_frames(4) < player->unk1A0 && player->unk3BC == 0) {
+                    previous_step = player->state.step;
+                    if (below_lower) {
+                        float scale = frame_time;
+                        if (player->ground_speed < D_L00_0017BDB8[previous_step].lower * scale) {
+                            struct Hero *stepper;
+                            SpeedStepThreshold_228c18 *thresholds;
+                            do {
+                                thresholds = D_L00_0017BDB8;
+                                stepper = &hero;
+                                stepper->state.step -= 1;
+                            } while (player->ground_speed < thresholds[stepper->state.step].lower * scale);
+                        }
+                    } else {
+                        float scale = frame_time;
+                        upper = &D_L00_0017BDB8[0].upper;
+                        if (upper[previous_step * 4] * scale < player->ground_speed) {
+                            float *uppers;
+                            struct Hero *stepper;
+                            do {
+                                stepper = &hero;
+                                uppers = &D_L00_0017BDB8[0].upper;
+                                stepper->state.step += 1;
+                            } while (uppers[stepper->state.step * 4] * scale < player->ground_speed);
+                        }
                     }
-                } else {
-                    while (D_L00_0017BDB8_228c18[hero.state.step].upper * frame_time < hero.ground_speed) {
-                        hero.state.step++;
+                    clamped = &hero;
+                    if (clamped->state.step < 0) clamped->state.step = 0;
+                    if (clamped->state.step > 1) clamped->state.step = 1;
+                    step = clamped->state.step;
+                    if (previous_step != step) {
+                        int sequence = step + 3;
+                        int previous_sequence = previous_step + 3;
+                        struct Moby *moby = clamped->moby;
+                        struct { char pad[0x48]; unsigned char *seqs[1]; } *moby_class = (void *)moby->pclass;
+                        int frame = moby->prev_frame;
+                        unsigned char *new_seq = moby_class->seqs[sequence];
+                        unsigned char *old_seq = moby_class->seqs[previous_sequence];
+                        int offset = *(int *)((char *)&D_L00_0015F6C8_gp + step * 4 + previous_step * 8);
+                        int start = ((frame * new_seq[0x10]) / old_seq[0x10] + offset) % new_seq[0x10];
+                        set_hero_animation(sequence, start, (float)scale_game_frames(8));
                     }
-                }
-                if (hero.state.step < 0)
-                    hero.state.step = 0;
-                if (hero.state.step > 1)
-                    hero.state.step = 1;
-                next_step = hero.state.step + 3;
-                if (previous_step != hero.state.step) {
-                    struct Moby *moby = hero.moby;
-                    u8 old_length;
-                    u8 new_length;
-                    int offset;
-                    int frame;
-                    new_length = *((u8 *)moby->pclass->seqs[next_step] + 0x10);
-                    old_length = *((u8 *)moby->pclass->seqs[previous_step + 3] + 0x10);
-                    {
-                        int step = hero.state.step;
-                        int old_offset = previous_step * 8;
-                        offset = *(s32 *)((u8 *)&D_L00_0015F6C8_228c18 + old_offset + step * 4);
-                    }
-                    frame = ((moby->prev_frame * new_length) / old_length + offset) % new_length;
-                    set_hero_animation(next_step, frame, (float)scale_game_frames(8));
                 }
             }
         }
-    }
-    {
-        struct Hero *g = &hero;
-        float anim_speed;
-        switch (g->state.step) {
-        case 0:
-            g->anim_speed = g->ground_speed * 157.0f;
-            if (g->anim_speed < 0.6f)
-                g->anim_speed = 0.6f;
-            limit = 4.0f;
-            anim_speed = g->anim_speed;
+        current = &hero;
+        switch (current->state.step) {
+        case 0: {
+            float speed = current->ground_speed * 157.0f;
+            current->anim_speed = speed;
+            if (speed < 0.6f) current->anim_speed = 0.6f;
+            if (4.0f < current->anim_speed) current->anim_speed = 4.0f;
             break;
-        case 1:
-            g->anim_speed = g->ground_speed * 14.0f;
-            if (g->anim_speed < 0.6f)
-                g->anim_speed = 0.6f;
-            anim_speed = g->anim_speed;
-            limit = 2.2f;
-            break;
-        default:
-            return;
         }
-        if (limit < anim_speed)
-            g->anim_speed = limit;
+        case 1: {
+            float speed = current->ground_speed * 14.0f;
+            current->anim_speed = speed;
+            if (speed < 0.6f) current->anim_speed = 0.6f;
+            if (2.2f < current->anim_speed) current->anim_speed = 2.2f;
+            break;
+        }
+        }
     }
 }
-#endif
 #define NOT_SDA
 
 #define MACRO_ADDR
