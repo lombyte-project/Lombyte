@@ -696,8 +696,11 @@ void birdbot_update(PeMoby *m) {
     enum {
         BIRDBOT_STATE_INITIALIZE = 0,
         BIRDBOT_STATE_WAIT_FOR_TRIGGER = 2,
+        BIRDBOT_STATE_FIRE_BURST = 6,
         BIRDBOT_STATE_BEGIN_PATH_MOVEMENT = 9,
         BIRDBOT_STATE_MOVE_TO_PATH_NODE = 10,
+        BIRDBOT_STATE_BRAKE_AND_FACE_TARGET = 11,
+        BIRDBOT_STATE_NONFATAL_KNOCKBACK = 12,
         BIRDBOT_STATE_FATAL_KNOCKBACK = 14
     };
     PeVars *v;
@@ -1049,7 +1052,7 @@ void birdbot_update(PeMoby *m) {
         }
         FUN_L01_002e6518_c((SplashMoby *)m, (u128 *)&old);
         break;
-    case 6:
+    case BIRDBOT_STATE_FIRE_BURST:
         if (v->f1CC < 14.0f && frame >= 14.0f) {
             float a;
             float yaw;
@@ -1208,7 +1211,7 @@ void birdbot_update(PeMoby *m) {
         FUN_L01_002e6518_c((SplashMoby *)m, (u128 *)&old);
         break;
     }
-    case 11:
+    case BIRDBOT_STATE_BRAKE_AND_FACE_TARGET:
         if (v->f1B8 > 0.0f && v->h1EE == 0) {
             v->f1B8 -= *(float *)&D_L01_00161954 * 3.0f * frame_time_sq;
             va.f[0] = fast_cos(m->rot.f[2]) * v->f1B8;
@@ -1246,7 +1249,7 @@ void birdbot_update(PeMoby *m) {
         }
         FUN_L01_002e6518_c((SplashMoby *)m, (u128 *)&old);
         break;
-    case 12:
+    case BIRDBOT_STATE_NONFATAL_KNOCKBACK:
         if (mine_fall(m, v->x70) & 0x40) {
             if (FUN_001f9b48(&m->pos, (PeVec *)v->main.path + (idx + 1)) > 0.25f) {
                 int i;
