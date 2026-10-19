@@ -542,7 +542,8 @@ void FUN_L08_002d42d8(Moby *moby) {
         BOMBER_TANK_STATE_INITIALIZE = 0,
         BOMBER_TANK_STATE_FOLLOW_PATH_AND_FIRE = 3,
         BOMBER_TANK_STATE_FOLLOW_PATH = 6,
-        BOMBER_TANK_STATE_WAIT_FOR_TRIGGER = 11
+        BOMBER_TANK_STATE_WAIT_FOR_TRIGGER = 11,
+        BOMBER_TANK_STATE_DAMAGED_FOLLOW_PATH = 99
     };
     float old_pos[4];
     float old_rot[4];
@@ -717,7 +718,7 @@ void FUN_L08_002d42d8(Moby *moby) {
         /* Fakematch: a never-true test keeps case 12 a block of its own until gcse, which then puts the default path's copies where retail has them. */
         if (never) vars->unk2E = 0;
         break;
-    case 99: {
+    case BOMBER_TANK_STATE_DAMAGED_FOLLOW_PATH: {
         float frame;
         FUN_L08_002d55c8(moby, vars->path);
         frame = compute_interpolated_record_value(moby);
