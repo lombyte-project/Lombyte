@@ -2215,6 +2215,7 @@ void minibomber_update(Moby_2B5938 *moby) {
         MINIBOMBER_STATE_RETRACE_INTRO_OR_EXIT_PATH = 3,
         MINIBOMBER_STATE_AIM_AT_BOMB_POINT = 5,
         MINIBOMBER_STATE_RELEASE_BOMB = 6,
+        MINIBOMBER_STATE_TRAVERSE_PATH = 7,
         MINIBOMBER_STATE_DESTROY = 9
     };
     Data_2B5938 *d = moby->d;
@@ -2399,7 +2400,7 @@ void minibomber_update(Moby_2B5938 *moby) {
             }
         }
         break;
-    case 7:
+    case MINIBOMBER_STATE_TRAVERSE_PATH:
         spd = D_L14_00161550 * D_0015ED60;
         if (d->f10C == 1) {
             spd = -spd;
