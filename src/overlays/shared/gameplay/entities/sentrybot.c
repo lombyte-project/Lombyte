@@ -1303,7 +1303,8 @@ void FUN_L15_0029a570(void *object, int flag) {
         NONLETHAL_ARC_HIT_RESPONSE = 4,
         NONLETHAL_ARC_KNOCKBACK_HIT_RESPONSE = 5,
         NONLETHAL_FALL_HIT_RESPONSE = 6,
-        SENTRYBOT_RECOVERABLE_KNOCKBACK_RESPONSE = 7
+        SENTRYBOT_RECOVERABLE_KNOCKBACK_RESPONSE = 7,
+        SENTRYBOT_RECOVERABLE_ARC_KNOCKBACK_RESPONSE = 8
     };
     unsigned char *moby = object;
     unsigned char *data = *(unsigned char **)(moby + 0x78);
@@ -1354,7 +1355,7 @@ void FUN_L15_0029a570(void *object, int flag) {
         case NONLETHAL_ARC_KNOCKBACK_HIT_RESPONSE:
         case NONLETHAL_FALL_HIT_RESPONSE:
         case SENTRYBOT_RECOVERABLE_KNOCKBACK_RESPONSE:
-        case 8:
+        case SENTRYBOT_RECOVERABLE_ARC_KNOCKBACK_RESPONSE:
             {
                 float step;
                 float step_sq;
