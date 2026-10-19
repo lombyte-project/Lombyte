@@ -95,6 +95,7 @@ extern char D_L00_00165FB0[];
 extern char D_L00_00161E00[];
 void FUN_L00_00245c28(void) {
     enum {
+        LEVEL_MODE_MEMORY_CARD_DRAIN = 1,
         LEVEL_MODE_FREEZE = 4,
         LEVEL_MODE_GAME_STATE_UPDATE = 6
     };
@@ -179,7 +180,7 @@ void FUN_L00_00245c28(void) {
             FUN_L00_00297f78();
             FUN_L00_001f8e30();
             break;
-        case 1:
+        case LEVEL_MODE_MEMORY_CARD_DRAIN:
             FUN_L00_002999a8();
             break;
         case 2:
