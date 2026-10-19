@@ -1256,7 +1256,9 @@ void plasmabot_hatch_update(struct Moby *moby) __asm__("FUN_L14_002d96e0");
 void plasmabot_hatch_update(struct Moby *moby) {
     enum {
         HATCH_WAIT_ACTIVATION = 0,
-        HATCH_WAIT_ACTIVATION_DELAY = 1
+        HATCH_WAIT_ACTIVATION_DELAY = 1,
+        HATCH_WAIT_RESET_DELAY = 6,
+        HATCH_WAIT_RESET_ANIMATION = 7
     };
     char *data = (char *)moby->pvars;
     if (hero.vehicle_mode == 2) {
@@ -1297,13 +1299,13 @@ void plasmabot_hatch_update(struct Moby *moby) {
             set_moby_animation(moby, 2, 0);
         }
         break;
-    case 6:
+    case HATCH_WAIT_RESET_DELAY:
         if (fast_dec_timer(data + 8) != 0) {
             set_moby_animation(moby, 3, 0);
             moby->state = 7;
         }
         break;
-    case 7:
+    case HATCH_WAIT_RESET_ANIMATION:
         if ((moby->anim_flags & 2) != 0) {
             moby->state = 0;
             set_moby_animation(moby, 0, 0);
