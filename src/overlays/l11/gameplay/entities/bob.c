@@ -1710,6 +1710,11 @@ extern float D_L11_00161DEC __attribute__((sda));
 extern float D_L11_00161DF0 __attribute__((sda));
 void pokitaru_boat_update(struct Moby *moby) __asm__("FUN_L11_00309ac0");
 void pokitaru_boat_update(struct Moby *moby) {
+    enum {
+        POKITARU_BOAT_INITIALIZE = 0,
+        POKITARU_BOAT_FOLLOW_PATH = 2,
+        POKITARU_BOAT_RISE_ABOVE_PATH = 4
+    };
     struct PokPv_309ac0 *pv = (struct PokPv_309ac0 *)moby->pvars;
     float start_pos[4];
     float start_rot[4];
@@ -1728,7 +1733,7 @@ void pokitaru_boat_update(struct Moby *moby) {
     FUN_L11_0030a500(moby);
 
     switch (moby->state) {
-    case 0: {
+    case POKITARU_BOAT_INITIALIZE: {
         int *tab_a8;
         int *tab_ac;
         int *path;
@@ -1773,7 +1778,7 @@ void pokitaru_boat_update(struct Moby *moby) {
             moby->state = 5;
         }
         break;
-    case 2: {
+    case POKITARU_BOAT_FOLLOW_PATH: {
         int *tab_a8;
         int *tab_ac;
         int i;
@@ -1867,7 +1872,7 @@ void pokitaru_boat_update(struct Moby *moby) {
             }
         }
         break;
-    case 4:
+    case POKITARU_BOAT_RISE_ABOVE_PATH:
         qcopy(target, (char *)pv->path_c4 + 0x10 + pv->seg_d4 * 16);
         advance_309ac0(&moby->pos.z, &pv->approach_d0, target[2] + 6.0f, frame_time_sq, frame_time_sq, frame_time);
         if (target[2] + 5.9f <= moby->pos.z) {
