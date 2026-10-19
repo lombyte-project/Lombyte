@@ -2367,6 +2367,7 @@ void FUN_L06_002f91e8(Moby *moby)
         REACTION_NO_RESPONSE = 11
     };
     enum {
+        SNAPPER_APPROACH_TARGET = 8,
         SNAPPER_RETURN_HOME = 12,
         SNAPPER_RETREAT_FROM_TARGET = 13
     };
@@ -2441,7 +2442,7 @@ void FUN_L06_002f91e8(Moby *moby)
     moby->hit_slot = 0xFF;
     func_L00_0025E590_2FA618(moby, data->f60);
     switch (moby->state) {
-    case 8:
+    case SNAPPER_APPROACH_TARGET:
     case 9:
     case SNAPPER_RETURN_HOME:
     case SNAPPER_RETREAT_FROM_TARGET:
