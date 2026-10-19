@@ -126,6 +126,7 @@ void scoutbot_update(Moby *moby) __asm__("FUN_L08_002d2af0");
 void scoutbot_update(Moby *moby) {
     enum {
         SCOUTBOT_STATE_INITIALIZE = 0,
+        SCOUTBOT_STATE_IDLE = 1,
         SCOUTBOT_STATE_APPROACH_TARGET = 2,
         SCOUTBOT_STATE_RETURN_HOME = 3,
         SCOUTBOT_STATE_ATTACK = 4,
@@ -177,7 +178,7 @@ void scoutbot_update(Moby *moby) {
         qcopy(data->wander_goal, data->home);
         data->b29 = 0;
         break;
-    case 1:
+    case SCOUTBOT_STATE_IDLE:
         if (data->f1B4 != 2) {
             data->f200 = 0.0f;
             data->f208 = 0.1f;
