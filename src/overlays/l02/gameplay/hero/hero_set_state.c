@@ -1878,6 +1878,7 @@ extern int func_001F9908_r(int *) __asm__("FUN_001f9740");
 extern f32 frame_scale_gp __asm__("D_0015ED60") __attribute__((sda));
 void FUN_L02_00230988(void) {
     enum {
+        HERO_STATE_MOVE_TO_TARGET = 101,
         HERO_STATE_DEATH_FALL = 119
     };
     unsigned char *moby;
@@ -2456,7 +2457,7 @@ void FUN_L02_00230988(void) {
                         break;
                     }
                     break;
-                case 101:
+                case HERO_STATE_MOVE_TO_TARGET:
                     if (vector_distance(hero.motion.pos.f, hero.unk1640.f) < 0.2f) {
                         if (frame_time * 2.7f > hero.motion.speed_xy) {
                             if (fast_difference_between_rotations(
