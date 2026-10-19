@@ -533,7 +533,8 @@ extern s32 FUN_L00_002595a0_32b90(f32 *, f32 *, f32, f32, f32) __asm__("FUN_L00_
 
 f32 FUN_L00_00232b90(f32 a, f32 b, f32 c) {
     enum {
-        GRAVITY_MODE_WORLD_Z = 0
+        GRAVITY_MODE_WORLD_Z = 0,
+        GRAVITY_MODE_VECTOR_AXIS = 1
     };
     f32 t[4];
     V4_32b90 v;
@@ -565,7 +566,7 @@ f32 FUN_L00_00232b90(f32 a, f32 b, f32 c) {
             }
         }
         break;
-    case 1:
+    case GRAVITY_MODE_VECTOR_AXIS:
         qcopy(&v, &hero.unk270);
         FUN_001f9bf8_32b90(&v, &v, b);
         FUN_001f9a68_32b90(&v, &v, -1.0f);
