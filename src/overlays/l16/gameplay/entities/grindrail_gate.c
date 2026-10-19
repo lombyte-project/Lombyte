@@ -366,6 +366,12 @@ extern void func_L00_002592B0_path54(char*,float,float*,float,float,float) __asm
 
 void bolt_thief_update(L16CrateMoby *moby) __asm__("FUN_L16_002e37a0");
 void bolt_thief_update(L16CrateMoby *moby) {
+    enum {
+        BOLT_THIEF_INITIALIZE = 0,
+        BOLT_THIEF_FACE_HERO = 1,
+        BOLT_THIEF_WAIT_FOR_HERO_TRIGGER = 2,
+        BOLT_THIEF_KNOCKBACK = 6
+    };
     L16CrateData *d = moby->data;
     char *hit;
 
@@ -393,7 +399,7 @@ void bolt_thief_update(L16CrateMoby *moby) {
     }
     moby->opacity = 0xFF;
     switch (moby->state) {
-    case 0:
+    case BOLT_THIEF_INITIALIZE:
         if (d->mode == 2) {
             moby->state = 1;
             d->turn = 0.0f;
@@ -434,7 +440,7 @@ void bolt_thief_update(L16CrateMoby *moby) {
         }
         d->child = 0;
         break;
-    case 1: {
+    case BOLT_THIEF_FACE_HERO: {
         struct Hero *player = &hero;
 
         func_L00_002592B0_path54((char *)moby,
@@ -443,7 +449,7 @@ void bolt_thief_update(L16CrateMoby *moby) {
         FUN_L14_002feca8(moby);
         break;
     }
-    case 2:
+    case BOLT_THIEF_WAIT_FOR_HERO_TRIGGER:
         if (is_point_inside_clip_volume(&hero.motion.pos, d->trigger)) {
             if (d->mode == 1) {
                 set_moby_animation_alt(moby, 0, 0);
@@ -516,7 +522,7 @@ void bolt_thief_update(L16CrateMoby *moby) {
             FUN_L14_002feca8(moby);
         }
         break;
-    case 6:
+    case BOLT_THIEF_KNOCKBACK:
         if (mine_fall(moby, d->knock) & 3) {
             cart_burst(moby, moby->position, -1, 1.0f, 13.0f);
             mark_moby_for_removal(moby);
