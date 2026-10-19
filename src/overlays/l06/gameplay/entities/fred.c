@@ -6462,12 +6462,16 @@ extern void FUN_L02_002f8aa0(float, float, float, float, float, float);
 
 extern float D_L06_0015F400;
 void FUN_L06_00301b90(unsigned char *m) {
+    enum {
+        INITIALIZE_ENTITY = 0,
+        ADVANCE_CAMERA_ALONG_PATH = 3
+    };
     char *d = *(char **)(m + 0x78);
     float va[4] __attribute__((aligned(16)));
     float vc[4] __attribute__((aligned(16)));
     float vb[4] __attribute__((aligned(16)));
     switch (m[0x20]) {
-    case 0:
+    case INITIALIZE_ENTITY:
         if (visited52[m[0xB0] + (current_level_index << 4)] != 0) {
             mark_moby_for_removal((struct Obj *)m);
             return;
@@ -6522,7 +6526,7 @@ void FUN_L06_00301b90(unsigned char *m) {
         }
         return;
     }
-    case 3: {
+    case ADVANCE_CAMERA_ALONG_PATH: {
         int **p;
         int x, nb;
         float r;
