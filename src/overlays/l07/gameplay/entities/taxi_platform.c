@@ -579,6 +579,12 @@ float absolute_float(float input) __asm__("func_001F99C0");
 extern char D_0013E550[];
 
 void FUN_L07_002cdb28(struct Moby *moby) {
+    enum {
+        TAXI_SHRINK_AND_RESET_TO_PATH_START = 0,
+        TAXI_WAIT_FOR_HERO_BOARDING = 1,
+        TAXI_TRAVERSE_PATH = 2,
+        TAXI_WAIT_FOR_HERO_TO_LEAVE = 3
+    };
     char *data = (char *)moby->pvars;
     char *path;
     float orig[4], delta[4], tmp[4];
@@ -618,7 +624,7 @@ void FUN_L07_002cdb28(struct Moby *moby) {
         moby->collision = moby->pclass->collision;
     }
     switch (moby->command) {
-    case 0: {
+    case TAXI_SHRINK_AND_RESET_TO_PATH_START: {
         char *cls = moby->pclass;
         float t = moby->scale - *(float *)(cls + 0x24) / 60.0f;
         moby->scale = t;
@@ -630,7 +636,7 @@ void FUN_L07_002cdb28(struct Moby *moby) {
         }
         break;
     }
-    case 1:
+    case TAXI_WAIT_FOR_HERO_BOARDING:
         if (*(short *)(data + 0xB8) != 0) {
             if (FUN_L01_00277fb8(moby)) {
                 if (*(int *)(data + 0xC8) == 0) {
@@ -644,7 +650,7 @@ void FUN_L07_002cdb28(struct Moby *moby) {
             }
         }
         break;
-    case 2:
+    case TAXI_TRAVERSE_PATH:
         if (*(short *)(data + 0xBA) != 0 ||
             (*(float *)(data + 0xBC) < 0.0f &&
              vector_distance(&moby->pos, &hero.motion.pos) < 2.0f &&
@@ -715,7 +721,7 @@ void FUN_L07_002cdb28(struct Moby *moby) {
             *(float *)(data + 0xBC) = moby->pos.z - orig[2];
         }
         break;
-    case 3:
+    case TAXI_WAIT_FOR_HERO_TO_LEAVE:
         if (!FUN_L01_00277fb8(moby)) {
             moby->command = 0;
         }
