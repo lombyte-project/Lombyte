@@ -1414,6 +1414,13 @@ typedef struct Data_2C7F38 {
 } Data_2C7F38;
 
 void FUN_L13_002c7f38(struct Moby *moby) {
+    enum {
+        INITIALIZE_ROTATION = 0,
+        WAIT_TO_ADVANCE_ROTATION = 1,
+        ADVANCE_ROTATION = 2,
+        HOLD_ROTATION_OFFSET = 3,
+        REVERSE_ROTATION = 4
+    };
     Data_2C7F38 *data = (Data_2C7F38 *)moby->pvars;
     struct Moby *linked;
     float step;
@@ -1425,7 +1432,7 @@ void FUN_L13_002c7f38(struct Moby *moby) {
     }
 
     switch (moby->state) {
-    case 0:
+    case INITIALIZE_ROTATION:
         qcopy(data, &moby->rot);
         moby->state = data->start_active == 0 ? 1 : 2;
         data->progress = 0.0f;
@@ -1433,7 +1440,7 @@ void FUN_L13_002c7f38(struct Moby *moby) {
             moby->scale = moby->pclass->scale * data->initial_scale;
         }
         return;
-    case 1:
+    case WAIT_TO_ADVANCE_ROTATION:
         if (data->linked_index != -1 &&
             (linked = (struct Moby *)(D_L13_0015FFD8 + data->linked_index * 0x100)) != 0 &&
             linked->state != 0xFE && linked->state != 0xFD && linked->state != data->active_state) {
@@ -1445,7 +1452,7 @@ void FUN_L13_002c7f38(struct Moby *moby) {
         data->progress = 0.0f;
         moby->state = 2;
         break;
-    case 2:
+    case ADVANCE_ROTATION:
         if (data->linked_index != -1 &&
             (linked = (struct Moby *)(D_L13_0015FFD8 + data->linked_index * 0x100)) != 0 &&
             linked->state != 0xFE && linked->state != 0xFD && linked->state == data->inactive_state) {
@@ -1476,7 +1483,7 @@ void FUN_L13_002c7f38(struct Moby *moby) {
             return;
         }
         break;
-    case 3:
+    case HOLD_ROTATION_OFFSET:
         if (data->linked_index == -1) return;
         linked = (struct Moby *)(D_L13_0015FFD8 + data->linked_index * 0x100);
         if (linked == 0 || linked->state == 0xFE || linked->state == 0xFD || linked->state != data->inactive_state) return;
@@ -1486,7 +1493,7 @@ void FUN_L13_002c7f38(struct Moby *moby) {
         }
         moby->state = 4;
         break;
-    case 4:
+    case REVERSE_ROTATION:
         if (data->linked_index == -1 ||
             (linked = (struct Moby *)(D_L13_0015FFD8 + data->linked_index * 0x100)) == 0 ||
             linked->state == 0xFE || linked->state == 0xFD || linked->state == data->active_state) {
