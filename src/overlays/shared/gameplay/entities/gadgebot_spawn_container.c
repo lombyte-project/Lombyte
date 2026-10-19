@@ -1396,6 +1396,17 @@ extern void subtract_vector_xyz(void *, void *, void *);
 
 void gadgebot_update(GbMoby *moby) __asm__("FUN_L06_002f0040");
 void gadgebot_update(GbMoby *moby) {
+    enum {
+        GADGEBOT_INITIALIZE = 0,
+        GADGEBOT_FOLLOW_HERO = 3,
+        GADGEBOT_STAND_AND_FACE_HERO = 4,
+        GADGEBOT_SEEK_AND_ATTACK_TARGET = 5,
+        GADGEBOT_ABSORB_INTO_OWNER = 8,
+        GADGEBOT_UPDATE_KNOCKBACK = 9
+    };
+    enum {
+        GADGEBOT_ATTACK_STRIKE = 2
+    };
     float out[4];
     float raised_position_snapshot[4];
     float save0[4];
@@ -1469,7 +1480,7 @@ void gadgebot_update(GbMoby *moby) {
         detach_manipulator(moby, &d->unk100);
     }
     switch (moby->state) {
-    case 0: {
+    case GADGEBOT_INITIALIZE: {
         int i;
 
         d->unk308 = 1.0f;
@@ -1563,7 +1574,7 @@ void gadgebot_update(GbMoby *moby) {
         }
         FUN_L00_00261630((char *)moby, (char *)d, 0.35f, 0.25f);
         break;
-    case 3: {
+    case GADGEBOT_FOLLOW_HERO: {
         int j;
 
         qcopy(v40, moby->pos);
@@ -1717,7 +1728,7 @@ void gadgebot_update(GbMoby *moby) {
         }
         break;
     }
-    case 4:
+    case GADGEBOT_STAND_AND_FACE_HERO:
         if (moby->anim != 0) {
             blend_moby_animation(moby, 0, 0, scale_game_frames(7));
         }
@@ -1726,7 +1737,7 @@ void gadgebot_update(GbMoby *moby) {
             fast_arc_tan(hero.motion.pos.f[0] - moby->pos[0], hero.motion.pos.f[1] - moby->pos[1]),
             &d->ctl.unk14, frame_scale_sq * 0.05f, frame_scale_sq * 0.3f, frame_time * 3.4906585f);
         break;
-    case 5:
+    case GADGEBOT_SEEK_AND_ATTACK_TARGET:
         if (current_level_index != 6) {
             int i;
 
@@ -1815,7 +1826,7 @@ void gadgebot_update(GbMoby *moby) {
                 moby->sub = 4;
             }
             break;
-        case 2:
+        case GADGEBOT_ATTACK_STRIKE:
             if (moby->anim != 2) {
                 blend_moby_animation(moby, 2, 8, scale_game_frames(7));
             }
@@ -1902,7 +1913,7 @@ void gadgebot_update(GbMoby *moby) {
             break;
         }
         break;
-    case 8: {
+    case GADGEBOT_ABSORB_INTO_OWNER: {
         float rr;
 
         ang = fast_arc_tan(moby->pos[0] - d->unk304->pos[0], moby->pos[1] - d->unk304->pos[1]);
@@ -1940,7 +1951,7 @@ void gadgebot_update(GbMoby *moby) {
         moby->flags &= 0xEFFF;
         return;
     }
-    case 9:
+    case GADGEBOT_UPDATE_KNOCKBACK:
         if (mine_fall(moby, d->unk80) & 0x41) {
             int i;
 
