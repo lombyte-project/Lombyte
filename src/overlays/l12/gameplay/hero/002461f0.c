@@ -126,6 +126,7 @@ void FUN_L12_002461f0(void) {
         HERO_STATE_ITEM_BUTTON_RELEASE_WAIT = 23,
         HERO_STATE_LOOK_RELEASE_WAIT = 30,
         HERO_STATE_ITEM_ANIMATION_RELEASE_GATE = 46,
+        HERO_STATE_CIRCLE_RELEASE_WAIT = 89,
         HERO_STATE_APPROACH_TARGET_POSE = 101,
         HERO_STATE_TARGET_POSE_APPROACH_RESTART_WAIT = 102,
         HERO_STATE_TARGET_POSE_WAIT = 103,
@@ -1933,7 +1934,7 @@ void FUN_L12_002461f0(void) {
                     }
                     hero_set_state(0x53, 1);
                     break;
-                case 89:
+                case HERO_STATE_CIRCLE_RELEASE_WAIT:
                     if (hero.state_timer > scale_game_frames(0x2D) && !(controller_state.held & 0x20)) {
                         hero_set_state(0x53, 0);
                         set_hero_animation(0, 0, scale_game_frames(0x14));
