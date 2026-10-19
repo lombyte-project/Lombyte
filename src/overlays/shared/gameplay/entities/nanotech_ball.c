@@ -1459,6 +1459,14 @@ extern SuckAimHeight *suck_get_aim_height(void *) __asm__("FUN_002141f8");
 extern float D_L00_00173E68 __attribute__((section(".data")));
 void suckcannon_update(SuckMoby *self) __asm__("FUN_L00_002da790");
 void suckcannon_update(SuckMoby *self) {
+    enum {
+        SUCKCANNON_STATE_INITIALIZE = 0,
+        SUCKCANNON_STATE_EMPTY_IDLE = 1,
+        SUCKCANNON_STATE_SUCTION_STARTUP = 2,
+        SUCKCANNON_STATE_SUCTION_ACTIVE = 3,
+        SUCKCANNON_STATE_LOADED_AIM = 4,
+        SUCKCANNON_STATE_FIRE_STORED_MOBY = 5
+    };
     SuckWork work;
     SuckCannon *cannon;
     SuckStats *stats;
@@ -1472,7 +1480,7 @@ void suckcannon_update(SuckMoby *self) {
     if ((u8)self->state != 3 && (u8)self->state != 0) FUN_L00_002defe0((int)self);
     FUN_L00_002da660();
     switch ((u8)self->state) {
-    case 0:
+    case SUCKCANNON_STATE_INITIALIZE:
         for (i=0; i<(suck_item_variant.gold == 0 ? 5 : 10); ++i) {
             if (suck_hero.stored[i]) {
                 suck_hero.stored[i]->collision = 0;
@@ -1490,7 +1498,7 @@ void suckcannon_update(SuckMoby *self) {
         }
         suck_reset(self);
         break;
-    case 1:
+    case SUCKCANNON_STATE_EMPTY_IDLE:
         if (self->anim_flags & 2) blend_moby_animation(self,1,0,scale_game_frames_alt(0));
         func_001F9908_r(&cannon->cooldown);
         if (cannon->cooldown == 0) FUN_L00_0020e698();
@@ -1512,7 +1520,7 @@ void suckcannon_update(SuckMoby *self) {
             self->state = 2;
         }
         break;
-    case 2:
+    case SUCKCANNON_STATE_SUCTION_STARTUP:
         if (self->anim_flags & 2) blend_moby_animation(self,3,0,scale_game_frames_alt(5));
         if (FUN_L00_002d9f78()!=0 || suck_hero.unk20AC || suck_hero.unk20A7) {
             sound = cannon->sound;
@@ -1539,7 +1547,7 @@ void suckcannon_update(SuckMoby *self) {
             goto changed;
         }
         break;
-    case 3:
+    case SUCKCANNON_STATE_SUCTION_ACTIVE:
         if (self->anim_state!=3 && (self->anim_state!=0 || (self->anim_flags&2)))
             blend_moby_animation(self,3,0,scale_game_frames_alt(5));
         func_001F9908_r(&cannon->cooldown);
@@ -1572,7 +1580,7 @@ void suckcannon_update(SuckMoby *self) {
             FUN_L00_002da360((u8 *)self,cannon);
         }
         break;
-    case 4:
+    case SUCKCANNON_STATE_LOADED_AIM:
         func_001F9908_r(&cannon->cooldown);
         if (!cannon->cooldown) FUN_L00_0020e698();
         if (self->anim_flags&2) {
@@ -1633,7 +1641,7 @@ void suckcannon_update(SuckMoby *self) {
         break;
     case 6:
         break;
-    case 5:
+    case SUCKCANNON_STATE_FIRE_STORED_MOBY:
         stored=0;
         if (!(0.0f <= compute_interpolated_record_value(self))) break;
         for(i=0; i<(suck_item_variant.gold==0?5:10);i++) {
