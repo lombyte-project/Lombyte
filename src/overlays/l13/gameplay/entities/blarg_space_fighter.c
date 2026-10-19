@@ -1163,6 +1163,9 @@ void FUN_L13_002c4428(Moby_2C56B0 *moby) {
         FIGHTER_ATTACK_FIRE = 1,
         FIGHTER_ATTACK_COOLDOWN = 2
     };
+    enum {
+        FIGHTER_DESTRUCTION_SPAWN_CLASS_E0 = 0
+    };
     Data_2C56B0 *d;
     Moby_2C56B0 *veh;
     Veh_2C56B0 *vehd = 0;
@@ -1356,7 +1359,7 @@ void FUN_L13_002c4428(Moby_2C56B0 *moby) {
         subtract_vector_xyz_c(spawn_position, &moby->pos, scratch_vector);
         scale_vector_xyz(scratch_vector, &d->vel, 0.5f);
         switch (rand() % 10) {
-        case 0:
+        case FIGHTER_DESTRUCTION_SPAWN_CLASS_E0:
             FUN_L13_002e1c50((char *)spawn_position, 0xE0);
             break;
         case 1:
