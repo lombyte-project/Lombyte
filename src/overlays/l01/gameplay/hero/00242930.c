@@ -131,6 +131,7 @@ int r1_repeat_timer __asm__("D_L01_0015F678") = 0;
 void FUN_L01_00242930(void) {
     enum {
         HERO_STATE_TARGET_POSE_APPROACH = 101,
+        HERO_STATE_TARGET_POSE_HOLD = 103,
         HERO_STATE_DEATH_PLANE_FALL = 119
     };
     unsigned char *moby;
@@ -886,7 +887,7 @@ void FUN_L01_00242930(void) {
                         hero_set_state(0x65, 1);
                     }
                     break;
-                case 103:
+                case HERO_STATE_TARGET_POSE_HOLD:
                     if ((hero.unkA98 & 2) || hero.unk1650 != 0) {
                         hero_set_state(HERO_STATE_IDLE, 1);
                     }
