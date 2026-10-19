@@ -233,7 +233,7 @@ void FUN_L06_0023b440(void) {
                 hero_set_state(0x77, 1);
             } else {
                 switch (hero.state.current) {
-                case 0:
+                case HERO_STATE_IDLE:
                     if (controller_state.held & 5) {
                         hero_set_state(HERO_STATE_LOOK, 1);
                         break;
@@ -417,7 +417,7 @@ void FUN_L06_0023b440(void) {
                         }
                     }
                     break;
-                case 0x40:
+                case HERO_STATE_FIDGET:
                     if (controller_state.held & 5) {
                         hero_set_state(HERO_STATE_LOOK, 1);
                         break;
@@ -444,7 +444,7 @@ void FUN_L06_0023b440(void) {
                         hero_set_state(HERO_STATE_IDLE, 1);
                     }
                     break;
-                case 0x41:
+                case HERO_STATE_FIDGET_ALT:
                     if (scale_game_frames(8) < hero.state_timer) {
                         FUN_L00_00228fa8();
                         if (hero.air_frames.s != 0) {
@@ -466,7 +466,7 @@ void FUN_L06_0023b440(void) {
                         hero_set_state(HERO_STATE_IDLE, 1);
                     }
                     break;
-                case 61:
+                case HERO_STATE_DYING:
                 case 71:
                 case 87:
                 case 98:
@@ -484,7 +484,7 @@ void FUN_L06_0023b440(void) {
                         return;
                     }
                     break;
-                case 1:
+                case HERO_STATE_LOOK:
                     if (hero.vehicle_mode == 0) {
                         if (hero.unk20AA == 0 || hero.unk20A5 != 0) {
                             if (controller_state.held & 0xA) {
@@ -560,9 +560,9 @@ void FUN_L06_0023b440(void) {
                         hero_set_state(HERO_STATE_IDLE, 1);
                     }
                 } break;
-                case 19:
-                case 20:
-                case 21:
+                case HERO_STATE_WRENCH_COMBO:
+                case HERO_STATE_WRENCH_SLAM:
+                case HERO_STATE_CROUCH_SWING:
                     if (hero.state.current == HERO_STATE_WRENCH_SLAM) {
                         int r = truncate_float_to_s32(
                             FUN_L00_00232b90(60.0f, frame_time_sq * 130.0f, -1.0f));
@@ -619,7 +619,7 @@ void FUN_L06_0023b440(void) {
                         hero_set_state(HERO_STATE_IDLE, 1);
                     }
                     break;
-                case 2:
+                case HERO_STATE_RUN:
                 case 47:
                 case 115:
                 case 126:
@@ -772,7 +772,7 @@ void FUN_L06_0023b440(void) {
                         return;
                     }
                     break;
-                case 3:
+                case HERO_STATE_STOP:
                     if (controller_state.held & 5) {
                         hero_set_state(HERO_STATE_LOOK, 1);
                         break;
@@ -816,7 +816,7 @@ void FUN_L06_0023b440(void) {
                         hero_set_state(HERO_STATE_RUN, 1);
                     }
                     break;
-                case 4:
+                case HERO_STATE_CROUCH:
                     if (controller_state.held & 5) {
                         hero_set_state(HERO_STATE_LOOK, 1);
                         break;
@@ -953,7 +953,7 @@ void FUN_L06_0023b440(void) {
                         hero_set_state(HERO_STATE_IDLE, 1);
                     }
                     break;
-                case 40:
+                case HERO_STATE_GRIND:
                 case 41:
                 case 42:
                 case 43:
@@ -1353,7 +1353,7 @@ void FUN_L06_0023b440(void) {
                         hero_set_state(0x1C, 1);
                     }
                     break;
-                case 121:
+                case HERO_STATE_SLIP:
                     if (scale_game_frames(0x12C) < hero.state_timer) {
                         hero_respawn();
                     }
@@ -1366,7 +1366,7 @@ void FUN_L06_0023b440(void) {
                     }
                     hero_set_state(HERO_STATE_IDLE, 1);
                     break;
-                case 6:
+                case HERO_STATE_FALL:
                 case 45:
                     if (hero.state.step == 0) {
                         if (!(scale_game_frames(0x12) > hero.state_timer) ||
@@ -1947,7 +1947,7 @@ void FUN_L06_0023b440(void) {
                         hero_set_state(0x18, 1);
                     }
                     break;
-                case 22:
+                case HERO_STATE_HURT:
                     if (12.5f < hero.anim_frame && hero.air_frames.s != 0 && hero.ground_distance > 1.0f) {
                         hero_set_state(HERO_STATE_FALL, 1);
                         break;
