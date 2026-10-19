@@ -200,6 +200,12 @@ void walker_update_gait(WalkMoby *m, WalkData *d, int flags, float speed, float 
         WALKER_GAIT_TRANSITION_TO_DOWNHILL = 7,
         WALKER_GAIT_ALTERNATE_TRANSITION_TO_DOWNHILL = 8
     };
+    enum {
+        WALKER_GAIT_TRANSITION_FROM_UPHILL_TO_WALK = 5,
+        WALKER_GAIT_ALTERNATE_TRANSITION_FROM_UPHILL_TO_WALK = 6,
+        WALKER_GAIT_TRANSITION_FROM_DOWNHILL_TO_WALK = 10,
+        WALKER_GAIT_ALTERNATE_TRANSITION_FROM_DOWNHILL_TO_WALK = 11
+    };
     float vec[4];
 
     switch (d->bB7) {
@@ -235,16 +241,16 @@ void walker_update_gait(WalkMoby *m, WalkData *d, int flags, float speed, float 
     case WALKER_GAIT_TRANSITION_TO_UPHILL:
     case WALKER_GAIT_ALTERNATE_TRANSITION_TO_UPHILL:
     case WALKER_GAIT_WALK_UPHILL:
-    case 5:
-    case 6:
+    case WALKER_GAIT_TRANSITION_FROM_UPHILL_TO_WALK:
+    case WALKER_GAIT_ALTERNATE_TRANSITION_FROM_UPHILL_TO_WALK:
         if (flags & 5) {
             d->uEE &= 0xFFF7;
         }
     case WALKER_GAIT_TRANSITION_TO_DOWNHILL:
     case WALKER_GAIT_ALTERNATE_TRANSITION_TO_DOWNHILL:
     case WALKER_GAIT_WALK_DOWNHILL:
-    case 10:
-    case 11: {
+    case WALKER_GAIT_TRANSITION_FROM_DOWNHILL_TO_WALK:
+    case WALKER_GAIT_ALTERNATE_TRANSITION_FROM_DOWNHILL_TO_WALK: {
         int idx = D_L00_001CA760[d->bB7];
         if (m->f58 < 0.25f && fast_difference_between_rotations(m->f48, ang) < 0.09239978f &&
             speed < frame_time * 0.19f) {
@@ -504,7 +510,7 @@ void walker_update_gait(WalkMoby *m, WalkData *d, int flags, float speed, float 
                             }
                         }
                         break;
-                    case 5:
+                    case WALKER_GAIT_TRANSITION_FROM_UPHILL_TO_WALK:
                         if ((h - vec[2]) + d->anim[idx]->f04 * 0.5f * fast_sin(d->fB8) <
                             -d->fE0 * 0.75f) {
                             int bl;
@@ -539,7 +545,7 @@ void walker_update_gait(WalkMoby *m, WalkData *d, int flags, float speed, float 
                             d->bB7 = 1;
                         }
                         break;
-                    case 6:
+                    case WALKER_GAIT_ALTERNATE_TRANSITION_FROM_UPHILL_TO_WALK:
                         if ((h - vec[2]) + d->anim[idx]->f04 * 0.5f * fast_sin(d->fB8) <
                             -d->fE0 * 0.75f) {
                             int bl;
@@ -693,7 +699,7 @@ void walker_update_gait(WalkMoby *m, WalkData *d, int flags, float speed, float 
                             }
                         }
                         break;
-                    case 10:
+                    case WALKER_GAIT_TRANSITION_FROM_DOWNHILL_TO_WALK:
                         if ((h - vec[2]) + d->anim[idx]->f04 * 0.5f * fast_sin(d->fB8) >
                             d->fE0 * 0.75f) {
                             int bl = truncate_float_to_s32(d->anim[1]->f3C * 0.25f /
@@ -724,7 +730,7 @@ void walker_update_gait(WalkMoby *m, WalkData *d, int flags, float speed, float 
                             d->bB7 = 1;
                         }
                         break;
-                    case 11:
+                    case WALKER_GAIT_ALTERNATE_TRANSITION_FROM_DOWNHILL_TO_WALK:
                         if ((h - vec[2]) + d->anim[idx]->f04 * 0.5f * fast_sin(d->fB8) >
                             d->fE0 * 0.75f) {
                             int bl = truncate_float_to_s32(d->anim[2]->f38 * 0.25f /
