@@ -529,6 +529,9 @@ extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 short D_L17_00162188 = 2;
 int FUN_L17_002eace8(int a, char *p, char *radar_origin, char *radar_rotation, float f0, float f1, float f2, char *cur,
                      char *g) {
+    enum {
+        MOBY_CLASS_OFFSCREEN_ARROW_TARGET = 0x15B
+    };
     float v[4];
     float w[4];
     float mat[16];
@@ -627,7 +630,7 @@ int FUN_L17_002eace8(int a, char *p, char *radar_origin, char *radar_rotation, f
             }
             FUN_L17_002eaae0(radar_rotation, radar_origin, m, 0, 0x70808080, *(int *)(p + 0x104));
             break;
-        case 0x15B:
+        case MOBY_CLASS_OFFSCREEN_ARROW_TARGET:
             qcopy(w, m + 0x10);
             w[2] += 4.0f;
             project_to_screen(v, w);
