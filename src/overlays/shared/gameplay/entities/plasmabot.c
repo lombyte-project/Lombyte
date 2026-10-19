@@ -976,6 +976,7 @@ void FUN_L14_002b2f60(char *moby) {
     enum {
         HIT_REACTION_LETHAL = 1,
         HIT_REACTION_DEATH = 2,
+        HIT_REACTION_STAGGER = 3,
         HIT_REACTION_NONE = 11
     };
     char *state = *(char **)(moby + 0x78);
@@ -1001,7 +1002,7 @@ void FUN_L14_002b2f60(char *moby) {
         *(float *)(state + 0x20) -= damage;
         if (*(float *)(state + 0x20) <= 0.0f) result = 1;
         switch (result) {
-        case 3: case 4: case 5: case 6: case 7: case 8: case 9: case 10:
+        case HIT_REACTION_STAGGER: case 4: case 5: case 6: case 7: case 8: case 9: case 10:
         {
             char *p60 = state + 0x60;
             int t;
