@@ -2295,8 +2295,10 @@ void FUN_L03_002c6fd0(Moby2C8398 *m) {
         ENEMY_MOVE_TO_PATH_NODE = 7,
         ENEMY_FOLLOW_PATH_TO_END = 8,
         ENEMY_FOLLOW_ALTERNATE_PATH = 9,
+        ENEMY_KNOCKBACK_RECOVERY = 10,
         ENEMY_FALL_UNDER_GRAVITY = 11,
         ENEMY_TURN_TO_HEADING = 12,
+        ENEMY_DEATH_KNOCKBACK = 13,
         ENEMY_HIDDEN_AT_PATH_START = 14,
         ENEMY_RESPAWN_AT_PATH_START = 15
     };
@@ -2774,7 +2776,7 @@ void FUN_L03_002c6fd0(Moby2C8398 *m) {
         }
         break;
     }
-    case 10: {
+    case ENEMY_KNOCKBACK_RECOVERY: {
         int fl;
         float g;
         if (d->q.s3E != 2) {
@@ -2950,7 +2952,7 @@ void FUN_L03_002c6fd0(Moby2C8398 *m) {
             break;
         }
         break;
-    case 13: {
+    case ENEMY_DEATH_KNOCKBACK: {
         int fl = FUN_L00_0025e450_cf(m, &d->q);
         float g;
         d->b255++;
