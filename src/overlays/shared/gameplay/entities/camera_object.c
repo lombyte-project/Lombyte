@@ -1177,6 +1177,11 @@ extern void multiply_matrix3x3(void *, void *, void *) __asm__("FUN_001fa328");
 extern void FUN_001f9bf8_u(float *, float *, float) __asm__("FUN_001f9bf8");
 
 void FUN_L00_002a6de8(char *moby, void *out1, void *out2) {
+    enum {
+        BOLT_CLASS_ONE = 13,
+        BOLT_CLASS_FIVE = 14,
+        BOLT_CLASS_TWENTY = 15
+    };
     char *data = *(char **)(moby + 0x78);
     float m0[12];
     float m1[12];
@@ -1196,21 +1201,21 @@ void FUN_L00_002a6de8(char *moby, void *out1, void *out2) {
         qcopy(B, data + 0x10);
     }
     switch (*(short *)(moby + 0xA6)) {
-    case 13:
+    case BOLT_CLASS_ONE:
         c1 = 0.04f;
         c2 = -0.25f;
         c3 = 0.04875f;
         c4 = 0.325f;
         c5 = 0.15f;
         break;
-    case 14:
+    case BOLT_CLASS_FIVE:
         c1 = 0.03f;
         c2 = -0.5f;
         c3 = 0.0245f;
         c4 = 0.35f;
         c5 = 0.23f;
         break;
-    case 15:
+    case BOLT_CLASS_TWENTY:
         c1 = 0.025f;
         c2 = -0.4f;
         c3 = 0.05625f;
