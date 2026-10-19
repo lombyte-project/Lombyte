@@ -986,6 +986,7 @@ extern short D_L11_00162388 __attribute__((sda));
 void energy_sphere_update(unsigned char *moby) __asm__("FUN_L11_00318b30");
 void energy_sphere_update(unsigned char *moby) {
     enum {
+        ENERGY_SPHERE_APPROACH_SCALE_AND_REMOVE = 1,
         ENERGY_SPHERE_MOVE_AND_DETONATE = 2
     };
     char *data = *(char **)(moby + 0x78);
@@ -993,7 +994,7 @@ void energy_sphere_update(unsigned char *moby) {
     float *vp;
     FUN_L11_00319028_c((char *)moby);
     switch (moby[0x20]) {
-    case 1:
+    case ENERGY_SPHERE_APPROACH_SCALE_AND_REMOVE:
         if (func_001F9908_i(data + 0x20)) {
             float *p = *(float **)(moby + 0x24);
             float n = (float)scale_game_frames(0x14);
