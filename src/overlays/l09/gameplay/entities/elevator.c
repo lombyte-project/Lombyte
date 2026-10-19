@@ -1632,6 +1632,12 @@ extern int FUN_L09_0030a298(struct Moby *);
 
 void shuttle_update(struct Moby *moby) __asm__("FUN_L09_00309c08");
 void shuttle_update(struct Moby *moby) {
+    enum {
+        SHUTTLE_STATE_INITIALIZE = 0,
+        SHUTTLE_STATE_WAIT_FOR_DEPARTURE = 1,
+        SHUTTLE_STATE_WAIT_FOR_DISMOUNT = 2,
+        SHUTTLE_STATE_FOLLOW_PATH = 3
+    };
     PathFlyerVars_00309c08 *vars = (PathFlyerVars_00309c08 *)moby->pvars;
     PathNodes_00309c08 *path = (PathNodes_00309c08 *)D_L09_001B0630[vars->path];
     Vec4 *position = &moby->pos;
@@ -1645,7 +1651,7 @@ void shuttle_update(struct Moby *moby) {
     if (vars == 0) return;
 
     switch (moby->state) {
-    case 0:
+    case SHUTTLE_STATE_INITIALIZE:
         moby->update_dist = 0xFF;
         vars->yaw_offset = 3.1415927f;
         *(s32 *)((u8 *)vars + 0xC4) = -1;
@@ -1672,7 +1678,7 @@ void shuttle_update(struct Moby *moby) {
         }
         moby->rot.z = fast_add_rotations(moby->rot.z, 3.1415927f);
         break;
-    case 2:
+    case SHUTTLE_STATE_WAIT_FOR_DISMOUNT:
         vars->lag += (1.0f - vars->lag) * 0.01f;
         FUN_L00_00262b00(vars->lag * 0.14f, frame_time * 0.5235988f,
                           (char *)moby, (f32 *)((u8 *)vars + 0xD8), (f32 *)((u8 *)vars + 0xDC));
@@ -1681,7 +1687,7 @@ void shuttle_update(struct Moby *moby) {
                           frame_time * 0.4886922f);
         if (hero.ground_moby != moby) moby->state = 1;
         break;
-    case 1:
+    case SHUTTLE_STATE_WAIT_FOR_DEPARTURE:
         vars->lag += (1.0f - vars->lag) * 0.01f;
         FUN_L00_00262b00(vars->lag * 0.14f, frame_time * 0.5235988f,
                           (char *)moby, (f32 *)((u8 *)vars + 0xD8), (f32 *)((u8 *)vars + 0xDC));
@@ -1699,7 +1705,7 @@ void shuttle_update(struct Moby *moby) {
             moby->state = 3;
         }
         break;
-    case 3:
+    case SHUTTLE_STATE_FOLLOW_PATH:
         if ((D_L09_0015F5CC & 7) == (((s32)moby >> 8) & 7)) {
             if (*(s32 *)((u8 *)vars + 0xC4) == -1 ||
                 (!check_voice_target_00309c08(moby, *(s32 *)((u8 *)vars + 0xC4)) &&
