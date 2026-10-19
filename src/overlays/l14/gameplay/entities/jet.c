@@ -2490,11 +2490,14 @@ extern float D_0015ED6C_u __asm__("D_0015ED6C");
 extern float FUN_001f9b48(void *, void *);
 
 void FUN_L14_002f1140(struct Moby *moby) {
+    enum {
+        TAXI_STOP_RETURN_HUB = 0
+    };
     char *d = (char *)moby->pvars;
     char *p;
     float inv, a, b, r;
     switch (*(short *)(d + 0xB4)) {
-    case 0:
+    case TAXI_STOP_RETURN_HUB:
         *(char **)(d + 0xAC) = D_L14_001B0BB0_c2[*(int *)(d + 0x94)];
         *(short *)(d + 0xB6) = 1;
         break;
