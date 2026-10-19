@@ -112,6 +112,17 @@ extern void FUN_L06_002ff100_u(struct Moby *) __asm__("FUN_L06_002ff100");
 
 void blarg_space_commando_update(struct Moby *moby) __asm__("FUN_L06_002fdbd0");
 void blarg_space_commando_update(struct Moby *moby) {
+    enum {
+        BLARG_COMMANDO_STATE_INITIALIZE = 0,
+        BLARG_COMMANDO_STATE_MELEE_ATTACK = 5,
+        BLARG_COMMANDO_STATE_MELEE_RECOVERY = 6,
+        BLARG_COMMANDO_STATE_CHASE_TARGET = 11,
+        BLARG_COMMANDO_STATE_CHASE_MELEE_ATTACK = 12,
+        BLARG_COMMANDO_STATE_RETURN_HOME = 13,
+        BLARG_COMMANDO_STATE_APPROACH_ROUTE_DESTINATION = 14,
+        BLARG_COMMANDO_STATE_KNOCKBACK = 15,
+        BLARG_COMMANDO_STATE_DEATH_KNOCKBACK = 16
+    };
     Moby1068Vars *vars = (Moby1068Vars *)moby->pvars;
     struct Moby *target;
     s32 *route;
@@ -135,7 +146,7 @@ void blarg_space_commando_update(struct Moby *moby) {
     }
     moby->anim_speed = 1.0f;
     switch (moby->state) {
-    case 0:
+    case BLARG_COMMANDO_STATE_INITIALIZE:
         vars->unk28 = 1;
         vars->unk20 = 2.0f;
         vars->unk30 = 2.0f;
@@ -189,7 +200,7 @@ void blarg_space_commando_update(struct Moby *moby) {
             }
         }
         break;
-    case 14:
+    case BLARG_COMMANDO_STATE_APPROACH_ROUTE_DESTINATION:
         if (moby->prev_seq != 1) {
             blend_moby_animation(moby, 1, 0, scale_game_frames(12));
         }
@@ -269,7 +280,7 @@ void blarg_space_commando_update(struct Moby *moby) {
             }
         }
         break;
-    case 5:
+    case BLARG_COMMANDO_STATE_MELEE_ATTACK:
         approach_angle(&moby->rot.z, fast_arc_tan(target->pos.x - moby->pos.x, target->pos.y - moby->pos.y),
                          &vars->turn_speed, frame_time_sq * 6.2831855f, frame_time_sq * 6.2831855f,
                          frame_time * 3.1415927f);
@@ -300,7 +311,7 @@ void blarg_space_commando_update(struct Moby *moby) {
             }
         }
         break;
-    case 6:
+    case BLARG_COMMANDO_STATE_MELEE_RECOVERY:
         if (moby->anim_flags & 2) {
             moby->state = moby->command;
             if (moby->prev_seq != 0) {
@@ -308,7 +319,7 @@ void blarg_space_commando_update(struct Moby *moby) {
             }
         }
         break;
-    case 11:
+    case BLARG_COMMANDO_STATE_CHASE_TARGET:
         near = 0;
         FUN_L00_00258278(moby, fast_arc_tan(target->pos.x - moby->pos.x, target->pos.y - moby->pos.y), &vars->turn_speed, 0.05f, 0.3f,
                          frame_time * 6.2831855f);
@@ -335,7 +346,7 @@ void blarg_space_commando_update(struct Moby *moby) {
             }
         }
         break;
-    case 12:
+    case BLARG_COMMANDO_STATE_CHASE_MELEE_ATTACK:
         moby_point_position(moby, 0, &a);
         qcopy(&b, &moby->pos);
         b.f[2] += 1.5f;
@@ -359,7 +370,7 @@ void blarg_space_commando_update(struct Moby *moby) {
             }
         }
         break;
-    case 13:
+    case BLARG_COMMANDO_STATE_RETURN_HOME:
         FUN_L00_00258278(moby, fast_arc_tan(vars->home.f[0] - moby->pos.x, vars->home.f[1] - moby->pos.y), &vars->turn_speed, 0.05f, 0.3f,
                          frame_time * 6.2831855f);
         a.f[0] = 2.0f * fast_cos(moby->rot.z);
@@ -378,7 +389,7 @@ void blarg_space_commando_update(struct Moby *moby) {
             }
         }
         break;
-    case 15:
+    case BLARG_COMMANDO_STATE_KNOCKBACK:
         hit = mine_fall(moby, &vars->vel);
         if (hit & 0x40) {
             moby->state = 1;
@@ -389,7 +400,7 @@ void blarg_space_commando_update(struct Moby *moby) {
             mark_moby_for_removal(moby);
         }
         break;
-    case 16:
+    case BLARG_COMMANDO_STATE_DEATH_KNOCKBACK:
         if (mine_fall(moby, &vars->vel) & 0x160) {
             s32 none;
 
@@ -448,7 +459,10 @@ float absolute_float(float input) __asm__("func_001F99C0");
 
 void FUN_L06_002feb40(char *m) {
     enum {
-        FATAL_HIT_RESPONSE = 1
+        HIT_RESPONSE_WITHOUT_KNOCKBACK = 0,
+        FATAL_HIT_RESPONSE = 1,
+        FRAGMENTING_FATAL_HIT_RESPONSE = 2,
+        NONFATAL_KNOCKBACK_HIT_RESPONSE = 3
     };
     extern unsigned char D_0013D408[];
     char *d;
@@ -489,7 +503,7 @@ void FUN_L06_002feb40(char *m) {
         *(int *)(d + 0x80) = 0x1F4;
         *(float *)(d + 0x88) = 0.5f;
         switch (r) {
-        case 3:
+        case NONFATAL_KNOCKBACK_HIT_RESPONSE:
         case 4:
         case 5:
         case 6:
@@ -516,7 +530,7 @@ void FUN_L06_002feb40(char *m) {
             break;
         }
         case FATAL_HIT_RESPONSE:
-        case 2:
+        case FRAGMENTING_FATAL_HIT_RESPONSE:
         {
             char *q;
             float a, b;
@@ -563,7 +577,7 @@ void FUN_L06_002feb40(char *m) {
             FUN_L00_00257470(m, 0, -1);
             break;
         }
-        case 0:
+        case HIT_RESPONSE_WITHOUT_KNOCKBACK:
         case 11:
         default:
             break;

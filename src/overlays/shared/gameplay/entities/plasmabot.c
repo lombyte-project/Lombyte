@@ -301,7 +301,11 @@ void attach_manipulator(void *owner, s32 slot_index, void *manip) __asm__("FUN_0
 void FUN_L14_002b17d8(char *moby);
 void FUN_L14_002b17d8(char *moby) {
     enum {
-        PLASMABOT_INITIALIZE = 0
+        PLASMABOT_INITIALIZE = 0,
+        PLASMABOT_FOLLOW_PATH_FORWARD = 3,
+        PLASMABOT_FOLLOW_PATH_BACKWARD = 8,
+        PLASMABOT_RETURN_TO_PATH_START = 9,
+        PLASMABOT_FACE_TARGET_AND_WAIT = 13
     };
     char *data;
     char *owner;
@@ -449,7 +453,7 @@ void FUN_L14_002b17d8(char *moby) {
             *(float *)(moby + 0x58) = 1.0f;
         }
         break;
-    case 9: {
+    case PLASMABOT_RETURN_TO_PATH_START: {
         float *path = (float *)D_L14_001B0BB0[*(int *)(data + 0x240)];
         vendor_spring((float *)(moby + 0x10), (float *)(data + 0x254), path[4], 0.01f, 0.2f, 0.0f);
         vendor_spring((float *)(moby + 0x14), (float *)(data + 0x258), path[5], 0.01f, 0.2f, 0.0f);
@@ -462,7 +466,7 @@ void FUN_L14_002b17d8(char *moby) {
         }
         break;
     }
-    case 13: {
+    case PLASMABOT_FACE_TARGET_AND_WAIT: {
         float ang;
         float k;
         ang = fast_arc_tan_c(*(float *)(owner + 0x10) - *(float *)(moby + 0x10),
@@ -482,13 +486,13 @@ void FUN_L14_002b17d8(char *moby) {
         *(float *)(data + 0x254) = *(float *)(data + 0x250);
         break;
     }
-    case 3:
+    case PLASMABOT_FOLLOW_PATH_FORWARD:
         if (FUN_L14_002b3418_c(moby) != 0) {
             blend_moby_animation(moby, 0, 0, scale_game_frames(10));
             ((unsigned char *)moby)[0x20] = 4;
         }
         break;
-    case 8:
+    case PLASMABOT_FOLLOW_PATH_BACKWARD:
         if (((unsigned char *)data)[0x24A] != 0) {
             FUN_L14_002d9870_c(*(int *)(data + 0x264));
         }
@@ -970,7 +974,10 @@ extern void func_L00_0025D5B0_i(void *, void *, float, int, int, int) __asm__("F
 
 void FUN_L14_002b2f60(char *moby) {
     enum {
-        HIT_REACTION_LETHAL = 1
+        HIT_REACTION_LETHAL = 1,
+        HIT_REACTION_DEATH = 2,
+        HIT_REACTION_STAGGER = 3,
+        HIT_REACTION_NONE = 11
     };
     char *state = *(char **)(moby + 0x78);
     int hit_kind;
@@ -995,7 +1002,7 @@ void FUN_L14_002b2f60(char *moby) {
         *(float *)(state + 0x20) -= damage;
         if (*(float *)(state + 0x20) <= 0.0f) result = 1;
         switch (result) {
-        case 3: case 4: case 5: case 6: case 7: case 8: case 9: case 10:
+        case HIT_REACTION_STAGGER: case 4: case 5: case 6: case 7: case 8: case 9: case 10:
         {
             char *p60 = state + 0x60;
             int t;
@@ -1015,7 +1022,7 @@ void FUN_L14_002b2f60(char *moby) {
         }
             ((unsigned char *)state)[0xC7] = 0xFA;
             break;
-        case HIT_REACTION_LETHAL: case 2: {
+        case HIT_REACTION_LETHAL: case HIT_REACTION_DEATH: {
             float y;
             if (*(int *)(hit_info + 0x24) & 0x800000) {
                 moby[0x20] = 0xC;
@@ -1044,7 +1051,7 @@ void FUN_L14_002b2f60(char *moby) {
             *(int *)(moby + 0x94) = 0;
             break;
         }
-        case 0: case 11:
+        case 0: case HIT_REACTION_NONE:
             break;
         }
         trooper_anim_update(moby, (short *)(state + 0xC0));
@@ -1248,7 +1255,11 @@ extern s32 fast_dec_timer(void *) __asm__("FUN_001f9740");
 void plasmabot_hatch_update(struct Moby *moby) __asm__("FUN_L14_002d96e0");
 void plasmabot_hatch_update(struct Moby *moby) {
     enum {
-        HATCH_WAIT_ACTIVATION_DELAY = 1
+        HATCH_WAIT_ACTIVATION = 0,
+        HATCH_WAIT_ACTIVATION_DELAY = 1,
+        HATCH_WAIT_ACTIVATION_ANIMATION = 2,
+        HATCH_WAIT_RESET_DELAY = 6,
+        HATCH_WAIT_RESET_ANIMATION = 7
     };
     char *data = (char *)moby->pvars;
     if (hero.vehicle_mode == 2) {
@@ -1257,7 +1268,7 @@ void plasmabot_hatch_update(struct Moby *moby) {
         moby->collision = moby->pclass->collision;
     }
     switch (moby->state) {
-    case 0:
+    case HATCH_WAIT_ACTIVATION:
         if (*(s32 *)data != 0 && *(s16 *)(D_L14_00167500 + 0x86) == 0x14) {
             moby->state = 1;
             *(s32 *)(data + 8) = FUN_001f96f8_c(*(s32 *)(data + 4));
@@ -1269,7 +1280,7 @@ void plasmabot_hatch_update(struct Moby *moby) {
             set_moby_animation(moby, 1, 0);
         }
         break;
-    case 2:
+    case HATCH_WAIT_ACTIVATION_ANIMATION:
         if ((moby->anim_flags & 2) != 0) {
             moby->state = 3;
             set_moby_animation(moby, 2, 0);
@@ -1289,13 +1300,13 @@ void plasmabot_hatch_update(struct Moby *moby) {
             set_moby_animation(moby, 2, 0);
         }
         break;
-    case 6:
+    case HATCH_WAIT_RESET_DELAY:
         if (fast_dec_timer(data + 8) != 0) {
             set_moby_animation(moby, 3, 0);
             moby->state = 7;
         }
         break;
-    case 7:
+    case HATCH_WAIT_RESET_ANIMATION:
         if ((moby->anim_flags & 2) != 0) {
             moby->state = 0;
             set_moby_animation(moby, 0, 0);
@@ -1920,6 +1931,11 @@ extern int ftoi_ff640(float) __asm__("FUN_001fa6d0");
 
 /* Floating mine: spins and pulses (and bobs in level 16); blows up on a hit and respawns once out of view. */
 void FUN_L14_002ff640(struct Moby *moby) {
+    enum {
+        FLOAT_MINE_INITIALIZE = 0,
+        FLOAT_MINE_ACTIVE = 1,
+        FLOAT_MINE_WAIT_OFFSCREEN_RESPAWN = 2
+    };
     FloatMineVars_ff640 *vars = (FloatMineVars_ff640 *)moby->pvars;
     union {
         HitInfo_ff640 info;
@@ -1933,7 +1949,7 @@ void FUN_L14_002ff640(struct Moby *moby) {
     int g;
 
     switch (moby->state) {
-    case 0:
+    case FLOAT_MINE_INITIALIZE:
         vars->rest_z = -1.0f;
         if (vars->link == 0) {
             moby->pos.z = probe_ground_height_ff640(0.5f, &moby->pos, 0) + 0.7f;
@@ -1945,7 +1961,7 @@ void FUN_L14_002ff640(struct Moby *moby) {
             moby->state = 1;
         }
         break;
-    case 1: {
+    case FLOAT_MINE_ACTIVE: {
         if (current_level_index == 16) {
             if (vars->rest_z < 0.0f)
                 vars->rest_z = probe_ground_height_ff640(0.5f, &moby->pos, 0) + 0.7f;
@@ -1982,7 +1998,7 @@ void FUN_L14_002ff640(struct Moby *moby) {
         }
         break;
     }
-    case 2: {
+    case FLOAT_MINE_WAIT_OFFSCREEN_RESPAWN: {
         qcopy(scratch.sphere, &moby->pos);
         scratch.sphere[3] = 3.0f;
         if (sphere_visible_ff640(scratch.sphere, 64.0f) == -1) {

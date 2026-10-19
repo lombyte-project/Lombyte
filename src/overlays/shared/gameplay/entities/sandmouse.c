@@ -25,6 +25,10 @@ extern char *D_L01_0015FFD8_b618 __asm__("D_L01_0015FFD8");
 
 extern char D_L01_00180740[];
 void FUN_L01_0030b618(u8 *m) {
+    enum {
+        EFFECT_STATE_INITIALIZE = 0,
+        EFFECT_STATE_UPDATE = 1
+    };
     s32 state = m[0x20];
     char *e = *(char **)(m + 0x78);
     s32 i;
@@ -40,7 +44,7 @@ void FUN_L01_0030b618(u8 *m) {
     OvlQuad second;
 
     switch (state) {
-    case 0:
+    case EFFECT_STATE_INITIALIZE:
         if (*(s32 *)(e + 0x58) < 2) {
             mark_moby_for_removal_b618(m);
             return;
@@ -60,7 +64,7 @@ void FUN_L01_0030b618(u8 *m) {
             m[0x30] = truncate_float_to_s32_b618(*(f32 *)(e + 0x5c)) + 4;
         m[0x20] = 1;
         return;
-    case 1:
+    case EFFECT_STATE_UPDATE:
         break;
     default:
         return;
@@ -593,6 +597,10 @@ extern s32 FUN_L00_00258ad0(struct Moby *, Vec4 *, f32, f32, s32, s32);
 extern f32 normalize_angle(f32) __asm__("FUN_L00_0025e310");
 
 void FUN_L01_0030d880(struct Moby *m, struct HoverVars *p) {
+    enum {
+        HOVER_COMMAND_FACE_GOAL = 0,
+        HOVER_COMMAND_MOVE_TO_GOAL = 2
+    };
     Vec4 v;
     f32 d;
     f32 k;
@@ -610,7 +618,7 @@ void FUN_L01_0030d880(struct Moby *m, struct HoverVars *p) {
     }
     vector_distance(&m->pos, p);
     switch (m->command) {
-    case 0:
+    case HOVER_COMMAND_FACE_GOAL:
         ang = fast_arc_tan(p->goal.f[0] - m->pos.x, p->goal.f[1] - m->pos.y);
         FUN_L00_00258278(m, &D_L01_001DEB4C, ang, frame_time_sq * 6.2831855f, frame_time_sq * 3.1415927f,
                          frame_time * 11.519173f);
@@ -618,7 +626,7 @@ void FUN_L01_0030d880(struct Moby *m, struct HoverVars *p) {
             m->command = 2;
         }
         break;
-    case 2:
+    case HOVER_COMMAND_MOVE_TO_GOAL:
         if (p->target == 0) {
             ang = fast_arc_tan(p->goal.f[0] - m->pos.x, p->goal.f[1] - m->pos.y);
             FUN_L00_00258278(m, &D_L01_001DEB4C, ang, frame_time_sq * 6.2831855f, frame_time_sq * 3.1415927f,
@@ -825,6 +833,14 @@ void detach_manipulator(void *moby, void *manip) __asm__("FUN_0020cb88");
 
 void sandmouse_update(Moby *m) __asm__("FUN_L01_0030df40");
 void sandmouse_update(Moby *m) {
+    enum {
+        SANDMOUSE_STATE_INITIALIZE = 0,
+        SANDMOUSE_STATE_WAIT_FOR_ACTIVATION = 1,
+        SANDMOUSE_STATE_WAIT_FOR_LINK = 2,
+        SANDMOUSE_STATE_MOVE_TO_GOAL = 3,
+        SANDMOUSE_STATE_FADE_OUT = 6,
+        SANDMOUSE_STATE_RESET = 7
+    };
     Pv_30F318 *p;
     f32 ang;
     int dv;
@@ -857,7 +873,7 @@ void sandmouse_update(Moby *m) {
         FUN_L01_0030ded0(m);
     }
     switch (m->state) {
-    case 0:
+    case SANDMOUSE_STATE_INITIALIZE:
         qzero(p);
         qzero(&p->vel);
         p->stuck = 0;
@@ -902,7 +918,7 @@ void sandmouse_update(Moby *m) {
         m->state = 1;
         m->draw_dist = 0;
         break;
-    case 1:
+    case SANDMOUSE_STATE_WAIT_FOR_ACTIVATION:
         if (D_0013D4C5 != 0) {
             char *hero_bytes;
             {
@@ -961,7 +977,7 @@ void sandmouse_update(Moby *m) {
             }
         }
         break;
-    case 2:
+    case SANDMOUSE_STATE_WAIT_FOR_LINK:
         if (p->link != -1) {
             if (LNK(p->link)->state == 5) {
                 if (m->prev_seq != 0) {
@@ -983,7 +999,7 @@ void sandmouse_update(Moby *m) {
             m->state = 3;
         }
         break;
-    case 3: {
+    case SANDMOUSE_STATE_MOVE_TO_GOAL: {
         int r;
         {
             char *v = VOICE(p->slot);
@@ -1082,7 +1098,7 @@ void sandmouse_update(Moby *m) {
         }
         FUN_L01_0030d5f0(m, p);
         break;
-    case 6:
+    case SANDMOUSE_STATE_FADE_OUT:
         if (p->slot != -1) {
             char *v = VOICE(p->slot);
             if (*(Moby **)(v + 0x88) == m && *(u8 *)(v + 0x74) != 0) {
@@ -1120,7 +1136,7 @@ void sandmouse_update(Moby *m) {
             m->rot.z = fast_add_rotations(m->rot.z, frame_time * 25.132742f);
         }
         break;
-    case 7:
+    case SANDMOUSE_STATE_RESET:
         if (p->slot != -1) {
             char *v = VOICE(p->slot);
             if (*(Moby **)(v + 0x88) == m && *(u8 *)(v + 0x74) != 0) {

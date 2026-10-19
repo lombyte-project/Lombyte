@@ -227,6 +227,15 @@ extern void FUN_L00_002e1aa8();
 extern f32 frame_scale_sq_gp __asm__("D_0015ED64") __attribute__((sda));
 void veldin_robot_enemy_update(VendMoby *moby) __asm__("FUN_L00_002e0b88");
 void veldin_robot_enemy_update(VendMoby *moby) {
+    enum {
+        VELDIN_ROBOT_STATE_INITIALIZE = 0,
+        VELDIN_ROBOT_STATE_WAIT_TO_FOLLOW_PATH = 1,
+        VELDIN_ROBOT_STATE_FOLLOW_PATH = 2,
+        VELDIN_ROBOT_STATE_FACE_TARGET = 3,
+        VELDIN_ROBOT_STATE_PROCESS_COLLISION_PROBES = 5,
+        VELDIN_ROBOT_STATE_DAMAGE_KNOCKBACK = 7,
+        VELDIN_ROBOT_STATE_DEATH_KNOCKBACK = 8
+    };
     VendVars *vars;
     VendTarget *target;
     VendPath *path;
@@ -250,7 +259,7 @@ void veldin_robot_enemy_update(VendMoby *moby) {
         moby->unk7F = 0x15;
     }
     switch (moby->state) {
-    case 0:
+    case VELDIN_ROBOT_STATE_INITIALIZE:
         qcopy(&vars->spawnPos, &moby->pos);
         vars->unk29 = 0;
         vars->unk20 = 2.0f;
@@ -275,7 +284,7 @@ void veldin_robot_enemy_update(VendMoby *moby) {
             VEND_ANIM(moby, 1, 5);
         }
         break;
-    case 1:
+    case VELDIN_ROBOT_STATE_WAIT_TO_FOLLOW_PATH:
         if (moby->unk70 & 2) {
             if (moby->anim == 1 && random_integer_below(4) == 0) {
                 VEND_ANIM(moby, 2, vend_rand(20));
@@ -288,7 +297,7 @@ void veldin_robot_enemy_update(VendMoby *moby) {
             VEND_ANIM(moby, 9, vend_rand(10));
         }
         break;
-    case 2:
+    case VELDIN_ROBOT_STATE_FOLLOW_PATH:
         vel = 0.0f;
         path = vend_paths[vars->pathIdx];
         qcopy(&delta, &path->pts[vars->pathPt]);
@@ -309,7 +318,7 @@ void veldin_robot_enemy_update(VendMoby *moby) {
         fast_vec_normalize(&dir, &dir, vars->speed);
         add_vector_xyz(&moby->pos, &moby->pos, &dir);
         break;
-    case 3:
+    case VELDIN_ROBOT_STATE_FACE_TARGET:
         VEND_TURN(
             moby, vars,
             fast_arc_tan(target->pos.f[0] - moby->pos.f[0], target->pos.f[1] - moby->pos.f[1]),
@@ -335,7 +344,7 @@ void veldin_robot_enemy_update(VendMoby *moby) {
             VEND_ANIM(moby, 6, vend_rand(10));
         }
         break;
-    case 5: {
+    case VELDIN_ROBOT_STATE_PROCESS_COLLISION_PROBES: {
         f32 ang;
 
         ang = fast_arc_tan(vars->homeX - moby->pos.f[0], vars->homeY - moby->pos.f[1]);
@@ -402,13 +411,13 @@ void veldin_robot_enemy_update(VendMoby *moby) {
             VEND_ANIM(moby, 1, vend_rand(10));
         }
         break;
-    case 7:
+    case VELDIN_ROBOT_STATE_DAMAGE_KNOCKBACK:
         if (mine_fall(moby, vars->unk70) & 0x140) {
             moby->state = 3;
             VEND_ANIM(moby, 1, vend_rand(10));
         }
         break;
-    case 8:
+    case VELDIN_ROBOT_STATE_DEATH_KNOCKBACK:
         if (mine_fall(moby, vars->unk70) & 0x140) {
             cart_burst(moby, &moby->pos, -1, 0.75f, 13.0f);
             FUN_L00_00263e30(moby, 0x7AB, 1, 0x7AB, 1, 4, 0);
@@ -781,13 +790,17 @@ extern void FUN_L00_002e2af0();
 void enqueue_callback_list_1(s32 arg0, s32 arg1) __asm__("FUN_001f4600");
 
 void FUN_L00_002e1df0(SlotMoby *m) {
+    enum {
+        SLOT_CONTROLLER_STATE_INITIALIZE = 0,
+        SLOT_CONTROLLER_STATE_PROCESS_SLOTS = 1
+    };
     s32 i;
     s32 j;
     s32 n;
     s32 st;
 
     switch (m->state) {
-    case 0:
+    case SLOT_CONTROLLER_STATE_INITIALIZE:
         for (j = 0; j < 3; j++) {
             D_L00_00161BF8[j] = 0;
             D_L00_00161C88[j] = 0;
@@ -795,7 +808,7 @@ void FUN_L00_002e1df0(SlotMoby *m) {
         m->state = 1;
         m->alpha = 0xFF;
         break;
-    case 1:
+    case SLOT_CONTROLLER_STATE_PROCESS_SLOTS:
         n = 0;
         for (i = 0; i < 3; i++) {
             st = D_L00_00161BF8[i];
@@ -856,6 +869,10 @@ extern void draw_trail(void *, void *, void *, f32, f32) __asm__("FUN_L00_00263b
 extern FlockPart *FUN_L00_0026d000(void *, s32, void *, s32, f32, f32, f32, f32);
 
 void FUN_L00_002e3800(FlockMoby *moby) {
+    enum {
+        FLOCK_EFFECT_STATE_INITIALIZE = 0,
+        FLOCK_EFFECT_STATE_PROCESS_PHASE_EFFECTS = 1
+    };
     f32 pos[4];
     void *src;
     FlockPart *part;
@@ -867,11 +884,11 @@ void FUN_L00_002e3800(FlockMoby *moby) {
     FlockTail *tail;
 
     switch (moby->state) {
-    case 0:
+    case FLOCK_EFFECT_STATE_INITIALIZE:
         moby->unk30 = 0xFF;
         moby->state = 1;
         break;
-    case 1:
+    case FLOCK_EFFECT_STATE_PROCESS_PHASE_EFFECTS:
         if ((D_L00_0015F5C4 == 2 && D_L00_0016C860.phase == 2 &&
              vend_rand(0x618) <= D_L00_0016C860.level) ||
             (D_L00_0015F5C4 == 2 && D_L00_0016C860.phase == 3)) {

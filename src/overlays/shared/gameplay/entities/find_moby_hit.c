@@ -717,6 +717,11 @@ extern float FUN_001f96b0_25b440(float) __asm__("FUN_001f96b0");
 extern float FUN_00213508_25b440(void *, int, float) __asm__("FUN_00213508");
 
 int FUN_L00_0025b440(O_25b440 *o, S_25b440 *s) {
+    enum {
+        INTEGRATE_ARC_MOTION = 1,
+        DESCEND_TO_GROUND = 2,
+        WAIT_AFTER_GROUND_CLAMP = 3
+    };
     float v[4];
     float t;
     float g;
@@ -733,7 +738,7 @@ int FUN_L00_0025b440(O_25b440 *o, S_25b440 *s) {
             FUN_00212f90_25b440(o, s->b2D, 0, 10);
             s->state = 1;
         }
-    case 1:
+    case INTEGRATE_ARC_MOTION:
         FUN_L00_00258278_25b440(o, &s->f30, s->f18, s->f34, s->f38, s->f3C);
         v[0] = FUN_001f9dc8_25b440(s->f18) * s->f14;
         v[1] = FUN_001f9de0_25b440(s->f18) * s->f14;
@@ -748,7 +753,7 @@ int FUN_L00_0025b440(O_25b440 *o, S_25b440 *s) {
             }
         }
         break;
-    case 2:
+    case DESCEND_TO_GROUND:
         o->z += s->f10;
         s->f10 -= s->f1C;
         g = FUN_00213508_25b440(o->pos, 0, 0.5f);
@@ -761,7 +766,7 @@ int FUN_L00_0025b440(O_25b440 *o, S_25b440 *s) {
             v[2] = 0.0f;
             FUN_001f9a10_25b440(o->pos, o->pos, v);
         }
-    case 3:
+    case WAIT_AFTER_GROUND_CLAMP:
         if (o->b70 & 2) {
             s->state = 4;
         }

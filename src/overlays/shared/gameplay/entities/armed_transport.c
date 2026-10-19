@@ -62,12 +62,22 @@ extern float func_001F9D10_update(void *, void *) __asm__("FUN_001f9b48");
 
 void armed_transport_update(char *m) __asm__("FUN_L16_002e22d8");
 void armed_transport_update(char *m) {
+    enum {
+        ARMED_TRANSPORT_STATE_INITIALIZE = 0,
+        ARMED_TRANSPORT_STATE_WAIT_FOR_ACTIVATION = 1,
+        ARMED_TRANSPORT_STATE_FOLLOW_FIRST_PATH = 2,
+        ARMED_TRANSPORT_STATE_RELEASE_PASSENGERS = 3,
+        ARMED_TRANSPORT_STATE_ALIGN_SECOND_PATH = 4,
+        ARMED_TRANSPORT_STATE_FOLLOW_SECOND_PATH = 5,
+        ARMED_TRANSPORT_STATE_TRACK_TARGET = 6,
+        ARMED_TRANSPORT_STATE_DYING = 8
+    };
     L16TransportVector vector, rotation;
     char *d = *(char **)(m + 0x78);
 
     FUN_L16_002e2b60(m);
     switch (*(unsigned char *)(m + 0x20)) {
-    case 0: {
+    case ARMED_TRANSPORT_STATE_INITIALIZE: {
         char *path;
         float speed;
 
@@ -96,7 +106,7 @@ void armed_transport_update(char *m) {
         *(unsigned short *)(m + 0x34) = (*(unsigned short *)(m + 0x34) | 1) & 0xEFFF;
         break;
     }
-    case 1: {
+    case ARMED_TRANSPORT_STATE_WAIT_FOR_ACTIVATION: {
         int i;
 
         if (D_L16_0015F5C4 == 0
@@ -119,7 +129,7 @@ void armed_transport_update(char *m) {
         }
         break;
     }
-    case 2: {
+    case ARMED_TRANSPORT_STATE_FOLLOW_FIRST_PATH: {
         int i, loaded = 0;
         char *path;
 
@@ -142,7 +152,7 @@ void armed_transport_update(char *m) {
         }
         break;
     }
-    case 3: {
+    case ARMED_TRANSPORT_STATE_RELEASE_PASSENGERS: {
         int i, *slot;
 
         if (!fast_dec_timer((int *)(d + 0x184))) break;
@@ -170,7 +180,7 @@ void armed_transport_update(char *m) {
         }
         break;
     }
-    case 4: {
+    case ARMED_TRANSPORT_STATE_ALIGN_SECOND_PATH: {
         float heading = *(float *)(D_L16_001B0930[*(int *)(d + 0xDC)] + 0x1C);
 
         advance_accelerated_scalar((float *)(m + 0x48), (float *)(d + 0x178), heading, frame_time_sq * 6.2831855f,
@@ -182,7 +192,7 @@ void armed_transport_update(char *m) {
         }
         break;
     }
-    case 5:
+    case ARMED_TRANSPORT_STATE_FOLLOW_SECOND_PATH:
         advance_accelerated_scalar((float *)(d + 0x17C), (float *)(d + 0x180), 0.0f, frame_time_sq * 12.566371f,
                       frame_time_sq * 12.566371f, frame_time * 6.2831855f);
         if (FUN_L16_002e2e88(m, D_L16_001B0930[*(int *)(d + 0xDC)])) {
@@ -193,7 +203,7 @@ void armed_transport_update(char *m) {
             m[0x20] = 6;
         }
         break;
-    case 6: {
+    case ARMED_TRANSPORT_STATE_TRACK_TARGET: {
         float *yaw = (float *)(m + 0x48);
         float bearing;
 
@@ -217,7 +227,7 @@ void armed_transport_update(char *m) {
         m[0x20] = 6;
         *(int *)(d + 0x164) = scale_game_frames(180);
         break;
-    case 8: {
+    case ARMED_TRANSPORT_STATE_DYING: {
         float dt = frame_time;
 
         *(float *)(d + 0x194) -= dt + dt;
@@ -442,16 +452,21 @@ extern short D_L16_00161E04 __attribute__((sda));
 extern short D_L16_00161E08 __attribute__((sda));
 void grindrail_barrier_update(struct Moby *m) __asm__("FUN_L16_002e5708");
 void grindrail_barrier_update(struct Moby *m) {
+    enum {
+        GRINDRAIL_BARRIER_STATE_INITIALIZE = 0,
+        GRINDRAIL_BARRIER_STATE_COLLISION_ENABLED = 1,
+        GRINDRAIL_BARRIER_STATE_COLLISION_DISABLED = 2
+    };
     char *d = (char *)m->pvars;
     float cycle;
     int i;
     float *p;
     switch (m->state) {
-    case 0:
+    case GRINDRAIL_BARRIER_STATE_INITIALIZE:
         m->state = 1;
         m->update_dist = 0xFF;
         break;
-    case 1:
+    case GRINDRAIL_BARRIER_STATE_COLLISION_ENABLED:
         cycle = *(float *)(d + 0xC) + *(float *)&D_L16_00161E04 * frame_time;
         *(float *)(d + 0xC) = cycle;
         if (cycle > 1.0f)
@@ -474,7 +489,7 @@ void grindrail_barrier_update(struct Moby *m) {
             FUN_L16_002e5d30_c(*(int *)(d + 0x20));
         }
         break;
-    case 2:
+    case GRINDRAIL_BARRIER_STATE_COLLISION_DISABLED:
         if (!FUN_L16_002e5cd0(*(int *)(d + 0x20))) {
             m->state = 1;
             m->collision = m->pclass->collision;

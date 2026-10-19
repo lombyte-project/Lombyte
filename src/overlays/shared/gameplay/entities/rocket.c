@@ -143,6 +143,10 @@ extern void kill_cc2e8(void *) __asm__("FUN_0020c828");
 
 void rocket_update(char *m) __asm__("FUN_L10_002cc2e8");
 void rocket_update(char *m) {
+    enum {
+        ROCKET_STATE_FLYING = 1,
+        ROCKET_STATE_BURST = 2
+    };
     Shot_cc2e8 *d = *(Shot_cc2e8 **)(m + 0x78);
     float pos0[4] __attribute__((aligned(16)));
     float c[4] __attribute__((aligned(16)));
@@ -158,7 +162,7 @@ void rocket_update(char *m) {
     char *tb;
 
     switch ((unsigned char)m[0x20]) {
-    case 1:
+    case ROCKET_STATE_FLYING:
         qcopy(pos0, m + 0x10);
         if (d->target == 0 || (unsigned char)d->target[0x20] == 0xFE ||
             (unsigned char)d->target[0x20] == 0xFD)
@@ -238,7 +242,7 @@ void rocket_update(char *m) {
         if (expired_cc2e8(&d->timer))
             m[0x20] = 2;
         break;
-    case 2:
+    case ROCKET_STATE_BURST:
         if (current_level_index != 10)
             burst_cc2e8(m, m + 0x10, -1, 0.25f, 13.0f);
         else

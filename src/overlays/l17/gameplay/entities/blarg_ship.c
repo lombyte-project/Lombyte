@@ -42,6 +42,16 @@ extern char D_00141D7C[];
 extern int func_001F9908_i(int *) __asm__("FUN_001f9740");
 
 void FUN_L17_002f26d0(struct Moby *moby) {
+    enum {
+        CAMERA_BOX_WATCHER_INITIALIZE = 0,
+        CAMERA_BOX_WATCHER_MONITOR = 1,
+        CAMERA_BOX_WATCHER_ALIGN_FIRST_TARGET = 2,
+        CAMERA_BOX_WATCHER_WAIT_AND_ALIGN_SECOND_TARGET = 3
+    };
+    enum {
+        CLIP_VOLUME_SEQUENCE_WAIT_FOR_ENTRY = 0,
+        CLIP_VOLUME_SEQUENCE_MONITOR_FOLLOWUP = 1
+    };
     int off;
     char *d = (char *)moby->pvars;
     int st;
@@ -61,7 +71,7 @@ void FUN_L17_002f26d0(struct Moby *moby) {
 
     st = *(int *)(d + 0x6C);
     switch (st) {
-    case 0: {
+    case CLIP_VOLUME_SEQUENCE_WAIT_FOR_ENTRY: {
         char *h = (char *)&hero.motion.pos;
         if (is_point_inside_clip_volume(h, *(int *)(d + 0x60))) {
             if (*(int *)(h + 0x200C) == 0x11) {
@@ -70,7 +80,7 @@ void FUN_L17_002f26d0(struct Moby *moby) {
         }
         break;
     }
-    case 1: {
+    case CLIP_VOLUME_SEQUENCE_MONITOR_FOLLOWUP: {
         struct Hero *h = &hero;
         int v = h->state.current;
         if (v == 0x76 || v == 0x32) {
@@ -113,7 +123,7 @@ void FUN_L17_002f26d0(struct Moby *moby) {
     }
 
     switch (moby->state) {
-    case 0:
+    case CAMERA_BOX_WATCHER_INITIALIZE:
         moby->update_dist = 0xFF;
         *(int *)(d + 0x38) = scale_game_frames(600);
         *(unsigned char *)(d + 0x4C) = 0;
@@ -125,7 +135,7 @@ void FUN_L17_002f26d0(struct Moby *moby) {
         }
         moby->state = 1;
         break;
-    case 1:
+    case CAMERA_BOX_WATCHER_MONITOR:
         tgt = -1;
         idx = -1;
         found = 0;
@@ -221,7 +231,7 @@ void FUN_L17_002f26d0(struct Moby *moby) {
             }
         }
         break;
-    case 2: {
+    case CAMERA_BOX_WATCHER_ALIGN_FIRST_TARGET: {
         char *cam;
         FUN_L00_002e8680();
         FUN_L00_002e8970((int)(D_L17_001600EC + (*(int *)(d + 0x44) << 7) + 0x30), 0.02617994f,
@@ -237,7 +247,7 @@ void FUN_L17_002f26d0(struct Moby *moby) {
         }
         break;
     }
-    case 3:
+    case CAMERA_BOX_WATCHER_WAIT_AND_ALIGN_SECOND_TARGET:
         FUN_L00_002e8680();
         if (func_001F9908_i((int *)(d + 0x5C))) {
             char *cam;
@@ -269,12 +279,16 @@ extern struct {
     int tbl[3];
 } D_L17_0016D160;
 void FUN_L17_002f2e78(struct Moby *m) {
+    enum {
+        MOBY_UPDATE_DISTANCE_INITIALIZE = 0,
+        MOBY_GUARDED_TABLE_CALL = 1
+    };
     switch (m->state) {
-    case 0:
+    case MOBY_UPDATE_DISTANCE_INITIALIZE:
         m->update_dist = 0xFF;
         m->state = 1;
         break;
-    case 1:
+    case MOBY_GUARDED_TABLE_CALL:
         if (D_L17_0015F5C4 == 2) {
             int v = D_L17_0016D160.v;
             int i;
@@ -548,7 +562,16 @@ void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__(
 extern float D_L17_001623E8 __attribute__((sda));
 void blarg_ship_update(struct Moby *moby) __asm__("FUN_L17_002f40d8");
 void blarg_ship_update(struct Moby *moby) {
-    float s0[4];
+    enum {
+        BLARG_SHIP_INITIALIZE = 0,
+        BLARG_SHIP_FOLLOW_PATH = 1,
+        BLARG_SHIP_BURST_AND_HIDE = 2,
+        BLARG_SHIP_WAIT_TO_REACTIVATE = 3,
+        BLARG_SHIP_INACTIVE = 4,
+        BLARG_SHIP_TRACK_HERO_AND_FIRE = 5,
+        BLARG_SHIP_BURST_AND_DEACTIVATE = 6
+    };
+    float scratch_vector[4];
     float movement_target_position[4];
     float hero_position_delta[4];
     float clamped_euler_angles[4];
@@ -568,7 +591,7 @@ void blarg_ship_update(struct Moby *moby) {
 
     FUN_L11_0031a1c0(moby);
     switch (moby->state) {
-    case 0:
+    case BLARG_SHIP_INITIALIZE:
         moby->draw_dist = 0xFF;
         moby->update_dist = 0xFF;
         if (*(int *)(d + 0x88) == 0) {
@@ -583,8 +606,8 @@ void blarg_ship_update(struct Moby *moby) {
             moby->flags |= 1;
         }
         break;
-    case 1:
-    case 2:
+    case BLARG_SHIP_FOLLOW_PATH:
+    case BLARG_SHIP_BURST_AND_HIDE:
         FUN_L11_00319670(moby);
         *(float *)(d + 0x68) += *(float *)(d + 0x6C);
         if (*(float *)(d + 0x68) > 1.0f) {
@@ -618,9 +641,9 @@ void blarg_ship_update(struct Moby *moby) {
             }
         }
         break;
-    case 3:
-        qcopy(s0, &moby->pos);
-        s0[3] = 3.0f;
+    case BLARG_SHIP_WAIT_TO_REACTIVATE:
+        qcopy(scratch_vector, &moby->pos);
+        scratch_vector[3] = 3.0f;
         if (fast_bsphere_check((char *)&moby->pos, 512.0f) == -1) {
             if (FUN_001f9b48(&moby->pos, &hero.motion.pos) > 32.0f) {
                 *(int *)(d + 0x84) += 1;
@@ -639,9 +662,9 @@ void blarg_ship_update(struct Moby *moby) {
             *(int *)(d + 0x84) = 0;
         }
         break;
-    case 4:
+    case BLARG_SHIP_INACTIVE:
         break;
-    case 5:
+    case BLARG_SHIP_TRACK_HERO_AND_FIRE:
         c0 = 0.0f;
         qcopy(clamped_euler_angles, D_L17_001676D0);
         clamped_euler_angles[0] = 0.0f;
@@ -655,14 +678,14 @@ void blarg_ship_update(struct Moby *moby) {
         qcopy(d + 0xB0, &hero.motion.pos);
         add_vector_xyz(&moby->pos, &moby->pos, hero_position_delta);
         f = fast_add_rotations(0.7853982f, (float)*(int *)(d + 0x88) * 1.5707964f);
-        normalize_vector_xyz(s0, m50, fast_sin(f) * 8.0f);
-        add_vector_xyz(movement_target_position, D_L17_001676C0, s0);
-        normalize_vector_xyz(s0, m60, fast_cos(f) * 8.0f);
-        add_vector_xyz(movement_target_position, movement_target_position, s0);
-        normalize_vector_xyz(s0, m40, 20.0f);
-        add_vector_xyz(movement_target_position, movement_target_position, s0);
-        subtract_vector_xyz(s0, movement_target_position, &moby->pos);
-        len = vector_length_xyz(s0);
+        normalize_vector_xyz(scratch_vector, m50, fast_sin(f) * 8.0f);
+        add_vector_xyz(movement_target_position, D_L17_001676C0, scratch_vector);
+        normalize_vector_xyz(scratch_vector, m60, fast_cos(f) * 8.0f);
+        add_vector_xyz(movement_target_position, movement_target_position, scratch_vector);
+        normalize_vector_xyz(scratch_vector, m40, 20.0f);
+        add_vector_xyz(movement_target_position, movement_target_position, scratch_vector);
+        subtract_vector_xyz(scratch_vector, movement_target_position, &moby->pos);
+        len = vector_length_xyz(scratch_vector);
         if (*(char *)&hero.ship_flags & 2) {
             advance_accelerated_scalar(&c0, (float *)(d + 0x6C), len, frame_time_sq + frame_time_sq,
                                        frame_time_sq * 20.0f, frame_time);
@@ -673,8 +696,8 @@ void blarg_ship_update(struct Moby *moby) {
             advance_accelerated_scalar(&c0, (float *)(d + 0x6C), len, frame_time_sq + frame_time_sq,
                                        frame_time_sq * 20.0f, frame_time * 5.0f);
         }
-        FUN_L00_0025f730(s0, *(float *)(d + 0x6C));
-        add_vector_xyz(&moby->pos.x, &moby->pos.x, s0);
+        FUN_L00_0025f730(scratch_vector, *(float *)(d + 0x6C));
+        add_vector_xyz(&moby->pos.x, &moby->pos.x, scratch_vector);
         if (moby->command) {
             if (moby->visible) {
                 *(int *)(d + 0x98) += 1;
@@ -724,10 +747,10 @@ void blarg_ship_update(struct Moby *moby) {
             }
         }
         break;
-    case 6:
-        subtract_vector_xyz(s0, &hero.motion.pos, d + 0xB0);
+    case BLARG_SHIP_BURST_AND_DEACTIVATE:
+        subtract_vector_xyz(scratch_vector, &hero.motion.pos, d + 0xB0);
         qcopy(d + 0xB0, &hero.motion.pos);
-        add_vector_xyz(&moby->pos, &moby->pos, s0);
+        add_vector_xyz(&moby->pos, &moby->pos, scratch_vector);
         cart_burst(moby, &moby->pos, -1, 2.0f, 13.0f);
         if (random_integer_below_c(2)) {
             FUN_L13_002e1c50((char *)&moby->pos, 0xE0);
@@ -820,19 +843,24 @@ extern void FUN_L01_00278e20(void *, int);
 void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
 void FUN_L17_002f5260(struct Moby *m) {
+    enum {
+        HIT_EFFECT_INITIALIZE = 0,
+        HIT_EFFECT_WAIT_FOR_HIT = 1,
+        HIT_EFFECT_EMIT_AND_REMOVE = 2
+    };
     int flag = 0;
     char *p = find_moby_hit(m, 0x10000, 0);
     switch (m->state) {
-    case 0:
+    case HIT_EFFECT_INITIALIZE:
         m->state = 1;
         break;
-    case 1:
+    case HIT_EFFECT_WAIT_FOR_HIT:
         if (p && *(float *)(p + 0x2C) > 0.0f)
             flag = 1;
         if (flag)
             m->state = 2;
         break;
-    case 2:
+    case HIT_EFFECT_EMIT_AND_REMOVE:
         FUN_0022da68(0, 0, (int)m);
         FUN_L00_00257470(m, 0, -1);
         FUN_L01_002787a0(m);
@@ -853,13 +881,18 @@ void mark_moby_for_removal_c(void *obj) __asm__("FUN_0020c828");
 
 extern float D_L17_0015F580_macro[] __asm__("D_L17_0015F580") __attribute__((section(".sdata")));
 void FUN_L17_002f5390(struct Moby *m) {
+    enum {
+        HIT_EFFECT_INITIALIZE = 0,
+        HIT_EFFECT_WAIT_FOR_HIT = 1,
+        HIT_EFFECT_EMIT_AND_REMOVE = 2
+    };
     int flag = 0;
     char *r = find_moby_hit(m, 0x10000, 0);
     switch (m->state) {
-    case 0:
+    case HIT_EFFECT_INITIALIZE:
         m->state = 1;
         break;
-    case 1:
+    case HIT_EFFECT_WAIT_FOR_HIT:
         if (r) {
             if (*(float *)(r + 0x2C) > 0.0f)
                 flag = 1;
@@ -867,7 +900,7 @@ void FUN_L17_002f5390(struct Moby *m) {
         if (flag)
             m->state = 2;
         break;
-    case 2:
+    case HIT_EFFECT_EMIT_AND_REMOVE:
         allocate_voice_for_target_entry(0, 0, (int)m);
         FUN_L00_00257470(m, 0, -1);
         FUN_L01_002787a0(m);

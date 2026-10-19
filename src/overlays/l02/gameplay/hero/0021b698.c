@@ -315,7 +315,11 @@ extern CollisionHit HH __asm__("D_L02_00174440") __attribute__((section(".data")
 #define HF(o) (*(f32 *)(D_L02_00174440 + (o)))
 
 void FUN_L02_002216a0(void) {
-    V collision_ray_end, collision_ray_start, v20, probe_ray_start, v40, probe_surface_angles, normalized_probe_hit_normal;
+    enum {
+        GRAVITY_MODE_NEGATIVE_Z = 0,
+        GRAVITY_MODE_OPPOSITE_GROUND_NORMAL = 1
+    };
+    V collision_ray_end, collision_ray_start, ground_geometry_scratch, probe_ray_start, unused_probe_point, probe_surface_angles, normalized_probe_hit_normal;
     f32 f;
     s32 r;
     s32 i;
@@ -405,8 +409,8 @@ void FUN_L02_002216a0(void) {
         sceVu0Normalize((u8 *)&hero.unk270, (u8 *)&HH.normal_x);
         hero.ground_slope.f = FUN_L00_00233d30((u8 *)&HH.normal_x);
         hero.downhill_yaw = FUN_001f9e90_c(HH.normal_x, HH.normal_y);
-        fast_vec_sub(&v20, (u8 *)&hero.ground_point, (u8 *)&hero.motion.pos);
-        if (0.0f < FUN_001f9ab0_c(&v20, (u8 *)&hero.unk270)) {
+        fast_vec_sub(&ground_geometry_scratch, (u8 *)&hero.ground_point, (u8 *)&hero.motion.pos);
+        if (0.0f < FUN_001f9ab0_c(&ground_geometry_scratch, (u8 *)&hero.unk270)) {
             hero.ground_distance = -hero.ground_distance;
         }
         if (hero.ground_distance < 0.02f) {
@@ -430,10 +434,10 @@ tail:
 d1:
     FUN_001f99f8_c((u8 *)&hero.gravity_dir);
     switch (hero.unk20B3) {
-    case 0:
+    case GRAVITY_MODE_NEGATIVE_Z:
         hero.gravity_dir.f[2] = -1.0f;
         break;
-    case 1:
+    case GRAVITY_MODE_OPPOSITE_GROUND_NORMAL:
         qcopy((u8 *)&hero.gravity_dir, (u8 *)&hero.unk270);
         FUN_001f9a68_c((u8 *)&hero.gravity_dir, (u8 *)&hero.gravity_dir, -1.0f);
         break;
@@ -457,12 +461,12 @@ d1:
     if (!(hero.ground_distance < 0.25f)) {
         return;
     }
-    FUN_L00_00216078((u8 *)&hero.unk270, &v20);
-    if (-0.78539819f < v20.f[1] && v20.f[1] < 0.78539819f) {
-        hero.ground_pitch.f = v20.f[1];
+    FUN_L00_00216078((u8 *)&hero.unk270, &ground_geometry_scratch);
+    if (-0.78539819f < ground_geometry_scratch.f[1] && ground_geometry_scratch.f[1] < 0.78539819f) {
+        hero.ground_pitch.f = ground_geometry_scratch.f[1];
     }
-    if (-0.78539819f < v20.f[0] && v20.f[0] < 0.78539819f) {
-        hero.unk2E8.f = v20.f[0];
+    if (-0.78539819f < ground_geometry_scratch.f[0] && ground_geometry_scratch.f[0] < 0.78539819f) {
+        hero.unk2E8.f = ground_geometry_scratch.f[0];
     }
     for (i = 0; i < 2; i++) {
         a = 1.5707964f;
@@ -470,7 +474,7 @@ d1:
             a = -a;
         }
         FUN_L00_002335c8(&probe_ray_start, 0.2f, a, 0.45f);
-        FUN_L00_002335c8(&v40, 0.2f, a, -0.45f);
+        FUN_L00_002335c8(&unused_probe_point, 0.2f, a, -0.45f);
         if (collision_line(&probe_ray_start, &collision_ray_end, 0x22, (s32)hero.moby, 0)) {
             f = HH.point.f[2] - hero.ground_z.f;
             hero.unk2C0.f[i] = f;
@@ -809,10 +813,10 @@ void FUN_L02_00225c20(void) {
     prevAnim = moby->f53;
     slideAngle = 0.6981317f;
     switch (hero.state.current) {
-    case 0x0:
-    case 0x1:
-    case 0x3:
-    case 0x4:
+    case HERO_STATE_IDLE:
+    case HERO_STATE_LOOK:
+    case HERO_STATE_STOP:
+    case HERO_STATE_CROUCH:
     case 0x17:
     case 0x1D:
     case 0x1E:
@@ -950,7 +954,7 @@ void FUN_L02_00225c20(void) {
             }
         }
     } break;
-    case 0x7F:
+    case HERO_STATE_SINK:
         if (((Moby *)hero.unk6A4) == 0) {
             Moby *m;
 
@@ -1710,7 +1714,7 @@ void FUN_L02_00225c20(void) {
             FUN_L00_002334d0(hero.motion.velocity.f, hero.motion.velocity.f, frame_time_sq * 54.0f);
         }
     } break;
-    case 0x2:
+    case HERO_STATE_RUN:
     case 0x73: {
         float k;
         float up;
@@ -1865,7 +1869,7 @@ void FUN_L02_00225c20(void) {
         air_accel(frame_time_sq * 25.0f);
         FUN_L00_002334d0(hero.motion.velocity.f, hero.motion.unk120.f, frame_time_sq * 18.0f);
         break;
-    case 0x6:
+    case HERO_STATE_FALL:
     case 0x2D:
         if (hero.state.current == 0x2D) {
             float t;
@@ -1997,14 +2001,14 @@ void FUN_L02_00225c20(void) {
         FUN_L00_00216de8_cf();
     } break;
     case 0x7:
-    case 0x9:
-    case 0xA:
-    case 0xB:
+    case HERO_STATE_RUN_JUMP:
+    case HERO_STATE_PACK_JUMP:
+    case HERO_STATE_HIGH_JUMP:
     case 0xC:
     case 0xD:
     case 0xE:
     case 0xF:
-    case 0x10:
+    case HERO_STATE_PACK_LONG_JUMP:
     case 0x11:
     case 0x12:
     case 0x1C:
@@ -2139,7 +2143,7 @@ void FUN_L02_00225c20(void) {
         FUN_L00_0020b5b8_cf();
         FUN_L00_00216de8_cf();
         break;
-    case 0x16: {
+    case HERO_STATE_HURT: {
         float len;
         float dec;
 

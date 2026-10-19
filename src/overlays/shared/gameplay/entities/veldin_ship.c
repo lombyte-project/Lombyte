@@ -298,7 +298,8 @@ extern f32 D_L00_001618CC __attribute__((sda));
 extern f32 D_L00_001618D0 __attribute__((sda));
 void crate_drop_bolts(u8 *a) {
     enum {
-        CRATE_DROP_AUTO_SELECT = 0
+        CRATE_DROP_AUTO_SELECT = 0,
+        CRATE_DROP_FALLBACK_ITEM = 1
     };
     T_2d0538 tmp;
     V_2d0538 trajectory_vector, adjusted_position, scratch_vector;
@@ -336,7 +337,7 @@ void crate_drop_bolts(u8 *a) {
     }
     if (h != 0x1F5) {
         switch (*(u8 *)(b + 0xCB)) {
-        case 1:
+        case CRATE_DROP_FALLBACK_ITEM:
             n = 10;
             break;
         case 6:
@@ -694,6 +695,10 @@ void break_crate(M2d1428 *moby, s32 hit, s32 source) {
     }
 }
 void FUN_L00_002d1428(M2d1428 *m) {
+    enum {
+        CRATE_STATE_BREAKABLE = 1,
+        CRATE_STATE_IMPACT_TRIGGERED = 5
+    };
     O2d1428 *o;
     M2d1428 *p, *n, *next;
     V2d1428 e, g, c2, a, b, c, d, h;
@@ -728,8 +733,8 @@ void FUN_L00_002d1428(M2d1428 *m) {
         if (FUN_001f99c0(a.x) < 0.55f && FUN_001f99c0(a.y) < 0.55f && a.z < 0.0f &&
             -(hero.capsule_top + hero.unk234) < a.z) {
             switch (m->state) {
-            case 1:
-            case 5:
+            case CRATE_STATE_BREAKABLE:
+            case CRATE_STATE_IMPACT_TRIGGERED:
                 break_crate(m, m->oclass == 0x1F9, 0);
                 FUN_L00_002d0538_c(m);
                 break;
@@ -1166,6 +1171,11 @@ extern void build_moby_bone_transform(void *, int, void *) __asm__("FUN_0020cca8
 
 void decoy_glove_update(unsigned char *moby) __asm__("FUN_L00_002d2670");
 void decoy_glove_update(unsigned char *moby) {
+    enum {
+        DECOY_GLOVE_INITIALIZE = 0,
+        DECOY_GLOVE_RELEASE_DECOY = 3,
+        DECOY_GLOVE_WAIT_AFTER_RELEASE = 4
+    };
     extern void mark_moby_for_removal();
     extern void transform_vector_alt();
     extern int allocate_voice_for_target_entry(int, int, void *);
@@ -1230,7 +1240,7 @@ L3D34:
     FUN_L00_002d2158_c((int)moby, (void *)d, (float *)&loc);
 
     switch (moby[0x20]) {
-    case 0:
+    case DECOY_GLOVE_INITIALIZE:
         *(int *)(d + 0x50) = 0;
         if (!(moby[0x70] & 2)) moby[0x20] = 1; else moby[0x20] = 2;
     case 1:
@@ -1238,7 +1248,7 @@ L3D34:
         break;
     case 2:
         break;
-    case 3:
+    case DECOY_GLOVE_RELEASE_DECOY:
         if (*(char **)(d + 0x50)) {
             char *stats = ((char *)&item_usage);
             if (*(unsigned short *)(stats + 0xC8) <= 0xFFFE) *(unsigned short *)(stats + 0xC8) = *(unsigned short *)(stats + 0xC8) + 1;
@@ -1253,7 +1263,7 @@ L3D34:
         moby[0x20] = 4;
         *(int *)(d + 0x54) = scale_game_frames_c2(0x14);
         break;
-    case 4: {
+    case DECOY_GLOVE_WAIT_AFTER_RELEASE: {
         char *h = ((char *)&hero);
         if (*(int *)(h + 0x2084) != 0x23 && *(unsigned char *)(h + 0x20A8) == 0) moby[0x20] = 2;
         break;
@@ -1509,6 +1519,10 @@ extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern struct PadState controller_state_lui __asm__("D_0013C940") __attribute__((section(".data")));
 void metal_detector_update(struct Moby *moby) __asm__("FUN_L00_002d2ee8");
 void metal_detector_update(struct Moby *moby) {
+    enum {
+        METAL_DETECTOR_INITIALIZE = 0,
+        METAL_DETECTOR_ACTIVE = 1
+    };
     Vars2d2ee8 *vars;
     struct Moby *t;
     TargetVars2d2ee8 *tv;
@@ -1536,7 +1550,7 @@ void metal_detector_update(struct Moby *moby) {
     }
     moby_point_position(moby, 0, &vars->pos);
     switch (moby->state) {
-    case 0:
+    case METAL_DETECTOR_INITIALIZE:
         hero.unk2044 = 100000.0f;
         hero.unk2040 = 0;
         vars->voice0 = -1;
@@ -1553,7 +1567,7 @@ void metal_detector_update(struct Moby *moby) {
     case 3:
     case 4:
         break;
-    case 1:
+    case METAL_DETECTOR_ACTIVE:
     case 2:
         one = 1.0f;
         *(u128 *)v = 0;
@@ -2229,6 +2243,15 @@ extern float D_L00_00161980 __attribute__((sda));
 extern float D_L00_00161984 __attribute__((sda));
 extern short D_L00_00161960 __attribute__((sda));
 void horny_toad_update(Moby *moby) {
+    enum {
+        HORNY_TOAD_INITIALIZE = 0,
+        HORNY_TOAD_FACE_FOLLOW_MOBY = 1,
+        HORNY_TOAD_MOVE_TO_PATH_POINT = 2,
+        HORNY_TOAD_WAIT_TO_FOLLOW_PATH = 3,
+        HORNY_TOAD_FOLLOW_PATH = 4,
+        HORNY_TOAD_RETURN_HOME = 8,
+        HORNY_TOAD_DYING = 12
+    };
     ToadVars *data;
     Moby *target;
     ToadVec v;
@@ -2242,7 +2265,7 @@ void horny_toad_update(Moby *moby) {
     }
     FUN_L00_00263ac8_2d4610(2.1f, (int)moby, 1, data->unk200);
     switch (moby->state) {
-    case 0: {
+    case HORNY_TOAD_INITIALIZE: {
         float k;
         moby->scale = ((ToadClass *)moby->pclass)->unk24 * D_L00_0016196C;
         qcopy(data->home, (*(ToadVec *)&moby->pos));
@@ -2289,7 +2312,7 @@ void horny_toad_update(Moby *moby) {
             data->unk138 = 0;
         }
         break;
-    case 1: {
+    case HORNY_TOAD_FACE_FOLLOW_MOBY: {
         Moby *t = (Moby *)(moby_table + (data->follow_moby << 8));
         if (t != 0 && t->state != 0xFE && t->state != 0xFD) {
             approach_angle(&moby->rot.z, angle_atan2((*(ToadVec *)&t->pos)[0] - (*(ToadVec *)&moby->pos)[0], (*(ToadVec *)&t->pos)[1] - (*(ToadVec *)&moby->pos)[1]), &data->turn_speed, frame_time_sq * 12.566371f, frame_time_sq * 12.566371f, frame_time * 12.566371f);
@@ -2299,19 +2322,19 @@ void horny_toad_update(Moby *moby) {
         }
         break;
     }
-    case 2:
+    case HORNY_TOAD_MOVE_TO_PATH_POINT:
         if (FUN_L00_002d54c8_2d4610((unsigned char *)moby, toad_paths[data->path]->pts[data->path_point], 0.5f) < 1.0f) {
             moby->state = 1;
             if (moby->prev_seq != 2) FUN_00212f90_2d4610(moby, 2, 0, scale_game_frames(10));
         }
         break;
-    case 3:
+    case HORNY_TOAD_WAIT_TO_FOLLOW_PATH:
         if (data->unk1C4 != 2) {
             moby->state = 4;
             if (moby->prev_seq != 4) FUN_00212f90_2d4610(moby, 4, 0, scale_game_frames(10));
         }
         break;
-    case 4: {
+    case HORNY_TOAD_FOLLOW_PATH: {
         ToadPath *path = toad_paths[data->path];
         if (FUN_L00_002d54c8_2d4610((unsigned char *)moby, path->pts[data->path_point], 0.5f) < 1.0f) {
             if (data->path_point < path->count - 1) {
@@ -2363,7 +2386,7 @@ void horny_toad_update(Moby *moby) {
             }
         }
         break;
-    case 8:
+    case HORNY_TOAD_RETURN_HOME:
         if (FUN_L00_002d54c8_2d4610((unsigned char *)moby, data->home, 0.5f) < 1.5f) {
             moby->state = 5;
             if (moby->prev_seq != 1) FUN_00212f90_2d4610(moby, 1, 0, scale_game_frames(10));
@@ -2403,7 +2426,7 @@ void horny_toad_update(Moby *moby) {
             if (moby->prev_seq != 1) FUN_00212f90_2d4610(moby, 1, 0, scale_game_frames(10));
         }
         break;
-    case 12:
+    case HORNY_TOAD_DYING:
         if (FUN_L00_0025c698_2d4610(moby, data->unk70) & 0x140) {
             FUN_0022da68_2d4610(7, 0, (int)moby);
             FUN_L00_0025f3e8_2d4610(moby, (*(ToadVec *)&moby->pos), -1, 0.75f, 10.0f);
@@ -2899,6 +2922,18 @@ static inline void measure_path(Path *path) {
 void infobot_update(struct Moby *moby) __asm__("FUN_L00_002d5de8");
 void infobot_update(struct Moby *moby)
 {
+    enum {
+        INFOBOT_INITIALIZE = 0,
+        INFOBOT_WAIT_FOR_PLAYER = 2,
+        INFOBOT_WAIT_TO_FOLLOW_SLOT_PATH = 3,
+        INFOBOT_FOLLOW_SLOT_PATH = 4,
+        INFOBOT_ORBIT_CARRIER = 5,
+        INFOBOT_FOLLOW_PATH = 6,
+        INFOBOT_ORBIT_PATH_ENDPOINT = 7,
+        INFOBOT_START_SCENE_SEQUENCE = 8,
+        INFOBOT_WAIT_TO_START_FINAL_SCENE = 10,
+        INFOBOT_SAVE_AND_REMOVE = 11
+    };
     Vec offset;
     Vec step;
     Vec point;
@@ -2923,7 +2958,7 @@ void infobot_update(struct Moby *moby)
     offset.q = 0;
     infobot = (Infobot *)moby->pvars;
     switch (moby->state) {
-    case 0:
+    case INFOBOT_INITIALIZE:
         moby->update_dist = 0xFF;
         infobot->yaw = moby->rot.z;
         infobot->home = MPOS(moby)->q;
@@ -2958,7 +2993,7 @@ void infobot_update(struct Moby *moby)
         break;
     case 1:
         break;
-    case 2:
+    case INFOBOT_WAIT_FOR_PLAYER:
         range = 1.0f;
         if (infobot->waiting != 0 && (moby->flags & 1)) {
             range = 3.0f;
@@ -2978,7 +3013,7 @@ void infobot_update(struct Moby *moby)
             moby->state = 8;
         }
         break;
-    case 3:
+    case INFOBOT_WAIT_TO_FOLLOW_SLOT_PATH:
         FUN_L00_002d6cd0_2d5de8(moby);
         if (level_available[infobot->planet] != 0) {
             FUN_0020c828(moby);
@@ -2997,14 +3032,14 @@ void infobot_update(struct Moby *moby)
             FUN_L00_00266858(moby, 1);
         }
         break;
-    case 4:
+    case INFOBOT_FOLLOW_SLOT_PATH:
         FUN_L00_002d5988_2d5de8(moby, D_L00_001B04B0[infobot->slots[infobot->seg]], 3);
         FUN_L00_002d6cd0_2d5de8(moby);
         if (moby->state != 4) {
             infobot->seg++;
         }
         break;
-    case 5:
+    case INFOBOT_ORBIT_CARRIER:
         FUN_L00_002d6cd0_2d5de8(moby);
         if (level_available[infobot->planet] != 0) {
             FUN_0020c828(moby);
@@ -3034,7 +3069,7 @@ void infobot_update(struct Moby *moby)
                                 D_L00_001B04B0[infobot->path]->pts[1].v.y - D_L00_001B04B0[infobot->path]->pts[0].v.y);
         measure_path(D_L00_001B04B0[infobot->path]);
         break;
-    case 6:
+    case INFOBOT_FOLLOW_PATH:
         path = D_L00_001B04B0[infobot->path];
         pos = (Vec *)&moby->pos;
         FUN_L00_002d6cd0_2d5de8(moby);
@@ -3086,7 +3121,7 @@ void infobot_update(struct Moby *moby)
         moby->rot.y = spring_turn_2d5de8(moby->rot.y, tilt_y, D_0015ED70 * 0.5235988f, D_0015ED70 * 1.0471976f, D_0015ED6C * 0.7853982f, &infobot->spin[1]);
         moby->rot.x = spring_turn_2d5de8(moby->rot.x, tilt_x, D_0015ED70 * 1.0471976f, D_0015ED70 * 2.0943952f, D_0015ED6C * 1.5707964f, &infobot->spin[0]);
         break;
-    case 7: {
+    case INFOBOT_ORBIT_PATH_ENDPOINT: {
         Path *p = D_L00_001B04B0[infobot->path];
         FUN_L00_002d6cd0_2d5de8(moby);
         infobot->sway = infobot->sway + D_0015ED6C;
@@ -3108,7 +3143,7 @@ void infobot_update(struct Moby *moby)
         moby->rot.x = spring_turn_2d5de8(moby->rot.x, 0.0f, D_0015ED70 * 1.0471976f, D_0015ED70 * 2.0943952f, D_0015ED6C * 1.5707964f, &infobot->spin[0]);
         break;
     }
-    case 8:
+    case INFOBOT_START_SCENE_SEQUENCE:
         moby->flags |= 0x41;
         FUN_L00_002607d0(infobot->planet);
         jet_clear_persistent(moby->mission);
@@ -3129,7 +3164,7 @@ void infobot_update(struct Moby *moby)
             FUN_L00_00299460(infobot->msg1);
         }
         break;
-    case 10:
+    case INFOBOT_WAIT_TO_START_FINAL_SCENE:
         if (D_L00_0015F5C4 == 2) {
             break;
         }
@@ -3138,7 +3173,7 @@ void infobot_update(struct Moby *moby)
         }
         moby->state = 11;
         break;
-    case 11:
+    case INFOBOT_SAVE_AND_REMOVE:
         if (D_L00_0015F5C4 == 2) {
             return;
         }

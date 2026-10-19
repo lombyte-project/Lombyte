@@ -553,6 +553,22 @@ extern P_B7B0 *D_L04_001B0930_B7B0[] __asm__("D_L04_001B0630");
 
 void big_axebot_update(M_B7B0 *moby) __asm__("FUN_L04_002ba520");
 void big_axebot_update(M_B7B0 *moby) {
+    enum {
+        BIG_AXEBOT_STATE_INITIALIZE = 0,
+        BIG_AXEBOT_STATE_IDLE = 1,
+        BIG_AXEBOT_STATE_ALERT = 2,
+        BIG_AXEBOT_STATE_FOLLOW_PATH = 4,
+        BIG_AXEBOT_STATE_CHASE_TARGET = 5,
+        BIG_AXEBOT_STATE_RETURN_HOME = 6,
+        BIG_AXEBOT_STATE_MELEE_ATTACK = 7,
+        BIG_AXEBOT_STATE_HIT_RECOVERY = 8,
+        BIG_AXEBOT_STATE_TURN = 9,
+        BIG_AXEBOT_STATE_DYING = 10
+    };
+    enum {
+        BIG_AXEBOT_HIT_REACTION_FATAL = 1,
+        BIG_AXEBOT_HIT_REACTION_KNOCKBACK = 7
+    };
     D_B7B0 *data = moby->data;
     T_B7B0 tg;
     V4_B7B0 prev;
@@ -667,7 +683,7 @@ void big_axebot_update(M_B7B0 *moby) {
                     data->f404 = scale_game_frames(0x46);
                     data->f406 = scale_game_frames(0xF0);
                     break;
-                case 7:
+                case BIG_AXEBOT_HIT_REACTION_KNOCKBACK:
                     allocate_voice_for_target_entry(0xB, 0, (char *)moby);
                     if (data->f448 <= 0) {
                         data->f408 = -0.5235988f;
@@ -699,7 +715,7 @@ void big_axebot_update(M_B7B0 *moby) {
                     data->f404 = scale_game_frames(0x46);
                     data->f406 = scale_game_frames(0xF0);
                     break;
-                case 1:
+                case BIG_AXEBOT_HIT_REACTION_FATAL:
                     data->fE8 = 1.0f;
                     data->fE0 = 0x400;
                     trooper_set_knockback(data->fC0, 5.7f, 4.0f);
@@ -737,7 +753,7 @@ void big_axebot_update(M_B7B0 *moby) {
     }
     fast_dec_timer_s16(&data->f402);
     switch (moby->state) {
-    case 0:
+    case BIG_AXEBOT_STATE_INITIALIZE:
         data->hp = 3.0f;
         data->f24 = 3;
         data->f28 = 2;
@@ -763,7 +779,7 @@ void big_axebot_update(M_B7B0 *moby) {
             moby->state = 1;
         }
         break;
-    case 1: {
+    case BIG_AXEBOT_STATE_IDLE: {
         if (moby->f53 == 6 && data->f402 == scale_game_frames(0x25)) {
             allocate_voice_for_target_entry(2, 0, (char *)moby);
         }
@@ -807,7 +823,7 @@ void big_axebot_update(M_B7B0 *moby) {
         }
         break;
     }
-    case 2:
+    case BIG_AXEBOT_STATE_ALERT:
         if (moby->f52 == 2 && (moby->f70 & 2)) {
             FUN_L04_002ba3e0(
                 (char *)moby,
@@ -835,7 +851,7 @@ void big_axebot_update(M_B7B0 *moby) {
             }
         }
         break;
-    case 4: {
+    case BIG_AXEBOT_STATE_FOLLOW_PATH: {
         P_B7B0 *path = D_L04_001B0930_B7B0[data->f434];
         float a;
 
@@ -869,7 +885,7 @@ void big_axebot_update(M_B7B0 *moby) {
         FUN_L04_00295de8_cf(moby, moby->pos, v, 1, 0.25f, 1.5f, 0.75f, 0.87266463f);
         break;
     }
-    case 5:
+    case BIG_AXEBOT_STATE_CHASE_TARGET:
         if (moby->fBC & 8) {
             moby->fBC &= ~8;
             FUN_L04_00295778_cf(moby, data->f1A0);
@@ -897,7 +913,7 @@ void big_axebot_update(M_B7B0 *moby) {
             }
         }
         break;
-    case 6:
+    case BIG_AXEBOT_STATE_RETURN_HOME:
         if (dist < 4.5f) {
             FUN_L04_002ba3e0((char *)moby, (void *)4, (void *)4, (void *)scale_game_frames(0xC));
             moby->state = 7;
@@ -935,7 +951,7 @@ void big_axebot_update(M_B7B0 *moby) {
             }
         }
         break;
-    case 7:
+    case BIG_AXEBOT_STATE_MELEE_ATTACK:
         if (moby->f52 == moby->f53 && compute_interpolated_record_value(moby) >= 17.0f &&
             compute_interpolated_record_value(moby) < 20.0f &&
             FUN_L00_00259bc8_cf(moby->pos[2] - tg.pos[2]) < 2.0f &&
@@ -970,7 +986,7 @@ void big_axebot_update(M_B7B0 *moby) {
             moby->state = 1;
         }
         break;
-    case 8:
+    case BIG_AXEBOT_STATE_HIT_RECOVERY:
         if (!(moby->f53 == 5 && (moby->f52 != moby->f53 || hd <= 13.0f))) {
             if (moby->fBC & 4) {
                 moby->fBC &= ~4;
@@ -1001,7 +1017,7 @@ void big_axebot_update(M_B7B0 *moby) {
             }
         }
         break;
-    case 9:
+    case BIG_AXEBOT_STATE_TURN:
         if (moby->f52 == 8 && (moby->f70 & 2)) {
             moby->state = 5;
             moby->fBC = (moby->fBC | 8) & ~0x10;
@@ -1016,7 +1032,7 @@ void big_axebot_update(M_B7B0 *moby) {
                                        frame_time_sq * 6.2831855f, frame_time * 4.1887903f);
         }
         break;
-    case 10:
+    case BIG_AXEBOT_STATE_DYING:
         if ((FUN_L04_002ba470_cf(moby, data->fC0) & 0x40) || moby->pos[2] < 1.0f) {
             mark_moby_for_removal_cf((char *)moby);
             if (data->f424 != 0) {
@@ -1133,6 +1149,10 @@ extern void engine_voice_set_pitch(s32 voice, s32 pitch) __asm__("FUN_L00_0028df
 void FUN_L04_002c1b80(struct Moby *m) {
     enum {
         CIRCULAR_SAW_ANIM_IDLE = 0,
+        CIRCULAR_SAW_ANIM_MOVE_FORWARD = 1,
+        CIRCULAR_SAW_ANIM_MOVE_BACKWARD = 2,
+        CIRCULAR_SAW_ANIM_JUMP = 5,
+        CIRCULAR_SAW_ANIM_ALERT = 6,
         CIRCULAR_SAW_ANIM_ATTACK = 7
     };
     EngineSoundVars *v = (EngineSoundVars *)m->pvars;
@@ -1150,11 +1170,11 @@ void FUN_L04_002c1b80(struct Moby *m) {
             pitch = 0.0f;
             volume = engine_int_to_float(0x400) * 0.6f;
             break;
-        case 1:
+        case CIRCULAR_SAW_ANIM_MOVE_FORWARD:
             pitch = 3.0f;
             volume = engine_int_to_float(0x400);
             break;
-        case 2:
+        case CIRCULAR_SAW_ANIM_MOVE_BACKWARD:
             pitch = -2.0f;
             volume = engine_int_to_float(0x400);
             break;
@@ -1163,8 +1183,8 @@ void FUN_L04_002c1b80(struct Moby *m) {
             pitch = 4.0f;
             volume = engine_int_to_float(0x400);
             break;
-        case 5:
-        case 6:
+        case CIRCULAR_SAW_ANIM_JUMP:
+        case CIRCULAR_SAW_ANIM_ALERT:
         case CIRCULAR_SAW_ANIM_ATTACK:
             pitch = 0.0f;
             volume = engine_int_to_float(0x400) * 0.8f;
@@ -1530,6 +1550,25 @@ extern P_35F0 *D_L04_001B0930_2C35F0[] __asm__("D_L04_001B0630");
 
 void circular_saw_enemy_update(M_35F0 *moby) __asm__("FUN_L04_002c2270");
 void circular_saw_enemy_update(M_35F0 *moby) {
+    enum {
+        CIRCULAR_SAW_STATE_INITIALIZE = 0,
+        CIRCULAR_SAW_STATE_IDLE = 1,
+        CIRCULAR_SAW_STATE_JUMP = 2,
+        CIRCULAR_SAW_STATE_CHASE_TARGET = 3,
+        CIRCULAR_SAW_STATE_FOLLOW_PATH = 4,
+        CIRCULAR_SAW_STATE_POINT_ATTACK = 5,
+        CIRCULAR_SAW_STATE_HIT_RECOVERY = 6,
+        CIRCULAR_SAW_STATE_MELEE_ATTACK = 7,
+        CIRCULAR_SAW_STATE_DYING = 8
+    };
+    enum {
+        CIRCULAR_SAW_HIT_REACTION_FATAL = 1
+    };
+    enum {
+        CIRCULAR_SAW_POINT_ATTACK_APPROACH_AND_ALIGN = 0,
+        CIRCULAR_SAW_POINT_ATTACK_ATTACK = 1,
+        CIRCULAR_SAW_POINT_ATTACK_TURN_TO_PATH = 2
+    };
     D_35F0 *data = moby->data;
     T_35F0 tg;
     V4_35F0 prev;
@@ -1608,7 +1647,7 @@ void circular_saw_enemy_update(M_35F0 *moby) {
             switch (r) {
             case 0:
                 break;
-            case 1:
+            case CIRCULAR_SAW_HIT_REACTION_FATAL:
             case 2:
                 FUN_L04_002c1d70((char *)moby);
                 mark_moby_for_removal(moby);
@@ -1685,7 +1724,7 @@ void circular_saw_enemy_update(M_35F0 *moby) {
     }
     fast_dec_timer_s16(&data->f146);
     switch (moby->state) {
-    case 0: {
+    case CIRCULAR_SAW_STATE_INITIALIZE: {
         float k;
         data->hp = 1.0f;
         data->f24 = 1;
@@ -1719,7 +1758,7 @@ void circular_saw_enemy_update(M_35F0 *moby) {
         }
         break;
     }
-    case 1: {
+    case CIRCULAR_SAW_STATE_IDLE: {
         V4_35F0 save;
         {
             qcopy(save, moby->pos);
@@ -1760,7 +1799,7 @@ void circular_saw_enemy_update(M_35F0 *moby) {
         }
         break;
     }
-    case 2:
+    case CIRCULAR_SAW_STATE_JUMP:
         if (moby->f53 != 5) {
             blend_moby_animation(moby, (void *)5, 0, (void *)scale_game_frames(5));
             data->f78 = -(frame_time * 7.668f);
@@ -1769,7 +1808,7 @@ void circular_saw_enemy_update(M_35F0 *moby) {
             moby->state = 1;
         }
         break;
-    case 3:
+    case CIRCULAR_SAW_STATE_CHASE_TARGET:
         if ((flag ? dist < data->f140 * 2.0f : dist < data->f140) &&
             (flag || data->f138 == -1 ||
              point_in_path_xy(&tg, D_L04_001B0930_2C35F0[data->f138]->pts,
@@ -1790,7 +1829,7 @@ void circular_saw_enemy_update(M_35F0 *moby) {
         func_L00_002592B0_b((char *)moby, rot, &data->f130, frame_time_sq * 1.0471976f,
                             frame_time_sq * 3.1415927f, frame_time * 3.1415927f);
         break;
-    case 4: {
+    case CIRCULAR_SAW_STATE_FOLLOW_PATH: {
         P_35F0 *path = D_L04_001B0930_2C35F0[data->f150];
         int i;
         float *vel;
@@ -1848,7 +1887,7 @@ void circular_saw_enemy_update(M_35F0 *moby) {
         }
         break;
     }
-    case 5: {
+    case CIRCULAR_SAW_STATE_POINT_ATTACK: {
         P_35F0 *path = D_L04_001B0930_2C35F0[data->f150];
 
         if (flag ? dist < data->f140 * 2.0f : dist < data->f140) {
@@ -1877,7 +1916,7 @@ void circular_saw_enemy_update(M_35F0 *moby) {
             }
         }
         switch (data->f15A) {
-        case 0: {
+        case CIRCULAR_SAW_POINT_ATTACK_APPROACH_AND_ALIGN: {
             E_35F0 *e = D_L04_001600EC;
             int n = data->f158;
             qcopy(dest, e[n].f30);
@@ -1894,7 +1933,7 @@ void circular_saw_enemy_update(M_35F0 *moby) {
             }
             break;
         }
-        case 1:
+        case CIRCULAR_SAW_POINT_ATTACK_ATTACK:
             qcopy(dest, D_L04_001600EC[data->f158].f30);
             if (moby->f53 != 7) {
                 blend_moby_animation(moby, (void *)7, 0, (void *)scale_game_frames(10));
@@ -1904,7 +1943,7 @@ void circular_saw_enemy_update(M_35F0 *moby) {
                 data->f15A = 2;
             }
             break;
-        case 2: {
+        case CIRCULAR_SAW_POINT_ATTACK_TURN_TO_PATH: {
             qcopy(dest, D_L04_001600EC[data->f158].f30);
             ta = fast_arc_tan(path->pts[data->f154][0] - moby->pos[0],
                               path->pts[data->f154][1] - moby->pos[1]);
@@ -1922,7 +1961,7 @@ void circular_saw_enemy_update(M_35F0 *moby) {
         }
         break;
     }
-    case 7:
+    case CIRCULAR_SAW_STATE_MELEE_ATTACK:
         rot = FUN_L04_002c1fb8_u(moby, dest, flag ? data->f140 * 2.0f : data->f140);
         if (data->f146 == 0 && (hd > 44.0f || (moby->f70 & 2))) {
             blend_moby_animation(moby, 0, 0, (void *)scale_game_frames(5));
@@ -1933,7 +1972,7 @@ void circular_saw_enemy_update(M_35F0 *moby) {
         func_L00_002592B0_b((char *)moby, rot, &data->f130, frame_time_sq * 1.0471976f,
                             frame_time_sq * 3.1415927f, frame_time * 3.1415927f);
         break;
-    case 6:
+    case CIRCULAR_SAW_STATE_HIT_RECOVERY:
         if ((moby->f52 == 8 && compute_interpolated_record_value(moby) > 30.0f) ||
             (moby->f70 & 2)) {
             blend_moby_animation(moby, 0, 0, (void *)scale_game_frames(10));
@@ -1941,7 +1980,7 @@ void circular_saw_enemy_update(M_35F0 *moby) {
             data->f146 = 0;
         }
         break;
-    case 8:
+    case CIRCULAR_SAW_STATE_DYING:
         if (moby->f70 & 2) {
             FUN_L04_002c1d70((char *)moby);
             mark_moby_for_removal(moby);
@@ -2278,6 +2317,19 @@ extern int func_L00_002594C8_o(void *, void *, void *, float, float, float, floa
 
 void blarg_trooper_update(struct Moby *moby) __asm__("FUN_L04_002c4850");
 void blarg_trooper_update(struct Moby *moby) {
+    enum {
+        BLARG_TROOPER_STATE_INITIALIZE = 0,
+        BLARG_TROOPER_STATE_IDLE = 1,
+        BLARG_TROOPER_STATE_JUMP = 4,
+        BLARG_TROOPER_STATE_AIM = 5,
+        BLARG_TROOPER_STATE_FIRE = 6,
+        BLARG_TROOPER_STATE_MELEE_ATTACK = 7,
+        BLARG_TROOPER_STATE_HIT_RECOVERY = 8,
+        BLARG_TROOPER_STATE_DYING = 11
+    };
+    enum {
+        BLARG_TROOPER_HIT_REACTION_FATAL = 1
+    };
     struct {
         float tgt[20];
         float v50[4];
@@ -2401,7 +2453,7 @@ void blarg_trooper_update(struct Moby *moby) {
         switch (r) {
         case 0:
             break;
-        case 1:
+        case BLARG_TROOPER_HIT_REACTION_FATAL:
         case 2:
             moby->flags &= 0xEFFF;
             *(unsigned char *)(data + 0x67) = 0xFA;
@@ -2467,7 +2519,7 @@ void blarg_trooper_update(struct Moby *moby) {
     FUN_L00_001fefc8(data + 0xFE);
     tick_countdown_32((int *)(data + 0x108));
     switch (moby->state) {
-    case 0:
+    case BLARG_TROOPER_STATE_INITIALIZE:
         moby->flags |= 0x1000;
         *(float *)(data + 0x20) = 2.0f;
         *(short *)(data + 0x24) = 2;
@@ -2496,7 +2548,7 @@ void blarg_trooper_update(struct Moby *moby) {
             moby->state = 1;
         }
         break;
-    case 1:
+    case BLARG_TROOPER_STATE_IDLE:
         if (moby->anim_flags & 2) {
             blend_moby_animation_p(moby, (void *)((rand() ^ 1) & 1), 0,
                                    (void *)scale_game_frames(0xA));
@@ -2646,7 +2698,7 @@ void blarg_trooper_update(struct Moby *moby) {
             }
         }
         break;
-    case 4:
+    case BLARG_TROOPER_STATE_JUMP:
         if (moby->prev_seq != 2) {
             blend_moby_animation_p(moby, (void *)2, 0, (void *)scale_game_frames(7));
             *(float *)(data + 0xD0) = -(frame_time * 7.668f);
@@ -2655,7 +2707,7 @@ void blarg_trooper_update(struct Moby *moby) {
             moby->state = 1;
         }
         break;
-    case 5: {
+    case BLARG_TROOPER_STATE_AIM: {
         float a =
             fast_arc_tan(st.v50[0] - moby->pos.x, st.v50[1] - moby->pos.y);
         FUN_L00_00258278(moby, (float *)(data + 0xEC), a, frame_scale_sq * 0.03f, frame_scale_sq * 0.3f,
@@ -2705,7 +2757,7 @@ void blarg_trooper_update(struct Moby *moby) {
             *(short *)(data + 0xF2) = scale_game_frames(0x1E);
         }
         break;
-    case 6: {
+    case BLARG_TROOPER_STATE_FIRE: {
         char *o;
         {
             float a = fast_arc_tan(st.tgt[8] - moby->pos.x,
@@ -2742,7 +2794,7 @@ void blarg_trooper_update(struct Moby *moby) {
         }
         break;
     }
-    case 7: {
+    case BLARG_TROOPER_STATE_MELEE_ATTACK: {
         float a =
             fast_arc_tan(st.v50[0] - moby->pos.x, st.v50[1] - moby->pos.y);
         FUN_L00_00258278(moby, (float *)(data + 0xEC), a, frame_scale_sq * 0.04f, frame_scale_sq * 0.3f,
@@ -2778,7 +2830,7 @@ void blarg_trooper_update(struct Moby *moby) {
             blend_moby_animation_p(moby, (void *)4, 0, (void *)scale_game_frames(7));
         }
         break;
-    case 8:
+    case BLARG_TROOPER_STATE_HIT_RECOVERY:
     case 9:
     case 10:
         if (*(float *)(data + 0xF4) > 0.0f) {
@@ -2800,7 +2852,7 @@ void blarg_trooper_update(struct Moby *moby) {
             *(int *)(data + 0x108) = scale_game_frames(0x78);
         }
         break;
-    case 11:
+    case BLARG_TROOPER_STATE_DYING:
         if (mine_fall(moby, data + 0x70) & 0x60) {
             FUN_L04_002c4808_c(moby);
             return;
@@ -2906,6 +2958,11 @@ extern s32 play_moby_voice(s32, s32, struct Moby *) __asm__("FUN_0022da68");
 /* Follows a linked switch moby (class 0x118): mirrors its position value, loops a sound while it moves, plays a click at either end and swaps class 0x41C back to 0x1B0 when it reaches 1.0. */
 void eudora_bridge_update(struct Moby *m) __asm__("FUN_L04_002c6858");
 void eudora_bridge_update(struct Moby *m) {
+    enum {
+        EUDORA_BRIDGE_STATE_INITIALIZE = 0,
+        EUDORA_BRIDGE_STATE_FOLLOW_LINKED_SWITCH = 1,
+        EUDORA_BRIDGE_STATE_RELEASE_MOVEMENT_VOICE = 2
+    };
     SwitchFollowerVars *v = (SwitchFollowerVars *)m->pvars;
     f32 last = m->anim_time;
     struct Moby *other;
@@ -2917,7 +2974,7 @@ void eudora_bridge_update(struct Moby *m) {
         return;
     }
     switch (m->state) {
-    case 0:
+    case EUDORA_BRIDGE_STATE_INITIALIZE:
         blend_anim(m, 1, 0, scale_game_frames(300));
         m->state = 1;
         m->anim_speed = 0;
@@ -2934,7 +2991,7 @@ void eudora_bridge_update(struct Moby *m) {
             refresh_moby_spatial_bounds_from_basis(m);
         }
         break;
-    case 1:
+    case EUDORA_BRIDGE_STATE_FOLLOW_LINKED_SWITCH:
         if (v->link == -1)
             break;
         other = (struct Moby *)(moby_array + (v->link << 8));
@@ -2982,7 +3039,7 @@ void eudora_bridge_update(struct Moby *m) {
             }
         }
         break;
-    case 2:
+    case EUDORA_BRIDGE_STATE_RELEASE_MOVEMENT_VOICE:
         if (voice_is_playing(m, v->voice)) {
             s32 h = v->voice;
             if (h != -1) {
@@ -3029,6 +3086,11 @@ extern u8 voice_slots[] __asm__("D_0013E550");
 /* Door update: follows its lever's travel, pushes the lever back while opening, and runs the motor sounds. */
 void platform_booster_update(struct Moby *m) __asm__("FUN_L04_002c6bb8");
 void platform_booster_update(struct Moby *m) {
+    enum {
+        PLATFORM_BOOSTER_STATE_INITIALIZE = 0,
+        PLATFORM_BOOSTER_STATE_FOLLOW_LEVER = 1,
+        PLATFORM_BOOSTER_STATE_ADVANCE_ANIMATION = 2
+    };
     DoorVars *v = (DoorVars *)m->pvars;
     f32 prev;
     struct Moby *lever;
@@ -3041,13 +3103,13 @@ void platform_booster_update(struct Moby *m) {
         return;
     }
     switch (m->state) {
-    case 0:
+    case PLATFORM_BOOSTER_STATE_INITIALIZE:
         moby_play_anim(m, 1, 0, scale_game_frames(300));
         m->state = 1;
         m->anim_speed = 0;
         v->voice = -1;
         break;
-    case 1:
+    case PLATFORM_BOOSTER_STATE_FOLLOW_LEVER:
         if (v->lever == -1) {
             break;
         }
@@ -3092,7 +3154,7 @@ void platform_booster_update(struct Moby *m) {
             v->voice = -1;
         }
         break;
-    case 2: {
+    case PLATFORM_BOOSTER_STATE_ADVANCE_ANIMATION: {
         struct Moby *link;
         LeverVars *link_vars;
 

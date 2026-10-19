@@ -106,19 +106,25 @@ int FUN_001f96f8_23aaa8(int) __asm__("FUN_001f96f8");
 int FUN_00213260_23aaa8(int) __asm__("FUN_00213260");
 extern T_23aaa8 *D_L00_0017E4F4 __attribute__((section(".data")));
 int FUN_L00_0023aaa8(O_23aaa8 *o) {
+    enum {
+        HUD_FRAME_MODE_STATIC = 0,
+        HUD_FRAME_MODE_LOOP = 1,
+        HUD_FRAME_MODE_PING_PONG = 2,
+        HUD_FRAME_MODE_PING_PONG_RESTART = 3
+    };
     T_23aaa8 *t = &D_L00_0017E4F4[o->id];
     int r;
     int k, a;
     r = 0;
     if (t->id != 0xFFFF) {
         switch (o->mode) {
-        case 0:
+        case HUD_FRAME_MODE_STATIC:
             r = t->base;
             break;
-        case 1:
+        case HUD_FRAME_MODE_LOOP:
             r = t->base + ((D_L00_0015F5CC_23aaa8 - o->start) / t->rate) % t->n;
             break;
-        case 2:
+        case HUD_FRAME_MODE_PING_PONG:
             r = (D_L00_0015F5CC_23aaa8 - o->start) / t->rate;
             k = t->n * 2;
             r = r % (k - 2);
@@ -128,7 +134,7 @@ int FUN_L00_0023aaa8(O_23aaa8 *o) {
             }
             r += t->base;
             break;
-        case 3:
+        case HUD_FRAME_MODE_PING_PONG_RESTART:
             if (o->start < D_L00_0015F5CC_23aaa8) {
                 int m;
                 r = (D_L00_0015F5CC_23aaa8 - o->start) / t->rate;

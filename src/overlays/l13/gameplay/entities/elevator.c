@@ -228,7 +228,11 @@ void elevator_update(struct Moby *moby) {
         ELEVATOR_STATE_INITIALIZE = 0,
         ELEVATOR_STATE_BLEND_CAMERA = 1,
         ELEVATOR_STATE_MOVE_TO_TOP = 2,
-        ELEVATOR_STATE_MOVE_TO_BOTTOM = 3
+        ELEVATOR_STATE_MOVE_TO_BOTTOM = 3,
+        ELEVATOR_STATE_WAIT_AT_TOP = 4,
+        ELEVATOR_STATE_WAIT_AT_BOTTOM = 5,
+        ELEVATOR_STATE_WAIT_FOR_HERO_EXIT_AT_TOP = 6,
+        ELEVATOR_STATE_WAIT_FOR_HERO_EXIT_AT_BOTTOM = 7
     };
     LiftVars *vars = (LiftVars *)moby->pvars;
     float delta[4];
@@ -299,8 +303,8 @@ void elevator_update(struct Moby *moby) {
         }
         break;
     }
-    case 6:
-    case 7:
+    case ELEVATOR_STATE_WAIT_FOR_HERO_EXIT_AT_TOP:
+    case ELEVATOR_STATE_WAIT_FOR_HERO_EXIT_AT_BOTTOM:
         if (voice_is_playing(moby, vars->voice)) {
             release_voice_slot(vars->voice);
             vars->voice = -1;
@@ -316,8 +320,8 @@ void elevator_update(struct Moby *moby) {
             }
         }
         break;
-    case 4:
-    case 5: {
+    case ELEVATOR_STATE_WAIT_AT_TOP:
+    case ELEVATOR_STATE_WAIT_AT_BOTTOM: {
         int i;
         vars->pulse = fast_add_rotations(vars->pulse, frame_time * 6.2831855f);
         i = float_to_int((fast_sin(vars->pulse) * 4.0f - 3.0f) * 128.0f);
@@ -486,6 +490,13 @@ extern unsigned char D_0013F420_2b0e80[] __asm__("D_0013F420");
 
 void blarg_turret_update(Moby_2B5368 *m) __asm__("FUN_L13_002b41b8");
 void blarg_turret_update(Moby_2B5368 *m) {
+    enum {
+        BLARG_TURRET_STATE_INITIALIZE = 0,
+        BLARG_TURRET_STATE_WAIT_FOR_TARGET = 1,
+        BLARG_TURRET_STATE_TRACK_TARGET = 3,
+        BLARG_TURRET_STATE_DESTROY = 4,
+        BLARG_TURRET_STATE_DESTRUCTION_DELAY = 5
+    };
     Data_2B5368 *data = m->data;
     Moby_2B5368 *t;
     Moby_2B5368 *gun;
@@ -497,7 +508,7 @@ void blarg_turret_update(Moby_2B5368 *m) {
         FUN_L00_00263ac8_2b0e80(2.7f, data->gun, 1, data->fx);
     }
     switch ((unsigned char)m->state) {
-    case 0:
+    case BLARG_TURRET_STATE_INITIALIZE:
         m->scale = m->cls->scale * 1.5f;
         data->gun = FUN_L13_002b4958_2b0e80(m);
         data->f54 = m->rot.z;
@@ -506,7 +517,7 @@ void blarg_turret_update(Moby_2B5368 *m) {
         }
         m->state = 1;
         break;
-    case 1:
+    case BLARG_TURRET_STATE_WAIT_FOR_TARGET:
         r = fast_difference_between_rotations(angle_atan2(t->pos.x - m->pos.x, t->pos.y - m->pos.y), data->f54);
         if (r < 1.5707964f && vector_distance(&m->pos, &t->pos) < 20.0f
             && (data->volume == -1 || is_point_inside_clip_volume(D_0013F420_2b0e80, data->volume) != 0)) {
@@ -527,7 +538,7 @@ void blarg_turret_update(Moby_2B5368 *m) {
             m->state = 5;
         }
         break;
-    case 3:
+    case BLARG_TURRET_STATE_TRACK_TARGET:
         r = fast_difference_between_rotations(angle_atan2(t->pos.x - m->pos.x, t->pos.y - m->pos.y), data->f54);
         if (r >= 1.5707964f || vector_distance(&m->pos, &t->pos) > 22.0f
             || (data->volume != -1 && is_point_inside_clip_volume(D_0013F420_2b0e80, data->volume) == 0)) {
@@ -558,7 +569,7 @@ void blarg_turret_update(Moby_2B5368 *m) {
             }
         }
         break;
-    case 4: {
+    case BLARG_TURRET_STATE_DESTROY: {
         V4_2B5368 v;
         random_vector(&v.x, 0.5f, 1.0f);
         mark_moby_for_removal_cf(m, 0, -1);
@@ -566,7 +577,7 @@ void blarg_turret_update(Moby_2B5368 *m) {
         delete_moby(m);
         return;
     }
-    case 5:
+    case BLARG_TURRET_STATE_DESTRUCTION_DELAY:
         approach_angle(&m->rot.z, data->f54, &data->f60, D_0015ED70_c * 12.566371f, D_0015ED70_c * 12.566371f, frame_time * 25.132742f);
         data->f64 -= 1.0f;
         if (data->f64 <= 0.0f) {
@@ -810,17 +821,22 @@ void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
 void blarg_gunner_update(struct Moby *moby) __asm__("FUN_L13_002b4c80");
 void blarg_gunner_update(struct Moby *moby) {
+    enum {
+        BLARG_GUNNER_STATE_INITIALIZE = 0,
+        BLARG_GUNNER_STATE_ACTIVE = 1,
+        BLARG_GUNNER_STATE_DESTROY = 2
+    };
     unsigned char *d = moby->pvars;
     float a[4];
     float b[4];
     switch (moby->state) {
-    case 0:
+    case BLARG_GUNNER_STATE_INITIALIZE:
         d[0x29] = 1;
         moby->state = 1;
         d[0x5A] = 6;
         d[0x58] = 8;
         break;
-    case 1:
+    case BLARG_GUNNER_STATE_ACTIVE:
         if ((*(unsigned char **)(d + 0x70))[0x20] == 3) {
             if (moby->prev_seq != 2) {
                 int x = FUN_L00_00257b90(0, 3);
@@ -843,7 +859,7 @@ void blarg_gunner_update(struct Moby *moby) {
         }
         FUN_L13_002b4a58_c(moby, d);
         break;
-    case 2:
+    case BLARG_GUNNER_STATE_DESTROY:
         if (moby->anim_flags & 2) {
             subtract_vector_xyz(a, D_L13_001670C0, &moby->pos);
             moby_point_position(moby, 0, b);
@@ -1139,6 +1155,22 @@ extern int func_001F9908_i(void *) __asm__("FUN_001f9740");
 
 void robosquawker_update(RsMoby *m) __asm__("FUN_L13_002b50d8");
 void robosquawker_update(RsMoby *m) {
+    enum {
+        ROBOSQUAWKER_STATE_INITIALIZE = 0,
+        ROBOSQUAWKER_STATE_GROUND_IDLE = 1,
+        ROBOSQUAWKER_STATE_CHASE_TARGET = 3,
+        ROBOSQUAWKER_STATE_PECK_ATTACK = 4,
+        ROBOSQUAWKER_STATE_RETURN_HOME = 5,
+        ROBOSQUAWKER_STATE_DAMAGE_KNOCKBACK = 6,
+        ROBOSQUAWKER_STATE_BLOCKED_RETURN_HOME = 0xC,
+        ROBOSQUAWKER_STATE_WALK_FORWARD_AVOID_MOBYS = 0xD,
+        ROBOSQUAWKER_STATE_FLIGHT_IDLE = 0xE,
+        ROBOSQUAWKER_STATE_FLY_TO_RANDOM_POINT = 0xF,
+        ROBOSQUAWKER_STATE_TAKEOFF = 0x10,
+        ROBOSQUAWKER_STATE_LAND = 0x11,
+        ROBOSQUAWKER_STATE_FOLLOW_FLIGHT_PATH = 0x12,
+        ROBOSQUAWKER_STATE_DEATH_KNOCKBACK = 0x63
+    };
     RsVars *v;
     RsVec old;
     RsTarget tgt;
@@ -1240,7 +1272,7 @@ void robosquawker_update(RsMoby *m) {
     }
     m->bA4 = 0xFF;
     switch (m->state) {
-    case 0:
+    case ROBOSQUAWKER_STATE_INITIALIZE:
         qcopy(&v->v1D0, &m->pos);
         v->v1D0.f[3] = v->f1FC;
         if (v->h20A != 0) {
@@ -1276,7 +1308,7 @@ void robosquawker_update(RsMoby *m) {
             v->w224 = FUN_L01_0028b510(&m->pos, D_L13_001B07B0[v->w220], 0.0f);
         }
         break;
-    case 0xE: {
+    case ROBOSQUAWKER_STATE_FLIGHT_IDLE: {
         float d;
 
         FUN_L13_002b4f28((unsigned char *)m, (char *)v);
@@ -1342,7 +1374,7 @@ void robosquawker_update(RsMoby *m) {
         }
         break;
     }
-    case 0xF: {
+    case ROBOSQUAWKER_STATE_FLY_TO_RANDOM_POINT: {
         float a;
 
         a = fast_arc_tan(v->v1E0.f[0] - m->pos.f[0], v->v1E0.f[1] - m->pos.f[1]);
@@ -1375,7 +1407,7 @@ void robosquawker_update(RsMoby *m) {
         FUN_L13_002b4f28((unsigned char *)m, (char *)v);
         break;
     }
-    case 0x12: {
+    case ROBOSQUAWKER_STATE_FOLLOW_FLIGHT_PATH: {
         char *path;
         float a;
         float d;
@@ -1453,7 +1485,7 @@ void robosquawker_update(RsMoby *m) {
         FUN_L13_002b4f28((unsigned char *)m, (char *)v);
         break;
     }
-    case 0x11: {
+    case ROBOSQUAWKER_STATE_LAND: {
         float g;
 
         g = probe_ground_height(&m->pos, 0x120, 0.5f);
@@ -1479,7 +1511,7 @@ void robosquawker_update(RsMoby *m) {
         }
         break;
     }
-    case 0x10: {
+    case ROBOSQUAWKER_STATE_TAKEOFF: {
         float g;
 
         g = probe_ground_height(&m->pos, 0x120, 0.5f);
@@ -1501,7 +1533,7 @@ void robosquawker_update(RsMoby *m) {
         FUN_L13_002b4f28((unsigned char *)m, (char *)v);
         break;
     }
-    case 1:
+    case ROBOSQUAWKER_STATE_GROUND_IDLE:
         subtract_vector_xyz(&va, &tgt, &m->pos);
         if (vector_length_xyz(&va) < v->f1FC + 4.0f
             && absolute_float(m->pos.f[2] - tgt.pos.f[2]) < 8.0f
@@ -1629,7 +1661,7 @@ void robosquawker_update(RsMoby *m) {
         FUN_L13_002b4ff0((char *)m, (char *)v);
         break;
     }
-    case 3: {
+    case ROBOSQUAWKER_STATE_CHASE_TARGET: {
         float r;
         int res;
         float a;
@@ -1678,7 +1710,7 @@ void robosquawker_update(RsMoby *m) {
         FUN_L13_002b4ff0((char *)m, (char *)v);
         break;
     }
-    case 4: {
+    case ROBOSQUAWKER_STATE_PECK_ATTACK: {
         float a;
         int same;
         float hh;
@@ -1725,7 +1757,7 @@ void robosquawker_update(RsMoby *m) {
         FUN_L13_002b4ff0((char *)m, (char *)v);
         break;
     }
-    case 5: {
+    case ROBOSQUAWKER_STATE_RETURN_HOME: {
         int res;
         float a;
 
@@ -1772,7 +1804,7 @@ void robosquawker_update(RsMoby *m) {
         m->bBC = 0;
         break;
     }
-    case 6:
+    case ROBOSQUAWKER_STATE_DAMAGE_KNOCKBACK:
         if (mine_fall(m, v->x120) & 1) {
             qzero(v->x120);
             m->state = 3;
@@ -1796,7 +1828,7 @@ void robosquawker_update(RsMoby *m) {
             v->hC8 = 0;
         }
         break;
-    case 0x63: {
+    case ROBOSQUAWKER_STATE_DEATH_KNOCKBACK: {
         int t;
 
         m->h34 &= 0xEFFF;
@@ -1814,7 +1846,7 @@ void robosquawker_update(RsMoby *m) {
         }
         break;
     }
-    case 0xC: {
+    case ROBOSQUAWKER_STATE_BLOCKED_RETURN_HOME: {
         float r;
         int res;
         float a;
@@ -1865,7 +1897,7 @@ void robosquawker_update(RsMoby *m) {
         m->bBC = 0;
         break;
     }
-    case 0xD: {
+    case ROBOSQUAWKER_STATE_WALK_FORWARD_AVOID_MOBYS: {
         RsOther *o;
         float g;
 
@@ -2654,6 +2686,17 @@ extern int jet_fast_dec_death_timer(void *) __asm__("FUN_001f9770");
 
 void fighter_jet_update(Jet *m) __asm__("FUN_L13_002bb068");
 void fighter_jet_update(Jet *m) {
+    enum {
+        FIGHTER_JET_STATE_INITIALIZE = 0,
+        FIGHTER_JET_STATE_WAIT_FOR_ENTRY = 1,
+        FIGHTER_JET_STATE_MOUNT_PLAYER = 2,
+        FIGHTER_JET_STATE_FLIGHT = 4,
+        FIGHTER_JET_STATE_EXIT_PLAYER = 5,
+        FIGHTER_JET_STATE_STOP_DEATH_SOUNDS = 6,
+        FIGHTER_JET_STATE_WAIT_FOR_DEATH_RESET = 7,
+        FIGHTER_JET_STATE_FORCED_EXIT = 8,
+        FIGHTER_JET_STATE_DELETE = 9
+    };
     JetData *d;
     JetVec impulse;
     int state,initial_state;
@@ -2693,7 +2736,7 @@ void fighter_jet_update(Jet *m) {
     m->status=0xFF;
     if (((JetPlayer*)(&jet_player47))->craft==m) ((JetPlayer*)(&jet_player47))->health_meter=(int)(((JetPlayer*)(&jet_player47))->health*0.00390625f*200.0f);
     switch(m->state) {
-    case 0: {
+    case FIGHTER_JET_STATE_INITIALIZE: {
         float limit;
         int *palette;
         JetTexture *texture_table;
@@ -2721,7 +2764,7 @@ void fighter_jet_update(Jet *m) {
         d->lock_index=-1; d->start_timer=jet_scale_ticks(575);
         break;
     }
-    case 1: {
+    case FIGHTER_JET_STATE_WAIT_FOR_ENTRY: {
         short enter=0;
         if (m->persistent!=0xFF && (visited52)[m->persistent+(D_L13_0015ED84<<4)]==0xFF) m->state=9;
         else if (d->trigger!=-1 && jet_check_trigger(D_0013F3D0,d->trigger)) { d->blend=0.99f; D_L13_0015F3FC=0.99f; enter=1; }
@@ -2740,7 +2783,7 @@ void fighter_jet_update(Jet *m) {
         jet_animate((unsigned char*)m,1.5f);
         break;
     }
-    case 2:
+    case FIGHTER_JET_STATE_MOUNT_PLAYER:
         jet_blend(&d->blend,1.0f,frame_time*4.0f); D_L13_0015F3FC=d->blend;
         if (d->blend==1.0f) {
             if (d->entry_path!=-1) {
@@ -2767,7 +2810,7 @@ void fighter_jet_update(Jet *m) {
             D_L13_0015F608=2; FUN_L13_002ba178(m,d); jet_camera_mode(); jet_game_state(2,4); m->state=4;
         }
         break;
-    case 4: {
+    case FIGHTER_JET_STATE_FLIGHT: {
         unsigned char *audio;
         if (d->blend!=0.0f) { jet_blend(&d->blend,0.0f,frame_time*4.0f); D_L13_0015F3FC=d->blend; }
         jet_force_help(6,0); D_L13_0015F608=2;
@@ -2778,7 +2821,7 @@ void fighter_jet_update(Jet *m) {
         if (d->energy<=0) { d->wait_timer=jet_scale_ticks(1200); m->state=8; }
         break;
     }
-    case 5:
+    case FIGHTER_JET_STATE_EXIT_PLAYER:
         ((JetPlayer*)(&jet_player47))->in_craft=0; *(int*)((char*)((JetPlayer*)(&jet_player47))->moby+0x98)=0;
         jet_set_hero_state(0,1); jet_end_mount(0); jet_set_weapon(((JetPlayer*)(&jet_player47))->weapon,0);
         qcopy(m->position,d->spawn_position); qcopy(m->rotation,d->spawn_rotation);
@@ -2799,7 +2842,7 @@ void fighter_jet_update(Jet *m) {
         }
         jet_game_state(0,5); d->blend=0.99f; D_L13_0015F3FC=0.99f; m->state=1;
         break;
-    case 6:
+    case FIGHTER_JET_STATE_STOP_DEATH_SOUNDS:
         D_L13_0015F608=2;
         {
             int id=d->engine_sound;
@@ -2811,7 +2854,7 @@ void fighter_jet_update(Jet *m) {
             d->weapon_sound=-1;
         }
         m->state=7; break;
-    case 7: {
+    case FIGHTER_JET_STATE_WAIT_FOR_DEATH_RESET: {
         JetTransition *transition;
         D_L13_0015F608=2;
         if (jet_fast_dec_death_timer(&d->death_timer)) {
@@ -2836,7 +2879,7 @@ void fighter_jet_update(Jet *m) {
         }
         break;
     }
-    case 8:
+    case FIGHTER_JET_STATE_FORCED_EXIT:
         ((JetPlayer*)(&jet_player47))->in_craft=0; *(int*)((char*)((JetPlayer*)(&jet_player47))->moby+0x98)=0; jet_set_hero_state(0,1); jet_end_mount(0);
         if (d->escape_path==-1) { stub_printf(D_L13_001F4470); qcopy(m->position,d->spawn_position); qcopy(m->rotation,d->spawn_rotation); }
         else { int index=d->escape_path; JetPath *paths=D_L13_001600EC; qcopy(m->position,paths[index].position); qcopy(m->rotation,paths[index].rotation); m->position[2]+=0.57318f; }
@@ -2861,7 +2904,7 @@ void fighter_jet_update(Jet *m) {
         }
         jet_reset_camera((char *)&jet_player47+0x80,(char *)&jet_player47+0x90); m->state=9;
         break;
-    case 9: jet_delete_moby(m); return;
+    case FIGHTER_JET_STATE_DELETE: jet_delete_moby(m); return;
     case 10: break;
     default: break;
     }

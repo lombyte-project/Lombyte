@@ -23,7 +23,10 @@ s32 update_menu_stream_image(struct MenuScreen *stream) __asm__("FUN_0021f990");
 
 s32 update_menu_stream_image(struct MenuScreen *stream) {
     enum {
-        MENU_STREAM_IMAGE_READY = 2
+        MENU_STREAM_IMAGE_IDLE = 0,
+        MENU_STREAM_IMAGE_READ_PENDING = 1,
+        MENU_STREAM_IMAGE_READY = 2,
+        MENU_STREAM_IMAGE_RELOAD_PENDING = 3
     };
     s32 flags;
     s32 idx;
@@ -69,7 +72,7 @@ s32 update_menu_stream_image(struct MenuScreen *stream) {
     }
 
     switch (stream->data.stream.state) {
-    case 0:
+    case MENU_STREAM_IMAGE_IDLE:
     case MENU_STREAM_IMAGE_READY:
         if (idx == stream->data.stream.loaded_entry[0]) {
             break;
@@ -105,8 +108,8 @@ s32 update_menu_stream_image(struct MenuScreen *stream) {
             stream->data.stream.state = -1;
         }
         break;
-    case 1:
-    case 3:
+    case MENU_STREAM_IMAGE_READ_PENDING:
+    case MENU_STREAM_IMAGE_RELOAD_PENDING:
         if (cd_read_active[0] != 0) {
             break;
         }

@@ -61,17 +61,21 @@ extern void enqueue_callback_list_1(void (*)(void), void *) __asm__("FUN_001f460
 extern void subtract_vector_xyz(void *, void *, void *);
 
 void FUN_L10_002e9028(unsigned char *m) {
+    enum {
+        MOBY_UPDATE_INITIALIZE = 0,
+        MOBY_UPDATE_ACTIVE = 1
+    };
     float v[4] __attribute__((aligned(16)));
     float mtx[16] __attribute__((aligned(16)));
     char *player;
     unsigned int s = m[0x20];
     switch (s) {
-    case 0:
+    case MOBY_UPDATE_INITIALIZE:
         m[0x20] = 1;
         *(unsigned short *)(m + 0x34) |= 1;
         m[0x31] = 0;
         break;
-    case 1:
+    case MOBY_UPDATE_ACTIVE:
         player = (&hero.motion.pos);
         if (FUN_001f9b48(m + 0x10, player) < 8.0f) {
             subtract_vector_xyz(v, player + 0x50, m + 0x10);

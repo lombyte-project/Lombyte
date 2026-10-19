@@ -84,19 +84,24 @@ extern void FUN_L01_00278e20(void *, int);
 void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
 void FUN_L08_0030bc00(struct Moby *m) {
+    enum {
+        MOBY_STATE_INITIALIZE = 0,
+        MOBY_STATE_WAIT_FOR_HIT = 1,
+        MOBY_STATE_REMOVE = 2
+    };
     int hit = 0;
     char *r = find_moby_hit(m, 0x10000, 0);
     switch (m->state) {
-    case 0:
+    case MOBY_STATE_INITIALIZE:
         m->state = 1;
         break;
-    case 1:
+    case MOBY_STATE_WAIT_FOR_HIT:
         if (r != 0 && *(float *)(r + 0x2C) > 0.0f)
             hit = 1;
         if (hit)
             m->state = 2;
         break;
-    case 2:
+    case MOBY_STATE_REMOVE:
         allocate_voice_for_target_entry(0, 0, (int)m);
         FUN_L01_002787a0(m);
         FUN_L00_00263e30(m, 0x736, 1, 0x737, 1, 0x1, 2);

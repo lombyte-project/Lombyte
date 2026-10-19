@@ -60,7 +60,10 @@ void update_help_state(void) __asm__("FUN_001fde90");
 
 void update_help_state(void) {
     enum {
-        HELP_STATE_IDLE = 0
+        HELP_STATE_IDLE = 0,
+        HELP_STATE_DISPLAY_START_DELAY = 1,
+        HELP_STATE_DISMISS_DELAY = 6,
+        HELP_STATE_DISMISSING = 7
     };
 
     if (D_001996D0.started == 0) {
@@ -114,7 +117,7 @@ void update_help_state(void) {
         }
         break;
 
-    case 1: {
+    case HELP_STATE_DISPLAY_START_DELAY: {
         s32 id;
 
         force_help_message(5, 0);
@@ -207,14 +210,14 @@ void update_help_state(void) {
         break;
     }
 
-    case 6:
+    case HELP_STATE_DISMISS_DELAY:
         if (D_0015EE1D == 0 || D_001996D0.timer >= 4 || (controller_state.pressed & PAD_TRIANGLE)) {
             D_001996D0.state = 7;
             D_001996D0.timer = 0;
         }
         break;
 
-    case 7: {
+    case HELP_STATE_DISMISSING: {
         s32 id;
 
         force_help_message(5, 0);

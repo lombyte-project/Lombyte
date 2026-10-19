@@ -30,8 +30,11 @@ s32 update_menu_resource_stream(struct MenuScreen *stream) {
     enum {
         STREAM_START_INITIAL_PRIMARY_READ = 0,
         STREAM_WAIT_INITIAL_PRIMARY_READ = 1,
+        STREAM_PRIMARY_RESOURCE_READY = 2,
         STREAM_WAIT_SECONDARY_READ = 3,
-        STREAM_WAIT_PRIMARY_REPLACEMENT_READ = 5
+        STREAM_SECONDARY_RESOURCE_READY = 4,
+        STREAM_WAIT_PRIMARY_REPLACEMENT_READ = 5,
+        STREAM_PRIMARY_REPLACEMENT_READ_COMPLETE = 6
     };
     LanguageResourceOffsets language_offsets;
     s32 *completed_buffer_slot;
@@ -195,10 +198,10 @@ s32 update_menu_resource_stream(struct MenuScreen *stream) {
                 stream->data.stream.state = stream->data.stream.state + 1;
             }
             break;
-        case 6:
+        case STREAM_PRIMARY_REPLACEMENT_READ_COMPLETE:
             stream->data.stream.state = 2;
             /* fallthrough */
-        case 2:
+        case STREAM_PRIMARY_RESOURCE_READY:
             if (resource_index != stream->data.stream.loaded_entry[0]) {
                 if (resource_index == stream->data.stream.loaded_entry[1]) {
                     stream->data.stream.state = 4;
@@ -248,7 +251,7 @@ s32 update_menu_resource_stream(struct MenuScreen *stream) {
                 }
             }
             break;
-        case 4:
+        case STREAM_SECONDARY_RESOURCE_READY:
             if (resource_index != stream->data.stream.loaded_entry[1]) {
                 if (resource_index == stream->data.stream.loaded_entry[0]) {
                     stream->data.stream.state = 2;

@@ -55,6 +55,12 @@ extern int func_0022ED80_2F0F78(int, int, int) __asm__("FUN_0022da68");
 
 void drek_fight_missile_update(struct Moby *moby) __asm__("FUN_L18_002efb88");
 void drek_fight_missile_update(struct Moby *moby) {
+    enum {
+        DREK_MISSILE_INITIALIZE = 0,
+        DREK_MISSILE_WANDER = 2,
+        DREK_MISSILE_DIVE = 3,
+        DREK_MISSILE_WAIT_TO_EXPLODE = 4
+    };
     char *d = (char *)moby->pvars;
     if (moby->state != 4) {
         moby->rot.x = fast_add_rotations(moby->rot.x,
@@ -65,7 +71,7 @@ void drek_fight_missile_update(struct Moby *moby) {
         return;
     }
     switch (moby->state) {
-    case 0: {
+    case DREK_MISSILE_INITIALIZE: {
         float a = D_0015ED6C_a[1];
         float b = frame_time;
         *(float *)(d + 0x158) = a * 10.0f;
@@ -84,7 +90,7 @@ void drek_fight_missile_update(struct Moby *moby) {
         moby->collision = 0;
         break;
     }
-    case 2: {
+    case DREK_MISSILE_WANDER: {
         char *p = d + 0x110;
         if (FUN_L18_002f0120(moby, (float *)p)) {
             FUN_L18_002f02e8(moby, p);
@@ -100,7 +106,7 @@ void drek_fight_missile_update(struct Moby *moby) {
         *(int *)(d + 0x14C) = 0;
         break;
     }
-    case 3: {
+    case DREK_MISSILE_DIVE: {
         float v[4];
         float w[4];
         subtract_vector_xyz(v, d + 0x120, &moby->pos);
@@ -125,7 +131,7 @@ void drek_fight_missile_update(struct Moby *moby) {
         }
         break;
     }
-    case 4: {
+    case DREK_MISSILE_WAIT_TO_EXPLODE: {
         float x = moby->rot.y;
         if (x < 0.87266463f) {
             x = 0.87266463f;
@@ -366,6 +372,11 @@ extern int D_L18_00162264 __attribute__((sda));
 extern float D_L18_00162268 __attribute__((sda));
 extern float D_L18_0016226C __attribute__((sda));
 void FUN_L18_002f06c0(struct Moby *m) {
+    enum {
+        DREK_MISSILE_WANDER = 2,
+        DREK_MISSILE_DIVE = 3,
+        DREK_MISSILE_WAIT_TO_EXPLODE = 4
+    };
     float v[4];
     short *p;
     unsigned char *o;
@@ -388,12 +399,12 @@ void FUN_L18_002f06c0(struct Moby *m) {
             FUN_001f9bf8_c7(v, o + 0xC0, D_L18_0016226C);
             FUN_001f9a10_c7(v, v, o + 0x10);
             switch (o[0x20]) {
-            case 2:
-            case 3:
+            case DREK_MISSILE_WANDER:
+            case DREK_MISSILE_DIVE:
                 FUN_L00_00263618_c7(v, c, D_L18_00162268, 0.0f);
                 *(float *)(d + 0x168) = FUN_001fa580_c7(*(float *)(d + 0x168), a);
                 break;
-            case 4:
+            case DREK_MISSILE_WAIT_TO_EXPLODE:
                 FUN_L00_00263618_c7(v, c, D_L18_00162268, 0.0f);
                 *(float *)(d + 0x168) = FUN_001fa580_c7(*(float *)(d + 0x168), b);
                 break;
@@ -532,6 +543,11 @@ extern void func_L12_0027C368_v(char *, void *, int) __asm__("FUN_L12_0027b370")
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void FUN_L18_002f16f0(struct Moby *moby) {
+    enum {
+        MOBY_INITIALIZE = 0,
+        MOBY_APPROACH_TARGET_TRANSFORM = 2,
+        MOBY_FALL_AND_REMOVE = 4
+    };
     VData *d = (VData *)moby->pvars;
     if (d) {
         float initial_acceleration_step = D_L18_00162290 * frame_time_sq;
@@ -541,7 +557,7 @@ void FUN_L18_002f16f0(struct Moby *moby) {
         float b2 = D_L18_001622A0 * frame_time_sq;
         float b3 = D_L18_001622A4 * frame_time;
         switch (moby->state) {
-        case 0: {
+        case MOBY_INITIALIZE: {
             short **tp;
             short *t;
             int j;
@@ -568,7 +584,7 @@ void FUN_L18_002f16f0(struct Moby *moby) {
             moby->state = 1;
             break;
         }
-        case 2: {
+        case MOBY_APPROACH_TARGET_TRANSFORM: {
             int hero_on_group_or_class_764_moby;
             int i;
             unsigned char *p;
@@ -606,7 +622,7 @@ void FUN_L18_002f16f0(struct Moby *moby) {
             }
             break;
         }
-        case 4: {
+        case MOBY_FALL_AND_REMOVE: {
             float t = frame_time_sq * 5.0f;
             moby->pos.z += d->f340;
             d->f340 = d->f340 - t;
@@ -757,13 +773,18 @@ extern void FUN_L18_002f1fd8(struct Moby *);
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 
 void FUN_L18_002f1e68(struct Moby *m) {
+    enum {
+        GLOW_INITIALIZE = 0,
+        GLOW_ACTIVE = 1,
+        GLOW_FADE_OUT = 2
+    };
     int *d = (int *)m->pvars;
     switch (m->state) {
-    case 0:
+    case GLOW_INITIALIZE:
         m->state = 1;
         ((float *)d)[3] = 1.0f;
         break;
-    case 1:
+    case GLOW_ACTIVE:
         enqueue_callback_list_1_alt((void (*)(void))FUN_L18_002f1fd8, m);
         if (voice_is_playing(m, d[1]) == 0) {
             d[1] = FUN_0022da68(0, 4, (int)m);
@@ -787,7 +808,7 @@ void FUN_L18_002f1e68(struct Moby *m) {
             }
         }
         break;
-    case 2:
+    case GLOW_FADE_OUT:
         approach_value((float *)(d + 3), 0.0f, frame_time + frame_time);
         break;
     }
@@ -899,10 +920,21 @@ extern float D_L18_0016230C __attribute__((sda));
 extern unsigned char D_00141400 __attribute__((section(".data")));
 extern unsigned char D_0013D406 __attribute__((section(".data")));
 void FUN_L18_002f2310(struct Moby *m) {
+    enum {
+        LIFT_INITIALIZE = 0,
+        LIFT_SELECT_INITIAL_HEIGHT = 1,
+        LIFT_APPROACH_BASE_HEIGHT = 2,
+        LIFT_APPROACH_ALTERNATE_HEIGHT = 3
+    };
+    enum {
+        LIFT_DRAW_22_QUAD_MESH = 0,
+        LIFT_DRAW_25_QUAD_MESH = 1,
+        LIFT_DRAW_38_QUAD_MESH = 2
+    };
     char *d = (char *)m->pvars;
     int v;
     switch (m->state) {
-    case 0:
+    case LIFT_INITIALIZE:
         if (D_L18_001622FC != 0) {
             D_00141400 = *(unsigned char *)&D_L18_001622FC;
         }
@@ -913,7 +945,7 @@ void FUN_L18_002f2310(struct Moby *m) {
         m->draw_dist = 0;
         m->collision = 0;
         break;
-    case 1:
+    case LIFT_SELECT_INITIAL_HEIGHT:
         if (D_0013D406 != 0) {
             *(int *)(d + 8) = (*(int *)(d + 8) + 1) & 1;
         }
@@ -927,7 +959,7 @@ void FUN_L18_002f2310(struct Moby *m) {
             m->pos.z = *(float *)(d + 4);
         }
         break;
-    case 3:
+    case LIFT_APPROACH_ALTERNATE_HEIGHT:
         if (m->command & 4) {
             D_L18_001622FC = 0;
             m->state = 2;
@@ -940,7 +972,7 @@ void FUN_L18_002f2310(struct Moby *m) {
         FUN_L18_002f2598(m);
         m->command = 1;
         break;
-    case 2:
+    case LIFT_APPROACH_BASE_HEIGHT:
         if (m->command & 8) {
             m->state = 3;
             D_L18_001622FC = 1;
@@ -952,17 +984,17 @@ void FUN_L18_002f2310(struct Moby *m) {
         break;
     }
     switch (*(int *)(d + 0x14)) {
-    case 1:
+    case LIFT_DRAW_25_QUAD_MESH:
         D_L18_00162308_gp = D_L18_00162308_gp + D_L18_0016230C * D_0015ED6C_2310;
         if (1.0f < D_L18_00162308_gp) {
             D_L18_00162308_gp -= 1.0f;
         }
         enqueue_2310(FUN_L18_002f2620, m);
         break;
-    case 2:
+    case LIFT_DRAW_38_QUAD_MESH:
         enqueue_2310(FUN_L18_002f27c8, m);
         break;
-    case 0:
+    case LIFT_DRAW_22_QUAD_MESH:
         enqueue_2310(FUN_L18_002f2970, m);
         break;
     }
@@ -1487,6 +1519,20 @@ extern void func_L00_0025F4A8_alt(void *, void *, void *, float, float, int, int
 
 void drek_final_boss_robot_update(BossMoby *moby) __asm__("FUN_L18_002f2bf0");
 void drek_final_boss_robot_update(BossMoby *moby) {
+    enum {
+        DREK_BOSS_INITIALIZE = 0,
+        DREK_BOSS_WAIT_FOR_SCENE = 7,
+        DREK_BOSS_SELECT_NEXT_ACTION = 0xC,
+        DREK_BOSS_TARGET_RANDOM_ARENA_POINTS = 0x10,
+        DREK_BOSS_APPROACH_AIM_NODE = 0x12,
+        DREK_BOSS_ACTIVATE_MISSILE_GROUP = 0x14
+    };
+    enum {
+        DREK_BOSS_FOLLOW_HERO = 0x13
+    };
+    enum {
+        DREK_BOSS_ACTION_REPOSITION_AND_AIM = 0xE
+    };
     BossData *d = (BossData *)moby->f78;
     BossMoby *tgt;
     float v0[4];
@@ -1515,7 +1561,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
         moby->f7F = 0x1A;
     }
     switch (moby->f20) {
-    case 0: {
+    case DREK_BOSS_INITIALIZE: {
         int i;
 
         qcopy(d->f3C0, moby->f10);
@@ -1541,7 +1587,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
         }
         break;
     }
-    case 7:
+    case DREK_BOSS_WAIT_FOR_SCENE:
         if (D_L18_0015F5C4 != 2) {
             moby->f34 &= 0xFFBE;
             moby->f94 = moby->f24[4];
@@ -1929,7 +1975,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
             }
         }
         break;
-    case 0x14:
+    case DREK_BOSS_ACTIVATE_MISSILE_GROUP:
         if (tick_countdown_32_alt(&d->f354) != 0) {
             d->f354 = scale_game_frames(0x14);
             qcopy(v0, d->f3C0);
@@ -1939,7 +1985,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
             }
         }
         break;
-    case 0xC:
+    case DREK_BOSS_SELECT_NEXT_ACTION:
         aim = &moby->f40[2];
         ang = fast_arc_tan(tgt->f10[0] - moby->f10[0], tgt->f10[1] - moby->f10[1]);
         approach_angle(aim, &d->f370, ang, D_0015ED6C_e[1] * 6.2831855f,
@@ -1984,7 +2030,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
             d->f354 = scale_game_frames(0xF);
             d->f358 = scale_game_frames(0x168);
             break;
-        case 0xE:
+        case DREK_BOSS_ACTION_REPOSITION_AND_AIM:
             moby->f20 = 0x12;
             if (moby->f53 != 0) {
                 blend_moby_animation(moby, 0, 0, scale_game_frames(0x14));
@@ -2010,7 +2056,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
             d->f358 = scale_game_frames(900);
             d->f354 = scale_game_frames(0xB4);
             break;
-        case 0x13:
+        case DREK_BOSS_FOLLOW_HERO:
             moby->f20 = 0x13;
             if (moby->f53 != 1) {
                 blend_moby_animation(moby, 1, 0, scale_game_frames(0x14));
@@ -2187,7 +2233,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
             }
         }
         break;
-    case 0x10:
+    case DREK_BOSS_TARGET_RANDOM_ARENA_POINTS:
         aim = &moby->f40[2];
         ang = fast_arc_tan(hero.motion.pos.f[0] - moby->f10[0], hero.motion.pos.f[1] - moby->f10[1]);
         approach_angle(aim, &d->f370, ang, D_0015ED6C_e[1] * 6.2831855f,
@@ -2265,7 +2311,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
         }
         break;
     }
-    case 0x13: {
+    case DREK_BOSS_FOLLOW_HERO: {
         int fire;
 
         aim = &moby->f40[2];
@@ -2316,7 +2362,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
         }
         break;
     }
-    case 0x12:
+    case DREK_BOSS_APPROACH_AIM_NODE:
         aim = &moby->f40[2];
         ang = fast_arc_tan(d->f70[0] - moby->f10[0], d->f70[1] - moby->f10[1]);
         approach_angle(aim, &d->f370, ang, D_0015ED6C_e[1] * 6.2831855f,
@@ -3114,6 +3160,11 @@ extern short D_L18_001DFB40[];
 s32 random_integer_below(s32 arg0) __asm__("FUN_00213260");
 
 int FUN_L18_002f70b8(struct Moby *moby) {
+    enum {
+        BOSS_ACTION_CHOICE_REPOSITION_AND_AIM = 1,
+        BOSS_ACTION_CHOICE_TARGET_RANDOM_ARENA_POINTS = 3,
+        BOSS_ACTION_CHOICE_FOLLOW_HERO = 5
+    };
     char *data = (char *)moby->pvars;
     int state = *(int *)(data + 0x350);
     int tries = 0;
@@ -3125,19 +3176,19 @@ int FUN_L18_002f70b8(struct Moby *moby) {
         case 0:
             state = 0xD;
             break;
-        case 1:
+        case BOSS_ACTION_CHOICE_REPOSITION_AND_AIM:
             state = 0xE;
             break;
         case 2:
             state = 0xF;
             break;
-        case 3:
+        case BOSS_ACTION_CHOICE_TARGET_RANDOM_ARENA_POINTS:
             state = 0x10;
             break;
         case 4:
             state = 0x11;
             break;
-        case 5:
+        case BOSS_ACTION_CHOICE_FOLLOW_HERO:
             state = 0x13;
             break;
         }
@@ -3519,10 +3570,15 @@ extern int D_L18_0016D290_lui __asm__("D_L18_0016D290") __attribute__((section("
 
 void FUN_L18_002f7ad8(M *moby);
 void FUN_L18_002f7ad8(M *moby) {
+    enum {
+        MOBY_INITIALIZE = 0,
+        MOBY_WAIT_FOR_SCENE_TRIGGER = 1,
+        MOBY_WAIT_FOR_SCENE_END = 2
+    };
     switch (moby->state) {
-    case 0:
+    case MOBY_INITIALIZE:
         moby->state = 1;
-    case 1:
+    case MOBY_WAIT_FOR_SCENE_TRIGGER:
         if ((D_L18_0015F5C4 == 2 && D_L18_0016D290_lui == 3) ||
             (game_frame < 5 && D_L18_001623A0_gp != 0 && moby->f40 == 0.0f)) {
             moby->state = 2;
@@ -3530,7 +3586,7 @@ void FUN_L18_002f7ad8(M *moby) {
             moby->substate = 0;
         }
         break;
-    case 2:
+    case MOBY_WAIT_FOR_SCENE_END:
         if (D_L18_00162384_w[7] != 0 && moby->f40 == 0.0f) {
             float d = 101.6f - moby->f18;
             moby->f40 = fast_add_rotations(moby->f40, 3.14159274f);
@@ -3591,7 +3647,9 @@ extern void func_L18_002F9AB8_v(void *) __asm__("FUN_L18_002f8658");
 void rocket_tank_update(M1454 *m) __asm__("FUN_L18_002f7c40");
 void rocket_tank_update(M1454 *m) {
     enum {
-        ROCKET_TANK_INITIALIZE = 0
+        ROCKET_TANK_INITIALIZE = 0,
+        ROCKET_TANK_PATROLLING = 1,
+        ROCKET_TANK_FIRING = 2
     };
     D1454 *d = m->data;
     FUN_L18_002f8050(m);
@@ -3648,7 +3706,7 @@ void rocket_tank_update(M1454 *m) {
         }
         m->state = 1;
         break;
-    case 1:
+    case ROCKET_TANK_PATROLLING:
         func_L18_002F9AB8_v(m);
         if (*(int *)((char *)d + 0xB4) != 2) {
             d->f134 = 0;
@@ -3659,7 +3717,7 @@ void rocket_tank_update(M1454 *m) {
             m->state = 2;
         }
         break;
-    case 2:
+    case ROCKET_TANK_FIRING:
         func_L18_002F9AB8_v(m);
         approach_value(&d->f130, 30.0f, frame_time * 6.0f);
         d->f134 = fast_add_rotations(d->f134, frame_time * 6.2831855f);

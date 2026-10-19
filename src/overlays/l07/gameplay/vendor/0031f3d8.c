@@ -39,13 +39,18 @@ extern void upd_a(void *) __asm__("FUN_L00_00250df8");
 
 void mushroom_update(char *self) __asm__("FUN_L07_0031f3d8");
 void mushroom_update(char *self) {
+    enum {
+        MUSHROOM_INITIALIZE = 0,
+        MUSHROOM_WAIT_FOR_HIT = 1,
+        MUSHROOM_SPAWN_AND_REMOVE = 2
+    };
     int flag = 0;
     char *o = find_moby_hit(self, 0x10000, 0);
     switch (((unsigned char *)self)[0x20]) {
-    case 0:
+    case MUSHROOM_INITIALIZE:
         self[0x20] = 1;
         break;
-    case 1:
+    case MUSHROOM_WAIT_FOR_HIT:
         if (o != 0 && *(float *)(o + 0x2C) > 0.0f) {
             flag = 1;
         }
@@ -53,7 +58,7 @@ void mushroom_update(char *self) {
             self[0x20] = 2;
         }
         break;
-    case 2: {
+    case MUSHROOM_SPAWN_AND_REMOVE: {
         char *m;
         FUN_0022da68_c(0, 0, (int)self);
         FUN_L01_002787a0(self);
@@ -83,13 +88,18 @@ void mark_moby_for_removal_c_c(struct Obj *obj) __asm__("FUN_0020c828");
 
 void robot_head_update(char *self) __asm__("FUN_L07_0031f5b0");
 void robot_head_update(char *self) {
+    enum {
+        ROBOT_HEAD_INITIALIZE = 0,
+        ROBOT_HEAD_WAIT_FOR_HIT = 1,
+        ROBOT_HEAD_SPAWN_AND_REMOVE = 2
+    };
     int flag = 0;
     char *o = find_moby_hit(self, 0x10000, 0);
     switch (((unsigned char *)self)[0x20]) {
-    case 0:
+    case ROBOT_HEAD_INITIALIZE:
         self[0x20] = 1;
         break;
-    case 1:
+    case ROBOT_HEAD_WAIT_FOR_HIT:
         if (o != 0 && *(float *)(o + 0x2C) > 0.0f) {
             flag = 1;
         }
@@ -97,7 +107,7 @@ void robot_head_update(char *self) {
             self[0x20] = 2;
         }
         break;
-    case 2: {
+    case ROBOT_HEAD_SPAWN_AND_REMOVE: {
         char *m;
         FUN_0022da68_c(0, 0, (int)self);
         FUN_L01_002787a0(self);
@@ -128,15 +138,20 @@ void mark_moby_for_removal_c_c2(struct Obj *obj) __asm__("FUN_0020c828");
 
 void seashell_update(unsigned char *m) __asm__("FUN_L07_0031f780");
 void seashell_update(unsigned char *m) {
+    enum {
+        SEASHELL_INITIALIZE = 0,
+        SEASHELL_WAIT_FOR_HIT = 1,
+        SEASHELL_SPAWN_AND_REMOVE = 2
+    };
     int flag = 0;
     float z;
     char *p, *pos, *vel;
     char *x = find_moby_hit(m, 0x10000, 0);
     switch (m[0x20]) {
-    case 0:
+    case SEASHELL_INITIALIZE:
         m[0x20] = 1;
         break;
-    case 1:
+    case SEASHELL_WAIT_FOR_HIT:
         if (x != 0) {
             if (*(float *)(x + 0x2C) > 0.0f)
                 flag = 1;
@@ -144,7 +159,7 @@ void seashell_update(unsigned char *m) {
         if (flag)
             m[0x20] = 2;
         break;
-    case 2:
+    case SEASHELL_SPAWN_AND_REMOVE:
         allocate_voice_for_target_entry(0, 0, (int)m);
         z = 0.0f;
         p = D_L07_0015F580;

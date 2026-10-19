@@ -890,6 +890,15 @@ extern void memcard_save_data(int, int) __asm__("FUN_0020b178");
 /* Watcher moby update with a level-specific state script, then turns its head toward the hero or a random target. */
 void the_plumber_update(L01WatchMoby *m) __asm__("FUN_L01_002ff118");
 void the_plumber_update(L01WatchMoby *m) {
+    enum {
+        PLUMBER_INITIALIZE = 0,
+        PLUMBER_LEVEL_ONE_DIALOGUE = 1,
+        PLUMBER_LEVEL_ONE_POST_DIALOGUE = 2,
+        PLUMBER_REMOVE = 3,
+        PLUMBER_LEVEL_EIGHT_DIALOGUE = 4,
+        PLUMBER_LEVEL_EIGHT_POST_DIALOGUE = 5,
+        PLUMBER_LEVEL_EIGHT_DIALOGUE_FINISHED = 6
+    };
     L01WatchScratch scratch;
     L01WatchData *d = (L01WatchData *)m->data;
     float rate;
@@ -905,7 +914,7 @@ void the_plumber_update(L01WatchMoby *m) {
         }
     }
     switch (m->state) {
-    case 0:
+    case PLUMBER_INITIALIZE:
         m->opacity = 0xFF;
         d->i44 = 0;
         if (D_0015ED84_m == 1) {
@@ -924,13 +933,13 @@ void the_plumber_update(L01WatchMoby *m) {
         }
         initialize_npc_dialogue(m, d);
         break;
-    case 1:
+    case PLUMBER_LEVEL_ONE_DIALOGUE:
         if (update_npc_dialogue(m, d)) {
             begin_dialogue_camera_transition(m, 2.2f);
             m->state = 2;
         }
         break;
-    case 2:
+    case PLUMBER_LEVEL_ONE_POST_DIALOGUE:
         if (cutscene_mode == 2)
             break;
         if (D_0014C050_c[m->bB0 + D_0015ED84_c * 16] != 0xFF) {
@@ -949,16 +958,16 @@ void the_plumber_update(L01WatchMoby *m) {
             memcard_save_data(0, -1);
         }
         break;
-    case 3:
+    case PLUMBER_REMOVE:
         mark_moby_for_removal(m);
         return;
-    case 4:
+    case PLUMBER_LEVEL_EIGHT_DIALOGUE:
         if (update_npc_dialogue(m, d)) {
             m->state = 5;
             d->b8 = 0;
         }
         break;
-    case 5:
+    case PLUMBER_LEVEL_EIGHT_POST_DIALOGUE:
         if (cutscene_mode == 2)
             break;
         if (d->h6 == 2) {
@@ -970,7 +979,7 @@ void the_plumber_update(L01WatchMoby *m) {
             m->state = 4;
         }
         break;
-    case 6:
+    case PLUMBER_LEVEL_EIGHT_DIALOGUE_FINISHED:
         break;
     }
     rate = 0.02f;
@@ -1291,6 +1300,11 @@ extern f32 D_L01_00161F24 __attribute__((sda));
 extern f32 D_L01_00161F28 __attribute__((sda));
 void gold_bolt_update(struct Moby *moby) __asm__("FUN_L01_00307ca0");
 void gold_bolt_update(struct Moby *moby) {
+    enum {
+        GOLD_BOLT_INITIALIZE = 0,
+        GOLD_BOLT_WAIT_FOR_PICKUP = 1,
+        GOLD_BOLT_PICKUP_CUTSCENE = 2
+    };
     Vars_307ca0 *vars = (Vars_307ca0 *)moby->pvars;
     struct Hero *h;
     Vec4f at;
@@ -1300,7 +1314,7 @@ void gold_bolt_update(struct Moby *moby) {
     int i;
 
     switch (moby->state) {
-    case 0:
+    case GOLD_BOLT_INITIALIZE:
         if (vars->id == -1 || D_0014BEC0[vars->id + D_0015ED84 * 4] != 0) {
             goto remove;
         }
@@ -1316,7 +1330,7 @@ void gold_bolt_update(struct Moby *moby) {
         moby->state = 1;
         FUN_L01_00308470(moby);
         return;
-    case 1:
+    case GOLD_BOLT_WAIT_FOR_PICKUP:
         moby->scale = moby->pclass->scale * D_L01_00161F10_gp;
         moby->pos.z = vars->home.z + D_L01_00161F14_gp + D_L01_00161F18_gp * fast_sin(moby->rot.w);
         moby->rot.x = FUN_001fa580_c(moby->rot.x, D_L01_00161F20 * 0.017453292f * D_0015ED6C_f);
@@ -1386,7 +1400,7 @@ void gold_bolt_update(struct Moby *moby) {
         moby->state = 2;
         vars->timer = scale_game_frames(60);
         return;
-    case 2:
+    case GOLD_BOLT_PICKUP_CUTSCENE:
         FUN_L01_003087e0_f(moby);
         qcopy(&moby->pos, &hero.motion.pos);
         qcopy(&moby->rot, &hero.motion.rot);
@@ -1701,7 +1715,10 @@ void teleporter_update(struct Moby *moby) __asm__("FUN_L01_00308bd8");
 void teleporter_update(struct Moby *moby) {
     enum {
         TELEPORTER_INITIALIZE = 0,
-        TELEPORTER_WAIT_FOR_USE = 1
+        TELEPORTER_WAIT_FOR_USE = 1,
+        TELEPORTER_PREPARE_TRANSFER = 2,
+        TELEPORTER_TRANSFER_TO_DESTINATION = 3,
+        TELEPORTER_RETURN_TO_IDLE = 4
     };
     char *data = (char *)moby->pvars;
     int active = 0;
@@ -1806,7 +1823,7 @@ void teleporter_update(struct Moby *moby) {
         }
         FUN_L01_003092d0_c(moby);
         break;
-    case 2: {
+    case TELEPORTER_PREPARE_TRANSFER: {
         int r = FUN_L00_00233f38();
         if (*(float *)(data + 0x20) < 1.0f) {
             advance_accelerated_scalar((float *)(data + 0x20), (float *)(data + 0x28), 1.0f,
@@ -1829,7 +1846,7 @@ void teleporter_update(struct Moby *moby) {
         FUN_L01_003092d0_c(moby);
         break;
     }
-    case 3:
+    case TELEPORTER_TRANSFER_TO_DESTINATION:
         if (*(float *)(data + 0x34) != 0.0f) {
             enqueue_callback_list_1(FUN_L01_003094f0_u, moby);
             approach_value((float *)(data + 0x34), 0.0f, frame_time * 4.0f);
@@ -1860,7 +1877,7 @@ void teleporter_update(struct Moby *moby) {
             FUN_L01_003092d0_c(moby);
         }
         break;
-    case 4:
+    case TELEPORTER_RETURN_TO_IDLE:
     case 8:
         if (*(float *)(data + 0x34) < 1.95f) {
             enqueue_callback_list_1(FUN_L01_003094f0_u, moby);

@@ -514,11 +514,18 @@ extern float func_L00_00258E58_2D9EA0(float, float, float, float, float) __asm__
 
 void nanotech_ball_update(Moby *moby) __asm__("FUN_L00_002d89f0");
 void nanotech_ball_update(Moby *moby) {
-    V_2D9EA0 v0, v10, v20, v30, v40, half_displacement_or_spark_position, slot_curve_offset;
+    enum {
+        NANOTECH_BALL_STATE_INITIALIZE = 0,
+        NANOTECH_BALL_STATE_FOLLOW_OWNER = 1,
+        NANOTECH_BALL_STATE_DETACHED_PICKUP = 2,
+        NANOTECH_BALL_STATE_COLLECTING = 3,
+        NANOTECH_BALL_STATE_BASIS_ONLY = 4
+    };
+    V_2D9EA0 v0, v10, v20, collection_target_or_end_tangent, cross_product_or_particle_midpoint, half_displacement_or_spark_position, slot_curve_offset;
     D_2D9EA0 *data = (D_2D9EA0 *)moby->pvars;
 
     switch (moby->state) {
-    case 0: {
+    case NANOTECH_BALL_STATE_INITIALIZE: {
         Moby *owner;
         int i;
         moby->state = 1;
@@ -571,7 +578,7 @@ void nanotech_ball_update(Moby *moby) {
         }
         data->v20.w = func_L00_00258C80_2D9EA0(0.785398006f, 1.5707964f);
     }
-    case 1: {
+    case NANOTECH_BALL_STATE_FOLLOW_OWNER: {
         Moby *owner = data->owner;
         qcopy(&moby->pos, &owner->pos);
         qcopy(&data->pos, &owner->pos);
@@ -581,7 +588,7 @@ void nanotech_ball_update(Moby *moby) {
             data->f50 = 0;
         }
     }
-    case 2:
+    case NANOTECH_BALL_STATE_DETACHED_PICKUP:
         if (moby->state == 2) {
             int i;
             qcopy(&data->pos, &moby->pos);
@@ -608,13 +615,13 @@ void nanotech_ball_update(Moby *moby) {
                 ((D_2D9EA0 *)D_L00_0015F63C->pvars)->f7C++;
                 if (D_0015EDB6 != 0) hero->invulnerable_frames = func_001F9850_2D9EA0(0x258);
                 data->h54 = func_001F9850_2D9EA0(D_L00_00161A3C);
-                func_001F9C30_2D9EA0(&v30, &hero->gravity_dir, -D_L00_00161A54);
-                func_001F9BD8_2D9EA0(&v30, &hero->motion.pos, &v30);
+                func_001F9C30_2D9EA0(&collection_target_or_end_tangent, &hero->gravity_dir, -D_L00_00161A54);
+                func_001F9BD8_2D9EA0(&collection_target_or_end_tangent, &hero->motion.pos, &collection_target_or_end_tangent);
                 func_001F9C30_2D9EA0(&v0, &hero->gravity_dir, -D_L00_00161A50);
-                func_001F9BF0_2D9EA0(&v20, &v30, &moby->pos);
+                func_001F9BF0_2D9EA0(&v20, &collection_target_or_end_tangent, &moby->pos);
                 v20.z -= 0.5f;
-                fast_vec_cross(&v40, &v20, &v0);
-                fast_vec_cross(&v0, &v40, &v20);
+                fast_vec_cross(&cross_product_or_particle_midpoint, &v20, &v0);
+                fast_vec_cross(&v0, &cross_product_or_particle_midpoint, &v20);
                 func_002156E0_2D9EA0(&v0, &v0, -1.5707964f, &v20);
                 func_L00_001FF4B0_2D9EA0(&v0, &v0, D_L00_00161A50);
                 func_001F9C30_2D9EA0(&half_displacement_or_spark_position, &v20, 0.5f);
@@ -685,7 +692,7 @@ void nanotech_ball_update(Moby *moby) {
             }
         }
         break;
-    case 3:
+    case NANOTECH_BALL_STATE_COLLECTING:
         if (D_L00_0015F63C == moby) func_L00_002D9DB8_2D9EA0();
         if (data->h56 != 0) {
             func_001F9C30_2D9EA0(&moby->pos, D_0013F5E0, -D_L00_00161A54);
@@ -748,7 +755,7 @@ void nanotech_ball_update(Moby *moby) {
                     float progress;
                     float remaining;
                     Part_2D9EA0 *spark;
-                    qcopy(&v40, &part->pos);
+                    qcopy(&cross_product_or_particle_midpoint, &part->pos);
                     remaining = func_001FA888_2D9EA0(ext->h1C);
                     remaining = (float)ext->h1E / remaining;
                     {
@@ -762,12 +769,12 @@ void nanotech_ball_update(Moby *moby) {
                     v0.x = v10.x - ext->u.a.x;
                     v0.y = v10.y - ext->u.a.y;
                     v0.z = v10.z - ext->u.a.z;
-                    v30.x = v20.x - ext->u.a.x;
-                    v30.y = v20.y - ext->u.a.y;
-                    v30.z = v20.z - ext->u.a.z;
-                    part->pos.x = func_L00_00258E58_2D9EA0(v0.x, v10.x, v20.x, v30.x, progress);
-                    part->pos.y = func_L00_00258E58_2D9EA0(v0.y, v10.y, v20.y, v30.y, progress);
-                    part->pos.z = func_L00_00258E58_2D9EA0(v0.z, v10.z, v20.z, v30.z, progress);
+                    collection_target_or_end_tangent.x = v20.x - ext->u.a.x;
+                    collection_target_or_end_tangent.y = v20.y - ext->u.a.y;
+                    collection_target_or_end_tangent.z = v20.z - ext->u.a.z;
+                    part->pos.x = func_L00_00258E58_2D9EA0(v0.x, v10.x, v20.x, collection_target_or_end_tangent.x, progress);
+                    part->pos.y = func_L00_00258E58_2D9EA0(v0.y, v10.y, v20.y, collection_target_or_end_tangent.y, progress);
+                    part->pos.z = func_L00_00258E58_2D9EA0(v0.z, v10.z, v20.z, collection_target_or_end_tangent.z, progress);
                     half_displacement_or_spark_position.x = func_L00_00258C80_2D9EA0(0.0f, 0.00999999978f) + part->pos.x;
                     half_displacement_or_spark_position.y = func_L00_00258C80_2D9EA0(0.0f, 0.00999999978f) + part->pos.y;
                     half_displacement_or_spark_position.z = func_L00_00258C80_2D9EA0(0.0f, 0.00999999978f) + part->pos.z;
@@ -776,11 +783,11 @@ void nanotech_ball_update(Moby *moby) {
                         spark->f4 = D_L00_00161A00;
                         spark->fC = D_L00_001619F8;
                     }
-                    func_001F9BD8_2D9EA0(&v40, &part->pos, &v40);
-                    func_001F9C30_2D9EA0(&v40, &v40, 0.5f);
-                    half_displacement_or_spark_position.x = func_L00_00258C80_2D9EA0(0.0f, 0.00999999978f) + v40.x;
-                    half_displacement_or_spark_position.y = func_L00_00258C80_2D9EA0(0.0f, 0.00999999978f) + v40.y;
-                    half_displacement_or_spark_position.z = func_L00_00258C80_2D9EA0(0.0f, 0.00999999978f) + v40.z;
+                    func_001F9BD8_2D9EA0(&cross_product_or_particle_midpoint, &part->pos, &cross_product_or_particle_midpoint);
+                    func_001F9C30_2D9EA0(&cross_product_or_particle_midpoint, &cross_product_or_particle_midpoint, 0.5f);
+                    half_displacement_or_spark_position.x = func_L00_00258C80_2D9EA0(0.0f, 0.00999999978f) + cross_product_or_particle_midpoint.x;
+                    half_displacement_or_spark_position.y = func_L00_00258C80_2D9EA0(0.0f, 0.00999999978f) + cross_product_or_particle_midpoint.y;
+                    half_displacement_or_spark_position.z = func_L00_00258C80_2D9EA0(0.0f, 0.00999999978f) + cross_product_or_particle_midpoint.z;
                     spark = func_L00_002745A8_2D9EA0(&half_displacement_or_spark_position, func_001F9850_2D9EA0(0x14), 0);
                     if (spark != 0) {
                         spark->f4 = D_L00_00161A00;
@@ -790,7 +797,7 @@ void nanotech_ball_update(Moby *moby) {
             }
         }
         break;
-    case 4:
+    case NANOTECH_BALL_STATE_BASIS_ONLY:
         if (D_L00_0015F63C == moby) func_L00_002D9DB8_2D9EA0();
         break;
     }
@@ -1455,6 +1462,14 @@ extern SuckAimHeight *suck_get_aim_height(void *) __asm__("FUN_002141f8");
 extern float D_L00_00173E68 __attribute__((section(".data")));
 void suckcannon_update(SuckMoby *self) __asm__("FUN_L00_002da790");
 void suckcannon_update(SuckMoby *self) {
+    enum {
+        SUCKCANNON_STATE_INITIALIZE = 0,
+        SUCKCANNON_STATE_EMPTY_IDLE = 1,
+        SUCKCANNON_STATE_SUCTION_STARTUP = 2,
+        SUCKCANNON_STATE_SUCTION_ACTIVE = 3,
+        SUCKCANNON_STATE_LOADED_AIM = 4,
+        SUCKCANNON_STATE_FIRE_STORED_MOBY = 5
+    };
     SuckWork work;
     SuckCannon *cannon;
     SuckStats *stats;
@@ -1468,7 +1483,7 @@ void suckcannon_update(SuckMoby *self) {
     if ((u8)self->state != 3 && (u8)self->state != 0) FUN_L00_002defe0((int)self);
     FUN_L00_002da660();
     switch ((u8)self->state) {
-    case 0:
+    case SUCKCANNON_STATE_INITIALIZE:
         for (i=0; i<(suck_item_variant.gold == 0 ? 5 : 10); ++i) {
             if (suck_hero.stored[i]) {
                 suck_hero.stored[i]->collision = 0;
@@ -1486,7 +1501,7 @@ void suckcannon_update(SuckMoby *self) {
         }
         suck_reset(self);
         break;
-    case 1:
+    case SUCKCANNON_STATE_EMPTY_IDLE:
         if (self->anim_flags & 2) blend_moby_animation(self,1,0,scale_game_frames_alt(0));
         func_001F9908_r(&cannon->cooldown);
         if (cannon->cooldown == 0) FUN_L00_0020e698();
@@ -1508,7 +1523,7 @@ void suckcannon_update(SuckMoby *self) {
             self->state = 2;
         }
         break;
-    case 2:
+    case SUCKCANNON_STATE_SUCTION_STARTUP:
         if (self->anim_flags & 2) blend_moby_animation(self,3,0,scale_game_frames_alt(5));
         if (FUN_L00_002d9f78()!=0 || suck_hero.unk20AC || suck_hero.unk20A7) {
             sound = cannon->sound;
@@ -1535,7 +1550,7 @@ void suckcannon_update(SuckMoby *self) {
             goto changed;
         }
         break;
-    case 3:
+    case SUCKCANNON_STATE_SUCTION_ACTIVE:
         if (self->anim_state!=3 && (self->anim_state!=0 || (self->anim_flags&2)))
             blend_moby_animation(self,3,0,scale_game_frames_alt(5));
         func_001F9908_r(&cannon->cooldown);
@@ -1568,7 +1583,7 @@ void suckcannon_update(SuckMoby *self) {
             FUN_L00_002da360((u8 *)self,cannon);
         }
         break;
-    case 4:
+    case SUCKCANNON_STATE_LOADED_AIM:
         func_001F9908_r(&cannon->cooldown);
         if (!cannon->cooldown) FUN_L00_0020e698();
         if (self->anim_flags&2) {
@@ -1629,7 +1644,7 @@ void suckcannon_update(SuckMoby *self) {
         break;
     case 6:
         break;
-    case 5:
+    case SUCKCANNON_STATE_FIRE_STORED_MOBY:
         stored=0;
         if (!(0.0f <= compute_interpolated_record_value(self))) break;
         for(i=0; i<(suck_item_variant.gold==0?5:10);i++) {
@@ -1786,8 +1801,12 @@ void blend_moby_animation_2db8f8(void *, s32, s32, s32) __asm__("FUN_00212f90");
 f32 vector_distance_2db8f8(void *, void *) __asm__("FUN_001f9b80");
 s32 FUN_L00_002db8f8(u8 *moby, u8 *position, u8 *target) {
     enum {
+        SUCK_DISPATCH_ALIGNING_FOR_SUCTION = 0,
+        SUCK_DISPATCH_RISING_FOR_SUCTION = 1,
         SUCK_DISPATCH_BEING_PULLED_IN = 2,
-        SUCK_DISPATCH_STORED = 3
+        SUCK_DISPATCH_STORED = 3,
+        SUCK_DISPATCH_FLYING_PROJECTILE = 4,
+        SUCK_DISPATCH_FALLING_AFTER_CANCEL = 6
     };
     u8 *record = FUN_L00_002db890_002db8f8(moby);
     s16 state;
@@ -1800,7 +1819,7 @@ s32 FUN_L00_002db8f8(u8 *moby, u8 *position, u8 *target) {
     *(f32 *)(record + 0xC) = 1.0f;
     state = (s16)(*(u16 *)(record + 0x68) - 1);
     switch (state) {
-    case 0:
+    case SUCK_DISPATCH_ALIGNING_FOR_SUCTION:
         if (1.0f <= *(f32 *)(record + 0x6C)) {
             {
                 u8 *seq = *(u8 **)(record + 0x70);
@@ -1819,7 +1838,7 @@ s32 FUN_L00_002db8f8(u8 *moby, u8 *position, u8 *target) {
             }
         }
         return 1;
-    case 1:
+    case SUCK_DISPATCH_RISING_FOR_SUCTION:
         if (!(1.0f <= *(f32 *)(record + 0x6C)))
             return 1;
         return 2;
@@ -1827,9 +1846,9 @@ s32 FUN_L00_002db8f8(u8 *moby, u8 *position, u8 *target) {
         break;
     case SUCK_DISPATCH_STORED:
         return 3;
-    case 4:
+    case SUCK_DISPATCH_FLYING_PROJECTILE:
     case 5:
-    case 6:
+    case SUCK_DISPATCH_FALLING_AFTER_CANCEL:
         {
             u8 *seq = *(u8 **)(record + 0x70);
             if (moby[0x53] != seq[3]) {
@@ -1955,8 +1974,12 @@ s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
 s32 FUN_L00_002dbe20(u8 *m) {
     enum {
+        SUCK_CANNON_ALIGNING_FOR_SUCTION = 1,
+        SUCK_CANNON_RISING_FOR_SUCTION = 2,
         SUCK_CANNON_BEING_PULLED_IN = 3,
-        SUCK_CANNON_STORED = 4
+        SUCK_CANNON_STORED = 4,
+        SUCK_CANNON_FLYING_PROJECTILE = 5,
+        SUCK_CANNON_FALLING_AFTER_CANCEL = 7
     };
     u8 *o = FUN_L00_002db890_u(m);
     s32 k;
@@ -1975,8 +1998,8 @@ s32 FUN_L00_002dbe20(u8 *m) {
                 D_0013F350_u.count--;
         }
         /* fall through */
-    case 1:
-    case 2: {
+    case SUCK_CANNON_ALIGNING_FOR_SUCTION:
+    case SUCK_CANNON_RISING_FOR_SUCTION: {
         if (m[0x53] != *(u8 *)(*(u8 **)(o + 0x70) + 7)) {
             u8 c = *(u8 *)(*(u8 **)(o + 0x70) + 7);
             blend_moby_animation(m, c, 0, scale_game_frames(10));
@@ -1987,9 +2010,9 @@ s32 FUN_L00_002dbe20(u8 *m) {
     case SUCK_CANNON_STORED:
         return 1;
     case 0:
-    case 5:
+    case SUCK_CANNON_FLYING_PROJECTILE:
     case 6:
-    case 7:
+    case SUCK_CANNON_FALLING_AFTER_CANCEL:
     case 9:
         return 0;
     }
@@ -2356,6 +2379,16 @@ extern void func_001E9730_2DDEA0(void *) __asm__("FUN_001e93b0");
 
 int FUN_L00_002dc9f0(struct Moby *moby, char *vars);
 int FUN_L00_002dc9f0(struct Moby *moby, char *vars) {
+    enum {
+        SUCK_UPDATE_ALIGNING_FOR_SUCTION = 0,
+        SUCK_UPDATE_RISING_FOR_SUCTION = 1,
+        SUCK_UPDATE_BEING_PULLED_IN = 2,
+        SUCK_UPDATE_STORED = 3,
+        SUCK_UPDATE_FLYING_PROJECTILE = 4,
+        SUCK_UPDATE_ROLLING_PROJECTILE = 5,
+        SUCK_UPDATE_FALLING_AFTER_CANCEL = 6,
+        SUCK_UPDATE_DEATH = 7
+    };
     Frame_2DDEA0 work;
     R_2DDEA0 *record;
 
@@ -2364,7 +2397,7 @@ int FUN_L00_002dc9f0(struct Moby *moby, char *vars) {
     if (record != 0) {
         *(u128 *)&record->v30 = *(u128 *)&moby->pos;
         switch ((short)(record->state - 1)) {
-        case 0: {
+        case SUCK_UPDATE_ALIGNING_FOR_SUCTION: {
             float yaw, tolerance;
             tolerance = 0.01f;
             yaw = func_001FA748_2DDEA0(func_L00_001FF860_2DDEA0(record->x - moby->pos.x, record->y - moby->pos.y), 3.1415927f);
@@ -2376,7 +2409,7 @@ int FUN_L00_002dc9f0(struct Moby *moby, char *vars) {
             func_001F9BC0_2DDEA0(&record->vel);
             break;
         }
-        case 1:
+        case SUCK_UPDATE_RISING_FOR_SUCTION:
             moby->anim_speed = record->f6C + 1.0f;
             record->f6C = record->f6C + 1.0f / func_001FA888_2DDEA0(func_001F9850_2DDEA0(1));
             if (1.0f < record->f6C) record->f6C = 1.0f;
@@ -2384,7 +2417,7 @@ int FUN_L00_002dc9f0(struct Moby *moby, char *vars) {
             func_00215328_2DDEA0(&record->q20, &moby->rot_row0);
             func_001F9BC0_2DDEA0(&record->vel);
             break;
-        case 2: {
+        case SUCK_UPDATE_BEING_PULLED_IN: {
             float one, distance, half;
             moby->visible = 1;
             moby->flags &= 0xFFFE;
@@ -2451,7 +2484,7 @@ int FUN_L00_002dc9f0(struct Moby *moby, char *vars) {
             }
             break;
         }
-        case 3:
+        case SUCK_UPDATE_STORED:
             moby->flags = (moby->flags | 3) & 0xFFFB;
             moby->visible = 0;
             moby->collision = 0;
@@ -2464,8 +2497,8 @@ int FUN_L00_002dc9f0(struct Moby *moby, char *vars) {
                 qzero(&moby->rot);
             }
             break;
-        case 4:
-        case 5: {
+        case SUCK_UPDATE_FLYING_PROJECTILE:
+        case SUCK_UPDATE_ROLLING_PROJECTILE: {
             float spin, one;
             int hit_wall, surface;
             moby->visible = 1;
@@ -2593,7 +2626,7 @@ int FUN_L00_002dc9f0(struct Moby *moby, char *vars) {
             func_L00_0026D270_2DDEA0(&moby->pos, &moby->rot_row0);
             break;
         }
-        case 6: {
+        case SUCK_UPDATE_FALLING_AFTER_CANCEL: {
             int landed;
             moby->visible = 1;
             moby->flags &= 0xFFFE;
@@ -2616,7 +2649,7 @@ int FUN_L00_002dc9f0(struct Moby *moby, char *vars) {
             }
             break;
         }
-        case 7:
+        case SUCK_UPDATE_DEATH:
             func_001E9730_2DDEA0(D_L00_001EA4B0_2DDEA0);
             break;
         }
@@ -3343,16 +3376,20 @@ extern int D_L00_00161B94 __attribute__((sda));
 extern float D_L00_00161B98 __attribute__((sda));
 void red_orb_update(char *m) __asm__("FUN_L00_002df4f8");
 void red_orb_update(char *m) {
+    enum {
+        RED_ORB_STATE_INITIALIZE_PHASE = 0,
+        RED_ORB_STATE_PULSE_COLOR = 1
+    };
     char *p = *(char **)(m + 0x78);
     unsigned char s = m[0x20];
     float a;
     int c, hi, r, g, b, t;
     switch (s) {
-    case 0:
+    case RED_ORB_STATE_INITIALIZE_PHASE:
         *(float *)p = *(float *)p * DEG_TO_RAD;
         m[0x20] = 1;
         break;
-    case 1:
+    case RED_ORB_STATE_PULSE_COLOR:
         a = fast_add_rotations(*(float *)p,
                                D_L00_00161B98 * DEG_TO_RAD * frame_time);
         *(float *)p = a;

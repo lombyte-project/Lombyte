@@ -238,6 +238,11 @@ extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 extern s32 D_0014C190_257218[][64] __asm__("D_0014C190");
 void novalis_elevator_update(unsigned char *moby) __asm__("FUN_L01_002b9eb0");
 void novalis_elevator_update(unsigned char *moby) {
+    enum {
+        NOVALIS_ELEVATOR_WAIT_AT_PATH_END = 0,
+        NOVALIS_ELEVATOR_WAIT_AT_PATH_START = 1,
+        NOVALIS_ELEVATOR_TRAVERSE_PATH = 2
+    };
     char *data = *(char **)(moby + 0x78);
     char *path;
     float orig[4], delta[4], tmp[4];
@@ -302,7 +307,7 @@ void novalis_elevator_update(unsigned char *moby) {
         *(int *)(data + 0xC4) = -1;
     }
     switch (moby[0xBC]) {
-    case 0:
+    case NOVALIS_ELEVATOR_WAIT_AT_PATH_END:
         if (on) {
             float far;
             if ((*(short *)(data + 0xB8) != 0 && FUN_L01_00277fb8(moby)) ||
@@ -314,7 +319,7 @@ void novalis_elevator_update(unsigned char *moby) {
             }
         }
         break;
-    case 1:
+    case NOVALIS_ELEVATOR_WAIT_AT_PATH_START:
         if (on) {
             float near;
             if ((*(short *)(data + 0xB8) != 0 && FUN_L01_00277fb8(moby)) ||
@@ -326,7 +331,7 @@ void novalis_elevator_update(unsigned char *moby) {
             }
         }
         break;
-    case 2:
+    case NOVALIS_ELEVATOR_TRAVERSE_PATH:
         if (*(int *)(data + 0xC8) == 0 && FUN_L01_00277fb8(moby)) {
             struct Hero *g = &hero;
             g->unk1F2 = 4;
@@ -481,6 +486,7 @@ extern s32 D_L01_00161494 __attribute__((sda));
 extern f32 D_L01_0016149C __attribute__((sda));
 void FUN_L01_002c7530(char *moby) {
     enum {
+        COLLISION_CHECK_AND_COUNTDOWN = 1,
         TIMED_REMOVAL = 2
     };
     int *data = *(int **)(moby + 0x78);
@@ -497,7 +503,7 @@ void FUN_L01_002c7530(char *moby) {
     *(float *)(moby + 0x40) = fast_add_rotations(*(float *)(moby + 0x40), *(float *)(data + 3));
     fast_vec_add(moby + 0x10, moby + 0x10, data + 8);
     switch ((u8)moby[0x20]) {
-    case 1:
+    case COLLISION_CHECK_AND_COUNTDOWN:
         FUN_L01_00280970(D_L01_00161494, moby);
         fast_vec_normalize(normal, data + 8, 1.0f);
         make_hit_descriptor(hit, moby, 0, 0.0f, normal);
@@ -838,6 +844,13 @@ extern ItemPrice_2e1ac0 D_L01_001C4530[];
 extern s32 alternate_animation_sequence_gp __asm__("D_0015EE20") __attribute__((sda));
 void gold_weapon_case_update(struct Moby *m) __asm__("FUN_L01_002e1ac0");
 void gold_weapon_case_update(struct Moby *m) {
+    enum {
+        GOLD_WEAPON_CASE_INITIALIZE = 0,
+        GOLD_WEAPON_CASE_PROCESS_SALE = 1,
+        GOLD_WEAPON_CASE_REMOVE_WHEN_PURCHASED = 2,
+        GOLD_WEAPON_CASE_IDLE = 3,
+        GOLD_WEAPON_CASE_WAIT_FOR_CUTSCENE_END = 4
+    };
     SaleVars_2e1ac0 *v = (SaleVars_2e1ac0 *)m->pvars;
     s32 item;
     ItemPrice_2e1ac0 *price;
@@ -847,7 +860,7 @@ void gold_weapon_case_update(struct Moby *m) {
         return;
     }
     switch (m->state) {
-    case 0:
+    case GOLD_WEAPON_CASE_INITIALIZE:
         if (m->oclass != 0x130) {
             m->state = 2;
         } else if (D_0013E520_2e1ac0[D_L01_001DEB10[v->slot]] != 0 ||
@@ -857,7 +870,7 @@ void gold_weapon_case_update(struct Moby *m) {
             m->state = 1;
         }
         break;
-    case 1:
+    case GOLD_WEAPON_CASE_PROCESS_SALE:
         v->radius = 1.9f;
         FUN_L00_00266448_2e1ac0(m, v);
         if (v->result == 2) {
@@ -869,15 +882,15 @@ void gold_weapon_case_update(struct Moby *m) {
             FUN_L01_002aea70_2e1ac0(m, item, price);
         }
         break;
-    case 3: /* sold out or done: idle */
+    case GOLD_WEAPON_CASE_IDLE: /* sold out or done: idle */
         break;
-    case 4:
+    case GOLD_WEAPON_CASE_WAIT_FOR_CUTSCENE_END:
         if (cutscene_mode == 0) {
             FUN_0020b178_2e1ac0(0, -1);
             m->state = 3;
         }
         break;
-    case 2:
+    case GOLD_WEAPON_CASE_REMOVE_WHEN_PURCHASED:
         if (D_0013E520_2e1ac0[D_L01_001DEB10[v->slot]] != 0) {
             FUN_0020c828_2e1ac0(m);
         }
@@ -1090,6 +1103,10 @@ extern void blend_moby_animation_3830(void *, int, int, int) __asm__("FUN_00212f
 extern int random_integer_3830(void) __asm__("FUN_001160d8");
 
 void FUN_L01_002e3830(struct Moby *m, char *p) {
+    enum {
+        HOVER_FACE_GOAL_AND_WAIT = 0,
+        HOVER_MOVE_TOWARD_GOAL = 2
+    };
     Vec4 v;
     f32 d, ang, len, ground, near;
     s32 hit;
@@ -1104,7 +1121,7 @@ void FUN_L01_002e3830(struct Moby *m, char *p) {
     vector_distance(&m->pos, p);
 
     switch (m->command) {
-    case 0:
+    case HOVER_FACE_GOAL_AND_WAIT:
         ang = fast_arc_tan(*(f32 *)(p + 0) - m->pos.x, *(f32 *)(p + 4) - m->pos.y);
         FUN_L00_00258278(m, ang, &D_L01_001DEB4C, frame_time_sq * 11.519173f,
                          frame_time_sq * 3.1415927f, frame_time * 11.519173f);
@@ -1121,7 +1138,7 @@ void FUN_L01_002e3830(struct Moby *m, char *p) {
             m->command = 2;
         }
         return;
-    case 2:
+    case HOVER_MOVE_TOWARD_GOAL:
     case 3:
         break;
     default:
@@ -1280,6 +1297,14 @@ extern void FUN_L01_002e3830(struct Moby *, char *);
 extern unsigned char D_0013D4C5 __attribute__((section(".data")));
 void sand_mouse_update(struct Moby *moby) __asm__("FUN_L01_002e3f20");
 void sand_mouse_update(struct Moby *moby) {
+    enum {
+        SAND_MOUSE_INITIALIZE = 0,
+        SAND_MOUSE_WAIT_FOR_PARENT_READY = 2,
+        SAND_MOUSE_MOVE_TOWARD_HERO = 3,
+        SAND_MOUSE_FADE_OUT_AND_RESET_HOME = 6,
+        SAND_MOUSE_DAMP_VELOCITY_BEFORE_RETURN = 19,
+        SAND_MOUSE_RETURN_TO_PARENT = 20
+    };
     Data_2e3f20 *d;
     float va[4];
     float vb[4];
@@ -1307,7 +1332,7 @@ void sand_mouse_update(struct Moby *moby) {
         }
     }
     switch (moby->state) {
-    case 0:
+    case SAND_MOUSE_INITIALIZE:
         qzero(d->target);
         qzero(d->vel);
         d->s4A = 0;
@@ -1409,7 +1434,7 @@ void sand_mouse_update(struct Moby *moby) {
             }
         }
         break;
-    case 2:
+    case SAND_MOUSE_WAIT_FOR_PARENT_READY:
         if (d->parent != -1) {
             if (ents_2e3f20[d->parent].state == 5) {
                 moby->state = 3;
@@ -1422,7 +1447,7 @@ void sand_mouse_update(struct Moby *moby) {
             moby->state = 3;
         }
         break;
-    case 3:
+    case SAND_MOUSE_MOVE_TOWARD_HERO:
         FUN_L01_002e30b8((int)moby, d);
         ang = fast_arc_tan(d->target[0] - moby->pos.x, d->target[1] - moby->pos.y);
         face_target_2e3f20(moby, ang, &mover_2e3f20.f14,
@@ -1478,7 +1503,7 @@ void sand_mouse_update(struct Moby *moby) {
         }
         FUN_L01_002e35a8((char *)moby, (char *)d);
         break;
-    case 6:
+    case SAND_MOUSE_FADE_OUT_AND_RESET_HOME:
         if (fast_dec_timer_s16(&d->timer)) {
             moby->alpha = 0x80;
             qcopy(((float *)&moby->pos), d->home);
@@ -1513,7 +1538,7 @@ void sand_mouse_update(struct Moby *moby) {
             moby->rot.z = fast_add_rotations(moby->rot.z, frame_time * 25.132742f);
         }
         break;
-    case 19:
+    case SAND_MOUSE_DAMP_VELOCITY_BEFORE_RETURN:
         {
             float t = frame_scale * -0.050000012f + 1.0f;
             d->vel[0] = d->vel[0] * t;
@@ -1525,7 +1550,7 @@ void sand_mouse_update(struct Moby *moby) {
             moby->state = 0x14;
         }
         break;
-    case 20:
+    case SAND_MOUSE_RETURN_TO_PARENT:
         {
             float z;
             int r;
@@ -1582,6 +1607,7 @@ extern char D_L01_00174340_c[] __asm__("D_L01_001742C0");
 
 void FUN_L01_002eda00(char *m) {
     enum {
+        MOVE_UNTIL_COLLISION_OR_TIMEOUT = 1,
         BURST_AND_REMOVE = 2
     };
     char *d = *(char **)(m + 0x78);
@@ -1590,7 +1616,7 @@ void FUN_L01_002eda00(char *m) {
     Hit_2eedd8 h;
     float gz;
     switch (((unsigned char *)m)[0x20]) {
-    case 1:
+    case MOVE_UNTIL_COLLISION_OR_TIMEOUT:
         qcopy(prev, m + 0x10);
         add_vector_xyz(m + 0x10, m + 0x10, d);
         *(float *)(m + 0x48) = fast_arc_tan(*(float *)(d + 0), *(float *)(d + 4));
@@ -1677,6 +1703,15 @@ extern float D_L01_001619AC __attribute__((sda));
 
 void large_amoeboid_update(unsigned char *moby) __asm__("FUN_L01_002edca0");
 void large_amoeboid_update(unsigned char *moby) {
+    enum {
+        LARGE_AMOEBOID_INITIALIZE = 0,
+        LARGE_AMOEBOID_MOVE_TOWARD_STORED_POSITION = 2,
+        LARGE_AMOEBOID_FOLLOW_PATH_TO_TARGET = 4,
+        LARGE_AMOEBOID_RETURN_TO_STORED_POSITION = 5,
+        LARGE_AMOEBOID_WAIT_FOR_ACTIVATION_VOLUME = 13,
+        LARGE_AMOEBOID_MOVE_DIRECTLY_TOWARD_TARGET = 15,
+        LARGE_AMOEBOID_WAIT_WHILE_BLOCKED = 16
+    };
     char *data = *(char **)(moby + 0x78);
     char *target;
     char *target_position;
@@ -1700,7 +1735,7 @@ void large_amoeboid_update(unsigned char *moby) {
     FUN_L01_002eec68_u((char *)moby);
     target = *(char **)(data + 0x200);
     switch (moby[0x20]) {
-    case 0:
+    case LARGE_AMOEBOID_INITIALIZE:
         qcopy(data + 0x210, moby + 0x10);
         switch (*(short *)(moby + 0xa6)) {
         case 0x23c:
@@ -1783,7 +1818,7 @@ void large_amoeboid_update(unsigned char *moby) {
             blend_moby_animation(moby, 1, 0, 5);
         moby[0x20] = 2;
         break;
-    case 2:
+    case LARGE_AMOEBOID_MOVE_TOWARD_STORED_POSITION:
         angle = fast_arc_tan(*(float *)(data + 0x210) - *(float *)(moby + 0x10),
                               *(float *)(data + 0x214) - *(float *)(moby + 0x14));
         approach_angle((float *)(moby + 0x48), (float *)(data + 0x220), angle,
@@ -1818,7 +1853,7 @@ void large_amoeboid_update(unsigned char *moby) {
         }
         FUN_L01_002ef560(moby);
         return;
-    case 15:
+    case LARGE_AMOEBOID_MOVE_DIRECTLY_TOWARD_TARGET:
         blocked = 0;
         angle = fast_arc_tan(*(float *)(target + 0x10) - *(float *)(moby + 0x10),
                               *(float *)(target + 0x14) - *(float *)(moby + 0x14));
@@ -1844,13 +1879,13 @@ void large_amoeboid_update(unsigned char *moby) {
             return;
         }
         break;
-    case 16:
+    case LARGE_AMOEBOID_WAIT_WHILE_BLOCKED:
         if (!(moby[0x70] & 2) || *(int *)(data + 0x22c) != 0) return;
         moby[0x20] = 5;
         if (moby[0x53] != 1)
             blend_moby_animation(moby, 1, 0, scale_game_frames(20));
         return;
-    case 4: {
+    case LARGE_AMOEBOID_FOLLOW_PATH_TO_TARGET: {
         char *target_position;
         unsigned char path_hit;
         target_position = target + 0x10;
@@ -1932,7 +1967,7 @@ void large_amoeboid_update(unsigned char *moby) {
         if (moby[0x53] != 1)
             blend_moby_animation(moby, 1, 0, scale_game_frames(10));
         return;
-    case 5: {
+    case LARGE_AMOEBOID_RETURN_TO_STORED_POSITION: {
         int blocked = 0;
         char *target_position;
         distance = vector_distance(moby + 0x10, (target_position = data + 0x210));
@@ -1998,7 +2033,7 @@ void large_amoeboid_update(unsigned char *moby) {
             *(float *)(data + 0x194) = distance;
         }
         break;
-    case 13:
+    case LARGE_AMOEBOID_WAIT_FOR_ACTIVATION_VOLUME:
         *(u16 *)(moby + 0x34) |= 1;
         if (FUN_00214720(D_0013F420, *(int *)(data + 0x25c)) != 0) {
             u16 flags;
@@ -2557,7 +2592,10 @@ extern float D_0015ED70_lui __asm__("D_0015ED70");
 void sandmouse_house_update(unsigned char *m) __asm__("FUN_L01_002f2b68");
 void sandmouse_house_update(unsigned char *m) {
     enum {
-        SANDMOUSE_HOUSE_INITIALIZE = 0
+        SANDMOUSE_HOUSE_INITIALIZE = 0,
+        SANDMOUSE_HOUSE_WAIT_FOR_INITIAL_COMMAND = 1,
+        SANDMOUSE_HOUSE_WAIT_FOR_INITIAL_COMMAND_ANIMATION_END = 2,
+        SANDMOUSE_HOUSE_RESTORE_INITIAL_ANIMATION = 7
     };
     char *d;
     if (m == 0)
@@ -2583,7 +2621,7 @@ void sandmouse_house_update(unsigned char *m) {
         m[0x20] = 1;
         *(float *)d = *(float *)(m + 0x48);
         break;
-    case 1:
+    case SANDMOUSE_HOUSE_WAIT_FOR_INITIAL_COMMAND:
         if ((unsigned char)(m[0xBC] - 3) < 3) {
             if (m[0x53] != 1) {
                 blend_moby_animation_w7(m, 1, 0, FUN_001f96f8_w7(10));
@@ -2591,7 +2629,7 @@ void sandmouse_house_update(unsigned char *m) {
             m[0x20] = 2;
         }
         break;
-    case 2:
+    case SANDMOUSE_HOUSE_WAIT_FOR_INITIAL_COMMAND_ANIMATION_END:
         if (m[0x70] & 2) {
             if (m[0x53] != 2) {
                 blend_moby_animation_w7(m, 2, 0, FUN_001f96f8_w7(3));
@@ -2643,7 +2681,7 @@ void sandmouse_house_update(unsigned char *m) {
             }
         }
         break;
-    case 7:
+    case SANDMOUSE_HOUSE_RESTORE_INITIAL_ANIMATION:
         if (m[0x70] & 2) {
             if (m[0x53] != 0) {
                 blend_moby_animation_w7(m, 0, 0, FUN_001f96f8_w7(3));

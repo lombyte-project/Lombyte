@@ -144,6 +144,11 @@ extern CollisionHit HH __asm__("D_L05_00174240") __attribute__((section(".data")
 #define HF(o) (*(f32 *)(D_L05_00174240 + (o)))
 
 void FUN_L05_002402a8(void) {
+    enum {
+        GRAVITY_MODE_WORLD_DOWN = 0,
+        GRAVITY_MODE_OPPOSITE_GROUND_NORMAL = 1,
+        GRAVITY_MODE_TOWARD_REFERENCE_POINT = 2
+    };
     V shared_probe_endpoint, ground_probe_endpoint, ground_vector_scratch, side_probe_endpoint, unused_probe_vector, hit_normal_angles, normalized_hit_normal;
     f32 f;
     s32 r;
@@ -265,14 +270,14 @@ tail:
 d1:
     FUN_001f99f8_c((u8 *)&hero.gravity_dir);
     switch (hero.unk20B3) {
-    case 0:
+    case GRAVITY_MODE_WORLD_DOWN:
         hero.gravity_dir.f[2] = -1.0f;
         break;
-    case 1:
+    case GRAVITY_MODE_OPPOSITE_GROUND_NORMAL:
         qcopy((u8 *)&hero.gravity_dir, (u8 *)&hero.unk270);
         FUN_001f9a68_c((u8 *)&hero.gravity_dir, (u8 *)&hero.gravity_dir, -1.0f);
         break;
-    case 2:
+    case GRAVITY_MODE_TOWARD_REFERENCE_POINT:
         fast_vec_sub((u8 *)&hero.gravity_dir, (u8 *)&hero.motion.unkB0, (u8 *)&hero.motion.pos);
         FUN_001f9bf8_c((u8 *)&hero.gravity_dir, (u8 *)&hero.gravity_dir, 1.0f);
         break;

@@ -120,6 +120,11 @@ extern int func_0022ED80_r(int, int, int) __asm__("FUN_0022da68");
 
 void background_ship_1_update(char *moby) __asm__("FUN_L02_002ec4b8");
 void background_ship_1_update(char *moby) {
+    enum {
+        BACKGROUND_SHIP_1_INITIALIZE = 0,
+        BACKGROUND_SHIP_1_FOLLOW_PATH = 1,
+        BACKGROUND_SHIP_1_REMOVE = 2
+    };
     char *d;
     char *t;
     int r;
@@ -135,7 +140,7 @@ void background_ship_1_update(char *moby) {
     t = D_L02_001B0AB0[*(int *)(d + 0x60)];
     r = (int)find_moby_hit(moby, 0x10000, 0);
     switch (*(unsigned char *)(moby + 0x20)) {
-    case 0: {
+    case BACKGROUND_SHIP_1_INITIALIZE: {
         int m1;
         *(unsigned char *)(moby + 0x30) = 0xFF;
         *(short *)(moby + 0x32) = 0xFF;
@@ -162,7 +167,7 @@ void background_ship_1_update(char *moby) {
         *(float *)(d + 0x64) = *(float *)(d + 0x74) * (float)*(int *)t;
         break;
     }
-    case 1:
+    case BACKGROUND_SHIP_1_FOLLOW_PATH:
         qcopy(tv, moby + 0x10);
         if (voice_is_playing(moby, *(int *)(d + 0x6C)) == 0) {
             *(int *)(d + 0x6C) = func_0022ED80_r(1, 4, (int)moby);
@@ -194,7 +199,7 @@ void background_ship_1_update(char *moby) {
             *(unsigned char *)(moby + 0x20) = 2;
         }
         break;
-    case 2:
+    case BACKGROUND_SHIP_1_REMOVE:
         if (current_level_index == 2) {
             D_0015EDF4 = D_0015EDF4 + 1;
             if (D_0015EDF4 >= 3) {
@@ -370,6 +375,11 @@ extern char D_001413F4[];
 
 void background_ship_2_update(char *moby) __asm__("FUN_L02_002ece18");
 void background_ship_2_update(char *moby) {
+    enum {
+        BACKGROUND_SHIP_2_INITIALIZE = 0,
+        BACKGROUND_SHIP_2_FOLLOW_PATH = 1,
+        BACKGROUND_SHIP_2_REMOVE = 2
+    };
     char *d;
     char *t;
     int r;
@@ -385,7 +395,7 @@ void background_ship_2_update(char *moby) {
     t = D_L02_001B0AB0[*(int *)(d + 0x60)];
     r = (int)find_moby_hit(moby, 0x10000, 0);
     switch (*(unsigned char *)(moby + 0x20)) {
-    case 0: {
+    case BACKGROUND_SHIP_2_INITIALIZE: {
         int m1;
         *(unsigned char *)(moby + 0x30) = 0xFF;
         *(short *)(moby + 0x32) = 0xFF;
@@ -415,7 +425,7 @@ void background_ship_2_update(char *moby) {
         *(float *)(d + 0x64) = *(float *)(d + 0x74) * (float)*(int *)t;
         break;
     }
-    case 1:
+    case BACKGROUND_SHIP_2_FOLLOW_PATH:
         if (*(unsigned char *)D_001413F4 == 1 && current_level_index == 10) {
             delete_moby(moby);
             return;
@@ -458,7 +468,7 @@ void background_ship_2_update(char *moby) {
             *(unsigned char *)(moby + 0x20) = 2;
         }
         break;
-    case 2:
+    case BACKGROUND_SHIP_2_REMOVE:
         if (current_level_index == 2) {
             D_0015EDF4 = D_0015EDF4 + 1;
             if (D_0015EDF4 >= 3) {
@@ -624,19 +634,24 @@ void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
 void white_flower_update(char *m) __asm__("FUN_L02_002f1f60");
 void white_flower_update(char *m) {
+    enum {
+        WHITE_FLOWER_INITIALIZE = 0,
+        WHITE_FLOWER_WAIT_FOR_HIT = 1,
+        WHITE_FLOWER_REMOVE = 2
+    };
     int hit = 0;
     char *r = find_moby_hit(m, 0x10000, 0);
     switch (*(unsigned char *)(m + 0x20)) {
-    case 0:
+    case WHITE_FLOWER_INITIALIZE:
         m[0x20] = 1;
         break;
-    case 1:
+    case WHITE_FLOWER_WAIT_FOR_HIT:
         if (r != 0 && *(float *)(r + 0x2C) > 0.0f)
             hit = 1;
         if (hit)
             m[0x20] = 2;
         break;
-    case 2:
+    case WHITE_FLOWER_REMOVE:
         allocate_voice_for_target_entry(0, 0, (int)m);
         FUN_L01_002787a0(m);
         FUN_L00_00263e30(m, 0x71D, 1, 0x71D, 1, 5, 2);

@@ -32,21 +32,26 @@ void fun_001fa070(void *, void *) __asm__("FUN_001fa070");
 
 void update_sky_shells_animated(void) __asm__("FUN_L00_00289420");
 void update_sky_shells_animated(void) {
+    enum {
+        SKY_SHELL_SLOW_ROTATION = 2,
+        SKY_SHELL_MEDIUM_ROTATION = 3,
+        SKY_SHELL_FAST_ROTATION = 4
+    };
     float v[4] __attribute__((aligned(16)));
     int i;
     *(short *)(D_L00_0016051C + 4) = 0;
     qzero(v);
     for (i = 0; i < *(short *)(D_L00_0016051C + 6); i++) {
         switch (i) {
-        case 2:
+        case SKY_SHELL_SLOW_ROTATION:
             v[2] = (D_L00_0015F5CC & 0x3ffff) * 0.000023968450f - 3.14159265f;
             fun_001fa070(D_L00_001BD7E0, v);
             break;
-        case 3:
+        case SKY_SHELL_MEDIUM_ROTATION:
             v[2] = (D_L00_0015F5CC & 0x1ffff) * 0.000047936900f - 3.14159265f;
             fun_001fa070(D_L00_001BD7E0, v);
             break;
-        case 4:
+        case SKY_SHELL_FAST_ROTATION:
             v[2] = (unsigned short)D_L00_0015F5CC * 0.000095873800f - 3.14159265f;
             fun_001fa070(D_L00_001BD7E0, v);
             break;
@@ -92,17 +97,21 @@ extern void FUN_001fa070_cf(void *) __asm__("FUN_001f9fc8");
 void FUN_001f9fc8_cf(void *, void *) __asm__("FUN_001fa070");
 
 void FUN_L00_00289a90(void) {
+    enum {
+        SKY_SHELL_FAST_ROTATION = 1,
+        SKY_SHELL_SLOW_ROTATION = 2
+    };
     float v[4] __attribute__((aligned(16)));
     int i;
     *(short *)(D_L00_0016051C + 4) = 0;
     qzero(v);
     for (i = 0; i < *(short *)(D_L00_0016051C + 6); ++i) {
         switch (i) {
-        case 1:
+        case SKY_SHELL_FAST_ROTATION:
             v[2] = (float)*(unsigned short *)&D_L00_0015F5CC * 0.0000958738017f - 3.14159265f;
             FUN_001f9fc8_cf(D_L00_001BD7E0, v);
             break;
-        case 2:
+        case SKY_SHELL_SLOW_ROTATION:
             v[2] = (float)(D_L00_0015F5CC & 0x1FFFF) * 0.00004793690085f - 3.14159265f;
             FUN_001f9fc8_cf(D_L00_001BD7E0, v);
             break;
@@ -205,30 +214,36 @@ extern void FUN_001fa070_28a480(void *, void *) __asm__("FUN_001fa070");
 extern void FUN_001f9fc8_28a480(void *) __asm__("FUN_001f9fc8");
 
 void FUN_L00_0028a480(void) {
+    enum {
+        SKY_SHELL_DOUBLE_PHASE_ROTATION = 0,
+        SKY_SHELL_QUINTUPLE_PHASE_ROTATION = 1,
+        SKY_SHELL_TENFOLD_PHASE_WIDE_WRAP_ROTATION = 2,
+        SKY_SHELL_TENFOLD_PHASE_ROTATION = 3
+    };
     OvlQuad v[1];
     int i;
 
     qzero(v);
     for (i = 0; i < *(short *)(D_L00_0016051C_28a480 + 6); i++) {
         switch (i) {
-        case 0:
+        case SKY_SHELL_DOUBLE_PHASE_ROTATION:
             ((float *)v)[2] =
                 (float)((D_L00_0015F5CC_28a480g * 2) & 0x1FFFF) * (3.14159265f / 65536.0f) -
                 3.14159265f;
             FUN_001fa070_28a480(D_L00_001BD7E0_lui, v);
             break;
-        case 1:
+        case SKY_SHELL_QUINTUPLE_PHASE_ROTATION:
             ((float *)v)[2] =
                 (float)((D_L00_0015F5CC_28a480d * 5) & 0x1FFFF) * (3.14159265f / 65536.0f) -
                 3.14159265f;
             FUN_001fa070_28a480(D_L00_001BD7E0_lui, v);
             break;
-        case 2:
+        case SKY_SHELL_TENFOLD_PHASE_WIDE_WRAP_ROTATION:
             ((float *)v)[2] =
                 (float)((D_L00_0015F5CC_28a480d * 10) & 0x3FFFF) * 2.39684496e-05f - 3.14159265f;
             FUN_001fa070_28a480(D_L00_001BD7E0_lui, v);
             break;
-        case 3:
+        case SKY_SHELL_TENFOLD_PHASE_ROTATION:
             ((float *)v)[2] =
                 (float)((D_L00_0015F5CC_28a480g * 10) & 0x1FFFF) * (3.14159265f / 65536.0f) -
                 3.14159265f;
@@ -247,21 +262,26 @@ void fun_001fa070(void *, void *) __asm__("FUN_001fa070");
 extern short D_L00_0015F6B0_s __asm__("D_L00_0015F5CC");
 
 void FUN_L00_0028a620(void) {
+    enum {
+        SKY_SHELL_SLOW_ROTATION = 1,
+        SKY_SHELL_MEDIUM_ROTATION = 2,
+        SKY_SHELL_FAST_ROTATION = 3
+    };
     float v[4] __attribute__((aligned(16)));
     int i;
     *(short *)(D_L00_0016051C + 4) = 0;
     qzero(v);
     for (i = 0; i < *(short *)(D_L00_0016051C + 6); i++) {
         switch (i) {
-        case 1:
+        case SKY_SHELL_SLOW_ROTATION:
             v[2] = (D_L00_0015F5CC & 0x3FFFF) * (3.14159265f / 131072.0f) - 3.14159265f;
             fun_001fa070(D_L00_001BD7E0, v);
             break;
-        case 2:
+        case SKY_SHELL_MEDIUM_ROTATION:
             v[2] = (D_L00_0015F5CC & 0x1FFFF) * (3.14159265f / 65536.0f) - 3.14159265f;
             fun_001fa070(D_L00_001BD7E0, v);
             break;
-        case 3:
+        case SKY_SHELL_FAST_ROTATION:
             v[2] = *(unsigned short *)&D_L00_0015F6B0_s * (3.14159265f / 32768.0f) - 3.14159265f;
             fun_001fa070(D_L00_001BD7E0, v);
             break;
@@ -361,6 +381,13 @@ void FUN_001f9a80_28b1a0(void *, void *, float) __asm__("FUN_001f9a80");
 extern float D_L00_001604C0 __attribute__((sda));
 extern OvlQuad D_L00_00160520 __attribute__((section(".sdata")));
 void FUN_L00_0028b1a0(void) {
+    enum {
+        SKY_SHELL_TRIPLE_SCALE = 1,
+        SKY_SHELL_TWO_AND_A_HALF_SCALE = 2,
+        SKY_SHELL_DOUBLE_SCALE = 3,
+        SKY_SHELL_ONE_AND_A_HALF_SCALE = 4,
+        SKY_SHELL_ONE_AND_A_QUARTER_SCALE = 5
+    };
     float v[4] __attribute__((aligned(16)));
     int i = 0;
     float *p;
@@ -373,27 +400,27 @@ void FUN_L00_0028b1a0(void) {
         p = (float *)(D_L00_0016051C_28b1a0->e[i] + 8);
         k = 1.0f;
         switch (i) {
-        case 1:
+        case SKY_SHELL_TRIPLE_SCALE:
             v[1] = 0.02f;
             k = 3.0f;
             *p += D_L00_001604C0 * 0.55f;
             break;
-        case 2:
+        case SKY_SHELL_TWO_AND_A_HALF_SCALE:
             v[1] = -0.02f;
             k = 2.5f;
             *p += D_L00_001604C0 * 0.6f;
             break;
-        case 3:
+        case SKY_SHELL_DOUBLE_SCALE:
             v[1] = 0.01f;
             k = 2.0f;
             *p += D_L00_001604C0 * 0.7f;
             break;
-        case 4:
+        case SKY_SHELL_ONE_AND_A_HALF_SCALE:
             v[1] = -0.01f;
             k = 1.5f;
             *p += D_L00_001604C0 * 0.75f;
             break;
-        case 5:
+        case SKY_SHELL_ONE_AND_A_QUARTER_SCALE:
             k = 1.25f;
             *p += D_L00_001604C0 * 0.8f;
             break;

@@ -24,16 +24,21 @@ extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68"
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 
 void FUN_L03_0029d1b8(struct Moby *moby) {
+    enum {
+        MOBY_CLASS_ALTERNATE_COLOR_CHILD_EFFECT_EMITTER = 0x4B,
+        MOBY_CLASS_TWO_JOINT_PARTICLE_EMITTER = 0x74,
+        MOBY_CLASS_FIFTEEN_PARTICLE_BURST_EMITTER = 0x76
+    };
     char *data = (char *)moby->pvars;
     int r;
     float f;
     switch (moby->oclass) {
     case 0x33:
     case 0x40:
-    case 0x4B:
+    case MOBY_CLASS_ALTERNATE_COLOR_CHILD_EFFECT_EMITTER:
     case 0x73:
-    case 0x74:
-    case 0x76:
+    case MOBY_CLASS_TWO_JOINT_PARTICLE_EMITTER:
+    case MOBY_CLASS_FIFTEEN_PARTICLE_BURST_EMITTER:
     case 0x77:
         if (*(short *)(data + 0x148) == -1) {
             int lo = *(short *)(data + 0x14C);
@@ -499,6 +504,15 @@ extern char D_0013E550_292e98[] __asm__("D_0013E550");
  * behind, switches to the second path when the cars are done and brakes at its end (state 6 resets). */
 void metropolis_train_locomotive_update(char *moby) __asm__("FUN_L03_00292e98");
 void metropolis_train_locomotive_update(char *moby) {
+    enum {
+        TRAIN_INITIALIZE = 0,
+        TRAIN_SETUP_COUPLING_PATH = 1,
+        TRAIN_POSITION_FOR_BOARDING = 2,
+        TRAIN_WAIT_FOR_BOARDING = 3,
+        TRAIN_ACCELERATE_AND_FOLLOW_FIRST_PATH = 4,
+        TRAIN_FOLLOW_SECOND_PATH_AND_BRAKE = 5,
+        TRAIN_WAIT_FOR_RESET_VOLUME = 6
+    };
     float start[4];
     int seg;
     float frac;
@@ -536,7 +550,7 @@ void metropolis_train_locomotive_update(char *moby) {
     cdata = *(Coupling292e98 **)(coupling + 0x78);
     D_L03_0015FDFC = 0;
     switch (((unsigned char *)moby)[0xBC]) {
-    case 0:
+    case TRAIN_INITIALIZE:
         data->i20 = 0;
         data->s24 = 0;
         data->b28 = 4;
@@ -568,7 +582,7 @@ void metropolis_train_locomotive_update(char *moby) {
         data->i9C = 3;
         *(unsigned short *)(coupling + 0x34) |= 6;
         break;
-    case 1:
+    case TRAIN_SETUP_COUPLING_PATH:
         *(OvlQuad *)start = *(OvlQuad *)(D_L03_001B05B0_292e98[data->iA4] + 0x10);
         FUN_L03_00292578(moby, start, 0.0f);
         cdata->i74 = data->iA4;
@@ -576,7 +590,7 @@ void metropolis_train_locomotive_update(char *moby) {
         gunship_follow_path(coupling);
         moby[0xBC] = 2;
         break;
-    case 2:
+    case TRAIN_POSITION_FOR_BOARDING:
         *(OvlQuad *)start = *(OvlQuad *)(D_L03_001B05B0_292e98[data->iA8] + 0x10);
         FUN_L03_00292578(moby, start, PATH_HEADING(D_L03_001B05B0_292e98[data->iA8]));
         moby[0xBC] = 3;
@@ -585,7 +599,7 @@ void metropolis_train_locomotive_update(char *moby) {
         cdata->i60 = 1;
         data->fC8 = 0.0f;
         break;
-    case 3:
+    case TRAIN_WAIT_FOR_BOARDING:
         FUN_L03_00292d10(moby);
         if (!is_point_inside_clip_volume(&hero.motion, data->iB4)) {
             break;
@@ -607,7 +621,7 @@ void metropolis_train_locomotive_update(char *moby) {
             data->i108 = -1;
         }
         break;
-    case 4:
+    case TRAIN_ACCELERATE_AND_FOLLOW_FIRST_PATH:
         data->fC8 += data->fC0 / 5.0f * frame_time;
         if (data->fC0 < data->fC8) {
             data->fC8 = data->fC0;
@@ -690,7 +704,7 @@ void metropolis_train_locomotive_update(char *moby) {
         moby[0xBC] = 5;
         jet_game_state(0, 8);
         break;
-    case 5:
+    case TRAIN_FOLLOW_SECOND_PATH_AND_BRAKE:
         td = *(Turret292e98 **)((char *)&D_L03_0015FFD8_m292[data->iD8] + 0x78);
         FUN_L03_00292890(moby);
         D_L03_0015FDFC = 1;
@@ -712,7 +726,7 @@ void metropolis_train_locomotive_update(char *moby) {
         }
         AIM_AT_HERO(td);
         break;
-    case 6:
+    case TRAIN_WAIT_FOR_RESET_VOLUME:
         if (is_point_inside_clip_volume(&hero.motion, data->iB0)) {
             for (i6 = 0; i6 < 8; i6++) {
                 m6 = D_L03_0015FFD8_292e98 + (data->ids[i6] << 8);
@@ -750,6 +764,13 @@ extern void scale_vector_xyz(void *out, void *a, float s) __asm__("FUN_001f9a68"
  * or steps node to node towards the path end, pausing between runs and playing its loop sound. */
 void moving_platform_small_update(char *moby) __asm__("FUN_L03_00294c08");
 void moving_platform_small_update(char *moby) {
+    enum {
+        PLATFORM_INITIALIZE_AND_WAIT = 0,
+        PLATFORM_EASED_ENDPOINT_TRAVEL = 1,
+        PLATFORM_PAUSE_BEFORE_EASED_TRAVEL = 2,
+        PLATFORM_FOLLOW_PATH_NODES = 3,
+        PLATFORM_PAUSE_BEFORE_NODE_TRAVEL = 4
+    };
     float delta[4];
     float old_rot[4];
     float step[4];
@@ -781,7 +802,7 @@ void moving_platform_small_update(char *moby) {
     qcopy(old_rot, moby + 0x40);
     noop_main_callback(moby);
     switch (((unsigned char *)moby)[0x20]) {
-    case 0:
+    case PLATFORM_INITIALIZE_AND_WAIT:
         pa = data + 0xB0;
         *(char **)(data + 0xC0) = D_L03_001B05B0_294c08[*(int *)(data + 0xE0)];
         if (*(int *)(data + 0xF8) != 0) {
@@ -806,7 +827,7 @@ void moving_platform_small_update(char *moby) {
             moby[0x20] = 1;
         }
         break;
-    case 1:
+    case PLATFORM_EASED_ENDPOINT_TRAVEL:
         pb = data + 0xB0;
         speed = *(float *)(data + 0x114);
         base = 0.0f;
@@ -843,13 +864,13 @@ void moving_platform_small_update(char *moby) {
             *(int *)(data + 0xE8) = scale_game_frames(*(int *)(data + 0xF0));
         }
         break;
-    case 2:
+    case PLATFORM_PAUSE_BEFORE_EASED_TRAVEL:
         if (fast_dec_timer(data + 0xE8)) {
             *(int *)(data + 0x10C) = 0;
             moby[0x20] = 1;
         }
         break;
-    case 3:
+    case PLATFORM_FOLLOW_PATH_NODES:
         pc = data + 0xB0;
         path = *(int **)(pc + 0x10);
         dir = pc[4];
@@ -892,7 +913,7 @@ void moving_platform_small_update(char *moby) {
             }
         }
         break;
-    case 4:
+    case PLATFORM_PAUSE_BEFORE_NODE_TRAVEL:
         if (fast_dec_timer(data + 0xE8)) {
             moby[0x20] = 3;
         }
@@ -948,6 +969,11 @@ extern int D_L03_0015F5CC; /* no foreign declaration */
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 
 void FUN_L03_0029c9d0(struct Moby *moby) {
+    enum {
+        MOBY_CLASS_ALTERNATE_COLOR_CHILD_EFFECT_EMITTER = 0x4B,
+        MOBY_CLASS_TWO_JOINT_PARTICLE_EMITTER = 0x74,
+        MOBY_CLASS_FIFTEEN_PARTICLE_BURST_EMITTER = 0x76
+    };
     char *data = (char *)moby->pvars;
     if (moby->state == 0) {
         *(int *)(data + 0x150) = -1;
@@ -966,10 +992,10 @@ void FUN_L03_0029c9d0(struct Moby *moby) {
     case 0x78:
         *(int *)(data + 0x150) = allocate_voice_for_target_entry(0, 4, (int)moby);
         break;
-    case 0x4B:
+    case MOBY_CLASS_ALTERNATE_COLOR_CHILD_EFFECT_EMITTER:
     case 0x73:
-    case 0x74:
-    case 0x76:
+    case MOBY_CLASS_TWO_JOINT_PARTICLE_EMITTER:
+    case MOBY_CLASS_FIFTEEN_PARTICLE_BURST_EMITTER:
     case 0x77:
         *(int *)(data + 0x150) = allocate_voice_for_target_entry(1, 4, (int)moby);
         break;
@@ -988,7 +1014,10 @@ char *FUN_L03_002bad40(struct Moby *parent, int unused, int color, int a3, int a
  * with countdowns in the moby data (0x12E, 0x12F) limiting how often they spawn. */
 void FUN_L03_0029caa8(char *moby, void *vel_in, int quiet) {
     enum {
-        MOBY_CLASS_TWO_JOINT_PARTICLE_EMITTER = 0x74
+        MOBY_CLASS_ALTERNATE_COLOR_CHILD_EFFECT_EMITTER = 0x4B,
+        MOBY_CLASS_TWO_JOINT_PARTICLE_EMITTER = 0x74,
+        MOBY_CLASS_FIFTEEN_PARTICLE_BURST_EMITTER = 0x76,
+        MOBY_CLASS_DEFAULT_COLOR_CHILD_EFFECT_EMITTER = 0x77
     };
     float vel[4];
     float *vp;
@@ -1042,7 +1071,7 @@ void FUN_L03_0029caa8(char *moby, void *vel_in, int quiet) {
             data[0x12E] = random_int_between(scale_game_frames(7), scale_game_frames(20));
         }
         break;
-    case 0x76:
+    case MOBY_CLASS_FIFTEEN_PARTICLE_BURST_EMITTER:
         if (quiet == 0 && FUN_L00_001fefc8(data + 0x12E)) {
             if (fast_vec_length(vp) < frame_time * 40.0f && FUN_001f9b48(moby + 0x10, D_L03_00166EC0) < 90.0f) {
                 scale_vector_xyz(vp, vp, 0.5f);
@@ -1058,8 +1087,8 @@ void FUN_L03_0029caa8(char *moby, void *vel_in, int quiet) {
             data[0x12E] = random_int_between(scale_game_frames(7), scale_game_frames(20));
         }
         break;
-    case 0x4B:
-    case 0x77:
+    case MOBY_CLASS_ALTERNATE_COLOR_CHILD_EFFECT_EMITTER:
+    case MOBY_CLASS_DEFAULT_COLOR_CHILD_EFFECT_EMITTER:
         FUN_L00_001fefc8(data + 0x12F);
         if (quiet != 0 && ((unsigned char *)data)[0x12F] == 0) {
             break;
@@ -1150,6 +1179,11 @@ void red_ship_1_update(char *moby) __asm__("FUN_L03_0029dba8");
  * the class debris, starts the shake/smoke effects and arms the respawn countdown (0x14A); once that runs
  * out the moby is hidden again unless the caller keeps it, and switches its update to the car update. */
 void FUN_L03_0029d2e0(char *moby, void *vel_in, int flag) {
+    enum {
+        MOBY_CLASS_TWO_JOINT_PARTICLE_EMITTER = 0x74,
+        MOBY_CLASS_FIFTEEN_PARTICLE_BURST_EMITTER = 0x76,
+        MOBY_CLASS_DEFAULT_COLOR_CHILD_EFFECT_EMITTER = 0x77
+    };
     float spot[4];
     float vel[4];
     float push[4];
@@ -1186,7 +1220,7 @@ void FUN_L03_0029d2e0(char *moby, void *vel_in, int flag) {
             SPAWN_DEBRIS(0x6AA);
             SPAWN_DEBRIS(0x6AB);
             break;
-        case 0x74:
+        case MOBY_CLASS_TWO_JOINT_PARTICLE_EMITTER:
             SPAWN_DEBRIS(0x6AC);
             SPAWN_DEBRIS(0x6AD);
             SPAWN_DEBRIS(0x6AE);
@@ -1196,12 +1230,12 @@ void FUN_L03_0029d2e0(char *moby, void *vel_in, int flag) {
             SPAWN_DEBRIS(0x6B0);
             SPAWN_DEBRIS(0x6B1);
             break;
-        case 0x76:
+        case MOBY_CLASS_FIFTEEN_PARTICLE_BURST_EMITTER:
             SPAWN_DEBRIS(0x6B2);
             SPAWN_DEBRIS(0x6B3);
             SPAWN_DEBRIS(0x6B4);
             break;
-        case 0x77:
+        case MOBY_CLASS_DEFAULT_COLOR_CHILD_EFFECT_EMITTER:
             SPAWN_DEBRIS(0x6B5);
             SPAWN_DEBRIS(0x6B6);
             SPAWN_DEBRIS(0x6B7);
@@ -1278,6 +1312,12 @@ extern void report_29dba8(void *, int, int) __asm__("FUN_001e93b0");
  * steering, banking and spawning its hit/smoke effects; state 2 waits without a path, 3 waits a timer. */
 void red_ship_1_update(char *moby) __asm__("FUN_L03_0029dba8");
 void red_ship_1_update(char *moby) {
+    enum {
+        RED_SHIP_INITIALIZE = 0,
+        RED_SHIP_FOLLOW_PATH_SPLINE = 1,
+        RED_SHIP_WAIT_FOR_PATH = 2,
+        RED_SHIP_WAIT_FOR_MOVEMENT_TIMER = 3
+    };
     float zero[4];
     float old_rot[4];
     float old_pos[4];
@@ -1344,7 +1384,7 @@ void red_ship_1_update(char *moby) {
     FUN_L03_0029c9d0((unsigned char *)moby);
     FUN_L03_0029d1b8(moby);
     switch (((unsigned char *)moby)[0x20]) {
-    case 0:
+    case RED_SHIP_INITIALIZE:
         *(unsigned short *)(moby + 0x34) |= 0x1000;
         if (*(int *)(pm + 0x14) != -1) {
             path = (int *)D_L03_001B05B0_29dba8[*(int *)(pm + 0x14)];
@@ -1416,7 +1456,7 @@ void red_ship_1_update(char *moby) {
             moby[0x20] = 1;
         }
         break;
-    case 2:
+    case RED_SHIP_WAIT_FOR_PATH:
         if (*(int *)(pm + 0x14) != -1) {
             moby[0x20] = 0;
         }
@@ -1429,12 +1469,12 @@ void red_ship_1_update(char *moby) {
         }
         *(int *)(data + 0x150) = -1;
         break;
-    case 3:
+    case RED_SHIP_WAIT_FOR_MOVEMENT_TIMER:
         if (fast_dec_timer_s16(data + 0x12C)) {
             moby[0x20] = 1;
         }
         break;
-    case 1:
+    case RED_SHIP_FOLLOW_PATH_SPLINE:
         *(OvlQuad *)old_rot = *(OvlQuad *)(moby + 0x40);
         *(OvlQuad *)old_pos = *(OvlQuad *)(moby + 0x10);
         cur = data + 0xA0;
@@ -1614,6 +1654,17 @@ extern void spawn_debris_c5bb8(char *, int, float *, void *, int, int, float, fl
  * (its partner moby data->0x248 is a class 0x23E), attacks in range, returns home, dies (states 8, 9, 21). */
 void robot_dog_update(char *moby) __asm__("FUN_L03_002c5bb8");
 void robot_dog_update(char *moby) {
+    enum {
+        ROBOT_DOG_INITIALIZE = 0,
+        ROBOT_DOG_WAIT_FOR_ACTIVATION = 1,
+        ROBOT_DOG_WAIT_FOR_PARTNER_RELEASE = 2,
+        ROBOT_DOG_TURN_TO_TARGET = 3,
+        ROBOT_DOG_CHASE_TARGET = 4,
+        ROBOT_DOG_FOLLOW_PATH = 5,
+        ROBOT_DOG_MELEE_ATTACK = 6,
+        ROBOT_DOG_RETURN_HOME = 7,
+        ROBOT_DOG_DEATH_FALL = 21
+    };
     Tgt2c5bb8 tgt;
     float dir[4];
     float push[4];
@@ -1634,7 +1685,7 @@ void robot_dog_update(char *moby) {
     FUN_L03_002c6a20((struct Moby *)moby);
     fast_dec_timer(&data->i244);
     switch (((unsigned char *)moby)[0x20]) {
-    case 0:
+    case ROBOT_DOG_INITIALIZE:
         *(unsigned short *)(moby + 0x34) |= 0x1000;
         qcopy(data->home, moby + 0x10);
         moby[0x20] = 1;
@@ -1673,7 +1724,7 @@ void robot_dog_update(char *moby) {
             blend_moby_animation_c5bb8(moby, 1, 0, 0);
         }
         break;
-    case 1:
+    case ROBOT_DOG_WAIT_FOR_ACTIVATION:
         if (data->i270 != -1) {
             p = D_L03_001B05B0_c5bb8[data->i270];
             *(OvlQuad *)(moby + 0x10) = *(OvlQuad *)(p + 0x10);
@@ -1697,7 +1748,7 @@ void robot_dog_update(char *moby) {
             *(float *)(moby + 0x58) = 0.8780488f;
         }
         break;
-    case 2:
+    case ROBOT_DOG_WAIT_FOR_PARTNER_RELEASE:
         if (random_integer_below(14) == 0) {
             idx = data->i248;
             if (idx == -1 || (m = D_L03_0015FFD8_c5bb8 + (idx << 8)) == 0 || ((unsigned char *)m)[0x20] == 0xFE ||
@@ -1710,7 +1761,7 @@ void robot_dog_update(char *moby) {
             }
         }
         break;
-    case 3:
+    case ROBOT_DOG_TURN_TO_TARGET:
         a = fast_arc_tan(tgt.pos[0] - *(float *)(moby + 0x10), tgt.pos[1] - *(float *)(moby + 0x14));
         FUN_L00_00258278(moby, data->v220, a, 0.02f, 0.3f, 0.1f);
         if (((unsigned char *)moby)[0x70] & 2) {
@@ -1721,7 +1772,7 @@ void robot_dog_update(char *moby) {
             }
         }
         break;
-    case 4:
+    case ROBOT_DOG_CHASE_TARGET:
         a = fast_arc_tan(tgt.pos[0] - *(float *)(moby + 0x10), tgt.pos[1] - *(float *)(moby + 0x14));
         FUN_L00_00258278(moby, data->v220, a, 0.05f, 0.3f, 0.2f);
         dir[0] = 2.0f * fast_cos(*(float *)(moby + 0x48));
@@ -1743,7 +1794,7 @@ void robot_dog_update(char *moby) {
             moby[0x20] = 7;
         }
         break;
-    case 5:
+    case ROBOT_DOG_FOLLOW_PATH:
         path = (int *)D_L03_001B05B0_c5bb8[data->i270];
         FUN_L00_0025df68(path, moby + 0x10, dir, &seg, &frac, 0, 999.0f, 5.0f, 0.0f);
         if (data->i278 < seg) {
@@ -1779,7 +1830,7 @@ void robot_dog_update(char *moby) {
             }
         }
         break;
-    case 6:
+    case ROBOT_DOG_MELEE_ATTACK:
         a = fast_arc_tan(tgt.pos[0] - *(float *)(moby + 0x10), tgt.pos[1] - *(float *)(moby + 0x14));
         FUN_L00_00258278(moby, data->v220, a, 0.05f, 0.3f, 0.2f);
         dir[0] = 2.0f * fast_cos(*(float *)(moby + 0x48));
@@ -1810,7 +1861,7 @@ void robot_dog_update(char *moby) {
             data->i244 = scale_game_frames(120);
         }
         break;
-    case 7:
+    case ROBOT_DOG_RETURN_HOME:
         a = fast_arc_tan(data->home[0] - *(float *)(moby + 0x10), data->home[1] - *(float *)(moby + 0x14));
         FUN_L00_00258278(moby, data->v220, a, 0.02f, 0.3f, 0.1f);
         dir[0] = 2.0f * fast_cos(*(float *)(moby + 0x48));
@@ -1848,7 +1899,7 @@ void robot_dog_update(char *moby) {
             data->sC8 = 0;
         }
         break;
-    case 21:
+    case ROBOT_DOG_DEATH_FALL:
         *(unsigned short *)(moby + 0x34) &= 0xEFFF;
         if (mine_fall(moby, data->m120) & 0x60) {
             clear_vector(dir);
@@ -2246,6 +2297,19 @@ extern void subtract_vector_xyz_cf(void *, int, void *) __asm__("FUN_L00_0024f7c
 extern void vector_length_xyz_cf(void *, void *, void *) __asm__("FUN_001f9a10");
 
 void FUN_L03_002c6fd0(Moby2C8398 *m) {
+    enum {
+        ENEMY_INITIALIZE = 0,
+        ENEMY_MELEE_ATTACK = 6,
+        ENEMY_MOVE_TO_PATH_NODE = 7,
+        ENEMY_FOLLOW_PATH_TO_END = 8,
+        ENEMY_FOLLOW_ALTERNATE_PATH = 9,
+        ENEMY_KNOCKBACK_RECOVERY = 10,
+        ENEMY_FALL_UNDER_GRAVITY = 11,
+        ENEMY_TURN_TO_HEADING = 12,
+        ENEMY_DEATH_KNOCKBACK = 13,
+        ENEMY_HIDDEN_AT_PATH_START = 14,
+        ENEMY_RESPAWN_AT_PATH_START = 15
+    };
     Tgt2C8398 tgt;
     Data2C8398 *d = m->data;
     float dist;
@@ -2294,7 +2358,7 @@ void FUN_L03_002c6fd0(Moby2C8398 *m) {
         FUN_L01_0026d930_cf((char *)m, (char *)&d->look1, 3, frame_scale_sq * 0.03f, frame_scale_sq * 0.3f);
     }
     switch (m->state) {
-    case 0:
+    case ENEMY_INITIALIZE:
         m->l38 = (((Moby2C8398 *)hero.moby))->l38;
         m->b7F = 0x1C;
         FUN_001f96b0_cf((char *)&d->mv);
@@ -2544,7 +2608,7 @@ void FUN_L03_002c6fd0(Moby2C8398 *m) {
         }
         break;
     }
-    case 6: {
+    case ENEMY_MELEE_ATTACK: {
         {
             float v[4];
             Hit2C8398 hit;
@@ -2603,7 +2667,7 @@ void FUN_L03_002c6fd0(Moby2C8398 *m) {
         }
         break;
     }
-    case 7: {
+    case ENEMY_MOVE_TO_PATH_NODE: {
         PathF2C8398 *pf = &d->pf;
         if (d->s256 != 0) {
             m->state = 8;
@@ -2657,7 +2721,7 @@ void FUN_L03_002c6fd0(Moby2C8398 *m) {
         }
         break;
     }
-    case 8: {
+    case ENEMY_FOLLOW_PATH_TO_END: {
         {
             PathF2C8398 *pf = &d->pf;
             float v[4];
@@ -2685,7 +2749,7 @@ void FUN_L03_002c6fd0(Moby2C8398 *m) {
         }
         break;
     }
-    case 9: {
+    case ENEMY_FOLLOW_ALTERNATE_PATH: {
         {
             char *path = D_L03_001B05B0[d->i290];
             float v[4];
@@ -2720,7 +2784,7 @@ void FUN_L03_002c6fd0(Moby2C8398 *m) {
         }
         break;
     }
-    case 10: {
+    case ENEMY_KNOCKBACK_RECOVERY: {
         int fl;
         float g;
         if (d->q.s3E != 2) {
@@ -2792,7 +2856,7 @@ void FUN_L03_002c6fd0(Moby2C8398 *m) {
         }
         break;
     }
-    case 11: {
+    case ENEMY_FALL_UNDER_GRAVITY: {
         {
             Jump2C8398 *q = &d->q;
             float a[4];
@@ -2849,7 +2913,7 @@ void FUN_L03_002c6fd0(Moby2C8398 *m) {
             }
         }
     }
-    case 12:
+    case ENEMY_TURN_TO_HEADING:
         switch (m->anim) {
         case 1:
             FUN_001f9c48_cf((char *)m, &d->f258, d->f28C, 0.09f, 0.27f, 0.15f);
@@ -2896,7 +2960,7 @@ void FUN_L03_002c6fd0(Moby2C8398 *m) {
             break;
         }
         break;
-    case 13: {
+    case ENEMY_DEATH_KNOCKBACK: {
         int fl = FUN_L00_0025e450_cf(m, &d->q);
         float g;
         d->b255++;
@@ -2952,7 +3016,7 @@ void FUN_L03_002c6fd0(Moby2C8398 *m) {
         }
         break;
     }
-    case 14: {
+    case ENEMY_HIDDEN_AT_PATH_START: {
         PathF2C8398 *pf = &d->pf;
         if (m->anim != 0) {
             blend_moby_animation(m, 0, 0, FUN_L03_002c6d98_cf(10));
@@ -2963,7 +3027,7 @@ void FUN_L03_002c6fd0(Moby2C8398 *m) {
         m->i94 = 0;
         break;
     }
-    case 15:
+    case ENEMY_RESPAWN_AT_PATH_START:
         if ((visited52)[m->bB0 + (current_level_index << 4)] == 0xFF) {
             FUN_L03_002c95a8_cf(m);
             return;
@@ -3104,7 +3168,10 @@ extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
  * on the hit kind; a lethal hit starts the death jump. */
 void FUN_L03_002c95a8(Moby2C8398 *m) {
     enum {
-        DEATH_KNOCKBACK_RESPONSE = 1
+        DEATH_KNOCKBACK_RESPONSE = 1,
+        TURN_AWAY_KNOCKBACK_RESPONSE = 6,
+        NO_KNOCKBACK_HIT_RESPONSE = 12,
+        ZERO_DAMAGE_NO_KNOCKBACK_RESPONSE = 13
     };
     float vec[4];
     int kind;
@@ -3144,11 +3211,11 @@ void FUN_L03_002c95a8(Moby2C8398 *m) {
             result = 1;
         }
         switch (result) {
-        case 12:
-        case 13:
+        case NO_KNOCKBACK_HIT_RESPONSE:
+        case ZERO_DAMAGE_NO_KNOCKBACK_RESPONSE:
             d->b67 = 0x78;
             break;
-        case 6:
+        case TURN_AWAY_KNOCKBACK_RESPONSE:
             d->b67 = 0x78;
             d->q.f10 = frame_time_sq * 80.0f;
             d->q.f18 = (D_L03_001618E4 / (2.0f * square_root(2.0f * D_L03_001618E0 * d->q.f10) / (frame_time_sq * 80.0f)) +

@@ -65,8 +65,12 @@ f32 probe_ground_height(void *arg0, s32 arg1, f32 arg2) __asm__("FUN_00213508");
 float absolute_float(float input) __asm__("func_001F99C0");
 
 void FUN_L16_002c9480(struct Moby *m) {
+    enum {
+        MOBY_STATE_INITIALIZE = 0,
+        MOBY_STATE_SPIN_AND_DRAW_SPRITES = 1
+    };
     switch (m->state) {
-    case 0: {
+    case MOBY_STATE_INITIALIZE: {
         float f;
         float h;
         FUN_L16_002c9568((char *)m);
@@ -79,7 +83,7 @@ void FUN_L16_002c9480(struct Moby *m) {
         m->state = 1;
         break;
     }
-    case 1:
+    case MOBY_STATE_SPIN_AND_DRAW_SPRITES:
         m->rot.z = fast_add_rotations(m->rot.z, D_0015ED6C * 4.1887903f);
         FUN_L16_002c9650_u((char *)m);
         break;
@@ -173,17 +177,21 @@ extern void func_L16_002D0990_2D0870(void *) __asm__("FUN_L16_002cf5c8");
 extern int func_0022ED80_i(int, int, void *) __asm__("FUN_0022da68");
 
 void FUN_L16_002cf4a8(struct Moby *moby) {
+    enum {
+        MOBY_STATE_INITIALIZE_LINKED_PAIRS = 0,
+        MOBY_STATE_UPDATE_DRAW_AND_SOUND = 1
+    };
     int *data = (int *)moby->pvars;
     if ((moby->flags & 2) == 0) {
         unsigned char state = moby->state;
         switch (state) {
-        case 0:
+        case MOBY_STATE_INITIALIZE_LINKED_PAIRS:
             if (data[0] == 0) {
                 func_L16_002D0990_2D0870(moby);
                 moby->state = 1;
             }
             break;
-        case 1:
+        case MOBY_STATE_UPDATE_DRAW_AND_SOUND:
             if (FUN_L16_002cf738(moby) != 0) {
                 data[2] = state;
                 enqueue_callback_list_1_alt(FUN_L16_002cf7a8_u, moby);
@@ -282,13 +290,17 @@ extern float D_L16_00161A84 __attribute__((sda));
 extern int D_L16_00161A88 __attribute__((sda));
 void test_dummy_door_update(struct Moby *moby) __asm__("FUN_L16_002d5cb8");
 void test_dummy_door_update(struct Moby *moby) {
+    enum {
+        TEST_DUMMY_DOOR_STATE_INITIALIZE = 0,
+        TEST_DUMMY_DOOR_STATE_UPDATE_HEIGHT = 1
+    };
     char *data = (char *)moby->pvars;
     switch (moby->state) {
-    case 0:
+    case TEST_DUMMY_DOOR_STATE_INITIALIZE:
         moby->state = 1;
         *(float *)data = moby->pos.z;
         break;
-    case 1: {
+    case TEST_DUMMY_DOOR_STATE_UPDATE_HEIGHT: {
         int r = fast_dec_timer((int *)(data + 8));
         float f;
         if (r != 0) {
@@ -317,19 +329,24 @@ extern void FUN_L01_002787a0(void *);
 void mark_moby_for_removal_u(struct Obj *obj) __asm__("FUN_0020c828");
 
 void FUN_L16_002d6740(struct Moby *moby) {
+    enum {
+        MOBY_STATE_INITIALIZE = 0,
+        MOBY_STATE_CHECK_HIT_FOR_REMOVAL = 1,
+        MOBY_STATE_REMOVE_WITH_EFFECTS = 2
+    };
     int flag = 0;
     char *p = find_moby_hit(moby, 0x10000, 0);
     switch (moby->state) {
-    case 0:
+    case MOBY_STATE_INITIALIZE:
         moby->state = 1;
         break;
-    case 1:
+    case MOBY_STATE_CHECK_HIT_FOR_REMOVAL:
         if (p != 0 && 0.0f < *(float *)(p + 0x2C))
             flag = 1;
         if (flag)
             moby->state = 2;
         break;
-    case 2:
+    case MOBY_STATE_REMOVE_WITH_EFFECTS:
         allocate_voice_for_target_entry(0, 0, moby);
         FUN_L00_00257470(moby, 0, -1);
         FUN_L01_002787a0(moby);
@@ -559,10 +576,16 @@ s32 is_point_inside_clip_volume(s32 arg0, s32 arg1) __asm__("FUN_00214720");
 void mark_moby_for_removal_c(struct Obj *obj) __asm__("FUN_0020c828");
 
 void FUN_L16_002c3d38(struct Moby *moby) {
+    enum {
+        ROCKET_STATE_INITIALIZE = 0,
+        ROCKET_STATE_WAIT_FOR_TRIGGER = 1,
+        ROCKET_STATE_FOLLOW_PATH = 2,
+        ROCKET_STATE_WAIT_FOR_RESET = 3
+    };
     char *data = (char *)moby->pvars;
     char *path = D_L16_001B0930[*(int *)(data + 4)];
     switch (moby->state) {
-    case 0:
+    case ROCKET_STATE_INITIALIZE:
         if (*(int *)data == -1 || *(int *)(data + 4) == -1) {
             mark_moby_for_removal_c(moby);
             break;
@@ -573,7 +596,7 @@ void FUN_L16_002c3d38(struct Moby *moby) {
         moby->update_dist = 100;
         moby->command = 0;
         break;
-    case 1: {
+    case ROCKET_STATE_WAIT_FOR_TRIGGER: {
         struct Hero *g = &hero;
         if (g->state.control_mode != 15)
             break;
@@ -583,7 +606,7 @@ void FUN_L16_002c3d38(struct Moby *moby) {
         }
         break;
     }
-    case 2:
+    case ROCKET_STATE_FOLLOW_PATH:
         *(float *)(data + 0x10) += *(float *)(data + 0xC);
         if ((float)(*(int *)path - 1) <= *(float *)(data + 0x10)) {
             moby->update_dist = 0xFF;
@@ -603,7 +626,7 @@ void FUN_L16_002c3d38(struct Moby *moby) {
             allocate_voice_for_target_entry_u(1, 0, moby);
         }
         break;
-    case 3:
+    case ROCKET_STATE_WAIT_FOR_RESET:
         if (moby->visible == 0) {
             moby->visible = 0;
             moby->collision = 0;
@@ -877,12 +900,17 @@ s32 is_point_inside_clip_volume(s32 arg0, s32 arg1) __asm__("FUN_00214720");
 extern float D_L16_0016198C __attribute__((sda));
 void conveyor_belt_update(struct Moby *m) __asm__("FUN_L16_002c9878");
 void conveyor_belt_update(struct Moby *m) {
+    enum {
+        CONVEYOR_BELT_STATE_INITIALIZE = 0,
+        CONVEYOR_BELT_STATE_APPROACH_BASE_SPEED = 1,
+        CONVEYOR_BELT_STATE_APPROACH_NEGATED_SPEED = 2
+    };
     char *d = (char *)m->pvars;
     float vec[4];
     float target;
     int one = 1;
     switch (m->state) {
-    case 0:
+    case CONVEYOR_BELT_STATE_INITIALIZE:
         *(int *)(d + 0x5C) |= 4;
         m->visible = 0;
         m->flags |= one;
@@ -893,7 +921,7 @@ void conveyor_belt_update(struct Moby *m) {
         }
         *(int *)(d + 0x74) = -1;
         break;
-    case 2:
+    case CONVEYOR_BELT_STATE_APPROACH_NEGATED_SPEED:
         target = -(D_L16_0016198C * D_0015ED6C);
         if (*(float *)(d + 0x6C) != target) {
             approach_value((float *)(d + 0x6C), target, D_0015ED70_c * 12.0f);
@@ -904,7 +932,7 @@ void conveyor_belt_update(struct Moby *m) {
             m->state = one;
         enqueue_callback_list_1_alt(FUN_L16_002c9cd0, m);
         break;
-    case 1:
+    case CONVEYOR_BELT_STATE_APPROACH_BASE_SPEED:
         target = D_L16_0016198C * D_0015ED6C;
         if (*(float *)(d + 0x6C) != target) {
             approach_value((float *)(d + 0x6C), target, D_0015ED70_c * 12.0f);
@@ -1201,6 +1229,24 @@ extern int func_L00_0025A8E8_2cf180(void *, float, void *, int, float, float, in
 
 void test_dummy_update(unsigned char *m) __asm__("FUN_L16_002cddb8");
 void test_dummy_update(unsigned char *m) {
+    enum {
+        TEST_DUMMY_STATE_INITIALIZE = 0,
+        TEST_DUMMY_STATE_APPROACH_FIRST_PATH_NODE = 2,
+        TEST_DUMMY_STATE_APPROACH_THROW_NODE = 3,
+        TEST_DUMMY_STATE_THROW_AT_TARGET = 4,
+        TEST_DUMMY_STATE_MOVE_ALONG_PATH = 5,
+        TEST_DUMMY_STATE_TURN_TO_NEXT_PATH_NODE = 6,
+        TEST_DUMMY_STATE_APPROACH_SPRAY_NODE = 7,
+        TEST_DUMMY_STATE_SPRAY_FROM_CHILD = 8,
+        TEST_DUMMY_STATE_TURN_AND_RESUME_SAVED_STATE = 9,
+        TEST_DUMMY_STATE_BURST = 10,
+        TEST_DUMMY_STATE_RESPAWN = 11
+    };
+    enum {
+        TEST_DUMMY_KIND_THROWER = 0,
+        TEST_DUMMY_KIND_PATH_MOVER = 1,
+        TEST_DUMMY_KIND_SPRAYER = 2
+    };
     L16SparkVector position_or_delta, v1, launch_velocity;
     L16SparkQuery fx;
     L16DummyData *d = *(L16DummyData **)(m + 0x78);
@@ -1213,7 +1259,7 @@ void test_dummy_update(unsigned char *m) {
     path = D_L16_001B0930[d->path];
     FUN_L00_00263ac8(2.5f, (int)m, 2, (unsigned char *)d->block140);
     switch (m[0x20]) {
-    case 0: /* set up: lives, home position, the held child for the variant */
+    case TEST_DUMMY_STATE_INITIALIZE: /* set up: lives, home position, the held child for the variant */
         d->b2E = 1;
         if (d->lives > 0) {
             *(short *)(m + 0xB4) /= d->lives;
@@ -1231,13 +1277,13 @@ void test_dummy_update(unsigned char *m) {
         d->route = FUN_L16_002d5db0(d->iCC, m + 0x10);
         qcopy(d->spawn, m + 0x10);
         switch (d->kind) {
-        case 0:
+        case TEST_DUMMY_KIND_THROWER:
             d->child = func_0020D348_m(0x35F);
             break;
-        case 1:
+        case TEST_DUMMY_KIND_PATH_MOVER:
             d->child = func_0020D348_m(0x374);
             break;
-        case 2:
+        case TEST_DUMMY_KIND_SPRAYER:
             d->child = func_0020D348_m(0x36C);
             FUN_L02_00264e40(d->slots);
             break;
@@ -1251,7 +1297,7 @@ void test_dummy_update(unsigned char *m) {
         break;
     case 1:
         break;
-    case 2: /* turn to the path's first node, then start by variant */
+    case TEST_DUMMY_STATE_APPROACH_FIRST_PATH_NODE: /* turn to the path's first node, then start by variant */
         FUN_L16_002d5e80(d->route);
         position_or_delta.quad = *(u128 *)(path + 0x10);
         if (FUN_L16_002ced20(m, position_or_delta.f, *(float *)(m + 0x48))) {
@@ -1267,7 +1313,7 @@ void test_dummy_update(unsigned char *m) {
             }
         }
         break;
-    case 3: /* thrower: wait, face the node, wind up */
+    case TEST_DUMMY_STATE_APPROACH_THROW_NODE: /* thrower: wait, face the node, wind up */
         if (tick_countdown_32_alt(&d->timer)) {
             position_or_delta.quad = *(u128 *)(path + d->node * 16 + 16);
             if (FUN_L16_002ced20(
@@ -1288,7 +1334,7 @@ void test_dummy_update(unsigned char *m) {
             }
         }
         break;
-    case 4: /* thrower: launch the held object at the target, then face it or the next node */
+    case TEST_DUMMY_STATE_THROW_AT_TARGET: /* thrower: launch the held object at the target, then face it or the next node */
         if (d->mode == 2) {
             qcopy(position_or_delta.f, D_L16_001600EC_c + d->aim[d->node] * 0x80 + 0x30);
         } else {
@@ -1323,7 +1369,7 @@ void test_dummy_update(unsigned char *m) {
                                           ((float *)(path + (node << 4)))[5] - *(float *)(m + 20)));
         }
         break;
-    case 5: /* slider: move toward the node, emit, stop on arrival */
+    case TEST_DUMMY_STATE_MOVE_ALONG_PATH: /* slider: move toward the node, emit, stop on arrival */
         if (m[0x53] == 10) {
             if (m[0x70] & 2) {
                 blend_moby_animation(m, 11, 0, 1);
@@ -1354,7 +1400,7 @@ void test_dummy_update(unsigned char *m) {
             }
         }
         break;
-    case 6: { /* slider: turn toward the next node while the timer runs */
+    case TEST_DUMMY_STATE_TURN_TO_NEXT_PATH_NODE: { /* slider: turn toward the next node while the timer runs */
         float *yaw = (float *)(m + 0x48);
         int next = d->node + d->step;
         float angle = fast_arc_tan(((float *)(path + (next << 4)))[4] - *(float *)(m + 16),
@@ -1370,7 +1416,7 @@ void test_dummy_update(unsigned char *m) {
         }
         break;
     }
-    case 7: /* sprayer: wait, face the node, start */
+    case TEST_DUMMY_STATE_APPROACH_SPRAY_NODE: /* sprayer: wait, face the node, start */
         if (tick_countdown_32_alt(&d->timer)) {
             position_or_delta.quad = *(u128 *)(path + d->node * 16 + 16);
             if (FUN_L16_002ced20(m, position_or_delta.f, *(float *)(m + 0x48))) {
@@ -1388,7 +1434,7 @@ void test_dummy_update(unsigned char *m) {
             }
         }
         break;
-    case 8: /* sprayer: face the target and emit from the child toward it */
+    case TEST_DUMMY_STATE_SPRAY_FROM_CHILD: /* sprayer: face the target and emit from the child toward it */
         if (d->mode != 2) {
             position_or_delta.quad = *(u128 *)(m + 16);
             FUN_L16_002ced20(
@@ -1421,7 +1467,7 @@ void test_dummy_update(unsigned char *m) {
             }
         }
         break;
-    case 9: /* turn back to the node, then resume the saved state and animation */
+    case TEST_DUMMY_STATE_TURN_AND_RESUME_SAVED_STATE: /* turn back to the node, then resume the saved state and animation */
         position_or_delta.quad = *(u128 *)(path + d->node * 16 + 16);
         FUN_L16_002ced20(m, position_or_delta.f, d->f10C);
         if (m[0x70] & 2) {
@@ -1431,7 +1477,7 @@ void test_dummy_update(unsigned char *m) {
             }
         }
         break;
-    case 10: { /* burst into three pieces; respawn at home or delete */
+    case TEST_DUMMY_STATE_BURST: { /* burst into three pieces; respawn at home or delete */
         char *position = (char *)m + 16;
         char *rot = (char *)m + 0x40;
         float burst;
@@ -1462,7 +1508,7 @@ void test_dummy_update(unsigned char *m) {
         }
         break;
     }
-    case 11: /* respawn: settle to the home height as the timer runs out */
+    case TEST_DUMMY_STATE_RESPAWN: /* respawn: settle to the home height as the timer runs out */
         if (tick_countdown_32_alt(&d->timer)) {
             d->turn = 0.0f;
             m[0x20] = 2;
@@ -1780,9 +1826,14 @@ extern int func_001FA898_caa18(float) __asm__("FUN_001fa6d0");
 
 void wall_button_update(struct Moby *m) __asm__("FUN_L16_002cf198");
 void wall_button_update(struct Moby *m) {
+    enum {
+        WALL_BUTTON_STATE_INITIALIZE = 0,
+        WALL_BUTTON_STATE_WAIT_FOR_HIT = 1,
+        WALL_BUTTON_STATE_ACTIVATED = 2
+    };
     char *d = (char *)m->pvars;
     switch ((*(unsigned char *)((char *)(m) + (0x20)))) {
-    case 0:
+    case WALL_BUTTON_STATE_INITIALIZE:
         (*(float *)((char *)(d) + (0x68))) = random_angle_radians();
         (*(float *)((char *)(d) + (0x30))) = 0.001f;
         if ((*(unsigned char *)((char *)(((char *)&(*(short *)&visited52_lui)) + (current_level_index << 4)) +
@@ -1796,7 +1847,7 @@ void wall_button_update(struct Moby *m) {
         } else
             (*(unsigned char *)((char *)(m) + (0x20))) = 1;
         break;
-    case 1: {
+    case WALL_BUTTON_STATE_WAIT_FOR_HIT: {
         int color;
         (*(float *)((char *)(d) + (0x68))) =
             fast_add_rotations((*(float *)((char *)(d) + (0x68))), D_0015ED6C * 6.2831855f);
@@ -1821,7 +1872,7 @@ void wall_button_update(struct Moby *m) {
         }
         break;
     }
-    case 2: {
+    case WALL_BUTTON_STATE_ACTIVATED: {
         int color = func_001FA898_caa18(
             (fast_sin((*(float *)((char *)(d) + (0x68)))) * 0.5f + 0.5f) * 128.0f);
         if (color > 128)
@@ -2309,6 +2360,12 @@ void FUN_L16_002d0058_c(L16LeapMoby *m) __asm__("FUN_L16_002d0058");
 extern int D_L16_00161A08 __attribute__((sda));
 void test_dummy_on_hoverboard_update(unsigned char *m) __asm__("FUN_L16_002d04a0");
 void test_dummy_on_hoverboard_update(unsigned char *m) {
+    enum {
+        HOVERBOARD_DUMMY_STATE_INITIALIZE = 0,
+        HOVERBOARD_DUMMY_STATE_WAIT_FOR_RACE = 1,
+        HOVERBOARD_DUMMY_STATE_RACING = 2,
+        HOVERBOARD_DUMMY_STATE_WAIT_FOR_REACTIVATION = 3
+    };
     float pos[4], delta[4], ahead[4], impact[4], spray[4], lateral[4], dust[4];
     char *d = *(char **)(m + 0x78);
     char *g;
@@ -2323,7 +2380,7 @@ void test_dummy_on_hoverboard_update(unsigned char *m) {
        (d + 0x1E0 from here on, the others at the top of the active state). */
     FUN_L00_00263b38(d + 0x1E0, 2.5f);
     switch (m[0x20]) {
-    case 0: {
+    case HOVERBOARD_DUMMY_STATE_INITIALIZE: {
         float time;
         char *path;
 
@@ -2360,7 +2417,7 @@ void test_dummy_on_hoverboard_update(unsigned char *m) {
         m[0x20] = 1;
         break;
     }
-    case 1:
+    case HOVERBOARD_DUMMY_STATE_WAIT_FOR_RACE:
         if (hero.state.control_mode == 22) {
             m[0x30] = 255;
             *(int *)(m + 0x94) = *(int *)(*(char **)(m + 0x24) + 0x10);
@@ -2379,7 +2436,7 @@ void test_dummy_on_hoverboard_update(unsigned char *m) {
             m[0x20] = 2;
         }
         break;
-    case 3:
+    case HOVERBOARD_DUMMY_STATE_WAIT_FOR_REACTIVATION:
         if (hero.state.control_mode != 22) {
             m[0x20] = 0;
         } else {
@@ -2402,7 +2459,7 @@ void test_dummy_on_hoverboard_update(unsigned char *m) {
             }
         }
         break;
-    case 2:
+    case HOVERBOARD_DUMMY_STATE_RACING:
         g = ((char *)&hero);
         if (*(int *)(g + 0x208C) != 22) {
             m[0x20] = 0;
@@ -2592,15 +2649,20 @@ extern void normalize_vector_xyz(void *, void *, float);
 
 void door_update(unsigned char *moby) __asm__("FUN_L16_002d59e0");
 void door_update(unsigned char *moby) {
+    enum {
+        DOOR_STATE_INITIALIZE = 0,
+        DOOR_STATE_MOVING = 1,
+        DOOR_STATE_IDLE = 2
+    };
     char *d = *(char **)(moby + 0x78);
     char *pos;
     char buf[16];
     switch (moby[0x20]) {
-    case 0:
+    case DOOR_STATE_INITIALIZE:
         qcopy(d, moby + 0x10);
         moby[0x20] = 2;
         break;
-    case 1:
+    case DOOR_STATE_MOVING:
         pos = (char *)moby + 0x10;
         qcopy(pos, d);
         advance_accelerated_scalar(*(float *)(d + 0x14), frame_time_sq * 4.0f, frame_time_sq * 4.0f,
@@ -2611,7 +2673,7 @@ void door_update(unsigned char *moby) {
             moby[0x20] = 2;
         }
         break;
-    case 2:
+    case DOOR_STATE_IDLE:
         break;
     }
 }
@@ -2770,11 +2832,20 @@ void mmr_q(struct Obj *obj) __asm__("FUN_0020c828");
 
 extern char D_0013F3D0[] __attribute__((section(".data")));
 void FUN_L16_002d5ef8(struct Moby *m) {
+    enum {
+        SCENE_STATE_INITIALIZE = 0,
+        SCENE_STATE_WAIT_FOR_TRIGGER = 1,
+        SCENE_STATE_WAIT_TO_HIDE = 2,
+        SCENE_STATE_WAIT_FOR_LINKED_MOBYS_AND_TIMER = 3,
+        SCENE_STATE_COMPLETE = 4,
+        SCENE_STATE_HIDDEN_WAIT_FOR_TRIGGER = 5,
+        SCENE_STATE_HIDDEN_WAIT_FOR_LINKED_MOBYS = 6
+    };
     float position[4], rotation[4];
     L16SceneData_q *d = (L16SceneData_q *)m->pvars;
     void *helper;
     switch (m->state) {
-    case 0:
+    case SCENE_STATE_INITIALIZE:
         if (d == 0 || d->trigger == -1) {
             mmr_q(m);
             return;
@@ -2789,7 +2860,7 @@ void FUN_L16_002d5ef8(struct Moby *m) {
             FUN_L16_002d5ad0_q(d->helper, 1);
         }
         break;
-    case 1: {
+    case SCENE_STATE_WAIT_FOR_TRIGGER: {
         char *player = D_0013F3D0;
         if (!is_point_inside_clip_volume(player, d->trigger))
             break;
@@ -2801,7 +2872,7 @@ void FUN_L16_002d5ef8(struct Moby *m) {
         helper = FUN_L16_002d5bc8_q(d->helper, 0);
         goto notify;
     }
-    case 2:
+    case SCENE_STATE_WAIT_TO_HIDE:
         if (d->camera >= 0)
             *(unsigned short *)(D_0014162A_q) = *(unsigned short *)&d->camera;
         if (tick_countdown_32_q(&d->timer_q)) {
@@ -2812,7 +2883,7 @@ void FUN_L16_002d5ef8(struct Moby *m) {
             FUN_L16_002ceca8_q(d->path);
         }
         break;
-    case 3:
+    case SCENE_STATE_WAIT_FOR_LINKED_MOBYS_AND_TIMER:
         FUN_L16_002d6260_q(m, position, rotation);
         FUN_L00_002ea9d8_q(position);
         FUN_L00_002ea9d8_q_002eaa30(rotation);
@@ -2836,16 +2907,16 @@ void FUN_L16_002d5ef8(struct Moby *m) {
         if (helper)
             FUN_0022da68_q(1, 0, helper);
         break;
-    case 4:
+    case SCENE_STATE_COMPLETE:
         break;
-    case 5:
+    case SCENE_STATE_HIDDEN_WAIT_FOR_TRIGGER:
         if (is_point_inside_clip_volume(D_0013F3D0, d->trigger)) {
             FUN_L16_002d5bc8_q(d->helper, 0);
             FUN_L16_002ceca8_q(d->path);
             m->state = 6;
         }
         break;
-    case 6: {
+    case SCENE_STATE_HIDDEN_WAIT_FOR_LINKED_MOBYS: {
         char *player = D_0013F3D0;
         if (is_point_inside_clip_volume(player, d->trigger) && d->camera >= 0)
             *(unsigned short *)(player + 0x225A) = *(unsigned short *)&d->camera;

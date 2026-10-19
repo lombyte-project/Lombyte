@@ -246,6 +246,15 @@ extern void FUN_L00_00258278(char*,float,float*,float,float,float);
 /* Same routine as bolt_thief_update, without the child hit test. */
 void bolt_thief_update(L16CrateMoby *moby) __asm__("FUN_L14_002fe2a0");
 void bolt_thief_update(L16CrateMoby *moby) {
+    enum {
+        BOLT_THIEF_STATE_INITIALIZE = 0,
+        BOLT_THIEF_STATE_FACE_HERO = 1,
+        BOLT_THIEF_STATE_WAIT_FOR_TRIGGER = 2,
+        BOLT_THIEF_STATE_SETTLE_AT_PATH_END = 3,
+        BOLT_THIEF_STATE_FOLLOW_PRIMARY_PATH = 4,
+        BOLT_THIEF_STATE_FOLLOW_SECONDARY_PATH = 5,
+        BOLT_THIEF_STATE_KNOCKBACK = 6
+    };
     L16CrateData *d = moby->data;
     char *hit;
 
@@ -271,7 +280,7 @@ void bolt_thief_update(L16CrateMoby *moby) {
     }
     moby->opacity = 0xFF;
     switch (moby->state) {
-    case 0:
+    case BOLT_THIEF_STATE_INITIALIZE:
         if (d->mode == 2) {
             moby->state = 1;
             d->turn = 0.0f;
@@ -312,7 +321,7 @@ void bolt_thief_update(L16CrateMoby *moby) {
         }
         d->child = 0;
         break;
-    case 1: {
+    case BOLT_THIEF_STATE_FACE_HERO: {
         struct Hero *player = &hero;
 
         FUN_L00_00258278((char *)moby,
@@ -321,7 +330,7 @@ void bolt_thief_update(L16CrateMoby *moby) {
         FUN_L14_002feca8(moby);
         break;
     }
-    case 2:
+    case BOLT_THIEF_STATE_WAIT_FOR_TRIGGER:
         if (is_point_inside_clip_volume(&hero.motion.pos, d->trigger)) {
             if (d->mode == 1) {
                 set_moby_animation(moby, 0, 0);
@@ -335,7 +344,7 @@ void bolt_thief_update(L16CrateMoby *moby) {
             moby->state = 4;
         }
         break;
-    case 4:
+    case BOLT_THIEF_STATE_FOLLOW_PRIMARY_PATH:
         if (d->mode == 0)
             FUN_L14_002fec28(moby);
         if (FUN_L14_002fea80((char *)moby)) {
@@ -344,7 +353,7 @@ void bolt_thief_update(L16CrateMoby *moby) {
         }
         FUN_L14_002feca8(moby);
         break;
-    case 3: {
+    case BOLT_THIEF_STATE_SETTLE_AT_PATH_END: {
         L16CrateData *a = moby->data;
         char *path = D_L14_001B0BB0[a->path];
         float target[4];
@@ -376,7 +385,7 @@ void bolt_thief_update(L16CrateMoby *moby) {
         FUN_L14_002feca8(moby);
         break;
     }
-    case 5:
+    case BOLT_THIEF_STATE_FOLLOW_SECONDARY_PATH:
         if (FUN_L14_002fea80((char *)moby)) {
             char *path;
 
@@ -394,7 +403,7 @@ void bolt_thief_update(L16CrateMoby *moby) {
             FUN_L14_002feca8(moby);
         }
         break;
-    case 6:
+    case BOLT_THIEF_STATE_KNOCKBACK:
         if (mine_fall(moby, d->knock) & 3) {
             cart_burst(moby, moby->position, -1, 1.0f, 13.0f);
             mark_moby_for_removal(moby);
@@ -562,6 +571,12 @@ extern s32 D_0014C190_257218[][64] __asm__("D_0014C190");
 /* Watcher moby update: gated by its collectable and trigger, primes a camera target, then turns its head toward the hero. */
 void sam_update(L14WatchMoby *m) __asm__("FUN_L14_002fefe0");
 void sam_update(L14WatchMoby *m) {
+    enum {
+        SAM_STATE_INITIALIZE = 0,
+        SAM_STATE_DIALOGUE = 1,
+        SAM_STATE_POST_DIALOGUE_WAIT = 2,
+        SAM_STATE_REMOVE = 3
+    };
     L14WatchScratch scratch;
     L14WatchData *d = (L14WatchData *)m->data;
     float rate;
@@ -569,7 +584,7 @@ void sam_update(L14WatchMoby *m) {
     int tracking;
     FUN_L02_002e0cd8(m);
     switch (m->state) {
-    case 0: {
+    case SAM_STATE_INITIALIZE: {
         unsigned short id;
         if (D_0013DD4F) {
             mark_moby_for_removal(m);
@@ -591,7 +606,7 @@ void sam_update(L14WatchMoby *m) {
         d->b8 = 1;
         break;
     }
-    case 1:
+    case SAM_STATE_DIALOGUE:
         if (d->b8 == 1 && is_point_inside_clip_volume(&hero.motion.pos, d->i40)) {
             if (visited52[m->bB0 + current_level_index * 16] != 0xFF) {
                 char *t;
@@ -612,7 +627,7 @@ void sam_update(L14WatchMoby *m) {
             m->state = 2;
         }
         break;
-    case 2:
+    case SAM_STATE_POST_DIALOGUE_WAIT:
         if (D_L14_0015F5C4 != 2) {
             m->state = 1;
             if ((short)d->sub == 4) {
@@ -626,7 +641,7 @@ void sam_update(L14WatchMoby *m) {
             }
         }
         break;
-    case 3:
+    case SAM_STATE_REMOVE:
         mark_moby_for_removal(m);
         return;
     }

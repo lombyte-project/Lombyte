@@ -57,6 +57,12 @@ extern void memcard_save_data(int, int) __asm__("FUN_0020b178");
 
 void lieutenant_update(struct Moby *moby) __asm__("FUN_L04_002e3078");
 void lieutenant_update(struct Moby *moby) {
+    enum {
+        LIEUTENANT_STATE_INITIALIZE = 0,
+        LIEUTENANT_STATE_UPDATE_DIALOGUE = 1,
+        LIEUTENANT_STATE_UNLOCK_PLANET_AND_DISABLE = 2,
+        LIEUTENANT_STATE_DISABLED = 3
+    };
     Vec4 pos;
     Vec4 rot;
     Vec4 *r;
@@ -68,7 +74,7 @@ void lieutenant_update(struct Moby *moby) {
     }
     FUN_L02_002e0cd8(moby);
     switch (moby->state) {
-    case 0:
+    case LIEUTENANT_STATE_INITIALIZE:
         if (D_0014C050[((struct VendorMobyView *)moby)->slot + current_level_index * 16] == 0xFF) {
             moby->state = 3;
             moby->flags |= 0x41;
@@ -78,7 +84,7 @@ void lieutenant_update(struct Moby *moby) {
         moby->state = 1;
         initialize_npc_dialogue(moby, vars);
         break;
-    case 1:
+    case LIEUTENANT_STATE_UPDATE_DIALOGUE:
         if (FUN_00214720(&hero.motion.pos, vars->item))
             vars->alpha = 255.0f;
         else
@@ -86,7 +92,7 @@ void lieutenant_update(struct Moby *moby) {
         if (update_npc_dialogue(moby, vars))
             moby->state = 2;
         break;
-    case 2:
+    case LIEUTENANT_STATE_UNLOCK_PLANET_AND_DISABLE:
         if (vars->phase == 2) {
             unlock_planet(6);
             jet_clear_persistent(((struct VendorMobyView *)moby)->slot);
@@ -107,7 +113,7 @@ void lieutenant_update(struct Moby *moby) {
         if (D_L04_0015F5C4 != 2)
             update_npc_dialogue(moby, vars);
         break;
-    case 3:
+    case LIEUTENANT_STATE_DISABLED:
         moby->flags |= 0x41;
         moby->collision = 0;
         break;
@@ -175,15 +181,19 @@ extern s32 current_level_index_macro __asm__("D_0015ED84") MACRO_ADDR;
 extern int D_0015EEA4_macro __asm__("D_0015EEA4") MACRO_ADDR;
 extern s32 D_0015EEAC_macro __asm__("D_0015EEAC") MACRO_ADDR;
 void FUN_L04_002e4418(Moby *moby) {
+    enum {
+        TUTORIAL_TRIGGER_STATE_INITIALIZE = 0,
+        TUTORIAL_TRIGGER_STATE_UPDATE_HINTS_AND_STATS = 1
+    };
     Data_2E57F8 *data = *(void **)&moby->pvars;
 
     switch (moby->state) {
-    case 0:
+    case TUTORIAL_TRIGGER_STATE_INITIALIZE:
         moby->update_dist = 0xFF;
         moby->state = 1;
         data->f14 = -1;
         break;
-    case 1:
+    case TUTORIAL_TRIGGER_STATE_UPDATE_HINTS_AND_STATS:
         if (is_point_inside_clip_volume(((char *)&D_0013F3D0), data->f0) != 0
             && D_L04_00179590[0] == 0 && D_L04_00179590[9] == -1
             && D_0014C050_c[moby->mission + (current_level_index_macro << 4)] != 0xFF) {
@@ -441,6 +451,10 @@ extern void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
 extern f32 rnd_2e5178(f32, f32) __asm__("FUN_L00_00257c48");
 extern void kill_2e5178(void *) __asm__("FUN_0020c828");
 void FUN_L04_002e5178(M2e5178 *m) {
+    enum {
+        ENTITY_MOTION_STATE_BOUNCE = 0,
+        ENTITY_MOTION_STATE_DECAY_AND_REMOVE = 1
+    };
     PV2e5178 *pv = m->pv;
     u128 old;
     u128 *t;
@@ -451,7 +465,7 @@ void FUN_L04_002e5178(M2e5178 *m) {
     m->f44 = appr_2e5178(m->f44, pv->f24);
     m->f48 = appr_2e5178(m->f48, pv->f28);
     switch (m->b20) {
-    case 0:
+    case ENTITY_MOTION_STATE_BOUNCE:
         if (m->pos[2] < pv->f4 - 3.0f) {
             m->b20 = 1;
         } else if (tick_2e5178(&pv->hE) && pv->hC != 0 && coll_2e5178(m->pos, 2, 0, pv->f8)) {
@@ -467,7 +481,7 @@ void FUN_L04_002e5178(M2e5178 *m) {
             }
         }
         break;
-    case 1:
+    case ENTITY_MOTION_STATE_DECAY_AND_REMOVE:
         m->f2c *= 0.9f;
         if (m->b23 < 4) {
             kill_2e5178(m);
@@ -490,12 +504,16 @@ extern struct L04MissionState D_L04_0016C9E0;
 extern void cutscene_set_camera_target(int) __asm__("FUN_L00_002637f8");
 
 void FUN_L04_002e53a0(struct Moby *m) {
+    enum {
+        MODE_SLOT_STATE_INITIALIZE = 0,
+        MODE_SLOT_STATE_DISPATCH_SELECTED_SLOT = 1
+    };
     switch (m->state) {
-    case 0:
+    case MODE_SLOT_STATE_INITIALIZE:
         m->update_dist = 0xFF;
         m->state = 1;
         break;
-    case 1:
+    case MODE_SLOT_STATE_DISPATCH_SELECTED_SLOT:
         if (D_L04_0015F5C4 == 2) {
             if (D_L04_0016C9E0.mode == 0 || D_L04_0016C9E0.mode == 1) {
                 int v = D_L04_0016C9E0.mode;

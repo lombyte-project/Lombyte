@@ -2302,6 +2302,12 @@ extern struct Moby *debris_target __asm__("D_L07_00173ED8") __attribute__((secti
    solid moby or when its timer runs out, and is removed once 64 units from home. */
 void homing_mine_update(struct Moby *moby) __asm__("FUN_L07_00319040");
 void homing_mine_update(struct Moby *moby) {
+    enum {
+        HOMING_MINE_INITIALIZE = 0,
+        HOMING_MINE_WAIT_FOR_PROXIMITY = 1,
+        HOMING_MINE_START_CHASE = 2,
+        HOMING_MINE_CHASE = 3
+    };
     Mine_19040 *vars;
     f32 *health;
     char sight[0x50];
@@ -2339,13 +2345,13 @@ void homing_mine_update(struct Moby *moby) {
     }
 
     switch (moby->state) {
-    case 0:
+    case HOMING_MINE_INITIALIZE:
         moby->flags |= 0x1000;
         qcopy(&vars->home, &moby->pos);
         moby->collision = moby->pclass->collision;
         moby->state = 1;
         break;
-    case 1:
+    case HOMING_MINE_WAIT_FOR_PROXIMITY:
         timer = scale_ticks(600);
         turn = D_0015ED6C * 6.2831855f;
         vars->timeout = timer;
@@ -2363,10 +2369,10 @@ void homing_mine_update(struct Moby *moby) {
             moby->state = 2;
         }
         break;
-    case 2:
+    case HOMING_MINE_START_CHASE:
         if (moby->prev_seq != 1) FUN_00212f90(moby, 1, 0, 10);
         moby->state = 3;
-    case 3:
+    case HOMING_MINE_CHASE:
         if ((moby->anim_flags & 2) && moby->seq == 1 && moby->prev_seq != 2) {
             FUN_00212f90(moby, 2, 0, 10);
         }
@@ -2507,6 +2513,12 @@ extern void jet_animate(struct Moby *, f32) __asm__("FUN_L00_00259fe8");
 
 /* Swooper: holds at its goal, dives at the hero once it sees it and bursts on contact. */
 void FUN_L07_003196e0(struct Moby *moby) {
+    enum {
+        SWOOPER_INITIALIZE = 0,
+        SWOOPER_WAIT_AT_GOAL = 1,
+        SWOOPER_CHASE_TARGET = 2,
+        SWOOPER_EXPLODE = 3
+    };
     SwooperVars *vars;
     SwooperSpawnerVars *spawner_vars;
     SwooperSight sight;
@@ -2542,7 +2554,7 @@ void FUN_L07_003196e0(struct Moby *moby) {
         FUN_L07_00319698(moby, spawner_vars);
     }
     switch (moby->state) {
-    case 0:
+    case SWOOPER_INITIALIZE:
         if (spawner_vars == NULL) {
             break;
         }
@@ -2555,7 +2567,7 @@ void FUN_L07_003196e0(struct Moby *moby) {
         moby->state = 1;
         moby->command = 0;
         break;
-    case 1:
+    case SWOOPER_WAIT_AT_GOAL:
         subtract_vector_xyz(&vars->velocity, &vars->goal, &moby->pos);
         FUN_L00_00258278(moby, fast_arc_tan(vars->goal.f[0] - moby->pos.x, vars->goal.f[1] - moby->pos.y),
                          &vars->turn_speed, frame_time_sq * 6.2831855f, D_0015ED6C * 3.1415927f,
@@ -2578,7 +2590,7 @@ void FUN_L07_003196e0(struct Moby *moby) {
             moby->state = 2;
         }
         break;
-    case 2:
+    case SWOOPER_CHASE_TARGET:
         if ((moby->anim_flags & 2) && moby->seq == 1 && moby->prev_seq != 2) {
             blend_moby_animation((MobyAnim *)moby, 2, 0, 10);
         }
@@ -2631,7 +2643,7 @@ void FUN_L07_003196e0(struct Moby *moby) {
             FUN_L07_00319698(moby, spawner_vars);
         }
         break;
-    case 3:
+    case SWOOPER_EXPLODE:
         spawn_explosion(moby, &vars->velocity, NULL, 0.0f, 0.0f, 3, 3, 5, 2.0f, 1.0f, 4.0f, 1.0f, 2, 7.0f, 0, 1, -1, 0);
         FUN_L07_00319698(moby, spawner_vars);
         break;
@@ -2710,6 +2722,13 @@ extern float D_0015ED6C;
 
 void machinegun_turret_update(unsigned char *moby) __asm__("FUN_L07_0031a250");
 void machinegun_turret_update(unsigned char *moby) {
+    enum {
+        TURRET_INITIALIZE = 0,
+        TURRET_SWEEP_AND_FIRE = 1,
+        TURRET_HIT_SPIN = 2,
+        TURRET_LOWER_AND_REALIGN = 3,
+        TURRET_RESTORE_HEIGHT = 4
+    };
     char *data;
     char *hit;
     char *collision;
@@ -2740,7 +2759,7 @@ void machinegun_turret_update(unsigned char *moby) {
     *(u8 *)(moby + 0xa4) = 0xff;
     trooper_anim_finish(moby, animation);
     switch ((u8)moby[0x20]) {
-    case 0:
+    case TURRET_INITIALIZE:
         if (*(int *)(data + 0x70) != -1) {
             char *target = (char *)(*(int *)(data + 0x70) * 0x100 + (int)level_mobys);
             *(float *)(data + 0x80) = fast_arc_tan(*(float *)(target + 0x10) - *(float *)(moby + 0x10),
@@ -2767,7 +2786,7 @@ void machinegun_turret_update(unsigned char *moby) {
         if ((u8)moby[0x53] != 1) FUN_00212f90(moby, 1, 0, 0);
         moby[0x20] = 1;
         break;
-    case 1:
+    case TURRET_SWEEP_AND_FIRE:
         if ((u8)moby[0x52] != 1 && ((u8)moby[0x70] & 2) != 0 && (u8)moby[0x53] != 1)
             FUN_00212f90(moby, 1, 0, 1);
         if (*(s16 *)(data + 0x7e) != 0) {
@@ -2820,7 +2839,7 @@ void machinegun_turret_update(unsigned char *moby) {
             *(s16 *)(data + 0x7c) = timer << 1;
         }
         break;
-    case 2:
+    case TURRET_HIT_SPIN:
         direction = frame_time;
         if ((u8)moby[0x52] != 4 && ((u8)moby[0x70] & 2) && (u8)moby[0x53] != 4) {
             FUN_00212f90(moby, 4, 0, 1);
@@ -2831,7 +2850,7 @@ void machinegun_turret_update(unsigned char *moby) {
         *(s16 *)(data + 0x7c) = scale_game_frames(180);
         moby[0x20] = 3;
         break;
-    case 3:
+    case TURRET_LOWER_AND_REALIGN:
         if ((u8)moby[0x52] != 4 && ((u8)moby[0x70] & 2) && (u8)moby[0x53] != 4)
             FUN_00212f90(moby, 4, 0, 0);
         if (*(float *)(data + 0x90) - 0.7f < *(float *)(moby + 0x18))
@@ -2850,7 +2869,7 @@ void machinegun_turret_update(unsigned char *moby) {
             moby[0x20] = 4;
         }
         break;
-    case 4:
+    case TURRET_RESTORE_HEIGHT:
         if (*(float *)(moby + 0x18) < *(float *)(data + 0x90)) {
             *(float *)(moby + 0x18) += D_0015ED6C * 5.0f;
             return;

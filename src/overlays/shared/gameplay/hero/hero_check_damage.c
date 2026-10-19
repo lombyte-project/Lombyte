@@ -354,10 +354,13 @@ s32 hero_slot_moby(s32 i) {
 /* Returns the item id of slot i when the slot is ready (state 2), else -1. */
 int hero_slot_item_id(int i) __asm__("FUN_L00_0020d498");
 int hero_slot_item_id(int i) {
+    enum {
+        HERO_ITEM_SLOT_STATE_READY = 2
+    };
     /* hero shifted by i slots, so items[0] is slot i */
     struct Hero *p = (struct Hero *)(((char *)&hero) + i * sizeof(struct HeroItemSlot));
     switch (p->items[0].state) {
-    case 2:
+    case HERO_ITEM_SLOT_STATE_READY:
         return p->items[0].item_id;
     }
     return -1;
@@ -2212,6 +2215,10 @@ void FUN_L00_00257024_210a08(char *) __asm__("FUN_L00_00257024");
 void FUN_L00_00207a58_210a08(void) __asm__("FUN_L00_00207a58");
 extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 void FUN_L00_00210a08(int mode, int b, char *m) {
+    enum {
+        VEHICLE_MODE_CLANK = 1,
+        VEHICLE_MODE_GIANT_CLANK = 2
+    };
     struct Hero *g;
     FUN_L00_0020e698_210a08();
     g = &hero;
@@ -2237,11 +2244,11 @@ void FUN_L00_00210a08(int mode, int b, char *m) {
     FUN_L00_00207a58_210a08();
     g->unk22CC = b;
     switch (mode) {
-    case 1:
+    case VEHICLE_MODE_CLANK:
         g->health.unk22B0 = *(unsigned short *)&g->health.hp;
         g->health.hp = g->health.unk22AC;
         break;
-    case 2:
+    case VEHICLE_MODE_GIANT_CLANK:
         g->unk1630 = 200;
         break;
     }
@@ -2364,6 +2371,11 @@ void FUN_L00_00210c80_210ce8(void *, s32, f32, f32) __asm__("FUN_L00_00210c80");
 s32 hero_check_damage(s32 arg) __asm__("FUN_L00_00210ce8");
 extern T_210ce8 moby_hits[] __asm__("D_L00_00178100");
 s32 hero_check_damage(s32 arg) {
+    enum {
+        HERO_VEHICLE_MODE_NONE = 0,
+        VEHICLE_MODE_CLANK = 1,
+        VEHICLE_MODE_GIANT_CLANK = 2
+    };
     u8 *m;
     T_210ce8 *tbl;
     u8 *mob;
@@ -2434,7 +2446,7 @@ s32 hero_check_damage(s32 arg) {
         v.i[2] = 0;
     }
     switch (hero.vehicle_mode) {
-    case 0:
+    case HERO_VEHICLE_MODE_NONE:
         mob = ((u8 *)hero.unk2280);
         if (mob != 0 && (*(s16 *)(mob + 0xA6) == 0x4EB || *(s16 *)(mob + 0xA6) == 0x558)) {
             id = 0x80;
@@ -2492,11 +2504,11 @@ s32 hero_check_damage(s32 arg) {
             v.f[2] += v.f[2];
         }
         break;
-    case 1:
+    case VEHICLE_MODE_CLANK:
         hero_set_state(0x46, 1);
         FUN_L00_00210c80_210ce8(&v, flag, D_0015ED6C_210ce8 * 5.0f, D_0015ED6C_210ce8 * 3.0f);
         break;
-    case 2:
+    case VEHICLE_MODE_GIANT_CLANK:
         if ((tbl->i24 & 4) || hero.unk1630 <= 0) {
             hero_set_state(0x5D, 1);
             FUN_L00_002a9be0_210ce8();
@@ -2566,18 +2578,23 @@ f32 FUN_001f9b80_211380(void *, void *) __asm__("FUN_001f9b80");
 f32 approach_value_211380(f32, f32, f32 *) __asm__("FUN_00213ed8");
 void FUN_L00_0025b8c0_211380(f32 *, f32 *, f32, f32, f32, f32) __asm__("FUN_L00_0025b8c0");
 void FUN_L00_00211380(void) {
+    enum {
+        HERO_VEHICLE_MODE_NONE = 0,
+        VEHICLE_MODE_CLANK = 1,
+        VEHICLE_MODE_GIANT_CLANK = 2
+    };
     switch (hero.vehicle_mode) {
-    case 0:
+    case HERO_VEHICLE_MODE_NONE:
         hero.unk228 = 0.8f;
         hero.unk22C = 0.7f;
         hero.unk230 = 0.45f;
         break;
-    case 1:
+    case VEHICLE_MODE_CLANK:
         hero.unk228 = 0.59999996f;
         hero.unk22C = 0.45000002f;
         hero.unk230 = 0.3f;
         break;
-    case 2:
+    case VEHICLE_MODE_GIANT_CLANK:
         hero.unk228 = 5.25f;
         hero.unk22C = 4.45f;
         hero.unk230 = 3.75f;
@@ -3187,7 +3204,12 @@ extern CollisionHit HH __asm__("D_L00_00173E40") __attribute__((section(".data")
 #define HF(o) (*(f32 *)(D_L00_00173E40 + (o)))
 
 void FUN_L00_002127b8(void) {
-    V collision_ray_end, ground_ray_start, ground_offset_or_angles, side_ray_start, v40, side_hit_angles, side_hit_normal;
+    enum {
+        GRAVITY_MODE_WORLD_DOWN = 0,
+        GRAVITY_MODE_NEGATIVE_GROUND_NORMAL = 1,
+        GRAVITY_MODE_TOWARD_REFERENCE_POINT = 2
+    };
+    V collision_ray_end, ground_ray_start, ground_offset_or_angles, side_ray_start, unused_side_probe_point, side_hit_angles, side_hit_normal;
     f32 f;
     s32 r;
     s32 i;
@@ -3305,14 +3327,14 @@ tail:
 d1:
     FUN_001f99f8_c(&hero.gravity_dir);
     switch (hero.unk20B3) {
-    case 0:
+    case GRAVITY_MODE_WORLD_DOWN:
         hero.gravity_dir.f[2] = -1.0f;
         break;
-    case 1:
+    case GRAVITY_MODE_NEGATIVE_GROUND_NORMAL:
         qcopy(&hero.gravity_dir, &hero.unk270);
         FUN_001f9a68_c(&hero.gravity_dir, &hero.gravity_dir, -1.0f);
         break;
-    case 2:
+    case GRAVITY_MODE_TOWARD_REFERENCE_POINT:
         fast_vec_sub(&hero.gravity_dir, &hero.motion.unkB0, &hero.motion.pos);
         FUN_001f9bf8_c(&hero.gravity_dir, &hero.gravity_dir, 1.0f);
         break;
@@ -3345,7 +3367,7 @@ d1:
             a = -a;
         }
         FUN_L00_002335c8(&side_ray_start, 0.2f, a, 0.45f);
-        FUN_L00_002335c8(&v40, 0.2f, a, -0.45f);
+        FUN_L00_002335c8(&unused_side_probe_point, 0.2f, a, -0.45f);
         if (collision_line(&side_ray_start, &collision_ray_end, 0x22, hero.moby, 0)) {
             f = HH.point.f[2] - hero.ground_z.f;
             hero.unk2C0.f[i] = f;

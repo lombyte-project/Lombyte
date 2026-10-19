@@ -44,6 +44,11 @@ extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 extern s32 D_0014C190_257218[][64] __asm__("D_0014C190");
 void elevator_update(unsigned char *moby) __asm__("FUN_L09_003033a0");
 void elevator_update(unsigned char *moby) {
+    enum {
+        ELEVATOR_STATE_AT_PATH_END = 0,
+        ELEVATOR_STATE_AT_PATH_START = 1,
+        ELEVATOR_STATE_MOVING = 2
+    };
     char *data = *(char **)(moby + 0x78);
     char *path;
     float orig[4], delta[4], tmp[4];
@@ -94,7 +99,7 @@ void elevator_update(unsigned char *moby) {
         *(int *)(data + 0xC4) = -1;
     }
     switch (moby[0xBC]) {
-    case 0:
+    case ELEVATOR_STATE_AT_PATH_END:
         if (on) {
             float far;
             if ((*(short *)(data + 0xB8) != 0 && FUN_L01_00277fb8(moby)) ||
@@ -109,7 +114,7 @@ void elevator_update(unsigned char *moby) {
             }
         }
         break;
-    case 1:
+    case ELEVATOR_STATE_AT_PATH_START:
         if (on) {
             float near;
             if ((*(short *)(data + 0xB8) != 0 && FUN_L01_00277fb8(moby)) ||
@@ -125,7 +130,7 @@ void elevator_update(unsigned char *moby) {
             }
         }
         break;
-    case 2:
+    case ELEVATOR_STATE_MOVING:
         if (*(short *)(data + 0xBA) != 0 ||
             (F(data, 0xBC) < 0.0f &&
              vector_distance((moby + 0x10), &hero.motion.pos) < 2.0f &&
@@ -310,12 +315,18 @@ extern void spawn_explosion(void *, void *, void *, float, float, int, int, int,
 
 void refueling_station_update(struct Moby *m) __asm__("FUN_L09_00303d10");
 void refueling_station_update(struct Moby *m) {
+    enum {
+        REFUELING_STATION_STATE_INITIALIZE = 0,
+        REFUELING_STATION_STATE_WAIT_COMMAND = 1,
+        REFUELING_STATION_STATE_EXPLOSION_DELAY = 2,
+        REFUELING_STATION_STATE_EXPLODE = 3
+    };
     char *d = (char *)m->pvars;
     float v[4];
     unsigned char *q;
     FUN_L09_00303b30(m, d, d + 0x20);
     switch (m->state) {
-    case 0:
+    case REFUELING_STATION_STATE_INITIALIZE:
         if (*(short *)(d + 0x76) != -1 &&
             (q = (unsigned char *)D_0013D388 + *(short *)(d + 0x76))[0x39] != 0) {
             mark_moby_for_removal(m);
@@ -324,7 +335,7 @@ void refueling_station_update(struct Moby *m) {
         *(int *)(d + 0x7C) = -1;
         m->state = 1;
         break;
-    case 1:
+    case REFUELING_STATION_STATE_WAIT_COMMAND:
         if ((D_L09_0015F5CC & 7) == (((int)m >> 8) & 7)) {
             if (*(int *)(d + 0x7C) == -1 ||
                 (voice_is_playing(m, *(int *)(d + 0x7C)) == 0 && *(int *)(d + 0x7C) == -1)) {
@@ -349,7 +360,7 @@ void refueling_station_update(struct Moby *m) {
             m->state = 2;
         }
         break;
-    case 2:
+    case REFUELING_STATION_STATE_EXPLOSION_DELAY:
         if (fast_dec_timer_s16(d + 0x74)) {
             if (*(int *)(d + 0x70) != -1) {
                 unsigned char *o = (unsigned char *)(D_L09_0015FFD8_u + (*(int *)(d + 0x70) << 8));
@@ -363,7 +374,7 @@ void refueling_station_update(struct Moby *m) {
             m->state = 3;
         }
         break;
-    case 3:
+    case REFUELING_STATION_STATE_EXPLODE:
         subtract_vector_xyz_c(v, D_L09_00166F40, &m->pos);
         spawn_explosion(m, v, 0, 0.0f, 0.0f, 0x14, 9, 0x20, 10.0f, 7.0f, 20.0f, 2.0f, 0,
                               40.0f, 0, 1, -1, 0);
@@ -953,6 +964,11 @@ extern void FUN_L00_001fff28(void *, int, float);
 
 void turret_update(struct Moby *moby) __asm__("FUN_L09_00304c80");
 void turret_update(struct Moby *moby) {
+    enum {
+        TURRET_STATE_INITIALIZE = 0,
+        TURRET_STATE_IDLE = 4,
+        TURRET_STATE_MOUNTED = 5
+    };
     Vec4 seat;
     Vec4 offset;
     Vec4 tmp;
@@ -1011,7 +1027,7 @@ void turret_update(struct Moby *moby) {
         }
     }
     switch (moby->state) {
-    case 0:
+    case TURRET_STATE_INITIALIZE:
         attach_manipulator(moby, 0, vars);
         tmp.q = *(u128 *)&moby->pos;
         FUN_L09_002efda8(moby, &tmp);
@@ -1026,7 +1042,7 @@ void turret_update(struct Moby *moby) {
         vars->unk40 = 0;
         sound_probe_ignore[0] = moby;
         return;
-    case 4:
+    case TURRET_STATE_IDLE:
         if (vector_distance(&moby->pos, &hero.motion.pos) < 4.0f || hero.ground_moby == moby) {
             moby->pos.z += ((vars->rest_z - 1.0f) - moby->pos.z) * 0.11f;
             vars->yaw_speed = fast_add_rotations(vars->yaw_speed,
@@ -1069,7 +1085,7 @@ void turret_update(struct Moby *moby) {
             }
         }
         break;
-    case 5:
+    case TURRET_STATE_MOUNTED:
         sound_probe_ignore[0] = moby;
         if (moby->pos.z < vars->rest_z) {
             moby->pos.z += frame_time;
@@ -1455,6 +1471,11 @@ extern unsigned char D_0013E633_30A560[] __asm__("D_0013F350");
 extern unsigned char D_0013F3D0[];
 
 void FUN_L09_003091b0(char *moby) {
+    enum {
+        PLATFORM_STATE_INITIALIZE = 0,
+        PLATFORM_STATE_WAIT_FOR_LINK_REMOVAL = 1,
+        PLATFORM_STATE_ACTIVE = 2
+    };
     char *data = *(char **)(moby + 0x78);
     float movement[4];
     float original_rotation[4];
@@ -1474,7 +1495,7 @@ void FUN_L09_003091b0(char *moby) {
     sink_level = *(float *)(data + 0x84) - 0.300000012f;
     state = ((unsigned char *)moby)[0x20];
     switch (state) {
-    case 0:
+    case PLATFORM_STATE_INITIALIZE:
         *(int *)(data + 0x80) = 1;
         qcopy(data + 0x60, moby + 0x40);
         qzero(data + 0x70);
@@ -1490,7 +1511,7 @@ void FUN_L09_003091b0(char *moby) {
             moby[0x20] = 2;
         }
         break;
-    case 1:
+    case PLATFORM_STATE_WAIT_FOR_LINK_REMOVAL:
         linked = (char *)(D_L09_0015FFD8_c + (*(int *)(data + 0x8C) << 8));
         if (linked == 0) {
             goto set2;
@@ -1505,7 +1526,7 @@ void FUN_L09_003091b0(char *moby) {
     set2:
         moby[0x20] = 2;
         break;
-    case 2:
+    case PLATFORM_STATE_ACTIVE:
         if (((Hero *)D_0013E633_30A560)->air_frames.s == 0 && ((char *)((Hero *)D_0013E633_30A560)->ground_moby) == moby) {
             if (*(int *)(data + 0x88) == 0) {
                 func_0022ED80_30A560(0, 0, moby);
@@ -1621,6 +1642,12 @@ extern int FUN_L09_0030a298(struct Moby *);
 
 void shuttle_update(struct Moby *moby) __asm__("FUN_L09_00309c08");
 void shuttle_update(struct Moby *moby) {
+    enum {
+        SHUTTLE_STATE_INITIALIZE = 0,
+        SHUTTLE_STATE_WAIT_FOR_DEPARTURE = 1,
+        SHUTTLE_STATE_WAIT_FOR_DISMOUNT = 2,
+        SHUTTLE_STATE_FOLLOW_PATH = 3
+    };
     PathFlyerVars_00309c08 *vars = (PathFlyerVars_00309c08 *)moby->pvars;
     PathNodes_00309c08 *path = (PathNodes_00309c08 *)D_L09_001B0630[vars->path];
     Vec4 *position = &moby->pos;
@@ -1634,7 +1661,7 @@ void shuttle_update(struct Moby *moby) {
     if (vars == 0) return;
 
     switch (moby->state) {
-    case 0:
+    case SHUTTLE_STATE_INITIALIZE:
         moby->update_dist = 0xFF;
         vars->yaw_offset = 3.1415927f;
         *(s32 *)((u8 *)vars + 0xC4) = -1;
@@ -1661,7 +1688,7 @@ void shuttle_update(struct Moby *moby) {
         }
         moby->rot.z = fast_add_rotations(moby->rot.z, 3.1415927f);
         break;
-    case 2:
+    case SHUTTLE_STATE_WAIT_FOR_DISMOUNT:
         vars->lag += (1.0f - vars->lag) * 0.01f;
         FUN_L00_00262b00(vars->lag * 0.14f, frame_time * 0.5235988f,
                           (char *)moby, (f32 *)((u8 *)vars + 0xD8), (f32 *)((u8 *)vars + 0xDC));
@@ -1670,7 +1697,7 @@ void shuttle_update(struct Moby *moby) {
                           frame_time * 0.4886922f);
         if (hero.ground_moby != moby) moby->state = 1;
         break;
-    case 1:
+    case SHUTTLE_STATE_WAIT_FOR_DEPARTURE:
         vars->lag += (1.0f - vars->lag) * 0.01f;
         FUN_L00_00262b00(vars->lag * 0.14f, frame_time * 0.5235988f,
                           (char *)moby, (f32 *)((u8 *)vars + 0xD8), (f32 *)((u8 *)vars + 0xDC));
@@ -1688,7 +1715,7 @@ void shuttle_update(struct Moby *moby) {
             moby->state = 3;
         }
         break;
-    case 3:
+    case SHUTTLE_STATE_FOLLOW_PATH:
         if ((D_L09_0015F5CC & 7) == (((s32)moby >> 8) & 7)) {
             if (*(s32 *)((u8 *)vars + 0xC4) == -1 ||
                 (!check_voice_target_00309c08(moby, *(s32 *)((u8 *)vars + 0xC4)) &&

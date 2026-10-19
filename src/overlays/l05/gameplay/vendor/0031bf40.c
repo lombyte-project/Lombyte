@@ -222,15 +222,19 @@ extern G D_L05_0016CC60;
 extern void cutscene_set_camera_target(int) __asm__("FUN_L00_002637f8");
 
 void FUN_L05_0031d5c8(unsigned char *m) {
+    enum {
+        INITIALIZE = 0,
+        ARMED = 1
+    };
     unsigned int s = m[0x20];
     unsigned int t;
     G *g;
     switch (s) {
-    case 0:
+    case INITIALIZE:
         m[0x30] = 0xFF;
         m[0x20] = 1;
         break;
-    case 1:
+    case ARMED:
         if (D_L05_0015F5C4 == 2) {
             g = &D_L05_0016CC60;
             t = *(int *)((char *)g + 0x30) - 10;

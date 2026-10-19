@@ -50,6 +50,10 @@ extern void queue_dialogue_message(s32, s32) __asm__("FUN_L00_00263d40");
 
 /* Kerwan tutorial hint triggers: plays help messages and counts usage stats while the hero is inside the moby's clip volumes. */
 void FUN_L03_002df520(u8 *moby) {
+    enum {
+        TUTORIAL_HINTS_INITIALIZE = 0,
+        TUTORIAL_HINTS_UPDATE = 1
+    };
     s32 *data = *(s32 **)(moby + 0x78);
     struct Moby *m;
     s32 count;
@@ -58,13 +62,13 @@ void FUN_L03_002df520(u8 *moby) {
 
     tick_countdown(&data[22]);
     switch (moby[0x20]) {
-    case 0:
+    case TUTORIAL_HINTS_INITIALIZE:
         data[20] = 0;
         data[21] = 0;
         moby[0x30] = 0xFF;
         moby[0x20] = 1;
         break;
-    case 1:
+    case TUTORIAL_HINTS_UPDATE:
         if (is_point_inside_clip_volume(&hero.motion.pos, data[30]) &&
             ((u32)hero.state.control_mode < 2 || hero.state.control_mode == 9)) {
             D_0013D388[0x1A] = 1;
@@ -237,17 +241,21 @@ extern void FUN_L00_0026ced0(void *, void *, int, int, float, int);
 
 /* Starts the cutscene, then during mode 3 (frames 900-10000) emits two particle beams from the listed moby. */
 void FUN_L03_002e01d0(char *m) {
+    enum {
+        CUTSCENE_EFFECTS_INITIALIZE = 0,
+        CUTSCENE_EFFECTS_UPDATE = 1
+    };
     char *moby;
     float from[4];
     float to[4];
     Vec4 zero;
 
     switch (*(unsigned char *)(m + 0x20)) {
-    case 0:
+    case CUTSCENE_EFFECTS_INITIALIZE:
         *(unsigned char *)(m + 0x30) = 0xFF;
         m[0x20] = 1;
         break;
-    case 1:
+    case CUTSCENE_EFFECTS_UPDATE:
         if (D_L03_0015F5C4 != 2)
             break;
         if (D_L03_0016C960.mode == 4 || D_L03_0016C960.mode == 10) {

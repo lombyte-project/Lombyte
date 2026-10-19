@@ -188,6 +188,7 @@ extern int func_L00_001F2BE8_d6f0(float, void *, int, void *, void *) __asm__("F
 int mine_fall(char *moby, char *st) __asm__("FUN_L00_0025c698");
 int mine_fall(char *moby, char *st) {
     enum {
+        MOTION_RISING = 0,
         MOTION_FALLING = 1,
         MOTION_GROUNDED = 2
     };
@@ -257,7 +258,7 @@ int mine_fall(char *moby, char *st) {
 
     if (*(float *)(st + 0x54) != -1.0f && *(float *)(st + 0x50) != -1.0f) {
         switch (*(short *)(st + 0x3E)) {
-        case 0: {
+        case MOTION_RISING: {
             float ratio;
             ratio = absolute_float(*(float *)(st + 0x8) / *(float *)(st + 0x10));
             if (2.0f < ratio) {

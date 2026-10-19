@@ -197,6 +197,11 @@ extern void draw_number(void *, void *, int, unsigned int, int, int, int, float)
 extern int D_L06_0015FFD8_gp __asm__("D_L06_0015FFD8") __attribute__((sda));
 void bot_door_lock_update(char *moby) __asm__("FUN_L06_00307d30");
 void bot_door_lock_update(char *moby) {
+    enum {
+        BOT_DOOR_LOCK_STATE_INITIALIZE = 0,
+        BOT_DOOR_LOCK_STATE_ACTIVE = 1,
+        BOT_DOOR_LOCK_STATE_SHRINK_EFFECT = 2
+    };
     float *data = *(float **)(moby + 0x78);
     int *idata = (int *)data;
     float pos[4];
@@ -212,14 +217,14 @@ void bot_door_lock_update(char *moby) {
     data[10] = fast_add_rotations(data[10], (360.0f / D_L06_001622E4) * 0.017453292f * frame_time);
     *(unsigned int *)(moby + 0x90) = fast_tween_color((fast_cos(data[10]) + 1.0f) * 0.5f, 0x80464646, 0x80828282);
     switch ((unsigned char)moby[0x20]) {
-    case 0:
+    case BOT_DOOR_LOCK_STATE_INITIALIZE:
         idata[5] = idata[4];
         data[6] = random_angle_radians();
         data[10] = random_angle_radians();
         moby[0x20] = 1;
         data[9] = D_L06_001622EC;
         return;
-    case 1:
+    case BOT_DOOR_LOCK_STATE_ACTIVE:
         *(OvlQuad *)pos = *(OvlQuad *)(moby + 0x10);
         pos[2] += 2.75f;
         if (FUN_001f9b48(D_L06_00167540, moby + 0x10) < 32.0f) {
@@ -281,7 +286,7 @@ void bot_door_lock_update(char *moby) {
             moby[0x20] = 2;
         }
         break;
-    case 2:
+    case BOT_DOOR_LOCK_STATE_SHRINK_EFFECT:
         data[9] -= frame_time + frame_time;
         if (data[9] < 0.0f) data[9] = 0.0f;
         if (0.0f < data[9]) enqueue_callback_list_1((int)FUN_L06_00307578, (int)moby);
@@ -328,13 +333,18 @@ extern char *mk_a(int) __asm__("FUN_0020c4f8");
 extern void upd_a(void *) __asm__("FUN_L00_00250df8");
 
 void FUN_L06_00309860(char *self) {
+    enum {
+        MOBY_STATE_INITIALIZE = 0,
+        MOBY_STATE_WAIT_FOR_HIT = 1,
+        MOBY_STATE_SPAWN_AND_REMOVE = 2
+    };
     int flag = 0;
     char *o = find_moby_hit(self, 0x10000, 0);
     switch (((unsigned char *)self)[0x20]) {
-    case 0:
+    case MOBY_STATE_INITIALIZE:
         self[0x20] = 1;
         break;
-    case 1:
+    case MOBY_STATE_WAIT_FOR_HIT:
         if (o != 0 && *(float *)(o + 0x2C) > 0.0f) {
             flag = 1;
         }
@@ -342,7 +352,7 @@ void FUN_L06_00309860(char *self) {
             self[0x20] = 2;
         }
         break;
-    case 2: {
+    case MOBY_STATE_SPAWN_AND_REMOVE: {
         char *m;
         FUN_0022da68_c(0, 0, (int)self);
         FUN_L01_002787a0(self);
@@ -374,12 +384,16 @@ void enqueue_callback_list_1(s32 arg0, s32 arg1) __asm__("FUN_001f4600");
 void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
 void FUN_L06_0030be60(char *m) {
+    enum {
+        SPRITE_EFFECT_STATE_REMOVE = 0,
+        SPRITE_EFFECT_STATE_ANIMATE = 1
+    };
     float *d = *(float **)(m + 0x78);
     switch ((unsigned char)m[0x20]) {
-    case 0:
+    case SPRITE_EFFECT_STATE_REMOVE:
         mark_moby_for_removal(m);
         break;
-    case 1:
+    case SPRITE_EFFECT_STATE_ANIMATE:
         enqueue_callback_list_1(FUN_L06_0030bfa8, m);
         d[0] = d[0] + d[1];
         if (2.0f < d[0]) {

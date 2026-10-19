@@ -125,6 +125,12 @@ extern s32 D_0013DF38_arr[] __asm__("D_0013DF38");
 
 void FUN_L08_002b82a0(Moby_2B94B0 *m)
 {
+    enum {
+        MOBY_STATE_INITIALIZE = 0,
+        MOBY_STATE_PHYSICS_MOVEMENT = 1,
+        MOBY_STATE_CHECK_COLLECTION = 2,
+        MOBY_STATE_REMOVE = 4
+    };
     MobyData_2B94B0 *d = m->data;
     float A[4], F[4], B[4], C[4], P[4], E[4];
     float f20, t, f;
@@ -133,12 +139,12 @@ void FUN_L08_002b82a0(Moby_2B94B0 *m)
     d->ticks++;
     if (m->state != 0) m->pos[2] = d->f8;
     switch (m->state) {
-    case 0:
+    case MOBY_STATE_INITIALIZE:
         func_L08_002B9438_2B94B0(m);
         if (d->f2C != 0) m->state = 1;
         else m->state = 2;
         break;
-    case 1:
+    case MOBY_STATE_PHYSICS_MOVEMENT:
         qcopy(P, m->pos);
         d->vel[2] = d->vel[2] - D_0015ED70 * 9.8f;
         f20 = fast_vec_length(d->vel);
@@ -182,7 +188,7 @@ void FUN_L08_002b82a0(Moby_2B94B0 *m)
             qcopy(P, A);
         }
         qcopy(m->pos, P);
-    case 2:
+    case MOBY_STATE_CHECK_COLLECTION:
         hit = 0;
         m->f48 = func_001FA748_2B94B0(m->f48, d->fC);
         if (((Hero_2B94B0 *)((char *)&hero))->f208C == 15) {
@@ -203,7 +209,7 @@ void FUN_L08_002b82a0(Moby_2B94B0 *m)
         return;
     case 3:
         break;
-    case 4:
+    case MOBY_STATE_REMOVE:
         if (d->target != 0) d->target->fA = 0;
         mark_moby_for_removal(m);
         return;
@@ -311,6 +317,12 @@ extern float D_L08_0015F580_macro[] __asm__("D_L08_0015F580") __attribute__((sec
 extern float D_L08_00174660[];
 
 void FUN_L08_002d23f0(char *moby) {
+    enum {
+        BOMB_STATE_MOVING = 1,
+        BOMB_STATE_STATIONARY_FUSE = 2,
+        BOMB_STATE_EXPLODE_AND_REMOVE = 0x62,
+        BOMB_STATE_BURST_AND_REMOVE = 0x63
+    };
     union Coll_36F8 c;
     blk16 table_or_bounce_scratch;
     float normalized_direction[4];
@@ -336,7 +348,7 @@ void FUN_L08_002d23f0(char *moby) {
     st = *(unsigned char *)(moby + 0x20);
     two = 2;
     switch (st) {
-    case 1: {
+    case BOMB_STATE_MOVING: {
         float t;
         t = fast_vec_length_c((d + 0x10));
         *(float *)(moby + 0x40) = fast_add_rotations_c(*(float *)(moby + 0x40), t * 0.5f);
@@ -417,7 +429,7 @@ void FUN_L08_002d23f0(char *moby) {
         }
         break;
     }
-    case 2:
+    case BOMB_STATE_STATIONARY_FUSE:
         if (tick_countdown_32_alt(d + 0x20)) {
             *(unsigned char *)(moby + 0x20) = 0x63;
         } else if (*(int *)(d + 0x20) == scale_game_frames_c(0x3C)
@@ -428,7 +440,7 @@ void FUN_L08_002d23f0(char *moby) {
         }
         FUN_L00_0025d538_c(moby, d);
         break;
-    case 0x62:
+    case BOMB_STATE_EXPLODE_AND_REMOVE:
         allocate_voice_for_target_entry(0, 0, moby);
         c.p.moby = moby;
         c.p.flags = 0x810001;
@@ -439,7 +451,7 @@ void FUN_L08_002d23f0(char *moby) {
         FUN_L00_0025e450_c3(moby, D_L08_0015F580_macro, 0, 0.0f, 0.0f, 7, 10, 20, 3.0f, 1.7f, 4.0f, 1.0f, -1, 7.0f, 0, 7, -1, 0);
         mark_moby_for_removal(moby);
         return;
-    case 0x63: {
+    case BOMB_STATE_BURST_AND_REMOVE: {
         char *p;
         allocate_voice_for_target_entry(0, 0, moby);
         p = moby + 0x10;
@@ -1562,8 +1574,12 @@ void blarg_bombthrower_update(struct Moby *moby) {
     enum {
         BOMBTHROWER_STATE_INITIALIZE = 0,
         BOMBTHROWER_STATE_APPROACH_WAYPOINT = 1,
+        BOMBTHROWER_STATE_WAIT_TO_THROW = 3,
+        BOMBTHROWER_STATE_MOVE_TO_THROW_POSITION = 4,
         BOMBTHROWER_STATE_THROW_BOMB = 5,
+        BOMBTHROWER_STATE_MOVE_ONTO_WAYPOINT = 6,
         BOMBTHROWER_STATE_DAMAGE_KNOCKBACK = 0x5A,
+        BOMBTHROWER_STATE_FALL_RECOVERY = 0x5D,
         BOMBTHROWER_STATE_DYING = 0x63
     };
     Data_DBF68 *vars = (Data_DBF68 *)moby->pvars;
@@ -1712,7 +1728,7 @@ void blarg_bombthrower_update(struct Moby *moby) {
             vars->i134 = scale_game_frames_c2(0xF0);
         }
         break;
-    case 6:
+    case BOMBTHROWER_STATE_MOVE_ONTO_WAYPOINT:
         FUN_L00_00259028((char *)moby, vars->blkD0, (float *)&vars->waypoint->pos, (char *)vars->v40);
         if (moby->anim_flags & 2) {
             FUN_00212f90(vars->waypoint, 1, 0, scale_game_frames_c2(6));
@@ -1728,7 +1744,7 @@ void blarg_bombthrower_update(struct Moby *moby) {
             moby->collision = 0;
         }
         break;
-    case 3: {
+    case BOMBTHROWER_STATE_WAIT_TO_THROW: {
         float dist = vector_distance_xy_alt(&moby->pos, &target->pos);
         func_L00_002592B0_x(fast_arc_tan_c2(target->pos.x - moby->pos.x, target->pos.y - moby->pos.y),
                             moby, vars->blk12C, 0.02f, 0.3f, 0.2f);
@@ -1751,7 +1767,7 @@ void blarg_bombthrower_update(struct Moby *moby) {
         moby->collision = moby->pclass->collision;
         break;
     }
-    case 4:
+    case BOMBTHROWER_STATE_MOVE_TO_THROW_POSITION:
         point[0] = fast_cos_c4(moby->rot.z) * 2.0f;
         point[1] = fast_sin(moby->rot.z) * 2.0f;
         point[2] = 0.0f;
@@ -1836,7 +1852,7 @@ void blarg_bombthrower_update(struct Moby *moby) {
         break;
     case BOMBTHROWER_STATE_DAMAGE_KNOCKBACK:
     case 0x5C:
-    case 0x5D:
+    case BOMBTHROWER_STATE_FALL_RECOVERY:
         if (mine_fall(moby, vars->blk70) & 0x40) {
             old_waypoint = vars->waypoint;
             if ((vars->waypoint = (struct Moby *)FUN_L08_002daa10_c((char *)moby)) == 0) {
@@ -1922,7 +1938,9 @@ void FUN_L08_002dc7f0(struct Moby *moby);
 void shuttle_update(struct Moby *moby) __asm__("FUN_L08_002dbdb0");
 void shuttle_update(struct Moby *moby) {
     enum {
-        SHUTTLE_STATE_INITIALIZE = 0
+        SHUTTLE_STATE_INITIALIZE = 0,
+        SHUTTLE_STATE_WAIT_FOR_DEPARTURE = 2,
+        SHUTTLE_STATE_TRAVEL = 3
     };
     LiftVars *vars = (LiftVars *)moby->pvars;
     Vec4 old_pos;
@@ -1959,7 +1977,7 @@ void shuttle_update(struct Moby *moby) {
             moby->update_dist = 0xFF;
         }
         break;
-    case 2:
+    case SHUTTLE_STATE_WAIT_FOR_DEPARTURE:
         if (hero.ground_moby == moby) {
             if (D_L08_00179C10.busy == 0 && D_L08_00179C10.owner == -1) {
                 qcopy(&p, &hero.motion.pos);
@@ -1974,7 +1992,7 @@ void shuttle_update(struct Moby *moby) {
             FUN_L08_002dc180((char *)moby);
         }
         break;
-    case 3:
+    case SHUTTLE_STATE_TRAVEL:
         hero.unk1F2 = 5;
         hero.unk1F4 = 5;
         hero.unk22DA = vars->stop;
@@ -2037,6 +2055,11 @@ extern int D_L08_0015F5CC; /* no foreign declaration */
 extern Route_2dd4f8 *D_L08_001B0FB0_r[] __asm__("D_L08_001B0CB0");
 
 void FUN_L08_002dc180(struct Moby *moby) {
+    enum {
+        SHUTTLE_SELECT_ROUTE_END = 0,
+        SHUTTLE_SELECT_CONFIGURED_PATH_START = 1,
+        SHUTTLE_SELECT_ROUTE_START = 2
+    };
     char *data = (char *)moby->pvars;
     char *pl = (char *)&hero.motion.pos;
     Route_2dd4f8 *a = D_L08_001B0FB0_r[*(int *)(data + 0x88)];
@@ -2061,7 +2084,7 @@ void FUN_L08_002dc180(struct Moby *moby) {
     *(int *)(data + 0x124) = 1;
     moby->collision = moby->pclass->collision;
     switch (sel) {
-    case 0: {
+    case SHUTTLE_SELECT_ROUTE_END: {
         int n = a->count;
         unsigned char *t;
         int f94, f98;
@@ -2088,12 +2111,12 @@ void FUN_L08_002dc180(struct Moby *moby) {
         }
         return;
     }
-    case 1:
+    case SHUTTLE_SELECT_CONFIGURED_PATH_START:
         qcopy(data + 0x60, b->e[0]);
         y = fast_arc_tan(b->e[1][0] - *(float *)(data + 0x60), b->e[1][1] - *(float *)(data + 0x64));
         *(Route_2dd4f8 **)(data + 0x120) = b;
         break;
-    case 2:
+    case SHUTTLE_SELECT_ROUTE_START:
         qcopy(data + 0x60, a->e[0]);
         y = fast_arc_tan(a->e[1][0] - *(float *)(data + 0x60), a->e[1][1] - *(float *)(data + 0x64));
         *(Route_2dd4f8 **)(data + 0x120) = a;
@@ -2226,6 +2249,14 @@ typedef struct EffectRecord_2DC9A8 {
 
 extern CollisionHit D_L08_00174640;
 void FUN_L08_002dc9a8(struct Moby *moby) {
+    enum {
+        PROJECTILE_STATE_FLYING = 1,
+        PROJECTILE_STATE_DETONATE = 99
+    };
+    enum {
+        DETONATION_EFFECT_NO_EMISSION = 1,
+        DETONATION_EFFECT_SPHERICAL_VELOCITY = 3
+    };
     char *m = (char *)moby;
     char *data = *(char **)(m + 0x78);
     float original[4];
@@ -2244,7 +2275,7 @@ void FUN_L08_002dc9a8(struct Moby *moby) {
         m[0x20] = 99;
     }
     switch ((unsigned char)m[0x20]) {
-    case 1: {
+    case PROJECTILE_STATE_FLYING: {
         position = (float *)(m + 0x10);
         qcopy(original, position);
         FUN_L08_002dc9a8_transform(position, position, data);
@@ -2267,7 +2298,7 @@ void FUN_L08_002dc9a8(struct Moby *moby) {
             if (FUN_L08_002dc9a8_test(data + 0x10) != 0) m[0x20] = 99;
         }
     } break;
-    case 99: {
+    case PROJECTILE_STATE_DETONATE: {
         record.pos[0] = D_0015ED6C_lui * 14.0f;
         record.pos[1] = D_0015ED6C_lui * 22.0f;
         record.pos[2] = D_0015ED6C_lui * 12.0f;
@@ -2318,7 +2349,7 @@ void FUN_L08_002dc9a8(struct Moby *moby) {
                 FUN_L08_002dc9a8_emit(record.pos, position, color, 0x0f000020, 150000.0f,
                                       FUN_L08_002dc9a8_blend(color2, alpha), 2);
             } break;
-            case 3: {
+            case DETONATION_EFFECT_SPHERICAL_VELOCITY: {
                 int color, color2, alpha;
                 color = FUN_L08_002dc9a8_color(FUN_L08_002dc9a8_random(0.25f, 1.0f),
                                                   0x7f000000, 0x7f182030);
@@ -2333,7 +2364,7 @@ void FUN_L08_002dc9a8(struct Moby *moby) {
                 FUN_L08_002dc9a8_emit(record.pos, position, color, color2, radius,
                                       alpha, 3);
             } break;
-            case 1: break;
+            case DETONATION_EFFECT_NO_EMISSION: break;
             }
         }
         FUN_L08_002dc9a8_finish(m);
@@ -2425,6 +2456,18 @@ extern int timer46(int*) __asm__("FUN_001f9740");
 
 void FUN_L08_002dd3c0(M46 *moby);
 void FUN_L08_002dd3c0(M46 *moby) {
+    enum {
+        ROCKET_STATE_INITIALIZE = 0,
+        ROCKET_STATE_APPROACH_TARGET_OFFSET = 1,
+        ROCKET_STATE_HOME_TOWARD_TARGET = 2,
+        ROCKET_STATE_WAIT_FOR_ACTIVATION = 3,
+        ROCKET_STATE_FOLLOW_ROUTE = 4,
+        ROCKET_STATE_FLY_CONFIGURED_HEADING = 5,
+        ROCKET_STATE_EXPLODE_AND_REMOVE = 6
+    };
+    enum {
+        LINKED_CLASS_ZERO_LAUNCH_OFFSET = 5
+    };
     V46 target,delta,accel,effect,aux;
     D46 *data=moby->data;
     if (FUN_L00_0025a420(moby,0x210000,0) && moby->state!=4) {
@@ -2434,7 +2477,7 @@ void FUN_L08_002dd3c0(M46 *moby) {
         return;
     }
     switch(moby->state) {
-    case 0: {
+    case ROCKET_STATE_INITIALIZE: {
         char *persistence_base=D_0013D388;
         Persistent46 *state=(Persistent46*)(persistence_base+data->persistent);
         if (state->active) {
@@ -2448,7 +2491,7 @@ void FUN_L08_002dd3c0(M46 *moby) {
         data->waypoint=1; moby->state=3; moby->animation=0; moby->flags=0;
         return;
     }
-    case 1: {
+    case ROCKET_STATE_APPROACH_TARGET_OFFSET: {
         D46 *target_data=data->target->data;
         int life,size0,size1;
         float yaw,pitch,radius,angle;
@@ -2477,7 +2520,7 @@ void FUN_L08_002dd3c0(M46 *moby) {
         FUN_L00_00269958(moby->position,effect,D_L08_00161A2C,D_L08_00161A30,life,size0,size1,1);
         return;
     }
-    case 2: {
+    case ROCKET_STATE_HOME_TOWARD_TARGET: {
         D46 *target_data=data->target->data;
         int life,size0,size1;
         float scale,radius,angle;
@@ -2507,7 +2550,7 @@ void FUN_L08_002dd3c0(M46 *moby) {
         FUN_L00_00269958(moby->position,effect,D_L08_00161A2C,D_L08_00161A30,life,size0,size1,1);
         return;
     }
-    case 3:
+    case ROCKET_STATE_WAIT_FOR_ACTIVATION:
         if (D_L08_0015F5C4_macro) return;
         if (distance_xyz_c(D_0013F3D0,(char*)data->path+(data->path->count<<4))<data->activation_range && timer46(&data->timer)) {
             moby->flags=0x40; moby->state=4; moby->animation=moby->model->animation;
@@ -2515,7 +2558,7 @@ void FUN_L08_002dd3c0(M46 *moby) {
             allocate_voice_for_target_entry_alt(1,0,moby);
         }
         return;
-    case 4: {
+    case ROCKET_STATE_FOLLOW_ROUTE: {
         RouteState46 *route;
         int next;
         float yaw;
@@ -2565,7 +2608,7 @@ void FUN_L08_002dd3c0(M46 *moby) {
                         case 2: *(Q46*)aux=(Q46)0; aux[0]=-2.0f; aux[1]=-1.152f; aux[2]=-1.772f; qcopy(effect,aux); break;
                         case 3: *(Q46*)aux=(Q46)0; aux[2]=0.975f; qcopy(effect,aux); break;
                         case 4: *(Q46*)aux=(Q46)0; aux[1]=-1.665f; aux[2]=0.642f; qcopy(effect,aux); break;
-                        case 5: *(Q46*)aux=(Q46)0; qcopy(effect,aux); break;
+                        case LINKED_CLASS_ZERO_LAUNCH_OFFSET: *(Q46*)aux=(Q46)0; qcopy(effect,aux); break;
                         }
                         if (other->distance>1500.0f) mark_moby_for_removal(other);
                         else {
@@ -2600,7 +2643,7 @@ void FUN_L08_002dd3c0(M46 *moby) {
         }
         return;
     }
-    case 5:
+    case ROCKET_STATE_FLY_CONFIGURED_HEADING:
         FUN_L00_0025bc00(&moby->rotation[2],0,data->yaw,D_0015ED6C*0.5235988f);
         FUN_L00_0025bc00(&moby->rotation[1],0,-data->pitch,D_0015ED6C*0.5235988f);
         moby->rotation[0]=fast_add_rotations(moby->rotation[0],D_0015ED6C*6.2831855f);
@@ -2608,7 +2651,7 @@ void FUN_L08_002dd3c0(M46 *moby) {
         add_vector_xyz(moby->position,moby->position,data->velocity);
         if (FUN_L08_002025d0(moby->position,0x400,2,moby,0) || moby->position[0]<5.0f || moby->position[0]>500.0f || moby->position[1]<5.0f || moby->position[1]>500.0f || moby->position[2]<5.0f || moby->position[2]>500.0f || distance_xyz_c(D_0013F3D0,moby->position)<16.0f) moby->state=6;
         return;
-    case 6:
+    case ROCKET_STATE_EXPLODE_AND_REMOVE:
         if (D_L08_0015FFDC<(unsigned int)moby) spawn_explosion(moby,data->velocity,moby->position,0.0f,0.0f,15,10,10,3.0f,2.0f,9.0f,1.0f,-1,15.0f,1,1,-1,0);
         mark_moby_for_removal(moby);
         break;
@@ -2732,6 +2775,11 @@ extern void FUN_L08_002dec90_c(char *m, char *pos) __asm__("FUN_L08_002dec90");
 s32 allocate_voice_for_bank_entry(s32 entry_index, s32 flags, s32 owner) __asm__("FUN_0022db10");
 
 void FUN_L08_002de848(char *m) {
+    enum {
+        MOBY_STATE_INITIALIZE_PATH = 0,
+        MOBY_STATE_FOLLOW_PATH = 1,
+        MOBY_STATE_FALLING = 2
+    };
     float a[4];
     float b[4];
     char *d = *(char **)(m + 0x78);
@@ -2740,7 +2788,7 @@ void FUN_L08_002de848(char *m) {
     qcopy(a, pos);
     t = (int *)D_L08_001B0CB0[*(int *)d];
     switch (*(unsigned char *)(m + 0x20)) {
-    case 0:
+    case MOBY_STATE_INITIALIZE_PATH:
         if (*(int *)d == -1) {
             mark_moby_for_removal(m);
             return;
@@ -2754,7 +2802,7 @@ void FUN_L08_002de848(char *m) {
         }
         m[0x20] = 1;
         *(unsigned char *)(m + 0x30) = 0xFF;
-    case 1: {
+    case MOBY_STATE_FOLLOW_PATH: {
         float f;
         sample_camera_path(t, 1, m + 0x10, (float *)(m + 0x40), 0, *(float *)(d + 4));
         *(float *)(m + 0x44) = *(float *)(m + 0x44) * 0.5f;
@@ -2766,7 +2814,7 @@ void FUN_L08_002de848(char *m) {
         }
         break;
     }
-    case 2: {
+    case MOBY_STATE_FALLING: {
         float c15 = 15.0f;
         float c10 = 10.0f;
         float dd;

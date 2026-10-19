@@ -15,12 +15,23 @@ void FUN_L10_002eaa08_c(void *pos, short *timer, short *burst, float height) __a
 extern void func_L10_002EBDC8_a01(float,void *,short *,short *) __asm__("FUN_L10_002eaa08");
 
 void FUN_L10_002ea1f0(char *m) {
+    enum {
+        EFFECT_STATE_INITIALIZE = 0,
+        EFFECT_STATE_EMIT_BURST_PARTICLES = 1,
+        EFFECT_STATE_UPDATE_WITH_GROUND_HEIGHT = 2,
+        EFFECT_STATE_EMIT_TIMED_PARTICLES = 3
+    };
+    enum {
+        EFFECT_MODE_BURST_PARTICLES = 0,
+        EFFECT_MODE_CACHE_GROUND_HEIGHT = 1,
+        EFFECT_MODE_TIMED_PARTICLES = 2
+    };
  char *d=*(char **)(m+0x78);
  switch((unsigned char)m[0x20]) {
- case 0:
+ case EFFECT_STATE_INITIALIZE:
   switch(*(int *)d) {
-  case 0:m[0x20]=1;break;
-  case 1:
+  case EFFECT_MODE_BURST_PARTICLES:m[0x20]=1;break;
+  case EFFECT_MODE_CACHE_GROUND_HEIGHT:
    if(*(int *)(d+4)!=-1) {
     char *tab=D_L10_001B0930[*(int *)(d+4)];
     char *pos=tab+0x10;
@@ -30,10 +41,10 @@ void FUN_L10_002ea1f0(char *m) {
     do {*height=probe_ground_height(pos,0,0.5f);pos+=0x10;height+=4;}while(--count);}
    }else *(float *)(d+0x88)=probe_ground_height(m+0x10,0,0.5f);
    m[0x20]=2;break;
-  case 2:m[0x20]=3;break;
+  case EFFECT_MODE_TIMED_PARTICLES:m[0x20]=3;break;
   }
   break;
- case 1:
+ case EFFECT_STATE_EMIT_BURST_PARTICLES:
   if(*(int *)(d+4)==-1)FUN_L10_002ea4e8_c(m+0x10,(short *)(d+8),(short *)(d+0x48));
   else {
    char *tab=D_L10_001B0930[*(int *)(d+4)];int n=*(int *)tab;
@@ -42,7 +53,7 @@ void FUN_L10_002ea1f0(char *m) {
    do {FUN_L10_002ea4e8_c(pos,timer,burst);timer++;++burst;--count;pos+=0x10;}while(count);}
   }
   break;
- case 2:
+ case EFFECT_STATE_UPDATE_WITH_GROUND_HEIGHT:
   if(*(int *)(d+4)==-1)func_L10_002EBDC8_a01(*(float *)(d+0x88),m+0x10,(short *)(d+8),(short *)(d+0x48));
   else {
    char *tab=D_L10_001B0930[*(int *)(d+4)];int n=*(int *)tab;
@@ -51,7 +62,7 @@ void FUN_L10_002ea1f0(char *m) {
    do {func_L10_002EBDC8_a01(*height,pos,timer,burst);height+=4;++burst;++timer;--count;pos+=0x10;}while(count);}
   }
   break;
- case 3:
+ case EFFECT_STATE_EMIT_TIMED_PARTICLES:
   if(*(int *)(d+4)==-1)FUN_L10_002ea7b0_c(m+0x10,(short *)(d+8));
   else {
    char *tab=D_L10_001B0930[*(int *)(d+4)];int n=*(int *)tab;
@@ -294,12 +305,16 @@ extern struct L10Data D_L10_0016CCE0;
 extern void cutscene_set_camera_target(int) __asm__("FUN_L00_002637f8");
 
 void FUN_L10_002eacd8(struct Moby *m) {
+    enum {
+        LEVEL_MODE_STATE_INITIALIZE = 0,
+        LEVEL_MODE_STATE_DISPATCH = 1
+    };
     switch (m->state) {
-    case 0:
+    case LEVEL_MODE_STATE_INITIALIZE:
         m->update_dist = 0xFF;
         m->state = 1;
         break;
-    case 1:
+    case LEVEL_MODE_STATE_DISPATCH:
         if (D_L10_0015F5C4_vendor == 2) {
             if (D_L10_0016CCE0.mode == 3 || D_L10_0016CCE0.mode == 5 || D_L10_0016CCE0.mode == 6 ||
                 D_L10_0016CCE0.mode == 7) {
@@ -328,19 +343,24 @@ extern void FUN_L01_002787a0(void *);
 void mark_moby_for_removal(struct Moby *moby) __asm__("FUN_0020c828");
 
 void FUN_L10_002eb6f0(struct Moby *m) {
+    enum {
+        HIT_RESPONSE_STATE_INITIALIZE = 0,
+        HIT_RESPONSE_STATE_WAIT_FOR_HIT = 1,
+        HIT_RESPONSE_STATE_RESPOND_AND_REMOVE = 2
+    };
     int hit = 0;
     char *r = find_moby_hit(m, 0x10000, 0);
     switch (m->state) {
-    case 0:
+    case HIT_RESPONSE_STATE_INITIALIZE:
         m->state = 1;
         break;
-    case 1:
+    case HIT_RESPONSE_STATE_WAIT_FOR_HIT:
         if (r != 0 && *(float *)(r + 0x2C) > 0.0f)
             hit = 1;
         if (hit)
             m->state = 2;
         break;
-    case 2:
+    case HIT_RESPONSE_STATE_RESPOND_AND_REMOVE:
         allocate_voice_for_target_entry(0, 0, (int)m);
         FUN_L01_002787a0(m);
         FUN_L00_00263e30(m, 0x742, 1, 0x742, 1, 11, 2);
@@ -354,13 +374,18 @@ void FUN_L10_002eb6f0(struct Moby *m) {
 extern void FUN_L01_00278e20(void *, int);
 
 void FUN_L10_002eb7e0(struct Moby *moby) {
+    enum {
+        HIT_RESPONSE_STATE_INITIALIZE = 0,
+        HIT_RESPONSE_STATE_WAIT_FOR_HIT = 1,
+        HIT_RESPONSE_STATE_RESPOND_AND_REMOVE = 2
+    };
     int ok = 0;
     char *p = find_moby_hit(moby, 0x10000, 0);
     switch (moby->state) {
-    case 0:
+    case HIT_RESPONSE_STATE_INITIALIZE:
         moby->state = 1;
         break;
-    case 1:
+    case HIT_RESPONSE_STATE_WAIT_FOR_HIT:
         if (p != 0) {
             if (0.0f < *(float *)(p + 0x2C))
                 ok = 1;
@@ -368,7 +393,7 @@ void FUN_L10_002eb7e0(struct Moby *moby) {
         if (ok != 0)
             moby->state = 2;
         break;
-    case 2:
+    case HIT_RESPONSE_STATE_RESPOND_AND_REMOVE:
         allocate_voice_for_target_entry(0, 0, (int)moby);
         FUN_L01_002787a0(moby);
         FUN_L01_00278e20(moby, 0x741);

@@ -36,14 +36,17 @@ extern void FUN_L00_0028b1a0(void);
 
 void FUN_L00_0023d968(void) {
     enum {
-        LEVEL_WITH_TWO_ROTATING_SKY_SHELLS = 3
+        LEVEL_WITH_SKY_PARTICLES_AND_ROTATING_SHELL = 0,
+        LEVEL_WITH_THREE_SKY_SHELL_ROTATION_RATES = 1,
+        LEVEL_WITH_TWO_ROTATING_SKY_SHELLS = 3,
+        LEVEL_WITH_FAST_AND_SLOW_ROTATING_SKY_SHELLS = 4
     };
     setup_sky_gif_paging();
     switch (current_level_index) {
-    case 0:
+    case LEVEL_WITH_SKY_PARTICLES_AND_ROTATING_SHELL:
         FUN_L00_00289330();
         break;
-    case 1:
+    case LEVEL_WITH_THREE_SKY_SHELL_ROTATION_RATES:
         update_sky_shells_animated();
         break;
     case 2:
@@ -52,7 +55,7 @@ void FUN_L00_0023d968(void) {
     case LEVEL_WITH_TWO_ROTATING_SKY_SHELLS:
         FUN_L00_002899a8();
         break;
-    case 4:
+    case LEVEL_WITH_FAST_AND_SLOW_ROTATING_SKY_SHELLS:
         FUN_L00_00289a90();
         break;
     case 5:
@@ -279,6 +282,11 @@ s32 is_point_inside_clip_volume(s32 arg0, s32 arg1) __asm__("FUN_00214720");
 
 void clank_cutscene_trigger_update(DoorMoby *m) __asm__("FUN_L00_002d9dc8");
 void clank_cutscene_trigger_update(DoorMoby *m) {
+    enum {
+        CLANK_TRIGGER_INITIALIZE_DIALOGUE = 0,
+        CLANK_TRIGGER_POLL_DIALOGUE = 1,
+        CLANK_TRIGGER_WAIT_TO_REPOLL_DIALOGUE = 2
+    };
     DoorVars *vars;
 
     vars = m->vars;
@@ -290,7 +298,7 @@ void clank_cutscene_trigger_update(DoorMoby *m) {
         m->flags &= ~1;
     }
     switch (m->state) {
-    case 0:
+    case CLANK_TRIGGER_INITIALIZE_DIALOGUE:
         D_00141628[0] = 1;
         initialize_npc_dialogue(m, vars->unk20);
         if (D_0013D388[8] != 0) {
@@ -304,7 +312,7 @@ void clank_cutscene_trigger_update(DoorMoby *m) {
         m->alpha = 0xFF;
         m->state = 1;
         break;
-    case 1:
+    case CLANK_TRIGGER_POLL_DIALOGUE:
         if (vars->unk56 != 0) {
             if (is_point_inside_clip_volume((s32)(&hero.motion.pos), vars->unk60) != 0) {
                 vars->unk2C = 16.0f;
@@ -320,7 +328,7 @@ void clank_cutscene_trigger_update(DoorMoby *m) {
             initialize_global_state_entry(1);
         }
         break;
-    case 2:
+    case CLANK_TRIGGER_WAIT_TO_REPOLL_DIALOGUE:
         if (D_L00_0015F5C4 != 2) {
             m->state = 1;
         }

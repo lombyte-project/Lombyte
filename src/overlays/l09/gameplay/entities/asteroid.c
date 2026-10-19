@@ -705,7 +705,7 @@ extern f32 frame_scale_macro __asm__("D_0015ED60") __attribute__((section(".sdat
 void FUN_L09_002eaea8(Moby *m) {
     float movement_step[4];
     float collision_probe_offset[4];
-    float v2[4];
+    float position_or_movement_step[4];
     float offset_position[4];
     Data_2EC188 *d = (*(Data_2EC188 **)&m->pvars);
     float len;
@@ -730,12 +730,12 @@ void FUN_L09_002eaea8(Moby *m) {
     m->rot.y = fast_add_rotations_c(t, d->f44);
     if (m->state == 0) {
         if (d->pos[2] < 100.0f && d->pos[0] < 500.0f && d->pos[1] < 500.0f) {
-            v2[0] = random_float_between_c2(-5.0f, 5.0f);
-            v2[1] = random_float_between_c2(-5.0f, 5.0f);
-            v2[2] = random_float_between_c2(-5.0f, 5.0f);
-            add_vector_xyz(v2, v2, d->pos);
-            add_vector_xyz(offset_position, v2, collision_probe_offset);
-            if (FUN_001efa68(v2, offset_position, 4, (int)m, 0) != 0 && D_L09_00173FE8 > 26.5f) {
+            position_or_movement_step[0] = random_float_between_c2(-5.0f, 5.0f);
+            position_or_movement_step[1] = random_float_between_c2(-5.0f, 5.0f);
+            position_or_movement_step[2] = random_float_between_c2(-5.0f, 5.0f);
+            add_vector_xyz(position_or_movement_step, position_or_movement_step, d->pos);
+            add_vector_xyz(offset_position, position_or_movement_step, collision_probe_offset);
+            if (FUN_001efa68(position_or_movement_step, offset_position, 4, (int)m, 0) != 0 && D_L09_00173FE8 > 26.5f) {
                 float scaled_movement_step[4];
                 V6_2EC188 A;
                 V6_2EC188 B;
@@ -790,10 +790,10 @@ void FUN_L09_002eaea8(Moby *m) {
         if (d->target[2] == 25.0f) {
             if (d->pos[2] < 27.0f) {
                 int j;
-                qcopy(v2, d->pos);
-                v2[2] = 25.0f;
+                qcopy(position_or_movement_step, d->pos);
+                position_or_movement_step[2] = 25.0f;
                 for (j = 4; j >= 0; j--) {
-                    FUN_L09_002efe48_c(m, v2, movement_step, d->f50 * 4.0f, d->f50 * 12.0f);
+                    FUN_L09_002efe48_c(m, position_or_movement_step, movement_step, d->f50 * 4.0f, d->f50 * 12.0f);
                 }
                 d->f54 = d->f54 * (frame_scale_macro * -0.100000024f + 1.0f);
                 if (d->f58 <= 0) {
@@ -810,7 +810,7 @@ void FUN_L09_002eaea8(Moby *m) {
                 int h;
                 extra = 0.0f;
                 if (len < 7.0f) extra = 7.0f - len;
-                scale_vector_xyz_c(v2, movement_step, 0.5f);
+                scale_vector_xyz_c(position_or_movement_step, movement_step, 0.5f);
                 for (i = 0; i < 8; i++) {
                     float s;
                     float sc;
@@ -836,7 +836,7 @@ void FUN_L09_002eaea8(Moby *m) {
                         int lo = scale_game_frames(25), hi = scale_game_frames(30);
                         b = FUN_L00_00257b90(lo, hi);
                     }
-                    FUN_L00_0026a9f0(offset_position, v2, *pa, *pb, a, b, 0, 0, 1200000.0f, sc);
+                    FUN_L00_0026a9f0(offset_position, position_or_movement_step, *pa, *pb, a, b, 0, 0, 1200000.0f, sc);
                 }
                 for (i = 9; i >= 0; i--) {
                     FUN_L09_002ea528_c((char *)m, movement_step);
@@ -862,10 +862,10 @@ void FUN_L09_002eaea8(Moby *m) {
             int j;
             m->draw_dist = 0;
             m->visible = 0;
-            qcopy(v2, d->pos);
-            v2[2] = 25.0f;
+            qcopy(position_or_movement_step, d->pos);
+            position_or_movement_step[2] = 25.0f;
             for (j = 1; j >= 0; j--) {
-                FUN_L09_002efe48_c(m, v2, movement_step, d->f50 * 4.0f, d->f50 * 12.0f);
+                FUN_L09_002efe48_c(m, position_or_movement_step, movement_step, d->f50 * 4.0f, d->f50 * 12.0f);
             }
             if (m->state > scale_game_frames(10)) {
                 mark_moby_for_removal(m);
@@ -877,7 +877,7 @@ void FUN_L09_002eaea8(Moby *m) {
             int k;
             extra = 0.0f;
             if (len < 7.0f) extra = 7.0f - len;
-            scale_vector_xyz_c(v2, movement_step, 0.25f);
+            scale_vector_xyz_c(position_or_movement_step, movement_step, 0.25f);
             for (k = 0; k < 3; k++) {
                 float s;
                 float sc;
@@ -903,7 +903,7 @@ void FUN_L09_002eaea8(Moby *m) {
                     int lo = scale_game_frames(25), hi = scale_game_frames(30);
                     b = FUN_L00_00257b90(lo, hi);
                 }
-                FUN_L00_0026a9f0(offset_position, v2, *pa, *pb, a, b, 0, 0, 1200000.0f, sc);
+                FUN_L00_0026a9f0(offset_position, position_or_movement_step, *pa, *pb, a, b, 0, 0, 1200000.0f, sc);
             }
             if (m->state >= 3) {
                 mark_moby_for_removal(m);
@@ -1130,6 +1130,10 @@ extern void FUN_L00_0025e450_edc30(struct Moby *, void *, void *, float, float, 
 /* Level 9 breakable stack: when hit, swaps in the next damaged class (0x512 -> 0x513 -> 0x514), bursts debris and smoke and removes itself once gone. */
 void display_update(struct Moby *moby) __asm__("FUN_L09_002edc30");
 void display_update(struct Moby *moby) {
+    enum {
+        BREAKABLE_STACK_ANTEPENULTIMATE_CLASS = 0x512,
+        BREAKABLE_STACK_PENULTIMATE_CLASS = 0x513
+    };
     float center[4];
     float top[4];
     float push[4];
@@ -1157,10 +1161,10 @@ void display_update(struct Moby *moby) {
     if (moby->oclass < 0x514) {
         next = 0x512;
         switch (moby->oclass) {
-        case 0x512:
+        case BREAKABLE_STACK_ANTEPENULTIMATE_CLASS:
             next = 0x513;
             break;
-        case 0x513:
+        case BREAKABLE_STACK_PENULTIMATE_CLASS:
             qcopy(center, &moby->pos);
             moby->pos.z += 4.0f;
             FUN_L00_00257470_edc30(moby, 0, -1);

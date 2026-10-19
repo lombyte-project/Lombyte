@@ -810,6 +810,9 @@ void FUN_L00_00210c80_8(void *, s32, f32, f32) __asm__("FUN_L00_00210c80");
 
 extern OvlMobyEntry40 D_L01_00178580[];
 s32 FUN_L01_00231580(s32 arg) {
+    enum {
+        VEHICLE_MODE_NONE = 0
+    };
     u8 *m;
     OvlMobyEntry40 *tbl;
     u8 *mob;
@@ -866,7 +869,7 @@ s32 FUN_L01_00231580(s32 arg) {
         v.i[2] = 0;
     }
     switch (G.vehicle_mode) {
-    case 0:
+    case VEHICLE_MODE_NONE:
         mob = (u8 *)G.unk2280;
         if (mob != 0 && (*(s16 *)(mob + 0xA6) == 0x4EB || *(s16 *)(mob + 0xA6) == 0x558)) {
             id = 0x80;
@@ -941,8 +944,11 @@ f32 FUN_001f9b80_231ae0(void *, void *) __asm__("FUN_001f9b80");
 f32 approach_value_231ae0(f32, f32, f32 *) __asm__("FUN_00213ed8");
 void FUN_L00_0025b8c0_231ae0(f32 *, f32 *, f32, f32, f32, f32) __asm__("FUN_L00_0025b8c0");
 void FUN_L01_00231ae0(void) {
+    enum {
+        VEHICLE_MODE_NONE = 0
+    };
     switch (hero.vehicle_mode) {
-    case 0:
+    case VEHICLE_MODE_NONE:
         hero.unk228 = 0.8f;
         hero.unk22C = 0.7f;
         hero.unk230 = 0.45f;
@@ -1130,9 +1136,10 @@ extern CollisionHit HH __asm__("D_L01_001742C0") __attribute__((section(".data")
 void FUN_L01_00232dc0(void) {
     enum {
         GRAVITY_WORLD_DOWN = 0,
-        GRAVITY_OPPOSITE_GROUND_NORMAL = 1
+        GRAVITY_OPPOSITE_GROUND_NORMAL = 1,
+        GRAVITY_TOWARD_REFERENCE_POINT = 2
     };
-    V collision_ray_end, ground_ray_start, v20, side_ray_start, v40, side_hit_angles, normalized_side_hit_normal;
+    V collision_ray_end, ground_ray_start, v20, side_ray_start, unused_side_probe_point, side_hit_angles, normalized_side_hit_normal;
     f32 f;
     s32 r;
     s32 i;
@@ -1247,7 +1254,7 @@ d1:
         qcopy((u8 *)&hero.gravity_dir, (u8 *)&hero.unk270);
         FUN_001f9a68_c((u8 *)&hero.gravity_dir, (u8 *)&hero.gravity_dir, -1.0f);
         break;
-    case 2:
+    case GRAVITY_TOWARD_REFERENCE_POINT:
         subtract_vector_xyz((u8 *)&hero.gravity_dir, (u8 *)&hero.motion.unkB0, (u8 *)&hero.motion.pos);
         FUN_001f9bf8_c((u8 *)&hero.gravity_dir, (u8 *)&hero.gravity_dir, 1.0f);
         break;
@@ -1280,7 +1287,7 @@ d1:
             a = -a;
         }
         FUN_L00_002335c8(&side_ray_start, 0.2f, a, 0.45f);
-        FUN_L00_002335c8(&v40, 0.2f, a, -0.45f);
+        FUN_L00_002335c8(&unused_side_probe_point, 0.2f, a, -0.45f);
         if (FUN_001efa68_c(&side_ray_start, &collision_ray_end, 0x22, (s32)hero.moby, 0)) {
             f = HH.point.f[2] - hero.ground_z.f;
             hero.unk2C0.f[i] = f;
@@ -1561,8 +1568,11 @@ skip:
 /* Ported from rac1-decomp (src/overlays/shared/help_002274A8.c: func_L01_00240CE8), where it is exact; names translated to the US level program. */
 
 void FUN_L01_002405a0(void) {
+    enum {
+        VEHICLE_MODE_NONE = 0
+    };
     switch ((unsigned char)D_0013E533[0x2EC1]) {
-    case 0:
+    case VEHICLE_MODE_NONE:
         hero_set_state(HERO_STATE_IDLE, 1);
         break;
     case 3:

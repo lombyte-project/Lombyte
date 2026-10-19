@@ -147,6 +147,11 @@ float absolute_float(float input) __asm__("FUN_001f99c0");
 extern s32 D_0014C190_257218[][64] __asm__("D_0014C190");
 void FUN_L14_002aba80(struct Moby *moby);
 void FUN_L14_002aba80(struct Moby *moby) {
+    enum {
+        PATH_MOVER_COMMAND_WAIT_AT_LAST_POINT = 0,
+        PATH_MOVER_COMMAND_WAIT_AT_FIRST_POINT = 1,
+        PATH_MOVER_COMMAND_TRAVERSE_PATH = 2
+    };
     PathMoverVars *vars = (PathMoverVars *)moby->pvars;
     MoverPath *path;
     Vec4 orig;
@@ -213,7 +218,7 @@ void FUN_L14_002aba80(struct Moby *moby) {
         vars->voice = -1;
     }
     switch (moby->command) {
-    case 0:
+    case PATH_MOVER_COMMAND_WAIT_AT_LAST_POINT:
         if (on) {
             f32 far;
 
@@ -226,7 +231,7 @@ void FUN_L14_002aba80(struct Moby *moby) {
             }
         }
         break;
-    case 1:
+    case PATH_MOVER_COMMAND_WAIT_AT_FIRST_POINT:
         if (on) {
             f32 near;
 
@@ -239,7 +244,7 @@ void FUN_L14_002aba80(struct Moby *moby) {
             }
         }
         break;
-    case 2:
+    case PATH_MOVER_COMMAND_TRAVERSE_PATH:
         if (vars->silent == 0 && FUN_L01_00277fb8(moby)) {
             hero.unk1F2 = 4;
             hero.unk1F4 = 4;
@@ -433,6 +438,17 @@ extern f32 D_L14_001613A4_c618 __asm__("D_L14_001613A4") __attribute__((sda));
 extern Vec4 D_L14_00174560;
 void FUN_L14_002ac618(struct Moby *m);
 void FUN_L14_002ac618(struct Moby *m) {
+    enum {
+        INTERCEPTOR_STATE_INITIALIZE = 0,
+        INTERCEPTOR_STATE_PATROL_AND_SCAN = 1,
+        INTERCEPTOR_STATE_ALERT_GROUP = 2,
+        INTERCEPTOR_STATE_TRACK_TARGET = 3,
+        INTERCEPTOR_STATE_WAIT_FOR_GROUP_READY = 4,
+        INTERCEPTOR_STATE_FOLLOW_RETURN_PATH = 5,
+        INTERCEPTOR_STATE_REJOIN_PATROL = 6,
+        INTERCEPTOR_STATE_INITIALIZE_DEATH_FALL = 7,
+        INTERCEPTOR_STATE_DEATH_FALL = 9
+    };
     char *d = (char *)m->pvars;
     float v[4];
     float w[4];
@@ -470,7 +486,7 @@ void FUN_L14_002ac618(struct Moby *m) {
         *(s16 *)(d + 0x200) = 0;
     }
     switch (m->state) {
-    case 0:
+    case INTERCEPTOR_STATE_INITIALIZE:
         FUN_002141f8_c618(m)[0xE] = 1;
         if (*(s16 *)(d + 0x1B6) == 1) {
             m->flags = (m->flags | 0x41) & 0xEFFF;
@@ -519,7 +535,7 @@ void FUN_L14_002ac618(struct Moby *m) {
         m->state = 1;
         m->command = 0;
         break;
-    case 1: {
+    case INTERCEPTOR_STATE_PATROL_AND_SCAN: {
         int found;
         int hit;
 
@@ -554,7 +570,7 @@ void FUN_L14_002ac618(struct Moby *m) {
             break;
         }
     }
-    case 2: {
+    case INTERCEPTOR_STATE_ALERT_GROUP: {
         s32 voice = *(s32 *)(d + 0x1D0);
 
         if (voice != -1) {
@@ -570,7 +586,7 @@ void FUN_L14_002ac618(struct Moby *m) {
         *(s16 *)(d + 0x1F2) = scale_game_frames(D_L14_001613D0);
         break;
     }
-    case 3:
+    case INTERCEPTOR_STATE_TRACK_TARGET:
         m->glow_color = 0xFF000000 | (D_L14_00161414 << 16) | (D_L14_00161410 << 8) | D_L14_0016140C;
         if (*(struct Moby **)(d + 0x18C) != 0) {
             *(s16 *)(d + 0x200) = 1;
@@ -601,7 +617,7 @@ void FUN_L14_002ac618(struct Moby *m) {
             *(s16 *)(d + 0x208) = 0;
             m->state = 4;
         }
-    case 4:
+    case INTERCEPTOR_STATE_WAIT_FOR_GROUP_READY:
         m->glow_color = 0xFF000000 | (D_L14_00161414 << 16) | (D_L14_00161410 << 8) | D_L14_0016140C;
         qcopy(v, &m->pos);
         v[3] = D_L14_0016139C;
@@ -645,7 +661,7 @@ void FUN_L14_002ac618(struct Moby *m) {
             }
         }
         break;
-    case 5:
+    case INTERCEPTOR_STATE_FOLLOW_RETURN_PATH:
         FUN_L14_002aea08_c618(m);
         FUN_L14_002ae900(m, 0.01f, 5.0f, -1.0f);
         if (*(s16 *)(d + 0x208) != 0) {
@@ -660,7 +676,7 @@ void FUN_L14_002ac618(struct Moby *m) {
             m->state = 6;
         }
         break;
-    case 6: {
+    case INTERCEPTOR_STATE_REJOIN_PATROL: {
         int i;
         int n;
         float dist;
@@ -696,7 +712,7 @@ void FUN_L14_002ac618(struct Moby *m) {
         ease_c618((f32 *)(d + 0x178), v[2], (f32 *)(d + 0x188), D_L14_001613A0_c618, D_L14_001613A4_c618, 0.0f);
         break;
     }
-    case 7: {
+    case INTERCEPTOR_STATE_INITIALIZE_DEATH_FALL: {
         s32 voice;
         float ang;
 
@@ -732,7 +748,7 @@ void FUN_L14_002ac618(struct Moby *m) {
         FUN_L14_002aead8_c618(m);
         return;
     }
-    case 9: {
+    case INTERCEPTOR_STATE_DEATH_FALL: {
         int i;
 
         add_vector_c618(&m->pos, &m->pos, d + 0x1E0);
@@ -815,7 +831,10 @@ void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__(
 
 void FUN_L14_002ad8b8(struct Moby *moby) {
     enum {
-        HIT_REACTION_LETHAL = 1
+        HIT_REACTION_NO_ACTION = 0,
+        HIT_REACTION_LETHAL = 1,
+        HIT_REACTION_DEATH_FALL = 2,
+        HIT_REACTION_NONE = 11
     };
     char *data = (char *)moby->pvars;
     int st;
@@ -848,13 +867,13 @@ void FUN_L14_002ad8b8(struct Moby *moby) {
             blend_moby_animation(moby, 1, 0, 5);
             break;
         case HIT_REACTION_LETHAL:
-        case 2:
+        case HIT_REACTION_DEATH_FALL:
             moby->state = 7;
             moby->flags &= 0xEFFF;
             FUN_L00_00257470(moby, 0, -1);
             break;
-        case 0:
-        case 11:
+        case HIT_REACTION_NO_ACTION:
+        case HIT_REACTION_NONE:
             break;
         }
         trooper_anim_update(moby, (short *)(data + 0x60));
@@ -1680,13 +1699,19 @@ extern void func_L00_001FF4B0_2B4E40(void *, void *, float) __asm__("FUN_001f9bf
 
 void machinegun_turret_update(char *moby) __asm__("FUN_L14_002b3bf0");
 void machinegun_turret_update(char *moby) {
+    enum {
+        TURRET_STATE_INITIALIZE = 0,
+        TURRET_STATE_WAIT_FOR_TARGET = 3,
+        TURRET_STATE_AIM_AND_FIRE = 4,
+        TURRET_STATE_DESTROY = 6
+    };
     char *data;
-    float v20[4];
+    float target_point_scratch[4];
     float spawn_position[4];
     float v40[4];
-    float v50[4];
+    float spawn_position_offset[4];
     float v60[4];
-    float v70[4];
+    float target_query_result[4];
     float m80[16];
     float g0;
     float phase_angle, sine_input_angle, sine_scale, target_heading;
@@ -1697,7 +1722,7 @@ void machinegun_turret_update(char *moby) {
     data = *(char **)(moby + 0x78);
     func_L14_002B5590_2B4E40((unsigned char *)moby);
     switch (*(unsigned char *)(moby + 0x20)) {
-    case 0:
+    case TURRET_STATE_INITIALIZE:
         *(float *)(data + 0x70) = *(float *)(moby + 0x18);
         *(float *)(data + 0x84) = *(float *)(moby + 0x48);
         *(int *)(data + 0x8C) = 0;
@@ -1764,10 +1789,10 @@ void machinegun_turret_update(char *moby) {
         *(float *)(moby + 0x18) = *(float *)(data + 0x70);
         *(int *)(data + 0x8C) = 0;
         return;
-    case 3:
-        r = func_L00_00260D30_2B4E40(moby, v20, 34.0f);
+    case TURRET_STATE_WAIT_FOR_TARGET:
+        r = func_L00_00260D30_2B4E40(moby, target_point_scratch, 34.0f);
         if (r != 2) {
-            if (func_00215570_2B4E40(v20, *(int *)(data + 0x90)) != 0) {
+            if (func_00215570_2B4E40(target_point_scratch, *(int *)(data + 0x90)) != 0) {
                 *(unsigned char *)(moby + 0x20) = 4;
                 func_00213D28_2B4E40(moby, 3, 0);
                 *(short *)(data + 0x74) = func_001F9850_2B4E40(120);
@@ -1783,7 +1808,7 @@ void machinegun_turret_update(char *moby) {
         }
         *(unsigned char *)(data + 0x8B) = 1;
         return;
-    case 4:
+    case TURRET_STATE_AIM_AND_FIRE:
         if (*(short *)(data + 0x9E) != 0) {
             g0 = -D_L14_00161514;
         } else {
@@ -1795,11 +1820,11 @@ void machinegun_turret_update(char *moby) {
         d80 = *(int *)(data + 0x80);
         p16 = D_L14_001600EC + (d80 << 7) + 0x10;
         sine_scale = func_001F9FA8_2B4E40(sine_input_angle);
-        func_001F9C30_2B4E40(v20, p16, sine_scale);
+        func_001F9C30_2B4E40(target_point_scratch, p16, sine_scale);
         d80 = *(int *)(data + 0x80);
         p6 = D_L14_001600EC + (d80 << 7) + 0x30;
-        func_001F9BD8_2B4E40(v20, v20, p6);
-        target_heading = func_L00_001FF860_2B4E40(v20[0] - *(float *)(moby + 0x10), v20[1] - *(float *)(moby + 0x14));
+        func_001F9BD8_2B4E40(target_point_scratch, target_point_scratch, p6);
+        target_heading = func_L00_001FF860_2B4E40(target_point_scratch[0] - *(float *)(moby + 0x10), target_point_scratch[1] - *(float *)(moby + 0x14));
         *(float *)(moby + 0x48) = target_heading;
         func_001F9938_2B4E40(data + 0x9C);
         rem = D_L14_0015F5CC % D_L14_00161530;
@@ -1811,13 +1836,13 @@ void machinegun_turret_update(char *moby) {
                 break;
             case 1:
                 func_L00_001FF4B0_2B4E40(spawn_position, moby + 0xE0, D_L14_00161524);
-                func_L00_001FF4B0_2B4E40(v50, moby + 0xD0, D_L14_0016152C);
-                func_001F9BD8_2B4E40(spawn_position, spawn_position, v50);
+                func_L00_001FF4B0_2B4E40(spawn_position_offset, moby + 0xD0, D_L14_0016152C);
+                func_001F9BD8_2B4E40(spawn_position, spawn_position, spawn_position_offset);
                 break;
             default:
                 func_L00_001FF4B0_2B4E40(spawn_position, moby + 0xE0, D_L14_00161524);
-                func_L00_001FF4B0_2B4E40(v50, moby + 0xD0, -D_L14_0016152C);
-                func_001F9BD8_2B4E40(spawn_position, spawn_position, v50);
+                func_L00_001FF4B0_2B4E40(spawn_position_offset, moby + 0xD0, -D_L14_0016152C);
+                func_001F9BD8_2B4E40(spawn_position, spawn_position, spawn_position_offset);
                 break;
             }
             func_L00_001FF4B0_2B4E40(v40, moby + 0xC0, D_L14_00161528);
@@ -1828,8 +1853,8 @@ void machinegun_turret_update(char *moby) {
                 func_L00_00251328_2B4E40(func_L14_002EE150_2B4E40(spawn_position, v40, (int)moby, 1), 0xE0, 0xE0, 0xE0);
             }
         }
-        r = func_L00_00260D30_2B4E40(moby, v70, 34.0f);
-        c17 = (r == 2 || func_00215570_2B4E40(v70, *(int *)(data + 0x90)) == 0);
+        r = func_L00_00260D30_2B4E40(moby, target_query_result, 34.0f);
+        c17 = (r == 2 || func_00215570_2B4E40(target_query_result, *(int *)(data + 0x90)) == 0);
         if (c17 == 0) {
             return;
         }
@@ -1874,7 +1899,7 @@ void machinegun_turret_update(char *moby) {
         *(float *)(moby + 0x18) = *(float *)(data + 0x70) - D_L14_00161508;
         *(unsigned short *)(moby + 0x34) = *(unsigned short *)(moby + 0x34) & 0xEFFF;
         return;
-    case 6:
+    case TURRET_STATE_DESTROY:
         func_L00_0025F4A8_2B4E40(moby, data + 0x40, moby + 0x10, 0.0f, 0.0f, 5, 2, 4, 2.0f, 1.0f, 9.0f, 0, 1.0f, 15.0f, 1, 1, -1, 0);
         func_0020D678_2B4E40(moby);
         return;
@@ -1886,7 +1911,10 @@ void machinegun_turret_update(char *moby) {
 
 void FUN_L14_002b4340(struct Moby *m) {
     enum {
-        HIT_REACTION_LETHAL = 1
+        HIT_REACTION_NO_ACTION = 0,
+        HIT_REACTION_LETHAL = 1,
+        HIT_REACTION_DESTROY = 2,
+        HIT_REACTION_NONE = 11
     };
     unsigned char *d = m->pvars;
     int loc0;
@@ -1909,8 +1937,8 @@ void FUN_L14_002b4340(struct Moby *m) {
         if (t <= 0.0f)
             k = 1;
         switch (k) {
-        case 0:
-        case 11:
+        case HIT_REACTION_NO_ACTION:
+        case HIT_REACTION_NONE:
             break;
         case 9:
         case 10:
@@ -1925,7 +1953,7 @@ void FUN_L14_002b4340(struct Moby *m) {
             d[0x67] = 200;
             break;
         case HIT_REACTION_LETHAL:
-        case 2:
+        case HIT_REACTION_DESTROY:
             m->state = 6;
             m->flags &= 0xEFFF;
             d[0x67] = 0xF0;
@@ -2175,6 +2203,12 @@ extern void func_L00_0025F4A8_2B5938(void *, void *, void *, float, float, int, 
 
 void minibomber_update(Moby_2B5938 *moby) __asm__("FUN_L14_002b46e8");
 void minibomber_update(Moby_2B5938 *moby) {
+    enum {
+        MINIBOMBER_STATE_INITIALIZE = 0,
+        MINIBOMBER_STATE_AIM_AT_BOMB_POINT = 5,
+        MINIBOMBER_STATE_RELEASE_BOMB = 6,
+        MINIBOMBER_STATE_DESTROY = 9
+    };
     Data_2B5938 *d = moby->d;
     float v[12];
     float *tgt;
@@ -2207,7 +2241,7 @@ void minibomber_update(Moby_2B5938 *moby) {
         }
     }
     switch (moby->state) {
-    case 0: {
+    case MINIBOMBER_STATE_INITIALIZE: {
         PathNode_2B5938 *path;
         if (d->fD0 == -1) {
             debug_print_alt(D_L14_001FBDF0, moby->fB2);
@@ -2391,7 +2425,7 @@ void minibomber_update(Moby_2B5938 *moby) {
             qcopy(d->f180, v);
         }
         break;
-    case 5: {
+    case MINIBOMBER_STATE_AIM_AT_BOMB_POINT: {
         PathNode_2B5938 *q = D_L14_001B0F30_2B5938[d->fD8] + d->f100;
         tg = fast_subtract_rotations(fast_arc_tan(q[1].v[0] - moby->pos[0], q[1].v[1] - moby->pos[1]), moby->rot);
         a = blend_scalar_alt(tg, d->f104, (float)d->f102 / convert_integer_to_float(scale_game_frames_c(D_L14_0016155C)));
@@ -2406,7 +2440,7 @@ void minibomber_update(Moby_2B5938 *moby) {
         }
         break;
     }
-    case 6:
+    case MINIBOMBER_STATE_RELEASE_BOMB:
         if (is_value_within_interpolated_window(moby, 3.0f) != 0) {
             PathNode_2B5938 *q;
             n = (float)scale_game_frames_c(D_L14_00161564);
@@ -2430,7 +2464,7 @@ void minibomber_update(Moby_2B5938 *moby) {
             }
         }
         break;
-    case 9: {
+    case MINIBOMBER_STATE_DESTROY: {
         int i;
         moby_point_position(moby, 2, v);
         FUN_L14_002bb310_c((char *)moby, moby->rot, (char *)v);
@@ -2464,7 +2498,10 @@ extern void FUN_L00_0025d458_c(void *, void *) __asm__("FUN_L00_0025d458");
 
 void FUN_L14_002b5290(struct Moby *m) {
     enum {
-        HIT_REACTION_LETHAL = 1
+        HIT_REACTION_NO_ACTION = 0,
+        HIT_REACTION_LETHAL = 1,
+        HIT_REACTION_DESTROY = 2,
+        HIT_REACTION_NONE = 11
     };
     unsigned char *d = m->pvars;
     int loc0;
@@ -2491,8 +2528,8 @@ void FUN_L14_002b5290(struct Moby *m) {
         if (t <= 0.0f)
             k = 1;
         switch (k) {
-        case 0:
-        case 11:
+        case HIT_REACTION_NO_ACTION:
+        case HIT_REACTION_NONE:
             break;
         case 3:
         case 4:
@@ -2507,7 +2544,7 @@ void FUN_L14_002b5290(struct Moby *m) {
             d[0x67] = 0xFA;
             break;
         case HIT_REACTION_LETHAL:
-        case 2:
+        case HIT_REACTION_DESTROY:
             m->state = 9;
             m->flags &= 0xEFFF;
             d[0x67] = 0xFA;
@@ -3098,6 +3135,15 @@ void FUN_L14_002d7490(struct Moby *m);
 
 void FUN_L14_002d5f40(struct Moby *m);
 void FUN_L14_002d5f40(struct Moby *m) {
+    enum {
+        RACER_STATE_INITIALIZE = 0,
+        RACER_STATE_WAIT_FOR_RACE_START = 1,
+        RACER_STATE_WAIT_FOR_START_DELAY = 2,
+        RACER_STATE_WAIT_FOR_START_ANIMATION = 3,
+        RACER_STATE_COMPLETE_START_INTERPOLATION = 4,
+        RACER_STATE_FOLLOW_PATH = 5,
+        RACER_STATE_WAIT_FOR_EXIT_VOLUME = 6
+    };
     struct L14RacerVars *d = (struct L14RacerVars *)m->pvars;
     u8 pos[16];
     f32 vel[3];
@@ -3105,7 +3151,7 @@ void FUN_L14_002d5f40(struct Moby *m) {
     f32 *sv;
 
     switch (m->state) {
-    case 0:
+    case RACER_STATE_INITIALIZE:
         if (d->path == -1 || *race_paths[d->path].points == 0 || d->start_point == -1 ||
             *D_L14_001B0BB0[d->start_point] != 3 || d->volume == -1) {
             FUN_0020c828(m);
@@ -3124,13 +3170,13 @@ void FUN_L14_002d5f40(struct Moby *m) {
         memset_words(d->manips[2], 0, 0x40);
         attach_manipulator(m, 4, d->manips[2]);
         return;
-    case 1:
+    case RACER_STATE_WAIT_FOR_RACE_START:
         if (race_state->phase == 0x14) {
             d->timer = scale_game_frames(d->delay);
             m->state = 2;
         }
         return;
-    case 2:
+    case RACER_STATE_WAIT_FOR_START_DELAY:
         if (!fast_dec_timer(&d->timer))
             return;
         m->flags = (m->flags | 0x1000) & 0xFFBE;
@@ -3141,7 +3187,7 @@ void FUN_L14_002d5f40(struct Moby *m) {
         d->timer = scale_game_frames(D_L14_00161A2C);
         d->inv_time = 1.0f / convert_integer_to_float(d->timer);
         qcopy(&m->pos, (char *)D_L14_001B0BB0[d->end_point] + 0x10);
-    case 3:
+    case RACER_STATE_WAIT_FOR_START_ANIMATION:
         if (compute_interpolated_record_value(m) >= 3.0f)
             FUN_L14_002d64d0(m);
         if ((m->anim_flags & 2) && m->seq == m->prev_seq) {
@@ -3150,16 +3196,16 @@ void FUN_L14_002d5f40(struct Moby *m) {
             m->anim_speed = 1.0f;
         }
         break;
-    case 4:
+    case RACER_STATE_COMPLETE_START_INTERPOLATION:
         if (FUN_L14_002d64d0(m)) {
             m->state = 5;
             d->timer = scale_game_frames(D_L14_00161A34);
         }
         break;
-    case 5:
+    case RACER_STATE_FOLLOW_PATH:
         FUN_L14_002d7198(m);
         break;
-    case 6:
+    case RACER_STATE_WAIT_FOR_EXIT_VOLUME:
         FUN_L14_002d67e8(m);
         if (is_point_inside_clip_volume(&m->pos, d->volume)) {
             moby_point_position(m, 2, pos);

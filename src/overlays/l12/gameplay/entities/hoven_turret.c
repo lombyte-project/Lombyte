@@ -274,6 +274,10 @@ extern char D_L12_00167240[];
 extern float D_0013F4D0_304310[] __asm__("D_0013F3D0");
 
 void FUN_L12_00302f30(Moby *moby) {
+    enum {
+        TARGET_TRACKING_STATE_INITIALIZE = 0,
+        TARGET_TRACKING_STATE_ACTIVE = 1
+    };
     Vec4 start;
     Vec4 end;
     char hit[0x30];
@@ -287,7 +291,7 @@ void FUN_L12_00302f30(Moby *moby) {
         return;
     }
     switch (moby->state) {
-    case 0:
+    case TARGET_TRACKING_STATE_INITIALIZE:
         D_L12_00161E08 = 0x16;
         D_L12_00161E04 = 0x2D;
         data->f231C = -1;
@@ -297,7 +301,7 @@ void FUN_L12_00302f30(Moby *moby) {
         data->f2300 = 0;
         moby->state = 1;
         break;
-    case 1:
+    case TARGET_TRACKING_STATE_ACTIVE:
         moby->rot.z = func_L00_001FF860_304310(D_L12_0015FFD8[data->target].pos.x - moby->pos.x,
                                              D_L12_0015FFD8[data->target].pos.y - moby->pos.y);
         data->dist = func_001F9D10_304310(((float *)&moby->pos), (char *)D_L12_0015FFD8 + (data->target << 8) + 0x10);
@@ -570,11 +574,20 @@ extern f32 frame_scale_macro __asm__("D_0015ED60") __attribute__((section(".sdat
 extern f32 frame_time_sq_macro __asm__("D_0015ED70") __attribute__((section(".sdata")));
 void hoven_turret_update(struct Moby *moby) __asm__("FUN_L12_00303540");
 void hoven_turret_update(struct Moby *moby) {
+    enum {
+        HOVEN_TURRET_STATE_INITIALIZE = 0,
+        HOVEN_TURRET_STATE_WAIT_FOR_BOARDING = 3,
+        HOVEN_TURRET_STATE_MANNED = 4,
+        HOVEN_TURRET_STATE_START_SCENE = 5,
+        HOVEN_TURRET_STATE_INACTIVE = 6,
+        HOVEN_TURRET_STATE_DESTRUCTION_EFFECTS = 7,
+        HOVEN_TURRET_STATE_SAVE_DATA = 8
+    };
     Data_304920 *data = *(Data_304920 **)&moby->pvars;
 
     ((Snd_304920 *)(D_0013E533 + 0x1D))->f6C = moby;
     switch (moby->state) {
-    case 0:
+    case HOVEN_TURRET_STATE_INITIALIZE:
         D_L12_00161F00 = 0;
         D_L12_00161F04 = 0;
         if (D_0014171B_304920[moby->mission + (current_level_index << 4)] == 0xFF) {
@@ -594,7 +607,7 @@ void hoven_turret_update(struct Moby *moby) {
             ((Snd_304920 *)(D_0013E533 + 0x1D))->f6C = moby;
         }
         break;
-    case 3: {
+    case HOVEN_TURRET_STATE_WAIT_FOR_BOARDING: {
         {
             Vec_304920 out;
 
@@ -631,7 +644,7 @@ void hoven_turret_update(struct Moby *moby) {
         }
         break;
     }
-    case 4:
+    case HOVEN_TURRET_STATE_MANNED:
         D_L12_00161F00 = 1;
         ((Hero *)(D_0013E533 + 0xE1D))->unk20A5 = 1;
         ((Hero *)(D_0013E533 + 0xE1D))->unk1CC = scale_game_frames_alt(0x78);
@@ -783,7 +796,7 @@ void hoven_turret_update(struct Moby *moby) {
             }
         }
         break;
-    case 7:
+    case HOVEN_TURRET_STATE_DESTRUCTION_EFFECTS:
         enqueue_callback_list_1(FUN_L12_00304d98_c, moby);
         if (fast_dec_timer_s16(&data->fAE)) {
             Vec_304920 v;
@@ -805,19 +818,19 @@ void hoven_turret_update(struct Moby *moby) {
             FUN_L00_00211250();
         }
         break;
-    case 5:
+    case HOVEN_TURRET_STATE_START_SCENE:
         if (D_L12_0015F5C4_macro != 2) {
             start_scene(1);
             moby->state = 8;
         }
         break;
-    case 8:
+    case HOVEN_TURRET_STATE_SAVE_DATA:
         if (D_L12_0015F5C4_macro != 2) {
             func_0020BFC8_304920(0, -1);
             moby->state = 6;
         }
         break;
-    case 6:
+    case HOVEN_TURRET_STATE_INACTIVE:
         if (moby->prev_seq != 0) {
             set_moby_animation(moby, 0, 0);
         }
@@ -1085,6 +1098,11 @@ typedef struct {
 extern struct Moby *hit_moby __asm__("D_L12_001742D8") __attribute__((section(".data")));
 /* A homing mine: rises, then steers toward the point ahead and blows up near it or on contact. */
 void FUN_L12_00304e00(struct Moby *moby) {
+    enum {
+        HOMING_MINE_STATE_INITIALIZE = 0,
+        HOMING_MINE_STATE_HOMING = 1,
+        HOMING_MINE_STATE_DETONATE = 2
+    };
     Data_304e00 *data = (Data_304e00 *)moby->pvars;
     s32 *damage = data->damage;
     f32 target[20];
@@ -1111,7 +1129,7 @@ void FUN_L12_00304e00(struct Moby *moby) {
         return;
     }
     switch (moby->state) {
-    case 0:
+    case HOMING_MINE_STATE_INITIALIZE:
         moby->flags |= 0x1000;
         qcopy(&data->start, &moby->pos);
         moby->state = 1;
@@ -1120,7 +1138,7 @@ void FUN_L12_00304e00(struct Moby *moby) {
             data->turn = -data->turn;
         data->timer = 0;
         break;
-    case 1:
+    case HOMING_MINE_STATE_HOMING:
         data->timer++;
         if (data->timer < scale_ticks(30))
             moby->pos.z += fast_sin_304e00((f32)data->timer * 3.1415927f / (f32)scale_ticks(30)) * 0.07f;
@@ -1176,7 +1194,7 @@ void FUN_L12_00304e00(struct Moby *moby) {
             }
         }
         break;
-    case 2:
+    case HOMING_MINE_STATE_DETONATE:
         spawn_explosion_304e00(moby, D_L12_0015F580, 0, 0.0f, 0.0f, 5, 15, 25,
             2.0f, 1.0f, 4.0f, 1.0f, 2, 7.0f, 0, 9, -1, 0);
         mark_moby_for_removal_304e00(moby);

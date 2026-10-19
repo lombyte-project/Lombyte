@@ -119,6 +119,11 @@ extern void enqueue_callback_list_1(int, int) __asm__("FUN_001f4600");
 
 void gadgebot_spawn_container_update(unsigned char *moby) __asm__("FUN_L06_002d85a0");
 void gadgebot_spawn_container_update(unsigned char *moby) {
+    enum {
+        GADGEBOT_CONTAINER_ACTIVATE = 0,
+        GADGEBOT_CONTAINER_PULSE_AND_HANDLE_HITS = 1,
+        GADGEBOT_CONTAINER_WAIT_FOR_REMOVAL = 2
+    };
     char *p = find_moby_hit(moby, 0x10000, 0);
     float tmp[4];
     int t;
@@ -126,10 +131,10 @@ void gadgebot_spawn_container_update(unsigned char *moby) {
 
     moby[0xA4] = 0xFF;
     switch (moby[0x20]) {
-    case 0:
+    case GADGEBOT_CONTAINER_ACTIVATE:
         moby[0x20] = 1;
         break;
-    case 1:
+    case GADGEBOT_CONTAINER_PULSE_AND_HANDLE_HITS:
         t = level_frame_count;
         f = (float)(t % 150) / 150.0f * 2.0f * 3.14159274f;
         if (f > 3.14159274f) {
@@ -144,7 +149,7 @@ void gadgebot_spawn_container_update(unsigned char *moby) {
             enqueue_callback_list_1((int)FUN_L06_002d8738_u, (int)moby);
         }
         break;
-    case 2:
+    case GADGEBOT_CONTAINER_WAIT_FOR_REMOVAL:
         qcopy(tmp, moby + 0x10);
         tmp[2] += 0.3f;
         if (FUN_L00_001fefc8(moby + 0xBC) != 0) {
@@ -749,6 +754,11 @@ extern void remove_e94f0(struct Moby *) __asm__("FUN_0020c828");
 extern struct Moby *D_001413D0_e94f0 __asm__("D_001413D0") __attribute__((section(".data")));
 
 void FUN_L06_002e94f0(struct Moby *moby) {
+    enum {
+        HIT_RESULT_LETHAL = 1,
+        HIT_RESULT_REMOVE_OR_RESPAWN = 2,
+        HIT_RESULT_NO_RESPONSE = 11
+    };
     struct RespawnVars *vars;
     struct MobyHit *hit;
     int kind;
@@ -775,8 +785,8 @@ void FUN_L06_002e94f0(struct Moby *moby) {
             code = 1;
         }
         switch (code) {
-        case 1:
-        case 2:
+        case HIT_RESULT_LETHAL:
+        case HIT_RESULT_REMOVE_OR_RESPAWN:
             stop_moby_sound_e94f0(moby, 0, -1);
             FUN_L06_002ea198(moby, (Vec4 *)&hit->pos);
             if (vars->sparks_pending == 1) {
@@ -801,7 +811,7 @@ void FUN_L06_002e94f0(struct Moby *moby) {
             break;
         case 0:
         case 3:
-        case 11:
+        case HIT_RESULT_NO_RESPONSE:
             break;
         }
     }
@@ -1388,6 +1398,35 @@ extern void subtract_vector_xyz(void *, void *, void *);
 
 void gadgebot_update(GbMoby *moby) __asm__("FUN_L06_002f0040");
 void gadgebot_update(GbMoby *moby) {
+    enum {
+        GADGEBOT_INITIALIZE = 0,
+        GADGEBOT_WAIT_FOR_SPAWN_PAD = 1,
+        GADGEBOT_FOLLOW_HERO = 3,
+        GADGEBOT_STAND_AND_FACE_HERO = 4,
+        GADGEBOT_SEEK_AND_ATTACK_TARGET = 5,
+        GADGEBOT_ABSORB_INTO_OWNER = 8,
+        GADGEBOT_UPDATE_KNOCKBACK = 9
+    };
+    enum {
+        GADGEBOT_ATTACK_SEEK_AND_APPROACH_TARGET = 1,
+        GADGEBOT_ATTACK_STRIKE = 2,
+        GADGEBOT_ATTACK_RECOVER_AFTER_STRIKE = 3,
+        GADGEBOT_ATTACK_WAIT_FOR_TARGET = 4
+    };
+    enum {
+        GADGEBOT_COMMAND_FOLLOW_HERO = 1,
+        GADGEBOT_COMMAND_STAND_AND_FACE_HERO = 2,
+        GADGEBOT_COMMAND_SEEK_AND_ATTACK_TARGET = 3
+    };
+    enum {
+        GADGEBOT_FOLLOW_INITIALIZE = 0,
+        GADGEBOT_FOLLOW_MOVE_TOWARD_HERO = 1,
+        GADGEBOT_FOLLOW_WAIT_AND_FACE_HERO = 2
+    };
+    enum {
+        GADGEBOT_INTERACTION_SEARCH_TARGET = 0,
+        GADGEBOT_INTERACTION_APPROACH_TARGET = 1
+    };
     float out[4];
     float raised_position_snapshot[4];
     float save0[4];
@@ -1422,19 +1461,19 @@ void gadgebot_update(GbMoby *moby) {
             if (ok) {
                 D_L06_0017EC58.unk2C++;
                 switch (D_00141610[0]) {
-                case 1:
+                case GADGEBOT_COMMAND_FOLLOW_HERO:
                     if (moby->state != 3) {
                         moby->state = 3;
                         moby->sub = 0;
                     }
                     break;
-                case 3:
+                case GADGEBOT_COMMAND_SEEK_AND_ATTACK_TARGET:
                     if (moby->state != 5) {
                         moby->state = 5;
                         moby->sub = 0;
                     }
                     break;
-                case 2:
+                case GADGEBOT_COMMAND_STAND_AND_FACE_HERO:
                     moby->state = 4;
                     break;
                 case 4:
@@ -1461,7 +1500,7 @@ void gadgebot_update(GbMoby *moby) {
         detach_manipulator(moby, &d->unk100);
     }
     switch (moby->state) {
-    case 0: {
+    case GADGEBOT_INITIALIZE: {
         int i;
 
         d->unk308 = 1.0f;
@@ -1503,7 +1542,7 @@ void gadgebot_update(GbMoby *moby) {
         moby->unk94 = 0;
         break;
     }
-    case 1:
+    case GADGEBOT_WAIT_FOR_SPAWN_PAD:
         if (d->unk170 == 0 || d->unk170->state == 0xFE || d->unk170->state == 0xFD ||
             d->unk170->state >= 2) {
             if (d->unk310 > 0) {
@@ -1555,7 +1594,7 @@ void gadgebot_update(GbMoby *moby) {
         }
         FUN_L00_00261630((char *)moby, (char *)d, 0.35f, 0.25f);
         break;
-    case 3: {
+    case GADGEBOT_FOLLOW_HERO: {
         int j;
 
         qcopy(v40, moby->pos);
@@ -1605,13 +1644,13 @@ void gadgebot_update(GbMoby *moby) {
         }
         if (moby->state != 4) {
             switch (moby->sub) {
-            case 0:
+            case GADGEBOT_FOLLOW_INITIALIZE:
                 moby->sub = 1;
                 d->unk184 = 0;
                 d->unk190 = 0;
                 qcopy(d->unkF0, moby->pos);
                 d->unk17C = randf_sym(0.13962634f, 0.34906584f);
-            case 1: {
+            case GADGEBOT_FOLLOW_MOVE_TOWARD_HERO: {
                 int hit;
 
                 if (moby->anim != 1) {
@@ -1686,7 +1725,7 @@ void gadgebot_update(GbMoby *moby) {
                 }
                 break;
             }
-            case 2: {
+            case GADGEBOT_FOLLOW_WAIT_AND_FACE_HERO: {
                 float hd = vector_distance(d->unk0, hero.motion.pos.f);
 
                 if ((d->unk190 == 0 && hd > 1.8f) || (d->unk190 != 0 && hd > d->unk188 + 0.5f)) {
@@ -1709,7 +1748,7 @@ void gadgebot_update(GbMoby *moby) {
         }
         break;
     }
-    case 4:
+    case GADGEBOT_STAND_AND_FACE_HERO:
         if (moby->anim != 0) {
             blend_moby_animation(moby, 0, 0, scale_game_frames(7));
         }
@@ -1718,7 +1757,7 @@ void gadgebot_update(GbMoby *moby) {
             fast_arc_tan(hero.motion.pos.f[0] - moby->pos[0], hero.motion.pos.f[1] - moby->pos[1]),
             &d->ctl.unk14, frame_scale_sq * 0.05f, frame_scale_sq * 0.3f, frame_time * 3.4906585f);
         break;
-    case 5:
+    case GADGEBOT_SEEK_AND_ATTACK_TARGET:
         if (current_level_index != 6) {
             int i;
 
@@ -1746,7 +1785,7 @@ void gadgebot_update(GbMoby *moby) {
             d->unk18C = level_frame_count;
         }
         switch (moby->sub) {
-        case 1:
+        case GADGEBOT_ATTACK_SEEK_AND_APPROACH_TARGET:
             if (d->unk18C < level_frame_count) {
                 FUN_L06_002f2250_u();
             }
@@ -1807,7 +1846,7 @@ void gadgebot_update(GbMoby *moby) {
                 moby->sub = 4;
             }
             break;
-        case 2:
+        case GADGEBOT_ATTACK_STRIKE:
             if (moby->anim != 2) {
                 blend_moby_animation(moby, 2, 8, scale_game_frames(7));
             }
@@ -1828,7 +1867,7 @@ void gadgebot_update(GbMoby *moby) {
                 moby->sub = 3;
             }
             break;
-        case 3:
+        case GADGEBOT_ATTACK_RECOVER_AFTER_STRIKE:
             if (moby->anim != 0) {
                 blend_moby_animation(moby, 0, 0, scale_game_frames(7));
             }
@@ -1843,7 +1882,7 @@ void gadgebot_update(GbMoby *moby) {
                 }
             }
             break;
-        case 4:
+        case GADGEBOT_ATTACK_WAIT_FOR_TARGET:
             if (d->unk18C < level_frame_count) {
                 FUN_L06_002f2250_u();
             }
@@ -1864,11 +1903,11 @@ void gadgebot_update(GbMoby *moby) {
         break;
     case 7:
         switch (moby->sub) {
-        case 0:
+        case GADGEBOT_INTERACTION_SEARCH_TARGET:
             moby->sub = 1;
             FUN_L06_002f2910(moby);
             break;
-        case 1:
+        case GADGEBOT_INTERACTION_APPROACH_TARGET:
             if (d->target != 0) {
                 if (moby->anim != 1) {
                     blend_moby_animation(moby, 1, 0, scale_game_frames(7));
@@ -1894,7 +1933,7 @@ void gadgebot_update(GbMoby *moby) {
             break;
         }
         break;
-    case 8: {
+    case GADGEBOT_ABSORB_INTO_OWNER: {
         float rr;
 
         ang = fast_arc_tan(moby->pos[0] - d->unk304->pos[0], moby->pos[1] - d->unk304->pos[1]);
@@ -1932,7 +1971,7 @@ void gadgebot_update(GbMoby *moby) {
         moby->flags &= 0xEFFF;
         return;
     }
-    case 9:
+    case GADGEBOT_UPDATE_KNOCKBACK:
         if (mine_fall(moby, d->unk80) & 0x41) {
             int i;
 
@@ -2418,7 +2457,10 @@ extern Moby *D_L06_0015FFD8;
 
 int FUN_L06_002f2c28(char *ctx, char *ow, char *moby, int flag, int *out) {
     enum {
-        MOBY_CLASS_RELOCATION_TRIGGER_WITH_SOUND = 0x515
+        MOBY_CLASS_RELOCATION_TRIGGER = 0x15F,
+        MOBY_CLASS_OFFSET_RELOCATION_TRIGGER = 0x3B1,
+        MOBY_CLASS_RELOCATION_TRIGGER_WITH_SOUND = 0x515,
+        MOBY_CLASS_GADGEBOT_ABSORPTION_TARGET = 0x516
     };
     float candidate_position[4];
     float vB[4];
@@ -2438,8 +2480,8 @@ int FUN_L06_002f2c28(char *ctx, char *ow, char *moby, int flag, int *out) {
     }
 
     switch (*(short *)(moby + 0xA6)) {
-    case 0x15F:
-    case 0x3B1:
+    case MOBY_CLASS_RELOCATION_TRIGGER:
+    case MOBY_CLASS_OFFSET_RELOCATION_TRIGGER:
     case MOBY_CLASS_RELOCATION_TRIGGER_WITH_SOUND:
         if (!(vector_distance_xy_alt(ctx + 0x10, candidate_position) < 1.0f)) return 0;
         st = *(char **)(moby + 0x78);
@@ -2530,7 +2572,7 @@ int FUN_L06_002f2c28(char *ctx, char *ow, char *moby, int flag, int *out) {
         }
         return 0;
     case 0x400:
-    case 0x516:
+    case MOBY_CLASS_GADGEBOT_ABSORPTION_TARGET:
         if (flag != 0) return 0;
         if (*(unsigned char *)(moby + 0x20) == 2) return 0;
         if (!(vector_distance_xy_alt(ctx + 0x10, candidate_position) < 1.0f)) return 0;
@@ -2826,7 +2868,13 @@ extern int func_0022ED80_2F6330(int, int, void *) __asm__("FUN_0022da68");
 
 void FUN_L06_002f4f00(Moby *m) {
     enum {
-        SPAWN_CHILD_MOBYS = 0
+        SPAWN_CHILD_MOBYS = 0,
+        INITIALIZE_BASE_TRANSFORM = 1,
+        WAIT_FOR_TRIGGER_AND_CHILDREN = 2,
+        UPDATE_POSITION_FROM_BASE = 3,
+        ROTATE_AND_HIDE_AFTER_TRIGGER_AND_CHILDREN = 4,
+        RESTORE_ROTATION_THEN_WAIT_FOR_TRIGGER_AND_CHILDREN = 8,
+        RESTORE_ROTATION_THEN_UPDATE_POSITION_FROM_BASE = 9
     };
     Vars_2F6330 *d = (Vars_2F6330 *)(*(void **)&m->pvars);
     float tmp[4];
@@ -2854,14 +2902,14 @@ void FUN_L06_002f4f00(Moby *m) {
             vu_euler_rotation_basis((*(float (*)[4])&d->slots[i]->rot_row0), (*(float (*)[4])&d->slots[i]->rot));
         }
         break;
-    case 1:
+    case INITIALIZE_BASE_TRANSFORM:
         d->unk10 = (*(float (*)[4])&m->rot)[0];
         qcopy(d->pos, (*(float (*)[4])&m->pos));
         m->state = 3;
         normalize_vector_xyz(tmp, (*(float (*)[4])&m->rot_row2), D_L06_00161D48);
         add_vector_xyz((*(float (*)[4])&m->pos), tmp, d);
         break;
-    case 2:
+    case WAIT_FOR_TRIGGER_AND_CHILDREN:
         if (m->command == 0) {
             flag = 0;
             if (d->idx >= 0) {
@@ -2896,11 +2944,11 @@ void FUN_L06_002f4f00(Moby *m) {
                 }
             }
         }
-    case 3:
+    case UPDATE_POSITION_FROM_BASE:
         normalize_vector_xyz(tmp, (*(float (*)[4])&m->rot_row2), D_L06_00161D48);
         add_vector_xyz((*(float (*)[4])&m->pos), tmp, d);
         break;
-    case 4:
+    case ROTATE_AND_HIDE_AFTER_TRIGGER_AND_CHILDREN:
     case 5:
         approach_angle(&d->unk14, &d->unk20, 1.0471976f,
                           D_L06_00161D38 * 0.017453292f * D_0015ED70,
@@ -2917,8 +2965,8 @@ void FUN_L06_002f4f00(Moby *m) {
             }
         }
         break;
-    case 8:
-    case 9:
+    case RESTORE_ROTATION_THEN_WAIT_FOR_TRIGGER_AND_CHILDREN:
+    case RESTORE_ROTATION_THEN_UPDATE_POSITION_FROM_BASE:
         approach_angle(&d->unk14, &d->unk20, 0.0f,
                           D_L06_00161D38 * 0.017453292f * D_0015ED70,
                           D_L06_00161D3C * 0.017453292f * D_0015ED70,
@@ -2947,11 +2995,15 @@ extern char D_0014171B_86b8[] __asm__("D_0014C190");
 
 void energy_sphere_holder_update(char *m) __asm__("FUN_L06_002f7288");
 void energy_sphere_holder_update(char *m) {
+    enum {
+        ENERGY_SPHERE_HOLDER_INITIALIZE = 0,
+        ENERGY_SPHERE_HOLDER_HANDLE_HITS_AND_UPDATE_BEAM = 1
+    };
     char *d = *(char **)(m + 0x78);
     char *o;
     unsigned char *q;
     switch (((unsigned char *)m)[0x20]) {
-    case 0:
+    case ENERGY_SPHERE_HOLDER_INITIALIZE:
         if ((*(int *)(current_level_index * 256 + ((short)*(unsigned short *)(m + 0xB2) >> 5) * 4 +
                       D_0014171B_86b8) >>
                  (*(unsigned short *)(m + 0xB2) & 0x1F) &
@@ -2981,7 +3033,7 @@ void energy_sphere_holder_update(char *m) {
         D_L06_001BAC50[(short)*(unsigned short *)(m + 0xB2) >> 5] &=
             ~(1 << (*(unsigned short *)(m + 0xB2) & 0x1F));
         break;
-    case 1: {
+    case ENERGY_SPHERE_HOLDER_HANDLE_HITS_AND_UPDATE_BEAM: {
         char *h = find_moby_hit(m, 0x330000, 0);
         if (h != 0) {
             spawn_nearby_effect(*(void **)(d + 0x40), *(int *)(h + 0x20), 0x10000, h, h + 0x10, 1.0f);
@@ -3099,6 +3151,10 @@ extern int hero_set_state(int, int) __asm__("FUN_L06_002356a0");
 extern void fade_to_black(s32 n) __asm__("FUN_001f4a58");
 
 void FUN_L06_002f7930(char *m) {
+    enum {
+        INITIALIZE_TRIGGER_MONITOR = 0,
+        CHECK_HERO_TRIGGER_VOLUMES = 1
+    };
     char *d = *(char **)(m + 0x78);
     struct Hero *g;
     int *list;
@@ -3107,11 +3163,11 @@ void FUN_L06_002f7930(char *m) {
     int i;
     int j;
     switch (((unsigned char *)m)[0x20]) {
-    case 0:
+    case INITIALIZE_TRIGGER_MONITOR:
         m[0x20] = 1;
         ((unsigned char *)m)[0x30] = 0xFF;
         return;
-    case 1:
+    case CHECK_HERO_TRIGGER_VOLUMES:
         break;
     default:
         return;
@@ -3181,6 +3237,10 @@ void mark_moby_for_removal_u(struct Obj *obj) __asm__("FUN_0020c828");
 
 void energy_sphere_update(struct Moby *m) __asm__("FUN_L06_002f7ab8");
 void energy_sphere_update(struct Moby *m) {
+    enum {
+        ENERGY_SPHERE_INITIALIZE = 0,
+        ENERGY_SPHERE_UPDATE_ROTATION = 1
+    };
     char *d = (char *)m->pvars;
     if (find_moby_hit(m, 0x330000, 0) != 0) {
         int idx;
@@ -3198,14 +3258,14 @@ void energy_sphere_update(struct Moby *m) {
         return;
     }
     switch (m->state) {
-    case 0:
+    case ENERGY_SPHERE_INITIALIZE:
         set_moby_color(m, 0x80, 0x80, 0x80);
         m->scale = m->pclass->scale * D_L06_00161E80;
         *(char **)d = d + 0x20;
         m->state = 1;
         m->flags |= 0x20;
         *(int *)(d + 0x60) = -1;
-    case 1: {
+    case ENERGY_SPHERE_UPDATE_ROTATION: {
         float rotation_delta_x = D_L06_00161E74 * DEG_TO_RAD * D_0015ED6C;
         float rotation_delta_y, rotation_delta_z;
         float x = fast_add_rotations(m->rot.x, rotation_delta_x);

@@ -1609,7 +1609,7 @@ int hero_set_state(int a, int b) {
     }
     case 0x81: {
         struct Hero *p = &hero;
-        int t81 = -2;
+        int animation_timing_preset = -2;
         p->state.control_mode = 1;
         p->unk22CA = 1;
         p->rand_timer.range = 0x68;
@@ -1619,13 +1619,13 @@ int hero_set_state(int a, int b) {
         }
         qcopy(&p->motion.velocity, &p->motion.unk110);
         if (b) {
-            set_hero_animation(0x13, 0, (float)t81);
+            set_hero_animation(0x13, 0, (float)animation_timing_preset);
         }
         break;
     }
     case 8: {
         struct Hero *p = &hero;
-        int t8 = -2;
+        int animation_timing_selector = -2;
         p->state.control_mode = 5;
         p->rand_timer.range = 0x68;
         p->unk2284 = 0;
@@ -1634,7 +1634,7 @@ int hero_set_state(int a, int b) {
         }
         qcopy(&p->motion.velocity, &p->motion.displacement);
         if (b) {
-            set_hero_animation(0x13, 0, (float)t8);
+            set_hero_animation(0x13, 0, (float)animation_timing_selector);
         }
         break;
     }
@@ -2994,8 +2994,11 @@ int hero_set_state(int a, int b) {
 extern unsigned char D_0013E533[];
 
 void FUN_L00_00227638(void) {
+    enum {
+        HERO_VEHICLE_MODE_NONE = 0
+    };
     switch (D_0013E533[0x2EC1]) {
-    case 0:
+    case HERO_VEHICLE_MODE_NONE:
         hero_set_state(HERO_STATE_IDLE, 1);
         break;
     case 1:
@@ -3308,6 +3311,11 @@ extern int f_fun_001fa6d0_227fa0(float) __asm__("FUN_001fa6d0");
 extern int D_L00_0015F674 __attribute__((sda));
 extern s32 D_00141660 __attribute__((section(".data")));
 int FUN_L00_00227fa0(void) {
+    enum {
+        ITEM_WRENCH = 8,
+        ITEM_GRAPPLE = 12,
+        ITEM_REMOTE_VENDOR = 32
+    };
     int out[3];
     int start;
     int mask;
@@ -3327,7 +3335,7 @@ int FUN_L00_00227fa0(void) {
     start = D_0013F450_h228770.f198;
     mask = D_0013F450_h228770.f10A0;
     switch (D_0013F450_h228770.f10B8) {
-    case 8:
+    case ITEM_WRENCH:
         if (D_0013F450_h228770.f208C < 2U || (D_0013F450_h228770.f208C == 4 && D_0013F450_h228770.f418 != 0)) {
             Moby_227fa0 *m;
 
@@ -3435,7 +3443,7 @@ int FUN_L00_00227fa0(void) {
             }
         }
         break;
-    case 12:
+    case ITEM_GRAPPLE:
         {
             int t;
 
@@ -3491,7 +3499,7 @@ int FUN_L00_00227fa0(void) {
         D_0013F450_h228770.f22DE = 0x12;
         D_0013F450_h228770.f22DC = 1;
         break;
-    case 32:
+    case ITEM_REMOTE_VENDOR:
         if (D_0013F450_h228770.f208C < 3U || D_0013F450_h228770.f208C == 4 || D_0013F450_h228770.f208C == 5) {
             if (f_fun_l00_00266d60_227fa0(mask, f_fun_001f96f8_227fa0(8), 0)) {
                 FUN_L00_0029a6b0(0);

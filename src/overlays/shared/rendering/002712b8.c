@@ -541,7 +541,7 @@ extern u8 *D_L00_001B215C __attribute__((section(".data")));
 P_2725d8 *FUN_L00_002678b8_c2(s32) __asm__("FUN_L00_002678b8");
 s32 FUN_001fa6d0(f32);
 void add_vector_xyz_cf(u8 *, u8 *, void *) __asm__("FUN_L00_0024f7c8");
-P_2725d8 *FUN_L00_002725d8(u8 *owner, u8 *attachment_point_selector, s32 color, s32 a3, f32 a4, f32 a5) {
+P_2725d8 *FUN_L00_002725d8(u8 *owner, u8 *attachment_point_selector, s32 color, s32 a3, f32 primary_position_w, f32 secondary_position_w) {
     P_2725d8 *p = FUN_L00_002678b8_c2(0x37);
     /* Fakematch: the dead update gives a0 and a3 retail's saved registers. */
     a3++;
@@ -556,13 +556,13 @@ P_2725d8 *FUN_L00_002725d8(u8 *owner, u8 *attachment_point_selector, s32 color, 
         p->b2 = *D_L00_001B215C;
         add_vector_xyz_cf(owner, attachment_point_selector, p->v10);
         qcopy(p->v20, p->v10);
-        p->unk2C = a5;
-        *(f32 *)((u8 *)p + 0x1C) = a4;
+        p->unk2C = secondary_position_w;
+        *(f32 *)((u8 *)p + 0x1C) = primary_position_w;
         s = &p->s;
         p->s.o = owner;
         s->k = *(s16 *)(owner + 0xA6);
         s->b = attachment_point_selector;
-        s->f = a4;
+        s->f = primary_position_w;
     }
     return p;
 }
@@ -651,6 +651,11 @@ void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0")
 extern unsigned char *D_L00_001B2168 __attribute__((section(".data")));
 unsigned char *FUN_L00_002729c8(void *pos, unsigned char a, unsigned char b, unsigned char c,
                                 unsigned char d, unsigned char e, int g, float x, float y) {
+    enum {
+        PARTICLE_MODE_COLOR_TWEEN_THEN_EMIT = 0,
+        PARTICLE_MODE_COLOR_TWEEN_ONLY = 1,
+        PARTICLE_MODE_EMITTED_PARTICLE = 2
+    };
     unsigned char *m = p27fe00_alloc(0x3A);
     if (m) {
         unsigned char *q;
@@ -674,13 +679,13 @@ unsigned char *FUN_L00_002729c8(void *pos, unsigned char a, unsigned char b, uns
         q[0x15] = e;
         mode = q[0x10];
         switch (mode) {
-        case 0:
-        case 1:
+        case PARTICLE_MODE_COLOR_TWEEN_THEN_EMIT:
+        case PARTICLE_MODE_COLOR_TWEEN_ONLY:
             *(short *)(m + 0xA) = b;
             *(int *)(m + 4) = 0xFF808080;
             q[0x14] = 0;
             break;
-        case 2:
+        case PARTICLE_MODE_EMITTED_PARTICLE:
             r = FUN_002132a8_2729c8(3.0f, 9.0f) * y * frame_time;
             t = random_angle_radians();
             u = FUN_002132a8_2729c8(1.3439035f, 1.7976891f);
@@ -719,6 +724,11 @@ extern void FUN_L00_00259bc8_272bc0(int, int, int, void *, void *,
                                     float) __asm__("FUN_L00_00259bc8");
 
 void FUN_L00_00272bc0(unsigned char *p) {
+    enum {
+        PARTICLE_PHASE_INITIAL_COLOR_TWEEN = 0,
+        PARTICLE_PHASE_EMISSION = 1,
+        PARTICLE_PHASE_EMITTED_PARTICLE = 2
+    };
     V_272bc0 t;
     unsigned char *q;
     unsigned char *c;
@@ -729,7 +739,7 @@ void FUN_L00_00272bc0(unsigned char *p) {
 
     q = p + 0x20;
     switch (q[0x14]) {
-    case 0: {
+    case PARTICLE_PHASE_INITIAL_COLOR_TWEEN: {
         float n = FUN_001fa6c0_272bc0(q[0x11]);
         *(int *)(p + 4) =
             fast_tween_color((n - FUN_001fa6c0_272bc0(*(short *)(p + 0xA))) / n, 0xFF4080FF, 0);
@@ -743,7 +753,7 @@ void FUN_L00_00272bc0(unsigned char *p) {
             }
         }
         break;
-    case 1: {
+    case PARTICLE_PHASE_EMISSION: {
         float m;
         for (i = 0; i < q[0x13]; i++) {
             qcopy(t, p + 0x10);
@@ -771,7 +781,7 @@ void FUN_L00_00272bc0(unsigned char *p) {
             }
         }
         break;
-    case 2:
+    case PARTICLE_PHASE_EMITTED_PARTICLE:
         FUN_001f9a10_272bc0(p + 0x10, p + 0x10, q);
         a = FUN_001fa6c0_272bc0(q[0x15]);
         k = a - FUN_001fa6c0_272bc0(*(short *)(p + 0xA));

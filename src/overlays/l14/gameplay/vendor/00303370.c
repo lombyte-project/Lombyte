@@ -11,13 +11,17 @@ extern unsigned char D_L14_001E9C60[];
 extern void register_audio_stream_callback(void) __asm__("FUN_00215420");
 
 void FUN_L14_00303370(struct Moby *moby) {
+    enum {
+        MOBY_STATE_INITIALIZE = 0,
+        MOBY_STATE_REGISTER_DRAW_CALLBACK = 1
+    };
     switch (moby->state) {
-    case 0:
+    case MOBY_STATE_INITIALIZE:
         FUN_L02_002a4058(D_L14_001E9C60, 0x40, 0.6666667f);
         moby->state = 1;
         moby->update_dist = 0xFF;
         break;
-    case 1:
+    case MOBY_STATE_REGISTER_DRAW_CALLBACK:
         add_draw_callback(register_audio_stream_callback, moby);
         break;
     }

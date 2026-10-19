@@ -178,8 +178,11 @@ s32 collision_hit_material() __asm__("FUN_001f0b58");
 void FUN_L00_002c3440();
 /* Calls FUN_L00_002c3440 on m for collision_hit_material results 0, 1, 3, 8, 11, 12 and 13. */
 void FUN_L00_002c4328(void *m) {
+    enum {
+        COLLISION_MATERIAL_WATER = 0
+    };
     switch (collision_hit_material()) {
-    case 0:
+    case COLLISION_MATERIAL_WATER:
     case 1:
     case 3:
     case 8:
@@ -426,7 +429,12 @@ void swingshot_hook_update(unsigned char *m) __asm__("FUN_L00_002c7070");
 void swingshot_hook_update(unsigned char *m) {
     enum {
         HOOK_INITIAL_ANIMATION = 0,
-        HOOK_REMOVAL_ANIMATION = 2
+        HOOK_IDLE_ANIMATION = 1,
+        HOOK_REMOVAL_ANIMATION = 2,
+        HOOK_LAUNCH_ANIMATION = 3,
+        HOOK_FLIGHT_ANIMATION = 4,
+        HOOK_ATTACHED_ANIMATION = 5,
+        HOOK_RETURN_ANIMATION = 7
     };
     unsigned char **d;
     unsigned char *o;
@@ -454,7 +462,7 @@ void swingshot_hook_update(unsigned char *m) {
             *(float *)(m + 0x58) = 1.0f;
         }
         break;
-    case 1:
+    case HOOK_IDLE_ANIMATION:
         if (d[0][0x20] == 2) {
             if (m[0x53] != 3)
                 FUN_00212f90_2c7070(m, 3, 0, FUN_001f96f8_2c7070(10));
@@ -474,21 +482,21 @@ void swingshot_hook_update(unsigned char *m) {
             return;
         }
         break;
-    case 3:
+    case HOOK_LAUNCH_ANIMATION:
         if (m[0x70] & 2) {
             if (m[0x53] != 4)
                 FUN_00212f90_2c7070(m, 4, 0, FUN_001f96f8_2c7070(10));
             m[0x20] = 4;
         }
         break;
-    case 4:
+    case HOOK_FLIGHT_ANIMATION:
         if ((unsigned char)(d[0][0x20] - 3) < 3) {
             if (m[0x53] != 5)
                 FUN_00212f90_2c7070(m, 5, 0, FUN_001f96f8_2c7070(10));
             m[0x20] = 5;
         }
         break;
-    case 5:
+    case HOOK_ATTACHED_ANIMATION:
         if (m[0x70] & 2)
             *(int *)(m + 0x58) = 0;
         if ((unsigned char)(d[0][0x20] - 6) < 2) {
@@ -500,7 +508,7 @@ void swingshot_hook_update(unsigned char *m) {
         break;
     case 6:
         break;
-    case 7:
+    case HOOK_RETURN_ANIMATION:
         if (!(m[0x70] & 2))
             break;
     default:
@@ -576,13 +584,16 @@ int rand(void) __asm__("FUN_001160d8");
 int scale_game_frames(int) __asm__("FUN_001f96f8");
 void FUN_L00_00269b70(float *, unsigned char, unsigned char, unsigned char, float, float, int);
 void FUN_L00_002c8078(unsigned char *m) {
+    enum {
+        COLLISION_MATERIAL_WATER = 0
+    };
     float v[4] __attribute__((aligned(16)));
     int i;
     int r, g;
     unsigned char b;
     float s;
     switch (collision_hit_material()) {
-    case 0:
+    case COLLISION_MATERIAL_WATER:
     case 1:
     case 3:
     case 8:
@@ -1080,17 +1091,22 @@ void FUN_0020c828_2c1778(void *) __asm__("FUN_0020c828");
 extern const float D_L00_00161828 __attribute__((sda));
 extern float D_L00_00161830 __attribute__((sda));
 void FUN_L00_002c1778(void *mv) {
+    enum {
+        TRESPASSER_INITIALIZE = 0,
+        TRESPASSER_WAIT_FOR_HERO_PROXIMITY = 1,
+        TRESPASSER_SHRINK_FOR_REMOVAL = 2
+    };
     unsigned char *m = mv;
     struct Hero *P;
     switch (m[0x20]) {
-    case 0:
+    case TRESPASSER_INITIALIZE:
         FUN_00213508_2c1778(m + 0x10, 0, 0.5f);
         *(float *)(m + 0x40) = 1.5707964f;
         *(float *)(m + 0x44) = 3.1415927f;
         *(float *)(m + 0x18) = D_L00_00173E68_2c1778 + D_L00_00161828;
         m[0x20] = 1;
         break;
-    case 1: {
+    case TRESPASSER_WAIT_FOR_HERO_PROXIMITY: {
         float r = FUN_001fa580_2c1778(*(float *)(m + 0x48), D_L00_00161830);
         int t = D_L00_0015F5CC_2c1778[0];
         *(float *)(m + 0x48) = r;
@@ -1106,7 +1122,7 @@ void FUN_L00_002c1778(void *mv) {
             }
         }
     } break;
-    case 2:
+    case TRESPASSER_SHRINK_FOR_REMOVAL:
         FUN_00213ed8_2c1778(m + 0x2C, 0.0f, *(float *)(*(char **)(m + 0x24) + 0x24) * 0.02f);
         if (*(float *)(m + 0x2C) == 0.0f)
             FUN_0020c828_2c1778(m);
@@ -1194,6 +1210,14 @@ extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
 /* Mine glove update: aims the glove and throws a mine at the target. */
 void mine_glove_update(struct Moby *moby) __asm__("FUN_L00_002c1ad0");
 void mine_glove_update(struct Moby *moby) {
+    enum {
+        MINE_GLOVE_INITIALIZE = 0,
+        MINE_GLOVE_WAIT_FOR_ANIMATION = 1,
+        MINE_GLOVE_RELEASE_HELD_MOBY = 3,
+        MINE_GLOVE_POST_RELEASE_WAIT = 4,
+        MINE_GLOVE_BEGIN_HELD_MOBY_REMOVAL = 5,
+        MINE_GLOVE_REMOVE_HELD_MOBY = 6
+    };
     GloveVars_2c1ad0 *vars;
     Vec4 saved, offset, rotatedOffset;
     Vec4 local[4];
@@ -1295,17 +1319,17 @@ void mine_glove_update(struct Moby *moby) {
         FUN_L00_002c1928_f(frame_time_sq_macro * 9.8f, 1.0f, item_text_variant[0x11] ? ((controller_state.held & 5) ? 12.0f : 4.0f) : ((controller_state.held & 5) ? 6.0f : 4.0f), pos.f, target.f, out);
     }
     switch (moby->state) {
-    case 0:
+    case MINE_GLOVE_INITIALIZE:
         vars->held = 0;
         if (!(moby->anim_flags & 2))
             moby->state = 1;
         else
             moby->state = 2;
-    case 1:
+    case MINE_GLOVE_WAIT_FOR_ANIMATION:
         if (moby->anim_flags & 2)
             moby->state = 2;
         break;
-    case 3:
+    case MINE_GLOVE_RELEASE_HELD_MOBY:
         if (vars->held != 0) {
             FUN_L00_002aa008(&pos, vars->held, vars->held->pvars);
             if (D_00141680_2c1ad0.deliveries <= 0xfffe)
@@ -1324,14 +1348,14 @@ void mine_glove_update(struct Moby *moby) {
         moby->state = 4;
         vars->timer58 = scale_game_frames(0x14);
         break;
-    case 4:
+    case MINE_GLOVE_POST_RELEASE_WAIT:
         if (hero.state.current != 0x23 && !hero.unk20A8)
             moby->state = 2;
         break;
-    case 5:
+    case MINE_GLOVE_BEGIN_HELD_MOBY_REMOVAL:
         moby->state = 6;
         break;
-    case 6:
+    case MINE_GLOVE_REMOVE_HELD_MOBY:
         if (vars->held != 0) {
             mark_moby_for_removal(vars->held);
             vars->held = 0;
@@ -1496,6 +1520,14 @@ extern int FUN_L00_00233e98_2c1ad0(int) __asm__("FUN_L00_00233e98");
 /* Updates the grip, chooses a throw target, and handles the held moby states. */
 void bomb_glove_update(struct Moby *moby) __asm__("FUN_L00_002c26c8");
 void bomb_glove_update(struct Moby *moby) {
+    enum {
+        BOMB_GLOVE_INITIALIZE = 0,
+        BOMB_GLOVE_WAIT_FOR_ANIMATION = 1,
+        BOMB_GLOVE_RELEASE_HELD_MOBY = 3,
+        BOMB_GLOVE_POST_RELEASE_WAIT = 4,
+        BOMB_GLOVE_BEGIN_HELD_MOBY_REMOVAL = 5,
+        BOMB_GLOVE_REMOVE_HELD_MOBY = 6
+    };
     CarrierVars_2c26c8 *vars;
     OvlVec4 local[4], saved, offset, rotatedOffset, pos, target, basis[3], matrix[4];
     OvlVec4 launch;
@@ -1628,17 +1660,17 @@ void bomb_glove_update(struct Moby *moby) {
         aim_throw_arc((V2c2488 *)&pos, (V2c2488 *)&target, out, gravity, 0.00000999999975f, speed);
     }
     switch (moby->state) {
-    case 0:
+    case BOMB_GLOVE_INITIALIZE:
         vars->held = 0;
         if (!(moby->anim_flags & 2))
             moby->state = 1;
         else
             moby->state = 2;
-    case 1:
+    case BOMB_GLOVE_WAIT_FOR_ANIMATION:
         if (moby->anim_flags & 2)
             moby->state = 2;
         break;
-    case 3:
+    case BOMB_GLOVE_RELEASE_HELD_MOBY:
         if (vars->held == 0) {
             vars->held = FUN_L00_002ace70(moby, &vars->grip);
         } else {
@@ -1657,14 +1689,14 @@ void bomb_glove_update(struct Moby *moby) {
             vars->timer = scale_game_frames(0x14);
         }
         break;
-    case 4:
+    case BOMB_GLOVE_POST_RELEASE_WAIT:
         if (hero.state.current != 0x23 && !hero.unk20A8)
             moby->state = 2;
         break;
-    case 5:
+    case BOMB_GLOVE_BEGIN_HELD_MOBY_REMOVAL:
         moby->state = 6;
         break;
-    case 6:
+    case BOMB_GLOVE_REMOVE_HELD_MOBY:
         /* Retail reloads held after destruction before the common tail. */
         if (vars->held != 0)
             mark_moby_for_removal(vars->held);
@@ -1991,6 +2023,14 @@ extern void mine_spawn_drops(void *, void *) __asm__("FUN_L00_0025f800");
 
 void decoy_update(char *moby) __asm__("FUN_L00_002c4380");
 void decoy_update(char *moby) {
+    enum {
+        DECOY_INITIALIZE = 0,
+        DECOY_THROWN_MOVEMENT = 2,
+        DECOY_SETTLED_MOVEMENT = 3,
+        DECOY_WAIT_TO_SHRINK = 5,
+        DECOY_SHRINK_FOR_REMOVAL = 6,
+        DECOY_RESET_TO_INITIALIZE = 7
+    };
     int active = ((unsigned char *)&D_0013E533)[6];
     char *vars = *(char **)(moby + 0x78);
     char *target;
@@ -2035,7 +2075,7 @@ void decoy_update(char *moby) {
             FUN_L00_002c3af8((ThrowVars *)vars, (struct Moby *)moby, 2);
     }
     switch ((u8)moby[0x20]) {
-    case 0:
+    case DECOY_INITIALIZE:
         moby[0x20] = 1;
         *(short *)(vars + 0x44) = 0;
         *(int *)(moby + 0x98) = -1;
@@ -2053,7 +2093,7 @@ void decoy_update(char *moby) {
         FUN_L00_0024eb68_2c4380(moby);
         return;
     }
-    case 2:
+    case DECOY_THROWN_MOVEMENT:
         if (*(float *)(moby + 0x2c) < *(float *)(*(char **)(moby + 0x24) + 0x24))
             *(float *)(moby + 0x2c) += D_0015ED60_2c4380 * 0.02f;
         qcopy(v, moby + 0x10);
@@ -2150,7 +2190,7 @@ void decoy_update(char *moby) {
             *(int *)(target + 0x94) = *(int *)(*(char **)(target + 0x24) + 0x10);
         }
         break;
-    case 3:
+    case DECOY_SETTLED_MOVEMENT:
     case 4:
         hit = FUN_L00_0025a420(moby, 0x30001, 0);
         *(float *)(moby + 0x40) = FUN_002000e8_2c4380(*(float *)(moby + 0x40),
@@ -2254,7 +2294,7 @@ void decoy_update(char *moby) {
             }
         }
         break;
-    case 5:
+    case DECOY_WAIT_TO_SHRINK:
         len = FUN_L00_00259698_2c4380(moby + 0x10, 0, 0.5f);
         if (len != 0.0f && coll_hit.moby)
             FUN_L00_00260400(moby, coll_hit.moby, moby + 0x10,
@@ -2264,7 +2304,7 @@ void decoy_update(char *moby) {
         if (FUN_001fef98_2c4380(vars + 0x44) || (moby[0x70] & 2))
             moby[0x20] = 6;
         break;
-    case 6: {
+    case DECOY_SHRINK_FOR_REMOVAL: {
         float len;
         len = FUN_L00_00259698_2c4380(moby + 0x10, 0, 0.5f);
         if (len != 0.0f && coll_hit.moby) {
@@ -2279,7 +2319,7 @@ void decoy_update(char *moby) {
         FUN_L00_0024eb68_2c4380(moby);
         break;
     }
-    case 7:
+    case DECOY_RESET_TO_INITIALIZE:
     default:
         moby[0x20] = 0;
     }
@@ -2341,6 +2381,13 @@ extern int D_L00_00161838_macro __asm__("D_L00_00161838") __attribute__((section
    Animation states share one stack value; index reloads follow calls. */
 void devestator_ammo_update(struct Moby *m) __asm__("FUN_L00_002c53c0");
 void devestator_ammo_update(struct Moby *m) {
+    enum {
+        AMMO_PICKUP_INITIALIZE = 0,
+        AMMO_PICKUP_WAIT_FOR_COLLECTION = 1,
+        AMMO_PICKUP_COLLECTED = 2,
+        AMMO_PICKUP_PULSE_ALPHA = 3,
+        AMMO_PICKUP_RESTORE_SCALE = 4
+    };
     AmmoPickup_2c53c0 *p;
     unsigned int state;
     FxVec position;
@@ -2377,10 +2424,10 @@ void devestator_ammo_update(struct Moby *m) {
         }
     }
     switch (m->state) {
-    case 0:
+    case AMMO_PICKUP_INITIALIZE:
         m->state = 1;
         break;
-    case 1: {
+    case AMMO_PICKUP_WAIT_FOR_COLLECTION: {
         struct Hero *player;
         float *value_ptr;
         float height_delta;
@@ -2465,7 +2512,7 @@ void devestator_ammo_update(struct Moby *m) {
         }
         return;
     }
-    case 2: {
+    case AMMO_PICKUP_COLLECTED: {
         float limit;
         float distance;
         float factor;
@@ -2495,7 +2542,7 @@ void devestator_ammo_update(struct Moby *m) {
         FUN_00213ed8_2c53c0(&m->scale, class_scale * distance, class_scale * 0.1f);
         return;
     }
-    case 3: {
+    case AMMO_PICKUP_PULSE_ALPHA: {
         float *value_ptr;
         float angle;
         float oscillation;
@@ -2527,7 +2574,7 @@ void devestator_ammo_update(struct Moby *m) {
         }
         return;
     }
-    case 4:
+    case AMMO_PICKUP_RESTORE_SCALE:
         current = m->scale;
         target = m->pclass->scale;
         step = D_0015ED60_2c53c0 * 0.03f;
@@ -3294,6 +3341,12 @@ extern int allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da
    picks a new one up when get_ammo allows. */
 void glove_of_doom_update(struct Moby *moby) __asm__("FUN_L00_002c7a58");
 void glove_of_doom_update(struct Moby *moby) {
+    enum {
+        GLOVE_INITIALIZE = 0,
+        GLOVE_WAIT_FOR_ANIMATION = 1,
+        GLOVE_RELEASE_HELD_MOBY = 3,
+        GLOVE_POST_RELEASE_WAIT = 4
+    };
     OvlVec4 pos;
     OvlVec4 offset;
     OvlVec4 local;
@@ -3330,21 +3383,21 @@ void glove_of_doom_update(struct Moby *moby) {
     grip.q = vars->grip.q;
     FUN_L00_002c7548(moby, vars, &grip);
     switch (moby->state) {
-    case 0:
+    case GLOVE_INITIALIZE:
         vars->held = 0;
         if (moby->anim_flags & 2) {
             moby->state = 2;
         } else {
             moby->state = 1;
         }
-    case 1:
+    case GLOVE_WAIT_FOR_ANIMATION:
         if (moby->anim_flags & 2) {
             moby->state = 2;
         }
         break;
     case 2:
         break;
-    case 3:
+    case GLOVE_RELEASE_HELD_MOBY:
         if (vars->held != 0) {
             if (D_00141680.deliveries < 0xFFFF) {
                 D_00141680.deliveries++;
@@ -3361,7 +3414,7 @@ void glove_of_doom_update(struct Moby *moby) {
         moby->state = 4;
         vars->timer = scale_game_frames(0x14);
         break;
-    case 4:
+    case GLOVE_POST_RELEASE_WAIT:
         if (hero.state.current != 0x23 && !hero.unk20A8) {
             moby->state = 2;
         }

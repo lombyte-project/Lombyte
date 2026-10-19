@@ -89,15 +89,18 @@ struct TextRegion D_001E78F0 = {0x50, 0x154, 0x60, 0x1a0, 0x100, 0x54, 0, 0, 0x1
 struct TextRegion D_001E7908 = {0x64, 0x12c, 0x60, 0x1a0, 0x100, 0x68, 0, 0, 0x10, 1, 0, 0};
 void draw_dialog_text(void) {
     enum {
+        FREEZE_SCALED_OUTLINE_DIALOG = 0,
         FREEZE_TITLE_DIALOG = 2,
-        FREEZE_MODE_MESSAGE_DIALOG = 3
+        FREEZE_MODE_MESSAGE_DIALOG = 3,
+        FREEZE_SPLIT_TEXT_ICON_DIALOG = 5,
+        FREEZE_CHOICE_MESSAGE_DIALOG = 6
     };
     char buf[0x200];
     struct TextRegion box;
 
     setup_gif_paging(0);
     switch (freeze.state) {
-    case 5: {
+    case FREEZE_SPLIT_TEXT_ICON_DIALOG: {
         u8 *p;
         s32 color;
         s32 tint;
@@ -277,7 +280,7 @@ void draw_dialog_text(void) {
         }
         break;
     }
-    case 6: {
+    case FREEZE_CHOICE_MESSAGE_DIALOG: {
         s32 text_color;
         s32 button_color;
         s32 id;
@@ -313,7 +316,7 @@ void draw_dialog_text(void) {
         }
         break;
     }
-    case 0: {
+    case FREEZE_SCALED_OUTLINE_DIALOG: {
         char line[0x40];
         s32 pulse;
         s32 c1;

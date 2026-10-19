@@ -524,9 +524,9 @@ extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern float probe_ground_height(float *, int, float) __asm__("FUN_00213508");
 extern void FUN_L00_00274cf8_205f60(float *, int, float) __asm__("FUN_L00_00274cf8");
 
-void FUN_L00_00205f60(int record_group_index, char *joint_index_offset, int a2) {
+void FUN_L00_00205f60(int record_group_index, char *joint_index_offset, int enable_record_dispatch) {
     float v[4];
-    if (a2) {
+    if (enable_record_dispatch) {
         struct Hero *g = &hero;
         int c = 0;
         if (((char *)g->items[1].moby)) {
@@ -1625,6 +1625,11 @@ extern float D_0015ED6C_gp __asm__("D_0015ED6C") __attribute__((section(".sdata"
 // Hero gadget glow: pulses the colour of the hero's gadget moby (hero state 13, 16, 17, 19, 20) and
 // queues its glow sprites. c and g are shared by cases 17 and 20 (one pseudo each, retail's $s0/$s1).
 void FUN_L00_002080b0(void) {
+    enum {
+        ITEM_RED_GREEN_GLOW = 13,
+        ITEM_GRAY_PULSE_GLOW = 17,
+        ITEM_RED_BLUE_GLOW = 19
+    };
     Vec4_2080b0 v;
     struct Moby *m;
     int i;
@@ -1648,7 +1653,7 @@ void FUN_L00_002080b0(void) {
     if (!((m->flags ^ 1) & 1)) return;
 
     switch (hero.items[0].item_id) {
-    case 17: {
+    case ITEM_GRAY_PULSE_GLOW: {
         int c5;
         int x1, x2, col;
         float fr;
@@ -1706,7 +1711,7 @@ void FUN_L00_002080b0(void) {
             queue_glow_sprite_2080b0(&v, col, 0.15f, 0.04f);
         }
         break;
-    case 19: {
+    case ITEM_RED_BLUE_GLOW: {
         float k, f;
         int r, g, b, col;
         k = D_0015ED6C_gp * 2.26892805f;
@@ -1758,7 +1763,7 @@ void FUN_L00_002080b0(void) {
         queue_glow_sprite_2080b0(&v, col, 0.17f, 0.1f);
         break;
     }
-    case 13: {
+    case ITEM_RED_GREEN_GLOW: {
         int c5;
         float f = fast_add_rotations_2080b0(hero.items[0].glow_phase, D_0015ED6C_gp * 4.71238899f);
         c5 = 0x2814D214;

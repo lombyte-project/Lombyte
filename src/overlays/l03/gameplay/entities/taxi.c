@@ -175,6 +175,14 @@ extern void FUN_L00_0025a120(struct Moby *);
    when it drops into a pit. */
 void mine_layer_update(struct Moby *m) __asm__("FUN_L03_002c9eb8");
 void mine_layer_update(struct Moby *m) {
+    enum {
+        MINE_LAYER_INITIALIZE = 0,
+        MINE_LAYER_FACE_TARGET_AND_WAIT_FOR_RANGE = 1,
+        MINE_LAYER_WAIT_FOR_ANIMATION_BEFORE_PATROL = 2,
+        MINE_LAYER_PATROL_AND_FIRE = 3,
+        MINE_LAYER_KNOCKBACK_AND_RECOVER = 4,
+        MINE_LAYER_KNOCKBACK_UNTIL_EXPLOSION = 5
+    };
     TrooperVars *v = (TrooperVars *)m->pvars;
     TrooperPatrol *pt;
     struct RailPath *path;
@@ -200,7 +208,7 @@ void mine_layer_update(struct Moby *m) {
         sight = 28.0f;
     }
     switch (m->state) {
-    case 0:
+    case MINE_LAYER_INITIALIZE:
         FUN_L01_0026d930(v->walk);
         v->unk10C = frame_time_sq * 6.2831855f;
         v->unk114 = frame_time * 6.2831855f;
@@ -224,7 +232,7 @@ void mine_layer_update(struct Moby *m) {
             trooper_blend_anim(m, 0, 0, 0);
         }
         break;
-    case 1:
+    case MINE_LAYER_FACE_TARGET_AND_WAIT_FOR_RANGE:
         FUN_L00_00258278(trooper_atan2_9eb8(target.aim.f[0] - m->pos.x, target.aim.f[1] - m->pos.y), 0.01f, 0.3f, 0.1f, m,
                          v->turn);
         if (trooper_dist(&m->pos, &target.aim) < sight && trooper_fabs(target.aim.f[2] - m->pos.z) < 4.0f) {
@@ -234,7 +242,7 @@ void mine_layer_update(struct Moby *m) {
             }
         }
         break;
-    case 2:
+    case MINE_LAYER_WAIT_FOR_ANIMATION_BEFORE_PATROL:
         if (m->anim_flags & 2) {
             m->state = 3;
             v->patrol_timer = trooper_frames(120);
@@ -245,7 +253,7 @@ void mine_layer_update(struct Moby *m) {
             v->fire_timer = trooper_frames(120);
         }
         break;
-    case 3:
+    case MINE_LAYER_PATROL_AND_FIRE:
         pt = &v->patrol;
         n = pt->idx;
         FUN_L00_00259028(m, v->walk, &pt->path->pts[n], v->effect);
@@ -288,7 +296,7 @@ void mine_layer_update(struct Moby *m) {
             }
         }
         break;
-    case 4:
+    case MINE_LAYER_KNOCKBACK_AND_RECOVER:
         if (mine_fall(m, v->knockback) & 0x60) {
             if (m->prev_seq != 0) {
                 trooper_blend_anim(m, 0, 0, trooper_frames(10));
@@ -303,7 +311,7 @@ void mine_layer_update(struct Moby *m) {
             return;
         }
         break;
-    case 5:
+    case MINE_LAYER_KNOCKBACK_UNTIL_EXPLOSION:
         if ((mine_fall(m, v->knockback) & 0x60) || m->pos.z < 5.0f) {
             qcopy(muzzle, &m->pos);
             muzzle[2] += 0.5f;
@@ -359,6 +367,9 @@ extern void trooper_anim_finish(struct Moby *, void *) __asm__("FUN_L00_0025d538
 extern f32 frame_time_sq_macro __asm__("D_0015ED70") __attribute__((section(".sdata")));
 /* Trooper hit handler: takes damage, then knocks back away from the attacker by hit strength (dying on lethal hits). */
 void FUN_L03_002ca808(struct Moby *m) {
+    enum {
+        TROOPER_DAMAGE_LETHAL = 1
+    };
     TrooperVars *v = (TrooperVars *)m->pvars;
     TrooperHit *h;
     Vec4 at;
@@ -411,7 +422,7 @@ void FUN_L03_002ca808(struct Moby *m) {
             v->kb_max = 15.0f;
             m->state = 4;
             break;
-        case 1:
+        case TROOPER_DAMAGE_LETHAL:
             v->kb_speed = D_L03_001618F8 * frame_time_sq_macro;
             trooper_set_knockback(v->knockback, D_L03_00161908, D_L03_0016190C);
             v->kb_landed = 0;
@@ -493,6 +504,16 @@ extern void mine_spawn_drops(struct Moby *, void *) __asm__("FUN_L00_0025f800");
 /* l03 mine update: falls until it lands, sticks to or homes on its target, arms,
    and explodes on contact (debris, camera shake, blast) or shrinks away when old. */
 void FUN_L03_002cbea8(struct Moby *m) {
+    enum {
+        MINE_FALL_UNTIL_LANDING = 1,
+        MINE_HOME_ON_TARGET = 2,
+        MINE_ARM_AND_MONITOR_PROXIMITY = 3,
+        MINE_EXPLODE_AND_REMOVE = 4,
+        MINE_SHRINK_AND_REMOVE = 5
+    };
+    enum {
+        MINE_DEBRIS_SPHERICAL_VELOCITY = 3
+    };
     MineBlast blast = D_L03_001E32B0;
     MineVec tmp;
     MineVars *v = (MineVars *)m->pvars;
@@ -508,7 +529,7 @@ void FUN_L03_002cbea8(struct Moby *m) {
     switch (m->state) {
     case 0:
         break;
-    case 1:
+    case MINE_FALL_UNTIL_LANDING:
         if (mine_fall(m, v) & 1) {
             m->state = 3;
             if (m->prev_seq != 1) {
@@ -520,7 +541,7 @@ void FUN_L03_002cbea8(struct Moby *m) {
             return;
         }
         break;
-    case 2:
+    case MINE_HOME_ON_TARGET:
         mine_vec_sub(tmp, &v->target->pos, &m->pos);
         if (mine_vec_len(tmp) < 0.25f) {
             mine_kill(m);
@@ -530,7 +551,7 @@ void FUN_L03_002cbea8(struct Moby *m) {
         tmp[2] += frame_time * 4.0f;
         mine_vec_add(&m->pos, &m->pos, tmp);
         break;
-    case 3:
+    case MINE_ARM_AND_MONITOR_PROXIMITY:
         mine_tick(&v->timer);
         t = v->target;
         if (t != 0 && t->state != 0xFE && t->state != 0xFD && mine_dist(&m->pos, &t->pos) < 3.0f && v->timer == 0) {
@@ -555,7 +576,7 @@ void FUN_L03_002cbea8(struct Moby *m) {
             }
         }
         break;
-    case 4: {
+    case MINE_EXPLODE_AND_REMOVE: {
         int cnt;
 
         dist = mine_dist(&m->pos, D_L03_00166EC0);
@@ -599,7 +620,7 @@ void FUN_L03_002cbea8(struct Moby *m) {
                     mine_debris(r, dir, mine_rand_below(100) < 0x28 ? 0x5FF8F8F8 : 0x2F486078, 0x0F000020, 150000.0f,
                                 mine_rand_between(mine_frames(0x1E), mine_frames(0x2D)), 2);
                     break;
-                case 3: {
+                case MINE_DEBRIS_SPHERICAL_VELOCITY: {
                     int c1 = mine_blend_color(0x7F000000, 0x7F182030, mine_rand(0.25f, 1.0f));
                     int c2 = mine_blend_color(0, 0x5F5F5F, mine_rand(0.5f, 1.0f));
 
@@ -619,7 +640,7 @@ void FUN_L03_002cbea8(struct Moby *m) {
         mine_kill(m);
         return;
     }
-    case 5:
+    case MINE_SHRINK_AND_REMOVE:
         m->scale *= frame_scale * -0.074f + 1.0f;
         if (m->scale < m->pclass->scale * 0.01f) {
             mine_spawn_drops(m, D_L03_001B08B0);
@@ -739,7 +760,10 @@ void FUN_L03_002d3198(struct Moby *m) {
         TAXI_INITIALIZE = 0,
         TAXI_WAIT_FOR_ROUTE_TRIGGER = 1,
         TAXI_FOLLOW_OUTBOUND_PATH = 2,
+        TAXI_WAIT_FOR_RETURN_REQUEST = 3,
+        TAXI_WAIT_FOR_RETURN_DEPARTURE = 4,
         TAXI_FOLLOW_RETURN_PATH = 5,
+        TAXI_WAIT_FOR_HERO_TO_MOVE_AWAY = 6,
         TAXI_FOLLOW_ONWARD_PATH = 7
     };
     struct RailTaxiVars *v = (struct RailTaxiVars *)m->pvars;
@@ -815,7 +839,7 @@ void FUN_L03_002d3198(struct Moby *m) {
             v->unkE4 = -1;
         }
         break;
-    case 3:
+    case TAXI_WAIT_FOR_RETURN_REQUEST:
         taxi_approach_angle(&m->rot.y, 0.0f, &v->pitch_vel, D_L03_00161B10 * DEG_TO_RAD * frame_time_sq_macro,
                             D_L03_00161B10 * DEG_TO_RAD * frame_time_sq_macro, frame_time * 12.566371f);
         taxi_approach_angle(&m->rot.x, 0.0f, &v->roll_vel, D_L03_00161B18 * DEG_TO_RAD * frame_time_sq_macro,
@@ -829,7 +853,7 @@ void FUN_L03_002d3198(struct Moby *m) {
             }
         }
         break;
-    case 4:
+    case TAXI_WAIT_FOR_RETURN_DEPARTURE:
         if (!FUN_L00_00233f38()) {
             m->state = 5;
         }
@@ -843,7 +867,7 @@ void FUN_L03_002d3198(struct Moby *m) {
             m->state = 6;
         }
         break;
-    case 6:
+    case TAXI_WAIT_FOR_HERO_TO_MOVE_AWAY:
         taxi_approach_angle(&m->rot.y, 0.0f, &v->pitch_vel, D_L03_00161B10 * DEG_TO_RAD * frame_time_sq_macro,
                             D_L03_00161B10 * DEG_TO_RAD * frame_time_sq_macro, frame_time * 12.566371f);
         taxi_approach_angle(&m->rot.x, 0.0f, &v->roll_vel, D_L03_00161B18 * DEG_TO_RAD * frame_time_sq_macro,
@@ -1265,6 +1289,11 @@ extern void update_joint_animation(float, float, void *, void *, int) __asm__("F
    While idle it turns its head toward the hero or toward random points. */
 void helga_update(struct Moby *m) __asm__("FUN_L03_002da870");
 void helga_update(struct Moby *m) {
+    enum {
+        HELGA_INITIALIZE = 0,
+        HELGA_UPDATE_DIALOGUE = 1,
+        HELGA_RESOLVE_DIALOGUE = 2
+    };
     struct QuestGiverVars *v = (struct QuestGiverVars *)m->pvars;
     struct TalkState *talk = &v->talk;
     struct Moby *t;
@@ -1284,7 +1313,7 @@ void helga_update(struct Moby *m) {
 
     FUN_L03_002da710(m);
     switch (m->state) {
-    case 0:
+    case HELGA_INITIALIZE:
         if (D_0013D4CC[0] != 0) {
             if (v->link != -1) {
                 t = (struct Moby *)((v->link << 8) + D_L03_0015FFD8_i);
@@ -1312,7 +1341,7 @@ void helga_update(struct Moby *m) {
         initialize_npc_dialogue(m, talk);
         initialize_moby_grounding(m);
         break;
-    case 1:
+    case HELGA_UPDATE_DIALOGUE:
         if (update_npc_dialogue(m, talk)) {
             begin_dialogue_camera_transition(m, 2.3f);
             m->state = 2;
@@ -1326,7 +1355,7 @@ void helga_update(struct Moby *m) {
             }
         }
         break;
-    case 2:
+    case HELGA_RESOLVE_DIALOGUE:
         if (D_L03_0015F5C4 != 2) {
             if (v->talk.mode != 2) {
                 jet_clear_persistent(m->mission);
@@ -1652,6 +1681,11 @@ extern GameFlags_db558 race_gates __asm__("D_0013D5B0");
    its head toward the hero or random points while idle. */
 void big_al_update(struct Moby *m) __asm__("FUN_L03_002db558");
 void big_al_update(struct Moby *m) {
+    enum {
+        BIG_AL_INITIALIZE = 0,
+        BIG_AL_UPDATE_DIALOGUE = 1,
+        BIG_AL_RESOLVE_DIALOGUE = 2
+    };
     struct GuideVars *v = (struct GuideVars *)m->pvars;
     struct Moby *t;
     struct Moby *o;
@@ -1669,7 +1703,7 @@ void big_al_update(struct Moby *m) {
 
     FUN_L03_002db480(m);
     switch (m->state) {
-    case 0:
+    case BIG_AL_INITIALIZE:
         if (race_gates.unk14C == 0) {
             m->rot.z = fast_add_rotations(m->rot.z, 3.1415927f);
             v->turned = 0;
@@ -1690,7 +1724,7 @@ void big_al_update(struct Moby *m) {
             v->talk.unk36 = -1;
         }
         break;
-    case 1:
+    case BIG_AL_UPDATE_DIALOGUE:
         if (item_available[2] != 0 && v->reward != -1) {
             t = (struct Moby *)((v->reward << 8) + D_L03_0015FFD8_i);
             if (t->oclass == 0x3E5 && t->state == 0) {
@@ -1720,7 +1754,7 @@ void big_al_update(struct Moby *m) {
             m->state = 2;
         }
         break;
-    case 2:
+    case BIG_AL_RESOLVE_DIALOGUE:
         if (D_L03_0015F5C4 == 2) {
             break;
         }
@@ -1873,6 +1907,12 @@ extern void FUN_L00_0026ced0(void *, void *, u32, u32, s32, f32);
  * it breaks, records its save bit, and keeps sparking. */
 void robot_qwark_update(struct Moby *m) __asm__("FUN_L03_002dbd90");
 void robot_qwark_update(struct Moby *m) {
+    enum {
+        ROBOT_QWARK_INITIALIZE = 0,
+        ROBOT_QWARK_UPDATE_DIALOGUE = 1,
+        ROBOT_QWARK_RESOLVE_DIALOGUE = 2,
+        ROBOT_QWARK_BROKEN_SPARKING = 3
+    };
     struct TalkerVars *d = (struct TalkerVars *)m->pvars;
     TalkerHit *hit;
     u8 type;
@@ -1915,7 +1955,7 @@ void robot_qwark_update(struct Moby *m) {
         return;
     }
     switch (m->state) {
-    case 0:
+    case ROBOT_QWARK_INITIALIZE:
         m->spawn_frame = *(u64 *)(D_001413D0[0] + 0x38);
         m->state = 1;
         talker_init(m, d);
@@ -1924,14 +1964,14 @@ void robot_qwark_update(struct Moby *m) {
             d->unk36 = 2;
         }
         break;
-    case 1:
+    case ROBOT_QWARK_UPDATE_DIALOGUE:
         if (talker_update(m, d)) {
             D_0013D388[0x19] = 1;
             begin_dialogue_camera_transition(m, 2.7f);
             m->state = 2;
         }
         break;
-    case 2:
+    case ROBOT_QWARK_RESOLVE_DIALOGUE:
         if (D_L03_0015F5C4 == 2) {
             break;
         }
@@ -1941,7 +1981,7 @@ void robot_qwark_update(struct Moby *m) {
             jet_reset_camera(w + 0x30, w + 0x70);
         }
         break;
-    case 3:
+    case ROBOT_QWARK_BROKEN_SPARKING:
         vel.f[0] = talker_cos(talker_rand_angle()) * (talker_rand_range(0.0f, 0.25f) * frame_time);
         vel.f[1] = talker_sin(talker_rand_angle()) * (talker_rand_range(0.0f, 0.25f) * frame_time);
         vel.f[2] = 0.0f;
@@ -2034,6 +2074,12 @@ extern s32 FUN_L00_00233f38(void);
 void FUN_L03_002dd0f0(struct Moby *m);
 
 void FUN_L03_002dccc0(struct Moby *m) {
+    enum {
+        LIFT_INITIALIZE = 0,
+        LIFT_WAIT_FOR_DEPARTURE = 1,
+        LIFT_WAIT_FOR_HERO_ANIMATION = 2,
+        LIFT_FOLLOW_PATH = 3
+    };
     struct RailLiftVars *d = (struct RailLiftVars *)m->pvars;
     Vec4 oldPos, oldRot, move;
     s32 hero_end, lift_end;
@@ -2045,7 +2091,7 @@ void FUN_L03_002dccc0(struct Moby *m) {
     oldRot.q = *(u128 *)&m->rot;
     fast_dec_timer(&d->timer);
     switch (m->state) {
-    case 0:
+    case LIFT_INITIALIZE:
         m->command = d->start_end;
         qcopy(&m->pos, &D_L03_001B05B0[d->path[m->command]]->pts[0]);
         d->hud = -1;
@@ -2054,7 +2100,7 @@ void FUN_L03_002dccc0(struct Moby *m) {
         m->update_dist = 0xFF;
         m->draw_dist = 0xFF;
         break;
-    case 1:
+    case LIFT_WAIT_FOR_DEPARTURE:
         hero_end = vec_dist(&hero.motion.pos, &D_L03_001B05B0[d->path[0]]->pts[0]) <
                    vec_dist(&hero.motion.pos, &D_L03_001B05B0[d->path[1]]->pts[0]);
         lift_end = vec_dist(&m->pos, &D_L03_001B05B0[d->path[0]]->pts[0]) <
@@ -2091,11 +2137,11 @@ void FUN_L03_002dccc0(struct Moby *m) {
             d->ready = 0;
         }
         break;
-    case 2:
+    case LIFT_WAIT_FOR_HERO_ANIMATION:
         if (!FUN_L00_00233f38())
             m->state = 3;
         break;
-    case 3:
+    case LIFT_FOLLOW_PATH:
         if (FUN_L01_00277fb8(m)) {
             hero.unk1F2 = 4;
             hero.unk1F4 = 4;

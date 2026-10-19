@@ -5593,9 +5593,14 @@ extern short *D_L06_001ABFC0[];
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 
 void FUN_L06_002fda30(char *m) {
+    enum {
+        WAIT_FOR_HERO_IN_CLIP_VOLUME = 0,
+        WAIT_FOR_ANIMATION_SIGNAL = 1,
+        ACTIVATE_LISTED_MOBYS_AT_INTERVAL = 2
+    };
     int *d = *(int **)(m + 0x78);
     switch (((unsigned char *)m)[0x20]) {
-    case 0:
+    case WAIT_FOR_HERO_IN_CLIP_VOLUME:
         if (d[1] >= 0 && is_point_inside_clip_volume(&hero.motion.pos, d[1])) {
             m[0x20] = 1;
             if (((unsigned char *)m)[0x53] != 1) {
@@ -5603,7 +5608,7 @@ void FUN_L06_002fda30(char *m) {
             }
         }
         break;
-    case 1:
+    case WAIT_FOR_ANIMATION_SIGNAL:
         if (m[0x70] & 2) {
             if (d[0] >= 0) {
                 m[0x20] = 2;
@@ -5615,7 +5620,7 @@ void FUN_L06_002fda30(char *m) {
             }
         }
         break;
-    case 2:
+    case ACTIVATE_LISTED_MOBYS_AT_INTERVAL:
         if (tick_countdown_32_alt(d + 2)) {
             float found = 0.0f;
             short *list = D_L06_001ABFC0[d[0]];
@@ -5700,7 +5705,11 @@ extern int D_L06_00162044 __attribute__((sda));
 extern float D_L06_00162050 __attribute__((sda));
 void FUN_L06_002ffcb0(char *moby) {
     enum {
-        INITIALIZE_DRAW_SELECTION = 0
+        INITIALIZE_DRAW_SELECTION = 0,
+        WAIT_FOR_LINKED_MOBY_TRIGGER = 1,
+        WAIT_CAMERA_START_DELAY = 2,
+        BLEND_CAMERA_TO_HERO = 3,
+        WAIT_FOR_NEARBY_HERO = 4
     };
     int *data = *(int **)(moby + 0x78);
     float pos[4], rot[4], from[4], target[4], offset[4];
@@ -5712,7 +5721,7 @@ void FUN_L06_002ffcb0(char *moby) {
         data[1] = 1;
         moby[0x20] = 1;
         break;
-    case 1:
+    case WAIT_FOR_LINKED_MOBY_TRIGGER:
         if ((data[2] < 0 || (unsigned char)D_L06_0015FFD8_ffcb0[(data[2] << 8) + 0xbc] == 0) && data[8] != -1) {
             break;
         }
@@ -5724,7 +5733,7 @@ void FUN_L06_002ffcb0(char *moby) {
             moby[0x20] = 4;
         }
         break;
-    case 2:
+    case WAIT_CAMERA_START_DELAY:
         if (count_down_ffcb0(data + 9)) {
             {
                 int state;
@@ -5769,7 +5778,7 @@ void FUN_L06_002ffcb0(char *moby) {
         if (data[9] < D_L06_00162044)
             D_L06_0015F3FC = 1.0f - normalize_timer_ffcb0(data[9]) / (float)D_L06_00162044;
         break;
-    case 3:
+    case BLEND_CAMERA_TO_HERO:
         if (data[9] < D_L06_00162044) {
             data[9]++;
             D_L06_0015F3FC = 1.0f - normalize_timer_ffcb0(data[9]) / (float)D_L06_00162044;
@@ -5821,7 +5830,7 @@ void FUN_L06_002ffcb0(char *moby) {
             FUN_L00_002eaa30(from);
         }
         break;
-    case 4:
+    case WAIT_FOR_NEARBY_HERO:
         if (vector_distance_ffcb0(moby + 0x10, D_0013F3D0) < 16.0f) {
             state = data[3];
             state <<= 7;
@@ -6036,6 +6045,11 @@ void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 extern float D_L06_00162090 __attribute__((sda));
 extern int GB_FRAME_gp __asm__("D_L06_0015F5CC") __attribute__((sda));
 void FUN_L06_00300df0(char *moby) {
+    enum {
+        INITIALIZE_BOBBING_HEIGHT = 0,
+        UPDATE_BOBBING_HEIGHT = 1,
+        UPDATE_LINEAR_AND_ANGULAR_MOTION = 2
+    };
     char *data = *(char **)(moby + 0x78);
     int state;
     if (data == 0) {
@@ -6044,13 +6058,13 @@ void FUN_L06_00300df0(char *moby) {
     }
     state = (unsigned char)moby[0x20];
     switch (state) {
-    case 0:
+    case INITIALIZE_BOBBING_HEIGHT:
         *(short *)(moby + 0x32) = 0x200;
         ((unsigned char *)moby)[0x30] = 0xFF;
         *(float *)(data + 0xC) = *(float *)(moby + 0x18);
         moby[0x20] = 1;
         break;
-    case 1:
+    case UPDATE_BOBBING_HEIGHT:
         if (*(int *)(D_0013E533 + 0x2EA1) == 0x72) {
             *(float *)(moby + 0x18) = *(float *)(data + 0xC);
         } else {
@@ -6059,7 +6073,7 @@ void FUN_L06_00300df0(char *moby) {
             *(float *)(moby + 0x18) = *(float *)(data + 0xC) + D_L06_00162090 * g;
         }
         break;
-    case 2:
+    case UPDATE_LINEAR_AND_ANGULAR_MOTION:
         if (*(float *)(data + 0xC) > 1.0f)
             fast_vec_scale(data, data, 0.985f);
         fast_vec_add(moby + 0x10, moby + 0x10, data);
@@ -6186,6 +6200,13 @@ extern f32 frame_scale_sq_macro __asm__("D_0015ED64") __attribute__((section(".s
 /* Update of moby class 1105 (fred): steps the conversation and camera states, then turns the head toward the hero. */
 void fred_update(struct Moby *m) __asm__("FUN_L06_00301070");
 void fred_update(struct Moby *m) {
+    enum {
+        INITIALIZE_FRED_DIALOGUE = 0,
+        UPDATE_FRED_DIALOGUE = 1,
+        HANDLE_FRED_DIALOGUE_RESULT = 2,
+        INTERPOLATE_FRED_CUTSCENE_CAMERA = 3,
+        WAIT_FOR_FRED_REMOVAL_TRIGGER = 5
+    };
     Data_301070 *d = *(struct Data_301070 **)&m->pvars;
     float rate, head_rate;
     int tracking;
@@ -6195,7 +6216,7 @@ void fred_update(struct Moby *m) {
         m->shadow_range = 0x13;
     }
     switch (m->state) {
-    case 0:
+    case INITIALIZE_FRED_DIALOGUE:
         if (D_0013D505[0] != 0) goto del;
         if (D_0013D8AC_lui == 0) {
             if (m->prev_seq != 1) {
@@ -6218,7 +6239,7 @@ void fred_update(struct Moby *m) {
         m->state = 1;
         initialize_npc_dialogue_301070(m, d);
         break;
-    case 1:
+    case UPDATE_FRED_DIALOGUE:
         if (d->f8 == 1 && is_point_inside_clip_volume_301070(&hero.motion.pos, d->f168) != 0) {
             d->fC = 16.0f;
         } else {
@@ -6241,7 +6262,7 @@ void fred_update(struct Moby *m) {
             FUN_L06_002f5360_301070(D_L06_0015FFD8_301070 + (d->f160 << 8));
         }
         break;
-    case 2:
+    case HANDLE_FRED_DIALOGUE_RESULT:
         if (D_L06_0015F5C4_macro != 2) {
             if (m->prev_seq != 0) {
                 blend_moby_animation_301070(m, 0, 0, scale_game_frames_301070(10));
@@ -6279,7 +6300,7 @@ void fred_update(struct Moby *m) {
             }
         }
         break;
-    case 3: {
+    case INTERPOLATE_FRED_CUTSCENE_CAMERA: {
       {
         VecQ_301070 p0;
         VecQ_301070 p1;
@@ -6336,7 +6357,7 @@ void fred_update(struct Moby *m) {
             m->state = 5;
         }
         break;
-    case 5:
+    case WAIT_FOR_FRED_REMOVAL_TRIGGER:
         if (hero.state.control_mode == 15) {
             FUN_L06_002f5360_301070(D_L06_0015FFD8_301070 + (d->f164 << 8));
         del:
@@ -6460,12 +6481,18 @@ extern void FUN_L02_002f8aa0(float, float, float, float, float, float);
 
 extern float D_L06_0015F400;
 void FUN_L06_00301b90(unsigned char *m) {
+    enum {
+        INITIALIZE_ENTITY = 0,
+        TRIGGER_LINKED_SEQUENCE_WHEN_GROUP_INACTIVE = 1,
+        WAIT_FOR_LINKED_SEQUENCE_COMPLETION = 2,
+        ADVANCE_CAMERA_ALONG_PATH = 3
+    };
     char *d = *(char **)(m + 0x78);
     float va[4] __attribute__((aligned(16)));
     float vc[4] __attribute__((aligned(16)));
     float vb[4] __attribute__((aligned(16)));
     switch (m[0x20]) {
-    case 0:
+    case INITIALIZE_ENTITY:
         if (visited52[m[0xB0] + (current_level_index << 4)] != 0) {
             mark_moby_for_removal((struct Obj *)m);
             return;
@@ -6476,14 +6503,14 @@ void FUN_L06_00301b90(unsigned char *m) {
         m[0x20] = 1;
         m[0x30] = 0xFF;
         return;
-    case 1:
+    case TRIGGER_LINKED_SEQUENCE_WHEN_GROUP_INACTIVE:
         if (FUN_L01_0026e008(*(int *)(d + 0x1C), -1) != 0) return;
         FUN_L06_003047b8(D_L06_0015FFD8_301b90 + (*(int *)(d + 0x2C) << 8));
         if (FUN_L06_003047f8((const u8 *)D_L06_0015FFD8_301b90 + (*(int *)(d + 0x2C) << 8)) != 1) return;
         m[0x20] = 2;
         FUN_L06_00302400((struct Moby *)m, 0);
         return;
-    case 2: {
+    case WAIT_FOR_LINKED_SEQUENCE_COMPLETION: {
         int *p;
         float r;
         if (FUN_L06_003047f8((const u8 *)D_L06_0015FFD8_301b90 + (*(int *)(d + 0x2C) << 8)) != 2) return;
@@ -6520,7 +6547,7 @@ void FUN_L06_00301b90(unsigned char *m) {
         }
         return;
     }
-    case 3: {
+    case ADVANCE_CAMERA_ALONG_PATH: {
         int **p;
         int x, nb;
         float r;
@@ -6611,6 +6638,11 @@ extern s32 FUN_00213260(s32);
 
 /* plays one of the vendor's greet, chatter or leave lines in the current language */
 void FUN_L06_00302400(struct Moby *m, s32 kind) {
+    enum {
+        VOICE_KIND_GREETING = 0,
+        VOICE_KIND_CHATTER = 1,
+        VOICE_KIND_LEAVING = 2
+    };
     struct TauntVoiceVars *v = (struct TauntVoiceVars *)m->pvars;
     s32 id = -1;
     s32 lang;
@@ -6618,12 +6650,12 @@ void FUN_L06_00302400(struct Moby *m, s32 kind) {
     s32 i;
 
     switch (kind) {
-    case 0:
+    case VOICE_KIND_GREETING:
         lang = game_language;
         if (lang != 0) lang--;
         id = v->greet[lang];
         break;
-    case 1:
+    case VOICE_KIND_CHATTER:
         r = FUN_00213260(3);
         for (i = 0; i < 4; i++) {
             if (D_L06_001620B8[r] == 0) {
@@ -6641,7 +6673,7 @@ void FUN_L06_00302400(struct Moby *m, s32 kind) {
         if (lang != 0) lang--;
         id = v->chatter[r][lang];
         break;
-    case 2:
+    case VOICE_KIND_LEAVING:
         lang = game_language;
         if (lang != 0) lang--;
         id = v->leave[lang];
@@ -6757,6 +6789,21 @@ extern unsigned char D_0013D4D5[] __attribute__((section(".data")));
 /* Update of moby class 1109 (shuttle): waits at one of three camera points, takes the hero's choice of destination, flies there through a cutscene and hands over to the level's travel sequence. */
 void shuttle_update(struct Moby *moby) __asm__("FUN_L06_00302578");
 void shuttle_update(struct Moby *moby) {
+    enum {
+        INITIALIZE_SHUTTLE = 0,
+        WAIT_FOR_SHUTTLE_ROUTE_REQUEST = 1,
+        WAIT_FOR_FORCED_SHUTTLE_RETURN_TRIGGER = 2,
+        UPDATE_SHUTTLE_PATH_RIDE = 3,
+        RESTORE_SHUTTLE_IDLE_ANIMATION = 4,
+        WAIT_FOR_HERO_NEAR_LINKED_MOBY = 6
+    };
+    enum {
+        SHUTTLE_ROUTE_INITIAL_TO_SECOND_STOP = 0,
+        SHUTTLE_ROUTE_SECOND_TO_INITIAL_STOP = 1,
+        SHUTTLE_ROUTE_FORCED_TO_INITIAL_STOP = 2,
+        SHUTTLE_ROUTE_INITIAL_TO_THIRD_STOP = 3,
+        SHUTTLE_ROUTE_THIRD_TO_INITIAL_STOP = 4
+    };
     Data_302578 *d = *(Data_302578 **)&moby->pvars;
     float old_pos[4];
     float old_rot[4];
@@ -6777,7 +6824,7 @@ void shuttle_update(struct Moby *moby) {
         FUN_L06_0030bef8_302578((char *)b, scale_game_frames_302578(D_L06_00162108), D_L06_0016210C, D_L06_00162110);
     }
     switch (moby->state) {
-    case 0:
+    case INITIALIZE_SHUTTLE:
         D_L06_0015FDF8 = 0;
         if (*(unsigned char *)(d->fF8 + (current_level_index << 4) + (int)visited52) == 0xFF) {
             FUN_L06_00304028((char *)moby);
@@ -6794,7 +6841,7 @@ void shuttle_update(struct Moby *moby) {
         d->sel = 0;
         d->side = 0;
         break;
-    case 1:
+    case WAIT_FOR_SHUTTLE_ROUTE_REQUEST:
         busy = 0;
         if (*(unsigned char *)&D_0015EE1D != 0 || *(unsigned char *)&D_0015EE1C != 0) {
             if (((Busy_302578 *)D_L06_00179B90)->f0 != 0 || ((Busy_302578 *)D_L06_00179B90)->f24 != -1) {
@@ -6813,33 +6860,33 @@ void shuttle_update(struct Moby *moby) {
                     D_L06_00162100 = 0;
                 }
                 switch (d->f9C) {
-                case 0:
+                case SHUTTLE_ROUTE_INITIAL_TO_SECOND_STOP:
                     d->sel = 1;
                     d->fC4 = D_L06_001620F8;
                     d->fC8 = D_L06_001620F4;
                     d->side = 0;
                     play_sound_302578(4, 8);
                     break;
-                case 1:
+                case SHUTTLE_ROUTE_SECOND_TO_INITIAL_STOP:
                     d->side = 1;
                     d->fC4 = D_L06_001620F4;
                     d->fC8 = D_L06_001620F8;
                     d->sel = 0;
                     play_sound_302578(0, 10);
                     break;
-                case 2:
+                case SHUTTLE_ROUTE_FORCED_TO_INITIAL_STOP:
                     d->side = 2;
                     d->fC4 = D_L06_001620F4;
                     d->fC8 = D_L06_001620F8;
                     d->sel = 0;
                     break;
-                case 3:
+                case SHUTTLE_ROUTE_INITIAL_TO_THIRD_STOP:
                     d->side = 3;
                     d->sel = 2;
                     d->fC4 = D_L06_001620F8;
                     d->fC8 = D_L06_001620F8;
                     break;
-                case 4:
+                case SHUTTLE_ROUTE_THIRD_TO_INITIAL_STOP:
                     d->side = 4;
                     d->sel = 0;
                     d->fC4 = D_L06_001620F8;
@@ -6897,7 +6944,7 @@ void shuttle_update(struct Moby *moby) {
             allocate_voice_302578(2, 0, moby);
         }
         break;
-    case 3:
+    case UPDATE_SHUTTLE_PATH_RIDE:
         if (FUN_L06_00303160((char *)moby, d->side) != 0) {
             int ofs;
             int base;
@@ -6936,7 +6983,7 @@ void shuttle_update(struct Moby *moby) {
             FUN_L00_002eac18_302578(0);
         }
         break;
-    case 6:
+    case WAIT_FOR_HERO_NEAR_LINKED_MOBY:
         if (vector_distance_302578((char *)&hero.motion.pos, D_L06_0015FFD8_302578 + (d->f10C << 8) + 0x10) < 3.5f) {
             char *o = D_L06_0015FFD8_302578 + (d->f10C << 8);
             qcopy(b, o + 0x10);
@@ -6952,7 +6999,7 @@ void shuttle_update(struct Moby *moby) {
             FUN_L00_00284e50_302578(b, rot);
         }
         break;
-    case 2:
+    case WAIT_FOR_FORCED_SHUTTLE_RETURN_TRIGGER:
         if (is_point_inside_clip_volume((char *)&hero.motion.pos, d->fF0) != 0) {
             d->side = 2;
             d->fC4 = D_L06_001620F4;
@@ -6963,7 +7010,7 @@ void shuttle_update(struct Moby *moby) {
             moby->state = 1;
         }
         break;
-    case 4:
+    case RESTORE_SHUTTLE_IDLE_ANIMATION:
         moby->state = 1;
         if (moby->prev_seq != 2) {
             blend_moby_animation_302578(moby, 2, 0, scale_game_frames_302578(30));
@@ -7016,7 +7063,16 @@ extern void try_set_help_message(int, int) __asm__("FUN_00215130");
 
 void FUN_L06_00302fd8(char *m) {
     enum {
-        SHUTTLE_AT_INITIAL_STOP = 0
+        SHUTTLE_AT_INITIAL_STOP = 0,
+        SHUTTLE_AT_SECOND_STOP = 1,
+        SHUTTLE_AT_THIRD_STOP = 2
+    };
+    enum {
+        SHUTTLE_ROUTE_INITIAL_TO_SECOND_STOP = 0,
+        SHUTTLE_ROUTE_SECOND_TO_INITIAL_STOP = 1,
+        SHUTTLE_ROUTE_FORCED_TO_INITIAL_STOP = 2,
+        SHUTTLE_ROUTE_INITIAL_TO_THIRD_STOP = 3,
+        SHUTTLE_ROUTE_THIRD_TO_INITIAL_STOP = 4
     };
     char *d = *(char **)(m + 0x78);
     switch (*(int *)(d + 0xBC)) {
@@ -7035,10 +7091,10 @@ void FUN_L06_00302fd8(char *m) {
         }
         break;
     }
-    case 1:
+    case SHUTTLE_AT_SECOND_STOP:
         *(int *)(d + 0x9C) = 1;
         break;
-    case 2:
+    case SHUTTLE_AT_THIRD_STOP:
         *(int *)(d + 0x9C) = 4;
         break;
     }
@@ -7049,17 +7105,17 @@ void FUN_L06_00302fd8(char *m) {
         return;
     }
     switch (*(int *)(d + 0x9C)) {
-    case 0:
+    case SHUTTLE_ROUTE_INITIAL_TO_SECOND_STOP:
         try_set_help_message(10, 0x1782);
         break;
-    case 1:
-    case 4:
+    case SHUTTLE_ROUTE_SECOND_TO_INITIAL_STOP:
+    case SHUTTLE_ROUTE_THIRD_TO_INITIAL_STOP:
         try_set_help_message(10, 0x1785);
         break;
-    case 2:
+    case SHUTTLE_ROUTE_FORCED_TO_INITIAL_STOP:
         try_set_help_message(10, 0x1786);
         break;
-    case 3:
+    case SHUTTLE_ROUTE_INITIAL_TO_THIRD_STOP:
         try_set_help_message(10, 0x1784);
         break;
     }
@@ -7457,6 +7513,15 @@ extern float D_L06_001621B0 __attribute__((sda));
 extern char D_0013E633[], D_0014171B[], D_0013D24D[], D_L16_00167240[] __attribute__((section(".data")));
 void red_button_update(struct Moby *moby) __asm__("FUN_L06_00304098");
 void red_button_update(struct Moby *moby) {
+    enum {
+        INITIALIZE_RED_BUTTON = 0,
+        IDLE_AFTER_INITIALIZATION = 1,
+        ROTATE_BUTTON_AND_LINKED_MOBYS = 2,
+        WAIT_FOR_NEARBY_HELP_TRIGGER = 3,
+        WAIT_CAMERA_START_DELAY = 4,
+        RAISE_CAMERA_AND_TRIGGER_LISTED_EFFECTS = 5,
+        HOLD_OFFSET_CAMERA_UNTIL_PROGRESS_COMPLETE = 6
+    };
     Data_304098 *data = *(struct Data_304098 **)&moby->pvars;
     Vector_304098 camera_position;
     Vector_304098 camera_rotation;
@@ -7470,15 +7535,15 @@ void red_button_update(struct Moby *moby) {
     int timer;
 
     switch (moby->state) {
-    case 0:
+    case INITIALIZE_RED_BUTTON:
         moby->update_dist = 0xFF;
         moby->rot.x = fast_subtract_rotations_304098(moby->rot.x, 0.78539819f);
         moby->state = 1;
         data->f48 = -1;
         break;
-    case 1:
+    case IDLE_AFTER_INITIALIZATION:
         break;
-    case 2: {
+    case ROTATE_BUTTON_AND_LINKED_MOBYS: {
         float angle;
         approach_two_stage_304098(&data->t, &data->vel, 1.0f, frame_time_sq, frame_time_sq, frame_time);
         angle = data->vel * 0.78539819f;
@@ -7494,7 +7559,7 @@ void red_button_update(struct Moby *moby) {
         }
         break;
     }
-    case 3:
+    case WAIT_FOR_NEARBY_HELP_TRIGGER:
         if (vector_distance_304098(D_0013F3D0, &moby->pos) < 3.7f) {
             help_message_available = try_set_help_message_304098(4, 0x1783) != 0;
             if ((*(int *)(D_0013A5E0 + 0x2504) & 0x10) && help_message_available) {
@@ -7505,7 +7570,7 @@ void red_button_update(struct Moby *moby) {
             }
         }
         break;
-    case 4:
+    case WAIT_CAMERA_START_DELAY:
         if (tick_countdown_304098(&data->timer)) {
             qcopy_nc(&camera_position, &D_L06_001600EC_304098[data->cut].a);
             qcopy(&camera_rotation, &D_L06_001600EC_304098[data->cut].b);
@@ -7526,7 +7591,7 @@ void red_button_update(struct Moby *moby) {
             D_L06_0015F3FC = 1.0f - previous_value;
         }
         break;
-    case 5:
+    case RAISE_CAMERA_AND_TRIGGER_LISTED_EFFECTS:
         duration = scale_game_frames_304098(10);
         timer = data->timer;
         if (timer < duration) {
@@ -7568,7 +7633,7 @@ void red_button_update(struct Moby *moby) {
             event_304098(0, 0, moby);
         }
         break;
-    case 6:
+    case HOLD_OFFSET_CAMERA_UNTIL_PROGRESS_COMPLETE:
         approach_two_stage_304098(&data->t, &data->vel, 2.0f, frame_time_sq, frame_time_sq, frame_time + frame_time);
         qcopy(&camera_rotation, &D_L06_001600EC_304098[data->cut2].a);
         camera_rotation.z = camera_rotation.z + 1.0f;
@@ -7711,6 +7776,12 @@ extern void func_L00_00273F80_r(void *, void *, int, float, int, int, int) __asm
 
 void FUN_L06_003049f8(char *moby)
 {
+    enum {
+        INITIALIZE_VECTOR_STREAMS = 0,
+        WAIT_FOR_LINKED_MOBY = 1,
+        UPDATE_VECTOR_STREAMS = 2,
+        EMIT_PARTICLE_BURST = 3
+    };
     Data_305E38 *d = *(Data_305E38 **)(moby + 0x78);
     union {
         float tmp[30][4];
@@ -7723,7 +7794,7 @@ void FUN_L06_003049f8(char *moby)
     } u;
 
     switch ((unsigned char)moby[0x20]) {
-    case 0:
+    case INITIALIZE_VECTOR_STREAMS:
         *(float *)(moby + 0x2C) = *(float *)(*(char **)(moby + 0x24) + 0x24) * D_L06_00162210;
         D_L06_00162238 = 0x16;
         D_L06_00162234 = 0x2D;
@@ -7739,7 +7810,7 @@ void FUN_L06_003049f8(char *moby)
             moby[0x20] = 2;
         }
         break;
-    case 1: {
+    case WAIT_FOR_LINKED_MOBY: {
         char *e = D_L06_0015FFD8_301070 + (d->f10 << 8);
         if (*(short *)(e + 0xA6) == 0x463 && (unsigned char)e[0x20] < 3) {
             return;
@@ -7748,7 +7819,7 @@ void FUN_L06_003049f8(char *moby)
         *(int *)(moby + 0x94) = *(int *)(*(char **)(moby + 0x24) + 0x10);
         break;
     }
-    case 2: {
+    case UPDATE_VECTOR_STREAMS: {
         float f20;
         float f21;
         float v;
@@ -7808,7 +7879,7 @@ void FUN_L06_003049f8(char *moby)
         }
         break;
     }
-    case 3: {
+    case EMIT_PARTICLE_BURST: {
         int i;
         int j;
 

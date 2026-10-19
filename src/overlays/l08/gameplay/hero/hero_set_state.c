@@ -89,6 +89,7 @@ extern char D_L08_0017C720[];
 int hero_set_state(int a, int b) {
     enum {
         ENTER_IDLE = 0,
+        ENTER_ATTACK_COMBO = 0x13,
         ENTER_SLIP = 0x79
     };
     int old2088;
@@ -219,7 +220,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0x7C, 0, (float)scale_game_frames(0xC));
         break;
     }
-    case 0x7F: {
+    case HERO_STATE_SINK: {
         struct Hero *p = &hero;
         p->state.control_mode = 0x14;
         p->unk2284 = 0;
@@ -817,7 +818,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0x2A, 0, (float)scale_game_frames(6));
         break;
     }
-    case 0x28: {
+    case HERO_STATE_GRIND: {
         struct Hero *p = &hero;
         float pos[4];
         int seg;
@@ -1407,7 +1408,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x13:
+    case ENTER_ATTACK_COMBO:
     case 0x14:
     case 0x15:
     case 0x20:
@@ -1498,7 +1499,7 @@ int hero_set_state(int a, int b) {
             FUN_L00_00214ed8(11.0f, 0.87266463f, -1.0f);
             break;
         }
-        case 0x13: {
+        case ENTER_ATTACK_COMBO: {
             char *h = ((char *)&item_usage);
             struct Hero *q;
             T2C_231228 *e;
@@ -1646,7 +1647,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0x29, 5, (float)scale_game_frames(8));
         break;
     }
-    case 0x16: {
+    case HERO_STATE_HURT: {
         struct Hero *p = &hero;
         char *r;
         p->state.control_mode = 7;

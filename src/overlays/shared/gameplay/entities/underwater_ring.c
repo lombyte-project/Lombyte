@@ -236,6 +236,12 @@ void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 extern float D_L15_001621A0 __attribute__((sda));
 void codebot_update(struct Moby *moby) __asm__("FUN_L15_002ebd78");
 void codebot_update(struct Moby *moby) {
+    enum {
+        CODEBOT_INITIALIZE = 0,
+        CODEBOT_CHECK_HERO_PROXIMITY = 1,
+        CODEBOT_RECORD_COLLECTION = 2,
+        CODEBOT_REMOVE = 3
+    };
     unsigned char *p;
     if (current_level_index != 0xF) {
         moby->rot.z =
@@ -243,7 +249,7 @@ void codebot_update(struct Moby *moby) {
         moby->scale =
             moby->pclass->scale * D_L15_001621A0;
         switch (moby->state) {
-        case 0:
+        case CODEBOT_INITIALIZE:
             FUN_L02_002ea7d0(moby);
             if (D_0013D388_bd78[2] != 0) {
                 mark_moby_for_removal(moby);
@@ -252,7 +258,7 @@ void codebot_update(struct Moby *moby) {
                 moby->pos.z += 1.0f;
             }
             break;
-        case 1:
+        case CODEBOT_CHECK_HERO_PROXIMITY:
             FUN_L02_002ea8b0(moby);
             if (FUN_001f9b48(&moby->pos, &hero.motion.pos) < 3.0f) {
                 if (hero.state.current != 0x32) {
@@ -262,7 +268,7 @@ void codebot_update(struct Moby *moby) {
                 }
             }
             break;
-        case 2:
+        case CODEBOT_RECORD_COLLECTION:
             if (D_L15_0015F5C4 != 2) {
                 queue_dialogue_message(0x426A, -1);
                 D_L15_0015F640 = scale_game_frames(0xB4);
@@ -273,7 +279,7 @@ void codebot_update(struct Moby *moby) {
                 memcard_save_data(0, -1);
             }
             break;
-        case 3:
+        case CODEBOT_REMOVE:
             mark_moby_for_removal(moby);
             break;
         }
@@ -298,6 +304,7 @@ void giant_clank_pad_update(struct Moby *moby) __asm__("FUN_L15_002ed068");
 void giant_clank_pad_update(struct Moby *moby) {
     enum {
         GIANT_CLANK_PAD_INITIALIZE = 0,
+        GIANT_CLANK_PAD_ARM_ACTIVATION = 1,
         GIANT_CLANK_PAD_CHECK_ACTIVATION = 2
     };
     struct Moby *linked = moby->pvars;
@@ -322,7 +329,7 @@ void giant_clank_pad_update(struct Moby *moby) {
             D_0014C050[0x120 + moby->mission] != 0xff) ? 1 : 3;
         break;
     }
-    case 1:
+    case GIANT_CLANK_PAD_ARM_ACTIVATION:
         /* Fakematch: the second store gives retail's register for moby. */
         if (moby) moby->state = 2; else moby->state = 2;
         return;

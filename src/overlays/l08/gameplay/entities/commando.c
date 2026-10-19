@@ -56,6 +56,13 @@ extern void FUN_L08_002e9758(struct Moby *);
 extern void FUN_L08_002e9a18(struct Moby *);
 
 void FUN_L08_002e9b70(struct Moby *moby) {
+    enum {
+        SWARM_INITIALIZE = 0,
+        SWARM_FOLLOW_PRIMARY_PATH = 1,
+        SWARM_FOLLOW_SECONDARY_PATH = 2,
+        SWARM_START_PRIMARY_PATH = 3,
+        SWARM_DISPERSE_AND_REMOVE = 0x63
+    };
     SwarmVars *vars = (SwarmVars *)moby->pvars;
     SwarmPathFollower *follower;
     struct Moby *target;
@@ -85,7 +92,7 @@ void FUN_L08_002e9b70(struct Moby *moby) {
         vars->sound = allocate_voice_for_target_entry(3, 4, moby);
     }
     switch (moby->state) {
-    case 0:
+    case SWARM_INITIALIZE:
         if (visited52[moby->mission + current_level_index * 16] == 0xFF) {
             mark_moby_for_removal(moby);
             return;
@@ -100,7 +107,7 @@ void FUN_L08_002e9b70(struct Moby *moby) {
         moby->rot.z = fast_arc_tan(vars->follow[1].path->points[1].f[0] - moby->pos.x,
                                    vars->follow[1].path->points[1].f[1] - moby->pos.y);
         break;
-    case 1:
+    case SWARM_FOLLOW_PRIMARY_PATH:
         waypoint = (vars->follow[0].point + vars->follow[0].path->count + vars->follow[0].direction) % vars->follow[0].path->count;
         target = &D_L08_0015FFD8[vars->target_index];
         FUN_L00_00258278(moby,
@@ -143,7 +150,7 @@ void FUN_L08_002e9b70(struct Moby *moby) {
             }
         }
         break;
-    case 2:
+    case SWARM_FOLLOW_SECONDARY_PATH:
         follower = &vars->follow[1];
         next = (vars->follow[1].point + 1) % follower->path->count;
         after = (vars->follow[1].point + 2) % follower->path->count;
@@ -181,7 +188,7 @@ void FUN_L08_002e9b70(struct Moby *moby) {
             bolt->rot.y = 0.0f;
         }
         break;
-    case 3: {
+    case SWARM_START_PRIMARY_PATH: {
         SwarmPath *path;
 
         moby->state = 1;
@@ -191,7 +198,7 @@ void FUN_L08_002e9b70(struct Moby *moby) {
         FUN_L08_002e9a18(moby);
         break;
     }
-    case 0x63:
+    case SWARM_DISPERSE_AND_REMOVE:
         for (i = 0; i < 16; i++) {
             struct Moby *part = vars->parts[i].moby;
             if (part != NULL) {
@@ -215,15 +222,20 @@ extern void FUN_00213ed8_c(char *, float, float) __asm__("FUN_00213ed8");
 
 void FUN_L08_002ea398(char *m)
 {
+    enum {
+        POSITION_BASELINE_INITIALIZE = 0,
+        POSITION_FOLLOW_DRIVER = 1,
+        POSITION_APPROACH_TARGET = 2
+    };
     char *d = *(char **)(m + 0x78);
     char *o;
     int i;
     switch (*(u8 *)(m + 0x20)) {
-    case 0:
+    case POSITION_BASELINE_INITIALIZE:
         *(float *)(d + 4) = *(float *)(m + 0x18);
         *(u8 *)(m + 0x20) = 1;
         break;
-    case 1:
+    case POSITION_FOLLOW_DRIVER:
         i = *(int *)(d + 8);
         if (i < 0) break;
         o = (char *)((i << 8) + (int)D_L08_0015FFD8_g);
@@ -236,7 +248,7 @@ void FUN_L08_002ea398(char *m)
             FUN_00213ed8_c(m + 0x18, (*(float *)d - *(float *)(d + 4)) * **(float **)(o + 0x78) + *(float *)(d + 4), frame_time * 10.0f);
         }
         break;
-    case 2:
+    case POSITION_APPROACH_TARGET:
         FUN_00213ed8_c(m + 0x18, *(float *)d, frame_time * 10.0f);
         break;
     }
@@ -400,13 +412,17 @@ extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 extern Pair D_L08_00161E20[] __attribute__((section(".sdata")));
 void FUN_L08_002f1548(struct Moby *moby) {
+    enum {
+        DRAW_ELEMENTS_INITIALIZE = 0,
+        DRAW_ELEMENTS_UPDATE = 1
+    };
     int i;
     float v[4];
     float w[4];
     float d;
 
     switch (moby->state) {
-    case 0:
+    case DRAW_ELEMENTS_INITIALIZE:
         if (*(int *)&D_L08_00161E04 == 0) {
             FUN_L08_002f0f68(D_L08_001E8310, 0xD, D_L08_001E2858, 0.5f, 0.5f, 0.65f, 0.5f, 1);
             FUN_L08_002f0f68(D_L08_001DDF20, 8, D_L08_001DB518, 0.5f, 0.5f, 0.5f, 1.0f, 1);
@@ -429,7 +445,7 @@ void FUN_L08_002f1548(struct Moby *moby) {
             *(float *)&D_L08_00161E24[i].a = i * 0.4f;
         }
         break;
-    case 1:
+    case DRAW_ELEMENTS_UPDATE:
         v[0] = *(float *)&D_L08_00161DC0;
         v[1] = D_L08_00161DC4;
         v[2] = D_L08_00161DC8;
@@ -486,6 +502,12 @@ extern void FUN_L00_0025e450_44c0(char *, void *, char *, f32, f32, s32, s32, s3
 extern f32 D_L08_00161F70 __attribute__((sda));
 void FUN_L08_002f44c0(struct Moby *moby)
 {
+    enum {
+        PATH_FOLLOWER_INITIALIZE_HEIGHT_OFFSET = 0,
+        PATH_FOLLOWER_CHECK_HIT_AND_PROXIMITY = 1,
+        PATH_FOLLOWER_FOLLOW_PATH = 2,
+        PATH_FOLLOWER_FADE_OUT = 3
+    };
     SwarmPathFollower *follower = (SwarmPathFollower *)moby->pvars;
     Vec4 point;
     Vec4 step;
@@ -495,13 +517,13 @@ void FUN_L08_002f44c0(struct Moby *moby)
     f32 distance;
 
     switch (moby->state) {
-    case 0: {
+    case PATH_FOLLOWER_INITIALIZE_HEIGHT_OFFSET: {
         fade = moby->pos.z;
         moby->state = 1;
         moby->pos.z = fade + 0.4f;
         return;
     }
-    case 1: {
+    case PATH_FOLLOWER_CHECK_HIT_AND_PROXIMITY: {
         s32 active = find_moby_hit_44c0(moby, 0x330000, 0);
         distance = FUN_001f9b80_44c0(&moby->pos, D_0013F3D0);
         if ((distance < 2.0f && *(s32 *)(D_0013F3D0 + 0x2004) == 0x42) || *(struct Moby **)(D_0013F3D0 + 0x1bc) == moby) {
@@ -519,7 +541,7 @@ void FUN_L08_002f44c0(struct Moby *moby)
         }
         return;
     }
-    case 2: {
+    case PATH_FOLLOWER_FOLLOW_PATH: {
         moby->pos.z -= 0.4f;
         if (follower->path_id == -1 || follower->path->count == 0) {
             mark_moby_for_removal_44c0(moby);
@@ -561,7 +583,7 @@ void FUN_L08_002f44c0(struct Moby *moby)
         moby->pos.z += 0.4f;
         return;
     }
-    case 3: {
+    case PATH_FOLLOWER_FADE_OUT: {
         Vec4 timer;
         timer.f[0] = (f32)moby->alpha;
         approach_value_44c0(&timer, 0.0f, 128.0f / (f32)scale_game_frames_44c0(30));
@@ -1165,7 +1187,10 @@ extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_002
 void commando_update(WM *m) __asm__("FUN_L08_00302ce8");
 void commando_update(WM *m) {
     enum {
-        COMMANDO_INITIALIZE = 0
+        COMMANDO_INITIALIZE = 0,
+        COMMANDO_DIALOGUE_BEFORE_REPOSITION = 1,
+        COMMANDO_DIALOGUE_AFTER_REPOSITION = 2,
+        COMMANDO_POST_DIALOGUE = 3
     };
     L16WatchScratch scratch;
     WD8 *d = (WD8 *)m->data;
@@ -1201,7 +1226,7 @@ void commando_update(WM *m) {
         }
         initialize_npc_dialogue(m, (char *)d + 0x20);
         break;
-    case 1:
+    case COMMANDO_DIALOGUE_BEFORE_REPOSITION:
         if (update_npc_dialogue(m, (char *)d + 0x20)) {
             char *b = D_L08_001600EC;
             int j = d->joint;
@@ -1211,7 +1236,7 @@ void commando_update(WM *m) {
             D_0013D3B4 = 1;
         }
         break;
-    case 2:
+    case COMMANDO_DIALOGUE_AFTER_REPOSITION:
         if (m->flags70 & 2) {
             if (m->animation != random_integer_below(2) + 1)
                 blend_moby_animation(m, random_integer_below(2) + 1, 0, scale_game_frames(20));
@@ -1221,7 +1246,7 @@ void commando_update(WM *m) {
             begin_dialogue_camera_transition(m, 2.2f);
         }
         break;
-    case 3:
+    case COMMANDO_POST_DIALOGUE:
         if (D_L08_0015F5C4 != 2) {
             d->b28 = 1;
             if (d->h24 == 3) {

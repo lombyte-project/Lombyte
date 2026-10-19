@@ -55,6 +55,11 @@ extern int D_L14_001621A4_s __asm__("D_L14_001620D4") __attribute__((sda));
 
 extern int D_L14_001620D8 __attribute__((sda));
 void FUN_L14_003015d0(unsigned char *m) {
+    enum {
+        BEAM_STATE_INITIALIZE = 0,
+        BEAM_STATE_WAIT_FOR_TIMED_PULSE = 2,
+        BEAM_STATE_REPEAT_PULSES = 3
+    };
     D1224 *d = *(D1224 **)(m + 0x78);
     float v[4] __attribute__((aligned(16)));
     int s;
@@ -71,7 +76,7 @@ void FUN_L14_003015d0(unsigned char *m) {
     }
     s = m[0x20];
     switch (s) {
-    case 0:
+    case BEAM_STATE_INITIALIZE:
         FUN_L14_003017f8((char *)m);
         d->s10 = scale_game_frames(d->wC);
         m[0x20] = 2;
@@ -87,14 +92,14 @@ void FUN_L14_003015d0(unsigned char *m) {
             }
         }
         break;
-    case 2:
+    case BEAM_STATE_WAIT_FOR_TIMED_PULSE:
         if (fast_dec_timer_s16(&d->s10) != 0) {
             m[0x20] = 3;
             d->s10 = scale_game_frames(d->s4);
             FUN_L14_003017f8((char *)m);
         }
         break;
-    case 3:
+    case BEAM_STATE_REPEAT_PULSES:
         if (fast_dec_timer_s16(&d->s10) != 0) {
             if (d->s6 != 0) {
                 m[0x20] = 2;
@@ -594,13 +599,17 @@ extern void FUN_L00_002e2250(int, int);
 extern void FUN_L00_002e2af0(void);
 
 void FUN_L14_003039e0(unsigned char *m) {
+    enum {
+        SLOT_UPDATE_STATE_INITIALIZE = 0,
+        SLOT_UPDATE_STATE_PROCESS_SLOTS = 1
+    };
     int i;
     int j;
     int n;
     int st;
 
     switch (m[0x20]) {
-    case 0:
+    case SLOT_UPDATE_STATE_INITIALIZE:
         for (j = 0; j < 3; j++) {
             D_L14_00162148[j] = 0;
             D_L14_001621D8[j] = 0;
@@ -608,7 +617,7 @@ void FUN_L14_003039e0(unsigned char *m) {
         m[0x20] = 1;
         m[0x30] = 0xFF;
         break;
-    case 1:
+    case SLOT_UPDATE_STATE_PROCESS_SLOTS:
         n = 0;
         for (i = 0; i < 3; i++) {
             st = D_L14_00162148[i];

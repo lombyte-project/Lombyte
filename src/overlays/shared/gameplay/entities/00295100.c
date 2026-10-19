@@ -1686,6 +1686,12 @@ extern unsigned char D_001516EC[];
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 
 void FUN_L00_0029b4d8(int a) {
+    enum {
+        VENDOR_SELECTION_CHANGED = 0,
+        VENDOR_AUXILIARY_MOBY_READY = 1,
+        VENDOR_ITEM_PURCHASE = 2,
+        VENDOR_AMMO_PURCHASE = 3
+    };
     char *b;
     unsigned char *m;
     int s;
@@ -1697,7 +1703,7 @@ void FUN_L00_0029b4d8(int a) {
     b = D_L00_001CA4C0;
     m = *(unsigned char **)(b + 0x24);
     switch (a) {
-    case 0:
+    case VENDOR_SELECTION_CHANGED:
         s = m[0x20];
         if (s == 2 || s == 0) {
             if (random_integer_below(4) == 0) {
@@ -1713,7 +1719,7 @@ void FUN_L00_0029b4d8(int a) {
             }
         }
         break;
-    case 1:
+    case VENDOR_AUXILIARY_MOBY_READY:
         r1 = random_integer_below(2);
         *(int *)(b + 0x3C) = r1;
         D_L00_00161190 = a;
@@ -1723,8 +1729,8 @@ void FUN_L00_0029b4d8(int a) {
             blend_moby_animation(m, 1, 0, 10);
         m[0x20] = 10;
         break;
-    case 2:
-    case 3:
+    case VENDOR_ITEM_PURCHASE:
+    case VENDOR_AMMO_PURCHASE:
         moby_state = m[0x20];
         if (moby_state == 2 || moby_state == 0) {
             char *q = D_L00_001CA4C0;
@@ -2225,6 +2231,12 @@ void FUN_L00_0029ba78(void) {
 }
 
 void FUN_L00_0029c648(void) {
+    enum {
+        VENDOR_MENU_OPENING = 0,
+        VENDOR_MENU_OPEN = 1,
+        VENDOR_MENU_CLOSING = 2,
+        VENDOR_MENU_EXIT_CUTSCENE = 3
+    };
     Vec4 a;
     Vec4 b;
     f32 m[4][4];
@@ -2250,8 +2262,8 @@ void FUN_L00_0029c648(void) {
     u8 flag;
 
     switch (vendor_menu.state) {
-    case 0:
-    case 2:
+    case VENDOR_MENU_OPENING:
+    case VENDOR_MENU_CLOSING:
         if (vendor_menu.f40 == 0 || vendor_menu.state == 2) {
             if ((g_debug_menu.update_flags & 2) || ((g_debug_menu.update_flags & 0x10) && (D_0013CAE4 & 0x200))) {
                 FUN_L00_00297e30();
@@ -2324,7 +2336,7 @@ void FUN_L00_0029c648(void) {
             FUN_L00_00297e70();
         }
         break;
-    case 1:
+    case VENDOR_MENU_OPEN:
         if (D_L00_00161188 == 0 && cd_read_active[0] == 0 && D_L00_0016118C != 0) {
             FUN_L00_0029a330();
             vendor_menu.f24 = vendor_menu.f14;
@@ -2528,7 +2540,7 @@ void FUN_L00_0029c648(void) {
         }
         FUN_L00_0023ac78(1);
         break;
-    case 3:
+    case VENDOR_MENU_EXIT_CUTSCENE:
         FUN_L00_00297e30();
         update_visible_resident_objects();
         FUN_0022dc50();

@@ -420,9 +420,23 @@ extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68
 void FUN_L13_002c25b8(unsigned char *moby) {
     enum {
         UPDATE_INITIALIZE = 0,
+        TRACK_TARGET_BEFORE_ATTACK = 2,
+        FIRE_ALTERNATING_SHOTS = 3,
+        UPDATE_ATTACK_SEQUENCE = 4,
+        WAIT_TO_MOVE_TO_TABLE_POINT = 5,
         MOVE_TO_TABLE_POINT = 6,
-        EMIT_EFFECT_AND_REMOVE = 8,
-        FIRE_ALTERNATING_SHOTS = 3
+        EMIT_EFFECT_AND_REMOVE = 8
+    };
+    enum {
+        WAIT_TO_RESUME_ATTACK_SEQUENCE = 7
+    };
+    enum {
+        START_ATTACK_ANIMATION_SEQUENCE = 0,
+        WAIT_FOR_ATTACK_START_ANIMATION = 1,
+        WAIT_TO_BEGIN_ALTERNATING_FIRE = 2,
+        WAIT_TO_ADVANCE_ATTACK_EXIT_SEQUENCE = 4,
+        SELECT_ATTACK_RESTART_OR_EXIT = 5,
+        WAIT_TO_COMPLETE_ATTACK_EXIT_SEQUENCE = 6
     };
     unsigned char *d = *(unsigned char **)(moby + 0x78);
     unsigned char *target;
@@ -456,7 +470,7 @@ void FUN_L13_002c25b8(unsigned char *moby) {
         *(float *)(d + 0x10C) = random_angle_radians_c();
         *(int *)(d + 0x110) = -1;
         break;
-    case 5:
+    case WAIT_TO_MOVE_TO_TABLE_POINT:
         if (*(int *)(d + 0xB4) == 2) return;
         moby[0xBC] = 0;
         moby[0x20] = 6;
@@ -476,7 +490,7 @@ void FUN_L13_002c25b8(unsigned char *moby) {
             moby[0x20] = 2;
         }
         break;
-    case 2:
+    case TRACK_TARGET_BEFORE_ATTACK:
         rot = (float *)(moby + 0x48);
         f = fast_arc_tan(*(float *)(target + 0x10) - *(float *)(moby + 0x10), *(float *)(target + 0x14) - *(float *)(moby + 0x14));
         approach_angle(rot, (float *)(d + 0xDC), f, frame_time_sq * 4.712389f, frame_time_sq * 4.712389f, frame_time * 10.12291f);
@@ -486,18 +500,18 @@ void FUN_L13_002c25b8(unsigned char *moby) {
         if (moby[0x53] != 1) blend_moby_animation_c13(moby, 1, 0, 0);
         moby[0x20] = 4;
         break;
-    case 4:
+    case UPDATE_ATTACK_SEQUENCE:
         rot = (float *)(moby + 0x48);
         f = fast_arc_tan(*(float *)(target + 0x10) - *(float *)(moby + 0x10), *(float *)(target + 0x14) - *(float *)(moby + 0x14));
         approach_angle(rot, (float *)(d + 0xDC), f, frame_time_sq * 12.566371f, frame_time_sq * 25.132742f, frame_time * 6.2831855f);
         switch (moby[0xBC]) {
-        case 1:
+        case WAIT_FOR_ATTACK_START_ANIMATION:
             if (!(moby[0x70] & 2)) return;
             moby[0xBC] = 2;
             if (moby[0x53] != 2) blend_moby_animation_c13(moby, 2, 0, 2);
             *(int *)(d + 0xE8) = 0;
             break;
-        case 2:
+        case WAIT_TO_BEGIN_ALTERNATING_FIRE:
             if (!(moby[0x70] & 2)) return;
             moby[0xBC] = 3;
             if (moby[0x53] != 3) blend_moby_animation_c13(moby, 3, 0, 2);
@@ -533,12 +547,12 @@ void FUN_L13_002c25b8(unsigned char *moby) {
             if (moby[0x53] != 4) blend_moby_animation_c13(moby, 4, 0, 2);
             moby[0xBC] = 4;
             break;
-        case 4:
+        case WAIT_TO_ADVANCE_ATTACK_EXIT_SEQUENCE:
             if (!(moby[0x70] & 2)) return;
             moby[0xBC] = 5;
             if (moby[0x53] != 5) blend_moby_animation_c13(moby, 5, 0, 2);
             break;
-        case 5:
+        case SELECT_ATTACK_RESTART_OR_EXIT:
             if (*(int *)(d + 0xB4) == 2) {
                 if (moby[0x53] != 6) blend_moby_animation_c13(moby, 6, 0, 2);
                 moby[0xBC] = 6;
@@ -547,7 +561,7 @@ void FUN_L13_002c25b8(unsigned char *moby) {
                 if (moby[0x53] != 2) blend_moby_animation_c13(moby, 2, 0, 2);
             }
             break;
-        case 6:
+        case WAIT_TO_COMPLETE_ATTACK_EXIT_SEQUENCE:
             if (!(moby[0x70] & 2)) return;
             if (*(int *)(d + 0xB4) == 2) {
                 if (moby[0x53] != 0) blend_moby_animation_c13(moby, 0, 0, 2);
@@ -555,7 +569,7 @@ void FUN_L13_002c25b8(unsigned char *moby) {
                 moby[0xBC] = 0;
                 break;
             }
-        case 0:
+        case START_ATTACK_ANIMATION_SEQUENCE:
             moby[0xBC] = 1;
             if (moby[0x53] != 1) blend_moby_animation_c13(moby, 1, 0, 2);
             break;
@@ -568,7 +582,7 @@ void FUN_L13_002c25b8(unsigned char *moby) {
         if (*(void **)(d + 0xFC)) mark_moby_for_removal(*(void **)(d + 0xFC));
         mark_moby_for_removal(moby);
         break;
-    case 7:
+    case WAIT_TO_RESUME_ATTACK_SEQUENCE:
         if (!(moby[0x70] & 2)) return;
         if (moby[0x53] != moby[0xBC]) blend_moby_animation_c13(moby, moby[0xBC], 0, 10);
         moby[0x20] = 4;
@@ -600,7 +614,10 @@ extern float D_L13_00161490 __attribute__((sda));
 
 void FUN_L13_002c2d30(unsigned char *moby) {
     enum {
-        HIT_REACTION_LETHAL = 1
+        HIT_REACTION_NONE = 0,
+        HIT_REACTION_LETHAL = 1,
+        HIT_REACTION_REMOVE = 2,
+        HIT_REACTION_NO_HIT = 11
     };
     unsigned char *d;
     char *r;
@@ -680,13 +697,13 @@ void FUN_L13_002c2d30(unsigned char *moby) {
             d[0x67] = 0x78;
             break;
         case HIT_REACTION_LETHAL:
-        case 2:
+        case HIT_REACTION_REMOVE:
             FUN_L00_00257470(moby, 0, -1);
             moby[0x20] = 8;
             d[0x67] = 0xF0;
             break;
-        case 0:
-        case 11:
+        case HIT_REACTION_NONE:
+        case HIT_REACTION_NO_HIT:
         default:
             break;
         }
@@ -728,15 +745,18 @@ extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9
 
 void FUN_L13_002c37e0(struct Moby *moby, unsigned char *d, float *fp) {
     enum {
-        HIT_REACTION_NONE = 0
+        HIT_REACTION_NONE = 0,
+        HIT_REACTION_LETHAL = 1,
+        HIT_REACTION_REMOVE = 2,
+        HIT_REACTION_NO_HIT = 11
     };
     if (moby->state != 3) {
         int cnt;
         float vec[4];
         char *t = find_moby_hit(moby, 0x330000, 0);
         switch (hit_reaction(moby, t, fp, 0, &cnt, 0, 0, 4)) {
-        case 1:
-        case 2:
+        case HIT_REACTION_LETHAL:
+        case HIT_REACTION_REMOVE:
             *fp = 0;
             break;
         case HIT_REACTION_NONE:
@@ -748,7 +768,7 @@ void FUN_L13_002c37e0(struct Moby *moby, unsigned char *d, float *fp) {
         case 8:
         case 9:
         case 10:
-        case 11:
+        case HIT_REACTION_NO_HIT:
             break;
         }
         if (cnt >= 2) {
@@ -1131,6 +1151,21 @@ extern int func_L13_002C5248_56B0(void *, void *, int) __asm__("FUN_L13_002c3fc0
 extern int func_001FA898_s(float) __asm__("FUN_001fa6d0");
 
 void FUN_L13_002c4428(Moby_2C56B0 *moby) {
+    enum {
+        FIGHTER_INITIALIZE = 0,
+        FIGHTER_WAIT_TO_JOIN_PATH = 1,
+        FIGHTER_FOLLOW_PATH_AND_ATTACK = 2,
+        FIGHTER_EMIT_DESTRUCTION_EFFECTS = 3,
+        FIGHTER_WAIT_TO_REINITIALIZE = 4
+    };
+    enum {
+        FIGHTER_ATTACK_WAIT_TO_FIRE = 0,
+        FIGHTER_ATTACK_FIRE = 1,
+        FIGHTER_ATTACK_COOLDOWN = 2
+    };
+    enum {
+        FIGHTER_DESTRUCTION_SPAWN_CLASS_E0 = 0
+    };
     Data_2C56B0 *d;
     Moby_2C56B0 *veh;
     Veh_2C56B0 *vehd = 0;
@@ -1148,7 +1183,7 @@ void FUN_L13_002c4428(Moby_2C56B0 *moby) {
         path = D_L13_001B07B0[d->fA0];
     }
     switch (moby->state) {
-    case 0:
+    case FIGHTER_INITIALIZE:
         if (moby->b30 == 0 && moby->h32 == 0) {
             mark_moby_for_removal(moby);
             return;
@@ -1176,7 +1211,7 @@ void FUN_L13_002c4428(Moby_2C56B0 *moby) {
         moby->b31 = 0;
         d->bD0 = 1;
         break;
-    case 1: {
+    case FIGHTER_WAIT_TO_JOIN_PATH: {
         Moby_2C56B0 *p;
         if (d->fBC == -1 || (p = (Moby_2C56B0 *)(D_L13_0015FFD8 + (d->fBC << 8))) == 0 || p->state == 0xFE
             || p->state == 0xFD || p->bBC == 4) {
@@ -1192,7 +1227,7 @@ void FUN_L13_002c4428(Moby_2C56B0 *moby) {
         }
         break;
     }
-    case 2: {
+    case FIGHTER_FOLLOW_PATH_AND_ATTACK: {
         Moby_2C56B0 *boss;
         Boss_2C56B0 *bossd;
         float dist;
@@ -1240,7 +1275,7 @@ void FUN_L13_002c4428(Moby_2C56B0 *moby) {
         }
         func_L13_002C5248_56B0(moby, d, 1);
         switch (moby->bBC) {
-        case 0:
+        case FIGHTER_ATTACK_WAIT_TO_FIRE:
             if (vehd != 0 && veh->state == 4 && moby->b31 != 0 && close != 0 && boss != 0 && bossd->b10F < 3) {
                 d->fB8 = scale_game_frames_alt(0x258);
                 d->fAC = 1.0f;
@@ -1248,7 +1283,7 @@ void FUN_L13_002c4428(Moby_2C56B0 *moby) {
                 moby->bBC = 1;
             }
             break;
-        case 1:
+        case FIGHTER_ATTACK_FIRE:
             if (boss != 0) {
                 bossd->b10F++;
             }
@@ -1299,7 +1334,7 @@ void FUN_L13_002c4428(Moby_2C56B0 *moby) {
                 }
             }
             break;
-        case 2:
+        case FIGHTER_ATTACK_COOLDOWN:
             if (tick_countdown_32_alt(&d->fB8) != 0) {
                 moby->bBC = 0;
             }
@@ -1307,7 +1342,7 @@ void FUN_L13_002c4428(Moby_2C56B0 *moby) {
         }
         break;
     }
-    case 3: {
+    case FIGHTER_EMIT_DESTRUCTION_EFFECTS: {
         Moby_2C56B0 *boss;
         Boss_2C56B0 *bossd;
 
@@ -1324,7 +1359,7 @@ void FUN_L13_002c4428(Moby_2C56B0 *moby) {
         subtract_vector_xyz_c(spawn_position, &moby->pos, scratch_vector);
         scale_vector_xyz(scratch_vector, &d->vel, 0.5f);
         switch (rand() % 10) {
-        case 0:
+        case FIGHTER_DESTRUCTION_SPAWN_CLASS_E0:
             FUN_L13_002e1c50((char *)spawn_position, 0xE0);
             break;
         case 1:
@@ -1359,7 +1394,7 @@ void FUN_L13_002c4428(Moby_2C56B0 *moby) {
         moby->flags = (moby->flags | 0x41) & 0xEFFF;
         break;
     }
-    case 4: {
+    case FIGHTER_WAIT_TO_REINITIALIZE: {
         Moby_2C56B0 *p;
         if (d->fBC != -1 && (p = (Moby_2C56B0 *)(D_L13_0015FFD8 + (d->fBC << 8))) != 0 && p->state != 0xFE
             && p->state != 0xFD && p->bBC != 4) {
@@ -1407,6 +1442,13 @@ typedef struct Data_2C7F38 {
 } Data_2C7F38;
 
 void FUN_L13_002c7f38(struct Moby *moby) {
+    enum {
+        INITIALIZE_ROTATION = 0,
+        WAIT_TO_ADVANCE_ROTATION = 1,
+        ADVANCE_ROTATION = 2,
+        HOLD_ROTATION_OFFSET = 3,
+        REVERSE_ROTATION = 4
+    };
     Data_2C7F38 *data = (Data_2C7F38 *)moby->pvars;
     struct Moby *linked;
     float step;
@@ -1418,7 +1460,7 @@ void FUN_L13_002c7f38(struct Moby *moby) {
     }
 
     switch (moby->state) {
-    case 0:
+    case INITIALIZE_ROTATION:
         qcopy(data, &moby->rot);
         moby->state = data->start_active == 0 ? 1 : 2;
         data->progress = 0.0f;
@@ -1426,7 +1468,7 @@ void FUN_L13_002c7f38(struct Moby *moby) {
             moby->scale = moby->pclass->scale * data->initial_scale;
         }
         return;
-    case 1:
+    case WAIT_TO_ADVANCE_ROTATION:
         if (data->linked_index != -1 &&
             (linked = (struct Moby *)(D_L13_0015FFD8 + data->linked_index * 0x100)) != 0 &&
             linked->state != 0xFE && linked->state != 0xFD && linked->state != data->active_state) {
@@ -1438,7 +1480,7 @@ void FUN_L13_002c7f38(struct Moby *moby) {
         data->progress = 0.0f;
         moby->state = 2;
         break;
-    case 2:
+    case ADVANCE_ROTATION:
         if (data->linked_index != -1 &&
             (linked = (struct Moby *)(D_L13_0015FFD8 + data->linked_index * 0x100)) != 0 &&
             linked->state != 0xFE && linked->state != 0xFD && linked->state == data->inactive_state) {
@@ -1469,7 +1511,7 @@ void FUN_L13_002c7f38(struct Moby *moby) {
             return;
         }
         break;
-    case 3:
+    case HOLD_ROTATION_OFFSET:
         if (data->linked_index == -1) return;
         linked = (struct Moby *)(D_L13_0015FFD8 + data->linked_index * 0x100);
         if (linked == 0 || linked->state == 0xFE || linked->state == 0xFD || linked->state != data->inactive_state) return;
@@ -1479,7 +1521,7 @@ void FUN_L13_002c7f38(struct Moby *moby) {
         }
         moby->state = 4;
         break;
-    case 4:
+    case REVERSE_ROTATION:
         if (data->linked_index == -1 ||
             (linked = (struct Moby *)(D_L13_0015FFD8 + data->linked_index * 0x100)) == 0 ||
             linked->state == 0xFE || linked->state == 0xFD || linked->state == data->active_state) {
@@ -1652,7 +1694,9 @@ extern char D_L13_001f49a8[];
 
 void FUN_L13_002cecb8(struct Moby *moby, unsigned char *d, float *health) {
     enum {
-        HIT_REACTION_LETHAL = 1
+        HIT_REACTION_NONE = 0,
+        HIT_REACTION_LETHAL = 1,
+        HIT_REACTION_NO_HIT = 11
     };
     char *src;
     int hit;
@@ -1673,7 +1717,7 @@ void FUN_L13_002cecb8(struct Moby *moby, unsigned char *d, float *health) {
         case 2:
             *health = 0.0f;
             break;
-        case 0:
+        case HIT_REACTION_NONE:
         case 3:
         case 4:
         case 5:
@@ -1682,7 +1726,7 @@ void FUN_L13_002cecb8(struct Moby *moby, unsigned char *d, float *health) {
         case 8:
         case 9:
         case 10:
-        case 11:
+        case HIT_REACTION_NO_HIT:
             break;
         }
         if (hit >= 2) {
@@ -1745,6 +1789,16 @@ extern int linked_state_flags[] __asm__("D_L13_001847A8");
 
 void forcefield_tower_update(struct Moby *moby) __asm__("FUN_L13_002cefc0");
 void forcefield_tower_update(struct Moby *moby) {
+    enum {
+        TOWER_STATE_INITIALIZE = 0,
+        TOWER_STATE_ACTIVE = 1,
+        TOWER_STATE_DESTRUCTION = 2
+    };
+    enum {
+        TOWER_DESTRUCTION_WAIT_FOR_POINT_1_EFFECT = 0,
+        TOWER_DESTRUCTION_WAIT_FOR_POINT_2_EFFECT = 1,
+        TOWER_DESTRUCTION_WAIT_FOR_POINT_3_EFFECT = 2
+    };
     unsigned char *m = (unsigned char *)moby;
     int *data = *(int **)(m + 0x78);
     float position[4];
@@ -1760,7 +1814,7 @@ void forcefield_tower_update(struct Moby *moby) {
     int state = m[0x20];
 
     switch (state) {
-    case 0: {
+    case TOWER_STATE_INITIALIZE: {
         m[0xBC] = 0;
         m[0x20] = 1;
         if (m[0x30] < *(short *)(m + 0x32)) m[0x30] = m[0x32];
@@ -1778,7 +1832,7 @@ void forcefield_tower_update(struct Moby *moby) {
         *(unsigned short *)(m + 0x34) &= 0xEFFF;
         return;
     }
-    case 1: {
+    case TOWER_STATE_ACTIVE: {
         linked_index = data[0x74 / 4];
         if (linked_index != -1) linked_state_flags[linked_index] = 0;
         if (data[0x70 / 4] == -1) goto allocate_voice;
@@ -1805,15 +1859,15 @@ voice_done:
         FUN_L13_002cecb8(moby, (unsigned char *)data, (float *)((char *)data + 0x20));
         return;
     }
-    case 2: {
+    case TOWER_STATE_DESTRUCTION: {
         *(u128z *)velocity = 0;
         velocity[2] = D_0015ED6C * 8.0f;
         *(u128z *)position = *(u128z *)velocity;
         threshold = 1000.0f;
         switch ((int)m[0xBC]) {
-        case 0: threshold = 8.5f; break;
-        case 1: threshold = 17.0f; break;
-        case 2: threshold = 17.0f; break;
+        case TOWER_DESTRUCTION_WAIT_FOR_POINT_1_EFFECT: threshold = 8.5f; break;
+        case TOWER_DESTRUCTION_WAIT_FOR_POINT_2_EFFECT: threshold = 17.0f; break;
+        case TOWER_DESTRUCTION_WAIT_FOR_POINT_3_EFFECT: threshold = 17.0f; break;
         }
         if (threshold < 100.0f && is_value_within_interpolated_window(moby, threshold)) {
             moby_point_position(moby, m[0xBC] + 1, velocity);
@@ -1885,13 +1939,13 @@ char *FUN_L13_002e1140(char *owner, char *pos, char *vec, int remaining_split_co
         }
         r = random_float_between_alt(-180.0f, 180.0f) * DEG_TO_RAD * frame_time;
         switch (rand() % 3) {
-        case 0:
+        case SPIN_AXIS_X:
             *(float *)(d + 0x30) = r;
             break;
-        case 1:
+        case SPIN_AXIS_Y:
             *(float *)(d + 0x34) = r;
             break;
-        case 2:
+        case SPIN_AXIS_Z:
             *(float *)(d + 0x38) = r;
             break;
         }
@@ -2015,6 +2069,18 @@ extern char *moby_base_1638 __asm__("D_L13_0015FFD8");
 /* Blob update: waits on its home point, jumps out at the hero when the ship comes near, splits when it hits something, and respawns. */
 void asteroid_update(struct Moby *moby) __asm__("FUN_L13_002e1638");
 void asteroid_update(struct Moby *moby) {
+    enum {
+        SPIN_AXIS_X = 0,
+        SPIN_AXIS_Y = 1,
+        SPIN_AXIS_Z = 2
+    };
+    enum {
+        ASTEROID_INITIALIZE = 0,
+        ASTEROID_WAIT_TO_LAUNCH = 1,
+        ASTEROID_MOVE_AND_COLLIDE = 2,
+        ASTEROID_RESET_AT_HOME = 3,
+        ASTEROID_WAIT_TO_RESPAWN = 4
+    };
     struct BlobVars *vars = (struct BlobVars *)moby->pvars;
     f32 distance = distance_xyz_1638(&moby->pos, &hero_pos_1638);
     f32 size;
@@ -2022,7 +2088,7 @@ void asteroid_update(struct Moby *moby) {
     char *hit;
 
     switch (moby->state) {
-    case 0:
+    case ASTEROID_INITIALIZE:
         qcopy(&vars->home, &moby->pos);
         vars->home.w = 20.0f;
         qcopy(vars->dir, &moby->rot_row0);
@@ -2033,14 +2099,14 @@ void asteroid_update(struct Moby *moby) {
         }
         moby->state = 3;
         break;
-    case 1:
+    case ASTEROID_WAIT_TO_LAUNCH:
         if (hero_1638.state.current == 0x32 && hero_1638.ship_moby != 0 && hero_1638.ship_moby->oclass == 0x45
             && (moby->visible != 0 || distance < 40.0f)) {
             normalize_vector_xyz_1638(vars, vars->dir, random_float_between_1638(1.0f, 10.0f) * frame_time);
             moby->state = 2;
         }
         break;
-    case 2:
+    case ASTEROID_MOVE_AND_COLLIDE:
         tick_countdown_16_1638(&vars->cooldown);
         add_vector_xyz_1638(&moby->pos, &moby->pos, vars);
         if (moby->visible != 0 || distance < 40.0f) {
@@ -2086,30 +2152,30 @@ void asteroid_update(struct Moby *moby) {
             moby->scale = vars->start_scale;
         }
         break;
-    case 3:
+    case ASTEROID_RESET_AT_HOME:
         qcopy(&moby->pos, &vars->home);
         qzero(&vars->spin);
         spin = random_float_between_1638(-30.0f, 30.0f) * DEG_TO_RAD * frame_time;
         switch (rand_1638() % 3) {
-        case 0:
+        case SPIN_AXIS_X:
             vars->spin.x = spin;
             break;
-        case 1:
+        case SPIN_AXIS_Y:
             vars->spin.y = spin;
             break;
-        case 2:
+        case SPIN_AXIS_Z:
             vars->spin.z = spin;
             break;
         }
         spin = random_float_between_1638(-180.0f, 180.0f) * DEG_TO_RAD * frame_time;
         switch (rand_1638() % 3) {
-        case 0:
+        case SPIN_AXIS_X:
             vars->spin.x = spin;
             break;
-        case 1:
+        case SPIN_AXIS_Y:
             vars->spin.y = spin;
             break;
-        case 2:
+        case SPIN_AXIS_Z:
             vars->spin.z = spin;
             break;
         }
@@ -2123,7 +2189,7 @@ void asteroid_update(struct Moby *moby) {
         }
         moby->state = 1;
         break;
-    case 4:
+    case ASTEROID_WAIT_TO_RESPAWN:
         if (FUN_001fa728_1638(moby->draw_dist, &vars->home) < 0) {
             qcopy(&moby->pos, &vars->home);
             moby->collision = moby->pclass->collision;
@@ -2160,7 +2226,10 @@ void asteroid_update(struct Moby *moby) {
 
 int FUN_L13_002e4300(struct Moby *m, char *arg, float *t) {
     enum {
-        HIT_REACTION_NONE = 0
+        HIT_REACTION_NONE = 0,
+        HIT_REACTION_LETHAL = 1,
+        HIT_REACTION_REMOVE = 2,
+        HIT_REACTION_NO_HIT = 11
     };
     char *r = find_moby_hit(m, 0x330000, 0);
     int n;
@@ -2169,10 +2238,10 @@ int FUN_L13_002e4300(struct Moby *m, char *arg, float *t) {
     switch (hit_reaction(m, r, t, 0, &n, 0, 0, 4)) {
     case HIT_REACTION_NONE:
         break;
-    case 1:
+    case HIT_REACTION_LETHAL:
         *(int *)t = 0;
         break;
-    case 2:
+    case HIT_REACTION_REMOVE:
         *(int *)t = 0;
         break;
     case 3:
@@ -2183,7 +2252,7 @@ int FUN_L13_002e4300(struct Moby *m, char *arg, float *t) {
     case 8:
     case 9:
     case 10:
-    case 11:
+    case HIT_REACTION_NO_HIT:
         break;
     }
     e = arg + 0x60;
@@ -2241,6 +2310,13 @@ typedef struct {
 } SwitchVars;
 #define MIN(a, b) ((a) < (b) ? (a) : (b))
 void FUN_L13_002e4448(char *moby) {
+    enum {
+        INITIALIZE_LINKED_GROUP = 0,
+        MONITOR_LINKED_GROUP_HITS = 1,
+        WAIT_FOR_LINKED_GROUP_COMPLETION = 2,
+        RESET_HIT_STATE = 3,
+        UPDATE_OPENED_STATE = 4
+    };
     SwitchVars *data = *(SwitchVars **)(moby + 0x78);
     int hit = 0;
 
@@ -2248,7 +2324,7 @@ void FUN_L13_002e4448(char *moby) {
         hit = FUN_L13_002e4300((struct Moby *)moby, data, &data->unk20);
     }
     switch ((unsigned char)moby[0x20]) {
-    case 0:
+    case INITIALIZE_LINKED_GROUP:
         if (data->unk79 == 0) {
             char *iter[4];
             char *linked;
@@ -2277,8 +2353,8 @@ void FUN_L13_002e4448(char *moby) {
         set_moby_color(moby, 0x80, 0x80, 0x80);
         moby[0x20] = 1;
         break;
-    case 1:
-    case 2:
+    case MONITOR_LINKED_GROUP_HITS:
+    case WAIT_FOR_LINKED_GROUP_COMPLETION:
         if (data->unk74 == 0 && hit != 0) {
             char *linked;
             SwitchVars *linked_data;
@@ -2322,7 +2398,7 @@ void FUN_L13_002e4448(char *moby) {
             }
         }
         break;
-    case 3:
+    case RESET_HIT_STATE:
         set_moby_color(moby, 0x80, 0x80, 0x80);
 
         data->unk7A = 0;
@@ -2331,7 +2407,7 @@ void FUN_L13_002e4448(char *moby) {
         moby[0x20] = 1;
 
         break;
-    case 4:
+    case UPDATE_OPENED_STATE:
         if (data->unk79 == 0 && data->unk70 != -1) {
             if (fast_dec_timer_s16(&data->unk70) != 0) {
 
@@ -2397,16 +2473,23 @@ extern void FUN_L00_0024efb0(unsigned char *, int, int);
 
 /* Fades the moby in (state 1), holds until its owner is gone or dying (state 2), fades it out (state 3) and removes it (state 4), easing its scale toward the class scale and spinning it all the while. */
 void FUN_L13_002e84d8(struct Moby *moby) {
+    enum {
+        INITIALIZE_COLLISION = 0,
+        FADE_IN = 1,
+        WAIT_FOR_OWNER_REMOVAL = 2,
+        FADE_OUT = 3,
+        REMOVE_MOBY = 4
+    };
     int *d = (int *)moby->pvars;
     int old;
     int step;
 
     switch (moby->state) {
-    case 0:
+    case INITIALIZE_COLLISION:
         moby->collision = moby->pclass->collision;
         moby->state = 1;
         break;
-    case 1: {
+    case FADE_IN: {
         float fade = frame_scale * 0.02f;
         moby->scale +=
             (moby->pclass->scale * 4.0f - moby->scale) * 0.1f;
@@ -2418,14 +2501,14 @@ void FUN_L13_002e84d8(struct Moby *moby) {
         moby->alpha = truncate_float_to_s32(((float *)d)[1] * 60.0f);
         break;
     }
-    case 2:
+    case WAIT_FOR_OWNER_REMOVAL:
         moby->scale +=
             (moby->pclass->scale * 4.0f - moby->scale) * 0.1f;
         if (d[0] == 0 || ((unsigned char *)d[0])[0x20] == 0xFE || ((unsigned char *)d[0])[0x20] == 0xFD) {
             moby->state = 3;
         }
         break;
-    case 3: {
+    case FADE_OUT: {
         float fade = frame_scale * 0.02f;
         moby->scale +=
             (moby->pclass->scale - moby->scale) * 0.1f;
@@ -2437,7 +2520,7 @@ void FUN_L13_002e84d8(struct Moby *moby) {
         moby->alpha = truncate_float_to_s32(((float *)d)[1] * 60.0f);
         break;
     }
-    case 4:
+    case REMOVE_MOBY:
         mark_moby_for_removal(moby);
         return;
     }
@@ -3038,6 +3121,11 @@ extern void func_L00_0025E590_2EAE80(void *, void *) __asm__("FUN_L00_0025d538")
 extern int func_L13_002E9B30_2EAE80(void *, void *, int, int) __asm__("FUN_L13_002e86f8");
 
 void FUN_L13_002e9a48(Moby_2EAE80 *m, Data_2EAE80 *d) {
+    enum {
+        DAMAGE_STAGE_QUEUE_RANDOM_LINE = 1,
+        DAMAGE_STAGE_START_TIMER_AND_QUEUE_LINE = 2,
+        DAMAGE_STAGE_QUEUE_SINGLE_LINE = 3
+    };
     int hit;
     int rf;
     int mode;
@@ -3234,14 +3322,14 @@ void FUN_L13_002e9a48(Moby_2EAE80 *m, Data_2EAE80 *d) {
                 switch (m->bBC - 1) {
                 case 0:
                     break;
-                case 1:
+                case DAMAGE_STAGE_QUEUE_RANDOM_LINE:
                     func_L13_002E9B30_2EAE80(m, d, 0xC, 4);
                     break;
-                case 2:
+                case DAMAGE_STAGE_START_TIMER_AND_QUEUE_LINE:
                     d->f100 = func_001F9850_2EAE80(0x78);
                     func_L13_002E9B30_2EAE80(m, d, 0x10, 1);
                     break;
-                case 3:
+                case DAMAGE_STAGE_QUEUE_SINGLE_LINE:
                     func_L13_002E9B30_2EAE80(m, d, 0x11, 1);
                     break;
                 case 4:

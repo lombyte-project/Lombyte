@@ -84,6 +84,10 @@ extern int D_0015EEA4_macro __asm__("D_0015EEA4") MACRO_ADDR;
 extern s32 current_level_index_macro __asm__("D_0015ED84") MACRO_ADDR;
 /* Novalis tutorial hint triggers: plays help messages and counts usage stats. */
 void FUN_L01_0030acb8(struct Moby *moby) {
+    enum {
+        TUTORIAL_HINT_STATE_INITIALIZE = 0,
+        TUTORIAL_HINT_STATE_UPDATE = 1
+    };
     s32 *data;
     struct Moby *m;
     struct Moby *m2;
@@ -92,13 +96,13 @@ void FUN_L01_0030acb8(struct Moby *moby) {
     data = (s32 *)moby->pvars;
     tick_countdown_32(&data[6]);
     switch (moby->state) {
-    case 0:
+    case TUTORIAL_HINT_STATE_INITIALIZE:
         data[5] = 0;
         moby->update_dist = 0xFF;
         moby->state = 1;
         data[10] = 0;
         break;
-    case 1:
+    case TUTORIAL_HINT_STATE_UPDATE:
         if (level_frame_count < scale_game_frames(400) && usage_stats.stat[12].count != 0 && usage_stats.stat[11].count == 0) {
             if (scale_game_frames(D_0015EEA4_macro) - usage_stats.stat[12].unk2 * 600 < scale_game_frames(1100) && help_records[0x51].v >= 0) {
                 help_request(0x4E27, 0x51);
@@ -438,6 +442,10 @@ extern void render_environment_mapped_object(void) __asm__("FUN_002327a0");
 
 /* Cutscene effects: camera targets, splashes, sparks and trails keyed on the cutscene scene and frame. */
 void FUN_L01_0030c190(struct Moby *moby) {
+    enum {
+        CUTSCENE_FX_STATE_INITIALIZE = 0,
+        CUTSCENE_FX_STATE_UPDATE = 1
+    };
     FxVec a;
     FxVec b;
     FxVec c;
@@ -456,11 +464,11 @@ void FUN_L01_0030c190(struct Moby *moby) {
     s32 node;
 
     switch (moby->state) {
-    case 0:
+    case CUTSCENE_FX_STATE_INITIALIZE:
         moby->update_dist = 0xFF;
         moby->state = 1;
         break;
-    case 1:
+    case CUTSCENE_FX_STATE_UPDATE:
         if (cutscene_mode_macro == 2) {
             if (fx_cutscene.scene == 1 || (fx_cutscene.scene == 2 && fx_cutscene.frame <= scale_game_frames(148)) ||
                 fx_cutscene.scene == 3 || fx_cutscene.scene == 4) {
@@ -592,16 +600,21 @@ void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 
 void tall_shroom_update(TriggerMoby *obj) __asm__("FUN_L01_0030d0f0");
 void tall_shroom_update(TriggerMoby *obj) {
+    enum {
+        TALL_SHROOM_STATE_INITIALIZE = 0,
+        TALL_SHROOM_STATE_WAIT_FOR_HIT = 1,
+        TALL_SHROOM_STATE_REMOVE_WITH_EFFECTS = 2
+    };
     TriggerHit *hit;
     s32 flag;
 
     flag = 0;
     hit = find_moby_hit(obj, 0x10000, 0);
     switch (obj->state) {
-    case 0:
+    case TALL_SHROOM_STATE_INITIALIZE:
         obj->state = 1;
         break;
-    case 1:
+    case TALL_SHROOM_STATE_WAIT_FOR_HIT:
         if (hit != 0 && hit->f2c > 0.0f) {
             flag = 1;
         }
@@ -609,7 +622,7 @@ void tall_shroom_update(TriggerMoby *obj) {
             obj->state = 2;
         }
         break;
-    case 2:
+    case TALL_SHROOM_STATE_REMOVE_WITH_EFFECTS:
         allocate_voice_for_target_entry(0, 0, obj);
         FUN_L01_002787a0(obj);
         FUN_L00_00263fd8(obj, 0x717, obj->pos, obj->rot, 0, 0, &D_L01_0015F580, &D_L01_0015F580,
@@ -696,15 +709,19 @@ void FUN_L01_0030f0e0(void);
 void enqueue_callback_list_1(void *fn, void *arg) __asm__("FUN_001f4600");
 
 void FUN_L01_0030f208(ScrollMoby *m) {
+    enum {
+        UV_SCROLL_STATE_INITIALIZE = 0,
+        UV_SCROLL_STATE_UPDATE_AND_QUEUE_DRAW = 1
+    };
     f32 d;
 
     switch (m->state) {
-    case 0:
+    case UV_SCROLL_STATE_INITIALIZE:
         D_L01_00162110[0] = 0.0f;
         D_L01_00162110[1] = 0.0f;
         m->state = 1;
         break;
-    case 1:
+    case UV_SCROLL_STATE_UPDATE_AND_QUEUE_DRAW:
         d = frame_delta_time * 0.025f;
         D_L01_00162110[0] += d;
         D_L01_00162110[1] += d;

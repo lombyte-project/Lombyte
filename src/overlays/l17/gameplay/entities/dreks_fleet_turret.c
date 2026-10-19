@@ -99,6 +99,11 @@ extern void func_L00_0025A8C0_alt(char *arg, int a, int b, float scale,
 
 extern char *D_L17_0015FFD0[] __attribute__((section(".sdata")));
 void FUN_L17_002a8da0(struct Moby *m) {
+    enum {
+        BEAM_INITIALIZE = 0,
+        BEAM_UPDATE_STATIONARY = 1,
+        BEAM_UPDATE_OSCILLATING = 2
+    };
     float c[4];
     float a[4];
     float b[4];
@@ -119,7 +124,7 @@ void FUN_L17_002a8da0(struct Moby *m) {
     flag = 0;
     d = (char *)m->pvars;
     switch (m->state) {
-    case 0:
+    case BEAM_INITIALIZE:
         *(float *)(d + 0x58) = animation_start(m->class_slot, 0);
         *(float *)(d + 0x5C) =
             (animation_end(m->class_slot, 0) - *(float *)(d + 0x58)) / 6.2831855f;
@@ -150,13 +155,13 @@ void FUN_L17_002a8da0(struct Moby *m) {
         subtract_vector_xyz(b, c, &m->pos);
         *(OvlQuad *)(d + 0x30) = *(OvlQuad *)b;
         break;
-    case 1:
+    case BEAM_UPDATE_STATIONARY:
         if (*(int *)(d + 0x40) == -1 ||
             is_point_inside_clip_volume(&hero.motion.pos, *(int *)(d + 0x40))) {
             flag = 1;
         }
         break;
-    case 2:
+    case BEAM_UPDATE_OSCILLATING:
         *(float *)(d + 0x50) += *(float *)(d + 0x54);
         if (*(float *)(d + 0x50) > 1.0f) {
             *(float *)(d + 0x50) = 1.0f;
@@ -384,13 +389,20 @@ extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void dreks_fleet_turret_update(struct Moby *m) __asm__("FUN_L17_002cb310");
 void dreks_fleet_turret_update(struct Moby *m) {
+    enum {
+        FLEET_TURRET_INITIALIZE = 0,
+        FLEET_TURRET_WAIT_FOR_TARGET = 1,
+        FLEET_TURRET_AIM_AND_FIRE_AT_ZONE = 2,
+        FLEET_TURRET_AIM_AND_FIRE_AT_HERO_SHIP = 3,
+        FLEET_TURRET_DESTROY = 4
+    };
     float dir[4];
     float from[4];
     Vars347 *d = (Vars347 *)m->pvars;
 
     FUN_L17_002cbc10(m);
     switch (m->state) {
-    case 0:
+    case FLEET_TURRET_INITIALIZE:
         m->state = 1;
         d->f20 = 15.0f;
         d->s24 = 0xF;
@@ -399,7 +411,7 @@ void dreks_fleet_turret_update(struct Moby *m) {
             mark_moby_for_removal(m);
         }
         break;
-    case 1: {
+    case FLEET_TURRET_WAIT_FOR_TARGET: {
         struct Hero *g = &hero;
         if (g->unk308 != 0) {
             qcopy(dir, &m->pos);
@@ -421,7 +433,7 @@ void dreks_fleet_turret_update(struct Moby *m) {
         }
         break;
     }
-    case 2: {
+    case FLEET_TURRET_AIM_AND_FIRE_AT_ZONE: {
         if (hero.unk308 == 0) {
             m->state = 1;
         }
@@ -479,7 +491,7 @@ void dreks_fleet_turret_update(struct Moby *m) {
         }
         break;
     }
-    case 3: {
+    case FLEET_TURRET_AIM_AND_FIRE_AT_HERO_SHIP: {
         struct Hero *g = &hero;
         if (g->state.current != 0x32 || ((char *)g->ship_moby) == 0 ||
             *(short *)(((char *)g->ship_moby) + 0xA6) != 0x563) {
@@ -534,7 +546,7 @@ void dreks_fleet_turret_update(struct Moby *m) {
         }
         break;
     }
-    case 4:
+    case FLEET_TURRET_DESTROY:
         FUN_L00_00263fd8(m, 0x63A, &m->pos.x, &m->rot, 0, 0, 0.0f, D_L17_0015F580,
                          D_L17_0015F580, D_L17_0015F580);
         FUN_L00_00263fd8(m, 0x63B, &m->pos.x, &m->rot, 0, 0, 0.0f, D_L17_0015F580,
@@ -899,6 +911,10 @@ extern void func_L00_0025A8C0_alt(char *arg, int a, int b, float scale,
 extern int func_L00_001F2BE8_alt(float, void *, int, void *, void *) __asm__("FUN_L00_001f2868");
 
 void FUN_L17_002dc3f8(struct Moby *m) {
+    enum {
+        BOBBING_INITIALIZE = 0,
+        BOBBING_UPDATE_AND_CHECK_CONTACT = 1
+    };
     float v[4];
     float w[12];
     float pos[4];
@@ -921,12 +937,12 @@ void FUN_L17_002dc3f8(struct Moby *m) {
         return;
     }
     switch (m->state) {
-    case 0:
+    case BOBBING_INITIALIZE:
         *(float *)(data + 0x60) = random_angle_radians();
         *(int *)(data + 0x64) = 0;
         m->state = 1;
         break;
-    case 1:
+    case BOBBING_UPDATE_AND_CHECK_CONTACT:
         FUN_L00_00262b00(*(float *)&D_L17_00161D2C,
                          *(float *)&D_L17_00161D30 * DEG_TO_RAD * frame_time, m,
                          (float *)(data + 0x60), (float *)(data + 0x64));

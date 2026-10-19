@@ -69,6 +69,12 @@ extern float FUN_001f9af0_1ee318(void *) __asm__("FUN_001f9af0");
 extern float FUN_001f9b48_1ee318(void *, void *) __asm__("FUN_001f9b48");
 
 int FUN_L00_001ee318(V_1ee318 *pt, int *vol, float rad) {
+    enum {
+        VOLUME_TYPE_BOX = 3,
+        VOLUME_TYPE_SPHERE = 5,
+        VOLUME_TYPE_CYLINDER = 6,
+        VOLUME_TYPE_CYLINDER_WITH_ENDPOINT_SPHERES = 7
+    };
     V_1ee318 p;
     V_1ee318 c;
     V_1ee318 d;
@@ -78,7 +84,7 @@ int FUN_L00_001ee318(V_1ee318 *pt, int *vol, float rad) {
     p.q = pt->q;
     pt = &p;
     switch (vol[4]) {
-    case 3: {
+    case VOLUME_TYPE_BOX: {
         unsigned char *e;
         e = D_L00_001600EC_1ee318;
         e += vol[5] << 7;
@@ -88,7 +94,7 @@ int FUN_L00_001ee318(V_1ee318 *pt, int *vol, float rad) {
         return -1.0f <= l.f[0] && l.f[0] <= 1.0f && -1.0f <= l.f[1] && l.f[1] <= 1.0f &&
                -1.0f <= l.f[2] && l.f[2] <= 1.0f;
     }
-    case 6: {
+    case VOLUME_TYPE_CYLINDER: {
         unsigned char *e;
         e = D_L00_001600FC_1ee318;
         e += vol[5] << 7;
@@ -101,7 +107,7 @@ int FUN_L00_001ee318(V_1ee318 *pt, int *vol, float rad) {
         }
         return r;
     }
-    case 5: {
+    case VOLUME_TYPE_SPHERE: {
         unsigned char *e;
         e = D_L00_001600F4_1ee318;
         e += vol[5] << 7;
@@ -110,7 +116,7 @@ int FUN_L00_001ee318(V_1ee318 *pt, int *vol, float rad) {
             return FUN_001f9b48_1ee318(pt, e + 0x30) < s;
         }
     }
-    case 7: {
+    case VOLUME_TYPE_CYLINDER_WITH_ENDPOINT_SPHERES: {
         unsigned char *e;
         e = D_L00_001600E4 + vol[5] * 0x90;
         FUN_001f9a28_1ee318(&d, pt, e + 0x30);

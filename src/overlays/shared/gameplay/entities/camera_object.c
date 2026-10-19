@@ -39,12 +39,20 @@ void FUN_L00_002a4890(void) {
         AMBIENCE_WAIT_AND_SELECT_TARGET = 0,
         AMBIENCE_INTERPOLATE_TO_TARGET = 1
     };
+    enum {
+        AMBIENCE_WAIT_AND_SELECT_SECOND_TARGET = 2,
+        AMBIENCE_INTERPOLATE_TO_SECOND_TARGET = 3
+    };
+    enum {
+        AMBIENCE_SINGLE_TARGET_CYCLE = 2,
+        AMBIENCE_TWO_TARGET_CYCLE = 3
+    };
     struct Amb *s = &D_L00_001CB7C0;
     float a, b, c, d, e;
     switch (s->hC) {
     case 1:
         break;
-    case 2:
+    case AMBIENCE_SINGLE_TARGET_CYCLE:
         switch (s->hE) {
         case AMBIENCE_WAIT_AND_SELECT_TARGET:
             if (fast_dec_timer_s16(&s->h1E)) {
@@ -76,9 +84,9 @@ void FUN_L00_002a4890(void) {
             break;
         }
         break;
-    case 3:
+    case AMBIENCE_TWO_TARGET_CYCLE:
         switch (s->hE) {
-        case 0:
+        case AMBIENCE_WAIT_AND_SELECT_TARGET:
             if (fast_dec_timer_s16(&s->h1E)) {
                 a = multiply_global_factor_ed64(random_float_between_alt(45.0f, 60.0f));
                 c = fast_add_rotations(s->f0, random_float_between_alt(-1.5707964f, 1.5707964f));
@@ -89,7 +97,7 @@ void FUN_L00_002a4890(void) {
                 s->hE = 1;
             }
             break;
-        case 1:
+        case AMBIENCE_INTERPOLATE_TO_TARGET:
             if (fast_dec_timer_s16(&s->h1E)) {
                 s->h1E = func_001FA898_r(convert_integer_to_float(s->h1C) *
                                          random_float_between_alt(1.0f, 1.5f));
@@ -106,7 +114,7 @@ void FUN_L00_002a4890(void) {
                 }
             }
             break;
-        case 2:
+        case AMBIENCE_WAIT_AND_SELECT_SECOND_TARGET:
             if (fast_dec_timer_s16(&s->h1E)) {
                 a = multiply_global_factor_ed64(random_float_between_alt(45.0f, 60.0f));
                 c = fast_add_rotations(s->f0, random_float_between_alt(-0.785398f, 0.785398f));
@@ -117,7 +125,7 @@ void FUN_L00_002a4890(void) {
                 s->hE = 3;
             }
             break;
-        case 3:
+        case AMBIENCE_INTERPOLATE_TO_SECOND_TARGET:
             if (fast_dec_timer_s16(&s->h1E)) {
                 s->h1E = func_001FA898_r(convert_integer_to_float(s->h1C) *
                                          random_float_between_alt(3.0f, 5.0f));
@@ -153,10 +161,14 @@ extern float D_L00_0016138C_gp __asm__("D_L00_0016138C") __attribute__((sda));
 int scale_game_frames(int) __asm__("FUN_001f96f8");
 float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 void FUN_L00_002a4cd8(unsigned char *p) {
+    enum {
+        INITIALIZE_FRAME_TIMING = 0,
+        UPDATE_WRAPPED_VALUE = 1
+    };
     float one;
     int r;
     switch (p[0x20]) {
-    case 0:
+    case INITIALIZE_FRAME_TIMING:
         D_L00_00161390 = 0;
         p[0x20] = 1;
         p[0x30] = 0xFF;
@@ -169,7 +181,7 @@ void FUN_L00_002a4cd8(unsigned char *p) {
         D_L00_00161388 = r;
         D_L00_0016138C_gp = one / (float)r;
         break;
-    case 1:
+    case UPDATE_WRAPPED_VALUE:
         D_L00_00161374_gp -= D_L00_00161378 * frame_scale;
         if (D_L00_00161374_gp <= -8.0f)
             D_L00_00161374_gp += 8.0f;
@@ -557,6 +569,12 @@ extern f32 D_L00_0016139C __attribute__((sda));
 extern f32 D_L00_001613A0 __attribute__((sda));
 void vendor_update(P_2a57a8 *p) __asm__("FUN_L00_002a57a8");
 void vendor_update(P_2a57a8 *p) {
+    enum {
+        VENDOR_INITIALIZE = 0,
+        VENDOR_WAIT_FOR_HERO = 1,
+        VENDOR_HERO_NEARBY = 2,
+        VENDOR_ZERO_AUXILIARY_SCALE = 3
+    };
     Q_2a57a8 *q = p->q;
     s32 i, a, b, c;
     u8 *v;
@@ -568,7 +586,7 @@ void vendor_update(P_2a57a8 *p) {
     p->i90 =
         (((s32)(fast_sin(D_L00_001613A4) * 48.0f) + 0x60) * 0x10101) | 0x80000000;
     switch (p->b20) {
-    case 0:
+    case VENDOR_INITIALIZE:
         p->b20 = 1;
         q->i0 = 0;
         q->i4 = 0;
@@ -585,7 +603,7 @@ void vendor_update(P_2a57a8 *p) {
         }
         upd_a(q->mC);
         break;
-    case 1:
+    case VENDOR_WAIT_FOR_HERO:
         if (q->f90 > 0.0f)
             q->f90 -= 0.1f;
         if (q->f90 <= 0.0f)
@@ -606,7 +624,7 @@ void vendor_update(P_2a57a8 *p) {
         q->mC->f2C = q->f90 * q->mC->p24->f24 * 2.5f;
         upd_a(q->mC);
         break;
-    case 2:
+    case VENDOR_HERO_NEARBY:
         if (q->f90 < 1.0f)
             q->f90 += 0.1f;
         d = vector_distance(&p->f10, &hero_pos);
@@ -658,7 +676,7 @@ void vendor_update(P_2a57a8 *p) {
             p->b20 = 3;
         }
         break;
-    case 3:
+    case VENDOR_ZERO_AUXILIARY_SCALE:
         if (q->mC) {
             q->f90 = 0.0f;
             q->mC->f2C = q->mC->p24->f24 * q->f90 * 2.5f;
@@ -802,7 +820,14 @@ void bolt_update(Bolt *obj) {
         BOLT_FALLING = 1,
         BOLT_SETTLING = 2,
         BOLT_IDLE = 3,
-        BOLT_MOVE_TO_HERO = 4
+        BOLT_MOVE_TO_HERO = 4,
+        BOLT_INITIALIZE_CLASS_ONE = 0xD,
+        BOLT_FALLING_CLASS_ONE = 0xD,
+        BOLT_INITIALIZE_CLASS_FIVE = 0xE,
+        BOLT_FALLING_CLASS_FIVE = 0xE,
+        BOLT_INITIALIZE_CLASS_TWENTY = 0xF,
+        BOLT_FALLING_CLASS_TWENTY = 0xF,
+        BOLT_INITIALIZE_CLASS_FIFTY = 0x10
     };
     BoltVars *v = obj->vars;
     Vec4 a;
@@ -867,16 +892,16 @@ void bolt_update(Bolt *obj) {
         v->slot_timer = FUN_L00_00257b90(0, scale_game_frames(600));
         v->slot = -1;
         switch (obj->oclass) {
-        case 0xD:
+        case BOLT_INITIALIZE_CLASS_ONE:
             obj->scale = obj->pclass->scale * 0.65f;
             break;
-        case 0xE:
+        case BOLT_INITIALIZE_CLASS_FIVE:
             obj->scale = obj->pclass->scale * 0.7f;
             break;
-        case 0xF:
+        case BOLT_INITIALIZE_CLASS_TWENTY:
             obj->scale = obj->pclass->scale * 0.75f;
             break;
-        case 0x10:
+        case BOLT_INITIALIZE_CLASS_FIFTY:
             obj->scale = obj->pclass->scale * 0.6f;
             break;
         }
@@ -887,13 +912,13 @@ void bolt_update(Bolt *obj) {
         quaternion_to_rotation_basis(&v->spin, &c);
         multiply_matrix3x3(&obj->rot, &c, &obj->rot);
         switch (obj->oclass) {
-        case 0xD:
+        case BOLT_FALLING_CLASS_ONE:
             hr = 0.15f;
             break;
-        case 0xE:
+        case BOLT_FALLING_CLASS_FIVE:
             hr = 0.23f;
             break;
-        case 0xF:
+        case BOLT_FALLING_CLASS_TWENTY:
             hr = 0.23f;
             break;
         default:
@@ -1093,6 +1118,11 @@ extern u8 *FUN_L00_00272060(void *pos, s32 life, f32 size0, f32 size1, s32 color
  */
 void FUN_L00_002a6b70(struct Moby *bolt)
 {
+    enum {
+        BOLT_CLASS_FIVE = 0xE,
+        BOLT_CLASS_TWENTY = 0xF,
+        BOLT_CLASS_FIFTY = 0x10
+    };
     Vec4 vel;
     Vec4 pos;
     s32 value;
@@ -1106,13 +1136,13 @@ void FUN_L00_002a6b70(struct Moby *bolt)
     case 0:
         value = 1;
         break;
-    case 0xE:
+    case BOLT_CLASS_FIVE:
         value = 5;
         break;
-    case 0xF:
+    case BOLT_CLASS_TWENTY:
         value = 20;
         break;
-    case 0x10:
+    case BOLT_CLASS_FIFTY:
         value = 50;
         break;
     }
@@ -1160,6 +1190,11 @@ extern void multiply_matrix3x3(void *, void *, void *) __asm__("FUN_001fa328");
 extern void FUN_001f9bf8_u(float *, float *, float) __asm__("FUN_001f9bf8");
 
 void FUN_L00_002a6de8(char *moby, void *out1, void *out2) {
+    enum {
+        BOLT_CLASS_ONE = 13,
+        BOLT_CLASS_FIVE = 14,
+        BOLT_CLASS_TWENTY = 15
+    };
     char *data = *(char **)(moby + 0x78);
     float m0[12];
     float m1[12];
@@ -1179,21 +1214,21 @@ void FUN_L00_002a6de8(char *moby, void *out1, void *out2) {
         qcopy(B, data + 0x10);
     }
     switch (*(short *)(moby + 0xA6)) {
-    case 13:
+    case BOLT_CLASS_ONE:
         c1 = 0.04f;
         c2 = -0.25f;
         c3 = 0.04875f;
         c4 = 0.325f;
         c5 = 0.15f;
         break;
-    case 14:
+    case BOLT_CLASS_FIVE:
         c1 = 0.03f;
         c2 = -0.5f;
         c3 = 0.0245f;
         c4 = 0.35f;
         c5 = 0.23f;
         break;
-    case 15:
+    case BOLT_CLASS_TWENTY:
         c1 = 0.025f;
         c2 = -0.4f;
         c3 = 0.05625f;
@@ -1897,13 +1932,18 @@ static __inline__ WrenchHero *sweep_hero(void) { return (WrenchHero*)((char*)swe
 
 void wrench_update(WrenchMoby *m) __asm__("FUN_L00_002a84c8");
 void wrench_update(WrenchMoby *m) {
+    enum {
+        WRENCH_NORMAL = 0,
+        WRENCH_THROW_OUTBOUND = 10,
+        WRENCH_THROW_RETURNING = 11
+    };
     WrenchVars *d=m->data;
     WrenchScratch work;
     WrenchHero *player=wrench_hero();
     player->wrench_state=0;
     if (player->mode==3) return;
     switch (m->state) {
-    case 0: {
+    case WRENCH_NORMAL: {
         int player_state;
         int anim;
         WrenchMoby *player_moby;
@@ -2048,7 +2088,7 @@ void wrench_update(WrenchMoby *m) {
         }
         break;
     }
-    case 10: case 11: {
+    case WRENCH_THROW_OUTBOUND: case WRENCH_THROW_RETURNING: {
         int collided;
         float *position;
         float radius;

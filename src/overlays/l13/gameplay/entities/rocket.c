@@ -664,6 +664,15 @@ extern void remove_7b10(struct Moby *) __asm__("FUN_0020c828");
 
 void poison_vessel_update(struct Moby *moby) __asm__("FUN_L13_00307b10");
 void poison_vessel_update(struct Moby *moby) {
+    enum {
+        POISON_VESSEL_INTACT = 0,
+        POISON_VESSEL_BLASTING = 1
+    };
+    enum {
+        HIT_RESULT_NONE = 0,
+        HIT_RESULT_DEATH = 1,
+        HIT_RESULT_NO_REACTION = 11
+    };
     struct BlastVars *vars = (struct BlastVars *)moby->pvars;
     struct BlastHit *hit;
     float *health;
@@ -674,7 +683,7 @@ void poison_vessel_update(struct Moby *moby) {
     int timer;
 
     switch (moby->state) {
-    case 0:
+    case POISON_VESSEL_INTACT:
         vars->hit = 0;
         moby->rot.x *= 0.7f;
         moby->rot.y *= 0.7f;
@@ -684,13 +693,13 @@ void poison_vessel_update(struct Moby *moby) {
             debug_print_7b10(D_L13_001F5590, moby->oclass, (s16)moby->save_id, fptodp_7b10(hit->damage));
         }
         switch (hit_check_7b10(moby, hit, health, 0, &kind, 0, 0, 4)) {
-        case 1:
+        case HIT_RESULT_DEATH:
         case 2:
             *health = 0;
             break;
-        case 0:
+        case HIT_RESULT_NONE:
         case 3:
-        case 11:
+        case HIT_RESULT_NO_REACTION:
             break;
         }
         effects = vars->effects;
@@ -718,7 +727,7 @@ void poison_vessel_update(struct Moby *moby) {
         moby->hit_slot = 0xFF;
         anim_update_7b10(moby, effects);
         break;
-    case 1:
+    case POISON_VESSEL_BLASTING:
         qcopy(pos, &moby->pos);
         pos[2] += 1.0f;
         hits = collect_mobies_7b10(FUN_L00_0025b6a8(D_L13_00161E30, D_L13_00161E34,
@@ -833,6 +842,14 @@ extern void func_L00_002592B0_309330(struct Moby *, float, float *, float, float
 
 void blarg_space_commando_update(struct Moby *moby) __asm__("FUN_L13_00307e98");
 void blarg_space_commando_update(struct Moby *moby) {
+    enum {
+        BLARG_SPACE_COMMANDO_INITIALIZE = 0,
+        BLARG_SPACE_COMMANDO_FACE_TARGET_AND_SELECT_ACTION = 1,
+        BLARG_SPACE_COMMANDO_RESUME_SAVED_STATE_AFTER_ANIMATION = 6,
+        BLARG_SPACE_COMMANDO_RETURN_HOME = 13,
+        BLARG_SPACE_COMMANDO_KNOCKBACK = 15,
+        BLARG_SPACE_COMMANDO_DYING = 16
+    };
     Vars_309330 *vars = (Vars_309330 *)moby->pvars;
     struct Moby *target;
     Vec4 point;
@@ -851,7 +868,7 @@ void blarg_space_commando_update(struct Moby *moby) {
         moby->shadow_range = 0x16;
     }
     switch (moby->state) {
-    case 0:
+    case BLARG_SPACE_COMMANDO_INITIALIZE:
         vars->unk20 = 2.0f;
         vars->unk28 = 1;
         vars->unk58 = 12;
@@ -868,7 +885,7 @@ void blarg_space_commando_update(struct Moby *moby) {
         FUN_L00_0024f7c8(moby, 0, &vars->unk1E0);
         moby->state = 1;
         break;
-    case 1:
+    case BLARG_SPACE_COMMANDO_FACE_TARGET_AND_SELECT_ACTION:
         approach_angle(&moby->rot.z, fast_arc_tan_c(target->pos.x - moby->pos.x, target->pos.y - moby->pos.y),
                           &vars->turn, frame_time_sq * 6.2831855f, frame_time_sq * 6.2831855f, frame_time * 3.1415927f);
         if (vars->unk164 != 2) {
@@ -976,7 +993,7 @@ void blarg_space_commando_update(struct Moby *moby) {
             }
         }
         break;
-    case 6:
+    case BLARG_SPACE_COMMANDO_RESUME_SAVED_STATE_AFTER_ANIMATION:
         if (moby->anim_flags & 2) {
             moby->state = moby->command;
             if (moby->prev_seq != 0) {
@@ -1079,7 +1096,7 @@ void blarg_space_commando_update(struct Moby *moby) {
             }
         }
         break;
-    case 13:
+    case BLARG_SPACE_COMMANDO_RETURN_HOME:
         func_L00_002592B0_309330(moby,
                           fast_arc_tan_c(vars->home.f[0] - moby->pos.x, vars->home.f[1] - moby->pos.y), &vars->turn, 0.05f,
                           0.3f, frame_time * 6.2831855f);
@@ -1098,7 +1115,7 @@ void blarg_space_commando_update(struct Moby *moby) {
             }
         }
         break;
-    case 15:
+    case BLARG_SPACE_COMMANDO_KNOCKBACK:
         hit = mine_fall(moby, &vars->vel);
         if (hit & 0x40) {
             qzero(&vars->vel);
@@ -1110,7 +1127,7 @@ void blarg_space_commando_update(struct Moby *moby) {
             mark_moby_for_removal_c2(moby);
         }
         break;
-    case 16:
+    case BLARG_SPACE_COMMANDO_DYING:
         if (mine_fall(moby, &vars->vel) & 0x160) {
             FUN_L00_0025e450_c(moby, &vars->vel, 0, 0.0f, 0.0f, 10, 3, 16, 4.0f, 2.0f, 9.0f, -1, 1.0f, 15.0f, 1, 1, -1, 0);
             mark_moby_for_removal_c2(moby);
@@ -1196,7 +1213,9 @@ extern void mark_moby_for_removal_8d10(struct Moby *) __asm__("FUN_0020c828");
 /* Walker update: takes hits (knocked back, or dies at no health), picks its target and falls onto or slides off the ground. */
 void FUN_L13_00308d10(struct Moby *moby) {
     enum {
-        HIT_RESULT_DEATH = 1
+        HIT_RESULT_NONE = 0,
+        HIT_RESULT_DEATH = 1,
+        HIT_RESULT_NO_REACTION = 11
     };
     struct WalkerVars_8d10 *vars = (struct WalkerVars_8d10 *)moby->pvars;
     char *hit;
@@ -1228,8 +1247,8 @@ void FUN_L13_00308d10(struct Moby *moby) {
         vars->hit_sound = 0x2CD;
         vars->hit_scale = 0.7f;
         switch (code) {
-        case 0:
-        case 11:
+        case HIT_RESULT_NONE:
+        case HIT_RESULT_NO_REACTION:
             break;
         case 3:
         case 4:
@@ -1533,6 +1552,10 @@ extern void FUN_L13_0030a460(void);
 extern void FUN_L13_0030a488(int);
 
 void FUN_L13_00309e88(struct Moby *moby) {
+    enum {
+        BOBBING_PLATFORM_INITIALIZE = 0,
+        BOBBING_PLATFORM_UPDATE = 1
+    };
     Bob_9e88 *b;
     float f;
     int i, j, k, n;
@@ -1547,7 +1570,7 @@ void FUN_L13_00309e88(struct Moby *moby) {
     if (b == 0)
         return;
     switch (moby->state) {
-    case 0: {
+    case BOBBING_PLATFORM_INITIALIZE: {
         float rate = frame_time;
         moby->flags |= 1;
         b->angle = b->angle * DEG_TO_RAD;
@@ -1603,7 +1626,7 @@ void FUN_L13_00309e88(struct Moby *moby) {
         moby->state = 1;
         break;
     }
-    case 1: {
+    case BOBBING_PLATFORM_UPDATE: {
         struct Hero *h;
         f = b->top;
         f -= b->bottom;
@@ -1747,8 +1770,13 @@ extern void FUN_L13_0030ad38(struct Moby *, float *, float *);
 void FUN_L13_0030a6d8(struct Moby *moby) {
     enum {
         LIFT_INITIALIZE = 0,
+        LIFT_BLEND_TO_MOUNT_TRANSFORM = 1,
         LIFT_MOVE_TO_TOP = 2,
-        LIFT_MOVE_TO_BOTTOM = 3
+        LIFT_MOVE_TO_BOTTOM = 3,
+        LIFT_IDLE_AT_TOP = 4,
+        LIFT_IDLE_AT_BOTTOM = 5,
+        LIFT_WAIT_AT_TOP_FOR_HERO_TO_LEAVE = 6,
+        LIFT_WAIT_AT_BOTTOM_FOR_HERO_TO_LEAVE = 7
     };
     LiftVarsA6D8 *vars = (LiftVarsA6D8 *)moby->pvars;
     float delta[4];
@@ -1767,7 +1795,7 @@ void FUN_L13_0030a6d8(struct Moby *moby) {
         vars->timer = 0;
         moby->state = 4;
         break;
-    case 1: {
+    case LIFT_BLEND_TO_MOUNT_TRANSFORM: {
         float old = vars->blend;
         advance_accelerated_scalar(&vars->blend, &vars->blend_speed, 1.0f, D_0015ED70 * 4.0f, D_0015ED70 * 4.0f, D_0015ED6C * 4.0f);
         if (vars->blend < 1.0f) {
@@ -1815,8 +1843,8 @@ void FUN_L13_0030a6d8(struct Moby *moby) {
         }
         break;
     }
-    case 6:
-    case 7:
+    case LIFT_WAIT_AT_TOP_FOR_HERO_TO_LEAVE:
+    case LIFT_WAIT_AT_BOTTOM_FOR_HERO_TO_LEAVE:
         if (vars->timer != 0 && tick_timer(&vars->timer))
             hero_set_state(0, 0);
         if (voice_is_playing(moby, vars->voice)) {
@@ -1830,8 +1858,8 @@ void FUN_L13_0030a6d8(struct Moby *moby) {
                 moby->state = 4;
         }
         break;
-    case 4:
-    case 5: {
+    case LIFT_IDLE_AT_TOP:
+    case LIFT_IDLE_AT_BOTTOM: {
         int i;
         vars->pulse = fast_add_rotations(vars->pulse, D_0015ED6C * 6.2831855f);
         i = float_to_int((fast_sin(vars->pulse) * 4.0f - 3.0f) * 128.0f);
@@ -1994,7 +2022,12 @@ extern int memcard_save_data(int, int) __asm__("FUN_0020b178");
 void FUN_L13_0030b628(struct Moby *moby) {
     enum {
         START_INITIAL_SCENE = 1,
-        CHECK_CLIP_VOLUME_FOR_SCENE = 4
+        WAIT_INITIAL_SCENE = 2,
+        CHECK_CLIP_VOLUME_FOR_SCENE = 4,
+        WAIT_CLIP_VOLUME_SCENE = 5,
+        START_FOLLOWUP_SCENE = 9,
+        WAIT_FOLLOWUP_SCENE = 10,
+        WAIT_LINKED_MOBY_REMOVAL_BEFORE_SAVE = 11
     };
     int *data = (int *)moby->pvars;
     switch (moby->state) {
@@ -2010,7 +2043,7 @@ void FUN_L13_0030b628(struct Moby *moby) {
         }
         moby->state = 3;
         break;
-    case 2:
+    case WAIT_INITIAL_SCENE:
         if (D_L13_0015F5C4 != 2) moby->state = 3;
         break;
     case 3:
@@ -2041,7 +2074,7 @@ after_state_4:
         }
         break;
     }
-    case 5: {
+    case WAIT_CLIP_VOLUME_SCENE: {
         char *object;
         char *entity;
         int index;
@@ -2106,13 +2139,13 @@ after_state_4:
             FUN_L00_00299460(14);
         }
         break;
-    case 9:
+    case START_FOLLOWUP_SCENE:
         if (D_L13_0015F5C4 != 2) {
             start_scene(3);
             moby->state = 10;
         }
         break;
-    case 10: {
+    case WAIT_FOLLOWUP_SCENE: {
         if (D_L13_0015F5C4 != 2) {
             if (data[4] != -1) {
                 struct Moby *other = (struct Moby *)(D_L13_0015FFD8_m + data[4] * 0x100);
@@ -2133,7 +2166,7 @@ after_state_4:
         }
         break;
     }
-    case 11: {
+    case WAIT_LINKED_MOBY_REMOVAL_BEFORE_SAVE: {
         if (data[4] != -1) {
             struct Moby *other = (struct Moby *)(D_L13_0015FFD8_m + data[4] * 0x100);
             if (other != 0 && other->oclass == 0x45 &&
@@ -2255,12 +2288,16 @@ extern int D_L13_0015F5C4;
 extern void cutscene_set_camera_target(int) __asm__("FUN_L00_002637f8");
 
 void FUN_L13_0030bdf0(struct Moby *moby) {
+    enum {
+        INITIALIZE_UPDATE_DISTANCE = 0,
+        UPDATE_CUTSCENE_CAMERA_TARGET = 1
+    };
     switch (moby->state) {
-    case 0:
+    case INITIALIZE_UPDATE_DISTANCE:
         moby->update_dist = 0xFF;
         moby->state = 1;
         break;
-    case 1:
+    case UPDATE_CUTSCENE_CAMERA_TARGET:
         if (D_L13_0015F5C4 == 2 && D_L13_0016CB60.state == 2) {
             cutscene_set_camera_target(D_L13_0016CB60.target);
         }
@@ -2569,6 +2606,11 @@ extern void FUN_0020c828(void *);
 extern s32 D_L13_001BA7D0[];
 void blarg_ship_update(struct Moby *moby) __asm__("FUN_L13_0030cdb8");
 void blarg_ship_update(struct Moby *moby) {
+    enum {
+        BLARG_SHIP_ENTER_DAMAGE_HANDLING = 0,
+        BLARG_SHIP_HANDLE_DAMAGE = 1,
+        BLARG_SHIP_EXPLODE = 2
+    };
     char *data;
     void *hit;
     OvlVec4 vector;
@@ -2583,10 +2625,10 @@ void blarg_ship_update(struct Moby *moby) {
     hit = find_moby_hit(moby, 0x10000, 0);
     fun_00213928(moby, hit, data + 0x20, 0, hit_buffer, 0, 0, 4);
     switch (moby->state) {
-    case 0:
+    case BLARG_SHIP_ENTER_DAMAGE_HANDLING:
         moby->state = 1;
         break;
-    case 1:
+    case BLARG_SHIP_HANDLE_DAMAGE:
         if (hit != 0) {
             float cost = *(float *)((char *)hit + 0x2c);
             if (*(float *)(data + 0x20) < cost) {
@@ -2600,7 +2642,7 @@ void blarg_ship_update(struct Moby *moby) {
         }
         trooper_anim_finish(moby, data + 0x60);
         break;
-    case 2: {
+    case BLARG_SHIP_EXPLODE: {
         void *pos;
         void *rot;
         void *zero_vector;

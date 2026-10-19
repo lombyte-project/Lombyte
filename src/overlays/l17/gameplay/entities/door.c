@@ -31,6 +31,13 @@ void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
 void door_update(struct Moby *m) __asm__("FUN_L17_002e87d8");
 void door_update(struct Moby *m) {
+    enum {
+        DOOR_STATE_INITIALIZE = 0,
+        DOOR_STATE_WAIT_AT_ORIGIN = 1,
+        DOOR_STATE_MOVE_AWAY_FROM_ORIGIN = 2,
+        DOOR_STATE_WAIT_DISPLACED = 4,
+        DOOR_STATE_RETURN_TO_ORIGIN = 5
+    };
     char *d = (char *)m->pvars;
     float v[4];
     float tmp[4];
@@ -47,7 +54,7 @@ void door_update(struct Moby *m) {
     if (D_L17_0015F5C4 == 2)
         return;
     switch (m->state) {
-    case 0:
+    case DOOR_STATE_INITIALIZE:
         if ((m->oclass) == 0x550 || (m->oclass) == 0x551 ||
             (m->oclass) == 0x553 || (m->oclass) == 0x557 ||
             (m->oclass) == 0x55D) {
@@ -56,7 +63,7 @@ void door_update(struct Moby *m) {
         *(OvlQuad *)d = *(OvlQuad *)&m->pos;
         m->state = 1;
         break;
-    case 2:
+    case DOOR_STATE_MOVE_AWAY_FROM_ORIGIN:
         if (m->pclass->sound_defs != 0 &&
             voice_is_playing(m, (*(int *)(d + ((0x20))))) == 0) {
             (*(int *)(d + ((0x20)))) = allocate_voice_for_target_entry(0, 4, (int)m);
@@ -92,7 +99,7 @@ void door_update(struct Moby *m) {
             m->state = 4;
         }
         break;
-    case 1:
+    case DOOR_STATE_WAIT_AT_ORIGIN:
         (*(float *)(d + ((0x14)))) = 0.0f;
         idx = (*(int *)(d + ((0x20))));
         if (idx != -1) {
@@ -122,7 +129,7 @@ void door_update(struct Moby *m) {
         break;
     case 3:
         break;
-    case 4:
+    case DOOR_STATE_WAIT_DISPLACED:
         idx = (*(int *)(d + ((0x20))));
         if (idx != -1) {
             char *e = (char *)D_0013E633 - 0xE80 + idx * 0x70;
@@ -146,7 +153,7 @@ void door_update(struct Moby *m) {
         }
         m->state = 5;
         break;
-    case 5:
+    case DOOR_STATE_RETURN_TO_ORIGIN:
         if (m->pclass->sound_defs != 0 &&
             voice_is_playing(m, (*(int *)(d + ((0x20))))) == 0) {
             (*(int *)(d + ((0x20)))) = allocate_voice_for_target_entry(0, 4, (int)m);
@@ -243,6 +250,10 @@ extern void func_L00_0025A8C0_alt_q(char *arg, int a, int b, float scale,
 
 extern char D_L17_00174760_lui[] __asm__("D_L17_00174760") __attribute__((section(".data")));
 void FUN_L17_002e8e08(struct Moby *moby) {
+    enum {
+        DRONE_STATE_FLIGHT = 0,
+        DRONE_STATE_SPARKS_UNTIL_REMOVAL = 1
+    };
     float a[4];
     float b[4];
     float c[4];
@@ -259,7 +270,7 @@ void FUN_L17_002e8e08(struct Moby *moby) {
     int n;
 
     switch (moby->state) {
-    case 0:
+    case DRONE_STATE_FLIGHT:
         moby->draw_dist = 0;
         moby->visible = 0;
         t = d + 0x10;
@@ -356,7 +367,7 @@ void FUN_L17_002e8e08(struct Moby *moby) {
             mmr_q_q(moby);
         }
         break;
-    case 1: {
+    case DRONE_STATE_SPARKS_UNTIL_REMOVAL: {
         float x = random_float_between_alt_q(frame_time + frame_time, frame_time * 10.0f);
         float y = random_float_between_alt_q(-3.1415927f, 3.1415927f);
         build_spherical_offset_q(a, x, y, random_float_between_alt_q(-3.1415927f, 3.1415927f));
@@ -518,6 +529,11 @@ extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 short D_L17_00162188 = 2;
 int FUN_L17_002eace8(int a, char *p, char *radar_origin, char *radar_rotation, float f0, float f1, float f2, char *cur,
                      char *g) {
+    enum {
+        MOBY_CLASS_OFFSCREEN_ARROW_TARGET = 0x15B,
+        MOBY_CLASS_UNMARKED_COUNTED_TARGET = 0x184,
+        MOBY_CLASS_UNCOUNTED_MARKED_TARGET = 0x191
+    };
     float v[4];
     float w[4];
     float mat[16];
@@ -588,8 +604,8 @@ int FUN_L17_002eace8(int a, char *p, char *radar_origin, char *radar_rotation, f
         case 0x53:
             FUN_L17_002eaae0(radar_rotation, radar_origin, m, 1, 0x70007080, *(int *)(p + 0x104));
             break;
-        case 0x184:
-        case 0x191:
+        case MOBY_CLASS_UNMARKED_COUNTED_TARGET:
+        case MOBY_CLASS_UNCOUNTED_MARKED_TARGET:
         case 0x3EB:
         case 0x504:
             project_to_screen(v, m + 0x10);
@@ -616,7 +632,7 @@ int FUN_L17_002eace8(int a, char *p, char *radar_origin, char *radar_rotation, f
             }
             FUN_L17_002eaae0(radar_rotation, radar_origin, m, 0, 0x70808080, *(int *)(p + 0x104));
             break;
-        case 0x15B:
+        case MOBY_CLASS_OFFSCREEN_ARROW_TARGET:
             qcopy(w, m + 0x10);
             w[2] += 4.0f;
             project_to_screen(v, w);
@@ -1636,6 +1652,7 @@ void fighter_jet_update(ShipMoby *moby) {
         FIGHTER_JET_STATE_PILOTED_FLIGHT = 4,
         FIGHTER_JET_STATE_DISMOUNT = 5,
         FIGHTER_JET_STATE_DEATH_RESPAWN_DELAY = 7,
+        FIGHTER_JET_STATE_VICTORY_EXIT = 8,
         FIGHTER_JET_STATE_FADE_THEN_REMOVE = 9
     };
     ShipVars *v;
@@ -1902,7 +1919,7 @@ void fighter_jet_update(ShipMoby *moby) {
                 moby->state = 0;
             }
             break;
-        case 8:
+        case FIGHTER_JET_STATE_VICTORY_EXIT:
             force_help_message(6, 0);
             D_L17_0015F608 = 2;
             FUN_L17_002ec360((Moby *)moby, (Obj *)v);
@@ -2092,7 +2109,13 @@ void magnet_elevator_update(struct Moby *moby) __asm__("FUN_L17_002ee2b0");
 void magnet_elevator_update(struct Moby *moby) {
     enum {
         MAGNET_ELEVATOR_STATE_INITIALIZE = 0,
-        MAGNET_ELEVATOR_STATE_BLEND_CAMERA = 1
+        MAGNET_ELEVATOR_STATE_BLEND_CAMERA = 1,
+        MAGNET_ELEVATOR_STATE_MOVE_TO_FIRST_STOP = 4,
+        MAGNET_ELEVATOR_STATE_MOVE_TO_SECOND_STOP = 5,
+        MAGNET_ELEVATOR_STATE_WAIT_AT_FIRST_STOP = 6,
+        MAGNET_ELEVATOR_STATE_WAIT_AT_SECOND_STOP = 7,
+        MAGNET_ELEVATOR_STATE_WAIT_FOR_HERO_TO_LEAVE_FIRST_STOP = 8,
+        MAGNET_ELEVATOR_STATE_WAIT_FOR_HERO_TO_LEAVE_SECOND_STOP = 9
     };
     char *state = P(moby, 0x78);
     float delta[4];
@@ -2154,8 +2177,8 @@ void magnet_elevator_update(struct Moby *moby) {
     case 2:
     case 3:
         FUN_L17_002eea70_c(moby);
-    case 4:
-    case 5: {
+    case MAGNET_ELEVATOR_STATE_MOVE_TO_FIRST_STOP:
+    case MAGNET_ELEVATOR_STATE_MOVE_TO_SECOND_STOP: {
         float target;
         int s;
         W(moby, 0x90) = fast_tween_color(W(moby, 0x90), 0x80808040, 0.1f);
@@ -2196,8 +2219,8 @@ void magnet_elevator_update(struct Moby *moby) {
         }
         break;
     }
-    case 8:
-    case 9:
+    case MAGNET_ELEVATOR_STATE_WAIT_FOR_HERO_TO_LEAVE_FIRST_STOP:
+    case MAGNET_ELEVATOR_STATE_WAIT_FOR_HERO_TO_LEAVE_SECOND_STOP:
         if (voice_is_playing(moby, W(state, 0x6C))) {
             release_voice_slot(W(state, 0x6C));
             W(state, 0x6C) = -1;
@@ -2210,8 +2233,8 @@ void magnet_elevator_update(struct Moby *moby) {
             }
         }
         break;
-    case 6:
-    case 7: {
+    case MAGNET_ELEVATOR_STATE_WAIT_AT_FIRST_STOP:
+    case MAGNET_ELEVATOR_STATE_WAIT_AT_SECOND_STOP: {
         int i;
         char *g;
         (*(float *)((char *)(state) + (0x78))) =
@@ -2396,6 +2419,16 @@ void mark_moby_for_removal_c(void *obj) __asm__("FUN_0020c828");
 extern float D_L17_0015F580_macro[] __asm__("D_L17_0015F580") __attribute__((section(".sdata")));
 void robot_dog_update(unsigned char *m) __asm__("FUN_L17_002eeb68");
 void robot_dog_update(unsigned char *m) {
+    enum {
+        ROBOT_DOG_STATE_INITIALIZE = 0,
+        ROBOT_DOG_STATE_FALL_UNTIL_LANDING = 4,
+        ROBOT_DOG_STATE_TRACK_TARGET_FACING = 5,
+        ROBOT_DOG_STATE_TURN_TOWARD_TARGET = 8,
+        ROBOT_DOG_STATE_APPROACH_TARGET = 9,
+        ROBOT_DOG_STATE_ATTACK_TARGET = 10,
+        ROBOT_DOG_STATE_RETURN_HOME = 11,
+        ROBOT_DOG_STATE_FALL_THEN_REMOVE = 15
+    };
     Vars1382 *d;
     unsigned char *tgt;
     int r;
@@ -2439,7 +2472,7 @@ void robot_dog_update(unsigned char *m) {
         m[0x7F] = 0x17;
     }
     switch (m[0x20]) {
-    case 0:
+    case ROBOT_DOG_STATE_INITIALIZE:
         *(unsigned short *)(m + 0x34) |= 0x1000;
         qcopy(&d->home, m + 0x10);
         d->b58 = 8;
@@ -2502,7 +2535,7 @@ void robot_dog_update(unsigned char *m) {
             }
         }
         break;
-    case 5:
+    case ROBOT_DOG_STATE_TRACK_TARGET_FACING:
         if (tgt != 0) {
             float turn;
             float ang;
@@ -2612,7 +2645,7 @@ void robot_dog_update(unsigned char *m) {
         }
         break;
     }
-    case 8: {
+    case ROBOT_DOG_STATE_TURN_TOWARD_TARGET: {
         float ang;
         ang = fast_arc_tan(d->v180[0] - *(float *)(m + 0x10), d->v180[1] - *(float *)(m + 0x14));
         FUN_L00_00258278((char *)m, &d->yawvel, ang, 0.03f, 0.3f, frame_time * 7.8539815f);
@@ -2634,7 +2667,7 @@ void robot_dog_update(unsigned char *m) {
         }
         break;
     }
-    case 9:
+    case ROBOT_DOG_STATE_APPROACH_TARGET:
         FUN_L17_002efd48_c((char *)m, d->v180, d->f1EC);
         *(float *)(m + 0x58) = 1.8f;
         if (point_in_path_xy((&hero.motion.pos), ((int **)D_L17_001B0DB0)[d->path] + 4,
@@ -2651,7 +2684,7 @@ void robot_dog_update(unsigned char *m) {
             m[0x20] = 11;
         }
         break;
-    case 10:
+    case ROBOT_DOG_STATE_ATTACK_TARGET:
         if (m[0x70] & 2) {
             m[0x20] = 11;
             if (m[0x53] != 9) {
@@ -2672,7 +2705,7 @@ void robot_dog_update(unsigned char *m) {
             spawn_nearby_effect((int)d->target, (int)m, 1, pos, tmp, 1.0f);
         }
         break;
-    case 11: {
+    case ROBOT_DOG_STATE_RETURN_HOME: {
         float dist;
         float far;
         float k1;
@@ -2705,7 +2738,7 @@ void robot_dog_update(unsigned char *m) {
         }
         break;
     }
-    case 4:
+    case ROBOT_DOG_STATE_FALL_UNTIL_LANDING:
         if (mine_fall(m, d->a120) & 0x60) {
             clear_vector(tmp);
             m[0x20] = 5;
@@ -2719,7 +2752,7 @@ void robot_dog_update(unsigned char *m) {
             mark_moby_for_removal_c(m);
         }
         break;
-    case 15:
+    case ROBOT_DOG_STATE_FALL_THEN_REMOVE:
         *(unsigned short *)(m + 0x34) &= 0xEFFF;
         if (mine_fall(m, d->a120) & 0x60) {
             float *zero;
@@ -3004,8 +3037,12 @@ extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void FUN_L17_002f0210(struct Moby *moby) {
     enum {
+        ROBOT_DOG_STATE_FALL_UNTIL_LANDING = 4,
+        ROBOT_DOG_STATE_TURN_TOWARD_TARGET = 8,
+        ROBOT_DOG_STATE_APPROACH_TARGET = 9,
+        ROBOT_DOG_STATE_ATTACK_TARGET = 10,
         ROBOT_DOG_STATE_RETURN_HOME = 11,
-        ROBOT_DOG_STATE_APPROACH_TARGET = 9
+        ROBOT_DOG_STATE_FALL_THEN_REMOVE = 15
     };
     char *data;
     int n;
@@ -3034,19 +3071,19 @@ void FUN_L17_002f0210(struct Moby *moby) {
     alpha = 0x80;
     mode = 0;
     switch (moby->state) {
-    case 4:
+    case ROBOT_DOG_STATE_FALL_UNTIL_LANDING:
     case 5:
     case 6:
         mode = 1;
         break;
     case 7:
-    case 8:
+    case ROBOT_DOG_STATE_TURN_TOWARD_TARGET:
     case ROBOT_DOG_STATE_APPROACH_TARGET:
-    case 10:
+    case ROBOT_DOG_STATE_ATTACK_TARGET:
     case ROBOT_DOG_STATE_RETURN_HOME:
     case 13:
     case 14:
-    case 15:
+    case ROBOT_DOG_STATE_FALL_THEN_REMOVE:
         mode = 2;
         break;
     case 12:
@@ -3508,6 +3545,16 @@ extern char D_0013CAE4[];
 
 void shuttle_update(struct Moby *m) __asm__("FUN_L17_002f1940");
 void shuttle_update(struct Moby *m) {
+    enum {
+        SHUTTLE_STATE_INITIALIZE = 0,
+        SHUTTLE_STATE_WAIT_FOR_ACTIVATION = 1,
+        SHUTTLE_STATE_TRAVEL = 2,
+        SHUTTLE_STATE_RESET_AFTER_TRAVEL = 3
+    };
+    enum {
+        SHUTTLE_STOP_FIRST = 0,
+        SHUTTLE_STOP_SECOND = 1
+    };
     Vars1448 *v = (Vars1448 *)m->pvars;
     float old_pos[4];
     float old_rot[4];
@@ -3524,7 +3571,7 @@ void shuttle_update(struct Moby *m) {
     qcopy(old_rot, &m->rot);
     m->scale = m->pclass->scale * *(float *)&D_L17_001623AC;
     switch (m->state) {
-    case 0:
+    case SHUTTLE_STATE_INITIALIZE:
         if (D_L17_001BBB30.collected[(short)m->save_id] != 0 ||
             (*(int *)(((char *)&D_0014C190) +
                       (((short)m->save_id >> 5) * 4 + (current_level_index << 8))) >>
@@ -3550,7 +3597,7 @@ void shuttle_update(struct Moby *m) {
             *(OvlQuad *)&m->rot = *(OvlQuad *)((v->cam[1] << 7) + base + 0x70);
         }
         break;
-    case 1:
+    case SHUTTLE_STATE_WAIT_FOR_ACTIVATION:
         if (m->prev_seq == 2 && (m->anim_flags & 2) && v->sfx == 0) {
             allocate_voice_for_target_entry(1, 0, (int)m);
             v->sfx = 0;
@@ -3563,7 +3610,7 @@ void shuttle_update(struct Moby *m) {
                 if (s >= 0) {
                     v->go = 1;
                     switch (s) {
-                    case 0: {
+                    case SHUTTLE_STOP_FIRST: {
                         float x = *(float *)&D_L17_001623AC;
                         float y = *(float *)&D_L17_001623A8;
                         v->sel = 1;
@@ -3572,7 +3619,7 @@ void shuttle_update(struct Moby *m) {
                         v->side = 0;
                         break;
                     }
-                    case 1: {
+                    case SHUTTLE_STOP_SECOND: {
                         float x = *(float *)&D_L17_001623A8;
                         float y = *(float *)&D_L17_001623AC;
                         v->side = s;
@@ -3632,7 +3679,7 @@ void shuttle_update(struct Moby *m) {
             }
         }
         break;
-    case 2:
+    case SHUTTLE_STATE_TRAVEL:
         if (FUN_L17_002f2180(m, v->side)) {
             int ofs;
             int base;
@@ -3659,7 +3706,7 @@ void shuttle_update(struct Moby *m) {
                 1 << (m->save_id & 0x1F);
         }
         break;
-    case 3:
+    case SHUTTLE_STATE_RESET_AFTER_TRAVEL:
         m->state = 1;
         if (m->prev_seq != 2) {
             blend_moby_animation(m, 2, 0, scale_game_frames(30));
@@ -3691,10 +3738,10 @@ void FUN_L17_002f20d8(struct Moby *moby) {
         break;
     }
     switch (*(int *)(data + 0x80)) {
-    case 0:
+    case SHUTTLE_STOP_FIRST:
         try_set_help_message(0xA, 0x426C);
         break;
-    case 1:
+    case SHUTTLE_STOP_SECOND:
     case 4:
         try_set_help_message(0xA, 0x426B);
         break;

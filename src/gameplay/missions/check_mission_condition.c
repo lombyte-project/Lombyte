@@ -19,6 +19,7 @@ s32 check_mission_condition(s16 kind, s32 value) {
         MISSION_CONDITION_UPGRADE_LEVEL_AT_LEAST_TWO = 5,
         MISSION_CONDITION_ALTERNATE_ITEM_AVAILABLE = 6,
         MISSION_CONDITION_CALLBACK_NONZERO = 7,
+        MISSION_CONDITION_GOLD_BOLT_COLLECTED = 8,
         MISSION_CONDITION_ALWAYS_FALSE = 9
     };
     switch (kind) {
@@ -44,7 +45,7 @@ s32 check_mission_condition(s16 kind, s32 value) {
         return alternate_item_available[value] != 0;
     case MISSION_CONDITION_CALLBACK_NONZERO:
         return ((s32(*)(void))value)() != 0;
-    case 8:
+    case MISSION_CONDITION_GOLD_BOLT_COLLECTED:
         return D_0014BEC0[(value & 0xFFFF) + (value >> 16) * 4] != 0;
     case MISSION_CONDITION_ALWAYS_FALSE:
         return 0;

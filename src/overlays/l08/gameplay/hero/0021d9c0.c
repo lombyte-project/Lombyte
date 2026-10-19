@@ -431,10 +431,10 @@ void FUN_L08_002284e0(void) {
     Vec4 vD0;
 
     switch (hero.state.current) {
-    case 0x0:
-    case 0x1:
-    case 0x3:
-    case 0x4:
+    case HERO_STATE_IDLE:
+    case HERO_STATE_LOOK:
+    case HERO_STATE_STOP:
+    case HERO_STATE_CROUCH:
     case 0x17:
     case 0x1D:
     case 0x1E:
@@ -557,7 +557,7 @@ void FUN_L08_002284e0(void) {
             }
         }
         break;
-    case 0x7F:
+    case HERO_STATE_SINK:
         if (MV(hero.unk6A4) == NULL) {
             struct MobyView *m = create_moby(0x52A);
             s32 h40 = 0x40;
@@ -1602,7 +1602,7 @@ void FUN_L08_002284e0(void) {
         }
         break;
     }
-    case 2:
+    case HERO_STATE_RUN:
     case 0x73: {
         s32 slide = 0;
         f32 k;
@@ -1748,7 +1748,7 @@ void FUN_L08_002284e0(void) {
         AN.f110 = d * 3.5f;
         break;
     }
-    case 0x28:
+    case HERO_STATE_GRIND:
     case 0x29:
     case 0x2A:
     case 0x2B:
@@ -2110,13 +2110,13 @@ void FUN_L08_002284e0(void) {
         set_vector_length_xy(&hero.motion.velocity, &hero.motion.velocity, D_L08_001C44B0[truncate_float_to_s32(hero.anim_frame)] * 0.5f);
         break;
     }
-    case 0x79:
+    case HERO_STATE_SLIP:
         hero.motion.move_yaw = hero.downhill_yaw;
         hero.target_speed = frame_time * 5.5f;
         air_accel(frame_time_sq * 25.0f);
         FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.unk120, frame_time_sq * 18.0f);
         break;
-    case 6:
+    case HERO_STATE_FALL:
     case 0x2D:
         if (hero.state.current == 0x2D) {
             f32 t = 0.0f;
@@ -2241,14 +2241,14 @@ void FUN_L08_002284e0(void) {
         break;
     }
     case 7:
-    case 9:
-    case 0xA:
-    case 0xB:
+    case HERO_STATE_RUN_JUMP:
+    case HERO_STATE_PACK_JUMP:
+    case HERO_STATE_HIGH_JUMP:
     case 0xC:
     case 0xD:
     case 0xE:
     case 0xF:
-    case 0x10:
+    case HERO_STATE_PACK_LONG_JUMP:
     case 0x11:
     case 0x12:
     case 0x1C:

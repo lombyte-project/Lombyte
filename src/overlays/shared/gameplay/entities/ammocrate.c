@@ -149,6 +149,15 @@ extern void FUN_L00_00262b00_1cc8(float, float, void *, void *, void *) __asm__(
 
 void ammocrate_update(char *moby) __asm__("FUN_L13_002e1cc8");
 void ammocrate_update(char *moby) {
+    enum {
+        SHIP_PICKUP_INITIALIZE = 0,
+        SHIP_PICKUP_SELECT_ACTIVATION_GATE = 1,
+        SHIP_PICKUP_WAIT_FOR_TARGET_STATE = 2,
+        SHIP_PICKUP_WAIT_FOR_ACTIVATION_TIMER = 3,
+        SHIP_PICKUP_ACTIVE = 4,
+        SHIP_PICKUP_COLLECTED_SHRINKING = 5,
+        SHIP_PICKUP_REMOVE_OR_RESET = 6
+    };
     int *vars = *(int **)(moby + 0x78);
     int hero_moby = ((char *)hero.ship_moby);
     int hit = 0;
@@ -159,7 +168,7 @@ void ammocrate_update(char *moby) {
     short cls;
     float speed;
     switch ((unsigned char)moby[0x20]) {
-    case 0:
+    case SHIP_PICKUP_INITIALIZE:
         if (*((unsigned char *)vars + 0xc) != 0) {
             *(float *)(moby + 0x2c) = *(float *)(*(char **)(moby + 0x24) + 0x24);
             moby[0x20] = 4;
@@ -172,14 +181,14 @@ void ammocrate_update(char *moby) {
         moby[0x20] = 1;
         *(float *)(moby + 0x2c) = start_size * 0.1f;
         break;
-    case 1:
+    case SHIP_PICKUP_SELECT_ACTIVATION_GATE:
         if (vars[0] != -1) {
             moby[0x20] = 2;
             break;
         }
         moby[0x20] = 3;
         break;
-    case 2: {
+    case SHIP_PICKUP_WAIT_FOR_TARGET_STATE: {
         int target_index = vars[0];
         int target_base = (int)moby_pool_1cc8;
         struct Moby *target = (struct Moby *)(target_base + target_index * 0x100);
@@ -190,7 +199,7 @@ void ammocrate_update(char *moby) {
         moby[0x20] = 3;
         break;
     }
-    case 3:
+    case SHIP_PICKUP_WAIT_FOR_ACTIVATION_TIMER:
         if (vars[2] == -1 || timer_expired_1cc8(vars + 4)) {
             moby[0x20] = 4;
         }
@@ -201,7 +210,7 @@ void ammocrate_update(char *moby) {
         activated_size = *(float *)(*(char **)(moby + 0x24) + 0x24);
         *(float *)(moby + 0x2c) = activated_size * 0.1f;
         break;
-    case 4:
+    case SHIP_PICKUP_ACTIVE:
         *(float *)(moby + 0x48) = fast_add_rotations_1cc8(*(float *)(moby + 0x48), D_0015ED6C_1cc8 * 0.7853982f);
         if (*(float *)(moby + 0x10) < 20.0f) *(float *)(moby + 0x10) = 20.0f;
         if (1003.0f < *(float *)(moby + 0x10)) *(float *)(moby + 0x10) = 1003.0f;
@@ -248,7 +257,7 @@ collected:
             fast_vec_add_1cc8(moby + 0x10, moby + 0x10, direction);
         }
         goto frame_tail;
-    case 5: {
+    case SHIP_PICKUP_COLLECTED_SHRINKING: {
         float delta = *(float *)(*(char **)(moby + 0x24) + 0x24) - *(float *)(moby + 0x2c);
         *(float *)(moby + 0x48) = fast_add_rotations_1cc8(*(float *)(moby + 0x48), delta + delta);
         *(float *)(moby + 0x2c) += (*(float *)(*(char **)(moby + 0x24) + 0x24) * 0.01f - *(float *)(moby + 0x2c)) * 0.3f;
@@ -256,7 +265,7 @@ collected:
             moby[0x20] = 6;
         break;
     }
-    case 6:
+    case SHIP_PICKUP_REMOVE_OR_RESET:
         if (*((unsigned char *)vars + 0xd) == 0) {
             mark_moby_for_removal_1cc8(moby);
             return;

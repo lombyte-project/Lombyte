@@ -79,6 +79,13 @@ extern f32 frame_time __asm__("D_0015ED6C");
 
 void FUN_L15_0029aff0(struct Moby *m)
 {
+    enum {
+        GATE_INITIALIZE = 0,
+        GATE_WAIT_TO_OPEN = 1,
+        GATE_OPENING = 2,
+        GATE_OPEN = 3,
+        GATE_CLOSING = 4
+    };
     MovingVars_29aff0 *d = (MovingVars_29aff0 *)m->pvars;
     Vec4 offset;
     Vec4 pos;
@@ -89,11 +96,11 @@ void FUN_L15_0029aff0(struct Moby *m)
     u32 *bits;
 
     switch (m->state) {
-    case 0:
+    case GATE_INITIALIZE:
         d->home.q = *(u128 *)&m->pos;
         m->state = 1;
         return;
-    case 1:
+    case GATE_WAIT_TO_OPEN:
         trigger_active = 0;
         d->travel = 0;
         if (d->trigger != -1) {
@@ -120,7 +127,7 @@ check_lock:
             m->state = 2;
         }
         return;
-    case 2:
+    case GATE_OPENING:
         if (((VoiceSlot_29aff0 *)(D_0013E550 + d->sound * 0x70))->owner != m ||
             ((VoiceSlot_29aff0 *)(D_0013E550 + d->sound * 0x70))->active == 0)
             d->sound = allocate_voice_for_target_entry(0, 4, (int)m);
@@ -149,13 +156,13 @@ check_lock:
         add_vector_xyz(&pos, &d->home, &offset);
         *(u128 *)&m->pos = pos.q;
         return;
-    case 3:
+    case GATE_OPEN:
         if (is_point_inside_clip_volume(D_0013F3D0, d->close_volume) ||
             is_point_inside_clip_volume(D_L15_001673C0, d->close_volume))
             return;
         m->state = 4;
         return;
-    case 4:
+    case GATE_CLOSING:
         if (((VoiceSlot_29aff0 *)(D_0013E550 + d->sound * 0x70))->owner != m ||
             ((VoiceSlot_29aff0 *)(D_0013E550 + d->sound * 0x70))->active == 0)
             d->sound = allocate_voice_for_target_entry(0, 4, (int)m);
@@ -230,11 +237,19 @@ extern int D_L15_00184B28_2A48B0 __asm__("D_L15_00184AA8") __attribute__((sectio
 
 void FUN_L15_002a36d0(GateMoby_2A48B0 *m)
 {
+    enum {
+        GATE_INITIALIZE = 0,
+        GATE_WAIT_TO_OPEN = 1,
+        GATE_OPENING = 2,
+        GATE_OPEN = 3,
+        GATE_CLOSING = 4,
+        GATE_POSITION_OVERRIDE = 5
+    };
     GateVars_2A48B0 *d = m->vars;
     float step;
 
     switch (m->state) {
-    case 0:
+    case GATE_INITIALIZE:
         *(u128 *)&d->home = *(u128 *)&m->pos;
         m->state = 1;
         d->locked = 0;
@@ -246,7 +261,7 @@ void FUN_L15_002a36d0(GateMoby_2A48B0 *m)
             m->state = 5;
         }
         break;
-    case 1:
+    case GATE_WAIT_TO_OPEN:
         d->travel = 0;
         if (d->key != -1) {
             D_L15_00184B28_2A48B0 = 0;
@@ -271,7 +286,7 @@ void FUN_L15_002a36d0(GateMoby_2A48B0 *m)
             m->state = 5;
         }
         break;
-    case 2:
+    case GATE_OPENING:
         step = (D_L15_001614F8 / 0.6f) * D_0015ED6C;
         if (d->key != -1) {
             step = step * 5.0f;
@@ -303,7 +318,7 @@ void FUN_L15_002a36d0(GateMoby_2A48B0 *m)
             m->pos.z = z;
         }
         break;
-    case 3:
+    case GATE_OPEN:
         if (d->key != -1) {
             D_L15_00184B28_2A48B0 = 1;
         }
@@ -317,7 +332,7 @@ void FUN_L15_002a36d0(GateMoby_2A48B0 *m)
             m->state = 4;
         }
         break;
-    case 4:
+    case GATE_CLOSING:
         step = (D_L15_001614F8 / 0.6f) * D_0015ED6C;
         if (d->key != -1) {
             step = step * 5.0f;
@@ -357,7 +372,7 @@ void FUN_L15_002a36d0(GateMoby_2A48B0 *m)
             m->state = 2;
         }
         break;
-    case 5:
+    case GATE_POSITION_OVERRIDE:
         if (D_0013DD50 != 0) {
             m->pos.z = d->home.z - D_L15_001614F8;
             D_L15_00184B28_2A48B0 = 1;
@@ -393,6 +408,13 @@ extern f32 D_L15_001614FC __attribute__((sda));
 extern f32 D_L15_00161500 __attribute__((sda));
 
 void FUN_L15_002a3ba8(struct Moby *moby) {
+    enum {
+        SWINGING_DOOR_INITIALIZE = 0,
+        SWINGING_DOOR_CLOSED = 1,
+        SWINGING_DOOR_OPENING = 2,
+        SWINGING_DOOR_OPEN = 3,
+        SWINGING_DOOR_CLOSING = 4
+    };
     DoorVars *vars = (DoorVars *)moby->pvars;
     s32 open = 0;
     s32 close = 0;
@@ -430,7 +452,7 @@ void FUN_L15_002a3ba8(struct Moby *moby) {
         close = 0;
     }
     switch (moby->state) {
-    case 0:
+    case SWINGING_DOOR_INITIALIZE:
         if (vars->reverse) {
             moby->flags |= 0x8000;
         }
@@ -444,7 +466,7 @@ void FUN_L15_002a3ba8(struct Moby *moby) {
         moby->rot.z = yaw;
         moby->state = 1;
         break;
-    case 1:
+    case SWINGING_DOOR_CLOSED:
         vars->swing = 0.0f;
         moby->rot.z = vars->closed_yaw;
         if (open) {
@@ -452,7 +474,7 @@ void FUN_L15_002a3ba8(struct Moby *moby) {
             vars->sound = allocate_voice_for_target_entry(0, 0, (int)moby);
         }
         break;
-    case 2:
+    case SWINGING_DOOR_OPENING:
         vars->swing = fast_add_rotations(vars->swing, D_L15_001614FC / D_L15_00161500 * DEG_TO_RAD * frame_time);
         limit = D_L15_001614FC * DEG_TO_RAD;
         if (vars->swing < limit) {
@@ -465,13 +487,13 @@ void FUN_L15_002a3ba8(struct Moby *moby) {
         }
         moby->rot.z = fast_add_rotations(vars->closed_yaw, step);
         break;
-    case 3:
+    case SWINGING_DOOR_OPEN:
         if (close) {
             moby->state = 4;
             vars->sound = allocate_voice_for_target_entry(0, 0, (int)moby);
         }
         break;
-    case 4:
+    case SWINGING_DOOR_CLOSING:
         vars->swing = fast_add_rotations(vars->swing, -(D_L15_001614FC / D_L15_00161500 * DEG_TO_RAD * frame_time));
         if (0.0f < vars->swing) {
             vars->swing = 0.0f;
@@ -865,7 +887,11 @@ void construction_arm_update(struct Moby *moby)
 {
     enum {
         CONSTRUCTION_ARM_INITIALIZE = 0,
+        CONSTRUCTION_ARM_WAIT_TO_TURN = 1,
         CONSTRUCTION_ARM_TURN_TO_TARGET_YAW = 2,
+        CONSTRUCTION_ARM_WAIT_FOR_ENTRY_ANIMATION = 3,
+        CONSTRUCTION_ARM_WAIT_TO_START_EXIT_ANIMATION = 4,
+        CONSTRUCTION_ARM_WAIT_FOR_EXIT_ANIMATION = 5,
         CONSTRUCTION_ARM_DESTROY = 6
     };
     UpdateVars_2938 *d = (UpdateVars_2938 *)moby->pvars;
@@ -897,7 +923,7 @@ void construction_arm_update(struct Moby *moby)
         moby->update_dist = 0xff;
         moby->state = 1;
         break;
-    case 1:
+    case CONSTRUCTION_ARM_WAIT_TO_TURN:
         if (fast_dec_timer_s16(&d->timer) && FUN_001f9b48(D_L15_001673C0, &moby->pos) < 42.0f) {
             ready = 1;
             if (moby->group != 0xff) {
@@ -933,7 +959,7 @@ void construction_arm_update(struct Moby *moby)
                              frame_time_sq * 1.5707964f, frame_time_sq * 0.7853982f,
                              frame_time * 0.7853982f);
         break;
-    case 3:
+    case CONSTRUCTION_ARM_WAIT_FOR_ENTRY_ANIMATION:
         if (moby->prev_seq == d->side * 2 + 1 && (moby->anim_flags & 2)) {
             d->timer = scale_game_frames(FUN_L00_00257b90(15, 45));
             animation = d->side;
@@ -943,7 +969,7 @@ void construction_arm_update(struct Moby *moby)
             moby->state = 4;
         }
         break;
-    case 4:
+    case CONSTRUCTION_ARM_WAIT_TO_START_EXIT_ANIMATION:
         if (FUN_001f9b48(&moby->pos, D_L15_001673C0) < 20.0f &&
             random_integer_below(2) == 0 && moby->visible != 0) {
             speed = random_float_between(D_L15_001619FC / 5.0f, D_L15_001619FC) * frame_time;
@@ -970,7 +996,7 @@ void construction_arm_update(struct Moby *moby)
             moby->state = 5;
         }
         break;
-    case 5:
+    case CONSTRUCTION_ARM_WAIT_FOR_EXIT_ANIMATION:
         if (moby->prev_seq == d->side * 2 + 3 && (moby->anim_flags & 2)) {
             minimum = FUN_L15_001f8648(D_L15_00161A00 * 60.0f);
             maximum = FUN_L15_001f8648(D_L15_00161A04 * 60.0f);
@@ -1937,6 +1963,17 @@ extern char *func_L10_002CD578_v(void *vel, float scale, void *pos, int a, int b
 
 void ultramech_unlimited_update(UMoby *m) __asm__("FUN_L15_002cf3a8");
 void ultramech_unlimited_update(UMoby *m) {
+    enum {
+        ULTRAMECH_INITIALIZE = 0,
+        ULTRAMECH_WAIT_FOR_ACTIVATION = 1,
+        ULTRAMECH_FOLLOW_ENTRY_PATH = 2,
+        ULTRAMECH_BALLISTIC_PATH_MOVE = 3,
+        ULTRAMECH_AIM_AND_SELECT_ATTACK = 4,
+        ULTRAMECH_FIRE_BURST = 5,
+        ULTRAMECH_WAIT_BETWEEN_BURSTS = 6,
+        ULTRAMECH_APPROACH_TARGET = 7,
+        ULTRAMECH_MELEE_ATTACK = 8
+    };
     UVec v10;
     UVec v20;
     UVec vector_arithmetic_result;
@@ -1973,7 +2010,7 @@ void ultramech_unlimited_update(UMoby *m) {
     }
     FUN_L00_00263ac8(2.5f, (int)m, 6, d->v200);
     switch (m->state) {
-    case 0:
+    case ULTRAMECH_INITIALIZE:
         d->f20 = 12.0f;
         d->h24 = 0xC;
         d->b28 = 3;
@@ -2000,7 +2037,7 @@ void ultramech_unlimited_update(UMoby *m) {
         if (m->anim != 0)
             blend_moby_animation(m, 0, 0, 5);
         break;
-    case 1:
+    case ULTRAMECH_WAIT_FOR_ACTIVATION:
         if (d->w1CC != -1 || is_point_inside_clip_volume(&hero.motion.pos, d->w1DC)) {
             if (d->w1CC != -1 && FUN_L01_0026e008(d->w1CC, 0x40))
                 break;
@@ -2036,7 +2073,7 @@ void ultramech_unlimited_update(UMoby *m) {
             }
         }
         break;
-    case 2: {
+    case ULTRAMECH_FOLLOW_ENTRY_PATH: {
         UPath *path = D_L15_001B0AB0[d->path];
         float speed = frame_time * 12.0f;
         float dist;
@@ -2078,7 +2115,7 @@ void ultramech_unlimited_update(UMoby *m) {
         add_vector_xyz(&m->pos, &m->pos, &v10);
         break;
     }
-    case 3:
+    case ULTRAMECH_BALLISTIC_PATH_MOVE:
         if (m->anim == 3 && (m->animFlags & 2))
             blend_moby_animation(m, 4, 0, scale_game_frames(6));
         add_vector_xyz(&m->pos, &m->pos, &d->vel);
@@ -2102,7 +2139,7 @@ void ultramech_unlimited_update(UMoby *m) {
         }
         moving = 1;
         break;
-    case 4:
+    case ULTRAMECH_AIM_AND_SELECT_ATTACK:
         if (m->anim != 0 && (m->animFlags & 2))
             blend_moby_animation(m, 0, 0, scale_game_frames(0x14));
         if (d->w164 != 2) {
@@ -2129,7 +2166,7 @@ void ultramech_unlimited_update(UMoby *m) {
             }
         }
         break;
-    case 5:
+    case ULTRAMECH_FIRE_BURST:
         if (m->anim == 6 && (m->animFlags & 2)) {
             blend_moby_animation(m, 7, 0, scale_game_frames(5));
             m->animSpeed = *(float *)&D_L15_00161B34;
@@ -2200,7 +2237,7 @@ void ultramech_unlimited_update(UMoby *m) {
                 blend_moby_animation(m, 0, 0, scale_game_frames(0x14));
         }
         break;
-    case 6:
+    case ULTRAMECH_WAIT_BETWEEN_BURSTS:
         if (d->w164 != 2) {
             approach_angle(&m->rot.f[2],
                              fast_arc_tan(tgt->pos.f[0] - m->pos.f[0], tgt->pos.f[1] - m->pos.f[1]),
@@ -2237,7 +2274,7 @@ void ultramech_unlimited_update(UMoby *m) {
                 blend_moby_animation(m, 0, 0, scale_game_frames(0x14));
         }
         break;
-    case 7: {
+    case ULTRAMECH_APPROACH_TARGET: {
         float ang = fast_arc_tan(tgt->pos.f[0] - m->pos.f[0], tgt->pos.f[1] - m->pos.f[1]);
         if (d->w164 != 2) {
             ang = FUN_L15_002cf110_u(m, &v20, d->f1B8);
@@ -2269,7 +2306,7 @@ void ultramech_unlimited_update(UMoby *m) {
         }
         break;
     }
-    case 8:
+    case ULTRAMECH_MELEE_ATTACK:
         approach_angle(
             &m->rot.f[2], fast_arc_tan(tgt->pos.f[0] - m->pos.f[0], tgt->pos.f[1] - m->pos.f[1]),
             &d->turnVel, frame_time_sq * 8.726646f, frame_time_sq * 8.726646f, frame_time * 12.566371f);
@@ -2452,7 +2489,10 @@ extern float FUN_001f8bc8(void *, void *) __asm__("FUN_001f9b48");
 
 void FUN_L15_002d0fa8(void *arg) {
     enum {
-        HIT_REACTION_DEATH = 1
+        HIT_REACTION_NO_ACTION = 0,
+        HIT_REACTION_DEATH = 1,
+        HIT_REACTION_DEATH_ALTERNATE = 2,
+        HIT_REACTION_NONE = 11
     };
     UMoby *m = arg;
     UData *d = m->data;
@@ -2511,8 +2551,8 @@ void FUN_L15_002d0fa8(void *arg) {
                 *(unsigned char *)((char *)d + 0xAD) = 0;
             }
             switch (code) {
-            case 0:
-            case 11:
+            case HIT_REACTION_NO_ACTION:
+            case HIT_REACTION_NONE:
                 break;
             case 9:
             case 10:
@@ -2544,7 +2584,7 @@ void FUN_L15_002d0fa8(void *arg) {
                 *(unsigned char *)((char *)d + 0x67) = 0x78;
                 break;
             case HIT_REACTION_DEATH:
-            case 2:
+            case HIT_REACTION_DEATH_ALTERNATE:
                 origin.q = 0;
                 m->flags &= 0xEFFF;
                 FUN_0023ee30(m, 7, &effect);

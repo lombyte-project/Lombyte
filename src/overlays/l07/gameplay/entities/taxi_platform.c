@@ -114,13 +114,17 @@ extern void FUN_L02_002a40d0(void *, float);
 
 void ocean_umbris_update(unsigned char *moby) __asm__("FUN_L07_0030d440");
 void ocean_umbris_update(unsigned char *moby) {
+    enum {
+        OCEAN_UMBRIS_INITIALIZE = 0,
+        OCEAN_UMBRIS_QUEUE_DRAW_OUTSIDE_CLIP_VOLUME = 1
+    };
     switch (moby[0x20]) {
-    case 0:
+    case OCEAN_UMBRIS_INITIALIZE:
         FUN_L02_002a40d0(D_L07_00208560, 0.66666669f);
         moby[0x20] = 1;
         moby[0x30] = 0xFF;
         break;
-    case 1:
+    case OCEAN_UMBRIS_QUEUE_DRAW_OUTSIDE_CLIP_VOLUME:
         if (!is_point_inside_clip_volume(D_L07_00166E40, **(int **)(moby + 0x78))) {
             add_draw_callback((void *)l07_moby_draw_callback, moby);
         }
@@ -234,20 +238,25 @@ int FUN_L07_0030ebc8(char *moby, char *data) {
 void blend_moby_animation_u(MobyAnim *moby, int new_seq, int frame_index, int blend_frames) __asm__("FUN_00212f90");
 
 void FUN_L07_0030ec58(char *arg) {
+    enum {
+        SHARKIGATOR_LARGE_WATER_HEIGHT_GAP = 0,
+        SHARKIGATOR_MEDIUM_WATER_HEIGHT_GAP = 1,
+        SHARKIGATOR_SMALL_WATER_HEIGHT_GAP = 2
+    };
     switch (((unsigned char *)arg)[0xBC]) {
-    case 0:
+    case SHARKIGATOR_LARGE_WATER_HEIGHT_GAP:
         if (((unsigned char *)arg)[0x53] != 0) {
             blend_moby_animation_u(arg, 0, 0, 10);
         }
         arg[0x20] = 1;
         break;
-    case 1:
+    case SHARKIGATOR_MEDIUM_WATER_HEIGHT_GAP:
         if (((unsigned char *)arg)[0x53] != 3) {
             blend_moby_animation_u(arg, 3, 0, 10);
         }
         arg[0x20] = 7;
         break;
-    case 2:
+    case SHARKIGATOR_SMALL_WATER_HEIGHT_GAP:
         if (((unsigned char *)arg)[0x53] != 9) {
             blend_moby_animation_u(arg, 9, 0, 10);
         }
@@ -422,6 +431,11 @@ extern char D_0013E550[];
 #define F(p, o) (*(float *)((p) + (o)))
 
 void FUN_L07_002cd2b0(unsigned char *moby) {
+    enum {
+        TAXI_SHRINK_AND_RESET_TO_PATH_START = 0,
+        TAXI_WAIT_FOR_HERO_BOARDING = 1,
+        TAXI_TRAVERSE_PATH = 2
+    };
     char *data = *(char **)(moby + 0x78);
     char *path;
     float orig[4], delta[4], tmp[4];
@@ -454,7 +468,7 @@ void FUN_L07_002cd2b0(unsigned char *moby) {
         *(int *)(data + 0xC4) = -1;
     }
     switch (moby[0xBC]) {
-    case 0: {
+    case TAXI_SHRINK_AND_RESET_TO_PATH_START: {
         char *cls = *(char **)(moby + 0x24);
         float t = F(moby, 0x2C) - F(cls, 0x24) / 60.0f;
         F(moby, 0x2C) = t;
@@ -466,7 +480,7 @@ void FUN_L07_002cd2b0(unsigned char *moby) {
         }
         break;
     }
-    case 1:
+    case TAXI_WAIT_FOR_HERO_BOARDING:
         if (*(short *)(data + 0xB8) != 0) {
             if (FUN_L01_00277fb8(moby)) {
                 if (*(int *)(data + 0xC8) == 0) {
@@ -480,7 +494,7 @@ void FUN_L07_002cd2b0(unsigned char *moby) {
             }
         }
         break;
-    case 2:
+    case TAXI_TRAVERSE_PATH:
         if (*(short *)(data + 0xBA) != 0 ||
             (F(data, 0xBC) < 0.0f &&
              vector_distance((moby + 0x10), &hero.motion.pos) < 2.0f &&
@@ -579,6 +593,12 @@ float absolute_float(float input) __asm__("func_001F99C0");
 extern char D_0013E550[];
 
 void FUN_L07_002cdb28(struct Moby *moby) {
+    enum {
+        TAXI_SHRINK_AND_RESET_TO_PATH_START = 0,
+        TAXI_WAIT_FOR_HERO_BOARDING = 1,
+        TAXI_TRAVERSE_PATH = 2,
+        TAXI_WAIT_FOR_HERO_TO_LEAVE = 3
+    };
     char *data = (char *)moby->pvars;
     char *path;
     float orig[4], delta[4], tmp[4];
@@ -618,7 +638,7 @@ void FUN_L07_002cdb28(struct Moby *moby) {
         moby->collision = moby->pclass->collision;
     }
     switch (moby->command) {
-    case 0: {
+    case TAXI_SHRINK_AND_RESET_TO_PATH_START: {
         char *cls = moby->pclass;
         float t = moby->scale - *(float *)(cls + 0x24) / 60.0f;
         moby->scale = t;
@@ -630,7 +650,7 @@ void FUN_L07_002cdb28(struct Moby *moby) {
         }
         break;
     }
-    case 1:
+    case TAXI_WAIT_FOR_HERO_BOARDING:
         if (*(short *)(data + 0xB8) != 0) {
             if (FUN_L01_00277fb8(moby)) {
                 if (*(int *)(data + 0xC8) == 0) {
@@ -644,7 +664,7 @@ void FUN_L07_002cdb28(struct Moby *moby) {
             }
         }
         break;
-    case 2:
+    case TAXI_TRAVERSE_PATH:
         if (*(short *)(data + 0xBA) != 0 ||
             (*(float *)(data + 0xBC) < 0.0f &&
              vector_distance(&moby->pos, &hero.motion.pos) < 2.0f &&
@@ -715,7 +735,7 @@ void FUN_L07_002cdb28(struct Moby *moby) {
             *(float *)(data + 0xBC) = moby->pos.z - orig[2];
         }
         break;
-    case 3:
+    case TAXI_WAIT_FOR_HERO_TO_LEAVE:
         if (!FUN_L01_00277fb8(moby)) {
             moby->command = 0;
         }
@@ -772,6 +792,14 @@ extern void initialize_global_state_entry(int) __asm__("FUN_0022e188");
 void FUN_L07_002f5ba0(struct Moby *moby)
 {
     enum {
+        CONTROLLER_START_INITIAL_SCENE = 1,
+        CONTROLLER_WAIT_FOR_INITIAL_SCENE = 2,
+        CONTROLLER_WAIT_FOR_OPEN_VOLUME = 4,
+        CONTROLLER_WAIT_FOR_FIRST_OPEN_SCENE = 5,
+        CONTROLLER_WAIT_FOR_SECOND_OPEN_SCENE = 6,
+        CONTROLLER_WAIT_FOR_FINISH_VOLUME = 8,
+        CONTROLLER_WAIT_FOR_FINISH_VOLUME_SCENE = 9,
+        CONTROLLER_WAIT_FOR_FINAL_SCENE_AND_UNLOCK_PLANET = 11,
         CONTROLLER_CLEANUP_LINKED_MOBY = 12,
         CONTROLLER_DELETE_SELF = 13
     };
@@ -785,7 +813,7 @@ void FUN_L07_002f5ba0(struct Moby *moby)
         }
         if (scene_state == 0) moby->state = 1;
         break;
-    case 1:
+    case CONTROLLER_START_INITIAL_SCENE:
         if (alternate_item_available[0x28] == 0) {
             alternate_item_available[0x28] = 1;
             moby->state = 2;
@@ -794,13 +822,13 @@ void FUN_L07_002f5ba0(struct Moby *moby)
             moby->state = 3;
         }
         break;
-    case 2:
+    case CONTROLLER_WAIT_FOR_INITIAL_SCENE:
         if (scene_state != 2) moby->state = 3;
         break;
     case 3:
         moby->state = 4;
         break;
-    case 4:
+    case CONTROLLER_WAIT_FOR_OPEN_VOLUME:
         if (alternate_item_available[0x29] == 0) {
             if (data->open_volume != -1) {
                 if (is_point_inside_clip_volume_i(&hero.motion.pos, data->open_volume) != 0) {
@@ -826,7 +854,7 @@ void FUN_L07_002f5ba0(struct Moby *moby)
             delete_moby_m(&level_mobys[data->removed_moby]);
         }
         break;
-    case 5:
+    case CONTROLLER_WAIT_FOR_FIRST_OPEN_SCENE:
         if (scene_state == 2) break;
         if (data->moby_0c != -1) {
             struct Moby *e = &level_mobys[data->moby_0c];
@@ -835,7 +863,7 @@ void FUN_L07_002f5ba0(struct Moby *moby)
         moby->state = 6;
         start_scene(2);
         break;
-    case 6:
+    case CONTROLLER_WAIT_FOR_SECOND_OPEN_SCENE:
         if (scene_state == 2) break;
         if (data->points_18 != -1) {
             FUN_L00_00216f90(scene_points[data->points_18].unk30, scene_points[data->points_18].unk70, 0, 1);
@@ -854,7 +882,7 @@ void FUN_L07_002f5ba0(struct Moby *moby)
         jet_game_state(2, 4);
         moby->state = 8;
         break;
-    case 8:
+    case CONTROLLER_WAIT_FOR_FINISH_VOLUME:
         if (alternate_item_available[0x2A] == 0) {
             struct Moby *e;
             if (data->moby_0c == -1 || (e = &level_mobys[data->moby_0c]) == 0 || e->state == 0xFE || e->state == 0xFD) {
@@ -877,7 +905,7 @@ void FUN_L07_002f5ba0(struct Moby *moby)
             e->flags |= 0x41;
         }
         break;
-    case 9:
+    case CONTROLLER_WAIT_FOR_FINISH_VOLUME_SCENE:
         if (scene_state == 2) break;
         moby->state = 10;
         FUN_L00_00299460(8);
@@ -886,7 +914,7 @@ void FUN_L07_002f5ba0(struct Moby *moby)
         if (scene_state == 2) break;
         moby->state = 11;
         start_scene(4);
-    case 11:
+    case CONTROLLER_WAIT_FOR_FINAL_SCENE_AND_UNLOCK_PLANET:
         if (scene_state == 2) break;
         if (data->points_1c != -1) {
             FUN_L00_00216f90(scene_points[data->points_1c].unk30, scene_points[data->points_1c].unk70, 0, 1);
@@ -1002,7 +1030,12 @@ void boltcrate_possibly_for_metal_detector_update(struct Moby *moby) __asm__("FU
 void boltcrate_possibly_for_metal_detector_update(struct Moby *moby) {
     enum {
         INITIALIZE_PATH_CHILDREN = 0,
-        ADVANCE_PATH_CHILDREN = 1
+        ADVANCE_PATH_CHILDREN = 1,
+        HIT_REACTION_NO_ANIMATION_RESPONSE = 11
+    };
+    enum {
+        HIT_REACTION_NONE = 0,
+        HIT_REACTION_START_KNOCKBACK = 3
     };
     char *data;
     char *path;
@@ -1026,8 +1059,8 @@ void boltcrate_possibly_for_metal_detector_update(struct Moby *moby) {
         limit = find_moby_hit(moby, 0x230000, 0);
         result = fun_00213928(moby, limit, remaining, 0, &count, 0, 0, 4);
         switch ((unsigned)result) {
-        case 0:
-        case 3:
+        case HIT_REACTION_NONE:
+        case HIT_REACTION_START_KNOCKBACK:
         case 4:
         case 5:
         case 6:
@@ -1035,7 +1068,7 @@ void boltcrate_possibly_for_metal_detector_update(struct Moby *moby) {
         case 8:
         case 9:
         case 10:
-        case 11:
+        case HIT_REACTION_NO_ANIMATION_RESPONSE:
             break;
         case 1:
         case 2:
@@ -1412,6 +1445,16 @@ extern void FUN_L07_0030cd20_2cd2b0(void) __asm__("FUN_L07_0030cd20");
 
 void water_update(Moby_30D8E8 *m) __asm__("FUN_L07_0030c508");
 void water_update(Moby_30D8E8 *m) {
+    enum {
+        WATER_INITIALIZE = 0,
+        WATER_APPROACH_HIGH_HEIGHT = 1,
+        WATER_APPROACH_LOW_HEIGHT = 2,
+        WATER_WAIT_FOR_HERO_IN_VOLUME = 3,
+        WATER_WAIT_BEFORE_RISING = 4,
+        WATER_TIMED_RISE = 5,
+        WATER_RISE_TO_HEIGHT_54 = 6,
+        WATER_REMOVE_ABOVE_HIGH_HEIGHT = 7
+    };
     Data_30D8E8 *d = m->data;
     int i;
     int j;
@@ -1428,7 +1471,7 @@ void water_update(Moby_30D8E8 *m) {
         D_0013D4EC[0] = 0;
     }
     switch (m->state) {
-    case 0:
+    case WATER_INITIALIZE:
         m->flags |= 0x81;
         if (d->idx == 0) {
             Cab_30D8E8 *cab;
@@ -1491,7 +1534,7 @@ void water_update(Moby_30D8E8 *m) {
             m->state = 2;
         }
         break;
-    case 2:
+    case WATER_APPROACH_LOW_HEIGHT:
         if (m->sub & 4) {
             FUN_L01_0026e0e0_2cd2b0(m->f21, 1);
         } else if (FUN_L07_00281ef8_2cd2b0(m, m->f21, 1, 0) && m->sub != 1) {
@@ -1507,7 +1550,7 @@ void water_update(Moby_30D8E8 *m) {
             FUN_L00_002a3ec8_2cd2b0(r, 1, 1, x, r->y + y, 1.0f, -0.05f);
         }
         break;
-    case 1:
+    case WATER_APPROACH_HIGH_HEIGHT:
         if (m->sub & 8) {
             FUN_L01_0026e0e0_2cd2b0(m->f21, 2);
         } else if (FUN_L07_00281ef8_2cd2b0(m, m->f21, 1, 0) && m->sub != 2) {
@@ -1523,31 +1566,31 @@ void water_update(Moby_30D8E8 *m) {
             FUN_L00_002a3ec8_2cd2b0(r, 1, 1, x, r->y + y, 1.0f, -0.05f);
         }
         break;
-    case 3:
+    case WATER_WAIT_FOR_HERO_IN_VOLUME:
         if (d->volume >= 0 && FUN_00214720_2cd2b0(&hero.motion.pos, d->volume)) {
             d->f1C = 0;
             FUN_L01_0026e0e0_2cd2b0(m->f21, 4);
         }
         break;
-    case 4:
+    case WATER_WAIT_BEFORE_RISING:
         if (fast_dec_timer(&d->timer)) {
             d->timer = scale_game_frames_alt(0x708);
             m->state = 5;
         }
         break;
-    case 5:
+    case WATER_TIMED_RISE:
         m->pos[2] += D_0015ED6C * 0.32f;
         if (fast_dec_timer(&d->timer)) {
             m->state = 6;
         }
         break;
-    case 6:
+    case WATER_RISE_TO_HEIGHT_54:
         m->pos[2] += D_0015ED6C * 0.42f;
         if (m->pos[2] >= 54.0f) {
             m->state = 7;
         }
         break;
-    case 7:
+    case WATER_REMOVE_ABOVE_HIGH_HEIGHT:
         if (d->hi < m->pos[2]) {
             D_L07_001DCE40_2cd2b0[d->idx].h1E = 0;
             mark_moby_for_removal_c2(m);
@@ -1663,6 +1706,13 @@ typedef struct {
 /* Slides out from its origin once its linked moby reaches one state and back when it reaches
    another; a level flag is set while it is out. */
 void FUN_L07_0030cf90(struct Moby *moby) {
+    enum {
+        PLATFORM_INITIALIZE = 0,
+        PLATFORM_WAIT_TO_MOVE_OUTWARD = 1,
+        PLATFORM_MOVE_OUTWARD = 2,
+        PLATFORM_WAIT_TO_RETURN = 3,
+        PLATFORM_RETURN_TO_ORIGIN = 4
+    };
     extern char *level_mobys_gp __asm__("D_L07_0015FFD8") __attribute__((sda));
     FUN_L07_0030cf90_Vars *vars = (FUN_L07_0030cf90_Vars *)moby->pvars;
     f32 origin[4];
@@ -1681,7 +1731,7 @@ void FUN_L07_0030cf90(struct Moby *moby) {
         vars->target_index = -1;
 
     switch (moby->state) {
-    case 0:
+    case PLATFORM_INITIALIZE:
     {
         Vec4f *position = &moby->pos;
         vars->origin_x = position->x;
@@ -1693,7 +1743,7 @@ void FUN_L07_0030cf90(struct Moby *moby) {
         moby->state = 1;
         break;
     }
-    case 1:
+    case PLATFORM_WAIT_TO_MOVE_OUTWARD:
         if (vars->target_index != -1) {
             target = (struct Moby *)(level_mobys_gp + vars->target_index * 0x100);
             if (target != 0 && target->state != 0xfe && target->state != 0xfd &&
@@ -1704,7 +1754,7 @@ void FUN_L07_0030cf90(struct Moby *moby) {
             play_moby_sound(vars->trigger_sound, 0, moby);
         moby->state = 2;
         break;
-    case 2:
+    case PLATFORM_MOVE_OUTWARD:
         if (vars->target_index != -1 &&
             (target = (struct Moby *)(level_mobys_gp + vars->target_index * 0x100)) != 0 &&
             target->state != 0xfe && target->state != 0xfd &&
@@ -1731,7 +1781,7 @@ void FUN_L07_0030cf90(struct Moby *moby) {
             return;
         }
         break;
-    case 3:
+    case PLATFORM_WAIT_TO_RETURN:
         if (vars->target_index != -1) {
             target = (struct Moby *)(level_mobys_gp + vars->target_index * 0x100);
             if (target != 0 && target->state != 0xfe && target->state != 0xfd) {
@@ -1743,7 +1793,7 @@ void FUN_L07_0030cf90(struct Moby *moby) {
             }
         }
         break;
-    case 4:
+    case PLATFORM_RETURN_TO_ORIGIN:
         if (vars->target_index == -1 ||
             (target = (struct Moby *)(level_mobys_gp + vars->target_index * 0x100)) == 0 ||
             target->state == 0xfe || target->state == 0xfd ||
@@ -1829,7 +1879,12 @@ void bombomatic_update(char *m) {
     enum {
         BOMBOMATIC_INITIALIZE = 0,
         BOMBOMATIC_WAIT_TO_LAUNCH = 1,
-        BOMBOMATIC_LAUNCH_BURST = 2
+        BOMBOMATIC_LAUNCH_BURST = 2,
+        HIT_REACTION_NO_ANIMATION_RESPONSE = 11
+    };
+    enum {
+        HIT_REACTION_NONE = 0,
+        BOMBOMATIC_CLEAR_HEALTH_RESPONSE = 1
     };
     char *d;
     char *hit_info;
@@ -1865,9 +1920,9 @@ void bombomatic_update(char *m) {
     t = d + 0x20;
     r = fun_00213928(m, hit_info, t, 0, &ia, 0, 0, 4);
     switch (r) {
-    case 0:
+    case HIT_REACTION_NONE:
         break;
-    case 1:
+    case BOMBOMATIC_CLEAR_HEALTH_RESPONSE:
         *(int *)t = 0;
         break;
     case 2:
@@ -1889,7 +1944,7 @@ void bombomatic_update(char *m) {
         break;
     case 10:
         break;
-    case 11:
+    case HIT_REACTION_NO_ANIMATION_RESPONSE:
         break;
     }
 
@@ -2304,6 +2359,9 @@ extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 
 void FUN_L07_0030e998(char *m, char *x, float *hp) {
     enum {
+        HIT_REACTION_NONE = 0,
+        SHARKIGATOR_CLEAR_HEALTH_RESPONSE = 1,
+        HIT_REACTION_START_KNOCKBACK = 3,
         HIT_REACTION_NO_ANIMATION_RESPONSE = 11
     };
     char *info;
@@ -2315,13 +2373,13 @@ void FUN_L07_0030e998(char *m, char *x, float *hp) {
     r = hit_reaction(m, info, hp, 0, &hit, 0, 0, 4);
     if (((unsigned char *)m)[0xBC] != 0) {
         switch (r) {
-        case 0:
+        case HIT_REACTION_NONE:
             break;
-        case 1:
+        case SHARKIGATOR_CLEAR_HEALTH_RESPONSE:
         case 2:
             *hp = 0.0f;
             break;
-        case 3:
+        case HIT_REACTION_START_KNOCKBACK:
         case 4:
         case 5:
         case 6:
@@ -2630,6 +2688,15 @@ extern void func_L00_002A5158_30D8E8(void *, int, int, float, float, float, floa
 
 void sharkigator_update(unsigned char *moby) __asm__("FUN_L07_0030f5f0");
 void sharkigator_update(unsigned char *moby) {
+    enum {
+        SHARKIGATOR_SWIM_IDLE = 1,
+        SHARKIGATOR_SWIM_WANDER = 2,
+        SHARKIGATOR_TARGET_PURSUIT = 4,
+        SHARKIGATOR_TARGET_LUNGE_INTERPOLATION = 5,
+        SHARKIGATOR_HIT_KNOCKBACK_RECOVERY = 12,
+        SHARKIGATOR_HIT_ANIMATION_RECOVERY = 13,
+        SHARKIGATOR_DEATH_FALL_AND_REMOVE = 14
+    };
     char *data;
     struct WalkerTarget target;
     float point[4];
@@ -2744,7 +2811,7 @@ void sharkigator_update(unsigned char *moby) {
     case 0:
         DebugPrint_alt(D_L07_00211838);
         goto end;
-    case 1:
+    case SHARKIGATOR_SWIM_IDLE:
         if ((moby[0x70] & 2) && moby[0x53] != 0) {
             blend_moby_animation(moby, 0, 0, 10);
         }
@@ -2778,7 +2845,7 @@ void sharkigator_update(unsigned char *moby) {
             moby[0x20] = next_state;
         }
         goto end;
-    case 2:
+    case SHARKIGATOR_SWIM_WANDER:
         if ((moby[0x70] & 2) && moby[0x53] != 1) {
             blend_moby_animation(moby, 1, 0, 10);
         }
@@ -2829,7 +2896,7 @@ void sharkigator_update(unsigned char *moby) {
             moby[0x20] = next_state;
         }
         goto end;
-    case 4: {
+    case SHARKIGATOR_TARGET_PURSUIT: {
         float angle;
         float pitch;
         int close = 1;
@@ -2876,7 +2943,7 @@ void sharkigator_update(unsigned char *moby) {
         }
         goto end;
     }
-    case 5: {
+    case SHARKIGATOR_TARGET_LUNGE_INTERPOLATION: {
         float angle;
         char *mpos;
         char *start;
@@ -3058,17 +3125,17 @@ void sharkigator_update(unsigned char *moby) {
             moby[0x20] = 7;
         }
         goto end;
-    case 12:
+    case SHARKIGATOR_HIT_KNOCKBACK_RECOVERY:
         if (mine_fall(moby, data + 0x70) & 1) {
             ((void (*)(char *, char *))FUN_L07_0030ec58_c)((char *)moby, data);
         }
         goto end;
-    case 13:
+    case SHARKIGATOR_HIT_ANIMATION_RECOVERY:
         if (moby[0x70] & 2) {
             ((void (*)(char *, char *))FUN_L07_0030ec58_c)((char *)moby, data);
         }
         goto end;
-    case 14:
+    case SHARKIGATOR_DEATH_FALL_AND_REMOVE:
         if (mine_fall(moby, data + 0x70) & (moby[0x70] & 2)) {
             FUN_L00_0025e450_c2(moby, data + 0xD0, 0, 0.0f, 0.0f, 3, 3, 5, 2.0f, 1.0f, 4.0f, 1.0f, -1, 7.0f,
                               0, 1, -1, 0);
@@ -3135,6 +3202,14 @@ extern float D_0013F448;
 
 
 void FUN_L07_003112c8(char *moby) {
+    enum {
+        PLATFORM_INITIALIZE = 0,
+        PLATFORM_COMMAND_GATED_SWAY = 1,
+        PLATFORM_TIMED_SWAY_BEFORE_FALL = 2,
+        PLATFORM_TILT_AND_FALL = 3,
+        PLATFORM_PARENT_GATED_RECOVERY_SETUP = 4,
+        PLATFORM_HEIGHT_RECOVERY_AND_SWAY = 5
+    };
     char *data = *(char **)(moby + 0x78);
     char *parent = 0;
     char *parent_data = 0;
@@ -3165,7 +3240,7 @@ void FUN_L07_003112c8(char *moby) {
         *(int *)(data + 0xAC) = ((unsigned char *)data)[0xBD];
     }
     switch (((unsigned char *)moby)[0x20]) {
-    case 0:
+    case PLATFORM_INITIALIZE:
         *(int *)(data + 0x20) = 0;
         *(short *)(data + 0x24) = 0;
         data[0x28] = 4;
@@ -3189,7 +3264,7 @@ void FUN_L07_003112c8(char *moby) {
             moby[0x20] = 5;
         }
         break;
-    case 1:
+    case PLATFORM_COMMAND_GATED_SWAY:
         if (((unsigned char *)moby)[0xBC] != 1) break;
         if (*(int *)(data + 0xAC) == 0)
             *(int *)(data + 0xAC) = rand() % 10;
@@ -3200,7 +3275,7 @@ void FUN_L07_003112c8(char *moby) {
         *(float *)(moby + 0x44) = fast_add_rotations(*(float *)(data + 0xA8),
             fast_cos(normalize_angle(convert_integer_to_float(*(int *)(data + 0xAC)) * 0.89f)) * 0.017453292f);
         break;
-    case 2:
+    case PLATFORM_TIMED_SWAY_BEFORE_FALL:
         *(float *)(moby + 0x40) = fast_add_rotations(*(float *)(data + 0xA4),
             fast_sin(normalize_angle(convert_integer_to_float(*(int *)(data + 0xAC)) * 0.75f)) * 0.017453292f);
         *(float *)(moby + 0x44) = fast_add_rotations(*(float *)(data + 0xA8),
@@ -3212,7 +3287,7 @@ void FUN_L07_003112c8(char *moby) {
         }
         moby[0x20] = 3;
         break;
-    case 3:
+    case PLATFORM_TILT_AND_FALL:
         speed = 1.3962634f;
         speed -= *(float *)(moby + 0x40);
         speed *= 0.05f;
@@ -3235,7 +3310,7 @@ void FUN_L07_003112c8(char *moby) {
             }
         }
         break;
-    case 4:
+    case PLATFORM_PARENT_GATED_RECOVERY_SETUP:
         if (((unsigned char *)parent_data)[0xEF] < 2 && ((unsigned char *)parent)[0x20] > 11) break;
         *(float *)(data + 0xB0) = random_float_between_alt(frame_time, frame_time * 4.0f);
         *(float *)(data + 0xC0) = random_angle_radians();
@@ -3245,7 +3320,7 @@ void FUN_L07_003112c8(char *moby) {
         *(float *)(moby + 0x44) = 0.0f;
         *(int *)(data + 0xAC) = 0;
         break;
-    case 5:
+    case PLATFORM_HEIGHT_RECOVERY_AND_SWAY:
         target = *(float *)(moby + 0x18) + *(float *)(data + 0xB0);
         height = *(float *)(data + 0xB8);
         if (hero.air_frames.s == 0 && (char *)hero.ground_moby == moby) {
@@ -3327,6 +3402,12 @@ s32 allocate_voice_for_target_entry_c(s32 entry_index, s32 flags,
 void mark_moby_for_removal_c(void *obj) __asm__("FUN_0020c828");
 
 void FUN_L07_00311bc8(char *m) {
+    enum {
+        LEAF_INITIALIZE = 0,
+        LEAF_WAIT_FOR_HERO_CONTACT = 1,
+        LEAF_TIMED_SWAY_AND_DESCENT = 2,
+        LEAF_ACCELERATED_FALL = 3
+    };
     char *d;
     float prev[4];
     float v[4];
@@ -3339,7 +3420,7 @@ void FUN_L07_00311bc8(char *m) {
         return;
     qcopy(prev, m + 0x10);
     switch (((unsigned char *)m)[0x20]) {
-    case 0:
+    case LEAF_INITIALIZE:
         *(int *)(d + 0x20) = 0;
         *(short *)(d + 0x24) = 0;
         d[0x28] = 4;
@@ -3350,7 +3431,7 @@ void FUN_L07_00311bc8(char *m) {
         *(float *)(m + 0x18) += random_float_between_alt(-0.02f, 0.02f);
         m[0x20] = 1;
         break;
-    case 1:
+    case LEAF_WAIT_FOR_HERO_CONTACT:
         if (FUN_L01_00277fb8(m)) {
             *(float *)(d + 0xA8) = *(float *)(m + 0x40);
             *(float *)(d + 0xAC) = *(float *)(m + 0x44);
@@ -3360,7 +3441,7 @@ void FUN_L07_00311bc8(char *m) {
             m[0x20] = 2;
         }
         break;
-    case 2:
+    case LEAF_TIMED_SWAY_AND_DESCENT:
         *(float *)(m + 0x40) =
             fast_sin(normalize_angle(convert_integer_to_float(*(short *)(d + 0xA0)) * 0.75f)) *
             DEG_TO_RAD;
@@ -3376,7 +3457,7 @@ void FUN_L07_00311bc8(char *m) {
             m[0x20] = 3;
         }
         break;
-    case 3:
+    case LEAF_ACCELERATED_FALL:
         t = (1.3962634f - *(float *)(m + 0x40)) * 0.05f;
         *(float *)(m + 0x40) += t;
         t = fast_sin(t);

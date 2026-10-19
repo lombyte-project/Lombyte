@@ -936,6 +936,10 @@ extern int mine_ftoi(float) __asm__("FUN_001fa6d0");
 
 /* Mine update: drifts along its looped path while spinning and pulsing; blows up on a hit. */
 void FUN_L14_002ec810(struct Moby *m) {
+    enum {
+        MINE_STATE_INITIALIZE = 0,
+        MINE_STATE_FOLLOW_PATH = 1
+    };
     L14MineVars *d = (L14MineVars *)m->pvars;
     float v[4];
     Vec4 vel;
@@ -948,7 +952,7 @@ void FUN_L14_002ec810(struct Moby *m) {
     int g;
 
     switch (m->state) {
-    case 0:
+    case MINE_STATE_INITIALIZE:
         if (d->path == -1) {
             mine_print(D_L14_001FCA98, m->save_id);
             mine_remove(m);
@@ -976,7 +980,7 @@ void FUN_L14_002ec810(struct Moby *m) {
         mine_clear(d->vel);
         d->phase = FUN_L00_00257c48(0.0f, 3.1415927f);
         break;
-    case 1:
+    case MINE_STATE_FOLLOW_PATH:
         FUN_L00_0025d808_mine(D_L14_001B0BB0_mine[d->path], v, &d->segment, &d->along, 1,
                               D_L14_00161C44 * D_0015ED6C_mine * d->dir);
         FUN_L00_0025b8c0(&m->pos.x, &d->vel[0], v[0], 0.02f, 0.2f, 0.0f);
@@ -1768,6 +1772,13 @@ extern s32 D_0014C190_257218[][64] __asm__("D_0014C190");
 /* Vendor platform update: rides its two rails between the trigger volumes, with hum and motor sounds. */
 void elevator_update(struct Moby *m) __asm__("FUN_L14_002ee8d8");
 void elevator_update(struct Moby *m) {
+    enum {
+        ELEVATOR_STATE_INITIALIZE = 0,
+        ELEVATOR_STATE_WAIT_FOR_RIDER = 1,
+        ELEVATOR_STATE_FOLLOW_PATH = 2,
+        ELEVATOR_STATE_SETTLE_AT_ENDPOINT = 3,
+        ELEVATOR_STATE_WAIT_FOR_RIDER_EXIT = 4
+    };
     L14VendorVars *d = (L14VendorVars *)m->pvars;
     Vec4 old;
     Vec4 rot;
@@ -1784,7 +1795,7 @@ void elevator_update(struct Moby *m) {
     qcopy(&old, &m->pos);
     qcopy(&rot, &m->rot);
     switch (m->state) {
-    case 0: {
+    case ELEVATOR_STATE_INITIALIZE: {
         u16 id;
         m->command = 0;
         m->state = 1;
@@ -1806,7 +1817,7 @@ void elevator_update(struct Moby *m) {
         d->i138 = 0;
         break;
     }
-    case 1:
+    case ELEVATOR_STATE_WAIT_FOR_RIDER:
         FUN_L14_002ef6f0(m);
         if (d->clip_a >= 0 && vendor_inside(&hero.motion.pos, d->clip_a) != 0) {
             m->command = 0;
@@ -1849,7 +1860,7 @@ void elevator_update(struct Moby *m) {
             d->dir = -d->dir;
         }
         break;
-    case 2:
+    case ELEVATOR_STATE_FOLLOW_PATH:
         if (voice_is_playing(m, d->motor) == 0) {
             d->motor = vendor_sound(0, 4, m);
             if (d->motor != 0) {
@@ -1867,7 +1878,7 @@ void elevator_update(struct Moby *m) {
         vendor_sub(&delta, &m->pos, &old);
         update_entity_matrix(d->spring, &delta, &rot, &m->rot);
         break;
-    case 3:
+    case ELEVATOR_STATE_SETTLE_AT_ENDPOINT:
         if (vendor_length(d->vel) >= 0.001f) {
             if (voice_is_playing(m, d->motor) == 0)
                 d->motor = vendor_sound(0, 4, m);
@@ -1894,7 +1905,7 @@ void elevator_update(struct Moby *m) {
                 m->state = 1;
         }
         break;
-    case 4:
+    case ELEVATOR_STATE_WAIT_FOR_RIDER_EXIT:
         FUN_L14_002ef6f0(m);
         if (hero.ground_moby != m)
             m->state = 1;
@@ -2225,8 +2236,16 @@ extern void taxi_sample_f(s32 *, int, void *, void *, int, float) __asm__("FUN_0
 /* Ported from rac1-decomp src/overlays/l14_oltanis/vendor_002E0538.c (func_L14_002F19C0) */
 void taxi_update(struct Moby *moby) __asm__("FUN_L14_002f0538");
 void taxi_update(struct Moby *moby) {
+    enum {
+        TAXI_STATE_INITIALIZE = 0,
+        TAXI_STATE_WAIT_AT_STOP = 1,
+        TAXI_STATE_BLEND_STOP_TO_PATH_START = 3,
+        TAXI_STATE_FOLLOW_PATH = 4,
+        TAXI_STATE_BLEND_PATH_END_TO_STOP = 5,
+        TAXI_STATE_BLEND_SAVED_POSE_TO_PATH_START = 7
+    };
     L14TaxiVars *d = (L14TaxiVars *)moby->pvars;
-    float previous_position[4], previous_rotation[4], position_delta[4], v30[4], v40[4], v50[4], v60[4], hero_relative_position[4];
+    float previous_position[4], previous_rotation[4], position_delta[4], v30[4], blend_to_position[4], blend_from_rotation[4], blend_to_rotation[4], hero_relative_position[4];
     float m80[16];
     int ticks = 10;
     int button = 0x10;
@@ -2236,12 +2255,12 @@ void taxi_update(struct Moby *moby) {
     qcopy(previous_rotation, &moby->rot);
     FUN_L00_00266858(moby, (moby->flags ^ 1) & 1);
     switch (moby->state) {
-    case 0:
+    case TAXI_STATE_INITIALIZE:
         d->hB0 = -1;
         d->sound = -1;
         FUN_L14_002f1040(moby);
         break;
-    case 1: {
+    case TAXI_STATE_WAIT_AT_STOP: {
         struct Hero *g = &hero;
         if (g->ground_moby == moby && g->air_frames.s == 0) {
             transpose_rotation_matrix(v30, &moby->rot_row0);
@@ -2317,18 +2336,18 @@ void taxi_update(struct Moby *moby) {
         }
         break;
     }
-    case 3: {
+    case TAXI_STATE_BLEND_STOP_TO_PATH_START: {
         struct Hero *g = &hero;
         if (g->ground_moby == moby && g->air_frames.s == 0) {
             FUN_L00_002e8450(0, 7.0f, 0.002f);
         }
         advance_accelerated_scalar_c(1.0f, frame_time_sq, frame_time_sq, frame_time * 0.5f, &d->t, &d->tv);
         qcopy_nc(v30, D_L14_001600EC_taxi[d->points[d->picked]].pos);
-        qcopy_nc(v50, D_L14_001600EC_taxi[d->points[d->picked]].rot);
-        taxi_sample(0.0f, d->path, wrap, v40, v60, flags);
-        lerp_vector(d->pos, v30, v40, d->t);
-        d->rot[1] = taxi_add_rot(taxi_sub_rot(v60[1], v50[1]) * d->t, v50[1]);
-        d->rot[2] = taxi_add_rot(taxi_sub_rot(v60[2], v50[2]) * d->t, v50[2]);
+        qcopy_nc(blend_from_rotation, D_L14_001600EC_taxi[d->points[d->picked]].rot);
+        taxi_sample(0.0f, d->path, wrap, blend_to_position, blend_to_rotation, flags);
+        lerp_vector(d->pos, v30, blend_to_position, d->t);
+        d->rot[1] = taxi_add_rot(taxi_sub_rot(blend_to_rotation[1], blend_from_rotation[1]) * d->t, blend_from_rotation[1]);
+        d->rot[2] = taxi_add_rot(taxi_sub_rot(blend_to_rotation[2], blend_from_rotation[2]) * d->t, blend_from_rotation[2]);
         if (1.0f <= d->t) {
             d->t = 0.0f;
             d->tv = 0.0f;
@@ -2336,16 +2355,16 @@ void taxi_update(struct Moby *moby) {
         }
         break;
     }
-    case 7: {
+    case TAXI_STATE_BLEND_SAVED_POSE_TO_PATH_START: {
         float f;
         advance_accelerated_scalar_c(1.0f, frame_time_sq, frame_time_sq, frame_time * 0.5f, &d->t, &d->tv);
         qcopy(v30, d->save_pos);
-        qcopy(v50, d->save_rot);
-        taxi_sample_f(d->path, wrap, v40, v60, flags, 0.0f);
+        qcopy(blend_from_rotation, d->save_rot);
+        taxi_sample_f(d->path, wrap, blend_to_position, blend_to_rotation, flags, 0.0f);
         f = cubic_hermite_scalar(1.0f, 0.0f, 1.0f, 0.0f, d->t);
-        lerp_vector(d->pos, v30, v40, f);
-        d->rot[1] = taxi_add_rot(taxi_sub_rot(v60[1], v50[1]) * f, v50[1]);
-        d->rot[2] = taxi_add_rot(taxi_sub_rot(v60[2], v50[2]) * f, v50[2]);
+        lerp_vector(d->pos, v30, blend_to_position, f);
+        d->rot[1] = taxi_add_rot(taxi_sub_rot(blend_to_rotation[1], blend_from_rotation[1]) * f, blend_from_rotation[1]);
+        d->rot[2] = taxi_add_rot(taxi_sub_rot(blend_to_rotation[2], blend_from_rotation[2]) * f, blend_from_rotation[2]);
         if (1.0f <= d->t) {
             d->t = 0.0f;
             d->tv = 0.0f;
@@ -2353,7 +2372,7 @@ void taxi_update(struct Moby *moby) {
         }
         break;
     }
-    case 4: {
+    case TAXI_STATE_FOLLOW_PATH: {
         struct Hero *g = &hero;
         if (g->ground_moby == moby && g->air_frames.s == 0) {
             FUN_L00_002e8450(0, 7.0f, 0.003f);
@@ -2365,15 +2384,15 @@ void taxi_update(struct Moby *moby) {
         }
         break;
     }
-    case 5: {
+    case TAXI_STATE_BLEND_PATH_END_TO_STOP: {
         struct Hero *g;
         advance_accelerated_scalar_c(1.0f, frame_time_sq, frame_time_sq, frame_time * 0.25f, &d->t, &d->tv);
-        qcopy_nc(v40, D_L14_001600EC_taxi[d->points[d->target]].pos);
-        qcopy_nc(v60, D_L14_001600EC_taxi[d->points[d->target]].rot);
-        taxi_sample_f(d->path, wrap, v30, v50, flags, (float)*d->path);
-        lerp_vector(d->pos, v30, v40, d->t);
-        d->rot[1] = taxi_add_rot(taxi_sub_rot(v60[1], v50[1]) * d->t, v50[1]);
-        d->rot[2] = taxi_add_rot(taxi_sub_rot(v60[2], v50[2]) * d->t, v50[2]);
+        qcopy_nc(blend_to_position, D_L14_001600EC_taxi[d->points[d->target]].pos);
+        qcopy_nc(blend_to_rotation, D_L14_001600EC_taxi[d->points[d->target]].rot);
+        taxi_sample_f(d->path, wrap, v30, blend_from_rotation, flags, (float)*d->path);
+        lerp_vector(d->pos, v30, blend_to_position, d->t);
+        d->rot[1] = taxi_add_rot(taxi_sub_rot(blend_to_rotation[1], blend_from_rotation[1]) * d->t, blend_from_rotation[1]);
+        d->rot[2] = taxi_add_rot(taxi_sub_rot(blend_to_rotation[2], blend_from_rotation[2]) * d->t, blend_from_rotation[2]);
         if (1.0f <= d->t) {
             d->t = 0.0f;
             d->tv = 0.0f;
@@ -2490,23 +2509,29 @@ extern float D_0015ED6C_u __asm__("D_0015ED6C");
 extern float FUN_001f9b48(void *, void *);
 
 void FUN_L14_002f1140(struct Moby *moby) {
+    enum {
+        TAXI_STOP_RETURN_HUB = 0,
+        TAXI_STOP_HUB_OUTBOUND_DESTINATION = 1,
+        TAXI_STOP_RETURN_FEEDER_ORIGIN = 2,
+        TAXI_STOP_RETURN_FEEDER_DESTINATION = 3
+    };
     char *d = (char *)moby->pvars;
     char *p;
     float inv, a, b, r;
     switch (*(short *)(d + 0xB4)) {
-    case 0:
+    case TAXI_STOP_RETURN_HUB:
         *(char **)(d + 0xAC) = D_L14_001B0BB0_c2[*(int *)(d + 0x94)];
         *(short *)(d + 0xB6) = 1;
         break;
-    case 1:
+    case TAXI_STOP_HUB_OUTBOUND_DESTINATION:
         *(char **)(d + 0xAC) = D_L14_001B0BB0_c2[*(int *)(d + 0x98)];
         *(short *)(d + 0xB6) = 0;
         break;
-    case 2:
+    case TAXI_STOP_RETURN_FEEDER_ORIGIN:
         *(char **)(d + 0xAC) = D_L14_001B0BB0_c2[*(int *)(d + 0x9C)];
         *(short *)(d + 0xB6) = 3;
         break;
-    case 3:
+    case TAXI_STOP_RETURN_FEEDER_DESTINATION:
         *(char **)(d + 0xAC) = D_L14_001B0BB0_c2[*(int *)(d + 0xA0)];
         *(short *)(d + 0xB6) = 0;
         break;
@@ -2559,22 +2584,28 @@ found:
 #endif
 extern void func_00215F80_f13f8(int, int) __asm__("FUN_00215130");
 void FUN_L14_002f13f8(struct Moby *moby) {
+    enum {
+        TAXI_STOP_RETURN_HUB = 0,
+        TAXI_STOP_HUB_OUTBOUND_DESTINATION = 1,
+        TAXI_STOP_RETURN_FEEDER_ORIGIN = 2,
+        TAXI_STOP_RETURN_FEEDER_DESTINATION = 3
+    };
     char *data = (char *)moby->pvars;
     int v = *(short *)(data + 0xB4);
     if (moby->state == 5) {
         v = *(short *)(data + 0xB6);
     }
     switch (v) {
-    case 0:
+    case TAXI_STOP_RETURN_HUB:
         func_00215F80_f13f8(4, 0x53ED);
         break;
-    case 1:
+    case TAXI_STOP_HUB_OUTBOUND_DESTINATION:
         func_00215F80_f13f8(4, 0x53EE);
         break;
-    case 2:
+    case TAXI_STOP_RETURN_FEEDER_ORIGIN:
         func_00215F80_f13f8(4, 0x53EE);
         break;
-    case 3:
+    case TAXI_STOP_RETURN_FEEDER_DESTINATION:
         func_00215F80_f13f8(4, 0x53EE);
         break;
     case 4:
@@ -2689,6 +2720,12 @@ extern void memcard_save_data(int, int) __asm__("FUN_0020b178");
 /* Watcher moby update: gated by its collectable and trigger, then turns its head toward the hero or a random target. */
 void qwark_oltanis_update(L14WatchMoby *m) __asm__("FUN_L14_002fba20");
 void qwark_oltanis_update(L14WatchMoby *m) {
+    enum {
+        QWARK_OLTANIS_STATE_INITIALIZE_DIALOGUE = 0,
+        QWARK_OLTANIS_STATE_UPDATE_DIALOGUE = 1,
+        QWARK_OLTANIS_STATE_POST_DIALOGUE = 2,
+        QWARK_OLTANIS_STATE_REMOVE = 3
+    };
     L14WatchScratch scratch;
     L14WatchData *d = (L14WatchData *)m->data;
     float rate;
@@ -2702,7 +2739,7 @@ void qwark_oltanis_update(L14WatchMoby *m) {
         }
     }
     switch (m->state) {
-    case 0: {
+    case QWARK_OLTANIS_STATE_INITIALIZE_DIALOGUE: {
         unsigned short id = m->hB2;
         if (D_L14_001BB930.collected[(short)id] != 0 ||
             (D_0014C190_257218[current_level_index][(short)id >> 5] >> (id & 0x1F)) & 1) {
@@ -2719,7 +2756,7 @@ void qwark_oltanis_update(L14WatchMoby *m) {
         m->state = 1;
         break;
     }
-    case 1:
+    case QWARK_OLTANIS_STATE_UPDATE_DIALOGUE:
         if (d->b8 == 1 && FUN_00214720_c(&hero.motion.pos, d->i40)) {
             if (visited52[m->bB0 + current_level_index * 16] != 0xFF) {
                 char *t;
@@ -2737,7 +2774,7 @@ void qwark_oltanis_update(L14WatchMoby *m) {
             m->state = 2;
         }
         break;
-    case 2:
+    case QWARK_OLTANIS_STATE_POST_DIALOGUE:
         if (D_L14_0015F5C4 != 2) {
             m->state = 1;
             if ((unsigned)(d->sub - 3) < 2) {
@@ -2755,7 +2792,7 @@ void qwark_oltanis_update(L14WatchMoby *m) {
             }
         }
         break;
-    case 3:
+    case QWARK_OLTANIS_STATE_REMOVE:
         mark_moby_for_removal(m);
         return;
     }
@@ -2861,6 +2898,11 @@ typedef struct {
 
 /* Cart update: follows its path, bursts when shot and respawns at the path start after a delay. */
 void FUN_L14_002fc0f0(struct Moby *moby) {
+    enum {
+        ENEMY_FIGHTER_STATE_INITIALIZE = 0,
+        ENEMY_FIGHTER_STATE_FOLLOW_PATH = 1,
+        ENEMY_FIGHTER_STATE_WAIT_FOR_RESPAWN = 2
+    };
     L14CartVars *data = (L14CartVars *)moby->pvars;
     int hit = cart_hit(moby, 0x800000, 0);
     int index;
@@ -2889,7 +2931,7 @@ void FUN_L14_002fc0f0(struct Moby *moby) {
         data->sound = -1;
     }
     switch (moby->state) {
-    case 0:
+    case ENEMY_FIGHTER_STATE_INITIALIZE:
         path_index = data->path;
         if (path_index == -1) {
             cart_print(D_L14_001FCE10, moby->save_id);
@@ -2908,10 +2950,10 @@ void FUN_L14_002fc0f0(struct Moby *moby) {
         data->sound = -1;
         data->timer = cart_frames(D_L14_00161F5C);
         break;
-    case 1:
+    case ENEMY_FIGHTER_STATE_FOLLOW_PATH:
         FUN_L14_002fc9a0(moby);
         break;
-    case 2:
+    case ENEMY_FIGHTER_STATE_WAIT_FOR_RESPAWN:
       if (cart_tick(&data->timer)) {
         path = D_L14_001B0BB0_cart[data->path];
         moby->flags &= 0xffbe;
@@ -3185,6 +3227,12 @@ typedef struct {
 } L14TramVars;
 /* Tram update: carries its rider moby, unlocks once the three items are bought and the camera looks at it. */
 void FUN_L14_002fcbb0(struct Moby *m) {
+    enum {
+        TRAM_STATE_INITIALIZE = 0,
+        TRAM_STATE_WAIT_FOR_UNLOCK = 1,
+        TRAM_STATE_FOLLOW_PATH = 2,
+        TRAM_STATE_WAIT_FOR_RESPAWN = 3
+    };
     L14TramVars *d = (L14TramVars *)m->pvars;
     Vec4 b;
     Vec4 a;
@@ -3223,7 +3271,7 @@ void FUN_L14_002fcbb0(struct Moby *m) {
         }
     }
     switch (m->state) {
-    case 0:
+    case TRAM_STATE_INITIALIZE:
         if (d->path == -1) {
             tram_print(D_L14_001FCE98, m->save_id);
             tram_remove(m);
@@ -3256,7 +3304,7 @@ void FUN_L14_002fcbb0(struct Moby *m) {
         d->sound = -1;
         d->timer = tram_frames(D_L14_00161F8C);
         break;
-    case 1: {
+    case TRAM_STATE_WAIT_FOR_UNLOCK: {
         int lvl = current_level_index * 16;
         u8 v = visited52[d->item[0] + lvl];
         if (v == 0xFF) {
@@ -3291,7 +3339,7 @@ void FUN_L14_002fcbb0(struct Moby *m) {
         }
         break;
     }
-    case 2:
+    case TRAM_STATE_FOLLOW_PATH:
         if (FUN_L14_002fd918(m) != 0)
             return;
         if (d->carrier != 0 && d->stage < 2) {
@@ -3311,7 +3359,7 @@ void FUN_L14_002fcbb0(struct Moby *m) {
             }
         }
         break;
-    case 3:
+    case TRAM_STATE_WAIT_FOR_RESPAWN:
         if (tram_tick(&d->timer) != 0) {
             char *path = D_L14_001B0BB0_t[d->path];
             m->flags &= 0xFFBE;
@@ -3542,6 +3590,11 @@ extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68"
 
 void rocket_update(struct Moby *moby) __asm__("FUN_L14_002fdbb8");
 void rocket_update(struct Moby *moby) {
+    enum {
+        ROCKET_STATE_INITIALIZE = 0,
+        ROCKET_STATE_IDLE = 1,
+        ROCKET_STATE_FLY_TO_POINT = 2
+    };
     FlyerVars *vars = (FlyerVars *)moby->pvars;
     Vec4f diff;
     OvlVec4 step;
@@ -3551,7 +3604,7 @@ void rocket_update(struct Moby *moby) {
     struct Moby *target;
 
     switch (moby->state) {
-    case 0:
+    case ROCKET_STATE_INITIALIZE:
         if (vars->point < 0 || vars->target < 0) {
             mark_moby_for_removal(moby);
             return;
@@ -3562,9 +3615,9 @@ void rocket_update(struct Moby *moby) {
         vars->sound = -1;
         vars->timer = scale_game_frames(D_L14_00161FB0);
         return;
-    case 1:
+    case ROCKET_STATE_IDLE:
         return;
-    case 2:
+    case ROCKET_STATE_FLY_TO_POINT:
         fast_vec_sub(&diff, D_L14_001600EC + vars->point * 0x80 + 0x30, &moby->pos);
         dist = fast_vec_length(&diff);
         fast_dec_timer(&vars->timer);

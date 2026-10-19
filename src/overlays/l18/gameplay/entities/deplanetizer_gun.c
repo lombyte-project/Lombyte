@@ -74,6 +74,10 @@ extern float D_L18_0016252C;
 extern char D_L18_001679D0[];
 /* Preserve the state-4 frame conversion and the state-7 raw-frame arithmetic. */
 void FUN_L18_002f88e8(struct Moby *moby) {
+    enum {
+        INITIALIZE_EFFECT_TIMING = 0,
+        UPDATE_SEQUENCE_EFFECTS = 1
+    };
     union { EffectRadii radii; struct { Vec4 pos, velocity; } vectors; } scratch;
     Vec4 direction, a, b;
     struct Moby *target;
@@ -83,7 +87,7 @@ void FUN_L18_002f88e8(struct Moby *moby) {
     int i, n;
 
     switch (moby->state) {
-    case 0:
+    case INITIALIZE_EFFECT_TIMING:
         D_L18_00162498 = 355;
         D_L18_0016249C = 365;
         D_L18_001624BC = 60;
@@ -93,7 +97,7 @@ void FUN_L18_002f88e8(struct Moby *moby) {
         moby->update_dist = 255;
         moby->state = 1;
         return;
-    case 1:
+    case UPDATE_SEQUENCE_EFFECTS:
         break;
     default:
         return;
@@ -749,11 +753,16 @@ extern int D_L18_0016D290_lui __asm__("D_L18_0016D290") __attribute__((section("
 
 void FUN_L18_002fa640(struct Moby *moby);
 void FUN_L18_002fa640(struct Moby *moby) {
+    enum {
+        INITIALIZE_STATE_MACHINE = 0,
+        WAIT_TO_HIDE_AND_TURN = 1,
+        HIDDEN_WAIT_TO_SHOW = 2
+    };
     switch (moby->state) {
-    case 0:
+    case INITIALIZE_STATE_MACHINE:
         moby->state = 1;
         break;
-    case 1:
+    case WAIT_TO_HIDE_AND_TURN:
         if (D_L18_0015F5C4 == 2 && D_L18_0016D290_lui == 3) {
             moby->flags |= 1;
             moby->visible = 0;
@@ -761,7 +770,7 @@ void FUN_L18_002fa640(struct Moby *moby) {
             moby->state = 2;
         }
         break;
-    case 2:
+    case HIDDEN_WAIT_TO_SHOW:
         if (D_L18_0015F5C4 != 2) {
             unsigned short fl = moby->flags;
             moby->state = 3;
@@ -902,17 +911,21 @@ extern short D_L18_00162578 __attribute__((sda));
 extern short D_L18_0016257C __attribute__((sda));
 extern short D_L18_00162580 __attribute__((sda));
 void FUN_L18_002fad28(M2 *m) {
+    enum {
+        INITIALIZE_TRAIL_EFFECT = 0,
+        UPDATE_TRAIL_EFFECT = 1
+    };
     char buf[16];
     char buf2[16];
     char buf3[16];
     int idx;
     char *p;
     switch (m->state) {
-    case 0:
+    case INITIALIZE_TRAIL_EFFECT:
         m->v = 0xFF;
         m->state = 1;
         break;
-    case 1:
+    case UPDATE_TRAIL_EFFECT:
         if (D_L18_0015F5C4 == 2) {
             if (D_L18_0016D260.n < 4) {
                 idx = 0;
@@ -979,7 +992,11 @@ void gadgebot_update(unsigned char *m) {
     enum {
         GADGEBOT_INITIALIZE = 0,
         GADGEBOT_LAUNCH_FLIGHT = 1,
-        GADGEBOT_APPROACH_TARGET = 3
+        GADGEBOT_WAIT_TO_APPROACH = 2,
+        GADGEBOT_APPROACH_TARGET = 3,
+        GADGEBOT_FACE_TARGET = 4,
+        GADGEBOT_DEATH_FALL = 5,
+        GADGEBOT_EXPLODE = 6
     };
     char tmp[16];
     unsigned char *e = *(unsigned char **)(m + 0x78);
@@ -1037,7 +1054,7 @@ void gadgebot_update(unsigned char *m) {
             *(short *)(e + 0x138) = 0;
         }
         break;
-    case 2:
+    case GADGEBOT_WAIT_TO_APPROACH:
         if (*(int *)(e + 0x1C4) == 2) {
             if (!(10.0f < f9d48_i(m + 0x10, e + 0x180)))
                 break;
@@ -1065,7 +1082,7 @@ void gadgebot_update(unsigned char *m) {
         }
         break;
     }
-    case 4: {
+    case GADGEBOT_FACE_TARGET: {
         float r, k, b, d;
         moby_transform_ptr = m + 0x48;
         r = fast_arc_tan(*(float *)(e + 0x180) - *(float *)(m + 0x10),
@@ -1092,10 +1109,10 @@ void gadgebot_update(unsigned char *m) {
         }
         break;
     }
-    case 5:
+    case GADGEBOT_DEATH_FALL:
         if (!(mine_fall(m, e + 0x70) & 0x140))
             break;
-    case 6:
+    case GADGEBOT_EXPLODE:
         qcopy(tmp, m + 0x10);
         ((float *)tmp)[2] += 0.5f;
         func_L00_0025F4A8_alt(m, e + 0x40, tmp, 0.0f, 0.0f, 5, 2, 4, 1.0f, 0.5f, 9.0f, 0.5f, 4,

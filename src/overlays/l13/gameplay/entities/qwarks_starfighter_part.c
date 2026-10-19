@@ -116,6 +116,11 @@ extern char D_0013F3D0[];
 extern char D_00140940[];
 
 void FUN_L13_002eac00(void *mobyp, void *pp) {
+    enum {
+        STARFIGHTER_COMMAND_TIMED_VOLLEY = 1,
+        STARFIGHTER_COMMAND_ALTERNATING_ATTACKS = 2,
+        STARFIGHTER_COMMAND_REPEATED_VECTOR_ATTACK = 7
+    };
     char *moby = mobyp;
     char *p = pp;
     float sv[4];
@@ -125,9 +130,9 @@ void FUN_L13_002eac00(void *mobyp, void *pp) {
     unsigned char c, e;
 
     switch (((unsigned char *)moby)[0xBC]) {
-    case 1:
+    case STARFIGHTER_COMMAND_TIMED_VOLLEY:
         goto s1;
-    case 2:
+    case STARFIGHTER_COMMAND_ALTERNATING_ATTACKS:
         goto s2;
     case 3:
         goto s3;
@@ -137,7 +142,7 @@ void FUN_L13_002eac00(void *mobyp, void *pp) {
         goto s3;
     case 6:
         goto s3;
-    case 7:
+    case STARFIGHTER_COMMAND_REPEATED_VECTOR_ATTACK:
         goto s2;
     default:
         return;
@@ -502,6 +507,16 @@ extern char *D_L13_00160058_m __asm__("D_L13_0015FFD8");
 extern char D_0013E633_snd[] __asm__("D_0013E533");
 
 void FUN_L13_002eb098(Moby388 *moby) {
+    enum {
+        STARFIGHTER_STATE_INITIALIZE = 0,
+        STARFIGHTER_STATE_WAIT_FOR_HERO_SHIP = 1,
+        STARFIGHTER_STATE_FOLLOW_INITIAL_PATH = 2,
+        STARFIGHTER_STATE_TRACTOR_BEAM = 5,
+        STARFIGHTER_STATE_OWNER_UNAVAILABLE = 6,
+        STARFIGHTER_STATE_DEATH_FLIGHT = 7,
+        STARFIGHTER_STATE_EXPLODE_AND_REMOVE = 8,
+        STARFIGHTER_STATE_RESET = 9
+    };
     Ship388 *data = moby->d;
     float offset[4];
     float joint[4];
@@ -522,7 +537,7 @@ void FUN_L13_002eb098(Moby388 *moby) {
     }
 
     switch (moby->state) {
-    case 0: {
+    case STARFIGHTER_STATE_INITIALIZE: {
         int j;
         if (moby->bB0 != 0xFF && visited52[moby->bB0 + (D_0015ED84 << 4)] == 0xFF) {
             mark_moby_for_removal_c(moby);
@@ -570,7 +585,7 @@ void FUN_L13_002eb098(Moby388 *moby) {
         moby->flags |= 0x41;
         break;
     }
-    case 1: {
+    case STARFIGHTER_STATE_WAIT_FOR_HERO_SHIP: {
         char *hero = ((char *)&D_0013F350);
         if (*(int *)(hero + 0x2084) == 0x32 && *(Moby388 **)(hero + 0x15F0) != 0) {
             moby->flags &= 0xFFBE;
@@ -600,7 +615,7 @@ void FUN_L13_002eb098(Moby388 *moby) {
         }
         break;
     }
-    case 2: {
+    case STARFIGHTER_STATE_FOLLOW_INITIAL_PATH: {
         {
             char *hero = ((char *)&D_0013F350);
             if (*(Moby388 **)(hero + 0x15F0) != 0 && (*(Moby388 **)(hero + 0x15F0))->cls_id == 0x45) {
@@ -660,7 +675,7 @@ void FUN_L13_002eb098(Moby388 *moby) {
             trooper_anim_finish(moby, (char *)data + 0x60);
         }
         break;
-    case 5: {
+    case STARFIGHTER_STATE_TRACTOR_BEAM: {
         float hero_distance;
         data->hud104 = queue_animation_update_alt(0x11, 0xFFFF, (int)FUN_L00_00235d80, (int)FUN_L00_00235ea0,
                                   (int)FUN_L06_00249738, (int)&data->i108,
@@ -784,7 +799,7 @@ void FUN_L13_002eb098(Moby388 *moby) {
         }
         break;
     }
-    case 6: {
+    case STARFIGHTER_STATE_OWNER_UNAVAILABLE: {
         char *dialog;
         if (*(Moby388 **)(((char *)&D_00140940)) != 0 && (*(Moby388 **)(((char *)&D_00140940)))->cls_id == 0x45) {
             (*(Moby388 **)(((char *)&D_00140940)))->bBC = 0;
@@ -802,7 +817,7 @@ void FUN_L13_002eb098(Moby388 *moby) {
         }
         break;
     }
-    case 7: {
+    case STARFIGHTER_STATE_DEATH_FLIGHT: {
         float target_yaw, target_pitch;
         if (*(Moby388 **)(((char *)&D_00140940)) != 0 && (*(Moby388 **)(((char *)&D_00140940)))->cls_id == 0x45) {
             (*(Moby388 **)(((char *)&D_00140940)))->bBC = 0;
@@ -865,7 +880,7 @@ void FUN_L13_002eb098(Moby388 *moby) {
         }
         break;
     }
-    case 8: {
+    case STARFIGHTER_STATE_EXPLODE_AND_REMOVE: {
         char *view;
         if (*(Moby388 **)(((char *)&D_00140940)) != 0 && (*(Moby388 **)(((char *)&D_00140940)))->cls_id == 0x45) {
             (*(Moby388 **)(((char *)&D_00140940)))->bBC = 0;
@@ -892,7 +907,7 @@ void FUN_L13_002eb098(Moby388 *moby) {
         }
         break;
     }
-    case 9: {
+    case STARFIGHTER_STATE_RESET: {
         char *path;
         char **parts;
         if (data->pF0 != 0) {
@@ -1146,6 +1161,13 @@ struct PieceVars {
 };
 
 void FUN_L13_002ece00(struct Moby *moby) {
+    enum {
+        PART_STATE_INITIALIZE = 0,
+        PART_STATE_SYNC_PARENT_SCALE = 1,
+        PART_STATE_IDLE = 2,
+        PART_STATE_MOVE_AND_SPIN = 3,
+        PART_STATE_BURST_AND_REMOVE = 4
+    };
     struct PieceVars *vars = (struct PieceVars *)moby->pvars;
     struct Moby *parent = vars->parent;
     struct Moby *hit;
@@ -1156,17 +1178,17 @@ void FUN_L13_002ece00(struct Moby *moby) {
     moby->flags = (moby->flags & 0xFFFC);
     moby->flags = moby->flags | (vars->parent->flags & 3);
     switch (moby->state) {
-    case 0:
+    case PART_STATE_INITIALIZE:
         moby->state = 1;
         qzero(&vars->unk20);
         break;
-    case 1:
+    case PART_STATE_SYNC_PARENT_SCALE:
         moby->scale = moby->pclass->scale * vars->parent->scale / vars->parent->pclass->scale;
         moby->spawn_frame = vars->parent->spawn_frame;
         break;
-    case 2:
+    case PART_STATE_IDLE:
         break;
-    case 3:
+    case PART_STATE_MOVE_AND_SPIN:
         add_vector_xyz(&moby->pos, &moby->pos, &vars->vel);
         scale_vector_ece00(&vars->vel, &vars->vel, 0.995f);
         if (coll_sphere_ece00(&moby->pos, 2.0f, 0, moby) != 0) {
@@ -1196,7 +1218,7 @@ void FUN_L13_002ece00(struct Moby *moby) {
     remove:
         remove_ece00(moby);
         break;
-    case 4:
+    case PART_STATE_BURST_AND_REMOVE:
         burst_ece00(moby, &vars->vel, 0, 2.0f, 4.0f, 10, 3, 16, 4.0f, 2.0f, 9.0f, -1, 1.0f, 15.0f, 1, 1, -1, 0);
         remove_ece00(moby);
         break;
@@ -1284,10 +1306,16 @@ extern s32 D_0014C190_257218[][64] __asm__("D_0014C190");
 extern char D_L13_001F4FB0[];
 void forcefield_update(unsigned char *m) __asm__("FUN_L13_002ed4a8");
 void forcefield_update(unsigned char *m) {
+    enum {
+        FORCEFIELD_STATE_INITIALIZE = 0,
+        FORCEFIELD_STATE_MONITOR_LINKED_MOBY = 1,
+        FORCEFIELD_STATE_FADE_OUT = 2,
+        FORCEFIELD_STATE_REMOVE = 3
+    };
     char *d = *(char **)(m + 0x78);
     int a;
     switch (m[0x20]) {
-    case 0:
+    case FORCEFIELD_STATE_INITIALIZE:
         m[0x20] = 1;
         m[0x23] = 0x14;
         *(unsigned short *)(m + 0x34) |= 0xA08;
@@ -1295,7 +1323,7 @@ void forcefield_update(unsigned char *m) {
         *(float *)(d + 4) = 1.0f;
         glow_n(m, 0x80, 0x80, 0x80);
         break;
-    case 1:
+    case FORCEFIELD_STATE_MONITOR_LINKED_MOBY:
         if (*(int *)d != -1) {
             unsigned char *o = (unsigned char *)(D_L13_0015FFD8_n + (*(int *)d << 8));
             if (o == 0 || o[0x20] == 0xFE || o[0x20] == 0xFD ||
@@ -1310,14 +1338,14 @@ void forcefield_update(unsigned char *m) {
         }
         FUN_L13_002ed158(m, d);
         break;
-    case 2:
+    case FORCEFIELD_STATE_FADE_OUT:
         *(float *)(d + 4) -= frame_scale * 0.05f;
         if (*(float *)(d + 4) < 0.0f)
             m[0x20] = 3;
         else
             m[0x23] = ftoi_n(*(float *)(d + 4) * 20.0f);
         break;
-    case 3:
+    case FORCEFIELD_STATE_REMOVE:
         if (*(short *)(d + 0xE) != -1) {
             FUN_L00_0023e838(*(short *)(d + 0xE));
             *(short *)(d + 0xE) = -1;
@@ -1465,6 +1493,11 @@ void mmr_q(struct Obj_q *obj) __asm__("FUN_0020c828");
 
 extern char D_L13_001F51B0[] __attribute__((section(".data")));
 void FUN_L13_002f8880(char *moby) {
+    enum {
+        STATE_RELAY_INITIALIZE = 0,
+        STATE_RELAY_WAIT_FOR_SECOND_STATE_SET = 1,
+        STATE_RELAY_WAIT_FOR_FIRST_STATE_SET = 2
+    };
     char *data = *(char **)(moby + 0x78);
     char *m = 0;
     int idx = *(int *)data;
@@ -1474,7 +1507,7 @@ void FUN_L13_002f8880(char *moby) {
         m = D_L13_0015FFD8_m + (idx << 8);
     }
     switch (data[0x1C]) {
-    case 0:
+    case STATE_RELAY_INITIALIZE:
         if (m == 0) {
             debug_print_alt_q(D_L13_001F51B0, *(short *)(moby + 0xB2), *(short *)(moby + 0xA6));
             mmr_q(moby);
@@ -1484,7 +1517,7 @@ void FUN_L13_002f8880(char *moby) {
             data[0x1C] = 2;
         }
         break;
-    case 1:
+    case STATE_RELAY_WAIT_FOR_SECOND_STATE_SET:
         found = 0;
         for (i = 0; i < 6; i++) {
             if ((unsigned char)m[0x20] == (data + i)[0xA]) {
@@ -1508,7 +1541,7 @@ void FUN_L13_002f8880(char *moby) {
             data[0x1C] = 2;
         }
         break;
-    case 2:
+    case STATE_RELAY_WAIT_FOR_FIRST_STATE_SET:
         found = 0;
         for (i = 0; i < 6; i++) {
             if ((unsigned char)m[0x20] == (data + i)[4]) {
@@ -1552,6 +1585,13 @@ extern void set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");
 extern int func_001FA898_d(float) __asm__("FUN_001fa6d0");
 
 void FUN_L13_002f8a78(char *moby) {
+    enum {
+        GATE_STATE_INITIALIZE = 0,
+        GATE_STATE_OPEN = 1,
+        GATE_STATE_CLOSING = 2,
+        GATE_STATE_CLOSED = 3,
+        GATE_STATE_OPENING = 4
+    };
     char *d = *(char **)(moby + 0x78);
     char *c = 0;
     int open;
@@ -1578,7 +1618,7 @@ void FUN_L13_002f8a78(char *moby) {
         }
     }
     switch (((unsigned char *)moby)[0x20]) {
-    case 0:
+    case GATE_STATE_INITIALIZE:
         if (c == 0) {
             debug_print_alt(D_L13_001F51E0, *(short *)(moby + 0xB2), *(short *)(moby + 0xA6));
             mark_moby_for_removal(moby);
@@ -1598,13 +1638,13 @@ void FUN_L13_002f8a78(char *moby) {
             moby[0x23] = 0;
         }
         break;
-    case 1:
+    case GATE_STATE_OPEN:
         if (close) {
             *(int *)(moby + 0x94) = 0;
             moby[0x20] = 2;
         }
         break;
-    case 2:
+    case GATE_STATE_CLOSING:
         if (open) {
             moby[0x20] = 4;
             *(int *)(moby + 0x94) = *(int *)(*(char **)(moby + 0x24) + 0x10);
@@ -1618,7 +1658,7 @@ void FUN_L13_002f8a78(char *moby) {
             *(unsigned short *)(moby + 0x34) |= 1;
         }
         break;
-    case 3:
+    case GATE_STATE_CLOSED:
         if (open) {
             moby[0x20] = 4;
             *(int *)(moby + 0x94) = *(int *)(*(char **)(moby + 0x24) + 0x10);
@@ -1626,7 +1666,7 @@ void FUN_L13_002f8a78(char *moby) {
             *(unsigned short *)(moby + 0x34) &= 0xFFFE;
         }
         break;
-    case 4:
+    case GATE_STATE_OPENING:
         if (close) {
             *(int *)(moby + 0x94) = 0;
             moby[0x20] = 2;

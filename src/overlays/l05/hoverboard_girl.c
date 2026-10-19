@@ -166,6 +166,11 @@ void update_hoverboard_girl_boobs_animation(HoverboardGirlMoby *moby, Hoverboard
 
 void update_hoverboard_girl(HoverboardGirlMoby *moby) __asm__("FUN_L05_00316ab8");
 void update_hoverboard_girl(HoverboardGirlMoby *moby) {
+    enum {
+        HOVERBOARD_GIRL_STATE_INITIALIZE = 0,
+        HOVERBOARD_GIRL_STATE_UPDATE_DIALOGUE = 1,
+        HOVERBOARD_GIRL_STATE_WAIT_TO_RESUME_DIALOGUE = 3
+    };
     HoverboardGirlState *state = moby->data;
     HoverboardGirlVector target_position;
     HoverboardGirlVector head_position;
@@ -181,7 +186,7 @@ void update_hoverboard_girl(HoverboardGirlMoby *moby) {
 
     update_hoverboard_girl_cutscene_instances(moby);
     switch (moby->state) {
-    case 0:
+    case HOVERBOARD_GIRL_STATE_INITIALIZE:
         if (moby->animation != 0) {
             blend_moby_animation(moby, 0, 0, scale_frame_count(20));
         }
@@ -196,7 +201,7 @@ void update_hoverboard_girl(HoverboardGirlMoby *moby) {
         initialize_npc_dialogue(moby, state);
         initialize_moby_grounding(moby);
         break;
-    case 1:
+    case HOVERBOARD_GIRL_STATE_UPDATE_DIALOGUE:
         if (update_npc_dialogue(moby, state) != 0) {
             begin_dialogue_camera_transition(2.0f, moby);
             moby->state = 3;
@@ -246,7 +251,7 @@ void update_hoverboard_girl(HoverboardGirlMoby *moby) {
             }
         }
         break;
-    case 3:
+    case HOVERBOARD_GIRL_STATE_WAIT_TO_RESUME_DIALOGUE:
         if (game_mode != 2) {
             moby->state = 1;
             if (state->previous_dialogue_state == 4) {

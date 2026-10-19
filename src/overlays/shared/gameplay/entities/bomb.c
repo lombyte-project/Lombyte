@@ -1704,6 +1704,14 @@ extern int rand_2cc608(void) __asm__("FUN_001160d8");
 /* Ryno (class 454) update: target lock and reticle while held, then the eight-missile salvo state machine. */
 void ryno_update(struct Moby *m) __asm__("FUN_L00_002cc608");
 void ryno_update(struct Moby *m) {
+    enum {
+        RYNO_STATE_INITIALIZE = 0,
+        RYNO_STATE_WAIT_ANIMATION = 1,
+        RYNO_STATE_READY_TO_FIRE = 2,
+        RYNO_STATE_READY_TO_FIRE_WITH_RETICLE = 3,
+        RYNO_STATE_FIRE_SALVO = 4,
+        RYNO_STATE_COOLDOWN = 5
+    };
     Mat3_2cc608 cam;
     Mat4_2cc608 view;
     Vec4 aim;
@@ -1751,16 +1759,16 @@ void ryno_update(struct Moby *m) {
         }
     }
     switch (m->state) {
-    case 0:
+    case RYNO_STATE_INITIALIZE:
         d->target = 0;
         hero.items[0].unk1C = 0;
         m->state = 1;
         d->track_timer = 0;
         break;
-    case 1:
+    case RYNO_STATE_WAIT_ANIMATION:
         if (m->anim_flags & 2) m->state = 2;
         break;
-    case 2:
+    case RYNO_STATE_READY_TO_FIRE:
         if (hero.state.current == 1) hud_2cc608(0x1E, 1);
         if ((controller_state.pressed & hero.items[0].button_mask) == 0) return;
         if (hero.unk20AC != 0) return;
@@ -1785,7 +1793,7 @@ void ryno_update(struct Moby *m) {
         }
         d->count = 0;
         break;
-    case 3:
+    case RYNO_STATE_READY_TO_FIRE_WITH_RETICLE:
         reticle_2cc608(m, 0xFF0F0FFF, 1.0f, 0.0f, 0, 0x23, -1, 90.0f, 4);
         if ((controller_state.held & 5) == 0) {
             m->state = 2;
@@ -1814,7 +1822,7 @@ void ryno_update(struct Moby *m) {
         }
         d->count = 0;
         break;
-    case 4:
+    case RYNO_STATE_FIRE_SALVO:
         if (timer16_2cc608(&d->shot_timer) == 0) return;
         d->shot_timer = ticks_2cc608(9);
         d->slot++;
@@ -1868,7 +1876,7 @@ void ryno_update(struct Moby *m) {
             }
         }
         break;
-    case 5:
+    case RYNO_STATE_COOLDOWN:
         if (timer16_2cc608(&d->shot_timer) == 0) return;
         d->shots = 0;
         d->target = 0;
@@ -2144,13 +2152,13 @@ void rocket_update(char *m) {
     flag = 0;
     goto body;
     for (;;) {
-        float a1;
+        float offset_trig_factor;
         if (!(0.1f < sp)) goto done;
     body:
-        a1 = fast_sin_c(*(float *)(d + 0x48));
-        u.v.a.f[1] = *(float *)(d + 0x44) * a1 * fast_cos_c(*(float *)(d + 0x4C));
-        a1 = fast_cos_c(*(float *)(d + 0x48));
-        u.v.a.f[2] = *(float *)(d + 0x44) * a1 * fast_cos_c(*(float *)(d + 0x4C));
+        offset_trig_factor = fast_sin_c(*(float *)(d + 0x48));
+        u.v.a.f[1] = *(float *)(d + 0x44) * offset_trig_factor * fast_cos_c(*(float *)(d + 0x4C));
+        offset_trig_factor = fast_cos_c(*(float *)(d + 0x48));
+        u.v.a.f[2] = *(float *)(d + 0x44) * offset_trig_factor * fast_cos_c(*(float *)(d + 0x4C));
         zf = 0.0f;
         u.v.a.f[3] = zf;
         u.v.a.f[0] = zf;
@@ -2898,6 +2906,15 @@ extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 
 void crate_update(struct Moby *moby) __asm__("FUN_L00_002cf218");
 void crate_update(struct Moby *moby) {
+    enum {
+        CRATE_STATE_INITIALIZE = 0,
+        CRATE_STATE_PROCESS_HITS = 1,
+        CRATE_STATE_CLASS_CHANGE_COOLDOWN = 2,
+        CRATE_STATE_BROKEN = 3,
+        CRATE_STATE_REACTIVATION_DELAY = 4,
+        CRATE_STATE_DETONATION_COUNTDOWN = 5,
+        CRATE_STATE_WAIT_RESPAWN = 6
+    };
     Burst burst;
     Vec4f at;
     s32 hitKind;
@@ -2942,7 +2959,7 @@ void crate_update(struct Moby *moby) {
     }
 
     switch (moby->state) {
-    case 0:
+    case CRATE_STATE_INITIALIZE:
         clear_u64_value(&pv->unk40);
         if (D_0015ED84 == 0x12 && moby->oclass == 0x1FF && pv->unkC8 != 0) {
             moby->state = 6;
@@ -2964,7 +2981,7 @@ void crate_update(struct Moby *moby) {
         }
         break;
 
-    case 1:
+    case CRATE_STATE_PROCESS_HITS:
         if (moby->oclass == 0x1F9 &&
             (hero.unk240 == (s32)moby || hero.coll_hit_moby == (u8 *)moby ||
              (hero.ground_moby == moby && hero.air_frames.s == 0) ||
@@ -3035,14 +3052,14 @@ void crate_update(struct Moby *moby) {
         crate_drop_bolts(moby);
         break;
 
-    case 2:
+    case CRATE_STATE_CLASS_CHANGE_COOLDOWN:
         if (--moby->command == 0xFF) {
             moby->hit_slot = 0xFF;
             moby->state = 1;
         }
         break;
 
-    case 3:
+    case CRATE_STATE_BROKEN:
         if (moby->oclass == 0x1F9 && pv->unkCA <= scale_game_frames(20)) {
             f32 r;
 
@@ -3079,7 +3096,7 @@ void crate_update(struct Moby *moby) {
         mark_moby_for_removal(moby);
         return;
 
-    case 6: {
+    case CRATE_STATE_WAIT_RESPAWN: {
         qcopy(&burst.pos, &moby->pos);
         burst.pos.z += 0.5f;
         burst.pos.w = 1.0f;
@@ -3158,7 +3175,7 @@ void crate_update(struct Moby *moby) {
         break;
     }
 
-    case 5:
+    case CRATE_STATE_DETONATION_COUNTDOWN:
         if (moby->command == 0) {
             moby->command = scale_game_frames(60) * 3 - 1;
             pv->unkB8 = moby->spawn_frame;
@@ -3183,7 +3200,7 @@ void crate_update(struct Moby *moby) {
         moby->command--;
         break;
 
-    case 4:
+    case CRATE_STATE_REACTIVATION_DELAY:
         if (FUN_L00_001fefc8(&moby->command)) {
             moby->state = 1;
             moby->flags &= ~1;

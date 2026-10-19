@@ -331,9 +331,9 @@ void FUN_L16_00214598(void) {
 
     switch (hero.state.current) {
     case 0x0:
-    case 0x1:
-    case 0x3:
-    case 0x4:
+    case HERO_STATE_LOOK:
+    case HERO_STATE_STOP:
+    case HERO_STATE_CROUCH:
     case 0x17:
     case 0x1D:
     case 0x1E:
@@ -2055,7 +2055,7 @@ void FUN_L16_00214598(void) {
         AN.f110 = d * 3.5f;
         break;
     }
-    case 0x28:
+    case HERO_STATE_GRIND:
     case 0x29:
     case 0x2A:
     case 0x2B:
@@ -2548,14 +2548,14 @@ void FUN_L16_00214598(void) {
         break;
     }
     case 7:
-    case 9:
-    case 0xA:
-    case 0xB:
+    case HERO_STATE_RUN_JUMP:
+    case HERO_STATE_PACK_JUMP:
+    case HERO_STATE_HIGH_JUMP:
     case 0xC:
     case 0xD:
     case 0xE:
     case 0xF:
-    case 0x10:
+    case HERO_STATE_PACK_LONG_JUMP:
     case 0x11:
     case 0x12:
     case 0x1C:
@@ -2565,7 +2565,7 @@ void FUN_L16_00214598(void) {
     case 0x5E:
     case 0x69: {
         s32 t198;
-        s32 t420;
+        s32 jump_phase_frame_threshold;
         if (hero.state.current == 0x1C && hero.unk22D8 == 0 && hero.items[3].item_id == 3) {
             if (FUN_L00_00211870(10.0f) != 0) {
                 FUN_L00_00216de8(4, 0);
@@ -2592,11 +2592,11 @@ void FUN_L16_00214598(void) {
             }
         }
         t198 = hero.state_timer;
-        t420 = hero.unk420;
-        if (t198 == t420) {
+        jump_phase_frame_threshold = hero.unk420;
+        if (t198 == jump_phase_frame_threshold) {
             qcopy(&hero.unk400, &hero.motion.pos);
         }
-        if (hero.unk418 != 0 || (t198 < t420 && hero.state.current != HERO_STATE_HIGH_JUMP && hero.state.current != HERO_STATE_PACK_LONG_JUMP && hero.state.current != 0xC &&
+        if (hero.unk418 != 0 || (t198 < jump_phase_frame_threshold && hero.state.current != HERO_STATE_HIGH_JUMP && hero.state.current != HERO_STATE_PACK_LONG_JUMP && hero.state.current != 0xC &&
                             hero.state.current != 0x11 && hero.state.current != 0x1C && hero.state.current != 0x4C)) {
             f32 sv;
             turn_to(0, frame_scale_sq * 0.015f, frame_scale_sq * 0.2f, frame_time * 15.009831f);

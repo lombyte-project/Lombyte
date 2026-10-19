@@ -84,10 +84,14 @@ extern int func_001F9850_3102C8(int) __asm__("FUN_001f96f8");
 void thruster_pack_lock_update(Lock_3102C8 *moby) __asm__("FUN_L11_0030ee00");
 void thruster_pack_lock_update(Lock_3102C8 *moby)
 {
+    enum {
+        THRUSTER_PACK_LOCK_STATE_INIT = 0,
+        THRUSTER_PACK_LOCK_STATE_ACTIVE = 1
+    };
     char *vars = moby->vars;
 
     switch (moby->state) {
-    case 0: {
+    case THRUSTER_PACK_LOCK_STATE_INIT: {
         int level = current_level_index;
         ((Stats_3102C8 *)(D_00141968_r))->count = 0;
         ((Stats_3102C8 *)(D_00141968_r))->best = 0;
@@ -104,7 +108,7 @@ void thruster_pack_lock_update(Lock_3102C8 *moby)
         moby->state = 1;
         break;
     }
-    case 1:
+    case THRUSTER_PACK_LOCK_STATE_ACTIVE:
         if (((void *)((Hero *)(D_0013F350_r))->ground_moby) == moby && D_0013D4C0[3] != 0 &&
             ((Hero *)(D_0013F350_r))->air_frames.s == 0 && ((Hero *)(D_0013F350_r))->state.current == 0x22) {
             if (current_level_index == 0xB && moby->bB0 != 0xFF) {

@@ -125,6 +125,12 @@ extern float add_rot_0e00(float, float) __asm__("FUN_001fa580");
 
 void FUN_L14_00300e00(struct Moby *m)
 {
+    enum {
+        SPARK_COUNT_NEXT_BOUNCE = 0,
+        SPARK_WAIT_FOR_DESCENT = 1,
+        SPARK_ROLL_AND_FADE = 2,
+        SPARK_BURST_AND_REMOVE = 3
+    };
   Spark_0e00 *d = (Spark_0e00 *) m->pvars;
   Vec4f next;
   Vec4f t;
@@ -142,9 +148,9 @@ void FUN_L14_00300e00(struct Moby *m)
   }
   switch (m->state)
   {
-    case 0:
+    case SPARK_COUNT_NEXT_BOUNCE:
 
-    case 1:
+    case SPARK_WAIT_FOR_DESCENT:
     {
       add_0e00(&next, &m->pos, &d->vel);
       d->vel.z -= d->vel.w;
@@ -236,7 +242,7 @@ void FUN_L14_00300e00(struct Moby *m)
       break;
     }
 
-    case 2:
+    case SPARK_ROLL_AND_FADE:
     {
       float f;
       int r;
@@ -261,7 +267,7 @@ void FUN_L14_00300e00(struct Moby *m)
       break;
     }
 
-    case 3:
+    case SPARK_BURST_AND_REMOVE:
       burst_0e00(m, &d->vel, &m->pos, 2.0f, 1.0f, 5, 2, 4, 2.0f, 1.0f, 9.0f, 0, 1.0f, 15.0f, 1, 1, -1, 0);
       remove_0e00(m);
       return;
@@ -350,11 +356,16 @@ extern void FUN_L14_00305680(struct Moby *);
 extern s32 D_0014C190_257218[][64] __asm__("D_0014C190");
 /* Moby that unlocks once: skips straight to done if this level already recorded it, otherwise waits for its trigger moby to reach state 2, records the unlock in the level's bit sets and runs a countdown. */
 void FUN_L14_00305408(unsigned char *moby) {
+    enum {
+        UNLOCK_SEQUENCE_INITIALIZE = 0,
+        UNLOCK_SEQUENCE_WAIT_FOR_TRIGGER = 1,
+        UNLOCK_SEQUENCE_COUNTDOWN = 2
+    };
     int *d = *(int **)(moby + 0x78);
     short id;
 
     switch (moby[0x20]) {
-    case 0:
+    case UNLOCK_SEQUENCE_INITIALIZE:
         if (d[3] < 0 || d[0] < 0 || d[4] < 0) {
             mark_moby_for_removal(moby);
             return;
@@ -371,7 +382,7 @@ void FUN_L14_00305408(unsigned char *moby) {
         moby[0x20] = 1;
         FUN_L14_00305600((char *)moby);
         break;
-    case 1:
+    case UNLOCK_SEQUENCE_WAIT_FOR_TRIGGER:
         if (((unsigned char *)D_L14_0015FFD8)[d[3] * 0x100 + 0x20] != 2) {
             return;
         }
@@ -382,7 +393,7 @@ void FUN_L14_00305408(unsigned char *moby) {
         ((float *)d)[2] = 1.0f / convert_integer_to_float(d[1]);
         FUN_L10_002f5a50(d[4]);
         break;
-    case 2:
+    case UNLOCK_SEQUENCE_COUNTDOWN:
         fast_dec_timer(&d[1]);
         FUN_L14_00305680((char *)moby);
         if (d[1] == 0) {
@@ -462,13 +473,19 @@ extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 
 void morphoray_update(struct Moby *moby) __asm__("FUN_L14_00305758");
 void morphoray_update(struct Moby *moby) {
+    enum {
+        MORPHORAY_INITIALIZE = 0,
+        MORPHORAY_WAIT_FOR_HERO = 1,
+        MORPHORAY_WAIT_TO_REMOVE = 2,
+        MORPHORAY_APPROACH_ZERO_AND_REMOVE = 3
+    };
     u8 *o = (u8 *)moby;
     u8 *d = (u8 *)moby->pvars;
     f32 v[4];
     u8 state = moby->state;
 
     switch (state) {
-    case 0:
+    case MORPHORAY_INITIALIZE:
         if (D_0014C050[moby->mission + current_level_index * 16] == 0xFF) {
             mark_moby_for_removal(moby);
             return;
@@ -481,7 +498,7 @@ void morphoray_update(struct Moby *moby) {
         qcopy(d, o + 0x10);
         moby->state = 1;
         break;
-    case 1:
+    case MORPHORAY_WAIT_FOR_HERO:
         *(f32 *)(o + 0x48) = fast_add_rotations(*(f32 *)(o + 0x48), D_L14_001621EC);
         qcopy(o + 0x10, d);
         scale_vector_xyz(v, o + 0xd0, D_L14_001621F0);
@@ -501,7 +518,7 @@ void morphoray_update(struct Moby *moby) {
         start_scene(6);
         moby->state = 2;
         break;
-    case 2:
+    case MORPHORAY_WAIT_TO_REMOVE:
         if (D_L14_0015F5C4 != state) {
             if (D_0014C050[moby->mission + current_level_index * 16] != 0xFF) {
                 jet_clear_persistent(moby->mission);
@@ -517,7 +534,7 @@ void morphoray_update(struct Moby *moby) {
         }
         *(u16 *)(o + 0x34) |= 0x41;
         break;
-    case 3:
+    case MORPHORAY_APPROACH_ZERO_AND_REMOVE:
         approach_value((f32 *)(o + 0x2c), 0.0f, *(f32 *)(*(u8 **)(o + 0x24) + 0x24) * 0.02f);
         if (*(f32 *)(o + 0x2c) == 0.0f)
             mark_moby_for_removal(moby);
@@ -665,11 +682,17 @@ extern void func_L00_0028EBF0_3071B0(int) __asm__("FUN_0022d798");
 extern char D_0013E633_3071B0[] __asm__("D_0013E550");
 
 void FUN_L14_00305d28(Moby_3071B0 *moby) {
+    enum {
+        HELPER_SEQUENCE_INITIALIZE = 0,
+        HELPER_SEQUENCE_WAIT_FOR_TRIGGER = 1,
+        HELPER_SEQUENCE_ANIMATE_SLOTS = 2,
+        HELPER_SEQUENCE_ANIMATE_OWNER = 3
+    };
     Data_3071B0 *data = moby->data;
     float vec[4];
 
     switch (moby->state) {
-    case 0: {
+    case HELPER_SEQUENCE_INITIALIZE: {
         int i;
         if (data->owner == 0) {
             data->owner = func_L14_003075E0_3071B0(moby);
@@ -690,7 +713,7 @@ void FUN_L14_00305d28(Moby_3071B0 *moby) {
         }
         break;
     }
-    case 1:
+    case HELPER_SEQUENCE_WAIT_FOR_TRIGGER:
         if (((Moby_3071B0 *)(D_L14_0015FFD8_c + (data->trigger << 8)))->state == 2) {
             moby->state = 2;
             data->cur = 5;
@@ -699,7 +722,7 @@ void FUN_L14_00305d28(Moby_3071B0 *moby) {
             func_L00_0028EF68_3071B0(0, 0, data->slots.m[data->cur], 0x575);
         }
         break;
-    case 2: {
+    case HELPER_SEQUENCE_ANIMATE_SLOTS: {
         Slots_3071B0 *slots = &data->slots;
         Moby_3071B0 *o = slots->m[data->cur];
         func_001F9938_3071B0(&data->timer);
@@ -717,7 +740,7 @@ void FUN_L14_00305d28(Moby_3071B0 *moby) {
         }
         break;
     }
-    case 3: {
+    case HELPER_SEQUENCE_ANIMATE_OWNER: {
         Moby_3071B0 *owner = data->owner;
         Moby_3071B0 **slots;
         int i;
@@ -752,10 +775,13 @@ void FUN_L14_00305d28(Moby_3071B0 *moby) {
     }
 }
 void FUN_L14_003061d8(void *arg) {
+    enum {
+        MOBY_PVARS_INITIALIZE = 0
+    };
     char *moby = arg;
     char *d;
     switch ((unsigned char)moby[0x20]) {
-    case 0:
+    case MOBY_PVARS_INITIALIZE:
         d = *(char **)(moby + 0x78);
         d[0x28] = 4;
         *(int *)(d + 0x20) = 0;
@@ -779,6 +805,10 @@ extern s32 allocate_voice_for_target_entry(s32, s32, struct Moby *) __asm__("FUN
 
 void button_update(struct Moby *moby) __asm__("FUN_L14_00306b78");
 void button_update(struct Moby *moby) {
+    enum {
+        BUTTON_INITIALIZE = 0,
+        BUTTON_WAIT_FOR_HERO_TO_STAND = 1
+    };
     s32 *d = (s32 *)moby->pvars;
     s16 id;
     s32 i;
@@ -790,7 +820,7 @@ void button_update(struct Moby *moby) {
     u32 high;
 
     switch (moby->state) {
-    case 0:
+    case BUTTON_INITIALIZE:
         *(f32 *)(d + 3) = random_angle_radians();
         moby->pos.z -= 0.35f;
         id = (s16)moby->save_id;
@@ -817,7 +847,7 @@ void button_update(struct Moby *moby) {
             moby->state = 1;
         }
         break;
-    case 1:
+    case BUTTON_WAIT_FOR_HERO_TO_STAND:
         angle = fast_add_rotations(*(f32 *)(d + 3), frame_time * 6.2831855f);
         *(f32 *)(d + 3) = angle;
         color = truncate_float_to_s32((fast_sin(angle) * 4.0f - 3.0f) * 128.0f);
@@ -931,6 +961,12 @@ extern f32 frame_time_macro __asm__("D_0015ED6C") __attribute__((section(".sdata
 /* Ported from rac1-decomp src/overlays/l14_oltanis/vendor_002FF358.c (func_L14_00308368) */
 void FUN_L14_00306ee0(struct Moby *m);
 void FUN_L14_00306ee0(struct Moby *m) {
+    enum {
+        FLYING_CAR_INITIALIZE = 0,
+        FLYING_CAR_WAIT_FOR_TRIGGER = 1,
+        FLYING_CAR_FOLLOW_PATH = 2,
+        FLYING_CAR_WAIT_FOR_PATH_RESET = 3
+    };
     Data_6ee0 *d = (Data_6ee0 *)m->pvars;
     Vec4f vec __attribute__((aligned(16)));
     char *hit;
@@ -956,7 +992,7 @@ void FUN_L14_00306ee0(struct Moby *m) {
         d->sound = -1;
     }
     switch (m->state) {
-    case 0:
+    case FLYING_CAR_INITIALIZE:
         if (d->path == -1) {
             FUN_001e93b0_6ee0(D_L14_001FD118, (s16)m->save_id);
             FUN_0020c828_6ee0(m);
@@ -996,7 +1032,7 @@ void FUN_L14_00306ee0(struct Moby *m) {
             m->state = 1;
         }
         break;
-    case 1:
+    case FLYING_CAR_WAIT_FOR_TRIGGER:
         if (inside_clip_6ee0(&hero.motion.pos, d->trigger)) {
             m->flags &= 0xFFBE;
             m->collision = m->pclass->collision;
@@ -1007,7 +1043,7 @@ void FUN_L14_00306ee0(struct Moby *m) {
             m->state = 2;
         }
         break;
-    case 2:
+    case FLYING_CAR_FOLLOW_PATH:
         d->fx.b2 = 1;
         d->fx.f20 = d->fx.f24 = d->fx.f28 = 0.0001f;
         FUN_L00_00262b80_6ee0(m, &d->fBC, &d->fC0, D_L14_00162290, D_L14_00162294, D_L14_00162298);
@@ -1042,7 +1078,7 @@ void FUN_L14_00306ee0(struct Moby *m) {
             }
         }
         break;
-    case 3:
+    case FLYING_CAR_WAIT_FOR_PATH_RESET:
         if (tick_done_6ee0(&d->timer)) {
             Path_6ee0 *path = D_L14_001B0BB0_6ee0[d->path];
             FUN_L00_002502f0_6ee0(m, d->effect[4], d->effect[5], d->effect[6]);
@@ -1210,12 +1246,16 @@ void enqueue_callback_list_1(int arg0, int arg1) __asm__("FUN_001f4600");
  * program. The size-matched rac1-decomp neighbour was the callback this one enqueues,
  * not this body. */
 void FUN_L14_00307a80(struct Moby *moby) {
+    enum {
+        DRAW_CALLBACK_INITIALIZE = 0,
+        DRAW_CALLBACK_ENQUEUE = 1
+    };
     switch (moby->state) {
-    case 0:
+    case DRAW_CALLBACK_INITIALIZE:
         moby->state = 1;
         moby->update_dist = 0xFF;
         break;
-    case 1:
+    case DRAW_CALLBACK_ENQUEUE:
         enqueue_callback_list_1((int)FUN_L12_002e71b0, (int)moby);
         break;
     }
@@ -1240,6 +1280,10 @@ extern void queue_dialogue_message(int arg0, int arg1) __asm__("FUN_L00_00263d40
 s32 allocate_voice_for_bank_entry(s32 arg1, s32 arg0, s32 arg2) __asm__("FUN_0022db10");
 
 void FUN_L14_003087c0(struct Moby *moby) {
+    enum {
+        MOBY_UPDATE_DISTANCE_INITIALIZE = 0,
+        MOBY_UPDATE_CUTSCENE_TARGET = 1
+    };
     int *d = (int *)moby->pvars;
     unsigned v;
     int i;
@@ -1253,11 +1297,11 @@ void FUN_L14_003087c0(struct Moby *moby) {
         }
     }
     switch (moby->state) {
-    case 0:
+    case MOBY_UPDATE_DISTANCE_INITIALIZE:
         moby->update_dist = 0xFF;
         moby->state = 1;
         break;
-    case 1:
+    case MOBY_UPDATE_CUTSCENE_TARGET:
         if (D_L14_0015F5C4 == 2) {
             v = D_L14_0016CF60.state - 3;
             if (v < 3) {

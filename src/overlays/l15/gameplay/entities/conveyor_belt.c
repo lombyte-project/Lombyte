@@ -21,18 +21,22 @@ extern void update_entity_matrix(char *a, void *b, void *c, void *d) __asm__("FU
 
 void conveyor_belt_update(struct Moby *moby) __asm__("FUN_L15_002e73c0");
 void conveyor_belt_update(struct Moby *moby) {
+    enum {
+        CONVEYOR_BELT_INITIALIZE = 0,
+        CONVEYOR_BELT_UPDATE_FRAME_OFFSET = 3
+    };
     char *data = (char *)moby->pvars;
     if (data != 0) {
         unsigned char state = moby->state;
         switch (state) {
-        case 0: {
+        case CONVEYOR_BELT_INITIALIZE: {
             char *vec = data + 0x40;
             clear_u64_value(vec);
             *(int *)(data + 0x9C) |= 4;
             moby->state = 3;
             break;
         }
-        case 3:
+        case CONVEYOR_BELT_UPDATE_FRAME_OFFSET:
             moby->anim_speed = 1.3888889f;
             *(float *)(data + 0x40) =
                 fast_cos(fast_add_rotations(moby->rot.z, 1.5707964f)) *
@@ -256,7 +260,7 @@ void poison_vessel_update(Moby_2E9358 *moby) {
         POISON_VESSEL_FOLLOW_TARGET = 1
     };
     Vec_2E9358 previous_position;
-    Vec_2E9358 s30;
+    Vec_2E9358 collision_scratch_vector;
     Vec_2E9358 temporary_vector;
     Data_2E9358 *data = moby->data;
     char *p20 = 0;
@@ -265,7 +269,7 @@ void poison_vessel_update(Moby_2E9358 *moby) {
     Res_2E9358 *r;
 
     previous_position.q = moby->pos;
-    clear_u64_value(&s30);
+    clear_u64_value(&collision_scratch_vector);
     if (coll_sphere(0.5f, &moby->pos, 1, moby)) {
         if (D_L15_001744D8_2E9358 == 0 || FUN_L00_002603d0(D_L15_001744D8_2E9358) == 0) {
             moby->bBC = 1;
@@ -291,8 +295,8 @@ void poison_vessel_update(Moby_2E9358 *moby) {
             } else if (((Tb_2E9358 *)D_L15_001744C0_2E9358)->f18 == D_001414D0_2E9358 || data->f8 < D_0015ED6C * -9.8f) {
                 moby->bBC = 1;
                 qcopy(&moby->pos, &((Tb_2E9358 *)D_L15_001744C0_2E9358)->v20);
-                func_L00_001FF610_2E9358(&s30, data, &((Tb_2E9358 *)D_L15_001744C0_2E9358)->v40);
-                func_L00_001FF4B0_2E9358(&s30, &s30, D_0015ED6C + D_0015ED6C);
+                func_L00_001FF610_2E9358(&collision_scratch_vector, data, &((Tb_2E9358 *)D_L15_001744C0_2E9358)->v40);
+                func_L00_001FF4B0_2E9358(&collision_scratch_vector, &collision_scratch_vector, D_0015ED6C + D_0015ED6C);
             }
         }
         break;
@@ -354,10 +358,16 @@ int memcard_save_data(int slot, int flags) __asm__("FUN_0020b178");
 extern short D_L15_00162078 __attribute__((sda));
 void bolt_grabber_update(struct Moby *m) __asm__("FUN_L15_002ea748");
 void bolt_grabber_update(struct Moby *m) {
+    enum {
+        BOLT_GRABBER_INITIALIZE = 0,
+        BOLT_GRABBER_WAIT_FOR_PROXIMITY = 1,
+        BOLT_GRABBER_FINALIZE_AND_SAVE = 2,
+        BOLT_GRABBER_REMOVE = 3
+    };
     m->rot.z = fast_add_rotations(m->rot.z, frame_time * 1.5707964f);
     m->scale = m->pclass->scale * *(float *)&D_L15_00162078;
     switch (m->state) {
-    case 0:
+    case BOLT_GRABBER_INITIALIZE:
         FUN_L00_002d6bf0((char *)m);
         if (D_0013D4FD[0xD] != 0) {
             mark_moby_for_removal(m);
@@ -366,7 +376,7 @@ void bolt_grabber_update(struct Moby *m) {
         m->state = 1;
         m->pos.z = m->pos.z + 1.0f;
         break;
-    case 1:
+    case BOLT_GRABBER_WAIT_FOR_PROXIMITY:
         FUN_L10_00298940((char *)m);
         if (vector_distance(&m->pos, &hero.motion.pos) < 3.0f) {
             m->flags |= 0x41;
@@ -374,7 +384,7 @@ void bolt_grabber_update(struct Moby *m) {
             m->state = 2;
         }
         break;
-    case 2:
+    case BOLT_GRABBER_FINALIZE_AND_SAVE:
         if (D_L15_0015F5C4 != 2) {
             queue_dialogue_message(0x3AA3, -1);
             D_L15_0015F640 = scale_game_frames(0xB4);
@@ -383,7 +393,7 @@ void bolt_grabber_update(struct Moby *m) {
             m->state = 3;
         }
         break;
-    case 3:
+    case BOLT_GRABBER_REMOVE:
         mark_moby_for_removal(m);
         break;
     }
@@ -399,14 +409,18 @@ extern short D_L15_0016207C;
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void FUN_L15_002eabd8(struct Moby *moby) {
+    enum {
+        INITIALIZE_SPAWN_TIMER = 0,
+        WAIT_FOR_SPAWN_TIMER = 1
+    };
     int *data = (int *)moby->pvars;
     switch (moby->state) {
-    case 0:
+    case INITIALIZE_SPAWN_TIMER:
         data[0] = func_001FA898_r(multiply_global_factor_ed64(*(float *)(data + 1) * 60.0f));
         moby->state = 1;
         moby->update_dist = 0xFF;
         break;
-    case 1:
+    case WAIT_FOR_SPAWN_TIMER:
         if (fast_dec_timer(data)) {
             data[0] = func_001FA898_r(multiply_global_factor_ed64(*(float *)&D_L15_0016207C * 60.0f));
             FUN_L15_002e7ed8_c(moby, &moby->pos);
@@ -716,10 +730,17 @@ extern void enqueue_callback_list_1(void (*)(void), void *) __asm__("FUN_001f460
 void FUN_L15_002eb6b8(void);
 
 void FUN_L15_002eb4c0(struct Moby *m) {
+    enum {
+        CUTSCENE_TRIGGER_WAIT_FOR_CONDITIONS = 0,
+        CUTSCENE_TRIGGER_START_SECOND_SCENE = 1,
+        CUTSCENE_TRIGGER_WAIT_FOR_FIRST_SCENE = 2,
+        CUTSCENE_TRIGGER_FINALIZE_AND_SAVE = 3,
+        CUTSCENE_TRIGGER_COMPLETED = 4
+    };
     char *d = (char *)m->pvars;
     m->update_dist = 0x80;
     switch (m->state) {
-    case 0:
+    case CUTSCENE_TRIGGER_WAIT_FOR_CONDITIONS:
         if (D_0014C050_v[m->mission + current_level_index * 16] == 0xFF)
             break;
         if (D_L15_00161AC0 != 0)
@@ -733,13 +754,13 @@ void FUN_L15_002eb4c0(struct Moby *m) {
         FUN_L00_002502a0_v(m->mission);
         FUN_L00_00232fe8_v();
         break;
-    case 2:
+    case CUTSCENE_TRIGGER_WAIT_FOR_FIRST_SCENE:
         if (D_L15_0015F5C4 != 2) {
             FUN_L00_00299460_v(0x11);
             m->state = 1;
         }
         break;
-    case 1:
+    case CUTSCENE_TRIGGER_START_SECOND_SCENE:
         if (D_L15_0015F5C4 != 2) {
             start_scene_p(4);
             m->state = 3;
@@ -750,7 +771,7 @@ void FUN_L15_002eb4c0(struct Moby *m) {
             }
         }
         break;
-    case 3:
+    case CUTSCENE_TRIGGER_FINALIZE_AND_SAVE:
         if (D_L15_0015F5C4 != 2) {
             FUN_L00_002607d0_v(0x11);
             if (*(int *)(d + 4) != -1) {
@@ -762,7 +783,7 @@ void FUN_L15_002eb4c0(struct Moby *m) {
             m->state = 4;
         }
         break;
-    case 4:
+    case CUTSCENE_TRIGGER_COMPLETED:
         break;
     }
     if (D_L15_0015F5C4 == 2)
@@ -968,7 +989,9 @@ void codebot_slot_update(struct Moby *moby) {
     enum {
         CODEBOT_SLOT_INITIALIZE = 0,
         CODEBOT_SLOT_WAIT_FOR_PROXIMITY = 1,
-        CODEBOT_SLOT_ANIMATE_EFFECT = 3
+        CODEBOT_SLOT_WAIT_TO_CREATE_EFFECT = 2,
+        CODEBOT_SLOT_ANIMATE_EFFECT = 3,
+        CODEBOT_SLOT_COMPLETED = 4
     };
     int *data = (int *)moby->pvars;
     float vec[4] __attribute__((aligned(16)));
@@ -1008,7 +1031,7 @@ void codebot_slot_update(struct Moby *moby) {
             moby->state = 2;
         }
         break;
-    case 2:
+    case CODEBOT_SLOT_WAIT_TO_CREATE_EFFECT:
         if (FUN_L15_002f78e0(data[0])) {
             vec[0] = fast_cos(fast_add_rotations(moby->rot.z, -1.5707964f)) * 2.0f;
             vec[1] = fast_sin(fast_add_rotations(moby->rot.z, -1.5707964f)) * 2.0f;
@@ -1054,7 +1077,7 @@ void codebot_slot_update(struct Moby *moby) {
             }
         }
         break;
-    case 4:
+    case CODEBOT_SLOT_COMPLETED:
         D_L15_00184AAC = 1;
         if (*(volatile int *)(data + 1) == 0) {
             vec[0] = fast_cos(fast_add_rotations(moby->rot.z, -1.5707964f)) * 0.5f;
@@ -1371,18 +1394,22 @@ extern s32 current_level_index_macro __asm__("D_0015ED84") __attribute__((sectio
 /* Quartu moby update (class 1469): hint and dialogue triggers from the hero's zones, with the play-time
    records of the two hint messages. */
 void FUN_L15_002ed398(struct Moby *m) {
+    enum {
+        HINT_DIALOGUE_INITIALIZE = 0,
+        HINT_DIALOGUE_CHECK_TRIGGERS = 1
+    };
     Talk_2ed398 *t = (struct Talk_2ed398 *)m->pvars;
     int st = m->state;
     struct Moby *e;
     int i, j, found, npc, pick;
 
     switch (st) {
-    case 0:
+    case HINT_DIALOGUE_INITIALIZE:
         m->update_dist = 0xFF;
         t->wait = scale_game_frames_2ed398(0x4B0);
         m->state = 1;
         break;
-    case 1:
+    case HINT_DIALOGUE_CHECK_TRIGGERS:
         if (t->npc[0] != -1) {
             e = (struct Moby *)(moby_list_2ed398 + (t->npc[0] << 8));
             if (e != 0 && e->oclass == 0x4E && e->state != 0xFE && e->state != 0xFD && e->state != 3
@@ -1526,12 +1553,16 @@ extern struct L15MissionState mission_2edb20 __asm__("D_L15_0016CE60");
 extern void cutscene_set_camera_target(int) __asm__("FUN_L00_002637f8");
 
 void FUN_L15_002edb20(struct Moby *m) {
+    enum {
+        INITIALIZE_UPDATE_DISTANCE = 0,
+        DISPATCH_MODE_SELECTED_SLOT = 1
+    };
     switch (m->state) {
-    case 0:
+    case INITIALIZE_UPDATE_DISTANCE:
         m->update_dist = 0xFF;
         m->state = 1;
         break;
-    case 1:
+    case DISPATCH_MODE_SELECTED_SLOT:
         if (D_L15_0015F5C4 == 2) {
             if (mission_2edb20.mode == 1 || mission_2edb20.mode == 2 || mission_2edb20.mode == 3 ||
                 mission_2edb20.mode == 4 || mission_2edb20.mode == 6) {

@@ -443,6 +443,11 @@ extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 
 void hangar_door_update(char *m) __asm__("FUN_L06_002b4770");
 void hangar_door_update(char *m) {
+    enum {
+        HANGAR_DOOR_INITIALIZE = 0,
+        HANGAR_DOOR_POSITIVE_ANGLE_OFFSET = 1,
+        HANGAR_DOOR_NEGATIVE_ANGLE_OFFSET = 2
+    };
     char *d = *(char **)(m + 0x78);
     float z;
     float a;
@@ -471,7 +476,7 @@ void hangar_door_update(char *m) {
                          frame_time_sq * 1.5707964f, frame_time_sq * 1.5707964f, frame_time * 1.5707964f);
     }
     switch (((unsigned char *)m)[0x20]) {
-    case 0:
+    case HANGAR_DOOR_INITIALIZE:
         *(float *)(d + 0xC) = vector_distance(m + 0x10, D_L06_001600EC + *(int *)d * 0x80 + 0x30);
         *(float *)(d + 4) = *(float *)(m + 0x48);
         if (*(float *)(m + 0x44) != 0.0f) {
@@ -480,7 +485,7 @@ void hangar_door_update(char *m) {
             m[0x20] = 2;
         }
         break;
-    case 1:
+    case HANGAR_DOOR_POSITIVE_ANGLE_OFFSET:
         z = *(float *)(m + 0x18);
         a = fast_add_rotations(*(float *)(d + 0x18), -1.5707950592041016f);
         *(float *)(m + 0x10) = fast_cos(a) * *(float *)(d + 0xC);
@@ -493,7 +498,7 @@ void hangar_door_update(char *m) {
         *(float *)(m + 0x18) = z;
         *(float *)(m + 0x48) = fast_add_rotations(*(float *)(d + 4), *(float *)(d + 0x18));
         break;
-    case 2:
+    case HANGAR_DOOR_NEGATIVE_ANGLE_OFFSET:
         z = *(float *)(m + 0x18);
         a = fast_subtract_rotations(-1.5707950592041016f, *(float *)(d + 0x18));
         *(float *)(m + 0x10) = fast_cos(a) * *(float *)(d + 0xC);
@@ -514,10 +519,14 @@ extern f32 advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__(
 extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
 
 void FUN_L06_002d9d10(unsigned char *moby) {
+    enum {
+        INITIALIZE_POSITION_ENDPOINTS = 0,
+        INTERPOLATE_POSITION_TO_TARGET = 2
+    };
     char *data;
     data = *(char **)(moby + 0x78);
     switch (moby[0x20]) {
-    case 0: {
+    case INITIALIZE_POSITION_ENDPOINTS: {
         char *p = (char *)moby + 0x10;
         char *q;
         qcopy(data, p);
@@ -527,7 +536,7 @@ void FUN_L06_002d9d10(unsigned char *moby) {
         moby[0x20] = 1;
         break;
     }
-    case 2: {
+    case INTERPOLATE_POSITION_TO_TARGET: {
         float a = (&frame_time)[1] * 10.0f;
         advance_accelerated_scalar((float *)(data + 0x20), (float *)(data + 0x24),
                                    *(float *)(data + 0x28), a, a, frame_time * 20.0f);
@@ -621,6 +630,12 @@ extern short D_L06_00161D24 __attribute__((sda));
 extern short D_L06_00161D28 __attribute__((sda));
 void toxic_gas_vent_update(char *m) __asm__("FUN_L06_002f3ad8");
 void toxic_gas_vent_update(char *m) {
+    enum {
+        VENT_INITIALIZE = 0,
+        VENT_OSCILLATE = 1,
+        VENT_TIMED_ACTIVE = 2,
+        VENT_WAIT_FOR_ACTIVATION = 3
+    };
     char *d = *(char **)(m + 0x78);
     float s;
     if (*(int *)(d + 0x90) >= 0) {
@@ -635,7 +650,7 @@ void toxic_gas_vent_update(char *m) {
         }
     }
     switch (((unsigned char *)m)[0x20]) {
-    case 0:
+    case VENT_INITIALIZE:
         if (*(int *)(d + 0x60) != 0) {
             m[0x20] = 1;
             *(float *)(d + 0x80) = 360.0f / *(float *)(d + 0x68) * DEG_TO_RAD * frame_time;
@@ -648,7 +663,7 @@ void toxic_gas_vent_update(char *m) {
         }
         *(int *)(d + 0x94) = -1;
         break;
-    case 1:
+    case VENT_OSCILLATE:
         if (voice_is_playing(m, *(int *)(d + 0x94)) == 0) {
             *(int *)(d + 0x94) = func_0022ED80_r(0, 4, (int)m);
         }
@@ -658,7 +673,7 @@ void toxic_gas_vent_update(char *m) {
         *(float *)(d + 0x7C) = fast_add_rotations(*(float *)(d + 0x7C), *(float *)(d + 0x80));
         *(float *)(m + 0x48) = fast_add_rotations(*(float *)(d + 0x84), s);
         break;
-    case 2:
+    case VENT_TIMED_ACTIVE:
         if (voice_is_playing(m, *(int *)(d + 0x94)) == 0) {
             *(int *)(d + 0x94) = func_0022ED80_r(0, 4, (int)m);
         }
@@ -677,7 +692,7 @@ void toxic_gas_vent_update(char *m) {
             *(int *)(d + 0x94) = -1;
         }
         break;
-    case 3:
+    case VENT_WAIT_FOR_ACTIVATION:
         if (fast_dec_timer(d + 0x88) != 0) {
             m[0x20] = 2;
             *(int *)(d + 0x88) =
@@ -1044,13 +1059,21 @@ extern void func_L00_00264DB8_2F69D0(int, int) __asm__("FUN_L00_00263d40");
 extern int func_0020BFC8_2F69D0(int, int) __asm__("FUN_0020b178");
 
 void FUN_L06_002f55a0(Moby *moby) {
+    enum {
+        INITIALIZE_DRAWBRIDGE_SEGMENTS = 0,
+        WAIT_FOR_DRAWBRIDGE_ACTIVATION = 1,
+        FADE_BEFORE_DRAWBRIDGE_ANIMATION = 3,
+        ANIMATE_DRAWBRIDGE_AND_CAMERA = 4,
+        FADE_AFTER_DRAWBRIDGE_ANIMATION = 5,
+        DRAWBRIDGE_COMPLETE = 6
+    };
     Vec_2F69D0 position, rotation, from_pos, from_rot, to_pos, to_rot;
     Data_2F69D0 *data = (struct Data_2F69D0 *)moby->pvars;
     float previous_fade, blend;
     int i, j, slot;
 
     switch (moby->state) {
-    case 0: {
+    case INITIALIZE_DRAWBRIDGE_SEGMENTS: {
         int status = D_0014C150_2F69D0[moby->mission + (D_0015EE84_2F69D0 << 4)];
         if (status == 0xFF) {
             moby->state = 6;
@@ -1095,7 +1118,7 @@ void FUN_L06_002f55a0(Moby *moby) {
         func_L06_002F71A8_2F69D0(moby);
         break;
     }
-    case 1:
+    case WAIT_FOR_DRAWBRIDGE_ACTIVATION:
         if (D_001413F4_r[0] == 1 && D_0013D4D6[0] != 0 && D_L06_0015F5C4 == 0) {
             D_L06_0015F3FC = 1.0f;
             moby->state = 3;
@@ -1104,7 +1127,7 @@ void FUN_L06_002f55a0(Moby *moby) {
         break;
     case 2:
         break;
-    case 3:
+    case FADE_BEFORE_DRAWBRIDGE_ANIMATION:
         previous_fade = data->fade;
         func_00214D28_2F69D0(&data->fade, 1.0f, 1.0f / func_001F9850_2F69D0(20));
         D_L06_0015F3FC = 1.0f - func_001F9B88_2F69D0(data->fade);
@@ -1116,7 +1139,7 @@ void FUN_L06_002f55a0(Moby *moby) {
             moby->command = func_0022ED80_2F69D0(0, 4, data->c[9]);
         }
         break;
-    case 4:
+    case ANIMATE_DRAWBRIDGE_AND_CAMERA:
         func_L00_002512D8_2F69D0(moby->mission);
         if (D_L06_00161D78_gp < 20.0f) {
             func_00214D88_2F69D0(&D_L06_00161D78_gp, &D_L06_00161D9C, 20.0f, D_L06_00161E20_2F69D0 * D_0015EE70_2F69D0, D_L06_00161E20_2F69D0 * D_0015EE70_2F69D0, D_L06_00161E14_2F69D0 * D_0015EE6C_2F69D0);
@@ -1165,7 +1188,7 @@ void FUN_L06_002f55a0(Moby *moby) {
         func_L00_002EBE88_2F69D0(&position);
         func_L00_002EBEE0_2F69D0(&rotation);
         break;
-    case 5:
+    case FADE_AFTER_DRAWBRIDGE_ANIMATION:
         previous_fade = data->fade;
         func_00214D28_2F69D0(&data->fade, 1.0f, 1.0f / func_001F9850_2F69D0(20));
         D_L06_0015F3FC = 1.0f - func_001F9B88_2F69D0(data->fade);
@@ -1179,7 +1202,7 @@ void FUN_L06_002f55a0(Moby *moby) {
             func_0020BFC8_2F69D0(0, -1);
         }
         break;
-    case 6:
+    case DRAWBRIDGE_COMPLETE:
         break;
     }
 }
@@ -2337,7 +2360,12 @@ extern unsigned char D_0013E633_2FA618[] __asm__("D_0013F350");
 void FUN_L06_002f91e8(Moby *moby)
 {
     enum {
-        REACTION_DEATH = 1
+        REACTION_SKIP_RESPONSE = 0,
+        REACTION_DEATH = 1,
+        REACTION_NO_RESPONSE = 11
+    };
+    enum {
+        SNAPPER_RETURN_HOME = 12
     };
     BlargVars_2FA618 *data = (struct BlargVars_2FA618 *)moby->pvars;
     int hit;
@@ -2371,7 +2399,7 @@ void FUN_L06_002f91e8(Moby *moby)
         }
 
         switch (reaction) {
-        case 0:
+        case REACTION_SKIP_RESPONSE:
             break;
         case 3:
         case 4:
@@ -2401,7 +2429,7 @@ void FUN_L06_002f91e8(Moby *moby)
             data->f67 = 0xFA;
             func_L00_002584A8_2FA618(moby, 0, -1);
             break;
-        case 11:
+        case REACTION_NO_RESPONSE:
             break;
         }
         func_L00_0025E4B0_2FA618(moby, data->f60);
@@ -2412,7 +2440,7 @@ void FUN_L06_002f91e8(Moby *moby)
     switch (moby->state) {
     case 8:
     case 9:
-    case 12:
+    case SNAPPER_RETURN_HOME:
     case 13:
         if (level_frame_count % 4 == (((int)moby >> 8) & 3)) {
             func_L00_0025A8E8_2FA618(moby, 0.7f, &moby->pos.x, 0x10000, 0.9f, 1.0f, 0, 1, 0);
@@ -2947,7 +2975,10 @@ extern int *D_L06_001B0C30[];
 /* Updates the object's health, hit response, recovery timer and path motion. */
 void FUN_L06_002fa9c0(char *moby) {
     enum {
-        HIT_RESPONSE_DEATH = 1
+        HIT_RESPONSE_SKIP_REACTION = 0,
+        HIT_RESPONSE_DEATH = 1,
+        HIT_RESPONSE_NONLETHAL_FALLBACK = 5,
+        HIT_RESPONSE_NO_REACTION = 11
     };
     char *data;
     char *hit;
@@ -3004,9 +3035,9 @@ start_recovery:
         if (*(float *)(data + 0x20) <= 0.0f) kind = 1;
         else if (kind == 1) kind = 5;
         switch (kind) {
-        case 0: case 11: default:
+        case HIT_RESPONSE_SKIP_REACTION: case HIT_RESPONSE_NO_REACTION: default:
             goto hit_response_done;
-        case 3: case 4: case 5: case 6: case 7: case 8: case 9: case 10:
+        case 3: case 4: case HIT_RESPONSE_NONLETHAL_FALLBACK: case 6: case 7: case 8: case 9: case 10:
             *(unsigned char *)(data + 0x67) = 200;
             break;
         case HIT_RESPONSE_DEATH:
@@ -3213,6 +3244,8 @@ void FUN_L06_002fbfb0(char *moby) {
     enum {
         INITIALIZE_CHILD_AND_TRANSFORMS = 0,
         WAIT_FOR_HERO_IN_CLIP_VOLUME = 1,
+        MOVE_PAIR_TO_FIXED_OFFSETS = 3,
+        ANIMATE_PAIR_WITH_TIMED_PHASES = 4,
         WAIT_FOR_RESET = 5
     };
     char *data = *(char **)(moby + 0x78);
@@ -3267,7 +3300,7 @@ void FUN_L06_002fbfb0(char *moby) {
         }
         allocate_voice_for_target_entry(0, 0, (int)*(char **)(data + 0x40));
         return;
-    case 3:
+    case MOVE_PAIR_TO_FIXED_OFFSETS:
         target_delta = FUN_001f9b48(moby + 0x10, data + 0x10);
         child = *(char **)(data + 0x40);
         a = target_delta;
@@ -3281,7 +3314,7 @@ void FUN_L06_002fbfb0(char *moby) {
         FUN_L00_00250df8(*(char **)(data + 0x40));
         if (absolute_float(a - D_L06_00161F1C) < 0.01f && absolute_float(b - D_L06_00161F20) < 0.01f) moby[0x20] = 5;
         return;
-    case 4:
+    case ANIMATE_PAIR_WITH_TIMED_PHASES:
         target_delta = FUN_001f9b48(moby + 0x10, data + 0x10);
         child = *(char **)(data + 0x40);
         phase_a = target_delta;
@@ -3488,6 +3521,15 @@ extern unsigned char alternate_item_available[] __asm__("D_0013D388");
 extern char D_0013A5E0_2FDA70[] __asm__("D_0013CAE4");
 
 void FUN_L06_002fc640(Moby_2FDA70 *moby) {
+    enum {
+        INITIALIZE_POSITION_AND_LINKED_MOBYS = 0,
+        WAIT_FOR_HERO_TRIGGER_AT_NODE_OFFSET_HEIGHT = 3,
+        WAIT_FOR_HERO_TRIGGER_AT_NODE_BASE_HEIGHT = 4,
+        MOVE_TO_NODE_BASE_HEIGHT = 5,
+        MOVE_TO_NODE_OFFSET_HEIGHT = 6,
+        WAIT_FOR_HERO_CLEARANCE_AT_NODE_OFFSET_HEIGHT = 7,
+        WAIT_FOR_HERO_CLEARANCE_AT_NODE_BASE_HEIGHT = 8
+    };
     Vec_2FDA70 position_delta;
     Vec_2FDA70 initial_rotation;
     Data_2FDA70 *d = moby->data;
@@ -3496,7 +3538,7 @@ void FUN_L06_002fc640(Moby_2FDA70 *moby) {
     qcopy(&initial_rotation, &moby->rot);
     moby->f2C = moby->cls->f24 * D_L06_00161F60;
     switch (moby->state) {
-    case 0:
+    case INITIALIZE_POSITION_AND_LINKED_MOBYS:
         if (D_L06_00161F78 == -1) {
             if (D_0013D5DD_2FDA70[0x10] != 0) {
                 D_L06_00161F78 = 1;
@@ -3539,8 +3581,8 @@ void FUN_L06_002fc640(Moby_2FDA70 *moby) {
             moby->state = 3;
         }
         break;
-    case 3:
-    case 4:
+    case WAIT_FOR_HERO_TRIGGER_AT_NODE_OFFSET_HEIGHT:
+    case WAIT_FOR_HERO_TRIGGER_AT_NODE_BASE_HEIGHT:
         if (fast_dec_timer(&d->f90) != 0 && is_point_inside_clip_volume(&((Hero_2FDA70 *)(D_0013F350))->pos, d->f70) != 0) {
             int ok;
             if (((Hero_2FDA70 *)(D_0013F350))->f20A4 == 1) {
@@ -3647,8 +3689,8 @@ void FUN_L06_002fc640(Moby_2FDA70 *moby) {
             d->f90 = scale_game_frames_alt(0x78);
         }
         break;
-    case 5:
-    case 6: {
+    case MOVE_TO_NODE_BASE_HEIGHT:
+    case MOVE_TO_NODE_OFFSET_HEIGHT: {
         float target;
         float t;
         target = ((Node_2FDA70 *)D_L06_001600EC_c)[d->f78].v30.z;
@@ -3668,8 +3710,8 @@ void FUN_L06_002fc640(Moby_2FDA70 *moby) {
         }
         break;
     }
-    case 7:
-    case 8:
+    case WAIT_FOR_HERO_CLEARANCE_AT_NODE_OFFSET_HEIGHT:
+    case WAIT_FOR_HERO_CLEARANCE_AT_NODE_BASE_HEIGHT:
         if (vector_distance(&((Hero_2FDA70 *)(D_0013F350))->pos, &moby->pos) >= 1.0f) {
             if (moby->state == 7) {
                 moby->state = 3;

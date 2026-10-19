@@ -23,8 +23,12 @@ s32 actuator_calc_power(s32 *p1) __asm__("FUN_001e8d08");
 s32 actuator_calc_power(s32 *p1)
 {
     enum {
+        ACTUATOR_WAVE_INACTIVE = 0,
         ACTUATOR_WAVE_RECTANGULAR = 1,
-        ACTUATOR_WAVE_TRIANGULAR = 2
+        ACTUATOR_WAVE_TRIANGULAR = 2,
+        ACTUATOR_WAVE_RISING_RAMP = 3,
+        ACTUATOR_WAVE_FALLING_RAMP = 4,
+        ACTUATOR_WAVE_COSINE = 5
     };
     s32 aa[3][4];
     s32 *q2;
@@ -65,7 +69,7 @@ s32 actuator_calc_power(s32 *p1)
         actuator_wave[i].f08++;
         rem = e->f08 % (e->f0a + e->f0c);
         switch (e->f00) {
-        case 0:
+        case ACTUATOR_WAVE_INACTIVE:
             break;
         case ACTUATOR_WAVE_RECTANGULAR:
             if (rem < e->f0a) {
@@ -82,17 +86,17 @@ s32 actuator_calc_power(s32 *p1)
             }
             res = res + e->f0f;
             break;
-        case 3:
+        case ACTUATOR_WAVE_RISING_RAMP:
             if (rem < e->f0a) {
                 res = (e->f0e * rem) / e->f0a + e->f0f;
             }
             break;
-        case 4:
+        case ACTUATOR_WAVE_FALLING_RAMP:
             if (rem >= e->f0a) {
                 res = (e->f0e * (e->f0c + e->f0a - rem)) / e->f0c + e->f0f;
             }
             break;
-        case 5: {
+        case ACTUATOR_WAVE_COSINE: {
             f32 f;
             f32 g;
             if (rem < e->f0c) {

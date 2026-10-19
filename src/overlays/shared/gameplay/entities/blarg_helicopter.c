@@ -339,6 +339,19 @@ extern f32 frame_scale_macro __asm__("D_0015ED60") __attribute__((section(".sdat
 /* Update of moby class 455 (spawner): counts its living children, takes hits, runs its state machine and spawns class 0x221 children at a point picked by its mode. */
 void spawner_update(struct Moby *moby) __asm__("FUN_L03_002bef68");
 void spawner_update(struct Moby *moby) {
+    enum {
+        SPAWNER_INITIALIZE = 0,
+        SPAWNER_WAIT_FOR_PROXIMITY = 1,
+        SPAWNER_DESTROY = 8
+    };
+    enum {
+        SPAWNER_TRIGGER_DISTANCE_ONLY = 0,
+        SPAWNER_TRIGGER_VOLUME_ONLY = 1,
+        SPAWNER_TRIGGER_VOLUME_OR_DISTANCE = 2
+    };
+    enum {
+        SPAWNER_TARGET_COUNT_INDEXED_POINT = 4
+    };
     int used[4];
     Vec4A_2bef68 launch_origin;
     Vec4A_2bef68 launch_velocity;
@@ -399,13 +412,13 @@ void spawner_update(struct Moby *moby) {
     }
     cond = inVol | near2;
     switch (d->b82) {
-    case 0:
+    case SPAWNER_TRIGGER_DISTANCE_ONLY:
         cond = near1;
         break;
-    case 1:
+    case SPAWNER_TRIGGER_VOLUME_ONLY:
         cond = inVol;
         break;
-    case 2:
+    case SPAWNER_TRIGGER_VOLUME_OR_DISTANCE:
         break;
     }
     if (d->h8A == 0 && d->count != 0) {
@@ -428,7 +441,7 @@ void spawner_update(struct Moby *moby) {
     }
     moby->hit_slot = 0xFF;
     switch (moby->state) {
-    case 0: {
+    case SPAWNER_INITIALIZE: {
         int k;
         for (k = 0; k < kids; k++) {
             struct Moby *o;
@@ -446,7 +459,7 @@ void spawner_update(struct Moby *moby) {
         moby->state = 1;
         break;
     }
-    case 1:
+    case SPAWNER_WAIT_FOR_PROXIMITY:
         if (near1) {
             switch (d->b84) {
             case 0:
@@ -492,7 +505,7 @@ void spawner_update(struct Moby *moby) {
     case 7:
         spawn = 1;
         break;
-    case 8: {
+    case SPAWNER_DESTROY: {
         float z;
         float *p;
         Vec4A_2bef68 *vel;
@@ -611,7 +624,7 @@ void spawner_update(struct Moby *moby) {
                 qcopy(&target_position, &v60);
                 break;
             }
-            case 4: {
+            case SPAWNER_TARGET_COUNT_INDEXED_POINT: {
                 int *p = d->pts;
                 int cnt = d->count;
                 int n = 0;
@@ -1037,6 +1050,14 @@ extern void func_L00_00251E30_2CDDC8(void *) __asm__("FUN_L00_00250df8");
 
 void blarg_helicopter_update(HMob49_2CDDC8 *moby) __asm__("FUN_L03_002cca00");
 void blarg_helicopter_update(HMob49_2CDDC8 *moby) {
+    enum {
+        BLARG_HELICOPTER_INITIALIZE = 0,
+        BLARG_HELICOPTER_ACTIVATION_PATH = 1,
+        BLARG_HELICOPTER_PATROL_AND_ATTACK = 2,
+        BLARG_HELICOPTER_EXIT = 3,
+        BLARG_HELICOPTER_TIMED_REACTION = 4,
+        BLARG_HELICOPTER_DESTROY = 5
+    };
     HData49_2CDDC8 *data=moby->data;
     HWork49_2CDDC8 work;
     float target_range=40.0f;
@@ -1065,7 +1086,7 @@ void blarg_helicopter_update(HMob49_2CDDC8 *moby) {
     }
     func_L03_002CF600_2CDDC8((char*)moby);
     switch (moby->state) {
-    case 0: {
+    case BLARG_HELICOPTER_INITIALIZE: {
         HPath49_2CDDC8 **paths;
         moby->update_distance=0x20; data->health=3.0f; data->health_word=func_001FA898_2CDDC8(3.0f);
         data->enabled=1; data->kind=2; data->gun_kind=25; data->gun_enabled=1; data->gun_mode=6; data->flag29=0;
@@ -1092,7 +1113,7 @@ void blarg_helicopter_update(HMob49_2CDDC8 *moby) {
         moby->state=2;
         break;
     }
-    case 1: {
+    case BLARG_HELICOPTER_ACTIVATION_PATH: {
         HPath49_2CDDC8 *path=D_L03_001B08B0_2CDDC8[data->activation_path];
         float progress,distance,step,limit,angle;
         if (data->activation_region!=-1 && !func_00215570_2CDDC8(D_0013F3D0,data->activation_region)) break;
@@ -1141,7 +1162,7 @@ void blarg_helicopter_update(HMob49_2CDDC8 *moby) {
     }
         break;
     }
-    case 2: {
+    case BLARG_HELICOPTER_PATROL_AND_ATTACK: {
         HRoute49_2CDDC8 *route=data->alternate ? &data->route_b : &data->route_a;
         int point=route->index;
         float angle=func_L00_001FF860_2CDDC8(work.target.position[0]-moby->position[0],work.target.position[1]-moby->position[1]);
@@ -1204,7 +1225,7 @@ void blarg_helicopter_update(HMob49_2CDDC8 *moby) {
         }
         break;
     }
-    case 3: {
+    case BLARG_HELICOPTER_EXIT: {
         HPath49_2CDDC8 *path;
         float progress,distance,step,limit,angle;
         if (data->exit_path==-1) {
@@ -1249,7 +1270,7 @@ void blarg_helicopter_update(HMob49_2CDDC8 *moby) {
     }
         break;
     }
-    case 4:
+    case BLARG_HELICOPTER_TIMED_REACTION:
         if (func_001F9938_2CDDC8(&data->reaction_timer)) moby->state=moby->previous_state;
         else {
             data->speed-=D_0015ED70*4.0f; if (data->speed<0) data->speed=0;
@@ -1269,7 +1290,7 @@ void blarg_helicopter_update(HMob49_2CDDC8 *moby) {
         
         }
         break;
-    case 5: {
+    case BLARG_HELICOPTER_DESTROY: {
         float angle; int i; 
         *(HQuad49_2CDDC8*)work.movement=0; angle=func_00214158_2CDDC8(); func_L00_00250800_2CDDC8(moby,4,work.projected);
         for (i=0; i<4; i++) {
@@ -1397,15 +1418,20 @@ void mark_moby_for_removal_c(struct Obj *obj) __asm__("FUN_0020c828");
 
 void statue_update(unsigned char *m) __asm__("FUN_L03_002d3cd8");
 void statue_update(unsigned char *m) {
+    enum {
+        STATUE_INITIALIZE = 0,
+        STATUE_WAITING_FOR_HIT = 1,
+        STATUE_BREAK_APART = 2
+    };
     int flag = 0;
     float z;
     char *p, *pos, *vel;
     char *x = find_moby_hit(m, 0x10000, 0);
     switch (m[0x20]) {
-    case 0:
+    case STATUE_INITIALIZE:
         m[0x20] = 1;
         break;
-    case 1:
+    case STATUE_WAITING_FOR_HIT:
         if (x != 0) {
             if (*(float *)(x + 0x2C) > 0.0f)
                 flag = 1;
@@ -1413,7 +1439,7 @@ void statue_update(unsigned char *m) {
         if (flag)
             m[0x20] = 2;
         break;
-    case 2:
+    case STATUE_BREAK_APART:
         allocate_voice_for_target_entry(0, 0, (int)m);
         z = 0.0f;
         p = D_L03_0015F580;
@@ -1490,6 +1516,10 @@ extern void mark_moby_for_removal_c_c(void *) __asm__("func_0020C828");
 extern char D_0013E550[];
 
 void FUN_L03_002d47c0(Moby *moby) {
+    enum {
+        SPARK_HOME_AND_EMIT = 1,
+        SPARK_CLEANUP_AND_REMOVE = 2
+    };
     Tgt_2D5B88 target_info;
     Vec_2D5B88 start_pos;
     Hit_2D5B88 hit;
@@ -1523,7 +1553,7 @@ void FUN_L03_002d47c0(Moby *moby) {
     }
     state = moby->state;
     switch (state) {
-    case 1:
+    case SPARK_HOME_AND_EMIT:
         set_vector_length_xy(&direction, data, 1.0f);
         data->vel.z = 1.0f;
         FUN_L00_00259888(&hit, moby, 0x10003, 2.0f, &direction);
@@ -1637,7 +1667,7 @@ void FUN_L03_002d47c0(Moby *moby) {
             moby->state = 2;
         }
         break;
-    case 2:
+    case SPARK_CLEANUP_AND_REMOVE:
         if (voice_slot != 0) {
             int voice = *voice_slot;
             if (voice != -1) {
@@ -1812,6 +1842,11 @@ extern void FUN_L01_002fb4b8(void *);
 /* Activate the watcher and steer its body and head toward the player. */
 void qwark_rilgar_update(L03WatchMoby *m) __asm__("FUN_L03_002dc478");
 void qwark_rilgar_update(L03WatchMoby *m) {
+    enum {
+        QWARK_RILGAR_INITIALIZE = 0,
+        QWARK_RILGAR_WAIT_FOR_PLAYER_IN_REGION = 1,
+        QWARK_RILGAR_POST_REGION_TRIGGER = 2
+    };
     L03WatchScratch scratch;
     L03WatchData *d = (L03WatchData *)m->data;
     float rate;
@@ -1825,7 +1860,7 @@ void qwark_rilgar_update(L03WatchMoby *m) {
         }
     }
     switch (m->state) {
-    case 0:
+    case QWARK_RILGAR_INITIALIZE:
         m->opacity = 0xFF;
         if (d->region_a == -1)
             debug_print(D_L03_001E3628);
@@ -1844,13 +1879,13 @@ void qwark_rilgar_update(L03WatchMoby *m) {
         }
         m->state = 1;
         break;
-    case 1:
+    case QWARK_RILGAR_WAIT_FOR_PLAYER_IN_REGION:
         if (d->region_a != -1 && is_point_inside_clip_volume(&hero.motion.pos, d->region_a)) {
             FUN_L00_00266858(m, 1);
             m->state = 2;
         }
         break;
-    case 2:
+    case QWARK_RILGAR_POST_REGION_TRIGGER:
         m->state = 3;
         break;
     }
@@ -1922,13 +1957,17 @@ extern unsigned char D_L03_001DC1A0[];
 extern void register_audio_stream_callback(void) __asm__("FUN_00215420");
 
 void FUN_L03_002dc9b0(unsigned char *moby) {
+    enum {
+        DRAW_CALLBACK_INITIALIZE = 0,
+        DRAW_CALLBACK_REGISTER = 1
+    };
     switch (moby[0x20]) {
-    case 0:
+    case DRAW_CALLBACK_INITIALIZE:
         FUN_L02_002a4058(D_L03_001DC1A0, 0x20, 0.6666667f);
         moby[0x20] = 1;
         moby[0x30] = 0xFF;
         break;
-    case 1:
+    case DRAW_CALLBACK_REGISTER:
         add_draw_callback(register_audio_stream_callback, moby);
         break;
     }
@@ -1952,12 +1991,17 @@ extern s32 current_level_index_gp __asm__("D_0015ED84") __attribute__((sda));
 void garage_door_update(struct Moby *m) __asm__("FUN_L03_002dca30");
 void garage_door_update(struct Moby *m)
 {
+    enum {
+        GARAGE_DOOR_WAITING_FOR_COLLECTION = 0,
+        GARAGE_DOOR_RISING = 1,
+        GARAGE_DOOR_RAISED = 2
+    };
     Vec4 *target = (Vec4 *)m->pvars;
     s16 idx;
     u16 id;
 
     switch (m->state) {
-    case 0:
+    case GARAGE_DOOR_WAITING_FOR_COLLECTION:
         /* one quadword copy (lq/sq); qcopy() schedules differently */
         target->q = ((Vec4 *)&m->pos)->q;
         id = m->save_id;
@@ -1968,12 +2012,12 @@ void garage_door_update(struct Moby *m)
         }
         m->state = 1;
         return;
-    case 1:
+    case GARAGE_DOOR_RISING:
         m->pos.z += frame_time;
         if (target->f[2] + 4.0f <= m->pos.z)
             m->state = 2;
         return;
-    case 2:
+    case GARAGE_DOOR_RAISED:
         m->pos.z = target->f[2] + 4.0f;
         return;
     }

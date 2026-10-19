@@ -385,6 +385,9 @@ extern void FUN_L00_0029a6b0(s32);
  */
 s32 FUN_L02_0022ee00(void)
 {
+    enum {
+        HERO_ITEM_WRENCH = 8
+    };
     s32 out0;
     s32 out1;
     s32 out2;
@@ -412,7 +415,7 @@ s32 FUN_L02_0022ee00(void)
     buttons = hero.items[0].button_mask;
 
     switch (hero.items[0].item_id) {
-    case 8:
+    case HERO_ITEM_WRENCH:
         if (hero.state.control_mode == 0 || hero.state.control_mode == 1 ||
             (hero.state.control_mode == 4 && hero.unk418 != 0)) {
             if (hero.on_slip_ground == 0 && pad_pressed_within(buttons, scale_game_frames(7), &out0) != 0) {

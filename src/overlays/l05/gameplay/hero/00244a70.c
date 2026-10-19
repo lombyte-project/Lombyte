@@ -325,10 +325,10 @@ void FUN_L05_00244a70(void) {
     Vec4 vD0;
 
     switch (hero.state.current) {
-    case 0x0:
-    case 0x1:
-    case 0x3:
-    case 0x4:
+    case HERO_STATE_IDLE:
+    case HERO_STATE_LOOK:
+    case HERO_STATE_STOP:
+    case HERO_STATE_CROUCH:
     case 0x17:
     case 0x1D:
     case 0x1E:
@@ -1415,7 +1415,7 @@ void FUN_L05_00244a70(void) {
         }
         break;
     }
-    case 0x14: {
+    case HERO_STATE_WRENCH_SLAM: {
         s32 t1;
         s32 t2;
         f32 r;
@@ -1537,7 +1537,7 @@ void FUN_L05_00244a70(void) {
         }
         break;
     }
-    case 0x13: {
+    case HERO_STATE_WRENCH_COMBO: {
         struct HeroTableRow2C *tb;
         if (hero.unkA9C != 0 || hero.anim_frame < D_L05_0017C088[hero.attack_record].f20) {
             hero.items[0].timer = 2;
@@ -1734,7 +1734,7 @@ void FUN_L05_00244a70(void) {
             hero.motion.velocity.f[2] = hero.motion.velocity.f[2] - frame_time_sq * 54.0f;
         }
         break;
-    case 2:
+    case HERO_STATE_RUN:
     case 0x73: {
         s32 slide = 0;
         f32 k;
@@ -2246,7 +2246,7 @@ void FUN_L05_00244a70(void) {
         air_accel(frame_time_sq * 25.0f);
         FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.unk120, frame_time_sq * 18.0f);
         break;
-    case 6:
+    case HERO_STATE_FALL:
     case 0x2D:
         if (hero.state.current == 0x2D) {
             f32 t = 0.0f;
@@ -2371,14 +2371,14 @@ void FUN_L05_00244a70(void) {
         break;
     }
     case 7:
-    case 9:
-    case 0xA:
-    case 0xB:
+    case HERO_STATE_RUN_JUMP:
+    case HERO_STATE_PACK_JUMP:
+    case HERO_STATE_HIGH_JUMP:
     case 0xC:
     case 0xD:
     case 0xE:
     case 0xF:
-    case 0x10:
+    case HERO_STATE_PACK_LONG_JUMP:
     case 0x11:
     case 0x12:
     case 0x1C:
@@ -2388,7 +2388,7 @@ void FUN_L05_00244a70(void) {
     case 0x5E:
     case 0x69: {
         s32 t198;
-        s32 t420;
+        s32 position_capture_frame;
         if (hero.state.current == 0x1C && hero.unk22D8 == 0 && hero.items[3].item_id == 3) {
             if (FUN_L00_00211870(10.0f) != 0) {
                 FUN_L00_00216de8(4, 0);
@@ -2415,11 +2415,11 @@ void FUN_L05_00244a70(void) {
             }
         }
         t198 = hero.state_timer;
-        t420 = hero.unk420;
-        if (t198 == t420) {
+        position_capture_frame = hero.unk420;
+        if (t198 == position_capture_frame) {
             qcopy(&hero.unk400, &hero.motion.pos);
         }
-        if (hero.unk418 != 0 || (t198 < t420 && hero.state.current != HERO_STATE_HIGH_JUMP && hero.state.current != HERO_STATE_PACK_LONG_JUMP && hero.state.current != 0xC &&
+        if (hero.unk418 != 0 || (t198 < position_capture_frame && hero.state.current != HERO_STATE_HIGH_JUMP && hero.state.current != HERO_STATE_PACK_LONG_JUMP && hero.state.current != 0xC &&
                             hero.state.current != 0x11 && hero.state.current != 0x1C && hero.state.current != 0x4C)) {
             f32 sv;
             turn_to(0, frame_scale_sq * 0.015f, frame_scale_sq * 0.2f, frame_time * 15.009831f);

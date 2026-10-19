@@ -122,6 +122,9 @@ void FUN_L00_00210c80_8(void *, s32, f32, f32) __asm__("FUN_L00_00210c80");
 
 extern OvlMobyEntry40 D_L14_00178800[];
 s32 FUN_L14_00222aa8(s32 arg) {
+    enum {
+        HERO_VEHICLE_MODE_ON_FOOT = 0
+    };
     u8 *m;
     OvlMobyEntry40 *tbl;
     u8 *mob;
@@ -182,7 +185,7 @@ s32 FUN_L14_00222aa8(s32 arg) {
         v.i[2] = 0;
     }
     switch (G.vehicle_mode) {
-    case 0:
+    case HERO_VEHICLE_MODE_ON_FOOT:
         mob = (u8 *)G.unk2280;
         if (mob != 0 && (*(s16 *)(mob + 0xA6) == 0x4EB || *(s16 *)(mob + 0xA6) == 0x558)) {
             id = 0x80;
@@ -563,10 +566,10 @@ void FUN_L14_00228cd0(void) {
     Vec4 vD0;
 
     switch (hero.state.current) {
-    case 0x0:
-    case 0x1:
-    case 0x3:
-    case 0x4:
+    case HERO_STATE_IDLE:
+    case HERO_STATE_LOOK:
+    case HERO_STATE_STOP:
+    case HERO_STATE_CROUCH:
     case 0x17:
     case 0x1D:
     case 0x1E:
@@ -694,7 +697,7 @@ void FUN_L14_00228cd0(void) {
             }
         }
         break;
-    case 0x7F:
+    case HERO_STATE_SINK:
         if (MV(hero.unk6A4) == NULL) {
             struct MobyView *m = create_moby(0x52A);
             s32 h40 = 0x40;
@@ -1020,7 +1023,7 @@ void FUN_L14_00228cd0(void) {
         }
         break;
     }
-    case 0x14: {
+    case HERO_STATE_WRENCH_SLAM: {
         s32 t1;
         s32 t2;
         f32 r;
@@ -1171,7 +1174,7 @@ void FUN_L14_00228cd0(void) {
         }
         break;
     }
-    case 0x13: {
+    case HERO_STATE_WRENCH_COMBO: {
         struct HeroTableRow2C *tb;
         if (hero.unk12E2 != 0) {
             FUN_L00_002167d0();
@@ -1421,7 +1424,7 @@ void FUN_L14_00228cd0(void) {
         }
         break;
     }
-    case 2:
+    case HERO_STATE_RUN:
     case 0x73: {
         f32 k;
         if (hero.motion.unk164 < frame_time * 0.3f && hero.unk229C > 0.85f) {
@@ -1544,7 +1547,7 @@ void FUN_L14_00228cd0(void) {
         }
         break;
     }
-    case 0x28:
+    case HERO_STATE_GRIND:
     case 0x29:
     case 0x2A:
     case 0x2B:
@@ -1906,7 +1909,7 @@ void FUN_L14_00228cd0(void) {
         set_vector_length_xy(&hero.motion.velocity, &hero.motion.velocity, D_L14_001C43B0[truncate_float_to_s32(hero.anim_frame)] * 0.5f);
         break;
     }
-    case 0x79:
+    case HERO_STATE_SLIP:
         hero.motion.move_yaw = hero.downhill_yaw;
         hero.target_speed = frame_time * 5.5f;
         FUN_L00_00213e68(frame_time_sq * 25.0f);
@@ -2043,14 +2046,14 @@ void FUN_L14_00228cd0(void) {
         break;
     }
     case 7:
-    case 9:
-    case 0xA:
-    case 0xB:
+    case HERO_STATE_RUN_JUMP:
+    case HERO_STATE_PACK_JUMP:
+    case HERO_STATE_HIGH_JUMP:
     case 0xC:
     case 0xD:
     case 0xE:
     case 0xF:
-    case 0x10:
+    case HERO_STATE_PACK_LONG_JUMP:
     case 0x11:
     case 0x12:
     case 0x1C:
@@ -2176,7 +2179,7 @@ void FUN_L14_00228cd0(void) {
         FUN_L00_0020b5b8();
         break;
     }
-    case 0x16: {
+    case HERO_STATE_HURT: {
         f32 l = vector_length_xy(&hero.motion.velocity);
         f32 d = frame_time_sq * 4.0f;
         if (hero.air_frames.s == 0 && scale_game_frames(10) < hero.state_timer) {

@@ -96,7 +96,10 @@ extern s32 FUN_L00_0025ff38(void *, void *, s32, s32, void *, s32, float);
 /* Path patroller update: rides its carrier moby until dropped, takes hits (hit and death states), and follows its D_L11_001B0EB0 path toward the hero. */
 void FUN_L11_00315968(struct Moby *moby) {
     enum {
-        HIT_RESPONSE_DEATH = 1
+        HIT_RESPONSE_DEATH = 1,
+        HIT_RESPONSE_DEATH_KNOCKBACK = 2,
+        HIT_RESPONSE_KNOCKBACK = 3,
+        HIT_RESPONSE_COOLDOWN_NO_KNOCKBACK = 11
     };
     struct L11PatrolVars *d = (struct L11PatrolVars *)moby->pvars;
     Vec4 v;
@@ -150,7 +153,7 @@ void FUN_L11_00315968(struct Moby *moby) {
             case 10:
                 d->unk117 = 0xFA;
                 break;
-            case 3:
+            case HIT_RESPONSE_KNOCKBACK:
             case 4:
             case 5:
             case 6:
@@ -174,7 +177,7 @@ void FUN_L11_00315968(struct Moby *moby) {
                 break;
             }
             case HIT_RESPONSE_DEATH:
-            case 2: {
+            case HIT_RESPONSE_DEATH_KNOCKBACK: {
                 float yaw;
                 moby->flags &= ~0x1000;
                 d->unk130 = D_L11_001622D0 * frame_time_sq;
@@ -195,7 +198,7 @@ void FUN_L11_00315968(struct Moby *moby) {
                 FUN_L00_00257470(moby, 0, -1);
                 break;
             }
-            case 11:
+            case HIT_RESPONSE_COOLDOWN_NO_KNOCKBACK:
                 break;
             }
             trooper_anim_update(moby, d->move);
@@ -375,7 +378,9 @@ void FUN_L11_00316320(struct Moby *moby) {
         GATE_WAIT_FOR_HERO_TRIGGER = 1,
         GATE_RAISE_DOORS = 2,
         GATE_ZERO_DOOR_Y_ROTATION = 3,
-        GATE_TILT_DOORS_APART = 4
+        GATE_TILT_DOORS_APART = 4,
+        GATE_OPEN_IDLE = 5,
+        GATE_APPLY_CONFIGURED_DOOR_POSE = 6
     };
     struct L11GateVars *d = (struct L11GateVars *)moby->pvars;
     float v[4];
@@ -474,9 +479,9 @@ void FUN_L11_00316320(struct Moby *moby) {
         }
         break;
     }
-    case 5:
+    case GATE_OPEN_IDLE:
         break;
-    case 6:
+    case GATE_APPLY_CONFIGURED_DOOR_POSE:
         fast_vec_normalize(v, &moby->rot_row0, 0.5f);
         fast_vec_add(&d->left->pos, &moby->pos, v);
         d->left->pos.z = moby->pos.z + D_L11_00162308;
@@ -524,10 +529,15 @@ void FUN_L11_003180a0(struct Moby *, int);
 /* Chain head update: spawns the eight 0x4F1 links, waits for D_001413D4 to reach 0x32, then moves along its path and runs the link helpers. */
 void oil_tanker_front_update(struct Moby *moby) __asm__("FUN_L11_003172c0");
 void oil_tanker_front_update(struct Moby *moby) {
+    enum {
+        OIL_TANKER_INITIALIZE = 0,
+        OIL_TANKER_WAIT_FOR_CAMERA_MODE = 1,
+        OIL_TANKER_FOLLOW_PATH_WITH_DAMAGE = 2
+    };
     struct L11ChainVars *d = (struct L11ChainVars *)moby->pvars;
 
     switch (moby->state) {
-    case 0: {
+    case OIL_TANKER_INITIALIZE: {
         int i;
 
         FUN_L11_003180a0(moby, d->path_index);
@@ -562,7 +572,7 @@ void oil_tanker_front_update(struct Moby *moby) {
         }
         break;
     }
-    case 1:
+    case OIL_TANKER_WAIT_FOR_CAMERA_MODE:
         if (camera_secondary_mode[0] == 0x32) {
             int i;
 
@@ -575,7 +585,7 @@ void oil_tanker_front_update(struct Moby *moby) {
             }
         }
         /* fallthrough */
-    case 2: {
+    case OIL_TANKER_FOLLOW_PATH_WITH_DAMAGE: {
         int i;
 
         d->t += D_L11_00162320;
@@ -900,12 +910,16 @@ extern void *func_L00_00265050_s(char *, int, void *, void *, int, int, float *,
                                  float *) __asm__("FUN_L00_00263fd8");
 
 void FUN_L11_003181f0(struct Moby *m) {
+    enum {
+        TANKER_LINK_EMIT_EFFECT_AND_SAVE_POSITION = 0,
+        TANKER_LINK_BURST_AND_HIDE = 1
+    };
     char *d = (char *)m->pvars;
     float v[4];
     float w[4];
     float r[4];
     switch (m->state) {
-    case 0:
+    case TANKER_LINK_EMIT_EFFECT_AND_SAVE_POSITION:
         if (func_001F9908_i(d + 0x28) == 0 && random_integer_below(*(int *)&D_L11_00162340) == 0 &&
             m->visible != 0 && *(int *)&D_L11_0015FFBC >= 0x47) {
             transform_vector_by_basis(v, &D_L11_00162350, &m->rot_row0);
@@ -920,7 +934,7 @@ void FUN_L11_003181f0(struct Moby *m) {
         }
         qcopy(d, &m->pos);
         break;
-    case 1: {
+    case TANKER_LINK_BURST_AND_HIDE: {
         char *p1 = &m->pos;
         float *dv;
         char *p2;
@@ -973,12 +987,16 @@ extern int func_001F9908_i(void *) __asm__("FUN_001f9740");
 extern short D_L11_00162388 __attribute__((sda));
 void energy_sphere_update(unsigned char *moby) __asm__("FUN_L11_00318b30");
 void energy_sphere_update(unsigned char *moby) {
+    enum {
+        ENERGY_SPHERE_APPROACH_SCALE_AND_REMOVE = 1,
+        ENERGY_SPHERE_MOVE_AND_DETONATE = 2
+    };
     char *data = *(char **)(moby + 0x78);
     float v[4];
     float *vp;
     FUN_L11_00319028_c((char *)moby);
     switch (moby[0x20]) {
-    case 1:
+    case ENERGY_SPHERE_APPROACH_SCALE_AND_REMOVE:
         if (func_001F9908_i(data + 0x20)) {
             float *p = *(float **)(moby + 0x24);
             float n = (float)scale_game_frames(0x14);
@@ -993,7 +1011,7 @@ void energy_sphere_update(unsigned char *moby) {
             mark_moby_for_removal(moby);
         }
         break;
-    case 2: {
+    case ENERGY_SPHERE_MOVE_AND_DETONATE: {
         char *pos = (char *)moby + 0x10;
         FUN_L11_003191c0_c((char *)moby);
         vp = v;
@@ -1231,6 +1249,15 @@ void blend_moby_animation_c(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm_
 extern short D_L11_001623D0 __attribute__((sda));
 void blarg_ship_update(struct Moby *moby) __asm__("FUN_L11_00319838");
 void blarg_ship_update(struct Moby *moby) {
+    enum {
+        BLARG_SHIP_INITIALIZE = 0,
+        BLARG_SHIP_FOLLOW_PATH = 1,
+        BLARG_SHIP_BURST_AND_WAIT_TO_REACTIVATE = 2,
+        BLARG_SHIP_WAIT_TO_REACTIVATE = 3,
+        BLARG_SHIP_INACTIVE = 4,
+        BLARG_SHIP_MANEUVER_AND_FIRE = 5,
+        BLARG_SHIP_BURST_AND_DEACTIVATE = 6
+    };
     float scratch_vector[4];
     float target_position[4];
     float hero_position_delta[4];
@@ -1251,7 +1278,7 @@ void blarg_ship_update(struct Moby *moby) {
 
     FUN_L11_0031a1c0(moby);
     switch (moby->state) {
-    case 0:
+    case BLARG_SHIP_INITIALIZE:
         moby->draw_dist = 0xFF;
         moby->update_dist = 0xFF;
         if (*(int *)(d + 0x88) == 0) {
@@ -1266,8 +1293,8 @@ void blarg_ship_update(struct Moby *moby) {
             moby->flags |= 1;
         }
         break;
-    case 1:
-    case 2:
+    case BLARG_SHIP_FOLLOW_PATH:
+    case BLARG_SHIP_BURST_AND_WAIT_TO_REACTIVATE:
         FUN_L11_00319670(moby);
         *(float *)(d + 0x68) += *(float *)(d + 0x6C);
         if (*(float *)(d + 0x68) > 1.0f) {
@@ -1302,7 +1329,7 @@ void blarg_ship_update(struct Moby *moby) {
             }
         }
         break;
-    case 3:
+    case BLARG_SHIP_WAIT_TO_REACTIVATE:
         qcopy(scratch_vector, &moby->pos);
         scratch_vector[3] = 3.0f;
         if (FUN_001fa728_u((char *)&moby->pos, 512.0f) == -1) {
@@ -1323,9 +1350,9 @@ void blarg_ship_update(struct Moby *moby) {
             *(int *)(d + 0x84) = 0;
         }
         break;
-    case 4:
+    case BLARG_SHIP_INACTIVE:
         break;
-    case 5:
+    case BLARG_SHIP_MANEUVER_AND_FIRE:
         c0 = 0.0f;
         qcopy(basis_rotation_angles, D_L11_001677D0);
         basis_rotation_angles[0] = 0.0f;
@@ -1408,7 +1435,7 @@ void blarg_ship_update(struct Moby *moby) {
             }
         }
         break;
-    case 6:
+    case BLARG_SHIP_BURST_AND_DEACTIVATE:
         *(unsigned short *)(D_00141C18) = 0xFFFF;
         subtract_vector_xyz(scratch_vector, &hero.motion.pos, d + 0xB0);
         qcopy(d + 0xB0, &hero.motion.pos);
@@ -1549,6 +1576,10 @@ extern short D_L11_00162414 __attribute__((sda));
 extern short D_L11_00162418 __attribute__((sda));
 extern short D_L11_0016241C __attribute__((sda));
 void FUN_L11_0031ab08(struct Moby *m) {
+    enum {
+        BUBBLE_MOVE_UNTIL_SURFACE_CROSSING = 1,
+        BUBBLE_SHRINK_TO_REMOVAL = 2
+    };
     char *d = (char *)m->pvars;
     float v[4];
     float len;
@@ -1563,7 +1594,7 @@ void FUN_L11_0031ab08(struct Moby *m) {
         *(short *)(d + 0x22) = 0;
     }
     switch (m->state) {
-    case 1:
+    case BUBBLE_MOVE_UNTIL_SURFACE_CROSSING:
         *(float *)(d + 8) -= *(float *)&D_L11_00162400 * frame_time_sq;
         if (**(float **)(d + 0x24) + 3.0f < m->pos.z) {
             if (random_integer_below_c3(*(int *)&D_L11_00162410) == 0) {
@@ -1576,7 +1607,7 @@ void FUN_L11_0031ab08(struct Moby *m) {
             FUN_L11_0031ae68((struct Moby *)m, *(float **)(d + 0x24), 8, 4);
         }
         break;
-    case 2:
+    case BUBBLE_SHRINK_TO_REMOVAL:
         *(float *)(d + 8) -= *(float *)&D_L11_00162404 * frame_time_sq;
         rate = m->pclass->scale / (float)scale_game_frames(0x3C);
         if ((level_frame & 3) == 0) {
@@ -1832,6 +1863,10 @@ extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 extern unsigned char D_L11_00162590;
 void FUN_L11_0031e2f0(struct Moby *moby) {
+    enum {
+        EFFECT_INITIALIZE = 0,
+        EFFECT_UPDATE_AND_QUEUE_DRAW = 1
+    };
     int i;
     float v[4];
     float w[4];
@@ -1839,7 +1874,7 @@ void FUN_L11_0031e2f0(struct Moby *moby) {
     char *s;
 
     switch (moby->state) {
-    case 0:
+    case EFFECT_INITIALIZE:
         if (D_L11_0016252C == 0) {
             FUN_L08_002f0f68(D_L11_00162570, 4, D_L11_00162530, 0.7f, 1.0f, 0.9f, 0.5f, 1);
             FUN_L08_002f0f68(D_L11_001F9A48, 0xB, D_L11_001F4978, 0.5f, 0.5f, 0.5f, 1.0f, 1);
@@ -1862,7 +1897,7 @@ void FUN_L11_0031e2f0(struct Moby *moby) {
             D_L11_001625AC[i].f = i * 0.4f;
         }
         break;
-    case 1:
+    case EFFECT_UPDATE_AND_QUEUE_DRAW:
         s = D_L11_00167680;
         if (*(float *)(s + 0x148) < 170.0f)
             return;
@@ -2005,6 +2040,10 @@ extern void subtract_vector_xyz(void *, void *, void *);
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void FUN_L11_0031f150(struct Moby *moby) {
+    enum {
+        EFFECT_INITIALIZE = 0,
+        EFFECT_UPDATE_AND_QUEUE_DRAW = 1
+    };
     int i;
     float v[4];
     float w[4];
@@ -2012,7 +2051,7 @@ void FUN_L11_0031f150(struct Moby *moby) {
     char *s;
 
     switch (moby->state) {
-    case 0:
+    case EFFECT_INITIALIZE:
         if (D_L11_001625FC == 0) {
             FUN_L08_002f0f68(D_L11_00215220, 17, D_L11_00207900, 0.7f, 1.0f, 0.9f, 0.5f, 1);
             FUN_L08_002f0f68(D_L11_00217740, 5, D_L11_00215268, 0.5f, 0.5f, 0.5f, 1.0f, 1);
@@ -2035,7 +2074,7 @@ void FUN_L11_0031f150(struct Moby *moby) {
             D_L11_0016262C[i].f = i * 0.4f;
         }
         break;
-    case 1:
+    case EFFECT_UPDATE_AND_QUEUE_DRAW:
         s = D_L11_00167680;
         if (*(float *)(s + 0x148) < 170.0f)
             return;

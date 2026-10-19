@@ -714,6 +714,19 @@ extern void func_L08_002E0258_2E16A0(void *) __asm__("FUN_L08_002deee0");
 
 extern unsigned char D_0014095F[];
 void FUN_L08_002e0328(Moby *moby) {
+    enum {
+        CANNON_INITIALIZE = 0,
+        CANNON_UNMOUNTED_IDLE = 4,
+        CANNON_MOUNTED_CONTROL = 5,
+        CANNON_REMOVE = 6
+    };
+    enum {
+        CANNON_NO_INACTIVE_INDEXED_TARGETS = 0,
+        CANNON_ONE_INACTIVE_INDEXED_TARGET = 1,
+        CANNON_TWO_INACTIVE_INDEXED_TARGETS = 2,
+        CANNON_THREE_INACTIVE_INDEXED_TARGETS = 3,
+        CANNON_ALL_INDEXED_TARGETS_INACTIVE = 4
+    };
     float position[4], offset[4], work[4], direction[4], muzzle[4], scatter[4], random_vec[4];
     CannonData52_2E16A0 *data = (*(CannonData52_2E16A0 **)&moby->pvars);
     int i, target, all_done, dead, best, min_life;
@@ -784,7 +797,7 @@ void FUN_L08_002e0328(Moby *moby) {
         }
     }
     switch (moby->state) {
-    case 0: {
+    case CANNON_INITIALIZE: {
         Moby *node; int *indices; int count;
         moby->state = 4; data->health = 200; data->range = 10.0f;
         node = func_0020D348_2E16A0(0x710); data->visual = node;
@@ -802,7 +815,7 @@ void FUN_L08_002e0328(Moby *moby) {
         else data->visual_angle = 1.5707964f;
         break;
     }
-    case 5:
+    case CANNON_MOUNTED_CONTROL:
         if (data->health < 0) data->health = 0;
         work[0] = hero52.input[0];
         work[1] = invert52 ? hero52.input[1] : -hero52.input[1];
@@ -914,11 +927,11 @@ void FUN_L08_002e0328(Moby *moby) {
                     walk++;
                 } while (--count >= 0);
                 switch (dead) {
-                case 0: data->range = 10.0f; data->wave_timer = func_001F9850_2E16A0(285); break;
-                case 1: data->range = 12.5f; data->wave_timer = func_001F9850_2E16A0(240); break;
-                case 2: data->range = 15.0f; data->wave_timer = func_001F9850_2E16A0(195); break;
-                case 3: data->range = 17.5f; data->wave_timer = func_001F9850_2E16A0(150); break;
-                case 4:
+                case CANNON_NO_INACTIVE_INDEXED_TARGETS: data->range = 10.0f; data->wave_timer = func_001F9850_2E16A0(285); break;
+                case CANNON_ONE_INACTIVE_INDEXED_TARGET: data->range = 12.5f; data->wave_timer = func_001F9850_2E16A0(240); break;
+                case CANNON_TWO_INACTIVE_INDEXED_TARGETS: data->range = 15.0f; data->wave_timer = func_001F9850_2E16A0(195); break;
+                case CANNON_THREE_INACTIVE_INDEXED_TARGETS: data->range = 17.5f; data->wave_timer = func_001F9850_2E16A0(150); break;
+                case CANNON_ALL_INDEXED_TARGETS_INACTIVE:
                     if (visited52[D_0015ED84][moby->mission] != 0xFF) {
                         Moby *node;
                         (*(float (*)[4])&moby->rot)[1] = 0.0f; moby->command = 2;
@@ -949,9 +962,9 @@ void FUN_L08_002e0328(Moby *moby) {
             }
         }
         break;
-    case 4:
+    case CANNON_UNMOUNTED_IDLE:
         break;
-    case 6:
+    case CANNON_REMOVE:
         func_0020D678_2E16A0(data->guns[0]); func_0020D678_2E16A0(data->guns[1]); func_0020D678_2E16A0(moby); return;
     }
     if (data->guns[0] == 0) {
@@ -1073,6 +1086,11 @@ extern void func_L00_0026B890_2E2A38(void *, void *, int, int, int, int, int, in
 extern char *func_00219780_2E2A38(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
 
 void FUN_L08_002e16c0(Moby_2E2A38 *m) {
+    enum {
+        FALLING_DEBRIS_INITIALIZE = 1,
+        FALLING_DEBRIS_BEFORE_BURST = 2,
+        FALLING_DEBRIS_AFTER_BURST = 3
+    };
     Data_2E2A38 *d = m->data;
     float particle_primary_vector[4];
     Pair_2E2A38 tab;
@@ -1081,12 +1099,12 @@ void FUN_L08_002e16c0(Moby_2E2A38 *m) {
     int i;
 
     switch (m->state) {
-    case 1:
+    case FALLING_DEBRIS_INITIALIZE:
         d->spin_x = random_float_between_c2(-(D_0015ED6C_gp * 1.5707964f), D_0015ED6C_gp * 1.5707964f);
         d->spin_y = random_float_between_c2(-(D_0015ED6C_gp * 1.5707964f), D_0015ED6C_gp * 1.5707964f);
         d->life = (int)random_float_between_c2((float)scale_game_frames_alt(0x5A), (float)scale_game_frames_alt(0x96));
         m->state = 2;
-    case 2:
+    case FALLING_DEBRIS_BEFORE_BURST:
         d->vel[2] -= D_0015ED70 * 10.8f * 0.5f;
         add_vector_xyz(m->pos, m->pos, d);
         m->rot[0] = fast_add_rotations_c(m->rot[0], d->spin_x);
@@ -1139,7 +1157,7 @@ void FUN_L08_002e16c0(Moby_2E2A38 *m) {
             m->state = 3;
         }
         break;
-    case 3:
+    case FALLING_DEBRIS_AFTER_BURST:
         d->vel[2] -= D_0015ED70 * 10.8f * 0.5f;
         add_vector_xyz(m->pos, m->pos, d);
         m->rot[0] = fast_add_rotations_c(m->rot[0], d->spin_x);
@@ -1408,6 +1426,13 @@ extern struct Moby *FUN_L08_002de3e0(void *, struct Moby *, void *, f32, f32);
 extern void FUN_L08_002e2250_u(struct Moby *) __asm__("FUN_L08_002e2250");
 
 void FUN_L08_002e24e8(struct Moby *moby) {
+    enum {
+        GUNSHIP_INITIALIZE = 0,
+        GUNSHIP_FOLLOW_PRIMARY_PATH_AND_FIRE_AT_TARGET = 1,
+        GUNSHIP_FOLLOW_SECONDARY_PATH_AND_FIRE_RANDOMLY = 2,
+        GUNSHIP_BEGIN_PRIMARY_PATH = 3,
+        GUNSHIP_BREAK_APART_AND_REMOVE = 0x63
+    };
     GunshipVars *vars = (GunshipVars *)moby->pvars;
     SwarmPathFollower *follower;
     struct Moby *target;
@@ -1437,7 +1462,7 @@ void FUN_L08_002e24e8(struct Moby *moby) {
         vars->sound = allocate_voice_for_target_entry(3, 4, moby);
     }
     switch (moby->state) {
-    case 0:
+    case GUNSHIP_INITIALIZE:
         if (D_0014C050[moby->mission + current_level_index * 16] == 0xFF) {
             mark_moby_for_removal(moby);
             return;
@@ -1452,7 +1477,7 @@ void FUN_L08_002e24e8(struct Moby *moby) {
                                    vars->follow[1].path->points[1].f[1] - moby->pos.y);
         moby->flags |= 0x4000;
         break;
-    case 1:
+    case GUNSHIP_FOLLOW_PRIMARY_PATH_AND_FIRE_AT_TARGET:
         waypoint = (vars->follow[0].point + vars->follow[0].path->count + vars->follow[0].direction) % vars->follow[0].path->count;
         target = &D_L08_0015FFD8_m[vars->target_index];
         FUN_L00_00258278(moby,
@@ -1499,7 +1524,7 @@ void FUN_L08_002e24e8(struct Moby *moby) {
             }
         }
         break;
-    case 2:
+    case GUNSHIP_FOLLOW_SECONDARY_PATH_AND_FIRE_RANDOMLY:
         follower = &vars->follow[1];
         next = (follower->point + 1) % follower->path->count;
         after = (follower->point + 2) % follower->path->count;
@@ -1543,7 +1568,7 @@ void FUN_L08_002e24e8(struct Moby *moby) {
             bolt->rot.y = 0.0f;
         }
         break;
-    case 3: {
+    case GUNSHIP_BEGIN_PRIMARY_PATH: {
         SwarmPath *path;
 
         moby->state = 1;
@@ -1554,7 +1579,7 @@ void FUN_L08_002e24e8(struct Moby *moby) {
         FUN_L08_002e2078(moby);
         break;
     }
-    case 0x63:
+    case GUNSHIP_BREAK_APART_AND_REMOVE:
         for (i = 1; i < 34; i++) {
             struct Moby *part = vars->links[i].part;
             if (part != NULL) {
@@ -1643,6 +1668,17 @@ typedef struct {
 
 void bolt_thief_update(struct Moby *moby) __asm__("FUN_L08_002e2df0");
 void bolt_thief_update(struct Moby *moby) {
+    enum {
+        BOLT_THIEF_INITIALIZE = 0,
+        BOLT_THIEF_WAIT_FOR_HERO_NEAR_TRIGGER = 1,
+        BOLT_THIEF_FOLLOW_PRIMARY_PATH_TO_COLLECTION_POINT = 2,
+        BOLT_THIEF_WAIT_FOR_ANIMATION_BEFORE_PULLING_PICKUPS = 3,
+        BOLT_THIEF_PULL_PICKUPS_TO_JOINT = 4,
+        BOLT_THIEF_FOLLOW_PRIMARY_PATH_TO_EXIT = 5,
+        BOLT_THIEF_FOLLOW_SECONDARY_PATH = 6,
+        BOLT_THIEF_FACE_HERO = 7,
+        BOLT_THIEF_KNOCKBACK = 8
+    };
     Vec4 point;
     Vec4 step;
     BoltThiefVars *data;
@@ -1682,7 +1718,7 @@ void bolt_thief_update(struct Moby *moby) {
     }
     moby->hit_slot = 0xFF;
     switch (moby->state) {
-    case 0:
+    case BOLT_THIEF_INITIALIZE:
         data->follow[0].path = D_L08_001B0CB0[data->follow[0].path_id];
         qcopy(&moby->pos, &data->follow[0].path->points[0]);
         data->follow[0].point = 1;
@@ -1699,7 +1735,7 @@ void bolt_thief_update(struct Moby *moby) {
             FUN_00212f90(moby, 1, 0, 0);
         }
         break;
-    case 1:
+    case BOLT_THIEF_WAIT_FOR_HERO_NEAR_TRIGGER:
         qcopy(&point, &D_L08_001B0CB0[data->w220]->points[0]);
         if (FUN_001f9b48(hero.motion.pos.f, &point) < 24.0f) {
             FUN_L08_002e2da0((char *)moby);
@@ -1709,7 +1745,7 @@ void bolt_thief_update(struct Moby *moby) {
             }
         }
         break;
-    case 2: {
+    case BOLT_THIEF_FOLLOW_PRIMARY_PATH_TO_COLLECTION_POINT: {
         SwarmPathFollower *follower;
         SwarmPath *path;
         int next;
@@ -1736,7 +1772,7 @@ void bolt_thief_update(struct Moby *moby) {
         }
         break;
     }
-    case 3:
+    case BOLT_THIEF_WAIT_FOR_ANIMATION_BEFORE_PULLING_PICKUPS:
         moby->anim_speed = 3.0f;
         if (moby->anim_flags & 2) {
             int i;
@@ -1756,7 +1792,7 @@ void bolt_thief_update(struct Moby *moby) {
             moby->anim_speed = 1.0f;
         }
         break;
-    case 4: {
+    case BOLT_THIEF_PULL_PICKUPS_TO_JOINT: {
         int active_count;
         int i;
 
@@ -1785,7 +1821,7 @@ void bolt_thief_update(struct Moby *moby) {
         }
         break;
     }
-    case 5: {
+    case BOLT_THIEF_FOLLOW_PRIMARY_PATH_TO_EXIT: {
         SwarmPathFollower *follower;
         int next;
         int found;
@@ -1831,7 +1867,7 @@ void bolt_thief_update(struct Moby *moby) {
         }
         break;
     }
-    case 6: {
+    case BOLT_THIEF_FOLLOW_SECONDARY_PATH: {
         SwarmPathFollower *follower;
         int next;
         float heading;
@@ -1852,7 +1888,7 @@ void bolt_thief_update(struct Moby *moby) {
         }
         break;
     }
-    case 7: {
+    case BOLT_THIEF_FACE_HERO: {
         float *hero_position;
         float distance;
         float heading;
@@ -1874,7 +1910,7 @@ void bolt_thief_update(struct Moby *moby) {
         }
         break;
     }
-    case 8:
+    case BOLT_THIEF_KNOCKBACK:
         if (mine_fall(moby, data->x70) & 3) {
             cart_burst(moby, &moby->pos, -1, 1.0f, 13.0f);
             mark_moby_for_removal(moby);
@@ -2017,6 +2053,24 @@ extern void func_L00_0023A788_4BE8(void) __asm__("FUN_L08_002445d8");
 extern int D_L08_00174658_lui __asm__("D_L08_00174658") __attribute__((section(".data")));
 
 void FUN_L08_002e3870(struct Moby *moby) {
+    enum {
+        MOBY_CLASS_FIVE_BOLT_PICKUP = 0x3DC,
+        MOBY_CLASS_TEN_BOLT_PICKUP = 0x3DD
+    };
+    enum {
+        BOLT_PICKUP_INITIALIZE = 0,
+        BOLT_PICKUP_WAIT_FOR_HERO = 1,
+        BOLT_PICKUP_TURN_TOWARD_HERO = 2,
+        BOLT_PICKUP_FLY_TO_HERO_AND_CREDIT_BOLTS = 3,
+        BOLT_PICKUP_FALL_AND_BOUNCE = 4,
+        BOLT_PICKUP_RETURN_TO_SURFACE = 5
+    };
+    enum {
+        MOBY_CLASS_ONE_BOLT_PICKUP = 0x279
+    };
+    enum {
+        MOBY_CLASS_COLLECTED_COUNT_BOLT_BONUS_PICKUP = 0x305
+    };
     char *cam;
     float direction[4];
     float point[4];
@@ -2024,18 +2078,18 @@ void FUN_L08_002e3870(struct Moby *moby) {
     float scratch[16];
 
     switch (moby->state) {
-    case 0: {
+    case BOLT_PICKUP_INITIALIZE: {
         Vars_4BE8 *vars = (Vars_4BE8 *)moby->pvars;
         int linked;
 
         switch (moby->oclass) {
-        case 0x279:
+        case MOBY_CLASS_ONE_BOLT_PICKUP:
             moby->scale = moby->pclass->scale * D_L08_00161CB4_gp;
             break;
-        case 0x3DC:
+        case MOBY_CLASS_FIVE_BOLT_PICKUP:
             moby->scale = moby->pclass->scale * D_L08_00161CB8;
             break;
-        case 0x3DD:
+        case MOBY_CLASS_TEN_BOLT_PICKUP:
             moby->scale = moby->pclass->scale * D_L08_00161CBC_gp;
             break;
         }
@@ -2075,7 +2129,7 @@ void FUN_L08_002e3870(struct Moby *moby) {
         vars->u78.i = D_L08_00161CCC_gp;
         break;
     }
-    case 1: {
+    case BOLT_PICKUP_WAIT_FOR_HERO: {
         Vars_4BE8 *vars = (Vars_4BE8 *)moby->pvars;
 
         if (vars->u7C.i != 0) {
@@ -2101,11 +2155,11 @@ void FUN_L08_002e3870(struct Moby *moby) {
             break;
         }
         switch (moby->oclass) {
-        case 0x3DD:
+        case MOBY_CLASS_TEN_BOLT_PICKUP:
             vars->f60 = fast_add_rotations_c4(vars->f60, D_L08_00161CAC_gp * 0.017453292f * frame_time);
             vars->f64 = fast_add_rotations_c4(vars->f64, D_L08_00161CB0 * 0.017453292f * frame_time);
             break;
-        case 0x3DC:
+        case MOBY_CLASS_FIVE_BOLT_PICKUP:
             vars->f60 = fast_add_rotations_c4(vars->f60, D_L08_00161CA4_gp * 0.017453292f * frame_time);
             vars->f64 = fast_add_rotations_c4(vars->f64, D_L08_00161CA8 * 0.017453292f * frame_time);
             break;
@@ -2136,7 +2190,7 @@ void FUN_L08_002e3870(struct Moby *moby) {
         }
         break;
     }
-    case 2: {
+    case BOLT_PICKUP_TURN_TOWARD_HERO: {
         Vars_4BE8 *vars = (Vars_4BE8 *)moby->pvars;
 
         euler_rotation_matrix(scratch, vars->v10);
@@ -2183,7 +2237,7 @@ void FUN_L08_002e3870(struct Moby *moby) {
         }
         break;
     }
-    case 3: {
+    case BOLT_PICKUP_FLY_TO_HERO_AND_CREDIT_BOLTS: {
         Vars_4BE8 *vars = (Vars_4BE8 *)moby->pvars;
         float dist;
         float fade_range;
@@ -2239,7 +2293,7 @@ void FUN_L08_002e3870(struct Moby *moby) {
                 BoltSource_4BE8 *source;
 
                 switch (moby->oclass) {
-                case 0x305: {
+                case MOBY_CLASS_COLLECTED_COUNT_BOLT_BONUS_PICKUP: {
                     int i;
                     int j;
                     int n;
@@ -2256,10 +2310,10 @@ void FUN_L08_002e3870(struct Moby *moby) {
                     value = n * 100;
                     break;
                 }
-                case 0x3DD:
+                case MOBY_CLASS_TEN_BOLT_PICKUP:
                     value = 10;
                     break;
-                case 0x3DC:
+                case MOBY_CLASS_FIVE_BOLT_PICKUP:
                     value = 5;
                     break;
                 default:
@@ -2298,7 +2352,7 @@ void FUN_L08_002e3870(struct Moby *moby) {
         multiply_matrix_basis_columns(&moby->rot_row0, vars, &moby->rot_row0);
         break;
     }
-    case 4: {
+    case BOLT_PICKUP_FALL_AND_BOUNCE: {
         Vars_4BE8 *vars = (Vars_4BE8 *)moby->pvars;
 
         add_vector_xyz(&moby->pos, &moby->pos, vars->velocity);
@@ -2309,10 +2363,10 @@ void FUN_L08_002e3870(struct Moby *moby) {
             BoltSource_4BE8 *source;
 
             switch (moby->oclass) {
-            case 0x3DD:
+            case MOBY_CLASS_TEN_BOLT_PICKUP:
                 value = 10;
                 break;
-            case 0x3DC:
+            case MOBY_CLASS_FIVE_BOLT_PICKUP:
                 value = 5;
                 break;
             default:
@@ -2386,7 +2440,7 @@ void FUN_L08_002e3870(struct Moby *moby) {
         }
         break;
     }
-    case 5: {
+    case BOLT_PICKUP_RETURN_TO_SURFACE: {
         Vars_4BE8 *vars = (Vars_4BE8 *)moby->pvars;
 
         moby->rot.x = fast_add_rotations_c4(moby->rot.x, vars->spin_x);
@@ -2470,6 +2524,10 @@ extern void cross_vectors_xyz(void *, void *, void *) __asm__("func_001F9AD8");
 extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
 
 void FUN_L08_002e4e90(struct Moby *moby, float *out, float *rot) {
+    enum {
+        MOBY_CLASS_FIVE_BOLT_PICKUP = 0x3DC,
+        MOBY_CLASS_TEN_BOLT_PICKUP = 0x3DD
+    };
     float r[16];
     float b[16];
     float up[4];
@@ -2482,12 +2540,12 @@ void FUN_L08_002e4e90(struct Moby *moby, float *out, float *rot) {
     float sx, sy, sz;
     float t;
     switch (moby->oclass) {
-    case 0x3DC:
+    case MOBY_CLASS_FIVE_BOLT_PICKUP:
         sx = D_L08_00161C68 * D_L08_00161CB8;
         sy = D_L08_00161C74 * D_L08_00161CB8;
         sz = D_L08_00161C80 * D_L08_00161CB8;
         break;
-    case 0x3DD:
+    case MOBY_CLASS_TEN_BOLT_PICKUP:
         sx = D_L08_00161C6C * D_L08_00161CBC;
         sy = D_L08_00161C78 * D_L08_00161CBC;
         sz = D_L08_00161C84 * D_L08_00161CBC;
@@ -2736,6 +2794,13 @@ extern void FUN_L08_002e8ba0(struct Moby *);
 
 void shrub_update(struct Moby *moby) __asm__("FUN_L08_002e8cd0");
 void shrub_update(struct Moby *moby) {
+    enum {
+        SHRUB_INITIALIZE = 0,
+        SHRUB_FOLLOW_PRIMARY_PATH_AND_FIRE_AT_TARGET = 1,
+        SHRUB_FOLLOW_SECONDARY_PATH_AND_FIRE_RANDOMLY = 2,
+        SHRUB_BEGIN_PRIMARY_PATH = 3,
+        SHRUB_BREAK_APART_AND_REMOVE = 0x63
+    };
     SwarmVars *vars = (SwarmVars *)moby->pvars;
     SwarmPathFollower *follower;
     struct Moby *target;
@@ -2765,7 +2830,7 @@ void shrub_update(struct Moby *moby) {
         vars->sound = allocate_voice_for_target_entry(3, 4, moby);
     }
     switch (moby->state) {
-    case 0:
+    case SHRUB_INITIALIZE:
         if (D_0014C050[moby->mission + current_level_index * 16] == 0xFF) {
             mark_moby_for_removal(moby);
             return;
@@ -2780,7 +2845,7 @@ void shrub_update(struct Moby *moby) {
         moby->rot.z = fast_arc_tan(vars->follow[1].path->points[1].f[0] - moby->pos.x,
                                    vars->follow[1].path->points[1].f[1] - moby->pos.y);
         break;
-    case 1:
+    case SHRUB_FOLLOW_PRIMARY_PATH_AND_FIRE_AT_TARGET:
         waypoint = (vars->follow[0].point + vars->follow[0].path->count + vars->follow[0].direction) % vars->follow[0].path->count;
         target = &D_L08_0015FFD8_m[vars->target_index];
         FUN_L00_00258278(moby,
@@ -2823,7 +2888,7 @@ void shrub_update(struct Moby *moby) {
             }
         }
         break;
-    case 2:
+    case SHRUB_FOLLOW_SECONDARY_PATH_AND_FIRE_RANDOMLY:
         follower = &vars->follow[1];
         if (D_L08_0015F5C4 == 2 && vars->can_skip != 0 && D_L08_0016D090 == 0x200000000) {
             qcopy(&moby->pos, &follower->path->points[15]);
@@ -2867,7 +2932,7 @@ void shrub_update(struct Moby *moby) {
             bolt->rot.y = 0.0f;
         }
         break;
-    case 3: {
+    case SHRUB_BEGIN_PRIMARY_PATH: {
         SwarmPath *path;
 
         moby->state = 1;
@@ -2877,7 +2942,7 @@ void shrub_update(struct Moby *moby) {
         FUN_L08_002e8ba0((char *)moby);
         break;
     }
-    case 0x63:
+    case SHRUB_BREAK_APART_AND_REMOVE:
         for (i = 0; i < 12; i++) {
             struct Moby *part = vars->parts[i].moby;
             if (part != NULL) {

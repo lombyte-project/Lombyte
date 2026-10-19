@@ -24,7 +24,10 @@ void music_update(void) __asm__("FUN_00216290");
 
 void music_update(void) {
     enum {
-        CROSSFADE_FADE_OUT_PRIMARY = 2
+        CROSSFADE_FADE_OUT_PRIMARY = 2,
+        CROSSFADE_WAIT_TO_PRESEEK_PRIMARY = 3,
+        CROSSFADE_WAIT_TO_CONTINUE_PRIMARY = 4,
+        CROSSFADE_WAIT_TO_RESET = 5
     };
     s8 requested_track;
     s32 fade_volume;
@@ -95,7 +98,7 @@ void music_update(void) {
                                         (s64)&music_stream_state.primary.handle);
             }
             break;
-        case 3:
+        case CROSSFADE_WAIT_TO_PRESEEK_PRIMARY:
             if (music_stream_state.primary.state == 0 && (music_stream_state.transition.crossfade_enabled != 0 ||
                                                    music_stream_state.transition.handle == 0)) {
                 music_preseek_track(music_stream_state.requested_track, music_stream_state.primary.flags,
@@ -104,7 +107,7 @@ void music_update(void) {
                 music_stream_state.crossfade_state = 4;
             }
             break;
-        case 4:
+        case CROSSFADE_WAIT_TO_CONTINUE_PRIMARY:
             if (music_stream_state.primary.state == 3) {
                 if (music_stream_state.transition.remaining_time < music_stream_state.crossfade_interval ||
                     music_stream_state.transition.state != 4 ||
@@ -116,7 +119,7 @@ void music_update(void) {
                 }
             }
             break;
-        case 5:
+        case CROSSFADE_WAIT_TO_RESET:
             if (music_stream_state.transition.state != 4 ||
                 music_stream_state.transition.crossfade_enabled == 0) {
                 music_stream_state.crossfade_state = 0;

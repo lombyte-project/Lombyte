@@ -782,6 +782,11 @@ extern void clear_vector(void *);
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void FUN_L02_002da6c0(int p0, int p1, int sel, float a, float s) {
+    enum {
+        ARROW_STYLE_NEWLY_REACHED = 0,
+        ARROW_STYLE_OCCUPIED = 1,
+        ARROW_STYLE_LIT = 2
+    };
     long xy[4];
     u32 col[4];
     int uv[4];
@@ -791,19 +796,19 @@ void FUN_L02_002da6c0(int p0, int p1, int sel, float a, float s) {
     long v;
     s64 tex;
     switch (sel) {
-    case 0:
+    case ARROW_STYLE_NEWLY_REACHED:
         uv[0] = D_L02_00161ABC;
         uv[1] = D_L02_00161AC0;
         uv[2] = D_L02_00161AC4;
         uv[3] = D_L02_00161AC8;
         break;
-    case 1:
+    case ARROW_STYLE_OCCUPIED:
         uv[0] = D_L02_00161ACC;
         uv[1] = D_L02_00161AD0;
         uv[2] = D_L02_00161AD4;
         uv[3] = D_L02_00161AD8;
         break;
-    case 2:
+    case ARROW_STYLE_LIT:
     default:
         uv[0] = D_L02_00161ADC;
         uv[1] = D_L02_00161AE0;
@@ -1133,12 +1138,17 @@ extern float func_L00_0025CE58_f(float *, float, float *, float, float,
 
 void swingshot_versatarget_update(char *m) __asm__("FUN_L02_002e0450");
 void swingshot_versatarget_update(char *m) {
+    enum {
+        VERSATARGET_STATE_INITIALIZE = 0,
+        VERSATARGET_STATE_ACTIVE = 1,
+        VERSATARGET_STATE_INACTIVE = 2
+    };
     char *d = *(char **)(m + 0x78);
     float v[4];
     float w[4];
     char *o;
     switch (((unsigned char *)m)[0x20]) {
-    case 0:
+    case VERSATARGET_STATE_INITIALIZE:
         if (*(int *)(d + 0x30) != -1 ||
             (*(int *)(d + 0x3C) != -1 &&
              (o = (char *)(D_L02_0015FFD8 + (*(int *)(d + 0x3C) << 8))) != 0 &&
@@ -1152,7 +1162,7 @@ void swingshot_versatarget_update(char *m) {
             m[0x20] = 1;
         }
         break;
-    case 1:
+    case VERSATARGET_STATE_ACTIVE:
         if (*(short *)(m + 0xA6) == 0x323) {
             struct Hero *g = &hero;
             float *rz = (float *)(m + 0x48);
@@ -1182,7 +1192,7 @@ void swingshot_versatarget_update(char *m) {
                 func_L02_002FBC00_c(m);
         }
         break;
-    case 2:
+    case VERSATARGET_STATE_INACTIVE:
         if (D_0014C050_a[*(int *)(d + 0x30) + (current_level_index << 4)] != 0 ||
             (*(int *)(d + 0x3C) != -1 &&
              ((o = (char *)(D_L02_0015FFD8 + (*(int *)(d + 0x3C) << 8))) == 0 ||

@@ -154,7 +154,7 @@ int hero_set_state(int a, int b) {
         p->rand_timer.range = 0;
     }
     switch (a) {
-    case 0: {
+    case HERO_STATE_IDLE: {
         struct Hero *p = &hero;
         p->state.control_mode = 0;
         p->unk2284 = 0;
@@ -208,7 +208,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x3D: {
+    case HERO_STATE_DYING: {
         struct Hero *p = &hero;
         p->state.control_mode = 0x14;
         p->unk2284 = 0;
@@ -1026,7 +1026,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0x25, 0, (float)scale_game_frames(6));
         break;
     }
-    case 0x79: {
+    case HERO_STATE_SLIP: {
         struct Hero *p = &hero;
         p->state.control_mode = 2;
         p->unk2284 = 0;
@@ -1035,7 +1035,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0xB, 0, (float)scale_game_frames(0xC));
         break;
     }
-    case 6:
+    case HERO_STATE_FALL:
     case 0x77: {
         struct Hero *p = &hero;
         p->state.control_mode = 2;
@@ -1073,7 +1073,7 @@ int hero_set_state(int a, int b) {
     }
     case 0x81: {
         struct Hero *p = &hero;
-        int t81 = -2;
+        int animation_timing_parameter = -2;
         p->state.control_mode = 1;
         p->unk22CA = 1;
         p->rand_timer.range = 0x68;
@@ -1083,7 +1083,7 @@ int hero_set_state(int a, int b) {
         }
         qcopy(&p->motion.velocity, &p->motion.unk110);
         if (b) {
-            set_hero_animation(0x13, 0, (float)t81);
+            set_hero_animation(0x13, 0, (float)animation_timing_parameter);
         }
         break;
     }
@@ -1525,7 +1525,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x13:
+    case HERO_STATE_WRENCH_COMBO:
     case 0x14:
     case 0x15:
     case 0x20:
@@ -1616,7 +1616,7 @@ int hero_set_state(int a, int b) {
             FUN_L00_00214ed8(11.0f, 0.87266463f, -1.0f);
             break;
         }
-        case 0x13: {
+        case HERO_STATE_WRENCH_COMBO: {
             char *h = ((char *)&item_usage);
             struct Hero *q;
             T2C_24D680 *e;

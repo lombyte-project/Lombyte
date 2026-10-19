@@ -17,6 +17,11 @@ extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 extern unsigned char *D_L08_001B2880 __attribute__((section(".data")));
 void FUN_L08_00272cb8(float *pos, int kind, float *vec, float scale) {
+    enum {
+        PARTICLE_SHORT_SPAN = 0,
+        PARTICLE_MEDIUM_SPAN = 1,
+        PARTICLE_LONG_SPAN = 2
+    };
     float v[4];
     float *vp = v;
     float w[4];
@@ -35,17 +40,17 @@ void FUN_L08_00272cb8(float *pos, int kind, float *vec, float scale) {
         f20 = 0.0f;
         s = f20;
         switch (k) {
-        case 0:
+        case PARTICLE_SHORT_SPAN:
             c = 0x14;
             f20 = 0.015f;
             s = random_float_between_alt(0.01f, 1.0f);
             break;
-        case 1:
+        case PARTICLE_MEDIUM_SPAN:
             c = 0xD;
             f20 = 0.5f;
             s = random_float_between_alt(1.0f, 5.0f);
             break;
-        case 2:
+        case PARTICLE_LONG_SPAN:
             c = 0xD;
             f20 = 1.0f;
             k = 1;

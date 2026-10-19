@@ -701,18 +701,25 @@ extern short D_L18_00161A6C __asm__("D_0015ED6C");
 extern float D_L18_6C_m __asm__("D_0015ED6C");
 
 void FUN_L18_002d5918(struct Moby *moby) {
+    enum {
+        STATE_INITIALIZE = 0,
+        STATE_BALLISTIC_FLIGHT = 1,
+        STATE_POST_FLIGHT_SETTLING = 2,
+        STATE_APPROACH_NEARBY_TARGET = 3,
+        STATE_WAIT_TO_RESUME_APPROACH = 4
+    };
     char *data = (char *)moby->pvars;
     float v[4];
     FUN_L18_002d5f20(moby);
     switch (moby->state) {
-    case 0:
+    case STATE_INITIALIZE:
         moby->collision = 0;
         moby->flags = (moby->flags | 0x41) & 0xEFFF;
         *(void **)(data + 0xD0) = &D_L18_00161988;
         *(float *)(data + 0x30) = 0.05f;
         moby->state = 5;
         break;
-    case 1:
+    case STATE_BALLISTIC_FLIGHT:
         add_vector_xyz(&moby->pos, &moby->pos, data + 0x180);
         *(float *)(data + 0x188) -= frame_time_sq * 10.0f;
         if (moby->pos.z < *(float *)(data + 0x178)) {
@@ -721,7 +728,7 @@ void FUN_L18_002d5918(struct Moby *moby) {
             *(float *)(data + 0x188) = -(D_L18_00161994 * 2.0f * D_L18_6C_m);
         }
         break;
-    case 2: {
+    case STATE_POST_FLIGHT_SETTLING: {
         float d = approach_value((float *)(data + 0x188), 0.0f, D_L18_00161994 * 2.0f * frame_time_sq);
         moby->rot.y += d;
         v[0] = fast_cos(moby->rot.z) * d;
@@ -737,7 +744,7 @@ void FUN_L18_002d5918(struct Moby *moby) {
         }
         break;
     }
-    case 3:
+    case STATE_APPROACH_NEARBY_TARGET:
         if (moby->prev_seq == 1 && (moby->anim_flags & 2)) {
             blend_moby_animation_alt(moby, 2, 0, scale_game_frames_i(12));
         }
@@ -782,7 +789,7 @@ void FUN_L18_002d5918(struct Moby *moby) {
             }
         }
         break;
-    case 4:
+    case STATE_WAIT_TO_RESUME_APPROACH:
         if (FUN_L00_002dc9f0(moby, data + 0x110)) {
             moby->state = 3;
             *(short *)(data + 0xC8) = 0;
@@ -996,6 +1003,10 @@ extern float FUN_001f9b48(void *, void *);
 extern char *FUN_L18_002e22c0(void *vector);
 
 void FUN_L18_002d62e8(struct Moby *moby) {
+    enum {
+        STATE_INITIALIZE_PATH_PAIRS = 0,
+        STATE_SELECT_NEARER_PATH = 1
+    };
     PathJunctionVars *vars = (PathJunctionVars *)moby->pvars;
     s32 n;
     s32 i;
@@ -1004,7 +1015,7 @@ void FUN_L18_002d62e8(struct Moby *moby) {
     f32 near_first;
 
     switch (moby->state) {
-    case 0:
+    case STATE_INITIALIZE_PATH_PAIRS:
         moby->state = 1;
         moby->update_dist = 0xFF;
         n = 0;
@@ -1035,7 +1046,7 @@ void FUN_L18_002d62e8(struct Moby *moby) {
             FUN_L18_002e22c0(D_L18_001600EC + vars->node[n] * 0x80 + 0x30);
         }
         break;
-    case 1:
+    case STATE_SELECT_NEARER_PATH:
         hero.unk1CA = 5;
         for (k = 0; k < 4; k++) {
             if (hero.state.control_mode == 0xF &&
@@ -1125,10 +1136,14 @@ extern float D_L18_0016199C __attribute__((sda));
 extern float D_L18_001619A0 __attribute__((sda));
 void thruster_pack_lock_green_update(char *moby) __asm__("FUN_L18_002d6600");
 void thruster_pack_lock_green_update(char *moby) {
+    enum {
+        STATE_INITIALIZE = 0,
+        STATE_UPDATE_LOCK_COMPONENTS = 1
+    };
     L18E_q *d = *(L18E_q **)(moby + 0x78);
     *(float *)(moby + 0x2C) = (*(L18Cls_q **)(moby + 0x24))->f24 * D_L18_00161998;
     switch (((unsigned char *)moby)[0x20]) {
-    case 0: {
+    case STATE_INITIALIZE: {
         *(float *)(moby + 0x18) = *(float *)(moby + 0x18) + 1.0f;
         *(int *)(moby + 0x94) = 0;
         *(float *)(moby + 0x18) = probe_ground_height(moby + 0x10, 0, 0.5f);
@@ -1181,7 +1196,7 @@ void thruster_pack_lock_green_update(char *moby) {
         *(int *)(moby + 0x94) = (*(L18Cls_q **)(moby + 0x24))->i10;
         break;
     }
-    case 1: {
+    case STATE_UPDATE_LOCK_COMPONENTS: {
         float v[4];
         if (D_L18_0015F5C4_d == 2) {
             if (d->i38 != 0) {
@@ -1338,11 +1353,17 @@ extern int allocate_voice_int_7b20(int, int, int) __asm__("FUN_0022da68");
 
 void thruster_pack_lock_red_update(struct Moby *moby) __asm__("FUN_L18_002d7b20");
 void thruster_pack_lock_red_update(struct Moby *moby) {
+    enum {
+        STATE_INITIALIZE = 0,
+        STATE_WAIT_FOR_GROUNDED_HERO_TRIGGER = 2,
+        STATE_WAIT_FOR_DEPRESSION_TRIGGER = 4,
+        STATE_SETTLE_DEPRESSED_HEIGHT = 5
+    };
     char *data = (char *)moby->pvars;
     int index;
 
     switch (moby->state) {
-    case 0:
+    case STATE_INITIALIZE:
         *(float *)(data + 0x64) = moby->pos.z;
         *(unsigned short *)(data + 0x3E) |= 8;
         if (*(int *)(data + 0x60) != 0) {
@@ -1359,7 +1380,7 @@ void thruster_pack_lock_red_update(struct Moby *moby) {
                                    frame_time_sq * 20.0f, frame_time_sq * 40.0f,
                                    frame_time * 20.0f);
         break;
-    case 2:
+    case STATE_WAIT_FOR_GROUNDED_HERO_TRIGGER:
         advance_accelerated_scalar(&moby->pos.z, (float *)(data + 0x68),
                                    *(float *)(data + 0x64) + D_L18_00161A14,
                                    frame_time_sq * 5.0f, frame_time_sq * 10.0f,
@@ -1380,7 +1401,7 @@ void thruster_pack_lock_red_update(struct Moby *moby) {
                 D_L18_00162390 = 1;
         }
         break;
-    case 4:
+    case STATE_WAIT_FOR_DEPRESSION_TRIGGER:
         if (hero.air_frames.s == 0 && hero.ground_moby == moby && hero.state.current == 0x22) {
             moby->state = 5;
             moby->command = 1;
@@ -1409,7 +1430,7 @@ void thruster_pack_lock_red_update(struct Moby *moby) {
             }
         }
         break;
-    case 5:
+    case STATE_SETTLE_DEPRESSED_HEIGHT:
         if (approach_value((float *)&moby->pos.z, *(float *)(data + 0x64) - 1.5f,
                            0.15f) != 0.0f)
             return;
@@ -1469,6 +1490,14 @@ extern int allocate_voice_82c0(int, int, struct Moby *) __asm__("FUN_0022da68");
 /* Sinking platform update: arms its tilt, then sinks it under the hero until it is removed. */
 void floating_platform_update(struct Moby *moby) __asm__("FUN_L18_002d82c0");
 void floating_platform_update(struct Moby *moby) {
+    enum {
+        STATE_INITIALIZE = 0,
+        STATE_WAIT_FOR_TILT_REQUEST = 1,
+        STATE_WAIT_FOR_SINK_REQUEST = 2,
+        STATE_TILT_DELAY = 3,
+        STATE_WAIT_FOR_SINK_TRIGGER = 4,
+        STATE_SINKING = 5
+    };
     char *data;
     float delta[4] __attribute__((aligned(16)));
     float old_rot[4] __attribute__((aligned(16)));
@@ -1481,7 +1510,7 @@ void floating_platform_update(struct Moby *moby) {
     scale_vector_xyz(delta, &moby->pos, -1.0f);
     qcopy(old_rot, &moby->rot);
     switch (moby->state) {
-    case 0:
+    case STATE_INITIALIZE:
         *(float *)(data + 0x60) = moby->pos.z;
         *(float *)(data + 0x64) = moby->pos.z;
         *(int *)(data + 0x70) = 0;
@@ -1496,7 +1525,7 @@ void floating_platform_update(struct Moby *moby) {
             moby->state = 1;
         }
         break;
-    case 3:
+    case STATE_TILT_DELAY:
         if (tick_countdown_32((int *)(data + 0x7C)) == 0) {
             break;
         }
@@ -1515,7 +1544,7 @@ void floating_platform_update(struct Moby *moby) {
         *(float *)(data + 0x6C) = rate * DEG_TO_RAD * frame_time;
         moby->state = 4;
         break;
-    case 4:
+    case STATE_WAIT_FOR_SINK_TRIGGER:
         if (moby->visible != 0 && tick_countdown_32((int *)(data + 0x8C)) != 0) {
             FUN_L18_002d88b8(moby);
             *(int *)(data + 0x8C) = scale_ticks(random_int_between(0x5A, 0x78));
@@ -1533,7 +1562,7 @@ void floating_platform_update(struct Moby *moby) {
             *(short *)(data + 0x92) = allocate_voice_82c0(1, 0, moby);
         }
         break;
-    case 5:
+    case STATE_SINKING:
         if (moby->visible != 0 && tick_countdown_32((int *)(data + 0x8C)) != 0) {
             FUN_L18_002d88b8(moby);
             *(int *)(data + 0x8C) = scale_ticks(random_int_between(0xF, 0x1E));
@@ -1566,9 +1595,9 @@ void floating_platform_update(struct Moby *moby) {
             }
         }
         break;
-    case 1:
+    case STATE_WAIT_FOR_TILT_REQUEST:
         break;
-    case 2:
+    case STATE_WAIT_FOR_SINK_REQUEST:
         break;
     default:
         break;
@@ -1715,6 +1744,7 @@ void FUN_L18_002db460(struct Moby *moby) {
     enum {
         STATE_BALLISTIC_FLIGHT = 0,
         STATE_GROUND_IMPACT_DELAY = 1,
+        STATE_EXPANDING_RING = 2,
         STATE_REMOVE = 3
     };
     float v[4];
@@ -1799,7 +1829,7 @@ void FUN_L18_002db460(struct Moby *moby) {
             moby->flags |= 1;
         }
         break;
-    case 2:
+    case STATE_EXPANDING_RING:
         d[9] = d[9] + d[8];
         FUN_L18_002dbe80_c(moby);
         enqueue_callback_list_1(FUN_L18_002dba20, moby);
@@ -2164,10 +2194,15 @@ extern int D_L18_0015F404;
 extern int D_L18_00179E10[] __attribute__((section(".data")));
 extern int D_L18_0017EF08 __attribute__((section(".data")));
 void FUN_L18_002df608(struct Moby *moby) {
+    enum {
+        STATE_INITIALIZE = 0,
+        STATE_INTERPOLATE_TRANSITION = 3,
+        STATE_POST_TRANSITION_RAMP_DOWN = 5
+    };
     char *data = (char *)moby->pvars;
     float v[12];
     switch (moby->state) {
-    case 0:
+    case STATE_INITIALIZE:
         moby->state = 1;
         moby->update_dist = 0xFF;
         break;
@@ -2194,7 +2229,7 @@ void FUN_L18_002df608(struct Moby *moby) {
             }
         }
         break;
-    case 3:
+    case STATE_INTERPOLATE_TRANSITION:
         D_L18_0017EF08 = 1;
         if (fast_dec_timer((int *)(data + 0x74))) {
             advance_accelerated_scalar((float *)(data + 0x60), (float *)(data + 0x64), 1.0f,
@@ -2272,7 +2307,7 @@ void FUN_L18_002df608(struct Moby *moby) {
             D_L18_0015F3FC_d = *(float *)(data + 0x6C);
         }
         break;
-    case 5:
+    case STATE_POST_TRANSITION_RAMP_DOWN:
         if (0.0f < *(float *)(data + 0x6C)) {
             approach_value((float *)(data + 0x6C), 0.0f, (*(float *)&D_L18_00161A6C) * 4.0f);
             D_L18_0015F3FC_d = *(float *)(data + 0x6C);
@@ -2290,7 +2325,7 @@ extern float D_0015EE70 __asm__("D_0015ED70");
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 
 void FUN_L18_002dfaa0(struct Moby *moby, void *transition_start_position, void *transition_target_position, void *transition_start_rotation, void *transition_target_rotation, void *v4, int invulnerability_duration_frames, int transition_delay_frames,
-                      int a8) {
+                      int transition_mode) {
     char *data = (char *)moby->pvars;
     *(int *)(data + 0x60) = 0;
     *(int *)(data + 0x64) = 0;
@@ -2303,7 +2338,7 @@ void FUN_L18_002dfaa0(struct Moby *moby, void *transition_start_position, void *
     *(float *)(data + 0x68) = D_0015EE70 * 0.333f;
     *(float *)(data + 0x70) = 1.0f / (float)scale_game_frames(invulnerability_duration_frames);
     *(int *)(data + 0x74) = scale_game_frames(transition_delay_frames);
-    *(int *)(data + 0x78) = a8;
+    *(int *)(data + 0x78) = transition_mode;
     hero.invulnerable_frames = scale_game_frames(invulnerability_duration_frames);
 }
 /* Maps states 2 and 3 to results 1 and 2; all other states return 0. */
@@ -2347,12 +2382,18 @@ extern unsigned char D_L18_001F29A0_9768[] __asm__("D_L18_001F29A0");
 extern unsigned char D_L18_001F29B8_9768[] __asm__("D_L18_001F29B8");
 
 void FUN_L18_002e9768(struct Moby *moby) {
+    enum {
+        STATE_INITIALIZE = 0,
+        STATE_WAIT_FOR_HIT = 1,
+        STATE_BURST_OR_LAUNCH = 2,
+        STATE_BALLISTIC_FLIGHT = 3
+    };
     float *data = (float *)moby->pvars;
     long state = moby->state;
     float magnitude;
 
     switch (state) {
-    case 0: {
+    case STATE_INITIALIZE: {
         if (moby->mission != 0xff) {
             int mission_table_index = moby->mission + current_level_index * 16;
             if (((unsigned char *)((int *)visited52))[mission_table_index] == 0xff) goto remove;
@@ -2361,14 +2402,14 @@ void FUN_L18_002e9768(struct Moby *moby) {
         if (*(int *)data != 0) *(int *)(*(int *)data) = 3;
         return;
     }
-    case 1:
+    case STATE_WAIT_FOR_HIT:
         if (FUN_L00_0025a420(moby, 0x80000, 0)) {
             FUN_L18_002e9e50(moby->group);
             trooper_play_sound(0, 0, (int)moby, 0x375);
         }
         moby->hit_slot = 0xff;
         return;
-    case 2:
+    case STATE_BURST_OR_LAUNCH:
         if (moby->oclass == 0x37c) {
             float *pos;
             {
@@ -2452,7 +2493,7 @@ remove:
             return;
         }
         break;
-    case 3: {
+    case STATE_BALLISTIC_FLIGHT: {
         float *pos = &moby->pos.x;
         moby->rot.x = fast_add_rotations_9768(moby->rot.x, data[2]);
         moby->rot.y = fast_add_rotations_9768(moby->rot.y, data[2]);
@@ -2488,19 +2529,23 @@ extern float D_L18_00161ED4 __attribute__((sda));
 extern float D_L18_00161ED8 __attribute__((sda));
 extern float D_L18_00161EE0 __attribute__((sda));
 void FUN_L18_002e9e70(struct Moby *moby) {
+    enum {
+        STATE_TIMED_REMOVAL_WAIT = 0,
+        STATE_TRAVEL_TO_TARGET = 1
+    };
     float *d = (float *)moby->pvars;
     float t = fast_add_rotations_c(d[0xB], D_L18_00161ED0 * DEG_TO_RAD * frame_time);
     float u = D_L18_00161ED4 * DEG_TO_RAD * frame_time;
     d[0xB] = t;
     d[0xC] = fast_add_rotations_c(d[0xC], u);
     switch (MOBY(moby)->state) {
-    case 0:
+    case STATE_TIMED_REMOVAL_WAIT:
         if (fast_dec_timer((int *)(d + 10))) {
             mark_moby_for_removal_c2(moby);
             return;
         }
         break;
-    case 1: {
+    case STATE_TRAVEL_TO_TARGET: {
         float buf[4];
         float buf2[4];
         float *p = &moby->pos.x;

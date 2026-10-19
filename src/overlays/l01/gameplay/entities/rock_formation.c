@@ -722,9 +722,14 @@ void agnogg_ship_front_update(Moby_2FC140 *moby) __asm__("FUN_L01_002fad68");
 void agnogg_ship_front_update(Moby_2FC140 *moby) {
     enum {
         AGNOGG_SHIP_INITIALIZE = 0,
-        AGNOGG_SHIP_HOLD_TARGET_HEIGHT = 10,
+        AGNOGG_SHIP_WAIT_FOR_DESCENT_TRIGGER = 1,
         AGNOGG_SHIP_DESCEND_TO_TARGET_HEIGHT = 2,
-        AGNOGG_SHIP_WAIT_BEFORE_SCENE = 5
+        AGNOGG_SHIP_WAIT_FOR_LINKED_MOBIES_INACTIVE = 4,
+        AGNOGG_SHIP_WAIT_BEFORE_SCENE = 5,
+        AGNOGG_SHIP_WAIT_FOR_SCENE_3_END = 6,
+        AGNOGG_SHIP_WAIT_TO_START_SCENE_4 = 7,
+        AGNOGG_SHIP_WAIT_FOR_SCENE_4_END = 8,
+        AGNOGG_SHIP_HOLD_TARGET_HEIGHT = 10
     };
     Data_2FC140 *data;
     Link_2FC140 *q;
@@ -751,7 +756,7 @@ void agnogg_ship_front_update(Moby_2FC140 *moby) {
         moby->flags = moby->flags | 0x41;
         moby->pos.z = moby->pos.z + fd;
         break;
-    case 1:
+    case AGNOGG_SHIP_WAIT_FOR_DESCENT_TRIGGER:
         r16 = *(unsigned char *)(moby->fB0 + (current_level_index_macro << 4) + D_0014C050_u);
         if (r16 == 0xFF) {
             if (moby->f53 != 2) {
@@ -827,7 +832,7 @@ void agnogg_ship_front_update(Moby_2FC140 *moby) {
             moby->state = 4;
         }
         break;
-    case 4:
+    case AGNOGG_SHIP_WAIT_FOR_LINKED_MOBIES_INACTIVE:
         flag = 1;
         cnt = 0;
         i = 0;
@@ -863,21 +868,21 @@ void agnogg_ship_front_update(Moby_2FC140 *moby) {
         start_scene(3);
         moby->state = 6;
         break;
-    case 6:
+    case AGNOGG_SHIP_WAIT_FOR_SCENE_3_END:
         if (cutscene_mode == 2) {
             break;
         }
         func_L00_0029A7D0_2FC140(3);
         moby->state = 7;
         break;
-    case 7:
+    case AGNOGG_SHIP_WAIT_TO_START_SCENE_4:
         if (cutscene_mode == 2) {
             break;
         }
         start_scene(4);
         moby->state = 8;
         break;
-    case 8:
+    case AGNOGG_SHIP_WAIT_FOR_SCENE_4_END:
         if (cutscene_mode == 2) {
             break;
         }
@@ -954,6 +959,11 @@ extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
 
 void bridge_half_update(PendulumMoby *self) __asm__("FUN_L01_002fb8a8");
 void bridge_half_update(PendulumMoby *self) {
+    enum {
+        BRIDGE_HALF_INITIALIZE = 0,
+        BRIDGE_HALF_WAIT_FOR_TRIGGER = 1,
+        BRIDGE_HALF_REDUCE_SWING_TO_ZERO = 2
+    };
     PendulumVars *v;
     PendVec4 arm;
     PendVec4 d;
@@ -962,19 +972,19 @@ void bridge_half_update(PendulumMoby *self) {
 
     v = self->vars;
     switch (self->state) {
-    case 0:
+    case BRIDGE_HALF_INITIALIZE:
         qcopy(&v->pivot, &self->pos);
         v->swing = 1.0f;
         self->state = 1;
         v->sound = -1;
         break;
-    case 1:
+    case BRIDGE_HALF_WAIT_FOR_TRIGGER:
         if (self->trigger == 2 || D_0014C050[self->id + current_level_index * 16] == 0xFF) {
             self->state = 2;
             self->trigger = 0;
         }
         break;
-    case 2:
+    case BRIDGE_HALF_REDUCE_SWING_TO_ZERO:
         v->swing -= frame_time * 0.5f;
         if (v->swing < 0.0f) {
             v->swing = 0.0f;
@@ -1076,6 +1086,10 @@ extern f32 D_L01_0016120C __attribute__((section(".sdata")));
 extern f32 D_L01_00161210 __attribute__((section(".sdata")));
 extern f32 D_L01_00161214 __attribute__((section(".sdata")));
 void FUN_L01_002fd0e8(struct Moby *moby) {
+    enum {
+        POOL_INITIALIZE = 0,
+        POOL_UPDATE_TILES_AND_EFFECTS = 1
+    };
     s32 *volumes;
     s32 found;
     s32 i;
@@ -1092,7 +1106,7 @@ void FUN_L01_002fd0e8(struct Moby *moby) {
 
     volumes = (s32 *)moby->pvars;
     switch (moby->state) {
-    case 0:
+    case POOL_INITIALIZE:
         moby->state = 1;
         moby->update_dist = 0xFF;
         moby->pos.z = moby->pos.z + 0.5f;
@@ -1153,7 +1167,7 @@ void FUN_L01_002fd0e8(struct Moby *moby) {
             }
         }
         break;
-    case 1:
+    case POOL_UPDATE_TILES_AND_EFFECTS:
         found = -1;
         for (i = 0; i < 7; i++) {
             if (*(s32 *)((u8 *)volumes + (i << 2)) == -1 || is_point_inside_clip_volume(camera_pos, *(s32 *)((u8 *)volumes + (i << 2))) == 0) {
@@ -1266,6 +1280,11 @@ extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 
 void green_mushroom_update(SparkMoby *m) __asm__("FUN_L01_002fd9a0");
 void green_mushroom_update(SparkMoby *m) {
+    enum {
+        GREEN_MUSHROOM_INITIALIZE = 0,
+        GREEN_MUSHROOM_WAIT_FOR_POSITIVE_HIT = 1,
+        GREEN_MUSHROOM_SPAWN_PIECES_AND_REMOVE = 2
+    };
     SparkHit *hit;
     s32 flag;
     s32 i;
@@ -1277,10 +1296,10 @@ void green_mushroom_update(SparkMoby *m) {
     flag = 0;
     hit = trooper_find_hit(m, 0x10000, 0);
     switch (m->state) {
-    case 0:
+    case GREEN_MUSHROOM_INITIALIZE:
         m->state = 1;
         break;
-    case 1:
+    case GREEN_MUSHROOM_WAIT_FOR_POSITIVE_HIT:
         if (hit != 0 && hit->f2c > 0.0f) {
             flag = 1;
         }
@@ -1288,7 +1307,7 @@ void green_mushroom_update(SparkMoby *m) {
             m->state = 2;
         }
         break;
-    case 2:
+    case GREEN_MUSHROOM_SPAWN_PIECES_AND_REMOVE:
         FUN_0022da68(0, 0, m);
         FUN_L01_002787a0(m);
         s = m->scale / m->pclass->radius;
@@ -1397,6 +1416,13 @@ extern f32 FUN_001f99c0(f32);
 
 void door_left_update(HoverMoby *m) __asm__("FUN_L01_002fed68");
 void door_left_update(HoverMoby *m) {
+    enum {
+        DOOR_INITIALIZE = 0,
+        DOOR_CLOSED = 1,
+        DOOR_OPENING = 2,
+        DOOR_OPEN = 3,
+        DOOR_CLOSING = 4
+    };
     HoverVars *v;
     Vec4 *player;
     Vec4 off;
@@ -1404,12 +1430,12 @@ void door_left_update(HoverMoby *m) {
 
     v = m->vars;
     switch (m->state) {
-    case 0:
+    case DOOR_INITIALIZE:
         qcopy(&v->home, &m->pos);
         v->t = 0.0f;
         m->state = 1;
         break;
-    case 1:
+    case DOOR_CLOSED:
         player = &hero.motion.pos;
         if (vector_distance(v, player) < v->radius &&
             FUN_001f99c0(m->pos.f[2] - player->f[2]) < 2.0f) {
@@ -1419,14 +1445,14 @@ void door_left_update(HoverMoby *m) {
             }
         }
         break;
-    case 2:
+    case DOOR_OPENING:
         v->t += 1.0f / multiply_global_factor_ed64(20.0f);
         if (v->t >= 1.0f) {
             v->t = 1.0f;
             m->state = 3;
         }
         break;
-    case 3:
+    case DOOR_OPEN:
         k = 1.1f;
         if (vector_distance(v, &hero.motion.pos) > v->radius * k &&
             vector_distance(v, D_L01_00167240) > v->radius * k) {
@@ -1436,7 +1462,7 @@ void door_left_update(HoverMoby *m) {
             }
         }
         break;
-    case 4:
+    case DOOR_CLOSING:
         player = &hero.motion.pos;
         if (vector_distance(v, player) < v->radius &&
             FUN_001f99c0(m->pos.f[2] - player->f[2]) < 2.0f) {
@@ -1816,16 +1842,20 @@ s32 D_L01_00161E90 = 5;
 
 void beehive_update(SpawnerMoby *m) __asm__("FUN_L01_003021b8");
 void beehive_update(SpawnerMoby *m) {
+    enum {
+        BEEHIVE_INITIALIZE = 0,
+        BEEHIVE_TRY_SPAWN_CLONE = 1
+    };
     SpawnerVars *v = m->pvars;
     SpawnerMoby *n;
     CloneAiVars *nv;
     f32 k;
 
     switch (m->state) {
-    case 0:
+    case BEEHIVE_INITIALIZE:
         m->state = 1;
         break;
-    case 1:
+    case BEEHIVE_TRY_SPAWN_CLONE:
         if (v->src_id < 0) {
             break;
         }

@@ -239,6 +239,11 @@ extern H910 coll_hit __asm__("D_L00_00173E40");
 
 void mine_update(M910 *m) __asm__("FUN_L00_002aa670");
 void mine_update(M910 *m) {
+    enum {
+        MINE_DEBRIS_FIXED_LIFETIME = 1,
+        MINE_DEBRIS_SHORT_LIVED = 2,
+        MINE_DEBRIS_SPHERICAL_VELOCITY = 3
+    };
     B910 a = D_L00_001E9830;
     B910 b = D_L00_001E9880;
     U910 c;
@@ -881,7 +886,7 @@ void mine_update(M910 *m) {
                                 mine_debris((char *)r, (char *)n, c1, 0x101010, sz, life, 0);
                                 break;
                             }
-                            case 1: {
+                            case MINE_DEBRIS_FIXED_LIFETIME: {
                                 int c1 = FUN_L00_0025c0e8(0x3F081020, D_E910.b11);
                                 int c2 = FUN_L00_0025c0e8(0x0F081020, D_E910.b11);
                                 float sz = random_float_between(50000.0f, 100000.0f) * sc;
@@ -890,7 +895,7 @@ void mine_update(M910 *m) {
                                                  scale_game_frames(0xB4), 1);
                                 break;
                             }
-                            case 2: {
+                            case MINE_DEBRIS_SHORT_LIVED: {
                                 int c1 = FUN_L00_0025c0e8(
                                     random_integer_below(100) < 0x28 ? 0x5FF8F8F8 : 0x2F486078,
                                     D_E910.b11);
@@ -905,7 +910,7 @@ void mine_update(M910 *m) {
                                 mine_debris((char *)r, (char *)n, c1, c2, sz, life, 2);
                                 break;
                             }
-                            case 3: {
+                            case MINE_DEBRIS_SPHERICAL_VELOCITY: {
                                 int c1 = mine_blend_color(0x7F000000, 0x7F182030,
                                                           random_float_between(0.25f, 1.0f));
                                 int c2 =
@@ -2195,6 +2200,10 @@ extern f32 rnd_2afa48(f32, f32) __asm__("FUN_L00_00257c48");
 extern void kill_2afa48(void *) __asm__("FUN_0020c828");
 void nanotech_crate_fragment_update(M_2afa48 *m) __asm__("FUN_L00_002afa48");
 void nanotech_crate_fragment_update(M_2afa48 *m) {
+    enum {
+        NANOTECH_CRATE_FRAGMENT_BOUNCING = 0,
+        NANOTECH_CRATE_FRAGMENT_FADING = 1
+    };
     PV_2afa48 *pv = m->pv;
     u128 old;
     u128 *t;
@@ -2205,7 +2214,7 @@ void nanotech_crate_fragment_update(M_2afa48 *m) {
     m->f44 = appr_2afa48(m->f44, pv->f24);
     m->f48 = appr_2afa48(m->f48, pv->f28);
     switch (m->b20) {
-    case 0:
+    case NANOTECH_CRATE_FRAGMENT_BOUNCING:
         if (m->pos[2] < pv->f4 - 3.0f) {
             m->b20 = 1;
         } else if (tick_2afa48(&pv->hE) && pv->hC != 0 && coll_sphere(m->pos, 2, 0, pv->f8)) {
@@ -2221,7 +2230,7 @@ void nanotech_crate_fragment_update(M_2afa48 *m) {
             }
         }
         break;
-    case 1:
+    case NANOTECH_CRATE_FRAGMENT_FADING:
         m->f2c *= g70_2afa48;
         if (m->b23 < g74_2afa48) {
             kill_2afa48(m);

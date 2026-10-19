@@ -532,6 +532,11 @@ extern f32 FUN_L00_00233a78_32b90(void *) __asm__("FUN_L00_00233a78");
 extern s32 FUN_L00_002595a0_32b90(f32 *, f32 *, f32, f32, f32) __asm__("FUN_L00_002595a0");
 
 f32 FUN_L00_00232b90(f32 a, f32 b, f32 c) {
+    enum {
+        GRAVITY_MODE_WORLD_Z = 0,
+        GRAVITY_MODE_VECTOR_AXIS = 1,
+        GRAVITY_MODE_DIRECTION_AXIS = 2
+    };
     f32 t[4];
     V4_32b90 v;
     V4_32b90 trajectory_work_vector;
@@ -540,7 +545,7 @@ f32 FUN_L00_00232b90(f32 a, f32 b, f32 c) {
     f32 x, y, z;
 
     switch (hero.unk20B3) {
-    case 0:
+    case GRAVITY_MODE_WORLD_Z:
         if (c < 0.0f) {
             FUN_001f9a68_32b90(t, &hero.motion.velocity, a);
             t[2] -= ((a * a + a) * 0.5f) * b;
@@ -562,7 +567,7 @@ f32 FUN_L00_00232b90(f32 a, f32 b, f32 c) {
             }
         }
         break;
-    case 1:
+    case GRAVITY_MODE_VECTOR_AXIS:
         qcopy(&v, &hero.unk270);
         FUN_001f9bf8_32b90(&v, &v, b);
         FUN_001f9a68_32b90(&v, &v, -1.0f);
@@ -583,7 +588,7 @@ f32 FUN_L00_00232b90(f32 a, f32 b, f32 c) {
             }
         }
         break;
-    case 2:
+    case GRAVITY_MODE_DIRECTION_AXIS:
         trajectory_work_vector.f[2] = 100.0f;
         trajectory_work_vector.f[1] = 100.0f;
         trajectory_work_vector.f[0] = 100.0f;
@@ -849,17 +854,22 @@ void FUN_001f9bf8_002334d0(void *, void *, f32) __asm__("FUN_001f9bf8");
 void FUN_001f9a10_002334d0(void *, void *, void *) __asm__("FUN_001f9a10");
 void FUN_L00_002334d0(f32 *out, f32 *in, f32 k);
 void FUN_L00_002334d0(f32 *out, f32 *in, f32 k) {
+    enum {
+        GRAVITY_MODE_WORLD_Z = 0,
+        GRAVITY_MODE_VECTOR_AXIS = 1,
+        GRAVITY_MODE_DIRECTION_AXIS = 2
+    };
     struct Hero *b = &hero;
     V002334d0 t;
     switch (b->unk20B3) {
-    case 0:
+    case GRAVITY_MODE_WORLD_Z:
         out[2] = in[2] - k;
         break;
-    case 1:
+    case GRAVITY_MODE_VECTOR_AXIS:
         FUN_001f9bf8_002334d0(&t, &b->unk270, -k);
         FUN_001f9a10_002334d0(out, in, &t);
         break;
-    case 2:
+    case GRAVITY_MODE_DIRECTION_AXIS:
         if (b->state.current == 0x3E && b->air_frames.s == 0) {
             FUN_001f9bf8_002334d0(&t, &b->unk270, -k);
         } else {
@@ -939,17 +949,22 @@ void FUN_001f9d20_00233708(Vec4_00233708 *, Vec4_00233708 *,
 void FUN_001f9a10_00233708(Vec4_00233708 *, Vec4_00233708 *,
                            Vec4_00233708 *) __asm__("FUN_001f9a10");
 void FUN_L00_00233708(Vec4_00233708 *out, Vec4_00233708 *in, float d) {
+    enum {
+        GRAVITY_MODE_WORLD_Z = 0,
+        GRAVITY_MODE_VECTOR_AXIS = 1,
+        GRAVITY_MODE_DIRECTION_AXIS = 2
+    };
     struct Hero *g = &hero;
     Mtx_00233708 m;
     Vec4_00233708 v;
     switch (g->unk20B3) {
-    case 0:
+    case GRAVITY_MODE_WORLD_Z:
         *(u128_00233708 *)out = *(u128_00233708 *)in;
         out->x += FUN_001f9dc8_00233708(*(float *)(((char *)g->moby) + 0x48)) * d;
         out->y += FUN_001f9de0_00233708(*(float *)(((char *)g->moby) + 0x48)) * d;
         break;
-    case 1:
-    case 2:
+    case GRAVITY_MODE_VECTOR_AXIS:
+    case GRAVITY_MODE_DIRECTION_AXIS:
         v.x = FUN_001f9dc8_00233708(0.0f) * d;
         v.y = FUN_001f9de0_00233708(0.0f) * d;
         v.z = 0.0f;
@@ -972,16 +987,21 @@ void FUN_001f9d20_00233810(void *, void *, void *) __asm__("FUN_001f9d20");
 void FUN_001f9a10_00233810(void *, void *, void *) __asm__("FUN_001f9a10");
 void FUN_L00_00233810(f32 *out, f32 *in, f32 z);
 void FUN_L00_00233810(f32 *out, f32 *in, f32 z) {
+    enum {
+        GRAVITY_MODE_WORLD_Z = 0,
+        GRAVITY_MODE_VECTOR_AXIS = 1,
+        GRAVITY_MODE_DIRECTION_AXIS = 2
+    };
     struct Hero *b = &hero;
     M00233810 m;
     V00233810 t;
     switch (b->unk20B3) {
-    case 0:
+    case GRAVITY_MODE_WORLD_Z:
         qcopy(out, in);
         out[2] += z;
         break;
-    case 1:
-    case 2:
+    case GRAVITY_MODE_VECTOR_AXIS:
+    case GRAVITY_MODE_DIRECTION_AXIS:
         FUN_001f99f8_00233810(&t);
         t.v[2] = z;
         FUN_001fa050_00233810(&m, ((u8 *)b->moby) + 0x40);
@@ -1000,20 +1020,25 @@ extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 
 void gravity_flatten(float *dst, float *src) __asm__("FUN_L00_002338d0");
 void gravity_flatten(float *dst, float *src) {
+    enum {
+        GRAVITY_MODE_WORLD_Z = 0,
+        GRAVITY_MODE_VECTOR_AXIS = 1,
+        GRAVITY_MODE_DIRECTION_AXIS = 2
+    };
     struct Hero *base = &hero;
     float n[4] __attribute__((aligned(16)));
 
     switch (base->unk20B3) {
-    case 0:
+    case GRAVITY_MODE_WORLD_Z:
         qcopy(dst, src);
         dst[2] = 0.0f;
         break;
-    case 1:
+    case GRAVITY_MODE_VECTOR_AXIS:
         fast_vec_normalize(n, &base->unk270, 1.0f);
         scale_vector_xyz(n, n, dot_vectors_xyz(n, src));
         subtract_vector_xyz(dst, src, n);
         break;
-    case 2:
+    case GRAVITY_MODE_DIRECTION_AXIS:
         scale_vector_xyz(n, &base->gravity_dir, dot_vectors_xyz(&base->gravity_dir, src));
         subtract_vector_xyz(dst, src, n);
         break;
@@ -1032,16 +1057,21 @@ extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
 
 float gravity_length_xy(float *v) __asm__("FUN_L00_002339d0");
 float gravity_length_xy(float *v) {
+    enum {
+        GRAVITY_MODE_WORLD_Z = 0,
+        GRAVITY_MODE_VECTOR_AXIS = 1,
+        GRAVITY_MODE_DIRECTION_AXIS = 2
+    };
     struct Hero *base = &hero;
     float m[16] __attribute__((aligned(16)));
     float inv[16] __attribute__((aligned(16)));
     float out[4] __attribute__((aligned(16)));
 
     switch (base->unk20B3) {
-    case 0:
+    case GRAVITY_MODE_WORLD_Z:
         return vector_length_xy(v);
-    case 1:
-    case 2:
+    case GRAVITY_MODE_VECTOR_AXIS:
+    case GRAVITY_MODE_DIRECTION_AXIS:
         euler_rotation_matrix(m, ((char *)base->moby) + 0x40);
         transpose_rotation_matrix(inv, m);
         transform_vector(out, v, inv);
@@ -1061,15 +1091,20 @@ extern void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
 
 float gravity_z(float *v) __asm__("FUN_L00_00233a78");
 float gravity_z(float *v) {
+    enum {
+        GRAVITY_MODE_WORLD_Z = 0,
+        GRAVITY_MODE_VECTOR_AXIS = 1,
+        GRAVITY_MODE_DIRECTION_AXIS = 2
+    };
     struct Hero *base = &hero;
     float m[16] __attribute__((aligned(16)));
     float axis[4] __attribute__((aligned(16)));
 
     switch (base->unk20B3) {
-    case 0:
+    case GRAVITY_MODE_WORLD_Z:
         return v[2];
-    case 1:
-    case 2:
+    case GRAVITY_MODE_VECTOR_AXIS:
+    case GRAVITY_MODE_DIRECTION_AXIS:
         clear_u64_value(axis);
         axis[2] = 1.0f;
         euler_rotation_matrix(m, ((char *)base->moby) + 0x40);
@@ -1082,14 +1117,19 @@ void FUN_001f9d20_00233b20(void *, void *, void *) __asm__("FUN_001f9d20");
 /* Copies in to out with z, transformed by the two hero matrices in modes 1 and 2. */
 void gravity_set_z(f32 *out, f32 *in, f32 z) __asm__("FUN_L00_00233b20");
 void gravity_set_z(f32 *out, f32 *in, f32 z) {
+    enum {
+        GRAVITY_MODE_WORLD_Z = 0,
+        GRAVITY_MODE_VECTOR_AXIS = 1,
+        GRAVITY_MODE_DIRECTION_AXIS = 2
+    };
     struct Hero *b = &hero;
     switch (b->unk20B3) {
-    case 0:
+    case GRAVITY_MODE_WORLD_Z:
         qcopy(out, in);
         out[2] = z;
         break;
-    case 1:
-    case 2:
+    case GRAVITY_MODE_VECTOR_AXIS:
+    case GRAVITY_MODE_DIRECTION_AXIS:
         FUN_001f9d20_00233b20(out, in, b->unk40);
         out[2] = z;
         FUN_001f9d20_00233b20(out, out, b->unk0);
@@ -1110,14 +1150,19 @@ extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void set_vector_length_xy(float *, float *, float) __asm__("FUN_001f9c48");
 
 void FUN_L00_00233ba0(float *dst, float *src, float z) {
+    enum {
+        GRAVITY_MODE_WORLD_Z = 0,
+        GRAVITY_MODE_VECTOR_AXIS = 1,
+        GRAVITY_MODE_DIRECTION_AXIS = 2
+    };
     struct Hero *base = &hero;
 
     switch (base->unk20B3) {
-    case 0:
+    case GRAVITY_MODE_WORLD_Z:
         set_vector_length_xy(dst, src, z);
         break;
-    case 1:
-    case 2:
+    case GRAVITY_MODE_VECTOR_AXIS:
+    case GRAVITY_MODE_DIRECTION_AXIS:
         transform_vector(dst, src, base->unk40);
         set_vector_length_xy(dst, dst, z);
         transform_vector(dst, dst, base->unk0);
@@ -1136,13 +1181,18 @@ extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 
 float FUN_L00_00233c30(float *pos, float *vel, int *steps, float step) {
+    enum {
+        GRAVITY_MODE_WORLD_Z = 0,
+        GRAVITY_MODE_VECTOR_AXIS = 1,
+        GRAVITY_MODE_DIRECTION_AXIS = 2
+    };
     int n;
     int k;
     float a;
     float r;
 
     switch (hero.unk20B3) {
-    case 0:
+    case GRAVITY_MODE_WORLD_Z:
         n = truncate_float_to_s32(vel[2] / step);
         a = convert_integer_to_float(n);
         r = pos[2] + vel[2] * a - convert_integer_to_float((n * n + n) >> 1) * step;
@@ -1150,8 +1200,8 @@ float FUN_L00_00233c30(float *pos, float *vel, int *steps, float step) {
             *steps = n;
         }
         return r;
-    case 1:
-    case 2:
+    case GRAVITY_MODE_VECTOR_AXIS:
+    case GRAVITY_MODE_DIRECTION_AXIS:
         k = truncate_float_to_s32(FUN_L00_00233a78_c(vel) / step);
         if (steps != 0) {
             *steps = k;
@@ -1170,16 +1220,21 @@ f32 FUN_001f9b20_00233d30(void *) __asm__("FUN_001f9b20");
 f32 FUN_001f9e90_00233d30(f32, f32) __asm__("FUN_001f9e90");
 /* Returns 001f9e90 of v (or v in the 0x40 hero frame), chosen by hero byte 0x20B3. */
 f32 FUN_L00_00233d30(f32 *v) {
+    enum {
+        GRAVITY_MODE_WORLD_Z = 0,
+        GRAVITY_MODE_VECTOR_AXIS = 1,
+        GRAVITY_MODE_DIRECTION_AXIS = 2
+    };
     struct Hero *b = &hero;
     V00233d30 t;
     f32 d, z;
     switch (b->unk20B3) {
-    case 0:
+    case GRAVITY_MODE_WORLD_Z:
         d = FUN_001f9b20_00233d30(v);
         z = v[2];
         goto call;
-    case 1:
-    case 2:
+    case GRAVITY_MODE_VECTOR_AXIS:
+    case GRAVITY_MODE_DIRECTION_AXIS:
         qcopy(&t, v);
         FUN_001f9d20_00233d30(&t, &t, &b->unk40);
         d = FUN_001f9b20_00233d30(&t);
@@ -1341,7 +1396,7 @@ extern f32 frame_time_sq_macro __asm__("D_0015ED70") __attribute__((section(".sd
 /* The hero on a moving platform: finds the platform the hero stands on or hangs from, tracks the platform's motion
    between frames (its attach points at 0x310-0x330) and carries the hero (position, facing, ledge-grab point) with it. */
 void FUN_L00_00233f80(void) {
-    Vec_234800 probed_position, unanchored_probe_rotation, v20, v30, v40, anchored_probe_rotation, primary_attachment_position, primary_attachment_rotation, secondary_attachment_position, v90, vA0;
+    Vec_234800 probed_position, unanchored_probe_rotation, v20, v30, probe_transform_scratch, anchored_probe_rotation, primary_attachment_position, primary_attachment_rotation, secondary_attachment_position, v90, vA0;
     float sB0, sB4;
     float amt, ang;
     int mode;
@@ -1393,15 +1448,15 @@ void FUN_L00_00233f80(void) {
                 v20.x += f_001f9dc8(f_001fa580(((Hero_234800 *)hero_233f80)->f4E4, 3.1415925f)) * 0.45f;
                 v20.y += f_001f9de0(f_001fa580(((Hero_234800 *)hero_233f80)->f4E4, 3.1415925f)) * 0.45f;
                 v20.z -= -1.43f;
-                probe_ground_height_cf(((Hero_234800 *)hero_233f80)->i2080, ((Hero_234800 *)hero_233f80)->p360, &((Hero_234800 *)hero_233f80)->v4D0, &((Hero_234800 *)hero_233f80)->v90, &v30, &v40);
-                probe_ground_height_cf(((Hero_234800 *)hero_233f80)->i2080, ((Hero_234800 *)hero_233f80)->p360, &v20, &((Hero_234800 *)hero_233f80)->v90, &v20, &v40);
-                FUN_L00_00260668(((Hero_234800 *)hero_233f80)->i2080, ((Hero_234800 *)hero_233f80)->p360, &((Hero_234800 *)hero_233f80)->v4D0, &((Hero_234800 *)hero_233f80)->v90, &((Hero_234800 *)hero_233f80)->v310, &v40);
-                FUN_L00_00260668(((Hero_234800 *)hero_233f80)->i2080, ((Hero_234800 *)hero_233f80)->p360, &v20, &((Hero_234800 *)hero_233f80)->v90, &((Hero_234800 *)hero_233f80)->v330, &v40);
+                probe_ground_height_cf(((Hero_234800 *)hero_233f80)->i2080, ((Hero_234800 *)hero_233f80)->p360, &((Hero_234800 *)hero_233f80)->v4D0, &((Hero_234800 *)hero_233f80)->v90, &v30, &probe_transform_scratch);
+                probe_ground_height_cf(((Hero_234800 *)hero_233f80)->i2080, ((Hero_234800 *)hero_233f80)->p360, &v20, &((Hero_234800 *)hero_233f80)->v90, &v20, &probe_transform_scratch);
+                FUN_L00_00260668(((Hero_234800 *)hero_233f80)->i2080, ((Hero_234800 *)hero_233f80)->p360, &((Hero_234800 *)hero_233f80)->v4D0, &((Hero_234800 *)hero_233f80)->v90, &((Hero_234800 *)hero_233f80)->v310, &probe_transform_scratch);
+                FUN_L00_00260668(((Hero_234800 *)hero_233f80)->i2080, ((Hero_234800 *)hero_233f80)->p360, &v20, &((Hero_234800 *)hero_233f80)->v90, &((Hero_234800 *)hero_233f80)->v330, &probe_transform_scratch);
             } else if (plat->i3C & 4) {
                 FUN_L00_00260668(((Hero_234800 *)hero_233f80)->i2080, ((Hero_234800 *)hero_233f80)->p360, &((Hero_234800 *)hero_233f80)->pos, &((Hero_234800 *)hero_233f80)->v90, &((Hero_234800 *)hero_233f80)->v310, &v20);
             } else {
-                probe_ground_height_cf(((Hero_234800 *)hero_233f80)->i2080, ((Hero_234800 *)hero_233f80)->p360, &((Hero_234800 *)hero_233f80)->pos, &((Hero_234800 *)hero_233f80)->v90, &v30, &v40);
-                FUN_L00_00260668(((Hero_234800 *)hero_233f80)->i2080, ((Hero_234800 *)hero_233f80)->p360, &v30, &v40, &((Hero_234800 *)hero_233f80)->v310, &v20);
+                probe_ground_height_cf(((Hero_234800 *)hero_233f80)->i2080, ((Hero_234800 *)hero_233f80)->p360, &((Hero_234800 *)hero_233f80)->pos, &((Hero_234800 *)hero_233f80)->v90, &v30, &probe_transform_scratch);
+                FUN_L00_00260668(((Hero_234800 *)hero_233f80)->i2080, ((Hero_234800 *)hero_233f80)->p360, &v30, &probe_transform_scratch, &((Hero_234800 *)hero_233f80)->v310, &v20);
             }
             ((Hero_234800 *)hero_233f80)->i364 |= 1;
         }
@@ -1439,7 +1494,7 @@ void FUN_L00_00233f80(void) {
         f_001f9a28(&v20, &probed_position, &((Hero_234800 *)hero_233f80)->pos);
         qcopy((Vec_234800 *)(hero_233f80 + 0x350), &v20);
     } else if (mode == 2) {
-        probe_ground_height_cf(((Hero_234800 *)hero_233f80)->i2080, ((Hero_234800 *)hero_233f80)->p360, &((Hero_234800 *)hero_233f80)->pos, &((Hero_234800 *)hero_233f80)->v90, &v40, &anchored_probe_rotation);
+        probe_ground_height_cf(((Hero_234800 *)hero_233f80)->i2080, ((Hero_234800 *)hero_233f80)->p360, &((Hero_234800 *)hero_233f80)->pos, &((Hero_234800 *)hero_233f80)->v90, &probe_transform_scratch, &anchored_probe_rotation);
         FUN_L00_002604f0(((Hero_234800 *)hero_233f80)->i2080, ((Hero_234800 *)hero_233f80)->p360, &((Hero_234800 *)hero_233f80)->v310, &((Hero_234800 *)hero_233f80)->v320, &primary_attachment_position, &primary_attachment_rotation);
         FUN_L00_002604f0(((Hero_234800 *)hero_233f80)->i2080, ((Hero_234800 *)hero_233f80)->p360, &((Hero_234800 *)hero_233f80)->v330, &((Hero_234800 *)hero_233f80)->v320, &secondary_attachment_position, &v90);
         if ((((Hero_234800 *)hero_233f80)->i2084 == 1 || ((Hero_234800 *)hero_233f80)->i2084 == 0x1E) && ((Hero_234800 *)hero_233f80)->b20A5 != 0) {
@@ -1456,7 +1511,7 @@ void FUN_L00_00233f80(void) {
                 vA0.z = 0.0f;
                 f_001f9a10(&vA0, &vA0, &secondary_attachment_position);
                 vA0.z += -1.43f;
-                f_001f9a28(&v20, &v40, &((Hero_234800 *)hero_233f80)->pos);
+                f_001f9a28(&v20, &probe_transform_scratch, &((Hero_234800 *)hero_233f80)->pos);
                 qcopy(&((Hero_234800 *)hero_233f80)->v4D0, &vA0);
                 ((Hero_234800 *)hero_233f80)->f4E4 = f_001f9e90(primary_attachment_position.x - secondary_attachment_position.x, primary_attachment_position.y - secondary_attachment_position.y);
             } else {
@@ -1479,7 +1534,7 @@ void FUN_L00_00233f80(void) {
                 }
             }
         } else {
-            f_001f9a28(&v20, &v40, &((Hero_234800 *)hero_233f80)->pos);
+            f_001f9a28(&v20, &probe_transform_scratch, &((Hero_234800 *)hero_233f80)->pos);
             qcopy(&v30, &v20);
         }
         qcopy((Vec_234800 *)(hero_233f80 + 0x350), &v20);

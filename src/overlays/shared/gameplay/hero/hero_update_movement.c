@@ -2826,10 +2826,10 @@ void hero_update_movement(void) {
                 break;
             case 2:
                 if (hero.anim_frame > 14.0f && hero.anim_frame < 21.0f) {
-                    f32 s2 = 2.0f;
+                    f32 sphere_radius = 2.0f;
                     moby_point_position((struct MobyView *)hero.moby, 3, &v0);
-                    collect_mobies_in_sphere(s2, &v0, 0x10, (struct MobyView *)hero.moby, &v10);
-                    s2 = 0.0f;
+                    collect_mobies_in_sphere(sphere_radius, &v0, 0x10, (struct MobyView *)hero.moby, &v10);
+                    sphere_radius = 0.0f;
                     moby_point_position((struct MobyView *)hero.moby, 4, &v0);
                     collect_mobies_in_sphere(2.0f, &v0, 0x10, (struct MobyView *)hero.moby, &v10);
                 }

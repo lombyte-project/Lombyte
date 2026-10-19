@@ -166,6 +166,11 @@ extern struct {
 /* Watcher moby update: wakes when the hero is near, then turns its head toward the hero or a random target. */
 void batalia_deserter_update(WM *m) __asm__("FUN_L08_00305270");
 void batalia_deserter_update(WM *m) {
+    enum {
+        DESERTER_INITIALIZE = 0,
+        DESERTER_WAIT_FOR_PLAYER = 1,
+        DESERTER_UPDATE_DIALOGUE = 2
+    };
     L16WatchScratch scratch;
     WD8 *d = (WD8 *)m->data;
     float rate;
@@ -179,7 +184,7 @@ void batalia_deserter_update(WM *m) {
         }
     }
     switch (m->state) {
-    case 0:
+    case DESERTER_INITIALIZE:
         if (m->animation != 1)
             blend_moby_animation(m, 1, 0, scale_game_frames(20));
         if (D_0013DD49 && visited52[((unsigned char *)m)[0xB0] + current_level_index * 16] == 0xFF) {
@@ -192,13 +197,13 @@ void batalia_deserter_update(WM *m) {
         if (d->i64 >= 0)
             initialize_npc_dialogue(m, (char *)d + 0x20);
         break;
-    case 1:
+    case DESERTER_WAIT_FOR_PLAYER:
         if (vector_distance(m->position, (char *)&D_0013E633_watch + 0xE9D) < 8.0f) {
             jet_clear_persistent(((unsigned char *)m)[0xB0]);
             m->state = 2;
         }
         break;
-    case 2:
+    case DESERTER_UPDATE_DIALOGUE:
         if (m->flags70 & 2) {
             if (m->animation != random_integer_below(2) + 1)
                 blend_moby_animation(m, random_integer_below(2) + 1, 0, scale_game_frames(20));
@@ -412,6 +417,12 @@ extern void FUN_L00_00260860(int, int);
 /* Watcher moby update with a scripted reveal, then turns its head toward the hero or a random target. */
 void the_plumber_batalia_update(L14WatchMoby *m) __asm__("FUN_L08_003065d8");
 void the_plumber_batalia_update(L14WatchMoby *m) {
+    enum {
+        PLUMBER_INITIALIZE = 0,
+        PLUMBER_UPDATE_DIALOGUE = 1,
+        PLUMBER_SCRIPTED_HANDOFF = 2,
+        PLUMBER_SAVE_AND_REMOVE = 5
+    };
     L14WatchScratch scratch;
     L14WatchData *d = (L14WatchData *)m->data;
     float rate;
@@ -419,7 +430,7 @@ void the_plumber_batalia_update(L14WatchMoby *m) {
     int tracking;
     FUN_L08_003063f0_c(m);
     switch (m->state) {
-    case 0:
+    case PLUMBER_INITIALIZE:
         m->opacity = 0xFF;
         if (visited52[m->bB0 + current_level_index * 16] == 0xFF) {
             mark_moby_for_removal(m);
@@ -429,7 +440,7 @@ void the_plumber_batalia_update(L14WatchMoby *m) {
         m->state = 1;
         FUN_L00_002668a0_c(m, d);
         break;
-    case 1:
+    case PLUMBER_UPDATE_DIALOGUE:
         if (update_npc_dialogue(m, d))
             begin_dialogue_camera_transition(m, 2.7f);
         if (d->h36 == 2) {
@@ -447,9 +458,9 @@ void the_plumber_batalia_update(L14WatchMoby *m) {
             d->sub = -1;
         }
         break;
-    case 2:
+    case PLUMBER_SCRIPTED_HANDOFF:
         break;
-    case 5:
+    case PLUMBER_SAVE_AND_REMOVE:
         jet_clear_persistent(m->bB0);
         FUN_L00_00260860(0x1B, 1);
         memcard_save_data(0, -1);
@@ -567,17 +578,21 @@ typedef struct {
 } VendorEventData;
 
 void FUN_L08_00307540(struct Moby *moby) {
+    enum {
+        VENDOR_EVENT_WAIT_FOR_ARMING = 0,
+        VENDOR_EVENT_ARMED = 1
+    };
     VendorEventData *data = *(VendorEventData **)((char *)moby + 0x78);
     s32 elapsed;
     s32 time;
     f32 volume[4];
 
     switch (data->state) {
-    case 0:
+    case VENDOR_EVENT_WAIT_FOR_ARMING:
         if (is_point_inside_clip_volume(&hero.motion.pos, data->third) && hero.state.control_mode == 15)
             data->state = 1;
         break;
-    case 1:
+    case VENDOR_EVENT_ARMED:
         if (hero.state.current == 0x42) {
             data->state = 0;
         } else if (is_point_inside_clip_volume(&hero.motion.pos, data->fourth) && item_unlocked[11] == 0) {
@@ -680,7 +695,8 @@ extern void cutscene_set_camera_target(int) __asm__("FUN_L00_002637f8");
 
 void FUN_L08_003084d8(struct Moby *moby) {
     enum {
-        MOBY_INITIALIZE = 0
+        MOBY_INITIALIZE = 0,
+        MOBY_ACTIVE = 1
     };
     int k;
     switch (moby->state) {
@@ -688,7 +704,7 @@ void FUN_L08_003084d8(struct Moby *moby) {
         moby->update_dist = 0xFF;
         moby->state = 1;
         break;
-    case 1:
+    case MOBY_ACTIVE:
         if (D_L08_0015F5C4 == 2) {
             int t = D_L08_0016D060_c.a;
             if ((t >= 1 && t <= 2) || t == 4 || t == 5) {
@@ -807,13 +823,17 @@ extern void subtract_vector_xyz(void *, void *, void *);
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void FUN_L08_003097b0(struct Moby *moby) {
+    enum {
+        MOBY_INITIALIZE = 0,
+        MOBY_ACTIVE = 1
+    };
     int i;
     float v[4];
     float w[4];
     float d;
 
     switch (moby->state) {
-    case 0:
+    case MOBY_INITIALIZE:
         if (D_L08_001623C4 == 0) {
             FUN_L08_002f0f68(D_L08_001F8528, 8, D_L08_001F4C60, 0.5f, 0.5f, 0.65f, 0.5f, 1);
             FUN_L08_002f0f68(D_L08_001623E8, 2, D_L08_001623C8, 0.5f, 0.5f, 0.5f, 1.0f, 1);
@@ -836,7 +856,7 @@ void FUN_L08_003097b0(struct Moby *moby) {
             *(float *)&D_L08_001623F0_e[7 + i * 2] = i * 0.4f;
         }
         break;
-    case 1:
+    case MOBY_ACTIVE:
         v[0] = *(float *)&D_L08_00162380;
         v[1] = D_L08_00162384;
         v[2] = D_L08_00162388;

@@ -96,9 +96,10 @@ extern CollisionHit HH __asm__("D_L15_00174440") __attribute__((section(".data")
 extern struct Hero hero_lui __asm__("D_0013F350") __attribute__((section(".data")));
 void FUN_L15_0020a7a0(void) {
     enum {
-        GRAVITY_WORLD_DOWN = 0
+        GRAVITY_WORLD_DOWN = 0,
+        GRAVITY_OPPOSITE_GROUND_NORMAL = 1
     };
-    V shared_ray_endpoint, ground_ray_endpoint, v20, surface_probe_endpoint, v40, probe_surface_angles, probe_surface_normal;
+    V shared_ray_endpoint, ground_ray_endpoint, ground_displacement_or_angles, surface_probe_endpoint, unused_probe_vector, probe_surface_angles, probe_surface_normal;
     f32 f;
     s32 r;
     s32 i;
@@ -181,8 +182,8 @@ void FUN_L15_0020a7a0(void) {
         FUN_00125180_c(&hero.unk270, (u8 *)&HH.normal_x);
         hero.ground_slope.f = FUN_L00_00233d30((u8 *)&HH.normal_x);
         hero.downhill_yaw = FUN_001f9e90_c(HH.normal_x, HH.normal_y);
-        subtract_vector_xyz(&v20, &hero.ground_point, &hero.motion.pos);
-        if (0.0f < FUN_001f9ab0_c(&v20, &hero.unk270)) {
+        subtract_vector_xyz(&ground_displacement_or_angles, &hero.ground_point, &hero.motion.pos);
+        if (0.0f < FUN_001f9ab0_c(&ground_displacement_or_angles, &hero.unk270)) {
             hero.ground_distance = -hero.ground_distance;
         }
         if (hero.ground_distance < 0.02f) {
@@ -209,7 +210,7 @@ d1:
     case GRAVITY_WORLD_DOWN:
         hero.gravity_dir.f[2] = -1.0f;
         break;
-    case 1:
+    case GRAVITY_OPPOSITE_GROUND_NORMAL:
         qcopy(&hero.gravity_dir, &hero.unk270);
         FUN_001f9a68_c(&hero.gravity_dir, &hero.gravity_dir, -1.0f);
         break;
@@ -233,12 +234,12 @@ d1:
     if (!(hero.ground_distance < 0.25f)) {
         return;
     }
-    FUN_L00_00216078(&hero.unk270, &v20);
-    if (-0.78539819f < v20.f[1] && v20.f[1] < 0.78539819f) {
-        hero.ground_pitch.f = v20.f[1];
+    FUN_L00_00216078(&hero.unk270, &ground_displacement_or_angles);
+    if (-0.78539819f < ground_displacement_or_angles.f[1] && ground_displacement_or_angles.f[1] < 0.78539819f) {
+        hero.ground_pitch.f = ground_displacement_or_angles.f[1];
     }
-    if (-0.78539819f < v20.f[0] && v20.f[0] < 0.78539819f) {
-        hero.unk2E8.f = v20.f[0];
+    if (-0.78539819f < ground_displacement_or_angles.f[0] && ground_displacement_or_angles.f[0] < 0.78539819f) {
+        hero.unk2E8.f = ground_displacement_or_angles.f[0];
     }
     for (i = 0; i < 2; i++) {
         a = 1.5707964f;
@@ -246,7 +247,7 @@ d1:
             a = -a;
         }
         FUN_L00_002335c8(&surface_probe_endpoint, 0.2f, a, 0.45f);
-        FUN_L00_002335c8(&v40, 0.2f, a, -0.45f);
+        FUN_L00_002335c8(&unused_probe_vector, 0.2f, a, -0.45f);
         if (FUN_001efa68_c(&surface_probe_endpoint, &shared_ray_endpoint, 0x22, (s32)hero.moby, 0)) {
             f = HH.point.f[2] - hero.ground_z.f;
             hero.unk2C0.f[i] = f;
