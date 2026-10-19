@@ -73,6 +73,10 @@ void timed_activation_pads_update(unsigned char *moby)
         PAD_UPDATE_FLASHING = 7,
         PAD_RESET_TO_ACTIVATION_WAIT = 8
     };
+    enum {
+        PAD_INITIALIZE = 0,
+        PAD_WAIT_FOR_ACTIVATION = 1
+    };
     char *d;
     char *p;
     float o[4];
@@ -134,12 +138,12 @@ void timed_activation_pads_update(unsigned char *moby)
     }
 
     switch (moby[0x20]) {
-    case 0:
+    case PAD_INITIALIZE:
         glow_n(moby, 0x80, 0x80, 0x80);
         func_L01_0026F040_30D370(moby[0x21], 0);
         func_L01_0026F090_30D370(moby[0x21], 1);
         break;
-    case 1:
+    case PAD_WAIT_FOR_ACTIVATION:
         *(int *)(d + 0x8) = 0;
         glow_n(moby, 0x80, 0x80, 0x80);
         if (flag) {
