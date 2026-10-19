@@ -1119,6 +1119,10 @@ extern char D_001404A8[];
 
 void extermibot_update(unsigned char *m) __asm__("FUN_L05_00301f48");
 void extermibot_update(unsigned char *m) {
+    enum {
+        EXTERMIBOT_INITIALIZE = 0,
+        EXTERMIBOT_RETURN_TO_START = 10
+    };
     char *d = *(char **)(m + 0x78);
     char *t;
     float dir[4];
@@ -1148,7 +1152,7 @@ void extermibot_update(unsigned char *m) {
     t = *(char **)(d + 0x160);
     *(float *)(m + 0x2C) = *(float *)(*(char **)(m + 0x24) + 0x24) * (D_L05_00161A98);
     switch (m[0x20]) {
-    case 0:
+    case EXTERMIBOT_INITIALIZE:
         *(unsigned short *)(m + 0x34) |= 0x1000;
         qcopy(d + 0x270, m + 0x10);
         *(float *)(d + 0x20) = 2.0f;
@@ -1425,7 +1429,7 @@ void extermibot_update(unsigned char *m) {
             }
         }
         break;
-    case 10:
+    case EXTERMIBOT_RETURN_TO_START:
         FUN_L05_00303b08_c((struct Moby *)m, (s32)(d + 0x270), 0.0f);
         if (vector_distance_xy_alt(m + 0x10, d + 0x270) < 1.0f) {
             m[0x20] = 1;
