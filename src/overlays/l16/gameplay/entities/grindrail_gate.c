@@ -2732,6 +2732,10 @@ extern L16SingleSphere D_L16_00161F60_bounds[] __asm__("D_L16_00161F80")
     __attribute__((section(".sdata")));
 
 void FUN_L16_002e93b0(unsigned char *m) {
+    enum {
+        SINGLE_MESH_RENDER_INITIALIZE_BOUNDING_SPHERE = 0,
+        SINGLE_MESH_RENDER_QUEUE_CALLBACK = 1
+    };
     int i, j;
     float maxx, maxy, maxz, minx, miny, minz;
     float p[4];
@@ -2739,7 +2743,7 @@ void FUN_L16_002e93b0(unsigned char *m) {
     float *verts;
     int count;
     switch (m[0x20]) {
-    case 0: {
+    case SINGLE_MESH_RENDER_INITIALIZE_BOUNDING_SPHERE: {
         for (i = 0; i <= 0; i++) {
             maxx = maxy = maxz = -1024.0f;
             minx = miny = minz = 1024.0f;
@@ -2787,7 +2791,7 @@ void FUN_L16_002e93b0(unsigned char *m) {
         m[0x30] = *(unsigned short *)(m + 0x32) = 255;
         break;
     }
-    case 1:
+    case SINGLE_MESH_RENDER_QUEUE_CALLBACK:
         enqueue_callback_list_1_u(FUN_L16_002e9270_u, m);
         break;
     }
