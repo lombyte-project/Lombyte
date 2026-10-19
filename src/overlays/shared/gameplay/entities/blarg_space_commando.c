@@ -454,6 +454,7 @@ float absolute_float(float input) __asm__("func_001F99C0");
 
 void FUN_L06_002feb40(char *m) {
     enum {
+        HIT_RESPONSE_WITHOUT_KNOCKBACK = 0,
         FATAL_HIT_RESPONSE = 1,
         FRAGMENTING_FATAL_HIT_RESPONSE = 2,
         NONFATAL_KNOCKBACK_HIT_RESPONSE = 3
@@ -571,7 +572,7 @@ void FUN_L06_002feb40(char *m) {
             FUN_L00_00257470(m, 0, -1);
             break;
         }
-        case 0:
+        case HIT_RESPONSE_WITHOUT_KNOCKBACK:
         case 11:
         default:
             break;
