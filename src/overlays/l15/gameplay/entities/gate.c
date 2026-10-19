@@ -2492,6 +2492,7 @@ void FUN_L15_002d0fa8(void *arg) {
         HIT_REACTION_NO_ACTION = 0,
         HIT_REACTION_DEATH = 1,
         HIT_REACTION_DEATH_ALTERNATE = 2,
+        HIT_REACTION_KNOCKBACK = 3,
         HIT_REACTION_NONE = 11
     };
     UMoby *m = arg;
@@ -2559,7 +2560,7 @@ void FUN_L15_002d0fa8(void *arg) {
                 d->w1C8 = 1;
                 *(unsigned char *)((char *)d + 0x67) = 0xFA;
                 break;
-            case 3:
+            case HIT_REACTION_KNOCKBACK:
             case 4:
             case 5:
             case 6:
