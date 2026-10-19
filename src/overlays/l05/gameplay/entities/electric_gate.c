@@ -1215,6 +1215,13 @@ extern void place_marker_ring(void *) __asm__("FUN_L05_00315f70");
 
 void elevator_with_button_update(struct Moby *moby) __asm__("FUN_L05_003156d0");
 void elevator_with_button_update(struct Moby *moby) {
+    enum {
+        ELEVATOR_INITIALIZE = 0,
+        ELEVATOR_MOVE_TO_TOP = 2,
+        ELEVATOR_MOVE_TO_BOTTOM = 3,
+        ELEVATOR_WAIT_AT_TOP = 4,
+        ELEVATOR_WAIT_AT_BOTTOM = 5
+    };
     LiftVars *vars = (LiftVars *)moby->pvars;
     Vec4 delta;
     Vec4 rot;
@@ -1229,7 +1236,7 @@ void elevator_with_button_update(struct Moby *moby) {
     scale_vector_xyz(&delta, &moby->pos, -1.0f);
     qcopy(&rot, &moby->rot);
     switch (moby->state) {
-    case 0:
+    case ELEVATOR_INITIALIZE:
         vars->phase = random_angle_radians();
         vars->sound = -1;
         vars->base_yaw = moby->rot.z;
@@ -1246,8 +1253,8 @@ void elevator_with_button_update(struct Moby *moby) {
             moby->command = 1;
         }
         break;
-    case 2:
-    case 3:
+    case ELEVATOR_MOVE_TO_TOP:
+    case ELEVATOR_MOVE_TO_BOTTOM:
         if (!voice_is_playing(moby, vars->sound)) {
             vars->sound = allocate_voice_for_target_entry(0, 4, moby);
         }
@@ -1338,8 +1345,8 @@ void elevator_with_button_update(struct Moby *moby) {
             }
         }
         break;
-    case 4:
-    case 5:
+    case ELEVATOR_WAIT_AT_TOP:
+    case ELEVATOR_WAIT_AT_BOTTOM:
         vars->phase = fast_add_rotations(vars->phase, frame_time * 6.2831855f);
         level = truncate_float_to_s32((fast_sin(vars->phase) * 4.0f - 3.0f) * 128.0f);
         if (level > 0x80) {
