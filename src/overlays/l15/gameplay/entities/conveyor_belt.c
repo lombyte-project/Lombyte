@@ -1278,11 +1278,11 @@ ready:
         FUN_00252348(6.0f, turn, random_float_between(0.0f, 30.0f) * angle, data + 0x260);
         FUN_001f89f0(data + 0x260, data + 0x260, pos);
     }
-    if (*(int *)(data + 0x274) == 0) {
-        vecs.target = *(OvlQuad *)(data + 0x260);
-    } else {
+    if (*(int *)(data + 0x274) != 0) {
         vecs.target = *(OvlQuad *)0x13f420;
         fast = 0.04f;
+    } else {
+        vecs.target = *(OvlQuad *)(data + 0x260);
     }
     vecs.pos = *(OvlQuad *)(pos);
     ((float *)&vecs.pos)[2] += 1.0f;

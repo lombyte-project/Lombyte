@@ -727,10 +727,10 @@ void FUN_L00_001f4598(void) {
                     }
                 }
             }
-            if (g_debug_menu.scene_index < 0) {
-                g_debug_menu.unknown_a4 = 0;
-            } else {
+            if (g_debug_menu.scene_index >= 0) {
                 g_debug_menu.unknown_a4 = 2;
+            } else {
+                g_debug_menu.unknown_a4 = 0;
             }
             break;
         case 10:

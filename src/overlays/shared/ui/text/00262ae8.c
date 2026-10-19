@@ -144,7 +144,11 @@ void FUN_L05_00262b58(HudCounter *e) {
         i = 2;
         dst = (s32 *)&D_0013FA5C - 1;
         do { *dst-- = 0; } while (--i >= 0);
-        if (D_001413D4 == 0x6b) {
+        if (D_001413D4 != 0x6b) {
+            counter[2] = 2;
+            counter[1] = D_L05_0015F87C;
+            counter[0] = scale_game_frames(0x3c);
+        } else {
             if (D_L05_0015FAD8 > 2) {
                 D_L05_0015FAFC = D_L05_0015FAF8;
                 D_L05_0015FAF8 = D_L05_0015FAF4;
@@ -154,10 +158,6 @@ void FUN_L05_00262b58(HudCounter *e) {
             counter[2] = 3;
             counter[1] = D_L05_0015F87C;
             counter[0] = scale_game_frames(0x78);
-        } else {
-            counter[2] = 2;
-            counter[1] = D_L05_0015F87C;
-            counter[0] = scale_game_frames(0x3c);
         }
         break;
     case 2:

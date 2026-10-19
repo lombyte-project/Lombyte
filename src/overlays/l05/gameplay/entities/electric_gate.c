@@ -214,14 +214,14 @@ void FUN_L05_0030de90(char *moby) {
                     float y = uv[1];
                     *uv0 = x;
                     *uv1 = y;
-                    if (j != 0) {
-                        *color = color0;
-                        qcopy(positions, source);
-                        positions->f[2] += (float)(short)height;
-                    } else {
+                    if (j == 0) {
                         *colors0 = color1;
                         qcopy(positions0, source0);
                         positions0->f[2] += (float)(short)height;
+                    } else {
+                        *color = color0;
+                        qcopy(positions, source);
+                        positions->f[2] += (float)(short)height;
                     }
                     positions0++;
                     source0++;
