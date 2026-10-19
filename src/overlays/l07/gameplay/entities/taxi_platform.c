@@ -1006,7 +1006,8 @@ void boltcrate_possibly_for_metal_detector_update(struct Moby *moby) __asm__("FU
 void boltcrate_possibly_for_metal_detector_update(struct Moby *moby) {
     enum {
         INITIALIZE_PATH_CHILDREN = 0,
-        ADVANCE_PATH_CHILDREN = 1
+        ADVANCE_PATH_CHILDREN = 1,
+        HIT_REACTION_NO_ANIMATION_RESPONSE = 11
     };
     char *data;
     char *path;
@@ -1039,7 +1040,7 @@ void boltcrate_possibly_for_metal_detector_update(struct Moby *moby) {
         case 8:
         case 9:
         case 10:
-        case 11:
+        case HIT_REACTION_NO_ANIMATION_RESPONSE:
             break;
         case 1:
         case 2:
