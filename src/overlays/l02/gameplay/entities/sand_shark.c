@@ -2958,14 +2958,15 @@ void crane_update(struct Moby *moby) {
     enum {
         CRANE_ANIM_TRANSITION_TO_RANDOM_WAIT = 1,
         CRANE_ANIM_WAIT_FOR_RANDOM_TRANSITION = 2,
-        CRANE_ANIM_WAIT_FOR_TRANSITION_TO_RANDOM_WAIT = 4
+        CRANE_ANIM_WAIT_FOR_TRANSITION_TO_RANDOM_WAIT = 4,
+        CRANE_ANIM_TRANSITION_BACK_TO_RANDOM_WAIT = 5
     };
     int *d = (int *)moby->pvars;
     moby->anim_speed = *(float *)&D_L02_00161C68;
     switch (moby->prev_seq) {
     case CRANE_ANIM_TRANSITION_TO_RANDOM_WAIT:
     case 3:
-    case 5:
+    case CRANE_ANIM_TRANSITION_BACK_TO_RANDOM_WAIT:
     case 7:
         if (moby->anim_flags & 2) {
             int idx;
