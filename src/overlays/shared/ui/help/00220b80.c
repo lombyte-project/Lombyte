@@ -388,7 +388,8 @@ s32 FUN_L02_0022ee00(void)
     enum {
         HERO_ITEM_WRENCH = 8,
         HERO_ITEM_HOLD_TO_FIRE = 15,
-        HERO_ITEM_PRESS_TO_ACTIVATE = 21
+        HERO_ITEM_PRESS_TO_ACTIVATE = 21,
+        HERO_ITEM_BUFFERED_ACTIVATE = 32
     };
     s32 out0;
     s32 out1;
@@ -524,7 +525,7 @@ s32 FUN_L02_0022ee00(void)
         }
         break;
 
-    case 32:
+    case HERO_ITEM_BUFFERED_ACTIVATE:
         if ((hero.state.control_mode == 0 || hero.state.control_mode == 1 || hero.state.control_mode == 2 ||
              hero.state.control_mode == 4 || hero.state.control_mode == 5) &&
             pad_pressed_within(buttons, scale_game_frames(8), NULL) != 0) {
