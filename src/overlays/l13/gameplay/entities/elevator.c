@@ -819,11 +819,15 @@ void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
 void blarg_gunner_update(struct Moby *moby) __asm__("FUN_L13_002b4c80");
 void blarg_gunner_update(struct Moby *moby) {
+    enum {
+        BLARG_GUNNER_STATE_INITIALIZE = 0,
+        BLARG_GUNNER_STATE_DESTROY = 2
+    };
     unsigned char *d = moby->pvars;
     float a[4];
     float b[4];
     switch (moby->state) {
-    case 0:
+    case BLARG_GUNNER_STATE_INITIALIZE:
         d[0x29] = 1;
         moby->state = 1;
         d[0x5A] = 6;
@@ -852,7 +856,7 @@ void blarg_gunner_update(struct Moby *moby) {
         }
         FUN_L13_002b4a58_c(moby, d);
         break;
-    case 2:
+    case BLARG_GUNNER_STATE_DESTROY:
         if (moby->anim_flags & 2) {
             subtract_vector_xyz(a, D_L13_001670C0, &moby->pos);
             moby_point_position(moby, 0, b);
