@@ -305,6 +305,8 @@ void FUN_L14_002b17d8(char *moby) {
         PLASMABOT_START_PATH_TRAVERSAL = 2,
         PLASMABOT_FOLLOW_PATH_FORWARD = 3,
         PLASMABOT_AIM_AT_TARGET = 4,
+        PLASMABOT_WAIT_ANIMATION_BEFORE_AIM_SWEEP = 5,
+        PLASMABOT_SWEEP_AIM_AND_TRACE_LINE = 6,
         PLASMABOT_WAIT_ANIMATION_BEFORE_AIM = 7,
         PLASMABOT_FOLLOW_PATH_BACKWARD = 8,
         PLASMABOT_RETURN_TO_PATH_START = 9,
@@ -552,7 +554,7 @@ void FUN_L14_002b17d8(char *moby) {
         *(short *)(data + 0x262) = scale_game_frames(D_L14_001614EC_gp);
         break;
     }
-    case 5: {
+    case PLASMABOT_WAIT_ANIMATION_BEFORE_AIM_SWEEP: {
         float ang;
         ang = fast_arc_tan_c(*(float *)(owner + 0x10) - *(float *)(moby + 0x10),
                                 *(float *)(owner + 0x14) - *(float *)(moby + 0x14));
@@ -564,7 +566,7 @@ void FUN_L14_002b17d8(char *moby) {
         }
         break;
     }
-    case 6: {
+    case PLASMABOT_SWEEP_AIM_AND_TRACE_LINE: {
         int flag;
         float ang;
         float progress;
