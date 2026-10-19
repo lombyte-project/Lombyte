@@ -651,6 +651,9 @@ void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0")
 extern unsigned char *D_L00_001B2168 __attribute__((section(".data")));
 unsigned char *FUN_L00_002729c8(void *pos, unsigned char a, unsigned char b, unsigned char c,
                                 unsigned char d, unsigned char e, int g, float x, float y) {
+    enum {
+        PARTICLE_MODE_EMITTED_PARTICLE = 2
+    };
     unsigned char *m = p27fe00_alloc(0x3A);
     if (m) {
         unsigned char *q;
@@ -680,7 +683,7 @@ unsigned char *FUN_L00_002729c8(void *pos, unsigned char a, unsigned char b, uns
             *(int *)(m + 4) = 0xFF808080;
             q[0x14] = 0;
             break;
-        case 2:
+        case PARTICLE_MODE_EMITTED_PARTICLE:
             r = FUN_002132a8_2729c8(3.0f, 9.0f) * y * frame_time;
             t = random_angle_radians();
             u = FUN_002132a8_2729c8(1.3439035f, 1.7976891f);
