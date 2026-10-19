@@ -3136,7 +3136,8 @@ void FUN_L13_002e9a48(Moby_2EAE80 *m, Data_2EAE80 *d) {
     enum {
         DAMAGE_STAGE_QUEUE_RANDOM_LINE = 1,
         DAMAGE_STAGE_START_TIMER_AND_QUEUE_LINE = 2,
-        DAMAGE_STAGE_QUEUE_SINGLE_LINE = 3
+        DAMAGE_STAGE_QUEUE_SINGLE_LINE = 3,
+        DAMAGE_STAGE_QUEUE_ALTERNATE_SINGLE_LINE = 5
     };
     int hit;
     int rf;
@@ -3346,7 +3347,7 @@ void FUN_L13_002e9a48(Moby_2EAE80 *m, Data_2EAE80 *d) {
                     break;
                 case 4:
                     break;
-                case 5:
+                case DAMAGE_STAGE_QUEUE_ALTERNATE_SINGLE_LINE:
                     func_L13_002E9B30_2EAE80(m, d, 0x13, 1);
                     break;
                 case 6:
