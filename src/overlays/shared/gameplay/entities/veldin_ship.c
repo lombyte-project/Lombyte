@@ -1531,7 +1531,8 @@ void metal_detector_update(struct Moby *moby) __asm__("FUN_L00_002d2ee8");
 void metal_detector_update(struct Moby *moby) {
     enum {
         METAL_DETECTOR_INITIALIZE = 0,
-        METAL_DETECTOR_ACTIVE = 1
+        METAL_DETECTOR_ACTIVE = 1,
+        METAL_DETECTOR_TRACK_AND_COLLECT = 2
     };
     Vars2d2ee8 *vars;
     struct Moby *t;
@@ -1578,7 +1579,7 @@ void metal_detector_update(struct Moby *moby) {
     case 4:
         break;
     case METAL_DETECTOR_ACTIVE:
-    case 2:
+    case METAL_DETECTOR_TRACK_AND_COLLECT:
         one = 1.0f;
         *(u128 *)v = 0;
         v[2] = one;
