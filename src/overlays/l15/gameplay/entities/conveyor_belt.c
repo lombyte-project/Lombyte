@@ -354,6 +354,10 @@ int memcard_save_data(int slot, int flags) __asm__("FUN_0020b178");
 extern short D_L15_00162078 __attribute__((sda));
 void bolt_grabber_update(struct Moby *m) __asm__("FUN_L15_002ea748");
 void bolt_grabber_update(struct Moby *m) {
+    enum {
+        BOLT_GRABBER_WAIT_FOR_PROXIMITY = 1,
+        BOLT_GRABBER_REMOVE = 3
+    };
     m->rot.z = fast_add_rotations(m->rot.z, frame_time * 1.5707964f);
     m->scale = m->pclass->scale * *(float *)&D_L15_00162078;
     switch (m->state) {
@@ -366,7 +370,7 @@ void bolt_grabber_update(struct Moby *m) {
         m->state = 1;
         m->pos.z = m->pos.z + 1.0f;
         break;
-    case 1:
+    case BOLT_GRABBER_WAIT_FOR_PROXIMITY:
         FUN_L10_00298940((char *)m);
         if (vector_distance(&m->pos, &hero.motion.pos) < 3.0f) {
             m->flags |= 0x41;
@@ -383,7 +387,7 @@ void bolt_grabber_update(struct Moby *m) {
             m->state = 3;
         }
         break;
-    case 3:
+    case BOLT_GRABBER_REMOVE:
         mark_moby_for_removal(m);
         break;
     }
