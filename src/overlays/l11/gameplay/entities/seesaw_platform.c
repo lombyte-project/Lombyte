@@ -1495,9 +1495,12 @@ void psytcopus_update(struct Moby *m) __asm__("FUN_L11_00310180");
 void psytcopus_update(struct Moby *m) {
     enum {
         PSYTCOPUS_STATE_INITIALIZE = 0,
+        PSYTCOPUS_STATE_FACE_PLAYER = 3,
         PSYTCOPUS_STATE_CREATE_PROJECTILE = 4,
         PSYTCOPUS_STATE_FIRE_PROJECTILE = 5,
-        PSYTCOPUS_STATE_ATTACK_RECOVERY = 6
+        PSYTCOPUS_STATE_ATTACK_RECOVERY = 6,
+        PSYTCOPUS_STATE_KNOCKBACK = 7,
+        PSYTCOPUS_STATE_DEATH_KNOCKBACK = 8
     };
     struct PokiPathVars *pv = (struct PokiPathVars *)m->pvars;
     struct Moby *target;
@@ -1535,7 +1538,7 @@ void psytcopus_update(struct Moby *m) {
             blend_0180(m, 0, 0, frames_0180(10));
         }
         break;
-    case 3:
+    case PSYTCOPUS_STATE_FACE_PLAYER:
         {
         float *yaw = &m->rot.z;
         angle = atan2_0180(D_001413D0->pos.x - m->pos.x, D_001413D0->pos.y - m->pos.y);
@@ -1597,7 +1600,7 @@ void psytcopus_update(struct Moby *m) {
             }
         }
         break;
-    case 7:
+    case PSYTCOPUS_STATE_KNOCKBACK:
         r = FUN_L00_0025c698_p(m, pv->unk70);
         if (r & 0x41) {
             path = D_L11_001B0EB0[pv->unk13C];
@@ -1616,7 +1619,7 @@ void psytcopus_update(struct Moby *m) {
             remove_0180(m);
         }
         break;
-    case 8:
+    case PSYTCOPUS_STATE_DEATH_KNOCKBACK:
         if (FUN_L00_0025c698_p(m, pv->unk70) & 0x160) {
             FUN_L00_0025f3e8_p(m, &m->pos, -1, 1.0f, 10.0f);
             FUN_L00_00257470_p(m, 0, -1);
