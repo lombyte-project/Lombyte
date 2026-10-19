@@ -1294,6 +1294,7 @@ void teleporter_update(struct Moby *moby) {
     enum {
         TELEPORTER_INITIALIZE = 0,
         TELEPORTER_WAIT_FOR_ACTIVATION = 1,
+        TELEPORTER_OPEN_PARTS = 2,
         TELEPORTER_CONTRACT_RING = 3,
         TELEPORTER_RESET = 4
     };
@@ -1357,7 +1358,7 @@ void teleporter_update(struct Moby *moby) {
         FUN_L00_002598b0_2518((int)moby, 1.5f, &moby->pos, 0x10000, 20.0f, 1.0f, 0, 1, 0);
         break;
     }
-    case 2: {
+    case TELEPORTER_OPEN_PARTS: {
         int r = FUN_L00_00233f38_2518();
         if (*(float *)(data + 0x20) < 1.0f) {
             advance_accelerated_scalar_2518((float *)(data + 0x20), (float *)(data + 0x28), 1.0f,
