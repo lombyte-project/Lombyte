@@ -446,6 +446,10 @@ extern void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
 extern f32 rnd_2e5178(f32, f32) __asm__("FUN_L00_00257c48");
 extern void kill_2e5178(void *) __asm__("FUN_0020c828");
 void FUN_L04_002e5178(M2e5178 *m) {
+    enum {
+        ENTITY_MOTION_STATE_BOUNCE = 0,
+        ENTITY_MOTION_STATE_DECAY_AND_REMOVE = 1
+    };
     PV2e5178 *pv = m->pv;
     u128 old;
     u128 *t;
@@ -456,7 +460,7 @@ void FUN_L04_002e5178(M2e5178 *m) {
     m->f44 = appr_2e5178(m->f44, pv->f24);
     m->f48 = appr_2e5178(m->f48, pv->f28);
     switch (m->b20) {
-    case 0:
+    case ENTITY_MOTION_STATE_BOUNCE:
         if (m->pos[2] < pv->f4 - 3.0f) {
             m->b20 = 1;
         } else if (tick_2e5178(&pv->hE) && pv->hC != 0 && coll_2e5178(m->pos, 2, 0, pv->f8)) {
@@ -472,7 +476,7 @@ void FUN_L04_002e5178(M2e5178 *m) {
             }
         }
         break;
-    case 1:
+    case ENTITY_MOTION_STATE_DECAY_AND_REMOVE:
         m->f2c *= 0.9f;
         if (m->b23 < 4) {
             kill_2e5178(m);
