@@ -351,9 +351,11 @@ void FUN_L11_002d1030(void *mp) {
     enum {
         RESORT_OWNER_INITIALIZE = 0,
         RESORT_OWNER_INITIAL_DIALOGUE = 2,
+        RESORT_OWNER_WAIT_TO_FOLLOW_HERO = 3,
         RESORT_OWNER_MOVE_TO_PATH_POINT = 6,
         RESORT_OWNER_JUMP_TO_TARGET = 7,
-        RESORT_OWNER_CHECK_PATH_COMPLETION_DIALOGUE = 12
+        RESORT_OWNER_CHECK_PATH_COMPLETION_DIALOGUE = 12,
+        RESORT_OWNER_WAIT_FOR_PATH_COMPLETION_DIALOGUE_END = 13
     };
     struct Moby *moby = mp;
     char *d = (char *)moby->pvars;
@@ -367,7 +369,7 @@ void FUN_L11_002d1030(void *mp) {
     case RESORT_OWNER_INITIALIZE:
     case 1:
     case RESORT_OWNER_INITIAL_DIALOGUE:
-    case 3:
+    case RESORT_OWNER_WAIT_TO_FOLLOW_HERO:
     case 11:
     case RESORT_OWNER_CHECK_PATH_COMPLETION_DIALOGUE:
         break;
@@ -432,7 +434,7 @@ void FUN_L11_002d1030(void *mp) {
         if (moby->prev_seq != 5)
             FUN_00212f90(moby, 5, 0, scale_game_frames(0x14));
         break;
-    case 13:
+    case RESORT_OWNER_WAIT_FOR_PATH_COMPLETION_DIALOGUE_END:
         if (D_L11_0016D260[12] != 1)
             break;
         if (D_L11_0016D260[13] != scale_game_frames(0x7D0))
