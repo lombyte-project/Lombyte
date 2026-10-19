@@ -1809,7 +1809,11 @@ void blarg_trooper_update(struct Moby *moby) {
     enum {
         BLARG_TROOPER_INITIALIZE = 0,
         BLARG_TROOPER_FOLLOW_WAYPOINTS = 1,
-        BLARG_TROOPER_RETURN_HOME = 8
+        BLARG_TROOPER_WAIT_FOR_ACTIVATION = 2,
+        BLARG_TROOPER_APPROACH_TARGET = 3,
+        BLARG_TROOPER_KNOCKBACK_RECOVERY = 4,
+        BLARG_TROOPER_RETURN_HOME = 8,
+        BLARG_TROOPER_DEATH_FALL = 9
     };
     TargetReport54_2E2EF0 work;
     Vec4 v;
@@ -1893,7 +1897,7 @@ hide:
         moby->state = 2;
         break;
     }
-    case 2: {
+    case BLARG_TROOPER_WAIT_FOR_ACTIVATION: {
         if (distance_xyz(&moby->pos, &hero.motion.pos) > 64.0f) return;
         if (moby->prev_seq != 0 && moby->seq == moby->prev_seq)
             blend_moby_animation_ex(moby, 0, 0, scale_game_frames_e81e0(8), 5);
@@ -1933,7 +1937,7 @@ hide:
         else if (vector_distance(&moby->pos, &target->pos) < OGRE_F(0x264)) moby->state = 3;
         break;
     }
-    case 3: {
+    case BLARG_TROOPER_APPROACH_TARGET: {
         float angle;
         if (OGRE_B(0x268) == 1) {
             int hit;
@@ -2029,7 +2033,7 @@ hide:
         if (vector_distance(&moby->pos, data + 0x220) < 1.0f) moby->state = 2;
         break;
     }
-    case 4: {
+    case BLARG_TROOPER_KNOCKBACK_RECOVERY: {
         float angle;
         moby->flags &= 0xffbe;
         if (mine_fall(moby, data + 0x70) & 0x60) {
@@ -2048,7 +2052,7 @@ state3:
         if (!(moby->pos.z < 2.0f)) goto finish;
         goto leave;
     }
-    case 9: {
+    case BLARG_TROOPER_DEATH_FALL: {
         if (mine_fall(moby, data + 0x70) & 0x60) {
             FUN_L00_00257470(moby, 0, -1);
             FUN_L12_002e7290(moby, &moby->pos);
