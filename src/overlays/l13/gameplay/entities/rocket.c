@@ -668,6 +668,11 @@ void poison_vessel_update(struct Moby *moby) {
         POISON_VESSEL_INTACT = 0,
         POISON_VESSEL_BLASTING = 1
     };
+    enum {
+        HIT_RESULT_NONE = 0,
+        HIT_RESULT_DEATH = 1,
+        HIT_RESULT_NO_REACTION = 11
+    };
     struct BlastVars *vars = (struct BlastVars *)moby->pvars;
     struct BlastHit *hit;
     float *health;
@@ -688,13 +693,13 @@ void poison_vessel_update(struct Moby *moby) {
             debug_print_7b10(D_L13_001F5590, moby->oclass, (s16)moby->save_id, fptodp_7b10(hit->damage));
         }
         switch (hit_check_7b10(moby, hit, health, 0, &kind, 0, 0, 4)) {
-        case 1:
+        case HIT_RESULT_DEATH:
         case 2:
             *health = 0;
             break;
-        case 0:
+        case HIT_RESULT_NONE:
         case 3:
-        case 11:
+        case HIT_RESULT_NO_REACTION:
             break;
         }
         effects = vars->effects;
