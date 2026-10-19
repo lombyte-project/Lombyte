@@ -971,7 +971,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 8: {
+    case HERO_STATE_LAND: {
         struct Hero *p = &hero;
         int animation_transition_code = -2;
         p->state.control_mode = 5;
