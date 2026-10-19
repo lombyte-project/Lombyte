@@ -2365,12 +2365,16 @@ extern unsigned char D_L18_001F29A0_9768[] __asm__("D_L18_001F29A0");
 extern unsigned char D_L18_001F29B8_9768[] __asm__("D_L18_001F29B8");
 
 void FUN_L18_002e9768(struct Moby *moby) {
+    enum {
+        STATE_INITIALIZE = 0,
+        STATE_BALLISTIC_FLIGHT = 3
+    };
     float *data = (float *)moby->pvars;
     long state = moby->state;
     float magnitude;
 
     switch (state) {
-    case 0: {
+    case STATE_INITIALIZE: {
         if (moby->mission != 0xff) {
             int mission_table_index = moby->mission + current_level_index * 16;
             if (((unsigned char *)((int *)visited52))[mission_table_index] == 0xff) goto remove;
@@ -2470,7 +2474,7 @@ remove:
             return;
         }
         break;
-    case 3: {
+    case STATE_BALLISTIC_FLIGHT: {
         float *pos = &moby->pos.x;
         moby->rot.x = fast_add_rotations_9768(moby->rot.x, data[2]);
         moby->rot.y = fast_add_rotations_9768(moby->rot.y, data[2]);
