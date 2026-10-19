@@ -3186,11 +3186,14 @@ void puffoid_update(struct Moby *moby) __asm__("FUN_L11_00314318");
 void puffoid_update(struct Moby *moby) {
     enum {
         PUFFOID_STATE_INITIALIZE = 0,
+        PUFFOID_STATE_WAIT_FOR_HOME_JUMP = 1,
         PUFFOID_STATE_IDLE = 2,
         PUFFOID_STATE_WANDER_NEAR_HOME = 3,
         PUFFOID_STATE_CHASE_TARGET = 4,
         PUFFOID_STATE_SPRAY_ATTACK = 5,
         PUFFOID_STATE_RETURN_HOME = 6,
+        PUFFOID_STATE_JUMP_HOME = 7,
+        PUFFOID_STATE_WAIT_FOR_CARRIER_JUMP = 12,
         PUFFOID_STATE_CARRIER_JUMP = 13,
         PUFFOID_STATE_CARRIER_IDLE = 14,
         PUFFOID_STATE_CARRIER_CHASE_TARGET = 15,
@@ -3258,7 +3261,7 @@ void puffoid_update(struct Moby *moby) {
             qcopy(d->home, &moby->pos);
         }
         break;
-    case 1: {
+    case PUFFOID_STATE_WAIT_FOR_HOME_JUMP: {
         char *path = D_L11_001B0EB0_4318[d->path];
         float ang = atan2_4318(*(float *)(path + 0x20) - moby->pos.x, *(float *)(path + 0x24) - moby->pos.y);
         turn_to_4318(&moby->rot.z, &d->unk250, ang,
@@ -3275,7 +3278,7 @@ void puffoid_update(struct Moby *moby) {
         }
         break;
     }
-    case 7:
+    case PUFFOID_STATE_JUMP_HOME:
     case 8:
         add_vector_4318(&moby->pos, &moby->pos, d->vel);
         d->vel[2] -= D_L11_001622F0 * frame_time_sq;
@@ -3431,7 +3434,7 @@ void puffoid_update(struct Moby *moby) {
             return;
         }
         break;
-    case 12: {
+    case PUFFOID_STATE_WAIT_FOR_CARRIER_JUMP: {
         float basis[16];
         float dest[4];
         if (d->unk214 != 2 && FUN_L11_00316090(moby) < 5) {
