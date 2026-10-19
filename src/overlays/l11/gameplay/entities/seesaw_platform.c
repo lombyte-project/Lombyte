@@ -3186,7 +3186,15 @@ void puffoid_update(struct Moby *moby) __asm__("FUN_L11_00314318");
 void puffoid_update(struct Moby *moby) {
     enum {
         PUFFOID_STATE_INITIALIZE = 0,
+        PUFFOID_STATE_IDLE = 2,
+        PUFFOID_STATE_WANDER_NEAR_HOME = 3,
+        PUFFOID_STATE_CHASE_TARGET = 4,
+        PUFFOID_STATE_SPRAY_ATTACK = 5,
         PUFFOID_STATE_RETURN_HOME = 6,
+        PUFFOID_STATE_CARRIER_JUMP = 13,
+        PUFFOID_STATE_CARRIER_IDLE = 14,
+        PUFFOID_STATE_CARRIER_CHASE_TARGET = 15,
+        PUFFOID_STATE_CARRIER_SPRAY_ATTACK = 16,
         PUFFOID_STATE_FOLLOW_PATH = 19
     };
     CreatureVars_4318 *d = (CreatureVars_4318 *)moby->pvars;
@@ -3287,7 +3295,7 @@ void puffoid_update(struct Moby *moby) {
             }
         }
         break;
-    case 2:
+    case PUFFOID_STATE_IDLE:
         if (d->unk214 != 2) {
             d->unk24C = random_float_4318(-D_L11_001622E8, D_L11_001622E8) * 0.017453292f;
             moby->state = 4;
@@ -3308,7 +3316,7 @@ void puffoid_update(struct Moby *moby) {
             }
         }
         break;
-    case 3:
+    case PUFFOID_STATE_WANDER_NEAR_HOME:
         FUN_L11_00315f58((char *)moby, d->unk260);
         if (d->unk214 != 2) {
             d->unk24C = random_float_4318(-D_L11_001622E8, D_L11_001622E8) * 0.017453292f;
@@ -3323,7 +3331,7 @@ void puffoid_update(struct Moby *moby) {
             }
         }
         break;
-    case 4:
+    case PUFFOID_STATE_CHASE_TARGET:
         if ((moby->anim_flags & 2) && vector_distance_4318(&moby->pos, &target->pos) < D_L11_001622E4) {
             moby->state = 5;
             if (moby->prev_seq != 2) {
@@ -3357,7 +3365,7 @@ void puffoid_update(struct Moby *moby) {
             }
         }
         break;
-    case 5:
+    case PUFFOID_STATE_SPRAY_ATTACK:
         FUN_L11_00315f58((char *)moby, (float *)&target->pos);
         if ((moby->anim_flags & 2) && D_L11_001622E4 < vector_distance_4318(&moby->pos, &target->pos)) {
             moby->state = 4;
@@ -3459,7 +3467,7 @@ void puffoid_update(struct Moby *moby) {
         }
         break;
     }
-    case 13: {
+    case PUFFOID_STATE_CARRIER_JUMP: {
         char *cv = (char *)((struct Moby *)(D_L11_0015FFD8_4318 + (d->carrier << 8)))->pvars;
         add_vector_4318(&moby->pos, &moby->pos, d->vel);
         add_vector_4318(&moby->pos, &moby->pos, cv + 0x70);
@@ -3474,7 +3482,7 @@ void puffoid_update(struct Moby *moby) {
         }
         break;
     }
-    case 14:
+    case PUFFOID_STATE_CARRIER_IDLE:
         follow_carrier_4318(moby, D_L11_0015FFD8_4318 + (d->carrier << 8), &moby->pos, &moby->rot,
                             &moby->pos, &moby->rot);
         if (d->unk214 != 2) {
@@ -3485,7 +3493,7 @@ void puffoid_update(struct Moby *moby) {
             }
         }
         break;
-    case 15:
+    case PUFFOID_STATE_CARRIER_CHASE_TARGET:
         follow_carrier_4318(moby, D_L11_0015FFD8_4318 + (d->carrier << 8), &moby->pos, &moby->rot,
                             &moby->pos, &moby->rot);
         FUN_L11_00315f58((char *)moby, (float *)&target->pos);
@@ -3499,7 +3507,7 @@ void puffoid_update(struct Moby *moby) {
             moby->state = 0xE;
         }
         break;
-    case 16:
+    case PUFFOID_STATE_CARRIER_SPRAY_ATTACK:
         follow_carrier_4318(moby, D_L11_0015FFD8_4318 + (d->carrier << 8), &moby->pos, &moby->rot,
                             &moby->pos, &moby->rot);
         FUN_L11_00315f58((char *)moby, (float *)&target->pos);
