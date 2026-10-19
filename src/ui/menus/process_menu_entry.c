@@ -56,7 +56,9 @@ extern s32 compute_clamped_count_difference(void) __asm__("FUN_00215248");
 
 #define SCRATCH ((char *)0x70000000)
 
-void FUN_00216c48(void *callback_context, Menu *menu, s32 follow_entry_link) {
+void process_menu_entry(void *callback_context, Menu *menu, s32 follow_entry_link) __asm__("FUN_00216c48");
+
+void process_menu_entry(void *callback_context, Menu *menu, s32 follow_entry_link) {
     enum {
         MENU_CONDITION_PURCHASE_PRICE_MET = 1,
         MENU_CONDITION_ITEM_AVAILABLE = 2,
@@ -167,8 +169,8 @@ void FUN_00216c48(void *callback_context, Menu *menu, s32 follow_entry_link) {
         menu->unk38 = world_update_time_macro;
         e = (MenuItem *)(menu->unk3C + next * 0x1C);
         menu->unk8 = *(u8 *)&e->unk10 & 1;
-        FUN_00216c48(callback_context, menu, 0);
+        process_menu_entry(callback_context, menu, 0);
     }
 }
 
-extern __typeof__(FUN_00216c48) func_00216C48 __attribute__((alias("FUN_00216c48")));
+extern __typeof__(process_menu_entry) func_00216C48 __attribute__((alias("FUN_00216c48")));

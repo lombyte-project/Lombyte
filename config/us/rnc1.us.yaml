@@ -1624,7 +1624,7 @@ segments:
           - [0x117ae8, c, audio/voices/set_sound_handle_id]
           - [0x117b40, c, audio/streaming/music_remaining_time_callback]
           - [0x117bac, textbin, text_gap_00216c2c_after_fun_00216bc0]
-          - [0x117bc8, c, ui/menus/fun_00216c48]
+          - [0x117bc8, c, ui/menus/process_menu_entry]
           - [0x117fa0, c, runtime/state/reset_global_state]
           - [0x117fb4, textbin, text_gap_00217034_before_fun_00217048]
           - [0x117fc8, c, input/pad/init_pads]
