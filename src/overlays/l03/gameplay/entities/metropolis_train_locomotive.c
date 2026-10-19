@@ -2330,6 +2330,9 @@ void FUN_L03_002c6fd0(Moby2C8398 *m) {
         ENEMY_HIDDEN_AT_PATH_START = 14,
         ENEMY_RESPAWN_AT_PATH_START = 15
     };
+    enum {
+        ENEMY_ANIM_HEADING_TURN = 9
+    };
     Tgt2C8398 tgt;
     Data2C8398 *d = m->data;
     float dist;
@@ -2957,7 +2960,7 @@ void FUN_L03_002c6fd0(Moby2C8398 *m) {
                 }
             }
             break;
-        case 9:
+        case ENEMY_ANIM_HEADING_TURN:
             FUN_001f9c48_cf((char *)m, &d->f258, d->f28C, 0.01f, 0.3f, 0.2f);
             if (FUN_L03_002c9ca0_cf(m->rot[2], d->f28C) < 0.034906585f) {
                 d->b263 = FUN_L03_002c6d98_cf(0x3C);
