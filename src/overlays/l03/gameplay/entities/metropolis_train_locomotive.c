@@ -2266,6 +2266,13 @@ extern void subtract_vector_xyz_cf(void *, int, void *) __asm__("FUN_L00_0024f7c
 extern void vector_length_xyz_cf(void *, void *, void *) __asm__("FUN_001f9a10");
 
 void FUN_L03_002c6fd0(Moby2C8398 *m) {
+    enum {
+        ENEMY_INITIALIZE = 0,
+        ENEMY_MELEE_ATTACK = 6,
+        ENEMY_TURN_TO_HEADING = 12,
+        ENEMY_HIDDEN_AT_PATH_START = 14,
+        ENEMY_RESPAWN_AT_PATH_START = 15
+    };
     Tgt2C8398 tgt;
     Data2C8398 *d = m->data;
     float dist;
@@ -2314,7 +2321,7 @@ void FUN_L03_002c6fd0(Moby2C8398 *m) {
         FUN_L01_0026d930_cf((char *)m, (char *)&d->look1, 3, frame_scale_sq * 0.03f, frame_scale_sq * 0.3f);
     }
     switch (m->state) {
-    case 0:
+    case ENEMY_INITIALIZE:
         m->l38 = (((Moby2C8398 *)hero.moby))->l38;
         m->b7F = 0x1C;
         FUN_001f96b0_cf((char *)&d->mv);
@@ -2564,7 +2571,7 @@ void FUN_L03_002c6fd0(Moby2C8398 *m) {
         }
         break;
     }
-    case 6: {
+    case ENEMY_MELEE_ATTACK: {
         {
             float v[4];
             Hit2C8398 hit;
@@ -2869,7 +2876,7 @@ void FUN_L03_002c6fd0(Moby2C8398 *m) {
             }
         }
     }
-    case 12:
+    case ENEMY_TURN_TO_HEADING:
         switch (m->anim) {
         case 1:
             FUN_001f9c48_cf((char *)m, &d->f258, d->f28C, 0.09f, 0.27f, 0.15f);
@@ -2972,7 +2979,7 @@ void FUN_L03_002c6fd0(Moby2C8398 *m) {
         }
         break;
     }
-    case 14: {
+    case ENEMY_HIDDEN_AT_PATH_START: {
         PathF2C8398 *pf = &d->pf;
         if (m->anim != 0) {
             blend_moby_animation(m, 0, 0, FUN_L03_002c6d98_cf(10));
@@ -2983,7 +2990,7 @@ void FUN_L03_002c6fd0(Moby2C8398 *m) {
         m->i94 = 0;
         break;
     }
-    case 15:
+    case ENEMY_RESPAWN_AT_PATH_START:
         if ((visited52)[m->bB0 + (current_level_index << 4)] == 0xFF) {
             FUN_L03_002c95a8_cf(m);
             return;
