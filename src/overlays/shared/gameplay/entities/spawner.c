@@ -367,6 +367,11 @@ extern f32 frame_time_sq_macro __asm__("D_0015ED70") MACRO_ADDR;
 void spawner_update(char *moby) __asm__("FUN_L09_0030ab80");
 void spawner_update(char *moby)
 {
+    enum {
+        SPAWNER_STATE_INITIALIZE = 0,
+        SPAWNER_STATE_SPAWN = 1,
+        SPAWNER_STATE_EXPLODE = 2
+    };
     char *d = *(char **)(moby + 0x78);
     float target[4];
     float vel[4];
@@ -375,7 +380,7 @@ void spawner_update(char *moby)
 
     FUN_L09_0030a9e8_30ab80(moby, d);
     switch ((unsigned char)moby[0x20]) {
-    case 0: {
+    case SPAWNER_STATE_INITIALIZE: {
         int h = 0;
         while (FUN_L00_002591d0_30ab80(&h, *(int *)(d + 0x94), 0, 0) == 0) {
             mark_moby_for_removal_30ab80((void *)h);
@@ -383,7 +388,7 @@ void spawner_update(char *moby)
         moby[0x20] = 1;
         return;
     }
-    case 1: {
+    case SPAWNER_STATE_SPAWN: {
         FUN_L09_0030a9e8_30ab80(moby, d);
         if (!tick_countdown_16_30ab80(d + 0x8E))
             return;
@@ -496,7 +501,7 @@ void spawner_update(char *moby)
         }
         return;
     }
-    case 2:
+    case SPAWNER_STATE_EXPLODE:
         FUN_L00_0025e450_30ab80(moby, d + 0x70, 0, 0.0f, 0.0f, 30, 8, 20, 8.0f, 4.0f, 18.0f, 1.0f, 1, 15.0f, 1, 1, -1, 0);
         FUN_L00_00263fd8_30ab80(moby, 0x6C5, moby + 0x10, moby + 0x40, 0, 0, 0.0f, D_L09_0015F580,
                                 D_L09_0015F580, D_L09_0015F580);
