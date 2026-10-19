@@ -1421,6 +1421,11 @@ extern char D_L04_00173FE0[];
 /* Three-state motion update. The saved position is restored when the timer expires. */
 void leaf_update(struct Moby *moby) __asm__("FUN_L04_002d7e90");
 void leaf_update(struct Moby *moby) {
+    enum {
+        LEAF_INITIALIZE = 0,
+        LEAF_WAIT_FOR_ACTIVATION = 1,
+        LEAF_UPDATE_MOTION = 2
+    };
     Vec4 random;
     Vec4 old;
     Vec4 work;
@@ -1440,13 +1445,13 @@ void leaf_update(struct Moby *moby) {
     speed = vector_length_xy(data);
     qcopy(&old, &moby->pos);
     switch (moby->state) {
-    case 0:
+    case LEAF_INITIALIZE:
         qcopy(data + 0x30, &moby->pos);
         *(int *)(data + 0x40) = *(int *)(data + 0x44) = random_int_between(120, 2400);
         *(float *)(data + 0x4c) = moby->scale * random_float_between(0.8f, 1.2f);
         moby->state = 1;
         break;
-    case 1:
+    case LEAF_WAIT_FOR_ACTIVATION:
         if (!(vector_distance(&moby->pos, D_L04_00166F40) < 32.0f))
             return;
         if (!fast_dec_timer((int *)(data + 0x44)))
@@ -1470,7 +1475,7 @@ void leaf_update(struct Moby *moby) {
         *(int *)(motion + 16) = *(int *)(motion + 17) = random_int_between(720, 1200);
         moby->state = 2;
         return;
-    case 2:
+    case LEAF_UPDATE_MOTION:
         fast_dec_timer((int *)(data + 0x44));
         normalize_vector_xyz(&random, &random, D_L04_001CB940[5] / 10.0f);
         add_vector_xyz(data + 0x10, data + 0x10, &random);
