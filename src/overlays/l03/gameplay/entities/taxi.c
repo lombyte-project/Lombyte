@@ -504,6 +504,7 @@ void FUN_L03_002cbea8(struct Moby *m) {
     enum {
         MINE_FALL_UNTIL_LANDING = 1,
         MINE_HOME_ON_TARGET = 2,
+        MINE_ARM_AND_MONITOR_PROXIMITY = 3,
         MINE_EXPLODE_AND_REMOVE = 4,
         MINE_SHRINK_AND_REMOVE = 5
     };
@@ -544,7 +545,7 @@ void FUN_L03_002cbea8(struct Moby *m) {
         tmp[2] += frame_time * 4.0f;
         mine_vec_add(&m->pos, &m->pos, tmp);
         break;
-    case 3:
+    case MINE_ARM_AND_MONITOR_PROXIMITY:
         mine_tick(&v->timer);
         t = v->target;
         if (t != 0 && t->state != 0xFE && t->state != 0xFD && mine_dist(&m->pos, &t->pos) < 3.0f && v->timer == 0) {
