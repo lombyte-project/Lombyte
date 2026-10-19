@@ -367,7 +367,8 @@ extern char D_0013E633_2C73D0[] __asm__("D_001413D0");
 
 void FUN_L09_002c6230(Moby *moby) {
     enum {
-        RESPONSE_FATAL_KNOCKBACK = 1
+        RESPONSE_FATAL_KNOCKBACK = 1,
+        RESPONSE_NO_REACTION = 11
     };
     char hit_pos[16];
     int hit;
@@ -453,7 +454,7 @@ void FUN_L09_002c6230(Moby *moby) {
             data->reactTime = 0xF0;
             break;
         case 0:
-        case 11:
+        case RESPONSE_NO_REACTION:
         default:
             break;
         }
