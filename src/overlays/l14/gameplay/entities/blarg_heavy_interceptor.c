@@ -828,6 +828,7 @@ void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__(
 
 void FUN_L14_002ad8b8(struct Moby *moby) {
     enum {
+        HIT_REACTION_NO_ACTION = 0,
         HIT_REACTION_LETHAL = 1,
         HIT_REACTION_DEATH_FALL = 2,
         HIT_REACTION_NONE = 11
@@ -868,7 +869,7 @@ void FUN_L14_002ad8b8(struct Moby *moby) {
             moby->flags &= 0xEFFF;
             FUN_L00_00257470(moby, 0, -1);
             break;
-        case 0:
+        case HIT_REACTION_NO_ACTION:
         case HIT_REACTION_NONE:
             break;
         }
