@@ -954,7 +954,7 @@ void FUN_L02_00225c20(void) {
             }
         }
     } break;
-    case 0x7F:
+    case HERO_STATE_SINK:
         if (((Moby *)hero.unk6A4) == 0) {
             Moby *m;
 
@@ -2143,7 +2143,7 @@ void FUN_L02_00225c20(void) {
         FUN_L00_0020b5b8_cf();
         FUN_L00_00216de8_cf();
         break;
-    case 0x16: {
+    case HERO_STATE_HURT: {
         float len;
         float dec;
 
