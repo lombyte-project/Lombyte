@@ -184,7 +184,9 @@ void hydrodisplacer_faucet_update(char *m) __asm__("FUN_L05_002f8080");
 void hydrodisplacer_faucet_update(char *m) {
     enum {
         HYDRODISPLACER_FAUCET_ANIM_WAIT_FOR_LINK_FLAG_1 = 0,
-        HYDRODISPLACER_FAUCET_ANIM_WAIT_FOR_LINK_FLAG_2 = 2
+        HYDRODISPLACER_FAUCET_ANIM_TRANSITION_TO_LINK_FLAG_2_WAIT = 1,
+        HYDRODISPLACER_FAUCET_ANIM_WAIT_FOR_LINK_FLAG_2 = 2,
+        HYDRODISPLACER_FAUCET_ANIM_TRANSITION_TO_LINK_FLAG_1_WAIT = 3
     };
     struct Hero *g = &hero;
     int f = 0;
@@ -203,11 +205,11 @@ void hydrodisplacer_faucet_update(char *m) {
             !f)
             blend_moby_animation(m, 3, 0, 0);
         break;
-    case 3:
+    case HYDRODISPLACER_FAUCET_ANIM_TRANSITION_TO_LINK_FLAG_1_WAIT:
         if (m[0x70] & 2)
             blend_moby_animation(m, 0, 0, 0);
         break;
-    case 1:
+    case HYDRODISPLACER_FAUCET_ANIM_TRANSITION_TO_LINK_FLAG_2_WAIT:
         if (m[0x70] & 2)
             blend_moby_animation(m, 2, 0, 0);
         break;
