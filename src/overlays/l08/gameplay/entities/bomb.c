@@ -2458,9 +2458,11 @@ void FUN_L08_002dd3c0(M46 *moby);
 void FUN_L08_002dd3c0(M46 *moby) {
     enum {
         ROCKET_STATE_INITIALIZE = 0,
+        ROCKET_STATE_APPROACH_TARGET_OFFSET = 1,
         ROCKET_STATE_HOME_TOWARD_TARGET = 2,
         ROCKET_STATE_WAIT_FOR_ACTIVATION = 3,
         ROCKET_STATE_FOLLOW_ROUTE = 4,
+        ROCKET_STATE_FLY_CONFIGURED_HEADING = 5,
         ROCKET_STATE_EXPLODE_AND_REMOVE = 6
     };
     V46 target,delta,accel,effect,aux;
@@ -2486,7 +2488,7 @@ void FUN_L08_002dd3c0(M46 *moby) {
         data->waypoint=1; moby->state=3; moby->animation=0; moby->flags=0;
         return;
     }
-    case 1: {
+    case ROCKET_STATE_APPROACH_TARGET_OFFSET: {
         D46 *target_data=data->target->data;
         int life,size0,size1;
         float yaw,pitch,radius,angle;
@@ -2638,7 +2640,7 @@ void FUN_L08_002dd3c0(M46 *moby) {
         }
         return;
     }
-    case 5:
+    case ROCKET_STATE_FLY_CONFIGURED_HEADING:
         FUN_L00_0025bc00(&moby->rotation[2],0,data->yaw,D_0015ED6C*0.5235988f);
         FUN_L00_0025bc00(&moby->rotation[1],0,-data->pitch,D_0015ED6C*0.5235988f);
         moby->rotation[0]=fast_add_rotations(moby->rotation[0],D_0015ED6C*6.2831855f);
