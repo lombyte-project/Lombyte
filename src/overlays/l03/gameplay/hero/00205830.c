@@ -1387,7 +1387,7 @@ void FUN_L03_0020ef60(void) {
         break;
     }
     case 0x21:
-    case 0x7A:
+    case HERO_STATE_WALL_BONK:
         approach_value(&hero.ground_speed, 0.0f, frame_time_sq * 24.0f);
         hero.motion.velocity.f[0] = fast_cos(hero.unkA68) * hero.ground_speed;
         hero.motion.velocity.f[1] = fast_sin(hero.unkA68) * hero.ground_speed;
@@ -2027,7 +2027,7 @@ void FUN_L03_0020ef60(void) {
         FUN_L00_0020b5b8();
         break;
     }
-    case 0x16: {
+    case HERO_STATE_HURT: {
         f32 l = vector_length_xy(&hero.motion.velocity);
         f32 d = frame_time_sq * 4.0f;
         if (hero.air_frames.s == 0 && scale_game_frames(10) < hero.state_timer) {
