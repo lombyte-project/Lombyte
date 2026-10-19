@@ -239,6 +239,9 @@ extern H910 coll_hit __asm__("D_L00_00173E40");
 
 void mine_update(M910 *m) __asm__("FUN_L00_002aa670");
 void mine_update(M910 *m) {
+    enum {
+        MINE_DEBRIS_SPHERICAL_VELOCITY = 3
+    };
     B910 a = D_L00_001E9830;
     B910 b = D_L00_001E9880;
     U910 c;
@@ -905,7 +908,7 @@ void mine_update(M910 *m) {
                                 mine_debris((char *)r, (char *)n, c1, c2, sz, life, 2);
                                 break;
                             }
-                            case 3: {
+                            case MINE_DEBRIS_SPHERICAL_VELOCITY: {
                                 int c1 = mine_blend_color(0x7F000000, 0x7F182030,
                                                           random_float_between(0.25f, 1.0f));
                                 int c2 =
