@@ -1493,6 +1493,7 @@ void floating_platform_update(struct Moby *moby) {
     enum {
         STATE_INITIALIZE = 0,
         STATE_WAIT_FOR_TILT_REQUEST = 1,
+        STATE_WAIT_FOR_SINK_REQUEST = 2,
         STATE_TILT_DELAY = 3,
         STATE_WAIT_FOR_SINK_TRIGGER = 4,
         STATE_SINKING = 5
@@ -1596,7 +1597,7 @@ void floating_platform_update(struct Moby *moby) {
         break;
     case STATE_WAIT_FOR_TILT_REQUEST:
         break;
-    case 2:
+    case STATE_WAIT_FOR_SINK_REQUEST:
         break;
     default:
         break;
