@@ -158,6 +158,7 @@ void FUN_L18_0022e8f8(void) {
         HERO_STATE_GRIND_RAIL_TRANSFER = 42,
         HERO_STATE_GRIND_ATTACK = 43,
         HERO_STATE_GRIND_COLLISION_RECOVERY = 66,
+        HERO_STATE_DROWNING_DEATH = 106,
         HERO_STATE_DEATH_FALL = 119
     };
     unsigned char *moby;
@@ -487,7 +488,7 @@ void FUN_L18_0022e8f8(void) {
                 case 71:
                 case 87:
                 case 98:
-                case 106:
+                case HERO_STATE_DROWNING_DEATH:
                 case 128:
                 case 130:
                     if (hero.unkA98 & 2) {
