@@ -142,7 +142,8 @@ void FUN_L05_00255960(void) {
         HERO_STATE_LEDGE_HANG_ENTRY = 24,
         HERO_STATE_LEDGE_HANG = 25,
         HERO_STATE_LEDGE_SHIMMY_POSITIVE_YAW_OFFSET = 26,
-        HERO_STATE_LEDGE_SHIMMY_NEGATIVE_YAW_OFFSET = 27
+        HERO_STATE_LEDGE_SHIMMY_NEGATIVE_YAW_OFFSET = 27,
+        HERO_STATE_LEDGE_JUMP = 28
     };
     unsigned char *moby;
     int prevSub;
@@ -1509,7 +1510,7 @@ void FUN_L05_00255960(void) {
                 case HERO_STATE_PACK_LONG_JUMP:
                 case 17:
                 case 18:
-                case 28:
+                case HERO_STATE_LEDGE_JUMP:
                 case 60:
                 case 105:
                     if (hero.unk4AE != 0) {
