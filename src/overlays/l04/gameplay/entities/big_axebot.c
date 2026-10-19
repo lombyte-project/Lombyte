@@ -2309,8 +2309,10 @@ void blarg_trooper_update(struct Moby *moby) {
         BLARG_TROOPER_STATE_INITIALIZE = 0,
         BLARG_TROOPER_STATE_IDLE = 1,
         BLARG_TROOPER_STATE_JUMP = 4,
+        BLARG_TROOPER_STATE_AIM = 5,
         BLARG_TROOPER_STATE_FIRE = 6,
         BLARG_TROOPER_STATE_MELEE_ATTACK = 7,
+        BLARG_TROOPER_STATE_HIT_RECOVERY = 8,
         BLARG_TROOPER_STATE_DYING = 11
     };
     enum {
@@ -2693,7 +2695,7 @@ void blarg_trooper_update(struct Moby *moby) {
             moby->state = 1;
         }
         break;
-    case 5: {
+    case BLARG_TROOPER_STATE_AIM: {
         float a =
             fast_arc_tan(st.v50[0] - moby->pos.x, st.v50[1] - moby->pos.y);
         FUN_L00_00258278(moby, (float *)(data + 0xEC), a, frame_scale_sq * 0.03f, frame_scale_sq * 0.3f,
@@ -2816,7 +2818,7 @@ void blarg_trooper_update(struct Moby *moby) {
             blend_moby_animation_p(moby, (void *)4, 0, (void *)scale_game_frames(7));
         }
         break;
-    case 8:
+    case BLARG_TROOPER_STATE_HIT_RECOVERY:
     case 9:
     case 10:
         if (*(float *)(data + 0xF4) > 0.0f) {
