@@ -1774,7 +1774,9 @@ void elevator_update(struct Moby *m) __asm__("FUN_L14_002ee8d8");
 void elevator_update(struct Moby *m) {
     enum {
         ELEVATOR_STATE_INITIALIZE = 0,
+        ELEVATOR_STATE_WAIT_FOR_RIDER = 1,
         ELEVATOR_STATE_FOLLOW_PATH = 2,
+        ELEVATOR_STATE_SETTLE_AT_ENDPOINT = 3,
         ELEVATOR_STATE_WAIT_FOR_RIDER_EXIT = 4
     };
     L14VendorVars *d = (L14VendorVars *)m->pvars;
@@ -1815,7 +1817,7 @@ void elevator_update(struct Moby *m) {
         d->i138 = 0;
         break;
     }
-    case 1:
+    case ELEVATOR_STATE_WAIT_FOR_RIDER:
         FUN_L14_002ef6f0(m);
         if (d->clip_a >= 0 && vendor_inside(&hero.motion.pos, d->clip_a) != 0) {
             m->command = 0;
@@ -1876,7 +1878,7 @@ void elevator_update(struct Moby *m) {
         vendor_sub(&delta, &m->pos, &old);
         update_entity_matrix(d->spring, &delta, &rot, &m->rot);
         break;
-    case 3:
+    case ELEVATOR_STATE_SETTLE_AT_ENDPOINT:
         if (vendor_length(d->vel) >= 0.001f) {
             if (voice_is_playing(m, d->motor) == 0)
                 d->motor = vendor_sound(0, 4, m);
