@@ -322,7 +322,8 @@ void sand_shark_update(struct Moby *moby) {
         SAND_SHARK_FACE_TARGET = 15,
         SAND_SHARK_ALIGN_TO_GROUND_BEFORE_APPROACH_TARGET = 19,
         SAND_SHARK_ALIGN_TO_GROUND_BEFORE_RETURN_HOME = 20,
-        SAND_SHARK_FADE_OUT = 25
+        SAND_SHARK_FADE_OUT = 25,
+        SAND_SHARK_BALLISTIC_FLIGHT_WITH_PARTICLES = 27
     };
     Varsd3e50 *vars;
     OvlVec4 v0;
@@ -788,7 +789,7 @@ void sand_shark_update(struct Moby *moby) {
         }
         break;
     }
-    case 27: {
+    case SAND_SHARK_BALLISTIC_FLIGHT_WITH_PARTICLES: {
         int life;
 
         FUN_L00_00257d78_e50(&v1, 0.0f, 0.2f);
