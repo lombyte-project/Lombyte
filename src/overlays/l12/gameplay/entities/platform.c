@@ -549,6 +549,12 @@ extern void func_L00_00263950_2E2EF0(char *,char *,int,float,float) __asm__("FUN
 extern void func_L00_0025B178_2E2EF0(void *) __asm__("FUN_L00_0025a120");
 
 void FUN_L12_002e1be0(TrollMoby54_2E2EF0 *moby) {
+    enum {
+        TROLL_INITIALIZE = 0,
+        TROLL_PURSUE_TARGET = 4,
+        TROLL_MELEE_ATTACK = 5,
+        TROLL_RETURN_HOME = 6
+    };
     TargetReport54_2E2EF0 work;
     TrollMoby54_2E2EF0 *iterator;
     float trajectory;
@@ -563,7 +569,7 @@ void FUN_L12_002e1be0(TrollMoby54_2E2EF0 *moby) {
     if (!target) target=*(TrollMoby54_2E2EF0 **)D_0013E633_2E2EF0;
     if (moby->pos[2]<26.0f) { func_0020D678_2E2EF0(moby); return; }
     switch(moby->state) {
-    case 0:
+    case TROLL_INITIALIZE:
         if(data->sleep) {
             qcopy(data->home,moby->pos); moby->state=9;
             if(moby->anim!=12) func_00213DE0_2E2EF0(moby,12,0,3);
@@ -691,7 +697,7 @@ void FUN_L12_002e1be0(TrollMoby54_2E2EF0 *moby) {
         func_L00_002592B0_2E2EF0((char *)moby,&data->turn_velocity,angle,0.03f,0.3f,D_0015ED6C*6.2831855f);
         if(moby->anim_flags&2) { moby->state=4; data->blocked=0; func_L12_002E2BF8_2E2EF0((unsigned char *)moby); }
         break;
-    case 4: {
+    case TROLL_PURSUE_TARGET: {
         float chase_angle, look_difference, clamp;
         chase_angle=func_L00_001FF860_2E2EF0(target->pos[0]-moby->pos[0],target->pos[1]-moby->pos[1]);
         look_difference=func_001FA790_2E2EF0(chase_angle,moby->rot[2]);
@@ -714,7 +720,7 @@ void FUN_L12_002e1be0(TrollMoby54_2E2EF0 *moby) {
         moby->proximity=0;
         break;
     }
-    case 5:
+    case TROLL_MELEE_ATTACK:
         (*(TrollMoby54_2E2EF0 **)D_0013E633_2E2EF0)->anim_rate=1.3f;
         angle=func_L00_001FF860_2E2EF0(target->pos[0]-moby->pos[0],target->pos[1]-moby->pos[1]);
         func_L00_002592B0_2E2EF0((char *)moby,&data->turn_velocity,angle,0.05f,0.3f,0.2f);
@@ -725,7 +731,7 @@ void FUN_L12_002e1be0(TrollMoby54_2E2EF0 *moby) {
         }
         if((moby->anim_flags&2)&&func_001F9D48_2E2EF0(moby->pos,target->pos)>=2.0f) { moby->state=4; data->blocked=0; func_L12_002E2BF8_2E2EF0((unsigned char *)moby); }
         break;
-    case 6: {
+    case TROLL_RETURN_HOME: {
         float return_distance;
         func_L12_002E41C8_2E2EF0((char *)moby,func_L00_001FF860_2E2EF0(data->home[0]-moby->pos[0],data->home[1]-moby->pos[1]));
         if(func_001F9D48_2E2EF0(moby->pos,data->home)<2.0f) {
