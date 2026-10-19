@@ -284,7 +284,8 @@ void clank_cutscene_trigger_update(DoorMoby *m) __asm__("FUN_L00_002d9dc8");
 void clank_cutscene_trigger_update(DoorMoby *m) {
     enum {
         CLANK_TRIGGER_INITIALIZE_DIALOGUE = 0,
-        CLANK_TRIGGER_POLL_DIALOGUE = 1
+        CLANK_TRIGGER_POLL_DIALOGUE = 1,
+        CLANK_TRIGGER_WAIT_TO_REPOLL_DIALOGUE = 2
     };
     DoorVars *vars;
 
@@ -327,7 +328,7 @@ void clank_cutscene_trigger_update(DoorMoby *m) {
             initialize_global_state_entry(1);
         }
         break;
-    case 2:
+    case CLANK_TRIGGER_WAIT_TO_REPOLL_DIALOGUE:
         if (D_L00_0015F5C4 != 2) {
             m->state = 1;
         }
