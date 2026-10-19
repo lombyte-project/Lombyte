@@ -29,6 +29,7 @@ void mark_moby_for_removal(struct Moby *obj) __asm__("FUN_0020c828");
 void FUN_L11_002cb668(struct Moby *moby) {
     enum {
         PICKUP_INITIALIZE = 0,
+        PICKUP_IDLE = 1,
         PICKUP_CHECK_PROXIMITY = 2
     };
     switch (moby->state) {
@@ -41,7 +42,7 @@ void FUN_L11_002cb668(struct Moby *moby) {
             moby->state = 1;
         }
         break;
-    case 1:
+    case PICKUP_IDLE:
         break;
     case PICKUP_CHECK_PROXIMITY:
         fast_add_rotations(moby->rot.z, frame_time * 4.7123890f);
