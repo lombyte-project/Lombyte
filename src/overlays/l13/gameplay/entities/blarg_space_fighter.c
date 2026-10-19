@@ -617,6 +617,7 @@ void FUN_L13_002c2d30(unsigned char *moby) {
         HIT_REACTION_NONE = 0,
         HIT_REACTION_LETHAL = 1,
         HIT_REACTION_REMOVE = 2,
+        HIT_REACTION_LOW_INTERPOLATION_TARGET = 3,
         HIT_REACTION_HIGH_INTERPOLATION_TARGET = 9,
         HIT_REACTION_NO_HIT = 11
     };
@@ -689,7 +690,7 @@ void FUN_L13_002c2d30(unsigned char *moby) {
         case 10:
             d[0x67] = 0xFA;
             break;
-        case 3:
+        case HIT_REACTION_LOW_INTERPOLATION_TARGET:
         case 4:
         case 5:
         case 6:
