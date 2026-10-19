@@ -70,6 +70,12 @@ extern s32 D_L05_0015FB00;
 extern u8 D_L05_0015F87C __attribute__((sda));
 
 void FUN_L05_00262b58(HudCounter *element) {
+    enum {
+        HUD_COUNTER_WAITING_FOR_COMBO = 0,
+        HUD_COUNTER_TRACKING_COMBO = 1,
+        HUD_COUNTER_RESULT_COUNTDOWN = 2,
+        HUD_COUNTER_REWARD_COUNTDOWN = 3
+    };
     f32 smoothed;
     u8 *state_bytes;
     s32 combo;
@@ -79,7 +85,7 @@ void FUN_L05_00262b58(HudCounter *element) {
     state_bytes = &element->timer;
     element->smoothed = truncate_float_to_s32(smoothed);
     switch (state_bytes[2]) {
-    case 0: {
+    case HUD_COUNTER_WAITING_FOR_COMBO: {
         struct Hero *player = &hero;
         if (player->air_frames.s < 6) {
             return;
@@ -101,7 +107,7 @@ void FUN_L05_00262b58(HudCounter *element) {
         state_bytes[0] = 0;
         break;
     }
-    case 1: {
+    case HUD_COUNTER_TRACKING_COMBO: {
         struct Hero *flag_source;
         struct Hero *player;
         if (element->timer < 10) {
@@ -161,8 +167,8 @@ void FUN_L05_00262b58(HudCounter *element) {
         }
         break;
     }
-    case 2:
-    case 3:
+    case HUD_COUNTER_RESULT_COUNTDOWN:
+    case HUD_COUNTER_REWARD_COUNTDOWN:
         if (state_bytes[0] == 0) {
             D_L05_0015FB00 = 0;
             D_L05_0015FAD4 = 0;
