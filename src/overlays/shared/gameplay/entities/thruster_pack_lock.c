@@ -443,7 +443,7 @@ int FUN_L11_003192c8(char *moby) {
     TrailQuad quads[16];
     float offset[2][4];
     short *list, *next_list;
-    int i, j, k, h, slot, more, next_k, next_h, own_class, other_class, visible, half, corner;
+    int i, j, segment, side, slot, more, next_segment, next_side, own_class, other_class, visible, half, corner;
     float base, blend;
     long skip;
     char *other, *trail;
@@ -499,23 +499,23 @@ int FUN_L11_003192c8(char *moby) {
         }
         if (!skip) {
             trail = *(char **)(other + 0x78);
-            k = 0;
+            segment = 0;
             if (*(int *)(trail + 0x2C0) > 0) {
                 do {
-                    next_k = k + 1;
-                    slot = (*(int *)(trail + 0x2C4) - k + 15) % 16;
-                    h = 0;
+                    next_segment = segment + 1;
+                    slot = (*(int *)(trail + 0x2C4) - segment + 15) % 16;
+                    side = 0;
                     do {
-                        next_h = h + 1;
+                        next_side = side + 1;
                         for (corner = 0; corner < 4; corner++) {
                             int point = (slot + (corner >> 1)) % 16;
-                            add_vector_xyz(quads[k].positions[corner], trail + 0xC0 + h * 0x100 + point * 16, offset[corner & 1]);
+                            add_vector_xyz(quads[segment].positions[corner], trail + 0xC0 + side * 0x100 + point * 16, offset[corner & 1]);
                         }
-                        draw_packet(&quads[k], 0, 0);
-                        h = next_h;
-                    } while (h < 2);
-                    k = next_k;
-                } while (k < *(int *)(trail + 0x2C0));
+                        draw_packet(&quads[segment], 0, 0);
+                        side = next_side;
+                    } while (side < 2);
+                    segment = next_segment;
+                } while (segment < *(int *)(trail + 0x2C0));
             }
         }
         more = *list >= 0;
