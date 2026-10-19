@@ -269,6 +269,7 @@ void magnetboots_update(struct Moby *m) {
     enum {
         MAGNETBOOTS_STATE_INITIALIZE = 0,
         MAGNETBOOTS_STATE_WAIT_FOR_HERO_PROXIMITY = 1,
+        MAGNETBOOTS_STATE_WAIT_FOR_SCENE_EXIT = 2,
         MAGNETBOOTS_STATE_REMOVE = 3
     };
     char *d = (char *)m->pvars;
@@ -295,7 +296,7 @@ void magnetboots_update(struct Moby *m) {
             }
         }
         break;
-    case 2:
+    case MAGNETBOOTS_STATE_WAIT_FOR_SCENE_EXIT:
         if (D_L10_0015F5C4_vendor != 2) {
             queue_dialogue_message(0x271B, -1);
             D_L10_0015F640 = 0xB4;
