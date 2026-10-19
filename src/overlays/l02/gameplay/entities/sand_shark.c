@@ -2122,17 +2122,19 @@ extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 void bulldozer_update(struct Moby *moby) __asm__("FUN_L02_002dca10");
 void bulldozer_update(struct Moby *moby) {
     enum {
+        BULLDOZER_ANIM_TRANSITION_TO_TIMED_WAIT = 0,
         BULLDOZER_ANIM_TIMED_WAIT = 1,
+        BULLDOZER_ANIM_TRANSITION_TO_TIMED_WAIT_BEFORE_RESTART = 2,
         BULLDOZER_ANIM_TIMED_WAIT_BEFORE_RESTART = 3
     };
     switch (moby->prev_seq) {
-    case 0:
+    case BULLDOZER_ANIM_TRANSITION_TO_TIMED_WAIT:
         if (moby->anim_flags & 2) {
             blend_moby_animation(moby, 1, 0, 0);
             moby->command = func_001FA898_r(multiply_global_factor_ed64(random_float_between_alt(180.0f, 240.0f)));
         }
         break;
-    case 2:
+    case BULLDOZER_ANIM_TRANSITION_TO_TIMED_WAIT_BEFORE_RESTART:
         if (moby->anim_flags & 2) {
             blend_moby_animation(moby, 3, 0, 0);
             moby->command = func_001FA898_r(multiply_global_factor_ed64(random_float_between_alt(180.0f, 240.0f)));
