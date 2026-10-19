@@ -3043,6 +3043,7 @@ void FUN_L17_002f0210(struct Moby *moby) {
     enum {
         ROBOT_DOG_STATE_FALL_UNTIL_LANDING = 4,
         ROBOT_DOG_STATE_TRACK_TARGET_FACING = 5,
+        ROBOT_DOG_STATE_WAIT_FOR_CHASE_TRIGGER = 6,
         ROBOT_DOG_STATE_TURN_TOWARD_TARGET = 8,
         ROBOT_DOG_STATE_APPROACH_TARGET = 9,
         ROBOT_DOG_STATE_ATTACK_TARGET = 10,
@@ -3079,7 +3080,7 @@ void FUN_L17_002f0210(struct Moby *moby) {
     switch (moby->state) {
     case ROBOT_DOG_STATE_FALL_UNTIL_LANDING:
     case ROBOT_DOG_STATE_TRACK_TARGET_FACING:
-    case 6:
+    case ROBOT_DOG_STATE_WAIT_FOR_CHASE_TRIGGER:
         mode = 1;
         break;
     case 7:
