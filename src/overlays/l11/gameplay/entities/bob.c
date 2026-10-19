@@ -863,6 +863,9 @@ extern int point_in_path_xy(void *, void *, int) __asm__("FUN_L00_00259740");
 extern int follow_path(int *, int, int, void *, void *, void *, float) __asm__("FUN_L01_00276fe8");
 
 int FUN_L11_002d2340(struct Moby *moby, char *other) {
+    enum {
+        RESORT_OWNER_FINAL_PATH_LEG = 3
+    };
     struct TgtData *d = (struct TgtData *)moby->pvars;
     int *p = d->a;
     int *ent = D_L11_001B0EB0[*(int *)((char *)p - (-(d->idx * 4)))];
@@ -879,7 +882,7 @@ int FUN_L11_002d2340(struct Moby *moby, char *other) {
         buf[2] = d->c[1];
         buf[3] = d->c[2];
         break;
-    case 3:
+    case RESORT_OWNER_FINAL_PATH_LEG:
         n = 3;
         buf[1] = d->c[0];
         buf[2] = d->c[1];
