@@ -163,7 +163,8 @@ void hero_update_transitions(void) {
         HERO_STATE_GRIND_JUMP = 41,
         HERO_STATE_GRIND_RAIL_TRANSFER = 42,
         HERO_STATE_GRIND_ATTACK = 43,
-        HERO_STATE_GRIND_OBSTACLE_HOP = 66
+        HERO_STATE_GRIND_OBSTACLE_HOP = 66,
+        HERO_STATE_DROWNING = 106
     };
     unsigned char *moby;
     int prevSub;
@@ -512,7 +513,7 @@ void hero_update_transitions(void) {
                 case 71:
                 case 87:
                 case 98:
-                case 106:
+                case HERO_STATE_DROWNING:
                 case 128:
                 case 130:
                     if (hero.unkA98 & 2) {
