@@ -95,6 +95,9 @@ void snow_plow_update(struct Moby *moby) {
         SNOW_PLOW_CLASS_OFFSET_WITH_QUARTER_TURN_LINKED_MOBY = 0xe,
         SNOW_PLOW_CLASS_OFFSET_WITH_ALIGNED_LINKED_MOBY = 0x1c
     };
+    enum {
+        SNOW_PLOW_CLASS_OFFSET_WITH_TWO_POINT_CART_BURST = 0x1b
+    };
     Vec4 old;
     Vec4 delta, *d;
     /* The sphere query is its position followed by the record; the hit cases pass one or the other. */
@@ -218,7 +221,7 @@ void snow_plow_update(struct Moby *moby) {
             attach_manipulator((char *)moby, 0, data + 0x180);
             *(int *)(data + 0x140) = 0;
             break;
-        case 0x16: case 0x1b:
+        case 0x16: case SNOW_PLOW_CLASS_OFFSET_WITH_TWO_POINT_CART_BURST:
             attach_manipulator((char *)moby, 0, data + 0x180);
             *(int *)(data + 0x140) = 0;
             attach_manipulator((char *)moby, 1, data + 0x1c0);
@@ -235,7 +238,7 @@ void snow_plow_update(struct Moby *moby) {
             *(float *)(data + 0x140) = fast_add_rotations(*(float *)(data + 0x140), frame_time * 12.566371f);
             FUN_L00_001fff28(data + 0x190, 2, *(float *)(data + 0x140));
             break;
-        case 0x16: case 0x1b:
+        case 0x16: case SNOW_PLOW_CLASS_OFFSET_WITH_TWO_POINT_CART_BURST:
             *(float *)(data + 0x140) = fast_add_rotations(*(float *)(data + 0x140), frame_time * 12.566371f);
             FUN_L00_001fff28(data + 0x190, 2, *(float *)(data + 0x140));
             *(float *)(data + 0x144) = fast_add_rotations(*(float *)(data + 0x144), frame_time * 12.566371f);
@@ -301,7 +304,7 @@ hit:
             *(int *)(data + 0x170) = scale_game_frames(600);
             *(int *)(data + 0x174) = 1;
             break;
-        case 0x1b:
+        case SNOW_PLOW_CLASS_OFFSET_WITH_TWO_POINT_CART_BURST:
             sphere_pos.q = 0;
             sphere_pos.f[2] = 0.75f;
             clear_vector(&sphere);
