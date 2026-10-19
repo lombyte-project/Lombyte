@@ -794,6 +794,7 @@ extern int D_L11_0015FFD8;
 
 void FUN_L11_002d2088(struct Moby *moby, unsigned char state) {
     enum {
+        RESORT_OWNER_CHECK_INITIAL_DIALOGUE = 1,
         RESORT_OWNER_WAIT_TO_FOLLOW_HERO = 3,
         RESORT_OWNER_MOVE_TO_PATH_POINT = 6,
         RESORT_OWNER_JUMP_TO_TARGET = 7,
@@ -806,7 +807,7 @@ void FUN_L11_002d2088(struct Moby *moby, unsigned char state) {
 
     moby->state = state;
     switch (moby->state) {
-    case 1:
+    case RESORT_OWNER_CHECK_INITIAL_DIALOGUE:
     case RESORT_OWNER_WAIT_TO_FOLLOW_HERO:
     case 11:
     case RESORT_OWNER_CHECK_PATH_COMPLETION_DIALOGUE:
