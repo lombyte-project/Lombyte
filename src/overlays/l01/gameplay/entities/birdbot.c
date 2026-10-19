@@ -1548,6 +1548,7 @@ void peckbot_update(Mob577 *self) {
     enum {
         PECKBOT_STATE_INITIALIZE = 0,
         PECKBOT_STATE_GROUNDED_IDLE = 1,
+        PECKBOT_STATE_FACE_AWAY_FROM_TARGET = 2,
         PECKBOT_STATE_CHASE_TARGET = 3,
         PECKBOT_STATE_ATTACK_TARGET = 4,
         PECKBOT_STATE_RETURN_HOME = 5,
@@ -1833,7 +1834,7 @@ void peckbot_update(Mob577 *self) {
             return;
         }
         break;
-    case 2:
+    case PECKBOT_STATE_FACE_AWAY_FROM_TARGET:
         ang =
             FUN_L00_001ff8b0_cf(self->pos.f[0] - target.pos.f[0], self->pos.f[1] - target.pos.f[1]);
         FUN_L00_00258278(self, v->turn, ang, 0.02f, 0.3f, 0.1f);
