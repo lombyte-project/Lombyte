@@ -517,10 +517,14 @@ extern f32 advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__(
 extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
 
 void FUN_L06_002d9d10(unsigned char *moby) {
+    enum {
+        INITIALIZE_POSITION_ENDPOINTS = 0,
+        INTERPOLATE_POSITION_TO_TARGET = 2
+    };
     char *data;
     data = *(char **)(moby + 0x78);
     switch (moby[0x20]) {
-    case 0: {
+    case INITIALIZE_POSITION_ENDPOINTS: {
         char *p = (char *)moby + 0x10;
         char *q;
         qcopy(data, p);
@@ -530,7 +534,7 @@ void FUN_L06_002d9d10(unsigned char *moby) {
         moby[0x20] = 1;
         break;
     }
-    case 2: {
+    case INTERPOLATE_POSITION_TO_TARGET: {
         float a = (&frame_time)[1] * 10.0f;
         advance_accelerated_scalar((float *)(data + 0x20), (float *)(data + 0x24),
                                    *(float *)(data + 0x28), a, a, frame_time * 20.0f);
