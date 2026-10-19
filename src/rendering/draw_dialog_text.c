@@ -104,6 +104,7 @@ void draw_dialog_text(void) {
     enum {
         MODE_FREEZE_TIMER_GATED_CENTERED_FOOTER_MESSAGE = 2,
         MODE_FREEZE_FORMATTED_CENTERED_FOOTER_MESSAGE = 5,
+        MODE_FREEZE_PAIRED_FOOTER_MESSAGE = 23,
         MODE_FREEZE_FORMATTED_PAIRED_FOOTER_MESSAGE = 24
     };
     char buf[0x200];
@@ -245,7 +246,7 @@ void draw_dialog_text(void) {
             sprintf(buf, freeze_fmt_scsc, get_help_message_text(0x4FAE), 1, 1, get_help_message_text(0x4FAA));
             text = buf;
             break;
-        case 23:
+        case MODE_FREEZE_PAIRED_FOOTER_MESSAGE:
             left = 0x524E;
             right = 0x524B;
             text = get_help_message_text(0x4FB1);
