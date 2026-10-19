@@ -977,7 +977,8 @@ void FUN_L03_0029c9d0(struct Moby *moby) {
         MOBY_CLASS_TWO_JOINT_PARTICLE_EMITTER = 0x74,
         MOBY_CLASS_JOINT_ZERO_TEN_PARTICLE_EMITTER = 0x75,
         MOBY_CLASS_FIFTEEN_PARTICLE_BURST_EMITTER = 0x76,
-        MOBY_CLASS_DEFAULT_COLOR_CHILD_EFFECT_EMITTER = 0x77
+        MOBY_CLASS_DEFAULT_COLOR_CHILD_EFFECT_EMITTER = 0x77,
+        MOBY_CLASS_GRAY_JOINT_ZERO_TEN_PARTICLE_EMITTER = 0x78
     };
     char *data = (char *)moby->pvars;
     if (moby->state == 0) {
@@ -994,7 +995,7 @@ void FUN_L03_0029c9d0(struct Moby *moby) {
     }
     switch (moby->oclass) {
     case MOBY_CLASS_JOINT_ZERO_TEN_PARTICLE_EMITTER:
-    case 0x78:
+    case MOBY_CLASS_GRAY_JOINT_ZERO_TEN_PARTICLE_EMITTER:
         *(int *)(data + 0x150) = allocate_voice_for_target_entry(0, 4, (int)moby);
         break;
     case MOBY_CLASS_ALTERNATE_COLOR_CHILD_EFFECT_EMITTER:
