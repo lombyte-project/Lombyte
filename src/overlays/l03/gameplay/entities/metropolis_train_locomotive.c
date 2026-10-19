@@ -2302,6 +2302,7 @@ extern void vector_length_xyz_cf(void *, void *, void *) __asm__("FUN_001f9a10")
 void FUN_L03_002c6fd0(Moby2C8398 *m) {
     enum {
         ENEMY_INITIALIZE = 0,
+        ENEMY_WAIT_FOR_ACTIVATION = 1,
         ENEMY_MELEE_ATTACK = 6,
         ENEMY_MOVE_TO_PATH_NODE = 7,
         ENEMY_FOLLOW_PATH_TO_END = 8,
@@ -2414,7 +2415,7 @@ void FUN_L03_002c6fd0(Moby2C8398 *m) {
             m->state = 2;
         }
         break;
-    case 1:
+    case ENEMY_WAIT_FOR_ACTIVATION:
         if ((m->b70 & 2) && m->b52 != 0) {
             blend_moby_animation(m, 0, 0, FUN_L03_002c6d98_cf(10));
         }
