@@ -101,6 +101,7 @@ void sentrybot_update(unsigned char *moby) {
         SENTRYBOT_TURN_AROUND = 8,
         SENTRYBOT_RETURN_HOME = 9,
         SENTRYBOT_PATROL_MOVE_FAST = 13,
+        SENTRYBOT_APPROACH_LINKED_MOBY = 14,
         SENTRYBOT_RETURN_HOME_FAST = 20
     };
     enum {
@@ -577,7 +578,7 @@ void sentrybot_update(unsigned char *moby) {
             }
         }
         break;
-    case 14:
+    case SENTRYBOT_APPROACH_LINKED_MOBY:
         FUN_L15_002cbba0((unsigned char *)(D_L15_0015FFD8_m + (*(int *)(data + 0x128) << 8)));
         subtract_vector_xyz(va, (char *)(D_L15_0015FFD8_m + (*(int *)(data + 0x128) << 8)) + 0x10,
                             moby + 0x10);
