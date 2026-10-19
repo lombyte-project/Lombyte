@@ -1579,7 +1579,8 @@ typedef struct {
 
 void FUN_L11_002f3350(struct Moby *moby) {
     enum {
-        MOBY_INITIALIZE = 0
+        MOBY_INITIALIZE = 0,
+        MOBY_COPY_PVAR_TO_HERO = 1
     };
     char *state = (char *)moby->pvars;
     switch (moby->state) {
@@ -1589,7 +1590,7 @@ void FUN_L11_002f3350(struct Moby *moby) {
         if (*(int *)state == -1)
             delete_moby(moby);
         break;
-    case 1:
+    case MOBY_COPY_PVAR_TO_HERO:
         if (hero.motion.pos.f[2] > 194.0f && hero.state.current != 0x32) {
             *(short unsigned int *)&hero.unk22DA = *(unsigned short *)state;
         }
