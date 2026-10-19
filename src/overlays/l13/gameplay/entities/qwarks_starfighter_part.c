@@ -1160,6 +1160,7 @@ void FUN_L13_002ece00(struct Moby *moby) {
     enum {
         PART_STATE_INITIALIZE = 0,
         PART_STATE_SYNC_PARENT_SCALE = 1,
+        PART_STATE_IDLE = 2,
         PART_STATE_MOVE_AND_SPIN = 3,
         PART_STATE_BURST_AND_REMOVE = 4
     };
@@ -1181,7 +1182,7 @@ void FUN_L13_002ece00(struct Moby *moby) {
         moby->scale = moby->pclass->scale * vars->parent->scale / vars->parent->pclass->scale;
         moby->spawn_frame = vars->parent->spawn_frame;
         break;
-    case 2:
+    case PART_STATE_IDLE:
         break;
     case PART_STATE_MOVE_AND_SPIN:
         add_vector_xyz(&moby->pos, &moby->pos, &vars->vel);
