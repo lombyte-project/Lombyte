@@ -138,6 +138,9 @@ extern int func_001F9908_r(int *) __asm__("FUN_001f9740");
 
 extern int D_L05_0015F6EC;
 void FUN_L05_00255960(void) {
+    enum {
+        HERO_STATE_LEDGE_HANG = 25
+    };
     unsigned char *moby;
     int prevSub;
     int prevState;
@@ -1142,7 +1145,7 @@ void FUN_L05_00255960(void) {
                         hero_set_state(0x19, 0);
                     }
                     break;
-                case 25:
+                case HERO_STATE_LEDGE_HANG:
                     if ((hero.unkA98 & 2) && ((unsigned char *)hero.moby)[0x53] == 0x20) {
                         set_hero_animation(0x21, 0, scale_game_frames(6));
                     }
