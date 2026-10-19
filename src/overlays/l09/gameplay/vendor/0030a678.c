@@ -15,19 +15,24 @@ void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
 void lamp_update(struct Moby *m) __asm__("FUN_L09_0030a678");
 void lamp_update(struct Moby *m) {
+    enum {
+        LAMP_STATE_INITIALIZE = 0,
+        LAMP_STATE_WAIT_FOR_HIT = 1,
+        LAMP_STATE_REMOVAL_SEQUENCE = 2
+    };
     int hit = 0;
     char *r = find_moby_hit(m, 0x10000, 0);
     switch (m->state) {
-    case 0:
+    case LAMP_STATE_INITIALIZE:
         m->state = 1;
         break;
-    case 1:
+    case LAMP_STATE_WAIT_FOR_HIT:
         if (r != 0 && *(float *)(r + 0x2C) > 0.0f)
             hit = 1;
         if (hit)
             m->state = 2;
         break;
-    case 2:
+    case LAMP_STATE_REMOVAL_SEQUENCE:
         allocate_voice_for_target_entry(0, 0, (int)m);
         FUN_L01_002787a0(m);
         FUN_L00_00263e30(m, 0x73b, 1, 0x73b, 1, 0x7, 2);
