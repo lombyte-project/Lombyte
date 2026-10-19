@@ -56,6 +56,13 @@ extern void FUN_L08_002e9758(struct Moby *);
 extern void FUN_L08_002e9a18(struct Moby *);
 
 void FUN_L08_002e9b70(struct Moby *moby) {
+    enum {
+        SWARM_INITIALIZE = 0,
+        SWARM_FOLLOW_PRIMARY_PATH = 1,
+        SWARM_FOLLOW_SECONDARY_PATH = 2,
+        SWARM_START_PRIMARY_PATH = 3,
+        SWARM_DISPERSE_AND_REMOVE = 0x63
+    };
     SwarmVars *vars = (SwarmVars *)moby->pvars;
     SwarmPathFollower *follower;
     struct Moby *target;
@@ -85,7 +92,7 @@ void FUN_L08_002e9b70(struct Moby *moby) {
         vars->sound = allocate_voice_for_target_entry(3, 4, moby);
     }
     switch (moby->state) {
-    case 0:
+    case SWARM_INITIALIZE:
         if (visited52[moby->mission + current_level_index * 16] == 0xFF) {
             mark_moby_for_removal(moby);
             return;
@@ -100,7 +107,7 @@ void FUN_L08_002e9b70(struct Moby *moby) {
         moby->rot.z = fast_arc_tan(vars->follow[1].path->points[1].f[0] - moby->pos.x,
                                    vars->follow[1].path->points[1].f[1] - moby->pos.y);
         break;
-    case 1:
+    case SWARM_FOLLOW_PRIMARY_PATH:
         waypoint = (vars->follow[0].point + vars->follow[0].path->count + vars->follow[0].direction) % vars->follow[0].path->count;
         target = &D_L08_0015FFD8[vars->target_index];
         FUN_L00_00258278(moby,
@@ -143,7 +150,7 @@ void FUN_L08_002e9b70(struct Moby *moby) {
             }
         }
         break;
-    case 2:
+    case SWARM_FOLLOW_SECONDARY_PATH:
         follower = &vars->follow[1];
         next = (vars->follow[1].point + 1) % follower->path->count;
         after = (vars->follow[1].point + 2) % follower->path->count;
@@ -181,7 +188,7 @@ void FUN_L08_002e9b70(struct Moby *moby) {
             bolt->rot.y = 0.0f;
         }
         break;
-    case 3: {
+    case SWARM_START_PRIMARY_PATH: {
         SwarmPath *path;
 
         moby->state = 1;
@@ -191,7 +198,7 @@ void FUN_L08_002e9b70(struct Moby *moby) {
         FUN_L08_002e9a18(moby);
         break;
     }
-    case 0x63:
+    case SWARM_DISPERSE_AND_REMOVE:
         for (i = 0; i < 16; i++) {
             struct Moby *part = vars->parts[i].moby;
             if (part != NULL) {
