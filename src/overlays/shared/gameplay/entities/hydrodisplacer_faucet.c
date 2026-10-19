@@ -460,10 +460,14 @@ void enqueue_callback_list_1(s32 arg0, s32 arg1) __asm__("FUN_001f4600");
 
 void FUN_L05_0030c0a8(unsigned char *m);
 void FUN_L05_0030c0a8(unsigned char *m) {
+    enum {
+        MOBY_WOBBLE_STATE_INITIALIZE = 0,
+        MOBY_WOBBLE_STATE_ANIMATE = 1
+    };
     char *d = *(char **)(m + 0x78);
     float r, lo, hi;
     switch (m[0x20]) {
-    case 0:
+    case MOBY_WOBBLE_STATE_INITIALIZE:
         *(float *)(d + 0x40) = *(float *)(m + 0x48);
         *(float *)(d + 0x48) = random_angle_radians();
         r = random_angle_radians();
@@ -479,7 +483,7 @@ void FUN_L05_0030c0a8(unsigned char *m) {
         attach_manipulator((char *)m, 0, d);
         m[0x20] = 1;
         break;
-    case 1: {
+    case MOBY_WOBBLE_STATE_ANIMATE: {
         float k = 0.5235988f;
         float t;
         enqueue_callback_list_1((void *)FUN_L05_0030c220, m);
