@@ -28,6 +28,9 @@ extern f32 FUN_L00_00233a78_32b90(void *) __asm__("FUN_L00_00233a78");
 extern s32 FUN_L00_002595a0_32b90(f32 *, f32 *, f32, f32, f32) __asm__("FUN_L00_002595a0");
 
 f32 FUN_L06_00242950(f32 a, f32 b, f32 c) {
+    enum {
+        HERO_MOTION_Z_AXIS_ACCELERATION = 0
+    };
     f32 t[4];
     V4_32b90 v;
     V4_32b90 vector_scratch;
@@ -36,7 +39,7 @@ f32 FUN_L06_00242950(f32 a, f32 b, f32 c) {
     f32 x, y, z;
 
     switch (hero.unk20B3) {
-    case 0:
+    case HERO_MOTION_Z_AXIS_ACCELERATION:
         if (c < 0.0f) {
             FUN_001f9a68_32b90(t, &hero.motion.velocity, a);
             t[2] -= ((a * a + a) * 0.5f) * b;
