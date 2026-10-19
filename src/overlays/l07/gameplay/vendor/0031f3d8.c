@@ -39,13 +39,18 @@ extern void upd_a(void *) __asm__("FUN_L00_00250df8");
 
 void mushroom_update(char *self) __asm__("FUN_L07_0031f3d8");
 void mushroom_update(char *self) {
+    enum {
+        MUSHROOM_INITIALIZE = 0,
+        MUSHROOM_WAIT_FOR_HIT = 1,
+        MUSHROOM_SPAWN_AND_REMOVE = 2
+    };
     int flag = 0;
     char *o = find_moby_hit(self, 0x10000, 0);
     switch (((unsigned char *)self)[0x20]) {
-    case 0:
+    case MUSHROOM_INITIALIZE:
         self[0x20] = 1;
         break;
-    case 1:
+    case MUSHROOM_WAIT_FOR_HIT:
         if (o != 0 && *(float *)(o + 0x2C) > 0.0f) {
             flag = 1;
         }
@@ -53,7 +58,7 @@ void mushroom_update(char *self) {
             self[0x20] = 2;
         }
         break;
-    case 2: {
+    case MUSHROOM_SPAWN_AND_REMOVE: {
         char *m;
         FUN_0022da68_c(0, 0, (int)self);
         FUN_L01_002787a0(self);
