@@ -691,6 +691,7 @@ void FUN_L09_002e27d8(Moby *moby) {
         GROUND_ENEMY_STATE_HURT_KNOCKBACK = 6,
         GROUND_ENEMY_STATE_HURT_RECOVERY = 9,
         GROUND_ENEMY_STATE_BLOCKED_RETURN_HOME = 12,
+        GROUND_ENEMY_STATE_LEASHED_FORWARD_WALK = 13,
         GROUND_ENEMY_STATE_FATAL_KNOCKBACK = 99
     };
     V_2E39E0 previous;
@@ -1005,7 +1006,7 @@ void FUN_L09_002e27d8(Moby *moby) {
         moby->command = 0;
         break;
     }
-    case 13: {
+    case GROUND_ENEMY_STATE_LEASHED_FORWARD_WALK: {
         Moby *other;
         if (moby->seq != 0 && moby->prev_seq != 0) animate_2E39E0(moby, 0, 0, ticks_2E39E0(range_2E39E0(10, 13)));
         step.x = sine_2E39E0(moby->rot.z) * (data->speed * D_0015EE6C_2E39E0);
