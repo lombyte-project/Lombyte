@@ -668,6 +668,7 @@ extern char D_L00_00177F00[];
 
 void FUN_L00_002c97e0(Moby *m) {
     enum {
+        CHICKEN_STATE_INITIALIZE = 0,
         CHICKEN_STATE_TURN_AWAY_FROM_HERO = 2
     };
     Vec4A next_pos;
@@ -812,7 +813,7 @@ void FUN_L00_002c97e0(Moby *m) {
         speed = 0.333f;
     }
     switch (m->state) {
-    case 0:
+    case CHICKEN_STATE_INITIALIZE:
         break;
     case 1:
         if (m->anim_flags & 2) {
