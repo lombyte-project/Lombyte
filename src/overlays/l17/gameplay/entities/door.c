@@ -2434,6 +2434,7 @@ void robot_dog_update(unsigned char *m) {
         ROBOT_DOG_STATE_APPROACH_TARGET = 9,
         ROBOT_DOG_STATE_ATTACK_TARGET = 10,
         ROBOT_DOG_STATE_RETURN_HOME = 11,
+        ROBOT_DOG_STATE_RECOVER_THEN_REINITIALIZE = 12,
         ROBOT_DOG_STATE_FALL_THEN_REMOVE = 15
     };
     Vars1382 *d;
@@ -2499,7 +2500,7 @@ void robot_dog_update(unsigned char *m) {
             d->i1E8 = d->path;
         }
         break;
-    case 12:
+    case ROBOT_DOG_STATE_RECOVER_THEN_REINITIALIZE:
         if (FUN_L00_002dc9f0(m, d->a120)) {
             m[0x20] = 0;
             d->sC8 = 0;
