@@ -1972,7 +1972,10 @@ void ultramech_unlimited_update(UMoby *m) {
         ULTRAMECH_FIRE_BURST = 5,
         ULTRAMECH_WAIT_BETWEEN_BURSTS = 6,
         ULTRAMECH_APPROACH_TARGET = 7,
-        ULTRAMECH_MELEE_ATTACK = 8
+        ULTRAMECH_MELEE_ATTACK = 8,
+        ULTRAMECH_KNOCKBACK_RECOVERY = 9,
+        ULTRAMECH_DEATH_EFFECTS = 10,
+        ULTRAMECH_DEAD_WAIT_FOR_RESET = 0x40
     };
     UVec v10;
     UVec v20;
@@ -2353,7 +2356,7 @@ void ultramech_unlimited_update(UMoby *m) {
             }
         }
         break;
-    case 9: {
+    case ULTRAMECH_KNOCKBACK_RECOVERY: {
         int r = 0;
         if (d->w1D8 == 0) {
             r = mine_fall(m, d->hit);
@@ -2383,7 +2386,7 @@ void ultramech_unlimited_update(UMoby *m) {
         }
         break;
     }
-    case 10: {
+    case ULTRAMECH_DEATH_EFFECTS: {
         void *pp = &m->pos;
         void *rr = &m->rot;
         float *dd;
@@ -2399,7 +2402,7 @@ void ultramech_unlimited_update(UMoby *m) {
         FUN_L00_00263e30(m, 0x7A9, 1, 0x7A9, 2, 4, 2);
         m->state = 0x40;
         return;
-    case 0x40:
+    case ULTRAMECH_DEAD_WAIT_FOR_RESET:
         m->w94 = 0;
         m->flags = (m->flags | 0x41) & 0xEFFF;
         d->b58 = 0;
