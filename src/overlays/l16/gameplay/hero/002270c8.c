@@ -156,6 +156,7 @@ void FUN_L16_002270c8(void) {
         HERO_STATE_GRIND_JUMP = 41,
         HERO_STATE_GRIND_RAIL_TRANSFER = 42,
         HERO_STATE_GRIND_ATTACK = 43,
+        HERO_STATE_GRIND_COLLISION_RECOVERY = 66,
         HERO_STATE_WATER_DEATH = 106
     };
     unsigned char *moby;
@@ -1190,7 +1191,7 @@ void FUN_L16_002270c8(void) {
                 case HERO_STATE_GRIND_JUMP:
                 case HERO_STATE_GRIND_RAIL_TRANSFER:
                 case HERO_STATE_GRIND_ATTACK:
-                case 66:
+                case HERO_STATE_GRIND_COLLISION_RECOVERY:
                     if (hero.state.current == 0x42) {
                         hero.unk5BE = 0;
                     } else {
