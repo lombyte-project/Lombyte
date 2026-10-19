@@ -2236,18 +2236,22 @@ f32 fast_normalize_angle(f32 a) __asm__("FUN_001fa610");
 
 void cave_door_update(Moby *self) __asm__("FUN_L01_002f4348");
 void cave_door_update(Moby *self) {
+    enum {
+        CAVE_DOOR_STATE_INITIALIZE = 0,
+        CAVE_DOOR_STATE_UPDATE_ROTATION = 1
+    };
     RotVars *v;
     Moby *m;
     f32 *mv;
 
     v = self->vars;
     switch (self->state) {
-    case 0:
+    case CAVE_DOOR_STATE_INITIALIZE:
         v->angle = self->rot;
         v->speed = v->speed * DEG_TO_RAD;
         self->state = 1;
         break;
-    case 1:
+    case CAVE_DOOR_STATE_UPDATE_ROTATION:
         if (v->target != -1) {
             m = &D_L01_0015FFD8[v->target];
             if (m->oclass == 0x118) {
