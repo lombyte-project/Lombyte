@@ -2972,6 +2972,10 @@ extern unsigned char D_00141C48[];
 extern unsigned char D_00141CB8[];
 void FUN_L10_002e85b8(Moby *moby)
 {
+    enum {
+        HELP_MESSAGE_STATE_INITIALIZE = 0,
+        HELP_MESSAGE_STATE_CHECK_CONDITIONS = 1
+    };
     EvData_2E9978 *data = (EvData_2E9978 *)((int *)moby->pvars);
     Moby *other;
     int any_active;
@@ -2983,11 +2987,11 @@ void FUN_L10_002e85b8(Moby *moby)
         D_L10_00161F38 = 0;
     }
     switch (moby->state) {
-    case 0:
+    case HELP_MESSAGE_STATE_INITIALIZE:
         moby->update_dist = 0xFF;
         moby->state = 1;
         break;
-    case 1:
+    case HELP_MESSAGE_STATE_CHECK_CONDITIONS:
         if (func_00215570_2E9978(D_0013F3D0_r, data->f0) != 0
             && (((HeroPos_2E9978 *)(D_0013F3D0_r))->f200C < 2 || ((HeroPos_2E9978 *)(D_0013F3D0_r))->f200C == 9)
             && ((Msg_2E9978 *)D_L10_00179890)->f0 == 0
