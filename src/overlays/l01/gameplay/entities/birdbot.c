@@ -3247,6 +3247,10 @@ extern f32 resolve_camera_surface_height(void *, s32) __asm__("FUN_002135f0");
 
 void water_lily_update(HoverMoby *m) __asm__("FUN_L01_002f8268");
 void water_lily_update(HoverMoby *m) {
+    enum {
+        WATER_LILY_STATE_INITIALIZE = 0,
+        WATER_LILY_STATE_UPDATE_POSITION = 1
+    };
     HoverVars *v;
     struct Hero *pl;
     HoverVec old;
@@ -3264,11 +3268,11 @@ void water_lily_update(HoverMoby *m) {
         return;
     }
     switch (m->state) {
-    case 0:
+    case WATER_LILY_STATE_INITIALIZE:
         *(u128 *)v = old.q;
         m->state = 1;
         break;
-    case 1:
+    case WATER_LILY_STATE_UPDATE_POSITION:
         spring_axis_to(&m->pos.v.x, v->home_x, &v->vel_x, D_L01_00161BF0 * frame_time_sq,
                        D_L01_00161BF4, 3.0f);
         spring_axis_to(&m->pos.v.y, v->home_y, &v->vel_y, D_L01_00161BF0 * frame_time_sq,
