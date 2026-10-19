@@ -1793,7 +1793,7 @@ segments:
           - [0x123354, textbin, text_gap_002223d4_after_fun_00222290]
           - [0x123358, c, gameplay/state/fun_002223d8]
           - [0x12336c, textbin, text_gap_002223ec_after_fun_002223d8]
-          - [0x123370, c, ui/menus/fun_002223f0]
+          - [0x123370, c, ui/menus/update_timed_menu_sequence]
           - [0x1236e8, c, ui/menus/draw_menu_text_box]
           - [0x1238c8, c, ui/menus/weapons/obtain_all_gold_weapons_menu]
           - [0x123a18, c, textbin/ui/menus/draw_localized_three_option_menu]
