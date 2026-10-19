@@ -2037,6 +2037,12 @@ extern s32 FUN_L00_00233f38(void);
 void FUN_L03_002dd0f0(struct Moby *m);
 
 void FUN_L03_002dccc0(struct Moby *m) {
+    enum {
+        LIFT_INITIALIZE = 0,
+        LIFT_WAIT_FOR_DEPARTURE = 1,
+        LIFT_WAIT_FOR_HERO_ANIMATION = 2,
+        LIFT_FOLLOW_PATH = 3
+    };
     struct RailLiftVars *d = (struct RailLiftVars *)m->pvars;
     Vec4 oldPos, oldRot, move;
     s32 hero_end, lift_end;
@@ -2048,7 +2054,7 @@ void FUN_L03_002dccc0(struct Moby *m) {
     oldRot.q = *(u128 *)&m->rot;
     fast_dec_timer(&d->timer);
     switch (m->state) {
-    case 0:
+    case LIFT_INITIALIZE:
         m->command = d->start_end;
         qcopy(&m->pos, &D_L03_001B05B0[d->path[m->command]]->pts[0]);
         d->hud = -1;
@@ -2057,7 +2063,7 @@ void FUN_L03_002dccc0(struct Moby *m) {
         m->update_dist = 0xFF;
         m->draw_dist = 0xFF;
         break;
-    case 1:
+    case LIFT_WAIT_FOR_DEPARTURE:
         hero_end = vec_dist(&hero.motion.pos, &D_L03_001B05B0[d->path[0]]->pts[0]) <
                    vec_dist(&hero.motion.pos, &D_L03_001B05B0[d->path[1]]->pts[0]);
         lift_end = vec_dist(&m->pos, &D_L03_001B05B0[d->path[0]]->pts[0]) <
@@ -2094,11 +2100,11 @@ void FUN_L03_002dccc0(struct Moby *m) {
             d->ready = 0;
         }
         break;
-    case 2:
+    case LIFT_WAIT_FOR_HERO_ANIMATION:
         if (!FUN_L00_00233f38())
             m->state = 3;
         break;
-    case 3:
+    case LIFT_FOLLOW_PATH:
         if (FUN_L01_00277fb8(m)) {
             hero.unk1F2 = 4;
             hero.unk1F4 = 4;
