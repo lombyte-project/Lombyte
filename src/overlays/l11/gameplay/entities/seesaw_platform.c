@@ -967,17 +967,22 @@ extern float FUN_001fa580_t(float, float) __asm__("FUN_001fa580");
 extern float approach_angle(float *p, float a, float *v, float b, float c, float d) __asm__("FUN_L00_0025be00");
 
 void FUN_L11_0030f2a8(struct Moby *m) {
+    enum {
+        LINKED_TURN_STATE_INITIALIZE = 0,
+        LINKED_TURN_STATE_WAIT_FOR_LINK = 1,
+        LINKED_TURN_STATE_ROTATE_TO_TARGET = 2
+    };
     int s = m->state;
     float *d = (float *)m->pvars;
     float a;
     float r;
     switch (s) {
-    case 0:
+    case LINKED_TURN_STATE_INITIALIZE:
         m->update_dist = 0xFF;
         m->state = 1;
         d[2] = m->rot.z;
         break;
-    case 1:
+    case LINKED_TURN_STATE_WAIT_FOR_LINK:
         if (FUN_L11_0030f270(D_L11_0015FFD8_t + (*(int *)d << 8))) {
             if (level_frame >= 11) {
                 D_0013D3E3_t[0] = s;
@@ -989,7 +994,7 @@ void FUN_L11_0030f2a8(struct Moby *m) {
             }
         }
         break;
-    case 2:
+    case LINKED_TURN_STATE_ROTATE_TO_TARGET:
         a = FUN_001fa580_t(d[2], 1.0471976f);
         r = frame_time_sq * 0.34906584f;
         if (approach_angle(&m->rot.z, a, d + 1, r, r, frame_time * 0.7853982f) == 0.0f) {
