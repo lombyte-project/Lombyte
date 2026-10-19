@@ -1657,6 +1657,7 @@ void robot_dog_update(char *moby) {
     enum {
         ROBOT_DOG_INITIALIZE = 0,
         ROBOT_DOG_WAIT_FOR_ACTIVATION = 1,
+        ROBOT_DOG_WAIT_FOR_PARTNER_RELEASE = 2,
         ROBOT_DOG_TURN_TO_TARGET = 3,
         ROBOT_DOG_CHASE_TARGET = 4,
         ROBOT_DOG_FOLLOW_PATH = 5,
@@ -1747,7 +1748,7 @@ void robot_dog_update(char *moby) {
             *(float *)(moby + 0x58) = 0.8780488f;
         }
         break;
-    case 2:
+    case ROBOT_DOG_WAIT_FOR_PARTNER_RELEASE:
         if (random_integer_below(14) == 0) {
             idx = data->i248;
             if (idx == -1 || (m = D_L03_0015FFD8_c5bb8 + (idx << 8)) == 0 || ((unsigned char *)m)[0x20] == 0xFE ||
