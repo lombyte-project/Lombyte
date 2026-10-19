@@ -200,6 +200,11 @@ extern void update_joint_animation(float, float, void *, void *, int) __asm__("F
 /* Watcher update, same routine as commando_update with this level's states and data layout. */
 void bob_update(WM11 *m) __asm__("FUN_L11_002d0710");
 void bob_update(WM11 *m) {
+    enum {
+        BOB_INITIALIZE = 0,
+        BOB_CHECK_DIALOGUE = 1,
+        BOB_WAIT_FOR_DIALOGUE_END = 2
+    };
     WS11 scratch;
     WD11 *d = (WD11 *)m->data;
     float rate;
@@ -207,7 +212,7 @@ void bob_update(WM11 *m) {
     int tracking;
     FUN_L05_00317398(m);
     switch (m->state) {
-    case 0:
+    case BOB_INITIALIZE:
         if (D_0013D4C3) {
             m->state = 3;
         } else {
@@ -216,7 +221,7 @@ void bob_update(WM11 *m) {
         initialize_npc_dialogue(m, d);
         d->f0C = 3.7f;
         break;
-    case 1:
+    case BOB_CHECK_DIALOGUE:
         if (FUN_00214720(hero.motion.pos.f, d->region)) {
             if (update_npc_dialogue(m, d)) {
                 begin_dialogue_camera_transition(m, 2.7f);
@@ -224,7 +229,7 @@ void bob_update(WM11 *m) {
             }
         }
         break;
-    case 2:
+    case BOB_WAIT_FOR_DIALOGUE_END:
         if (D_L11_0015F5C4 != 2) {
             m->state = 1;
             if (d->h04 == 2) {
