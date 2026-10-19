@@ -907,17 +907,21 @@ extern short D_L18_00162578 __attribute__((sda));
 extern short D_L18_0016257C __attribute__((sda));
 extern short D_L18_00162580 __attribute__((sda));
 void FUN_L18_002fad28(M2 *m) {
+    enum {
+        INITIALIZE_TRAIL_EFFECT = 0,
+        UPDATE_TRAIL_EFFECT = 1
+    };
     char buf[16];
     char buf2[16];
     char buf3[16];
     int idx;
     char *p;
     switch (m->state) {
-    case 0:
+    case INITIALIZE_TRAIL_EFFECT:
         m->v = 0xFF;
         m->state = 1;
         break;
-    case 1:
+    case UPDATE_TRAIL_EFFECT:
         if (D_L18_0015F5C4 == 2) {
             if (D_L18_0016D260.n < 4) {
                 idx = 0;
