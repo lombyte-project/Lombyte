@@ -205,13 +205,16 @@ extern void FUN_001fa070_28a480(void *, void *) __asm__("FUN_001fa070");
 extern void FUN_001f9fc8_28a480(void *) __asm__("FUN_001f9fc8");
 
 void FUN_L00_0028a480(void) {
+    enum {
+        SKY_SHELL_DOUBLE_PHASE_ROTATION = 0
+    };
     OvlQuad v[1];
     int i;
 
     qzero(v);
     for (i = 0; i < *(short *)(D_L00_0016051C_28a480 + 6); i++) {
         switch (i) {
-        case 0:
+        case SKY_SHELL_DOUBLE_PHASE_ROTATION:
             ((float *)v)[2] =
                 (float)((D_L00_0015F5CC_28a480g * 2) & 0x1FFFF) * (3.14159265f / 65536.0f) -
                 3.14159265f;
