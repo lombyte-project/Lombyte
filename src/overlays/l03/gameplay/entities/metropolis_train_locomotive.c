@@ -3153,6 +3153,7 @@ void FUN_L03_002c95a8(Moby2C8398 *m) {
     enum {
         DEATH_KNOCKBACK_RESPONSE = 1,
         TURN_AWAY_KNOCKBACK_RESPONSE = 6,
+        NO_KNOCKBACK_HIT_RESPONSE = 12,
         ZERO_DAMAGE_NO_KNOCKBACK_RESPONSE = 13
     };
     float vec[4];
@@ -3193,7 +3194,7 @@ void FUN_L03_002c95a8(Moby2C8398 *m) {
             result = 1;
         }
         switch (result) {
-        case 12:
+        case NO_KNOCKBACK_HIT_RESPONSE:
         case ZERO_DAMAGE_NO_KNOCKBACK_RESPONSE:
             d->b67 = 0x78;
             break;
