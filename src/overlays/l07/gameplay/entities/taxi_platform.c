@@ -2706,6 +2706,7 @@ void sharkigator_update(unsigned char *moby) {
         SHARKIGATOR_SWIM_WANDER = 2,
         SHARKIGATOR_TARGET_PURSUIT = 4,
         SHARKIGATOR_TARGET_LUNGE_INTERPOLATION = 5,
+        SHARKIGATOR_POST_LUNGE_PATH_FOLLOW = 6,
         SHARKIGATOR_GRAVITY_IDLE = 7,
         SHARKIGATOR_GRAVITY_WANDER = 8,
         SHARKIGATOR_TARGET_APPROACH = 9,
@@ -3004,7 +3005,7 @@ void sharkigator_update(unsigned char *moby) {
         moby[0x20] = 2;
         goto end;
     }
-    case 6: {
+    case SHARKIGATOR_POST_LUNGE_PATH_FOLLOW: {
         float seven = 7.0f;
         float pi = 3.14159274f;
         float pi2 = 1.57079637f;
