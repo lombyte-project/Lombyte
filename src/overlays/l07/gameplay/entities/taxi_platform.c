@@ -1029,6 +1029,9 @@ void boltcrate_possibly_for_metal_detector_update(struct Moby *moby) {
         ADVANCE_PATH_CHILDREN = 1,
         HIT_REACTION_NO_ANIMATION_RESPONSE = 11
     };
+    enum {
+        HIT_REACTION_NONE = 0
+    };
     char *data;
     char *path;
     float *remaining;
@@ -1051,7 +1054,7 @@ void boltcrate_possibly_for_metal_detector_update(struct Moby *moby) {
         limit = find_moby_hit(moby, 0x230000, 0);
         result = fun_00213928(moby, limit, remaining, 0, &count, 0, 0, 4);
         switch ((unsigned)result) {
-        case 0:
+        case HIT_REACTION_NONE:
         case 3:
         case 4:
         case 5:
