@@ -1457,6 +1457,12 @@ extern float abs_0698(float) __asm__("FUN_001f99c0");
    spawns and fires a projectile (pvars 0x160) and dies by explosion or by reaching the end of its path. */
 void psytcopus_update(struct Moby *m) __asm__("FUN_L11_00310180");
 void psytcopus_update(struct Moby *m) {
+    enum {
+        PSYTCOPUS_STATE_INITIALIZE = 0,
+        PSYTCOPUS_STATE_CREATE_PROJECTILE = 4,
+        PSYTCOPUS_STATE_FIRE_PROJECTILE = 5,
+        PSYTCOPUS_STATE_ATTACK_RECOVERY = 6
+    };
     struct PokiPathVars *pv = (struct PokiPathVars *)m->pvars;
     struct Moby *target;
     Vec4f v;
@@ -1472,7 +1478,7 @@ void psytcopus_update(struct Moby *m) {
         m->shadow_range = 0x16;
     }
     switch (m->state) {
-    case 0:
+    case PSYTCOPUS_STATE_INITIALIZE:
         pv->unk24 = 3;
         pv->health = 3.0f;
         pv->unk28 = 2;
@@ -1507,7 +1513,7 @@ void psytcopus_update(struct Moby *m) {
             }
         }
         break;
-    case 4:
+    case PSYTCOPUS_STATE_CREATE_PROJECTILE:
         {
         float *yaw = &m->rot.z;
         angle = atan2_0180(target->pos.x - m->pos.x, target->pos.y - m->pos.y);
@@ -1528,7 +1534,7 @@ void psytcopus_update(struct Moby *m) {
             }
         }
         break;
-    case 5:
+    case PSYTCOPUS_STATE_FIRE_PROJECTILE:
         {
         float *yaw = &m->rot.z;
         angle = atan2_0180(target->pos.x - m->pos.x, target->pos.y - m->pos.y);
@@ -1547,7 +1553,7 @@ void psytcopus_update(struct Moby *m) {
             }
         }
         break;
-    case 6:
+    case PSYTCOPUS_STATE_ATTACK_RECOVERY:
         if (m->anim_flags & 2) {
             m->state = 3;
             if (m->prev_seq != 0) {
