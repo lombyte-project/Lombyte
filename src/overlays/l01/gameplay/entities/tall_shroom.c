@@ -438,6 +438,10 @@ extern void render_environment_mapped_object(void) __asm__("FUN_002327a0");
 
 /* Cutscene effects: camera targets, splashes, sparks and trails keyed on the cutscene scene and frame. */
 void FUN_L01_0030c190(struct Moby *moby) {
+    enum {
+        CUTSCENE_FX_STATE_INITIALIZE = 0,
+        CUTSCENE_FX_STATE_UPDATE = 1
+    };
     FxVec a;
     FxVec b;
     FxVec c;
@@ -456,11 +460,11 @@ void FUN_L01_0030c190(struct Moby *moby) {
     s32 node;
 
     switch (moby->state) {
-    case 0:
+    case CUTSCENE_FX_STATE_INITIALIZE:
         moby->update_dist = 0xFF;
         moby->state = 1;
         break;
-    case 1:
+    case CUTSCENE_FX_STATE_UPDATE:
         if (cutscene_mode_macro == 2) {
             if (fx_cutscene.scene == 1 || (fx_cutscene.scene == 2 && fx_cutscene.frame <= scale_game_frames(148)) ||
                 fx_cutscene.scene == 3 || fx_cutscene.scene == 4) {
