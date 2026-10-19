@@ -130,6 +130,7 @@ extern int func_001F9908_r(int *) __asm__("FUN_001f9740");
 int r1_repeat_timer __asm__("D_L01_0015F678") = 0;
 void FUN_L01_00242930(void) {
     enum {
+        HERO_STATE_LATERAL_MOVE_HOLD_ANIMATION_WAIT = 24,
         HERO_STATE_LATERAL_MOVE_HOLD = 25,
         HERO_STATE_LATERAL_MOVE_POSITIVE_YAW = 26,
         HERO_STATE_LATERAL_MOVE_NEGATIVE_YAW = 27,
@@ -1023,7 +1024,7 @@ void FUN_L01_00242930(void) {
                         hero_set_state(HERO_STATE_IDLE, 1);
                     }
                     break;
-                case 24:
+                case HERO_STATE_LATERAL_MOVE_HOLD_ANIMATION_WAIT:
                     if (13.5f < hero.anim_frame) {
                         hero_set_state(0x19, 0);
                     }
