@@ -2497,6 +2497,7 @@ void FUN_L15_002d0fa8(void *arg) {
         HIT_REACTION_DEATH_ALTERNATE = 2,
         HIT_REACTION_KNOCKBACK = 3,
         HIT_REACTION_KNOCKBACK_ALTERNATE = 4,
+        HIT_REACTION_DIRECTIONAL_KNOCKBACK = 5,
         HIT_REACTION_DAMAGE_WITHOUT_KNOCKBACK = 9,
         HIT_REACTION_DAMAGE_WITHOUT_KNOCKBACK_ALTERNATE = 10,
         HIT_REACTION_NONE = 11
@@ -2568,7 +2569,7 @@ void FUN_L15_002d0fa8(void *arg) {
                 break;
             case HIT_REACTION_KNOCKBACK:
             case HIT_REACTION_KNOCKBACK_ALTERNATE:
-            case 5:
+            case HIT_REACTION_DIRECTIONAL_KNOCKBACK:
             case 6:
             case 7:
             case 8:
