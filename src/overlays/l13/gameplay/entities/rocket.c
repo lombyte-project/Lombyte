@@ -1766,6 +1766,7 @@ extern void FUN_L13_0030ad38(struct Moby *, float *, float *);
 void FUN_L13_0030a6d8(struct Moby *moby) {
     enum {
         LIFT_INITIALIZE = 0,
+        LIFT_BLEND_TO_MOUNT_TRANSFORM = 1,
         LIFT_MOVE_TO_TOP = 2,
         LIFT_MOVE_TO_BOTTOM = 3,
         LIFT_IDLE_AT_TOP = 4,
@@ -1790,7 +1791,7 @@ void FUN_L13_0030a6d8(struct Moby *moby) {
         vars->timer = 0;
         moby->state = 4;
         break;
-    case 1: {
+    case LIFT_BLEND_TO_MOUNT_TRANSFORM: {
         float old = vars->blend;
         advance_accelerated_scalar(&vars->blend, &vars->blend_speed, 1.0f, D_0015ED70 * 4.0f, D_0015ED70 * 4.0f, D_0015ED6C * 4.0f);
         if (vars->blend < 1.0f) {
