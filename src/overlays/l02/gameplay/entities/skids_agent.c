@@ -128,6 +128,9 @@ void skids_agent_update(struct Moby *moby) __asm__("FUN_L02_002e0dc0");
 void skids_agent_update(struct Moby *moby) {
     enum {
         SKIDS_AGENT_INITIALIZE = 0,
+        SKIDS_AGENT_IDLE_AND_TALK = 1,
+        SKIDS_AGENT_CONVERSATION_ACTIVE = 2,
+        SKIDS_AGENT_FADE_TO_ZERO_AND_DELETE = 4,
         SKIDS_AGENT_END_CONVERSATION = 5
     };
     char *data = (char *)moby->pvars;
@@ -152,7 +155,7 @@ void skids_agent_update(struct Moby *moby) {
         (*(struct Moby **)(data + 0x178))->spawn_frame = moby->spawn_frame;
         (*(struct Moby **)(data + 0x178))->flags |= 0x100;
         break;
-    case 1:
+    case SKIDS_AGENT_IDLE_AND_TALK:
         if (*(u8 *)(data + 8) == 1 && point_in_clip_volume(&hero.motion.pos, *(s32 *)(data + 0x154)) != 0) {
             *(f32 *)(data + 0xC) = 255.0f;
         } else {
@@ -190,7 +193,7 @@ void skids_agent_update(struct Moby *moby) {
             blend_anim(moby, 0, 0, scale_frames(10));
         }
         break;
-    case 2:
+    case SKIDS_AGENT_CONVERSATION_ACTIVE:
         if (level_game_mode != 2) {
             moby->state = 1;
             if (*(s16 *)(data + 4) == 0) {
@@ -251,7 +254,7 @@ void skids_agent_update(struct Moby *moby) {
         D_L02_0015F3FC = *(f32 *)(data + 0x17C);
         break;
     }
-    case 4: {
+    case SKIDS_AGENT_FADE_TO_ZERO_AND_DELETE: {
         approach_value((f32 *)(data + 0x17C), 0.0f, 0.1f);
         fade = *(f32 *)(data + 0x17C);
         D_L02_0015F3FC = fade;
