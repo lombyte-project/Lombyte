@@ -839,6 +839,11 @@ extern ItemPrice_2e1ac0 D_L01_001C4530[];
 extern s32 alternate_animation_sequence_gp __asm__("D_0015EE20") __attribute__((sda));
 void gold_weapon_case_update(struct Moby *m) __asm__("FUN_L01_002e1ac0");
 void gold_weapon_case_update(struct Moby *m) {
+    enum {
+        GOLD_WEAPON_CASE_INITIALIZE = 0,
+        GOLD_WEAPON_CASE_PROCESS_SALE = 1,
+        GOLD_WEAPON_CASE_WAIT_FOR_CUTSCENE_END = 4
+    };
     SaleVars_2e1ac0 *v = (SaleVars_2e1ac0 *)m->pvars;
     s32 item;
     ItemPrice_2e1ac0 *price;
@@ -848,7 +853,7 @@ void gold_weapon_case_update(struct Moby *m) {
         return;
     }
     switch (m->state) {
-    case 0:
+    case GOLD_WEAPON_CASE_INITIALIZE:
         if (m->oclass != 0x130) {
             m->state = 2;
         } else if (D_0013E520_2e1ac0[D_L01_001DEB10[v->slot]] != 0 ||
@@ -858,7 +863,7 @@ void gold_weapon_case_update(struct Moby *m) {
             m->state = 1;
         }
         break;
-    case 1:
+    case GOLD_WEAPON_CASE_PROCESS_SALE:
         v->radius = 1.9f;
         FUN_L00_00266448_2e1ac0(m, v);
         if (v->result == 2) {
@@ -872,7 +877,7 @@ void gold_weapon_case_update(struct Moby *m) {
         break;
     case 3: /* sold out or done: idle */
         break;
-    case 4:
+    case GOLD_WEAPON_CASE_WAIT_FOR_CUTSCENE_END:
         if (cutscene_mode == 0) {
             FUN_0020b178_2e1ac0(0, -1);
             m->state = 3;
