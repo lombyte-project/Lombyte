@@ -730,6 +730,8 @@ void FUN_L15_002eb6b8(void);
 void FUN_L15_002eb4c0(struct Moby *m) {
     enum {
         CUTSCENE_TRIGGER_WAIT_FOR_CONDITIONS = 0,
+        CUTSCENE_TRIGGER_START_SECOND_SCENE = 1,
+        CUTSCENE_TRIGGER_FINALIZE_AND_SAVE = 3,
         CUTSCENE_TRIGGER_COMPLETED = 4
     };
     char *d = (char *)m->pvars;
@@ -755,7 +757,7 @@ void FUN_L15_002eb4c0(struct Moby *m) {
             m->state = 1;
         }
         break;
-    case 1:
+    case CUTSCENE_TRIGGER_START_SECOND_SCENE:
         if (D_L15_0015F5C4 != 2) {
             start_scene_p(4);
             m->state = 3;
@@ -766,7 +768,7 @@ void FUN_L15_002eb4c0(struct Moby *m) {
             }
         }
         break;
-    case 3:
+    case CUTSCENE_TRIGGER_FINALIZE_AND_SAVE:
         if (D_L15_0015F5C4 != 2) {
             FUN_L00_002607d0_v(0x11);
             if (*(int *)(d + 4) != -1) {
