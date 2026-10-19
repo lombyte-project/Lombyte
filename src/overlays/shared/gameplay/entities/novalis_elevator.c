@@ -2598,6 +2598,8 @@ void sandmouse_house_update(unsigned char *m) {
         SANDMOUSE_HOUSE_INITIALIZE = 0,
         SANDMOUSE_HOUSE_WAIT_FOR_INITIAL_COMMAND = 1,
         SANDMOUSE_HOUSE_WAIT_FOR_INITIAL_COMMAND_ANIMATION_END = 2,
+        SANDMOUSE_HOUSE_WAIT_FOR_FOLLOWUP_COMMAND = 3,
+        SANDMOUSE_HOUSE_WAIT_FOR_FOLLOWUP_COMMAND_ANIMATION_END = 4,
         SANDMOUSE_HOUSE_RESTORE_INITIAL_ANIMATION = 7
     };
     char *d;
@@ -2640,7 +2642,7 @@ void sandmouse_house_update(unsigned char *m) {
             m[0x20] = 3;
         }
         break;
-    case 3:
+    case SANDMOUSE_HOUSE_WAIT_FOR_FOLLOWUP_COMMAND:
         if ((unsigned char)(m[0xBC] - 4) < 2) {
             if (m[0x53] != 3) {
                 blend_moby_animation_w7(m, 3, 0, FUN_001f96f8_w7(3));
@@ -2653,7 +2655,7 @@ void sandmouse_house_update(unsigned char *m) {
             m[0x20] = 7;
         }
         break;
-    case 4:
+    case SANDMOUSE_HOUSE_WAIT_FOR_FOLLOWUP_COMMAND_ANIMATION_END:
         if (m[0x70] & 2) {
             if (m[0x53] != 4) {
                 blend_moby_animation_w7(m, 4, 0, FUN_001f96f8_w7(3));
