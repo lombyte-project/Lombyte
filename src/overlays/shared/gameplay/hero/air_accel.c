@@ -1562,8 +1562,11 @@ skip:
 /* Ported from rac1-decomp (src/overlays/shared/help_002274A8.c: func_L01_00240CE8), where it is exact; names translated to the US level program. */
 
 void FUN_L01_002405a0(void) {
+    enum {
+        VEHICLE_MODE_NONE = 0
+    };
     switch ((unsigned char)D_0013E533[0x2EC1]) {
-    case 0:
+    case VEHICLE_MODE_NONE:
         hero_set_state(HERO_STATE_IDLE, 1);
         break;
     case 3:
