@@ -30,7 +30,6 @@ void sceGsSetDefDispEnv(struct sceGsDispEnv *output, s16 pixel_storage_format, s
     s64 scaled_horizontal;
     u64 display_width;
     u16 interlace;
-    u64 value;
     u64 display_vertical;
 
     state = GetCoreDataTable();
@@ -76,15 +75,14 @@ void sceGsSetDefDispEnv(struct sceGsDispEnv *output, s16 pixel_storage_format, s
             }
             output->display = display_width | display_vertical;
         } else {
-            scale = width + 0x9ff;
-            scale /= width;
-            scaled_horizontal = horizontal_offset * scale;
-            value = ((u64)((s64)(scale * width) - 1) << 32) |
-                    ((u64)(s64)(height - 1) << 44) |
-                    ((u64)(s64)(scale - 1) << 23) |
-                    ((u64)((vertical_offset + kernel_vertical + 0x19) & 0xfff) << 12) |
-                    ((u64)(((s64)scaled_horizontal + (s64)(((u32)kernel_horizontal + 0x27cU) & 0xfffU)) & 0xfff));
-            output->display = value;
+            s64 horizontal;
+            scale = (width + 0x9ff) / width;
+            horizontal = (s64)kernel_horizontal + 0x27c;
+            output->display = ((s64)(scale - 1) << 23) |
+                              (((u64)(s64)(scale * width - 1) << 32) |
+                               (((horizontal + horizontal_offset * scale) & 0xfff) |
+                                ((s64)(height - 1) << 44)) |
+                               ((s64)((vertical_offset + kernel_vertical + 0x19) & 0xfff) << 12));
         }
     } else if ((s16)mode == 3) {
         if ((s16)interlace == 1) {
@@ -106,15 +104,14 @@ void sceGsSetDefDispEnv(struct sceGsDispEnv *output, s16 pixel_storage_format, s
             }
             output->display = display_width | display_vertical;
         } else {
-            scale = width + 0x9ff;
-            scale /= width;
-            scaled_horizontal = horizontal_offset * scale;
-            value = ((u64)((s64)(scale * width) - 1) << 32) |
-                    ((u64)(s64)(height - 1) << 44) |
-                    ((u64)(s64)(scale - 1) << 23) |
-                    ((u64)((vertical_offset + kernel_vertical + 0x24) & 0xfff) << 12) |
-                    ((u64)(((s64)scaled_horizontal + (s64)(((u32)kernel_horizontal + 0x290U) & 0xfffU)) & 0xfff));
-            output->display = value;
+            s64 horizontal;
+            scale = (width + 0x9ff) / width;
+            horizontal = (s64)kernel_horizontal + 0x290;
+            output->display = ((s64)(scale - 1) << 23) |
+                              (((u64)(s64)(scale * width - 1) << 32) |
+                               (((horizontal + horizontal_offset * scale) & 0xfff) |
+                                ((s64)(height - 1) << 44)) |
+                               ((s64)((vertical_offset + kernel_vertical + 0x24) & 0xfff) << 12));
         }
     } else if ((s16)mode == 0x50) {
         output->display = ((u64)(s64)(height - 1) << 44) |
