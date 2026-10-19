@@ -570,6 +570,9 @@ extern void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L0
  * hero to step on, then plays the driver's up or down animation (2/4) with its loop sound until it ends. */
 void liftcar_platform_update(struct Moby *moby) __asm__("FUN_L02_002e2228");
 void liftcar_platform_update(struct Moby *moby) {
+    enum {
+        LIFTCAR_PLATFORM_INITIALIZE = 0
+    };
     char *data = (char *)moby->pvars;
     struct Moby *driver = &D_L02_0015FFD8[*(int *)(data + 0xA0)];
     Vec4 delta;
@@ -584,7 +587,7 @@ void liftcar_platform_update(struct Moby *moby) {
     moby_point_position(driver, 0, &pos);
     qcopy(&moby->pos, &pos);
     switch (moby->state) {
-    case 0:
+    case LIFTCAR_PLATFORM_INITIALIZE:
         build_moby_bone_transform(driver, 0, joint_mtx);
         moby->rot.z = atan2_e2228(joint_mtx[0], joint_mtx[1]);
         moby->state = 1;
