@@ -2080,7 +2080,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
             break;
         }
         break;
-    case 0xE:
+    case DREK_BOSS_ACTION_REPOSITION_AND_AIM:
         aim = &moby->f40[2];
         ang = fast_arc_tan(d->f320[0] - moby->f10[0], d->f320[1] - moby->f10[1]);
         approach_angle(aim, &d->f370, ang, D_0015ED6C_e[1] * 6.2831855f,
