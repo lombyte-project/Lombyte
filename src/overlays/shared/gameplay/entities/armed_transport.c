@@ -70,6 +70,7 @@ void armed_transport_update(char *m) {
         ARMED_TRANSPORT_STATE_ALIGN_SECOND_PATH = 4,
         ARMED_TRANSPORT_STATE_FOLLOW_SECOND_PATH = 5,
         ARMED_TRANSPORT_STATE_TRACK_TARGET = 6,
+        ARMED_TRANSPORT_STATE_SPAWN_DIRECTED_MOBY = 7,
         ARMED_TRANSPORT_STATE_DYING = 8
     };
     L16TransportVector vector, rotation;
@@ -218,7 +219,7 @@ void armed_transport_update(char *m) {
         if (fast_dec_timer((int *)(d + 0x164)) && *(int *)(d + 0xB4) != 2) m[0x20] = 7;
         break;
     }
-    case 7:
+    case ARMED_TRANSPORT_STATE_SPAWN_DIRECTED_MOBY:
         moby_point_position(m, 1, vector.f);
         subtract_vector_xyz(rotation.f, d + 0x70, vector.f);
         normalize_vector_xyz(rotation.f, rotation.f, *(float *)&D_L16_00161D7C * frame_time);
