@@ -2229,6 +2229,12 @@ void FUN_L00_0029ba78(void) {
 }
 
 void FUN_L00_0029c648(void) {
+    enum {
+        VENDOR_MENU_OPENING = 0,
+        VENDOR_MENU_OPEN = 1,
+        VENDOR_MENU_CLOSING = 2,
+        VENDOR_MENU_EXIT_CUTSCENE = 3
+    };
     Vec4 a;
     Vec4 b;
     f32 m[4][4];
@@ -2254,8 +2260,8 @@ void FUN_L00_0029c648(void) {
     u8 flag;
 
     switch (vendor_menu.state) {
-    case 0:
-    case 2:
+    case VENDOR_MENU_OPENING:
+    case VENDOR_MENU_CLOSING:
         if (vendor_menu.f40 == 0 || vendor_menu.state == 2) {
             if ((g_debug_menu.update_flags & 2) || ((g_debug_menu.update_flags & 0x10) && (D_0013CAE4 & 0x200))) {
                 FUN_L00_00297e30();
@@ -2328,7 +2334,7 @@ void FUN_L00_0029c648(void) {
             FUN_L00_00297e70();
         }
         break;
-    case 1:
+    case VENDOR_MENU_OPEN:
         if (D_L00_00161188 == 0 && cd_read_active[0] == 0 && D_L00_0016118C != 0) {
             FUN_L00_0029a330();
             vendor_menu.f24 = vendor_menu.f14;
@@ -2532,7 +2538,7 @@ void FUN_L00_0029c648(void) {
         }
         FUN_L00_0023ac78(1);
         break;
-    case 3:
+    case VENDOR_MENU_EXIT_CUTSCENE:
         FUN_L00_00297e30();
         update_visible_resident_objects();
         FUN_0022dc50();
