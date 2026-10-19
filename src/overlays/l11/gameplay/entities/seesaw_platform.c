@@ -3195,11 +3195,15 @@ void puffoid_update(struct Moby *moby) {
         PUFFOID_STATE_SPRAY_ATTACK = 5,
         PUFFOID_STATE_RETURN_HOME = 6,
         PUFFOID_STATE_JUMP_HOME = 7,
+        PUFFOID_STATE_KNOCKBACK = 9,
+        PUFFOID_STATE_DEATH_KNOCKBACK = 11,
         PUFFOID_STATE_WAIT_FOR_CARRIER_JUMP = 12,
         PUFFOID_STATE_CARRIER_JUMP = 13,
         PUFFOID_STATE_CARRIER_IDLE = 14,
         PUFFOID_STATE_CARRIER_CHASE_TARGET = 15,
         PUFFOID_STATE_CARRIER_SPRAY_ATTACK = 16,
+        PUFFOID_STATE_CARRIER_KNOCKBACK = 17,
+        PUFFOID_STATE_CARRIER_DEATH_KNOCKBACK = 18,
         PUFFOID_STATE_FOLLOW_PATH = 19
     };
     CreatureVars_4318 *d = (CreatureVars_4318 *)moby->pvars;
@@ -3403,7 +3407,7 @@ void puffoid_update(struct Moby *moby) {
             set_anim_4318(moby, 1, 0, 5);
         }
         break;
-    case 9: {
+    case PUFFOID_STATE_KNOCKBACK: {
         int hit = FUN_L00_0025c698_4318(moby, d->unk120);
         if (hit & 0x40) {
             char *path;
@@ -3428,7 +3432,7 @@ void puffoid_update(struct Moby *moby) {
         }
         break;
     }
-    case 11:
+    case PUFFOID_STATE_DEATH_KNOCKBACK:
         if (FUN_L00_0025c698_4318(moby, d->unk120) & 0x160) {
             zero_vector_4318(pos);
             FUN_L00_0025f3e8(moby, &moby->pos, -1, 0.5f, 10.0f);
@@ -3528,7 +3532,7 @@ void puffoid_update(struct Moby *moby) {
         pos[2] += 0.333f;
         spray_4318(moby, pos, D_L11_001622CC * 0.6f, 1, 1.0f, 0.0f, 0, 1, 0);
         break;
-    case 17: {
+    case PUFFOID_STATE_CARRIER_KNOCKBACK: {
         int hit;
         follow_carrier_4318(moby, D_L11_0015FFD8_4318 + (d->carrier << 8), &moby->pos, &moby->rot,
                             &moby->pos, &moby->rot);
@@ -3556,7 +3560,7 @@ void puffoid_update(struct Moby *moby) {
         }
         break;
     }
-    case 18:
+    case PUFFOID_STATE_CARRIER_DEATH_KNOCKBACK:
         follow_carrier_4318(moby, D_L11_0015FFD8_4318 + (d->carrier << 8), &moby->pos, &moby->rot,
                             &moby->pos, &moby->rot);
         if (FUN_L00_0025c698_4318(moby, d->unk120) & 0x160) {
