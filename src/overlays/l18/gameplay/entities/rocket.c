@@ -2382,6 +2382,8 @@ extern unsigned char D_L18_001F29B8_9768[] __asm__("D_L18_001F29B8");
 void FUN_L18_002e9768(struct Moby *moby) {
     enum {
         STATE_INITIALIZE = 0,
+        STATE_WAIT_FOR_HIT = 1,
+        STATE_BURST_OR_LAUNCH = 2,
         STATE_BALLISTIC_FLIGHT = 3
     };
     float *data = (float *)moby->pvars;
@@ -2398,14 +2400,14 @@ void FUN_L18_002e9768(struct Moby *moby) {
         if (*(int *)data != 0) *(int *)(*(int *)data) = 3;
         return;
     }
-    case 1:
+    case STATE_WAIT_FOR_HIT:
         if (FUN_L00_0025a420(moby, 0x80000, 0)) {
             FUN_L18_002e9e50(moby->group);
             trooper_play_sound(0, 0, (int)moby, 0x375);
         }
         moby->hit_slot = 0xff;
         return;
-    case 2:
+    case STATE_BURST_OR_LAUNCH:
         if (moby->oclass == 0x37c) {
             float *pos;
             {
