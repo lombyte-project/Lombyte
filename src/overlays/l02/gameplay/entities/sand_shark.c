@@ -2103,6 +2103,9 @@ extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void bulldozer_update(struct Moby *moby) __asm__("FUN_L02_002dca10");
 void bulldozer_update(struct Moby *moby) {
+    enum {
+        BULLDOZER_ANIM_TIMED_WAIT = 1
+    };
     switch (moby->prev_seq) {
     case 0:
         if (moby->anim_flags & 2) {
@@ -2116,7 +2119,7 @@ void bulldozer_update(struct Moby *moby) {
             moby->command = func_001FA898_r(multiply_global_factor_ed64(random_float_between_alt(180.0f, 240.0f)));
         }
         break;
-    case 1:
+    case BULLDOZER_ANIM_TIMED_WAIT:
         if (FUN_L00_001fefc8(&moby->command) != 0 && moby->prev_seq != 2) {
             blend_moby_animation(moby, 2, 0, 0);
         }
