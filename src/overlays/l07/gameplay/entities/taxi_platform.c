@@ -2375,6 +2375,7 @@ void FUN_L07_0030e998(char *m, char *x, float *hp) {
         SHARKIGATOR_CLEAR_HEALTH_RESPONSE = 1,
         SHARKIGATOR_ALTERNATE_CLEAR_HEALTH_RESPONSE = 2,
         HIT_REACTION_START_KNOCKBACK = 3,
+        SHARKIGATOR_KNOCKBACK_RESPONSE = 4,
         SHARKIGATOR_HIT_ANIMATION_RESPONSE = 9,
         SHARKIGATOR_ALTERNATE_HIT_ANIMATION_RESPONSE = 10,
         HIT_REACTION_NO_ANIMATION_RESPONSE = 11
@@ -2395,7 +2396,7 @@ void FUN_L07_0030e998(char *m, char *x, float *hp) {
             *hp = 0.0f;
             break;
         case HIT_REACTION_START_KNOCKBACK:
-        case 4:
+        case SHARKIGATOR_KNOCKBACK_RESPONSE:
         case 5:
         case 6:
         case 7:
