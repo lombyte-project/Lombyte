@@ -59,6 +59,9 @@ s32 fun_00213928(O_25a478 *obj, P_25a478 *p, Q_25a478 *q, u32 flags, s32 *out, f
     enum {
         KIND_GATED_HIT_RESPONSE = 0
     };
+    enum {
+        KIND_GATED_HIT_STATE = 0
+    };
     V_25a478 v;
     V_25a478 t;
     s32 r;
@@ -117,7 +120,7 @@ s32 fun_00213928(O_25a478 *obj, P_25a478 *p, Q_25a478 *q, u32 flags, s32 *out, f
         else { kind = p->tgt->hA6; p->state = 8; }
     }
     switch (p->state) {
-    case 0:
+    case KIND_GATED_HIT_STATE:
         if (p->kind == 1 || p->kind == 2) { *out = 2; r = 0; break; }
         goto dflt;
     case 1:
