@@ -1520,7 +1520,8 @@ extern struct PadState controller_state_lui __asm__("D_0013C940") __attribute__(
 void metal_detector_update(struct Moby *moby) __asm__("FUN_L00_002d2ee8");
 void metal_detector_update(struct Moby *moby) {
     enum {
-        METAL_DETECTOR_INITIALIZE = 0
+        METAL_DETECTOR_INITIALIZE = 0,
+        METAL_DETECTOR_ACTIVE = 1
     };
     Vars2d2ee8 *vars;
     struct Moby *t;
@@ -1566,7 +1567,7 @@ void metal_detector_update(struct Moby *moby) {
     case 3:
     case 4:
         break;
-    case 1:
+    case METAL_DETECTOR_ACTIVE:
     case 2:
         one = 1.0f;
         *(u128 *)v = 0;
