@@ -97,7 +97,8 @@ extern struct Hero hero_lui __asm__("D_0013F350") __attribute__((section(".data"
 void FUN_L15_0020a7a0(void) {
     enum {
         GRAVITY_WORLD_DOWN = 0,
-        GRAVITY_OPPOSITE_GROUND_NORMAL = 1
+        GRAVITY_OPPOSITE_GROUND_NORMAL = 1,
+        GRAVITY_TOWARD_REFERENCE_POINT = 2
     };
     V shared_ray_endpoint, ground_ray_endpoint, ground_displacement_or_angles, surface_probe_endpoint, unused_probe_vector, probe_surface_angles, probe_surface_normal;
     f32 f;
@@ -214,7 +215,7 @@ d1:
         qcopy(&hero.gravity_dir, &hero.unk270);
         FUN_001f9a68_c(&hero.gravity_dir, &hero.gravity_dir, -1.0f);
         break;
-    case 2:
+    case GRAVITY_TOWARD_REFERENCE_POINT:
         subtract_vector_xyz(&hero.gravity_dir, &hero.motion.unkB0, &hero.motion.pos);
         FUN_001f9bf8_c(&hero.gravity_dir, &hero.gravity_dir, 1.0f);
         break;
