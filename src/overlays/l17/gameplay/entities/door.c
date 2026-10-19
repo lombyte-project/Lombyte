@@ -3545,6 +3545,10 @@ void shuttle_update(struct Moby *m) {
         SHUTTLE_STATE_TRAVEL = 2,
         SHUTTLE_STATE_RESET_AFTER_TRAVEL = 3
     };
+    enum {
+        SHUTTLE_STOP_FIRST = 0,
+        SHUTTLE_STOP_SECOND = 1
+    };
     Vars1448 *v = (Vars1448 *)m->pvars;
     float old_pos[4];
     float old_rot[4];
@@ -3600,7 +3604,7 @@ void shuttle_update(struct Moby *m) {
                 if (s >= 0) {
                     v->go = 1;
                     switch (s) {
-                    case 0: {
+                    case SHUTTLE_STOP_FIRST: {
                         float x = *(float *)&D_L17_001623AC;
                         float y = *(float *)&D_L17_001623A8;
                         v->sel = 1;
@@ -3609,7 +3613,7 @@ void shuttle_update(struct Moby *m) {
                         v->side = 0;
                         break;
                     }
-                    case 1: {
+                    case SHUTTLE_STOP_SECOND: {
                         float x = *(float *)&D_L17_001623A8;
                         float y = *(float *)&D_L17_001623AC;
                         v->side = s;
