@@ -2059,6 +2059,12 @@ void asteroid_update(struct Moby *moby) {
         SPIN_AXIS_Y = 1,
         SPIN_AXIS_Z = 2
     };
+    enum {
+        ASTEROID_INITIALIZE = 0,
+        ASTEROID_WAIT_TO_LAUNCH = 1,
+        ASTEROID_MOVE_AND_COLLIDE = 2,
+        ASTEROID_RESET_AT_HOME = 3
+    };
     struct BlobVars *vars = (struct BlobVars *)moby->pvars;
     f32 distance = distance_xyz_1638(&moby->pos, &hero_pos_1638);
     f32 size;
@@ -2066,7 +2072,7 @@ void asteroid_update(struct Moby *moby) {
     char *hit;
 
     switch (moby->state) {
-    case 0:
+    case ASTEROID_INITIALIZE:
         qcopy(&vars->home, &moby->pos);
         vars->home.w = 20.0f;
         qcopy(vars->dir, &moby->rot_row0);
@@ -2077,14 +2083,14 @@ void asteroid_update(struct Moby *moby) {
         }
         moby->state = 3;
         break;
-    case 1:
+    case ASTEROID_WAIT_TO_LAUNCH:
         if (hero_1638.state.current == 0x32 && hero_1638.ship_moby != 0 && hero_1638.ship_moby->oclass == 0x45
             && (moby->visible != 0 || distance < 40.0f)) {
             normalize_vector_xyz_1638(vars, vars->dir, random_float_between_1638(1.0f, 10.0f) * frame_time);
             moby->state = 2;
         }
         break;
-    case 2:
+    case ASTEROID_MOVE_AND_COLLIDE:
         tick_countdown_16_1638(&vars->cooldown);
         add_vector_xyz_1638(&moby->pos, &moby->pos, vars);
         if (moby->visible != 0 || distance < 40.0f) {
@@ -2130,7 +2136,7 @@ void asteroid_update(struct Moby *moby) {
             moby->scale = vars->start_scale;
         }
         break;
-    case 3:
+    case ASTEROID_RESET_AT_HOME:
         qcopy(&moby->pos, &vars->home);
         qzero(&vars->spin);
         spin = random_float_between_1638(-30.0f, 30.0f) * DEG_TO_RAD * frame_time;
