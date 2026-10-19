@@ -1104,7 +1104,8 @@ extern int random_integer_3830(void) __asm__("FUN_001160d8");
 
 void FUN_L01_002e3830(struct Moby *m, char *p) {
     enum {
-        HOVER_FACE_GOAL_AND_WAIT = 0
+        HOVER_FACE_GOAL_AND_WAIT = 0,
+        HOVER_MOVE_TOWARD_GOAL = 2
     };
     Vec4 v;
     f32 d, ang, len, ground, near;
@@ -1137,7 +1138,7 @@ void FUN_L01_002e3830(struct Moby *m, char *p) {
             m->command = 2;
         }
         return;
-    case 2:
+    case HOVER_MOVE_TOWARD_GOAL:
     case 3:
         break;
     default:
