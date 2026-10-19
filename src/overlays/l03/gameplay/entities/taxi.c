@@ -509,6 +509,7 @@ extern void mine_spawn_drops(struct Moby *, void *) __asm__("FUN_L00_0025f800");
    and explodes on contact (debris, camera shake, blast) or shrinks away when old. */
 void FUN_L03_002cbea8(struct Moby *m) {
     enum {
+        MINE_IDLE = 0,
         MINE_FALL_UNTIL_LANDING = 1,
         MINE_HOME_ON_TARGET = 2,
         MINE_ARM_AND_MONITOR_PROXIMITY = 3,
@@ -534,7 +535,7 @@ void FUN_L03_002cbea8(struct Moby *m) {
     v->unk60 = 0;
     v->age++;
     switch (m->state) {
-    case 0:
+    case MINE_IDLE:
         break;
     case MINE_FALL_UNTIL_LANDING:
         if (mine_fall(m, v) & 1) {
