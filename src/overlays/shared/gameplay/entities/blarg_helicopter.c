@@ -1397,15 +1397,20 @@ void mark_moby_for_removal_c(struct Obj *obj) __asm__("FUN_0020c828");
 
 void statue_update(unsigned char *m) __asm__("FUN_L03_002d3cd8");
 void statue_update(unsigned char *m) {
+    enum {
+        STATUE_INITIALIZE = 0,
+        STATUE_WAITING_FOR_HIT = 1,
+        STATUE_BREAK_APART = 2
+    };
     int flag = 0;
     float z;
     char *p, *pos, *vel;
     char *x = find_moby_hit(m, 0x10000, 0);
     switch (m[0x20]) {
-    case 0:
+    case STATUE_INITIALIZE:
         m[0x20] = 1;
         break;
-    case 1:
+    case STATUE_WAITING_FOR_HIT:
         if (x != 0) {
             if (*(float *)(x + 0x2C) > 0.0f)
                 flag = 1;
@@ -1413,7 +1418,7 @@ void statue_update(unsigned char *m) {
         if (flag)
             m[0x20] = 2;
         break;
-    case 2:
+    case STATUE_BREAK_APART:
         allocate_voice_for_target_entry(0, 0, (int)m);
         z = 0.0f;
         p = D_L03_0015F580;
