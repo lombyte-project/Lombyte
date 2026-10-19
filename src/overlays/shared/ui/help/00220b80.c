@@ -387,7 +387,8 @@ s32 FUN_L02_0022ee00(void)
 {
     enum {
         HERO_ITEM_WRENCH = 8,
-        HERO_ITEM_HOLD_TO_FIRE = 15
+        HERO_ITEM_HOLD_TO_FIRE = 15,
+        HERO_ITEM_PRESS_TO_ACTIVATE = 21
     };
     s32 out0;
     s32 out1;
@@ -606,7 +607,7 @@ s32 FUN_L02_0022ee00(void)
         }
         break;
 
-    case 21:
+    case HERO_ITEM_PRESS_TO_ACTIVATE:
         if (hero.items[0].moby != NULL && (controller_state.pressed & buttons)) {
             FUN_L00_0020e4c8();
         }
