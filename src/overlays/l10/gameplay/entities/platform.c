@@ -685,20 +685,24 @@ extern void scale_vector_xyz(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
 extern int tick_countdown_32(void *) __asm__("func_001F9740");
 
 void FUN_L10_002c7a20(struct Moby *moby) {
+    enum {
+        MOBY_STATE_WAIT_FOR_ACTIVATION = 0,
+        MOBY_STATE_ACTIVE_WITH_SOUND = 1
+    };
     char *data = (char *)moby->pvars;
     float d[16];
     float v[4];
     float r[4];
     float s[4];
     switch (moby->state) {
-    case 0:
+    case MOBY_STATE_WAIT_FOR_ACTIVATION:
         *(int *)(data + 0x10) = -1;
         if (tick_countdown_32((int *)(data + 0xC))) {
             *(int *)(data + 0xC) = *(int *)(data + 4);
             moby->state = 1;
         }
         break;
-    case 1:
+    case MOBY_STATE_ACTIVE_WITH_SOUND:
         qcopy(v, &moby->pos);
         euler_rotation_matrix(d, &moby->rot.x);
         clear_u64_value(r);
