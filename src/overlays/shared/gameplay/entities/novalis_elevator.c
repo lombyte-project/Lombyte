@@ -1709,6 +1709,7 @@ void large_amoeboid_update(unsigned char *moby) __asm__("FUN_L01_002edca0");
 void large_amoeboid_update(unsigned char *moby) {
     enum {
         LARGE_AMOEBOID_INITIALIZE = 0,
+        LARGE_AMOEBOID_TRY_ACQUIRE_TARGET_PATH = 1,
         LARGE_AMOEBOID_MOVE_TOWARD_STORED_POSITION = 2,
         LARGE_AMOEBOID_WAIT_FOR_PATH_ACQUISITION_ANIMATION_END = 3,
         LARGE_AMOEBOID_FOLLOW_PATH_TO_TARGET = 4,
@@ -1797,7 +1798,7 @@ void large_amoeboid_update(unsigned char *moby) {
             *(float *)(moby + 0x18) = distance;
         }
         break;
-    case 1:
+    case LARGE_AMOEBOID_TRY_ACQUIRE_TARGET_PATH:
         if (*(int *)(data + 0x204) != 2) {
             if (FUN_00213260(4) == 0) {
                 path_hit = follow_path((int *)(data + 0x240), 1, *(int *)(data + 0x244),
