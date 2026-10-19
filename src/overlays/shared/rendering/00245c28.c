@@ -98,7 +98,8 @@ void FUN_L00_00245c28(void) {
         LEVEL_MODE_MEMORY_CARD_DRAIN = 1,
         LEVEL_MODE_CALLBACK_TABLE_UPDATE = 3,
         LEVEL_MODE_FREEZE = 4,
-        LEVEL_MODE_GAME_STATE_UPDATE = 6
+        LEVEL_MODE_GAME_STATE_UPDATE = 6,
+        LEVEL_MODE_TIMED_BUFFER_SEQUENCE = 7
     };
     int i;
     int v;
@@ -209,7 +210,7 @@ void FUN_L00_00245c28(void) {
             update_resident_gameplay_state();
             dispatch_game_state_update();
             break;
-        case 7:
+        case LEVEL_MODE_TIMED_BUFFER_SEQUENCE:
             register_audio_stream_callback();
             FUN_L00_00299c48();
             FUN_L00_001f8f78();
