@@ -1120,6 +1120,7 @@ void chomper_update(struct Moby *m) __asm__("FUN_L16_002e5e08");
 void chomper_update(struct Moby *m) {
     enum {
         CHOMPER_INITIALIZE = 0,
+        CHOMPER_WAIT_TO_APPROACH_TARGET = 1,
         CHOMPER_APPROACH_TARGET = 4,
         CHOMPER_RETURN_HOME = 6,
         CHOMPER_KNOCKBACK = 8
@@ -1150,7 +1151,7 @@ void chomper_update(struct Moby *m) {
         *(unsigned char *)(d + 0x58) = func_001FA898_caa18(8.0f);
         *(unsigned char *)(d + 0x5A) = func_001FA898_caa18(3.2f);
         break;
-    case 1:
+    case CHOMPER_WAIT_TO_APPROACH_TARGET:
         if (*(int *)(d + 0x1C4) != 2) {
             m->state = 4;
             if (m->prev_seq != 0)
