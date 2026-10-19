@@ -359,7 +359,8 @@ void skid_mcmarx_update(struct Moby *m) __asm__("FUN_L02_002e1950");
 void skid_mcmarx_update(struct Moby *m) {
     enum {
         SKID_MCMARX_INITIALIZE = 0,
-        SKID_MCMARX_IDLE_AND_TALK = 1
+        SKID_MCMARX_IDLE_AND_TALK = 1,
+        SKID_MCMARX_CONVERSATION_ACTIVE = 2
     };
     WatcherVars *v = (WatcherVars *)m->pvars;
     WatcherLook look;
@@ -411,7 +412,7 @@ void skid_mcmarx_update(struct Moby *m) {
             blend_anim(m, 0, 0, scale_frames(10));
         }
         break;
-    case 2:
+    case SKID_MCMARX_CONVERSATION_ACTIVE:
         if (D_L02_0016CE60.placed == 0) {
             vec_set_len(&D_L02_0016CE60.pos, &m->rot_row0, 2.5f);
             vec_add(&D_L02_0016CE60.pos, &D_L02_0016CE60.pos, &m->pos);
