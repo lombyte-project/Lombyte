@@ -1692,6 +1692,10 @@ extern float D_L01_001619AC __attribute__((sda));
 
 void large_amoeboid_update(unsigned char *moby) __asm__("FUN_L01_002edca0");
 void large_amoeboid_update(unsigned char *moby) {
+    enum {
+        LARGE_AMOEBOID_INITIALIZE = 0,
+        LARGE_AMOEBOID_WAIT_FOR_ACTIVATION_VOLUME = 13
+    };
     char *data = *(char **)(moby + 0x78);
     char *target;
     char *target_position;
@@ -1715,7 +1719,7 @@ void large_amoeboid_update(unsigned char *moby) {
     FUN_L01_002eec68_u((char *)moby);
     target = *(char **)(data + 0x200);
     switch (moby[0x20]) {
-    case 0:
+    case LARGE_AMOEBOID_INITIALIZE:
         qcopy(data + 0x210, moby + 0x10);
         switch (*(short *)(moby + 0xa6)) {
         case 0x23c:
@@ -2013,7 +2017,7 @@ void large_amoeboid_update(unsigned char *moby) {
             *(float *)(data + 0x194) = distance;
         }
         break;
-    case 13:
+    case LARGE_AMOEBOID_WAIT_FOR_ACTIVATION_VOLUME:
         *(u16 *)(moby + 0x34) |= 1;
         if (FUN_00214720(D_0013F420, *(int *)(data + 0x25c)) != 0) {
             u16 flags;
