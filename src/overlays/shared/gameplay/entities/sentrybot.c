@@ -1281,7 +1281,8 @@ extern int FUN_L00_0025ff38(void *, void *, float, int, int, void *, int);
 void FUN_L15_0029a570(void *object, int flag) {
     enum {
         LETHAL_HIT_RESPONSE = 1,
-        DEATH_KNOCKBACK_HIT_RESPONSE = 2
+        DEATH_KNOCKBACK_HIT_RESPONSE = 2,
+        NONLETHAL_KNOCKBACK_HIT_RESPONSE = 3
     };
     unsigned char *moby = object;
     unsigned char *data = *(unsigned char **)(moby + 0x78);
@@ -1327,7 +1328,7 @@ void FUN_L15_0029a570(void *object, int flag) {
         case 10:
             data[0x67] = 0xFA;
             break;
-        case 3:
+        case NONLETHAL_KNOCKBACK_HIT_RESPONSE:
         case 4:
         case 5:
         case 6:
