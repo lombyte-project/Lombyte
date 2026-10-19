@@ -1092,7 +1092,9 @@ extern const float D_L00_00161828 __attribute__((sda));
 extern float D_L00_00161830 __attribute__((sda));
 void FUN_L00_002c1778(void *mv) {
     enum {
-        TRESPASSER_INITIALIZE = 0
+        TRESPASSER_INITIALIZE = 0,
+        TRESPASSER_WAIT_FOR_HERO_PROXIMITY = 1,
+        TRESPASSER_SHRINK_FOR_REMOVAL = 2
     };
     unsigned char *m = mv;
     struct Hero *P;
@@ -1104,7 +1106,7 @@ void FUN_L00_002c1778(void *mv) {
         *(float *)(m + 0x18) = D_L00_00173E68_2c1778 + D_L00_00161828;
         m[0x20] = 1;
         break;
-    case 1: {
+    case TRESPASSER_WAIT_FOR_HERO_PROXIMITY: {
         float r = FUN_001fa580_2c1778(*(float *)(m + 0x48), D_L00_00161830);
         int t = D_L00_0015F5CC_2c1778[0];
         *(float *)(m + 0x48) = r;
@@ -1120,7 +1122,7 @@ void FUN_L00_002c1778(void *mv) {
             }
         }
     } break;
-    case 2:
+    case TRESPASSER_SHRINK_FOR_REMOVAL:
         FUN_00213ed8_2c1778(m + 0x2C, 0.0f, *(float *)(*(char **)(m + 0x24) + 0x24) * 0.02f);
         if (*(float *)(m + 0x2C) == 0.0f)
             FUN_0020c828_2c1778(m);
