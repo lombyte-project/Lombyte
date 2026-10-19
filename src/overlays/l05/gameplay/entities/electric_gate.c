@@ -545,6 +545,13 @@ typedef struct {
 } DrainCoverHero;
 void drain_cover_update(DrainCoverMoby *moby) __asm__("FUN_L05_0030e7f8");
 void drain_cover_update(DrainCoverMoby *moby) {
+    enum {
+        DRAIN_COVER_INITIALIZE = 0,
+        DRAIN_COVER_WAIT_TO_RISE = 1,
+        DRAIN_COVER_RISE = 2,
+        DRAIN_COVER_HOVER = 3,
+        DRAIN_COVER_FALL_TO_HOME = 4
+    };
     DrainCoverData *data = moby->d;
     float old_position[4];
     float old_rotation[4];
@@ -578,7 +585,7 @@ void drain_cover_update(DrainCoverMoby *moby) {
         data->sound = -1;
     }
     switch (moby->state) {
-    case 0:
+    case DRAIN_COVER_INITIALIZE:
         moby->state = 1;
         data->timer = scale_game_frames_30e7f8(0x78);
         data->sound = 0xFF;
@@ -592,7 +599,7 @@ void drain_cover_update(DrainCoverMoby *moby) {
             data->f80 = t;
         }
         break;
-    case 1:
+    case DRAIN_COVER_WAIT_TO_RISE:
         FUN_L05_0030f408((char *)moby, 0.0f, 8.0f);
         if (D_L05_0015F5C4 == 0 && vector_distance_xyz(moby->pos, D_0013F3D0) < 24.0f && timer_finished(&data->timer) != 0) {
             moby->state = 2;
@@ -623,7 +630,7 @@ void drain_cover_update(DrainCoverMoby *moby) {
             }
         }
         break;
-    case 2:
+    case DRAIN_COVER_RISE:
         if ((frame_number & 3) == 0) {
             play_entity_sound((int)moby, 1.0f, moby->pos, 0x10000, 2.0f, 1.0f, 0, 1, 0);
         }
@@ -637,7 +644,7 @@ void drain_cover_update(DrainCoverMoby *moby) {
             data->timer = convert_effect_value(scale_game_frames_float_30e7f8(data->f88));
         }
         break;
-    case 3:
+    case DRAIN_COVER_HOVER:
         FUN_L05_0030f218((char *)moby, data->home[2], moby->pos[2]);
         FUN_L05_0030f408((char *)moby, D_L05_00161DD4, 1.0f);
         approach_position(data->home[2] + data->home[3], D_L05_00161DB0 * frame_time_sq, D_L05_00161DB0 * frame_time_sq, frame_time * 20.0f, &moby->pos[2], &data->vel[2]);
@@ -652,7 +659,7 @@ void drain_cover_update(DrainCoverMoby *moby) {
             moby->state = 4;
         }
         break;
-    case 4:
+    case DRAIN_COVER_FALL_TO_HOME:
         FUN_L05_0030f218((char *)moby, data->home[2], data->vel[2] * (float)scale_game_frames_30e7f8(*(int *)&D_L05_00161DB8) + moby->pos[2]);
         FUN_L05_0030f408((char *)moby, data->home[2] + 1.0f < moby->pos[2] ? D_L05_00161DD4 : 0.0f, data->home[2] + 1.0f < moby->pos[2] ? 1.0f : 10.0f);
         add_vector(moby->pos, moby->pos, data->vel);
