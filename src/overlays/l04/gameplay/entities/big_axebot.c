@@ -553,6 +553,15 @@ extern P_B7B0 *D_L04_001B0930_B7B0[] __asm__("D_L04_001B0630");
 
 void big_axebot_update(M_B7B0 *moby) __asm__("FUN_L04_002ba520");
 void big_axebot_update(M_B7B0 *moby) {
+    enum {
+        BIG_AXEBOT_STATE_INITIALIZE = 0,
+        BIG_AXEBOT_STATE_FOLLOW_PATH = 4,
+        BIG_AXEBOT_STATE_CHASE_TARGET = 5,
+        BIG_AXEBOT_STATE_RETURN_HOME = 6,
+        BIG_AXEBOT_STATE_MELEE_ATTACK = 7,
+        BIG_AXEBOT_STATE_TURN = 9,
+        BIG_AXEBOT_STATE_DYING = 10
+    };
     D_B7B0 *data = moby->data;
     T_B7B0 tg;
     V4_B7B0 prev;
@@ -737,7 +746,7 @@ void big_axebot_update(M_B7B0 *moby) {
     }
     fast_dec_timer_s16(&data->f402);
     switch (moby->state) {
-    case 0:
+    case BIG_AXEBOT_STATE_INITIALIZE:
         data->hp = 3.0f;
         data->f24 = 3;
         data->f28 = 2;
@@ -835,7 +844,7 @@ void big_axebot_update(M_B7B0 *moby) {
             }
         }
         break;
-    case 4: {
+    case BIG_AXEBOT_STATE_FOLLOW_PATH: {
         P_B7B0 *path = D_L04_001B0930_B7B0[data->f434];
         float a;
 
@@ -869,7 +878,7 @@ void big_axebot_update(M_B7B0 *moby) {
         FUN_L04_00295de8_cf(moby, moby->pos, v, 1, 0.25f, 1.5f, 0.75f, 0.87266463f);
         break;
     }
-    case 5:
+    case BIG_AXEBOT_STATE_CHASE_TARGET:
         if (moby->fBC & 8) {
             moby->fBC &= ~8;
             FUN_L04_00295778_cf(moby, data->f1A0);
@@ -897,7 +906,7 @@ void big_axebot_update(M_B7B0 *moby) {
             }
         }
         break;
-    case 6:
+    case BIG_AXEBOT_STATE_RETURN_HOME:
         if (dist < 4.5f) {
             FUN_L04_002ba3e0((char *)moby, (void *)4, (void *)4, (void *)scale_game_frames(0xC));
             moby->state = 7;
@@ -935,7 +944,7 @@ void big_axebot_update(M_B7B0 *moby) {
             }
         }
         break;
-    case 7:
+    case BIG_AXEBOT_STATE_MELEE_ATTACK:
         if (moby->f52 == moby->f53 && compute_interpolated_record_value(moby) >= 17.0f &&
             compute_interpolated_record_value(moby) < 20.0f &&
             FUN_L00_00259bc8_cf(moby->pos[2] - tg.pos[2]) < 2.0f &&
@@ -1001,7 +1010,7 @@ void big_axebot_update(M_B7B0 *moby) {
             }
         }
         break;
-    case 9:
+    case BIG_AXEBOT_STATE_TURN:
         if (moby->f52 == 8 && (moby->f70 & 2)) {
             moby->state = 5;
             moby->fBC = (moby->fBC | 8) & ~0x10;
@@ -1016,7 +1025,7 @@ void big_axebot_update(M_B7B0 *moby) {
                                        frame_time_sq * 6.2831855f, frame_time * 4.1887903f);
         }
         break;
-    case 10:
+    case BIG_AXEBOT_STATE_DYING:
         if ((FUN_L04_002ba470_cf(moby, data->fC0) & 0x40) || moby->pos[2] < 1.0f) {
             mark_moby_for_removal_cf((char *)moby);
             if (data->f424 != 0) {
