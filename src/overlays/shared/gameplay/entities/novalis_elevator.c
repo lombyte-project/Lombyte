@@ -1703,7 +1703,10 @@ void large_amoeboid_update(unsigned char *moby) __asm__("FUN_L01_002edca0");
 void large_amoeboid_update(unsigned char *moby) {
     enum {
         LARGE_AMOEBOID_INITIALIZE = 0,
-        LARGE_AMOEBOID_WAIT_FOR_ACTIVATION_VOLUME = 13
+        LARGE_AMOEBOID_FOLLOW_PATH_TO_TARGET = 4,
+        LARGE_AMOEBOID_RETURN_TO_STORED_POSITION = 5,
+        LARGE_AMOEBOID_WAIT_FOR_ACTIVATION_VOLUME = 13,
+        LARGE_AMOEBOID_MOVE_DIRECTLY_TOWARD_TARGET = 15
     };
     char *data = *(char **)(moby + 0x78);
     char *target;
@@ -1846,7 +1849,7 @@ void large_amoeboid_update(unsigned char *moby) {
         }
         FUN_L01_002ef560(moby);
         return;
-    case 15:
+    case LARGE_AMOEBOID_MOVE_DIRECTLY_TOWARD_TARGET:
         blocked = 0;
         angle = fast_arc_tan(*(float *)(target + 0x10) - *(float *)(moby + 0x10),
                               *(float *)(target + 0x14) - *(float *)(moby + 0x14));
@@ -1878,7 +1881,7 @@ void large_amoeboid_update(unsigned char *moby) {
         if (moby[0x53] != 1)
             blend_moby_animation(moby, 1, 0, scale_game_frames(20));
         return;
-    case 4: {
+    case LARGE_AMOEBOID_FOLLOW_PATH_TO_TARGET: {
         char *target_position;
         unsigned char path_hit;
         target_position = target + 0x10;
@@ -1960,7 +1963,7 @@ void large_amoeboid_update(unsigned char *moby) {
         if (moby[0x53] != 1)
             blend_moby_animation(moby, 1, 0, scale_game_frames(10));
         return;
-    case 5: {
+    case LARGE_AMOEBOID_RETURN_TO_STORED_POSITION: {
         int blocked = 0;
         char *target_position;
         distance = vector_distance(moby + 0x10, (target_position = data + 0x210));
