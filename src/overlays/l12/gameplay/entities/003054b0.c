@@ -1008,7 +1008,8 @@ extern void FUN_L12_00308350(struct Moby *);
 /* Pvars: d[0] is the moby to watch, d[1] the voice slot held for this moby. */
 void FUN_L12_003081b0(struct Moby *m) {
     enum {
-        CHECK_PERSISTENT_REMOVAL = 0
+        CHECK_PERSISTENT_REMOVAL = 0,
+        QUEUE_DRAW_AND_MONITOR_LINKED_MOBY = 1
     };
     int st = m->state;
     int vis;
@@ -1022,7 +1023,7 @@ void FUN_L12_003081b0(struct Moby *m) {
         }
         m->state = 1;
         break;
-    case 1:
+    case QUEUE_DRAW_AND_MONITOR_LINKED_MOBY:
         vis = 1;
         if (FUN_L01_00275690(m, 48.0f) == -1) {
             vis = 0;
