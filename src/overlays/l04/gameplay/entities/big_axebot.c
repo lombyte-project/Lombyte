@@ -1568,7 +1568,8 @@ void circular_saw_enemy_update(M_35F0 *moby) {
     enum {
         CIRCULAR_SAW_HIT_REACTION_NONE = 0,
         CIRCULAR_SAW_HIT_REACTION_FATAL = 1,
-        CIRCULAR_SAW_HIT_REACTION_DESTROY_IMMEDIATELY = 2
+        CIRCULAR_SAW_HIT_REACTION_DESTROY_IMMEDIATELY = 2,
+        CIRCULAR_SAW_HIT_REACTION_START_HIT_RECOVERY = 3
     };
     enum {
         CIRCULAR_SAW_POINT_ATTACK_APPROACH_AND_ALIGN = 0,
@@ -1658,7 +1659,7 @@ void circular_saw_enemy_update(M_35F0 *moby) {
                 FUN_L04_002c1d70((char *)moby);
                 mark_moby_for_removal(moby);
                 return;
-            case 3:
+            case CIRCULAR_SAW_HIT_REACTION_START_HIT_RECOVERY:
             case 4:
             case 5:
             case 6:
