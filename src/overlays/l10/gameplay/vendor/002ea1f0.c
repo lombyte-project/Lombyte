@@ -357,13 +357,18 @@ void FUN_L10_002eb6f0(struct Moby *m) {
 extern void FUN_L01_00278e20(void *, int);
 
 void FUN_L10_002eb7e0(struct Moby *moby) {
+    enum {
+        HIT_RESPONSE_STATE_INITIALIZE = 0,
+        HIT_RESPONSE_STATE_WAIT_FOR_HIT = 1,
+        HIT_RESPONSE_STATE_RESPOND_AND_REMOVE = 2
+    };
     int ok = 0;
     char *p = find_moby_hit(moby, 0x10000, 0);
     switch (moby->state) {
-    case 0:
+    case HIT_RESPONSE_STATE_INITIALIZE:
         moby->state = 1;
         break;
-    case 1:
+    case HIT_RESPONSE_STATE_WAIT_FOR_HIT:
         if (p != 0) {
             if (0.0f < *(float *)(p + 0x2C))
                 ok = 1;
@@ -371,7 +376,7 @@ void FUN_L10_002eb7e0(struct Moby *moby) {
         if (ok != 0)
             moby->state = 2;
         break;
-    case 2:
+    case HIT_RESPONSE_STATE_RESPOND_AND_REMOVE:
         allocate_voice_for_target_entry(0, 0, (int)moby);
         FUN_L01_002787a0(moby);
         FUN_L01_00278e20(moby, 0x741);
