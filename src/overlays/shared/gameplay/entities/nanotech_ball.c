@@ -1787,7 +1787,8 @@ f32 vector_distance_2db8f8(void *, void *) __asm__("FUN_001f9b80");
 s32 FUN_L00_002db8f8(u8 *moby, u8 *position, u8 *target) {
     enum {
         SUCK_DISPATCH_BEING_PULLED_IN = 2,
-        SUCK_DISPATCH_STORED = 3
+        SUCK_DISPATCH_STORED = 3,
+        SUCK_DISPATCH_FALLING_AFTER_CANCEL = 6
     };
     u8 *record = FUN_L00_002db890_002db8f8(moby);
     s16 state;
@@ -1829,7 +1830,7 @@ s32 FUN_L00_002db8f8(u8 *moby, u8 *position, u8 *target) {
         return 3;
     case 4:
     case 5:
-    case 6:
+    case SUCK_DISPATCH_FALLING_AFTER_CANCEL:
         {
             u8 *seq = *(u8 **)(record + 0x70);
             if (moby[0x53] != seq[3]) {
