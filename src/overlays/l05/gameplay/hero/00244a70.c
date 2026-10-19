@@ -2240,7 +2240,7 @@ void FUN_L05_00244a70(void) {
             }
             break;
         }
-    case 0x79:
+    case HERO_STATE_SLIP:
         hero.motion.move_yaw = hero.downhill_yaw;
         hero.target_speed = frame_time * 5.5f;
         air_accel(frame_time_sq * 25.0f);
