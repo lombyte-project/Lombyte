@@ -2413,6 +2413,12 @@ void mark_moby_for_removal_c(void *obj) __asm__("FUN_0020c828");
 extern float D_L17_0015F580_macro[] __asm__("D_L17_0015F580") __attribute__((section(".sdata")));
 void robot_dog_update(unsigned char *m) __asm__("FUN_L17_002eeb68");
 void robot_dog_update(unsigned char *m) {
+    enum {
+        ROBOT_DOG_STATE_INITIALIZE = 0,
+        ROBOT_DOG_STATE_APPROACH_TARGET = 9,
+        ROBOT_DOG_STATE_ATTACK_TARGET = 10,
+        ROBOT_DOG_STATE_RETURN_HOME = 11
+    };
     Vars1382 *d;
     unsigned char *tgt;
     int r;
@@ -2456,7 +2462,7 @@ void robot_dog_update(unsigned char *m) {
         m[0x7F] = 0x17;
     }
     switch (m[0x20]) {
-    case 0:
+    case ROBOT_DOG_STATE_INITIALIZE:
         *(unsigned short *)(m + 0x34) |= 0x1000;
         qcopy(&d->home, m + 0x10);
         d->b58 = 8;
@@ -2651,7 +2657,7 @@ void robot_dog_update(unsigned char *m) {
         }
         break;
     }
-    case 9:
+    case ROBOT_DOG_STATE_APPROACH_TARGET:
         FUN_L17_002efd48_c((char *)m, d->v180, d->f1EC);
         *(float *)(m + 0x58) = 1.8f;
         if (point_in_path_xy((&hero.motion.pos), ((int **)D_L17_001B0DB0)[d->path] + 4,
@@ -2668,7 +2674,7 @@ void robot_dog_update(unsigned char *m) {
             m[0x20] = 11;
         }
         break;
-    case 10:
+    case ROBOT_DOG_STATE_ATTACK_TARGET:
         if (m[0x70] & 2) {
             m[0x20] = 11;
             if (m[0x53] != 9) {
@@ -2689,7 +2695,7 @@ void robot_dog_update(unsigned char *m) {
             spawn_nearby_effect((int)d->target, (int)m, 1, pos, tmp, 1.0f);
         }
         break;
-    case 11: {
+    case ROBOT_DOG_STATE_RETURN_HOME: {
         float dist;
         float far;
         float k1;
