@@ -628,6 +628,11 @@ extern char *D_L05_001B0CB0_2D8388[] __asm__("D_L05_001B0930");
 
 void scenery_ship_update(char *moby) __asm__("FUN_L05_002d7140");
 void scenery_ship_update(char *moby) {
+    enum {
+        SCENERY_SHIP_INITIALIZE = 0,
+        SCENERY_SHIP_FOLLOW_PATH = 1,
+        SCENERY_SHIP_SPAWN_EFFECTS_AND_REMOVE = 2
+    };
     Data_2D8388 *data = *(Data_2D8388 **)(moby + 0x78);
     char *hit;
     char *path;
@@ -653,7 +658,7 @@ void scenery_ship_update(char *moby) {
     hit = func_L00_0025B478_2D8388(moby, 0x10000, 0);
     damaged = 0;
     switch (*(unsigned char *)(moby + 0x20)) {
-    case 0: {
+    case SCENERY_SHIP_INITIALIZE: {
         *(unsigned char *)(moby + 0x30) = 0xFF;
         *(short *)(moby + 0x32) = 0xFF;
         *(float *)(moby + 0x2C) = *(float *)(*(char **)(moby + 0x24) + 0x24) * D_L05_001613D4;
@@ -695,7 +700,7 @@ void scenery_ship_update(char *moby) {
         data->f8 = (float)*(int *)path * data->f4;
         break;
     }
-    case 1: {
+    case SCENERY_SHIP_FOLLOW_PATH: {
         float phase = func_001FA748_2D8388(data->f1C, D_0015ED6C * 12.566370614f);
         float wave;
         data->f1C = phase;
@@ -746,7 +751,7 @@ void scenery_ship_update(char *moby) {
         if (damaged) *(unsigned char *)(moby + 0x20) = 2;
         break;
     }
-    case 2: {
+    case SCENERY_SHIP_SPAWN_EFFECTS_AND_REMOVE: {
         func_0022ED80_2D8388(0, 0, (int)moby);
         tab = (float *)D_L05_0015F580_macro;
         pos = (float *)(moby + 0x10);
