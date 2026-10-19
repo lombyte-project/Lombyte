@@ -2284,14 +2284,15 @@ extern void cutscene_set_camera_target(int) __asm__("FUN_L00_002637f8");
 
 void FUN_L13_0030bdf0(struct Moby *moby) {
     enum {
-        INITIALIZE_UPDATE_DISTANCE = 0
+        INITIALIZE_UPDATE_DISTANCE = 0,
+        UPDATE_CUTSCENE_CAMERA_TARGET = 1
     };
     switch (moby->state) {
     case INITIALIZE_UPDATE_DISTANCE:
         moby->update_dist = 0xFF;
         moby->state = 1;
         break;
-    case 1:
+    case UPDATE_CUTSCENE_CAMERA_TARGET:
         if (D_L13_0015F5C4 == 2 && D_L13_0016CB60.state == 2) {
             cutscene_set_camera_target(D_L13_0016CB60.target);
         }
