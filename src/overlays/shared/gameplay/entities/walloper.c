@@ -2531,6 +2531,9 @@ extern int D_L00_00173E40[] __attribute__((section(".data")));
 int FUN_001efa68_002bec80(Vec4_2bec80 *, Vec4_2bec80 *, int, void *, int) __asm__("FUN_001efa68");
 unsigned int FUN_001f0b58_002bec80(void) __asm__("FUN_001f0b58");
 float FUN_L00_002bec80(Vec4_2bec80 *p, void *q) {
+    enum {
+        COLLISION_MATERIAL_WATER = 0
+    };
     Vec4_2bec80 a, b;
     float f, t;
     qcopy(&a, p);
@@ -2548,7 +2551,7 @@ float FUN_L00_002bec80(Vec4_2bec80 *p, void *q) {
             return (*(S173E40_2bec80 *)D_L00_00173E40).f28;
         }
         switch (FUN_001f0b58_002bec80()) {
-        case 0:
+        case COLLISION_MATERIAL_WATER:
         case 1:
         case 3:
         case 8:
