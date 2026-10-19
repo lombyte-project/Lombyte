@@ -100,6 +100,7 @@ void FUN_L11_00315968(struct Moby *moby) {
         HIT_RESPONSE_DEATH = 1,
         HIT_RESPONSE_DEATH_KNOCKBACK = 2,
         HIT_RESPONSE_KNOCKBACK = 3,
+        HIT_RESPONSE_KNOCKBACK_ALTERNATE = 4,
         HIT_RESPONSE_NON_KNOCKBACK_REACTION = 9,
         HIT_RESPONSE_NON_KNOCKBACK_REACTION_ALTERNATE = 10,
         HIT_RESPONSE_COOLDOWN_NO_KNOCKBACK = 11
@@ -157,7 +158,7 @@ void FUN_L11_00315968(struct Moby *moby) {
                 d->unk117 = 0xFA;
                 break;
             case HIT_RESPONSE_KNOCKBACK:
-            case 4:
+            case HIT_RESPONSE_KNOCKBACK_ALTERNATE:
             case 5:
             case 6:
             case 7:
