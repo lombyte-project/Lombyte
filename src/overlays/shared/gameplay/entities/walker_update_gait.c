@@ -178,7 +178,8 @@ void walker_update_gait(WalkMoby *m, WalkData *d, int flags, float speed, float 
         WALKER_GAIT_RESET_TO_IDLE = 12,
         WALKER_GAIT_RUN = 13,
         WALKER_GAIT_WAIT_FOR_LANDING = 16,
-        WALKER_GAIT_SYNC_LANDING_ANIMATION = 18
+        WALKER_GAIT_SYNC_LANDING_ANIMATION = 18,
+        WALKER_GAIT_RESUME_RUN_AFTER_LANDING = 20
     };
     enum {
         WALKER_GAIT_WALK = 1
@@ -946,7 +947,7 @@ void walker_update_gait(WalkMoby *m, WalkData *d, int flags, float speed, float 
             }
         }
         break;
-    case 20:
+    case WALKER_GAIT_RESUME_RUN_AFTER_LANDING:
         if (flags & 1) {
             int bl =
                 truncate_float_to_s32((d->anim[7]->f38 * 0.25f + 2.0f) / (speed / d->anim[7]->f08));
