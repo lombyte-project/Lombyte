@@ -320,6 +320,8 @@ void sand_shark_update(struct Moby *moby) {
         SAND_SHARK_WAIT_FOR_HERO_LAUNCH_TRIGGER = 12,
         SAND_SHARK_BALLISTIC_FLIGHT = 13,
         SAND_SHARK_FACE_TARGET = 15,
+        SAND_SHARK_ALIGN_TO_GROUND_BEFORE_APPROACH_TARGET_WITH_HEIGHT_OFFSET = 17,
+        SAND_SHARK_ALIGN_TO_GROUND_BEFORE_RETURN_HOME_WITH_HEIGHT_OFFSET = 18,
         SAND_SHARK_ALIGN_TO_GROUND_BEFORE_APPROACH_TARGET = 19,
         SAND_SHARK_ALIGN_TO_GROUND_BEFORE_RETURN_HOME = 20,
         SAND_SHARK_APPROACH_TARGET_WITH_HEIGHT_OFFSET = 22,
@@ -537,8 +539,8 @@ void sand_shark_update(struct Moby *moby) {
             moby->state = 0x12;
         }
         break;
-    case 17:
-    case 18: {
+    case SAND_SHARK_ALIGN_TO_GROUND_BEFORE_APPROACH_TARGET_WITH_HEIGHT_OFFSET:
+    case SAND_SHARK_ALIGN_TO_GROUND_BEFORE_RETURN_HOME_WITH_HEIGHT_OFFSET: {
         float g;
         moby->pos.z += D_L02_0016191C;
         g = ground_e50(&moby->pos, 0, 0.5f);
