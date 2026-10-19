@@ -1850,6 +1850,12 @@ extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F
 /* Same platform routine as elevator_update, with a waiting state (1) and this level's tables. */
 void elevator_update(L16PlatformMoby *moby) __asm__("FUN_L02_002dbd38");
 void elevator_update(L16PlatformMoby *moby) {
+    enum {
+        ELEVATOR_INITIALIZE = 0,
+        ELEVATOR_WAIT_FOR_RIDER_OR_TRIGGER = 1,
+        ELEVATOR_WAIT_AT_STOP = 2,
+        ELEVATOR_MOVE_TO_GOAL = 3
+    };
     L16PlatformVector delta, old_rotation, motion;
     L16PlatformData *d = moby->data;
     float *position = moby->position;
@@ -1859,7 +1865,7 @@ void elevator_update(L16PlatformMoby *moby) {
     qcopy(old_rotation.v, rotation);
     if (d) {
         switch (moby->state) {
-        case 0:
+        case ELEVATOR_INITIALIZE:
             motion.q = 0;
             motion.v[2] = 1.0f;
             d->particle = -1;
@@ -1873,7 +1879,7 @@ void elevator_update(L16PlatformMoby *moby) {
                 moby->state = 1;
             }
             break;
-        case 2:
+        case ELEVATOR_WAIT_AT_STOP:
             if (voice_is_playing(moby, d->particle)) {
                 release_voice_slot(d->particle);
                 d->particle = -1;
@@ -1909,7 +1915,7 @@ void elevator_update(L16PlatformMoby *moby) {
                 moby->state = 3;
             }
             break;
-        case 1:
+        case ELEVATOR_WAIT_FOR_RIDER_OR_TRIGGER:
             if ((hero.ground_moby == (struct Moby *)moby && hero.air_frames.s == 0) || D_0013D4DA) {
                 clear_u64_value(motion.v);
                 if (moby->reverse) {
@@ -1924,7 +1930,7 @@ void elevator_update(L16PlatformMoby *moby) {
                 moby->state = 3;
             }
             break;
-        case 3: {
+        case ELEVATOR_MOVE_TO_GOAL: {
             float speed;
 
             if (!FUN_L00_0025fa38(&hero.motion.unkD0, d->joint)
