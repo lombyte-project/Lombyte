@@ -1145,7 +1145,8 @@ extern void set_vector_length_xy(float *, float *, float) __asm__("FUN_001f9c48"
 void FUN_L00_00233ba0(float *dst, float *src, float z) {
     enum {
         GRAVITY_MODE_WORLD_Z = 0,
-        GRAVITY_MODE_VECTOR_AXIS = 1
+        GRAVITY_MODE_VECTOR_AXIS = 1,
+        GRAVITY_MODE_DIRECTION_AXIS = 2
     };
     struct Hero *base = &hero;
 
@@ -1154,7 +1155,7 @@ void FUN_L00_00233ba0(float *dst, float *src, float z) {
         set_vector_length_xy(dst, src, z);
         break;
     case GRAVITY_MODE_VECTOR_AXIS:
-    case 2:
+    case GRAVITY_MODE_DIRECTION_AXIS:
         transform_vector(dst, src, base->unk40);
         set_vector_length_xy(dst, dst, z);
         transform_vector(dst, dst, base->unk0);
