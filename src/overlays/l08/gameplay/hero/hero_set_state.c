@@ -189,7 +189,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x41: {
+    case HERO_STATE_FIDGET_ALT: {
         int t = scale_game_frames(9);
         set_hero_animation(FUN_L01_00226f10(0), 0, (float)t);
         {
@@ -459,7 +459,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0x80, 0, (float)scale_game_frames(0xA));
         break;
     }
-    case 1: {
+    case HERO_STATE_LOOK: {
         struct Hero *p = &hero;
         int t;
         p->state.control_mode = 0;
