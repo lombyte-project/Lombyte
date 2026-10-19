@@ -97,6 +97,7 @@ extern s32 FUN_L00_0025ff38(void *, void *, s32, s32, void *, s32, float);
 void FUN_L11_00315968(struct Moby *moby) {
     enum {
         HIT_RESPONSE_DEATH = 1,
+        HIT_RESPONSE_DEATH_KNOCKBACK = 2,
         HIT_RESPONSE_KNOCKBACK = 3
     };
     struct L11PatrolVars *d = (struct L11PatrolVars *)moby->pvars;
@@ -175,7 +176,7 @@ void FUN_L11_00315968(struct Moby *moby) {
                 break;
             }
             case HIT_RESPONSE_DEATH:
-            case 2: {
+            case HIT_RESPONSE_DEATH_KNOCKBACK: {
                 float yaw;
                 moby->flags &= ~0x1000;
                 d->unk130 = D_L11_001622D0 * frame_time_sq;
