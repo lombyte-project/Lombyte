@@ -78,6 +78,9 @@ extern void clear_vector(void *);
 extern int hero_set_state(int, int) __asm__("FUN_L02_0022b728");
 extern char D_L02_0017C520[];
 int hero_set_state(int a, int b) {
+    enum {
+        HERO_STATE_DEATH_FALL = 0x77
+    };
     int old2088;
     char *moby;
     int old20A7;
@@ -624,7 +627,7 @@ int hero_set_state(int a, int b) {
         break;
     }
     case HERO_STATE_FALL:
-    case 0x77: {
+    case HERO_STATE_DEATH_FALL: {
         struct Hero *p = &hero;
         p->state.control_mode = 2;
         p->unk2284 = 0;
