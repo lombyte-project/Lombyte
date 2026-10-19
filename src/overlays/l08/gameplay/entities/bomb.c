@@ -319,7 +319,8 @@ extern float D_L08_00174660[];
 void FUN_L08_002d23f0(char *moby) {
     enum {
         BOMB_STATE_MOVING = 1,
-        BOMB_STATE_STATIONARY_FUSE = 2
+        BOMB_STATE_STATIONARY_FUSE = 2,
+        BOMB_STATE_EXPLODE_AND_REMOVE = 0x62
     };
     union Coll_36F8 c;
     blk16 table_or_bounce_scratch;
@@ -438,7 +439,7 @@ void FUN_L08_002d23f0(char *moby) {
         }
         FUN_L00_0025d538_c(moby, d);
         break;
-    case 0x62:
+    case BOMB_STATE_EXPLODE_AND_REMOVE:
         allocate_voice_for_target_entry(0, 0, moby);
         c.p.moby = moby;
         c.p.flags = 0x810001;
