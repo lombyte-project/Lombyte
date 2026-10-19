@@ -3113,6 +3113,10 @@ extern int hero_set_state(int, int) __asm__("FUN_L06_002356a0");
 extern void fade_to_black(s32 n) __asm__("FUN_001f4a58");
 
 void FUN_L06_002f7930(char *m) {
+    enum {
+        INITIALIZE_TRIGGER_MONITOR = 0,
+        CHECK_HERO_TRIGGER_VOLUMES = 1
+    };
     char *d = *(char **)(m + 0x78);
     struct Hero *g;
     int *list;
@@ -3121,11 +3125,11 @@ void FUN_L06_002f7930(char *m) {
     int i;
     int j;
     switch (((unsigned char *)m)[0x20]) {
-    case 0:
+    case INITIALIZE_TRIGGER_MONITOR:
         m[0x20] = 1;
         ((unsigned char *)m)[0x30] = 0xFF;
         return;
-    case 1:
+    case CHECK_HERO_TRIGGER_VOLUMES:
         break;
     default:
         return;
