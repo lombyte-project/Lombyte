@@ -1300,6 +1300,7 @@ void sand_mouse_update(struct Moby *moby) __asm__("FUN_L01_002e3f20");
 void sand_mouse_update(struct Moby *moby) {
     enum {
         SAND_MOUSE_INITIALIZE = 0,
+        SAND_MOUSE_WAIT_FOR_HERO_IN_VOLUME = 1,
         SAND_MOUSE_WAIT_FOR_PARENT_READY = 2,
         SAND_MOUSE_MOVE_TOWARD_HERO = 3,
         SAND_MOUSE_FADE_OUT_AND_RESET_HOME = 6,
@@ -1385,7 +1386,7 @@ void sand_mouse_update(struct Moby *moby) {
         moby->state = 1;
         moby->draw_dist = 0;
         break;
-    case 1:
+    case SAND_MOUSE_WAIT_FOR_HERO_IN_VOLUME:
         if (D_0013D4C5 != 0 && hero_2e3f20->i1158 == 5) {
             d->count = 0;
             d->t60 = scale_game_frames(D_L01_00161918);
