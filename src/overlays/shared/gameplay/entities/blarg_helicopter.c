@@ -354,7 +354,8 @@ void spawner_update(struct Moby *moby) {
         SPAWNER_TARGET_COUNT_ANGULAR_SPREAD = 0,
         SPAWNER_TARGET_HALF_REFERENCE_OFFSET = 1,
         SPAWNER_TARGET_UNUSED_POINT = 2,
-        SPAWNER_TARGET_COUNT_INDEXED_POINT = 4
+        SPAWNER_TARGET_COUNT_INDEXED_POINT = 4,
+        SPAWNER_TARGET_SKIP_SETUP = 5
     };
     enum {
         SPAWNER_ACTIVATION_STAY_IN_PROXIMITY_WAIT = 6
@@ -657,7 +658,7 @@ void spawner_update(struct Moby *moby) {
                 qcopy(&target_position, &spawn_position);
                 break;
             }
-            case 5:
+            case SPAWNER_TARGET_SKIP_SETUP:
                 break;
             }
             {
