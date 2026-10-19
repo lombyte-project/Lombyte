@@ -2030,6 +2030,7 @@ extern short D_L00_00161D10 __attribute__((sda));
 extern short D_L00_00161D80 __attribute__((sda));
 void FUN_L00_002e4fe8(char *m, float *out_focus_velocity) {
     enum {
+        CAM_ATTACH_GROUND_AWARE_FOCUS_VELOCITY = 2,
         CAM_ATTACH_PROJECT_HERO_FOCUS_VELOCITY = 4,
         CAM_ATTACH_BLEND_OUT_FOCUS_VELOCITY = 6,
         CAM_ATTACH_BLEND_BACK_FOCUS_VELOCITY = 7,
@@ -2069,7 +2070,7 @@ void FUN_L00_002e4fe8(char *m, float *out_focus_velocity) {
         return;
     }
     switch (*(unsigned char *)(e + 0xC4)) {
-    case 2:
+    case CAM_ATTACH_GROUND_AWARE_FOCUS_VELOCITY:
         padb = &hero;
         if (padb->state.current == 0x11 ||
             (padb->unk41E != 0 && padb->ground_distance > 0.2f &&
