@@ -3101,6 +3101,12 @@ void FUN_L14_002d7490(struct Moby *m);
 
 void FUN_L14_002d5f40(struct Moby *m);
 void FUN_L14_002d5f40(struct Moby *m) {
+    enum {
+        RACER_STATE_INITIALIZE = 0,
+        RACER_STATE_WAIT_FOR_RACE_START = 1,
+        RACER_STATE_WAIT_FOR_START_DELAY = 2,
+        RACER_STATE_FOLLOW_PATH = 5
+    };
     struct L14RacerVars *d = (struct L14RacerVars *)m->pvars;
     u8 pos[16];
     f32 vel[3];
@@ -3108,7 +3114,7 @@ void FUN_L14_002d5f40(struct Moby *m) {
     f32 *sv;
 
     switch (m->state) {
-    case 0:
+    case RACER_STATE_INITIALIZE:
         if (d->path == -1 || *race_paths[d->path].points == 0 || d->start_point == -1 ||
             *D_L14_001B0BB0[d->start_point] != 3 || d->volume == -1) {
             FUN_0020c828(m);
@@ -3127,13 +3133,13 @@ void FUN_L14_002d5f40(struct Moby *m) {
         memset_words(d->manips[2], 0, 0x40);
         attach_manipulator(m, 4, d->manips[2]);
         return;
-    case 1:
+    case RACER_STATE_WAIT_FOR_RACE_START:
         if (race_state->phase == 0x14) {
             d->timer = scale_game_frames(d->delay);
             m->state = 2;
         }
         return;
-    case 2:
+    case RACER_STATE_WAIT_FOR_START_DELAY:
         if (!fast_dec_timer(&d->timer))
             return;
         m->flags = (m->flags | 0x1000) & 0xFFBE;
@@ -3159,7 +3165,7 @@ void FUN_L14_002d5f40(struct Moby *m) {
             d->timer = scale_game_frames(D_L14_00161A34);
         }
         break;
-    case 5:
+    case RACER_STATE_FOLLOW_PATH:
         FUN_L14_002d7198(m);
         break;
     case 6:
