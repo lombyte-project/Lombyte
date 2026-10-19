@@ -5593,9 +5593,12 @@ extern short *D_L06_001ABFC0[];
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 
 void FUN_L06_002fda30(char *m) {
+    enum {
+        WAIT_FOR_HERO_IN_CLIP_VOLUME = 0
+    };
     int *d = *(int **)(m + 0x78);
     switch (((unsigned char *)m)[0x20]) {
-    case 0:
+    case WAIT_FOR_HERO_IN_CLIP_VOLUME:
         if (d[1] >= 0 && is_point_inside_clip_volume(&hero.motion.pos, d[1])) {
             m[0x20] = 1;
             if (((unsigned char *)m)[0x53] != 1) {
