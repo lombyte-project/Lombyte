@@ -37,6 +37,13 @@ extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void transform_vector_xyz(void *, void *, void *) __asm__("FUN_001f9cf8");
 
 void FUN_L07_0031a9e8(struct Moby *moby) {
+    enum {
+        MOVING_MOBY_INITIALIZE = 0,
+        MOVING_MOBY_WAIT_AT_HOME = 1,
+        MOVING_MOBY_MOVE_TO_OFFSET = 2,
+        MOVING_MOBY_WAIT_AT_OFFSET = 3,
+        MOVING_MOBY_RETURN_HOME = 4
+    };
     struct L07MovingVars *vars = (struct L07MovingVars *)moby->pvars;
     struct Moby *target;
     Vec4 next;
@@ -63,14 +70,14 @@ void FUN_L07_0031a9e8(struct Moby *moby) {
     }
 
     switch (moby->state) {
-    case 0:
+    case MOVING_MOBY_INITIALIZE:
         qcopy(&vars->home, &moby->pos);
         if (vars->indicator != -1)
             D_L07_00184528[vars->indicator] = 0;
         moby->state = 1;
         vars->home.w = 0;
         return;
-    case 1:
+    case MOVING_MOBY_WAIT_AT_HOME:
         if (force_start)
             return;
         if (!force_end && vars->target != -1 &&
@@ -88,7 +95,7 @@ void FUN_L07_0031a9e8(struct Moby *moby) {
             FUN_0022da68(vars->startSound, 0, moby);
         moby->state = 2;
         break;
-    case 2:
+    case MOVING_MOBY_MOVE_TO_OFFSET:
         if (force_start || (!force_end && vars->target != -1 &&
             (target = &D_L07_0015FFD8[vars->target]) != 0 &&
             target->state != 0xfe && target->state != 0xfd &&
@@ -118,7 +125,7 @@ void FUN_L07_0031a9e8(struct Moby *moby) {
         if (vars->endSound != -1)
             FUN_0022da68(vars->startSound, 0, moby);
         return;
-    case 3:
+    case MOVING_MOBY_WAIT_AT_OFFSET:
         if (!force_start && (force_end || vars->target == -1 ||
             (target = &D_L07_0015FFD8[vars->target]) == 0 ||
             target->state == 0xfe || target->state == 0xfd ||
@@ -129,7 +136,7 @@ void FUN_L07_0031a9e8(struct Moby *moby) {
             FUN_0022da68(vars->startSound, 0, moby);
         moby->state = 4;
         break;
-    case 4:
+    case MOVING_MOBY_RETURN_HOME:
         if (!force_start && (force_end || vars->target == -1 ||
             (target = &D_L07_0015FFD8[vars->target]) == 0 ||
             target->state == 0xfe || target->state == 0xfd ||
