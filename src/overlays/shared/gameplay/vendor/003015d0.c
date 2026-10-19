@@ -57,6 +57,7 @@ extern int D_L14_001620D8 __attribute__((sda));
 void FUN_L14_003015d0(unsigned char *m) {
     enum {
         BEAM_STATE_INITIALIZE = 0,
+        BEAM_STATE_COUNTER_TRIGGERED_PULSES = 1,
         BEAM_STATE_WAIT_FOR_TIMED_PULSE = 2,
         BEAM_STATE_REPEAT_PULSES = 3
     };
@@ -84,7 +85,7 @@ void FUN_L14_003015d0(unsigned char *m) {
         d->s8 = 1;
         d->sA = 1;
         break;
-    case 1:
+    case BEAM_STATE_COUNTER_TRIGGERED_PULSES:
         if (D_L14_00162188_s != 0) {
             if (d->s12 == 0) {
                 D_L14_00162188_s = D_L14_00162188_s - 1;
