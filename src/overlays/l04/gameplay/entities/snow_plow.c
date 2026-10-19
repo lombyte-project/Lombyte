@@ -825,7 +825,9 @@ void woodcut_bot_update(WBMoby *m) {
         WOODCUT_BOT_REACTION_START_DEATH_KNOCKBACK = 1,
         WOODCUT_BOT_REACTION_DEATH_KNOCKBACK = 2,
         WOODCUT_BOT_REACTION_HIT_RECOVERY_AND_REPOSITION = 3,
-        WOODCUT_BOT_REACTION_RECOIL_TO_IDLE = 4
+        WOODCUT_BOT_REACTION_RECOIL_TO_IDLE = 4,
+        WOODCUT_BOT_REACTION_RECOIL_TO_IDLE_WITH_COOLDOWNS = 5,
+        WOODCUT_BOT_REACTION_HIT_RECOVERY_WITH_MELEE_WINDOW_GUARD = 6
     };
     int excited = 0;
     WBData *d = m->d;
@@ -926,7 +928,7 @@ void woodcut_bot_update(WBMoby *m) {
                 d->f3E4 = (2.0f / multiply_global_factor_ed64(15.0f)) * 2.0f;
                 break;
             case WOODCUT_BOT_REACTION_HIT_RECOVERY_AND_REPOSITION:
-            case 6:
+            case WOODCUT_BOT_REACTION_HIT_RECOVERY_WITH_MELEE_WINDOW_GUARD:
                 d->f3C8 = -0.5235988f;
                 if (m->anim != 4 || hd < 16.0f || hd > 27.0f) {
                     short cls;
@@ -950,7 +952,7 @@ void woodcut_bot_update(WBMoby *m) {
                 }
                 break;
             case WOODCUT_BOT_REACTION_RECOIL_TO_IDLE:
-            case 5:
+            case WOODCUT_BOT_REACTION_RECOIL_TO_IDLE_WITH_COOLDOWNS:
                 blend_moby_animation(m, 6, 0, scale_game_frames(10));
                 FUN_L00_002a1538(d->f160);
                 m->state = 1;
