@@ -627,7 +627,7 @@ void FUN_L15_0020ed50(void) {
     Vec4 vD0;
 
     switch (hero.state.current) {
-    case 0x0:
+    case HERO_STATE_IDLE:
     case HERO_STATE_LOOK:
     case HERO_STATE_STOP:
     case HERO_STATE_CROUCH:
@@ -1719,7 +1719,7 @@ void FUN_L15_0020ed50(void) {
             hero.motion.velocity.f[2] = hero.motion.velocity.f[2] - frame_time_sq * 54.0f;
         }
         break;
-    case 2:
+    case HERO_STATE_RUN:
     case 0x73: {
         s32 slide = 0;
         f32 k;
@@ -1928,7 +1928,7 @@ void FUN_L15_0020ed50(void) {
         air_accel(frame_time_sq * 25.0f);
         FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.unk120, frame_time_sq * 18.0f);
         break;
-    case 6:
+    case HERO_STATE_FALL:
     case 0x2D:
         if (hero.state.current == 0x2D) {
             f32 t = 0.0f;
@@ -2055,7 +2055,7 @@ void FUN_L15_0020ed50(void) {
     case 7:
     case HERO_STATE_RUN_JUMP:
     case HERO_STATE_PACK_JUMP:
-    case 0xB:
+    case HERO_STATE_HIGH_JUMP:
     case 0xC:
     case 0xD:
     case 0xE:
@@ -2194,7 +2194,7 @@ void FUN_L15_0020ed50(void) {
         FUN_L00_0020b5b8();
         break;
     }
-    case 0x16: {
+    case HERO_STATE_HURT: {
         f32 l = vector_length_xy(&hero.motion.velocity);
         f32 d = frame_time_sq * 4.0f;
         if (hero.air_frames.s == 0 && scale_game_frames(10) < hero.state_timer) {
