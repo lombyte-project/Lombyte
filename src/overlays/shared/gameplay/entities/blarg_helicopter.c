@@ -341,12 +341,16 @@ void spawner_update(struct Moby *moby) __asm__("FUN_L03_002bef68");
 void spawner_update(struct Moby *moby) {
     enum {
         SPAWNER_INITIALIZE = 0,
+        SPAWNER_WAIT_FOR_PROXIMITY = 1,
         SPAWNER_DESTROY = 8
     };
     enum {
         SPAWNER_TRIGGER_DISTANCE_ONLY = 0,
         SPAWNER_TRIGGER_VOLUME_ONLY = 1,
         SPAWNER_TRIGGER_VOLUME_OR_DISTANCE = 2
+    };
+    enum {
+        SPAWNER_TARGET_COUNT_INDEXED_POINT = 4
     };
     int used[4];
     Vec4A_2bef68 launch_origin;
@@ -455,7 +459,7 @@ void spawner_update(struct Moby *moby) {
         moby->state = 1;
         break;
     }
-    case 1:
+    case SPAWNER_WAIT_FOR_PROXIMITY:
         if (near1) {
             switch (d->b84) {
             case 0:
@@ -620,7 +624,7 @@ void spawner_update(struct Moby *moby) {
                 qcopy(&target_position, &v60);
                 break;
             }
-            case 4: {
+            case SPAWNER_TARGET_COUNT_INDEXED_POINT: {
                 int *p = d->pts;
                 int cnt = d->count;
                 int n = 0;
