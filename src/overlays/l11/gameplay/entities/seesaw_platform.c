@@ -3207,7 +3207,8 @@ void puffoid_update(struct Moby *moby) {
         PUFFOID_STATE_CARRIER_SPRAY_ATTACK = 16,
         PUFFOID_STATE_CARRIER_KNOCKBACK = 17,
         PUFFOID_STATE_CARRIER_DEATH_KNOCKBACK = 18,
-        PUFFOID_STATE_FOLLOW_PATH = 19
+        PUFFOID_STATE_FOLLOW_PATH = 19,
+        PUFFOID_STATE_WAIT_TO_RESUME_COMMAND = 20
     };
     enum {
         PUFFOID_PATH_ANIM_TRAVEL = 4,
@@ -3637,7 +3638,7 @@ void puffoid_update(struct Moby *moby) {
         }
         break;
     }
-    case 20:
+    case PUFFOID_STATE_WAIT_TO_RESUME_COMMAND:
         if (d->unkC8 != 0 && FUN_L00_002dc9f0_4318(moby, d->unk120)) {
             moby->state = moby->command;
             d->unkC8 = 0;
