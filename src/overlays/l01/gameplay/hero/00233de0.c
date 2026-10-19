@@ -667,7 +667,7 @@ void FUN_L01_002370b8(void) {
             }
         }
     } break;
-    case 0x7F:
+    case HERO_STATE_SINK:
         if (((Moby *)hero.unk6A4) == 0) {
             Moby *m;
 
