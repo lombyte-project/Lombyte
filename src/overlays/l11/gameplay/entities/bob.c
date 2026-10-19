@@ -65,10 +65,15 @@ extern float approach_angle(float *p, float a, float *v, float b, float c, float
 extern float fast_add_rotations_c(float, float) __asm__("func_001FA580");
 
 void FUN_L11_002cb810(struct Moby *moby) {
+    enum {
+        ROTATION_INITIALIZE = 0,
+        ROTATION_WAIT_FOR_TRIGGER = 1,
+        ROTATION_APPROACH_OFFSET = 2
+    };
     char *data = (char *)moby->pvars;
     int state = (unsigned char)MOBY(moby)->state;
     switch (state) {
-    case 0:
+    case ROTATION_INITIALIZE:
         MOBY(moby)->state = 1;
         *(float *)(data + 4) = moby->rot.z;
         if ((moby->flags & 0x8000) == 0) {
@@ -82,9 +87,9 @@ void FUN_L11_002cb810(struct Moby *moby) {
             *(float *)(*(char **)(c + 0x78) + 4) = moby->rot.z;
         }
         break;
-    case 1:
+    case ROTATION_WAIT_FOR_TRIGGER:
         break;
-    case 2: {
+    case ROTATION_APPROACH_OFFSET: {
         float f;
         if ((moby->flags & 0x8000) == 0)
             f = fast_add_rotations_c(*(float *)(data + 4), 0.20769417f);
