@@ -1269,6 +1269,10 @@ extern void update_joint_animation(float, float, void *, void *, int) __asm__("F
    While idle it turns its head toward the hero or toward random points. */
 void helga_update(struct Moby *m) __asm__("FUN_L03_002da870");
 void helga_update(struct Moby *m) {
+    enum {
+        HELGA_INITIALIZE = 0,
+        HELGA_UPDATE_DIALOGUE = 1
+    };
     struct QuestGiverVars *v = (struct QuestGiverVars *)m->pvars;
     struct TalkState *talk = &v->talk;
     struct Moby *t;
@@ -1288,7 +1292,7 @@ void helga_update(struct Moby *m) {
 
     FUN_L03_002da710(m);
     switch (m->state) {
-    case 0:
+    case HELGA_INITIALIZE:
         if (D_0013D4CC[0] != 0) {
             if (v->link != -1) {
                 t = (struct Moby *)((v->link << 8) + D_L03_0015FFD8_i);
@@ -1316,7 +1320,7 @@ void helga_update(struct Moby *m) {
         initialize_npc_dialogue(m, talk);
         initialize_moby_grounding(m);
         break;
-    case 1:
+    case HELGA_UPDATE_DIALOGUE:
         if (update_npc_dialogue(m, talk)) {
             begin_dialogue_camera_transition(m, 2.3f);
             m->state = 2;
