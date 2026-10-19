@@ -833,6 +833,11 @@ void detach_manipulator(void *moby, void *manip) __asm__("FUN_0020cb88");
 
 void sandmouse_update(Moby *m) __asm__("FUN_L01_0030df40");
 void sandmouse_update(Moby *m) {
+    enum {
+        SANDMOUSE_STATE_INITIALIZE = 0,
+        SANDMOUSE_STATE_FADE_OUT = 6,
+        SANDMOUSE_STATE_RESET = 7
+    };
     Pv_30F318 *p;
     f32 ang;
     int dv;
@@ -865,7 +870,7 @@ void sandmouse_update(Moby *m) {
         FUN_L01_0030ded0(m);
     }
     switch (m->state) {
-    case 0:
+    case SANDMOUSE_STATE_INITIALIZE:
         qzero(p);
         qzero(&p->vel);
         p->stuck = 0;
@@ -1090,7 +1095,7 @@ void sandmouse_update(Moby *m) {
         }
         FUN_L01_0030d5f0(m, p);
         break;
-    case 6:
+    case SANDMOUSE_STATE_FADE_OUT:
         if (p->slot != -1) {
             char *v = VOICE(p->slot);
             if (*(Moby **)(v + 0x88) == m && *(u8 *)(v + 0x74) != 0) {
@@ -1128,7 +1133,7 @@ void sandmouse_update(Moby *m) {
             m->rot.z = fast_add_rotations(m->rot.z, frame_time * 25.132742f);
         }
         break;
-    case 7:
+    case SANDMOUSE_STATE_RESET:
         if (p->slot != -1) {
             char *v = VOICE(p->slot);
             if (*(Moby **)(v + 0x88) == m && *(u8 *)(v + 0x74) != 0) {
