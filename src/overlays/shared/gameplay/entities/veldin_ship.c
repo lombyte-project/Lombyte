@@ -298,7 +298,8 @@ extern f32 D_L00_001618CC __attribute__((sda));
 extern f32 D_L00_001618D0 __attribute__((sda));
 void crate_drop_bolts(u8 *a) {
     enum {
-        CRATE_DROP_AUTO_SELECT = 0
+        CRATE_DROP_AUTO_SELECT = 0,
+        CRATE_DROP_FALLBACK_ITEM = 1
     };
     T_2d0538 tmp;
     V_2d0538 trajectory_vector, adjusted_position, scratch_vector;
@@ -336,7 +337,7 @@ void crate_drop_bolts(u8 *a) {
     }
     if (h != 0x1F5) {
         switch (*(u8 *)(b + 0xCB)) {
-        case 1:
+        case CRATE_DROP_FALLBACK_ITEM:
             n = 10;
             break;
         case 6:
