@@ -1786,6 +1786,10 @@ extern unsigned char D_0013DD47 __attribute__((section(".data")));
 /* Watcher moby update (variant of shady_salesman_update): turns its head toward the hero or a random target. */
 void qwarks_bouncer_update(WM_c *m) __asm__("FUN_L05_00317470");
 void qwarks_bouncer_update(WM_c *m) {
+    enum {
+        QWARKS_BOUNCER_INITIALIZE = 0,
+        QWARKS_BOUNCER_UPDATE_DIALOGUE = 1
+    };
     L16WatchScratch_c scratch;
     WD2 *d = (WD2 *)m->data;
     float rate;
@@ -1795,7 +1799,7 @@ void qwarks_bouncer_update(WM_c *m) {
     if (!d)
         return;
     switch (m->state) {
-    case 0:
+    case QWARKS_BOUNCER_INITIALIZE:
         if (D_0013DD47) {
             FUN_0020c828_c(m);
             return;
@@ -1806,7 +1810,7 @@ void qwarks_bouncer_update(WM_c *m) {
         d->fC = 3.7f;
         initialize_moby_grounding(m);
         break;
-    case 1:
+    case QWARKS_BOUNCER_UPDATE_DIALOGUE:
         if (FUN_L00_00266448_c(m, d))
             FUN_L01_002783a8_c(m, 2.5f);
         if (d->sub == 5) {
