@@ -1295,6 +1295,12 @@ extern void func_L00_002592B0_b(char *moby, float target, float k, float d, floa
 
 void toxic_crab_update(Moby2E30F8 *m) __asm__("FUN_L10_002e1d38");
 void toxic_crab_update(Moby2E30F8 *m) {
+    enum {
+        TOXIC_CRAB_STATE_INITIALIZE = 0,
+        TOXIC_CRAB_STATE_MELEE_ATTACK = 7,
+        TOXIC_CRAB_STATE_RETURN_HOME = 8,
+        TOXIC_CRAB_STATE_DEATH_EFFECTS = 11
+    };
     int see = 0;
     Crab2E30F8 *d = m->data;
     char *t;
@@ -1321,7 +1327,7 @@ void toxic_crab_update(Moby2E30F8 *m) {
         see = 0;
     }
     switch (m->state) {
-    case 0:
+    case TOXIC_CRAB_STATE_INITIALIZE:
         if (d->i1DC != 0 && ((unsigned char *)&D_0013E533)[0x2EC1] == 1) {
             mark_moby_for_removal(m);
             return;
@@ -1640,7 +1646,7 @@ void toxic_crab_update(Moby2E30F8 *m) {
             }
         }
     }
-    case 7: {
+    case TOXIC_CRAB_STATE_MELEE_ATTACK: {
         float fr;
         float ang;
 
@@ -1729,7 +1735,7 @@ void toxic_crab_update(Moby2E30F8 *m) {
         }
         break;
     }
-    case 8: {
+    case TOXIC_CRAB_STATE_RETURN_HOME: {
         {
             float dir[4];
             float out[4];
@@ -1819,7 +1825,7 @@ void toxic_crab_update(Moby2E30F8 *m) {
             }
         }
     }
-    case 11: {
+    case TOXIC_CRAB_STATE_DEATH_EFFECTS: {
         {
             float p[4];
 
