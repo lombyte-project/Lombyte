@@ -1158,10 +1158,12 @@ void robosquawker_update(RsMoby *m) {
     enum {
         ROBOSQUAWKER_STATE_INITIALIZE = 0,
         ROBOSQUAWKER_STATE_GROUND_IDLE = 1,
+        ROBOSQUAWKER_STATE_FACE_AWAY_WAIT_FOR_CHASE = 2,
         ROBOSQUAWKER_STATE_CHASE_TARGET = 3,
         ROBOSQUAWKER_STATE_PECK_ATTACK = 4,
         ROBOSQUAWKER_STATE_RETURN_HOME = 5,
         ROBOSQUAWKER_STATE_DAMAGE_KNOCKBACK = 6,
+        ROBOSQUAWKER_STATE_WAIT_FOR_CLOSE_TARGET = 8,
         ROBOSQUAWKER_STATE_PREPARE_HOME_HOP = 0xA,
         ROBOSQUAWKER_STATE_HOME_HOP = 0xB,
         ROBOSQUAWKER_STATE_BLOCKED_RETURN_HOME = 0xC,
@@ -1564,7 +1566,7 @@ void robosquawker_update(RsMoby *m) {
         }
         FUN_L13_002b4ff0((char *)m, (char *)v);
         break;
-    case 8:
+    case ROBOSQUAWKER_STATE_WAIT_FOR_CLOSE_TARGET:
         subtract_vector_xyz(&va, &tgt, &m->pos);
         if (vector_length_xyz(&va) < v->f1FC - 4.0f
             && absolute_float(m->pos.f[2] - tgt.pos.f[2]) < 8.0f
@@ -1623,7 +1625,7 @@ void robosquawker_update(RsMoby *m) {
             return;
         }
         break;
-    case 2: {
+    case ROBOSQUAWKER_STATE_FACE_AWAY_WAIT_FOR_CHASE: {
         float a;
 
         a = fast_arc_tan(m->pos.f[0] - tgt.pos.f[0], m->pos.f[1] - tgt.pos.f[1]);
