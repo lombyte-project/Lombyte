@@ -462,7 +462,8 @@ void FUN_L06_002feb40(char *m) {
         HIT_RESPONSE_WITHOUT_KNOCKBACK = 0,
         FATAL_HIT_RESPONSE = 1,
         FRAGMENTING_FATAL_HIT_RESPONSE = 2,
-        NONFATAL_KNOCKBACK_HIT_RESPONSE = 3
+        NONFATAL_KNOCKBACK_HIT_RESPONSE = 3,
+        HIT_RESPONSE_PRESERVING_MOBY_STATE = 11
     };
     extern unsigned char D_0013D408[];
     char *d;
@@ -578,7 +579,7 @@ void FUN_L06_002feb40(char *m) {
             break;
         }
         case HIT_RESPONSE_WITHOUT_KNOCKBACK:
-        case 11:
+        case HIT_RESPONSE_PRESERVING_MOBY_STATE:
         default:
             break;
         }
