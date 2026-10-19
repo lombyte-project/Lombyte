@@ -3300,6 +3300,10 @@ extern int allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da
    picks a new one up when get_ammo allows. */
 void glove_of_doom_update(struct Moby *moby) __asm__("FUN_L00_002c7a58");
 void glove_of_doom_update(struct Moby *moby) {
+    enum {
+        GLOVE_INITIALIZE = 0,
+        GLOVE_RELEASE_HELD_MOBY = 3
+    };
     OvlVec4 pos;
     OvlVec4 offset;
     OvlVec4 local;
@@ -3336,7 +3340,7 @@ void glove_of_doom_update(struct Moby *moby) {
     grip.q = vars->grip.q;
     FUN_L00_002c7548(moby, vars, &grip);
     switch (moby->state) {
-    case 0:
+    case GLOVE_INITIALIZE:
         vars->held = 0;
         if (moby->anim_flags & 2) {
             moby->state = 2;
@@ -3350,7 +3354,7 @@ void glove_of_doom_update(struct Moby *moby) {
         break;
     case 2:
         break;
-    case 3:
+    case GLOVE_RELEASE_HELD_MOBY:
         if (vars->held != 0) {
             if (D_00141680.deliveries < 0xFFFF) {
                 D_00141680.deliveries++;
