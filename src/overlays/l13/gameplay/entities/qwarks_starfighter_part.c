@@ -510,6 +510,7 @@ void FUN_L13_002eb098(Moby388 *moby) {
     enum {
         STARFIGHTER_STATE_INITIALIZE = 0,
         STARFIGHTER_STATE_WAIT_FOR_HERO_SHIP = 1,
+        STARFIGHTER_STATE_FOLLOW_INITIAL_PATH = 2,
         STARFIGHTER_STATE_TRACTOR_BEAM = 5,
         STARFIGHTER_STATE_OWNER_UNAVAILABLE = 6,
         STARFIGHTER_STATE_DEATH_FLIGHT = 7,
@@ -614,7 +615,7 @@ void FUN_L13_002eb098(Moby388 *moby) {
         }
         break;
     }
-    case 2: {
+    case STARFIGHTER_STATE_FOLLOW_INITIAL_PATH: {
         {
             char *hero = ((char *)&D_0013F350);
             if (*(Moby388 **)(hero + 0x15F0) != 0 && (*(Moby388 **)(hero + 0x15F0))->cls_id == 0x45) {
