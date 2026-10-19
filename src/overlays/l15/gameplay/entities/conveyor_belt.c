@@ -1389,18 +1389,22 @@ extern s32 current_level_index_macro __asm__("D_0015ED84") __attribute__((sectio
 /* Quartu moby update (class 1469): hint and dialogue triggers from the hero's zones, with the play-time
    records of the two hint messages. */
 void FUN_L15_002ed398(struct Moby *m) {
+    enum {
+        HINT_DIALOGUE_INITIALIZE = 0,
+        HINT_DIALOGUE_CHECK_TRIGGERS = 1
+    };
     Talk_2ed398 *t = (struct Talk_2ed398 *)m->pvars;
     int st = m->state;
     struct Moby *e;
     int i, j, found, npc, pick;
 
     switch (st) {
-    case 0:
+    case HINT_DIALOGUE_INITIALIZE:
         m->update_dist = 0xFF;
         t->wait = scale_game_frames_2ed398(0x4B0);
         m->state = 1;
         break;
-    case 1:
+    case HINT_DIALOGUE_CHECK_TRIGGERS:
         if (t->npc[0] != -1) {
             e = (struct Moby *)(moby_list_2ed398 + (t->npc[0] << 8));
             if (e != 0 && e->oclass == 0x4E && e->state != 0xFE && e->state != 0xFD && e->state != 3
