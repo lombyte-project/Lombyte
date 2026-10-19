@@ -1708,6 +1708,9 @@ void machinegun_turret_update(char *moby) {
         TURRET_STATE_RETRACT = 5,
         TURRET_STATE_DESTROY = 6
     };
+    enum {
+        TURRET_SPAWN_CENTER = 0
+    };
     char *data;
     float target_point_scratch[4];
     float spawn_position[4];
@@ -1834,7 +1837,7 @@ void machinegun_turret_update(char *moby) {
         if (rem == 0) {
             sel = func_002140B0_2B4E40(3);
             switch (sel) {
-            case 0:
+            case TURRET_SPAWN_CENTER:
                 func_L00_001FF4B0_2B4E40(spawn_position, moby + 0xE0, D_L14_00161520);
                 break;
             case 1:
