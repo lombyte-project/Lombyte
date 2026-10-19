@@ -1041,6 +1041,14 @@ extern void func_L00_00251E30_2CDDC8(void *) __asm__("FUN_L00_00250df8");
 
 void blarg_helicopter_update(HMob49_2CDDC8 *moby) __asm__("FUN_L03_002cca00");
 void blarg_helicopter_update(HMob49_2CDDC8 *moby) {
+    enum {
+        BLARG_HELICOPTER_INITIALIZE = 0,
+        BLARG_HELICOPTER_ACTIVATION_PATH = 1,
+        BLARG_HELICOPTER_PATROL_AND_ATTACK = 2,
+        BLARG_HELICOPTER_EXIT = 3,
+        BLARG_HELICOPTER_TIMED_REACTION = 4,
+        BLARG_HELICOPTER_DESTROY = 5
+    };
     HData49_2CDDC8 *data=moby->data;
     HWork49_2CDDC8 work;
     float target_range=40.0f;
@@ -1069,7 +1077,7 @@ void blarg_helicopter_update(HMob49_2CDDC8 *moby) {
     }
     func_L03_002CF600_2CDDC8((char*)moby);
     switch (moby->state) {
-    case 0: {
+    case BLARG_HELICOPTER_INITIALIZE: {
         HPath49_2CDDC8 **paths;
         moby->update_distance=0x20; data->health=3.0f; data->health_word=func_001FA898_2CDDC8(3.0f);
         data->enabled=1; data->kind=2; data->gun_kind=25; data->gun_enabled=1; data->gun_mode=6; data->flag29=0;
@@ -1096,7 +1104,7 @@ void blarg_helicopter_update(HMob49_2CDDC8 *moby) {
         moby->state=2;
         break;
     }
-    case 1: {
+    case BLARG_HELICOPTER_ACTIVATION_PATH: {
         HPath49_2CDDC8 *path=D_L03_001B08B0_2CDDC8[data->activation_path];
         float progress,distance,step,limit,angle;
         if (data->activation_region!=-1 && !func_00215570_2CDDC8(D_0013F3D0,data->activation_region)) break;
@@ -1145,7 +1153,7 @@ void blarg_helicopter_update(HMob49_2CDDC8 *moby) {
     }
         break;
     }
-    case 2: {
+    case BLARG_HELICOPTER_PATROL_AND_ATTACK: {
         HRoute49_2CDDC8 *route=data->alternate ? &data->route_b : &data->route_a;
         int point=route->index;
         float angle=func_L00_001FF860_2CDDC8(work.target.position[0]-moby->position[0],work.target.position[1]-moby->position[1]);
@@ -1208,7 +1216,7 @@ void blarg_helicopter_update(HMob49_2CDDC8 *moby) {
         }
         break;
     }
-    case 3: {
+    case BLARG_HELICOPTER_EXIT: {
         HPath49_2CDDC8 *path;
         float progress,distance,step,limit,angle;
         if (data->exit_path==-1) {
@@ -1253,7 +1261,7 @@ void blarg_helicopter_update(HMob49_2CDDC8 *moby) {
     }
         break;
     }
-    case 4:
+    case BLARG_HELICOPTER_TIMED_REACTION:
         if (func_001F9938_2CDDC8(&data->reaction_timer)) moby->state=moby->previous_state;
         else {
             data->speed-=D_0015ED70*4.0f; if (data->speed<0) data->speed=0;
@@ -1273,7 +1281,7 @@ void blarg_helicopter_update(HMob49_2CDDC8 *moby) {
         
         }
         break;
-    case 5: {
+    case BLARG_HELICOPTER_DESTROY: {
         float angle; int i; 
         *(HQuad49_2CDDC8*)work.movement=0; angle=func_00214158_2CDDC8(); func_L00_00250800_2CDDC8(moby,4,work.projected);
         for (i=0; i<4; i++) {
