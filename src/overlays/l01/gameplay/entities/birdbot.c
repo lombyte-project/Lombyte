@@ -1538,7 +1538,11 @@ void peckbot_update(Mob577 *self) __asm__("FUN_L01_002efc60");
 void peckbot_update(Mob577 *self) {
     enum {
         PECKBOT_STATE_INITIALIZE = 0,
+        PECKBOT_STATE_CHASE_TARGET = 3,
+        PECKBOT_STATE_ATTACK_TARGET = 4,
         PECKBOT_STATE_RETURN_HOME = 5,
+        PECKBOT_STATE_NONFATAL_KNOCKBACK = 6,
+        PECKBOT_STATE_MOVE_TO_DESTINATION = 15,
         PECKBOT_STATE_ASCEND = 16,
         PECKBOT_STATE_DESCEND = 17,
         PECKBOT_STATE_FATAL_KNOCKBACK = 0x63
@@ -1701,7 +1705,7 @@ void peckbot_update(Mob577 *self) {
             self->state = 15;
         }
         break;
-    case 15:
+    case PECKBOT_STATE_MOVE_TO_DESTINATION:
         ang = FUN_L00_001ff8b0_cf(v->dest.f[0] - self->pos.f[0], v->dest.f[1] - self->pos.f[1]);
         FUN_L00_00258278(self, v->turn, ang, 0.05f, 0.3f, 0.2f);
         fast_vec_sub(&v->vel, &v->dest, &self->pos);
@@ -1853,7 +1857,7 @@ void peckbot_update(Mob577 *self) {
             blend_moby_animation(self, 4, 0, scale_game_frames(3));
         }
         break;
-    case 3:
+    case PECKBOT_STATE_CHASE_TARGET:
         r3 = FUN_001f99c0(self->pos.f[2] - target.pos.f[2]);
         r3 = r3 / vector_distance(&self->pos, &target.pos);
         if (v->path != -1) {
@@ -1896,7 +1900,7 @@ void peckbot_update(Mob577 *self) {
         }
         self->hit = 0;
         break;
-    case 4:
+    case PECKBOT_STATE_ATTACK_TARGET:
         ang =
             FUN_L00_001ff8b0_cf(target.pos.f[0] - self->pos.f[0], target.pos.f[1] - self->pos.f[1]);
         FUN_L00_00258278(self, v->turn, ang, 0.05f, 0.3f, 0.2f);
@@ -1966,7 +1970,7 @@ void peckbot_update(Mob577 *self) {
         }
         self->hit = 0;
         break;
-    case 6:
+    case PECKBOT_STATE_NONFATAL_KNOCKBACK:
         if (mine_fall(self, v->knock) & 1) {
             self->state = 3;
             SET_ANIM(self, 2, 0, scale_game_frames(3));
