@@ -3545,11 +3545,18 @@ void FUN_L00_002d73e8(P *p) {
     ws_norm(m1[1], m1[1], 1.0f);
     ws_cross(m1[2], m1[1], m1[0]);
     qcopy(m1[3], a);
-    ws_scale(m2[0], m1[0], -1.0f);
-    ws_cross(m2[1], m2[0], b);
-    ws_norm(m2[1], m2[1], 1.0f);
-    ws_cross(m2[2], m2[1], m2[0]);
-    qcopy(m2[3], m1[3]);
+    /* Fakematch: the do-while(0) gives m2's address s1 and m1's s2 as retail
+     * does (BYTES 29 -> 15). Still off: the burst branch's g[3] constant
+     * register (v0, retail v1) and the ring loop's s2/s3/s5 pointers; the
+     * latter come from the GCSE copy of m1's address at the end of block 0,
+     * which prefers s2. */
+    do {
+        ws_scale(m2[0], m1[0], -1.0f);
+        ws_cross(m2[1], m2[0], b);
+        ws_norm(m2[1], m2[1], 1.0f);
+        ws_cross(m2[2], m2[1], m2[0]);
+        qcopy(m2[3], m1[3]);
+    } while (0);
     quad.g[1] = ws_tex(q->tex0 + 0x28);
     quad.g[2] = 0xFF9000000260L;
     quad.g[3] = 0x8000000048L;

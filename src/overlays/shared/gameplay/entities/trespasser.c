@@ -1112,13 +1112,17 @@ void FUN_L00_002bffa8(M44 *moby) {
         if (!blocked) { if (moby->anim_secondary!=5) anim44(moby,5,0,b44_001f96f8(5)); }
         else moby->state=2;
     }
-Falling: {
+    /* Fakematch: the do-while(0) loop notes split the scheduling region
+     * (BYTES 3 -> 2). Still off: retail sets the spring call's a1
+     * (addiu a1,s5,0x40) before a0. Getting that order needs data to die
+     * at the a1 set, which turns the bebc8 argument into a reload. */
+Falling: do {
         float direction=b44_001f9e90(data->velocity.v.x,data->velocity.v.y);
         Hero44 *hp=(Hero44*)&hero;
         spring44(moby,&data->turn_velocity,direction,
             hp->turn_k,hp->turn_d,hp->turn_max);
+    } while (0);
         b44_L00_002bebc8((char*)data);
-    }
 Contact:
         moby->state=state44(moby);
         break;
