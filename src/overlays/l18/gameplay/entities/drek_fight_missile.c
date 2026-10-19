@@ -3532,8 +3532,11 @@ extern int D_L18_0016D290_lui __asm__("D_L18_0016D290") __attribute__((section("
 
 void FUN_L18_002f7ad8(M *moby);
 void FUN_L18_002f7ad8(M *moby) {
+    enum {
+        MOBY_INITIALIZE = 0
+    };
     switch (moby->state) {
-    case 0:
+    case MOBY_INITIALIZE:
         moby->state = 1;
     case 1:
         if ((D_L18_0015F5C4 == 2 && D_L18_0016D290_lui == 3) ||
