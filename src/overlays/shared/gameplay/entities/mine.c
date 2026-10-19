@@ -2195,6 +2195,10 @@ extern f32 rnd_2afa48(f32, f32) __asm__("FUN_L00_00257c48");
 extern void kill_2afa48(void *) __asm__("FUN_0020c828");
 void nanotech_crate_fragment_update(M_2afa48 *m) __asm__("FUN_L00_002afa48");
 void nanotech_crate_fragment_update(M_2afa48 *m) {
+    enum {
+        NANOTECH_CRATE_FRAGMENT_BOUNCING = 0,
+        NANOTECH_CRATE_FRAGMENT_FADING = 1
+    };
     PV_2afa48 *pv = m->pv;
     u128 old;
     u128 *t;
@@ -2205,7 +2209,7 @@ void nanotech_crate_fragment_update(M_2afa48 *m) {
     m->f44 = appr_2afa48(m->f44, pv->f24);
     m->f48 = appr_2afa48(m->f48, pv->f28);
     switch (m->b20) {
-    case 0:
+    case NANOTECH_CRATE_FRAGMENT_BOUNCING:
         if (m->pos[2] < pv->f4 - 3.0f) {
             m->b20 = 1;
         } else if (tick_2afa48(&pv->hE) && pv->hC != 0 && coll_sphere(m->pos, 2, 0, pv->f8)) {
@@ -2221,7 +2225,7 @@ void nanotech_crate_fragment_update(M_2afa48 *m) {
             }
         }
         break;
-    case 1:
+    case NANOTECH_CRATE_FRAGMENT_FADING:
         m->f2c *= g70_2afa48;
         if (m->b23 < g74_2afa48) {
             kill_2afa48(m);
