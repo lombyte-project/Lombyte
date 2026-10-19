@@ -2022,10 +2022,12 @@ extern int memcard_save_data(int, int) __asm__("FUN_0020b178");
 
 void FUN_L13_0030b628(struct Moby *moby) {
     enum {
+        WAIT_TO_START_INITIAL_SCENE = 0,
         START_INITIAL_SCENE = 1,
         WAIT_INITIAL_SCENE = 2,
         CHECK_CLIP_VOLUME_FOR_SCENE = 4,
         WAIT_CLIP_VOLUME_SCENE = 5,
+        WAIT_LINKED_MOBY_REMOVAL_BEFORE_SCENE = 7,
         WAIT_SCENE_BEFORE_FOLLOWUP = 8,
         START_FOLLOWUP_SCENE = 9,
         WAIT_FOLLOWUP_SCENE = 10,
@@ -2033,7 +2035,7 @@ void FUN_L13_0030b628(struct Moby *moby) {
     };
     int *data = (int *)moby->pvars;
     switch (moby->state) {
-    case 0:
+    case WAIT_TO_START_INITIAL_SCENE:
         if (D_L13_0015F5C4 == 0) moby->state = 1;
         break;
     case START_INITIAL_SCENE:
@@ -2105,7 +2107,7 @@ after_state_4:
     case 6:
         moby->state = 7;
         break;
-    case 7: {
+    case WAIT_LINKED_MOBY_REMOVAL_BEFORE_SCENE: {
         char *object;
         if (alternate_item_available[0x66] == 0) {
             struct Moby *other;
