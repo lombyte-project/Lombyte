@@ -2664,6 +2664,10 @@ extern void func_L00_002A5158_30D8E8(void *, int, int, float, float, float, floa
 
 void sharkigator_update(unsigned char *moby) __asm__("FUN_L07_0030f5f0");
 void sharkigator_update(unsigned char *moby) {
+    enum {
+        SHARKIGATOR_HIT_KNOCKBACK_RECOVERY = 12,
+        SHARKIGATOR_DEATH_FALL_AND_REMOVE = 14
+    };
     char *data;
     struct WalkerTarget target;
     float point[4];
@@ -3092,7 +3096,7 @@ void sharkigator_update(unsigned char *moby) {
             moby[0x20] = 7;
         }
         goto end;
-    case 12:
+    case SHARKIGATOR_HIT_KNOCKBACK_RECOVERY:
         if (mine_fall(moby, data + 0x70) & 1) {
             ((void (*)(char *, char *))FUN_L07_0030ec58_c)((char *)moby, data);
         }
@@ -3102,7 +3106,7 @@ void sharkigator_update(unsigned char *moby) {
             ((void (*)(char *, char *))FUN_L07_0030ec58_c)((char *)moby, data);
         }
         goto end;
-    case 14:
+    case SHARKIGATOR_DEATH_FALL_AND_REMOVE:
         if (mine_fall(moby, data + 0x70) & (moby[0x70] & 2)) {
             FUN_L00_0025e450_c2(moby, data + 0xD0, 0, 0.0f, 0.0f, 3, 3, 5, 2.0f, 1.0f, 4.0f, 1.0f, -1, 7.0f,
                               0, 1, -1, 0);
