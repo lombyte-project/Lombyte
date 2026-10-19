@@ -2677,6 +2677,17 @@ extern int jet_fast_dec_death_timer(void *) __asm__("FUN_001f9770");
 
 void fighter_jet_update(Jet *m) __asm__("FUN_L13_002bb068");
 void fighter_jet_update(Jet *m) {
+    enum {
+        FIGHTER_JET_STATE_INITIALIZE = 0,
+        FIGHTER_JET_STATE_WAIT_FOR_ENTRY = 1,
+        FIGHTER_JET_STATE_MOUNT_PLAYER = 2,
+        FIGHTER_JET_STATE_FLIGHT = 4,
+        FIGHTER_JET_STATE_EXIT_PLAYER = 5,
+        FIGHTER_JET_STATE_STOP_DEATH_SOUNDS = 6,
+        FIGHTER_JET_STATE_WAIT_FOR_DEATH_RESET = 7,
+        FIGHTER_JET_STATE_FORCED_EXIT = 8,
+        FIGHTER_JET_STATE_DELETE = 9
+    };
     JetData *d;
     JetVec impulse;
     int state,initial_state;
@@ -2716,7 +2727,7 @@ void fighter_jet_update(Jet *m) {
     m->status=0xFF;
     if (((JetPlayer*)(&jet_player47))->craft==m) ((JetPlayer*)(&jet_player47))->health_meter=(int)(((JetPlayer*)(&jet_player47))->health*0.00390625f*200.0f);
     switch(m->state) {
-    case 0: {
+    case FIGHTER_JET_STATE_INITIALIZE: {
         float limit;
         int *palette;
         JetTexture *texture_table;
@@ -2744,7 +2755,7 @@ void fighter_jet_update(Jet *m) {
         d->lock_index=-1; d->start_timer=jet_scale_ticks(575);
         break;
     }
-    case 1: {
+    case FIGHTER_JET_STATE_WAIT_FOR_ENTRY: {
         short enter=0;
         if (m->persistent!=0xFF && (visited52)[m->persistent+(D_L13_0015ED84<<4)]==0xFF) m->state=9;
         else if (d->trigger!=-1 && jet_check_trigger(D_0013F3D0,d->trigger)) { d->blend=0.99f; D_L13_0015F3FC=0.99f; enter=1; }
@@ -2763,7 +2774,7 @@ void fighter_jet_update(Jet *m) {
         jet_animate((unsigned char*)m,1.5f);
         break;
     }
-    case 2:
+    case FIGHTER_JET_STATE_MOUNT_PLAYER:
         jet_blend(&d->blend,1.0f,frame_time*4.0f); D_L13_0015F3FC=d->blend;
         if (d->blend==1.0f) {
             if (d->entry_path!=-1) {
@@ -2790,7 +2801,7 @@ void fighter_jet_update(Jet *m) {
             D_L13_0015F608=2; FUN_L13_002ba178(m,d); jet_camera_mode(); jet_game_state(2,4); m->state=4;
         }
         break;
-    case 4: {
+    case FIGHTER_JET_STATE_FLIGHT: {
         unsigned char *audio;
         if (d->blend!=0.0f) { jet_blend(&d->blend,0.0f,frame_time*4.0f); D_L13_0015F3FC=d->blend; }
         jet_force_help(6,0); D_L13_0015F608=2;
@@ -2801,7 +2812,7 @@ void fighter_jet_update(Jet *m) {
         if (d->energy<=0) { d->wait_timer=jet_scale_ticks(1200); m->state=8; }
         break;
     }
-    case 5:
+    case FIGHTER_JET_STATE_EXIT_PLAYER:
         ((JetPlayer*)(&jet_player47))->in_craft=0; *(int*)((char*)((JetPlayer*)(&jet_player47))->moby+0x98)=0;
         jet_set_hero_state(0,1); jet_end_mount(0); jet_set_weapon(((JetPlayer*)(&jet_player47))->weapon,0);
         qcopy(m->position,d->spawn_position); qcopy(m->rotation,d->spawn_rotation);
@@ -2822,7 +2833,7 @@ void fighter_jet_update(Jet *m) {
         }
         jet_game_state(0,5); d->blend=0.99f; D_L13_0015F3FC=0.99f; m->state=1;
         break;
-    case 6:
+    case FIGHTER_JET_STATE_STOP_DEATH_SOUNDS:
         D_L13_0015F608=2;
         {
             int id=d->engine_sound;
@@ -2834,7 +2845,7 @@ void fighter_jet_update(Jet *m) {
             d->weapon_sound=-1;
         }
         m->state=7; break;
-    case 7: {
+    case FIGHTER_JET_STATE_WAIT_FOR_DEATH_RESET: {
         JetTransition *transition;
         D_L13_0015F608=2;
         if (jet_fast_dec_death_timer(&d->death_timer)) {
@@ -2859,7 +2870,7 @@ void fighter_jet_update(Jet *m) {
         }
         break;
     }
-    case 8:
+    case FIGHTER_JET_STATE_FORCED_EXIT:
         ((JetPlayer*)(&jet_player47))->in_craft=0; *(int*)((char*)((JetPlayer*)(&jet_player47))->moby+0x98)=0; jet_set_hero_state(0,1); jet_end_mount(0);
         if (d->escape_path==-1) { stub_printf(D_L13_001F4470); qcopy(m->position,d->spawn_position); qcopy(m->rotation,d->spawn_rotation); }
         else { int index=d->escape_path; JetPath *paths=D_L13_001600EC; qcopy(m->position,paths[index].position); qcopy(m->rotation,paths[index].rotation); m->position[2]+=0.57318f; }
@@ -2884,7 +2895,7 @@ void fighter_jet_update(Jet *m) {
         }
         jet_reset_camera((char *)&jet_player47+0x80,(char *)&jet_player47+0x90); m->state=9;
         break;
-    case 9: jet_delete_moby(m); return;
+    case FIGHTER_JET_STATE_DELETE: jet_delete_moby(m); return;
     case 10: break;
     default: break;
     }
