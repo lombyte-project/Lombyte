@@ -90,7 +90,8 @@ struct TextRegion D_001E7908 = {0x64, 0x12c, 0x60, 0x1a0, 0x100, 0x68, 0, 0, 0x1
 void draw_dialog_text(void) {
     enum {
         FREEZE_TITLE_DIALOG = 2,
-        FREEZE_MODE_MESSAGE_DIALOG = 3
+        FREEZE_MODE_MESSAGE_DIALOG = 3,
+        FREEZE_CHOICE_MESSAGE_DIALOG = 6
     };
     char buf[0x200];
     struct TextRegion box;
@@ -277,7 +278,7 @@ void draw_dialog_text(void) {
         }
         break;
     }
-    case 6: {
+    case FREEZE_CHOICE_MESSAGE_DIALOG: {
         s32 text_color;
         s32 button_color;
         s32 id;
