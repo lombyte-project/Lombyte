@@ -860,6 +860,10 @@ extern void draw_trail(void *, void *, void *, f32, f32) __asm__("FUN_L00_00263b
 extern FlockPart *FUN_L00_0026d000(void *, s32, void *, s32, f32, f32, f32, f32);
 
 void FUN_L00_002e3800(FlockMoby *moby) {
+    enum {
+        FLOCK_EFFECT_STATE_INITIALIZE = 0,
+        FLOCK_EFFECT_STATE_PROCESS_PHASE_EFFECTS = 1
+    };
     f32 pos[4];
     void *src;
     FlockPart *part;
@@ -871,11 +875,11 @@ void FUN_L00_002e3800(FlockMoby *moby) {
     FlockTail *tail;
 
     switch (moby->state) {
-    case 0:
+    case FLOCK_EFFECT_STATE_INITIALIZE:
         moby->unk30 = 0xFF;
         moby->state = 1;
         break;
-    case 1:
+    case FLOCK_EFFECT_STATE_PROCESS_PHASE_EFFECTS:
         if ((D_L00_0015F5C4 == 2 && D_L00_0016C860.phase == 2 &&
              vend_rand(0x618) <= D_L00_0016C860.level) ||
             (D_L00_0015F5C4 == 2 && D_L00_0016C860.phase == 3)) {
