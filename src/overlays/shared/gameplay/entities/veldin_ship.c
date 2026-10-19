@@ -1176,6 +1176,7 @@ void decoy_glove_update(unsigned char *moby) __asm__("FUN_L00_002d2670");
 void decoy_glove_update(unsigned char *moby) {
     enum {
         DECOY_GLOVE_INITIALIZE = 0,
+        DECOY_GLOVE_WAIT_FOR_MOBY_FLAG = 1,
         DECOY_GLOVE_RELEASE_DECOY = 3,
         DECOY_GLOVE_WAIT_AFTER_RELEASE = 4,
         DECOY_GLOVE_ENTER_SKIP_TARGET_FOLLOW_AND_SPAWN = 5,
@@ -1248,7 +1249,7 @@ L3D34:
     case DECOY_GLOVE_INITIALIZE:
         *(int *)(d + 0x50) = 0;
         if (!(moby[0x70] & 2)) moby[0x20] = 1; else moby[0x20] = 2;
-    case 1:
+    case DECOY_GLOVE_WAIT_FOR_MOBY_FLAG:
         if (moby[0x70] & 2) moby[0x20] = 2;
         break;
     case 2:
