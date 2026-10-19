@@ -621,6 +621,12 @@ extern short D_L06_00161D24 __attribute__((sda));
 extern short D_L06_00161D28 __attribute__((sda));
 void toxic_gas_vent_update(char *m) __asm__("FUN_L06_002f3ad8");
 void toxic_gas_vent_update(char *m) {
+    enum {
+        VENT_INITIALIZE = 0,
+        VENT_OSCILLATE = 1,
+        VENT_TIMED_ACTIVE = 2,
+        VENT_WAIT_FOR_ACTIVATION = 3
+    };
     char *d = *(char **)(m + 0x78);
     float s;
     if (*(int *)(d + 0x90) >= 0) {
@@ -635,7 +641,7 @@ void toxic_gas_vent_update(char *m) {
         }
     }
     switch (((unsigned char *)m)[0x20]) {
-    case 0:
+    case VENT_INITIALIZE:
         if (*(int *)(d + 0x60) != 0) {
             m[0x20] = 1;
             *(float *)(d + 0x80) = 360.0f / *(float *)(d + 0x68) * DEG_TO_RAD * frame_time;
@@ -648,7 +654,7 @@ void toxic_gas_vent_update(char *m) {
         }
         *(int *)(d + 0x94) = -1;
         break;
-    case 1:
+    case VENT_OSCILLATE:
         if (voice_is_playing(m, *(int *)(d + 0x94)) == 0) {
             *(int *)(d + 0x94) = func_0022ED80_r(0, 4, (int)m);
         }
@@ -658,7 +664,7 @@ void toxic_gas_vent_update(char *m) {
         *(float *)(d + 0x7C) = fast_add_rotations(*(float *)(d + 0x7C), *(float *)(d + 0x80));
         *(float *)(m + 0x48) = fast_add_rotations(*(float *)(d + 0x84), s);
         break;
-    case 2:
+    case VENT_TIMED_ACTIVE:
         if (voice_is_playing(m, *(int *)(d + 0x94)) == 0) {
             *(int *)(d + 0x94) = func_0022ED80_r(0, 4, (int)m);
         }
@@ -677,7 +683,7 @@ void toxic_gas_vent_update(char *m) {
             *(int *)(d + 0x94) = -1;
         }
         break;
-    case 3:
+    case VENT_WAIT_FOR_ACTIVATION:
         if (fast_dec_timer(d + 0x88) != 0) {
             m[0x20] = 2;
             *(int *)(d + 0x88) =
