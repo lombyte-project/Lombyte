@@ -2307,9 +2307,14 @@ void blarg_trooper_update(struct Moby *moby) __asm__("FUN_L04_002c4850");
 void blarg_trooper_update(struct Moby *moby) {
     enum {
         BLARG_TROOPER_STATE_INITIALIZE = 0,
+        BLARG_TROOPER_STATE_IDLE = 1,
         BLARG_TROOPER_STATE_JUMP = 4,
+        BLARG_TROOPER_STATE_FIRE = 6,
         BLARG_TROOPER_STATE_MELEE_ATTACK = 7,
         BLARG_TROOPER_STATE_DYING = 11
+    };
+    enum {
+        BLARG_TROOPER_HIT_REACTION_FATAL = 1
     };
     struct {
         float tgt[20];
@@ -2434,7 +2439,7 @@ void blarg_trooper_update(struct Moby *moby) {
         switch (r) {
         case 0:
             break;
-        case 1:
+        case BLARG_TROOPER_HIT_REACTION_FATAL:
         case 2:
             moby->flags &= 0xEFFF;
             *(unsigned char *)(data + 0x67) = 0xFA;
@@ -2529,7 +2534,7 @@ void blarg_trooper_update(struct Moby *moby) {
             moby->state = 1;
         }
         break;
-    case 1:
+    case BLARG_TROOPER_STATE_IDLE:
         if (moby->anim_flags & 2) {
             blend_moby_animation_p(moby, (void *)((rand() ^ 1) & 1), 0,
                                    (void *)scale_game_frames(0xA));
@@ -2738,7 +2743,7 @@ void blarg_trooper_update(struct Moby *moby) {
             *(short *)(data + 0xF2) = scale_game_frames(0x1E);
         }
         break;
-    case 6: {
+    case BLARG_TROOPER_STATE_FIRE: {
         char *o;
         {
             float a = fast_arc_tan(st.tgt[8] - moby->pos.x,
