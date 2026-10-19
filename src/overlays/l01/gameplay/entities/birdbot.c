@@ -1559,6 +1559,7 @@ void peckbot_update(Mob577 *self) {
         PECKBOT_STATE_RETURN_HOME = 5,
         PECKBOT_STATE_NONFATAL_KNOCKBACK = 6,
         PECKBOT_STATE_WAIT_FOR_CLOSE_TARGET = 8,
+        PECKBOT_STATE_FACE_HOME_AND_WAIT = 10,
         PECKBOT_STATE_RECOVER_FROM_BLOCKED_MOVEMENT = 12,
         PECKBOT_STATE_MOVE_FORWARD_NEAR_LEADER = 13,
         PECKBOT_STATE_AIRBORNE_IDLE = 14,
@@ -1802,7 +1803,7 @@ void peckbot_update(Mob577 *self) {
             SET_ANIM(self, 5, 0, scale_game_frames(3));
         }
         break;
-    case 10:
+    case PECKBOT_STATE_FACE_HOME_AND_WAIT:
         ang = FUN_L00_001ff8b0_cf(v->home.f[0] - self->pos.f[0], v->home.f[1] - self->pos.f[1]);
         FUN_L00_00258278(self, v->turn, ang, 0.05f, 0.3f, 0.2f);
         fast_vec_sub(&vector_scratch, &target.pos, &v->home);
