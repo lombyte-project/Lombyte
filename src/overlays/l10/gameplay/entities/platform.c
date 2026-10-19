@@ -633,10 +633,15 @@ extern BfState D_L10_001BAA50;
 extern unsigned char D_L10_0015FC88[8];
 void gate_update(unsigned char *m) __asm__("FUN_L10_002befe8");
 void gate_update(unsigned char *m) {
+    enum {
+        GATE_STATE_WAIT_FOR_SAVE_FLAG = 0,
+        GATE_STATE_MOVING_TO_LOWER_Y = 1,
+        GATE_STATE_AT_LOWER_Y = 2
+    };
     float *d = *(float **)(m + 0x78);
     unsigned short id;
     switch (m[0x20]) {
-    case 0:
+    case GATE_STATE_WAIT_FOR_SAVE_FLAG:
         *(OvlQuad *)d = *(OvlQuad *)(m + 0x10);
         id = *(unsigned short *)(m + 0xB2);
         if (D_L10_001BB6B0_bf.collected[(short)id] != 0 ||
@@ -644,7 +649,7 @@ void gate_update(unsigned char *m) {
             m[0x20] = 1;
         }
         break;
-    case 1:
+    case GATE_STATE_MOVING_TO_LOWER_Y:
         *(float *)(m + 0x14) += D_0015ED6C_bf * -1.0f;
         if (*(float *)(m + 0x14) <= d[1] + -3.75f) {
             D_L10_001BAA50.collected[*(short *)(m + 0xB2)] = m[0xB0] + 2;
@@ -657,7 +662,7 @@ void gate_update(unsigned char *m) {
             }
         }
         break;
-    case 2:
+    case GATE_STATE_AT_LOWER_Y:
         *(float *)(m + 0x14) = d[1] + -3.75f;
         break;
     }
