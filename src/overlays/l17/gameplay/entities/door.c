@@ -3519,6 +3519,12 @@ extern char D_0013CAE4[];
 
 void shuttle_update(struct Moby *m) __asm__("FUN_L17_002f1940");
 void shuttle_update(struct Moby *m) {
+    enum {
+        SHUTTLE_STATE_INITIALIZE = 0,
+        SHUTTLE_STATE_WAIT_FOR_ACTIVATION = 1,
+        SHUTTLE_STATE_TRAVEL = 2,
+        SHUTTLE_STATE_RESET_AFTER_TRAVEL = 3
+    };
     Vars1448 *v = (Vars1448 *)m->pvars;
     float old_pos[4];
     float old_rot[4];
@@ -3535,7 +3541,7 @@ void shuttle_update(struct Moby *m) {
     qcopy(old_rot, &m->rot);
     m->scale = m->pclass->scale * *(float *)&D_L17_001623AC;
     switch (m->state) {
-    case 0:
+    case SHUTTLE_STATE_INITIALIZE:
         if (D_L17_001BBB30.collected[(short)m->save_id] != 0 ||
             (*(int *)(((char *)&D_0014C190) +
                       (((short)m->save_id >> 5) * 4 + (current_level_index << 8))) >>
@@ -3561,7 +3567,7 @@ void shuttle_update(struct Moby *m) {
             *(OvlQuad *)&m->rot = *(OvlQuad *)((v->cam[1] << 7) + base + 0x70);
         }
         break;
-    case 1:
+    case SHUTTLE_STATE_WAIT_FOR_ACTIVATION:
         if (m->prev_seq == 2 && (m->anim_flags & 2) && v->sfx == 0) {
             allocate_voice_for_target_entry(1, 0, (int)m);
             v->sfx = 0;
@@ -3643,7 +3649,7 @@ void shuttle_update(struct Moby *m) {
             }
         }
         break;
-    case 2:
+    case SHUTTLE_STATE_TRAVEL:
         if (FUN_L17_002f2180(m, v->side)) {
             int ofs;
             int base;
@@ -3670,7 +3676,7 @@ void shuttle_update(struct Moby *m) {
                 1 << (m->save_id & 0x1F);
         }
         break;
-    case 3:
+    case SHUTTLE_STATE_RESET_AFTER_TRAVEL:
         m->state = 1;
         if (m->prev_seq != 2) {
             blend_moby_animation(m, 2, 0, scale_game_frames(30));
