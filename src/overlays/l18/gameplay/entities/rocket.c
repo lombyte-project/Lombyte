@@ -703,7 +703,9 @@ extern float D_L18_6C_m __asm__("D_0015ED6C");
 void FUN_L18_002d5918(struct Moby *moby) {
     enum {
         STATE_INITIALIZE = 0,
-        STATE_BALLISTIC_FLIGHT = 1
+        STATE_BALLISTIC_FLIGHT = 1,
+        STATE_POST_FLIGHT_SETTLING = 2,
+        STATE_APPROACH_NEARBY_TARGET = 3
     };
     char *data = (char *)moby->pvars;
     float v[4];
@@ -725,7 +727,7 @@ void FUN_L18_002d5918(struct Moby *moby) {
             *(float *)(data + 0x188) = -(D_L18_00161994 * 2.0f * D_L18_6C_m);
         }
         break;
-    case 2: {
+    case STATE_POST_FLIGHT_SETTLING: {
         float d = approach_value((float *)(data + 0x188), 0.0f, D_L18_00161994 * 2.0f * frame_time_sq);
         moby->rot.y += d;
         v[0] = fast_cos(moby->rot.z) * d;
@@ -741,7 +743,7 @@ void FUN_L18_002d5918(struct Moby *moby) {
         }
         break;
     }
-    case 3:
+    case STATE_APPROACH_NEARBY_TARGET:
         if (moby->prev_seq == 1 && (moby->anim_flags & 2)) {
             blend_moby_animation_alt(moby, 2, 0, scale_game_frames_i(12));
         }
