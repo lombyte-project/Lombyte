@@ -718,6 +718,7 @@ extern float FUN_00213508_25b440(void *, int, float) __asm__("FUN_00213508");
 
 int FUN_L00_0025b440(O_25b440 *o, S_25b440 *s) {
     enum {
+        CHECK_ARC_ENTRY_GATES = 0,
         INTEGRATE_ARC_MOTION = 1,
         DESCEND_TO_GROUND = 2,
         WAIT_AFTER_GROUND_CLAMP = 3
@@ -727,7 +728,7 @@ int FUN_L00_0025b440(O_25b440 *o, S_25b440 *s) {
     float g;
 
     switch (s->state) {
-    case 0:
+    case CHECK_ARC_ENTRY_GATES:
         if (o->b52 != s->b2C) {
             break;
         }
