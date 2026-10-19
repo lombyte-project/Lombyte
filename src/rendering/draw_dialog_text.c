@@ -96,6 +96,7 @@ void draw_dialog_text(void) {
         FREEZE_CHOICE_MESSAGE_DIALOG = 6
     };
     enum {
+        FREEZE_CHOICE_ALTERNATE_PAIRED_FOOTER_MESSAGE = 2,
         FREEZE_CHOICE_CENTERED_FOOTER_MESSAGE = 3
     };
     char buf[0x200];
@@ -301,7 +302,7 @@ void draw_dialog_text(void) {
             font_print_center(0x135, 0x118, button_color, get_help_message_text(0x524B), -1);
             id = 0x522A;
             break;
-        case 2:
+        case FREEZE_CHOICE_ALTERNATE_PAIRED_FOOTER_MESSAGE:
             font_print_center(0xCA, 0x118, button_color, get_help_message_text(0x524E), -1);
             font_print_center(0x135, 0x118, button_color, get_help_message_text(0x524B), -1);
             id = 0x522B;
