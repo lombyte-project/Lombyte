@@ -2,9 +2,7 @@
 #include "types.h"
 #include "asm.h"
 
-#define NOT_SDA
-
-#define MACRO_ADDR
+#include "sda.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/hud_00263490.c: func_L05_00264C88), where it is exact; names translated to the US level program. */
 
@@ -46,28 +44,7 @@ void FUN_L05_00262ae8(HudElemX *e) {
     }
     FUN_L00_00235c80(e);
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00262b58.s", FUN_L05_00262b58);
-#else
-extern void approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
-extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
-extern s32 D_001413D4;
-extern s16 D_0013F65E;
-extern s32 D_0013F650;
-extern s32 D_0013FA30[4];
-extern s32 D_0013FA40;
-extern s32 D_0013FA5C;
-extern s32 D_0013FBB4;
-extern s32 D_0013FBF8;
-extern s32 D_L05_0015FAD4;
-extern s32 D_L05_0015FAD8;
-extern s32 D_L05_0015FAE0[4];
-extern s32 D_L05_0015FAEC;
-extern s32 D_L05_0015FAF0;
-extern s32 D_L05_0015FAF4;
-extern s32 D_L05_0015FAF8;
-extern s32 D_L05_0015FB00;
-extern u8 D_L05_0015F87C __attribute__((sda));
+#include "rnc/gameplay/hero.h"
 
 typedef struct {
     u8 pad0[0xC];
@@ -80,77 +57,96 @@ typedef struct {
     s32 smoothed;
 } HudCounter;
 
-#include "rnc/gameplay/hero.h"
-
-/* Retail accesses these names through the shared Hero base at 0x0013f350. */
-#define D_001413D4 hero.state.current
-#define D_0013F65E hero.air_frames.s
-#define D_0013F650 hero.grounded_frames
-#define D_0013FA40 hero.unk6E0[4]
-#define D_0013FA5C (*(s32 *)((u8 *)&hero + 0x70C))
-#define D_0013FBB4 hero.unk864
-#define D_0013FBF8 hero.unk8A8
-#define D_0013FA30 hero.unk6E0
+extern void approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
+extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
+extern s32 D_L05_0015FAD4 __attribute__((section(".sdata")));
+extern s32 D_L05_0015FAD8 __attribute__((section(".sdata")));
+extern s32 D_L05_0015FAE0[4] __attribute__((section(".sdata")));
+extern s32 D_L05_0015FAF0 __attribute__((section(".sdata")));
+extern s32 D_L05_0015FAF4 __attribute__((section(".sdata")));
+extern s32 D_L05_0015FAF8 __attribute__((section(".sdata")));
+extern s32 D_L05_0015FAFC_macro __asm__("D_L05_0015FAFC") __attribute__((section(".sdata")));
+extern s32 D_L05_0015FB00;
+extern u8 D_L05_0015F87C __attribute__((sda));
 
 void FUN_L05_00262b58(HudCounter *e) {
     f32 value;
-    s32 i;
-    s32 *src;
-    s32 *dst;
-    s32 limit;
-    u8 timer;
-    u8 *counter = &e->timer;
+    u8 *counter;
+    s32 v;
 
     value = (f32)e->smoothed;
     approach_value(&value, (f32)*e->value, 6.0f);
+    counter = &e->timer;
     e->smoothed = truncate_float_to_s32(value);
-
     switch (counter[2]) {
-    case 0:
-        if (D_0013F65E < 6 || ((f32)D_0013FA5C < 1.0f)) return;
-        D_L05_0015FAD4 = D_0013FA5C;
+    case 0: {
+        struct Hero *h = &hero;
+        if (h->air_frames.s < 6) {
+            return;
+        }
+        v = h->unk70C;
+        if (!((f32)v >= 1.0f)) {
+            return;
+        }
+        D_L05_0015FAD4 = v;
         D_L05_0015FAD8 = 0;
-        dst = &D_L05_0015FAEC;
-        i = 3;
-        do { *dst-- = 0; } while (--i >= 0);
+        {
+            int k;
+            for (k = 3; k >= 0; k--) {
+                D_L05_0015FAE0[k] = 0;
+            }
+        }
         counter[2] = 1;
         counter[1] = D_L05_0015F87C;
         counter[0] = 0;
         break;
-    case 1:
-        if (counter[0] < 10) counter[0]++;
-        if (counter[1] != 0) counter[1]--;
-        src = D_0013FA30;
-        dst = D_L05_0015FAE0;
-        D_L05_0015FAD8 = D_0013FA40;
-        for (i = 0; i < 4; i++) dst[i] = src[i];
-        limit = D_0013FA5C;
-        timer = D_L05_0015F87C;
-        if (D_L05_0015FAD4 < limit) {
-            counter[1] = timer;
-            D_L05_0015FAD4 = limit;
+    }
+    case 1: {
+        struct Hero *t;
+        struct Hero *h;
+        if (e->timer < 10) {
+            e->timer++;
         }
-        if (D_0013F650 == 0) {
-            if ((u32)(D_001413D4 - 0x6d) > 2) return;
-            D_L05_0015FB00 = 0;
-        } else {
-            D_L05_0015FB00 = 0;
+        if (counter[1] != 0) {
+            counter[1]--;
         }
-        D_0013FA5C = 0;
-        D_0013FA40 = 0;
-        i = 3;
-        dst = &D_0013FA30[3];
-        do { *dst-- = 0; } while (--i >= 0);
-        i = 2;
-        dst = (s32 *)&D_0013FA5C - 1;
-        do { *dst-- = 0; } while (--i >= 0);
-        if (D_001413D4 != 0x6b) {
-            counter[2] = 2;
+        t = &hero;
+        D_L05_0015FAD8 = t->unk6E0[4];
+        {
+            int k;
+            for (k = 0; k < 4; k++) {
+                D_L05_0015FAE0[k] = t->unk6E0[k];
+            }
+        }
+        h = &hero;
+        if (D_L05_0015FAD4 < h->unk70C) {
+            D_L05_0015FAD4 = h->unk70C;
             counter[1] = D_L05_0015F87C;
-            counter[0] = scale_game_frames(0x3c);
-        } else {
-            if (D_L05_0015FAD8 > 2) {
-                D_L05_0015FAFC = D_L05_0015FAF8;
+        }
+        if (h->grounded_frames == 0) {
+            if (!(h->state.current >= 0x6D && h->state.current <= 0x6F)) {
+                return;
+            }
+        }
+        D_L05_0015FB00 = 0;
+        h->unk70C = 0;
+        h->unk6E0[4] = 0;
+        {
+            int k;
+            s32 *p = &h->unk6E0[3];
+            for (k = 3; k >= 0; k--) {
+                *p-- = 0;
+            }
+        }
+        {
+            int k;
+            for (k = 2; k >= 0; k--) {
+                hero.unk700[k] = 0;
+            }
+        }
+        if (hero.state.current == 0x6B) {
+            if (D_L05_0015FAD8 >= 3) {
+                D_L05_0015FAFC_macro = D_L05_0015FAF8;
                 D_L05_0015FAF8 = D_L05_0015FAF4;
                 D_L05_0015FAF4 = D_L05_0015FAF0;
                 D_L05_0015FAF0 = -1;
@@ -158,189 +154,193 @@ void FUN_L05_00262b58(HudCounter *e) {
             counter[2] = 3;
             counter[1] = D_L05_0015F87C;
             counter[0] = scale_game_frames(0x78);
+        } else {
+            counter[2] = 2;
+            counter[1] = D_L05_0015F87C;
+            counter[0] = scale_game_frames(0x3C);
         }
         break;
+    }
     case 2:
     case 3:
-
-        timer = counter[0];
-        if (timer == 0) {
+        if (counter[0] == 0) {
             D_L05_0015FB00 = 0;
             D_L05_0015FAD4 = 0;
             D_L05_0015FAD8 = 0;
-            i = 3;
-            dst = &D_L05_0015FAEC;
-            do { *dst-- = 0; } while (--i >= 0);
-            counter[0] = 0;
-            counter[2] = 0;
-        } else {
-            if (counter[2] == 3) {
-                if (timer == scale_game_frames(0x6e)) {
-                    D_0013FBF8 += D_L05_0015FB00;
-                    D_0013FBB4 += D_L05_0015FB00 * 5;
-                    if ((s32)((f32)scale_game_frames(0x11) * 60.0f) < D_0013FBB4) {
-                        D_0013FBB4 = (s32)((f32)scale_game_frames(0x11) * 60.0f);
-                    }
+            {
+                int k;
+                for (k = 3; k >= 0; k--) {
+                    D_L05_0015FAE0[k] = 0;
                 }
+            }
+            counter[2] = 0;
+            counter[0] = 0;
+        } else if (counter[2] == 3 && counter[0] == scale_game_frames(0x6E)) {
+            s32 n = D_L05_0015FB00;
+            struct Hero *h = &hero;
+            h->unk8A8 += n;
+            h->unk864 += n * 5;
+            if ((s32)((f32)scale_game_frames(0x11) * 60.0f) < h->unk864) {
+                h->unk864 = (s32)((f32)scale_game_frames(0x11) * 60.0f);
             }
         }
         counter[0]--;
+        break;
     }
 }
-#undef D_001413D4
-#undef D_0013F65E
-#undef D_0013F650
-#undef D_0013FA40
-#undef D_0013FA5C
-#undef D_0013FBB4
-#undef D_0013FBF8
-#undef D_0013FA30
-
-#endif
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00262f50.s", FUN_L05_00262f50);
-#else
-#include "rnc/gameplay/hero.h"
-
-extern s32 D_L05_0015FAE4, D_L05_0015FAE8, D_L05_0015FAEC;
-extern u8 D_0013FBFE;
-extern s32 frame_number __asm__("D_L05_0015F5CC");
-extern s32 D_L05_0015FAD4, D_L05_0015FAD8;
-extern s32 D_L05_0015FAE0[4], D_L05_0015FAF0, D_L05_0015FAF4, D_L05_0015FAF8, D_L05_0015FB00;
-extern s32 D_L05_0015FAFC;
-extern s32 D_L05_0017E918[15];
-extern char D_L05_0015F860[], D_L05_0015F8D0[], D_L05_0015F8E0[], D_L05_0015F8E8[];
-extern char D_L05_00216C50[];
-extern u8 D_L05_0015F87C __attribute__((sda));
-extern s32 D_L05_0015F894 __attribute__((sda)), D_L05_0015F898 __attribute__((sda));
-extern s32 D_L05_0015F8A0 __attribute__((sda));
-extern s32 D_L05_0015F8A4 __attribute__((sda)), D_L05_0015F8A8 __attribute__((sda));
-extern s32 D_L05_0015F8AC __attribute__((sda)), D_L05_0015F8B0 __attribute__((sda));
-extern s32 D_L05_0015F8B4 __attribute__((sda)), D_L05_0015F8B8 __attribute__((sda));
-extern s32 D_L05_0015F8BC __attribute__((sda)), D_L05_0015F8C0 __attribute__((sda));
-extern s32 D_L05_0015F8C4 __attribute__((sda)), D_L05_0015F8C8 __attribute__((sda));
 extern int sprintf_alt(char *, const char *, ...) __asm__("FUN_00116248");
-extern s32 scale_game_frames(s32);
 extern f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
-extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern s32 fast_tween_color(s32, s32, f32) __asm__("FUN_001fa6e0");
 extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
 extern char *get_help_message_text(s32) __asm__("FUN_001fdd10");
-extern void font_print_center_large(s32, s32, s32, char *, s32) __asm__("FUN_001f6c20");
+extern void font_print_center_large(s32, s32, u64, char *, s32) __asm__("FUN_001f6c20");
 extern void draw_framed_text(s32, s32, s32, char *) __asm__("FUN_00201200");
 extern s32 hud_screen_position(char *, s32 *, s32 *) __asm__("FUN_L00_00235a70");
 extern s32 get_icon_frame(s32, s32) __asm__("FUN_001ff960");
 extern void FUN_L00_0023b6c0(s32, s32, s32, s32, s32, s32);
 extern void draw_hud_sprite(s32, s32, s32, s32, s32, s32) __asm__("FUN_001ffc30");
 
-/* Draws the counter text and its icon, then the optional pulsing label. */
-s32 FUN_L05_00262f50(char *e) {
-    char buf[128];
-    s32 indices[4];
-    s32 x, y, shadow, value, group, i, count, period;
-    f32 fade, pulse;
-    f32 ratio;
-    s32 *src, *dst;
-    u32 state;
-    u8 *q = (u8 *)e + 0x70;
+extern s32 D_L05_0015FAE4 __attribute__((section(".sdata")));
+extern s32 D_L05_0015FAE8 __attribute__((section(".sdata")));
+extern s32 D_L05_0015FAEC __attribute__((section(".sdata")));
+extern s32 D_L05_0017E918[15];
+extern s32 frame_number __asm__("D_L05_0015F5CC") __attribute__((section(".sdata")));
+extern char D_L05_0015F860[];
+extern char D_L05_0015F8D0[];
+extern char D_L05_0015F8E0[];
+extern char D_L05_0015F8E8[];
+extern char D_L05_00216C50[];
+extern s32 D_L05_0015F894 __attribute__((sda));
+extern s32 D_L05_0015F898 __attribute__((sda));
+extern s32 D_L05_0015F8A0 __attribute__((sda));
+extern s32 D_L05_0015F8A4 __attribute__((sda));
+extern s32 D_L05_0015F8A8 __attribute__((sda));
+extern s32 D_L05_0015F8AC __attribute__((sda));
+extern s32 D_L05_0015F8B0 __attribute__((sda));
+extern s32 D_L05_0015F8B4 __attribute__((sda));
+extern s32 D_L05_0015F8B8 __attribute__((sda));
+extern s32 D_L05_0015F8BC __attribute__((sda));
+extern s32 D_L05_0015F8C0 __attribute__((sda));
+extern s32 D_L05_0015F8C4 __attribute__((sda));
+extern s32 D_L05_0015F8C8 __attribute__((sda));
 
-    fade = (f32)q[0] / 10.0f;
-    if (fade > 1.0f) fade = 1.0f;
-    if (hero.state.control_mode != 0x16) return *(s32 *)((u8 *)e + 0x58);
-    if (q[2] != 0) {
-        s32 color, shadow;
+s32 FUN_L05_00262f50(char *a) {
+    u8 *u = (u8 *)(a + 0x70);
+    char buf[0x80];
+    s32 out[4];
+    s32 xa, xb;
+    f32 f20, f21, f0, f12;
+    struct Hero *E;
+    s32 r, sel, cnt, k, idx, h, acc, id, id2, i, s16, r3, t;
+
+    f21 = (f32)u[0] / 10.0f;
+    if (f21 > 1.0f) {
+        f21 = 1.0f;
+    }
+    E = &hero;
+    if (E->state.control_mode != 0x16) {
+        return *(s32 *)(a + 0x58);
+    }
+    if (u[2] != 0) {
         sprintf_alt(buf, D_L05_0015F860, D_L05_0015FAD4 * 0x168);
-        pulse = convert_integer_to_float(q[1]);
-        period = scale_game_frames(*(s32 *)&D_L05_0015F87C);
-        ratio = pulse / (f32)period;
-        if (q[2] == 1 || q[2] == 3)
-            color = fast_tween_color(D_L05_0015F894, D_L05_0015F898, ratio);
-        else color = D_L05_0015F8A0;
-        shadow = truncate_float_to_s32(fade * 128.0f) << 24;
-        color += shadow;
-        state = q[2];
-        state--;
-        if (state < 2) {
-            x = D_L05_0015F8B4 + 1;
-            y = D_L05_0015F8B8 + 1;
-            font_print_center_large(x, y, shadow, buf, -1);
-            font_print_center_large(D_L05_0015F8B4, D_L05_0015F8B8, color, buf, -1);
+        f20 = convert_integer_to_float(u[1]);
+        r = scale_game_frames(*(s32 *)&D_L05_0015F87C);
+        f12 = f20 / (f32)r;
+        if (u[2] == 1 || u[2] == 3) {
+            acc = fast_tween_color(D_L05_0015F894, D_L05_0015F898, f12);
+        } else {
+            acc = D_L05_0015F8A0;
+        }
+        h = truncate_float_to_s32(f21 * 128.0f) << 24;
+        acc += h;
+        if (u[2] == 1 || u[2] == 2) {
+            font_print_center_large(D_L05_0015F8B4 + 1, D_L05_0015F8B8 + 1, h, buf, -1);
+            font_print_center_large(D_L05_0015F8B4, D_L05_0015F8B8, acc, buf, -1);
             sprintf_alt(buf, D_L05_0015F8D0, D_L05_0015FAD8);
-            font_print_center_large(D_L05_0015F8BC + 1, D_L05_0015F8C0 + 1, shadow, buf, -1);
-            font_print_center_large(D_L05_0015F8BC, D_L05_0015F8C0, color, buf, -1);
-        } else if ((u8)(state + 1) == 3) {
-            value = -1;
+            font_print_center_large(D_L05_0015F8BC + 1, D_L05_0015F8C0 + 1, h, buf, -1);
+            font_print_center_large(D_L05_0015F8BC, D_L05_0015F8C0, acc, buf, -1);
+        } else if (u[2] == 3) {
+            sel = -1;
             if (D_L05_0015FAD8 == 3) {
-                value = 0;
+                sel = 0;
                 if (D_L05_0015FAEC != 0) {
-                    value = 2;
-                    if (D_L05_0015FAE8 == 0) value = 1;
-                    else if (D_L05_0015FAE4 != 0) value = 3;
+                    sel = 2;
+                    if (D_L05_0015FAE8 == 0) {
+                        sel = 1;
+                    } else if (D_L05_0015FAE4 != 0) {
+                        sel = 3;
+                    }
                 }
-            } else if (D_L05_0015FAD8 == 4) value = 4;
-            if (value >= 0) {
-                i = D_L05_0015FAD4 >= 4 ? 2 : (D_L05_0015FAD4 < 2) ^ 1;
-                group = value + i * 5;
-                D_L05_0015FAF0 = group;
-                D_L05_0015FB00 = D_L05_0017E918[group];
-                count = 1;
-                i = 2;
-                src = &D_L05_0015FAF4;
-                do { count += (*src++ == group); } while (--i >= 0);
-                D_L05_0015FB00 = D_L05_0015FB00 / count;
+            } else if (D_L05_0015FAD8 == 4) {
+                sel = 4;
+            }
+            if (sel >= 0) {
+                if (D_L05_0015FAD4 >= 4) {
+                    k = 2;
+                } else {
+                    k = D_L05_0015FAD4 >= 2;
+                }
+                idx = sel + k * 5;
+                D_L05_0015FAF0 = idx;
+                D_L05_0015FB00 = D_L05_0017E918[idx];
+                cnt = 1;
+                for (i = 1; i < 4; i++) {
+                    if ((&D_L05_0015FAF0)[i] == D_L05_0015FAF0) {
+                        cnt++;
+                    }
+                }
+                D_L05_0015FB00 = D_L05_0015FB00 / cnt;
                 sprintf_alt(buf, D_L05_0015F860, D_L05_0015FB00);
-                draw_framed_text(D_L05_0015F8C4, D_L05_0015F8C8 - 0x18, color, buf);
-                sprintf_alt(buf, D_L05_0015F8E0, get_help_message_text(group + 0x5092));
-                draw_framed_text(D_L05_0015F8C4, D_L05_0015F8C8, color, buf);
+                draw_framed_text(D_L05_0015F8C4, D_L05_0015F8C8 - 0x18, acc, buf);
+                sprintf_alt(buf, D_L05_0015F8E0, get_help_message_text(idx + 0x5092));
+                draw_framed_text(D_L05_0015F8C4, D_L05_0015F8C8, acc, buf);
             } else if (D_L05_0015FAD8 > 0) {
-                count = 0;
-                i = 0;
-                src = D_L05_0015FAE0;
-                dst = indices;
-                if (D_L05_0015FAD8 > 0) {
-                    while (i < 4 && count < D_L05_0015FAD8) {
-                        if (*src++ != 0) { *dst++ = i; count++; }
-                        i++;
+                s32 n = 0;
+                s32 m;
+                for (m = 0; m < 4 && n < D_L05_0015FAD8; m++) {
+                    if (D_L05_0015FAE0[m] != 0) {
+                        out[n] = m;
+                        n++;
                     }
                 }
                 if (D_L05_0015FAD8 == 1) {
                     D_L05_0015FB00 = D_L05_0015FAD4 * 10;
                     sprintf_alt(buf, D_L05_0015F860, D_L05_0015FB00);
-                    draw_framed_text(D_L05_0015F8C4, D_L05_0015F8C8 - 0x18, color, buf);
-                    sprintf_alt(buf, D_L05_0015F8E8, get_help_message_text(indices[0] + 0x517e), D_L05_0015FAD4);
+                    draw_framed_text(D_L05_0015F8C4, D_L05_0015F8C8 - 0x18, acc, buf);
+                    sprintf_alt(buf, D_L05_0015F8E8, get_help_message_text(out[0] + 0x517E), D_L05_0015FAD4);
+                    draw_framed_text(D_L05_0015F8C4, D_L05_0015F8C8, acc, buf);
                 } else {
                     D_L05_0015FB00 = D_L05_0015FAD4 * 20;
                     sprintf_alt(buf, D_L05_0015F860, D_L05_0015FB00);
-                    draw_framed_text(D_L05_0015F8C4, D_L05_0015F8C8 - 0x18, color, buf);
-                    sprintf_alt(buf, D_L05_00216C50, get_help_message_text(indices[0] + 0x517e),
-                                get_help_message_text(indices[1] + 0x517e), D_L05_0015FAD4);
+                    draw_framed_text(D_L05_0015F8C4, D_L05_0015F8C8 - 0x18, acc, buf);
+                    sprintf_alt(buf, D_L05_00216C50, get_help_message_text(out[0] + 0x517E),
+                                get_help_message_text(out[1] + 0x517E), D_L05_0015FAD4);
+                    draw_framed_text(D_L05_0015F8C4, D_L05_0015F8C8, acc, buf);
                 }
-                draw_framed_text(D_L05_0015F8C4, D_L05_0015F8C8, color, buf);
             }
         }
     }
-    x = *(s32 *)((u8 *)e + 0x50);
-    y = *(s32 *)((u8 *)e + 0x54);
-    *(s32 *)((u8 *)e + 0x58) = 0x100;
-    *(s32 *)((u8 *)e + 0x5c) = 0x40;
-    hud_screen_position((char *)e, &x, &y);
-    value = *(s32 *)((u8 *)e + 0x74);
-    value *= 0xdd;
-    value /= *(s32 *)((u8 *)e + 8);
-    value += 0x1b;
-    group = get_icon_frame(0x7558, 1);
-    FUN_L00_0023b6c0(group, x, y, value, 0x40, 0x80);
-    draw_hud_sprite(get_icon_frame(0x7558, 0), x, y, 0x100, 0x40, 0x80);
-    value = hero.unk8AE;
-    if (scale_game_frames(0x78) < value) {
-        period = scale_game_frames(0x3c);
-        pulse = fast_sin(convert_integer_to_float(frame_number % period) / (f32)period *
-                         6.28318f - 3.14159f);
-        shadow = fast_tween_color(D_L05_0015F8AC, D_L05_0015F8B0, pulse * 0.5f + 0.5f);
-        sprintf_alt(buf, get_help_message_text(0x531a));
+
+    xa = *(s32 *)(a + 0x50);
+    xb = *(s32 *)(a + 0x54);
+    *(s32 *)(a + 0x58) = 0x100;
+    *(s32 *)(a + 0x5C) = 0x40;
+    hud_screen_position(a, &xa, &xb);
+    s16 = (*(s32 *)(a + 0x74) * 0xDD) / *(s32 *)(a + 0x8) + 0x1B;
+    id = get_icon_frame(0x7558, 1);
+    FUN_L00_0023b6c0(id, xa, xb, s16, 0x40, 0x80);
+    id2 = get_icon_frame(0x7558, 0);
+    draw_hud_sprite(id2, xa, xb, 0x100, 0x40, 0x80);
+    E = &hero;
+    t = E->unk8AE;
+    if (scale_game_frames(0x78) < t) {
+        r3 = scale_game_frames(0x3C);
+        f0 = convert_integer_to_float(frame_number % r3) / (f32)r3;
+        f0 = fast_sin(f0 * 6.283180236816406f - 3.141590118408203f);
+        r3 = fast_tween_color(D_L05_0015F8AC, D_L05_0015F8B0, f0 * 0.5f + 0.5f);
+        sprintf_alt(buf, get_help_message_text(0x531A));
         draw_framed_text(D_L05_0015F8A4 + 1, D_L05_0015F8A8 + 1, 0x80000000, buf);
-        draw_framed_text(D_L05_0015F8A4, D_L05_0015F8A8, shadow, buf);
+        draw_framed_text(D_L05_0015F8A4, D_L05_0015F8A8, r3, buf);
     }
-    return *(s32 *)((u8 *)e + 0x58);
+    return *(s32 *)(a + 0x58);
 }
-#endif

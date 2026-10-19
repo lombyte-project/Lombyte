@@ -632,215 +632,230 @@ L2:
         FUN_L00_00276908();
     }
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002772c0.s", FUN_L00_002772c0);
-#else
+/* Ported from rac1-decomp (src/overlays/shared/pause_00277208.c: func_L00_002781D8). */
 typedef struct {
-    u8 pad0[0x10];
-    u32 flags;
-    u8 pad14[0x64];
-    s32 *image;
-} VoiceRenderObject;
+    u128 row[4];
+    char pad40[0x10];
+    int x;
+    int y;
+    int w;
+    int h;
+} PageMobyData;
 
-typedef struct VoiceRenderEntry {
-    s32 unk0;
-    u32 (*draw)(struct VoiceRenderEntry *);
-    u8 pad8[8];
-    u32 flags;
-    u8 pad14[4];
-    s32 left;
-    s32 top;
-    s32 width;
-    s32 height;
-} VoiceRenderEntry;
+extern s32 D_L00_001B23C0[];
+extern s32 D_L00_00160270 __attribute__((sda));
+extern long D_0015EED0;
+extern void append_gif_transfer_packet() __asm__("FUN_001fb368");
+extern void FUN_L00_002a0fc8(s32, s32, s32);
+extern void reset_gs_registers() __asm__("FUN_001f3868");
+extern void emit_rgba_draw_packet(s32, s32, s32, s32) __asm__("FUN_001f5210");
+extern void vu1_add_g_sregister(s32, u64) __asm__("FUN_00233980");
+extern void draw_mobys_setup(void) __asm__("FUN_0020d278");
+extern void init_moby_class_dists(void) __asm__("FUN_0020d1f0");
+extern void stash_moby_class_dists(void) __asm__("FUN_0020d218");
+extern void draw_moby_list(s32, s32) __asm__("FUN_0020d330");
+extern void project_graphics_bounds(void *, void *, int *, int *, int *, int *) __asm__("FUN_00237a78");
+extern void append_screen_rect_packet(s32, s32, s32, s32, u64, s32) __asm__("FUN_00200e08");
+extern void configure_graphics_render_target_and_projection(s32, s32, s32, f32) __asm__("FUN_001f7888");
+extern void draw_hud_rect_depth(s32, s32, s32, s32, u64, u32, s32) __asm__("FUN_00200f90");
+extern void begin_draw_frame(void) __asm__("FUN_001f7978");
+extern void draw_textured_quad_alt(int, int, int, int, int, int, int, int, long, long) __asm__("FUN_001f5450");
+extern void restore_moby_class_dists(void) __asm__("FUN_0020d248");
+extern void draw_mobys_clean_up(void) __asm__("FUN_0020d3b0");
+extern void patch_moby_gifs() __asm__("FUN_0020cef8");
+extern void setup_gif_paging(s32) __asm__("FUN_001f4280");
+extern void draw_menu_flashing_panel(int) __asm__("FUN_00223e28");
+extern void do_gif_paging(void) __asm__("FUN_001f4398");
 
-extern s32 frame_size __asm__("D_0013E504") __attribute__((section(".data")));
-extern s32 draw_buffer_address __asm__("D_0015EE84");
-extern s32 D_L00_001B9E90_init[] __asm__("D_L00_001B9E90");
-extern s32 D_L00_001B23C0[] __asm__("D_L00_001B23C0");
-#define D_L00_001B9DC8 (*(s32 *)((u8 *)&D_L00_001B9CF0 + 0xd8))
-extern u64 D_L00_0015EED0 __asm__("D_0015EED0");
-extern s32 D_L00_0015F578 __attribute__((sda));
-extern void emit_fixed_dma_packet_if_cursor(void) __asm__("FUN_001fb368");
-extern void FUN_L00_002a0fc8_772c0(s32, s32, s32) __asm__("FUN_L00_002a0fc8");
-extern void FUN_L00_001f8450(void) __asm__("FUN_001f3868");
-extern void FUN_L00_001fa050_772c0(s32, s32, s32, s32) __asm__("FUN_001f5210");
-extern void FUN_L00_002a0ba8(s32, u64) __asm__("FUN_L00_002a0ba8");
-extern void FUN_L00_0024fe50(void) __asm__("FUN_L00_0024fe50");
-extern void FUN_L00_0024fdc8(void) __asm__("FUN_L00_0024fdc8");
-extern void FUN_L00_0024fdf0(void) __asm__("FUN_L00_0024fdf0");
-extern void FUN_L00_0024ff08(s32, s32) __asm__("FUN_L00_0024ff08");
-extern void FUN_L00_00299f40(void *, void *, s32 *, s32 *, s32 *, s32 *) __asm__("FUN_L00_00299f40");
-extern void FUN_L00_0023caa8_772c0(s32, s32, s32, s32, u64, s32) __asm__("FUN_00200e08");
-extern void FUN_L00_001fc928(f32, s32, s32, s32) __asm__("FUN_001f7888");
-extern void FUN_L00_0023cc30(s32, s32, s32, s32, u64, s32, s32) __asm__("FUN_00200f90");
-extern void FUN_L00_001fca18(void) __asm__("FUN_L00_001fca18");
-extern void FUN_L00_001fa290(s32, s32, s32, s32, s32, s32, s32, s32, u64, u64) __asm__("FUN_001f5450");
-extern void FUN_L00_0024fe20(void) __asm__("FUN_L00_0024fe20");
-extern void FUN_L00_0024ff88(void) __asm__("FUN_L00_0024ff88");
-extern void FUN_L00_002a09d8_772c0(s32) __asm__("FUN_L00_002a09d8");
-extern void FUN_L00_0024fad0(void) __asm__("FUN_L00_0024fad0");
-extern void FUN_L00_001f9060(s32) __asm__("FUN_001f4280");
-extern void FUN_L00_00281a70(s32) __asm__("FUN_L00_00281a70");
-extern void FUN_L00_001f9178(void) __asm__("FUN_001f4398");
+/* Draws the pause menu pages: lays out each page moby's screen rect, then renders each page's texture. */
+void FUN_L00_002772c0(int arg0) {
+    u128 c[4];
+    u128 pad[5];
+    u128 box[2];
+    struct {
+        int w;
+        int h;
+        int x;
+        int y;
+    } rect;
+    char **pp;
+    int i;
+    int k;
+    int j;
+    int n;
+    int pass;
+    int flags;
+    int never;
 
-void FUN_L00_002772c0(s32 param_1) {
-    s32 i, pass, width, height, left, top, right, bottom;
-    s32 texture_width, texture_height, width_shift, height_shift;
-    s32 out_left, out_top, out_right, out_bottom;
-    s32 *handles = 0;
-    VoiceRenderObject *object;
-    VoiceRenderEntry *entry;
-    u32 flags;
-    struct { u128d image_copy[4]; u128d unused[5]; u128d first, last; } copies;
-
-    emit_fixed_dma_packet_if_cursor();
-    FUN_L00_002a0fc8_772c0(D_L00_001B9CF0.unk10, draw_buffer_address, frame_size << 11);
-    if (param_1 != 0) {
+    append_gif_transfer_packet();
+    pp = 0;
+    never = 0;
+    FUN_L00_002a0fc8(D_L00_001B9CF0.unk10, draw_buffer_address, frame_size << 11);
+    if (arg0 != 0) {
         return;
     }
-    FUN_L00_001f8450();
-    FUN_L00_001fa050_772c0(0, 0, 0, 0x30);
+    reset_gs_registers();
+    emit_rgba_draw_packet(0, 0, 0, 0x30);
     if (D_L00_001B9CF0.state == 0x14) {
         return;
     }
-    FUN_L00_002a0ba8(0x47, 0x5360b);
-    FUN_L00_0024fe50();
-    FUN_L00_0024fdc8();
-    FUN_L00_0024fdf0();
+    vu1_add_g_sregister(0x47, 0x5360B);
+    draw_mobys_setup();
+    init_moby_class_dists();
+    stash_moby_class_dists();
     for (i = 0; i < 14; i++) {
-        if (D_L00_001B23C0[i] != 0 && D_L00_001B9E90_init[i] != 0 &&
-            (i != 6 || D_L00_001B9DC8 != 0)) {
-            FUN_L00_0024ff08(D_L00_001B9E90_init[i], 1);
+        if (D_L00_001B23C0[i] != 0 && D_L00_001B9E90[i] != 0 && (i != 6 || D_L00_001B9CF0.unkD8 != 0)) {
+            draw_moby_list((int)D_L00_001B9E90[i], 1);
         }
+    }
+    /* Fakematch: a never-taken set keeps gcse from folding pp's 0 into the select below. */
+    if (never) {
+        pp = (char **)D_L00_001B9CF0.owner;
     }
     if (D_L00_001B9CF0.owner != 0) {
-        handles = (s32 *)((u8 *)D_L00_001B9CF0.owner + 0x44);
+        pp = (char **)D_L00_001B9CF0.owner->objs;
     }
-    for (i = 0; i < 14; i++) {
-        if (D_L00_001B9E90_init[i] != 0 && D_L00_001B23C0[i] != 0 &&
-            (i != 6 || D_L00_001B9DC8 != 0)) {
-            object = (VoiceRenderObject *)D_L00_001B9E90_init[i];
-            qcopy(&copies.image_copy[0], object->image);
-            qcopy(&copies.image_copy[1], object->image + 4);
-            qcopy(&copies.image_copy[2], object->image + 8);
-            qcopy(&copies.image_copy[3], object->image + 12);
-            copies.first = copies.image_copy[0];
-            copies.last = copies.image_copy[3];
-            FUN_L00_00299f40(&copies.first, &copies.last, &left, &top, &width, &height);
-            width++;
-            height++;
-            if (handles != 0 && handles[i] != 0) {
-                *(s32 *)(handles[i] + 0x20) = left;
-                *(s32 *)(handles[i] + 0x24) = top;
-                *(s32 *)(handles[i] + 0x18) = width;
-                *(s32 *)(handles[i] + 0x1c) = height;
-            }
-            object->image[20] = width;
-            object->image[21] = height;
-            object->image[22] = left;
-            object->image[23] = top;
-            FUN_L00_0023caa8_772c0(width + 1, height + 1, width + left - 1,
-                                     height + top - 1, *(s32 *)0x00160270, 0);
+    for (k = 0; k < 14; k++) {
+        PageMobyData *d;
+        if (D_L00_001B9E90[k] == 0 || D_L00_001B23C0[k] == 0) {
+            continue;
         }
+        if (k == 6 && D_L00_001B9CF0.unkD8 == 0) {
+            continue;
+        }
+        d = *(PageMobyData **)((char *)D_L00_001B9E90[k] + 0x78);
+        qcopy(&c[0], d);
+        qcopy(&c[1], &d->row[1]);
+        qcopy(&c[2], &d->row[2]);
+        qcopy(&c[3], &d->row[3]);
+        box[0] = c[0];
+        box[1] = c[3];
+        project_graphics_bounds(&box[0], &box[1], &rect.w, &rect.h, &rect.x, &rect.y);
+        flags = rect.w;
+        rect.x++;
+        rect.y++;
+        if (pp != 0 && pp[k] != 0) {
+            *(int *)(pp[k] + 0x20) = flags;
+            *(int *)(pp[k] + 0x24) = rect.h;
+            *(int *)(pp[k] + 0x18) = rect.x;
+            *(int *)(pp[k] + 0x1C) = rect.y;
+        }
+        d->x = rect.x;
+        d->y = rect.y;
+        d->w = rect.w;
+        d->h = rect.h;
+        append_screen_rect_packet(rect.x + 1, rect.y + 1, rect.x + rect.w - 1, rect.y + rect.h - 1, D_L00_00160270, 0);
     }
     for (pass = 0; pass < 2; pass++) {
-        for (i = 0; i < 14; i++) {
-            s32 width, height;
-            if (D_L00_001B9E90_init[i] == 0 || handles == 0 || handles[i] == 0) {
+        Ent **mobys = D_L00_001B9E90;
+        for (j = 0; j < 14; j++) {
+            char *m = (char *)mobys[j];
+            int pw, ph, px, py;
+            int tw, th, su, sv;
+            int r, u, v, u1, v1;
+            char *d;
+            if (m == 0 || pp == 0 || pp[j] == 0) {
                 continue;
             }
-            entry = (VoiceRenderEntry *)handles[i];
-            {
-                u32 flags = entry->flags;
-                if ((flags & 4) != 0 || D_L00_001B23C0[i] == 0 || entry->draw == 0 ||
-                    (i == 6 && D_L00_001B9DC8 == 0) ||
-                    (pass == 0 && (flags & 2) == 0) ||
-                    (pass == 1 && (flags & 2) != 0)) {
-                    continue;
-                }
-                if ((flags & 1) != 0) {
-                    entry->draw(entry);
-                    continue;
-                }
-            }
-            object = (VoiceRenderObject *)D_L00_001B9E90_init[i];
-            right = object->image[20];
-            bottom = object->image[21];
-            texture_height = object->image[23];
-            texture_width = object->image[22];
-            width_shift = 7;
-            if (texture_width > 0x80) {
-                for (width_shift = 8; (1 << width_shift) < texture_width; width_shift++) {}
-            }
-            height_shift = 7;
-            if (texture_height > 0x80) {
-                for (height_shift = 8; (1 << height_shift) < texture_height; height_shift++) {}
-            }
-            while (width_shift + height_shift > 17) {
-                height_shift--;
-            }
-            FUN_L00_001fc928(1.0f, width_shift, height_shift, pass != 0);
-            width = 1 << width_shift;
-            height = 1 << height_shift;
-            FUN_L00_0023cc30(0, 0, width, height, *(s32 *)0x00160270, 0, 0);
-            entry = (VoiceRenderEntry *)handles[i];
-            flags = entry->draw(entry);
-            FUN_L00_001fca18();
-            FUN_L00_002a0ba8(0x42, 0x8000000064ULL);
-            FUN_L00_002a0ba8(0x47, 0x43);
-            if ((flags & 1) != 0) {
+            flags = *(int *)(pp[j] + 0x10);
+            if (flags & 4) {
                 continue;
             }
-            out_left = 0;
-            out_top = 0;
-            if ((flags & 2) != 0) {
-                out_right = texture_width;
-                out_bottom = texture_height;
-            } else {
-                out_bottom = height;
-                out_right = width;
-                if ((flags & 8) != 0) {
-                    out_left = (width - texture_width) / 2;
-                    out_top = (height - texture_height) / 2;
-                    out_right = width - out_left;
-                    if (width < out_right) out_right = width;
-                    out_bottom = height - out_top;
-                    if (height < out_bottom) out_bottom = height;
-                    if (out_left < 0) out_left = 0;
-                    if (out_top < 0) out_top = 0;
-                } else if ((flags & 4) != 0) {
-                    if (texture_width < texture_height) {
-                        out_left = width / 2 - (texture_width * width) / (texture_height << 1);
-                        out_right = width - out_left;
-                    } else {
-                        out_top = height / 2 - (texture_height * height) / (texture_width << 1);
-                        out_bottom = height - out_top;
-                    }
-                } else if ((flags & 0x10) == 0) {
-                    continue;
-                }
+            if (D_L00_001B23C0[j] == 0 || *(int *)(pp[j] + 4) == 0) {
+                continue;
             }
-            FUN_L00_001fa290(right, bottom, texture_width, texture_height,
-                              out_left, out_top, out_right - out_left, out_bottom - out_top,
-                              0x80808080ULL, D_L00_0015EED0);
+            if (j == 6 && D_L00_001B9CF0.unkD8 == 0) {
+                continue;
+            }
+            if (pass == 0 && !(flags & 2)) {
+                continue;
+            }
+            if (pass == 1 && (flags & 2)) {
+                continue;
+            }
+            if (flags & 1) {
+                (*(int (**)(char *))(pp[j] + 4))(pp[j]);
+                continue;
+            }
+            d = *(char **)(m + 0x78);
+            px = *(int *)(d + 0x50);
+            py = *(int *)(d + 0x54);
+            pw = *(int *)(d + 0x58);
+            ph = *(int *)(d + 0x5C);
+            tw = 7;
+            while ((1 << tw) < pw) {
+                tw++;
+            }
+            th = 7;
+            while ((1 << th) < ph) {
+                th++;
+            }
+            while (tw + th >= 18) {
+                th--;
+            }
+            configure_graphics_render_target_and_projection(tw, th, pass != 0, 1.0f);
+            su = 1 << tw;
+            sv = 1 << th;
+            draw_hud_rect_depth(0, 0, su, sv, D_L00_00160270, 0, 0);
+            r = (*(int (**)(char *))(pp[j] + 4))(pp[j]);
+            begin_draw_frame();
+            vu1_add_g_sregister(0x42, 0x8000000064L);
+            vu1_add_g_sregister(0x47, 0x43);
+            if (r & 1) {
+                continue;
+            }
+            u = 0;
+            u1 = su;
+            v = 0;
+            v1 = sv;
+            if (r & 2) {
+                u1 = pw;
+                v1 = ph;
+            } else if (r & 8) {
+                u = (u1 - pw) / 2;
+                v = (v1 - ph) / 2;
+                u1 -= u;
+                v1 -= v;
+                if (u < 0) {
+                    u = 0;
+                }
+                if (v < 0) {
+                    v = 0;
+                }
+                if (u1 > su) {
+                    u1 = su;
+                }
+                if (v1 > sv) {
+                    v1 = sv;
+                }
+            } else if (r & 4) {
+                if (pw < ph) {
+                    u = u1 / 2 - (pw * u1) / (ph * 2);
+                    u1 -= u;
+                } else {
+                    v = v1 / 2 - (ph * v1) / (pw * 2);
+                    v1 -= v;
+                }
+            } else if (!(r & 0x10)) {
+                continue;
+            }
+            draw_textured_quad_alt(px, py, pw, ph, u, v, u1 - u, v1 - v, 0x80808080L, D_0015EED0);
         }
         if (pass == 0) {
-            FUN_L00_0024fe20();
-            FUN_L00_0024ff88();
-            FUN_L00_002a09d8_772c0(0x10);
-            FUN_L00_0024fad0();
+            restore_moby_class_dists();
+            draw_mobys_clean_up();
+            FUN_L00_002a09d8(0x10);
+            patch_moby_gifs();
         }
     }
-    FUN_L00_001f9060(0);
-    for (i = 0; i < 14; i++) {
-        if (D_L00_001B23C0[i] != 0 && (i != 6 || D_L00_001B9DC8 != 0)) {
-            FUN_L00_00281a70(D_L00_001B9E90_init[i]);
+    setup_gif_paging(0);
+    for (n = 0; n < 14; n++) {
+        if (D_L00_001B23C0[n] != 0 && (n != 6 || D_L00_001B9CF0.unkD8 != 0)) {
+            draw_menu_flashing_panel((int)D_L00_001B9E90[n]);
         }
     }
-    FUN_L00_001f9178();
+    do_gif_paging();
 }
-#endif
 
 #include "sda.h"
 

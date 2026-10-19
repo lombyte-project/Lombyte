@@ -3,183 +3,160 @@
 #include "asm.h"
 #include "rnc/globals.h"
 #include "rnc/overlay/level_labels.h"
+#include "sda.h"
 
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0023db30.s", FUN_L00_0023db30);
-#else
-#include "rnc/overlay/quad.h"
 #include "qcopy.h"
+#include "rnc/math/fast_math.h"
+
+/* Ported from rac1-decomp (src/overlays/shared/initonce_0023E4C8.c: func_L00_0023E4C8). */
+
 typedef struct {
-    OvlVec4 points[4];
-    u32 colors[4];
-    float texcoords[8];
-    u64 texture[4];
-} __attribute__((aligned(16))) Quad_0023db30;
-extern u64 FUN_L00_001f9298(int);
-extern void FUN_L00_0024f728(void *, int, void *);
-extern void FUN_L00_0025fc08(float, void *, void *, void *);
-extern void FUN_L00_001ff3c0(void *, void *, void *);
-extern void FUN_L00_001ff500(float, void *, void *);
-extern void scale_to_0023db30(float, void *, void *) __asm__("FUN_L00_001ff300");
-extern void FUN_L00_001ff278(void *, void *, void *);
-extern float FUN_L00_001ff260(void *);
-extern void FUN_L00_001fd228(void *, void *, int);
-extern char D_L00_0015FC0A;
+    int c[4];
+    float f[8];
+    long l[4];
+} Pkt_23e4c8;
 
-void FUN_L00_0023db30(void *m) {
-    Quad_0023db30 quad;
-    OvlVec4 pos, rot, normal, base, scaled, offset, copied, other;
-    float four;
-    float quarter;
-    float minus_quarter;
-    float copied_x, other_x;
-    u64 texture;
+extern float D_L00_0015FB08 NOT_SDA;
+extern long get_effect_texture(int) __asm__("FUN_001f44b8");
+extern void build_look_at_matrix(void *out, void *dir, void *axis, f32 ang) __asm__("FUN_00214890");
+extern void build_moby_bone_transform(char *moby, int bone, char *out);
+extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
+extern void fast_draw_quad_real(void *quads, void *matrix, int count);
+
+/* Builds the object's tilted frame and emits three batches of four quads offset around it. */
+void FUN_L00_0023db30(char *moby) {
+    float q[4][4] __attribute__((aligned(16)));
+    Pkt_23e4c8 pk;
+    float m[4][4] __attribute__((aligned(16)));
+    float a[4] __attribute__((aligned(16)));
+    float b[4] __attribute__((aligned(16)));
+    float c[4] __attribute__((aligned(16)));
+    float d[4] __attribute__((aligned(16)));
     int i;
-    OvlVec4 *p; OvlVec4 *point1; OvlVec4 *copied_ptr; OvlVec4 *other_ptr;
+    float *p;
+    float x, y;
+    float sc;
+    long tex;
 
-    texture = FUN_L00_001f9298(14);
-    quad.colors[0] = 0x3ff08080;
-    quad.colors[1] = 0x3ff08080;
-    quad.colors[2] = 0x3ff08030;
-    quad.colors[3] = 0x3ff08030;
-    quad.texture[1] = texture;
-    quad.texture[2] = 0xff9000000260ULL;
-    quad.texture[0] = 5;
-    quad.texture[3] = 0x8000000048ULL;
-    ((u32 *)quad.texcoords)[0] = 0;
-    ((u32 *)quad.texcoords)[1] = 0;
-    quad.texcoords[2] = 1.0f;
-    ((u32 *)quad.texcoords)[3] = 0;
-    ((u32 *)quad.texcoords)[4] = 0;
-    quad.texcoords[5] = 1.0f;
-    quad.texcoords[6] = 1.0f;
-    quad.texcoords[7] = 1.0f;
-    FUN_L00_0024f728(m, 0, &pos);
-    four = 4.0f;
-    FUN_L00_0025fc08(-0.34906584f, &pos, &pos, &rot);
-    FUN_L00_001ff3c0(&rot, &pos, &normal);
-    FUN_L00_001ff500(1.0f, &rot, &rot);
-    FUN_L00_001ff3c0(&normal, &rot, &pos);
-    base.f[3] = 1.0f;
-    scale_to_0023db30(four, &scaled, &pos);
-    scaled.f[3] = 1.0f;
-    FUN_L00_001ff278(&offset, &scaled, &base);
-    qcopy(&copied, &pos);
-    FUN_L00_001ff278(&other, &copied, &pos);
-    {
-        quarter = 0.25f;
-        copied.f[3] = quarter;
-        other.f[3] = 0.5f;
+    tex = get_effect_texture(0xE);
+    pk.c[0] = 0x3FF08080;
+    pk.c[1] = 0x3FF08080;
+    pk.c[2] = 0x3FF08030;
+    pk.c[3] = 0x3FF08030;
+    pk.f[0] = 0.0f;
+    pk.f[1] = 0.0f;
+    pk.f[2] = 1.0f;
+    pk.f[3] = 0.0f;
+    pk.f[4] = 0.0f;
+    pk.f[5] = 1.0f;
+    pk.f[6] = 1.0f;
+    pk.f[7] = 1.0f;
+    pk.l[1] = tex;
+    pk.l[2] = 0xFF9000000260L;
+    pk.l[0] = 5;
+    pk.l[3] = 0x8000000048L;
+    build_moby_bone_transform(moby, 0, (char *)m);
+    sc = 4.0f;
+    build_look_at_matrix(m[0], m[0], m[1], -0.34906584f);
+    fast_vec_cross(m[1], m[0], m[2]);
+    fast_vec_normalize(m[1], m[1], 1.0f);
+    fast_vec_cross(m[2], m[1], m[0]);
+    m[3][3] = 1.0f;
+    fast_vec_scale(a, m[0], sc);
+    a[3] = 1.0f;
+    fast_vec_add(b, a, m[3]);
+    qcopy(c, m[0]);
+    fast_vec_add(d, c, m[0]);
+    c[3] = 0.25f;
+    d[3] = 0.5f;
 
-        FUN_L00_001ff260(&quad.points[0]);
-        quad.points[0].i[2] = 0;
-        quad.points[0].f[3] = 1.0f;
-        point1 = &quad.points[1];
-        qcopy(point1, &copied);
-        minus_quarter = -0.25f;
-        quad.points[1].f[2] += minus_quarter;
-        quad.points[1].f[0] = four * copied.f[3];
-        quad.points[1].f[3] = 1.0f;
-        FUN_L00_001ff260(&quad.points[2]);
-        quad.points[2].i[2] = 0;
-        quad.points[2].f[3] = 1.0f;
-        qcopy(&quad.points[3], &copied);
-        quad.points[3].f[2] += quarter;
-        quad.points[3].f[0] = four * copied.f[3];
-        quad.points[3].f[3] = 1.0f;
-        FUN_L00_001fd228(&quad, &pos, 1);
-
-        i = 1;
-        p = point1;
-        do {
-            if (i < 2) {
-                p->f[1] += minus_quarter;
-                p->f[2] += quarter;
-            } else {
-                p->f[1] += quarter;
-                p->f[2] += minus_quarter;
-            }
-            i += 2;
-            p += 2;
-        } while (i < 4);
-        FUN_L00_001fd228(&quad, &pos, 1);
-
+    clear_u64_value(q[0]);
+    q[0][2] = 0.0f;
+    q[0][3] = 1.0f;
+    qcopy(q[1], c);
+    q[1][2] = q[1][2] + -0.25f;
+    q[1][3] = 1.0f;
+    q[1][0] = c[3] * sc;
+    clear_u64_value(q[2]);
+    q[2][2] = 0.0f;
+    q[2][3] = 1.0f;
+    qcopy(q[3], c);
+    q[3][2] = q[3][2] + 0.25f;
+    q[3][3] = 1.0f;
+    q[3][0] = c[3] * sc;
+    fast_draw_quad_real(q, m, 1);
+    for (i = 1; i < 4; i += 2) {
+        p = q[i];
+        if (i < 2) {
+            p[1] = p[1] + -0.25f;
+            p[2] = p[2] + 0.25f;
+        } else {
+            p[1] = p[1] + 0.25f;
+            p[2] = p[2] + -0.25f;
+        }
     }
-    {
-        qcopy(&quad.points[0], &copied);
-        copied_x = four * copied.f[3];
-        quarter = -0.25f;
-        quad.points[0].f[0] = copied_x;
-        quad.points[0].f[2] += quarter;
-        quad.points[0].f[3] = 1.0f;
-        qcopy(point1, &other);
-        other_x = four * other.f[3];
-        quad.points[1].f[0] = other_x;
-        quad.points[1].f[2] += quarter;
-        quad.points[1].f[3] = 1.0f;
-        qcopy(&quad.points[2], &copied);
-        quad.points[2].f[0] = copied_x;
-        quad.points[2].f[2] += 0.25f;
-        quad.points[2].f[3] = 1.0f;
-        qcopy(&quad.points[3], &other);
-        quad.points[3].f[0] = other_x;
-        quad.points[3].f[2] += 0.25f;
-        quad.points[3].f[3] = 1.0f;
-        FUN_L00_001fd228(&quad, &pos, 1);
-        i = 0;
-        p = quad.points;
-        do {
-            if (i < 2) {
-                p->f[1] += quarter;
-                p->f[2] += 0.25f;
-            } else {
-                p->f[1] += 0.25f;
-                p->f[2] += quarter;
-            }
-            i += 1;
-            p += 1;
-        } while (i < 4);
-        FUN_L00_001fd228(&quad, &pos, 1);
+    fast_draw_quad_real(q, m, 1);
 
+    qcopy(q[0], c);
+    x = sc * c[3];
+    q[0][2] = q[0][2] + -0.25f;
+    q[0][3] = 1.0f;
+    q[0][0] = x;
+    qcopy(q[1], d);
+    y = sc * d[3];
+    q[1][2] = q[1][2] + -0.25f;
+    q[1][3] = 1.0f;
+    q[1][0] = y;
+    qcopy(q[2], c);
+    q[2][0] = x;
+    q[2][2] = q[2][2] + 0.25f;
+    q[2][3] = 1.0f;
+    qcopy(q[3], d);
+    q[3][0] = y;
+    q[3][2] = q[3][2] + 0.25f;
+    q[3][3] = 1.0f;
+    fast_draw_quad_real(q, m, 1);
+    for (i = 0; i < 4; i++) {
+        p = q[i];
+        if (i < 2) {
+            p[1] = p[1] + -0.25f;
+            p[2] = p[2] + 0.25f;
+        } else {
+            p[1] = p[1] + 0.25f;
+            p[2] = p[2] + -0.25f;
+        }
     }
-    {
-        qcopy(&quad.points[0], &other);
-        minus_quarter = -0.25f;
-        quad.points[0].f[0] = four * other.f[3];
-        quad.points[0].f[2] += minus_quarter;
-        quad.points[0].f[3] = 1.0f;
-        FUN_L00_001ff260(point1);
-        other_x = 3.0f;
-        quad.points[1].f[0] = four * copied.f[3] * other_x;
-        quad.points[1].f[2] += *(float *)(&D_L00_0015FC0A - 0x102);
-        quad.points[1].f[3] = 1.0f;
-        qcopy(&quad.points[2], &other);
-        quad.points[2].f[0] = four * other.f[3];
-        quarter = 0.25f;
-        quad.points[2].f[2] += quarter;
-        quad.points[2].f[3] = 1.0f;
-        FUN_L00_001ff260(&quad.points[3]);
-        quad.points[3].f[0] = four * copied.f[3] * other_x;
-        quad.points[3].i[2] = 0;
-        quad.points[3].f[3] = 1.0f;
-        FUN_L00_001fd228(&quad, &pos, 1);
-        i = 0;
-        p = quad.points;
-        do {
-            if (i < 2) {
-                p->f[1] += minus_quarter;
-                p->f[2] += quarter;
-            } else {
-                p->f[1] += quarter;
-                p->f[2] += minus_quarter;
-            }
-            i += 2;
-            p += 2;
-        } while (i < 4);
-        FUN_L00_001fd228(&quad, &pos, 1);
+    fast_draw_quad_real(q, m, 1);
+
+    qcopy(q[0], d);
+    q[0][2] = q[0][2] + -0.25f;
+    q[0][3] = 1.0f;
+    q[0][0] = sc * d[3];
+    clear_u64_value(q[1]);
+    q[1][3] = 1.0f;
+    q[1][2] = q[1][2] + D_L00_0015FB08;
+    q[1][0] = sc * c[3] * 3.0f;
+    qcopy(q[2], d);
+    q[2][2] = q[2][2] + 0.25f;
+    q[2][3] = 1.0f;
+    q[2][0] = sc * d[3];
+    clear_u64_value(q[3]);
+    q[3][3] = 1.0f;
+    q[3][2] = 0.0f;
+    q[3][0] = sc * c[3] * 3.0f;
+    fast_draw_quad_real(q, m, 1);
+    for (i = 0; i < 4; i += 2) {
+        p = q[i];
+        if (i < 2) {
+            p[1] = p[1] + -0.25f;
+            p[2] = p[2] + 0.25f;
+        } else {
+            p[1] = p[1] + 0.25f;
+            p[2] = p[2] + -0.25f;
+        }
     }
+    fast_draw_quad_real(q, m, 1);
 }
-#endif
 #include "qcopy.h"
 #include "rnc/overlay/quad.h"
 extern void getpos_23e008(void *, int, void *) __asm__("FUN_L00_0024f7c8");

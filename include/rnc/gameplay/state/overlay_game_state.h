@@ -33,7 +33,9 @@ struct GameState {
     u8 pad60[0x6C];
     s32 saved_seq_count;
     struct Own *unkD0;
-    u8 padD4[0x10];
+    u8 padD4[4];
+    s32 unkD8;
+    u8 padDC[8];
     void *unkE4;
     f32 unkE8;
     void *unkEC;
