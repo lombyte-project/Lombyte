@@ -552,9 +552,14 @@ extern void func_L00_0025B178_2E2EF0(void *) __asm__("FUN_L00_0025a120");
 void FUN_L12_002e1be0(TrollMoby54_2E2EF0 *moby) {
     enum {
         TROLL_INITIALIZE = 0,
+        TROLL_IDLE = 1,
+        TROLL_FACE_TARGET_BEFORE_PURSUIT = 3,
         TROLL_PURSUE_TARGET = 4,
         TROLL_MELEE_ATTACK = 5,
-        TROLL_RETURN_HOME = 6
+        TROLL_RETURN_HOME = 6,
+        TROLL_WAIT_FOR_LEAP_TRIGGER = 11,
+        TROLL_LEAP_TO_HOME = 12,
+        TROLL_LAND_AFTER_LEAP = 14
     };
     TargetReport54_2E2EF0 work;
     TrollMoby54_2E2EF0 *iterator;
@@ -596,7 +601,7 @@ void FUN_L12_002e1be0(TrollMoby54_2E2EF0 *moby) {
         data->tuning=&D_L12_001618E8;
         }
         break;
-    case 1: {
+    case TROLL_IDLE: {
         float idle_distance, idle_angle, idle_difference;
         idle_distance=func_001F9D10_2E2EF0(target->pos,data->home);
         idle_angle=func_L00_001FF860_2E2EF0(target->pos[0]-moby->pos[0],target->pos[1]-moby->pos[1]);
@@ -661,7 +666,7 @@ void FUN_L12_002e1be0(TrollMoby54_2E2EF0 *moby) {
         }
         break;
     }
-    case 11:
+    case TROLL_WAIT_FOR_LEAP_TRIGGER:
         angle=func_L00_001FF860_2E2EF0(data->home[0]-moby->pos[0],data->home[1]-moby->pos[1]);
         func_L00_002592B0_2E2EF0((char *)moby,&data->turn_velocity,angle,0.05f,0.3f,0.2f);
         fast_vec_sub(work.v0,target->pos,data->home);
@@ -676,7 +681,7 @@ void FUN_L12_002e1be0(TrollMoby54_2E2EF0 *moby) {
             moby->collision=*(int *)(moby->model+0x10);
         }
         break;
-    case 12:
+    case TROLL_LEAP_TO_HOME:
         if(func_L00_0025D6F0_2E2EF0(moby,data->fall)&1) {
             moby->state=14;
             if(moby->anim!=9) func_00213DE0_2E2EF0(moby,9,8,func_001F9850_2E2EF0(7));
@@ -684,7 +689,7 @@ void FUN_L12_002e1be0(TrollMoby54_2E2EF0 *moby) {
         }
         if(moby->pos[2]<0.0f) { func_0020D678_2E2EF0(moby); return; }
         break;
-    case 14:
+    case TROLL_LAND_AFTER_LEAP:
         if(moby->anim_flags&2) {
             moby->state=4; data->blocked=0;
             if(func_002140B0_2E2EF0(256)&1) data->circle_rate=-data->circle_rate;
@@ -693,7 +698,7 @@ void FUN_L12_002e1be0(TrollMoby54_2E2EF0 *moby) {
             func_L12_002E2BF8_2E2EF0((unsigned char *)moby);
         }
         break;
-    case 3:
+    case TROLL_FACE_TARGET_BEFORE_PURSUIT:
         angle=func_L00_001FF860_2E2EF0(target->pos[0]-moby->pos[0],target->pos[1]-moby->pos[1]);
         func_L00_002592B0_2E2EF0((char *)moby,&data->turn_velocity,angle,0.03f,0.3f,D_0015ED6C*6.2831855f);
         if(moby->anim_flags&2) { moby->state=4; data->blocked=0; func_L12_002E2BF8_2E2EF0((unsigned char *)moby); }
