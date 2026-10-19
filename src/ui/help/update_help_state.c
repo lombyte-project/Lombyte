@@ -62,6 +62,7 @@ void update_help_state(void) {
     enum {
         HELP_STATE_IDLE = 0,
         HELP_STATE_DISPLAY_START_DELAY = 1,
+        HELP_STATE_DISMISSAL_WAIT_START_DELAY = 4,
         HELP_STATE_WAIT_FOR_DISMISSAL = 5,
         HELP_STATE_DISMISS_DELAY = 6,
         HELP_STATE_DISMISSING = 7,
@@ -174,7 +175,7 @@ void update_help_state(void) {
         }
         break;
 
-    case 4: {
+    case HELP_STATE_DISMISSAL_WAIT_START_DELAY: {
         s32 id;
 
         force_help_message(5, 0);
