@@ -1022,7 +1022,7 @@ void FUN_L06_0022e020(void) {
     Vec4 vD0;
 
     switch (hero.state.current) {
-    case 0x0:
+    case HERO_STATE_IDLE:
     case HERO_STATE_LOOK:
     case HERO_STATE_STOP:
     case HERO_STATE_CROUCH:
@@ -2249,7 +2249,7 @@ void FUN_L06_0022e020(void) {
         FUN_L01_00234358(frame_time_sq * 25.0f);
         FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.unk120, frame_time_sq * 18.0f);
         break;
-    case 6:
+    case HERO_STATE_FALL:
     case 0x2D:
         if (hero.state.current == 0x2D) {
             f32 t = 0.0f;
@@ -2374,14 +2374,14 @@ void FUN_L06_0022e020(void) {
         break;
     }
     case 7:
-    case 9:
-    case 0xA:
-    case 0xB:
+    case HERO_STATE_RUN_JUMP:
+    case HERO_STATE_PACK_JUMP:
+    case HERO_STATE_HIGH_JUMP:
     case 0xC:
     case 0xD:
     case 0xE:
     case 0xF:
-    case 0x10:
+    case HERO_STATE_PACK_LONG_JUMP:
     case 0x11:
     case 0x12:
     case 0x1C:
@@ -2391,7 +2391,7 @@ void FUN_L06_0022e020(void) {
     case 0x5E:
     case 0x69: {
         s32 t198;
-        s32 t420;
+        s32 jump_frame_threshold;
         if (hero.state.current == 0x1C && hero.unk22D8 == 0 && hero.items[3].item_id == 3) {
             if (FUN_L00_00211870(10.0f) != 0) {
                 FUN_L00_00216de8(4, 0);
@@ -2406,11 +2406,11 @@ void FUN_L06_0022e020(void) {
             FUN_L00_002118c8_c(hero.unk424, 0);
         }
         t198 = hero.state_timer;
-        t420 = hero.unk420;
-        if (t198 == t420) {
+        jump_frame_threshold = hero.unk420;
+        if (t198 == jump_frame_threshold) {
             qcopy(&hero.unk400, &hero.motion.pos);
         }
-        if (hero.unk418 != 0 || (t198 < t420 && hero.state.current != HERO_STATE_HIGH_JUMP && hero.state.current != HERO_STATE_PACK_LONG_JUMP && hero.state.current != 0xC &&
+        if (hero.unk418 != 0 || (t198 < jump_frame_threshold && hero.state.current != HERO_STATE_HIGH_JUMP && hero.state.current != HERO_STATE_PACK_LONG_JUMP && hero.state.current != 0xC &&
                             hero.state.current != 0x11 && hero.state.current != 0x1C && hero.state.current != 0x4C)) {
             f32 sv;
             turn_to(0, frame_scale_sq * 0.015f, frame_scale_sq * 0.2f, D_0015ED6C_c * 15.009831f);
