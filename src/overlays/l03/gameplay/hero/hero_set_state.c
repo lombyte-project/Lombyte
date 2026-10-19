@@ -90,7 +90,8 @@ int hero_set_state(int a, int b) {
     enum {
         HERO_STATE_WATER_SURFACE_ENTRY = 0x37,
         HERO_STATE_VEHICLE_IDLE = 0x53,
-        HERO_STATE_DROWN = 0x6A
+        HERO_STATE_DROWN = 0x6A,
+        HERO_STATE_PATH_MOTION_ENTRY = 0x74
     };
     int old2088;
     char *moby;
@@ -801,7 +802,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0x2A, 0, (float)scale_game_frames(6));
         break;
     }
-    case 0x74: {
+    case HERO_STATE_PATH_MOTION_ENTRY: {
         struct Hero *p = &hero;
         float vec[4];
         float pos[4];
