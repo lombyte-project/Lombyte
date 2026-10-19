@@ -1309,6 +1309,8 @@ void toxic_crab_update(Moby2E30F8 *m) __asm__("FUN_L10_002e1d38");
 void toxic_crab_update(Moby2E30F8 *m) {
     enum {
         TOXIC_CRAB_STATE_INITIALIZE = 0,
+        TOXIC_CRAB_STATE_WAIT_FOR_ACTIVATION = 1,
+        TOXIC_CRAB_STATE_ACTIVATE = 2,
         TOXIC_CRAB_STATE_FACE_TRACKED_POSITION = 3,
         TOXIC_CRAB_STATE_WAIT_TO_PURSUE = 4,
         TOXIC_CRAB_STATE_PURSUE_TARGET = 5,
@@ -1396,7 +1398,7 @@ void toxic_crab_update(Moby2E30F8 *m) {
         }
         d->f1A0 = *(float *)&D_L10_00161E40_gp;
         break;
-    case 1:
+    case TOXIC_CRAB_STATE_WAIT_FOR_ACTIVATION:
         FUN_L00_00258278((char *)m, &d->f190, d->v170[3], 0.02f, 0.3f, frame_time * 6.2831855f);
         if (d->i1BC != -1) {
             char *base = D_L10_0015FFD8;
@@ -1421,7 +1423,7 @@ void toxic_crab_update(Moby2E30F8 *m) {
             }
         }
         break;
-    case 2:
+    case TOXIC_CRAB_STATE_ACTIVATE:
         if (m->anim == 0) {
             if (d->i1A8 == 0) {
                 d->i1A8 = truncate_float_to_s32(FUN_L04_001f1978(random_float_between(0.0f, 20.0f)));
