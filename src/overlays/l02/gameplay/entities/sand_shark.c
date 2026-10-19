@@ -2170,6 +2170,13 @@ extern void spawn_explosion(void *, void *, void *, float, float, int, int, int,
    projectile at it (state 2) and bursts into debris when its hit animation flags it (state 4). */
 void sand_shark_nest_update(unsigned char *moby) __asm__("FUN_L02_002dcb38");
 void sand_shark_nest_update(unsigned char *moby) {
+    enum {
+        SAND_SHARK_NEST_INITIALIZE = 0,
+        SAND_SHARK_NEST_WAIT_FOR_SPAWN = 1,
+        SAND_SHARK_NEST_LAUNCH_SAND_SHARK = 2,
+        SAND_SHARK_NEST_HIT_RECOVERY = 3,
+        SAND_SHARK_NEST_DEATH_KNOCKBACK = 4
+    };
     Varscb38 *d = *(Varscb38 **)(moby + 0x78);
     char *o;
     int n;
@@ -2185,7 +2192,7 @@ void sand_shark_nest_update(unsigned char *moby) {
         moby[0x7F] = 0x16;
     }
     switch (moby[0x20]) {
-    case 0:
+    case SAND_SHARK_NEST_INITIALIZE:
         *(short *)(moby + 0xB4) -= D_0014D590_cb38[2][moby[0xB1]][1];
         if (*(short *)(moby + 0xB4) <= 0) {
             *(short *)(moby + 0xB4) = 1;
@@ -2199,7 +2206,7 @@ void sand_shark_nest_update(unsigned char *moby) {
             (*(Spawnercb38 **)((d->spawner << 8) + D_L02_0015FFD8 + 0x78))->i150 += 1;
         }
         break;
-    case 1:
+    case SAND_SHARK_NEST_WAIT_FOR_SPAWN:
         if (fast_dec_timer(&d->timer)) {
             if (FUN_L02_002dd2a8_c(moby)) {
                 moby[0x20] = 2;
@@ -2211,7 +2218,7 @@ void sand_shark_nest_update(unsigned char *moby) {
             }
         }
         break;
-    case 2:
+    case SAND_SHARK_NEST_LAUNCH_SAND_SHARK:
         if (moby[0x70] & 2) {
             moby[0x20] = 1;
             if (moby[0x53] != 0) {
@@ -2238,7 +2245,7 @@ void sand_shark_nest_update(unsigned char *moby) {
             }
         }
         break;
-    case 3:
+    case SAND_SHARK_NEST_HIT_RECOVERY:
         mine_fall(moby, d->anim);
         if (moby[0x70] & 2) {
             moby[0x20] = 1;
@@ -2247,7 +2254,7 @@ void sand_shark_nest_update(unsigned char *moby) {
             }
         }
         break;
-    case 4:
+    case SAND_SHARK_NEST_DEATH_KNOCKBACK:
         if (mine_fall(moby, d->anim) & 0x40) {
             if (d->spawner >= 0) {
                 extern int D_L02_0015FFD8_s __asm__("D_L02_0015FFD8") __attribute__((sda));
