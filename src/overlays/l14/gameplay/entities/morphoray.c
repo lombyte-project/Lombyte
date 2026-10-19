@@ -462,13 +462,17 @@ extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 
 void morphoray_update(struct Moby *moby) __asm__("FUN_L14_00305758");
 void morphoray_update(struct Moby *moby) {
+    enum {
+        MORPHORAY_INITIALIZE = 0,
+        MORPHORAY_WAIT_FOR_HERO = 1
+    };
     u8 *o = (u8 *)moby;
     u8 *d = (u8 *)moby->pvars;
     f32 v[4];
     u8 state = moby->state;
 
     switch (state) {
-    case 0:
+    case MORPHORAY_INITIALIZE:
         if (D_0014C050[moby->mission + current_level_index * 16] == 0xFF) {
             mark_moby_for_removal(moby);
             return;
@@ -481,7 +485,7 @@ void morphoray_update(struct Moby *moby) {
         qcopy(d, o + 0x10);
         moby->state = 1;
         break;
-    case 1:
+    case MORPHORAY_WAIT_FOR_HERO:
         *(f32 *)(o + 0x48) = fast_add_rotations(*(f32 *)(o + 0x48), D_L14_001621EC);
         qcopy(o + 0x10, d);
         scale_vector_xyz(v, o + 0xd0, D_L14_001621F0);
