@@ -2305,6 +2305,7 @@ typedef struct {
 void FUN_L13_002e4448(char *moby) {
     enum {
         INITIALIZE_LINKED_GROUP = 0,
+        MONITOR_LINKED_GROUP_HITS = 1,
         WAIT_FOR_LINKED_GROUP_COMPLETION = 2,
         RESET_HIT_STATE = 3,
         UPDATE_OPENED_STATE = 4
@@ -2345,7 +2346,7 @@ void FUN_L13_002e4448(char *moby) {
         set_moby_color(moby, 0x80, 0x80, 0x80);
         moby[0x20] = 1;
         break;
-    case 1:
+    case MONITOR_LINKED_GROUP_HITS:
     case WAIT_FOR_LINKED_GROUP_COMPLETION:
         if (data->unk74 == 0 && hit != 0) {
             char *linked;
