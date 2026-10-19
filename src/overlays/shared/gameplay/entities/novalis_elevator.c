@@ -1714,6 +1714,7 @@ void large_amoeboid_update(unsigned char *moby) {
         LARGE_AMOEBOID_WAIT_FOR_PATH_ACQUISITION_ANIMATION_END = 3,
         LARGE_AMOEBOID_FOLLOW_PATH_TO_TARGET = 4,
         LARGE_AMOEBOID_RETURN_TO_STORED_POSITION = 5,
+        LARGE_AMOEBOID_LUNGE_AT_TARGET = 6,
         LARGE_AMOEBOID_WAIT_FOR_ANIMATION_BEFORE_RESUMING_PATH = 7,
         LARGE_AMOEBOID_PROCESS_KNOCKBACK = 8,
         LARGE_AMOEBOID_WAIT_FOR_ANIMATION_BEFORE_RESTARTING_PATH = 9,
@@ -1932,7 +1933,7 @@ void large_amoeboid_update(unsigned char *moby) {
             return;
         }
     }
-    case 6: {
+    case LARGE_AMOEBOID_LUNGE_AT_TARGET: {
         char *target_position;
         float *rotation = (float *)(moby + 0x48);
         angle = fast_arc_tan(*(float *)(target + 0x10) - *(float *)(moby + 0x10),
