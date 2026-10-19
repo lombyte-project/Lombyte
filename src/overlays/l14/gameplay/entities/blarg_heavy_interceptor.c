@@ -1694,13 +1694,17 @@ extern void func_L00_001FF4B0_2B4E40(void *, void *, float) __asm__("FUN_001f9bf
 
 void machinegun_turret_update(char *moby) __asm__("FUN_L14_002b3bf0");
 void machinegun_turret_update(char *moby) {
+    enum {
+        TURRET_STATE_INITIALIZE = 0,
+        TURRET_STATE_DESTROY = 6
+    };
     char *data;
     float v20[4];
     float spawn_position[4];
     float v40[4];
     float spawn_position_offset[4];
     float v60[4];
-    float v70[4];
+    float target_query_result[4];
     float m80[16];
     float g0;
     float phase_angle, sine_input_angle, sine_scale, target_heading;
@@ -1711,7 +1715,7 @@ void machinegun_turret_update(char *moby) {
     data = *(char **)(moby + 0x78);
     func_L14_002B5590_2B4E40((unsigned char *)moby);
     switch (*(unsigned char *)(moby + 0x20)) {
-    case 0:
+    case TURRET_STATE_INITIALIZE:
         *(float *)(data + 0x70) = *(float *)(moby + 0x18);
         *(float *)(data + 0x84) = *(float *)(moby + 0x48);
         *(int *)(data + 0x8C) = 0;
@@ -1842,8 +1846,8 @@ void machinegun_turret_update(char *moby) {
                 func_L00_00251328_2B4E40(func_L14_002EE150_2B4E40(spawn_position, v40, (int)moby, 1), 0xE0, 0xE0, 0xE0);
             }
         }
-        r = func_L00_00260D30_2B4E40(moby, v70, 34.0f);
-        c17 = (r == 2 || func_00215570_2B4E40(v70, *(int *)(data + 0x90)) == 0);
+        r = func_L00_00260D30_2B4E40(moby, target_query_result, 34.0f);
+        c17 = (r == 2 || func_00215570_2B4E40(target_query_result, *(int *)(data + 0x90)) == 0);
         if (c17 == 0) {
             return;
         }
@@ -1888,7 +1892,7 @@ void machinegun_turret_update(char *moby) {
         *(float *)(moby + 0x18) = *(float *)(data + 0x70) - D_L14_00161508;
         *(unsigned short *)(moby + 0x34) = *(unsigned short *)(moby + 0x34) & 0xEFFF;
         return;
-    case 6:
+    case TURRET_STATE_DESTROY:
         func_L00_0025F4A8_2B4E40(moby, data + 0x40, moby + 0x10, 0.0f, 0.0f, 5, 2, 4, 2.0f, 1.0f, 9.0f, 0, 1.0f, 15.0f, 1, 1, -1, 0);
         func_0020D678_2B4E40(moby);
         return;
