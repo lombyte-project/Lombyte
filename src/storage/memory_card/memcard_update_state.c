@@ -106,6 +106,7 @@ void memcard_update_state(void) {
         MEMCARD_CREATE_PROCESS_SAVE_WRITE_RESULT_AND_REQUEST_CLOSE = 15,
         MEMCARD_CREATE_PROCESS_SAVE_CLOSE_RESULT = 16,
         MEMCARD_CREATE_ADVANCE_SAVE_INDEX = 17,
+        MEMCARD_CREATE_PROCESS_AUXILIARY_FILE_WRITE_RESULT_AND_REQUEST_CLOSE = 20,
         MEMCARD_CREATE_RESET_CARD_STATUS = 21
     };
     enum {
@@ -158,6 +159,12 @@ void memcard_update_state(void) {
     enum {
         MEMCARD_CREATE_REQUEST_ICON_SYS_OPEN = 5,
         MEMCARD_CREATE_REQUEST_STATIC_ICON_OPEN = 9
+    };
+    enum {
+        MEMCARD_CREATE_REQUEST_AUXILIARY_FILE_OPEN = 18
+    };
+    enum {
+        MEMCARD_CREATE_PROCESS_AUXILIARY_FILE_OPEN_RESULT_AND_REQUEST_WRITE = 19
     };
     char name[0x40];
 
@@ -429,7 +436,7 @@ void memcard_update_state(void) {
         case MEMCARD_CREATE_REQUEST_ICON_SYS_OPEN:
         case MEMCARD_CREATE_REQUEST_STATIC_ICON_OPEN:
         case MEMCARD_CREATE_REQUEST_SAVE_OPEN:
-        case 18:
+        case MEMCARD_CREATE_REQUEST_AUXILIARY_FILE_OPEN:
             switch (MC.sub) {
             case MEMCARD_CREATE_REQUEST_ICON_SYS_OPEN:
                 strcpy(name, D_0013D200);
@@ -437,7 +444,7 @@ void memcard_update_state(void) {
             case MEMCARD_CREATE_REQUEST_STATIC_ICON_OPEN:
                 strcpy(name, D_0013D220);
                 break;
-            case 18:
+            case MEMCARD_CREATE_REQUEST_AUXILIARY_FILE_OPEN:
                 strcpy(name, D_0013D240);
                 break;
             case MEMCARD_CREATE_REQUEST_SAVE_OPEN:
@@ -452,7 +459,7 @@ void memcard_update_state(void) {
         case MEMCARD_CREATE_PROCESS_ICON_SYS_OPEN_RESULT_AND_REQUEST_WRITE:
         case MEMCARD_CREATE_PROCESS_STATIC_ICON_OPEN_RESULT_AND_REQUEST_WRITE:
         case MEMCARD_CREATE_PROCESS_SAVE_OPEN_RESULT_AND_REQUEST_WRITE:
-        case 19: {
+        case MEMCARD_CREATE_PROCESS_AUXILIARY_FILE_OPEN_RESULT_AND_REQUEST_WRITE: {
             McChunk *chunk;
             s32 size;
 
@@ -470,7 +477,7 @@ void memcard_update_state(void) {
                     MC.size = chunk->xC;
                     MC.buf = (u8 *)chunk + chunk->x8;
                     break;
-                case 19:
+                case MEMCARD_CREATE_PROCESS_AUXILIARY_FILE_OPEN_RESULT_AND_REQUEST_WRITE:
                     if (pause_action_list_mode != 0) {
                         MC.size = 0x3C00;
                     } else {
@@ -500,7 +507,7 @@ void memcard_update_state(void) {
         case MEMCARD_CREATE_PROCESS_ICON_SYS_WRITE_RESULT_AND_REQUEST_CLOSE:
         case MEMCARD_CREATE_PROCESS_STATIC_ICON_WRITE_RESULT_AND_REQUEST_CLOSE:
         case MEMCARD_CREATE_PROCESS_SAVE_WRITE_RESULT_AND_REQUEST_CLOSE:
-        case 20:
+        case MEMCARD_CREATE_PROCESS_AUXILIARY_FILE_WRITE_RESULT_AND_REQUEST_CLOSE:
             if (MC.result == MC.size) {
                 if (sceMcClose(MC.fd) == 0) {
                     MC.sub++;
