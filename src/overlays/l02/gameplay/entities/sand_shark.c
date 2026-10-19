@@ -1395,6 +1395,13 @@ float absolute_float_c(float input) __asm__("func_001F99C0");
 
 void FUN_L02_002d7748(struct Moby *moby);
 void FUN_L02_002d7748(struct Moby *moby) {
+    enum {
+        L02_BOT_INITIALIZE = 0,
+        L02_BOT_WANDER = 6,
+        L02_BOT_WAIT_FOR_WAKE_TRIGGER = 10,
+        L02_BOT_HIT_KNOCKBACK_RECOVERY = 16,
+        L02_BOT_DEATH_KNOCKBACK = 17
+    };
     float position[4];
     float direction[4];
     char shot[0x30];
@@ -1415,7 +1422,7 @@ void FUN_L02_002d7748(struct Moby *moby) {
     }
     FUN_L02_002d85b8(moby);
     switch (moby->state) {
-    case 0:
+    case L02_BOT_INITIALIZE:
         if (rand() & 1) {
             moby->flags |= 0x8000;
         }
@@ -1509,7 +1516,7 @@ void FUN_L02_002d7748(struct Moby *moby) {
             moby->state = 7;
         }
         break;
-    case 6:
+    case L02_BOT_WANDER:
         if (FUN_L00_00259028((char *)moby, data->walk, data->wander, (char *)data->velocity) & 6) {
             if (moby->prev_seq != 0) {
                 blend_moby_animation_c3(moby, 0, 0, scale_game_frames(10));
@@ -1567,7 +1574,7 @@ void FUN_L02_002d7748(struct Moby *moby) {
             FUN_L00_0026cbb0(position, direction, D_L02_00161A88, D_L02_00161A88,
                               random_int_between(scale_game_frames(D_L02_00161A90), scale_game_frames(D_L02_00161A94)), 1, 40000.0f);
         }
-    case 10:
+    case L02_BOT_WAIT_FOR_WAKE_TRIGGER:
         triggered = 0;
         if (data->wake_volume >= 0) {
             triggered = is_point_inside_clip_volume(&hero.ground_point, data->wake_volume) != 0;
@@ -1653,7 +1660,7 @@ void FUN_L02_002d7748(struct Moby *moby) {
             }
         }
         break;
-    case 16:
+    case L02_BOT_HIT_KNOCKBACK_RECOVERY:
         if (mine_fall(moby, data->knockback) & 0x40) {
             moby->state = 7;
             if (moby->prev_seq != 0) {
@@ -1661,7 +1668,7 @@ void FUN_L02_002d7748(struct Moby *moby) {
             }
         }
         break;
-    case 17:
+    case L02_BOT_DEATH_KNOCKBACK:
         if (mine_fall(moby, data->knockback) & 0x140) {
             qcopy(position, &moby->pos);
             position[2] += 1.0f;
