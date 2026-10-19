@@ -101,6 +101,7 @@ void level_draw_dialog_text(void) {
     enum {
         FREEZE_DIALOG_TIMER_GATED_CENTERED_BUTTON = 2,
         FREEZE_DIALOG_FORMATTED_BODY_CENTERED_BUTTON = 5,
+        FREEZE_DIALOG_CONDITIONAL_FORMATTED_BODY = 19,
         FREEZE_DIALOG_FORMATTED_BODY_PAIRED_BUTTONS = 24
     };
     char buf[0x200];
@@ -214,7 +215,7 @@ void level_draw_dialog_text(void) {
                 mid = 0;
             }
             break;
-        case 19:
+        case FREEZE_DIALOG_CONDITIONAL_FORMATTED_BODY:
             if (mode_freeze_flags & 4) {
                 mid = 0x4FA8;
                 text = get_help_message_text(0x4FA7);
