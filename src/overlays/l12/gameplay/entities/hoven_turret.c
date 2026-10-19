@@ -574,11 +574,17 @@ extern f32 frame_scale_macro __asm__("D_0015ED60") __attribute__((section(".sdat
 extern f32 frame_time_sq_macro __asm__("D_0015ED70") __attribute__((section(".sdata")));
 void hoven_turret_update(struct Moby *moby) __asm__("FUN_L12_00303540");
 void hoven_turret_update(struct Moby *moby) {
+    enum {
+        HOVEN_TURRET_STATE_INITIALIZE = 0,
+        HOVEN_TURRET_STATE_WAIT_FOR_BOARDING = 3,
+        HOVEN_TURRET_STATE_MANNED = 4,
+        HOVEN_TURRET_STATE_DESTRUCTION_EFFECTS = 7
+    };
     Data_304920 *data = *(Data_304920 **)&moby->pvars;
 
     ((Snd_304920 *)(D_0013E533 + 0x1D))->f6C = moby;
     switch (moby->state) {
-    case 0:
+    case HOVEN_TURRET_STATE_INITIALIZE:
         D_L12_00161F00 = 0;
         D_L12_00161F04 = 0;
         if (D_0014171B_304920[moby->mission + (current_level_index << 4)] == 0xFF) {
@@ -598,7 +604,7 @@ void hoven_turret_update(struct Moby *moby) {
             ((Snd_304920 *)(D_0013E533 + 0x1D))->f6C = moby;
         }
         break;
-    case 3: {
+    case HOVEN_TURRET_STATE_WAIT_FOR_BOARDING: {
         {
             Vec_304920 out;
 
@@ -635,7 +641,7 @@ void hoven_turret_update(struct Moby *moby) {
         }
         break;
     }
-    case 4:
+    case HOVEN_TURRET_STATE_MANNED:
         D_L12_00161F00 = 1;
         ((Hero *)(D_0013E533 + 0xE1D))->unk20A5 = 1;
         ((Hero *)(D_0013E533 + 0xE1D))->unk1CC = scale_game_frames_alt(0x78);
@@ -787,7 +793,7 @@ void hoven_turret_update(struct Moby *moby) {
             }
         }
         break;
-    case 7:
+    case HOVEN_TURRET_STATE_DESTRUCTION_EFFECTS:
         enqueue_callback_list_1(FUN_L12_00304d98_c, moby);
         if (fast_dec_timer_s16(&data->fAE)) {
             Vec_304920 v;
