@@ -91,6 +91,7 @@ void seeker_update(struct Moby *moby) {
         SEEKER_STATE_INITIALIZE = 0,
         SEEKER_STATE_IDLE_HOVER = 1,
         SEEKER_STATE_CHASE = 2,
+        SEEKER_STATE_CHASE_ANIMATION_WAIT = 3,
         SEEKER_STATE_HURT_KNOCKBACK = 5,
         SEEKER_STATE_FATAL_KNOCKBACK = 6,
         SEEKER_STATE_EXPLODE = 7
@@ -168,7 +169,7 @@ void seeker_update(struct Moby *moby) {
             moby->state = 2;
         }
         break;
-    case 3:
+    case SEEKER_STATE_CHASE_ANIMATION_WAIT:
         if (moby->anim_flags & 2) {
             if (moby->group != 0xFF) {
                 FUN_L01_0026e090(moby->group, 1);
