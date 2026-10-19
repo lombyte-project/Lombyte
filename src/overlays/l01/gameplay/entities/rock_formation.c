@@ -722,9 +722,10 @@ void agnogg_ship_front_update(Moby_2FC140 *moby) __asm__("FUN_L01_002fad68");
 void agnogg_ship_front_update(Moby_2FC140 *moby) {
     enum {
         AGNOGG_SHIP_INITIALIZE = 0,
-        AGNOGG_SHIP_HOLD_TARGET_HEIGHT = 10,
+        AGNOGG_SHIP_WAIT_FOR_DESCENT_TRIGGER = 1,
         AGNOGG_SHIP_DESCEND_TO_TARGET_HEIGHT = 2,
-        AGNOGG_SHIP_WAIT_BEFORE_SCENE = 5
+        AGNOGG_SHIP_WAIT_BEFORE_SCENE = 5,
+        AGNOGG_SHIP_HOLD_TARGET_HEIGHT = 10
     };
     Data_2FC140 *data;
     Link_2FC140 *q;
@@ -751,7 +752,7 @@ void agnogg_ship_front_update(Moby_2FC140 *moby) {
         moby->flags = moby->flags | 0x41;
         moby->pos.z = moby->pos.z + fd;
         break;
-    case 1:
+    case AGNOGG_SHIP_WAIT_FOR_DESCENT_TRIGGER:
         r16 = *(unsigned char *)(moby->fB0 + (current_level_index_macro << 4) + D_0014C050_u);
         if (r16 == 0xFF) {
             if (moby->f53 != 2) {
