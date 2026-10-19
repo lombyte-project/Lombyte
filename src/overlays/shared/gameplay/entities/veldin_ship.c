@@ -2236,6 +2236,12 @@ extern float D_L00_00161980 __attribute__((sda));
 extern float D_L00_00161984 __attribute__((sda));
 extern short D_L00_00161960 __attribute__((sda));
 void horny_toad_update(Moby *moby) {
+    enum {
+        HORNY_TOAD_INITIALIZE = 0,
+        HORNY_TOAD_FACE_FOLLOW_MOBY = 1,
+        HORNY_TOAD_FOLLOW_PATH = 4,
+        HORNY_TOAD_RETURN_HOME = 8
+    };
     ToadVars *data;
     Moby *target;
     ToadVec v;
@@ -2249,7 +2255,7 @@ void horny_toad_update(Moby *moby) {
     }
     FUN_L00_00263ac8_2d4610(2.1f, (int)moby, 1, data->unk200);
     switch (moby->state) {
-    case 0: {
+    case HORNY_TOAD_INITIALIZE: {
         float k;
         moby->scale = ((ToadClass *)moby->pclass)->unk24 * D_L00_0016196C;
         qcopy(data->home, (*(ToadVec *)&moby->pos));
@@ -2296,7 +2302,7 @@ void horny_toad_update(Moby *moby) {
             data->unk138 = 0;
         }
         break;
-    case 1: {
+    case HORNY_TOAD_FACE_FOLLOW_MOBY: {
         Moby *t = (Moby *)(moby_table + (data->follow_moby << 8));
         if (t != 0 && t->state != 0xFE && t->state != 0xFD) {
             approach_angle(&moby->rot.z, angle_atan2((*(ToadVec *)&t->pos)[0] - (*(ToadVec *)&moby->pos)[0], (*(ToadVec *)&t->pos)[1] - (*(ToadVec *)&moby->pos)[1]), &data->turn_speed, frame_time_sq * 12.566371f, frame_time_sq * 12.566371f, frame_time * 12.566371f);
@@ -2318,7 +2324,7 @@ void horny_toad_update(Moby *moby) {
             if (moby->prev_seq != 4) FUN_00212f90_2d4610(moby, 4, 0, scale_game_frames(10));
         }
         break;
-    case 4: {
+    case HORNY_TOAD_FOLLOW_PATH: {
         ToadPath *path = toad_paths[data->path];
         if (FUN_L00_002d54c8_2d4610((unsigned char *)moby, path->pts[data->path_point], 0.5f) < 1.0f) {
             if (data->path_point < path->count - 1) {
@@ -2370,7 +2376,7 @@ void horny_toad_update(Moby *moby) {
             }
         }
         break;
-    case 8:
+    case HORNY_TOAD_RETURN_HOME:
         if (FUN_L00_002d54c8_2d4610((unsigned char *)moby, data->home, 0.5f) < 1.5f) {
             moby->state = 5;
             if (moby->prev_seq != 1) FUN_00212f90_2d4610(moby, 1, 0, scale_game_frames(10));
