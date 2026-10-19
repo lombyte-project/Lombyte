@@ -1877,6 +1877,9 @@ void bombomatic_update(char *m) {
         BOMBOMATIC_LAUNCH_BURST = 2,
         HIT_REACTION_NO_ANIMATION_RESPONSE = 11
     };
+    enum {
+        HIT_REACTION_NONE = 0
+    };
     char *d;
     char *hit_info;
     char *t;
@@ -1911,7 +1914,7 @@ void bombomatic_update(char *m) {
     t = d + 0x20;
     r = fun_00213928(m, hit_info, t, 0, &ia, 0, 0, 4);
     switch (r) {
-    case 0:
+    case HIT_REACTION_NONE:
         break;
     case 1:
         *(int *)t = 0;
