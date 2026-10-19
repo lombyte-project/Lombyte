@@ -355,6 +355,9 @@ void spawner_update(struct Moby *moby) {
         SPAWNER_TARGET_UNUSED_POINT = 2,
         SPAWNER_TARGET_COUNT_INDEXED_POINT = 4
     };
+    enum {
+        SPAWNER_ACTIVATION_STAY_IN_PROXIMITY_WAIT = 6
+    };
     int used[4];
     Vec4A_2bef68 launch_origin;
     Vec4A_2bef68 launch_velocity;
@@ -483,7 +486,7 @@ void spawner_update(struct Moby *moby) {
             case 5:
                 moby->state = 5;
                 break;
-            case 6:
+            case SPAWNER_ACTIVATION_STAY_IN_PROXIMITY_WAIT:
             default:
                 moby->state = 1;
                 break;
