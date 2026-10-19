@@ -48,6 +48,10 @@ void FUN_L17_002f26d0(struct Moby *moby) {
         CAMERA_BOX_WATCHER_ALIGN_FIRST_TARGET = 2,
         CAMERA_BOX_WATCHER_WAIT_AND_ALIGN_SECOND_TARGET = 3
     };
+    enum {
+        CLIP_VOLUME_SEQUENCE_WAIT_FOR_ENTRY = 0,
+        CLIP_VOLUME_SEQUENCE_MONITOR_FOLLOWUP = 1
+    };
     int off;
     char *d = (char *)moby->pvars;
     int st;
@@ -67,7 +71,7 @@ void FUN_L17_002f26d0(struct Moby *moby) {
 
     st = *(int *)(d + 0x6C);
     switch (st) {
-    case 0: {
+    case CLIP_VOLUME_SEQUENCE_WAIT_FOR_ENTRY: {
         char *h = (char *)&hero.motion.pos;
         if (is_point_inside_clip_volume(h, *(int *)(d + 0x60))) {
             if (*(int *)(h + 0x200C) == 0x11) {
@@ -76,7 +80,7 @@ void FUN_L17_002f26d0(struct Moby *moby) {
         }
         break;
     }
-    case 1: {
+    case CLIP_VOLUME_SEQUENCE_MONITOR_FOLLOWUP: {
         struct Hero *h = &hero;
         int v = h->state.current;
         if (v == 0x76 || v == 0x32) {
