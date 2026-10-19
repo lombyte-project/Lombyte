@@ -1951,6 +1951,9 @@ extern int tick_countdown_32(void *) __asm__("FUN_001f9740");
 
 extern float D_L10_00161C98 __attribute__((sda));
 void FUN_L10_002da2c8(struct Moby *moby) {
+    enum {
+        MOBY_STATE_INITIALIZE = 0
+    };
     char *data = (char *)moby->pvars;
     union { unsigned char order[10]; float position2[4]; } scratch;
     float position1[4];
@@ -1962,7 +1965,7 @@ void FUN_L10_002da2c8(struct Moby *moby) {
         delete_moby(moby);
     }
     switch (moby->state) {
-    case 0:
+    case MOBY_STATE_INITIALIZE:
         if (current_level_index == 10 && D_001413F4[0] == 1) {
             delete_moby(moby);
             break;
