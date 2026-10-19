@@ -3331,7 +3331,8 @@ void glove_of_doom_update(struct Moby *moby) {
     enum {
         GLOVE_INITIALIZE = 0,
         GLOVE_WAIT_FOR_ANIMATION = 1,
-        GLOVE_RELEASE_HELD_MOBY = 3
+        GLOVE_RELEASE_HELD_MOBY = 3,
+        GLOVE_POST_RELEASE_WAIT = 4
     };
     OvlVec4 pos;
     OvlVec4 offset;
@@ -3400,7 +3401,7 @@ void glove_of_doom_update(struct Moby *moby) {
         moby->state = 4;
         vars->timer = scale_game_frames(0x14);
         break;
-    case 4:
+    case GLOVE_POST_RELEASE_WAIT:
         if (hero.state.current != 0x23 && !hero.unk20A8) {
             moby->state = 2;
         }
