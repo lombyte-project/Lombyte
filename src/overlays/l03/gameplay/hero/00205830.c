@@ -1850,7 +1850,7 @@ void FUN_L03_0020ef60(void) {
         }
         break;
     }
-    case 8: {
+    case HERO_STATE_LAND: {
         f32 sp;
         if (hero_slot_item_id(3) == 2) {
             if (hero.unk2228 != -1) {
