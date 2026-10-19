@@ -551,6 +551,7 @@ struct PokKeeperVars {
 void FUN_L11_002d14b0(void *arg) {
     enum {
         RESORT_OWNER_INITIALIZE = 0,
+        RESORT_OWNER_CHECK_INITIAL_DIALOGUE = 1,
         RESORT_OWNER_INITIAL_DIALOGUE = 2,
         RESORT_OWNER_WAIT_TO_FOLLOW_HERO = 3,
         RESORT_OWNER_MOVE_TO_PATH_POINT = 6,
@@ -561,6 +562,8 @@ void FUN_L11_002d14b0(void *arg) {
         RESORT_OWNER_WAIT_FOR_POST_PATH_DIALOGUE_END = 15
     };
     enum {
+        RESORT_OWNER_FIRST_PATH_LEG = 0,
+        RESORT_OWNER_SECOND_PATH_LEG = 1,
         RESORT_OWNER_PENULTIMATE_PATH_LEG = 2,
         RESORT_OWNER_FINAL_PATH_LEG = 3
     };
@@ -630,7 +633,7 @@ void FUN_L11_002d14b0(void *arg) {
         d->talk_range = 5.0f;
         FUN_L11_002d2088_c(moby, 1);
         break;
-    case 1:
+    case RESORT_OWNER_CHECK_INITIAL_DIALOGUE:
         if (d->unk56 == 0) {
             if (hero.air_frames.s == 0 && update_npc_dialogue(moby, d->talk)) {
                 begin_dialogue_camera_transition(moby, 2.5f);
@@ -667,7 +670,7 @@ void FUN_L11_002d14b0(void *arg) {
         FUN_L11_002d2340(moby, (char *)&path_points_14b0[d->points[d->leg]].pos);
         if (vector_distance(&moby->pos, &d->target) < 1.0f) {
             switch (d->leg) {
-            case 0: {
+            case RESORT_OWNER_FIRST_PATH_LEG: {
                 struct Moby *o = (struct Moby *)(D_L11_0015FFD8 + (d->gates[0] << 8));
                 qcopy(&d->target, &o->pos);
                 scale_vector_14b0(v, &o->rot_row0, D_L11_00161418);
@@ -680,7 +683,7 @@ void FUN_L11_002d14b0(void *arg) {
                 FUN_L11_002d2088_c(moby, 7);
                 break;
             }
-            case 1: {
+            case RESORT_OWNER_SECOND_PATH_LEG: {
                 struct Moby *o = (struct Moby *)(D_L11_0015FFD8 + (d->gates[1] << 8));
                 qcopy(&d->target, &o->pos);
                 scale_vector_14b0(v, &o->rot_row0, D_L11_00161418);
