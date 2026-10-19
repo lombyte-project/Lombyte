@@ -3348,6 +3348,7 @@ void glove_of_doom_update(struct Moby *moby) {
         GLOVE_IDLE = 2,
         GLOVE_RELEASE_HELD_MOBY = 3,
         GLOVE_POST_RELEASE_WAIT = 4,
+        GLOVE_BEGIN_SKIP_HELD_MOBY_SYNC_AND_SPAWN = 5,
         GLOVE_SKIP_HELD_MOBY_SYNC_AND_SPAWN = 6
     };
     OvlVec4 pos;
@@ -3422,7 +3423,7 @@ void glove_of_doom_update(struct Moby *moby) {
             moby->state = 2;
         }
         break;
-    case 5:
+    case GLOVE_BEGIN_SKIP_HELD_MOBY_SYNC_AND_SPAWN:
         moby->state = 6;
         break;
     case GLOVE_SKIP_HELD_MOBY_SYNC_AND_SPAWN:
