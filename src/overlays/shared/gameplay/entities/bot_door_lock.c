@@ -197,6 +197,11 @@ extern void draw_number(void *, void *, int, unsigned int, int, int, int, float)
 extern int D_L06_0015FFD8_gp __asm__("D_L06_0015FFD8") __attribute__((sda));
 void bot_door_lock_update(char *moby) __asm__("FUN_L06_00307d30");
 void bot_door_lock_update(char *moby) {
+    enum {
+        BOT_DOOR_LOCK_STATE_INITIALIZE = 0,
+        BOT_DOOR_LOCK_STATE_ACTIVE = 1,
+        BOT_DOOR_LOCK_STATE_SHRINK_EFFECT = 2
+    };
     float *data = *(float **)(moby + 0x78);
     int *idata = (int *)data;
     float pos[4];
@@ -212,14 +217,14 @@ void bot_door_lock_update(char *moby) {
     data[10] = fast_add_rotations(data[10], (360.0f / D_L06_001622E4) * 0.017453292f * frame_time);
     *(unsigned int *)(moby + 0x90) = fast_tween_color((fast_cos(data[10]) + 1.0f) * 0.5f, 0x80464646, 0x80828282);
     switch ((unsigned char)moby[0x20]) {
-    case 0:
+    case BOT_DOOR_LOCK_STATE_INITIALIZE:
         idata[5] = idata[4];
         data[6] = random_angle_radians();
         data[10] = random_angle_radians();
         moby[0x20] = 1;
         data[9] = D_L06_001622EC;
         return;
-    case 1:
+    case BOT_DOOR_LOCK_STATE_ACTIVE:
         *(OvlQuad *)pos = *(OvlQuad *)(moby + 0x10);
         pos[2] += 2.75f;
         if (FUN_001f9b48(D_L06_00167540, moby + 0x10) < 32.0f) {
@@ -281,7 +286,7 @@ void bot_door_lock_update(char *moby) {
             moby[0x20] = 2;
         }
         break;
-    case 2:
+    case BOT_DOOR_LOCK_STATE_SHRINK_EFFECT:
         data[9] -= frame_time + frame_time;
         if (data[9] < 0.0f) data[9] = 0.0f;
         if (0.0f < data[9]) enqueue_callback_list_1((int)FUN_L06_00307578, (int)moby);
