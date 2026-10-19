@@ -1522,7 +1522,12 @@ void drek_final_boss_robot_update(BossMoby *moby) {
     enum {
         DREK_BOSS_INITIALIZE = 0,
         DREK_BOSS_WAIT_FOR_SCENE = 7,
-        DREK_BOSS_SELECT_NEXT_ACTION = 0xC
+        DREK_BOSS_SELECT_NEXT_ACTION = 0xC,
+        DREK_BOSS_APPROACH_AIM_NODE = 0x12,
+        DREK_BOSS_ACTIVATE_MISSILE_GROUP = 0x14
+    };
+    enum {
+        DREK_BOSS_FOLLOW_HERO = 0x13
     };
     BossData *d = (BossData *)moby->f78;
     BossMoby *tgt;
@@ -1966,7 +1971,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
             }
         }
         break;
-    case 0x14:
+    case DREK_BOSS_ACTIVATE_MISSILE_GROUP:
         if (tick_countdown_32_alt(&d->f354) != 0) {
             d->f354 = scale_game_frames(0x14);
             qcopy(v0, d->f3C0);
@@ -2047,7 +2052,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
             d->f358 = scale_game_frames(900);
             d->f354 = scale_game_frames(0xB4);
             break;
-        case 0x13:
+        case DREK_BOSS_FOLLOW_HERO:
             moby->f20 = 0x13;
             if (moby->f53 != 1) {
                 blend_moby_animation(moby, 1, 0, scale_game_frames(0x14));
@@ -2302,7 +2307,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
         }
         break;
     }
-    case 0x13: {
+    case DREK_BOSS_FOLLOW_HERO: {
         int fire;
 
         aim = &moby->f40[2];
@@ -2353,7 +2358,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
         }
         break;
     }
-    case 0x12:
+    case DREK_BOSS_APPROACH_AIM_NODE:
         aim = &moby->f40[2];
         ang = fast_arc_tan(d->f70[0] - moby->f10[0], d->f70[1] - moby->f10[1]);
         approach_angle(aim, &d->f370, ang, D_0015ED6C_e[1] * 6.2831855f,
