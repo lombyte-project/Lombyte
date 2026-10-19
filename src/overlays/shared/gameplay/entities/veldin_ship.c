@@ -1172,7 +1172,8 @@ void decoy_glove_update(unsigned char *moby) __asm__("FUN_L00_002d2670");
 void decoy_glove_update(unsigned char *moby) {
     enum {
         DECOY_GLOVE_INITIALIZE = 0,
-        DECOY_GLOVE_RELEASE_DECOY = 3
+        DECOY_GLOVE_RELEASE_DECOY = 3,
+        DECOY_GLOVE_WAIT_AFTER_RELEASE = 4
     };
     extern void mark_moby_for_removal();
     extern void transform_vector_alt();
@@ -1261,7 +1262,7 @@ L3D34:
         moby[0x20] = 4;
         *(int *)(d + 0x54) = scale_game_frames_c2(0x14);
         break;
-    case 4: {
+    case DECOY_GLOVE_WAIT_AFTER_RELEASE: {
         char *h = ((char *)&hero);
         if (*(int *)(h + 0x2084) != 0x23 && *(unsigned char *)(h + 0x20A8) == 0) moby[0x20] = 2;
         break;
