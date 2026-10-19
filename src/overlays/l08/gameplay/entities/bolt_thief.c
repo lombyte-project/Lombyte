@@ -2045,6 +2045,14 @@ void FUN_L08_002e3870(struct Moby *moby) {
         MOBY_CLASS_FIVE_BOLT_PICKUP = 0x3DC,
         MOBY_CLASS_TEN_BOLT_PICKUP = 0x3DD
     };
+    enum {
+        BOLT_PICKUP_INITIALIZE = 0,
+        BOLT_PICKUP_WAIT_FOR_HERO = 1,
+        BOLT_PICKUP_TURN_TOWARD_HERO = 2,
+        BOLT_PICKUP_FLY_TO_HERO_AND_CREDIT_BOLTS = 3,
+        BOLT_PICKUP_FALL_AND_BOUNCE = 4,
+        BOLT_PICKUP_RETURN_TO_SURFACE = 5
+    };
     char *cam;
     float direction[4];
     float point[4];
@@ -2052,7 +2060,7 @@ void FUN_L08_002e3870(struct Moby *moby) {
     float scratch[16];
 
     switch (moby->state) {
-    case 0: {
+    case BOLT_PICKUP_INITIALIZE: {
         Vars_4BE8 *vars = (Vars_4BE8 *)moby->pvars;
         int linked;
 
@@ -2103,7 +2111,7 @@ void FUN_L08_002e3870(struct Moby *moby) {
         vars->u78.i = D_L08_00161CCC_gp;
         break;
     }
-    case 1: {
+    case BOLT_PICKUP_WAIT_FOR_HERO: {
         Vars_4BE8 *vars = (Vars_4BE8 *)moby->pvars;
 
         if (vars->u7C.i != 0) {
@@ -2164,7 +2172,7 @@ void FUN_L08_002e3870(struct Moby *moby) {
         }
         break;
     }
-    case 2: {
+    case BOLT_PICKUP_TURN_TOWARD_HERO: {
         Vars_4BE8 *vars = (Vars_4BE8 *)moby->pvars;
 
         euler_rotation_matrix(scratch, vars->v10);
@@ -2211,7 +2219,7 @@ void FUN_L08_002e3870(struct Moby *moby) {
         }
         break;
     }
-    case 3: {
+    case BOLT_PICKUP_FLY_TO_HERO_AND_CREDIT_BOLTS: {
         Vars_4BE8 *vars = (Vars_4BE8 *)moby->pvars;
         float dist;
         float fade_range;
@@ -2326,7 +2334,7 @@ void FUN_L08_002e3870(struct Moby *moby) {
         multiply_matrix_basis_columns(&moby->rot_row0, vars, &moby->rot_row0);
         break;
     }
-    case 4: {
+    case BOLT_PICKUP_FALL_AND_BOUNCE: {
         Vars_4BE8 *vars = (Vars_4BE8 *)moby->pvars;
 
         add_vector_xyz(&moby->pos, &moby->pos, vars->velocity);
@@ -2414,7 +2422,7 @@ void FUN_L08_002e3870(struct Moby *moby) {
         }
         break;
     }
-    case 5: {
+    case BOLT_PICKUP_RETURN_TO_SURFACE: {
         Vars_4BE8 *vars = (Vars_4BE8 *)moby->pvars;
 
         moby->rot.x = fast_add_rotations_c4(moby->rot.x, vars->spin_x);
