@@ -1580,7 +1580,8 @@ void circular_saw_enemy_update(M_35F0 *moby) {
         CIRCULAR_SAW_HIT_REACTION_BACKWARD_RECOIL = 5,
         CIRCULAR_SAW_HIT_REACTION_RECOIL_RECOVERY = 6,
         CIRCULAR_SAW_HIT_REACTION_IGNORED = 7,
-        CIRCULAR_SAW_HIT_REACTION_NO_ADDITIONAL_REACTION = 8
+        CIRCULAR_SAW_HIT_REACTION_NO_ADDITIONAL_REACTION = 8,
+        CIRCULAR_SAW_HIT_REACTION_CONTINUE_WITHOUT_RESPONSE = 9
     };
     enum {
         CIRCULAR_SAW_POINT_ATTACK_APPROACH_AND_ALIGN = 0,
@@ -1691,7 +1692,7 @@ void circular_saw_enemy_update(M_35F0 *moby) {
                 break;
             case CIRCULAR_SAW_HIT_REACTION_IGNORED:
             case CIRCULAR_SAW_HIT_REACTION_NO_ADDITIONAL_REACTION:
-            case 9:
+            case CIRCULAR_SAW_HIT_REACTION_CONTINUE_WITHOUT_RESPONSE:
             case 10:
             case 11:
                 break;
