@@ -215,11 +215,14 @@ extern void FUN_00213ed8_c(char *, float, float) __asm__("FUN_00213ed8");
 
 void FUN_L08_002ea398(char *m)
 {
+    enum {
+        POSITION_BASELINE_INITIALIZE = 0
+    };
     char *d = *(char **)(m + 0x78);
     char *o;
     int i;
     switch (*(u8 *)(m + 0x20)) {
-    case 0:
+    case POSITION_BASELINE_INITIALIZE:
         *(float *)(d + 4) = *(float *)(m + 0x18);
         *(u8 *)(m + 0x20) = 1;
         break;
