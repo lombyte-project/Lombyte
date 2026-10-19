@@ -236,6 +236,11 @@ void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 extern float D_L15_001621A0 __attribute__((sda));
 void codebot_update(struct Moby *moby) __asm__("FUN_L15_002ebd78");
 void codebot_update(struct Moby *moby) {
+    enum {
+        CODEBOT_INITIALIZE = 0,
+        CODEBOT_CHECK_HERO_PROXIMITY = 1,
+        CODEBOT_REMOVE = 3
+    };
     unsigned char *p;
     if (current_level_index != 0xF) {
         moby->rot.z =
@@ -243,7 +248,7 @@ void codebot_update(struct Moby *moby) {
         moby->scale =
             moby->pclass->scale * D_L15_001621A0;
         switch (moby->state) {
-        case 0:
+        case CODEBOT_INITIALIZE:
             FUN_L02_002ea7d0(moby);
             if (D_0013D388_bd78[2] != 0) {
                 mark_moby_for_removal(moby);
@@ -252,7 +257,7 @@ void codebot_update(struct Moby *moby) {
                 moby->pos.z += 1.0f;
             }
             break;
-        case 1:
+        case CODEBOT_CHECK_HERO_PROXIMITY:
             FUN_L02_002ea8b0(moby);
             if (FUN_001f9b48(&moby->pos, &hero.motion.pos) < 3.0f) {
                 if (hero.state.current != 0x32) {
@@ -273,7 +278,7 @@ void codebot_update(struct Moby *moby) {
                 memcard_save_data(0, -1);
             }
             break;
-        case 3:
+        case CODEBOT_REMOVE:
             mark_moby_for_removal(moby);
             break;
         }
