@@ -820,7 +820,8 @@ void woodcut_bot_update(WBMoby *m) {
     };
     enum {
         WOODCUT_BOT_REACTION_START_DEATH_KNOCKBACK = 1,
-        WOODCUT_BOT_REACTION_HIT_RECOVERY_AND_REPOSITION = 3
+        WOODCUT_BOT_REACTION_HIT_RECOVERY_AND_REPOSITION = 3,
+        WOODCUT_BOT_REACTION_RECOIL_TO_IDLE = 4
     };
     int excited = 0;
     WBData *d = m->d;
@@ -944,7 +945,7 @@ void woodcut_bot_update(WBMoby *m) {
                     d->t3C6 = scale_game_frames(0xF0);
                 }
                 break;
-            case 4:
+            case WOODCUT_BOT_REACTION_RECOIL_TO_IDLE:
             case 5:
                 blend_moby_animation(m, 6, 0, scale_game_frames(10));
                 FUN_L00_002a1538(d->f160);
