@@ -246,6 +246,11 @@ extern void FUN_L00_00258278(char*,float,float*,float,float,float);
 /* Same routine as bolt_thief_update, without the child hit test. */
 void bolt_thief_update(L16CrateMoby *moby) __asm__("FUN_L14_002fe2a0");
 void bolt_thief_update(L16CrateMoby *moby) {
+    enum {
+        BOLT_THIEF_STATE_INITIALIZE = 0,
+        BOLT_THIEF_STATE_WAIT_FOR_TRIGGER = 2,
+        BOLT_THIEF_STATE_KNOCKBACK = 6
+    };
     L16CrateData *d = moby->data;
     char *hit;
 
@@ -271,7 +276,7 @@ void bolt_thief_update(L16CrateMoby *moby) {
     }
     moby->opacity = 0xFF;
     switch (moby->state) {
-    case 0:
+    case BOLT_THIEF_STATE_INITIALIZE:
         if (d->mode == 2) {
             moby->state = 1;
             d->turn = 0.0f;
@@ -321,7 +326,7 @@ void bolt_thief_update(L16CrateMoby *moby) {
         FUN_L14_002feca8(moby);
         break;
     }
-    case 2:
+    case BOLT_THIEF_STATE_WAIT_FOR_TRIGGER:
         if (is_point_inside_clip_volume(&hero.motion.pos, d->trigger)) {
             if (d->mode == 1) {
                 set_moby_animation(moby, 0, 0);
@@ -394,7 +399,7 @@ void bolt_thief_update(L16CrateMoby *moby) {
             FUN_L14_002feca8(moby);
         }
         break;
-    case 6:
+    case BOLT_THIEF_STATE_KNOCKBACK:
         if (mine_fall(moby, d->knock) & 3) {
             cart_burst(moby, moby->position, -1, 1.0f, 13.0f);
             mark_moby_for_removal(moby);
