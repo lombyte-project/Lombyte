@@ -845,6 +845,7 @@ void blarg_space_commando_update(struct Moby *moby) {
     enum {
         BLARG_SPACE_COMMANDO_INITIALIZE = 0,
         BLARG_SPACE_COMMANDO_FACE_TARGET_AND_SELECT_ACTION = 1,
+        BLARG_SPACE_COMMANDO_FACE_TARGET_AND_WAIT_FOR_TIMER = 4,
         BLARG_SPACE_COMMANDO_RESUME_SAVED_STATE_AFTER_ANIMATION = 6,
         BLARG_SPACE_COMMANDO_RETURN_HOME = 13,
         BLARG_SPACE_COMMANDO_KNOCKBACK = 15,
@@ -942,7 +943,7 @@ void blarg_space_commando_update(struct Moby *moby) {
             }
         }
         break;
-    case 4:
+    case BLARG_SPACE_COMMANDO_FACE_TARGET_AND_WAIT_FOR_TIMER:
         approach_angle(&moby->rot.z, fast_arc_tan_c(target->pos.x - moby->pos.x, target->pos.y - moby->pos.y),
                           &vars->turn, frame_time_sq * 6.2831855f, frame_time_sq * 6.2831855f, frame_time * 3.1415927f);
         if (tick_countdown_32_alt(&vars->timer) != 0) {
