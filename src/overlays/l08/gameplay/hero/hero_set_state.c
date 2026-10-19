@@ -200,7 +200,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x3D: {
+    case HERO_STATE_DYING: {
         struct Hero *p = &hero;
         p->state.control_mode = 0x14;
         p->unk2284 = 0;
@@ -656,7 +656,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 4: {
+    case HERO_STATE_CROUCH: {
         struct Hero *p = &hero;
         p->state.control_mode = 0xC;
         p->unk2284 = 0;
@@ -1637,7 +1637,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x7A: {
+    case HERO_STATE_WALL_BONK: {
         struct Hero *p = &hero;
         p->state.control_mode = 0xA;
         p->unk2284 = 0;
