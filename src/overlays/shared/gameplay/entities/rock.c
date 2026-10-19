@@ -892,7 +892,11 @@ void the_plumber_update(L01WatchMoby *m) __asm__("FUN_L01_002ff118");
 void the_plumber_update(L01WatchMoby *m) {
     enum {
         PLUMBER_INITIALIZE = 0,
-        PLUMBER_REMOVE = 3
+        PLUMBER_LEVEL_ONE_DIALOGUE = 1,
+        PLUMBER_LEVEL_ONE_POST_DIALOGUE = 2,
+        PLUMBER_REMOVE = 3,
+        PLUMBER_LEVEL_EIGHT_DIALOGUE = 4,
+        PLUMBER_LEVEL_EIGHT_POST_DIALOGUE = 5
     };
     L01WatchScratch scratch;
     L01WatchData *d = (L01WatchData *)m->data;
@@ -928,13 +932,13 @@ void the_plumber_update(L01WatchMoby *m) {
         }
         initialize_npc_dialogue(m, d);
         break;
-    case 1:
+    case PLUMBER_LEVEL_ONE_DIALOGUE:
         if (update_npc_dialogue(m, d)) {
             begin_dialogue_camera_transition(m, 2.2f);
             m->state = 2;
         }
         break;
-    case 2:
+    case PLUMBER_LEVEL_ONE_POST_DIALOGUE:
         if (cutscene_mode == 2)
             break;
         if (D_0014C050_c[m->bB0 + D_0015ED84_c * 16] != 0xFF) {
@@ -956,13 +960,13 @@ void the_plumber_update(L01WatchMoby *m) {
     case PLUMBER_REMOVE:
         mark_moby_for_removal(m);
         return;
-    case 4:
+    case PLUMBER_LEVEL_EIGHT_DIALOGUE:
         if (update_npc_dialogue(m, d)) {
             m->state = 5;
             d->b8 = 0;
         }
         break;
-    case 5:
+    case PLUMBER_LEVEL_EIGHT_POST_DIALOGUE:
         if (cutscene_mode == 2)
             break;
         if (d->h6 == 2) {
