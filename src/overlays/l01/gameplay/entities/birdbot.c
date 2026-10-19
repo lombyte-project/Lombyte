@@ -1578,7 +1578,7 @@ void peckbot_update(Mob577 *self) {
     s32 hitA0;
     f32 hitA4;
     f32 angle;
-    f32 tmpAC;
+    f32 knockback_travel_time;
     Mob577Vars *v;
     Mob577Hit *hit;
     MobyNode *m;
@@ -1819,7 +1819,7 @@ void peckbot_update(Mob577 *self) {
             v->x134 = 0.0f;
             v->x130 = D_L01_00161A6C;
             v->x138 = D_L01_00161A68 * frame_time;
-            v->x13C = FUN_L00_0025abf0(&self->pos, &v->home, &tmpAC, v->x138, -D_L01_00161A6C);
+            v->x13C = FUN_L00_0025abf0(&self->pos, &v->home, &knockback_travel_time, v->x138, -D_L01_00161A6C);
             v->x144 = 13;
             v->x15D = 0;
             trooper_start_knockback(self, v->knock, 6, 1, 0, self->rot.f[2]);
