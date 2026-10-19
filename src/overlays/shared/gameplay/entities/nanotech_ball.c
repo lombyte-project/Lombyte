@@ -514,11 +514,15 @@ extern float func_L00_00258E58_2D9EA0(float, float, float, float, float) __asm__
 
 void nanotech_ball_update(Moby *moby) __asm__("FUN_L00_002d89f0");
 void nanotech_ball_update(Moby *moby) {
-    V_2D9EA0 v0, v10, v20, v30, v40, half_displacement_or_spark_position, slot_curve_offset;
+    enum {
+        NANOTECH_BALL_STATE_INITIALIZE = 0,
+        NANOTECH_BALL_STATE_FOLLOW_OWNER = 1
+    };
+    V_2D9EA0 v0, v10, v20, collection_target_or_end_tangent, v40, half_displacement_or_spark_position, slot_curve_offset;
     D_2D9EA0 *data = (D_2D9EA0 *)moby->pvars;
 
     switch (moby->state) {
-    case 0: {
+    case NANOTECH_BALL_STATE_INITIALIZE: {
         Moby *owner;
         int i;
         moby->state = 1;
@@ -571,7 +575,7 @@ void nanotech_ball_update(Moby *moby) {
         }
         data->v20.w = func_L00_00258C80_2D9EA0(0.785398006f, 1.5707964f);
     }
-    case 1: {
+    case NANOTECH_BALL_STATE_FOLLOW_OWNER: {
         Moby *owner = data->owner;
         qcopy(&moby->pos, &owner->pos);
         qcopy(&data->pos, &owner->pos);
@@ -608,10 +612,10 @@ void nanotech_ball_update(Moby *moby) {
                 ((D_2D9EA0 *)D_L00_0015F63C->pvars)->f7C++;
                 if (D_0015EDB6 != 0) hero->invulnerable_frames = func_001F9850_2D9EA0(0x258);
                 data->h54 = func_001F9850_2D9EA0(D_L00_00161A3C);
-                func_001F9C30_2D9EA0(&v30, &hero->gravity_dir, -D_L00_00161A54);
-                func_001F9BD8_2D9EA0(&v30, &hero->motion.pos, &v30);
+                func_001F9C30_2D9EA0(&collection_target_or_end_tangent, &hero->gravity_dir, -D_L00_00161A54);
+                func_001F9BD8_2D9EA0(&collection_target_or_end_tangent, &hero->motion.pos, &collection_target_or_end_tangent);
                 func_001F9C30_2D9EA0(&v0, &hero->gravity_dir, -D_L00_00161A50);
-                func_001F9BF0_2D9EA0(&v20, &v30, &moby->pos);
+                func_001F9BF0_2D9EA0(&v20, &collection_target_or_end_tangent, &moby->pos);
                 v20.z -= 0.5f;
                 fast_vec_cross(&v40, &v20, &v0);
                 fast_vec_cross(&v0, &v40, &v20);
@@ -762,12 +766,12 @@ void nanotech_ball_update(Moby *moby) {
                     v0.x = v10.x - ext->u.a.x;
                     v0.y = v10.y - ext->u.a.y;
                     v0.z = v10.z - ext->u.a.z;
-                    v30.x = v20.x - ext->u.a.x;
-                    v30.y = v20.y - ext->u.a.y;
-                    v30.z = v20.z - ext->u.a.z;
-                    part->pos.x = func_L00_00258E58_2D9EA0(v0.x, v10.x, v20.x, v30.x, progress);
-                    part->pos.y = func_L00_00258E58_2D9EA0(v0.y, v10.y, v20.y, v30.y, progress);
-                    part->pos.z = func_L00_00258E58_2D9EA0(v0.z, v10.z, v20.z, v30.z, progress);
+                    collection_target_or_end_tangent.x = v20.x - ext->u.a.x;
+                    collection_target_or_end_tangent.y = v20.y - ext->u.a.y;
+                    collection_target_or_end_tangent.z = v20.z - ext->u.a.z;
+                    part->pos.x = func_L00_00258E58_2D9EA0(v0.x, v10.x, v20.x, collection_target_or_end_tangent.x, progress);
+                    part->pos.y = func_L00_00258E58_2D9EA0(v0.y, v10.y, v20.y, collection_target_or_end_tangent.y, progress);
+                    part->pos.z = func_L00_00258E58_2D9EA0(v0.z, v10.z, v20.z, collection_target_or_end_tangent.z, progress);
                     half_displacement_or_spark_position.x = func_L00_00258C80_2D9EA0(0.0f, 0.00999999978f) + part->pos.x;
                     half_displacement_or_spark_position.y = func_L00_00258C80_2D9EA0(0.0f, 0.00999999978f) + part->pos.y;
                     half_displacement_or_spark_position.z = func_L00_00258C80_2D9EA0(0.0f, 0.00999999978f) + part->pos.z;
