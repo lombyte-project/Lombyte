@@ -153,6 +153,8 @@ extern int func_001F9908_r(int *) __asm__("FUN_001f9740");
 extern int D_L16_0015F6EC;
 void FUN_L16_002270c8(void) {
     enum {
+        HERO_STATE_GRIND_JUMP = 41,
+        HERO_STATE_GRIND_RAIL_TRANSFER = 42,
         HERO_STATE_WATER_DEATH = 106
     };
     unsigned char *moby;
@@ -1184,8 +1186,8 @@ void FUN_L16_002270c8(void) {
                     }
                     break;
                 case HERO_STATE_GRIND:
-                case 41:
-                case 42:
+                case HERO_STATE_GRIND_JUMP:
+                case HERO_STATE_GRIND_RAIL_TRANSFER:
                 case 43:
                 case 66:
                     if (hero.state.current == 0x42) {
