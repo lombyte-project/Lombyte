@@ -313,6 +313,7 @@ void sand_shark_update(struct Moby *moby) __asm__("FUN_L02_002d3e50");
 void sand_shark_update(struct Moby *moby) {
     enum {
         SAND_SHARK_INITIALIZE = 0,
+        SAND_SHARK_WANDER_AROUND_HOME = 2,
         SAND_SHARK_WAIT_FOR_TARGET_IN_VOLUME = 3,
         SAND_SHARK_APPROACH_TARGET = 5,
         SAND_SHARK_RETURN_HOME = 7,
@@ -424,7 +425,7 @@ void sand_shark_update(struct Moby *moby) {
             blend_e50(moby, 0, 0, scale_ticks_e50(3));
         }
         break;
-    case 2:
+    case SAND_SHARK_WANDER_AROUND_HOME:
         moby->pos.z += D_L02_0016191C;
         qcopy(&v0, &vars->home);
         FUN_L00_00258278_c(moby, add_rotations_e50(atan2_e50(v0.f[0] - moby->pos.x, v0.f[1] - moby->pos.y), vars->turn_offset),
