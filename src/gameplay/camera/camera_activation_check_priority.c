@@ -35,6 +35,9 @@ int camera_activation_check_priority(void *cur, void *other) {
         CAMERA_ACTIVATION_IN_CLIP_VOLUME = 4,
         CAMERA_ACTIVATION_MATCH_LISTENER_GROUP = 7
     };
+    enum {
+        CAMERA_ACTIVATION_HANDOFF_GATED_PRIORITY = 1
+    };
     char *c = (char *)cur;
     char *o = (char *)other;
     unsigned char *state = (unsigned char *)(c + 0x74);
@@ -54,7 +57,7 @@ int camera_activation_check_priority(void *cur, void *other) {
         }
     }
     switch (*(int *)state) {
-    case 1:
+    case CAMERA_ACTIVATION_HANDOFF_GATED_PRIORITY:
     case 2:
         if (state[9] == 0) {
             return 0;
