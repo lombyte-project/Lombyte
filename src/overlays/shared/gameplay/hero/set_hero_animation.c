@@ -1396,7 +1396,7 @@ extern f32 frame_time_sq_macro __asm__("D_0015ED70") __attribute__((section(".sd
 /* The hero on a moving platform: finds the platform the hero stands on or hangs from, tracks the platform's motion
    between frames (its attach points at 0x310-0x330) and carries the hero (position, facing, ledge-grab point) with it. */
 void FUN_L00_00233f80(void) {
-    Vec_234800 probed_position, unanchored_probe_rotation, attachment_motion_scratch, v30, probe_transform_scratch, anchored_probe_rotation, primary_attachment_position, primary_attachment_rotation, secondary_attachment_position, v90, vA0;
+    Vec_234800 probed_position, unanchored_probe_rotation, attachment_motion_scratch, attachment_position_motion_scratch, probe_transform_scratch, anchored_probe_rotation, primary_attachment_position, primary_attachment_rotation, secondary_attachment_position, v90, vA0;
     float sB0, sB4;
     float amt, ang;
     int mode;
@@ -1448,15 +1448,15 @@ void FUN_L00_00233f80(void) {
                 attachment_motion_scratch.x += f_001f9dc8(f_001fa580(((Hero_234800 *)hero_233f80)->f4E4, 3.1415925f)) * 0.45f;
                 attachment_motion_scratch.y += f_001f9de0(f_001fa580(((Hero_234800 *)hero_233f80)->f4E4, 3.1415925f)) * 0.45f;
                 attachment_motion_scratch.z -= -1.43f;
-                probe_ground_height_cf(((Hero_234800 *)hero_233f80)->i2080, ((Hero_234800 *)hero_233f80)->p360, &((Hero_234800 *)hero_233f80)->v4D0, &((Hero_234800 *)hero_233f80)->v90, &v30, &probe_transform_scratch);
+                probe_ground_height_cf(((Hero_234800 *)hero_233f80)->i2080, ((Hero_234800 *)hero_233f80)->p360, &((Hero_234800 *)hero_233f80)->v4D0, &((Hero_234800 *)hero_233f80)->v90, &attachment_position_motion_scratch, &probe_transform_scratch);
                 probe_ground_height_cf(((Hero_234800 *)hero_233f80)->i2080, ((Hero_234800 *)hero_233f80)->p360, &attachment_motion_scratch, &((Hero_234800 *)hero_233f80)->v90, &attachment_motion_scratch, &probe_transform_scratch);
                 FUN_L00_00260668(((Hero_234800 *)hero_233f80)->i2080, ((Hero_234800 *)hero_233f80)->p360, &((Hero_234800 *)hero_233f80)->v4D0, &((Hero_234800 *)hero_233f80)->v90, &((Hero_234800 *)hero_233f80)->v310, &probe_transform_scratch);
                 FUN_L00_00260668(((Hero_234800 *)hero_233f80)->i2080, ((Hero_234800 *)hero_233f80)->p360, &attachment_motion_scratch, &((Hero_234800 *)hero_233f80)->v90, &((Hero_234800 *)hero_233f80)->v330, &probe_transform_scratch);
             } else if (plat->i3C & 4) {
                 FUN_L00_00260668(((Hero_234800 *)hero_233f80)->i2080, ((Hero_234800 *)hero_233f80)->p360, &((Hero_234800 *)hero_233f80)->pos, &((Hero_234800 *)hero_233f80)->v90, &((Hero_234800 *)hero_233f80)->v310, &attachment_motion_scratch);
             } else {
-                probe_ground_height_cf(((Hero_234800 *)hero_233f80)->i2080, ((Hero_234800 *)hero_233f80)->p360, &((Hero_234800 *)hero_233f80)->pos, &((Hero_234800 *)hero_233f80)->v90, &v30, &probe_transform_scratch);
-                FUN_L00_00260668(((Hero_234800 *)hero_233f80)->i2080, ((Hero_234800 *)hero_233f80)->p360, &v30, &probe_transform_scratch, &((Hero_234800 *)hero_233f80)->v310, &attachment_motion_scratch);
+                probe_ground_height_cf(((Hero_234800 *)hero_233f80)->i2080, ((Hero_234800 *)hero_233f80)->p360, &((Hero_234800 *)hero_233f80)->pos, &((Hero_234800 *)hero_233f80)->v90, &attachment_position_motion_scratch, &probe_transform_scratch);
+                FUN_L00_00260668(((Hero_234800 *)hero_233f80)->i2080, ((Hero_234800 *)hero_233f80)->p360, &attachment_position_motion_scratch, &probe_transform_scratch, &((Hero_234800 *)hero_233f80)->v310, &attachment_motion_scratch);
             }
             ((Hero_234800 *)hero_233f80)->i364 |= 1;
         }
@@ -1475,7 +1475,7 @@ void FUN_L00_00233f80(void) {
         mode = 2;
     }
     f_001f99f8(&attachment_motion_scratch);
-    f_001f99f8(&v30);
+    f_001f99f8(&attachment_position_motion_scratch);
     if (amt != 0.0f) {
         sB4 = f_001f9b20(&((Hero_234800 *)hero_233f80)->v350);
         sB0 = ((Hero_234800 *)hero_233f80)->v350.z;
@@ -1487,7 +1487,7 @@ void FUN_L00_00233f80(void) {
         } else {
             qcopy(&attachment_motion_scratch, &((Hero_234800 *)hero_233f80)->v350);
         }
-        qcopy(&v30, &attachment_motion_scratch);
+        qcopy(&attachment_position_motion_scratch, &attachment_motion_scratch);
     } else if (mode == 1) {
         probe_ground_height_cf(((Hero_234800 *)hero_233f80)->i2080, ((Hero_234800 *)hero_233f80)->p360, &((Hero_234800 *)hero_233f80)->pos, &((Hero_234800 *)hero_233f80)->v90, &probed_position, &unanchored_probe_rotation);
         ((Hero_234800 *)hero_233f80)->v90.z = unanchored_probe_rotation.z;
@@ -1535,7 +1535,7 @@ void FUN_L00_00233f80(void) {
             }
         } else {
             f_001f9a28(&attachment_motion_scratch, &probe_transform_scratch, &((Hero_234800 *)hero_233f80)->pos);
-            qcopy(&v30, &attachment_motion_scratch);
+            qcopy(&attachment_position_motion_scratch, &attachment_motion_scratch);
         }
         qcopy((Vec_234800 *)(hero_233f80 + 0x350), &attachment_motion_scratch);
     }
