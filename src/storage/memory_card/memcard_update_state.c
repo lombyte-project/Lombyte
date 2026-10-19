@@ -77,6 +77,8 @@ void memcard_update_state(void) {
         MEMCARD_READ_SAVE = 14,
         MEMCARD_BEGIN_UPDATE_SAVE = 15,
         MEMCARD_UPDATE_SAVE = 16,
+        MEMCARD_REQUEST_SAVE_RESOURCE_READ = 17,
+        MEMCARD_WAIT_SAVE_RESOURCE_READ_AND_SELECT_BUFFER = 18,
         MEMCARD_BEGIN_WRITE_FULL_SAVE = 19,
         MEMCARD_WRITE_FULL_SAVE = 20,
         MEMCARD_BEGIN_SCAN_SAVE_INFO = 21,
@@ -99,7 +101,8 @@ void memcard_update_state(void) {
         MEMCARD_CREATE_WAIT_RESOURCE_READ = 4,
         MEMCARD_CREATE_PROCESS_SAVE_WRITE_RESULT_AND_REQUEST_CLOSE = 15,
         MEMCARD_CREATE_PROCESS_SAVE_CLOSE_RESULT = 16,
-        MEMCARD_CREATE_ADVANCE_SAVE_INDEX = 17
+        MEMCARD_CREATE_ADVANCE_SAVE_INDEX = 17,
+        MEMCARD_CREATE_RESET_CARD_STATUS = 21
     };
     enum {
         MEMCARD_DELETE_REQUEST_FIRST_DIRECTORY_ENTRY = 0,
@@ -536,7 +539,7 @@ void memcard_update_state(void) {
             }
             MC.busy = 0;
             break;
-        case 21:
+        case MEMCARD_CREATE_RESET_CARD_STATUS:
             MC.card[0].save_index = -1;
             MC.state = 0;
             MC.cur = 0;
@@ -983,7 +986,7 @@ void memcard_update_state(void) {
         }
         break;
 
-    case 17: {
+    case MEMCARD_REQUEST_SAVE_RESOURCE_READ: {
         McChunk *chunk;
         s32 size;
 
@@ -994,7 +997,7 @@ void memcard_update_state(void) {
         break;
     }
 
-    case 18:
+    case MEMCARD_WAIT_SAVE_RESOURCE_READ_AND_SELECT_BUFFER:
         if (cd_read_active[0] == 0) {
             McChunk *chunk;
             s32 size;
