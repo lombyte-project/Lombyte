@@ -1270,6 +1270,9 @@ extern void queue_dialogue_message(int arg0, int arg1) __asm__("FUN_L00_00263d40
 s32 allocate_voice_for_bank_entry(s32 arg1, s32 arg0, s32 arg2) __asm__("FUN_0022db10");
 
 void FUN_L14_003087c0(struct Moby *moby) {
+    enum {
+        MOBY_UPDATE_DISTANCE_INITIALIZE = 0
+    };
     int *d = (int *)moby->pvars;
     unsigned v;
     int i;
@@ -1283,7 +1286,7 @@ void FUN_L14_003087c0(struct Moby *moby) {
         }
     }
     switch (moby->state) {
-    case 0:
+    case MOBY_UPDATE_DISTANCE_INITIALIZE:
         moby->update_dist = 0xFF;
         moby->state = 1;
         break;
