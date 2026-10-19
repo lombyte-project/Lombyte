@@ -1140,7 +1140,8 @@ void swingshot_versatarget_update(char *m) __asm__("FUN_L02_002e0450");
 void swingshot_versatarget_update(char *m) {
     enum {
         VERSATARGET_STATE_INITIALIZE = 0,
-        VERSATARGET_STATE_ACTIVE = 1
+        VERSATARGET_STATE_ACTIVE = 1,
+        VERSATARGET_STATE_INACTIVE = 2
     };
     char *d = *(char **)(m + 0x78);
     float v[4];
@@ -1191,7 +1192,7 @@ void swingshot_versatarget_update(char *m) {
                 func_L02_002FBC00_c(m);
         }
         break;
-    case 2:
+    case VERSATARGET_STATE_INACTIVE:
         if (D_0014C050_a[*(int *)(d + 0x30) + (current_level_index << 4)] != 0 ||
             (*(int *)(d + 0x3C) != -1 &&
              ((o = (char *)(D_L02_0015FFD8 + (*(int *)(d + 0x3C) << 8))) == 0 ||
