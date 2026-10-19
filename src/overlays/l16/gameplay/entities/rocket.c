@@ -900,7 +900,9 @@ extern float D_L16_0016198C __attribute__((sda));
 void conveyor_belt_update(struct Moby *m) __asm__("FUN_L16_002c9878");
 void conveyor_belt_update(struct Moby *m) {
     enum {
-        CONVEYOR_BELT_STATE_INITIALIZE = 0
+        CONVEYOR_BELT_STATE_INITIALIZE = 0,
+        CONVEYOR_BELT_STATE_APPROACH_BASE_SPEED = 1,
+        CONVEYOR_BELT_STATE_APPROACH_NEGATED_SPEED = 2
     };
     char *d = (char *)m->pvars;
     float vec[4];
@@ -918,7 +920,7 @@ void conveyor_belt_update(struct Moby *m) {
         }
         *(int *)(d + 0x74) = -1;
         break;
-    case 2:
+    case CONVEYOR_BELT_STATE_APPROACH_NEGATED_SPEED:
         target = -(D_L16_0016198C * D_0015ED6C);
         if (*(float *)(d + 0x6C) != target) {
             approach_value((float *)(d + 0x6C), target, D_0015ED70_c * 12.0f);
@@ -929,7 +931,7 @@ void conveyor_belt_update(struct Moby *m) {
             m->state = one;
         enqueue_callback_list_1_alt(FUN_L16_002c9cd0, m);
         break;
-    case 1:
+    case CONVEYOR_BELT_STATE_APPROACH_BASE_SPEED:
         target = D_L16_0016198C * D_0015ED6C;
         if (*(float *)(d + 0x6C) != target) {
             approach_value((float *)(d + 0x6C), target, D_0015ED70_c * 12.0f);
