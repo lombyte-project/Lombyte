@@ -2370,6 +2370,7 @@ void FUN_L07_0030e998(char *m, char *x, float *hp) {
         SHARKIGATOR_CLEAR_HEALTH_RESPONSE = 1,
         SHARKIGATOR_ALTERNATE_CLEAR_HEALTH_RESPONSE = 2,
         HIT_REACTION_START_KNOCKBACK = 3,
+        SHARKIGATOR_HIT_ANIMATION_RESPONSE = 9,
         HIT_REACTION_NO_ANIMATION_RESPONSE = 11
     };
     char *info;
@@ -2396,7 +2397,7 @@ void FUN_L07_0030e998(char *m, char *x, float *hp) {
             FUN_L07_0030e858(m, x + 0x70, info + 0x10);
             m[0x20] = 0xC;
             break;
-        case 9:
+        case SHARKIGATOR_HIT_ANIMATION_RESPONSE:
         case 10:
             if (((unsigned char *)m)[0x53] != 4) {
                 blend_moby_animation(m, 4, 4, 4);
