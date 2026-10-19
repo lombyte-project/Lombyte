@@ -1304,8 +1304,12 @@ void toxic_crab_update(Moby2E30F8 *m) __asm__("FUN_L10_002e1d38");
 void toxic_crab_update(Moby2E30F8 *m) {
     enum {
         TOXIC_CRAB_STATE_INITIALIZE = 0,
+        TOXIC_CRAB_STATE_WAIT_TO_PURSUE = 4,
+        TOXIC_CRAB_STATE_PURSUE_TARGET = 5,
         TOXIC_CRAB_STATE_MELEE_ATTACK = 7,
         TOXIC_CRAB_STATE_RETURN_HOME = 8,
+        TOXIC_CRAB_STATE_BACK_AWAY_FROM_TARGET = 9,
+        TOXIC_CRAB_STATE_HIT_KNOCKBACK = 10,
         TOXIC_CRAB_STATE_DEATH_EFFECTS = 11
     };
     int see = 0;
@@ -1453,7 +1457,7 @@ void toxic_crab_update(Moby2E30F8 *m) {
         }
         break;
     }
-    case 4:
+    case TOXIC_CRAB_STATE_WAIT_TO_PURSUE:
         if (tick_countdown_32(&d->i1A8)) {
             float x;
             m->state = 5;
@@ -1467,7 +1471,7 @@ void toxic_crab_update(Moby2E30F8 *m) {
             }
         }
         break;
-    case 5: {
+    case TOXIC_CRAB_STATE_PURSUE_TARGET: {
         {
             float dir[4];
             float out[4];
@@ -1707,7 +1711,7 @@ void toxic_crab_update(Moby2E30F8 *m) {
         }
         break;
     }
-    case 9: {
+    case TOXIC_CRAB_STATE_BACK_AWAY_FROM_TARGET: {
         {
             float dir[4];
             float out[4];
@@ -1778,7 +1782,7 @@ void toxic_crab_update(Moby2E30F8 *m) {
         }
         break;
     }
-    case 10:
+    case TOXIC_CRAB_STATE_HIT_KNOCKBACK:
         if (mine_fall(m, d->v70) & 0x41) {
             int anim;
             m->state = 7;
