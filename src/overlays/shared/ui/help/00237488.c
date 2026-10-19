@@ -648,6 +648,7 @@ extern int D_0015ED84_gp __asm__("D_0015ED84") __attribute__((section(".sdata"))
 int FUN_L05_00251be8(void) {
     enum {
         ITEM_WRENCH = 8,
+        ITEM_TARGET_INTERACTION_DEVICE = 12,
         ITEM_AMMO_MENU_DEVICE = 32,
         ITEM_RACE_PROJECTILE = 36
     };
@@ -776,7 +777,7 @@ int FUN_L05_00251be8(void) {
             }
         }
         break;
-    case 12:
+    case ITEM_TARGET_INTERACTION_DEVICE:
         {
             int window;
 
