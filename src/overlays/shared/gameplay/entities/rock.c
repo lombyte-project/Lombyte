@@ -1295,6 +1295,11 @@ extern f32 D_L01_00161F24 __attribute__((sda));
 extern f32 D_L01_00161F28 __attribute__((sda));
 void gold_bolt_update(struct Moby *moby) __asm__("FUN_L01_00307ca0");
 void gold_bolt_update(struct Moby *moby) {
+    enum {
+        GOLD_BOLT_INITIALIZE = 0,
+        GOLD_BOLT_WAIT_FOR_PICKUP = 1,
+        GOLD_BOLT_PICKUP_CUTSCENE = 2
+    };
     Vars_307ca0 *vars = (Vars_307ca0 *)moby->pvars;
     struct Hero *h;
     Vec4f at;
@@ -1304,7 +1309,7 @@ void gold_bolt_update(struct Moby *moby) {
     int i;
 
     switch (moby->state) {
-    case 0:
+    case GOLD_BOLT_INITIALIZE:
         if (vars->id == -1 || D_0014BEC0[vars->id + D_0015ED84 * 4] != 0) {
             goto remove;
         }
@@ -1320,7 +1325,7 @@ void gold_bolt_update(struct Moby *moby) {
         moby->state = 1;
         FUN_L01_00308470(moby);
         return;
-    case 1:
+    case GOLD_BOLT_WAIT_FOR_PICKUP:
         moby->scale = moby->pclass->scale * D_L01_00161F10_gp;
         moby->pos.z = vars->home.z + D_L01_00161F14_gp + D_L01_00161F18_gp * fast_sin(moby->rot.w);
         moby->rot.x = FUN_001fa580_c(moby->rot.x, D_L01_00161F20 * 0.017453292f * D_0015ED6C_f);
@@ -1390,7 +1395,7 @@ void gold_bolt_update(struct Moby *moby) {
         moby->state = 2;
         vars->timer = scale_game_frames(60);
         return;
-    case 2:
+    case GOLD_BOLT_PICKUP_CUTSCENE:
         FUN_L01_003087e0_f(moby);
         qcopy(&moby->pos, &hero.motion.pos);
         qcopy(&moby->rot, &hero.motion.rot);
