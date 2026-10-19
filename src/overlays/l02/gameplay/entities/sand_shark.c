@@ -331,6 +331,7 @@ void sand_shark_update(struct Moby *moby) {
         SAND_SHARK_RETURN_HOME_WITH_HEIGHT_OFFSET = 23,
         SAND_SHARK_DEATH_KNOCKBACK = 24,
         SAND_SHARK_FADE_OUT = 25,
+        SAND_SHARK_INACTIVE_WAIT_FOR_RELAUNCH = 26,
         SAND_SHARK_BALLISTIC_FLIGHT_WITH_PARTICLES = 27,
         SAND_SHARK_WAIT_FOR_LINKED_MOBY_BEFORE_INITIALIZE = 29
     };
@@ -879,7 +880,7 @@ void sand_shark_update(struct Moby *moby) {
             }
         }
         break;
-    case 26:
+    case SAND_SHARK_INACTIVE_WAIT_FOR_RELAUNCH:
         vars->unk27C = FUN_L02_002d5658_e50(moby);
         if (vars->unk27C == 0) {
             remove_moby_e50(moby);
