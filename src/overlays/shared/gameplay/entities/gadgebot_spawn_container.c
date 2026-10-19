@@ -2874,6 +2874,7 @@ void FUN_L06_002f4f00(Moby *m) {
         WAIT_FOR_TRIGGER_AND_CHILDREN = 2,
         UPDATE_POSITION_FROM_BASE = 3,
         ROTATE_AND_HIDE_AFTER_TRIGGER_AND_CHILDREN = 4,
+        ROTATE_AND_HIDE = 5,
         RESTORE_ROTATION_THEN_WAIT_FOR_TRIGGER_AND_CHILDREN = 8,
         RESTORE_ROTATION_THEN_UPDATE_POSITION_FROM_BASE = 9
     };
@@ -2950,7 +2951,7 @@ void FUN_L06_002f4f00(Moby *m) {
         add_vector_xyz((*(float (*)[4])&m->pos), tmp, d);
         break;
     case ROTATE_AND_HIDE_AFTER_TRIGGER_AND_CHILDREN:
-    case 5:
+    case ROTATE_AND_HIDE:
         approach_angle(&d->unk14, &d->unk20, 1.0471976f,
                           D_L06_00161D38 * 0.017453292f * D_0015ED70,
                           D_L06_00161D3C * 0.017453292f * D_0015ED70,
