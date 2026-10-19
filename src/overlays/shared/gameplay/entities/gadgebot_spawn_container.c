@@ -2851,7 +2851,9 @@ void FUN_L06_002f4f00(Moby *m) {
         SPAWN_CHILD_MOBYS = 0,
         INITIALIZE_BASE_TRANSFORM = 1,
         WAIT_FOR_TRIGGER_AND_CHILDREN = 2,
-        UPDATE_POSITION_FROM_BASE = 3
+        UPDATE_POSITION_FROM_BASE = 3,
+        RESTORE_ROTATION_THEN_WAIT_FOR_TRIGGER_AND_CHILDREN = 8,
+        RESTORE_ROTATION_THEN_UPDATE_POSITION_FROM_BASE = 9
     };
     Vars_2F6330 *d = (Vars_2F6330 *)(*(void **)&m->pvars);
     float tmp[4];
@@ -2942,8 +2944,8 @@ void FUN_L06_002f4f00(Moby *m) {
             }
         }
         break;
-    case 8:
-    case 9:
+    case RESTORE_ROTATION_THEN_WAIT_FOR_TRIGGER_AND_CHILDREN:
+    case RESTORE_ROTATION_THEN_UPDATE_POSITION_FROM_BASE:
         approach_angle(&d->unk14, &d->unk20, 0.0f,
                           D_L06_00161D38 * 0.017453292f * D_0015ED70,
                           D_L06_00161D3C * 0.017453292f * D_0015ED70,
