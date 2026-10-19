@@ -75,7 +75,7 @@ typedef struct {
 
 typedef struct {
     u8 pad0[0xB0];
-    f32 unkB0;
+    f32 tan_half_fov;
     u8 padB4[0x164];
     s32 unk218;
     f32 unk21C;
@@ -172,7 +172,7 @@ void FUN_L00_00276368(void) {
     struct GameState *state = &D_L00_001B9CF0;
     Own *page;
     s32 small_buffers = 0;
-    s32 state_id, i, j, n, id, texture_start, next;
+    s32 state_id, i, j, n, seq, texture_start, next;
     s32 *slot;
 
     D_L00_00173E40_lui[4] |= 0x80000000;
@@ -241,9 +241,9 @@ void FUN_L00_00276368(void) {
     {
         f32 unk21C = 524288.0f;
         f32 unk228 = 255.0f;
-        f32 unkB0 = 0.63f;
-        D_L00_001B9CF0.unkE8 = ((ViewSettings *)D_L00_0016CA40)->unkB0;
-        ((ViewSettings *)D_L00_0016CA40)->unkB0 = unkB0;
+        f32 tan_half_fov = 0.63f;
+        D_L00_001B9CF0.unkE8 = ((ViewSettings *)D_L00_0016CA40)->tan_half_fov;
+        ((ViewSettings *)D_L00_0016CA40)->tan_half_fov = tan_half_fov;
         ((ViewSettings *)D_L00_0016CA40)->unk21C = unk21C;
         ((ViewSettings *)D_L00_0016CA40)->unk228 = unk228;
         ((ViewSettings *)D_L00_0016CA40)->unk22C = 0;
@@ -344,8 +344,8 @@ void FUN_L00_00276368(void) {
                 D_L00_001B9E90[i]->rot[0] = 0.0f;
                 D_L00_001B9E90[i]->rot[1] = 0.0f;
                 D_L00_001B9E90[i]->rot[2] = 0.0f;
-                id = D_L00_001B9CF0.owner->ids[i];
-                set_moby_animation(D_L00_001B9E90[i], id, D_L00_001B9E90[i]->pclass->seqs[id]->frame_count - 1);
+                seq = D_L00_001B9CF0.owner->ids[i];
+                set_moby_animation(D_L00_001B9E90[i], seq, D_L00_001B9E90[i]->pclass->seqs[seq]->frame_count - 1);
             }
         }
     }
@@ -644,7 +644,7 @@ typedef struct {
 
 extern s32 D_L00_001B23C0[];
 extern s32 D_L00_00160270 __attribute__((sda));
-extern long D_0015EED0;
+extern long capture_texture_tex0 __asm__("D_0015EED0");
 extern void append_gif_transfer_packet() __asm__("FUN_001fb368");
 extern void FUN_L00_002a0fc8(s32, s32, s32);
 extern void reset_gs_registers() __asm__("FUN_001f3868");
@@ -659,7 +659,7 @@ extern void append_screen_rect_packet(s32, s32, s32, s32, u64, s32) __asm__("FUN
 extern void configure_graphics_render_target_and_projection(s32, s32, s32, f32) __asm__("FUN_001f7888");
 extern void draw_hud_rect_depth(s32, s32, s32, s32, u64, u32, s32) __asm__("FUN_00200f90");
 extern void begin_draw_frame(void) __asm__("FUN_001f7978");
-extern void draw_textured_quad_alt(int, int, int, int, int, int, int, int, long, long) __asm__("FUN_001f5450");
+extern void draw_textured_quad(int, int, int, int, int, int, int, int, long, long) __asm__("FUN_001f5450");
 extern void restore_moby_class_dists(void) __asm__("FUN_0020d248");
 extern void draw_mobys_clean_up(void) __asm__("FUN_0020d3b0");
 extern void patch_moby_gifs() __asm__("FUN_0020cef8");
@@ -668,8 +668,8 @@ extern void draw_menu_flashing_panel(int) __asm__("FUN_00223e28");
 extern void do_gif_paging(void) __asm__("FUN_001f4398");
 
 /* Draws the pause menu pages: lays out each page moby's screen rect, then renders each page's texture. */
-void FUN_L00_002772c0(int arg0) {
-    u128 c[4];
+void FUN_L00_002772c0(int transfer_only) {
+    u128 corners[4];
     u128 pad[5];
     u128 box[2];
     struct {
@@ -678,7 +678,7 @@ void FUN_L00_002772c0(int arg0) {
         int x;
         int y;
     } rect;
-    char **pp;
+    char **page_objects;
     int i;
     int k;
     int j;
@@ -688,10 +688,10 @@ void FUN_L00_002772c0(int arg0) {
     int never;
 
     append_gif_transfer_packet();
-    pp = 0;
+    page_objects = 0;
     never = 0;
     FUN_L00_002a0fc8(D_L00_001B9CF0.unk10, draw_buffer_address, frame_size << 11);
-    if (arg0 != 0) {
+    if (transfer_only != 0) {
         return;
     }
     reset_gs_registers();
@@ -708,60 +708,60 @@ void FUN_L00_002772c0(int arg0) {
             draw_moby_list((int)D_L00_001B9E90[i], 1);
         }
     }
-    /* Fakematch: a never-taken set keeps gcse from folding pp's 0 into the select below. */
+    /* Fakematch: a never-taken set keeps gcse from folding the 0 in page_objects into the select below. */
     if (never) {
-        pp = (char **)D_L00_001B9CF0.owner;
+        page_objects = (char **)D_L00_001B9CF0.owner;
     }
     if (D_L00_001B9CF0.owner != 0) {
-        pp = (char **)D_L00_001B9CF0.owner->objs;
+        page_objects = (char **)D_L00_001B9CF0.owner->objs;
     }
     for (k = 0; k < 14; k++) {
-        PageMobyData *d;
+        PageMobyData *page_data;
         if (D_L00_001B9E90[k] == 0 || D_L00_001B23C0[k] == 0) {
             continue;
         }
         if (k == 6 && D_L00_001B9CF0.unkD8 == 0) {
             continue;
         }
-        d = *(PageMobyData **)((char *)D_L00_001B9E90[k] + 0x78);
-        qcopy(&c[0], d);
-        qcopy(&c[1], &d->row[1]);
-        qcopy(&c[2], &d->row[2]);
-        qcopy(&c[3], &d->row[3]);
-        box[0] = c[0];
-        box[1] = c[3];
+        page_data = *(PageMobyData **)((char *)D_L00_001B9E90[k] + 0x78);
+        qcopy(&corners[0], page_data);
+        qcopy(&corners[1], &page_data->row[1]);
+        qcopy(&corners[2], &page_data->row[2]);
+        qcopy(&corners[3], &page_data->row[3]);
+        box[0] = corners[0];
+        box[1] = corners[3];
         project_graphics_bounds(&box[0], &box[1], &rect.w, &rect.h, &rect.x, &rect.y);
         flags = rect.w;
         rect.x++;
         rect.y++;
-        if (pp != 0 && pp[k] != 0) {
-            *(int *)(pp[k] + 0x20) = flags;
-            *(int *)(pp[k] + 0x24) = rect.h;
-            *(int *)(pp[k] + 0x18) = rect.x;
-            *(int *)(pp[k] + 0x1C) = rect.y;
+        if (page_objects != 0 && page_objects[k] != 0) {
+            *(int *)(page_objects[k] + 0x20) = flags;
+            *(int *)(page_objects[k] + 0x24) = rect.h;
+            *(int *)(page_objects[k] + 0x18) = rect.x;
+            *(int *)(page_objects[k] + 0x1C) = rect.y;
         }
-        d->x = rect.x;
-        d->y = rect.y;
-        d->w = rect.w;
-        d->h = rect.h;
+        page_data->x = rect.x;
+        page_data->y = rect.y;
+        page_data->w = rect.w;
+        page_data->h = rect.h;
         append_screen_rect_packet(rect.x + 1, rect.y + 1, rect.x + rect.w - 1, rect.y + rect.h - 1, D_L00_00160270, 0);
     }
     for (pass = 0; pass < 2; pass++) {
         Ent **mobys = D_L00_001B9E90;
         for (j = 0; j < 14; j++) {
-            char *m = (char *)mobys[j];
-            int pw, ph, px, py;
-            int tw, th, su, sv;
-            int r, u, v, u1, v1;
-            char *d;
-            if (m == 0 || pp == 0 || pp[j] == 0) {
+            char *moby = (char *)mobys[j];
+            int width, height, x, y;
+            int width_log2, height_log2, target_width, target_height;
+            int draw_result, u_start, v_start, u_end, v_end;
+            char *vars;
+            if (moby == 0 || page_objects == 0 || page_objects[j] == 0) {
                 continue;
             }
-            flags = *(int *)(pp[j] + 0x10);
+            flags = *(int *)(page_objects[j] + 0x10);
             if (flags & 4) {
                 continue;
             }
-            if (D_L00_001B23C0[j] == 0 || *(int *)(pp[j] + 4) == 0) {
+            if (D_L00_001B23C0[j] == 0 || *(int *)(page_objects[j] + 4) == 0) {
                 continue;
             }
             if (j == 6 && D_L00_001B9CF0.unkD8 == 0) {
@@ -774,72 +774,72 @@ void FUN_L00_002772c0(int arg0) {
                 continue;
             }
             if (flags & 1) {
-                (*(int (**)(char *))(pp[j] + 4))(pp[j]);
+                (*(int (**)(char *))(page_objects[j] + 4))(page_objects[j]);
                 continue;
             }
-            d = *(char **)(m + 0x78);
-            px = *(int *)(d + 0x50);
-            py = *(int *)(d + 0x54);
-            pw = *(int *)(d + 0x58);
-            ph = *(int *)(d + 0x5C);
-            tw = 7;
-            while ((1 << tw) < pw) {
-                tw++;
+            vars = *(char **)(moby + 0x78);
+            x = *(int *)(vars + 0x50);
+            y = *(int *)(vars + 0x54);
+            width = *(int *)(vars + 0x58);
+            height = *(int *)(vars + 0x5C);
+            width_log2 = 7;
+            while ((1 << width_log2) < width) {
+                width_log2++;
             }
-            th = 7;
-            while ((1 << th) < ph) {
-                th++;
+            height_log2 = 7;
+            while ((1 << height_log2) < height) {
+                height_log2++;
             }
-            while (tw + th >= 18) {
-                th--;
+            while (width_log2 + height_log2 >= 18) {
+                height_log2--;
             }
-            configure_graphics_render_target_and_projection(tw, th, pass != 0, 1.0f);
-            su = 1 << tw;
-            sv = 1 << th;
-            draw_hud_rect_depth(0, 0, su, sv, D_L00_00160270, 0, 0);
-            r = (*(int (**)(char *))(pp[j] + 4))(pp[j]);
+            configure_graphics_render_target_and_projection(width_log2, height_log2, pass != 0, 1.0f);
+            target_width = 1 << width_log2;
+            target_height = 1 << height_log2;
+            draw_hud_rect_depth(0, 0, target_width, target_height, D_L00_00160270, 0, 0);
+            draw_result = (*(int (**)(char *))(page_objects[j] + 4))(page_objects[j]);
             begin_draw_frame();
             vu1_add_g_sregister(0x42, 0x8000000064L);
             vu1_add_g_sregister(0x47, 0x43);
-            if (r & 1) {
+            if (draw_result & 1) {
                 continue;
             }
-            u = 0;
-            u1 = su;
-            v = 0;
-            v1 = sv;
-            if (r & 2) {
-                u1 = pw;
-                v1 = ph;
-            } else if (r & 8) {
-                u = (u1 - pw) / 2;
-                v = (v1 - ph) / 2;
-                u1 -= u;
-                v1 -= v;
-                if (u < 0) {
-                    u = 0;
+            u_start = 0;
+            u_end = target_width;
+            v_start = 0;
+            v_end = target_height;
+            if (draw_result & 2) {
+                u_end = width;
+                v_end = height;
+            } else if (draw_result & 8) {
+                u_start = (u_end - width) / 2;
+                v_start = (v_end - height) / 2;
+                u_end -= u_start;
+                v_end -= v_start;
+                if (u_start < 0) {
+                    u_start = 0;
                 }
-                if (v < 0) {
-                    v = 0;
+                if (v_start < 0) {
+                    v_start = 0;
                 }
-                if (u1 > su) {
-                    u1 = su;
+                if (u_end > target_width) {
+                    u_end = target_width;
                 }
-                if (v1 > sv) {
-                    v1 = sv;
+                if (v_end > target_height) {
+                    v_end = target_height;
                 }
-            } else if (r & 4) {
-                if (pw < ph) {
-                    u = u1 / 2 - (pw * u1) / (ph * 2);
-                    u1 -= u;
+            } else if (draw_result & 4) {
+                if (width < height) {
+                    u_start = u_end / 2 - (width * u_end) / (height * 2);
+                    u_end -= u_start;
                 } else {
-                    v = v1 / 2 - (ph * v1) / (pw * 2);
-                    v1 -= v;
+                    v_start = v_end / 2 - (height * v_end) / (width * 2);
+                    v_end -= v_start;
                 }
-            } else if (!(r & 0x10)) {
+            } else if (!(draw_result & 0x10)) {
                 continue;
             }
-            draw_textured_quad_alt(px, py, pw, ph, u, v, u1 - u, v1 - v, 0x80808080L, D_0015EED0);
+            draw_textured_quad(x, y, width, height, u_start, v_start, u_end - u_start, v_end - v_start, 0x80808080L, capture_texture_tex0);
         }
         if (pass == 0) {
             restore_moby_class_dists();

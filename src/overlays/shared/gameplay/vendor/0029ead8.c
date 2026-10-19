@@ -21,7 +21,7 @@ typedef struct {
 
 typedef struct {
     u8 pad0[0x20];
-    s32 f20;
+    s32 display_mobys;
     u8 pad24[0x1c];
     s32 f40;
     u8 pad44[0x14];
@@ -81,7 +81,7 @@ void FUN_L00_0029ead8(void *moby, s32 x, s32 y) {
         ammo_cost = SELECTED_ITEM.h8;
     if (current_bolt_count_macro < ammo_cost)
         goto no_money;
-    draw_moby_list(vendor_menu.f20 + 0x500, 1);
+    draw_moby_list(vendor_menu.display_mobys + 0x500, 1);
     box.half_y = 6;
     box.style = 1;
     font_print_window_small((void *)&box, 0x80F0F0F0L, get_help_message_text(0x5237), -1);

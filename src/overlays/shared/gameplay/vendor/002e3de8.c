@@ -261,7 +261,7 @@ int FUN_L10_002f5a78(char *moby) {
 }
 typedef struct {
     char pad0[0xB0];
-    float fB0; /* tan of half the field of view */
+    float tan_half_fov;
 } VendorView_5f18;
 
 typedef struct {
@@ -273,8 +273,8 @@ typedef struct {
 typedef struct {
     s32 seg;      /* 0x40 */
     f32 t;        /* 0x44 */
-    f32 len_a;    /* 0x48: length of the camera path */
-    f32 len_b;    /* 0x4C: length of the look path */
+    f32 path_length;      /* 0x48 */
+    f32 look_path_length; /* 0x4C */
     f32 dist;     /* 0x50: distance travelled */
     s16 started;  /* 0x54 */
     s16 timer;    /* 0x56 */
@@ -305,8 +305,8 @@ void FUN_L10_002f5b58(struct UpdateCam *cam) {
     run = (VendorCamRun_5f18 *)((char *)cam->saved_state + 0x40);
     run->seg = 0;
     run->t = 0.0f;
-    run->len_a = 0.0f;
-    run->len_b = 0.0f;
+    run->path_length = 0.0f;
+    run->look_path_length = 0.0f;
     run->dist = 0.0f;
     run->started = 0;
     run->timer = scale_game_frames(*(s16 *)(rec + 0x3A));
@@ -322,7 +322,7 @@ void FUN_L10_002f5b58(struct UpdateCam *cam) {
     pos = &cam->pos;
     m1 = (Vec4f *)&cam->m1;
     m2 = (Vec4f *)&cam->m2;
-    stops->fov_end = angle_atan2(1.0f, D_L10_0016CEC0.fB0) * 2.0f;
+    stops->fov_end = angle_atan2(1.0f, D_L10_0016CEC0.tan_half_fov) * 2.0f;
     if (*(int *)(rec + 0x20) >= 0) {
         char *path = D_L10_001B0930_5a78[*(int *)(rec + 0x20)];
         int i = 0;
@@ -349,7 +349,7 @@ void FUN_L10_002f5b58(struct UpdateCam *cam) {
                     *(f32 *)(point + 0x1C) = length;
                 }
                 if (i < *(int *)path - 1)
-                    run->len_a += length;
+                    run->path_length += length;
                 i = next;
             } while (i < *(int *)path);
         }
@@ -357,7 +357,7 @@ void FUN_L10_002f5b58(struct UpdateCam *cam) {
     {
         s16 frames = *(s16 *)(rec + 0x3A);
         if (frames > 0)
-            *(f32 *)(rec + 0x3C) = run->len_a / s32_to_float(scale_game_frames(frames)) * 60.0f;
+            *(f32 *)(rec + 0x3C) = run->path_length / s32_to_float(scale_game_frames(frames)) * 60.0f;
     }
     if (*(int *)(rec + 0x24) >= 0) {
         char *path = D_L10_001B0930_5a78[*(int *)(rec + 0x24)];
@@ -367,7 +367,7 @@ void FUN_L10_002f5b58(struct UpdateCam *cam) {
             f32 length = distance_xyz(path + (offset + 0x10), path + ((i + 1) % *(int *)path * 16 + 0x10));
             *(f32 *)(path + offset + 0x1C) = length;
             if (i < *(int *)path - 1)
-                run->len_b += length;
+                run->look_path_length += length;
         }
     }
     saved = (char *)cam->saved_state;
@@ -479,7 +479,7 @@ void FUN_L10_002f5f18(struct UpdateCam *cam) {
             run->started = 3;
             D_L10_0015F3FC = 1.0f;
             ang = stops->fov_end * 0.5f;
-            D_L10_0016CEC0.fB0 = fast_sin_5f18(ang) / fast_cos_5f18(ang);
+            D_L10_0016CEC0.tan_half_fov = fast_sin_5f18(ang) / fast_cos_5f18(ang);
             update_view_context_5f18();
             *(u8 *)(rec + 0x39) = 1;
             D_L10_00167358 = 0.05f;
@@ -528,7 +528,7 @@ void FUN_L10_002f5f18(struct UpdateCam *cam) {
             for (after = run->seg; after < stops->seg[i + 1]; after++)
                 total += *(float *)(path + (after * 16 + 0x1C));
             ang = cosine_interpolate_5f18(stops->fov[i], stops->fov[i + 1], sum / total) * 0.017453292f * 0.5f;
-            D_L10_0016CEC0.fB0 = fast_sin_5f18(ang) / fast_cos_5f18(ang);
+            D_L10_0016CEC0.tan_half_fov = fast_sin_5f18(ang) / fast_cos_5f18(ang);
             update_view_context_5f18();
         }
     }
@@ -547,7 +547,7 @@ void FUN_L10_002f5f18(struct UpdateCam *cam) {
         char *look = D_L10_001B0930_5f18[*(int *)(rec + 0x24)];
         look_seg = 0;
         look_t = 0.0f;
-        path_step_5f18(look, point, &look_seg, &look_t, 0, run->dist / run->len_a * run->len_b);
+        path_step_5f18(look, point, &look_seg, &look_t, 0, run->dist / run->path_length * run->look_path_length);
         debug_point_5f18(point, 0.2f);
         debug_line_5f18(look + 0x10, look + *(int *)look * 16);
         subtract_vector_xyz_5f18(offset, point, &cam->pos);

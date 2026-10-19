@@ -455,7 +455,9 @@ typedef struct {
     int i1A0;
 } C940;
 typedef struct {
-    u8 pad0[0x270];
+    u8 pad0[0x180];
+    char *current_follow_cam; /* 0x180: struct UpdateCam * */
+    u8 pad184[0x270 - 0x184];
     s16 s270;
 } G680;
 extern C940 D_0013C940;
@@ -1414,21 +1416,14 @@ void FUN_L00_002ebbd8(void *arg) {
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002ebe70.s", FUN_L00_002ebe70);
 #else
-/* Near miss (SN BYTES 8/397): in the list block the store of chosen lands after the
- * cur->0x21 load instead of before it; the order that fixes it lets turn take $fp. */
-typedef struct { char pad[0x180]; char *p180; } CamGlobals_2ebe70;
-extern CamGlobals_2ebe70 G680_2ebe70 __asm__("D_L00_00166C80");
+/* Near miss (SN BYTES 8/397): in the neighbours loop the store of chosen lands after the
+ * current_target->0x21 load instead of before it; the order that fixes it lets turn take $fp. */
 extern void FUN_L00_0025b868(float, float, float *);
-extern void FUN_001ff2a8_2ebe70(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void FUN_001ff500_2ebe70(float, void *, void *) __asm__("FUN_001f9bf8");
-extern float FUN_001ff7e8_2ebe70(float) __asm__("FUN_001f9dc8");
-extern float FUN_001ff800_2ebe70(float) __asm__("FUN_001f9de0");
-extern float FUN_001ff398_2ebe70(void *, void *) __asm__("FUN_001f9ab0");
-extern float FUN_001ff3d8_2ebe70(void *) __asm__("FUN_001f9af0");
-extern float FUN_001ff8b0_2ebe70(float, float) __asm__("FUN_001f9e90");
 extern void FUN_001ff300_2ebe70(float, void *, void *) __asm__("FUN_001f9a68");
-extern void FUN_001ff278_2ebe70(void *, void *, void *) __asm__("FUN_001f9a10");
-extern int FUN_001efc70_2ebe70(void *, void *, int, int, int) __asm__("FUN_001efa68");
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
+extern int coll_line_fix(void *, void *, int, int, int) __asm__("FUN_001efa68");
 extern int FUN_001f0d60_2ebe70(float, void *, int, int) __asm__("FUN_L00_001f0d60");
 extern unsigned short *D_L00_001AB840_2ebe70[] __asm__("D_L00_001AB840");
 extern char *D_0015FFD8_2ebe70 __asm__("D_L00_0015FFD8");
@@ -1436,21 +1431,20 @@ extern OvlQuad D_L00_00173E60_2ebe70 __asm__("D_L00_00173E60");
 extern float D_L00_00173E70_2ebe70[] __asm__("D_L00_00173E70");
 extern float D_L00_00161DD8_2ebe70 __asm__("D_L00_00161DD8") __attribute__((sda));
 
-void FUN_L00_002ebe70(char *o) {
-    char *m = *(char **)(o + 0x70);
-    char *p = m + 0x40;
-    float *distance = (float *)(m + 0xa0);
-    float *angle = (float *)(m + 0xb8);
-    float next[4] __attribute__((aligned(16)));
-    float diff[4] __attribute__((aligned(16)));
-    float scaled[4] __attribute__((aligned(16)));
+void FUN_L00_002ebe70(char *cam) {
+    char *state = *(char **)(cam + 0x70);
+    char *follow = state + 0x40;
+    float *distance = (float *)(state + 0xa0);
+    float *angle = (float *)(state + 0xb8);
+    float position[4] __attribute__((aligned(16)));
+    float offset[4] __attribute__((aligned(16)));
+    float direction[4] __attribute__((aligned(16)));
     float aim[4] __attribute__((aligned(16)));
-    float *aim_values;
     float target, rate, fraction, score, best, length;
-    char *candidate, *chosen, *cur;
+    char *candidate, *chosen, *current_target;
     float *turn;
     OvlQuad *collision_position;
-    unsigned short *list;
+    unsigned short *neighbours;
     int i;
 
     if (hero.unk994 != 0 && hero.state.current == 0x2c) {
@@ -1464,12 +1458,12 @@ void FUN_L00_002ebe70(char *o) {
         target = 4.64f;
         rate = 2.0f;
     }
-    FUN_L00_0025b868(target, frame_time * 8.0f, (float *)(*(char **)(G680_2ebe70.p180 + 0x70) + 0xa0));
-    FUN_L00_0025b868(rate, frame_time * 4.0f, (float *)(*(char **)(G680_2ebe70.p180 + 0x70) + 0xb0));
+    FUN_L00_0025b868(target, frame_time * 8.0f, (float *)(*(char **)(D_L00_00166C80_c.current_follow_cam + 0x70) + 0xa0));
+    FUN_L00_0025b868(rate, frame_time * 4.0f, (float *)(*(char **)(D_L00_00166C80_c.current_follow_cam + 0x70) + 0xb0));
     if (current_level_index == 14 && hero.state.current == 0x2c)
-        FUN_L00_0025b868(rate + 0.25f, frame_time * 8.0f, (float *)(*(char **)(G680_2ebe70.p180 + 0x70) + 0x8c));
+        FUN_L00_0025b868(rate + 0.25f, frame_time * 8.0f, (float *)(*(char **)(D_L00_00166C80_c.current_follow_cam + 0x70) + 0x8c));
     else
-        FUN_L00_0025b868(rate - 0.5f, frame_time * 8.0f, (float *)(*(char **)(G680_2ebe70.p180 + 0x70) + 0x8c));
+        FUN_L00_0025b868(rate - 0.5f, frame_time * 8.0f, (float *)(*(char **)(D_L00_00166C80_c.current_follow_cam + 0x70) + 0x8c));
 
     if (hero.state.current == 0x2c) {
         if ((current_level_index != 14 && current_level_index != 7 && current_level_index != 9) ||
@@ -1479,67 +1473,67 @@ void FUN_L00_002ebe70(char *o) {
             turn = angle + 1;
             chosen = 0;
             best = 1000.0f;
-            cur = (char *)hero.unk994;
-            list = D_L00_001AB840_2ebe70[*(unsigned char *)(cur + 0x21)];
-            if (list != 0) {
+            current_target = (char *)hero.unk994;
+            neighbours = D_L00_001AB840_2ebe70[*(unsigned char *)(current_target + 0x21)];
+            if (neighbours != 0) {
                 do {
-                    candidate = D_0015FFD8_2ebe70 + (*list & 0x7fff) * 0x100;
-                    if (candidate != cur &&
+                    candidate = D_0015FFD8_2ebe70 + (*neighbours & 0x7fff) * 0x100;
+                    if (candidate != current_target &&
                         (*(short *)(candidate + 0xa6) == 0x323 || *(short *)(candidate + 0xa6) == 0x2f6)) {
-                        FUN_001ff2a8_2ebe70(diff, candidate + 0x10, cur + 0x10);
-                        FUN_001ff500_2ebe70(1.0f, scaled, diff);
-                        aim[0] = FUN_001ff7e8_2ebe70(hero.motion.rot.f[2]);
-                        aim[1] = FUN_001ff800_2ebe70(hero.motion.rot.f[2]);
+                        fast_vec_sub(offset, candidate + 0x10, current_target + 0x10);
+                        FUN_001ff500_2ebe70(1.0f, direction, offset);
+                        aim[0] = fast_cos(hero.motion.rot.f[2]);
+                        aim[1] = fast_sin(hero.motion.rot.f[2]);
                         aim[2] = 0.0f;
-                        score = FUN_001ff398_2ebe70(scaled, aim);
+                        score = fast_vec_dot(direction, aim);
                         if (score > 0.0f) {
-                            target = FUN_001ff3d8_2ebe70(diff) - score * 10.0f;
+                            target = fast_vec_length(offset) - score * 10.0f;
                             if (target < best) {
                                 chosen = candidate;
                                 best = target;
                             }
                         }
                     }
-                } while ((short)*list++ >= 0);
+                } while ((short)*neighbours++ >= 0);
             }
             if (chosen != 0) {
-                FUN_001ff2a8_2ebe70(diff, chosen + 0x10, cur + 0x10);
-                *angle = rope_spring_turn(turn, *angle, FUN_001ff8b0_2ebe70(diff[0], diff[1]), 0.00125f, 0.175f, 0.0f);
-            } else if (*(int *)(p + 0x40) == 1)
-                *angle = rope_spring_turn(turn, *angle, *(float *)(*(char **)(p + 0x44) + 0x48), 0.00125f, 0.175f, 0.0f);
+                fast_vec_sub(offset, chosen + 0x10, current_target + 0x10);
+                *angle = rope_spring_turn(turn, *angle, fast_arc_tan(offset[0], offset[1]), 0.00125f, 0.175f, 0.0f);
+            } else if (*(int *)(follow + 0x40) == 1)
+                *angle = rope_spring_turn(turn, *angle, *(float *)(*(char **)(follow + 0x44) + 0x48), 0.00125f, 0.175f, 0.0f);
             else
                 *angle = rope_spring_turn(turn, *angle, hero.motion.rot.f[2], 0.00125f, 0.175f, 0.0f);
         }
     } else if (hero.state.current == 0x25) {
-        if (*(int *)(p + 0x40) == 1)
-            *angle = rope_spring_turn(angle + 1, *angle, *(float *)(*(char **)(p + 0x44) + 0x48), D_L00_00161DD8_2ebe70, 0.175f, 0.0f);
+        if (*(int *)(follow + 0x40) == 1)
+            *angle = rope_spring_turn(angle + 1, *angle, *(float *)(*(char **)(follow + 0x44) + 0x48), D_L00_00161DD8_2ebe70, 0.175f, 0.0f);
         else
             *angle = rope_spring_turn(angle + 1, *angle, hero.motion.rot.f[2], D_L00_00161DD8_2ebe70, 0.175f, 0.0f);
     }
-    *(float *)(p + 0x30) = FUN_001ff7e8_2ebe70(*angle);
-    *(float *)(p + 0x34) = FUN_001ff800_2ebe70(*angle);
-    *(int *)(p + 0x38) = 0;
-    *(float *)(p + 0x3c) = *(float *)(p + 0x38);
-    FUN_001ff500_2ebe70(-*distance, next, p + 0x30);
-    next[2] += distance[4];
-    FUN_001ff278_2ebe70(next, next, &hero.motion.pos);
-    if (FUN_001efc70_2ebe70(o + 0x30, next, 0x12, 0, 0) != 0) {
-        FUN_001ff2a8_2ebe70(diff, &D_L00_00173E60_2ebe70, o + 0x30);
+    *(float *)(follow + 0x30) = fast_cos(*angle);
+    *(float *)(follow + 0x34) = fast_sin(*angle);
+    *(int *)(follow + 0x38) = 0;
+    *(float *)(follow + 0x3c) = *(float *)(follow + 0x38);
+    FUN_001ff500_2ebe70(-*distance, position, follow + 0x30);
+    position[2] += distance[4];
+    fast_vec_add(position, position, &hero.motion.pos);
+    if (coll_line_fix(cam + 0x30, position, 0x12, 0, 0) != 0) {
+        fast_vec_sub(offset, &D_L00_00173E60_2ebe70, cam + 0x30);
         collision_position = &D_L00_00173E60_2ebe70;
-        length = FUN_001ff3d8_2ebe70(diff);
+        length = fast_vec_length(offset);
         if (length > 0.5f) {
-            FUN_001ff300_2ebe70((length - 0.5f) / length, diff, diff);
-            FUN_001ff278_2ebe70(next, o + 0x30, diff);
+            FUN_001ff300_2ebe70((length - 0.5f) / length, offset, offset);
+            fast_vec_add(position, cam + 0x30, offset);
             for (i = 0; i < 5; i++) {
-                if (FUN_001f0d60_2ebe70(0.75f, next, 0, 0) != 0) qcopy(next, collision_position + 1);
+                if (FUN_001f0d60_2ebe70(0.75f, position, 0, 0) != 0) qcopy(position, collision_position + 1);
                 else break;
             }
         }
-        qcopy(o + 0x30, next);
-        FUN_001ff2a8_2ebe70(diff, &hero.motion.pos, o + 0x30);
-        *angle = FUN_001ff8b0_2ebe70(diff[0], diff[1]);
+        qcopy(cam + 0x30, position);
+        fast_vec_sub(offset, &hero.motion.pos, cam + 0x30);
+        *angle = fast_arc_tan(offset[0], offset[1]);
         *(int *)(angle + 1) = 0;
-    } else qcopy(o + 0x30, next);
+    } else qcopy(cam + 0x30, position);
 }
 #endif
 typedef union {

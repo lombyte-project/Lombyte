@@ -422,44 +422,44 @@ extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void draw_hud_sprite_subpixel(s32, s32, s32, s32, s32, s32) __asm__("FUN_00200080");
 
-int FUN_L00_002365a8(HudElem *e) {
+int FUN_L00_002365a8(HudElem *element) {
     int x, y, i, previous, current, frames, image, star_width;
     float origin[4], direction[4], first_step[4], second_step[4], third_step[4], star_position[4];
     float seconds, sixteen, offset, thirty_two;
 
     {
         int width = D_L00_0015F760;
-        x = e->unk50;
-        y = e->unk54;
-        e->w = width;
-        e->h = D_L00_0015F764;
+        x = element->unk50;
+        y = element->unk54;
+        element->w = width;
+        element->h = D_L00_0015F764;
     }
-    hud_screen_position(e, &x, &y);
-    FUN_L00_00235ad8(e, &x, &y, e->unk6C, 0);
+    hud_screen_position(element, &x, &y);
+    FUN_L00_00235ad8(element, &x, &y, element->unk6C, 0);
 
     {
-        int w = D_L00_0015F760 * 0xD0;
-        int h = D_L00_0015F764 * 0xA0;
-        int bar_w = D_L00_0015F760 * 0x260;
+        int left_inset = D_L00_0015F760 * 0xD0;
+        int top_inset = D_L00_0015F764 * 0xA0;
+        int bar_width = D_L00_0015F760 * 0x260;
         int bottom = D_L00_0015F764 * 0xEA0;
-        int left = (x + e->unk48) << 4;
-        int top = (y + e->unk4A) << 4;
+        int left = (x + element->unk48) << 4;
+        int top = (y + element->unk4A) << 4;
         int right;
-        left += w / 64;
-        top += h / 256;
-        right = left + bar_w / 64;
+        left += left_inset / 64;
+        top += top_inset / 256;
+        right = left + bar_width / 64;
         bottom = top + bottom / 256;
         append_screen_rect_packet(left, top, right, bottom, 0x80684C2F, 1);
     }
 
-    if (e->unk74 * 3 < 10001) {
+    if (element->unk74 * 3 < 10001) {
         frames = scale_game_frames(1);
         seconds = scale_game_seconds(0.75f);
         previous = (D_L00_0015F3F8 - 1) % (int)((float)frames * 60.0f) < (int)(seconds * 60.0f);
     } else {
         previous = 0;
     }
-    if (e->unk74 * 3 < 10001) {
+    if (element->unk74 * 3 < 10001) {
         frames = scale_game_frames(1);
         seconds = scale_game_seconds(0.75f);
         current = D_L00_0015F3F8 % (int)((float)frames * 60.0f) < (int)(seconds * 60.0f);
@@ -470,10 +470,10 @@ int FUN_L00_002365a8(HudElem *e) {
         FUN_L00_00216de8(0xB, 0);
     }
     star_width = 0;
-    image = get_icon_frame(*(int *)e, current);
+    image = get_icon_frame(*(int *)element, current);
     sixteen = 16.0f;
     thirty_two = 32.0f;
-    FUN_L00_0023bac0(image, x + e->unk48, y + e->unk4A, D_L00_0015F760, D_L00_0015F764, 0x80);
+    FUN_L00_0023bac0(image, x + element->unk48, y + element->unk4A, D_L00_0015F760, D_L00_0015F764, 0x80);
 
     {
         float center_x, center_y, half_w, half_h;
@@ -481,8 +481,8 @@ int FUN_L00_002365a8(HudElem *e) {
         half_h = -(D_L00_0015F764 * D_L00_0015F76C * 0.5f) / 116.0f;
         origin[2] = 1.0f;
         origin[3] = 1.0f;
-        center_x = D_L00_0015F760 * D_L00_0015F768 * 0.5f + (x + e->unk48);
-        center_y = D_L00_0015F764 * D_L00_0015F76C * 0.5f + (y + e->unk4A);
+        center_x = D_L00_0015F760 * D_L00_0015F768 * 0.5f + (x + element->unk48);
+        center_y = D_L00_0015F764 * D_L00_0015F76C * 0.5f + (y + element->unk4A);
         direction[0] = (center_x + (1.0f - D_L00_0015F768) * 0.5f * D_L00_0015F760) * sixteen;
         direction[1] = (center_y + (1.0f - D_L00_0015F76C) * 0.5f * D_L00_0015F764) * sixteen;
         direction[2] = 0.0f;
@@ -490,9 +490,9 @@ int FUN_L00_002365a8(HudElem *e) {
         origin[0] = half_w * sixteen;
         origin[1] = half_h * sixteen;
     }
-    offset = (float)(10000 - e->unk74) / 10000.0f;
+    offset = (float)(10000 - element->unk74) / 10000.0f;
     offset = 116.0f - (offset + offset) * 116.0f;
-    image = get_icon_frame(*(int *)e, 2);
+    image = get_icon_frame(*(int *)element, 2);
 
     clear_u64_value(first_step);
     clear_u64_value(second_step);
@@ -545,7 +545,7 @@ int FUN_L00_002365a8(HudElem *e) {
         fast_vec_add(star_position, star_position, direction);
         draw_hud_sprite_subpixel(image, (int)star_position[0], (int)star_position[1], star_width, star_width, 0x80);
     }
-    return e->w;
+    return element->w;
 }
 /* Ported from rac1-decomp (src/overlays/shared/hud_00235960.c: func_L00_002377E0), where it is exact; names translated to the US level program. */
 

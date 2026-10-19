@@ -69,26 +69,26 @@ extern s32 D_L05_0015FAFC_macro __asm__("D_L05_0015FAFC") __attribute__((section
 extern s32 D_L05_0015FB00;
 extern u8 D_L05_0015F87C __attribute__((sda));
 
-void FUN_L05_00262b58(HudCounter *e) {
-    f32 value;
-    u8 *counter;
-    s32 v;
+void FUN_L05_00262b58(HudCounter *element) {
+    f32 smoothed;
+    u8 *state_bytes;
+    s32 combo;
 
-    value = (f32)e->smoothed;
-    approach_value(&value, (f32)*e->value, 6.0f);
-    counter = &e->timer;
-    e->smoothed = truncate_float_to_s32(value);
-    switch (counter[2]) {
+    smoothed = (f32)element->smoothed;
+    approach_value(&smoothed, (f32)*element->value, 6.0f);
+    state_bytes = &element->timer;
+    element->smoothed = truncate_float_to_s32(smoothed);
+    switch (state_bytes[2]) {
     case 0: {
-        struct Hero *h = &hero;
-        if (h->air_frames.s < 6) {
+        struct Hero *player = &hero;
+        if (player->air_frames.s < 6) {
             return;
         }
-        v = h->unk70C;
-        if (!((f32)v >= 1.0f)) {
+        combo = player->unk70C;
+        if (!((f32)combo >= 1.0f)) {
             return;
         }
-        D_L05_0015FAD4 = v;
+        D_L05_0015FAD4 = combo;
         D_L05_0015FAD8 = 0;
         {
             int k;
@@ -96,44 +96,44 @@ void FUN_L05_00262b58(HudCounter *e) {
                 D_L05_0015FAE0[k] = 0;
             }
         }
-        counter[2] = 1;
-        counter[1] = D_L05_0015F87C;
-        counter[0] = 0;
+        state_bytes[2] = 1;
+        state_bytes[1] = D_L05_0015F87C;
+        state_bytes[0] = 0;
         break;
     }
     case 1: {
-        struct Hero *t;
-        struct Hero *h;
-        if (e->timer < 10) {
-            e->timer++;
+        struct Hero *flag_source;
+        struct Hero *player;
+        if (element->timer < 10) {
+            element->timer++;
         }
-        if (counter[1] != 0) {
-            counter[1]--;
+        if (state_bytes[1] != 0) {
+            state_bytes[1]--;
         }
-        t = &hero;
-        D_L05_0015FAD8 = t->unk6E0[4];
+        flag_source = &hero;
+        D_L05_0015FAD8 = flag_source->unk6E0[4];
         {
             int k;
             for (k = 0; k < 4; k++) {
-                D_L05_0015FAE0[k] = t->unk6E0[k];
+                D_L05_0015FAE0[k] = flag_source->unk6E0[k];
             }
         }
-        h = &hero;
-        if (D_L05_0015FAD4 < h->unk70C) {
-            D_L05_0015FAD4 = h->unk70C;
-            counter[1] = D_L05_0015F87C;
+        player = &hero;
+        if (D_L05_0015FAD4 < player->unk70C) {
+            D_L05_0015FAD4 = player->unk70C;
+            state_bytes[1] = D_L05_0015F87C;
         }
-        if (h->grounded_frames == 0) {
-            if (!(h->state.current >= 0x6D && h->state.current <= 0x6F)) {
+        if (player->grounded_frames == 0) {
+            if (!(player->state.current >= 0x6D && player->state.current <= 0x6F)) {
                 return;
             }
         }
         D_L05_0015FB00 = 0;
-        h->unk70C = 0;
-        h->unk6E0[4] = 0;
+        player->unk70C = 0;
+        player->unk6E0[4] = 0;
         {
             int k;
-            s32 *p = &h->unk6E0[3];
+            s32 *p = &player->unk6E0[3];
             for (k = 3; k >= 0; k--) {
                 *p-- = 0;
             }
@@ -151,19 +151,19 @@ void FUN_L05_00262b58(HudCounter *e) {
                 D_L05_0015FAF4 = D_L05_0015FAF0;
                 D_L05_0015FAF0 = -1;
             }
-            counter[2] = 3;
-            counter[1] = D_L05_0015F87C;
-            counter[0] = scale_game_frames(0x78);
+            state_bytes[2] = 3;
+            state_bytes[1] = D_L05_0015F87C;
+            state_bytes[0] = scale_game_frames(0x78);
         } else {
-            counter[2] = 2;
-            counter[1] = D_L05_0015F87C;
-            counter[0] = scale_game_frames(0x3C);
+            state_bytes[2] = 2;
+            state_bytes[1] = D_L05_0015F87C;
+            state_bytes[0] = scale_game_frames(0x3C);
         }
         break;
     }
     case 2:
     case 3:
-        if (counter[0] == 0) {
+        if (state_bytes[0] == 0) {
             D_L05_0015FB00 = 0;
             D_L05_0015FAD4 = 0;
             D_L05_0015FAD8 = 0;
@@ -173,18 +173,18 @@ void FUN_L05_00262b58(HudCounter *e) {
                     D_L05_0015FAE0[k] = 0;
                 }
             }
-            counter[2] = 0;
-            counter[0] = 0;
-        } else if (counter[2] == 3 && counter[0] == scale_game_frames(0x6E)) {
-            s32 n = D_L05_0015FB00;
-            struct Hero *h = &hero;
-            h->unk8A8 += n;
-            h->unk864 += n * 5;
-            if ((s32)((f32)scale_game_frames(0x11) * 60.0f) < h->unk864) {
-                h->unk864 = (s32)((f32)scale_game_frames(0x11) * 60.0f);
+            state_bytes[2] = 0;
+            state_bytes[0] = 0;
+        } else if (state_bytes[2] == 3 && state_bytes[0] == scale_game_frames(0x6E)) {
+            s32 points = D_L05_0015FB00;
+            struct Hero *player = &hero;
+            player->unk8A8 += points;
+            player->unk864 += points * 5;
+            if ((s32)((f32)scale_game_frames(0x11) * 60.0f) < player->unk864) {
+                player->unk864 = (s32)((f32)scale_game_frames(0x11) * 60.0f);
             }
         }
-        counter[0]--;
+        state_bytes[0]--;
         break;
     }
 }
@@ -224,123 +224,123 @@ extern s32 D_L05_0015F8C0 __attribute__((sda));
 extern s32 D_L05_0015F8C4 __attribute__((sda));
 extern s32 D_L05_0015F8C8 __attribute__((sda));
 
-s32 FUN_L05_00262f50(char *a) {
-    u8 *u = (u8 *)(a + 0x70);
-    char buf[0x80];
-    s32 out[4];
-    s32 xa, xb;
-    f32 f20, f21, f0, f12;
-    struct Hero *E;
-    s32 r, sel, cnt, k, idx, h, acc, id, id2, i, s16, r3, t;
+s32 FUN_L05_00262f50(char *element) {
+    u8 *state_bytes = (u8 *)(element + 0x70);
+    char text[0x80];
+    s32 pose_ids[4];
+    s32 x, y;
+    f32 delay_left, fade, pulse, blend;
+    struct Hero *player;
+    s32 delay_total, trick, repeats, tier, trick_index, shadow_color, color, fill_icon, frame_icon, i, bar_width, blink_period, blink_color, warning_timer;
 
-    f21 = (f32)u[0] / 10.0f;
-    if (f21 > 1.0f) {
-        f21 = 1.0f;
+    fade = (f32)state_bytes[0] / 10.0f;
+    if (fade > 1.0f) {
+        fade = 1.0f;
     }
-    E = &hero;
-    if (E->state.control_mode != 0x16) {
-        return *(s32 *)(a + 0x58);
+    player = &hero;
+    if (player->state.control_mode != 0x16) {
+        return *(s32 *)(element + 0x58);
     }
-    if (u[2] != 0) {
-        sprintf_alt(buf, D_L05_0015F860, D_L05_0015FAD4 * 0x168);
-        f20 = convert_integer_to_float(u[1]);
-        r = scale_game_frames(*(s32 *)&D_L05_0015F87C);
-        f12 = f20 / (f32)r;
-        if (u[2] == 1 || u[2] == 3) {
-            acc = fast_tween_color(D_L05_0015F894, D_L05_0015F898, f12);
+    if (state_bytes[2] != 0) {
+        sprintf_alt(text, D_L05_0015F860, D_L05_0015FAD4 * 0x168);
+        delay_left = convert_integer_to_float(state_bytes[1]);
+        delay_total = scale_game_frames(*(s32 *)&D_L05_0015F87C);
+        blend = delay_left / (f32)delay_total;
+        if (state_bytes[2] == 1 || state_bytes[2] == 3) {
+            color = fast_tween_color(D_L05_0015F894, D_L05_0015F898, blend);
         } else {
-            acc = D_L05_0015F8A0;
+            color = D_L05_0015F8A0;
         }
-        h = truncate_float_to_s32(f21 * 128.0f) << 24;
-        acc += h;
-        if (u[2] == 1 || u[2] == 2) {
-            font_print_center_large(D_L05_0015F8B4 + 1, D_L05_0015F8B8 + 1, h, buf, -1);
-            font_print_center_large(D_L05_0015F8B4, D_L05_0015F8B8, acc, buf, -1);
-            sprintf_alt(buf, D_L05_0015F8D0, D_L05_0015FAD8);
-            font_print_center_large(D_L05_0015F8BC + 1, D_L05_0015F8C0 + 1, h, buf, -1);
-            font_print_center_large(D_L05_0015F8BC, D_L05_0015F8C0, acc, buf, -1);
-        } else if (u[2] == 3) {
-            sel = -1;
+        shadow_color = truncate_float_to_s32(fade * 128.0f) << 24;
+        color += shadow_color;
+        if (state_bytes[2] == 1 || state_bytes[2] == 2) {
+            font_print_center_large(D_L05_0015F8B4 + 1, D_L05_0015F8B8 + 1, shadow_color, text, -1);
+            font_print_center_large(D_L05_0015F8B4, D_L05_0015F8B8, color, text, -1);
+            sprintf_alt(text, D_L05_0015F8D0, D_L05_0015FAD8);
+            font_print_center_large(D_L05_0015F8BC + 1, D_L05_0015F8C0 + 1, shadow_color, text, -1);
+            font_print_center_large(D_L05_0015F8BC, D_L05_0015F8C0, color, text, -1);
+        } else if (state_bytes[2] == 3) {
+            trick = -1;
             if (D_L05_0015FAD8 == 3) {
-                sel = 0;
+                trick = 0;
                 if (D_L05_0015FAEC != 0) {
-                    sel = 2;
+                    trick = 2;
                     if (D_L05_0015FAE8 == 0) {
-                        sel = 1;
+                        trick = 1;
                     } else if (D_L05_0015FAE4 != 0) {
-                        sel = 3;
+                        trick = 3;
                     }
                 }
             } else if (D_L05_0015FAD8 == 4) {
-                sel = 4;
+                trick = 4;
             }
-            if (sel >= 0) {
+            if (trick >= 0) {
                 if (D_L05_0015FAD4 >= 4) {
-                    k = 2;
+                    tier = 2;
                 } else {
-                    k = D_L05_0015FAD4 >= 2;
+                    tier = D_L05_0015FAD4 >= 2;
                 }
-                idx = sel + k * 5;
-                D_L05_0015FAF0 = idx;
-                D_L05_0015FB00 = D_L05_0017E918[idx];
-                cnt = 1;
+                trick_index = trick + tier * 5;
+                D_L05_0015FAF0 = trick_index;
+                D_L05_0015FB00 = D_L05_0017E918[trick_index];
+                repeats = 1;
                 for (i = 1; i < 4; i++) {
                     if ((&D_L05_0015FAF0)[i] == D_L05_0015FAF0) {
-                        cnt++;
+                        repeats++;
                     }
                 }
-                D_L05_0015FB00 = D_L05_0015FB00 / cnt;
-                sprintf_alt(buf, D_L05_0015F860, D_L05_0015FB00);
-                draw_framed_text(D_L05_0015F8C4, D_L05_0015F8C8 - 0x18, acc, buf);
-                sprintf_alt(buf, D_L05_0015F8E0, get_help_message_text(idx + 0x5092));
-                draw_framed_text(D_L05_0015F8C4, D_L05_0015F8C8, acc, buf);
+                D_L05_0015FB00 = D_L05_0015FB00 / repeats;
+                sprintf_alt(text, D_L05_0015F860, D_L05_0015FB00);
+                draw_framed_text(D_L05_0015F8C4, D_L05_0015F8C8 - 0x18, color, text);
+                sprintf_alt(text, D_L05_0015F8E0, get_help_message_text(trick_index + 0x5092));
+                draw_framed_text(D_L05_0015F8C4, D_L05_0015F8C8, color, text);
             } else if (D_L05_0015FAD8 > 0) {
-                s32 n = 0;
-                s32 m;
-                for (m = 0; m < 4 && n < D_L05_0015FAD8; m++) {
-                    if (D_L05_0015FAE0[m] != 0) {
-                        out[n] = m;
-                        n++;
+                s32 count = 0;
+                s32 pose;
+                for (pose = 0; pose < 4 && count < D_L05_0015FAD8; pose++) {
+                    if (D_L05_0015FAE0[pose] != 0) {
+                        pose_ids[count] = pose;
+                        count++;
                     }
                 }
                 if (D_L05_0015FAD8 == 1) {
                     D_L05_0015FB00 = D_L05_0015FAD4 * 10;
-                    sprintf_alt(buf, D_L05_0015F860, D_L05_0015FB00);
-                    draw_framed_text(D_L05_0015F8C4, D_L05_0015F8C8 - 0x18, acc, buf);
-                    sprintf_alt(buf, D_L05_0015F8E8, get_help_message_text(out[0] + 0x517E), D_L05_0015FAD4);
-                    draw_framed_text(D_L05_0015F8C4, D_L05_0015F8C8, acc, buf);
+                    sprintf_alt(text, D_L05_0015F860, D_L05_0015FB00);
+                    draw_framed_text(D_L05_0015F8C4, D_L05_0015F8C8 - 0x18, color, text);
+                    sprintf_alt(text, D_L05_0015F8E8, get_help_message_text(pose_ids[0] + 0x517E), D_L05_0015FAD4);
+                    draw_framed_text(D_L05_0015F8C4, D_L05_0015F8C8, color, text);
                 } else {
                     D_L05_0015FB00 = D_L05_0015FAD4 * 20;
-                    sprintf_alt(buf, D_L05_0015F860, D_L05_0015FB00);
-                    draw_framed_text(D_L05_0015F8C4, D_L05_0015F8C8 - 0x18, acc, buf);
-                    sprintf_alt(buf, D_L05_00216C50, get_help_message_text(out[0] + 0x517E),
-                                get_help_message_text(out[1] + 0x517E), D_L05_0015FAD4);
-                    draw_framed_text(D_L05_0015F8C4, D_L05_0015F8C8, acc, buf);
+                    sprintf_alt(text, D_L05_0015F860, D_L05_0015FB00);
+                    draw_framed_text(D_L05_0015F8C4, D_L05_0015F8C8 - 0x18, color, text);
+                    sprintf_alt(text, D_L05_00216C50, get_help_message_text(pose_ids[0] + 0x517E),
+                                get_help_message_text(pose_ids[1] + 0x517E), D_L05_0015FAD4);
+                    draw_framed_text(D_L05_0015F8C4, D_L05_0015F8C8, color, text);
                 }
             }
         }
     }
 
-    xa = *(s32 *)(a + 0x50);
-    xb = *(s32 *)(a + 0x54);
-    *(s32 *)(a + 0x58) = 0x100;
-    *(s32 *)(a + 0x5C) = 0x40;
-    hud_screen_position(a, &xa, &xb);
-    s16 = (*(s32 *)(a + 0x74) * 0xDD) / *(s32 *)(a + 0x8) + 0x1B;
-    id = get_icon_frame(0x7558, 1);
-    FUN_L00_0023b6c0(id, xa, xb, s16, 0x40, 0x80);
-    id2 = get_icon_frame(0x7558, 0);
-    draw_hud_sprite(id2, xa, xb, 0x100, 0x40, 0x80);
-    E = &hero;
-    t = E->unk8AE;
-    if (scale_game_frames(0x78) < t) {
-        r3 = scale_game_frames(0x3C);
-        f0 = convert_integer_to_float(frame_number % r3) / (f32)r3;
-        f0 = fast_sin(f0 * 6.283180236816406f - 3.141590118408203f);
-        r3 = fast_tween_color(D_L05_0015F8AC, D_L05_0015F8B0, f0 * 0.5f + 0.5f);
-        sprintf_alt(buf, get_help_message_text(0x531A));
-        draw_framed_text(D_L05_0015F8A4 + 1, D_L05_0015F8A8 + 1, 0x80000000, buf);
-        draw_framed_text(D_L05_0015F8A4, D_L05_0015F8A8, r3, buf);
+    x = *(s32 *)(element + 0x50);
+    y = *(s32 *)(element + 0x54);
+    *(s32 *)(element + 0x58) = 0x100;
+    *(s32 *)(element + 0x5C) = 0x40;
+    hud_screen_position(element, &x, &y);
+    bar_width = (*(s32 *)(element + 0x74) * 0xDD) / *(s32 *)(element + 0x8) + 0x1B;
+    fill_icon = get_icon_frame(0x7558, 1);
+    FUN_L00_0023b6c0(fill_icon, x, y, bar_width, 0x40, 0x80);
+    frame_icon = get_icon_frame(0x7558, 0);
+    draw_hud_sprite(frame_icon, x, y, 0x100, 0x40, 0x80);
+    player = &hero;
+    warning_timer = player->unk8AE;
+    if (scale_game_frames(0x78) < warning_timer) {
+        blink_period = scale_game_frames(0x3C);
+        pulse = convert_integer_to_float(frame_number % blink_period) / (f32)blink_period;
+        pulse = fast_sin(pulse * 6.283180236816406f - 3.141590118408203f);
+        blink_color = fast_tween_color(D_L05_0015F8AC, D_L05_0015F8B0, pulse * 0.5f + 0.5f);
+        sprintf_alt(text, get_help_message_text(0x531A));
+        draw_framed_text(D_L05_0015F8A4 + 1, D_L05_0015F8A8 + 1, 0x80000000, text);
+        draw_framed_text(D_L05_0015F8A4, D_L05_0015F8A8, blink_color, text);
     }
-    return *(s32 *)(a + 0x58);
+    return *(s32 *)(element + 0x58);
 }
