@@ -1791,6 +1791,11 @@ void large_amoeboid_update(unsigned char *moby) {
         LARGE_AMOEBOID_MOVE_DIRECTLY_TOWARD_TARGET = 15,
         LARGE_AMOEBOID_WAIT_WHILE_BLOCKED = 16
     };
+    enum {
+        LARGE_AMOEBOID_LARGE_VARIANT = 0x23c,
+        LARGE_AMOEBOID_MEDIUM_VARIANT = 0x361,
+        LARGE_AMOEBOID_SMALL_VARIANT = 0x362
+    };
     char *data = *(char **)(moby + 0x78);
     char *target;
     char *target_position;
@@ -1817,17 +1822,17 @@ void large_amoeboid_update(unsigned char *moby) {
     case LARGE_AMOEBOID_INITIALIZE:
         qcopy(data + 0x210, moby + 0x10);
         switch (*(short *)(moby + 0xa6)) {
-        case 0x23c:
+        case LARGE_AMOEBOID_LARGE_VARIANT:
             data[0x58] = FUN_001fa6d0(14.0f);
             data[0x5a] = FUN_001fa6d0(10.4f);
             *(float *)(data + 0x250) = 1.0f;
             break;
-        case 0x361:
+        case LARGE_AMOEBOID_MEDIUM_VARIANT:
             data[0x58] = FUN_001fa6d0(14.0f);
             data[0x5a] = FUN_001fa6d0(5.6f);
             *(float *)(data + 0x250) = 0.7f;
             break;
-        case 0x362:
+        case LARGE_AMOEBOID_SMALL_VARIANT:
             data[0x58] = FUN_001fa6d0(14.0f);
             data[0x5a] = FUN_001fa6d0(4.0f);
             *(float *)(data + 0x250) = 0.49f;
