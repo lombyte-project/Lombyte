@@ -710,7 +710,8 @@ void birdbot_update(PeMoby *m) {
         BIRDBOT_HIT_REACTION_KEEP_CURRENT_STATE = 0,
         BIRDBOT_HIT_REACTION_FATAL_KNOCKBACK = 1,
         BIRDBOT_HIT_REACTION_FORCE_FATAL_KNOCKBACK = 2,
-        BIRDBOT_HIT_REACTION_NONFATAL_KNOCKBACK = 3
+        BIRDBOT_HIT_REACTION_NONFATAL_KNOCKBACK = 3,
+        BIRDBOT_HIT_REACTION_ANIMATED_NONFATAL_KNOCKBACK = 6
     };
     PeVars *v;
     PeVec old;
@@ -800,7 +801,7 @@ void birdbot_update(PeMoby *m) {
             v->h26 = scale_game_frames(0x3C);
             break;
         case BIRDBOT_HIT_REACTION_NONFATAL_KNOCKBACK:
-        case 6:
+        case BIRDBOT_HIT_REACTION_ANIMATED_NONFATAL_KNOCKBACK:
             v->w90 = 0x200;
             v->b67 = 0x78;
             v->f98 = 0.5f;
