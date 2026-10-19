@@ -1466,6 +1466,11 @@ extern unsigned char D_0013E633_30A560[] __asm__("D_0013F350");
 extern unsigned char D_0013F3D0[];
 
 void FUN_L09_003091b0(char *moby) {
+    enum {
+        PLATFORM_STATE_INITIALIZE = 0,
+        PLATFORM_STATE_WAIT_FOR_LINK_REMOVAL = 1,
+        PLATFORM_STATE_ACTIVE = 2
+    };
     char *data = *(char **)(moby + 0x78);
     float movement[4];
     float original_rotation[4];
@@ -1485,7 +1490,7 @@ void FUN_L09_003091b0(char *moby) {
     sink_level = *(float *)(data + 0x84) - 0.300000012f;
     state = ((unsigned char *)moby)[0x20];
     switch (state) {
-    case 0:
+    case PLATFORM_STATE_INITIALIZE:
         *(int *)(data + 0x80) = 1;
         qcopy(data + 0x60, moby + 0x40);
         qzero(data + 0x70);
@@ -1501,7 +1506,7 @@ void FUN_L09_003091b0(char *moby) {
             moby[0x20] = 2;
         }
         break;
-    case 1:
+    case PLATFORM_STATE_WAIT_FOR_LINK_REMOVAL:
         linked = (char *)(D_L09_0015FFD8_c + (*(int *)(data + 0x8C) << 8));
         if (linked == 0) {
             goto set2;
@@ -1516,7 +1521,7 @@ void FUN_L09_003091b0(char *moby) {
     set2:
         moby[0x20] = 2;
         break;
-    case 2:
+    case PLATFORM_STATE_ACTIVE:
         if (((Hero *)D_0013E633_30A560)->air_frames.s == 0 && ((char *)((Hero *)D_0013E633_30A560)->ground_moby) == moby) {
             if (*(int *)(data + 0x88) == 0) {
                 func_0022ED80_30A560(0, 0, moby);
