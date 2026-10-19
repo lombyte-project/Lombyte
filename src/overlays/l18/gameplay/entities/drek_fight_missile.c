@@ -899,10 +899,14 @@ extern float D_L18_0016230C __attribute__((sda));
 extern unsigned char D_00141400 __attribute__((section(".data")));
 extern unsigned char D_0013D406 __attribute__((section(".data")));
 void FUN_L18_002f2310(struct Moby *m) {
+    enum {
+        LIFT_INITIALIZE = 0,
+        LIFT_SELECT_INITIAL_HEIGHT = 1
+    };
     char *d = (char *)m->pvars;
     int v;
     switch (m->state) {
-    case 0:
+    case LIFT_INITIALIZE:
         if (D_L18_001622FC != 0) {
             D_00141400 = *(unsigned char *)&D_L18_001622FC;
         }
@@ -913,7 +917,7 @@ void FUN_L18_002f2310(struct Moby *m) {
         m->draw_dist = 0;
         m->collision = 0;
         break;
-    case 1:
+    case LIFT_SELECT_INITIAL_HEIGHT:
         if (D_0013D406 != 0) {
             *(int *)(d + 8) = (*(int *)(d + 8) + 1) & 1;
         }
