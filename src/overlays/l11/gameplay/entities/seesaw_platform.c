@@ -1642,6 +1642,7 @@ void FUN_L11_00310698(struct Moby *m) {
         HIT_REACTION_DEATH = 1,
         HIT_REACTION_DEATH_KNOCKBACK = 2,
         HIT_REACTION_KNOCKBACK = 3,
+        HIT_REACTION_KNOCKBACK_AND_CANCEL_PROJECTILE = 4,
         HIT_REACTION_HURT_WITHOUT_KNOCKBACK = 9,
         HIT_REACTION_HURT_WITHOUT_STATE_CHANGE = 10,
         HIT_REACTION_NO_RESPONSE = 11
@@ -1688,7 +1689,7 @@ void FUN_L11_00310698(struct Moby *m) {
             pv->unk67 = 0xFA;
             break;
         case HIT_REACTION_KNOCKBACK:
-        case 4:
+        case HIT_REACTION_KNOCKBACK_AND_CANCEL_PROJECTILE:
         case 5:
         case 6:
         case 7:
