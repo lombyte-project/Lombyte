@@ -1686,6 +1686,10 @@ extern unsigned char D_001516EC[];
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 
 void FUN_L00_0029b4d8(int a) {
+    enum {
+        VENDOR_ITEM_PURCHASE = 2,
+        VENDOR_AMMO_PURCHASE = 3
+    };
     char *b;
     unsigned char *m;
     int s;
@@ -1723,8 +1727,8 @@ void FUN_L00_0029b4d8(int a) {
             blend_moby_animation(m, 1, 0, 10);
         m[0x20] = 10;
         break;
-    case 2:
-    case 3:
+    case VENDOR_ITEM_PURCHASE:
+    case VENDOR_AMMO_PURCHASE:
         moby_state = m[0x20];
         if (moby_state == 2 || moby_state == 0) {
             char *q = D_L00_001CA4C0;
