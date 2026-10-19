@@ -835,6 +835,7 @@ void sandmouse_update(Moby *m) __asm__("FUN_L01_0030df40");
 void sandmouse_update(Moby *m) {
     enum {
         SANDMOUSE_STATE_INITIALIZE = 0,
+        SANDMOUSE_STATE_WAIT_FOR_ACTIVATION = 1,
         SANDMOUSE_STATE_WAIT_FOR_LINK = 2,
         SANDMOUSE_STATE_MOVE_TO_GOAL = 3,
         SANDMOUSE_STATE_FADE_OUT = 6,
@@ -917,7 +918,7 @@ void sandmouse_update(Moby *m) {
         m->state = 1;
         m->draw_dist = 0;
         break;
-    case 1:
+    case SANDMOUSE_STATE_WAIT_FOR_ACTIVATION:
         if (D_0013D4C5 != 0) {
             char *hero_bytes;
             {
