@@ -1523,11 +1523,15 @@ void drek_final_boss_robot_update(BossMoby *moby) {
         DREK_BOSS_INITIALIZE = 0,
         DREK_BOSS_WAIT_FOR_SCENE = 7,
         DREK_BOSS_SELECT_NEXT_ACTION = 0xC,
+        DREK_BOSS_TARGET_RANDOM_ARENA_POINTS = 0x10,
         DREK_BOSS_APPROACH_AIM_NODE = 0x12,
         DREK_BOSS_ACTIVATE_MISSILE_GROUP = 0x14
     };
     enum {
         DREK_BOSS_FOLLOW_HERO = 0x13
+    };
+    enum {
+        DREK_BOSS_ACTION_REPOSITION_AND_AIM = 0xE
     };
     BossData *d = (BossData *)moby->f78;
     BossMoby *tgt;
@@ -2026,7 +2030,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
             d->f354 = scale_game_frames(0xF);
             d->f358 = scale_game_frames(0x168);
             break;
-        case 0xE:
+        case DREK_BOSS_ACTION_REPOSITION_AND_AIM:
             moby->f20 = 0x12;
             if (moby->f53 != 0) {
                 blend_moby_animation(moby, 0, 0, scale_game_frames(0x14));
@@ -2229,7 +2233,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
             }
         }
         break;
-    case 0x10:
+    case DREK_BOSS_TARGET_RANDOM_ARENA_POINTS:
         aim = &moby->f40[2];
         ang = fast_arc_tan(hero.motion.pos.f[0] - moby->f10[0], hero.motion.pos.f[1] - moby->f10[1]);
         approach_angle(aim, &d->f370, ang, D_0015ED6C_e[1] * 6.2831855f,
