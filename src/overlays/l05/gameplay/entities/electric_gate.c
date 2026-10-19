@@ -2145,18 +2145,22 @@ extern int D_L05_0015F5C4;
 extern short D_L05_00161F08 __attribute__((sda));
 void television_update(struct Moby *moby) __asm__("FUN_L05_00318b98");
 void television_update(struct Moby *moby) {
+    enum {
+        TELEVISION_INITIALIZE = 0,
+        TELEVISION_UPDATE_BOBBING = 1
+    };
     float v;
     char *data = (char *)moby->pvars;
     int g;
     moby->scale =
         moby->pclass->scale * *(float *)&D_L05_00161F08;
     switch (moby->state) {
-    case 0:
+    case TELEVISION_INITIALIZE:
         moby->state = 1;
         *(float *)data = random_angle_radians_alt();
         *(float *)(data + 4) = moby->pos.z;
         break;
-    case 1:
+    case TELEVISION_UPDATE_BOBBING:
         g = D_L05_0015F5C4;
         if (g == 2) {
             moby->visible = 0;
