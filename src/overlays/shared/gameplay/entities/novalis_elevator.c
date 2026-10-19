@@ -2561,7 +2561,8 @@ extern float D_0015ED70_lui __asm__("D_0015ED70");
 void sandmouse_house_update(unsigned char *m) __asm__("FUN_L01_002f2b68");
 void sandmouse_house_update(unsigned char *m) {
     enum {
-        SANDMOUSE_HOUSE_INITIALIZE = 0
+        SANDMOUSE_HOUSE_INITIALIZE = 0,
+        SANDMOUSE_HOUSE_RESTORE_INITIAL_ANIMATION = 7
     };
     char *d;
     if (m == 0)
@@ -2647,7 +2648,7 @@ void sandmouse_house_update(unsigned char *m) {
             }
         }
         break;
-    case 7:
+    case SANDMOUSE_HOUSE_RESTORE_INITIAL_ANIMATION:
         if (m[0x70] & 2) {
             if (m[0x53] != 0) {
                 blend_moby_animation_w7(m, 0, 0, FUN_001f96f8_w7(3));
