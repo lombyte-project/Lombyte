@@ -98,7 +98,8 @@ void FUN_L11_00315968(struct Moby *moby) {
     enum {
         HIT_RESPONSE_DEATH = 1,
         HIT_RESPONSE_DEATH_KNOCKBACK = 2,
-        HIT_RESPONSE_KNOCKBACK = 3
+        HIT_RESPONSE_KNOCKBACK = 3,
+        HIT_RESPONSE_COOLDOWN_NO_KNOCKBACK = 11
     };
     struct L11PatrolVars *d = (struct L11PatrolVars *)moby->pvars;
     Vec4 v;
@@ -197,7 +198,7 @@ void FUN_L11_00315968(struct Moby *moby) {
                 FUN_L00_00257470(moby, 0, -1);
                 break;
             }
-            case 11:
+            case HIT_RESPONSE_COOLDOWN_NO_KNOCKBACK:
                 break;
             }
             trooper_anim_update(moby, d->move);
