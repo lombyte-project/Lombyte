@@ -2586,6 +2586,7 @@ void sandmouse_house_update(unsigned char *m) {
     enum {
         SANDMOUSE_HOUSE_INITIALIZE = 0,
         SANDMOUSE_HOUSE_WAIT_FOR_INITIAL_COMMAND = 1,
+        SANDMOUSE_HOUSE_WAIT_FOR_INITIAL_COMMAND_ANIMATION_END = 2,
         SANDMOUSE_HOUSE_RESTORE_INITIAL_ANIMATION = 7
     };
     char *d;
@@ -2620,7 +2621,7 @@ void sandmouse_house_update(unsigned char *m) {
             m[0x20] = 2;
         }
         break;
-    case 2:
+    case SANDMOUSE_HOUSE_WAIT_FOR_INITIAL_COMMAND_ANIMATION_END:
         if (m[0x70] & 2) {
             if (m[0x53] != 2) {
                 blend_moby_animation_w7(m, 2, 0, FUN_001f96f8_w7(3));
