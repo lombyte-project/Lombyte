@@ -177,6 +177,8 @@ void walker_update_gait(WalkMoby *m, WalkData *d, int flags, float speed, float 
         WALKER_GAIT_IDLE = 0,
         WALKER_GAIT_RESET_TO_IDLE = 12,
         WALKER_GAIT_RUN = 13,
+        WALKER_GAIT_ALTERNATE_TAKEOFF_ANIMATION = 14,
+        WALKER_GAIT_TAKEOFF_ANIMATION = 15,
         WALKER_GAIT_WAIT_FOR_LANDING = 16,
         WALKER_GAIT_SYNC_ALTERNATE_LANDING_ANIMATION = 17,
         WALKER_GAIT_SYNC_LANDING_ANIMATION = 18,
@@ -821,7 +823,7 @@ void walker_update_gait(WalkMoby *m, WalkData *d, int flags, float speed, float 
         FUN_L00_002a1538_c((char *)d);
         d->bB7 = 0;
         break;
-    case 15:
+    case WALKER_GAIT_TAKEOFF_ANIMATION:
         if (flags & 0x30) {
             float dist = vector_distance_xy(m->pos, d->v60);
             debug_print_alt(D_L00_001611E0, dist);
@@ -851,7 +853,7 @@ void walker_update_gait(WalkMoby *m, WalkData *d, int flags, float speed, float 
             }
         }
         break;
-    case 14:
+    case WALKER_GAIT_ALTERNATE_TAKEOFF_ANIMATION:
         if (flags & 0x30) {
             float dist = fast_vec_dist(m->pos, d->v60);
             debug_print_alt(D_L00_001611E0, dist);
