@@ -1032,13 +1032,16 @@ extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
 
 float gravity_length_xy(float *v) __asm__("FUN_L00_002339d0");
 float gravity_length_xy(float *v) {
+    enum {
+        GRAVITY_MODE_WORLD_Z = 0
+    };
     struct Hero *base = &hero;
     float m[16] __attribute__((aligned(16)));
     float inv[16] __attribute__((aligned(16)));
     float out[4] __attribute__((aligned(16)));
 
     switch (base->unk20B3) {
-    case 0:
+    case GRAVITY_MODE_WORLD_Z:
         return vector_length_xy(v);
     case 1:
     case 2:
