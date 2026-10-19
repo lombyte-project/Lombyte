@@ -3208,6 +3208,9 @@ void puffoid_update(struct Moby *moby) {
         PUFFOID_STATE_CARRIER_DEATH_KNOCKBACK = 18,
         PUFFOID_STATE_FOLLOW_PATH = 19
     };
+    enum {
+        PUFFOID_PATH_ANIM_SPRAY_ATTACK = 6
+    };
     CreatureVars_4318 *d = (CreatureVars_4318 *)moby->pvars;
     struct Moby *target;
     float pos[4];
@@ -3610,7 +3613,7 @@ void puffoid_update(struct Moby *moby) {
                     set_anim_4318(moby, 5, 0, frames_4318(10));
                 }
                 break;
-            case 6:
+            case PUFFOID_PATH_ANIM_SPRAY_ATTACK:
                 if (dist > 8.0f) {
                     set_anim_4318(moby, 7, 0, frames_4318(10));
                 } else if (dist < 4.0f) {
