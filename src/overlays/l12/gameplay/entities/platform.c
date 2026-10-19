@@ -1291,7 +1291,9 @@ void platform_update(Moby *moby) {
         PLATFORM_WAIT_TO_RESUME_OSCILLATION = 3,
         PLATFORM_OSCILLATE_BETWEEN_PATH_ENDPOINTS_FIXED_PITCH = 4,
         PLATFORM_WAIT_TO_RESUME_FIXED_PITCH_OSCILLATION = 5,
+        PLATFORM_ACCELERATE_UPWARD_UNTIL_NOT_VISIBLE = 6,
         PLATFORM_FOLLOW_WAYPOINTS = 7,
+        PLATFORM_FALL_AND_TUMBLE = 8,
         PLATFORM_TRACK_REFERENCED_MOBY_HEIGHT = 9
     };
     enum {
@@ -1470,7 +1472,7 @@ void platform_update(Moby *moby) {
         qcopy(angles, (*(float (*)[4])&moby->rot));
         func_L12_002E4F18_2E51E8(moby, angles, (*(float (*)[4])&moby->pos), 0, 1);
         break;
-    case 6:
+    case PLATFORM_ACCELERATE_UPWARD_UNTIL_NOT_VISIBLE:
         if (vector_length_xyz_c2(data->vel) < D_0015ED6C * 6.0f) {
             data->vel[2] = data->vel[2] + D_0015ED70 * 6.0f;
         }
@@ -1479,7 +1481,7 @@ void platform_update(Moby *moby) {
             mark_moby_for_removal_c(moby);
         }
         break;
-    case 8:
+    case PLATFORM_FALL_AND_TUMBLE:
         add_vector_xyz_c3((*(float (*)[4])&moby->pos), (*(float (*)[4])&moby->pos), data->vel);
         if (FUN_L08_002025d0((*(float (*)[4])&moby->pos), 0x600, 0, moby, 0) && data->walk.path == 0) {
             FUN_L00_0025e450_c(moby, data->vel, 0, 2.0f, 0.0f, 10, 3, 16, 4.0f, 2.0f, 9.0f, -1, 1.0f, 15.0f, 1, 1, -1, 0);
