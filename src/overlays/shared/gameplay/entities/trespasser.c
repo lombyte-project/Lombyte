@@ -1205,6 +1205,11 @@ extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
 /* Mine glove update: aims the glove and throws a mine at the target. */
 void mine_glove_update(struct Moby *moby) __asm__("FUN_L00_002c1ad0");
 void mine_glove_update(struct Moby *moby) {
+    enum {
+        MINE_GLOVE_INITIALIZE = 0,
+        MINE_GLOVE_WAIT_FOR_ANIMATION = 1,
+        MINE_GLOVE_REMOVE_HELD_MOBY = 6
+    };
     GloveVars_2c1ad0 *vars;
     Vec4 saved, offset, rotatedOffset;
     Vec4 local[4];
@@ -1306,13 +1311,13 @@ void mine_glove_update(struct Moby *moby) {
         FUN_L00_002c1928_f(frame_time_sq_macro * 9.8f, 1.0f, item_text_variant[0x11] ? ((controller_state.held & 5) ? 12.0f : 4.0f) : ((controller_state.held & 5) ? 6.0f : 4.0f), pos.f, target.f, out);
     }
     switch (moby->state) {
-    case 0:
+    case MINE_GLOVE_INITIALIZE:
         vars->held = 0;
         if (!(moby->anim_flags & 2))
             moby->state = 1;
         else
             moby->state = 2;
-    case 1:
+    case MINE_GLOVE_WAIT_FOR_ANIMATION:
         if (moby->anim_flags & 2)
             moby->state = 2;
         break;
@@ -1342,7 +1347,7 @@ void mine_glove_update(struct Moby *moby) {
     case 5:
         moby->state = 6;
         break;
-    case 6:
+    case MINE_GLOVE_REMOVE_HELD_MOBY:
         if (vars->held != 0) {
             mark_moby_for_removal(vars->held);
             vars->held = 0;
