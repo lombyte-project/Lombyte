@@ -240,6 +240,7 @@ extern H910 coll_hit __asm__("D_L00_00173E40");
 void mine_update(M910 *m) __asm__("FUN_L00_002aa670");
 void mine_update(M910 *m) {
     enum {
+        MINE_DEBRIS_SHORT_LIVED = 2,
         MINE_DEBRIS_SPHERICAL_VELOCITY = 3
     };
     B910 a = D_L00_001E9830;
@@ -893,7 +894,7 @@ void mine_update(M910 *m) {
                                                  scale_game_frames(0xB4), 1);
                                 break;
                             }
-                            case 2: {
+                            case MINE_DEBRIS_SHORT_LIVED: {
                                 int c1 = FUN_L00_0025c0e8(
                                     random_integer_below(100) < 0x28 ? 0x5FF8F8F8 : 0x2F486078,
                                     D_E910.b11);
