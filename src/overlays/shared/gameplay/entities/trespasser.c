@@ -2002,6 +2002,10 @@ extern void mine_spawn_drops(void *, void *) __asm__("FUN_L00_0025f800");
 
 void decoy_update(char *moby) __asm__("FUN_L00_002c4380");
 void decoy_update(char *moby) {
+    enum {
+        DECOY_INITIALIZE = 0,
+        DECOY_SHRINK_FOR_REMOVAL = 6
+    };
     int active = ((unsigned char *)&D_0013E533)[6];
     char *vars = *(char **)(moby + 0x78);
     char *target;
@@ -2046,7 +2050,7 @@ void decoy_update(char *moby) {
             FUN_L00_002c3af8((ThrowVars *)vars, (struct Moby *)moby, 2);
     }
     switch ((u8)moby[0x20]) {
-    case 0:
+    case DECOY_INITIALIZE:
         moby[0x20] = 1;
         *(short *)(vars + 0x44) = 0;
         *(int *)(moby + 0x98) = -1;
@@ -2275,7 +2279,7 @@ void decoy_update(char *moby) {
         if (FUN_001fef98_2c4380(vars + 0x44) || (moby[0x70] & 2))
             moby[0x20] = 6;
         break;
-    case 6: {
+    case DECOY_SHRINK_FOR_REMOVAL: {
         float len;
         len = FUN_L00_00259698_2c4380(moby + 0x10, 0, 0.5f);
         if (len != 0.0f && coll_hit.moby) {
