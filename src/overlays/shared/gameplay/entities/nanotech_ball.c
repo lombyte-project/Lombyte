@@ -1802,6 +1802,7 @@ s32 FUN_L00_002db8f8(u8 *moby, u8 *position, u8 *target) {
         SUCK_DISPATCH_RISING_FOR_SUCTION = 1,
         SUCK_DISPATCH_BEING_PULLED_IN = 2,
         SUCK_DISPATCH_STORED = 3,
+        SUCK_DISPATCH_FLYING_PROJECTILE = 4,
         SUCK_DISPATCH_FALLING_AFTER_CANCEL = 6
     };
     u8 *record = FUN_L00_002db890_002db8f8(moby);
@@ -1842,7 +1843,7 @@ s32 FUN_L00_002db8f8(u8 *moby, u8 *position, u8 *target) {
         break;
     case SUCK_DISPATCH_STORED:
         return 3;
-    case 4:
+    case SUCK_DISPATCH_FLYING_PROJECTILE:
     case 5:
     case SUCK_DISPATCH_FALLING_AFTER_CANCEL:
         {
