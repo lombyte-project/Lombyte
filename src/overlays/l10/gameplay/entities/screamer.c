@@ -2127,6 +2127,7 @@ void FUN_L10_002e3ef0(void *mv) {
         TIMED_KNOCKBACK_HIT_RESPONSE = 7,
         ANIMATED_KNOCKBACK_HIT_RESPONSE = 8,
         HIT_DIRECTED_KNOCKBACK_HIT_RESPONSE = 9,
+        ARC_ADJUSTED_KNOCKBACK_HIT_RESPONSE = 10,
         SUPPRESSED_HIT_RESPONSE = 11
     };
     Moby *m = mv;
@@ -2227,7 +2228,7 @@ void FUN_L10_002e3ef0(void *mv) {
         case TIMED_KNOCKBACK_HIT_RESPONSE:
         case ANIMATED_KNOCKBACK_HIT_RESPONSE:
         case HIT_DIRECTED_KNOCKBACK_HIT_RESPONSE:
-        case 10:
+        case ARC_ADJUSTED_KNOCKBACK_HIT_RESPONSE:
             m->state = 10;
             d->h26 = func_001F9850_2E52B0(60);
             d->f80 = D_L10_00161E2C * D_0015ED70;
