@@ -2510,19 +2510,23 @@ extern float D_L18_00161ED4 __attribute__((sda));
 extern float D_L18_00161ED8 __attribute__((sda));
 extern float D_L18_00161EE0 __attribute__((sda));
 void FUN_L18_002e9e70(struct Moby *moby) {
+    enum {
+        STATE_TIMED_REMOVAL_WAIT = 0,
+        STATE_TRAVEL_TO_TARGET = 1
+    };
     float *d = (float *)moby->pvars;
     float t = fast_add_rotations_c(d[0xB], D_L18_00161ED0 * DEG_TO_RAD * frame_time);
     float u = D_L18_00161ED4 * DEG_TO_RAD * frame_time;
     d[0xB] = t;
     d[0xC] = fast_add_rotations_c(d[0xC], u);
     switch (MOBY(moby)->state) {
-    case 0:
+    case STATE_TIMED_REMOVAL_WAIT:
         if (fast_dec_timer((int *)(d + 10))) {
             mark_moby_for_removal_c2(moby);
             return;
         }
         break;
-    case 1: {
+    case STATE_TRAVEL_TO_TARGET: {
         float buf[4];
         float buf2[4];
         float *p = &moby->pos.x;
