@@ -473,7 +473,8 @@ void morphoray_update(struct Moby *moby) __asm__("FUN_L14_00305758");
 void morphoray_update(struct Moby *moby) {
     enum {
         MORPHORAY_INITIALIZE = 0,
-        MORPHORAY_WAIT_FOR_HERO = 1
+        MORPHORAY_WAIT_FOR_HERO = 1,
+        MORPHORAY_WAIT_TO_REMOVE = 2
     };
     u8 *o = (u8 *)moby;
     u8 *d = (u8 *)moby->pvars;
@@ -514,7 +515,7 @@ void morphoray_update(struct Moby *moby) {
         start_scene(6);
         moby->state = 2;
         break;
-    case 2:
+    case MORPHORAY_WAIT_TO_REMOVE:
         if (D_L14_0015F5C4 != state) {
             if (D_0014C050[moby->mission + current_level_index * 16] != 0xFF) {
                 jet_clear_persistent(moby->mission);
