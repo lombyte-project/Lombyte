@@ -899,6 +899,10 @@ extern void func_L00_0025A8C0_alt(char *arg, int a, int b, float scale,
 extern int func_L00_001F2BE8_alt(float, void *, int, void *, void *) __asm__("FUN_L00_001f2868");
 
 void FUN_L17_002dc3f8(struct Moby *m) {
+    enum {
+        BOBBING_INITIALIZE = 0,
+        BOBBING_UPDATE_AND_CHECK_CONTACT = 1
+    };
     float v[4];
     float w[12];
     float pos[4];
@@ -921,12 +925,12 @@ void FUN_L17_002dc3f8(struct Moby *m) {
         return;
     }
     switch (m->state) {
-    case 0:
+    case BOBBING_INITIALIZE:
         *(float *)(data + 0x60) = random_angle_radians();
         *(int *)(data + 0x64) = 0;
         m->state = 1;
         break;
-    case 1:
+    case BOBBING_UPDATE_AND_CHECK_CONTACT:
         FUN_L00_00262b00(*(float *)&D_L17_00161D2C,
                          *(float *)&D_L17_00161D30 * DEG_TO_RAD * frame_time, m,
                          (float *)(data + 0x60), (float *)(data + 0x64));
