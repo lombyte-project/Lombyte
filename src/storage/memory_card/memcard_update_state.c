@@ -69,8 +69,13 @@ void memcard_update_state(void) {
         MEMCARD_PROCESS_UNFORMAT_RESULT = 6,
         MEMCARD_REQUEST_CHDIR = 7,
         MEMCARD_PROBE_SAVE_HEADER = 8,
+        MEMCARD_BEGIN_CREATE_SAVE_DIRECTORY = 9,
+        MEMCARD_CREATE_SAVE_DIRECTORY = 10,
         MEMCARD_BEGIN_DELETE_SAVE_DIRECTORY = 11,
-        MEMCARD_DELETE_SAVE_DIRECTORY = 12
+        MEMCARD_DELETE_SAVE_DIRECTORY = 12,
+        MEMCARD_BEGIN_SCAN_SAVE_INFO = 21,
+        MEMCARD_ADVANCE_SAVE_INFO_SCAN = 22,
+        MEMCARD_READ_SCANNED_SAVE_INFO = 23
     };
     enum {
         MEMCARD_PROBE_PROCESS_CHDIR_RESULT = 0,
@@ -306,11 +311,11 @@ void memcard_update_state(void) {
         }
         break;
 
-    case 9:
+    case MEMCARD_BEGIN_CREATE_SAVE_DIRECTORY:
         MC.state = 10;
         MC.sub = 0;
         CARD.save_index = 0;
-    case 10:
+    case MEMCARD_CREATE_SAVE_DIRECTORY:
         switch (MC.sub) {
         case MEMCARD_CREATE_CHECK_FREE_SPACE:
             if (CARD.free >= 350) {
@@ -566,13 +571,13 @@ void memcard_update_state(void) {
         }
         break;
 
-    case 21:
+    case MEMCARD_BEGIN_SCAN_SAVE_INFO:
         MC.state = 22;
         CARD.scan_save_index = -1;
         MC.record_index = 0;
         break;
 
-    case 22:
+    case MEMCARD_ADVANCE_SAVE_INFO_SCAN:
         CARD.scan_save_index++;
         if (CARD.scan_save_index < 5) {
             MC.sub = 0;
@@ -595,7 +600,7 @@ void memcard_update_state(void) {
         MC.sub = 0;
         MC.state = 14;
     case 14:
-    case 23:
+    case MEMCARD_READ_SCANNED_SAVE_INFO:
         switch (MC.sub) {
         case 0:
             if (MC.state == 23) {
