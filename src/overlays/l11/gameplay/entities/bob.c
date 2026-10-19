@@ -334,6 +334,7 @@ extern int D_L11_0015FFD8;
 
 void FUN_L11_002d1030(void *mp) {
     enum {
+        RESORT_OWNER_INITIALIZE = 0,
         RESORT_OWNER_JUMP_TO_TARGET = 7
     };
     struct Moby *moby = mp;
@@ -345,7 +346,7 @@ void FUN_L11_002d1030(void *mp) {
     float f3;
 
     switch (moby->state) {
-    case 0:
+    case RESORT_OWNER_INITIALIZE:
     case 1:
     case 2:
     case 3:
