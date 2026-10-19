@@ -46,18 +46,12 @@ s32 fun_00213928(O_25a478 *obj, P_25a478 *p, Q_25a478 *q, u32 flags, s32 *out, f
 
 s32 fun_00213928(O_25a478 *obj, P_25a478 *p, Q_25a478 *q, u32 flags, s32 *out, f32 *fp, s32 *kp, s32 idx) {
     enum {
+        KIND_GATED_HIT_RESPONSE = 0,
         FALLBACK_HIT_RESPONSE = 1,
         DEFAULT_HIT_RESPONSE = 1,
+        AUXILIARY_FLAG_SETTING_HIT_RESPONSE = 4,
+        CONDITIONAL_DURATION_HIT_RESPONSE = 7,
         DAMAGE_PRESERVING_COOLDOWN_RESPONSE = 11
-    };
-    enum {
-        AUXILIARY_FLAG_SETTING_HIT_RESPONSE = 4
-    };
-    enum {
-        CONDITIONAL_DURATION_HIT_RESPONSE = 7
-    };
-    enum {
-        KIND_GATED_HIT_RESPONSE = 0
     };
     enum {
         KIND_GATED_HIT_STATE = 0,
