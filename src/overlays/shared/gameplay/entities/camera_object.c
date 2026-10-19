@@ -1100,6 +1100,11 @@ extern u8 *FUN_L00_00272060(void *pos, s32 life, f32 size0, f32 size1, s32 color
  */
 void FUN_L00_002a6b70(struct Moby *bolt)
 {
+    enum {
+        BOLT_CLASS_FIVE = 0xE,
+        BOLT_CLASS_TWENTY = 0xF,
+        BOLT_CLASS_FIFTY = 0x10
+    };
     Vec4 vel;
     Vec4 pos;
     s32 value;
@@ -1113,13 +1118,13 @@ void FUN_L00_002a6b70(struct Moby *bolt)
     case 0:
         value = 1;
         break;
-    case 0xE:
+    case BOLT_CLASS_FIVE:
         value = 5;
         break;
-    case 0xF:
+    case BOLT_CLASS_TWENTY:
         value = 20;
         break;
-    case 0x10:
+    case BOLT_CLASS_FIFTY:
         value = 50;
         break;
     }
