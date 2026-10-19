@@ -466,6 +466,7 @@ void FUN_L06_002feb40(char *m) {
         FATAL_HIT_RESPONSE = 1,
         FRAGMENTING_FATAL_HIT_RESPONSE = 2,
         NONFATAL_KNOCKBACK_HIT_RESPONSE = 3,
+        TIMED_NONFATAL_KNOCKBACK_HIT_RESPONSE = 4,
         HIT_RESPONSE_PRESERVING_MOBY_STATE = 11
     };
     extern unsigned char D_0013D408[];
@@ -508,7 +509,7 @@ void FUN_L06_002feb40(char *m) {
         *(float *)(d + 0x88) = 0.5f;
         switch (r) {
         case NONFATAL_KNOCKBACK_HIT_RESPONSE:
-        case 4:
+        case TIMED_NONFATAL_KNOCKBACK_HIT_RESPONSE:
         case 5:
         case 6:
         case 7:
