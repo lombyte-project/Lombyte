@@ -567,6 +567,7 @@ void FUN_L11_002d14b0(void *arg) {
         RESORT_OWNER_JUMP_TO_TARGET = 7,
         RESORT_OWNER_MOVE_TO_GATE_TARGET = 8,
         RESORT_OWNER_MOVE_TO_GATE_DEPARTURE_TARGET = 10,
+        RESORT_OWNER_WAIT_TO_ADVANCE_FINAL_PATH_LEG = 11,
         RESORT_OWNER_CHECK_PATH_COMPLETION_DIALOGUE = 12,
         RESORT_OWNER_WAIT_FOR_PATH_COMPLETION_DIALOGUE_END = 13,
         RESORT_OWNER_CHECK_POST_PATH_DIALOGUE = 14,
@@ -767,7 +768,7 @@ void FUN_L11_002d14b0(void *arg) {
             FUN_L11_002d2088_c(moby, 7);
         }
         break;
-    case 11:
+    case RESORT_OWNER_WAIT_TO_ADVANCE_FINAL_PATH_LEG:
         if (FUN_L11_0030a830((struct Moby *)(D_L11_0015FFD8 + (d->unk100 << 8)))) {
             d->leg += 1;
             FUN_L11_002d2088_c(moby, 3);
