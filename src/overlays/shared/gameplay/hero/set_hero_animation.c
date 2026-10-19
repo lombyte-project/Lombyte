@@ -1157,13 +1157,16 @@ extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 
 float FUN_L00_00233c30(float *pos, float *vel, int *steps, float step) {
+    enum {
+        GRAVITY_MODE_WORLD_Z = 0
+    };
     int n;
     int k;
     float a;
     float r;
 
     switch (hero.unk20B3) {
-    case 0:
+    case GRAVITY_MODE_WORLD_Z:
         n = truncate_float_to_s32(vel[2] / step);
         a = convert_integer_to_float(n);
         r = pos[2] + vel[2] * a - convert_integer_to_float((n * n + n) >> 1) * step;
