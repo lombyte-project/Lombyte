@@ -2604,6 +2604,7 @@ void transport_pod_update(unsigned char *moby) {
         TRANSPORT_POD_RAISE_FOR_BOARDING = 3,
         TRANSPORT_POD_POSITION_RAILS_FOR_BOARDING = 4,
         TRANSPORT_POD_WAIT_FOR_RIDER_OR_RECALL = 5,
+        TRANSPORT_POD_WAIT_FOR_RIDER_READY_FOR_DEPARTURE = 6,
         TRANSPORT_POD_POSITION_RAILS_FOR_DEPARTURE = 7,
         TRANSPORT_POD_LOWER_AND_TRANSFER_TO_OTHER_STOP = 8,
         TRANSPORT_POD_ADVANCE_RIDE_CAMERA = 9,
@@ -2763,7 +2764,7 @@ void transport_pod_update(unsigned char *moby) {
             FUN_L00_002eaa30(&e);
         }
         break;
-    case 6: {
+    case TRANSPORT_POD_WAIT_FOR_RIDER_READY_FOR_DEPARTURE: {
         int r6 = FUN_L00_00233f38();
         if (r6 == 2) {
             moby[0x20] = 7;
