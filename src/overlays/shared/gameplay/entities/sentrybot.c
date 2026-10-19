@@ -100,6 +100,7 @@ void sentrybot_update(unsigned char *moby) {
         SENTRYBOT_TURN_POSITIVE_HEADING_DELTA = 7,
         SENTRYBOT_TURN_AROUND = 8,
         SENTRYBOT_RETURN_HOME = 9,
+        SENTRYBOT_WAIT_FOR_TRANSITION_ANIMATION = 11,
         SENTRYBOT_PATROL_MOVE_FAST = 13,
         SENTRYBOT_APPROACH_LINKED_MOBY = 14,
         SENTRYBOT_ACTIVATE_LINKED_MOBY = 15,
@@ -550,7 +551,7 @@ void sentrybot_update(unsigned char *moby) {
         }
         break;
     }
-    case 11:
+    case SENTRYBOT_WAIT_FOR_TRANSITION_ANIMATION:
         if (*(int *)(data + 0x128) != -1) {
             FUN_L15_002cbba0((unsigned char *)(D_L15_0015FFD8_m + (*(int *)(data + 0x128) << 8)));
         }
