@@ -695,8 +695,11 @@ void birdbot_update(PeMoby *m) __asm__("FUN_L01_002e6bf0");
 void birdbot_update(PeMoby *m) {
     enum {
         BIRDBOT_STATE_INITIALIZE = 0,
+        BIRDBOT_STATE_TRACK_TARGET_AND_SELECT_ACTION = 1,
         BIRDBOT_STATE_WAIT_FOR_TRIGGER = 2,
+        BIRDBOT_STATE_DEPLOY = 3,
         BIRDBOT_STATE_FIRE_BURST = 6,
+        BIRDBOT_STATE_RECOVER_FROM_BURST = 7,
         BIRDBOT_STATE_BEGIN_PATH_MOVEMENT = 9,
         BIRDBOT_STATE_MOVE_TO_PATH_NODE = 10,
         BIRDBOT_STATE_BRAKE_AND_FACE_TARGET = 11,
@@ -900,7 +903,7 @@ void birdbot_update(PeMoby *m) {
         m->state = 2;
         break;
     }
-    case 1: {
+    case BIRDBOT_STATE_TRACK_TARGET_AND_SELECT_ACTION: {
         PeCursor *c;
         float d;
         float a;
@@ -975,7 +978,7 @@ void birdbot_update(PeMoby *m) {
             m->state = 3;
         }
         break;
-    case 3:
+    case BIRDBOT_STATE_DEPLOY:
         if (v->side.path != 0) {
             PeCursor *s;
             PePath *path;
@@ -1096,7 +1099,7 @@ void birdbot_update(PeMoby *m) {
             }
         }
         break;
-    case 7: {
+    case BIRDBOT_STATE_RECOVER_FROM_BURST: {
         float a;
 
         a = FUN_001f9e90_cf(tgt.pos.f[0] - m->pos.f[0], tgt.pos.f[1] - m->pos.f[1]);
