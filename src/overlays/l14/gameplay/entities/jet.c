@@ -2242,6 +2242,7 @@ void taxi_update(struct Moby *moby) {
         TAXI_STATE_BLEND_STOP_TO_PATH_START = 3,
         TAXI_STATE_FOLLOW_PATH = 4,
         TAXI_STATE_BLEND_PATH_END_TO_STOP = 5,
+        TAXI_STATE_WAIT_FOR_ITEM_GATE = 6,
         TAXI_STATE_BLEND_SAVED_POSE_TO_PATH_START = 7
     };
     L14TaxiVars *d = (L14TaxiVars *)moby->pvars;
@@ -2430,7 +2431,7 @@ void taxi_update(struct Moby *moby) {
         }
         break;
     }
-    case 6: {
+    case TAXI_STATE_WAIT_FOR_ITEM_GATE: {
         unsigned char *t = visited52;
         int k = current_level_index * 16;
         if (t[d->item_a + k] == 0xFF || t[d->item_b + k] == 0xFF) {
