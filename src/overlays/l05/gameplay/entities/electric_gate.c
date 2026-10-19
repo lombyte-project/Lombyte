@@ -2111,12 +2111,15 @@ extern float D_L05_001612EC;
 /* Two-state marker: arms the moby, then once its target is found copies the
  * target position and sets the bob height from the frame counter. */
 void FUN_L05_00318a68(char *m) {
+    enum {
+        MOBY_INITIALIZE = 0
+    };
     int state = *(unsigned char *)(m + 0x20);
     int *v = *(int **)(m + 0x78);
     char *t;
 
     switch (state) {
-    case 0:
+    case MOBY_INITIALIZE:
         *(unsigned char *)(m + 0x20) = 1;
         *(unsigned short *)(m + 0x34) |= 1;
         *(unsigned char *)(m + 0x30) = 0xFF;
