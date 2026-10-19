@@ -521,7 +521,7 @@ void nanotech_ball_update(Moby *moby) {
         NANOTECH_BALL_STATE_COLLECTING = 3,
         NANOTECH_BALL_STATE_BASIS_ONLY = 4
     };
-    V_2D9EA0 v0, rotated_slot_offset_or_particle_position, v20, collection_target_or_end_tangent, cross_product_or_particle_midpoint, half_displacement_or_spark_position, slot_curve_offset;
+    V_2D9EA0 slot_rotation_basis_or_cull_position_or_start_tangent, rotated_slot_offset_or_particle_position, v20, collection_target_or_end_tangent, cross_product_or_particle_midpoint, half_displacement_or_spark_position, slot_curve_offset;
     D_2D9EA0 *data = (D_2D9EA0 *)moby->pvars;
 
     switch (moby->state) {
@@ -617,18 +617,18 @@ void nanotech_ball_update(Moby *moby) {
                 data->h54 = func_001F9850_2D9EA0(D_L00_00161A3C);
                 func_001F9C30_2D9EA0(&collection_target_or_end_tangent, &hero->gravity_dir, -D_L00_00161A54);
                 func_001F9BD8_2D9EA0(&collection_target_or_end_tangent, &hero->motion.pos, &collection_target_or_end_tangent);
-                func_001F9C30_2D9EA0(&v0, &hero->gravity_dir, -D_L00_00161A50);
+                func_001F9C30_2D9EA0(&slot_rotation_basis_or_cull_position_or_start_tangent, &hero->gravity_dir, -D_L00_00161A50);
                 func_001F9BF0_2D9EA0(&v20, &collection_target_or_end_tangent, &moby->pos);
                 v20.z -= 0.5f;
-                fast_vec_cross(&cross_product_or_particle_midpoint, &v20, &v0);
-                fast_vec_cross(&v0, &cross_product_or_particle_midpoint, &v20);
-                func_002156E0_2D9EA0(&v0, &v0, -1.5707964f, &v20);
-                func_L00_001FF4B0_2D9EA0(&v0, &v0, D_L00_00161A50);
+                fast_vec_cross(&cross_product_or_particle_midpoint, &v20, &slot_rotation_basis_or_cull_position_or_start_tangent);
+                fast_vec_cross(&slot_rotation_basis_or_cull_position_or_start_tangent, &cross_product_or_particle_midpoint, &v20);
+                func_002156E0_2D9EA0(&slot_rotation_basis_or_cull_position_or_start_tangent, &slot_rotation_basis_or_cull_position_or_start_tangent, -1.5707964f, &v20);
+                func_L00_001FF4B0_2D9EA0(&slot_rotation_basis_or_cull_position_or_start_tangent, &slot_rotation_basis_or_cull_position_or_start_tangent, D_L00_00161A50);
                 func_001F9C30_2D9EA0(&half_displacement_or_spark_position, &v20, 0.5f);
                 for (i = 0; i < 8; i++) {
                     if (data->slots[i] != 0) {
                         Ext_2D9EA0 *ext = (Ext_2D9EA0 *)(data->slots[i] + 1);
-                        func_002156E0_2D9EA0(&rotated_slot_offset_or_particle_position, &v0, (float)i * 0.448549628f, &v20);
+                        func_002156E0_2D9EA0(&rotated_slot_offset_or_particle_position, &slot_rotation_basis_or_cull_position_or_start_tangent, (float)i * 0.448549628f, &v20);
                         func_001F9BD8_2D9EA0(&slot_curve_offset, &half_displacement_or_spark_position, &rotated_slot_offset_or_particle_position);
                         {
                             V3_2D9EA0 *dst = &ext->u.a;
@@ -651,10 +651,10 @@ void nanotech_ball_update(Moby *moby) {
         data->f0 = D_L00_00161A10_gp * func_001F9FA8_2D9EA0(data->f4);
         data->f4 = func_001FA748_2D9EA0(data->f4, D_L00_00161A0C);
         if (D_L00_0015F63C == moby) func_L00_002D9DB8_2D9EA0();
-        qcopy(&v0, &moby->pos);
-        v0.z += 0.5f;
-        v0.w = 1.0f;
-        if (func_L00_00200290_2D9EA0(&v0, 64.0f) >= 0) {
+        qcopy(&slot_rotation_basis_or_cull_position_or_start_tangent, &moby->pos);
+        slot_rotation_basis_or_cull_position_or_start_tangent.z += 0.5f;
+        slot_rotation_basis_or_cull_position_or_start_tangent.w = 1.0f;
+        if (func_L00_00200290_2D9EA0(&slot_rotation_basis_or_cull_position_or_start_tangent, 64.0f) >= 0) {
             int i;
             int lifetime;
             func_001F49B0_2D9EA0(func_L00_002DACC0_2D9EA0, (int)moby);
@@ -766,15 +766,15 @@ void nanotech_ball_update(Moby *moby) {
                     }
                     rotated_slot_offset_or_particle_position.w = 0.0f;
                     progress = 1.0f - remaining;
-                    v0.x = rotated_slot_offset_or_particle_position.x - ext->u.a.x;
-                    v0.y = rotated_slot_offset_or_particle_position.y - ext->u.a.y;
-                    v0.z = rotated_slot_offset_or_particle_position.z - ext->u.a.z;
+                    slot_rotation_basis_or_cull_position_or_start_tangent.x = rotated_slot_offset_or_particle_position.x - ext->u.a.x;
+                    slot_rotation_basis_or_cull_position_or_start_tangent.y = rotated_slot_offset_or_particle_position.y - ext->u.a.y;
+                    slot_rotation_basis_or_cull_position_or_start_tangent.z = rotated_slot_offset_or_particle_position.z - ext->u.a.z;
                     collection_target_or_end_tangent.x = v20.x - ext->u.a.x;
                     collection_target_or_end_tangent.y = v20.y - ext->u.a.y;
                     collection_target_or_end_tangent.z = v20.z - ext->u.a.z;
-                    part->pos.x = func_L00_00258E58_2D9EA0(v0.x, rotated_slot_offset_or_particle_position.x, v20.x, collection_target_or_end_tangent.x, progress);
-                    part->pos.y = func_L00_00258E58_2D9EA0(v0.y, rotated_slot_offset_or_particle_position.y, v20.y, collection_target_or_end_tangent.y, progress);
-                    part->pos.z = func_L00_00258E58_2D9EA0(v0.z, rotated_slot_offset_or_particle_position.z, v20.z, collection_target_or_end_tangent.z, progress);
+                    part->pos.x = func_L00_00258E58_2D9EA0(slot_rotation_basis_or_cull_position_or_start_tangent.x, rotated_slot_offset_or_particle_position.x, v20.x, collection_target_or_end_tangent.x, progress);
+                    part->pos.y = func_L00_00258E58_2D9EA0(slot_rotation_basis_or_cull_position_or_start_tangent.y, rotated_slot_offset_or_particle_position.y, v20.y, collection_target_or_end_tangent.y, progress);
+                    part->pos.z = func_L00_00258E58_2D9EA0(slot_rotation_basis_or_cull_position_or_start_tangent.z, rotated_slot_offset_or_particle_position.z, v20.z, collection_target_or_end_tangent.z, progress);
                     half_displacement_or_spark_position.x = func_L00_00258C80_2D9EA0(0.0f, 0.00999999978f) + part->pos.x;
                     half_displacement_or_spark_position.y = func_L00_00258C80_2D9EA0(0.0f, 0.00999999978f) + part->pos.y;
                     half_displacement_or_spark_position.z = func_L00_00258C80_2D9EA0(0.0f, 0.00999999978f) + part->pos.z;
