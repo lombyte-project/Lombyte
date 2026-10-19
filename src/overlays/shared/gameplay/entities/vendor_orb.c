@@ -497,6 +497,12 @@ extern T_2e03a0_2e03a0 D_L00_001BB230;
 extern s32 current_level_index_gp __asm__("D_0015ED84") __attribute__((sda));
 void pilots_helmet_update(M_2e03a0_2e03a0 *m) __asm__("FUN_L00_002e03a0");
 void pilots_helmet_update(M_2e03a0_2e03a0 *m) {
+    enum {
+        PILOTS_HELMET_INITIALIZE = 0,
+        PILOTS_HELMET_WAIT_FOR_HERO_PROXIMITY = 1,
+        PILOTS_HELMET_GRANT_REWARD = 2,
+        PILOTS_HELMET_SAVE_AND_REMOVE = 3
+    };
     P_2e03a0_2e03a0 *p = m->p;
     char *g;
     E_2e03a0_2e03a0 *e;
@@ -505,7 +511,7 @@ void pilots_helmet_update(M_2e03a0_2e03a0 *m) {
 
     m->ang = FUN_001fa580_2e03a0(m->ang, D_0015ED6C_2e03a0 * 1.5707964f);
     switch (m->state) {
-    case 0:
+    case PILOTS_HELMET_INITIALIZE:
         FUN_L00_002d6bf0_2e03a0(m);
         if (p->fa_2e03a0 == -1)
             stub_printf(D_L00_001EA1B0, m->h);
@@ -517,7 +523,7 @@ void pilots_helmet_update(M_2e03a0_2e03a0 *m) {
         m->state = 1;
         m->z += 1.0f;
         break;
-    case 1:
+    case PILOTS_HELMET_WAIT_FOR_HERO_PROXIMITY:
         FUN_L00_002e0788_2e03a0(m);
         g = (char *)&hero.motion.pos;
         if (vector_distance((char *)m + 0x10, g) < 3.0f) {
@@ -532,7 +538,7 @@ void pilots_helmet_update(M_2e03a0_2e03a0 *m) {
             }
         }
         break;
-    case 2:
+    case PILOTS_HELMET_GRANT_REWARD:
         if (D_L00_0015F5C4_2e03a0 == 2)
             return;
         stub_printf(D_L00_00161BC0);
@@ -559,7 +565,7 @@ void pilots_helmet_update(M_2e03a0_2e03a0 *m) {
         D_00141410_2e03a0[0] = 7;
         m->state = 3;
         break;
-    case 3:
+    case PILOTS_HELMET_SAVE_AND_REMOVE:
         memcard_save_data(0, -1);
         FUN_0020c828_2e03a0(m);
         break;
