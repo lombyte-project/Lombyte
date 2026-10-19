@@ -92,6 +92,7 @@ void level_draw_dialog_text(void) {
         MESSAGE_BOX_RESULTS_PANEL = 0,
         MESSAGE_BOX_TITLE_ONLY = 2,
         MESSAGE_BOX_FREEZE_MODE_DIALOG = 3,
+        MESSAGE_BOX_SPLIT_TEXT_SPRITE_DIALOG = 5,
         MESSAGE_BOX_CHOICE_DIALOG = 6
     };
     char buf[0x200];
@@ -99,7 +100,7 @@ void level_draw_dialog_text(void) {
 
     setup_gif_paging(0);
     switch (D_L00_00173040.state) {
-    case 5: {
+    case MESSAGE_BOX_SPLIT_TEXT_SPRITE_DIALOG: {
         u8 *p;
         s32 color;
         s32 tint;
