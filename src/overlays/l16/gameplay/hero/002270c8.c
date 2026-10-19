@@ -158,6 +158,7 @@ void FUN_L16_002270c8(void) {
         HERO_STATE_GRIND_ATTACK = 43,
         HERO_STATE_GRIND_COLLISION_RECOVERY = 66,
         HERO_STATE_APPROACH_TARGET_POSE = 101,
+        HERO_STATE_AT_TARGET_POSE = 103,
         HERO_STATE_WATER_DEATH = 106,
         HERO_STATE_DEATH_FALL = 119
     };
@@ -933,7 +934,7 @@ void FUN_L16_002270c8(void) {
                         hero_set_state(0x65, 1);
                     }
                     break;
-                case 103:
+                case HERO_STATE_AT_TARGET_POSE:
                     if ((hero.unkA98 & 2) || hero.unk1650 != 0) {
                         hero_set_state(HERO_STATE_IDLE, 1);
                     }
