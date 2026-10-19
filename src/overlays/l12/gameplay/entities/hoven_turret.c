@@ -1085,6 +1085,11 @@ typedef struct {
 extern struct Moby *hit_moby __asm__("D_L12_001742D8") __attribute__((section(".data")));
 /* A homing mine: rises, then steers toward the point ahead and blows up near it or on contact. */
 void FUN_L12_00304e00(struct Moby *moby) {
+    enum {
+        HOMING_MINE_STATE_INITIALIZE = 0,
+        HOMING_MINE_STATE_HOMING = 1,
+        HOMING_MINE_STATE_DETONATE = 2
+    };
     Data_304e00 *data = (Data_304e00 *)moby->pvars;
     s32 *damage = data->damage;
     f32 target[20];
@@ -1111,7 +1116,7 @@ void FUN_L12_00304e00(struct Moby *moby) {
         return;
     }
     switch (moby->state) {
-    case 0:
+    case HOMING_MINE_STATE_INITIALIZE:
         moby->flags |= 0x1000;
         qcopy(&data->start, &moby->pos);
         moby->state = 1;
@@ -1120,7 +1125,7 @@ void FUN_L12_00304e00(struct Moby *moby) {
             data->turn = -data->turn;
         data->timer = 0;
         break;
-    case 1:
+    case HOMING_MINE_STATE_HOMING:
         data->timer++;
         if (data->timer < scale_ticks(30))
             moby->pos.z += fast_sin_304e00((f32)data->timer * 3.1415927f / (f32)scale_ticks(30)) * 0.07f;
@@ -1176,7 +1181,7 @@ void FUN_L12_00304e00(struct Moby *moby) {
             }
         }
         break;
-    case 2:
+    case HOMING_MINE_STATE_DETONATE:
         spawn_explosion_304e00(moby, D_L12_0015F580, 0, 0.0f, 0.0f, 5, 15, 25,
             2.0f, 1.0f, 4.0f, 1.0f, 2, 7.0f, 0, 9, -1, 0);
         mark_moby_for_removal_304e00(moby);
