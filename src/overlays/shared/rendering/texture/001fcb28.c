@@ -11,6 +11,10 @@ extern void font_print_large(int, int, u64, char *, int) __asm__("FUN_001f6530")
 
 void draw_timed_text_line(int x, int y, int mode, float scale, float alpha, char *text) __asm__("FUN_L00_001fcb28");
 void draw_timed_text_line(int x, int y, int mode, float scale, float alpha, char *text) {
+    enum {
+        TEXT_ALIGN_CENTER = 0,
+        TEXT_ALIGN_RIGHT = 1
+    };
     int width, right, left;
     u32 shadow;
     s32 color;
@@ -18,11 +22,11 @@ void draw_timed_text_line(int x, int y, int mode, float scale, float alpha, char
     left = x;
     right = left;
     switch (mode) {
-    case 0:
+    case TEXT_ALIGN_CENTER:
         left -= width >> 1;
         right = x + (width >> 1);
         break;
-    case 1:
+    case TEXT_ALIGN_RIGHT:
         left -= width;
         break;
     case -1:
