@@ -21,18 +21,22 @@ extern void update_entity_matrix(char *a, void *b, void *c, void *d) __asm__("FU
 
 void conveyor_belt_update(struct Moby *moby) __asm__("FUN_L15_002e73c0");
 void conveyor_belt_update(struct Moby *moby) {
+    enum {
+        CONVEYOR_BELT_INITIALIZE = 0,
+        CONVEYOR_BELT_UPDATE_FRAME_OFFSET = 3
+    };
     char *data = (char *)moby->pvars;
     if (data != 0) {
         unsigned char state = moby->state;
         switch (state) {
-        case 0: {
+        case CONVEYOR_BELT_INITIALIZE: {
             char *vec = data + 0x40;
             clear_u64_value(vec);
             *(int *)(data + 0x9C) |= 4;
             moby->state = 3;
             break;
         }
-        case 3:
+        case CONVEYOR_BELT_UPDATE_FRAME_OFFSET:
             moby->anim_speed = 1.3888889f;
             *(float *)(data + 0x40) =
                 fast_cos(fast_add_rotations(moby->rot.z, 1.5707964f)) *
