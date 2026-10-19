@@ -705,7 +705,8 @@ void FUN_L18_002d5918(struct Moby *moby) {
         STATE_INITIALIZE = 0,
         STATE_BALLISTIC_FLIGHT = 1,
         STATE_POST_FLIGHT_SETTLING = 2,
-        STATE_APPROACH_NEARBY_TARGET = 3
+        STATE_APPROACH_NEARBY_TARGET = 3,
+        STATE_WAIT_TO_RESUME_APPROACH = 4
     };
     char *data = (char *)moby->pvars;
     float v[4];
@@ -788,7 +789,7 @@ void FUN_L18_002d5918(struct Moby *moby) {
             }
         }
         break;
-    case 4:
+    case STATE_WAIT_TO_RESUME_APPROACH:
         if (FUN_L00_002dc9f0(moby, data + 0x110)) {
             moby->state = 3;
             *(short *)(data + 0xC8) = 0;
