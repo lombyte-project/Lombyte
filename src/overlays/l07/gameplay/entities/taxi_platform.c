@@ -114,13 +114,17 @@ extern void FUN_L02_002a40d0(void *, float);
 
 void ocean_umbris_update(unsigned char *moby) __asm__("FUN_L07_0030d440");
 void ocean_umbris_update(unsigned char *moby) {
+    enum {
+        OCEAN_UMBRIS_INITIALIZE = 0,
+        OCEAN_UMBRIS_QUEUE_DRAW_OUTSIDE_CLIP_VOLUME = 1
+    };
     switch (moby[0x20]) {
-    case 0:
+    case OCEAN_UMBRIS_INITIALIZE:
         FUN_L02_002a40d0(D_L07_00208560, 0.66666669f);
         moby[0x20] = 1;
         moby[0x30] = 0xFF;
         break;
-    case 1:
+    case OCEAN_UMBRIS_QUEUE_DRAW_OUTSIDE_CLIP_VOLUME:
         if (!is_point_inside_clip_volume(D_L07_00166E40, **(int **)(moby + 0x78))) {
             add_draw_callback((void *)l07_moby_draw_callback, moby);
         }
