@@ -731,7 +731,8 @@ extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9
 
 void FUN_L13_002c37e0(struct Moby *moby, unsigned char *d, float *fp) {
     enum {
-        HIT_REACTION_NONE = 0
+        HIT_REACTION_NONE = 0,
+        HIT_REACTION_NO_HIT = 11
     };
     if (moby->state != 3) {
         int cnt;
@@ -751,7 +752,7 @@ void FUN_L13_002c37e0(struct Moby *moby, unsigned char *d, float *fp) {
         case 8:
         case 9:
         case 10:
-        case 11:
+        case HIT_REACTION_NO_HIT:
             break;
         }
         if (cnt >= 2) {
