@@ -101,6 +101,9 @@ void snow_plow_update(struct Moby *moby) {
     enum {
         SNOW_PLOW_CLASS_OFFSET_WITH_TWO_ROTATING_MANIPULATORS = 0x16
     };
+    enum {
+        SNOW_PLOW_CLASS_OFFSET_WITH_HIT_SPHERE_QUERY_WITHOUT_TARGET_VOICE = 0x14
+    };
     Vec4 old;
     Vec4 delta, *d;
     /* The sphere query is its position followed by the record; the hit cases pass one or the other. */
@@ -220,7 +223,7 @@ void snow_plow_update(struct Moby *moby) {
     }
     if (!state) {
         switch ((short)(moby->oclass - 0x1d2)) {
-        case 0: case SNOW_PLOW_CLASS_OFFSET_WITH_QUARTER_TURN_LINKED_MOBY: case 0x13: case 0x14: case SNOW_PLOW_CLASS_OFFSET_WITH_ALIGNED_LINKED_MOBY: case 0x1d: case 0x20: case 0x59:
+        case 0: case SNOW_PLOW_CLASS_OFFSET_WITH_QUARTER_TURN_LINKED_MOBY: case 0x13: case SNOW_PLOW_CLASS_OFFSET_WITH_HIT_SPHERE_QUERY_WITHOUT_TARGET_VOICE: case SNOW_PLOW_CLASS_OFFSET_WITH_ALIGNED_LINKED_MOBY: case 0x1d: case 0x20: case 0x59:
             attach_manipulator((char *)moby, 0, data + 0x180);
             *(int *)(data + 0x140) = 0;
             break;
@@ -237,7 +240,7 @@ void snow_plow_update(struct Moby *moby) {
             *(float *)(data + 0x140) = fast_add_rotations(*(float *)(data + 0x140), frame_time * 12.566371f);
             FUN_L00_001fff28(data + 0x190, 0, *(float *)(data + 0x140));
             break;
-        case 0x13: case 0x14: case SNOW_PLOW_CLASS_OFFSET_WITH_ALIGNED_LINKED_MOBY: case 0x1d: case 0x20: case 0x59:
+        case 0x13: case SNOW_PLOW_CLASS_OFFSET_WITH_HIT_SPHERE_QUERY_WITHOUT_TARGET_VOICE: case SNOW_PLOW_CLASS_OFFSET_WITH_ALIGNED_LINKED_MOBY: case 0x1d: case 0x20: case 0x59:
             *(float *)(data + 0x140) = fast_add_rotations(*(float *)(data + 0x140), frame_time * 12.566371f);
             FUN_L00_001fff28(data + 0x190, 2, *(float *)(data + 0x140));
             break;
@@ -288,7 +291,7 @@ hit:
             }
         }
         switch ((short)(moby->oclass - 0x1d2)) {
-        case 0x13: case 0x14:
+        case 0x13: case SNOW_PLOW_CLASS_OFFSET_WITH_HIT_SPHERE_QUERY_WITHOUT_TARGET_VOICE:
             sphere.flags = 0x810000;
             sphere.scale = 1.0f;
             sphere.moby = moby;
