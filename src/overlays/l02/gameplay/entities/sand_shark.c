@@ -2409,6 +2409,9 @@ void blend_moby_animation(MobyAnim *moby, int new_seq, int frame_index, int blen
 
 void grab_crane_update(struct Moby *moby) __asm__("FUN_L02_002dd370");
 void grab_crane_update(struct Moby *moby) {
+    enum {
+        GRAB_CRANE_ANIM_TIMED_WAIT = 2
+    };
     switch (moby->prev_seq) {
     case 0:
         if (moby->anim_flags & 2) {
@@ -2416,7 +2419,7 @@ void grab_crane_update(struct Moby *moby) {
             moby->command = func_001FA898_r(multiply_global_factor_ed64(random_float_between_alt(60.0f, 180.0f)));
         }
         break;
-    case 2:
+    case GRAB_CRANE_ANIM_TIMED_WAIT:
         if (FUN_L00_001fefc8(&moby->command)) {
             if (moby->prev_seq != 3)
                 blend_moby_animation(moby, 3, 0, scale_game_frames(5));
