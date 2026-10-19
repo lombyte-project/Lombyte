@@ -2475,6 +2475,10 @@ extern void cross_vectors_xyz(void *, void *, void *) __asm__("func_001F9AD8");
 extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
 
 void FUN_L08_002e4e90(struct Moby *moby, float *out, float *rot) {
+    enum {
+        MOBY_CLASS_FIVE_BOLT_PICKUP = 0x3DC,
+        MOBY_CLASS_TEN_BOLT_PICKUP = 0x3DD
+    };
     float r[16];
     float b[16];
     float up[4];
@@ -2487,12 +2491,12 @@ void FUN_L08_002e4e90(struct Moby *moby, float *out, float *rot) {
     float sx, sy, sz;
     float t;
     switch (moby->oclass) {
-    case 0x3DC:
+    case MOBY_CLASS_FIVE_BOLT_PICKUP:
         sx = D_L08_00161C68 * D_L08_00161CB8;
         sy = D_L08_00161C74 * D_L08_00161CB8;
         sz = D_L08_00161C80 * D_L08_00161CB8;
         break;
-    case 0x3DD:
+    case MOBY_CLASS_TEN_BOLT_PICKUP:
         sx = D_L08_00161C6C * D_L08_00161CBC;
         sy = D_L08_00161C78 * D_L08_00161CBC;
         sz = D_L08_00161C84 * D_L08_00161CBC;
