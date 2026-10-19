@@ -2706,6 +2706,8 @@ void sharkigator_update(unsigned char *moby) {
         SHARKIGATOR_SWIM_WANDER = 2,
         SHARKIGATOR_TARGET_PURSUIT = 4,
         SHARKIGATOR_TARGET_LUNGE_INTERPOLATION = 5,
+        SHARKIGATOR_GRAVITY_IDLE = 7,
+        SHARKIGATOR_GRAVITY_WANDER = 8,
         SHARKIGATOR_TARGET_APPROACH = 9,
         SHARKIGATOR_TARGET_CONTACT_ATTACK = 10,
         SHARKIGATOR_TARGET_CONTACT_RECOIL_RECOVERY = 11,
@@ -3025,7 +3027,7 @@ void sharkigator_update(unsigned char *moby) {
         }
         goto end;
     }
-    case 7:
+    case SHARKIGATOR_GRAVITY_IDLE:
         if (inside) {
             if (moby[0x53] != 4) {
                 blend_moby_animation(moby, 4, 0, 10);
@@ -3051,7 +3053,7 @@ void sharkigator_update(unsigned char *moby) {
             moby[0x20] = next_state;
         }
         goto end;
-    case 8:
+    case SHARKIGATOR_GRAVITY_WANDER:
         if (inside) {
             if (moby[0x53] != 4) {
                 blend_moby_animation(moby, 4, 0, 10);
