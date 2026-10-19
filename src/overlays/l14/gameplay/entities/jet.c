@@ -2718,6 +2718,7 @@ void qwark_oltanis_update(L14WatchMoby *m) {
     enum {
         QWARK_OLTANIS_STATE_INITIALIZE_DIALOGUE = 0,
         QWARK_OLTANIS_STATE_UPDATE_DIALOGUE = 1,
+        QWARK_OLTANIS_STATE_POST_DIALOGUE = 2,
         QWARK_OLTANIS_STATE_REMOVE = 3
     };
     L14WatchScratch scratch;
@@ -2768,7 +2769,7 @@ void qwark_oltanis_update(L14WatchMoby *m) {
             m->state = 2;
         }
         break;
-    case 2:
+    case QWARK_OLTANIS_STATE_POST_DIALOGUE:
         if (D_L14_0015F5C4 != 2) {
             m->state = 1;
             if ((unsigned)(d->sub - 3) < 2) {
