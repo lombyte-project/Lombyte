@@ -172,9 +172,13 @@ extern int func_001F9908_2E0E50(void *) __asm__("FUN_001f9740");
 void hydrodisplacer_update(Moby *moby) __asm__("FUN_L00_002df9a0");
 void hydrodisplacer_update(Moby *moby) {
     enum {
+        HYDRODISPLACER_INITIALIZE = 0,
         HYDRODISPLACER_WAIT_FOR_ACTIVATION = 2,
         HYDRODISPLACER_CAMERA_TRANSITION = 4,
         HYDRODISPLACER_WAIT_FOR_TIMER = 5
+    };
+    enum {
+        HYDRODISPLACER_CAMERA_INTERPOLATE = 1
     };
     Vec_2E0E50 camera_pos, camera_rot;
     Data_2E0E50 *data = (void *)moby->pvars;
@@ -210,7 +214,7 @@ void hydrodisplacer_update(Moby *moby) {
         }
     }
     switch (moby->state) {
-    case 0:
+    case HYDRODISPLACER_INITIALIZE:
         func_0022ED80_2E0E50(0, 0, moby);
         moby->state = 1;
         break;
@@ -317,7 +321,7 @@ void hydrodisplacer_update(Moby *moby) {
             }
             break;
         }
-        case 1:
+        case HYDRODISPLACER_CAMERA_INTERPOLATE:
             if (data->f10 == 0.0f && 0.0f < D_L00_0015F4FC_2E0E50) {
                 func_00214D28_2E0E50(&D_L00_0015F4FC_2E0E50, 0.0f, 1.0f / func_001F9850_2E0E50(15));
                 return;
