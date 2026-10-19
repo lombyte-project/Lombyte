@@ -240,6 +240,7 @@ extern H910 coll_hit __asm__("D_L00_00173E40");
 void mine_update(M910 *m) __asm__("FUN_L00_002aa670");
 void mine_update(M910 *m) {
     enum {
+        MINE_DEBRIS_FIXED_SECONDARY_COLOR = 0,
         MINE_DEBRIS_FIXED_LIFETIME = 1,
         MINE_DEBRIS_SHORT_LIVED = 2,
         MINE_DEBRIS_SPHERICAL_VELOCITY = 3
@@ -877,7 +878,7 @@ void mine_update(M910 *m) {
                             r[2] -= rr * fast_cos(0.785398f);
                             n[2] -= rr * frame_time * 8.0f;
                             switch (kind) {
-                            case 0: {
+                            case MINE_DEBRIS_FIXED_SECONDARY_COLOR: {
                                 int c1 = FUN_L00_0025c0e8(0x1F101820, D_E910.b11);
                                 float sz = random_float_between(200000.0f, 300000.0f) * sc;
                                 int life = FUN_L00_00257b90(scale_game_frames(0xB4),
