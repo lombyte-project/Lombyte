@@ -79,7 +79,9 @@ extern short D_L05_00161D38 __attribute__((sda));
 void electric_gate_update(char *m) __asm__("FUN_L05_0030dc68");
 void electric_gate_update(char *m) {
     enum {
-        ELECTRIC_GATE_INITIALIZE = 0
+        ELECTRIC_GATE_INITIALIZE = 0,
+        ELECTRIC_GATE_WAIT_FOR_TRIGGER = 1,
+        ELECTRIC_GATE_TRIGGERED = 2
     };
     char *data = *(char **)(m + 0x78);
     int state = *(unsigned char *)(m + 0x20);
@@ -97,7 +99,7 @@ void electric_gate_update(char *m) {
         *(unsigned char *)(m + 0x31) = 0;
         **(int **)(data + 4) = -1;
         break;
-    case 1:
+    case ELECTRIC_GATE_WAIT_FOR_TRIGGER:
         if (*(int *)&D_L05_00161D38 != D_L05_0015F5CC_e[2]) {
             *(int *)&D_L05_00161D38 = D_L05_0015F5CC_e[2];
             enqueue_callback_list_1(FUN_L05_0030de90, m);
@@ -136,7 +138,7 @@ void electric_gate_update(char *m) {
             }
         }
         break;
-    case 2:
+    case ELECTRIC_GATE_TRIGGERED:
         if (*(int *)(m + 0x94) != 0)
             *(int *)(m + 0x94) = 0;
         break;
