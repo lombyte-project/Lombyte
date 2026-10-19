@@ -2585,6 +2585,7 @@ void sandmouse_house_update(unsigned char *m) __asm__("FUN_L01_002f2b68");
 void sandmouse_house_update(unsigned char *m) {
     enum {
         SANDMOUSE_HOUSE_INITIALIZE = 0,
+        SANDMOUSE_HOUSE_WAIT_FOR_INITIAL_COMMAND = 1,
         SANDMOUSE_HOUSE_RESTORE_INITIAL_ANIMATION = 7
     };
     char *d;
@@ -2611,7 +2612,7 @@ void sandmouse_house_update(unsigned char *m) {
         m[0x20] = 1;
         *(float *)d = *(float *)(m + 0x48);
         break;
-    case 1:
+    case SANDMOUSE_HOUSE_WAIT_FOR_INITIAL_COMMAND:
         if ((unsigned char)(m[0xBC] - 3) < 3) {
             if (m[0x53] != 1) {
                 blend_moby_animation_w7(m, 1, 0, FUN_001f96f8_w7(10));
