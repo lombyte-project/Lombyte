@@ -2019,6 +2019,8 @@ void decoy_update(char *moby) __asm__("FUN_L00_002c4380");
 void decoy_update(char *moby) {
     enum {
         DECOY_INITIALIZE = 0,
+        DECOY_THROWN_MOVEMENT = 2,
+        DECOY_WAIT_TO_SHRINK = 5,
         DECOY_SHRINK_FOR_REMOVAL = 6
     };
     int active = ((unsigned char *)&D_0013E533)[6];
@@ -2083,7 +2085,7 @@ void decoy_update(char *moby) {
         FUN_L00_0024eb68_2c4380(moby);
         return;
     }
-    case 2:
+    case DECOY_THROWN_MOVEMENT:
         if (*(float *)(moby + 0x2c) < *(float *)(*(char **)(moby + 0x24) + 0x24))
             *(float *)(moby + 0x2c) += D_0015ED60_2c4380 * 0.02f;
         qcopy(v, moby + 0x10);
@@ -2284,7 +2286,7 @@ void decoy_update(char *moby) {
             }
         }
         break;
-    case 5:
+    case DECOY_WAIT_TO_SHRINK:
         len = FUN_L00_00259698_2c4380(moby + 0x10, 0, 0.5f);
         if (len != 0.0f && coll_hit.moby)
             FUN_L00_00260400(moby, coll_hit.moby, moby + 0x10,
