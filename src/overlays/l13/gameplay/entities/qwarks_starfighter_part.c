@@ -1149,6 +1149,12 @@ struct PieceVars {
 };
 
 void FUN_L13_002ece00(struct Moby *moby) {
+    enum {
+        PART_STATE_INITIALIZE = 0,
+        PART_STATE_SYNC_PARENT_SCALE = 1,
+        PART_STATE_MOVE_AND_SPIN = 3,
+        PART_STATE_BURST_AND_REMOVE = 4
+    };
     struct PieceVars *vars = (struct PieceVars *)moby->pvars;
     struct Moby *parent = vars->parent;
     struct Moby *hit;
@@ -1159,17 +1165,17 @@ void FUN_L13_002ece00(struct Moby *moby) {
     moby->flags = (moby->flags & 0xFFFC);
     moby->flags = moby->flags | (vars->parent->flags & 3);
     switch (moby->state) {
-    case 0:
+    case PART_STATE_INITIALIZE:
         moby->state = 1;
         qzero(&vars->unk20);
         break;
-    case 1:
+    case PART_STATE_SYNC_PARENT_SCALE:
         moby->scale = moby->pclass->scale * vars->parent->scale / vars->parent->pclass->scale;
         moby->spawn_frame = vars->parent->spawn_frame;
         break;
     case 2:
         break;
-    case 3:
+    case PART_STATE_MOVE_AND_SPIN:
         add_vector_xyz(&moby->pos, &moby->pos, &vars->vel);
         scale_vector_ece00(&vars->vel, &vars->vel, 0.995f);
         if (coll_sphere_ece00(&moby->pos, 2.0f, 0, moby) != 0) {
@@ -1199,7 +1205,7 @@ void FUN_L13_002ece00(struct Moby *moby) {
     remove:
         remove_ece00(moby);
         break;
-    case 4:
+    case PART_STATE_BURST_AND_REMOVE:
         burst_ece00(moby, &vars->vel, 0, 2.0f, 4.0f, 10, 3, 16, 4.0f, 2.0f, 9.0f, -1, 1.0f, 15.0f, 1, 1, -1, 0);
         remove_ece00(moby);
         break;
