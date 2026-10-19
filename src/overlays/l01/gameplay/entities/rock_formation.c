@@ -1082,6 +1082,10 @@ extern f32 D_L01_0016120C __attribute__((section(".sdata")));
 extern f32 D_L01_00161210 __attribute__((section(".sdata")));
 extern f32 D_L01_00161214 __attribute__((section(".sdata")));
 void FUN_L01_002fd0e8(struct Moby *moby) {
+    enum {
+        POOL_INITIALIZE = 0,
+        POOL_UPDATE_TILES_AND_EFFECTS = 1
+    };
     s32 *volumes;
     s32 found;
     s32 i;
@@ -1098,7 +1102,7 @@ void FUN_L01_002fd0e8(struct Moby *moby) {
 
     volumes = (s32 *)moby->pvars;
     switch (moby->state) {
-    case 0:
+    case POOL_INITIALIZE:
         moby->state = 1;
         moby->update_dist = 0xFF;
         moby->pos.z = moby->pos.z + 0.5f;
@@ -1159,7 +1163,7 @@ void FUN_L01_002fd0e8(struct Moby *moby) {
             }
         }
         break;
-    case 1:
+    case POOL_UPDATE_TILES_AND_EFFECTS:
         found = -1;
         for (i = 0; i < 7; i++) {
             if (*(s32 *)((u8 *)volumes + (i << 2)) == -1 || is_point_inside_clip_volume(camera_pos, *(s32 *)((u8 *)volumes + (i << 2))) == 0) {
