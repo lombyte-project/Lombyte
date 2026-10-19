@@ -534,6 +534,7 @@ int FUN_L17_002eace8(int a, char *p, char *radar_origin, char *radar_rotation, f
         MOBY_CLASS_UNMARKED_COUNTED_TARGET = 0x184,
         MOBY_CLASS_UNCOUNTED_MARKED_TARGET = 0x191,
         MOBY_CLASS_PRIORITY_LOCK_TARGET = 0x3EB,
+        MOBY_CLASS_STATE_GATED_MARKED_TARGET = 0x4BF,
         MOBY_CLASS_MARKED_COUNTED_TARGET = 0x504
     };
     float v[4];
@@ -677,7 +678,7 @@ int FUN_L17_002eace8(int a, char *p, char *radar_origin, char *radar_rotation, f
                 FUN_L17_002eaae0(radar_rotation, radar_origin, m, 1, 0x70808080, *(int *)(p + 0x104));
             }
             break;
-        case 0x4BF:
+        case MOBY_CLASS_STATE_GATED_MARKED_TARGET:
             if (!(*(unsigned short *)(m + 0x34) & 1) && *(unsigned char *)(m + 0x20) >= 2) {
                 project_to_screen(v, m + 0x10);
                 if (*(unsigned char *)(m + 0x31) != 0) {
