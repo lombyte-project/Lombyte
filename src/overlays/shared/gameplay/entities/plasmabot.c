@@ -1257,6 +1257,7 @@ void plasmabot_hatch_update(struct Moby *moby) {
     enum {
         HATCH_WAIT_ACTIVATION = 0,
         HATCH_WAIT_ACTIVATION_DELAY = 1,
+        HATCH_WAIT_ACTIVATION_ANIMATION = 2,
         HATCH_WAIT_RESET_DELAY = 6,
         HATCH_WAIT_RESET_ANIMATION = 7
     };
@@ -1279,7 +1280,7 @@ void plasmabot_hatch_update(struct Moby *moby) {
             set_moby_animation(moby, 1, 0);
         }
         break;
-    case 2:
+    case HATCH_WAIT_ACTIVATION_ANIMATION:
         if ((moby->anim_flags & 2) != 0) {
             moby->state = 3;
             set_moby_animation(moby, 2, 0);
