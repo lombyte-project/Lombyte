@@ -180,15 +180,19 @@ extern s32 current_level_index_macro __asm__("D_0015ED84") MACRO_ADDR;
 extern int D_0015EEA4_macro __asm__("D_0015EEA4") MACRO_ADDR;
 extern s32 D_0015EEAC_macro __asm__("D_0015EEAC") MACRO_ADDR;
 void FUN_L04_002e4418(Moby *moby) {
+    enum {
+        TUTORIAL_TRIGGER_STATE_INITIALIZE = 0,
+        TUTORIAL_TRIGGER_STATE_UPDATE_HINTS_AND_STATS = 1
+    };
     Data_2E57F8 *data = *(void **)&moby->pvars;
 
     switch (moby->state) {
-    case 0:
+    case TUTORIAL_TRIGGER_STATE_INITIALIZE:
         moby->update_dist = 0xFF;
         moby->state = 1;
         data->f14 = -1;
         break;
-    case 1:
+    case TUTORIAL_TRIGGER_STATE_UPDATE_HINTS_AND_STATS:
         if (is_point_inside_clip_volume(((char *)&D_0013F3D0), data->f0) != 0
             && D_L04_00179590[0] == 0 && D_L04_00179590[9] == -1
             && D_0014C050_c[moby->mission + (current_level_index_macro << 4)] != 0xFF) {
