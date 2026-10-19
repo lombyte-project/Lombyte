@@ -114,6 +114,7 @@ void blarg_space_commando_update(struct Moby *moby) __asm__("FUN_L06_002fdbd0");
 void blarg_space_commando_update(struct Moby *moby) {
     enum {
         BLARG_COMMANDO_STATE_INITIALIZE = 0,
+        BLARG_COMMANDO_STATE_SELECT_ACTION = 1,
         BLARG_COMMANDO_STATE_RANGED_ATTACK_WINDUP = 2,
         BLARG_COMMANDO_STATE_RANGED_ATTACK_RECOVERY = 3,
         BLARG_COMMANDO_STATE_RANGED_ATTACK_COOLDOWN = 4,
@@ -167,7 +168,7 @@ void blarg_space_commando_update(struct Moby *moby) {
         qcopy(&vars->home, &moby->pos);
         moby->state = 1;
         break;
-    case 1:
+    case BLARG_COMMANDO_STATE_SELECT_ACTION:
         if (vars->volume != -1 && vars->route != -1) {
             if (is_point_inside_clip_volume(&hero.motion.pos, vars->volume) != 0) {
                 moby->state = 14;
