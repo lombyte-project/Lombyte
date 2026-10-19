@@ -188,6 +188,10 @@ void walker_update_gait(WalkMoby *m, WalkData *d, int flags, float speed, float 
     enum {
         WALKER_GAIT_WALK = 1
     };
+    enum {
+        WALKER_GAIT_WALK_UPHILL = 4,
+        WALKER_GAIT_WALK_DOWNHILL = 9
+    };
     float vec[4];
 
     switch (d->bB7) {
@@ -222,7 +226,7 @@ void walker_update_gait(WalkMoby *m, WalkData *d, int flags, float speed, float 
     case WALKER_GAIT_WALK:
     case 2:
     case 3:
-    case 4:
+    case WALKER_GAIT_WALK_UPHILL:
     case 5:
     case 6:
         if (flags & 5) {
@@ -230,7 +234,7 @@ void walker_update_gait(WalkMoby *m, WalkData *d, int flags, float speed, float 
         }
     case 7:
     case 8:
-    case 9:
+    case WALKER_GAIT_WALK_DOWNHILL:
     case 10:
     case 11: {
         int idx = D_L00_001CA760[d->bB7];
@@ -434,7 +438,7 @@ void walker_update_gait(WalkMoby *m, WalkData *d, int flags, float speed, float 
                             d->bB7 = 4;
                         }
                         break;
-                    case 4:
+                    case WALKER_GAIT_WALK_UPHILL:
                         if ((h - vec[2]) + d->anim[idx]->f04 * 0.5f * fast_sin(d->fB8) <
                             -d->fE0 * 0.75f) {
                             d->uEE |= 8;
@@ -624,7 +628,7 @@ void walker_update_gait(WalkMoby *m, WalkData *d, int flags, float speed, float 
                             d->bB7 = 9;
                         }
                         break;
-                    case 9:
+                    case WALKER_GAIT_WALK_DOWNHILL:
                         if ((h - vec[2]) + d->anim[idx]->f04 * 0.5f * fast_sin(d->fB8) >
                             d->fE0 * 0.75f) {
                             if (flags & 1) {
