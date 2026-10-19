@@ -26,7 +26,7 @@ extern s32 ReadQueueStatus(void);
 extern s32 SignalSema(s32);
 extern s32 WaitSema(s32);
 extern s32 _sceFsWaitS(s32);
-extern s32 func_0011BBB8(void);
+extern s32 sif_file_server_changed(void) __asm__("func_0011BBB8");
 extern struct SifFileSlot *new_iob(void);
 extern s32 sceFsInit(void);
 extern s32 sceSifCallRpc(void *, s32, s32, void *, s32, void *, s32, void *, void *);
@@ -51,7 +51,7 @@ s32 sceOpen(const u8 *path, s32 flags, ...) {
     if (FsResetState == 0) {
         sceFsInit();
     }
-    if (func_0011BBB8() != 0) {
+    if (sif_file_server_changed() != 0) {
         ReadQueueStatus();
         return -0x10004;
     }

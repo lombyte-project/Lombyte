@@ -345,7 +345,7 @@ segments:
           - [0x1c92c, textbin, text_gap_0011b97c_tail_0011b9ac]
           - [0x1c930, c, assembly/sdk/library/sceFsInit]
           - [0x1cb34, textbin, text_gap_0011bbb4_before_fun_0011bbb8]
-          - [0x1cb38, c, runtime/sio/fun_0011bbb8]
+          - [0x1cb38, c, runtime/sio/sif_file_server_changed]
           - [0x1cbc4, textbin, text_gap_0011bc44_after_fun_0011bbb8]
           - [0x1cbc8, c, sdk/library/sceFsReset]
           - [0x1cbfc, textbin, text_gap_0011bc48_post_sdk_worker]
