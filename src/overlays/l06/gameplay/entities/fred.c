@@ -6789,7 +6789,16 @@ void shuttle_update(struct Moby *moby) __asm__("FUN_L06_00302578");
 void shuttle_update(struct Moby *moby) {
     enum {
         INITIALIZE_SHUTTLE = 0,
-        UPDATE_SHUTTLE_PATH_RIDE = 3
+        WAIT_FOR_SHUTTLE_ROUTE_REQUEST = 1,
+        UPDATE_SHUTTLE_PATH_RIDE = 3,
+        RESTORE_SHUTTLE_IDLE_ANIMATION = 4
+    };
+    enum {
+        SHUTTLE_ROUTE_INITIAL_TO_SECOND_STOP = 0,
+        SHUTTLE_ROUTE_SECOND_TO_INITIAL_STOP = 1,
+        SHUTTLE_ROUTE_FORCED_TO_INITIAL_STOP = 2,
+        SHUTTLE_ROUTE_INITIAL_TO_THIRD_STOP = 3,
+        SHUTTLE_ROUTE_THIRD_TO_INITIAL_STOP = 4
     };
     Data_302578 *d = *(Data_302578 **)&moby->pvars;
     float old_pos[4];
@@ -6828,7 +6837,7 @@ void shuttle_update(struct Moby *moby) {
         d->sel = 0;
         d->side = 0;
         break;
-    case 1:
+    case WAIT_FOR_SHUTTLE_ROUTE_REQUEST:
         busy = 0;
         if (*(unsigned char *)&D_0015EE1D != 0 || *(unsigned char *)&D_0015EE1C != 0) {
             if (((Busy_302578 *)D_L06_00179B90)->f0 != 0 || ((Busy_302578 *)D_L06_00179B90)->f24 != -1) {
@@ -6847,33 +6856,33 @@ void shuttle_update(struct Moby *moby) {
                     D_L06_00162100 = 0;
                 }
                 switch (d->f9C) {
-                case 0:
+                case SHUTTLE_ROUTE_INITIAL_TO_SECOND_STOP:
                     d->sel = 1;
                     d->fC4 = D_L06_001620F8;
                     d->fC8 = D_L06_001620F4;
                     d->side = 0;
                     play_sound_302578(4, 8);
                     break;
-                case 1:
+                case SHUTTLE_ROUTE_SECOND_TO_INITIAL_STOP:
                     d->side = 1;
                     d->fC4 = D_L06_001620F4;
                     d->fC8 = D_L06_001620F8;
                     d->sel = 0;
                     play_sound_302578(0, 10);
                     break;
-                case 2:
+                case SHUTTLE_ROUTE_FORCED_TO_INITIAL_STOP:
                     d->side = 2;
                     d->fC4 = D_L06_001620F4;
                     d->fC8 = D_L06_001620F8;
                     d->sel = 0;
                     break;
-                case 3:
+                case SHUTTLE_ROUTE_INITIAL_TO_THIRD_STOP:
                     d->side = 3;
                     d->sel = 2;
                     d->fC4 = D_L06_001620F8;
                     d->fC8 = D_L06_001620F8;
                     break;
-                case 4:
+                case SHUTTLE_ROUTE_THIRD_TO_INITIAL_STOP:
                     d->side = 4;
                     d->sel = 0;
                     d->fC4 = D_L06_001620F8;
@@ -6997,7 +7006,7 @@ void shuttle_update(struct Moby *moby) {
             moby->state = 1;
         }
         break;
-    case 4:
+    case RESTORE_SHUTTLE_IDLE_ANIMATION:
         moby->state = 1;
         if (moby->prev_seq != 2) {
             blend_moby_animation_302578(moby, 2, 0, scale_game_frames_302578(30));
