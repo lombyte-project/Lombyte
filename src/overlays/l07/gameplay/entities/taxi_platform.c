@@ -1042,6 +1042,7 @@ void boltcrate_possibly_for_metal_detector_update(struct Moby *moby) {
         BOLTCRATE_CLEAR_HEALTH_RESPONSE = 1,
         BOLTCRATE_ALTERNATE_CLEAR_HEALTH_RESPONSE = 2,
         HIT_REACTION_START_KNOCKBACK = 3,
+        HIT_REACTION_KNOCKBACK_RESPONSE = 4,
         HIT_REACTION_HIT_ANIMATION_RESPONSE = 9,
         HIT_REACTION_ALTERNATE_HIT_ANIMATION_RESPONSE = 10
     };
@@ -1069,7 +1070,7 @@ void boltcrate_possibly_for_metal_detector_update(struct Moby *moby) {
         switch ((unsigned)result) {
         case HIT_REACTION_NONE:
         case HIT_REACTION_START_KNOCKBACK:
-        case 4:
+        case HIT_REACTION_KNOCKBACK_RESPONSE:
         case 5:
         case 6:
         case 7:
