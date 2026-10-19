@@ -3247,15 +3247,20 @@ extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a
 
 void tresspasser_door1_update(struct Moby *moby) __asm__("FUN_L02_002dffc8");
 void tresspasser_door1_update(struct Moby *moby) {
+    enum {
+        TRESSPASSER_DOOR1_CAPTURE_START_POSITION = 0,
+        TRESSPASSER_DOOR1_WAIT_FOR_LINKED_MOBY = 1,
+        TRESSPASSER_DOOR1_SLIDE_TO_OFFSET_POSITION = 2
+    };
     char *d = (char *)moby->pvars;
     float a[4];
     float b[4];
     switch (moby->state) {
-    case 0:
+    case TRESSPASSER_DOOR1_CAPTURE_START_POSITION:
         qcopy(d, &moby->pos);
         moby->state = 1;
         break;
-    case 1:
+    case TRESSPASSER_DOOR1_WAIT_FOR_LINKED_MOBY:
         if (*(int *)(d + 0x10) >= 0) {
             unsigned char *o =
                 (unsigned char *)((*(int *)(d + 0x10) << 8) + *(int *)&D_L02_0015FFD8_c2);
@@ -3268,7 +3273,7 @@ void tresspasser_door1_update(struct Moby *moby) {
             }
         }
         break;
-    case 2:
+    case TRESSPASSER_DOOR1_SLIDE_TO_OFFSET_POSITION:
         normalize_vector_xyz(a, &moby->rot_row1, 2.0f);
         add_vector_xyz(a, d, a);
         subtract_vector_xyz(b, a, &moby->pos);
