@@ -3586,6 +3586,7 @@ void rocket_update(struct Moby *moby) __asm__("FUN_L14_002fdbb8");
 void rocket_update(struct Moby *moby) {
     enum {
         ROCKET_STATE_INITIALIZE = 0,
+        ROCKET_STATE_IDLE = 1,
         ROCKET_STATE_FLY_TO_POINT = 2
     };
     FlyerVars *vars = (FlyerVars *)moby->pvars;
@@ -3608,7 +3609,7 @@ void rocket_update(struct Moby *moby) {
         vars->sound = -1;
         vars->timer = scale_game_frames(D_L14_00161FB0);
         return;
-    case 1:
+    case ROCKET_STATE_IDLE:
         return;
     case ROCKET_STATE_FLY_TO_POINT:
         fast_vec_sub(&diff, D_L14_001600EC + vars->point * 0x80 + 0x30, &moby->pos);
