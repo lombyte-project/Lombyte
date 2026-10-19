@@ -1275,7 +1275,7 @@ void FUN_L14_00228cd0(void) {
         break;
     }
     case 0x21:
-    case 0x7A:
+    case HERO_STATE_WALL_BONK:
         approach_value(&hero.ground_speed, 0.0f, frame_time_sq * 24.0f);
         hero.motion.velocity.f[0] = fast_cos(hero.unkA68) * hero.ground_speed;
         hero.motion.velocity.f[1] = fast_sin(hero.unkA68) * hero.ground_speed;
