@@ -62,12 +62,17 @@ extern float func_001F9D10_update(void *, void *) __asm__("FUN_001f9b48");
 
 void armed_transport_update(char *m) __asm__("FUN_L16_002e22d8");
 void armed_transport_update(char *m) {
+    enum {
+        ARMED_TRANSPORT_STATE_INITIALIZE = 0,
+        ARMED_TRANSPORT_STATE_ALIGN_SECOND_PATH = 4,
+        ARMED_TRANSPORT_STATE_DYING = 8
+    };
     L16TransportVector vector, rotation;
     char *d = *(char **)(m + 0x78);
 
     FUN_L16_002e2b60(m);
     switch (*(unsigned char *)(m + 0x20)) {
-    case 0: {
+    case ARMED_TRANSPORT_STATE_INITIALIZE: {
         char *path;
         float speed;
 
@@ -170,7 +175,7 @@ void armed_transport_update(char *m) {
         }
         break;
     }
-    case 4: {
+    case ARMED_TRANSPORT_STATE_ALIGN_SECOND_PATH: {
         float heading = *(float *)(D_L16_001B0930[*(int *)(d + 0xDC)] + 0x1C);
 
         advance_accelerated_scalar((float *)(m + 0x48), (float *)(d + 0x178), heading, frame_time_sq * 6.2831855f,
@@ -217,7 +222,7 @@ void armed_transport_update(char *m) {
         m[0x20] = 6;
         *(int *)(d + 0x164) = scale_game_frames(180);
         break;
-    case 8: {
+    case ARMED_TRANSPORT_STATE_DYING: {
         float dt = frame_time;
 
         *(float *)(d + 0x194) -= dt + dt;
