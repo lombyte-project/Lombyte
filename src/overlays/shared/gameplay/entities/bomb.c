@@ -667,6 +667,9 @@ extern float feather_radius_max __asm__("D_L00_0016186C") __attribute__((sda));
 extern char D_L00_00177F00[];
 
 void FUN_L00_002c97e0(Moby *m) {
+    enum {
+        CHICKEN_STATE_TURN_AWAY_FROM_HERO = 2
+    };
     Vec4A next_pos;
     Vec4A ahead;
     Vec4A vec;
@@ -835,7 +838,7 @@ void FUN_L00_002c97e0(Moby *m) {
             FUN_L00_00258490(m, &next_pos, &next_pos, 0, size * 0.2f, size * 0.5f, speed, 0.2617994f);
         }
         break;
-    case 2:
+    case CHICKEN_STATE_TURN_AWAY_FROM_HERO:
         FUN_L00_00258278(m, &vars->turn_speed, flee_angle, frame_time_sq * 0.7853982f, frame_time_sq * 1.5707964f, frame_time * 0.7853982f);
         FUN_L00_00258490(m, &next_pos, &next_pos, 0, size * 0.2f, size * 0.5f, speed, 0.2617994f);
         if (fast_dec_timer_s16(&vars->flee_timer) != 0 && vector_distance(&m->pos, &hero.motion.pos) < size * 5.0f) {
