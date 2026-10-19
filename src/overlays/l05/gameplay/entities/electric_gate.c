@@ -1456,13 +1456,17 @@ extern float D_L05_00211B20[];
 
 void ocean_rilgar_update(char *moby) __asm__("FUN_L05_00316110");
 void ocean_rilgar_update(char *moby) {
+    enum {
+        OCEAN_RILGAR_INITIALIZE = 0,
+        OCEAN_RILGAR_UPDATE_BOBBING = 1
+    };
     switch ((unsigned char)moby[0x20]) {
-    case 0:
+    case OCEAN_RILGAR_INITIALIZE:
         FUN_L02_002a40d0(D_L05_00211B20, 1.0f);
         moby[0x20] = 1;
         ((unsigned char *)moby)[0x30] = 0xFF;
         break;
-    case 1:
+    case OCEAN_RILGAR_UPDATE_BOBBING:
         if (hero.state.control_mode == 0x16) {
             D_L05_00211B20[2] =
                 fast_sin((float)(frame_number % 360) * 0.017444444f - 3.14f) * 0.25f + 61.5f;
