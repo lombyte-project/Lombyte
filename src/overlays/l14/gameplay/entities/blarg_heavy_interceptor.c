@@ -1926,6 +1926,7 @@ void FUN_L14_002b4340(struct Moby *m) {
         HIT_REACTION_LETHAL = 1,
         HIT_REACTION_DESTROY = 2,
         HIT_REACTION_PLAY_HIT_ANIMATION = 3,
+        HIT_REACTION_HIGH_RED_FLASH_AND_HIT_ANIMATION = 4,
         HIT_REACTION_ANIMATE_WITH_LOW_RED_FLASH = 9,
         HIT_REACTION_LOW_RED_FLASH_AND_HIT_ANIMATION = 10,
         HIT_REACTION_NONE = 11
@@ -1959,7 +1960,7 @@ void FUN_L14_002b4340(struct Moby *m) {
             d[0x67] = 100;
             break;
         case HIT_REACTION_PLAY_HIT_ANIMATION:
-        case 4:
+        case HIT_REACTION_HIGH_RED_FLASH_AND_HIT_ANIMATION:
         case 5:
         case 6:
         case 7:
