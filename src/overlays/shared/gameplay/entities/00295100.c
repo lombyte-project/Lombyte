@@ -1687,6 +1687,7 @@ extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 
 void FUN_L00_0029b4d8(int a) {
     enum {
+        VENDOR_SELECTION_CHANGED = 0,
         VENDOR_ITEM_PURCHASE = 2,
         VENDOR_AMMO_PURCHASE = 3
     };
@@ -1701,7 +1702,7 @@ void FUN_L00_0029b4d8(int a) {
     b = D_L00_001CA4C0;
     m = *(unsigned char **)(b + 0x24);
     switch (a) {
-    case 0:
+    case VENDOR_SELECTION_CHANGED:
         s = m[0x20];
         if (s == 2 || s == 0) {
             if (random_integer_below(4) == 0) {
