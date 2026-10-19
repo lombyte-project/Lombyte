@@ -426,13 +426,7 @@ void FUN_L00_001f4490(void) {
     copy_memory_aligned(d + 0xC0, c, 0x30);
     FUN_L00_00250df8(*(u8 **)&c->moby);
 }
-/* Pending C: keep the oracle until the placed overlay bytes match. */
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001f4598.s", FUN_L00_001f4598);
-#else
-/* Ported from rac1-decomp (nonmatching/shared/func_L00_001F4918.c: func_L00_001F4918). */
-#include "types.h"
-#include "sda.h"
+/* Ported from rac1-decomp (src/overlays/shared/draw_001F3A78.c: func_L00_001F4918). */
 #include "rnc/gameplay/state/game_globals.h"
 #include "rnc/gameplay/state/item_state.h"
 #include "rnc/rendering/fs_aa_buffer.h"
@@ -475,7 +469,7 @@ extern char level_directory[] __asm__("D_L00_001E7938");
 extern char occlusion_deltas_file_name[] __asm__("D_L00_001E7958");
 extern char add_sample_format[] __asm__("D_L00_001E7970");
 extern char start_point_format[] __asm__("D_L00_001E7990");
-extern u8 mission_state[] __asm__("D_L00_0015FC88");
+extern u8 mission_state[] __asm__("D_L00_0015FC88") MACRO_ADDR;
 extern s32 occlusion_sample_count __asm__("D_L00_0015F614");
 extern f32 *occlusion_samples __asm__("D_L00_00173E20") NOT_SDA;
 extern u8 D_L00_0015F444;
@@ -665,18 +659,14 @@ void FUN_L00_001f4598(void) {
             break;
         case 8:
             if (D_0013C940.buttons.w.pressed & 0x50) {
-                f32 scale;
-                LevelViewContext *view;
                 g_debug_menu.screen_mode = !g_debug_menu.screen_mode;
                 if (g_debug_menu.screen_mode) {
-                    scale = 0.125f;
-                    view = &level_view_context;
+                    level_view_context.half_width = convert_integer_to_float(fs_aa_buffer.display_width) * 0.125f;
+                    level_view_context.half_height = convert_integer_to_float(fs_aa_buffer.display_height) * 0.125f;
                 } else {
-                    scale = 0.5f;
-                    view = &level_view_context;
+                    level_view_context.half_width = convert_integer_to_float(fs_aa_buffer.display_width) * 0.5f;
+                    level_view_context.half_height = convert_integer_to_float(fs_aa_buffer.display_height) * 0.5f;
                 }
-                view->half_width = convert_integer_to_float(fs_aa_buffer.display_width) * scale;
-                view->half_height = convert_integer_to_float(fs_aa_buffer.display_height) * scale;
                 {
                     f32 half_width = level_view_context.half_width;
                     f32 half_height = level_view_context.half_height;
@@ -689,10 +679,12 @@ void FUN_L00_001f4598(void) {
         case 9:
             if (D_0013C940.buttons.w.pressed & 0x50) {
                 if (D_0013C940.buttons.w.pressed & 0x40) {
-                    if (++g_debug_menu.scene_index == 36)
+                    g_debug_menu.scene_index++;
+                    while (g_debug_menu.scene_index == 36)
                         g_debug_menu.scene_index = -1;
                 } else {
-                    if (--g_debug_menu.scene_index < -1)
+                    g_debug_menu.scene_index--;
+                    while (g_debug_menu.scene_index < -1)
                         g_debug_menu.scene_index = 35;
                 }
             }
@@ -704,23 +696,20 @@ void FUN_L00_001f4598(void) {
         case 10:
             if (D_0013C940.buttons.w.pressed & 0x50) {
                 if (D_0013C940.buttons.w.pressed & 0x40) {
-                    if (++g_debug_menu.segment_index == 16)
+                    g_debug_menu.segment_index++;
+                    while (g_debug_menu.segment_index == 16)
                         g_debug_menu.segment_index = 0;
                 } else {
-                    if (--g_debug_menu.segment_index < 0)
+                    g_debug_menu.segment_index--;
+                    while (g_debug_menu.segment_index < 0)
                         g_debug_menu.segment_index = 15;
                 }
             } else if (D_0013C940.buttons.w.pressed & 0x20) {
                 s32 mission = g_debug_menu.segment_index;
                 s32 index = mission + (current_level_index << 4);
                 u8 *visited = visited52 + index;
-                u8 state = *visited;
-                if (state == 0)
-                    state = ~state;
-                else
-                    state = 0;
-                *visited = state;
-                mission_state[mission] = state;
+                *visited = *visited ? 0 : 255;
+                mission_state[mission] = *visited;
             }
             break;
         }
@@ -851,8 +840,9 @@ void FUN_L00_001f4598(void) {
         if (g_debug_menu.selected_row == 1 && (D_0013C940.buttons.w.pressed & 0x50))
             g_debug_menu.actuator_enabled = !g_debug_menu.actuator_enabled;
         if (g_debug_menu.selected_row == 2 && (D_0013C940.buttons.w.pressed & 0xF0)) {
+            char *directory = level_directory_macro;
+            char *path_format = level_file_path_format_gp;
             s32 i = 0, found, fd, size;
-            char *version;
             {
                 f32 *sample;
                 s32 count = occlusion_sample_count;
@@ -875,9 +865,8 @@ void FUN_L00_001f4598(void) {
             }
             if (found)
                 break;
-            version = iso_version_suffix;
-            sprintf(scratch.sample.path, level_file_path_format_gp, level_directory_macro, current_level_index,
-                    occlusion_deltas_file_name, version);
+            sprintf(scratch.sample.path, path_format, directory, current_level_index,
+                    occlusion_deltas_file_name, iso_version_suffix);
             sprintf(scratch.sample.line, add_sample_format, fptodp(D_L00_00166C80.camera.position[0]),
                     fptodp(D_L00_00166C80.camera.position[1]), fptodp(D_L00_00166C80.camera.position[2]));
             fd = sceOpen(scratch.sample.path, 0x303);
@@ -889,8 +878,8 @@ void FUN_L00_001f4598(void) {
             }
             {
                 f32 *samples = occlusion_samples;
-                sprintf(scratch.sample.path, level_file_path_format_gp, level_directory_macro,
-                        current_level_index, occlusion_samples_file_name, version);
+                sprintf(scratch.sample.path, path_format, directory,
+                        current_level_index, occlusion_samples_file_name, iso_version_suffix);
                 fd = sceOpen(scratch.sample.path, 0x303);
                 if (fd >= 0) {
                     sceLseek(fd, 0, 2);
@@ -927,7 +916,6 @@ void FUN_L00_001f4598(void) {
         break;
     }
 }
-#endif /* NON_MATCHING */
 /* Pending C: keep the oracle until the placed overlay bytes match. */
 #include "types.h"
 

@@ -18,9 +18,6 @@ void trooper_set_knockback(float *p, float a, float b) {
     p[6] = (a + a) / x;
     p[5] = (a + a) / (x * x);
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_00250ae8.s", FUN_L03_00250ae8);
-#else
 #include "eetypes.h"
 
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
@@ -32,7 +29,7 @@ extern s32 random_int_between(s32, s32) __asm__("FUN_L00_00257b90");
 extern s32 random_integer_below(s32) __asm__("FUN_00213260");
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern void FUN_L00_001ff290(void *, void *, void *);
-extern void *FUN_L00_002712b8(f32, f32, f32, f32, f32, void *, void *, s32, s32, s32, s32);
+extern void *FUN_L00_002712b8(void *, void *, s32, s32, s32, s32, f32, f32, f32, f32, f32);
 extern void *FUN_L00_0026cbb0(void *, void *, s32, s32, s32, s32, f32);
 
 void FUN_L03_00250ae8(char *param_1, u128 *param_2, void *param_3) {
@@ -52,6 +49,10 @@ void FUN_L03_00250ae8(char *param_1, u128 *param_2, void *param_3) {
         angle = randf_sym(0.0f, 0.1308997f);
         build_look_at_matrix(&vectors.velocity, param_1 + 0xe0, param_1 + 0xc0,
                              (f32)i * 0.2617994f + angle);
+        /* Fakematch: the empty scopes add 20 notes to loop 1, past haifa's 100-luid region limit,
+         * so sched1 schedules this loop block by block as retail does (they emit no code). */
+        { s32 pad; } { s32 pad; } { s32 pad; } { s32 pad; } { s32 pad; }
+        { s32 pad; } { s32 pad; } { s32 pad; } { s32 pad; } { s32 pad; }
         fast_vec_normalize(&vectors.velocity, &vectors.velocity, random_float_between(0.05f, 0.1f));
         spin = random_int_between(0, 3);
         if (random_integer_below(2)) spin = -spin;
@@ -59,8 +60,8 @@ void FUN_L03_00250ae8(char *param_1, u128 *param_2, void *param_3) {
         maximum = scale_game_frames(90);
         duration = random_int_between(minimum, maximum);
         if (param_3) FUN_L00_001ff290(&vectors.temp, &vectors.velocity, param_3);
-        FUN_L00_002712b8(60000.0f, 3000.0f, 0.85f, -0.001f, 0.85f,
-                         position, &vectors.velocity, duration, 30, 0xffffff, spin);
+        FUN_L00_002712b8(position, &vectors.velocity, duration, 30, 0xffffff, spin,
+                         60000.0f, 3000.0f, 0.85f, -0.001f, 0.85f);
     }
     for (j = 0; j < truncate_float_to_s32(6.0f); ) {
         angle = random_float_between(0.0f, 0.7853982f);
@@ -74,4 +75,3 @@ void FUN_L03_00250ae8(char *param_1, u128 *param_2, void *param_3) {
         FUN_L00_0026cbb0(position, &vectors.velocity, 0x4f007fff, 0x1fffffff, duration, 1, 10000.0f);
     }
 }
-#endif

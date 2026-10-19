@@ -1413,11 +1413,7 @@ void FUN_L00_002ebbd8(void *arg) {
     *(short *)(gg + 0x270) = 1;
     *(int *)(gg + 0x2F4) = scale_game_frames_c(0x3C);
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002ebe70.s", FUN_L00_002ebe70);
-#else
-/* Near miss (SN BYTES 8/397): in the neighbours loop the store of chosen lands after the
- * current_target->0x21 load instead of before it; the order that fixes it lets turn take $fp. */
+
 extern void FUN_L00_0025b868(float, float, float *);
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void FUN_001ff500_2ebe70(float, void *, void *) __asm__("FUN_001f9bf8");
@@ -1470,10 +1466,13 @@ void FUN_L00_002ebe70(char *cam) {
             (hero.unk994 != 0 && *(unsigned char *)((char *)hero.unk994 + 0x21) == 255)) {
             *angle = rope_spring_turn(angle + 1, *angle, hero.motion.rot.f[2], 0.00125f, 0.175f, 0.0f);
         } else {
-            turn = angle + 1;
             chosen = 0;
+            turn = angle + 1;
             best = 1000.0f;
             current_target = (char *)hero.unk994;
+            /* Fakematch: a dead compare with 10.0f loads that constant early, which fixes the
+             * register order of the loop constants and of turn. */
+            if (target == 10.0f) { }
             neighbours = D_L00_001AB840_2ebe70[*(unsigned char *)(current_target + 0x21)];
             if (neighbours != 0) {
                 do {
@@ -1535,7 +1534,6 @@ void FUN_L00_002ebe70(char *cam) {
         *(int *)(angle + 1) = 0;
     } else qcopy(cam + 0x30, position);
 }
-#endif
 typedef union {
     OvlQuad q;
     float f[4];
