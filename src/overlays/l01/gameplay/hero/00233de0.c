@@ -2065,7 +2065,7 @@ void FUN_L01_002370b8(void) {
         FUN_L00_0020b5b8_cf();
         FUN_L00_00216de8_cf();
         break;
-    case 0x16: {
+    case HERO_STATE_HURT: {
         float len;
         float dec;
 
@@ -2154,7 +2154,7 @@ void FUN_L01_002370b8(void) {
             FUN_L00_002334d0(hero.motion.velocity.f, hero.motion.velocity.f, frame_time_sq * 54.0f);
         }
     } break;
-    case 0x40:
+    case HERO_STATE_FIDGET:
     case 0x67:
         clear_vector(hero.motion.velocity.f);
         break;
