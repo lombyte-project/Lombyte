@@ -403,13 +403,17 @@ extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 extern Pair D_L08_00161E20[] __attribute__((section(".sdata")));
 void FUN_L08_002f1548(struct Moby *moby) {
+    enum {
+        DRAW_ELEMENTS_INITIALIZE = 0,
+        DRAW_ELEMENTS_UPDATE = 1
+    };
     int i;
     float v[4];
     float w[4];
     float d;
 
     switch (moby->state) {
-    case 0:
+    case DRAW_ELEMENTS_INITIALIZE:
         if (*(int *)&D_L08_00161E04 == 0) {
             FUN_L08_002f0f68(D_L08_001E8310, 0xD, D_L08_001E2858, 0.5f, 0.5f, 0.65f, 0.5f, 1);
             FUN_L08_002f0f68(D_L08_001DDF20, 8, D_L08_001DB518, 0.5f, 0.5f, 0.5f, 1.0f, 1);
@@ -432,7 +436,7 @@ void FUN_L08_002f1548(struct Moby *moby) {
             *(float *)&D_L08_00161E24[i].a = i * 0.4f;
         }
         break;
-    case 1:
+    case DRAW_ELEMENTS_UPDATE:
         v[0] = *(float *)&D_L08_00161DC0;
         v[1] = D_L08_00161DC4;
         v[2] = D_L08_00161DC8;
