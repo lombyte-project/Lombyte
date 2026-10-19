@@ -2001,7 +2001,7 @@ void FUN_L02_00225c20(void) {
         }
         FUN_L00_00216de8_cf();
     } break;
-    case 0x7:
+    case HERO_STATE_JUMP:
     case HERO_STATE_RUN_JUMP:
     case HERO_STATE_PACK_JUMP:
     case HERO_STATE_HIGH_JUMP:
