@@ -823,6 +823,7 @@ void woodcut_bot_update(WBMoby *m) {
     };
     enum {
         WOODCUT_BOT_REACTION_START_DEATH_KNOCKBACK = 1,
+        WOODCUT_BOT_REACTION_DEATH_KNOCKBACK = 2,
         WOODCUT_BOT_REACTION_HIT_RECOVERY_AND_REPOSITION = 3,
         WOODCUT_BOT_REACTION_RECOIL_TO_IDLE = 4
     };
@@ -909,7 +910,7 @@ void woodcut_bot_update(WBMoby *m) {
             case 0:
                 break;
             case WOODCUT_BOT_REACTION_START_DEATH_KNOCKBACK:
-            case 2:
+            case WOODCUT_BOT_REACTION_DEATH_KNOCKBACK:
                 d->fD4 = frame_time_sq * 17.0f;
                 d->fD8 = frame_time * 7.0f;
                 d->fDC = frame_time * 13.0f;
