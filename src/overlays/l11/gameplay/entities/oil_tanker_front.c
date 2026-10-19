@@ -379,7 +379,8 @@ void FUN_L11_00316320(struct Moby *moby) {
         GATE_RAISE_DOORS = 2,
         GATE_ZERO_DOOR_Y_ROTATION = 3,
         GATE_TILT_DOORS_APART = 4,
-        GATE_OPEN_IDLE = 5
+        GATE_OPEN_IDLE = 5,
+        GATE_APPLY_CONFIGURED_DOOR_POSE = 6
     };
     struct L11GateVars *d = (struct L11GateVars *)moby->pvars;
     float v[4];
@@ -480,7 +481,7 @@ void FUN_L11_00316320(struct Moby *moby) {
     }
     case GATE_OPEN_IDLE:
         break;
-    case 6:
+    case GATE_APPLY_CONFIGURED_DOOR_POSE:
         fast_vec_normalize(v, &moby->rot_row0, 0.5f);
         fast_vec_add(&d->left->pos, &moby->pos, v);
         d->left->pos.z = moby->pos.z + D_L11_00162308;
