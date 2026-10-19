@@ -6038,6 +6038,10 @@ void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 extern float D_L06_00162090 __attribute__((sda));
 extern int GB_FRAME_gp __asm__("D_L06_0015F5CC") __attribute__((sda));
 void FUN_L06_00300df0(char *moby) {
+    enum {
+        INITIALIZE_BOBBING_HEIGHT = 0,
+        UPDATE_BOBBING_HEIGHT = 1
+    };
     char *data = *(char **)(moby + 0x78);
     int state;
     if (data == 0) {
@@ -6046,13 +6050,13 @@ void FUN_L06_00300df0(char *moby) {
     }
     state = (unsigned char)moby[0x20];
     switch (state) {
-    case 0:
+    case INITIALIZE_BOBBING_HEIGHT:
         *(short *)(moby + 0x32) = 0x200;
         ((unsigned char *)moby)[0x30] = 0xFF;
         *(float *)(data + 0xC) = *(float *)(moby + 0x18);
         moby[0x20] = 1;
         break;
-    case 1:
+    case UPDATE_BOBBING_HEIGHT:
         if (*(int *)(D_0013E533 + 0x2EA1) == 0x72) {
             *(float *)(moby + 0x18) = *(float *)(data + 0xC);
         } else {
