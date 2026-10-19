@@ -302,6 +302,8 @@ void FUN_L14_002b17d8(char *moby);
 void FUN_L14_002b17d8(char *moby) {
     enum {
         PLASMABOT_INITIALIZE = 0,
+        PLASMABOT_FOLLOW_PATH_FORWARD = 3,
+        PLASMABOT_FOLLOW_PATH_BACKWARD = 8,
         PLASMABOT_RETURN_TO_PATH_START = 9,
         PLASMABOT_FACE_TARGET_AND_WAIT = 13
     };
@@ -484,13 +486,13 @@ void FUN_L14_002b17d8(char *moby) {
         *(float *)(data + 0x254) = *(float *)(data + 0x250);
         break;
     }
-    case 3:
+    case PLASMABOT_FOLLOW_PATH_FORWARD:
         if (FUN_L14_002b3418_c(moby) != 0) {
             blend_moby_animation(moby, 0, 0, scale_game_frames(10));
             ((unsigned char *)moby)[0x20] = 4;
         }
         break;
-    case 8:
+    case PLASMABOT_FOLLOW_PATH_BACKWARD:
         if (((unsigned char *)data)[0x24A] != 0) {
             FUN_L14_002d9870_c(*(int *)(data + 0x264));
         }
