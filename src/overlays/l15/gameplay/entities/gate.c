@@ -79,6 +79,13 @@ extern f32 frame_time __asm__("D_0015ED6C");
 
 void FUN_L15_0029aff0(struct Moby *m)
 {
+    enum {
+        GATE_INITIALIZE = 0,
+        GATE_WAIT_TO_OPEN = 1,
+        GATE_OPENING = 2,
+        GATE_OPEN = 3,
+        GATE_CLOSING = 4
+    };
     MovingVars_29aff0 *d = (MovingVars_29aff0 *)m->pvars;
     Vec4 offset;
     Vec4 pos;
@@ -89,11 +96,11 @@ void FUN_L15_0029aff0(struct Moby *m)
     u32 *bits;
 
     switch (m->state) {
-    case 0:
+    case GATE_INITIALIZE:
         d->home.q = *(u128 *)&m->pos;
         m->state = 1;
         return;
-    case 1:
+    case GATE_WAIT_TO_OPEN:
         trigger_active = 0;
         d->travel = 0;
         if (d->trigger != -1) {
@@ -120,7 +127,7 @@ check_lock:
             m->state = 2;
         }
         return;
-    case 2:
+    case GATE_OPENING:
         if (((VoiceSlot_29aff0 *)(D_0013E550 + d->sound * 0x70))->owner != m ||
             ((VoiceSlot_29aff0 *)(D_0013E550 + d->sound * 0x70))->active == 0)
             d->sound = allocate_voice_for_target_entry(0, 4, (int)m);
@@ -149,13 +156,13 @@ check_lock:
         add_vector_xyz(&pos, &d->home, &offset);
         *(u128 *)&m->pos = pos.q;
         return;
-    case 3:
+    case GATE_OPEN:
         if (is_point_inside_clip_volume(D_0013F3D0, d->close_volume) ||
             is_point_inside_clip_volume(D_L15_001673C0, d->close_volume))
             return;
         m->state = 4;
         return;
-    case 4:
+    case GATE_CLOSING:
         if (((VoiceSlot_29aff0 *)(D_0013E550 + d->sound * 0x70))->owner != m ||
             ((VoiceSlot_29aff0 *)(D_0013E550 + d->sound * 0x70))->active == 0)
             d->sound = allocate_voice_for_target_entry(0, 4, (int)m);
