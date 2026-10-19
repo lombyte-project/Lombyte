@@ -523,7 +523,7 @@ void FUN_L01_002370b8(void) {
     prevState = hero.state.step;
     prevAnim = moby->f53;
     switch (hero.state.current) {
-    case 0x0:
+    case HERO_STATE_IDLE:
     case HERO_STATE_LOOK:
     case HERO_STATE_STOP:
     case HERO_STATE_CROUCH:
@@ -1338,7 +1338,7 @@ void FUN_L01_002370b8(void) {
             FUN_L00_002334d0(hero.motion.velocity.f, hero.motion.velocity.f, frame_time_sq * 54.0f);
         }
     } break;
-    case 0x13: {
+    case HERO_STATE_WRENCH_COMBO: {
         HeroTableRow2C *r;
 
         if (hero.unkA9C != 0 || hero.anim_frame < D_L01_0017C0A8[hero.attack_record].f20) {
@@ -1552,7 +1552,7 @@ void FUN_L01_002370b8(void) {
             hero.motion.velocity.f[2] -= frame_time_sq * 54.0f;
         }
         break;
-    case 0x2:
+    case HERO_STATE_RUN:
     case 0x73: {
         int quiet;
         float k;
@@ -1787,7 +1787,7 @@ void FUN_L01_002370b8(void) {
         air_accel(frame_time_sq * 25.0f);
         FUN_L00_002334d0(hero.motion.velocity.f, hero.motion.unk120.f, frame_time_sq * 18.0f);
         break;
-    case 0x6:
+    case HERO_STATE_FALL:
     case 0x2D:
         FUN_L01_00232290();
         if (hero.unk1C4 == 0) {
