@@ -215,7 +215,9 @@ extern void FUN_001f9fc8_28a480(void *) __asm__("FUN_001f9fc8");
 
 void FUN_L00_0028a480(void) {
     enum {
-        SKY_SHELL_DOUBLE_PHASE_ROTATION = 0
+        SKY_SHELL_DOUBLE_PHASE_ROTATION = 0,
+        SKY_SHELL_QUINTUPLE_PHASE_ROTATION = 1,
+        SKY_SHELL_TENFOLD_PHASE_ROTATION = 3
     };
     OvlQuad v[1];
     int i;
@@ -229,7 +231,7 @@ void FUN_L00_0028a480(void) {
                 3.14159265f;
             FUN_001fa070_28a480(D_L00_001BD7E0_lui, v);
             break;
-        case 1:
+        case SKY_SHELL_QUINTUPLE_PHASE_ROTATION:
             ((float *)v)[2] =
                 (float)((D_L00_0015F5CC_28a480d * 5) & 0x1FFFF) * (3.14159265f / 65536.0f) -
                 3.14159265f;
@@ -240,7 +242,7 @@ void FUN_L00_0028a480(void) {
                 (float)((D_L00_0015F5CC_28a480d * 10) & 0x3FFFF) * 2.39684496e-05f - 3.14159265f;
             FUN_001fa070_28a480(D_L00_001BD7E0_lui, v);
             break;
-        case 3:
+        case SKY_SHELL_TENFOLD_PHASE_ROTATION:
             ((float *)v)[2] =
                 (float)((D_L00_0015F5CC_28a480g * 10) & 0x1FFFF) * (3.14159265f / 65536.0f) -
                 3.14159265f;
