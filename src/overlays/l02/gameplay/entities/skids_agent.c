@@ -126,6 +126,10 @@ extern void FUN_L00_00250df8(void *);
  * record 50), a path-camera ride (3/4) that fades D_L02_0015F3FC in and out, then the shared head-tracking tail. */
 void skids_agent_update(struct Moby *moby) __asm__("FUN_L02_002e0dc0");
 void skids_agent_update(struct Moby *moby) {
+    enum {
+        SKIDS_AGENT_INITIALIZE = 0,
+        SKIDS_AGENT_END_CONVERSATION = 5
+    };
     char *data = (char *)moby->pvars;
     s32 t;
     f32 fade;
@@ -133,7 +137,7 @@ void skids_agent_update(struct Moby *moby) {
 
     FUN_L02_002e0cd8(moby);
     switch (moby->state) {
-    case 0:
+    case SKIDS_AGENT_INITIALIZE:
         if (items_owned[0x2D] != 0) {
             goto kill;
         }
@@ -215,7 +219,7 @@ void skids_agent_update(struct Moby *moby) {
             talk_camera.placed = 1;
         }
         break;
-    case 5:
+    case SKIDS_AGENT_END_CONVERSATION:
         FUN_L00_00260860(5, 1);
         end_conversation(0, -1);
         goto kill;
