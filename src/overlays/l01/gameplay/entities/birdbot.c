@@ -1552,6 +1552,7 @@ void peckbot_update(Mob577 *self) {
         PECKBOT_STATE_ATTACK_TARGET = 4,
         PECKBOT_STATE_RETURN_HOME = 5,
         PECKBOT_STATE_NONFATAL_KNOCKBACK = 6,
+        PECKBOT_STATE_MOVE_FORWARD_NEAR_LEADER = 13,
         PECKBOT_STATE_AIRBORNE_IDLE = 14,
         PECKBOT_STATE_MOVE_TO_DESTINATION = 15,
         PECKBOT_STATE_ASCEND = 16,
@@ -2063,7 +2064,7 @@ void peckbot_update(Mob577 *self) {
         }
         self->hit = 0;
         break;
-    case 13:
+    case PECKBOT_STATE_MOVE_FORWARD_NEAR_LEADER:
         if (self->anim_next != 2) {
             SET_ANIM(self, 2, 0, scale_game_frames(3));
         }
