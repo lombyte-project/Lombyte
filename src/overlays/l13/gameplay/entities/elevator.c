@@ -1163,6 +1163,7 @@ void robosquawker_update(RsMoby *m) {
         ROBOSQUAWKER_STATE_PECK_ATTACK = 4,
         ROBOSQUAWKER_STATE_RETURN_HOME = 5,
         ROBOSQUAWKER_STATE_DAMAGE_KNOCKBACK = 6,
+        ROBOSQUAWKER_STATE_RECOVER_TO_FLIGHT_IDLE = 7,
         ROBOSQUAWKER_STATE_WAIT_FOR_CLOSE_TARGET = 8,
         ROBOSQUAWKER_STATE_PREPARE_HOME_HOP = 0xA,
         ROBOSQUAWKER_STATE_HOME_HOP = 0xB,
@@ -1822,7 +1823,7 @@ void robosquawker_update(RsMoby *m) {
             return;
         }
         break;
-    case 7:
+    case ROBOSQUAWKER_STATE_RECOVER_TO_FLIGHT_IDLE:
         FUN_L13_002b4fb8((Level13VendorMoby *)v);
         if (FUN_L00_002dc9f0(m, v->x120) != 0) {
             m->state = 0xE;
