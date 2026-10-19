@@ -1975,6 +1975,7 @@ s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
 s32 FUN_L00_002dbe20(u8 *m) {
     enum {
+        SUCK_CANNON_INACTIVE = 0,
         SUCK_CANNON_ALIGNING_FOR_SUCTION = 1,
         SUCK_CANNON_RISING_FOR_SUCTION = 2,
         SUCK_CANNON_BEING_PULLED_IN = 3,
@@ -2011,7 +2012,7 @@ s32 FUN_L00_002dbe20(u8 *m) {
     }
     case SUCK_CANNON_STORED:
         return 1;
-    case 0:
+    case SUCK_CANNON_INACTIVE:
     case SUCK_CANNON_FLYING_PROJECTILE:
     case SUCK_CANNON_ROLLING_PROJECTILE:
     case SUCK_CANNON_FALLING_AFTER_CANCEL:
