@@ -1174,7 +1174,8 @@ void decoy_glove_update(unsigned char *moby) {
     enum {
         DECOY_GLOVE_INITIALIZE = 0,
         DECOY_GLOVE_RELEASE_DECOY = 3,
-        DECOY_GLOVE_WAIT_AFTER_RELEASE = 4
+        DECOY_GLOVE_WAIT_AFTER_RELEASE = 4,
+        DECOY_GLOVE_SKIP_TARGET_FOLLOW_AND_SPAWN = 6
     };
     extern void mark_moby_for_removal();
     extern void transform_vector_alt();
@@ -1271,7 +1272,7 @@ L3D34:
     case 5:
         moby[0x20] = 6;
         break;
-    case 6:
+    case DECOY_GLOVE_SKIP_TARGET_FOLLOW_AND_SPAWN:
         return;
     default:
         break;
