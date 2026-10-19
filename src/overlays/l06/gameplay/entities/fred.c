@@ -6045,7 +6045,8 @@ extern int GB_FRAME_gp __asm__("D_L06_0015F5CC") __attribute__((sda));
 void FUN_L06_00300df0(char *moby) {
     enum {
         INITIALIZE_BOBBING_HEIGHT = 0,
-        UPDATE_BOBBING_HEIGHT = 1
+        UPDATE_BOBBING_HEIGHT = 1,
+        UPDATE_LINEAR_AND_ANGULAR_MOTION = 2
     };
     char *data = *(char **)(moby + 0x78);
     int state;
@@ -6070,7 +6071,7 @@ void FUN_L06_00300df0(char *moby) {
             *(float *)(moby + 0x18) = *(float *)(data + 0xC) + D_L06_00162090 * g;
         }
         break;
-    case 2:
+    case UPDATE_LINEAR_AND_ANGULAR_MOTION:
         if (*(float *)(data + 0xC) > 1.0f)
             fast_vec_scale(data, data, 0.985f);
         fast_vec_add(moby + 0x10, moby + 0x10, data);
