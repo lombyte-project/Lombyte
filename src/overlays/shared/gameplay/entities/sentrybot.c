@@ -111,6 +111,9 @@ void sentrybot_update(unsigned char *moby) {
         SENTRYBOT_ANIM_TURN_POSITIVE_HEADING_DELTA = 11,
         SENTRYBOT_ANIM_TURN_AROUND = 12
     };
+    enum {
+        SENTRYBOT_PATROL_IDLE = 2
+    };
     float va[4];
     float vb[4];
     float pos[4];
@@ -213,7 +216,7 @@ void sentrybot_update(unsigned char *moby) {
         }
         break;
     }
-    case 2:
+    case SENTRYBOT_PATROL_IDLE:
     case SENTRYBOT_PATROL_PAUSE:
         if (*(int *)(data + 0x114) != 2) {
             moby[0xBC] = 1;
@@ -331,7 +334,7 @@ void sentrybot_update(unsigned char *moby) {
             }
             moby[0x20] = data[0x15C];
             switch (moby[0x20]) {
-            case 2:
+            case SENTRYBOT_PATROL_IDLE:
                 if (moby[0x53] != 0)
                     blend_moby_animation(moby, 0, 0, scale_game_frames(10));
                 break;
