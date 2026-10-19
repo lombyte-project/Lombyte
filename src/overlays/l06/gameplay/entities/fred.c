@@ -6799,6 +6799,7 @@ void shuttle_update(struct Moby *moby) {
         UPDATE_SHUTTLE_PATH_RIDE = 3,
         RESTORE_SHUTTLE_IDLE_ANIMATION = 4,
         WAIT_FOR_HERO_NEAR_LINKED_MOBY = 6,
+        WAIT_TO_SELECT_SHUTTLE_SAVE_FLOW = 7,
         WAIT_TO_SAVE_AND_RESUME_SHUTTLE_REQUESTS = 9
     };
     enum {
@@ -7020,7 +7021,7 @@ void shuttle_update(struct Moby *moby) {
             blend_moby_animation_302578(moby, 2, 0, scale_game_frames_302578(30));
         }
         break;
-    case 7:
+    case WAIT_TO_SELECT_SHUTTLE_SAVE_FLOW:
         if (D_L06_0015F5C4 != 2) {
             if (D_0013D4D5[9] != 0) {
                 FUN_L00_00298840_302578(5);
