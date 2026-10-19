@@ -1574,6 +1574,11 @@ extern L16WatchPlayer D_0013E633_watch __asm__("D_0013E533");
 extern char *D_L12_001600EC;
 void miner_update(L16WatchMoby *m) __asm__("FUN_L12_002e6c48");
 void miner_update(L16WatchMoby *m) {
+    enum {
+        MINER_INITIALIZE = 0,
+        MINER_UPDATE_DIALOGUE = 1,
+        MINER_APPLY_DIALOGUE_COMPLETION = 2
+    };
     L16WatchScratch scratch;
     L16WatchData *d = m->data;
     float rate;
@@ -1581,7 +1586,7 @@ void miner_update(L16WatchMoby *m) {
     int tracking;
     FUN_L12_002e6b60((char *)m);
     switch (m->state) {
-    case 0:
+    case MINER_INITIALIZE:
         if (alternate_item_available[1] != 0) {
             FUN_0020c828_c(m);
             return;
@@ -1590,14 +1595,14 @@ void miner_update(L16WatchMoby *m) {
         initialize_npc_dialogue(m, &d->activation);
         initialize_moby_grounding(m);
         break;
-    case 1:
+    case MINER_UPDATE_DIALOGUE:
         if (alternate_item_available[1] == 0 && update_npc_dialogue(m, &d->activation)) {
             FUN_L01_002783a8_c(m, 2.5f);
             *(int *)((char *)m + 0x58) = 0;
             m->state = 2;
         }
         break;
-    case 2:
+    case MINER_APPLY_DIALOGUE_COMPLETION:
         if (D_L12_0015F5C4 != 2) {
             *(float *)((char *)m + 0x58) = 1.0f;
             alternate_item_available[1] = 1;
