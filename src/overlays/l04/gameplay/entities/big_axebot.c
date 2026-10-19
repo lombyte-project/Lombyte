@@ -2322,6 +2322,7 @@ void blarg_trooper_update(struct Moby *moby) {
     enum {
         BLARG_TROOPER_STATE_INITIALIZE = 0,
         BLARG_TROOPER_STATE_IDLE = 1,
+        BLARG_TROOPER_STATE_MOVE_TO_PATH_POINT = 2,
         BLARG_TROOPER_STATE_JUMP = 4,
         BLARG_TROOPER_STATE_AIM = 5,
         BLARG_TROOPER_STATE_FIRE = 6,
@@ -2601,7 +2602,7 @@ void blarg_trooper_update(struct Moby *moby) {
             }
         }
         break;
-    case 2:
+    case BLARG_TROOPER_STATE_MOVE_TO_PATH_POINT:
         if (dist < 13.0f || best < 1.0f) {
             blend_moby_animation_p(moby, 0, 0, (void *)scale_game_frames(0xA));
             moby->state = 1;
