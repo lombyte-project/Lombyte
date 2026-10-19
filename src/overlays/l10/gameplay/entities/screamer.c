@@ -128,6 +128,7 @@ void screamer_update(Moby *moby) __asm__("FUN_L10_002df270");
 void screamer_update(Moby *moby) {
     enum {
         SCREAMER_STATE_INITIALIZE = 0,
+        SCREAMER_STATE_WAIT_FOR_ACTIVATION = 1,
         SCREAMER_STATE_WAIT_TO_RISE = 2,
         SCREAMER_STATE_RISE_FROM_HOME = 4,
         SCREAMER_STATE_FOLLOW_PATH = 5,
@@ -166,7 +167,7 @@ void screamer_update(Moby *moby) {
             moby->state = 1;
         }
         break;
-    case 1:
+    case SCREAMER_STATE_WAIT_FOR_ACTIVATION:
         if (data->f104 == 2 && data->f174 != 0) break;
         moby->state = 2;
         if (moby->prev_seq != 1) func_00213DE0_2E0630(moby, 1, 0, func_001F9850_2E0630(10));
