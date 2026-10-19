@@ -2020,8 +2020,10 @@ void decoy_update(char *moby) {
     enum {
         DECOY_INITIALIZE = 0,
         DECOY_THROWN_MOVEMENT = 2,
+        DECOY_SETTLED_MOVEMENT = 3,
         DECOY_WAIT_TO_SHRINK = 5,
-        DECOY_SHRINK_FOR_REMOVAL = 6
+        DECOY_SHRINK_FOR_REMOVAL = 6,
+        DECOY_RESET_TO_INITIALIZE = 7
     };
     int active = ((unsigned char *)&D_0013E533)[6];
     char *vars = *(char **)(moby + 0x78);
@@ -2182,7 +2184,7 @@ void decoy_update(char *moby) {
             *(int *)(target + 0x94) = *(int *)(*(char **)(target + 0x24) + 0x10);
         }
         break;
-    case 3:
+    case DECOY_SETTLED_MOVEMENT:
     case 4:
         hit = FUN_L00_0025a420(moby, 0x30001, 0);
         *(float *)(moby + 0x40) = FUN_002000e8_2c4380(*(float *)(moby + 0x40),
@@ -2311,7 +2313,7 @@ void decoy_update(char *moby) {
         FUN_L00_0024eb68_2c4380(moby);
         break;
     }
-    case 7:
+    case DECOY_RESET_TO_INITIALIZE:
     default:
         moby[0x20] = 0;
     }
