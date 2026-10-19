@@ -516,9 +516,12 @@ void nanotech_ball_update(Moby *moby) __asm__("FUN_L00_002d89f0");
 void nanotech_ball_update(Moby *moby) {
     enum {
         NANOTECH_BALL_STATE_INITIALIZE = 0,
-        NANOTECH_BALL_STATE_FOLLOW_OWNER = 1
+        NANOTECH_BALL_STATE_FOLLOW_OWNER = 1,
+        NANOTECH_BALL_STATE_DETACHED_PICKUP = 2,
+        NANOTECH_BALL_STATE_COLLECTING = 3,
+        NANOTECH_BALL_STATE_BASIS_ONLY = 4
     };
-    V_2D9EA0 v0, v10, v20, collection_target_or_end_tangent, v40, half_displacement_or_spark_position, slot_curve_offset;
+    V_2D9EA0 v0, v10, v20, collection_target_or_end_tangent, cross_product_or_particle_midpoint, half_displacement_or_spark_position, slot_curve_offset;
     D_2D9EA0 *data = (D_2D9EA0 *)moby->pvars;
 
     switch (moby->state) {
@@ -585,7 +588,7 @@ void nanotech_ball_update(Moby *moby) {
             data->f50 = 0;
         }
     }
-    case 2:
+    case NANOTECH_BALL_STATE_DETACHED_PICKUP:
         if (moby->state == 2) {
             int i;
             qcopy(&data->pos, &moby->pos);
@@ -617,8 +620,8 @@ void nanotech_ball_update(Moby *moby) {
                 func_001F9C30_2D9EA0(&v0, &hero->gravity_dir, -D_L00_00161A50);
                 func_001F9BF0_2D9EA0(&v20, &collection_target_or_end_tangent, &moby->pos);
                 v20.z -= 0.5f;
-                fast_vec_cross(&v40, &v20, &v0);
-                fast_vec_cross(&v0, &v40, &v20);
+                fast_vec_cross(&cross_product_or_particle_midpoint, &v20, &v0);
+                fast_vec_cross(&v0, &cross_product_or_particle_midpoint, &v20);
                 func_002156E0_2D9EA0(&v0, &v0, -1.5707964f, &v20);
                 func_L00_001FF4B0_2D9EA0(&v0, &v0, D_L00_00161A50);
                 func_001F9C30_2D9EA0(&half_displacement_or_spark_position, &v20, 0.5f);
@@ -689,7 +692,7 @@ void nanotech_ball_update(Moby *moby) {
             }
         }
         break;
-    case 3:
+    case NANOTECH_BALL_STATE_COLLECTING:
         if (D_L00_0015F63C == moby) func_L00_002D9DB8_2D9EA0();
         if (data->h56 != 0) {
             func_001F9C30_2D9EA0(&moby->pos, D_0013F5E0, -D_L00_00161A54);
@@ -752,7 +755,7 @@ void nanotech_ball_update(Moby *moby) {
                     float progress;
                     float remaining;
                     Part_2D9EA0 *spark;
-                    qcopy(&v40, &part->pos);
+                    qcopy(&cross_product_or_particle_midpoint, &part->pos);
                     remaining = func_001FA888_2D9EA0(ext->h1C);
                     remaining = (float)ext->h1E / remaining;
                     {
@@ -780,11 +783,11 @@ void nanotech_ball_update(Moby *moby) {
                         spark->f4 = D_L00_00161A00;
                         spark->fC = D_L00_001619F8;
                     }
-                    func_001F9BD8_2D9EA0(&v40, &part->pos, &v40);
-                    func_001F9C30_2D9EA0(&v40, &v40, 0.5f);
-                    half_displacement_or_spark_position.x = func_L00_00258C80_2D9EA0(0.0f, 0.00999999978f) + v40.x;
-                    half_displacement_or_spark_position.y = func_L00_00258C80_2D9EA0(0.0f, 0.00999999978f) + v40.y;
-                    half_displacement_or_spark_position.z = func_L00_00258C80_2D9EA0(0.0f, 0.00999999978f) + v40.z;
+                    func_001F9BD8_2D9EA0(&cross_product_or_particle_midpoint, &part->pos, &cross_product_or_particle_midpoint);
+                    func_001F9C30_2D9EA0(&cross_product_or_particle_midpoint, &cross_product_or_particle_midpoint, 0.5f);
+                    half_displacement_or_spark_position.x = func_L00_00258C80_2D9EA0(0.0f, 0.00999999978f) + cross_product_or_particle_midpoint.x;
+                    half_displacement_or_spark_position.y = func_L00_00258C80_2D9EA0(0.0f, 0.00999999978f) + cross_product_or_particle_midpoint.y;
+                    half_displacement_or_spark_position.z = func_L00_00258C80_2D9EA0(0.0f, 0.00999999978f) + cross_product_or_particle_midpoint.z;
                     spark = func_L00_002745A8_2D9EA0(&half_displacement_or_spark_position, func_001F9850_2D9EA0(0x14), 0);
                     if (spark != 0) {
                         spark->f4 = D_L00_00161A00;
@@ -794,7 +797,7 @@ void nanotech_ball_update(Moby *moby) {
             }
         }
         break;
-    case 4:
+    case NANOTECH_BALL_STATE_BASIS_ONLY:
         if (D_L00_0015F63C == moby) func_L00_002D9DB8_2D9EA0();
         break;
     }
