@@ -88,6 +88,7 @@ int hero_set_state(int a, int b) {
         HERO_STATE_MOVE_TO_TARGET = 0x65,
         HERO_STATE_STOP_AT_TARGET = 0x66,
         HERO_STATE_IDLE_AT_TARGET = 0x67,
+        HERO_STATE_WRENCH_COMBO_ALT = 0x70,
         HERO_STATE_DEATH_FALL = 0x77
     };
     int old2088;
@@ -1218,7 +1219,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x70: {
+    case HERO_STATE_WRENCH_COMBO_ALT: {
         struct Hero *p = &hero;
         p->state.control_mode = 6;
         p->unkA64 = 0;
