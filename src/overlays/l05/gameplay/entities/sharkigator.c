@@ -3003,6 +3003,10 @@ extern int D_L05_00161CE4 __attribute__((sda));
 extern int D_L05_00161CE8 __attribute__((sda));
 void floating_platform_update(unsigned char *moby) __asm__("FUN_L05_0030bdd8");
 void floating_platform_update(unsigned char *moby) {
+    enum {
+        FLOATING_PLATFORM_INITIALIZE = 0,
+        FLOATING_PLATFORM_UPDATE_ROCKING = 1
+    };
     char *data = *(char **)(moby + 0x78);
     float v[4];
     float w[4];
@@ -3013,14 +3017,14 @@ void floating_platform_update(unsigned char *moby) {
     float k;
     float t;
     switch (moby[0x20]) {
-    case 0:
+    case FLOATING_PLATFORM_INITIALIZE:
         *(int *)(data + 0x78) = func_001FA898_r(multiply_global_factor_ed64(random_float_between_alt(
             (float)D_L05_00161CE4, (float)D_L05_00161CE8)));
         *(float *)(data + 0x60) = random_angle_radians();
         *(float *)(data + 0x6C) = random_angle_radians();
         moby[0x20] = 1;
         break;
-    case 1:
+    case FLOATING_PLATFORM_UPDATE_ROCKING:
         if (fast_dec_timer((int *)(data + 0x78))) {
             allocate_voice_for_target_entry_alt(0, 0, (int)moby);
             *(int *)(data + 0x78) = func_001FA898_r(multiply_global_factor_ed64(random_float_between_alt(
