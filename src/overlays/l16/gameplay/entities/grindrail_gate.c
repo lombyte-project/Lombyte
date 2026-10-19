@@ -2618,6 +2618,10 @@ extern L16SingleSphere_2e8e80 D_L16_00161F60_bounds_2e8e80[] __asm__("D_L16_001D
 extern void FUN_L16_002e8d40_c(void *) __asm__("FUN_L16_002e8d40");
 extern void FUN_L16_002e97a0(void);
 void FUN_L16_002e8e80(struct Moby *m) {
+    enum {
+        MESH_RENDER_INITIALIZE_BOUNDING_SPHERES = 0,
+        MESH_RENDER_QUEUE_CALLBACK = 1
+    };
     int i, j;
     float maxx, maxy, maxz, minx, miny, minz;
     float p[4];
@@ -2625,7 +2629,7 @@ void FUN_L16_002e8e80(struct Moby *m) {
     float *verts;
     int count;
     switch (m->state) {
-    case 0: {
+    case MESH_RENDER_INITIALIZE_BOUNDING_SPHERES: {
         for (i = 0; i <= 2; i++) {
             maxx = maxy = maxz = -1024.0f;
             minx = miny = minz = 1024.0f;
@@ -2673,7 +2677,7 @@ void FUN_L16_002e8e80(struct Moby *m) {
         m->state = 1;
         break;
     }
-    case 1:
+    case MESH_RENDER_QUEUE_CALLBACK:
         enqueue_callback_list_1_2e8e80(FUN_L16_002e8d40_c, m);
         break;
     }
