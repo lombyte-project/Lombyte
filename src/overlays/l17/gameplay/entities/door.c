@@ -538,6 +538,7 @@ int FUN_L17_002eace8(int a, char *p, char *radar_origin, char *radar_rotation, f
         MOBY_CLASS_PRIORITY_LOCK_TARGET = 0x3EB,
         MOBY_CLASS_FLAG_GATED_SCREEN_MARKER_TARGET = 0x4BE,
         MOBY_CLASS_STATE_GATED_MARKED_TARGET = 0x4BF,
+        MOBY_CLASS_GRAY_RADAR_ICON_TWO_CONTACT = 0x4C2,
         MOBY_CLASS_MARKED_COUNTED_TARGET = 0x504
     };
     float v[4];
@@ -597,7 +598,7 @@ int FUN_L17_002eace8(int a, char *p, char *radar_origin, char *radar_rotation, f
         }
         switch (*(short *)(m + 0xA6)) {
         case MOBY_CLASS_GRAY_RADAR_CONTACT:
-        case 0x4C2:
+        case MOBY_CLASS_GRAY_RADAR_ICON_TWO_CONTACT:
             FUN_L17_002eaae0(radar_rotation, radar_origin, m, 2, 0x70808080, *(int *)(p + 0x104));
             break;
         case 0xE4:
