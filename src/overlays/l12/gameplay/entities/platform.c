@@ -1281,8 +1281,16 @@ void platform_update(Moby *moby) __asm__("FUN_L12_002e3ed8");
 void platform_update(Moby *moby) {
     enum {
         PLATFORM_INITIALIZE = 0,
+        PLATFORM_OSCILLATE_BETWEEN_PATH_ENDPOINTS = 2,
+        PLATFORM_WAIT_TO_RESUME_OSCILLATION = 3,
+        PLATFORM_OSCILLATE_BETWEEN_PATH_ENDPOINTS_FIXED_PITCH = 4,
+        PLATFORM_WAIT_TO_RESUME_FIXED_PITCH_OSCILLATION = 5,
         PLATFORM_FOLLOW_WAYPOINTS = 7,
         PLATFORM_TRACK_REFERENCED_MOBY_HEIGHT = 9
+    };
+    enum {
+        PLATFORM_KIND_FOLLOW_WAYPOINTS = 0,
+        PLATFORM_KIND_TRACK_REFERENCED_MOBY_HEIGHT = 4
     };
     float oldPos[4];
     float oldRot[4];
@@ -1306,7 +1314,7 @@ void platform_update(Moby *moby) {
     switch (moby->state) {
     case PLATFORM_INITIALIZE:
         switch (data->kind) {
-        case 0:
+        case PLATFORM_KIND_FOLLOW_WAYPOINTS:
             (*(int *)&moby->collision) = (*(Class_2E51E8 **)&moby->pclass)->f10;
             data->walk.path = D_L12_001B0C30_2E51E8[data->walk.pathIdx];
             data->walk.idx = 0;
@@ -1346,7 +1354,7 @@ void platform_update(Moby *moby) {
             moby->state = 1;
             (*(int *)&moby->collision) = 0;
             break;
-        case 4:
+        case PLATFORM_KIND_TRACK_REFERENCED_MOBY_HEIGHT:
             moby->state = 9;
             data->fD4 = 4.0f;
             data->fD0 = 4.0f;
@@ -1379,7 +1387,7 @@ void platform_update(Moby *moby) {
         }
         break;
     }
-    case 2: {
+    case PLATFORM_OSCILLATE_BETWEEN_PATH_ENDPOINTS: {
         Path_2E51E8 *path = data->walk.path;
         float swing;
         data->fD4 = 0.0f;
@@ -1404,7 +1412,7 @@ void platform_update(Moby *moby) {
         }
         break;
     }
-    case 4: {
+    case PLATFORM_OSCILLATE_BETWEEN_PATH_ENDPOINTS_FIXED_PITCH: {
         Path_2E51E8 *path = data->walk.path;
         float swing;
         data->fD8 = fast_add_rotations_c2(data->fD8, D_0015ED6C * 1.2217305f);
@@ -1421,7 +1429,7 @@ void platform_update(Moby *moby) {
         (*(float (*)[4])&moby->rot)[1] = -1.5707964f;
         break;
     }
-    case 3:
+    case PLATFORM_WAIT_TO_RESUME_OSCILLATION:
         angles[2] = (*(float (*)[4])&moby->rot)[2];
         if (tick_countdown_32_alt_c(&data->timer)) {
             if (data->walk.dir == 1) {
@@ -1439,7 +1447,7 @@ void platform_update(Moby *moby) {
             func_L12_002E4F18_2E51E8(moby, angles, (*(float (*)[4])&moby->pos), 0, 1);
         }
         break;
-    case 5:
+    case PLATFORM_WAIT_TO_RESUME_FIXED_PITCH_OSCILLATION:
         if (tick_countdown_32_alt_c(&data->timer)) {
             if (data->walk.dir == 1) {
                 data->walk.dir = 2;
