@@ -681,7 +681,9 @@ extern char D_0013E633_3071B0[] __asm__("D_0013E550");
 void FUN_L14_00305d28(Moby_3071B0 *moby) {
     enum {
         HELPER_SEQUENCE_INITIALIZE = 0,
-        HELPER_SEQUENCE_WAIT_FOR_TRIGGER = 1
+        HELPER_SEQUENCE_WAIT_FOR_TRIGGER = 1,
+        HELPER_SEQUENCE_ANIMATE_SLOTS = 2,
+        HELPER_SEQUENCE_ANIMATE_OWNER = 3
     };
     Data_3071B0 *data = moby->data;
     float vec[4];
@@ -717,7 +719,7 @@ void FUN_L14_00305d28(Moby_3071B0 *moby) {
             func_L00_0028EF68_3071B0(0, 0, data->slots.m[data->cur], 0x575);
         }
         break;
-    case 2: {
+    case HELPER_SEQUENCE_ANIMATE_SLOTS: {
         Slots_3071B0 *slots = &data->slots;
         Moby_3071B0 *o = slots->m[data->cur];
         func_001F9938_3071B0(&data->timer);
@@ -735,7 +737,7 @@ void FUN_L14_00305d28(Moby_3071B0 *moby) {
         }
         break;
     }
-    case 3: {
+    case HELPER_SEQUENCE_ANIMATE_OWNER: {
         Moby_3071B0 *owner = data->owner;
         Moby_3071B0 **slots;
         int i;
