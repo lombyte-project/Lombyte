@@ -753,6 +753,13 @@ extern void scale_vector_xyz(void *out, void *a, float s) __asm__("FUN_001f9a68"
  * or steps node to node towards the path end, pausing between runs and playing its loop sound. */
 void moving_platform_small_update(char *moby) __asm__("FUN_L03_00294c08");
 void moving_platform_small_update(char *moby) {
+    enum {
+        PLATFORM_INITIALIZE_AND_WAIT = 0,
+        PLATFORM_EASED_ENDPOINT_TRAVEL = 1,
+        PLATFORM_PAUSE_BEFORE_EASED_TRAVEL = 2,
+        PLATFORM_FOLLOW_PATH_NODES = 3,
+        PLATFORM_PAUSE_BEFORE_NODE_TRAVEL = 4
+    };
     float delta[4];
     float old_rot[4];
     float step[4];
@@ -784,7 +791,7 @@ void moving_platform_small_update(char *moby) {
     qcopy(old_rot, moby + 0x40);
     noop_main_callback(moby);
     switch (((unsigned char *)moby)[0x20]) {
-    case 0:
+    case PLATFORM_INITIALIZE_AND_WAIT:
         pa = data + 0xB0;
         *(char **)(data + 0xC0) = D_L03_001B05B0_294c08[*(int *)(data + 0xE0)];
         if (*(int *)(data + 0xF8) != 0) {
@@ -809,7 +816,7 @@ void moving_platform_small_update(char *moby) {
             moby[0x20] = 1;
         }
         break;
-    case 1:
+    case PLATFORM_EASED_ENDPOINT_TRAVEL:
         pb = data + 0xB0;
         speed = *(float *)(data + 0x114);
         base = 0.0f;
@@ -846,13 +853,13 @@ void moving_platform_small_update(char *moby) {
             *(int *)(data + 0xE8) = scale_game_frames(*(int *)(data + 0xF0));
         }
         break;
-    case 2:
+    case PLATFORM_PAUSE_BEFORE_EASED_TRAVEL:
         if (fast_dec_timer(data + 0xE8)) {
             *(int *)(data + 0x10C) = 0;
             moby[0x20] = 1;
         }
         break;
-    case 3:
+    case PLATFORM_FOLLOW_PATH_NODES:
         pc = data + 0xB0;
         path = *(int **)(pc + 0x10);
         dir = pc[4];
@@ -895,7 +902,7 @@ void moving_platform_small_update(char *moby) {
             }
         }
         break;
-    case 4:
+    case PLATFORM_PAUSE_BEFORE_NODE_TRAVEL:
         if (fast_dec_timer(data + 0xE8)) {
             moby[0x20] = 3;
         }
