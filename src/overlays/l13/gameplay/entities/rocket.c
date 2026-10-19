@@ -844,7 +844,9 @@ void blarg_space_commando_update(struct Moby *moby) __asm__("FUN_L13_00307e98");
 void blarg_space_commando_update(struct Moby *moby) {
     enum {
         BLARG_SPACE_COMMANDO_INITIALIZE = 0,
-        BLARG_SPACE_COMMANDO_RETURN_HOME = 13
+        BLARG_SPACE_COMMANDO_RETURN_HOME = 13,
+        BLARG_SPACE_COMMANDO_KNOCKBACK = 15,
+        BLARG_SPACE_COMMANDO_DYING = 16
     };
     Vars_309330 *vars = (Vars_309330 *)moby->pvars;
     struct Moby *target;
@@ -1111,7 +1113,7 @@ void blarg_space_commando_update(struct Moby *moby) {
             }
         }
         break;
-    case 15:
+    case BLARG_SPACE_COMMANDO_KNOCKBACK:
         hit = mine_fall(moby, &vars->vel);
         if (hit & 0x40) {
             qzero(&vars->vel);
@@ -1123,7 +1125,7 @@ void blarg_space_commando_update(struct Moby *moby) {
             mark_moby_for_removal_c2(moby);
         }
         break;
-    case 16:
+    case BLARG_SPACE_COMMANDO_DYING:
         if (mine_fall(moby, &vars->vel) & 0x160) {
             FUN_L00_0025e450_c(moby, &vars->vel, 0, 0.0f, 0.0f, 10, 3, 16, 4.0f, 2.0f, 9.0f, -1, 1.0f, 15.0f, 1, 1, -1, 0);
             mark_moby_for_removal_c2(moby);
