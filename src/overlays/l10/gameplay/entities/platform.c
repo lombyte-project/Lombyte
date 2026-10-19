@@ -1591,6 +1591,10 @@ extern void func_L00_002633D8_f(float, float, void *, int *, float *,
 extern int trooper_play_sound(int, int, void *, int) __asm__("FUN_L00_0028dc90");
 
 void FUN_L10_002d8d30(char *m) {
+    enum {
+        SPARK_STATE_WAIT_FOR_TIMER = 0,
+        SPARK_STATE_TRAVERSE_PATH = 1
+    };
     char *d = *(char **)(m + 0x78);
     int *path;
     float pos[4];
@@ -1605,7 +1609,7 @@ void FUN_L10_002d8d30(char *m) {
     path = D_L10_001B0930[*(int *)d];
     ((unsigned char *)m)[0x30] = 0xFF;
     switch (((unsigned char *)m)[0x20]) {
-    case 0:
+    case SPARK_STATE_WAIT_FOR_TIMER:
         if (*(int *)(d + 0xC) != -1) {
             FUN_L00_0023e838(*(int *)(d + 0xC));
             *(int *)(d + 0xC) = -1;
@@ -1622,7 +1626,7 @@ void FUN_L10_002d8d30(char *m) {
             *(int *)(d + 4) = 0;
         }
         break;
-    case 1:
+    case SPARK_STATE_TRAVERSE_PATH:
         len = distance_xyz((char *)path + 0x10, (char *)path + 0x20);
         *(float *)(d + 4) += frame_time * 5.0f;
         func_L00_002633D8_f(*(float *)(d + 4), len, path, &seg, &frac, pos);
