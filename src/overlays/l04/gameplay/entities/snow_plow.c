@@ -788,8 +788,10 @@ void woodcut_bot_update(WBMoby *m) __asm__("FUN_L04_002d16b8");
 void woodcut_bot_update(WBMoby *m) {
     enum {
         WOODCUT_BOT_INITIALIZE = 0,
+        WOODCUT_BOT_IDLE = 1,
         WOODCUT_BOT_MOVE_TOWARD_TARGET = 5,
         WOODCUT_BOT_RETURN_TO_SAVED_POSITION = 6,
+        WOODCUT_BOT_STOP_MOVEMENT = 7,
         WOODCUT_BOT_MELEE_ATTACK = 8,
         WOODCUT_BOT_TURN_BEFORE_MOVEMENT = 10,
         WOODCUT_BOT_DEATH_KNOCKBACK = 11
@@ -996,7 +998,7 @@ void woodcut_bot_update(WBMoby *m) {
             m->state = 1;
         }
         break;
-    case 1:
+    case WOODCUT_BOT_IDLE:
         if (m->f70 & 2) {
             if (excited ? (d->f3E8 * 2.0f < dist) : (d->f3E8 < dist)) {
                 int anims[6];
@@ -1210,7 +1212,7 @@ void woodcut_bot_update(WBMoby *m) {
             }
         }
         break;
-    case 7:
+    case WOODCUT_BOT_STOP_MOVEMENT:
         if (dist < 3.0f && adiff < 1.5707964f) {
             blend_moby_animation(m, 4, 0, scale_game_frames(10));
             FUN_L00_002a1538(d->f160);
