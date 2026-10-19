@@ -815,6 +815,9 @@ void woodcut_bot_update(WBMoby *m) {
         WOODCUT_BOT_TURN_BEFORE_MOVEMENT = 10,
         WOODCUT_BOT_DEATH_KNOCKBACK = 11
     };
+    enum {
+        WOODCUT_BOT_REACTION_START_DEATH_KNOCKBACK = 1
+    };
     int excited = 0;
     WBData *d = m->d;
     unsigned char *p120;
@@ -897,7 +900,7 @@ void woodcut_bot_update(WBMoby *m) {
             switch (r) {
             case 0:
                 break;
-            case 1:
+            case WOODCUT_BOT_REACTION_START_DEATH_KNOCKBACK:
             case 2:
                 d->fD4 = frame_time_sq * 17.0f;
                 d->fD8 = frame_time * 7.0f;
