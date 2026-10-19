@@ -2697,6 +2697,7 @@ extern char *D_L10_001B0930_5968[] __asm__("D_L10_001B0930");
 void FUN_L10_002e5968(struct Moby *m) {
     enum {
         LETHAL_HIT_RESPONSE = 1,
+        COLOR_EFFECT_ONLY_HIT_RESPONSE = 12,
         NO_REACTION_HIT_RESPONSE = 13
     };
     unsigned char *d = m->pvars;
@@ -2716,7 +2717,7 @@ void FUN_L10_002e5968(struct Moby *m) {
         switch (r) {
         case 9:
         case 10:
-        case 12:
+        case COLOR_EFFECT_ONLY_HIT_RESPONSE:
             d[0xC7] = 0xFA;
             trooper_anim_update(m, d + 0xC0);
             break;
