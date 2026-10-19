@@ -3422,20 +3422,24 @@ extern int scale_ticks(int) __asm__("FUN_001f96f8");
 /* One-shot burst: when hit, flags D_0013D39D, sprays 200 dust puffs and 50 sparks, then removes itself. */
 void rocks_update(struct Moby *moby) __asm__("FUN_L02_002e0720");
 void rocks_update(struct Moby *moby) {
+    enum {
+        ROCKS_INITIALIZE = 0,
+        ROCKS_WAIT_FOR_HIT = 1
+    };
     char *h;
     int i;
     int j;
 
     h = find_moby_hit(moby, 0x800000, 0);
     switch (moby->state) {
-    case 0:
+    case ROCKS_INITIALIZE:
         if (menu_item_enabled_9) {
             mark_moby_for_removal(moby);
         } else {
             moby->state = 1;
         }
         break;
-    case 1:
+    case ROCKS_WAIT_FOR_HIT:
         if (h) {
             menu_item_enabled_9 = 1;
             FUN_0022da68(0, 0, (int)moby);
