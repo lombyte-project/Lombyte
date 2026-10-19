@@ -62,10 +62,17 @@ void memcard_update_state(void) {
     enum {
         MEMCARD_QUERY_INFO = 0,
         MEMCARD_PROCESS_INFO_RESULT = 1,
+        MEMCARD_PROBE_REQUEST_OPEN = 1,
+        MEMCARD_DISPATCH_PENDING_OPERATION = 2,
+        MEMCARD_PROBE_PROCESS_OPEN_RESULT = 2,
         MEMCARD_REQUEST_FORMAT = 3,
+        MEMCARD_PROBE_REQUEST_HEADER_READ = 3,
         MEMCARD_PROCESS_FORMAT_RESULT = 4,
+        MEMCARD_PROBE_PROCESS_HEADER_READ_RESULT = 4,
         MEMCARD_REQUEST_UNFORMAT = 5,
-        MEMCARD_PROCESS_UNFORMAT_RESULT = 6
+        MEMCARD_PROBE_REQUEST_CLOSE = 5,
+        MEMCARD_PROCESS_UNFORMAT_RESULT = 6,
+        MEMCARD_REQUEST_CHDIR = 7
     };
     char name[0x40];
 
@@ -99,7 +106,7 @@ void memcard_update_state(void) {
         MC.busy = 0;
         break;
 
-    case 2:
+    case MEMCARD_DISPATCH_PENDING_OPERATION:
         if (MC.pending_state >= 0) {
             if (MC.card[0].sync_result == 0) {
                 if (MC.pending_card >= 0) {
@@ -163,7 +170,7 @@ void memcard_update_state(void) {
         MC.busy = 0;
         break;
 
-    case 7:
+    case MEMCARD_REQUEST_CHDIR:
         if (sceMcChdir(CARD.port, CARD.slot, D_0013D1D0, 0) == 0) {
             MC.sub = 0;
             MC.state = 8;
@@ -194,13 +201,13 @@ void memcard_update_state(void) {
                 MC.busy = 0;
             }
             break;
-        case 1:
+        case MEMCARD_PROBE_REQUEST_OPEN:
             sprintf(name, D_0013D270, 0);
             if (sceMcOpen(CARD.port, CARD.slot, name, 1) == 0) {
                 MC.sub++;
             }
             break;
-        case 2:
+        case MEMCARD_PROBE_PROCESS_OPEN_RESULT:
             if (MC.result >= 0) {
                 MC.fd = MC.result;
                 MC.sub = 3;
@@ -225,13 +232,13 @@ void memcard_update_state(void) {
             }
             MC.busy = 0;
             break;
-        case 3:
+        case MEMCARD_PROBE_REQUEST_HEADER_READ:
             MC.size = 8;
             if (sceMcRead(MC.fd, &CARD.main_size, 8) == 0) {
                 MC.sub = 4;
             }
             break;
-        case 4:
+        case MEMCARD_PROBE_PROCESS_HEADER_READ_RESULT:
             if (MC.result == MC.size) {
                 CARD.errors = 0;
                 if (CARD.main_size != get_dma_packet_span_bytes(mc_gamedata)) {
@@ -270,7 +277,7 @@ void memcard_update_state(void) {
                 MC.busy = 0;
             }
             break;
-        case 5:
+        case MEMCARD_PROBE_REQUEST_CLOSE:
             if (sceMcClose(MC.fd) == 0) {
                 MC.busy = 0;
                 MC.state = 21;
