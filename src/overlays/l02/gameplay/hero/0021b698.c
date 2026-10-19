@@ -1321,7 +1321,7 @@ void FUN_L02_00225c20(void) {
             }
         }
     } break;
-    case 0x14: {
+    case HERO_STATE_WRENCH_SLAM: {
         int t0;
         int t1;
         float v;
