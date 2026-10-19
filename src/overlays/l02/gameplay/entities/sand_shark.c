@@ -3183,6 +3183,11 @@ extern void quaternion_rotation_basis(void *, void *) __asm__("FUN_001fa480");
 /* Turns the moby from its spawn rotation to the goal angles once it is triggered (unkBC). */
 void rocket_door1_update(struct Moby *m) __asm__("FUN_L02_002df948");
 void rocket_door1_update(struct Moby *m) {
+    enum {
+        ROCKET_DOOR1_INITIALIZE_ROTATION = 0,
+        ROCKET_DOOR1_WAIT_FOR_COMMAND = 1,
+        ROCKET_DOOR1_TURN_TO_GOAL_ROTATION = 2
+    };
     Vec4 qx;
     Vec4 qy;
     Vec4 qz;
@@ -3198,7 +3203,7 @@ void rocket_door1_update(struct Moby *m) {
         m->flags &= ~1;
     }
     switch (m->state) {
-    case 0:
+    case ROCKET_DOOR1_INITIALIZE_ROTATION:
         qcopy(&v->start, &m->rot);
         v->start.f[3] = 0.0f;
         if (D_0014C050[D_0015ED84][m->mission] == 0xFF) {
@@ -3221,14 +3226,14 @@ void rocket_door1_update(struct Moby *m) {
             multiply_quaternions(&v->start, &rxy, &qz);
         }
         break;
-    case 1:
+    case ROCKET_DOOR1_WAIT_FOR_COMMAND:
         if (m->command != 0) {
             m->state = 2;
             v->speed = 0.0f;
             v->t = 0.0f;
         }
         break;
-    case 2:
+    case ROCKET_DOOR1_TURN_TO_GOAL_ROTATION:
         approach_angle(&v->t, &v->speed, 1.0f, frame_time_sq_macro * 0.5f, frame_time_sq_macro * 0.5f, D_0015ED6C);
         quaternion_nlerp(&qx, &v->start, &v->goal, v->t);
         quaternion_rotation_basis(&qx, &m->rot_row0);
