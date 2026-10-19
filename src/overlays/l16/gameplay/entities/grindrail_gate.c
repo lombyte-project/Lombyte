@@ -2448,6 +2448,10 @@ void FUN_L16_002e8970(struct Moby *moby) {
         TARGET_CYCLE_WAIT_TO_TRIGGER = 1,
         TARGET_CYCLE_POLL_STATUS = 2
     };
+    enum {
+        TARGET_STATUS_INACTIVE = 0,
+        TARGET_STATUS_REPOSITION_READY = 2
+    };
     char *g = (char *)&hero.motion.pos;
     char *data = (char *)moby->pvars;
     char *target;
@@ -2475,10 +2479,10 @@ void FUN_L16_002e8970(struct Moby *moby) {
     case TARGET_CYCLE_POLL_STATUS:
         n = FUN_L16_002e0e28(target);
         switch (n) {
-        case 0:
+        case TARGET_STATUS_INACTIVE:
             moby->state = 1;
             break;
-        case 2:
+        case TARGET_STATUS_REPOSITION_READY:
             moby->state = 1;
             {
                 char *other = FUN_L16_002e8b08(*(int *)data);
