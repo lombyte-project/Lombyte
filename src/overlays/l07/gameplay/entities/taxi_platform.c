@@ -2356,6 +2356,7 @@ extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 void FUN_L07_0030e998(char *m, char *x, float *hp) {
     enum {
         HIT_REACTION_NONE = 0,
+        SHARKIGATOR_CLEAR_HEALTH_RESPONSE = 1,
         HIT_REACTION_START_KNOCKBACK = 3,
         HIT_REACTION_NO_ANIMATION_RESPONSE = 11
     };
@@ -2370,7 +2371,7 @@ void FUN_L07_0030e998(char *m, char *x, float *hp) {
         switch (r) {
         case HIT_REACTION_NONE:
             break;
-        case 1:
+        case SHARKIGATOR_CLEAR_HEALTH_RESPONSE:
         case 2:
             *hp = 0.0f;
             break;
