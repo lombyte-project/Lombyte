@@ -972,7 +972,8 @@ void FUN_L03_0029c9d0(struct Moby *moby) {
     enum {
         MOBY_CLASS_ALTERNATE_COLOR_CHILD_EFFECT_EMITTER = 0x4B,
         MOBY_CLASS_TWO_JOINT_PARTICLE_EMITTER = 0x74,
-        MOBY_CLASS_FIFTEEN_PARTICLE_BURST_EMITTER = 0x76
+        MOBY_CLASS_FIFTEEN_PARTICLE_BURST_EMITTER = 0x76,
+        MOBY_CLASS_DEFAULT_COLOR_CHILD_EFFECT_EMITTER = 0x77
     };
     char *data = (char *)moby->pvars;
     if (moby->state == 0) {
@@ -996,7 +997,7 @@ void FUN_L03_0029c9d0(struct Moby *moby) {
     case 0x73:
     case MOBY_CLASS_TWO_JOINT_PARTICLE_EMITTER:
     case MOBY_CLASS_FIFTEEN_PARTICLE_BURST_EMITTER:
-    case 0x77:
+    case MOBY_CLASS_DEFAULT_COLOR_CHILD_EFFECT_EMITTER:
         *(int *)(data + 0x150) = allocate_voice_for_target_entry(1, 4, (int)moby);
         break;
     }
