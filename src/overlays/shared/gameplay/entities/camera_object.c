@@ -557,6 +557,11 @@ extern f32 D_L00_0016139C __attribute__((sda));
 extern f32 D_L00_001613A0 __attribute__((sda));
 void vendor_update(P_2a57a8 *p) __asm__("FUN_L00_002a57a8");
 void vendor_update(P_2a57a8 *p) {
+    enum {
+        VENDOR_INITIALIZE = 0,
+        VENDOR_WAIT_FOR_HERO = 1,
+        VENDOR_HERO_NEARBY = 2
+    };
     Q_2a57a8 *q = p->q;
     s32 i, a, b, c;
     u8 *v;
@@ -568,7 +573,7 @@ void vendor_update(P_2a57a8 *p) {
     p->i90 =
         (((s32)(fast_sin(D_L00_001613A4) * 48.0f) + 0x60) * 0x10101) | 0x80000000;
     switch (p->b20) {
-    case 0:
+    case VENDOR_INITIALIZE:
         p->b20 = 1;
         q->i0 = 0;
         q->i4 = 0;
@@ -585,7 +590,7 @@ void vendor_update(P_2a57a8 *p) {
         }
         upd_a(q->mC);
         break;
-    case 1:
+    case VENDOR_WAIT_FOR_HERO:
         if (q->f90 > 0.0f)
             q->f90 -= 0.1f;
         if (q->f90 <= 0.0f)
@@ -606,7 +611,7 @@ void vendor_update(P_2a57a8 *p) {
         q->mC->f2C = q->f90 * q->mC->p24->f24 * 2.5f;
         upd_a(q->mC);
         break;
-    case 2:
+    case VENDOR_HERO_NEARBY:
         if (q->f90 < 1.0f)
             q->f90 += 0.1f;
         d = vector_distance(&p->f10, &hero_pos);
