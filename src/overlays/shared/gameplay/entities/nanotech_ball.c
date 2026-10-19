@@ -2385,7 +2385,9 @@ int FUN_L00_002dc9f0(struct Moby *moby, char *vars) {
         SUCK_UPDATE_BEING_PULLED_IN = 2,
         SUCK_UPDATE_STORED = 3,
         SUCK_UPDATE_FLYING_PROJECTILE = 4,
-        SUCK_UPDATE_FALLING_AFTER_CANCEL = 6
+        SUCK_UPDATE_ROLLING_PROJECTILE = 5,
+        SUCK_UPDATE_FALLING_AFTER_CANCEL = 6,
+        SUCK_UPDATE_DEATH = 7
     };
     Frame_2DDEA0 work;
     R_2DDEA0 *record;
@@ -2496,7 +2498,7 @@ int FUN_L00_002dc9f0(struct Moby *moby, char *vars) {
             }
             break;
         case SUCK_UPDATE_FLYING_PROJECTILE:
-        case 5: {
+        case SUCK_UPDATE_ROLLING_PROJECTILE: {
             float spin, one;
             int hit_wall, surface;
             moby->visible = 1;
@@ -2647,7 +2649,7 @@ int FUN_L00_002dc9f0(struct Moby *moby, char *vars) {
             }
             break;
         }
-        case 7:
+        case SUCK_UPDATE_DEATH:
             func_001E9730_2DDEA0(D_L00_001EA4B0_2DDEA0);
             break;
         }
