@@ -1703,10 +1703,12 @@ void large_amoeboid_update(unsigned char *moby) __asm__("FUN_L01_002edca0");
 void large_amoeboid_update(unsigned char *moby) {
     enum {
         LARGE_AMOEBOID_INITIALIZE = 0,
+        LARGE_AMOEBOID_MOVE_TOWARD_STORED_POSITION = 2,
         LARGE_AMOEBOID_FOLLOW_PATH_TO_TARGET = 4,
         LARGE_AMOEBOID_RETURN_TO_STORED_POSITION = 5,
         LARGE_AMOEBOID_WAIT_FOR_ACTIVATION_VOLUME = 13,
-        LARGE_AMOEBOID_MOVE_DIRECTLY_TOWARD_TARGET = 15
+        LARGE_AMOEBOID_MOVE_DIRECTLY_TOWARD_TARGET = 15,
+        LARGE_AMOEBOID_WAIT_WHILE_BLOCKED = 16
     };
     char *data = *(char **)(moby + 0x78);
     char *target;
@@ -1814,7 +1816,7 @@ void large_amoeboid_update(unsigned char *moby) {
             blend_moby_animation(moby, 1, 0, 5);
         moby[0x20] = 2;
         break;
-    case 2:
+    case LARGE_AMOEBOID_MOVE_TOWARD_STORED_POSITION:
         angle = fast_arc_tan(*(float *)(data + 0x210) - *(float *)(moby + 0x10),
                               *(float *)(data + 0x214) - *(float *)(moby + 0x14));
         approach_angle((float *)(moby + 0x48), (float *)(data + 0x220), angle,
@@ -1875,7 +1877,7 @@ void large_amoeboid_update(unsigned char *moby) {
             return;
         }
         break;
-    case 16:
+    case LARGE_AMOEBOID_WAIT_WHILE_BLOCKED:
         if (!(moby[0x70] & 2) || *(int *)(data + 0x22c) != 0) return;
         moby[0x20] = 5;
         if (moby[0x53] != 1)
