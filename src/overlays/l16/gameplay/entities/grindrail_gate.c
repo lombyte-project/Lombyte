@@ -1495,6 +1495,7 @@ void gadgetron_ceo_update(L16ChallengeMoby *m) {
     enum {
         GADGETRON_CEO_INITIALIZE_DIALOGUE = 0,
         GADGETRON_CEO_POLL_DIALOGUE = 1,
+        GADGETRON_CEO_MONITOR_CHALLENGE_EVENTS = 3,
         GADGETRON_CEO_WAIT_TO_SAVE = 4
     };
     L16ChallengeScratch scratch;
@@ -1584,7 +1585,7 @@ void gadgetron_ceo_update(L16ChallengeMoby *m) {
             memcard_save_data(0, -1);
         }
         break;
-    case 3:
+    case GADGETRON_CEO_MONITOR_CHALLENGE_EVENTS:
     default: {
         L16ChallengePlayer *player = (L16ChallengePlayer *)((char *)&D_0013E633_challenge + 0xE1D);
         unsigned char event;
