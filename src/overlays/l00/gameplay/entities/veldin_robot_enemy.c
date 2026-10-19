@@ -227,6 +227,12 @@ extern void FUN_L00_002e1aa8();
 extern f32 frame_scale_sq_gp __asm__("D_0015ED64") __attribute__((sda));
 void veldin_robot_enemy_update(VendMoby *moby) __asm__("FUN_L00_002e0b88");
 void veldin_robot_enemy_update(VendMoby *moby) {
+    enum {
+        VELDIN_ROBOT_STATE_INITIALIZE = 0,
+        VELDIN_ROBOT_STATE_FOLLOW_PATH = 2,
+        VELDIN_ROBOT_STATE_DAMAGE_KNOCKBACK = 7,
+        VELDIN_ROBOT_STATE_DEATH_KNOCKBACK = 8
+    };
     VendVars *vars;
     VendTarget *target;
     VendPath *path;
@@ -250,7 +256,7 @@ void veldin_robot_enemy_update(VendMoby *moby) {
         moby->unk7F = 0x15;
     }
     switch (moby->state) {
-    case 0:
+    case VELDIN_ROBOT_STATE_INITIALIZE:
         qcopy(&vars->spawnPos, &moby->pos);
         vars->unk29 = 0;
         vars->unk20 = 2.0f;
@@ -288,7 +294,7 @@ void veldin_robot_enemy_update(VendMoby *moby) {
             VEND_ANIM(moby, 9, vend_rand(10));
         }
         break;
-    case 2:
+    case VELDIN_ROBOT_STATE_FOLLOW_PATH:
         vel = 0.0f;
         path = vend_paths[vars->pathIdx];
         qcopy(&delta, &path->pts[vars->pathPt]);
@@ -402,13 +408,13 @@ void veldin_robot_enemy_update(VendMoby *moby) {
             VEND_ANIM(moby, 1, vend_rand(10));
         }
         break;
-    case 7:
+    case VELDIN_ROBOT_STATE_DAMAGE_KNOCKBACK:
         if (mine_fall(moby, vars->unk70) & 0x140) {
             moby->state = 3;
             VEND_ANIM(moby, 1, vend_rand(10));
         }
         break;
-    case 8:
+    case VELDIN_ROBOT_STATE_DEATH_KNOCKBACK:
         if (mine_fall(moby, vars->unk70) & 0x140) {
             cart_burst(moby, &moby->pos, -1, 0.75f, 13.0f);
             FUN_L00_00263e30(moby, 0x7AB, 1, 0x7AB, 1, 4, 0);
