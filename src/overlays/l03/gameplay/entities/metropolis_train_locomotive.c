@@ -1183,6 +1183,7 @@ void red_ship_1_update(char *moby) __asm__("FUN_L03_0029dba8");
  * out the moby is hidden again unless the caller keeps it, and switches its update to the car update. */
 void FUN_L03_0029d2e0(char *moby, void *vel_in, int flag) {
     enum {
+        MOBY_CLASS_TEN_PARTICLE_BURST_EMITTER = 0x73,
         MOBY_CLASS_TWO_JOINT_PARTICLE_EMITTER = 0x74,
         MOBY_CLASS_FIFTEEN_PARTICLE_BURST_EMITTER = 0x76,
         MOBY_CLASS_DEFAULT_COLOR_CHILD_EFFECT_EMITTER = 0x77
@@ -1218,7 +1219,7 @@ void FUN_L03_0029d2e0(char *moby, void *vel_in, int flag) {
         scale_vector_xyz(push, moby + 0xC0, frame_scale * 0.075f);
         push[2] += frame_scale * 0.08f;
         switch (*(short *)(moby + 0xA6)) {
-        case 0x73:
+        case MOBY_CLASS_TEN_PARTICLE_BURST_EMITTER:
             SPAWN_DEBRIS(0x6A9);
             SPAWN_DEBRIS(0x6AA);
             SPAWN_DEBRIS(0x6AB);
