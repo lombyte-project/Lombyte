@@ -1627,6 +1627,7 @@ extern float D_0015ED6C_gp __asm__("D_0015ED6C") __attribute__((section(".sdata"
 void FUN_L00_002080b0(void) {
     enum {
         ITEM_RED_GREEN_GLOW = 13,
+        ITEM_GRAY_PULSE_GLOW = 17,
         ITEM_RED_BLUE_GLOW = 19
     };
     Vec4_2080b0 v;
@@ -1652,7 +1653,7 @@ void FUN_L00_002080b0(void) {
     if (!((m->flags ^ 1) & 1)) return;
 
     switch (hero.items[0].item_id) {
-    case 17: {
+    case ITEM_GRAY_PULSE_GLOW: {
         int c5;
         int x1, x2, col;
         float fr;
