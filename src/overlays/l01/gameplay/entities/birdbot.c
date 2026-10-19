@@ -3502,6 +3502,12 @@ extern int hero_set_state(int, int) __asm__("FUN_L01_0023cf98");
 
 void falling_rock_update(CapMoby *m) __asm__("FUN_L01_002f9080");
 void falling_rock_update(CapMoby *m) {
+    enum {
+        FALLING_ROCK_STATE_INITIALIZE = 0,
+        FALLING_ROCK_STATE_WAIT_FOR_TRIGGER = 1,
+        FALLING_ROCK_STATE_FALLING = 3,
+        FALLING_ROCK_STATE_FALLEN = 4
+    };
     CapVars *v;
     u8 *e;
 
@@ -3528,7 +3534,7 @@ void falling_rock_update(CapMoby *m) {
                          random_int_between(0xB4, 0x12C), 0.05f, 1.0f, 1.0f, 0.75f, 0);
     }
     switch (m->state) {
-    case 0:
+    case FALLING_ROCK_STATE_INITIALIZE:
         v->w20 = 0;
         v->h24 = 0;
         v->b28 = 4;
@@ -3543,7 +3549,7 @@ void falling_rock_update(CapMoby *m) {
             v->music = -1;
         }
         break;
-    case 1:
+    case FALLING_ROCK_STATE_WAIT_FOR_TRIGGER:
         if (v->cam != -1) {
             e = (u8 *)(v->cam * 128 + (s32)D_L01_001600EC_u);
             if (hero.motion.pos.f[2] >= *(f32 *)(e + 0x38) &&
@@ -3566,7 +3572,7 @@ void falling_rock_update(CapMoby *m) {
             m->state = 3;
         }
         break;
-    case 3: {
+    case FALLING_ROCK_STATE_FALLING: {
         CapVec3 old;
 
         FUN_L01_002f9000((Obj *)m);
@@ -3587,7 +3593,7 @@ void falling_rock_update(CapMoby *m) {
         m->pos.f[2] += 0.0f;
         break;
     }
-    case 4:
+    case FALLING_ROCK_STATE_FALLEN:
         if (v->wait == 0 && v->music != -1) {
             FUN_L00_002eac18(0);
             hero_set_state(HERO_STATE_IDLE, 1);
