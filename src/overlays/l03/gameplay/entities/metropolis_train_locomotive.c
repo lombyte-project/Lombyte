@@ -502,6 +502,12 @@ extern char D_0013E550_292e98[] __asm__("D_0013E550");
  * behind, switches to the second path when the cars are done and brakes at its end (state 6 resets). */
 void metropolis_train_locomotive_update(char *moby) __asm__("FUN_L03_00292e98");
 void metropolis_train_locomotive_update(char *moby) {
+    enum {
+        TRAIN_INITIALIZE = 0,
+        TRAIN_WAIT_FOR_BOARDING = 3,
+        TRAIN_FOLLOW_SECOND_PATH_AND_BRAKE = 5,
+        TRAIN_WAIT_FOR_RESET_VOLUME = 6
+    };
     float start[4];
     int seg;
     float frac;
@@ -539,7 +545,7 @@ void metropolis_train_locomotive_update(char *moby) {
     cdata = *(Coupling292e98 **)(coupling + 0x78);
     D_L03_0015FDFC = 0;
     switch (((unsigned char *)moby)[0xBC]) {
-    case 0:
+    case TRAIN_INITIALIZE:
         data->i20 = 0;
         data->s24 = 0;
         data->b28 = 4;
@@ -588,7 +594,7 @@ void metropolis_train_locomotive_update(char *moby) {
         cdata->i60 = 1;
         data->fC8 = 0.0f;
         break;
-    case 3:
+    case TRAIN_WAIT_FOR_BOARDING:
         FUN_L03_00292d10(moby);
         if (!is_point_inside_clip_volume(&hero.motion, data->iB4)) {
             break;
@@ -693,7 +699,7 @@ void metropolis_train_locomotive_update(char *moby) {
         moby[0xBC] = 5;
         jet_game_state(0, 8);
         break;
-    case 5:
+    case TRAIN_FOLLOW_SECOND_PATH_AND_BRAKE:
         td = *(Turret292e98 **)((char *)&D_L03_0015FFD8_m292[data->iD8] + 0x78);
         FUN_L03_00292890(moby);
         D_L03_0015FDFC = 1;
@@ -715,7 +721,7 @@ void metropolis_train_locomotive_update(char *moby) {
         }
         AIM_AT_HERO(td);
         break;
-    case 6:
+    case TRAIN_WAIT_FOR_RESET_VOLUME:
         if (is_point_inside_clip_volume(&hero.motion, data->iB0)) {
             for (i6 = 0; i6 < 8; i6++) {
                 m6 = D_L03_0015FFD8_292e98 + (data->ids[i6] << 8);
