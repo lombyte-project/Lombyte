@@ -2710,6 +2710,11 @@ extern float D_0015ED6C;
 
 void machinegun_turret_update(unsigned char *moby) __asm__("FUN_L07_0031a250");
 void machinegun_turret_update(unsigned char *moby) {
+    enum {
+        TURRET_INITIALIZE = 0,
+        TURRET_SWEEP_AND_FIRE = 1,
+        TURRET_RESTORE_HEIGHT = 4
+    };
     char *data;
     char *hit;
     char *collision;
@@ -2740,7 +2745,7 @@ void machinegun_turret_update(unsigned char *moby) {
     *(u8 *)(moby + 0xa4) = 0xff;
     trooper_anim_finish(moby, animation);
     switch ((u8)moby[0x20]) {
-    case 0:
+    case TURRET_INITIALIZE:
         if (*(int *)(data + 0x70) != -1) {
             char *target = (char *)(*(int *)(data + 0x70) * 0x100 + (int)level_mobys);
             *(float *)(data + 0x80) = fast_arc_tan(*(float *)(target + 0x10) - *(float *)(moby + 0x10),
@@ -2767,7 +2772,7 @@ void machinegun_turret_update(unsigned char *moby) {
         if ((u8)moby[0x53] != 1) FUN_00212f90(moby, 1, 0, 0);
         moby[0x20] = 1;
         break;
-    case 1:
+    case TURRET_SWEEP_AND_FIRE:
         if ((u8)moby[0x52] != 1 && ((u8)moby[0x70] & 2) != 0 && (u8)moby[0x53] != 1)
             FUN_00212f90(moby, 1, 0, 1);
         if (*(s16 *)(data + 0x7e) != 0) {
@@ -2850,7 +2855,7 @@ void machinegun_turret_update(unsigned char *moby) {
             moby[0x20] = 4;
         }
         break;
-    case 4:
+    case TURRET_RESTORE_HEIGHT:
         if (*(float *)(moby + 0x18) < *(float *)(data + 0x90)) {
             *(float *)(moby + 0x18) += D_0015ED6C * 5.0f;
             return;
