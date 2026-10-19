@@ -1672,7 +1672,7 @@ void FUN_L16_00214598(void) {
         }
         break;
     }
-    case 0x13: {
+    case HERO_STATE_WRENCH_COMBO: {
         struct HeroTableRow2C *tb;
         if (hero.unkA9C != 0 || hero.anim_frame < D_L16_0017C088[hero.attack_record].f20) {
             hero.items[0].timer = 2;
