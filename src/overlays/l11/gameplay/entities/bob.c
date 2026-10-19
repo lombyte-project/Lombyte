@@ -1735,7 +1735,9 @@ void pokitaru_boat_update(struct Moby *moby) __asm__("FUN_L11_00309ac0");
 void pokitaru_boat_update(struct Moby *moby) {
     enum {
         POKITARU_BOAT_INITIALIZE = 0,
+        POKITARU_BOAT_WAIT_FOR_ACTIVATION = 1,
         POKITARU_BOAT_FOLLOW_PATH = 2,
+        POKITARU_BOAT_WAIT_FOR_GROUP_CLEAR = 3,
         POKITARU_BOAT_RISE_ABOVE_PATH = 4
     };
     struct PokPv_309ac0 *pv = (struct PokPv_309ac0 *)moby->pvars;
@@ -1787,7 +1789,7 @@ void pokitaru_boat_update(struct Moby *moby) {
         pv->flags |= 1;
         break;
     }
-    case 1:
+    case POKITARU_BOAT_WAIT_FOR_ACTIVATION:
         if (pv->flag_b8 != 0) {
             int *path = D_L11_001B0EB0[pv->path_a0];
             int n;
@@ -1885,7 +1887,7 @@ void pokitaru_boat_update(struct Moby *moby) {
         }
         break;
     }
-    case 3:
+    case POKITARU_BOAT_WAIT_FOR_GROUP_CLEAR:
         if (FUN_L11_0030a850(moby) != 0) {
             if (pv->flag_b0 != 0) {
                 pv->approach_d0 = 0.0f;
