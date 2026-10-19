@@ -751,6 +751,9 @@ void FUN_L13_002c37e0(struct Moby *moby, unsigned char *d, float *fp) {
         HIT_REACTION_NONE = 0,
         HIT_REACTION_LETHAL = 1,
         HIT_REACTION_REMOVE = 2,
+        HIT_REACTION_LOW_INTERPOLATION_TARGET = 3,
+        HIT_REACTION_HIGH_INTERPOLATION_TARGET = 9,
+        HIT_REACTION_HIGH_INTERPOLATION_TARGET_ALTERNATE = 10,
         HIT_REACTION_NO_HIT = 11
     };
     if (moby->state != 3) {
@@ -763,14 +766,14 @@ void FUN_L13_002c37e0(struct Moby *moby, unsigned char *d, float *fp) {
             *fp = 0;
             break;
         case HIT_REACTION_NONE:
-        case 3:
+        case HIT_REACTION_LOW_INTERPOLATION_TARGET:
         case 4:
         case 5:
         case 6:
         case 7:
         case 8:
-        case 9:
-        case 10:
+        case HIT_REACTION_HIGH_INTERPOLATION_TARGET:
+        case HIT_REACTION_HIGH_INTERPOLATION_TARGET_ALTERNATE:
         case HIT_REACTION_NO_HIT:
             break;
         }
