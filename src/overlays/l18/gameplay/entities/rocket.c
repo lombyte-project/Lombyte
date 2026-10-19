@@ -2200,6 +2200,7 @@ void FUN_L18_002df608(struct Moby *moby) {
         STATE_INITIALIZE = 0,
         STATE_PRE_TRANSITION_RAMP_UP = 2,
         STATE_INTERPOLATE_TRANSITION = 3,
+        STATE_INTERPOLATE_TRANSITION_WITH_RAMP_UP = 4,
         STATE_POST_TRANSITION_RAMP_DOWN = 5
     };
     char *data = (char *)moby->pvars;
@@ -2268,7 +2269,7 @@ void FUN_L18_002df608(struct Moby *moby) {
             }
         }
         break;
-    case 4:
+    case STATE_INTERPOLATE_TRANSITION_WITH_RAMP_UP:
         if (fast_dec_timer((int *)(data + 0x74))) {
             advance_accelerated_scalar((float *)(data + 0x60), (float *)(data + 0x64), 1.0f,
                            *(float *)(data + 0x68), *(float *)(data + 0x68),
