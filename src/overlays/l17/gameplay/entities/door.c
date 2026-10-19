@@ -2422,6 +2422,7 @@ void robot_dog_update(unsigned char *m) {
     enum {
         ROBOT_DOG_STATE_INITIALIZE = 0,
         ROBOT_DOG_STATE_FALL_UNTIL_LANDING = 4,
+        ROBOT_DOG_STATE_TRACK_TARGET_FACING = 5,
         ROBOT_DOG_STATE_TURN_TOWARD_TARGET = 8,
         ROBOT_DOG_STATE_APPROACH_TARGET = 9,
         ROBOT_DOG_STATE_ATTACK_TARGET = 10,
@@ -2534,7 +2535,7 @@ void robot_dog_update(unsigned char *m) {
             }
         }
         break;
-    case 5:
+    case ROBOT_DOG_STATE_TRACK_TARGET_FACING:
         if (tgt != 0) {
             float turn;
             float ang;
