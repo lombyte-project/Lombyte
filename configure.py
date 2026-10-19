@@ -1164,42 +1164,65 @@ def reference_assembly(assembly):
     return re.sub(r"^[ \t]*\.set[ \t]+no(?:reorder|macro)[ \t]*\r?\n", "", assembly, flags=re.M)
 
 
-def fill_volatile_call_slots(assembly):
-    """Move a volatile store into the delay slot of the `jal` right after it.
+def fill_jump_slots(assembly):
+    """Fill the delay slot of a reorder-mode jump or branch as retail did.
 
-    The SDK compiler marks a volatile access with `#.set volatile` and
-    `#.set novolatile` and never puts it in a delay slot, so the `jal` that
-    follows goes out in reorder mode and GNU as pads it with a nop.  Retail's
-    SDK assembler filled that slot with the store (_setDefaultQM).  Only
-    comments and debug line labels may sit between the store and the `jal`.
-    Same model as rac1-decomp's tools/fix_volatile_slot.py.
+    cc1 leaves a jump in reorder mode when it found nothing for the slot
+    itself: after a volatile access, or after the second half of a two-line
+    pattern (`dsll`/`dsra` sign extension).  GNU as pads those with a nop;
+    retail's SDK assembler moved the instruction before the jump into the
+    slot (_setDefaultQM, kputchar, ftoi, sceCdRead).  A load moved only when
+    the instruction before it was itself assembled in reorder mode with no
+    label between (PollSema calls in cd_check_ncmd stay); `mflo`/`mfhi` never
+    moved.  Debug line labels and comments do not count as labels.  Same
+    model as rac1-decomp's tools/fix_volatile_slot.py.
     """
-    store = re.compile(r"^\s*(?:sb|sh|sw|sd)\s+(\$\d+),\s*(-?\w*)\((\$\d+)\)\s*$")
-    out, reorder = [], True
+    jump = re.compile(r"^\s*(?:jal\s+[\w.$]+|j\s+\$31|b\s+[\w.$]+"
+                      r"|(?:beq|bne)\s+\$\w+,\s*\$\w+,\s*[\w.$]+"
+                      r"|(?:beqz|bnez|blez|bgtz|bltz|bgez)\s+\$\w+,\s*[\w.$]+)\s*$")
+    load = re.compile(r"^\s*(?:lb|lbu|lh|lhu|lw|ld|lq|lwc1)\s+\$\w+,\s*-?[\w%()]*\(\$\w+\)\s*$")
+    other = re.compile(
+        r"^\s*(?:(?:sb|sh|sw|sd|sq|swc1)\s+\$\w+,\s*-?[\w%()]*\(\$\w+\)"
+        r"|(?:move|addu|addiu|daddu|daddiu|subu|dsubu|and|andi|or|ori|xor|xori|nor|lui"
+        r"|sll|srl|sra|dsll|dsrl|dsra|dsll32|dsrl32|dsra32|sllv|srlv|srav|dsllv|dsrlv|dsrav"
+        r"|slt|slti|sltu|sltiu)\s+\$\w+(?:,\s*[$\w-]+)*)\s*$")
+
+    def skippable(text):
+        return not text or text.startswith((".stab", "#")) or re.match(r"^\$LM\d+:$", text)
+
+    def code_before(index):
+        while index >= 0 and skippable(out[index].strip()):
+            index -= 1
+        return index
+
+    out, reordered, reorder = [], [], True
     for line in assembly.split("\n"):
         text = line.strip()
         if text in (".set\tnoreorder", ".set noreorder"):
             reorder = False
         elif text in (".set\treorder", ".set reorder"):
             reorder = True
-        if reorder and re.match(r"^\s*jal\s+[\w.$]+\s*$", line):
-            k = len(out) - 1
-            between = []
-            while k >= 0 and (not out[k].strip() or out[k].strip().startswith((".stab", "#"))
-                              or re.match(r"^\$LM\d+:$", out[k].strip())):
-                between.append(out[k].strip())
-                k -= 1
-            before = k - 1
-            while before >= 0 and not out[before].strip():
-                before -= 1
-            match = store.match(out[k]) if k >= 0 else None
-            if (match and "$31" not in match.groups()
-                    and any(item.replace("\t", " ") == "#.set novolatile" for item in between)
-                    and before >= 0 and out[before].strip().replace("\t", " ") == "#.set volatile"):
+        if reorder and jump.match(line):
+            k = code_before(len(out) - 1)
+            previous = out[k].split("#")[0] if k >= 0 else ""
+            movable = bool(other.match(previous))
+            if load.match(previous):
+                j = code_before(k - 1)
+                text_j = out[j].strip() if j >= 0 else ""
+                movable = (j >= 0 and reordered[j] and not text_j.endswith(":")
+                           and not text_j.startswith("."))
+            written = re.match(r"^\s*(?!s[bhwdq]\s|swc1\s)\w+\s+(\$\w+)", previous)
+            if written and written.group(1) in re.findall(r"\$\w+", line):
+                movable = False
+            if movable and "$31" not in previous:
                 slot = out.pop(k)
-                out += ["\t.set\tnoreorder", "\t.set\tnomacro", line, slot, "\t.set\tmacro", "\t.set\treorder"]
+                reordered.pop(k)
+                added = ["\t.set\tnoreorder", "\t.set\tnomacro", line, slot, "\t.set\tmacro", "\t.set\treorder"]
+                out += added
+                reordered += [False] * len(added)
                 continue
         out.append(line)
+        reordered.append(reorder)
     return "\n".join(out)
 
 
@@ -1213,7 +1236,7 @@ def main(argv):
         open(argv[3], "w").write(reference_assembly(open(argv[2]).read()))
         return
     if len(argv) == 4 and argv[1] == "slots":
-        open(argv[3], "w").write(fill_volatile_call_slots(open(argv[2]).read()))
+        open(argv[3], "w").write(fill_jump_slots(open(argv[2]).read()))
         return
     if len(argv) not in (4, 5):
         raise SystemExit("usage: padless-asm.py normalize IN OUT [POLICY] | finish IN OUT [REFERENCE] | "
@@ -1362,7 +1385,7 @@ def build_stuff(
     )
 
     # SDK code: cc1 output goes through `padless-asm.py slots` (retail's SDK
-    # assembler put volatile stores in call delay slots) before GNU as.
+    # assembler filled the jump delay slots cc1 left empty) before GNU as.
     ninja.rule(
         "sdk-compiler",
         description="sdk-compiler $in",
