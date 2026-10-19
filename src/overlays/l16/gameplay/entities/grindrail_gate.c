@@ -2397,6 +2397,11 @@ f32 probe_ground_height(void *arg0, s32 arg1, f32 arg2) __asm__("FUN_00213508");
 s32 is_point_inside_clip_volume_u(s32 arg0, s32 arg1) __asm__("FUN_00214720");
 
 void FUN_L16_002e8970(struct Moby *moby) {
+    enum {
+        TARGET_CYCLE_INITIALIZE_DELAY = 0,
+        TARGET_CYCLE_WAIT_TO_TRIGGER = 1,
+        TARGET_CYCLE_POLL_STATUS = 2
+    };
     char *g = (char *)&hero.motion.pos;
     char *data = (char *)moby->pvars;
     char *target;
@@ -2406,11 +2411,11 @@ void FUN_L16_002e8970(struct Moby *moby) {
         return;
     target = D_L16_0015FFD8 + (*(int *)(data + 4) << 8);
     switch (moby->state) {
-    case 0:
+    case TARGET_CYCLE_INITIALIZE_DELAY:
         moby->state = 1;
         *(int *)(data + 0xC) = scale_game_frames(random_int_between(0xB4, 0x168));
         break;
-    case 1:
+    case TARGET_CYCLE_WAIT_TO_TRIGGER:
         if (vector_distance(g, target + 0x10) > 3.0f) {
             if (FUN_L16_002e8b08(*(int *)data) != 0) {
                 if (FUN_001f9740_c(data + 0xC)) {
@@ -2421,7 +2426,7 @@ void FUN_L16_002e8970(struct Moby *moby) {
             }
         }
         break;
-    case 2:
+    case TARGET_CYCLE_POLL_STATUS:
         n = FUN_L16_002e0e28(target);
         switch (n) {
         case 0:
