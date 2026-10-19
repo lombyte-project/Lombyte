@@ -512,6 +512,9 @@ extern void transform_vector_by_basis(void *, void *, void *);
 extern s32 D_0013CB14[];
 
 void FUN_L01_002370b8(void) {
+    enum {
+        HERO_STATE_MOVE_TO_TARGET_POSITION = 0x65
+    };
     FVec4 vec[6];
     Moby *moby;
     int prevState;
@@ -2084,7 +2087,7 @@ void FUN_L01_002370b8(void) {
         set_vector_length_xy(hero.motion.velocity.f, hero.motion.velocity.f, len);
         FUN_L00_002334d0(hero.motion.velocity.f, hero.motion.velocity.f, 0.004f);
     } break;
-    case 0x65: {
+    case HERO_STATE_MOVE_TO_TARGET_POSITION: {
         float len;
         float k;
 
