@@ -42,6 +42,10 @@ extern char D_00141D7C[];
 extern int func_001F9908_i(int *) __asm__("FUN_001f9740");
 
 void FUN_L17_002f26d0(struct Moby *moby) {
+    enum {
+        CAMERA_BOX_WATCHER_INITIALIZE = 0,
+        CAMERA_BOX_WATCHER_MONITOR = 1
+    };
     int off;
     char *d = (char *)moby->pvars;
     int st;
@@ -113,7 +117,7 @@ void FUN_L17_002f26d0(struct Moby *moby) {
     }
 
     switch (moby->state) {
-    case 0:
+    case CAMERA_BOX_WATCHER_INITIALIZE:
         moby->update_dist = 0xFF;
         *(int *)(d + 0x38) = scale_game_frames(600);
         *(unsigned char *)(d + 0x4C) = 0;
@@ -125,7 +129,7 @@ void FUN_L17_002f26d0(struct Moby *moby) {
         }
         moby->state = 1;
         break;
-    case 1:
+    case CAMERA_BOX_WATCHER_MONITOR:
         tgt = -1;
         idx = -1;
         found = 0;
