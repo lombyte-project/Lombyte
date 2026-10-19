@@ -234,20 +234,25 @@ int FUN_L07_0030ebc8(char *moby, char *data) {
 void blend_moby_animation_u(MobyAnim *moby, int new_seq, int frame_index, int blend_frames) __asm__("FUN_00212f90");
 
 void FUN_L07_0030ec58(char *arg) {
+    enum {
+        SHARKIGATOR_LARGE_WATER_HEIGHT_GAP = 0,
+        SHARKIGATOR_MEDIUM_WATER_HEIGHT_GAP = 1,
+        SHARKIGATOR_SMALL_WATER_HEIGHT_GAP = 2
+    };
     switch (((unsigned char *)arg)[0xBC]) {
-    case 0:
+    case SHARKIGATOR_LARGE_WATER_HEIGHT_GAP:
         if (((unsigned char *)arg)[0x53] != 0) {
             blend_moby_animation_u(arg, 0, 0, 10);
         }
         arg[0x20] = 1;
         break;
-    case 1:
+    case SHARKIGATOR_MEDIUM_WATER_HEIGHT_GAP:
         if (((unsigned char *)arg)[0x53] != 3) {
             blend_moby_animation_u(arg, 3, 0, 10);
         }
         arg[0x20] = 7;
         break;
-    case 2:
+    case SHARKIGATOR_SMALL_WATER_HEIGHT_GAP:
         if (((unsigned char *)arg)[0x53] != 9) {
             blend_moby_animation_u(arg, 9, 0, 10);
         }
