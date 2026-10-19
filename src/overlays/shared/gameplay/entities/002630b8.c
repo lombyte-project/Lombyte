@@ -505,7 +505,7 @@ extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void *FUN_L00_00263fd8(char *src, int cls, float *pos, void *mat, int a8, int a9, float *v10,
                        float *v11, float scale, float *v12);
-void *FUN_L00_00263fd8(char *src, int cls, float *pos, void *mat, int a8, int a9, float *initial_velocity,
+void *FUN_L00_00263fd8(char *src, int cls, float *pos, void *mat, int random_default_override, int a9, float *initial_velocity,
                        float *random_vector_override, float scale, float *class_vector_override) {
     char *m = (char *)func_0020D348_m(cls);
     char *d;
@@ -525,11 +525,11 @@ void *FUN_L00_00263fd8(char *src, int cls, float *pos, void *mat, int a8, int a9
         *(unsigned char *)(m + 0x30) = 0xFF;
         *(short *)(m + 0x32) = 0x80;
         *(int *)(m + 0x94) = 0;
-        if (a8 == 0)
+        if (random_default_override == 0)
             *(int *)(d + 0x30) =
                 func_001FA898_r(multiply_global_factor_ed64(random_float_between_alt(60.0f, 120.0f)));
         else
-            *(int *)(d + 0x30) = a8;
+            *(int *)(d + 0x30) = random_default_override;
         *(int *)(d + 0x34) = a9;
         if (*(float *)(d + 0x38) == 0.0f)
             *(float *)(d + 0x38) = random_float_between_alt(10.0f, 15.0f) * frame_time_sq;
