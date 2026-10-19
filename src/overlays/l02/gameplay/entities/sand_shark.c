@@ -2586,8 +2586,13 @@ void transport_pod_update(unsigned char *moby) {
     enum {
         TRANSPORT_POD_INITIALIZE = 0,
         TRANSPORT_POD_TIMED_GEAR_MOVEMENT = 2,
+        TRANSPORT_POD_POSITION_RAILS_FOR_BOARDING = 4,
         TRANSPORT_POD_WAIT_FOR_RIDER_OR_RECALL = 5,
+        TRANSPORT_POD_POSITION_RAILS_FOR_DEPARTURE = 7,
+        TRANSPORT_POD_LOWER_AND_TRANSFER_TO_OTHER_STOP = 8,
         TRANSPORT_POD_ADVANCE_RIDE_CAMERA = 9,
+        TRANSPORT_POD_POSITION_RAILS_FOR_DISEMBARKING = 11,
+        TRANSPORT_POD_RAISE_TO_STOP_HEIGHT = 12,
         TRANSPORT_POD_WAIT_FOR_RIDER_TO_LEAVE = 13,
         TRANSPORT_POD_CREATE_RAILS = 14
     };
@@ -2678,7 +2683,7 @@ void transport_pod_update(unsigned char *moby) {
             FUN_0022da68_dc88(0, 0, moby);
         }
         break;
-    case 4:
+    case TRANSPORT_POD_POSITION_RAILS_FOR_BOARDING:
         d->rail_a_off = 2.0f;
         d->rail_b_off = -4.0f;
         FUN_L02_002def80((struct Moby *)moby);
@@ -2754,7 +2759,7 @@ void transport_pod_update(unsigned char *moby) {
         }
         break;
     }
-    case 7:
+    case TRANSPORT_POD_POSITION_RAILS_FOR_DEPARTURE:
         d->rail_a_off = -1.0f;
         d->rail_b_off = -1.0f;
         FUN_L02_002def80((struct Moby *)moby);
@@ -2763,7 +2768,7 @@ void transport_pod_update(unsigned char *moby) {
             moby[0x20] = 8;
         }
         break;
-    case 8:
+    case TRANSPORT_POD_LOWER_AND_TRANSFER_TO_OTHER_STOP:
         FUN_00213f38((float *)(moby + 0x18), &d->speed,
                      D_L02_001600EC_n[d->node_a].pos[2] - 6.0f,
                      D_L02_00161C34_gp * frame_time_sq, D_L02_00161C34_gp * frame_time_sq,
@@ -2813,7 +2818,7 @@ void transport_pod_update(unsigned char *moby) {
             FUN_0022da68_dc88(0, 0, moby);
         }
         break;
-    case 11:
+    case TRANSPORT_POD_POSITION_RAILS_FOR_DISEMBARKING:
         d->rail_a_off = 2.0f;
         d->rail_b_off = -4.0f;
         FUN_L02_002def80((struct Moby *)moby);
@@ -2834,7 +2839,7 @@ void transport_pod_update(unsigned char *moby) {
             FUN_L02_0022b728(0, 1);
         }
         break;
-    case 12:
+    case TRANSPORT_POD_RAISE_TO_STOP_HEIGHT:
         ((struct Moby *)moby)->pos.z += D_0015ED6C * 4.0f;
         if (D_L02_001600EC_n[d->node_a].pos[2] <= ((struct Moby *)moby)->pos.z) {
             moby[0x20] = 5;
