@@ -3509,6 +3509,11 @@ extern unsigned char alternate_item_available[] __asm__("D_0013D388");
 extern char D_0013A5E0_2FDA70[] __asm__("D_0013CAE4");
 
 void FUN_L06_002fc640(Moby_2FDA70 *moby) {
+    enum {
+        INITIALIZE_POSITION_AND_LINKED_MOBYS = 0,
+        MOVE_TO_NODE_BASE_HEIGHT = 5,
+        MOVE_TO_NODE_OFFSET_HEIGHT = 6
+    };
     Vec_2FDA70 position_delta;
     Vec_2FDA70 initial_rotation;
     Data_2FDA70 *d = moby->data;
@@ -3517,7 +3522,7 @@ void FUN_L06_002fc640(Moby_2FDA70 *moby) {
     qcopy(&initial_rotation, &moby->rot);
     moby->f2C = moby->cls->f24 * D_L06_00161F60;
     switch (moby->state) {
-    case 0:
+    case INITIALIZE_POSITION_AND_LINKED_MOBYS:
         if (D_L06_00161F78 == -1) {
             if (D_0013D5DD_2FDA70[0x10] != 0) {
                 D_L06_00161F78 = 1;
@@ -3668,8 +3673,8 @@ void FUN_L06_002fc640(Moby_2FDA70 *moby) {
             d->f90 = scale_game_frames_alt(0x78);
         }
         break;
-    case 5:
-    case 6: {
+    case MOVE_TO_NODE_BASE_HEIGHT:
+    case MOVE_TO_NODE_OFFSET_HEIGHT: {
         float target;
         float t;
         target = ((Node_2FDA70 *)D_L06_001600EC_c)[d->f78].v30.z;
