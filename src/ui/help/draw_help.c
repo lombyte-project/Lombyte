@@ -40,7 +40,9 @@ void draw_help(void) __asm__("FUN_001fe980");
 void draw_help(void) {
     enum {
         HELP_PROMPT = 2,
-        HELP_TEXT_STEADY = 5
+        HELP_TEXT_FADE_IN = 4,
+        HELP_TEXT_STEADY = 5,
+        HELP_TEXT_FADE_OUT = 6
     };
     if (((HelpState *)D_001996D0)->state == 0) {
         return;
@@ -92,9 +94,9 @@ void draw_help(void) {
                                0x40, (alpha << 24) | 0x808080, get_effect_texture(4));
         }
         break;
-    case 4:
+    case HELP_TEXT_FADE_IN:
     case HELP_TEXT_STEADY:
-    case 6:
+    case HELP_TEXT_FADE_OUT:
         if (D_0015EF1D_b) {
             short win[12];
             int col = 0x80FFA888;
