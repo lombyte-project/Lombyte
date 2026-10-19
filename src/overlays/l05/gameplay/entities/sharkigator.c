@@ -1637,6 +1637,7 @@ void FUN_L05_00303390(Moby *m) {
         EXTERMIBOT_HIT_LETHAL = 1,
         EXTERMIBOT_HIT_DEATH_KNOCKBACK = 2,
         EXTERMIBOT_HIT_NONLETHAL_KNOCKBACK = 3,
+        EXTERMIBOT_HIT_KNOCKBACK_AND_FLASH = 4,
         EXTERMIBOT_HIT_FLASH = 9,
         EXTERMIBOT_HIT_FLASH_ONLY = 10,
         EXTERMIBOT_HIT_NO_REACTION = 11
@@ -1695,7 +1696,7 @@ void FUN_L05_00303390(Moby *m) {
             d->b67 = 0xFA;
             break;
         case EXTERMIBOT_HIT_NONLETHAL_KNOCKBACK:
-        case 4:
+        case EXTERMIBOT_HIT_KNOCKBACK_AND_FLASH:
         case 5:
         case 6:
         case 7:
