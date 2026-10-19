@@ -1960,7 +1960,8 @@ extern int tick_countdown_32(void *) __asm__("FUN_001f9740");
 extern float D_L10_00161C98 __attribute__((sda));
 void FUN_L10_002da2c8(struct Moby *moby) {
     enum {
-        MOBY_STATE_INITIALIZE = 0
+        MOBY_STATE_INITIALIZE = 0,
+        MOBY_STATE_ACTIVE_WITH_SOUND = 1
     };
     char *data = (char *)moby->pvars;
     union { unsigned char order[10]; float position2[4]; } scratch;
@@ -2007,7 +2008,7 @@ void FUN_L10_002da2c8(struct Moby *moby) {
 
         moby->flags |= 0x41;
         break;
-    case 1: {
+    case MOBY_STATE_ACTIVE_WITH_SOUND: {
         float half_height, half_width, radius_squared;
         half_height = (float)*(int *)(data + 4) * *(float *)(data + 8) * 0.5f;
         half_width = *(float *)data * 0.5f;
