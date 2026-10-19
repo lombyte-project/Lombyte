@@ -120,6 +120,7 @@ void FUN_L13_002eac00(void *mobyp, void *pp) {
         STARFIGHTER_COMMAND_TIMED_VOLLEY = 1,
         STARFIGHTER_COMMAND_ALTERNATING_ATTACKS = 2,
         STARFIGHTER_COMMAND_REPEATED_TARGETED_ATTACK = 3,
+        STARFIGHTER_COMMAND_ALTERNATING_ATTACKS_WITH_TRACTOR_BEAM = 5,
         STARFIGHTER_COMMAND_REPEATED_VECTOR_ATTACK = 7
     };
     char *moby = mobyp;
@@ -139,7 +140,7 @@ void FUN_L13_002eac00(void *mobyp, void *pp) {
         goto s3;
     case 4:
         goto s4;
-    case 5:
+    case STARFIGHTER_COMMAND_ALTERNATING_ATTACKS_WITH_TRACTOR_BEAM:
         goto s3;
     case 6:
         goto s3;
