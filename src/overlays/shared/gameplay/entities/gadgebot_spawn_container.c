@@ -2961,11 +2961,15 @@ extern char D_0014171B_86b8[] __asm__("D_0014C190");
 
 void energy_sphere_holder_update(char *m) __asm__("FUN_L06_002f7288");
 void energy_sphere_holder_update(char *m) {
+    enum {
+        ENERGY_SPHERE_HOLDER_INITIALIZE = 0,
+        ENERGY_SPHERE_HOLDER_HANDLE_HITS_AND_UPDATE_BEAM = 1
+    };
     char *d = *(char **)(m + 0x78);
     char *o;
     unsigned char *q;
     switch (((unsigned char *)m)[0x20]) {
-    case 0:
+    case ENERGY_SPHERE_HOLDER_INITIALIZE:
         if ((*(int *)(current_level_index * 256 + ((short)*(unsigned short *)(m + 0xB2) >> 5) * 4 +
                       D_0014171B_86b8) >>
                  (*(unsigned short *)(m + 0xB2) & 0x1F) &
@@ -2995,7 +2999,7 @@ void energy_sphere_holder_update(char *m) {
         D_L06_001BAC50[(short)*(unsigned short *)(m + 0xB2) >> 5] &=
             ~(1 << (*(unsigned short *)(m + 0xB2) & 0x1F));
         break;
-    case 1: {
+    case ENERGY_SPHERE_HOLDER_HANDLE_HITS_AND_UPDATE_BEAM: {
         char *h = find_moby_hit(m, 0x330000, 0);
         if (h != 0) {
             spawn_nearby_effect(*(void **)(d + 0x40), *(int *)(h + 0x20), 0x10000, h, h + 0x10, 1.0f);
