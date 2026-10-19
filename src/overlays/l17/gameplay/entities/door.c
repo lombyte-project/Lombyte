@@ -532,7 +532,8 @@ int FUN_L17_002eace8(int a, char *p, char *radar_origin, char *radar_rotation, f
     enum {
         MOBY_CLASS_OFFSCREEN_ARROW_TARGET = 0x15B,
         MOBY_CLASS_UNMARKED_COUNTED_TARGET = 0x184,
-        MOBY_CLASS_UNCOUNTED_MARKED_TARGET = 0x191
+        MOBY_CLASS_UNCOUNTED_MARKED_TARGET = 0x191,
+        MOBY_CLASS_PRIORITY_LOCK_TARGET = 0x3EB
     };
     float v[4];
     float w[4];
@@ -606,7 +607,7 @@ int FUN_L17_002eace8(int a, char *p, char *radar_origin, char *radar_rotation, f
             break;
         case MOBY_CLASS_UNMARKED_COUNTED_TARGET:
         case MOBY_CLASS_UNCOUNTED_MARKED_TARGET:
-        case 0x3EB:
+        case MOBY_CLASS_PRIORITY_LOCK_TARGET:
         case 0x504:
             project_to_screen(v, m + 0x10);
             if (*(short *)(m + 0xA6) != 0x184) {
