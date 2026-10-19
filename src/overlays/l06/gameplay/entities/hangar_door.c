@@ -2985,6 +2985,7 @@ void FUN_L06_002fa9c0(char *moby) {
         HIT_RESPONSE_NO_REACTION = 11
     };
     enum {
+        AMPLIFIED_DAMAGE_SOURCE_CLASS = 0xB0,
         REDUCED_DAMAGE_SOURCE_CLASS = 0x131
     };
     char *data;
@@ -3012,7 +3013,7 @@ void FUN_L06_002fa9c0(char *moby) {
             case REDUCED_DAMAGE_SOURCE_CLASS:
                 dmg *= 0.666f;
                 break;
-            case 0xB0: case 0x79: case 0x33B:
+            case AMPLIFIED_DAMAGE_SOURCE_CLASS: case 0x79: case 0x33B:
                 dmg *= 1.5f;
                 break;
             }
