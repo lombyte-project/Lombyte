@@ -2256,7 +2256,9 @@ void FUN_L08_002dc9a8(struct Moby *moby) {
         PROJECTILE_STATE_DETONATE = 99
     };
     enum {
+        DETONATION_EFFECT_FIXED_COLORS = 0,
         DETONATION_EFFECT_NO_EMISSION = 1,
+        DETONATION_EFFECT_TWO_COLOR_CHOICE = 2,
         DETONATION_EFFECT_SPHERICAL_VELOCITY = 3
     };
     char *m = (char *)moby;
@@ -2335,7 +2337,7 @@ void FUN_L08_002dc9a8(struct Moby *moby) {
             effect[2] -= frame_time * 8.0f;
             position = effect;
             switch (axis) {
-            case 0: {
+            case DETONATION_EFFECT_FIXED_COLORS: {
                 int color, color2, alpha;
                 float size = FUN_L08_002dc9a8_random(200000.0f, 300000.0f);
                 color = FUN_L08_002dc9a8_random_color(60);
@@ -2343,7 +2345,7 @@ void FUN_L08_002dc9a8(struct Moby *moby) {
                 alpha = FUN_L08_002dc9a8_blend(color, color2);
                 FUN_L08_002dc9a8_emit(record.pos, position, 0x1f101820, 0x101010, size, alpha, 0);
             } break;
-            case 2: {
+            case DETONATION_EFFECT_TWO_COLOR_CHOICE: {
                 int color, color2, alpha;
                 color = FUN_L08_002dc9a8_random_below(100) < 40 ? 0x5ff8f8f8 : 0x2f486078;
                 color2 = FUN_L08_002dc9a8_random_color(30);
