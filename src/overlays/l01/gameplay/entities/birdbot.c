@@ -3674,6 +3674,8 @@ extern void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L0
 void piston_platform_update(LiftMoby *m) __asm__("FUN_L01_002f95c0");
 void piston_platform_update(LiftMoby *m) {
     enum {
+        PISTON_PLATFORM_MODE_WAIT_BEFORE_SUBTRACT_TRAVEL = 0,
+        PISTON_PLATFORM_MODE_WAIT_BEFORE_ADD_TRAVEL = 1,
         PISTON_PLATFORM_MODE_MOVING = 2
     };
     LiftVars *v;
@@ -3698,7 +3700,7 @@ void piston_platform_update(LiftMoby *m) {
         v->xb4 = -1;
     }
     switch (m->mode) {
-    case 0:
+    case PISTON_PLATFORM_MODE_WAIT_BEFORE_SUBTRACT_TRAVEL:
         if (v->timer == 0) {
             m->mode = 2;
             v->speed =
@@ -3707,7 +3709,7 @@ void piston_platform_update(LiftMoby *m) {
             allocate_voice_for_target_entry(0, 0, m);
         }
         break;
-    case 1:
+    case PISTON_PLATFORM_MODE_WAIT_BEFORE_ADD_TRAVEL:
         if (v->timer == 0) {
             m->mode = 2;
             v->speed = -(v->travel /
