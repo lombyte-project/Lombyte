@@ -2699,6 +2699,9 @@ void sharkigator_update(unsigned char *moby) {
         SHARKIGATOR_SWIM_WANDER = 2,
         SHARKIGATOR_TARGET_PURSUIT = 4,
         SHARKIGATOR_TARGET_LUNGE_INTERPOLATION = 5,
+        SHARKIGATOR_TARGET_APPROACH = 9,
+        SHARKIGATOR_TARGET_CONTACT_ATTACK = 10,
+        SHARKIGATOR_TARGET_CONTACT_RECOIL_RECOVERY = 11,
         SHARKIGATOR_HIT_KNOCKBACK_RECOVERY = 12,
         SHARKIGATOR_HIT_ANIMATION_RECOVERY = 13,
         SHARKIGATOR_DEATH_FALL_AND_REMOVE = 14
@@ -3083,8 +3086,8 @@ void sharkigator_update(unsigned char *moby) {
             moby[0x20] = next_state;
         }
         goto end;
-    case 9:
-    case 10: {
+    case SHARKIGATOR_TARGET_APPROACH:
+    case SHARKIGATOR_TARGET_CONTACT_ATTACK: {
         float angle;
         float pi2 = 1.57079637f;
         angle = fast_arc_tan_c2(target.pos[0] - F(moby, 0x10), target.pos[1] - F(moby, 0x14));
@@ -3126,7 +3129,7 @@ void sharkigator_update(unsigned char *moby) {
         }
         goto end;
     }
-    case 11:
+    case SHARKIGATOR_TARGET_CONTACT_RECOIL_RECOVERY:
         if (moby[0x70] & 2) {
             moby[0x20] = 7;
         }
