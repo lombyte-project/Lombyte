@@ -1298,6 +1298,7 @@ extern int FUN_L00_0025ff38(void *, void *, float, int, int, void *, int);
 
 void FUN_L15_0029a570(void *object, int flag) {
     enum {
+        SENTRYBOT_NO_KNOCKBACK_SETUP_RESPONSE = 0,
         LETHAL_HIT_RESPONSE = 1,
         DEATH_KNOCKBACK_HIT_RESPONSE = 2,
         NONLETHAL_KNOCKBACK_HIT_RESPONSE = 3,
@@ -1344,7 +1345,7 @@ void FUN_L15_0029a570(void *object, int flag) {
         *(float *)(data + 0x80) = speed;
         data[0xAD] = 0;
         switch (code) {
-        case 0:
+        case SENTRYBOT_NO_KNOCKBACK_SETUP_RESPONSE:
         case 11:
             break;
         case 9:
