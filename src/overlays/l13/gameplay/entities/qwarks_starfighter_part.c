@@ -117,7 +117,8 @@ extern char D_00140940[];
 
 void FUN_L13_002eac00(void *mobyp, void *pp) {
     enum {
-        STARFIGHTER_COMMAND_TIMED_VOLLEY = 1
+        STARFIGHTER_COMMAND_TIMED_VOLLEY = 1,
+        STARFIGHTER_COMMAND_ALTERNATING_ATTACKS = 2
     };
     char *moby = mobyp;
     char *p = pp;
@@ -130,7 +131,7 @@ void FUN_L13_002eac00(void *mobyp, void *pp) {
     switch (((unsigned char *)moby)[0xBC]) {
     case STARFIGHTER_COMMAND_TIMED_VOLLEY:
         goto s1;
-    case 2:
+    case STARFIGHTER_COMMAND_ALTERNATING_ATTACKS:
         goto s2;
     case 3:
         goto s3;
