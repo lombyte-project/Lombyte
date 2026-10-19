@@ -1536,6 +1536,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
     };
     enum {
         DREK_BOSS_WAIT_FOR_ENCOUNTER_TRIGGER = 1,
+        DREK_BOSS_CIRCLE_AND_FIRE_AT_HERO = 2,
         DREK_BOSS_WAIT_FOR_GROUNDED_HERO_TO_START_SCENE = 4,
         DREK_BOSS_FOLLOW_PATH_AND_FIRE_AT_MOBYS = 10,
         DREK_BOSS_FINISH_PATH_AND_WAIT_FOR_HERO = 0xB,
@@ -1713,7 +1714,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
             }
         }
         break;
-    case 2:
+    case DREK_BOSS_CIRCLE_AND_FIRE_AT_HERO:
         aim = &moby->f40[2];
         ang = fast_arc_tan(hero.motion.pos.f[0] - moby->f10[0], hero.motion.pos.f[1] - moby->f10[1]);
         approach_angle(aim, &d->f370, ang, D_0015ED6C_e[1] * 6.2831855f,
