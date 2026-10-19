@@ -133,6 +133,7 @@ void FUN_L01_00242930(void) {
         HERO_STATE_LATERAL_MOVE_POSITIVE_YAW = 26,
         HERO_STATE_LATERAL_MOVE_NEGATIVE_YAW = 27,
         HERO_STATE_TARGET_POSE_APPROACH = 101,
+        HERO_STATE_TARGET_POSE_ANIMATION_WAIT = 102,
         HERO_STATE_TARGET_POSE_HOLD = 103,
         HERO_STATE_DEATH_PLANE_FALL = 119
     };
@@ -884,7 +885,7 @@ void FUN_L01_00242930(void) {
                     }
                     FUN_L00_00228c18();
                     break;
-                case 102:
+                case HERO_STATE_TARGET_POSE_ANIMATION_WAIT:
                     if (hero.unkA98 & 2) {
                         hero_set_state(0x65, 1);
                     }
