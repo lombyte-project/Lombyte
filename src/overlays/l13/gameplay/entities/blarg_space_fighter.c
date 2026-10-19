@@ -1788,6 +1788,11 @@ void forcefield_tower_update(struct Moby *moby) {
         TOWER_STATE_ACTIVE = 1,
         TOWER_STATE_DESTRUCTION = 2
     };
+    enum {
+        TOWER_DESTRUCTION_WAIT_FOR_POINT_1_EFFECT = 0,
+        TOWER_DESTRUCTION_WAIT_FOR_POINT_2_EFFECT = 1,
+        TOWER_DESTRUCTION_WAIT_FOR_POINT_3_EFFECT = 2
+    };
     unsigned char *m = (unsigned char *)moby;
     int *data = *(int **)(m + 0x78);
     float position[4];
@@ -1854,9 +1859,9 @@ voice_done:
         *(u128z *)position = *(u128z *)velocity;
         threshold = 1000.0f;
         switch ((int)m[0xBC]) {
-        case 0: threshold = 8.5f; break;
-        case 1: threshold = 17.0f; break;
-        case 2: threshold = 17.0f; break;
+        case TOWER_DESTRUCTION_WAIT_FOR_POINT_1_EFFECT: threshold = 8.5f; break;
+        case TOWER_DESTRUCTION_WAIT_FOR_POINT_2_EFFECT: threshold = 17.0f; break;
+        case TOWER_DESTRUCTION_WAIT_FOR_POINT_3_EFFECT: threshold = 17.0f; break;
         }
         if (threshold < 100.0f && is_value_within_interpolated_window(moby, threshold)) {
             moby_point_position(moby, m[0xBC] + 1, velocity);
