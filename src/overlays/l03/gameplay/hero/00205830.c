@@ -1888,7 +1888,7 @@ void FUN_L03_0020ef60(void) {
     case 7:
     case HERO_STATE_RUN_JUMP:
     case HERO_STATE_PACK_JUMP:
-    case 0xB:
+    case HERO_STATE_HIGH_JUMP:
     case 0xC:
     case 0xD:
     case 0xE:
