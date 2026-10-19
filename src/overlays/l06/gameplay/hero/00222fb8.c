@@ -1019,9 +1019,9 @@ void FUN_L06_0022e020(void) {
 
     switch (hero.state.current) {
     case 0x0:
-    case 0x1:
-    case 0x3:
-    case 0x4:
+    case HERO_STATE_LOOK:
+    case HERO_STATE_STOP:
+    case HERO_STATE_CROUCH:
     case 0x17:
     case 0x1D:
     case 0x1E:
@@ -1144,7 +1144,7 @@ void FUN_L06_0022e020(void) {
             FUN_L00_00217450();
         }
         break;
-    case 0x7F:
+    case HERO_STATE_SINK:
         if ((struct MobyView *)hero.unk6A4 == NULL) {
             struct MobyView *m = create_moby(0x52A);
             s32 h40 = 0x40;
@@ -1789,7 +1789,7 @@ void FUN_L06_0022e020(void) {
             hero.motion.velocity.f[2] = hero.motion.velocity.f[2] - frame_time_sq * 54.0f;
         }
         break;
-    case 2:
+    case HERO_STATE_RUN:
     case 0x73: {
         f32 k;
         if (hero.motion.unk164 < D_0015ED6C_c * 0.3f && hero.unk229C > 0.85f) {
@@ -1869,7 +1869,7 @@ void FUN_L06_0022e020(void) {
         }
         break;
     }
-    case 0x28:
+    case HERO_STATE_GRIND:
     case 0x29:
     case 0x2A:
     case 0x2B:
@@ -2239,7 +2239,7 @@ void FUN_L06_0022e020(void) {
         set_vector_length_xy(&hero.motion.velocity, &hero.motion.velocity, D_L06_001C4430[truncate_float_to_s32(hero.anim_frame)] * 0.5f);
         break;
     }
-    case 0x79:
+    case HERO_STATE_SLIP:
         hero.motion.move_yaw = hero.downhill_yaw;
         hero.target_speed = D_0015ED6C_c * 5.5f;
         FUN_L01_00234358(frame_time_sq * 25.0f);
@@ -2498,7 +2498,7 @@ void FUN_L06_0022e020(void) {
         FUN_L00_0020b5b8();
         break;
     }
-    case 0x16: {
+    case HERO_STATE_HURT: {
         f32 l = vector_length_xy(&hero.motion.velocity);
         f32 d = frame_time_sq * 4.0f;
         if (hero.air_frames.s == 0 && scale_game_frames(10) < hero.state_timer) {
