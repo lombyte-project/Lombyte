@@ -3086,6 +3086,9 @@ extern void func_L00_0025E590_2EAE80(void *, void *) __asm__("FUN_L00_0025d538")
 extern int func_L13_002E9B30_2EAE80(void *, void *, int, int) __asm__("FUN_L13_002e86f8");
 
 void FUN_L13_002e9a48(Moby_2EAE80 *m, Data_2EAE80 *d) {
+    enum {
+        DAMAGE_STAGE_START_TIMER_AND_QUEUE_LINE = 2
+    };
     int hit;
     int rf;
     int mode;
@@ -3285,7 +3288,7 @@ void FUN_L13_002e9a48(Moby_2EAE80 *m, Data_2EAE80 *d) {
                 case 1:
                     func_L13_002E9B30_2EAE80(m, d, 0xC, 4);
                     break;
-                case 2:
+                case DAMAGE_STAGE_START_TIMER_AND_QUEUE_LINE:
                     d->f100 = func_001F9850_2EAE80(0x78);
                     func_L13_002E9B30_2EAE80(m, d, 0x10, 1);
                     break;
