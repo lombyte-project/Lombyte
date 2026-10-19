@@ -847,6 +847,8 @@ void blarg_space_commando_update(struct Moby *moby) {
         BLARG_SPACE_COMMANDO_FACE_TARGET_AND_SELECT_ACTION = 1,
         BLARG_SPACE_COMMANDO_FACE_TARGET_AND_WAIT_FOR_TIMER = 4,
         BLARG_SPACE_COMMANDO_RESUME_SAVED_STATE_AFTER_ANIMATION = 6,
+        BLARG_SPACE_COMMANDO_APPROACH_TARGET_WITH_TURN_OFFSET = 7,
+        BLARG_SPACE_COMMANDO_APPROACH_TARGET_UNTIL_BLOCKED_OR_NEAR = 11,
         BLARG_SPACE_COMMANDO_RETURN_HOME = 13,
         BLARG_SPACE_COMMANDO_KNOCKBACK = 15,
         BLARG_SPACE_COMMANDO_DYING = 16
@@ -1002,7 +1004,7 @@ void blarg_space_commando_update(struct Moby *moby) {
             }
         }
         break;
-    case 7:
+    case BLARG_SPACE_COMMANDO_APPROACH_TARGET_WITH_TURN_OFFSET:
         func_L00_002592B0_309330(moby,
                           fast_add_rotations_c(fast_arc_tan_c(target->pos.x - moby->pos.x, target->pos.y - moby->pos.y),
                                         vars->unk1A8), &vars->turn,
@@ -1042,7 +1044,7 @@ void blarg_space_commando_update(struct Moby *moby) {
         }
         }
         break;
-    case 11:
+    case BLARG_SPACE_COMMANDO_APPROACH_TARGET_UNTIL_BLOCKED_OR_NEAR:
         blocked = 0;
         func_L00_002592B0_309330(moby,
                           fast_arc_tan_c(target->pos.x - moby->pos.x, target->pos.y - moby->pos.y), &vars->turn, 0.05f, 0.3f,
