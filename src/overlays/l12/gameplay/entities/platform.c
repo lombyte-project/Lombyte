@@ -307,15 +307,15 @@ extern void blend_moby_animation(void *, int, int, int);
 
 void FUN_L12_002e18e8(struct Moby *moby) {
     enum {
-        BURROWER_PURSUIT_ANIMATION_VARIANT_A = 0,
-        BURROWER_PURSUIT_ANIMATION_VARIANT_B = 1
+        ANKLEBITER_PURSUIT_ANIMATION_VARIANT_A = 0,
+        ANKLEBITER_PURSUIT_ANIMATION_VARIANT_B = 1
     };
     switch (random_integer_below(2)) {
-    case BURROWER_PURSUIT_ANIMATION_VARIANT_A:
+    case ANKLEBITER_PURSUIT_ANIMATION_VARIANT_A:
         if (moby->prev_seq != 3)
             blend_moby_animation(moby, 3, 0, scale_game_frames(8));
         break;
-    case BURROWER_PURSUIT_ANIMATION_VARIANT_B:
+    case ANKLEBITER_PURSUIT_ANIMATION_VARIANT_B:
         if (moby->prev_seq != 0xF)
             blend_moby_animation(moby, 0xF, 0, scale_game_frames(8));
         break;
@@ -400,23 +400,23 @@ void FUN_L12_002e19a8(void *pos) {
 }
 #include "rnc/math/vector.h"
 
-/* Updates a Hoven burrower's (moby class 238) idle, pursuit, melee, leap, landing and death states. */
+/* Updates a Hoven anklebiter's (moby class 238) idle, pursuit, melee, leap, landing and death states. */
 /* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002C0310.c: func_L12_002E2EF0), where it is exact; names translated to the US level program. */
 
 typedef struct Moby Moby;
 
-typedef struct BurrowerData_2E2EF0 BurrowerData_2E2EF0;
+typedef struct AnklebiterData_2E2EF0 AnklebiterData_2E2EF0;
 
-typedef struct BurrowerMoby_2E2EF0 {
+typedef struct AnklebiterMoby_2E2EF0 {
     char p0[0x10]; float pos[4]; unsigned char state, group; char p22[2]; char *model;
     char p28[9]; unsigned char enabled; unsigned short joints, flags; char p36[0xA];
     float rot[4]; char p50[2]; unsigned char anim_end, anim; float anim_time, anim_rate;
-    char p5C[0x14]; unsigned char anim_flags; char p71[7]; BurrowerData_2E2EF0 *data;
+    char p5C[0x14]; unsigned char anim_flags; char p71[7]; AnklebiterData_2E2EF0 *data;
     char p7C[3]; unsigned char active; char p80[0x14]; int collision;
     char p98[0x24]; unsigned char proximity;
-} BurrowerMoby_2E2EF0;
+} AnklebiterMoby_2E2EF0;
 
-struct BurrowerData_2E2EF0 {
+struct AnklebiterData_2E2EF0 {
     char p0[0x20]; float health; char p24[5]; unsigned char mode; char p2A[0x2E];
     unsigned char blend; char p59; unsigned char count; char p5B[0x6D]; short stuck; char pCA[6]; void *tuning;
     char pD4[0x4C]; float fall[4], gravity, zero, launch_speed, launch_time; int fall_flags, fall_mode; float damping;
@@ -429,7 +429,7 @@ struct BurrowerData_2E2EF0 {
     int path, blocked, return_timer, group_enabled; int *group_count; int group_check;
 };
 
-typedef struct TargetReport54_2E2EF0 { float v0[4], v10[4], v20[4], v30[4]; BurrowerMoby_2E2EF0 *moby; int mode; char pad48[8]; } TargetReport54_2E2EF0;
+typedef struct TargetReport54_2E2EF0 { float v0[4], v10[4], v20[4], v30[4]; AnklebiterMoby_2E2EF0 *moby; int mode; char pad48[8]; } TargetReport54_2E2EF0;
 
 typedef struct {
     char pad0[0x248];
@@ -549,39 +549,39 @@ extern void func_0020D678_2E2EF0(void *) __asm__("FUN_0020c828");
 extern void func_L00_00263950_2E2EF0(char *,char *,int,float,float) __asm__("FUN_L00_002628d8");
 extern void func_L00_0025B178_2E2EF0(void *) __asm__("FUN_L00_0025a120");
 
-void FUN_L12_002e1be0(BurrowerMoby_2E2EF0 *moby) {
+void FUN_L12_002e1be0(AnklebiterMoby_2E2EF0 *moby) {
     enum {
-        BURROWER_INITIALIZE = 0,
-        BURROWER_IDLE = 1,
-        BURROWER_FACE_TARGET_BEFORE_PURSUIT = 3,
-        BURROWER_PURSUE_TARGET = 4,
-        BURROWER_MELEE_ATTACK = 5,
-        BURROWER_RETURN_HOME = 6,
-        BURROWER_KNOCKBACK_FALL = 7,
-        BURROWER_DORMANT = 9,
-        BURROWER_RECOVER_AFTER_KNOCKBACK = 10,
-        BURROWER_WAIT_FOR_LEAP_TRIGGER = 11,
-        BURROWER_LEAP_TO_HOME = 12,
-        BURROWER_ACTIVATE_FROM_DORMANCY = 13,
-        BURROWER_LAND_AFTER_LEAP = 14,
-        BURROWER_DEATH_EFFECTS_AND_REMOVE = 15,
-        BURROWER_DEATH_FALL = 99
+        ANKLEBITER_INITIALIZE = 0,
+        ANKLEBITER_IDLE = 1,
+        ANKLEBITER_FACE_TARGET_BEFORE_PURSUIT = 3,
+        ANKLEBITER_PURSUE_TARGET = 4,
+        ANKLEBITER_MELEE_ATTACK = 5,
+        ANKLEBITER_RETURN_HOME = 6,
+        ANKLEBITER_KNOCKBACK_FALL = 7,
+        ANKLEBITER_DORMANT = 9,
+        ANKLEBITER_RECOVER_AFTER_KNOCKBACK = 10,
+        ANKLEBITER_WAIT_FOR_LEAP_TRIGGER = 11,
+        ANKLEBITER_LEAP_TO_HOME = 12,
+        ANKLEBITER_ACTIVATE_FROM_DORMANCY = 13,
+        ANKLEBITER_LAND_AFTER_LEAP = 14,
+        ANKLEBITER_DEATH_EFFECTS_AND_REMOVE = 15,
+        ANKLEBITER_DEATH_FALL = 99
     };
     TargetReport54_2E2EF0 work;
-    BurrowerMoby_2E2EF0 *iterator;
+    AnklebiterMoby_2E2EF0 *iterator;
     float trajectory;
-    BurrowerData_2E2EF0 *data = moby->data;
-    BurrowerMoby_2E2EF0 *target;
+    AnklebiterData_2E2EF0 *data = moby->data;
+    AnklebiterMoby_2E2EF0 *target;
     float angle;
     int count, first, blocked, hit;
     func_L12_002E4838_2E2EF0(moby);
     func_L00_00264BB0_2E2EF0(data->collision_data,2.2f);
     FUN_L01_00274b78_c((char *)moby,(char *)&work,data->range);
     target=work.moby;
-    if (!target) target=*(BurrowerMoby_2E2EF0 **)D_0013E633_2E2EF0;
+    if (!target) target=*(AnklebiterMoby_2E2EF0 **)D_0013E633_2E2EF0;
     if (moby->pos[2]<26.0f) { func_0020D678_2E2EF0(moby); return; }
     switch(moby->state) {
-    case BURROWER_INITIALIZE:
+    case ANKLEBITER_INITIALIZE:
         if(data->sleep) {
             qcopy(data->home,moby->pos); moby->state=9;
             if(moby->anim!=12) func_00213DE0_2E2EF0(moby,12,0,3);
@@ -607,7 +607,7 @@ void FUN_L12_002e1be0(BurrowerMoby_2E2EF0 *moby) {
         data->tuning=&D_L12_001618E8;
         }
         break;
-    case BURROWER_IDLE: {
+    case ANKLEBITER_IDLE: {
         float idle_distance, idle_angle, idle_difference;
         idle_distance=func_001F9D10_2E2EF0(target->pos,data->home);
         idle_angle=func_L00_001FF860_2E2EF0(target->pos[0]-moby->pos[0],target->pos[1]-moby->pos[1]);
@@ -635,7 +635,7 @@ void FUN_L12_002e1be0(BurrowerMoby_2E2EF0 *moby) {
         }
         break;
     }
-    case BURROWER_DORMANT:
+    case ANKLEBITER_DORMANT:
         if(data->group_enabled) {
             if(func_001F9D48_2E2EF0(moby->pos,target->pos)<2.0f) break;
             if(data->group_check<D_L12_0015F5CC) {
@@ -659,7 +659,7 @@ void FUN_L12_002e1be0(BurrowerMoby_2E2EF0 *moby) {
         *(u128 *)work.v10=*(u128 *)moby->pos;
         func_L12_002E2CB8_2E2EF0(work.v10);
         break;
-    case BURROWER_ACTIVATE_FROM_DORMANCY: {
+    case ANKLEBITER_ACTIVATE_FROM_DORMANCY: {
         int collision=*(int *)(moby->model+0x10);
         moby->flags&=0xFFBE; moby->collision=collision;
         angle=func_L00_001FF860_2E2EF0(target->pos[0]-moby->pos[0],target->pos[1]-moby->pos[1]);
@@ -672,7 +672,7 @@ void FUN_L12_002e1be0(BurrowerMoby_2E2EF0 *moby) {
         }
         break;
     }
-    case BURROWER_WAIT_FOR_LEAP_TRIGGER:
+    case ANKLEBITER_WAIT_FOR_LEAP_TRIGGER:
         angle=func_L00_001FF860_2E2EF0(data->home[0]-moby->pos[0],data->home[1]-moby->pos[1]);
         func_L00_002592B0_2E2EF0((char *)moby,&data->turn_velocity,angle,0.05f,0.3f,0.2f);
         fast_vec_sub(work.v0,target->pos,data->home);
@@ -687,7 +687,7 @@ void FUN_L12_002e1be0(BurrowerMoby_2E2EF0 *moby) {
             moby->collision=*(int *)(moby->model+0x10);
         }
         break;
-    case BURROWER_LEAP_TO_HOME:
+    case ANKLEBITER_LEAP_TO_HOME:
         if(func_L00_0025D6F0_2E2EF0(moby,data->fall)&1) {
             moby->state=14;
             if(moby->anim!=9) func_00213DE0_2E2EF0(moby,9,8,func_001F9850_2E2EF0(7));
@@ -695,7 +695,7 @@ void FUN_L12_002e1be0(BurrowerMoby_2E2EF0 *moby) {
         }
         if(moby->pos[2]<0.0f) { func_0020D678_2E2EF0(moby); return; }
         break;
-    case BURROWER_LAND_AFTER_LEAP:
+    case ANKLEBITER_LAND_AFTER_LEAP:
         if(moby->anim_flags&2) {
             moby->state=4; data->blocked=0;
             if(func_002140B0_2E2EF0(256)&1) data->circle_rate=-data->circle_rate;
@@ -704,12 +704,12 @@ void FUN_L12_002e1be0(BurrowerMoby_2E2EF0 *moby) {
             func_L12_002E2BF8_2E2EF0((unsigned char *)moby);
         }
         break;
-    case BURROWER_FACE_TARGET_BEFORE_PURSUIT:
+    case ANKLEBITER_FACE_TARGET_BEFORE_PURSUIT:
         angle=func_L00_001FF860_2E2EF0(target->pos[0]-moby->pos[0],target->pos[1]-moby->pos[1]);
         func_L00_002592B0_2E2EF0((char *)moby,&data->turn_velocity,angle,0.03f,0.3f,D_0015ED6C*6.2831855f);
         if(moby->anim_flags&2) { moby->state=4; data->blocked=0; func_L12_002E2BF8_2E2EF0((unsigned char *)moby); }
         break;
-    case BURROWER_PURSUE_TARGET: {
+    case ANKLEBITER_PURSUE_TARGET: {
         float chase_angle, look_difference, clamp;
         chase_angle=func_L00_001FF860_2E2EF0(target->pos[0]-moby->pos[0],target->pos[1]-moby->pos[1]);
         look_difference=func_001FA790_2E2EF0(chase_angle,moby->rot[2]);
@@ -732,8 +732,8 @@ void FUN_L12_002e1be0(BurrowerMoby_2E2EF0 *moby) {
         moby->proximity=0;
         break;
     }
-    case BURROWER_MELEE_ATTACK:
-        (*(BurrowerMoby_2E2EF0 **)D_0013E633_2E2EF0)->anim_rate=1.3f;
+    case ANKLEBITER_MELEE_ATTACK:
+        (*(AnklebiterMoby_2E2EF0 **)D_0013E633_2E2EF0)->anim_rate=1.3f;
         angle=func_L00_001FF860_2E2EF0(target->pos[0]-moby->pos[0],target->pos[1]-moby->pos[1]);
         func_L00_002592B0_2E2EF0((char *)moby,&data->turn_velocity,angle,0.05f,0.3f,0.2f);
         if(moby->anim_end==moby->anim && func_00215B18_2E2EF0((char *)moby,13.0f) && func_001F9B88_2E2EF0(moby->pos[2]-target->pos[2])<0.5f && func_001F9D48_2E2EF0(moby->pos,target->pos)<2.0f && func_001FA850_2E2EF0(func_L00_001FF860_2E2EF0(target->pos[0]-moby->pos[0],target->pos[1]-moby->pos[1]),moby->rot[2])<0.2617994f) {
@@ -743,7 +743,7 @@ void FUN_L12_002e1be0(BurrowerMoby_2E2EF0 *moby) {
         }
         if((moby->anim_flags&2)&&func_001F9D48_2E2EF0(moby->pos,target->pos)>=2.0f) { moby->state=4; data->blocked=0; func_L12_002E2BF8_2E2EF0((unsigned char *)moby); }
         break;
-    case BURROWER_RETURN_HOME: {
+    case ANKLEBITER_RETURN_HOME: {
         float return_distance;
         func_L12_002E41C8_2E2EF0((char *)moby,func_L00_001FF860_2E2EF0(data->home[0]-moby->pos[0],data->home[1]-moby->pos[1]));
         if(func_001F9D48_2E2EF0(moby->pos,data->home)<2.0f) {
@@ -766,7 +766,7 @@ void FUN_L12_002e1be0(BurrowerMoby_2E2EF0 *moby) {
         moby->proximity=0;
         break;
     }
-    case BURROWER_KNOCKBACK_FALL:
+    case ANKLEBITER_KNOCKBACK_FALL:
         if(moby->group!=255) func_L01_0026F040_2E2EF0(moby->group,1);
         if(func_L00_0025D6F0_2E2EF0(moby,data->fall)&1) {
             moby->state=10;
@@ -778,17 +778,17 @@ void FUN_L12_002e1be0(BurrowerMoby_2E2EF0 *moby) {
     case 8:
         if(func_L00_002DDEA0_2E2EF0(moby,data->fall)) { moby->state=6; data->return_timer=0; data->stuck=0; }
         break;
-    case BURROWER_RECOVER_AFTER_KNOCKBACK:
+    case ANKLEBITER_RECOVER_AFTER_KNOCKBACK:
         if(height54(moby)>29.0f) { moby->state=4; data->blocked=0; func_L12_002E2BF8_2E2EF0((unsigned char *)moby); return; }
         break;
-    case BURROWER_DEATH_FALL:
+    case ANKLEBITER_DEATH_FALL:
         hit=func_L00_0025D6F0_2E2EF0(moby,data->fall);
         if((hit&0x40)||(height54(moby)>37.0f && moby->anim_end==moby->anim)) {
             moby->anim_rate=0.0f; func_L00_002584A8_2E2EF0(moby,0,-1); moby->state=15; moby->flags|=8;
         } else if(moby->pos[2]<10.0f) { func_L00_002584A8_2E2EF0(moby,0,-1); { func_0020D678_2E2EF0(moby); return; } }
         else if(hit&1) func_L10_002E51A8_2E2EF0((char *)moby);
         break;
-    case BURROWER_DEATH_EFFECTS_AND_REMOVE:
+    case ANKLEBITER_DEATH_EFFECTS_AND_REMOVE:
         func_L10_002E51A8_2E2EF0((char *)moby); func_L12_002E43A8_2E2EF0(moby); func_L12_002E43A8_2E2EF0(moby); { func_0020D678_2E2EF0(moby); return; }
     }
     if(moby->enabled && moby->state!=9 && moby->state!=8) {
@@ -952,7 +952,7 @@ void FUN_L12_002e3098(struct Moby *moby) {
 #include "rnc/gameplay/entities/moby.h"
 #include "rnc/math/vector.h"
 
-/* Variables of the Hoven burrower (moby->pvars); the l00 VeldinRobotVars damage layout moved by 0xB0. */
+/* Variables of the Hoven anklebiter (moby->pvars); the l00 ElectroidVars damage layout moved by 0xB0. */
 typedef struct {
     u8 pad0[0x20];
     f32 health;          /* 0x20 */
@@ -987,12 +987,12 @@ typedef struct {
     u8 pad2C8[0x20];
     s16 call_enabled;    /* 0x2E8 */
     s16 call_timer;      /* 0x2EA */
-} BurrowerVars_e3528;
+} AnklebiterVars_e3528;
 
 typedef struct {
     u8 pad0[0x10];
     Vec4 pos;
-} BurrowerHit_e3528;
+} AnklebiterHit_e3528;
 
 extern f32 D_0015ED6C_e3528 __asm__("D_0015ED6C");
 extern s32 D_001413D0_e3528 __asm__("D_001413D0") __attribute__((section(".data")));
@@ -1005,8 +1005,8 @@ extern f32 fast_sin_e3528(f32) __asm__("FUN_001f9de0");
 extern s32 FUN_L01_0026e008(s32, s32);
 extern void alert_group_e3528(s32, s32) __asm__("FUN_L01_0026e090");
 extern void call_for_help_e3528(struct Moby *, s32, s32, Vec4f *, f32 *, f32) __asm__("FUN_L00_00259bc8");
-extern BurrowerHit_e3528 *find_hit_e3528(struct Moby *, s32, s32) __asm__("FUN_L00_0025a420");
-extern void take_damage_e3528(struct Moby *, BurrowerHit_e3528 *, f32 *, s32, s32 *, f32 *, s32, s32) __asm__("FUN_00213928");
+extern AnklebiterHit_e3528 *find_hit_e3528(struct Moby *, s32, s32) __asm__("FUN_L00_0025a420");
+extern void take_damage_e3528(struct Moby *, AnklebiterHit_e3528 *, f32 *, s32, s32 *, f32 *, s32, s32) __asm__("FUN_00213928");
 extern void knockback_e3528(void *, f32 *, f32 *, f32 *) __asm__("FUN_L00_0025ab48");
 extern void start_fall_e3528(struct Moby *, void *, s32, s32, s32, f32) __asm__("FUN_L00_0025c558");
 extern void anim_reset_e3528(struct Moby *, void *) __asm__("FUN_L00_0025d458");
@@ -1015,16 +1015,16 @@ extern void FUN_L12_002e3098(struct Moby *);
 
 extern f32 D_L12_001618D0 __attribute__((sda));
 extern f32 D_L12_001618D4 __attribute__((sda));
-/* Damage and alert step of the Hoven burrower: refreshes its speed while alerted, now and then calls for help behind
+/* Damage and alert step of the Hoven anklebiter: refreshes its speed while alerted, now and then calls for help behind
    itself, and takes hits (dying, or staggering back). */
 void FUN_L12_002e3528(struct Moby *moby) {
-    BurrowerVars_e3528 *vars = (BurrowerVars_e3528 *)moby->pvars;
+    AnklebiterVars_e3528 *vars = (AnklebiterVars_e3528 *)moby->pvars;
     Vec4 v;
     s32 hit;
     f32 dmg;
     f32 angle;
     f32 unused;
-    BurrowerHit_e3528 *coll;
+    AnklebiterHit_e3528 *coll;
 
     if (vars->reset_alert != 0) {
         vars->reset_alert = 0;
@@ -2098,7 +2098,7 @@ finish:
 #undef TROOPER_B
 #undef TROOPER_H
 #undef TROOPER_CHILD
-/* Variables of the Hoven blarg trooper (moby->pvars): the l00 VeldinRobotVars
+/* Variables of the Hoven blarg trooper (moby->pvars): the l00 ElectroidVars
    damage layout, with the alert and call-for-help state at 0x230.. */
 typedef struct {
     u8 pad0[0x20];
