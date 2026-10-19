@@ -286,6 +286,11 @@ extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F9CF8");
 
 void FUN_L05_0030e1f8(char *moby) {
+    enum {
+        FOG_ZONE_INITIALIZE = 0,
+        FOG_ZONE_WAIT_TO_APPLY_PRESET = 1,
+        FOG_ZONE_WAIT_TO_RESTORE_SAVED_SETTINGS = 2
+    };
     char *data = *(char **)(moby + 0x78);
     float v[4];
     float w[4];
@@ -294,7 +299,7 @@ void FUN_L05_0030e1f8(char *moby) {
         *(float *)(g + 0x270) = 500.0f;
     }
     switch (((unsigned char *)moby)[0x20]) {
-    case 0:
+    case FOG_ZONE_INITIALIZE:
         data[0x20] = D_L05_0015F444;
         data[0x21] = D_L05_0015F445;
         data[0x22] = D_L05_0015F446;
@@ -322,7 +327,7 @@ void FUN_L05_0030e1f8(char *moby) {
         }
         moby[0x20] = 1;
         break;
-    case 1:
+    case FOG_ZONE_WAIT_TO_APPLY_PRESET:
         if (is_point_inside_clip_volume(&hero.motion.pos, *(int *)(data + 0x2C))) {
             D_L05_0015F444 = data[0x23];
             D_L05_0015F445 = data[0x24];
@@ -340,7 +345,7 @@ void FUN_L05_0030e1f8(char *moby) {
             moby[0x20] = 2;
         }
         break;
-    case 2:
+    case FOG_ZONE_WAIT_TO_RESTORE_SAVED_SETTINGS:
         if (is_point_inside_clip_volume(&hero.motion.pos, *(int *)(data + 0x28))) {
             D_L05_0015F444 = data[0x20];
             D_L05_0015F445 = data[0x21];
