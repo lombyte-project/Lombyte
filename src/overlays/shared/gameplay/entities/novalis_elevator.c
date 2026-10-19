@@ -2250,11 +2250,7 @@ void FUN_L01_002eec68(char *m) {
     *(int *)(m + 0x90) = fast_tween_color((fast_sin_c(ang) + 1.0f) * 0.5f,
                                            *(int *)&D_L01_00161998, *(int *)&D_L01_0016199C);
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002ef350.s", FUN_L01_002ef350);
-#else
 extern short *lists_2ef478[] __asm__("D_L01_001ABCC0");
-extern char *D_L01_0015FFD8;
 extern void FUN_L00_00250df8(void *);
 
 char *FUN_L01_002ef350(void *arg) {
@@ -2270,6 +2266,9 @@ char *FUN_L01_002ef350(void *arg) {
     }
     entry = *(volatile unsigned char *)(self + 0x21);
     entities = (char *)(lists_2ef478 + entry);
+    /* Fakematch: the dead touch of the entity base gives retail's register for the list slot. */
+    D_L01_0015FFD8++;
+    D_L01_0015FFD8--;
     list = *(short **)entities;
     entities = D_L01_0015FFD8;
     if (list == 0) return 0;
@@ -2310,7 +2309,6 @@ scan:
     } while (1);
     return 0;
 }
-#endif /* NON_MATCHING */
 
 typedef struct {
     char p0[0x10];
