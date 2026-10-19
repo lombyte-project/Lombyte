@@ -1082,9 +1082,12 @@ void FUN_001f9d20_00233b20(void *, void *, void *) __asm__("FUN_001f9d20");
 /* Copies in to out with z, transformed by the two hero matrices in modes 1 and 2. */
 void gravity_set_z(f32 *out, f32 *in, f32 z) __asm__("FUN_L00_00233b20");
 void gravity_set_z(f32 *out, f32 *in, f32 z) {
+    enum {
+        GRAVITY_MODE_WORLD_Z = 0
+    };
     struct Hero *b = &hero;
     switch (b->unk20B3) {
-    case 0:
+    case GRAVITY_MODE_WORLD_Z:
         qcopy(out, in);
         out[2] = z;
         break;
