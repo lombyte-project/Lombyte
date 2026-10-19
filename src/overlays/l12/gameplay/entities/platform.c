@@ -3223,6 +3223,9 @@ void crane_arm_update(unsigned char *m) {
         CRANE_ARM_WAIT_DELAY = 1,
         CRANE_ARM_WAIT_ANIMATION_FLAG = 2
     };
+    enum {
+        CRANE_ARM_ANIM_BASE = 0
+    };
     float dist = vector_distance(m + 0x10, &hero.motion.pos);
     switch (m[0x20]) {
     case CRANE_ARM_INITIALIZE:
@@ -3238,7 +3241,7 @@ void crane_arm_update(unsigned char *m) {
             m[0xBC] = 0;
         if (FUN_L00_001fefc8(m + 0xBC)) {
             switch (m[0x52]) {
-            case 0:
+            case CRANE_ARM_ANIM_BASE:
                 if (random_integer_below(0x100) & 1) {
                     if (m[0x53] != 3)
                         blend_moby_animation(m, 3, 0, 0);
