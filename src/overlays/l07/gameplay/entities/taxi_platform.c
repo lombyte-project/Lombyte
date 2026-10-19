@@ -2689,6 +2689,8 @@ extern void func_L00_002A5158_30D8E8(void *, int, int, float, float, float, floa
 void sharkigator_update(unsigned char *moby) __asm__("FUN_L07_0030f5f0");
 void sharkigator_update(unsigned char *moby) {
     enum {
+        SHARKIGATOR_SWIM_IDLE = 1,
+        SHARKIGATOR_SWIM_WANDER = 2,
         SHARKIGATOR_TARGET_PURSUIT = 4,
         SHARKIGATOR_TARGET_LUNGE_INTERPOLATION = 5,
         SHARKIGATOR_HIT_KNOCKBACK_RECOVERY = 12,
@@ -2809,7 +2811,7 @@ void sharkigator_update(unsigned char *moby) {
     case 0:
         DebugPrint_alt(D_L07_00211838);
         goto end;
-    case 1:
+    case SHARKIGATOR_SWIM_IDLE:
         if ((moby[0x70] & 2) && moby[0x53] != 0) {
             blend_moby_animation(moby, 0, 0, 10);
         }
@@ -2843,7 +2845,7 @@ void sharkigator_update(unsigned char *moby) {
             moby[0x20] = next_state;
         }
         goto end;
-    case 2:
+    case SHARKIGATOR_SWIM_WANDER:
         if ((moby[0x70] & 2) && moby[0x53] != 1) {
             blend_moby_animation(moby, 1, 0, 10);
         }
