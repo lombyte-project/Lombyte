@@ -749,11 +749,16 @@ extern int D_L18_0016D290_lui __asm__("D_L18_0016D290") __attribute__((section("
 
 void FUN_L18_002fa640(struct Moby *moby);
 void FUN_L18_002fa640(struct Moby *moby) {
+    enum {
+        INITIALIZE_STATE_MACHINE = 0,
+        WAIT_TO_HIDE_AND_TURN = 1,
+        HIDDEN_WAIT_TO_SHOW = 2
+    };
     switch (moby->state) {
-    case 0:
+    case INITIALIZE_STATE_MACHINE:
         moby->state = 1;
         break;
-    case 1:
+    case WAIT_TO_HIDE_AND_TURN:
         if (D_L18_0015F5C4 == 2 && D_L18_0016D290_lui == 3) {
             moby->flags |= 1;
             moby->visible = 0;
@@ -761,7 +766,7 @@ void FUN_L18_002fa640(struct Moby *moby) {
             moby->state = 2;
         }
         break;
-    case 2:
+    case HIDDEN_WAIT_TO_SHOW:
         if (D_L18_0015F5C4 != 2) {
             unsigned short fl = moby->flags;
             moby->state = 3;
