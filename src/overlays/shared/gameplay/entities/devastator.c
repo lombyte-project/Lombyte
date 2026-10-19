@@ -3775,6 +3775,13 @@ extern void FUN_0020c828_4198(void *) __asm__("FUN_0020c828");
 extern void FUN_L00_002b3c50_4198(void *) __asm__("FUN_L00_002b3c50");
 
 void FUN_L00_002b4198(void *p) {
+    enum {
+        STATE_INITIALIZE = 0,
+        STATE_WAIT_FOR_BEAM = 1,
+        STATE_BEAM_GROW = 2,
+        STATE_BEAM_ACTIVE = 3,
+        STATE_BEAM_SHRINK = 4
+    };
     O_4198 *o = (O_4198 *)p;
     V_4198 *v = o->v;
     s32 flag = 0;
@@ -3807,13 +3814,13 @@ void FUN_L00_002b4198(void *p) {
         }
     }
     switch (o->state) {
-    case 0:
+    case STATE_INITIALIZE:
         o->f18 += 0.5f;
         o->state = 1;
         o->u30 = 0xFF;
         o->u34 |= 1;
         break;
-    case 1:
+    case STATE_WAIT_FOR_BEAM:
         if (FUN_L00_0020d498_4198(3) != 3) {
             FUN_0020c828_4198(o);
         } else if (flag != 0) {
@@ -3829,7 +3836,7 @@ void FUN_L00_002b4198(void *p) {
             v->f2C = 0.0f;
         }
         break;
-    case 2:
+    case STATE_BEAM_GROW:
         v->f20 += v->f30;
         v->f24 += v->f34;
         v->f28 += v->f38;
@@ -3845,7 +3852,7 @@ void FUN_L00_002b4198(void *p) {
             v->f2C = 0.025f;
         }
         break;
-    case 3:
+    case STATE_BEAM_ACTIVE:
         v->i8 = ((s32)hero.items[3].moby);
         FUN_001f4600_4198(FUN_L00_002b3628_4198, o);
         if (flag == 0) {
@@ -3860,7 +3867,7 @@ void FUN_L00_002b4198(void *p) {
             FUN_L00_002b3c50_4198(o);
         }
         break;
-    case 4:
+    case STATE_BEAM_SHRINK:
         if (FUN_001f9740_4198(v) != 0) {
             o->state = 1;
         } else {
