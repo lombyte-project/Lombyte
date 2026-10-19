@@ -1300,6 +1300,7 @@ void sand_mouse_update(struct Moby *moby) {
     enum {
         SAND_MOUSE_INITIALIZE = 0,
         SAND_MOUSE_WAIT_FOR_PARENT_READY = 2,
+        SAND_MOUSE_MOVE_TOWARD_HERO = 3,
         SAND_MOUSE_FADE_OUT_AND_RESET_HOME = 6,
         SAND_MOUSE_RETURN_TO_PARENT = 20
     };
@@ -1445,7 +1446,7 @@ void sand_mouse_update(struct Moby *moby) {
             moby->state = 3;
         }
         break;
-    case 3:
+    case SAND_MOUSE_MOVE_TOWARD_HERO:
         FUN_L01_002e30b8((int)moby, d);
         ang = fast_arc_tan(d->target[0] - moby->pos.x, d->target[1] - moby->pos.y);
         face_target_2e3f20(moby, ang, &mover_2e3f20.f14,
