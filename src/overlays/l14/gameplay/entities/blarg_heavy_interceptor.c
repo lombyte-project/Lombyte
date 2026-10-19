@@ -2492,6 +2492,7 @@ extern void FUN_L00_0025d458_c(void *, void *) __asm__("FUN_L00_0025d458");
 void FUN_L14_002b5290(struct Moby *m) {
     enum {
         HIT_REACTION_LETHAL = 1,
+        HIT_REACTION_DESTROY = 2,
         HIT_REACTION_NONE = 11
     };
     unsigned char *d = m->pvars;
@@ -2535,7 +2536,7 @@ void FUN_L14_002b5290(struct Moby *m) {
             d[0x67] = 0xFA;
             break;
         case HIT_REACTION_LETHAL:
-        case 2:
+        case HIT_REACTION_DESTROY:
             m->state = 9;
             m->flags &= 0xEFFF;
             d[0x67] = 0xFA;
