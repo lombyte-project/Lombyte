@@ -1792,6 +1792,11 @@ extern void FUN_L04_002aee30(void *, void *, void *, int);
    keep the original branch outcomes. Quad copies include the fourth word. */
 void blarg_trooper_update(struct Moby *moby) __asm__("FUN_L12_002e72c0");
 void blarg_trooper_update(struct Moby *moby) {
+    enum {
+        BLARG_TROOPER_INITIALIZE = 0,
+        BLARG_TROOPER_FOLLOW_WAYPOINTS = 1,
+        BLARG_TROOPER_RETURN_HOME = 8
+    };
     TargetReport54_2E2EF0 work;
     Vec4 v;
     Vec4 delta;
@@ -1826,7 +1831,7 @@ hide:
         qcopy(work.v20, hero.motion.unkD0.f);
     }
     switch (moby->state) {
-    case 0: {
+    case BLARG_TROOPER_INITIALIZE: {
         float value;
         float other = OGRE_F(0x230);
         OGRE_F(0x20) = 2.0f;
@@ -1901,7 +1906,7 @@ hide:
         }
         break;
     }
-    case 1: {
+    case BLARG_TROOPER_FOLLOW_WAYPOINTS: {
         int *path;
         if (!tick_countdown_32_alt_c2((int *)(data + 0x258))) break;
         if (moby->prev_seq != 8 && moby->seq == moby->prev_seq)
@@ -1999,7 +2004,7 @@ hide:
         if (angle_difference_8808(moby->rot.z, angle) > 0.4886922f) moby->state = 3;
         break;
     }
-    case 8: {
+    case BLARG_TROOPER_RETURN_HOME: {
         float angle;
         FUN_L12_002e8808(moby, (float *)(data + 0x220), 0.0f, 0.0f);
         angle = OGRE_F(0x23c) * 30.0f;
