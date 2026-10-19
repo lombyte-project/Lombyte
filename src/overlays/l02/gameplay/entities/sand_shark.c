@@ -2600,6 +2600,7 @@ void transport_pod_update(unsigned char *moby) __asm__("FUN_L02_002ddc88");
 void transport_pod_update(unsigned char *moby) {
     enum {
         TRANSPORT_POD_INITIALIZE = 0,
+        TRANSPORT_POD_WAIT_FOR_GEAR_MOVEMENT_TRIGGER = 1,
         TRANSPORT_POD_TIMED_GEAR_MOVEMENT = 2,
         TRANSPORT_POD_RAISE_FOR_BOARDING = 3,
         TRANSPORT_POD_POSITION_RAILS_FOR_BOARDING = 4,
@@ -2665,7 +2666,7 @@ void transport_pod_update(unsigned char *moby) {
         d->cam_accel = D_0015ED6C * 0.3f * (float)*D_L02_001B0AB0_dc88[d->path];
         FUN_L02_002df0b0((struct Moby *)moby);
         break;
-    case 1:
+    case TRANSPORT_POD_WAIT_FOR_GEAR_MOVEMENT_TRIGGER:
         if (D_0014C050_dc88[moby[0xB0] + current_level_index * 16] == 0xFF) {
             d->timer = scale_ticks(30);
             moby[0x20] = 2;
