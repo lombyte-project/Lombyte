@@ -504,14 +504,15 @@ extern void cutscene_set_camera_target(int) __asm__("FUN_L00_002637f8");
 
 void FUN_L04_002e53a0(struct Moby *m) {
     enum {
-        MODE_SLOT_STATE_INITIALIZE = 0
+        MODE_SLOT_STATE_INITIALIZE = 0,
+        MODE_SLOT_STATE_DISPATCH_SELECTED_SLOT = 1
     };
     switch (m->state) {
     case MODE_SLOT_STATE_INITIALIZE:
         m->update_dist = 0xFF;
         m->state = 1;
         break;
-    case 1:
+    case MODE_SLOT_STATE_DISPATCH_SELECTED_SLOT:
         if (D_L04_0015F5C4 == 2) {
             if (D_L04_0016C9E0.mode == 0 || D_L04_0016C9E0.mode == 1) {
                 int v = D_L04_0016C9E0.mode;
