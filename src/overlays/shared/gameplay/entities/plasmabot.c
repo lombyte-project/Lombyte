@@ -312,6 +312,8 @@ void FUN_L14_002b17d8(char *moby) {
         PLASMABOT_FOLLOW_PATH_BACKWARD = 8,
         PLASMABOT_RETURN_TO_PATH_START = 9,
         PLASMABOT_WAIT_ANIMATION_BEFORE_RESUMING_AIM = 10,
+        PLASMABOT_FALL_THEN_EXPLODE = 11,
+        PLASMABOT_SPAWN_DEBRIS_AND_REMOVE = 12,
         PLASMABOT_FACE_TARGET_AND_WAIT = 13
     };
     char *data;
@@ -639,7 +641,7 @@ void FUN_L14_002b17d8(char *moby) {
         ((unsigned char *)moby)[0x20] = 4;
         break;
     }
-    case 11: {
+    case PLASMABOT_FALL_THEN_EXPLODE: {
         if ((mine_fall(moby, data + 0x60) & 0x160) == 0) return;
         FUN_L00_002e2040(moby);
         FUN_L00_0024f7c8(moby, 2, mat);
@@ -652,7 +654,7 @@ void FUN_L14_002b17d8(char *moby) {
         FUN_L00_00257470(moby, 0, -1);
         { call_D678(moby); return; }
     }
-    case 12: {
+    case PLASMABOT_SPAWN_DEBRIS_AND_REMOVE: {
         FUN_L00_0024f7c8(moby, 2, mat);
         FUN_L14_002dea98_c(moby, (char *)mat);
         status = 0;
