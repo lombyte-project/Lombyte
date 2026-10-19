@@ -979,6 +979,9 @@ extern int func_001F9908_i(void *) __asm__("FUN_001f9740");
 extern short D_L11_00162388 __attribute__((sda));
 void energy_sphere_update(unsigned char *moby) __asm__("FUN_L11_00318b30");
 void energy_sphere_update(unsigned char *moby) {
+    enum {
+        ENERGY_SPHERE_MOVE_AND_DETONATE = 2
+    };
     char *data = *(char **)(moby + 0x78);
     float v[4];
     float *vp;
@@ -999,7 +1002,7 @@ void energy_sphere_update(unsigned char *moby) {
             mark_moby_for_removal(moby);
         }
         break;
-    case 2: {
+    case ENERGY_SPHERE_MOVE_AND_DETONATE: {
         char *pos = (char *)moby + 0x10;
         FUN_L11_003191c0_c((char *)moby);
         vp = v;
