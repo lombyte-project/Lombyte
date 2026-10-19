@@ -313,6 +313,7 @@ void sand_shark_update(struct Moby *moby) __asm__("FUN_L02_002d3e50");
 void sand_shark_update(struct Moby *moby) {
     enum {
         SAND_SHARK_INITIALIZE = 0,
+        SAND_SHARK_BEGIN_RETURN_HOME_WITH_HEIGHT_OFFSET = 1,
         SAND_SHARK_WANDER_AROUND_HOME = 2,
         SAND_SHARK_WAIT_FOR_TARGET_IN_VOLUME = 3,
         SAND_SHARK_APPROACH_TARGET = 5,
@@ -326,6 +327,7 @@ void sand_shark_update(struct Moby *moby) {
         SAND_SHARK_ALIGN_TO_GROUND_BEFORE_RETURN_HOME = 20,
         SAND_SHARK_APPROACH_TARGET_WITH_HEIGHT_OFFSET = 22,
         SAND_SHARK_RETURN_HOME_WITH_HEIGHT_OFFSET = 23,
+        SAND_SHARK_DEATH_KNOCKBACK = 24,
         SAND_SHARK_FADE_OUT = 25,
         SAND_SHARK_BALLISTIC_FLIGHT_WITH_PARTICLES = 27
     };
@@ -423,7 +425,7 @@ void sand_shark_update(struct Moby *moby) {
             moby->pos.z -= D_L02_0016191C;
         }
         break;
-    case 1:
+    case SAND_SHARK_BEGIN_RETURN_HOME_WITH_HEIGHT_OFFSET:
         fast_vec_sub(&v0, &hero.motion.pos, &moby->pos);
         moby->state = 0x12;
         if (moby->prev_seq != 0) {
@@ -825,7 +827,7 @@ void sand_shark_update(struct Moby *moby) {
         }
         break;
     }
-    case 24: {
+    case SAND_SHARK_DEATH_KNOCKBACK: {
         int res = FUN_L00_0025c698_e50(moby, vars->unk120);
         if ((res & 1) && vars->unk29C == 0) {
             vars->unk29C = 1;
