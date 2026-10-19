@@ -2251,7 +2251,8 @@ void FUN_L08_002dc9a8(struct Moby *moby) {
         PROJECTILE_STATE_DETONATE = 99
     };
     enum {
-        DETONATION_EFFECT_NO_EMISSION = 1
+        DETONATION_EFFECT_NO_EMISSION = 1,
+        DETONATION_EFFECT_SPHERICAL_VELOCITY = 3
     };
     char *m = (char *)moby;
     char *data = *(char **)(m + 0x78);
@@ -2345,7 +2346,7 @@ void FUN_L08_002dc9a8(struct Moby *moby) {
                 FUN_L08_002dc9a8_emit(record.pos, position, color, 0x0f000020, 150000.0f,
                                       FUN_L08_002dc9a8_blend(color2, alpha), 2);
             } break;
-            case 3: {
+            case DETONATION_EFFECT_SPHERICAL_VELOCITY: {
                 int color, color2, alpha;
                 color = FUN_L08_002dc9a8_color(FUN_L08_002dc9a8_random(0.25f, 1.0f),
                                                   0x7f000000, 0x7f182030);
