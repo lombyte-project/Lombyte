@@ -811,7 +811,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0x2A, 0, (float)scale_game_frames(6));
         break;
     }
-    case 0x28: {
+    case HERO_STATE_GRIND: {
         struct Hero *p = &hero;
         float pos[4];
         int seg;
