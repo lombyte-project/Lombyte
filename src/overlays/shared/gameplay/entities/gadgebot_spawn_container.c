@@ -756,7 +756,8 @@ extern struct Moby *D_001413D0_e94f0 __asm__("D_001413D0") __attribute__((sectio
 void FUN_L06_002e94f0(struct Moby *moby) {
     enum {
         HIT_RESULT_LETHAL = 1,
-        HIT_RESULT_REMOVE_OR_RESPAWN = 2
+        HIT_RESULT_REMOVE_OR_RESPAWN = 2,
+        HIT_RESULT_NO_RESPONSE = 11
     };
     struct RespawnVars *vars;
     struct MobyHit *hit;
@@ -810,7 +811,7 @@ void FUN_L06_002e94f0(struct Moby *moby) {
             break;
         case 0:
         case 3:
-        case 11:
+        case HIT_RESULT_NO_RESPONSE:
             break;
         }
     }
