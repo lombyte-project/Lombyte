@@ -948,6 +948,9 @@ extern int D_L03_0015F5CC; /* no foreign declaration */
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 
 void FUN_L03_0029c9d0(struct Moby *moby) {
+    enum {
+        MOBY_CLASS_TWO_JOINT_PARTICLE_EMITTER = 0x74
+    };
     char *data = (char *)moby->pvars;
     if (moby->state == 0) {
         *(int *)(data + 0x150) = -1;
@@ -968,7 +971,7 @@ void FUN_L03_0029c9d0(struct Moby *moby) {
         break;
     case 0x4B:
     case 0x73:
-    case 0x74:
+    case MOBY_CLASS_TWO_JOINT_PARTICLE_EMITTER:
     case 0x76:
     case 0x77:
         *(int *)(data + 0x150) = allocate_voice_for_target_entry(1, 4, (int)moby);
