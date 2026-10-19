@@ -724,6 +724,7 @@ void agnogg_ship_front_update(Moby_2FC140 *moby) {
         AGNOGG_SHIP_INITIALIZE = 0,
         AGNOGG_SHIP_WAIT_FOR_DESCENT_TRIGGER = 1,
         AGNOGG_SHIP_DESCEND_TO_TARGET_HEIGHT = 2,
+        AGNOGG_SHIP_WAIT_FOR_ANIMATION_1_GATE = 3,
         AGNOGG_SHIP_WAIT_FOR_LINKED_MOBIES_INACTIVE = 4,
         AGNOGG_SHIP_WAIT_BEFORE_SCENE = 5,
         AGNOGG_SHIP_WAIT_FOR_SCENE_3_END = 6,
@@ -816,7 +817,7 @@ void agnogg_ship_front_update(Moby_2FC140 *moby) {
             moby->state = 3;
         }
         break;
-    case 3:
+    case AGNOGG_SHIP_WAIT_FOR_ANIMATION_1_GATE:
         if (moby->f52 != 1) {
             break;
         }
