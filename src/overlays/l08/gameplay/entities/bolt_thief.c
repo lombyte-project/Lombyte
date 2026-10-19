@@ -1073,6 +1073,11 @@ extern void func_L00_0026B890_2E2A38(void *, void *, int, int, int, int, int, in
 extern char *func_00219780_2E2A38(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
 
 void FUN_L08_002e16c0(Moby_2E2A38 *m) {
+    enum {
+        FALLING_DEBRIS_INITIALIZE = 1,
+        FALLING_DEBRIS_BEFORE_BURST = 2,
+        FALLING_DEBRIS_AFTER_BURST = 3
+    };
     Data_2E2A38 *d = m->data;
     float particle_primary_vector[4];
     Pair_2E2A38 tab;
@@ -1081,12 +1086,12 @@ void FUN_L08_002e16c0(Moby_2E2A38 *m) {
     int i;
 
     switch (m->state) {
-    case 1:
+    case FALLING_DEBRIS_INITIALIZE:
         d->spin_x = random_float_between_c2(-(D_0015ED6C_gp * 1.5707964f), D_0015ED6C_gp * 1.5707964f);
         d->spin_y = random_float_between_c2(-(D_0015ED6C_gp * 1.5707964f), D_0015ED6C_gp * 1.5707964f);
         d->life = (int)random_float_between_c2((float)scale_game_frames_alt(0x5A), (float)scale_game_frames_alt(0x96));
         m->state = 2;
-    case 2:
+    case FALLING_DEBRIS_BEFORE_BURST:
         d->vel[2] -= D_0015ED70 * 10.8f * 0.5f;
         add_vector_xyz(m->pos, m->pos, d);
         m->rot[0] = fast_add_rotations_c(m->rot[0], d->spin_x);
@@ -1139,7 +1144,7 @@ void FUN_L08_002e16c0(Moby_2E2A38 *m) {
             m->state = 3;
         }
         break;
-    case 3:
+    case FALLING_DEBRIS_AFTER_BURST:
         d->vel[2] -= D_0015ED70 * 10.8f * 0.5f;
         add_vector_xyz(m->pos, m->pos, d);
         m->rot[0] = fast_add_rotations_c(m->rot[0], d->spin_x);
