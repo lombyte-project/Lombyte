@@ -1171,7 +1171,8 @@ extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 
 float FUN_L00_00233c30(float *pos, float *vel, int *steps, float step) {
     enum {
-        GRAVITY_MODE_WORLD_Z = 0
+        GRAVITY_MODE_WORLD_Z = 0,
+        GRAVITY_MODE_VECTOR_AXIS = 1
     };
     int n;
     int k;
@@ -1187,7 +1188,7 @@ float FUN_L00_00233c30(float *pos, float *vel, int *steps, float step) {
             *steps = n;
         }
         return r;
-    case 1:
+    case GRAVITY_MODE_VECTOR_AXIS:
     case 2:
         k = truncate_float_to_s32(FUN_L00_00233a78_c(vel) / step);
         if (steps != 0) {
