@@ -128,8 +128,10 @@ void screamer_update(Moby *moby) __asm__("FUN_L10_002df270");
 void screamer_update(Moby *moby) {
     enum {
         SCREAMER_STATE_INITIALIZE = 0,
+        SCREAMER_STATE_WAIT_TO_RISE = 2,
         SCREAMER_STATE_RISE_FROM_HOME = 4,
         SCREAMER_STATE_FOLLOW_PATH = 5,
+        SCREAMER_STATE_FACE_LEADER_AT_WAYPOINT = 6,
         SCREAMER_STATE_RETURN_HOME = 8,
         SCREAMER_STATE_WAIT_TO_WANDER = 9,
         SCREAMER_STATE_WANDER = 10,
@@ -168,7 +170,7 @@ void screamer_update(Moby *moby) {
         moby->state = 2;
         if (moby->prev_seq != 1) func_00213DE0_2E0630(moby, 1, 0, func_001F9850_2E0630(10));
         break;
-    case 2:
+    case SCREAMER_STATE_WAIT_TO_RISE:
         if ((moby->anim_flags & 2) == 0) break;
         moby->state = 4;
         func_001F9BC0_2E0630(&data->vel);
@@ -217,7 +219,7 @@ void screamer_update(Moby *moby) {
         }
         break;
     }
-    case 6:
+    case SCREAMER_STATE_FACE_LEADER_AT_WAYPOINT:
         func_L00_0025CE58_2E0630(&moby->rot.z, func_L00_001FF860_2E0630(leader->pos.x - moby->pos.x, leader->pos.y - moby->pos.y), &data->yaw_speed,
             D_0015ED70 * 25.132742f, D_0015ED70 * 25.132742f, D_0015ED6C * 50.265484f);
         if ((moby->anim_flags & 2) == 0) break;
