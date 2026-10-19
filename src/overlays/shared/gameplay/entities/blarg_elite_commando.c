@@ -212,6 +212,13 @@ extern float func_001F9D10_update(void *, void *) __asm__("FUN_001f9b48");
 
 void blarg_elite_commando_update(char *m) __asm__("FUN_L16_002d2cf0");
 void blarg_elite_commando_update(char *m) {
+    enum {
+        COMMANDO_STATE_INITIALIZE = 0,
+        COMMANDO_STATE_FIRE_ROCKETS = 5,
+        COMMANDO_STATE_KNOCKBACK_RECOVERY = 8,
+        COMMANDO_STATE_FATAL_FALL = 9,
+        COMMANDO_STATE_FOLLOW_PARENT_TRANSFORM = 10
+    };
     float target[4], temp[4], delta[4];
     char *d = *(char **)(m + 0x78);
     char *source, *owner;
@@ -230,7 +237,7 @@ void blarg_elite_commando_update(char *m) {
     if ((&big_head_cheat_enabled)[7])
         FUN_L00_00263b38(d + 0x130, 2.5f);
     switch (((unsigned char *)m)[0x20]) {
-    case 0:
+    case COMMANDO_STATE_INITIALIZE:
         *(int *)(d + 0x2EC) = 0;
         d[0x29] = 1;
         *(short *)(d + 0x24) = 3;
@@ -272,7 +279,7 @@ void blarg_elite_commando_update(char *m) {
         } else
             goto idle;
         break;
-    case 10:
+    case COMMANDO_STATE_FOLLOW_PARENT_TRANSFORM:
         if (*(char **)(d + 0x2D0)) {
             m[0x31] = 1;
             *(unsigned short *)(m + 0x34) &= 0xFFFE;
@@ -363,7 +370,7 @@ void blarg_elite_commando_update(char *m) {
             }
         }
         break;
-    case 5:
+    case COMMANDO_STATE_FIRE_ROCKETS:
         heading = (float *)(m + 0x48);
         angle = fast_arc_tan(target[0] - *(float *)(m + 0x10), target[1] - *(float *)(m + 0x14));
         approach_angle(heading, (float *)(d + 0x2D8), angle, frame_time_sq * 12.566371f,
@@ -402,7 +409,7 @@ void blarg_elite_commando_update(char *m) {
             }
         }
         break;
-    case 8:
+    case COMMANDO_STATE_KNOCKBACK_RECOVERY:
         if (((unsigned char *)m)[0x70] & 2) {
         idle:
             m[0x20] = 2;
@@ -416,7 +423,7 @@ void blarg_elite_commando_update(char *m) {
             add_vector_xyz(m + 0x10, m + 0x10, temp);
         }
         break;
-    case 9: {
+    case COMMANDO_STATE_FATAL_FALL: {
         char *position;
         movement = temp;
         position = m + 0x10;
