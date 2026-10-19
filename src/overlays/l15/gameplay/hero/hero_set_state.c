@@ -1291,7 +1291,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x13:
+    case HERO_STATE_WRENCH_COMBO:
     case 0x14:
     case 0x15:
     case 0x20:
@@ -1382,7 +1382,7 @@ int hero_set_state(int a, int b) {
             FUN_L00_00214ed8(11.0f, 0.87266463f, -1.0f);
             break;
         }
-        case 0x13: {
+        case HERO_STATE_WRENCH_COMBO: {
             char *h = ((char *)&item_usage);
             struct Hero *q;
             T2C_217348 *e;
