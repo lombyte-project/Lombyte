@@ -155,9 +155,6 @@ ret0:
     /* a second return 0 block, as in retail */
     return 0;
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002c89e8.s", FUN_L00_002c89e8);
-#else
 extern u8 D_0013E534 __attribute__((section(".data")));
 extern int D_L00_0015FFE4;
 extern f32 vector_length_xyz_2cb418(void *) __asm__("FUN_001f9af0");
@@ -176,9 +173,7 @@ extern void FUN_L00_00260400(struct Moby *, s32, void *, void *, void *, void *)
 extern f32 probe_ground_height(void *, int, f32) __asm__("FUN_00213508");
 
 /* Six checked switch entries: state 5 shares the default state reset.
- * Case 2/3 shaped after rac1-decomp (nonmatching/shared/func_L00_002C9DC8.c). Left: the
- * collision base should sit in s0 (ours a call-clobbered reg), and the 0xBA count loop
- * should keep its branch (ours if-converts count++ into xori/movn). */
+ * Case 2/3 shaped after rac1-decomp (nonmatching/shared/func_L00_002C9DC8.c). */
 void FUN_L00_002c89e8(struct Moby *m)
 {
     Vec4 d, e, a, q;
@@ -187,6 +182,11 @@ void FUN_L00_002c89e8(struct Moby *m)
     s32 count;
     s32 timer;
     s32 t16;
+    u8 *collision_point;
+    /* Fakematch: hidden zero; the dead `last` keeps the 0xBA count loop's
+     * count++ a branch (jump would turn a one-insn then-block into movn). */
+    s32 never = 0;
+    struct Moby *last;
 
     if (!m) return;
     v = (ThrowVars_2c8440 *)m->pvars;
@@ -229,7 +229,6 @@ void FUN_L00_002c89e8(struct Moby *m)
     case 2: {
         f32 f, g, h, t;
         f32 half = 0.5f;
-        u8 *collision_point;
         u8 *carry;
         struct Hero *hp;
         f = convert_integer_to_float(D_0013E534) + 1.0f;
@@ -305,16 +304,21 @@ collision_miss:
     }
     case 3: {
         f32 f;
-        f = probe_ground_height(&m->pos, 0, 0.5f);
+        /* Fakematch: reusing case 2's pointer here makes it cross a call, so it gets s0 there. */
+        collision_point = (u8 *)&m->pos;
+        f = probe_ground_height(collision_point, 0, 0.5f);
         if (f != 0.0f && coll_hit.moby)
-            FUN_L00_00260400(m, coll_hit.moby, &m->pos, &m->rot, &m->pos, &m->rot);
+            FUN_L00_00260400(m, coll_hit.moby, collision_point, &m->rot, collision_point, &m->rot);
         if (tick_timer_2cb418(&v->timer)) {
             count = 0;
             for (p = (struct Moby *)D_L00_0015FFE4; p; p = p->next) {
                 if (p->oclass == 0xba) {
-                    if ((p->state & 0xf0) != 0xf0) count++;
+                    /* Fakematch: dead `last = p` (see `never`). */
+                    if ((p->state & 0xf0) != 0xf0) { count++; last = p; }
                 }
             }
+            /* Fakematch: keeps `last` alive until cse2 folds this to nothing. */
+            count += (s32)last & never;
             if (count >= 8) {
                 v->timer = scale_game_frames_2c8440(15);
             } else {
@@ -328,9 +332,11 @@ collision_miss:
                 add_vector_xyz_2c8440(&d, &e, &m->pos);
                 FUN_L00_002bfe08(v->holder, &d, &e);
                 v->timer = scale_game_frames_2c8440(8);
-                count = *(s32 *)((u8 *)v + 0x3c) + 1;
-                *(s32 *)((u8 *)v + 0x3c) = count;
-                if (count > 3) m->state = 4;
+                {
+                    s32 k = *(s32 *)((u8 *)v + 0x3c) + 1;
+                    *(s32 *)((u8 *)v + 0x3c) = k;
+                    if (k > 3) m->state = 4;
+                }
             }
         }
         if (*(s32 *)((u8 *)v + 0x3c) < 2 && tick_countdown_2c8440((s32 *)v->pad_34)) {
@@ -356,7 +362,6 @@ remove:
         m->state = 0;
     }
 }
-#endif
 /* 0x002c92d8, 112 bytes.
  * Ported from rac1-decomp, where it is exact; names translated to
  * the US level program (data still reached through the MACRO_ADDR form). */

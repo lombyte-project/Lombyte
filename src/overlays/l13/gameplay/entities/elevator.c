@@ -3166,19 +3166,21 @@ void FUN_L13_002ba178(void *a0, void *a1) {
             ratio = sp / range;
         }
     }
-    o->fC4 = ratio;
     {
         W4_3E8 tbl[2];
         W4_3E8 w;
         W4_3E8 r;
         float mat[12];
+        /* Near miss (diff 7, sched1 order of the r stores): the volatile accesses below
+         * are draft-only scheduling experiments, not believed original. */
         *(u128 *)w = 0;
-        *(u128 *)r = 0;
+        w[1] = *(volatile float *)&o->f6C * -3.0f * 0.25f;
         w[0] = (-15.0f - o->f70 - ratio * 4.0f) * 0.25f;
-        w[1] = o->f6C * -3.0f * 0.25f;
-        w[2] = (4.0f + o->f70 * 2.0f) * 0.25f;
-        r[0] = -1.275f;
+        *(volatile u128 *)r = 0;
+        ((volatile float *)w)[2] = (4.0f + o->f70 * 2.0f) * 0.25f;
+        ((volatile float *)r)[0] = -1.275f;
         r[2] = 0.65f;
+        *(volatile float *)&o->fC4 = ratio;
         *(u128 *)tbl[0] = *(u128 *)w;
         *(u128 *)tbl[1] = *(u128 *)r;
         if (m->state == 2) {
