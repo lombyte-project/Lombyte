@@ -28,6 +28,7 @@ extern s32 sceCdNcmdDiskReady();
 extern s32 scePrintf();
 extern s32 sceSifCallRpc();
 extern void sceSifWriteBackDCache(void *ptr, s32 size);
+
 s32 sceCdRead(u32 sector, u32 count, void *buffer, struct sceCdRMode *mode) {
     struct CdReadCommand *command = &D_001313C0;
     s32 size;

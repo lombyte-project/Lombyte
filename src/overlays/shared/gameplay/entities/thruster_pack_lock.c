@@ -423,7 +423,6 @@ extern float D_L11_001F1490[];
 extern short D_L11_001623F0_d __asm__("D_L11_001623F0") __attribute__((sda));
 extern long long trail_effect_texture(int) __asm__("FUN_001f44b8");
 extern float integer_to_float(int) __asm__("FUN_001fa6c0");
-extern int tween_color(float, int, int) __asm__("FUN_001fa6e0");
 extern void memset(void *, int, int) __asm__("FUN_001153fc");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void draw_packet(void *, int, int) __asm__("FUN_001f7d30");
@@ -438,8 +437,7 @@ typedef struct {
     long packet[4];
 } TrailQuad;
 
-extern float trail_scale __asm__("D_L11_001623F0") __attribute__((sda));
-extern int tween_color_92c8(int, int, float) __asm__("FUN_001fa6e0");
+extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 
 int FUN_L11_003192c8(char *moby) {
     TrailQuad quads[16];
@@ -454,9 +452,9 @@ int FUN_L11_003192c8(char *moby) {
         return;
     }
     if (D_0015EDB2 != 0) {
-        trail_scale = 16.0f;
+        *(float *)&D_L11_001623F0_d = 16.0f;
     } else {
-        trail_scale = 5.0f;
+        *(float *)&D_L11_001623F0_d = 5.0f;
     }
 
     for (i = 0; i < 16; i++) {
@@ -466,18 +464,18 @@ int FUN_L11_003192c8(char *moby) {
         quad->packet[2] = 0xFF9000000260L;
         quad->packet[0] = 0;
         quad->packet[3] = 0x8000000048L;
-        base = integer_to_float((level_frame + 3) & 3) / (trail_scale * 4.0f);
+        base = integer_to_float((level_frame + 3) & 3) / (*(float *)&D_L11_001623F0_d * 4.0f);
         for (j = 0; j < 4; j++) {
             half = (j >> 1) - 1;
             quads[i].texture_coordinates[j][0] = ((float (*)[2])D_L11_001F1490)[j][0];
             quads[i].texture_coordinates[j][1] = ((float (*)[2])D_L11_001F1490)[j][1];
-            blend = integer_to_float(i - half) / trail_scale + base;
+            blend = integer_to_float(i - half) / *(float *)&D_L11_001623F0_d + base;
             if (1.0f < blend) {
                 blend = 1.0f;
             } else if (blend < 0.0f) {
                 blend = 0.0f;
             }
-            quads[i].colors[j] = tween_color_92c8(0x8C28AA28, 0x144646, blend);
+            quads[i].colors[j] = fast_tween_color(0x8C28AA28, 0x144646, blend);
         }
     }
 

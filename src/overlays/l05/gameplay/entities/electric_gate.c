@@ -169,8 +169,7 @@ extern float D_L05_0020B740[4][2];
 extern Vec4 D_L05_0020B760[4];
 extern Vec4 D_L05_0020B7A0[4];
 extern short *D_L05_001ABCC0[];
-extern int frame_counter_de90 __asm__("D_L05_0015F5CC");
-extern char *moby_base_de90 __asm__("D_L05_0015FFD8");
+extern int frame_number __asm__("D_L05_0015F5CC");
 void FUN_L05_0030de90(char *moby) {
     struct GeometryQuad quads[2][5];
     char matrix[0x40];
@@ -181,7 +180,7 @@ void FUN_L05_0030de90(char *moby) {
     unsigned short *next;
     short id;
 
-    angle = convert_integer_to_float(frame_counter_de90 & 0x3F) / 63.0f * 6.28318f;
+    angle = convert_integer_to_float(frame_number & 0x3F) / 63.0f * 6.28318f;
     i = 0;
     do {
         next_i = i + 1;
@@ -220,11 +219,11 @@ void FUN_L05_0030de90(char *moby) {
     do {
         char *entry;
         offset = (*list & 0x7FFF) << 8;
-        entry = (char *)(offset + (int)moby_base_de90);
+        entry = (char *)(offset + (int)*(char **)&D_L05_0015FFD8_d);
         next = list + 1;
         if (*(short *)(entry + 0xA6) == 0x346 && *(unsigned char *)(entry + 0x20) == 1) {
             copy_matrix_rotation(matrix, entry + 0xC0);
-            qcopy(matrix + 0x30, (char *)(offset + (int)moby_base_de90) + 0x10);
+            qcopy(matrix + 0x30, (char *)(offset + (int)*(char **)&D_L05_0015FFD8_d) + 0x10);
             *(float *)(matrix + 0x3C) = 1.0f;
             for (k = 0; k < 5; k++) {
                 fast_draw_quad_real(&quads[0][k], matrix, 0);

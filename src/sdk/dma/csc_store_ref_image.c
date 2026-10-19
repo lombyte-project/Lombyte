@@ -32,63 +32,63 @@ extern void _sendIpuCommand(CscDecoder *d, u32 cmd);
 extern s32 disable_dmac(s32 channel) __asm__("func_001190F8");
 extern s32 enable_dmac(s32 channel) __asm__("func_00119160");
 
-void _csc_storeRefImage(CscDecoder *d, CscImage *img) {
-    s32 cbarg[8];
+void _csc_storeRefImage(CscDecoder *decoder, CscImage *image) {
+    s32 callback_args[8];
     CscDmaState dma;
-    s32 mbs;
-    s32 few_mbs;
+    s32 macroblocks;
+    s32 few_macroblocks;
     s32 handle;
-    s32 intr;
+    s32 interrupts_enabled;
 
-    mbs = img->width * img->height;
-    cbarg[0] = 2;
-    _dispatchMpegCallback(d->cbData, cbarg);
+    macroblocks = image->width * image->height;
+    callback_args[0] = 2;
+    _dispatchMpegCallback(decoder->cbData, callback_args);
     if (*IPU_CTRL & 0x4000) {
         *IPU_CTRL = 0x40000000;
     }
-    few_mbs = mbs < 0x400;
+    few_macroblocks = macroblocks < 0x400;
     while ((s32)*IPU_CTRL < 0) {
     }
-    _sendIpuCommand(d, 0);
+    _sendIpuCommand(decoder, 0);
     while ((s32)*IPU_CTRL < 0) {
     }
-    dma.qwc = mbs * 0x18;
-    dma.addr = img->dest & 0x0FFFFFFF;
+    dma.qwc = macroblocks * 0x18;
+    dma.addr = image->dest & 0x0FFFFFFF;
     if (dma.qwc > 0xFFFF) {
         handle = AddDmacHandlerSecondary(4, csc_dma_chunk_handler, 0, &dma);
         *REG_DMAC_STAT = 0x10;
         enable_dmac(4);
-        intr = DIntr();
+        interrupts_enabled = DIntr();
         *D4_MADR = dma.addr;
         *D4_QWC = 0xFFFF;
         *D4_CHCR = 0x101;
-        if (intr) {
+        if (interrupts_enabled) {
             EnableInterrupts();
         }
         dma.addr = (dma.addr + 0xFFFF0) & 0x0FFFFFFF;
         dma.qwc -= 0xFFFF;
-        if (few_mbs) {
-            _doCSC(d, d->source, mbs);
+        if (few_macroblocks) {
+            _doCSC(decoder, decoder->source, macroblocks);
         } else {
-            _doCSC2(d, d->source, mbs);
+            _doCSC2(decoder, decoder->source, macroblocks);
         }
         disable_dmac(4);
         RemoveDmacHandler(4, handle);
     } else {
-        intr = DIntr();
-        *D4_MADR = img->dest & 0x0FFFFFFF;
+        interrupts_enabled = DIntr();
+        *D4_MADR = image->dest & 0x0FFFFFFF;
         *D4_QWC = dma.qwc;
         *D4_CHCR = 0x101;
-        if (intr) {
+        if (interrupts_enabled) {
             EnableInterrupts();
         }
         dma.qwc = 0;
-        if (few_mbs) {
-            _doCSC(d, d->source, mbs);
+        if (few_macroblocks) {
+            _doCSC(decoder, decoder->source, macroblocks);
         } else {
-            _doCSC2(d, d->source, mbs);
+            _doCSC2(decoder, decoder->source, macroblocks);
         }
     }
-    cbarg[0] = 3;
-    _dispatchMpegCallback(d->cbData, cbarg);
+    callback_args[0] = 3;
+    _dispatchMpegCallback(decoder->cbData, callback_args);
 }
