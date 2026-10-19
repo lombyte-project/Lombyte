@@ -60,7 +60,8 @@ s32 fun_00213928(O_25a478 *obj, P_25a478 *p, Q_25a478 *q, u32 flags, s32 *out, f
         KIND_GATED_HIT_RESPONSE = 0
     };
     enum {
-        KIND_GATED_HIT_STATE = 0
+        KIND_GATED_HIT_STATE = 0,
+        COOLDOWN_RESETTING_HIT_STATE = 3
     };
     V_25a478 v;
     V_25a478 t;
@@ -132,7 +133,7 @@ s32 fun_00213928(O_25a478 *obj, P_25a478 *p, Q_25a478 *q, u32 flags, s32 *out, f
         if (p->sub < 2) { *out = 2; r = 8; break; }
         *out = 2; r = 0xD;
         break;
-    case 3:
+    case COOLDOWN_RESETTING_HIT_STATE:
         if (p->sub < 2) { *out = 2; r = 0xA; break; }
         if (p->sub < 3) { *out = 2; r = 0xF; break; }
         *out = 2; r = 0x10; q->h14 = -1; q->h1C = 0;
