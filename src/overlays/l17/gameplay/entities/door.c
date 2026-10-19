@@ -530,6 +530,7 @@ short D_L17_00162188 = 2;
 int FUN_L17_002eace8(int a, char *p, char *radar_origin, char *radar_rotation, float f0, float f1, float f2, char *cur,
                      char *g) {
     enum {
+        MOBY_CLASS_FLAG_GATED_MARKED_TARGET = 0x6F,
         MOBY_CLASS_OFFSCREEN_ARROW_TARGET = 0x15B,
         MOBY_CLASS_UNMARKED_COUNTED_TARGET = 0x184,
         MOBY_CLASS_UNCOUNTED_MARKED_TARGET = 0x191,
@@ -662,7 +663,7 @@ int FUN_L17_002eace8(int a, char *p, char *radar_origin, char *radar_rotation, f
             FUN_L17_002eaae0(radar_rotation, (char *)w, m, 0, 0x70808080, *(int *)(p + 0x104));
             *(int *)(p + 0xE8) = *(int *)(p + 0xE8) + 1;
             break;
-        case 0x6F:
+        case MOBY_CLASS_FLAG_GATED_MARKED_TARGET:
         case 0x4BE:
             if (!(*(unsigned short *)(m + 0x34) & 1)) {
                 project_to_screen(v, m + 0x10);
