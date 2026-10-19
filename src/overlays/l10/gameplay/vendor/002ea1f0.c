@@ -16,14 +16,18 @@ extern void func_L10_002EBDC8_a01(float,void *,short *,short *) __asm__("FUN_L10
 
 void FUN_L10_002ea1f0(char *m) {
     enum {
-        EFFECT_STATE_INITIALIZE = 0
+        EFFECT_STATE_INITIALIZE = 0,
+        EFFECT_STATE_UPDATE_WITH_GROUND_HEIGHT = 2
+    };
+    enum {
+        EFFECT_MODE_CACHE_GROUND_HEIGHT = 1
     };
  char *d=*(char **)(m+0x78);
  switch((unsigned char)m[0x20]) {
  case EFFECT_STATE_INITIALIZE:
   switch(*(int *)d) {
   case 0:m[0x20]=1;break;
-  case 1:
+  case EFFECT_MODE_CACHE_GROUND_HEIGHT:
    if(*(int *)(d+4)!=-1) {
     char *tab=D_L10_001B0930[*(int *)(d+4)];
     char *pos=tab+0x10;
@@ -45,7 +49,7 @@ void FUN_L10_002ea1f0(char *m) {
    do {FUN_L10_002ea4e8_c(pos,timer,burst);timer++;++burst;--count;pos+=0x10;}while(count);}
   }
   break;
- case 2:
+ case EFFECT_STATE_UPDATE_WITH_GROUND_HEIGHT:
   if(*(int *)(d+4)==-1)func_L10_002EBDC8_a01(*(float *)(d+0x88),m+0x10,(short *)(d+8),(short *)(d+0x48));
   else {
    char *tab=D_L10_001B0930[*(int *)(d+4)];int n=*(int *)tab;
