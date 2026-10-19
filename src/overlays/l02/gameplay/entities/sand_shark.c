@@ -1415,6 +1415,7 @@ void FUN_L02_002d7748(struct Moby *moby) {
         L02_BOT_WANDER = 6,
         L02_BOT_SELECT_ATTACK_OR_WANDER = 7,
         L02_BOT_WAIT_FOR_WAKE_TRIGGER_BEFORE_GROUND_ALIGNMENT = 8,
+        L02_BOT_WAIT_FOR_WAKE_TRIGGER_WITH_ALTERNATE_WAKE_ANIMATION = 9,
         L02_BOT_WAIT_FOR_WAKE_TRIGGER = 10,
         L02_BOT_WAIT_FOR_ANIMATION_BEFORE_ATTACK = 11,
         L02_BOT_UPDATE_ATTACK_SHOTS = 12,
@@ -1425,7 +1426,8 @@ void FUN_L02_002d7748(struct Moby *moby) {
     enum {
         L02_BOT_START_SELECT_ATTACK_OR_WANDER = 0,
         L02_BOT_START_WAIT_FOR_WAKE_TRIGGER = 1,
-        L02_BOT_START_WAIT_FOR_WAKE_TRIGGER_BEFORE_GROUND_ALIGNMENT = 2
+        L02_BOT_START_WAIT_FOR_WAKE_TRIGGER_BEFORE_GROUND_ALIGNMENT = 2,
+        L02_BOT_START_WAIT_FOR_WAKE_TRIGGER_WITH_ALTERNATE_WAKE_ANIMATION = 3
     };
     float position[4];
     float direction[4];
@@ -1490,7 +1492,7 @@ void FUN_L02_002d7748(struct Moby *moby) {
             }
             moby->state = 8;
             break;
-        case 3:
+        case L02_BOT_START_WAIT_FOR_WAKE_TRIGGER_WITH_ALTERNATE_WAKE_ANIMATION:
             if (moby->prev_seq != 15) {
                 blend_moby_animation_c3(moby, 15, 0, 0);
             }
@@ -1588,7 +1590,7 @@ void FUN_L02_002d7748(struct Moby *moby) {
         }
         break;
     case L02_BOT_WAIT_FOR_WAKE_TRIGGER_BEFORE_GROUND_ALIGNMENT:
-    case 9:
+    case L02_BOT_WAIT_FOR_WAKE_TRIGGER_WITH_ALTERNATE_WAKE_ANIMATION:
         if (!(D_L02_0015F5CC_i & 3) && moby->visible != 0) {
             spray_radius = random_float_between(0.0f, D_L02_00161A98) * D_0015ED6C;
             spray_heading = random_angle_radians();
