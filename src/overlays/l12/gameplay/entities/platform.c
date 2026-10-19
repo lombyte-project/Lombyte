@@ -1273,6 +1273,11 @@ extern void func_L12_002E4F18_2E51E8(void *, void *, void *, int, int) __asm__("
 
 void platform_update(Moby *moby) __asm__("FUN_L12_002e3ed8");
 void platform_update(Moby *moby) {
+    enum {
+        PLATFORM_INITIALIZE = 0,
+        PLATFORM_FOLLOW_WAYPOINTS = 7,
+        PLATFORM_TRACK_REFERENCED_MOBY_HEIGHT = 9
+    };
     float oldPos[4];
     float oldRot[4];
     float delta[4];
@@ -1293,7 +1298,7 @@ void platform_update(Moby *moby) {
         return;
     }
     switch (moby->state) {
-    case 0:
+    case PLATFORM_INITIALIZE:
         switch (data->kind) {
         case 0:
             (*(int *)&moby->collision) = (*(Class_2E51E8 **)&moby->pclass)->f10;
@@ -1343,7 +1348,7 @@ void platform_update(Moby *moby) {
             break;
         }
         break;
-    case 7: {
+    case PLATFORM_FOLLOW_WAYPOINTS: {
         Walk_2E51E8 *w = &data->walk;
         Path_2E51E8 *path;
         int next;
@@ -1469,7 +1474,7 @@ void platform_update(Moby *moby) {
             mark_moby_for_removal_c(moby);
         }
         break;
-    case 9: {
+    case PLATFORM_TRACK_REFERENCED_MOBY_HEIGHT: {
         Moby *o = (Moby *)((char *)(*(Moby * *)&D_L12_0015FFD8_p) + (data->fF0 << 8));
         qcopy(angles, (*(float (*)[4])&moby->pos));
         angles[2] = (*(float (*)[4])&o->pos)[2];
