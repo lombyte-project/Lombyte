@@ -1278,6 +1278,7 @@ void teleporter_update(struct Moby *moby) {
     enum {
         TELEPORTER_INITIALIZE = 0,
         TELEPORTER_WAIT_FOR_ACTIVATION = 1,
+        TELEPORTER_CONTRACT_RING = 3,
         TELEPORTER_RESET = 4
     };
     char *data = (char *)moby->pvars;
@@ -1363,7 +1364,7 @@ void teleporter_update(struct Moby *moby) {
         FUN_L01_003092d0_2518(moby);
         break;
     }
-    case 3:
+    case TELEPORTER_CONTRACT_RING:
         if (*(float *)(data + 0x3C) != 0.0f) {
             enqueue_callback_2518(FUN_L11_002f2d58_2518, moby);
             approach_value_2518((float *)(data + 0x3C), 0.0f, D_0015ED6C_2518 * 4.0f);
