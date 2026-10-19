@@ -696,6 +696,7 @@ void break_crate(M2d1428 *moby, s32 hit, s32 source) {
 }
 void FUN_L00_002d1428(M2d1428 *m) {
     enum {
+        CRATE_STATE_BREAKABLE = 1,
         CRATE_STATE_IMPACT_TRIGGERED = 5
     };
     O2d1428 *o;
@@ -732,7 +733,7 @@ void FUN_L00_002d1428(M2d1428 *m) {
         if (FUN_001f99c0(a.x) < 0.55f && FUN_001f99c0(a.y) < 0.55f && a.z < 0.0f &&
             -(hero.capsule_top + hero.unk234) < a.z) {
             switch (m->state) {
-            case 1:
+            case CRATE_STATE_BREAKABLE:
             case CRATE_STATE_IMPACT_TRIGGERED:
                 break_crate(m, m->oclass == 0x1F9, 0);
                 FUN_L00_002d0538_c(m);
