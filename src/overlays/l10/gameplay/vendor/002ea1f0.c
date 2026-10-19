@@ -297,12 +297,16 @@ extern struct L10Data D_L10_0016CCE0;
 extern void cutscene_set_camera_target(int) __asm__("FUN_L00_002637f8");
 
 void FUN_L10_002eacd8(struct Moby *m) {
+    enum {
+        LEVEL_MODE_STATE_INITIALIZE = 0,
+        LEVEL_MODE_STATE_DISPATCH = 1
+    };
     switch (m->state) {
-    case 0:
+    case LEVEL_MODE_STATE_INITIALIZE:
         m->update_dist = 0xFF;
         m->state = 1;
         break;
-    case 1:
+    case LEVEL_MODE_STATE_DISPATCH:
         if (D_L10_0015F5C4_vendor == 2) {
             if (D_L10_0016CCE0.mode == 3 || D_L10_0016CCE0.mode == 5 || D_L10_0016CCE0.mode == 6 ||
                 D_L10_0016CCE0.mode == 7) {
