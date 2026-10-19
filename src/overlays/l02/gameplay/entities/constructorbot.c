@@ -446,6 +446,8 @@ s32 D_L02_00162164 = 0x10019;
 void FUN_L02_002ef020(struct Moby *moby) {
     enum {
         SMOKE_VENT_STATE_INITIALIZE = 0,
+        SMOKE_VENT_STATE_VIEW_GATED_EMISSION = 1,
+        SMOKE_VENT_STATE_ALTERNATING_PUFF_TIMING = 2,
         SMOKE_VENT_STATE_REMOVE = 3
     };
     char *data = (char *)moby->pvars;
@@ -481,7 +483,7 @@ void FUN_L02_002ef020(struct Moby *moby) {
         moby->state = data[0] + 1;
         build_rotation_matrix(&moby->rot_row0, &moby->rot);
         break;
-    case 1:
+    case SMOKE_VENT_STATE_VIEW_GATED_EMISSION:
         qcopy(&p, &moby->pos);
         p.f[3] = 6.0f;
         if (sphere_in_view(&p, 120.0f) == -1) {
@@ -525,7 +527,7 @@ void FUN_L02_002ef020(struct Moby *moby) {
         spawn_smoke_particle(&moby->pos, &vel, &acc, color_a1_puff, color_b1_puff, time_a1_puff, time_b1_puff,
                        truncate_time(scale_time((f32)D_L02_001620A0 * (random_float(-D_L02_001620A4, D_L02_001620A4) + 1.0f))), -1);
         break;
-    case 2:
+    case SMOKE_VENT_STATE_ALTERNATING_PUFF_TIMING:
         if (tick_timer32((s32 *)(data + 0xC4)) != 0) {
             if (*(s32 *)(data + 0xC8) < 21) {
                 *(s32 *)(data + 0xC8) = 30;
