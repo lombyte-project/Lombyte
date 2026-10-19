@@ -6796,7 +6796,8 @@ void shuttle_update(struct Moby *moby) {
         WAIT_FOR_FORCED_SHUTTLE_RETURN_TRIGGER = 2,
         UPDATE_SHUTTLE_PATH_RIDE = 3,
         RESTORE_SHUTTLE_IDLE_ANIMATION = 4,
-        WAIT_FOR_HERO_NEAR_LINKED_MOBY = 6
+        WAIT_FOR_HERO_NEAR_LINKED_MOBY = 6,
+        WAIT_TO_SAVE_AND_RESUME_SHUTTLE_REQUESTS = 9
     };
     enum {
         SHUTTLE_ROUTE_INITIAL_TO_SECOND_STOP = 0,
@@ -7030,7 +7031,7 @@ void shuttle_update(struct Moby *moby) {
             }
         }
         break;
-    case 9:
+    case WAIT_TO_SAVE_AND_RESUME_SHUTTLE_REQUESTS:
         if (D_L06_0015F5C4 != 2) {
             FUN_L00_00262d38_302578(5);
             memcard_Save_302578(0, -1);
