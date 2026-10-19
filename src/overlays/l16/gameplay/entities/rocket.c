@@ -2345,6 +2345,12 @@ void FUN_L16_002d0058_c(L16LeapMoby *m) __asm__("FUN_L16_002d0058");
 extern int D_L16_00161A08 __attribute__((sda));
 void test_dummy_on_hoverboard_update(unsigned char *m) __asm__("FUN_L16_002d04a0");
 void test_dummy_on_hoverboard_update(unsigned char *m) {
+    enum {
+        HOVERBOARD_DUMMY_STATE_INITIALIZE = 0,
+        HOVERBOARD_DUMMY_STATE_WAIT_FOR_RACE = 1,
+        HOVERBOARD_DUMMY_STATE_RACING = 2,
+        HOVERBOARD_DUMMY_STATE_WAIT_FOR_REACTIVATION = 3
+    };
     float pos[4], delta[4], ahead[4], impact[4], spray[4], lateral[4], dust[4];
     char *d = *(char **)(m + 0x78);
     char *g;
@@ -2359,7 +2365,7 @@ void test_dummy_on_hoverboard_update(unsigned char *m) {
        (d + 0x1E0 from here on, the others at the top of the active state). */
     FUN_L00_00263b38(d + 0x1E0, 2.5f);
     switch (m[0x20]) {
-    case 0: {
+    case HOVERBOARD_DUMMY_STATE_INITIALIZE: {
         float time;
         char *path;
 
@@ -2396,7 +2402,7 @@ void test_dummy_on_hoverboard_update(unsigned char *m) {
         m[0x20] = 1;
         break;
     }
-    case 1:
+    case HOVERBOARD_DUMMY_STATE_WAIT_FOR_RACE:
         if (hero.state.control_mode == 22) {
             m[0x30] = 255;
             *(int *)(m + 0x94) = *(int *)(*(char **)(m + 0x24) + 0x10);
@@ -2415,7 +2421,7 @@ void test_dummy_on_hoverboard_update(unsigned char *m) {
             m[0x20] = 2;
         }
         break;
-    case 3:
+    case HOVERBOARD_DUMMY_STATE_WAIT_FOR_REACTIVATION:
         if (hero.state.control_mode != 22) {
             m[0x20] = 0;
         } else {
@@ -2438,7 +2444,7 @@ void test_dummy_on_hoverboard_update(unsigned char *m) {
             }
         }
         break;
-    case 2:
+    case HOVERBOARD_DUMMY_STATE_RACING:
         g = ((char *)&hero);
         if (*(int *)(g + 0x208C) != 22) {
             m[0x20] = 0;
