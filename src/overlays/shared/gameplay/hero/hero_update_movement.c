@@ -320,8 +320,8 @@ void hero_update_movement(void) {
     switch (hero.state.current) {
     case 0x0:
     case 0x1:
-    case 0x3:
-    case 0x4:
+    case HERO_STATE_STOP:
+    case HERO_STATE_CROUCH:
     case 0x17:
     case 0x1D:
     case 0x1E:
@@ -2320,14 +2320,14 @@ void hero_update_movement(void) {
         break;
     }
     case 7:
-    case 9:
-    case 0xA:
+    case HERO_STATE_RUN_JUMP:
+    case HERO_STATE_PACK_JUMP:
     case 0xB:
     case 0xC:
     case 0xD:
     case 0xE:
     case 0xF:
-    case 0x10:
+    case HERO_STATE_PACK_LONG_JUMP:
     case 0x11:
     case 0x12:
     case 0x1C:
