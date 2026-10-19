@@ -1618,6 +1618,9 @@ extern int voice_is_playing(struct Moby *, int) __asm__("FUN_L00_0028d8c0");
 extern void FUN_L00_0029a6b0(int);
 
 int FUN_L01_00240ed8(void) {
+    enum {
+        ITEM_WRENCH = 8
+    };
     int out0;
     int out1;
     int out2;
@@ -1637,7 +1640,7 @@ int FUN_L01_00240ed8(void) {
     buttons = hero.items[0].button_mask;
 
     switch (hero.items[0].item_id) {
-    case 8:
+    case ITEM_WRENCH:
         if ((unsigned int)hero.state.control_mode < 2 ||
             (hero.state.control_mode == 4 && hero.unk418 != 0)) {
             if (hero.on_slip_ground == 0 && FUN_L00_00266d60(buttons, scale_game_frames(7), &out0) != 0) {
