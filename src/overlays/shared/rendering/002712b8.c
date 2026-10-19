@@ -722,6 +722,11 @@ extern void FUN_L00_00259bc8_272bc0(int, int, int, void *, void *,
                                     float) __asm__("FUN_L00_00259bc8");
 
 void FUN_L00_00272bc0(unsigned char *p) {
+    enum {
+        PARTICLE_PHASE_INITIAL_COLOR_TWEEN = 0,
+        PARTICLE_PHASE_EMISSION = 1,
+        PARTICLE_PHASE_EMITTED_PARTICLE = 2
+    };
     V_272bc0 t;
     unsigned char *q;
     unsigned char *c;
@@ -732,7 +737,7 @@ void FUN_L00_00272bc0(unsigned char *p) {
 
     q = p + 0x20;
     switch (q[0x14]) {
-    case 0: {
+    case PARTICLE_PHASE_INITIAL_COLOR_TWEEN: {
         float n = FUN_001fa6c0_272bc0(q[0x11]);
         *(int *)(p + 4) =
             fast_tween_color((n - FUN_001fa6c0_272bc0(*(short *)(p + 0xA))) / n, 0xFF4080FF, 0);
@@ -746,7 +751,7 @@ void FUN_L00_00272bc0(unsigned char *p) {
             }
         }
         break;
-    case 1: {
+    case PARTICLE_PHASE_EMISSION: {
         float m;
         for (i = 0; i < q[0x13]; i++) {
             qcopy(t, p + 0x10);
@@ -774,7 +779,7 @@ void FUN_L00_00272bc0(unsigned char *p) {
             }
         }
         break;
-    case 2:
+    case PARTICLE_PHASE_EMITTED_PARTICLE:
         FUN_001f9a10_272bc0(p + 0x10, p + 0x10, q);
         a = FUN_001fa6c0_272bc0(q[0x15]);
         k = a - FUN_001fa6c0_272bc0(*(short *)(p + 0xA));
