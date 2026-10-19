@@ -2190,6 +2190,7 @@ s32 FUN_L00_002e5678(void *mm, void *a, void *b, s32 k) {
     enum {
         CAM_ATTACH_HERO_POSITION_BASE = 1,
         CAM_ATTACH_STORED_FOCUS_POSITION_BASE = 2,
+        CAM_ATTACH_BLEND_TO_PROJECT_HERO_FOCUS_VELOCITY = 3,
         CAM_ATTACH_PROJECT_HERO_FOCUS_VELOCITY = 4,
         CAM_ATTACH_BLEND_OUT_FOCUS_VELOCITY = 6,
         CAM_ATTACH_BLEND_BACK_FOCUS_VELOCITY = 7
@@ -2199,7 +2200,7 @@ s32 FUN_L00_002e5678(void *mm, void *a, void *b, s32 k) {
     u8 *p = *(u8 **)(m + 0x70) + 0x40;
     f32 t[4] __attribute__((aligned(16)));
     switch (k) {
-    case 3:
+    case CAM_ATTACH_BLEND_TO_PROJECT_HERO_FOCUS_VELOCITY:
     case CAM_ATTACH_PROJECT_HERO_FOCUS_VELOCITY:
         fast_vec_add(b, a, p);
         r = 0;
