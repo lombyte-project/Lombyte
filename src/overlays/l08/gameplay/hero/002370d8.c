@@ -146,7 +146,8 @@ int r1_repeat_timer __asm__("D_L08_0015F678") = 0;
 void FUN_L08_002370d8(void) {
     enum {
         HERO_STATE_GRIND_JUMP = 41,
-        HERO_STATE_GRIND_RAIL_TRANSFER = 42
+        HERO_STATE_GRIND_RAIL_TRANSFER = 42,
+        HERO_STATE_GRIND_ATTACK = 43
     };
     unsigned char *moby;
     int prevSub;
@@ -1179,7 +1180,7 @@ void FUN_L08_002370d8(void) {
                 case HERO_STATE_GRIND:
                 case HERO_STATE_GRIND_JUMP:
                 case HERO_STATE_GRIND_RAIL_TRANSFER:
-                case 43:
+                case HERO_STATE_GRIND_ATTACK:
                 case 66:
                     if (hero.state.current == 0x42) {
                         hero.unk5BE = 0;
