@@ -492,6 +492,8 @@ void blarg_turret_update(Moby_2B5368 *m) __asm__("FUN_L13_002b41b8");
 void blarg_turret_update(Moby_2B5368 *m) {
     enum {
         BLARG_TURRET_STATE_INITIALIZE = 0,
+        BLARG_TURRET_STATE_WAIT_FOR_TARGET = 1,
+        BLARG_TURRET_STATE_TRACK_TARGET = 3,
         BLARG_TURRET_STATE_DESTROY = 4,
         BLARG_TURRET_STATE_DESTRUCTION_DELAY = 5
     };
@@ -515,7 +517,7 @@ void blarg_turret_update(Moby_2B5368 *m) {
         }
         m->state = 1;
         break;
-    case 1:
+    case BLARG_TURRET_STATE_WAIT_FOR_TARGET:
         r = fast_difference_between_rotations(angle_atan2(t->pos.x - m->pos.x, t->pos.y - m->pos.y), data->f54);
         if (r < 1.5707964f && vector_distance(&m->pos, &t->pos) < 20.0f
             && (data->volume == -1 || is_point_inside_clip_volume(D_0013F420_2b0e80, data->volume) != 0)) {
@@ -536,7 +538,7 @@ void blarg_turret_update(Moby_2B5368 *m) {
             m->state = 5;
         }
         break;
-    case 3:
+    case BLARG_TURRET_STATE_TRACK_TARGET:
         r = fast_difference_between_rotations(angle_atan2(t->pos.x - m->pos.x, t->pos.y - m->pos.y), data->f54);
         if (r >= 1.5707964f || vector_distance(&m->pos, &t->pos) > 22.0f
             || (data->volume != -1 && is_point_inside_clip_volume(D_0013F420_2b0e80, data->volume) == 0)) {
