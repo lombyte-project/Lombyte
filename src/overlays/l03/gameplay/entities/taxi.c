@@ -178,7 +178,10 @@ void mine_layer_update(struct Moby *m) {
     enum {
         MINE_LAYER_INITIALIZE = 0,
         MINE_LAYER_FACE_TARGET_AND_WAIT_FOR_RANGE = 1,
-        MINE_LAYER_PATROL_AND_FIRE = 3
+        MINE_LAYER_WAIT_FOR_ANIMATION_BEFORE_PATROL = 2,
+        MINE_LAYER_PATROL_AND_FIRE = 3,
+        MINE_LAYER_KNOCKBACK_AND_RECOVER = 4,
+        MINE_LAYER_KNOCKBACK_UNTIL_EXPLOSION = 5
     };
     TrooperVars *v = (TrooperVars *)m->pvars;
     TrooperPatrol *pt;
@@ -239,7 +242,7 @@ void mine_layer_update(struct Moby *m) {
             }
         }
         break;
-    case 2:
+    case MINE_LAYER_WAIT_FOR_ANIMATION_BEFORE_PATROL:
         if (m->anim_flags & 2) {
             m->state = 3;
             v->patrol_timer = trooper_frames(120);
@@ -293,7 +296,7 @@ void mine_layer_update(struct Moby *m) {
             }
         }
         break;
-    case 4:
+    case MINE_LAYER_KNOCKBACK_AND_RECOVER:
         if (mine_fall(m, v->knockback) & 0x60) {
             if (m->prev_seq != 0) {
                 trooper_blend_anim(m, 0, 0, trooper_frames(10));
@@ -308,7 +311,7 @@ void mine_layer_update(struct Moby *m) {
             return;
         }
         break;
-    case 5:
+    case MINE_LAYER_KNOCKBACK_UNTIL_EXPLOSION:
         if ((mine_fall(m, v->knockback) & 0x60) || m->pos.z < 5.0f) {
             qcopy(muzzle, &m->pos);
             muzzle[2] += 0.5f;
