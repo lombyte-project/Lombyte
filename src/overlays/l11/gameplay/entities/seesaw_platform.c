@@ -1638,6 +1638,7 @@ void FUN_L11_00310698(struct Moby *m) {
     enum {
         HIT_REACTION_NONE = 0,
         HIT_REACTION_DEATH = 1,
+        HIT_REACTION_DEATH_KNOCKBACK = 2,
         HIT_REACTION_NO_RESPONSE = 11
     };
     struct PokiPathVars *pv = (struct PokiPathVars *)m->pvars;
@@ -1706,7 +1707,7 @@ void FUN_L11_00310698(struct Moby *m) {
             pv->unk158 += frames_0180(60);
             break;
         case HIT_REACTION_DEATH:
-        case 2:
+        case HIT_REACTION_DEATH_KNOCKBACK:
             m->flags &= 0xEFFF;
             pv->unk80 = D_L11_00161F88 * frame_time_sq;
             pv->unk88 = D_L11_00161F98 * frame_time;
