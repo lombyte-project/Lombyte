@@ -80,7 +80,8 @@ extern int hero_set_state(int, int) __asm__("FUN_L14_0022ff58");
 extern char D_L14_0017C620[];
 int hero_set_state(int a, int b) {
     enum {
-        HERO_STATE_GRIND_HURT = 0x42
+        HERO_STATE_GRIND_HURT = 0x42,
+        HERO_STATE_VEHICLE_IDLE = 0x53
     };
     int old2088;
     char *moby;
@@ -1416,7 +1417,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x53: {
+    case HERO_STATE_VEHICLE_IDLE: {
         struct Hero *p = &hero;
         p->state.control_mode = 0;
         p->unk2284 = 0;
