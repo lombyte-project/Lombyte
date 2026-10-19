@@ -299,8 +299,11 @@ extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void cutscene_set_camera_target(int) __asm__("FUN_L00_002637f8");
 
 void FUN_L06_00309348(unsigned char *moby) {
+    enum {
+        MOBY_INITIALIZE = 0
+    };
     switch (moby[0x20]) {
-    case 0:
+    case MOBY_INITIALIZE:
         moby[0x30] = 0xFF;
         moby[0x20] = 1;
         break;
