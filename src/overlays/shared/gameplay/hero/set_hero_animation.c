@@ -1088,7 +1088,8 @@ float gravity_z(float *v) __asm__("FUN_L00_00233a78");
 float gravity_z(float *v) {
     enum {
         GRAVITY_MODE_WORLD_Z = 0,
-        GRAVITY_MODE_VECTOR_AXIS = 1
+        GRAVITY_MODE_VECTOR_AXIS = 1,
+        GRAVITY_MODE_DIRECTION_AXIS = 2
     };
     struct Hero *base = &hero;
     float m[16] __attribute__((aligned(16)));
@@ -1098,7 +1099,7 @@ float gravity_z(float *v) {
     case GRAVITY_MODE_WORLD_Z:
         return v[2];
     case GRAVITY_MODE_VECTOR_AXIS:
-    case 2:
+    case GRAVITY_MODE_DIRECTION_AXIS:
         clear_u64_value(axis);
         axis[2] = 1.0f;
         euler_rotation_matrix(m, ((char *)base->moby) + 0x40);
