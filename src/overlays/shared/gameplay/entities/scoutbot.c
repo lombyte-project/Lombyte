@@ -1282,6 +1282,7 @@ void blarg_paratrooper_update(char *moby) {
         PARATROOPER_STATE_HOP_BETWEEN_WAYPOINTS = 4,
         PARATROOPER_STATE_FIRE_PROJECTILES = 5,
         PARATROOPER_STATE_MELEE_ATTACK = 7,
+        PARATROOPER_STATE_KNOCKBACK_RECOVERY = 10,
         PARATROOPER_STATE_DEATH_EFFECTS_AND_REMOVE = 11
     };
     Paratrooper302618 *data = (Paratrooper302618 *)(*(char * *)((char *)(moby)+0x78));
@@ -1528,7 +1529,7 @@ void blarg_paratrooper_update(char *moby) {
             if((*(unsigned char *)((char *)(moby)+0x53))!=0) animate302618(moby,0,0,scale302618(10));
         }
         break;
-    case 10:
+    case PARATROOPER_STATE_KNOCKBACK_RECOVERY:
         {
             int flags=dying302618(moby,(char *)data+0x70);
             if(flags&0x40) {
