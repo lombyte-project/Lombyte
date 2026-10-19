@@ -717,6 +717,9 @@ extern float FUN_001f96b0_25b440(float) __asm__("FUN_001f96b0");
 extern float FUN_00213508_25b440(void *, int, float) __asm__("FUN_00213508");
 
 int FUN_L00_0025b440(O_25b440 *o, S_25b440 *s) {
+    enum {
+        DESCEND_TO_GROUND = 2
+    };
     float v[4];
     float t;
     float g;
@@ -748,7 +751,7 @@ int FUN_L00_0025b440(O_25b440 *o, S_25b440 *s) {
             }
         }
         break;
-    case 2:
+    case DESCEND_TO_GROUND:
         o->z += s->f10;
         s->f10 -= s->f1C;
         g = FUN_00213508_25b440(o->pos, 0, 0.5f);
