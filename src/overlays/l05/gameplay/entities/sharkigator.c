@@ -3053,19 +3053,23 @@ extern void FUN_L00_00260738_c(char *, float *, float *, char *) __asm__("FUN_L0
 void box_update(char *moby) __asm__("FUN_L05_0030bf98");
 void box_update(char *moby)
 {
+    enum {
+        BOX_INITIALIZE = 0,
+        BOX_UPDATE_TRANSFORM = 1
+    };
     char *d = *(char **)(moby + 0x78);
     float p[4];
     float q[4];
     float r[4];
     switch (*(u8 *)(moby + 0x20)) {
-    case 0:
+    case BOX_INITIALIZE:
         *(int *)(d + 0x5C) = 1;
         if (*(int *)(d + 0x80) >= 0) {
             FUN_L00_00260668(moby, D_L05_0015FFD8_c + (*(int *)(d + 0x80) << 8), moby + 0x10, moby + 0x40, d + 0x60, d + 0x70);
             *(u8 *)(moby + 0x20) = 1;
         }
         break;
-    case 1:
+    case BOX_UPDATE_TRANSFORM:
         qcopy(p, moby + 0x10);
         qcopy(q, moby + 0x40);
         FUN_L00_002604f0(moby, D_L05_0015FFD8_c + (*(int *)(d + 0x80) << 8), d + 0x60, d + 0x70, moby + 0x10, moby + 0x40);
