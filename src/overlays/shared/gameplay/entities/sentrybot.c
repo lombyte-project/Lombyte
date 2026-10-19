@@ -1754,7 +1754,7 @@ void FUN_L15_0029d6c0(M_29E8A0 *m) {
     float previous_position[4];
     float burst_drift_velocity[4];
     float burst_rotation_axis[4];
-    float v90[4];
+    float trail_offset_or_position[4];
     float vel[4];
     float vB0[4];
     float up[4];
@@ -1859,11 +1859,11 @@ void FUN_L15_0029d6c0(M_29E8A0 *m) {
             dv[2] = random_float_between(-1.0f, 1.0f);
             *(u128_29E8A0 *)delta = *(u128_29E8A0 *)dv;
             fast_vec_normalize(delta, delta, random_float_between(0.1f, 0.2f) * D_0015ED6C);
-            fast_vec_normalize(v90, vel, -random_float_between(D_0015ED6C * 0.1f, D_0015ED6C));
-            add_vector_xyz(delta, delta, v90);
-            fast_vec_normalize(v90, vel, random_float_between(0.0f, 1.0f) * d->speed);
-            add_vector_xyz(v90, v90, m->pos);
-            p = (Part_29E8A0 *)FUN_L00_002712b8(v90, delta, scale_game_frames(0x3C), 0x7F, 0x606060, 3,
+            fast_vec_normalize(trail_offset_or_position, vel, -random_float_between(D_0015ED6C * 0.1f, D_0015ED6C));
+            add_vector_xyz(delta, delta, trail_offset_or_position);
+            fast_vec_normalize(trail_offset_or_position, vel, random_float_between(0.0f, 1.0f) * d->speed);
+            add_vector_xyz(trail_offset_or_position, trail_offset_or_position, m->pos);
+            p = (Part_29E8A0 *)FUN_L00_002712b8(trail_offset_or_position, delta, scale_game_frames(0x3C), 0x7F, 0x606060, 3,
                 40000.0f, 1000.0f, 1.0f, -0.0002f, 0.0f);
             if (p != 0) {
                 p->f2 = *D_L15_001B26DC;
@@ -1874,7 +1874,7 @@ void FUN_L15_0029d6c0(M_29E8A0 *m) {
             dv[2] = 0.02f;
             transform_vector_by_basis(dv, dv, m->mtx);
             build_look_at_matrix(dv, dv, m->mtx, random_angle_radians());
-            FUN_L00_0026cbb0(v90, dv, 0x4F007FFF, 0x1FFFFFFF, scale_game_frames(5), 1, 20000.0f);
+            FUN_L00_0026cbb0(trail_offset_or_position, dv, 0x4F007FFF, 0x1FFFFFFF, scale_game_frames(5), 1, 20000.0f);
             qcopy(previous_position, m->pos);
             FUN_L00_001ff290(delta, vel, up);
         }
