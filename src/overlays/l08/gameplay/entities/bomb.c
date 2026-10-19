@@ -2448,6 +2448,13 @@ extern int timer46(int*) __asm__("FUN_001f9740");
 
 void FUN_L08_002dd3c0(M46 *moby);
 void FUN_L08_002dd3c0(M46 *moby) {
+    enum {
+        ROCKET_STATE_INITIALIZE = 0,
+        ROCKET_STATE_HOME_TOWARD_TARGET = 2,
+        ROCKET_STATE_WAIT_FOR_ACTIVATION = 3,
+        ROCKET_STATE_FOLLOW_ROUTE = 4,
+        ROCKET_STATE_EXPLODE_AND_REMOVE = 6
+    };
     V46 target,delta,accel,effect,aux;
     D46 *data=moby->data;
     if (FUN_L00_0025a420(moby,0x210000,0) && moby->state!=4) {
@@ -2457,7 +2464,7 @@ void FUN_L08_002dd3c0(M46 *moby) {
         return;
     }
     switch(moby->state) {
-    case 0: {
+    case ROCKET_STATE_INITIALIZE: {
         char *persistence_base=D_0013D388;
         Persistent46 *state=(Persistent46*)(persistence_base+data->persistent);
         if (state->active) {
@@ -2500,7 +2507,7 @@ void FUN_L08_002dd3c0(M46 *moby) {
         FUN_L00_00269958(moby->position,effect,D_L08_00161A2C,D_L08_00161A30,life,size0,size1,1);
         return;
     }
-    case 2: {
+    case ROCKET_STATE_HOME_TOWARD_TARGET: {
         D46 *target_data=data->target->data;
         int life,size0,size1;
         float scale,radius,angle;
@@ -2530,7 +2537,7 @@ void FUN_L08_002dd3c0(M46 *moby) {
         FUN_L00_00269958(moby->position,effect,D_L08_00161A2C,D_L08_00161A30,life,size0,size1,1);
         return;
     }
-    case 3:
+    case ROCKET_STATE_WAIT_FOR_ACTIVATION:
         if (D_L08_0015F5C4_macro) return;
         if (distance_xyz_c(D_0013F3D0,(char*)data->path+(data->path->count<<4))<data->activation_range && timer46(&data->timer)) {
             moby->flags=0x40; moby->state=4; moby->animation=moby->model->animation;
@@ -2538,7 +2545,7 @@ void FUN_L08_002dd3c0(M46 *moby) {
             allocate_voice_for_target_entry_alt(1,0,moby);
         }
         return;
-    case 4: {
+    case ROCKET_STATE_FOLLOW_ROUTE: {
         RouteState46 *route;
         int next;
         float yaw;
@@ -2631,7 +2638,7 @@ void FUN_L08_002dd3c0(M46 *moby) {
         add_vector_xyz(moby->position,moby->position,data->velocity);
         if (FUN_L08_002025d0(moby->position,0x400,2,moby,0) || moby->position[0]<5.0f || moby->position[0]>500.0f || moby->position[1]<5.0f || moby->position[1]>500.0f || moby->position[2]<5.0f || moby->position[2]>500.0f || distance_xyz_c(D_0013F3D0,moby->position)<16.0f) moby->state=6;
         return;
-    case 6:
+    case ROCKET_STATE_EXPLODE_AND_REMOVE:
         if (D_L08_0015FFDC<(unsigned int)moby) spawn_explosion(moby,data->velocity,moby->position,0.0f,0.0f,15,10,10,3.0f,2.0f,9.0f,1.0f,-1,15.0f,1,1,-1,0);
         mark_moby_for_removal(moby);
         break;
