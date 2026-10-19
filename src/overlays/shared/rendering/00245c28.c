@@ -95,6 +95,7 @@ extern char D_L00_00165FB0[];
 extern char D_L00_00161E00[];
 void FUN_L00_00245c28(void) {
     enum {
+        LEVEL_MODE_DEBUG_FLAG_GATED_UPDATE = 0,
         LEVEL_MODE_MEMORY_CARD_DRAIN = 1,
         LEVEL_MODE_DEBUG_PROFILER_RENDER = 2,
         LEVEL_MODE_CALLBACK_TABLE_UPDATE = 3,
@@ -178,7 +179,7 @@ void FUN_L00_00245c28(void) {
             FUN_L00_001f4598();
             FUN_L00_001f58e0();
             break;
-        case 0:
+        case LEVEL_MODE_DEBUG_FLAG_GATED_UPDATE:
             register_audio_stream_callback();
             FUN_L00_00297f78();
             FUN_L00_001f8e30();
