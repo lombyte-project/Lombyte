@@ -2103,6 +2103,10 @@ extern s32 D_L00_0015F3F8;
 
 void hero_update_items(void) __asm__("FUN_L00_00210748");
 void hero_update_items(void) {
+    enum {
+        HERO_ITEM_SLOT_STATE_READY = 2,
+        HERO_ITEM_SLOT_STATE_REMOVING = 3
+    };
     int i;
     int k;
     struct Moby *moby;
@@ -2111,7 +2115,7 @@ void hero_update_items(void) {
         moby = ITEM_SLOT(i)->items[0].moby;
         if (moby != 0) {
             switch (ITEM_SLOT(i)->items[0].state) {
-            case 2:
+            case HERO_ITEM_SLOT_STATE_READY:
                 ITEM_SLOT(i)->items[0].unk20++;
                 hero_switch_item(i);
                 if (i == 0) {
@@ -2126,7 +2130,7 @@ void hero_update_items(void) {
                     blend_moby_animation(moby, 1, 0, 2);
                 }
                 break;
-            case 3:
+            case HERO_ITEM_SLOT_STATE_REMOVING:
                 ITEM_SLOT(i)->items[0].unk1B++;
                 if ((moby->anim_flags & 2) || i == 1 || i == 0) {
                     FUN_L00_0020fca8(i, D_L00_0015F3F8 + 2);
