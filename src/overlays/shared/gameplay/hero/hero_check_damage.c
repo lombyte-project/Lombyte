@@ -354,10 +354,13 @@ s32 hero_slot_moby(s32 i) {
 /* Returns the item id of slot i when the slot is ready (state 2), else -1. */
 int hero_slot_item_id(int i) __asm__("FUN_L00_0020d498");
 int hero_slot_item_id(int i) {
+    enum {
+        HERO_ITEM_SLOT_STATE_READY = 2
+    };
     /* hero shifted by i slots, so items[0] is slot i */
     struct Hero *p = (struct Hero *)(((char *)&hero) + i * sizeof(struct HeroItemSlot));
     switch (p->items[0].state) {
-    case 2:
+    case HERO_ITEM_SLOT_STATE_READY:
         return p->items[0].item_id;
     }
     return -1;
