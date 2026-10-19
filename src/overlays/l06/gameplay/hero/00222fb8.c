@@ -393,7 +393,7 @@ extern CollisionHit HH __asm__("D_L06_001745C0") __attribute__((section(".data")
 
 extern struct Hero hero_lui __asm__("D_0013F350") __attribute__((section(".data")));
 void FUN_L06_00229650(void) {
-    V collision_ray_end, ground_ray_start, v20, surface_probe_start, v40, hit_surface_angles, normalized_hit_normal;
+    V collision_ray_end, ground_ray_start, ground_offset_or_angles, surface_probe_start, v40, hit_surface_angles, normalized_hit_normal;
     f32 f;
     s32 r;
     s32 i;
@@ -475,8 +475,8 @@ void FUN_L06_00229650(void) {
         sceVu0Normalize((u8 *)&hero_lui + 0x270, (u8 *)&HH.normal_x);
         hero_lui.ground_slope.f = FUN_L00_00233d30((u8 *)&HH.normal_x);
         hero_lui.downhill_yaw = FUN_001f9e90_c(HH.normal_x, HH.normal_y);
-        subtract_vector_xyz(&v20, ((u8 *)&hero_lui + 0x2A0), (u8 *)&hero_lui + 0x80);
-        if (0.0f < FUN_001f9ab0_c(&v20, (u8 *)&hero_lui + 0x270)) {
+        subtract_vector_xyz(&ground_offset_or_angles, ((u8 *)&hero_lui + 0x2A0), (u8 *)&hero_lui + 0x80);
+        if (0.0f < FUN_001f9ab0_c(&ground_offset_or_angles, (u8 *)&hero_lui + 0x270)) {
             hero_lui.ground_distance = -hero_lui.ground_distance;
         }
         if (hero_lui.ground_distance < 0.02f) {
@@ -527,12 +527,12 @@ d1:
     if (!(hero_lui.ground_distance < 0.25f)) {
         return;
     }
-    FUN_L00_00216078((u8 *)&hero_lui + 0x270, &v20);
-    if (-0.78539819f < v20.f[1] && v20.f[1] < 0.78539819f) {
-        hero_lui.ground_pitch.f = v20.f[1];
+    FUN_L00_00216078((u8 *)&hero_lui + 0x270, &ground_offset_or_angles);
+    if (-0.78539819f < ground_offset_or_angles.f[1] && ground_offset_or_angles.f[1] < 0.78539819f) {
+        hero_lui.ground_pitch.f = ground_offset_or_angles.f[1];
     }
-    if (-0.78539819f < v20.f[0] && v20.f[0] < 0.78539819f) {
-        hero_lui.unk2E8.f = v20.f[0];
+    if (-0.78539819f < ground_offset_or_angles.f[0] && ground_offset_or_angles.f[0] < 0.78539819f) {
+        hero_lui.unk2E8.f = ground_offset_or_angles.f[0];
     }
     for (i = 0; i < 2; i++) {
         a = 1.5707964f;
