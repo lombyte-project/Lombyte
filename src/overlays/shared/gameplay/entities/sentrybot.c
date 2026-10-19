@@ -97,6 +97,7 @@ void sentrybot_update(unsigned char *moby) {
         SENTRYBOT_WAIT_FOR_LINKED_MOBY = 1,
         SENTRYBOT_PATROL_PAUSE = 3,
         SENTRYBOT_RETURN_HOME = 9,
+        SENTRYBOT_PATROL_MOVE_FAST = 13,
         SENTRYBOT_RETURN_HOME_FAST = 20
     };
     enum {
@@ -451,7 +452,7 @@ void sentrybot_update(unsigned char *moby) {
         }
         break;
     }
-    case 13: {
+    case SENTRYBOT_PATROL_MOVE_FAST: {
         float sp = frame_time * 3.5f;
         if (FUN_L15_00299ae0((char *)moby,
                              (float *)((char *)D_L15_001B0AB0[*(int *)(data + 0x124)] +
