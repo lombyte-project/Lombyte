@@ -975,6 +975,7 @@ extern void func_L00_0025D5B0_i(void *, void *, float, int, int, int) __asm__("F
 void FUN_L14_002b2f60(char *moby) {
     enum {
         HIT_REACTION_LETHAL = 1,
+        HIT_REACTION_DEATH = 2,
         HIT_REACTION_NONE = 11
     };
     char *state = *(char **)(moby + 0x78);
@@ -1020,7 +1021,7 @@ void FUN_L14_002b2f60(char *moby) {
         }
             ((unsigned char *)state)[0xC7] = 0xFA;
             break;
-        case HIT_REACTION_LETHAL: case 2: {
+        case HIT_REACTION_LETHAL: case HIT_REACTION_DEATH: {
             float y;
             if (*(int *)(hit_info + 0x24) & 0x800000) {
                 moby[0x20] = 0xC;
