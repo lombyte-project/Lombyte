@@ -4,6 +4,8 @@
 #include "types.h"
 
 /* EE register addresses used by Sony's eeregs/libdma conventions. */
+#define IPU_CMD ((vu32 *)0x10002000)
+
 #define REG_DMAC_CTRL ((vu32 *)0x1000e000)
 #define REG_DMAC_STAT ((vu32 *)0x1000e010)
 

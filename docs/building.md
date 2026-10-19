@@ -72,7 +72,9 @@ every C unit below `GAME_TEXT_START` with the SDK compiler and every unit from
 there on with the game compiler. The game compiler's `cc1` output is assembled
 by `Ps2EeAs`, which pads short loops and `div` instructions itself; the game
 code is compiled without `-g`, whose line labels the assembler would take for
-branch targets. Pending `INCLUDE_ASM` wrappers are assembled by the game
+branch targets. SDK code goes through GNU `as` after one step,
+`padless-asm.py slots`: retail's SDK assembler put a volatile store into the
+delay slot of the call right after it, which GNU `as` does not. Pending `INCLUDE_ASM` wrappers are assembled by the game
 compiler's GNU `as` instead. The few units that do not reproduce on their
 compiler yet are listed in `ROUTE_EXCEPTIONS` with the route that still builds
 them; that list only shrinks. It and every other per-unit compiler setting,

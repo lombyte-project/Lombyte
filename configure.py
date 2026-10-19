@@ -1164,6 +1164,45 @@ def reference_assembly(assembly):
     return re.sub(r"^[ \t]*\.set[ \t]+no(?:reorder|macro)[ \t]*\r?\n", "", assembly, flags=re.M)
 
 
+def fill_volatile_call_slots(assembly):
+    """Move a volatile store into the delay slot of the `jal` right after it.
+
+    The SDK compiler marks a volatile access with `#.set volatile` and
+    `#.set novolatile` and never puts it in a delay slot, so the `jal` that
+    follows goes out in reorder mode and GNU as pads it with a nop.  Retail's
+    SDK assembler filled that slot with the store (_setDefaultQM).  Only
+    comments and debug line labels may sit between the store and the `jal`.
+    Same model as rac1-decomp's tools/fix_volatile_slot.py.
+    """
+    store = re.compile(r"^\s*(?:sb|sh|sw|sd)\s+(\$\d+),\s*(-?\w*)\((\$\d+)\)\s*$")
+    out, reorder = [], True
+    for line in assembly.split("\n"):
+        text = line.strip()
+        if text in (".set\tnoreorder", ".set noreorder"):
+            reorder = False
+        elif text in (".set\treorder", ".set reorder"):
+            reorder = True
+        if reorder and re.match(r"^\s*jal\s+[\w.$]+\s*$", line):
+            k = len(out) - 1
+            between = []
+            while k >= 0 and (not out[k].strip() or out[k].strip().startswith((".stab", "#"))
+                              or re.match(r"^\$LM\d+:$", out[k].strip())):
+                between.append(out[k].strip())
+                k -= 1
+            before = k - 1
+            while before >= 0 and not out[before].strip():
+                before -= 1
+            match = store.match(out[k]) if k >= 0 else None
+            if (match and "$31" not in match.groups()
+                    and any(item.replace("\t", " ") == "#.set novolatile" for item in between)
+                    and before >= 0 and out[before].strip().replace("\t", " ") == "#.set volatile"):
+                slot = out.pop(k)
+                out += ["\t.set\tnoreorder", "\t.set\tnomacro", line, slot, "\t.set\tmacro", "\t.set\treorder"]
+                continue
+        out.append(line)
+    return "\n".join(out)
+
+
 def main(argv):
     if len(argv) == 5 and argv[1] == "externs":
         _, _, source, destination, c_source = argv
@@ -1173,9 +1212,12 @@ def main(argv):
     if len(argv) == 4 and argv[1] == "reference":
         open(argv[3], "w").write(reference_assembly(open(argv[2]).read()))
         return
+    if len(argv) == 4 and argv[1] == "slots":
+        open(argv[3], "w").write(fill_volatile_call_slots(open(argv[2]).read()))
+        return
     if len(argv) not in (4, 5):
         raise SystemExit("usage: padless-asm.py normalize IN OUT [POLICY] | finish IN OUT [REFERENCE] | "
-                         "externs IN OUT SOURCE | reference IN OUT")
+                         "externs IN OUT SOURCE | reference IN OUT | slots IN OUT")
     mode, source, destination = argv[1:4]
     policy = argv[4] if len(argv) == 5 else "none"
     data = open(source, "rb").read()
@@ -1319,10 +1361,17 @@ def build_stuff(
         ),
     )
 
+    # SDK code: cc1 output goes through `padless-asm.py slots` (retail's SDK
+    # assembler put volatile stores in call delay slots) before GNU as.
     ninja.rule(
         "sdk-compiler",
         description="sdk-compiler $in",
-        command=f"{compile_cmd} $in $extra -o $out && {CROSS}strip $out -N dummy-symbol-name -R .mdebug",
+        command=(
+            f"mkdir -p $sdk_work && {compile_cmd} -S $in $extra -o $sdk_work/cand.s && "
+            f"{sys.executable} padless-asm.py slots $sdk_work/cand.s $sdk_work/cand-slots.s && "
+            f"{compile_cmd} $extra $sdk_work/cand-slots.s -o $out && "
+            f"{CROSS}strip $out -N dummy-symbol-name -R .mdebug"
+        ),
     )
 
     if not game_compiler_configured():
@@ -1516,7 +1565,9 @@ def build_stuff(
                 build(entry.object_path, entry.src_paths, rule, variables=variables)
             elif rule == "sdk-compiler":
                 flags = SDK_COMPILER_FLAG_UNITS.get(unit, "")
-                variables = {"extra": f"{flags} "} if flags else {}
+                variables = {"sdk_work": str(ROOT / "build/sdk-work/units" / unit)}
+                if flags:
+                    variables["extra"] = f"{flags} "
                 build(entry.object_path, entry.src_paths, rule, variables=variables)
             elif rule == "cc_ee_gcc_patched" and not patched_route:
                 # No patched profile: build from the retail oracle; the C is

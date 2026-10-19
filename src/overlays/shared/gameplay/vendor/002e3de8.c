@@ -276,9 +276,6 @@ typedef struct {
     s16 timer;    /* 0x56 */
 } VendorCamRun_5f18;
 
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002f5b58.s", FUN_L10_002f5b58);
-#else
 #include "eetypes.h"
 #include "qcopy.h"
 #include "rnc/gameplay/camera/update_cam.h"
@@ -330,7 +327,8 @@ void FUN_L10_002f5b58(struct UpdateCam *cam) {
             s16 *stop_seg = stops->seg;
             int next;
             do {
-                f32 angle = ((Vec4f *)(path + 0x10))[i].w;
+                int offset = i * 16;
+                f32 angle = *(f32 *)(path + offset + 0x1C);
                 f32 length;
                 if (angle > 0.0f) {
                     *stop_fov = angle;
@@ -342,7 +340,10 @@ void FUN_L10_002f5b58(struct UpdateCam *cam) {
                 }
                 next = i + 1;
                 length = distance_xyz(&((Vec4f *)(path + 0x10))[i], &((Vec4f *)(path + 0x10))[next % *(int *)path]);
-                ((Vec4f *)(path + 0x10))[i].w = length;
+                {
+                    char *point = path + i * 16;
+                    *(f32 *)(point + 0x1C) = length;
+                }
                 if (i < *(int *)path - 1)
                     run->len_a += length;
                 i = next;
@@ -383,7 +384,6 @@ void FUN_L10_002f5b58(struct UpdateCam *cam) {
     if (*(int *)(rec + 0x4C) == 0)
         hero_set_state(0x72, 1);
 }
-#endif
 #include "rnc/overlay/level_globals.h"
 #include "rnc/globals.h"
 #include "rnc/gameplay/entities/moby.h"
