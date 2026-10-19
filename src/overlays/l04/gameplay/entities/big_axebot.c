@@ -2340,7 +2340,8 @@ void blarg_trooper_update(struct Moby *moby) {
     enum {
         BLARG_TROOPER_HIT_REACTION_NONE = 0,
         BLARG_TROOPER_HIT_REACTION_FATAL = 1,
-        BLARG_TROOPER_HIT_REACTION_FATAL_KNOCKBACK = 2
+        BLARG_TROOPER_HIT_REACTION_FATAL_KNOCKBACK = 2,
+        BLARG_TROOPER_HIT_REACTION_START_HIT_RECOVERY = 3
     };
     struct {
         float tgt[20];
@@ -2487,7 +2488,7 @@ void blarg_trooper_update(struct Moby *moby) {
             moby->state = 0xB;
             FUN_L00_00257470(moby, 0, -1);
             break;
-        case 3:
+        case BLARG_TROOPER_HIT_REACTION_START_HIT_RECOVERY:
         case 6: {
             int h;
             *(unsigned char *)(data + 0x67) = 0x96;
