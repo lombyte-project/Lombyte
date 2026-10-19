@@ -2165,7 +2165,8 @@ void asteroid_update(struct Moby *moby) {
 
 int FUN_L13_002e4300(struct Moby *m, char *arg, float *t) {
     enum {
-        HIT_REACTION_NONE = 0
+        HIT_REACTION_NONE = 0,
+        HIT_REACTION_NO_HIT = 11
     };
     char *r = find_moby_hit(m, 0x330000, 0);
     int n;
@@ -2188,7 +2189,7 @@ int FUN_L13_002e4300(struct Moby *m, char *arg, float *t) {
     case 8:
     case 9:
     case 10:
-    case 11:
+    case HIT_REACTION_NO_HIT:
         break;
     }
     e = arg + 0x60;
