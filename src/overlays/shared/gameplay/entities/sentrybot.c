@@ -96,12 +96,16 @@ void sentrybot_update(unsigned char *moby) {
         SENTRYBOT_INITIALIZE = 0,
         SENTRYBOT_WAIT_FOR_LINKED_MOBY = 1,
         SENTRYBOT_PATROL_PAUSE = 3,
+        SENTRYBOT_TURN_AROUND = 8,
         SENTRYBOT_RETURN_HOME = 9,
         SENTRYBOT_PATROL_MOVE_FAST = 13,
         SENTRYBOT_RETURN_HOME_FAST = 20
     };
     enum {
         SENTRYBOT_PATROL_MOVE = 4
+    };
+    enum {
+        SENTRYBOT_ANIM_TURN_AROUND = 12
     };
     float va[4];
     float vb[4];
@@ -336,7 +340,7 @@ void sentrybot_update(unsigned char *moby) {
         break;
     case 6:
     case 7:
-    case 8:
+    case SENTRYBOT_TURN_AROUND:
         if (*(int *)(data + 0x114) != 2 &&
             fast_difference_between_rotations(
                 *(float *)(moby + 0x48),
@@ -359,7 +363,7 @@ void sentrybot_update(unsigned char *moby) {
             int anim = moby[0x52];
             float *tbl = 0;
             switch (anim) {
-            case 12:
+            case SENTRYBOT_ANIM_TURN_AROUND:
                 tbl = D_L15_001CC0E0;
                 break;
             case 10:
