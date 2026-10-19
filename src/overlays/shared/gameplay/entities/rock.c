@@ -1705,7 +1705,8 @@ void teleporter_update(struct Moby *moby) __asm__("FUN_L01_00308bd8");
 void teleporter_update(struct Moby *moby) {
     enum {
         TELEPORTER_INITIALIZE = 0,
-        TELEPORTER_WAIT_FOR_USE = 1
+        TELEPORTER_WAIT_FOR_USE = 1,
+        TELEPORTER_TRANSFER_TO_DESTINATION = 3
     };
     char *data = (char *)moby->pvars;
     int active = 0;
@@ -1833,7 +1834,7 @@ void teleporter_update(struct Moby *moby) {
         FUN_L01_003092d0_c(moby);
         break;
     }
-    case 3:
+    case TELEPORTER_TRANSFER_TO_DESTINATION:
         if (*(float *)(data + 0x34) != 0.0f) {
             enqueue_callback_list_1(FUN_L01_003094f0_u, moby);
             approach_value((float *)(data + 0x34), 0.0f, frame_time * 4.0f);
