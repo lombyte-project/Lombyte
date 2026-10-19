@@ -286,13 +286,17 @@ extern float D_L16_00161A84 __attribute__((sda));
 extern int D_L16_00161A88 __attribute__((sda));
 void test_dummy_door_update(struct Moby *moby) __asm__("FUN_L16_002d5cb8");
 void test_dummy_door_update(struct Moby *moby) {
+    enum {
+        TEST_DUMMY_DOOR_STATE_INITIALIZE = 0,
+        TEST_DUMMY_DOOR_STATE_UPDATE_HEIGHT = 1
+    };
     char *data = (char *)moby->pvars;
     switch (moby->state) {
-    case 0:
+    case TEST_DUMMY_DOOR_STATE_INITIALIZE:
         moby->state = 1;
         *(float *)data = moby->pos.z;
         break;
-    case 1: {
+    case TEST_DUMMY_DOOR_STATE_UPDATE_HEIGHT: {
         int r = fast_dec_timer((int *)(data + 8));
         float f;
         if (r != 0) {
