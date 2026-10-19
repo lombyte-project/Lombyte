@@ -1551,11 +1551,21 @@ void circular_saw_enemy_update(M_35F0 *moby) __asm__("FUN_L04_002c2270");
 void circular_saw_enemy_update(M_35F0 *moby) {
     enum {
         CIRCULAR_SAW_STATE_INITIALIZE = 0,
+        CIRCULAR_SAW_STATE_IDLE = 1,
         CIRCULAR_SAW_STATE_JUMP = 2,
+        CIRCULAR_SAW_STATE_CHASE_TARGET = 3,
         CIRCULAR_SAW_STATE_FOLLOW_PATH = 4,
         CIRCULAR_SAW_STATE_HIT_RECOVERY = 6,
         CIRCULAR_SAW_STATE_MELEE_ATTACK = 7,
         CIRCULAR_SAW_STATE_DYING = 8
+    };
+    enum {
+        CIRCULAR_SAW_HIT_REACTION_FATAL = 1
+    };
+    enum {
+        CIRCULAR_SAW_POINT_ATTACK_APPROACH_AND_ALIGN = 0,
+        CIRCULAR_SAW_POINT_ATTACK_ATTACK = 1,
+        CIRCULAR_SAW_POINT_ATTACK_TURN_TO_PATH = 2
     };
     D_35F0 *data = moby->data;
     T_35F0 tg;
@@ -1635,7 +1645,7 @@ void circular_saw_enemy_update(M_35F0 *moby) {
             switch (r) {
             case 0:
                 break;
-            case 1:
+            case CIRCULAR_SAW_HIT_REACTION_FATAL:
             case 2:
                 FUN_L04_002c1d70((char *)moby);
                 mark_moby_for_removal(moby);
@@ -1746,7 +1756,7 @@ void circular_saw_enemy_update(M_35F0 *moby) {
         }
         break;
     }
-    case 1: {
+    case CIRCULAR_SAW_STATE_IDLE: {
         V4_35F0 save;
         {
             qcopy(save, moby->pos);
@@ -1796,7 +1806,7 @@ void circular_saw_enemy_update(M_35F0 *moby) {
             moby->state = 1;
         }
         break;
-    case 3:
+    case CIRCULAR_SAW_STATE_CHASE_TARGET:
         if ((flag ? dist < data->f140 * 2.0f : dist < data->f140) &&
             (flag || data->f138 == -1 ||
              point_in_path_xy(&tg, D_L04_001B0930_2C35F0[data->f138]->pts,
@@ -1904,7 +1914,7 @@ void circular_saw_enemy_update(M_35F0 *moby) {
             }
         }
         switch (data->f15A) {
-        case 0: {
+        case CIRCULAR_SAW_POINT_ATTACK_APPROACH_AND_ALIGN: {
             E_35F0 *e = D_L04_001600EC;
             int n = data->f158;
             qcopy(dest, e[n].f30);
@@ -1921,7 +1931,7 @@ void circular_saw_enemy_update(M_35F0 *moby) {
             }
             break;
         }
-        case 1:
+        case CIRCULAR_SAW_POINT_ATTACK_ATTACK:
             qcopy(dest, D_L04_001600EC[data->f158].f30);
             if (moby->f53 != 7) {
                 blend_moby_animation(moby, (void *)7, 0, (void *)scale_game_frames(10));
@@ -1931,7 +1941,7 @@ void circular_saw_enemy_update(M_35F0 *moby) {
                 data->f15A = 2;
             }
             break;
-        case 2: {
+        case CIRCULAR_SAW_POINT_ATTACK_TURN_TO_PATH: {
             qcopy(dest, D_L04_001600EC[data->f158].f30);
             ta = fast_arc_tan(path->pts[data->f154][0] - moby->pos[0],
                               path->pts[data->f154][1] - moby->pos[1]);
