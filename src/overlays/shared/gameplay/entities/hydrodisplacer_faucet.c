@@ -256,9 +256,6 @@ void FUN_L05_002f81b8(void *mv) {
         *(int *)(moby + 0x90) = *(int *)&D_L05_001618C0;
     }
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_002f87a8.s", FUN_L05_002f87a8);
-#else
 #include "rnc/gameplay/state/item_state.h"
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -325,6 +322,9 @@ void hoverboard_update(unsigned char *moby) {
         }
         break;
     case 2:
+        /* Fakematch: a dead test in state 2 gives retail's block layout. */
+        if (*(int *)(data + 0x50) != 0)
+            break;
         break;
     }
     {
@@ -361,7 +361,7 @@ void hoverboard_update(unsigned char *moby) {
     }
     moby[0xbc] = 0;
 }
-#endif
+
 
 #define NOT_SDA
 
