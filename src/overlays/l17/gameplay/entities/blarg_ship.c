@@ -44,7 +44,9 @@ extern int func_001F9908_i(int *) __asm__("FUN_001f9740");
 void FUN_L17_002f26d0(struct Moby *moby) {
     enum {
         CAMERA_BOX_WATCHER_INITIALIZE = 0,
-        CAMERA_BOX_WATCHER_MONITOR = 1
+        CAMERA_BOX_WATCHER_MONITOR = 1,
+        CAMERA_BOX_WATCHER_ALIGN_FIRST_TARGET = 2,
+        CAMERA_BOX_WATCHER_WAIT_AND_ALIGN_SECOND_TARGET = 3
     };
     int off;
     char *d = (char *)moby->pvars;
@@ -225,7 +227,7 @@ void FUN_L17_002f26d0(struct Moby *moby) {
             }
         }
         break;
-    case 2: {
+    case CAMERA_BOX_WATCHER_ALIGN_FIRST_TARGET: {
         char *cam;
         FUN_L00_002e8680();
         FUN_L00_002e8970((int)(D_L17_001600EC + (*(int *)(d + 0x44) << 7) + 0x30), 0.02617994f,
@@ -241,7 +243,7 @@ void FUN_L17_002f26d0(struct Moby *moby) {
         }
         break;
     }
-    case 3:
+    case CAMERA_BOX_WATCHER_WAIT_AND_ALIGN_SECOND_TARGET:
         FUN_L00_002e8680();
         if (func_001F9908_i((int *)(d + 0x5C))) {
             char *cam;
