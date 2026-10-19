@@ -2183,7 +2183,7 @@ void hero_update_movement(void) {
         set_vector_length_xy(&hero.motion.velocity, &hero.motion.velocity, D_L00_001C3CB0[truncate_float_to_s32(hero.anim_frame)] * 0.5f);
         break;
     }
-    case 0x79:
+    case HERO_STATE_SLIP:
         hero.motion.move_yaw = hero.downhill_yaw;
         hero.target_speed = frame_time * 5.5f;
         FUN_L00_00213e68(frame_time_sq * 25.0f);
