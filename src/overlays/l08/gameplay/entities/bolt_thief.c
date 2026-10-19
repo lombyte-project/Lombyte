@@ -1418,6 +1418,13 @@ extern struct Moby *FUN_L08_002de3e0(void *, struct Moby *, void *, f32, f32);
 extern void FUN_L08_002e2250_u(struct Moby *) __asm__("FUN_L08_002e2250");
 
 void FUN_L08_002e24e8(struct Moby *moby) {
+    enum {
+        GUNSHIP_INITIALIZE = 0,
+        GUNSHIP_FOLLOW_PRIMARY_PATH_AND_FIRE_AT_TARGET = 1,
+        GUNSHIP_FOLLOW_SECONDARY_PATH_AND_FIRE_RANDOMLY = 2,
+        GUNSHIP_BEGIN_PRIMARY_PATH = 3,
+        GUNSHIP_BREAK_APART_AND_REMOVE = 0x63
+    };
     GunshipVars *vars = (GunshipVars *)moby->pvars;
     SwarmPathFollower *follower;
     struct Moby *target;
@@ -1447,7 +1454,7 @@ void FUN_L08_002e24e8(struct Moby *moby) {
         vars->sound = allocate_voice_for_target_entry(3, 4, moby);
     }
     switch (moby->state) {
-    case 0:
+    case GUNSHIP_INITIALIZE:
         if (D_0014C050[moby->mission + current_level_index * 16] == 0xFF) {
             mark_moby_for_removal(moby);
             return;
@@ -1462,7 +1469,7 @@ void FUN_L08_002e24e8(struct Moby *moby) {
                                    vars->follow[1].path->points[1].f[1] - moby->pos.y);
         moby->flags |= 0x4000;
         break;
-    case 1:
+    case GUNSHIP_FOLLOW_PRIMARY_PATH_AND_FIRE_AT_TARGET:
         waypoint = (vars->follow[0].point + vars->follow[0].path->count + vars->follow[0].direction) % vars->follow[0].path->count;
         target = &D_L08_0015FFD8_m[vars->target_index];
         FUN_L00_00258278(moby,
@@ -1509,7 +1516,7 @@ void FUN_L08_002e24e8(struct Moby *moby) {
             }
         }
         break;
-    case 2:
+    case GUNSHIP_FOLLOW_SECONDARY_PATH_AND_FIRE_RANDOMLY:
         follower = &vars->follow[1];
         next = (follower->point + 1) % follower->path->count;
         after = (follower->point + 2) % follower->path->count;
@@ -1553,7 +1560,7 @@ void FUN_L08_002e24e8(struct Moby *moby) {
             bolt->rot.y = 0.0f;
         }
         break;
-    case 3: {
+    case GUNSHIP_BEGIN_PRIMARY_PATH: {
         SwarmPath *path;
 
         moby->state = 1;
@@ -1564,7 +1571,7 @@ void FUN_L08_002e24e8(struct Moby *moby) {
         FUN_L08_002e2078(moby);
         break;
     }
-    case 0x63:
+    case GUNSHIP_BREAK_APART_AND_REMOVE:
         for (i = 1; i < 34; i++) {
             struct Moby *part = vars->links[i].part;
             if (part != NULL) {
