@@ -1667,6 +1667,7 @@ void robot_dog_update(char *moby) {
         ROBOT_DOG_FOLLOW_PATH = 5,
         ROBOT_DOG_MELEE_ATTACK = 6,
         ROBOT_DOG_RETURN_HOME = 7,
+        ROBOT_DOG_FALL_RECOVERY = 8,
         ROBOT_DOG_DEATH_FALL = 21
     };
     Tgt2c5bb8 tgt;
@@ -1888,7 +1889,7 @@ void robot_dog_update(char *moby) {
             }
         }
         break;
-    case 8:
+    case ROBOT_DOG_FALL_RECOVERY:
         if (mine_fall(moby, data->m120) & 0x60) {
             moby[0x20] = 4;
             if (((unsigned char *)moby)[0x53] != 3) {
