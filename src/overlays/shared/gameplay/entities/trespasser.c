@@ -2366,6 +2366,12 @@ extern int D_L00_00161838_macro __asm__("D_L00_00161838") __attribute__((section
    Animation states share one stack value; index reloads follow calls. */
 void devestator_ammo_update(struct Moby *m) __asm__("FUN_L00_002c53c0");
 void devestator_ammo_update(struct Moby *m) {
+    enum {
+        AMMO_PICKUP_WAIT_FOR_COLLECTION = 1,
+        AMMO_PICKUP_COLLECTED = 2,
+        AMMO_PICKUP_PULSE_ALPHA = 3,
+        AMMO_PICKUP_RESTORE_SCALE = 4
+    };
     AmmoPickup_2c53c0 *p;
     unsigned int state;
     FxVec position;
@@ -2405,7 +2411,7 @@ void devestator_ammo_update(struct Moby *m) {
     case 0:
         m->state = 1;
         break;
-    case 1: {
+    case AMMO_PICKUP_WAIT_FOR_COLLECTION: {
         struct Hero *player;
         float *value_ptr;
         float height_delta;
@@ -2490,7 +2496,7 @@ void devestator_ammo_update(struct Moby *m) {
         }
         return;
     }
-    case 2: {
+    case AMMO_PICKUP_COLLECTED: {
         float limit;
         float distance;
         float factor;
@@ -2520,7 +2526,7 @@ void devestator_ammo_update(struct Moby *m) {
         FUN_00213ed8_2c53c0(&m->scale, class_scale * distance, class_scale * 0.1f);
         return;
     }
-    case 3: {
+    case AMMO_PICKUP_PULSE_ALPHA: {
         float *value_ptr;
         float angle;
         float oscillation;
@@ -2552,7 +2558,7 @@ void devestator_ammo_update(struct Moby *m) {
         }
         return;
     }
-    case 4:
+    case AMMO_PICKUP_RESTORE_SCALE:
         current = m->scale;
         target = m->pclass->scale;
         step = D_0015ED60_2c53c0 * 0.03f;
