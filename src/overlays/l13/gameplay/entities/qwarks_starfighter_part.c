@@ -1555,6 +1555,13 @@ extern void set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");
 extern int func_001FA898_d(float) __asm__("FUN_001fa6d0");
 
 void FUN_L13_002f8a78(char *moby) {
+    enum {
+        GATE_STATE_INITIALIZE = 0,
+        GATE_STATE_OPEN = 1,
+        GATE_STATE_CLOSING = 2,
+        GATE_STATE_CLOSED = 3,
+        GATE_STATE_OPENING = 4
+    };
     char *d = *(char **)(moby + 0x78);
     char *c = 0;
     int open;
@@ -1581,7 +1588,7 @@ void FUN_L13_002f8a78(char *moby) {
         }
     }
     switch (((unsigned char *)moby)[0x20]) {
-    case 0:
+    case GATE_STATE_INITIALIZE:
         if (c == 0) {
             debug_print_alt(D_L13_001F51E0, *(short *)(moby + 0xB2), *(short *)(moby + 0xA6));
             mark_moby_for_removal(moby);
@@ -1601,13 +1608,13 @@ void FUN_L13_002f8a78(char *moby) {
             moby[0x23] = 0;
         }
         break;
-    case 1:
+    case GATE_STATE_OPEN:
         if (close) {
             *(int *)(moby + 0x94) = 0;
             moby[0x20] = 2;
         }
         break;
-    case 2:
+    case GATE_STATE_CLOSING:
         if (open) {
             moby[0x20] = 4;
             *(int *)(moby + 0x94) = *(int *)(*(char **)(moby + 0x24) + 0x10);
@@ -1621,7 +1628,7 @@ void FUN_L13_002f8a78(char *moby) {
             *(unsigned short *)(moby + 0x34) |= 1;
         }
         break;
-    case 3:
+    case GATE_STATE_CLOSED:
         if (open) {
             moby[0x20] = 4;
             *(int *)(moby + 0x94) = *(int *)(*(char **)(moby + 0x24) + 0x10);
@@ -1629,7 +1636,7 @@ void FUN_L13_002f8a78(char *moby) {
             *(unsigned short *)(moby + 0x34) &= 0xFFFE;
         }
         break;
-    case 4:
+    case GATE_STATE_OPENING:
         if (close) {
             *(int *)(moby + 0x94) = 0;
             moby[0x20] = 2;
