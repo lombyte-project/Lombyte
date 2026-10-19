@@ -331,6 +331,7 @@ void mark_moby_for_removal_u(struct Obj *obj) __asm__("FUN_0020c828");
 void FUN_L16_002d6740(struct Moby *moby) {
     enum {
         MOBY_STATE_INITIALIZE = 0,
+        MOBY_STATE_CHECK_HIT_FOR_REMOVAL = 1,
         MOBY_STATE_REMOVE_WITH_EFFECTS = 2
     };
     int flag = 0;
@@ -339,7 +340,7 @@ void FUN_L16_002d6740(struct Moby *moby) {
     case MOBY_STATE_INITIALIZE:
         moby->state = 1;
         break;
-    case 1:
+    case MOBY_STATE_CHECK_HIT_FOR_REMOVAL:
         if (p != 0 && 0.0f < *(float *)(p + 0x2C))
             flag = 1;
         if (flag)
