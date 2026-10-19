@@ -2391,6 +2391,10 @@ extern s32 allocate_voice_for_target_entry(s32, s32, void *) __asm__("FUN_0022da
 void door_half_update(Moby *self) __asm__("FUN_L01_002f4710");
 void door_half_update(Moby *self)
 {
+    enum {
+        DOOR_HALF_STATE_INITIALIZE = 0,
+        DOOR_HALF_STATE_FOLLOW_DRIVER = 1
+    };
     struct SliderVars *v;
     Moby *driver;
     f32 *progress;
@@ -2399,14 +2403,14 @@ void door_half_update(Moby *self)
 
     v = (struct SliderVars *)self->vars;
     switch (self->state) {
-    case 0:
+    case DOOR_HALF_STATE_INITIALIZE:
         v->start_x = self->pos.x;
         v->start_y = self->pos.y;
         v->sound = -1;
         v->last_progress = 0.0f;
         self->state = 1;
         break;
-    case 1:
+    case DOOR_HALF_STATE_FOLLOW_DRIVER:
         if (v->target == -1 || v->end_x == 0.0f || v->end_y == 0.0f)
             break;
         driver = &D_L01_0015FFD8[v->target];
