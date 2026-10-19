@@ -380,6 +380,7 @@ void FUN_L09_002c6230(Moby *moby) {
         RESPONSE_NONE = 0,
         RESPONSE_FATAL_KNOCKBACK = 1,
         RESPONSE_HURT_KNOCKBACK = 3,
+        RESPONSE_REACTION_ONLY = 9,
         RESPONSE_NO_REACTION = 11
     };
     char hit_pos[16];
@@ -425,7 +426,7 @@ void FUN_L09_002c6230(Moby *moby) {
         func_0022ED80_2C73D0(8, 0, moby);
 
         switch (response) {
-        case 9:
+        case RESPONSE_REACTION_ONLY:
         case 10:
             data->reactTime = 0xFA;
             break;
