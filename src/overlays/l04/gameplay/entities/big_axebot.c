@@ -569,6 +569,7 @@ void big_axebot_update(M_B7B0 *moby) {
     enum {
         BIG_AXEBOT_HIT_REACTION_NONE = 0,
         BIG_AXEBOT_HIT_REACTION_FATAL = 1,
+        BIG_AXEBOT_HIT_REACTION_CONDITIONAL_HIT_RECOVERY = 3,
         BIG_AXEBOT_HIT_REACTION_RETURN_TO_IDLE = 4,
         BIG_AXEBOT_HIT_REACTION_KNOCKBACK = 7
     };
@@ -665,7 +666,7 @@ void big_axebot_update(M_B7B0 *moby) {
                 switch (r) {
                 case BIG_AXEBOT_HIT_REACTION_NONE:
                     break;
-                case 3:
+                case BIG_AXEBOT_HIT_REACTION_CONDITIONAL_HIT_RECOVERY:
                 case 6:
                 case 8:
                     allocate_voice_for_target_entry(0xB, 0, (char *)moby);
