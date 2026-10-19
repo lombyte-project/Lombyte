@@ -585,13 +585,17 @@ extern void FUN_L00_002e2250(int, int);
 extern void FUN_L00_002e2af0(void);
 
 void FUN_L14_003039e0(unsigned char *m) {
+    enum {
+        SLOT_UPDATE_STATE_INITIALIZE = 0,
+        SLOT_UPDATE_STATE_PROCESS_SLOTS = 1
+    };
     int i;
     int j;
     int n;
     int st;
 
     switch (m[0x20]) {
-    case 0:
+    case SLOT_UPDATE_STATE_INITIALIZE:
         for (j = 0; j < 3; j++) {
             D_L14_00162148[j] = 0;
             D_L14_001621D8[j] = 0;
@@ -599,7 +603,7 @@ void FUN_L14_003039e0(unsigned char *m) {
         m[0x20] = 1;
         m[0x30] = 0xFF;
         break;
-    case 1:
+    case SLOT_UPDATE_STATE_PROCESS_SLOTS:
         n = 0;
         for (i = 0; i < 3; i++) {
             st = D_L14_00162148[i];
