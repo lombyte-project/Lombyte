@@ -508,6 +508,9 @@ void FUN_L03_002cbea8(struct Moby *m) {
         MINE_EXPLODE_AND_REMOVE = 4,
         MINE_SHRINK_AND_REMOVE = 5
     };
+    enum {
+        MINE_DEBRIS_SPHERICAL_VELOCITY = 3
+    };
     MineBlast blast = D_L03_001E32B0;
     MineVec tmp;
     MineVars *v = (MineVars *)m->pvars;
@@ -614,7 +617,7 @@ void FUN_L03_002cbea8(struct Moby *m) {
                     mine_debris(r, dir, mine_rand_below(100) < 0x28 ? 0x5FF8F8F8 : 0x2F486078, 0x0F000020, 150000.0f,
                                 mine_rand_between(mine_frames(0x1E), mine_frames(0x2D)), 2);
                     break;
-                case 3: {
+                case MINE_DEBRIS_SPHERICAL_VELOCITY: {
                     int c1 = mine_blend_color(0x7F000000, 0x7F182030, mine_rand(0.25f, 1.0f));
                     int c2 = mine_blend_color(0, 0x5F5F5F, mine_rand(0.5f, 1.0f));
 
