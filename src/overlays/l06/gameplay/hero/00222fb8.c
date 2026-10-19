@@ -2589,7 +2589,7 @@ void FUN_L06_0022e020(void) {
             FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.velocity, frame_time_sq * 54.0f);
         }
         break;
-    case 0x40:
+    case HERO_STATE_FIDGET:
     case 0x67:
         clear_u64_value(&hero.motion.velocity);
         break;
