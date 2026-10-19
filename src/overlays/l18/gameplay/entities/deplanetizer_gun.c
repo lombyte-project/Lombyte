@@ -994,6 +994,7 @@ void gadgebot_update(unsigned char *m) {
         GADGEBOT_LAUNCH_FLIGHT = 1,
         GADGEBOT_WAIT_TO_APPROACH = 2,
         GADGEBOT_APPROACH_TARGET = 3,
+        GADGEBOT_FACE_TARGET = 4,
         GADGEBOT_DEATH_FALL = 5,
         GADGEBOT_EXPLODE = 6
     };
@@ -1081,7 +1082,7 @@ void gadgebot_update(unsigned char *m) {
         }
         break;
     }
-    case 4: {
+    case GADGEBOT_FACE_TARGET: {
         float r, k, b, d;
         moby_transform_ptr = m + 0x48;
         r = fast_arc_tan(*(float *)(e + 0x180) - *(float *)(m + 0x10),
