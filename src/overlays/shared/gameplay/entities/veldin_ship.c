@@ -2912,6 +2912,12 @@ static inline void measure_path(Path *path) {
 void infobot_update(struct Moby *moby) __asm__("FUN_L00_002d5de8");
 void infobot_update(struct Moby *moby)
 {
+    enum {
+        INFOBOT_INITIALIZE = 0,
+        INFOBOT_FOLLOW_SLOT_PATH = 4,
+        INFOBOT_FOLLOW_PATH = 6,
+        INFOBOT_ORBIT_PATH_ENDPOINT = 7
+    };
     Vec offset;
     Vec step;
     Vec point;
@@ -2936,7 +2942,7 @@ void infobot_update(struct Moby *moby)
     offset.q = 0;
     infobot = (Infobot *)moby->pvars;
     switch (moby->state) {
-    case 0:
+    case INFOBOT_INITIALIZE:
         moby->update_dist = 0xFF;
         infobot->yaw = moby->rot.z;
         infobot->home = MPOS(moby)->q;
@@ -3010,7 +3016,7 @@ void infobot_update(struct Moby *moby)
             FUN_L00_00266858(moby, 1);
         }
         break;
-    case 4:
+    case INFOBOT_FOLLOW_SLOT_PATH:
         FUN_L00_002d5988_2d5de8(moby, D_L00_001B04B0[infobot->slots[infobot->seg]], 3);
         FUN_L00_002d6cd0_2d5de8(moby);
         if (moby->state != 4) {
@@ -3047,7 +3053,7 @@ void infobot_update(struct Moby *moby)
                                 D_L00_001B04B0[infobot->path]->pts[1].v.y - D_L00_001B04B0[infobot->path]->pts[0].v.y);
         measure_path(D_L00_001B04B0[infobot->path]);
         break;
-    case 6:
+    case INFOBOT_FOLLOW_PATH:
         path = D_L00_001B04B0[infobot->path];
         pos = (Vec *)&moby->pos;
         FUN_L00_002d6cd0_2d5de8(moby);
@@ -3099,7 +3105,7 @@ void infobot_update(struct Moby *moby)
         moby->rot.y = spring_turn_2d5de8(moby->rot.y, tilt_y, D_0015ED70 * 0.5235988f, D_0015ED70 * 1.0471976f, D_0015ED6C * 0.7853982f, &infobot->spin[1]);
         moby->rot.x = spring_turn_2d5de8(moby->rot.x, tilt_x, D_0015ED70 * 1.0471976f, D_0015ED70 * 2.0943952f, D_0015ED6C * 1.5707964f, &infobot->spin[0]);
         break;
-    case 7: {
+    case INFOBOT_ORBIT_PATH_ENDPOINT: {
         Path *p = D_L00_001B04B0[infobot->path];
         FUN_L00_002d6cd0_2d5de8(moby);
         infobot->sway = infobot->sway + D_0015ED6C;
