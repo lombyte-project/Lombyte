@@ -353,6 +353,9 @@ extern f32 frame_scale_sq_macro __asm__("D_0015ED64") __attribute__((section(".s
 /* Watcher NPC update (twin of qwarks_bouncer_update): idles with random animations, talks to the hero and drops its reward, and turns its head toward the hero or a random look target. */
 void skid_mcmarx_update(struct Moby *m) __asm__("FUN_L02_002e1950");
 void skid_mcmarx_update(struct Moby *m) {
+    enum {
+        SKID_MCMARX_INITIALIZE = 0
+    };
     WatcherVars *v = (WatcherVars *)m->pvars;
     WatcherLook look;
     f32 rate;
@@ -362,7 +365,7 @@ void skid_mcmarx_update(struct Moby *m) {
     FUN_L02_002e0cd8(m);
     FUN_L02_002e1fb8((char *)m);
     switch (m->state) {
-    case 0:
+    case SKID_MCMARX_INITIALIZE:
         if (D_0013D506) {
             delete_moby(m);
             return;
