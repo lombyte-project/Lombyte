@@ -1908,6 +1908,7 @@ void machinegun_turret_update(char *moby) {
 
 void FUN_L14_002b4340(struct Moby *m) {
     enum {
+        HIT_REACTION_NO_ACTION = 0,
         HIT_REACTION_LETHAL = 1,
         HIT_REACTION_DESTROY = 2,
         HIT_REACTION_NONE = 11
@@ -1933,7 +1934,7 @@ void FUN_L14_002b4340(struct Moby *m) {
         if (t <= 0.0f)
             k = 1;
         switch (k) {
-        case 0:
+        case HIT_REACTION_NO_ACTION:
         case HIT_REACTION_NONE:
             break;
         case 9:
