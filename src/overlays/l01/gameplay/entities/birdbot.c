@@ -1542,6 +1542,7 @@ void peckbot_update(Mob577 *self) {
         PECKBOT_STATE_ATTACK_TARGET = 4,
         PECKBOT_STATE_RETURN_HOME = 5,
         PECKBOT_STATE_NONFATAL_KNOCKBACK = 6,
+        PECKBOT_STATE_AIRBORNE_IDLE = 14,
         PECKBOT_STATE_MOVE_TO_DESTINATION = 15,
         PECKBOT_STATE_ASCEND = 16,
         PECKBOT_STATE_DESCEND = 17,
@@ -1678,7 +1679,7 @@ void peckbot_update(Mob577 *self) {
         }
         v->xD0 = &D_L01_00161A70;
         break;
-    case 14:
+    case PECKBOT_STATE_AIRBORNE_IDLE:
         fast_vec_sub(&v70, &target.pos, &self->pos);
         if (tick_countdown_32(&v->x228) != 0 && fast_vec_length(&v70) < v->range + 4.0f &&
             FUN_001f99c0(self->pos.f[2] - target.pos.f[2]) < 8.0f &&
