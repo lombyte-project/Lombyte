@@ -2091,13 +2091,11 @@ void hero_switch_item(int i) {
         }
     }
 }
-/* Per-frame update of the hero's seven item slots. */
 /* Ported from rac1-decomp (src/overlays/shared/help_0020CDF0.c: func_L00_00210E00), where it is exact; names translated to the US level program. */
 #include "rnc/gameplay/entities/moby.h"
 extern void FUN_L00_00205168(void *);
 extern s32 D_L00_0015F3F8;
 
-/* Through hero_lui the slot address is built as in retail (lui, then the index); through hero it is not. */
 #define ITEM_SLOT(i) ((struct Hero *)((char *)&hero_lui + (i) * sizeof(struct HeroItemSlot)))
 
 void hero_update_items(void) __asm__("FUN_L00_00210748");

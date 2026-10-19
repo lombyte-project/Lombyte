@@ -364,7 +364,6 @@ extern int D_L14_001620EC __attribute__((sda));
 
 extern char D_L14_001674C0[];
 
-/* The beam state behind moby->vars: a main line of 32 points and four 4-point branches. */
 typedef struct {
     int frame;              /* 0x0: D_L14_001600EC transform index */
     u8 pad4[0x10];

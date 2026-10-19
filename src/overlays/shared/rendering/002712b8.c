@@ -431,7 +431,6 @@ unsigned char *FUN_L00_00272060(void *pos, int s, int color, int mode, int b, fl
     }
     return m;
 }
-/* Particle update: adds data[0xA] to byte 8, fades the alpha over the last frames, moves by the velocity and frees the particle outside 2..1021 or when its timer ends. */
 /* Ported from rac1-decomp (src/overlays/shared/partupd_00272158.c: func_L00_00273090), where it is exact; names translated to the US level program. */
 
 extern s32 fast_dec_timer_s16(void *) __asm__("FUN_001f9770");

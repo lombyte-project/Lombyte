@@ -87,7 +87,7 @@ typedef struct {
 #define D_0013F65E hero.air_frames.s
 #define D_0013F650 hero.grounded_frames
 #define D_0013FA40 hero.unk6E0[4]
-#define D_0013FA5C (*(s32 *)((u8 *)&hero + 0x70C)) /* hero.unk70C as a field changes the draft codegen */
+#define D_0013FA5C (*(s32 *)((u8 *)&hero + 0x70C))
 #define D_0013FBB4 hero.unk864
 #define D_0013FBF8 hero.unk8A8
 #define D_0013FA30 hero.unk6E0

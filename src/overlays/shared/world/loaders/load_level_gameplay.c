@@ -27,7 +27,6 @@ void FUN_L00_00241728(s32 *h) {
         }
     }
 }
-/* Debug print: lists the moby classes (0x20-byte records: data offset, class id) by data size in K, largest first. */
 /* Ported from rac1-decomp (src/overlays/shared/loaders_00240398.c: func_L00_00242120), where it is exact; names translated to the US level program. */
 
 typedef struct {

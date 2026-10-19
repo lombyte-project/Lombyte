@@ -1215,12 +1215,10 @@ void FUN_L05_00253b48(void) {
         }
     }
 }
-/* Updates action and rotation scores while the challenge is active. */
 /* Ported from rac1-decomp (src/overlays/shared/help_00237B00.c: func_L05_00254838), where it is exact; names translated to the US level program. */
 
 struct ScoreTable { f32 values[5]; };
 
-/* The hero's challenge tally. */
 struct HeroTally {
     u8 pad0[0x6D0];
     f32 spin[3];          /* 0x6D0 */

@@ -520,7 +520,6 @@ int FUN_L00_002365a8(HudElem *e) {
     return e->w;
 }
 #endif
-/* Draws a HUD element's backdrop, then the stars of D_L00_0017E660 that the element's progress has reached. */
 /* Ported from rac1-decomp (src/overlays/shared/hud_00235960.c: func_L00_002377E0), where it is exact; names translated to the US level program. */
 
 

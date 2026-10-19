@@ -292,8 +292,6 @@ extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 extern struct { char pad0[0x184]; char *source; } D_L10_00167100;
 extern VendorView_5f18 D_L10_0016CEC0;
 
-/* Camera setup: resets the run, collects the stops (points with a field of view)
-   and the two path lengths, then starts from the current camera matrix. */
 void FUN_L10_002f5b58(struct UpdateCam *cam) {
     char *rec = *(char **)(D_L10_0015EF50 + cam->descriptor_index * 32 + 0x1C);
     VendorCamRun_5f18 *run;

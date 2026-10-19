@@ -9,7 +9,6 @@ extern void disable_global_flag(void) __asm__("FUN_001f61f8");
 extern void enable_global_flag(void) __asm__("FUN_001f61e8");
 extern void font_print_large(int, int, u64, char *, int) __asm__("FUN_001f6530");
 
-/* Draws one line of timed text centred, right- or left-aligned on x (mode 0, 1, -1), on a frame box, with a shadow. */
 void draw_timed_text_line(int x, int y, int mode, float scale, float alpha, char *text) __asm__("FUN_L00_001fcb28");
 void draw_timed_text_line(int x, int y, int mode, float scale, float alpha, char *text) {
     int width, right, left;
@@ -38,8 +37,6 @@ void draw_timed_text_line(int x, int y, int mode, float scale, float alpha, char
     font_print_large(left, y - 8, color, text, -1);
     enable_global_flag();
 }
-/* Draws a level text entry while its frame window is open: fades it in and out,
-   and either joins its lines with " - " or draws each line 26 pixels lower. */
 /* Ported from rac1-decomp (src/overlays/shared/draw_001F3A78.c: func_L00_001FCC50), where it is exact; names translated to the US level program. */
 extern char *get_help_message_text(s32) __asm__("FUN_001fdd10");
 

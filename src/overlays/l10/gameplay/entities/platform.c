@@ -2166,8 +2166,6 @@ typedef struct {
     f32 phase;
 } PlatformWaveVars;
 
-/* Four groups of ten wave strands, 20 points each: on a staggered timer a strand
-   gets new random offsets and its point velocities are the three-point average. */
 
 void FUN_L10_002dcc58(struct Moby *moby) {
     PlatformWaveVars *vars = (PlatformWaveVars *)moby->pvars;
