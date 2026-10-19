@@ -719,6 +719,13 @@ void FUN_L08_002e0328(Moby *moby) {
         CANNON_MOUNTED_CONTROL = 5,
         CANNON_REMOVE = 6
     };
+    enum {
+        CANNON_NO_INACTIVE_INDEXED_TARGETS = 0,
+        CANNON_ONE_INACTIVE_INDEXED_TARGET = 1,
+        CANNON_TWO_INACTIVE_INDEXED_TARGETS = 2,
+        CANNON_THREE_INACTIVE_INDEXED_TARGETS = 3,
+        CANNON_ALL_INDEXED_TARGETS_INACTIVE = 4
+    };
     float position[4], offset[4], work[4], direction[4], muzzle[4], scatter[4], random_vec[4];
     CannonData52_2E16A0 *data = (*(CannonData52_2E16A0 **)&moby->pvars);
     int i, target, all_done, dead, best, min_life;
@@ -919,11 +926,11 @@ void FUN_L08_002e0328(Moby *moby) {
                     walk++;
                 } while (--count >= 0);
                 switch (dead) {
-                case 0: data->range = 10.0f; data->wave_timer = func_001F9850_2E16A0(285); break;
-                case 1: data->range = 12.5f; data->wave_timer = func_001F9850_2E16A0(240); break;
-                case 2: data->range = 15.0f; data->wave_timer = func_001F9850_2E16A0(195); break;
-                case 3: data->range = 17.5f; data->wave_timer = func_001F9850_2E16A0(150); break;
-                case 4:
+                case CANNON_NO_INACTIVE_INDEXED_TARGETS: data->range = 10.0f; data->wave_timer = func_001F9850_2E16A0(285); break;
+                case CANNON_ONE_INACTIVE_INDEXED_TARGET: data->range = 12.5f; data->wave_timer = func_001F9850_2E16A0(240); break;
+                case CANNON_TWO_INACTIVE_INDEXED_TARGETS: data->range = 15.0f; data->wave_timer = func_001F9850_2E16A0(195); break;
+                case CANNON_THREE_INACTIVE_INDEXED_TARGETS: data->range = 17.5f; data->wave_timer = func_001F9850_2E16A0(150); break;
+                case CANNON_ALL_INDEXED_TARGETS_INACTIVE:
                     if (visited52[D_0015ED84][moby->mission] != 0xFF) {
                         Moby *node;
                         (*(float (*)[4])&moby->rot)[1] = 0.0f; moby->command = 2;
