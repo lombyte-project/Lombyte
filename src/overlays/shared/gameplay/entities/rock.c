@@ -1715,6 +1715,7 @@ void teleporter_update(struct Moby *moby) {
     enum {
         TELEPORTER_INITIALIZE = 0,
         TELEPORTER_WAIT_FOR_USE = 1,
+        TELEPORTER_PREPARE_TRANSFER = 2,
         TELEPORTER_TRANSFER_TO_DESTINATION = 3
     };
     char *data = (char *)moby->pvars;
@@ -1820,7 +1821,7 @@ void teleporter_update(struct Moby *moby) {
         }
         FUN_L01_003092d0_c(moby);
         break;
-    case 2: {
+    case TELEPORTER_PREPARE_TRANSFER: {
         int r = FUN_L00_00233f38();
         if (*(float *)(data + 0x20) < 1.0f) {
             advance_accelerated_scalar((float *)(data + 0x20), (float *)(data + 0x28), 1.0f,
