@@ -1701,6 +1701,7 @@ void machinegun_turret_update(char *moby) __asm__("FUN_L14_002b3bf0");
 void machinegun_turret_update(char *moby) {
     enum {
         TURRET_STATE_INITIALIZE = 0,
+        TURRET_STATE_WAIT_FOR_ACTIVATION = 1,
         TURRET_STATE_WAIT_FOR_TARGET = 3,
         TURRET_STATE_AIM_AND_FIRE = 4,
         TURRET_STATE_DESTROY = 6
@@ -1708,7 +1709,7 @@ void machinegun_turret_update(char *moby) {
     char *data;
     float target_point_scratch[4];
     float spawn_position[4];
-    float v40[4];
+    float spawn_vector_scratch[4];
     float spawn_position_offset[4];
     float v60[4];
     float target_query_result[4];
@@ -1752,7 +1753,7 @@ void machinegun_turret_update(char *moby) {
         }
         *(int *)(data + 0x98) = func_001F9850_2B4E40(*(int *)(data + 0x94));
         return;
-    case 1:
+    case TURRET_STATE_WAIT_FOR_ACTIVATION:
         if (*(short *)(data + 0x88) == 0) {
             return;
         }
@@ -1845,12 +1846,12 @@ void machinegun_turret_update(char *moby) {
                 func_001F9BD8_2B4E40(spawn_position, spawn_position, spawn_position_offset);
                 break;
             }
-            func_L00_001FF4B0_2B4E40(v40, moby + 0xC0, D_L14_00161528);
-            func_001F9BD8_2B4E40(spawn_position, spawn_position, v40);
+            func_L00_001FF4B0_2B4E40(spawn_vector_scratch, moby + 0xC0, D_L14_00161528);
+            func_001F9BD8_2B4E40(spawn_position, spawn_position, spawn_vector_scratch);
             func_001F9BD8_2B4E40(spawn_position, spawn_position, moby + 0x10);
-            func_L00_001FF4B0_2B4E40(v40, moby + 0xC0, D_L14_0016151C * frame_time);
+            func_L00_001FF4B0_2B4E40(spawn_vector_scratch, moby + 0xC0, D_L14_0016151C * frame_time);
             if (*(short *)(data + 0x9C) == 0) {
-                func_L00_00251328_2B4E40(func_L14_002EE150_2B4E40(spawn_position, v40, (int)moby, 1), 0xE0, 0xE0, 0xE0);
+                func_L00_00251328_2B4E40(func_L14_002EE150_2B4E40(spawn_position, spawn_vector_scratch, (int)moby, 1), 0xE0, 0xE0, 0xE0);
             }
         }
         r = func_L00_00260D30_2B4E40(moby, target_query_result, 34.0f);
