@@ -586,7 +586,9 @@ void liftcar_platform_update(struct Moby *moby) {
     enum {
         LIFTCAR_PLATFORM_INITIALIZE = 0,
         LIFTCAR_PLATFORM_WAIT_FOR_MISSION_GATE = 1,
+        LIFTCAR_PLATFORM_ANIMATE_THEN_WAIT_FOR_RIDER_OR_HERO_ABOVE = 2,
         LIFTCAR_PLATFORM_WAIT_FOR_RIDER_OR_HERO_ABOVE = 3,
+        LIFTCAR_PLATFORM_ANIMATE_THEN_WAIT_FOR_RIDER_OR_HERO_BELOW = 4,
         LIFTCAR_PLATFORM_WAIT_FOR_RIDER_OR_HERO_BELOW = 5
     };
     char *data = (char *)moby->pvars;
@@ -640,8 +642,8 @@ void liftcar_platform_update(struct Moby *moby) {
             moby->command = 0;
         }
         break;
-    case 2:
-    case 4:
+    case LIFTCAR_PLATFORM_ANIMATE_THEN_WAIT_FOR_RIDER_OR_HERO_ABOVE:
+    case LIFTCAR_PLATFORM_ANIMATE_THEN_WAIT_FOR_RIDER_OR_HERO_BELOW:
         build_moby_bone_transform(driver, 0, joint_mtx);
         moby->rot.z = atan2_e2228(joint_mtx[0], joint_mtx[1]);
         if (distance_xyz(&moby->pos, &hero.motion.pos) < 1.5f && hero.motion.pos.f[2] < moby->pos.z - 1.5f) {
