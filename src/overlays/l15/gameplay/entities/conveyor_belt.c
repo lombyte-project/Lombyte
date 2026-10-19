@@ -716,10 +716,14 @@ extern void enqueue_callback_list_1(void (*)(void), void *) __asm__("FUN_001f460
 void FUN_L15_002eb6b8(void);
 
 void FUN_L15_002eb4c0(struct Moby *m) {
+    enum {
+        CUTSCENE_TRIGGER_WAIT_FOR_CONDITIONS = 0,
+        CUTSCENE_TRIGGER_COMPLETED = 4
+    };
     char *d = (char *)m->pvars;
     m->update_dist = 0x80;
     switch (m->state) {
-    case 0:
+    case CUTSCENE_TRIGGER_WAIT_FOR_CONDITIONS:
         if (D_0014C050_v[m->mission + current_level_index * 16] == 0xFF)
             break;
         if (D_L15_00161AC0 != 0)
@@ -762,7 +766,7 @@ void FUN_L15_002eb4c0(struct Moby *m) {
             m->state = 4;
         }
         break;
-    case 4:
+    case CUTSCENE_TRIGGER_COMPLETED:
         break;
     }
     if (D_L15_0015F5C4 == 2)
