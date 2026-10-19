@@ -1015,7 +1015,8 @@ extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 void gravity_flatten(float *dst, float *src) __asm__("FUN_L00_002338d0");
 void gravity_flatten(float *dst, float *src) {
     enum {
-        GRAVITY_MODE_WORLD_Z = 0
+        GRAVITY_MODE_WORLD_Z = 0,
+        GRAVITY_MODE_VECTOR_AXIS = 1
     };
     struct Hero *base = &hero;
     float n[4] __attribute__((aligned(16)));
@@ -1025,7 +1026,7 @@ void gravity_flatten(float *dst, float *src) {
         qcopy(dst, src);
         dst[2] = 0.0f;
         break;
-    case 1:
+    case GRAVITY_MODE_VECTOR_AXIS:
         fast_vec_normalize(n, &base->unk270, 1.0f);
         scale_vector_xyz(n, n, dot_vectors_xyz(n, src));
         subtract_vector_xyz(dst, src, n);
