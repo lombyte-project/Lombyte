@@ -1555,6 +1555,7 @@ void circular_saw_enemy_update(M_35F0 *moby) {
         CIRCULAR_SAW_STATE_JUMP = 2,
         CIRCULAR_SAW_STATE_CHASE_TARGET = 3,
         CIRCULAR_SAW_STATE_FOLLOW_PATH = 4,
+        CIRCULAR_SAW_STATE_POINT_ATTACK = 5,
         CIRCULAR_SAW_STATE_HIT_RECOVERY = 6,
         CIRCULAR_SAW_STATE_MELEE_ATTACK = 7,
         CIRCULAR_SAW_STATE_DYING = 8
@@ -1885,7 +1886,7 @@ void circular_saw_enemy_update(M_35F0 *moby) {
         }
         break;
     }
-    case 5: {
+    case CIRCULAR_SAW_STATE_POINT_ATTACK: {
         P_35F0 *path = D_L04_001B0930_2C35F0[data->f150];
 
         if (flag ? dist < data->f140 * 2.0f : dist < data->f140) {
