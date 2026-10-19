@@ -175,7 +175,11 @@ void walker_update_gait(WalkMoby *m, WalkData *d, int flags, float speed, float 
 void walker_update_gait(WalkMoby *m, WalkData *d, int flags, float speed, float ang, float accel) {
     enum {
         WALKER_GAIT_IDLE = 0,
-        WALKER_GAIT_RESET_TO_IDLE = 12
+        WALKER_GAIT_RESET_TO_IDLE = 12,
+        WALKER_GAIT_RUN = 13
+    };
+    enum {
+        WALKER_GAIT_WALK = 1
     };
     float vec[4];
 
@@ -208,7 +212,7 @@ void walker_update_gait(WalkMoby *m, WalkData *d, int flags, float speed, float 
             }
         }
         break;
-    case 1:
+    case WALKER_GAIT_WALK:
     case 2:
     case 3:
     case 4:
@@ -295,7 +299,7 @@ void walker_update_gait(WalkMoby *m, WalkData *d, int flags, float speed, float 
                     h = probe_ground_height(vec, 0, 0.5f);
                     d->fE4 = h;
                     switch (d->bB7) {
-                    case 1:
+                    case WALKER_GAIT_WALK:
                         if ((h - vec[2]) + d->anim[idx]->f04 * 0.5f * fast_sin(d->fB8) >
                             d->fE0 * 0.75f) {
                             if (flags & 1) {
@@ -738,7 +742,7 @@ void walker_update_gait(WalkMoby *m, WalkData *d, int flags, float speed, float 
         }
         break;
     }
-    case 13: {
+    case WALKER_GAIT_RUN: {
         float t = (d->anim[7]->f08 + d->anim[0]->f08) * 0.35f;
         if (m->b52 == d->anim[7]->id && !(d->bB6 & 0x30)) {
             if (speed < t && d->fC0 <= t) {
