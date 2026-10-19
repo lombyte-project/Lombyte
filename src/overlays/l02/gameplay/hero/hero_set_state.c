@@ -1882,6 +1882,8 @@ extern f32 frame_scale_gp __asm__("D_0015ED60") __attribute__((sda));
 void FUN_L02_00230988(void) {
     enum {
         HERO_STATE_MOVE_TO_TARGET = 101,
+        HERO_STATE_STOP_AT_TARGET = 102,
+        HERO_STATE_IDLE_AT_TARGET = 103,
         HERO_STATE_DEATH_FALL = 119
     };
     unsigned char *moby;
@@ -2476,12 +2478,12 @@ void FUN_L02_00230988(void) {
                     }
                     FUN_L00_00228c18();
                     break;
-                case 102:
+                case HERO_STATE_STOP_AT_TARGET:
                     if (hero.unkA98 & 2) {
                         hero_set_state(0x65, 1);
                     }
                     break;
-                case 103:
+                case HERO_STATE_IDLE_AT_TARGET:
                     if ((hero.unkA98 & 2) || hero.unk1650 != 0) {
                         hero_set_state(HERO_STATE_IDLE, 1);
                     }
