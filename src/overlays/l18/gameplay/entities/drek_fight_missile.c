@@ -925,6 +925,11 @@ void FUN_L18_002f2310(struct Moby *m) {
         LIFT_APPROACH_BASE_HEIGHT = 2,
         LIFT_APPROACH_ALTERNATE_HEIGHT = 3
     };
+    enum {
+        LIFT_DRAW_22_QUAD_MESH = 0,
+        LIFT_DRAW_25_QUAD_MESH = 1,
+        LIFT_DRAW_38_QUAD_MESH = 2
+    };
     char *d = (char *)m->pvars;
     int v;
     switch (m->state) {
@@ -978,17 +983,17 @@ void FUN_L18_002f2310(struct Moby *m) {
         break;
     }
     switch (*(int *)(d + 0x14)) {
-    case 1:
+    case LIFT_DRAW_25_QUAD_MESH:
         D_L18_00162308_gp = D_L18_00162308_gp + D_L18_0016230C * D_0015ED6C_2310;
         if (1.0f < D_L18_00162308_gp) {
             D_L18_00162308_gp -= 1.0f;
         }
         enqueue_2310(FUN_L18_002f2620, m);
         break;
-    case 2:
+    case LIFT_DRAW_38_QUAD_MESH:
         enqueue_2310(FUN_L18_002f27c8, m);
         break;
-    case 0:
+    case LIFT_DRAW_22_QUAD_MESH:
         enqueue_2310(FUN_L18_002f2970, m);
         break;
     }
