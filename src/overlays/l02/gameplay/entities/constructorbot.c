@@ -444,6 +444,10 @@ s32 D_L02_00162164 = 0x10019;
  * on a timer plus occasional single puffs (D_L02_00162088 / D_L02_00162048); state 2 alternates its puff life.
  * Each burst and puff block has its own locals: shared ones become long-lived pseudos and shift the allocation. */
 void FUN_L02_002ef020(struct Moby *moby) {
+    enum {
+        SMOKE_VENT_STATE_INITIALIZE = 0,
+        SMOKE_VENT_STATE_REMOVE = 3
+    };
     char *data = (char *)moby->pvars;
     Vec4 p;
     Vec4 vel;
@@ -473,7 +477,7 @@ void FUN_L02_002ef020(struct Moby *moby) {
     f32 rise2_puff;
 
     switch (moby->state) {
-    case 0:
+    case SMOKE_VENT_STATE_INITIALIZE:
         moby->state = data[0] + 1;
         build_rotation_matrix(&moby->rot_row0, &moby->rot);
         break;
@@ -570,7 +574,7 @@ void FUN_L02_002ef020(struct Moby *moby) {
         spawn_smoke_particle(&moby->pos, &vel, &acc, color_a2_puff, color_b2_puff, time_a2_puff, time_b2_puff,
                        truncate_time(scale_time((f32)D_L02_00162060 * (random_float(-D_L02_00162064, D_L02_00162064) + 1.0f))), -1);
         break;
-    case 3:
+    case SMOKE_VENT_STATE_REMOVE:
         mark_moby_for_removal(moby);
         break;
     }
