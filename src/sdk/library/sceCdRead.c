@@ -30,6 +30,11 @@ extern s32 sceSifCallRpc();
 extern void sceSifWriteBackDCache(void *ptr, s32 size);
 
 s32 sceCdRead(u32 sector, u32 count, void *buffer, struct sceCdRMode *mode) {
+    enum {
+        CD_READ_PATTERN_2048_BYTES_PER_SECTOR = 0,
+        CD_READ_PATTERN_2328_BYTES_PER_SECTOR = 1,
+        CD_READ_PATTERN_2340_BYTES_PER_SECTOR = 2
+    };
     struct CdReadCommand *command = &D_001313C0;
     s32 size;
 
@@ -48,13 +53,13 @@ s32 sceCdRead(u32 sector, u32 count, void *buffer, struct sceCdRMode *mode) {
     command->rpc_buffer = D_001323C0;
     command->status = (s32 *)D_00132480;
     switch (mode->datapattern) {
-    case 1:
+    case CD_READ_PATTERN_2328_BYTES_PER_SECTOR:
         size = count * 2328;
         break;
-    case 2:
+    case CD_READ_PATTERN_2340_BYTES_PER_SECTOR:
         size = count * 2340;
         break;
-    case 0:
+    case CD_READ_PATTERN_2048_BYTES_PER_SECTOR:
     default:
         size = count * 2048;
         break;
