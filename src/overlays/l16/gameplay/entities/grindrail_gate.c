@@ -816,19 +816,24 @@ extern char *D_L16_001B0930[];
 extern float FUN_001f9b48(void *, void *);
 
 void FUN_L16_002e4a58(struct Moby *moby) {
+    enum {
+        TAXI_DEPART_FROM_FIRST_STOP = 0,
+        TAXI_DEPART_FROM_SECOND_STOP = 1,
+        TAXI_DEPART_FROM_THIRD_STOP = 2
+    };
     char *d = (char *)moby->pvars;
     char *p;
     float inv, a, b, r;
     switch (*(short *)(d + 0xAC)) {
-    case 0:
+    case TAXI_DEPART_FROM_FIRST_STOP:
         *(char **)(d + 0xA4) = D_L16_001B0930[*(int *)(d + 0x90)];
         *(short *)(d + 0xAE) = 1;
         break;
-    case 1:
+    case TAXI_DEPART_FROM_SECOND_STOP:
         *(char **)(d + 0xA4) = D_L16_001B0930[*(int *)(d + 0x94)];
         *(short *)(d + 0xAE) = 0;
         break;
-    case 2:
+    case TAXI_DEPART_FROM_THIRD_STOP:
         *(char **)(d + 0xA4) = D_L16_001B0930[*(int *)(d + 0x9C)];
         *(short *)(d + 0xAE) = 1;
         break;
