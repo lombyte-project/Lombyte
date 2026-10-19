@@ -1172,7 +1172,9 @@ void FUN_L13_002c4428(Moby_2C56B0 *moby) {
     enum {
         FIGHTER_DESTRUCTION_SPAWN_CLASS_E0 = 0,
         FIGHTER_DESTRUCTION_SPAWN_CLASS_E4 = 1,
-        FIGHTER_DESTRUCTION_SKIP_SPAWN = 7
+        FIGHTER_DESTRUCTION_SPAWN_CLASS_E4_ALTERNATE = 2,
+        FIGHTER_DESTRUCTION_SKIP_SPAWN = 7,
+        FIGHTER_DESTRUCTION_SKIP_SPAWN_ALTERNATE = 8
     };
     Data_2C56B0 *d;
     Moby_2C56B0 *veh;
@@ -1371,7 +1373,7 @@ void FUN_L13_002c4428(Moby_2C56B0 *moby) {
             FUN_L13_002e1c50((char *)spawn_position, 0xE0);
             break;
         case FIGHTER_DESTRUCTION_SPAWN_CLASS_E4:
-        case 2:
+        case FIGHTER_DESTRUCTION_SPAWN_CLASS_E4_ALTERNATE:
         case 3:
         case 4:
         case 5:
@@ -1379,7 +1381,7 @@ void FUN_L13_002c4428(Moby_2C56B0 *moby) {
             FUN_L13_002e1c50((char *)spawn_position, 0xE4);
             break;
         case FIGHTER_DESTRUCTION_SKIP_SPAWN:
-        case 8:
+        case FIGHTER_DESTRUCTION_SKIP_SPAWN_ALTERNATE:
         case 9:
             break;
         }
