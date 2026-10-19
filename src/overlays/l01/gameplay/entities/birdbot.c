@@ -1544,6 +1544,7 @@ void peckbot_update(Mob577 *self) __asm__("FUN_L01_002efc60");
 void peckbot_update(Mob577 *self) {
     enum {
         PECKBOT_STATE_INITIALIZE = 0,
+        PECKBOT_STATE_GROUNDED_IDLE = 1,
         PECKBOT_STATE_CHASE_TARGET = 3,
         PECKBOT_STATE_ATTACK_TARGET = 4,
         PECKBOT_STATE_RETURN_HOME = 5,
@@ -1758,7 +1759,7 @@ void peckbot_update(Mob577 *self) {
             clear_u64_value(&v->vel);
         }
         break;
-    case 1:
+    case PECKBOT_STATE_GROUNDED_IDLE:
         fast_vec_sub(&v70, &target.pos, &self->pos);
         if (fast_vec_length(&v70) < v->range + 4.0f &&
             FUN_001f99c0(self->pos.f[2] - target.pos.f[2]) < 8.0f &&
