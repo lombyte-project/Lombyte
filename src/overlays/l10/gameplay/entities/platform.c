@@ -1962,7 +1962,8 @@ extern float D_L10_00161C98 __attribute__((sda));
 void FUN_L10_002da2c8(struct Moby *moby) {
     enum {
         MOBY_STATE_INITIALIZE = 0,
-        MOBY_STATE_ACTIVE_WITH_SOUND = 1
+        MOBY_STATE_ACTIVE_WITH_SOUND = 1,
+        MOBY_STATE_ACTIVE_WITHOUT_SOUND = 2
     };
     char *data = (char *)moby->pvars;
     union { unsigned char order[10]; float position2[4]; } scratch;
@@ -2023,7 +2024,7 @@ void FUN_L10_002da2c8(struct Moby *moby) {
             *(int *)(data + 0x30) = allocate_voice_for_target_entry(0, 4, (int)moby);
         break;
     }
-    case 2: {
+    case MOBY_STATE_ACTIVE_WITHOUT_SOUND: {
         int voice;
         float half_height, half_width, radius_squared;
         tick_countdown_32(data + 0x34);
