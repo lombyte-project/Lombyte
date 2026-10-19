@@ -97,17 +97,21 @@ extern void FUN_001fa070_cf(void *) __asm__("FUN_001f9fc8");
 void FUN_001f9fc8_cf(void *, void *) __asm__("FUN_001fa070");
 
 void FUN_L00_00289a90(void) {
+    enum {
+        SKY_SHELL_FAST_ROTATION = 1,
+        SKY_SHELL_SLOW_ROTATION = 2
+    };
     float v[4] __attribute__((aligned(16)));
     int i;
     *(short *)(D_L00_0016051C + 4) = 0;
     qzero(v);
     for (i = 0; i < *(short *)(D_L00_0016051C + 6); ++i) {
         switch (i) {
-        case 1:
+        case SKY_SHELL_FAST_ROTATION:
             v[2] = (float)*(unsigned short *)&D_L00_0015F5CC * 0.0000958738017f - 3.14159265f;
             FUN_001f9fc8_cf(D_L00_001BD7E0, v);
             break;
-        case 2:
+        case SKY_SHELL_SLOW_ROTATION:
             v[2] = (float)(D_L00_0015F5CC & 0x1FFFF) * 0.00004793690085f - 3.14159265f;
             FUN_001f9fc8_cf(D_L00_001BD7E0, v);
             break;
