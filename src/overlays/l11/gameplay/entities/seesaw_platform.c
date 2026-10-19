@@ -1349,6 +1349,9 @@ void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
 void FUN_L11_00310028(struct Moby *moby) {
     enum {
+        LINKED_MOBY_STATE_START_ANIMATION = 0,
+        LINKED_MOBY_STATE_WAIT_FOR_ANIMATION_FLAG = 1,
+        LINKED_MOBY_STATE_HANDLE_HITS = 2,
         LINKED_MOBY_STATE_FADE_OUT = 3,
         LINKED_MOBY_STATE_REMOVE = 4
     };
@@ -1361,19 +1364,19 @@ void FUN_L11_00310028(struct Moby *moby) {
         }
     }
     switch (moby->state) {
-    case 0:
+    case LINKED_MOBY_STATE_START_ANIMATION:
         if (moby->prev_seq != 1) {
             blend_moby_animation(moby, 1, 0, 0xF);
         }
         moby->state = 1;
         break;
-    case 1:
+    case LINKED_MOBY_STATE_WAIT_FOR_ANIMATION_FLAG:
         if (moby->anim_flags & 2) {
             moby->hit_slot = 0xFF;
             moby->state = 2;
         }
         break;
-    case 2:
+    case LINKED_MOBY_STATE_HANDLE_HITS:
         FUN_L11_0030fe50(moby, data, u);
         if ((moby->anim_flags & 2) && moby->prev_seq != 1) {
             blend_moby_animation(moby, 1, 0, 0xA);
