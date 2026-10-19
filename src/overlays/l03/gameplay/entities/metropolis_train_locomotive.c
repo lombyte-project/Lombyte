@@ -2331,6 +2331,7 @@ void FUN_L03_002c6fd0(Moby2C8398 *m) {
         ENEMY_RESPAWN_AT_PATH_START = 15
     };
     enum {
+        ENEMY_ANIM_LOCOMOTION = 1,
         ENEMY_ANIM_HEADING_TURN = 9
     };
     Tgt2C8398 tgt;
@@ -2938,7 +2939,7 @@ void FUN_L03_002c6fd0(Moby2C8398 *m) {
     }
     case ENEMY_TURN_TO_HEADING:
         switch (m->anim) {
-        case 1:
+        case ENEMY_ANIM_LOCOMOTION:
             FUN_001f9c48_cf((char *)m, &d->f258, d->f28C, 0.09f, 0.27f, 0.15f);
             if (FUN_L03_002c9ca0_cf(m->rot[2], d->f28C) < 0.034906585f) {
                 d->b263 = FUN_L03_002c6d98_cf(0x3C);
