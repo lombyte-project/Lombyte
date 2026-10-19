@@ -214,6 +214,7 @@ void blarg_elite_commando_update(char *m) __asm__("FUN_L16_002d2cf0");
 void blarg_elite_commando_update(char *m) {
     enum {
         COMMANDO_STATE_INITIALIZE = 0,
+        COMMANDO_STATE_RETURN_TO_INITIAL_POSITION = 1,
         COMMANDO_STATE_IDLE = 2,
         COMMANDO_STATE_MOVE_TO_PATROL_NODE = 3,
         COMMANDO_STATE_PREPARE_ROCKET_FIRE = 4,
@@ -294,7 +295,7 @@ void blarg_elite_commando_update(char *m) {
                 fast_add_rotations(*(float *)(*(char **)(d + 0x2D0) + 0x48), *(float *)(d + 0x2CC));
         }
         break;
-    case 1:
+    case COMMANDO_STATE_RETURN_TO_INITIAL_POSITION:
         if (!fast_dec_timer_s16(d + 0x2DC)) {
             normalize_vector_xyz(temp, m + 0xC0, *(short *)(d + 0x2DC) * 0.1f);
             add_vector_xyz(temp, temp, m + 0x10);
