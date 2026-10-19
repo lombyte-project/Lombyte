@@ -1006,11 +1006,14 @@ extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 
 void gravity_flatten(float *dst, float *src) __asm__("FUN_L00_002338d0");
 void gravity_flatten(float *dst, float *src) {
+    enum {
+        GRAVITY_MODE_WORLD_Z = 0
+    };
     struct Hero *base = &hero;
     float n[4] __attribute__((aligned(16)));
 
     switch (base->unk20B3) {
-    case 0:
+    case GRAVITY_MODE_WORLD_Z:
         qcopy(dst, src);
         dst[2] = 0.0f;
         break;
