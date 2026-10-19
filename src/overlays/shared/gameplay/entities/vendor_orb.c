@@ -2033,7 +2033,8 @@ void FUN_L00_002e4fe8(char *m, float *out_focus_velocity) {
         CAM_ATTACH_PROJECT_HERO_FOCUS_VELOCITY = 4,
         CAM_ATTACH_BLEND_BACK_FOCUS_VELOCITY = 7,
         CAM_ATTACH_HOLD_FOCUS_VELOCITY = 8,
-        CAM_ATTACH_BLEND_PROJECTED_HERO_FOCUS_VELOCITY = 9
+        CAM_ATTACH_BLEND_PROJECTED_HERO_FOCUS_VELOCITY = 9,
+        CAM_ATTACH_CONTINUE_BLEND_PROJECTED_HERO_FOCUS_VELOCITY = 10
     };
     float cam[4];
     float tmp[4];
@@ -2157,7 +2158,7 @@ void FUN_L00_002e4fe8(char *m, float *out_focus_velocity) {
         FUN_001f9a28(e, cam, tmp);
         break;
     case CAM_ATTACH_BLEND_PROJECTED_HERO_FOCUS_VELOCITY:
-    case 10:
+    case CAM_ATTACH_CONTINUE_BLEND_PROJECTED_HERO_FOCUS_VELOCITY:
         x = fast_vec_dot(cam, g + 0x30);
         FUN_001f9a68_c2(out_focus_velocity, g + 0x30, x);
         FUN_001f9a28(e, cam, out_focus_velocity);
