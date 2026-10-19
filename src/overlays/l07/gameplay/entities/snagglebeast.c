@@ -645,12 +645,9 @@ void FUN_L07_00314058(char *moby) {
         }
     }
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L07_00314150.s", FUN_L07_00314150);
-#else
-/* Target sensing, fade timers, and state transitions. Adapted from
- * OpenRAC/rac1-decomp func_L07_00315528 and checked against US level-07
- * instructions; only navigation result 4 takes the stop transition. */
+
+/* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_00313D28.c: func_L07_00315528). */
+/* Target sensing, fade timers, and state transitions; only navigation result 4 takes the stop transition. */
 typedef struct {
     Vec4 pos;
     Vec4 rotation;
@@ -1167,17 +1164,24 @@ void snagglebeast_update(unsigned char *moby) {
             float spd;
             int near;
             int moving;
+            int four;
             fast_difference_between_rotations(*(float *)(moby + 0x48), rot);
             spd = fast_vec_length(data + 0x100);
             near = 0;
             if (!path_point_ready && target_distance < 20.0f) near = 1;
-            moving = frame_time * 0.01f < spd;
-            if (hit == 4) {
-                if (frame_time * 0.01f < spd) hit = 4;
+            /* Fakematch: four set on both paths hides the 4 from cse, and the no-op near == 2
+             * split is cross-jumped after reload, leaving retail's dead `li v0,2` before the test. */
+            if (!(frame_time * 0.01f < spd)) {
+                moving = 0;
+                four = 4;
             } else {
-                hit = 2;
+                moving = 1;
+                four = 4;
             }
-            if ((hit == 4) || !moving) {
+            if (hit != four && near == 2) {
+                if (hit == 4 || !moving) goto stop;
+            } else if (hit == 4 || !moving) {
+            stop:
                 data[0x1F7] = scale_ticks(0x5A);
                 if (moby[0x53] != (FUN_001160d8() & 1)) {
                     int r1 = FUN_001160d8() & 1;
@@ -1728,7 +1732,6 @@ void snagglebeast_update(unsigned char *moby) {
     if (moby[0x20] < 0xA) jet_animate((struct Moby *)moby, 2.5f);
     FUN_L07_00312150((char *)data);
 }
-#endif
 extern u64 get_effect_texture_l07(int) __asm__("FUN_001f44b8");
 extern void vu1_add_g_sregister_l07(int, u64) __asm__("FUN_00233980");
 extern void draw_geometry_quad_l07(void *, int, int) __asm__("FUN_001f7d30");
