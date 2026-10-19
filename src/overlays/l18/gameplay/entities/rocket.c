@@ -701,18 +701,22 @@ extern short D_L18_00161A6C __asm__("D_0015ED6C");
 extern float D_L18_6C_m __asm__("D_0015ED6C");
 
 void FUN_L18_002d5918(struct Moby *moby) {
+    enum {
+        STATE_INITIALIZE = 0,
+        STATE_BALLISTIC_FLIGHT = 1
+    };
     char *data = (char *)moby->pvars;
     float v[4];
     FUN_L18_002d5f20(moby);
     switch (moby->state) {
-    case 0:
+    case STATE_INITIALIZE:
         moby->collision = 0;
         moby->flags = (moby->flags | 0x41) & 0xEFFF;
         *(void **)(data + 0xD0) = &D_L18_00161988;
         *(float *)(data + 0x30) = 0.05f;
         moby->state = 5;
         break;
-    case 1:
+    case STATE_BALLISTIC_FLIGHT:
         add_vector_xyz(&moby->pos, &moby->pos, data + 0x180);
         *(float *)(data + 0x188) -= frame_time_sq * 10.0f;
         if (moby->pos.z < *(float *)(data + 0x178)) {
