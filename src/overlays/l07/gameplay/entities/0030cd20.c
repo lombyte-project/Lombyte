@@ -190,6 +190,7 @@ void FUN_L07_0031b3f0(struct Moby *moby) {
     enum {
         SWING_GATE_INITIALIZE = 0,
         SWING_GATE_WAIT_FOR_OPEN_CONDITION = 1,
+        SWING_GATE_HOLD_ROTATION = 2,
         SWING_GATE_SWINGING = 3,
         SWING_GATE_RETURN_TO_ZERO = 4
     };
@@ -214,7 +215,7 @@ void FUN_L07_0031b3f0(struct Moby *moby) {
         FUN_0022da68(0, 0, moby);
         moby->state = 3;
         break;
-    case 2:
+    case SWING_GATE_HOLD_ROTATION:
         break;
     case SWING_GATE_SWINGING:
         vars->vel = fast_add_rotations(vars->vel, fast_cos(moby->rot.y) * (vars->speed * frame_time));
