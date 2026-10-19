@@ -1033,14 +1033,15 @@ void FUN_L12_003081b0(struct Moby *m) {
         break;
     }
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L12_00308350.s", FUN_L12_00308350);
-#else
-#include "eetypes.h"
+/* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_00309730.c: func_L12_00309730). */
 
 typedef struct {
-    u128 vertices[4];
-    int color[4];
+    float x, y, z, w;
+} __attribute__((aligned(16))) VendorQuadCorner;
+
+typedef struct {
+    float corner[4][4];
+    unsigned int color[4];
     float uv[4][2];
     long tag;
     long texture;
@@ -1048,6 +1049,8 @@ typedef struct {
     long gs_state;
 } VendorDrawPacket;
 
+extern int D_L12_00161F90 __attribute__((sda));
+extern int D_L12_00161F94 __attribute__((sda));
 extern int D_L12_00161FBC __attribute__((sda));
 extern int D_L12_00161FC0 __attribute__((sda));
 extern int D_L12_00161FC4 __attribute__((sda));
@@ -1056,79 +1059,75 @@ extern int D_L12_00161FCC __attribute__((sda));
 extern int D_L12_00161FD0 __attribute__((sda));
 extern int D_L12_00161FD4 __attribute__((sda));
 extern int D_L12_00161FD8 __attribute__((sda));
-extern unsigned int D_L12_00161F90 __attribute__((sda));
-extern unsigned int D_L12_00161F94 __attribute__((sda));
 extern float D_L12_001FB6D0[4][2];
-extern u128 D_L12_001FB6F0[4];
-extern u128 D_L12_001FB730[4];
+extern VendorQuadCorner D_L12_001FB6F0[4] __attribute__((section(".data")));
+extern VendorQuadCorner D_L12_001FB730[4] __attribute__((section(".data")));
 extern void copy_moby_matrix(void *, void *) __asm__("FUN_001fa298");
 extern long get_effect_texture(int) __asm__("FUN_001f44b8");
 extern void draw_geometry_quad_l12(void *, void *, int) __asm__("FUN_001f7d30");
 
 void FUN_L12_00308350(struct Moby *m) {
-    VendorDrawPacket first, second;
-    float matrix[4][4] __attribute__((aligned(16)));
-    void *matrix_ptr;
-    int i, j;
-    int vertex;
-    long flags, second_flags;
+    VendorDrawPacket packets[2] __attribute__((aligned(16)));
+    float matrix[16] __attribute__((aligned(16)));
+    long texture;
+    int first_color, second_color;
+    int pass, row, vertex, corner;
+    float jitter;
 
-    matrix_ptr = matrix;
     copy_moby_matrix(matrix, &m->rot_row0);
-    qcopy(&matrix[3], &m->pos);
-    matrix[3][3] = 1.0f;
-    first.texture = second.texture = get_effect_texture(0xe);
-    first.texture_state = second.texture_state = 0xFF9000000260L;
-    first.gs_state = (long)D_L12_00161FBC | ((long)D_L12_00161FC0 << 2) | ((long)D_L12_00161FC4 << 4) | ((long)D_L12_00161FC8 << 6) | 0x8000000000L;
-    second.gs_state = (long)D_L12_00161FCC | ((long)D_L12_00161FD0 << 2) | ((long)D_L12_00161FD4 << 4) | ((long)D_L12_00161FD8 << 6) | 0x8000000000L;
-    second.tag = 0;
-    first.tag = 0;
-    first.color[0] = first.color[1] = first.color[2] = first.color[3] = D_L12_00161F90;
-    second.color[0] = second.color[1] = second.color[2] = second.color[3] = D_L12_00161F94;
-    vertex = 0;
-    do {
-        float x, y;
-        qcopy(&second.vertices[vertex], &D_L12_001FB6F0[vertex]);
-        qcopy(&first.vertices[vertex], &D_L12_001FB730[vertex]);
-        x = D_L12_001FB6D0[vertex][0];
-        y = D_L12_001FB6D0[vertex][1];
-        first.uv[vertex][0] = x;
-        ((float *)first.uv)[vertex * 2 + 1] = y;
-        second.uv[vertex][0] = x;
-        second.uv[vertex][1] = y;
-        vertex++;
-    } while (vertex < 4);
-    i = 0;
-    do {
-        float x_offset;
-        float jitter;
-        int row;
-        u128 *first_vertex;
-        u128 *second_vertex;
-        x_offset = random_float_between(-0.5f, 0.5f);
-        first_vertex = first.vertices;
-        second_vertex = second.vertices;
-        for (j = 0; j < 4; j++) {
-            ((float *)&first.vertices[j])[2] += 1.0f;
-            ((float *)&second_vertex[j])[2] += 1.0f;
-            first.uv[j][0] = D_L12_001FB6D0[j][0] + x_offset;
-            first.uv[j][1] = D_L12_001FB6D0[j][1];
+    qcopy(&matrix[12], &m->pos);
+    matrix[15] = 1.0f;
+    texture = get_effect_texture(0xE);
+    packets[0].texture = packets[1].texture = texture;
+    first_color = D_L12_00161F90;
+    second_color = D_L12_00161F94;
+    packets[0].texture_state = packets[1].texture_state = 0xFF9000000260L;
+    packets[0].gs_state = (long)D_L12_00161FBC | ((long)D_L12_00161FC0 << 2) | ((long)D_L12_00161FC4 << 4)
+                          | ((long)D_L12_00161FC8 << 6) | (0x8000L << 24);
+    packets[1].gs_state = (long)D_L12_00161FCC | ((long)D_L12_00161FD0 << 2) | ((long)D_L12_00161FD4 << 4)
+                          | ((long)D_L12_00161FD8 << 6) | (0x8000L << 24);
+    packets[0].color[0] = packets[0].color[1] = packets[0].color[2] = packets[0].color[3] = first_color;
+    packets[0].tag = packets[1].tag = 0;
+    packets[1].color[0] = packets[1].color[1] = packets[1].color[2] = packets[1].color[3] = second_color;
+    for (vertex = 0; vertex < 4; vertex++) {
+        float u, v;
+        qcopy(packets[1].corner[vertex], &D_L12_001FB6F0[vertex]);
+        qcopy(packets[0].corner[vertex], &D_L12_001FB730[vertex]);
+        u = D_L12_001FB6D0[vertex][0];
+        v = D_L12_001FB6D0[vertex][1];
+        packets[0].uv[vertex][0] = u;
+        packets[0].uv[vertex][1] = v;
+        packets[1].uv[vertex][0] = u;
+        packets[1].uv[vertex][1] = v;
+    }
+    for (pass = 0; pass < 5; pass++) {
+        float u_offset = random_float_between(-0.5f, 0.5f);
+        for (corner = 0; corner < 4; corner++) {
+            float (*first)[4] = packets[0].corner;
+            float (*second)[4] = packets[1].corner;
+            first[corner][2] = first[corner][2] + 1.0f;
+            second[corner][2] = second[corner][2] + 1.0f;
+            packets[0].uv[corner][0] = D_L12_001FB6D0[corner][0] + u_offset;
+            packets[0].uv[corner][1] = D_L12_001FB6D0[corner][1];
         }
         jitter = 0.0f;
-        for (row = -3; row < 3; row++) {
-            float x = (float)row + jitter;
-            ((float *)&first.vertices[0])[1] = x;
-            ((float *)&first.vertices[1])[1] = x;
-            jitter = row < 4 ? random_float_between(-0.2f, 0.2f) : 0.0f;
-            x = (float)(row + 1) + jitter;
-            ((float *)&first.vertices[2])[1] = x;
-            ((float *)&first.vertices[3])[1] = x;
-            draw_geometry_quad_l12(&first, matrix, 0);
-        }
-        i++;
-    } while (i < 5);
+        row = -3;
+        do {
+            int next_row = row + 1;
+            int jittered = row < 4;
+            float y = (float)row + jitter;
+            jitter = 0.0f;
+            packets[0].corner[0][1] = y;
+            packets[0].corner[1][1] = y;
+            if (jittered) jitter = random_float_between(-0.2f, 0.2f);
+            y = (float)next_row + jitter;
+            packets[0].corner[2][1] = y;
+            packets[0].corner[3][1] = y;
+            row = next_row;
+            draw_geometry_quad_l12(&packets[0], matrix, 0);
+        } while (row < 3);
+    }
 }
-#endif
 #include "sda.h"
 
 /* Vendor-counter moby update: once the shared block is ready, latch its data and copy two vectors. */

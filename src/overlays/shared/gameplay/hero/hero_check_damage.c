@@ -1015,97 +1015,134 @@ void FUN_L00_0020e698(void) {
         hero.unk20AA = 0;
     }
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0020e728.s", FUN_L00_0020e728);
-#else
+/* Ported from rac1-decomp (src/overlays/shared/help_0020CDF0.c: func_L00_0020EDC0). */
+
+typedef struct {
+    u8 pad0[0x18];
+    s32 f18;
+    u8 pad1C[0x8];
+    s32 f24;
+    s32 animation;         /* 0x28 */
+    s32 animation_mode_12; /* 0x2C: used while state.control_mode is 12 */
+    s32 f30;
+    u8 pad34[0x18];
+} ItemDef_e728;
+
+extern ItemDef_e728 item_defs_e728[] __asm__("D_L00_00179AC0");
 extern int get_ammo(s32) __asm__("FUN_L00_00233e98");
-extern s32 FUN_001f96f8_e728(s32) __asm__("FUN_001f96f8");
-extern void FUN_L00_0024f190(u8 *, u8 *);
-extern f32 FUN_00213ed8_e728(f32 *, f32, f32) __asm__("FUN_00213ed8");
-extern f32 FUN_002000e8_e728(f32, f32) __asm__("FUN_001fa580");
-extern f32 FUN_001ff8b0_e728(f32, f32) __asm__("FUN_001f9e90");
+extern int hero_slot_item_id_e728(int) __asm__("FUN_L00_0020d498");
+extern s32 scale_game_frames_e728(s32) __asm__("FUN_001f96f8");
+extern float approach_value(float *, float, float) __asm__("FUN_00213ed8");
+extern void FUN_L00_0024f190(void *, unsigned char *);
+extern f32 atan2_e728(f32, f32) __asm__("FUN_001f9e90");
 extern void vu_euler_rotation_basis(void *, void *) __asm__("FUN_001fa030");
-extern void FUN_001ff260_e728(void *) __asm__("FUN_001f99f8");
-extern void FUN_001ff6d0_e728(void *, void *, void *) __asm__("FUN_001f9cf8");
-extern f32 D_0015ED60_e728 __asm__("D_0015ED60");
+extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
+extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
+extern float D_0015ED60;
+extern Vec4 hero_basis_e728[3] __asm__("D_0013F990");
+
+#define HERO_ROTATION(h) (*(u128 *)((u8 *)(h) + 0x680))
 
 void FUN_L00_0020e728(void) {
-    u8 **slot;
-    int i;
-    u128 *basis;
-    struct Hero *hero_state;
-    f32 angle;
-    if (hero.unk20A8 && hero.unk20AA && get_ammo(-1) == 0)
-        FUN_L00_0020e698();
-    i = 0;
-    slot = hero.unkD08;
-    hero_state = (struct Hero *)((u8 *)slot - 0xD08);
-    do {
-        if (*slot != 0) {
-            int id = FUN_L00_0020d498_c(0);
-            if (id == hero_state->unk2298) {
-                s64 anim;
-                ID_20e4c8 *definition = &D_L00_00179AC0_c[id];
-                anim = (s32)definition->f28;
-                if (hero_state->state.control_mode == 12)
-                    anim = (s32)definition->f2C;
-                if (anim != -1 && (*slot)[0x23] != anim) {
-                    hero_state->unk2294 = anim;
-                    FUN_L00_0024f3e0((u8 *)hero_state->moby, *slot, hero_state->unk2294, 0,
-                                      FUN_001f96f8_e728(8), 1);
-                }
+    struct Hero *g = &hero;
+    int k;
+
+    if (g->unk20A8 != 0 && g->unk20AA != 0) {
+        if (get_ammo(-1) == 0) {
+            FUN_L00_0020e698();
+        }
+    }
+
+    for (k = 0; k < 2; k++) {
+        struct Hero *l = &hero;
+        unsigned char **slot = l->unkD08 + k;
+        unsigned char **cur;
+        int id;
+        int animation;
+
+        if (*slot == 0) {
+            continue;
+        }
+        id = hero_slot_item_id_e728(0);
+        if (id == l->unk2298) {
+            animation = ((struct { ItemDef_e728 a[1]; } *)item_defs_e728)->a[id].animation;
+            if (l->state.control_mode == 12) {
+                animation = ((struct { ItemDef_e728 a[1]; } *)item_defs_e728)->a[id].animation_mode_12;
             }
-            FUN_L00_0024f190((u8 *)hero.moby, *slot);
-            if (hero.unkD14 != 0) {
-                if (hero.unkD14 == 2) {
-                    f32 scale = frame_scale * 0.25f;
-                    FUN_00213ed8_e728((f32 *)(*slot + 8), 0.0f, scale);
-                } else {
-                    f32 scale = frame_scale * 0.07f;
-                    FUN_00213ed8_e728((f32 *)(*slot + 8), 0.0f, scale);
-                }
-                if (*(f32 *)(*slot + 8) == 0.0f) {
-                    FUN_L00_0024f0e8((u8 *)hero.moby, slot);
-                    return;
-                }
-            } else {
-                FUN_00213ed8_e728((f32 *)(*slot + 8), 1.0f, D_0015ED60_e728 * 0.2f);
-                if (((*slot)[5] & 2) && hero.unk20AA == 0) {
-                    hero.unkD14 = 1;
-                    hero.unk20A8 = 0;
-                    *(s32 *)(*slot + 0x28) = 0;
-                    return;
-                }
+            if (animation != -1 && (*slot)[0x23] != animation) {
+                l->unk2294 = animation;
+                FUN_L00_0024f3e0((u8 *)l->moby, *slot, l->unk2294, 0, scale_game_frames_e728(8), 1);
             }
         }
-        i++;
-        slot++;
-    } while (i < 2);
-    if (hero.state.control_mode == 15) {
-        hero.unk684 = hero.unk5D8 != 0 ?
-            (*(u128 *)((u8 *)&hero + 0x680) = hero.motion.rot.q,
-             (angle = FUN_001ff8b0_e728(*(f32 *)((u8 *)hero.unk5D8 + 0x10) - hero.motion.pos.f[0],
-                                *(f32 *)((u8 *)hero.unk5D8 + 0x14) - hero.motion.pos.f[1]),
-              hero.unk688 = angle, -hero.unk580)) :
-            (*(u128 *)((u8 *)&hero + 0x680) = hero.motion.rot.q,
-             (angle = FUN_002000e8_e728(hero.unk57C, hero.unk5D0),
-              hero.unk688 = angle, -hero.unk580));
-        vu_euler_rotation_basis(hero.basis, (u8 *)&hero + 0x680);
-        FUN_001ff260_e728((u8 *)&hero + 0x670);
-        hero.unk670 = 1.0f;
-        FUN_001ff6d0_e728((u8 *)&hero + 0x670, (u8 *)&hero + 0x670, hero.basis);
+
+        cur = l->unkD08 + k;
+        {
+        struct Hero *h = &hero;
+        FUN_L00_0024f190(h->moby, *cur);
+
+        if (h->unkD14 != 0) {
+            if (h->unkD14 == 2) {
+                approach_value((float *)(*cur + 8), 0.0f, D_0015ED60 * 0.25f);
+            } else {
+                approach_value((float *)(*cur + 8), 0.0f, D_0015ED60 * 0.07f);
+            }
+            g = &hero;
+            if (*(float *)(*slot + 8) != 0.0f) {
+                continue;
+            }
+            FUN_L00_0024f0e8((u8 *)g->moby, slot);
+            return;
+        } else {
+            approach_value((float *)(*cur + 8), 1.0f, D_0015ED60 * 0.2f);
+            if (((*cur)[5] & 2) == 0) {
+                continue;
+            }
+            if (h->unk20AA == 0) {
+                h->unkD14 = 1;
+                *(int *)(*cur + 0x28) = 0;
+                h->unk20A8 = 0;
+                return;
+            }
+        }
+        }
+    }
+
+    {
+    struct Hero *h = &hero;
+    if (h->state.control_mode == 15) {
+        char *target = (char *)h->unk5D8;
+
+        if (target != 0) {
+            HERO_ROTATION(h) = h->motion.rot.q;
+            h->unk688 = atan2_e728(*(float *)(target + 0x10) - h->motion.pos.f[0],
+                                   *(float *)(target + 0x14) - h->motion.pos.f[1]);
+            h->unk684 = -h->unk580;
+        } else {
+            HERO_ROTATION(h) = h->motion.rot.q;
+            h->unk688 = fast_add_rotations(h->unk57C, h->unk5D0);
+            h->unk684 = -h->unk580;
+        }
+        {
+            char *basis = (char *)hero_basis_e728;
+            vu_euler_rotation_basis(basis, basis + 0x40);
+            clear_u64_value(basis + 0x30);
+            *(float *)(basis + 0x30) = 1.0f;
+            transform_vector_by_basis(basis + 0x30, basis + 0x30, basis);
+        }
     } else {
-        basis = (u128 *)(hero.basis);
-        basis[0] = *(u128 *)((u8 *)hero.moby + 0xc0);
-        basis[1] = *(u128 *)((u8 *)hero.moby + 0xd0);
-        basis[2] = *(u128 *)((u8 *)hero.moby + 0xe0);
-        FUN_001ff260_e728((u8 *)&hero + 0x670);
-        hero.unk670 = 1.0f;
-        FUN_001ff6d0_e728((u8 *)&hero + 0x670, (u8 *)&hero + 0x670, basis);
-        *(u128 *)((u8 *)&hero + 0x680) = hero.motion.rot.q;
+        char *moby = (char *)h->moby;
+        u128 *basis = (u128 *)h->basis;
+        float *offset = &h->unk670;
+        basis[0] = *(u128 *)(moby + 0xC0);
+        basis[1] = *(u128 *)(moby + 0xD0);
+        basis[2] = *(u128 *)(moby + 0xE0);
+        clear_u64_value(offset);
+        h->unk670 = 1.0f;
+        transform_vector_by_basis(offset, offset, basis);
+        HERO_ROTATION(h) = h->motion.rot.q;
+    }
     }
 }
-#endif
 #include "types.h"
 #include "rnc/gameplay/hero.h"
 #include "rnc/gameplay/entities/moby.h"
