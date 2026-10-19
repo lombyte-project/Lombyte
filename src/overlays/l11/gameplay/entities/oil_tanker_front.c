@@ -2025,6 +2025,10 @@ extern void subtract_vector_xyz(void *, void *, void *);
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void FUN_L11_0031f150(struct Moby *moby) {
+    enum {
+        EFFECT_INITIALIZE = 0,
+        EFFECT_UPDATE_AND_QUEUE_DRAW = 1
+    };
     int i;
     float v[4];
     float w[4];
@@ -2032,7 +2036,7 @@ void FUN_L11_0031f150(struct Moby *moby) {
     char *s;
 
     switch (moby->state) {
-    case 0:
+    case EFFECT_INITIALIZE:
         if (D_L11_001625FC == 0) {
             FUN_L08_002f0f68(D_L11_00215220, 17, D_L11_00207900, 0.7f, 1.0f, 0.9f, 0.5f, 1);
             FUN_L08_002f0f68(D_L11_00217740, 5, D_L11_00215268, 0.5f, 0.5f, 0.5f, 1.0f, 1);
@@ -2055,7 +2059,7 @@ void FUN_L11_0031f150(struct Moby *moby) {
             D_L11_0016262C[i].f = i * 0.4f;
         }
         break;
-    case 1:
+    case EFFECT_UPDATE_AND_QUEUE_DRAW:
         s = D_L11_00167680;
         if (*(float *)(s + 0x148) < 170.0f)
             return;
