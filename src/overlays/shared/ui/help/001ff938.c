@@ -575,8 +575,11 @@ skip:
 extern int hero_set_state(int, int) __asm__("FUN_L15_00216c38");
 
 void FUN_L15_0021ab60(void) {
+    enum {
+        HERO_VEHICLE_MODE_DEFAULT = 0
+    };
     switch (((unsigned char *)&D_0013E533)[0x2EC1]) {
-    case 0:
+    case HERO_VEHICLE_MODE_DEFAULT:
         hero_set_state(HERO_STATE_IDLE, 1);
         break;
     case 2:
