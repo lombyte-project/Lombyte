@@ -1276,8 +1276,11 @@ void blarg_paratrooper_update(char *moby) {
     enum {
         PARATROOPER_STATE_INITIALIZE = 0,
         PARATROOPER_STATE_PATROL_PATH = 1,
+        PARATROOPER_STATE_WAIT_FACING_TARGET = 3,
         PARATROOPER_STATE_HOP_BETWEEN_WAYPOINTS = 4,
-        PARATROOPER_STATE_MELEE_ATTACK = 7
+        PARATROOPER_STATE_FIRE_PROJECTILES = 5,
+        PARATROOPER_STATE_MELEE_ATTACK = 7,
+        PARATROOPER_STATE_DEATH_EFFECTS_AND_REMOVE = 11
     };
     Paratrooper302618 *data = (Paratrooper302618 *)(*(char * *)((char *)(moby)+0x78));
     char *path;
@@ -1373,7 +1376,7 @@ void blarg_paratrooper_update(char *moby) {
         }
         break;
     }
-    case 3: {
+    case PARATROOPER_STATE_WAIT_FACING_TARGET: {
         float *rotation=(float *)(moby+0x48);
         float heading;
         float frame;
@@ -1448,7 +1451,7 @@ void blarg_paratrooper_update(char *moby) {
         }
         break;
     }
-    case 5:
+    case PARATROOPER_STATE_FIRE_PROJECTILES:
         if(fast_distance302618(moby+0x10,target+0x10)<melee302618) {
             (*(unsigned char *)((char *)(moby)+0x20))=7; data->f1EC=0;
             if((*(unsigned char *)((char *)(moby)+0x53))==13) break;
@@ -1547,7 +1550,7 @@ delete_moby:
             }
         }
         break;
-    case 11:
+    case PARATROOPER_STATE_DEATH_EFFECTS_AND_REMOVE:
         if(dying302618(moby,(char *)data+0x70)&0x160) {
             float *color;
             char *rotation;
