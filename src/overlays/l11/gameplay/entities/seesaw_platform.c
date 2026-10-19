@@ -3210,6 +3210,7 @@ void puffoid_update(struct Moby *moby) {
         PUFFOID_STATE_FOLLOW_PATH = 19
     };
     enum {
+        PUFFOID_PATH_ANIM_TRAVEL = 4,
         PUFFOID_PATH_ANIM_ENTER_SPRAY_ATTACK = 5,
         PUFFOID_PATH_ANIM_SPRAY_ATTACK = 6,
         PUFFOID_PATH_ANIM_EXIT_SPRAY_ATTACK = 7
@@ -3611,7 +3612,7 @@ void puffoid_update(struct Moby *moby) {
         if (moby->anim_time == 0.0f) {
             dist = vector_distance_4318(&moby->pos, D_0013F3D0_4318);
             switch (moby->prev_seq) {
-            case 4:
+            case PUFFOID_PATH_ANIM_TRAVEL:
                 if (dist < 6.0f) {
                     set_anim_4318(moby, 5, 0, frames_4318(10));
                 }
