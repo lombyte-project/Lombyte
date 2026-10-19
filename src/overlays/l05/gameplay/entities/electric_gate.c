@@ -164,100 +164,71 @@ extern float D_L05_0020B740[4][2];
 extern Vec4 D_L05_0020B760[4];
 extern Vec4 D_L05_0020B7A0[4];
 extern short *D_L05_001ABCC0[];
+extern int frame_counter_de90 __asm__("D_L05_0015F5CC");
+extern char *moby_base_de90 __asm__("D_L05_0015FFD8");
 void FUN_L05_0030de90(char *moby) {
     struct GeometryQuad quads[2][5];
-    float matrix[4][4] __attribute__((aligned(16)));
+    char matrix[0x40];
+    u64 texture;
+    int i, j, k, n, next_i, next_j, outer_color, inner_color, offset;
     float angle, blend;
-    int color0, color1;
-    int i, j, k;
-    int height;
-    short *list;
-    int offset;
-    char *entry;
-    struct GeometryQuad *a, *b, *end;
-    float *u, *v;
-    u32 *colors;
-    angle = (convert_integer_to_float(D_L05_0015F5CC_e[2] & 63) / 63.0f) * 6.28318f;
-    u = &quads[0][0].texture_coordinates[0][0];
-    v = &quads[0][0].texture_coordinates[0][1];
-    colors = quads[0][0].colors;
+    unsigned short *list;
+    unsigned short *next;
+    short id;
+
+    angle = convert_integer_to_float(frame_counter_de90 & 0x3F) / 63.0f * 6.28318f;
     i = 0;
     do {
-        height = i + 1;
+        next_i = i + 1;
         blend = (angle_sin(angle) + 1.0f) * 0.5f;
-        color0 = fast_tween_color(D_L05_00161D3C, D_L05_00161D40, blend);
-        color1 = fast_tween_color(D_L05_00161D44, D_L05_00161D48, blend);
+        outer_color = fast_tween_color(D_L05_00161D3C, D_L05_00161D40, blend);
+        inner_color = fast_tween_color(D_L05_00161D44, D_L05_00161D48, blend);
         angle = fast_add_rotations(angle, 1.2566371f);
         j = 0;
         do {
-            u64 texture = get_effect_texture(D_L05_00161D98);
-            /* Each 0x90-byte record spans 18 flag words or 36 float words. */
-            int flags = (int)quads;
-            *(u64 *)(flags + i * 144 + j * 720 + 136) = (s64)D_L05_00161D70 | ((s64)D_L05_00161D74 << 2) |
-                (((s64)D_L05_00161D78 << 4) | ((s64)D_L05_00161D7C << 6)) | 0x8000000000ULL;
-            *(u64 *)(flags + i * 144 + j * 720 + 120) = texture;
-            *(u64 *)(flags + i * 144 + j * 720 + 128) = 0xff9000000260ULL;
-            *(u64 *)(flags + i * 144 + j * 720 + 112) = 0;
-            {
-                Vec4 *positions0 = (Vec4 *)((float *)quads + i * 0x24);
-                Vec4 *positions = (Vec4 *)((float *)quads + i * 36 + j * 180);
-                Vec4 *source0 = D_L05_0020B7A0;
-                Vec4 *source = D_L05_0020B760;
-                u32 *colors0 = colors + i * 0x24;
-                u32 *color = colors + i * 36 + j * 180;
-                float *uv = D_L05_0020B740[0];
-                float *uv0 = (float *)((char *)u + j * 0x2d0 + i * 0x90);
-                float *uv1 = (float *)((char *)v + j * 0x2d0 + i * 0x90);
-                k = 3;
-                do {
-                    float x = uv[0];
-                    float y = uv[1];
-                    *uv0 = x;
-                    *uv1 = y;
-                    if (j == 0) {
-                        *colors0 = color1;
-                        qcopy(positions0, source0);
-                        positions0->f[2] += (float)(short)height;
-                    } else {
-                        *color = color0;
-                        qcopy(positions, source);
-                        positions->f[2] += (float)(short)height;
-                    }
-                    positions0++;
-                    source0++;
-                    colors0++;
-                    positions++;
-                    source++;
-                    color++;
-                    uv0 += 2;
-                    uv1 += 2;
-                    k--;
-                    uv += 2;
-                } while (k >= 0);
+            texture = get_effect_texture(D_L05_00161D98);
+            next_j = j + 1;
+            quads[j][i].primitive = (s64)D_L05_00161D70 | ((s64)D_L05_00161D74 << 2) | ((s64)D_L05_00161D78 << 4)
+                                    | ((s64)D_L05_00161D7C << 6) | 0x8000000000LL;
+            quads[j][i].texture = texture;
+            quads[j][i].texture_state = 0xFF9000000260LL;
+            quads[j][i].reserved.value = 0;
+            for (n = 0; n < 4; n++) {
+                quads[j][i].texture_coordinates[n][0] = D_L05_0020B740[n][0];
+                quads[j][i].texture_coordinates[n][1] = D_L05_0020B740[n][1];
+                if (j != 0) {
+                    quads[j][i].colors[n] = outer_color;
+                    qcopy(&quads[j][i].positions[n], &D_L05_0020B760[n]);
+                    quads[j][i].positions[n].f[2] += (float)(i + 1);
+                } else {
+                    quads[0][i].colors[n] = inner_color;
+                    qcopy(&quads[0][i].positions[n], &D_L05_0020B7A0[n]);
+                    quads[0][i].positions[n].f[2] += (float)(i + 1);
+                }
             }
-            j++;
+            j = next_j;
         } while (j < 2);
-        i++;
+        i = next_i;
     } while (i < 5);
-    list = D_L05_001ABCC0[(unsigned char)moby[0x21]];
+
+    list = (unsigned short *)D_L05_001ABCC0[*(unsigned char *)(moby + 0x21)];
     do {
-        offset = (*list & 0x7fff) << 8;
-        entry = (char *)(offset + *(int *)&D_L05_0015FFD8_d);
-        if (*(short *)(entry + 0xa6) == 0x346 && (unsigned char)entry[0x20] == 1) {
-            copy_matrix_rotation(matrix, entry + 0xc0);
-            qcopy(matrix[3], (char *)(offset + *(int *)&D_L05_0015FFD8_d) + 0x10);
-            b = quads[1];
-            matrix[3][3] = 1.0f;
-            end = b;
-            a = quads[0];
-            do {
-                fast_draw_quad_real(a, matrix, 0);
-                fast_draw_quad_real(b, matrix, 0);
-                a++;
-                b++;
-            } while ((int)a < (int)end);
+        char *entry;
+        offset = (*list & 0x7FFF) << 8;
+        entry = (char *)(offset + (int)moby_base_de90);
+        next = list + 1;
+        if (*(short *)(entry + 0xA6) == 0x346 && *(unsigned char *)(entry + 0x20) == 1) {
+            copy_matrix_rotation(matrix, entry + 0xC0);
+            qcopy(matrix + 0x30, (char *)(offset + (int)moby_base_de90) + 0x10);
+            *(float *)(matrix + 0x3C) = 1.0f;
+            for (k = 0; k < 5; k++) {
+                fast_draw_quad_real(&quads[0][k], matrix, 0);
+                fast_draw_quad_real(&quads[1][k], matrix, 0);
+            }
         }
-    } while (*list++ >= 0);
+        id = *(short *)list;
+        list = next;
+    } while (id >= 0);
 }
 #endif
 

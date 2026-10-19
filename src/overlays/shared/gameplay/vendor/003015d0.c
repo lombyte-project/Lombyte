@@ -386,32 +386,43 @@ void FUN_L14_00301fa8(char *m) {
     float offset[4] __attribute__((aligned(16)));
     float view[4] __attribute__((aligned(16)));
     float tangent[4] __attribute__((aligned(16)));
-    int i, branch, node;
+    u64 texture;
+    u64 gs_state;
+    int branch, node, corner;
     int start_point;
+    int k;
 
     euler_rotation_matrix(world, &D_L14_001600EC[beam->frame].pad40[0x30]);
     transpose_rotation_matrix(inverse, world);
     qcopy_nc(&world[12], &D_L14_001600EC[beam->frame].origin);
     subtract_vector_xyz(camera, D_L14_001674C0, &D_L14_001600EC[beam->frame].origin);
     transform_vector_xyz(camera, camera, inverse);
-
-    {
-        u64 texture = get_effect_texture(D_L14_001620DC);
-        u64 gs_state = (u64)D_L14_001620E0 | (u64)D_L14_001620E4 << 2 |
-            (u64)D_L14_001620E8 << 4 | (u64)D_L14_001620EC << 6 | 0x8000000000ULL;
-        packet[0].texture_state = packet[1].texture_state = packet[2].texture_state = 0xff9000000260ULL;
-        packet[0].texture = packet[1].texture = packet[2].texture = texture;
-        packet[0].tag = packet[1].tag = packet[2].tag = 0;
-        packet[0].gs_state = packet[1].gs_state = packet[2].gs_state = gs_state;
+    texture = get_effect_texture(D_L14_001620DC);
+    gs_state = (u64)D_L14_001620E0 | ((u64)D_L14_001620E4 << 2) | ((u64)D_L14_001620E8 << 4)
+               | ((u64)D_L14_001620EC << 6) | (0x8000ULL << 24);
+    packet[2].texture_state = 0xFF9000000260ULL;
+    packet[1].texture_state = 0xFF9000000260ULL;
+    packet[0].texture_state = 0xFF9000000260ULL;
+    packet[2].texture = texture;
+    packet[1].texture = texture;
+    packet[0].texture = texture;
+    packet[2].tag = 0;
+    packet[1].tag = 0;
+    packet[0].tag = 0;
+    packet[2].gs_state = gs_state;
+    packet[1].gs_state = gs_state;
+    packet[0].gs_state = gs_state;
+    for (k = 0; k < 4; k++) {
+        float v = D_L14_001E5FD0[k][1];
+        int color;
+        packet[2].uv[k][1] = v;
+        packet[1].uv[k][1] = v;
+        packet[0].uv[k][1] = v;
+        color = beam->color;
+        packet[2].colors[k] = color;
+        packet[1].colors[k] = color;
+        packet[0].colors[k] = color;
     }
-    {
-        int k;
-        for (k = 0; k < 4; k++) {
-            packet[0].uv[k][1] = packet[1].uv[k][1] = packet[2].uv[k][1] = D_L14_001E5FD0[k][1];
-            packet[0].colors[k] = packet[1].colors[k] = packet[2].colors[k] = beam->color;
-        }
-    }
-
     clear_u64_value(offset);
     {
         int point;
@@ -425,17 +436,18 @@ void FUN_L14_00301fa8(char *m) {
             } else {
                 clear_u64_value(offset);
             }
-            for (i = 0; i < 4; i++) {
-                if (i < 2) {
-                    qcopy(&packet[0].vertices[i], &beam->points[point]);
-                    if (i & 1) add_vector_xyz(&packet[0].vertices[i], &packet[0].vertices[i], prev_offset);
-                    else subtract_vector_xyz(&packet[0].vertices[i], &packet[0].vertices[i], prev_offset);
+            for (corner = 0; corner < 4; corner++) {
+                float *side;
+                if (corner < 2) {
+                    qcopy(&packet[0].vertices[corner], &beam->points[point]);
+                    side = prev_offset;
                 } else {
-                    qcopy(&packet[0].vertices[i], &beam->points[point + 1]);
-                    if (i & 1) add_vector_xyz(&packet[0].vertices[i], &packet[0].vertices[i], offset);
-                    else subtract_vector_xyz(&packet[0].vertices[i], &packet[0].vertices[i], offset);
+                    qcopy(&packet[0].vertices[corner], &beam->points[point + 1]);
+                    side = offset;
                 }
-                packet[0].uv[i][0] = D_L14_001E5FD0[i][0] + convert_integer_to_float(point % 4) * 0.25f;
+                if (corner & 1) add_vector_xyz(&packet[0].vertices[corner], &packet[0].vertices[corner], side);
+                else subtract_vector_xyz(&packet[0].vertices[corner], &packet[0].vertices[corner], side);
+                packet[0].uv[corner][0] = D_L14_001E5FD0[corner][0] + convert_integer_to_float(point - point / 4 * 4) * 0.25f;
             }
             draw_geometry_quad(&packet[0], world, 0);
         }
@@ -443,33 +455,33 @@ void FUN_L14_00301fa8(char *m) {
     for (branch = 0; branch < 4; branch++) {
         clear_u64_value(offset);
         start_point = beam->branch_start[branch];
-        if (start_point < 31) if (start_point > -1) {
-            for (node = 0; node < 3; node++) {
-                qcopy(prev_offset, offset);
-                if (node < 2) {
-                    subtract_vector_xyz(tangent, (char *)&beam->branches[node][0] + (branch << 4),
-                        (char *)&beam->branches[node + 2][0] + (branch << 4));
-                    subtract_vector_xyz(view, (char *)&beam->branches[node + 1][0] + (branch << 4), camera);
-                    cross_vectors_xyz(offset, view, tangent);
-                    normalize_vector_xyz(offset, offset, 0.1f);
-                } else {
-                    clear_u64_value(offset);
-                }
-                if (node == 0) qcopy(prev_offset, offset);
-                for (i = 0; i < 4; i++) {
-                    if (i < 2) {
-                        qcopy(&packet[0].vertices[i], (char *)&beam->branches[node][branch]);
-                        if (i & 1) add_vector_xyz(&packet[0].vertices[i], &packet[0].vertices[i], prev_offset);
-                        else subtract_vector_xyz(&packet[0].vertices[i], &packet[0].vertices[i], prev_offset);
-                    } else {
-                        qcopy(&packet[0].vertices[i], (char *)&beam->branches[node + 1][branch]);
-                        if (i & 1) add_vector_xyz(&packet[0].vertices[i], &packet[0].vertices[i], offset);
-                        else subtract_vector_xyz(&packet[0].vertices[i], &packet[0].vertices[i], offset);
-                    }
-                    packet[0].uv[i][0] = D_L14_001E5FD0[i][0] + convert_integer_to_float(node % 4) * 0.25f;
-                }
-                draw_geometry_quad(&packet[0], world, 0);
+        if (start_point >= 0x1F) continue;
+        if (start_point <= -1) continue;
+        for (node = 0; node < 3; node++) {
+            qcopy(prev_offset, offset);
+            if (node < 2) {
+                subtract_vector_xyz(tangent, &beam->branches[node][branch], &beam->branches[node + 2][branch]);
+                subtract_vector_xyz(view, &beam->branches[node + 1][branch], camera);
+                cross_vectors_xyz(offset, view, tangent);
+                normalize_vector_xyz(offset, offset, 0.1f);
+            } else {
+                clear_u64_value(offset);
             }
+            if (node == 0) qcopy(prev_offset, offset);
+            for (corner = 0; corner < 4; corner++) {
+                float *side;
+                if (corner < 2) {
+                    qcopy(&packet[0].vertices[corner], &beam->branches[node][branch]);
+                    side = prev_offset;
+                } else {
+                    qcopy(&packet[0].vertices[corner], &beam->branches[node + 1][branch]);
+                    side = offset;
+                }
+                if (corner & 1) add_vector_xyz(&packet[0].vertices[corner], &packet[0].vertices[corner], side);
+                else subtract_vector_xyz(&packet[0].vertices[corner], &packet[0].vertices[corner], side);
+                packet[0].uv[corner][0] = D_L14_001E5FD0[corner][0] + convert_integer_to_float(node - node / 4 * 4) * 0.25f;
+            }
+            draw_geometry_quad(&packet[0], world, 0);
         }
     }
 }
