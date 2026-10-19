@@ -635,12 +635,16 @@ extern void enqueue_e088(void *, void *) __asm__("FUN_001f4600");
 /* Tile moby: claims a D_L11_001DA880 row on spawn (row 0 also sets up the shared light block), then moves
    up or down once its switch fires and throws random sparks; row 0 flushes the visible rows each frame. */
 void FUN_L11_0030e088(struct Moby *m) {
+    enum {
+        WATER_TILE_STATE_INITIALIZE = 0,
+        WATER_TILE_STATE_FIND_NEIGHBORS = 1
+    };
     int *pv = (int *)m->pvars;
     int i;
     float f;
 
     switch (m->state) {
-    case 0:
+    case WATER_TILE_STATE_INITIALIZE:
         m->update_dist = 0xFF;
         pv[1] = D_L11_00161F64;
         D_L11_00161F64 = D_L11_00161F64 + 1;
@@ -694,7 +698,7 @@ void FUN_L11_0030e088(struct Moby *m) {
         pool_bind_tile(&D_L11_001DA880[pv[1]], D_L11_001DA740 + pv[1] * 16);
         m->state = 1;
         break;
-    case 1:
+    case WATER_TILE_STATE_FIND_NEIGHBORS:
         D_L11_00161F64 = 0;
         FUN_L11_0030e730(pv[1]);
         m->state = 2;
