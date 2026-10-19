@@ -1562,7 +1562,7 @@ void hero_update_movement(void) {
         }
         break;
     }
-    case 2:
+    case HERO_STATE_RUN:
     case 0x73: {
         s32 slide = 0;
         f32 k;
@@ -2189,7 +2189,7 @@ void hero_update_movement(void) {
         FUN_L00_00213e68(frame_time_sq * 25.0f);
         FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.unk120, frame_time_sq * 18.0f);
         break;
-    case 6:
+    case HERO_STATE_FALL:
     case 0x2D:
         if (hero.state.current == 0x2D) {
             f32 t = 0.0f;
