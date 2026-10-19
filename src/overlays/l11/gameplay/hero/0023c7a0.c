@@ -1721,7 +1721,7 @@ void FUN_L11_00246b70(void) {
         air_accel(frame_time_sq * 25.0f);
         FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.unk120, frame_time_sq * 18.0f);
         break;
-    case 6:
+    case HERO_STATE_FALL:
     case 0x2D:
         if (hero.state.current == 0x2D) {
             f32 t = 0.0f;
@@ -1845,7 +1845,7 @@ void FUN_L11_00246b70(void) {
         FUN_L00_0020b5b8();
         break;
     }
-    case 7:
+    case HERO_STATE_JUMP:
     case HERO_STATE_RUN_JUMP:
     case HERO_STATE_PACK_JUMP:
     case HERO_STATE_HIGH_JUMP:
