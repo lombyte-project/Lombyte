@@ -232,6 +232,7 @@ void veldin_robot_enemy_update(VendMoby *moby) {
         VELDIN_ROBOT_STATE_WAIT_TO_FOLLOW_PATH = 1,
         VELDIN_ROBOT_STATE_FOLLOW_PATH = 2,
         VELDIN_ROBOT_STATE_FACE_TARGET = 3,
+        VELDIN_ROBOT_STATE_PROCESS_COLLISION_PROBES = 5,
         VELDIN_ROBOT_STATE_DAMAGE_KNOCKBACK = 7,
         VELDIN_ROBOT_STATE_DEATH_KNOCKBACK = 8
     };
@@ -343,7 +344,7 @@ void veldin_robot_enemy_update(VendMoby *moby) {
             VEND_ANIM(moby, 6, vend_rand(10));
         }
         break;
-    case 5: {
+    case VELDIN_ROBOT_STATE_PROCESS_COLLISION_PROBES: {
         f32 ang;
 
         ang = fast_arc_tan(vars->homeX - moby->pos.f[0], vars->homeY - moby->pos.f[1]);
