@@ -30,7 +30,8 @@ extern int kprintf(const char *format, ...);
 
 void sceTtyHandler(s32 event, s32 param, TtyState *tty) {
     enum {
-        TTY_SEND_PENDING_BYTES = 3
+        TTY_SEND_PENDING_BYTES = 3,
+        TTY_CLEAR_SEND_BUSY = 4
     };
     Deci2Hdr *hdr;
     s32 n;
@@ -68,7 +69,7 @@ void sceTtyHandler(s32 event, s32 param, TtyState *tty) {
             tty->wlen -= n;
         }
         break;
-    case 4:
+    case TTY_CLEAR_SEND_BUSY:
         if (tty->wlen != 0) {
             kprintf(D_00152768, tty->wlen);
         }
