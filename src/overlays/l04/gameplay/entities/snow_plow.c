@@ -87,6 +87,10 @@ void snow_plow_update(struct Moby *moby) {
         SNOW_PLOW_WAIT_BEFORE_RETURN = 2,
         SNOW_PLOW_RETURN_TO_SAVED_TRANSFORM = 3
     };
+    enum {
+        SNOW_PLOW_CLASS_WITH_QUARTER_TURN_LINKED_MOBY = 0x1e0,
+        SNOW_PLOW_CLASS_WITH_ALIGNED_LINKED_MOBY = 0x1ee
+    };
     Vec4 old;
     Vec4 delta, *d;
     /* The sphere query is its position followed by the record; the hit cases pass one or the other. */
@@ -239,7 +243,7 @@ void snow_plow_update(struct Moby *moby) {
         struct Moby *other = (struct Moby *)(D_L04_0015FFD8 + (*(int *)(data + 0x17c) << 8));
         other->draw_dist = 0x7f;
         switch (moby->oclass) {
-        case 0x1e0:
+        case SNOW_PLOW_CLASS_WITH_QUARTER_TURN_LINKED_MOBY:
             delta.q = 0;
             delta.f[0] = 0.5f;
             delta.f[2] = -5.0f;
@@ -248,7 +252,7 @@ void snow_plow_update(struct Moby *moby) {
             qcopy(&other->rot, &moby->rot);
             other->rot.y = fast_add_rotations(other->rot.y, 1.5707964f);
             break;
-        case 0x1ee:
+        case SNOW_PLOW_CLASS_WITH_ALIGNED_LINKED_MOBY:
             delta.q = 0;
             delta.f[2] = -2.0f;
             transform_vector_by_basis(&delta, &delta, &moby->rot_row0);
