@@ -816,7 +816,8 @@ void woodcut_bot_update(WBMoby *m) {
         WOODCUT_BOT_DEATH_KNOCKBACK = 11
     };
     enum {
-        WOODCUT_BOT_REACTION_START_DEATH_KNOCKBACK = 1
+        WOODCUT_BOT_REACTION_START_DEATH_KNOCKBACK = 1,
+        WOODCUT_BOT_REACTION_HIT_RECOVERY_AND_REPOSITION = 3
     };
     int excited = 0;
     WBData *d = m->d;
@@ -916,7 +917,7 @@ void woodcut_bot_update(WBMoby *m) {
                 trooper_anim_update(m, d->fB0);
                 d->f3E4 = (2.0f / multiply_global_factor_ed64(15.0f)) * 2.0f;
                 break;
-            case 3:
+            case WOODCUT_BOT_REACTION_HIT_RECOVERY_AND_REPOSITION:
             case 6:
                 d->f3C8 = -0.5235988f;
                 if (m->anim != 4 || hd < 16.0f || hd > 27.0f) {
