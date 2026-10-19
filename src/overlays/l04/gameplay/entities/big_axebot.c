@@ -3035,6 +3035,11 @@ extern u8 voice_slots[] __asm__("D_0013E550");
 /* Door update: follows its lever's travel, pushes the lever back while opening, and runs the motor sounds. */
 void platform_booster_update(struct Moby *m) __asm__("FUN_L04_002c6bb8");
 void platform_booster_update(struct Moby *m) {
+    enum {
+        PLATFORM_BOOSTER_STATE_INITIALIZE = 0,
+        PLATFORM_BOOSTER_STATE_FOLLOW_LEVER = 1,
+        PLATFORM_BOOSTER_STATE_ADVANCE_ANIMATION = 2
+    };
     DoorVars *v = (DoorVars *)m->pvars;
     f32 prev;
     struct Moby *lever;
@@ -3047,13 +3052,13 @@ void platform_booster_update(struct Moby *m) {
         return;
     }
     switch (m->state) {
-    case 0:
+    case PLATFORM_BOOSTER_STATE_INITIALIZE:
         moby_play_anim(m, 1, 0, scale_game_frames(300));
         m->state = 1;
         m->anim_speed = 0;
         v->voice = -1;
         break;
-    case 1:
+    case PLATFORM_BOOSTER_STATE_FOLLOW_LEVER:
         if (v->lever == -1) {
             break;
         }
@@ -3098,7 +3103,7 @@ void platform_booster_update(struct Moby *m) {
             v->voice = -1;
         }
         break;
-    case 2: {
+    case PLATFORM_BOOSTER_STATE_ADVANCE_ANIMATION: {
         struct Moby *link;
         LeverVars *link_vars;
 
