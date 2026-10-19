@@ -3191,6 +3191,7 @@ void FUN_L03_002c95a8(Moby2C8398 *m) {
         ALTERNATE_ANIMATION_KNOCKBACK_RESPONSE = 4,
         ANIMATION_SIX_KNOCKBACK_RESPONSE = 5,
         TURN_AWAY_KNOCKBACK_RESPONSE = 6,
+        ANIMATION_FIVE_KNOCKBACK_RESPONSE = 7,
         NO_KNOCKBACK_HIT_RESPONSE = 12,
         ZERO_DAMAGE_NO_KNOCKBACK_RESPONSE = 13
     };
@@ -3259,7 +3260,7 @@ void FUN_L03_002c95a8(Moby2C8398 *m) {
             allocate_voice_for_target_entry(1, 0, (int)m);
             break;
         case KNOCKBACK_WITHOUT_FACING_CHANGE_RESPONSE:
-        case 7:
+        case ANIMATION_FIVE_KNOCKBACK_RESPONSE:
         case 8:
             d->b67 = 0x78;
             d->q.f10 = frame_time_sq * 80.0f;
