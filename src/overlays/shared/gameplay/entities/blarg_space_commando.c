@@ -455,7 +455,8 @@ float absolute_float(float input) __asm__("func_001F99C0");
 void FUN_L06_002feb40(char *m) {
     enum {
         FATAL_HIT_RESPONSE = 1,
-        FRAGMENTING_FATAL_HIT_RESPONSE = 2
+        FRAGMENTING_FATAL_HIT_RESPONSE = 2,
+        NONFATAL_KNOCKBACK_HIT_RESPONSE = 3
     };
     extern unsigned char D_0013D408[];
     char *d;
@@ -496,7 +497,7 @@ void FUN_L06_002feb40(char *m) {
         *(int *)(d + 0x80) = 0x1F4;
         *(float *)(d + 0x88) = 0.5f;
         switch (r) {
-        case 3:
+        case NONFATAL_KNOCKBACK_HIT_RESPONSE:
         case 4:
         case 5:
         case 6:
