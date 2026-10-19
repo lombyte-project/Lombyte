@@ -1671,6 +1671,13 @@ void mark_moby_for_removal_u(struct Obj *obj) __asm__("FUN_0020c828");
 
 void lab_door_update(unsigned char *m) __asm__("FUN_L10_002d90a8");
 void lab_door_update(unsigned char *m) {
+    enum {
+        LAB_DOOR_STATE_INITIALIZE = 0,
+        LAB_DOOR_STATE_DESCENDING = 1,
+        LAB_DOOR_STATE_AT_ORIGINAL_HEIGHT = 2,
+        LAB_DOOR_STATE_RISING = 3,
+        LAB_DOOR_STATE_AT_RAISED_HEIGHT = 4
+    };
     int *d = *(int **)(m + 0x78);
     OvlQuad v[2];
     int it;
@@ -1682,11 +1689,11 @@ void lab_door_update(unsigned char *m) {
         return;
     }
     switch (m[0x20]) {
-    case 0:
+    case LAB_DOOR_STATE_INITIALIZE:
         *(OvlQuad *)d = *(OvlQuad *)(m + 0x10);
         m[0x20] = 2;
         break;
-    case 1:
+    case LAB_DOOR_STATE_DESCENDING:
         flag = 0;
         {
             float f = *(float *)(m + 0x18) - 4.0f / multiply_global_factor_ed64(20.0f);
@@ -1721,9 +1728,9 @@ void lab_door_update(unsigned char *m) {
         if (hit)
             m[0x20] = 3;
         break;
-    case 2:
+    case LAB_DOOR_STATE_AT_ORIGINAL_HEIGHT:
         break;
-    case 3: {
+    case LAB_DOOR_STATE_RISING: {
         float f = 4.0f / multiply_global_factor_ed64(20.0f);
         float g = *(float *)(m + 0x18) + f;
         float h;
@@ -1737,7 +1744,7 @@ void lab_door_update(unsigned char *m) {
         }
         break;
     }
-    case 4:
+    case LAB_DOOR_STATE_AT_RAISED_HEIGHT:
         break;
     }
 }
