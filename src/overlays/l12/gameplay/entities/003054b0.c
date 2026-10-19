@@ -1221,6 +1221,10 @@ static inline unsigned char camera_target_index(int phase) {
 }
 
 void FUN_L12_003094a0(struct Moby *moby) {
+    enum {
+        INITIALIZE_UPDATE_DISTANCE = 0,
+        DISPATCH_PHASE_SELECTED_MOBY = 1
+    };
     L12VendorMobyList *list;
     L12VendorMobyList *target_list;
     int phase;
@@ -1231,11 +1235,11 @@ void FUN_L12_003094a0(struct Moby *moby) {
     /* Fakematch: the dead call guarded by never keeps retail's branch shape. */
     never = 0;
     switch (moby->state) {
-    case 0:
+    case INITIALIZE_UPDATE_DISTANCE:
         moby->update_dist = 0xFF;
         moby->state = 1;
         break;
-    case 1:
+    case DISPATCH_PHASE_SELECTED_MOBY:
         if (D_L12_0015F5C4 == 2) {
             list = &D_L12_0016CCE0;
             phase = list->phase;
