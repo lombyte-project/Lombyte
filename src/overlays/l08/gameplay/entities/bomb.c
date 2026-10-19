@@ -2249,6 +2249,9 @@ void FUN_L08_002dc9a8(struct Moby *moby) {
         PROJECTILE_STATE_FLYING = 1,
         PROJECTILE_STATE_DETONATE = 99
     };
+    enum {
+        DETONATION_EFFECT_NO_EMISSION = 1
+    };
     char *m = (char *)moby;
     char *data = *(char **)(m + 0x78);
     float original[4];
@@ -2356,7 +2359,7 @@ void FUN_L08_002dc9a8(struct Moby *moby) {
                 FUN_L08_002dc9a8_emit(record.pos, position, color, color2, radius,
                                       alpha, 3);
             } break;
-            case 1: break;
+            case DETONATION_EFFECT_NO_EMISSION: break;
             }
         }
         FUN_L08_002dc9a8_finish(m);
