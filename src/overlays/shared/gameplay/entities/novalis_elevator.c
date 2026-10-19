@@ -238,6 +238,11 @@ extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 extern s32 D_0014C190_257218[][64] __asm__("D_0014C190");
 void novalis_elevator_update(unsigned char *moby) __asm__("FUN_L01_002b9eb0");
 void novalis_elevator_update(unsigned char *moby) {
+    enum {
+        NOVALIS_ELEVATOR_WAIT_AT_PATH_END = 0,
+        NOVALIS_ELEVATOR_WAIT_AT_PATH_START = 1,
+        NOVALIS_ELEVATOR_TRAVERSE_PATH = 2
+    };
     char *data = *(char **)(moby + 0x78);
     char *path;
     float orig[4], delta[4], tmp[4];
@@ -302,7 +307,7 @@ void novalis_elevator_update(unsigned char *moby) {
         *(int *)(data + 0xC4) = -1;
     }
     switch (moby[0xBC]) {
-    case 0:
+    case NOVALIS_ELEVATOR_WAIT_AT_PATH_END:
         if (on) {
             float far;
             if ((*(short *)(data + 0xB8) != 0 && FUN_L01_00277fb8(moby)) ||
@@ -314,7 +319,7 @@ void novalis_elevator_update(unsigned char *moby) {
             }
         }
         break;
-    case 1:
+    case NOVALIS_ELEVATOR_WAIT_AT_PATH_START:
         if (on) {
             float near;
             if ((*(short *)(data + 0xB8) != 0 && FUN_L01_00277fb8(moby)) ||
@@ -326,7 +331,7 @@ void novalis_elevator_update(unsigned char *moby) {
             }
         }
         break;
-    case 2:
+    case NOVALIS_ELEVATOR_TRAVERSE_PATH:
         if (*(int *)(data + 0xC8) == 0 && FUN_L01_00277fb8(moby)) {
             struct Hero *g = &hero;
             g->unk1F2 = 4;
