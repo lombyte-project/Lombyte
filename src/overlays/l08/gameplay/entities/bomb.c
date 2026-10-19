@@ -2465,6 +2465,9 @@ void FUN_L08_002dd3c0(M46 *moby) {
         ROCKET_STATE_FLY_CONFIGURED_HEADING = 5,
         ROCKET_STATE_EXPLODE_AND_REMOVE = 6
     };
+    enum {
+        LINKED_CLASS_ZERO_LAUNCH_OFFSET = 5
+    };
     V46 target,delta,accel,effect,aux;
     D46 *data=moby->data;
     if (FUN_L00_0025a420(moby,0x210000,0) && moby->state!=4) {
@@ -2605,7 +2608,7 @@ void FUN_L08_002dd3c0(M46 *moby) {
                         case 2: *(Q46*)aux=(Q46)0; aux[0]=-2.0f; aux[1]=-1.152f; aux[2]=-1.772f; qcopy(effect,aux); break;
                         case 3: *(Q46*)aux=(Q46)0; aux[2]=0.975f; qcopy(effect,aux); break;
                         case 4: *(Q46*)aux=(Q46)0; aux[1]=-1.665f; aux[2]=0.642f; qcopy(effect,aux); break;
-                        case 5: *(Q46*)aux=(Q46)0; qcopy(effect,aux); break;
+                        case LINKED_CLASS_ZERO_LAUNCH_OFFSET: *(Q46*)aux=(Q46)0; qcopy(effect,aux); break;
                         }
                         if (other->distance>1500.0f) mark_moby_for_removal(other);
                         else {
