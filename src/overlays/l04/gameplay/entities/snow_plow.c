@@ -778,6 +778,12 @@ void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 
 void woodcut_bot_update(WBMoby *m) __asm__("FUN_L04_002d16b8");
 void woodcut_bot_update(WBMoby *m) {
+    enum {
+        WOODCUT_BOT_INITIALIZE = 0,
+        WOODCUT_BOT_MOVE_TOWARD_TARGET = 5,
+        WOODCUT_BOT_RETURN_TO_SAVED_POSITION = 6,
+        WOODCUT_BOT_DEATH_KNOCKBACK = 11
+    };
     int excited = 0;
     WBData *d = m->d;
     unsigned char *p120;
@@ -958,7 +964,7 @@ void woodcut_bot_update(WBMoby *m) {
     fast_dec_timer_s16(tm);
 
     switch (m->state) {
-    case 0:
+    case WOODCUT_BOT_INITIALIZE:
         d->hp = 2.0f;
         d->f24 = 2;
         d->f30 = 1.0f;
@@ -1112,7 +1118,7 @@ void woodcut_bot_update(WBMoby *m) {
             m->state = 1;
         }
         break;
-    case 5: {
+    case WOODCUT_BOT_MOVE_TOWARD_TARGET: {
         if (m->fBC & 8) {
             m->fBC &= ~8;
             FUN_L04_00295de8(m, d->f160);
@@ -1152,7 +1158,7 @@ void woodcut_bot_update(WBMoby *m) {
         }
         break;
     }
-    case 6:
+    case WOODCUT_BOT_RETURN_TO_SAVED_POSITION:
         if (m->fBC & 8) {
             m->fBC &= ~8;
             FUN_L04_00295de8(m, d->f160);
@@ -1324,7 +1330,7 @@ void woodcut_bot_update(WBMoby *m) {
                                  &d->f3D0, 0.03f, 0.3f, frame_time * 6.4577184f);
         }
         break;
-    case 11:
+    case WOODCUT_BOT_DEATH_KNOCKBACK:
         if ((mine_fall(m, d->fC0) & 0x40) || m->pos[2] < 1.0f) {
             FUN_L04_002d1608(m);
             FUN_L00_00263fd8(m, 0x6CB, pos, m->rot, 0, 0, 0.0f, D_L04_0015F580, D_L04_0015F580,
