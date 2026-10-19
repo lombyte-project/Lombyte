@@ -2770,11 +2770,16 @@ void mmr_q(struct Obj *obj) __asm__("FUN_0020c828");
 
 extern char D_0013F3D0[] __attribute__((section(".data")));
 void FUN_L16_002d5ef8(struct Moby *m) {
+    enum {
+        SCENE_STATE_INITIALIZE = 0,
+        SCENE_STATE_WAIT_FOR_TRIGGER = 1,
+        SCENE_STATE_COMPLETE = 4
+    };
     float position[4], rotation[4];
     L16SceneData_q *d = (L16SceneData_q *)m->pvars;
     void *helper;
     switch (m->state) {
-    case 0:
+    case SCENE_STATE_INITIALIZE:
         if (d == 0 || d->trigger == -1) {
             mmr_q(m);
             return;
@@ -2789,7 +2794,7 @@ void FUN_L16_002d5ef8(struct Moby *m) {
             FUN_L16_002d5ad0_q(d->helper, 1);
         }
         break;
-    case 1: {
+    case SCENE_STATE_WAIT_FOR_TRIGGER: {
         char *player = D_0013F3D0;
         if (!is_point_inside_clip_volume(player, d->trigger))
             break;
@@ -2836,7 +2841,7 @@ void FUN_L16_002d5ef8(struct Moby *m) {
         if (helper)
             FUN_0022da68_q(1, 0, helper);
         break;
-    case 4:
+    case SCENE_STATE_COMPLETE:
         break;
     case 5:
         if (is_point_inside_clip_volume(D_0013F3D0, d->trigger)) {
