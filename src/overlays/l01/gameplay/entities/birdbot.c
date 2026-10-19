@@ -1561,6 +1561,7 @@ void peckbot_update(Mob577 *self) {
         PECKBOT_STATE_NONFATAL_KNOCKBACK = 6,
         PECKBOT_STATE_WAIT_FOR_CLOSE_TARGET = 8,
         PECKBOT_STATE_FACE_HOME_AND_WAIT = 10,
+        PECKBOT_STATE_HOME_TRIGGERED_KNOCKBACK = 11,
         PECKBOT_STATE_RECOVER_FROM_BLOCKED_MOVEMENT = 12,
         PECKBOT_STATE_MOVE_FORWARD_NEAR_LEADER = 13,
         PECKBOT_STATE_AIRBORNE_IDLE = 14,
@@ -1827,7 +1828,7 @@ void peckbot_update(Mob577 *self) {
             self->state = 11;
         }
         break;
-    case 11:
+    case PECKBOT_STATE_HOME_TRIGGERED_KNOCKBACK:
         if (mine_fall(self, v->knock) & 1) {
             self->state = 3;
             if (random_integer_below(0x100) & 1) {
