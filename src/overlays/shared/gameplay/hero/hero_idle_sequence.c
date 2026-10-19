@@ -1626,7 +1626,8 @@ extern float D_0015ED6C_gp __asm__("D_0015ED6C") __attribute__((section(".sdata"
 // queues its glow sprites. c and g are shared by cases 17 and 20 (one pseudo each, retail's $s0/$s1).
 void FUN_L00_002080b0(void) {
     enum {
-        ITEM_RED_GREEN_GLOW = 13
+        ITEM_RED_GREEN_GLOW = 13,
+        ITEM_RED_BLUE_GLOW = 19
     };
     Vec4_2080b0 v;
     struct Moby *m;
@@ -1709,7 +1710,7 @@ void FUN_L00_002080b0(void) {
             queue_glow_sprite_2080b0(&v, col, 0.15f, 0.04f);
         }
         break;
-    case 19: {
+    case ITEM_RED_BLUE_GLOW: {
         float k, f;
         int r, g, b, col;
         k = D_0015ED6C_gp * 2.26892805f;
