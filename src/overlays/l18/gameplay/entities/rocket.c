@@ -2326,7 +2326,7 @@ void FUN_L18_002df608(struct Moby *moby) {
 extern float D_0015EE70 __asm__("D_0015ED70");
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 
-void FUN_L18_002dfaa0(struct Moby *moby, void *transition_start_position, void *transition_target_position, void *transition_start_rotation, void *transition_target_rotation, void *v4, int invulnerability_duration_frames, int transition_delay_frames,
+void FUN_L18_002dfaa0(struct Moby *moby, void *transition_start_position, void *transition_target_position, void *transition_start_rotation, void *transition_target_rotation, void *transition_setup_vector, int invulnerability_duration_frames, int transition_delay_frames,
                       int transition_mode) {
     char *data = (char *)moby->pvars;
     *(int *)(data + 0x60) = 0;
@@ -2335,7 +2335,7 @@ void FUN_L18_002dfaa0(struct Moby *moby, void *transition_start_position, void *
     qcopy(data + 0x10, transition_target_position);
     qcopy(data + 0x20, transition_start_rotation);
     qcopy(data + 0x30, transition_target_rotation);
-    qcopy(data + 0x40, v4);
+    qcopy(data + 0x40, transition_setup_vector);
     moby->state = 2;
     *(float *)(data + 0x68) = D_0015EE70 * 0.333f;
     *(float *)(data + 0x70) = 1.0f / (float)scale_game_frames(invulnerability_duration_frames);
