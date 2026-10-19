@@ -896,7 +896,8 @@ void the_plumber_update(L01WatchMoby *m) {
         PLUMBER_LEVEL_ONE_POST_DIALOGUE = 2,
         PLUMBER_REMOVE = 3,
         PLUMBER_LEVEL_EIGHT_DIALOGUE = 4,
-        PLUMBER_LEVEL_EIGHT_POST_DIALOGUE = 5
+        PLUMBER_LEVEL_EIGHT_POST_DIALOGUE = 5,
+        PLUMBER_LEVEL_EIGHT_DIALOGUE_FINISHED = 6
     };
     L01WatchScratch scratch;
     L01WatchData *d = (L01WatchData *)m->data;
@@ -978,7 +979,7 @@ void the_plumber_update(L01WatchMoby *m) {
             m->state = 4;
         }
         break;
-    case 6:
+    case PLUMBER_LEVEL_EIGHT_DIALOGUE_FINISHED:
         break;
     }
     rate = 0.02f;
