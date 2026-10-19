@@ -2036,7 +2036,8 @@ void FUN_L13_0030b628(struct Moby *moby) {
         WAIT_SCENE_BEFORE_FOLLOWUP = 8,
         START_FOLLOWUP_SCENE = 9,
         WAIT_FOLLOWUP_SCENE = 10,
-        WAIT_LINKED_MOBY_REMOVAL_BEFORE_SAVE = 11
+        WAIT_LINKED_MOBY_REMOVAL_BEFORE_SAVE = 11,
+        ENTER_LINKED_MOBY_CLEANUP_WAIT = 12
     };
     int *data = (int *)moby->pvars;
     switch (moby->state) {
@@ -2187,7 +2188,7 @@ after_state_4:
         moby->state = 12;
         break;
     }
-    case 12:
+    case ENTER_LINKED_MOBY_CLEANUP_WAIT:
         moby->state = 13;
         break;
     case 13:
