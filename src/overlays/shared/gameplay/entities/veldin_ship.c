@@ -538,6 +538,7 @@ extern void FUN_002ac910_2d09b8(void *, void *, void *, f32, s32, s32, s32, s32,
 void break_crate(M2d1428 *moby, s32 hit, s32 source) __asm__("FUN_L00_002d09b8");
 void break_crate(M2d1428 *moby, s32 hit, s32 source) {
     enum {
+        CRATE_VARIANT_OPTIONAL_QUARTER_TURN = 0,
         CRATE_VARIANT_MISSION_THRESHOLD_GATED = 1,
         CRATE_VARIANT_DAMAGE_FLAG_GATED = 2,
         CRATE_VARIANT_IMPACT_TRIGGERED = 5,
@@ -601,7 +602,7 @@ void break_crate(M2d1428 *moby, s32 hit, s32 source) {
             }
             kind = 0x162;
             break;
-        case 0: case CRATE_VARIANT_CONDITIONAL_RESPAWN_START: kind = 0x165; break;
+        case CRATE_VARIANT_OPTIONAL_QUARTER_TURN: case CRATE_VARIANT_CONDITIONAL_RESPAWN_START: kind = 0x165; break;
         case 4: kind = 0x168; break;
         case CRATE_VARIANT_IMPACT_TRIGGERED: kind = 0x16B; break;
         case 6: kind = 0x16E; break;
