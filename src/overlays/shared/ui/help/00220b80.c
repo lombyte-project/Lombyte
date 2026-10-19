@@ -387,6 +387,7 @@ s32 FUN_L02_0022ee00(void)
 {
     enum {
         HERO_ITEM_WRENCH = 8,
+        HERO_ITEM_BUFFERED_OR_TIMED_HOLD_ACTIVATE = 10,
         HERO_ITEM_BUFFERED_OR_HELD_ACTIVATE = 12,
         HERO_ITEM_HOLD_TO_FIRE = 15,
         HERO_ITEM_BUFFERED_ACTIVATE_WITH_VOICE = 18,
@@ -555,7 +556,7 @@ s32 FUN_L02_0022ee00(void)
         }
         break;
 
-    case 10:
+    case HERO_ITEM_BUFFERED_OR_TIMED_HOLD_ACTIVATE:
     case 17:
     case 20:
     case 24:
