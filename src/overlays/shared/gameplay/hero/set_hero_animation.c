@@ -942,11 +942,14 @@ void FUN_001f9d20_00233708(Vec4_00233708 *, Vec4_00233708 *,
 void FUN_001f9a10_00233708(Vec4_00233708 *, Vec4_00233708 *,
                            Vec4_00233708 *) __asm__("FUN_001f9a10");
 void FUN_L00_00233708(Vec4_00233708 *out, Vec4_00233708 *in, float d) {
+    enum {
+        GRAVITY_MODE_WORLD_Z = 0
+    };
     struct Hero *g = &hero;
     Mtx_00233708 m;
     Vec4_00233708 v;
     switch (g->unk20B3) {
-    case 0:
+    case GRAVITY_MODE_WORLD_Z:
         *(u128_00233708 *)out = *(u128_00233708 *)in;
         out->x += FUN_001f9dc8_00233708(*(float *)(((char *)g->moby) + 0x48)) * d;
         out->y += FUN_001f9de0_00233708(*(float *)(((char *)g->moby) + 0x48)) * d;
