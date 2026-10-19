@@ -686,6 +686,7 @@ void FUN_L09_002e27d8(Moby *moby) {
     enum {
         GROUND_ENEMY_STATE_INITIALIZE = 0,
         GROUND_ENEMY_STATE_IDLE = 1,
+        GROUND_ENEMY_STATE_ALERT_TURN = 2,
         GROUND_ENEMY_STATE_CHASE = 3,
         GROUND_ENEMY_STATE_MELEE_ATTACK = 4,
         GROUND_ENEMY_STATE_RETURN_HOME = 5,
@@ -827,7 +828,7 @@ void FUN_L09_002e27d8(Moby *moby) {
             moby->command = 0;
         }
         break;
-    case 2:
+    case GROUND_ENEMY_STATE_ALERT_TURN:
     case 8:
     case 10:
     case 11:
