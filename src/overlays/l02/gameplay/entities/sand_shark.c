@@ -318,6 +318,7 @@ void sand_shark_update(struct Moby *moby) {
         SAND_SHARK_WAIT_FOR_TARGET_IN_VOLUME = 3,
         SAND_SHARK_APPROACH_TARGET = 5,
         SAND_SHARK_RETURN_HOME = 7,
+        SAND_SHARK_KNOCKBACK_UNTIL_LANDING = 8,
         SAND_SHARK_WAIT_FOR_HERO_LAUNCH_TRIGGER = 12,
         SAND_SHARK_BALLISTIC_FLIGHT = 13,
         SAND_SHARK_APPROACH_TARGET_WITH_PATH_PROXIMITY_CHECK = 14,
@@ -751,7 +752,7 @@ void sand_shark_update(struct Moby *moby) {
             fast_vec_add(&moby->pos, &moby->pos, &v4);
         }
         break;
-    case 8:
+    case SAND_SHARK_KNOCKBACK_UNTIL_LANDING:
         if (FUN_L00_0025c698_e50(moby, vars->unk120) & 1) {
             moby->state = 0xB;
             if (moby->prev_seq != 4) {
