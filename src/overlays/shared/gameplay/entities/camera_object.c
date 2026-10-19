@@ -153,10 +153,14 @@ extern float D_L00_0016138C_gp __asm__("D_L00_0016138C") __attribute__((sda));
 int scale_game_frames(int) __asm__("FUN_001f96f8");
 float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 void FUN_L00_002a4cd8(unsigned char *p) {
+    enum {
+        INITIALIZE_FRAME_TIMING = 0,
+        UPDATE_WRAPPED_VALUE = 1
+    };
     float one;
     int r;
     switch (p[0x20]) {
-    case 0:
+    case INITIALIZE_FRAME_TIMING:
         D_L00_00161390 = 0;
         p[0x20] = 1;
         p[0x30] = 0xFF;
@@ -169,7 +173,7 @@ void FUN_L00_002a4cd8(unsigned char *p) {
         D_L00_00161388 = r;
         D_L00_0016138C_gp = one / (float)r;
         break;
-    case 1:
+    case UPDATE_WRAPPED_VALUE:
         D_L00_00161374_gp -= D_L00_00161378 * frame_scale;
         if (D_L00_00161374_gp <= -8.0f)
             D_L00_00161374_gp += 8.0f;
