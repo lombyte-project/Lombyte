@@ -1902,6 +1902,7 @@ void bombomatic_update(char *m) {
         HIT_REACTION_KNOCKBACK_RESPONSE = 4,
         HIT_REACTION_ALTERNATE_KNOCKBACK_RESPONSE = 5,
         HIT_REACTION_START_HIT_KNOCKBACK_RECOVERY = 6,
+        HIT_REACTION_LAUNCH_HIT_KNOCKBACK_RECOVERY = 7,
         HIT_REACTION_HIT_ANIMATION_RESPONSE = 9,
         HIT_REACTION_ALTERNATE_HIT_ANIMATION_RESPONSE = 10
     };
@@ -1955,7 +1956,7 @@ void bombomatic_update(char *m) {
         break;
     case HIT_REACTION_START_HIT_KNOCKBACK_RECOVERY:
         break;
-    case 7:
+    case HIT_REACTION_LAUNCH_HIT_KNOCKBACK_RECOVERY:
         break;
     case 8:
         break;
