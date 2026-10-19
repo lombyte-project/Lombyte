@@ -139,6 +139,9 @@ extern int func_L00_00235790_r(void) __asm__("FUN_L00_00234e00");
 extern int func_001F9908_r(int *) __asm__("FUN_001f9740");
 
 void FUN_L15_0021d040(void) {
+    enum {
+        HERO_STATE_FALL_TO_RESPAWN = 119
+    };
     unsigned char *moby;
     int prevSub;
     int prevState;
@@ -1332,7 +1335,7 @@ void FUN_L15_0021d040(void) {
                         hero_set_state(0x18, 1);
                     }
                     break;
-                case 119:
+                case HERO_STATE_FALL_TO_RESPAWN:
                     if ((current_level_index == 3 && 5.0f > hero.motion.pos.f[2]) ||
                         (current_level_index == 6 && 50.0f > hero.motion.pos.f[2]) ||
                         (current_level_index == 0x10 && (77.0f > hero.motion.pos.f[2] ||
