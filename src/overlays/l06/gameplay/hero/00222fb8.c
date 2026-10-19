@@ -393,6 +393,10 @@ extern CollisionHit HH __asm__("D_L06_001745C0") __attribute__((section(".data")
 
 extern struct Hero hero_lui __asm__("D_0013F350") __attribute__((section(".data")));
 void FUN_L06_00229650(void) {
+    enum {
+        GRAVITY_MODE_WORLD_DOWN = 0,
+        GRAVITY_MODE_OPPOSITE_GROUND_NORMAL = 1
+    };
     V collision_ray_end, ground_ray_start, ground_offset_or_angles, surface_probe_start, v40, hit_surface_angles, normalized_hit_normal;
     f32 f;
     s32 r;
@@ -500,10 +504,10 @@ tail:
 d1:
     FUN_001f99f8_c(((u8 *)&hero_lui + 0x290));
     switch (hero_lui.unk20B3) {
-    case 0:
+    case GRAVITY_MODE_WORLD_DOWN:
         hero_lui.gravity_dir.f[2] = -1.0f;
         break;
-    case 1:
+    case GRAVITY_MODE_OPPOSITE_GROUND_NORMAL:
         qcopy((u8 *)&hero_lui + 0x290, ((u8 *)&hero_lui + 0x290) - 0x20);
         FUN_001f9a68_c(((u8 *)&hero_lui + 0x290), ((u8 *)&hero_lui + 0x290), -1.0f);
         break;
