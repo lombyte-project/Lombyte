@@ -3388,13 +3388,19 @@ extern int func_001F9908_2EAD50(int *) __asm__("FUN_001f9740");
 void gate_2_update(GateMoby_2EAD50 *m) __asm__("FUN_L10_002e9990");
 void gate_2_update(GateMoby_2EAD50 *m)
 {
+    enum {
+        GATE_STATE_INITIALIZE = 0,
+        GATE_STATE_CLOSED = 1,
+        GATE_STATE_OPENING = 2,
+        GATE_STATE_OPEN = 3
+    };
     GateVars_2EAD50 *d = m->vars;
     float v[3];
     Vec_2EAD50 out;
     unsigned char st = m->state;
 
     switch (st) {
-    case 0:
+    case GATE_STATE_INITIALIZE:
         m->f30 = 0xFF;
         d->home = m->pos;
         if (D_001413F4[0] != 0 ||
@@ -3413,7 +3419,7 @@ void gate_2_update(GateMoby_2EAD50 *m)
             m->state = 1;
         }
         break;
-    case 1: {
+    case GATE_STATE_CLOSED: {
         unsigned char *bits;
         if (D_001413F4[0] != 0 ||
             D_L10_001BB9C0_2EAD50.collected[(short)m->uid] != 0 ||
@@ -3437,7 +3443,7 @@ void gate_2_update(GateMoby_2EAD50 *m)
         }
         break;
     }
-    case 2:
+    case GATE_STATE_OPENING:
         v[0] = func_001F9F90_2EAD50(fast_add_rotations(m->rotz, 3.14159265f)) * 1.5f *
                func_001FA888_2EAD50(func_001F9878_2EAD50(FUN_L04_001f1978(90.0f)) - d->timer) /
                FUN_L04_001f1978(90.0f);
@@ -3451,7 +3457,7 @@ void gate_2_update(GateMoby_2EAD50 *m)
             m->state = 3;
         }
         break;
-    case 3:
+    case GATE_STATE_OPEN:
         if (D_001413F4[0] == 0 &&
             D_L10_001BB9C0_2EAD50.collected[(short)m->uid] == 0 &&
             (((*(int *)(D_0014C190_c + ((((short)m->uid >> 5) * 4) + (current_level_index << 8))) >> (m->uid & 0x1F)) ^ 1) & 1)) {
