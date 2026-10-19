@@ -1891,6 +1891,7 @@ extern int func_001F9908_r(int *) __asm__("FUN_001f9740");
 extern f32 frame_scale_gp __asm__("D_0015ED60") __attribute__((sda));
 void FUN_L02_00230988(void) {
     enum {
+        HERO_STATE_DOUBLE_JUMP = 14,
         HERO_STATE_HELD_ITEM_ATTACK = 32,
         HERO_STATE_VEHICLE_IDLE = 83,
         HERO_STATE_VEHICLE_RUN = 84,
@@ -3120,7 +3121,7 @@ void FUN_L02_00230988(void) {
                 case HERO_STATE_HIGH_JUMP:
                 case 12:
                 case 13:
-                case 14:
+                case HERO_STATE_DOUBLE_JUMP:
                 case 15:
                 case HERO_STATE_PACK_LONG_JUMP:
                 case 17:
