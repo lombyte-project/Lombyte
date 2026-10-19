@@ -1163,6 +1163,7 @@ void robosquawker_update(RsMoby *m) {
         ROBOSQUAWKER_STATE_RETURN_HOME = 5,
         ROBOSQUAWKER_STATE_DAMAGE_KNOCKBACK = 6,
         ROBOSQUAWKER_STATE_BLOCKED_RETURN_HOME = 0xC,
+        ROBOSQUAWKER_STATE_WALK_FORWARD_AVOID_MOBYS = 0xD,
         ROBOSQUAWKER_STATE_FLIGHT_IDLE = 0xE,
         ROBOSQUAWKER_STATE_FLY_TO_RANDOM_POINT = 0xF,
         ROBOSQUAWKER_STATE_TAKEOFF = 0x10,
@@ -1896,7 +1897,7 @@ void robosquawker_update(RsMoby *m) {
         m->bBC = 0;
         break;
     }
-    case 0xD: {
+    case ROBOSQUAWKER_STATE_WALK_FORWARD_AVOID_MOBYS: {
         RsOther *o;
         float g;
 
