@@ -78,7 +78,7 @@ void FUN_L00_002a4890(void) {
         break;
     case 3:
         switch (s->hE) {
-        case 0:
+        case AMBIENCE_WAIT_AND_SELECT_TARGET:
             if (fast_dec_timer_s16(&s->h1E)) {
                 a = multiply_global_factor_ed64(random_float_between_alt(45.0f, 60.0f));
                 c = fast_add_rotations(s->f0, random_float_between_alt(-1.5707964f, 1.5707964f));
@@ -89,7 +89,7 @@ void FUN_L00_002a4890(void) {
                 s->hE = 1;
             }
             break;
-        case 1:
+        case AMBIENCE_INTERPOLATE_TO_TARGET:
             if (fast_dec_timer_s16(&s->h1E)) {
                 s->h1E = func_001FA898_r(convert_integer_to_float(s->h1C) *
                                          random_float_between_alt(1.0f, 1.5f));
