@@ -1905,6 +1905,7 @@ static __inline__ WrenchHero *sweep_hero(void) { return (WrenchHero*)((char*)swe
 void wrench_update(WrenchMoby *m) __asm__("FUN_L00_002a84c8");
 void wrench_update(WrenchMoby *m) {
     enum {
+        WRENCH_NORMAL = 0,
         WRENCH_THROW_OUTBOUND = 10,
         WRENCH_THROW_RETURNING = 11
     };
@@ -1914,7 +1915,7 @@ void wrench_update(WrenchMoby *m) {
     player->wrench_state=0;
     if (player->mode==3) return;
     switch (m->state) {
-    case 0: {
+    case WRENCH_NORMAL: {
         int player_state;
         int anim;
         WrenchMoby *player_moby;
