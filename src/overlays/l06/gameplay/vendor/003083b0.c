@@ -155,7 +155,9 @@ extern f32 frame_time_macro __asm__("D_0015ED6C") __attribute__((section(".sdata
 void FUN_L06_00308c68(struct Moby *m) {
     enum {
         SPARK_EMITTER_INITIALIZE = 0,
-        SPARK_EMITTER_DELAYED_ACTION = 2
+        SPARK_EMITTER_DELAYED_ACTION = 2,
+        SPARK_EMITTER_RANDOMIZED_SPRAY = 3,
+        SPARK_EMITTER_TIMED_BURSTS = 4
     };
     SparkData *d = *(void **)&m->pvars;
     SparkVector position_test_vector;
@@ -189,7 +191,7 @@ void FUN_L06_00308c68(struct Moby *m) {
             }
         }
         break;
-    case 4: {
+    case SPARK_EMITTER_TIMED_BURSTS: {
         int n = 1;
         int k;
         if (timer_step(&d->f24)) {
@@ -219,7 +221,7 @@ void FUN_L06_00308c68(struct Moby *m) {
         }
         break;
     }
-    case 3:
+    case SPARK_EMITTER_RANDOMIZED_SPRAY:
         if (timer_step(&d->f20)) {
             int cnt;
             int k;
