@@ -845,6 +845,7 @@ void blarg_space_commando_update(struct Moby *moby) {
     enum {
         BLARG_SPACE_COMMANDO_INITIALIZE = 0,
         BLARG_SPACE_COMMANDO_FACE_TARGET_AND_SELECT_ACTION = 1,
+        BLARG_SPACE_COMMANDO_ENTER_ACTION_SELECTION_AFTER_ANIMATION = 2,
         BLARG_SPACE_COMMANDO_SELECT_ACTION_AFTER_ANIMATION = 3,
         BLARG_SPACE_COMMANDO_FACE_TARGET_AND_WAIT_FOR_TIMER = 4,
         BLARG_SPACE_COMMANDO_RESUME_SAVED_STATE_AFTER_ANIMATION = 6,
@@ -920,7 +921,7 @@ void blarg_space_commando_update(struct Moby *moby) {
             }
         }
         break;
-    case 2:
+    case BLARG_SPACE_COMMANDO_ENTER_ACTION_SELECTION_AFTER_ANIMATION:
         if (moby->anim_flags & 2) {
             moby->state = 3;
             FUN_L13_00309370_c((char *)moby);
