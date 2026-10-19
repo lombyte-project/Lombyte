@@ -397,7 +397,7 @@ void FUN_L06_00229650(void) {
         GRAVITY_MODE_WORLD_DOWN = 0,
         GRAVITY_MODE_OPPOSITE_GROUND_NORMAL = 1
     };
-    V collision_ray_end, ground_ray_start, ground_offset_or_angles, surface_probe_start, v40, hit_surface_angles, normalized_hit_normal;
+    V collision_ray_end, ground_ray_start, ground_offset_or_angles, surface_probe_start, unused_surface_probe_point, hit_surface_angles, normalized_hit_normal;
     f32 f;
     s32 r;
     s32 i;
@@ -544,7 +544,7 @@ d1:
             a = -a;
         }
         FUN_L00_002335c8(&surface_probe_start, 0.2f, a, 0.45f);
-        FUN_L00_002335c8(&v40, 0.2f, a, -0.45f);
+        FUN_L00_002335c8(&unused_surface_probe_point, 0.2f, a, -0.45f);
         if (collision_line(&surface_probe_start, &collision_ray_end, 0x22, hero_lui.moby, 0)) {
             f = HH.point.f[2] - hero_lui.ground_z.f;
             hero_lui.unk2C0.f[i] = f;
