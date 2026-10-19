@@ -6204,7 +6204,8 @@ void fred_update(struct Moby *m) {
         INITIALIZE_FRED_DIALOGUE = 0,
         UPDATE_FRED_DIALOGUE = 1,
         HANDLE_FRED_DIALOGUE_RESULT = 2,
-        INTERPOLATE_FRED_CUTSCENE_CAMERA = 3
+        INTERPOLATE_FRED_CUTSCENE_CAMERA = 3,
+        WAIT_FOR_FRED_REMOVAL_TRIGGER = 5
     };
     Data_301070 *d = *(struct Data_301070 **)&m->pvars;
     float rate, head_rate;
@@ -6356,7 +6357,7 @@ void fred_update(struct Moby *m) {
             m->state = 5;
         }
         break;
-    case 5:
+    case WAIT_FOR_FRED_REMOVAL_TRIGGER:
         if (hero.state.control_mode == 15) {
             FUN_L06_002f5360_301070(D_L06_0015FFD8_301070 + (d->f164 << 8));
         del:
