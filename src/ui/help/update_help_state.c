@@ -60,7 +60,8 @@ void update_help_state(void) __asm__("FUN_001fde90");
 
 void update_help_state(void) {
     enum {
-        HELP_STATE_IDLE = 0
+        HELP_STATE_IDLE = 0,
+        HELP_STATE_DISMISSING = 7
     };
 
     if (D_001996D0.started == 0) {
@@ -214,7 +215,7 @@ void update_help_state(void) {
         }
         break;
 
-    case 7: {
+    case HELP_STATE_DISMISSING: {
         s32 id;
 
         force_help_message(5, 0);
