@@ -1761,6 +1761,11 @@ extern int linked_state_flags[] __asm__("D_L13_001847A8");
 
 void forcefield_tower_update(struct Moby *moby) __asm__("FUN_L13_002cefc0");
 void forcefield_tower_update(struct Moby *moby) {
+    enum {
+        TOWER_STATE_INITIALIZE = 0,
+        TOWER_STATE_ACTIVE = 1,
+        TOWER_STATE_DESTRUCTION = 2
+    };
     unsigned char *m = (unsigned char *)moby;
     int *data = *(int **)(m + 0x78);
     float position[4];
@@ -1776,7 +1781,7 @@ void forcefield_tower_update(struct Moby *moby) {
     int state = m[0x20];
 
     switch (state) {
-    case 0: {
+    case TOWER_STATE_INITIALIZE: {
         m[0xBC] = 0;
         m[0x20] = 1;
         if (m[0x30] < *(short *)(m + 0x32)) m[0x30] = m[0x32];
@@ -1794,7 +1799,7 @@ void forcefield_tower_update(struct Moby *moby) {
         *(unsigned short *)(m + 0x34) &= 0xEFFF;
         return;
     }
-    case 1: {
+    case TOWER_STATE_ACTIVE: {
         linked_index = data[0x74 / 4];
         if (linked_index != -1) linked_state_flags[linked_index] = 0;
         if (data[0x70 / 4] == -1) goto allocate_voice;
@@ -1821,7 +1826,7 @@ voice_done:
         FUN_L13_002cecb8(moby, (unsigned char *)data, (float *)((char *)data + 0x20));
         return;
     }
-    case 2: {
+    case TOWER_STATE_DESTRUCTION: {
         *(u128z *)velocity = 0;
         velocity[2] = D_0015ED6C * 8.0f;
         *(u128z *)position = *(u128z *)velocity;
