@@ -7725,6 +7725,12 @@ extern void func_L00_00273F80_r(void *, void *, int, float, int, int, int) __asm
 
 void FUN_L06_003049f8(char *moby)
 {
+    enum {
+        INITIALIZE_VECTOR_STREAMS = 0,
+        WAIT_FOR_LINKED_MOBY = 1,
+        UPDATE_VECTOR_STREAMS = 2,
+        EMIT_PARTICLE_BURST = 3
+    };
     Data_305E38 *d = *(Data_305E38 **)(moby + 0x78);
     union {
         float tmp[30][4];
@@ -7737,7 +7743,7 @@ void FUN_L06_003049f8(char *moby)
     } u;
 
     switch ((unsigned char)moby[0x20]) {
-    case 0:
+    case INITIALIZE_VECTOR_STREAMS:
         *(float *)(moby + 0x2C) = *(float *)(*(char **)(moby + 0x24) + 0x24) * D_L06_00162210;
         D_L06_00162238 = 0x16;
         D_L06_00162234 = 0x2D;
@@ -7753,7 +7759,7 @@ void FUN_L06_003049f8(char *moby)
             moby[0x20] = 2;
         }
         break;
-    case 1: {
+    case WAIT_FOR_LINKED_MOBY: {
         char *e = D_L06_0015FFD8_301070 + (d->f10 << 8);
         if (*(short *)(e + 0xA6) == 0x463 && (unsigned char)e[0x20] < 3) {
             return;
@@ -7762,7 +7768,7 @@ void FUN_L06_003049f8(char *moby)
         *(int *)(moby + 0x94) = *(int *)(*(char **)(moby + 0x24) + 0x10);
         break;
     }
-    case 2: {
+    case UPDATE_VECTOR_STREAMS: {
         float f20;
         float f21;
         float v;
@@ -7822,7 +7828,7 @@ void FUN_L06_003049f8(char *moby)
         }
         break;
     }
-    case 3: {
+    case EMIT_PARTICLE_BURST: {
         int i;
         int j;
 
