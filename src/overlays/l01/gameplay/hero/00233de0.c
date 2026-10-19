@@ -1274,7 +1274,7 @@ void FUN_L01_002370b8(void) {
             }
         }
     } break;
-    case 0x15: {
+    case HERO_STATE_CROUCH_SWING: {
         int skip;
 
         hero.target_speed = 0.0f;
@@ -1861,7 +1861,7 @@ void FUN_L01_002370b8(void) {
                              frame_scale_sq * 0.02f, frame_scale_sq * 0.35f, frame_time * 2.5f);
         }
     } break;
-    case 0x8: {
+    case HERO_STATE_LAND: {
         float v;
 
         if (hero_slot_item_id(3) == 2) {
@@ -1901,7 +1901,7 @@ void FUN_L01_002370b8(void) {
         }
         FUN_L00_00216de8_cf();
     } break;
-    case 0x7:
+    case HERO_STATE_JUMP:
     case HERO_STATE_RUN_JUMP:
     case HERO_STATE_PACK_JUMP:
     case HERO_STATE_HIGH_JUMP:
