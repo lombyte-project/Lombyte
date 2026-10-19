@@ -524,9 +524,9 @@ void FUN_L01_002370b8(void) {
     prevAnim = moby->f53;
     switch (hero.state.current) {
     case 0x0:
-    case 0x1:
-    case 0x3:
-    case 0x4:
+    case HERO_STATE_LOOK:
+    case HERO_STATE_STOP:
+    case HERO_STATE_CROUCH:
     case 0x17:
     case 0x1D:
     case 0x1E:
@@ -1203,7 +1203,7 @@ void FUN_L01_002370b8(void) {
             }
         }
     } break;
-    case 0x14: {
+    case HERO_STATE_WRENCH_SLAM: {
         int t0;
         int t1;
         float v;
@@ -1438,7 +1438,7 @@ void FUN_L01_002370b8(void) {
         FUN_L00_00217118(3.7f, 0.0f);
     } break;
     case 0x21:
-    case 0x7A:
+    case HERO_STATE_WALL_BONK:
         fast_cos_cf(&hero.ground_speed, 0.0f, frame_time_sq * 24.0f);
         hero.motion.velocity.f[0] = FUN_L00_0020a1e0_cf(hero.unkA68) * hero.ground_speed;
         hero.motion.velocity.f[1] = FUN_L00_002121c0_cf(hero.unkA68) * hero.ground_speed;
@@ -1781,7 +1781,7 @@ void FUN_L01_002370b8(void) {
             }
         }
     } break;
-    case 0x79:
+    case HERO_STATE_SLIP:
         hero.motion.move_yaw = hero.downhill_yaw;
         hero.target_speed = frame_time * 5.5f;
         air_accel(frame_time_sq * 25.0f);
@@ -1902,14 +1902,14 @@ void FUN_L01_002370b8(void) {
         FUN_L00_00216de8_cf();
     } break;
     case 0x7:
-    case 0x9:
-    case 0xA:
-    case 0xB:
+    case HERO_STATE_RUN_JUMP:
+    case HERO_STATE_PACK_JUMP:
+    case HERO_STATE_HIGH_JUMP:
     case 0xC:
     case 0xD:
     case 0xE:
     case 0xF:
-    case 0x10:
+    case HERO_STATE_PACK_LONG_JUMP:
     case 0x11:
     case 0x12:
     case 0x1C:
