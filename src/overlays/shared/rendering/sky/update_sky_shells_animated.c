@@ -361,6 +361,10 @@ void FUN_001f9a80_28b1a0(void *, void *, float) __asm__("FUN_001f9a80");
 extern float D_L00_001604C0 __attribute__((sda));
 extern OvlQuad D_L00_00160520 __attribute__((section(".sdata")));
 void FUN_L00_0028b1a0(void) {
+    enum {
+        SKY_SHELL_TRIPLE_SCALE = 1,
+        SKY_SHELL_DOUBLE_SCALE = 3
+    };
     float v[4] __attribute__((aligned(16)));
     int i = 0;
     float *p;
@@ -373,7 +377,7 @@ void FUN_L00_0028b1a0(void) {
         p = (float *)(D_L00_0016051C_28b1a0->e[i] + 8);
         k = 1.0f;
         switch (i) {
-        case 1:
+        case SKY_SHELL_TRIPLE_SCALE:
             v[1] = 0.02f;
             k = 3.0f;
             *p += D_L00_001604C0 * 0.55f;
@@ -383,7 +387,7 @@ void FUN_L00_0028b1a0(void) {
             k = 2.5f;
             *p += D_L00_001604C0 * 0.6f;
             break;
-        case 3:
+        case SKY_SHELL_DOUBLE_SCALE:
             v[1] = 0.01f;
             k = 2.0f;
             *p += D_L00_001604C0 * 0.7f;
