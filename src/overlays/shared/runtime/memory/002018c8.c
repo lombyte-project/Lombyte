@@ -95,6 +95,9 @@ void level_draw_dialog_text(void) {
         MESSAGE_BOX_SPLIT_TEXT_SPRITE_DIALOG = 5,
         MESSAGE_BOX_CHOICE_DIALOG = 6
     };
+    enum {
+        CHOICE_DIALOG_SINGLE_CENTERED_BUTTON = 3
+    };
     char buf[0x200];
     struct TextRegion box;
 
@@ -303,7 +306,7 @@ void level_draw_dialog_text(void) {
             font_print_center(0x135, 0x118, button_color, get_help_message_text(0x524B), -1);
             id = 0x522B;
             break;
-        case 3:
+        case CHOICE_DIALOG_SINGLE_CENTERED_BUTTON:
             font_print_center(0x100, 0x118, button_color, get_help_message_text(0x524A), -1);
             id = 0x522C;
             break;
