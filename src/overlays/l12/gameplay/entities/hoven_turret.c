@@ -274,6 +274,10 @@ extern char D_L12_00167240[];
 extern float D_0013F4D0_304310[] __asm__("D_0013F3D0");
 
 void FUN_L12_00302f30(Moby *moby) {
+    enum {
+        TARGET_TRACKING_STATE_INITIALIZE = 0,
+        TARGET_TRACKING_STATE_ACTIVE = 1
+    };
     Vec4 start;
     Vec4 end;
     char hit[0x30];
@@ -287,7 +291,7 @@ void FUN_L12_00302f30(Moby *moby) {
         return;
     }
     switch (moby->state) {
-    case 0:
+    case TARGET_TRACKING_STATE_INITIALIZE:
         D_L12_00161E08 = 0x16;
         D_L12_00161E04 = 0x2D;
         data->f231C = -1;
@@ -297,7 +301,7 @@ void FUN_L12_00302f30(Moby *moby) {
         data->f2300 = 0;
         moby->state = 1;
         break;
-    case 1:
+    case TARGET_TRACKING_STATE_ACTIVE:
         moby->rot.z = func_L00_001FF860_304310(D_L12_0015FFD8[data->target].pos.x - moby->pos.x,
                                              D_L12_0015FFD8[data->target].pos.y - moby->pos.y);
         data->dist = func_001F9D10_304310(((float *)&moby->pos), (char *)D_L12_0015FFD8 + (data->target << 8) + 0x10);
