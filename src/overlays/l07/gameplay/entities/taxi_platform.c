@@ -1898,6 +1898,7 @@ void bombomatic_update(char *m) {
         BOMBOMATIC_ALTERNATE_CLEAR_HEALTH_RESPONSE = 2,
         HIT_REACTION_START_KNOCKBACK = 3,
         HIT_REACTION_KNOCKBACK_RESPONSE = 4,
+        HIT_REACTION_ALTERNATE_KNOCKBACK_RESPONSE = 5,
         HIT_REACTION_HIT_ANIMATION_RESPONSE = 9,
         HIT_REACTION_ALTERNATE_HIT_ANIMATION_RESPONSE = 10
     };
@@ -1947,7 +1948,7 @@ void bombomatic_update(char *m) {
         break;
     case HIT_REACTION_KNOCKBACK_RESPONSE:
         break;
-    case 5:
+    case HIT_REACTION_ALTERNATE_KNOCKBACK_RESPONSE:
         break;
     case 6:
         break;
