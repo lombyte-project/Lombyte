@@ -837,6 +837,10 @@ extern void func_L00_002592B0_309330(struct Moby *, float, float *, float, float
 
 void blarg_space_commando_update(struct Moby *moby) __asm__("FUN_L13_00307e98");
 void blarg_space_commando_update(struct Moby *moby) {
+    enum {
+        BLARG_SPACE_COMMANDO_INITIALIZE = 0,
+        BLARG_SPACE_COMMANDO_RETURN_HOME = 13
+    };
     Vars_309330 *vars = (Vars_309330 *)moby->pvars;
     struct Moby *target;
     Vec4 point;
@@ -855,7 +859,7 @@ void blarg_space_commando_update(struct Moby *moby) {
         moby->shadow_range = 0x16;
     }
     switch (moby->state) {
-    case 0:
+    case BLARG_SPACE_COMMANDO_INITIALIZE:
         vars->unk20 = 2.0f;
         vars->unk28 = 1;
         vars->unk58 = 12;
@@ -1083,7 +1087,7 @@ void blarg_space_commando_update(struct Moby *moby) {
             }
         }
         break;
-    case 13:
+    case BLARG_SPACE_COMMANDO_RETURN_HOME:
         func_L00_002592B0_309330(moby,
                           fast_arc_tan_c(vars->home.f[0] - moby->pos.x, vars->home.f[1] - moby->pos.y), &vars->turn, 0.05f,
                           0.3f, frame_time * 6.2831855f);
