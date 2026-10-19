@@ -1759,7 +1759,7 @@ void FUN_L16_002270c8(void) {
                     set_hero_animation(FUN_L01_00226f10(0), 0, -2.0f);
                     FUN_L00_00233288(0.016f, 0.002f, 5, 2, 0, 1);
                     break;
-                case 8:
+                case HERO_STATE_LAND:
                     if (hero.unk1B4 != 0) {
                         if (scale_game_frames(9) > hero.state_timer) {
                             int hit = 0;
