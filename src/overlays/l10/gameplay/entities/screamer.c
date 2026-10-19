@@ -2116,6 +2116,7 @@ extern Path_2E52B0 *D_L10_001B0C30_2E52B0[] __asm__("D_L10_001B0930");
 
 void FUN_L10_002e3ef0(void *mv) {
     enum {
+        NO_STATE_TRANSITION_HIT_RESPONSE = 0,
         LETHAL_HIT_RESPONSE = 1,
         DEATH_HIT_RESPONSE = 2,
         KNOCKBACK_HIT_RESPONSE = 3,
@@ -2255,7 +2256,7 @@ void FUN_L10_002e3ef0(void *mv) {
             m->state = 11;
             m->flags &= 0xEFFF;
             break;
-        case 0:
+        case NO_STATE_TRANSITION_HIT_RESPONSE:
         case SUPPRESSED_HIT_RESPONSE:
             break;
         }
