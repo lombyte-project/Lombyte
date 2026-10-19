@@ -1738,7 +1738,8 @@ void pokitaru_boat_update(struct Moby *moby) {
         POKITARU_BOAT_WAIT_FOR_ACTIVATION = 1,
         POKITARU_BOAT_FOLLOW_PATH = 2,
         POKITARU_BOAT_WAIT_FOR_GROUP_CLEAR = 3,
-        POKITARU_BOAT_RISE_ABOVE_PATH = 4
+        POKITARU_BOAT_RISE_ABOVE_PATH = 4,
+        POKITARU_BOAT_ADJUST_HEIGHT_FOR_HERO = 5
     };
     struct PokPv_309ac0 *pv = (struct PokPv_309ac0 *)moby->pvars;
     float start_pos[4];
@@ -1904,7 +1905,7 @@ void pokitaru_boat_update(struct Moby *moby) {
             moby->state = 5;
         }
         break;
-    case 5:
+    case POKITARU_BOAT_ADJUST_HEIGHT_FOR_HERO:
         qcopy(target, (char *)pv->path_c4 + 0x10 + pv->seg_d4 * 16);
         if (pv->flag_b0 != 0) {
             if (D_0013F3D8_lui < moby->pos.z) {
