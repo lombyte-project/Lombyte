@@ -7047,6 +7047,12 @@ void FUN_L06_00302fd8(char *m) {
         SHUTTLE_AT_SECOND_STOP = 1,
         SHUTTLE_AT_THIRD_STOP = 2
     };
+    enum {
+        SHUTTLE_ROUTE_INITIAL_TO_SECOND_STOP = 0,
+        SHUTTLE_ROUTE_SECOND_TO_INITIAL_STOP = 1,
+        SHUTTLE_ROUTE_INITIAL_TO_THIRD_STOP = 3,
+        SHUTTLE_ROUTE_THIRD_TO_INITIAL_STOP = 4
+    };
     char *d = *(char **)(m + 0x78);
     switch (*(int *)(d + 0xBC)) {
     case SHUTTLE_AT_INITIAL_STOP: {
@@ -7078,17 +7084,17 @@ void FUN_L06_00302fd8(char *m) {
         return;
     }
     switch (*(int *)(d + 0x9C)) {
-    case 0:
+    case SHUTTLE_ROUTE_INITIAL_TO_SECOND_STOP:
         try_set_help_message(10, 0x1782);
         break;
-    case 1:
-    case 4:
+    case SHUTTLE_ROUTE_SECOND_TO_INITIAL_STOP:
+    case SHUTTLE_ROUTE_THIRD_TO_INITIAL_STOP:
         try_set_help_message(10, 0x1785);
         break;
     case 2:
         try_set_help_message(10, 0x1786);
         break;
-    case 3:
+    case SHUTTLE_ROUTE_INITIAL_TO_THIRD_STOP:
         try_set_help_message(10, 0x1784);
         break;
     }
