@@ -2388,6 +2388,8 @@ extern unsigned char D_0014C050_19208[] __asm__("D_0014C050");
 
 void FUN_L05_00319208(void *moby_v) {
     enum {
+        TAXI_PAIRED_ROUTE_FIRST_STOP = 0,
+        TAXI_PAIRED_ROUTE_SECOND_STOP = 1,
         TAXI_BRANCHING_STOP = 2,
         TAXI_PRIMARY_BRANCH_STOP = 3,
         TAXI_FALLBACK_BRANCH_STOP = 4
@@ -2423,8 +2425,8 @@ void FUN_L05_00319208(void *moby_v) {
             break;
         }
     }
-    case 0:
-    case 1:
+    case TAXI_PAIRED_ROUTE_FIRST_STOP:
+    case TAXI_PAIRED_ROUTE_SECOND_STOP:
     case TAXI_PRIMARY_BRANCH_STOP:
     case TAXI_FALLBACK_BRANCH_STOP: {
         int v = *(int *)(*(char **)(moby + 0x24) + 0x10);
