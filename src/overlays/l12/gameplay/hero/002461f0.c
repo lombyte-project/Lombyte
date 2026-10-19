@@ -124,6 +124,7 @@ int r1_repeat_timer __asm__("D_L12_0015F678") = 0;
 void FUN_L12_002461f0(void) {
     enum {
         HERO_STATE_APPROACH_TARGET_POSE = 101,
+        HERO_STATE_TARGET_POSE_APPROACH_RESTART_WAIT = 102,
         HERO_STATE_TARGET_POSE_WAIT = 103,
         HERO_STATE_LOW_ALTITUDE_RESPAWN_WAIT = 119
     };
@@ -949,7 +950,7 @@ void FUN_L12_002461f0(void) {
                     }
                     FUN_L00_00228c18();
                     break;
-                case 102:
+                case HERO_STATE_TARGET_POSE_APPROACH_RESTART_WAIT:
                     if (hero.unkA98 & 2) {
                         hero_set_state(0x65, 1);
                     }
