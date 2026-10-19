@@ -148,6 +148,13 @@ extern int func_L00_00235790_r(void) __asm__("FUN_L00_00234e00");
 extern int func_001F9908_r(int *) __asm__("FUN_001f9740");
 
 void FUN_L17_002258a8(void) {
+    enum {
+        HERO_STATE_GRIND_JUMP = 41,
+        HERO_STATE_GRIND_RAIL_TRANSFER = 42,
+        HERO_STATE_GRIND_ATTACK = 43,
+        HERO_STATE_GRIND_OBSTACLE_JUMP = 66,
+        HERO_STATE_DEATH_FALL = 119
+    };
     unsigned char *moby;
     int prevSub;
     int prevState;
@@ -1298,10 +1305,10 @@ void FUN_L17_002258a8(void) {
                     }
                     break;
                 case HERO_STATE_GRIND:
-                case 41:
-                case 42:
-                case 43:
-                case 66:
+                case HERO_STATE_GRIND_JUMP:
+                case HERO_STATE_GRIND_RAIL_TRANSFER:
+                case HERO_STATE_GRIND_ATTACK:
+                case HERO_STATE_GRIND_OBSTACLE_JUMP:
                     if (hero.state.current == 0x42) {
                         hero.unk5BE = 0;
                     } else {
@@ -1843,7 +1850,7 @@ void FUN_L17_002258a8(void) {
                         hero_set_state(0x74, 1);
                     }
                     break;
-                case 119:
+                case HERO_STATE_DEATH_FALL:
                     if ((current_level_index == 3 && 5.0f > hero.motion.pos.f[2]) ||
                         (current_level_index == 6 && 50.0f > hero.motion.pos.f[2]) ||
                         (current_level_index == 0x10 && (77.0f > hero.motion.pos.f[2] ||

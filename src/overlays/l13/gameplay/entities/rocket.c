@@ -841,7 +841,11 @@ void blarg_space_commando_update(struct Moby *moby) {
     enum {
         BLARG_SPACE_COMMANDO_INITIALIZE = 0,
         BLARG_SPACE_COMMANDO_FACE_TARGET_AND_SELECT_ACTION = 1,
+        BLARG_SPACE_COMMANDO_SELECT_ACTION_AFTER_ANIMATION = 3,
+        BLARG_SPACE_COMMANDO_FACE_TARGET_AND_WAIT_FOR_TIMER = 4,
         BLARG_SPACE_COMMANDO_RESUME_SAVED_STATE_AFTER_ANIMATION = 6,
+        BLARG_SPACE_COMMANDO_APPROACH_TARGET_WITH_TURN_OFFSET = 7,
+        BLARG_SPACE_COMMANDO_APPROACH_TARGET_UNTIL_BLOCKED_OR_NEAR = 11,
         BLARG_SPACE_COMMANDO_RETURN_HOME = 13,
         BLARG_SPACE_COMMANDO_KNOCKBACK = 15,
         BLARG_SPACE_COMMANDO_DYING = 16
@@ -921,7 +925,7 @@ void blarg_space_commando_update(struct Moby *moby) {
             }
         }
         break;
-    case 3:
+    case BLARG_SPACE_COMMANDO_SELECT_ACTION_AFTER_ANIMATION:
         if (moby->anim_flags & 2) {
             f32 dist = vector_distance_xy_alt(&moby->pos, &target->pos);
             if (vars->unk164 != 2 && dist < 15.0f) {
@@ -938,7 +942,7 @@ void blarg_space_commando_update(struct Moby *moby) {
             }
         }
         break;
-    case 4:
+    case BLARG_SPACE_COMMANDO_FACE_TARGET_AND_WAIT_FOR_TIMER:
         approach_angle(&moby->rot.z, fast_arc_tan_c(target->pos.x - moby->pos.x, target->pos.y - moby->pos.y),
                           &vars->turn, frame_time_sq * 6.2831855f, frame_time_sq * 6.2831855f, frame_time * 3.1415927f);
         if (tick_countdown_32_alt(&vars->timer) != 0) {
@@ -997,7 +1001,7 @@ void blarg_space_commando_update(struct Moby *moby) {
             }
         }
         break;
-    case 7:
+    case BLARG_SPACE_COMMANDO_APPROACH_TARGET_WITH_TURN_OFFSET:
         func_L00_002592B0_309330(moby,
                           fast_add_rotations_c(fast_arc_tan_c(target->pos.x - moby->pos.x, target->pos.y - moby->pos.y),
                                         vars->unk1A8), &vars->turn,
@@ -1037,7 +1041,7 @@ void blarg_space_commando_update(struct Moby *moby) {
         }
         }
         break;
-    case 11:
+    case BLARG_SPACE_COMMANDO_APPROACH_TARGET_UNTIL_BLOCKED_OR_NEAR:
         blocked = 0;
         func_L00_002592B0_309330(moby,
                           fast_arc_tan_c(target->pos.x - moby->pos.x, target->pos.y - moby->pos.y), &vars->turn, 0.05f, 0.3f,
@@ -2017,17 +2021,22 @@ extern int memcard_save_data(int, int) __asm__("FUN_0020b178");
 
 void FUN_L13_0030b628(struct Moby *moby) {
     enum {
+        WAIT_TO_START_INITIAL_SCENE = 0,
         START_INITIAL_SCENE = 1,
         WAIT_INITIAL_SCENE = 2,
+        ENTER_CLIP_VOLUME_CHECK = 3,
         CHECK_CLIP_VOLUME_FOR_SCENE = 4,
         WAIT_CLIP_VOLUME_SCENE = 5,
+        ENTER_LINKED_MOBY_REMOVAL_WAIT = 6,
+        WAIT_LINKED_MOBY_REMOVAL_BEFORE_SCENE = 7,
+        WAIT_SCENE_BEFORE_FOLLOWUP = 8,
         START_FOLLOWUP_SCENE = 9,
         WAIT_FOLLOWUP_SCENE = 10,
         WAIT_LINKED_MOBY_REMOVAL_BEFORE_SAVE = 11
     };
     int *data = (int *)moby->pvars;
     switch (moby->state) {
-    case 0:
+    case WAIT_TO_START_INITIAL_SCENE:
         if (D_L13_0015F5C4 == 0) moby->state = 1;
         break;
     case START_INITIAL_SCENE:
@@ -2042,7 +2051,7 @@ void FUN_L13_0030b628(struct Moby *moby) {
     case WAIT_INITIAL_SCENE:
         if (D_L13_0015F5C4 != 2) moby->state = 3;
         break;
-    case 3:
+    case ENTER_CLIP_VOLUME_CHECK:
         moby->state = 4;
         break;
     case CHECK_CLIP_VOLUME_FOR_SCENE: {
@@ -2096,10 +2105,10 @@ after_state_4:
         }
         break;
     }
-    case 6:
+    case ENTER_LINKED_MOBY_REMOVAL_WAIT:
         moby->state = 7;
         break;
-    case 7: {
+    case WAIT_LINKED_MOBY_REMOVAL_BEFORE_SCENE: {
         char *object;
         if (alternate_item_available[0x66] == 0) {
             struct Moby *other;
@@ -2129,7 +2138,7 @@ after_state_4:
         moby->state = 12;
         break;
     }
-    case 8:
+    case WAIT_SCENE_BEFORE_FOLLOWUP:
         if (D_L13_0015F5C4 != 2) {
             moby->state = 9;
             FUN_L00_00299460(14);

@@ -26,8 +26,10 @@ extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 void FUN_L03_0029d1b8(struct Moby *moby) {
     enum {
         MOBY_CLASS_ALTERNATE_COLOR_CHILD_EFFECT_EMITTER = 0x4B,
+        MOBY_CLASS_TEN_PARTICLE_BURST_EMITTER = 0x73,
         MOBY_CLASS_TWO_JOINT_PARTICLE_EMITTER = 0x74,
-        MOBY_CLASS_FIFTEEN_PARTICLE_BURST_EMITTER = 0x76
+        MOBY_CLASS_FIFTEEN_PARTICLE_BURST_EMITTER = 0x76,
+        MOBY_CLASS_DEFAULT_COLOR_CHILD_EFFECT_EMITTER = 0x77
     };
     char *data = (char *)moby->pvars;
     int r;
@@ -36,10 +38,10 @@ void FUN_L03_0029d1b8(struct Moby *moby) {
     case 0x33:
     case 0x40:
     case MOBY_CLASS_ALTERNATE_COLOR_CHILD_EFFECT_EMITTER:
-    case 0x73:
+    case MOBY_CLASS_TEN_PARTICLE_BURST_EMITTER:
     case MOBY_CLASS_TWO_JOINT_PARTICLE_EMITTER:
     case MOBY_CLASS_FIFTEEN_PARTICLE_BURST_EMITTER:
-    case 0x77:
+    case MOBY_CLASS_DEFAULT_COLOR_CHILD_EFFECT_EMITTER:
         if (*(short *)(data + 0x148) == -1) {
             int lo = *(short *)(data + 0x14C);
             *(short *)(data + 0x148) =
@@ -971,8 +973,11 @@ extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 void FUN_L03_0029c9d0(struct Moby *moby) {
     enum {
         MOBY_CLASS_ALTERNATE_COLOR_CHILD_EFFECT_EMITTER = 0x4B,
+        MOBY_CLASS_TEN_PARTICLE_BURST_EMITTER = 0x73,
         MOBY_CLASS_TWO_JOINT_PARTICLE_EMITTER = 0x74,
-        MOBY_CLASS_FIFTEEN_PARTICLE_BURST_EMITTER = 0x76
+        MOBY_CLASS_JOINT_ZERO_TEN_PARTICLE_EMITTER = 0x75,
+        MOBY_CLASS_FIFTEEN_PARTICLE_BURST_EMITTER = 0x76,
+        MOBY_CLASS_DEFAULT_COLOR_CHILD_EFFECT_EMITTER = 0x77
     };
     char *data = (char *)moby->pvars;
     if (moby->state == 0) {
@@ -988,15 +993,15 @@ void FUN_L03_0029c9d0(struct Moby *moby) {
             return;
     }
     switch (moby->oclass) {
-    case 0x75:
+    case MOBY_CLASS_JOINT_ZERO_TEN_PARTICLE_EMITTER:
     case 0x78:
         *(int *)(data + 0x150) = allocate_voice_for_target_entry(0, 4, (int)moby);
         break;
     case MOBY_CLASS_ALTERNATE_COLOR_CHILD_EFFECT_EMITTER:
-    case 0x73:
+    case MOBY_CLASS_TEN_PARTICLE_BURST_EMITTER:
     case MOBY_CLASS_TWO_JOINT_PARTICLE_EMITTER:
     case MOBY_CLASS_FIFTEEN_PARTICLE_BURST_EMITTER:
-    case 0x77:
+    case MOBY_CLASS_DEFAULT_COLOR_CHILD_EFFECT_EMITTER:
         *(int *)(data + 0x150) = allocate_voice_for_target_entry(1, 4, (int)moby);
         break;
     }
@@ -1015,9 +1020,12 @@ char *FUN_L03_002bad40(struct Moby *parent, int unused, int color, int a3, int a
 void FUN_L03_0029caa8(char *moby, void *vel_in, int quiet) {
     enum {
         MOBY_CLASS_ALTERNATE_COLOR_CHILD_EFFECT_EMITTER = 0x4B,
+        MOBY_CLASS_TEN_PARTICLE_BURST_EMITTER = 0x73,
         MOBY_CLASS_TWO_JOINT_PARTICLE_EMITTER = 0x74,
+        MOBY_CLASS_JOINT_ZERO_TEN_PARTICLE_EMITTER = 0x75,
         MOBY_CLASS_FIFTEEN_PARTICLE_BURST_EMITTER = 0x76,
-        MOBY_CLASS_DEFAULT_COLOR_CHILD_EFFECT_EMITTER = 0x77
+        MOBY_CLASS_DEFAULT_COLOR_CHILD_EFFECT_EMITTER = 0x77,
+        MOBY_CLASS_GRAY_JOINT_ZERO_TEN_PARTICLE_EMITTER = 0x78
     };
     float vel[4];
     float *vp;
@@ -1052,9 +1060,9 @@ void FUN_L03_0029caa8(char *moby, void *vel_in, int quiet) {
             }
         }
         break;
-    case 0x73:
-    case 0x75:
-    case 0x78:
+    case MOBY_CLASS_TEN_PARTICLE_BURST_EMITTER:
+    case MOBY_CLASS_JOINT_ZERO_TEN_PARTICLE_EMITTER:
+    case MOBY_CLASS_GRAY_JOINT_ZERO_TEN_PARTICLE_EMITTER:
     case 0x84:
         if (quiet == 0 && FUN_L00_001fefc8(data + 0x12E)) {
             if (fast_vec_length(vp) < frame_time * 40.0f && FUN_001f9b48(moby + 0x10, D_L03_00166EC0) < 75.0f) {
@@ -1180,9 +1188,13 @@ void red_ship_1_update(char *moby) __asm__("FUN_L03_0029dba8");
  * out the moby is hidden again unless the caller keeps it, and switches its update to the car update. */
 void FUN_L03_0029d2e0(char *moby, void *vel_in, int flag) {
     enum {
+        MOBY_CLASS_TEN_PARTICLE_BURST_EMITTER = 0x73,
         MOBY_CLASS_TWO_JOINT_PARTICLE_EMITTER = 0x74,
+        MOBY_CLASS_JOINT_ZERO_TEN_PARTICLE_EMITTER = 0x75,
         MOBY_CLASS_FIFTEEN_PARTICLE_BURST_EMITTER = 0x76,
-        MOBY_CLASS_DEFAULT_COLOR_CHILD_EFFECT_EMITTER = 0x77
+        MOBY_CLASS_DEFAULT_COLOR_CHILD_EFFECT_EMITTER = 0x77,
+        MOBY_CLASS_GRAY_JOINT_ZERO_TEN_PARTICLE_EMITTER = 0x78,
+        MOBY_CLASS_TEN_GRAY_PARTICLE_BURST_EMITTER = 0x84
     };
     float spot[4];
     float vel[4];
@@ -1215,7 +1227,7 @@ void FUN_L03_0029d2e0(char *moby, void *vel_in, int flag) {
         scale_vector_xyz(push, moby + 0xC0, frame_scale * 0.075f);
         push[2] += frame_scale * 0.08f;
         switch (*(short *)(moby + 0xA6)) {
-        case 0x73:
+        case MOBY_CLASS_TEN_PARTICLE_BURST_EMITTER:
             SPAWN_DEBRIS(0x6A9);
             SPAWN_DEBRIS(0x6AA);
             SPAWN_DEBRIS(0x6AB);
@@ -1225,7 +1237,7 @@ void FUN_L03_0029d2e0(char *moby, void *vel_in, int flag) {
             SPAWN_DEBRIS(0x6AD);
             SPAWN_DEBRIS(0x6AE);
             break;
-        case 0x75:
+        case MOBY_CLASS_JOINT_ZERO_TEN_PARTICLE_EMITTER:
             SPAWN_DEBRIS(0x6AF);
             SPAWN_DEBRIS(0x6B0);
             SPAWN_DEBRIS(0x6B1);
@@ -1240,12 +1252,12 @@ void FUN_L03_0029d2e0(char *moby, void *vel_in, int flag) {
             SPAWN_DEBRIS(0x6B6);
             SPAWN_DEBRIS(0x6B7);
             break;
-        case 0x78:
+        case MOBY_CLASS_GRAY_JOINT_ZERO_TEN_PARTICLE_EMITTER:
             SPAWN_DEBRIS(0x6B8);
             SPAWN_DEBRIS(0x6B9);
             SPAWN_DEBRIS(0x6BA);
             break;
-        case 0x84:
+        case MOBY_CLASS_TEN_GRAY_PARTICLE_BURST_EMITTER:
             SPAWN_DEBRIS(0x6BC);
             SPAWN_DEBRIS(0x6BE);
             SPAWN_DEBRIS(0x6BF);
@@ -1663,6 +1675,8 @@ void robot_dog_update(char *moby) {
         ROBOT_DOG_FOLLOW_PATH = 5,
         ROBOT_DOG_MELEE_ATTACK = 6,
         ROBOT_DOG_RETURN_HOME = 7,
+        ROBOT_DOG_FALL_RECOVERY = 8,
+        ROBOT_DOG_WAIT_TO_REINITIALIZE = 9,
         ROBOT_DOG_DEATH_FALL = 21
     };
     Tgt2c5bb8 tgt;
@@ -1884,7 +1898,7 @@ void robot_dog_update(char *moby) {
             }
         }
         break;
-    case 8:
+    case ROBOT_DOG_FALL_RECOVERY:
         if (mine_fall(moby, data->m120) & 0x60) {
             moby[0x20] = 4;
             if (((unsigned char *)moby)[0x53] != 3) {
@@ -1893,7 +1907,7 @@ void robot_dog_update(char *moby) {
             break;
         }
         goto low;
-    case 9:
+    case ROBOT_DOG_WAIT_TO_REINITIALIZE:
         if (FUN_L00_002dc9f0(moby, data->m120)) {
             moby[0x20] = 0;
             data->sC8 = 0;
@@ -2299,6 +2313,10 @@ extern void vector_length_xyz_cf(void *, void *, void *) __asm__("FUN_001f9a10")
 void FUN_L03_002c6fd0(Moby2C8398 *m) {
     enum {
         ENEMY_INITIALIZE = 0,
+        ENEMY_WAIT_FOR_ACTIVATION = 1,
+        ENEMY_WAIT_FOR_LINKED_MOBY = 2,
+        ENEMY_PROJECTILE_ATTACK_WINDUP = 4,
+        ENEMY_PROJECTILE_ATTACK = 5,
         ENEMY_MELEE_ATTACK = 6,
         ENEMY_MOVE_TO_PATH_NODE = 7,
         ENEMY_FOLLOW_PATH_TO_END = 8,
@@ -2411,7 +2429,7 @@ void FUN_L03_002c6fd0(Moby2C8398 *m) {
             m->state = 2;
         }
         break;
-    case 1:
+    case ENEMY_WAIT_FOR_ACTIVATION:
         if ((m->b70 & 2) && m->b52 != 0) {
             blend_moby_animation(m, 0, 0, FUN_L03_002c6d98_cf(10));
         }
@@ -2468,7 +2486,7 @@ void FUN_L03_002c6fd0(Moby2C8398 *m) {
             }
         }
         break;
-    case 2:
+    case ENEMY_WAIT_FOR_LINKED_MOBY:
         if (dist < d->f270 && FUN_L03_002c6e18_cf(tgt.pos[2] - m->pos[2]) < 4.0f &&
             m->anim != 0xA) {
             blend_moby_animation(m, 0xA, 0, FUN_L03_002c6d98_cf(10));
@@ -2487,7 +2505,7 @@ void FUN_L03_002c6fd0(Moby2C8398 *m) {
             }
         }
         break;
-    case 4:
+    case ENEMY_PROJECTILE_ATTACK_WINDUP:
         if (m->b70 & 2) {
             m->state = 5;
             d->b254 = 0;
@@ -2518,7 +2536,7 @@ void FUN_L03_002c6fd0(Moby2C8398 *m) {
             }
         }
         break;
-    case 5: {
+    case ENEMY_PROJECTILE_ATTACK: {
         if (FUN_L00_0024f7c8_cf((char *)m, 8.0f)) {
             float a[4];
             float b[4];
@@ -3169,6 +3187,9 @@ extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 void FUN_L03_002c95a8(Moby2C8398 *m) {
     enum {
         DEATH_KNOCKBACK_RESPONSE = 1,
+        KNOCKBACK_WITHOUT_FACING_CHANGE_RESPONSE = 3,
+        ALTERNATE_ANIMATION_KNOCKBACK_RESPONSE = 4,
+        ANIMATION_SIX_KNOCKBACK_RESPONSE = 5,
         TURN_AWAY_KNOCKBACK_RESPONSE = 6,
         NO_KNOCKBACK_HIT_RESPONSE = 12,
         ZERO_DAMAGE_NO_KNOCKBACK_RESPONSE = 13
@@ -3237,7 +3258,7 @@ void FUN_L03_002c95a8(Moby2C8398 *m) {
             m->state = 10;
             allocate_voice_for_target_entry(1, 0, (int)m);
             break;
-        case 3:
+        case KNOCKBACK_WITHOUT_FACING_CHANGE_RESPONSE:
         case 7:
         case 8:
             d->b67 = 0x78;
@@ -3257,8 +3278,8 @@ void FUN_L03_002c95a8(Moby2C8398 *m) {
             m->state = 10;
             allocate_voice_for_target_entry(1, 0, (int)m);
             break;
-        case 4:
-        case 5:
+        case ALTERNATE_ANIMATION_KNOCKBACK_RESPONSE:
+        case ANIMATION_SIX_KNOCKBACK_RESPONSE:
             d->b67 = 0x78;
             d->q.f10 = frame_time_sq * 80.0f;
             d->q.f14 = D_L03_001618E8 * frame_time_sq;

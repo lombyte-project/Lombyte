@@ -1139,7 +1139,7 @@ void FUN_L01_00232dc0(void) {
         GRAVITY_OPPOSITE_GROUND_NORMAL = 1,
         GRAVITY_TOWARD_REFERENCE_POINT = 2
     };
-    V collision_ray_end, ground_ray_start, v20, side_ray_start, unused_side_probe_point, side_hit_angles, normalized_side_hit_normal;
+    V collision_ray_end, ground_ray_start, ground_delta_or_angles, side_ray_start, unused_side_probe_point, side_hit_angles, normalized_side_hit_normal;
     f32 f;
     s32 r;
     s32 i;
@@ -1222,8 +1222,8 @@ void FUN_L01_00232dc0(void) {
         FUN_00125180_c((u8 *)&hero.unk270, (u8 *)&HH.normal_x);
         hero.ground_slope.f = FUN_L00_00233d30((u8 *)&HH.normal_x);
         hero.downhill_yaw = FUN_001f9e90_c(HH.normal_x, HH.normal_y);
-        subtract_vector_xyz(&v20, (u8 *)&hero.ground_point, (u8 *)&hero.motion.pos);
-        if (0.0f < FUN_001f9ab0_c(&v20, (u8 *)&hero.unk270)) {
+        subtract_vector_xyz(&ground_delta_or_angles, (u8 *)&hero.ground_point, (u8 *)&hero.motion.pos);
+        if (0.0f < FUN_001f9ab0_c(&ground_delta_or_angles, (u8 *)&hero.unk270)) {
             hero.ground_distance = -hero.ground_distance;
         }
         if (hero.ground_distance < 0.02f) {
@@ -1274,12 +1274,12 @@ d1:
     if (!(hero.ground_distance < 0.25f)) {
         return;
     }
-    FUN_L00_00216078((u8 *)&hero.unk270, &v20);
-    if (-0.78539819f < v20.f[1] && v20.f[1] < 0.78539819f) {
-        hero.ground_pitch.f = v20.f[1];
+    FUN_L00_00216078((u8 *)&hero.unk270, &ground_delta_or_angles);
+    if (-0.78539819f < ground_delta_or_angles.f[1] && ground_delta_or_angles.f[1] < 0.78539819f) {
+        hero.ground_pitch.f = ground_delta_or_angles.f[1];
     }
-    if (-0.78539819f < v20.f[0] && v20.f[0] < 0.78539819f) {
-        hero.unk2E8.f = v20.f[0];
+    if (-0.78539819f < ground_delta_or_angles.f[0] && ground_delta_or_angles.f[0] < 0.78539819f) {
+        hero.unk2E8.f = ground_delta_or_angles.f[0];
     }
     for (i = 0; i < 2; i++) {
         a = 1.5707964f;

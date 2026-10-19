@@ -114,6 +114,10 @@ void blarg_space_commando_update(struct Moby *moby) __asm__("FUN_L06_002fdbd0");
 void blarg_space_commando_update(struct Moby *moby) {
     enum {
         BLARG_COMMANDO_STATE_INITIALIZE = 0,
+        BLARG_COMMANDO_STATE_SELECT_ACTION = 1,
+        BLARG_COMMANDO_STATE_RANGED_ATTACK_WINDUP = 2,
+        BLARG_COMMANDO_STATE_RANGED_ATTACK_RECOVERY = 3,
+        BLARG_COMMANDO_STATE_RANGED_ATTACK_COOLDOWN = 4,
         BLARG_COMMANDO_STATE_MELEE_ATTACK = 5,
         BLARG_COMMANDO_STATE_MELEE_RECOVERY = 6,
         BLARG_COMMANDO_STATE_CHASE_TARGET = 11,
@@ -164,7 +168,7 @@ void blarg_space_commando_update(struct Moby *moby) {
         qcopy(&vars->home, &moby->pos);
         moby->state = 1;
         break;
-    case 1:
+    case BLARG_COMMANDO_STATE_SELECT_ACTION:
         if (vars->volume != -1 && vars->route != -1) {
             if (is_point_inside_clip_volume(&hero.motion.pos, vars->volume) != 0) {
                 moby->state = 14;
@@ -230,7 +234,7 @@ void blarg_space_commando_update(struct Moby *moby) {
             FUN_L00_00258b50(moby, &vars->ctl, &b, &c, 1.0f);
         }
         break;
-    case 2:
+    case BLARG_COMMANDO_STATE_RANGED_ATTACK_WINDUP:
         approach_angle(&moby->rot.z, fast_arc_tan(target->pos.x - moby->pos.x, target->pos.y - moby->pos.y),
                          &vars->turn_speed, frame_time_sq * 6.2831855f, frame_time_sq * 6.2831855f,
                          frame_time * 3.1415927f);
@@ -242,7 +246,7 @@ void blarg_space_commando_update(struct Moby *moby) {
             }
         }
         break;
-    case 3:
+    case BLARG_COMMANDO_STATE_RANGED_ATTACK_RECOVERY:
         if (moby->anim_flags & 2) {
             if (vars->unk164 != 2) {
                 moby->state = 4;
@@ -258,7 +262,7 @@ void blarg_space_commando_update(struct Moby *moby) {
             }
         }
         break;
-    case 4:
+    case BLARG_COMMANDO_STATE_RANGED_ATTACK_COOLDOWN:
         approach_angle(&moby->rot.z, fast_arc_tan(target->pos.x - moby->pos.x, target->pos.y - moby->pos.y),
                          &vars->turn_speed, frame_time_sq * 6.2831855f, frame_time_sq * 6.2831855f,
                          frame_time * 3.1415927f);
@@ -462,7 +466,10 @@ void FUN_L06_002feb40(char *m) {
         HIT_RESPONSE_WITHOUT_KNOCKBACK = 0,
         FATAL_HIT_RESPONSE = 1,
         FRAGMENTING_FATAL_HIT_RESPONSE = 2,
-        NONFATAL_KNOCKBACK_HIT_RESPONSE = 3
+        NONFATAL_KNOCKBACK_HIT_RESPONSE = 3,
+        TIMED_NONFATAL_KNOCKBACK_HIT_RESPONSE = 4,
+        RECOVERABLE_KNOCKBACK_HIT_RESPONSE = 5,
+        HIT_RESPONSE_PRESERVING_MOBY_STATE = 11
     };
     extern unsigned char D_0013D408[];
     char *d;
@@ -504,8 +511,8 @@ void FUN_L06_002feb40(char *m) {
         *(float *)(d + 0x88) = 0.5f;
         switch (r) {
         case NONFATAL_KNOCKBACK_HIT_RESPONSE:
-        case 4:
-        case 5:
+        case TIMED_NONFATAL_KNOCKBACK_HIT_RESPONSE:
+        case RECOVERABLE_KNOCKBACK_HIT_RESPONSE:
         case 6:
         case 7:
         case 8:
@@ -578,7 +585,7 @@ void FUN_L06_002feb40(char *m) {
             break;
         }
         case HIT_RESPONSE_WITHOUT_KNOCKBACK:
-        case 11:
+        case HIT_RESPONSE_PRESERVING_MOBY_STATE:
         default:
             break;
         }

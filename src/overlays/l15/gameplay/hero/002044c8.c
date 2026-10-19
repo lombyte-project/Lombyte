@@ -635,7 +635,7 @@ void FUN_L15_0020ed50(void) {
     case 0x1D:
     case 0x1E:
     case 0x1F:
-    case 0x3D:
+    case HERO_STATE_DYING:
     case 0x70:
     case 0x71:
     case 0x72:
@@ -1616,7 +1616,7 @@ void FUN_L15_0020ed50(void) {
         break;
     }
     case 0x21:
-    case 0x7A:
+    case HERO_STATE_WALL_BONK:
         approach_value(&hero.ground_speed, 0.0f, frame_time_sq * 24.0f);
         hero.motion.velocity.f[0] = fast_cos(hero.unkA68) * hero.ground_speed;
         hero.motion.velocity.f[1] = fast_sin(hero.unkA68) * hero.ground_speed;
@@ -2014,7 +2014,7 @@ void FUN_L15_0020ed50(void) {
         }
         break;
     }
-    case 8: {
+    case HERO_STATE_LAND: {
         f32 sp;
         if (hero_slot_item_id(3) == 2) {
             if (hero.unk2228 != -1) {
@@ -2052,7 +2052,7 @@ void FUN_L15_0020ed50(void) {
         FUN_L00_0020b5b8();
         break;
     }
-    case 7:
+    case HERO_STATE_JUMP:
     case HERO_STATE_RUN_JUMP:
     case HERO_STATE_PACK_JUMP:
     case HERO_STATE_HIGH_JUMP:
@@ -2069,7 +2069,7 @@ void FUN_L15_0020ed50(void) {
     case 0x4C:
     case 0x5E:
     case 0x69: {
-        s32 t198;
+        s32 jump_timer_or_trail_control;
         s32 jump_frame_threshold;
         if (hero.state.current == 0x1C && hero.unk22D8 == 0 && hero.items[3].item_id == 3) {
             if (FUN_L00_00211870(10.0f) != 0) {
@@ -2096,12 +2096,12 @@ void FUN_L15_0020ed50(void) {
                 FUN_L00_00209a40(7, 0);
             }
         }
-        t198 = hero.state_timer;
+        jump_timer_or_trail_control = hero.state_timer;
         jump_frame_threshold = hero.unk420;
-        if (t198 == jump_frame_threshold) {
+        if (jump_timer_or_trail_control == jump_frame_threshold) {
             qcopy(&hero.unk400, &hero.motion.pos);
         }
-        if (hero.unk418 != 0 || (t198 < jump_frame_threshold && hero.state.current != HERO_STATE_HIGH_JUMP && hero.state.current != HERO_STATE_PACK_LONG_JUMP && hero.state.current != 0xC &&
+        if (hero.unk418 != 0 || (jump_timer_or_trail_control < jump_frame_threshold && hero.state.current != HERO_STATE_HIGH_JUMP && hero.state.current != HERO_STATE_PACK_LONG_JUMP && hero.state.current != 0xC &&
                             hero.state.current != 0x11 && hero.state.current != 0x1C && hero.state.current != 0x4C)) {
             f32 sv;
             turn_to(0, frame_scale_sq * 0.015f, frame_scale_sq * 0.2f, frame_time * 15.009831f);
@@ -2172,8 +2172,8 @@ void FUN_L15_0020ed50(void) {
             FUN_L00_00215340();
         }
         if (hero.state.current == HERO_STATE_PACK_LONG_JUMP || hero.state.current == 0xD) {
-            t198 = (scale_game_frames(12) < hero.state_timer) * 2;
-            FUN_L00_00262608(&hero.trail.pos[0], t198);
+            jump_timer_or_trail_control = (scale_game_frames(12) < hero.state_timer) * 2;
+            FUN_L00_00262608(&hero.trail.pos[0], jump_timer_or_trail_control);
         }
         if (hero.state.current == HERO_STATE_PACK_LONG_JUMP && scale_game_frames(8) < hero.state_timer && hero.anim_frame < 28.0f) {
             s32 n;
@@ -2280,7 +2280,7 @@ void FUN_L15_0020ed50(void) {
             FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.velocity, frame_time_sq * 54.0f);
         }
         break;
-    case 0x40:
+    case HERO_STATE_FIDGET:
     case 0x67:
         clear_u64_value(&hero.motion.velocity);
         break;

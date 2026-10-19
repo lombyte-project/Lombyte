@@ -313,6 +313,7 @@ void sand_shark_update(struct Moby *moby) __asm__("FUN_L02_002d3e50");
 void sand_shark_update(struct Moby *moby) {
     enum {
         SAND_SHARK_INITIALIZE = 0,
+        SAND_SHARK_WANDER_AROUND_HOME = 2,
         SAND_SHARK_WAIT_FOR_TARGET_IN_VOLUME = 3,
         SAND_SHARK_APPROACH_TARGET = 5,
         SAND_SHARK_RETURN_HOME = 7,
@@ -321,7 +322,10 @@ void sand_shark_update(struct Moby *moby) {
         SAND_SHARK_FACE_TARGET = 15,
         SAND_SHARK_ALIGN_TO_GROUND_BEFORE_APPROACH_TARGET = 19,
         SAND_SHARK_ALIGN_TO_GROUND_BEFORE_RETURN_HOME = 20,
-        SAND_SHARK_FADE_OUT = 25
+        SAND_SHARK_APPROACH_TARGET_WITH_HEIGHT_OFFSET = 22,
+        SAND_SHARK_RETURN_HOME_WITH_HEIGHT_OFFSET = 23,
+        SAND_SHARK_FADE_OUT = 25,
+        SAND_SHARK_BALLISTIC_FLIGHT_WITH_PARTICLES = 27
     };
     Varsd3e50 *vars;
     OvlVec4 v0;
@@ -424,7 +428,7 @@ void sand_shark_update(struct Moby *moby) {
             blend_e50(moby, 0, 0, scale_ticks_e50(3));
         }
         break;
-    case 2:
+    case SAND_SHARK_WANDER_AROUND_HOME:
         moby->pos.z += D_L02_0016191C;
         qcopy(&v0, &vars->home);
         FUN_L00_00258278_c(moby, add_rotations_e50(atan2_e50(v0.f[0] - moby->pos.x, v0.f[1] - moby->pos.y), vars->turn_offset),
@@ -593,7 +597,7 @@ void sand_shark_update(struct Moby *moby) {
         break;
     }
     case SAND_SHARK_APPROACH_TARGET:
-    case 22:
+    case SAND_SHARK_APPROACH_TARGET_WITH_HEIGHT_OFFSET:
         if (moby->state == 0x16) {
             moby->pos.z += D_L02_0016191C;
             if (rand_below_e50(0xFF) & 1) {
@@ -665,7 +669,7 @@ void sand_shark_update(struct Moby *moby) {
         }
         break;
     case SAND_SHARK_RETURN_HOME:
-    case 23:
+    case SAND_SHARK_RETURN_HOME_WITH_HEIGHT_OFFSET:
         if (moby->state == 0x17) {
             moby->pos.z += D_L02_0016191C;
             if (rand_below_e50(0xFF) & 1) {
@@ -787,7 +791,7 @@ void sand_shark_update(struct Moby *moby) {
         }
         break;
     }
-    case 27: {
+    case SAND_SHARK_BALLISTIC_FLIGHT_WITH_PARTICLES: {
         int life;
 
         FUN_L00_00257d78_e50(&v1, 0.0f, 0.2f);
@@ -1410,13 +1414,20 @@ void FUN_L02_002d7748(struct Moby *moby) {
         L02_BOT_MOVE_TO_POST = 5,
         L02_BOT_WANDER = 6,
         L02_BOT_SELECT_ATTACK_OR_WANDER = 7,
+        L02_BOT_WAIT_FOR_WAKE_TRIGGER_BEFORE_GROUND_ALIGNMENT = 8,
+        L02_BOT_WAIT_FOR_WAKE_TRIGGER_WITH_ALTERNATE_WAKE_ANIMATION = 9,
         L02_BOT_WAIT_FOR_WAKE_TRIGGER = 10,
+        L02_BOT_WAIT_FOR_ANIMATION_BEFORE_ATTACK = 11,
+        L02_BOT_UPDATE_ATTACK_SHOTS = 12,
+        L02_BOT_WAIT_FOR_ANIMATION_BEFORE_ATTACK_RECHECK = 13,
         L02_BOT_HIT_KNOCKBACK_RECOVERY = 16,
         L02_BOT_DEATH_KNOCKBACK = 17
     };
     enum {
         L02_BOT_START_SELECT_ATTACK_OR_WANDER = 0,
-        L02_BOT_START_WAIT_FOR_WAKE_TRIGGER = 1
+        L02_BOT_START_WAIT_FOR_WAKE_TRIGGER = 1,
+        L02_BOT_START_WAIT_FOR_WAKE_TRIGGER_BEFORE_GROUND_ALIGNMENT = 2,
+        L02_BOT_START_WAIT_FOR_WAKE_TRIGGER_WITH_ALTERNATE_WAKE_ANIMATION = 3
     };
     float position[4];
     float direction[4];
@@ -1475,13 +1486,13 @@ void FUN_L02_002d7748(struct Moby *moby) {
             }
             moby->state = 10;
             break;
-        case 2:
+        case L02_BOT_START_WAIT_FOR_WAKE_TRIGGER_BEFORE_GROUND_ALIGNMENT:
             if (moby->prev_seq != 2) {
                 blend_moby_animation_c3(moby, 2, 0, 0);
             }
             moby->state = 8;
             break;
-        case 3:
+        case L02_BOT_START_WAIT_FOR_WAKE_TRIGGER_WITH_ALTERNATE_WAKE_ANIMATION:
             if (moby->prev_seq != 15) {
                 blend_moby_animation_c3(moby, 15, 0, 0);
             }
@@ -1578,8 +1589,8 @@ void FUN_L02_002d7748(struct Moby *moby) {
             }
         }
         break;
-    case 8:
-    case 9:
+    case L02_BOT_WAIT_FOR_WAKE_TRIGGER_BEFORE_GROUND_ALIGNMENT:
+    case L02_BOT_WAIT_FOR_WAKE_TRIGGER_WITH_ALTERNATE_WAKE_ANIMATION:
         if (!(D_L02_0015F5CC_i & 3) && moby->visible != 0) {
             spray_radius = random_float_between(0.0f, D_L02_00161A98) * D_0015ED6C;
             spray_heading = random_angle_radians();
@@ -1616,7 +1627,7 @@ void FUN_L02_002d7748(struct Moby *moby) {
             }
         }
         break;
-    case 11:
+    case L02_BOT_WAIT_FOR_ANIMATION_BEFORE_ATTACK:
         moby->anim_speed = 2.0f;
         target = data->target;
         angle = fast_arc_tan(*(float *)(target + 0x10) - moby->pos.x,
@@ -1630,7 +1641,7 @@ void FUN_L02_002d7748(struct Moby *moby) {
             }
         }
         break;
-    case 12:
+    case L02_BOT_UPDATE_ATTACK_SHOTS:
         moby->anim_speed = 0.5f;
         moby_point_position(moby, 0, position);
         direction[0] = fast_cos_c(fast_arc_tan(position[0] - moby->pos.x, position[1] - moby->pos.y));
@@ -1656,7 +1667,7 @@ void FUN_L02_002d7748(struct Moby *moby) {
             }
         }
         break;
-    case 13:
+    case L02_BOT_WAIT_FOR_ANIMATION_BEFORE_ATTACK_RECHECK:
         target = data->target;
         angle = fast_arc_tan(*(float *)(target + 0x10) - moby->pos.x,
                                   *(float *)(target + 0x14) - moby->pos.y);
@@ -2589,10 +2600,12 @@ void transport_pod_update(unsigned char *moby) __asm__("FUN_L02_002ddc88");
 void transport_pod_update(unsigned char *moby) {
     enum {
         TRANSPORT_POD_INITIALIZE = 0,
+        TRANSPORT_POD_WAIT_FOR_GEAR_MOVEMENT_TRIGGER = 1,
         TRANSPORT_POD_TIMED_GEAR_MOVEMENT = 2,
         TRANSPORT_POD_RAISE_FOR_BOARDING = 3,
         TRANSPORT_POD_POSITION_RAILS_FOR_BOARDING = 4,
         TRANSPORT_POD_WAIT_FOR_RIDER_OR_RECALL = 5,
+        TRANSPORT_POD_WAIT_FOR_RIDER_READY_FOR_DEPARTURE = 6,
         TRANSPORT_POD_POSITION_RAILS_FOR_DEPARTURE = 7,
         TRANSPORT_POD_LOWER_AND_TRANSFER_TO_OTHER_STOP = 8,
         TRANSPORT_POD_ADVANCE_RIDE_CAMERA = 9,
@@ -2600,7 +2613,10 @@ void transport_pod_update(unsigned char *moby) {
         TRANSPORT_POD_POSITION_RAILS_FOR_DISEMBARKING = 11,
         TRANSPORT_POD_RAISE_TO_STOP_HEIGHT = 12,
         TRANSPORT_POD_WAIT_FOR_RIDER_TO_LEAVE = 13,
-        TRANSPORT_POD_CREATE_RAILS = 14
+        TRANSPORT_POD_CREATE_RAILS = 14,
+        TRANSPORT_POD_POSITION_RAILS_FROM_CONFIGURED_OFFSETS = 15,
+        TRANSPORT_POD_CYCLE_RAILS_TO_SPLIT_HEIGHTS = 16,
+        TRANSPORT_POD_CYCLE_RAILS_TO_SHARED_LOWER_HEIGHT = 17
     };
     Varsdc88 *d = *(Varsdc88 **)(moby + 0x78);
     int i;
@@ -2650,7 +2666,7 @@ void transport_pod_update(unsigned char *moby) {
         d->cam_accel = D_0015ED6C * 0.3f * (float)*D_L02_001B0AB0_dc88[d->path];
         FUN_L02_002df0b0((struct Moby *)moby);
         break;
-    case 1:
+    case TRANSPORT_POD_WAIT_FOR_GEAR_MOVEMENT_TRIGGER:
         if (D_0014C050_dc88[moby[0xB0] + current_level_index * 16] == 0xFF) {
             d->timer = scale_ticks(30);
             moby[0x20] = 2;
@@ -2749,7 +2765,7 @@ void transport_pod_update(unsigned char *moby) {
             FUN_L00_002eaa30(&e);
         }
         break;
-    case 6: {
+    case TRANSPORT_POD_WAIT_FOR_RIDER_READY_FOR_DEPARTURE: {
         int r6 = FUN_L00_00233f38();
         if (r6 == 2) {
             moby[0x20] = 7;
@@ -2873,7 +2889,7 @@ void transport_pod_update(unsigned char *moby) {
         qcopy_nc(d->rail_b + 0x40, moby + 0x40);
         moby[0x20] = 0xF;
         break;
-    case 15:
+    case TRANSPORT_POD_POSITION_RAILS_FROM_CONFIGURED_OFFSETS:
         d->rail_a_off = D_L02_00161C20;
         d->rail_b_off = D_L02_00161C24;
         FUN_L02_002def80((struct Moby *)moby);
@@ -2881,7 +2897,7 @@ void transport_pod_update(unsigned char *moby) {
             moby[0x20] = 0x10;
         }
         break;
-    case 16:
+    case TRANSPORT_POD_CYCLE_RAILS_TO_SPLIT_HEIGHTS:
         d->rail_a_off = 2.0f;
         d->rail_b_off = -4.0f;
         FUN_L02_002def80((struct Moby *)moby);
@@ -2892,7 +2908,7 @@ void transport_pod_update(unsigned char *moby) {
             moby[0x20] = 0x11;
         }
         break;
-    case 17:
+    case TRANSPORT_POD_CYCLE_RAILS_TO_SHARED_LOWER_HEIGHT:
         d->rail_a_off = -1.0f;
         d->rail_b_off = -1.0f;
         FUN_L02_002def80((struct Moby *)moby);
@@ -2985,18 +3001,21 @@ extern short D_L02_00161C68 __attribute__((sda));
 void crane_update(struct Moby *moby) __asm__("FUN_L02_002df1a8");
 void crane_update(struct Moby *moby) {
     enum {
+        CRANE_ANIM_RESTART_WAIT = 0,
         CRANE_ANIM_TRANSITION_TO_RANDOM_WAIT = 1,
         CRANE_ANIM_WAIT_FOR_RANDOM_TRANSITION = 2,
+        CRANE_ANIM_TRANSITION_TO_WAIT_FOR_TRANSITION_TO_RANDOM_WAIT = 3,
         CRANE_ANIM_WAIT_FOR_TRANSITION_TO_RANDOM_WAIT = 4,
-        CRANE_ANIM_TRANSITION_BACK_TO_RANDOM_WAIT = 5
+        CRANE_ANIM_TRANSITION_BACK_TO_RANDOM_WAIT = 5,
+        CRANE_ANIM_TRANSITION_TO_RESTART_WAIT = 7
     };
     int *d = (int *)moby->pvars;
     moby->anim_speed = *(float *)&D_L02_00161C68;
     switch (moby->prev_seq) {
     case CRANE_ANIM_TRANSITION_TO_RANDOM_WAIT:
-    case 3:
+    case CRANE_ANIM_TRANSITION_TO_WAIT_FOR_TRANSITION_TO_RANDOM_WAIT:
     case CRANE_ANIM_TRANSITION_BACK_TO_RANDOM_WAIT:
-    case 7:
+    case CRANE_ANIM_TRANSITION_TO_RESTART_WAIT:
         if (moby->anim_flags & 2) {
             int idx;
             moby->anim_time = 0;
@@ -3015,7 +3034,7 @@ void crane_update(struct Moby *moby) {
             moby->command = func_001FA898_r(multiply_global_factor_ed64(random_float_between_alt(180.0f, 240.0f)));
         }
         break;
-    case 0:
+    case CRANE_ANIM_RESTART_WAIT:
         if (FUN_L00_001fefc8(&moby->command)) {
             if (moby->prev_seq != 1) {
                 blend_moby_animation(moby, 1, 0, scale_game_frames(10));

@@ -1401,9 +1401,11 @@ void gadgebot_update(GbMoby *moby) {
     enum {
         GADGEBOT_INITIALIZE = 0,
         GADGEBOT_WAIT_FOR_SPAWN_PAD = 1,
+        GADGEBOT_WANDER_NEAR_HOME = 2,
         GADGEBOT_FOLLOW_HERO = 3,
         GADGEBOT_STAND_AND_FACE_HERO = 4,
         GADGEBOT_SEEK_AND_ATTACK_TARGET = 5,
+        GADGEBOT_SEEK_INTERACTION_TARGET = 7,
         GADGEBOT_ABSORB_INTO_OWNER = 8,
         GADGEBOT_UPDATE_KNOCKBACK = 9
     };
@@ -1416,7 +1418,8 @@ void gadgebot_update(GbMoby *moby) {
     enum {
         GADGEBOT_COMMAND_FOLLOW_HERO = 1,
         GADGEBOT_COMMAND_STAND_AND_FACE_HERO = 2,
-        GADGEBOT_COMMAND_SEEK_AND_ATTACK_TARGET = 3
+        GADGEBOT_COMMAND_SEEK_AND_ATTACK_TARGET = 3,
+        GADGEBOT_COMMAND_SEEK_INTERACTION_TARGET = 4
     };
     enum {
         GADGEBOT_FOLLOW_INITIALIZE = 0,
@@ -1433,7 +1436,7 @@ void gadgebot_update(GbMoby *moby) {
     float save1[4];
     float v40[4];
     float v50[4];
-    float v60[4];
+    float temporary_position[4];
     float v70[4];
     float attack_probe_near_position[4];
     float ang;
@@ -1476,7 +1479,7 @@ void gadgebot_update(GbMoby *moby) {
                 case GADGEBOT_COMMAND_STAND_AND_FACE_HERO:
                     moby->state = 4;
                     break;
-                case 4:
+                case GADGEBOT_COMMAND_SEEK_INTERACTION_TARGET:
                     moby->sub = 0;
                     moby->state = 7;
                     break;
@@ -1588,7 +1591,7 @@ void gadgebot_update(GbMoby *moby) {
             return;
         }
         break;
-    case 2:
+    case GADGEBOT_WANDER_NEAR_HOME:
         if (moby->anim != 1) {
             blend_moby_animation(moby, 1, 0, scale_game_frames(7));
         }
@@ -1656,7 +1659,7 @@ void gadgebot_update(GbMoby *moby) {
                 if (moby->anim != 1) {
                     blend_moby_animation(moby, 1, 0, scale_game_frames(7));
                 }
-                *(OvlQuad *)v60 = *(OvlQuad *)moby->pos;
+                *(OvlQuad *)temporary_position = *(OvlQuad *)moby->pos;
                 if (d->unk27C >= 0) {
                     int *p;
 
@@ -1703,7 +1706,7 @@ void gadgebot_update(GbMoby *moby) {
                 dz = absolute_float(moby->pos[2] - hero.ground_point.f[2]);
                 probe_ground_height(moby->pos, 0, 0.5f);
                 if (D_L06_001745D8 != 0 && D_L06_001745D8->cls_id == 0x3B1) {
-                    *(OvlQuad *)moby->pos = *(OvlQuad *)v60;
+                    *(OvlQuad *)moby->pos = *(OvlQuad *)temporary_position;
                 }
                 hit = 0;
                 if (flags & 1) {
@@ -1717,7 +1720,7 @@ void gadgebot_update(GbMoby *moby) {
                 }
                 if (flags & 0x20) {
                     moby->state = 4;
-                    *(OvlQuad *)moby->pos = *(OvlQuad *)v60;
+                    *(OvlQuad *)moby->pos = *(OvlQuad *)temporary_position;
                 }
                 if (dist < 0.8f || hit != 0 || dz > 1.75f) {
                     qcopy(d->unk0, moby->pos);
@@ -1802,11 +1805,11 @@ void gadgebot_update(GbMoby *moby) {
                                          moby->pos, d->target->pos, v40, 0.1f) == 0) {
                         qcopy(v40, d->target->pos);
                     }
-                    *(OvlQuad *)v60 = *(OvlQuad *)moby->pos;
-                    FUN_L00_00261d78(0.17f, d->paths.id[d->unk27C], moby->pos, v60);
+                    *(OvlQuad *)temporary_position = *(OvlQuad *)moby->pos;
+                    FUN_L00_00261d78(0.17f, d->paths.id[d->unk27C], moby->pos, temporary_position);
                     p = D_L06_001B0C30[d->paths.id[d->unk27C]];
-                    if (point_in_path_xy(v60, p + 4, *p) != 0) {
-                        *(OvlQuad *)moby->pos = *(OvlQuad *)v60;
+                    if (point_in_path_xy(temporary_position, p + 4, *p) != 0) {
+                        *(OvlQuad *)moby->pos = *(OvlQuad *)temporary_position;
                     }
                 } else {
                     qcopy(v40, d->target->pos);
@@ -1901,7 +1904,7 @@ void gadgebot_update(GbMoby *moby) {
             break;
         }
         break;
-    case 7:
+    case GADGEBOT_SEEK_INTERACTION_TARGET:
         switch (moby->sub) {
         case GADGEBOT_INTERACTION_SEARCH_TARGET:
             moby->sub = 1;
@@ -1992,7 +1995,7 @@ void gadgebot_update(GbMoby *moby) {
                 v50[1] = fast_sin(random_angle_radians()) * random_float_between(0.0f, 0.25f);
                 v50[2] = 0.0f;
                 v50[2] += random_float_between(0.0f, 0.5f);
-                FUN_L00_001ff290(v60, v50, moby->pos);
+                FUN_L00_001ff290(temporary_position, v50, moby->pos);
                 normalize_vector_xyz(v40, v40, random_float_between(0.0f, frame_time));
                 v40[2] = random_float_between(frame_time * 2.5f, frame_time * 5.0f);
                 t = scale_game_frames(random_int_between(0xF, 0x1E));
@@ -2459,6 +2462,7 @@ int FUN_L06_002f2c28(char *ctx, char *ow, char *moby, int flag, int *out) {
     enum {
         MOBY_CLASS_RELOCATION_TRIGGER = 0x15F,
         MOBY_CLASS_OFFSET_RELOCATION_TRIGGER = 0x3B1,
+        MOBY_CLASS_GADGEBOT_ABSORPTION_TRIGGER = 0x400,
         MOBY_CLASS_RELOCATION_TRIGGER_WITH_SOUND = 0x515,
         MOBY_CLASS_GADGEBOT_ABSORPTION_TARGET = 0x516
     };
@@ -2571,7 +2575,7 @@ int FUN_L06_002f2c28(char *ctx, char *ow, char *moby, int flag, int *out) {
             }
         }
         return 0;
-    case 0x400:
+    case MOBY_CLASS_GADGEBOT_ABSORPTION_TRIGGER:
     case MOBY_CLASS_GADGEBOT_ABSORPTION_TARGET:
         if (flag != 0) return 0;
         if (*(unsigned char *)(moby + 0x20) == 2) return 0;
@@ -2873,6 +2877,7 @@ void FUN_L06_002f4f00(Moby *m) {
         WAIT_FOR_TRIGGER_AND_CHILDREN = 2,
         UPDATE_POSITION_FROM_BASE = 3,
         ROTATE_AND_HIDE_AFTER_TRIGGER_AND_CHILDREN = 4,
+        ROTATE_AND_HIDE = 5,
         RESTORE_ROTATION_THEN_WAIT_FOR_TRIGGER_AND_CHILDREN = 8,
         RESTORE_ROTATION_THEN_UPDATE_POSITION_FROM_BASE = 9
     };
@@ -2949,7 +2954,7 @@ void FUN_L06_002f4f00(Moby *m) {
         add_vector_xyz((*(float (*)[4])&m->pos), tmp, d);
         break;
     case ROTATE_AND_HIDE_AFTER_TRIGGER_AND_CHILDREN:
-    case 5:
+    case ROTATE_AND_HIDE:
         approach_angle(&d->unk14, &d->unk20, 1.0471976f,
                           D_L06_00161D38 * 0.017453292f * D_0015ED70,
                           D_L06_00161D3C * 0.017453292f * D_0015ED70,

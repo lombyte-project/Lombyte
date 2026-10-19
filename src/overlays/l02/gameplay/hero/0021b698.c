@@ -317,7 +317,8 @@ extern CollisionHit HH __asm__("D_L02_00174440") __attribute__((section(".data")
 void FUN_L02_002216a0(void) {
     enum {
         GRAVITY_MODE_NEGATIVE_Z = 0,
-        GRAVITY_MODE_OPPOSITE_GROUND_NORMAL = 1
+        GRAVITY_MODE_OPPOSITE_GROUND_NORMAL = 1,
+        GRAVITY_MODE_TOWARD_REFERENCE_POINT = 2
     };
     V collision_ray_end, collision_ray_start, ground_geometry_scratch, probe_ray_start, unused_probe_point, probe_surface_angles, normalized_probe_hit_normal;
     f32 f;
@@ -441,7 +442,7 @@ d1:
         qcopy((u8 *)&hero.gravity_dir, (u8 *)&hero.unk270);
         FUN_001f9a68_c((u8 *)&hero.gravity_dir, (u8 *)&hero.gravity_dir, -1.0f);
         break;
-    case 2:
+    case GRAVITY_MODE_TOWARD_REFERENCE_POINT:
         fast_vec_sub((u8 *)&hero.gravity_dir, (u8 *)&hero.motion.unkB0, (u8 *)&hero.motion.pos);
         FUN_001f9bf8_c((u8 *)&hero.gravity_dir, (u8 *)&hero.gravity_dir, 1.0f);
         break;
@@ -1320,7 +1321,7 @@ void FUN_L02_00225c20(void) {
             }
         }
     } break;
-    case 0x14: {
+    case HERO_STATE_WRENCH_SLAM: {
         int t0;
         int t1;
         float v;
@@ -1455,7 +1456,7 @@ void FUN_L02_00225c20(void) {
             FUN_L00_002334d0(hero.motion.velocity.f, hero.motion.velocity.f, frame_time_sq * 54.0f);
         }
     } break;
-    case 0x13: {
+    case HERO_STATE_WRENCH_COMBO: {
         HeroTableRow2C *r;
 
         if (hero.unkA9C != 0 || hero.anim_frame < D_L02_0017C228[hero.attack_record].f20) {
@@ -1863,7 +1864,7 @@ void FUN_L02_00225c20(void) {
             }
         }
     } break;
-    case 0x79:
+    case HERO_STATE_SLIP:
         hero.motion.move_yaw = hero.downhill_yaw;
         hero.target_speed = frame_time * 5.5f;
         air_accel(frame_time_sq * 25.0f);

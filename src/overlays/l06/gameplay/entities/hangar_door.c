@@ -2386,10 +2386,13 @@ void FUN_L06_002f91e8(Moby *moby)
     enum {
         REACTION_SKIP_RESPONSE = 0,
         REACTION_DEATH = 1,
+        HIT_RESPONSE_DEATH_SEQUENCE = 2,
+        HIT_RESPONSE_NONLETHAL_FALLBACK = 5,
         REACTION_NO_RESPONSE = 11
     };
     enum {
-        SNAPPER_RETURN_HOME = 12
+        SNAPPER_RETURN_HOME = 12,
+        SNAPPER_RETREAT_FROM_TARGET = 13
     };
     BlargVars_2FA618 *data = (struct BlargVars_2FA618 *)moby->pvars;
     int hit;
@@ -2427,7 +2430,7 @@ void FUN_L06_002f91e8(Moby *moby)
             break;
         case 3:
         case 4:
-        case 5:
+        case HIT_RESPONSE_NONLETHAL_FALLBACK:
         case 6:
         case 7:
         case 8:
@@ -2442,7 +2445,7 @@ void FUN_L06_002f91e8(Moby *moby)
             data->f67 = 0xFA;
             break;
         case REACTION_DEATH:
-        case 2:
+        case HIT_RESPONSE_DEATH_SEQUENCE:
             moby->state = 0x11;
             moby->flags &= 0xEFFF;
             data->f88 = D_0015ED6C_c * 8.0f;
@@ -2465,7 +2468,7 @@ void FUN_L06_002f91e8(Moby *moby)
     case 8:
     case 9:
     case SNAPPER_RETURN_HOME:
-    case 13:
+    case SNAPPER_RETREAT_FROM_TARGET:
         if (level_frame_count % 4 == (((int)moby >> 8) & 3)) {
             func_L00_0025A8E8_2FA618(moby, 0.7f, &moby->pos.x, 0x10000, 0.9f, 1.0f, 0, 1, 0);
         }
@@ -3001,8 +3004,13 @@ void FUN_L06_002fa9c0(char *moby) {
     enum {
         HIT_RESPONSE_SKIP_REACTION = 0,
         HIT_RESPONSE_DEATH = 1,
+        HIT_RESPONSE_DEATH_SEQUENCE = 2,
         HIT_RESPONSE_NONLETHAL_FALLBACK = 5,
         HIT_RESPONSE_NO_REACTION = 11
+    };
+    enum {
+        AMPLIFIED_DAMAGE_SOURCE_CLASS = 0xB0,
+        REDUCED_DAMAGE_SOURCE_CLASS = 0x131
     };
     char *data;
     char *hit;
@@ -3026,10 +3034,10 @@ void FUN_L06_002fa9c0(char *moby) {
         if (*(char **)(hit + 0x20) != 0) {
             int oclass = *(short *)(*(char **)(hit + 0x20) + 0xA6);
             switch (oclass) {
-            case 0x131:
+            case REDUCED_DAMAGE_SOURCE_CLASS:
                 dmg *= 0.666f;
                 break;
-            case 0xB0: case 0x79: case 0x33B:
+            case AMPLIFIED_DAMAGE_SOURCE_CLASS: case 0x79: case 0x33B:
                 dmg *= 1.5f;
                 break;
             }
@@ -3065,7 +3073,7 @@ start_recovery:
             *(unsigned char *)(data + 0x67) = 200;
             break;
         case HIT_RESPONSE_DEATH:
-        case 2: {
+        case HIT_RESPONSE_DEATH_SEQUENCE: {
             char *base;
             if (*(int *)(data + 0x10C) != -1) {
                 set_animation_parameter(*(int *)(data + 0x10C), 0);
@@ -3547,6 +3555,8 @@ extern char D_0013A5E0_2FDA70[] __asm__("D_0013CAE4");
 void FUN_L06_002fc640(Moby_2FDA70 *moby) {
     enum {
         INITIALIZE_POSITION_AND_LINKED_MOBYS = 0,
+        WAIT_FOR_INITIAL_HERO_ACTIVATION = 1,
+        WAIT_FOR_SCENE_GAME_MODE_CLEAR = 2,
         WAIT_FOR_HERO_TRIGGER_AT_NODE_OFFSET_HEIGHT = 3,
         WAIT_FOR_HERO_TRIGGER_AT_NODE_BASE_HEIGHT = 4,
         MOVE_TO_NODE_BASE_HEIGHT = 5,
@@ -3588,7 +3598,7 @@ void FUN_L06_002fc640(Moby_2FDA70 *moby) {
         FUN_L06_002f53e8_c(D_L06_0015FFD8_c + (d->f64 << 8));
         FUN_L06_002f53e8_c(D_L06_0015FFD8_c + (d->f68 << 8));
         break;
-    case 1:
+    case WAIT_FOR_INITIAL_HERO_ACTIVATION:
         if (is_point_inside_clip_volume(&((Hero_2FDA70 *)(D_0013F350))->pos, d->f70) != 0) {
             if (((Flags_2FDA70 *)(alternate_item_available))->f20 == 0) {
                 ((Flags_2FDA70 *)(alternate_item_available))->f20 = 1;
@@ -3600,7 +3610,7 @@ void FUN_L06_002fc640(Moby_2FDA70 *moby) {
             d->f84 = 1;
         }
         break;
-    case 2:
+    case WAIT_FOR_SCENE_GAME_MODE_CLEAR:
         if (D_L06_0015F5C4_macro == 0) {
             moby->state = 3;
         }

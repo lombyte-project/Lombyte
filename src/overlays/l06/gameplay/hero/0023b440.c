@@ -133,6 +133,12 @@ extern int func_001F9908_r(int *) __asm__("FUN_001f9740");
 
 extern float D_L06_00167558_lui __asm__("D_L06_00167558") __attribute__((section(".data")));
 void FUN_L06_0023b440(void) {
+    enum {
+        HERO_STATE_GRIND_JUMP = 41,
+        HERO_STATE_GRIND_RAIL_TRANSFER = 42,
+        HERO_STATE_GRIND_ATTACK = 43,
+        HERO_STATE_GRIND_COLLISION_RECOVERY = 66
+    };
     unsigned char *moby;
     int prevSub;
     int prevState;
@@ -954,10 +960,10 @@ void FUN_L06_0023b440(void) {
                     }
                     break;
                 case HERO_STATE_GRIND:
-                case 41:
-                case 42:
-                case 43:
-                case 66:
+                case HERO_STATE_GRIND_JUMP:
+                case HERO_STATE_GRIND_RAIL_TRANSFER:
+                case HERO_STATE_GRIND_ATTACK:
+                case HERO_STATE_GRIND_COLLISION_RECOVERY:
                     if (hero.state.current == 0x42) {
                         hero.unk5BE = 0;
                     } else {

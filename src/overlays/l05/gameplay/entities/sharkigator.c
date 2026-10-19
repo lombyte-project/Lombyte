@@ -1117,13 +1117,18 @@ void extermibot_update(unsigned char *m) __asm__("FUN_L05_00301f48");
 void extermibot_update(unsigned char *m) {
     enum {
         EXTERMIBOT_INITIALIZE = 0,
+        EXTERMIBOT_IDLE_AND_CHECK_TARGET_PATH = 1,
         EXTERMIBOT_WANDER_NEAR_START = 2,
         EXTERMIBOT_FOLLOW_TARGET = 4,
+        EXTERMIBOT_WAIT_FOR_TARGET_IN_STRIKE_RANGE = 5,
         EXTERMIBOT_APPROACH_TARGET_DIRECTLY = 6,
         EXTERMIBOT_AIM_BEFORE_STRIKE = 7,
         EXTERMIBOT_STRIKE_TARGET = 8,
         EXTERMIBOT_RECOVER_AFTER_STRIKE = 9,
-        EXTERMIBOT_RETURN_TO_START = 10
+        EXTERMIBOT_RETURN_TO_START = 10,
+        EXTERMIBOT_NONLETHAL_KNOCKBACK = 11,
+        EXTERMIBOT_DEATH_KNOCKBACK = 14,
+        EXTERMIBOT_WAIT_FOR_ACTIVATION_TRIGGER = 15
     };
     char *d = *(char **)(m + 0x78);
     char *t;
@@ -1200,7 +1205,7 @@ void extermibot_update(unsigned char *m) {
         }
         FUN_L05_0028be78((int *)(d + 0x2C0), 1, *(int *)(d + 0x2C4));
         break;
-    case 1:
+    case EXTERMIBOT_IDLE_AND_CHECK_TARGET_PATH:
         if (*(int *)(d + 0x164) != 2 && random_integer_below_c2(9) == 0) {
             if (follow_path(d + 0x2C0, 1, *(int *)(d + 0x2C4), m + 0x10, (s32)(t + 0x10), dir,
                                   (D_L05_00161A98) * 0.4f) != 0) {
@@ -1292,7 +1297,7 @@ void extermibot_update(unsigned char *m) {
         }
         break;
     }
-    case 5:
+    case EXTERMIBOT_WAIT_FOR_TARGET_IN_STRIKE_RANGE:
         if (*(int *)(d + 0x2B0) == 0) {
             *(float *)(d + 0xF4) = 0.0f;
             m[0x20] = 10;
@@ -1303,7 +1308,7 @@ void extermibot_update(unsigned char *m) {
             if (m[0x53] != 2) blend_moby_animation(m, 2, 0, scale_game_frames(10));
         }
         break;
-    case 15:
+    case EXTERMIBOT_WAIT_FOR_ACTIVATION_TRIGGER:
         if ((*(int *)(d + 0x2B8) != -1 && ((unsigned char *)*(int *)&D_L05_0015FFD8)[*(int *)(d + 0x2B8) * 256 + 0xBC] != 0)
             || (*(int *)(d + 0x2BC) != -1 && is_point_inside_clip_volume(((char *)D_0013F3D0), *(int *)(d + 0x2BC)) != 0)) {
             *(short *)(m + 0x32) = 0x40;
@@ -1443,7 +1448,7 @@ void extermibot_update(unsigned char *m) {
             m[0x20] = 6;
         }
         break;
-    case 11:
+    case EXTERMIBOT_NONLETHAL_KNOCKBACK:
         if (mine_fall(m, d + 0x70) & 0x60) {
             if (follow_path(d + 0x2C0, 1, *(int *)(d + 0x2C4), m + 0x10, (s32)(d + 0x270), dir,
                                   (D_L05_00161A98) * 0.4f) != 0) {
@@ -1466,7 +1471,7 @@ void extermibot_update(unsigned char *m) {
             if (m[0x53] != 0) blend_moby_animation(m, 0, 0, scale_game_frames(10));
         }
         break;
-    case 14:
+    case EXTERMIBOT_DEATH_KNOCKBACK:
         if (mine_fall(m, d + 0x70) & 0x60) {
             cart_burst(m, m + 0x10, -1, 0.5f, 13.0f);
             FUN_L00_00263fd8_c(m, 0x6DA, m + 0x10, m + 0x40, 0, 0, 0.0f, D_L05_0015F580, D_L05_0015F580, D_L05_0015F580);
@@ -1622,8 +1627,10 @@ extern s32 D_001413D0_lui[] __asm__("D_001413D0") __attribute__((section(".data"
 
 void FUN_L05_00303390(Moby *m) {
     enum {
+        EXTERMIBOT_HIT_NO_RESPONSE = 0,
         EXTERMIBOT_HIT_LETHAL = 1,
         EXTERMIBOT_HIT_DEATH_KNOCKBACK = 2,
+        EXTERMIBOT_HIT_NONLETHAL_KNOCKBACK = 3,
         EXTERMIBOT_HIT_NO_REACTION = 11
     };
     Vec_3047E8 working_vector;
@@ -1672,14 +1679,14 @@ void FUN_L05_00303390(Moby *m) {
         d->f94 = 9;
         d->bAD = 0;
         switch (res) {
-        case 0:
+        case EXTERMIBOT_HIT_NO_RESPONSE:
         case EXTERMIBOT_HIT_NO_REACTION:
             break;
         case 9:
         case 10:
             d->b67 = 0xFA;
             break;
-        case 3:
+        case EXTERMIBOT_HIT_NONLETHAL_KNOCKBACK:
         case 4:
         case 5:
         case 6:

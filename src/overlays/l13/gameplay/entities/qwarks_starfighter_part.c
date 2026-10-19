@@ -119,6 +119,9 @@ void FUN_L13_002eac00(void *mobyp, void *pp) {
     enum {
         STARFIGHTER_COMMAND_TIMED_VOLLEY = 1,
         STARFIGHTER_COMMAND_ALTERNATING_ATTACKS = 2,
+        STARFIGHTER_COMMAND_REPEATED_TARGETED_ATTACK = 3,
+        STARFIGHTER_COMMAND_WAIT_FOR_ALTERNATING_ATTACKS_WITH_TRACTOR_BEAM = 4,
+        STARFIGHTER_COMMAND_ALTERNATING_ATTACKS_WITH_TRACTOR_BEAM = 5,
         STARFIGHTER_COMMAND_REPEATED_VECTOR_ATTACK = 7
     };
     char *moby = mobyp;
@@ -134,11 +137,11 @@ void FUN_L13_002eac00(void *mobyp, void *pp) {
         goto s1;
     case STARFIGHTER_COMMAND_ALTERNATING_ATTACKS:
         goto s2;
-    case 3:
+    case STARFIGHTER_COMMAND_REPEATED_TARGETED_ATTACK:
         goto s3;
-    case 4:
+    case STARFIGHTER_COMMAND_WAIT_FOR_ALTERNATING_ATTACKS_WITH_TRACTOR_BEAM:
         goto s4;
-    case 5:
+    case STARFIGHTER_COMMAND_ALTERNATING_ATTACKS_WITH_TRACTOR_BEAM:
         goto s3;
     case 6:
         goto s3;
@@ -511,6 +514,8 @@ void FUN_L13_002eb098(Moby388 *moby) {
         STARFIGHTER_STATE_INITIALIZE = 0,
         STARFIGHTER_STATE_WAIT_FOR_HERO_SHIP = 1,
         STARFIGHTER_STATE_FOLLOW_INITIAL_PATH = 2,
+        STARFIGHTER_STATE_FOLLOW_COMMAND_PATH = 3,
+        STARFIGHTER_STATE_FOLLOW_COMMAND_PATH_WITH_TIMED_VOLLEY = 4,
         STARFIGHTER_STATE_TRACTOR_BEAM = 5,
         STARFIGHTER_STATE_OWNER_UNAVAILABLE = 6,
         STARFIGHTER_STATE_DEATH_FLIGHT = 7,
@@ -648,8 +653,8 @@ void FUN_L13_002eb098(Moby388 *moby) {
         }
         break;
     }
-    case 3:
-    case 4:
+    case STARFIGHTER_STATE_FOLLOW_COMMAND_PATH:
+    case STARFIGHTER_STATE_FOLLOW_COMMAND_PATH_WITH_TIMED_VOLLEY:
         data->hud104 = queue_animation_update_alt(0x11, 0xFFFF, (int)FUN_L00_00235d80, (int)FUN_L00_00235ea0,
                                   (int)FUN_L06_00249738, (int)&data->i108,
                                   (data->s24 << 4) | 0xF);

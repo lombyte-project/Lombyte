@@ -6205,6 +6205,7 @@ void fred_update(struct Moby *m) {
         UPDATE_FRED_DIALOGUE = 1,
         HANDLE_FRED_DIALOGUE_RESULT = 2,
         INTERPOLATE_FRED_CUTSCENE_CAMERA = 3,
+        RAMP_FRED_POST_CUTSCENE_SCALAR_TO_ZERO = 4,
         WAIT_FOR_FRED_REMOVAL_TRIGGER = 5
     };
     Data_301070 *d = *(struct Data_301070 **)&m->pvars;
@@ -6351,7 +6352,7 @@ void fred_update(struct Moby *m) {
       }
         break;
     }
-    case 4:
+    case RAMP_FRED_POST_CUTSCENE_SCALAR_TO_ZERO:
         approach_value_301070(&D_L06_0015F3FC_macro, 0.0f, frame_time_macro * 4.0f);
         if (D_L06_0015F3FC_macro == 0.0f) {
             m->state = 5;
@@ -6485,7 +6486,9 @@ void FUN_L06_00301b90(unsigned char *m) {
         INITIALIZE_ENTITY = 0,
         TRIGGER_LINKED_SEQUENCE_WHEN_GROUP_INACTIVE = 1,
         WAIT_FOR_LINKED_SEQUENCE_COMPLETION = 2,
-        ADVANCE_CAMERA_ALONG_PATH = 3
+        ADVANCE_CAMERA_ALONG_PATH = 3,
+        UPDATE_POST_PATH_TIMED_EVENTS = 4,
+        RAMP_SHARED_VALUE_AFTER_DELAY = 5
     };
     char *d = *(char **)(m + 0x78);
     float va[4] __attribute__((aligned(16)));
@@ -6577,7 +6580,7 @@ void FUN_L06_00301b90(unsigned char *m) {
         FUN_L06_00312ad0(vc);
         return;
     }
-    case 4: {
+    case UPDATE_POST_PATH_TIMED_EVENTS: {
         int x;
         char *q;
         x = scale_game_frames(0x708);
@@ -6610,7 +6613,7 @@ void FUN_L06_00301b90(unsigned char *m) {
         allocate_voice_for_group_entry(1, 0, (int)hero.moby);
         return;
     }
-    case 5:
+    case RAMP_SHARED_VALUE_AFTER_DELAY:
         if (*(float *)(d + 0xB8) == 1.0f) {
             FUN_L00_00211250();
             D_L06_0015F400 = 0.0f;
@@ -6795,7 +6798,10 @@ void shuttle_update(struct Moby *moby) {
         WAIT_FOR_FORCED_SHUTTLE_RETURN_TRIGGER = 2,
         UPDATE_SHUTTLE_PATH_RIDE = 3,
         RESTORE_SHUTTLE_IDLE_ANIMATION = 4,
-        WAIT_FOR_HERO_NEAR_LINKED_MOBY = 6
+        WAIT_FOR_HERO_NEAR_LINKED_MOBY = 6,
+        WAIT_TO_SELECT_SHUTTLE_SAVE_FLOW = 7,
+        WAIT_TO_ENTER_SHUTTLE_SAVE_FLOW = 8,
+        WAIT_TO_SAVE_AND_RESUME_SHUTTLE_REQUESTS = 9
     };
     enum {
         SHUTTLE_ROUTE_INITIAL_TO_SECOND_STOP = 0,
@@ -7016,7 +7022,7 @@ void shuttle_update(struct Moby *moby) {
             blend_moby_animation_302578(moby, 2, 0, scale_game_frames_302578(30));
         }
         break;
-    case 7:
+    case WAIT_TO_SELECT_SHUTTLE_SAVE_FLOW:
         if (D_L06_0015F5C4 != 2) {
             if (D_0013D4D5[9] != 0) {
                 FUN_L00_00298840_302578(5);
@@ -7029,14 +7035,14 @@ void shuttle_update(struct Moby *moby) {
             }
         }
         break;
-    case 9:
+    case WAIT_TO_SAVE_AND_RESUME_SHUTTLE_REQUESTS:
         if (D_L06_0015F5C4 != 2) {
             FUN_L00_00262d38_302578(5);
             memcard_Save_302578(0, -1);
             moby->state = 1;
         }
         break;
-    case 8:
+    case WAIT_TO_ENTER_SHUTTLE_SAVE_FLOW:
         if (D_L06_0015F5C4 != 2) {
             FUN_L00_00299460_302578(5);
             moby->state = 7;

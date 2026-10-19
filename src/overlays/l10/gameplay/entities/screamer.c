@@ -128,10 +128,12 @@ void screamer_update(Moby *moby) __asm__("FUN_L10_002df270");
 void screamer_update(Moby *moby) {
     enum {
         SCREAMER_STATE_INITIALIZE = 0,
+        SCREAMER_STATE_WAIT_FOR_ACTIVATION = 1,
         SCREAMER_STATE_WAIT_TO_RISE = 2,
         SCREAMER_STATE_RISE_FROM_HOME = 4,
         SCREAMER_STATE_FOLLOW_PATH = 5,
         SCREAMER_STATE_FACE_LEADER_AT_WAYPOINT = 6,
+        SCREAMER_STATE_IDLE_AT_HOME = 7,
         SCREAMER_STATE_RETURN_HOME = 8,
         SCREAMER_STATE_WAIT_TO_WANDER = 9,
         SCREAMER_STATE_WANDER = 10,
@@ -165,7 +167,7 @@ void screamer_update(Moby *moby) {
             moby->state = 1;
         }
         break;
-    case 1:
+    case SCREAMER_STATE_WAIT_FOR_ACTIVATION:
         if (data->f104 == 2 && data->f174 != 0) break;
         moby->state = 2;
         if (moby->prev_seq != 1) func_00213DE0_2E0630(moby, 1, 0, func_001F9850_2E0630(10));
@@ -238,7 +240,7 @@ void screamer_update(Moby *moby) {
             if (moby->prev_seq != 4) func_00213DE0_2E0630(moby, 4, 0, func_001F9850_2E0630(10));
         }
         break;
-    case 7:
+    case SCREAMER_STATE_IDLE_AT_HOME:
         break;
     case SCREAMER_STATE_RETURN_HOME: {
         float zero = 0.0f;
@@ -1308,6 +1310,8 @@ void toxic_crab_update(Moby2E30F8 *m) __asm__("FUN_L10_002e1d38");
 void toxic_crab_update(Moby2E30F8 *m) {
     enum {
         TOXIC_CRAB_STATE_INITIALIZE = 0,
+        TOXIC_CRAB_STATE_WAIT_FOR_ACTIVATION = 1,
+        TOXIC_CRAB_STATE_ACTIVATE = 2,
         TOXIC_CRAB_STATE_FACE_TRACKED_POSITION = 3,
         TOXIC_CRAB_STATE_WAIT_TO_PURSUE = 4,
         TOXIC_CRAB_STATE_PURSUE_TARGET = 5,
@@ -1395,7 +1399,7 @@ void toxic_crab_update(Moby2E30F8 *m) {
         }
         d->f1A0 = *(float *)&D_L10_00161E40_gp;
         break;
-    case 1:
+    case TOXIC_CRAB_STATE_WAIT_FOR_ACTIVATION:
         FUN_L00_00258278((char *)m, &d->f190, d->v170[3], 0.02f, 0.3f, frame_time * 6.2831855f);
         if (d->i1BC != -1) {
             char *base = D_L10_0015FFD8;
@@ -1420,7 +1424,7 @@ void toxic_crab_update(Moby2E30F8 *m) {
             }
         }
         break;
-    case 2:
+    case TOXIC_CRAB_STATE_ACTIVATE:
         if (m->anim == 0) {
             if (d->i1A8 == 0) {
                 d->i1A8 = truncate_float_to_s32(FUN_L04_001f1978(random_float_between(0.0f, 20.0f)));
@@ -2113,8 +2117,11 @@ extern Path_2E52B0 *D_L10_001B0C30_2E52B0[] __asm__("D_L10_001B0930");
 
 void FUN_L10_002e3ef0(void *mv) {
     enum {
+        NO_STATE_TRANSITION_HIT_RESPONSE = 0,
         LETHAL_HIT_RESPONSE = 1,
         DEATH_HIT_RESPONSE = 2,
+        KNOCKBACK_HIT_RESPONSE = 3,
+        VEHICLE_SCALED_KNOCKBACK_HIT_RESPONSE = 4,
         SUPPRESSED_HIT_RESPONSE = 11
     };
     Moby *m = mv;
@@ -2210,7 +2217,7 @@ void FUN_L10_002e3ef0(void *mv) {
         d->bAD = 0;
         fx = func_L00_001FF860_2E52B0(r->pos.x, r->pos.y);
         switch (hit_response_code) {
-        case 3:
+        case KNOCKBACK_HIT_RESPONSE:
         case 6:
         case 7:
         case 8:
@@ -2228,7 +2235,7 @@ void FUN_L10_002e3ef0(void *mv) {
             d->b67 = 0xFA;
             func_L00_0025E4B0_2E52B0(m, d->a60);
             break;
-        case 4:
+        case VEHICLE_SCALED_KNOCKBACK_HIT_RESPONSE:
         case 5: {
             float s;
             m->state = 10;
@@ -2250,7 +2257,7 @@ void FUN_L10_002e3ef0(void *mv) {
             m->state = 11;
             m->flags &= 0xEFFF;
             break;
-        case 0:
+        case NO_STATE_TRANSITION_HIT_RESPONSE:
         case SUPPRESSED_HIT_RESPONSE:
             break;
         }

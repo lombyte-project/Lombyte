@@ -792,13 +792,17 @@ extern void initialize_global_state_entry(int) __asm__("FUN_0022e188");
 void FUN_L07_002f5ba0(struct Moby *moby)
 {
     enum {
+        CONTROLLER_WAIT_FOR_SCENE_IDLE = 0,
         CONTROLLER_START_INITIAL_SCENE = 1,
         CONTROLLER_WAIT_FOR_INITIAL_SCENE = 2,
+        CONTROLLER_ADVANCE_TO_OPEN_VOLUME_WAIT = 3,
         CONTROLLER_WAIT_FOR_OPEN_VOLUME = 4,
         CONTROLLER_WAIT_FOR_FIRST_OPEN_SCENE = 5,
         CONTROLLER_WAIT_FOR_SECOND_OPEN_SCENE = 6,
+        CONTROLLER_CLEAR_LINKED_MOBY_FLAGS = 7,
         CONTROLLER_WAIT_FOR_FINISH_VOLUME = 8,
         CONTROLLER_WAIT_FOR_FINISH_VOLUME_SCENE = 9,
+        CONTROLLER_WAIT_TO_START_FINAL_SCENE = 10,
         CONTROLLER_WAIT_FOR_FINAL_SCENE_AND_UNLOCK_PLANET = 11,
         CONTROLLER_CLEANUP_LINKED_MOBY = 12,
         CONTROLLER_DELETE_SELF = 13
@@ -807,7 +811,7 @@ void FUN_L07_002f5ba0(struct Moby *moby)
     float v[4];
 
     switch (moby->state) {
-    case 0:
+    case CONTROLLER_WAIT_FOR_SCENE_IDLE:
         if (D_0013D3B1[0] != 0 && data->removed_moby != -1) {
             delete_moby_m(&level_mobys[data->removed_moby]);
         }
@@ -825,7 +829,7 @@ void FUN_L07_002f5ba0(struct Moby *moby)
     case CONTROLLER_WAIT_FOR_INITIAL_SCENE:
         if (scene_state != 2) moby->state = 3;
         break;
-    case 3:
+    case CONTROLLER_ADVANCE_TO_OPEN_VOLUME_WAIT:
         moby->state = 4;
         break;
     case CONTROLLER_WAIT_FOR_OPEN_VOLUME:
@@ -870,7 +874,7 @@ void FUN_L07_002f5ba0(struct Moby *moby)
         }
         moby->state = 7;
         break;
-    case 7:
+    case CONTROLLER_CLEAR_LINKED_MOBY_FLAGS:
         if (data->moby_0c != -1) {
             struct Moby *e = &level_mobys[data->moby_0c];
             e->flags &= 0xFFBE;
@@ -910,7 +914,7 @@ void FUN_L07_002f5ba0(struct Moby *moby)
         moby->state = 10;
         FUN_L00_00299460(8);
         break;
-    case 10:
+    case CONTROLLER_WAIT_TO_START_FINAL_SCENE:
         if (scene_state == 2) break;
         moby->state = 11;
         start_scene(4);
@@ -1035,7 +1039,10 @@ void boltcrate_possibly_for_metal_detector_update(struct Moby *moby) {
     };
     enum {
         HIT_REACTION_NONE = 0,
-        HIT_REACTION_START_KNOCKBACK = 3
+        BOLTCRATE_CLEAR_HEALTH_RESPONSE = 1,
+        BOLTCRATE_ALTERNATE_CLEAR_HEALTH_RESPONSE = 2,
+        HIT_REACTION_START_KNOCKBACK = 3,
+        HIT_REACTION_HIT_ANIMATION_RESPONSE = 9
     };
     char *data;
     char *path;
@@ -1066,12 +1073,12 @@ void boltcrate_possibly_for_metal_detector_update(struct Moby *moby) {
         case 6:
         case 7:
         case 8:
-        case 9:
+        case HIT_REACTION_HIT_ANIMATION_RESPONSE:
         case 10:
         case HIT_REACTION_NO_ANIMATION_RESPONSE:
             break;
-        case 1:
-        case 2:
+        case BOLTCRATE_CLEAR_HEALTH_RESPONSE:
+        case BOLTCRATE_ALTERNATE_CLEAR_HEALTH_RESPONSE:
             *remaining = 0.0f;
             break;
         }
@@ -1884,7 +1891,10 @@ void bombomatic_update(char *m) {
     };
     enum {
         HIT_REACTION_NONE = 0,
-        BOMBOMATIC_CLEAR_HEALTH_RESPONSE = 1
+        BOMBOMATIC_CLEAR_HEALTH_RESPONSE = 1,
+        BOMBOMATIC_ALTERNATE_CLEAR_HEALTH_RESPONSE = 2,
+        HIT_REACTION_START_KNOCKBACK = 3,
+        HIT_REACTION_HIT_ANIMATION_RESPONSE = 9
     };
     char *d;
     char *hit_info;
@@ -1925,10 +1935,10 @@ void bombomatic_update(char *m) {
     case BOMBOMATIC_CLEAR_HEALTH_RESPONSE:
         *(int *)t = 0;
         break;
-    case 2:
+    case BOMBOMATIC_ALTERNATE_CLEAR_HEALTH_RESPONSE:
         *(int *)t = 0;
         break;
-    case 3:
+    case HIT_REACTION_START_KNOCKBACK:
         break;
     case 4:
         break;
@@ -1940,7 +1950,7 @@ void bombomatic_update(char *m) {
         break;
     case 8:
         break;
-    case 9:
+    case HIT_REACTION_HIT_ANIMATION_RESPONSE:
         break;
     case 10:
         break;
@@ -2361,7 +2371,10 @@ void FUN_L07_0030e998(char *m, char *x, float *hp) {
     enum {
         HIT_REACTION_NONE = 0,
         SHARKIGATOR_CLEAR_HEALTH_RESPONSE = 1,
+        SHARKIGATOR_ALTERNATE_CLEAR_HEALTH_RESPONSE = 2,
         HIT_REACTION_START_KNOCKBACK = 3,
+        SHARKIGATOR_HIT_ANIMATION_RESPONSE = 9,
+        SHARKIGATOR_ALTERNATE_HIT_ANIMATION_RESPONSE = 10,
         HIT_REACTION_NO_ANIMATION_RESPONSE = 11
     };
     char *info;
@@ -2376,7 +2389,7 @@ void FUN_L07_0030e998(char *m, char *x, float *hp) {
         case HIT_REACTION_NONE:
             break;
         case SHARKIGATOR_CLEAR_HEALTH_RESPONSE:
-        case 2:
+        case SHARKIGATOR_ALTERNATE_CLEAR_HEALTH_RESPONSE:
             *hp = 0.0f;
             break;
         case HIT_REACTION_START_KNOCKBACK:
@@ -2388,8 +2401,8 @@ void FUN_L07_0030e998(char *m, char *x, float *hp) {
             FUN_L07_0030e858(m, x + 0x70, info + 0x10);
             m[0x20] = 0xC;
             break;
-        case 9:
-        case 10:
+        case SHARKIGATOR_HIT_ANIMATION_RESPONSE:
+        case SHARKIGATOR_ALTERNATE_HIT_ANIMATION_RESPONSE:
             if (((unsigned char *)m)[0x53] != 4) {
                 blend_moby_animation(m, 4, 4, 4);
             }
@@ -2693,6 +2706,12 @@ void sharkigator_update(unsigned char *moby) {
         SHARKIGATOR_SWIM_WANDER = 2,
         SHARKIGATOR_TARGET_PURSUIT = 4,
         SHARKIGATOR_TARGET_LUNGE_INTERPOLATION = 5,
+        SHARKIGATOR_POST_LUNGE_PATH_FOLLOW = 6,
+        SHARKIGATOR_GRAVITY_IDLE = 7,
+        SHARKIGATOR_GRAVITY_WANDER = 8,
+        SHARKIGATOR_TARGET_APPROACH = 9,
+        SHARKIGATOR_TARGET_CONTACT_ATTACK = 10,
+        SHARKIGATOR_TARGET_CONTACT_RECOIL_RECOVERY = 11,
         SHARKIGATOR_HIT_KNOCKBACK_RECOVERY = 12,
         SHARKIGATOR_HIT_ANIMATION_RECOVERY = 13,
         SHARKIGATOR_DEATH_FALL_AND_REMOVE = 14
@@ -2986,7 +3005,7 @@ void sharkigator_update(unsigned char *moby) {
         moby[0x20] = 2;
         goto end;
     }
-    case 6: {
+    case SHARKIGATOR_POST_LUNGE_PATH_FOLLOW: {
         float seven = 7.0f;
         float pi = 3.14159274f;
         float pi2 = 1.57079637f;
@@ -3009,7 +3028,7 @@ void sharkigator_update(unsigned char *moby) {
         }
         goto end;
     }
-    case 7:
+    case SHARKIGATOR_GRAVITY_IDLE:
         if (inside) {
             if (moby[0x53] != 4) {
                 blend_moby_animation(moby, 4, 0, 10);
@@ -3035,7 +3054,7 @@ void sharkigator_update(unsigned char *moby) {
             moby[0x20] = next_state;
         }
         goto end;
-    case 8:
+    case SHARKIGATOR_GRAVITY_WANDER:
         if (inside) {
             if (moby[0x53] != 4) {
                 blend_moby_animation(moby, 4, 0, 10);
@@ -3077,8 +3096,8 @@ void sharkigator_update(unsigned char *moby) {
             moby[0x20] = next_state;
         }
         goto end;
-    case 9:
-    case 10: {
+    case SHARKIGATOR_TARGET_APPROACH:
+    case SHARKIGATOR_TARGET_CONTACT_ATTACK: {
         float angle;
         float pi2 = 1.57079637f;
         angle = fast_arc_tan_c2(target.pos[0] - F(moby, 0x10), target.pos[1] - F(moby, 0x14));
@@ -3120,7 +3139,7 @@ void sharkigator_update(unsigned char *moby) {
         }
         goto end;
     }
-    case 11:
+    case SHARKIGATOR_TARGET_CONTACT_RECOIL_RECOVERY:
         if (moby[0x70] & 2) {
             moby[0x20] = 7;
         }

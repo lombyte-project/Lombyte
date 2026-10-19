@@ -140,6 +140,10 @@ extern int func_001F9908_r(int *) __asm__("FUN_001f9740");
 
 void FUN_L15_0021d040(void) {
     enum {
+        HERO_STATE_LEDGE_HANG_ENTRY = 24,
+        HERO_STATE_LEDGE_HANG = 25,
+        HERO_STATE_LEDGE_SHIMMY_YAW_PLUS_90 = 26,
+        HERO_STATE_LEDGE_SHIMMY_YAW_MINUS_90 = 27,
         HERO_STATE_FALL_TO_RESPAWN = 119
     };
     unsigned char *moby;
@@ -1118,12 +1122,12 @@ void FUN_L15_0021d040(void) {
                         hero_set_state(HERO_STATE_IDLE, 1);
                     }
                     break;
-                case 24:
+                case HERO_STATE_LEDGE_HANG_ENTRY:
                     if (13.5f < hero.anim_frame) {
                         hero_set_state(0x19, 0);
                     }
                     break;
-                case 25:
+                case HERO_STATE_LEDGE_HANG:
                     if ((hero.unkA98 & 2) && ((unsigned char *)hero.moby)[0x53] == 0x20) {
                         set_hero_animation(0x21, 0, scale_game_frames(6));
                     }
@@ -1176,8 +1180,8 @@ void FUN_L15_0021d040(void) {
                         }
                     }
                     break;
-                case 26:
-                case 27: {
+                case HERO_STATE_LEDGE_SHIMMY_YAW_PLUS_90:
+                case HERO_STATE_LEDGE_SHIMMY_YAW_MINUS_90: {
                     float ang;
 
                     qcopy(v0, hero.motion.pos.f);

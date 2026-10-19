@@ -41,6 +41,7 @@ void draw_help(void) {
     enum {
         HELP_FRAME_OPENING = 1,
         HELP_PROMPT = 2,
+        HELP_PROMPT_FRAME_TRANSITION = 3,
         HELP_TEXT_FADE_IN = 4,
         HELP_TEXT_STEADY = 5,
         HELP_TEXT_FADE_OUT = 6,
@@ -72,7 +73,7 @@ void draw_help(void) {
             help_draw_prompt();
         }
         break;
-    case 3:
+    case HELP_PROMPT_FRAME_TRANSITION:
         if (D_0015EF1D_b) {
             int a =
                 (((HelpState *)D_001996D0)->pad[0] - 0x20) * ((HelpState *)D_001996D0)->x04 / 8 +

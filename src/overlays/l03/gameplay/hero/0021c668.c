@@ -132,6 +132,10 @@ extern int func_001F9908_r(int *) __asm__("FUN_001f9740");
 
 int r1_repeat_timer __asm__("D_L03_0015F678") = 0;
 void FUN_L03_0021c668(void) {
+    enum {
+        HERO_STATE_WATER_DEATH = 106,
+        HERO_STATE_LOW_ALTITUDE_RESPAWN = 119
+    };
     unsigned char *moby;
     int prevSub;
     int prevState;
@@ -445,7 +449,7 @@ void FUN_L03_0021c668(void) {
                 case 71:
                 case 87:
                 case 98:
-                case 106:
+                case HERO_STATE_WATER_DEATH:
                 case 128:
                 case 130:
                     if (hero.unkA98 & 2) {
@@ -453,7 +457,7 @@ void FUN_L03_0021c668(void) {
                         return;
                     }
                     break;
-                case 127:
+                case HERO_STATE_SINK:
                     if (hero.state_timer > scale_game_frames(0xDC)) {
                         hero_respawn();
                         return;
@@ -1326,7 +1330,7 @@ void FUN_L03_0021c668(void) {
                         hero_set_state(0x74, 1);
                     }
                     break;
-                case 119:
+                case HERO_STATE_LOW_ALTITUDE_RESPAWN:
                     if ((current_level_index == 3 && 5.0f > hero.motion.pos.f[2]) ||
                         (current_level_index == 6 && 50.0f > hero.motion.pos.f[2]) ||
                         (current_level_index == 0x10 && (77.0f > hero.motion.pos.f[2] ||

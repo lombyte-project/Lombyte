@@ -2082,8 +2082,10 @@ void decoy_update(char *moby) __asm__("FUN_L00_002c4380");
 void decoy_update(char *moby) {
     enum {
         DECOY_INITIALIZE = 0,
+        DECOY_HELD = 1,
         DECOY_THROWN_MOVEMENT = 2,
         DECOY_SETTLED_MOVEMENT = 3,
+        DECOY_PRE_REMOVAL_DELAY = 4,
         DECOY_WAIT_TO_SHRINK = 5,
         DECOY_SHRINK_FOR_REMOVAL = 6,
         DECOY_RESET_TO_INITIALIZE = 7
@@ -2139,7 +2141,7 @@ void decoy_update(char *moby) {
         *(short *)(vars + 0x6c) = 0;
         vars[0x6e] = 0;
         break;
-    case 1: {
+    case DECOY_HELD: {
         char *target;
         *(short *)(vars + 0x44) = 0;
         target = *(char **)(vars + 0x40);
@@ -2248,7 +2250,7 @@ void decoy_update(char *moby) {
         }
         break;
     case DECOY_SETTLED_MOVEMENT:
-    case 4:
+    case DECOY_PRE_REMOVAL_DELAY:
         hit = FUN_L00_0025a420(moby, 0x30001, 0);
         *(float *)(moby + 0x40) = FUN_002000e8_2c4380(*(float *)(moby + 0x40),
             FUN_00200130_2c4380(*(float *)(vars + 0x4c), *(float *)(moby + 0x40)) *
@@ -3401,8 +3403,11 @@ void glove_of_doom_update(struct Moby *moby) {
     enum {
         GLOVE_INITIALIZE = 0,
         GLOVE_WAIT_FOR_ANIMATION = 1,
+        GLOVE_IDLE = 2,
         GLOVE_RELEASE_HELD_MOBY = 3,
-        GLOVE_POST_RELEASE_WAIT = 4
+        GLOVE_POST_RELEASE_WAIT = 4,
+        GLOVE_BEGIN_SKIP_HELD_MOBY_SYNC_AND_SPAWN = 5,
+        GLOVE_SKIP_HELD_MOBY_SYNC_AND_SPAWN = 6
     };
     OvlVec4 pos;
     OvlVec4 offset;
@@ -3452,7 +3457,7 @@ void glove_of_doom_update(struct Moby *moby) {
             moby->state = 2;
         }
         break;
-    case 2:
+    case GLOVE_IDLE:
         break;
     case GLOVE_RELEASE_HELD_MOBY:
         if (vars->held != 0) {
@@ -3476,10 +3481,10 @@ void glove_of_doom_update(struct Moby *moby) {
             moby->state = 2;
         }
         break;
-    case 5:
+    case GLOVE_BEGIN_SKIP_HELD_MOBY_SYNC_AND_SPAWN:
         moby->state = 6;
         break;
-    case 6:
+    case GLOVE_SKIP_HELD_MOBY_SYNC_AND_SPAWN:
         return;
     }
     if (vars->held != 0) {

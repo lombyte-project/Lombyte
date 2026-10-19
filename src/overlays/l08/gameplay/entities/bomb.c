@@ -1582,6 +1582,8 @@ void blarg_bombthrower_update(struct Moby *moby) {
         BOMBTHROWER_STATE_THROW_BOMB = 5,
         BOMBTHROWER_STATE_MOVE_ONTO_WAYPOINT = 6,
         BOMBTHROWER_STATE_DAMAGE_KNOCKBACK = 0x5A,
+        BOMBTHROWER_STATE_WAIT_FOR_FALL_RECOVERY = 0x5B,
+        BOMBTHROWER_STATE_MOTION_RECOVERY = 0x5C,
         BOMBTHROWER_STATE_FALL_RECOVERY = 0x5D,
         BOMBTHROWER_STATE_DYING = 0x63
     };
@@ -1845,7 +1847,7 @@ void blarg_bombthrower_update(struct Moby *moby) {
             vars->i134 = scale_game_frames_c2(0xF0);
         }
         break;
-    case 0x5B:
+    case BOMBTHROWER_STATE_WAIT_FOR_FALL_RECOVERY:
         if (moby->anim_flags & 2) {
             if (moby->prev_seq != 7) {
                 FUN_00212f90(moby, 7, 0, 3);
@@ -1854,7 +1856,7 @@ void blarg_bombthrower_update(struct Moby *moby) {
         }
         break;
     case BOMBTHROWER_STATE_DAMAGE_KNOCKBACK:
-    case 0x5C:
+    case BOMBTHROWER_STATE_MOTION_RECOVERY:
     case BOMBTHROWER_STATE_FALL_RECOVERY:
         if (mine_fall(moby, vars->blk70) & 0x40) {
             old_waypoint = vars->waypoint;
@@ -2061,7 +2063,8 @@ void FUN_L08_002dc180(struct Moby *moby) {
     enum {
         SHUTTLE_SELECT_ROUTE_END = 0,
         SHUTTLE_SELECT_CONFIGURED_PATH_START = 1,
-        SHUTTLE_SELECT_ROUTE_START = 2
+        SHUTTLE_SELECT_ROUTE_START = 2,
+        SHUTTLE_SELECT_ALTERNATE_PATH_START = 3
     };
     char *data = (char *)moby->pvars;
     char *pl = (char *)&hero.motion.pos;
@@ -2124,7 +2127,7 @@ void FUN_L08_002dc180(struct Moby *moby) {
         y = fast_arc_tan(a->e[1][0] - *(float *)(data + 0x60), a->e[1][1] - *(float *)(data + 0x64));
         *(Route_2dd4f8 **)(data + 0x120) = a;
         break;
-    case 3:
+    case SHUTTLE_SELECT_ALTERNATE_PATH_START:
         qcopy(data + 0x60, c->e[0]);
         y = fast_arc_tan(c->e[1][0] - *(float *)(data + 0x60), c->e[1][1] - *(float *)(data + 0x64));
         *(Route_2dd4f8 **)(data + 0x120) = c;
@@ -2257,7 +2260,9 @@ void FUN_L08_002dc9a8(struct Moby *moby) {
         PROJECTILE_STATE_DETONATE = 99
     };
     enum {
+        DETONATION_EFFECT_FIXED_COLORS = 0,
         DETONATION_EFFECT_NO_EMISSION = 1,
+        DETONATION_EFFECT_TWO_COLOR_CHOICE = 2,
         DETONATION_EFFECT_SPHERICAL_VELOCITY = 3
     };
     char *m = (char *)moby;
@@ -2336,7 +2341,7 @@ void FUN_L08_002dc9a8(struct Moby *moby) {
             effect[2] -= frame_time * 8.0f;
             position = effect;
             switch (axis) {
-            case 0: {
+            case DETONATION_EFFECT_FIXED_COLORS: {
                 int color, color2, alpha;
                 float size = FUN_L08_002dc9a8_random(200000.0f, 300000.0f);
                 color = FUN_L08_002dc9a8_random_color(60);
@@ -2344,7 +2349,7 @@ void FUN_L08_002dc9a8(struct Moby *moby) {
                 alpha = FUN_L08_002dc9a8_blend(color, color2);
                 FUN_L08_002dc9a8_emit(record.pos, position, 0x1f101820, 0x101010, size, alpha, 0);
             } break;
-            case 2: {
+            case DETONATION_EFFECT_TWO_COLOR_CHOICE: {
                 int color, color2, alpha;
                 color = FUN_L08_002dc9a8_random_below(100) < 40 ? 0x5ff8f8f8 : 0x2f486078;
                 color2 = FUN_L08_002dc9a8_random_color(30);
@@ -2469,6 +2474,11 @@ void FUN_L08_002dd3c0(M46 *moby) {
         ROCKET_STATE_EXPLODE_AND_REMOVE = 6
     };
     enum {
+        LINKED_CLASS_NEGATIVE_X_POSITIVE_Y_POSITIVE_Z_LAUNCH_OFFSET = 0,
+        LINKED_CLASS_NEGATIVE_X_POSITIVE_Y_NEGATIVE_Z_LAUNCH_OFFSET = 1,
+        LINKED_CLASS_NEGATIVE_X_NEGATIVE_Y_NEGATIVE_Z_LAUNCH_OFFSET = 2,
+        LINKED_CLASS_VERTICAL_LAUNCH_OFFSET = 3,
+        LINKED_CLASS_NEGATIVE_Y_POSITIVE_Z_LAUNCH_OFFSET = 4,
         LINKED_CLASS_ZERO_LAUNCH_OFFSET = 5
     };
     V46 target,delta,accel,effect,aux;
@@ -2606,11 +2616,11 @@ void FUN_L08_002dd3c0(M46 *moby) {
                     if ((unsigned int)(cls-0x223)<6) {
                         clear_u64_value(accel);
                         switch ((short)(other->class_id-0x223)) {
-                        case 0: *(Q46*)aux=(Q46)0; aux[0]=-3.331f; aux[1]=3.331f; aux[2]=0.275f; qcopy(effect,aux); break;
-                        case 1: *(Q46*)aux=(Q46)0; aux[0]=-6.0f; aux[1]=6.0f; aux[2]=-1.772f; qcopy(effect,aux); break;
-                        case 2: *(Q46*)aux=(Q46)0; aux[0]=-2.0f; aux[1]=-1.152f; aux[2]=-1.772f; qcopy(effect,aux); break;
-                        case 3: *(Q46*)aux=(Q46)0; aux[2]=0.975f; qcopy(effect,aux); break;
-                        case 4: *(Q46*)aux=(Q46)0; aux[1]=-1.665f; aux[2]=0.642f; qcopy(effect,aux); break;
+                        case LINKED_CLASS_NEGATIVE_X_POSITIVE_Y_POSITIVE_Z_LAUNCH_OFFSET: *(Q46*)aux=(Q46)0; aux[0]=-3.331f; aux[1]=3.331f; aux[2]=0.275f; qcopy(effect,aux); break;
+                        case LINKED_CLASS_NEGATIVE_X_POSITIVE_Y_NEGATIVE_Z_LAUNCH_OFFSET: *(Q46*)aux=(Q46)0; aux[0]=-6.0f; aux[1]=6.0f; aux[2]=-1.772f; qcopy(effect,aux); break;
+                        case LINKED_CLASS_NEGATIVE_X_NEGATIVE_Y_NEGATIVE_Z_LAUNCH_OFFSET: *(Q46*)aux=(Q46)0; aux[0]=-2.0f; aux[1]=-1.152f; aux[2]=-1.772f; qcopy(effect,aux); break;
+                        case LINKED_CLASS_VERTICAL_LAUNCH_OFFSET: *(Q46*)aux=(Q46)0; aux[2]=0.975f; qcopy(effect,aux); break;
+                        case LINKED_CLASS_NEGATIVE_Y_POSITIVE_Z_LAUNCH_OFFSET: *(Q46*)aux=(Q46)0; aux[1]=-1.665f; aux[2]=0.642f; qcopy(effect,aux); break;
                         case LINKED_CLASS_ZERO_LAUNCH_OFFSET: *(Q46*)aux=(Q46)0; qcopy(effect,aux); break;
                         }
                         if (other->distance>1500.0f) mark_moby_for_removal(other);

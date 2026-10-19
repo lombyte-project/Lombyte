@@ -368,7 +368,11 @@ extern f32 frame_time_sq_macro __asm__("D_0015ED70") __attribute__((section(".sd
 /* Trooper hit handler: takes damage, then knocks back away from the attacker by hit strength (dying on lethal hits). */
 void FUN_L03_002ca808(struct Moby *m) {
     enum {
-        TROOPER_DAMAGE_LETHAL = 1
+        TROOPER_DAMAGE_LETHAL = 1,
+        TROOPER_DAMAGE_SHORT_KNOCKBACK = 3,
+        TROOPER_DAMAGE_LONG_KNOCKBACK = 4,
+        TROOPER_DAMAGE_LONG_KNOCKBACK_ALTERNATE = 5,
+        TROOPER_DAMAGE_SHORT_KNOCKBACK_ALTERNATE = 6
     };
     TrooperVars *v = (TrooperVars *)m->pvars;
     TrooperHit *h;
@@ -394,8 +398,8 @@ void FUN_L03_002ca808(struct Moby *m) {
         if (v->health <= 0.0f)
             r = 1;
         switch (r) {
-        case 3:
-        case 6:
+        case TROOPER_DAMAGE_SHORT_KNOCKBACK:
+        case TROOPER_DAMAGE_SHORT_KNOCKBACK_ALTERNATE:
             v->kb_speed = D_L03_001618FC * frame_time_sq_macro;
             trooper_set_knockback(v->knockback, D_L03_00161900, D_L03_00161904);
             v->kb_landed = 0;
@@ -408,8 +412,8 @@ void FUN_L03_002ca808(struct Moby *m) {
             v->kb_max = 10.0f;
             m->state = 4;
             break;
-        case 4:
-        case 5:
+        case TROOPER_DAMAGE_LONG_KNOCKBACK:
+        case TROOPER_DAMAGE_LONG_KNOCKBACK_ALTERNATE:
             v->kb_speed = D_L03_001618FC * frame_time_sq_macro;
             trooper_set_knockback(v->knockback, D_L03_00161900, D_L03_00161904);
             v->kb_landed = 0;
@@ -512,6 +516,9 @@ void FUN_L03_002cbea8(struct Moby *m) {
         MINE_SHRINK_AND_REMOVE = 5
     };
     enum {
+        MINE_DEBRIS_FIXED_PALETTE_COLOR = 0,
+        MINE_DEBRIS_WIDE_SPAWN_RADIUS = 1,
+        MINE_DEBRIS_RANDOM_PALETTE_COLOR = 2,
         MINE_DEBRIS_SPHERICAL_VELOCITY = 3
     };
     MineBlast blast = D_L03_001E32B0;
@@ -609,14 +616,14 @@ void FUN_L03_002cbea8(struct Moby *m) {
                 r[2] -= rr * mine_cos(0.785398f);
                 dir[2] -= rr * frame_time * 8.0f;
                 switch (kind) {
-                case 0:
+                case MINE_DEBRIS_FIXED_PALETTE_COLOR:
                     mine_debris(r, dir, 0x1F101820, 0x101010, mine_rand(200000.0f, 300000.0f),
                                 mine_rand_between(mine_frames(0xB4), mine_frames(0xF0)), 0);
                     break;
-                case 1:
+                case MINE_DEBRIS_WIDE_SPAWN_RADIUS:
                     mine_debris(r, dir, 0x3F081020, 0x0F081020, mine_rand(50000.0f, 100000.0f), mine_frames(0xB4), 1);
                     break;
-                case 2:
+                case MINE_DEBRIS_RANDOM_PALETTE_COLOR:
                     mine_debris(r, dir, mine_rand_below(100) < 0x28 ? 0x5FF8F8F8 : 0x2F486078, 0x0F000020, 150000.0f,
                                 mine_rand_between(mine_frames(0x1E), mine_frames(0x2D)), 2);
                     break;

@@ -96,12 +96,23 @@ void sentrybot_update(unsigned char *moby) {
         SENTRYBOT_INITIALIZE = 0,
         SENTRYBOT_WAIT_FOR_LINKED_MOBY = 1,
         SENTRYBOT_PATROL_PAUSE = 3,
+        SENTRYBOT_TURN_NEGATIVE_HEADING_DELTA = 6,
+        SENTRYBOT_TURN_POSITIVE_HEADING_DELTA = 7,
+        SENTRYBOT_TURN_AROUND = 8,
         SENTRYBOT_RETURN_HOME = 9,
         SENTRYBOT_PATROL_MOVE_FAST = 13,
         SENTRYBOT_RETURN_HOME_FAST = 20
     };
     enum {
         SENTRYBOT_PATROL_MOVE = 4
+    };
+    enum {
+        SENTRYBOT_ANIM_TURN_NEGATIVE_HEADING_DELTA = 10,
+        SENTRYBOT_ANIM_TURN_POSITIVE_HEADING_DELTA = 11,
+        SENTRYBOT_ANIM_TURN_AROUND = 12
+    };
+    enum {
+        SENTRYBOT_PATROL_IDLE = 2
     };
     float va[4];
     float vb[4];
@@ -205,7 +216,7 @@ void sentrybot_update(unsigned char *moby) {
         }
         break;
     }
-    case 2:
+    case SENTRYBOT_PATROL_IDLE:
     case SENTRYBOT_PATROL_PAUSE:
         if (*(int *)(data + 0x114) != 2) {
             moby[0xBC] = 1;
@@ -323,7 +334,7 @@ void sentrybot_update(unsigned char *moby) {
             }
             moby[0x20] = data[0x15C];
             switch (moby[0x20]) {
-            case 2:
+            case SENTRYBOT_PATROL_IDLE:
                 if (moby[0x53] != 0)
                     blend_moby_animation(moby, 0, 0, scale_game_frames(10));
                 break;
@@ -334,9 +345,9 @@ void sentrybot_update(unsigned char *moby) {
             }
         }
         break;
-    case 6:
-    case 7:
-    case 8:
+    case SENTRYBOT_TURN_NEGATIVE_HEADING_DELTA:
+    case SENTRYBOT_TURN_POSITIVE_HEADING_DELTA:
+    case SENTRYBOT_TURN_AROUND:
         if (*(int *)(data + 0x114) != 2 &&
             fast_difference_between_rotations(
                 *(float *)(moby + 0x48),
@@ -359,13 +370,13 @@ void sentrybot_update(unsigned char *moby) {
             int anim = moby[0x52];
             float *tbl = 0;
             switch (anim) {
-            case 12:
+            case SENTRYBOT_ANIM_TURN_AROUND:
                 tbl = D_L15_001CC0E0;
                 break;
-            case 10:
+            case SENTRYBOT_ANIM_TURN_NEGATIVE_HEADING_DELTA:
                 tbl = D_L15_001CC060;
                 break;
-            case 11:
+            case SENTRYBOT_ANIM_TURN_POSITIVE_HEADING_DELTA:
                 tbl = D_L15_001CBFE0;
                 break;
             }
@@ -1289,7 +1300,10 @@ void FUN_L15_0029a570(void *object, int flag) {
         LETHAL_HIT_RESPONSE = 1,
         DEATH_KNOCKBACK_HIT_RESPONSE = 2,
         NONLETHAL_KNOCKBACK_HIT_RESPONSE = 3,
-        NONLETHAL_ARC_HIT_RESPONSE = 4
+        NONLETHAL_ARC_HIT_RESPONSE = 4,
+        NONLETHAL_ARC_KNOCKBACK_HIT_RESPONSE = 5,
+        NONLETHAL_FALL_HIT_RESPONSE = 6,
+        SENTRYBOT_RECOVERABLE_KNOCKBACK_RESPONSE = 7
     };
     unsigned char *moby = object;
     unsigned char *data = *(unsigned char **)(moby + 0x78);
@@ -1337,9 +1351,9 @@ void FUN_L15_0029a570(void *object, int flag) {
             break;
         case NONLETHAL_KNOCKBACK_HIT_RESPONSE:
         case NONLETHAL_ARC_HIT_RESPONSE:
-        case 5:
-        case 6:
-        case 7:
+        case NONLETHAL_ARC_KNOCKBACK_HIT_RESPONSE:
+        case NONLETHAL_FALL_HIT_RESPONSE:
+        case SENTRYBOT_RECOVERABLE_KNOCKBACK_RESPONSE:
         case 8:
             {
                 float step;
@@ -1753,7 +1767,7 @@ void FUN_L15_0029d6c0(M_29E8A0 *m) {
     float previous_position[4];
     float burst_drift_velocity[4];
     float burst_rotation_axis[4];
-    float v90[4];
+    float trail_offset_or_position[4];
     float vel[4];
     float vB0[4];
     float up[4];
@@ -1858,11 +1872,11 @@ void FUN_L15_0029d6c0(M_29E8A0 *m) {
             dv[2] = random_float_between(-1.0f, 1.0f);
             *(u128_29E8A0 *)delta = *(u128_29E8A0 *)dv;
             fast_vec_normalize(delta, delta, random_float_between(0.1f, 0.2f) * D_0015ED6C);
-            fast_vec_normalize(v90, vel, -random_float_between(D_0015ED6C * 0.1f, D_0015ED6C));
-            add_vector_xyz(delta, delta, v90);
-            fast_vec_normalize(v90, vel, random_float_between(0.0f, 1.0f) * d->speed);
-            add_vector_xyz(v90, v90, m->pos);
-            p = (Part_29E8A0 *)FUN_L00_002712b8(v90, delta, scale_game_frames(0x3C), 0x7F, 0x606060, 3,
+            fast_vec_normalize(trail_offset_or_position, vel, -random_float_between(D_0015ED6C * 0.1f, D_0015ED6C));
+            add_vector_xyz(delta, delta, trail_offset_or_position);
+            fast_vec_normalize(trail_offset_or_position, vel, random_float_between(0.0f, 1.0f) * d->speed);
+            add_vector_xyz(trail_offset_or_position, trail_offset_or_position, m->pos);
+            p = (Part_29E8A0 *)FUN_L00_002712b8(trail_offset_or_position, delta, scale_game_frames(0x3C), 0x7F, 0x606060, 3,
                 40000.0f, 1000.0f, 1.0f, -0.0002f, 0.0f);
             if (p != 0) {
                 p->f2 = *D_L15_001B26DC;
@@ -1873,7 +1887,7 @@ void FUN_L15_0029d6c0(M_29E8A0 *m) {
             dv[2] = 0.02f;
             transform_vector_by_basis(dv, dv, m->mtx);
             build_look_at_matrix(dv, dv, m->mtx, random_angle_radians());
-            FUN_L00_0026cbb0(v90, dv, 0x4F007FFF, 0x1FFFFFFF, scale_game_frames(5), 1, 20000.0f);
+            FUN_L00_0026cbb0(trail_offset_or_position, dv, 0x4F007FFF, 0x1FFFFFFF, scale_game_frames(5), 1, 20000.0f);
             qcopy(previous_position, m->pos);
             FUN_L00_001ff290(delta, vel, up);
         }

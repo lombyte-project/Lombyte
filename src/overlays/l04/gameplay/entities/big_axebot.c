@@ -557,6 +557,7 @@ void big_axebot_update(M_B7B0 *moby) {
         BIG_AXEBOT_STATE_INITIALIZE = 0,
         BIG_AXEBOT_STATE_IDLE = 1,
         BIG_AXEBOT_STATE_ALERT = 2,
+        BIG_AXEBOT_STATE_WAIT_FOR_TARGET = 3,
         BIG_AXEBOT_STATE_FOLLOW_PATH = 4,
         BIG_AXEBOT_STATE_CHASE_TARGET = 5,
         BIG_AXEBOT_STATE_RETURN_HOME = 6,
@@ -566,7 +567,9 @@ void big_axebot_update(M_B7B0 *moby) {
         BIG_AXEBOT_STATE_DYING = 10
     };
     enum {
+        BIG_AXEBOT_HIT_REACTION_NONE = 0,
         BIG_AXEBOT_HIT_REACTION_FATAL = 1,
+        BIG_AXEBOT_HIT_REACTION_RETURN_TO_IDLE = 4,
         BIG_AXEBOT_HIT_REACTION_KNOCKBACK = 7
     };
     D_B7B0 *data = moby->data;
@@ -660,7 +663,7 @@ void big_axebot_update(M_B7B0 *moby) {
                 trooper_anim_update(moby, (short *)data->fB0);
             } else {
                 switch (r) {
-                case 0:
+                case BIG_AXEBOT_HIT_REACTION_NONE:
                     break;
                 case 3:
                 case 6:
@@ -702,7 +705,7 @@ void big_axebot_update(M_B7B0 *moby) {
                     data->f404 = scale_game_frames(0x46);
                     data->f406 = scale_game_frames(0xF0);
                     break;
-                case 4:
+                case BIG_AXEBOT_HIT_REACTION_RETURN_TO_IDLE:
                 case 5:
                     allocate_voice_for_target_entry(0xB, 0, (char *)moby);
                     FUN_L04_002ba3e0((char *)moby, (void *)6, (void *)2,
@@ -832,7 +835,7 @@ void big_axebot_update(M_B7B0 *moby) {
             moby->state = 1;
         }
         break;
-    case 3:
+    case BIG_AXEBOT_STATE_WAIT_FOR_TARGET:
         if (moby->f52 != 0 && (moby->f70 & 2)) {
             FUN_L04_002ba3e0((char *)moby, (void *)0xB, 0, (void *)scale_game_frames(0xC));
         }
@@ -1151,6 +1154,8 @@ void FUN_L04_002c1b80(struct Moby *m) {
         CIRCULAR_SAW_ANIM_IDLE = 0,
         CIRCULAR_SAW_ANIM_MOVE_FORWARD = 1,
         CIRCULAR_SAW_ANIM_MOVE_BACKWARD = 2,
+        CIRCULAR_SAW_ANIM_STRAFE_NEGATIVE_YAW = 3,
+        CIRCULAR_SAW_ANIM_STRAFE_POSITIVE_YAW = 4,
         CIRCULAR_SAW_ANIM_JUMP = 5,
         CIRCULAR_SAW_ANIM_ALERT = 6,
         CIRCULAR_SAW_ANIM_ATTACK = 7
@@ -1178,8 +1183,8 @@ void FUN_L04_002c1b80(struct Moby *m) {
             pitch = -2.0f;
             volume = engine_int_to_float(0x400);
             break;
-        case 3:
-        case 4:
+        case CIRCULAR_SAW_ANIM_STRAFE_NEGATIVE_YAW:
+        case CIRCULAR_SAW_ANIM_STRAFE_POSITIVE_YAW:
             pitch = 4.0f;
             volume = engine_int_to_float(0x400);
             break;
@@ -1562,7 +1567,10 @@ void circular_saw_enemy_update(M_35F0 *moby) {
         CIRCULAR_SAW_STATE_DYING = 8
     };
     enum {
-        CIRCULAR_SAW_HIT_REACTION_FATAL = 1
+        CIRCULAR_SAW_HIT_REACTION_NONE = 0,
+        CIRCULAR_SAW_HIT_REACTION_FATAL = 1,
+        CIRCULAR_SAW_HIT_REACTION_DESTROY_IMMEDIATELY = 2,
+        CIRCULAR_SAW_HIT_REACTION_START_HIT_RECOVERY = 3
     };
     enum {
         CIRCULAR_SAW_POINT_ATTACK_APPROACH_AND_ALIGN = 0,
@@ -1645,14 +1653,14 @@ void circular_saw_enemy_update(M_35F0 *moby) {
             }
             data->f136 = scale_game_frames(0xF0);
             switch (r) {
-            case 0:
+            case CIRCULAR_SAW_HIT_REACTION_NONE:
                 break;
             case CIRCULAR_SAW_HIT_REACTION_FATAL:
-            case 2:
+            case CIRCULAR_SAW_HIT_REACTION_DESTROY_IMMEDIATELY:
                 FUN_L04_002c1d70((char *)moby);
                 mark_moby_for_removal(moby);
                 return;
-            case 3:
+            case CIRCULAR_SAW_HIT_REACTION_START_HIT_RECOVERY:
             case 4:
             case 5:
             case 6:
@@ -2320,6 +2328,8 @@ void blarg_trooper_update(struct Moby *moby) {
     enum {
         BLARG_TROOPER_STATE_INITIALIZE = 0,
         BLARG_TROOPER_STATE_IDLE = 1,
+        BLARG_TROOPER_STATE_MOVE_TO_PATH_POINT = 2,
+        BLARG_TROOPER_STATE_RUN_TO_TARGET_OR_PATH_POINT = 3,
         BLARG_TROOPER_STATE_JUMP = 4,
         BLARG_TROOPER_STATE_AIM = 5,
         BLARG_TROOPER_STATE_FIRE = 6,
@@ -2328,7 +2338,9 @@ void blarg_trooper_update(struct Moby *moby) {
         BLARG_TROOPER_STATE_DYING = 11
     };
     enum {
-        BLARG_TROOPER_HIT_REACTION_FATAL = 1
+        BLARG_TROOPER_HIT_REACTION_NONE = 0,
+        BLARG_TROOPER_HIT_REACTION_FATAL = 1,
+        BLARG_TROOPER_HIT_REACTION_FATAL_KNOCKBACK = 2
     };
     struct {
         float tgt[20];
@@ -2451,10 +2463,10 @@ void blarg_trooper_update(struct Moby *moby) {
         }
         *(unsigned char *)(data + 0xFE) = scale_game_frames(0xF0);
         switch (r) {
-        case 0:
+        case BLARG_TROOPER_HIT_REACTION_NONE:
             break;
         case BLARG_TROOPER_HIT_REACTION_FATAL:
-        case 2:
+        case BLARG_TROOPER_HIT_REACTION_FATAL_KNOCKBACK:
             moby->flags &= 0xEFFF;
             *(unsigned char *)(data + 0x67) = 0xFA;
             {
@@ -2599,7 +2611,7 @@ void blarg_trooper_update(struct Moby *moby) {
             }
         }
         break;
-    case 2:
+    case BLARG_TROOPER_STATE_MOVE_TO_PATH_POINT:
         if (dist < 13.0f || best < 1.0f) {
             blend_moby_animation_p(moby, 0, 0, (void *)scale_game_frames(0xA));
             moby->state = 1;
@@ -2626,7 +2638,7 @@ void blarg_trooper_update(struct Moby *moby) {
             func_L00_002594C8_o(moby, pos, st.w.p.v70, 0.5f, 1.0f, 0.5f, 0.5235988f, 0);
         }
         break;
-    case 3:
+    case BLARG_TROOPER_STATE_RUN_TO_TARGET_OR_PATH_POINT:
         *(int *)(data + 0x108) = scale_game_frames(0x64);
         if (flag) {
             int k;

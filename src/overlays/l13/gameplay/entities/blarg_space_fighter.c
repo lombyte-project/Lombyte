@@ -617,6 +617,9 @@ void FUN_L13_002c2d30(unsigned char *moby) {
         HIT_REACTION_NONE = 0,
         HIT_REACTION_LETHAL = 1,
         HIT_REACTION_REMOVE = 2,
+        HIT_REACTION_LOW_INTERPOLATION_TARGET = 3,
+        HIT_REACTION_HIGH_INTERPOLATION_TARGET = 9,
+        HIT_REACTION_HIGH_INTERPOLATION_TARGET_ALTERNATE = 10,
         HIT_REACTION_NO_HIT = 11
     };
     unsigned char *d;
@@ -684,11 +687,11 @@ void FUN_L13_002c2d30(unsigned char *moby) {
             moby[0x20] = 7;
         }
         switch (st) {
-        case 9:
-        case 10:
+        case HIT_REACTION_HIGH_INTERPOLATION_TARGET:
+        case HIT_REACTION_HIGH_INTERPOLATION_TARGET_ALTERNATE:
             d[0x67] = 0xFA;
             break;
-        case 3:
+        case HIT_REACTION_LOW_INTERPOLATION_TARGET:
         case 4:
         case 5:
         case 6:
@@ -748,6 +751,9 @@ void FUN_L13_002c37e0(struct Moby *moby, unsigned char *d, float *fp) {
         HIT_REACTION_NONE = 0,
         HIT_REACTION_LETHAL = 1,
         HIT_REACTION_REMOVE = 2,
+        HIT_REACTION_LOW_INTERPOLATION_TARGET = 3,
+        HIT_REACTION_HIGH_INTERPOLATION_TARGET = 9,
+        HIT_REACTION_HIGH_INTERPOLATION_TARGET_ALTERNATE = 10,
         HIT_REACTION_NO_HIT = 11
     };
     if (moby->state != 3) {
@@ -760,14 +766,14 @@ void FUN_L13_002c37e0(struct Moby *moby, unsigned char *d, float *fp) {
             *fp = 0;
             break;
         case HIT_REACTION_NONE:
-        case 3:
+        case HIT_REACTION_LOW_INTERPOLATION_TARGET:
         case 4:
         case 5:
         case 6:
         case 7:
         case 8:
-        case 9:
-        case 10:
+        case HIT_REACTION_HIGH_INTERPOLATION_TARGET:
+        case HIT_REACTION_HIGH_INTERPOLATION_TARGET_ALTERNATE:
         case HIT_REACTION_NO_HIT:
             break;
         }
@@ -1164,7 +1170,11 @@ void FUN_L13_002c4428(Moby_2C56B0 *moby) {
         FIGHTER_ATTACK_COOLDOWN = 2
     };
     enum {
-        FIGHTER_DESTRUCTION_SPAWN_CLASS_E0 = 0
+        FIGHTER_DESTRUCTION_SPAWN_CLASS_E0 = 0,
+        FIGHTER_DESTRUCTION_SPAWN_CLASS_E4 = 1,
+        FIGHTER_DESTRUCTION_SPAWN_CLASS_E4_ALTERNATE = 2,
+        FIGHTER_DESTRUCTION_SKIP_SPAWN = 7,
+        FIGHTER_DESTRUCTION_SKIP_SPAWN_ALTERNATE = 8
     };
     Data_2C56B0 *d;
     Moby_2C56B0 *veh;
@@ -1362,16 +1372,16 @@ void FUN_L13_002c4428(Moby_2C56B0 *moby) {
         case FIGHTER_DESTRUCTION_SPAWN_CLASS_E0:
             FUN_L13_002e1c50((char *)spawn_position, 0xE0);
             break;
-        case 1:
-        case 2:
+        case FIGHTER_DESTRUCTION_SPAWN_CLASS_E4:
+        case FIGHTER_DESTRUCTION_SPAWN_CLASS_E4_ALTERNATE:
         case 3:
         case 4:
         case 5:
         case 6:
             FUN_L13_002e1c50((char *)spawn_position, 0xE4);
             break;
-        case 7:
-        case 8:
+        case FIGHTER_DESTRUCTION_SKIP_SPAWN:
+        case FIGHTER_DESTRUCTION_SKIP_SPAWN_ALTERNATE:
         case 9:
             break;
         }
@@ -1696,6 +1706,8 @@ void FUN_L13_002cecb8(struct Moby *moby, unsigned char *d, float *health) {
     enum {
         HIT_REACTION_NONE = 0,
         HIT_REACTION_LETHAL = 1,
+        HIT_REACTION_REMOVE = 2,
+        HIT_REACTION_HIGH_INTERPOLATION_TARGET = 9,
         HIT_REACTION_NO_HIT = 11
     };
     char *src;
@@ -1714,7 +1726,7 @@ void FUN_L13_002cecb8(struct Moby *moby, unsigned char *d, float *health) {
         }
         switch (FUN_00213928(moby, src, health, 0, &hit, 0, 0, 4)) {
         case HIT_REACTION_LETHAL:
-        case 2:
+        case HIT_REACTION_REMOVE:
             *health = 0.0f;
             break;
         case HIT_REACTION_NONE:
@@ -1724,7 +1736,7 @@ void FUN_L13_002cecb8(struct Moby *moby, unsigned char *d, float *health) {
         case 6:
         case 7:
         case 8:
-        case 9:
+        case HIT_REACTION_HIGH_INTERPOLATION_TARGET:
         case 10:
         case HIT_REACTION_NO_HIT:
             break;
@@ -2229,6 +2241,9 @@ int FUN_L13_002e4300(struct Moby *m, char *arg, float *t) {
         HIT_REACTION_NONE = 0,
         HIT_REACTION_LETHAL = 1,
         HIT_REACTION_REMOVE = 2,
+        HIT_REACTION_LOW_INTERPOLATION_TARGET = 3,
+        HIT_REACTION_HIGH_INTERPOLATION_TARGET = 9,
+        HIT_REACTION_HIGH_INTERPOLATION_TARGET_ALTERNATE = 10,
         HIT_REACTION_NO_HIT = 11
     };
     char *r = find_moby_hit(m, 0x330000, 0);
@@ -2244,14 +2259,14 @@ int FUN_L13_002e4300(struct Moby *m, char *arg, float *t) {
     case HIT_REACTION_REMOVE:
         *(int *)t = 0;
         break;
-    case 3:
+    case HIT_REACTION_LOW_INTERPOLATION_TARGET:
     case 4:
     case 5:
     case 6:
     case 7:
     case 8:
-    case 9:
-    case 10:
+    case HIT_REACTION_HIGH_INTERPOLATION_TARGET:
+    case HIT_REACTION_HIGH_INTERPOLATION_TARGET_ALTERNATE:
     case HIT_REACTION_NO_HIT:
         break;
     }
@@ -3122,9 +3137,12 @@ extern int func_L13_002E9B30_2EAE80(void *, void *, int, int) __asm__("FUN_L13_0
 
 void FUN_L13_002e9a48(Moby_2EAE80 *m, Data_2EAE80 *d) {
     enum {
+        DAMAGE_STAGE_SKIP_LINE_QUEUE = 0,
         DAMAGE_STAGE_QUEUE_RANDOM_LINE = 1,
         DAMAGE_STAGE_START_TIMER_AND_QUEUE_LINE = 2,
-        DAMAGE_STAGE_QUEUE_SINGLE_LINE = 3
+        DAMAGE_STAGE_QUEUE_SINGLE_LINE = 3,
+        DAMAGE_STAGE_QUEUE_ALTERNATE_SINGLE_LINE = 5,
+        DAMAGE_STAGE_QUEUE_LATE_SINGLE_LINE = 6
     };
     int hit;
     int rf;
@@ -3320,7 +3338,7 @@ void FUN_L13_002e9a48(Moby_2EAE80 *m, Data_2EAE80 *d) {
         if (mode > 0) {
             if (rf != 0) {
                 switch (m->bBC - 1) {
-                case 0:
+                case DAMAGE_STAGE_SKIP_LINE_QUEUE:
                     break;
                 case DAMAGE_STAGE_QUEUE_RANDOM_LINE:
                     func_L13_002E9B30_2EAE80(m, d, 0xC, 4);
@@ -3334,10 +3352,10 @@ void FUN_L13_002e9a48(Moby_2EAE80 *m, Data_2EAE80 *d) {
                     break;
                 case 4:
                     break;
-                case 5:
+                case DAMAGE_STAGE_QUEUE_ALTERNATE_SINGLE_LINE:
                     func_L13_002E9B30_2EAE80(m, d, 0x13, 1);
                     break;
-                case 6:
+                case DAMAGE_STAGE_QUEUE_LATE_SINGLE_LINE:
                     func_L13_002E9B30_2EAE80(m, d, 0x16, 1);
                     break;
                 case 7:

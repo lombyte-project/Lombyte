@@ -1296,6 +1296,8 @@ void FUN_L11_0030fe50(struct Moby *m, unsigned char *d, float *t) {
     enum {
         HIT_REACTION_NONE = 0,
         HIT_REACTION_DEATH = 1,
+        HIT_REACTION_DEATH_KNOCKBACK = 2,
+        HIT_REACTION_KNOCKBACK = 3,
         HIT_REACTION_NO_RESPONSE = 11
     };
     int out;
@@ -1307,11 +1309,11 @@ void FUN_L11_0030fe50(struct Moby *m, unsigned char *d, float *t) {
         }
         switch (hit_fe50(m, info, t, 0, &out, 0, 0, 4)) {
         case HIT_REACTION_DEATH:
-        case 2:
+        case HIT_REACTION_DEATH_KNOCKBACK:
             *t = 0.0f;
             break;
         case HIT_REACTION_NONE:
-        case 3:
+        case HIT_REACTION_KNOCKBACK:
         case 4:
         case HIT_REACTION_NO_RESPONSE:
             break;
@@ -1638,6 +1640,8 @@ void FUN_L11_00310698(struct Moby *m) {
     enum {
         HIT_REACTION_NONE = 0,
         HIT_REACTION_DEATH = 1,
+        HIT_REACTION_DEATH_KNOCKBACK = 2,
+        HIT_REACTION_KNOCKBACK = 3,
         HIT_REACTION_NO_RESPONSE = 11
     };
     struct PokiPathVars *pv = (struct PokiPathVars *)m->pvars;
@@ -1681,7 +1685,7 @@ void FUN_L11_00310698(struct Moby *m) {
         case 10:
             pv->unk67 = 0xFA;
             break;
-        case 3:
+        case HIT_REACTION_KNOCKBACK:
         case 4:
         case 5:
         case 6:
@@ -1706,7 +1710,7 @@ void FUN_L11_00310698(struct Moby *m) {
             pv->unk158 += frames_0180(60);
             break;
         case HIT_REACTION_DEATH:
-        case 2:
+        case HIT_REACTION_DEATH_KNOCKBACK:
             m->flags &= 0xEFFF;
             pv->unk80 = D_L11_00161F88 * frame_time_sq;
             pv->unk88 = D_L11_00161F98 * frame_time;
@@ -1826,7 +1830,7 @@ extern int FUN_L11_00318050(char *moby, void **out);
 extern short *D_L11_001AC240[];
 void FUN_L11_00311be8(void *moby, void *a1, void *a2);
 
-void *FUN_L11_00311948(void *moby, char *ship_vars, float *reference_position, float *reference_rotation, float f0, float f1, float f2, void *current_target, int a5) {
+void *FUN_L11_00311948(void *moby, char *ship_vars, float *reference_position, float *reference_rotation, float f0, float f1, float f2, void *current_target, int unused_parameter) {
     void *best = 0;
     float bestd = 1000.0f;
     short *p;
@@ -3193,12 +3197,21 @@ void puffoid_update(struct Moby *moby) {
         PUFFOID_STATE_SPRAY_ATTACK = 5,
         PUFFOID_STATE_RETURN_HOME = 6,
         PUFFOID_STATE_JUMP_HOME = 7,
+        PUFFOID_STATE_KNOCKBACK = 9,
+        PUFFOID_STATE_DEATH_KNOCKBACK = 11,
         PUFFOID_STATE_WAIT_FOR_CARRIER_JUMP = 12,
         PUFFOID_STATE_CARRIER_JUMP = 13,
         PUFFOID_STATE_CARRIER_IDLE = 14,
         PUFFOID_STATE_CARRIER_CHASE_TARGET = 15,
         PUFFOID_STATE_CARRIER_SPRAY_ATTACK = 16,
+        PUFFOID_STATE_CARRIER_KNOCKBACK = 17,
+        PUFFOID_STATE_CARRIER_DEATH_KNOCKBACK = 18,
         PUFFOID_STATE_FOLLOW_PATH = 19
+    };
+    enum {
+        PUFFOID_PATH_ANIM_ENTER_SPRAY_ATTACK = 5,
+        PUFFOID_PATH_ANIM_SPRAY_ATTACK = 6,
+        PUFFOID_PATH_ANIM_EXIT_SPRAY_ATTACK = 7
     };
     CreatureVars_4318 *d = (CreatureVars_4318 *)moby->pvars;
     struct Moby *target;
@@ -3401,7 +3414,7 @@ void puffoid_update(struct Moby *moby) {
             set_anim_4318(moby, 1, 0, 5);
         }
         break;
-    case 9: {
+    case PUFFOID_STATE_KNOCKBACK: {
         int hit = FUN_L00_0025c698_4318(moby, d->unk120);
         if (hit & 0x40) {
             char *path;
@@ -3426,7 +3439,7 @@ void puffoid_update(struct Moby *moby) {
         }
         break;
     }
-    case 11:
+    case PUFFOID_STATE_DEATH_KNOCKBACK:
         if (FUN_L00_0025c698_4318(moby, d->unk120) & 0x160) {
             zero_vector_4318(pos);
             FUN_L00_0025f3e8(moby, &moby->pos, -1, 0.5f, 10.0f);
@@ -3526,7 +3539,7 @@ void puffoid_update(struct Moby *moby) {
         pos[2] += 0.333f;
         spray_4318(moby, pos, D_L11_001622CC * 0.6f, 1, 1.0f, 0.0f, 0, 1, 0);
         break;
-    case 17: {
+    case PUFFOID_STATE_CARRIER_KNOCKBACK: {
         int hit;
         follow_carrier_4318(moby, D_L11_0015FFD8_4318 + (d->carrier << 8), &moby->pos, &moby->rot,
                             &moby->pos, &moby->rot);
@@ -3554,7 +3567,7 @@ void puffoid_update(struct Moby *moby) {
         }
         break;
     }
-    case 18:
+    case PUFFOID_STATE_CARRIER_DEATH_KNOCKBACK:
         follow_carrier_4318(moby, D_L11_0015FFD8_4318 + (d->carrier << 8), &moby->pos, &moby->rot,
                             &moby->pos, &moby->rot);
         if (FUN_L00_0025c698_4318(moby, d->unk120) & 0x160) {
@@ -3602,7 +3615,7 @@ void puffoid_update(struct Moby *moby) {
                     set_anim_4318(moby, 5, 0, frames_4318(10));
                 }
                 break;
-            case 6:
+            case PUFFOID_PATH_ANIM_SPRAY_ATTACK:
                 if (dist > 8.0f) {
                     set_anim_4318(moby, 7, 0, frames_4318(10));
                 } else if (dist < 4.0f) {
@@ -3612,10 +3625,10 @@ void puffoid_update(struct Moby *moby) {
                     spray_4318(moby, p, D_L11_001622CC * 0.55f, 1, 1.0f, 1.0f, 0, 1, 0);
                 }
                 break;
-            case 5:
+            case PUFFOID_PATH_ANIM_ENTER_SPRAY_ATTACK:
                 set_anim_4318(moby, 6, 0, frames_4318(10));
                 break;
-            case 7:
+            case PUFFOID_PATH_ANIM_EXIT_SPRAY_ATTACK:
                 set_anim_4318(moby, 4, 0, frames_4318(10));
                 break;
             }

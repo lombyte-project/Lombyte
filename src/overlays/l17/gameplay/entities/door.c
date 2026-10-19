@@ -532,7 +532,10 @@ int FUN_L17_002eace8(int a, char *p, char *radar_origin, char *radar_rotation, f
     enum {
         MOBY_CLASS_OFFSCREEN_ARROW_TARGET = 0x15B,
         MOBY_CLASS_UNMARKED_COUNTED_TARGET = 0x184,
-        MOBY_CLASS_UNCOUNTED_MARKED_TARGET = 0x191
+        MOBY_CLASS_UNCOUNTED_MARKED_TARGET = 0x191,
+        MOBY_CLASS_PRIORITY_LOCK_TARGET = 0x3EB,
+        MOBY_CLASS_STATE_GATED_MARKED_TARGET = 0x4BF,
+        MOBY_CLASS_MARKED_COUNTED_TARGET = 0x504
     };
     float v[4];
     float w[4];
@@ -606,8 +609,8 @@ int FUN_L17_002eace8(int a, char *p, char *radar_origin, char *radar_rotation, f
             break;
         case MOBY_CLASS_UNMARKED_COUNTED_TARGET:
         case MOBY_CLASS_UNCOUNTED_MARKED_TARGET:
-        case 0x3EB:
-        case 0x504:
+        case MOBY_CLASS_PRIORITY_LOCK_TARGET:
+        case MOBY_CLASS_MARKED_COUNTED_TARGET:
             project_to_screen(v, m + 0x10);
             if (*(short *)(m + 0xA6) != 0x184) {
                 if (*(unsigned char *)(m + 0x31) != 0) {
@@ -675,7 +678,7 @@ int FUN_L17_002eace8(int a, char *p, char *radar_origin, char *radar_rotation, f
                 FUN_L17_002eaae0(radar_rotation, radar_origin, m, 1, 0x70808080, *(int *)(p + 0x104));
             }
             break;
-        case 0x4BF:
+        case MOBY_CLASS_STATE_GATED_MARKED_TARGET:
             if (!(*(unsigned short *)(m + 0x34) & 1) && *(unsigned char *)(m + 0x20) >= 2) {
                 project_to_screen(v, m + 0x10);
                 if (*(unsigned char *)(m + 0x31) != 0) {
@@ -2110,6 +2113,8 @@ void magnet_elevator_update(struct Moby *moby) {
     enum {
         MAGNET_ELEVATOR_STATE_INITIALIZE = 0,
         MAGNET_ELEVATOR_STATE_BLEND_CAMERA = 1,
+        MAGNET_ELEVATOR_STATE_MOVE_TO_FIRST_STOP_WITH_GROUND_CHECK = 2,
+        MAGNET_ELEVATOR_STATE_MOVE_TO_SECOND_STOP_WITH_GROUND_CHECK = 3,
         MAGNET_ELEVATOR_STATE_MOVE_TO_FIRST_STOP = 4,
         MAGNET_ELEVATOR_STATE_MOVE_TO_SECOND_STOP = 5,
         MAGNET_ELEVATOR_STATE_WAIT_AT_FIRST_STOP = 6,
@@ -2174,8 +2179,8 @@ void magnet_elevator_update(struct Moby *moby) {
         }
         break;
     }
-    case 2:
-    case 3:
+    case MAGNET_ELEVATOR_STATE_MOVE_TO_FIRST_STOP_WITH_GROUND_CHECK:
+    case MAGNET_ELEVATOR_STATE_MOVE_TO_SECOND_STOP_WITH_GROUND_CHECK:
         FUN_L17_002eea70_c(moby);
     case MAGNET_ELEVATOR_STATE_MOVE_TO_FIRST_STOP:
     case MAGNET_ELEVATOR_STATE_MOVE_TO_SECOND_STOP: {
@@ -2421,12 +2426,15 @@ void robot_dog_update(unsigned char *m) __asm__("FUN_L17_002eeb68");
 void robot_dog_update(unsigned char *m) {
     enum {
         ROBOT_DOG_STATE_INITIALIZE = 0,
+        ROBOT_DOG_STATE_WAIT_FOR_IDLE_ANIMATION_COMPLETION = 3,
         ROBOT_DOG_STATE_FALL_UNTIL_LANDING = 4,
         ROBOT_DOG_STATE_TRACK_TARGET_FACING = 5,
+        ROBOT_DOG_STATE_WAIT_FOR_CHASE_TRIGGER = 6,
         ROBOT_DOG_STATE_TURN_TOWARD_TARGET = 8,
         ROBOT_DOG_STATE_APPROACH_TARGET = 9,
         ROBOT_DOG_STATE_ATTACK_TARGET = 10,
         ROBOT_DOG_STATE_RETURN_HOME = 11,
+        ROBOT_DOG_STATE_RECOVER_THEN_REINITIALIZE = 12,
         ROBOT_DOG_STATE_FALL_THEN_REMOVE = 15
     };
     Vars1382 *d;
@@ -2492,7 +2500,7 @@ void robot_dog_update(unsigned char *m) {
             d->i1E8 = d->path;
         }
         break;
-    case 12:
+    case ROBOT_DOG_STATE_RECOVER_THEN_REINITIALIZE:
         if (FUN_L00_002dc9f0(m, d->a120)) {
             m[0x20] = 0;
             d->sC8 = 0;
@@ -2595,7 +2603,7 @@ void robot_dog_update(unsigned char *m) {
             }
         }
         break;
-    case 3:
+    case ROBOT_DOG_STATE_WAIT_FOR_IDLE_ANIMATION_COMPLETION:
         if (m[0x70] & 2) {
             m[0x20] = 1;
             if (m[0x53] != 0) {
@@ -2605,7 +2613,7 @@ void robot_dog_update(unsigned char *m) {
             }
         }
         break;
-    case 6:
+    case ROBOT_DOG_STATE_WAIT_FOR_CHASE_TRIGGER:
     case 7: {
         int s = d->mode;
         if (s != 2) {
@@ -3038,10 +3046,13 @@ extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 void FUN_L17_002f0210(struct Moby *moby) {
     enum {
         ROBOT_DOG_STATE_FALL_UNTIL_LANDING = 4,
+        ROBOT_DOG_STATE_TRACK_TARGET_FACING = 5,
+        ROBOT_DOG_STATE_WAIT_FOR_CHASE_TRIGGER = 6,
         ROBOT_DOG_STATE_TURN_TOWARD_TARGET = 8,
         ROBOT_DOG_STATE_APPROACH_TARGET = 9,
         ROBOT_DOG_STATE_ATTACK_TARGET = 10,
         ROBOT_DOG_STATE_RETURN_HOME = 11,
+        ROBOT_DOG_STATE_RECOVER_THEN_REINITIALIZE = 12,
         ROBOT_DOG_STATE_FALL_THEN_REMOVE = 15
     };
     char *data;
@@ -3072,8 +3083,8 @@ void FUN_L17_002f0210(struct Moby *moby) {
     mode = 0;
     switch (moby->state) {
     case ROBOT_DOG_STATE_FALL_UNTIL_LANDING:
-    case 5:
-    case 6:
+    case ROBOT_DOG_STATE_TRACK_TARGET_FACING:
+    case ROBOT_DOG_STATE_WAIT_FOR_CHASE_TRIGGER:
         mode = 1;
         break;
     case 7:
@@ -3086,7 +3097,7 @@ void FUN_L17_002f0210(struct Moby *moby) {
     case ROBOT_DOG_STATE_FALL_THEN_REMOVE:
         mode = 2;
         break;
-    case 12:
+    case ROBOT_DOG_STATE_RECOVER_THEN_REINITIALIZE:
         mode = -1;
         break;
     }

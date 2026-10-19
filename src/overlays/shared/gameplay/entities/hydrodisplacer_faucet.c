@@ -283,6 +283,10 @@ extern int D_L05_00161910 __attribute__((sda));
 
 void hoverboard_update(unsigned char *moby) __asm__("FUN_L05_002f87a8");
 void hoverboard_update(unsigned char *moby) {
+    enum {
+        HOVERBOARD_STATE_WAIT_FOR_PLAYER_APPROACH = 0,
+        HOVERBOARD_STATE_WAIT_FOR_CONTROL_MODE_EXIT = 1
+    };
     char *data = *(char **)(moby + 0x78);
     float delta[4], position[4], effect_position[4], offset[4], second_position[4];
     float angle, distance_scale, delta_length;
@@ -290,7 +294,7 @@ void hoverboard_update(unsigned char *moby) {
     struct Hero *g;
 
     switch (state) {
-    case 0: {
+    case HOVERBOARD_STATE_WAIT_FOR_PLAYER_APPROACH: {
         char *pos = D_0013F3D0;
         struct Hero *player;
         if (distance_xyz(pos, moby + 0x10) < 5.5f && frame_number_gp > 3 &&
@@ -306,7 +310,7 @@ void hoverboard_update(unsigned char *moby) {
         }
         break;
     }
-    case 1:
+    case HOVERBOARD_STATE_WAIT_FOR_CONTROL_MODE_EXIT:
         if (*(int *)(data + 0x50) == 0 && alternate_item_available[0] != 0 &&
             D_00141938 == 0 && D_L05_0015F6A8 != 0 &&
             (g = &hero, scale_game_frames(0x4b0) < g->unk19C) &&

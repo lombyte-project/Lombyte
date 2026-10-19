@@ -1231,6 +1231,7 @@ void test_dummy_update(unsigned char *m) __asm__("FUN_L16_002cddb8");
 void test_dummy_update(unsigned char *m) {
     enum {
         TEST_DUMMY_STATE_INITIALIZE = 0,
+        TEST_DUMMY_STATE_IDLE = 1,
         TEST_DUMMY_STATE_APPROACH_FIRST_PATH_NODE = 2,
         TEST_DUMMY_STATE_APPROACH_THROW_NODE = 3,
         TEST_DUMMY_STATE_THROW_AT_TARGET = 4,
@@ -1247,7 +1248,7 @@ void test_dummy_update(unsigned char *m) {
         TEST_DUMMY_KIND_PATH_MOVER = 1,
         TEST_DUMMY_KIND_SPRAYER = 2
     };
-    L16SparkVector position_or_delta, v1, launch_velocity;
+    L16SparkVector position_or_delta, position_or_direction, launch_velocity;
     L16SparkQuery fx;
     L16DummyData *d = *(L16DummyData **)(m + 0x78);
     /* A count, then 16-byte points from +0x10. A point copied whole is `path + i * 16 + 16`; its x and y are read
@@ -1295,7 +1296,7 @@ void test_dummy_update(unsigned char *m) {
             *(unsigned char *)(d->child + 0x31) = 1;
         }
         break;
-    case 1:
+    case TEST_DUMMY_STATE_IDLE:
         break;
     case TEST_DUMMY_STATE_APPROACH_FIRST_PATH_NODE: /* turn to the path's first node, then start by variant */
         FUN_L16_002d5e80(d->route);
@@ -1344,12 +1345,12 @@ void test_dummy_update(unsigned char *m) {
             float speed = D_L16_001619CC * D_0015ED6C;
             float gravity = frame_time_sq * 10.0f;
             position_or_delta.f[2] = probe_ground_height(position_or_delta.f, 0, 0.5f);
-            moby_point_position(d->child, 0, v1.f);
-            subtract_vector_xyz(launch_velocity.f, position_or_delta.f, v1.f);
+            moby_point_position(d->child, 0, position_or_direction.f);
+            subtract_vector_xyz(launch_velocity.f, position_or_delta.f, position_or_direction.f);
             launch_velocity.f[2] = 0.0f;
             normalize_vector_xyz(launch_velocity.f, launch_velocity.f, speed);
-            launch_velocity.f[2] = FUN_L00_0025abf0(v1.f, position_or_delta.f, 0, speed, -gravity);
-            func_L16_002C75D0_2cf180((int)m, v1.f, launch_velocity.f, gravity, scale_game_frames(300));
+            launch_velocity.f[2] = FUN_L00_0025abf0(position_or_direction.f, position_or_delta.f, 0, speed, -gravity);
+            func_L16_002C75D0_2cf180((int)m, position_or_direction.f, launch_velocity.f, gravity, scale_game_frames(300));
         } else if (m[0x70] & 2) {
             d->node = (d->node + 1) & 1;
             m[0x20] = 3;
@@ -1358,13 +1359,13 @@ void test_dummy_update(unsigned char *m) {
             }
         }
         if (compute_interpolated_record_value(m) < 15.0f) {
-            v1.quad = *(u128 *)(m + 16);
+            position_or_direction.quad = *(u128 *)(m + 16);
             FUN_L16_002ced20(
-                m, v1.f, fast_arc_tan(position_or_delta.f[0] - *(float *)(m + 16), position_or_delta.f[1] - *(float *)(m + 20)));
+                m, position_or_direction.f, fast_arc_tan(position_or_delta.f[0] - *(float *)(m + 16), position_or_delta.f[1] - *(float *)(m + 20)));
         } else {
             int node = (d->node + 1) & 1;
-            v1.quad = *(u128 *)(m + 16);
-            FUN_L16_002ced20(m, v1.f,
+            position_or_direction.quad = *(u128 *)(m + 16);
+            FUN_L16_002ced20(m, position_or_direction.f,
                              fast_arc_tan(((float *)(path + (node << 4)))[4] - *(float *)(m + 16),
                                           ((float *)(path + (node << 4)))[5] - *(float *)(m + 20)));
         }
@@ -1380,8 +1381,8 @@ void test_dummy_update(unsigned char *m) {
             subtract_vector_xyz(position_or_delta.f, path + (d->node * 16 + 16), position);
             FUN_L00_0025f730(position_or_delta.f, D_L16_001619D0 * D_0015ED6C);
             add_vector_xyz(position, position, position_or_delta.f);
-            moby_point_position(m, D_L16_001619C8_gp, v1.f);
-            func_L00_0025A8E8_2cf180(m, 0.333f, v1.f, 1, 1.0f, 1.0f, 0, 1, 0);
+            moby_point_position(m, D_L16_001619C8_gp, position_or_direction.f);
+            func_L00_0025A8E8_2cf180(m, 0.333f, position_or_direction.f, 1, 1.0f, 1.0f, 0, 1, 0);
             g = &hero;
             if (D_L16_00174258 == ((char *)g->moby) && g->invulnerable_frames == 0) {
                 func_0022ED80_i(6, 0, m);
@@ -1445,15 +1446,15 @@ void test_dummy_update(unsigned char *m) {
             char *slots;
             moby_point_position(d->child, 0, position_or_delta.f);
             slots = d->slots;
-            v1.f[0] =
+            position_or_direction.f[0] =
                 fast_cos(fast_arc_tan(position_or_delta.f[0] - *(float *)(m + 16), position_or_delta.f[1] - *(float *)(m + 20)));
-            v1.f[1] =
+            position_or_direction.f[1] =
                 fast_sin(fast_arc_tan(position_or_delta.f[0] - *(float *)(m + 16), position_or_delta.f[1] - *(float *)(m + 20)));
-            v1.f[2] = 0.0f;
-            FUN_L02_00264e70(slots, position_or_delta.f, v1.f, D_L16_001619D4);
-            v1.f[3] = 5627.925f;
-            v1.f[2] = 1.0f;
-            make_hit_descriptor(&fx, m, 0x10001, 1.0f, v1.f);
+            position_or_direction.f[2] = 0.0f;
+            FUN_L02_00264e70(slots, position_or_delta.f, position_or_direction.f, D_L16_001619D4);
+            position_or_direction.f[3] = 5627.925f;
+            position_or_direction.f[2] = 1.0f;
+            make_hit_descriptor(&fx, m, 0x10001, 1.0f, position_or_direction.f);
             fx.kind = 5;
             fx.enabled = 1;
             fx.cls = *(unsigned short *)(m + 0xA6);

@@ -95,6 +95,13 @@ void level_draw_dialog_text(void) {
         MESSAGE_BOX_SPLIT_TEXT_SPRITE_DIALOG = 5,
         MESSAGE_BOX_CHOICE_DIALOG = 6
     };
+    enum {
+        CHOICE_DIALOG_SINGLE_CENTERED_BUTTON = 3
+    };
+    enum {
+        FREEZE_DIALOG_TIMER_GATED_CENTERED_BUTTON = 2,
+        FREEZE_DIALOG_FORMATTED_BODY_CENTERED_BUTTON = 5
+    };
     char buf[0x200];
     struct TextRegion box;
 
@@ -199,7 +206,7 @@ void level_draw_dialog_text(void) {
             mid = 0x524A;
             text = get_help_message_text(0x4FBC);
             break;
-        case 2:
+        case FREEZE_DIALOG_TIMER_GATED_CENTERED_BUTTON:
             mid = 0x524A;
             text = get_help_message_text(0x4FA6);
             if (D_L00_00173040.timer != 0) {
@@ -250,7 +257,7 @@ void level_draw_dialog_text(void) {
                 text = get_help_message_text(0x4FAC);
             }
             break;
-        case 5:
+        case FREEZE_DIALOG_FORMATTED_BODY_CENTERED_BUTTON:
             mid = 0x4FA8;
             sprintf(buf, D_L00_0015F510, get_help_message_text(0x4FB0), 1, 1, get_help_message_text(0x4FA7));
             text = buf;
@@ -303,7 +310,7 @@ void level_draw_dialog_text(void) {
             font_print_center(0x135, 0x118, button_color, get_help_message_text(0x524B), -1);
             id = 0x522B;
             break;
-        case 3:
+        case CHOICE_DIALOG_SINGLE_CENTERED_BUTTON:
             font_print_center(0x100, 0x118, button_color, get_help_message_text(0x524A), -1);
             id = 0x522C;
             break;

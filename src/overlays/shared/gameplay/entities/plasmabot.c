@@ -302,7 +302,12 @@ void FUN_L14_002b17d8(char *moby);
 void FUN_L14_002b17d8(char *moby) {
     enum {
         PLASMABOT_INITIALIZE = 0,
+        PLASMABOT_START_PATH_TRAVERSAL = 2,
         PLASMABOT_FOLLOW_PATH_FORWARD = 3,
+        PLASMABOT_AIM_AT_TARGET = 4,
+        PLASMABOT_WAIT_ANIMATION_BEFORE_AIM_SWEEP = 5,
+        PLASMABOT_SWEEP_AIM_AND_TRACE_LINE = 6,
+        PLASMABOT_WAIT_ANIMATION_BEFORE_AIM = 7,
         PLASMABOT_FOLLOW_PATH_BACKWARD = 8,
         PLASMABOT_RETURN_TO_PATH_START = 9,
         PLASMABOT_FACE_TARGET_AND_WAIT = 13
@@ -443,7 +448,7 @@ void FUN_L14_002b17d8(char *moby) {
         *(float *)(data + 0x254) = *(float *)(data + 0x268);
         return;
     }
-    case 2:
+    case PLASMABOT_START_PATH_TRAVERSAL:
         if (compute_interpolated_record_value(moby) >= 3.0f) {
             FUN_L14_002b3418_c(moby);
         }
@@ -506,7 +511,7 @@ void FUN_L14_002b17d8(char *moby) {
             }
         }
         break;
-    case 4: {
+    case PLASMABOT_AIM_AT_TARGET: {
         float ang;
         float k;
         float aim;
@@ -549,7 +554,7 @@ void FUN_L14_002b17d8(char *moby) {
         *(short *)(data + 0x262) = scale_game_frames(D_L14_001614EC_gp);
         break;
     }
-    case 5: {
+    case PLASMABOT_WAIT_ANIMATION_BEFORE_AIM_SWEEP: {
         float ang;
         ang = fast_arc_tan_c(*(float *)(owner + 0x10) - *(float *)(moby + 0x10),
                                 *(float *)(owner + 0x14) - *(float *)(moby + 0x14));
@@ -561,7 +566,7 @@ void FUN_L14_002b17d8(char *moby) {
         }
         break;
     }
-    case 6: {
+    case PLASMABOT_SWEEP_AIM_AND_TRACE_LINE: {
         int flag;
         float ang;
         float progress;
@@ -612,7 +617,7 @@ void FUN_L14_002b17d8(char *moby) {
         }
         break;
     }
-    case 7:
+    case PLASMABOT_WAIT_ANIMATION_BEFORE_AIM:
         if ((moby[0x70] & 2) && ((unsigned char *)moby)[0x52] == ((unsigned char *)moby)[0x53]) {
             blend_moby_animation(moby, 0, 0, scale_game_frames(10));
             ((unsigned char *)moby)[0x20] = 4;
@@ -974,6 +979,7 @@ extern void func_L00_0025D5B0_i(void *, void *, float, int, int, int) __asm__("F
 
 void FUN_L14_002b2f60(char *moby) {
     enum {
+        HIT_REACTION_UNAVAILABLE = 0,
         HIT_REACTION_LETHAL = 1,
         HIT_REACTION_DEATH = 2,
         HIT_REACTION_STAGGER = 3,
@@ -1051,7 +1057,7 @@ void FUN_L14_002b2f60(char *moby) {
             *(int *)(moby + 0x94) = 0;
             break;
         }
-        case 0: case HIT_REACTION_NONE:
+        case HIT_REACTION_UNAVAILABLE: case HIT_REACTION_NONE:
             break;
         }
         trooper_anim_update(moby, (short *)(state + 0xC0));
@@ -1258,6 +1264,9 @@ void plasmabot_hatch_update(struct Moby *moby) {
         HATCH_WAIT_ACTIVATION = 0,
         HATCH_WAIT_ACTIVATION_DELAY = 1,
         HATCH_WAIT_ACTIVATION_ANIMATION = 2,
+        HATCH_WAIT_ACTIVATION_GATE_CLEAR = 3,
+        HATCH_IDLE_AFTER_ACTIVATION_GATE_CLEAR = 4,
+        HATCH_WAIT_ANIMATION_BEFORE_RESET_DELAY = 5,
         HATCH_WAIT_RESET_DELAY = 6,
         HATCH_WAIT_RESET_ANIMATION = 7
     };
@@ -1286,15 +1295,15 @@ void plasmabot_hatch_update(struct Moby *moby) {
             set_moby_animation(moby, 2, 0);
         }
         break;
-    case 3:
+    case HATCH_WAIT_ACTIVATION_GATE_CLEAR:
         if (*(s16 *)(D_L14_00167500 + 0x86) != 0x14) {
             set_moby_animation(moby, 0, 0);
             moby->state = 4;
         }
         break;
-    case 4:
+    case HATCH_IDLE_AFTER_ACTIVATION_GATE_CLEAR:
         break;
-    case 5:
+    case HATCH_WAIT_ANIMATION_BEFORE_RESET_DELAY:
         if ((moby->anim_flags & 2) != 0) {
             moby->state = 6;
             set_moby_animation(moby, 2, 0);

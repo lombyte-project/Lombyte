@@ -563,6 +563,9 @@ void FUN_L16_002d38b0(struct Moby *m) {
         HIT_RESPONSE_UNAVAILABLE = 0,
         HIT_RESPONSE_FATAL = 1,
         HIT_RESPONSE_FATAL_FALL = 2,
+        HIT_RESPONSE_KNOCKBACK_RECOVERY = 3,
+        HIT_RESPONSE_ANIMATION_ONLY = 9,
+        HIT_RESPONSE_DAMAGE_ANIMATION_ONLY = 10,
         HIT_RESPONSE_NO_REACTION = 11
     };
     L16DamageScratch scratch;
@@ -596,11 +599,11 @@ void FUN_L16_002d38b0(struct Moby *m) {
         d->active = 1;
         d->pending = 0;
         switch (response) {
-        case 9:
-        case 10:
+        case HIT_RESPONSE_ANIMATION_ONLY:
+        case HIT_RESPONSE_DAMAGE_ANIMATION_ONLY:
             d->animation = 0xFA;
             break;
-        case 3:
+        case HIT_RESPONSE_KNOCKBACK_RECOVERY:
         case 4:
         case 5:
         case 6:

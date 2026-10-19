@@ -1996,10 +1996,13 @@ void ultramech_unlimited_update(UMoby *m) {
         ULTRAMECH_FIRE_BURST = 5,
         ULTRAMECH_WAIT_BETWEEN_BURSTS = 6,
         ULTRAMECH_APPROACH_TARGET = 7,
-        ULTRAMECH_MELEE_ATTACK = 8
+        ULTRAMECH_MELEE_ATTACK = 8,
+        ULTRAMECH_KNOCKBACK_RECOVERY = 9,
+        ULTRAMECH_DEATH_EFFECTS = 10,
+        ULTRAMECH_DEAD_WAIT_FOR_RESET = 0x40
     };
     UVec v10;
-    UVec v20;
+    UVec position_or_motion_vector;
     UVec vector_arithmetic_result;
     UVec hit_direction;
     UVec attack_start;
@@ -2102,7 +2105,7 @@ void ultramech_unlimited_update(UMoby *m) {
         float speed = frame_time * 12.0f;
         float dist;
         float len;
-        FUN_L00_0025df68(path, &m->pos, &v20, &seg, &frac, 0, 999.0f, 5.0f, 0.0f);
+        FUN_L00_0025df68(path, &m->pos, &position_or_motion_vector, &seg, &frac, 0, 999.0f, 5.0f, 0.0f);
         dist = convert_integer_to_float(seg) * path->pt[0].f[3];
         dist += frac;
         dist += 2.0f;
@@ -2122,15 +2125,15 @@ void ultramech_unlimited_update(UMoby *m) {
         if (dist < speed / FUN_L04_001f1978(26.0f) && m->anim != 5) {
             blend_moby_animation(m, 5, 0, scale_game_frames(6));
         }
-        subtract_vector_xyz(&v20, (UVec *)path + (seg + 2), (UVec *)path + (seg + 1));
-        scale_vector_xyz(&v20, &v20, frac);
-        add_vector_xyz(&v20, &v20, (UVec *)path + (seg + 1));
+        subtract_vector_xyz(&position_or_motion_vector, (UVec *)path + (seg + 2), (UVec *)path + (seg + 1));
+        scale_vector_xyz(&position_or_motion_vector, &position_or_motion_vector, frac);
+        add_vector_xyz(&position_or_motion_vector, &position_or_motion_vector, (UVec *)path + (seg + 1));
         if (seg + 1 < path->n - 8) {
             float ang = fast_arc_tan(path->pt[seg + 1].f[0] - m->pos.f[0],
                                      path->pt[seg + 1].f[1] - m->pos.f[1]);
             m->rot.f[2] = spring_turn(&d->turnVel, m->rot.f[2], ang, 0.01f, 0.3f, 0.1f);
         }
-        subtract_vector_xyz(&v10, &v20, &m->pos);
+        subtract_vector_xyz(&v10, &position_or_motion_vector, &m->pos);
         len = vector_length_xyz(&v10);
         if (speed < len)
             len = speed;
@@ -2207,17 +2210,17 @@ void ultramech_unlimited_update(UMoby *m) {
             }
             if (fire >= 0) {
                 moby_point_position(m, 0, &v10);
-                subtract_vector_xyz(&v20, &tgt->pos, &v10);
-                v20.f[2] += 0.5f;
-                normalize_vector_xyz(&v20, &v20, *(float *)&D_L15_00161B20 * frame_time);
-                if (0.0f < v20.f[2])
-                    v20.f[2] = 0.0f;
-                if (v20.f[2] < 0.0f)
-                    v20.f[2] = 0.0f;
-                func_L10_002CD578_v(&v20, 3.0f, &v10, (int)m, (int)tgt,
+                subtract_vector_xyz(&position_or_motion_vector, &tgt->pos, &v10);
+                position_or_motion_vector.f[2] += 0.5f;
+                normalize_vector_xyz(&position_or_motion_vector, &position_or_motion_vector, *(float *)&D_L15_00161B20 * frame_time);
+                if (0.0f < position_or_motion_vector.f[2])
+                    position_or_motion_vector.f[2] = 0.0f;
+                if (position_or_motion_vector.f[2] < 0.0f)
+                    position_or_motion_vector.f[2] = 0.0f;
+                func_L10_002CD578_v(&position_or_motion_vector, 3.0f, &v10, (int)m, (int)tgt,
                                     scale_game_frames(D_L15_00161B1C));
-                normalize_vector_xyz(&v20, &v20, 3.0f);
-                FUN_L00_001ff290(&vector_arithmetic_result, &v10, &v20);
+                normalize_vector_xyz(&position_or_motion_vector, &position_or_motion_vector, 3.0f);
+                FUN_L00_001ff290(&vector_arithmetic_result, &v10, &position_or_motion_vector);
                 FUN_L03_00250ae8(m, &v10, 0);
                 d->shots++;
             } else if ((float)d->shots >= 6.0f && (m->animFlags & 2)) {
@@ -2301,7 +2304,7 @@ void ultramech_unlimited_update(UMoby *m) {
     case ULTRAMECH_APPROACH_TARGET: {
         float ang = fast_arc_tan(tgt->pos.f[0] - m->pos.f[0], tgt->pos.f[1] - m->pos.f[1]);
         if (d->w164 != 2) {
-            ang = FUN_L15_002cf110_u(m, &v20, d->f1B8);
+            ang = FUN_L15_002cf110_u(m, &position_or_motion_vector, d->f1B8);
             if (vector_distance(&m->pos, &tgt->pos) < *(float *)&D_L15_00161B28) {
                 m->state = 8;
                 if (m->anim != 2)
@@ -2315,11 +2318,11 @@ void ultramech_unlimited_update(UMoby *m) {
         FUN_L00_00258278((char *)m, &d->turnVel, ang, frame_time_sq * 1.0471976f,
                          frame_time_sq * 3.1415927f, frame_time * 3.1415927f);
         qcopy(&v10, &m->pos);
-        subtract_vector_xyz(&vector_arithmetic_result, &v20, &m->pos);
-        v20.q = vector_arithmetic_result.q;
-        normalize_vector_xyz(&v20, &v20, frame_time * 6.5f);
-        FUN_L00_001ff290(&vector_arithmetic_result, &v20, &m->pos);
-        if (!FUN_L00_00258490(m, &v10, &v20, 1, 2.25f, 1.75f, 0.5f, 0.5235988f) ||
+        subtract_vector_xyz(&vector_arithmetic_result, &position_or_motion_vector, &m->pos);
+        position_or_motion_vector.q = vector_arithmetic_result.q;
+        normalize_vector_xyz(&position_or_motion_vector, &position_or_motion_vector, frame_time * 6.5f);
+        FUN_L00_001ff290(&vector_arithmetic_result, &position_or_motion_vector, &m->pos);
+        if (!FUN_L00_00258490(m, &v10, &position_or_motion_vector, 1, 2.25f, 1.75f, 0.5f, 0.5235988f) ||
             point_in_path_xy(&v10, D_L15_001B0AB0[d->side]->pt, D_L15_001B0AB0[d->side]->n)) {
             qcopy(&m->pos, &v10);
             m->state = 4;
@@ -2377,7 +2380,7 @@ void ultramech_unlimited_update(UMoby *m) {
             }
         }
         break;
-    case 9: {
+    case ULTRAMECH_KNOCKBACK_RECOVERY: {
         int r = 0;
         if (d->w1D8 == 0) {
             r = mine_fall(m, d->hit);
@@ -2407,7 +2410,7 @@ void ultramech_unlimited_update(UMoby *m) {
         }
         break;
     }
-    case 10: {
+    case ULTRAMECH_DEATH_EFFECTS: {
         void *pp = &m->pos;
         void *rr = &m->rot;
         float *dd;
@@ -2423,7 +2426,7 @@ void ultramech_unlimited_update(UMoby *m) {
         FUN_L00_00263e30(m, 0x7A9, 1, 0x7A9, 2, 4, 2);
         m->state = 0x40;
         return;
-    case 0x40:
+    case ULTRAMECH_DEAD_WAIT_FOR_RESET:
         m->w94 = 0;
         m->flags = (m->flags | 0x41) & 0xEFFF;
         d->b58 = 0;
@@ -2460,15 +2463,15 @@ void ultramech_unlimited_update(UMoby *m) {
             n = i + 1;
             for (j = 2; j < 6; j++) {
                 int k;
-                v20.q = 0;
-                v20.f[0] = random_float_between(1.0f, -1.0f) * (frame_time * 20.0f);
-                v20.f[1] = random_float_between(1.0f, -1.0f) * (frame_time * 20.0f);
-                v20.f[2] = random_float_between(0.8f, 1.2f) * (frame_time * -20.0f);
-                v10.q = v20.q;
+                position_or_motion_vector.q = 0;
+                position_or_motion_vector.f[0] = random_float_between(1.0f, -1.0f) * (frame_time * 20.0f);
+                position_or_motion_vector.f[1] = random_float_between(1.0f, -1.0f) * (frame_time * 20.0f);
+                position_or_motion_vector.f[2] = random_float_between(0.8f, 1.2f) * (frame_time * -20.0f);
+                v10.q = position_or_motion_vector.q;
                 k = random_integer_below(100) & 1;
-                moby_point_position(m, j, &v20);
+                moby_point_position(m, j, &position_or_motion_vector);
                 transform_vector_by_basis(&v10, &v10, m->mtx);
-                FUN_L00_0026ced0(&v20, &v10, k ? 0x400F0F7F : 0x407F7F7F, 0x272727,
+                FUN_L00_0026ced0(&position_or_motion_vector, &v10, k ? 0x400F0F7F : 0x407F7F7F, 0x272727,
                                  random_float_between(1.5f, 3.0f) * 210000.0f,
                                  scale_game_frames(k ? FUN_L00_00257b90(0xA, 0xF)
                                                      : FUN_L00_00257b90(0x14, 0x1E)));
@@ -2516,6 +2519,9 @@ void FUN_L15_002d0fa8(void *arg) {
         HIT_REACTION_NO_ACTION = 0,
         HIT_REACTION_DEATH = 1,
         HIT_REACTION_DEATH_ALTERNATE = 2,
+        HIT_REACTION_KNOCKBACK = 3,
+        HIT_REACTION_KNOCKBACK_ALTERNATE = 4,
+        HIT_REACTION_DAMAGE_WITHOUT_KNOCKBACK = 9,
         HIT_REACTION_NONE = 11
     };
     UMoby *m = arg;
@@ -2578,13 +2584,13 @@ void FUN_L15_002d0fa8(void *arg) {
             case HIT_REACTION_NO_ACTION:
             case HIT_REACTION_NONE:
                 break;
-            case 9:
+            case HIT_REACTION_DAMAGE_WITHOUT_KNOCKBACK:
             case 10:
                 d->w1C8 = 1;
                 *(unsigned char *)((char *)d + 0x67) = 0xFA;
                 break;
-            case 3:
-            case 4:
+            case HIT_REACTION_KNOCKBACK:
+            case HIT_REACTION_KNOCKBACK_ALTERNATE:
             case 5:
             case 6:
             case 7:

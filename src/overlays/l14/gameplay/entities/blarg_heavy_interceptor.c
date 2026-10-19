@@ -1701,14 +1701,20 @@ void machinegun_turret_update(char *moby) __asm__("FUN_L14_002b3bf0");
 void machinegun_turret_update(char *moby) {
     enum {
         TURRET_STATE_INITIALIZE = 0,
+        TURRET_STATE_WAIT_FOR_ACTIVATION = 1,
+        TURRET_STATE_DEPLOY = 2,
         TURRET_STATE_WAIT_FOR_TARGET = 3,
         TURRET_STATE_AIM_AND_FIRE = 4,
+        TURRET_STATE_RETRACT = 5,
         TURRET_STATE_DESTROY = 6
+    };
+    enum {
+        TURRET_SPAWN_CENTER = 0
     };
     char *data;
     float target_point_scratch[4];
     float spawn_position[4];
-    float v40[4];
+    float spawn_vector_scratch[4];
     float spawn_position_offset[4];
     float v60[4];
     float target_query_result[4];
@@ -1752,7 +1758,7 @@ void machinegun_turret_update(char *moby) {
         }
         *(int *)(data + 0x98) = func_001F9850_2B4E40(*(int *)(data + 0x94));
         return;
-    case 1:
+    case TURRET_STATE_WAIT_FOR_ACTIVATION:
         if (*(short *)(data + 0x88) == 0) {
             return;
         }
@@ -1765,7 +1771,7 @@ void machinegun_turret_update(char *moby) {
         func_00213D28_2B4E40(moby, 1, 0);
         *(float *)(moby + 0x58) = 1.0f / (func_001FA888_2B4E40(*(short *)(data + 0x74)) * D_L14_00161510);
         return;
-    case 2:
+    case TURRET_STATE_DEPLOY:
         {
             float t = (float)*(short *)(data + 0x74) * *(float *)(data + 0x78);
             *(float *)(moby + 0x18) = *(float *)(data + 0x70) - (0.0f + (D_L14_00161508 - 0.0f) * t);
@@ -1831,7 +1837,7 @@ void machinegun_turret_update(char *moby) {
         if (rem == 0) {
             sel = func_002140B0_2B4E40(3);
             switch (sel) {
-            case 0:
+            case TURRET_SPAWN_CENTER:
                 func_L00_001FF4B0_2B4E40(spawn_position, moby + 0xE0, D_L14_00161520);
                 break;
             case 1:
@@ -1845,12 +1851,12 @@ void machinegun_turret_update(char *moby) {
                 func_001F9BD8_2B4E40(spawn_position, spawn_position, spawn_position_offset);
                 break;
             }
-            func_L00_001FF4B0_2B4E40(v40, moby + 0xC0, D_L14_00161528);
-            func_001F9BD8_2B4E40(spawn_position, spawn_position, v40);
+            func_L00_001FF4B0_2B4E40(spawn_vector_scratch, moby + 0xC0, D_L14_00161528);
+            func_001F9BD8_2B4E40(spawn_position, spawn_position, spawn_vector_scratch);
             func_001F9BD8_2B4E40(spawn_position, spawn_position, moby + 0x10);
-            func_L00_001FF4B0_2B4E40(v40, moby + 0xC0, D_L14_0016151C * frame_time);
+            func_L00_001FF4B0_2B4E40(spawn_vector_scratch, moby + 0xC0, D_L14_0016151C * frame_time);
             if (*(short *)(data + 0x9C) == 0) {
-                func_L00_00251328_2B4E40(func_L14_002EE150_2B4E40(spawn_position, v40, (int)moby, 1), 0xE0, 0xE0, 0xE0);
+                func_L00_00251328_2B4E40(func_L14_002EE150_2B4E40(spawn_position, spawn_vector_scratch, (int)moby, 1), 0xE0, 0xE0, 0xE0);
             }
         }
         r = func_L00_00260D30_2B4E40(moby, target_query_result, 34.0f);
@@ -1873,7 +1879,7 @@ void machinegun_turret_update(char *moby) {
         func_00213D28_2B4E40(moby, 2, 0);
         *(float *)(moby + 0x58) = 1.0f;
         return;
-    case 5:
+    case TURRET_STATE_RETRACT:
         {
             float t = (float)*(short *)(data + 0x74) * *(float *)(data + 0x78);
             *(float *)(moby + 0x18) = *(float *)(data + 0x70) - (D_L14_00161508 + (0.0f - D_L14_00161508) * t);
@@ -2205,8 +2211,12 @@ void minibomber_update(Moby_2B5938 *moby) __asm__("FUN_L14_002b46e8");
 void minibomber_update(Moby_2B5938 *moby) {
     enum {
         MINIBOMBER_STATE_INITIALIZE = 0,
+        MINIBOMBER_STATE_WAIT_TO_FOLLOW_PATH = 1,
+        MINIBOMBER_STATE_FOLLOW_INTRO_OR_EXIT_PATH = 2,
+        MINIBOMBER_STATE_RETRACE_INTRO_OR_EXIT_PATH = 3,
         MINIBOMBER_STATE_AIM_AT_BOMB_POINT = 5,
         MINIBOMBER_STATE_RELEASE_BOMB = 6,
+        MINIBOMBER_STATE_TRAVERSE_PATH = 7,
         MINIBOMBER_STATE_DESTROY = 9
     };
     Data_2B5938 *d = moby->d;
@@ -2302,7 +2312,7 @@ void minibomber_update(Moby_2B5938 *moby) {
         moby->f7F = 0x20;
         break;
     }
-    case 1:
+    case MINIBOMBER_STATE_WAIT_TO_FOLLOW_PATH:
         if (d->fB4 != 2) {
             moby->state = 2;
             moby->f34 &= 0xFFBE;
@@ -2310,7 +2320,7 @@ void minibomber_update(Moby_2B5938 *moby) {
             FUN_L14_002b5d18_c((char *)moby);
         }
         break;
-    case 2: {
+    case MINIBOMBER_STATE_FOLLOW_INTRO_OR_EXIT_PATH: {
         PathNode_2B5938 *path;
         if (d->f10C == 0) {
             path = D_L14_001B0F30_2B5938[d->fD0];
@@ -2345,7 +2355,7 @@ void minibomber_update(Moby_2B5938 *moby) {
         }
         break;
     }
-    case 3: {
+    case MINIBOMBER_STATE_RETRACE_INTRO_OR_EXIT_PATH: {
         PathNode_2B5938 *path;
         if (d->f10C == 0) {
             path = D_L14_001B0F30_2B5938[d->fD0];
@@ -2391,7 +2401,7 @@ void minibomber_update(Moby_2B5938 *moby) {
             }
         }
         break;
-    case 7:
+    case MINIBOMBER_STATE_TRAVERSE_PATH:
         spd = D_L14_00161550 * D_0015ED60;
         if (d->f10C == 1) {
             spd = -spd;

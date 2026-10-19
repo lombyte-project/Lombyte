@@ -89,7 +89,10 @@ void seeker_update(struct Moby *moby) __asm__("FUN_L09_002c5990");
 void seeker_update(struct Moby *moby) {
     enum {
         SEEKER_STATE_INITIALIZE = 0,
+        SEEKER_STATE_IDLE_HOVER = 1,
         SEEKER_STATE_CHASE = 2,
+        SEEKER_STATE_CHASE_ANIMATION_WAIT = 3,
+        SEEKER_STATE_TIMED_CHASE = 4,
         SEEKER_STATE_HURT_KNOCKBACK = 5,
         SEEKER_STATE_FATAL_KNOCKBACK = 6,
         SEEKER_STATE_EXPLODE = 7
@@ -140,7 +143,7 @@ void seeker_update(struct Moby *moby) {
         }
         vars->voice = -1;
         break;
-    case 1:
+    case SEEKER_STATE_IDLE_HOVER:
         moby->pos.z += (probe_ground_height(&moby->pos, 0, 0.5f) + 0.5f - moby->pos.z) * 0.1f;
         approach_angle(&moby->rot.z,
                          fast_arc_tan(target->pos.x - moby->pos.x, target->pos.y - moby->pos.y),
@@ -167,7 +170,7 @@ void seeker_update(struct Moby *moby) {
             moby->state = 2;
         }
         break;
-    case 3:
+    case SEEKER_STATE_CHASE_ANIMATION_WAIT:
         if (moby->anim_flags & 2) {
             if (moby->group != 0xFF) {
                 FUN_L01_0026e090(moby->group, 1);
@@ -186,7 +189,7 @@ void seeker_update(struct Moby *moby) {
         }
         break;
     case SEEKER_STATE_CHASE:
-    case 4:
+    case SEEKER_STATE_TIMED_CHASE:
         z = moby->pos.z;
         approach_angle(&moby->rot.z,
                          fast_arc_tan(target->pos.x - moby->pos.x, target->pos.y - moby->pos.y),
@@ -686,6 +689,7 @@ void FUN_L09_002e27d8(Moby *moby) {
     enum {
         GROUND_ENEMY_STATE_INITIALIZE = 0,
         GROUND_ENEMY_STATE_IDLE = 1,
+        GROUND_ENEMY_STATE_ALERT_TURN = 2,
         GROUND_ENEMY_STATE_CHASE = 3,
         GROUND_ENEMY_STATE_MELEE_ATTACK = 4,
         GROUND_ENEMY_STATE_RETURN_HOME = 5,
@@ -827,7 +831,7 @@ void FUN_L09_002e27d8(Moby *moby) {
             moby->command = 0;
         }
         break;
-    case 2:
+    case GROUND_ENEMY_STATE_ALERT_TURN:
     case 8:
     case 10:
     case 11:

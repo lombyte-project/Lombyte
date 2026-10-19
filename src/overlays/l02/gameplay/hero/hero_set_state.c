@@ -78,6 +78,12 @@ extern void clear_vector(void *);
 extern int hero_set_state(int, int) __asm__("FUN_L02_0022b728");
 extern char D_L02_0017C520[];
 int hero_set_state(int a, int b) {
+    enum {
+        HERO_STATE_MOVE_TO_TARGET = 0x65,
+        HERO_STATE_STOP_AT_TARGET = 0x66,
+        HERO_STATE_IDLE_AT_TARGET = 0x67,
+        HERO_STATE_DEATH_FALL = 0x77
+    };
     int old2088;
     char *moby;
     int old20A7;
@@ -159,7 +165,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x67: {
+    case HERO_STATE_IDLE_AT_TARGET: {
         struct Hero *p = &hero;
         p->state.control_mode = 0;
         p->unk2284 = 0;
@@ -340,7 +346,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x65: {
+    case HERO_STATE_MOVE_TO_TARGET: {
         struct Hero *p = &hero;
         p->state.control_mode = 1;
         p->unk2284 = 0;
@@ -388,7 +394,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x66: {
+    case HERO_STATE_STOP_AT_TARGET: {
         struct Hero *p = &hero;
         char *v = (char *)&p->motion.unk110;
         p->state.control_mode = 1;
@@ -624,7 +630,7 @@ int hero_set_state(int a, int b) {
         break;
     }
     case HERO_STATE_FALL:
-    case 0x77: {
+    case HERO_STATE_DEATH_FALL: {
         struct Hero *p = &hero;
         p->state.control_mode = 2;
         p->unk2284 = 0;
@@ -1875,6 +1881,10 @@ extern int func_001F9908_r(int *) __asm__("FUN_001f9740");
 extern f32 frame_scale_gp __asm__("D_0015ED60") __attribute__((sda));
 void FUN_L02_00230988(void) {
     enum {
+        HERO_STATE_VEHICLE_HURT = 86,
+        HERO_STATE_MOVE_TO_TARGET = 101,
+        HERO_STATE_STOP_AT_TARGET = 102,
+        HERO_STATE_IDLE_AT_TARGET = 103,
         HERO_STATE_DEATH_FALL = 119
     };
     unsigned char *moby;
@@ -2453,7 +2463,7 @@ void FUN_L02_00230988(void) {
                         break;
                     }
                     break;
-                case 101:
+                case HERO_STATE_MOVE_TO_TARGET:
                     if (vector_distance(hero.motion.pos.f, hero.unk1640.f) < 0.2f) {
                         if (frame_time * 2.7f > hero.motion.speed_xy) {
                             if (fast_difference_between_rotations(
@@ -2469,12 +2479,12 @@ void FUN_L02_00230988(void) {
                     }
                     FUN_L00_00228c18();
                     break;
-                case 102:
+                case HERO_STATE_STOP_AT_TARGET:
                     if (hero.unkA98 & 2) {
                         hero_set_state(0x65, 1);
                     }
                     break;
-                case 103:
+                case HERO_STATE_IDLE_AT_TARGET:
                     if ((hero.unkA98 & 2) || hero.unk1650 != 0) {
                         hero_set_state(HERO_STATE_IDLE, 1);
                     }
@@ -3535,7 +3545,7 @@ void FUN_L02_00230988(void) {
                         hero_set_state(0x53, 1);
                     }
                     break;
-                case 86:
+                case HERO_STATE_VEHICLE_HURT:
                     if (!(hero.state_timer < scale_game_frames(0x20)) && hero.air_frames.s != 0 &&
                         hero.ground_distance > 1.0f) {
                         hero_set_state(0x55, 1);

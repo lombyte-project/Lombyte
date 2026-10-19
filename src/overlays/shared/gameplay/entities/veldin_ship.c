@@ -537,6 +537,11 @@ extern void FUN_002ac910_2d09b8(void *, void *, void *, f32, s32, s32, s32, s32,
 
 void break_crate(M2d1428 *moby, s32 hit, s32 source) __asm__("FUN_L00_002d09b8");
 void break_crate(M2d1428 *moby, s32 hit, s32 source) {
+    enum {
+        CRATE_VARIANT_IMPACT_TRIGGERED = 5,
+        CRATE_VARIANT_PENULTIMATE_DAMAGE_STAGE = 9,
+        CRATE_VARIANT_FINAL_DAMAGE_STAGE = 10
+    };
     u8 *vars = (u8 *)moby->vars;
     V2d09b8 position, away, rotation, basis[3], launch, spawn_pos, spin;
     s32 kind;
@@ -593,9 +598,9 @@ void break_crate(M2d1428 *moby, s32 hit, s32 source) {
             break;
         case 0: case 11: kind = 0x165; break;
         case 4: kind = 0x168; break;
-        case 5: kind = 0x16B; break;
+        case CRATE_VARIANT_IMPACT_TRIGGERED: kind = 0x16B; break;
         case 6: kind = 0x16E; break;
-        case 7: case 8: case 9: case 10: kind = 0x171; break;
+        case 7: case 8: case CRATE_VARIANT_PENULTIMATE_DAMAGE_STAGE: case CRATE_VARIANT_FINAL_DAMAGE_STAGE: kind = 0x171; break;
         default: kind = 0x95; break;
         }
         if (D_L00_0015FFBC >= 201) { count = 4; trail_count = 4; }
@@ -1173,8 +1178,11 @@ void decoy_glove_update(unsigned char *moby) __asm__("FUN_L00_002d2670");
 void decoy_glove_update(unsigned char *moby) {
     enum {
         DECOY_GLOVE_INITIALIZE = 0,
+        DECOY_GLOVE_WAIT_FOR_MOBY_FLAG = 1,
         DECOY_GLOVE_RELEASE_DECOY = 3,
-        DECOY_GLOVE_WAIT_AFTER_RELEASE = 4
+        DECOY_GLOVE_WAIT_AFTER_RELEASE = 4,
+        DECOY_GLOVE_ENTER_SKIP_TARGET_FOLLOW_AND_SPAWN = 5,
+        DECOY_GLOVE_SKIP_TARGET_FOLLOW_AND_SPAWN = 6
     };
     extern void mark_moby_for_removal();
     extern void transform_vector_alt();
@@ -1243,7 +1251,7 @@ L3D34:
     case DECOY_GLOVE_INITIALIZE:
         *(int *)(d + 0x50) = 0;
         if (!(moby[0x70] & 2)) moby[0x20] = 1; else moby[0x20] = 2;
-    case 1:
+    case DECOY_GLOVE_WAIT_FOR_MOBY_FLAG:
         if (moby[0x70] & 2) moby[0x20] = 2;
         break;
     case 2:
@@ -1268,10 +1276,10 @@ L3D34:
         if (*(int *)(h + 0x2084) != 0x23 && *(unsigned char *)(h + 0x20A8) == 0) moby[0x20] = 2;
         break;
     }
-    case 5:
+    case DECOY_GLOVE_ENTER_SKIP_TARGET_FOLLOW_AND_SPAWN:
         moby[0x20] = 6;
         break;
-    case 6:
+    case DECOY_GLOVE_SKIP_TARGET_FOLLOW_AND_SPAWN:
         return;
     default:
         break;
@@ -2249,7 +2257,10 @@ void horny_toad_update(Moby *moby) {
         HORNY_TOAD_MOVE_TO_PATH_POINT = 2,
         HORNY_TOAD_WAIT_TO_FOLLOW_PATH = 3,
         HORNY_TOAD_FOLLOW_PATH = 4,
+        HORNY_TOAD_ROAM = 5,
+        HORNY_TOAD_APPROACH_AND_FACE_TARGET = 6,
         HORNY_TOAD_RETURN_HOME = 8,
+        HORNY_TOAD_MOVE_TO_POINT_OR_FACE_TARGET = 10,
         HORNY_TOAD_DYING = 12
     };
     ToadVars *data;
@@ -2349,7 +2360,7 @@ void horny_toad_update(Moby *moby) {
         }
         break;
     }
-    case 5:
+    case HORNY_TOAD_ROAM:
         if (moby->prev_seq != 4) {
             int n = random_int_between(0, 5);
             if (moby->prev_seq != 4) FUN_00212f90_2d4610(moby, 4, n, scale_game_frames(10));
@@ -2362,7 +2373,7 @@ void horny_toad_update(Moby *moby) {
             if (moby->prev_seq != 4) FUN_00212f90_2d4610(moby, 4, 0, scale_game_frames(10));
         }
         break;
-    case 6:
+    case HORNY_TOAD_APPROACH_AND_FACE_TARGET:
         if (FUN_L00_002d54c8_2d4610((unsigned char *)moby, data->unk180, 0.5f) < D_L00_00161980
             && fast_difference_between_rotations(moby->rot.z, angle_atan2((*(ToadVec *)&target->pos)[0] - (*(ToadVec *)&moby->pos)[0], (*(ToadVec *)&target->pos)[1] - (*(ToadVec *)&moby->pos)[1])) < 0.17453292f) {
             moby->state = 7;
@@ -2395,7 +2406,7 @@ void horny_toad_update(Moby *moby) {
             if (moby->prev_seq != 4) FUN_00212f90_2d4610(moby, 4, 0, scale_game_frames(10));
         }
         break;
-    case 10: {
+    case HORNY_TOAD_MOVE_TO_POINT_OR_FACE_TARGET: {
         fast_vec_sub(v, data->unk180, (*(ToadVec *)&moby->pos));
         v[2] = 0.0f;
         normalize_vector_xyz(v, v, 2.5f);
@@ -2931,6 +2942,7 @@ void infobot_update(struct Moby *moby)
         INFOBOT_FOLLOW_PATH = 6,
         INFOBOT_ORBIT_PATH_ENDPOINT = 7,
         INFOBOT_START_SCENE_SEQUENCE = 8,
+        INFOBOT_WAIT_TO_DISPATCH_MSG1 = 9,
         INFOBOT_WAIT_TO_START_FINAL_SCENE = 10,
         INFOBOT_SAVE_AND_REMOVE = 11
     };
@@ -3155,7 +3167,7 @@ void infobot_update(struct Moby *moby)
             start_scene(infobot->msg0);
         }
         break;
-    case 9:
+    case INFOBOT_WAIT_TO_DISPATCH_MSG1:
         if (D_L00_0015F5C4 == 2) {
             break;
         }

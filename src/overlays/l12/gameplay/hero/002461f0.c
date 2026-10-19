@@ -122,6 +122,11 @@ extern int func_001F9908_r(int *) __asm__("FUN_001f9740");
 
 int r1_repeat_timer __asm__("D_L12_0015F678") = 0;
 void FUN_L12_002461f0(void) {
+    enum {
+        HERO_STATE_APPROACH_TARGET_POSE = 101,
+        HERO_STATE_TARGET_POSE_WAIT = 103,
+        HERO_STATE_LOW_ALTITUDE_RESPAWN_WAIT = 119
+    };
     struct Moby *moby;
     int prevSub;
     int prevState;
@@ -928,7 +933,7 @@ void FUN_L12_002461f0(void) {
                         }
                     }
                     break;
-                case 101:
+                case HERO_STATE_APPROACH_TARGET_POSE:
                     if (vector_distance(hero.motion.pos.f, hero.unk1640.f) < 0.2f) {
                         if (frame_time * 2.7f > hero.motion.speed_xy) {
                             if (fast_difference_between_rotations(
@@ -949,7 +954,7 @@ void FUN_L12_002461f0(void) {
                         hero_set_state(0x65, 1);
                     }
                     break;
-                case 103:
+                case HERO_STATE_TARGET_POSE_WAIT:
                     if ((hero.unkA98 & 2) || hero.unk1650 != 0) {
                         hero_set_state(HERO_STATE_IDLE, 1);
                     }
@@ -1398,7 +1403,7 @@ void FUN_L12_002461f0(void) {
                         hero_set_state(0x18, 1);
                     }
                     break;
-                case 119:
+                case HERO_STATE_LOW_ALTITUDE_RESPAWN_WAIT:
                     if ((current_level_index == 3 && 5.0f > hero.motion.pos.f[2]) ||
                         (current_level_index == 6 && 50.0f > hero.motion.pos.f[2]) ||
                         (current_level_index == 0x10 && (77.0f > hero.motion.pos.f[2] ||

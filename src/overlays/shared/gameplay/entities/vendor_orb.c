@@ -175,11 +175,14 @@ void hydrodisplacer_update(Moby *moby) {
         HYDRODISPLACER_INITIALIZE = 0,
         HYDRODISPLACER_WAIT_FOR_ANIMATION_FLAG = 1,
         HYDRODISPLACER_WAIT_FOR_ACTIVATION = 2,
+        HYDRODISPLACER_WAIT_FOR_HERO_FLAG = 3,
         HYDRODISPLACER_CAMERA_TRANSITION = 4,
         HYDRODISPLACER_WAIT_FOR_TIMER = 5
     };
     enum {
-        HYDRODISPLACER_CAMERA_INTERPOLATE = 1
+        HYDRODISPLACER_CAMERA_PREPARE_INTERPOLATION = 0,
+        HYDRODISPLACER_CAMERA_INTERPOLATE = 1,
+        HYDRODISPLACER_CAMERA_RETURN_TO_ACTIVATION = 2
     };
     Vec_2E0E50 camera_pos, camera_rot;
     Data_2E0E50 *data = (void *)moby->pvars;
@@ -246,7 +249,7 @@ void hydrodisplacer_update(Moby *moby) {
             func_L00_00232C10_2E0E50(0x46, 0, func_001F9850_2E0E50(6));
         }
         break;
-    case 3: {
+    case HYDRODISPLACER_WAIT_FOR_HERO_FLAG: {
         int *platform;
         char *linked;
 
@@ -301,7 +304,7 @@ void hydrodisplacer_update(Moby *moby) {
             return;
         }
         switch (moby->command) {
-        case 0: {
+        case HYDRODISPLACER_CAMERA_PREPARE_INTERPOLATION: {
             char *linked;
 
             func_00214D28_2E0E50(&D_L00_0015F4FC_2E0E50, 1.0f, 1.0f / func_001F9850_2E0E50(15));
@@ -347,7 +350,7 @@ void hydrodisplacer_update(Moby *moby) {
             D_L00_0015F404_macro = 0;
             func_L00_002EC0C8_2E0E50(3);
             return;
-        case 2:
+        case HYDRODISPLACER_CAMERA_RETURN_TO_ACTIVATION:
             if (0.0f < D_L00_0015F4FC_2E0E50) {
                 func_00214D28_2E0E50(&D_L00_0015F4FC_2E0E50, 0.0f, 1.0f / func_001F9850_2E0E50(15));
                 return;
@@ -2054,10 +2057,13 @@ extern short D_L00_00161D10 __attribute__((sda));
 extern short D_L00_00161D80 __attribute__((sda));
 void FUN_L00_002e4fe8(char *m, float *out_focus_velocity) {
     enum {
+        CAM_ATTACH_GROUND_AWARE_FOCUS_VELOCITY = 2,
         CAM_ATTACH_PROJECT_HERO_FOCUS_VELOCITY = 4,
+        CAM_ATTACH_BLEND_OUT_FOCUS_VELOCITY = 6,
         CAM_ATTACH_BLEND_BACK_FOCUS_VELOCITY = 7,
         CAM_ATTACH_HOLD_FOCUS_VELOCITY = 8,
-        CAM_ATTACH_BLEND_PROJECTED_HERO_FOCUS_VELOCITY = 9
+        CAM_ATTACH_BLEND_PROJECTED_HERO_FOCUS_VELOCITY = 9,
+        CAM_ATTACH_CONTINUE_BLEND_PROJECTED_HERO_FOCUS_VELOCITY = 10
     };
     float cam[4];
     float tmp[4];
@@ -2091,7 +2097,7 @@ void FUN_L00_002e4fe8(char *m, float *out_focus_velocity) {
         return;
     }
     switch (*(unsigned char *)(e + 0xC4)) {
-    case 2:
+    case CAM_ATTACH_GROUND_AWARE_FOCUS_VELOCITY:
         padb = &hero;
         if (padb->state.current == 0x11 ||
             (padb->unk41E != 0 && padb->ground_distance > 0.2f &&
@@ -2139,7 +2145,7 @@ void FUN_L00_002e4fe8(char *m, float *out_focus_velocity) {
         break;
     case 3:
     case 5:
-    case 6:
+    case CAM_ATTACH_BLEND_OUT_FOCUS_VELOCITY:
     case CAM_ATTACH_BLEND_BACK_FOCUS_VELOCITY:
         lerp_vector((float)*(short *)(e + 0xD4) * *(float *)(e + 0xCC), e + 0x10, e + 0x30,
                      e + 0x20);
@@ -2181,7 +2187,7 @@ void FUN_L00_002e4fe8(char *m, float *out_focus_velocity) {
         FUN_001f9a28(e, cam, tmp);
         break;
     case CAM_ATTACH_BLEND_PROJECTED_HERO_FOCUS_VELOCITY:
-    case 10:
+    case CAM_ATTACH_CONTINUE_BLEND_PROJECTED_HERO_FOCUS_VELOCITY:
         x = fast_vec_dot(cam, g + 0x30);
         FUN_001f9a68_c2(out_focus_velocity, g + 0x30, x);
         FUN_001f9a28(e, cam, out_focus_velocity);
@@ -2209,7 +2215,10 @@ s32 FUN_L00_002e5678(void *mm, void *a, void *b, s32 k) {
     enum {
         CAM_ATTACH_HERO_POSITION_BASE = 1,
         CAM_ATTACH_STORED_FOCUS_POSITION_BASE = 2,
+        CAM_ATTACH_BLEND_TO_PROJECT_HERO_FOCUS_VELOCITY = 3,
         CAM_ATTACH_PROJECT_HERO_FOCUS_VELOCITY = 4,
+        CAM_ATTACH_BLEND_FOCUS_VELOCITY_WITH_HOLD_TRANSITION = 5,
+        CAM_ATTACH_BLEND_OUT_FOCUS_VELOCITY = 6,
         CAM_ATTACH_BLEND_BACK_FOCUS_VELOCITY = 7
     };
     u8 *m = mm;
@@ -2217,13 +2226,13 @@ s32 FUN_L00_002e5678(void *mm, void *a, void *b, s32 k) {
     u8 *p = *(u8 **)(m + 0x70) + 0x40;
     f32 t[4] __attribute__((aligned(16)));
     switch (k) {
-    case 3:
+    case CAM_ATTACH_BLEND_TO_PROJECT_HERO_FOCUS_VELOCITY:
     case CAM_ATTACH_PROJECT_HERO_FOCUS_VELOCITY:
         fast_vec_add(b, a, p);
         r = 0;
         break;
-    case 5:
-    case 6:
+    case CAM_ATTACH_BLEND_FOCUS_VELOCITY_WITH_HOLD_TRANSITION:
+    case CAM_ATTACH_BLEND_OUT_FOCUS_VELOCITY:
     case CAM_ATTACH_BLEND_BACK_FOCUS_VELOCITY:
         fast_vec_add(b, a, p);
         r = 0;

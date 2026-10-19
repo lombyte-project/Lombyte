@@ -1718,7 +1718,10 @@ void teleporter_update(struct Moby *moby) {
         TELEPORTER_WAIT_FOR_USE = 1,
         TELEPORTER_PREPARE_TRANSFER = 2,
         TELEPORTER_TRANSFER_TO_DESTINATION = 3,
-        TELEPORTER_RETURN_TO_IDLE = 4
+        TELEPORTER_RETURN_TO_IDLE = 4,
+        TELEPORTER_ENTER_WAIT_FOR_USE = 6,
+        TELEPORTER_EFFECT_CYCLE_PREPARE = 7,
+        TELEPORTER_EFFECT_CYCLE_RETURN_TO_IDLE = 8
     };
     char *data = (char *)moby->pvars;
     int active = 0;
@@ -1775,7 +1778,7 @@ void teleporter_update(struct Moby *moby) {
         FUN_L01_003092d0_c(moby);
         break;
     }
-    case 6:
+    case TELEPORTER_ENTER_WAIT_FOR_USE:
         if (moby->group != 0xFF) {
             FUN_L01_0026e0e0_c((char *)moby->group, 1);
         }
@@ -1805,7 +1808,7 @@ void teleporter_update(struct Moby *moby) {
         play_entity_sound((int)moby, 1.5f, &moby->pos, 0x10000, 20.0f, 1.0f, 0, 1, 0);
         break;
     }
-    case 7:
+    case TELEPORTER_EFFECT_CYCLE_PREPARE:
         if (*(float *)(data + 0x20) < 1.0f) {
             advance_accelerated_scalar((float *)(data + 0x20), (float *)(data + 0x28), 1.0f,
                                        D_L01_00161F88 * frame_time_sq,
@@ -1878,7 +1881,7 @@ void teleporter_update(struct Moby *moby) {
         }
         break;
     case TELEPORTER_RETURN_TO_IDLE:
-    case 8:
+    case TELEPORTER_EFFECT_CYCLE_RETURN_TO_IDLE:
         if (*(float *)(data + 0x34) < 1.95f) {
             enqueue_callback_list_1(FUN_L01_003094f0_u, moby);
             approach_value((float *)(data + 0x34), 1.95f, frame_time * 4.0f);

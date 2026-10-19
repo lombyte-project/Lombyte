@@ -350,10 +350,14 @@ extern int D_L11_0015FFD8;
 void FUN_L11_002d1030(void *mp) {
     enum {
         RESORT_OWNER_INITIALIZE = 0,
+        RESORT_OWNER_CHECK_INITIAL_DIALOGUE = 1,
         RESORT_OWNER_INITIAL_DIALOGUE = 2,
+        RESORT_OWNER_WAIT_TO_FOLLOW_HERO = 3,
         RESORT_OWNER_MOVE_TO_PATH_POINT = 6,
         RESORT_OWNER_JUMP_TO_TARGET = 7,
-        RESORT_OWNER_CHECK_PATH_COMPLETION_DIALOGUE = 12
+        RESORT_OWNER_MOVE_TO_GATE_TARGET = 8,
+        RESORT_OWNER_CHECK_PATH_COMPLETION_DIALOGUE = 12,
+        RESORT_OWNER_WAIT_FOR_PATH_COMPLETION_DIALOGUE_END = 13
     };
     struct Moby *moby = mp;
     char *d = (char *)moby->pvars;
@@ -365,16 +369,16 @@ void FUN_L11_002d1030(void *mp) {
 
     switch (moby->state) {
     case RESORT_OWNER_INITIALIZE:
-    case 1:
+    case RESORT_OWNER_CHECK_INITIAL_DIALOGUE:
     case RESORT_OWNER_INITIAL_DIALOGUE:
-    case 3:
+    case RESORT_OWNER_WAIT_TO_FOLLOW_HERO:
     case 11:
     case RESORT_OWNER_CHECK_PATH_COMPLETION_DIALOGUE:
         break;
     case 4:
     case 5:
     case RESORT_OWNER_MOVE_TO_PATH_POINT:
-    case 8:
+    case RESORT_OWNER_MOVE_TO_GATE_TARGET:
     case 10:
     {
         char *m48 = (char *)moby + 0x48;
@@ -432,7 +436,7 @@ void FUN_L11_002d1030(void *mp) {
         if (moby->prev_seq != 5)
             FUN_00212f90(moby, 5, 0, scale_game_frames(0x14));
         break;
-    case 13:
+    case RESORT_OWNER_WAIT_FOR_PATH_COMPLETION_DIALOGUE_END:
         if (D_L11_0016D260[12] != 1)
             break;
         if (D_L11_0016D260[13] != scale_game_frames(0x7D0))
@@ -554,8 +558,12 @@ void FUN_L11_002d14b0(void *arg) {
         RESORT_OWNER_CHECK_INITIAL_DIALOGUE = 1,
         RESORT_OWNER_INITIAL_DIALOGUE = 2,
         RESORT_OWNER_WAIT_TO_FOLLOW_HERO = 3,
+        RESORT_OWNER_FOLLOW_HERO = 4,
+        RESORT_OWNER_FOLLOW_DISTANT_HERO = 5,
         RESORT_OWNER_MOVE_TO_PATH_POINT = 6,
         RESORT_OWNER_JUMP_TO_TARGET = 7,
+        RESORT_OWNER_MOVE_TO_GATE_TARGET = 8,
+        RESORT_OWNER_MOVE_TO_GATE_DEPARTURE_TARGET = 10,
         RESORT_OWNER_CHECK_PATH_COMPLETION_DIALOGUE = 12,
         RESORT_OWNER_WAIT_FOR_PATH_COMPLETION_DIALOGUE_END = 13,
         RESORT_OWNER_CHECK_POST_PATH_DIALOGUE = 14,
@@ -652,14 +660,14 @@ void FUN_L11_002d14b0(void *arg) {
             FUN_L11_002d2340(moby, (char *)&hero.motion.pos) && proximity == 1)
             FUN_L11_002d2088_c(moby, 4);
         break;
-    case 4:
+    case RESORT_OWNER_FOLLOW_HERO:
         if (vector_distance(&moby->pos, &hero.motion.pos) < 3.0f ||
             !FUN_L11_002d2340(moby, (char *)&hero.motion.pos) || proximity == 2)
             FUN_L11_002d2088_c(moby, 3);
         else if (vector_distance(&moby->pos, &hero.motion.pos) > 8.0f)
             FUN_L11_002d2088_c(moby, 5);
         break;
-    case 5:
+    case RESORT_OWNER_FOLLOW_DISTANT_HERO:
         if (vector_distance(&moby->pos, &hero.motion.pos) < 3.0f ||
             !FUN_L11_002d2340(moby, (char *)&hero.motion.pos) || proximity == 2)
             FUN_L11_002d2088_c(moby, 3);
@@ -737,7 +745,7 @@ void FUN_L11_002d14b0(void *arg) {
         if (moby->anim_flags & 2)
             FUN_L11_002d2088_c(moby, d->next_state);
         break;
-    case 8:
+    case RESORT_OWNER_MOVE_TO_GATE_TARGET:
         if (vector_distance(&moby->pos, &d->target) < 0.5f)
             FUN_L11_002d2088_c(moby, 9);
         break;
@@ -748,7 +756,7 @@ void FUN_L11_002d14b0(void *arg) {
                 FUN_L11_002d2088_c(moby, 0xA);
         }
         break;
-    case 10:
+    case RESORT_OWNER_MOVE_TO_GATE_DEPARTURE_TARGET:
         if (vector_distance(&moby->pos, &d->target) < 0.5f) {
             int n = ++d->leg;
             qcopy(&d->target, &path_points_14b0[d->unkD0[n]].pos);
@@ -791,8 +799,11 @@ extern int D_L11_0015FFD8;
 
 void FUN_L11_002d2088(struct Moby *moby, unsigned char state) {
     enum {
+        RESORT_OWNER_CHECK_INITIAL_DIALOGUE = 1,
+        RESORT_OWNER_WAIT_TO_FOLLOW_HERO = 3,
         RESORT_OWNER_MOVE_TO_PATH_POINT = 6,
         RESORT_OWNER_JUMP_TO_TARGET = 7,
+        RESORT_OWNER_MOVE_TO_GATE_TARGET = 8,
         RESORT_OWNER_CHECK_PATH_COMPLETION_DIALOGUE = 12,
         RESORT_OWNER_CHECK_POST_PATH_DIALOGUE = 14
     };
@@ -801,8 +812,8 @@ void FUN_L11_002d2088(struct Moby *moby, unsigned char state) {
 
     moby->state = state;
     switch (moby->state) {
-    case 1:
-    case 3:
+    case RESORT_OWNER_CHECK_INITIAL_DIALOGUE:
+    case RESORT_OWNER_WAIT_TO_FOLLOW_HERO:
     case 11:
     case RESORT_OWNER_CHECK_PATH_COMPLETION_DIALOGUE:
     case RESORT_OWNER_CHECK_POST_PATH_DIALOGUE:
@@ -830,7 +841,7 @@ void FUN_L11_002d2088(struct Moby *moby, unsigned char state) {
             FUN_00212f90(moby, 4, 0, scale_game_frames(0x14));
         clear_u64_value(d + 0x130);
         break;
-    case 8:
+    case RESORT_OWNER_MOVE_TO_GATE_TARGET:
         if (moby->prev_seq != 3)
             FUN_00212f90(moby, 3, 0, scale_game_frames(0x14));
         {
@@ -1037,8 +1048,11 @@ typedef struct {
 void FUN_L11_002d27b0(WM11 *m) {
     enum {
         RESORT_OWNER_INITIALIZE = 0,
+        RESORT_OWNER_CHECK_INITIAL_DIALOGUE = 1,
         RESORT_OWNER_INITIAL_DIALOGUE = 2,
         RESORT_OWNER_WAIT_TO_FOLLOW_HERO = 3,
+        RESORT_OWNER_FOLLOW_HERO = 4,
+        RESORT_OWNER_FOLLOW_DISTANT_HERO = 5,
         RESORT_OWNER_CHECK_PATH_COMPLETION_DIALOGUE = 12,
         RESORT_OWNER_CHECK_POST_PATH_DIALOGUE = 14
     };
@@ -1051,11 +1065,11 @@ void FUN_L11_002d27b0(WM11 *m) {
     head_rate = 0.3f;
     switch (m->state) {
     case RESORT_OWNER_INITIALIZE:
-    case 1:
+    case RESORT_OWNER_CHECK_INITIAL_DIALOGUE:
     case RESORT_OWNER_INITIAL_DIALOGUE:
     case RESORT_OWNER_WAIT_TO_FOLLOW_HERO:
-    case 4:
-    case 5:
+    case RESORT_OWNER_FOLLOW_HERO:
+    case RESORT_OWNER_FOLLOW_DISTANT_HERO:
     case 11:
     case RESORT_OWNER_CHECK_PATH_COMPLETION_DIALOGUE:
     case RESORT_OWNER_CHECK_POST_PATH_DIALOGUE:
@@ -1290,6 +1304,7 @@ void teleporter_update(struct Moby *moby) {
     enum {
         TELEPORTER_INITIALIZE = 0,
         TELEPORTER_WAIT_FOR_ACTIVATION = 1,
+        TELEPORTER_OPEN_PARTS = 2,
         TELEPORTER_CONTRACT_RING = 3,
         TELEPORTER_RESET = 4
     };
@@ -1353,7 +1368,7 @@ void teleporter_update(struct Moby *moby) {
         FUN_L00_002598b0_2518((int)moby, 1.5f, &moby->pos, 0x10000, 20.0f, 1.0f, 0, 1, 0);
         break;
     }
-    case 2: {
+    case TELEPORTER_OPEN_PARTS: {
         int r = FUN_L00_00233f38_2518();
         if (*(float *)(data + 0x20) < 1.0f) {
             advance_accelerated_scalar_2518((float *)(data + 0x20), (float *)(data + 0x28), 1.0f,

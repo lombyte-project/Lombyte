@@ -146,7 +146,10 @@ int r1_repeat_timer __asm__("D_L08_0015F678") = 0;
 void FUN_L08_002370d8(void) {
     enum {
         HERO_STATE_GRIND_JUMP = 41,
-        HERO_STATE_GRIND_RAIL_TRANSFER = 42
+        HERO_STATE_GRIND_RAIL_TRANSFER = 42,
+        HERO_STATE_GRIND_ATTACK = 43,
+        HERO_STATE_GRIND_COLLISION_RECOVERY = 66,
+        HERO_STATE_APPROACH_TARGET = 101
     };
     unsigned char *moby;
     int prevSub;
@@ -899,7 +902,7 @@ void FUN_L08_002370d8(void) {
                         }
                     }
                     break;
-                case 101:
+                case HERO_STATE_APPROACH_TARGET:
                     if (vector_distance(hero.motion.pos.f, hero.unk1640.f) < 0.2f) {
                         if (frame_time * 2.7f > hero.motion.speed_xy) {
                             if (fast_difference_between_rotations(
@@ -1179,8 +1182,8 @@ void FUN_L08_002370d8(void) {
                 case HERO_STATE_GRIND:
                 case HERO_STATE_GRIND_JUMP:
                 case HERO_STATE_GRIND_RAIL_TRANSFER:
-                case 43:
-                case 66:
+                case HERO_STATE_GRIND_ATTACK:
+                case HERO_STATE_GRIND_COLLISION_RECOVERY:
                     if (hero.state.current == 0x42) {
                         hero.unk5BE = 0;
                     } else {

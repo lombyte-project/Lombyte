@@ -706,6 +706,11 @@ void birdbot_update(PeMoby *m) {
         BIRDBOT_STATE_NONFATAL_KNOCKBACK = 12,
         BIRDBOT_STATE_FATAL_KNOCKBACK = 14
     };
+    enum {
+        BIRDBOT_HIT_REACTION_FATAL_KNOCKBACK = 1,
+        BIRDBOT_HIT_REACTION_FORCE_FATAL_KNOCKBACK = 2,
+        BIRDBOT_HIT_REACTION_NONFATAL_KNOCKBACK = 3
+    };
     PeVars *v;
     PeVec old;
     PeTarget tgt;
@@ -773,8 +778,8 @@ void birdbot_update(PeMoby *m) {
         case 10:
         case 11:
             break;
-        case 1:
-        case 2:
+        case BIRDBOT_HIT_REACTION_FATAL_KNOCKBACK:
+        case BIRDBOT_HIT_REACTION_FORCE_FATAL_KNOCKBACK:
             v->f98 = 0.3f;
             v->f84 = frame_time_sq * 10.0f;
             v->f80 = frame_time_sq * 40.0f;
@@ -793,7 +798,7 @@ void birdbot_update(PeMoby *m) {
             FUN_L00_0025d458_u(m, (short *)v->x60);
             v->h26 = scale_game_frames(0x3C);
             break;
-        case 3:
+        case BIRDBOT_HIT_REACTION_NONFATAL_KNOCKBACK:
         case 6:
             v->w90 = 0x200;
             v->b67 = 0x78;
@@ -1544,10 +1549,13 @@ void peckbot_update(Mob577 *self) __asm__("FUN_L01_002efc60");
 void peckbot_update(Mob577 *self) {
     enum {
         PECKBOT_STATE_INITIALIZE = 0,
+        PECKBOT_STATE_GROUNDED_IDLE = 1,
+        PECKBOT_STATE_FACE_AWAY_FROM_TARGET = 2,
         PECKBOT_STATE_CHASE_TARGET = 3,
         PECKBOT_STATE_ATTACK_TARGET = 4,
         PECKBOT_STATE_RETURN_HOME = 5,
         PECKBOT_STATE_NONFATAL_KNOCKBACK = 6,
+        PECKBOT_STATE_MOVE_FORWARD_NEAR_LEADER = 13,
         PECKBOT_STATE_AIRBORNE_IDLE = 14,
         PECKBOT_STATE_MOVE_TO_DESTINATION = 15,
         PECKBOT_STATE_ASCEND = 16,
@@ -1758,7 +1766,7 @@ void peckbot_update(Mob577 *self) {
             clear_u64_value(&v->vel);
         }
         break;
-    case 1:
+    case PECKBOT_STATE_GROUNDED_IDLE:
         fast_vec_sub(&v70, &target.pos, &self->pos);
         if (fast_vec_length(&v70) < v->range + 4.0f &&
             FUN_001f99c0(self->pos.f[2] - target.pos.f[2]) < 8.0f &&
@@ -1828,7 +1836,7 @@ void peckbot_update(Mob577 *self) {
             return;
         }
         break;
-    case 2:
+    case PECKBOT_STATE_FACE_AWAY_FROM_TARGET:
         ang =
             FUN_L00_001ff8b0_cf(self->pos.f[0] - target.pos.f[0], self->pos.f[1] - target.pos.f[1]);
         FUN_L00_00258278(self, v->turn, ang, 0.02f, 0.3f, 0.1f);
@@ -2059,7 +2067,7 @@ void peckbot_update(Mob577 *self) {
         }
         self->hit = 0;
         break;
-    case 13:
+    case PECKBOT_STATE_MOVE_FORWARD_NEAR_LEADER:
         if (self->anim_next != 2) {
             SET_ANIM(self, 2, 0, scale_game_frames(3));
         }

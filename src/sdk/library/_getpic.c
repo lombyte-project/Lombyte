@@ -12,7 +12,8 @@ s32 _getpic(struct sceMpeg *mpeg) {
         MPEG_SEQUENCE_END = 0,
         MPEG_INTRA_PICTURE = 1,
         MPEG_PREDICTIVE_PICTURE = 2,
-        MPEG_BIDIRECTIONAL_PICTURE = 3
+        MPEG_BIDIRECTIONAL_PICTURE = 3,
+        MPEG_DC_INTRA_PICTURE = 4
     };
     s32 temp_6_13;
     s32 var_18_8;
@@ -60,7 +61,7 @@ s32 _getpic(struct sceMpeg *mpeg) {
             temp_16_12->unkA4 = (s32)(temp_16_12->unkA4 + 1);
             break;
         case MPEG_BIDIRECTIONAL_PICTURE:
-        case 4:
+        case MPEG_DC_INTRA_PICTURE:
             var_18_8 = _decodeOrSkip(mpeg, temp_16_12->unkA8, temp_16_12->unk9C);
             temp_16_12->unkA8 = (s32)(temp_16_12->unkA8 + 1);
             break;

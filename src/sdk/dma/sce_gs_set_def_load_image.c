@@ -12,33 +12,41 @@ s32 sceGsSetDefLoadImage(sceGsLoadImage *image, s16 destination_base,
         PIXEL_FORMAT_32_BIT = 0,
         PIXEL_FORMAT_24_BIT = 1,
         PIXEL_FORMAT_16_BIT = 2,
+        PIXEL_FORMAT_16_BIT_ALTERNATE = 10,
         PIXEL_FORMAT_8_BIT = 0x13,
-        PIXEL_FORMAT_4_BIT = 0x14
+        PIXEL_FORMAT_4_BIT = 0x14,
+        PIXEL_FORMAT_8_BIT_ALTERNATE = 0x1b,
+        PIXEL_FORMAT_4_BIT_ALTERNATE = 0x24,
+        PIXEL_FORMAT_4_BIT_ALTERNATE_2 = 0x2c,
+        PIXEL_FORMAT_32_BIT_ALTERNATE = 0x30,
+        PIXEL_FORMAT_24_BIT_ALTERNATE = 0x31,
+        PIXEL_FORMAT_16_BIT_ALTERNATE_2 = 0x32,
+        PIXEL_FORMAT_16_BIT_ALTERNATE_3 = 0x3a
     };
     s32 size = 0;
 
     switch (pixel_format) {
     case PIXEL_FORMAT_32_BIT:
-    case 0x30:
+    case PIXEL_FORMAT_32_BIT_ALTERNATE:
         size = (width * height) >> 2;
         break;
     case PIXEL_FORMAT_24_BIT:
-    case 0x31:
+    case PIXEL_FORMAT_24_BIT_ALTERNATE:
         size = (width * height * 3) >> 4;
         break;
     case PIXEL_FORMAT_16_BIT:
-    case 10:
-    case 0x32:
-    case 0x3a:
+    case PIXEL_FORMAT_16_BIT_ALTERNATE:
+    case PIXEL_FORMAT_16_BIT_ALTERNATE_2:
+    case PIXEL_FORMAT_16_BIT_ALTERNATE_3:
         size = (width * height) >> 3;
         break;
     case PIXEL_FORMAT_8_BIT:
-    case 0x1b:
+    case PIXEL_FORMAT_8_BIT_ALTERNATE:
         size = (width * height) >> 4;
         break;
     case PIXEL_FORMAT_4_BIT:
-    case 0x24:
-    case 0x2c:
+    case PIXEL_FORMAT_4_BIT_ALTERNATE:
+    case PIXEL_FORMAT_4_BIT_ALTERNATE_2:
         size = (width * height) >> 5;
         break;
     }

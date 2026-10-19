@@ -1616,8 +1616,10 @@ extern float D_0015ED6C_gp __asm__("D_0015ED6C") __attribute__((section(".sdata"
 void FUN_L00_002080b0(void) {
     enum {
         ITEM_RED_GREEN_GLOW = 13,
+        ITEM_SINE_RED_GREEN_GLOW = 16,
         ITEM_GRAY_PULSE_GLOW = 17,
-        ITEM_RED_BLUE_GLOW = 19
+        ITEM_RED_BLUE_GLOW = 19,
+        ITEM_BRIGHT_GRAY_PULSE_GLOW = 20
     };
     Vec4_2080b0 v;
     struct Moby *m;
@@ -1671,7 +1673,7 @@ void FUN_L00_002080b0(void) {
         queue_glow_sprite_2080b0(&v, col, 0.15f, 0.1f);
         break;
     }
-    case 16:
+    case ITEM_SINE_RED_GREEN_GLOW:
         if (scale_game_frames_2080b0(50) < hero.items[0].unk20) {
             float k, f;
             int r, g, b, a, col, col1, bs, gs;
@@ -1723,7 +1725,7 @@ void FUN_L00_002080b0(void) {
         m->glow_color = fast_tween_color_2080b0(m->glow_color, col, 0.15f);
         break;
     }
-    case 20: {
+    case ITEM_BRIGHT_GRAY_PULSE_GLOW: {
         int c5;
         int x1, x2, col;
         float fr;

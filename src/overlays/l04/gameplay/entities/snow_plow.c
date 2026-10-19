@@ -95,6 +95,15 @@ void snow_plow_update(struct Moby *moby) {
         SNOW_PLOW_CLASS_OFFSET_WITH_QUARTER_TURN_LINKED_MOBY = 0xe,
         SNOW_PLOW_CLASS_OFFSET_WITH_ALIGNED_LINKED_MOBY = 0x1c
     };
+    enum {
+        SNOW_PLOW_CLASS_OFFSET_WITH_TWO_POINT_CART_BURST = 0x1b
+    };
+    enum {
+        SNOW_PLOW_CLASS_OFFSET_WITH_TWO_ROTATING_MANIPULATORS = 0x16
+    };
+    enum {
+        SNOW_PLOW_CLASS_OFFSET_WITH_HIT_SPHERE_QUERY_WITHOUT_TARGET_VOICE = 0x14
+    };
     Vec4 old;
     Vec4 delta, *d;
     /* The sphere query is its position followed by the record; the hit cases pass one or the other. */
@@ -214,11 +223,11 @@ void snow_plow_update(struct Moby *moby) {
     }
     if (!state) {
         switch ((short)(moby->oclass - 0x1d2)) {
-        case 0: case SNOW_PLOW_CLASS_OFFSET_WITH_QUARTER_TURN_LINKED_MOBY: case 0x13: case 0x14: case SNOW_PLOW_CLASS_OFFSET_WITH_ALIGNED_LINKED_MOBY: case 0x1d: case 0x20: case 0x59:
+        case 0: case SNOW_PLOW_CLASS_OFFSET_WITH_QUARTER_TURN_LINKED_MOBY: case 0x13: case SNOW_PLOW_CLASS_OFFSET_WITH_HIT_SPHERE_QUERY_WITHOUT_TARGET_VOICE: case SNOW_PLOW_CLASS_OFFSET_WITH_ALIGNED_LINKED_MOBY: case 0x1d: case 0x20: case 0x59:
             attach_manipulator((char *)moby, 0, data + 0x180);
             *(int *)(data + 0x140) = 0;
             break;
-        case 0x16: case 0x1b:
+        case SNOW_PLOW_CLASS_OFFSET_WITH_TWO_ROTATING_MANIPULATORS: case SNOW_PLOW_CLASS_OFFSET_WITH_TWO_POINT_CART_BURST:
             attach_manipulator((char *)moby, 0, data + 0x180);
             *(int *)(data + 0x140) = 0;
             attach_manipulator((char *)moby, 1, data + 0x1c0);
@@ -231,11 +240,11 @@ void snow_plow_update(struct Moby *moby) {
             *(float *)(data + 0x140) = fast_add_rotations(*(float *)(data + 0x140), frame_time * 12.566371f);
             FUN_L00_001fff28(data + 0x190, 0, *(float *)(data + 0x140));
             break;
-        case 0x13: case 0x14: case SNOW_PLOW_CLASS_OFFSET_WITH_ALIGNED_LINKED_MOBY: case 0x1d: case 0x20: case 0x59:
+        case 0x13: case SNOW_PLOW_CLASS_OFFSET_WITH_HIT_SPHERE_QUERY_WITHOUT_TARGET_VOICE: case SNOW_PLOW_CLASS_OFFSET_WITH_ALIGNED_LINKED_MOBY: case 0x1d: case 0x20: case 0x59:
             *(float *)(data + 0x140) = fast_add_rotations(*(float *)(data + 0x140), frame_time * 12.566371f);
             FUN_L00_001fff28(data + 0x190, 2, *(float *)(data + 0x140));
             break;
-        case 0x16: case 0x1b:
+        case SNOW_PLOW_CLASS_OFFSET_WITH_TWO_ROTATING_MANIPULATORS: case SNOW_PLOW_CLASS_OFFSET_WITH_TWO_POINT_CART_BURST:
             *(float *)(data + 0x140) = fast_add_rotations(*(float *)(data + 0x140), frame_time * 12.566371f);
             FUN_L00_001fff28(data + 0x190, 2, *(float *)(data + 0x140));
             *(float *)(data + 0x144) = fast_add_rotations(*(float *)(data + 0x144), frame_time * 12.566371f);
@@ -282,14 +291,14 @@ hit:
             }
         }
         switch ((short)(moby->oclass - 0x1d2)) {
-        case 0x13: case 0x14:
+        case 0x13: case SNOW_PLOW_CLASS_OFFSET_WITH_HIT_SPHERE_QUERY_WITHOUT_TARGET_VOICE:
             sphere.flags = 0x810000;
             sphere.scale = 1.0f;
             sphere.moby = moby;
             clear_vector(&sphere_pos);
             sphere.zero = 0;
             collect_mobies_in_sphere(&moby->pos, 4.0f, 0x10, moby, &sphere_pos);
-        case 0: case SNOW_PLOW_CLASS_OFFSET_WITH_QUARTER_TURN_LINKED_MOBY: case 0x16: case 0x18: case SNOW_PLOW_CLASS_OFFSET_WITH_ALIGNED_LINKED_MOBY: case 0x1d: case 0x20: case 0x59:
+        case 0: case SNOW_PLOW_CLASS_OFFSET_WITH_QUARTER_TURN_LINKED_MOBY: case SNOW_PLOW_CLASS_OFFSET_WITH_TWO_ROTATING_MANIPULATORS: case 0x18: case SNOW_PLOW_CLASS_OFFSET_WITH_ALIGNED_LINKED_MOBY: case 0x1d: case 0x20: case 0x59:
             delta.q = 0;
             delta.f[2] = 0.75f;
             clear_vector(&sphere_pos);
@@ -301,7 +310,7 @@ hit:
             *(int *)(data + 0x170) = scale_game_frames(600);
             *(int *)(data + 0x174) = 1;
             break;
-        case 0x1b:
+        case SNOW_PLOW_CLASS_OFFSET_WITH_TWO_POINT_CART_BURST:
             sphere_pos.q = 0;
             sphere_pos.f[2] = 0.75f;
             clear_vector(&sphere);
@@ -789,10 +798,13 @@ void woodcut_bot_update(WBMoby *m) {
     enum {
         WOODCUT_BOT_INITIALIZE = 0,
         WOODCUT_BOT_IDLE = 1,
+        WOODCUT_BOT_WAIT_FOR_ANIMATION_BEFORE_PURSUIT = 2,
+        WOODCUT_BOT_SELECT_ACTION_WHILE_EXCITED = 4,
         WOODCUT_BOT_MOVE_TOWARD_TARGET = 5,
         WOODCUT_BOT_RETURN_TO_SAVED_POSITION = 6,
         WOODCUT_BOT_STOP_MOVEMENT = 7,
         WOODCUT_BOT_MELEE_ATTACK = 8,
+        WOODCUT_BOT_HIT_RECOVERY_AND_REPOSITION = 9,
         WOODCUT_BOT_TURN_BEFORE_MOVEMENT = 10,
         WOODCUT_BOT_DEATH_KNOCKBACK = 11
     };
@@ -1042,7 +1054,7 @@ void woodcut_bot_update(WBMoby *m) {
             }
         }
         break;
-    case 2:
+    case WOODCUT_BOT_WAIT_FOR_ANIMATION_BEFORE_PURSUIT:
         if (m->anim == 2 && (m->f70 & 2)) {
             if (excited || d->f3DC == -1 ||
                 point_in_path_xy(tgt, D_L04_001B0630[d->f3DC] + 4, *D_L04_001B0630[d->f3DC]) != 0) {
@@ -1110,7 +1122,7 @@ void woodcut_bot_update(WBMoby *m) {
         }
         break;
     }
-    case 4:
+    case WOODCUT_BOT_SELECT_ACTION_WHILE_EXCITED:
         if (excited) {
             if (dist < 3.0f && adiff < 1.5707964f) {
                 blend_moby_animation(m, 4, 0, scale_game_frames(10));
@@ -1235,7 +1247,7 @@ void woodcut_bot_update(WBMoby *m) {
             m->state = 1;
         }
         break;
-    case 9:
+    case WOODCUT_BOT_HIT_RECOVERY_AND_REPOSITION:
         if (m->anim2 != 5 || (m->anim == 5 && (m->f70 & 2))) {
             if (m->fBC & 4) {
                 m->fBC &= ~4;

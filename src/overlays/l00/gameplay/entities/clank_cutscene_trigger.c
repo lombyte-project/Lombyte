@@ -38,8 +38,11 @@ void FUN_L00_0023d968(void) {
     enum {
         LEVEL_WITH_SKY_PARTICLES_AND_ROTATING_SHELL = 0,
         LEVEL_WITH_THREE_SKY_SHELL_ROTATION_RATES = 1,
+        LEVEL_WITH_ANIMATED_SKY_PARTICLE_POSITIONS = 2,
         LEVEL_WITH_TWO_ROTATING_SKY_SHELLS = 3,
-        LEVEL_WITH_FAST_AND_SLOW_ROTATING_SKY_SHELLS = 4
+        LEVEL_WITH_FAST_AND_SLOW_ROTATING_SKY_SHELLS = 4,
+        LEVEL_WITH_MODULO_50000_SKY_SHELL_ROTATION = 5,
+        LEVEL_WITH_THREE_SKY_SHELLS_AND_PARTICLES = 13
     };
     setup_sky_gif_paging();
     switch (current_level_index) {
@@ -49,7 +52,7 @@ void FUN_L00_0023d968(void) {
     case LEVEL_WITH_THREE_SKY_SHELL_ROTATION_RATES:
         update_sky_shells_animated();
         break;
-    case 2:
+    case LEVEL_WITH_ANIMATED_SKY_PARTICLE_POSITIONS:
         FUN_L00_002895a0();
         break;
     case LEVEL_WITH_TWO_ROTATING_SKY_SHELLS:
@@ -58,7 +61,7 @@ void FUN_L00_0023d968(void) {
     case LEVEL_WITH_FAST_AND_SLOW_ROTATING_SKY_SHELLS:
         FUN_L00_00289a90();
         break;
-    case 5:
+    case LEVEL_WITH_MODULO_50000_SKY_SHELL_ROTATION:
         FUN_L00_00289bd8();
         break;
     case 6:
@@ -82,7 +85,7 @@ void FUN_L00_0023d968(void) {
     case 12:
         FUN_L00_0028a7a0();
         break;
-    case 13:
+    case LEVEL_WITH_THREE_SKY_SHELLS_AND_PARTICLES:
         FUN_L00_0028a920();
         break;
     case 14:

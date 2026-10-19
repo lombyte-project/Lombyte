@@ -1396,7 +1396,7 @@ extern f32 frame_time_sq_macro __asm__("D_0015ED70") __attribute__((section(".sd
 /* The hero on a moving platform: finds the platform the hero stands on or hangs from, tracks the platform's motion
    between frames (its attach points at 0x310-0x330) and carries the hero (position, facing, ledge-grab point) with it. */
 void FUN_L00_00233f80(void) {
-    Vec_234800 probed_position, unanchored_probe_rotation, v20, v30, probe_transform_scratch, anchored_probe_rotation, primary_attachment_position, primary_attachment_rotation, secondary_attachment_position, v90, vA0;
+    Vec_234800 probed_position, unanchored_probe_rotation, attachment_motion_scratch, v30, probe_transform_scratch, anchored_probe_rotation, primary_attachment_position, primary_attachment_rotation, secondary_attachment_position, v90, vA0;
     float sB0, sB4;
     float amt, ang;
     int mode;
@@ -1444,19 +1444,19 @@ void FUN_L00_00233f80(void) {
         || (unsigned int)(((Hero_234800 *)hero_233f80)->i2084 - 0x18) < 2) {
         if ((((Hero_234800 *)hero_233f80)->i364 ^ 1) & 1) {
             if ((unsigned int)(((Hero_234800 *)hero_233f80)->i2084 - 0x18) < 2) {
-                qcopy(&v20, &((Hero_234800 *)hero_233f80)->v4D0);
-                v20.x += f_001f9dc8(f_001fa580(((Hero_234800 *)hero_233f80)->f4E4, 3.1415925f)) * 0.45f;
-                v20.y += f_001f9de0(f_001fa580(((Hero_234800 *)hero_233f80)->f4E4, 3.1415925f)) * 0.45f;
-                v20.z -= -1.43f;
+                qcopy(&attachment_motion_scratch, &((Hero_234800 *)hero_233f80)->v4D0);
+                attachment_motion_scratch.x += f_001f9dc8(f_001fa580(((Hero_234800 *)hero_233f80)->f4E4, 3.1415925f)) * 0.45f;
+                attachment_motion_scratch.y += f_001f9de0(f_001fa580(((Hero_234800 *)hero_233f80)->f4E4, 3.1415925f)) * 0.45f;
+                attachment_motion_scratch.z -= -1.43f;
                 probe_ground_height_cf(((Hero_234800 *)hero_233f80)->i2080, ((Hero_234800 *)hero_233f80)->p360, &((Hero_234800 *)hero_233f80)->v4D0, &((Hero_234800 *)hero_233f80)->v90, &v30, &probe_transform_scratch);
-                probe_ground_height_cf(((Hero_234800 *)hero_233f80)->i2080, ((Hero_234800 *)hero_233f80)->p360, &v20, &((Hero_234800 *)hero_233f80)->v90, &v20, &probe_transform_scratch);
+                probe_ground_height_cf(((Hero_234800 *)hero_233f80)->i2080, ((Hero_234800 *)hero_233f80)->p360, &attachment_motion_scratch, &((Hero_234800 *)hero_233f80)->v90, &attachment_motion_scratch, &probe_transform_scratch);
                 FUN_L00_00260668(((Hero_234800 *)hero_233f80)->i2080, ((Hero_234800 *)hero_233f80)->p360, &((Hero_234800 *)hero_233f80)->v4D0, &((Hero_234800 *)hero_233f80)->v90, &((Hero_234800 *)hero_233f80)->v310, &probe_transform_scratch);
-                FUN_L00_00260668(((Hero_234800 *)hero_233f80)->i2080, ((Hero_234800 *)hero_233f80)->p360, &v20, &((Hero_234800 *)hero_233f80)->v90, &((Hero_234800 *)hero_233f80)->v330, &probe_transform_scratch);
+                FUN_L00_00260668(((Hero_234800 *)hero_233f80)->i2080, ((Hero_234800 *)hero_233f80)->p360, &attachment_motion_scratch, &((Hero_234800 *)hero_233f80)->v90, &((Hero_234800 *)hero_233f80)->v330, &probe_transform_scratch);
             } else if (plat->i3C & 4) {
-                FUN_L00_00260668(((Hero_234800 *)hero_233f80)->i2080, ((Hero_234800 *)hero_233f80)->p360, &((Hero_234800 *)hero_233f80)->pos, &((Hero_234800 *)hero_233f80)->v90, &((Hero_234800 *)hero_233f80)->v310, &v20);
+                FUN_L00_00260668(((Hero_234800 *)hero_233f80)->i2080, ((Hero_234800 *)hero_233f80)->p360, &((Hero_234800 *)hero_233f80)->pos, &((Hero_234800 *)hero_233f80)->v90, &((Hero_234800 *)hero_233f80)->v310, &attachment_motion_scratch);
             } else {
                 probe_ground_height_cf(((Hero_234800 *)hero_233f80)->i2080, ((Hero_234800 *)hero_233f80)->p360, &((Hero_234800 *)hero_233f80)->pos, &((Hero_234800 *)hero_233f80)->v90, &v30, &probe_transform_scratch);
-                FUN_L00_00260668(((Hero_234800 *)hero_233f80)->i2080, ((Hero_234800 *)hero_233f80)->p360, &v30, &probe_transform_scratch, &((Hero_234800 *)hero_233f80)->v310, &v20);
+                FUN_L00_00260668(((Hero_234800 *)hero_233f80)->i2080, ((Hero_234800 *)hero_233f80)->p360, &v30, &probe_transform_scratch, &((Hero_234800 *)hero_233f80)->v310, &attachment_motion_scratch);
             }
             ((Hero_234800 *)hero_233f80)->i364 |= 1;
         }
@@ -1465,7 +1465,7 @@ void FUN_L00_00233f80(void) {
     }
     if ((((Hero_234800 *)hero_233f80)->i208C == 0 || ((Hero_234800 *)hero_233f80)->i208C == 12) && ((Hero_234800 *)hero_233f80)->f184 == 0.0f && ((Hero_234800 *)hero_233f80)->h30E == 0) {
         if (!(((Hero_234800 *)hero_233f80)->i364 & 2)) {
-            FUN_L00_00260668(((Hero_234800 *)hero_233f80)->i2080, ((Hero_234800 *)hero_233f80)->p360, &((Hero_234800 *)hero_233f80)->pos, &((Hero_234800 *)hero_233f80)->v90, &v20, &((Hero_234800 *)hero_233f80)->v320);
+            FUN_L00_00260668(((Hero_234800 *)hero_233f80)->i2080, ((Hero_234800 *)hero_233f80)->p360, &((Hero_234800 *)hero_233f80)->pos, &((Hero_234800 *)hero_233f80)->v90, &attachment_motion_scratch, &((Hero_234800 *)hero_233f80)->v320);
             ((Hero_234800 *)hero_233f80)->i364 |= 2;
         }
     } else {
@@ -1474,7 +1474,7 @@ void FUN_L00_00233f80(void) {
     if (((Hero_234800 *)hero_233f80)->i364 & 3) {
         mode = 2;
     }
-    f_001f99f8(&v20);
+    f_001f99f8(&attachment_motion_scratch);
     f_001f99f8(&v30);
     if (amt != 0.0f) {
         sB4 = f_001f9b20(&((Hero_234800 *)hero_233f80)->v350);
@@ -1482,17 +1482,17 @@ void FUN_L00_00233f80(void) {
         if (!(plat->i3C & 2)) {
             approach_value(&sB0, 0.0f, frame_time_sq_macro * 25.0f * amt);
             approach_value(&sB4, 0.0f, (frame_time_sq_macro + frame_time_sq_macro) * amt);
-            trooper_scale(&v20, &((Hero_234800 *)hero_233f80)->v350, sB4);
-            v20.z = sB0;
+            trooper_scale(&attachment_motion_scratch, &((Hero_234800 *)hero_233f80)->v350, sB4);
+            attachment_motion_scratch.z = sB0;
         } else {
-            qcopy(&v20, &((Hero_234800 *)hero_233f80)->v350);
+            qcopy(&attachment_motion_scratch, &((Hero_234800 *)hero_233f80)->v350);
         }
-        qcopy(&v30, &v20);
+        qcopy(&v30, &attachment_motion_scratch);
     } else if (mode == 1) {
         probe_ground_height_cf(((Hero_234800 *)hero_233f80)->i2080, ((Hero_234800 *)hero_233f80)->p360, &((Hero_234800 *)hero_233f80)->pos, &((Hero_234800 *)hero_233f80)->v90, &probed_position, &unanchored_probe_rotation);
         ((Hero_234800 *)hero_233f80)->v90.z = unanchored_probe_rotation.z;
-        f_001f9a28(&v20, &probed_position, &((Hero_234800 *)hero_233f80)->pos);
-        qcopy((Vec_234800 *)(hero_233f80 + 0x350), &v20);
+        f_001f9a28(&attachment_motion_scratch, &probed_position, &((Hero_234800 *)hero_233f80)->pos);
+        qcopy((Vec_234800 *)(hero_233f80 + 0x350), &attachment_motion_scratch);
     } else if (mode == 2) {
         probe_ground_height_cf(((Hero_234800 *)hero_233f80)->i2080, ((Hero_234800 *)hero_233f80)->p360, &((Hero_234800 *)hero_233f80)->pos, &((Hero_234800 *)hero_233f80)->v90, &probe_transform_scratch, &anchored_probe_rotation);
         FUN_L00_002604f0(((Hero_234800 *)hero_233f80)->i2080, ((Hero_234800 *)hero_233f80)->p360, &((Hero_234800 *)hero_233f80)->v310, &((Hero_234800 *)hero_233f80)->v320, &primary_attachment_position, &primary_attachment_rotation);
@@ -1511,35 +1511,35 @@ void FUN_L00_00233f80(void) {
                 vA0.z = 0.0f;
                 f_001f9a10(&vA0, &vA0, &secondary_attachment_position);
                 vA0.z += -1.43f;
-                f_001f9a28(&v20, &probe_transform_scratch, &((Hero_234800 *)hero_233f80)->pos);
+                f_001f9a28(&attachment_motion_scratch, &probe_transform_scratch, &((Hero_234800 *)hero_233f80)->pos);
                 qcopy(&((Hero_234800 *)hero_233f80)->v4D0, &vA0);
                 ((Hero_234800 *)hero_233f80)->f4E4 = f_001f9e90(primary_attachment_position.x - secondary_attachment_position.x, primary_attachment_position.y - secondary_attachment_position.y);
             } else {
                 float len;
 
-                f_001f9a28(&v20, &primary_attachment_position, &((Hero_234800 *)hero_233f80)->pos);
-                len = vector_length_xyz(&v20);
+                f_001f9a28(&attachment_motion_scratch, &primary_attachment_position, &((Hero_234800 *)hero_233f80)->pos);
+                len = vector_length_xyz(&attachment_motion_scratch);
                 if (len < 0.0001f) {
-                    f_001f99f8(&v20);
+                    f_001f99f8(&attachment_motion_scratch);
                     qcopy(&((Hero_234800 *)hero_233f80)->pos, &primary_attachment_position);
                 } else if (2.0f < len) {
-                    f_001f99f8(&v20);
+                    f_001f99f8(&attachment_motion_scratch);
                     ((Hero_234800 *)hero_233f80)->i364 &= ~2;
                     ((Hero_234800 *)hero_233f80)->i364 &= ~1;
                 }
-                f_001f9a10(hero_233f80 + 0x4D0, hero_233f80 + 0x4D0, &v20);
-                f_001f9a28(&vA0, &v20, hero_233f80 + 0x140);
+                f_001f9a10(hero_233f80 + 0x4D0, hero_233f80 + 0x4D0, &attachment_motion_scratch);
+                f_001f9a28(&vA0, &attachment_motion_scratch, hero_233f80 + 0x140);
                 if (0.1f < vector_length_xyz(&vA0)) {
                     ((Hero_234800 *)hero_233f80)->i364 &= ~1;
                 }
             }
         } else {
-            f_001f9a28(&v20, &probe_transform_scratch, &((Hero_234800 *)hero_233f80)->pos);
-            qcopy(&v30, &v20);
+            f_001f9a28(&attachment_motion_scratch, &probe_transform_scratch, &((Hero_234800 *)hero_233f80)->pos);
+            qcopy(&v30, &attachment_motion_scratch);
         }
-        qcopy((Vec_234800 *)(hero_233f80 + 0x350), &v20);
+        qcopy((Vec_234800 *)(hero_233f80 + 0x350), &attachment_motion_scratch);
     }
-    f_001f9a10(hero_233f80 + 0xF0, hero_233f80 + 0xF0, &v20);
+    f_001f9a10(hero_233f80 + 0xF0, hero_233f80 + 0xF0, &attachment_motion_scratch);
     ((Hero_234800 *)hero_233f80)->fFC = fast_subtract_rotations(((Hero_234800 *)hero_233f80)->v90.z, ang);
 }
 #define NOT_SDA

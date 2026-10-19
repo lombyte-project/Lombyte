@@ -1523,15 +1523,16 @@ void drek_final_boss_robot_update(BossMoby *moby) {
         DREK_BOSS_INITIALIZE = 0,
         DREK_BOSS_WAIT_FOR_SCENE = 7,
         DREK_BOSS_SELECT_NEXT_ACTION = 0xC,
+        DREK_BOSS_LAUNCH_FORWARD_WITH_LATERAL_OFFSET = 0xD,
+        DREK_BOSS_ACTION_REPOSITION_AND_AIM = 0xE,
+        DREK_BOSS_TARGET_GROUND_POINTS = 0xF,
         DREK_BOSS_TARGET_RANDOM_ARENA_POINTS = 0x10,
+        DREK_BOSS_TARGET_SIDE_GROUND_POINTS = 0x11,
         DREK_BOSS_APPROACH_AIM_NODE = 0x12,
-        DREK_BOSS_ACTIVATE_MISSILE_GROUP = 0x14
-    };
-    enum {
-        DREK_BOSS_FOLLOW_HERO = 0x13
-    };
-    enum {
-        DREK_BOSS_ACTION_REPOSITION_AND_AIM = 0xE
+        DREK_BOSS_FOLLOW_HERO = 0x13,
+        DREK_BOSS_ACTIVATE_MISSILE_GROUP = 0x14,
+        DREK_BOSS_APPROACH_SELECTED_MOBY = 0x15,
+        DREK_BOSS_DEATH_EXPLOSIONS = 0x1A
     };
     BossData *d = (BossData *)moby->f78;
     BossMoby *tgt;
@@ -1995,7 +1996,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
             break;
         }
         switch (FUN_L18_002f70b8((char *)moby)) {
-        case 0xF:
+        case DREK_BOSS_TARGET_GROUND_POINTS:
             moby->f20 = 0xF;
             if (moby->f53 != 10) {
                 blend_moby_animation(moby, 10, 0, scale_game_frames(0x14));
@@ -2004,7 +2005,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
             d->f358 = scale_game_frames(600);
             d->f35C = scale_game_frames(0x168);
             break;
-        case 0xD:
+        case DREK_BOSS_LAUNCH_FORWARD_WITH_LATERAL_OFFSET:
             moby->f20 = 0xD;
             if (moby->f53 != 2) {
                 blend_moby_animation(moby, 2, 0, scale_game_frames(0x14));
@@ -2014,7 +2015,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
             d->f35C = scale_game_frames((6 - d->f34C) * 0x1E);
             d->f3BC = random_float_between_alt(-0.333f, 0.333f);
             break;
-        case 0x11:
+        case DREK_BOSS_TARGET_SIDE_GROUND_POINTS:
             moby->f20 = 0x11;
             if (moby->f53 != 11) {
                 blend_moby_animation(moby, 0xB, 0, scale_game_frames(0x14));
@@ -2122,7 +2123,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
         }
         tick_countdown_32_alt(&d->f358);
         break;
-    case 0xF:
+    case DREK_BOSS_TARGET_GROUND_POINTS:
         aim = &moby->f40[2];
         ang = fast_arc_tan(tgt->f10[0] - moby->f10[0], tgt->f10[1] - moby->f10[1]);
         approach_angle(aim, &d->f370, ang, D_0015ED6C_e[1] * 6.2831855f,
@@ -2185,7 +2186,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
             moby->f20 = 0xC;
         }
         break;
-    case 0xD:
+    case DREK_BOSS_LAUNCH_FORWARD_WITH_LATERAL_OFFSET:
         aim = &moby->f40[2];
         ang = fast_arc_tan(tgt->f10[0] - moby->f10[0], tgt->f10[1] - moby->f10[1]);
         approach_angle(aim, &d->f370, ang, D_0015ED6C_e[1] * 6.2831855f,
@@ -2269,7 +2270,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
             moby->f20 = 0xC;
         }
         break;
-    case 0x11: {
+    case DREK_BOSS_TARGET_SIDE_GROUND_POINTS: {
         int n;
 
         aim = &moby->f40[2];
@@ -2381,7 +2382,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
             }
         }
         break;
-    case 0x15:
+    case DREK_BOSS_APPROACH_SELECTED_MOBY:
         aim = &moby->f40[2];
         ang = fast_arc_tan(d->f330->f10[0] - moby->f10[0], d->f330->f10[1] - moby->f10[1]);
         approach_angle(aim, &d->f370, ang, D_0015ED6C_e[1] * 6.2831855f,
@@ -2425,7 +2426,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
             moby->f20 = 5;
         }
         break;
-    case 0x1A: {
+    case DREK_BOSS_DEATH_EXPLOSIONS: {
         int n;
 
         aim = &moby->f40[2];
@@ -3161,8 +3162,11 @@ s32 random_integer_below(s32 arg0) __asm__("FUN_00213260");
 
 int FUN_L18_002f70b8(struct Moby *moby) {
     enum {
+        BOSS_ACTION_CHOICE_LAUNCH_FORWARD_WITH_LATERAL_OFFSET = 0,
         BOSS_ACTION_CHOICE_REPOSITION_AND_AIM = 1,
+        BOSS_ACTION_CHOICE_TARGET_GROUND_POINTS = 2,
         BOSS_ACTION_CHOICE_TARGET_RANDOM_ARENA_POINTS = 3,
+        BOSS_ACTION_CHOICE_TARGET_SIDE_GROUND_POINTS = 4,
         BOSS_ACTION_CHOICE_FOLLOW_HERO = 5
     };
     char *data = (char *)moby->pvars;
@@ -3173,19 +3177,19 @@ int FUN_L18_002f70b8(struct Moby *moby) {
     do {
         r = random_integer_below(6);
         switch (r) {
-        case 0:
+        case BOSS_ACTION_CHOICE_LAUNCH_FORWARD_WITH_LATERAL_OFFSET:
             state = 0xD;
             break;
         case BOSS_ACTION_CHOICE_REPOSITION_AND_AIM:
             state = 0xE;
             break;
-        case 2:
+        case BOSS_ACTION_CHOICE_TARGET_GROUND_POINTS:
             state = 0xF;
             break;
         case BOSS_ACTION_CHOICE_TARGET_RANDOM_ARENA_POINTS:
             state = 0x10;
             break;
-        case 4:
+        case BOSS_ACTION_CHOICE_TARGET_SIDE_GROUND_POINTS:
             state = 0x11;
             break;
         case BOSS_ACTION_CHOICE_FOLLOW_HERO:

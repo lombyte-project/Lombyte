@@ -512,6 +512,9 @@ extern void transform_vector_by_basis(void *, void *, void *);
 extern s32 D_0013CB14[];
 
 void FUN_L01_002370b8(void) {
+    enum {
+        HERO_STATE_MOVE_TO_TARGET_POSITION = 0x65
+    };
     FVec4 vec[6];
     Moby *moby;
     int prevState;
@@ -667,7 +670,7 @@ void FUN_L01_002370b8(void) {
             }
         }
     } break;
-    case 0x7F:
+    case HERO_STATE_SINK:
         if (((Moby *)hero.unk6A4) == 0) {
             Moby *m;
 
@@ -2065,7 +2068,7 @@ void FUN_L01_002370b8(void) {
         FUN_L00_0020b5b8_cf();
         FUN_L00_00216de8_cf();
         break;
-    case 0x16: {
+    case HERO_STATE_HURT: {
         float len;
         float dec;
 
@@ -2084,7 +2087,7 @@ void FUN_L01_002370b8(void) {
         set_vector_length_xy(hero.motion.velocity.f, hero.motion.velocity.f, len);
         FUN_L00_002334d0(hero.motion.velocity.f, hero.motion.velocity.f, 0.004f);
     } break;
-    case 0x65: {
+    case HERO_STATE_MOVE_TO_TARGET_POSITION: {
         float len;
         float k;
 
@@ -2154,7 +2157,7 @@ void FUN_L01_002370b8(void) {
             FUN_L00_002334d0(hero.motion.velocity.f, hero.motion.velocity.f, frame_time_sq * 54.0f);
         }
     } break;
-    case 0x40:
+    case HERO_STATE_FIDGET:
     case 0x67:
         clear_vector(hero.motion.velocity.f);
         break;

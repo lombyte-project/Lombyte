@@ -16,10 +16,10 @@ extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern s32 spawn_spark(void *, void *, void *, s32, s32, s32, s32, s32, s32) __asm__("func_00218888");
 
-void FUN_0022f5b0(u8 *m, f32 z) __asm__("FUN_0022f5b0");
+void emit_six_spark_effects(u8 *m, f32 z) __asm__("FUN_0022f5b0");
 
 extern f32 frame_time __asm__("D_0015ED6C") MACRO_ADDR;
-void FUN_0022f5b0(u8 *m, f32 z) {
+void emit_six_spark_effects(u8 *m, f32 z) {
     Vec4 vel;
     Vec4 vel2;
     Vec4 pos;
@@ -46,4 +46,4 @@ void FUN_0022f5b0(u8 *m, f32 z) {
     }
 }
 
-extern __typeof__(FUN_0022f5b0) func_0022F5B0 __attribute__((alias("FUN_0022f5b0")));
+extern __typeof__(emit_six_spark_effects) func_0022F5B0 __attribute__((alias("FUN_0022f5b0")));

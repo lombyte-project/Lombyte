@@ -521,7 +521,7 @@ void nanotech_ball_update(Moby *moby) {
         NANOTECH_BALL_STATE_COLLECTING = 3,
         NANOTECH_BALL_STATE_BASIS_ONLY = 4
     };
-    V_2D9EA0 v0, v10, v20, collection_target_or_end_tangent, cross_product_or_particle_midpoint, half_displacement_or_spark_position, slot_curve_offset;
+    V_2D9EA0 v0, rotated_slot_offset_or_particle_position, v20, collection_target_or_end_tangent, cross_product_or_particle_midpoint, half_displacement_or_spark_position, slot_curve_offset;
     D_2D9EA0 *data = (D_2D9EA0 *)moby->pvars;
 
     switch (moby->state) {
@@ -628,8 +628,8 @@ void nanotech_ball_update(Moby *moby) {
                 for (i = 0; i < 8; i++) {
                     if (data->slots[i] != 0) {
                         Ext_2D9EA0 *ext = (Ext_2D9EA0 *)(data->slots[i] + 1);
-                        func_002156E0_2D9EA0(&v10, &v0, (float)i * 0.448549628f, &v20);
-                        func_001F9BD8_2D9EA0(&slot_curve_offset, &half_displacement_or_spark_position, &v10);
+                        func_002156E0_2D9EA0(&rotated_slot_offset_or_particle_position, &v0, (float)i * 0.448549628f, &v20);
+                        func_001F9BD8_2D9EA0(&slot_curve_offset, &half_displacement_or_spark_position, &rotated_slot_offset_or_particle_position);
                         {
                             V3_2D9EA0 *dst = &ext->u.a;
                             dst->x = slot_curve_offset.x;
@@ -663,8 +663,8 @@ void nanotech_ball_update(Moby *moby) {
             for (i = 0; i < 8; i++) {
                 Part_2D9EA0 *part;
                 Part_2D9EA0 *slot;
-                func_L00_002D9D00_2D9EA0(moby, &v10, i);
-                part = func_L00_002745A8_2D9EA0(&v10, lifetime, 2);
+                func_L00_002D9D00_2D9EA0(moby, &rotated_slot_offset_or_particle_position, i);
+                part = func_L00_002745A8_2D9EA0(&rotated_slot_offset_or_particle_position, lifetime, 2);
                 if (part != 0) {
                     Ext_2D9EA0 *ext = (Ext_2D9EA0 *)(part + 1);
                     ext->b.x = part->pos.x - moby->pos.x;
@@ -677,7 +677,7 @@ void nanotech_ball_update(Moby *moby) {
                 }
                 slot = data->slots[i];
                 if (slot == 0) {
-                    data->slots[i] = func_L00_002745A8_2D9EA0(&v10, 0, 1);
+                    data->slots[i] = func_L00_002745A8_2D9EA0(&rotated_slot_offset_or_particle_position, 0, 1);
                     if (data->slots[i] != 0) {
                         Ext_2D9EA0 *ext = (Ext_2D9EA0 *)(data->slots[i] + 1);
                         ext->u.s.scale = D_L00_00161A14_gp;
@@ -686,7 +686,7 @@ void nanotech_ball_update(Moby *moby) {
                         data->slots[i]->f4 = D_L00_00161A00;
                     }
                 } else {
-                    qcopy(&slot->pos, &v10);
+                    qcopy(&slot->pos, &rotated_slot_offset_or_particle_position);
                     slot->b8 += D_L00_001619F4;
                 }
             }
@@ -760,21 +760,21 @@ void nanotech_ball_update(Moby *moby) {
                     remaining = (float)ext->h1E / remaining;
                     {
                         V3_2D9EA0 *src = &ext->b;
-                        v10.x = src->x;
-                        v10.y = src->y;
-                        v10.z = src->z;
+                        rotated_slot_offset_or_particle_position.x = src->x;
+                        rotated_slot_offset_or_particle_position.y = src->y;
+                        rotated_slot_offset_or_particle_position.z = src->z;
                     }
-                    v10.w = 0.0f;
+                    rotated_slot_offset_or_particle_position.w = 0.0f;
                     progress = 1.0f - remaining;
-                    v0.x = v10.x - ext->u.a.x;
-                    v0.y = v10.y - ext->u.a.y;
-                    v0.z = v10.z - ext->u.a.z;
+                    v0.x = rotated_slot_offset_or_particle_position.x - ext->u.a.x;
+                    v0.y = rotated_slot_offset_or_particle_position.y - ext->u.a.y;
+                    v0.z = rotated_slot_offset_or_particle_position.z - ext->u.a.z;
                     collection_target_or_end_tangent.x = v20.x - ext->u.a.x;
                     collection_target_or_end_tangent.y = v20.y - ext->u.a.y;
                     collection_target_or_end_tangent.z = v20.z - ext->u.a.z;
-                    part->pos.x = func_L00_00258E58_2D9EA0(v0.x, v10.x, v20.x, collection_target_or_end_tangent.x, progress);
-                    part->pos.y = func_L00_00258E58_2D9EA0(v0.y, v10.y, v20.y, collection_target_or_end_tangent.y, progress);
-                    part->pos.z = func_L00_00258E58_2D9EA0(v0.z, v10.z, v20.z, collection_target_or_end_tangent.z, progress);
+                    part->pos.x = func_L00_00258E58_2D9EA0(v0.x, rotated_slot_offset_or_particle_position.x, v20.x, collection_target_or_end_tangent.x, progress);
+                    part->pos.y = func_L00_00258E58_2D9EA0(v0.y, rotated_slot_offset_or_particle_position.y, v20.y, collection_target_or_end_tangent.y, progress);
+                    part->pos.z = func_L00_00258E58_2D9EA0(v0.z, rotated_slot_offset_or_particle_position.z, v20.z, collection_target_or_end_tangent.z, progress);
                     half_displacement_or_spark_position.x = func_L00_00258C80_2D9EA0(0.0f, 0.00999999978f) + part->pos.x;
                     half_displacement_or_spark_position.y = func_L00_00258C80_2D9EA0(0.0f, 0.00999999978f) + part->pos.y;
                     half_displacement_or_spark_position.z = func_L00_00258C80_2D9EA0(0.0f, 0.00999999978f) + part->pos.z;
@@ -1798,6 +1798,7 @@ s32 FUN_L00_002db8f8(u8 *moby, u8 *position, u8 *target) {
         SUCK_DISPATCH_BEING_PULLED_IN = 2,
         SUCK_DISPATCH_STORED = 3,
         SUCK_DISPATCH_FLYING_PROJECTILE = 4,
+        SUCK_DISPATCH_ROLLING_PROJECTILE = 5,
         SUCK_DISPATCH_FALLING_AFTER_CANCEL = 6
     };
     u8 *record = FUN_L00_002db890_002db8f8(moby);
@@ -1839,7 +1840,7 @@ s32 FUN_L00_002db8f8(u8 *moby, u8 *position, u8 *target) {
     case SUCK_DISPATCH_STORED:
         return 3;
     case SUCK_DISPATCH_FLYING_PROJECTILE:
-    case 5:
+    case SUCK_DISPATCH_ROLLING_PROJECTILE:
     case SUCK_DISPATCH_FALLING_AFTER_CANCEL:
         {
             u8 *seq = *(u8 **)(record + 0x70);
@@ -1966,11 +1967,13 @@ s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
 s32 FUN_L00_002dbe20(u8 *m) {
     enum {
+        SUCK_CANNON_INACTIVE = 0,
         SUCK_CANNON_ALIGNING_FOR_SUCTION = 1,
         SUCK_CANNON_RISING_FOR_SUCTION = 2,
         SUCK_CANNON_BEING_PULLED_IN = 3,
         SUCK_CANNON_STORED = 4,
         SUCK_CANNON_FLYING_PROJECTILE = 5,
+        SUCK_CANNON_ROLLING_PROJECTILE = 6,
         SUCK_CANNON_FALLING_AFTER_CANCEL = 7
     };
     u8 *o = FUN_L00_002db890_u(m);
@@ -2001,9 +2004,9 @@ s32 FUN_L00_002dbe20(u8 *m) {
     }
     case SUCK_CANNON_STORED:
         return 1;
-    case 0:
+    case SUCK_CANNON_INACTIVE:
     case SUCK_CANNON_FLYING_PROJECTILE:
-    case 6:
+    case SUCK_CANNON_ROLLING_PROJECTILE:
     case SUCK_CANNON_FALLING_AFTER_CANCEL:
     case 9:
         return 0;

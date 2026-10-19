@@ -2242,10 +2242,11 @@ void taxi_update(struct Moby *moby) {
         TAXI_STATE_BLEND_STOP_TO_PATH_START = 3,
         TAXI_STATE_FOLLOW_PATH = 4,
         TAXI_STATE_BLEND_PATH_END_TO_STOP = 5,
+        TAXI_STATE_WAIT_FOR_ITEM_GATE = 6,
         TAXI_STATE_BLEND_SAVED_POSE_TO_PATH_START = 7
     };
     L14TaxiVars *d = (L14TaxiVars *)moby->pvars;
-    float previous_position[4], previous_rotation[4], position_delta[4], v30[4], blend_to_position[4], blend_from_rotation[4], blend_to_rotation[4], hero_relative_position[4];
+    float previous_position[4], previous_rotation[4], position_delta[4], blend_from_position_or_rotation_matrix[4], blend_to_position[4], blend_from_rotation[4], blend_to_rotation[4], hero_relative_position[4];
     float m80[16];
     int ticks = 10;
     int button = 0x10;
@@ -2263,10 +2264,10 @@ void taxi_update(struct Moby *moby) {
     case TAXI_STATE_WAIT_AT_STOP: {
         struct Hero *g = &hero;
         if (g->ground_moby == moby && g->air_frames.s == 0) {
-            transpose_rotation_matrix(v30, &moby->rot_row0);
+            transpose_rotation_matrix(blend_from_position_or_rotation_matrix, &moby->rot_row0);
             taxi_sub(hero_relative_position, &g->motion.pos, &moby->pos);
             hero_relative_position[3] = 0;
-            transform_vector(hero_relative_position, hero_relative_position, v30);
+            transform_vector(hero_relative_position, hero_relative_position, blend_from_position_or_rotation_matrix);
             if (taxi_fabs(hero_relative_position[1]) < 1.2f) {
                 FUN_L14_002f1140(moby);
                 FUN_L14_002f13f8(moby);
@@ -2342,10 +2343,10 @@ void taxi_update(struct Moby *moby) {
             FUN_L00_002e8450(0, 7.0f, 0.002f);
         }
         advance_accelerated_scalar_c(1.0f, frame_time_sq, frame_time_sq, frame_time * 0.5f, &d->t, &d->tv);
-        qcopy_nc(v30, D_L14_001600EC_taxi[d->points[d->picked]].pos);
+        qcopy_nc(blend_from_position_or_rotation_matrix, D_L14_001600EC_taxi[d->points[d->picked]].pos);
         qcopy_nc(blend_from_rotation, D_L14_001600EC_taxi[d->points[d->picked]].rot);
         taxi_sample(0.0f, d->path, wrap, blend_to_position, blend_to_rotation, flags);
-        lerp_vector(d->pos, v30, blend_to_position, d->t);
+        lerp_vector(d->pos, blend_from_position_or_rotation_matrix, blend_to_position, d->t);
         d->rot[1] = taxi_add_rot(taxi_sub_rot(blend_to_rotation[1], blend_from_rotation[1]) * d->t, blend_from_rotation[1]);
         d->rot[2] = taxi_add_rot(taxi_sub_rot(blend_to_rotation[2], blend_from_rotation[2]) * d->t, blend_from_rotation[2]);
         if (1.0f <= d->t) {
@@ -2358,11 +2359,11 @@ void taxi_update(struct Moby *moby) {
     case TAXI_STATE_BLEND_SAVED_POSE_TO_PATH_START: {
         float f;
         advance_accelerated_scalar_c(1.0f, frame_time_sq, frame_time_sq, frame_time * 0.5f, &d->t, &d->tv);
-        qcopy(v30, d->save_pos);
+        qcopy(blend_from_position_or_rotation_matrix, d->save_pos);
         qcopy(blend_from_rotation, d->save_rot);
         taxi_sample_f(d->path, wrap, blend_to_position, blend_to_rotation, flags, 0.0f);
         f = cubic_hermite_scalar(1.0f, 0.0f, 1.0f, 0.0f, d->t);
-        lerp_vector(d->pos, v30, blend_to_position, f);
+        lerp_vector(d->pos, blend_from_position_or_rotation_matrix, blend_to_position, f);
         d->rot[1] = taxi_add_rot(taxi_sub_rot(blend_to_rotation[1], blend_from_rotation[1]) * f, blend_from_rotation[1]);
         d->rot[2] = taxi_add_rot(taxi_sub_rot(blend_to_rotation[2], blend_from_rotation[2]) * f, blend_from_rotation[2]);
         if (1.0f <= d->t) {
@@ -2389,8 +2390,8 @@ void taxi_update(struct Moby *moby) {
         advance_accelerated_scalar_c(1.0f, frame_time_sq, frame_time_sq, frame_time * 0.25f, &d->t, &d->tv);
         qcopy_nc(blend_to_position, D_L14_001600EC_taxi[d->points[d->target]].pos);
         qcopy_nc(blend_to_rotation, D_L14_001600EC_taxi[d->points[d->target]].rot);
-        taxi_sample_f(d->path, wrap, v30, blend_from_rotation, flags, (float)*d->path);
-        lerp_vector(d->pos, v30, blend_to_position, d->t);
+        taxi_sample_f(d->path, wrap, blend_from_position_or_rotation_matrix, blend_from_rotation, flags, (float)*d->path);
+        lerp_vector(d->pos, blend_from_position_or_rotation_matrix, blend_to_position, d->t);
         d->rot[1] = taxi_add_rot(taxi_sub_rot(blend_to_rotation[1], blend_from_rotation[1]) * d->t, blend_from_rotation[1]);
         d->rot[2] = taxi_add_rot(taxi_sub_rot(blend_to_rotation[2], blend_from_rotation[2]) * d->t, blend_from_rotation[2]);
         if (1.0f <= d->t) {
@@ -2430,7 +2431,7 @@ void taxi_update(struct Moby *moby) {
         }
         break;
     }
-    case 6: {
+    case TAXI_STATE_WAIT_FOR_ITEM_GATE: {
         unsigned char *t = visited52;
         int k = current_level_index * 16;
         if (t[d->item_a + k] == 0xFF || t[d->item_b + k] == 0xFF) {

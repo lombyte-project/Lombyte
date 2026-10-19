@@ -838,6 +838,8 @@ void sandmouse_update(Moby *m) {
         SANDMOUSE_STATE_WAIT_FOR_ACTIVATION = 1,
         SANDMOUSE_STATE_WAIT_FOR_LINK = 2,
         SANDMOUSE_STATE_MOVE_TO_GOAL = 3,
+        SANDMOUSE_STATE_BEGIN_FOLLOW_HERO_AND_FIRE = 4,
+        SANDMOUSE_STATE_FOLLOW_HERO_AND_FIRE = 5,
         SANDMOUSE_STATE_FADE_OUT = 6,
         SANDMOUSE_STATE_RESET = 7
     };
@@ -1038,7 +1040,7 @@ void sandmouse_update(Moby *m) {
         }
         break;
     }
-    case 4:
+    case SANDMOUSE_STATE_BEGIN_FOLLOW_HERO_AND_FIRE:
         {
             char *v = VOICE(p->slot);
             if (*(Moby **)(v + 0x88) != m || *(u8 *)(v + 0x74) == 0) {
@@ -1053,7 +1055,7 @@ void sandmouse_update(Moby *m) {
         }
         m->state = 5;
         break;
-    case 5:
+    case SANDMOUSE_STATE_FOLLOW_HERO_AND_FIRE:
         {
             char *v = VOICE(p->slot);
             if (*(Moby **)(v + 0x88) != m || *(u8 *)(v + 0x74) == 0) {

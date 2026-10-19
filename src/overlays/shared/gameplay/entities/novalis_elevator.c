@@ -486,6 +486,7 @@ extern s32 D_L01_00161494 __attribute__((sda));
 extern f32 D_L01_0016149C __attribute__((sda));
 void FUN_L01_002c7530(char *moby) {
     enum {
+        UPDATE_TRANSFORM_ONLY = 0,
         COLLISION_CHECK_AND_COUNTDOWN = 1,
         TIMED_REMOVAL = 2
     };
@@ -522,7 +523,7 @@ void FUN_L01_002c7530(char *moby) {
                 data[4] = 0;
         }
         break;
-    case 0:
+    case UPDATE_TRANSFORM_ONLY:
         break;
     case TIMED_REMOVAL:
         if (fast_dec_timer(data)) {
@@ -1368,8 +1369,11 @@ void sand_mouse_update(struct Moby *moby) __asm__("FUN_L01_002e3f20");
 void sand_mouse_update(struct Moby *moby) {
     enum {
         SAND_MOUSE_INITIALIZE = 0,
+        SAND_MOUSE_WAIT_FOR_HERO_IN_VOLUME = 1,
         SAND_MOUSE_WAIT_FOR_PARENT_READY = 2,
         SAND_MOUSE_MOVE_TOWARD_HERO = 3,
+        SAND_MOUSE_BEGIN_FOLLOW_HERO = 4,
+        SAND_MOUSE_FOLLOW_HERO = 5,
         SAND_MOUSE_FADE_OUT_AND_RESET_HOME = 6,
         SAND_MOUSE_DAMP_VELOCITY_BEFORE_RETURN = 19,
         SAND_MOUSE_RETURN_TO_PARENT = 20
@@ -1453,7 +1457,7 @@ void sand_mouse_update(struct Moby *moby) {
         moby->state = 1;
         moby->draw_dist = 0;
         break;
-    case 1:
+    case SAND_MOUSE_WAIT_FOR_HERO_IN_VOLUME:
         if (D_0013D4C5 != 0 && hero_2e3f20->i1158 == 5) {
             d->count = 0;
             d->t60 = scale_game_frames(D_L01_00161918);
@@ -1534,7 +1538,7 @@ void sand_mouse_update(struct Moby *moby) {
             }
         }
         break;
-    case 4:
+    case SAND_MOUSE_BEGIN_FOLLOW_HERO:
         FUN_L01_0023cf98(0, 1);
         moby->flags &= 0xFFBE;
         if (d->parent != -1) {
@@ -1549,7 +1553,7 @@ void sand_mouse_update(struct Moby *moby) {
             hero_2e3f20->helper->state = 2;
         }
         break;
-    case 5:
+    case SAND_MOUSE_FOLLOW_HERO:
         if (hero_2e3f20->helper != 0
             && hero_2e3f20->i1158 == 5
             && hero_2e3f20->i208C != 0x16
@@ -1775,8 +1779,11 @@ void large_amoeboid_update(unsigned char *moby) {
     enum {
         LARGE_AMOEBOID_INITIALIZE = 0,
         LARGE_AMOEBOID_MOVE_TOWARD_STORED_POSITION = 2,
+        LARGE_AMOEBOID_WAIT_FOR_PATH_ACQUISITION_ANIMATION_END = 3,
         LARGE_AMOEBOID_FOLLOW_PATH_TO_TARGET = 4,
         LARGE_AMOEBOID_RETURN_TO_STORED_POSITION = 5,
+        LARGE_AMOEBOID_WAIT_FOR_ANIMATION_BEFORE_RESUMING_PATH = 7,
+        LARGE_AMOEBOID_WAIT_FOR_ANIMATION_BEFORE_RESTARTING_PATH = 9,
         LARGE_AMOEBOID_WAIT_FOR_ACTIVATION_VOLUME = 13,
         LARGE_AMOEBOID_MOVE_DIRECTLY_TOWARD_TARGET = 15,
         LARGE_AMOEBOID_WAIT_WHILE_BLOCKED = 16
@@ -2029,8 +2036,8 @@ void large_amoeboid_update(unsigned char *moby) {
         }
         break;
     }
-    case 3:
-    case 7:
+    case LARGE_AMOEBOID_WAIT_FOR_PATH_ACQUISITION_ANIMATION_END:
+    case LARGE_AMOEBOID_WAIT_FOR_ANIMATION_BEFORE_RESUMING_PATH:
         if (!(moby[0x70] & 2)) return;
         moby[0x20] = 4;
         if (moby[0x53] != 1)
@@ -2090,7 +2097,7 @@ void large_amoeboid_update(unsigned char *moby) {
         }
         FUN_0020c828(moby);
         return;
-    case 9:
+    case LARGE_AMOEBOID_WAIT_FOR_ANIMATION_BEFORE_RESTARTING_PATH:
         if (moby[0x70] & 2) {
             moby[0x20] = 4;
             if (moby[0x53] != 1)
@@ -2664,6 +2671,10 @@ void sandmouse_house_update(unsigned char *m) {
         SANDMOUSE_HOUSE_INITIALIZE = 0,
         SANDMOUSE_HOUSE_WAIT_FOR_INITIAL_COMMAND = 1,
         SANDMOUSE_HOUSE_WAIT_FOR_INITIAL_COMMAND_ANIMATION_END = 2,
+        SANDMOUSE_HOUSE_WAIT_FOR_FOLLOWUP_COMMAND = 3,
+        SANDMOUSE_HOUSE_WAIT_FOR_FOLLOWUP_COMMAND_ANIMATION_END = 4,
+        SANDMOUSE_HOUSE_WAIT_FOR_POST_FOLLOWUP_COMMAND = 5,
+        SANDMOUSE_HOUSE_WAIT_FOR_POST_FOLLOWUP_COMMAND_ANIMATION_END = 6,
         SANDMOUSE_HOUSE_RESTORE_INITIAL_ANIMATION = 7
     };
     char *d;
@@ -2706,7 +2717,7 @@ void sandmouse_house_update(unsigned char *m) {
             m[0x20] = 3;
         }
         break;
-    case 3:
+    case SANDMOUSE_HOUSE_WAIT_FOR_FOLLOWUP_COMMAND:
         if ((unsigned char)(m[0xBC] - 4) < 2) {
             if (m[0x53] != 3) {
                 blend_moby_animation_w7(m, 3, 0, FUN_001f96f8_w7(3));
@@ -2719,7 +2730,7 @@ void sandmouse_house_update(unsigned char *m) {
             m[0x20] = 7;
         }
         break;
-    case 4:
+    case SANDMOUSE_HOUSE_WAIT_FOR_FOLLOWUP_COMMAND_ANIMATION_END:
         if (m[0x70] & 2) {
             if (m[0x53] != 4) {
                 blend_moby_animation_w7(m, 4, 0, FUN_001f96f8_w7(3));
@@ -2727,7 +2738,7 @@ void sandmouse_house_update(unsigned char *m) {
             m[0x20] = 5;
         }
         break;
-    case 5:
+    case SANDMOUSE_HOUSE_WAIT_FOR_POST_FOLLOWUP_COMMAND:
         if (m[0xBC] == 3 || m[0xBC] == 6 || m[0xBC] == 7 || m[0xBC] == 1) {
             if (m[0x53] != 5) {
                 blend_moby_animation_w7(m, 5, 0, FUN_001f96f8_w7(3));
@@ -2735,7 +2746,7 @@ void sandmouse_house_update(unsigned char *m) {
             m[0x20] = 6;
         }
         break;
-    case 6:
+    case SANDMOUSE_HOUSE_WAIT_FOR_POST_FOLLOWUP_COMMAND_ANIMATION_END:
         if (m[0x70] & 2) {
             if (m[0xBC] == 7 || m[0xBC] == 1) {
                 if (m[0x53] != 6) {

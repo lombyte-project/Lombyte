@@ -648,6 +648,9 @@ extern int D_0015ED84_gp __asm__("D_0015ED84") __attribute__((section(".sdata"))
 int FUN_L05_00251be8(void) {
     enum {
         ITEM_WRENCH = 8,
+        ITEM_TARGET_INTERACTION_DEVICE = 12,
+        ITEM_HELD_SOUND_DEVICE = 15,
+        ITEM_AMMO_MENU_DEVICE = 32,
         ITEM_RACE_PROJECTILE = 36
     };
     float joint_pos[4];
@@ -775,7 +778,7 @@ int FUN_L05_00251be8(void) {
             }
         }
         break;
-    case 12:
+    case ITEM_TARGET_INTERACTION_DEVICE:
         {
             int window;
 
@@ -831,14 +834,14 @@ int FUN_L05_00251be8(void) {
         (*(Hero *)((char *)&hero)).unk22DE = 0x12;
         (*(Hero *)((char *)&hero)).unk22DC = 1;
         break;
-    case 32:
+    case ITEM_AMMO_MENU_DEVICE:
         if ((*(Hero *)((char *)&hero)).state.control_mode < 3U || (*(Hero *)((char *)&hero)).state.control_mode == 4 || (*(Hero *)((char *)&hero)).state.control_mode == 5) {
             if (FUN_L00_00266d60(mask, scale_game_frames_alt(8), 0)) {
                 FUN_L00_0029a6b0(0);
             }
         }
         break;
-    case 15:
+    case ITEM_HELD_SOUND_DEVICE:
         if ((*(Hero *)((char *)&hero)).state.control_mode < 2U || (*(Hero *)((char *)&hero)).state.control_mode == 0xC || (*(Hero *)((char *)&hero)).state.control_mode == 2 || (*(Hero *)((char *)&hero)).state.control_mode == 4
             || (*(Hero *)((char *)&hero)).state.control_mode == 5 || (*(Hero *)((char *)&hero)).state.control_mode == 0xF || (*(Hero *)((char *)&hero)).state.current == 0x1E) {
             PVar_2523C8 *pv;
