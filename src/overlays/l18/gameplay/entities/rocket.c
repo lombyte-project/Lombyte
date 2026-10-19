@@ -2197,6 +2197,7 @@ extern int D_L18_0017EF08 __attribute__((section(".data")));
 void FUN_L18_002df608(struct Moby *moby) {
     enum {
         STATE_INITIALIZE = 0,
+        STATE_PRE_TRANSITION_RAMP_UP = 2,
         STATE_INTERPOLATE_TRANSITION = 3,
         STATE_POST_TRANSITION_RAMP_DOWN = 5
     };
@@ -2207,7 +2208,7 @@ void FUN_L18_002df608(struct Moby *moby) {
         moby->state = 1;
         moby->update_dist = 0xFF;
         break;
-    case 2:
+    case STATE_PRE_TRANSITION_RAMP_UP:
         D_L18_0017EF08 = 1;
         approach_value((float *)(data + 0x6C), 1.0f, (*(float *)&D_L18_00161A6C) * 4.0f);
         {
