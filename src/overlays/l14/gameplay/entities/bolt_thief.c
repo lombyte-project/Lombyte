@@ -567,6 +567,11 @@ extern s32 D_0014C190_257218[][64] __asm__("D_0014C190");
 /* Watcher moby update: gated by its collectable and trigger, primes a camera target, then turns its head toward the hero. */
 void sam_update(L14WatchMoby *m) __asm__("FUN_L14_002fefe0");
 void sam_update(L14WatchMoby *m) {
+    enum {
+        SAM_STATE_INITIALIZE = 0,
+        SAM_STATE_DIALOGUE = 1,
+        SAM_STATE_REMOVE = 3
+    };
     L14WatchScratch scratch;
     L14WatchData *d = (L14WatchData *)m->data;
     float rate;
@@ -574,7 +579,7 @@ void sam_update(L14WatchMoby *m) {
     int tracking;
     FUN_L02_002e0cd8(m);
     switch (m->state) {
-    case 0: {
+    case SAM_STATE_INITIALIZE: {
         unsigned short id;
         if (D_0013DD4F) {
             mark_moby_for_removal(m);
@@ -596,7 +601,7 @@ void sam_update(L14WatchMoby *m) {
         d->b8 = 1;
         break;
     }
-    case 1:
+    case SAM_STATE_DIALOGUE:
         if (d->b8 == 1 && is_point_inside_clip_volume(&hero.motion.pos, d->i40)) {
             if (visited52[m->bB0 + current_level_index * 16] != 0xFF) {
                 char *t;
@@ -631,7 +636,7 @@ void sam_update(L14WatchMoby *m) {
             }
         }
         break;
-    case 3:
+    case SAM_STATE_REMOVE:
         mark_moby_for_removal(m);
         return;
     }
