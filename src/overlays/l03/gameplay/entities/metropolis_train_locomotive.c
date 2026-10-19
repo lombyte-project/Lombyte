@@ -2310,6 +2310,7 @@ void FUN_L03_002c6fd0(Moby2C8398 *m) {
     enum {
         ENEMY_INITIALIZE = 0,
         ENEMY_WAIT_FOR_ACTIVATION = 1,
+        ENEMY_WAIT_FOR_LINKED_MOBY = 2,
         ENEMY_MELEE_ATTACK = 6,
         ENEMY_MOVE_TO_PATH_NODE = 7,
         ENEMY_FOLLOW_PATH_TO_END = 8,
@@ -2479,7 +2480,7 @@ void FUN_L03_002c6fd0(Moby2C8398 *m) {
             }
         }
         break;
-    case 2:
+    case ENEMY_WAIT_FOR_LINKED_MOBY:
         if (dist < d->f270 && FUN_L03_002c6e18_cf(tgt.pos[2] - m->pos[2]) < 4.0f &&
             m->anim != 0xA) {
             blend_moby_animation(m, 0xA, 0, FUN_L03_002c6d98_cf(10));
