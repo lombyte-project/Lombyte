@@ -62,7 +62,8 @@ void FUN_00216c48(void *callback_context, Menu *menu, s32 follow_entry_link) {
         MENU_CONDITION_ITEM_AVAILABLE = 2,
         MENU_CONDITION_ITEM_AVAILABLE_NOT_ACQUIRED = 3,
         MENU_CONDITION_ALTERNATE_ITEM_AVAILABLE = 4,
-        MENU_CONDITION_COUNT_DIFFERENCE_MET = 5
+        MENU_CONDITION_COUNT_DIFFERENCE_MET = 5,
+        MENU_CONDITION_BOLT_THRESHOLD_AND_COUNT_DIFFERENCE_MET = 6
     };
     char buf[0x100];
     Suffixes sfx;
@@ -149,7 +150,7 @@ void FUN_00216c48(void *callback_context, Menu *menu, s32 follow_entry_link) {
     case MENU_CONDITION_COUNT_DIFFERENCE_MET:
         ok = !(compute_clamped_count_difference() < e->unkA);
         break;
-    case 6:
+    case MENU_CONDITION_BOLT_THRESHOLD_AND_COUNT_DIFFERENCE_MET:
         ok = current_bolt_count >= D_001DFFB0[e->unkA].unk14 && compute_clamped_count_difference() >= 4;
         break;
     default:
