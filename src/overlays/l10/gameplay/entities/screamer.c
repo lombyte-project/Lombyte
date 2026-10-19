@@ -126,6 +126,13 @@ extern V_2E0630 D_L10_00174360_2E0630 __asm__("D_L10_001742E0");
 
 void screamer_update(Moby *moby) __asm__("FUN_L10_002df270");
 void screamer_update(Moby *moby) {
+    enum {
+        SCREAMER_STATE_INITIALIZE = 0,
+        SCREAMER_STATE_FOLLOW_PATH = 5,
+        SCREAMER_STATE_RETURN_HOME = 8,
+        SCREAMER_STATE_WAIT_TO_WANDER = 9,
+        SCREAMER_STATE_WANDER = 10
+    };
     float waypoint[6];
     D_2E0630 *data = (D_2E0630 *)moby->pvars;
     Moby *leader;
@@ -139,7 +146,7 @@ void screamer_update(Moby *moby) {
     }
     moby->anim_speed = 1.0f;
     switch (moby->state) {
-    case 0:
+    case SCREAMER_STATE_INITIALIZE:
         data->f30 = 0.5f;
         data->f20 = 1.0f;
         data->h24 = 1;
@@ -174,7 +181,7 @@ void screamer_update(Moby *moby) {
             moby->state = 5;
         }
         break;
-    case 5: {
+    case SCREAMER_STATE_FOLLOW_PATH: {
         float distance;
         moby->anim_speed = 4.0f;
         qcopy(waypoint, &D_L10_001B0C30_2E0630[data->path]->nodes[data->node_index]);
@@ -229,7 +236,7 @@ void screamer_update(Moby *moby) {
         break;
     case 7:
         break;
-    case 8: {
+    case SCREAMER_STATE_RETURN_HOME: {
         float zero = 0.0f;
         float climb;
         func_L00_0025CC58_2E0630(&moby->rot.y, 0, zero, D_0015ED6C * 12.566371f);
@@ -249,7 +256,7 @@ void screamer_update(Moby *moby) {
         if (func_001F9D48_2E0630(&moby->pos, &data->home) < 2.0f) moby->state = 7;
         break;
     }
-    case 9: {
+    case SCREAMER_STATE_WAIT_TO_WANDER: {
         float radius;
         float angle;
         float zero;
@@ -266,7 +273,7 @@ void screamer_update(Moby *moby) {
         moby->state = 10;
         break;
     }
-    case 10:
+    case SCREAMER_STATE_WANDER:
         func_L00_002592B0_2E0630(moby, func_L00_001FF860_2E0630(data->wander_goal.x - moby->pos.x, data->wander_goal.y - moby->pos.y), &data->yaw_speed,
             0.05f, 0.3f, 0.2f);
         fast_vec_sub(&data->step, &data->wander_goal, &moby->pos);
