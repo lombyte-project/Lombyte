@@ -1193,7 +1193,8 @@ void FUN_L03_0029d2e0(char *moby, void *vel_in, int flag) {
         MOBY_CLASS_JOINT_ZERO_TEN_PARTICLE_EMITTER = 0x75,
         MOBY_CLASS_FIFTEEN_PARTICLE_BURST_EMITTER = 0x76,
         MOBY_CLASS_DEFAULT_COLOR_CHILD_EFFECT_EMITTER = 0x77,
-        MOBY_CLASS_GRAY_JOINT_ZERO_TEN_PARTICLE_EMITTER = 0x78
+        MOBY_CLASS_GRAY_JOINT_ZERO_TEN_PARTICLE_EMITTER = 0x78,
+        MOBY_CLASS_TEN_GRAY_PARTICLE_BURST_EMITTER = 0x84
     };
     float spot[4];
     float vel[4];
@@ -1256,7 +1257,7 @@ void FUN_L03_0029d2e0(char *moby, void *vel_in, int flag) {
             SPAWN_DEBRIS(0x6B9);
             SPAWN_DEBRIS(0x6BA);
             break;
-        case 0x84:
+        case MOBY_CLASS_TEN_GRAY_PARTICLE_BURST_EMITTER:
             SPAWN_DEBRIS(0x6BC);
             SPAWN_DEBRIS(0x6BE);
             SPAWN_DEBRIS(0x6BF);
