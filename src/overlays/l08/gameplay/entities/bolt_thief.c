@@ -2022,6 +2022,10 @@ extern void func_L00_0023A788_4BE8(void) __asm__("FUN_L08_002445d8");
 extern int D_L08_00174658_lui __asm__("D_L08_00174658") __attribute__((section(".data")));
 
 void FUN_L08_002e3870(struct Moby *moby) {
+    enum {
+        MOBY_CLASS_FIVE_BOLT_PICKUP = 0x3DC,
+        MOBY_CLASS_TEN_BOLT_PICKUP = 0x3DD
+    };
     char *cam;
     float direction[4];
     float point[4];
@@ -2037,10 +2041,10 @@ void FUN_L08_002e3870(struct Moby *moby) {
         case 0x279:
             moby->scale = moby->pclass->scale * D_L08_00161CB4_gp;
             break;
-        case 0x3DC:
+        case MOBY_CLASS_FIVE_BOLT_PICKUP:
             moby->scale = moby->pclass->scale * D_L08_00161CB8;
             break;
-        case 0x3DD:
+        case MOBY_CLASS_TEN_BOLT_PICKUP:
             moby->scale = moby->pclass->scale * D_L08_00161CBC_gp;
             break;
         }
@@ -2106,11 +2110,11 @@ void FUN_L08_002e3870(struct Moby *moby) {
             break;
         }
         switch (moby->oclass) {
-        case 0x3DD:
+        case MOBY_CLASS_TEN_BOLT_PICKUP:
             vars->f60 = fast_add_rotations_c4(vars->f60, D_L08_00161CAC_gp * 0.017453292f * frame_time);
             vars->f64 = fast_add_rotations_c4(vars->f64, D_L08_00161CB0 * 0.017453292f * frame_time);
             break;
-        case 0x3DC:
+        case MOBY_CLASS_FIVE_BOLT_PICKUP:
             vars->f60 = fast_add_rotations_c4(vars->f60, D_L08_00161CA4_gp * 0.017453292f * frame_time);
             vars->f64 = fast_add_rotations_c4(vars->f64, D_L08_00161CA8 * 0.017453292f * frame_time);
             break;
@@ -2261,10 +2265,10 @@ void FUN_L08_002e3870(struct Moby *moby) {
                     value = n * 100;
                     break;
                 }
-                case 0x3DD:
+                case MOBY_CLASS_TEN_BOLT_PICKUP:
                     value = 10;
                     break;
-                case 0x3DC:
+                case MOBY_CLASS_FIVE_BOLT_PICKUP:
                     value = 5;
                     break;
                 default:
@@ -2314,10 +2318,10 @@ void FUN_L08_002e3870(struct Moby *moby) {
             BoltSource_4BE8 *source;
 
             switch (moby->oclass) {
-            case 0x3DD:
+            case MOBY_CLASS_TEN_BOLT_PICKUP:
                 value = 10;
                 break;
-            case 0x3DC:
+            case MOBY_CLASS_FIVE_BOLT_PICKUP:
                 value = 5;
                 break;
             default:
