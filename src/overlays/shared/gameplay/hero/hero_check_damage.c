@@ -2540,7 +2540,9 @@ f32 approach_value_211380(f32, f32, f32 *) __asm__("FUN_00213ed8");
 void FUN_L00_0025b8c0_211380(f32 *, f32 *, f32, f32, f32, f32) __asm__("FUN_L00_0025b8c0");
 void FUN_L00_00211380(void) {
     enum {
-        HERO_VEHICLE_MODE_NONE = 0
+        HERO_VEHICLE_MODE_NONE = 0,
+        VEHICLE_MODE_CLANK = 1,
+        VEHICLE_MODE_GIANT_CLANK = 2
     };
     switch (hero.vehicle_mode) {
     case HERO_VEHICLE_MODE_NONE:
@@ -2548,12 +2550,12 @@ void FUN_L00_00211380(void) {
         hero.unk22C = 0.7f;
         hero.unk230 = 0.45f;
         break;
-    case 1:
+    case VEHICLE_MODE_CLANK:
         hero.unk228 = 0.59999996f;
         hero.unk22C = 0.45000002f;
         hero.unk230 = 0.3f;
         break;
-    case 2:
+    case VEHICLE_MODE_GIANT_CLANK:
         hero.unk228 = 5.25f;
         hero.unk22C = 4.45f;
         hero.unk230 = 3.75f;
