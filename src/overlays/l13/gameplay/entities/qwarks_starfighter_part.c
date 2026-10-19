@@ -119,6 +119,7 @@ void FUN_L13_002eac00(void *mobyp, void *pp) {
     enum {
         STARFIGHTER_COMMAND_TIMED_VOLLEY = 1,
         STARFIGHTER_COMMAND_ALTERNATING_ATTACKS = 2,
+        STARFIGHTER_COMMAND_REPEATED_TARGETED_ATTACK = 3,
         STARFIGHTER_COMMAND_REPEATED_VECTOR_ATTACK = 7
     };
     char *moby = mobyp;
@@ -134,7 +135,7 @@ void FUN_L13_002eac00(void *mobyp, void *pp) {
         goto s1;
     case STARFIGHTER_COMMAND_ALTERNATING_ATTACKS:
         goto s2;
-    case 3:
+    case STARFIGHTER_COMMAND_REPEATED_TARGETED_ATTACK:
         goto s3;
     case 4:
         goto s4;
