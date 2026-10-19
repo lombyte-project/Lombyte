@@ -177,6 +177,9 @@ void FUN_L00_00210c80_210ce8(void *, s32, f32, f32) __asm__("FUN_L00_00210c80");
 
 extern T_210ce8 D_L18_00178B00[];
 s32 FUN_L18_00218a90(s32 arg) {
+    enum {
+        HERO_VEHICLE_MODE_NORMAL = 0
+    };
     u8 *m;
     T_210ce8 *tbl;
     u8 *mob;
@@ -247,7 +250,7 @@ s32 FUN_L18_00218a90(s32 arg) {
         v.i[2] = 0;
     }
     switch (hero.vehicle_mode) {
-    case 0:
+    case HERO_VEHICLE_MODE_NORMAL:
         mob = ((u8 *)hero.unk2280);
         if (mob != 0 && (*(s16 *)(mob + 0xA6) == 0x4EB || *(s16 *)(mob + 0xA6) == 0x558)) {
             id = 0x80;
