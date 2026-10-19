@@ -208,7 +208,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x3D: {
+    case HERO_STATE_DYING: {
         struct Hero *p = &hero;
         p->state.control_mode = 0x14;
         p->unk2284 = 0;
@@ -1026,7 +1026,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0x25, 0, (float)scale_game_frames(6));
         break;
     }
-    case 0x79: {
+    case HERO_STATE_SLIP: {
         struct Hero *p = &hero;
         p->state.control_mode = 2;
         p->unk2284 = 0;
