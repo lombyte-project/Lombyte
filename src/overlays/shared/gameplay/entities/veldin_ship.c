@@ -1178,6 +1178,7 @@ void decoy_glove_update(unsigned char *moby) {
         DECOY_GLOVE_INITIALIZE = 0,
         DECOY_GLOVE_RELEASE_DECOY = 3,
         DECOY_GLOVE_WAIT_AFTER_RELEASE = 4,
+        DECOY_GLOVE_ENTER_SKIP_TARGET_FOLLOW_AND_SPAWN = 5,
         DECOY_GLOVE_SKIP_TARGET_FOLLOW_AND_SPAWN = 6
     };
     extern void mark_moby_for_removal();
@@ -1272,7 +1273,7 @@ L3D34:
         if (*(int *)(h + 0x2084) != 0x23 && *(unsigned char *)(h + 0x20A8) == 0) moby[0x20] = 2;
         break;
     }
-    case 5:
+    case DECOY_GLOVE_ENTER_SKIP_TARGET_FOLLOW_AND_SPAWN:
         moby[0x20] = 6;
         break;
     case DECOY_GLOVE_SKIP_TARGET_FOLLOW_AND_SPAWN:
