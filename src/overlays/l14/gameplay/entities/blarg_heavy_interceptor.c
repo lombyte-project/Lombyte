@@ -433,6 +433,14 @@ extern f32 D_L14_001613A4_c618 __asm__("D_L14_001613A4") __attribute__((sda));
 extern Vec4 D_L14_00174560;
 void FUN_L14_002ac618(struct Moby *m);
 void FUN_L14_002ac618(struct Moby *m) {
+    enum {
+        INTERCEPTOR_STATE_INITIALIZE = 0,
+        INTERCEPTOR_STATE_PATROL_AND_SCAN = 1,
+        INTERCEPTOR_STATE_TRACK_TARGET = 3,
+        INTERCEPTOR_STATE_REJOIN_PATROL = 6,
+        INTERCEPTOR_STATE_INITIALIZE_DEATH_FALL = 7,
+        INTERCEPTOR_STATE_DEATH_FALL = 9
+    };
     char *d = (char *)m->pvars;
     float v[4];
     float w[4];
@@ -470,7 +478,7 @@ void FUN_L14_002ac618(struct Moby *m) {
         *(s16 *)(d + 0x200) = 0;
     }
     switch (m->state) {
-    case 0:
+    case INTERCEPTOR_STATE_INITIALIZE:
         FUN_002141f8_c618(m)[0xE] = 1;
         if (*(s16 *)(d + 0x1B6) == 1) {
             m->flags = (m->flags | 0x41) & 0xEFFF;
@@ -519,7 +527,7 @@ void FUN_L14_002ac618(struct Moby *m) {
         m->state = 1;
         m->command = 0;
         break;
-    case 1: {
+    case INTERCEPTOR_STATE_PATROL_AND_SCAN: {
         int found;
         int hit;
 
@@ -570,7 +578,7 @@ void FUN_L14_002ac618(struct Moby *m) {
         *(s16 *)(d + 0x1F2) = scale_game_frames(D_L14_001613D0);
         break;
     }
-    case 3:
+    case INTERCEPTOR_STATE_TRACK_TARGET:
         m->glow_color = 0xFF000000 | (D_L14_00161414 << 16) | (D_L14_00161410 << 8) | D_L14_0016140C;
         if (*(struct Moby **)(d + 0x18C) != 0) {
             *(s16 *)(d + 0x200) = 1;
@@ -660,7 +668,7 @@ void FUN_L14_002ac618(struct Moby *m) {
             m->state = 6;
         }
         break;
-    case 6: {
+    case INTERCEPTOR_STATE_REJOIN_PATROL: {
         int i;
         int n;
         float dist;
@@ -696,7 +704,7 @@ void FUN_L14_002ac618(struct Moby *m) {
         ease_c618((f32 *)(d + 0x178), v[2], (f32 *)(d + 0x188), D_L14_001613A0_c618, D_L14_001613A4_c618, 0.0f);
         break;
     }
-    case 7: {
+    case INTERCEPTOR_STATE_INITIALIZE_DEATH_FALL: {
         s32 voice;
         float ang;
 
@@ -732,7 +740,7 @@ void FUN_L14_002ac618(struct Moby *m) {
         FUN_L14_002aead8_c618(m);
         return;
     }
-    case 9: {
+    case INTERCEPTOR_STATE_DEATH_FALL: {
         int i;
 
         add_vector_c618(&m->pos, &m->pos, d + 0x1E0);
