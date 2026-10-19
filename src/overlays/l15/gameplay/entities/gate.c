@@ -400,6 +400,13 @@ extern f32 D_L15_001614FC __attribute__((sda));
 extern f32 D_L15_00161500 __attribute__((sda));
 
 void FUN_L15_002a3ba8(struct Moby *moby) {
+    enum {
+        SWINGING_DOOR_INITIALIZE = 0,
+        SWINGING_DOOR_CLOSED = 1,
+        SWINGING_DOOR_OPENING = 2,
+        SWINGING_DOOR_OPEN = 3,
+        SWINGING_DOOR_CLOSING = 4
+    };
     DoorVars *vars = (DoorVars *)moby->pvars;
     s32 open = 0;
     s32 close = 0;
@@ -437,7 +444,7 @@ void FUN_L15_002a3ba8(struct Moby *moby) {
         close = 0;
     }
     switch (moby->state) {
-    case 0:
+    case SWINGING_DOOR_INITIALIZE:
         if (vars->reverse) {
             moby->flags |= 0x8000;
         }
@@ -451,7 +458,7 @@ void FUN_L15_002a3ba8(struct Moby *moby) {
         moby->rot.z = yaw;
         moby->state = 1;
         break;
-    case 1:
+    case SWINGING_DOOR_CLOSED:
         vars->swing = 0.0f;
         moby->rot.z = vars->closed_yaw;
         if (open) {
@@ -459,7 +466,7 @@ void FUN_L15_002a3ba8(struct Moby *moby) {
             vars->sound = allocate_voice_for_target_entry(0, 0, (int)moby);
         }
         break;
-    case 2:
+    case SWINGING_DOOR_OPENING:
         vars->swing = fast_add_rotations(vars->swing, D_L15_001614FC / D_L15_00161500 * DEG_TO_RAD * frame_time);
         limit = D_L15_001614FC * DEG_TO_RAD;
         if (vars->swing < limit) {
@@ -472,13 +479,13 @@ void FUN_L15_002a3ba8(struct Moby *moby) {
         }
         moby->rot.z = fast_add_rotations(vars->closed_yaw, step);
         break;
-    case 3:
+    case SWINGING_DOOR_OPEN:
         if (close) {
             moby->state = 4;
             vars->sound = allocate_voice_for_target_entry(0, 0, (int)moby);
         }
         break;
-    case 4:
+    case SWINGING_DOOR_CLOSING:
         vars->swing = fast_add_rotations(vars->swing, -(D_L15_001614FC / D_L15_00161500 * DEG_TO_RAD * frame_time));
         if (0.0f < vars->swing) {
             vars->swing = 0.0f;
