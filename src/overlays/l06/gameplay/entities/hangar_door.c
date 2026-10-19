@@ -1059,7 +1059,10 @@ extern int func_0020BFC8_2F69D0(int, int) __asm__("FUN_0020b178");
 void FUN_L06_002f55a0(Moby *moby) {
     enum {
         INITIALIZE_DRAWBRIDGE_SEGMENTS = 0,
-        ANIMATE_DRAWBRIDGE_AND_CAMERA = 4
+        WAIT_FOR_DRAWBRIDGE_ACTIVATION = 1,
+        FADE_BEFORE_DRAWBRIDGE_ANIMATION = 3,
+        ANIMATE_DRAWBRIDGE_AND_CAMERA = 4,
+        FADE_AFTER_DRAWBRIDGE_ANIMATION = 5
     };
     Vec_2F69D0 position, rotation, from_pos, from_rot, to_pos, to_rot;
     Data_2F69D0 *data = (struct Data_2F69D0 *)moby->pvars;
@@ -1112,7 +1115,7 @@ void FUN_L06_002f55a0(Moby *moby) {
         func_L06_002F71A8_2F69D0(moby);
         break;
     }
-    case 1:
+    case WAIT_FOR_DRAWBRIDGE_ACTIVATION:
         if (D_001413F4_r[0] == 1 && D_0013D4D6[0] != 0 && D_L06_0015F5C4 == 0) {
             D_L06_0015F3FC = 1.0f;
             moby->state = 3;
@@ -1121,7 +1124,7 @@ void FUN_L06_002f55a0(Moby *moby) {
         break;
     case 2:
         break;
-    case 3:
+    case FADE_BEFORE_DRAWBRIDGE_ANIMATION:
         previous_fade = data->fade;
         func_00214D28_2F69D0(&data->fade, 1.0f, 1.0f / func_001F9850_2F69D0(20));
         D_L06_0015F3FC = 1.0f - func_001F9B88_2F69D0(data->fade);
@@ -1182,7 +1185,7 @@ void FUN_L06_002f55a0(Moby *moby) {
         func_L00_002EBE88_2F69D0(&position);
         func_L00_002EBEE0_2F69D0(&rotation);
         break;
-    case 5:
+    case FADE_AFTER_DRAWBRIDGE_ANIMATION:
         previous_fade = data->fade;
         func_00214D28_2F69D0(&data->fade, 1.0f, 1.0f / func_001F9850_2F69D0(20));
         D_L06_0015F3FC = 1.0f - func_001F9B88_2F69D0(data->fade);
