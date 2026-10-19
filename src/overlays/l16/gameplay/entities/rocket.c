@@ -2820,7 +2820,9 @@ void FUN_L16_002d5ef8(struct Moby *m) {
     enum {
         SCENE_STATE_INITIALIZE = 0,
         SCENE_STATE_WAIT_FOR_TRIGGER = 1,
-        SCENE_STATE_COMPLETE = 4
+        SCENE_STATE_WAIT_TO_HIDE = 2,
+        SCENE_STATE_COMPLETE = 4,
+        SCENE_STATE_HIDDEN_WAIT_FOR_TRIGGER = 5
     };
     float position[4], rotation[4];
     L16SceneData_q *d = (L16SceneData_q *)m->pvars;
@@ -2853,7 +2855,7 @@ void FUN_L16_002d5ef8(struct Moby *m) {
         helper = FUN_L16_002d5bc8_q(d->helper, 0);
         goto notify;
     }
-    case 2:
+    case SCENE_STATE_WAIT_TO_HIDE:
         if (d->camera >= 0)
             *(unsigned short *)(D_0014162A_q) = *(unsigned short *)&d->camera;
         if (tick_countdown_32_q(&d->timer_q)) {
@@ -2890,7 +2892,7 @@ void FUN_L16_002d5ef8(struct Moby *m) {
         break;
     case SCENE_STATE_COMPLETE:
         break;
-    case 5:
+    case SCENE_STATE_HIDDEN_WAIT_FOR_TRIGGER:
         if (is_point_inside_clip_volume(D_0013F3D0, d->trigger)) {
             FUN_L16_002d5bc8_q(d->helper, 0);
             FUN_L16_002ceca8_q(d->path);
