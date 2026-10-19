@@ -1013,7 +1013,8 @@ void FUN_L03_0029caa8(char *moby, void *vel_in, int quiet) {
     enum {
         MOBY_CLASS_ALTERNATE_COLOR_CHILD_EFFECT_EMITTER = 0x4B,
         MOBY_CLASS_TWO_JOINT_PARTICLE_EMITTER = 0x74,
-        MOBY_CLASS_FIFTEEN_PARTICLE_BURST_EMITTER = 0x76
+        MOBY_CLASS_FIFTEEN_PARTICLE_BURST_EMITTER = 0x76,
+        MOBY_CLASS_DEFAULT_COLOR_CHILD_EFFECT_EMITTER = 0x77
     };
     float vel[4];
     float *vp;
@@ -1084,7 +1085,7 @@ void FUN_L03_0029caa8(char *moby, void *vel_in, int quiet) {
         }
         break;
     case MOBY_CLASS_ALTERNATE_COLOR_CHILD_EFFECT_EMITTER:
-    case 0x77:
+    case MOBY_CLASS_DEFAULT_COLOR_CHILD_EFFECT_EMITTER:
         FUN_L00_001fefc8(data + 0x12F);
         if (quiet != 0 && ((unsigned char *)data)[0x12F] == 0) {
             break;
