@@ -1793,9 +1793,14 @@ extern int func_001FA898_caa18(float) __asm__("FUN_001fa6d0");
 
 void wall_button_update(struct Moby *m) __asm__("FUN_L16_002cf198");
 void wall_button_update(struct Moby *m) {
+    enum {
+        WALL_BUTTON_STATE_INITIALIZE = 0,
+        WALL_BUTTON_STATE_WAIT_FOR_HIT = 1,
+        WALL_BUTTON_STATE_ACTIVATED = 2
+    };
     char *d = (char *)m->pvars;
     switch ((*(unsigned char *)((char *)(m) + (0x20)))) {
-    case 0:
+    case WALL_BUTTON_STATE_INITIALIZE:
         (*(float *)((char *)(d) + (0x68))) = random_angle_radians();
         (*(float *)((char *)(d) + (0x30))) = 0.001f;
         if ((*(unsigned char *)((char *)(((char *)&(*(short *)&visited52_lui)) + (current_level_index << 4)) +
@@ -1809,7 +1814,7 @@ void wall_button_update(struct Moby *m) {
         } else
             (*(unsigned char *)((char *)(m) + (0x20))) = 1;
         break;
-    case 1: {
+    case WALL_BUTTON_STATE_WAIT_FOR_HIT: {
         int color;
         (*(float *)((char *)(d) + (0x68))) =
             fast_add_rotations((*(float *)((char *)(d) + (0x68))), D_0015ED6C * 6.2831855f);
@@ -1834,7 +1839,7 @@ void wall_button_update(struct Moby *m) {
         }
         break;
     }
-    case 2: {
+    case WALL_BUTTON_STATE_ACTIVATED: {
         int color = func_001FA898_caa18(
             (fast_sin((*(float *)((char *)(d) + (0x68)))) * 0.5f + 0.5f) * 128.0f);
         if (color > 128)
