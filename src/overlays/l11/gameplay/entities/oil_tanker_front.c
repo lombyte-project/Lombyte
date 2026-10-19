@@ -525,10 +525,15 @@ void FUN_L11_003180a0(struct Moby *, int);
 /* Chain head update: spawns the eight 0x4F1 links, waits for D_001413D4 to reach 0x32, then moves along its path and runs the link helpers. */
 void oil_tanker_front_update(struct Moby *moby) __asm__("FUN_L11_003172c0");
 void oil_tanker_front_update(struct Moby *moby) {
+    enum {
+        OIL_TANKER_INITIALIZE = 0,
+        OIL_TANKER_WAIT_FOR_CAMERA_MODE = 1,
+        OIL_TANKER_FOLLOW_PATH_WITH_DAMAGE = 2
+    };
     struct L11ChainVars *d = (struct L11ChainVars *)moby->pvars;
 
     switch (moby->state) {
-    case 0: {
+    case OIL_TANKER_INITIALIZE: {
         int i;
 
         FUN_L11_003180a0(moby, d->path_index);
@@ -563,7 +568,7 @@ void oil_tanker_front_update(struct Moby *moby) {
         }
         break;
     }
-    case 1:
+    case OIL_TANKER_WAIT_FOR_CAMERA_MODE:
         if (camera_secondary_mode[0] == 0x32) {
             int i;
 
@@ -576,7 +581,7 @@ void oil_tanker_front_update(struct Moby *moby) {
             }
         }
         /* fallthrough */
-    case 2: {
+    case OIL_TANKER_FOLLOW_PATH_WITH_DAMAGE: {
         int i;
 
         d->t += D_L11_00162320;
