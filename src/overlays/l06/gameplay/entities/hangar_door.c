@@ -2982,6 +2982,7 @@ void FUN_L06_002fa9c0(char *moby) {
         HIT_RESPONSE_SKIP_REACTION = 0,
         HIT_RESPONSE_DEATH = 1,
         HIT_RESPONSE_DEATH_SEQUENCE = 2,
+        HIT_RESPONSE_NONLETHAL_REACTION = 3,
         HIT_RESPONSE_NONLETHAL_FALLBACK = 5,
         HIT_RESPONSE_NO_REACTION = 11
     };
@@ -3046,7 +3047,7 @@ start_recovery:
         switch (kind) {
         case HIT_RESPONSE_SKIP_REACTION: case HIT_RESPONSE_NO_REACTION: default:
             goto hit_response_done;
-        case 3: case 4: case HIT_RESPONSE_NONLETHAL_FALLBACK: case 6: case 7: case 8: case 9: case 10:
+        case HIT_RESPONSE_NONLETHAL_REACTION: case 4: case HIT_RESPONSE_NONLETHAL_FALLBACK: case 6: case 7: case 8: case 9: case 10:
             *(unsigned char *)(data + 0x67) = 200;
             break;
         case HIT_RESPONSE_DEATH:
