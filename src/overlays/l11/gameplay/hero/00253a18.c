@@ -122,7 +122,8 @@ extern int func_001F9908_r(int *) __asm__("FUN_001f9740");
 
 void FUN_L11_00253a18(void) {
     enum {
-        HERO_STATE_APPROACH_TARGET_POSE = 101
+        HERO_STATE_APPROACH_TARGET_POSE = 101,
+        HERO_STATE_AT_TARGET_POSE = 103
     };
     struct Moby *moby;
     int prevSub;
@@ -888,7 +889,7 @@ void FUN_L11_00253a18(void) {
                         hero_set_state(0x65, 1);
                     }
                     break;
-                case 103:
+                case HERO_STATE_AT_TARGET_POSE:
                     if ((hero.unkA98 & 2) || hero.unk1650 != 0) {
                         hero_set_state(HERO_STATE_IDLE, 1);
                     }
