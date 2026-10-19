@@ -1879,9 +1879,6 @@ void FUN_L07_00317cb0(char *moby, void *anchor) {
     }
 }
 
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L07_00317e60.s", FUN_L07_00317e60);
-#else
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_00313D28.c: func_L07_00319230). */
 typedef int RopeU128 __attribute__((mode(TI)));
 
@@ -1913,6 +1910,7 @@ typedef struct {
 } RopePuff;
 
 extern RopePart rope_parts[] __asm__("D_L07_0020C840");
+extern RopeVec D_L07_0020DB00_lui[] __asm__("D_L07_0020DB00");
 extern RopePuff *FUN_L00_0026d000(void *, float, float, float, int, void *, float, int);
 extern RopeVec D_L07_0020C700[];
 extern RopeVec D_L07_0020DAA0[][20];
@@ -2101,6 +2099,7 @@ float FUN_L07_00317e60(void *moby, void *anchor) {
     int idx2;
     RopePuff *p;
     RopePuff *q;
+    RopeVec *base;
     int k;
     short lf;
     lf = 200;
@@ -2118,7 +2117,11 @@ float FUN_L07_00317e60(void *moby, void *anchor) {
                     r = random_integer_below(20);
                     s = random_float_between(0.2f, 1.0f);
                     lerp_vector(v60, rope_grid[0][r], rope_grid[j][r], s);
-                    lerp_vector(vB0, D_L07_0020DB00_c[0], D_L07_0020DB00_c[j], s);
+                    /* Fakematch: a second label and a dead store keep this address out of the
+                     * loop-hoisted constant, so it is built in a1 next to the call. */
+                    base = D_L07_0020DB00_lui;
+                    lerp_vector(vB0, base[0], base[j], s);
+                    base = 0;
                     sc = random_float_between(60000.0f, 180000.0f);
                     p = FUN_L00_0026d000(v60, 0.0f, 1.0f, 1.03f, random_integer_below(5) + 1, v70, sc, 0x404040);
                     if (p != 0) {
@@ -2212,7 +2215,6 @@ float FUN_L07_00317e60(void *moby, void *anchor) {
     }
     return best;
 }
-#endif
 
 #define NOT_SDA
 

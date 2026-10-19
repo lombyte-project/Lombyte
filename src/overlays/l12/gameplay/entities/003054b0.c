@@ -1205,9 +1205,6 @@ void FUN_L12_003093c8(struct Moby *moby) {
         }
     }
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L12_003094a0.s", FUN_L12_003094a0);
-#else
 /* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002EDAA0.c: func_L12_0030A880). */
 typedef struct {
     char pad0[0x30];
@@ -1228,7 +1225,12 @@ void FUN_L12_003094a0(struct Moby *moby) {
     L12VendorMobyList *target_list;
     int phase;
     int index;
+    int never;
+    int held;
 
+    /* Fakematch: only gcse folds never, so the dead call below keeps a real insn in front of
+     * the helper's test until flow and the second jump-threading pass leaves its branch alone. */
+    never = 0;
     switch (moby->state) {
     case 0:
         moby->update_dist = 0xFF;
@@ -1239,6 +1241,9 @@ void FUN_L12_003094a0(struct Moby *moby) {
             list = &D_L12_0016CCE0;
             phase = list->phase;
             if (phase == 1 || phase == 7) {
+                /* Fakematch: see never. */
+                held = phase + 1;
+                if (never) cutscene_set_camera_target(held);
                 index = camera_target_index(list->phase);
                 target_list = &D_L12_0016CCE0;
                 cutscene_set_camera_target((int)target_list->mobys[index]);
@@ -1247,7 +1252,6 @@ void FUN_L12_003094a0(struct Moby *moby) {
         break;
     }
 }
-#endif
 
 #define NOT_SDA
 
