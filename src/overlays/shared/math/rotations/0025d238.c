@@ -536,17 +536,17 @@ void spawn_explosion(char *m, void *unused, char *pos, float fA, float fB, int n
                        float fC, float fD, float fE, float fF, int k10, float fG, int k11,
                        int spray_count, int effect_reduction_level, unsigned char flag) {
     Q_25e450 vb;
-    Q_25e450 v0;
+    Q_25e450 effect_vector_work;
     float dist;
     float f3;
     float t;
     int cnt4;
     int i;
 
-    *(u128_25e450 *)&v0 = 0;
-    v0.f[2] = frame_time_macro * 8.0f * fF;
+    *(u128_25e450 *)&effect_vector_work = 0;
+    effect_vector_work.f[2] = frame_time_macro * 8.0f * fF;
     f3 = D_L00_0015F5D4_macro + D_L00_0015F5D0_macro;
-    *(u128_25e450 *)&vb = *(u128_25e450 *)&v0;
+    *(u128_25e450 *)&vb = *(u128_25e450 *)&effect_vector_work;
     if (effect_reduction_level == -1) {
         effect_reduction_level = 0;
         if (1.7f < f3) effect_reduction_level = 1;
@@ -579,8 +579,8 @@ void spawn_explosion(char *m, void *unused, char *pos, float fA, float fB, int n
             random_int_between_25e450(scale_game_frames_25e450(0x3C), scale_game_frames_25e450(0x78)) - effect_reduction_level * 10, 1, -1, -1, dist);
         }
     }
-    subtract_vector_xyz_25e450(&v0, D_L00_00166DC0_25e450, pos);
-    dist = vector_length_xyz_25e450(&v0);
+    subtract_vector_xyz_25e450(&effect_vector_work, D_L00_00166DC0_25e450, pos);
+    dist = vector_length_xyz_25e450(&effect_vector_work);
     {
     if (spray_count != 0) {
         Q_25e450 d2;
@@ -592,10 +592,10 @@ void spawn_explosion(char *m, void *unused, char *pos, float fA, float fB, int n
         rnd.f[2] = random_float_between_25e450(-1.0f, 1.0f);
         *(u128_25e450 *)&d2 = *(u128_25e450 *)&rnd;
         if (dist < 14.0f) {
-            v0.f[2] += dist * 0.5f;
+            effect_vector_work.f[2] += dist * 0.5f;
             normalize_vector_xyz_25e450(&d2, &d2, dist / 5.0f * frame_time_macro);
-            normalize_vector_xyz_25e450(&v0, &v0, (dist + dist) * frame_time_macro);
-            add_vector_xyz_25e450(&d2, &d2, &v0);
+            normalize_vector_xyz_25e450(&effect_vector_work, &effect_vector_work, (dist + dist) * frame_time_macro);
+            add_vector_xyz_25e450(&d2, &d2, &effect_vector_work);
             func_L00_001FF548_25e450(&d2, &d2, frame_time_macro * 10.0f);
             func_L00_002B0738_25e450(pos, &d2, random_int_between_25e450(scale_game_frames_25e450(0x3C), scale_game_frames_25e450(0x5A)), 0, 0);
         }
