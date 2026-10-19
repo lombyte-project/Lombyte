@@ -48,6 +48,7 @@ extern void *memcpy(void *, const void *, u32);
 
 void _sceFs_Rcv_Intr(s32 *arg) {
     enum {
+        FS_COMPLETION_COPY_READ_BUFFERS = 2,
         FS_COMPLETION_COPY_DIRENT = 11,
         FS_COMPLETION_COPY_STAT = 12
     };
@@ -84,7 +85,7 @@ void _sceFs_Rcv_Intr(s32 *arg) {
         memcpy((void *)h.dest.v, pkt + 0x10, h.size.v);
     }
     switch (h.func.v) {
-    case 2:
+    case FS_COMPLETION_COPY_READ_BUFFERS:
         r = (FsRcvRead *)(pkt + 0x14);
         if (r->n1 > 0) {
             d = r->d1;
