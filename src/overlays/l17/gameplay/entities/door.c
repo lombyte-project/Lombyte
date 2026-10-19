@@ -2108,6 +2108,8 @@ void magnet_elevator_update(struct Moby *moby) {
     enum {
         MAGNET_ELEVATOR_STATE_INITIALIZE = 0,
         MAGNET_ELEVATOR_STATE_BLEND_CAMERA = 1,
+        MAGNET_ELEVATOR_STATE_MOVE_TO_FIRST_STOP = 4,
+        MAGNET_ELEVATOR_STATE_MOVE_TO_SECOND_STOP = 5,
         MAGNET_ELEVATOR_STATE_WAIT_AT_FIRST_STOP = 6,
         MAGNET_ELEVATOR_STATE_WAIT_AT_SECOND_STOP = 7
     };
@@ -2171,8 +2173,8 @@ void magnet_elevator_update(struct Moby *moby) {
     case 2:
     case 3:
         FUN_L17_002eea70_c(moby);
-    case 4:
-    case 5: {
+    case MAGNET_ELEVATOR_STATE_MOVE_TO_FIRST_STOP:
+    case MAGNET_ELEVATOR_STATE_MOVE_TO_SECOND_STOP: {
         float target;
         int s;
         W(moby, 0x90) = fast_tween_color(W(moby, 0x90), 0x80808040, 0.1f);
