@@ -3534,6 +3534,7 @@ void falling_rock_update(CapMoby *m) {
     enum {
         FALLING_ROCK_STATE_INITIALIZE = 0,
         FALLING_ROCK_STATE_WAIT_FOR_TRIGGER = 1,
+        FALLING_ROCK_STATE_WAIT_BEFORE_FALL = 2,
         FALLING_ROCK_STATE_FALLING = 3,
         FALLING_ROCK_STATE_FALLEN = 4
     };
@@ -3593,7 +3594,7 @@ void falling_rock_update(CapMoby *m) {
             }
         }
         break;
-    case 2:
+    case FALLING_ROCK_STATE_WAIT_BEFORE_FALL:
         FUN_L01_002f9000((Obj *)m);
         if (fast_dec_timer_s16(&v->rise)) {
             clear_u64_value(&v->rot);
