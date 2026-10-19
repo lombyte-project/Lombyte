@@ -85,6 +85,9 @@ extern void subtract_vector_xyz(void *dst, void *a, void *b);
 extern int hero_set_state(int, int) __asm__("FUN_L06_002356a0");
 extern char D_L06_0017C6A0[];
 int hero_set_state(int a, int b) {
+    enum {
+        HERO_STATE_GRIND_HURT = 0x42
+    };
     int old2088;
     char *moby;
     int old20A7;
@@ -1710,7 +1713,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x42: {
+    case HERO_STATE_GRIND_HURT: {
         struct Hero *p = &hero;
         p->state.control_mode = 0xF;
         p->unk2284 = 0;
