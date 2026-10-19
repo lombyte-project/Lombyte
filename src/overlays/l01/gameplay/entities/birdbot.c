@@ -1529,6 +1529,13 @@ extern s32 FUN_L01_002efbf8(void *, s32, s32);
 
 void peckbot_update(Mob577 *self) __asm__("FUN_L01_002efc60");
 void peckbot_update(Mob577 *self) {
+    enum {
+        PECKBOT_STATE_INITIALIZE = 0,
+        PECKBOT_STATE_RETURN_HOME = 5,
+        PECKBOT_STATE_ASCEND = 16,
+        PECKBOT_STATE_DESCEND = 17,
+        PECKBOT_STATE_FATAL_KNOCKBACK = 0x63
+    };
     Vec577 oldpos;
     Mob577Target target;
     Vec577 v70;
@@ -1633,7 +1640,7 @@ void peckbot_update(Mob577 *self) {
     }
     self->xA4 = 0xFF;
     switch (self->state) {
-    case 0:
+    case PECKBOT_STATE_INITIALIZE:
         qcopy(&v->home, &self->pos);
         v->x29 = 0;
         if (v->x20A != 0) {
@@ -1703,7 +1710,7 @@ void peckbot_update(Mob577 *self) {
             self->state = 14;
         }
         break;
-    case 17:
+    case PECKBOT_STATE_DESCEND:
         g17 = FUN_00213508(&self->pos, 0, 0.5f);
         approach_value(&v->vel.f[2], -(frame_time * 8.0f), frame_time_sq * 10.8f);
         self->pos.f[2] = self->pos.f[2] + v->vel.f[2];
@@ -1722,7 +1729,7 @@ void peckbot_update(Mob577 *self) {
             SET_ANIM(self, 2, 0, scale_game_frames(3));
         }
         break;
-    case 16:
+    case PECKBOT_STATE_ASCEND:
         g16 = FUN_00213508(&self->pos, 0, 0.5f);
         approach_value(&v->vel.f[2], frame_time * 8.0f, frame_time_sq * 10.8f);
         self->pos.f[2] += v->vel.f[2];
@@ -1913,7 +1920,7 @@ void peckbot_update(Mob577 *self) {
             self->pos.f[2] = g4;
         }
         break;
-    case 5:
+    case PECKBOT_STATE_RETURN_HOME:
         if (v->path != -1) {
             FUN_L01_0028b5e0(self, D_L01_001B0930[v->path], &v->home, &position_scratch);
         } else {
@@ -1971,7 +1978,7 @@ void peckbot_update(Mob577 *self) {
             v->xC8 = 0;
         }
         break;
-    case 0x63:
+    case PECKBOT_STATE_FATAL_KNOCKBACK:
         self->flags &= ~0x1000;
         if (mine_fall(self, v->knock) & 0x140) {
             clear_u64_value(&v70);
