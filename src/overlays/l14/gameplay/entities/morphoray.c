@@ -1233,12 +1233,16 @@ void enqueue_callback_list_1(int arg0, int arg1) __asm__("FUN_001f4600");
  * program. The size-matched rac1-decomp neighbour was the callback this one enqueues,
  * not this body. */
 void FUN_L14_00307a80(struct Moby *moby) {
+    enum {
+        DRAW_CALLBACK_INITIALIZE = 0,
+        DRAW_CALLBACK_ENQUEUE = 1
+    };
     switch (moby->state) {
-    case 0:
+    case DRAW_CALLBACK_INITIALIZE:
         moby->state = 1;
         moby->update_dist = 0xFF;
         break;
-    case 1:
+    case DRAW_CALLBACK_ENQUEUE:
         enqueue_callback_list_1((int)FUN_L12_002e71b0, (int)moby);
         break;
     }
