@@ -579,7 +579,9 @@ void liftcar_platform_update(struct Moby *moby) __asm__("FUN_L02_002e2228");
 void liftcar_platform_update(struct Moby *moby) {
     enum {
         LIFTCAR_PLATFORM_INITIALIZE = 0,
-        LIFTCAR_PLATFORM_WAIT_FOR_MISSION_GATE = 1
+        LIFTCAR_PLATFORM_WAIT_FOR_MISSION_GATE = 1,
+        LIFTCAR_PLATFORM_WAIT_FOR_RIDER_OR_HERO_ABOVE = 3,
+        LIFTCAR_PLATFORM_WAIT_FOR_RIDER_OR_HERO_BELOW = 5
     };
     char *data = (char *)moby->pvars;
     struct Moby *driver = &D_L02_0015FFD8[*(int *)(data + 0xA0)];
@@ -606,8 +608,8 @@ void liftcar_platform_update(struct Moby *moby) {
             moby->state = 5;
         }
         break;
-    case 3:
-    case 5:
+    case LIFTCAR_PLATFORM_WAIT_FOR_RIDER_OR_HERO_ABOVE:
+    case LIFTCAR_PLATFORM_WAIT_FOR_RIDER_OR_HERO_BELOW:
         ride = 0;
         if (hero.ground_moby == moby && hero.air_frames.s == 0 && moby->command == 0) {
             ride = 1;
