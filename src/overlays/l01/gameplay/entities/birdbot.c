@@ -2576,6 +2576,9 @@ void stationary_ship_update(CarrierMoby *m) {
         CARRIER_STATE_WAIT_FOR_TRIGGER = 1,
         CARRIER_STATE_FOLLOW_PATH = 2
     };
+    enum {
+        CARRIER_RIDER_CLASS_TURRET = 0x1CB
+    };
     CarrierVars *v;
     CarrierCamVars *cv;
     PePath *p;
@@ -2691,7 +2694,7 @@ void stationary_ship_update(CarrierMoby *m) {
             case 0x1AB:
                 D_L01_0015FFD8_m[v->riders[j]].state = 4;
                 break;
-            case 0x1CB:
+            case CARRIER_RIDER_CLASS_TURRET:
                 rv = (CarrierRiderVars *)D_L01_0015FFD8_m[v->riders[j]].pvars;
                 rv->dropped = 1;
                 rv->drop_timer = scale_game_frames(0x1E);
