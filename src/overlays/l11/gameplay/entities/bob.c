@@ -558,6 +558,8 @@ void FUN_L11_002d14b0(void *arg) {
         RESORT_OWNER_CHECK_INITIAL_DIALOGUE = 1,
         RESORT_OWNER_INITIAL_DIALOGUE = 2,
         RESORT_OWNER_WAIT_TO_FOLLOW_HERO = 3,
+        RESORT_OWNER_FOLLOW_HERO = 4,
+        RESORT_OWNER_FOLLOW_DISTANT_HERO = 5,
         RESORT_OWNER_MOVE_TO_PATH_POINT = 6,
         RESORT_OWNER_JUMP_TO_TARGET = 7,
         RESORT_OWNER_MOVE_TO_GATE_TARGET = 8,
@@ -657,14 +659,14 @@ void FUN_L11_002d14b0(void *arg) {
             FUN_L11_002d2340(moby, (char *)&hero.motion.pos) && proximity == 1)
             FUN_L11_002d2088_c(moby, 4);
         break;
-    case 4:
+    case RESORT_OWNER_FOLLOW_HERO:
         if (vector_distance(&moby->pos, &hero.motion.pos) < 3.0f ||
             !FUN_L11_002d2340(moby, (char *)&hero.motion.pos) || proximity == 2)
             FUN_L11_002d2088_c(moby, 3);
         else if (vector_distance(&moby->pos, &hero.motion.pos) > 8.0f)
             FUN_L11_002d2088_c(moby, 5);
         break;
-    case 5:
+    case RESORT_OWNER_FOLLOW_DISTANT_HERO:
         if (vector_distance(&moby->pos, &hero.motion.pos) < 3.0f ||
             !FUN_L11_002d2340(moby, (char *)&hero.motion.pos) || proximity == 2)
             FUN_L11_002d2088_c(moby, 3);
