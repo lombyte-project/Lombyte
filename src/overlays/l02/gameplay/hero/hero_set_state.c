@@ -80,6 +80,8 @@ extern char D_L02_0017C520[];
 int hero_set_state(int a, int b) {
     enum {
         HERO_STATE_MOVE_TO_TARGET = 0x65,
+        HERO_STATE_STOP_AT_TARGET = 0x66,
+        HERO_STATE_IDLE_AT_TARGET = 0x67,
         HERO_STATE_DEATH_FALL = 0x77
     };
     int old2088;
@@ -163,7 +165,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x67: {
+    case HERO_STATE_IDLE_AT_TARGET: {
         struct Hero *p = &hero;
         p->state.control_mode = 0;
         p->unk2284 = 0;
@@ -392,7 +394,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x66: {
+    case HERO_STATE_STOP_AT_TARGET: {
         struct Hero *p = &hero;
         char *v = (char *)&p->motion.unk110;
         p->state.control_mode = 1;
