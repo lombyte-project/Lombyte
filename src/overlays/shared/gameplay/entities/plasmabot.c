@@ -303,6 +303,7 @@ void FUN_L14_002b17d8(char *moby) {
     enum {
         PLASMABOT_INITIALIZE = 0,
         PLASMABOT_FOLLOW_PATH_FORWARD = 3,
+        PLASMABOT_AIM_AT_TARGET = 4,
         PLASMABOT_FOLLOW_PATH_BACKWARD = 8,
         PLASMABOT_RETURN_TO_PATH_START = 9,
         PLASMABOT_FACE_TARGET_AND_WAIT = 13
@@ -506,7 +507,7 @@ void FUN_L14_002b17d8(char *moby) {
             }
         }
         break;
-    case 4: {
+    case PLASMABOT_AIM_AT_TARGET: {
         float ang;
         float k;
         float aim;
