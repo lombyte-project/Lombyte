@@ -1296,6 +1296,7 @@ void FUN_L11_0030fe50(struct Moby *m, unsigned char *d, float *t) {
     enum {
         HIT_REACTION_NONE = 0,
         HIT_REACTION_DEATH = 1,
+        HIT_REACTION_DEATH_KNOCKBACK = 2,
         HIT_REACTION_NO_RESPONSE = 11
     };
     int out;
@@ -1307,7 +1308,7 @@ void FUN_L11_0030fe50(struct Moby *m, unsigned char *d, float *t) {
         }
         switch (hit_fe50(m, info, t, 0, &out, 0, 0, 4)) {
         case HIT_REACTION_DEATH:
-        case 2:
+        case HIT_REACTION_DEATH_KNOCKBACK:
             *t = 0.0f;
             break;
         case HIT_REACTION_NONE:
