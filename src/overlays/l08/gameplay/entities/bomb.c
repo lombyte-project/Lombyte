@@ -1579,6 +1579,7 @@ void blarg_bombthrower_update(struct Moby *moby) {
         BOMBTHROWER_STATE_THROW_BOMB = 5,
         BOMBTHROWER_STATE_MOVE_ONTO_WAYPOINT = 6,
         BOMBTHROWER_STATE_DAMAGE_KNOCKBACK = 0x5A,
+        BOMBTHROWER_STATE_WAIT_FOR_FALL_RECOVERY = 0x5B,
         BOMBTHROWER_STATE_FALL_RECOVERY = 0x5D,
         BOMBTHROWER_STATE_DYING = 0x63
     };
@@ -1842,7 +1843,7 @@ void blarg_bombthrower_update(struct Moby *moby) {
             vars->i134 = scale_game_frames_c2(0xF0);
         }
         break;
-    case 0x5B:
+    case BOMBTHROWER_STATE_WAIT_FOR_FALL_RECOVERY:
         if (moby->anim_flags & 2) {
             if (moby->prev_seq != 7) {
                 FUN_00212f90(moby, 7, 0, 3);
