@@ -345,6 +345,9 @@ extern s32 FUN_L00_00211870(f32);
 extern s32 D_L03_0015F688_gp __asm__("D_L03_0015F688") __attribute__((sda));
 extern s32 D_L03_0015F68C_gp __asm__("D_L03_0015F68C") __attribute__((sda));
 void FUN_L03_0020ef60(void) {
+    enum {
+        HERO_STATE_MOVE_TO_TARGET_POSITION = 0x65
+    };
     struct MobyView *moby = MV(hero.moby);
     s32 sub = hero.state.step;
     s32 anim = moby->b53;
@@ -2044,7 +2047,7 @@ void FUN_L03_0020ef60(void) {
         FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.velocity, 0.004f);
         break;
     }
-    case 0x65: {
+    case HERO_STATE_MOVE_TO_TARGET_POSITION: {
         f32 l;
         f32 k;
         subtract_vector_xyz(&v0, &hero.unk1640, &hero.motion.pos);
