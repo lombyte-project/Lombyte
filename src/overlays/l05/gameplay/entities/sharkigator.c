@@ -3188,10 +3188,14 @@ extern s32 D_L05_001612D8 __attribute__((section(".sdata")));
 /* Update of the level 05 water mobys: sets up the 48-record water chain, moves the surface by state and keeps its record in step. */
 void water_update(struct Moby *moby) __asm__("FUN_L05_0030ca80");
 void water_update(struct Moby *moby) {
+    enum {
+        WATER_INITIALIZE = 0,
+        WATER_TIMED_RISE = 8
+    };
     WaterVars_30ca80 *d = *(WaterVars_30ca80 **)&moby->pvars;
 
     switch (moby->state) {
-    case 0:
+    case WATER_INITIALIZE:
         if (d->record_index == 0) {
             int i;
             int j;
@@ -3365,7 +3369,7 @@ void water_update(struct Moby *moby) {
             return;
         }
         break;
-    case 8:
+    case WATER_TIMED_RISE:
         if (func_001F9908_v(&d->timer) != 0) {
             if (rise_step < 5) {
                 rise_step++;
