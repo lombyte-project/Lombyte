@@ -1092,6 +1092,11 @@ extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
 
 void fred_pokitaru_update(struct Moby *moby) __asm__("FUN_L11_002f0e40");
 void fred_pokitaru_update(struct Moby *moby) {
+    enum {
+        FRED_POKITARU_INITIALIZE = 0,
+        FRED_POKITARU_CHECK_DIALOGUE = 1,
+        FRED_POKITARU_WAIT_FOR_DIALOGUE_END = 2
+    };
     WS11 scratch;
     struct PokSentryVars *d = (struct PokSentryVars *)moby->pvars;
     float rate;
@@ -1104,7 +1109,7 @@ void fred_pokitaru_update(struct Moby *moby) {
         moby->shadow_range = 24;
     }
     switch (moby->state) {
-    case 0:
+    case FRED_POKITARU_INITIALIZE:
         moby->state = 1;
         if (moby->prev_seq != 1)
             FUN_00212f90(moby, 1, 0, scale_game_frames(20));
@@ -1115,7 +1120,7 @@ void fred_pokitaru_update(struct Moby *moby) {
         initialize_npc_dialogue(moby, d);
         d->f0C = 4.0f;
         break;
-    case 1:
+    case FRED_POKITARU_CHECK_DIALOGUE:
         if (update_npc_dialogue(moby, d)) {
             begin_dialogue_camera_transition(moby, 3.0f);
             moby->state = 2;
@@ -1139,7 +1144,7 @@ void fred_pokitaru_update(struct Moby *moby) {
             jet_reset_camera(entry + 0x30, entry + 0x70);
         }
         break;
-    case 2:
+    case FRED_POKITARU_WAIT_FOR_DIALOGUE_END:
         if (D_L11_0015F5C4 != 2) {
             moby->state = 1;
             if (d->h04 == 2) {
