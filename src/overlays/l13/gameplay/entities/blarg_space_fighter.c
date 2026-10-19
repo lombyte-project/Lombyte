@@ -1153,10 +1153,13 @@ extern int func_001FA898_s(float) __asm__("FUN_001fa6d0");
 void FUN_L13_002c4428(Moby_2C56B0 *moby) {
     enum {
         FIGHTER_INITIALIZE = 0,
+        FIGHTER_WAIT_TO_JOIN_PATH = 1,
         FIGHTER_FOLLOW_PATH_AND_ATTACK = 2,
-        FIGHTER_EMIT_DESTRUCTION_EFFECTS = 3
+        FIGHTER_EMIT_DESTRUCTION_EFFECTS = 3,
+        FIGHTER_WAIT_TO_REINITIALIZE = 4
     };
     enum {
+        FIGHTER_ATTACK_WAIT_TO_FIRE = 0,
         FIGHTER_ATTACK_FIRE = 1,
         FIGHTER_ATTACK_COOLDOWN = 2
     };
@@ -1205,7 +1208,7 @@ void FUN_L13_002c4428(Moby_2C56B0 *moby) {
         moby->b31 = 0;
         d->bD0 = 1;
         break;
-    case 1: {
+    case FIGHTER_WAIT_TO_JOIN_PATH: {
         Moby_2C56B0 *p;
         if (d->fBC == -1 || (p = (Moby_2C56B0 *)(D_L13_0015FFD8 + (d->fBC << 8))) == 0 || p->state == 0xFE
             || p->state == 0xFD || p->bBC == 4) {
@@ -1269,7 +1272,7 @@ void FUN_L13_002c4428(Moby_2C56B0 *moby) {
         }
         func_L13_002C5248_56B0(moby, d, 1);
         switch (moby->bBC) {
-        case 0:
+        case FIGHTER_ATTACK_WAIT_TO_FIRE:
             if (vehd != 0 && veh->state == 4 && moby->b31 != 0 && close != 0 && boss != 0 && bossd->b10F < 3) {
                 d->fB8 = scale_game_frames_alt(0x258);
                 d->fAC = 1.0f;
@@ -1388,7 +1391,7 @@ void FUN_L13_002c4428(Moby_2C56B0 *moby) {
         moby->flags = (moby->flags | 0x41) & 0xEFFF;
         break;
     }
-    case 4: {
+    case FIGHTER_WAIT_TO_REINITIALIZE: {
         Moby_2C56B0 *p;
         if (d->fBC != -1 && (p = (Moby_2C56B0 *)(D_L13_0015FFD8 + (d->fBC << 8))) != 0 && p->state != 0xFE
             && p->state != 0xFD && p->bBC != 4) {
