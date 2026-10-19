@@ -535,6 +535,7 @@ int FUN_L17_002eace8(int a, char *p, char *radar_origin, char *radar_rotation, f
         MOBY_CLASS_UNMARKED_COUNTED_TARGET = 0x184,
         MOBY_CLASS_UNCOUNTED_MARKED_TARGET = 0x191,
         MOBY_CLASS_PRIORITY_LOCK_TARGET = 0x3EB,
+        MOBY_CLASS_FLAG_GATED_SCREEN_MARKER_TARGET = 0x4BE,
         MOBY_CLASS_STATE_GATED_MARKED_TARGET = 0x4BF,
         MOBY_CLASS_MARKED_COUNTED_TARGET = 0x504
     };
@@ -664,7 +665,7 @@ int FUN_L17_002eace8(int a, char *p, char *radar_origin, char *radar_rotation, f
             *(int *)(p + 0xE8) = *(int *)(p + 0xE8) + 1;
             break;
         case MOBY_CLASS_FLAG_GATED_MARKED_TARGET:
-        case 0x4BE:
+        case MOBY_CLASS_FLAG_GATED_SCREEN_MARKER_TARGET:
             if (!(*(unsigned short *)(m + 0x34) & 1)) {
                 project_to_screen(v, m + 0x10);
                 if (*(unsigned char *)(m + 0x31) != 0) {
