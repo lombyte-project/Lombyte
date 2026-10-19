@@ -3176,6 +3176,7 @@ void FUN_L03_002c95a8(Moby2C8398 *m) {
     enum {
         DEATH_KNOCKBACK_RESPONSE = 1,
         KNOCKBACK_WITHOUT_FACING_CHANGE_RESPONSE = 3,
+        ALTERNATE_ANIMATION_KNOCKBACK_RESPONSE = 4,
         TURN_AWAY_KNOCKBACK_RESPONSE = 6,
         NO_KNOCKBACK_HIT_RESPONSE = 12,
         ZERO_DAMAGE_NO_KNOCKBACK_RESPONSE = 13
@@ -3264,7 +3265,7 @@ void FUN_L03_002c95a8(Moby2C8398 *m) {
             m->state = 10;
             allocate_voice_for_target_entry(1, 0, (int)m);
             break;
-        case 4:
+        case ALTERNATE_ANIMATION_KNOCKBACK_RESPONSE:
         case 5:
             d->b67 = 0x78;
             d->q.f10 = frame_time_sq * 80.0f;
