@@ -2936,6 +2936,7 @@ void infobot_update(struct Moby *moby)
         INFOBOT_FOLLOW_PATH = 6,
         INFOBOT_ORBIT_PATH_ENDPOINT = 7,
         INFOBOT_START_SCENE_SEQUENCE = 8,
+        INFOBOT_WAIT_TO_DISPATCH_MSG1 = 9,
         INFOBOT_WAIT_TO_START_FINAL_SCENE = 10,
         INFOBOT_SAVE_AND_REMOVE = 11
     };
@@ -3160,7 +3161,7 @@ void infobot_update(struct Moby *moby)
             start_scene(infobot->msg0);
         }
         break;
-    case 9:
+    case INFOBOT_WAIT_TO_DISPATCH_MSG1:
         if (D_L00_0015F5C4 == 2) {
             break;
         }
