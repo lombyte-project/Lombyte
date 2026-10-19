@@ -3209,7 +3209,9 @@ void puffoid_update(struct Moby *moby) {
         PUFFOID_STATE_FOLLOW_PATH = 19
     };
     enum {
-        PUFFOID_PATH_ANIM_SPRAY_ATTACK = 6
+        PUFFOID_PATH_ANIM_ENTER_SPRAY_ATTACK = 5,
+        PUFFOID_PATH_ANIM_SPRAY_ATTACK = 6,
+        PUFFOID_PATH_ANIM_EXIT_SPRAY_ATTACK = 7
     };
     CreatureVars_4318 *d = (CreatureVars_4318 *)moby->pvars;
     struct Moby *target;
@@ -3623,10 +3625,10 @@ void puffoid_update(struct Moby *moby) {
                     spray_4318(moby, p, D_L11_001622CC * 0.55f, 1, 1.0f, 1.0f, 0, 1, 0);
                 }
                 break;
-            case 5:
+            case PUFFOID_PATH_ANIM_ENTER_SPRAY_ATTACK:
                 set_anim_4318(moby, 6, 0, frames_4318(10));
                 break;
-            case 7:
+            case PUFFOID_PATH_ANIM_EXIT_SPRAY_ATTACK:
                 set_anim_4318(moby, 4, 0, frames_4318(10));
                 break;
             }
