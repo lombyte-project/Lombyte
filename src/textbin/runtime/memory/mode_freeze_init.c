@@ -30,6 +30,7 @@ void mode_freeze_init(u32 mode, s32 freeze_context) {
         FREEZE_HERO_STATE_32_PAUSE = 1,
         FREEZE_ERROR = 3,
         FREEZE_VEHICLE_PAUSE = 4,
+        FREEZE_PUSH_HELP_HISTORY = 5,
         FREEZE_VIDEO_MODE_CHANGE = 6
     };
     struct FreezeModeState *st;
@@ -67,7 +68,7 @@ void mode_freeze_init(u32 mode, s32 freeze_context) {
         st->unk10 = (s32)get_help_message_text(0x524A);
         st->unk4 = 0;
         break;
-    case 5:
+    case FREEZE_PUSH_HELP_HISTORY:
         push_help_history(0x4E2B);
         freeze.unk4 = scale_game_frames(0x1E);
         freeze.unk20 = 0;
