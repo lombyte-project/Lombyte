@@ -1308,13 +1308,16 @@ void toxic_crab_update(Moby2E30F8 *m) __asm__("FUN_L10_002e1d38");
 void toxic_crab_update(Moby2E30F8 *m) {
     enum {
         TOXIC_CRAB_STATE_INITIALIZE = 0,
+        TOXIC_CRAB_STATE_FACE_TRACKED_POSITION = 3,
         TOXIC_CRAB_STATE_WAIT_TO_PURSUE = 4,
         TOXIC_CRAB_STATE_PURSUE_TARGET = 5,
+        TOXIC_CRAB_STATE_PAUSE_PURSUIT = 6,
         TOXIC_CRAB_STATE_MELEE_ATTACK = 7,
         TOXIC_CRAB_STATE_RETURN_HOME = 8,
         TOXIC_CRAB_STATE_BACK_AWAY_FROM_TARGET = 9,
         TOXIC_CRAB_STATE_HIT_KNOCKBACK = 10,
-        TOXIC_CRAB_STATE_DEATH_EFFECTS = 11
+        TOXIC_CRAB_STATE_DEATH_EFFECTS = 11,
+        TOXIC_CRAB_STATE_FALL_TO_DEATH = 12
     };
     int see = 0;
     Crab2E30F8 *d = m->data;
@@ -1452,7 +1455,7 @@ void toxic_crab_update(Moby2E30F8 *m) {
             }
         }
         break;
-    case 3: {
+    case TOXIC_CRAB_STATE_FACE_TRACKED_POSITION: {
         float ang = fast_arc_tan(d->f120 - m->pos[0], d->f124 - m->pos[1]);
         FUN_L00_00258278((char *)m, &d->f190, ang, 0.02f, 0.3f, frame_time * 6.2831855f);
         if (d->i164 != 2) {
@@ -1605,7 +1608,7 @@ void toxic_crab_update(Moby2E30F8 *m) {
         }
         break;
     }
-    case 6: {
+    case TOXIC_CRAB_STATE_PAUSE_PURSUIT: {
         float diff;
 
         diff = fast_difference_between_rotations(
@@ -1804,7 +1807,7 @@ void toxic_crab_update(Moby2E30F8 *m) {
             d->f78 = d->f78 / 3.0f;
         }
         break;
-    case 12: {
+    case TOXIC_CRAB_STATE_FALL_TO_DEATH: {
         {
             float tmp[4];
             int r;
