@@ -128,10 +128,12 @@ void screamer_update(Moby *moby) __asm__("FUN_L10_002df270");
 void screamer_update(Moby *moby) {
     enum {
         SCREAMER_STATE_INITIALIZE = 0,
+        SCREAMER_STATE_RISE_FROM_HOME = 4,
         SCREAMER_STATE_FOLLOW_PATH = 5,
         SCREAMER_STATE_RETURN_HOME = 8,
         SCREAMER_STATE_WAIT_TO_WANDER = 9,
-        SCREAMER_STATE_WANDER = 10
+        SCREAMER_STATE_WANDER = 10,
+        SCREAMER_STATE_DEATH_KNOCKBACK = 11
     };
     float waypoint[6];
     D_2E0630 *data = (D_2E0630 *)moby->pvars;
@@ -174,7 +176,7 @@ void screamer_update(Moby *moby) {
         break;
     case 3:
         break;
-    case 4:
+    case SCREAMER_STATE_RISE_FROM_HOME:
         moby->anim_speed = 4.0f;
         if (func_00214D88_2E0630(&moby->pos.z, data->home.z + 2.0f, &data->vel.z,
                 D_0015ED70 * 18.0f, D_0015ED70 * 18.0f, D_0015ED6C * 6.0f) == 0.0f) {
@@ -287,7 +289,7 @@ void screamer_update(Moby *moby) {
         }
         if (fast_vec_length(&data->step) == 0.0f) moby->state = 9;
         break;
-    case 11:
+    case SCREAMER_STATE_DEATH_KNOCKBACK:
         if ((func_L00_0025D6F0_2E0630(moby, data->react) & 1) == 0) break;
         func_L00_002584A8_2E0630(moby, 0x200, -1);
         func_L00_00260460_2E0630(moby, &moby->pos, -1, 0.5f, 10.0f);
