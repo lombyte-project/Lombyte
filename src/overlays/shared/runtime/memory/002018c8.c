@@ -88,6 +88,10 @@ extern void vu1_add_g_sregister(s32, s64) __asm__("FUN_00233980");
 
 void level_draw_dialog_text(void) __asm__("FUN_L00_002018c8");
 void level_draw_dialog_text(void) {
+    enum {
+        MESSAGE_BOX_TITLE_ONLY = 2,
+        MESSAGE_BOX_FREEZE_MODE_DIALOG = 3
+    };
     char buf[0x200];
     struct TextRegion box;
 
@@ -141,7 +145,7 @@ void level_draw_dialog_text(void) {
                             get_frame_texture(find_valid_animation_frame_index_alt(0x755D, 1)));
         break;
     }
-    case 3: {
+    case MESSAGE_BOX_FREEZE_MODE_DIALOG: {
         char *text;
         s32 left;
         s32 right;
@@ -410,7 +414,7 @@ void level_draw_dialog_text(void) {
         }
         break;
     }
-    case 2:
+    case MESSAGE_BOX_TITLE_ONLY:
         draw_outlined_rect(0x64, 0xA0, 0xB0, 0x150,
                      fast_tween_color(D_L00_0015F4E4, D_L00_0015F4E8,
                                   fast_sin((f32)(D_L00_0015F3F8 % D_L00_0015F4E0) / convert_integer_to_float(D_L00_0015F4E0) * 6.28318f -
