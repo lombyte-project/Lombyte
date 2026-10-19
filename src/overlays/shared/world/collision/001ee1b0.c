@@ -72,7 +72,8 @@ int FUN_L00_001ee318(V_1ee318 *pt, int *vol, float rad) {
     enum {
         VOLUME_TYPE_BOX = 3,
         VOLUME_TYPE_SPHERE = 5,
-        VOLUME_TYPE_CYLINDER = 6
+        VOLUME_TYPE_CYLINDER = 6,
+        VOLUME_TYPE_CYLINDER_WITH_ENDPOINT_SPHERES = 7
     };
     V_1ee318 p;
     V_1ee318 c;
@@ -115,7 +116,7 @@ int FUN_L00_001ee318(V_1ee318 *pt, int *vol, float rad) {
             return FUN_001f9b48_1ee318(pt, e + 0x30) < s;
         }
     }
-    case 7: {
+    case VOLUME_TYPE_CYLINDER_WITH_ENDPOINT_SPHERES: {
         unsigned char *e;
         e = D_L00_001600E4 + vol[5] * 0x90;
         FUN_001f9a28_1ee318(&d, pt, e + 0x30);
