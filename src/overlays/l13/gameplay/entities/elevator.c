@@ -1162,6 +1162,8 @@ void robosquawker_update(RsMoby *m) {
         ROBOSQUAWKER_STATE_PECK_ATTACK = 4,
         ROBOSQUAWKER_STATE_RETURN_HOME = 5,
         ROBOSQUAWKER_STATE_DAMAGE_KNOCKBACK = 6,
+        ROBOSQUAWKER_STATE_PREPARE_HOME_HOP = 0xA,
+        ROBOSQUAWKER_STATE_HOME_HOP = 0xB,
         ROBOSQUAWKER_STATE_BLOCKED_RETURN_HOME = 0xC,
         ROBOSQUAWKER_STATE_WALK_FORWARD_AVOID_MOBYS = 0xD,
         ROBOSQUAWKER_STATE_FLIGHT_IDLE = 0xE,
@@ -1574,7 +1576,7 @@ void robosquawker_update(RsMoby *m) {
             }
         }
         break;
-    case 0xA: {
+    case ROBOSQUAWKER_STATE_PREPARE_HOME_HOP: {
         float a;
 
         a = fast_arc_tan(v->v1D0.f[0] - m->pos.f[0], v->v1D0.f[1] - m->pos.f[1]);
@@ -1601,7 +1603,7 @@ void robosquawker_update(RsMoby *m) {
         }
         break;
     }
-    case 0xB:
+    case ROBOSQUAWKER_STATE_HOME_HOP:
         if (mine_fall(m, v->x120) & 1) {
             FUN_L13_002b4fb8((Level13VendorMoby *)v);
             qzero(v->x120);
