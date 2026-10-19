@@ -538,6 +538,12 @@ typedef struct {
 } BomberTankVars;
 
 void FUN_L08_002d42d8(Moby *moby) {
+    enum {
+        BOMBER_TANK_STATE_INITIALIZE = 0,
+        BOMBER_TANK_STATE_FOLLOW_PATH_AND_FIRE = 3,
+        BOMBER_TANK_STATE_FOLLOW_PATH = 6,
+        BOMBER_TANK_STATE_WAIT_FOR_TRIGGER = 11
+    };
     float old_pos[4];
     float old_rot[4];
     float velocity[4];
@@ -558,7 +564,7 @@ void FUN_L08_002d42d8(Moby *moby) {
     FUN_L08_002d4ca0(moby);
     target = vars->target;
     switch (moby->state) {
-    case 0:
+    case BOMBER_TANK_STATE_INITIALIZE:
         if (vars->part_a == 0) {
             Moby *part;
             vars->part_a = create_moby(0x14B);
@@ -634,7 +640,7 @@ void FUN_L08_002d42d8(Moby *moby) {
         vars->unk58 = truncate_float_to_s32(D_L08_001618CC);
         vars->unk5A = truncate_float_to_s32(D_L08_001618D0 * 8.0f);
         break;
-    case 6:
+    case BOMBER_TANK_STATE_FOLLOW_PATH:
         FUN_L08_002d55c8(moby, vars->path);
         if (vars->mode != 2 && vector_distance(&moby->pos, &target->pos) < 20.0f) {
             if (D_00141C38 == 0 && D_0013D4CB == 0) {
@@ -644,7 +650,7 @@ void FUN_L08_002d42d8(Moby *moby) {
             if (moby->prev_seq != 2) blend_moby_animation(moby, 2, 0, scale_game_frames(10));
         }
         break;
-    case 3:
+    case BOMBER_TANK_STATE_FOLLOW_PATH_AND_FIRE:
         FUN_L08_002d55c8(moby, vars->path);
         if (vars->mode == 2 || vector_distance(&moby->pos, &target->pos) > 22.0f) {
             moby->state = 6;
@@ -667,7 +673,7 @@ void FUN_L08_002d42d8(Moby *moby) {
             if (shot != 0) shot[0x20] = 1;
         }
         break;
-    case 11:
+    case BOMBER_TANK_STATE_WAIT_FOR_TRIGGER:
         if (*(float *)((Moby *)D_L08_0015FFD8 + vars->trigger_moby)->pvars == 1.0f) {
             qcopy(&moby->pos, (char *)D_L08_001B0CB0[vars->start_point] + 0x10);
             qcopy(&vars->part_a->pos, &moby->pos);
