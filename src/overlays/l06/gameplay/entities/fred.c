@@ -6617,6 +6617,11 @@ extern s32 FUN_00213260(s32);
 
 /* plays one of the vendor's greet, chatter or leave lines in the current language */
 void FUN_L06_00302400(struct Moby *m, s32 kind) {
+    enum {
+        VOICE_KIND_GREETING = 0,
+        VOICE_KIND_CHATTER = 1,
+        VOICE_KIND_LEAVING = 2
+    };
     struct TauntVoiceVars *v = (struct TauntVoiceVars *)m->pvars;
     s32 id = -1;
     s32 lang;
@@ -6624,12 +6629,12 @@ void FUN_L06_00302400(struct Moby *m, s32 kind) {
     s32 i;
 
     switch (kind) {
-    case 0:
+    case VOICE_KIND_GREETING:
         lang = game_language;
         if (lang != 0) lang--;
         id = v->greet[lang];
         break;
-    case 1:
+    case VOICE_KIND_CHATTER:
         r = FUN_00213260(3);
         for (i = 0; i < 4; i++) {
             if (D_L06_001620B8[r] == 0) {
@@ -6647,7 +6652,7 @@ void FUN_L06_00302400(struct Moby *m, s32 kind) {
         if (lang != 0) lang--;
         id = v->chatter[r][lang];
         break;
-    case 2:
+    case VOICE_KIND_LEAVING:
         lang = game_language;
         if (lang != 0) lang--;
         id = v->leave[lang];
