@@ -56,6 +56,9 @@ s32 fun_00213928(O_25a478 *obj, P_25a478 *p, Q_25a478 *q, u32 flags, s32 *out, f
     enum {
         CONDITIONAL_DURATION_HIT_RESPONSE = 7
     };
+    enum {
+        KIND_GATED_HIT_RESPONSE = 0
+    };
     V_25a478 v;
     V_25a478 t;
     s32 r;
@@ -152,7 +155,7 @@ s32 fun_00213928(O_25a478 *obj, P_25a478 *p, Q_25a478 *q, u32 flags, s32 *out, f
     if (q->h14 != kind) q->h1C = 0;
     if (fast_dec_timer_s16(&q->h1C)) {
         switch (r) {
-        case 0: q->h1C = scale_game_frames(0x25); break;
+        case KIND_GATED_HIT_RESPONSE: q->h1C = scale_game_frames(0x25); break;
         case DEFAULT_HIT_RESPONSE: q->h1C = scale_game_frames(0xF); break;
         case AUXILIARY_FLAG_SETTING_HIT_RESPONSE: q->h1C = scale_game_frames(0x3C); break;
         case CONDITIONAL_DURATION_HIT_RESPONSE:
@@ -164,7 +167,7 @@ s32 fun_00213928(O_25a478 *obj, P_25a478 *p, Q_25a478 *q, u32 flags, s32 *out, f
         }
     } else {
         switch (r) {
-        case 0:
+        case KIND_GATED_HIT_RESPONSE:
         case FALLBACK_HIT_RESPONSE:
             if (!(flags & 0x10)) res = 0xB;
             if (!(flags & 0x20)) *out = 1;
