@@ -1276,6 +1276,7 @@ void blarg_paratrooper_update(char *moby) {
     enum {
         PARATROOPER_STATE_INITIALIZE = 0,
         PARATROOPER_STATE_PATROL_PATH = 1,
+        PARATROOPER_STATE_APPROACH_WAYPOINT = 2,
         PARATROOPER_STATE_WAIT_FACING_TARGET = 3,
         PARATROOPER_STATE_HOP_BETWEEN_WAYPOINTS = 4,
         PARATROOPER_STATE_FIRE_PROJECTILES = 5,
@@ -1364,7 +1365,7 @@ void blarg_paratrooper_update(char *moby) {
             (*(unsigned char *)((char *)(moby)+0x20))=2;
         }
         break;
-    case 2: {
+    case PARATROOPER_STATE_APPROACH_WAYPOINT: {
         float distance;
         data->f1F4=FUN_L01_0028b510(moby+0x10,D_L08_001B0CB0[data->f1D4],0.0f);
         distance=fast_distance302618(moby+0x10,D_L08_001B0CB0[data->f1D4]+0x10+data->f1F4*16);
