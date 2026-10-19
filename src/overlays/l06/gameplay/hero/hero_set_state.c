@@ -744,7 +744,7 @@ int hero_set_state(int a, int b) {
     case HERO_STATE_JUMP:
     case 9:
     case 0xA:
-    case 0xB:
+    case HERO_STATE_HIGH_JUMP:
     case 0xC:
     case 0xD:
     case 0xE:
