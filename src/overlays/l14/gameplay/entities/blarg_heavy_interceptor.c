@@ -1684,7 +1684,7 @@ void machinegun_turret_update(char *moby) {
     float v20[4];
     float spawn_position[4];
     float v40[4];
-    float v50[4];
+    float spawn_position_offset[4];
     float v60[4];
     float v70[4];
     float m80[16];
@@ -1811,13 +1811,13 @@ void machinegun_turret_update(char *moby) {
                 break;
             case 1:
                 func_L00_001FF4B0_2B4E40(spawn_position, moby + 0xE0, D_L14_00161524);
-                func_L00_001FF4B0_2B4E40(v50, moby + 0xD0, D_L14_0016152C);
-                func_001F9BD8_2B4E40(spawn_position, spawn_position, v50);
+                func_L00_001FF4B0_2B4E40(spawn_position_offset, moby + 0xD0, D_L14_0016152C);
+                func_001F9BD8_2B4E40(spawn_position, spawn_position, spawn_position_offset);
                 break;
             default:
                 func_L00_001FF4B0_2B4E40(spawn_position, moby + 0xE0, D_L14_00161524);
-                func_L00_001FF4B0_2B4E40(v50, moby + 0xD0, -D_L14_0016152C);
-                func_001F9BD8_2B4E40(spawn_position, spawn_position, v50);
+                func_L00_001FF4B0_2B4E40(spawn_position_offset, moby + 0xD0, -D_L14_0016152C);
+                func_001F9BD8_2B4E40(spawn_position, spawn_position, spawn_position_offset);
                 break;
             }
             func_L00_001FF4B0_2B4E40(v40, moby + 0xC0, D_L14_00161528);
