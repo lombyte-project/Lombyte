@@ -68,7 +68,9 @@ void memcard_update_state(void) {
         MEMCARD_REQUEST_UNFORMAT = 5,
         MEMCARD_PROCESS_UNFORMAT_RESULT = 6,
         MEMCARD_REQUEST_CHDIR = 7,
-        MEMCARD_PROBE_SAVE_HEADER = 8
+        MEMCARD_PROBE_SAVE_HEADER = 8,
+        MEMCARD_BEGIN_DELETE_SAVE_DIRECTORY = 11,
+        MEMCARD_DELETE_SAVE_DIRECTORY = 12
     };
     enum {
         MEMCARD_PROBE_PROCESS_CHDIR_RESULT = 0,
@@ -84,6 +86,13 @@ void memcard_update_state(void) {
         MEMCARD_CREATE_PROCESS_MKDIR_RESULT = 2,
         MEMCARD_CREATE_REQUEST_RESOURCE_READ = 3,
         MEMCARD_CREATE_WAIT_RESOURCE_READ = 4
+    };
+    enum {
+        MEMCARD_DELETE_REQUEST_FIRST_DIRECTORY_ENTRY = 0,
+        MEMCARD_DELETE_PROCESS_ENTRY_AND_REQUEST_DELETE = 1,
+        MEMCARD_DELETE_REQUEST_NEXT_DIRECTORY_ENTRY = 2,
+        MEMCARD_DELETE_REQUEST_DIRECTORY_DELETE = 3,
+        MEMCARD_DELETE_PROCESS_DIRECTORY_DELETE_RESULT = 4
     };
     char name[0x40];
 
@@ -486,18 +495,18 @@ void memcard_update_state(void) {
         }
         break;
 
-    case 11:
+    case MEMCARD_BEGIN_DELETE_SAVE_DIRECTORY:
         MC.state = 12;
         MC.sub = 0;
         CARD.save_index = -2;
-    case 12:
+    case MEMCARD_DELETE_SAVE_DIRECTORY:
         switch (MC.sub) {
-        case 0:
+        case MEMCARD_DELETE_REQUEST_FIRST_DIRECTORY_ENTRY:
             if (sceMcGetDir(CARD.port, CARD.slot, D_0013D1E8, 0, 1, D_001A0880) == 0) {
                 MC.sub = 1;
             }
             break;
-        case 1:
+        case MEMCARD_DELETE_PROCESS_ENTRY_AND_REQUEST_DELETE:
             if (MC.result == 1) {
                 sprintf(name, D_0015FE98, D_0013D1D0, D_001A08A0);
                 DebugPrint(D_0015FEA0, name);
@@ -524,18 +533,18 @@ void memcard_update_state(void) {
                 MC.busy = 0;
             }
             break;
-        case 2:
+        case MEMCARD_DELETE_REQUEST_NEXT_DIRECTORY_ENTRY:
             if (sceMcGetDir(CARD.port, CARD.slot, D_0013D1E8, 1, 1, D_001A0880) == 0) {
                 MC.sub = 1;
             }
             break;
-        case 3:
+        case MEMCARD_DELETE_REQUEST_DIRECTORY_DELETE:
             if (sceMcDelete(CARD.port, CARD.slot, D_0013D1D0) == 0) {
                 DebugPrint(D_001E81E8, D_0013D1D0);
                 MC.sub = 4;
             }
             break;
-        case 4:
+        case MEMCARD_DELETE_PROCESS_DIRECTORY_DELETE_RESULT:
             if (MC.result != 0) {
                 MC.err_card = MC.cur;
                 if (MC.result == -6) {
