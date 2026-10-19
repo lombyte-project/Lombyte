@@ -792,13 +792,16 @@ extern void initialize_global_state_entry(int) __asm__("FUN_0022e188");
 void FUN_L07_002f5ba0(struct Moby *moby)
 {
     enum {
+        CONTROLLER_WAIT_FOR_SCENE_IDLE = 0,
         CONTROLLER_START_INITIAL_SCENE = 1,
         CONTROLLER_WAIT_FOR_INITIAL_SCENE = 2,
+        CONTROLLER_ADVANCE_TO_OPEN_VOLUME_WAIT = 3,
         CONTROLLER_WAIT_FOR_OPEN_VOLUME = 4,
         CONTROLLER_WAIT_FOR_FIRST_OPEN_SCENE = 5,
         CONTROLLER_WAIT_FOR_SECOND_OPEN_SCENE = 6,
         CONTROLLER_WAIT_FOR_FINISH_VOLUME = 8,
         CONTROLLER_WAIT_FOR_FINISH_VOLUME_SCENE = 9,
+        CONTROLLER_WAIT_TO_START_FINAL_SCENE = 10,
         CONTROLLER_WAIT_FOR_FINAL_SCENE_AND_UNLOCK_PLANET = 11,
         CONTROLLER_CLEANUP_LINKED_MOBY = 12,
         CONTROLLER_DELETE_SELF = 13
@@ -807,7 +810,7 @@ void FUN_L07_002f5ba0(struct Moby *moby)
     float v[4];
 
     switch (moby->state) {
-    case 0:
+    case CONTROLLER_WAIT_FOR_SCENE_IDLE:
         if (D_0013D3B1[0] != 0 && data->removed_moby != -1) {
             delete_moby_m(&level_mobys[data->removed_moby]);
         }
@@ -825,7 +828,7 @@ void FUN_L07_002f5ba0(struct Moby *moby)
     case CONTROLLER_WAIT_FOR_INITIAL_SCENE:
         if (scene_state != 2) moby->state = 3;
         break;
-    case 3:
+    case CONTROLLER_ADVANCE_TO_OPEN_VOLUME_WAIT:
         moby->state = 4;
         break;
     case CONTROLLER_WAIT_FOR_OPEN_VOLUME:
@@ -910,7 +913,7 @@ void FUN_L07_002f5ba0(struct Moby *moby)
         moby->state = 10;
         FUN_L00_00299460(8);
         break;
-    case 10:
+    case CONTROLLER_WAIT_TO_START_FINAL_SCENE:
         if (scene_state == 2) break;
         moby->state = 11;
         start_scene(4);
