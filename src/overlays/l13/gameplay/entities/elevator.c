@@ -228,7 +228,11 @@ void elevator_update(struct Moby *moby) {
         ELEVATOR_STATE_INITIALIZE = 0,
         ELEVATOR_STATE_BLEND_CAMERA = 1,
         ELEVATOR_STATE_MOVE_TO_TOP = 2,
-        ELEVATOR_STATE_MOVE_TO_BOTTOM = 3
+        ELEVATOR_STATE_MOVE_TO_BOTTOM = 3,
+        ELEVATOR_STATE_WAIT_AT_TOP = 4,
+        ELEVATOR_STATE_WAIT_AT_BOTTOM = 5,
+        ELEVATOR_STATE_WAIT_FOR_HERO_EXIT_AT_TOP = 6,
+        ELEVATOR_STATE_WAIT_FOR_HERO_EXIT_AT_BOTTOM = 7
     };
     LiftVars *vars = (LiftVars *)moby->pvars;
     float delta[4];
@@ -299,8 +303,8 @@ void elevator_update(struct Moby *moby) {
         }
         break;
     }
-    case 6:
-    case 7:
+    case ELEVATOR_STATE_WAIT_FOR_HERO_EXIT_AT_TOP:
+    case ELEVATOR_STATE_WAIT_FOR_HERO_EXIT_AT_BOTTOM:
         if (voice_is_playing(moby, vars->voice)) {
             release_voice_slot(vars->voice);
             vars->voice = -1;
@@ -316,8 +320,8 @@ void elevator_update(struct Moby *moby) {
             }
         }
         break;
-    case 4:
-    case 5: {
+    case ELEVATOR_STATE_WAIT_AT_TOP:
+    case ELEVATOR_STATE_WAIT_AT_BOTTOM: {
         int i;
         vars->pulse = fast_add_rotations(vars->pulse, frame_time * 6.2831855f);
         i = float_to_int((fast_sin(vars->pulse) * 4.0f - 3.0f) * 128.0f);
