@@ -114,7 +114,10 @@ void blarg_space_commando_update(struct Moby *moby) __asm__("FUN_L06_002fdbd0");
 void blarg_space_commando_update(struct Moby *moby) {
     enum {
         BLARG_COMMANDO_STATE_INITIALIZE = 0,
+        BLARG_COMMANDO_STATE_MELEE_ATTACK = 5,
+        BLARG_COMMANDO_STATE_MELEE_RECOVERY = 6,
         BLARG_COMMANDO_STATE_CHASE_TARGET = 11,
+        BLARG_COMMANDO_STATE_CHASE_MELEE_ATTACK = 12,
         BLARG_COMMANDO_STATE_RETURN_HOME = 13,
         BLARG_COMMANDO_STATE_APPROACH_ROUTE_DESTINATION = 14
     };
@@ -275,7 +278,7 @@ void blarg_space_commando_update(struct Moby *moby) {
             }
         }
         break;
-    case 5:
+    case BLARG_COMMANDO_STATE_MELEE_ATTACK:
         approach_angle(&moby->rot.z, fast_arc_tan(target->pos.x - moby->pos.x, target->pos.y - moby->pos.y),
                          &vars->turn_speed, frame_time_sq * 6.2831855f, frame_time_sq * 6.2831855f,
                          frame_time * 3.1415927f);
@@ -306,7 +309,7 @@ void blarg_space_commando_update(struct Moby *moby) {
             }
         }
         break;
-    case 6:
+    case BLARG_COMMANDO_STATE_MELEE_RECOVERY:
         if (moby->anim_flags & 2) {
             moby->state = moby->command;
             if (moby->prev_seq != 0) {
@@ -341,7 +344,7 @@ void blarg_space_commando_update(struct Moby *moby) {
             }
         }
         break;
-    case 12:
+    case BLARG_COMMANDO_STATE_CHASE_MELEE_ATTACK:
         moby_point_position(moby, 0, &a);
         qcopy(&b, &moby->pos);
         b.f[2] += 1.5f;
