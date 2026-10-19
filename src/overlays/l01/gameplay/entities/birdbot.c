@@ -706,6 +706,9 @@ void birdbot_update(PeMoby *m) {
         BIRDBOT_STATE_NONFATAL_KNOCKBACK = 12,
         BIRDBOT_STATE_FATAL_KNOCKBACK = 14
     };
+    enum {
+        BIRDBOT_HIT_REACTION_FATAL_KNOCKBACK = 1
+    };
     PeVars *v;
     PeVec old;
     PeTarget tgt;
@@ -773,7 +776,7 @@ void birdbot_update(PeMoby *m) {
         case 10:
         case 11:
             break;
-        case 1:
+        case BIRDBOT_HIT_REACTION_FATAL_KNOCKBACK:
         case 2:
             v->f98 = 0.3f;
             v->f84 = frame_time_sq * 10.0f;
