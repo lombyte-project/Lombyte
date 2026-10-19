@@ -89,6 +89,7 @@ void seeker_update(struct Moby *moby) __asm__("FUN_L09_002c5990");
 void seeker_update(struct Moby *moby) {
     enum {
         SEEKER_STATE_INITIALIZE = 0,
+        SEEKER_STATE_CHASE = 2,
         SEEKER_STATE_HURT_KNOCKBACK = 5,
         SEEKER_STATE_FATAL_KNOCKBACK = 6,
         SEEKER_STATE_EXPLODE = 7
@@ -184,7 +185,7 @@ void seeker_update(struct Moby *moby) {
             }
         }
         break;
-    case 2:
+    case SEEKER_STATE_CHASE:
     case 4:
         z = moby->pos.z;
         approach_angle(&moby->rot.z,
