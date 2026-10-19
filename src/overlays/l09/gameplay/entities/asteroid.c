@@ -1131,6 +1131,7 @@ extern void FUN_L00_0025e450_edc30(struct Moby *, void *, void *, float, float, 
 void display_update(struct Moby *moby) __asm__("FUN_L09_002edc30");
 void display_update(struct Moby *moby) {
     enum {
+        BREAKABLE_STACK_ANTEPENULTIMATE_CLASS = 0x512,
         BREAKABLE_STACK_PENULTIMATE_CLASS = 0x513
     };
     float center[4];
@@ -1160,7 +1161,7 @@ void display_update(struct Moby *moby) {
     if (moby->oclass < 0x514) {
         next = 0x512;
         switch (moby->oclass) {
-        case 0x512:
+        case BREAKABLE_STACK_ANTEPENULTIMATE_CLASS:
             next = 0x513;
             break;
         case BREAKABLE_STACK_PENULTIMATE_CLASS:
