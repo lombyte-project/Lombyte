@@ -20,7 +20,7 @@ extern s32 D_L00_00173E08 __attribute__((sda));
 extern int D_L00_00173E40_lui[] __asm__("D_L00_00173E40") __attribute__((section(".data")));
 extern void *D_L00_00197300[];
 extern s32 D_L00_0015F3F8_gp __asm__("D_L00_0015F3F8") __attribute__((sda));
-extern s32 frame_size __asm__("D_0013E504");
+extern s32 frame_size __asm__("D_0013E504") __attribute__((section(".data")));
 extern s32 D_L00_001611CC;
 #define D_L00_00184414 (*(s32 *)(D_L00_001841F0_init + 0x224))
 extern s32 D_L00_001B9E90_init[] __asm__("D_L00_001B9E90");
@@ -657,7 +657,7 @@ typedef struct VoiceRenderEntry {
     s32 height;
 } VoiceRenderEntry;
 
-extern s32 frame_size __asm__("D_0013E504");
+extern s32 frame_size __asm__("D_0013E504") __attribute__((section(".data")));
 extern s32 draw_buffer_address __asm__("D_0015EE84");
 extern s32 D_L00_001B9E90_init[] __asm__("D_L00_001B9E90");
 extern s32 D_L00_001B23C0[] __asm__("D_L00_001B23C0");

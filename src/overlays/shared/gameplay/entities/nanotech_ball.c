@@ -812,8 +812,8 @@ extern int D_L00_00161AC0_002d9810 __asm__("D_L00_00161AC0") __attribute__((sda)
 extern int D_L00_00161AC4_002d9810 __asm__("D_L00_00161AC4") __attribute__((sda));
 extern int D_L00_00161AC8_002d9810 __asm__("D_L00_00161AC8") __attribute__((sda));
 extern int D_L00_00161ACC_002d9810 __asm__("D_L00_00161ACC") __attribute__((sda));
-extern int D_L00_00161AD4_002d9810 __asm__("D_L00_00161AD4") __attribute__((section(".data")));
-extern u32 D_L00_00161AD8_002d9810 __asm__("D_L00_00161AD8") __attribute__((section(".data")));
+extern int D_L00_00161AD4_002d9810 __asm__("D_L00_00161AD4") __attribute__((sda));
+extern u32 D_L00_00161AD8_002d9810 __asm__("D_L00_00161AD8") __attribute__((sda));
 extern float D_L00_00161ADC_002d9810 __asm__("D_L00_00161ADC") __attribute__((sda));
 extern int D_L00_00161AE4_002d9810 __asm__("D_L00_00161AE4") __attribute__((sda));
 extern float D_L00_00161AE8_002d9810 __asm__("D_L00_00161AE8") __attribute__((sda));
@@ -2813,10 +2813,9 @@ void FUN_L00_002ddcb8(char *a, char *b) {
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002ddf60.s", FUN_L00_002ddf60);
 #else
-extern float D_L00_00161B84_lui __asm__("D_L00_00161B84");
+extern float D_L00_00161B84_lui __asm__("D_L00_00161B84") __attribute__((section(".data")));
 extern float D_L00_00161B80_lui __asm__("D_L00_00161B80");
 extern float D_L00_00161B80_gp __asm__("D_L00_00161B80");
-extern float D_L00_00161B84_gp __asm__("D_L00_00161B84");
 extern float D_L00_00161B50_gp __asm__("D_L00_00161B50") __attribute__((sda));
 extern int D_L00_00161B54 __attribute__((sda));
 extern int D_L00_00161B58 __attribute__((sda));
@@ -2981,7 +2980,7 @@ void FUN_L00_002ddf60(void *frame_context, void *initial_vector) {
         if (FUN_001ff218_002ddf60(delta) > 0.31415927f)
             sampled = fast_add_rotations(sampled, FUN_00200130_002ddf60(delta, 0.31415927f));
         FUN_0025fc08_002ddcb8(&offset, sampled, &temp1, &edge);
-        FUN_001ff500_002ddcb8(&direction, &offset, D_L00_00161B84_gp);
+        FUN_001ff500_002ddcb8(&direction, &offset, D_L00_00161B84_lui);
         FUN_001ff2d8_002ddf60(&offset, &offset, &direction, 1.0f);
         {
             float length = FUN_001ff3d8_002ddf60(&offset);

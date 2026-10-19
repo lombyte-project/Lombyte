@@ -496,7 +496,6 @@ void FUN_L05_0030c0a8(unsigned char *m) {
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0030c220.s", FUN_L05_0030c220);
 #else
-extern void get_moby_position(struct Moby *, int, float *) __asm__("FUN_L00_0024f7c8");
 extern void clear_vector(float *) __asm__("FUN_001f99f8");
 extern void subtract_vector_xyz_30c220(float *, const float *, const float *) __asm__("FUN_001f9a28");
 extern void normalize_vector_xyz_30c220(float *, float *, float) __asm__("FUN_001f9bf8");

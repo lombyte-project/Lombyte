@@ -937,7 +937,7 @@ int FUN_L02_002fb788(char *moby, float a, float b) {
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002fb9c8.s", FUN_L02_002fb9c8);
 #else
-extern int D_L02_0015FFD8;
+extern int D_L02_0015FFD8 __attribute__((section(".data")));
 #include "rnc/input/pad_state.h"
 extern int D_L02_001ABE40[];
 extern char *D_L02_0015EF50;
