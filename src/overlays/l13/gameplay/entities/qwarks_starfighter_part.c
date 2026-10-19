@@ -510,6 +510,9 @@ void FUN_L13_002eb098(Moby388 *moby) {
     enum {
         STARFIGHTER_STATE_INITIALIZE = 0,
         STARFIGHTER_STATE_WAIT_FOR_HERO_SHIP = 1,
+        STARFIGHTER_STATE_TRACTOR_BEAM = 5,
+        STARFIGHTER_STATE_OWNER_UNAVAILABLE = 6,
+        STARFIGHTER_STATE_DEATH_FLIGHT = 7,
         STARFIGHTER_STATE_EXPLODE_AND_REMOVE = 8,
         STARFIGHTER_STATE_RESET = 9
     };
@@ -671,7 +674,7 @@ void FUN_L13_002eb098(Moby388 *moby) {
             trooper_anim_finish(moby, (char *)data + 0x60);
         }
         break;
-    case 5: {
+    case STARFIGHTER_STATE_TRACTOR_BEAM: {
         float hero_distance;
         data->hud104 = queue_animation_update_alt(0x11, 0xFFFF, (int)FUN_L00_00235d80, (int)FUN_L00_00235ea0,
                                   (int)FUN_L06_00249738, (int)&data->i108,
@@ -795,7 +798,7 @@ void FUN_L13_002eb098(Moby388 *moby) {
         }
         break;
     }
-    case 6: {
+    case STARFIGHTER_STATE_OWNER_UNAVAILABLE: {
         char *dialog;
         if (*(Moby388 **)(((char *)&D_00140940)) != 0 && (*(Moby388 **)(((char *)&D_00140940)))->cls_id == 0x45) {
             (*(Moby388 **)(((char *)&D_00140940)))->bBC = 0;
@@ -813,7 +816,7 @@ void FUN_L13_002eb098(Moby388 *moby) {
         }
         break;
     }
-    case 7: {
+    case STARFIGHTER_STATE_DEATH_FLIGHT: {
         float target_yaw, target_pitch;
         if (*(Moby388 **)(((char *)&D_00140940)) != 0 && (*(Moby388 **)(((char *)&D_00140940)))->cls_id == 0x45) {
             (*(Moby388 **)(((char *)&D_00140940)))->bBC = 0;
