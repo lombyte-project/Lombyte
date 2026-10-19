@@ -1715,6 +1715,7 @@ void large_amoeboid_update(unsigned char *moby) {
         LARGE_AMOEBOID_FOLLOW_PATH_TO_TARGET = 4,
         LARGE_AMOEBOID_RETURN_TO_STORED_POSITION = 5,
         LARGE_AMOEBOID_WAIT_FOR_ANIMATION_BEFORE_RESUMING_PATH = 7,
+        LARGE_AMOEBOID_PROCESS_KNOCKBACK = 8,
         LARGE_AMOEBOID_WAIT_FOR_ANIMATION_BEFORE_RESTARTING_PATH = 9,
         LARGE_AMOEBOID_WAIT_FOR_ACTIVATION_VOLUME = 13,
         LARGE_AMOEBOID_MOVE_DIRECTLY_TOWARD_TARGET = 15,
@@ -2007,7 +2008,7 @@ void large_amoeboid_update(unsigned char *moby) {
         FUN_L01_002ef560(moby);
         return;
     }
-    case 8:
+    case LARGE_AMOEBOID_PROCESS_KNOCKBACK:
         result = mine_fall(moby, data + 0x60);
         if (result & 1) {
             path_hit = follow_path((int *)(data + 0x240), 1, *(int *)(data + 0x244),
