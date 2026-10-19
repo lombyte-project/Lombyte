@@ -2598,15 +2598,20 @@ extern void normalize_vector_xyz(void *, void *, float);
 
 void door_update(unsigned char *moby) __asm__("FUN_L16_002d59e0");
 void door_update(unsigned char *moby) {
+    enum {
+        DOOR_STATE_INITIALIZE = 0,
+        DOOR_STATE_MOVING = 1,
+        DOOR_STATE_IDLE = 2
+    };
     char *d = *(char **)(moby + 0x78);
     char *pos;
     char buf[16];
     switch (moby[0x20]) {
-    case 0:
+    case DOOR_STATE_INITIALIZE:
         qcopy(d, moby + 0x10);
         moby[0x20] = 2;
         break;
-    case 1:
+    case DOOR_STATE_MOVING:
         pos = (char *)moby + 0x10;
         qcopy(pos, d);
         advance_accelerated_scalar(*(float *)(d + 0x14), frame_time_sq * 4.0f, frame_time_sq * 4.0f,
@@ -2617,7 +2622,7 @@ void door_update(unsigned char *moby) {
             moby[0x20] = 2;
         }
         break;
-    case 2:
+    case DOOR_STATE_IDLE:
         break;
     }
 }
