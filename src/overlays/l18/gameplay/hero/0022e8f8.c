@@ -156,6 +156,8 @@ void FUN_L18_0022e8f8(void) {
     enum {
         HERO_STATE_LEDGE_HANG_ENTRY = 24,
         HERO_STATE_LEDGE_HANG = 25,
+        HERO_STATE_LEDGE_SHIMMY_CCW = 26,
+        HERO_STATE_LEDGE_SHIMMY_CW = 27,
         HERO_STATE_GRIND_JUMP = 41,
         HERO_STATE_GRIND_RAIL_TRANSFER = 42,
         HERO_STATE_GRIND_ATTACK = 43,
@@ -1586,8 +1588,8 @@ void FUN_L18_0022e8f8(void) {
                         }
                     }
                     break;
-                case 26:
-                case 27: {
+                case HERO_STATE_LEDGE_SHIMMY_CCW:
+                case HERO_STATE_LEDGE_SHIMMY_CW: {
                     float ang;
 
                     qcopy(v0, hero.motion.pos.f);
