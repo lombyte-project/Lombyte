@@ -1512,6 +1512,11 @@ extern int FUN_L00_00233e98_2c1ad0(int) __asm__("FUN_L00_00233e98");
 /* Updates the grip, chooses a throw target, and handles the held moby states. */
 void bomb_glove_update(struct Moby *moby) __asm__("FUN_L00_002c26c8");
 void bomb_glove_update(struct Moby *moby) {
+    enum {
+        BOMB_GLOVE_INITIALIZE = 0,
+        BOMB_GLOVE_WAIT_FOR_ANIMATION = 1,
+        BOMB_GLOVE_REMOVE_HELD_MOBY = 6
+    };
     CarrierVars_2c26c8 *vars;
     OvlVec4 local[4], saved, offset, rotatedOffset, pos, target, basis[3], matrix[4];
     OvlVec4 launch;
@@ -1644,13 +1649,13 @@ void bomb_glove_update(struct Moby *moby) {
         aim_throw_arc((V2c2488 *)&pos, (V2c2488 *)&target, out, gravity, 0.00000999999975f, speed);
     }
     switch (moby->state) {
-    case 0:
+    case BOMB_GLOVE_INITIALIZE:
         vars->held = 0;
         if (!(moby->anim_flags & 2))
             moby->state = 1;
         else
             moby->state = 2;
-    case 1:
+    case BOMB_GLOVE_WAIT_FOR_ANIMATION:
         if (moby->anim_flags & 2)
             moby->state = 2;
         break;
@@ -1680,7 +1685,7 @@ void bomb_glove_update(struct Moby *moby) {
     case 5:
         moby->state = 6;
         break;
-    case 6:
+    case BOMB_GLOVE_REMOVE_HELD_MOBY:
         /* Retail reloads held after destruction before the common tail. */
         if (vars->held != 0)
             mark_moby_for_removal(vars->held);
