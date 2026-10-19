@@ -6205,6 +6205,7 @@ void fred_update(struct Moby *m) {
         UPDATE_FRED_DIALOGUE = 1,
         HANDLE_FRED_DIALOGUE_RESULT = 2,
         INTERPOLATE_FRED_CUTSCENE_CAMERA = 3,
+        RAMP_FRED_POST_CUTSCENE_SCALAR_TO_ZERO = 4,
         WAIT_FOR_FRED_REMOVAL_TRIGGER = 5
     };
     Data_301070 *d = *(struct Data_301070 **)&m->pvars;
@@ -6351,7 +6352,7 @@ void fred_update(struct Moby *m) {
       }
         break;
     }
-    case 4:
+    case RAMP_FRED_POST_CUTSCENE_SCALAR_TO_ZERO:
         approach_value_301070(&D_L06_0015F3FC_macro, 0.0f, frame_time_macro * 4.0f);
         if (D_L06_0015F3FC_macro == 0.0f) {
             m->state = 5;
