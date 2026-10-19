@@ -1480,6 +1480,9 @@ void mmr_q(struct Obj_q *obj) __asm__("FUN_0020c828");
 
 extern char D_L13_001F51B0[] __attribute__((section(".data")));
 void FUN_L13_002f8880(char *moby) {
+    enum {
+        STATE_RELAY_INITIALIZE = 0
+    };
     char *data = *(char **)(moby + 0x78);
     char *m = 0;
     int idx = *(int *)data;
@@ -1489,7 +1492,7 @@ void FUN_L13_002f8880(char *moby) {
         m = D_L13_0015FFD8_m + (idx << 8);
     }
     switch (data[0x1C]) {
-    case 0:
+    case STATE_RELAY_INITIALIZE:
         if (m == 0) {
             debug_print_alt_q(D_L13_001F51B0, *(short *)(moby + 0xB2), *(short *)(moby + 0xA6));
             mmr_q(moby);
