@@ -1300,6 +1300,7 @@ void platform_update(Moby *moby) {
         PLATFORM_KIND_FOLLOW_WAYPOINTS = 0,
         PLATFORM_KIND_OSCILLATE_BETWEEN_PATH_ENDPOINTS = 1,
         PLATFORM_KIND_OSCILLATE_BETWEEN_PATH_ENDPOINTS_FIXED_PITCH = 2,
+        PLATFORM_KIND_DISABLE_DRAWING_AND_COLLISION = 3,
         PLATFORM_KIND_TRACK_REFERENCED_MOBY_HEIGHT = 4
     };
     float oldPos[4];
@@ -1359,7 +1360,7 @@ void platform_update(Moby *moby) {
             clear_u64_value_c2(data->vel);
             moby->state = 4;
             break;
-        case 3:
+        case PLATFORM_KIND_DISABLE_DRAWING_AND_COLLISION:
             moby->draw_dist = 0;
             moby->state = 1;
             (*(int *)&moby->collision) = 0;
