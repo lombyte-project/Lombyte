@@ -2939,6 +2939,7 @@ void infobot_update(struct Moby *moby)
 {
     enum {
         INFOBOT_INITIALIZE = 0,
+        INFOBOT_IDLE = 1,
         INFOBOT_WAIT_FOR_PLAYER = 2,
         INFOBOT_WAIT_TO_FOLLOW_SLOT_PATH = 3,
         INFOBOT_FOLLOW_SLOT_PATH = 4,
@@ -3007,7 +3008,7 @@ void infobot_update(struct Moby *moby)
         infobot->seg = 0;
         moby->state = 3;
         break;
-    case 1:
+    case INFOBOT_IDLE:
         break;
     case INFOBOT_WAIT_FOR_PLAYER:
         range = 1.0f;
