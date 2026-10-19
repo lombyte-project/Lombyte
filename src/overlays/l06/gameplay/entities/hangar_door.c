@@ -444,7 +444,9 @@ extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 void hangar_door_update(char *m) __asm__("FUN_L06_002b4770");
 void hangar_door_update(char *m) {
     enum {
-        HANGAR_DOOR_INITIALIZE = 0
+        HANGAR_DOOR_INITIALIZE = 0,
+        HANGAR_DOOR_POSITIVE_ANGLE_OFFSET = 1,
+        HANGAR_DOOR_NEGATIVE_ANGLE_OFFSET = 2
     };
     char *d = *(char **)(m + 0x78);
     float z;
@@ -483,7 +485,7 @@ void hangar_door_update(char *m) {
             m[0x20] = 2;
         }
         break;
-    case 1:
+    case HANGAR_DOOR_POSITIVE_ANGLE_OFFSET:
         z = *(float *)(m + 0x18);
         a = fast_add_rotations(*(float *)(d + 0x18), -1.5707950592041016f);
         *(float *)(m + 0x10) = fast_cos(a) * *(float *)(d + 0xC);
@@ -496,7 +498,7 @@ void hangar_door_update(char *m) {
         *(float *)(m + 0x18) = z;
         *(float *)(m + 0x48) = fast_add_rotations(*(float *)(d + 4), *(float *)(d + 0x18));
         break;
-    case 2:
+    case HANGAR_DOOR_NEGATIVE_ANGLE_OFFSET:
         z = *(float *)(m + 0x18);
         a = fast_subtract_rotations(-1.5707950592041016f, *(float *)(d + 0x18));
         *(float *)(m + 0x10) = fast_cos(a) * *(float *)(d + 0xC);
