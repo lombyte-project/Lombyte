@@ -442,12 +442,16 @@ extern short D_L16_00161E04 __attribute__((sda));
 extern short D_L16_00161E08 __attribute__((sda));
 void grindrail_barrier_update(struct Moby *m) __asm__("FUN_L16_002e5708");
 void grindrail_barrier_update(struct Moby *m) {
+    enum {
+        GRINDRAIL_BARRIER_STATE_INITIALIZE = 0,
+        GRINDRAIL_BARRIER_STATE_COLLISION_DISABLED = 2
+    };
     char *d = (char *)m->pvars;
     float cycle;
     int i;
     float *p;
     switch (m->state) {
-    case 0:
+    case GRINDRAIL_BARRIER_STATE_INITIALIZE:
         m->state = 1;
         m->update_dist = 0xFF;
         break;
@@ -474,7 +478,7 @@ void grindrail_barrier_update(struct Moby *m) {
             FUN_L16_002e5d30_c(*(int *)(d + 0x20));
         }
         break;
-    case 2:
+    case GRINDRAIL_BARRIER_STATE_COLLISION_DISABLED:
         if (!FUN_L16_002e5cd0(*(int *)(d + 0x20))) {
             m->state = 1;
             m->collision = m->pclass->collision;
