@@ -173,6 +173,7 @@ void hydrodisplacer_update(Moby *moby) __asm__("FUN_L00_002df9a0");
 void hydrodisplacer_update(Moby *moby) {
     enum {
         HYDRODISPLACER_INITIALIZE = 0,
+        HYDRODISPLACER_WAIT_FOR_ANIMATION_FLAG = 1,
         HYDRODISPLACER_WAIT_FOR_ACTIVATION = 2,
         HYDRODISPLACER_CAMERA_TRANSITION = 4,
         HYDRODISPLACER_WAIT_FOR_TIMER = 5
@@ -218,7 +219,7 @@ void hydrodisplacer_update(Moby *moby) {
         func_0022ED80_2E0E50(0, 0, moby);
         moby->state = 1;
         break;
-    case 1:
+    case HYDRODISPLACER_WAIT_FOR_ANIMATION_FLAG:
         if (moby->anim_flags & 2) {
             moby->state = 2;
         }
