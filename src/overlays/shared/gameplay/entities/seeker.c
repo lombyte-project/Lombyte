@@ -89,6 +89,8 @@ void seeker_update(struct Moby *moby) __asm__("FUN_L09_002c5990");
 void seeker_update(struct Moby *moby) {
     enum {
         SEEKER_STATE_INITIALIZE = 0,
+        SEEKER_STATE_HURT_KNOCKBACK = 5,
+        SEEKER_STATE_FATAL_KNOCKBACK = 6,
         SEEKER_STATE_EXPLODE = 7
     };
     Moby52Vars *vars = (Moby52Vars *)moby->pvars;
@@ -244,7 +246,7 @@ void seeker_update(struct Moby *moby) {
             }
         }
         break;
-    case 5:
+    case SEEKER_STATE_HURT_KNOCKBACK:
         height = moby->pos.z;
         mine_fall(moby, &vars->vel);
         moby->pos.z = height;
@@ -260,7 +262,7 @@ void seeker_update(struct Moby *moby) {
             }
         }
         break;
-    case 6:
+    case SEEKER_STATE_FATAL_KNOCKBACK:
         voice = vars->voice;
         if (voice != -1) {
             slot = (VoiceSlot *)(D_0013E550 + voice * 0x70);
