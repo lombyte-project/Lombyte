@@ -161,6 +161,10 @@ extern char *func_L00_0026DEA0_c(void *, int, void *, int, float, float, float,
 extern char D_L07_0016C960_c[] __asm__("D_L07_0016C8E0");
 
 void FUN_L07_0031eba8(char *m) {
+    enum {
+        MOBY_STATE_INITIALIZE = 0,
+        MOBY_STATE_UPDATE = 1
+    };
     int state = *(unsigned char *)(m + 0x20);
     int a;
     int k;
@@ -171,11 +175,11 @@ void FUN_L07_0031eba8(char *m) {
     char *S;
     float buf[4];
     switch (state) {
-    case 0:
+    case MOBY_STATE_INITIALIZE:
         *(unsigned char *)(m + 0x30) = 0xFF;
         m[0x20] = 1;
         break;
-    case 1:
+    case MOBY_STATE_UPDATE:
         a = scene_state;
         if (a != 2)
             return;
