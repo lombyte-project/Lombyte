@@ -2780,6 +2780,11 @@ extern int func_L00_001F2BE8_308D68(void *, int, void *, void *, float) __asm__(
 
 void skid_mcmarx_update(Moby *moby) __asm__("FUN_L05_00307910");
 void skid_mcmarx_update(Moby *moby) {
+    enum {
+        SKID_MCMARX_INITIALIZE = 0,
+        SKID_MCMARX_WAIT_FOR_RACE_MODE = 1,
+        SKID_MCMARX_FOLLOW_PATH = 2
+    };
     float path_point[4];
     float step[4];
     float probe[4];
@@ -2791,7 +2796,7 @@ void skid_mcmarx_update(Moby *moby) {
         moby->shadow_range = 0x17;
     }
     switch (moby->state) {
-    case 0: {
+    case SKID_MCMARX_INITIALIZE: {
         Path_308D68 *path;
 
         moby->update_dist = 0x18;
@@ -2823,7 +2828,7 @@ void skid_mcmarx_update(Moby *moby) {
         moby->state = 1;
         break;
     }
-    case 1:
+    case SKID_MCMARX_WAIT_FOR_RACE_MODE:
         if (*(int *)(((char *)&D_001413DC)) == 0x16) {
             moby->update_dist = 0xFF;
             moby->flags &= ~0x41;
@@ -2851,7 +2856,7 @@ void skid_mcmarx_update(Moby *moby) {
             moby->state = 2;
         }
         break;
-    case 2: {
+    case SKID_MCMARX_FOLLOW_PATH: {
         Hero *hero = (Hero *)(((char *)&D_0013F350));
 
         if (hero->state.control_mode != 0x16) {
