@@ -1,14 +1,7 @@
-#include "rnc/gameplay/entities/moby_class_tables.h"
+/* Ported from rac1-decomp (src/game/pause.c: func_00226978). */
 #include "types.h"
-#include "asm.h"
-
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/expected/asm/assembly/textbin/ui/menus/update_streamed_moby_animation/FUN_002256e8.s", FUN_002256e8);
-#else
 #include "rnc/gameplay/entities/moby_class_tables.h"
-#include "types.h"
 #include "rnc/storage/disc_table.h"
-
 
 typedef struct {
     u8 pad_0[0x20];
@@ -62,11 +55,13 @@ s32 update_streamed_moby_animation(MobyAnimationStream *stream) {
     StreamedAnimationMoby *moby;
     AnimationTableHeader *header;
     StreamedClassResource **class_resource;
+    StreamedClassResource **classes;
+    s32 k;
     s32 table_index;
     s32 dialogue_column;
     u8 *animation_table;
     s32 animation_index;
-    u8 class_slot;
+    u16 class_slot;
 
     switch (stream->state) {
     case 0:
@@ -92,16 +87,13 @@ s32 update_streamed_moby_animation(MobyAnimationStream *stream) {
         animation_asset_read_active[0] = 0;
         decompress_wad(stream->buffer + stream->read_offset, stream->buffer);
         class_slot = resident_class_slot_by_id[0x7A5];
-        class_resource = (StreamedClassResource **)&moby_class_resources[class_slot];
+        classes = (StreamedClassResource **)moby_class_resources;
         header = (AnimationTableHeader *)stream->buffer;
-        table_index = class_slot >> 8;
-    next:
-        animation_table = stream->buffer + ((AnimationTableHeader *)((u8 *)header + (table_index << 3)))->offset;
-        table_index++;
-        (*class_resource)->animation_tables[table_index] = animation_table;
-        relocate_asset_entry_pointers(*class_resource, table_index);
-        if (table_index < 3) {
-            goto next;
+        class_resource = &classes[class_slot];
+        for (k = 0; k < 3; k++) {
+            animation_table = stream->buffer + ((AnimationTableHeader *)((u8 *)header + (k << 3)))->offset;
+            (*class_resource)->animation_tables[k + 1] = animation_table;
+            relocate_asset_entry_pointers(*class_resource, k + 1);
         }
         stream->state = 2;
         if (alternate_animation_sequence == 0) {
@@ -179,4 +171,5 @@ s32 update_streamed_moby_animation(MobyAnimationStream *stream) {
     }
     return 0;
 }
-#endif /* NON_MATCHING */
+
+extern __typeof__(update_streamed_moby_animation) func_002256E8 __attribute__((alias("FUN_002256e8")));

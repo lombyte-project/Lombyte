@@ -7,9 +7,9 @@ struct ViewParams {
     f32 sy;
 };
 extern struct ViewParams D_0019E970[];
-void world_to_map_coords(f32 *outx, f32 *outy, s32 view, f32 x, f32 y) __asm__("FUN_00208408");
+void world_to_map_coords(f32 x, f32 y, f32 *outx, f32 *outy, s32 view) __asm__("FUN_00208408");
 
-void world_to_map_coords(f32 *outx, f32 *outy, s32 view, f32 x, f32 y) {
+void world_to_map_coords(f32 x, f32 y, f32 *outx, f32 *outy, s32 view) {
     s32 alt;
 
     alt = 0;

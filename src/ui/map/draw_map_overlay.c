@@ -1,11 +1,4 @@
-#include "types.h"
-#include "asm.h"
-#include "rnc/globals.h"
-
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/expected/asm/assembly/textbin/ui/map/draw_map_overlay/FUN_00205640.s",
-            FUN_00205640);
-#else
+/* Ported from rac1-decomp (src/game/map.c: DrawMapView). */
 #include "rnc/globals.h"
 #include "types.h"
 #include "rnc/ui/text/text_region.h"
@@ -57,14 +50,13 @@ extern void draw_hud_sprite_subpixel(s32, s32, s32, s32, s32, s32) __asm__("func
 extern void draw_rotated_sprite(f32, f32, f32, f32, f32, s32, s32, u64) __asm__("func_00200600");
 extern void append_screen_rect_packet(s32, s32, s32, s32, u64, s32) __asm__("func_00200E08");
 extern void format_menu_item_text(s32, void *) __asm__("func_00208280");
-extern void world_to_map_coords(f32 *, f32 *, s32, f32, f32) __asm__("func_00208408");
+extern void world_to_map_coords(f32 x, f32 y, f32 *outx, f32 *outy, s32 view) __asm__("func_00208408");
 extern void draw_map_markers(s32, s32, s32, s32) __asm__("func_00208508");
 extern void vu1_add_g_sregister(s32, s64) __asm__("FUN_00233980");
 extern void *memset(void *, s32, u32);
 
 void draw_map_overlay(void) __asm__("FUN_00205640");
 
-extern struct MapState D_001A00F0_far __asm__("D_001A00F0") __attribute__((section(".data")));
 void draw_map_overlay(void) {
     union {
         u8 b[0x80];
@@ -269,20 +261,22 @@ void draw_map_overlay(void) {
             s32 inner_offset;
             s32 inner_icon_offset;
             s32 inner_stride;
+            s32 outer_stride;
 
             /* The flag-4 entry terminates the list. Separate overlapping icon
                bounds before either icon is drawn, using half of the smallest
                positive edge distance for each pair. */
             i = 0;
             if (!(level_map_selection.icons[1].flags & 4)) {
+                outer_stride = sizeof(struct MapIcon);
                 inner_stride = sizeof(struct MapIcon);
                 do {
-                    if (level_map_selection.icons[i].active == 0 || level_map_selection.icons[i].texture_id == 0 ||
-                        (level_map_selection.icons[i].flags & 3)) {
+                    if (((struct MapIcon *)(i * outer_stride + (u32)level_map_selection.icons))->active == 0 || ((struct MapIcon *)(i * outer_stride + (u32)level_map_selection.icons))->texture_id == 0 ||
+                        (((struct MapIcon *)(i * outer_stride + (u32)level_map_selection.icons))->flags & 3)) {
                         goto next_outer_icon;
                     }
                     j = i + 1;
-                    if (!(level_map_selection.icons[j].flags & 4)) {
+                    if (!(((struct MapIcon *)(j * outer_stride + (u32)level_map_selection.icons))->flags & 4)) {
                         inner_offset = j * inner_stride;
                         inner_icon_offset = inner_offset;
                         do {
@@ -337,7 +331,7 @@ void draw_map_overlay(void) {
                     }
                 next_outer_icon:
                     i++;
-                } while (!(level_map_selection.icons[i + 1].flags & 4));
+                } while (!(((struct MapIcon *)(i * outer_stride + (u32)level_map_selection.icons))[1].flags & 4));
             }
         }
 
@@ -401,39 +395,40 @@ void draw_map_overlay(void) {
                                 icon_bounds[i].x1 - icon_bounds[i].x0,
                                 icon_bounds[i].y1 - icon_bounds[i].y0, 0x80);
                         }
-                        icon = &level_map_selection.icons[i];
-                        if (icon->flags & 0x10) {
-                            label_width = icon->label_width;
-                            label_offset_x = icon->label_offset_x;
-                            label_height = (s16)icon->label_height;
-                            label_offset_y = icon->label_offset_y;
+                        if (level_map_selection.icons[i].flags & 0x10) {
+                            label_width = level_map_selection.icons[i].label_width;
+                            label_offset_x = level_map_selection.icons[i].label_offset_x;
+                            label_height = (s16)level_map_selection.icons[i].label_height;
+                            frame_index = level_map_selection.icons[i].label_offset_y;
                             if (label_offset_x == 0) {
                                 label_x = ((icon_bounds[i].x0 + icon_bounds[i].x1) >> 5) -
                                           label_width / 2;
                             } else {
-                                label_x =
-                                    ((label_offset_x > 0 ? icon_bounds[i].x1 : icon_bounds[i].x0) >>
-                                     4) -
-                                    label_width / 2 + label_offset_x;
+                                if (label_offset_x > 0) {
+                                    label_x = (icon_bounds[i].x1 >> 4) - label_width / 2 + label_offset_x;
+                                } else {
+                                    label_x = (icon_bounds[i].x0 >> 4) - label_width / 2 + label_offset_x;
+                                }
                             }
-                            if (label_offset_y == 0) {
+                            if (frame_index == 0) {
                                 label_y = ((icon_bounds[i].y0 + icon_bounds[i].y1) >> 5) -
                                           label_height / 2;
                             } else {
-                                label_y =
-                                    ((label_offset_y > 0 ? icon_bounds[i].y1 : icon_bounds[i].y0) >>
-                                     4) -
-                                    label_height / 2 + label_offset_y;
+                                if (frame_index > 0) {
+                                    label_y = (icon_bounds[i].y1 >> 4) - label_height / 2 + frame_index;
+                                } else {
+                                    label_y = (icon_bounds[i].y0 >> 4) - label_height / 2 + frame_index;
+                                }
                             }
                             draw_ui_frame(label_y, label_y + label_height, label_x,
                                           label_x + label_width, 0x40);
                             format_menu_item_text(i, &label_buffer);
                             memset(&text_window, 0, sizeof(text_window));
-                            text_window.line_advance = 0xF;
                             text_window.bottom = label_y + label_height;
                             text_window.right = label_x + label_width;
                             text_window.anchor_x = label_x + label_width / 2;
                             text_window.anchor_y = label_y + 4;
+                            text_window.line_advance = 0xF;
                             text_window.flags = 1;
                             text_window.top = label_y;
                             text_window.left = label_x;
@@ -463,12 +458,10 @@ void draw_map_overlay(void) {
                 angle = fast_add_rotations(angle, 1.5707964f);
             }
             if (D_0015FD60 != 0) {
-                world_to_map_coords(&label_buffer.f[0], &label_buffer.f[1], current_level_index + 100,
-                                    hero.motion.pos.f[0], hero.motion.pos.f[1]);
+                world_to_map_coords(hero.motion.pos.f[0], hero.motion.pos.f[1], &label_buffer.f[0], &label_buffer.f[1], current_level_index + 100);
                 angle = fast_add_rotations(angle, 1.5707964f);
             } else {
-                world_to_map_coords(&label_buffer.f[0], &label_buffer.f[1], current_level_index,
-                                    hero.motion.pos.f[0], hero.motion.pos.f[1]);
+                world_to_map_coords(hero.motion.pos.f[0], hero.motion.pos.f[1], &label_buffer.f[0], &label_buffer.f[1], current_level_index);
             }
             label_buffer.f[0] = (f32)rx0 + label_buffer.f[0] * (f32)(rx1 - rx0);
             label_buffer.f[1] = (f32)ry0 + label_buffer.f[1] * (f32)(ry1 - ry0);
@@ -491,4 +484,3 @@ void draw_map_overlay(void) {
     }
 }
 extern __typeof__(draw_map_overlay) func_00205640 __attribute__((alias("FUN_00205640")));
-#endif /* NON_MATCHING */

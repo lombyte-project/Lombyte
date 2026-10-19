@@ -36,7 +36,7 @@ extern MapFilterCallback D_L00_00183F90[19][8] __asm__("D_L00_00183F90") NOT_SDA
 extern u8 D_00140634 __asm__("D_00140634") NOT_SDA;
 extern s32 D_L00_001844A8[] __asm__("D_L00_001844A8") NOT_SDA;
 extern u8 D_L00_00184394[] __asm__("D_L00_00184394") NOT_SDA;
-extern void world_to_map_coords(f32 *, f32 *, s32, f32, f32) __asm__("FUN_00208408");
+extern void world_to_map_coords(f32, f32, f32 *, f32 *, s32) __asm__("FUN_00208408");
 extern s32 FUN_L00_00249d80(s32);
 
 void FUN_L00_002484e0(f32 *position) {
@@ -58,9 +58,9 @@ void FUN_L00_002484e0(f32 *position) {
 
     if (D_L00_00184218 == 0) return;
     if (*(s32 *)0x0015fdf8 != 0) {
-        world_to_map_coords(&px, &py, current_level_index + 100, position[0], position[1]);
+        world_to_map_coords(position[0], position[1], &px, &py, current_level_index + 100);
     } else {
-        world_to_map_coords(&px, &py, current_level_index, position[0], position[1]);
+        world_to_map_coords(position[0], position[1], &px, &py, current_level_index);
     }
     x = (s32)(px * 512.0f) + 1;
     y = (s32)(py * 512.0f) + 1;
