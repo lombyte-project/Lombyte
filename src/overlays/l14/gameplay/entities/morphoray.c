@@ -799,6 +799,10 @@ extern s32 allocate_voice_for_target_entry(s32, s32, struct Moby *) __asm__("FUN
 
 void button_update(struct Moby *moby) __asm__("FUN_L14_00306b78");
 void button_update(struct Moby *moby) {
+    enum {
+        BUTTON_INITIALIZE = 0,
+        BUTTON_WAIT_FOR_HERO_TO_STAND = 1
+    };
     s32 *d = (s32 *)moby->pvars;
     s16 id;
     s32 i;
@@ -810,7 +814,7 @@ void button_update(struct Moby *moby) {
     u32 high;
 
     switch (moby->state) {
-    case 0:
+    case BUTTON_INITIALIZE:
         *(f32 *)(d + 3) = random_angle_radians();
         moby->pos.z -= 0.35f;
         id = (s16)moby->save_id;
@@ -837,7 +841,7 @@ void button_update(struct Moby *moby) {
             moby->state = 1;
         }
         break;
-    case 1:
+    case BUTTON_WAIT_FOR_HERO_TO_STAND:
         angle = fast_add_rotations(*(f32 *)(d + 3), frame_time * 6.2831855f);
         *(f32 *)(d + 3) = angle;
         color = truncate_float_to_s32((fast_sin(angle) * 4.0f - 3.0f) * 128.0f);
