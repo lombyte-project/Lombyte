@@ -35,16 +35,20 @@ extern void rand_vec(void *, f32, f32) __asm__("FUN_L00_00257d78");
 /* Shard debris update: drifts along its velocity, sheds particle trails and expires when its timer runs out. */
 void FUN_L02_002ebf20(struct Moby *m);
 void FUN_L02_002ebf20(struct Moby *m) {
+    enum {
+        SHARD_STATE_REMOVE = 0,
+        SHARD_STATE_ACTIVE = 1
+    };
     ShardVars *v = (ShardVars *)m->pvars;
     Vec4f p, back, half, jit;
     u8 *q;
     s32 i;
 
     switch (m->state) {
-    case 0:
+    case SHARD_STATE_REMOVE:
         mark_moby_for_removal(m);
         return;
-    case 1:
+    case SHARD_STATE_ACTIVE:
         break;
     default:
         return;
