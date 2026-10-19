@@ -53,6 +53,7 @@ void update_resident_dialogue_animation_state(Moby *m) {
         RESIDENT_IDLE_WAIT_TO_REQUEST_DIALOGUE = 0,
         RESIDENT_TIMED_WAIT_TO_RESTORE_IDLE_ANIMATION = 2,
         RESIDENT_WAIT_TO_RESTORE_IDLE_ANIMATION = 3,
+        RESIDENT_WAIT_FOR_ANIMATION_COMPLETION_TO_START_DIALOGUE_ANIMATION = 10,
         RESIDENT_WAIT_TO_START_DIALOGUE_ANIMATION = 12
     };
     s32 r;
@@ -144,7 +145,7 @@ void update_resident_dialogue_animation_state(Moby *m) {
             D_001E63C0.timer = 0;
         }
         break;
-    case 10:
+    case RESIDENT_WAIT_FOR_ANIMATION_COMPLETION_TO_START_DIALOGUE_ANIMATION:
         if (D_0015172A == 3 && D_001610B0 != 0) {
             D_001610B0 = 0;
             D_001610B4 = 1;
