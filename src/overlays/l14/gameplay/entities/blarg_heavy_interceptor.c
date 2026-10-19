@@ -1702,8 +1702,10 @@ void machinegun_turret_update(char *moby) {
     enum {
         TURRET_STATE_INITIALIZE = 0,
         TURRET_STATE_WAIT_FOR_ACTIVATION = 1,
+        TURRET_STATE_DEPLOY = 2,
         TURRET_STATE_WAIT_FOR_TARGET = 3,
         TURRET_STATE_AIM_AND_FIRE = 4,
+        TURRET_STATE_RETRACT = 5,
         TURRET_STATE_DESTROY = 6
     };
     char *data;
@@ -1766,7 +1768,7 @@ void machinegun_turret_update(char *moby) {
         func_00213D28_2B4E40(moby, 1, 0);
         *(float *)(moby + 0x58) = 1.0f / (func_001FA888_2B4E40(*(short *)(data + 0x74)) * D_L14_00161510);
         return;
-    case 2:
+    case TURRET_STATE_DEPLOY:
         {
             float t = (float)*(short *)(data + 0x74) * *(float *)(data + 0x78);
             *(float *)(moby + 0x18) = *(float *)(data + 0x70) - (0.0f + (D_L14_00161508 - 0.0f) * t);
@@ -1874,7 +1876,7 @@ void machinegun_turret_update(char *moby) {
         func_00213D28_2B4E40(moby, 2, 0);
         *(float *)(moby + 0x58) = 1.0f;
         return;
-    case 5:
+    case TURRET_STATE_RETRACT:
         {
             float t = (float)*(short *)(data + 0x74) * *(float *)(data + 0x78);
             *(float *)(moby + 0x18) = *(float *)(data + 0x70) - (D_L14_00161508 + (0.0f - D_L14_00161508) * t);
