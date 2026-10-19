@@ -1152,6 +1152,16 @@ extern int func_001F9908_i(void *) __asm__("FUN_001f9740");
 
 void robosquawker_update(RsMoby *m) __asm__("FUN_L13_002b50d8");
 void robosquawker_update(RsMoby *m) {
+    enum {
+        ROBOSQUAWKER_STATE_INITIALIZE = 0,
+        ROBOSQUAWKER_STATE_RETURN_HOME = 5,
+        ROBOSQUAWKER_STATE_DAMAGE_KNOCKBACK = 6,
+        ROBOSQUAWKER_STATE_FLY_TO_RANDOM_POINT = 0xF,
+        ROBOSQUAWKER_STATE_TAKEOFF = 0x10,
+        ROBOSQUAWKER_STATE_LAND = 0x11,
+        ROBOSQUAWKER_STATE_FOLLOW_FLIGHT_PATH = 0x12,
+        ROBOSQUAWKER_STATE_DEATH_KNOCKBACK = 0x63
+    };
     RsVars *v;
     RsVec old;
     RsTarget tgt;
@@ -1253,7 +1263,7 @@ void robosquawker_update(RsMoby *m) {
     }
     m->bA4 = 0xFF;
     switch (m->state) {
-    case 0:
+    case ROBOSQUAWKER_STATE_INITIALIZE:
         qcopy(&v->v1D0, &m->pos);
         v->v1D0.f[3] = v->f1FC;
         if (v->h20A != 0) {
@@ -1355,7 +1365,7 @@ void robosquawker_update(RsMoby *m) {
         }
         break;
     }
-    case 0xF: {
+    case ROBOSQUAWKER_STATE_FLY_TO_RANDOM_POINT: {
         float a;
 
         a = fast_arc_tan(v->v1E0.f[0] - m->pos.f[0], v->v1E0.f[1] - m->pos.f[1]);
@@ -1388,7 +1398,7 @@ void robosquawker_update(RsMoby *m) {
         FUN_L13_002b4f28((unsigned char *)m, (char *)v);
         break;
     }
-    case 0x12: {
+    case ROBOSQUAWKER_STATE_FOLLOW_FLIGHT_PATH: {
         char *path;
         float a;
         float d;
@@ -1466,7 +1476,7 @@ void robosquawker_update(RsMoby *m) {
         FUN_L13_002b4f28((unsigned char *)m, (char *)v);
         break;
     }
-    case 0x11: {
+    case ROBOSQUAWKER_STATE_LAND: {
         float g;
 
         g = probe_ground_height(&m->pos, 0x120, 0.5f);
@@ -1492,7 +1502,7 @@ void robosquawker_update(RsMoby *m) {
         }
         break;
     }
-    case 0x10: {
+    case ROBOSQUAWKER_STATE_TAKEOFF: {
         float g;
 
         g = probe_ground_height(&m->pos, 0x120, 0.5f);
@@ -1738,7 +1748,7 @@ void robosquawker_update(RsMoby *m) {
         FUN_L13_002b4ff0((char *)m, (char *)v);
         break;
     }
-    case 5: {
+    case ROBOSQUAWKER_STATE_RETURN_HOME: {
         int res;
         float a;
 
@@ -1785,7 +1795,7 @@ void robosquawker_update(RsMoby *m) {
         m->bBC = 0;
         break;
     }
-    case 6:
+    case ROBOSQUAWKER_STATE_DAMAGE_KNOCKBACK:
         if (mine_fall(m, v->x120) & 1) {
             qzero(v->x120);
             m->state = 3;
@@ -1809,7 +1819,7 @@ void robosquawker_update(RsMoby *m) {
             v->hC8 = 0;
         }
         break;
-    case 0x63: {
+    case ROBOSQUAWKER_STATE_DEATH_KNOCKBACK: {
         int t;
 
         m->h34 &= 0xEFFF;
