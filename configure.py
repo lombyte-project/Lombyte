@@ -2224,12 +2224,14 @@ def build_overlays() -> Path:
     # obj/ only checks that the file compiles as written; its code is never
     # compared.  GNU as can assert (tc-mips.c:11454) on a bare symbol access
     # in a noreorder delay slot, with -G0 on some files and without it on
-    # others, so a file passes when it assembles either way.
+    # others, and on some with both; cc1 -G0 leaves no such access, so a file
+    # passes when it assembles any of the three ways.
     overlay_cc = f"{game_root}/ee-gcc -c {includes} {LANG_DEFINE} {COMPILER_FLAGS} $in -o $out"
     ninja.rule(
         "overlay-cc",
         description="overlay-cc $in",
-        command=f"{overlay_cc.replace(' -c ', ' -c -Wa,-G0 ', 1)} 2>/dev/null || {overlay_cc}",
+        command=(f"{overlay_cc.replace(' -c ', ' -c -Wa,-G0 ', 1)} 2>/dev/null || {overlay_cc} 2>/dev/null || "
+                 f"{overlay_cc.replace(' -c ', ' -c -G0 ', 1)}"),
     )
     ninja.rule(
         "c-only",
