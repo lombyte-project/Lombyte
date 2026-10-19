@@ -3341,6 +3341,12 @@ s32 allocate_voice_for_target_entry_c(s32 entry_index, s32 flags,
 void mark_moby_for_removal_c(void *obj) __asm__("FUN_0020c828");
 
 void FUN_L07_00311bc8(char *m) {
+    enum {
+        LEAF_INITIALIZE = 0,
+        LEAF_WAIT_FOR_HERO_CONTACT = 1,
+        LEAF_TIMED_SWAY_AND_DESCENT = 2,
+        LEAF_ACCELERATED_FALL = 3
+    };
     char *d;
     float prev[4];
     float v[4];
@@ -3353,7 +3359,7 @@ void FUN_L07_00311bc8(char *m) {
         return;
     qcopy(prev, m + 0x10);
     switch (((unsigned char *)m)[0x20]) {
-    case 0:
+    case LEAF_INITIALIZE:
         *(int *)(d + 0x20) = 0;
         *(short *)(d + 0x24) = 0;
         d[0x28] = 4;
@@ -3364,7 +3370,7 @@ void FUN_L07_00311bc8(char *m) {
         *(float *)(m + 0x18) += random_float_between_alt(-0.02f, 0.02f);
         m[0x20] = 1;
         break;
-    case 1:
+    case LEAF_WAIT_FOR_HERO_CONTACT:
         if (FUN_L01_00277fb8(m)) {
             *(float *)(d + 0xA8) = *(float *)(m + 0x40);
             *(float *)(d + 0xAC) = *(float *)(m + 0x44);
@@ -3374,7 +3380,7 @@ void FUN_L07_00311bc8(char *m) {
             m[0x20] = 2;
         }
         break;
-    case 2:
+    case LEAF_TIMED_SWAY_AND_DESCENT:
         *(float *)(m + 0x40) =
             fast_sin(normalize_angle(convert_integer_to_float(*(short *)(d + 0xA0)) * 0.75f)) *
             DEG_TO_RAD;
@@ -3390,7 +3396,7 @@ void FUN_L07_00311bc8(char *m) {
             m[0x20] = 3;
         }
         break;
-    case 3:
+    case LEAF_ACCELERATED_FALL:
         t = (1.3962634f - *(float *)(m + 0x40)) * 0.05f;
         *(float *)(m + 0x40) += t;
         t = fast_sin(t);
