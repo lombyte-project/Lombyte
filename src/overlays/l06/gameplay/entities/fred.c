@@ -5594,7 +5594,8 @@ extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 
 void FUN_L06_002fda30(char *m) {
     enum {
-        WAIT_FOR_HERO_IN_CLIP_VOLUME = 0
+        WAIT_FOR_HERO_IN_CLIP_VOLUME = 0,
+        ACTIVATE_LISTED_MOBYS_AT_INTERVAL = 2
     };
     int *d = *(int **)(m + 0x78);
     switch (((unsigned char *)m)[0x20]) {
@@ -5618,7 +5619,7 @@ void FUN_L06_002fda30(char *m) {
             }
         }
         break;
-    case 2:
+    case ACTIVATE_LISTED_MOBYS_AT_INTERVAL:
         if (tick_countdown_32_alt(d + 2)) {
             float found = 0.0f;
             short *list = D_L06_001ABFC0[d[0]];
