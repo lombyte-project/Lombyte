@@ -443,6 +443,9 @@ extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 
 void hangar_door_update(char *m) __asm__("FUN_L06_002b4770");
 void hangar_door_update(char *m) {
+    enum {
+        HANGAR_DOOR_INITIALIZE = 0
+    };
     char *d = *(char **)(m + 0x78);
     float z;
     float a;
@@ -471,7 +474,7 @@ void hangar_door_update(char *m) {
                          frame_time_sq * 1.5707964f, frame_time_sq * 1.5707964f, frame_time * 1.5707964f);
     }
     switch (((unsigned char *)m)[0x20]) {
-    case 0:
+    case HANGAR_DOOR_INITIALIZE:
         *(float *)(d + 0xC) = vector_distance(m + 0x10, D_L06_001600EC + *(int *)d * 0x80 + 0x30);
         *(float *)(d + 4) = *(float *)(m + 0x48);
         if (*(float *)(m + 0x44) != 0.0f) {
