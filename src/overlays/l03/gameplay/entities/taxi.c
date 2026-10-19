@@ -516,6 +516,7 @@ void FUN_L03_002cbea8(struct Moby *m) {
         MINE_SHRINK_AND_REMOVE = 5
     };
     enum {
+        MINE_DEBRIS_WIDE_SPAWN_RADIUS = 1,
         MINE_DEBRIS_RANDOM_PALETTE_COLOR = 2,
         MINE_DEBRIS_SPHERICAL_VELOCITY = 3
     };
@@ -618,7 +619,7 @@ void FUN_L03_002cbea8(struct Moby *m) {
                     mine_debris(r, dir, 0x1F101820, 0x101010, mine_rand(200000.0f, 300000.0f),
                                 mine_rand_between(mine_frames(0xB4), mine_frames(0xF0)), 0);
                     break;
-                case 1:
+                case MINE_DEBRIS_WIDE_SPAWN_RADIUS:
                     mine_debris(r, dir, 0x3F081020, 0x0F081020, mine_rand(50000.0f, 100000.0f), mine_frames(0xB4), 1);
                     break;
                 case MINE_DEBRIS_RANDOM_PALETTE_COLOR:
