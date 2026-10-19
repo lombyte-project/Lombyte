@@ -3134,6 +3134,8 @@ void FUN_L14_002d5f40(struct Moby *m) {
         RACER_STATE_INITIALIZE = 0,
         RACER_STATE_WAIT_FOR_RACE_START = 1,
         RACER_STATE_WAIT_FOR_START_DELAY = 2,
+        RACER_STATE_WAIT_FOR_START_ANIMATION = 3,
+        RACER_STATE_COMPLETE_START_INTERPOLATION = 4,
         RACER_STATE_FOLLOW_PATH = 5
     };
     struct L14RacerVars *d = (struct L14RacerVars *)m->pvars;
@@ -3179,7 +3181,7 @@ void FUN_L14_002d5f40(struct Moby *m) {
         d->timer = scale_game_frames(D_L14_00161A2C);
         d->inv_time = 1.0f / convert_integer_to_float(d->timer);
         qcopy(&m->pos, (char *)D_L14_001B0BB0[d->end_point] + 0x10);
-    case 3:
+    case RACER_STATE_WAIT_FOR_START_ANIMATION:
         if (compute_interpolated_record_value(m) >= 3.0f)
             FUN_L14_002d64d0(m);
         if ((m->anim_flags & 2) && m->seq == m->prev_seq) {
@@ -3188,7 +3190,7 @@ void FUN_L14_002d5f40(struct Moby *m) {
             m->anim_speed = 1.0f;
         }
         break;
-    case 4:
+    case RACER_STATE_COMPLETE_START_INTERPOLATION:
         if (FUN_L14_002d64d0(m)) {
             m->state = 5;
             d->timer = scale_game_frames(D_L14_00161A34);
