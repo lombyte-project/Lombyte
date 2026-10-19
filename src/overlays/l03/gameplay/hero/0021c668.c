@@ -133,6 +133,7 @@ extern int func_001F9908_r(int *) __asm__("FUN_001f9740");
 int r1_repeat_timer __asm__("D_L03_0015F678") = 0;
 void FUN_L03_0021c668(void) {
     enum {
+        HERO_STATE_WATER_DEATH = 106,
         HERO_STATE_LOW_ALTITUDE_RESPAWN = 119
     };
     unsigned char *moby;
@@ -448,7 +449,7 @@ void FUN_L03_0021c668(void) {
                 case 71:
                 case 87:
                 case 98:
-                case 106:
+                case HERO_STATE_WATER_DEATH:
                 case 128:
                 case 130:
                     if (hero.unkA98 & 2) {
