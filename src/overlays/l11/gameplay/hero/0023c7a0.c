@@ -401,7 +401,8 @@ extern s32 FUN_L00_00211870(f32);
 
 void FUN_L11_00246b70(void) {
     enum {
-        HERO_STATE_MOVE_TO_TARGET_POSITION = 0x65
+        HERO_STATE_MOVE_TO_TARGET_POSITION = 0x65,
+        HERO_STATE_BRAKE_AT_TARGET_POSITION = 0x66
     };
     struct MobyView *moby = MV(hero.moby);
     s32 sub = hero.state.step;
@@ -2061,7 +2062,7 @@ void FUN_L11_00246b70(void) {
         }
         break;
     }
-    case 0x66:
+    case HERO_STATE_BRAKE_AT_TARGET_POSITION:
         subtract_vector_xyz(&vector_and_hit_descriptor_head_scratch, &hero.unk1640, &hero.motion.pos);
         if (fast_vec_dot(&vector_and_hit_descriptor_head_scratch, &hero.motion.unk150) < 0.0f) {
             clear_u64_value(&hero.motion.unk150);
