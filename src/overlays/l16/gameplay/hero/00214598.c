@@ -1550,7 +1550,7 @@ void FUN_L16_00214598(void) {
         }
         break;
     }
-    case 0x14: {
+    case HERO_STATE_WRENCH_SLAM: {
         s32 t1;
         s32 t2;
         f32 r;
