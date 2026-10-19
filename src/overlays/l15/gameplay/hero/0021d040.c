@@ -145,6 +145,7 @@ void FUN_L15_0021d040(void) {
         HERO_STATE_LEDGE_SHIMMY_YAW_PLUS_90 = 26,
         HERO_STATE_LEDGE_SHIMMY_YAW_MINUS_90 = 27,
         HERO_STATE_APPROACH_TARGET_POSE = 101,
+        HERO_STATE_AT_TARGET_POSE = 103,
         HERO_STATE_FALL_TO_RESPAWN = 119
     };
     unsigned char *moby;
@@ -896,7 +897,7 @@ void FUN_L15_0021d040(void) {
                         hero_set_state(0x65, 1);
                     }
                     break;
-                case 103:
+                case HERO_STATE_AT_TARGET_POSE:
                     if ((hero.unkA98 & 2) || hero.unk1650 != 0) {
                         hero_set_state(HERO_STATE_IDLE, 1);
                     }
