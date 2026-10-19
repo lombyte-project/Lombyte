@@ -3149,6 +3149,7 @@ extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 void FUN_L03_002c95a8(Moby2C8398 *m) {
     enum {
         DEATH_KNOCKBACK_RESPONSE = 1,
+        TURN_AWAY_KNOCKBACK_RESPONSE = 6,
         ZERO_DAMAGE_NO_KNOCKBACK_RESPONSE = 13
     };
     float vec[4];
@@ -3193,7 +3194,7 @@ void FUN_L03_002c95a8(Moby2C8398 *m) {
         case ZERO_DAMAGE_NO_KNOCKBACK_RESPONSE:
             d->b67 = 0x78;
             break;
-        case 6:
+        case TURN_AWAY_KNOCKBACK_RESPONSE:
             d->b67 = 0x78;
             d->q.f10 = frame_time_sq * 80.0f;
             d->q.f18 = (D_L03_001618E4 / (2.0f * square_root(2.0f * D_L03_001618E0 * d->q.f10) / (frame_time_sq * 80.0f)) +
