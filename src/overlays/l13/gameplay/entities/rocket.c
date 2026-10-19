@@ -2025,8 +2025,10 @@ void FUN_L13_0030b628(struct Moby *moby) {
         WAIT_TO_START_INITIAL_SCENE = 0,
         START_INITIAL_SCENE = 1,
         WAIT_INITIAL_SCENE = 2,
+        ENTER_CLIP_VOLUME_CHECK = 3,
         CHECK_CLIP_VOLUME_FOR_SCENE = 4,
         WAIT_CLIP_VOLUME_SCENE = 5,
+        ENTER_LINKED_MOBY_REMOVAL_WAIT = 6,
         WAIT_LINKED_MOBY_REMOVAL_BEFORE_SCENE = 7,
         WAIT_SCENE_BEFORE_FOLLOWUP = 8,
         START_FOLLOWUP_SCENE = 9,
@@ -2050,7 +2052,7 @@ void FUN_L13_0030b628(struct Moby *moby) {
     case WAIT_INITIAL_SCENE:
         if (D_L13_0015F5C4 != 2) moby->state = 3;
         break;
-    case 3:
+    case ENTER_CLIP_VOLUME_CHECK:
         moby->state = 4;
         break;
     case CHECK_CLIP_VOLUME_FOR_SCENE: {
@@ -2104,7 +2106,7 @@ after_state_4:
         }
         break;
     }
-    case 6:
+    case ENTER_LINKED_MOBY_REMOVAL_WAIT:
         moby->state = 7;
         break;
     case WAIT_LINKED_MOBY_REMOVAL_BEFORE_SCENE: {
