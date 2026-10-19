@@ -441,7 +441,10 @@ void FUN_L14_002ac618(struct Moby *m) {
     enum {
         INTERCEPTOR_STATE_INITIALIZE = 0,
         INTERCEPTOR_STATE_PATROL_AND_SCAN = 1,
+        INTERCEPTOR_STATE_ALERT_GROUP = 2,
         INTERCEPTOR_STATE_TRACK_TARGET = 3,
+        INTERCEPTOR_STATE_WAIT_FOR_GROUP_READY = 4,
+        INTERCEPTOR_STATE_FOLLOW_RETURN_PATH = 5,
         INTERCEPTOR_STATE_REJOIN_PATROL = 6,
         INTERCEPTOR_STATE_INITIALIZE_DEATH_FALL = 7,
         INTERCEPTOR_STATE_DEATH_FALL = 9
@@ -567,7 +570,7 @@ void FUN_L14_002ac618(struct Moby *m) {
             break;
         }
     }
-    case 2: {
+    case INTERCEPTOR_STATE_ALERT_GROUP: {
         s32 voice = *(s32 *)(d + 0x1D0);
 
         if (voice != -1) {
@@ -614,7 +617,7 @@ void FUN_L14_002ac618(struct Moby *m) {
             *(s16 *)(d + 0x208) = 0;
             m->state = 4;
         }
-    case 4:
+    case INTERCEPTOR_STATE_WAIT_FOR_GROUP_READY:
         m->glow_color = 0xFF000000 | (D_L14_00161414 << 16) | (D_L14_00161410 << 8) | D_L14_0016140C;
         qcopy(v, &m->pos);
         v[3] = D_L14_0016139C;
@@ -658,7 +661,7 @@ void FUN_L14_002ac618(struct Moby *m) {
             }
         }
         break;
-    case 5:
+    case INTERCEPTOR_STATE_FOLLOW_RETURN_PATH:
         FUN_L14_002aea08_c618(m);
         FUN_L14_002ae900(m, 0.01f, 5.0f, -1.0f);
         if (*(s16 *)(d + 0x208) != 0) {
