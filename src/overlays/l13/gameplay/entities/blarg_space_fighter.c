@@ -602,6 +602,7 @@ void FUN_L13_002c2d30(unsigned char *moby) {
     enum {
         HIT_REACTION_NONE = 0,
         HIT_REACTION_LETHAL = 1,
+        HIT_REACTION_REMOVE = 2,
         HIT_REACTION_NO_HIT = 11
     };
     unsigned char *d;
@@ -682,7 +683,7 @@ void FUN_L13_002c2d30(unsigned char *moby) {
             d[0x67] = 0x78;
             break;
         case HIT_REACTION_LETHAL:
-        case 2:
+        case HIT_REACTION_REMOVE:
             FUN_L00_00257470(moby, 0, -1);
             moby[0x20] = 8;
             d[0x67] = 0xF0;
