@@ -2202,6 +2202,7 @@ void minibomber_update(Moby_2B5938 *moby) __asm__("FUN_L14_002b46e8");
 void minibomber_update(Moby_2B5938 *moby) {
     enum {
         MINIBOMBER_STATE_INITIALIZE = 0,
+        MINIBOMBER_STATE_AIM_AT_BOMB_POINT = 5,
         MINIBOMBER_STATE_DESTROY = 9
     };
     Data_2B5938 *d = moby->d;
@@ -2420,7 +2421,7 @@ void minibomber_update(Moby_2B5938 *moby) {
             qcopy(d->f180, v);
         }
         break;
-    case 5: {
+    case MINIBOMBER_STATE_AIM_AT_BOMB_POINT: {
         PathNode_2B5938 *q = D_L14_001B0F30_2B5938[d->fD8] + d->f100;
         tg = fast_subtract_rotations(fast_arc_tan(q[1].v[0] - moby->pos[0], q[1].v[1] - moby->pos[1]), moby->rot);
         a = blend_scalar_alt(tg, d->f104, (float)d->f102 / convert_integer_to_float(scale_game_frames_c(D_L14_0016155C)));
