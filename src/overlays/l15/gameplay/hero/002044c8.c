@@ -622,7 +622,7 @@ void FUN_L15_0020ed50(void) {
     f32 speed;
     Vec4 spatial_or_hit_descriptor_work;
     Vec4 v10;
-    Vec4 v20;
+    Vec4 spatial_or_hit_descriptor_tail_work;
     Vec4 motion_work_vector;
     Vec4 m40[4];
     Vec4 m80[4];
@@ -933,13 +933,13 @@ void FUN_L15_0020ed50(void) {
                 s32 hi2;
                 pl = &hero;
                 moby_point_position((struct MobyView *)pl->moby, 4, &spatial_or_hit_descriptor_work);
-                v20.q = 0;
-                v20.f[0] = 0.4f;
-                transform_vector_by_basis(&v20, &v20, &((struct MobyView *)pl->moby)->vC0);
-                add_vector_xyz(&spatial_or_hit_descriptor_work, &spatial_or_hit_descriptor_work, &v20);
+                spatial_or_hit_descriptor_tail_work.q = 0;
+                spatial_or_hit_descriptor_tail_work.f[0] = 0.4f;
+                transform_vector_by_basis(&spatial_or_hit_descriptor_tail_work, &spatial_or_hit_descriptor_tail_work, &((struct MobyView *)pl->moby)->vC0);
+                add_vector_xyz(&spatial_or_hit_descriptor_work, &spatial_or_hit_descriptor_work, &spatial_or_hit_descriptor_tail_work);
                 qcopy(&v10, &hero.motion.displacement);
-                fast_vec_normalize(&v20, &v20, frame_time * 1.5f);
-                add_vector_xyz(&v10, &v10, &v20);
+                fast_vec_normalize(&spatial_or_hit_descriptor_tail_work, &spatial_or_hit_descriptor_tail_work, frame_time * 1.5f);
+                add_vector_xyz(&v10, &v10, &spatial_or_hit_descriptor_tail_work);
                 v10.f[2] += frame_time * 2.0f;
                 FUN_L00_0026f080(&spatial_or_hit_descriptor_work, &v10, 25200.0f, -1.0f);
                 if (random_integer_below(100) < 40.0f) {
@@ -957,10 +957,10 @@ void FUN_L15_0020ed50(void) {
                     s32 i;
                     for (i = 0; i < 4; i++) {
                         moby_point_position(gm, i % 2, &spatial_or_hit_descriptor_work);
-                        v20.q = 0;
-                        v20.f[0] = -0.15f;
-                        transform_vector_by_basis(&v20, &v20, &((struct MobyView *)hero.moby)->vC0);
-                        add_vector_xyz(&spatial_or_hit_descriptor_work, &spatial_or_hit_descriptor_work, &v20);
+                        spatial_or_hit_descriptor_tail_work.q = 0;
+                        spatial_or_hit_descriptor_tail_work.f[0] = -0.15f;
+                        transform_vector_by_basis(&spatial_or_hit_descriptor_tail_work, &spatial_or_hit_descriptor_tail_work, &((struct MobyView *)hero.moby)->vC0);
+                        add_vector_xyz(&spatial_or_hit_descriptor_work, &spatial_or_hit_descriptor_work, &spatial_or_hit_descriptor_tail_work);
                         spatial_or_hit_descriptor_work.f[0] += random_float_between(0.0f, 0.03f);
                         spatial_or_hit_descriptor_work.f[1] += random_float_between(0.0f, 0.03f);
                         spatial_or_hit_descriptor_work.f[2] += random_float_between(0.0f, 0.03f);
@@ -1043,13 +1043,13 @@ void FUN_L15_0020ed50(void) {
         qcopy(&hero.motion.velocity, &hero.motion.unk150);
         if (fast_dec_timer(&hero.unk8F0) == 2) {
             moby_point_position((struct MobyView *)hero.moby, 4, &spatial_or_hit_descriptor_work);
-            v20.q = 0;
-            v20.f[0] = 0.4f;
-            transform_vector_by_basis(&v20, &v20, &((struct MobyView *)hero.moby)->vC0);
-            add_vector_xyz(&spatial_or_hit_descriptor_work, &spatial_or_hit_descriptor_work, &v20);
+            spatial_or_hit_descriptor_tail_work.q = 0;
+            spatial_or_hit_descriptor_tail_work.f[0] = 0.4f;
+            transform_vector_by_basis(&spatial_or_hit_descriptor_tail_work, &spatial_or_hit_descriptor_tail_work, &((struct MobyView *)hero.moby)->vC0);
+            add_vector_xyz(&spatial_or_hit_descriptor_work, &spatial_or_hit_descriptor_work, &spatial_or_hit_descriptor_tail_work);
             qcopy(&v10, &hero.motion.displacement);
-            fast_vec_normalize(&v20, &v20, frame_time * 1.5f);
-            add_vector_xyz(&v10, &v10, &v20);
+            fast_vec_normalize(&spatial_or_hit_descriptor_tail_work, &spatial_or_hit_descriptor_tail_work, frame_time * 1.5f);
+            add_vector_xyz(&v10, &v10, &spatial_or_hit_descriptor_tail_work);
             v10.f[2] += frame_time * 2.0f;
             FUN_L00_0026f080(&spatial_or_hit_descriptor_work, &v10, 25200.0f, -1.0f);
             if (scale_game_frames(40) > hero.state_timer) {
@@ -1195,11 +1195,11 @@ void FUN_L15_0020ed50(void) {
                 -fast_arc_tan(vector_distance(&hero.motion.pos, &spatial_or_hit_descriptor_work), spatial_or_hit_descriptor_work.f[2] - hero.motion.pos.f[2]), 1.5707964f);
             FUN_L00_0025bc00(&hero.motion.rot.f[1], 0, an, frame_time * 6.4577184f);
         }
-        v20.f[0] = fast_cos(fast_add_rotations(hero.motion.rot.f[2], -1.5707964f)) * -0.57f;
-        v20.f[1] = fast_sin(fast_add_rotations(hero.motion.rot.f[2], -1.5707964f)) * -0.57f;
-        v20.f[2] = 0.0f;
-        add_vector_xyz(&v20, &v20, &hero.motion.pos);
-        subtract_vector_xyz(&v10, &((struct MobyView *)hero.unk964)->u10.v10, &v20);
+        spatial_or_hit_descriptor_tail_work.f[0] = fast_cos(fast_add_rotations(hero.motion.rot.f[2], -1.5707964f)) * -0.57f;
+        spatial_or_hit_descriptor_tail_work.f[1] = fast_sin(fast_add_rotations(hero.motion.rot.f[2], -1.5707964f)) * -0.57f;
+        spatial_or_hit_descriptor_tail_work.f[2] = 0.0f;
+        add_vector_xyz(&spatial_or_hit_descriptor_tail_work, &spatial_or_hit_descriptor_tail_work, &hero.motion.pos);
+        subtract_vector_xyz(&v10, &((struct MobyView *)hero.unk964)->u10.v10, &spatial_or_hit_descriptor_tail_work);
         fast_vec_normalize(&hero.motion.velocity, &v10, hero.unk960);
         if (scale_game_frames(30) > hero.unk96C) {
             f32 t = scale_game_frames(30) - hero.unk96C;
@@ -1217,8 +1217,8 @@ void FUN_L15_0020ed50(void) {
         add_vector_xyz(&v10, &hero.motion.pos, &hero.motion.velocity);
         subtract_vector_xyz(&motion_work_vector, &v10, &spatial_or_hit_descriptor_work);
         fast_vec_normalize(&motion_work_vector, &motion_work_vector, hero.unk97C);
-        add_vector_xyz(&v20, &spatial_or_hit_descriptor_work, &motion_work_vector);
-        subtract_vector_xyz(&hero.motion.velocity, &v20, &hero.motion.pos);
+        add_vector_xyz(&spatial_or_hit_descriptor_tail_work, &spatial_or_hit_descriptor_work, &motion_work_vector);
+        subtract_vector_xyz(&hero.motion.velocity, &spatial_or_hit_descriptor_tail_work, &hero.motion.pos);
         break;
     }
     case 0x2C: {
@@ -1243,9 +1243,9 @@ void FUN_L15_0020ed50(void) {
         if (spatial_or_hit_descriptor_work.f[2] < 0.23f) {
             spatial_or_hit_descriptor_work.f[2] = 0.23f;
         }
-        clear_u64_value(&v20);
-        v20.f[2] = hero.motion.rot.f[2];
-        euler_rotation_matrix(m40, &v20);
+        clear_u64_value(&spatial_or_hit_descriptor_tail_work);
+        spatial_or_hit_descriptor_tail_work.f[2] = hero.motion.rot.f[2];
+        euler_rotation_matrix(m40, &spatial_or_hit_descriptor_tail_work);
         transpose_rotation_matrix(m80, m40);
         transform_vector(&spatial_or_hit_descriptor_work, &spatial_or_hit_descriptor_work, m80);
         v10.f[0] = -fast_arc_tan(square_root(spatial_or_hit_descriptor_work.f[0] * spatial_or_hit_descriptor_work.f[0] + spatial_or_hit_descriptor_work.f[2] * spatial_or_hit_descriptor_work.f[2]), spatial_or_hit_descriptor_work.f[1]);
@@ -1447,9 +1447,9 @@ void FUN_L15_0020ed50(void) {
             m40[0].f[2] = 0.0f;
             make_hit_descriptor(&v10, (struct MobyView *)hero.moby, 0x10000, 2.0f, &m40[0]);
             v10.f[3] = 5627.925f;
-            ((u8 *)&v20)[9] = 1;
-            ((s16 *)&v20)[5] = 0x47;
-            ((u8 *)&v20)[8] = 0;
+            ((u8 *)&spatial_or_hit_descriptor_tail_work)[9] = 1;
+            ((s16 *)&spatial_or_hit_descriptor_tail_work)[5] = 0x47;
+            ((u8 *)&spatial_or_hit_descriptor_tail_work)[8] = 0;
             collect_mobies_in_sphere(0.4f, &spatial_or_hit_descriptor_work, 0x10, (struct MobyView *)hero.moby, &v10);
         }
         FUN_L00_00211870(27.0f);
@@ -1886,7 +1886,7 @@ void FUN_L15_0020ed50(void) {
         hero.motion.velocity.f[0] = 0.0f;
         hero.motion.velocity.f[1] = 0.0f;
         hero.motion.velocity.f[2] = 0.0f;
-        qcopy(&v20, &hero.motion.pos);
+        qcopy(&spatial_or_hit_descriptor_tail_work, &hero.motion.pos);
         if (hero.state.current == 0x1A) {
             m40[0].f[0] = fast_cos(fast_add_rotations(hero.motion.rot.f[2], 1.5707964f)) * 0.3f;
             m40[0].f[1] = fast_sin(fast_add_rotations(hero.motion.rot.f[2], 1.5707964f)) * 0.3f;
@@ -1896,7 +1896,7 @@ void FUN_L15_0020ed50(void) {
             m40[0].f[1] = fast_sin(fast_add_rotations(hero.motion.rot.f[2], -1.5707964f)) * 0.3f;
             m40[0].f[2] = 0.0f;
         }
-        add_vector_xyz(&motion_work_vector, &v20, &m40[0]);
+        add_vector_xyz(&motion_work_vector, &spatial_or_hit_descriptor_tail_work, &m40[0]);
         FUN_L01_0022d090();
         if (hero.unk4E8 == 0) {
             break;
@@ -1905,7 +1905,7 @@ void FUN_L15_0020ed50(void) {
         a = fast_add_rotations(hero.unk4E4, 3.1415927f);
         qcopy(&hero.motion.pos, &motion_work_vector);
         FUN_L01_0022d090();
-        qcopy(&hero.motion.pos, &v20);
+        qcopy(&hero.motion.pos, &spatial_or_hit_descriptor_tail_work);
         if (hero.unk4E8 == 0) {
             break;
         }
@@ -2330,9 +2330,9 @@ void FUN_L15_0020ed50(void) {
             make_hit_descriptor(&v10, (struct MobyView *)hero.moby, 0xB0000, 4.0f, &m40[0]);
             v10.f[2] = 1.0f;
             v10.f[3] = 5627.925f;
-            ((u8 *)&v20)[8] = 7;
-            ((u8 *)&v20)[9] = 1;
-            ((s16 *)&v20)[5] = ((struct MobyView *)hero.moby)->hA6;
+            ((u8 *)&spatial_or_hit_descriptor_tail_work)[8] = 7;
+            ((u8 *)&spatial_or_hit_descriptor_tail_work)[9] = 1;
+            ((s16 *)&spatial_or_hit_descriptor_tail_work)[5] = ((struct MobyView *)hero.moby)->hA6;
             switch (hero.attack_record) {
             case 0:
                 if (hero.anim_frame > 7.0f && hero.anim_frame < 14.0f) {
