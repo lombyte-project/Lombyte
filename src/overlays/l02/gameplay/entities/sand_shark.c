@@ -2604,7 +2604,10 @@ void transport_pod_update(unsigned char *moby) {
         TRANSPORT_POD_POSITION_RAILS_FOR_DISEMBARKING = 11,
         TRANSPORT_POD_RAISE_TO_STOP_HEIGHT = 12,
         TRANSPORT_POD_WAIT_FOR_RIDER_TO_LEAVE = 13,
-        TRANSPORT_POD_CREATE_RAILS = 14
+        TRANSPORT_POD_CREATE_RAILS = 14,
+        TRANSPORT_POD_POSITION_RAILS_FROM_CONFIGURED_OFFSETS = 15,
+        TRANSPORT_POD_CYCLE_RAILS_TO_SPLIT_HEIGHTS = 16,
+        TRANSPORT_POD_CYCLE_RAILS_TO_SHARED_LOWER_HEIGHT = 17
     };
     Varsdc88 *d = *(Varsdc88 **)(moby + 0x78);
     int i;
@@ -2877,7 +2880,7 @@ void transport_pod_update(unsigned char *moby) {
         qcopy_nc(d->rail_b + 0x40, moby + 0x40);
         moby[0x20] = 0xF;
         break;
-    case 15:
+    case TRANSPORT_POD_POSITION_RAILS_FROM_CONFIGURED_OFFSETS:
         d->rail_a_off = D_L02_00161C20;
         d->rail_b_off = D_L02_00161C24;
         FUN_L02_002def80((struct Moby *)moby);
@@ -2885,7 +2888,7 @@ void transport_pod_update(unsigned char *moby) {
             moby[0x20] = 0x10;
         }
         break;
-    case 16:
+    case TRANSPORT_POD_CYCLE_RAILS_TO_SPLIT_HEIGHTS:
         d->rail_a_off = 2.0f;
         d->rail_b_off = -4.0f;
         FUN_L02_002def80((struct Moby *)moby);
@@ -2896,7 +2899,7 @@ void transport_pod_update(unsigned char *moby) {
             moby[0x20] = 0x11;
         }
         break;
-    case 17:
+    case TRANSPORT_POD_CYCLE_RAILS_TO_SHARED_LOWER_HEIGHT:
         d->rail_a_off = -1.0f;
         d->rail_b_off = -1.0f;
         FUN_L02_002def80((struct Moby *)moby);
