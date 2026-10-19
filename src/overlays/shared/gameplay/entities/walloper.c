@@ -3066,6 +3066,9 @@ extern char *D_L00_00173E58 __attribute__((section(".data")));
 int FUN_001efa68(Vec4 *, Vec4 *, int, void *, int);
 unsigned int collision_hit_material(void) __asm__("FUN_001f0b58");
 int FUN_L00_002bfec8(unsigned char *p) {
+    enum {
+        COLLISION_MATERIAL_WATER = 0
+    };
     Vec4 a, b;
     int r = p[0x20];
     qcopy(&a, p + 0x10);
@@ -3078,7 +3081,7 @@ int FUN_L00_002bfec8(unsigned char *p) {
             r = 11;
         } else {
             switch (collision_hit_material()) {
-            case 0:
+            case COLLISION_MATERIAL_WATER:
             case 1:
             case 3:
             case 8:
