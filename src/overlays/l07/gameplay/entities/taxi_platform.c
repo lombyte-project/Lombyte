@@ -1885,7 +1885,8 @@ void bombomatic_update(char *m) {
     };
     enum {
         HIT_REACTION_NONE = 0,
-        BOMBOMATIC_CLEAR_HEALTH_RESPONSE = 1
+        BOMBOMATIC_CLEAR_HEALTH_RESPONSE = 1,
+        BOMBOMATIC_ALTERNATE_CLEAR_HEALTH_RESPONSE = 2
     };
     char *d;
     char *hit_info;
@@ -1926,7 +1927,7 @@ void bombomatic_update(char *m) {
     case BOMBOMATIC_CLEAR_HEALTH_RESPONSE:
         *(int *)t = 0;
         break;
-    case 2:
+    case BOMBOMATIC_ALTERNATE_CLEAR_HEALTH_RESPONSE:
         *(int *)t = 0;
         break;
     case 3:
