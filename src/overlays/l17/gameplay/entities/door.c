@@ -2424,6 +2424,7 @@ void robot_dog_update(unsigned char *m) __asm__("FUN_L17_002eeb68");
 void robot_dog_update(unsigned char *m) {
     enum {
         ROBOT_DOG_STATE_INITIALIZE = 0,
+        ROBOT_DOG_STATE_WAIT_FOR_IDLE_ANIMATION_COMPLETION = 3,
         ROBOT_DOG_STATE_FALL_UNTIL_LANDING = 4,
         ROBOT_DOG_STATE_TRACK_TARGET_FACING = 5,
         ROBOT_DOG_STATE_TURN_TOWARD_TARGET = 8,
@@ -2598,7 +2599,7 @@ void robot_dog_update(unsigned char *m) {
             }
         }
         break;
-    case 3:
+    case ROBOT_DOG_STATE_WAIT_FOR_IDLE_ANIMATION_COMPLETION:
         if (m[0x70] & 2) {
             m[0x20] = 1;
             if (m[0x53] != 0) {
