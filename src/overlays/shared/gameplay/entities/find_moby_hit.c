@@ -487,9 +487,6 @@ float FUN_L00_0025abf0(float *a, float *b, float *out, float speed, float g) {
     }
     return -((a[2] - b[2]) + g * (t * t) * 0.5f) / t;
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025aca0.s", FUN_L00_0025aca0);
-#else
 typedef union {
     u128 q;
     float f[4];
@@ -625,9 +622,13 @@ int FUN_L00_0025aca0(float density, unsigned char *entity, int maximum, Vec4_25a
                 second.f[1] = FUN_002132a8_25aca0(-extent, extent);
                 second.f[2] = FUN_002132a8_25aca0(-extent, extent);
             } while (!(FUN_001f9af0_25aca0(&second) <= extent));
-            FUN_001f9a10_25aca0(&second, &second, &first);
-            FUN_001f9cf8_25aca0(&second, &second, entity + 0xc0);
-            FUN_001f9a10_25aca0(&out[emitted], &second, entity + 0x10);
+            /* Fakematch: the do-while (0) raises the loop-weighted refs of entity + 0x10,
+             * &out[emitted] and entity + 0xc0 so global alloc gives &second the last saved register. */
+            do {
+                FUN_001f9a10_25aca0(&second, &second, &first);
+                FUN_001f9cf8_25aca0(&second, &second, entity + 0xc0);
+                FUN_001f9a10_25aca0(&out[emitted], &second, entity + 0x10);
+            } while (0);
             break;
         }
         case 3: {
@@ -676,7 +677,6 @@ int FUN_L00_0025aca0(float density, unsigned char *entity, int maximum, Vec4_25a
     }
     return limit;
 }
-#endif
 typedef struct {
     unsigned char pad0[8];
     float f8;
