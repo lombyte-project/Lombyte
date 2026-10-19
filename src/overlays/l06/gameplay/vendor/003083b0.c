@@ -300,14 +300,15 @@ extern void cutscene_set_camera_target(int) __asm__("FUN_L00_002637f8");
 
 void FUN_L06_00309348(unsigned char *moby) {
     enum {
-        MOBY_INITIALIZE = 0
+        MOBY_INITIALIZE = 0,
+        MOBY_CONDITIONAL_CAMERA_TARGET_UPDATE = 1
     };
     switch (moby[0x20]) {
     case MOBY_INITIALIZE:
         moby[0x30] = 0xFF;
         moby[0x20] = 1;
         break;
-    case 1:
+    case MOBY_CONDITIONAL_CAMERA_TARGET_UPDATE:
         if (D_L06_0015F5C4 == 2) {
             char *p = D_L06_0016CFE0;
             if (*(int *)(p + 0x30) == 5) {
