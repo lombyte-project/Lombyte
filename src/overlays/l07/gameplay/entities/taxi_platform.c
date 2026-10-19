@@ -1437,6 +1437,16 @@ extern void FUN_L07_0030cd20_2cd2b0(void) __asm__("FUN_L07_0030cd20");
 
 void water_update(Moby_30D8E8 *m) __asm__("FUN_L07_0030c508");
 void water_update(Moby_30D8E8 *m) {
+    enum {
+        WATER_INITIALIZE = 0,
+        WATER_APPROACH_HIGH_HEIGHT = 1,
+        WATER_APPROACH_LOW_HEIGHT = 2,
+        WATER_WAIT_FOR_HERO_IN_VOLUME = 3,
+        WATER_WAIT_BEFORE_RISING = 4,
+        WATER_TIMED_RISE = 5,
+        WATER_RISE_TO_HEIGHT_54 = 6,
+        WATER_REMOVE_ABOVE_HIGH_HEIGHT = 7
+    };
     Data_30D8E8 *d = m->data;
     int i;
     int j;
@@ -1453,7 +1463,7 @@ void water_update(Moby_30D8E8 *m) {
         D_0013D4EC[0] = 0;
     }
     switch (m->state) {
-    case 0:
+    case WATER_INITIALIZE:
         m->flags |= 0x81;
         if (d->idx == 0) {
             Cab_30D8E8 *cab;
@@ -1516,7 +1526,7 @@ void water_update(Moby_30D8E8 *m) {
             m->state = 2;
         }
         break;
-    case 2:
+    case WATER_APPROACH_LOW_HEIGHT:
         if (m->sub & 4) {
             FUN_L01_0026e0e0_2cd2b0(m->f21, 1);
         } else if (FUN_L07_00281ef8_2cd2b0(m, m->f21, 1, 0) && m->sub != 1) {
@@ -1532,7 +1542,7 @@ void water_update(Moby_30D8E8 *m) {
             FUN_L00_002a3ec8_2cd2b0(r, 1, 1, x, r->y + y, 1.0f, -0.05f);
         }
         break;
-    case 1:
+    case WATER_APPROACH_HIGH_HEIGHT:
         if (m->sub & 8) {
             FUN_L01_0026e0e0_2cd2b0(m->f21, 2);
         } else if (FUN_L07_00281ef8_2cd2b0(m, m->f21, 1, 0) && m->sub != 2) {
@@ -1548,31 +1558,31 @@ void water_update(Moby_30D8E8 *m) {
             FUN_L00_002a3ec8_2cd2b0(r, 1, 1, x, r->y + y, 1.0f, -0.05f);
         }
         break;
-    case 3:
+    case WATER_WAIT_FOR_HERO_IN_VOLUME:
         if (d->volume >= 0 && FUN_00214720_2cd2b0(&hero.motion.pos, d->volume)) {
             d->f1C = 0;
             FUN_L01_0026e0e0_2cd2b0(m->f21, 4);
         }
         break;
-    case 4:
+    case WATER_WAIT_BEFORE_RISING:
         if (fast_dec_timer(&d->timer)) {
             d->timer = scale_game_frames_alt(0x708);
             m->state = 5;
         }
         break;
-    case 5:
+    case WATER_TIMED_RISE:
         m->pos[2] += D_0015ED6C * 0.32f;
         if (fast_dec_timer(&d->timer)) {
             m->state = 6;
         }
         break;
-    case 6:
+    case WATER_RISE_TO_HEIGHT_54:
         m->pos[2] += D_0015ED6C * 0.42f;
         if (m->pos[2] >= 54.0f) {
             m->state = 7;
         }
         break;
-    case 7:
+    case WATER_REMOVE_ABOVE_HIGH_HEIGHT:
         if (d->hi < m->pos[2]) {
             D_L07_001DCE40_2cd2b0[d->idx].h1E = 0;
             mark_moby_for_removal_c2(m);
