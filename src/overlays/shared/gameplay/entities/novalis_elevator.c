@@ -608,34 +608,34 @@ extern void vendor_spring(f32 *, f32 *, f32, f32, f32, f32) __asm__("FUN_L00_002
 extern f32 FUN_L00_0025bc00(f32 *, f32, int, f32);
 extern int pad_pressed_within(int, int, int *) __asm__("FUN_L00_00266d60");
 extern void jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
-extern void FUN_L00_002ea9d8(void *);
-extern void FUN_L00_002eaa30(void *);
+extern void set_camera_position(void *) __asm__("FUN_L00_002ea9d8");
+extern void set_camera_rotation(void *) __asm__("FUN_L00_002eaa30");
 extern void jet_mount(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0");
 extern void FUN_L00_002eac18(int);
-extern int novalis_hero_set_state(int, int) __asm__("FUN_L01_0023cf98");
+extern int hero_set_state(int, int) __asm__("FUN_L01_0023cf98");
 extern void FUN_L01_0029b0a0(void *, int, void *, int, void *);
 extern void FUN_L01_00316e88(f32, f32);
 
 /* Turned by the hero (state 0x3B) until progress reaches 1, then lowered and saved as done. */
-void bolt_crank_update(char *moby) __asm__("FUN_L01_002e0c68");
-void bolt_crank_update(char *moby) {
-    BoltCrankVars *crank = *(BoltCrankVars **)(moby + 0x78);
+void bolt_crank_update(struct Moby *moby) __asm__("FUN_L01_002e0c68");
+void bolt_crank_update(struct Moby *moby) {
+    BoltCrankVars *crank = (BoltCrankVars *)moby->pvars;
     float matrix[16];
     float stick[4], step[4], facing[4];
     Vec4 rotation, target;
     float offset[4], spring_pos;
     float distance, yaw_diff, angle, old_angle, height_diff, max_speed, height, ground;
-    int save_id, free;
-    char *other;
+    int save_id, area_clear;
+    struct Moby *other;
 
     if (crank == 0) {
-        F(moby, 0x48) = fast_add_rotations(F(moby, 0x48), frame_time * 6.2831855f);
+        moby->rot.z = fast_add_rotations(moby->rot.z, frame_time * 6.2831855f);
         return;
     }
 
     if (hero.state.current != HERO_STATE_CRANK) {
-        if ((unsigned char)moby[0x20] == BOLT_CRANK_TURNING) {
-            moby[0x20] = BOLT_CRANK_IDLE;
+        if (moby->state == BOLT_CRANK_TURNING) {
+            moby->state = BOLT_CRANK_IDLE;
             if (D_L01_00167280_lui == 0) {
                 return;
             }
@@ -643,52 +643,52 @@ void bolt_crank_update(char *moby) {
             return;
         }
     }
-    switch ((unsigned char)moby[0x20]) {
+    switch (moby->state) {
     case BOLT_CRANK_INIT:
-        crank->rest_height = F(moby, 0x18);
-        moby[0x20] = BOLT_CRANK_IDLE;
+        crank->rest_height = moby->pos.z;
+        moby->state = BOLT_CRANK_IDLE;
         goto done;
     case BOLT_CRANK_IDLE: {
-        save_id = *(unsigned short *)(moby + 0xB2);
+        save_id = moby->save_id;
         if (D_L01_001BB6B0.collected[(short)save_id] != 0 ||
             ((D_0014C190_257218[current_level_index][(short)save_id >> 5] >> (save_id & 0x1F)) & 1)) {
-            F(moby, 0x18) = F(moby, 0x18) - 0.5f;
-            moby[0x20] = BOLT_CRANK_DONE;
+            moby->pos.z = moby->pos.z - 0.5f;
+            moby->state = BOLT_CRANK_DONE;
             crank->progress = 1.0f;
             goto done;
         }
-        distance = vector_distance(moby + 0x10, &hero.motion.pos);
+        distance = vector_distance(&moby->pos, &hero.motion.pos);
         if (distance < 1.75f) {
             if (hero.vehicle_mode == 0) {
-                angle = fast_arc_tan(F(moby, 0x10) - hero.motion.pos.f[0], F(moby, 0x14) - hero.motion.pos.f[1]);
+                angle = fast_arc_tan(moby->pos.x - hero.motion.pos.f[0], moby->pos.y - hero.motion.pos.f[1]);
                 yaw_diff = fast_difference_between_rotations(hero.motion.rot.f[2], angle);
                 if (yaw_diff < 1.5707964f) {
-                    height_diff = absolute_float((hero.motion.pos.f[2] - 0.3f) - F(moby, 0x18));
+                    height_diff = absolute_float((hero.motion.pos.f[2] - 0.3f) - moby->pos.z);
                     if (height_diff < 0.2f && hero.items[0].item_id == 8 && hero.items[0].moby != 0) {
                         int pressed = pad_pressed_within(0x80, scale_game_frames(7), 0);
                         if (pressed != 0 && (unsigned int)scale_game_frames(0x1E) < (unsigned int)crank->idle_frames &&
-                            F(moby, 0x18) == crank->rest_height) {
+                            moby->pos.z == crank->rest_height) {
                             if (crank->progress < 1.0f) {
-                                free = 1;
+                                area_clear = 1;
                                 crank->idle_frames = 0;
                                 D_L01_001618A0 = 0.0f;
-                                for (other = D_L01_0015FFE4; other != 0; other = *(char **)(other + 0x28)) {
-                                    if (*(unsigned short *)(other + 0x34) & 0x1000) {
-                                        if (vector_distance(moby + 0x10, other + 0x10) < 3.25f) {
-                                            free = 0;
+                                for (other = (struct Moby *)D_L01_0015FFE4; other != 0; other = other->next) {
+                                    if (other->flags & 0x1000) {
+                                        if (vector_distance(&moby->pos, &other->pos) < 3.25f) {
+                                            area_clear = 0;
                                             break;
                                         }
                                     }
                                 }
-                                if (free == 0) {
+                                if (area_clear == 0) {
                                     goto done;
                                 }
-                                novalis_hero_set_state(HERO_STATE_CRANK, 1);
+                                hero_set_state(HERO_STATE_CRANK, 1);
                                 jet_mount(D_L01_00167240, D_L01_00167240 + 0x10, 3, scale_game_frames(0xB4), 0);
-                                FUN_L00_002eaa30(D_L01_001600EC + (crank->camera_point << 7) + 0x70);
-                                FUN_L00_002ea9d8(D_L01_001600EC + (crank->camera_point << 7) + 0x30);
+                                set_camera_rotation(D_L01_001600EC + (crank->camera_point << 7) + 0x70);
+                                set_camera_position(D_L01_001600EC + (crank->camera_point << 7) + 0x30);
                                 FUN_L01_00316e88(crank->camera_params[0], crank->camera_params[1]);
-                                moby[0x20] = BOLT_CRANK_TURNING;
+                                moby->state = BOLT_CRANK_TURNING;
                                 crank->fall_speed = 0.0f;
                                 crank->turned = crank->progress * (crank->turns * 6.2831855f);
                                 goto done;
@@ -702,31 +702,31 @@ void bolt_crank_update(char *moby) {
             crank->idle_frames = crank->idle_frames + 1;
             approach_value(&crank->progress, 0.0f, 1.0f / (float)scale_game_frames(0x3C));
             if (0.0f < crank->progress) {
-                F(moby, 0x48) = fast_subtract_rotations(F(moby, 0x48),
+                moby->rot.z = fast_subtract_rotations(moby->rot.z,
                                                         crank->turns * 6.2831855f / (float)scale_game_frames(0x3C));
             }
-            F(moby, 0x18) = F(moby, 0x18) + frame_time * 0.5f;
-            if (crank->rest_height <= F(moby, 0x18)) {
-                F(moby, 0x18) = crank->rest_height;
+            moby->pos.z = moby->pos.z + frame_time * 0.5f;
+            if (crank->rest_height <= moby->pos.z) {
+                moby->pos.z = crank->rest_height;
             }
         } else {
             if (crank->reusable == 0) {
                 goto done;
             }
             if (crank->exit_camera_point != -1 &&
-                visited52[(unsigned char)moby[0xB0] + (current_level_index << 4)] != 0xFF) {
+                visited52[moby->mission + (current_level_index << 4)] != 0xFF) {
                 FUN_L01_0029b0a0(crank, 4, moby, 2, D_L01_001BAAA0);
-                jet_clear_persistent((unsigned char)moby[0xB0]);
+                jet_clear_persistent(moby->mission);
                 if (crank->exit_camera_point != -1) {
                     char *point = D_L01_001600EC + (crank->exit_camera_point << 7);
                     jet_reset_camera(point + 0x30, point + 0x70);
                 }
             }
-            F(moby, 0x18) = F(moby, 0x18) - frame_time * 0.5f;
+            moby->pos.z = moby->pos.z - frame_time * 0.5f;
             {
                 float lowest = crank->rest_height - 0.5f;
-                if (F(moby, 0x18) <= lowest) {
-                    F(moby, 0x18) = lowest;
+                if (moby->pos.z <= lowest) {
+                    moby->pos.z = lowest;
                 }
             }
         }
@@ -738,23 +738,23 @@ void bolt_crank_update(char *moby) {
         target.q = 0;
         target.f[2] = D_L01_00167258_lui;
         rotation.q = target.q;
-        old_angle = fast_arc_tan(hero.motion.pos.f[0] - F(moby, 0x10), hero.motion.pos.f[1] - F(moby, 0x14));
+        old_angle = fast_arc_tan(hero.motion.pos.f[0] - moby->pos.x, hero.motion.pos.f[1] - moby->pos.y);
         if ((pad_pressed_within(0x80, scale_game_frames(7), 0) != 0 && scale_game_frames(0x3C) < hero.state_timer) ||
             crank->progress == 1.0f) {
-            novalis_hero_set_state(0, 1);
+            hero_set_state(0, 1);
             if (crank->reusable != 0) {
-                moby[0x20] = BOLT_CRANK_IDLE;
+                moby->state = BOLT_CRANK_IDLE;
             } else if (crank->progress == 1.0f) {
                 FUN_L01_0029b0a0(crank, 4, moby, 2, D_L01_001BAAA0);
-                moby[0x20] = BOLT_CRANK_LOWERING;
-                D_0014C190_257218[current_level_index][(short)*(unsigned short *)(moby + 0xB2) >> 5] |=
-                    1 << (*(unsigned short *)(moby + 0xB2) & 0x1F);
-                moby_killed[(short)*(unsigned short *)(moby + 0xB2) >> 5] |= 1 << (*(unsigned short *)(moby + 0xB2) & 0x1F);
+                moby->state = BOLT_CRANK_LOWERING;
+                D_0014C190_257218[current_level_index][(short)moby->save_id >> 5] |=
+                    1 << (moby->save_id & 0x1F);
+                moby_killed[(short)moby->save_id >> 5] |= 1 << (moby->save_id & 0x1F);
                 allocate_voice_for_target_entry(0, 0, moby);
                 if (crank->exit_camera_point != -1 &&
-                    visited52[(unsigned char)moby[0xB0] + (current_level_index << 4)] != 0xFF) {
+                    visited52[moby->mission + (current_level_index << 4)] != 0xFF) {
                     FUN_L01_0029b0a0(crank, 4, moby, 2, D_L01_001BAAA0);
-                    jet_clear_persistent((unsigned char)moby[0xB0]);
+                    jet_clear_persistent(moby->mission);
                     if (crank->exit_camera_point != -1) {
                         char *point = D_L01_001600EC + (crank->exit_camera_point << 7);
                         jet_reset_camera(point + 0x30, point + 0x70);
@@ -816,11 +816,11 @@ void bolt_crank_update(char *moby) {
             struct Hero *player = &hero;
             height = player->motion.pos.f[2];
             add_vector_xyz(&player->motion.pos, &player->motion.pos, step);
-            angle = fast_arc_tan(player->motion.pos.f[0] - F(moby, 0x10), player->motion.pos.f[1] - F(moby, 0x14));
+            angle = fast_arc_tan(player->motion.pos.f[0] - moby->pos.x, player->motion.pos.f[1] - moby->pos.y);
             step[0] = fast_cos(angle) * 1.05f;
             step[1] = fast_sin(angle) * 1.05f;
             step[2] = 0.0f;
-            add_vector_xyz(&target, moby + 0x10, step);
+            add_vector_xyz(&target, &moby->pos, step);
             subtract_vector_xyz(offset, &target, &player->motion.pos);
             offset[2] = 0.0f;
             distance = vector_length_xy(offset);
@@ -848,11 +848,11 @@ void bolt_crank_update(char *moby) {
         if (hero.moby->prev_seq != 0x44) {
             float limit = 1.0471976f;
             float handle_yaw = fast_add_rotations(0.2617994f, angle);
-            FUN_L00_0025bc00((f32 *)(moby + 0x48), handle_yaw, 0, frame_time * 3.1415927f);
-            if (limit < fast_subtract_rotations(F(moby, 0x48), handle_yaw)) {
-                F(moby, 0x48) = fast_subtract_rotations(F(moby, 0x48), limit);
-            } else if (fast_subtract_rotations(F(moby, 0x48), handle_yaw) < -1.0471976f) {
-                F(moby, 0x48) = fast_add_rotations(F(moby, 0x48), limit);
+            FUN_L00_0025bc00(&moby->rot.z, handle_yaw, 0, frame_time * 3.1415927f);
+            if (limit < fast_subtract_rotations(moby->rot.z, handle_yaw)) {
+                moby->rot.z = fast_subtract_rotations(moby->rot.z, limit);
+            } else if (fast_subtract_rotations(moby->rot.z, handle_yaw) < -1.0471976f) {
+                moby->rot.z = fast_add_rotations(moby->rot.z, limit);
             }
         }
         yaw_diff = fast_difference_between_rotations(angle, old_angle);
@@ -863,12 +863,12 @@ void bolt_crank_update(char *moby) {
         fast_mem_zero16(&hero.motion.velocity, 0x90);
         goto done;
     case BOLT_CRANK_LOWERING:
-        F(moby, 0x18) = F(moby, 0x18) - frame_time * 0.5f;
+        moby->pos.z = moby->pos.z - frame_time * 0.5f;
         {
             float lowest = crank->rest_height - 0.5f;
-            if (F(moby, 0x18) <= lowest) {
-                F(moby, 0x18) = lowest;
-                moby[0x20] = BOLT_CRANK_DONE;
+            if (moby->pos.z <= lowest) {
+                moby->pos.z = lowest;
+                moby->state = BOLT_CRANK_DONE;
                 crank->progress = 1.0f;
             }
         }
@@ -878,7 +878,7 @@ void bolt_crank_update(char *moby) {
         goto done;
     }
 done:
-    FUN_L01_002e0bd8(moby);
+    FUN_L01_002e0bd8((char *)moby);
 }
 #include "sda.h"
 #include "rnc/gameplay/entities/moby.h"
@@ -1301,12 +1301,12 @@ typedef struct {
     void *tgt;
 } Data_2e3f20;
 typedef struct {
-    int i0;
-    float f4, f8, fC, f10, f14, f18, f1C, f20, f24, f28, f2C, f30;
-    int i34, i38;
-    float f3C, f40, f44;
-    int i48, i4C;
-    void *p50;
+    int unk0;
+    float unk4, unk8, unkC, unk10, yaw_speed, unk18, unk1C, unk20, unk24, unk28, unk2C, unk30;
+    int unk34, unk38;
+    float unk3C, unk40, unk44;
+    int unk48, unk4C;
+    void *owner;
 } Mover_2e3f20;
 typedef struct {
     char pad0[0x80];
@@ -1438,21 +1438,21 @@ void sand_mouse_update(struct Moby *moby) {
             float len;
             int flag;
             rig_probe_setup(moby, 0, &kind, va, &len, &flag);
-            mover_2e3f20.f14 = frame_scale * 0.4f;
-            mover_2e3f20.f8 = 0.15f;
-            mover_2e3f20.fC = 0.15f;
-            mover_2e3f20.f10 = frame_scale * 0.01f;
-            mover_2e3f20.f24 = frame_time * 2.7f;
-            mover_2e3f20.f1C = frame_scale * 0.01f;
-            mover_2e3f20.i0 = truncate_float_to_s32(len * 1024.0f) + 1;
-            mover_2e3f20.i38 |= 8;
-            mover_2e3f20.f4 = 0.3f;
-            mover_2e3f20.f30 = 0.005f;
-            mover_2e3f20.f3C = frame_time_sq * 11.519173f;
-            mover_2e3f20.f40 = frame_time_sq * 3.1415927f;
-            mover_2e3f20.f44 = frame_time * 11.519173f;
-            mover_2e3f20.i48 = scale_game_frames(4);
-            mover_2e3f20.f28 = 3.1415927f;
+            mover_2e3f20.yaw_speed = frame_scale * 0.4f;
+            mover_2e3f20.unk8 = 0.15f;
+            mover_2e3f20.unkC = 0.15f;
+            mover_2e3f20.unk10 = frame_scale * 0.01f;
+            mover_2e3f20.unk24 = frame_time * 2.7f;
+            mover_2e3f20.unk1C = frame_scale * 0.01f;
+            mover_2e3f20.unk0 = truncate_float_to_s32(len * 1024.0f) + 1;
+            mover_2e3f20.unk38 |= 8;
+            mover_2e3f20.unk4 = 0.3f;
+            mover_2e3f20.unk30 = 0.005f;
+            mover_2e3f20.unk3C = frame_time_sq * 11.519173f;
+            mover_2e3f20.unk40 = frame_time_sq * 3.1415927f;
+            mover_2e3f20.unk44 = frame_time * 11.519173f;
+            mover_2e3f20.unk48 = scale_game_frames(4);
+            mover_2e3f20.unk28 = 3.1415927f;
         }
         moby->state = 1;
         moby->draw_dist = 0;
@@ -1476,7 +1476,7 @@ void sand_mouse_update(struct Moby *moby) {
             if (hero_2e3f20->helper != 0 && hero_2e3f20->i1158 == 5) {
                 ang = fast_arc_tan(hero_2e3f20->pos[0] - moby->pos.x,
                                         hero_2e3f20->pos[1] - moby->pos.y);
-                face_target_2e3f20(moby, ang, &mover_2e3f20.f14,
+                face_target_2e3f20(moby, ang, &mover_2e3f20.yaw_speed,
                                         frame_time_sq * 11.519173f, frame_time_sq * 3.1415927f, frame_time * 11.519173f);
                 qcopy(va, ((float *)&ents_2e3f20[d->parent].pos));
                 va[2] = va[2] + 0.5f;
@@ -1523,7 +1523,7 @@ void sand_mouse_update(struct Moby *moby) {
     case SAND_MOUSE_MOVE_TOWARD_HERO:
         FUN_L01_002e30b8((int)moby, d);
         ang = fast_arc_tan(d->target[0] - moby->pos.x, d->target[1] - moby->pos.y);
-        face_target_2e3f20(moby, ang, &mover_2e3f20.f14,
+        face_target_2e3f20(moby, ang, &mover_2e3f20.yaw_speed,
                                 frame_time_sq * 11.519173f, frame_time_sq * 3.1415927f, frame_time * 11.519173f);
         if ((step_mover_2e3f20(moby, &mover_2e3f20, d->target, d->vel) & 6)
             || vector_distance(((float *)&moby->pos), hero_2e3f20->pos) < 1.0f) {
@@ -1627,9 +1627,9 @@ void sand_mouse_update(struct Moby *moby) {
         {
             float z;
             int r;
-            mover_2e3f20.p50 = 0;
+            mover_2e3f20.owner = 0;
             ang = fast_arc_tan(d->target[0] - moby->pos.x, d->target[1] - moby->pos.y);
-            face_target_2e3f20(moby, ang, &mover_2e3f20.f14,
+            face_target_2e3f20(moby, ang, &mover_2e3f20.yaw_speed,
                                     frame_time_sq * 11.519173f, frame_time_sq * 3.1415927f, frame_time * 11.519173f);
             z = moby->pos.z;
             r = step_mover_2e3f20(moby, &mover_2e3f20, d->target, d->vel);
@@ -2361,22 +2361,22 @@ void FUN_L01_002eec68(char *m) {
     *(int *)(m + 0x90) = fast_tween_color((fast_sin_c(ang) + 1.0f) * 0.5f,
                                            *(int *)&D_L01_00161998, *(int *)&D_L01_0016199C);
 }
-extern short *lists_2ef478[] __asm__("D_L01_001ABCC0");
+extern short *D_L01_001ABCC0[];
 extern void FUN_L00_00250df8(void *);
 
 char *FUN_L01_002ef350(void *arg) {
-    char *self = arg;
+    struct Moby *self = arg;
     short *list;
     char *entities;
     int entry;
-    int type = -1;
-    if (*(short *)(self + 0xA6) == 0x23C) {
-        type = 0x361;
-    } else if (*(short *)(self + 0xA6) == 0x361) {
-        type = 0x362;
+    int next_class = -1;
+    if (self->oclass == 0x23C) {
+        next_class = 0x361;
+    } else if (self->oclass == 0x361) {
+        next_class = 0x362;
     }
-    entry = *(volatile unsigned char *)(self + 0x21);
-    entities = (char *)(lists_2ef478 + entry);
+    entry = *(volatile u8 *)&self->group;
+    entities = (char *)(D_L01_001ABCC0 + entry);
     /* Fakematch: the dead touch of the entity base gives retail's register for the list slot. */
     D_L01_0015FFD8++;
     D_L01_0015FFD8--;
@@ -2385,7 +2385,7 @@ char *FUN_L01_002ef350(void *arg) {
     if (list == 0) return 0;
     goto scan;
     do {
-        char *other;
+        struct Moby *other;
         int index;
 advance:
         if ((short)entry < 0) return 0;
@@ -2394,28 +2394,28 @@ scan:
         index = *(unsigned short *)list;
         entry = index;
         index &= 0x7FFF;
-        other = entities + (index << 8);
-        if ((unsigned char)other[0x20] != 12 || *(short *)(other + 0xA6) != type) goto advance;
+        other = (struct Moby *)(entities + (index << 8));
+        if (other->state != 12 || other->oclass != next_class) goto advance;
         {
-            /* Retail reads both pvars pointers and unk30 before writing the entity. */
-            char *other_data = *(char * volatile *)(other + 0x78);
-            unsigned char unk30 = *(volatile unsigned char *)(self + 0x30);
-            char *self_data = *(char **)(self + 0x78);
-            other[0x30] = unk30;
-            *(unsigned short *)(other + 0x32) = *(unsigned short *)(self + 0x32);
+            /* Retail reads both pvars pointers and update_dist before writing the entity. */
+            u8 *other_vars = *(u8 * volatile *)&other->pvars;
+            u8 update_dist = *(volatile u8 *)&self->update_dist;
+            u8 *self_vars = self->pvars;
+            other->update_dist = update_dist;
+            other->draw_dist = self->draw_dist;
             {
-                unsigned long long spawn_frame = *(unsigned long long *)(self + 0x38);
-                other[0x31] = 1;
-                *(unsigned long long *)(other + 0x38) = spawn_frame;
+                u64 spawn_frame = self->spawn_frame;
+                other->visible = 1;
+                other->spawn_frame = spawn_frame;
             }
-            *(int *)(other + 0x94) = *(int *)(*(char **)(other + 0x24) + 0x10);
-            *(unsigned short *)(other + 0x34) = *(unsigned short *)(self + 0x34);
-            qcopy(other + 0x10, self + 0x10);
-            qcopy(other + 0x40, self + 0x40);
-            *(float *)(other_data + 0x20) = *(float *)(self_data + 0x20);
-            *(float *)(other_data + 0x224) = *(float *)(self_data + 0x224);
+            other->collision = other->pclass->collision;
+            other->flags = self->flags;
+            qcopy(&other->pos, &self->pos);
+            qcopy(&other->rot, &self->rot);
+            *(float *)(other_vars + 0x20) = *(float *)(self_vars + 0x20);
+            *(float *)(other_vars + 0x224) = *(float *)(self_vars + 0x224);
             FUN_L00_00250df8(other);
-            return other;
+            return (char *)other;
         }
     } while (1);
     return 0;
@@ -2433,13 +2433,12 @@ typedef struct {
 } Ent_2ef478;
 
 extern float dist_2ef478(void *, void *) __asm__("FUN_001f9b48");
-extern short *lists_2ef478[] __asm__("D_L01_001ABCC0");
 extern char *D_L01_0015FFD8;
 extern char *D_L01_0015FFD8;
 
 /* Nearest live entity of type 0x26F in list idx within 120 units of self, or 0. */
 char *FUN_L01_002ef478(char *self, int idx) {
-    short *list = lists_2ef478[idx];
+    short *list = D_L01_001ABCC0[idx];
     float best = 120.0f;
     char *res = 0;
     if (list == 0) {

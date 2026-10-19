@@ -780,23 +780,18 @@ f32 FUN_L00_0025b6a8(f32 a, f32 b, f32 t);
 f32 FUN_L00_0025b6a8(f32 a, f32 b, f32 t) {
     return a + (b - a) * t;
 }
-typedef union {
-    u128 q;
-    f32 f[4];
-} Vec4_25b6b8 __attribute__((aligned(16)));
+#include "rnc/math/vector.h"
 
 typedef struct {
     f32 *p;
-} OutPtr_25b6b8;
+} OutPtr;
 
 /* Interpolates the four components of two copied vectors by t into dst. */
 void FUN_L00_0025b6b8(f32 *dst, f32 *a, f32 *b, f32 t);
 void FUN_L00_0025b6b8(f32 *dst, f32 *a, f32 *b, f32 t) {
-    Vec4_25b6b8 left, right;
-    /* Fakematch: out and the dead dst = 0 stores leave a no-op copy of out until sched1,
-       so alias analysis cannot place the stores and keeps each one ahead of the next
-       call's loads; the copy is deleted after reload. */
-    OutPtr_25b6b8 out = { dst };
+    Vec4 left, right;
+    /* Fakematch: the struct copy of dst and the dead dst = 0 stores keep each store ahead of the next call's loads. */
+    OutPtr out = { dst };
 
     dst = 0;
     left.q = *(u128 *)a;
@@ -804,7 +799,7 @@ void FUN_L00_0025b6b8(f32 *dst, f32 *a, f32 *b, f32 t) {
     b = right.f;
     out.p[0] = FUN_L00_0025b6a8(left.f[0], b[0], t);
     dst = out.p;
-    out = (OutPtr_25b6b8){ dst };
+    out = (OutPtr){ dst };
     dst = 0;
     out.p[1] = FUN_L00_0025b6a8(left.f[1], b[1], t);
     out.p[2] = FUN_L00_0025b6a8(left.f[2], b[2], t);
