@@ -2405,6 +2405,7 @@ void FUN_L06_002f91e8(Moby *moby)
     };
     enum {
         SNAPPER_APPROACH_TARGET = 8,
+        SNAPPER_REPOSITION_AROUND_TARGET = 9,
         SNAPPER_RETURN_HOME = 12,
         SNAPPER_RETREAT_FROM_TARGET = 13
     };
@@ -2480,7 +2481,7 @@ void FUN_L06_002f91e8(Moby *moby)
     func_L00_0025E590_2FA618(moby, data->f60);
     switch (moby->state) {
     case SNAPPER_APPROACH_TARGET:
-    case 9:
+    case SNAPPER_REPOSITION_AROUND_TARGET:
     case SNAPPER_RETURN_HOME:
     case SNAPPER_RETREAT_FROM_TARGET:
         if (level_frame_count % 4 == (((int)moby >> 8) & 3)) {
