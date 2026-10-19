@@ -5699,13 +5699,16 @@ extern float D_L06_00162048 __attribute__((sda));
 extern int D_L06_00162044 __attribute__((sda));
 extern float D_L06_00162050 __attribute__((sda));
 void FUN_L06_002ffcb0(char *moby) {
+    enum {
+        INITIALIZE_DRAW_SELECTION = 0
+    };
     int *data = *(int **)(moby + 0x78);
     float pos[4], rot[4], from[4], target[4], offset[4];
     int base;
     int state;
     *(float *)(moby + 0x2c) = *(float *)(*(char **)(moby + 0x24) + 0x24) * D_L06_00162048;
     switch ((unsigned char)moby[0x20]) {
-    case 0:
+    case INITIALIZE_DRAW_SELECTION:
         data[1] = 1;
         moby[0x20] = 1;
         break;
@@ -7012,9 +7015,12 @@ extern unsigned short D_00141C00 __attribute__((section(".data")));
 extern void try_set_help_message(int, int) __asm__("FUN_00215130");
 
 void FUN_L06_00302fd8(char *m) {
+    enum {
+        SHUTTLE_AT_INITIAL_STOP = 0
+    };
     char *d = *(char **)(m + 0x78);
     switch (*(int *)(d + 0xBC)) {
-    case 0: {
+    case SHUTTLE_AT_INITIAL_STOP: {
         int idx = current_level_index << 4;
         int a = *(unsigned char *)(*(int *)(d + 0xF8) + idx + (int)visited52);
         if (a != 0xFF) {

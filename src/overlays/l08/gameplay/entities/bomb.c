@@ -1559,6 +1559,13 @@ extern char camera_state_bytes[] __asm__("D_L08_00167480");
 
 void blarg_bombthrower_update(struct Moby *moby) __asm__("FUN_L08_002dabf0");
 void blarg_bombthrower_update(struct Moby *moby) {
+    enum {
+        BOMBTHROWER_STATE_INITIALIZE = 0,
+        BOMBTHROWER_STATE_APPROACH_WAYPOINT = 1,
+        BOMBTHROWER_STATE_THROW_BOMB = 5,
+        BOMBTHROWER_STATE_DAMAGE_KNOCKBACK = 0x5A,
+        BOMBTHROWER_STATE_DYING = 0x63
+    };
     Data_DBF68 *vars = (Data_DBF68 *)moby->pvars;
     Look_DBF68 search;
     float point[4];
@@ -1645,7 +1652,7 @@ void blarg_bombthrower_update(struct Moby *moby) {
     }
     target = search.target;
     switch (moby->state) {
-    case 0:
+    case BOMBTHROWER_STATE_INITIALIZE:
         moby->flags |= 0x1000;
         vars->b29 = 1;
         vars->health = 2.0f;
@@ -1668,7 +1675,7 @@ void blarg_bombthrower_update(struct Moby *moby) {
         moby->state = 1;
         vars->i134 = scale_game_frames_c2(0xF0);
         break;
-    case 1:
+    case BOMBTHROWER_STATE_APPROACH_WAYPOINT:
         FUN_L00_00259028((char *)moby, vars->blkD0, (float *)&vars->waypoint->pos, (char *)vars->v40);
         if (fast_vec_dist(&moby->pos, &vars->waypoint->pos) < 3.0f) {
             if (fast_difference_between_rotations_c3(moby->rot.z,
@@ -1776,7 +1783,7 @@ void blarg_bombthrower_update(struct Moby *moby) {
             }
         }
         break;
-    case 5:
+    case BOMBTHROWER_STATE_THROW_BOMB:
         func_L00_002592B0_x(fast_arc_tan_c2(target->pos.x - moby->pos.x, target->pos.y - moby->pos.y),
                             moby, vars->blk12C, 0.02f, 0.3f, 0.2f);
         if (moby->seq == moby->prev_seq && FUN_0020c9e0(moby) == 19.0f) {
@@ -1827,7 +1834,7 @@ void blarg_bombthrower_update(struct Moby *moby) {
             moby->state = 0x5D;
         }
         break;
-    case 0x5A:
+    case BOMBTHROWER_STATE_DAMAGE_KNOCKBACK:
     case 0x5C:
     case 0x5D:
         if (mine_fall(moby, vars->blk70) & 0x40) {
@@ -1849,7 +1856,7 @@ void blarg_bombthrower_update(struct Moby *moby) {
             return;
         }
         break;
-    case 0x63:
+    case BOMBTHROWER_STATE_DYING:
         if (mine_fall(moby, vars->blk70) & 0x40) {
             moby->anim_speed = 0.0f;
             moby->state = 100;
@@ -1914,6 +1921,9 @@ void FUN_L08_002dc7f0(struct Moby *moby);
  * by how far it moved this frame. */
 void shuttle_update(struct Moby *moby) __asm__("FUN_L08_002dbdb0");
 void shuttle_update(struct Moby *moby) {
+    enum {
+        SHUTTLE_STATE_INITIALIZE = 0
+    };
     LiftVars *vars = (LiftVars *)moby->pvars;
     Vec4 old_pos;
     Vec4 old_rot;
@@ -1934,7 +1944,7 @@ void shuttle_update(struct Moby *moby) {
     vars->spin.f[0] = fast_add_rotations(vars->spin.f[0], frame_time * 1.5707964f);
     FUN_L00_00259f50(vars->spin_state, &vars->spin);
     switch (moby->state) {
-    case 0:
+    case SHUTTLE_STATE_INITIALIZE:
         clear_u64_value(&vars->spin);
         if (vars->path == -1) {
             qcopy(&vars->home_pos, &moby->pos);

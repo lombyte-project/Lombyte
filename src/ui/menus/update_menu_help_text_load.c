@@ -20,8 +20,14 @@ static inline int pauseSlotCount(void) {
 int update_menu_help_text_load(char *menu) __asm__("FUN_0021d338");
 
 int update_menu_help_text_load(char *menu) {
+    enum {
+        HELP_TEXT_LOAD_START_READ = 0,
+        HELP_TEXT_LOAD_WAIT_FOR_READ = 1,
+        HELP_TEXT_LOAD_READY = 2,
+        HELP_TEXT_LOAD_READ_NOT_STARTED = 3
+    };
     switch (*(int *)(menu + 0x50)) {
-    case 0:
+    case HELP_TEXT_LOAD_START_READ:
         if (cd_read_active[0] == 0) {
             if (start_audio_stream_read(menu_system.help_text_buffer, disc_table.help_text.sector,
                                         disc_table.help_text.size) != 0) {
@@ -31,7 +37,7 @@ int update_menu_help_text_load(char *menu) {
             }
         }
         break;
-    case 1:
+    case HELP_TEXT_LOAD_WAIT_FOR_READ:
         if (cd_read_active[0] == 0) {
             struct MenuSystem *g = &menu_system;
             int *archive = (int *)g->help_text_buffer;
@@ -57,8 +63,8 @@ int update_menu_help_text_load(char *menu) {
             *(int *)(menu + 0x50) = 2;
         }
         break;
-    case 2:
-    case 3:
+    case HELP_TEXT_LOAD_READY:
+    case HELP_TEXT_LOAD_READ_NOT_STARTED:
         break;
     }
     return 0;

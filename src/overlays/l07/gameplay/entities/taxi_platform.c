@@ -771,6 +771,10 @@ extern void initialize_global_state_entry(int) __asm__("FUN_0022e188");
 
 void FUN_L07_002f5ba0(struct Moby *moby)
 {
+    enum {
+        CONTROLLER_CLEANUP_LINKED_MOBY = 12,
+        CONTROLLER_DELETE_SELF = 13
+    };
     Class436Vars *data = (Class436Vars *)moby->pvars;
     float v[4];
 
@@ -900,7 +904,7 @@ void FUN_L07_002f5ba0(struct Moby *moby)
         initialize_global_state_entry(8);
         moby->state = 12;
         break;
-    case 12:
+    case CONTROLLER_CLEANUP_LINKED_MOBY:
         if (data->moby_10 != -1) {
             struct Moby *e = &level_mobys[data->moby_10];
             if (e != 0 && e->state != 0xFE && e->state != 0xFD) {
@@ -909,7 +913,7 @@ void FUN_L07_002f5ba0(struct Moby *moby)
         }
         moby->state = 13;
         break;
-    case 13:
+    case CONTROLLER_DELETE_SELF:
         delete_moby_m(moby);
         break;
     }
@@ -996,6 +1000,10 @@ typedef struct { char pad[0x90]; int segment; int next_segment; } FollowerSegmen
 
 void boltcrate_possibly_for_metal_detector_update(struct Moby *moby) __asm__("FUN_L07_0030b000");
 void boltcrate_possibly_for_metal_detector_update(struct Moby *moby) {
+    enum {
+        INITIALIZE_PATH_CHILDREN = 0,
+        ADVANCE_PATH_CHILDREN = 1
+    };
     char *data;
     char *path;
     float *remaining;
@@ -1055,7 +1063,7 @@ void boltcrate_possibly_for_metal_detector_update(struct Moby *moby) {
     if (*(int *)(data + 0x70) == -1) return;
     path = D_L07_001B0530[*(int *)(data + 0x70)];
     switch (moby->state) {
-    case 0: {
+    case INITIALIZE_PATH_CHILDREN: {
         int j;
         int placed, follower;
         current = 0;
@@ -1102,7 +1110,7 @@ void boltcrate_possibly_for_metal_detector_update(struct Moby *moby) {
         moby->state = 1;
         break;
     }
-    case 1: {
+    case ADVANCE_PATH_CHILDREN: {
         int cursor = 0;
         FUN_L00_002591d0(&cursor, ((CrateGroupView *)data)->group, 1, 0);
         for (i = 0; i < *(int *)(data + 0x78); i++) {
@@ -1818,6 +1826,11 @@ void attach_manipulator(void *owner, s32 slot_index, void *manip) __asm__("FUN_0
 
 void bombomatic_update(char *m) __asm__("FUN_L07_0030d4d8");
 void bombomatic_update(char *m) {
+    enum {
+        BOMBOMATIC_INITIALIZE = 0,
+        BOMBOMATIC_WAIT_TO_LAUNCH = 1,
+        BOMBOMATIC_LAUNCH_BURST = 2
+    };
     char *d;
     char *hit_info;
     char *t;
@@ -1917,7 +1930,7 @@ eb20:
     trooper_anim_finish(m, d + 0x60);
     get_target_sight(m, target_buffer, 20.0f);
     switch (((unsigned char *)m)[0x20]) {
-    case 0: {
+    case BOMBOMATIC_INITIALIZE: {
             int r1 = scale_game_frames(*(int *)(d + 0xB0));
             int r2;
             int r3;
@@ -1931,7 +1944,7 @@ eb20:
             *(int *)(d + 0xC4) = 0;
         break;
     }
-    case 1: {
+    case BOMBOMATIC_WAIT_TO_LAUNCH: {
         if (*(int *)(d + 0xB4) <= D_L07_0015F5CC) {
             int r9 = scale_game_frames(0xB4);
             *(int *)(d + 0xB4) = D_L07_0015F5CC + r9;
@@ -1942,7 +1955,7 @@ eb20:
         }
         break;
     }
-    case 2: {
+    case BOMBOMATIC_LAUNCH_BURST: {
             int i;
             if (fast_dec_timer_s16(d + 0xB8) != 0) {
                 *(short *)(d + 0xB8) = scale_game_frames(7);
@@ -2290,6 +2303,9 @@ extern void trooper_anim_update(void *, short *) __asm__("FUN_L00_0025d458");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 
 void FUN_L07_0030e998(char *m, char *x, float *hp) {
+    enum {
+        HIT_REACTION_NO_ANIMATION_RESPONSE = 11
+    };
     char *info;
     int hit;
     int r;
@@ -2321,7 +2337,7 @@ void FUN_L07_0030e998(char *m, char *x, float *hp) {
             }
             m[0x20] = 0xD;
             break;
-        case 11:
+        case HIT_REACTION_NO_ANIMATION_RESPONSE:
             break;
         }
         if (hit >= 2) {
@@ -3503,7 +3519,7 @@ extern char D_L07_00173EE0_2cd2b0[] __asm__("D_L07_00173EE0");
 
 void FUN_L07_00312420(struct Moby *arg)
 {
-    float line_endpoint[4], v10[4], quad_side_offset[4], attachment_position[4], endpoint_to_attachment[4], oscillating_reference_position[4], m[4], c2[4], h[4], ii[4], jj[4];
+    float line_endpoint[4], endpoint_work_vector[4], quad_side_offset[4], attachment_position[4], endpoint_to_attachment[4], oscillating_reference_position[4], m[4], c2[4], h[4], ii[4], jj[4];
     float f20, t;
     int flag = 1;
     EffData_313800 *p = ((EffData_313800 *)arg->pvars);
@@ -3517,9 +3533,9 @@ void FUN_L07_00312420(struct Moby *arg)
     t = FUN_L00_0025e310_2cd2b0(f20 + t * 1.5707964f);
     oscillating_reference_position[0] = oscillating_reference_position[0] + FUN_001f9de0_2cd2b0(t);
     add_vector_xyz_cf(arg, 2, attachment_position);
-    subtract_vector_xyz(v10, oscillating_reference_position, attachment_position);
-    FUN_001f9bf8_2cd2b0(v10, v10, 30.0f);
-    add_vector_xyz(line_endpoint, oscillating_reference_position, v10);
+    subtract_vector_xyz(endpoint_work_vector, oscillating_reference_position, attachment_position);
+    FUN_001f9bf8_2cd2b0(endpoint_work_vector, endpoint_work_vector, 30.0f);
+    add_vector_xyz(line_endpoint, oscillating_reference_position, endpoint_work_vector);
     if (FUN_001efa68_2cd2b0(attachment_position, line_endpoint, 2, arg, 0)) {
         qcopy(line_endpoint, D_L07_00173EE0_2cd2b0);
     } else {
@@ -3528,7 +3544,7 @@ void FUN_L07_00312420(struct Moby *arg)
     subtract_vector_xyz(endpoint_to_attachment, attachment_position, line_endpoint);
     cross_vectors_xyz(quad_side_offset, D_L07_00167050_2cd2b0, endpoint_to_attachment);
     FUN_001f9bf8_2cd2b0(quad_side_offset, quad_side_offset, 0.25f);
-    add_vector_xyz(v10, quad_side_offset, line_endpoint);
+    add_vector_xyz(endpoint_work_vector, quad_side_offset, line_endpoint);
     if (flag) {
         FUN_L00_002729c8_2cd2b0(line_endpoint, 0, FUN_001f96f8_2cd2b0((rand_e50() & 1) + 0x2D),
             FUN_001f96f8_2cd2b0((rand_e50() & 7) + 0x37), 1,
@@ -3574,7 +3590,7 @@ void FUN_L07_00312420(struct Moby *arg)
     qcopy_nc(pkt.a, attachment_position);
     add_vector_xyz(pkt.b, pkt.a, quad_side_offset);
     qcopy(pkt.c, line_endpoint);
-    qcopy(pkt.d, v10);
+    qcopy(pkt.d, endpoint_work_vector);
     draw_geometry_quad(&pkt, 0, 1);
 }
 

@@ -266,6 +266,10 @@ extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f
 /* Level 12 shot: flies with a smoke trail, damages the first moby it hits other than its owner, then pops. */
 void rocket_update(struct Moby *moby) __asm__("FUN_L12_002ece00");
 void rocket_update(struct Moby *moby) {
+    enum {
+        ROCKET_STATE_FLYING = 1,
+        ROCKET_STATE_DETONATE = 2
+    };
     ShotVars_ece00 *vars = (ShotVars_ece00 *)moby->pvars;
     float old_pos[4];
     float side[4];
@@ -273,7 +277,7 @@ void rocket_update(struct Moby *moby) {
     float trail[4];
     ShotHit_ece00 hit;
     switch (moby->state) {
-    case 1: {
+    case ROCKET_STATE_FLYING: {
         char *touch = FUN_L00_0025a420_ece00(moby, 0x230000, 0);
         int damage;
         if (touch != 0 && *(struct Moby **)(touch + 0x20) != vars->owner) {
@@ -324,7 +328,7 @@ void rocket_update(struct Moby *moby) {
         }
         break;
     }
-    case 2:
+    case ROCKET_STATE_DETONATE:
         subtract_vector_ece00(old_pos, &moby->pos, D_L12_00167240);
         set_vector_length_ece00(old_pos, old_pos, 0.4f);
         add_vector_ece00(&moby->pos, &moby->pos, old_pos);

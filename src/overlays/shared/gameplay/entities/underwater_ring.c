@@ -296,6 +296,10 @@ extern void FUN_L00_00210a08(int, int, struct Moby *);
 
 void giant_clank_pad_update(struct Moby *moby) __asm__("FUN_L15_002ed068");
 void giant_clank_pad_update(struct Moby *moby) {
+    enum {
+        GIANT_CLANK_PAD_INITIALIZE = 0,
+        GIANT_CLANK_PAD_CHECK_ACTIVATION = 2
+    };
     struct Moby *linked = moby->pvars;
     struct Moby *entry;
     struct Moby *pad;
@@ -303,7 +307,7 @@ void giant_clank_pad_update(struct Moby *moby) {
     u8 position[16] __attribute__((aligned(16)));
 
     switch (state) {
-    case 0: {
+    case GIANT_CLANK_PAD_INITIALIZE: {
         s32 level;
         if (*(int *)((u8 *)linked + 0x60) == -1) {
             mark_moby_for_removal_002ed068(moby);
@@ -322,7 +326,7 @@ void giant_clank_pad_update(struct Moby *moby) {
         /* Fakematch: the second store gives retail's register for moby. */
         if (moby) moby->state = 2; else moby->state = 2;
         return;
-    case 2:
+    case GIANT_CLANK_PAD_CHECK_ACTIVATION:
         if (hero.ground_moby == moby && hero.air_frames.s == 0 && D_L15_0015F5C4 != 2 && hero.state.current != 0x1d) {
             if (hero.vehicle_mode == 0) {
                 try_set_help_message(4, 0x3aa4);

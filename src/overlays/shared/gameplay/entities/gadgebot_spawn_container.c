@@ -2417,6 +2417,9 @@ extern float fast_normalize_angle(f32) __asm__("FUN_001fa610");
 extern Moby *D_L06_0015FFD8;
 
 int FUN_L06_002f2c28(char *ctx, char *ow, char *moby, int flag, int *out) {
+    enum {
+        MOBY_CLASS_RELOCATION_TRIGGER_WITH_SOUND = 0x515
+    };
     float candidate_position[4];
     float vB[4];
     float vA[4];
@@ -2437,7 +2440,7 @@ int FUN_L06_002f2c28(char *ctx, char *ow, char *moby, int flag, int *out) {
     switch (*(short *)(moby + 0xA6)) {
     case 0x15F:
     case 0x3B1:
-    case 0x515:
+    case MOBY_CLASS_RELOCATION_TRIGGER_WITH_SOUND:
         if (!(vector_distance_xy_alt(ctx + 0x10, candidate_position) < 1.0f)) return 0;
         st = *(char **)(moby + 0x78);
         if (*(int *)st < 0) return 0;
@@ -2822,6 +2825,9 @@ extern Moby *create_moby(int) __asm__("FUN_0020c4f8");
 extern int func_0022ED80_2F6330(int, int, void *) __asm__("FUN_0022da68");
 
 void FUN_L06_002f4f00(Moby *m) {
+    enum {
+        SPAWN_CHILD_MOBYS = 0
+    };
     Vars_2F6330 *d = (Vars_2F6330 *)(*(void **)&m->pvars);
     float tmp[4];
     int i;
@@ -2830,7 +2836,7 @@ void FUN_L06_002f4f00(Moby *m) {
     int flag;
 
     switch (m->state) {
-    case 0:
+    case SPAWN_CHILD_MOBYS:
         d->unk10 = (*(float (*)[4])&m->rot)[0];
         qcopy(d->pos, (*(float (*)[4])&m->pos));
         m->state = 2;

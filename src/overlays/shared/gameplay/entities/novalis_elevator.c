@@ -480,6 +480,9 @@ extern void FUN_0020c828(void *);
 extern s32 D_L01_00161494 __attribute__((sda));
 extern f32 D_L01_0016149C __attribute__((sda));
 void FUN_L01_002c7530(char *moby) {
+    enum {
+        TIMED_REMOVAL = 2
+    };
     int *data = *(int **)(moby + 0x78);
     char *camera = D_L01_00167240;
     char hit[0x30];
@@ -515,7 +518,7 @@ void FUN_L01_002c7530(char *moby) {
         break;
     case 0:
         break;
-    case 2:
+    case TIMED_REMOVAL:
         if (fast_dec_timer(data)) {
         remove:
             FUN_0020c828(moby);
@@ -1578,6 +1581,9 @@ void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 extern char D_L01_00174340_c[] __asm__("D_L01_001742C0");
 
 void FUN_L01_002eda00(char *m) {
+    enum {
+        BURST_AND_REMOVE = 2
+    };
     char *d = *(char **)(m + 0x78);
     float prev[4];
     float z[4];
@@ -1621,7 +1627,7 @@ void FUN_L01_002eda00(char *m) {
         if (tick_countdown_32_alt(d + 0x14) != 0)
             m[0x20] = 2;
         break;
-    case 2:
+    case BURST_AND_REMOVE:
         cart_burst(m, m + 0x10, -1, 0.25f, 13.0f);
         mark_moby_for_removal(m);
         break;
@@ -2552,6 +2558,9 @@ extern float D_0015ED70_lui __asm__("D_0015ED70");
 
 void sandmouse_house_update(unsigned char *m) __asm__("FUN_L01_002f2b68");
 void sandmouse_house_update(unsigned char *m) {
+    enum {
+        SANDMOUSE_HOUSE_INITIALIZE = 0
+    };
     char *d;
     if (m == 0)
         return;
@@ -2569,7 +2578,7 @@ void sandmouse_house_update(unsigned char *m) {
         }
     }
     switch (m[0x20]) {
-    case 0:
+    case SANDMOUSE_HOUSE_INITIALIZE:
         if (m[0x53] != 0) {
             blend_moby_animation_w7(m, 0, 0, FUN_001f96f8_w7(0));
         }

@@ -1200,7 +1200,7 @@ void follow_camera_avoid_mobies(u8 *m) __asm__("FUN_L00_002e7d20");
 extern s32 current_level_index_macro __asm__("D_0015ED84") __attribute__((section(".sdata")));
 extern s32 camera_collision_mask __asm__("D_L00_0015EF58") __attribute__((sda));
 void follow_camera_avoid_mobies(u8 *m) {
-    V_2e7d20 probe_center, v10, v20, planar_moby_direction, orbit_side_direction;
+    V_2e7d20 probe_center, moby_offset_or_camera_endpoint, v20, planar_moby_direction, orbit_side_direction;
     W_2e7d20 w;
     u8 *x;
     u8 *a;
@@ -1249,16 +1249,16 @@ void follow_camera_avoid_mobies(u8 *m) {
                 *(s32 *)(o + 0x94) = 0;
                 goto next;
             }
-            FUN_001f9a28_2e7d20(&v10, o + 0x10, (x + 0x90));
-            FUN_001f9a68_2e7d20(&v20, base + 0x30, FUN_001f9ab0_2e7d20(base + 0x30, &v10));
-            FUN_001f9a28_2e7d20(&planar_moby_direction, &v10, &v20);
+            FUN_001f9a28_2e7d20(&moby_offset_or_camera_endpoint, o + 0x10, (x + 0x90));
+            FUN_001f9a68_2e7d20(&v20, base + 0x30, FUN_001f9ab0_2e7d20(base + 0x30, &moby_offset_or_camera_endpoint));
+            FUN_001f9a28_2e7d20(&planar_moby_direction, &moby_offset_or_camera_endpoint, &v20);
             FUN_001f9bf8_2e7d20(&planar_moby_direction, &planar_moby_direction, 1.0f);
             f = FUN_001f9ab0_2e7d20(&planar_moby_direction, a);
             f = fast_arc_sin(f / (AF_2e7d20(0x2C) - BF_2e7d20(0x30)));
             if (FUN_001f99c0_2e7d20(1.5707964f - f) < 0.43633232f) {
                 fast_vec_cross(&orbit_side_direction, a, base + 0x30);
                 FUN_001f9bf8_2e7d20(&orbit_side_direction, &orbit_side_direction, 1.0f);
-                if (0.0f < FUN_001f9ab0_2e7d20(&orbit_side_direction, &v10)) {
+                if (0.0f < FUN_001f9ab0_2e7d20(&orbit_side_direction, &moby_offset_or_camera_endpoint)) {
                     build_look_at_matrix(a, a, base + 0x20, -0.017453292f);
                 } else {
                     build_look_at_matrix(a, a, base + 0x20, 0.017453292f);
@@ -1316,14 +1316,14 @@ slow:
     }
 move:
     FUN_001f9bf8_2e7d20(a, a, AF_2e7d20(0x2C) - BF_2e7d20(0x30));
-    FUN_001f9a10_2e7d20(&v10, a, (x + 0x90));
+    FUN_001f9a10_2e7d20(&moby_offset_or_camera_endpoint, a, (x + 0x90));
     if (D_0013F350_2e7d20.i2084 == 0x7F) {
         goto clear;
     }
     if (current_level_index_macro == 0xD && D_0013F350_2e7d20.i2084 == 0x7B) {
         goto clear;
     }
-    if (!collision_line((x + 0x90), &v10, camera_collision_mask, D_0013F350_2e7d20.p2080, 0)) {
+    if (!collision_line((x + 0x90), &moby_offset_or_camera_endpoint, camera_collision_mask, D_0013F350_2e7d20.p2080, 0)) {
         goto clear;
     }
     if (FUN_L00_002e4290_2e7d20((*(E40_2e7d20_t *)&D_L00_00173E40_lui).v20)) {

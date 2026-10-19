@@ -297,6 +297,9 @@ extern f32 D_L00_001618C8 __attribute__((sda));
 extern f32 D_L00_001618CC __attribute__((sda));
 extern f32 D_L00_001618D0 __attribute__((sda));
 void crate_drop_bolts(u8 *a) {
+    enum {
+        CRATE_DROP_AUTO_SELECT = 0
+    };
     T_2d0538 tmp;
     V_2d0538 trajectory_vector, adjusted_position, scratch_vector;
     s32 n;
@@ -366,7 +369,7 @@ void crate_drop_bolts(u8 *a) {
         case 9:
             n = 25;
             break;
-        case 0:
+        case CRATE_DROP_AUTO_SELECT:
         default:
             n = -1;
             break;
@@ -3332,6 +3335,10 @@ void FUN_L00_002d73e8(P *);
 
 void particle_spawner_smoke_fire_update(P *p) __asm__("FUN_L00_002d6f28");
 void particle_spawner_smoke_fire_update(P *p) {
+    enum {
+        PARTICLE_SPAWNER_INITIALIZE = 0,
+        PARTICLE_SPAWNER_ACTIVE = 1
+    };
     Q *q = p->q;
     u8 *tbl;
     V v, a, b;
@@ -3341,7 +3348,7 @@ void particle_spawner_smoke_fire_update(P *p) {
     E2 *sub;
 
     switch (p->state) {
-    case 0:
+    case PARTICLE_SPAWNER_INITIALIZE:
         p->state = 1;
         p->b30 = 0xFF;
         if (q->idx == -1) {
@@ -3377,7 +3384,7 @@ void particle_spawner_smoke_fire_update(P *p) {
         D_L00_001600EC[q->idx].w = 1.0f;
         q->col = q->c2 << 16 | q->c1 << 8 | q->c0;
         return;
-    case 1:
+    case PARTICLE_SPAWNER_ACTIVE:
         tbl = (u8 *)&D_L00_001600EC[q->idx];
         qcopy(&v, tbl + 0x30);
         v.z += 9.0f;

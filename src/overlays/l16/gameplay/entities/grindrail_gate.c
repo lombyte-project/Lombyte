@@ -102,6 +102,10 @@ extern L16WatchFlags D_0013D355_watch __asm__("D_0013D24D");
 
 void help_desk_lady_update(L16WatchMoby *m) __asm__("FUN_L16_002e3190");
 void help_desk_lady_update(L16WatchMoby *m) {
+    enum {
+        HELP_DESK_INITIALIZE_DIALOGUE = 0,
+        HELP_DESK_POLL_DIALOGUE = 1
+    };
     L16WatchScratch scratch;
     L16WatchData *d = m->data;
     L16WatchFlags *flags;
@@ -112,13 +116,13 @@ void help_desk_lady_update(L16WatchMoby *m) {
     FUN_L12_002e6b60((char *)m);
     activation = &d->activation;
     switch (m->state) {
-    case 0:
+    case HELP_DESK_INITIALIZE_DIALOGUE:
         initialize_npc_dialogue(m, activation);
         m->state = 1;
         d->activation.radius = 20.0f;
         m->opacity = 0xFF;
         break;
-    case 1: {
+    case HELP_DESK_POLL_DIALOGUE: {
         L16WatchPlayer *player = (L16WatchPlayer *)((char *)&D_0013E633_watch + 0xE1D);
         if (player->disabled == 0 && player->mode != 15 && player->mode != 22) {
             if (is_point_inside_clip_volume((char *)player + 0x80, d->activation_region) &&
@@ -623,6 +627,11 @@ extern void func_00215CA8_f5848(float, int *, int, void *, float *, int) __asm__
 
 void taxi_update(struct Moby *moby) __asm__("FUN_L16_002e43e0");
 void taxi_update(struct Moby *moby) {
+    enum {
+        TAXI_INITIALIZE = 0,
+        TAXI_BLEND_TO_PATH_START = 3,
+        TAXI_BLEND_TO_DESTINATION_POSE = 5
+    };
     char *d = (char *)moby->pvars;
     float previous_position[4], previous_rotation[4], position_delta[4], v30[4], transition_end_position[4], transition_start_rotation[4], transition_end_rotation[4], hero_local_offset[4];
     struct Hero *g;
@@ -638,7 +647,7 @@ void taxi_update(struct Moby *moby) {
     qcopy(previous_rotation, &moby->rot);
     FUN_L00_00266858(moby, (moby->flags ^ 1) & 1);
     switch (moby->state) {
-    case 0:
+    case TAXI_INITIALIZE:
         *(short *)(d + 0xAA) = -1;
         FUN_L16_002e4900_c(moby);
         break;
@@ -665,7 +674,7 @@ void taxi_update(struct Moby *moby) {
             }
         }
         break;
-    case 3:
+    case TAXI_BLEND_TO_PATH_START:
         advance_accelerated_scalar_c(1.0f, D_0015ED70_c2, D_0015ED70_c2, frame_time * 0.5f,
                                      (float *)(d + 0xB0), (float *)(d + 0xB4));
         qa = v30;
@@ -693,7 +702,7 @@ void taxi_update(struct Moby *moby) {
             moby->state = 5;
         }
         break;
-    case 5:
+    case TAXI_BLEND_TO_DESTINATION_POSE:
         advance_accelerated_scalar_c(1.0f, D_0015ED70_c2, D_0015ED70_c2, frame_time * 0.5f,
                                      (float *)(d + 0xB0), (float *)(d + 0xB4));
         qa = transition_end_position;
@@ -1080,6 +1089,11 @@ extern int func_001FA898_caa18(float) __asm__("FUN_001fa6d0");
 short D_L16_00161E48 = 0;
 void chomper_update(struct Moby *m) __asm__("FUN_L16_002e5e08");
 void chomper_update(struct Moby *m) {
+    enum {
+        CHOMPER_INITIALIZE = 0,
+        CHOMPER_APPROACH_TARGET = 4,
+        CHOMPER_RETURN_HOME = 6
+    };
     char *d = (char *)m->pvars;
     FUN_L16_002e6208(m);
     FUN_L00_00263ac8(2.1f, (int)m, 1, (unsigned char *)(d + 0x220));
@@ -1088,7 +1102,7 @@ void chomper_update(struct Moby *m) {
         m->shadow_range = 23;
     }
     switch (m->state) {
-    case 0:
+    case CHOMPER_INITIALIZE:
         if (*(int *)(d + 0x1F0) == -1) {
             mark_moby_for_removal_u(m);
             return;
@@ -1116,7 +1130,7 @@ void chomper_update(struct Moby *m) {
     case 2:
     case 3:
         break;
-    case 4:
+    case CHOMPER_APPROACH_TARGET:
         if (FUN_L16_002e6428_u(m, d + 0x180) < 1.25f) {
             m->state = 5;
             if (m->prev_seq != 1)
@@ -1139,7 +1153,7 @@ void chomper_update(struct Moby *m) {
         }
         break;
     }
-    case 6:
+    case CHOMPER_RETURN_HOME:
         if (FUN_L16_002e6428_u(m, d + 0x1D0) < 1.0f) {
             m->state = 1;
             if (m->prev_seq != 2)
@@ -1443,6 +1457,10 @@ extern L16ChallengePlayer D_0013E633_challenge __asm__("D_0013E533");
 
 void gadgetron_ceo_update(L16ChallengeMoby *m) __asm__("FUN_L16_002e6808");
 void gadgetron_ceo_update(L16ChallengeMoby *m) {
+    enum {
+        GADGETRON_CEO_INITIALIZE_DIALOGUE = 0,
+        GADGETRON_CEO_POLL_DIALOGUE = 1
+    };
     L16ChallengeScratch scratch;
     L16ChallengeData *d = m->data;
     L16ChallengeActivation *activation = (L16ChallengeActivation *)d->activation;
@@ -1454,7 +1472,7 @@ void gadgetron_ceo_update(L16ChallengeMoby *m) {
     }
     FUN_L02_002e0cd8(m);
     switch (m->state) {
-    case 0:
+    case GADGETRON_CEO_INITIALIZE_DIALOGUE:
         m->opacity = 255;
         m->state = 1;
         initialize_npc_dialogue(m, activation);
@@ -1464,7 +1482,7 @@ void gadgetron_ceo_update(L16ChallengeMoby *m) {
             m->yaw = fast_add_rotations(m->yaw, 3.14159265f);
         FUN_L16_002e7168((char *)m);
         break;
-    case 1: {
+    case GADGETRON_CEO_POLL_DIALOGUE: {
         if (((L16ChallengePlayer *)((char *)&D_0013E633_challenge + 0xE1D))->mode != 15)
             D_L16_0015F638 = 115.0f;
         else

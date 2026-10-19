@@ -38,6 +38,9 @@ extern long get_effect_texture(int) __asm__("func_001F44B8");
 void draw_help(void) __asm__("FUN_001fe980");
 
 void draw_help(void) {
+    enum {
+        HELP_PROMPT = 2
+    };
     if (((HelpState *)D_001996D0)->state == 0) {
         return;
     }
@@ -59,7 +62,7 @@ void draw_help(void) {
                 ((HelpState *)D_001996D0)->pad[2] - s, ((HelpState *)D_001996D0)->pad[2] + s, 0x60);
         }
         break;
-    case 2:
+    case HELP_PROMPT:
         if (D_0015EF1D_b) {
             help_draw_prompt();
         }

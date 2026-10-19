@@ -506,7 +506,7 @@ extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 void *FUN_L00_00263fd8(char *src, int cls, float *pos, void *mat, int a8, int a9, float *v10,
                        float *v11, float scale, float *v12);
 void *FUN_L00_00263fd8(char *src, int cls, float *pos, void *mat, int a8, int a9, float *initial_velocity,
-                       float *v11, float scale, float *class_vector_override) {
+                       float *random_vector_override, float scale, float *class_vector_override) {
     char *m = (char *)func_0020D348_m(cls);
     char *d;
     float t[4];
@@ -546,12 +546,12 @@ void *FUN_L00_00263fd8(char *src, int cls, float *pos, void *mat, int a8, int a9
         } else {
             qcopy(d, initial_velocity);
         }
-        if (fast_vec_length(v11) == 0.0f) {
+        if (fast_vec_length(random_vector_override) == 0.0f) {
             float g = D_0015ED6C_s[0];
             random_vector(t, g * 3.1415927f, g * 6.2831855f);
             qcopy(d + 0x10, t);
         } else {
-            qcopy(d + 0x10, v11);
+            qcopy(d + 0x10, random_vector_override);
         }
         if (fast_vec_length(class_vector_override) == 0.0f && class_vector_override[3] == 0.0f) {
             qcopy(t, *(char **)(m + 0x24) + 0x30);

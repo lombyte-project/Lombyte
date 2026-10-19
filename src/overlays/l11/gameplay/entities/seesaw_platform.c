@@ -387,6 +387,11 @@ void FUN_L11_0030dd18(struct Moby *m);
 /* Spawns the 4x6 child grid, waits for its linked moby, then fades and blends between two D_L11_001600EC
    points (pos at 0x30, rotation at 0x70) before handing back to the hero. */
 void FUN_L11_0030d800(struct Moby *m) {
+    enum {
+        CHILD_GRID_STATE_CREATE_CHILDREN = 0,
+        CHILD_GRID_STATE_WAIT_LINK_COMMAND = 1,
+        CHILD_GRID_STATE_BLEND_POINT_POSES = 3
+    };
     GridVars_d800 *pv = (GridVars_d800 *)m->pvars;
     Vec4f pos;
     Vec4f rot;
@@ -395,7 +400,7 @@ void FUN_L11_0030d800(struct Moby *m) {
     float old;
 
     switch (m->state) {
-    case 0:
+    case CHILD_GRID_STATE_CREATE_CHILDREN:
         for (row = 0; row < 4; row++) {
             for (col = 0; col < 6; col++) {
                 pv->grid[row][col] = create_moby_d800(0x4B7);
@@ -410,7 +415,7 @@ void FUN_L11_0030d800(struct Moby *m) {
         pv->t = 0.0f;
         m->state = 1;
         break;
-    case 1: {
+    case CHILD_GRID_STATE_WAIT_LINK_COMMAND: {
         struct Moby *link = (struct Moby *)((pv->link << 8) + D_L11_0015FFD8_d800);
         if (link->command == 1) {
             m->state = 2;
@@ -437,7 +442,7 @@ void FUN_L11_0030d800(struct Moby *m) {
             m->state = 3;
         }
         break;
-    case 3:
+    case CHILD_GRID_STATE_BLEND_POINT_POSES:
         pv->prev = pv->t;
         approach_d800(&pv->t, &pv->vel, 1.0f, D_L11_00161F58 * frame_time_sq, D_L11_00161F5C * frame_time_sq,
                       D_L11_00161F60 * frame_time);
@@ -1078,6 +1083,12 @@ extern struct Moby *D_L11_00174858 __attribute__((section(".data")));
 /* Ship ammo / health pickup: falls and bounces, is pulled toward the hero's ship, and refills it on contact. */
 void ammocrate_update(struct Moby *m) __asm__("FUN_L11_0030f728");
 void ammocrate_update(struct Moby *m) {
+    enum {
+        OCLASS_SHIP_AMMO_PICKUP = 0x4C2,
+        OCLASS_SHIP_HEALTH_PICKUP = 0x4C4,
+        AMMOCRATE_STATE_INITIALIZE = 0,
+        AMMOCRATE_STATE_REMOVE = 5
+    };
     struct Moby *ship = hero.ship_moby;
     char *pv = m->pvars;
     float dist = 100000.0f;
@@ -1110,7 +1121,7 @@ void ammocrate_update(struct Moby *m) {
                 (*(struct Moby **)(pv + 0x34))->collision = 0;
             }
             switch (m->oclass) {
-            case 0x4C2:
+            case OCLASS_SHIP_AMMO_PICKUP:
                 hero.ship_ammo += 5;
                 if (hero.ship_moby != 0 && hero.ship_moby->state != 0xFE && hero.ship_moby->state != 0xFD) {
                     FUN_0022da68_f728(4, 0, hero.ship_moby);
@@ -1120,7 +1131,7 @@ void ammocrate_update(struct Moby *m) {
                 }
                 m->state = 4;
                 break;
-            case 0x4C4:
+            case OCLASS_SHIP_HEALTH_PICKUP:
                 hero.ship_hp += hero.ship_hp_max * 0.25f;
                 if (hero.ship_moby != 0 && hero.ship_moby->state != 0xFE && hero.ship_moby->state != 0xFD) {
                     FUN_0022da68_f728(5, 0, hero.ship_moby);
@@ -1137,7 +1148,7 @@ void ammocrate_update(struct Moby *m) {
         }
     }
     switch (m->state) {
-    case 0:
+    case AMMOCRATE_STATE_INITIALIZE:
         *(struct Moby **)(pv + 0x34) = 0;
         FUN_L11_0030f660(m, pv);
         *(float *)(pv + 0x30) = 0.0f;
@@ -1184,7 +1195,7 @@ void ammocrate_update(struct Moby *m) {
     case 4:
         m->state = 5;
         break;
-    case 5:
+    case AMMOCRATE_STATE_REMOVE:
         mark_moby_for_removal_f728(m);
         return;
     }
@@ -1571,6 +1582,9 @@ void psytcopus_update(struct Moby *m) {
 }
 /* Hit handling for the psytcopus_update moby: takes damage, picks the hurt or death reaction, keeps it on its path. */
 void FUN_L11_00310698(struct Moby *m) {
+    enum {
+        HIT_REACTION_DEATH = 1
+    };
     struct PokiPathVars *pv = (struct PokiPathVars *)m->pvars;
     Vec4f v;
     int hits;
@@ -1636,7 +1650,7 @@ void FUN_L11_00310698(struct Moby *m) {
             }
             pv->unk158 += frames_0180(60);
             break;
-        case 1:
+        case HIT_REACTION_DEATH:
         case 2:
             m->flags &= 0xEFFF;
             pv->unk80 = D_L11_00161F88 * frame_time_sq;
@@ -2613,6 +2627,14 @@ extern int FUN_L11_0031a7d8(int);
 s32 hp_bar_saved __asm__("D_L11_00162170") = 0;
 void jet_fighter_update(struct Moby *moby) __asm__("FUN_L11_00313290");
 void jet_fighter_update(struct Moby *moby) {
+    enum {
+        JET_FIGHTER_STATE_INITIALIZE = 0,
+        JET_FIGHTER_STATE_WAIT_FOR_BOARDING = 1,
+        JET_FIGHTER_STATE_BOARD = 2,
+        JET_FIGHTER_STATE_FLIGHT = 4,
+        JET_FIGHTER_STATE_DISMOUNT = 5,
+        JET_FIGHTER_STATE_WAIT_FOR_RESPAWN = 7
+    };
     ShipVars_2838 *v;
     ShipHit_3290 *hit;
     W4_2838 dir;
@@ -2668,7 +2690,7 @@ void jet_fighter_update(struct Moby *moby) {
             }
         }
         switch (moby->state) {
-        case 0:
+        case JET_FIGHTER_STATE_INITIALIZE:
             moby->state = 1;
             v->sel = 0;
             moby->scale = *(float *)((char *)moby->pclass + 0x24);
@@ -2696,7 +2718,7 @@ void jet_fighter_update(struct Moby *moby) {
                 moby->visible = 0;
             }
             break;
-        case 1: {
+        case JET_FIGHTER_STATE_WAIT_FOR_BOARDING: {
             struct Hero *g = &hero;
             if (jet_distance(moby, g->moby) < D_L11_00161FD0) {
                 if (item_available[7] != 0) {
@@ -2722,7 +2744,7 @@ void jet_fighter_update(struct Moby *moby) {
             }
             break;
         }
-        case 2:
+        case JET_FIGHTER_STATE_BOARD:
             approach_value_c788(&v->fade, 1.0f, frame_time * 4.0f);
             D_L11_0015F3FC = v->fade;
             if (v->fade == 1.0f) {
@@ -2773,7 +2795,7 @@ void jet_fighter_update(struct Moby *moby) {
                 g->unk20A5 = 1;
             }
             break;
-        case 4:
+        case JET_FIGHTER_STATE_FLIGHT:
             if (v->fade != 0.0f) {
                 approach_value_c788(&v->fade, 0.0f, frame_time * 4.0f);
                 D_L11_0015F3FC = v->fade;
@@ -2795,7 +2817,7 @@ void jet_fighter_update(struct Moby *moby) {
                 moby->state = 5;
             }
             break;
-        case 5: {
+        case JET_FIGHTER_STATE_DISMOUNT: {
             char *p;
             struct Hero *g = &hero;
             g->unk20A5 = 0;
@@ -2831,7 +2853,7 @@ void jet_fighter_update(struct Moby *moby) {
             D_L11_0015F3FC = 0.99f;
             break;
         }
-        case 7:
+        case JET_FIGHTER_STATE_WAIT_FOR_RESPAWN:
             D_L11_0015F608 = 2;
             if (timer_3290(&v->iF8)) {
                 hero_respawn();

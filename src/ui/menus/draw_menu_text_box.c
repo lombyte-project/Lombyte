@@ -17,6 +17,9 @@ extern void vu1_add_g_sregister(int, long) __asm__("func_00233980");
 int draw_menu_text_box(char *arg0) __asm__("FUN_00222768");
 
 int draw_menu_text_box(char *menu_text_box) {
+    enum {
+        MENU_TEXT_DRAW_NONE = 0
+    };
     short box[12];
     int ypos;
     int n;
@@ -72,7 +75,7 @@ int draw_menu_text_box(char *menu_text_box) {
         font_print_window_regular(box, 0x80FFA888L, get_help_message_text(*(int *)(menu_text_box + 0x34)),
                                   -1);
         break;
-    case 0:
+    case MENU_TEXT_DRAW_NONE:
         break;
     }
     do_gif_paging();

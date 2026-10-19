@@ -720,6 +720,12 @@ extern f32 frame_time_macro __asm__("D_0015ED6C") __attribute__((section(".sdata
 extern s32 current_level_index_macro __asm__("D_0015ED84") __attribute__((section(".sdata")));
 void agnogg_ship_front_update(Moby_2FC140 *moby) __asm__("FUN_L01_002fad68");
 void agnogg_ship_front_update(Moby_2FC140 *moby) {
+    enum {
+        AGNOGG_SHIP_INITIALIZE = 0,
+        AGNOGG_SHIP_HOLD_TARGET_HEIGHT = 10,
+        AGNOGG_SHIP_DESCEND_TO_TARGET_HEIGHT = 2,
+        AGNOGG_SHIP_WAIT_BEFORE_SCENE = 5
+    };
     Data_2FC140 *data;
     Link_2FC140 *q;
     int r16;
@@ -734,7 +740,7 @@ void agnogg_ship_front_update(Moby_2FC140 *moby) {
     func_L01_002FC058_2FC140();
     fast_dec_timer(&data->timer);
     switch (moby->state) {
-    case 0:
+    case AGNOGG_SHIP_INITIALIZE:
         fz = moby->pos.z - 0.75f;
         moby->f30 = 0xFF;
         moby->state = 1;
@@ -784,7 +790,7 @@ void agnogg_ship_front_update(Moby_2FC140 *moby) {
             }
         }
         break;
-    case 2:
+    case AGNOGG_SHIP_DESCEND_TO_TARGET_HEIGHT:
         moby->pos.z = moby->pos.z - frame_time_macro * 5.0f;
         if (data->link != -1) {
             q = D_L01_00160058_2FC140[data->link].data;
@@ -848,7 +854,7 @@ void agnogg_ship_front_update(Moby_2FC140 *moby) {
         data->timer = scale_game_frames(0x2D);
         moby->state = 5;
         break;
-    case 5:
+    case AGNOGG_SHIP_WAIT_BEFORE_SCENE:
         if (data->timer != 0) {
             break;
         }
@@ -905,7 +911,7 @@ void agnogg_ship_front_update(Moby_2FC140 *moby) {
         func_L01_002A3680_2FC140();
         moby->state = 10;
         break;
-    case 10:
+    case AGNOGG_SHIP_HOLD_TARGET_HEIGHT:
         moby->pos.z = data->fC;
         break;
     }

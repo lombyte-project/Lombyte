@@ -29,6 +29,9 @@ extern s32 SceDeci2ExSend(s32 socket, void *buffer, u16 byte_count);
 extern int kprintf(const char *format, ...);
 
 void sceTtyHandler(s32 event, s32 param, TtyState *tty) {
+    enum {
+        TTY_SEND_PENDING_BYTES = 3
+    };
     Deci2Hdr *hdr;
     s32 n;
     s32 off;
@@ -55,7 +58,7 @@ void sceTtyHandler(s32 event, s32 param, TtyState *tty) {
             tty->rlen = 0;
         }
         break;
-    case 3:
+    case TTY_SEND_PENDING_BYTES:
         n = SceDeci2ExSend(tty->socket, tty->wbuf, tty->wlen);
         if (n < 0) {
             kprintf(D_00152750, n);

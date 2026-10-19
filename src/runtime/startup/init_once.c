@@ -54,6 +54,9 @@ extern s32 sceSifSyncIop();
 void init_once(void) __asm__("FUN_00201650");
 
 void init_once(void) {
+    enum {
+        SYSTEM_LANGUAGE_GAME_FALLBACK = 1
+    };
     u8 buf[0x800];
     s32 lang;
     u32 b;
@@ -149,7 +152,7 @@ void init_once(void) {
     default:
         DebugPrint(unsupported_lang_message, lang);
         /* fallthrough */
-    case 1:
+    case SYSTEM_LANGUAGE_GAME_FALLBACK:
         game_language = 0;
         return;
     }

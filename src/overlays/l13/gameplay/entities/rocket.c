@@ -1195,6 +1195,9 @@ extern void mark_moby_for_removal_8d10(struct Moby *) __asm__("FUN_0020c828");
 
 /* Walker update: takes hits (knocked back, or dies at no health), picks its target and falls onto or slides off the ground. */
 void FUN_L13_00308d10(struct Moby *moby) {
+    enum {
+        HIT_RESULT_DEATH = 1
+    };
     struct WalkerVars_8d10 *vars = (struct WalkerVars_8d10 *)moby->pvars;
     char *hit;
     s32 code;
@@ -1245,7 +1248,7 @@ void FUN_L13_00308d10(struct Moby *moby) {
             knock_back_8d10(moby, vars->anim, 7, 1, 0, atan2_f_8d10(*(f32 *)(hit + 0x10), *(f32 *)(hit + 0x14)));
             vars->flash_time = 0xFA;
             break;
-        case 1:
+        case HIT_RESULT_DEATH:
         case 2:
             moby->state = 0x10;
             moby->flags &= ~0x1000;
@@ -1742,6 +1745,11 @@ extern void FUN_L00_002eac18(int);
 extern void FUN_L13_0030ad38(struct Moby *, float *, float *);
 
 void FUN_L13_0030a6d8(struct Moby *moby) {
+    enum {
+        LIFT_INITIALIZE = 0,
+        LIFT_MOVE_TO_TOP = 2,
+        LIFT_MOVE_TO_BOTTOM = 3
+    };
     LiftVarsA6D8 *vars = (LiftVarsA6D8 *)moby->pvars;
     float delta[4];
     float rot[4];
@@ -1753,7 +1761,7 @@ void FUN_L13_0030a6d8(struct Moby *moby) {
     qcopy(rot, &moby->rot);
     moby->rot.y = fast_add_rotations((1.0f - (moby->pos.z - vars->bottom) / (vars->top - vars->bottom)) * 3.1415927f, vars->angle * DEG_TO_RAD);
     switch (moby->state) {
-    case 0:
+    case LIFT_INITIALIZE:
         vars->pulse = random_angle_radians();
         vars->voice = -1;
         vars->timer = 0;
@@ -1781,8 +1789,8 @@ void FUN_L13_0030a6d8(struct Moby *moby) {
         }
         break;
     }
-    case 2:
-    case 3: {
+    case LIFT_MOVE_TO_TOP:
+    case LIFT_MOVE_TO_BOTTOM: {
         float target;
         if (!voice_is_playing(moby, vars->voice))
             vars->voice = allocate_voice(0, 4, moby);
@@ -1984,12 +1992,16 @@ extern void FUN_L00_0028e8a0(void *);
 extern int memcard_save_data(int, int) __asm__("FUN_0020b178");
 
 void FUN_L13_0030b628(struct Moby *moby) {
+    enum {
+        START_INITIAL_SCENE = 1,
+        CHECK_CLIP_VOLUME_FOR_SCENE = 4
+    };
     int *data = (int *)moby->pvars;
     switch (moby->state) {
     case 0:
         if (D_L13_0015F5C4 == 0) moby->state = 1;
         break;
-    case 1:
+    case START_INITIAL_SCENE:
         if (alternate_item_available[0x64] == 0) {
             alternate_item_available[0x64] = 1;
             moby->state = 2;
@@ -2004,7 +2016,7 @@ void FUN_L13_0030b628(struct Moby *moby) {
     case 3:
         moby->state = 4;
         break;
-    case 4: {
+    case CHECK_CLIP_VOLUME_FOR_SCENE: {
         if (alternate_item_available[0x65] == 0) {
             if (data[0] == -1)
                 goto set_state_4;

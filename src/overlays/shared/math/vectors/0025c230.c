@@ -187,6 +187,10 @@ extern int func_L00_001F2BE8_d6f0(float, void *, int, void *, void *) __asm__("F
 
 int mine_fall(char *moby, char *st) __asm__("FUN_L00_0025c698");
 int mine_fall(char *moby, char *st) {
+    enum {
+        MOTION_FALLING = 1,
+        MOTION_GROUNDED = 2
+    };
     float eye[4];
     float height_probe_position[4];
     float collision_probe_position[4];
@@ -265,7 +269,7 @@ int mine_fall(char *moby, char *st) {
             }
             break;
         }
-        case 1:
+        case MOTION_FALLING:
             t = compute_interpolated_record_value(moby);
             if (*(float *)(st + 0x54) <= t) {
                 *(int *)(moby + 0x58) = 0;
@@ -289,7 +293,7 @@ int mine_fall(char *moby, char *st) {
                 approach_value((float *)(moby + 0x58), rr, frame_scale * 0.1f);
             }
             break;
-        case 2:
+        case MOTION_GROUNDED:
             *(float *)(moby + 0x58) = 1.0f;
             break;
         }

@@ -366,6 +366,9 @@ extern Path_2C73D0 *D_L09_001B0930_2C73D0[] __asm__("D_L09_001B0630");
 extern char D_0013E633_2C73D0[] __asm__("D_001413D0");
 
 void FUN_L09_002c6230(Moby *moby) {
+    enum {
+        RESPONSE_FATAL_KNOCKBACK = 1
+    };
     char hit_pos[16];
     int hit;
     float damage;
@@ -433,7 +436,7 @@ void FUN_L09_002c6230(Moby *moby) {
             }
             data->reactTime = 0x78;
             break;
-        case 1:
+        case RESPONSE_FATAL_KNOCKBACK:
         case 2:
             moby->flags &= 0xEFFF;
             data->f80 = D_L09_001613F8 * D_0015ED70;

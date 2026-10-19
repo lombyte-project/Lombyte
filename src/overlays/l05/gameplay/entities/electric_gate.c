@@ -1952,6 +1952,10 @@ extern L16WatchPlayer D_0013E633_watch __asm__("D_0013E533");
 
 void shady_salesman_update(WM *m) __asm__("FUN_L05_003180a0");
 void shady_salesman_update(WM *m) {
+    enum {
+        SHADY_SALESMAN_INITIALIZE = 0,
+        SHADY_SALESMAN_UPDATE_DIALOGUE = 1
+    };
     L16WatchScratch scratch;
     WD *d = m->data;
     float rate;
@@ -1965,7 +1969,7 @@ void shady_salesman_update(WM *m) {
         }
     }
     switch (m->state) {
-    case 0:
+    case SHADY_SALESMAN_INITIALIZE:
         if (D_0013D4FF) {
             mark_moby_for_removal(m);
             return;
@@ -1976,7 +1980,7 @@ void shady_salesman_update(WM *m) {
         m->state = 1;
         initialize_npc_dialogue(m, d);
         break;
-    case 1:
+    case SHADY_SALESMAN_UPDATE_DIALOGUE:
         if (update_npc_dialogue(m, d))
             begin_dialogue_camera_transition(m, 2.0f);
         if ((unsigned)(d->sub - 3) < 2) {
@@ -2170,6 +2174,12 @@ extern void func_00215CA8_f5848(float, int *, int, void *, float *, int) __asm__
 
 void taxi_update(struct Moby *moby) __asm__("FUN_L05_00318c78");
 void taxi_update(struct Moby *moby) {
+    enum {
+        TAXI_INITIALIZE = 0,
+        TAXI_WAIT_FOR_PICKUP = 1,
+        TAXI_BLEND_TO_PATH_START = 3,
+        TAXI_BLEND_TO_DESTINATION = 5
+    };
     char *d = (char *)moby->pvars;
     float old_position[4], old_rotation[4], position_delta[4], v30[4], interpolation_end_position[4], interpolation_start_angles[4], interpolation_end_angles[4], hero_offset[4];
     struct Hero *g;
@@ -2185,11 +2195,11 @@ void taxi_update(struct Moby *moby) {
     qcopy(old_rotation, &moby->rot);
     FUN_L00_00266858(moby, (moby->flags ^ 1) & 1);
     switch (moby->state) {
-    case 0:
+    case TAXI_INITIALIZE:
         *(short *)(d + 0xB2) = *(short *)(d + 0xB0) = -1;
         FUN_L05_00319208(moby);
         break;
-    case 1:
+    case TAXI_WAIT_FOR_PICKUP:
         g = &hero;
         if (((char *)g->ground_moby) == moby && g->air_frames.s == 0) {
             transpose_rotation_matrix(v30, &moby->rot_row0);
@@ -2212,7 +2222,7 @@ void taxi_update(struct Moby *moby) {
             }
         }
         break;
-    case 3:
+    case TAXI_BLEND_TO_PATH_START:
         advance_accelerated_scalar_c(1.0f, frame_time_sq, frame_time_sq, frame_time * 0.5f,
                                      (float *)(d + 0xC0), (float *)(d + 0xC4));
         qa = v30;
@@ -2240,7 +2250,7 @@ void taxi_update(struct Moby *moby) {
             moby->state = 5;
         }
         break;
-    case 5:
+    case TAXI_BLEND_TO_DESTINATION:
         advance_accelerated_scalar_c(1.0f, frame_time_sq, frame_time_sq, frame_time * 0.5f,
                                      (float *)(d + 0xC0), (float *)(d + 0xC4));
         qa = interpolation_end_position;

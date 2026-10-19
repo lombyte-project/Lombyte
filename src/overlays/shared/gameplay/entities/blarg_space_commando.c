@@ -447,6 +447,9 @@ extern void allocate_voice_for_bank_entry(int, int, int) __asm__("FUN_0022db10")
 float absolute_float(float input) __asm__("func_001F99C0");
 
 void FUN_L06_002feb40(char *m) {
+    enum {
+        FATAL_HIT_RESPONSE = 1
+    };
     extern unsigned char D_0013D408[];
     char *d;
     char *t;
@@ -512,7 +515,7 @@ void FUN_L06_002feb40(char *m) {
             *(unsigned char *)(d + 0x117) = 0xFA;
             break;
         }
-        case 1:
+        case FATAL_HIT_RESPONSE:
         case 2:
         {
             char *q;

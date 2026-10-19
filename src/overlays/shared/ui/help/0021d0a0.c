@@ -103,6 +103,12 @@ extern f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
 extern void approach_value(f32, f32, void *) __asm__("FUN_00213ed8");
 
 void FUN_L06_0021e1a0(void) {
+    enum {
+        ATTACHMENT_PULSE_GREEN = 1,
+        ATTACHMENT_PULSE_YELLOW = 2,
+        ATTACHMENT_PULSE_RED = 3,
+        ATTACHMENT_PULSE_BLUE = 4
+    };
     char *g;
     char *moby;
     /* The two transform paths reuse the retail 0xA0-byte scratch region. */
@@ -190,10 +196,10 @@ void FUN_L06_0021e1a0(void) {
                 char *g = (char *)&hero;
                 *(f32 *)(g + 0x1628) = fast_add_rotations(*(f32 *)(g + 0x1628), frame_time_macro * 12.217304f);
                 switch (*(s16 *)(g + 0x22fe)) {
-                case 1: color = 0x2814c814; color2 = 0x1e004b00; break;
-                case 2: color = 0x2814c8c8; color2 = 0x1e004b4b; break;
-                case 3: color = 0x323232fa; color2 = 0x1e000078; break;
-                case 4: color = 0x28f01414; color2 = 0x1e4b0000; break;
+                case ATTACHMENT_PULSE_GREEN: color = 0x2814c814; color2 = 0x1e004b00; break;
+                case ATTACHMENT_PULSE_YELLOW: color = 0x2814c8c8; color2 = 0x1e004b4b; break;
+                case ATTACHMENT_PULSE_RED: color = 0x323232fa; color2 = 0x1e000078; break;
+                case ATTACHMENT_PULSE_BLUE: color = 0x28f01414; color2 = 0x1e4b0000; break;
                 }
             }
             {

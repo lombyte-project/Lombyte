@@ -333,6 +333,9 @@ extern int D_L11_0016D260[];
 extern int D_L11_0015FFD8;
 
 void FUN_L11_002d1030(void *mp) {
+    enum {
+        RESORT_OWNER_JUMP_TO_TARGET = 7
+    };
     struct Moby *moby = mp;
     char *d = (char *)moby->pvars;
     float ang;
@@ -378,7 +381,7 @@ void FUN_L11_002d1030(void *mp) {
         }
         break;
     }
-    case 7:
+    case RESORT_OWNER_JUMP_TO_TARGET:
         if (FUN_00214cc8(moby, 9.0f)) {
             fast_vec_sub(d + 0x130, d + 0x120, (char *)moby + 0x10);
             f0 = (float)scale_game_frames(0x3C);
@@ -746,6 +749,9 @@ float D_L11_00161400 = -3.0f;
 extern int D_L11_0015FFD8;
 
 void FUN_L11_002d2088(struct Moby *moby, unsigned char state) {
+    enum {
+        RESORT_OWNER_JUMP_TO_TARGET = 7
+    };
     char *d = (char *)moby->pvars;
     float tmp[4];
 
@@ -775,7 +781,7 @@ void FUN_L11_002d2088(struct Moby *moby, unsigned char state) {
             FUN_00212f90(moby, 3, 0, scale_game_frames(0x14));
         *(float *)(d + 0x154) = D_L11_001613D4 * frame_time;
         break;
-    case 7:
+    case RESORT_OWNER_JUMP_TO_TARGET:
         if (moby->prev_seq != 4)
             FUN_00212f90(moby, 4, 0, scale_game_frames(0x14));
         clear_u64_value(d + 0x130);
@@ -981,6 +987,9 @@ typedef struct {
 
 /* Guard head update: in its watching states it turns its body and head toward the hero. */
 void FUN_L11_002d27b0(WM11 *m) {
+    enum {
+        RESORT_OWNER_INITIALIZE = 0
+    };
     WS11 scratch;
     WD11b *d = (WD11b *)m->data;
     float rate;
@@ -989,7 +998,7 @@ void FUN_L11_002d27b0(WM11 *m) {
     rate = 0.02f;
     head_rate = 0.3f;
     switch (m->state) {
-    case 0:
+    case RESORT_OWNER_INITIALIZE:
     case 1:
     case 2:
     case 3:

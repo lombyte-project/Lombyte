@@ -88,6 +88,10 @@ extern char D_0015F588[];
 struct TextRegion D_001E78F0 = {0x50, 0x154, 0x60, 0x1a0, 0x100, 0x54, 0, 0, 0x10, 1, 0, 0};
 struct TextRegion D_001E7908 = {0x64, 0x12c, 0x60, 0x1a0, 0x100, 0x68, 0, 0, 0x10, 1, 0, 0};
 void draw_dialog_text(void) {
+    enum {
+        FREEZE_TITLE_DIALOG = 2,
+        FREEZE_MODE_MESSAGE_DIALOG = 3
+    };
     char buf[0x200];
     struct TextRegion box;
 
@@ -141,7 +145,7 @@ void draw_dialog_text(void) {
                             get_frame_texture(find_valid_animation_frame_index_alt(0x755D, 1)));
         break;
     }
-    case 3: {
+    case FREEZE_MODE_MESSAGE_DIALOG: {
         char *text;
         s32 left;
         s32 right;
@@ -410,7 +414,7 @@ void draw_dialog_text(void) {
         }
         break;
     }
-    case 2:
+    case FREEZE_TITLE_DIALOG:
         draw_outlined_rect(0x64, 0xA0, 0xB0, 0x150,
                      fast_tween_color(D_0015F524, D_0015F528,
                                   fast_sin((f32)(game_frame_counter % freeze_wave_period) / convert_integer_to_float(freeze_wave_period) * 6.28318f -

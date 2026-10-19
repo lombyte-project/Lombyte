@@ -14,6 +14,10 @@ extern void _Error1();
 const u8 D_001537A8[] = "Invalid macroblock_address_increment code(0x%08x)";
 
 s32 _mbAddressIncrement(MbCtx *ctx) {
+    enum {
+        MACROBLOCK_ADDRESS_INCREMENT_STUFFING = 0x22,
+        MACROBLOCK_ADDRESS_INCREMENT_ESCAPE = 0x23
+    };
     s32 total;
     register u32 code;
     s32 bits;
@@ -22,10 +26,10 @@ s32 _mbAddressIncrement(MbCtx *ctx) {
     do {
         code = _ipuVdec(ctx, 0);
         switch (code) {
-        case 0x22:
+        case MACROBLOCK_ADDRESS_INCREMENT_STUFFING:
             ret = 1;
             break;
-        case 0x23:
+        case MACROBLOCK_ADDRESS_INCREMENT_ESCAPE:
             ret = 1;
             total += 0x21;
             break;

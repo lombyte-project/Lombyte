@@ -59,6 +59,9 @@ void update_help_state(void) __asm__("FUN_001fde90");
         D_00141968[D_001996D0.entry].flags | (1 << current_level_index) | 0x80000000
 
 void update_help_state(void) {
+    enum {
+        HELP_STATE_IDLE = 0
+    };
 
     if (D_001996D0.started == 0) {
         if (D_001996D0.delay == 0 && (controller_state.held & (PAD_UP | PAD_RIGHT | PAD_DOWN | PAD_LEFT))) {
@@ -101,7 +104,7 @@ void update_help_state(void) {
         D_001996D0.shown = 0;
         break;
 
-    case 0:
+    case HELP_STATE_IDLE:
         if (D_001996D0.pending >= 0) {
             D_001996D0.msg = find_help_message_index(D_001996D0.pending);
             D_001996D0.pending = -1;

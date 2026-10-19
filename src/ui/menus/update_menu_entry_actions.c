@@ -24,6 +24,10 @@ extern s32 current_level_index_gp __asm__("D_0015ED84") __attribute__((sda));
 extern s32 game_language_gp __asm__("D_0015ED88") __attribute__((sda));
 extern s32 *menu_level_indices_gp __asm__("D_001601E0") __attribute__((sda));
 s32 update_menu_entry_actions(struct MenuScreen *menu) {
+    enum {
+        MENU_ACTION_SET_NEXT_PAGE = 3,
+        MENU_ACTION_SET_LANGUAGE = 9
+    };
     s32 focused;
     s32 entry_index;
     s32 entry_count;
@@ -76,7 +80,7 @@ s32 update_menu_entry_actions(struct MenuScreen *menu) {
         case 0:
         case 1:
             break;
-        case 3:
+        case MENU_ACTION_SET_NEXT_PAGE:
             menu_system.next =
                 (struct MenuPage *)menu->data.list.items[menu->data.list.selected].param.value;
             break;
@@ -140,7 +144,7 @@ s32 update_menu_entry_actions(struct MenuScreen *menu) {
             menu_system.close_request = 7;
             allocate_voice_for_target_entry(0, 0x11, menu->moby);
             return 0;
-        case 9:
+        case MENU_ACTION_SET_LANGUAGE:
             game_language_gp = menu->data.list.items[menu->data.list.selected].param.value;
             return 0;
         case 2:

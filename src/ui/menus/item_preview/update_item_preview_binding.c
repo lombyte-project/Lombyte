@@ -58,6 +58,12 @@ extern struct Moby *delete_moby(struct Moby *) __asm__("FUN_00225530");
 s32 update_item_preview_binding(struct ItemPreviewBinding *preview) __asm__("FUN_0021e230");
 
 s32 update_item_preview_binding(struct ItemPreviewBinding *preview) {
+    enum {
+        ITEM_PREVIEW_INITIALIZE = 0,
+        ITEM_PREVIEW_WAIT_FOR_CLASS = 1,
+        ITEM_PREVIEW_CREATE_MOBYS = 2,
+        ITEM_PREVIEW_MONITOR_CLASS_CHANGE = 3
+    };
     struct MenuScreen *grid;
     struct Moby *moby;
     struct Moby *secondary_moby;
@@ -105,15 +111,15 @@ s32 update_item_preview_binding(struct ItemPreviewBinding *preview) {
     }
     use_alternate_x = preview->flags & 1;
     switch (preview->state) {
-    case 0:
+    case ITEM_PREVIEW_INITIALIZE:
         preview->state = 1;
         break;
-    case 1:
+    case ITEM_PREVIEW_WAIT_FOR_CLASS:
         if (oclass != -1) {
             preview->state = 2;
         }
         break;
-    case 2:
+    case ITEM_PREVIEW_CREATE_MOBYS:
         if (oclass == -1) {
             preview->state = 1;
             break;
@@ -187,7 +193,7 @@ s32 update_item_preview_binding(struct ItemPreviewBinding *preview) {
         }
         preview->state = 3;
         break;
-    case 3:
+    case ITEM_PREVIEW_MONITOR_CLASS_CHANGE:
         if (previous_class != oclass) {
             preview->primary_moby = delete_moby(preview->primary_moby);
             preview->secondary_moby = delete_moby(preview->secondary_moby);

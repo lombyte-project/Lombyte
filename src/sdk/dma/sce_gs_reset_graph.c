@@ -8,10 +8,14 @@ extern s32 disable_intc() __asm__("func_00119028");
 extern void SetGsCrt(s32, s32, s32);
 
 void sceGsResetGraph(s16 mode, s16 inter, s16 out, s16 ff) {
+    enum {
+        GS_RESET_AND_CONFIGURE_VIDEO = 0,
+        GS_UPDATE_VIDEO_MODE = 5
+    };
     sceGsGParam *gp;
 
     switch (mode) {
-    case 0:
+    case GS_RESET_AND_CONFIGURE_VIDEO:
         gp = GetCoreDataTable();
         *(volatile u64 *)0x12001000 = 0x200;
         gp->sceGsInterMode = inter;
@@ -30,7 +34,7 @@ void sceGsResetGraph(s16 mode, s16 inter, s16 out, s16 ff) {
     case 1:
         *(volatile u64 *)0x12001000 = 0x100;
         break;
-    case 5:
+    case GS_UPDATE_VIDEO_MODE:
         gp = GetCoreDataTable();
         gp->sceGsFFMode = (ff != 0);
         gp->sceGsInterMode = inter;

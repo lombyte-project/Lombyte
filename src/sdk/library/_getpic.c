@@ -8,6 +8,9 @@ extern s32 _nextHeader();
 extern s32 _sceMpegFlush();
 
 s32 _getpic(struct sceMpeg *mpeg) {
+    enum {
+        MPEG_SEQUENCE_END = 0
+    };
     s32 temp_6_13;
     s32 var_18_8;
     u32 var_19_6;
@@ -38,7 +41,7 @@ s32 _getpic(struct sceMpeg *mpeg) {
         } while (temp_16_12->unk848 != 0);
     dispatch:
         switch (var_19_6) {
-        case 0:
+        case MPEG_SEQUENCE_END:
             _sceMpegFlush(mpeg);
             temp_16_12->unk0 = 1;
             break;

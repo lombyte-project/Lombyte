@@ -653,6 +653,10 @@ extern void vu_euler_rotation_basis(void *, void *);
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void FUN_L17_002d77f0(char *m) {
+    enum {
+        RING_INITIALIZE = 0,
+        RING_ROTATE_AND_DRAW = 1
+    };
     OvlQuad sp0[1];
     OvlQuad sp10[1];
     struct Blk blk;
@@ -676,12 +680,12 @@ void FUN_L17_002d77f0(char *m) {
     d = *(float **)(m + 0x78);
     if (FUN_L00_0020d568() != 0) {
         switch (*(unsigned char *)(m + 0x20)) {
-        case 0:
+        case RING_INITIALIZE:
             *(unsigned char *)(m + 0x30) = 0xFF;
             *(unsigned char *)(m + 0x20) = 1;
             d[1] = d[0] * *(float *)&D_L17_00161B78 * DEG_TO_RAD * frame_time;
             break;
-        case 1:
+        case RING_ROTATE_AND_DRAW:
             *(float *)(m + 0x40) = fast_add_rotations(*(float *)(m + 0x40), d[1]);
             enqueue_callback_list_1(FUN_L17_002d7cf0, m);
             break;

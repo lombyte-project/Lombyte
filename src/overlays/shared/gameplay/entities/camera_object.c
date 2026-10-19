@@ -35,6 +35,10 @@ float absolute_float(float input) __asm__("func_001F99C0");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void FUN_L00_002a4890(void) {
+    enum {
+        AMBIENCE_WAIT_AND_SELECT_TARGET = 0,
+        AMBIENCE_INTERPOLATE_TO_TARGET = 1
+    };
     struct Amb *s = &D_L00_001CB7C0;
     float a, b, c, d, e;
     switch (s->hC) {
@@ -42,7 +46,7 @@ void FUN_L00_002a4890(void) {
         break;
     case 2:
         switch (s->hE) {
-        case 0:
+        case AMBIENCE_WAIT_AND_SELECT_TARGET:
             if (fast_dec_timer_s16(&s->h1E)) {
                 a = convert_integer_to_float(s->h1C) * random_float_between_alt(0.5f, 1.5f);
                 c = fast_add_rotations(s->f0, random_float_between_alt(-1.0471976f, 1.0471976f));
@@ -53,7 +57,7 @@ void FUN_L00_002a4890(void) {
                 s->hE = 1;
             }
             break;
-        case 1:
+        case AMBIENCE_INTERPOLATE_TO_TARGET:
             if (fast_dec_timer_s16(&s->h1E)) {
                 s->h1E = func_001FA898_r(convert_integer_to_float(s->h1C) *
                                          random_float_between_alt(2.0f, 3.0f));
@@ -793,6 +797,13 @@ extern void FUN_L00_002a7210_c(Bolt *, void *, f32, f32) __asm__("FUN_L00_002a72
 
 void bolt_update(Bolt *obj) __asm__("FUN_L00_002a5dd8");
 void bolt_update(Bolt *obj) {
+    enum {
+        BOLT_INITIALIZE = 0,
+        BOLT_FALLING = 1,
+        BOLT_SETTLING = 2,
+        BOLT_IDLE = 3,
+        BOLT_MOVE_TO_HERO = 4
+    };
     BoltVars *v = obj->vars;
     Vec4 a;
     Vec4 b;
@@ -822,7 +833,7 @@ void bolt_update(Bolt *obj) {
         obj->flags &= 0xFFFE;
     }
     switch (obj->state) {
-    case 0:
+    case BOLT_INITIALIZE:
         obj->state = 3;
         obj->unk73 = 0x14;
         obj->flags |= 0x100;
@@ -870,7 +881,7 @@ void bolt_update(Bolt *obj) {
             break;
         }
         break;
-    case 1:
+    case BOLT_FALLING:
         v->vel.f[2] -= frame_time_sq * 10.8f;
         fast_vec_add(&obj->pos, &obj->pos, &v->vel);
         quaternion_to_rotation_basis(&v->spin, &c);
@@ -928,7 +939,7 @@ void bolt_update(Bolt *obj) {
         matrix_to_euler(&obj->rot, &b);
         FUN_L00_00259f50(&v->spin, &b);
         return;
-    case 2:
+    case BOLT_SETTLING:
         FUN_L00_002a6de8_c(obj, &b, 0);
         k = 0.25f;
         b.f[2] += k;
@@ -947,7 +958,7 @@ void bolt_update(Bolt *obj) {
         obj->state = 3;
         v->hop_frames = v->hop_left = FUN_001fa6d0(multiply_global_factor_ed64(FUN_002132a8(10.0f, 20.0f)));
         return;
-    case 3:
+    case BOLT_IDLE:
         dist = vector_distance(&obj->pos, &hero.motion.pos);
         if (dist < hero.reach_distance && FUN_001f99c0(obj->pos.f[2] - hero.motion.pos.f[2]) < hero.reach_height) {
             FUN_L00_002a7210_c(obj, hero.moby, 0.0f, 0.0f);
@@ -984,7 +995,7 @@ void bolt_update(Bolt *obj) {
             v->hop_left--;
         }
         return;
-    case 4:
+    case BOLT_MOVE_TO_HERO:
         flag = 0;
         if (v->unk60->oclass == 0) {
             fast_vec_sub(&a, &obj->pos, &hero.ground_point);
@@ -1333,6 +1344,12 @@ extern void FUN_L00_001ff500(void *, void *, float);
  */
 struct Moby *FUN_L00_002a7438(struct Moby *src, void *pos, void *vel, int flags, int value, int counted)
 {
+    enum {
+        BOLT_VALUE_ONE = 1,
+        BOLT_VALUE_FIVE = 5,
+        BOLT_VALUE_TWENTY = 20,
+        BOLT_VALUE_FIFTY = 50
+    };
     f32 dir[4] __attribute__((aligned(16)));
     f32 tmp[4] __attribute__((aligned(16)));
     struct Moby *m;
@@ -1345,19 +1362,19 @@ struct Moby *FUN_L00_002a7438(struct Moby *src, void *pos, void *vel, int flags,
 
     switch (value) {
     default:
-    case 1:
+    case BOLT_VALUE_ONE:
         m = (struct Moby *)create_moby(0xD);
         scale = 0.65f;
         break;
-    case 5:
+    case BOLT_VALUE_FIVE:
         m = (struct Moby *)create_moby(0xE);
         scale = 0.7f;
         break;
-    case 20:
+    case BOLT_VALUE_TWENTY:
         m = (struct Moby *)create_moby(0xF);
         scale = 0.75f;
         break;
-    case 50:
+    case BOLT_VALUE_FIFTY:
         m = (struct Moby *)create_moby(0x10);
         scale = 0.6f;
         break;

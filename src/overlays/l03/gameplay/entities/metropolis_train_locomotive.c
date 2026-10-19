@@ -987,6 +987,9 @@ char *FUN_L03_002bad40(struct Moby *parent, int unused, int color, int a3, int a
 /* Hit effects for the Kerwan train and turret classes: sparks or smoke puffs pushed along the hit velocity,
  * with countdowns in the moby data (0x12E, 0x12F) limiting how often they spawn. */
 void FUN_L03_0029caa8(char *moby, void *vel_in, int quiet) {
+    enum {
+        MOBY_CLASS_TWO_JOINT_PARTICLE_EMITTER = 0x74
+    };
     float vel[4];
     float *vp;
     float pos[4];
@@ -1007,7 +1010,7 @@ void FUN_L03_0029caa8(char *moby, void *vel_in, int quiet) {
         return;
     }
     switch (*(short *)(moby + 0xA6)) {
-    case 0x74:
+    case MOBY_CLASS_TWO_JOINT_PARTICLE_EMITTER:
         if (quiet == 0) {
             scale_vector_xyz(vp, vp, 0.35f);
             for (i = 0; i < 2; i++) {
@@ -3100,6 +3103,9 @@ extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
  * attacker (the hero when hit by the wrench or by nothing) and starts a knock-back jump whose size depends
  * on the hit kind; a lethal hit starts the death jump. */
 void FUN_L03_002c95a8(Moby2C8398 *m) {
+    enum {
+        DEATH_KNOCKBACK_RESPONSE = 1
+    };
     float vec[4];
     int kind;
     float damage;
@@ -3203,7 +3209,7 @@ void FUN_L03_002c95a8(Moby2C8398 *m) {
             m->state = 10;
             allocate_voice_for_target_entry(1, 0, (int)m);
             break;
-        case 1:
+        case DEATH_KNOCKBACK_RESPONSE:
             d->q.f10 = frame_time_sq * 40.0f;
             d->q.f14 = D_L03_001618E8 * frame_time_sq;
             d->q.f18 = 3.0f / (2.0f * square_root(2.0f * 2.0f * d->q.f10) / (frame_time_sq * 40.0f)) +

@@ -1131,6 +1131,10 @@ extern void engine_voice_set_pitch(s32 voice, s32 pitch) __asm__("FUN_L00_0028df
 
 /* Keeps the moby's engine voice playing, easing its volume and pitch toward the animation's levels. */
 void FUN_L04_002c1b80(struct Moby *m) {
+    enum {
+        CIRCULAR_SAW_ANIM_IDLE = 0,
+        CIRCULAR_SAW_ANIM_ATTACK = 7
+    };
     EngineSoundVars *v = (EngineSoundVars *)m->pvars;
     f32 volume;
     f32 pitch;
@@ -1142,7 +1146,7 @@ void FUN_L04_002c1b80(struct Moby *m) {
             v->pitch = 0;
         }
         switch (m->prev_seq) {
-        case 0:
+        case CIRCULAR_SAW_ANIM_IDLE:
             pitch = 0.0f;
             volume = engine_int_to_float(0x400) * 0.6f;
             break;
@@ -1161,7 +1165,7 @@ void FUN_L04_002c1b80(struct Moby *m) {
             break;
         case 5:
         case 6:
-        case 7:
+        case CIRCULAR_SAW_ANIM_ATTACK:
             pitch = 0.0f;
             volume = engine_int_to_float(0x400) * 0.8f;
             break;

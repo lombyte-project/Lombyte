@@ -300,6 +300,9 @@ void attach_manipulator(void *owner, s32 slot_index, void *manip) __asm__("FUN_0
 
 void FUN_L14_002b17d8(char *moby);
 void FUN_L14_002b17d8(char *moby) {
+    enum {
+        PLASMABOT_INITIALIZE = 0
+    };
     char *data;
     char *owner;
     int state;
@@ -346,7 +349,7 @@ void FUN_L14_002b17d8(char *moby) {
         *(unsigned short *)(moby + 0x34) &= 0xFFFE;
     }
     switch (((unsigned char *)moby)[0x20]) {
-    case 0: {
+    case PLASMABOT_INITIALIZE: {
         if (((unsigned char *)data)[0x24A] != 0) {
             if (*(int *)(data + 0x240) == -1) {
                 DebugPrint(D_L14_001FBB60, *(short *)(moby + 0xB2));
@@ -966,6 +969,9 @@ extern char D_0013E533[];
 extern void func_L00_0025D5B0_i(void *, void *, float, int, int, int) __asm__("FUN_L00_0025c558");
 
 void FUN_L14_002b2f60(char *moby) {
+    enum {
+        HIT_REACTION_LETHAL = 1
+    };
     char *state = *(char **)(moby + 0x78);
     int hit_kind;
     float damage;
@@ -1009,7 +1015,7 @@ void FUN_L14_002b2f60(char *moby) {
         }
             ((unsigned char *)state)[0xC7] = 0xFA;
             break;
-        case 1: case 2: {
+        case HIT_REACTION_LETHAL: case 2: {
             float y;
             if (*(int *)(hit_info + 0x24) & 0x800000) {
                 moby[0x20] = 0xC;
@@ -1241,6 +1247,9 @@ extern s32 fast_dec_timer(void *) __asm__("FUN_001f9740");
 
 void plasmabot_hatch_update(struct Moby *moby) __asm__("FUN_L14_002d96e0");
 void plasmabot_hatch_update(struct Moby *moby) {
+    enum {
+        HATCH_WAIT_ACTIVATION_DELAY = 1
+    };
     char *data = (char *)moby->pvars;
     if (hero.vehicle_mode == 2) {
         moby->collision = 0;
@@ -1254,7 +1263,7 @@ void plasmabot_hatch_update(struct Moby *moby) {
             *(s32 *)(data + 8) = FUN_001f96f8_c(*(s32 *)(data + 4));
         }
         break;
-    case 1:
+    case HATCH_WAIT_ACTIVATION_DELAY:
         if (fast_dec_timer(data + 8) != 0) {
             moby->state = 2;
             set_moby_animation(moby, 1, 0);

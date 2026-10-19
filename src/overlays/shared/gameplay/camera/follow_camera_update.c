@@ -235,7 +235,7 @@ void follow_camera_orbit(int arg) {
     float orbit_cross_scratch[4];
     float rotated_orbit_offset[4];
     float scaled_up_offset[4];
-    float t7[4];
+    float orbit_base_position[4];
     float forward_clamp_axis[4];
     float tb[4];
     float x, bc, e, e1, y, h, r, i, s, len;
@@ -277,7 +277,7 @@ void follow_camera_orbit(int arg) {
     build_look_at_matrix(rotated_orbit_offset, rotated_orbit_offset, orbit_cross_scratch, i);
     fast_vec_normalize(p140, rotated_orbit_offset, bc);
     fast_vec_scale(scaled_up_offset, up, *(float *)(p130 + 0x30));
-    add_vector_xyz(t7, scaled_up_offset, d + 0xA0);
+    add_vector_xyz(orbit_base_position, scaled_up_offset, d + 0xA0);
     e = fast_vec_dot(p140, fw);
     len = fast_vec_length(p140);
     if (len != 0.0f) {
@@ -291,7 +291,7 @@ void follow_camera_orbit(int arg) {
             *(float *)(p130 + 0x24) = 0.0f;
         }
     }
-    add_vector_xyz(m + 0x30, t7, p130 + 0x10);
+    add_vector_xyz(m + 0x30, orbit_base_position, p130 + 0x10);
 }
 extern int *D_L00_0015EF80_9aa0 __asm__("D_L00_0015EF80");
 extern char *D_L00_001600F4_9aa0 __asm__("D_L00_001600F4");

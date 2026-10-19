@@ -46,6 +46,7 @@ s32 fun_00213928(O_25a478 *obj, P_25a478 *p, Q_25a478 *q, u32 flags, s32 *out, f
 
 s32 fun_00213928(O_25a478 *obj, P_25a478 *p, Q_25a478 *q, u32 flags, s32 *out, f32 *fp, s32 *kp, s32 idx) {
     enum {
+        FALLBACK_HIT_RESPONSE = 1,
         DEFAULT_HIT_RESPONSE = 1
     };
     V_25a478 v;
@@ -157,7 +158,7 @@ s32 fun_00213928(O_25a478 *obj, P_25a478 *p, Q_25a478 *q, u32 flags, s32 *out, f
     } else {
         switch (r) {
         case 0:
-        case 1:
+        case FALLBACK_HIT_RESPONSE:
             if (!(flags & 0x10)) res = 0xB;
             if (!(flags & 0x20)) *out = 1;
             goto z;

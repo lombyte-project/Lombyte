@@ -1999,6 +1999,9 @@ extern short D_L00_00161D0C __attribute__((sda));
 extern short D_L00_00161D10 __attribute__((sda));
 extern short D_L00_00161D80 __attribute__((sda));
 void FUN_L00_002e4fe8(char *m, float *out_focus_velocity) {
+    enum {
+        CAM_ATTACH_HOLD_FOCUS_VELOCITY = 8
+    };
     float cam[4];
     float tmp[4];
     char *d;
@@ -2114,7 +2117,7 @@ void FUN_L00_002e4fe8(char *m, float *out_focus_velocity) {
             }
         }
         break;
-    case 8:
+    case CAM_ATTACH_HOLD_FOCUS_VELOCITY:
         qcopy(out_focus_velocity, e + 0x10);
         x = fast_vec_dot(cam, g + 0x30);
         FUN_001f9a68_c2(tmp, g + 0x30, x);
@@ -2146,6 +2149,9 @@ void FUN_L00_002e55b8(void *mm, void *vv, void *tt, f32 a, f32 b, f32 c) {
 }
 void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 s32 FUN_L00_002e5678(void *mm, void *a, void *b, s32 k) {
+    enum {
+        CAM_ATTACH_HERO_POSITION_BASE = 1
+    };
     u8 *m = mm;
     s32 r = 1;
     u8 *p = *(u8 **)(m + 0x70) + 0x40;
@@ -2162,7 +2168,7 @@ s32 FUN_L00_002e5678(void *mm, void *a, void *b, s32 k) {
         fast_vec_add(b, a, p);
         r = 0;
         break;
-    case 1:
+    case CAM_ATTACH_HERO_POSITION_BASE:
         follow_camera_hero_target((int)m, t);
         fast_vec_add(b, a, t);
         break;

@@ -20,7 +20,7 @@ extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void FUN_L00_00250df8(void *);
 
 char *FUN_L08_00307190(char *pos, char *dir, int a2, int a3, int a4, int a5);
-char *FUN_L08_00307190(char *pos, char *dir, int collision_ignore_moby, int tracked_moby, int lifetime_frames, int a5) {
+char *FUN_L08_00307190(char *pos, char *dir, int collision_ignore_moby, int tracked_moby, int lifetime_frames, int burst_mode) {
     char *m = func_0020D348_m(0x50C);
     if (m != 0) {
         char *d;
@@ -34,7 +34,7 @@ char *FUN_L08_00307190(char *pos, char *dir, int collision_ignore_moby, int trac
         *(int *)(d + 0x18) = scale_game_frames(lifetime_frames);
         *(int *)(d + 0x10) = collision_ignore_moby;
         *(int *)(d + 0x14) = tracked_moby;
-        *(int *)(d + 0x2C) = a5;
+        *(int *)(d + 0x2C) = burst_mode;
         *(int *)(d + 0x28) = 0;
         *(float *)(m + 0x48) = fast_arc_tan(*(float *)d, *(float *)(d + 4));
         *(float *)(m + 0x44) = -fast_arc_tan(vector_length_xy(d), *(float *)(d + 8));
@@ -62,6 +62,10 @@ void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 extern int func_001F9908_i(void *) __asm__("FUN_001f9740");
 
 void FUN_L08_00307298(char *m) {
+    enum {
+        FIRE_BOLT_STATE_FLYING = 1,
+        FIRE_BOLT_STATE_BURST_AND_REMOVE = 2
+    };
     char *d = *(char **)(m + 0x78);
     float prev[4];
     float sc[4];
@@ -69,7 +73,7 @@ void FUN_L08_00307298(char *m) {
     float tmp[4];
     char *o;
     switch (((unsigned char *)m)[0x20]) {
-    case 1:
+    case FIRE_BOLT_STATE_FLYING:
         qcopy(prev, m + 0x10);
         o = *(char **)(d + 0x14);
         if (o == 0 || ((unsigned char *)o)[0x20] == 0xFE || ((unsigned char *)o)[0x20] == 0xFD) {
@@ -98,7 +102,7 @@ void FUN_L08_00307298(char *m) {
         if (func_001F9908_i(d + 0x18) != 0)
             m[0x20] = 2;
         break;
-    case 2:
+    case FIRE_BOLT_STATE_BURST_AND_REMOVE:
         if ((D_L08_0015F5D4 < 0.85f && D_L08_0015F5D0 < 0.85f) || *(int *)(d + 0x2C) == 1) {
             cart_burst(m, m + 0x10, -1, 0.25f, 13.0f);
         } else {

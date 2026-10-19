@@ -420,6 +420,10 @@ extern float func_L00_0025CCF0_spark(void *, void *, float, float, float, float,
 extern int func_L00_001EFFF0_spark(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 
 void FUN_L16_002a3f38(unsigned char *m) {
+    enum {
+        PROJECTILE_STATE_FLYING = 0,
+        PROJECTILE_STATE_IMPACT = 1
+    };
     L16SparkVector desired, previous, velocity, random;
     L16SparkQuery query;
     char *d = *(char **)(m + 0x78);
@@ -429,7 +433,7 @@ void FUN_L16_002a3f38(unsigned char *m) {
     struct Hero *player;
     float yaw, pitch;
     switch (m[0x20]) {
-    case 0: {
+    case PROJECTILE_STATE_FLYING: {
         float step, time;
         step = D_0015ED6C;
         time = frame_time_sq;
@@ -517,7 +521,7 @@ void FUN_L16_002a3f38(unsigned char *m) {
         }
         break;
     }
-    case 1:
+    case PROJECTILE_STATE_IMPACT:
         func_L00_0025F4A8_alt(m, &D_L16_0015F580_spark, 0, 0.0f, 0.0f, 3, 3, 5, 1.0f, 0.5f, 4.0f,
                               0.7f, 0, 7.0f, 0, 0, -1, 0);
         mark_moby_for_removal_a3f38(m);
@@ -745,11 +749,16 @@ extern L16SparkHitN D_L16_hitN __asm__("D_L16_00174240");
 extern int func_0022ED80_n(int, int, void *) __asm__("FUN_0022da68");
 
 void FUN_L16_002c5eb0(L16FallingMoby *m) {
+    enum {
+        BOMB_STATE_MOVING = 1,
+        BOMB_STATE_RESTING = 2,
+        BOMB_STATE_EXPLODE = 3
+    };
     float previous[4], normal[4];
     L16FallingData *d = m->data;
 
     switch (m->state) {
-    case 1:
+    case BOMB_STATE_MOVING:
         /* No pointer locals: m->position and d->velocity are written at each use and the compiler caches
            them itself (velocity formed in the argument register and copied to a saved one, the position
            copied a second time for the ground test). */
@@ -783,7 +792,7 @@ void FUN_L16_002c5eb0(L16FallingMoby *m) {
         }
         d->velocity[2] -= d->gravity;
         break;
-    case 2:
+    case BOMB_STATE_RESTING:
         if (tick_countdown_32_alt(&d->timer)) {
             m->state = 3;
         } else if (d->timer < scale_game_frames(61) && d->timer % scale_game_frames(20) == 0) {
@@ -791,7 +800,7 @@ void FUN_L16_002c5eb0(L16FallingMoby *m) {
             trooper_anim_update(m, (short *)d);
         }
         break;
-    case 3:
+    case BOMB_STATE_EXPLODE:
         func_0022ED80_n(0, 0, m);
         spawn_explosion(m, (int)D_L16_0015F580n, 0, 1.5f, 1.0f, 7, 10, 20, 3.0f, 1.7f, 4.0f, -1,
                          1.0f, 7.0f, 0, 7, -1, 0);

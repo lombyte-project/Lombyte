@@ -49,6 +49,9 @@ void update_resident_dialogue_animation_state(Moby *m) __asm__("FUN_00237ed0");
 
 extern u8 big_head_cheat_enabled __asm__("D_0015EDB0") MACRO_ADDR;
 void update_resident_dialogue_animation_state(Moby *m) {
+    enum {
+        RESIDENT_WAIT_TO_START_DIALOGUE_ANIMATION = 12
+    };
     s32 r;
     s32 a;
 
@@ -151,7 +154,7 @@ void update_resident_dialogue_animation_state(Moby *m) {
             m->state = 4;
         }
         break;
-    case 12:
+    case RESIDENT_WAIT_TO_START_DIALOGUE_ANIMATION:
         if (D_0015172A == 3 && D_001610B0 != 0) {
             D_001610B4 = 1;
             D_001610B0 = 0;

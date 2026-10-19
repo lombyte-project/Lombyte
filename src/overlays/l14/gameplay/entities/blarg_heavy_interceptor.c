@@ -814,6 +814,9 @@ extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
 void FUN_L14_002ad8b8(struct Moby *moby) {
+    enum {
+        HIT_REACTION_LETHAL = 1
+    };
     char *data = (char *)moby->pvars;
     int st;
     float t;
@@ -844,7 +847,7 @@ void FUN_L14_002ad8b8(struct Moby *moby) {
             ((unsigned char *)data)[0x67] = 0xC8;
             blend_moby_animation(moby, 1, 0, 5);
             break;
-        case 1:
+        case HIT_REACTION_LETHAL:
         case 2:
             moby->state = 7;
             moby->flags &= 0xEFFF;
@@ -1679,7 +1682,7 @@ void machinegun_turret_update(char *moby) __asm__("FUN_L14_002b3bf0");
 void machinegun_turret_update(char *moby) {
     char *data;
     float v20[4];
-    float v30[4];
+    float spawn_position[4];
     float v40[4];
     float v50[4];
     float v60[4];
@@ -1804,25 +1807,25 @@ void machinegun_turret_update(char *moby) {
             sel = func_002140B0_2B4E40(3);
             switch (sel) {
             case 0:
-                func_L00_001FF4B0_2B4E40(v30, moby + 0xE0, D_L14_00161520);
+                func_L00_001FF4B0_2B4E40(spawn_position, moby + 0xE0, D_L14_00161520);
                 break;
             case 1:
-                func_L00_001FF4B0_2B4E40(v30, moby + 0xE0, D_L14_00161524);
+                func_L00_001FF4B0_2B4E40(spawn_position, moby + 0xE0, D_L14_00161524);
                 func_L00_001FF4B0_2B4E40(v50, moby + 0xD0, D_L14_0016152C);
-                func_001F9BD8_2B4E40(v30, v30, v50);
+                func_001F9BD8_2B4E40(spawn_position, spawn_position, v50);
                 break;
             default:
-                func_L00_001FF4B0_2B4E40(v30, moby + 0xE0, D_L14_00161524);
+                func_L00_001FF4B0_2B4E40(spawn_position, moby + 0xE0, D_L14_00161524);
                 func_L00_001FF4B0_2B4E40(v50, moby + 0xD0, -D_L14_0016152C);
-                func_001F9BD8_2B4E40(v30, v30, v50);
+                func_001F9BD8_2B4E40(spawn_position, spawn_position, v50);
                 break;
             }
             func_L00_001FF4B0_2B4E40(v40, moby + 0xC0, D_L14_00161528);
-            func_001F9BD8_2B4E40(v30, v30, v40);
-            func_001F9BD8_2B4E40(v30, v30, moby + 0x10);
+            func_001F9BD8_2B4E40(spawn_position, spawn_position, v40);
+            func_001F9BD8_2B4E40(spawn_position, spawn_position, moby + 0x10);
             func_L00_001FF4B0_2B4E40(v40, moby + 0xC0, D_L14_0016151C * frame_time);
             if (*(short *)(data + 0x9C) == 0) {
-                func_L00_00251328_2B4E40(func_L14_002EE150_2B4E40(v30, v40, (int)moby, 1), 0xE0, 0xE0, 0xE0);
+                func_L00_00251328_2B4E40(func_L14_002EE150_2B4E40(spawn_position, v40, (int)moby, 1), 0xE0, 0xE0, 0xE0);
             }
         }
         r = func_L00_00260D30_2B4E40(moby, v70, 34.0f);
@@ -1882,6 +1885,9 @@ void machinegun_turret_update(char *moby) {
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002B5590), where it is exact; names translated to the US level program. */
 
 void FUN_L14_002b4340(struct Moby *m) {
+    enum {
+        HIT_REACTION_LETHAL = 1
+    };
     unsigned char *d = m->pvars;
     int loc0;
     float f4 = 0.0f;
@@ -1918,7 +1924,7 @@ void FUN_L14_002b4340(struct Moby *m) {
         case 8:
             d[0x67] = 200;
             break;
-        case 1:
+        case HIT_REACTION_LETHAL:
         case 2:
             m->state = 6;
             m->flags &= 0xEFFF;
@@ -2457,6 +2463,9 @@ extern void FUN_00212f90(void *, int, int, int);
 extern void FUN_L00_0025d458_c(void *, void *) __asm__("FUN_L00_0025d458");
 
 void FUN_L14_002b5290(struct Moby *m) {
+    enum {
+        HIT_REACTION_LETHAL = 1
+    };
     unsigned char *d = m->pvars;
     int loc0;
     float f4;
@@ -2497,7 +2506,7 @@ void FUN_L14_002b5290(struct Moby *m) {
         case 10:
             d[0x67] = 0xFA;
             break;
-        case 1:
+        case HIT_REACTION_LETHAL:
         case 2:
             m->state = 9;
             m->flags &= 0xEFFF;

@@ -224,6 +224,12 @@ extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 /* Updates the lift: rides between its two heights, blends the camera while the hero rides it and pulses its colour while it waits. */
 void elevator_update(struct Moby *moby) __asm__("FUN_L13_002b39e0");
 void elevator_update(struct Moby *moby) {
+    enum {
+        ELEVATOR_STATE_INITIALIZE = 0,
+        ELEVATOR_STATE_BLEND_CAMERA = 1,
+        ELEVATOR_STATE_MOVE_TO_TOP = 2,
+        ELEVATOR_STATE_MOVE_TO_BOTTOM = 3
+    };
     LiftVars *vars = (LiftVars *)moby->pvars;
     float delta[4];
     float rot[4];
@@ -234,12 +240,12 @@ void elevator_update(struct Moby *moby) {
     scale_vector_xyz(delta, &moby->pos, -1.0f);
     qcopy(rot, &moby->rot);
     switch (moby->state) {
-    case 0:
+    case ELEVATOR_STATE_INITIALIZE:
         vars->pulse = random_angle_radians();
         vars->voice = -1;
         moby->state = 3;
         break;
-    case 1: {
+    case ELEVATOR_STATE_BLEND_CAMERA: {
         float old = vars->blend;
         advance_accelerated_scalar(&vars->blend, &vars->blend_speed, 1.0f, D_0015ED70_2b39e0 * 4.0f,
                                    D_0015ED70_2b39e0 * 4.0f, frame_time * 4.0f);
@@ -262,8 +268,8 @@ void elevator_update(struct Moby *moby) {
         }
         break;
     }
-    case 2:
-    case 3: {
+    case ELEVATOR_STATE_MOVE_TO_TOP:
+    case ELEVATOR_STATE_MOVE_TO_BOTTOM: {
         float target;
         if (!voice_is_playing(moby, vars->voice)) {
             vars->voice = allocate_voice_2b39e0(0, 4, moby);
@@ -693,6 +699,9 @@ extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
 void FUN_L13_002b4a58(struct Moby *m, char *p) {
+    enum {
+        HIT_REACTION_NONE = 11
+    };
     float *tm = (float *)(p + 0x20);
     char *q;
     int k;
@@ -732,7 +741,7 @@ void FUN_L13_002b4a58(struct Moby *m, char *p) {
         case 8:
         case 9:
         case 10:
-        case 11:
+        case HIT_REACTION_NONE:
             break;
         }
         if (k >= 2) {

@@ -424,6 +424,10 @@ void FUN_0020e098_2c7070(void *) __asm__("FUN_0020e098");
 extern unsigned char D_001413FF __attribute__((section(".data")));
 void swingshot_hook_update(unsigned char *m) __asm__("FUN_L00_002c7070");
 void swingshot_hook_update(unsigned char *m) {
+    enum {
+        HOOK_INITIAL_ANIMATION = 0,
+        HOOK_REMOVAL_ANIMATION = 2
+    };
     unsigned char **d;
     unsigned char *o;
     if (m == 0)
@@ -442,7 +446,7 @@ void swingshot_hook_update(unsigned char *m) {
         *(unsigned short *)(m + 0x34) &= ~0x41;
     }
     switch (m[0x20]) {
-    case 0:
+    case HOOK_INITIAL_ANIMATION:
         if (m[0x70] & 2) {
             if (m[0x53] != 1)
                 FUN_00212f90_2c7070(m, 1, 0, FUN_001f96f8_2c7070(10));
@@ -463,7 +467,7 @@ void swingshot_hook_update(unsigned char *m) {
             *(float *)(m + 0x58) = 1.0f;
         }
         break;
-    case 2:
+    case HOOK_REMOVAL_ANIMATION:
         if (m[0x70] & 2) {
         kill:
             FUN_0020c828_2c7070(m);

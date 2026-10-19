@@ -22,6 +22,9 @@ extern s32 clear_record_flag_by_key(s32) __asm__("FUN_00225e20");
 s32 update_menu_stream_image(struct MenuScreen *stream) __asm__("FUN_0021f990");
 
 s32 update_menu_stream_image(struct MenuScreen *stream) {
+    enum {
+        MENU_STREAM_IMAGE_READY = 2
+    };
     s32 flags;
     s32 idx;
     s32 r;
@@ -67,7 +70,7 @@ s32 update_menu_stream_image(struct MenuScreen *stream) {
 
     switch (stream->data.stream.state) {
     case 0:
-    case 2:
+    case MENU_STREAM_IMAGE_READY:
         if (idx == stream->data.stream.loaded_entry[0]) {
             break;
         }

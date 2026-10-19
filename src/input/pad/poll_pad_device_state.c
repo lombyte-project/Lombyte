@@ -40,6 +40,10 @@ extern void process_pad_input(struct PAD *p, u8 *buf, s32 len) __asm__("func_002
 void poll_pad_device_state(struct PAD *p) __asm__("FUN_002170c8");
 
 void poll_pad_device_state(struct PAD *p) {
+    enum {
+        PAD_PROFILE_INITIALIZATION = 0,
+        PAD_INPUT_POLLING = 1
+    };
     s32 v;
     s32 r;
     s32 n;
@@ -55,7 +59,7 @@ void poll_pad_device_state(struct PAD *p) {
     p->unk19C = r;
     if (r == 1) {
         switch (p->unk198) {
-        case 0: {
+        case PAD_PROFILE_INITIALIZATION: {
             n = scePad2GetButtonProfile(p->socket, buf);
             if (*(u32 *)buf == 0xFFFFFFFF) {
                 p->unk1DC = 0x79;
@@ -88,7 +92,7 @@ void poll_pad_device_state(struct PAD *p) {
             clear_pad_input(p);
             break;
         }
-        case 1:
+        case PAD_INPUT_POLLING:
             n = scePad2Read(p->socket, buf);
             process_pad_input(p, buf, n);
             break;

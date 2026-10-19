@@ -23,6 +23,9 @@ extern s32 start_audio_stream_read(s32, s32, s32) __asm__("FUN_00216788");
 void music_update(void) __asm__("FUN_00216290");
 
 void music_update(void) {
+    enum {
+        CROSSFADE_FADE_OUT_PRIMARY = 2
+    };
     s8 requested_track;
     s32 fade_volume;
     s32 handle;
@@ -71,7 +74,7 @@ void music_update(void) {
         !(music_stream_state.primary.fade_flags & 0x8000) && !(music_stream_state.primary.state & 0x8000) &&
         !(music_stream_state.transition.fade_flags & 0x8000) && !(music_stream_state.transition.state & 0x8000)) {
         switch (music_stream_state.crossfade_state) {
-        case 2:
+        case CROSSFADE_FADE_OUT_PRIMARY:
             /* Fade the primary stream against the transition's remaining time. */
             fade_volume =
                 music_stream_state.primary.volume *

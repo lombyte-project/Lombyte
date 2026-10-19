@@ -654,12 +654,18 @@ extern char D_0014171B_c[] __asm__("D_0014C190");
 extern int stub_printf(void *, int, int) __asm__("FUN_001e93b0");
 
 void FUN_L01_002fb5b0(char *m) {
+    enum {
+        CUTSCENE_TRIGGER_INITIALIZE = 0,
+        CUTSCENE_TRIGGER_WAIT_FOR_TRIGGER = 1,
+        CUTSCENE_TRIGGER_ACTIVE = 2,
+        CUTSCENE_TRIGGER_WAIT_FOR_REARM = 3
+    };
     char *d = *(char **)(m + 0x78);
     float a[4];
     float b[4];
     func_L01_002FC890_m(m);
     switch (((unsigned char *)m)[0x20]) {
-    case 0:
+    case CUTSCENE_TRIGGER_INITIALIZE:
         if (*(int *)(d + 0x24) == -1) {
             stub_printf(D_L01_0020B550, *(short *)(m + 0xA6), *(unsigned short *)(m + 0xA8));
             mark_moby_for_removal(m);
@@ -673,7 +679,7 @@ void FUN_L01_002fb5b0(char *m) {
             ((unsigned char *)m)[0x30] = ff;
         }
         break;
-    case 1: {
+    case CUTSCENE_TRIGGER_WAIT_FOR_TRIGGER: {
         char *g;
         if (D_L01_001BB9C0_s.collected[(short)*(unsigned short *)(m + 0xB2)] != 0) {
             m[0x20] = 1;
@@ -715,7 +721,7 @@ void FUN_L01_002fb5b0(char *m) {
         }
         break;
     }
-    case 2:
+    case CUTSCENE_TRIGGER_ACTIVE:
         if (fast_dec_timer(d + 0x2C) != 0 || ((unsigned char *)m)[0xBC] != 1) {
             if (*(int *)(d + 0x30) != 0) {
                 FUN_L00_002eac18(2);
@@ -731,7 +737,7 @@ void FUN_L01_002fb5b0(char *m) {
             FUN_L00_002eaa30(d + 0x10);
         }
         break;
-    case 3:
+    case CUTSCENE_TRIGGER_WAIT_FOR_REARM:
         if (((unsigned char *)m)[0xBC] == 1)
             m[0x20] = ((unsigned char *)m)[0xBC];
         break;
@@ -1693,6 +1699,10 @@ extern float D_L01_00161F8C __attribute__((sda));
 extern float D_L01_00161F90 __attribute__((sda));
 void teleporter_update(struct Moby *moby) __asm__("FUN_L01_00308bd8");
 void teleporter_update(struct Moby *moby) {
+    enum {
+        TELEPORTER_INITIALIZE = 0,
+        TELEPORTER_WAIT_FOR_USE = 1
+    };
     char *data = (char *)moby->pvars;
     int active = 0;
 
@@ -1721,7 +1731,7 @@ void teleporter_update(struct Moby *moby) {
         moby->flags &= ~0x41;
     }
     switch (moby->state) {
-    case 0: {
+    case TELEPORTER_INITIALIZE: {
         char **slots = (char **)(data + 0x14);
         int i;
         moby->update_dist = 0xFF;
@@ -1753,7 +1763,7 @@ void teleporter_update(struct Moby *moby) {
             FUN_L01_0026e0e0_c((char *)moby->group, 1);
         }
         moby->state = 1;
-    case 1: {
+    case TELEPORTER_WAIT_FOR_USE: {
         struct Hero *g;
         if (*(int *)(data + 8) >= 0 && D_0014C050[*(int *)(data + 8) + D_0015ED84_c * 16] != 0xFF)
             break;

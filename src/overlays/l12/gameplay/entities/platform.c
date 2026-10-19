@@ -2371,6 +2371,15 @@ extern int D_L12_0015F580_gp __asm__("D_L12_0015F580") __attribute__((section(".
 
 void blarg_helicopter_update(struct Moby *moby) __asm__("FUN_L12_002e9f68");
 void blarg_helicopter_update(struct Moby *moby) {
+    enum {
+        BLARG_HELICOPTER_INITIALIZE = 0,
+        BLARG_HELICOPTER_WAIT_FOR_ACTIVATION = 1,
+        BLARG_HELICOPTER_FOLLOW_INITIAL_PATH = 2,
+        BLARG_HELICOPTER_AIM_AND_FIRE = 3,
+        BLARG_HELICOPTER_MOVE_BETWEEN_PATH_ENDPOINTS = 4,
+        BLARG_HELICOPTER_KNOCKBACK = 5,
+        BLARG_HELICOPTER_EXPLODE_AND_REMOVE_OR_RESET = 6
+    };
     char *data = (char *)moby->pvars;
     struct Moby *child;
     float target[20] __attribute__((aligned(16)));
@@ -2443,7 +2452,7 @@ check_mode:
     }
 update_state:
     switch (moby->state) {
-    case 0: {
+    case BLARG_HELICOPTER_INITIALIZE: {
         int a, b, limit;
         *(short *)(data + 0x24) = 6;
         *(float *)(data + 0x20) = 6.0f;
@@ -2480,7 +2489,7 @@ update_state:
         moby->state = 1;
         break;
     }
-    case 1: {
+    case BLARG_HELICOPTER_WAIT_FOR_ACTIVATION: {
         int triggered, a;
         struct Moby *child;
         triggered = 0;
@@ -2499,7 +2508,7 @@ update_state:
         }
         break;
     }
-    case 2:
+    case BLARG_HELICOPTER_FOLLOW_INITIAL_PATH:
         if (*(int *)(data + 0xc0) == 0 && D_L12_00167100.moby == 0) {
             D_L12_00167100.moby = moby;
             D_L12_00167100.count = 0;
@@ -2514,7 +2523,7 @@ update_state:
         }
         if (FUN_L12_002eaf68(moby, *(int *)(data + 0xa0))) moby->state = 3;
         break;
-    case 3: {
+    case BLARG_HELICOPTER_AIM_AND_FIRE: {
         int count, limit, a, b, color, life, size;
         float distance, angle, value, spread;
         if (current_level_index == 12 && !D_0013D4CB && !D_00141C50) help_request(0x2ee2, 0x5d);
@@ -2579,7 +2588,7 @@ update_state:
         }
         break;
     }
-    case 4:
+    case BLARG_HELICOPTER_MOVE_BETWEEN_PATH_ENDPOINTS:
         angle = fast_arc_tan(target[0] - moby->pos.x, target[1] - moby->pos.y);
         moby->rot.z = spring_turn((float *)(data + 0x88), moby->rot.z, angle, 0.004f, 0.3f, frame_time * 0.7853982f);
         {
@@ -2601,7 +2610,7 @@ update_state:
         fast_vec_add(&moby->pos, &moby->pos, data + 0x70);
         FUN_L12_002eae00(moby);
         break;
-    case 5:
+    case BLARG_HELICOPTER_KNOCKBACK:
         if (fast_dec_timer_s16(data + 0x8e)) {
             moby->state = moby->command;
         } else {
@@ -2616,7 +2625,7 @@ update_state:
             fast_vec_add(&moby->pos, &moby->pos, &position);
         }
         break;
-    case 6: {
+    case BLARG_HELICOPTER_EXPLODE_AND_REMOVE_OR_RESET: {
         int index;
         if (D_L12_00167100.moby == moby) D_L12_00167100.moby = 0;
         if (*(struct Moby **)(data + 0xac)) {
@@ -3167,15 +3176,19 @@ extern void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
 
 void crane_arm_update(unsigned char *m) __asm__("FUN_L12_002ec1d0");
 void crane_arm_update(unsigned char *m) {
+    enum {
+        CRANE_ARM_INITIALIZE = 0,
+        CRANE_ARM_WAIT_DELAY = 1
+    };
     float dist = vector_distance(m + 0x10, &hero.motion.pos);
     switch (m[0x20]) {
-    case 0:
+    case CRANE_ARM_INITIALIZE:
         if (m[0x53] != 0)
             blend_moby_animation(m, 0, 0, 0);
         m[0x20] = 1;
         m[0xBC] = random_integer_below(scale_game_frames(0xB4));
         break;
-    case 1:
+    case CRANE_ARM_WAIT_DELAY:
         if (m[0x52] == 0 && dist < 9.0f && m[0xBC] < 2)
             m[0xBC] = 2;
         if (dist < 12.0f && m[0x52] == m[0x53] && m[0x52] != 0)

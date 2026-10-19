@@ -1606,7 +1606,7 @@ extern char D_0013F420[];
 extern s32 D_001413D0_lui[] __asm__("D_001413D0") __attribute__((section(".data")));
 
 void FUN_L05_00303390(Moby *m) {
-    Vec_3047E8 v0;
+    Vec_3047E8 working_vector;
     Vec_3047E8 hit_test_endpoint;
     int cnt;
     float dmg;
@@ -1622,20 +1622,20 @@ void FUN_L05_00303390(Moby *m) {
     dmg = 0.0f;
     r = func_L00_0025B478_3047E8(m, 0x330000, 0);
     if (r != 0) {
-        qcopy(v0, ((float *)&m->pos));
-        v0[2] = v0[2] + 0.5f;
+        qcopy(working_vector, ((float *)&m->pos));
+        working_vector[2] = working_vector[2] + 0.5f;
         if (r->who != 0) {
             if (r->who->oclass == 0x47) {
                 qcopy(hit_test_endpoint, D_0013F420);
             } else if ((*(struct Moby **)&r->who->pclass != 0 && *(short *)((u8 *)((struct Moby *)r->who->pclass) + 0x46) == 5) || r->who->oclass == 0xBA) {
-                qcopy(hit_test_endpoint, v0);
+                qcopy(hit_test_endpoint, working_vector);
             } else {
                 qcopy(hit_test_endpoint, ((float *)&r->who->pos));
             }
         } else {
             qcopy(hit_test_endpoint, r->at);
         }
-        if (func_001F9D10_3047E8(v0, hit_test_endpoint) < 24.0f && collision_line(v0, hit_test_endpoint, 2, m, 0) != 0) {
+        if (func_001F9D10_3047E8(working_vector, hit_test_endpoint) < 24.0f && collision_line(working_vector, hit_test_endpoint, 2, m, 0) != 0) {
             r = 0;
         }
     }
@@ -1670,8 +1670,8 @@ void FUN_L05_00303390(Moby *m) {
             d->f8C = D_L05_00161A8C * D_0015ED6C;
             d->fC4 = 10.0f;
             ang = angle_atan2(m->pos.x - r->who->pos.x, m->pos.y - r->who->pos.y);
-            *(u128_3047E8 *)v0 = r->dir;
-            trooper_knockback_arc(v0, &ang, &d->f88, &d->f8C);
+            *(u128_3047E8 *)working_vector = r->dir;
+            trooper_knockback_arc(working_vector, &ang, &d->f88, &d->f8C);
             trooper_start_knockback(m, d->f70, ang, 5, 1, 0);
             m->state = 11;
             d->b67 = 0x78;
@@ -1685,8 +1685,8 @@ void FUN_L05_00303390(Moby *m) {
             d->fC0 = 5.5f;
             d->fC4 = 11.0f;
             ang2 = angle_atan2(m->pos.x - r->who->pos.x, m->pos.y - r->who->pos.y);
-            *(u128_3047E8 *)v0 = r->dir;
-            trooper_knockback_arc(v0, &ang2, &d->f88, &d->f8C);
+            *(u128_3047E8 *)working_vector = r->dir;
+            trooper_knockback_arc(working_vector, &ang2, &d->f88, &d->f8C);
             trooper_start_knockback(m, d->f70, ang2, 6, 1, 0);
             m->state = 14;
             d->b67 = 0xF0;
@@ -1734,9 +1734,9 @@ void FUN_L05_00303390(Moby *m) {
     if (k < 10) {
     if (k >= 4 && d->target == (*(Moby * *)D_001413D0_lui)) {
         float yaw, pitch;
-        func_001F9BF0_3047E8(v0, ((float *)&d->target->pos), ((float *)&m->pos));
-        yaw = func_001FA790_3047E8(angle_atan2(v0[0], v0[1]), m->rot.z);
-        pitch = -angle_atan2(func_001F9CE8_3047E8(v0), v0[2]);
+        func_001F9BF0_3047E8(working_vector, ((float *)&d->target->pos), ((float *)&m->pos));
+        yaw = func_001FA790_3047E8(angle_atan2(working_vector[0], working_vector[1]), m->rot.z);
+        pitch = -angle_atan2(func_001F9CE8_3047E8(working_vector), working_vector[2]);
         if (m->flags & 0x8000) {
             yaw = -yaw;
         }
@@ -2039,6 +2039,12 @@ typedef char *(*Spawn_305778)(void *, void *, void *, int, int, long, long, long
 
 void extermitank_update(unsigned char *m) __asm__("FUN_L05_00304320");
 void extermitank_update(unsigned char *m) {
+    enum {
+        EXTERMITANK_INITIALIZE = 0,
+        EXTERMITANK_FOLLOW_PATH = 1,
+        EXTERMITANK_FIRE_PARTICLES = 2,
+        EXTERMITANK_REMOVE = 3
+    };
     char *d = *(char **)(m + 0x78);
     float origin_position[4];
     float particle_vector_a[4];
@@ -2060,7 +2066,7 @@ void extermitank_update(unsigned char *m) {
         }
     }
     switch (m[0x20]) {
-    case 0: {
+    case EXTERMITANK_INITIALIZE: {
         char *c;
         char *g;
         if (*(char **)(d + 0x184) == 0) {
@@ -2128,7 +2134,7 @@ void extermitank_update(unsigned char *m) {
         d[0x5A] = truncate_float_to_s32_c5(D_L05_00161B7C * 8.0f);
         break;
     }
-    case 1: {
+    case EXTERMITANK_FOLLOW_PATH: {
         char *pp = d + 0xC0;
         char *path = *(char **)(pp + 0x10);
         int n = *(int *)path;
@@ -2177,7 +2183,7 @@ void extermitank_update(unsigned char *m) {
         FUN_L00_001fff28(d + 0x100, 2, fast_subtract_rotations(*(float *)(d + 0x194), *(float *)(m + 0x48)));
         break;
     }
-    case 2: {
+    case EXTERMITANK_FIRE_PARTICLES: {
         char *pp = d + 0xC0;
         char *path = *(char **)(pp + 0x10);
         int n = *(int *)path;
@@ -2282,7 +2288,7 @@ void extermitank_update(unsigned char *m) {
         FUN_L00_001fff28(d + 0x100, 2, fast_subtract_rotations(*(float *)(d + 0x194), *(float *)(m + 0x48)));
         break;
     }
-    case 3:
+    case EXTERMITANK_REMOVE:
         if (*(char **)(d + 0x184) != 0) mark_moby_for_removal_c3(*(char **)(d + 0x184));
         if (*(char **)(d + 0x188) != 0) mark_moby_for_removal_c3(*(char **)(d + 0x188));
         mark_moby_for_removal_c3(m);
