@@ -1025,7 +1025,9 @@ typedef struct {
 void FUN_L11_002d27b0(WM11 *m) {
     enum {
         RESORT_OWNER_INITIALIZE = 0,
-        RESORT_OWNER_INITIAL_DIALOGUE = 2
+        RESORT_OWNER_INITIAL_DIALOGUE = 2,
+        RESORT_OWNER_CHECK_PATH_COMPLETION_DIALOGUE = 12,
+        RESORT_OWNER_CHECK_POST_PATH_DIALOGUE = 14
     };
     WS11 scratch;
     WD11b *d = (WD11b *)m->data;
@@ -1042,8 +1044,8 @@ void FUN_L11_002d27b0(WM11 *m) {
     case 4:
     case 5:
     case 11:
-    case 12:
-    case 14:
+    case RESORT_OWNER_CHECK_PATH_COMPLETION_DIALOGUE:
+    case RESORT_OWNER_CHECK_POST_PATH_DIALOGUE:
     case 16:
         tracking = 1;
         qcopy(scratch.target, &hero.motion.pos);
