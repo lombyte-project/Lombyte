@@ -1264,6 +1264,7 @@ void plasmabot_hatch_update(struct Moby *moby) {
         HATCH_WAIT_ACTIVATION = 0,
         HATCH_WAIT_ACTIVATION_DELAY = 1,
         HATCH_WAIT_ACTIVATION_ANIMATION = 2,
+        HATCH_WAIT_ACTIVATION_GATE_CLEAR = 3,
         HATCH_WAIT_ANIMATION_BEFORE_RESET_DELAY = 5,
         HATCH_WAIT_RESET_DELAY = 6,
         HATCH_WAIT_RESET_ANIMATION = 7
@@ -1293,7 +1294,7 @@ void plasmabot_hatch_update(struct Moby *moby) {
             set_moby_animation(moby, 2, 0);
         }
         break;
-    case 3:
+    case HATCH_WAIT_ACTIVATION_GATE_CLEAR:
         if (*(s16 *)(D_L14_00167500 + 0x86) != 0x14) {
             set_moby_animation(moby, 0, 0);
             moby->state = 4;
