@@ -175,6 +175,11 @@ extern void FUN_L00_0025a120(struct Moby *);
    when it drops into a pit. */
 void mine_layer_update(struct Moby *m) __asm__("FUN_L03_002c9eb8");
 void mine_layer_update(struct Moby *m) {
+    enum {
+        MINE_LAYER_INITIALIZE = 0,
+        MINE_LAYER_FACE_TARGET_AND_WAIT_FOR_RANGE = 1,
+        MINE_LAYER_PATROL_AND_FIRE = 3
+    };
     TrooperVars *v = (TrooperVars *)m->pvars;
     TrooperPatrol *pt;
     struct RailPath *path;
@@ -200,7 +205,7 @@ void mine_layer_update(struct Moby *m) {
         sight = 28.0f;
     }
     switch (m->state) {
-    case 0:
+    case MINE_LAYER_INITIALIZE:
         FUN_L01_0026d930(v->walk);
         v->unk10C = frame_time_sq * 6.2831855f;
         v->unk114 = frame_time * 6.2831855f;
@@ -224,7 +229,7 @@ void mine_layer_update(struct Moby *m) {
             trooper_blend_anim(m, 0, 0, 0);
         }
         break;
-    case 1:
+    case MINE_LAYER_FACE_TARGET_AND_WAIT_FOR_RANGE:
         FUN_L00_00258278(trooper_atan2_9eb8(target.aim.f[0] - m->pos.x, target.aim.f[1] - m->pos.y), 0.01f, 0.3f, 0.1f, m,
                          v->turn);
         if (trooper_dist(&m->pos, &target.aim) < sight && trooper_fabs(target.aim.f[2] - m->pos.z) < 4.0f) {
@@ -245,7 +250,7 @@ void mine_layer_update(struct Moby *m) {
             v->fire_timer = trooper_frames(120);
         }
         break;
-    case 3:
+    case MINE_LAYER_PATROL_AND_FIRE:
         pt = &v->patrol;
         n = pt->idx;
         FUN_L00_00259028(m, v->walk, &pt->path->pts[n], v->effect);
