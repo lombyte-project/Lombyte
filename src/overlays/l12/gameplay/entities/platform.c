@@ -3111,6 +3111,10 @@ extern float D_L12_001619AC __attribute__((sda));
 extern float D_L12_001619B0 __attribute__((sda));
 void helicopter_update(char *m) __asm__("FUN_L12_002ebea8");
 void helicopter_update(char *m) {
+    enum {
+        HELICOPTER_INITIALIZE_PATH = 0,
+        HELICOPTER_FOLLOW_PATH = 1
+    };
     char *d = *(char **)(m + 0x78);
     float A[4];
     float B[4];
@@ -3120,7 +3124,7 @@ void helicopter_update(char *m) {
         int r = func_L01_00276680_i(m, convert_integer_to_float(*(short *)(m + 0x32)));
         FUN_L12_002ebca8_c(m, r == -1);
         switch ((unsigned char)m[0x20]) {
-        case 0:
+        case HELICOPTER_INITIALIZE_PATH:
             if (*(int *)(d + 0x74) != -1) {
                 char *tbl;
                 int idx;
@@ -3143,7 +3147,7 @@ void helicopter_update(char *m) {
                 *(unsigned short *)(m + 0x34) |= 0x1000;
             }
             break;
-        case 1: {
+        case HELICOPTER_FOLLOW_PATH: {
             char *p = d + 0x60;
             int cur = *(int *)p;
             char *tbl = *(char **)(p + 0x10);
