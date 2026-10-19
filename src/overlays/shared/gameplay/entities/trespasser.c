@@ -2027,6 +2027,7 @@ void decoy_update(char *moby) {
         DECOY_INITIALIZE = 0,
         DECOY_THROWN_MOVEMENT = 2,
         DECOY_SETTLED_MOVEMENT = 3,
+        DECOY_PRE_REMOVAL_DELAY = 4,
         DECOY_WAIT_TO_SHRINK = 5,
         DECOY_SHRINK_FOR_REMOVAL = 6,
         DECOY_RESET_TO_INITIALIZE = 7
@@ -2191,7 +2192,7 @@ void decoy_update(char *moby) {
         }
         break;
     case DECOY_SETTLED_MOVEMENT:
-    case 4:
+    case DECOY_PRE_REMOVAL_DELAY:
         hit = FUN_L00_0025a420(moby, 0x30001, 0);
         *(float *)(moby + 0x40) = FUN_002000e8_2c4380(*(float *)(moby + 0x40),
             FUN_00200130_2c4380(*(float *)(vars + 0x4c), *(float *)(moby + 0x40)) *
