@@ -343,6 +343,11 @@ void spawner_update(struct Moby *moby) {
         SPAWNER_INITIALIZE = 0,
         SPAWNER_DESTROY = 8
     };
+    enum {
+        SPAWNER_TRIGGER_DISTANCE_ONLY = 0,
+        SPAWNER_TRIGGER_VOLUME_ONLY = 1,
+        SPAWNER_TRIGGER_VOLUME_OR_DISTANCE = 2
+    };
     int used[4];
     Vec4A_2bef68 launch_origin;
     Vec4A_2bef68 launch_velocity;
@@ -403,13 +408,13 @@ void spawner_update(struct Moby *moby) {
     }
     cond = inVol | near2;
     switch (d->b82) {
-    case 0:
+    case SPAWNER_TRIGGER_DISTANCE_ONLY:
         cond = near1;
         break;
-    case 1:
+    case SPAWNER_TRIGGER_VOLUME_ONLY:
         cond = inVol;
         break;
-    case 2:
+    case SPAWNER_TRIGGER_VOLUME_OR_DISTANCE:
         break;
     }
     if (d->h8A == 0 && d->count != 0) {
