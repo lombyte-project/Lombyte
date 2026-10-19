@@ -3178,7 +3178,8 @@ void crane_arm_update(unsigned char *m) __asm__("FUN_L12_002ec1d0");
 void crane_arm_update(unsigned char *m) {
     enum {
         CRANE_ARM_INITIALIZE = 0,
-        CRANE_ARM_WAIT_DELAY = 1
+        CRANE_ARM_WAIT_DELAY = 1,
+        CRANE_ARM_WAIT_ANIMATION_FLAG = 2
     };
     float dist = vector_distance(m + 0x10, &hero.motion.pos);
     switch (m[0x20]) {
@@ -3216,7 +3217,7 @@ void crane_arm_update(unsigned char *m) {
             m[0x20] = 2;
         }
         break;
-    case 2:
+    case CRANE_ARM_WAIT_ANIMATION_FLAG:
         if (m[0x70] & 2) {
             switch (m[0x52]) {
             case 3:
