@@ -559,10 +559,16 @@ s32 is_point_inside_clip_volume(s32 arg0, s32 arg1) __asm__("FUN_00214720");
 void mark_moby_for_removal_c(struct Obj *obj) __asm__("FUN_0020c828");
 
 void FUN_L16_002c3d38(struct Moby *moby) {
+    enum {
+        ROCKET_STATE_INITIALIZE = 0,
+        ROCKET_STATE_WAIT_FOR_TRIGGER = 1,
+        ROCKET_STATE_FOLLOW_PATH = 2,
+        ROCKET_STATE_WAIT_FOR_RESET = 3
+    };
     char *data = (char *)moby->pvars;
     char *path = D_L16_001B0930[*(int *)(data + 4)];
     switch (moby->state) {
-    case 0:
+    case ROCKET_STATE_INITIALIZE:
         if (*(int *)data == -1 || *(int *)(data + 4) == -1) {
             mark_moby_for_removal_c(moby);
             break;
@@ -573,7 +579,7 @@ void FUN_L16_002c3d38(struct Moby *moby) {
         moby->update_dist = 100;
         moby->command = 0;
         break;
-    case 1: {
+    case ROCKET_STATE_WAIT_FOR_TRIGGER: {
         struct Hero *g = &hero;
         if (g->state.control_mode != 15)
             break;
@@ -583,7 +589,7 @@ void FUN_L16_002c3d38(struct Moby *moby) {
         }
         break;
     }
-    case 2:
+    case ROCKET_STATE_FOLLOW_PATH:
         *(float *)(data + 0x10) += *(float *)(data + 0xC);
         if ((float)(*(int *)path - 1) <= *(float *)(data + 0x10)) {
             moby->update_dist = 0xFF;
@@ -603,7 +609,7 @@ void FUN_L16_002c3d38(struct Moby *moby) {
             allocate_voice_for_target_entry_u(1, 0, moby);
         }
         break;
-    case 3:
+    case ROCKET_STATE_WAIT_FOR_RESET:
         if (moby->visible == 0) {
             moby->visible = 0;
             moby->collision = 0;
