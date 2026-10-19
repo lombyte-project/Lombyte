@@ -3199,6 +3199,7 @@ void puffoid_update(struct Moby *moby) {
         PUFFOID_STATE_SPRAY_ATTACK = 5,
         PUFFOID_STATE_RETURN_HOME = 6,
         PUFFOID_STATE_JUMP_HOME = 7,
+        PUFFOID_STATE_JUMP_THEN_WAIT_FOR_HOME_JUMP = 8,
         PUFFOID_STATE_KNOCKBACK = 9,
         PUFFOID_STATE_REPOSITION_AND_FACE_TARGET = 10,
         PUFFOID_STATE_DEATH_KNOCKBACK = 11,
@@ -3297,7 +3298,7 @@ void puffoid_update(struct Moby *moby) {
         break;
     }
     case PUFFOID_STATE_JUMP_HOME:
-    case 8:
+    case PUFFOID_STATE_JUMP_THEN_WAIT_FOR_HOME_JUMP:
         add_vector_4318(&moby->pos, &moby->pos, d->vel);
         d->vel[2] -= D_L11_001622F0 * frame_time_sq;
         if (d->vel[2] < 0.0f) {
