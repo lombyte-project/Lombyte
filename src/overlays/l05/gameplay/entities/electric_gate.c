@@ -1457,13 +1457,18 @@ extern float FUN_001f9b48(void *, void *);
 extern char *D_001413D0_316258 __asm__("D_001413D0") __attribute__((section(".data")));
 
 void FUN_L05_00316258(char *moby) {
+    enum {
+        MOBY_INITIALIZE = 0,
+        MOBY_MOVE_TO_OFFSET_POSITION = 3,
+        MOBY_RETURN_TO_SAVED_POSITION = 4
+    };
     char *data = *(char **)(moby + 0x78);
     float target[4];
     float delta[4];
     float stopped;
 
     switch (*(u8 *)(moby + 0x20)) {
-    case 0:
+    case MOBY_INITIALIZE:
         if (*(int *)(data + 0x50) != 0) {
             *(float *)(moby + 0x40) = 3.1415927f;
             *(float *)(moby + 0x18) += 4.0f;
@@ -1534,8 +1539,8 @@ void FUN_L05_00316258(char *moby) {
             FUN_L00_001fff28(data + 0x20, 0, *(float *)(data + 0x60));
         }
         break;
-    case 3:
-    case 4:
+    case MOBY_MOVE_TO_OFFSET_POSITION:
+    case MOBY_RETURN_TO_SAVED_POSITION:
         if (*(u8 *)(moby + 0x20) == 3) {
             fast_vec_scale(target, moby + 0xD0, -1.9f);
             add_vector_xyz(target, data, target);
