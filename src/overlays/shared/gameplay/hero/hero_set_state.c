@@ -3660,6 +3660,10 @@ extern SpeedStepThreshold_228c18 D_L00_0017BDB8[];
 extern s32 D_L00_0015F6C8_gp __asm__("D_L00_0015F6C8") __attribute__((sda));
 
 void FUN_L00_00228c18(void) {
+    enum {
+        HERO_SPEED_STEP_LOW = 0,
+        HERO_SPEED_STEP_HIGH = 1
+    };
     struct Hero *player = &hero;
     int mode = player->vehicle_mode;
     if (mode == 3) {
@@ -3725,14 +3729,14 @@ void FUN_L00_00228c18(void) {
         }
         current = &hero;
         switch (current->state.step) {
-        case 0: {
+        case HERO_SPEED_STEP_LOW: {
             float speed = current->ground_speed * 157.0f;
             current->anim_speed = speed;
             if (speed < 0.6f) current->anim_speed = 0.6f;
             if (4.0f < current->anim_speed) current->anim_speed = 4.0f;
             break;
         }
-        case 1: {
+        case HERO_SPEED_STEP_HIGH: {
             float speed = current->ground_speed * 14.0f;
             current->anim_speed = speed;
             if (speed < 0.6f) current->anim_speed = 0.6f;
