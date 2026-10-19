@@ -2111,7 +2111,9 @@ void magnet_elevator_update(struct Moby *moby) {
         MAGNET_ELEVATOR_STATE_MOVE_TO_FIRST_STOP = 4,
         MAGNET_ELEVATOR_STATE_MOVE_TO_SECOND_STOP = 5,
         MAGNET_ELEVATOR_STATE_WAIT_AT_FIRST_STOP = 6,
-        MAGNET_ELEVATOR_STATE_WAIT_AT_SECOND_STOP = 7
+        MAGNET_ELEVATOR_STATE_WAIT_AT_SECOND_STOP = 7,
+        MAGNET_ELEVATOR_STATE_WAIT_FOR_HERO_TO_LEAVE_FIRST_STOP = 8,
+        MAGNET_ELEVATOR_STATE_WAIT_FOR_HERO_TO_LEAVE_SECOND_STOP = 9
     };
     char *state = P(moby, 0x78);
     float delta[4];
@@ -2215,8 +2217,8 @@ void magnet_elevator_update(struct Moby *moby) {
         }
         break;
     }
-    case 8:
-    case 9:
+    case MAGNET_ELEVATOR_STATE_WAIT_FOR_HERO_TO_LEAVE_FIRST_STOP:
+    case MAGNET_ELEVATOR_STATE_WAIT_FOR_HERO_TO_LEAVE_SECOND_STOP:
         if (voice_is_playing(moby, W(state, 0x6C))) {
             release_voice_slot(W(state, 0x6C));
             W(state, 0x6C) = -1;
