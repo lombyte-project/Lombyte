@@ -1565,6 +1565,7 @@ void blarg_bombthrower_update(struct Moby *moby) {
         BOMBTHROWER_STATE_WAIT_TO_THROW = 3,
         BOMBTHROWER_STATE_MOVE_TO_THROW_POSITION = 4,
         BOMBTHROWER_STATE_THROW_BOMB = 5,
+        BOMBTHROWER_STATE_MOVE_ONTO_WAYPOINT = 6,
         BOMBTHROWER_STATE_DAMAGE_KNOCKBACK = 0x5A,
         BOMBTHROWER_STATE_DYING = 0x63
     };
@@ -1714,7 +1715,7 @@ void blarg_bombthrower_update(struct Moby *moby) {
             vars->i134 = scale_game_frames_c2(0xF0);
         }
         break;
-    case 6:
+    case BOMBTHROWER_STATE_MOVE_ONTO_WAYPOINT:
         FUN_L00_00259028((char *)moby, vars->blkD0, (float *)&vars->waypoint->pos, (char *)vars->v40);
         if (moby->anim_flags & 2) {
             FUN_00212f90(vars->waypoint, 1, 0, scale_game_frames_c2(6));
