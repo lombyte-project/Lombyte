@@ -1768,6 +1768,11 @@ extern s32 D_0014C190_257218[][64] __asm__("D_0014C190");
 /* Vendor platform update: rides its two rails between the trigger volumes, with hum and motor sounds. */
 void elevator_update(struct Moby *m) __asm__("FUN_L14_002ee8d8");
 void elevator_update(struct Moby *m) {
+    enum {
+        ELEVATOR_STATE_INITIALIZE = 0,
+        ELEVATOR_STATE_FOLLOW_PATH = 2,
+        ELEVATOR_STATE_WAIT_FOR_RIDER_EXIT = 4
+    };
     L14VendorVars *d = (L14VendorVars *)m->pvars;
     Vec4 old;
     Vec4 rot;
@@ -1784,7 +1789,7 @@ void elevator_update(struct Moby *m) {
     qcopy(&old, &m->pos);
     qcopy(&rot, &m->rot);
     switch (m->state) {
-    case 0: {
+    case ELEVATOR_STATE_INITIALIZE: {
         u16 id;
         m->command = 0;
         m->state = 1;
@@ -1849,7 +1854,7 @@ void elevator_update(struct Moby *m) {
             d->dir = -d->dir;
         }
         break;
-    case 2:
+    case ELEVATOR_STATE_FOLLOW_PATH:
         if (voice_is_playing(m, d->motor) == 0) {
             d->motor = vendor_sound(0, 4, m);
             if (d->motor != 0) {
@@ -1894,7 +1899,7 @@ void elevator_update(struct Moby *m) {
                 m->state = 1;
         }
         break;
-    case 4:
+    case ELEVATOR_STATE_WAIT_FOR_RIDER_EXIT:
         FUN_L14_002ef6f0(m);
         if (hero.ground_moby != m)
             m->state = 1;
