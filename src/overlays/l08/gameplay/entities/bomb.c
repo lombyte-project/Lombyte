@@ -2055,6 +2055,7 @@ extern Route_2dd4f8 *D_L08_001B0FB0_r[] __asm__("D_L08_001B0CB0");
 void FUN_L08_002dc180(struct Moby *moby) {
     enum {
         SHUTTLE_SELECT_ROUTE_END = 0,
+        SHUTTLE_SELECT_CONFIGURED_PATH_START = 1,
         SHUTTLE_SELECT_ROUTE_START = 2
     };
     char *data = (char *)moby->pvars;
@@ -2108,7 +2109,7 @@ void FUN_L08_002dc180(struct Moby *moby) {
         }
         return;
     }
-    case 1:
+    case SHUTTLE_SELECT_CONFIGURED_PATH_START:
         qcopy(data + 0x60, b->e[0]);
         y = fast_arc_tan(b->e[1][0] - *(float *)(data + 0x60), b->e[1][1] - *(float *)(data + 0x64));
         *(Route_2dd4f8 **)(data + 0x120) = b;
