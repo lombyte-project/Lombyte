@@ -84,6 +84,7 @@ int hero_set_state(int a, int b) {
     enum {
         HERO_STATE_UNDERWATER_ENTRY = 0x33,
         HERO_STATE_WATER_SURFACE_ENTRY = 0x37,
+        HERO_STATE_HURT_UPWARD_LAUNCH = 0x42,
         HERO_STATE_VEHICLE_IDLE = 0x53,
         HERO_STATE_VEHICLE_RUN = 0x54,
         HERO_STATE_VEHICLE_FALL = 0x55,
@@ -1592,7 +1593,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x42: {
+    case HERO_STATE_HURT_UPWARD_LAUNCH: {
         struct Hero *p = &hero;
         p->state.control_mode = 0xF;
         p->unk2284 = 0;
