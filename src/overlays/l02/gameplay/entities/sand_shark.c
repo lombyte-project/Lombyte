@@ -331,7 +331,8 @@ void sand_shark_update(struct Moby *moby) {
         SAND_SHARK_RETURN_HOME_WITH_HEIGHT_OFFSET = 23,
         SAND_SHARK_DEATH_KNOCKBACK = 24,
         SAND_SHARK_FADE_OUT = 25,
-        SAND_SHARK_BALLISTIC_FLIGHT_WITH_PARTICLES = 27
+        SAND_SHARK_BALLISTIC_FLIGHT_WITH_PARTICLES = 27,
+        SAND_SHARK_WAIT_FOR_LINKED_MOBY_BEFORE_INITIALIZE = 29
     };
     Varsd3e50 *vars;
     OvlVec4 v0;
@@ -417,7 +418,7 @@ void sand_shark_update(struct Moby *moby) {
             }
         }
         break;
-    case 29:
+    case SAND_SHARK_WAIT_FOR_LINKED_MOBY_BEFORE_INITIALIZE:
         if (((struct Moby *)((char *)D_L02_0015FFD8_e50 + (vars->unk258 << 8)))->state >= 5 && D_001413D4_e50 != 0x72) {
             moby->flags = (moby->flags & 0xFFBE) | 0x1000;
             moby->collision = moby->pclass->collision;
