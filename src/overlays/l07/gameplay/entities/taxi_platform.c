@@ -3183,6 +3183,12 @@ extern float D_0013F448;
 
 
 void FUN_L07_003112c8(char *moby) {
+    enum {
+        PLATFORM_INITIALIZE = 0,
+        PLATFORM_TIMED_SWAY_BEFORE_FALL = 2,
+        PLATFORM_TILT_AND_FALL = 3,
+        PLATFORM_HEIGHT_RECOVERY_AND_SWAY = 5
+    };
     char *data = *(char **)(moby + 0x78);
     char *parent = 0;
     char *parent_data = 0;
@@ -3213,7 +3219,7 @@ void FUN_L07_003112c8(char *moby) {
         *(int *)(data + 0xAC) = ((unsigned char *)data)[0xBD];
     }
     switch (((unsigned char *)moby)[0x20]) {
-    case 0:
+    case PLATFORM_INITIALIZE:
         *(int *)(data + 0x20) = 0;
         *(short *)(data + 0x24) = 0;
         data[0x28] = 4;
@@ -3248,7 +3254,7 @@ void FUN_L07_003112c8(char *moby) {
         *(float *)(moby + 0x44) = fast_add_rotations(*(float *)(data + 0xA8),
             fast_cos(normalize_angle(convert_integer_to_float(*(int *)(data + 0xAC)) * 0.89f)) * 0.017453292f);
         break;
-    case 2:
+    case PLATFORM_TIMED_SWAY_BEFORE_FALL:
         *(float *)(moby + 0x40) = fast_add_rotations(*(float *)(data + 0xA4),
             fast_sin(normalize_angle(convert_integer_to_float(*(int *)(data + 0xAC)) * 0.75f)) * 0.017453292f);
         *(float *)(moby + 0x44) = fast_add_rotations(*(float *)(data + 0xA8),
@@ -3260,7 +3266,7 @@ void FUN_L07_003112c8(char *moby) {
         }
         moby[0x20] = 3;
         break;
-    case 3:
+    case PLATFORM_TILT_AND_FALL:
         speed = 1.3962634f;
         speed -= *(float *)(moby + 0x40);
         speed *= 0.05f;
@@ -3293,7 +3299,7 @@ void FUN_L07_003112c8(char *moby) {
         *(float *)(moby + 0x44) = 0.0f;
         *(int *)(data + 0xAC) = 0;
         break;
-    case 5:
+    case PLATFORM_HEIGHT_RECOVERY_AND_SWAY:
         target = *(float *)(moby + 0x18) + *(float *)(data + 0xB0);
         height = *(float *)(data + 0xB8);
         if (hero.air_frames.s == 0 && (char *)hero.ground_moby == moby) {
