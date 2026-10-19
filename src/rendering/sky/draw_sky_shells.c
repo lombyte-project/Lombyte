@@ -33,6 +33,7 @@ void draw_sky_shells(void) __asm__("FUN_0022b288");
 extern struct SkyShellSet *level_sky_effect_data __asm__("D_0016045C");
 void draw_sky_shells(void) {
     enum {
+        SKY_SHELL_FIRST_UNIT_SCALE = 0,
         SKY_SHELL_UNIT_SCALE = 1,
         SKY_SHELL_ONE_AND_QUARTER_SCALE = 2,
         SKY_SHELL_ONE_AND_HALF_SCALE = 3,
@@ -53,7 +54,7 @@ void draw_sky_shells(void) {
         do {
             shell_scale = 1.0f;
             switch (shell_index) {
-            case 0:
+            case SKY_SHELL_FIRST_UNIT_SCALE:
                 *(s32 *)&rotation_angles[1] = 0;
                 rotation_angles[2] = D_00160404;
             case SKY_SHELL_UNIT_SCALE:
