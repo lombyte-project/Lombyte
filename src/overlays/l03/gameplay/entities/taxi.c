@@ -1284,7 +1284,8 @@ void helga_update(struct Moby *m) __asm__("FUN_L03_002da870");
 void helga_update(struct Moby *m) {
     enum {
         HELGA_INITIALIZE = 0,
-        HELGA_UPDATE_DIALOGUE = 1
+        HELGA_UPDATE_DIALOGUE = 1,
+        HELGA_RESOLVE_DIALOGUE = 2
     };
     struct QuestGiverVars *v = (struct QuestGiverVars *)m->pvars;
     struct TalkState *talk = &v->talk;
@@ -1347,7 +1348,7 @@ void helga_update(struct Moby *m) {
             }
         }
         break;
-    case 2:
+    case HELGA_RESOLVE_DIALOGUE:
         if (D_L03_0015F5C4 != 2) {
             if (v->talk.mode != 2) {
                 jet_clear_persistent(m->mission);
