@@ -1570,17 +1570,22 @@ extern int allocate_voice_for_target_entry(int, int, struct Moby *) __asm__("FUN
 extern s32 D_0014C190_257218[][64] __asm__("D_0014C190");
 void upper_door_update(struct Moby *m) __asm__("FUN_L04_002e17d8");
 void upper_door_update(struct Moby *m) {
+    enum {
+        UPPER_DOOR_INITIALIZE = 0,
+        UPPER_DOOR_WAIT_FOR_ACTIVATION = 1,
+        UPPER_DOOR_MOVE_VERTICAL = 2
+    };
     struct RiserVars *d = (struct RiserVars *)m->pvars;
     struct Moby *t;
     s16 idx;
     u16 id;
 
     switch (m->state) {
-    case 0:
+    case UPPER_DOOR_INITIALIZE:
         d->baseZ = m->pos.z;
         m->state = 1;
         break;
-    case 1:
+    case UPPER_DOOR_WAIT_FOR_ACTIVATION:
         id = m->save_id;
         idx = id;
         if (D_L04_001BB3B0.collected[idx] == 0 && !((D_0014C190_257218[current_level_index][idx >> 5] >> (id & 0x1F)) & 1)) {
@@ -1595,7 +1600,7 @@ void upper_door_update(struct Moby *m) {
         m->state = 2;
         d->timer = scale_game_frames(60);
         break;
-    case 2:
+    case UPPER_DOOR_MOVE_VERTICAL:
         m->pos.z += riser_rise_speed(m) * frame_time;
         if (fast_dec_timer(&d->timer)) {
             D_0014C190_257218[current_level_index][(s16)m->save_id >> 5] |= 1 << (m->save_id & 0x1F);
