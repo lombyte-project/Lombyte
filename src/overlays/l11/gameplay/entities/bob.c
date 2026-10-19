@@ -1233,10 +1233,14 @@ extern float D_L11_00161918 __attribute__((sda));
  * open and moves the linked moby (or its fallback) along. */
 void teleporter_update(struct Moby *moby) __asm__("FUN_L11_002f2518");
 void teleporter_update(struct Moby *moby) {
+    enum {
+        TELEPORTER_INITIALIZE = 0,
+        TELEPORTER_WAIT_FOR_ACTIVATION = 1
+    };
     char *data = (char *)moby->pvars;
 
     switch (moby->state) {
-    case 0: {
+    case TELEPORTER_INITIALIZE: {
         char **slots = (char **)(data + 0x14);
         int i;
         int j;
@@ -1268,7 +1272,7 @@ void teleporter_update(struct Moby *moby) {
         FUN_L01_003092d0_2518(moby);
         break;
     }
-    case 1: {
+    case TELEPORTER_WAIT_FOR_ACTIVATION: {
         struct Hero *g;
         if (*(int *)data == -1)
             break;
