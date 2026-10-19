@@ -125,6 +125,12 @@ extern s32 D_0013DF38_arr[] __asm__("D_0013DF38");
 
 void FUN_L08_002b82a0(Moby_2B94B0 *m)
 {
+    enum {
+        MOBY_STATE_INITIALIZE = 0,
+        MOBY_STATE_PHYSICS_MOVEMENT = 1,
+        MOBY_STATE_CHECK_COLLECTION = 2,
+        MOBY_STATE_REMOVE = 4
+    };
     MobyData_2B94B0 *d = m->data;
     float A[4], F[4], B[4], C[4], P[4], E[4];
     float f20, t, f;
@@ -133,12 +139,12 @@ void FUN_L08_002b82a0(Moby_2B94B0 *m)
     d->ticks++;
     if (m->state != 0) m->pos[2] = d->f8;
     switch (m->state) {
-    case 0:
+    case MOBY_STATE_INITIALIZE:
         func_L08_002B9438_2B94B0(m);
         if (d->f2C != 0) m->state = 1;
         else m->state = 2;
         break;
-    case 1:
+    case MOBY_STATE_PHYSICS_MOVEMENT:
         qcopy(P, m->pos);
         d->vel[2] = d->vel[2] - D_0015ED70 * 9.8f;
         f20 = fast_vec_length(d->vel);
@@ -182,7 +188,7 @@ void FUN_L08_002b82a0(Moby_2B94B0 *m)
             qcopy(P, A);
         }
         qcopy(m->pos, P);
-    case 2:
+    case MOBY_STATE_CHECK_COLLECTION:
         hit = 0;
         m->f48 = func_001FA748_2B94B0(m->f48, d->fC);
         if (((Hero_2B94B0 *)((char *)&hero))->f208C == 15) {
@@ -203,7 +209,7 @@ void FUN_L08_002b82a0(Moby_2B94B0 *m)
         return;
     case 3:
         break;
-    case 4:
+    case MOBY_STATE_REMOVE:
         if (d->target != 0) d->target->fA = 0;
         mark_moby_for_removal(m);
         return;
