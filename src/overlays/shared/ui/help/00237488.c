@@ -647,7 +647,8 @@ extern int D_0015ED84_gp __asm__("D_0015ED84") __attribute__((section(".sdata"))
 
 int FUN_L05_00251be8(void) {
     enum {
-        ITEM_WRENCH = 8
+        ITEM_WRENCH = 8,
+        ITEM_RACE_PROJECTILE = 36
     };
     float joint_pos[4];
     int press_time0, press_time1, press_time2;
@@ -920,7 +921,7 @@ int FUN_L05_00251be8(void) {
             }
         }
         break;
-    case 36:
+    case ITEM_RACE_PROJECTILE:
         {
             Moby *item;
             Moby *best;
