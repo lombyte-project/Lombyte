@@ -1033,6 +1033,11 @@ extern float D_L05_00161EB8 __attribute__((sda));
 extern float D_L05_00161EBC __attribute__((sda));
 
 void FUN_L05_003150f0(struct Moby *m) {
+    enum {
+        EMITTER_INITIALIZE = 0,
+        EMITTER_WAIT_FOR_TRIGGER = 1,
+        EMITTER_SPRAY_PARTICLES = 2
+    };
     float v[4];
     float w[4];
     float u[4];
@@ -1050,19 +1055,19 @@ void FUN_L05_003150f0(struct Moby *m) {
         return;
     }
     switch (state = m->state) {
-    case 0:
+    case EMITTER_INITIALIZE:
         if (D_0014C050[current_level_index][m->mission] != 0xFF) {
             m->state = 1;
         } else {
             m->state = 3;
         }
         break;
-    case 1:
+    case EMITTER_WAIT_FOR_TRIGGER:
         if (d->trigger >= 0 && D_L05_0015FFD8[d->trigger].command != 0) {
             FUN_L01_0026e0e0(m->group, 2);
         }
         break;
-    case 2:
+    case EMITTER_SPRAY_PARTICLES:
         d->age++;
         if (FUN_001f9b48(&m->pos, D_L05_001671C0) < 64.0f) {
             struct Moby *o;
