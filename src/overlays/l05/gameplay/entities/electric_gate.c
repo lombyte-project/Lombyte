@@ -2319,6 +2319,9 @@ extern char *D_L05_001600EC_19208 __asm__("D_L05_001600EC");
 extern unsigned char D_0014C050_19208[] __asm__("D_0014C050");
 
 void FUN_L05_00319208(void *moby_v) {
+    enum {
+        TAXI_BRANCHING_STOP = 2
+    };
     char *moby = moby_v;
     char *data = *(char **)(moby + 0x78);
     int *list = (int *)(data + 0x80);
@@ -2332,7 +2335,7 @@ void FUN_L05_00319208(void *moby_v) {
         }
     }
     switch (*(short *)(data + 0xB4)) {
-    case 2: {
+    case TAXI_BRANCHING_STOP: {
         int k = current_level_index << 4;
         if (D_0014C050_19208[*(int *)(data + 0xB8) + k] != 0xFF &&
             D_0014C050_19208[*(int *)(data + 0xBC) + k] != 0xFF) {
