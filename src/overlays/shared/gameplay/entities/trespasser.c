@@ -434,6 +434,7 @@ void swingshot_hook_update(unsigned char *m) {
         HOOK_LAUNCH_ANIMATION = 3,
         HOOK_FLIGHT_ANIMATION = 4,
         HOOK_ATTACHED_ANIMATION = 5,
+        HOOK_SKIP_ANIMATION_TRANSITIONS = 6,
         HOOK_RETURN_ANIMATION = 7
     };
     unsigned char **d;
@@ -506,7 +507,7 @@ void swingshot_hook_update(unsigned char *m) {
             m[0x20] = 7;
         }
         break;
-    case 6:
+    case HOOK_SKIP_ANIMATION_TRANSITIONS:
         break;
     case HOOK_RETURN_ANIMATION:
         if (!(m[0x70] & 2))
