@@ -110,8 +110,8 @@ void FUN_L05_00262b58(HudCounter *e) {
         if (D_0013F65E < 6 || ((f32)D_0013FA5C < 1.0f)) return;
         D_L05_0015FAD4 = D_0013FA5C;
         D_L05_0015FAD8 = 0;
-        i = 3;
         dst = &D_L05_0015FAEC;
+        i = 3;
         do { *dst-- = 0; } while (--i >= 0);
         counter[2] = 1;
         counter[1] = D_L05_0015F87C;
@@ -127,8 +127,8 @@ void FUN_L05_00262b58(HudCounter *e) {
         limit = D_0013FA5C;
         timer = D_L05_0015F87C;
         if (D_L05_0015FAD4 < limit) {
-            D_L05_0015FAD4 = limit;
             counter[1] = timer;
+            D_L05_0015FAD4 = limit;
         }
         if (D_0013F650 == 0) {
             if ((u32)(D_001413D4 - 0x6d) > 2) return;

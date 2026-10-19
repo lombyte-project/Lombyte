@@ -2938,8 +2938,8 @@ void FUN_L00_002ddf60(void *frame_context, void *initial_vector) {
     ++D_L00_00161B54;
     fraction = fraction / sampled;
     scaled_first[0] = start[0] + (end[0] - start[0]) * fraction;
-    scaled_first[2] = start[2] + (end[2] - start[2]) * fraction;
     scaled_first[1] = start[1] + (end[1] - start[1]) * fraction;
+    scaled_first[2] = start[2] + (end[2] - start[2]) * fraction;
     if (FUN_001fef20_002ddf60(60) <= D_L00_00161B54) {
         qcopy(D_L00_00161B60_lui, D_L00_00161B70_lui);
         FUN_001ff500_002ddcb8(&axis, &first, D_L00_00161B84_lui);

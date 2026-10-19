@@ -229,8 +229,8 @@ void FUN_L05_0030de90(char *moby) {
                     positions++;
                     source++;
                     color++;
-                    uv1 += 2;
                     uv0 += 2;
+                    uv1 += 2;
                     k--;
                     uv += 2;
                 } while (k >= 0);

@@ -41,8 +41,8 @@ void FUN_L06_00307578(char *moby) {
     quad.texture_state = 1;
     *(u64 *)&quad.primitive = 0x4000000044ULL;
     quad.reserved.value = 0;
-    indices = D_L06_001fe9d0;
     quad.texture = get_effect_texture(0x18);
+    indices = D_L06_001fe9d0;
     i = 0;
     result0 = &result[0];
     result1 = &result[1];
@@ -79,8 +79,8 @@ void FUN_L06_00307578(char *moby) {
         quad.colors[0] = colors[indices[0]];
         quad.colors[1] = colors[*index1];
         quad.colors[2] = colors[*index2];
-        quad.colors[3] = colors[indices[3]];
         quad.texture_coordinates[0][0] = uvs[indices[0]][0];
+        quad.colors[3] = colors[indices[3]];
         quad.texture_coordinates[0][1] = uvs[indices[0]][1] + data[7];
         quad.texture_coordinates[1][0] = uvs[*index1][0];
         quad.texture_coordinates[1][1] = uvs[*index1][1] + data[7];

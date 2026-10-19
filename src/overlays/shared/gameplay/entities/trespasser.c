@@ -975,8 +975,8 @@ collision_done:
             if (!FUN_L00_002bf9f0(moby,vars,vars,0)) {
                 if (vars->target) { vars->previous_target = vars->target; vars->timer = (s32)((u32)vars->timer + 500); }
                 vars->velocity.f[0] = moby->pos.x-vars->target_pos.f[0];
-                vars->velocity.f[2] = 0.01f;
                 vars->velocity.f[1] = moby->pos.y-vars->target_pos.f[1];
+                vars->velocity.f[2] = 0.01f;
                 fast_vec_normalize(&vars->velocity,&vars->velocity,0.1f);
                 moby->state = 8; if (moby->prev_seq != 5) ANIM_2bffa8(5,5); goto finish;
             }
