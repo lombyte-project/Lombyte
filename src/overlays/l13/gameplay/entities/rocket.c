@@ -1538,6 +1538,10 @@ extern void FUN_L13_0030a460(void);
 extern void FUN_L13_0030a488(int);
 
 void FUN_L13_00309e88(struct Moby *moby) {
+    enum {
+        BOBBING_PLATFORM_INITIALIZE = 0,
+        BOBBING_PLATFORM_UPDATE = 1
+    };
     Bob_9e88 *b;
     float f;
     int i, j, k, n;
@@ -1552,7 +1556,7 @@ void FUN_L13_00309e88(struct Moby *moby) {
     if (b == 0)
         return;
     switch (moby->state) {
-    case 0: {
+    case BOBBING_PLATFORM_INITIALIZE: {
         float rate = frame_time;
         moby->flags |= 1;
         b->angle = b->angle * DEG_TO_RAD;
@@ -1608,7 +1612,7 @@ void FUN_L13_00309e88(struct Moby *moby) {
         moby->state = 1;
         break;
     }
-    case 1: {
+    case BOBBING_PLATFORM_UPDATE: {
         struct Hero *h;
         f = b->top;
         f -= b->bottom;
