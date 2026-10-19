@@ -1954,7 +1954,7 @@ float FUN_L07_00317e60(void *moby, void *anchor) {
     float lifetime;
     int i, j, segment, column, next_column;
     int created, extras;
-    char *particle;
+    unsigned char *particle;
     char *slot;
     char *ring;
     void *point;

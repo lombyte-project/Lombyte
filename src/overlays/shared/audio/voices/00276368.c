@@ -179,7 +179,7 @@ void FUN_L00_00276368(void) {
     FUN_L00_002a0f18(D_L00_001B9D00, draw_buffer_address, frame_size << 11);
     D_L00_001B9D08 = D_L00_0015EE78;
     if (D_L00_001B9CF0.state == 11 || D_L00_001B9CF0.state == 15) {
-        s32 i;
+        short i;
         s32 *handle;
         D_L00_00184434 = D_L00_0015EE78 + 0x40000;
         D_L00_00184430 = D_L00_0015EE78;
@@ -192,7 +192,7 @@ void FUN_L00_00276368(void) {
             D_L00_0015EE78 += 0x4000;
         } while (i >= 0);
     } else {
-        s32 i;
+        unsigned int i;
         s32 *handle;
         D_L00_00184430 = 0;
         D_L00_00184434 = 0;
@@ -208,7 +208,7 @@ void FUN_L00_00276368(void) {
     D_L00_001B9DBC = table[12];
     table[12] += 28;
     {
-        s32 i;
+        short i;
         s32 *handle = D_L00_001B9D20;
         s32 *source = D_L00_00141660_init;
         i = 3;

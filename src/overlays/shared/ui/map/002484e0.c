@@ -45,12 +45,12 @@ void FUN_L00_002484e0(f32 *position) {
     f32 py;
     s32 x;
     s32 y;
-    s32 x_min;
+    unsigned short x_min;
     s32 y_min;
     s32 x_max;
     s32 y_max;
     s32 level;
-    s32 state;
+    short state;
     s32 mode15;
     s64 mode16;
     s32 i;

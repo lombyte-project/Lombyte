@@ -507,7 +507,7 @@ void FUN_L00_001f4598(void) {
     u8 *level;
     f32 *capture_positions;
     u8 *player_setting;
-    u8 byte_value;
+    int byte_value;
     f32 dimension, scale, angle;
     s32 file, file_size;
     DebugRowCounts row_counts;
@@ -915,7 +915,7 @@ void FUN_L00_001f4598(void) {
             b32 enabled = FALSE;
             s32 index = 0;
             f64 formatted_x, formatted_y, formatted_z;
-            if (0 < D_L00_0015F614) {
+            if (index < D_L00_0015F614) {
                 f32 *capture_positions = D_L00_00173E20;
                 do {
                     if (((((*capture_positions < D_L00_00166C80.camera.position[0] + 0.5f) &&

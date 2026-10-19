@@ -856,7 +856,7 @@ void FUN_L00_002d9810(u8 *m) {
     char *shape;
     float ratio = data[0] / D_L00_00161A10_gp;
     int i, j, color;
-    short *indices;
+    unsigned short *indices;
     char *source;
     char *destination = D_L00_001E3DA0_002d9810;
     char *pointB, *pointA;
@@ -2866,7 +2866,7 @@ void FUN_L00_002ddf60(void *frame_context, void *initial_vector) {
     V4 edge, offset, direction, tangent, following, outward, forward;
     V4 ring[3];
     char *global;
-    char *record, *effect, *current, *prior;
+    unsigned char *record, *effect, *current, *prior;
     short *halfword;
     int i, j, row, segment, count, small_count, index, next_segment;
     float fraction, sampled, length, value;

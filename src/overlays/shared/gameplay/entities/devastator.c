@@ -2947,7 +2947,7 @@ void pyrocitor_update(unsigned char *m) {
     f32 speed, length, strength, response_scale;
     struct { f32 response[2]; s32 gate, initial_count, count; } counts;
     s32 i;
-    u8 state;
+    int state;
     s16 h;
     s32 divisor;
     void *effect;

@@ -195,7 +195,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L05_002d1688.s", FUN_L05_002d1688);
 typedef unsigned int U128_2d1688 __attribute__((mode(TI)));
 extern char *D_L05_001B0930[];
 extern float D_L05_00161388 __attribute__((sda));
-extern float D_L05_001612E8;
+extern volatile float D_L05_001612E8;
 extern float D_L05_0013F640 __asm__("D_L05_0013F640");
 extern float D_0013F3D0[4] __asm__("D_0013F3D0");
 extern char D_L05_0013F3E0[] __asm__("D_L05_0013F3E0");
@@ -304,7 +304,8 @@ state_one:
         }
         if ((hero.state.control_mode == 0x12 || hero.state.current == 0x12) &&
             distance_to_2d1688(moby + 0x10, &hero.motion.pos) < 8.0f) {
-            speed = (D_L05_001612E8 - (D_L05_00161388)) - 2.0f;
+            float sea = D_L05_00161388;
+            speed = (D_L05_001612E8 - sea) - 2.0f;
         } else {
             speed = (D_L05_001612E8 - (D_L05_00161388)) - 0.5f;
             FUN_L05_002d1e30(moby);

@@ -625,7 +625,7 @@ extern void FUN_0023cf80(int, int, int, char *) __asm__("FUN_00201200");
 typedef struct { float x, y, z, w; } __attribute__((aligned(16))) HudPoint_237200;
 int FUN_L00_00237200(HudElem *e) {
     int y, i, width, left, other_width, other_left;
-    int alpha, color, level, elapsed, extra, interval, minute_scale, remainder, seconds;
+    unsigned int alpha, color, level, elapsed, extra, interval, minute_scale, remainder, seconds;
     float fade;
     HudPoint_237200 points[2];
     HudPoint_237200 point;

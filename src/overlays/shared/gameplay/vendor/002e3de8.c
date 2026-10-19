@@ -327,7 +327,7 @@ void FUN_L10_002f5b58(struct UpdateCam *cam) {
     if (*(int *)(rec + 0x20) >= 0) {
         char *path = D_L10_001B0930_5a78[*(int *)(rec + 0x20)];
         int i = 0;
-        if (*(int *)path > 0) {
+        if (i < *(int *)path) {
             f32 *stop_fov = fov;
             s16 *stop_seg = stops->seg;
             int next;

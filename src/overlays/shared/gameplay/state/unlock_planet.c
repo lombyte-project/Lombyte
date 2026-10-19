@@ -505,7 +505,7 @@ void FUN_L00_00260a88(char *moby, int lower, int upper, unsigned int flags, int 
                 FUN_001eb078_260a88((int)D_L00_001600C0_260a88, 0x3fb99999a0000000LL);
                 count /= 10;
             } else {
-                int span = 360 - multiplier;
+                short span = 360 - multiplier;
                 float scale = FUN_00200240_260a88(span);
                 FUN_001eb078_260a88((int)D_L00_001600C0_260a88, FUN_00120478_260a88(scale / 20.0f));
                 count *= span / 80;
