@@ -3525,6 +3525,7 @@ extern char D_0013A5E0_2FDA70[] __asm__("D_0013CAE4");
 void FUN_L06_002fc640(Moby_2FDA70 *moby) {
     enum {
         INITIALIZE_POSITION_AND_LINKED_MOBYS = 0,
+        WAIT_FOR_SCENE_GAME_MODE_CLEAR = 2,
         WAIT_FOR_HERO_TRIGGER_AT_NODE_OFFSET_HEIGHT = 3,
         WAIT_FOR_HERO_TRIGGER_AT_NODE_BASE_HEIGHT = 4,
         MOVE_TO_NODE_BASE_HEIGHT = 5,
@@ -3578,7 +3579,7 @@ void FUN_L06_002fc640(Moby_2FDA70 *moby) {
             d->f84 = 1;
         }
         break;
-    case 2:
+    case WAIT_FOR_SCENE_GAME_MODE_CLEAR:
         if (D_L06_0015F5C4_macro == 0) {
             moby->state = 3;
         }
