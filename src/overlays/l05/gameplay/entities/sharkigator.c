@@ -1132,6 +1132,7 @@ void extermibot_update(unsigned char *m) {
         EXTERMIBOT_RECOVER_AFTER_STRIKE = 9,
         EXTERMIBOT_RETURN_TO_START = 10,
         EXTERMIBOT_NONLETHAL_KNOCKBACK = 11,
+        EXTERMIBOT_WAIT_FOR_ANIMATION_BEFORE_IDLE = 13,
         EXTERMIBOT_DEATH_KNOCKBACK = 14,
         EXTERMIBOT_WAIT_FOR_ACTIVATION_TRIGGER = 15
     };
@@ -1470,7 +1471,7 @@ void extermibot_update(unsigned char *m) {
             return;
         }
         break;
-    case 13:
+    case EXTERMIBOT_WAIT_FOR_ANIMATION_BEFORE_IDLE:
         if (m[0x70] & 2) {
             m[0x20] = 1;
             if (m[0x53] != 0) blend_moby_animation(m, 0, 0, scale_game_frames(10));
