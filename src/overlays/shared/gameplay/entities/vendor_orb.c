@@ -171,6 +171,11 @@ extern int func_001F9908_2E0E50(void *) __asm__("FUN_001f9740");
 
 void hydrodisplacer_update(Moby *moby) __asm__("FUN_L00_002df9a0");
 void hydrodisplacer_update(Moby *moby) {
+    enum {
+        HYDRODISPLACER_WAIT_FOR_ACTIVATION = 2,
+        HYDRODISPLACER_CAMERA_TRANSITION = 4,
+        HYDRODISPLACER_WAIT_FOR_TIMER = 5
+    };
     Vec_2E0E50 camera_pos, camera_rot;
     Data_2E0E50 *data = (void *)moby->pvars;
 
@@ -214,7 +219,7 @@ void hydrodisplacer_update(Moby *moby) {
             moby->state = 2;
         }
         break;
-    case 2:
+    case HYDRODISPLACER_WAIT_FOR_ACTIVATION:
         if (func_L00_00267BA8_2E0E50(((Hero *)D_0013E633_2E0E50)->items[0].button_mask, func_001F9850_2E0E50(8), 0) == 0) {
             break;
         }
@@ -285,7 +290,7 @@ void hydrodisplacer_update(Moby *moby) {
         }
         break;
     }
-    case 4:
+    case HYDRODISPLACER_CAMERA_TRANSITION:
         if (((Hero *)D_0013E633_2E0E50)->ground_moby == 0 || ((Hero *)D_0013E633_2E0E50)->ground_moby->oclass != 0x155) {
             func_L00_002E17F0_2E0E50(moby);
             return;
@@ -352,7 +357,7 @@ void hydrodisplacer_update(Moby *moby) {
             return;
         }
         break;
-    case 5:
+    case HYDRODISPLACER_WAIT_FOR_TIMER:
         if (((Hero *)D_0013E633_2E0E50)->ground_moby != 0 && ((Hero *)D_0013E633_2E0E50)->ground_moby->oclass == 0x155
             && func_001F9908_2E0E50(data) == 0) {
             break;
