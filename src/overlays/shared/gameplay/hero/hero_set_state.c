@@ -3311,6 +3311,9 @@ extern int f_fun_001fa6d0_227fa0(float) __asm__("FUN_001fa6d0");
 extern int D_L00_0015F674 __attribute__((sda));
 extern s32 D_00141660 __attribute__((section(".data")));
 int FUN_L00_00227fa0(void) {
+    enum {
+        ITEM_WRENCH = 8
+    };
     int out[3];
     int start;
     int mask;
@@ -3330,7 +3333,7 @@ int FUN_L00_00227fa0(void) {
     start = D_0013F450_h228770.f198;
     mask = D_0013F450_h228770.f10A0;
     switch (D_0013F450_h228770.f10B8) {
-    case 8:
+    case ITEM_WRENCH:
         if (D_0013F450_h228770.f208C < 2U || (D_0013F450_h228770.f208C == 4 && D_0013F450_h228770.f418 != 0)) {
             Moby_227fa0 *m;
 
