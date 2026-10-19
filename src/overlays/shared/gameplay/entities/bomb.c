@@ -669,7 +669,8 @@ extern char D_L00_00177F00[];
 void FUN_L00_002c97e0(Moby *m) {
     enum {
         CHICKEN_STATE_INITIALIZE = 0,
-        CHICKEN_STATE_TURN_AWAY_FROM_HERO = 2
+        CHICKEN_STATE_TURN_AWAY_FROM_HERO = 2,
+        CHICKEN_STATE_FLEE_FROM_HERO = 3
     };
     Vec4A next_pos;
     Vec4A ahead;
@@ -857,7 +858,7 @@ void FUN_L00_002c97e0(Moby *m) {
             blend_moby_animation(m, random_integer_below(2) == 0, 0, scale_game_frames(5));
         }
         break;
-    case 3:
+    case CHICKEN_STATE_FLEE_FROM_HERO:
         if (vector_distance(&m->pos, &hero.motion.pos) > size * 6.0f) {
             m->state = 1;
             vars->flee_timer = random_int_between(scale_game_frames(0x3C), scale_game_frames(0xB4));
