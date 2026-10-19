@@ -1535,11 +1535,14 @@ void leaf_update(struct Moby *moby) {
 float riser_rise_speed(struct Moby *moby) __asm__("FUN_L04_002e1768");
 
 float riser_rise_speed(struct Moby *moby) {
+    enum {
+        RISER_CLASS_FAST_DESCENDING = 0x5FB
+    };
     switch (moby->oclass) {
     case 0x44D:
     case 0x5FC:
         return 1.3f;
-    case 0x5FB:
+    case RISER_CLASS_FAST_DESCENDING:
         return -2.55f;
     }
     return -2.05f;
