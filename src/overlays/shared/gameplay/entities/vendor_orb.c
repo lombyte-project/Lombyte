@@ -2189,6 +2189,7 @@ s32 FUN_L00_002e5678(void *mm, void *a, void *b, s32 k) {
         CAM_ATTACH_HERO_POSITION_BASE = 1,
         CAM_ATTACH_STORED_FOCUS_POSITION_BASE = 2,
         CAM_ATTACH_PROJECT_HERO_FOCUS_VELOCITY = 4,
+        CAM_ATTACH_BLEND_OUT_FOCUS_VELOCITY = 6,
         CAM_ATTACH_BLEND_BACK_FOCUS_VELOCITY = 7
     };
     u8 *m = mm;
@@ -2202,7 +2203,7 @@ s32 FUN_L00_002e5678(void *mm, void *a, void *b, s32 k) {
         r = 0;
         break;
     case 5:
-    case 6:
+    case CAM_ATTACH_BLEND_OUT_FOCUS_VELOCITY:
     case CAM_ATTACH_BLEND_BACK_FOCUS_VELOCITY:
         fast_vec_add(b, a, p);
         r = 0;
