@@ -2362,6 +2362,7 @@ void FUN_L06_002f91e8(Moby *moby)
     enum {
         REACTION_SKIP_RESPONSE = 0,
         REACTION_DEATH = 1,
+        HIT_RESPONSE_DEATH_SEQUENCE = 2,
         REACTION_NO_RESPONSE = 11
     };
     enum {
@@ -2419,7 +2420,7 @@ void FUN_L06_002f91e8(Moby *moby)
             data->f67 = 0xFA;
             break;
         case REACTION_DEATH:
-        case 2:
+        case HIT_RESPONSE_DEATH_SEQUENCE:
             moby->state = 0x11;
             moby->flags &= 0xEFFF;
             data->f88 = D_0015ED6C_c * 8.0f;
