@@ -1886,6 +1886,9 @@ extern int func_001F9908_r(int *) __asm__("FUN_001f9740");
 extern f32 frame_scale_gp __asm__("D_0015ED60") __attribute__((sda));
 void FUN_L02_00230988(void) {
     enum {
+        HERO_STATE_VEHICLE_IDLE = 83,
+        HERO_STATE_VEHICLE_RUN = 84,
+        HERO_STATE_VEHICLE_FALL = 85,
         HERO_STATE_VEHICLE_HURT = 86,
         HERO_STATE_VEHICLE_DYING = 87,
         HERO_STATE_MOVE_TO_TARGET = 101,
@@ -3449,7 +3452,7 @@ void FUN_L02_00230988(void) {
                         hero_set_state(HERO_STATE_IDLE, 0);
                     }
                     break;
-                case 83:
+                case HERO_STATE_VEHICLE_IDLE:
                     if (hero.unkA98 & 2) {
                         if (((unsigned char *)hero.moby)[0x53] != 0) {
                             set_hero_animation(0, 0, scale_game_frames(0xC));
@@ -3502,7 +3505,7 @@ void FUN_L02_00230988(void) {
                         set_hero_animation(0, 0, scale_game_frames(0x14));
                     }
                     break;
-                case 85:
+                case HERO_STATE_VEHICLE_FALL:
                     if (hero.air_frames.s != 0) {
                         break;
                     }
@@ -3526,7 +3529,7 @@ void FUN_L02_00230988(void) {
                     hero.anim_speed = 0.35f;
                     hero.unk1C4 = scale_game_frames(0x14);
                     break;
-                case 84:
+                case HERO_STATE_VEHICLE_RUN:
                     hero.anim_speed = hero.motion.speed_xy * 54.0f;
                     if (!(hero.air_frames.s < scale_game_frames(5))) {
                         if (hero.ground_distance > 0.8f || hero.ground_slope.f > 0.87266463f) {
