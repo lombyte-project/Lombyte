@@ -242,7 +242,8 @@ void FUN_L15_002a36d0(GateMoby_2A48B0 *m)
         GATE_WAIT_TO_OPEN = 1,
         GATE_OPENING = 2,
         GATE_OPEN = 3,
-        GATE_CLOSING = 4
+        GATE_CLOSING = 4,
+        GATE_POSITION_OVERRIDE = 5
     };
     GateVars_2A48B0 *d = m->vars;
     float step;
@@ -371,7 +372,7 @@ void FUN_L15_002a36d0(GateMoby_2A48B0 *m)
             m->state = 2;
         }
         break;
-    case 5:
+    case GATE_POSITION_OVERRIDE:
         if (D_0013DD50 != 0) {
             m->pos.z = d->home.z - D_L15_001614F8;
             D_L15_00184B28_2A48B0 = 1;
