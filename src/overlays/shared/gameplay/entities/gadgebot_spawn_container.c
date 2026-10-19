@@ -1400,6 +1400,7 @@ void gadgebot_update(GbMoby *moby) __asm__("FUN_L06_002f0040");
 void gadgebot_update(GbMoby *moby) {
     enum {
         GADGEBOT_INITIALIZE = 0,
+        GADGEBOT_WAIT_FOR_SPAWN_PAD = 1,
         GADGEBOT_FOLLOW_HERO = 3,
         GADGEBOT_STAND_AND_FACE_HERO = 4,
         GADGEBOT_SEEK_AND_ATTACK_TARGET = 5,
@@ -1407,7 +1408,20 @@ void gadgebot_update(GbMoby *moby) {
         GADGEBOT_UPDATE_KNOCKBACK = 9
     };
     enum {
-        GADGEBOT_ATTACK_STRIKE = 2
+        GADGEBOT_ATTACK_SEEK_AND_APPROACH_TARGET = 1,
+        GADGEBOT_ATTACK_STRIKE = 2,
+        GADGEBOT_ATTACK_RECOVER_AFTER_STRIKE = 3,
+        GADGEBOT_ATTACK_WAIT_FOR_TARGET = 4
+    };
+    enum {
+        GADGEBOT_COMMAND_FOLLOW_HERO = 1,
+        GADGEBOT_COMMAND_STAND_AND_FACE_HERO = 2,
+        GADGEBOT_COMMAND_SEEK_AND_ATTACK_TARGET = 3
+    };
+    enum {
+        GADGEBOT_FOLLOW_INITIALIZE = 0,
+        GADGEBOT_FOLLOW_MOVE_TOWARD_HERO = 1,
+        GADGEBOT_FOLLOW_WAIT_AND_FACE_HERO = 2
     };
     float out[4];
     float raised_position_snapshot[4];
@@ -1443,19 +1457,19 @@ void gadgebot_update(GbMoby *moby) {
             if (ok) {
                 D_L06_0017EC58.unk2C++;
                 switch (D_00141610[0]) {
-                case 1:
+                case GADGEBOT_COMMAND_FOLLOW_HERO:
                     if (moby->state != 3) {
                         moby->state = 3;
                         moby->sub = 0;
                     }
                     break;
-                case 3:
+                case GADGEBOT_COMMAND_SEEK_AND_ATTACK_TARGET:
                     if (moby->state != 5) {
                         moby->state = 5;
                         moby->sub = 0;
                     }
                     break;
-                case 2:
+                case GADGEBOT_COMMAND_STAND_AND_FACE_HERO:
                     moby->state = 4;
                     break;
                 case 4:
@@ -1524,7 +1538,7 @@ void gadgebot_update(GbMoby *moby) {
         moby->unk94 = 0;
         break;
     }
-    case 1:
+    case GADGEBOT_WAIT_FOR_SPAWN_PAD:
         if (d->unk170 == 0 || d->unk170->state == 0xFE || d->unk170->state == 0xFD ||
             d->unk170->state >= 2) {
             if (d->unk310 > 0) {
@@ -1626,13 +1640,13 @@ void gadgebot_update(GbMoby *moby) {
         }
         if (moby->state != 4) {
             switch (moby->sub) {
-            case 0:
+            case GADGEBOT_FOLLOW_INITIALIZE:
                 moby->sub = 1;
                 d->unk184 = 0;
                 d->unk190 = 0;
                 qcopy(d->unkF0, moby->pos);
                 d->unk17C = randf_sym(0.13962634f, 0.34906584f);
-            case 1: {
+            case GADGEBOT_FOLLOW_MOVE_TOWARD_HERO: {
                 int hit;
 
                 if (moby->anim != 1) {
@@ -1707,7 +1721,7 @@ void gadgebot_update(GbMoby *moby) {
                 }
                 break;
             }
-            case 2: {
+            case GADGEBOT_FOLLOW_WAIT_AND_FACE_HERO: {
                 float hd = vector_distance(d->unk0, hero.motion.pos.f);
 
                 if ((d->unk190 == 0 && hd > 1.8f) || (d->unk190 != 0 && hd > d->unk188 + 0.5f)) {
@@ -1767,7 +1781,7 @@ void gadgebot_update(GbMoby *moby) {
             d->unk18C = level_frame_count;
         }
         switch (moby->sub) {
-        case 1:
+        case GADGEBOT_ATTACK_SEEK_AND_APPROACH_TARGET:
             if (d->unk18C < level_frame_count) {
                 FUN_L06_002f2250_u();
             }
@@ -1849,7 +1863,7 @@ void gadgebot_update(GbMoby *moby) {
                 moby->sub = 3;
             }
             break;
-        case 3:
+        case GADGEBOT_ATTACK_RECOVER_AFTER_STRIKE:
             if (moby->anim != 0) {
                 blend_moby_animation(moby, 0, 0, scale_game_frames(7));
             }
@@ -1864,7 +1878,7 @@ void gadgebot_update(GbMoby *moby) {
                 }
             }
             break;
-        case 4:
+        case GADGEBOT_ATTACK_WAIT_FOR_TARGET:
             if (d->unk18C < level_frame_count) {
                 FUN_L06_002f2250_u();
             }
