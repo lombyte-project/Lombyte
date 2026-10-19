@@ -557,6 +557,7 @@ void big_axebot_update(M_B7B0 *moby) {
         BIG_AXEBOT_STATE_INITIALIZE = 0,
         BIG_AXEBOT_STATE_IDLE = 1,
         BIG_AXEBOT_STATE_ALERT = 2,
+        BIG_AXEBOT_STATE_WAIT_FOR_TARGET = 3,
         BIG_AXEBOT_STATE_FOLLOW_PATH = 4,
         BIG_AXEBOT_STATE_CHASE_TARGET = 5,
         BIG_AXEBOT_STATE_RETURN_HOME = 6,
@@ -833,7 +834,7 @@ void big_axebot_update(M_B7B0 *moby) {
             moby->state = 1;
         }
         break;
-    case 3:
+    case BIG_AXEBOT_STATE_WAIT_FOR_TARGET:
         if (moby->f52 != 0 && (moby->f70 & 2)) {
             FUN_L04_002ba3e0((char *)moby, (void *)0xB, 0, (void *)scale_game_frames(0xC));
         }
