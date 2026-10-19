@@ -137,6 +137,7 @@ void FUN_L03_0021c668(void) {
         HERO_STATE_LEDGE_HANG = 25,
         HERO_STATE_LEDGE_SHIMMY_POSITIVE_YAW_OFFSET = 26,
         HERO_STATE_LEDGE_SHIMMY_NEGATIVE_YAW_OFFSET = 27,
+        HERO_STATE_TARGET_POSE_APPROACH = 101,
         HERO_STATE_WATER_DEATH = 106,
         HERO_STATE_LOW_ALTITUDE_RESPAWN = 119
     };
@@ -872,7 +873,7 @@ void FUN_L03_0021c668(void) {
                         }
                     }
                     break;
-                case 101:
+                case HERO_STATE_TARGET_POSE_APPROACH:
                     if (vector_distance(hero.motion.pos.f, hero.unk1640.f) < 0.2f) {
                         if (frame_time * 2.7f > hero.motion.speed_xy) {
                             if (fast_difference_between_rotations(
