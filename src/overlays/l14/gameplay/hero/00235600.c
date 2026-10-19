@@ -131,6 +131,9 @@ extern int func_L00_00235790_r(void) __asm__("FUN_L00_00234e00");
 extern int func_001F9908_r(int *) __asm__("FUN_001f9740");
 
 void FUN_L14_00235600(void) {
+    enum {
+        HERO_STATE_GRIND_RAIL_TRANSFER = 42
+    };
     unsigned char *moby;
     int prevSub;
     int prevState;
@@ -1036,7 +1039,7 @@ void FUN_L14_00235600(void) {
                     break;
                 case HERO_STATE_GRIND:
                 case 41:
-                case 42:
+                case HERO_STATE_GRIND_RAIL_TRANSFER:
                 case 43:
                 case 66:
                     if (hero.state.current == 0x42) {
