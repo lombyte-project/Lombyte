@@ -3163,6 +3163,11 @@ extern float sin_4318(float) __asm__("FUN_001f9de0");
    the target, jumps between path points, and smokes while it dies. */
 void puffoid_update(struct Moby *moby) __asm__("FUN_L11_00314318");
 void puffoid_update(struct Moby *moby) {
+    enum {
+        PUFFOID_STATE_INITIALIZE = 0,
+        PUFFOID_STATE_RETURN_HOME = 6,
+        PUFFOID_STATE_FOLLOW_PATH = 19
+    };
     CreatureVars_4318 *d = (CreatureVars_4318 *)moby->pvars;
     struct Moby *target;
     float pos[4];
@@ -3179,7 +3184,7 @@ void puffoid_update(struct Moby *moby) {
         moby->shadow_range = 0x16;
     }
     switch (moby->state) {
-    case 0:
+    case PUFFOID_STATE_INITIALIZE:
         d->unk20 = 2.0f;
         d->unk24 = 2;
         d->unk28 = 1;
@@ -3345,7 +3350,7 @@ void puffoid_update(struct Moby *moby) {
         pos[2] += 0.333f;
         spray_4318(moby, pos, D_L11_001622CC * 0.6f, 1, 1.0f, 1.0f, 0, 1, 0);
         break;
-    case 6:
+    case PUFFOID_STATE_RETURN_HOME:
         if (vector_distance_4318(&moby->pos, d->home) < 1.0f) {
             moby->state = 2;
             if (moby->prev_seq != 0) {
@@ -3527,7 +3532,7 @@ void puffoid_update(struct Moby *moby) {
             return;
         }
         break;
-    case 19: {
+    case PUFFOID_STATE_FOLLOW_PATH: {
         float vel[4];
         float lim;
         float dist;
