@@ -2260,6 +2260,7 @@ void horny_toad_update(Moby *moby) {
         HORNY_TOAD_ROAM = 5,
         HORNY_TOAD_APPROACH_AND_FACE_TARGET = 6,
         HORNY_TOAD_RETURN_HOME = 8,
+        HORNY_TOAD_MOVE_TO_POINT_OR_FACE_TARGET = 10,
         HORNY_TOAD_DYING = 12
     };
     ToadVars *data;
@@ -2405,7 +2406,7 @@ void horny_toad_update(Moby *moby) {
             if (moby->prev_seq != 4) FUN_00212f90_2d4610(moby, 4, 0, scale_game_frames(10));
         }
         break;
-    case 10: {
+    case HORNY_TOAD_MOVE_TO_POINT_OR_FACE_TARGET: {
         fast_vec_sub(v, data->unk180, (*(ToadVec *)&moby->pos));
         v[2] = 0.0f;
         normalize_vector_xyz(v, v, 2.5f);
