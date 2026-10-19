@@ -6476,6 +6476,7 @@ extern float D_L06_0015F400;
 void FUN_L06_00301b90(unsigned char *m) {
     enum {
         INITIALIZE_ENTITY = 0,
+        WAIT_FOR_LINKED_SEQUENCE_COMPLETION = 2,
         ADVANCE_CAMERA_ALONG_PATH = 3
     };
     char *d = *(char **)(m + 0x78);
@@ -6501,7 +6502,7 @@ void FUN_L06_00301b90(unsigned char *m) {
         m[0x20] = 2;
         FUN_L06_00302400((struct Moby *)m, 0);
         return;
-    case 2: {
+    case WAIT_FOR_LINKED_SEQUENCE_COMPLETION: {
         int *p;
         float r;
         if (FUN_L06_003047f8((const u8 *)D_L06_0015FFD8_301b90 + (*(int *)(d + 0x2C) << 8)) != 2) return;
