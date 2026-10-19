@@ -152,6 +152,9 @@ extern int func_001F9908_r(int *) __asm__("FUN_001f9740");
 
 extern int D_L16_0015F6EC;
 void FUN_L16_002270c8(void) {
+    enum {
+        HERO_STATE_WATER_DEATH = 106
+    };
     unsigned char *moby;
     int prevSub;
     int prevState;
@@ -477,7 +480,7 @@ void FUN_L16_002270c8(void) {
                 case 71:
                 case 87:
                 case 98:
-                case 106:
+                case HERO_STATE_WATER_DEATH:
                 case 128:
                 case 130:
                     if (hero.unkA98 & 2) {
