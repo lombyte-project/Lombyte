@@ -502,6 +502,8 @@ extern f32 D_L08_00161F70 __attribute__((sda));
 void FUN_L08_002f44c0(struct Moby *moby)
 {
     enum {
+        PATH_FOLLOWER_INITIALIZE_HEIGHT_OFFSET = 0,
+        PATH_FOLLOWER_CHECK_HIT_AND_PROXIMITY = 1,
         PATH_FOLLOWER_FOLLOW_PATH = 2,
         PATH_FOLLOWER_FADE_OUT = 3
     };
@@ -514,13 +516,13 @@ void FUN_L08_002f44c0(struct Moby *moby)
     f32 distance;
 
     switch (moby->state) {
-    case 0: {
+    case PATH_FOLLOWER_INITIALIZE_HEIGHT_OFFSET: {
         fade = moby->pos.z;
         moby->state = 1;
         moby->pos.z = fade + 0.4f;
         return;
     }
-    case 1: {
+    case PATH_FOLLOWER_CHECK_HIT_AND_PROXIMITY: {
         s32 active = find_moby_hit_44c0(moby, 0x330000, 0);
         distance = FUN_001f9b80_44c0(&moby->pos, D_0013F3D0);
         if ((distance < 2.0f && *(s32 *)(D_0013F3D0 + 0x2004) == 0x42) || *(struct Moby **)(D_0013F3D0 + 0x1bc) == moby) {
