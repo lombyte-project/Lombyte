@@ -577,17 +577,21 @@ typedef struct {
 } VendorEventData;
 
 void FUN_L08_00307540(struct Moby *moby) {
+    enum {
+        VENDOR_EVENT_WAIT_FOR_ARMING = 0,
+        VENDOR_EVENT_ARMED = 1
+    };
     VendorEventData *data = *(VendorEventData **)((char *)moby + 0x78);
     s32 elapsed;
     s32 time;
     f32 volume[4];
 
     switch (data->state) {
-    case 0:
+    case VENDOR_EVENT_WAIT_FOR_ARMING:
         if (is_point_inside_clip_volume(&hero.motion.pos, data->third) && hero.state.control_mode == 15)
             data->state = 1;
         break;
-    case 1:
+    case VENDOR_EVENT_ARMED:
         if (hero.state.current == 0x42) {
             data->state = 0;
         } else if (is_point_inside_clip_volume(&hero.motion.pos, data->fourth) && item_unlocked[11] == 0) {
