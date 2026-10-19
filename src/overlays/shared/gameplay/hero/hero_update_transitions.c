@@ -160,7 +160,9 @@ extern int func_001F9908_r(int *) __asm__("FUN_001f9740");
 void hero_update_transitions(void) __asm__("FUN_L00_00229b70");
 void hero_update_transitions(void) {
     enum {
-        HERO_STATE_GRIND_RAIL_TRANSFER = 42
+        HERO_STATE_GRIND_JUMP = 41,
+        HERO_STATE_GRIND_RAIL_TRANSFER = 42,
+        HERO_STATE_GRIND_ATTACK = 43
     };
     unsigned char *moby;
     int prevSub;
@@ -1313,9 +1315,9 @@ void hero_update_transitions(void) {
                     }
                     break;
                 case HERO_STATE_GRIND:
-                case 41:
+                case HERO_STATE_GRIND_JUMP:
                 case HERO_STATE_GRIND_RAIL_TRANSFER:
-                case 43:
+                case HERO_STATE_GRIND_ATTACK:
                 case 66:
                     if (hero.state.current == 0x42) {
                         hero.unk5BE = 0;
