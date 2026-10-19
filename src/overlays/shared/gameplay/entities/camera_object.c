@@ -572,7 +572,8 @@ void vendor_update(P_2a57a8 *p) {
     enum {
         VENDOR_INITIALIZE = 0,
         VENDOR_WAIT_FOR_HERO = 1,
-        VENDOR_HERO_NEARBY = 2
+        VENDOR_HERO_NEARBY = 2,
+        VENDOR_ZERO_AUXILIARY_SCALE = 3
     };
     Q_2a57a8 *q = p->q;
     s32 i, a, b, c;
@@ -675,7 +676,7 @@ void vendor_update(P_2a57a8 *p) {
             p->b20 = 3;
         }
         break;
-    case 3:
+    case VENDOR_ZERO_AUXILIARY_SCALE:
         if (q->mC) {
             q->f90 = 0.0f;
             q->mC->f2C = q->mC->p24->f24 * q->f90 * 2.5f;
