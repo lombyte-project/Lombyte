@@ -1443,7 +1443,7 @@ int hero_set_state(int a, int b) {
         break;
     }
     case HERO_STATE_WRENCH_COMBO:
-    case 0x14:
+    case HERO_STATE_WRENCH_SLAM:
     case 0x15:
     case 0x20:
     case 0x23:
@@ -1456,7 +1456,7 @@ int hero_set_state(int a, int b) {
         *(int *)&p->unkA54 = 0;
         p->unkA64 = 0;
         switch (p->state.current) {
-        case 0x14: {
+        case HERO_STATE_WRENCH_SLAM: {
             struct UsageStat *h = usage_stats.stat;
             struct Hero *q;
             if (h[0].count <= 0xFFFE) {
