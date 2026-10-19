@@ -544,6 +544,15 @@ struct PokKeeperVars {
 /* NPC that talks to the hero, then walks a chain of level path points ahead of him, opening the
    gate mobys (FUN_L11_0030a840) and moving path points as it goes. */
 void FUN_L11_002d14b0(void *arg) {
+    enum {
+        RESORT_OWNER_INITIALIZE = 0,
+        RESORT_OWNER_INITIAL_DIALOGUE = 2,
+        RESORT_OWNER_MOVE_TO_PATH_POINT = 6,
+        RESORT_OWNER_JUMP_TO_TARGET = 7
+    };
+    enum {
+        RESORT_OWNER_FINAL_PATH_LEG = 3
+    };
     struct Moby *moby = arg;
     struct PokKeeperVars *d = (struct PokKeeperVars *)moby->pvars;
     int proximity = FUN_L11_002d2460(moby);
@@ -565,7 +574,7 @@ void FUN_L11_002d14b0(void *arg) {
         }
     }
     switch (moby->state) {
-    case 0:
+    case RESORT_OWNER_INITIALIZE:
         initialize_npc_dialogue(moby, d->talk);
         moby->update_dist = 0xFF;
         FUN_L05_0028be78(&d->unk60[0], 1, d->unk70[0]);
@@ -620,7 +629,7 @@ void FUN_L11_002d14b0(void *arg) {
             FUN_L11_002d2088_c(moby, 3);
         }
         break;
-    case 2:
+    case RESORT_OWNER_INITIAL_DIALOGUE:
         if (D_L11_0015F5C4 != 2)
             FUN_L11_002d2088_c(moby, 3);
         break;
@@ -643,7 +652,7 @@ void FUN_L11_002d14b0(void *arg) {
         else if (vector_distance(&moby->pos, &hero.motion.pos) < 4.0f)
             FUN_L11_002d2088_c(moby, 4);
         break;
-    case 6:
+    case RESORT_OWNER_MOVE_TO_PATH_POINT:
         FUN_L11_002d2340(moby, (char *)&path_points_14b0[d->points[d->leg]].pos);
         if (vector_distance(&moby->pos, &d->target) < 1.0f) {
             switch (d->leg) {
@@ -677,7 +686,7 @@ void FUN_L11_002d14b0(void *arg) {
             case 2:
                 FUN_L11_002d2088_c(moby, 0xB);
                 break;
-            case 3:
+            case RESORT_OWNER_FINAL_PATH_LEG:
                 path_points_14b0[d->unk114].pos.z += 500.0f;
                 FUN_L11_002d2088_c(moby, 0xC);
                 break;
@@ -710,7 +719,7 @@ void FUN_L11_002d14b0(void *arg) {
             FUN_L11_002d2088_c(moby, 0xE);
         }
         break;
-    case 7:
+    case RESORT_OWNER_JUMP_TO_TARGET:
         if (moby->anim_flags & 2)
             FUN_L11_002d2088_c(moby, d->next_state);
         break;
