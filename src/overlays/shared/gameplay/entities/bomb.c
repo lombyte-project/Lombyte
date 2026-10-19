@@ -1704,6 +1704,13 @@ extern int rand_2cc608(void) __asm__("FUN_001160d8");
 /* Ryno (class 454) update: target lock and reticle while held, then the eight-missile salvo state machine. */
 void ryno_update(struct Moby *m) __asm__("FUN_L00_002cc608");
 void ryno_update(struct Moby *m) {
+    enum {
+        RYNO_STATE_INITIALIZE = 0,
+        RYNO_STATE_WAIT_ANIMATION = 1,
+        RYNO_STATE_READY_TO_FIRE = 2,
+        RYNO_STATE_FIRE_SALVO = 4,
+        RYNO_STATE_COOLDOWN = 5
+    };
     Mat3_2cc608 cam;
     Mat4_2cc608 view;
     Vec4 aim;
@@ -1751,16 +1758,16 @@ void ryno_update(struct Moby *m) {
         }
     }
     switch (m->state) {
-    case 0:
+    case RYNO_STATE_INITIALIZE:
         d->target = 0;
         hero.items[0].unk1C = 0;
         m->state = 1;
         d->track_timer = 0;
         break;
-    case 1:
+    case RYNO_STATE_WAIT_ANIMATION:
         if (m->anim_flags & 2) m->state = 2;
         break;
-    case 2:
+    case RYNO_STATE_READY_TO_FIRE:
         if (hero.state.current == 1) hud_2cc608(0x1E, 1);
         if ((controller_state.pressed & hero.items[0].button_mask) == 0) return;
         if (hero.unk20AC != 0) return;
@@ -1814,7 +1821,7 @@ void ryno_update(struct Moby *m) {
         }
         d->count = 0;
         break;
-    case 4:
+    case RYNO_STATE_FIRE_SALVO:
         if (timer16_2cc608(&d->shot_timer) == 0) return;
         d->shot_timer = ticks_2cc608(9);
         d->slot++;
@@ -1868,7 +1875,7 @@ void ryno_update(struct Moby *m) {
             }
         }
         break;
-    case 5:
+    case RYNO_STATE_COOLDOWN:
         if (timer16_2cc608(&d->shot_timer) == 0) return;
         d->shots = 0;
         d->target = 0;
