@@ -74,6 +74,10 @@ extern float D_L18_0016252C;
 extern char D_L18_001679D0[];
 /* Preserve the state-4 frame conversion and the state-7 raw-frame arithmetic. */
 void FUN_L18_002f88e8(struct Moby *moby) {
+    enum {
+        INITIALIZE_EFFECT_TIMING = 0,
+        UPDATE_SEQUENCE_EFFECTS = 1
+    };
     union { EffectRadii radii; struct { Vec4 pos, velocity; } vectors; } scratch;
     Vec4 direction, a, b;
     struct Moby *target;
@@ -83,7 +87,7 @@ void FUN_L18_002f88e8(struct Moby *moby) {
     int i, n;
 
     switch (moby->state) {
-    case 0:
+    case INITIALIZE_EFFECT_TIMING:
         D_L18_00162498 = 355;
         D_L18_0016249C = 365;
         D_L18_001624BC = 60;
@@ -93,7 +97,7 @@ void FUN_L18_002f88e8(struct Moby *moby) {
         moby->update_dist = 255;
         moby->state = 1;
         return;
-    case 1:
+    case UPDATE_SEQUENCE_EFFECTS:
         break;
     default:
         return;
