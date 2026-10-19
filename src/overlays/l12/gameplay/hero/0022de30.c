@@ -181,7 +181,7 @@ void FUN_L12_00233e80(void) {
         GRAVITY_OPPOSITE_GROUND_NORMAL = 1,
         GRAVITY_TOWARD_REFERENCE_POINT = 2
     };
-    V collision_ray_second_endpoint, ground_ray_first_endpoint, ground_geometry_scratch, ground_probe_first_endpoint, v40, hit_surface_angles, normalized_hit_normal;
+    V collision_ray_second_endpoint, ground_ray_first_endpoint, ground_geometry_scratch, ground_probe_first_endpoint, unused_ground_probe_output, hit_surface_angles, normalized_hit_normal;
     f32 f;
     s32 r;
     s32 i;
@@ -325,7 +325,7 @@ d1:
             a = -a;
         }
         FUN_L00_002335c8(&ground_probe_first_endpoint, 0.2f, a, 0.45f);
-        FUN_L00_002335c8(&v40, 0.2f, a, -0.45f);
+        FUN_L00_002335c8(&unused_ground_probe_output, 0.2f, a, -0.45f);
         if (FUN_001efa68_u(&ground_probe_first_endpoint, &collision_ray_second_endpoint, 0x22, (s32)hero.moby, 0)) {
             f = HH.point.f[2] - hero.ground_z.f;
             hero.unk2C0.f[i] = f;
