@@ -55,6 +55,9 @@ extern int D_L14_001621A4_s __asm__("D_L14_001620D4") __attribute__((sda));
 
 extern int D_L14_001620D8 __attribute__((sda));
 void FUN_L14_003015d0(unsigned char *m) {
+    enum {
+        BEAM_STATE_INITIALIZE = 0
+    };
     D1224 *d = *(D1224 **)(m + 0x78);
     float v[4] __attribute__((aligned(16)));
     int s;
@@ -71,7 +74,7 @@ void FUN_L14_003015d0(unsigned char *m) {
     }
     s = m[0x20];
     switch (s) {
-    case 0:
+    case BEAM_STATE_INITIALIZE:
         FUN_L14_003017f8((char *)m);
         d->s10 = scale_game_frames(d->wC);
         m[0x20] = 2;
