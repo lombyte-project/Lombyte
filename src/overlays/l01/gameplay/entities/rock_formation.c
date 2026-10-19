@@ -1398,6 +1398,13 @@ extern f32 FUN_001f99c0(f32);
 
 void door_left_update(HoverMoby *m) __asm__("FUN_L01_002fed68");
 void door_left_update(HoverMoby *m) {
+    enum {
+        DOOR_INITIALIZE = 0,
+        DOOR_CLOSED = 1,
+        DOOR_OPENING = 2,
+        DOOR_OPEN = 3,
+        DOOR_CLOSING = 4
+    };
     HoverVars *v;
     Vec4 *player;
     Vec4 off;
@@ -1405,12 +1412,12 @@ void door_left_update(HoverMoby *m) {
 
     v = m->vars;
     switch (m->state) {
-    case 0:
+    case DOOR_INITIALIZE:
         qcopy(&v->home, &m->pos);
         v->t = 0.0f;
         m->state = 1;
         break;
-    case 1:
+    case DOOR_CLOSED:
         player = &hero.motion.pos;
         if (vector_distance(v, player) < v->radius &&
             FUN_001f99c0(m->pos.f[2] - player->f[2]) < 2.0f) {
@@ -1420,14 +1427,14 @@ void door_left_update(HoverMoby *m) {
             }
         }
         break;
-    case 2:
+    case DOOR_OPENING:
         v->t += 1.0f / multiply_global_factor_ed64(20.0f);
         if (v->t >= 1.0f) {
             v->t = 1.0f;
             m->state = 3;
         }
         break;
-    case 3:
+    case DOOR_OPEN:
         k = 1.1f;
         if (vector_distance(v, &hero.motion.pos) > v->radius * k &&
             vector_distance(v, D_L01_00167240) > v->radius * k) {
@@ -1437,7 +1444,7 @@ void door_left_update(HoverMoby *m) {
             }
         }
         break;
-    case 4:
+    case DOOR_CLOSING:
         player = &hero.motion.pos;
         if (vector_distance(v, player) < v->radius &&
             FUN_001f99c0(m->pos.f[2] - player->f[2]) < 2.0f) {
