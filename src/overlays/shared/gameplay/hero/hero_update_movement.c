@@ -2319,7 +2319,7 @@ void hero_update_movement(void) {
         FUN_L00_0020b5b8();
         break;
     }
-    case 7:
+    case HERO_STATE_JUMP:
     case HERO_STATE_RUN_JUMP:
     case HERO_STATE_PACK_JUMP:
     case HERO_STATE_HIGH_JUMP:
