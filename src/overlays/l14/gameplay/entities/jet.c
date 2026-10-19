@@ -936,6 +936,10 @@ extern int mine_ftoi(float) __asm__("FUN_001fa6d0");
 
 /* Mine update: drifts along its looped path while spinning and pulsing; blows up on a hit. */
 void FUN_L14_002ec810(struct Moby *m) {
+    enum {
+        MINE_STATE_INITIALIZE = 0,
+        MINE_STATE_FOLLOW_PATH = 1
+    };
     L14MineVars *d = (L14MineVars *)m->pvars;
     float v[4];
     Vec4 vel;
@@ -948,7 +952,7 @@ void FUN_L14_002ec810(struct Moby *m) {
     int g;
 
     switch (m->state) {
-    case 0:
+    case MINE_STATE_INITIALIZE:
         if (d->path == -1) {
             mine_print(D_L14_001FCA98, m->save_id);
             mine_remove(m);
@@ -976,7 +980,7 @@ void FUN_L14_002ec810(struct Moby *m) {
         mine_clear(d->vel);
         d->phase = FUN_L00_00257c48(0.0f, 3.1415927f);
         break;
-    case 1:
+    case MINE_STATE_FOLLOW_PATH:
         FUN_L00_0025d808_mine(D_L14_001B0BB0_mine[d->path], v, &d->segment, &d->along, 1,
                               D_L14_00161C44 * D_0015ED6C_mine * d->dir);
         FUN_L00_0025b8c0(&m->pos.x, &d->vel[0], v[0], 0.02f, 0.2f, 0.0f);
