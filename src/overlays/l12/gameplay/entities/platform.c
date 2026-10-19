@@ -1296,6 +1296,8 @@ void platform_update(Moby *moby) {
     };
     enum {
         PLATFORM_KIND_FOLLOW_WAYPOINTS = 0,
+        PLATFORM_KIND_OSCILLATE_BETWEEN_PATH_ENDPOINTS = 1,
+        PLATFORM_KIND_OSCILLATE_BETWEEN_PATH_ENDPOINTS_FIXED_PITCH = 2,
         PLATFORM_KIND_TRACK_REFERENCED_MOBY_HEIGHT = 4
     };
     float oldPos[4];
@@ -1331,7 +1333,7 @@ void platform_update(Moby *moby) {
             clear_u64_value_c2(data->vel);
             moby->state = 7;
             break;
-        case 1:
+        case PLATFORM_KIND_OSCILLATE_BETWEEN_PATH_ENDPOINTS:
             (*(int *)&moby->collision) = (*(Class_2E51E8 **)&moby->pclass)->f10;
             data->walk.path = D_L12_001B0C30_2E51E8[data->walk.pathIdx];
             data->walk.idx = 0;
@@ -1343,7 +1345,7 @@ void platform_update(Moby *moby) {
             clear_u64_value_c2(data->vel);
             moby->state = 2;
             break;
-        case 2:
+        case PLATFORM_KIND_OSCILLATE_BETWEEN_PATH_ENDPOINTS_FIXED_PITCH:
             (*(int *)&moby->collision) = (*(Class_2E51E8 **)&moby->pclass)->f10;
             (*(float (*)[4])&moby->rot)[1] = -1.5707964f;
             (*(float (*)[4])&moby->rot)[2] = (*(float (*)[4])&moby->rot)[2] + 3.1415927f;
