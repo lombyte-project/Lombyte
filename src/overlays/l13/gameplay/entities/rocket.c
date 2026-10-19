@@ -454,11 +454,7 @@ bounds:
         moby->pos.z < 2.0f || moby->pos.z > 1021.0f)
         mark_moby_for_removal_c(moby);
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L13_003073c8.s", FUN_L13_003073c8);
-#else
-extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+
 extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
 extern float dot_vector_xyz(void *, void *) __asm__("FUN_001f9ab0");
 extern float vector_length_xyz(void *) __asm__("FUN_001f9af0");
@@ -466,7 +462,8 @@ extern void clamp_vector_length(void *, void *, float) __asm__("FUN_001f9c90");
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern char D_L13_001670C0[];
 typedef struct { int v[6]; } L13EffectColors;
-extern L13EffectColors D_L13_001F5560, D_L13_001F5578;
+extern L13EffectColors D_L13_001F5560;
+extern L13EffectColors D_L13_001F5578;
 extern char *FUN_L13_0030c138(void *, void *, int, int);
 extern void FUN_L00_0026a9f0(void *, void *, int, int, float, int, int, int, int, float);
 extern char *FUN_L00_002df808(void *, void *, void *, float, int, unsigned char, unsigned char, unsigned char, int);
@@ -501,8 +498,8 @@ void FUN_L13_003073c8(struct Moby *moby, void *vars) {
             work.random_vector.f[0] = FUN_002132a8(-1.0f, 1.0f);
             work.random_vector.f[1] = FUN_002132a8(-1.0f, 1.0f);
             random_direction = &work.random_direction;
-            offset = &work.offset;
             axis = &work.axis;
+            offset = &work.offset;
             random_direction->q = work.random_vector.q;
             amount = dot_vector_xyz(random_direction, axis);
             fast_vec_normalize(offset, axis, amount);
@@ -523,11 +520,11 @@ void FUN_L13_003073c8(struct Moby *moby, void *vars) {
         for (i = 0; i < 4; i++) {
             int lo, hi, duration;
             OvlVec4 *random_direction, *axis, *offset;
+            random_direction = &work.random_direction;
+            axis = &work.axis;
             work.random_vector.q = 0;
             work.random_vector.f[0] = FUN_002132a8(-1.0f, 1.0f);
             work.random_vector.f[1] = FUN_002132a8(-1.0f, 1.0f);
-            random_direction = &work.random_direction;
-            axis = &work.axis;
             offset = &work.offset;
             random_direction->q = work.random_vector.q;
             fast_vec_normalize(offset, axis, dot_vector_xyz(random_direction, axis));
@@ -617,7 +614,6 @@ void FUN_L13_003073c8(struct Moby *moby, void *vars) {
         FUN_L00_002df808(moby, &work.pos, &work.velocity, amount, duration, 0, 32, 0, 32);
     }
 }
-#endif
 struct BlastHit {
     u8 pad0[0x2C];
     f32 damage;
@@ -650,7 +646,7 @@ extern int hit_check_7b10(void *, void *, void *, int, int *, float *, int, int)
 extern void stop_moby_sound_7b10(void *, int, int) __asm__("FUN_L00_00257470");
 extern void anim_reset_7b10(struct Moby *, void *) __asm__("FUN_L00_0025d458");
 extern void anim_update_7b10(struct Moby *, void *) __asm__("FUN_L00_0025d538");
-extern void FUN_L13_003073c8(struct Moby *, void *);
+extern void FUN_L13_003073c8_u(struct Moby *, void *) __asm__("FUN_L13_003073c8");
 extern void FUN_L10_002e3de8(struct Moby *);
 extern int allocate_voice_7b10(int, int, int) __asm__("FUN_0022da68");
 extern int scale_game_frames_7b10(int) __asm__("FUN_001f96f8");
@@ -711,7 +707,7 @@ void poison_vessel_update(struct Moby *moby) {
                 vars->effect_level = 0x78;
                 anim_reset_7b10(moby, effects);
                 vars->timer = 0;
-                FUN_L13_003073c8(moby, vars);
+                FUN_L13_003073c8_u(moby, vars);
                 FUN_L10_002e3de8(moby);
                 allocate_voice_7b10(0, 0, (int)moby);
                 moby->state = 1;
