@@ -597,6 +597,10 @@ extern s32 FUN_L00_00258ad0(struct Moby *, Vec4 *, f32, f32, s32, s32);
 extern f32 normalize_angle(f32) __asm__("FUN_L00_0025e310");
 
 void FUN_L01_0030d880(struct Moby *m, struct HoverVars *p) {
+    enum {
+        HOVER_COMMAND_FACE_GOAL = 0,
+        HOVER_COMMAND_MOVE_TO_GOAL = 2
+    };
     Vec4 v;
     f32 d;
     f32 k;
@@ -614,7 +618,7 @@ void FUN_L01_0030d880(struct Moby *m, struct HoverVars *p) {
     }
     vector_distance(&m->pos, p);
     switch (m->command) {
-    case 0:
+    case HOVER_COMMAND_FACE_GOAL:
         ang = fast_arc_tan(p->goal.f[0] - m->pos.x, p->goal.f[1] - m->pos.y);
         FUN_L00_00258278(m, &D_L01_001DEB4C, ang, frame_time_sq * 6.2831855f, frame_time_sq * 3.1415927f,
                          frame_time * 11.519173f);
@@ -622,7 +626,7 @@ void FUN_L01_0030d880(struct Moby *m, struct HoverVars *p) {
             m->command = 2;
         }
         break;
-    case 2:
+    case HOVER_COMMAND_MOVE_TO_GOAL:
         if (p->target == 0) {
             ang = fast_arc_tan(p->goal.f[0] - m->pos.x, p->goal.f[1] - m->pos.y);
             FUN_L00_00258278(m, &D_L01_001DEB4C, ang, frame_time_sq * 6.2831855f, frame_time_sq * 3.1415927f,
