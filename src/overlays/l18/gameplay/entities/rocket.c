@@ -2179,10 +2179,13 @@ extern int D_L18_0015F404;
 extern int D_L18_00179E10[] __attribute__((section(".data")));
 extern int D_L18_0017EF08 __attribute__((section(".data")));
 void FUN_L18_002df608(struct Moby *moby) {
+    enum {
+        STATE_INITIALIZE = 0
+    };
     char *data = (char *)moby->pvars;
     float v[12];
     switch (moby->state) {
-    case 0:
+    case STATE_INITIALIZE:
         moby->state = 1;
         moby->update_dist = 0xFF;
         break;
