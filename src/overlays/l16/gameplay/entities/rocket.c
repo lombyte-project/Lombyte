@@ -317,10 +317,14 @@ extern void FUN_L01_002787a0(void *);
 void mark_moby_for_removal_u(struct Obj *obj) __asm__("FUN_0020c828");
 
 void FUN_L16_002d6740(struct Moby *moby) {
+    enum {
+        MOBY_STATE_INITIALIZE = 0,
+        MOBY_STATE_REMOVE_WITH_EFFECTS = 2
+    };
     int flag = 0;
     char *p = find_moby_hit(moby, 0x10000, 0);
     switch (moby->state) {
-    case 0:
+    case MOBY_STATE_INITIALIZE:
         moby->state = 1;
         break;
     case 1:
@@ -329,7 +333,7 @@ void FUN_L16_002d6740(struct Moby *moby) {
         if (flag)
             moby->state = 2;
         break;
-    case 2:
+    case MOBY_STATE_REMOVE_WITH_EFFECTS:
         allocate_voice_for_target_entry(0, 0, moby);
         FUN_L00_00257470(moby, 0, -1);
         FUN_L01_002787a0(moby);
