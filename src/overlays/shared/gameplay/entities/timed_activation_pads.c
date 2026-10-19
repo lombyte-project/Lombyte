@@ -371,7 +371,9 @@ void bridge_update(u8 *moby)
 {
     enum {
         BRIDGE_INITIALIZE = 0,
+        BRIDGE_WAIT_TO_MOVE_TO_OFFSET_POSITION = 1,
         BRIDGE_MOVE_TO_OFFSET_POSITION = 2,
+        BRIDGE_WAIT_TO_RETURN_TO_INITIAL_POSITION = 3,
         BRIDGE_RETURN_TO_INITIAL_POSITION = 4
     };
     u8 *data = *(u8 **)(moby + 0x78);
@@ -399,7 +401,7 @@ void bridge_update(u8 *moby)
         moby[0x20] = 1;
         *(s32 *)(data + 0xac) = 0;
         break;
-    case 1:
+    case BRIDGE_WAIT_TO_MOVE_TO_OFFSET_POSITION:
         if (*(s32 *)(data + 0xb0) != -1) {
             other = level_mobys + *(s32 *)(data + 0xb0) * 0x100;
             if (other != 0 && other[0x20] != 0xfe && other[0x20] != 0xfd &&
@@ -446,7 +448,7 @@ void bridge_update(u8 *moby)
                 play_sound_31aee0(*(s32 *)(data + 0xd0), 0, moby);
         }
         break;
-    case 3:
+    case BRIDGE_WAIT_TO_RETURN_TO_INITIAL_POSITION:
         if (*(s32 *)(data + 0xb0) != -1) {
             other = level_mobys + *(s32 *)(data + 0xb0) * 0x100;
             if (other != 0 && other[0x20] != 0xfe && other[0x20] != 0xfd &&
