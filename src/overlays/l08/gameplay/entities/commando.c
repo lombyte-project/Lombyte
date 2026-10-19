@@ -486,6 +486,10 @@ extern void FUN_L00_0025e450_44c0(char *, void *, char *, f32, f32, s32, s32, s3
 extern f32 D_L08_00161F70 __attribute__((sda));
 void FUN_L08_002f44c0(struct Moby *moby)
 {
+    enum {
+        PATH_FOLLOWER_FOLLOW_PATH = 2,
+        PATH_FOLLOWER_FADE_OUT = 3
+    };
     SwarmPathFollower *follower = (SwarmPathFollower *)moby->pvars;
     Vec4 point;
     Vec4 step;
@@ -519,7 +523,7 @@ void FUN_L08_002f44c0(struct Moby *moby)
         }
         return;
     }
-    case 2: {
+    case PATH_FOLLOWER_FOLLOW_PATH: {
         moby->pos.z -= 0.4f;
         if (follower->path_id == -1 || follower->path->count == 0) {
             mark_moby_for_removal_44c0(moby);
@@ -561,7 +565,7 @@ void FUN_L08_002f44c0(struct Moby *moby)
         moby->pos.z += 0.4f;
         return;
     }
-    case 3: {
+    case PATH_FOLLOWER_FADE_OUT: {
         Vec4 timer;
         timer.f[0] = (f32)moby->alpha;
         approach_value_44c0(&timer, 0.0f, 128.0f / (f32)scale_game_frames_44c0(30));
