@@ -1891,6 +1891,7 @@ void FUN_L02_00230988(void) {
         HERO_STATE_VEHICLE_FALL = 85,
         HERO_STATE_VEHICLE_HURT = 86,
         HERO_STATE_VEHICLE_DYING = 87,
+        HERO_STATE_VEHICLE_SLIP = 88,
         HERO_STATE_MOVE_TO_TARGET = 101,
         HERO_STATE_STOP_AT_TARGET = 102,
         HERO_STATE_IDLE_AT_TARGET = 103,
@@ -3486,7 +3487,7 @@ void FUN_L02_00230988(void) {
                         hero_set_state(0x54, 1);
                     }
                     break;
-                case 88:
+                case HERO_STATE_VEHICLE_SLIP:
                     if (scale_game_frames(0x12C) < hero.state_timer) {
                         hero_respawn();
                     }
