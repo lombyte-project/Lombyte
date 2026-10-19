@@ -648,6 +648,7 @@ extern int D_0015ED84_gp __asm__("D_0015ED84") __attribute__((section(".sdata"))
 int FUN_L05_00251be8(void) {
     enum {
         ITEM_WRENCH = 8,
+        ITEM_AMMO_MENU_DEVICE = 32,
         ITEM_RACE_PROJECTILE = 36
     };
     float joint_pos[4];
@@ -831,7 +832,7 @@ int FUN_L05_00251be8(void) {
         (*(Hero *)((char *)&hero)).unk22DE = 0x12;
         (*(Hero *)((char *)&hero)).unk22DC = 1;
         break;
-    case 32:
+    case ITEM_AMMO_MENU_DEVICE:
         if ((*(Hero *)((char *)&hero)).state.control_mode < 3U || (*(Hero *)((char *)&hero)).state.control_mode == 4 || (*(Hero *)((char *)&hero)).state.control_mode == 5) {
             if (FUN_L00_00266d60(mask, scale_game_frames_alt(8), 0)) {
                 FUN_L00_0029a6b0(0);
