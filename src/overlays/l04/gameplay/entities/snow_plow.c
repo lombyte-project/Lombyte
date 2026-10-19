@@ -1557,10 +1557,11 @@ float riser_rise_speed(struct Moby *moby) __asm__("FUN_L04_002e1768");
 
 float riser_rise_speed(struct Moby *moby) {
     enum {
+        RISER_CLASS_ASCENDING_WITH_COMPLETION_VOICE = 0x44D,
         RISER_CLASS_FAST_DESCENDING = 0x5FB
     };
     switch (moby->oclass) {
-    case 0x44D:
+    case RISER_CLASS_ASCENDING_WITH_COMPLETION_VOICE:
     case 0x5FC:
         return 1.3f;
     case RISER_CLASS_FAST_DESCENDING:
