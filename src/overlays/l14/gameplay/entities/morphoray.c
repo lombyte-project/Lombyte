@@ -669,11 +669,15 @@ extern void func_L00_0028EBF0_3071B0(int) __asm__("FUN_0022d798");
 extern char D_0013E633_3071B0[] __asm__("D_0013E550");
 
 void FUN_L14_00305d28(Moby_3071B0 *moby) {
+    enum {
+        HELPER_SEQUENCE_INITIALIZE = 0,
+        HELPER_SEQUENCE_WAIT_FOR_TRIGGER = 1
+    };
     Data_3071B0 *data = moby->data;
     float vec[4];
 
     switch (moby->state) {
-    case 0: {
+    case HELPER_SEQUENCE_INITIALIZE: {
         int i;
         if (data->owner == 0) {
             data->owner = func_L14_003075E0_3071B0(moby);
@@ -694,7 +698,7 @@ void FUN_L14_00305d28(Moby_3071B0 *moby) {
         }
         break;
     }
-    case 1:
+    case HELPER_SEQUENCE_WAIT_FOR_TRIGGER:
         if (((Moby_3071B0 *)(D_L14_0015FFD8_c + (data->trigger << 8)))->state == 2) {
             moby->state = 2;
             data->cur = 5;
