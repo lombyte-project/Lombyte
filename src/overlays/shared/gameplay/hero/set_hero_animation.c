@@ -855,7 +855,8 @@ void FUN_L00_002334d0(f32 *out, f32 *in, f32 k);
 void FUN_L00_002334d0(f32 *out, f32 *in, f32 k) {
     enum {
         GRAVITY_MODE_WORLD_Z = 0,
-        GRAVITY_MODE_VECTOR_AXIS = 1
+        GRAVITY_MODE_VECTOR_AXIS = 1,
+        GRAVITY_MODE_DIRECTION_AXIS = 2
     };
     struct Hero *b = &hero;
     V002334d0 t;
@@ -867,7 +868,7 @@ void FUN_L00_002334d0(f32 *out, f32 *in, f32 k) {
         FUN_001f9bf8_002334d0(&t, &b->unk270, -k);
         FUN_001f9a10_002334d0(out, in, &t);
         break;
-    case 2:
+    case GRAVITY_MODE_DIRECTION_AXIS:
         if (b->state.current == 0x3E && b->air_frames.s == 0) {
             FUN_001f9bf8_002334d0(&t, &b->unk270, -k);
         } else {
