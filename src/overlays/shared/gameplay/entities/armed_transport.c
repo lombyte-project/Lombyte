@@ -449,6 +449,7 @@ void grindrail_barrier_update(struct Moby *m) __asm__("FUN_L16_002e5708");
 void grindrail_barrier_update(struct Moby *m) {
     enum {
         GRINDRAIL_BARRIER_STATE_INITIALIZE = 0,
+        GRINDRAIL_BARRIER_STATE_COLLISION_ENABLED = 1,
         GRINDRAIL_BARRIER_STATE_COLLISION_DISABLED = 2
     };
     char *d = (char *)m->pvars;
@@ -460,7 +461,7 @@ void grindrail_barrier_update(struct Moby *m) {
         m->state = 1;
         m->update_dist = 0xFF;
         break;
-    case 1:
+    case GRINDRAIL_BARRIER_STATE_COLLISION_ENABLED:
         cycle = *(float *)(d + 0xC) + *(float *)&D_L16_00161E04 * frame_time;
         *(float *)(d + 0xC) = cycle;
         if (cycle > 1.0f)
