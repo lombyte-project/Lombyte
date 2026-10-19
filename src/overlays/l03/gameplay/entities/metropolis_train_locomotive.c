@@ -2292,6 +2292,10 @@ void FUN_L03_002c6fd0(Moby2C8398 *m) {
     enum {
         ENEMY_INITIALIZE = 0,
         ENEMY_MELEE_ATTACK = 6,
+        ENEMY_MOVE_TO_PATH_NODE = 7,
+        ENEMY_FOLLOW_PATH_TO_END = 8,
+        ENEMY_FOLLOW_ALTERNATE_PATH = 9,
+        ENEMY_FALL_UNDER_GRAVITY = 11,
         ENEMY_TURN_TO_HEADING = 12,
         ENEMY_HIDDEN_AT_PATH_START = 14,
         ENEMY_RESPAWN_AT_PATH_START = 15
@@ -2653,7 +2657,7 @@ void FUN_L03_002c6fd0(Moby2C8398 *m) {
         }
         break;
     }
-    case 7: {
+    case ENEMY_MOVE_TO_PATH_NODE: {
         PathF2C8398 *pf = &d->pf;
         if (d->s256 != 0) {
             m->state = 8;
@@ -2707,7 +2711,7 @@ void FUN_L03_002c6fd0(Moby2C8398 *m) {
         }
         break;
     }
-    case 8: {
+    case ENEMY_FOLLOW_PATH_TO_END: {
         {
             PathF2C8398 *pf = &d->pf;
             float v[4];
@@ -2735,7 +2739,7 @@ void FUN_L03_002c6fd0(Moby2C8398 *m) {
         }
         break;
     }
-    case 9: {
+    case ENEMY_FOLLOW_ALTERNATE_PATH: {
         {
             char *path = D_L03_001B05B0[d->i290];
             float v[4];
@@ -2842,7 +2846,7 @@ void FUN_L03_002c6fd0(Moby2C8398 *m) {
         }
         break;
     }
-    case 11: {
+    case ENEMY_FALL_UNDER_GRAVITY: {
         {
             Jump2C8398 *q = &d->q;
             float a[4];
