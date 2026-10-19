@@ -96,6 +96,7 @@ extern char D_L00_00161E00[];
 void FUN_L00_00245c28(void) {
     enum {
         LEVEL_MODE_MEMORY_CARD_DRAIN = 1,
+        LEVEL_MODE_CALLBACK_TABLE_UPDATE = 3,
         LEVEL_MODE_FREEZE = 4,
         LEVEL_MODE_GAME_STATE_UPDATE = 6
     };
@@ -188,7 +189,7 @@ void FUN_L00_00245c28(void) {
             FUN_L00_00298f90();
             prepare_debug_profiler_render();
             break;
-        case 3:
+        case LEVEL_MODE_CALLBACK_TABLE_UPDATE:
             register_audio_stream_callback();
             FUN_L00_00276bd0();
             FUN_L00_001f8f50();
