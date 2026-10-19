@@ -2717,7 +2717,8 @@ void sharkigator_update(unsigned char *moby) {
         SHARKIGATOR_TARGET_CONTACT_RECOIL_RECOVERY = 11,
         SHARKIGATOR_HIT_KNOCKBACK_RECOVERY = 12,
         SHARKIGATOR_HIT_ANIMATION_RECOVERY = 13,
-        SHARKIGATOR_DEATH_FALL_AND_REMOVE = 14
+        SHARKIGATOR_DEATH_FALL_AND_REMOVE = 14,
+        SHARKIGATOR_SMALL_WATER_GAP_GRAVITY_IDLE = 15
     };
     char *data;
     struct WalkerTarget target;
@@ -3173,7 +3174,7 @@ void sharkigator_update(unsigned char *moby) {
             ((void (*)(char *, char *))FUN_L07_0030ec58_c)((char *)moby, data);
         }
         goto end;
-    case 15:
+    case SHARKIGATOR_SMALL_WATER_GAP_GRAVITY_IDLE:
         fast_vec_scale_c(data + 0xD0, data + 0xD0, frame_scale * (0.95f - 1.0f) + 1.0f);
         F(data, 0xD8) -= frame_time * 9.8f;
         FUN_L00_00258ad0((int)moby, (int)(data + 0xD0), 0x400, 0x10, 1.0f, 0.0f);
