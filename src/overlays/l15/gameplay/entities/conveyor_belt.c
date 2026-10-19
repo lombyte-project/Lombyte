@@ -256,7 +256,7 @@ void poison_vessel_update(Moby_2E9358 *moby) {
         POISON_VESSEL_FOLLOW_TARGET = 1
     };
     Vec_2E9358 previous_position;
-    Vec_2E9358 s30;
+    Vec_2E9358 collision_scratch_vector;
     Vec_2E9358 temporary_vector;
     Data_2E9358 *data = moby->data;
     char *p20 = 0;
@@ -265,7 +265,7 @@ void poison_vessel_update(Moby_2E9358 *moby) {
     Res_2E9358 *r;
 
     previous_position.q = moby->pos;
-    clear_u64_value(&s30);
+    clear_u64_value(&collision_scratch_vector);
     if (coll_sphere(0.5f, &moby->pos, 1, moby)) {
         if (D_L15_001744D8_2E9358 == 0 || FUN_L00_002603d0(D_L15_001744D8_2E9358) == 0) {
             moby->bBC = 1;
@@ -291,8 +291,8 @@ void poison_vessel_update(Moby_2E9358 *moby) {
             } else if (((Tb_2E9358 *)D_L15_001744C0_2E9358)->f18 == D_001414D0_2E9358 || data->f8 < D_0015ED6C * -9.8f) {
                 moby->bBC = 1;
                 qcopy(&moby->pos, &((Tb_2E9358 *)D_L15_001744C0_2E9358)->v20);
-                func_L00_001FF610_2E9358(&s30, data, &((Tb_2E9358 *)D_L15_001744C0_2E9358)->v40);
-                func_L00_001FF4B0_2E9358(&s30, &s30, D_0015ED6C + D_0015ED6C);
+                func_L00_001FF610_2E9358(&collision_scratch_vector, data, &((Tb_2E9358 *)D_L15_001744C0_2E9358)->v40);
+                func_L00_001FF4B0_2E9358(&collision_scratch_vector, &collision_scratch_vector, D_0015ED6C + D_0015ED6C);
             }
         }
         break;
