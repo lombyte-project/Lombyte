@@ -91,6 +91,9 @@ int hero_set_state(int a, int b) {
         HERO_STATE_WRENCH_COMBO_ALT = 0x70,
         HERO_STATE_DEATH_FALL = 0x77
     };
+    enum {
+        HERO_STATE_HELD_ITEM_ATTACK = 0x20
+    };
     int old2088;
     char *moby;
     int old20A7;
@@ -1060,7 +1063,7 @@ int hero_set_state(int a, int b) {
     case HERO_STATE_WRENCH_COMBO:
     case HERO_STATE_WRENCH_SLAM:
     case HERO_STATE_CROUCH_SWING:
-    case 0x20:
+    case HERO_STATE_HELD_ITEM_ATTACK:
     case 0x23:
     case 0x51: {
         struct Hero *p = &hero;
@@ -1137,7 +1140,7 @@ int hero_set_state(int a, int b) {
             }
             break;
         }
-        case 0x20: {
+        case HERO_STATE_HELD_ITEM_ATTACK: {
             struct Hero *q = &hero;
             if (((void *)q->items[0].moby) == 0)
                 break;
