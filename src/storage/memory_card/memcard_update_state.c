@@ -99,6 +99,17 @@ void memcard_update_state(void) {
         MEMCARD_DELETE_REQUEST_DIRECTORY_DELETE = 3,
         MEMCARD_DELETE_PROCESS_DIRECTORY_DELETE_RESULT = 4
     };
+    enum {
+        MEMCARD_READ_SAVE_REQUEST_OPEN = 0,
+        MEMCARD_READ_SAVE_PROCESS_OPEN_RESULT = 1,
+        MEMCARD_READ_SAVE_REQUEST_HEADER_READ = 2,
+        MEMCARD_READ_SAVE_PROCESS_HEADER_READ_RESULT = 3,
+        MEMCARD_READ_SAVE_REQUEST_MAIN_DATA_READ = 4,
+        MEMCARD_READ_SAVE_PROCESS_MAIN_DATA_READ_RESULT = 5,
+        MEMCARD_READ_SAVE_REQUEST_RECORD_READ = 6,
+        MEMCARD_READ_SAVE_PROCESS_RECORD_READ_RESULT = 7,
+        MEMCARD_READ_SAVE_REQUEST_CLOSE = 8
+    };
     char name[0x40];
 
     if (MC.busy) {
@@ -602,7 +613,7 @@ void memcard_update_state(void) {
     case 14:
     case MEMCARD_READ_SCANNED_SAVE_INFO:
         switch (MC.sub) {
-        case 0:
+        case MEMCARD_READ_SAVE_REQUEST_OPEN:
             if (MC.state == 23) {
                 sprintf(name, D_0013D270, CARD.scan_save_index);
             } else {
@@ -612,7 +623,7 @@ void memcard_update_state(void) {
                 MC.sub++;
             }
             break;
-        case 1:
+        case MEMCARD_READ_SAVE_PROCESS_OPEN_RESULT:
             if (MC.result >= 0) {
                 MC.fd = MC.result;
                 MC.sub = 2;
@@ -636,13 +647,13 @@ void memcard_update_state(void) {
             }
             MC.busy = 0;
             break;
-        case 2:
+        case MEMCARD_READ_SAVE_REQUEST_HEADER_READ:
             MC.size = 8;
             if (sceMcRead(MC.fd, &CARD.main_size, 8) == 0) {
                 MC.sub = 3;
             }
             break;
-        case 3:
+        case MEMCARD_READ_SAVE_PROCESS_HEADER_READ_RESULT:
             if (MC.result == MC.size) {
                 MC.busy = 0;
                 MC.sub = 4;
@@ -673,7 +684,7 @@ void memcard_update_state(void) {
             MC.cur = 0;
             MC.busy = 0;
             break;
-        case 4:
+        case MEMCARD_READ_SAVE_REQUEST_MAIN_DATA_READ:
             MC.size = CARD.main_size;
             if (MC.size > 0x1800) {
                 RaiseKernelTrap();
@@ -682,7 +693,7 @@ void memcard_update_state(void) {
                 MC.sub = 5;
             }
             break;
-        case 5:
+        case MEMCARD_READ_SAVE_PROCESS_MAIN_DATA_READ_RESULT:
             if (MC.result == MC.size) {
                 if (MC.state == 23) {
                     memcard_restore_info(D_0014EED0, MC.cur, CARD.scan_save_index);
@@ -719,7 +730,7 @@ void memcard_update_state(void) {
             MC.cur = 0;
             MC.busy = 0;
             break;
-        case 6:
+        case MEMCARD_READ_SAVE_REQUEST_RECORD_READ:
             MC.size = CARD.record_size;
             if (MC.size > 0x1000) {
                 RaiseKernelTrap();
@@ -728,7 +739,7 @@ void memcard_update_state(void) {
                 MC.sub = 7;
             }
             break;
-        case 7:
+        case MEMCARD_READ_SAVE_PROCESS_RECORD_READ_RESULT:
             if (MC.result == MC.size) {
                 CARD.errors += memcard_restore_data(D_001506D0, MC.record_index, mc_leveldata);
                 if (++MC.record_index < 20) {
@@ -764,7 +775,7 @@ void memcard_update_state(void) {
             MC.cur = 0;
             MC.busy = 0;
             break;
-        case 8:
+        case MEMCARD_READ_SAVE_REQUEST_CLOSE:
             if (sceMcClose(MC.fd) == 0) {
                 if (MC.state == 23) {
                     MC.busy = 0;
