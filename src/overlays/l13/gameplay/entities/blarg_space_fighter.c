@@ -2305,6 +2305,7 @@ typedef struct {
 void FUN_L13_002e4448(char *moby) {
     enum {
         INITIALIZE_LINKED_GROUP = 0,
+        WAIT_FOR_LINKED_GROUP_COMPLETION = 2,
         RESET_HIT_STATE = 3,
         UPDATE_OPENED_STATE = 4
     };
@@ -2345,7 +2346,7 @@ void FUN_L13_002e4448(char *moby) {
         moby[0x20] = 1;
         break;
     case 1:
-    case 2:
+    case WAIT_FOR_LINKED_GROUP_COMPLETION:
         if (data->unk74 == 0 && hit != 0) {
             char *linked;
             SwitchVars *linked_data;
