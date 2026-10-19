@@ -151,7 +151,8 @@ void FUN_L17_002258a8(void) {
     enum {
         HERO_STATE_GRIND_JUMP = 41,
         HERO_STATE_GRIND_RAIL_TRANSFER = 42,
-        HERO_STATE_GRIND_ATTACK = 43
+        HERO_STATE_GRIND_ATTACK = 43,
+        HERO_STATE_GRIND_OBSTACLE_JUMP = 66
     };
     unsigned char *moby;
     int prevSub;
@@ -1306,7 +1307,7 @@ void FUN_L17_002258a8(void) {
                 case HERO_STATE_GRIND_JUMP:
                 case HERO_STATE_GRIND_RAIL_TRANSFER:
                 case HERO_STATE_GRIND_ATTACK:
-                case 66:
+                case HERO_STATE_GRIND_OBSTACLE_JUMP:
                     if (hero.state.current == 0x42) {
                         hero.unk5BE = 0;
                     } else {
