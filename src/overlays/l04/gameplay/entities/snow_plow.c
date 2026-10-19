@@ -91,6 +91,10 @@ void snow_plow_update(struct Moby *moby) {
         SNOW_PLOW_CLASS_WITH_QUARTER_TURN_LINKED_MOBY = 0x1e0,
         SNOW_PLOW_CLASS_WITH_ALIGNED_LINKED_MOBY = 0x1ee
     };
+    enum {
+        SNOW_PLOW_CLASS_OFFSET_WITH_QUARTER_TURN_LINKED_MOBY = 0xe,
+        SNOW_PLOW_CLASS_OFFSET_WITH_ALIGNED_LINKED_MOBY = 0x1c
+    };
     Vec4 old;
     Vec4 delta, *d;
     /* The sphere query is its position followed by the record; the hit cases pass one or the other. */
@@ -210,7 +214,7 @@ void snow_plow_update(struct Moby *moby) {
     }
     if (!state) {
         switch ((short)(moby->oclass - 0x1d2)) {
-        case 0: case 0xe: case 0x13: case 0x14: case 0x1c: case 0x1d: case 0x20: case 0x59:
+        case 0: case SNOW_PLOW_CLASS_OFFSET_WITH_QUARTER_TURN_LINKED_MOBY: case 0x13: case 0x14: case SNOW_PLOW_CLASS_OFFSET_WITH_ALIGNED_LINKED_MOBY: case 0x1d: case 0x20: case 0x59:
             attach_manipulator((char *)moby, 0, data + 0x180);
             *(int *)(data + 0x140) = 0;
             break;
@@ -223,11 +227,11 @@ void snow_plow_update(struct Moby *moby) {
         }
     } else {
         switch ((short)(moby->oclass - 0x1d2)) {
-        case 0: case 0xe:
+        case 0: case SNOW_PLOW_CLASS_OFFSET_WITH_QUARTER_TURN_LINKED_MOBY:
             *(float *)(data + 0x140) = fast_add_rotations(*(float *)(data + 0x140), frame_time * 12.566371f);
             FUN_L00_001fff28(data + 0x190, 0, *(float *)(data + 0x140));
             break;
-        case 0x13: case 0x14: case 0x1c: case 0x1d: case 0x20: case 0x59:
+        case 0x13: case 0x14: case SNOW_PLOW_CLASS_OFFSET_WITH_ALIGNED_LINKED_MOBY: case 0x1d: case 0x20: case 0x59:
             *(float *)(data + 0x140) = fast_add_rotations(*(float *)(data + 0x140), frame_time * 12.566371f);
             FUN_L00_001fff28(data + 0x190, 2, *(float *)(data + 0x140));
             break;
@@ -285,7 +289,7 @@ hit:
             clear_vector(&sphere_pos);
             sphere.zero = 0;
             collect_mobies_in_sphere(&moby->pos, 4.0f, 0x10, moby, &sphere_pos);
-        case 0: case 0xe: case 0x16: case 0x18: case 0x1c: case 0x1d: case 0x20: case 0x59:
+        case 0: case SNOW_PLOW_CLASS_OFFSET_WITH_QUARTER_TURN_LINKED_MOBY: case 0x16: case 0x18: case SNOW_PLOW_CLASS_OFFSET_WITH_ALIGNED_LINKED_MOBY: case 0x1d: case 0x20: case 0x59:
             delta.q = 0;
             delta.f[2] = 0.75f;
             clear_vector(&sphere_pos);
