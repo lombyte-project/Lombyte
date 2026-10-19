@@ -1639,7 +1639,7 @@ int hero_set_state(int a, int b) {
         break;
     }
     case HERO_STATE_JUMP:
-    case 9:
+    case HERO_STATE_RUN_JUMP:
     case HERO_STATE_PACK_JUMP:
     case HERO_STATE_HIGH_JUMP:
     case 0xC:
