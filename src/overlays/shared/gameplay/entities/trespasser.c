@@ -2381,6 +2381,7 @@ extern int D_L00_00161838_macro __asm__("D_L00_00161838") __attribute__((section
 void devestator_ammo_update(struct Moby *m) __asm__("FUN_L00_002c53c0");
 void devestator_ammo_update(struct Moby *m) {
     enum {
+        AMMO_PICKUP_INITIALIZE = 0,
         AMMO_PICKUP_WAIT_FOR_COLLECTION = 1,
         AMMO_PICKUP_COLLECTED = 2,
         AMMO_PICKUP_PULSE_ALPHA = 3,
@@ -2422,7 +2423,7 @@ void devestator_ammo_update(struct Moby *m) {
         }
     }
     switch (m->state) {
-    case 0:
+    case AMMO_PICKUP_INITIALIZE:
         m->state = 1;
         break;
     case AMMO_PICKUP_WAIT_FOR_COLLECTION: {
