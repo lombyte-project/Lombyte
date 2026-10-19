@@ -2689,7 +2689,10 @@ extern void func_L00_002A5158_30D8E8(void *, int, int, float, float, float, floa
 void sharkigator_update(unsigned char *moby) __asm__("FUN_L07_0030f5f0");
 void sharkigator_update(unsigned char *moby) {
     enum {
+        SHARKIGATOR_TARGET_PURSUIT = 4,
+        SHARKIGATOR_TARGET_LUNGE_INTERPOLATION = 5,
         SHARKIGATOR_HIT_KNOCKBACK_RECOVERY = 12,
+        SHARKIGATOR_HIT_ANIMATION_RECOVERY = 13,
         SHARKIGATOR_DEATH_FALL_AND_REMOVE = 14
     };
     char *data;
@@ -2891,7 +2894,7 @@ void sharkigator_update(unsigned char *moby) {
             moby[0x20] = next_state;
         }
         goto end;
-    case 4: {
+    case SHARKIGATOR_TARGET_PURSUIT: {
         float angle;
         float pitch;
         int close = 1;
@@ -2938,7 +2941,7 @@ void sharkigator_update(unsigned char *moby) {
         }
         goto end;
     }
-    case 5: {
+    case SHARKIGATOR_TARGET_LUNGE_INTERPOLATION: {
         float angle;
         char *mpos;
         char *start;
@@ -3125,7 +3128,7 @@ void sharkigator_update(unsigned char *moby) {
             ((void (*)(char *, char *))FUN_L07_0030ec58_c)((char *)moby, data);
         }
         goto end;
-    case 13:
+    case SHARKIGATOR_HIT_ANIMATION_RECOVERY:
         if (moby[0x70] & 2) {
             ((void (*)(char *, char *))FUN_L07_0030ec58_c)((char *)moby, data);
         }
