@@ -994,12 +994,15 @@ extern void FUN_L12_00308350(struct Moby *);
 
 /* Pvars: d[0] is the moby to watch, d[1] the voice slot held for this moby. */
 void FUN_L12_003081b0(struct Moby *m) {
+    enum {
+        CHECK_PERSISTENT_REMOVAL = 0
+    };
     int st = m->state;
     int vis;
     int *d = (int *)m->pvars;
 
     switch (st) {
-    case 0:
+    case CHECK_PERSISTENT_REMOVAL:
         if (m->mission != 0xFF && visited52[m->mission + current_level_index * 16] == 0xFF) {
             mark_moby_for_removal(m);
             break;
