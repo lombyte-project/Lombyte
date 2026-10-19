@@ -2944,7 +2944,9 @@ extern unsigned char *func_L00_00273F80_r(float *pos, char *vel, int color, unsi
 void spiderbot_update(unsigned char *moby) __asm__("FUN_L15_002a6e68");
 void spiderbot_update(unsigned char *moby) {
     enum {
-        SPIDERBOT_INITIALIZE = 0
+        SPIDERBOT_INITIALIZE = 0,
+        SPIDERBOT_CIRCULAR_MOTION = 1,
+        SPIDERBOT_LINEAR_OSCILLATION = 3
     };
     float old[4];
     float A[4];
@@ -2971,7 +2973,7 @@ void spiderbot_update(unsigned char *moby) {
             moby[0x20] = 3;
         }
         break;
-    case 1: {
+    case SPIDERBOT_CIRCULAR_MOTION: {
         *(u128_2A8090 *)C = 0;
         C[2] = *(float *)(d + 0x24);
         *(u128_2A8090 *)D = 0;
@@ -3021,7 +3023,7 @@ void spiderbot_update(unsigned char *moby) {
         *(unsigned short *)(moby + 0x34) |= 0x100;
         break;
     }
-    case 3: {
+    case SPIDERBOT_LINEAR_OSCILLATION: {
         float w;
         float x;
         w = fast_cos_c4(*(float *)(d + 0x28)) * *(float *)(d + 0x24);
