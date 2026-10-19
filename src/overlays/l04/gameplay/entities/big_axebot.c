@@ -1145,6 +1145,7 @@ void FUN_L04_002c1b80(struct Moby *m) {
         CIRCULAR_SAW_ANIM_MOVE_FORWARD = 1,
         CIRCULAR_SAW_ANIM_MOVE_BACKWARD = 2,
         CIRCULAR_SAW_ANIM_JUMP = 5,
+        CIRCULAR_SAW_ANIM_ALERT = 6,
         CIRCULAR_SAW_ANIM_ATTACK = 7
     };
     EngineSoundVars *v = (EngineSoundVars *)m->pvars;
@@ -1176,7 +1177,7 @@ void FUN_L04_002c1b80(struct Moby *m) {
             volume = engine_int_to_float(0x400);
             break;
         case CIRCULAR_SAW_ANIM_JUMP:
-        case 6:
+        case CIRCULAR_SAW_ANIM_ALERT:
         case CIRCULAR_SAW_ANIM_ATTACK:
             pitch = 0.0f;
             volume = engine_int_to_float(0x400) * 0.8f;
