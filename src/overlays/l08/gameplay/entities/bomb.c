@@ -320,7 +320,8 @@ void FUN_L08_002d23f0(char *moby) {
     enum {
         BOMB_STATE_MOVING = 1,
         BOMB_STATE_STATIONARY_FUSE = 2,
-        BOMB_STATE_EXPLODE_AND_REMOVE = 0x62
+        BOMB_STATE_EXPLODE_AND_REMOVE = 0x62,
+        BOMB_STATE_BURST_AND_REMOVE = 0x63
     };
     union Coll_36F8 c;
     blk16 table_or_bounce_scratch;
@@ -450,7 +451,7 @@ void FUN_L08_002d23f0(char *moby) {
         FUN_L00_0025e450_c3(moby, D_L08_0015F580_macro, 0, 0.0f, 0.0f, 7, 10, 20, 3.0f, 1.7f, 4.0f, 1.0f, -1, 7.0f, 0, 7, -1, 0);
         mark_moby_for_removal(moby);
         return;
-    case 0x63: {
+    case BOMB_STATE_BURST_AND_REMOVE: {
         char *p;
         allocate_voice_for_target_entry(0, 0, moby);
         p = moby + 0x10;
