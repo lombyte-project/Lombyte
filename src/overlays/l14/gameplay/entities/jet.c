@@ -2577,7 +2577,9 @@ extern void func_00215F80_f13f8(int, int) __asm__("FUN_00215130");
 void FUN_L14_002f13f8(struct Moby *moby) {
     enum {
         TAXI_STOP_RETURN_HUB = 0,
-        TAXI_STOP_HUB_OUTBOUND_DESTINATION = 1
+        TAXI_STOP_HUB_OUTBOUND_DESTINATION = 1,
+        TAXI_STOP_RETURN_FEEDER_ORIGIN = 2,
+        TAXI_STOP_RETURN_FEEDER_DESTINATION = 3
     };
     char *data = (char *)moby->pvars;
     int v = *(short *)(data + 0xB4);
@@ -2591,10 +2593,10 @@ void FUN_L14_002f13f8(struct Moby *moby) {
     case TAXI_STOP_HUB_OUTBOUND_DESTINATION:
         func_00215F80_f13f8(4, 0x53EE);
         break;
-    case 2:
+    case TAXI_STOP_RETURN_FEEDER_ORIGIN:
         func_00215F80_f13f8(4, 0x53EE);
         break;
-    case 3:
+    case TAXI_STOP_RETURN_FEEDER_DESTINATION:
         func_00215F80_f13f8(4, 0x53EE);
         break;
     case 4:
