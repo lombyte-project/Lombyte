@@ -36,7 +36,7 @@ extern void FUN_L00_001ff300(void *, void *, f32) __asm__("FUN_001f9a68");
 extern void FUN_L00_001f7980(void) __asm__("FUN_001f2d98");
 extern void FUN_L00_00276128(void);
 extern void FUN_L00_001f6e48(void) __asm__("FUN_001f2260");
-extern void FUN_L00_00122298(s32) __asm__("FUN_00122298");
+extern int FUN_L00_00122298(s32) __asm__("FUN_00122298");
 extern void FUN_L00_00283908(s32);
 extern void FUN_L00_002468b8(void) __asm__("FUN_L00_002468b8");
 extern void FUN_L00_00234fd0(s32) __asm__("FUN_L00_00234fd0");

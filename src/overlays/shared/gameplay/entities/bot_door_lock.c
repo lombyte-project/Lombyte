@@ -12,7 +12,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00307578.s", FUN_L06_00307578);
 extern u64 get_effect_texture(s32) __asm__("FUN_001f44b8");
 extern void euler_rotation_basis(void *, void *) __asm__("FUN_001fa030");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
-extern void draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
+extern int draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
 extern float D_L06_00167400[];
 extern OvlVec4 D_L06_001fe8d0[];
 extern float D_L06_001fe960[][2];

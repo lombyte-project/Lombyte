@@ -275,7 +275,7 @@ extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern void spawn_effect(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");
 extern void spawn_second_effect(void *, void *, int, int, int, int, float) __asm__("FUN_L00_0026cbb0");
-extern void FUN_L05_0024cee8(int, int);
+extern int FUN_L05_0024cee8(int, int);
 extern int frame_number_gp __asm__("D_L05_0015F5CC") __attribute__((sda));
 extern unsigned short D_00141938 __attribute__((section(".data")));
 extern unsigned short D_00141C60 __attribute__((section(".data")));

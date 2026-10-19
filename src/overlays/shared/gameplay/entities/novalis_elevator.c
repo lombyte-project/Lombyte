@@ -2775,8 +2775,8 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002f5168.s", FUN_L01_002f5168);
 #else
 extern float FUN_00222150_2f5168(short) __asm__("FUN_001fa6c0");
 extern int FUN_L01_00275690(float, char *);
-extern void FUN_L00_0026e150_2f5168(void *, int, int, int) __asm__("FUN_L00_002591d0");
-extern void FUN_L00_0026e238_2f5168(void *, char *, int, int) __asm__("FUN_L00_002592b8");
+extern int FUN_L00_0026e150_2f5168(void *, int, int, int) __asm__("FUN_L00_002591d0");
+extern int FUN_L00_0026e238_2f5168(void *, char *, int, int) __asm__("FUN_L00_002592b8");
 extern short FUN_00220e30_2f5168(int) __asm__("FUN_001f96f8");
 extern int FUN_00220ea8_2f5168(void *) __asm__("FUN_001f9770");
 extern float FUN_00221360_2f5168(void *, void *) __asm__("FUN_001f9b48");

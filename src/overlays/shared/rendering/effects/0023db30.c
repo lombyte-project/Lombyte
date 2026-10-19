@@ -22,7 +22,7 @@ extern void FUN_L00_001ff3c0(void *, void *, void *);
 extern void FUN_L00_001ff500(float, void *, void *);
 extern void scale_to_0023db30(float, void *, void *) __asm__("FUN_L00_001ff300");
 extern void FUN_L00_001ff278(void *, void *, void *);
-extern void FUN_L00_001ff260(void *);
+extern float FUN_L00_001ff260(void *);
 extern void FUN_L00_001fd228(void *, void *, int);
 extern char D_L00_0015FC0A;
 

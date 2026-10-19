@@ -1909,7 +1909,7 @@ extern void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
 extern void lerp_vector(void *, void *, void *, float) __asm__("FUN_001f9a40");
 extern float fast_arc_sin(float) __asm__("FUN_001f9df8");
 extern float rope_spring_turn(void *, float, float, float, float, float) __asm__("FUN_L00_001eb328");
-extern void interpolate_vector(void *, void *, void *, float) __asm__("FUN_L00_0025b6b8");
+extern int interpolate_vector(void *, void *, void *, float) __asm__("FUN_L00_0025b6b8");
 extern void release_particle(void *) __asm__("FUN_L00_00267a08");
 extern char *FUN_L00_0026d000(void *, int, void *, int, float, float, float, float);
 extern int D_L07_00161B84_gp __asm__("D_L07_00161B84") __attribute__((sda));

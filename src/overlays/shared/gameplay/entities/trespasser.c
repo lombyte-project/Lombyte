@@ -723,7 +723,7 @@ extern float FUN_001f9b80_2c1928(void *, void *) __asm__("FUN_001f9b80");
 extern u8 *FUN_002141f8_2c26c8(struct Moby *) __asm__("FUN_002141f8");
 extern int FUN_001efa68_002c82f0(void *, void *, int, void *, int) __asm__("FUN_001efa68");
 extern void FUN_001f9c90_2bffa8(void *, void *, float) __asm__("FUN_001f9c90");
-extern void FUN_L00_001ff600_2bffa8(void *, void *, float) __asm__("FUN_L00_001ff600");
+extern int FUN_L00_001ff600_2bffa8(void *, void *, float) __asm__("FUN_L00_001ff600");
 extern void FUN_001e93b0_2bffa8(void *) __asm__("FUN_001e93b0");
 extern char D_L00_001E9B48[], D_L00_001E9B70[];
 extern s32 D_L00_00177F00[];

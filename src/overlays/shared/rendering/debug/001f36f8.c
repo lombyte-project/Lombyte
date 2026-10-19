@@ -480,7 +480,7 @@ extern const char D_L00_001E7958[];
 extern const char D_L00_001E7970[];
 extern const char D_L00_001E7990[];
 extern u8 D_L00_0015EFD0[] __attribute__((sda));
-extern void sound_update(void) __asm__("FUN_0022ca50");
+extern int sound_update(void) __asm__("FUN_0022ca50");
 extern void set_background_color(s32, s32, s32) __asm__("FUN_001fb280");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
