@@ -168,7 +168,8 @@ void update_hoverboard_girl(HoverboardGirlMoby *moby) __asm__("FUN_L05_00316ab8"
 void update_hoverboard_girl(HoverboardGirlMoby *moby) {
     enum {
         HOVERBOARD_GIRL_STATE_INITIALIZE = 0,
-        HOVERBOARD_GIRL_STATE_UPDATE_DIALOGUE = 1
+        HOVERBOARD_GIRL_STATE_UPDATE_DIALOGUE = 1,
+        HOVERBOARD_GIRL_STATE_WAIT_TO_RESUME_DIALOGUE = 3
     };
     HoverboardGirlState *state = moby->data;
     HoverboardGirlVector target_position;
@@ -250,7 +251,7 @@ void update_hoverboard_girl(HoverboardGirlMoby *moby) {
             }
         }
         break;
-    case 3:
+    case HOVERBOARD_GIRL_STATE_WAIT_TO_RESUME_DIALOGUE:
         if (game_mode != 2) {
             moby->state = 1;
             if (state->previous_dialogue_state == 4) {
