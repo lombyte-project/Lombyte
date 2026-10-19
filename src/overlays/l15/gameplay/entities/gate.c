@@ -868,6 +868,7 @@ void construction_arm_update(struct Moby *moby)
         CONSTRUCTION_ARM_WAIT_TO_TURN = 1,
         CONSTRUCTION_ARM_TURN_TO_TARGET_YAW = 2,
         CONSTRUCTION_ARM_WAIT_FOR_ENTRY_ANIMATION = 3,
+        CONSTRUCTION_ARM_WAIT_TO_START_EXIT_ANIMATION = 4,
         CONSTRUCTION_ARM_WAIT_FOR_EXIT_ANIMATION = 5,
         CONSTRUCTION_ARM_DESTROY = 6
     };
@@ -946,7 +947,7 @@ void construction_arm_update(struct Moby *moby)
             moby->state = 4;
         }
         break;
-    case 4:
+    case CONSTRUCTION_ARM_WAIT_TO_START_EXIT_ANIMATION:
         if (FUN_001f9b48(&moby->pos, D_L15_001673C0) < 20.0f &&
             random_integer_below(2) == 0 && moby->visible != 0) {
             speed = random_float_between(D_L15_001619FC / 5.0f, D_L15_001619FC) * frame_time;
