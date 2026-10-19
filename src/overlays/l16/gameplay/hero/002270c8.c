@@ -157,7 +157,8 @@ void FUN_L16_002270c8(void) {
         HERO_STATE_GRIND_RAIL_TRANSFER = 42,
         HERO_STATE_GRIND_ATTACK = 43,
         HERO_STATE_GRIND_COLLISION_RECOVERY = 66,
-        HERO_STATE_WATER_DEATH = 106
+        HERO_STATE_WATER_DEATH = 106,
+        HERO_STATE_DEATH_FALL = 119
     };
     unsigned char *moby;
     int prevSub;
@@ -1714,7 +1715,7 @@ void FUN_L16_002270c8(void) {
                         hero_set_state(HERO_STATE_GRIND, 1);
                     }
                     break;
-                case 119:
+                case HERO_STATE_DEATH_FALL:
                     if ((current_level_index == 3 && 5.0f > hero.motion.pos.f[2]) ||
                         (current_level_index == 6 && 50.0f > hero.motion.pos.f[2]) ||
                         (current_level_index == 0x10 && (77.0f > hero.motion.pos.f[2] ||
