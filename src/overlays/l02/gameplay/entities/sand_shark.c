@@ -2565,6 +2565,14 @@ extern int D_0015EEA4_gp __asm__("D_0015EEA4") __attribute__((sda));
 /* Aridia lift: carries the hero between two stops, with its two rail mobys, gears and a camera path. */
 void transport_pod_update(unsigned char *moby) __asm__("FUN_L02_002ddc88");
 void transport_pod_update(unsigned char *moby) {
+    enum {
+        TRANSPORT_POD_INITIALIZE = 0,
+        TRANSPORT_POD_TIMED_GEAR_MOVEMENT = 2,
+        TRANSPORT_POD_WAIT_FOR_RIDER_OR_RECALL = 5,
+        TRANSPORT_POD_ADVANCE_RIDE_CAMERA = 9,
+        TRANSPORT_POD_WAIT_FOR_RIDER_TO_LEAVE = 13,
+        TRANSPORT_POD_CREATE_RAILS = 14
+    };
     Varsdc88 *d = *(Varsdc88 **)(moby + 0x78);
     int i;
     int *path;
@@ -2587,7 +2595,7 @@ void transport_pod_update(unsigned char *moby) {
         }
     }
     switch (moby[0x20]) {
-    case 0:
+    case TRANSPORT_POD_INITIALIZE:
         moby[0x30] = 0xFF;
         moby[0xBC] = 1;
         qcopy(moby + 0x10, D_L02_001600EC_n[d->node_b].pos);
@@ -2619,7 +2627,7 @@ void transport_pod_update(unsigned char *moby) {
             moby[0x20] = 2;
         }
         break;
-    case 2:
+    case TRANSPORT_POD_TIMED_GEAR_MOVEMENT:
         s = D_0015ED6C * 5.0f;
         fast_vec_normalize(&a, (char *)D_L02_0015FFD8 + (d->gear[0] << 8) + 0xC0, -s);
         fast_vec_add((char *)D_L02_0015FFD8 + (d->gear[0] << 8) + 0x10,
@@ -2661,7 +2669,7 @@ void transport_pod_update(unsigned char *moby) {
             moby[0x20] = 5;
         }
         break;
-    case 5:
+    case TRANSPORT_POD_WAIT_FOR_RIDER_OR_RECALL:
         if (moby[0xBC] == 0 &&
             vector_distance(&hero.motion.pos, D_L02_001600EC_n[d->node_b].pos) < 16.0f) {
             qcopy(moby + 0x10, D_L02_001600EC_n[d->node_b].pos);
@@ -2763,7 +2771,7 @@ void transport_pod_update(unsigned char *moby) {
             FUN_L02_002f8a18(2, scale_ticks(0xB4));
         }
         break;
-    case 9:
+    case TRANSPORT_POD_ADVANCE_RIDE_CAMERA:
         FUN_00213f38(&d->cam_pos, &d->cam_speed, (float)d->cam_goal, d->cam_max, d->cam_max, d->cam_accel);
         if (d->cam_goal != 0 ? (float)d->cam_goal <= d->cam_pos : d->cam_pos <= (float)d->cam_goal) {
             moby[0x20] = 10;
@@ -2814,12 +2822,12 @@ void transport_pod_update(unsigned char *moby) {
             moby[0x20] = 5;
         }
         break;
-    case 13:
+    case TRANSPORT_POD_WAIT_FOR_RIDER_TO_LEAVE:
         if ((unsigned char *)hero.ground_moby != (struct Moby *)moby) {
             moby[0x20] = 5;
         }
         break;
-    case 14:
+    case TRANSPORT_POD_CREATE_RAILS:
         d->rail_a = create_moby(0x421);
         *(short *)(d->rail_a + 0x32) = 0x40;
         d->rail_a[0x31] = 1;
