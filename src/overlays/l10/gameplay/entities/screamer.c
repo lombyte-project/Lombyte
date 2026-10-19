@@ -3265,11 +3265,17 @@ extern int tick_countdown_e9648(int *) __asm__("FUN_001f9740");
 /* Level 10 door: swings open once the hero enters its clip volume and sets its save bit; starts open when the bit is already set. */
 void gate_1_update(struct Moby *moby) __asm__("FUN_L10_002e9648");
 void gate_1_update(struct Moby *moby) {
+    enum {
+        GATE_STATE_INITIALIZE = 0,
+        GATE_STATE_CLOSED = 1,
+        GATE_STATE_OPENING = 2,
+        GATE_STATE_OPEN = 3
+    };
     DoorVars_e9648 *vars = (DoorVars_e9648 *)moby->pvars;
     unsigned short save_id;
 
     switch (moby->state) {
-    case 0:
+    case GATE_STATE_INITIALIZE:
         moby->update_dist = 0xFF;
         if (D_001413F4_e9648[0] == 0) {
             save_id = moby->save_id;
@@ -3283,7 +3289,7 @@ void gate_1_update(struct Moby *moby) {
         moby->rot.y = fast_add_rotations(moby->rot.y, -1.3962634f);
         moby->state = 3;
         return;
-    case 1:
+    case GATE_STATE_CLOSED:
         if (hero.vehicle_mode != 0)
             goto open;
         save_id = moby->save_id;
@@ -3307,12 +3313,12 @@ void gate_1_update(struct Moby *moby) {
         vars->timer = truncate_float_e9648(FUN_L04_001f1978(90.0f));
         moby->state = 2;
         return;
-    case 2:
+    case GATE_STATE_OPENING:
         moby->rot.y = fast_add_rotations(moby->rot.y, -1.3962634f / FUN_L04_001f1978(90.0f));
         if (tick_countdown_e9648(&vars->timer))
             moby->state = 3;
         return;
-    case 3:
+    case GATE_STATE_OPEN:
         if (D_001413F4_e9648[0] != 0)
             return;
         save_id = moby->save_id;
