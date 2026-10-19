@@ -180,6 +180,12 @@ extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 
 void FUN_L07_0031b3f0(struct Moby *moby) {
+    enum {
+        SWING_GATE_INITIALIZE = 0,
+        SWING_GATE_WAIT_FOR_OPEN_CONDITION = 1,
+        SWING_GATE_SWINGING = 3,
+        SWING_GATE_RETURN_TO_ZERO = 4
+    };
     struct SwingGateVars *vars = (struct SwingGateVars *)moby->pvars;
     struct Moby *target;
     float f;
@@ -187,12 +193,12 @@ void FUN_L07_0031b3f0(struct Moby *moby) {
     if (vars == 0)
         return;
     switch (moby->state) {
-    case 0:
+    case SWING_GATE_INITIALIZE:
         moby->rot.y = 0;
         moby->state = 1;
         vars->vel = 0;
         break;
-    case 1:
+    case SWING_GATE_WAIT_FOR_OPEN_CONDITION:
         if (vars->target != -1 && (target = &D_L07_0015FFD8[vars->target]) != 0 &&
             target->state != 0xFE && target->state != 0xFD && target->state != vars->openState)
             return;
@@ -203,7 +209,7 @@ void FUN_L07_0031b3f0(struct Moby *moby) {
         break;
     case 2:
         break;
-    case 3:
+    case SWING_GATE_SWINGING:
         vars->vel = fast_add_rotations(vars->vel, fast_cos(moby->rot.y) * (vars->speed * frame_time));
         moby->rot.y = fast_add_rotations(moby->rot.y, vars->vel);
         vars->vel = vars->vel * vars->damp;
@@ -214,7 +220,7 @@ void FUN_L07_0031b3f0(struct Moby *moby) {
             return;
         moby->state = 4;
         break;
-    case 4:
+    case SWING_GATE_RETURN_TO_ZERO:
         if (vars->target == -1 || (target = &D_L07_0015FFD8[vars->target]) == 0 ||
             target->state == 0xFE || target->state == 0xFD || target->state == vars->openState) {
             FUN_0022da68(0, 0, moby);
