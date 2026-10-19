@@ -24,6 +24,9 @@ extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68"
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 
 void FUN_L03_0029d1b8(struct Moby *moby) {
+    enum {
+        MOBY_CLASS_TWO_JOINT_PARTICLE_EMITTER = 0x74
+    };
     char *data = (char *)moby->pvars;
     int r;
     float f;
@@ -32,7 +35,7 @@ void FUN_L03_0029d1b8(struct Moby *moby) {
     case 0x40:
     case 0x4B:
     case 0x73:
-    case 0x74:
+    case MOBY_CLASS_TWO_JOINT_PARTICLE_EMITTER:
     case 0x76:
     case 0x77:
         if (*(short *)(data + 0x148) == -1) {
