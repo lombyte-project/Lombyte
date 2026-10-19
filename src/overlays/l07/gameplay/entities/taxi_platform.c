@@ -3204,8 +3204,10 @@ extern float D_0013F448;
 void FUN_L07_003112c8(char *moby) {
     enum {
         PLATFORM_INITIALIZE = 0,
+        PLATFORM_COMMAND_GATED_SWAY = 1,
         PLATFORM_TIMED_SWAY_BEFORE_FALL = 2,
         PLATFORM_TILT_AND_FALL = 3,
+        PLATFORM_PARENT_GATED_RECOVERY_SETUP = 4,
         PLATFORM_HEIGHT_RECOVERY_AND_SWAY = 5
     };
     char *data = *(char **)(moby + 0x78);
@@ -3262,7 +3264,7 @@ void FUN_L07_003112c8(char *moby) {
             moby[0x20] = 5;
         }
         break;
-    case 1:
+    case PLATFORM_COMMAND_GATED_SWAY:
         if (((unsigned char *)moby)[0xBC] != 1) break;
         if (*(int *)(data + 0xAC) == 0)
             *(int *)(data + 0xAC) = rand() % 10;
@@ -3308,7 +3310,7 @@ void FUN_L07_003112c8(char *moby) {
             }
         }
         break;
-    case 4:
+    case PLATFORM_PARENT_GATED_RECOVERY_SETUP:
         if (((unsigned char *)parent_data)[0xEF] < 2 && ((unsigned char *)parent)[0x20] > 11) break;
         *(float *)(data + 0xB0) = random_float_between_alt(frame_time, frame_time * 4.0f);
         *(float *)(data + 0xC0) = random_angle_radians();
