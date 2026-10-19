@@ -1211,6 +1211,7 @@ void FUN_L13_00308d10(struct Moby *moby) {
         HIT_RESULT_NONE = 0,
         HIT_RESULT_DEATH = 1,
         HIT_RESULT_DYING_KNOCKBACK = 2,
+        HIT_RESULT_STUN_KNOCKBACK = 3,
         HIT_RESULT_NO_REACTION = 11
     };
     struct WalkerVars_8d10 *vars = (struct WalkerVars_8d10 *)moby->pvars;
@@ -1246,7 +1247,7 @@ void FUN_L13_00308d10(struct Moby *moby) {
         case HIT_RESULT_NONE:
         case HIT_RESULT_NO_REACTION:
             break;
-        case 3:
+        case HIT_RESULT_STUN_KNOCKBACK:
         case 4:
         case 5:
         case 6:
