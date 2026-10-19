@@ -2237,7 +2237,11 @@ extern void taxi_sample_f(s32 *, int, void *, void *, int, float) __asm__("FUN_0
 void taxi_update(struct Moby *moby) __asm__("FUN_L14_002f0538");
 void taxi_update(struct Moby *moby) {
     enum {
-        TAXI_STATE_INITIALIZE = 0
+        TAXI_STATE_INITIALIZE = 0,
+        TAXI_STATE_WAIT_AT_STOP = 1,
+        TAXI_STATE_BLEND_STOP_TO_PATH_START = 3,
+        TAXI_STATE_BLEND_PATH_END_TO_STOP = 5,
+        TAXI_STATE_BLEND_SAVED_POSE_TO_PATH_START = 7
     };
     L14TaxiVars *d = (L14TaxiVars *)moby->pvars;
     float previous_position[4], previous_rotation[4], position_delta[4], v30[4], blend_to_position[4], blend_from_rotation[4], blend_to_rotation[4], hero_relative_position[4];
@@ -2255,7 +2259,7 @@ void taxi_update(struct Moby *moby) {
         d->sound = -1;
         FUN_L14_002f1040(moby);
         break;
-    case 1: {
+    case TAXI_STATE_WAIT_AT_STOP: {
         struct Hero *g = &hero;
         if (g->ground_moby == moby && g->air_frames.s == 0) {
             transpose_rotation_matrix(v30, &moby->rot_row0);
@@ -2331,7 +2335,7 @@ void taxi_update(struct Moby *moby) {
         }
         break;
     }
-    case 3: {
+    case TAXI_STATE_BLEND_STOP_TO_PATH_START: {
         struct Hero *g = &hero;
         if (g->ground_moby == moby && g->air_frames.s == 0) {
             FUN_L00_002e8450(0, 7.0f, 0.002f);
@@ -2350,7 +2354,7 @@ void taxi_update(struct Moby *moby) {
         }
         break;
     }
-    case 7: {
+    case TAXI_STATE_BLEND_SAVED_POSE_TO_PATH_START: {
         float f;
         advance_accelerated_scalar_c(1.0f, frame_time_sq, frame_time_sq, frame_time * 0.5f, &d->t, &d->tv);
         qcopy(v30, d->save_pos);
@@ -2379,7 +2383,7 @@ void taxi_update(struct Moby *moby) {
         }
         break;
     }
-    case 5: {
+    case TAXI_STATE_BLEND_PATH_END_TO_STOP: {
         struct Hero *g;
         advance_accelerated_scalar_c(1.0f, frame_time_sq, frame_time_sq, frame_time * 0.25f, &d->t, &d->tv);
         qcopy_nc(blend_to_position, D_L14_001600EC_taxi[d->points[d->target]].pos);
