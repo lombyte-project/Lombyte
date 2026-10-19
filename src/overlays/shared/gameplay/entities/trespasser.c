@@ -3327,6 +3327,7 @@ void glove_of_doom_update(struct Moby *moby) __asm__("FUN_L00_002c7a58");
 void glove_of_doom_update(struct Moby *moby) {
     enum {
         GLOVE_INITIALIZE = 0,
+        GLOVE_WAIT_FOR_ANIMATION = 1,
         GLOVE_RELEASE_HELD_MOBY = 3
     };
     OvlVec4 pos;
@@ -3372,7 +3373,7 @@ void glove_of_doom_update(struct Moby *moby) {
         } else {
             moby->state = 1;
         }
-    case 1:
+    case GLOVE_WAIT_FOR_ANIMATION:
         if (moby->anim_flags & 2) {
             moby->state = 2;
         }
