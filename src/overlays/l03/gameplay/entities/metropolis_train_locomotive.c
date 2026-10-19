@@ -1017,6 +1017,7 @@ char *FUN_L03_002bad40(struct Moby *parent, int unused, int color, int a3, int a
 void FUN_L03_0029caa8(char *moby, void *vel_in, int quiet) {
     enum {
         MOBY_CLASS_ALTERNATE_COLOR_CHILD_EFFECT_EMITTER = 0x4B,
+        MOBY_CLASS_TEN_PARTICLE_BURST_EMITTER = 0x73,
         MOBY_CLASS_TWO_JOINT_PARTICLE_EMITTER = 0x74,
         MOBY_CLASS_FIFTEEN_PARTICLE_BURST_EMITTER = 0x76,
         MOBY_CLASS_DEFAULT_COLOR_CHILD_EFFECT_EMITTER = 0x77
@@ -1054,7 +1055,7 @@ void FUN_L03_0029caa8(char *moby, void *vel_in, int quiet) {
             }
         }
         break;
-    case 0x73:
+    case MOBY_CLASS_TEN_PARTICLE_BURST_EMITTER:
     case 0x75:
     case 0x78:
     case 0x84:
