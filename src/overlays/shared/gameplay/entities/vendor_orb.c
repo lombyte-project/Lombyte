@@ -2034,7 +2034,9 @@ extern short D_L00_00161D80 __attribute__((sda));
 void FUN_L00_002e4fe8(char *m, float *out_focus_velocity) {
     enum {
         CAM_ATTACH_GROUND_AWARE_FOCUS_VELOCITY = 2,
+        CAM_ATTACH_BLEND_TO_PROJECT_HERO_FOCUS_VELOCITY = 3,
         CAM_ATTACH_PROJECT_HERO_FOCUS_VELOCITY = 4,
+        CAM_ATTACH_BLEND_FOCUS_VELOCITY_WITH_HOLD_TRANSITION = 5,
         CAM_ATTACH_BLEND_OUT_FOCUS_VELOCITY = 6,
         CAM_ATTACH_BLEND_BACK_FOCUS_VELOCITY = 7,
         CAM_ATTACH_HOLD_FOCUS_VELOCITY = 8,
@@ -2119,8 +2121,8 @@ void FUN_L00_002e4fe8(char *m, float *out_focus_velocity) {
             FUN_001f9a28(e, tmp, out_focus_velocity);
         }
         break;
-    case 3:
-    case 5:
+    case CAM_ATTACH_BLEND_TO_PROJECT_HERO_FOCUS_VELOCITY:
+    case CAM_ATTACH_BLEND_FOCUS_VELOCITY_WITH_HOLD_TRANSITION:
     case CAM_ATTACH_BLEND_OUT_FOCUS_VELOCITY:
     case CAM_ATTACH_BLEND_BACK_FOCUS_VELOCITY:
         lerp_vector((float)*(short *)(e + 0xD4) * *(float *)(e + 0xCC), e + 0x10, e + 0x30,
