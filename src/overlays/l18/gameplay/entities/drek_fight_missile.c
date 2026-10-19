@@ -3167,6 +3167,7 @@ int FUN_L18_002f70b8(struct Moby *moby) {
         BOSS_ACTION_CHOICE_REPOSITION_AND_AIM = 1,
         BOSS_ACTION_CHOICE_TARGET_GROUND_POINTS = 2,
         BOSS_ACTION_CHOICE_TARGET_RANDOM_ARENA_POINTS = 3,
+        BOSS_ACTION_CHOICE_TARGET_SIDE_GROUND_POINTS = 4,
         BOSS_ACTION_CHOICE_FOLLOW_HERO = 5
     };
     char *data = (char *)moby->pvars;
@@ -3189,7 +3190,7 @@ int FUN_L18_002f70b8(struct Moby *moby) {
         case BOSS_ACTION_CHOICE_TARGET_RANDOM_ARENA_POINTS:
             state = 0x10;
             break;
-        case 4:
+        case BOSS_ACTION_CHOICE_TARGET_SIDE_GROUND_POINTS:
             state = 0x11;
             break;
         case BOSS_ACTION_CHOICE_FOLLOW_HERO:
