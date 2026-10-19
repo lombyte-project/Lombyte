@@ -2039,7 +2039,8 @@ void FUN_L13_0030b628(struct Moby *moby) {
         WAIT_FOLLOWUP_SCENE = 10,
         WAIT_LINKED_MOBY_REMOVAL_BEFORE_SAVE = 11,
         ENTER_LINKED_MOBY_CLEANUP_WAIT = 12,
-        WAIT_TO_REMOVE_LINKED_MOBY = 13
+        WAIT_TO_REMOVE_LINKED_MOBY = 13,
+        FINALIZE_LINKED_MOBY_CLEANUP = 14
     };
     int *data = (int *)moby->pvars;
     switch (moby->state) {
@@ -2204,7 +2205,7 @@ after_state_4:
             mark_moby_for_removal(moby);
         }
         break;
-    case 14:
+    case FINALIZE_LINKED_MOBY_CLEANUP:
         moby->flags |= 2;
         break;
     }
