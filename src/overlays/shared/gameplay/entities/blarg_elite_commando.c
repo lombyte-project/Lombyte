@@ -548,7 +548,8 @@ s32 allocate_voice_for_bank_entry(s32 arg1, s32 arg0, s32 arg2) __asm__("FUN_002
 
 void FUN_L16_002d38b0(struct Moby *m) {
     enum {
-        HIT_RESPONSE_FATAL = 1
+        HIT_RESPONSE_FATAL = 1,
+        HIT_RESPONSE_NO_REACTION = 11
     };
     L16DamageScratch scratch;
     L16DamageData *d = (L16DamageData *)m->pvars;
@@ -655,7 +656,7 @@ void FUN_L16_002d38b0(struct Moby *m) {
             break;
         }
         case 0:
-        case 11:
+        case HIT_RESPONSE_NO_REACTION:
         default:
             break;
         }
