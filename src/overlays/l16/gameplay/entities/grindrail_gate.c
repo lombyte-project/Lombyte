@@ -370,6 +370,9 @@ void bolt_thief_update(L16CrateMoby *moby) {
         BOLT_THIEF_INITIALIZE = 0,
         BOLT_THIEF_FACE_HERO = 1,
         BOLT_THIEF_WAIT_FOR_HERO_TRIGGER = 2,
+        BOLT_THIEF_SETTLE_AT_PATH_END = 3,
+        BOLT_THIEF_FOLLOW_PRIMARY_PATH = 4,
+        BOLT_THIEF_FOLLOW_OTHER_PATH = 5,
         BOLT_THIEF_KNOCKBACK = 6
     };
     L16CrateData *d = moby->data;
@@ -463,7 +466,7 @@ void bolt_thief_update(L16CrateMoby *moby) {
             moby->state = 4;
         }
         break;
-    case 4:
+    case BOLT_THIEF_FOLLOW_PRIMARY_PATH:
         if (d->mode == 0)
             FUN_L14_002fec28(moby);
         if (FUN_L16_002e3fa0((char *)moby)) {
@@ -472,7 +475,7 @@ void bolt_thief_update(L16CrateMoby *moby) {
         }
         FUN_L14_002feca8(moby);
         break;
-    case 3: {
+    case BOLT_THIEF_SETTLE_AT_PATH_END: {
         L16CrateData *a = moby->data;
         char *path = D_L16_001B0930[a->path];
         float target[4];
@@ -504,7 +507,7 @@ void bolt_thief_update(L16CrateMoby *moby) {
         FUN_L14_002feca8(moby);
         break;
     }
-    case 5:
+    case BOLT_THIEF_FOLLOW_OTHER_PATH:
         if (FUN_L16_002e3fa0((char *)moby)) {
             char *path;
 
