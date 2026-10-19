@@ -799,6 +799,7 @@ void FUN_L07_002f5ba0(struct Moby *moby)
         CONTROLLER_WAIT_FOR_OPEN_VOLUME = 4,
         CONTROLLER_WAIT_FOR_FIRST_OPEN_SCENE = 5,
         CONTROLLER_WAIT_FOR_SECOND_OPEN_SCENE = 6,
+        CONTROLLER_CLEAR_LINKED_MOBY_FLAGS = 7,
         CONTROLLER_WAIT_FOR_FINISH_VOLUME = 8,
         CONTROLLER_WAIT_FOR_FINISH_VOLUME_SCENE = 9,
         CONTROLLER_WAIT_TO_START_FINAL_SCENE = 10,
@@ -873,7 +874,7 @@ void FUN_L07_002f5ba0(struct Moby *moby)
         }
         moby->state = 7;
         break;
-    case 7:
+    case CONTROLLER_CLEAR_LINKED_MOBY_FLAGS:
         if (data->moby_0c != -1) {
             struct Moby *e = &level_mobys[data->moby_0c];
             e->flags &= 0xFFBE;
