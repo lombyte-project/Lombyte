@@ -2700,6 +2700,11 @@ extern void memcard_save_data(int, int) __asm__("FUN_0020b178");
 /* Watcher moby update: gated by its collectable and trigger, then turns its head toward the hero or a random target. */
 void qwark_oltanis_update(L14WatchMoby *m) __asm__("FUN_L14_002fba20");
 void qwark_oltanis_update(L14WatchMoby *m) {
+    enum {
+        QWARK_OLTANIS_STATE_INITIALIZE_DIALOGUE = 0,
+        QWARK_OLTANIS_STATE_UPDATE_DIALOGUE = 1,
+        QWARK_OLTANIS_STATE_REMOVE = 3
+    };
     L14WatchScratch scratch;
     L14WatchData *d = (L14WatchData *)m->data;
     float rate;
@@ -2713,7 +2718,7 @@ void qwark_oltanis_update(L14WatchMoby *m) {
         }
     }
     switch (m->state) {
-    case 0: {
+    case QWARK_OLTANIS_STATE_INITIALIZE_DIALOGUE: {
         unsigned short id = m->hB2;
         if (D_L14_001BB930.collected[(short)id] != 0 ||
             (D_0014C190_257218[current_level_index][(short)id >> 5] >> (id & 0x1F)) & 1) {
@@ -2730,7 +2735,7 @@ void qwark_oltanis_update(L14WatchMoby *m) {
         m->state = 1;
         break;
     }
-    case 1:
+    case QWARK_OLTANIS_STATE_UPDATE_DIALOGUE:
         if (d->b8 == 1 && FUN_00214720_c(&hero.motion.pos, d->i40)) {
             if (visited52[m->bB0 + current_level_index * 16] != 0xFF) {
                 char *t;
@@ -2766,7 +2771,7 @@ void qwark_oltanis_update(L14WatchMoby *m) {
             }
         }
         break;
-    case 3:
+    case QWARK_OLTANIS_STATE_REMOVE:
         mark_moby_for_removal(m);
         return;
     }
