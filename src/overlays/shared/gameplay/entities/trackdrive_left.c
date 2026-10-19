@@ -1139,6 +1139,7 @@ extern float func_L00_0025CE58_f(float *, float, float *, float, float,
 void swingshot_versatarget_update(char *m) __asm__("FUN_L02_002e0450");
 void swingshot_versatarget_update(char *m) {
     enum {
+        VERSATARGET_STATE_INITIALIZE = 0,
         VERSATARGET_STATE_ACTIVE = 1
     };
     char *d = *(char **)(m + 0x78);
@@ -1146,7 +1147,7 @@ void swingshot_versatarget_update(char *m) {
     float w[4];
     char *o;
     switch (((unsigned char *)m)[0x20]) {
-    case 0:
+    case VERSATARGET_STATE_INITIALIZE:
         if (*(int *)(d + 0x30) != -1 ||
             (*(int *)(d + 0x3C) != -1 &&
              (o = (char *)(D_L02_0015FFD8 + (*(int *)(d + 0x3C) << 8))) != 0 &&
