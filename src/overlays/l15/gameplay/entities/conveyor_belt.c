@@ -359,6 +359,7 @@ extern short D_L15_00162078 __attribute__((sda));
 void bolt_grabber_update(struct Moby *m) __asm__("FUN_L15_002ea748");
 void bolt_grabber_update(struct Moby *m) {
     enum {
+        BOLT_GRABBER_INITIALIZE = 0,
         BOLT_GRABBER_WAIT_FOR_PROXIMITY = 1,
         BOLT_GRABBER_FINALIZE_AND_SAVE = 2,
         BOLT_GRABBER_REMOVE = 3
@@ -366,7 +367,7 @@ void bolt_grabber_update(struct Moby *m) {
     m->rot.z = fast_add_rotations(m->rot.z, frame_time * 1.5707964f);
     m->scale = m->pclass->scale * *(float *)&D_L15_00162078;
     switch (m->state) {
-    case 0:
+    case BOLT_GRABBER_INITIALIZE:
         FUN_L00_002d6bf0((char *)m);
         if (D_0013D4FD[0xD] != 0) {
             mark_moby_for_removal(m);
