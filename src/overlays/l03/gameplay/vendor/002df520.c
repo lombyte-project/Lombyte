@@ -237,17 +237,21 @@ extern void FUN_L00_0026ced0(void *, void *, int, int, float, int);
 
 /* Starts the cutscene, then during mode 3 (frames 900-10000) emits two particle beams from the listed moby. */
 void FUN_L03_002e01d0(char *m) {
+    enum {
+        CUTSCENE_EFFECTS_INITIALIZE = 0,
+        CUTSCENE_EFFECTS_UPDATE = 1
+    };
     char *moby;
     float from[4];
     float to[4];
     Vec4 zero;
 
     switch (*(unsigned char *)(m + 0x20)) {
-    case 0:
+    case CUTSCENE_EFFECTS_INITIALIZE:
         *(unsigned char *)(m + 0x30) = 0xFF;
         m[0x20] = 1;
         break;
-    case 1:
+    case CUTSCENE_EFFECTS_UPDATE:
         if (D_L03_0015F5C4 != 2)
             break;
         if (D_L03_0016C960.mode == 4 || D_L03_0016C960.mode == 10) {
