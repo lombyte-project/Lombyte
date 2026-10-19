@@ -1242,6 +1242,11 @@ void test_dummy_update(unsigned char *m) {
         TEST_DUMMY_STATE_BURST = 10,
         TEST_DUMMY_STATE_RESPAWN = 11
     };
+    enum {
+        TEST_DUMMY_KIND_THROWER = 0,
+        TEST_DUMMY_KIND_PATH_MOVER = 1,
+        TEST_DUMMY_KIND_SPRAYER = 2
+    };
     L16SparkVector position_or_delta, v1, launch_velocity;
     L16SparkQuery fx;
     L16DummyData *d = *(L16DummyData **)(m + 0x78);
@@ -1272,13 +1277,13 @@ void test_dummy_update(unsigned char *m) {
         d->route = FUN_L16_002d5db0(d->iCC, m + 0x10);
         qcopy(d->spawn, m + 0x10);
         switch (d->kind) {
-        case 0:
+        case TEST_DUMMY_KIND_THROWER:
             d->child = func_0020D348_m(0x35F);
             break;
-        case 1:
+        case TEST_DUMMY_KIND_PATH_MOVER:
             d->child = func_0020D348_m(0x374);
             break;
-        case 2:
+        case TEST_DUMMY_KIND_SPRAYER:
             d->child = func_0020D348_m(0x36C);
             FUN_L02_00264e40(d->slots);
             break;
