@@ -557,9 +557,15 @@ void FUN_L12_002e1be0(TrollMoby54_2E2EF0 *moby) {
         TROLL_PURSUE_TARGET = 4,
         TROLL_MELEE_ATTACK = 5,
         TROLL_RETURN_HOME = 6,
+        TROLL_KNOCKBACK_FALL = 7,
+        TROLL_DORMANT = 9,
+        TROLL_RECOVER_AFTER_KNOCKBACK = 10,
         TROLL_WAIT_FOR_LEAP_TRIGGER = 11,
         TROLL_LEAP_TO_HOME = 12,
-        TROLL_LAND_AFTER_LEAP = 14
+        TROLL_ACTIVATE_FROM_DORMANCY = 13,
+        TROLL_LAND_AFTER_LEAP = 14,
+        TROLL_DEATH_EFFECTS_AND_REMOVE = 15,
+        TROLL_DEATH_FALL = 99
     };
     TargetReport54_2E2EF0 work;
     TrollMoby54_2E2EF0 *iterator;
@@ -629,7 +635,7 @@ void FUN_L12_002e1be0(TrollMoby54_2E2EF0 *moby) {
         }
         break;
     }
-    case 9:
+    case TROLL_DORMANT:
         if(data->group_enabled) {
             if(func_001F9D48_2E2EF0(moby->pos,target->pos)<2.0f) break;
             if(data->group_check<D_L12_0015F5CC) {
@@ -653,7 +659,7 @@ void FUN_L12_002e1be0(TrollMoby54_2E2EF0 *moby) {
         *(u128 *)work.v10=*(u128 *)moby->pos;
         func_L12_002E2CB8_2E2EF0(work.v10);
         break;
-    case 13: {
+    case TROLL_ACTIVATE_FROM_DORMANCY: {
         int collision=*(int *)(moby->model+0x10);
         moby->flags&=0xFFBE; moby->collision=collision;
         angle=func_L00_001FF860_2E2EF0(target->pos[0]-moby->pos[0],target->pos[1]-moby->pos[1]);
@@ -760,7 +766,7 @@ void FUN_L12_002e1be0(TrollMoby54_2E2EF0 *moby) {
         moby->proximity=0;
         break;
     }
-    case 7:
+    case TROLL_KNOCKBACK_FALL:
         if(moby->group!=255) func_L01_0026F040_2E2EF0(moby->group,1);
         if(func_L00_0025D6F0_2E2EF0(moby,data->fall)&1) {
             moby->state=10;
@@ -772,17 +778,17 @@ void FUN_L12_002e1be0(TrollMoby54_2E2EF0 *moby) {
     case 8:
         if(func_L00_002DDEA0_2E2EF0(moby,data->fall)) { moby->state=6; data->return_timer=0; data->stuck=0; }
         break;
-    case 10:
+    case TROLL_RECOVER_AFTER_KNOCKBACK:
         if(height54(moby)>29.0f) { moby->state=4; data->blocked=0; func_L12_002E2BF8_2E2EF0((unsigned char *)moby); return; }
         break;
-    case 99:
+    case TROLL_DEATH_FALL:
         hit=func_L00_0025D6F0_2E2EF0(moby,data->fall);
         if((hit&0x40)||(height54(moby)>37.0f && moby->anim_end==moby->anim)) {
             moby->anim_rate=0.0f; func_L00_002584A8_2E2EF0(moby,0,-1); moby->state=15; moby->flags|=8;
         } else if(moby->pos[2]<10.0f) { func_L00_002584A8_2E2EF0(moby,0,-1); { func_0020D678_2E2EF0(moby); return; } }
         else if(hit&1) func_L10_002E51A8_2E2EF0((char *)moby);
         break;
-    case 15:
+    case TROLL_DEATH_EFFECTS_AND_REMOVE:
         func_L10_002E51A8_2E2EF0((char *)moby); func_L12_002E43A8_2E2EF0(moby); func_L12_002E43A8_2E2EF0(moby); { func_0020D678_2E2EF0(moby); return; }
     }
     if(moby->enabled && moby->state!=9 && moby->state!=8) {
