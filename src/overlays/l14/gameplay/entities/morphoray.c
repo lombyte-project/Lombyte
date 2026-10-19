@@ -939,6 +939,12 @@ extern f32 frame_time_macro __asm__("D_0015ED6C") __attribute__((section(".sdata
 /* Ported from rac1-decomp src/overlays/l14_oltanis/vendor_002FF358.c (func_L14_00308368) */
 void FUN_L14_00306ee0(struct Moby *m);
 void FUN_L14_00306ee0(struct Moby *m) {
+    enum {
+        FLYING_CAR_INITIALIZE = 0,
+        FLYING_CAR_WAIT_FOR_TRIGGER = 1,
+        FLYING_CAR_FOLLOW_PATH = 2,
+        FLYING_CAR_WAIT_FOR_PATH_RESET = 3
+    };
     Data_6ee0 *d = (Data_6ee0 *)m->pvars;
     Vec4f vec __attribute__((aligned(16)));
     char *hit;
@@ -964,7 +970,7 @@ void FUN_L14_00306ee0(struct Moby *m) {
         d->sound = -1;
     }
     switch (m->state) {
-    case 0:
+    case FLYING_CAR_INITIALIZE:
         if (d->path == -1) {
             FUN_001e93b0_6ee0(D_L14_001FD118, (s16)m->save_id);
             FUN_0020c828_6ee0(m);
@@ -1004,7 +1010,7 @@ void FUN_L14_00306ee0(struct Moby *m) {
             m->state = 1;
         }
         break;
-    case 1:
+    case FLYING_CAR_WAIT_FOR_TRIGGER:
         if (inside_clip_6ee0(&hero.motion.pos, d->trigger)) {
             m->flags &= 0xFFBE;
             m->collision = m->pclass->collision;
@@ -1015,7 +1021,7 @@ void FUN_L14_00306ee0(struct Moby *m) {
             m->state = 2;
         }
         break;
-    case 2:
+    case FLYING_CAR_FOLLOW_PATH:
         d->fx.b2 = 1;
         d->fx.f20 = d->fx.f24 = d->fx.f28 = 0.0001f;
         FUN_L00_00262b80_6ee0(m, &d->fBC, &d->fC0, D_L14_00162290, D_L14_00162294, D_L14_00162298);
@@ -1050,7 +1056,7 @@ void FUN_L14_00306ee0(struct Moby *m) {
             }
         }
         break;
-    case 3:
+    case FLYING_CAR_WAIT_FOR_PATH_RESET:
         if (tick_done_6ee0(&d->timer)) {
             Path_6ee0 *path = D_L14_001B0BB0_6ee0[d->path];
             FUN_L00_002502f0_6ee0(m, d->effect[4], d->effect[5], d->effect[6]);
