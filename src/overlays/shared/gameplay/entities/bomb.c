@@ -2675,12 +2675,12 @@ state2:
             other = (struct Moby *)coll_hit.moby;
             if (other && other->oclass == 0 && other->state != 0xfe && other->state != 0xfd)
                 goto update_rotations;
-            other = (struct Moby *)((volatile CollisionHit *)&coll_hit)->moby;
+            other = (struct Moby *)coll_hit.moby;
             if (other) {
                 category = 0;
                 if (other->pclass) category = *(u8 *)((u8 *)other->pclass + 0x46);
             }
-            other = (struct Moby *)((volatile CollisionHit *)&coll_hit)->moby;
+            other = (struct Moby *)coll_hit.moby;
             if (other && other->state != 0xfe && other->state != 0xfd &&
                 (category == 5 || category == 7 || category == 8)) {
                 FUN_00259858_2ce358(1.0f, scratch.effect, m, 0x10000);

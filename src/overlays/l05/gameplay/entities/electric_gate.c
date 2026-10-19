@@ -193,11 +193,11 @@ void FUN_L05_0030de90(char *moby) {
             u64 texture = get_effect_texture(D_L05_00161D98);
             /* Each 0x90-byte record spans 18 flag words or 36 float words. */
             int flags = (int)quads;
-            *(volatile u64 *)(flags + i * 144 + j * 720 + 136) = (s64)D_L05_00161D70 | ((s64)D_L05_00161D74 << 2) |
+            *(u64 *)(flags + i * 144 + j * 720 + 136) = (s64)D_L05_00161D70 | ((s64)D_L05_00161D74 << 2) |
                 (((s64)D_L05_00161D78 << 4) | ((s64)D_L05_00161D7C << 6)) | 0x8000000000ULL;
-            *(volatile u64 *)(flags + i * 144 + j * 720 + 120) = texture;
+            *(u64 *)(flags + i * 144 + j * 720 + 120) = texture;
             *(u64 *)(flags + i * 144 + j * 720 + 128) = 0xff9000000260ULL;
-            *(volatile u64 *)(flags + i * 144 + j * 720 + 112) = 0;
+            *(u64 *)(flags + i * 144 + j * 720 + 112) = 0;
             {
                 Vec4 *positions0 = (Vec4 *)((float *)quads + i * 0x24);
                 Vec4 *positions = (Vec4 *)((float *)quads + i * 36 + j * 180);

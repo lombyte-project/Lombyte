@@ -1296,7 +1296,7 @@ ready:
     {
     float half_yaw = yaw * 0.5f;
     *(volatile float *)(data + 0x248) = half_yaw;
-    *(volatile float *)(data + 0x1c4) = pitch * 1.25f;
+    *(float *)(data + 0x1c4) = pitch * 1.25f;
     *(volatile float *)(data + 0x1c8) = half_yaw;
     }
     {

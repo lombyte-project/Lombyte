@@ -3473,7 +3473,7 @@ void FUN_L00_002d73e8(P *p) {
     int end = q->start + q->count + q->extra;
     V *transform;
     float x, y, f, speed;
-    float * volatile phase;
+    float *phase;
     float *source_texcoords;
     s16 *timer;
     V *points, *source;

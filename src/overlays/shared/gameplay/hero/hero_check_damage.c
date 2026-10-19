@@ -1050,7 +1050,7 @@ void FUN_L00_0020e728(void) {
                 if (hero_state->state.control_mode == 12)
                     anim = (s32)definition->f2C;
                 if (anim != -1 && (*slot)[0x23] != anim) {
-                    *(volatile s32 *)&hero_state->unk2294 = anim;
+                    hero_state->unk2294 = anim;
                     FUN_L00_0024f3e0((u8 *)hero_state->moby, *slot, hero_state->unk2294, 0,
                                       FUN_001f96f8_e728(8), 1);
                 }
@@ -1512,7 +1512,7 @@ void FUN_L00_0020f580(void)
     s32 color_red, color_green, color_blue;
     u8 *moby, *effect;
     u8 *volatile source;
-    u8 *volatile slot;
+    u8 *slot;
     f32 angle;
 
     i = 0;

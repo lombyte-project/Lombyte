@@ -65,7 +65,7 @@ void FUN_L00_002648e0(void) {
                 update = moby->update;
             }
             if (update != 0) {
-                update = ((volatile struct Moby *)moby)->update;
+                update = moby->update;
                 update(moby);
             }
             if (!(((volatile struct Moby *)moby)->flags & 4)) {

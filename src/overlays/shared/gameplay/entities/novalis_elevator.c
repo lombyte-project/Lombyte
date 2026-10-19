@@ -2284,7 +2284,7 @@ scan:
             /* Retail reads both pvars pointers and unk30 before writing the entity. */
             char *other_data = *(char * volatile *)(other + 0x78);
             unsigned char unk30 = *(volatile unsigned char *)(self + 0x30);
-            char *self_data = *(char * volatile *)(self + 0x78);
+            char *self_data = *(char **)(self + 0x78);
             other[0x30] = unk30;
             *(unsigned short *)(other + 0x32) = *(unsigned short *)(self + 0x32);
             {

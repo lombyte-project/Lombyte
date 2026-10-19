@@ -3060,7 +3060,7 @@ void FUN_L00_002ddf60(void *frame_context, void *initial_vector) {
                     effect[0x2b] = 200;
                 }
                 *(short *)record = row;
-                *(volatile int *)(record + 4) = 0;
+                *(int *)(record + 4) = 0;
                 *(volatile int *)(record + 8) = 0;
                 *(short *)(record + 2) = random_integer_below(20);
                 *(float *)(record + 12) = FUN_00257be8_002ddf60(0.1f, 0.8f);

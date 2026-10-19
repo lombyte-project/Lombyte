@@ -2719,7 +2719,7 @@ extern float D_L18_00161FD8 __attribute__((sda));
 extern float D_L18_00161FE4 __attribute__((sda));
 extern volatile unsigned char D_L18_00161FC8 __attribute__((sda));
 extern volatile unsigned char D_L18_00161FD4 __attribute__((sda));
-extern volatile unsigned char D_L18_00161FE0 __attribute__((sda));
+extern unsigned char D_L18_00161FE0 __attribute__((sda));
 extern volatile unsigned char D_L18_00161FC9 __attribute__((section(".sdata")));
 extern volatile unsigned char D_L18_00161FCA __attribute__((section(".sdata")));
 extern volatile unsigned char D_L18_00161FCB __attribute__((section(".sdata")));
