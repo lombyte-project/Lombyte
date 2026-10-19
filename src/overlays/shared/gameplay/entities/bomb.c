@@ -2910,6 +2910,7 @@ void crate_update(struct Moby *moby) {
         CRATE_STATE_INITIALIZE = 0,
         CRATE_STATE_PROCESS_HITS = 1,
         CRATE_STATE_CLASS_CHANGE_COOLDOWN = 2,
+        CRATE_STATE_BROKEN = 3,
         CRATE_STATE_DETONATION_COUNTDOWN = 5,
         CRATE_STATE_WAIT_RESPAWN = 6
     };
@@ -3057,7 +3058,7 @@ void crate_update(struct Moby *moby) {
         }
         break;
 
-    case 3:
+    case CRATE_STATE_BROKEN:
         if (moby->oclass == 0x1F9 && pv->unkCA <= scale_game_frames(20)) {
             f32 r;
 
