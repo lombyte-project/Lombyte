@@ -658,7 +658,7 @@ void FUN_L17_002258a8(void) {
                         hero_set_state(HERO_STATE_IDLE, 1);
                     }
                     break;
-                case 1:
+                case HERO_STATE_LOOK:
                     if (hero.vehicle_mode == 0) {
                         if (hero.unk20AA == 0 || hero.unk20A5 != 0) {
                             if (controller_state.held & 0xA) {
@@ -734,9 +734,9 @@ void FUN_L17_002258a8(void) {
                         hero_set_state(HERO_STATE_IDLE, 1);
                     }
                 } break;
-                case 19:
-                case 20:
-                case 21:
+                case HERO_STATE_WRENCH_COMBO:
+                case HERO_STATE_WRENCH_SLAM:
+                case HERO_STATE_CROUCH_SWING:
                     if (hero.state.current == HERO_STATE_WRENCH_SLAM) {
                         int r = truncate_float_to_s32(
                             FUN_L00_00232b90(60.0f, frame_time_sq * 130.0f, -1.0f));
@@ -1297,7 +1297,7 @@ void FUN_L17_002258a8(void) {
                         hero_set_state(HERO_STATE_IDLE, 1);
                     }
                     break;
-                case 40:
+                case HERO_STATE_GRIND:
                 case 41:
                 case 42:
                 case 43:
@@ -1712,7 +1712,7 @@ void FUN_L17_002258a8(void) {
                         hero_set_state(0x1C, 1);
                     }
                     break;
-                case 121:
+                case HERO_STATE_SLIP:
                     if (scale_game_frames(0x12C) < hero.state_timer) {
                         hero_respawn();
                     }
@@ -1725,7 +1725,7 @@ void FUN_L17_002258a8(void) {
                     }
                     hero_set_state(HERO_STATE_IDLE, 1);
                     break;
-                case 6:
+                case HERO_STATE_FALL:
                 case 45:
                     if (hero.state.step == 0) {
                         if (!(scale_game_frames(0x12) > hero.state_timer) ||
@@ -1982,8 +1982,8 @@ void FUN_L17_002258a8(void) {
                     set_hero_animation(7, 0x17, scale_game_frames(9));
                     FUN_L00_00233288(0.016f, 0.002f, 5, 2, 0, 1);
                     break;
-                case 7:
-                case 9:
+                case HERO_STATE_JUMP:
+                case HERO_STATE_RUN_JUMP:
                 case 10:
                 case 11:
                 case 12:
