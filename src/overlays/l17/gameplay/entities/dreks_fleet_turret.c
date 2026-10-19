@@ -99,6 +99,11 @@ extern void func_L00_0025A8C0_alt(char *arg, int a, int b, float scale,
 
 extern char *D_L17_0015FFD0[] __attribute__((section(".sdata")));
 void FUN_L17_002a8da0(struct Moby *m) {
+    enum {
+        BEAM_INITIALIZE = 0,
+        BEAM_UPDATE_STATIONARY = 1,
+        BEAM_UPDATE_OSCILLATING = 2
+    };
     float c[4];
     float a[4];
     float b[4];
@@ -119,7 +124,7 @@ void FUN_L17_002a8da0(struct Moby *m) {
     flag = 0;
     d = (char *)m->pvars;
     switch (m->state) {
-    case 0:
+    case BEAM_INITIALIZE:
         *(float *)(d + 0x58) = animation_start(m->class_slot, 0);
         *(float *)(d + 0x5C) =
             (animation_end(m->class_slot, 0) - *(float *)(d + 0x58)) / 6.2831855f;
@@ -150,13 +155,13 @@ void FUN_L17_002a8da0(struct Moby *m) {
         subtract_vector_xyz(b, c, &m->pos);
         *(OvlQuad *)(d + 0x30) = *(OvlQuad *)b;
         break;
-    case 1:
+    case BEAM_UPDATE_STATIONARY:
         if (*(int *)(d + 0x40) == -1 ||
             is_point_inside_clip_volume(&hero.motion.pos, *(int *)(d + 0x40))) {
             flag = 1;
         }
         break;
-    case 2:
+    case BEAM_UPDATE_OSCILLATING:
         *(float *)(d + 0x50) += *(float *)(d + 0x54);
         if (*(float *)(d + 0x50) > 1.0f) {
             *(float *)(d + 0x50) = 1.0f;
