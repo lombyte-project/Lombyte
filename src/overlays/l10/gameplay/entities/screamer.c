@@ -2726,6 +2726,7 @@ void FUN_L10_002e5968(struct Moby *moby) {
     enum {
         LETHAL_HIT_RESPONSE = 1,
         COLOR_UPDATE_ONLY_HIT_RESPONSE = 9,
+        COLOR_UPDATE_WITHOUT_STATE_CHANGE_HIT_RESPONSE = 10,
         COLOR_EFFECT_ONLY_HIT_RESPONSE = 12,
         NO_REACTION_HIT_RESPONSE = 13
     };
@@ -2745,7 +2746,7 @@ void FUN_L10_002e5968(struct Moby *moby) {
         }
         switch (r) {
         case COLOR_UPDATE_ONLY_HIT_RESPONSE:
-        case 10:
+        case COLOR_UPDATE_WITHOUT_STATE_CHANGE_HIT_RESPONSE:
         case COLOR_EFFECT_ONLY_HIT_RESPONSE:
             pvars[0xC7] = 0xFA;
             trooper_anim_update(moby, pvars + 0xC0);
