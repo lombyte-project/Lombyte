@@ -263,7 +263,7 @@ void poison_vessel_update(Moby_2E9358 *moby) {
     Vec_2E9358 collision_scratch_vector;
     Vec_2E9358 temporary_vector;
     Data_2E9358 *data = moby->data;
-    char *p20 = 0;
+    char *follow_context = 0;
     unsigned char state;
     int ret;
     Res_2E9358 *r;
@@ -309,15 +309,15 @@ void poison_vessel_update(Moby_2E9358 *moby) {
                 moby->bBC = state;
                 data->target = 0;
             } else if (D_L15_001744D8_2E9358 != 0) {
-                p20 = FUN_L00_002603d0(D_L15_001744D8_2E9358);
-                if (p20 != 0) {
+                follow_context = FUN_L00_002603d0(D_L15_001744D8_2E9358);
+                if (follow_context != 0) {
                     func_L00_00261478_2E9358(moby, data->target, &moby->pos, &moby->v40, &moby->pos, &moby->v40);
                     subtract_vector_xyz(&temporary_vector, &moby->pos, &previous_position);
                     *(OvlQuad *)data = temporary_vector.q;
                 }
             }
         }
-        if (p20 == 0) {
+        if (follow_context == 0) {
             moby->state = 0;
             data->f8 = 0.0f;
             data->target = 0;
