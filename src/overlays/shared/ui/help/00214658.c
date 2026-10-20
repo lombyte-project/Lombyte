@@ -792,17 +792,17 @@ extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68"
 
 /* In mode 3 allocates a voice for the object at D_0013F350+0xA88, else for the one at +0x2080. */
 int FUN_L00_00216de8(int a, int b);
-int FUN_L00_00216de8(int a, int b) {
-    char *p = D_0013E533 + 0xE1D;
-    int c;
-    if (*(unsigned char *)(p + 0x20A4) == 3) {
-        c = *(int *)(p + 0xA88);
-        if (c != 0) {
-            qcopy((char *)c + 0x10, p + 0x80);
-            return allocate_voice_for_target_entry(a, b, c);
+int FUN_L00_00216de8(int entry_index, int b) {
+    char *hero_base = D_0013E533 + 0xE1D;
+    int voice_target;
+    if (*(unsigned char *)(hero_base + 0x20A4) == 3) {
+        voice_target = *(int *)(hero_base + 0xA88);
+        if (voice_target != 0) {
+            qcopy((char *)voice_target + 0x10, hero_base + 0x80);
+            return allocate_voice_for_target_entry(entry_index, b, voice_target);
         }
     } else {
-        return allocate_voice_for_target_entry(a, b, *(int *)(p + 0x2080));
+        return allocate_voice_for_target_entry(entry_index, b, *(int *)(hero_base + 0x2080));
     }
     return -1;
 }
