@@ -662,15 +662,15 @@ extern int ftoi_g(float) __asm__("FUN_001fa6d0");
 
 extern u128_ad0 D_L11_001608E0;
 extern u128_ad0 D_L11_001608F0;
-void FUN_L11_00310ad0(short *pts, int n, float x0, float y0, unsigned int col, unsigned long long prim, float scale) {
-    int q = (n + 1) / 2 + 3;
-    unsigned long long *o;
+void FUN_L11_00310ad0(short *pts, int point_count, float x0, float y0, unsigned int col, unsigned long long prim, float scale) {
+    int packet_qword_count = (point_count + 1) / 2 + 3;
+    unsigned long long *vertex_payload;
     int x, y;
     int i;
-    *(int *)(D_L11_001611C0 + 0) = q | 0x10000000;
+    *(int *)(D_L11_001611C0 + 0) = packet_qword_count | 0x10000000;
     *(int *)(D_L11_001611C0 + 4) = 0;
     *(int *)(D_L11_001611C0 + 8) = 0;
-    *(int *)(D_L11_001611C0 + 12) = q | 0x50000000;
+    *(int *)(D_L11_001611C0 + 12) = packet_qword_count | 0x50000000;
     {
         char *dma_header = (char *)D_L11_001611C0;
         D_L11_001611C0 = (int)(dma_header + 0x10);
@@ -687,16 +687,16 @@ void FUN_L11_00310ad0(short *pts, int n, float x0, float y0, unsigned int col, u
         char *saved_packet_cursor = (char *)D_L11_001611C0;
         D_L11_001611C0 = (int)(saved_packet_cursor + 0x10);
         qcopy((void *)D_L11_001611C0, &D_L11_001608F0);
-        *(short *)(saved_packet_cursor + 0x10) = n - 0x8000;
+        *(short *)(saved_packet_cursor + 0x10) = point_count - 0x8000;
     }
     D_L11_001611C0 += 0x10;
-    o = (unsigned long long *)D_L11_001611C0;
-    for (i = 0; i < n; i++) {
+    vertex_payload = (unsigned long long *)D_L11_001611C0;
+    for (i = 0; i < point_count; i++) {
         x = ftoi_g((itof_g(pts[i * 2]) * scale + x0) * 16.0f);
         y = ftoi_g((itof_g(pts[i * 2 + 1]) * scale + y0) * 16.0f);
-        o[i] = (unsigned long long)(x + screen_extent[4] - 8) | ((unsigned long long)(y + screen_extent[5] - 8) << 16) | ((unsigned long long)col << 32);
+        vertex_payload[i] = (unsigned long long)(x + screen_extent[4] - 8) | ((unsigned long long)(y + screen_extent[5] - 8) << 16) | ((unsigned long long)col << 32);
     }
-    D_L11_001611C0 += ((n + 1) / 2) * 16;
+    D_L11_001611C0 += ((point_count + 1) / 2) * 16;
 }
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
