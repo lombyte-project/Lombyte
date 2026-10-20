@@ -807,15 +807,15 @@ float absolute_float(float) __asm__("FUN_001f99c0");
 short FUN_001f96f8_2e7138(int) __asm__("FUN_001f96f8");
 
 extern float D_L00_00161CB8 __attribute__((sda));
-int FUN_L00_002e7138(unsigned char *m, void *b, int c, int d) {
-    unsigned char *q = *(unsigned char **)(m + 0x70);
-    unsigned char *A = q + 0x130;
-    unsigned char *B = q + 0x1D0;
-    unsigned char *C = q + 0x40;
+int FUN_L00_002e7138(unsigned char *camera_moby, void *b, int c, int d) {
+    unsigned char *camera_state = *(unsigned char **)(camera_moby + 0x70);
+    unsigned char *A = camera_state + 0x130;
+    unsigned char *B = camera_state + 0x1D0;
+    unsigned char *C = camera_state + 0x40;
     float len, dist, k;
     G_2e7138 *G;
     len = FUN_001f9af0_2e7138(A);
-    subtract_vector_xyz(A, b, q + 0x90);
+    subtract_vector_xyz(A, b, camera_state + 0x90);
     if (*(short *)(B + 0x38)) {
         FUN_L00_001ff500_2e7138(A, A, *(float *)(A + 0x2C) - *(float *)(B + 0x30));
         return d;
