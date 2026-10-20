@@ -1713,16 +1713,16 @@ extern void FUN_L16_002de3b8(float f);
 
 void FUN_L16_002e70c0(struct Moby *moby) {
     char *data = (char *)moby->pvars;
-    int *p = (int *)(data + 0x60);
+    int *group_index_entry = (int *)(data + 0x60);
     int i;
     for (i = 15; i >= 0; i--) {
-        jet_group_state(*p, 1, 1, 1);
-        p++;
+        jet_group_state(*group_index_entry, 1, 1, 1);
+        group_index_entry++;
     }
-    p = (int *)(data + 0xA0);
+    group_index_entry = (int *)(data + 0xA0);
     for (i = 7; i >= 0; i--) {
-        jet_group_state(*p, 0, 0, 0);
-        p++;
+        jet_group_state(*group_index_entry, 0, 0, 0);
+        group_index_entry++;
     }
     *(float *)&D_L16_0015F638 = 74.0f;
     FUN_L16_002de3b8(76.0f);
