@@ -260,8 +260,8 @@ void FUN_L17_002e8e08(struct Moby *moby) {
     float e[4];
     float f[4];
     float w[12];
-    char *d = (char *)moby->pvars;
-    char *t;
+    char *drone_vars = (char *)moby->pvars;
+    char *target_position;
     struct Hero *g;
     struct Hero *g2;
     char *r;
@@ -273,34 +273,34 @@ void FUN_L17_002e8e08(struct Moby *moby) {
     case DRONE_STATE_FLIGHT:
         moby->draw_dist = 0;
         moby->visible = 0;
-        t = d + 0x10;
+        target_position = drone_vars + 0x10;
         *(OvlQuad *)e = *(OvlQuad *)(&hero.motion.unkD0);
         e[2] = e[2] - 0.5f;
-        if (FUN_001f9b80_q(e, t) < 8.0f) {
-            FUN_001f9a40_q(t, e, t, 0.99f);
+        if (FUN_001f9b80_q(e, target_position) < 8.0f) {
+            FUN_001f9a40_q(target_position, e, target_position, 0.99f);
         }
-        if (FUN_001f9b80_q(&moby->pos, t) > 4.0f) {
+        if (FUN_001f9b80_q(&moby->pos, target_position) > 4.0f) {
             if (FUN_001fa688_q(moby->rot.z,
-                               FUN_001f9e90_q(*(float *)(d + 0x10) - moby->pos.x,
-                                              *(float *)(d + 0x14) - moby->pos.y)) <
+                               FUN_001f9e90_q(*(float *)(drone_vars + 0x10) - moby->pos.x,
+                                              *(float *)(drone_vars + 0x14) - moby->pos.y)) <
                 0.7853982f) {
-                subtract_vector_xyz_q(c, t, &moby->pos);
-                normalize_vector_xyz_q(d, c, *(float *)(d + 0x40));
+                subtract_vector_xyz_q(c, target_position, &moby->pos);
+                normalize_vector_xyz_q(drone_vars, c, *(float *)(drone_vars + 0x40));
             }
         }
-        scale_vector_xyz_q(c, d, -20.0f);
+        scale_vector_xyz_q(c, drone_vars, -20.0f);
         step = 0;
-        add_vector_xyz_q(a, &moby->pos, d);
+        add_vector_xyz_q(a, &moby->pos, drone_vars);
         add_vector_xyz_q(b, &moby->pos, c);
         FUN_001f9a40_q(f, a, &moby->pos, 0.5f);
-        if (*(int *)(d + 0x38) < 0x3C) {
-            step = (0x3C - *(int *)(d + 0x38)) >> 2;
+        if (*(int *)(drone_vars + 0x38) < 0x3C) {
+            step = (0x3C - *(int *)(drone_vars + 0x38)) >> 2;
         }
         FUN_L17_0026fdd0_q((char *)a, 1, step);
         FUN_L17_0026fdd0_q((char *)f, 1, step);
         FUN_L17_0026fdd0_q((char *)a, 0, step);
         b[2] = b[2] + 0.25f;
-        func_L00_0025A8C0_alt_q((char *)w, (int)moby, 1, 6.0f, d);
+        func_L00_0025A8C0_alt_q((char *)w, (int)moby, 1, 6.0f, drone_vars);
         *(short *)((char *)w + 0x1A) = moby->oclass;
         qcopy(&moby->pos, a);
         r = D_L17_00174740_lui;
@@ -309,7 +309,7 @@ void FUN_L17_002e8e08(struct Moby *moby) {
             FUN_L00_001f0d60_q(0.5f, &moby->pos, 0, moby) != 0) {
             hit = *(int *)(r + 0x18);
             if (hit != 0) {
-                if (hit != *(int *)(d + 0x3C)) {
+                if (hit != *(int *)(drone_vars + 0x3C)) {
                     g = &hero;
                     if (g->unk308 != 0 && hit == ((int)g->moby)) {
                         unsigned char *rec = D_00141968_x_q;
@@ -341,26 +341,26 @@ void FUN_L17_002e8e08(struct Moby *moby) {
                                 *(int *)(rec + 0x45C) | (1 << current_level_index) | 0x80000000;
                         }
                     }
-                    *(int *)(d + 0x38) = scale_game_frames_q(0x1E);
+                    *(int *)(drone_vars + 0x38) = scale_game_frames_q(0x1E);
                     moby->state = 1;
                     return;
                 }
-            } else if (FUN_001f9b80_q(&moby->pos, *(char **)(d + 0x3C) + 0x10) > 10.0f) {
+            } else if (FUN_001f9b80_q(&moby->pos, *(char **)(drone_vars + 0x3C) + 0x10) > 10.0f) {
                 qcopy(&moby->pos, r + 0x20);
-                *(int *)(d + 0x38) = scale_game_frames_q(0x1E);
+                *(int *)(drone_vars + 0x38) = scale_game_frames_q(0x1E);
                 moby->state = 1;
                 return;
             }
         }
-        if (scale_game_frames_q(0x46) < *(int *)(d + 0x38)) {
+        if (scale_game_frames_q(0x46) < *(int *)(drone_vars + 0x38)) {
             if (moby->pos.x > 890.0f || moby->pos.y > 890.0f ||
                 moby->pos.z > 890.0f || moby->pos.x < 80.0f ||
                 moby->pos.x < 80.0f || moby->pos.y < 80.0f ||
                 moby->pos.z < 80.0f) {
-                *(int *)(d + 0x38) = scale_game_frames_q(0x46);
+                *(int *)(drone_vars + 0x38) = scale_game_frames_q(0x46);
             }
         }
-        if (tick_countdown_32_q(d + 0x38) != 0 || moby->pos.x > 968.0f ||
+        if (tick_countdown_32_q(drone_vars + 0x38) != 0 || moby->pos.x > 968.0f ||
             moby->pos.y > 968.0f || moby->pos.z > 968.0f ||
             moby->pos.x < 10.0f || moby->pos.x < 10.0f ||
             moby->pos.y < 10.0f || moby->pos.z < 10.0f) {
@@ -373,7 +373,7 @@ void FUN_L17_002e8e08(struct Moby *moby) {
         build_spherical_offset_q(a, x, y, random_float_between_alt_q(-3.1415927f, 3.1415927f));
         FUN_L00_002730e0_q(&moby->pos.x, (char *)a, 0x60FF3020, 0xF,
                            random_integer_below_q(0xFF), 0, 3.0f);
-        if (tick_countdown_32_q(d + 0x38) != 0) {
+        if (tick_countdown_32_q(drone_vars + 0x38) != 0) {
             mmr_q_q(moby);
         }
         break;
