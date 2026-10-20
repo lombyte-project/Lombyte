@@ -20,22 +20,22 @@ extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 extern unsigned char *D_L07_001B2164 __attribute__((section(".data")));
 void FUN_L07_0029c4e8(void *pos, void *pos2) {
-    unsigned char *p = create_part(0x41);
-    if (p) {
-        float *f = (float *)(p + 0x20);
-        qcopy(p + 0x10, pos);
-        *(int *)(p + 4) = FUN_L00_0025bfe0(1.0f, 1.0f, 1.0f, 0.6f);
-        p[9] = func_001FA898_r(4.0f) + 0x40;
-        p[1] = 0;
-        p[3] = 0x48;
-        *(float *)(p + 0xC) = random_float_between_alt(20000.0f, 120000.0f);
-        p[8] = 0;
-        p[2] = *D_L07_001B2164;
+    unsigned char *particle = create_part(0x41);
+    if (particle) {
+        float *f = (float *)(particle + 0x20);
+        qcopy(particle + 0x10, pos);
+        *(int *)(particle + 4) = FUN_L00_0025bfe0(1.0f, 1.0f, 1.0f, 0.6f);
+        particle[9] = func_001FA898_r(4.0f) + 0x40;
+        particle[1] = 0;
+        particle[3] = 0x48;
+        *(float *)(particle + 0xC) = random_float_between_alt(20000.0f, 120000.0f);
+        particle[8] = 0;
+        particle[2] = *D_L07_001B2164;
         f[4] = 1.0f;
         f[5] = 1.0f;
         f[6] = 1.0f;
         f[7] = 0.6f;
-        *(short *)(p + 0xA) = scale_game_frames(0x50);
+        *(short *)(particle + 0xA) = scale_game_frames(0x50);
         qcopy(f, pos2);
     }
 }
