@@ -89,50 +89,50 @@ extern void update_moby_animation_state(void *) __asm__("func_0020C880");
 void init_moby_instance(void *moby_mem, int oClass) __asm__("FUN_0020c5f0");
 
 void init_moby_instance(void *moby_mem, int oClass) {
-    MobyI *m = (MobyI *)moby_mem;
+    MobyI *moby_instance = (MobyI *)moby_mem;
     unsigned char resident_class_slot;
     int idx;
     MobyIClass *pClass;
 
-    fill_transfer_words(m, 0, 0x100);
+    fill_transfer_words(moby_instance, 0, 0x100);
     resident_class_slot = resident_class_slot_by_id[oClass];
-    m->unk23 = 0x80;
-    m->oClass = resident_class_slot;
-    m->unkA4 = 0xFF;
-    m->unk21 = 0xFF;
-    m->unk71 = 0xFF;
-    m->unk72 = 0xFF;
-    m->unkA6 = oClass;
-    m->unk38 = 0x40404000000000L;
-    m->unk36 = 0x7F80;
-    idx = ((char *)m - (char *)resident_object_pool) >> 8;
-    m->unkA8 = idx << 16;
-    m->unkAC = idx;
-    m->unk7E = 0;
-    m->unk7C = 0xFF;
-    m->unkA0 = 0x7F;
-    m->unkA2 = 0x80;
-    m->unk7D = 0xFF;
-    m->unkA1 = 0x7F;
-    m->unkA3 = 0x80;
-    m->unk74 = D_001B3580[m->oClass];
-    if (m->unk74 == 0) {
-        m->flags |= 2;
+    moby_instance->unk23 = 0x80;
+    moby_instance->oClass = resident_class_slot;
+    moby_instance->unkA4 = 0xFF;
+    moby_instance->unk21 = 0xFF;
+    moby_instance->unk71 = 0xFF;
+    moby_instance->unk72 = 0xFF;
+    moby_instance->unkA6 = oClass;
+    moby_instance->unk38 = 0x40404000000000L;
+    moby_instance->unk36 = 0x7F80;
+    idx = ((char *)moby_instance - (char *)resident_object_pool) >> 8;
+    moby_instance->unkA8 = idx << 16;
+    moby_instance->unkAC = idx;
+    moby_instance->unk7E = 0;
+    moby_instance->unk7C = 0xFF;
+    moby_instance->unkA0 = 0x7F;
+    moby_instance->unkA2 = 0x80;
+    moby_instance->unk7D = 0xFF;
+    moby_instance->unkA1 = 0x7F;
+    moby_instance->unkA3 = 0x80;
+    moby_instance->unk74 = D_001B3580[moby_instance->oClass];
+    if (moby_instance->unk74 == 0) {
+        moby_instance->flags |= 2;
     }
-    pClass = moby_class_resources[m->oClass];
+    pClass = moby_class_resources[moby_instance->oClass];
     if (pClass != 0) {
         MobyIClass *class_resource;
 
-        m->pClass = pClass;
-        m->unk72 = pClass->unk0E;
-        m->flags |= pClass->unk44;
-        m->unk94 = pClass->unk10;
-        m->unk2C = pClass->unk24;
-        m->unk58 = 1.0f;
-        m->unk5C = 1.0f;
+        moby_instance->pClass = pClass;
+        moby_instance->unk72 = pClass->unk0E;
+        moby_instance->flags |= pClass->unk44;
+        moby_instance->unk94 = pClass->unk10;
+        moby_instance->unk2C = pClass->unk24;
+        moby_instance->unk58 = 1.0f;
+        moby_instance->unk5C = 1.0f;
         if (pClass->unk40 != 0) {
-            m->flags |= 0x10;
-            m->unk90 = pClass->unk40;
+            moby_instance->flags |= 0x10;
+            moby_instance->unk90 = pClass->unk40;
         }
         {
             /* retail re-reads m->pClass (lw v0, 0x24(s1)) before each of the
@@ -140,40 +140,40 @@ void init_moby_instance(void *moby_mem, int oClass) {
                so cc1 must not carry the pointer across them. Reading the field
                through a volatile copy of the pointer is what keeps every read
                a real load; the stores still go through the plain m. */
-            volatile MobyI *vm = m;
+            volatile MobyI *vm = moby_instance;
 
             if (vm->pClass->unk0F != 0) {
-                m->unk7F = 0x18;
-                m->flags |= 0x400;
-                m->unk84 = 0;
-                m->unk88 = 0;
-                m->unkBD = 0;
+                moby_instance->unk7F = 0x18;
+                moby_instance->flags |= 0x400;
+                moby_instance->unk84 = 0;
+                moby_instance->unk88 = 0;
+                moby_instance->unkBD = 0;
             }
             if (vm->pClass->unk06 != 0) {
-                m->unk73 = 0x18;
+                moby_instance->unk73 = 0x18;
             }
             if (vm->pClass->seq == 0) {
                 return;
             }
         }
-        update_moby_animation_state(m);
-        if (m->pClass->seq->nframes >= 2) {
-            m->flags &= 0xFFFD;
+        update_moby_animation_state(moby_instance);
+        if (moby_instance->pClass->seq->nframes >= 2) {
+            moby_instance->flags &= 0xFFFD;
         }
-        class_resource = m->pClass;
+        class_resource = moby_instance->pClass;
         if (class_resource->unk0C == 1) {
             if (class_resource->seq->nframes < 2) {
-                m->unk58 = 0.0f;
+                moby_instance->unk58 = 0.0f;
                 if (class_resource->seq->unk11 < 0) {
-                    m->flags |= 0x40;
+                    moby_instance->flags |= 0x40;
                 }
             }
         }
         return;
     }
-    m->pClass = 0;
-    m->flags |= 5;
-    m->unk94 = 0;
+    moby_instance->pClass = 0;
+    moby_instance->flags |= 5;
+    moby_instance->unk94 = 0;
 }
 
 extern __typeof__(init_moby_instance) func_0020C5F0 __attribute__((alias("FUN_0020c5f0")));
