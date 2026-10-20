@@ -13,20 +13,20 @@ extern void init_moby_instance(struct Moby *, s32) __asm__("func_0020C5F0");
 struct Moby *create_moby(s32 oclass) __asm__("FUN_0020c4f8");
 
 struct Moby *create_moby(s32 oclass) {
-    struct Moby *m;
+    struct Moby *moby_slot;
 
-    for (m = moby_instance_end; m < moby_instance_perm_end; m++) {
-        if (m->state >= 0xFE && m->spawn_frame <= (u32)world_update_time) {
-            if (m->state == 0xFF) {
-                m[1].state = 0xFF;
+    for (moby_slot = moby_instance_end; moby_slot < moby_instance_perm_end; moby_slot++) {
+        if (moby_slot->state >= 0xFE && moby_slot->spawn_frame <= (u32)world_update_time) {
+            if (moby_slot->state == 0xFF) {
+                moby_slot[1].state = 0xFF;
             }
-            init_moby_instance(m, oclass);
-            m->pvars = moby_vars + (m - moby_instance_end) * 0x80;
-            fill_transfer_words(m->pvars, 0, 0x80);
+            init_moby_instance(moby_slot, oclass);
+            moby_slot->pvars = moby_vars + (moby_slot - moby_instance_end) * 0x80;
+            fill_transfer_words(moby_slot->pvars, 0, 0x80);
             if (num_spawnable_mobys != 0) {
                 num_spawnable_mobys--;
             }
-            return m;
+            return moby_slot;
         }
     }
     DebugPrint(s_tried_to_create_moby, world_update_time, oclass);
