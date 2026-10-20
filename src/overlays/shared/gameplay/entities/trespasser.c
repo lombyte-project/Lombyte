@@ -766,7 +766,9 @@ extern int FUN_L00_00259028(void *,void *,void *,void *);
 void doom_bot_update(struct Moby *moby) __asm__("FUN_L00_002bffa8");
 void doom_bot_update(struct Moby *moby) {
     enum {
+        DOOM_BOT_INITIALIZE = 0,
         DOOM_BOT_ALIGN_TO_TARGET = 6,
+        DOOM_BOT_EXECUTE_JUMP = 7,
         DOOM_BOT_COLLISION_RECOVERY_FALL = 8,
         DOOM_BOT_DETONATE = 11,
         DOOM_BOT_WAIT_FOR_TRANSITION_ANIMATION = 12,
@@ -861,7 +863,7 @@ void doom_bot_update(struct Moby *moby) {
     if (probe_ground_height(&moby->pos,0,0.5f)!=0 && coll_hit.moby)
         FUN_L00_00260400(moby,coll_hit.moby,&moby->pos,&moby->rot,&moby->pos,&moby->rot);
     switch (moby->state) {
-    case 0:
+    case DOOM_BOT_INITIALIZE:
         debug_print(D_L00_001E9B48); moby->state=1; break;
     case DOOM_BOT_COLLISION_RECOVERY_FALL: {
         DoomBotParams *hp;
@@ -1030,7 +1032,7 @@ void doom_bot_update(struct Moby *moby) {
         }
         goto Contact;
     }
-    case 7:
+    case DOOM_BOT_EXECUTE_JUMP:
         z=moby->pos.z;
         FUN_L00_002bec00((char*)data);
         result=FUN_L00_0025b440(moby,&((DoomBotParams*)&hero)->config);
