@@ -98,7 +98,7 @@ extern void func_L00_0025A8C0_alt(char *arg, int a, int b, float scale,
                                   void *src) __asm__("FUN_L00_00259888");
 
 extern char *D_L17_0015FFD0[] __attribute__((section(".sdata")));
-void FUN_L17_002a8da0(struct Moby *m) {
+void FUN_L17_002a8da0(struct Moby *beam_moby) {
     enum {
         BEAM_INITIALIZE = 0,
         BEAM_UPDATE_STATIONARY = 1,
@@ -119,40 +119,40 @@ void FUN_L17_002a8da0(struct Moby *m) {
     int j;
     float len;
 
-    if (m->state == 3)
+    if (beam_moby->state == 3)
         return;
     flag = 0;
-    beam_vars = (char *)m->pvars;
-    switch (m->state) {
+    beam_vars = (char *)beam_moby->pvars;
+    switch (beam_moby->state) {
     case BEAM_INITIALIZE:
-        *(float *)(beam_vars + 0x58) = animation_start(m->class_slot, 0);
+        *(float *)(beam_vars + 0x58) = animation_start(beam_moby->class_slot, 0);
         *(float *)(beam_vars + 0x5C) =
-            (animation_end(m->class_slot, 0) - *(float *)(beam_vars + 0x58)) / 6.2831855f;
+            (animation_end(beam_moby->class_slot, 0) - *(float *)(beam_vars + 0x58)) / 6.2831855f;
         k = *(int *)(beam_vars + 0x44);
         if (k != -1) {
-            qcopy(beam_vars, &m->pos);
+            qcopy(beam_vars, &beam_moby->pos);
             *(float *)(beam_vars + 0x54) = *(float *)(beam_vars + 0x48) * frame_time /
                                    FUN_001f9b48(beam_vars, D_L17_001600EC + (k << 7) + 0x30);
-            m->state = 2;
+            beam_moby->state = 2;
         } else if ((j = *(int *)(beam_vars + 0x68)) != -1) {
-            qcopy(beam_vars, &m->pos);
+            qcopy(beam_vars, &beam_moby->pos);
             *(float *)(beam_vars + 0x54) = *(float *)(beam_vars + 0x48) * frame_time /
                                    FUN_001f9b48(beam_vars, D_L17_0015FFD0[2] + (j << 8) + 0x10);
-            m->state = 2;
+            beam_moby->state = 2;
         } else {
-            m->state = 1;
+            beam_moby->state = 1;
         }
         *(int *)(beam_vars + 0x60) = 0;
         *(float *)(beam_vars + 0x4C) = 0.1f;
         *(OvlQuad *)a = 0;
         a[0] = 13.0f;
-        transform_vector_by_basis(a, a, &m->rot_row0);
-        add_vector_xyz(b, &m->pos, a);
+        transform_vector_by_basis(a, a, &beam_moby->rot_row0);
+        add_vector_xyz(b, &beam_moby->pos, a);
         *(OvlQuad *)c = *(OvlQuad *)b;
-        if (collision_line(&m->pos, c, 2, 0, 0)) {
+        if (collision_line(&beam_moby->pos, c, 2, 0, 0)) {
             *(OvlQuad *)c = *(OvlQuad *)D_L17_00174760;
         }
-        subtract_vector_xyz(b, c, &m->pos);
+        subtract_vector_xyz(b, c, &beam_moby->pos);
         *(OvlQuad *)(beam_vars + 0x30) = *(OvlQuad *)b;
         break;
     case BEAM_UPDATE_STATIONARY:
@@ -171,32 +171,32 @@ void FUN_L17_002a8da0(struct Moby *m) {
             *(float *)(beam_vars + 0x54) = -*(float *)(beam_vars + 0x54);
         }
         if (*(int *)(beam_vars + 0x68) != -1) {
-            lerp_vector(&m->pos, beam_vars, ((char *(*)[64])D_L17_0015FFD8)[*(int *)(beam_vars + 0x68)][0x1E],
+            lerp_vector(&beam_moby->pos, beam_vars, ((char *(*)[64])D_L17_0015FFD8)[*(int *)(beam_vars + 0x68)][0x1E],
                          *(float *)(beam_vars + 0x50));
         } else {
-            lerp_vector(&m->pos, beam_vars, D_L17_001600EC + (*(int *)(beam_vars + 0x44) << 7) + 0x30,
+            lerp_vector(&beam_moby->pos, beam_vars, D_L17_001600EC + (*(int *)(beam_vars + 0x44) << 7) + 0x30,
                          *(float *)(beam_vars + 0x50));
         }
         if (*(int *)(beam_vars + 0x40) == -1 ||
             is_point_inside_clip_volume(&hero.motion.pos, *(int *)(beam_vars + 0x40))) {
             *(OvlQuad *)a = 0;
             a[0] = 13.0f;
-            transform_vector_by_basis(a, a, &m->rot_row0);
-            add_vector_xyz(b, &m->pos, a);
+            transform_vector_by_basis(a, a, &beam_moby->rot_row0);
+            add_vector_xyz(b, &beam_moby->pos, a);
             *(OvlQuad *)c = *(OvlQuad *)b;
-            if (collision_line(&m->pos, c, 2, 0, 0)) {
+            if (collision_line(&beam_moby->pos, c, 2, 0, 0)) {
                 *(OvlQuad *)c = *(OvlQuad *)D_L17_00174760;
             }
             flag = 1;
-            subtract_vector_xyz(b, c, &m->pos);
+            subtract_vector_xyz(b, c, &beam_moby->pos);
             *(OvlQuad *)(beam_vars + 0x30) = *(OvlQuad *)b;
         }
         break;
     }
     *(OvlQuad *)a = 0;
     a[0] = 12.0f;
-    transform_vector_by_basis(a, a, &m->rot_row0);
-    add_vector_xyz(b, &m->pos, beam_vars + 0x30);
+    transform_vector_by_basis(a, a, &beam_moby->rot_row0);
+    add_vector_xyz(b, &beam_moby->pos, beam_vars + 0x30);
     *(OvlQuad *)c = *(OvlQuad *)b;
     if (*(int *)(beam_vars + 0x60) != 0) {
         normalize_vector_xyz(beam_vars + 0x20, a, -(*(float *)&D_L17_00161498 - 0.2f));
@@ -212,22 +212,22 @@ void FUN_L17_002a8da0(struct Moby *m) {
     if (flag) {
         *(float *)(beam_vars + 0x4C) =
             fast_cos(fast_add_rotations(
-                3.1415927f, (compute_interpolated_record_value(m) - *(float *)(beam_vars + 0x58)) /
+                3.1415927f, (compute_interpolated_record_value(beam_moby) - *(float *)(beam_vars + 0x58)) /
                                 *(float *)(beam_vars + 0x5C))) *
                 0.02f +
             0.09f;
         normalize_vector_xyz(beam_vars + 0x10, a, 0.2f);
-        subtract_vector_xyz(e50, &m->pos, beam_vars + 0x10);
+        subtract_vector_xyz(e50, &beam_moby->pos, beam_vars + 0x10);
         *(OvlQuad *)(beam_vars + 0x10) = *(OvlQuad *)e50;
         len = vector_length_xyz(beam_vars + 0x30);
         lerp_vector(b, beam_vars + 0x10, beam_vars + 0x20, 0.5f);
         b[3] = len * 0.5f;
         if (fast_bsphere_check((char *)b, 32.0f) != -1) {
-            subtract_vector_xyz(hero_offset, &hero.motion.pos, &m->pos);
-            normalize_vector_xyz(axis_aligned_hero_offset, &m->rot_row0, dot_vectors_xyz(&m->rot_row0, hero_offset));
+            subtract_vector_xyz(hero_offset, &hero.motion.pos, &beam_moby->pos);
+            normalize_vector_xyz(axis_aligned_hero_offset, &beam_moby->rot_row0, dot_vectors_xyz(&beam_moby->rot_row0, hero_offset));
             subtract_vector_xyz(hero_offset, hero_offset, axis_aligned_hero_offset);
-            func_L00_0025A8C0_alt((char *)hit_descriptor_and_vector_scratch, (int)m, 0x10001, 1.0f, hero_offset);
-            collision_line(&m->pos, beam_vars + 0x20, 9, m, hit_descriptor_and_vector_scratch);
+            func_L00_0025A8C0_alt((char *)hit_descriptor_and_vector_scratch, (int)beam_moby, 0x10001, 1.0f, hero_offset);
+            collision_line(&beam_moby->pos, beam_vars + 0x20, 9, beam_moby, hit_descriptor_and_vector_scratch);
             len = vector_length_xyz(beam_vars + 0x30);
             *(OvlQuad *)e50 = *(OvlQuad *)(beam_vars + 0x10);
             for (i = 0; i < 7; i++) {
@@ -235,7 +235,7 @@ void FUN_L17_002a8da0(struct Moby *m) {
                 FUN_L00_001ff290(hit_descriptor_and_vector_scratch, c, e50);
                 normalize_vector_xyz(a, beam_vars + 0x30,
                                      random_float_between(frame_time * 10.0f, len / 20.0f));
-                FUN_L17_0026fb60(m, c, a);
+                FUN_L17_0026fb60(beam_moby, c, a);
             }
             len = -len;
             *(OvlQuad *)e50 = *(OvlQuad *)(beam_vars + 0x20);
@@ -245,7 +245,7 @@ void FUN_L17_002a8da0(struct Moby *m) {
                 *(OvlQuad *)c = *(OvlQuad *)hit_descriptor_and_vector_scratch;
                 normalize_vector_xyz(a, beam_vars + 0x30,
                                      random_float_between(frame_time * 10.0f, len / 20.0f));
-                FUN_L17_0026fb60(m, c, a);
+                FUN_L17_0026fb60(beam_moby, c, a);
             }
             normalize_vector_xyz(a, beam_vars + 0x30, -random_float_between(frame_time * 0.5f, frame_time));
             a[0] += random_float_between(-0.01f, 0.01f);
@@ -253,7 +253,7 @@ void FUN_L17_002a8da0(struct Moby *m) {
             a[2] += random_float_between(-0.01f, 0.01f);
             FUN_L17_0026fb60(0, beam_vars + 0x20, a);
         }
-        enqueue_callback_list_1(FUN_L17_002a95b8, m);
+        enqueue_callback_list_1(FUN_L17_002a95b8, beam_moby);
     }
 }
 #ifndef NOT_SDA
