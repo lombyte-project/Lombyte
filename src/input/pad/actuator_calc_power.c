@@ -97,16 +97,16 @@ s32 actuator_calc_power(s32 *output_power)
             }
             break;
         case ACTUATOR_WAVE_COSINE: {
-            f32 f;
+            f32 cosine_wave_intermediate;
             f32 g;
             if (rem < wave_entry->f0c) {
-                f = convert_integer_to_float(rem) * 3.1415927f / convert_integer_to_float(wave_entry->f0c);
+                cosine_wave_intermediate = convert_integer_to_float(rem) * 3.1415927f / convert_integer_to_float(wave_entry->f0c);
             } else {
-                f = 3.1415927f - convert_integer_to_float(rem - wave_entry->f0c) * 3.1415927f / convert_integer_to_float(wave_entry->f0a);
+                cosine_wave_intermediate = 3.1415927f - convert_integer_to_float(rem - wave_entry->f0c) * 3.1415927f / convert_integer_to_float(wave_entry->f0a);
             }
-            f = fast_cos(f);
+            cosine_wave_intermediate = fast_cos(cosine_wave_intermediate);
             g = convert_integer_to_float(wave_entry->f0e);
-            res = truncate_float_to_s32((f * g + g) * 0.5f) + wave_entry->f0f;
+            res = truncate_float_to_s32((cosine_wave_intermediate * g + g) * 0.5f) + wave_entry->f0f;
             if (res >= 256) {
                 res = 255;
             }
