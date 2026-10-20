@@ -774,6 +774,7 @@ void doom_bot_update(struct Moby *moby) {
         DOOM_BOT_COLLISION_RECOVERY_FALL = 8,
         DOOM_BOT_DETONATE = 11,
         DOOM_BOT_WAIT_FOR_TRANSITION_ANIMATION = 12,
+        DOOM_BOT_SQUIRM = 13,
         DOOM_BOT_INITIAL_FALL = 14,
         DOOM_BOT_RESET_TO_INITIALIZE = 15
     };
@@ -1069,7 +1070,7 @@ void doom_bot_update(struct Moby *moby) {
             data->turn_rate=frame_scale*0.1f*speed;
         }
         break;
-    case 13:
+    case DOOM_BOT_SQUIRM:
         debug_print(D_L00_001E9B70); break;
     case DOOM_BOT_INITIAL_FALL: {
         DoomBotParams *hp;
