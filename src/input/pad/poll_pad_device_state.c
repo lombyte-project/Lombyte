@@ -39,7 +39,7 @@ extern void process_pad_input(struct PAD *p, u8 *buf, s32 len) __asm__("func_002
 
 void poll_pad_device_state(struct PAD *p) __asm__("FUN_002170c8");
 
-void poll_pad_device_state(struct PAD *p) {
+void poll_pad_device_state(struct PAD *pad_state) {
     enum {
         PAD_PROFILE_INITIALIZATION = 0,
         PAD_INPUT_POLLING = 1,
@@ -47,66 +47,66 @@ void poll_pad_device_state(struct PAD *p) {
     };
     s32 v;
     s32 r;
-    s32 n;
+    s32 byte_count;
     s32 i;
     u8 buf[0x40];
 
-    p->unk1A0 = 0;
-    v = p->unk1B0;
-    p->unk1B0 = 0;
-    p->unk1AC = p->unk348;
-    p->unk1BC = v;
-    r = scePad2GetState(p->socket);
-    p->unk19C = r;
+    pad_state->unk1A0 = 0;
+    v = pad_state->unk1B0;
+    pad_state->unk1B0 = 0;
+    pad_state->unk1AC = pad_state->unk348;
+    pad_state->unk1BC = v;
+    r = scePad2GetState(pad_state->socket);
+    pad_state->unk19C = r;
     if (r == 1) {
-        switch (p->unk198) {
+        switch (pad_state->unk198) {
         case PAD_PROFILE_INITIALIZATION: {
-            n = scePad2GetButtonProfile(p->socket, buf);
+            byte_count = scePad2GetButtonProfile(pad_state->socket, buf);
             if (*(u32 *)buf == 0xFFFFFFFF) {
-                p->unk1DC = 0x79;
+                pad_state->unk1DC = 0x79;
             } else {
-                p->unk1DC = 0;
+                pad_state->unk1DC = 0;
             }
-            if (n < 5) {
-                for (i = 0; i < n; i++) {
-                    p->unk180[i] = buf[i];
+            if (byte_count < 5) {
+                for (i = 0; i < byte_count; i++) {
+                    pad_state->unk180[i] = buf[i];
                 }
-                p->unk198 = 1;
+                pad_state->unk198 = 1;
             } else {
-                p->unk198 = 2;
-                n = 0;
+                pad_state->unk198 = 2;
+                byte_count = 0;
             }
-            for (i = n; i < 4; i++) {
-                p->unk180[i] = buf[i];
+            for (i = byte_count; i < 4; i++) {
+                pad_state->unk180[i] = buf[i];
             }
-            n = sceVibGetProfile(p->socket, buf);
-            if (n < 5) {
-                for (i = 0; i < n; i++) {
-                    p->unk184[i] = buf[i];
+            byte_count = sceVibGetProfile(pad_state->socket, buf);
+            if (byte_count < 5) {
+                for (i = 0; i < byte_count; i++) {
+                    pad_state->unk184[i] = buf[i];
                 }
             } else {
-                n = 0;
+                byte_count = 0;
             }
-            for (i = n; i < 4; i++) {
-                p->unk184[i] = buf[i];
+            for (i = byte_count; i < 4; i++) {
+                pad_state->unk184[i] = buf[i];
             }
-            clear_pad_input(p);
+            clear_pad_input(pad_state);
             break;
         }
         case PAD_INPUT_POLLING:
-            n = scePad2Read(p->socket, buf);
-            process_pad_input(p, buf, n);
+            byte_count = scePad2Read(pad_state->socket, buf);
+            process_pad_input(pad_state, buf, byte_count);
             break;
         case PAD_BUTTON_PROFILE_TOO_LARGE:
-            clear_pad_input(p);
+            clear_pad_input(pad_state);
             break;
         }
     } else {
-        clear_pad_input(p);
-        p->unk198 = 0;
+        clear_pad_input(pad_state);
+        pad_state->unk198 = 0;
     }
-    p->unk188 = 0;
-    p->unk189 = 0;
+    pad_state->unk188 = 0;
+    pad_state->unk189 = 0;
 }
 
 extern __typeof__(poll_pad_device_state) func_002170C8 __attribute__((alias("FUN_002170c8")));
