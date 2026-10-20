@@ -290,24 +290,24 @@ extern int D_L00_00173E40_25a120[] __asm__("D_L00_00173E40");
 extern int collision_line(void *, void *, int, int, int) __asm__("FUN_001efa68");
 
 void FUN_L00_0025a120(char *o);
-void FUN_L00_0025a120(char *o) {
-    float a[4];
+void FUN_L00_0025a120(char *moby) {
+    float probe_end[4];
     float b[4];
-    void *p = o + 0x10;
-    qcopy(a, p);
-    a[2] = a[2] - 16.0f;
-    if (a[2] < 0.5f) {
-        a[2] = 0.5f;
+    void *moby_position = moby + 0x10;
+    qcopy(probe_end, moby_position);
+    probe_end[2] = probe_end[2] - 16.0f;
+    if (probe_end[2] < 0.5f) {
+        probe_end[2] = 0.5f;
     }
-    qcopy(b, p);
+    qcopy(b, moby_position);
     b[2] = b[2] + 0.5f;
-    if (collision_line(b, a, 0x22, 0, 0) != 0) {
+    if (collision_line(b, probe_end, 0x22, 0, 0) != 0) {
         float *t = (float *)D_L00_00173E40_25a120;
-        *(float *)(o + 0x84) = t[10] - 0.2f;
-        *(float *)(o + 0x88) = t[10] + 0.2f;
+        *(float *)(moby + 0x84) = t[10] - 0.2f;
+        *(float *)(moby + 0x88) = t[10] + 0.2f;
     } else {
-        *(int *)(o + 0x84) = 0;
-        *(int *)(o + 0x88) = 0;
+        *(int *)(moby + 0x84) = 0;
+        *(int *)(moby + 0x88) = 0;
     }
 }
 struct Ent_z {
