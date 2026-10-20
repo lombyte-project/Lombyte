@@ -148,10 +148,10 @@ extern u8 *D_L00_0015FFD8;
 extern u8 *D_L00_0015FFDC;
 /* Finds the moby (0x100 bytes each) whose short at 0xB2 equals id; 0 when none. */
 u8 *FUN_L00_002851c0(s32 a, s32 id) {
-    u8 *p;
-    for (p = D_L00_0015FFD8; p != D_L00_0015FFDC; p += 0x100) {
-        if (*(s16 *)(p + 0xB2) == id)
-            return p;
+    u8 *record_cursor;
+    for (record_cursor = D_L00_0015FFD8; record_cursor != D_L00_0015FFDC; record_cursor += 0x100) {
+        if (*(s16 *)(record_cursor + 0xB2) == id)
+            return record_cursor;
     }
     return 0;
 }
