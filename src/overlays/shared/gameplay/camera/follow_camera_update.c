@@ -1348,11 +1348,11 @@ void FUN_L00_002ebbd8(void *arg) {
     int lvl;
     char *follow_block = *(char **)(camera_object + 0x70) + 0x40;
     float f;
-    char *t, *q, *r, *w, *camera_data, *src;
-    char *gg, *gg0, *h;
+    char *view_turn_spring_state, *camera_state, *r, *w, *camera_data, *src;
+    char *gg, *gg0, *hero_data_base;
     *(int *)(follow_block + 0x40) = 0;
     f = 1.5f;
-    if (lvl0 == 0xE && (h = D_0013F350, (unsigned)(*(int *)(h + 0x2084) - 0x2C) < 2))
+    if (lvl0 == 0xE && (hero_data_base = D_0013F350, (unsigned)(*(int *)(hero_data_base + 0x2084) - 0x2C) < 2))
         *(float *)(follow_block + 0x4C) = 2.0f;
     else
         *(float *)(follow_block + 0x4C) = 1.5f;
@@ -1376,12 +1376,12 @@ void FUN_L00_002ebbd8(void *arg) {
     *(short *)(r + 0x1E) = scale_game_frames_c(0x78);
     *(short *)(r + 0x1C) = 0;
     clear_u64_value_c(r);
-    q = *(char **)(camera_object + 0x70);
-    t = q + 0x30;
-    *(float *)(t + 4) = 0.02f;
-    *(float *)(t + 8) = 0.2f;
-    *(int *)(t + 0xC) = 0;
-    *(int *)(q + 0x30) = 0;
+    camera_state = *(char **)(camera_object + 0x70);
+    view_turn_spring_state = camera_state + 0x30;
+    *(float *)(view_turn_spring_state + 4) = 0.02f;
+    *(float *)(view_turn_spring_state + 8) = 0.2f;
+    *(int *)(view_turn_spring_state + 0xC) = 0;
+    *(int *)(camera_state + 0x30) = 0;
     camera_data = *(char **)(camera_object + 0x70);
     w = camera_data + 0xB8;
     *(int *)(w + 4) = 0;
