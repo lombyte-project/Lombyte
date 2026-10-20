@@ -345,7 +345,7 @@ extern int hero_set_state(int, int) __asm__("FUN_L06_002356a0");
 
 void FUN_L06_00227cf8(void) {
     struct Hero *g = &hero;
-    unsigned char *m;
+    unsigned char *flag_clear_target;
     if (g->vehicle_mode == 1) {
         g->health.unk22AC = g->health.hp;
         g->health.hp = g->health.unk22B0;
@@ -362,9 +362,9 @@ void FUN_L06_00227cf8(void) {
         struct Hero *g2 = &hero;
         FUN_L00_00205538_227cf8();
         g2->vehicle_mode = 0;
-        m = g2->unkA84;
-        if (m) {
-            *(u16 *)(m + 0x34) &= ~6;
+        flag_clear_target = g2->unkA84;
+        if (flag_clear_target) {
+            *(u16 *)(flag_clear_target + 0x34) &= ~6;
         }
         g2->unkA84 = 0;
         if (g2->unkA8C) {
