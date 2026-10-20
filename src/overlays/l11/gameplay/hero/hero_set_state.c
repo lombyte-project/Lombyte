@@ -82,6 +82,7 @@ extern char D_L11_0017C960[];
 extern char D_L11_0017C920[];
 int hero_set_state(int a, int b) {
     enum {
+        HERO_STATE_FALL_CLEAR_MOTION_VECTOR = 0x2D,
         HERO_STATE_UNDERWATER_ENTRY = 0x33,
         HERO_STATE_WATER_SURFACE_ENTRY = 0x37,
         HERO_STATE_HURT_UPWARD_LAUNCH = 0x42,
@@ -789,7 +790,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x2D: {
+    case HERO_STATE_FALL_CLEAR_MOTION_VECTOR: {
         struct Hero *p = &hero;
         p->state.control_mode = 2;
         p->unk2284 = 7;
