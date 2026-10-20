@@ -418,19 +418,19 @@ void FUN_L12_003064e8(char *moby) {
     char *data = *(char **)(moby + 0x78);
     int last = 17;
     for (i = 0, off = 0; i < 18; i++, off += 4) {
-        int s = D_L12_001FB688[i];
+        int saved_moby_index = D_L12_001FB688[i];
         char *obj;
         float f1;
-        if (s == 0) {
+        if (saved_moby_index == 0) {
             continue;
         }
         if (i == last) {
             obj = moby;
         } else {
-            if (s == -1) {
+            if (saved_moby_index == -1) {
                 continue;
             }
-            obj = (char *)(D_L12_0015FFD8_gp + (s << 8));
+            obj = (char *)(D_L12_0015FFD8_gp + (saved_moby_index << 8));
         }
         if (i == last) {
             f1 = D_L12_00161F40;
@@ -463,11 +463,11 @@ void FUN_L12_003064e8(char *moby) {
             *(float *)(obj + 0x40) = fast_add_rotations_c4(*(float *)(obj + 0x40), *(float *)(data + 0x450 + i * 16));
             FUN_L00_0025bc98(obj + 0x44, -1.5707964f, (float *)(data + 0x450 + i * 16) + 1, 0, *(float *)(data + 0x45C + i * 16), 0.3f, 0.0f);
         } else if (*(short *)(obj + 0xA6) == 0x4FA) {
-            float t;
+            float updated_rotation_angle;
             *(float *)(obj + 0x40) = fast_add_rotations_c4(*(float *)(obj + 0x40), D_0015ED6C * -0.87266463f);
-            t = fast_add_rotations_c4(*(float *)(obj + 0x44), *(float *)(data + 0x454 + i * 16));
+            updated_rotation_angle = fast_add_rotations_c4(*(float *)(obj + 0x44), *(float *)(data + 0x454 + i * 16));
             *(float *)(obj + 0x14) = *(float *)(obj + 0x14) + D_0015ED6C * -4.0f;
-            *(float *)(obj + 0x44) = t;
+            *(float *)(obj + 0x44) = updated_rotation_angle;
         } else {
             *(float *)(obj + 0x14) = *(float *)(obj + 0x14) + D_0015ED6C * -4.0f;
             *(float *)(obj + 0x40) = fast_add_rotations_c4(*(float *)(obj + 0x40), *(float *)(data + 0x450 + i * 16));
