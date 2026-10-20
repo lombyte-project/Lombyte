@@ -13,13 +13,13 @@ typedef struct {
     K0024ed18 *k[1];
 } O0024ed18;
 s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
-s32 FUN_L00_0024ed18(O0024ed18 *o, f32 t) {
+s32 FUN_L00_0024ed18(O0024ed18 *animation_sequence, f32 t) {
     s16 v = truncate_float_to_s32(t * 16.0f);
     s32 i;
-    for (i = 0; i < o->n; i++) {
-        if (v < o->k[i]->h) {
+    for (i = 0; i < animation_sequence->n; i++) {
+        if (v < animation_sequence->k[i]->h) {
             if (i > 0) {
-                if (v - o->k[i - 1]->h < o->k[i]->h - v)
+                if (v - animation_sequence->k[i - 1]->h < animation_sequence->k[i]->h - v)
                     i = i - 1;
             }
             return i;
