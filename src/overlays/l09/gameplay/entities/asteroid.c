@@ -1415,35 +1415,35 @@ extern f32 random_angle_radians(void) __asm__("FUN_00213308");
 
 /* spawns a debris moby of class 0x140 + kind at pos with velocity vel and a random spin */
 struct Moby *FUN_L09_002ef868(struct Moby *src, Vec4 *pos, Vec4 *vel, s32 kind, f32 scale) {
-    Vec4 p;
+    Vec4 position_copy;
     Vec4 v;
-    Vec4 *pp = &p;
+    Vec4 *pp = &position_copy;
     Vec4 *pv = &v;
-    struct Moby *m;
-    struct DebrisVars *d;
+    struct Moby *spawned_moby;
+    struct DebrisVars *debris_vars;
 
-    p.q = pos->q;
+    position_copy.q = pos->q;
     v.q = vel->q;
-    m = create_moby(kind + 0x140);
-    if (m != 0) {
-        d = (struct DebrisVars *)m->pvars;
-        d->src = src;
-        m->update_dist = 0x7F;
-        m->draw_dist = 0x7F;
-        m->visible = 1;
-        m->spawn_frame = src->spawn_frame;
-        m->rot.x = random_angle_radians();
-        m->rot.y = random_angle_radians();
-        m->rot.z = random_angle_radians();
-        qcopy(&m->pos, pp);
-        qcopy(&d->vel, pv);
-        m->scale = m->pclass->scale * scale;
-        d->spin = random_float_between(-(frame_time * 9.075712f), frame_time * 9.075712f);
-        d->tumble = random_float_between(-(frame_time * 6.2831855f), frame_time * 6.2831855f);
-        d->life = scale_game_frames(FUN_L00_00257b90(0x5A, 0x6E));
-        FUN_L00_00250df8(m);
+    spawned_moby = create_moby(kind + 0x140);
+    if (spawned_moby != 0) {
+        debris_vars = (struct DebrisVars *)spawned_moby->pvars;
+        debris_vars->src = src;
+        spawned_moby->update_dist = 0x7F;
+        spawned_moby->draw_dist = 0x7F;
+        spawned_moby->visible = 1;
+        spawned_moby->spawn_frame = src->spawn_frame;
+        spawned_moby->rot.x = random_angle_radians();
+        spawned_moby->rot.y = random_angle_radians();
+        spawned_moby->rot.z = random_angle_radians();
+        qcopy(&spawned_moby->pos, pp);
+        qcopy(&debris_vars->vel, pv);
+        spawned_moby->scale = spawned_moby->pclass->scale * scale;
+        debris_vars->spin = random_float_between(-(frame_time * 9.075712f), frame_time * 9.075712f);
+        debris_vars->tumble = random_float_between(-(frame_time * 6.2831855f), frame_time * 6.2831855f);
+        debris_vars->life = scale_game_frames(FUN_L00_00257b90(0x5A, 0x6E));
+        FUN_L00_00250df8(spawned_moby);
     }
-    return m;
+    return spawned_moby;
 }
 #include "rnc/globals.h"
 #include "qcopy.h"
