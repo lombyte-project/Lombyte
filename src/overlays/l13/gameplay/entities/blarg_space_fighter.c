@@ -877,48 +877,48 @@ extern void scale_vector_xyz(void *, void *, float);
 extern void subtract_vector_xyz(void *dst, void *a, void *b);
 void FUN_L13_002c3988_c(char *moby, char *d, float p2, float p3) __asm__("FUN_L13_002c3988");
 
-int FUN_L13_002c3c88(struct Moby *m, char *d, int aim) {
-    char *path = D_L13_001B07B0[*(int *)(d + 0xA0)];
-    float a, seg, diff, t;
+int FUN_L13_002c3c88(struct Moby *moby, char *moby_data, int aim) {
+    char *path = D_L13_001B07B0[*(int *)(moby_data + 0xA0)];
+    float distance_from_previous_node, seg, diff, steering_blend_factor;
     int wrapped = 0;
     float v[4];
-    a = FUN_001f9b48(path + (*(short *)(d + 0xB6) * 16 + 0x10), &m->pos);
-    seg = FUN_001f9b48(path + (*(short *)(d + 0xB6) * 16 + 0x10),
-                       path + (*(short *)(d + 0xB4) * 16 + 0x10));
-    diff = seg - a;
-    if ((0.0f <= diff && diff < *(float *)(d + 0xCC)) || seg < *(float *)(d + 0xCC)) {
-        *(short *)(d + 0xB6) = *(unsigned short *)(d + 0xB4);
-        *(short *)(d + 0xB4) = *(unsigned short *)(d + 0xB4) + ((signed char *)d)[0xD0];
-        if (*(short *)(d + 0xB4) >= *(int *)path) {
-            *(short *)(d + 0xB4) = 0;
+    distance_from_previous_node = FUN_001f9b48(path + (*(short *)(moby_data + 0xB6) * 16 + 0x10), &moby->pos);
+    seg = FUN_001f9b48(path + (*(short *)(moby_data + 0xB6) * 16 + 0x10),
+                       path + (*(short *)(moby_data + 0xB4) * 16 + 0x10));
+    diff = seg - distance_from_previous_node;
+    if ((0.0f <= diff && diff < *(float *)(moby_data + 0xCC)) || seg < *(float *)(moby_data + 0xCC)) {
+        *(short *)(moby_data + 0xB6) = *(unsigned short *)(moby_data + 0xB4);
+        *(short *)(moby_data + 0xB4) = *(unsigned short *)(moby_data + 0xB4) + ((signed char *)moby_data)[0xD0];
+        if (*(short *)(moby_data + 0xB4) >= *(int *)path) {
+            *(short *)(moby_data + 0xB4) = 0;
             wrapped = 1;
         }
-        if (*(short *)(d + 0xB4) < 0) {
+        if (*(short *)(moby_data + 0xB4) < 0) {
             wrapped = 1;
-            *(short *)(d + 0xB4) = *(unsigned short *)path - 1;
+            *(short *)(moby_data + 0xB4) = *(unsigned short *)path - 1;
         }
-        t = 0.0f;
+        steering_blend_factor = 0.0f;
     } else {
-        t = a / seg;
+        steering_blend_factor = distance_from_previous_node / seg;
     }
-    if (t < 0.05f)
-        t = 0.05f;
-    if (1.0f < t)
-        t = 1.0f;
-    scale_vector_xyz(d + 0x70, d + 0x70, 1.0f - t);
-    subtract_vector_xyz(v, path + (*(short *)(d + 0xB4) * 16 + 0x10), &m->pos);
-    normalize_vector_xyz(v, v, *(float *)(d + 0xCC));
-    scale_vector_xyz(v, v, t);
-    add_vector_xyz(d + 0x70, d + 0x70, v);
-    normalize_vector_xyz(d + 0x70, d + 0x70, *(float *)(d + 0xCC));
-    add_vector_xyz(&m->pos, &m->pos, d + 0x70);
+    if (steering_blend_factor < 0.05f)
+        steering_blend_factor = 0.05f;
+    if (1.0f < steering_blend_factor)
+        steering_blend_factor = 1.0f;
+    scale_vector_xyz(moby_data + 0x70, moby_data + 0x70, 1.0f - steering_blend_factor);
+    subtract_vector_xyz(v, path + (*(short *)(moby_data + 0xB4) * 16 + 0x10), &moby->pos);
+    normalize_vector_xyz(v, v, *(float *)(moby_data + 0xCC));
+    scale_vector_xyz(v, v, steering_blend_factor);
+    add_vector_xyz(moby_data + 0x70, moby_data + 0x70, v);
+    normalize_vector_xyz(moby_data + 0x70, moby_data + 0x70, *(float *)(moby_data + 0xCC));
+    add_vector_xyz(&moby->pos, &moby->pos, moby_data + 0x70);
     if (aim != 0) {
         struct Hero *g = &hero;
-        float yaw = fast_arc_tan(g->motion.pos.f[0] - m->pos.x,
-                                 g->motion.pos.f[1] - m->pos.y);
-        FUN_L13_002c3988_c(m, d, yaw,
-                           -fast_arc_tan(vector_distance(&m->pos, &g->motion.pos),
-                                         g->motion.pos.f[2] - m->pos.z));
+        float yaw = fast_arc_tan(g->motion.pos.f[0] - moby->pos.x,
+                                 g->motion.pos.f[1] - moby->pos.y);
+        FUN_L13_002c3988_c(moby, moby_data, yaw,
+                           -fast_arc_tan(vector_distance(&moby->pos, &g->motion.pos),
+                                         g->motion.pos.f[2] - moby->pos.z));
     }
     return wrapped;
 }
