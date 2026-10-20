@@ -44,7 +44,7 @@ extern void FUN_L01_0021fa98(s32, s32, s32, s32, s32, s32);
 /* Scrolls the UV offsets of count overlay layers (wrapping into [-1, 1]) and, for each one in view, queues its two-texture GS setup and draws it. */
 void FUN_L01_002b96e0(s32 count, ScrollLayer *l) {
     struct DmaTag *tag;
-    u64 *q;
+    u64 *packet_payload;
     s32 vis;
     s32 i;
 
@@ -83,18 +83,18 @@ void FUN_L01_002b96e0(s32 count, ScrollLayer *l) {
         l01_packet.tag->vif0 = 0;
         l01_packet.tag->vif1 = 0x50000005;
         tag = l01_packet.tag;
-        q = (u64 *)(tag + 1);
+        packet_payload = (u64 *)(tag + 1);
         l01_packet.tag = tag + 1;
-        q[0] = 0x4000000000008001;
-        q[1] = 0xEEEE;
-        q[2] = ((u64)l->alpha0 << 32) | 100;
-        q[3] = 0x42;
-        q[4] = ((u64)l->alpha1 << 32) | 100;
-        q[5] = 0x43;
-        q[6] = texture_tex0(l->tex0);
-        q[7] = 6;
-        q[8] = texture_tex0(l->tex1);
-        q[9] = 7;
+        packet_payload[0] = 0x4000000000008001;
+        packet_payload[1] = 0xEEEE;
+        packet_payload[2] = ((u64)l->alpha0 << 32) | 100;
+        packet_payload[3] = 0x42;
+        packet_payload[4] = ((u64)l->alpha1 << 32) | 100;
+        packet_payload[5] = 0x43;
+        packet_payload[6] = texture_tex0(l->tex0);
+        packet_payload[7] = 6;
+        packet_payload[8] = texture_tex0(l->tex1);
+        packet_payload[9] = 7;
         l01_packet.tag = tag + 6;
         FUN_L01_00262618(l);
         FUN_L01_0021fa98(l->shape, 0x70000000, 0x70003000, 0x70001000, 0x70002000, 1 - vis);
