@@ -126,7 +126,7 @@ extern int is_point_inside_clip_volume_alt(void *arg0, int arg1) __asm__("FUN_00
 int FUN_L03_002e8870(char *candidate_object, char *comparison_object) {
     char *entry = (char *)(D_L03_0015EF50 + (*(short *)(candidate_object + 0x84) << 5));
     char *sub = *(char **)(entry + 0x1C);
-    char *q;
+    char *global_state_base;
     int five;
     if (*(int *)(candidate_object + 0x74) != 4)
         return 0;
@@ -136,12 +136,12 @@ int FUN_L03_002e8870(char *candidate_object, char *comparison_object) {
     if (is_point_inside_clip_volume_alt(D_0013E533 + 0xE9D, *(int *)(sub + 0xC)) != 0) {
         if (is_point_inside_clip_volume_alt(D_L03_00166EC0, *(int *)(sub + 0xC)) != 0)
             return 1;
-        q = D_L03_00166EC0 - 0x140;
-        five = *(int *)(q + 0x180);
-        *(unsigned char *)(q + 0x273) = 0;
+        global_state_base = D_L03_00166EC0 - 0x140;
+        five = *(int *)(global_state_base + 0x180);
+        *(unsigned char *)(global_state_base + 0x273) = 0;
         *(short *)(five + 0x7E) = 2;
-        *(float *)(q + 0x294) = 0.018f;
-        *(float *)(q + 0x288) = 0.018f;
+        *(float *)(global_state_base + 0x294) = 0.018f;
+        *(float *)(global_state_base + 0x288) = 0.018f;
         return 1;
     }
     return 0;
