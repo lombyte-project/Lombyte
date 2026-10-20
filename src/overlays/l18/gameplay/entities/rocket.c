@@ -908,38 +908,38 @@ extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern void explode_h(void *, void *, void *, float, float, int, int, int, float, float, float, float, int,
                       float, int, int, int, int) __asm__("FUN_L00_0025e450");
 
-void FUN_L18_002d5f20(unsigned char *m) {
-    char *d = *(char **)(m + 0x78);
+void FUN_L18_002d5f20(unsigned char *moby) {
+    char *moby_vars = *(char **)(moby + 0x78);
     struct Hero *g;
     int hit;
-    if (m[0x20] == 5 || m[0x20] == 0 || m[0x20] == 4)
+    if (moby[0x20] == 5 || moby[0x20] == 0 || moby[0x20] == 4)
         return;
     g = &hero;
     if (g->state.current == 0x72) {
-        m[0x20] = 5;
-        *(short *)(m + 0x34) = (*(short *)(m + 0x34) | 0x41) & ~0x1000;
-        *(int *)(m + 0x94) = 0;
+        moby[0x20] = 5;
+        *(short *)(moby + 0x34) = (*(short *)(moby + 0x34) | 0x41) & ~0x1000;
+        *(int *)(moby + 0x94) = 0;
         return;
     }
-    hit = trooper_find_hit(m, 0x330000, 0);
-    m[0xA4] = 0xFF;
-    if (((unsigned char *)g->coll_hit_moby) == m || ((unsigned char *)g->unk240) == m || *(int *)(d + 0x19C) != 0) {
-        explode_h(m, D_L18_0015F580_h, 0, 1.5f, 1.0f, 0x14, 6, 0x20, 3.0f, 1.5f, 9.0f, 1.5f, 1, 0.0f, 1, 0, -1, 0);
-        m[0x20] = 5;
-        *(short *)(m + 0x34) = (*(short *)(m + 0x34) | 0x41) & ~0x1000;
-        *(int *)(m + 0x94) = 0;
+    hit = trooper_find_hit(moby, 0x330000, 0);
+    moby[0xA4] = 0xFF;
+    if (((unsigned char *)g->coll_hit_moby) == moby || ((unsigned char *)g->unk240) == moby || *(int *)(moby_vars + 0x19C) != 0) {
+        explode_h(moby, D_L18_0015F580_h, 0, 1.5f, 1.0f, 0x14, 6, 0x20, 3.0f, 1.5f, 9.0f, 1.5f, 1, 0.0f, 1, 0, -1, 0);
+        moby[0x20] = 5;
+        *(short *)(moby + 0x34) = (*(short *)(moby + 0x34) | 0x41) & ~0x1000;
+        *(int *)(moby + 0x94) = 0;
         return;
     }
-    if (fast_dec_timer((int *)(d + 0x194)) == 0 && hit == 0) {
-        if (m[0x20] != 1)
+    if (fast_dec_timer((int *)(moby_vars + 0x194)) == 0 && hit == 0) {
+        if (moby[0x20] != 1)
             return;
-        if (!(vector_distance(m + 0x10, &g->motion.pos) < 2.0f))
+        if (!(vector_distance(moby + 0x10, &g->motion.pos) < 2.0f))
             return;
     }
-    explode_h(m, D_L18_0015F580_h, 0, 0.0f, 0.0f, 5, 2, 8, 1.0f, 0.5f, 9.0f, 0.5f, 1, 0.0f, 0, 0, -1, 0);
-    m[0x20] = 5;
-    *(short *)(m + 0x34) = (*(short *)(m + 0x34) | 0x41) & ~0x1000;
-    *(int *)(m + 0x94) = 0;
+    explode_h(moby, D_L18_0015F580_h, 0, 0.0f, 0.0f, 5, 2, 8, 1.0f, 0.5f, 9.0f, 0.5f, 1, 0.0f, 0, 0, -1, 0);
+    moby[0x20] = 5;
+    *(short *)(moby + 0x34) = (*(short *)(moby + 0x34) | 0x41) & ~0x1000;
+    *(int *)(moby + 0x94) = 0;
 }
 /* Pauses the moby in state 4 while the check holds, restoring its old state after. */
 
