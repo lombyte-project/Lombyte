@@ -187,23 +187,23 @@ void follow_camera_auto_turn(int m) {
     char *q = p + 0x130;
     if (*(short *)(p + 0x10) > 0) {
         float v[4];
-        float f;
+        float vector_length;
         float lim;
         subtract_vector_xyz(v, (float *)p, (float *)(p + 0x90));
         lerp_vector(D_L00_0015EF40, q, q, v);
-        f = fast_vec_length(q);
+        vector_length = fast_vec_length(q);
         lim = *(float *)(q + 0x2C);
-        if (lim < f) {
-            f = lim;
-            fast_vec_normalize(q, q, f);
-            *(float *)(r + 0x30) = *(float *)(q + 0x2C) - f;
+        if (lim < vector_length) {
+            vector_length = lim;
+            fast_vec_normalize(q, q, vector_length);
+            *(float *)(r + 0x30) = *(float *)(q + 0x2C) - vector_length;
         } else {
-            float t = lim - *(float *)(r + 0x30);
-            if (f < t) {
-                f = t;
-                fast_vec_normalize(q, q, f);
+            float minimum_length = lim - *(float *)(r + 0x30);
+            if (vector_length < minimum_length) {
+                vector_length = minimum_length;
+                fast_vec_normalize(q, q, vector_length);
             }
-            *(float *)(r + 0x30) = *(float *)(q + 0x2C) - f;
+            *(float *)(r + 0x30) = *(float *)(q + 0x2C) - vector_length;
         }
     }
 }
