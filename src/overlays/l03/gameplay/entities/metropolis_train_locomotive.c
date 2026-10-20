@@ -2031,9 +2031,9 @@ int FUN_L03_002c6e18(float ang, struct Moby *moby, struct Moby *target) {
     if (*(int *)&target->rot != 0) {
         idx = *(int *)(data + 0x264);
         if (idx != -1) {
-            char *e = (char *)(idx << 8) + (int)*(char **)&D_L03_0015FFD8_u;
-            if (*(short *)(e + 0xA6) == 0x336) {
-                if ((unsigned char)e[0xBC] != 4)
+            char *linked_moby = (char *)(idx << 8) + (int)*(char **)&D_L03_0015FFD8_u;
+            if (*(short *)(linked_moby + 0xA6) == 0x336) {
+                if ((unsigned char)linked_moby[0xBC] != 4)
                     return 0;
             }
         }
