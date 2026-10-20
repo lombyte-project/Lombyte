@@ -158,52 +158,52 @@ void FUN_L00_00259f50(void *, void *);
 
 /* Eases one record's rotation and position toward their targets and rebuilds its matrix;
    once targets are zero and it has settled, detaches it from its moby. */
-void FUN_L00_00205168(struct HeroEase *e) {
-    s32 moby = FUN_L00_00205110(e->kind);
+void FUN_L00_00205168(struct HeroEase *ease_record) {
+    s32 moby = FUN_L00_00205110(ease_record->kind);
     if (moby == 0)
         return;
     if (D_001413F4 == 0) {
-        if (e->kind == 4 || e->kind == 2 || e->kind == 3)
+        if (ease_record->kind == 4 || ease_record->kind == 2 || ease_record->kind == 3)
             return;
-    } else if (e->kind == 0) {
+    } else if (ease_record->kind == 0) {
         return;
     }
-    if (e->rot_target.f[0] == 0.0f && e->rot_target.f[1] == 0.0f && e->rot_target.f[2] == 0.0f &&
-        e->pos_target.f[0] == 0.0f && e->pos_target.f[1] == 0.0f && e->pos_target.f[2] == 0.0f &&
-        absolute_float(e->pos.f[0]) < 0.003f && absolute_float(e->pos.f[1]) < 0.003f &&
-        absolute_float(e->pos.f[2]) < 0.003f && e->scale == 1.0f &&
-        absolute_float(e->rot.f[0]) < 0.005f && absolute_float(e->rot.f[1]) < 0.005f &&
-        absolute_float(e->rot.f[2]) < 0.005f) {
-        if (e->attached)
-            detach_manipulator(moby, e);
+    if (ease_record->rot_target.f[0] == 0.0f && ease_record->rot_target.f[1] == 0.0f && ease_record->rot_target.f[2] == 0.0f &&
+        ease_record->pos_target.f[0] == 0.0f && ease_record->pos_target.f[1] == 0.0f && ease_record->pos_target.f[2] == 0.0f &&
+        absolute_float(ease_record->pos.f[0]) < 0.003f && absolute_float(ease_record->pos.f[1]) < 0.003f &&
+        absolute_float(ease_record->pos.f[2]) < 0.003f && ease_record->scale == 1.0f &&
+        absolute_float(ease_record->rot.f[0]) < 0.005f && absolute_float(ease_record->rot.f[1]) < 0.005f &&
+        absolute_float(ease_record->rot.f[2]) < 0.005f) {
+        if (ease_record->attached)
+            detach_manipulator(moby, ease_record);
     } else {
         Vec4 *rot;
         Vec4 *pos;
         /* retail reads this flag at its literal address, with no relocation */
         if (*(u8 *)0x15EDB5) {
-            e->rot_target.f[0] = -e->rot_target.f[0];
-            e->rot_target.f[2] = -e->rot_target.f[2];
-            e->pos.f[1] = -e->pos.f[1];
+            ease_record->rot_target.f[0] = -ease_record->rot_target.f[0];
+            ease_record->rot_target.f[2] = -ease_record->rot_target.f[2];
+            ease_record->pos.f[1] = -ease_record->pos.f[1];
         }
-        rot = &e->rot;
-        pos = &e->pos;
-        turn_k(&rot->f[0], e->rot_target.f[0], &e->rot_vel.f[0], e->accel * frame_scale_sq, e->max_speed * frame_scale_sq, 0.0f, 2);
-        turn_k(&rot->f[1], e->rot_target.f[1], &e->rot_vel.f[1], e->accel * frame_scale_sq, e->max_speed * frame_scale_sq, 0.0f, 2);
-        turn_k(&rot->f[2], e->rot_target.f[2], &e->rot_vel.f[2], e->accel * frame_scale_sq, e->max_speed * frame_scale_sq, 0.0f, 2);
-        vendor_spring(&pos->f[0], &e->pos_vel.f[0], e->pos_target.f[0], e->accel, e->max_speed, 0.0f);
-        vendor_spring(&pos->f[1], &e->pos_vel.f[1], e->pos_target.f[1], e->accel, e->max_speed, 0.0f);
-        vendor_spring(&pos->f[2], &e->pos_vel.f[2], e->pos_target.f[2], e->accel, e->max_speed, 0.0f);
-        if (!e->attached)
-            attach_manipulator(moby, e->unkA0, e);
-        FUN_L00_00259f50(&e->quat, rot);
-        qcopy(&e->translation, pos);
-        e->scale3.f[0] = e->scale;
-        e->scale3.f[1] = e->scale;
-        e->scale3.f[2] = e->scale;
+        rot = &ease_record->rot;
+        pos = &ease_record->pos;
+        turn_k(&rot->f[0], ease_record->rot_target.f[0], &ease_record->rot_vel.f[0], ease_record->accel * frame_scale_sq, ease_record->max_speed * frame_scale_sq, 0.0f, 2);
+        turn_k(&rot->f[1], ease_record->rot_target.f[1], &ease_record->rot_vel.f[1], ease_record->accel * frame_scale_sq, ease_record->max_speed * frame_scale_sq, 0.0f, 2);
+        turn_k(&rot->f[2], ease_record->rot_target.f[2], &ease_record->rot_vel.f[2], ease_record->accel * frame_scale_sq, ease_record->max_speed * frame_scale_sq, 0.0f, 2);
+        vendor_spring(&pos->f[0], &ease_record->pos_vel.f[0], ease_record->pos_target.f[0], ease_record->accel, ease_record->max_speed, 0.0f);
+        vendor_spring(&pos->f[1], &ease_record->pos_vel.f[1], ease_record->pos_target.f[1], ease_record->accel, ease_record->max_speed, 0.0f);
+        vendor_spring(&pos->f[2], &ease_record->pos_vel.f[2], ease_record->pos_target.f[2], ease_record->accel, ease_record->max_speed, 0.0f);
+        if (!ease_record->attached)
+            attach_manipulator(moby, ease_record->unkA0, ease_record);
+        FUN_L00_00259f50(&ease_record->quat, rot);
+        qcopy(&ease_record->translation, pos);
+        ease_record->scale3.f[0] = ease_record->scale;
+        ease_record->scale3.f[1] = ease_record->scale;
+        ease_record->scale3.f[2] = ease_record->scale;
     }
-    clear_u64_value(&e->pos_target);
-    clear_u64_value(&e->rot_target);
-    e->scale = 1.0f;
+    clear_u64_value(&ease_record->pos_target);
+    clear_u64_value(&ease_record->rot_target);
+    ease_record->scale = 1.0f;
 }
 extern struct HeroEase D_L00_0017A680_002054e8[] __asm__("D_L00_0017A680");
 /* Runs FUN_L00_00205168 on each entry of D_L00_0017A680 (0x1550 bytes). */
