@@ -3064,12 +3064,12 @@ void FUN_L00_0020b5b8(void) {
     struct Hero *h;
     struct Hero *k2;
     u8 *pz;
-    s32 t;
-    s32 n;
+    s32 prediction_frames;
+    s32 hit_material;
     f32 f;
     f32 r;
-    f32 s;
-    f32 a, b, c, d;
+    f32 max_hit_distance;
+    f32 a, b, projected_x_displacement, projected_y_displacement;
 
     g = &hero;
     if (g->ground_distance < 0.4f) {
@@ -3083,20 +3083,20 @@ void FUN_L00_0020b5b8(void) {
         return;
     }
     qcopy(&v, &g->motion.pos);
-    t = scale_game_frames(0x14);
+    prediction_frames = scale_game_frames(0x14);
     {
-        f32 st = (f32)t;
+        f32 st = (f32)prediction_frames;
         a = g->unk4A0 * st;
         b = g->motion.velocity.f[2] * st;
-        c = g->motion.displacement.f[0] * st;
-        d = g->motion.displacement.f[1] * st;
+        projected_x_displacement = g->motion.displacement.f[0] * st;
+        projected_y_displacement = g->motion.displacement.f[1] * st;
         v.f[2] = v.f[2] + b - a * st * 0.5f;
     }
-    v.f[0] = v.f[0] + c;
-    v.f[1] = v.f[1] + d;
+    v.f[0] = v.f[0] + projected_x_displacement;
+    v.f[1] = v.f[1] + projected_y_displacement;
     if (FUN_L00_0020c758_20b5b8(&v, &g->motion.rot.f[2]) != 0) {
         g->unk1B4 = 0;
-        g->unk1F0 = t + 2;
+        g->unk1F0 = prediction_frames + 2;
         return;
     }
     if (FUN_L00_0020a240_20b5b8(0, 0.3f, 1.0f) == 0) {
@@ -3114,11 +3114,11 @@ void FUN_L00_0020b5b8(void) {
     if (FUN_001efa68_20b5b8(&v, &w, 2, 0, 0) == 0) {
         return;
     }
-    n = collision_hit_material();
-    if (n == 0xA) {
+    hit_material = collision_hit_material();
+    if (hit_material == 0xA) {
         return;
     }
-    if (n == 0xC) {
+    if (hit_material == 0xC) {
         return;
     }
     pz = (u8 *)coll_hit_normal;
@@ -3132,12 +3132,12 @@ void FUN_L00_0020b5b8(void) {
         return;
     }
     if (k2->state.current == 0x11) {
-        s = 0.95f;
+        max_hit_distance = 0.95f;
     } else {
-        s = 0.72f;
+        max_hit_distance = 0.72f;
     }
     f = FUN_001f9b80_20b5b8(pz - 0x20, &v);
-    if (s < f) {
+    if (max_hit_distance < f) {
         return;
     }
     {
