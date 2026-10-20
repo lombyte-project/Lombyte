@@ -517,6 +517,7 @@ void FUN_L01_002370b8(void) {
         HERO_STATE_MOVE_VIA_POSITIVE_LATERAL_PROBE = 0x1A,
         HERO_STATE_MOVE_VIA_NEGATIVE_LATERAL_PROBE = 0x1B,
         HERO_STATE_DECELERATE_ALONG_SAVED_YAW = 0x21,
+        HERO_STATE_RISE_THEN_FALL_WITH_AIRBORNE_HIT_QUERY = 0x22,
         HERO_STATE_MOVE_WITH_MINIMUM_TARGET_SPEED = 0x54,
         HERO_STATE_FALL_WITH_LIMITED_DESCENT = 0x55,
         HERO_STATE_DAMP_PLANAR_VELOCITY = 0x56,
@@ -1170,7 +1171,7 @@ void FUN_L01_002370b8(void) {
             set_hero_animation(FUN_L01_00226f10(0), 0, scale_game_frames(5));
         }
     } break;
-    case 0x22: {
+    case HERO_STATE_RISE_THEN_FALL_WITH_AIRBORNE_HIT_QUERY: {
         int t0;
         int t1;
         float a;
