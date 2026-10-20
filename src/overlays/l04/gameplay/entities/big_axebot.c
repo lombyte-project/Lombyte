@@ -81,7 +81,7 @@ int FUN_L04_002c1e98(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     float vec[20];
     float target_distance;
-    float s;
+    float target_selection_distance_limit;
     char *other_moby;
     int flag = 0;
     if (*(int *)(data + 0x38) != 0 || *(short *)(data + 0x136) != 0) {
@@ -89,11 +89,11 @@ int FUN_L04_002c1e98(struct Moby *moby) {
     }
     if (flag) {
         float x = *(float *)(data + 0x140);
-        s = x + x;
+        target_selection_distance_limit = x + x;
     } else {
-        s = *(float *)(data + 0x140);
+        target_selection_distance_limit = *(float *)(data + 0x140);
     }
-    FUN_L00_0025fcb8(moby, vec, s);
+    FUN_L00_0025fcb8(moby, vec, target_selection_distance_limit);
     target_distance = vector_distance((float *)&moby->pos, vec);
     for (other_moby = D_L04_0015FFE4; other_moby != 0; other_moby = *(char **)(other_moby + 0x28)) {
         if (other_moby != moby && *(short *)(other_moby + 0xA6) == 0x154) {
