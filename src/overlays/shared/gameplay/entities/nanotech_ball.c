@@ -71,8 +71,8 @@ void FUN_L00_002d7f88(S_002d7f88 *self) {
     self->f2C = t * 0.1f + t * moby_data->f4 / D_L00_001616DC;
 }
 /* True when the moby state byte is 1. */
-int FUN_L00_002d8128(unsigned char *p) {
-    return p[0x20] == 1;
+int FUN_L00_002d8128(unsigned char *moby) {
+    return moby[0x20] == 1;
 }
 typedef struct {
     char pad[0x10];
