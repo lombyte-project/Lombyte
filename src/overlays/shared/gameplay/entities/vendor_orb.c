@@ -2209,7 +2209,7 @@ void FUN_L00_002e55b8(void *mm, void *vv, void *tt, f32 stiffness, f32 b, f32 li
     v[2] = cam_interp_values(camera_state + 0xE8, v[2], target_values[2], stiffness, b, limit);
 }
 void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-s32 FUN_L00_002e5678(void *mm, void *a, void *b, s32 k) {
+s32 FUN_L00_002e5678(void *mm, void *input_offset, void *b, s32 k) {
     enum {
         CAM_ATTACH_HERO_POSITION_BASE = 1,
         CAM_ATTACH_STORED_FOCUS_POSITION_BASE = 2,
@@ -2219,29 +2219,29 @@ s32 FUN_L00_002e5678(void *mm, void *a, void *b, s32 k) {
         CAM_ATTACH_BLEND_OUT_FOCUS_VELOCITY = 6,
         CAM_ATTACH_BLEND_BACK_FOCUS_VELOCITY = 7
     };
-    u8 *m = mm;
+    u8 *camera = mm;
     s32 r = 1;
-    u8 *p = *(u8 **)(m + 0x70) + 0x40;
+    u8 *stored_focus_position = *(u8 **)(camera + 0x70) + 0x40;
     f32 t[4] __attribute__((aligned(16)));
     switch (k) {
     case CAM_ATTACH_BLEND_TO_PROJECT_HERO_FOCUS_VELOCITY:
     case CAM_ATTACH_PROJECT_HERO_FOCUS_VELOCITY:
-        fast_vec_add(b, a, p);
+        fast_vec_add(b, input_offset, stored_focus_position);
         r = 0;
         break;
     case CAM_ATTACH_BLEND_FOCUS_VELOCITY_WITH_HOLD_TRANSITION:
     case CAM_ATTACH_BLEND_OUT_FOCUS_VELOCITY:
     case CAM_ATTACH_BLEND_BACK_FOCUS_VELOCITY:
-        fast_vec_add(b, a, p);
+        fast_vec_add(b, input_offset, stored_focus_position);
         r = 0;
         break;
     case CAM_ATTACH_HERO_POSITION_BASE:
-        follow_camera_hero_target((int)m, t);
-        fast_vec_add(b, a, t);
+        follow_camera_hero_target((int)camera, t);
+        fast_vec_add(b, input_offset, t);
         break;
     case CAM_ATTACH_STORED_FOCUS_POSITION_BASE:
     default:
-        fast_vec_add(b, a, p);
+        fast_vec_add(b, input_offset, stored_focus_position);
         break;
     }
     return r;
