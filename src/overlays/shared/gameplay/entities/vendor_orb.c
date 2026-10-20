@@ -613,7 +613,7 @@ void FUN_L00_002e0788(unsigned char *moby) {
     float *a;
     int *t;
     int i, j, c;
-    float f, g;
+    float pre_wrap_sum, g;
     j = 0;
     moby += 0x10;
     fast_vec_sub(v, D_L00_00166DC0, moby);
@@ -623,12 +623,12 @@ void FUN_L00_002e0788(unsigned char *moby) {
     vscl_2e0788(&v[1], v, 0.1f);
     fast_vec_add(v, v, moby);
     for (i = 3; i >= 0; i--) {
-        f = *a + moby_data->b[j];
-        *a = f;
-        if (f >= 255.0f) {
-            *a = f - 255.0f;
-        } else if (f <= 0.0f) {
-            *a = f + 255.0f;
+        pre_wrap_sum = *a + moby_data->b[j];
+        *a = pre_wrap_sum;
+        if (pre_wrap_sum >= 255.0f) {
+            *a = pre_wrap_sum - 255.0f;
+        } else if (pre_wrap_sum <= 0.0f) {
+            *a = pre_wrap_sum + 255.0f;
         }
         if (f9740_2e0788(t)) {
             moby_data->t[j] = ticks_2e0788(0xff);
