@@ -69,16 +69,16 @@ void FUN_L12_002e6b60(char *moby) {
 
     if (D_L12_0015F5C4 == 2 && big_head_cheat_enabled != 0) {
         for (i = 0; i < D_L12_0016CCE0.count; i++) {
-            char *e = D_L12_0016CCE0.mobys[i];
+            char *candidate_moby = D_L12_0016CCE0.mobys[i];
 
-            if (*(short *)(e + 0xA6) == *(short *)(moby + 0xA6)) {
-                unsigned char *s = D_L12_0017C8C0;
+            if (*(short *)(candidate_moby + 0xA6) == *(short *)(moby + 0xA6)) {
+                unsigned char *manipulator = D_L12_0017C8C0;
 
-                if (s[1] == 0) {
-                    attach_manipulator(e, 1, s);
-                    *(float *)(s + 0x20) = 2.75f;
-                    *(float *)(s + 0x24) = 2.75f;
-                    *(float *)(s + 0x28) = 2.75f;
+                if (manipulator[1] == 0) {
+                    attach_manipulator(candidate_moby, 1, manipulator);
+                    *(float *)(manipulator + 0x20) = 2.75f;
+                    *(float *)(manipulator + 0x24) = 2.75f;
+                    *(float *)(manipulator + 0x28) = 2.75f;
                 }
             }
         }
