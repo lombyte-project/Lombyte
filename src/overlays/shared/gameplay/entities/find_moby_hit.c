@@ -302,9 +302,9 @@ void FUN_L00_0025a120(char *moby) {
     qcopy(b, moby_position);
     b[2] = b[2] + 0.5f;
     if (collision_line(b, probe_end, 0x22, 0, 0) != 0) {
-        float *t = (float *)D_L00_00173E40_25a120;
-        *(float *)(moby + 0x84) = t[10] - 0.2f;
-        *(float *)(moby + 0x88) = t[10] + 0.2f;
+        float *output_bounds_source = (float *)D_L00_00173E40_25a120;
+        *(float *)(moby + 0x84) = output_bounds_source[10] - 0.2f;
+        *(float *)(moby + 0x88) = output_bounds_source[10] + 0.2f;
     } else {
         *(int *)(moby + 0x84) = 0;
         *(int *)(moby + 0x88) = 0;
