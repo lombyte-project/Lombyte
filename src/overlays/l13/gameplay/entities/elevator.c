@@ -489,7 +489,7 @@ extern void random_vector(float *, float, float) __asm__("FUN_L00_00257d78");
 extern unsigned char D_0013F420_2b0e80[] __asm__("D_0013F420");
 
 void blarg_turret_update(Moby_2B5368 *m) __asm__("FUN_L13_002b41b8");
-void blarg_turret_update(Moby_2B5368 *m) {
+void blarg_turret_update(Moby_2B5368 *turret_moby) {
     enum {
         BLARG_TURRET_STATE_INITIALIZE = 0,
         BLARG_TURRET_STATE_WAIT_FOR_TARGET = 1,
@@ -497,59 +497,59 @@ void blarg_turret_update(Moby_2B5368 *m) {
         BLARG_TURRET_STATE_DESTROY = 4,
         BLARG_TURRET_STATE_DESTRUCTION_DELAY = 5
     };
-    Data_2B5368 *data = m->data;
-    Moby_2B5368 *t;
+    Data_2B5368 *data = turret_moby->data;
+    Moby_2B5368 *target_moby;
     Moby_2B5368 *gun;
     float r;
 
-    FUN_L13_002b48d8_2b0e80(m);
-    t = data->target;
+    FUN_L13_002b48d8_2b0e80(turret_moby);
+    target_moby = data->target;
     if (data->gun != 0 && data->gun->cls_id == 0x24 && data->gun->state >= 0) {
         FUN_L00_00263ac8_2b0e80(2.7f, data->gun, 1, data->fx);
     }
-    switch ((unsigned char)m->state) {
+    switch ((unsigned char)turret_moby->state) {
     case BLARG_TURRET_STATE_INITIALIZE:
-        m->scale = m->cls->scale * 1.5f;
-        data->gun = FUN_L13_002b4958_2b0e80(m);
-        data->f54 = m->rot.z;
-        if (m->b53 != 0) {
-            FUN_00212f90_2b0e80(m, 0, 0, 10);
+        turret_moby->scale = turret_moby->cls->scale * 1.5f;
+        data->gun = FUN_L13_002b4958_2b0e80(turret_moby);
+        data->f54 = turret_moby->rot.z;
+        if (turret_moby->b53 != 0) {
+            FUN_00212f90_2b0e80(turret_moby, 0, 0, 10);
         }
-        m->state = 1;
+        turret_moby->state = 1;
         break;
     case BLARG_TURRET_STATE_WAIT_FOR_TARGET:
-        r = fast_difference_between_rotations(angle_atan2(t->pos.x - m->pos.x, t->pos.y - m->pos.y), data->f54);
-        if (r < 1.5707964f && vector_distance(&m->pos, &t->pos) < 20.0f
+        r = fast_difference_between_rotations(angle_atan2(target_moby->pos.x - turret_moby->pos.x, target_moby->pos.y - turret_moby->pos.y), data->f54);
+        if (r < 1.5707964f && vector_distance(&turret_moby->pos, &target_moby->pos) < 20.0f
             && (data->volume == -1 || is_point_inside_clip_volume(D_0013F420_2b0e80, data->volume) != 0)) {
             data->f68 = 8.0f;
-            if (m->b53 != 1) {
+            if (turret_moby->b53 != 1) {
                 int a = random_int_between(0, 3);
-                FUN_00212f90_2b0e80(m, 1, a, random_int_between(7, 13));
+                FUN_00212f90_2b0e80(turret_moby, 1, a, random_int_between(7, 13));
             }
-            m->state = 3;
+            turret_moby->state = 3;
         }
-        approach_angle(&m->rot.z, data->f54, &data->f60, D_0015ED70_c * 12.566371f, D_0015ED70_c * 12.566371f, frame_time * 12.566371f);
+        approach_angle(&turret_moby->rot.z, data->f54, &data->f60, D_0015ED70_c * 12.566371f, D_0015ED70_c * 12.566371f, frame_time * 12.566371f);
         if (data->gun == 0 || data->gun->cls_id != 0x24 || (unsigned char)data->gun->state == 0xFE
             || (unsigned char)data->gun->state == 0xFD || (unsigned char)data->gun->state == 2) {
-            if (m->b53 != 0) {
-                FUN_00212f90_2b0e80(m, 0, 0, random_int_between(7, 13));
+            if (turret_moby->b53 != 0) {
+                FUN_00212f90_2b0e80(turret_moby, 0, 0, random_int_between(7, 13));
             }
             data->f64 = 1.0f;
-            m->state = 5;
+            turret_moby->state = 5;
         }
         break;
     case BLARG_TURRET_STATE_TRACK_TARGET:
-        r = fast_difference_between_rotations(angle_atan2(t->pos.x - m->pos.x, t->pos.y - m->pos.y), data->f54);
-        if (r >= 1.5707964f || vector_distance(&m->pos, &t->pos) > 22.0f
+        r = fast_difference_between_rotations(angle_atan2(target_moby->pos.x - turret_moby->pos.x, target_moby->pos.y - turret_moby->pos.y), data->f54);
+        if (r >= 1.5707964f || vector_distance(&turret_moby->pos, &target_moby->pos) > 22.0f
             || (data->volume != -1 && is_point_inside_clip_volume(D_0013F420_2b0e80, data->volume) == 0)) {
-            if (m->b53 != 0) {
-                FUN_00212f90_2b0e80(m, 0, 0, random_int_between(7, 13));
+            if (turret_moby->b53 != 0) {
+                FUN_00212f90_2b0e80(turret_moby, 0, 0, random_int_between(7, 13));
             }
-            m->state = 1;
+            turret_moby->state = 1;
         } else {
             float lim;
             approach_value(&data->f68, 20.0f, frame_time * 6.0f);
-            r = FUN_001fa5c8_2b0e80(angle_atan2(t->pos.x - m->pos.x, t->pos.y - m->pos.y), data->f54);
+            r = FUN_001fa5c8_2b0e80(angle_atan2(target_moby->pos.x - turret_moby->pos.x, target_moby->pos.y - turret_moby->pos.y), data->f54);
             lim = data->f6C * 0.017453292f;
             if (lim < r) {
                 r = lim;
@@ -557,40 +557,40 @@ void blarg_turret_update(Moby_2B5368 *m) {
                 r = -lim;
             }
             r = FUN_001fa580_2b0e80(r, data->f54);
-            approach_angle(&m->rot.z, r, &data->f60, D_0015ED70_c * 12.566371f, D_0015ED70_c * 12.566371f, frame_time * 12.566371f);
-            FUN_L13_002b47a0_2b0e80(m);
+            approach_angle(&turret_moby->rot.z, r, &data->f60, D_0015ED70_c * 12.566371f, D_0015ED70_c * 12.566371f, frame_time * 12.566371f);
+            FUN_L13_002b47a0_2b0e80(turret_moby);
             if (data->gun == 0 || data->gun->cls_id != 0x24 || (unsigned char)data->gun->state == 0xFE
                 || (unsigned char)data->gun->state == 0xFD || (unsigned char)data->gun->state == 2) {
-                if (m->b53 != 0) {
-                    FUN_00212f90_2b0e80(m, 0, 0, random_int_between(7, 13));
+                if (turret_moby->b53 != 0) {
+                    FUN_00212f90_2b0e80(turret_moby, 0, 0, random_int_between(7, 13));
                 }
                 data->f64 = 1.0f;
-                m->state = 5;
+                turret_moby->state = 5;
             }
         }
         break;
     case BLARG_TURRET_STATE_DESTROY: {
         V4_2B5368 v;
         random_vector(&v.x, 0.5f, 1.0f);
-        mark_moby_for_removal_cf(m, 0, -1);
-        FUN_L00_0025e450_2b0e80(m, &v, &m->pos, 0.0f, 0.0f, 5, 2, 4, 2.0f, 1.0f, 9.0f, -1, 1.0f, 15.0f, 1, 1, -1, 0);
-        delete_moby(m);
+        mark_moby_for_removal_cf(turret_moby, 0, -1);
+        FUN_L00_0025e450_2b0e80(turret_moby, &v, &turret_moby->pos, 0.0f, 0.0f, 5, 2, 4, 2.0f, 1.0f, 9.0f, -1, 1.0f, 15.0f, 1, 1, -1, 0);
+        delete_moby(turret_moby);
         return;
     }
     case BLARG_TURRET_STATE_DESTRUCTION_DELAY:
-        approach_angle(&m->rot.z, data->f54, &data->f60, D_0015ED70_c * 12.566371f, D_0015ED70_c * 12.566371f, frame_time * 25.132742f);
+        approach_angle(&turret_moby->rot.z, data->f54, &data->f60, D_0015ED70_c * 12.566371f, D_0015ED70_c * 12.566371f, frame_time * 25.132742f);
         data->f64 -= 1.0f;
         if (data->f64 <= 0.0f) {
-            m->state = 4;
+            turret_moby->state = 4;
         }
         break;
     }
     gun = data->gun;
     if (gun != 0 && gun->cls_id == 0x24 && (unsigned char)gun->state != 0xFE && (unsigned char)gun->state != 0xFD) {
-        qcopy(&gun->rot, &m->rot);
-        *(u128 *)&gun->mat[0] = *(u128 *)&m->mat[0];
-        *(u128 *)&gun->mat[1] = *(u128 *)&m->mat[1];
-        *(u128 *)&gun->mat[2] = *(u128 *)&m->mat[2];
+        qcopy(&gun->rot, &turret_moby->rot);
+        *(u128 *)&gun->mat[0] = *(u128 *)&turret_moby->mat[0];
+        *(u128 *)&gun->mat[1] = *(u128 *)&turret_moby->mat[1];
+        *(u128 *)&gun->mat[2] = *(u128 *)&turret_moby->mat[2];
     } else {
         data->gun = 0;
     }
