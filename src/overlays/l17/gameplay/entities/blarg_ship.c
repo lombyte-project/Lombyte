@@ -1038,30 +1038,30 @@ void FUN_L17_002f59a8(void) {
 /* Computes a per-vertex 2D sphere-map texture coordinate from position and normal arrays. */
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F7C78), where it is exact; names translated to the US level program. */
 
-void FUN_L17_002f6138(int n, char *nrm, char *pos, int unused, float *out) {
-    float a[4];
-    float t[4];
+void FUN_L17_002f6138(int vertex_count, char *nrm, char *pos, int unused, float *out) {
+    float normalized_position_delta[4];
+    float vertex_position[4];
     float r[4];
-    float c[4];
+    float normalized_normal[4];
     int i;
-    for (i = 0; i < n; i++) {
-        float *p = (float *)(i * 12 + (int)pos);
-        float *q;
+    for (i = 0; i < vertex_count; i++) {
+        float *position_element = (float *)(i * 12 + (int)pos);
+        float *normal_element;
         float len;
-        t[3] = 1.0f;
-        t[0] = p[0];
-        t[1] = p[1];
-        t[2] = p[2];
-        fast_vec_sub(a, D_L17_001676C0, t);
-        fast_vec_normalize(a, a, 1.0f);
-        c[3] = 1.0f;
-        q = (float *)(i * 12 + (int)nrm);
-        c[0] = q[0];
-        c[1] = q[1];
-        c[2] = q[2];
-        fast_vec_normalize(c, c, 1.0f);
-        fast_vec_scale(r, c, fast_vec_dot(c, a) * 2.0f);
-        fast_vec_sub(r, a, r);
+        vertex_position[3] = 1.0f;
+        vertex_position[0] = position_element[0];
+        vertex_position[1] = position_element[1];
+        vertex_position[2] = position_element[2];
+        fast_vec_sub(normalized_position_delta, D_L17_001676C0, vertex_position);
+        fast_vec_normalize(normalized_position_delta, normalized_position_delta, 1.0f);
+        normalized_normal[3] = 1.0f;
+        normal_element = (float *)(i * 12 + (int)nrm);
+        normalized_normal[0] = normal_element[0];
+        normalized_normal[1] = normal_element[1];
+        normalized_normal[2] = normal_element[2];
+        fast_vec_normalize(normalized_normal, normalized_normal, 1.0f);
+        fast_vec_scale(r, normalized_normal, fast_vec_dot(normalized_normal, normalized_position_delta) * 2.0f);
+        fast_vec_sub(r, normalized_position_delta, r);
         fast_vec_normalize(r, r, 1.0f);
         r[2] += 1.0f;
         len = fast_vec_length(r) * 2.0f;
