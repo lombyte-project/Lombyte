@@ -356,16 +356,16 @@ void FUN_L00_00260860(int id, int flag) {
     unsigned char *pa = &D_0013D4C0[id];
     unsigned char *pb = &items_acquired[id];
     int idx = id + 0x25;
-    int *p;
+    int *dialogue_message_id_ptr;
     int i;
 
     if (*pa == 0) {
         idx = id;
     }
-    p = &D_L00_001B0340[idx];
+    dialogue_message_id_ptr = &D_L00_001B0340[idx];
     *pb = 1;
-    if (*p != -1) {
-        queue_dialogue_message(*p, scale_game_frames(0x12C));
+    if (*dialogue_message_id_ptr != -1) {
+        queue_dialogue_message(*dialogue_message_id_ptr, scale_game_frames(0x12C));
     }
     if (*pa == 0) {
         VendorItemInfo *r;
@@ -373,12 +373,12 @@ void FUN_L00_00260860(int id, int flag) {
         r = &D_L00_001C40B0[id];
         *pb = 1;
         if (r->h8 != 0) {
-            int *q = &weapon_ammo_counts[id];
+            int *ammo_count_ptr = &weapon_ammo_counts[id];
             int v = r->h12;
-            if (v < *q) {
-                v = *q;
+            if (v < *ammo_count_ptr) {
+                v = *ammo_count_ptr;
             }
-            *q = v;
+            *ammo_count_ptr = v;
         }
         for (i = 0; i < 20; i++) {
             if (id != 0 && D_L00_001C3E98[i] == id) {
