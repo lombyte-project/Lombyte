@@ -6640,13 +6640,13 @@ extern s32 D_001516EC[];
 extern s32 FUN_00213260(s32);
 
 /* plays one of the vendor's greet, chatter or leave lines in the current language */
-void FUN_L06_00302400(struct Moby *m, s32 kind) {
+void FUN_L06_00302400(struct Moby *moby, s32 kind) {
     enum {
         VOICE_KIND_GREETING = 0,
         VOICE_KIND_CHATTER = 1,
         VOICE_KIND_LEAVING = 2
     };
-    struct TauntVoiceVars *v = (struct TauntVoiceVars *)m->pvars;
+    struct TauntVoiceVars *v = (struct TauntVoiceVars *)moby->pvars;
     s32 id = -1;
     s32 lang;
     s32 r;
