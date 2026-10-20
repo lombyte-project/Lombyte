@@ -1529,12 +1529,12 @@ void FUN_L00_0029ab70(int a) {
         }
     }
     {
-        char *h = D_L00_001CA4C0_29ab70;
-        *(*(char **)(h + 0x1C) + 0x20) = 1;
+        char *vendor_state = D_L00_001CA4C0_29ab70;
+        *(*(char **)(vendor_state + 0x1C) + 0x20) = 1;
         if ((unsigned short)(D_001516D0_29ab70.mode - 6) >= 2)
             D_001516D0_29ab70.mode = 5;
-        if (*(int *)(h + 0x40))
-            f20c828_29ab70(*(void **)(h + 0x1C));
+        if (*(int *)(vendor_state + 0x40))
+            f20c828_29ab70(*(void **)(vendor_state + 0x1C));
     }
     f12e418_29ab70(0x1D);
     f216088_29ab70();
