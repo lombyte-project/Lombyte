@@ -1921,7 +1921,7 @@ void machinegun_turret_update(char *moby) {
 }
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002B5590), where it is exact; names translated to the US level program. */
 
-void FUN_L14_002b4340(struct Moby *m) {
+void FUN_L14_002b4340(struct Moby *moby) {
     enum {
         HIT_REACTION_NO_ACTION = 0,
         HIT_REACTION_LETHAL = 1,
@@ -1933,25 +1933,25 @@ void FUN_L14_002b4340(struct Moby *m) {
         HIT_REACTION_LOW_RED_FLASH_AND_HIT_ANIMATION = 10,
         HIT_REACTION_NONE = 11
     };
-    unsigned char *moby_vars = m->pvars;
+    unsigned char *moby_vars = moby->pvars;
     int loc0;
     float f4 = 0.0f;
     char *hit_record;
     int k;
-    float t;
-    hit_record = find_moby_hit(m, 0x330000, 0);
+    float remaining_health;
+    hit_record = find_moby_hit(moby, 0x330000, 0);
     if (hit_record != 0) {
         if (*(int *)(hit_record + 0x20) != 0) {
             int hit_object_class = *(short *)(*(int *)(hit_record + 0x20) + 0xA6);
-            if (hit_object_class == m->oclass || hit_object_class == 0x2A9)
+            if (hit_object_class == moby->oclass || hit_object_class == 0x2A9)
                 hit_record = 0;
         }
     }
-    k = hit_reaction(m, hit_record, moby_vars + 0x20, 0, &loc0, &f4, 0, 4);
-    if (loc0 != 1 && m->state != 6) {
-        t = *(float *)(moby_vars + 0x20) - f4;
-        *(float *)(moby_vars + 0x20) = t;
-        if (t <= 0.0f)
+    k = hit_reaction(moby, hit_record, moby_vars + 0x20, 0, &loc0, &f4, 0, 4);
+    if (loc0 != 1 && moby->state != 6) {
+        remaining_health = *(float *)(moby_vars + 0x20) - f4;
+        *(float *)(moby_vars + 0x20) = remaining_health;
+        if (remaining_health <= 0.0f)
             k = 1;
         switch (k) {
         case HIT_REACTION_NO_ACTION:
@@ -1971,16 +1971,16 @@ void FUN_L14_002b4340(struct Moby *m) {
             break;
         case HIT_REACTION_LETHAL:
         case HIT_REACTION_DESTROY:
-            m->state = 6;
-            m->flags &= 0xEFFF;
+            moby->state = 6;
+            moby->flags &= 0xEFFF;
             moby_vars[0x67] = 0xF0;
-            FUN_L00_00257470(m, 0, -1);
+            FUN_L00_00257470(moby, 0, -1);
             break;
         }
-        trooper_anim_update(m, (short *)(moby_vars + 0x60));
+        trooper_anim_update(moby, (short *)(moby_vars + 0x60));
     }
-    m->hit_slot = 0xFF;
-    trooper_anim_finish(m, moby_vars + 0x60);
+    moby->hit_slot = 0xFF;
+    trooper_anim_finish(moby, moby_vars + 0x60);
 }
 /* Returns 0 unless every object on the list is ready, then wakes the waiting ones and sets their timers. */
 extern short *D_L14_001ABF40_b45[] __asm__("D_L14_001ABF40");
