@@ -33,10 +33,10 @@ s32 update_menu_stream_image(struct MenuScreen *stream) {
     s32 r;
     s32 x;
     s32 y;
-    u8 *p;
+    u8 *read_destination;
     struct ClutImage *b;
-    u8 *p20;
-    u8 *p420;
+    u8 *clut_data;
+    u8 *pixel_data;
 
     flags = stream->data.stream.flags;
     if (flags & 1) {
@@ -86,18 +86,18 @@ s32 update_menu_stream_image(struct MenuScreen *stream) {
         if (stream->data.stream.entries[idx].sector_count == 0) {
             break;
         }
-        p = (u8 *)stream->data.stream.buffer[0];
+        read_destination = (u8 *)stream->data.stream.buffer[0];
         if (stream->data.stream.flags & 0x20) {
             r = get_stream_buffer_size(stream->data.stream.buffer[0]) -
                 (stream->data.stream.entries[idx].sector_count << 11);
             stream->data.stream.read_offset = r;
-            p += r;
+            read_destination += r;
         }
         if (stream->data.stream.flags & 0x10) {
-            r = start_audio_stream_read(p, stream->data.stream.entries[idx].sector,
+            r = start_audio_stream_read(read_destination, stream->data.stream.entries[idx].sector,
                                         stream->data.stream.entries[idx].sector_count);
         } else {
-            r = start_audio_stream_read(p, stream->data.stream.entries[idx].sector,
+            r = start_audio_stream_read(read_destination, stream->data.stream.entries[idx].sector,
                                         stream->data.stream.entries[idx].sector_count);
         }
         if (r != 0) {
@@ -120,11 +120,11 @@ s32 update_menu_stream_image(struct MenuScreen *stream) {
             stream->data.stream.read_offset = 0;
         }
         b = (struct ClutImage *)stream->data.stream.buffer[0];
-        p20 = b->clut;
-        p420 = b->pixels;
+        clut_data = b->clut;
+        pixel_data = b->pixels;
         x = log2dim(b->width);
         y = log2dim(b->height);
-        level_map_selection.tex0 = register_8bit_texture(x, y, p20, p420, level_map_selection.tex_clut_vram, level_map_selection.tex0_vram);
+        level_map_selection.tex0 = register_8bit_texture(x, y, clut_data, pixel_data, level_map_selection.tex_clut_vram, level_map_selection.tex0_vram);
         FUN_0020b4a8();
         stream->data.stream.state = 2;
         break;
