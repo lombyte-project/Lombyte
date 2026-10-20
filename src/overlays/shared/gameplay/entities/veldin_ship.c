@@ -1540,14 +1540,14 @@ void metal_detector_update(struct Moby *moby) {
         METAL_DETECTOR_TRACK_AND_COLLECT = 2
     };
     Vars2d2ee8 *vars;
-    struct Moby *t;
+    struct Moby *target_moby;
     TargetVars2d2ee8 *tv;
     Vec2d2ee8 u;
     Vec2d2ee8 v;
     Vec2d2ee8 w;
-    Mtx2d2ee8 m;
-    Mtx2d2ee8 m2;
-    Mtx2d2ee8 m3;
+    Mtx2d2ee8 aim_basis;
+    Mtx2d2ee8 normalized_bone_transform;
+    Mtx2d2ee8 transposed_bone_rotation;
     Mtx2d2ee8 m4;
     f32 yaw;
     f32 pitch;
@@ -1613,24 +1613,24 @@ void metal_detector_update(struct Moby *moby) {
             build_spherical_offset(v, -3.0f, yaw, pitch);
             fast_vec_add(w, &vars->pos, v);
             noop_main_callback(&vars->pos, w);
-            fast_vec_normalize(m[D_L00_00161920], v, (f32)D_L00_0016192C);
-            fast_vec_cross(m[D_L00_00161924], m[D_L00_00161920], &D_L00_00161940);
-            fast_vec_normalize(m[D_L00_00161924], m[D_L00_00161924], (f32)D_L00_00161930);
-            fast_vec_cross(m[D_L00_0016191C], m[D_L00_00161924], m[D_L00_00161920]);
-            m[3][2] = zero;
-            m[3][1] = zero;
-            m[3][0] = zero;
-            m[3][3] = one;
-            build_moby_bone_transform(moby, 2, m2);
-            fast_vec_normalize(m2[0], m2[0], one);
-            fast_vec_normalize(m2[1], m2[1], one);
-            fast_vec_normalize(m2[2], m2[2], one);
-            transpose_rotation_matrix(m3, m2);
-            m3[3][2] = zero;
-            m3[3][1] = zero;
-            m3[3][0] = zero;
-            m3[3][3] = one;
-            multiply_matrix(m4, m3, m);
+            fast_vec_normalize(aim_basis[D_L00_00161920], v, (f32)D_L00_0016192C);
+            fast_vec_cross(aim_basis[D_L00_00161924], aim_basis[D_L00_00161920], &D_L00_00161940);
+            fast_vec_normalize(aim_basis[D_L00_00161924], aim_basis[D_L00_00161924], (f32)D_L00_00161930);
+            fast_vec_cross(aim_basis[D_L00_0016191C], aim_basis[D_L00_00161924], aim_basis[D_L00_00161920]);
+            aim_basis[3][2] = zero;
+            aim_basis[3][1] = zero;
+            aim_basis[3][0] = zero;
+            aim_basis[3][3] = one;
+            build_moby_bone_transform(moby, 2, normalized_bone_transform);
+            fast_vec_normalize(normalized_bone_transform[0], normalized_bone_transform[0], one);
+            fast_vec_normalize(normalized_bone_transform[1], normalized_bone_transform[1], one);
+            fast_vec_normalize(normalized_bone_transform[2], normalized_bone_transform[2], one);
+            transpose_rotation_matrix(transposed_bone_rotation, normalized_bone_transform);
+            transposed_bone_rotation[3][2] = zero;
+            transposed_bone_rotation[3][1] = zero;
+            transposed_bone_rotation[3][0] = zero;
+            transposed_bone_rotation[3][3] = one;
+            multiply_matrix(m4, transposed_bone_rotation, aim_basis);
             matrix_to_quaternion(u, m4);
         } else {
             *(u128 *)w = 0;
@@ -1659,32 +1659,32 @@ void metal_detector_update(struct Moby *moby) {
 
                     moby->glow_color = ((c << 16) | col) | 0xFF;
                 }
-                t = hero.unk2040;
-                if (t != 0 && t->oclass == 0x25D && t->state != 0xFE && t->state != 0xFD && hero.unk2044 < 1.0f) {
-                    tv = (TargetVars2d2ee8 *)t->pvars;
+                target_moby = hero.unk2040;
+                if (target_moby != 0 && target_moby->oclass == 0x25D && target_moby->state != 0xFE && target_moby->state != 0xFD && hero.unk2044 < 1.0f) {
+                    tv = (TargetVars2d2ee8 *)target_moby->pvars;
                     while (tv->count > 0) {
                         w[0] = random_float_between(1.0f, 10.0f) * frame_time;
                         w[1] = random_float_between(-10.0f, 10.0f) * frame_time;
                         w[2] = random_float_between(1.0f, 12.0f) * frame_time;
                         transform_vector_by_basis(w, w, &hero);
                         {
-                            Vec4f *q = &hero.unk2040->pos;
+                            Vec4f *target_position = &hero.unk2040->pos;
 
-                            qcopy(q, &vars->pos);
-                            FUN_L00_0025f8e0(q, 0.2f);
+                            qcopy(target_position, &vars->pos);
+                            FUN_L00_0025f8e0(target_position, 0.2f);
                         }
-                        t = hero.unk2040;
-                        FUN_L00_002a7438(t, &t->pos, w, 0x13, 5, 0);
-                        t = hero.unk2040;
-                        qcopy(&t->pos, &vars->pos);
+                        target_moby = hero.unk2040;
+                        FUN_L00_002a7438(target_moby, &target_moby->pos, w, 0x13, 5, 0);
+                        target_moby = hero.unk2040;
+                        qcopy(&target_moby->pos, &vars->pos);
                         if (tv != 0) {
                             if (tv->count > 0) {
                                 tv->count -= 5;
-                                t = hero.unk2040;
+                                target_moby = hero.unk2040;
                             }
-                            FUN_L00_002d2e28((u8 *)t);
+                            FUN_L00_002d2e28((u8 *)target_moby);
                         } else {
-                            FUN_L00_002d2e28((u8 *)t);
+                            FUN_L00_002d2e28((u8 *)target_moby);
                         }
                     }
                     delete_moby(hero.unk2040);
