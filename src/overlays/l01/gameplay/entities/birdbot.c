@@ -3394,20 +3394,20 @@ extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern void spawn_debris_chunk(void *, void *, u32, s32, f32, f32, f32, f32, s32) __asm__("FUN_L01_002f8530");
 extern void *mine_debris(void *, void *, u32, u32, f32, s32, u32) __asm__("FUN_L00_0026bed0");
 
-void FUN_L01_002f8c58(SteamMoby *m) {
+void FUN_L01_002f8c58(SteamMoby *steam_moby) {
     SteamVars *v;
     SteamColors colors;
     SteamVec vel;
     SteamVec pos;
     SteamVec puff;
-    SteamParticle *p;
+    SteamParticle *debris_particle;
     f32 r;
     f32 ang;
     f32 size;
     s32 life;
     s32 i;
 
-    v = m->pvars;
+    v = steam_moby->pvars;
     fast_dec_timer_s16(&v->puff_timer);
     fast_dec_timer_s16(&v->burst_timer);
     if (v->active == 0) {
@@ -3427,7 +3427,7 @@ void FUN_L01_002f8c58(SteamMoby *m) {
         pos.f[0] = fast_cos(ang) * r;
         pos.f[1] = fast_sin(ang) * r;
         pos.f[2] = 0.0f;
-        fast_vec_add(&pos, &pos, &m->pos);
+        fast_vec_add(&pos, &pos, &steam_moby->pos);
         pos.f[2] += v->height;
         spawn_debris_chunk(&pos, &vel, colors.c[random_integer_below(3)],
                          random_int_between(0xB4, 0x12C), 0.05f, 1.0f, 1.0f, 0.75f, 0);
@@ -3444,17 +3444,17 @@ void FUN_L01_002f8c58(SteamMoby *m) {
         puff.f[0] = fast_cos(ang) * r;
         puff.f[1] = fast_sin(ang) * r;
         puff.f[2] = 0.0f;
-        fast_vec_add(&puff, &puff, &m->pos);
+        fast_vec_add(&puff, &puff, &steam_moby->pos);
         r *= frame_time_macro;
         r *= 8.0f;
         puff.f[2] += v->height;
         vel.f[2] += r;
         size = random_float_between(70000.0f, 140000.0f);
         life = scale_game_frames(0xB4);
-        p = mine_debris(&puff, &vel, 0x0F081020, 0x00081020, size, life,
+        debris_particle = mine_debris(&puff, &vel, 0x0F081020, 0x00081020, size, life,
                              colors.c[random_integer_below(3)]);
-        if (p != 0) {
-            p->floor_z = m->pos.f[2] - 0.5f;
+        if (debris_particle != 0) {
+            debris_particle->floor_z = steam_moby->pos.f[2] - 0.5f;
         }
     }
 }
