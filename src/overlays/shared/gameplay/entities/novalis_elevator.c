@@ -2695,10 +2695,10 @@ void sandmouse_house_update(unsigned char *moby) {
         if (moby[0x20] != 0) {
             if (D_0013D4C5 != 0) {
                 if (hero.items[2].item_id == 5) {
-                    float s = D_0015ED70_lui;
+                    float yaw_response_scale = D_0015ED70_lui;
                     *(float *)(moby + 0x48) =
                         FUN_L00_00258110_w7((float *)(house_vars + 4), *(float *)(moby + 0x48), *(float *)house_vars,
-                                            s * 6.2831855f, s * 5.7595863f, 0.0f);
+                                            yaw_response_scale * 6.2831855f, yaw_response_scale * 5.7595863f, 0.0f);
                 }
             }
         }
