@@ -898,10 +898,10 @@ void sentrybot_update(unsigned char *moby) {
     color_pulse_sine = fast_sin((float)(D_L15_0015F5CC % color_pulse_period_frames) / convert_integer_to_float(color_pulse_period_frames) * 2.0f * 3.1415927f +
                  -3.1415927f);
     {
-        int r0 = func_001FA898_r(color_pulse_sine * 20.0f);
+        int color_pulse_red_offset = func_001FA898_r(color_pulse_sine * 20.0f);
         int g0 = func_001FA898_r(color_pulse_sine * 70.0f);
         int b0 = func_001FA898_r(color_pulse_sine * 10.0f);
-        int cr = r0 + 0x32;
+        int cr = color_pulse_red_offset + 0x32;
         int cb = b0 + 0x14;
         int cg = g0 + 0xB4;
         if (cr > 0xFF)
