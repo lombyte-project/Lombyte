@@ -6068,8 +6068,8 @@ void FUN_L06_00300df0(char *moby) {
         if (*(int *)(D_0013E533 + 0x2EA1) == 0x72) {
             *(float *)(moby + 0x18) = *(float *)(data + 0xC);
         } else {
-            float f = convert_integer_to_float(GB_FRAME_gp % 600) / 600.0f;
-            float g = fast_sin(f * 6.28318f);
+            float bobbing_cycle_fraction = convert_integer_to_float(GB_FRAME_gp % 600) / 600.0f;
+            float g = fast_sin(bobbing_cycle_fraction * 6.28318f);
             *(float *)(moby + 0x18) = *(float *)(data + 0xC) + D_L06_00162090 * g;
         }
         break;
