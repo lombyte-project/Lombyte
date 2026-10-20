@@ -1757,17 +1757,17 @@ void teleporter_update(struct Moby *moby) {
         moby->update_dist = 0xFF;
         for (i = 0; i < 3; i++) {
             struct Hero *g = &hero;
-            char *c;
+            char *child_moby;
             slots[i] = create_moby(0x13B);
             *(short *)(slots[i] + 0x32) = 0x40;
             slots[i][0x31] = 1;
             *(long *)(slots[i] + 0x38) = *(long *)(((char *)g->moby) + 0x38);
             *(unsigned short *)(slots[i] + 0x34) = moby->flags;
-            c = slots[i];
-            qcopy(c + 0x10, &moby->pos);
-            qcopy(c + 0x40, &moby->rot);
+            child_moby = slots[i];
+            qcopy(child_moby + 0x10, &moby->pos);
+            qcopy(child_moby + 0x40, &moby->rot);
             *(float *)(slots[i] + 0x48) =
-                fast_add_rotations(*(float *)(c + 0x48), (float)i * 2.0943952f);
+                fast_add_rotations(*(float *)(child_moby + 0x48), (float)i * 2.0943952f);
         }
         if (*(int *)(data + 0x38) != 0 || active) {
             moby->state = 6;
@@ -1854,23 +1854,23 @@ void teleporter_update(struct Moby *moby) {
             enqueue_callback_list_1(FUN_L01_003094f0_u, moby);
             approach_value((float *)(data + 0x34), 0.0f, frame_time * 4.0f);
         } else {
-            char *t = D_L01_0015FFD8 + (*(int *)data << 8);
-            char *td = *(char **)(t + 0x78);
+            char *destination_moby = D_L01_0015FFD8 + (*(int *)data << 8);
+            char *td = *(char **)(destination_moby + 0x78);
             float v[4];
-            qcopy(v, t + 0x10);
+            qcopy(v, destination_moby + 0x10);
             v[2] += 0.2f;
-            FUN_L00_00216f90(v, t + 0x40, 0, 1);
+            FUN_L00_00216f90(v, destination_moby + 0x40, 0, 1);
             hero.unk20A5 = 1;
             if (*(int *)(data + 0x40) != -1 && *(int *)(data + 0x44) != -1) {
                 jet_game_state(*(int *)(data + 0x40), *(int *)(data + 0x44));
             }
-            *(unsigned char *)(t + 0x20) = 4;
+            *(unsigned char *)(destination_moby + 0x20) = 4;
             *(float *)(td + 0x34) = 0.0f;
             *(float *)(td + 0x28) = 0.0f;
             *(float *)(td + 0x2C) = 0.0f;
             *(float *)(td + 0x20) = 1.0f;
             *(float *)(td + 0x24) = 1.0f;
-            allocate_voice_for_target_entry(1, 0, (void *)t);
+            allocate_voice_for_target_entry(1, 0, (void *)destination_moby);
             moby->state = 1;
             *(float *)(data + 0x20) = 0.0f;
             *(float *)(data + 0x24) = 0.0f;
