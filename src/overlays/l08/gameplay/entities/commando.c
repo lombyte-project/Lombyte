@@ -604,16 +604,16 @@ extern s32 truncate_float_to_s32_u(f32) __asm__("FUN_001fa6d0");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 float FUN_L08_002f5d98(float x, char *arg) {
-    float f = x * 8.0f;
-    int i = func_001FA898_r(f);
-    float fr = f - convert_integer_to_float(i);
-    char *t;
+    float sample_position = x * 8.0f;
+    int i = func_001FA898_r(sample_position);
+    float fr = sample_position - convert_integer_to_float(i);
+    char *samples_base;
     int j;
     i = i % 8;
     j = i + 1;
     j = j % 8;
-    t = arg + 0x90;
-    return *(float *)(t - (-(i * 4))) * (1.0f - fr) + *(float *)(t - (-(j * 4))) * fr;
+    samples_base = arg + 0x90;
+    return *(float *)(samples_base - (-(i * 4))) * (1.0f - fr) + *(float *)(samples_base - (-(j * 4))) * fr;
 }
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002f5e58.s", FUN_L08_002f5e58);
