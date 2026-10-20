@@ -3462,7 +3462,7 @@ extern void FUN_L13_002ea400_c(float *, float *, float *, float) __asm__("FUN_L1
 extern int FUN_001f96f8_e5(int) __asm__("FUN_001f96f8");
 extern void FUN_0022da68_e5(int, int, char *) __asm__("FUN_0022da68");
 
-unsigned char *FUN_L13_002ea540(struct Moby *firing_moby, unsigned char *d) {
+unsigned char *FUN_L13_002ea540(struct Moby *firing_moby, unsigned char *starfighter_data) {
     float v[4];
     struct {
         int a;
@@ -3470,12 +3470,12 @@ unsigned char *FUN_L13_002ea540(struct Moby *firing_moby, unsigned char *d) {
         float c;
     } s;
     int muzzle_joint_index;
-    float f;
+    float projectile_speed;
     unsigned char *r;
     struct Hero *g;
-    muzzle_joint_index = (d[0xFC] & 1) ? 0x12 : 0x10;
+    muzzle_joint_index = (starfighter_data[0xFC] & 1) ? 0x12 : 0x10;
     if (firing_moby->command != 6 || (FUN_001160d8_e5() & 1)) {
-        d[0xFC] ^= 1;
+        starfighter_data[0xFC] ^= 1;
     }
     FUN_L00_0024f7c8_e5(firing_moby, muzzle_joint_index, v);
     s.a = 0;
@@ -3485,11 +3485,11 @@ unsigned char *FUN_L13_002ea540(struct Moby *firing_moby, unsigned char *d) {
         FUN_L13_002ea400_c(v, &s.b, &s.c, -1.0f);
     }
     g = &hero;
-    f = D_0015ED6C_e5 * 18.0f + *(float *)(d + 0xAC);
+    projectile_speed = D_0015ED6C_e5 * 18.0f + *(float *)(starfighter_data + 0xAC);
     s.c = firing_moby->rot.z;
     s.b = 0.43633232f;
     r = FUN_L13_002c13b0_e5(firing_moby, (char *)v, ((char *)g->ship_moby), (char *)&s,
-                         f, FUN_001f96f8_e5(300), D_0015ED6C_e5 * 18.0f);
+                         projectile_speed, FUN_001f96f8_e5(300), D_0015ED6C_e5 * 18.0f);
     if (r != 0) {
         FUN_0022da68_e5(2, 0, firing_moby);
     }
