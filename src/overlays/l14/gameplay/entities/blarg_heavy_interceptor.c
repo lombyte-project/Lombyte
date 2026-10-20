@@ -2530,28 +2530,28 @@ void FUN_L14_002b5290(struct Moby *m) {
         HIT_REACTION_FLASH_RED = 10,
         HIT_REACTION_NONE = 11
     };
-    unsigned char *d = m->pvars;
+    unsigned char *moby_vars = m->pvars;
     int loc0;
     float f4;
-    char *q;
+    char *hit_record;
     int k;
     float t;
     if (m->state == 0 || m->state == 9)
         return;
     m->scale = m->pclass->scale;
     f4 = 0.0f;
-    q = find_moby_hit(m, 0x330000, 0);
-    if (q != 0) {
-        if (*(int *)(q + 0x20) != 0) {
-            int a = *(short *)(*(int *)(q + 0x20) + 0xA6);
-            if (a == m->oclass || a == 0x370)
-                q = 0;
+    hit_record = find_moby_hit(m, 0x330000, 0);
+    if (hit_record != 0) {
+        if (*(int *)(hit_record + 0x20) != 0) {
+            int hit_object_class = *(short *)(*(int *)(hit_record + 0x20) + 0xA6);
+            if (hit_object_class == m->oclass || hit_object_class == 0x370)
+                hit_record = 0;
         }
     }
-    k = FUN_L00_0025a478_c(m, q, d + 0x20, 0, &loc0, &f4, 0, 4);
+    k = FUN_L00_0025a478_c(m, hit_record, moby_vars + 0x20, 0, &loc0, &f4, 0, 4);
     if (loc0 != 1 && m->state != 9) {
-        t = *(float *)(d + 0x20) - f4;
-        *(float *)(d + 0x20) = t;
+        t = *(float *)(moby_vars + 0x20) - f4;
+        *(float *)(moby_vars + 0x20) = t;
         if (t <= 0.0f)
             k = 1;
         switch (k) {
@@ -2568,20 +2568,20 @@ void FUN_L14_002b5290(struct Moby *m) {
             m->anim_speed = 1.75f;
         case HIT_REACTION_RED_FLASH_ONLY:
         case HIT_REACTION_FLASH_RED:
-            d[0x67] = 0xFA;
+            moby_vars[0x67] = 0xFA;
             break;
         case HIT_REACTION_LETHAL:
         case HIT_REACTION_DESTROY:
             m->state = 9;
             m->flags &= 0xEFFF;
-            d[0x67] = 0xFA;
+            moby_vars[0x67] = 0xFA;
             FUN_L00_00257470(m, 0, -1);
             break;
         }
-        FUN_L00_0025d458_c(m, d + 0x60);
+        FUN_L00_0025d458_c(m, moby_vars + 0x60);
     }
     m->hit_slot = 0xFF;
-    trooper_anim_finish(m, d + 0x60);
+    trooper_anim_finish(m, moby_vars + 0x60);
 }
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002B6678), where it is exact; names translated to the US level program. */
 
