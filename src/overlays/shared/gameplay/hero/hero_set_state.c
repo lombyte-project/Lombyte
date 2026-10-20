@@ -123,10 +123,10 @@ extern Entry70_2215c8 D_L00_001798F0[];
 void FUN_L00_002215c8(void) {
     Vec4 sum;
     Vec4 d;
-    struct Moby *m;
+    struct Moby *spawned_moby;
     s32 i;
     s32 n;
-    s32 n8;
+    s32 sample_count;
 
     if (hero.unk20AD == 0) {
         FUN_L00_002165b8_2215c8();
@@ -184,12 +184,12 @@ void FUN_L00_002215c8(void) {
                 hero.unk20A6 = 1;
             }
         } else {
-            m = create_moby(0x27A);
-            hero.unkA8C = m;
-            if (m != 0) {
-                qcopy(&m->pos, &hero.motion.pos);
-                qcopy(&m->rot, &hero.motion.rot);
-                m->draw_dist = 0x40;
+            spawned_moby = create_moby(0x27A);
+            hero.unkA8C = spawned_moby;
+            if (spawned_moby != 0) {
+                qcopy(&spawned_moby->pos, &hero.motion.pos);
+                qcopy(&spawned_moby->rot, &hero.motion.rot);
+                spawned_moby->draw_dist = 0x40;
                 ((struct Moby *)hero.unkA8C)->visible = 1;
                 ((struct Moby *)hero.unkA8C)->glow_color = 0;
                 ((struct Moby *)hero.unkA8C)->spawn_frame = hero.moby->spawn_frame;
@@ -208,8 +208,8 @@ void FUN_L00_002215c8(void) {
     if (hero.air_frames.s != 0 && gravity_z(&hero.motion.velocity) < 0.0f) {
         if (hero.unk21B4 != 0x20) goto skip;
         clear_u64_value(&sum);
-        n8 = 8;
-        for (i = 0; i < n8; i++) {
+        sample_count = 8;
+        for (i = 0; i < sample_count; i++) {
             n = hero.unk21B0 - i;
             {
                 s32 a = (n + 0x1F) % 32;
@@ -218,7 +218,7 @@ void FUN_L00_002215c8(void) {
             }
             add_vector_xyz(&sum, &sum, &d);
         }
-        scale_vector_xyz(&sum, &sum, 1.0f / (f32)n8);
+        scale_vector_xyz(&sum, &sum, 1.0f / (f32)sample_count);
         if (FUN_001f9af0_2215c8(&sum) < frame_time) {
             hero.unk1E2++;
             goto skip;
