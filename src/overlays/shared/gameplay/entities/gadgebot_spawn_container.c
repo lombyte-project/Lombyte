@@ -1155,14 +1155,14 @@ int FUN_L06_002ea6a8(unsigned char *moby) {
 }
 extern s32 FUN_L00_002dbe20(void *);
 
-s32 FUN_L06_002ea7c8(unsigned char *p) {
-    u8 t;
+s32 FUN_L06_002ea7c8(unsigned char *moby) {
+    u8 previous_state;
     s32 r;
-    r = FUN_L00_002dbe20(p);
-    t = p[0x20];
-    if (t != 0x10) {
-        p[0xBC] = t;
-        p[0x20] = 0x10;
+    r = FUN_L00_002dbe20(moby);
+    previous_state = moby[0x20];
+    if (previous_state != 0x10) {
+        moby[0xBC] = previous_state;
+        moby[0x20] = 0x10;
     }
     return r;
 }
