@@ -24,7 +24,7 @@ extern unsigned char *func_L00_00273E08_298940(void *, int, unsigned char, int, 
                                                float) __asm__("FUN_L00_00272f68");
 extern int func_001FA898_298940(float) __asm__("FUN_001fa6d0");
 void FUN_L10_00298940(char *m) {
-    L10SpriteData_298940 *p = *(L10SpriteData_298940 **)(m + 0x78);
+    L10SpriteData_298940 *sprite_data = *(L10SpriteData_298940 **)(m + 0x78);
     float d[4] __attribute__((aligned(16)));
     float e[4] __attribute__((aligned(16)));
     int i, col;
@@ -37,21 +37,21 @@ void FUN_L10_00298940(char *m) {
     func_001F9BD8_298940(d, d, m + 0x10);
     *(float *)(m + 0x18) -= 0.5f;
     for (i = 0; i < 4; i++) {
-        float h = p->a[i] + p->b[i];
-        p->a[i] = h;
-        if (255.0f <= h) {
-            p->a[i] = h - 255.0f;
-        } else if (h <= 0.0f) {
-            p->a[i] = h + 255.0f;
+        float phase_sum = sprite_data->a[i] + sprite_data->b[i];
+        sprite_data->a[i] = phase_sum;
+        if (255.0f <= phase_sum) {
+            sprite_data->a[i] = phase_sum - 255.0f;
+        } else if (phase_sum <= 0.0f) {
+            sprite_data->a[i] = phase_sum + 255.0f;
         }
-        if (func_001F9908_298940(&p->c[i])) {
-            p->c[i] = func_001F9850_298940(0xFF);
+        if (func_001F9908_298940(&sprite_data->c[i])) {
+            sprite_data->c[i] = func_001F9850_298940(0xFF);
         }
-        f = func_001FA888_298940(func_001F9850_298940(0xFF) - p->c[i]);
+        f = func_001FA888_298940(func_001F9850_298940(0xFF) - sprite_data->c[i]);
         f = f / (float)func_001F9850_298940(0xFF);
         col = func_001FA8A8_298940(0x4040FFFF, 0x1040FFFF, func_001F9B88_298940(0.5f - f));
-        func_L00_00273E08_298940(d, col, func_001FA898_298940(p->a[i]) & 0xFF, 0x35, 1, 2, 0,
-                                 p->d[i]);
+        func_L00_00273E08_298940(d, col, func_001FA898_298940(sprite_data->a[i]) & 0xFF, 0x35, 1, 2, 0,
+                                 sprite_data->d[i]);
         func_001F9BD8_298940(d, d, e);
     }
 }
