@@ -274,7 +274,7 @@ extern void zero_vector_d1b0(void *) __asm__("FUN_001f99f8");
    D_L11_00161EC4..ED8. */
 void FUN_L11_0030d1b0(struct Moby *parent_moby) {
     Vec4f v;
-    Vec4f a;
+    Vec4f child_position_scratch;
     Vec4f b;
     int i;
     int j;
@@ -293,11 +293,11 @@ void FUN_L11_0030d1b0(struct Moby *parent_moby) {
         normalize_vector_xyz(&v, &parent_moby->rot_row0, 14.0f);
         v.z += D_L11_00161EAC;
         add_vector_xyz(&v, &v, &parent_moby->pos);
-        normalize_vector_xyz(&a, &D_L11_001DA710[i]->rot_row2, D_L11_00161EB0);
+        normalize_vector_xyz(&child_position_scratch, &D_L11_001DA710[i]->rot_row2, D_L11_00161EB0);
         normalize_vector_xyz(&b, &parent_moby->rot_row1, (float)s * D_L11_00161EB4);
-        add_vector_xyz(&a, &a, &b);
-        add_vector_xyz(&a, &a, &v);
-        qcopy_nc(&D_L11_001DA710[i]->pos, &a);
+        add_vector_xyz(&child_position_scratch, &child_position_scratch, &b);
+        add_vector_xyz(&child_position_scratch, &child_position_scratch, &v);
+        qcopy_nc(&D_L11_001DA710[i]->pos, &child_position_scratch);
         FUN_L00_00250df8(D_L11_001DA710[i]);
     }
     for (j = 0; j < 4; j++) {
@@ -314,11 +314,11 @@ void FUN_L11_0030d1b0(struct Moby *parent_moby) {
         normalize_vector_xyz(&v, &parent_moby->rot_row0, 14.0f);
         v.z += D_L11_00161EAC;
         add_vector_xyz(&v, &v, &parent_moby->pos);
-        normalize_vector_xyz(&a, &D_L11_00161F20[j]->rot_row2, D_L11_00161EB0);
+        normalize_vector_xyz(&child_position_scratch, &D_L11_00161F20[j]->rot_row2, D_L11_00161EB0);
         normalize_vector_xyz(&b, &parent_moby->rot_row1, (float)s * D_L11_00161EB4);
-        add_vector_xyz(&a, &a, &b);
-        add_vector_xyz(&a, &a, &v);
-        qcopy(&D_L11_00161F20[j]->pos, &a);
+        add_vector_xyz(&child_position_scratch, &child_position_scratch, &b);
+        add_vector_xyz(&child_position_scratch, &child_position_scratch, &v);
+        qcopy(&D_L11_00161F20[j]->pos, &child_position_scratch);
         r = fast_sub_rotations((float)k * 0.2617994f, 1.3962634f);
         r = r * ((k == -1) ? D_L11_00161EC8 : D_L11_00161ECC);
         r = fast_add_rotations(r, 1.3962634f);
@@ -328,8 +328,8 @@ void FUN_L11_0030d1b0(struct Moby *parent_moby) {
     for (n = 0; n < 4; n++) {
         float rotation_y_progress;
         normalize_vector_xyz(&v, &D_L11_00161F20[n]->rot_row2, D_L11_00161EFC);
-        normalize_vector_xyz(&a, &D_L11_00161F20[n]->rot_row1, D_L11_00161F00);
-        add_vector_xyz(&v, &v, &a);
+        normalize_vector_xyz(&child_position_scratch, &D_L11_00161F20[n]->rot_row1, D_L11_00161F00);
+        add_vector_xyz(&v, &v, &child_position_scratch);
         add_vector_xyz(&D_L11_00161F30[n]->pos, &D_L11_00161F20[n]->pos, &v);
         qcopy(&D_L11_00161F30[n]->rot, &D_L11_00161F20[n]->rot);
         rotation_y_progress = (n & 1) ? D_L11_00161ED0 : D_L11_00161ED4;
