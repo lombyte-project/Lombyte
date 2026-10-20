@@ -204,7 +204,7 @@ int mine_fall(char *moby, char *st) {
     char *collision_metadata;
     int flags = 0;
 
-    float sc, f21, f20, f12, t, r, rr, one;
+    float sc, f21, f20, f12, motion_or_record_value, r, rr, one;
     int result_count, i;
 
     *(float *)(st + 0x8) = *(float *)(st + 0x8) - *(float *)(st + 0x10);
@@ -215,8 +215,8 @@ int mine_fall(char *moby, char *st) {
     }
 
     f60 = vector_length_xy(st);
-    t = (*(short *)(st + 0x3E) == 2) ? 0.0f : *(float *)(st + 0x4C);
-    approach_value(&f60, t, *(float *)(st + 0x14));
+    motion_or_record_value = (*(short *)(st + 0x3E) == 2) ? 0.0f : *(float *)(st + 0x4C);
+    approach_value(&f60, motion_or_record_value, *(float *)(st + 0x14));
     set_vector_length_xy((float *)st, (float *)st, f60);
     if (*(float *)(st + 0x1C) < *(float *)(st + 0x8)) {
         *(float *)(st + 0x8) = *(float *)(st + 0x1C);
@@ -262,8 +262,8 @@ int mine_fall(char *moby, char *st) {
             float ratio;
             ratio = absolute_float(*(float *)(st + 0x8) / *(float *)(st + 0x10));
             if (2.0f < ratio) {
-                t = compute_interpolated_record_value(moby);
-                rr = (*(float *)(st + 0x50) - t) / ratio;
+                motion_or_record_value = compute_interpolated_record_value(moby);
+                rr = (*(float *)(st + 0x50) - motion_or_record_value) / ratio;
                 if (0.0f < rr) {
                     approach_value((float *)(moby + 0x58), rr, frame_scale * 0.1f);
                 }
@@ -271,8 +271,8 @@ int mine_fall(char *moby, char *st) {
             break;
         }
         case MOTION_FALLING:
-            t = compute_interpolated_record_value(moby);
-            if (*(float *)(st + 0x54) <= t) {
+            motion_or_record_value = compute_interpolated_record_value(moby);
+            if (*(float *)(st + 0x54) <= motion_or_record_value) {
                 *(int *)(moby + 0x58) = 0;
             } else {
                 float negative_half_gravity_step = *(float *)(st + 0x10) * -0.5f;
@@ -284,8 +284,8 @@ int mine_fall(char *moby, char *st) {
                 if (f20 < 0.0001f) {
                     f20 = 0.0001f;
                 }
-                t = compute_interpolated_record_value(moby);
-                rr = (*(float *)(st + 0x54) - t) / f20;
+                motion_or_record_value = compute_interpolated_record_value(moby);
+                rr = (*(float *)(st + 0x54) - motion_or_record_value) / f20;
                 if (2.0f < rr) {
                     rr = 2.0f;
                 } else if (rr < 0.0f) {
@@ -333,8 +333,8 @@ int mine_fall(char *moby, char *st) {
     }
 
     sc = 0.0009765625f;
-    t = fast_vec_length(st);
-    if ((float)*(int *)(st + 0x20) * sc < t) {
+    motion_or_record_value = fast_vec_length(st);
+    if ((float)*(int *)(st + 0x20) * sc < motion_or_record_value) {
         collision_line(eye, collision_probe_position, 36, moby, 0);
         qcopy(collision_probe_position, &D_94C8_60);
     }
