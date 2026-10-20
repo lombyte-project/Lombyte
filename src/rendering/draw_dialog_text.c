@@ -103,6 +103,8 @@ void draw_dialog_text(void) {
     };
     enum {
         MODE_FREEZE_TIMER_GATED_CENTERED_FOOTER_MESSAGE = 2,
+        MODE_FREEZE_BOOT_FLAG_GATED_PAIRED_OR_CENTERED_FOOTER_MESSAGE = 3,
+        MODE_FREEZE_SHARED_BOOT_FLAG_GATED_PAIRED_OR_CENTERED_FOOTER_MESSAGE = 4,
         MODE_FREEZE_FORMATTED_CENTERED_FOOTER_MESSAGE = 5,
         MODE_FREEZE_ALTERNATE_LEFT_PAIRED_FOOTER_MESSAGE = 6,
         MODE_FREEZE_FLAG_GATED_PAIRED_OR_CENTERED_FOOTER_MESSAGE = 12,
@@ -256,8 +258,8 @@ void draw_dialog_text(void) {
             right = 0x524B;
             text = get_help_message_text(0x4FB1);
             break;
-        case 3:
-        case 4:
+        case MODE_FREEZE_BOOT_FLAG_GATED_PAIRED_OR_CENTERED_FOOTER_MESSAGE:
+        case MODE_FREEZE_SHARED_BOOT_FLAG_GATED_PAIRED_OR_CENTERED_FOOTER_MESSAGE:
             if (boot_level_active != 0 && (mode_freeze_flags & 2)) {
                 left = 0x524E;
                 right = 0x524B;
