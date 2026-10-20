@@ -468,7 +468,7 @@ extern void FUN_L18_002d5610_u(void *, void *) __asm__("FUN_L18_002d5610");
 void FUN_L18_002d5768(struct Moby *m);
 
 void FUN_L18_002d5050(struct Moby *moby) {
-    L18D *d = (L18D *)moby->pvars;
+    L18D *moby_vars = (L18D *)moby->pvars;
     float target_movement_step[4];
     float movement_step[4];
     float rotation_angles[4];
@@ -476,31 +476,31 @@ void FUN_L18_002d5050(struct Moby *moby) {
     float target_heading_basis[12];
     float configured_rotation_basis[12];
     float aA0[16];
-    float s, f, k;
+    float movement_blend_weight, f, k;
     int r;
     if (hero.state.current == 0x72 || D_L18_0015F5C4 == 2) {
         mark_moby_for_removal(moby);
     } else if (moby->state == 0) {
         qcopy(previous_position, &moby->pos);
-        s = convert_integer_to_float(d->c);
-        s = s / convert_integer_to_float(d->lim);
-        if (1.0f < s) {
-            s = 1.0f;
+        movement_blend_weight = convert_integer_to_float(moby_vars->c);
+        movement_blend_weight = movement_blend_weight / convert_integer_to_float(moby_vars->lim);
+        if (1.0f < movement_blend_weight) {
+            movement_blend_weight = 1.0f;
         }
-        fast_vec_sub(target_movement_step, (char *)d + 0x10, &moby->pos);
-        fast_vec_scale(target_movement_step, target_movement_step, 1.0f / convert_integer_to_float(d->end - d->c));
+        fast_vec_sub(target_movement_step, (char *)moby_vars + 0x10, &moby->pos);
+        fast_vec_scale(target_movement_step, target_movement_step, 1.0f / convert_integer_to_float(moby_vars->end - moby_vars->c));
         clear_u64_value(rotation_angles);
         rotation_angles[2] = fast_arc_tan(target_movement_step[0], target_movement_step[1]);
         euler_rotation_basis(target_heading_basis, rotation_angles);
         transpose_rotation_matrix(aA0, target_heading_basis);
         clear_u64_value(rotation_angles);
-        rotation_angles[2] = d->f24;
-        rotation_angles[1] = d->f28;
+        rotation_angles[2] = moby_vars->f24;
+        rotation_angles[1] = moby_vars->f28;
         euler_rotation_basis(configured_rotation_basis, rotation_angles);
         transform_vector_by_basis(target_movement_step, target_movement_step, aA0);
         transform_vector_by_basis(target_movement_step, target_movement_step, configured_rotation_basis);
         transform_vector_by_basis(target_movement_step, target_movement_step, target_heading_basis);
-        lerp_vector(movement_step, d, target_movement_step, s);
+        lerp_vector(movement_step, moby_vars, target_movement_step, movement_blend_weight);
         FUN_L18_002d5488(moby, movement_step);
         fast_vec_add(&moby->pos, &moby->pos, movement_step);
         moby->rot.z = fast_arc_tan(movement_step[0], movement_step[1]);
@@ -508,24 +508,24 @@ void FUN_L18_002d5050(struct Moby *moby) {
         k = frame_time;
         moby->rot.y = -f;
         moby->rot.x = fast_add_rotations(moby->rot.x, k * 18.849556f);
-        d->c = d->c + 1;
+        moby_vars->c = moby_vars->c + 1;
         r = collision_line(previous_position, &moby->pos, 0, moby, 0);
         if (r) {
             char *p = D_L18_00174858;
             if (p != 0) {
                 short h = *(short *)(p + 0xA6);
                 if (h == 0x1DF) {
-                    d->flags = d->flags & 4;
+                    moby_vars->flags = moby_vars->flags & 4;
                 } else if (h != 0x1A3) {
                     r = 0;
                 }
             }
         }
-        if (d->c == d->end || r) {
+        if (moby_vars->c == moby_vars->end || r) {
             FUN_L18_002d5610_u(moby, movement_step);
             mark_moby_for_removal(moby);
-        } else if (d->flags & 2) {
-            f = (float)(d->end - d->c);
+        } else if (moby_vars->flags & 2) {
+            f = (float)(moby_vars->end - moby_vars->c);
             if (f <= FUN_L04_001f1978(D_L18_00161964)) {
                 enqueue_callback_list_1(FUN_L18_002d5768, moby);
             }
