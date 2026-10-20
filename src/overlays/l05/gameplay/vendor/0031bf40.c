@@ -226,10 +226,10 @@ void FUN_L05_0031d5c8(unsigned char *m) {
         INITIALIZE = 0,
         ARMED = 1
     };
-    unsigned int s = m[0x20];
+    unsigned int object_state = m[0x20];
     unsigned int t;
     G *g;
-    switch (s) {
+    switch (object_state) {
     case INITIALIZE:
         m[0x30] = 0xFF;
         m[0x20] = 1;
@@ -240,7 +240,7 @@ void FUN_L05_0031d5c8(unsigned char *m) {
             t = *(int *)((char *)g + 0x30) - 10;
             if (t < 2) {
                 int k = 3;
-                if (s < t)
+                if (object_state < t)
                     k = 0;
                 cutscene_set_camera_target((int)g->m[k]);
             }
