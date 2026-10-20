@@ -19,7 +19,7 @@ void hero_respawn() __asm__("FUN_L00_00211250");
 /* Picks a disc table entry pair by D_0015ED80 and passes it with the language to FUN_L00_002995d0. */
 void FUN_L02_00298c68(s32 i) {
     s32 a, b;
-    struct Hero *s;
+    struct Hero *hero_ptr;
     if (i < 0)
         return;
     if (pal_mode) {
@@ -29,10 +29,10 @@ void FUN_L02_00298c68(s32 i) {
         a = D_00137B80_00298c68.x[i].a;
         b = D_00137B80_00298c68.x[i].b;
     }
-    s = &hero;
-    if (s->health.hp == 0) {
+    hero_ptr = &hero;
+    if (hero_ptr->health.hp == 0) {
         hero_respawn();
-    } else if (s->unk20B1 == 0) {
+    } else if (hero_ptr->unk20B1 == 0) {
         FUN_L00_002995d0(a, b, game_language);
     }
 }
