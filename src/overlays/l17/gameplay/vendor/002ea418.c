@@ -41,9 +41,9 @@ extern void FUN_L17_002f0448(struct Moby *m);
 
 extern void FUN_L00_00263618(void *, int, float, float);
 
-void FUN_L17_002f0448(struct Moby *m) {
-    int v = (m->glow_color & 0xFFFFFF) | 0x30000000;
-    char *effect_position = (char *)m->pvars + 0x200;
+void FUN_L17_002f0448(struct Moby *effect_owner) {
+    int v = (effect_owner->glow_color & 0xFFFFFF) | 0x30000000;
+    char *effect_position = (char *)effect_owner->pvars + 0x200;
     int i;
     for (i = 2; i >= 0; i--) {
         FUN_L00_00263618(effect_position, v, 0.2f, 0.08f);
