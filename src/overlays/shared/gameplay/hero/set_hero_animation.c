@@ -1623,15 +1623,15 @@ extern void FUN_L00_0020f580(void);
 extern void FUN_L00_00234808_u(void) __asm__("FUN_L00_00234808");
 
 void FUN_L00_00234a50(int moby_override) {
-    char *d;
+    char *moby_collection_base;
     struct Hero *base;
     char *listed_moby;
     char *item_moby;
     int i;
     if (D_L00_0015F5C4 == 2 || D_L00_0015F5C4 == 6) {
-        d = D_L00_0016C860;
-        for (i = 0; i < *(short *)(d + 0x44); i++) {
-            listed_moby = *(char **)(d + 0x178 + i * 4);
+        moby_collection_base = D_L00_0016C860;
+        for (i = 0; i < *(short *)(moby_collection_base + 0x44); i++) {
+            listed_moby = *(char **)(moby_collection_base + 0x178 + i * 4);
             if ((unsigned short)(*(unsigned short *)(listed_moby + 0xA6) - 0x509) < 2) {
                 *(unsigned short *)(listed_moby + 0x34) |= 0x800;
             }
