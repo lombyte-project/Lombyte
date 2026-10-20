@@ -1879,13 +1879,13 @@ extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 float FUN_L11_00311a88(void *moby_v, void *o_v) {
     char *moby = moby_v;
-    char *o = o_v;
+    char *target_moby = o_v;
     char *data = *(char **)(moby + 0x78);
-    if (*(unsigned char *)(o + 0x31) != 0) {
+    if (*(unsigned char *)(target_moby + 0x31) != 0) {
         char v[16];
         int ax, ay, cx, cy;
-        int dx, dy, t;
-        FUN_L11_00311210(o + 0x10, &ax, &ay, 0);
+        int dx, dy, reticle_axis_limit;
+        FUN_L11_00311210(target_moby + 0x10, &ax, &ay, 0);
         dx = ax - *(int *)(data + 0xE0);
         dy = ay - *(int *)(data + 0xE4);
         if (dx < 0)
@@ -1893,13 +1893,13 @@ float FUN_L11_00311a88(void *moby_v, void *o_v) {
         if (dy < 0)
             dy = -dy;
         qcopy(v, D_L11_001679E0);
-        scale_vector_xyz(v, D_L11_001679E0, *(float *)(o + 0xC) / 1280.0f);
-        add_vector_xyz(v, v, o + 0x10);
+        scale_vector_xyz(v, D_L11_001679E0, *(float *)(target_moby + 0xC) / 1280.0f);
+        add_vector_xyz(v, v, target_moby + 0x10);
         FUN_L11_00311210(v, &cx, &cy, 0);
         cx = cx - ax;
         cy = cy - ay;
-        t = func_001FA898_r(square_root(convert_integer_to_float(cx * cx + cy * cy))) + 0x1C;
-        if (dx < t && dy < t)
+        reticle_axis_limit = func_001FA898_r(square_root(convert_integer_to_float(cx * cx + cy * cy))) + 0x1C;
+        if (dx < reticle_axis_limit && dy < reticle_axis_limit)
             return (float)(dx * dx + dy * dy);
     }
     return 10000.0f;
