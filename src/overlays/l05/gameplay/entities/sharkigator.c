@@ -815,7 +815,7 @@ void FUN_L05_002d7920(char *moby) {
     float phase;
     float ratio;
     u64 texture;
-    L05GlowPacket *p;
+    L05GlowPacket *glow_packet;
 
     if (D_L05_001613F0 != 0)
         return;
@@ -825,11 +825,11 @@ void FUN_L05_002d7920(char *moby) {
         D_L05_001613E0 = 5.0f;
     for (i = 0; i < 16; i++) {
         texture = get_effect_texture_7920(0x13);
-        p = &packet[i];
-        p->effect_texture = texture;
-        p->texture = 0xff9000000260ULL;
-        p->zero = 0;
-        p->flags = (u64)D_L05_001613F8 | ((u64)D_L05_001613FC << 2) |
+        glow_packet = &packet[i];
+        glow_packet->effect_texture = texture;
+        glow_packet->texture = 0xff9000000260ULL;
+        glow_packet->zero = 0;
+        glow_packet->flags = (u64)D_L05_001613F8 | ((u64)D_L05_001613FC << 2) |
                           ((u64)D_L05_00161400 << 4) | ((u64)D_L05_00161404 << 6) |
                           0x8000000000ULL;
         phase = convert_integer_to_float((frame_number + 3) & 3) / (D_L05_001613E0 * 4.0f);
