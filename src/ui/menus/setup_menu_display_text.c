@@ -17,13 +17,13 @@ int setup_menu_display_text(char *menu) __asm__("FUN_0021ef78");
 
 int setup_menu_display_text(char *menu) {
     char buf[0x100];
-    char *t = preview_camera;
-    char *o = *(char **)(menu + 0x44);
+    char *preview_camera_state = preview_camera;
+    char *menu_moby_list = *(char **)(menu + 0x44);
     int count;
 
-    *(float *)(o + 0x10) = *(float *)(t + 0x140) + 8.0f;
-    *(float *)(o + 0x14) = *(float *)(t + 0x144) + D_001602A4_f;
-    *(float *)(o + 0x18) = *(float *)(t + 0x148) - 0.1f;
+    *(float *)(menu_moby_list + 0x10) = *(float *)(preview_camera_state + 0x140) + 8.0f;
+    *(float *)(menu_moby_list + 0x14) = *(float *)(preview_camera_state + 0x144) + D_001602A4_f;
+    *(float *)(menu_moby_list + 0x18) = *(float *)(preview_camera_state + 0x148) - 0.1f;
     if (*(int *)(menu + 0x44) != 0) {
         draw_moby_list(*(int *)(menu + 0x44), 1);
     }
