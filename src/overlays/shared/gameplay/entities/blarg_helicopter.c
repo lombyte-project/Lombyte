@@ -1696,23 +1696,23 @@ void FUN_L03_002d47c0(Moby *moby) {
 
 extern char *func_0020D348_m5208(int) __asm__("FUN_0020c4f8");
 
-char *FUN_L03_002d5208(char *a, char *pos, int c, int d, float f) {
-    char *m = (char *)func_0020D348_m5208(0x350);
+char *FUN_L03_002d5208(char *velocity, char *pos, int target_moby, int lifetime_frames, float target_height) {
+    char *spawned_moby = (char *)func_0020D348_m5208(0x350);
     char *data;
-    if (m != 0) {
-        *(unsigned char *)(m + 0x30) = 0xFF;
-        *(short *)(m + 0x32) = 0x7E;
-        *(unsigned char *)(m + 0x31) = 1;
-        *(unsigned char *)(m + 0x20) = 1;
-        data = *(char **)(m + 0x78);
-        qcopy(m + 0x10, pos);
-        qcopy(data, a);
-        *(float *)(data + 0xC) = f;
-        *(int *)(data + 0x14) = d;
-        *(int *)(data + 0x10) = c;
+    if (spawned_moby != 0) {
+        *(unsigned char *)(spawned_moby + 0x30) = 0xFF;
+        *(short *)(spawned_moby + 0x32) = 0x7E;
+        *(unsigned char *)(spawned_moby + 0x31) = 1;
+        *(unsigned char *)(spawned_moby + 0x20) = 1;
+        data = *(char **)(spawned_moby + 0x78);
+        qcopy(spawned_moby + 0x10, pos);
+        qcopy(data, velocity);
+        *(float *)(data + 0xC) = target_height;
+        *(int *)(data + 0x14) = lifetime_frames;
+        *(int *)(data + 0x10) = target_moby;
         *(int *)(data + 0x18) = 0;
     }
-    return m;
+    return spawned_moby;
 }
 typedef struct {
     char pad0[0x44];
