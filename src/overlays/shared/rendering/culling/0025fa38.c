@@ -17,17 +17,17 @@ extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 
-int FUN_L00_0025fa38(void *p, int i) {
-    Vp a;
+int FUN_L00_0025fa38(void *point, int i) {
+    Vp point_offset;
     Vp b;
-    char *e;
+    char *volume_entry;
     if (i < 0) {
         return 0;
     }
-    e = D_L00_001600FC + i * 128;
-    subtract_vector_xyz(&a, p, e + 0x30);
-    a.w = 0;
-    transform_vector_by_basis(&b, &a, e + 0x40);
+    volume_entry = D_L00_001600FC + i * 128;
+    subtract_vector_xyz(&point_offset, point, volume_entry + 0x30);
+    point_offset.w = 0;
+    transform_vector_by_basis(&b, &point_offset, volume_entry + 0x40);
     if (vector_length_xy(&b) < 1.0f) {
         if (-1.0f <= b.z && b.z <= 1.0f) {
             return 1;
