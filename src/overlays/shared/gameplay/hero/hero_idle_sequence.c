@@ -2982,7 +2982,7 @@ extern void moby_point_position(void *, s32, void *) __asm__("FUN_L00_0024f7c8")
 extern void FUN_L00_0026de90(void *, void *, f32);
 void FUN_L00_0020b1d8(void) {
     u8 buf[0x10] __attribute__((aligned(16)));
-    f32 a, b;
+    f32 clamped_rotation_angle, b;
     u8 *optional_moby_basis;
     s32 i;
     if (FUN_L00_0020d568())
@@ -2993,19 +2993,19 @@ void FUN_L00_0020b1d8(void) {
         if (P.h308 != 1) {
             A.f324 = -P.f2C8;
             A.f3D4 = -P.f2CC;
-            a = fast_arc_tan(0.2f, P.f2C0) * 1.2f;
+            clamped_rotation_angle = fast_arc_tan(0.2f, P.f2C0) * 1.2f;
             b = -fast_arc_tan(0.2f, P.f2C4) * 1.2f;
-            if (0.7853982f < a)
-                a = 0.7853982f;
-            if (a < -0.17453292f)
-                a = -0.17453292f;
+            if (0.7853982f < clamped_rotation_angle)
+                clamped_rotation_angle = 0.7853982f;
+            if (clamped_rotation_angle < -0.17453292f)
+                clamped_rotation_angle = -0.17453292f;
             if (0.17453292f < b)
                 b = 0.17453292f;
             if (b < -0.7853982f)
                 b = -0.7853982f;
-            A.f480 = a;
+            A.f480 = clamped_rotation_angle;
             A.f530 = b;
-            A.f320 = -fast_subtract_rotations(P.f2D0, -a);
+            A.f320 = -fast_subtract_rotations(P.f2D0, -clamped_rotation_angle);
             A.f3D0 = -fast_subtract_rotations(P.f2D4, -b);
         }
     }
