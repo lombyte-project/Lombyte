@@ -2808,23 +2808,23 @@ extern s32 FUN_00214720_2f2eb8(void *, s32) __asm__("FUN_00214720");
 extern f32 FUN_001f9b80_2f2eb8(void *, void *) __asm__("FUN_001f9b80");
 
 extern s32 D_L01_00161AF0 __attribute__((sda));
-void FUN_L01_002f2eb8(struct Moby *m) {
-    AreaVars_2f2eb8 *v = (AreaVars_2f2eb8 *)m->pvars;
+void FUN_L01_002f2eb8(struct Moby *moby) {
+    AreaVars_2f2eb8 *v = (AreaVars_2f2eb8 *)moby->pvars;
     Vec4 target;
     s32 k;
     s32 *path;
-    f32 d;
+    f32 target_distance;
 
-    if (m->state == 0) {
+    if (moby->state == 0) {
         if (v == 0) {
-            FUN_0020c828_2f2eb8(m);
+            FUN_0020c828_2f2eb8(moby);
             return;
         }
-        m->update_dist = 0xFF;
-        qcopy(&v->home, &m->pos);
-        m->flags |= 0x41;
-        m->state = 1;
-        if (m->command == 0 && D_0015ED84 < 20) {
+        moby->update_dist = 0xFF;
+        qcopy(&v->home, &moby->pos);
+        moby->flags |= 0x41;
+        moby->state = 1;
+        if (moby->command == 0 && D_0015ED84 < 20) {
             k = D_0014BF10[D_L01_00161AF0 / 2 + D_0015ED84 * 16];
             if (D_L01_00161AF0 & 1) {
                 k &= 0xF;
@@ -2832,11 +2832,11 @@ void FUN_L01_002f2eb8(struct Moby *m) {
                 k = (k >> 4) & 0xF;
             }
             D_L01_00161AF0++;
-            m->command = D_L01_00161AF0;
+            moby->command = D_L01_00161AF0;
             k *= 5;
             v->count -= k;
             if (v->count <= 0) {
-                FUN_0020c828_2f2eb8(m);
+                FUN_0020c828_2f2eb8(moby);
                 return;
             }
         }
@@ -2862,11 +2862,11 @@ void FUN_L01_002f2eb8(struct Moby *m) {
         return;
     }
 in_range:
-    d = FUN_001f9b80_2f2eb8(&m->pos, &target);
-    if (d < hero.unk2044) {
-        hero.unk2040 = m;
-        hero.unk2044 = d;
-        if (d < 20.0f) {
+    target_distance = FUN_001f9b80_2f2eb8(&moby->pos, &target);
+    if (target_distance < hero.unk2044) {
+        hero.unk2040 = moby;
+        hero.unk2044 = target_distance;
+        if (target_distance < 20.0f) {
             hero.unk2048 = 1;
         }
     }
