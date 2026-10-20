@@ -876,22 +876,22 @@ extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
 
 extern float D_L06_00161C00 __attribute__((sda));
-void FUN_L06_002e9998(char *m, float *reference_axis, float *facing_direction) {
-    float d;
+void FUN_L06_002e9998(char *moby, float *reference_axis, float *facing_direction) {
+    float facing_projection;
     float A[4], B[4], C[4], D[4], E[4], F[4], G[4], H[4];
     fast_vec_normalize(C, reference_axis, 1.0f);
-    d = fast_vec_dot(C, facing_direction);
-    fast_vec_normalize(E, C, d);
+    facing_projection = fast_vec_dot(C, facing_direction);
+    fast_vec_normalize(E, C, facing_projection);
     fast_vec_sub(D, facing_direction, E);
     fast_vec_normalize(D, D, 1.0f);
     qcopy(H, C);
     qcopy(F, D);
     fast_vec_cross(G, F, H);
-    m += 0xC0;
-    extract_matrix_rotation_quaternion(A, m);
+    moby += 0xC0;
+    extract_matrix_rotation_quaternion(A, moby);
     extract_matrix_rotation_quaternion(B, F);
     quaternion_nlerp(A, A, B, D_L06_00161C00);
-    quaternion_to_rotation_basis(A, m);
+    quaternion_to_rotation_basis(A, moby);
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D9548.c: func_L06_002EAED8), where it is exact; names translated to the US level program. */
 
