@@ -3119,9 +3119,9 @@ int FUN_L00_002279b0(void) {
         }
         hero_get_collision_ray_endpoints(ray_start, ray_end, 0, scale, 1.3f);
         if (collision_line(ray_start, ray_end, 2, u->moby, 0) != 0) {
-            int s = collision_hit_material();
-            u->ground_type = s;
-            if ((short)s == 0) {
+            int hit_material = collision_hit_material();
+            u->ground_type = hit_material;
+            if ((short)hit_material == 0) {
                 ray_start[2] = D_L00_00173E68 - 0.01f;
                 if (collision_line(ray_start, ray_end, 2, u->moby, 0) == 0) {
                     hero_set_state(0x34, 1);
