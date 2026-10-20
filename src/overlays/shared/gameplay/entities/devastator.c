@@ -3093,13 +3093,13 @@ int FUN_001f96f8_2b8230(int) __asm__("FUN_001f96f8");
 void FUN_L00_00203908_2b8230(int, int) __asm__("FUN_L00_00203908");
 
 extern unsigned short D_00141BD8 __attribute__((section(".data")));
-void FUN_L00_002b8230(unsigned char *m) {
-    unsigned char *v = *(unsigned char **)(m + 0x78);
+void FUN_L00_002b8230(unsigned char *pyrocitor_moby) {
+    unsigned char *v = *(unsigned char **)(pyrocitor_moby + 0x78);
     struct UsageStats *P;
     unsigned char *voice;
-    int h, c;
-    if (m[0x53] == 2) {
-        m[0x20] = 4;
+    int h, firing_frame_count;
+    if (pyrocitor_moby[0x53] == 2) {
+        pyrocitor_moby[0x20] = 4;
         if (*(void **)v)
             FUN_0020c828_2b8230(*(void **)v);
         if (*(short *)(v + 0x44) != -1) {
@@ -3109,7 +3109,7 @@ void FUN_L00_002b8230(unsigned char *m) {
         h = *(short *)(v + 0x4A);
         if (h != -1) {
             voice = D_0013E550_2b8230 + h * 0x70;
-            if (*(unsigned char **)(voice + 0x88) == m && voice[0x74])
+            if (*(unsigned char **)(voice + 0x88) == pyrocitor_moby && voice[0x74])
                 FUN_0022d798_2b8230(h);
         }
         *(short *)(v + 0x4A) = -1;
@@ -3120,14 +3120,14 @@ void FUN_L00_002b8230(unsigned char *m) {
     P = &usage_stats;
     if (P->stat[10].count)
         return;
-    if (m[0x20] == 3) {
+    if (pyrocitor_moby[0x20] == 3) {
         (*(unsigned short *)(v + 0x50))++;
         return;
     }
-    c = *(short *)(v + 0x50);
-    if (c == 0)
+    firing_frame_count = *(short *)(v + 0x50);
+    if (firing_frame_count == 0)
         return;
-    if (FUN_001f96f8_2b8230(0x78) < c) {
+    if (FUN_001f96f8_2b8230(0x78) < firing_frame_count) {
         if (P->stat[10].count <= 0xFFFE)
             (P->stat[10].count)++;
         h = FUN_001f96f8_2b8230(D_0015EEA4) / 600;
