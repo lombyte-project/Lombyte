@@ -808,6 +808,7 @@ extern s32 D_0013CB14[];
 
 void FUN_L02_00225c20(void) {
     enum {
+        HERO_STATE_CONSTRAIN_TO_TARGET_RADIUS = 0x26,
         HERO_STATE_VEHICLE_MODE_3_HURT = 0x56,
         HERO_STATE_MOVE_TO_TARGET_POSITION = 0x65,
         HERO_STATE_BRAKE_AT_TARGET_POSITION = 0x66,
@@ -1107,7 +1108,7 @@ void FUN_L02_00225c20(void) {
             hero.motion.velocity.f[2] -= frame_time_sq * 29.0f * d;
         }
     } break;
-    case 0x26: {
+    case HERO_STATE_CONSTRAIN_TO_TARGET_RADIUS: {
 
         approach_value(&hero.unk97C, hero.unk980, frame_time * 10.0f);
         qcopy(hero.motion.velocity.f, hero.motion.displacement.f);
