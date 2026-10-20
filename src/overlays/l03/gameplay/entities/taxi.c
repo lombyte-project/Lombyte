@@ -525,9 +525,9 @@ void FUN_L03_002cbea8(struct Moby *m) {
     MineBlast blast = D_L03_001E32B0;
     MineVec tmp;
     MineVars *v = (MineVars *)m->pvars;
-    struct Moby *t;
+    struct Moby *target_moby;
     float dist;
-    int n;
+    int nearby_moby_count;
     int i;
     int k;
 
@@ -561,8 +561,8 @@ void FUN_L03_002cbea8(struct Moby *m) {
         break;
     case MINE_ARM_AND_MONITOR_PROXIMITY:
         mine_tick(&v->timer);
-        t = v->target;
-        if (t != 0 && t->state != 0xFE && t->state != 0xFD && mine_dist(&m->pos, &t->pos) < 3.0f && v->timer == 0) {
+        target_moby = v->target;
+        if (target_moby != 0 && target_moby->state != 0xFE && target_moby->state != 0xFD && mine_dist(&m->pos, &target_moby->pos) < 3.0f && v->timer == 0) {
             m->state = 2;
             mine_sound(2, 0, m);
         }
@@ -574,11 +574,11 @@ void FUN_L03_002cbea8(struct Moby *m) {
             m->state = 4;
             break;
         }
-        n = mine_find_mobys(&m->pos, 0x10, m, 0, 1.0f);
-        for (k = 0; k < n; k++) {
-            struct Moby *o = D_L03_00178000[k];
+        nearby_moby_count = mine_find_mobys(&m->pos, 0x10, m, 0, 1.0f);
+        for (k = 0; k < nearby_moby_count; k++) {
+            struct Moby *nearby_moby = D_L03_00178000[k];
 
-            if ((o->flags & 0x1000) && (o != v->target || v->timer == 0)) {
+            if ((nearby_moby->flags & 0x1000) && (nearby_moby != v->target || v->timer == 0)) {
                 m->state = 4;
                 break;
             }
@@ -588,9 +588,9 @@ void FUN_L03_002cbea8(struct Moby *m) {
         int cnt;
 
         dist = mine_dist(&m->pos, D_L03_00166EC0);
-        n = mine_find_mobys(&m->pos, 0x10, m, 0, 2.0f);
+        nearby_moby_count = mine_find_mobys(&m->pos, 0x10, m, 0, 2.0f);
         *(OvlQuad *)tmp = *(OvlQuad *)&m->pos;
-        mine_blast_mobys(m, tmp, D_L03_00178000, n, 0, 0x810001, 4, 1, 3.0f, 0.25f, 1.5f);
+        mine_blast_mobys(m, tmp, D_L03_00178000, nearby_moby_count, 0, 0x810001, 4, 1, 3.0f, 0.25f, 1.5f);
         cnt = mine_ftoi(dist * 15.0f);
         for (i = 0; i < cnt; i++) {
             int kind = mine_rand_below(4);
