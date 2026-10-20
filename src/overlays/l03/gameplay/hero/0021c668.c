@@ -138,6 +138,7 @@ void FUN_L03_0021c668(void) {
         HERO_STATE_LEDGE_SHIMMY_POSITIVE_YAW_OFFSET = 26,
         HERO_STATE_LEDGE_SHIMMY_NEGATIVE_YAW_OFFSET = 27,
         HERO_STATE_JUMP_FROM_LEDGE = 28,
+        HERO_STATE_LOOK_ALT = 30,
         HERO_STATE_TARGET_POSE_APPROACH = 101,
         HERO_STATE_TARGET_POSE_APPROACH_ANIMATION_WAIT = 102,
         HERO_STATE_TARGET_POSE_REACHED = 103,
@@ -1941,7 +1942,7 @@ void FUN_L03_0021c668(void) {
                         hero_set_state(0x53, 0);
                     }
                     break;
-                case 30:
+                case HERO_STATE_LOOK_ALT:
                     if (hero.vehicle_mode == 0) {
                         if (hero.unk20AA == 0 || hero.unk20A5 != 0) {
                             if (controller_state.held & 0xA) {
