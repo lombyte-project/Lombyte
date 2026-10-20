@@ -328,18 +328,18 @@ void FUN_001f9a10_00271df8(void *, void *, void *) __asm__("FUN_001f9a10");
 void FUN_L00_00267a08_00271df8(unsigned char *) __asm__("FUN_L00_00267a08");
 extern unsigned char *D_L00_001B2148[];
 extern float D_L00_00160210 __attribute__((sda));
-void FUN_L00_00271df8(unsigned char *p) {
-    unsigned char *q = p + 0x20;
-    if (fast_dec_timer(p + 0xA)) {
-        *(float *)(q + 8) -= *(float *)(q + 0x18);
+void FUN_L00_00271df8(unsigned char *particle) {
+    unsigned char *particle_data = particle + 0x20;
+    if (fast_dec_timer(particle + 0xA)) {
+        *(float *)(particle_data + 8) -= *(float *)(particle_data + 0x18);
     }
-    FUN_001f9a10_00271df8(p + 0x10, p + 0x10, q);
-    p[8] += q[0x14];
-    if (p[2] == D_L00_001B2148[0][0]) {
-        *(float *)(p + 0xC) += D_L00_00160210 * frame_time * 210000.0f;
+    FUN_001f9a10_00271df8(particle + 0x10, particle + 0x10, particle_data);
+    particle[8] += particle_data[0x14];
+    if (particle[2] == D_L00_001B2148[0][0]) {
+        *(float *)(particle + 0xC) += D_L00_00160210 * frame_time * 210000.0f;
     }
-    if (*(float *)(p + 0x18) < *(float *)(q + 0x10)) {
-        FUN_L00_00267a08_00271df8(p);
+    if (*(float *)(particle + 0x18) < *(float *)(particle_data + 0x10)) {
+        FUN_L00_00267a08_00271df8(particle);
     }
 }
 #include "sda.h"
