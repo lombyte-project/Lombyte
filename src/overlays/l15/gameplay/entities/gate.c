@@ -1157,35 +1157,35 @@ extern float angle_atan2(float, float) __asm__("FUN_001f9e90");
  * same-class mobys within 10 units and keeps ~15 units off the goal while
  * another moby is closer to it (~10 otherwise); writes the steering point to
  * out and returns the heading to follow. */
-float FUN_L15_002c52b8(struct Moby *m, float *out, Goal_52b8 goal) {
-    float tmp[4];
+float FUN_L15_002c52b8(struct Moby *moby, float *out, Goal_52b8 goal) {
+    float steering_offset[4];
     float dist;
     float wsum;
     int clear;
     float k;
-    char *o;
-    dist = vector_distance(&m->pos, &goal);
+    char *other_moby;
+    dist = vector_distance(&moby->pos, &goal);
     clear = 1;
     clear_u64_value(out);
     wsum = 0.0f;
-    for (o = D_L15_0015FFE4; o != 0; o = *(char **)(o + 0x28)) {
-        if (o == m)
+    for (other_moby = D_L15_0015FFE4; other_moby != 0; other_moby = *(char **)(other_moby + 0x28)) {
+        if (other_moby == moby)
             continue;
-        if (*(short *)(o + 0xA6) != m->oclass)
+        if (*(short *)(other_moby + 0xA6) != moby->oclass)
             continue;
-        if ((u8)o[0x20] == 1 || (u8)o[0x20] == 0x40)
+        if ((u8)other_moby[0x20] == 1 || (u8)other_moby[0x20] == 0x40)
             continue;
-        if (vector_distance(o + 0x10, &m->pos) < 10.0f) {
+        if (vector_distance(other_moby + 0x10, &moby->pos) < 10.0f) {
             wsum += 6.0f;
-            subtract_vector_xyz(tmp, &m->pos, o + 0x10);
-            scale_vector_xyz_52b8(tmp, tmp, 6.0f);
-            add_vector_xyz_52b8(out, out, tmp);
+            subtract_vector_xyz(steering_offset, &moby->pos, other_moby + 0x10);
+            scale_vector_xyz_52b8(steering_offset, steering_offset, 6.0f);
+            add_vector_xyz_52b8(out, out, steering_offset);
         }
-        if (vector_distance(o + 0x10, &goal) < dist)
+        if (vector_distance(other_moby + 0x10, &goal) < dist)
             clear = 0;
     }
     if (clear == 0) {
-        subtract_vector_xyz(tmp, &m->pos, &goal);
+        subtract_vector_xyz(steering_offset, &moby->pos, &goal);
         if (dist < 14.5f) {
             k = 15.0f;
         } else if (15.5f < dist) {
@@ -1194,12 +1194,12 @@ float FUN_L15_002c52b8(struct Moby *m, float *out, Goal_52b8 goal) {
             k = 0.0f;
         }
         wsum += 10.0f;
-        normalize_vector_xyz(tmp, tmp, k * 10.0f);
-        add_vector_xyz_52b8(out, out, tmp);
+        normalize_vector_xyz(steering_offset, steering_offset, k * 10.0f);
+        add_vector_xyz_52b8(out, out, steering_offset);
         scale_vector_xyz_52b8(out, out, 1.0f / wsum);
-        add_vector_xyz_52b8(out, out, &m->pos);
+        add_vector_xyz_52b8(out, out, &moby->pos);
     } else {
-        subtract_vector_xyz(tmp, &m->pos, &goal);
+        subtract_vector_xyz(steering_offset, &moby->pos, &goal);
         if (dist < 9.5f) {
             k = 10.0f;
         } else if (10.5f < dist) {
@@ -1208,16 +1208,16 @@ float FUN_L15_002c52b8(struct Moby *m, float *out, Goal_52b8 goal) {
             k = 0.0f;
         }
         wsum += 10.0f;
-        normalize_vector_xyz(tmp, tmp, k * 10.0f);
-        add_vector_xyz_52b8(out, out, tmp);
+        normalize_vector_xyz(steering_offset, steering_offset, k * 10.0f);
+        add_vector_xyz_52b8(out, out, steering_offset);
         scale_vector_xyz_52b8(out, out, 1.0f / wsum);
-        add_vector_xyz_52b8(out, out, &m->pos);
+        add_vector_xyz_52b8(out, out, &moby->pos);
     }
-    if (vector_distance(&m->pos, out) < 1.0f) {
-        qcopy(out, &m->pos);
-        return angle_atan2(goal.pos.f[0] - m->pos.x, goal.pos.f[1] - m->pos.y);
+    if (vector_distance(&moby->pos, out) < 1.0f) {
+        qcopy(out, &moby->pos);
+        return angle_atan2(goal.pos.f[0] - moby->pos.x, goal.pos.f[1] - moby->pos.y);
     }
-    return angle_atan2(out[0] - m->pos.x, out[1] - m->pos.y);
+    return angle_atan2(out[0] - moby->pos.x, out[1] - moby->pos.y);
 }
 typedef union {
     OvlQuad q;
