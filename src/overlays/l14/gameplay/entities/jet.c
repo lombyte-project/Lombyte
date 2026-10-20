@@ -935,33 +935,33 @@ extern float mine_sin(float) __asm__("FUN_001f9de0");
 extern int mine_ftoi(float) __asm__("FUN_001fa6d0");
 
 /* Mine update: drifts along its looped path while spinning and pulsing; blows up on a hit. */
-void FUN_L14_002ec810(struct Moby *m) {
+void FUN_L14_002ec810(struct Moby *moby) {
     enum {
         MINE_STATE_INITIALIZE = 0,
         MINE_STATE_FOLLOW_PATH = 1
     };
-    L14MineVars *d = (L14MineVars *)m->pvars;
+    L14MineVars *mine_vars = (L14MineVars *)moby->pvars;
     float v[4];
     Vec4 vel;
     s32 count;
     L14MinePath *path;
     L14MineHit *hit;
     int i;
-    float s;
+    float glow_pulse_sine;
     int r;
     int g;
 
-    switch (m->state) {
+    switch (moby->state) {
     case MINE_STATE_INITIALIZE:
-        if (d->path == -1) {
-            mine_print(D_L14_001FCA98, m->save_id);
-            mine_remove(m);
+        if (mine_vars->path == -1) {
+            mine_print(D_L14_001FCA98, moby->save_id);
+            mine_remove(moby);
             return;
         }
-        path = D_L14_001B0BB0_mine[d->path];
+        path = D_L14_001B0BB0_mine[mine_vars->path];
         if (path->count == 0) {
-            mine_print(D_L14_001FCAD8, m->save_id);
-            mine_remove(m);
+            mine_print(D_L14_001FCAD8, moby->save_id);
+            mine_remove(moby);
             return;
         }
         for (i = 0; i < path->count; i++) {
@@ -969,43 +969,43 @@ void FUN_L14_002ec810(struct Moby *m) {
             char *pt = (char *)path + i * 16;
             *(f32 *)(pt + 0x1C) = len;
         }
-        d->segment = 0;
-        d->along = 0;
-        d->dir = mine_rand(2) != 0 ? 1.0f : -1.0f;
-        qcopy(&m->pos, path->points[0].pos);
-        m->state = 1;
-        d->spin[0] = mine_random(0.05235988f, 0.10471976f);
-        d->spin[1] = mine_random(0.034906585f, 0.06981317f);
-        d->spin[2] = mine_random(0.017453292f, 0.034906585f);
-        mine_clear(d->vel);
-        d->phase = FUN_L00_00257c48(0.0f, 3.1415927f);
+        mine_vars->segment = 0;
+        mine_vars->along = 0;
+        mine_vars->dir = mine_rand(2) != 0 ? 1.0f : -1.0f;
+        qcopy(&moby->pos, path->points[0].pos);
+        moby->state = 1;
+        mine_vars->spin[0] = mine_random(0.05235988f, 0.10471976f);
+        mine_vars->spin[1] = mine_random(0.034906585f, 0.06981317f);
+        mine_vars->spin[2] = mine_random(0.017453292f, 0.034906585f);
+        mine_clear(mine_vars->vel);
+        mine_vars->phase = FUN_L00_00257c48(0.0f, 3.1415927f);
         break;
     case MINE_STATE_FOLLOW_PATH:
-        FUN_L00_0025d808_mine(D_L14_001B0BB0_mine[d->path], v, &d->segment, &d->along, 1,
-                              D_L14_00161C44 * D_0015ED6C_mine * d->dir);
-        FUN_L00_0025b8c0(&m->pos.x, &d->vel[0], v[0], 0.02f, 0.2f, 0.0f);
-        FUN_L00_0025b8c0(&m->pos.y, &d->vel[1], v[1], 0.02f, 0.2f, 0.0f);
-        FUN_L00_0025b8c0(&m->pos.z, &d->vel[2], v[2], 0.02f, 0.2f, 0.0f);
-        hit = mine_hit(m, 0x230000, 0);
-        fun_00213928(m, hit, d->health, 0, &count, 0, 0, 4);
-        if ((count >= 2 && hit != 0 && hit->moby->oclass != 0x283) || hero.coll_hit_moby == (u8 *)m) {
+        FUN_L00_0025d808_mine(D_L14_001B0BB0_mine[mine_vars->path], v, &mine_vars->segment, &mine_vars->along, 1,
+                              D_L14_00161C44 * D_0015ED6C_mine * mine_vars->dir);
+        FUN_L00_0025b8c0(&moby->pos.x, &mine_vars->vel[0], v[0], 0.02f, 0.2f, 0.0f);
+        FUN_L00_0025b8c0(&moby->pos.y, &mine_vars->vel[1], v[1], 0.02f, 0.2f, 0.0f);
+        FUN_L00_0025b8c0(&moby->pos.z, &mine_vars->vel[2], v[2], 0.02f, 0.2f, 0.0f);
+        hit = mine_hit(moby, 0x230000, 0);
+        fun_00213928(moby, hit, mine_vars->health, 0, &count, 0, 0, 4);
+        if ((count >= 2 && hit != 0 && hit->moby->oclass != 0x283) || hero.coll_hit_moby == (u8 *)moby) {
             mine_clear(&vel);
-            mine_sound(0, 0, m);
-            if (hero.coll_hit_moby == (u8 *)m)
-                mine_explode(m, &vel, &m->pos, 3.0f, 1.0f, 10, 20, 60, 3.0f, 5.0f, 9.0f, 1.0f, -1, 15.0f, 1, 1, -1, 0);
+            mine_sound(0, 0, moby);
+            if (hero.coll_hit_moby == (u8 *)moby)
+                mine_explode(moby, &vel, &moby->pos, 3.0f, 1.0f, 10, 20, 60, 3.0f, 5.0f, 9.0f, 1.0f, -1, 15.0f, 1, 1, -1, 0);
             else
-                mine_explode(m, &vel, &m->pos, 0.0f, 0.0f, 10, 20, 60, 3.0f, 5.0f, 9.0f, 1.0f, -1, 15.0f, 1, 1, -1, 0);
-            mine_remove(m);
+                mine_explode(moby, &vel, &moby->pos, 0.0f, 0.0f, 10, 20, 60, 3.0f, 5.0f, 9.0f, 1.0f, -1, 15.0f, 1, 1, -1, 0);
+            mine_remove(moby);
             return;
         }
-        m->rot.x = mine_add_rot(m->rot.x, d->spin[0]);
-        m->rot.y = mine_add_rot(m->rot.y, d->spin[1]);
-        m->rot.z = mine_add_rot(m->rot.z, d->spin[2]);
-        d->phase = mine_add_rot(d->phase, D_L14_00161C48);
-        s = mine_sin(d->phase);
-        r = mine_ftoi(s * 48.0f) + 0xCF;
-        g = mine_ftoi(s * 32.0f) + 0x30;
-        m->glow_color = g << 16 | (0xFF000000 | g << 8) | r;
+        moby->rot.x = mine_add_rot(moby->rot.x, mine_vars->spin[0]);
+        moby->rot.y = mine_add_rot(moby->rot.y, mine_vars->spin[1]);
+        moby->rot.z = mine_add_rot(moby->rot.z, mine_vars->spin[2]);
+        mine_vars->phase = mine_add_rot(mine_vars->phase, D_L14_00161C48);
+        glow_pulse_sine = mine_sin(mine_vars->phase);
+        r = mine_ftoi(glow_pulse_sine * 48.0f) + 0xCF;
+        g = mine_ftoi(glow_pulse_sine * 32.0f) + 0x30;
+        moby->glow_color = g << 16 | (0xFF000000 | g << 8) | r;
         break;
     }
 }
