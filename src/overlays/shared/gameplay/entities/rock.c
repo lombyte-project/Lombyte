@@ -1530,7 +1530,7 @@ void FUN_L01_00308550(char *moby) {
     for (i = 0; i < 4; i++) {
         float unwrapped_angle = ang[i] + spd[i];
         float pulse_progress;
-        int c;
+        int packed_color;
         ang[i] = unwrapped_angle;
         if (255.0f <= unwrapped_angle) {
             ang[i] = unwrapped_angle - 255.0f;
@@ -1541,8 +1541,8 @@ void FUN_L01_00308550(char *moby) {
             tm[i] = scale_game_frames(0xFF);
         }
         pulse_progress = convert_integer_to_float(scale_game_frames(0xFF) - tm[i]) / (float)scale_game_frames(0xFF);
-        c = fast_tween_color(D_L01_00161F3C, D_L01_00161F40, absolute_float(0.5f - pulse_progress));
-        FUN_L00_00272f68(dir, c, func_001FA898_r(ang[i]), D_L01_00161F4C, D_L01_00161F48, 2, 0,
+        packed_color = fast_tween_color(D_L01_00161F3C, D_L01_00161F40, absolute_float(0.5f - pulse_progress));
+        FUN_L00_00272f68(dir, packed_color, func_001FA898_r(ang[i]), D_L01_00161F4C, D_L01_00161F48, 2, 0,
                          sz[i] * scale);
         add_vector_xyz(dir, dir, step);
     }
