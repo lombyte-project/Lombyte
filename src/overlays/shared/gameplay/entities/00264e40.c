@@ -9,10 +9,10 @@
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_0025D750.c: func_L02_00265E58), where it is exact; names translated to the US level program. */
 
 void FUN_L02_00264e40(char *moby) {
-    int *p = (int *)(moby + 0x18);
+    int *word_to_clear = (int *)(moby + 0x18);
     int i;
-    for (i = 6; i >= 0; i--, p--) {
-        *p = 0;
+    for (i = 6; i >= 0; i--, word_to_clear--) {
+        *word_to_clear = 0;
     }
     *(short *)(moby + 0x1C) = 0;
 }
