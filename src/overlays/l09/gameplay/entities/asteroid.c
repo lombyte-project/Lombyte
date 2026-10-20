@@ -629,30 +629,30 @@ extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 void delete_moby(struct Obj *obj) __asm__("FUN_0020c828");
 
-void FUN_L09_002ead30(unsigned char *m) {
-    if (m[0x23] < 3) {
-        delete_moby(m);
+void FUN_L09_002ead30(unsigned char *moby) {
+    if (moby[0x23] < 3) {
+        delete_moby(moby);
     } else {
-        char *d;
-        float len, t;
-        m[0x23] -= 2;
-        d = *(char **)(m + 0x78);
-        fast_vec_scale(d, d, frame_scale * -0.0199999809f + 1.0f);
-        *(float *)(d + 8) -= frame_time_sq * 20.0f;
-        fast_vec_add(d + 0x20, d + 0x20, d);
-        fast_vec_sub(m + 0x10, d + 0x20, D_L09_00166F40);
-        len = fast_vec_length(m + 0x10);
+        char *moby_vars;
+        float len, updated_rotation_x;
+        moby[0x23] -= 2;
+        moby_vars = *(char **)(moby + 0x78);
+        fast_vec_scale(moby_vars, moby_vars, frame_scale * -0.0199999809f + 1.0f);
+        *(float *)(moby_vars + 8) -= frame_time_sq * 20.0f;
+        fast_vec_add(moby_vars + 0x20, moby_vars + 0x20, moby_vars);
+        fast_vec_sub(moby + 0x10, moby_vars + 0x20, D_L09_00166F40);
+        len = fast_vec_length(moby + 0x10);
         if (len > 100.0f) {
-            fast_vec_normalize(m + 0x10, m + 0x10, 100.0f);
-            fast_vec_add(m + 0x10, m + 0x10, D_L09_00166F40);
-            *(float *)(m + 0x2C) = *(float *)(d + 0x50) * (100.0f / len);
+            fast_vec_normalize(moby + 0x10, moby + 0x10, 100.0f);
+            fast_vec_add(moby + 0x10, moby + 0x10, D_L09_00166F40);
+            *(float *)(moby + 0x2C) = *(float *)(moby_vars + 0x50) * (100.0f / len);
         } else {
-            qcopy(m + 0x10, d + 0x20);
-            *(float *)(m + 0x2C) = *(float *)(d + 0x50);
+            qcopy(moby + 0x10, moby_vars + 0x20);
+            *(float *)(moby + 0x2C) = *(float *)(moby_vars + 0x50);
         }
-        t = fast_add_rotations(*(float *)(m + 0x40), *(float *)(d + 0x40));
-        *(float *)(m + 0x40) = t;
-        *(float *)(m + 0x44) = fast_add_rotations(t, *(float *)(d + 0x44));
+        updated_rotation_x = fast_add_rotations(*(float *)(moby + 0x40), *(float *)(moby_vars + 0x40));
+        *(float *)(moby + 0x40) = updated_rotation_x;
+        *(float *)(moby + 0x44) = fast_add_rotations(updated_rotation_x, *(float *)(moby_vars + 0x44));
     }
 }
 #include "sda.h"
