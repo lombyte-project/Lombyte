@@ -22,7 +22,7 @@ int build_pause_item_list(void) __asm__("FUN_002215f8");
 int build_pause_item_list(void) {
     int i;
     int item_count = 0;
-    char *m;
+    char *item_count_storage_base;
 
     for (i = 0; i < 15; i++) {
         int id = D_001CF120[i].id;
@@ -40,8 +40,8 @@ int build_pause_item_list(void) {
             item_count++;
         }
     }
-    m = D_001D0D00;
-    *(int *)(m + 0x40) = item_count;
+    item_count_storage_base = D_001D0D00;
+    *(int *)(item_count_storage_base + 0x40) = item_count;
     return 0;
 }
 
