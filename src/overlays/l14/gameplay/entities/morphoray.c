@@ -779,14 +779,14 @@ void FUN_L14_003061d8(void *arg) {
         MOBY_PVARS_INITIALIZE = 0
     };
     char *moby = arg;
-    char *d;
+    char *moby_pvars;
     switch ((unsigned char)moby[0x20]) {
     case MOBY_PVARS_INITIALIZE:
-        d = *(char **)(moby + 0x78);
-        d[0x28] = 4;
-        *(int *)(d + 0x20) = 0;
-        *(short *)(d + 0x24) = 0;
-        *(short *)(d + 0x3E) = 0;
+        moby_pvars = *(char **)(moby + 0x78);
+        moby_pvars[0x28] = 4;
+        *(int *)(moby_pvars + 0x20) = 0;
+        *(short *)(moby_pvars + 0x24) = 0;
+        *(short *)(moby_pvars + 0x3E) = 0;
         moby[0x20] = 1;
         break;
     case 2:
