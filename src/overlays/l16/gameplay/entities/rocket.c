@@ -219,10 +219,10 @@ extern int *D_L16_001ABCC0_c[] __asm__("D_L16_001ABCC0");
 extern int FUN_L16_002cf678_u(char *) __asm__("FUN_L16_002cf678");
 
 void FUN_L16_002cf5c8(struct Moby *moby) {
-    short *p = D_L16_001ABCC0_c[moby->group];
-    if (p != 0) {
+    short *group_entry = D_L16_001ABCC0_c[moby->group];
+    if (group_entry != 0) {
         do {
-            char *other = D_L16_0015FFD8 + (((unsigned short)*p & 0x7FFF) << 8);
+            char *other = D_L16_0015FFD8 + (((unsigned short)*group_entry & 0x7FFF) << 8);
             if (*(short *)(other + 0xA6) == 0x228) {
                 int *data;
                 if (moby != other) {
@@ -231,7 +231,7 @@ void FUN_L16_002cf5c8(struct Moby *moby) {
                 data = *(int **)(other + 0x78);
                 *data = FUN_L16_002cf678_u(other);
             }
-        } while (*p++ >= 0);
+        } while (*group_entry++ >= 0);
     }
 }
 #include "qcopy.h"
