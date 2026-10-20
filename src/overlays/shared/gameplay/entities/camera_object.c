@@ -2283,26 +2283,26 @@ extern int D_L00_0015F334;
 extern long D_L00_0015F328;
 extern long D_L00_0015F338;
 void *FUN_L00_002a9aa0(int unused, float *pos) {
-    char *m = func_0020D348_m_q(0x5F3);
-    if (m != 0 && *(int *)&D_L00_001613C8_q == 0) {
-        char *d;
-        m[0x20] = 0;
-        *(unsigned char *)(m + 0x30) = 0xFF;
-        *(short *)(m + 0x32) = 0xFF;
-        m[0x31] = 1;
-        d = *(char **)(m + 0x78);
-        *(OvlQuad *)(m + 0x10) = *(OvlQuad *)pos;
+    char *spawned_moby = func_0020D348_m_q(0x5F3);
+    if (spawned_moby != 0 && *(int *)&D_L00_001613C8_q == 0) {
+        char *moby_vars;
+        spawned_moby[0x20] = 0;
+        *(unsigned char *)(spawned_moby + 0x30) = 0xFF;
+        *(short *)(spawned_moby + 0x32) = 0xFF;
+        spawned_moby[0x31] = 1;
+        moby_vars = *(char **)(spawned_moby + 0x78);
+        *(OvlQuad *)(spawned_moby + 0x10) = *(OvlQuad *)pos;
         D_L00_0015F324 = 0xFF;
         D_L00_0015F334 = 0xFFFFFF;
         D_L00_0015F338 = 0x1F00000042L;
-        *(int *)&D_L00_001613C8_q = (int)m;
+        *(int *)&D_L00_001613C8_q = (int)spawned_moby;
         D_L00_0015F328 = 0;
         D_L00_0015F320 = 0;
         D_L00_0015F330 = 0;
-        *(int *)(d + 0x10) = 0;
-        *(short *)(d + 0x2C) = FUN_L00_0023e5e0_q(pos, 0.0f, 0.0f, 0);
+        *(int *)(moby_vars + 0x10) = 0;
+        *(short *)(moby_vars + 0x2C) = FUN_L00_0023e5e0_q(pos, 0.0f, 0.0f, 0);
     }
-    return m;
+    return spawned_moby;
 }
 extern u8 *D_L00_001613C8 __attribute__((sda));
 void FUN_L00_002a9aa0_u(void *, OvlQuad *) __asm__("FUN_L00_002a9aa0");
