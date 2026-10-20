@@ -619,24 +619,24 @@ void FUN_L00_002c8078(unsigned char *m) {
 #include "qcopy.h"
 unsigned char *create_moby(int) __asm__("FUN_0020c4f8");
 unsigned char *FUN_L00_002c8218(int a, u128 *b, u128 *c) {
-    unsigned char *m = create_moby(0xe6);
-    if (m) {
-        char *q;
-        q = *(char **)(m + 0x78);
-        m[0x30] = 0xff;
-        *(short *)(m + 0x32) = 0xff;
-        m[0x31] = 1;
-        m[0x20] = 0;
-        qcopy(m + 0x10, b);
-        qcopy(q, c);
-        *(int *)(q + 0x30) = a;
-        *(int *)(q + 0x34) = 0;
-        *(short *)(q + 0x38) = 0;
-        *(float *)(m + 0x2c) = *(float *)(*(char **)(m + 0x24) + 0x24) * 0.01f;
+    unsigned char *spawned_moby = create_moby(0xe6);
+    if (spawned_moby) {
+        char *moby_vars;
+        moby_vars = *(char **)(spawned_moby + 0x78);
+        spawned_moby[0x30] = 0xff;
+        *(short *)(spawned_moby + 0x32) = 0xff;
+        spawned_moby[0x31] = 1;
+        spawned_moby[0x20] = 0;
+        qcopy(spawned_moby + 0x10, b);
+        qcopy(moby_vars, c);
+        *(int *)(moby_vars + 0x30) = a;
+        *(int *)(moby_vars + 0x34) = 0;
+        *(short *)(moby_vars + 0x38) = 0;
+        *(float *)(spawned_moby + 0x2c) = *(float *)(*(char **)(spawned_moby + 0x24) + 0x24) * 0.01f;
         if (hero.unk20A5 || hero.unk20AF)
-            *(unsigned short *)(m + 0x34) |= 0x41;
+            *(unsigned short *)(spawned_moby + 0x34) |= 0x41;
     }
-    return m;
+    return spawned_moby;
 }
 typedef unsigned int u128_2c82f0 __attribute__((mode(TI), aligned(16)));
 typedef union {
