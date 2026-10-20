@@ -614,41 +614,41 @@ extern f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
 extern void FUN_L00_002e1c78();
 void enqueue_callback_list_1(s32 arg0, s32 arg1) __asm__("FUN_001f4600");
 
-void FUN_L00_002e1aa8(SparkMoby *m) {
+void FUN_L00_002e1aa8(SparkMoby *moby) {
     SparkVars *vars;
-    SparkPart *p;
-    SparkTail *t;
+    SparkPart *particle;
+    SparkTail *particle_tail;
     f32 *pos;
     f32 vel[4];
     s32 i;
     s32 life;
 
-    vars = m->vars;
+    vars = moby->vars;
     pos = vars->pos;
-    moby_point_position(m, 1, pos);
+    moby_point_position(moby, 1, pos);
     vars->pos[2] -= 0.333f;
     random_spherical_offset(vel, 0.005f, 0.03f);
-    p = FUN_L00_00274948(pos, vel, 0x7F, m);
-    if (p != 0) {
-        p->unkC = random_float_between(6000.0f, 32000.0f);
+    particle = FUN_L00_00274948(pos, vel, 0x7F, moby);
+    if (particle != 0) {
+        particle->unkC = random_float_between(6000.0f, 32000.0f);
     }
     for (i = 0; i < 3; i++) {
-        p = FUN_L00_00274948(vars->pos, D_L00_0015F580, 0x7F, m);
-        if (p != 0) {
-            t = &p->tail;
+        particle = FUN_L00_00274948(vars->pos, D_L00_0015F580, 0x7F, moby);
+        if (particle != 0) {
+            particle_tail = &particle->tail;
             if (i == 2 && random_integer_below(8) == 0) {
-                p->unkC = 180000.0f;
+                particle->unkC = 180000.0f;
             } else {
-                p->unkC = random_float_between(80000.0f, 120000.0f);
+                particle->unkC = random_float_between(80000.0f, 120000.0f);
             }
             life = scale_game_frames_s32(2);
-            p->life = life;
-            t->unk10 = 1.0f / convert_integer_to_float((s16)life);
-            t->color = 0x7F7F7F;
-            t->unk16 = 3;
+            particle->life = life;
+            particle_tail->unk10 = 1.0f / convert_integer_to_float((s16)life);
+            particle_tail->color = 0x7F7F7F;
+            particle_tail->unk16 = 3;
         }
     }
-    enqueue_callback_list_1((s32)FUN_L00_002e1c78, (s32)m);
+    enqueue_callback_list_1((s32)FUN_L00_002e1c78, (s32)moby);
 }
 typedef union {
     u128 q;
