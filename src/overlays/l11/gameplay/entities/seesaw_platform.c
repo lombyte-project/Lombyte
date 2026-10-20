@@ -853,50 +853,50 @@ void FUN_L11_0030e978(struct Moby *m) {
         LINKED_MOTION_STATE_WAIT_FOR_LINK_TRIGGER = 1,
         LINKED_MOTION_STATE_MOVE_ALONG_LOCAL_AXIS = 2
     };
-    char *d = (char *)m->pvars;
+    char *private_data = (char *)m->pvars;
     float v[4] __attribute__((aligned(16)));
-    struct Moby *c;
-    struct Moby *o;
-    char *p;
-    struct MobyClass *q;
+    struct Moby *spawned_moby;
+    struct Moby *linked_moby;
+    char *spawned_private_data;
+    struct MobyClass *source_moby_class;
     switch (m->state) {
     case LINKED_MOTION_STATE_INITIALIZE:
-        m->pos.z = m->pos.z + *(float *)(d + 0xC) * 1.9f;
-        c = (struct Moby *)func_0020D348_c(0x487);
-        c->visible = 1;
-        c->draw_dist = 0x40;
-        c->spawn_frame = m->spawn_frame;
-        c->flags = m->flags;
-        qcopy(&c->pos, &m->pos);
-        qcopy(&c->rot, &m->rot);
-        c->rot.x = func_001FA748_f(c->rot.x, 3.1415927f);
-        func_L00_00251E30_u(c);
-        p = (char *)c->pvars;
-        *(int *)(p + 8) = *(int *)(d + 8);
-        *(float *)(p + 0x10) = *(float *)(d + 0x10);
-        *(int *)(p + 0x14) = *(int *)(d + 0x14);
-        q = m->pclass;
-        m->scale = q->scale * *(float *)(d + 0xC);
-        c->scale = q->scale * *(float *)(d + 0xC);
-        c->state = 1;
+        m->pos.z = m->pos.z + *(float *)(private_data + 0xC) * 1.9f;
+        spawned_moby = (struct Moby *)func_0020D348_c(0x487);
+        spawned_moby->visible = 1;
+        spawned_moby->draw_dist = 0x40;
+        spawned_moby->spawn_frame = m->spawn_frame;
+        spawned_moby->flags = m->flags;
+        qcopy(&spawned_moby->pos, &m->pos);
+        qcopy(&spawned_moby->rot, &m->rot);
+        spawned_moby->rot.x = func_001FA748_f(spawned_moby->rot.x, 3.1415927f);
+        func_L00_00251E30_u(spawned_moby);
+        spawned_private_data = (char *)spawned_moby->pvars;
+        *(int *)(spawned_private_data + 8) = *(int *)(private_data + 8);
+        *(float *)(spawned_private_data + 0x10) = *(float *)(private_data + 0x10);
+        *(int *)(spawned_private_data + 0x14) = *(int *)(private_data + 0x14);
+        source_moby_class = m->pclass;
+        m->scale = source_moby_class->scale * *(float *)(private_data + 0xC);
+        spawned_moby->scale = source_moby_class->scale * *(float *)(private_data + 0xC);
+        spawned_moby->state = 1;
         m->state = 1;
         break;
     case LINKED_MOTION_STATE_WAIT_FOR_LINK_TRIGGER:
-        o = (struct Moby *)((*(int *)(d + 8) << 8) + (int)D_L11_0015FFD8);
-        if (o->oclass == 0x267 && o->state == 4) {
+        linked_moby = (struct Moby *)((*(int *)(private_data + 8) << 8) + (int)D_L11_0015FFD8);
+        if (linked_moby->oclass == 0x267 && linked_moby->state == 4) {
             goto go;
         }
-        if (o->oclass == 0x33E && o->command != 0) {
+        if (linked_moby->oclass == 0x33E && linked_moby->command != 0) {
         go:
             m->state = 2;
-            ((Rec57 *)(*(int *)(d + 0x14) + (int)(D_0013D355_t)))->f57 = 1;
+            ((Rec57 *)(*(int *)(private_data + 0x14) + (int)(D_0013D355_t)))->f57 = 1;
             func_0022ED80_u(0, 0, m);
         }
         break;
     case LINKED_MOTION_STATE_MOVE_ALONG_LOCAL_AXIS:
-        func_00214D88_f((float *)d, (float *)(d + 4), *(float *)(d + 0x10), frame_time_sq, frame_time_sq,
+        func_00214D88_f((float *)private_data, (float *)(private_data + 4), *(float *)(private_data + 0x10), frame_time_sq, frame_time_sq,
                         frame_time + frame_time);
-        func_L00_001FF4B0_u(v, &m->rot_row1, -*(float *)(d + 4));
+        func_L00_001FF4B0_u(v, &m->rot_row1, -*(float *)(private_data + 4));
         func_001F9BD8_u(&m->pos, &m->pos, v);
         break;
     }
