@@ -815,36 +815,36 @@ extern int inside_w(void *, void *, int) __asm__("FUN_L00_00259740");
 extern float dist_w(void *, void *) __asm__("FUN_001f9b48");
 extern int frames_w(int) __asm__("FUN_001f96f8");
 
-int FUN_L12_002e2eb8(struct Moby *m, float speed) {
-    char *d = (char *)m->pvars;
+int FUN_L12_002e2eb8(struct Moby *moby, float speed) {
+    char *moby_vars = (char *)moby->pvars;
     float old[4] __attribute__((aligned(16)));
     float dir[4];
     float hit[4];
     float res[4] __attribute__((aligned(16)));
-    float t[4];
+    float path_test_position[4];
     float u[4];
     int r;
-    *(OvlQuad *)old = *(OvlQuad *)&m->pos;
-    FUN_L12_002e1878_w(m);
-    approach_w(m, (float *)(d + 0x2A0), speed, 0.05f, 0.3f, 0.2f);
-    dir[0] = cos_w(m->rot.z) * 2.0f;
-    dir[1] = sin_w(m->rot.z) * 2.0f;
+    *(OvlQuad *)old = *(OvlQuad *)&moby->pos;
+    FUN_L12_002e1878_w(moby);
+    approach_w(moby, (float *)(moby_vars + 0x2A0), speed, 0.05f, 0.3f, 0.2f);
+    dir[0] = cos_w(moby->rot.z) * 2.0f;
+    dir[1] = sin_w(moby->rot.z) * 2.0f;
     dir[2] = 0.0f;
-    r = move_w(m, d + 0x180, dir, hit, 1.0f);
-    if (*(int *)(d + 0x2D0) != -1) {
-        sub_w(u, old, &m->pos);
+    r = move_w(moby, moby_vars + 0x180, dir, hit, 1.0f);
+    if (*(int *)(moby_vars + 0x2D0) != -1) {
+        sub_w(u, old, &moby->pos);
         norm_w(u, u, 0.05f);
-        add_w(t, old, u);
-        if (path_w(*(int *)(d + 0x2D0), &m->pos, t, res) != 0) {
-            char *p = D_L12_001B0930_w[*(int *)(d + 0x2D0)];
-            if (inside_w(&m->pos, p + 0x10, *(int *)p) == 0)
-                *(OvlQuad *)&m->pos = *(OvlQuad *)res;
-            if (dist_w(&m->pos, old) < D_0015ED6C_w * 0.5f) {
-                *(int *)(d + 0x2D4) += 1;
-                if (frames_w(10) < *(int *)(d + 0x2D4))
+        add_w(path_test_position, old, u);
+        if (path_w(*(int *)(moby_vars + 0x2D0), &moby->pos, path_test_position, res) != 0) {
+            char *path = D_L12_001B0930_w[*(int *)(moby_vars + 0x2D0)];
+            if (inside_w(&moby->pos, path + 0x10, *(int *)path) == 0)
+                *(OvlQuad *)&moby->pos = *(OvlQuad *)res;
+            if (dist_w(&moby->pos, old) < D_0015ED6C_w * 0.5f) {
+                *(int *)(moby_vars + 0x2D4) += 1;
+                if (frames_w(10) < *(int *)(moby_vars + 0x2D4))
                     r = 2;
             } else {
-                *(int *)(d + 0x2D4) = 0;
+                *(int *)(moby_vars + 0x2D4) = 0;
             }
         }
     }
