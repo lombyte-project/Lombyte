@@ -956,11 +956,11 @@ extern void fast_vec_add(float *, float *, float *) __asm__("FUN_001f9a10");
 
 void FUN_L06_00300b90(struct Moby *moby) {
     char *data;
-    float t = frame_time_sq * 15.0f;
+    float vertical_velocity_decrement = frame_time_sq * 15.0f;
     moby->scale =
         moby->pclass->scale * *(float *)&D_L06_00162080_gp;
     data = (char *)moby->pvars;
-    *(float *)(data + 8) -= t;
+    *(float *)(data + 8) -= vertical_velocity_decrement;
     fast_vec_add(&moby->pos.x, &moby->pos.x, (float *)data);
     fast_vec_add(&moby->rot.x, &moby->rot.x, (float *)(data + 0x10));
     moby->rot.x = fast_add_rotations(moby->rot.x, *(float *)(data + 0x10));
