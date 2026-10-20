@@ -164,15 +164,15 @@ extern void hero_set_state_2(int, int) __asm__("FUN_L00_002223f8");
 
 int hero_handle_jump_press(void) __asm__("FUN_L00_00229660");
 int hero_handle_jump_press(void) {
-    int n, t, jump_press_history_limit;
+    int input_history_separation_limit, input_history_window_padding, jump_press_history_limit;
     int next_state;
 
     if (hero.state.current == 0xE)
         return 0;
-    n = FUN_L00_00221d98_229660();
-    t = FUN_001f96f8_229660(5);
-    if ((D_0013CAE0_229660 & 0xA) && n > 0 &&
-        FUN_L00_00266e00_229660(0x40, (void *)0x1F000, t + n, n)) {
+    input_history_separation_limit = FUN_L00_00221d98_229660();
+    input_history_window_padding = FUN_001f96f8_229660(5);
+    if ((D_0013CAE0_229660 & 0xA) && input_history_separation_limit > 0 &&
+        FUN_L00_00266e00_229660(0x40, (void *)0x1F000, input_history_window_padding + input_history_separation_limit, input_history_separation_limit)) {
         next_state = 0xB;
     found:
         hero_set_state(next_state, 1);
