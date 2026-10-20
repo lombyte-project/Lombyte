@@ -409,17 +409,17 @@ typedef struct {
 void FUN_L16_002e2fa0(void *arg) {
     Path2fa0 *path = arg;
     int i;
-    int n;
+    int point_count;
     for (i = 0; i < path->count - 1; i++) {
-        PathPoint2fa0 *p = path->pts;
-        path->pts[i].heading = fast_arc_tan(path->pts[i + 1].x - path->pts[i].x, p[i + 1].y - path->pts[i].y);
+        PathPoint2fa0 *points = path->pts;
+        path->pts[i].heading = fast_arc_tan(path->pts[i + 1].x - path->pts[i].x, points[i + 1].y - path->pts[i].y);
     }
-    n = path->count;
-    if (n >= 2)
+    point_count = path->count;
+    if (point_count >= 2)
     {
-        Path2fa0 *a = (Path2fa0 *)((char *)path + (n - 2) * 16);
-        Path2fa0 *b = (Path2fa0 *)((char *)path + (n - 1) * 16);
-        b->pts[0].heading = a->pts[0].heading;
+        Path2fa0 *heading_source = (Path2fa0 *)((char *)path + (point_count - 2) * 16);
+        Path2fa0 *b = (Path2fa0 *)((char *)path + (point_count - 1) * 16);
+        b->pts[0].heading = heading_source->pts[0].heading;
     }
 }
 #define NOT_SDA
