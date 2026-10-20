@@ -652,7 +652,7 @@ void follow_camera_setup(Moby_2E8210 *camera_moby) {
     Cam_2E8210 *camera_state;
     Cam_2E8210 *e;
     CamE_2E8210 *f;
-    Cam_2E8210 *d;
+    Cam_2E8210 *camera_state_base;
     CamG_2E8210 *g;
     char *q1;
     char *q2;
@@ -745,9 +745,9 @@ void follow_camera_setup(Moby_2E8210 *camera_moby) {
     ((Cam220_2E8210 *)q3)->f8 = b->f2C;
     ((Cam220_2E8210 *)q3)->fC = D_L00_00161D1C_gp;
 
-    d = camera_moby->cam;
+    camera_state_base = camera_moby->cam;
     r = scale_game_frames(0x7D0);
-    g = &d->g;
+    g = &camera_state_base->g;
     g->f30 = 0.0f;
     g->h3A = 0;
     g->h36 = 0;
@@ -758,7 +758,7 @@ void follow_camera_setup(Moby_2E8210 *camera_moby) {
     g->f3C = D_L00_00161CE4_gp;
     g->f40 = D_L00_00161CE0_gp;
     g->i48 = D_L00_0015EF60;
-    clear_u64_value(d->g.v10);
+    clear_u64_value(camera_state_base->g.v10);
 
     p240 = &camera_moby->cam->p240;
     p240->h28 = 0;
