@@ -1950,8 +1950,8 @@ int FUN_L13_0030ae68(int idx, int arg) {
         int id = *moby_id_cursor & 0x7FFF;
         char *moby = (char *)(id << 8) + (int)D_L13_0015FFD8_m;
         if (moby[0x20] >= 0) {
-            char *f = FUN_L00_002db890(moby);
-            if (f == 0 || *(short *)(f + 0x68) < 4) {
+            char *moby_callback_record = FUN_L00_002db890(moby);
+            if (moby_callback_record == 0 || *(short *)(moby_callback_record + 0x68) < 4) {
                 if (arg == -1 ||
                     *(unsigned char *)((char *)(id << 8) + (int)D_L13_0015FFD8_m + 0x20) != arg) {
                     count++;
