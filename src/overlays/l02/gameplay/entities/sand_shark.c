@@ -2349,74 +2349,74 @@ extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 extern void blend_moby_animation_c2(void *, s32, s32, s32) __asm__("FUN_00212f90");
 void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 
-void FUN_L02_002dcfe0(struct Moby *m) {
-    char *d = (char *)m->pvars;
+void FUN_L02_002dcfe0(struct Moby *moby) {
+    char *nest_vars = (char *)moby->pvars;
     float v[4];
     int hit;
     float dmg;
     float k1;
     float k2;
-    char *h;
+    char *hit_record;
     dmg = 0.0f;
-    if (((unsigned char *)d)[0x2E] == 2) {
-        d[0x2E] = 1;
-        if (*(int *)(d + 0xE0) >= 0) {
-            char *od = *(char **)((*(int *)(d + 0xE0) << 8) + D_L02_0015FFD8 + 0x78);
+    if (((unsigned char *)nest_vars)[0x2E] == 2) {
+        nest_vars[0x2E] = 1;
+        if (*(int *)(nest_vars + 0xE0) >= 0) {
+            char *od = *(char **)((*(int *)(nest_vars + 0xE0) << 8) + D_L02_0015FFD8 + 0x78);
             *(int *)(od + 0x150) -= 1;
         }
-        mark_moby_for_removal(m);
+        mark_moby_for_removal(moby);
         return;
     }
-    h = find_moby_hit(m, 0x330000, 0);
-    hit_reaction(m, h, d + 0x20, 0, &hit, &dmg, 0, 4);
-    if (h != 0 && hit != 1 && m->state != 4) {
+    hit_record = find_moby_hit(moby, 0x330000, 0);
+    hit_reaction(moby, hit_record, nest_vars + 0x20, 0, &hit, &dmg, 0, 4);
+    if (hit_record != 0 && hit != 1 && moby->state != 4) {
         if (hit == 3) {
-            *(float *)(d + 0x20) = 0.0f;
+            *(float *)(nest_vars + 0x20) = 0.0f;
         } else {
-            *(float *)(d + 0x20) -= dmg;
+            *(float *)(nest_vars + 0x20) -= dmg;
         }
-        *(int *)(d + 0x94) = 4;
-        if (0.0f < *(float *)(d + 0x20)) {
+        *(int *)(nest_vars + 0x94) = 4;
+        if (0.0f < *(float *)(nest_vars + 0x20)) {
             {
                 float a = D_0015ED6C * 4.0f;
                 float b = D_0015ED6C * 3.0f;
-                *(float *)(d + 0x88) = a;
-                *(float *)(d + 0x8C) = b;
+                *(float *)(nest_vars + 0x88) = a;
+                *(float *)(nest_vars + 0x8C) = b;
             }
-            *(OvlQuad *)v = *(OvlQuad *)(h + 0x10);
-            trooper_knockback_arc(v, &k1, d + 0x88, d + 0x8C);
-            trooper_start_knockback(k1, m, d + 0x70, 3, 1, 0);
+            *(OvlQuad *)v = *(OvlQuad *)(hit_record + 0x10);
+            trooper_knockback_arc(v, &k1, nest_vars + 0x88, nest_vars + 0x8C);
+            trooper_start_knockback(k1, moby, nest_vars + 0x70, 3, 1, 0);
             if (1.0f <= dmg) {
-                d[0x67] = 0x78;
-                m->state = 3;
-                blend_moby_animation_c2(m, 2, 0, 0);
+                nest_vars[0x67] = 0x78;
+                moby->state = 3;
+                blend_moby_animation_c2(moby, 2, 0, 0);
             } else {
-                d[0x67] = 0x78;
+                nest_vars[0x67] = 0x78;
             }
         } else {
-            m->flags &= 0xEFFF;
-            ((unsigned char *)d)[0x67] = 0xFA;
-            m->state = 4;
+            moby->flags &= 0xEFFF;
+            ((unsigned char *)nest_vars)[0x67] = 0xFA;
+            moby->state = 4;
             {
                 float b = D_0015ED6C * 11.0f;
                 float a = D_0015ED6C * 3.0f;
-                *(float *)(d + 0x8C) = a;
-                *(float *)(d + 0x88) = b;
+                *(float *)(nest_vars + 0x8C) = a;
+                *(float *)(nest_vars + 0x88) = b;
             }
-            *(OvlQuad *)v = *(OvlQuad *)(h + 0x10);
-            trooper_knockback_arc(v, &k2, d + 0x88, d + 0x8C);
-            trooper_start_knockback(k2, m, d + 0x70, 3, 1, 0);
-            *(float *)(d + 0xC0) = 9.0f;
-            *(float *)(d + 0xC4) = 19.0f;
-            if (m->prev_seq != 3)
-                blend_moby_animation_c2(m, 3, 0, 0);
-            FUN_L00_00257470(m, 0, -1);
+            *(OvlQuad *)v = *(OvlQuad *)(hit_record + 0x10);
+            trooper_knockback_arc(v, &k2, nest_vars + 0x88, nest_vars + 0x8C);
+            trooper_start_knockback(k2, moby, nest_vars + 0x70, 3, 1, 0);
+            *(float *)(nest_vars + 0xC0) = 9.0f;
+            *(float *)(nest_vars + 0xC4) = 19.0f;
+            if (moby->prev_seq != 3)
+                blend_moby_animation_c2(moby, 3, 0, 0);
+            FUN_L00_00257470(moby, 0, -1);
         }
-        trooper_anim_update(m, (short *)(d + 0x60));
+        trooper_anim_update(moby, (short *)(nest_vars + 0x60));
     }
-    m->hit_slot = 0xFF;
-    trooper_anim_finish(m, d + 0x60);
-    FUN_L00_001fefc8(&m->command);
+    moby->hit_slot = 0xFF;
+    trooper_anim_finish(moby, nest_vars + 0x60);
+    FUN_L00_001fefc8(&moby->command);
 }
 typedef struct {
     char pad0[0x20];
