@@ -1589,7 +1589,7 @@ void FUN_L00_002325e0_242198(s32, s32) __asm__("FUN_L00_002325e0");
 void FUN_L00_0025f730_242198(void *, f32) __asm__("FUN_L00_0025f730");
 s32 FUN_L01_00226f10_242198(s32) __asm__("FUN_L01_00226f10");
 void FUN_L01_00242198(void) {
-    struct Hero *b, *c, *d;
+    struct Hero *b, *run_hero, *stop_idle_hero;
     s32 n;
     b = &hero;
     b->unk2284 = 0;
@@ -1600,38 +1600,38 @@ void FUN_L01_00242198(void) {
         FUN_L00_002325e0_242198(3, 0x12);
         return;
     }
-    c = &hero;
-    if (0.3f < c->unk229C && c->unk1C4 == 0) {
-        if (c->unk12E2 != 0 || c->unk20A9 != 0) {
+    run_hero = &hero;
+    if (0.3f < run_hero->unk229C && run_hero->unk1C4 == 0) {
+        if (run_hero->unk12E2 != 0 || run_hero->unk20A9 != 0) {
             hero_set_state(HERO_STATE_RUN, 1);
             return;
         }
         if (hero_set_state(HERO_STATE_RUN, 0)) {
-            c->state.step = 1;
+            run_hero->state.step = 1;
             n = FUN_001f96f8_242198(8);
-            if (FUN_001f96f8_242198(5) < c->unk418)
+            if (FUN_001f96f8_242198(5) < run_hero->unk418)
                 n = FUN_001f96f8_242198(14);
             FUN_L00_002323b8_242198(4, D_L01_0015F6DC, (f32)n);
-            c->unk3BC = 1;
+            run_hero->unk3BC = 1;
         }
         return;
     }
-    d = &hero;
-    if ((frame_time * 3.0f < d->motion.unk168 &&
-         FUN_001f96f8_242198(3) < d->unk418) ||
-        d->state.current == 0x10) {
+    stop_idle_hero = &hero;
+    if ((frame_time * 3.0f < stop_idle_hero->motion.unk168 &&
+         FUN_001f96f8_242198(3) < stop_idle_hero->unk418) ||
+        stop_idle_hero->state.current == 0x10) {
         if (hero_set_state(HERO_STATE_STOP, 0)) {
             FUN_L00_002323b8_242198(5, 0, -1.0f);
             FUN_L00_0025f730_242198(&hero.motion.unk150, frame_time * 5.0f);
         }
         return;
     }
-    if (FUN_001f96f8_242198(12) < d->unk418 || (d->unkA98 & 2)) {
+    if (FUN_001f96f8_242198(12) < stop_idle_hero->unk418 || (stop_idle_hero->unkA98 & 2)) {
         if (hero_set_state(HERO_STATE_IDLE, 0)) {
             if (FUN_L01_00226f10_242198(0) == 0x54) {
                 n = FUN_L01_00226f10_242198(0);
                 FUN_L00_002323b8_242198(n, 0, (f32)FUN_001f96f8_242198(15));
-            } else if (d->unkA98 & 2) {
+            } else if (stop_idle_hero->unkA98 & 2) {
                 FUN_L00_002323b8_242198(FUN_L01_00226f10_242198(0), 0, -2.0f);
             }
         }
