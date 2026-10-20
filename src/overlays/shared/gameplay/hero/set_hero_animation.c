@@ -1569,46 +1569,46 @@ void FUN_L00_001fff28_234808(void *, s32, f32) __asm__("FUN_L00_001fff28");
 #define X  D_L00_0015F5C4_234808
 #define DD frame_time
 void FUN_L00_00234808(void) {
-    char *m0, *m1, *m2;
+    char *slot4_moby, *slot4_secondary_moby, *slot5_moby;
     f32 k;
     s32 a, b;
     f32 t;
-    m0 = (char *)hero.items[4].moby;
-    if (m0) {
+    slot4_moby = (char *)hero.items[4].moby;
+    if (slot4_moby) {
         if (X == 2)
             hero.unk22E8 = FUN_001fa580_234808(hero.unk22E8, DD * 1.2217305f);
         else
             hero.unk22E8 = FUN_001fa580_234808(hero.unk22E8, DD * 2.0943952f);
-        *(s32 *)(m0 + 0x90) =
+        *(s32 *)(slot4_moby + 0x90) =
             fast_tween_color(0xD2D2D2, 0x285050, FUN_001f9de0_234808(hero.unk22E8) * 0.5f + 0.5f);
     }
-    m1 = (char *)hero.items[4].moby2;
-    if (m1) {
+    slot4_secondary_moby = (char *)hero.items[4].moby2;
+    if (slot4_secondary_moby) {
         if (X != 2) {
             f32 v;
             hero.unk22EC = v = FUN_001fa580_234808(hero.unk22EC, DD * 2.9670596f);
             b = 0x1EE628;
             if (0.0f < v && v < 1.9198622f)
                 b = 0x1E1ED2;
-            *(s32 *)(m1 + 0x90) = fast_tween_color(*(s32 *)(m1 + 0x90), b, 0.07f);
+            *(s32 *)(slot4_secondary_moby + 0x90) = fast_tween_color(*(s32 *)(slot4_secondary_moby + 0x90), b, 0.07f);
         } else {
             f32 v;
             hero.unk22EC = v = FUN_001fa580_234808(hero.unk22EC, DD * 1.5707964f);
-            *(s32 *)(m1 + 0x90) =
+            *(s32 *)(slot4_secondary_moby + 0x90) =
                 fast_tween_color(0x1E1ED2, 0x1E1E50, FUN_001f9de0_234808(v) * 0.5f + 0.5f);
         }
     }
-    m2 = (char *)hero.items[5].moby;
-    if (m2) {
+    slot5_moby = (char *)hero.items[5].moby;
+    if (slot5_moby) {
         if (X == 2)
             hero.unk22F0 = FUN_001fa580_234808(hero.unk22EC, DD * 1.3962634f);
         else
             hero.unk22F0 = FUN_001fa580_234808(hero.unk22EC, DD * 1.9198622f);
-        *(s32 *)(m2 + 0x90) =
+        *(s32 *)(slot5_moby + 0x90) =
             fast_tween_color(0xAAC8AA, 0x965050, FUN_001f9de0_234808(hero.unk22F0) * 0.5f + 0.5f);
-        if (m2) {
+        if (slot5_moby) {
             if (!hero.unk1D90.attached)
-                FUN_0020cb10_234808(m2, 0, &hero.unk1D90);
+                FUN_0020cb10_234808(slot5_moby, 0, &hero.unk1D90);
             else
                 FUN_L00_001fff28_234808(&hero.unk1D90.quat, 0, hero.unk22F0);
         }
