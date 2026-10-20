@@ -78,21 +78,21 @@ extern int FUN_L04_0024c4f0(float *, float *, int);
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void FUN_L04_0024c660_u(float *, float *, float *, float *) __asm__("FUN_L04_0024c660");
 
-int FUN_L04_0024c7d8(float *out, float *p, float *poly, int n) {
-    float tmp[4];
+int FUN_L04_0024c7d8(float *out, float *query_point, float *poly, int vertex_count) {
+    float edge_closest_point[4];
     float diff[4];
     float best;
     int i;
-    int r = FUN_L04_0024c4f0(p, poly, n) != 0;
+    int r = FUN_L04_0024c4f0(query_point, poly, vertex_count) != 0;
     best = 0;
-    for (i = 0; i < n; i++) {
-        float d;
-        FUN_L04_0024c660_u(tmp, poly + i * 4, poly + ((i + 1) % n) * 4, p);
-        fast_vec_sub(diff, p, tmp);
-        d = fast_vec_length(diff);
-        if (i == 0 || d < best) {
-            best = d;
-            qcopy(out, tmp);
+    for (i = 0; i < vertex_count; i++) {
+        float distance_to_edge;
+        FUN_L04_0024c660_u(edge_closest_point, poly + i * 4, poly + ((i + 1) % vertex_count) * 4, query_point);
+        fast_vec_sub(diff, query_point, edge_closest_point);
+        distance_to_edge = fast_vec_length(diff);
+        if (i == 0 || distance_to_edge < best) {
+            best = distance_to_edge;
+            qcopy(out, edge_closest_point);
         }
     }
     return r;
