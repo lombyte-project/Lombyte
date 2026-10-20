@@ -2537,14 +2537,14 @@ void FUN_L18_002e9e70(struct Moby *moby) {
         STATE_TIMED_REMOVAL_WAIT = 0,
         STATE_TRAVEL_TO_TARGET = 1
     };
-    float *d = (float *)moby->pvars;
-    float t = fast_add_rotations_c(d[0xB], D_L18_00161ED0 * DEG_TO_RAD * frame_time);
+    float *moby_vars = (float *)moby->pvars;
+    float updated_rotation_angle = fast_add_rotations_c(moby_vars[0xB], D_L18_00161ED0 * DEG_TO_RAD * frame_time);
     float u = D_L18_00161ED4 * DEG_TO_RAD * frame_time;
-    d[0xB] = t;
-    d[0xC] = fast_add_rotations_c(d[0xC], u);
+    moby_vars[0xB] = updated_rotation_angle;
+    moby_vars[0xC] = fast_add_rotations_c(moby_vars[0xC], u);
     switch (MOBY(moby)->state) {
     case STATE_TIMED_REMOVAL_WAIT:
-        if (fast_dec_timer((int *)(d + 10))) {
+        if (fast_dec_timer((int *)(moby_vars + 10))) {
             mark_moby_for_removal_c2(moby);
             return;
         }
@@ -2552,15 +2552,15 @@ void FUN_L18_002e9e70(struct Moby *moby) {
     case STATE_TRAVEL_TO_TARGET: {
         float buf[4];
         float buf2[4];
-        float *p = &moby->pos.x;
-        float *q = d + 4;
+        float *position = &moby->pos.x;
+        float *q = moby_vars + 4;
         float lim = D_L18_00161EE0 * frame_time;
         float len;
-        subtract_vector_xyz(buf, d, p);
+        subtract_vector_xyz(buf, moby_vars, position);
         len = vector_length_xyz(buf);
         FUN_L18_002ea598_c(moby);
-        FUN_L00_00257d78(q, D_L18_00161ED8 * d[9], D_L18_00161ED8 * d[9]);
-        add_vector_xyz(q, q, p);
+        FUN_L00_00257d78(q, D_L18_00161ED8 * moby_vars[9], D_L18_00161ED8 * moby_vars[9]);
+        add_vector_xyz(q, q, position);
         FUN_L18_002eacd8(moby);
         FUN_L18_002eaea0_u(moby);
         enqueue_callback_list_1((void (*)(void))FUN_L15_002d8710, moby);
@@ -2570,14 +2570,14 @@ void FUN_L18_002e9e70(struct Moby *moby) {
             return;
         }
         normalize_vector_xyz(buf, buf, lim);
-        add_vector_xyz(p, p, buf);
-        qcopy(buf2, p);
+        add_vector_xyz(position, position, buf);
+        qcopy(buf2, position);
         buf2[2] = probe_ground_height_c(buf2, 0, 0.5f);
-        spark_s(*(int *)(d + 8), p, 2.0f, 0x10001, 5.0f, 1.0f, 0, 1, 0);
-        spark_s(*(int *)(d + 8), buf2, 2.0f, 0x10001, 5.0f, 1.0f, 0, 1, 0);
-        if (fast_dec_timer((int *)(d + 13))) {
-            approach_value_alt(d + 9, 0.0f, 0.2f);
-            if (d[9] == 0.0f) {
+        spark_s(*(int *)(moby_vars + 8), position, 2.0f, 0x10001, 5.0f, 1.0f, 0, 1, 0);
+        spark_s(*(int *)(moby_vars + 8), buf2, 2.0f, 0x10001, 5.0f, 1.0f, 0, 1, 0);
+        if (fast_dec_timer((int *)(moby_vars + 13))) {
+            approach_value_alt(moby_vars + 9, 0.0f, 0.2f);
+            if (moby_vars[9] == 0.0f) {
                 mark_moby_for_removal_c2(moby);
                 return;
             }
