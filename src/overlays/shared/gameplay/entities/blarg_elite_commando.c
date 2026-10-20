@@ -224,7 +224,7 @@ void blarg_elite_commando_update(char *commando_moby) {
         COMMANDO_STATE_FATAL_FALL = 9,
         COMMANDO_STATE_FOLLOW_PARENT_TRANSFORM = 10
     };
-    float target[4], temp[4], delta[4];
+    float target[4], scratch_vector[4], delta[4];
     char *commando_data = *(char **)(commando_moby + 0x78);
     char *source, *owner;
     float distance, angle;
@@ -288,7 +288,7 @@ void blarg_elite_commando_update(char *commando_moby) {
         if (*(char **)(commando_data + 0x2D0)) {
             commando_moby[0x31] = 1;
             *(unsigned short *)(commando_moby + 0x34) &= 0xFFFE;
-            movement = temp;
+            movement = scratch_vector;
             transform_vector_by_basis(movement, commando_data + 0x2C0, *(char **)(commando_data + 0x2D0) + 0xC0);
             add_vector_xyz(commando_moby + 0x10, movement, *(char **)(commando_data + 0x2D0) + 0x10);
             *(float *)(commando_moby + 0x48) =
@@ -297,9 +297,9 @@ void blarg_elite_commando_update(char *commando_moby) {
         break;
     case COMMANDO_STATE_RETURN_TO_INITIAL_POSITION:
         if (!fast_dec_timer_s16(commando_data + 0x2DC)) {
-            normalize_vector_xyz(temp, commando_moby + 0xC0, *(short *)(commando_data + 0x2DC) * 0.1f);
-            add_vector_xyz(temp, temp, commando_moby + 0x10);
-            func_L16_002D5280_update(commando_moby, temp, 1);
+            normalize_vector_xyz(scratch_vector, commando_moby + 0xC0, *(short *)(commando_data + 0x2DC) * 0.1f);
+            add_vector_xyz(scratch_vector, scratch_vector, commando_moby + 0x10);
+            func_L16_002D5280_update(commando_moby, scratch_vector, 1);
         } else {
             heading = (float *)(commando_moby + 0x48);
             angle = fast_arc_tan(*(float *)(commando_data + 0x2B0) - *(float *)(commando_moby + 0x10),
@@ -383,10 +383,10 @@ void blarg_elite_commando_update(char *commando_moby) {
         if (is_value_within_interpolated_window(commando_moby, 2.0f) ||
             is_value_within_interpolated_window(commando_moby, 17.0f) ||
             is_value_within_interpolated_window(commando_moby, 32.0f)) {
-            moby_point_position(commando_moby, 0, temp);
-            subtract_vector_xyz(delta, target, temp);
+            moby_point_position(commando_moby, 0, scratch_vector);
+            subtract_vector_xyz(delta, target, scratch_vector);
             normalize_vector_xyz(delta, delta, frame_time * 20.0f);
-            FUN_L16_002a09a0(commando_moby, delta, (char *)temp);
+            FUN_L16_002a09a0(commando_moby, delta, (char *)scratch_vector);
         } else if (is_value_within_interpolated_window(commando_moby, 10.0f)) {
             int count = *(unsigned short *)(commando_data + 0x2DE) + 1;
             *(unsigned short *)(commando_data + 0x2DE) = count;
@@ -424,13 +424,13 @@ void blarg_elite_commando_update(char *commando_moby) {
                 blend_moby_animation(commando_moby, 0, 0, scale_game_frames(ticks));
             }
         } else {
-            normalize_vector_xyz(temp, commando_moby + 0xC0, -frame_time);
-            add_vector_xyz(commando_moby + 0x10, commando_moby + 0x10, temp);
+            normalize_vector_xyz(scratch_vector, commando_moby + 0xC0, -frame_time);
+            add_vector_xyz(commando_moby + 0x10, commando_moby + 0x10, scratch_vector);
         }
         break;
     case COMMANDO_STATE_FATAL_FALL: {
         char *position;
-        movement = temp;
+        movement = scratch_vector;
         position = commando_moby + 0x10;
         qcopy(movement, position);
         if (mine_fall(commando_moby, commando_data + 0x70) & 0x160) {
