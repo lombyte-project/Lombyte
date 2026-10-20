@@ -140,6 +140,8 @@ void FUN_L03_0021c668(void) {
         HERO_STATE_JUMP_FROM_LEDGE = 28,
         HERO_STATE_LOOK_ALT = 30,
         HERO_STATE_FALL_ALT = 45,
+        HERO_STATE_IDLE_ALT = 83,
+        HERO_STATE_RUN_ALT = 84,
         HERO_STATE_SLIP_ALT = 88,
         HERO_STATE_TARGET_POSE_APPROACH = 101,
         HERO_STATE_TARGET_POSE_APPROACH_ANIMATION_WAIT = 102,
@@ -1824,7 +1826,7 @@ void FUN_L03_0021c668(void) {
                         hero_set_state(HERO_STATE_IDLE, 0);
                     }
                     break;
-                case 83:
+                case HERO_STATE_IDLE_ALT:
                     if (hero.unkA98 & 2) {
                         if (((unsigned char *)hero.moby)[0x53] != 0) {
                             set_hero_animation(0, 0, scale_game_frames(0xC));
@@ -1901,7 +1903,7 @@ void FUN_L03_0021c668(void) {
                     hero.anim_speed = 0.35f;
                     hero.unk1C4 = scale_game_frames(0x14);
                     break;
-                case 84:
+                case HERO_STATE_RUN_ALT:
                     hero.anim_speed = hero.motion.speed_xy * 54.0f;
                     if (!(hero.air_frames.s < scale_game_frames(5))) {
                         if (hero.ground_distance > 0.8f || hero.ground_slope.f > 0.87266463f) {
