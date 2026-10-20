@@ -808,6 +808,7 @@ extern s32 D_0013CB14[];
 
 void FUN_L02_00225c20(void) {
     enum {
+        HERO_STATE_APPROACH_TARGET_MOBY = 0x25,
         HERO_STATE_CONSTRAIN_TO_TARGET_RADIUS = 0x26,
         HERO_STATE_VEHICLE_MODE_3_HURT = 0x56,
         HERO_STATE_MOVE_TO_TARGET_POSITION = 0x65,
@@ -1058,7 +1059,7 @@ void FUN_L02_00225c20(void) {
             turn_to(0, frame_scale_sq * 0.02f, frame_scale_sq * 0.15f, frame_time * 6.2831855f);
         }
         break;
-    case 0x25: {
+    case HERO_STATE_APPROACH_TARGET_MOBY: {
         float t0;
         float t1;
 
