@@ -173,6 +173,9 @@ void hero_update_transitions(void) {
         HERO_STATE_AT_TARGET_POSE = 103,
         HERO_STATE_DROWNING = 106
     };
+    enum {
+        HERO_VEHICLE_MODE_NONE = 0
+    };
     unsigned char *moby;
     int prevSub;
     int prevState;
@@ -217,7 +220,7 @@ void hero_update_transitions(void) {
                     (hero.unk20AC == 0 || hero.vehicle_mode == 1 || hero.unk1B2 != 0) &&
                     (hero.unk20A7 == 0 || hero.vehicle_mode == 1 || hero.unk1B2 != 0)) {
                     switch (hero.vehicle_mode) {
-                    case 0:
+                    case HERO_VEHICLE_MODE_NONE:
                     case 3: {
                         int id;
 
