@@ -441,7 +441,7 @@ extern Entry70_215e58 D_L15_00179EF0[];
 void FUN_L15_00215e58(void) {
     Vec4 sum;
     Vec4 d;
-    struct Moby *m;
+    struct Moby *spawned_moby;
     s32 i;
     s32 n;
     s32 sample_count;
@@ -502,12 +502,12 @@ void FUN_L15_00215e58(void) {
                 hero.unk20A6 = 1;
             }
         } else {
-            m = FUN_0020c4f8_215e58(0x27A);
-            hero.unkA8C = m;
-            if (m != 0) {
-                qcopy(&m->pos, &hero.motion.pos);
-                qcopy(&m->rot, &hero.motion.rot);
-                m->draw_dist = 0x40;
+            spawned_moby = FUN_0020c4f8_215e58(0x27A);
+            hero.unkA8C = spawned_moby;
+            if (spawned_moby != 0) {
+                qcopy(&spawned_moby->pos, &hero.motion.pos);
+                qcopy(&spawned_moby->rot, &hero.motion.rot);
+                spawned_moby->draw_dist = 0x40;
                 ((struct Moby *)hero.unkA8C)->visible = 1;
                 ((struct Moby *)hero.unkA8C)->glow_color = 0;
                 ((struct Moby *)hero.unkA8C)->spawn_frame = hero.moby->spawn_frame;
