@@ -905,20 +905,20 @@ extern int random_integer_below(int) __asm__("FUN_00213260");
 int FUN_L02_002d5658(void *argp) {
     char *arg = argp;
     int result = 0;
-    short *p;
+    short *group_ids;
     if (((unsigned char *)arg)[0x21] == 0xFF) {
         return 0;
     }
-    p = (short *)D_L02_001ABE40[((unsigned char *)arg)[0x21]];
+    group_ids = (short *)D_L02_001ABE40[((unsigned char *)arg)[0x21]];
     do {
-        int idx = (*(unsigned short *)p & 0x7FFF) << 8;
-        char *o = (char *)(idx + D_L02_0015FFD8_m);
-        if (*(short *)(o + 0xA6) == 0x29C && ((unsigned char *)o)[0x20] < 0x7F) {
+        int idx = (*(unsigned short *)group_ids & 0x7FFF) << 8;
+        char *group_moby = (char *)(idx + D_L02_0015FFD8_m);
+        if (*(short *)(group_moby + 0xA6) == 0x29C && ((unsigned char *)group_moby)[0x20] < 0x7F) {
             if (result == 0 || (random_integer_below(0xFF) & 1)) {
                 result = D_L02_0015FFD8_m + idx;
             }
         }
-    } while (*p++ >= 0);
+    } while (*group_ids++ >= 0);
     return result;
 }
 /* Ported from rac1-decomp (src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002D6B60), where it is exact; names translated to the US level program. */
