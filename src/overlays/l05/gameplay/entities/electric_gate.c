@@ -1011,7 +1011,7 @@ extern float D_L05_00161EB4 __attribute__((sda));
 extern float D_L05_00161EB8 __attribute__((sda));
 extern float D_L05_00161EBC __attribute__((sda));
 
-void FUN_L05_003150f0(struct Moby *m) {
+void FUN_L05_003150f0(struct Moby *emitter_moby) {
     enum {
         EMITTER_INITIALIZE = 0,
         EMITTER_WAIT_FOR_TRIGGER = 1,
@@ -1020,7 +1020,7 @@ void FUN_L05_003150f0(struct Moby *m) {
     float v[4];
     float w[4];
     float u[4];
-    struct EmitterVars *d = (struct EmitterVars *)m->pvars;
+    struct EmitterVars *emitter_vars = (struct EmitterVars *)emitter_moby->pvars;
     float floor;
     float lim;
     float a, b, c;
@@ -1030,45 +1030,45 @@ void FUN_L05_003150f0(struct Moby *m) {
     int i;
     unsigned char state;
 
-    if (d == 0) {
+    if (emitter_vars == 0) {
         return;
     }
-    switch (state = m->state) {
+    switch (state = emitter_moby->state) {
     case EMITTER_INITIALIZE:
-        if (D_0014C050[current_level_index][m->mission] != 0xFF) {
-            m->state = 1;
+        if (D_0014C050[current_level_index][emitter_moby->mission] != 0xFF) {
+            emitter_moby->state = 1;
         } else {
-            m->state = 3;
+            emitter_moby->state = 3;
         }
         break;
     case EMITTER_WAIT_FOR_TRIGGER:
-        if (d->trigger >= 0 && D_L05_0015FFD8[d->trigger].command != 0) {
-            FUN_L01_0026e0e0(m->group, 2);
+        if (emitter_vars->trigger >= 0 && D_L05_0015FFD8[emitter_vars->trigger].command != 0) {
+            FUN_L01_0026e0e0(emitter_moby->group, 2);
         }
         break;
     case EMITTER_SPRAY_PARTICLES:
-        d->age++;
-        if (FUN_001f9b48(&m->pos, D_L05_001671C0) < 64.0f) {
-            struct Moby *o;
-            if (*d->voice >= 0 && (o = ((struct VoiceSlot *)(D_0013E550 + *d->voice * 0x70))->owner) != 0 &&
-                o->oclass == 0x357) {
-                if (o != m && (o->state != state || FUN_001f9b48(&m->pos, D_L05_001671C0) <
-                                                         FUN_001f9b48(&o->pos, D_L05_001671C0))) {
-                    fast_vec_normalize(v, &m->rot_row0, 2.5f);
-                    add_vector_xyz(&((struct VoiceSlot *)(D_0013E550 + *d->voice * 0x70))->pos, v, &m->pos);
-                    ((struct VoiceSlot *)(D_0013E550 + *d->voice * 0x70))->owner = m;
+        emitter_vars->age++;
+        if (FUN_001f9b48(&emitter_moby->pos, D_L05_001671C0) < 64.0f) {
+            struct Moby *voice_owner;
+            if (*emitter_vars->voice >= 0 && (voice_owner = ((struct VoiceSlot *)(D_0013E550 + *emitter_vars->voice * 0x70))->owner) != 0 &&
+                voice_owner->oclass == 0x357) {
+                if (voice_owner != emitter_moby && (voice_owner->state != state || FUN_001f9b48(&emitter_moby->pos, D_L05_001671C0) <
+                                                         FUN_001f9b48(&voice_owner->pos, D_L05_001671C0))) {
+                    fast_vec_normalize(v, &emitter_moby->rot_row0, 2.5f);
+                    add_vector_xyz(&((struct VoiceSlot *)(D_0013E550 + *emitter_vars->voice * 0x70))->pos, v, &emitter_moby->pos);
+                    ((struct VoiceSlot *)(D_0013E550 + *emitter_vars->voice * 0x70))->owner = emitter_moby;
                 }
             } else {
-                *d->voice = allocate_voice_for_target_entry(0, 0xD, m);
-                if (*d->voice >= 0) {
-                    fast_vec_normalize(v, &m->rot_row0, 2.5f);
-                    add_vector_xyz(&((struct VoiceSlot *)(D_0013E550 + *d->voice * 0x70))->pos, v, &m->pos);
+                *emitter_vars->voice = allocate_voice_for_target_entry(0, 0xD, emitter_moby);
+                if (*emitter_vars->voice >= 0) {
+                    fast_vec_normalize(v, &emitter_moby->rot_row0, 2.5f);
+                    add_vector_xyz(&((struct VoiceSlot *)(D_0013E550 + *emitter_vars->voice * 0x70))->pos, v, &emitter_moby->pos);
                 }
             }
         }
-        floor = D_L05_001612D0[d->floor].z;
-        if (m->pos.z < floor) {
-            m->state = 3;
+        floor = D_L05_001612D0[emitter_vars->floor].z;
+        if (emitter_moby->pos.z < floor) {
+            emitter_moby->state = 3;
         }
         for (i = 0; (float)i < D_L05_00161EB8; i++) {
             big = 1;
@@ -1079,8 +1079,8 @@ void FUN_L05_003150f0(struct Moby *m) {
             if (!big) {
                 lim = D_L05_00161EB0;
             }
-            qcopy(v, &m->pos);
-            fast_vec_normalize(u, &m->rot_row1, random_float_between(-D_L05_00161EB4, D_L05_00161EB4));
+            qcopy(v, &emitter_moby->pos);
+            fast_vec_normalize(u, &emitter_moby->rot_row1, random_float_between(-D_L05_00161EB4, D_L05_00161EB4));
             add_vector_xyz(v, v, u);
             a = random_float_between(lim, D_L05_00161EA8);
             b = random_float_between(lim, D_L05_00161EA8);
@@ -1091,7 +1091,7 @@ void FUN_L05_003150f0(struct Moby *m) {
             if (a < c) {
                 a = c;
             }
-            fast_vec_normalize(w, &m->rot_row0, a * frame_time);
+            fast_vec_normalize(w, &emitter_moby->rot_row0, a * frame_time);
             if (big) {
                 scale = D_L05_00161EA0;
                 kind = D_L05_00161E98;
@@ -1105,18 +1105,18 @@ void FUN_L05_003150f0(struct Moby *m) {
                              big);
             if (random_integer_below(2)) {
                 /* fall time from the emitter to the floor */
-                float t = square_root(2.0f * (m->pos.z - floor) / (frame_time_sq * 10.0f));
-                if (t < (float)d->age) {
-                    float s = t * (frame_time * 4.0f);
+                float fall_time_frames = square_root(2.0f * (emitter_moby->pos.z - floor) / (frame_time_sq * 10.0f));
+                if (fall_time_frames < (float)emitter_vars->age) {
+                    float splash_forward_distance = fall_time_frames * (frame_time * 4.0f);
                     float ang = random_angle_radians();
                     float r = random_float_between(0.0f, 1.25f);
-                    fast_vec_scale(v, &m->rot_row0, s);
-                    add_vector_xyz(v, v, &m->pos);
+                    fast_vec_scale(v, &emitter_moby->rot_row0, splash_forward_distance);
+                    add_vector_xyz(v, v, &emitter_moby->pos);
                     v[0] += fast_cos(ang) * r;
                     v[1] += fast_sin(ang) * r;
                     v[2] = floor + 0.05f;
                     spawn_splash(random_float_between(1.0f, 1.5f), random_integer_below(2) ? 2.0f : -2.0f, v,
-                                     D_L05_0015F580_macro, &D_L05_001612D0[d->floor].z);
+                                     D_L05_0015F580_macro, &D_L05_001612D0[emitter_vars->floor].z);
                 }
             }
         }
