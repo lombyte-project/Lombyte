@@ -16,36 +16,36 @@ extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int FUN_L00_0023aaa8(char *);
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 
-void FUN_L00_00235ea0(HudElem *e) {
-    unsigned char *c = e->cnt;
+void FUN_L00_00235ea0(HudElem *hud_element) {
+    unsigned char *c = hud_element->cnt;
     int v;
     int cap;
-    int d;
+    int value_distance;
     int n;
     int x;
     unsigned char t;
 
-    if (e->unk0C != 0) {
-        v = *e->unk0C;
-        cap = e->unk08;
+    if (hud_element->unk0C != 0) {
+        v = *hud_element->unk0C;
+        cap = hud_element->unk08;
         if (v < 0) {
             v = 0;
         }
-        e->unk78 = v;
+        hud_element->unk78 = v;
         if (cap < v) {
-            e->unk78 = cap;
+            hud_element->unk78 = cap;
         }
     }
-    if (e->unk74 != e->unk78) {
-        e->unk7C = scale_game_frames(0xB4);
-        if (e->unk6C >= 0x18) {
-            x = e->unk74 - e->unk78;
-            d = x;
-            d = d < 0 ? -d : d;
-            if (d != 0) {
-                n = truncate_float_to_s32(square_root(convert_integer_to_float(d) / 25.0f) * 5.0f);
-                n = n < d * scale_game_frames(2) / scale_game_frames(10)
-                        ? d * scale_game_frames(2) / scale_game_frames(10)
+    if (hud_element->unk74 != hud_element->unk78) {
+        hud_element->unk7C = scale_game_frames(0xB4);
+        if (hud_element->unk6C >= 0x18) {
+            x = hud_element->unk74 - hud_element->unk78;
+            value_distance = x;
+            value_distance = value_distance < 0 ? -value_distance : value_distance;
+            if (value_distance != 0) {
+                n = truncate_float_to_s32(square_root(convert_integer_to_float(value_distance) / 25.0f) * 5.0f);
+                n = n < value_distance * scale_game_frames(2) / scale_game_frames(10)
+                        ? value_distance * scale_game_frames(2) / scale_game_frames(10)
                         : n;
                 if (n >= 0x7A) {
                     n = 0x79;
@@ -56,17 +56,17 @@ void FUN_L00_00235ea0(HudElem *e) {
                 t = c[3];
                 if (scale_game_frames(2) < t) {
                     n = c[3] / scale_game_frames(2);
-                    if (e->unk78 < e->unk74) {
-                        e->unk74 = e->unk74 - n;
+                    if (hud_element->unk78 < hud_element->unk74) {
+                        hud_element->unk74 = hud_element->unk74 - n;
                     } else {
-                        e->unk74 = e->unk74 + n;
+                        hud_element->unk74 = hud_element->unk74 + n;
                     }
                     c[3] -= n * scale_game_frames(2);
                 }
             }
         }
     }
-    if (e->unk7C >= scale_game_frames(5)) {
+    if (hud_element->unk7C >= scale_game_frames(5)) {
         if (c[0] < scale_game_frames(8)) {
             c[0]++;
         } else if (c[1] < scale_game_frames(8)) {
@@ -74,7 +74,7 @@ void FUN_L00_00235ea0(HudElem *e) {
         }
     } else {
         if (c[1] != 0 || c[0] != 0) {
-            e->unk6C = 1;
+            hud_element->unk6C = 1;
         }
         if (c[1] != 0) {
             c[1]--;
@@ -82,5 +82,5 @@ void FUN_L00_00235ea0(HudElem *e) {
             c[0]--;
         }
     }
-    FUN_L00_0023aaa8((char *)e + 0x40);
+    FUN_L00_0023aaa8((char *)hud_element + 0x40);
 }
