@@ -1796,80 +1796,80 @@ extern short D_L00_00161D78 __attribute__((sda));
 extern short D_L00_00161D7C __attribute__((sda));
 extern void FUN_L00_002e48a0_c(void *out, float f) __asm__("FUN_L00_002e48a0");
 
-void FUN_L00_002e4930(char *m) {
-    char *d = *(char **)(m + 0x70);
-    CamAttach *e = (CamAttach *)(d + 0x40);
+void FUN_L00_002e4930(char *camera) {
+    char *camera_state = *(char **)(camera + 0x70);
+    CamAttach *attach_state = (CamAttach *)(camera_state + 0x40);
     char *q;
     float inv, x, y;
     int t;
 
-    if (e->state == 0) {
+    if (attach_state->state == 0) {
         struct Hero *p0 = &hero;
         if (p0->state.control_mode == 2) {
-            e->prev = e->state;
-            e->state = 1;
-            e->timer = D_L00_00161D3C_gp;
-            e->invTimer = 1.0f / convert_integer_to_float_c(e->timer);
+            attach_state->prev = attach_state->state;
+            attach_state->state = 1;
+            attach_state->timer = D_L00_00161D3C_gp;
+            attach_state->invTimer = 1.0f / convert_integer_to_float_c(attach_state->timer);
         } else {
             struct Hero *p1 = &hero;
             if (p1->state.current == 0xF && D_L00_00166EEC == 0.0f) {
-                e->prev = e->state;
-                e->state = 3;
-                e->moveTimer = scale_game_frames(*(int *)&D_L00_00161D4C);
-                e->invMove = 1.0f / convert_integer_to_float_c(e->moveTimer);
-                e->timer = D_L00_00161D50;
-                inv = 1.0f / convert_integer_to_float_c(e->timer);
-                e->dist = *(float *)&D_L00_00161D58;
-                e->hit = 0;
+                attach_state->prev = attach_state->state;
+                attach_state->state = 3;
+                attach_state->moveTimer = scale_game_frames(*(int *)&D_L00_00161D4C);
+                attach_state->invMove = 1.0f / convert_integer_to_float_c(attach_state->moveTimer);
+                attach_state->timer = D_L00_00161D50;
+                inv = 1.0f / convert_integer_to_float_c(attach_state->timer);
+                attach_state->dist = *(float *)&D_L00_00161D58;
+                attach_state->hit = 0;
                 x = *(float *)&D_L00_00161D58;
-                e->invTimer = inv;
-                FUN_L00_002e48a0_c(e->v30, x);
-                qcopy(e->v20, e->v10);
+                attach_state->invTimer = inv;
+                FUN_L00_002e48a0_c(attach_state->v30, x);
+                qcopy(attach_state->v20, attach_state->v10);
             } else {
                 struct Hero *p2 = &hero;
                 if (p2->state.current == 0xC && D_L00_00166EEC == 0.0f) {
-                    e->prev = e->state;
-                    e->state = 8;
-                    e->timer = D_L00_00161D60;
-                    e->invTimer = 1.0f / convert_integer_to_float_c(e->timer);
+                    attach_state->prev = attach_state->state;
+                    attach_state->state = 8;
+                    attach_state->timer = D_L00_00161D60;
+                    attach_state->invTimer = 1.0f / convert_integer_to_float_c(attach_state->timer);
                 } else {
                     struct Hero *p3 = &hero;
                     if (p3->state.current == 0xB && D_L00_00166EEC == 0.0f) {
-                        e->prev = e->state;
-                        e->state = 6;
-                        e->moveTimer = scale_game_frames(*(int *)&D_L00_00161D40_gp);
-                        e->invMove = 1.0f / convert_integer_to_float_c(e->moveTimer);
-                        e->timer = D_L00_00161D50;
-                        inv = 1.0f / convert_integer_to_float_c(e->timer);
-                        e->dist = *(float *)&D_L00_00161D48;
-                        e->hit = 0;
+                        attach_state->prev = attach_state->state;
+                        attach_state->state = 6;
+                        attach_state->moveTimer = scale_game_frames(*(int *)&D_L00_00161D40_gp);
+                        attach_state->invMove = 1.0f / convert_integer_to_float_c(attach_state->moveTimer);
+                        attach_state->timer = D_L00_00161D50;
+                        inv = 1.0f / convert_integer_to_float_c(attach_state->timer);
+                        attach_state->dist = *(float *)&D_L00_00161D48;
+                        attach_state->hit = 0;
                         x = *(float *)&D_L00_00161D48;
-                        e->invTimer = inv;
-                        FUN_L00_002e48a0_c(e->v30, x);
-                        qcopy(e->v20, e->v10);
+                        attach_state->invTimer = inv;
+                        FUN_L00_002e48a0_c(attach_state->v30, x);
+                        qcopy(attach_state->v20, attach_state->v10);
                     } else {
                         struct Hero *p4 = &hero;
                         if ((p4->state.current == 0xD || p4->state.current == 0xE) &&
                             D_L00_00166EEC == 0.0f) {
-                            e->prev = e->state;
-                            e->state = 5;
-                            e->moveTimer = scale_game_frames(*(int *)&D_L00_00161D5C);
-                            e->invMove = 1.0f / convert_integer_to_float_c(e->moveTimer);
-                            e->timer = D_L00_00161D60;
-                            inv = 1.0f / convert_integer_to_float_c(e->timer);
-                            e->dist = *(float *)&D_L00_00161D68;
-                            e->hit = 0;
+                            attach_state->prev = attach_state->state;
+                            attach_state->state = 5;
+                            attach_state->moveTimer = scale_game_frames(*(int *)&D_L00_00161D5C);
+                            attach_state->invMove = 1.0f / convert_integer_to_float_c(attach_state->moveTimer);
+                            attach_state->timer = D_L00_00161D60;
+                            inv = 1.0f / convert_integer_to_float_c(attach_state->timer);
+                            attach_state->dist = *(float *)&D_L00_00161D68;
+                            attach_state->hit = 0;
                             x = *(float *)&D_L00_00161D68;
-                            e->invTimer = inv;
-                            FUN_L00_002e48a0_c(e->v30, x);
-                            qcopy(e->v20, e->v10);
+                            attach_state->invTimer = inv;
+                            FUN_L00_002e48a0_c(attach_state->v30, x);
+                            qcopy(attach_state->v20, attach_state->v10);
                         } else {
                             struct Hero *p5 = &hero;
                             if (p5->state.control_mode == 4 && D_L00_00166EEC == 0.0f) {
-                                e->prev = e->state;
-                                e->state = 2;
-                                e->timer = D_L00_00161D38;
-                                e->invTimer = 1.0f / convert_integer_to_float_c(e->timer);
+                                attach_state->prev = attach_state->state;
+                                attach_state->state = 2;
+                                attach_state->timer = D_L00_00161D38;
+                                attach_state->invTimer = 1.0f / convert_integer_to_float_c(attach_state->timer);
                             }
                         }
                     }
@@ -1878,153 +1878,153 @@ void FUN_L00_002e4930(char *m) {
         }
         return;
     }
-    if (e->state != 9 && e->state != 1 && D_001413D4 == 0x14) {
+    if (attach_state->state != 9 && attach_state->state != 1 && D_001413D4 == 0x14) {
         float r;
-        e->prev = e->state;
-        e->state = 9;
-        e->moveTimer = scale_game_frames(*(int *)&D_L00_00161D6C_gp);
-        r = 1.0f / convert_integer_to_float_c(e->moveTimer);
+        attach_state->prev = attach_state->state;
+        attach_state->state = 9;
+        attach_state->moveTimer = scale_game_frames(*(int *)&D_L00_00161D6C_gp);
+        r = 1.0f / convert_integer_to_float_c(attach_state->moveTimer);
         y = *(float *)&D_L00_00161D7C;
-        e->hit = 0;
-        e->timer = 0;
+        attach_state->hit = 0;
+        attach_state->timer = 0;
         x = *(float *)&D_L00_00161D7C;
-        e->invTimer = 1.0f;
-        e->dist = y;
-        e->invMove = r;
-        FUN_L00_002e48a0_c(e->v30, x);
-        qcopy(e->v20, e->v10);
+        attach_state->invTimer = 1.0f;
+        attach_state->dist = y;
+        attach_state->invMove = r;
+        FUN_L00_002e48a0_c(attach_state->v30, x);
+        qcopy(attach_state->v20, attach_state->v10);
         return;
     }
-    if ((e->state == 1 || e->state == 2) && D_001413DC != 4 && D_001413DC != 2) {
-        e->timer = 0;
-        e->invTimer = 1.0f;
-        e->state = 0;
+    if ((attach_state->state == 1 || attach_state->state == 2) && D_001413DC != 4 && D_001413DC != 2) {
+        attach_state->timer = 0;
+        attach_state->invTimer = 1.0f;
+        attach_state->state = 0;
         return;
     }
-    if (e->state == 7) {
+    if (attach_state->state == 7) {
         struct Hero *p = &hero;
         if (p->unk41E == 0) {
-            e->prev = e->state;
-            e->state = 6;
-            e->moveTimer = scale_game_frames(*(int *)&D_L00_00161D40_gp);
-            e->invMove = 1.0f / convert_integer_to_float_c(e->moveTimer);
-            e->timer = D_L00_00161D50;
-            inv = 1.0f / convert_integer_to_float_c(e->timer);
-            e->dist = *(float *)&D_L00_00161D48;
-            e->hit = 0;
+            attach_state->prev = attach_state->state;
+            attach_state->state = 6;
+            attach_state->moveTimer = scale_game_frames(*(int *)&D_L00_00161D40_gp);
+            attach_state->invMove = 1.0f / convert_integer_to_float_c(attach_state->moveTimer);
+            attach_state->timer = D_L00_00161D50;
+            inv = 1.0f / convert_integer_to_float_c(attach_state->timer);
+            attach_state->dist = *(float *)&D_L00_00161D48;
+            attach_state->hit = 0;
             x = *(float *)&D_L00_00161D48;
-            e->invTimer = inv;
-            FUN_L00_002e48a0_c(e->v30, x);
-            qcopy(e->v20, e->v10);
+            attach_state->invTimer = inv;
+            FUN_L00_002e48a0_c(attach_state->v30, x);
+            qcopy(attach_state->v20, attach_state->v10);
             return;
         }
         if (p->state.control_mode == 2) {
-            e->prev = e->state;
-            e->state = 1;
-            e->timer = scale_game_frames(*(int *)&D_L00_00161D54_gp);
-            e->invTimer = 1.0f / convert_integer_to_float_c(e->timer);
+            attach_state->prev = attach_state->state;
+            attach_state->state = 1;
+            attach_state->timer = scale_game_frames(*(int *)&D_L00_00161D54_gp);
+            attach_state->invTimer = 1.0f / convert_integer_to_float_c(attach_state->timer);
             return;
         }
     }
-    if (e->state == 4 && D_001413DC != 4) {
+    if (attach_state->state == 4 && D_001413DC != 4) {
         if (D_001413DC == 2) {
-            e->prev = 4;
-            e->state = 1;
-            e->timer = scale_game_frames(*(int *)&D_L00_00161D54_gp);
-            e->invTimer = 1.0f / convert_integer_to_float_c(e->timer);
+            attach_state->prev = 4;
+            attach_state->state = 1;
+            attach_state->timer = scale_game_frames(*(int *)&D_L00_00161D54_gp);
+            attach_state->invTimer = 1.0f / convert_integer_to_float_c(attach_state->timer);
         } else {
-            e->prev = 4;
-            e->state = 0;
-            e->timer = scale_game_frames(*(int *)&D_L00_00161D54_gp);
-            e->invTimer = 1.0f / convert_integer_to_float_c(e->timer);
+            attach_state->prev = 4;
+            attach_state->state = 0;
+            attach_state->timer = scale_game_frames(*(int *)&D_L00_00161D54_gp);
+            attach_state->invTimer = 1.0f / convert_integer_to_float_c(attach_state->timer);
         }
         return;
     }
-    if (e->state == 3 && D_001413D4 == 0xB) {
-        e->prev = e->state;
-        e->state = 6;
-        e->moveTimer = scale_game_frames(*(int *)&D_L00_00161D40_gp);
-        e->invMove = 1.0f / convert_integer_to_float_c(e->moveTimer);
-        e->timer = D_L00_00161D50;
-        inv = 1.0f / convert_integer_to_float_c(e->timer);
-        e->dist = *(float *)&D_L00_00161D48;
-        e->hit = 0;
+    if (attach_state->state == 3 && D_001413D4 == 0xB) {
+        attach_state->prev = attach_state->state;
+        attach_state->state = 6;
+        attach_state->moveTimer = scale_game_frames(*(int *)&D_L00_00161D40_gp);
+        attach_state->invMove = 1.0f / convert_integer_to_float_c(attach_state->moveTimer);
+        attach_state->timer = D_L00_00161D50;
+        inv = 1.0f / convert_integer_to_float_c(attach_state->timer);
+        attach_state->dist = *(float *)&D_L00_00161D48;
+        attach_state->hit = 0;
         x = *(float *)&D_L00_00161D48;
-        e->invTimer = inv;
-        FUN_L00_002e48a0_c(e->v30, x);
-        qcopy(e->v20, e->v10);
+        attach_state->invTimer = inv;
+        FUN_L00_002e48a0_c(attach_state->v30, x);
+        qcopy(attach_state->v20, attach_state->v10);
         return;
     }
-    if (e->state == 5 && D_001413D4 == 0xC) {
-        e->prev = e->state;
-        e->state = 8;
-        e->timer = D_L00_00161D60;
-        e->invTimer = 1.0f / convert_integer_to_float_c(e->timer);
+    if (attach_state->state == 5 && D_001413D4 == 0xC) {
+        attach_state->prev = attach_state->state;
+        attach_state->state = 8;
+        attach_state->timer = D_L00_00161D60;
+        attach_state->invTimer = 1.0f / convert_integer_to_float_c(attach_state->timer);
         return;
     }
-    if (e->state == 8 && D_001413D4 != 0xC) {
-        e->prev = e->state;
-        e->state = 0;
-        e->timer = scale_game_frames(*(int *)&D_L00_00161D64);
-        e->invTimer = 1.0f / convert_integer_to_float_c(e->timer);
+    if (attach_state->state == 8 && D_001413D4 != 0xC) {
+        attach_state->prev = attach_state->state;
+        attach_state->state = 0;
+        attach_state->timer = scale_game_frames(*(int *)&D_L00_00161D64);
+        attach_state->invTimer = 1.0f / convert_integer_to_float_c(attach_state->timer);
         return;
     }
-    if (e->state == 6 && D_001413D4 != 0xB) {
-        e->prev = e->state;
-        e->state = 0;
-        e->timer = scale_game_frames(*(int *)&D_L00_00161D54_gp);
-        e->invTimer = 1.0f / convert_integer_to_float_c(e->timer);
+    if (attach_state->state == 6 && D_001413D4 != 0xB) {
+        attach_state->prev = attach_state->state;
+        attach_state->state = 0;
+        attach_state->timer = scale_game_frames(*(int *)&D_L00_00161D54_gp);
+        attach_state->invTimer = 1.0f / convert_integer_to_float_c(attach_state->timer);
         return;
     }
-    if ((e->state == 3 || e->state == 5) && D_001413DC != 4) {
-        e->prev = e->state;
-        e->state = 0;
-        e->timer = scale_game_frames(*(int *)&D_L00_00161D54_gp);
-        e->invTimer = 1.0f / convert_integer_to_float_c(e->timer);
+    if ((attach_state->state == 3 || attach_state->state == 5) && D_001413DC != 4) {
+        attach_state->prev = attach_state->state;
+        attach_state->state = 0;
+        attach_state->timer = scale_game_frames(*(int *)&D_L00_00161D54_gp);
+        attach_state->invTimer = 1.0f / convert_integer_to_float_c(attach_state->timer);
         return;
     }
-    if (e->state == 9) {
+    if (attach_state->state == 9) {
         struct Hero *p = &hero;
         if (p->state.control_mode == 2 || p->frames_off_ground.s >= scale_game_frames(0x37)) {
             goto to_one;
         }
     }
-    if (e->state == 0xA) {
+    if (attach_state->state == 0xA) {
         struct Hero *p = &hero;
         if (p->state.control_mode == 2 || p->frames_off_ground.s >= scale_game_frames(0x37)) {
             float r;
         to_one:
-            e->prev = e->state;
-            e->state = 1;
-            e->timer = scale_game_frames(*(int *)&D_L00_00161D54_gp);
-            r = 1.0f / convert_integer_to_float_c(e->timer);
+            attach_state->prev = attach_state->state;
+            attach_state->state = 1;
+            attach_state->timer = scale_game_frames(*(int *)&D_L00_00161D54_gp);
+            r = 1.0f / convert_integer_to_float_c(attach_state->timer);
             t = *(int *)&D_L00_00161D24_gp;
-            e->invTimer = r;
-            q = *(char **)(m + 0x70);
+            attach_state->invTimer = r;
+            q = *(char **)(camera + 0x70);
             *(short *)(q + 0x20) = scale_game_frames(t);
-            qcopy(m + 0x40, m);
+            qcopy(camera + 0x40, camera);
             return;
         }
     }
-    if (e->state == 9 && D_001413D4 != 0x14) {
-        e->prev = e->state;
-        e->state = 0xA;
-        e->timer = D_L00_00161D78;
-        e->invTimer = 1.0f / convert_integer_to_float_c(e->timer);
+    if (attach_state->state == 9 && D_001413D4 != 0x14) {
+        attach_state->prev = attach_state->state;
+        attach_state->state = 0xA;
+        attach_state->timer = D_L00_00161D78;
+        attach_state->invTimer = 1.0f / convert_integer_to_float_c(attach_state->timer);
         return;
     }
-    if (e->state == 0xA && FUN_001f9770_c2(&e->moveTimer)) {
-        e->prev = e->state;
-        e->state = 0;
-        e->timer = scale_game_frames(*(int *)&D_L00_00161D54_gp);
-        e->invTimer = 1.0f / convert_integer_to_float_c(e->timer);
+    if (attach_state->state == 0xA && FUN_001f9770_c2(&attach_state->moveTimer)) {
+        attach_state->prev = attach_state->state;
+        attach_state->state = 0;
+        attach_state->timer = scale_game_frames(*(int *)&D_L00_00161D54_gp);
+        attach_state->invTimer = 1.0f / convert_integer_to_float_c(attach_state->timer);
         return;
     }
-    if (e->state == 5 && D_001413D4 == 0x10) {
-        e->prev = e->state;
-        e->state = 0;
-        e->timer = scale_game_frames(*(int *)&D_L00_00161D64);
-        e->invTimer = 1.0f / convert_integer_to_float_c(e->timer);
+    if (attach_state->state == 5 && D_001413D4 == 0x10) {
+        attach_state->prev = attach_state->state;
+        attach_state->state = 0;
+        attach_state->timer = scale_game_frames(*(int *)&D_L00_00161D64);
+        attach_state->invTimer = 1.0f / convert_integer_to_float_c(attach_state->timer);
     }
 }
 /* per-frame state machine that eases a moby's attach pose toward the camera block's vector */
