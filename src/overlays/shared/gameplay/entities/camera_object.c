@@ -2468,28 +2468,28 @@ float FUN_002132a8_2a9ed0(float, float) __asm__("FUN_002132a8");
 void FUN_L00_00250df8_2a9ed0(void *) __asm__("FUN_L00_00250df8");
 unsigned char *spawn_mine(int owner, OvlQuad *pos) __asm__("FUN_L00_002a9ed0");
 unsigned char *spawn_mine(int owner, OvlQuad *pos) {
-    unsigned char *m = create_moby(0x4A);
-    if (m) {
-        unsigned char *v = *(unsigned char **)(m + 0x78);
-        m[0x30] = 0xFF;
-        *(short *)(m + 0x32) = 0x7F;
-        m[0x31] = 1;
-        *(float *)(m + 0x2C) = *(float *)(m + 0x2C) * 0.5f;
-        m[0x20] = 0;
+    unsigned char *mine_moby = create_moby(0x4A);
+    if (mine_moby) {
+        unsigned char *v = *(unsigned char **)(mine_moby + 0x78);
+        mine_moby[0x30] = 0xFF;
+        *(short *)(mine_moby + 0x32) = 0x7F;
+        mine_moby[0x31] = 1;
+        *(float *)(mine_moby + 0x2C) = *(float *)(mine_moby + 0x2C) * 0.5f;
+        mine_moby[0x20] = 0;
         *(int *)(v + 0x30) = owner;
         *(short *)(v + 0x36) = 0;
         *(int *)(v + 0x78) = 0;
-        qcopy(m + 0x10, pos);
+        qcopy(mine_moby + 0x10, pos);
         clear_u64_value(v);
         {
             float a =
                 FUN_002132a8_2a9ed0(D_0015ED6C_2a9ed0 * 1.0471976f, D_0015ED6C_2a9ed0 * 3.1415927f);
-            float d = D_0015ED6C_2a9ed0;
+            float frame_rate_scale = D_0015ED6C_2a9ed0;
             float b;
             int x;
             float z;
             *(float *)(v + 0x38) = a;
-            b = FUN_002132a8_2a9ed0(d * 1.0471976f, d * 3.1415927f);
+            b = FUN_002132a8_2a9ed0(frame_rate_scale * 1.0471976f, frame_rate_scale * 3.1415927f);
             x = D_L00_0015F5CC_2a9ed0;
             z = 0.0f;
             *(float *)(v + 0x3C) = b;
@@ -2500,11 +2500,11 @@ unsigned char *spawn_mine(int owner, OvlQuad *pos) {
             *(int *)(v + 0x5C) = x;
             *(int *)(v + 0x74) = 0;
             *(int *)(v + 0x68) = -1;
-            *(int *)(m + 0x94) = 0;
+            *(int *)(mine_moby + 0x94) = 0;
         }
-        FUN_L00_00250df8_2a9ed0(m);
+        FUN_L00_00250df8_2a9ed0(mine_moby);
     }
-    return m;
+    return mine_moby;
 }
 typedef union {
     u128 q;
