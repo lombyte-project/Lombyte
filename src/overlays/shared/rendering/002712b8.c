@@ -306,22 +306,22 @@ void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 s32 fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 void free_effect_particle(void *) __asm__("FUN_L00_00267a08");
 s32 coll_line_fix(void *, void *, s32, s32, s32) __asm__("FUN_001efa68");
-void FUN_L00_00271d20(O00271d20 *o) {
-    V00271d20 t;
-    V00271d20 *acc = &o->acc;
-    V00271d20 *pos = &o->pos;
-    V00271d20 *vel = &o->vel;
-    t.f[0] = acc->f[0];
-    t.f[1] = acc->f[1];
-    t.f[2] = acc->f[2];
-    t.f[3] = 0.0f;
-    fast_vec_add(pos, pos, &t);
-    fast_vec_add(vel, vel, &t);
-    if (fast_dec_timer_s16(&o->xa)) {
-        free_effect_particle(o);
+void FUN_L00_00271d20(O00271d20 *particle) {
+    V00271d20 motion_delta_xyz;
+    V00271d20 *acc = &particle->acc;
+    V00271d20 *pos = &particle->pos;
+    V00271d20 *vel = &particle->vel;
+    motion_delta_xyz.f[0] = acc->f[0];
+    motion_delta_xyz.f[1] = acc->f[1];
+    motion_delta_xyz.f[2] = acc->f[2];
+    motion_delta_xyz.f[3] = 0.0f;
+    fast_vec_add(pos, pos, &motion_delta_xyz);
+    fast_vec_add(vel, vel, &motion_delta_xyz);
+    if (fast_dec_timer_s16(&particle->xa)) {
+        free_effect_particle(particle);
     } else if (coll_line_fix(vel, pos, 0x10, acc->i[3], 0)) {
-        o->pos.q = D_L00_00173E60.q;
-        o->xa = 0;
+        particle->pos.q = D_L00_00173E60.q;
+        particle->xa = 0;
     }
 }
 void FUN_001f9a10_00271df8(void *, void *, void *) __asm__("FUN_001f9a10");
