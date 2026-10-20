@@ -1789,7 +1789,7 @@ void FUN_L01_00316030(CamUser_316030 *camera_user) {
 extern char *FUN_L00_001eb1f8(int);
 
 extern char *D_L01_00167280_lui __asm__("D_L01_00167280") __attribute__((section(".data")));
-void FUN_L01_00316e88(float a, float b) {
+void FUN_L01_00316e88(float camera_track_accel_y, float b) {
     char *camera_candidate = D_L01_00167280_lui;
     char *selected_camera;
     char *destination;
@@ -1798,7 +1798,7 @@ void FUN_L01_00316e88(float a, float b) {
     else
         selected_camera = camera_candidate;
     destination = *(char **)(selected_camera + 0x70) + 0xE0;
-    *(float *)(destination + 0x44) = a;
+    *(float *)(destination + 0x44) = camera_track_accel_y;
     *(float *)(destination + 0x48) = b;
 }
 extern char *D_L00_0015F5F4;
