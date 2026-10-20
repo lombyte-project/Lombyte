@@ -278,7 +278,7 @@ extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern unsigned char D_0013E533[];
 
 void FUN_L00_00221b68(void) {
-    char *q = (char *)D_0013E533 + 0xE1D;
+    char *hero_check_base = (char *)D_0013E533 + 0xE1D;
     char *hero_base;
     char *r;
     float distance_error;
@@ -287,10 +287,10 @@ void FUN_L00_00221b68(void) {
     float ang;
     int s;
 
-    if (*(unsigned char *)(q + 0x257) != 0 && *(float *)(q + 0x2DC) > 0.0f &&
-        *(float *)(q + 0x160) < frame_time * 3.0f && fast_vec_length(q + 0xE0) < frame_time * 3.0f &&
-        *(float *)(q + 0x229C) < 0.2f) {
-        s = *(int *)(q + 0x208C);
+    if (*(unsigned char *)(hero_check_base + 0x257) != 0 && *(float *)(hero_check_base + 0x2DC) > 0.0f &&
+        *(float *)(hero_check_base + 0x160) < frame_time * 3.0f && fast_vec_length(hero_check_base + 0xE0) < frame_time * 3.0f &&
+        *(float *)(hero_check_base + 0x229C) < 0.2f) {
+        s = *(int *)(hero_check_base + 0x208C);
         if (s == 0 || s == 2 || s == 4 || s == 10 || s == 1) {
             s = scale_game_frames(5);
             r = (char *)D_0013E533 + 0xE1D;
