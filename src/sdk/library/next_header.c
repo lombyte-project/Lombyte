@@ -22,7 +22,7 @@ extern void _groupOfPicturesHeader(MpegDec *d);
 extern void _pictureHeader(MpegDec *d);
 extern void _dispatchMpegCallback(void *cb, void *arg);
 
-s32 _nextHeader(MpegDec *d) {
+s32 _nextHeader(MpegDec *decoder) {
     enum {
         MPEG_PICTURE_START_CODE = 0x100,
         MPEG_SEQUENCE_HEADER_CODE = 0x1B3,
@@ -33,24 +33,24 @@ s32 _nextHeader(MpegDec *d) {
     u32 code;
 
     while (1) {
-        _nextStartCode(d);
-        code = _nextBit(d, 32);
+        _nextStartCode(decoder);
+        code = _nextBit(decoder, 32);
         switch (code) {
         case MPEG_SEQUENCE_HEADER_CODE:
-            _sequenceHeader(d);
+            _sequenceHeader(decoder);
             break;
         case MPEG_GROUP_START_CODE:
-            _groupOfPicturesHeader(d);
+            _groupOfPicturesHeader(decoder);
             break;
         case MPEG_PICTURE_START_CODE:
-            _pictureHeader(d);
+            _pictureHeader(decoder);
             cb.type = 5;
             cb.pts = -1;
             cb.dts = -1;
-            _dispatchMpegCallback(d->cbData, &cb);
-            d->dts = cb.dts;
-            d->pts = cb.pts;
-            return d->unk150;
+            _dispatchMpegCallback(decoder->cbData, &cb);
+            decoder->dts = cb.dts;
+            decoder->pts = cb.pts;
+            return decoder->unk150;
         case MPEG_SEQUENCE_END_CODE:
             return 0;
         }
