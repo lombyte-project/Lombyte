@@ -126,12 +126,12 @@ void FUN_L13_002eac00(void *mobyp, void *pp) {
         STARFIGHTER_COMMAND_REPEATED_VECTOR_ATTACK = 7
     };
     char *moby = mobyp;
-    char *p = pp;
+    char *starfighter_data = pp;
     float sv[4];
     float f1;
     int v;
-    char *q;
-    unsigned char c, e;
+    char *voice_slot_entry;
+    unsigned char c, attack_mode;
 
     switch (((unsigned char *)moby)[0xBC]) {
     case STARFIGHTER_COMMAND_TIMED_VOLLEY:
@@ -156,62 +156,62 @@ s1:
     if (((unsigned char *)moby)[0x20] != 4) {
         goto s1b;
     }
-    if (!fast_dec_timer(p + 0xF8)) {
+    if (!fast_dec_timer(starfighter_data + 0xF8)) {
         return;
     }
-    FUN_L13_002ea540(moby, p);
-    *(int *)(p + 0xF8) = scale_game_frames_alt(0x3C);
-    ((unsigned char *)p)[0xFD]++;
-    if (((unsigned char *)p)[0xFD] < 11) {
+    FUN_L13_002ea540(moby, starfighter_data);
+    *(int *)(starfighter_data + 0xF8) = scale_game_frames_alt(0x3C);
+    ((unsigned char *)starfighter_data)[0xFD]++;
+    if (((unsigned char *)starfighter_data)[0xFD] < 11) {
         return;
     }
-    ((unsigned char *)p)[0xFD] = 0;
+    ((unsigned char *)starfighter_data)[0xFD] = 0;
     moby[0x20] = 3;
-    *(int *)(p + 0xF8) = scale_game_frames_alt(0x12C);
+    *(int *)(starfighter_data + 0xF8) = scale_game_frames_alt(0x12C);
     return;
 
 s1b:
-    if (!fast_dec_timer(p + 0xF8)) {
+    if (!fast_dec_timer(starfighter_data + 0xF8)) {
         return;
     }
-    if (!(*(unsigned short *)(p + 0x138) & 1)) {
-        if (FUN_L13_002e86f8(moby, p, 1, 2)) {
-            *(unsigned short *)(p + 0x138) |= 1;
+    if (!(*(unsigned short *)(starfighter_data + 0x138) & 1)) {
+        if (FUN_L13_002e86f8(moby, starfighter_data, 1, 2)) {
+            *(unsigned short *)(starfighter_data + 0x138) |= 1;
         }
     }
-    *(int *)(p + 0xF8) = scale_game_frames_alt(0x1E);
+    *(int *)(starfighter_data + 0xF8) = scale_game_frames_alt(0x1E);
     moby[0x20] = 4;
     return;
 
 s3:
-    fast_dec_timer(p + 0x124);
-    fast_dec_timer(p + 0x100);
-    fast_dec_timer(p + 0xF8);
+    fast_dec_timer(starfighter_data + 0x124);
+    fast_dec_timer(starfighter_data + 0x100);
+    fast_dec_timer(starfighter_data + 0xF8);
     if (((unsigned char *)moby)[0x20] == 5) {
         goto s308;
     }
-    v = *(int *)(p + 0x11C);
+    v = *(int *)(starfighter_data + 0x11C);
     if (v != -1) {
-        q = ((char *)&D_0013E550) + v * 0x70;
-        if (*(int *)(q + 0x88) == (int)moby && ((unsigned char *)q)[0x74]) {
+        voice_slot_entry = ((char *)&D_0013E550) + v * 0x70;
+        if (*(int *)(voice_slot_entry + 0x88) == (int)moby && ((unsigned char *)voice_slot_entry)[0x74]) {
             release_voice_slot(v);
         }
-        *(int *)(p + 0x11C) = -1;
+        *(int *)(starfighter_data + 0x11C) = -1;
     }
     moby_point_position(moby, 0x13, sv);
     f1 = distance_xyz(sv, ((char *)&D_0013F3D0));
-    if (*(int *)(p + 0x100) == 0) {
+    if (*(int *)(starfighter_data + 0x100) == 0) {
         if (f1 < 100.0f) {
           if (60.0f < f1) {
-            if (*(int *)(p + 0xF8) != 0) {
+            if (*(int *)(starfighter_data + 0xF8) != 0) {
                 return;
             }
-            if (*(int *)(p + 0x124) != 0) {
+            if (*(int *)(starfighter_data + 0x124) != 0) {
                 return;
             }
-            *(int *)(p + 0x100) = scale_game_frames_alt(0x258);
-            qcopy(p + 0x80, sv);
-            ((unsigned char *)p)[0xFF] = 0;
+            *(int *)(starfighter_data + 0x100) = scale_game_frames_alt(0x258);
+            qcopy(starfighter_data + 0x80, sv);
+            ((unsigned char *)starfighter_data)[0xFF] = 0;
             moby[0x20] = 5;
             return;
         }
@@ -219,113 +219,113 @@ s3:
     }
     if (((unsigned char *)moby)[0xBC] == 3) {
         moby[0x20] = 4;
-        if (*(int *)(p + 0xF8) != 0) {
+        if (*(int *)(starfighter_data + 0xF8) != 0) {
             return;
         }
         goto s384;
     }
-    if (*(int *)(p + 0xF8) != 0) {
+    if (*(int *)(starfighter_data + 0xF8) != 0) {
         return;
     }
-    if (FUN_L00_001fefc8(p + 0xFD) == 0) {
+    if (FUN_L00_001fefc8(starfighter_data + 0xFD) == 0) {
         goto s2e;
     }
-    if (*(int *)(p + 0x124) != 0) {
+    if (*(int *)(starfighter_data + 0x124) != 0) {
         goto s2e;
     }
-    e = ((unsigned char *)p)[0xFE] ^ 1;
-    ((unsigned char *)p)[0xFE] = e;
-    if (!e) {
-        ((unsigned char *)p)[0xFD] = random_int_between(4, 6);
+    attack_mode = ((unsigned char *)starfighter_data)[0xFE] ^ 1;
+    ((unsigned char *)starfighter_data)[0xFE] = attack_mode;
+    if (!attack_mode) {
+        ((unsigned char *)starfighter_data)[0xFD] = random_int_between(4, 6);
         moby[0x20] = 4;
     } else {
-        ((unsigned char *)p)[0xFD] = random_int_between(0x14, 0x32);
+        ((unsigned char *)starfighter_data)[0xFD] = random_int_between(0x14, 0x32);
         moby[0x20] = 3;
     }
-    *(int *)(p + 0xF8) = scale_game_frames_alt(0x78);
+    *(int *)(starfighter_data + 0xF8) = scale_game_frames_alt(0x78);
     return;
 
 s2e:
-    if (((unsigned char *)p)[0xFE] == 0) {
+    if (((unsigned char *)starfighter_data)[0xFE] == 0) {
         goto s380;
     }
-    FUN_L13_002ea6b8(moby, p);
-    *(int *)(p + 0xF8) = scale_game_frames_alt(0x14);
-    *(int *)(p + 0x124) = scale_game_frames_alt(0xF0);
+    FUN_L13_002ea6b8(moby, starfighter_data);
+    *(int *)(starfighter_data + 0xF8) = scale_game_frames_alt(0x14);
+    *(int *)(starfighter_data + 0x124) = scale_game_frames_alt(0xF0);
     return;
 
 s308:
-    if (*(int *)(p + 0x100) != 0) {
+    if (*(int *)(starfighter_data + 0x100) != 0) {
         goto s358;
     }
-    if (*(int *)(p + 0x124) != 0) {
+    if (*(int *)(starfighter_data + 0x124) != 0) {
         return;
     }
-    *(int *)(p + 0x100) = scale_game_frames_alt(0x258);
-    *(int *)(p + 0xF8) = scale_game_frames_alt(0x78);
+    *(int *)(starfighter_data + 0x100) = scale_game_frames_alt(0x258);
+    *(int *)(starfighter_data + 0xF8) = scale_game_frames_alt(0x78);
     moby[0x20] = 4;
     allocate_voice_for_target_entry(5, 0, (int)moby);
     return;
 
 s358:
-    if ((*(long *)(p + 0xF8) & ((((0xFF00L << 32) | 0xFFFFL) << 16) | 0xFFFFL)) != (0x8000L << 41)) {
+    if ((*(long *)(starfighter_data + 0xF8) & ((((0xFF00L << 32) | 0xFFFFL) << 16) | 0xFFFFL)) != (0x8000L << 41)) {
         return;
     }
 s380:
 s384:
-    FUN_L13_002ea540(moby, p);
-    *(int *)(p + 0xF8) = scale_game_frames_alt(0x3C);
-    *(int *)(p + 0x124) = scale_game_frames_alt(0x78);
+    FUN_L13_002ea540(moby, starfighter_data);
+    *(int *)(starfighter_data + 0xF8) = scale_game_frames_alt(0x3C);
+    *(int *)(starfighter_data + 0x124) = scale_game_frames_alt(0x78);
     return;
 
 s2:
-    if (!fast_dec_timer(p + 0xF8)) {
+    if (!fast_dec_timer(starfighter_data + 0xF8)) {
         return;
     }
     if (((unsigned char *)moby)[0xBC] != 2) {
         goto s2b;
     }
-    if (FUN_L00_001fefc8(p + 0xFD) == 0) {
+    if (FUN_L00_001fefc8(starfighter_data + 0xFD) == 0) {
         goto s2z;
     }
-    e = ((unsigned char *)p)[0xFE] ^ 1;
-    ((unsigned char *)p)[0xFE] = e;
-    if (!e) {
-        ((unsigned char *)p)[0xFD] = random_int_between(4, 6);
+    attack_mode = ((unsigned char *)starfighter_data)[0xFE] ^ 1;
+    ((unsigned char *)starfighter_data)[0xFE] = attack_mode;
+    if (!attack_mode) {
+        ((unsigned char *)starfighter_data)[0xFD] = random_int_between(4, 6);
         moby[0x20] = 4;
     } else {
-        ((unsigned char *)p)[0xFD] = random_int_between(0x14, 0x32);
+        ((unsigned char *)starfighter_data)[0xFD] = random_int_between(0x14, 0x32);
         moby[0x20] = 3;
     }
-    *(int *)(p + 0xF8) = scale_game_frames_alt(0x3C);
+    *(int *)(starfighter_data + 0xF8) = scale_game_frames_alt(0x3C);
     return;
 
 s2z:
-    if (((unsigned char *)p)[0xFE] != 0) {
+    if (((unsigned char *)starfighter_data)[0xFE] != 0) {
         goto s2y;
     }
-    FUN_L13_002ea540(moby, p);
-    *(int *)(p + 0xF8) = scale_game_frames_alt(0x3C);
+    FUN_L13_002ea540(moby, starfighter_data);
+    *(int *)(starfighter_data + 0xF8) = scale_game_frames_alt(0x3C);
     return;
 
 s2y:
-    FUN_L13_002ea6b8(moby, p);
-    *(int *)(p + 0xF8) = scale_game_frames_alt(0x14);
+    FUN_L13_002ea6b8(moby, starfighter_data);
+    *(int *)(starfighter_data + 0xF8) = scale_game_frames_alt(0x14);
     return;
 
 s2b:
     moby[0x20] = 3;
-    FUN_L13_002ea6b8(moby, p);
-    *(int *)(p + 0xF8) = scale_game_frames_alt(0x14);
+    FUN_L13_002ea6b8(moby, starfighter_data);
+    *(int *)(starfighter_data + 0xF8) = scale_game_frames_alt(0x14);
     return;
 
 s4:
     moby[0x20] = 3;
-    if (((unsigned char *)p)[0x10E] != 0) {
+    if (((unsigned char *)starfighter_data)[0x10E] != 0) {
         return;
     }
     moby[0xBC] = 5;
-    FUN_L13_002e86f8(moby, p, 0x1B, 2);
+    FUN_L13_002e86f8(moby, starfighter_data, 0x1B, 2);
     {
         char *z = *(char **)(*(int *)(((char *)&D_00140940)) + 0x78);
         *(int *)(z + 0x88) = 0;
