@@ -15,8 +15,8 @@ void _printf(const char *fmt, char *ap) {
     char *pad;
     char *p;
     s32 mod;
-    s32 n;
-    unsigned long d;
+    s32 zero_pad_width;
+    unsigned long hex_digit;
     u8 ch;
     char second;
     s64 v;
@@ -32,22 +32,22 @@ void _printf(const char *fmt, char *ap) {
             fmt++;
             switch ((char)(*fmt - '0')) {
             case FORMAT_ZERO_PAD_WIDTH:
-                n = fmt[1] - '0';
+                zero_pad_width = fmt[1] - '0';
                 second = fmt[2];
-                if ((u8)n < 10) {
+                if ((u8)zero_pad_width < 10) {
                     if ((u32)(second - '0') < 10) {
-                        n = n * 10 + (second - '0');
+                        zero_pad_width = zero_pad_width * 10 + (second - '0');
                         fmt += 2;
-                        if (n >= 32) {
-                            n = 31;
+                        if (zero_pad_width >= 32) {
+                            zero_pad_width = 31;
                         }
                     } else {
                         fmt += 1;
                     }
-                    pad = &buf[31 - n];
-                    while (n > 0) {
-                        buf[31 - n] = '0';
-                        n--;
+                    pad = &buf[31 - zero_pad_width];
+                    while (zero_pad_width > 0) {
+                        buf[31 - zero_pad_width] = '0';
+                        zero_pad_width--;
                     }
                     goto again;
                 }
@@ -97,11 +97,11 @@ void _printf(const char *fmt, char *ap) {
                     *--p = '0';
                 } else {
                     do {
-                        d = v & 0xF;
-                        if (d < 10) {
-                            *--p = d + '0';
+                        hex_digit = v & 0xF;
+                        if (hex_digit < 10) {
+                            *--p = hex_digit + '0';
                         } else {
-                            *--p = d + 'a' - 10;
+                            *--p = hex_digit + 'a' - 10;
                         }
                         v = (u64)v >> 4;
                     } while (v != 0);
@@ -169,11 +169,11 @@ void _printf(const char *fmt, char *ap) {
                 break;
             case 'e' - '0':
             case 'f' - '0': {
-                f32 f = ARG(f32);
-                if (f == 0.0f) {
+                f32 float_argument = ARG(f32);
+                if (float_argument == 0.0f) {
                     D_0012FC00[0]('0');
                 } else {
-                    printfloat(f);
+                    printfloat(float_argument);
                 }
             } break;
             case 's' - '0': {
