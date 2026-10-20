@@ -375,7 +375,7 @@ void bolt_thief_update(L16CrateMoby *moby) {
         BOLT_THIEF_FOLLOW_OTHER_PATH = 5,
         BOLT_THIEF_KNOCKBACK = 6
     };
-    L16CrateData *d = moby->data;
+    L16CrateData *bolt_thief_data = moby->data;
     char *hit;
 
     if ((moby->status & 2) && moby->frame == moby->animation && moby->frame == 1)
@@ -383,54 +383,54 @@ void bolt_thief_update(L16CrateMoby *moby) {
     if (hero.coll_hit_moby == moby && moby->animation != 1 && moby->frame != 1)
         blend_moby_animation(moby, 1, 0, scale_game_frames(5));
     hit = find_moby_hit(moby, 0x210000, 0);
-    if (!hit && d->child)
-        hit = find_moby_hit(d->child, 0x210000, 0);
+    if (!hit && bolt_thief_data->child)
+        hit = find_moby_hit(bolt_thief_data->child, 0x210000, 0);
     if (hit && moby->state != 6) {
         struct Hero *player = &hero;
 
-        d->knock_drag = 0.008f;
-        d->knock_gravity = 0.0005f;
-        d->knock_speed = frame_time * 24.0f;
-        d->knock_rise = frame_time * 12.0f;
-        d->knock_flags = 1;
-        d->knock_bAD = 0;
-        trooper_start_knockback(moby, d->knock, 1, 1, 0,
+        bolt_thief_data->knock_drag = 0.008f;
+        bolt_thief_data->knock_gravity = 0.0005f;
+        bolt_thief_data->knock_speed = frame_time * 24.0f;
+        bolt_thief_data->knock_rise = frame_time * 12.0f;
+        bolt_thief_data->knock_flags = 1;
+        bolt_thief_data->knock_bAD = 0;
+        trooper_start_knockback(moby, bolt_thief_data->knock, 1, 1, 0,
                           fast_arc_tan(moby->position[0] - player->motion.pos.f[0], moby->position[1] - player->motion.pos.f[1]));
-        d->ticks = 0x78;
+        bolt_thief_data->ticks = 0x78;
         FUN_L00_00257470(moby, 0, -1);
         moby->state = 6;
     }
     moby->opacity = 0xFF;
     switch (moby->state) {
     case BOLT_THIEF_INITIALIZE:
-        if (d->mode == 2) {
+        if (bolt_thief_data->mode == 2) {
             moby->state = 1;
-            d->turn = 0.0f;
+            bolt_thief_data->turn = 0.0f;
             set_moby_animation_alt(moby, 4, 0);
         } else {
-            if (d->path == -1) {
+            if (bolt_thief_data->path == -1) {
                 debug_print_alt(D_L16_001E86A0, moby->id);
                 mark_moby_for_removal(moby);
                 return;
             }
-            if (*(int *)D_L16_001B0930[d->path] == 0) {
+            if (*(int *)D_L16_001B0930[bolt_thief_data->path] == 0) {
                 debug_print_alt(D_L16_001E86D8, moby->id);
                 mark_moby_for_removal(moby);
                 return;
             }
-            if (d->mode != 1) {
-                if (d->other_path == -1) {
+            if (bolt_thief_data->mode != 1) {
+                if (bolt_thief_data->other_path == -1) {
                     debug_print_alt(D_L16_001E8720, moby->id);
                     mark_moby_for_removal(moby);
                     return;
                 }
-                if (*(int *)D_L16_001B0930[d->other_path] == 0) {
+                if (*(int *)D_L16_001B0930[bolt_thief_data->other_path] == 0) {
                     debug_print_alt(D_L16_001E8758, moby->id);
                     mark_moby_for_removal(moby);
                     return;
                 }
             }
-            if (d->trigger == -1) {
+            if (bolt_thief_data->trigger == -1) {
                 debug_print_alt(D_L16_001E87A0, moby->id);
                 mark_moby_for_removal(moby);
                 return;
@@ -441,23 +441,23 @@ void bolt_thief_update(L16CrateMoby *moby) {
             moby->flags |= 0x41;
             moby->bounds = 0;
         }
-        d->child = 0;
+        bolt_thief_data->child = 0;
         break;
     case BOLT_THIEF_FACE_HERO: {
         struct Hero *player = &hero;
 
         func_L00_002592B0_path54((char *)moby,
                                  fast_arc_tan(player->motion.pos.f[0] - moby->position[0], player->motion.pos.f[1] - moby->position[1]),
-                                 &d->turn, 0.005f, 0.2f, 0.0f);
+                                 &bolt_thief_data->turn, 0.005f, 0.2f, 0.0f);
         FUN_L14_002feca8(moby);
         break;
     }
     case BOLT_THIEF_WAIT_FOR_HERO_TRIGGER:
-        if (is_point_inside_clip_volume(&hero.motion.pos, d->trigger)) {
-            if (d->mode == 1) {
+        if (is_point_inside_clip_volume(&hero.motion.pos, bolt_thief_data->trigger)) {
+            if (bolt_thief_data->mode == 1) {
                 set_moby_animation_alt(moby, 0, 0);
             } else {
-                d->child = FUN_L14_002ffaf8(moby, moby->position);
+                bolt_thief_data->child = FUN_L14_002ffaf8(moby, moby->position);
                 FUN_L14_002fec28(moby);
                 set_moby_animation_alt(moby, 2, 0);
             }
@@ -467,7 +467,7 @@ void bolt_thief_update(L16CrateMoby *moby) {
         }
         break;
     case BOLT_THIEF_FOLLOW_PRIMARY_PATH:
-        if (d->mode == 0)
+        if (bolt_thief_data->mode == 0)
             FUN_L14_002fec28(moby);
         if (FUN_L16_002e3fa0((char *)moby)) {
             moby->state = 3;
@@ -476,32 +476,32 @@ void bolt_thief_update(L16CrateMoby *moby) {
         FUN_L14_002feca8(moby);
         break;
     case BOLT_THIEF_SETTLE_AT_PATH_END: {
-        L16CrateData *a = moby->data;
-        char *path = D_L16_001B0930[a->path];
+        L16CrateData *settle_data = moby->data;
+        char *path = D_L16_001B0930[settle_data->path];
         float target[4];
         float zero;
 
-        if (a->mode == 0)
+        if (settle_data->mode == 0)
             FUN_L14_002fec28(moby);
         qcopy(target, path + *(int *)path * 16);
         zero = 0.0f;
-        vendor_spring(moby->position, &a->vx, target[0], *(float *)&D_L16_00161D94, *(float *)&D_L16_00161D98_gp, zero);
-        vendor_spring(moby->position + 1, &a->vy, target[1], *(float *)&D_L16_00161D94, *(float *)&D_L16_00161D98_gp, zero);
-        vendor_spring(moby->position + 2, &a->vz, target[2], *(float *)&D_L16_00161D94, *(float *)&D_L16_00161D98_gp, zero);
+        vendor_spring(moby->position, &settle_data->vx, target[0], *(float *)&D_L16_00161D94, *(float *)&D_L16_00161D98_gp, zero);
+        vendor_spring(moby->position + 1, &settle_data->vy, target[1], *(float *)&D_L16_00161D94, *(float *)&D_L16_00161D98_gp, zero);
+        vendor_spring(moby->position + 2, &settle_data->vz, target[2], *(float *)&D_L16_00161D94, *(float *)&D_L16_00161D98_gp, zero);
         if ((moby->status & 2) && moby->frame == moby->animation) {
-            if (a->mode == 1) {
+            if (settle_data->mode == 1) {
                 moby->state = 1;
-                a->turn = zero;
+                settle_data->turn = zero;
                 set_moby_animation_alt(moby, 4, 0);
             } else {
-                if (a->child) {
-                    FUN_L03_002c6c90(a->child);
-                    a->child = 0;
+                if (settle_data->child) {
+                    FUN_L03_002c6c90(settle_data->child);
+                    settle_data->child = 0;
                 }
                 moby->state = 5;
                 blend_moby_animation(moby, 0, 0, 20);
-                a->timer = zero;
-                a->counter = 0;
+                settle_data->timer = zero;
+                settle_data->counter = 0;
             }
         }
         FUN_L14_002feca8(moby);
@@ -514,10 +514,10 @@ void bolt_thief_update(L16CrateMoby *moby) {
             moby->state = 2;
             moby->bounds = 0;
             moby->flags |= 0x41;
-            d->timer = 0.0f;
-            d->counter = 0;
-            d->turn = d->vx = d->vy = d->vz = d->timer;
-            path = D_L16_001B0930[d->path];
+            bolt_thief_data->timer = 0.0f;
+            bolt_thief_data->counter = 0;
+            bolt_thief_data->turn = bolt_thief_data->vx = bolt_thief_data->vy = bolt_thief_data->vz = bolt_thief_data->timer;
+            path = D_L16_001B0930[bolt_thief_data->path];
             qcopy(moby->position, path + 0x10);
             moby->rotation[2] = fast_arc_tan(*(float *)(path + 0x20) - *(float *)(path + 0x10),
                                                *(float *)(path + 0x24) - *(float *)(path + 0x14));
@@ -526,7 +526,7 @@ void bolt_thief_update(L16CrateMoby *moby) {
         }
         break;
     case BOLT_THIEF_KNOCKBACK:
-        if (mine_fall(moby, d->knock) & 3) {
+        if (mine_fall(moby, bolt_thief_data->knock) & 3) {
             cart_burst(moby, moby->position, -1, 1.0f, 13.0f);
             mark_moby_for_removal(moby);
             return;
@@ -537,7 +537,7 @@ void bolt_thief_update(L16CrateMoby *moby) {
         }
         break;
     }
-    trooper_anim_finish(moby, d->effect);
+    trooper_anim_finish(moby, bolt_thief_data->effect);
 }
 
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002E5408), where it is exact; names translated to the US level program. */
