@@ -537,6 +537,7 @@ int FUN_L17_002eace8(int ship_moby, char *ship_vars, char *radar_origin, char *r
         MOBY_CLASS_GRAY_RADAR_QUAD_CONTACT = 0xE4,
         MOBY_CLASS_OFFSCREEN_ARROW_TARGET = 0x15B,
         MOBY_CLASS_UNMARKED_COUNTED_TARGET = 0x184,
+        MOBY_CLASS_EXCLUDED_FROM_RADAR = 0x185,
         MOBY_CLASS_UNCOUNTED_MARKED_TARGET = 0x191,
         MOBY_CLASS_PRIORITY_LOCK_TARGET = 0x3EB,
         MOBY_CLASS_FLAG_GATED_SCREEN_MARKER_TARGET = 0x4BE,
@@ -701,7 +702,7 @@ int FUN_L17_002eace8(int ship_moby, char *ship_vars, char *radar_origin, char *r
                 FUN_L17_002eaae0(radar_rotation, radar_origin, scanned_moby, 1, 0x70808080, *(int *)(ship_vars + 0x104));
             }
             break;
-        case 0x185:
+        case MOBY_CLASS_EXCLUDED_FROM_RADAR:
         case 0x186:
         case 0x187:
         case 0x188:
