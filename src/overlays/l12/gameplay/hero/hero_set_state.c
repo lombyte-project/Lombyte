@@ -83,6 +83,7 @@ extern char D_L12_0017C3E0[];
 int hero_set_state(int a, int b) {
     enum {
         HERO_STATE_RUN_WITH_DISPLACEMENT_SPEED = 0x2E,
+        HERO_STATE_RUN_CLEAR_VELOCITY_Z = 0x2F,
         HERO_STATE_VEHICLE_IDLE = 0x53,
         HERO_STATE_VEHICLE_RUN = 0x54,
         HERO_STATE_VEHICLE_FALL = 0x55,
@@ -531,7 +532,7 @@ int hero_set_state(int a, int b) {
         break;
     }
     case HERO_STATE_RUN:
-    case 0x2F:
+    case HERO_STATE_RUN_CLEAR_VELOCITY_Z:
     case 0x3F:
     case 0x73: {
         struct Hero *p = &hero;
