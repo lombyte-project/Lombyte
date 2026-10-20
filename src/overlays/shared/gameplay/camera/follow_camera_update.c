@@ -420,9 +420,9 @@ void FUN_L00_002e9dd0(char *camera_object) {
     }
     FUN_001f9a10_2e9dd0(camera_object + 0x30, &D_0013F3D0_2e9dd0, &b);
     {
-        void *d = D_L00_00166E04_2e9dd0;
+        void *side_axis_reference = D_L00_00166E04_2e9dd0;
         qcopy(camera_object + 0x20, &hero_up_axis);
-        FUN_001f9ad8_2e9dd0(camera_object + 0x10, d, &hero_up_axis);
+        FUN_001f9ad8_2e9dd0(camera_object + 0x10, side_axis_reference, &hero_up_axis);
     }
     FUN_001f9bf8_2e9dd0(camera_object + 0x10, camera_object + 0x10, 1.0f);
     FUN_001f9ad8_2e9dd0(camera_object, &hero_up_axis, camera_object + 0x10);
