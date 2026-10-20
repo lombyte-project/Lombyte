@@ -20,23 +20,23 @@ extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
 void rotate_vector_by_quaternion(void *arg0, void *arg1, void *arg2) __asm__("FUN_00214800");
 
-void FUN_L03_0024e6f8(float t, float *dst, float *a, float *b, int flag) {
-    float q[4];
-    float d, l, ang;
-    fast_vec_cross(q, b, a);
-    fast_vec_normalize(q, q, 1.0f);
-    d = fast_vec_dot(a, b);
+void FUN_L03_0024e6f8(float rotation_scale, float *dst, float *source_vector, float *b, int flag) {
+    float rotation_quaternion[4];
+    float dot_product, l, ang;
+    fast_vec_cross(rotation_quaternion, b, source_vector);
+    fast_vec_normalize(rotation_quaternion, rotation_quaternion, 1.0f);
+    dot_product = fast_vec_dot(source_vector, b);
     if (flag == 0) {
-        l = fast_vec_length(a);
+        l = fast_vec_length(source_vector);
         l = l * fast_vec_length(b);
         if (l == 0.0f) {
-            qcopy(dst, a);
+            qcopy(dst, source_vector);
             return;
         }
-        d = d / l;
+        dot_product = dot_product / l;
     }
-    ang = (1.5707964f - fast_arc_sin(d)) * 0.5f * t;
-    fast_vec_scale(q, q, fast_sin(ang));
-    q[3] = fast_cos(ang);
-    rotate_vector_by_quaternion(dst, a, q);
+    ang = (1.5707964f - fast_arc_sin(dot_product)) * 0.5f * rotation_scale;
+    fast_vec_scale(rotation_quaternion, rotation_quaternion, fast_sin(ang));
+    rotation_quaternion[3] = fast_cos(ang);
+    rotate_vector_by_quaternion(dst, source_vector, rotation_quaternion);
 }
