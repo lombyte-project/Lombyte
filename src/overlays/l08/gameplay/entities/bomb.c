@@ -2081,18 +2081,18 @@ extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9
 
 void FUN_L08_002dc0c8(struct Moby *moby) {
     char *data = (char *)moby->pvars;
-    int *t = (int *)D_L08_001B0CB0[*(int *)(data + 0x8C)];
-    if (*t == 8) {
-        char *q = D_L08_001DB280;
+    int *stop_point_table = (int *)D_L08_001B0CB0[*(int *)(data + 0x8C)];
+    if (*stop_point_table == 8) {
+        char *local_point = D_L08_001DB280;
         char *mat = &moby->rot_row0;
         char *pos = &moby->pos;
-        char *p = (char *)t + 0x10;
+        char *world_point = (char *)stop_point_table + 0x10;
         int i;
         for (i = 7; i >= 0; i--) {
-            transform_vector_by_basis(p, q, mat);
-            q += 0x10;
-            add_vector_xyz(p, p, pos);
-            p += 0x10;
+            transform_vector_by_basis(world_point, local_point, mat);
+            local_point += 0x10;
+            add_vector_xyz(world_point, world_point, pos);
+            world_point += 0x10;
         }
     }
 }
