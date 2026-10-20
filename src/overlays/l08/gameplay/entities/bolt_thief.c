@@ -202,15 +202,15 @@ void FUN_L08_002e9a18(struct Moby *arg) {
     float anchor_joint_position[4];
     float joint_alignment_offset[4];
     int i;
-    char *p;
+    char *part_entry_cursor;
     char *parts = data + 0x60;
     for (i = 0; i < 16; i++) {
-        char *e = parts + 0x1C + i * 16;
-        char *part = *(char **)(e - 0xC);
+        char *anchor_joint_cursor = parts + 0x1C + i * 16;
+        char *part = *(char **)(anchor_joint_cursor - 0xC);
         if (part != 0) {
             *(float *)(part + 0x48) = arg->rot.z;
-            moby_point_position(part, *(int *)(e - 4), part_joint_position);
-            moby_point_position(*(void **)(e - 8), *(int *)e, anchor_joint_position);
+            moby_point_position(part, *(int *)(anchor_joint_cursor - 4), part_joint_position);
+            moby_point_position(*(void **)(anchor_joint_cursor - 8), *(int *)anchor_joint_cursor, anchor_joint_position);
             fast_vec_sub(joint_alignment_offset, anchor_joint_position, part_joint_position);
             fast_vec_add(part + 0x10, part + 0x10, joint_alignment_offset);
         }
@@ -220,17 +220,17 @@ void FUN_L08_002e9a18(struct Moby *arg) {
             fast_add_rotations(*(float *)(*(char **)(data + 0x90) + 0x40),
                                D_L08_00161D38 * DEG_TO_RAD * D_0015ED6C);
     }
-    p = parts + 0x10;
+    part_entry_cursor = parts + 0x10;
     for (i = 0; i < 16; i++) {
-        char *o = *(char **)p;
-        if (o != 0) {
-            FUN_L00_00250df8(o);
-            o = *(char **)p;
-            if (*(unsigned short *)(o + 0x34) & 0x8000) {
-                fast_vec_scale(o + 0xD0, o + 0xD0, -1.0f);
+        char *updated_part = *(char **)part_entry_cursor;
+        if (updated_part != 0) {
+            FUN_L00_00250df8(updated_part);
+            updated_part = *(char **)part_entry_cursor;
+            if (*(unsigned short *)(updated_part + 0x34) & 0x8000) {
+                fast_vec_scale(updated_part + 0xD0, updated_part + 0xD0, -1.0f);
             }
         }
-        p += 16;
+        part_entry_cursor += 16;
     }
 }
 
