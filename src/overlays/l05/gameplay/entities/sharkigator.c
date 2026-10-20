@@ -3089,24 +3089,24 @@ void box_update(char *moby)
         BOX_INITIALIZE = 0,
         BOX_UPDATE_TRANSFORM = 1
     };
-    char *d = *(char **)(moby + 0x78);
-    float p[4];
-    float q[4];
+    char *moby_data = *(char **)(moby + 0x78);
+    float previous_position[4];
+    float previous_rotation[4];
     float r[4];
     switch (*(u8 *)(moby + 0x20)) {
     case BOX_INITIALIZE:
-        *(int *)(d + 0x5C) = 1;
-        if (*(int *)(d + 0x80) >= 0) {
-            FUN_L00_00260668(moby, D_L05_0015FFD8_c + (*(int *)(d + 0x80) << 8), moby + 0x10, moby + 0x40, d + 0x60, d + 0x70);
+        *(int *)(moby_data + 0x5C) = 1;
+        if (*(int *)(moby_data + 0x80) >= 0) {
+            FUN_L00_00260668(moby, D_L05_0015FFD8_c + (*(int *)(moby_data + 0x80) << 8), moby + 0x10, moby + 0x40, moby_data + 0x60, moby_data + 0x70);
             *(u8 *)(moby + 0x20) = 1;
         }
         break;
     case BOX_UPDATE_TRANSFORM:
-        qcopy(p, moby + 0x10);
-        qcopy(q, moby + 0x40);
-        FUN_L00_002604f0(moby, D_L05_0015FFD8_c + (*(int *)(d + 0x80) << 8), d + 0x60, d + 0x70, moby + 0x10, moby + 0x40);
-        fast_vec_sub(r, moby + 0x10, p);
-        FUN_L00_00260738_c(d + 0x20, r, q, moby + 0x40);
+        qcopy(previous_position, moby + 0x10);
+        qcopy(previous_rotation, moby + 0x40);
+        FUN_L00_002604f0(moby, D_L05_0015FFD8_c + (*(int *)(moby_data + 0x80) << 8), moby_data + 0x60, moby_data + 0x70, moby + 0x10, moby + 0x40);
+        fast_vec_sub(r, moby + 0x10, previous_position);
+        FUN_L00_00260738_c(moby_data + 0x20, r, previous_rotation, moby + 0x40);
         break;
     }
 }
