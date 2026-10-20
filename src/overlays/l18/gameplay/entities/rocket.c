@@ -2121,12 +2121,12 @@ void FUN_L18_002dc4b8(char *moby) {
     V_dc4b8 mat[4];
     V_dc4b8 rot[3];
     V_dc4b8 ang;
-    float *p;
+    float *moby_vars;
     int i, j, k;
     int c;
-    float t, r, d, s, gi;
+    float layer_phase, r, d, s, gi;
 
-    p = *(float **)(moby + 0x78);
+    moby_vars = *(float **)(moby + 0x78);
     unit_matrix_dc4b8(mat);
     qcopy(&mat[3], moby + 0x10);
     mat[3].f[2] = mat[3].f[2] + D_L18_00161CC4;
@@ -2138,14 +2138,14 @@ void FUN_L18_002dc4b8(char *moby) {
         quad[i].unk80 = 0xFF9000000260L;
         quad[i].unk88 = (long)D_L18_00161CA4 | ((long)D_L18_00161CA8 << 2) |
                         ((long)D_L18_00161CAC << 4) | ((long)D_L18_00161CB0 << 6) | 0x8000000000L;
-        t = p[1] + (float)i * 0.25f;
-        r = p[0] + gi;
-        t = t - (float)truncate_dc4b8(t);
-        c = tween_color_dc4b8(D_L18_00161CB8, D_L18_00161CBC, t);
-        s = t * D_L18_00161CD4;
+        layer_phase = moby_vars[1] + (float)i * 0.25f;
+        r = moby_vars[0] + gi;
+        layer_phase = layer_phase - (float)truncate_dc4b8(layer_phase);
+        c = tween_color_dc4b8(D_L18_00161CB8, D_L18_00161CBC, layer_phase);
+        s = layer_phase * D_L18_00161CD4;
         if (s > 1.0f) s = 1.0f;
         c = tween_color_dc4b8(c & 0xFFFFFF, c, s);
-        d = itof_dc4b8(((int *)p)[2]);
+        d = itof_dc4b8(((int *)moby_vars)[2]);
         s = d / (float)scale_ticks_dc4b8(D_L18_00161C9C_v);
         if (s > 1.0f) {
             s = 1.0f;
@@ -2154,14 +2154,14 @@ void FUN_L18_002dc4b8(char *moby) {
         }
         c = tween_color_dc4b8(c & 0xFFFFFF, c, s);
         for (j = 0; j < 4; j++) {
-            float a;
+            float corner_angle;
             quad[i].uv[j].u = D_L18_001D4330[j * 2];
             quad[i].uv[j].v = D_L18_001D4330[j * 2 + 1];
-            quad[i].corner[j].f[2] = (j & 1) ? t * D_L18_00161CC8 : -t * D_L18_00161CC8;
-            a = add_rotations_dc4b8((float)(j >> 1) * (D_L18_00161CC0 * 0.017453292f) - 3.14159f,
+            quad[i].corner[j].f[2] = (j & 1) ? layer_phase * D_L18_00161CC8 : -layer_phase * D_L18_00161CC8;
+            corner_angle = add_rotations_dc4b8((float)(j >> 1) * (D_L18_00161CC0 * 0.017453292f) - 3.14159f,
                               D_L18_00161CC0 * 0.25f * (float)i * 0.017453292f);
-            quad[i].corner[j].f[0] = cos_dc4b8(a) * r;
-            quad[i].corner[j].f[1] = sin_dc4b8(a) * r;
+            quad[i].corner[j].f[0] = cos_dc4b8(corner_angle) * r;
+            quad[i].corner[j].f[1] = sin_dc4b8(corner_angle) * r;
             quad[i].corner[j].f[3] = 1.0f;
             quad[i].color[j] = c;
         }
