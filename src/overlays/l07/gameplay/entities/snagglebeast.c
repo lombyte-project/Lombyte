@@ -728,7 +728,8 @@ void snagglebeast_update(unsigned char *moby) {
         SNAGGLEBEAST_IDLE = 1,
         SNAGGLEBEAST_TURN_TOWARD_TARGET = 7,
         SNAGGLEBEAST_ROPE_ATTACK = 9,
-        SNAGGLEBEAST_DEATH_EXPLOSION = 10
+        SNAGGLEBEAST_DEATH_EXPLOSION = 10,
+        SNAGGLEBEAST_POST_DEATH_CLEANUP = 16
     };
     enum {
         SNAGGLEBEAST_ROPE_START_ATTACK_ANIMATION = 0,
@@ -1736,7 +1737,7 @@ void snagglebeast_update(unsigned char *moby) {
             }
         }
         break;
-    case 16:
+    case SNAGGLEBEAST_POST_DEATH_CLEANUP:
         if (*(short *)(data + 0x280) != -1) FUN_L00_0023e838(*(short *)(data + 0x280));
         if (*(int *)(data + 0x1D0) == -1 || !(*(float *)(level_mobys + (*(int *)(data + 0x1D0) << 8) + 0x18) < 34.5f)) {
             mark_moby_for_removal(moby);
