@@ -2284,7 +2284,7 @@ void cave_door_update(Moby *self) {
         CAVE_DOOR_STATE_UPDATE_ROTATION = 1
     };
     RotVars *v;
-    Moby *m;
+    Moby *target_moby;
     f32 *mv;
 
     v = self->vars;
@@ -2296,10 +2296,10 @@ void cave_door_update(Moby *self) {
         break;
     case CAVE_DOOR_STATE_UPDATE_ROTATION:
         if (v->target != -1) {
-            m = &D_L01_0015FFD8[v->target];
-            if (m->oclass == 0x118) {
-                mv = m->vars;
-                m->alpha = 0xFF;
+            target_moby = &D_L01_0015FFD8[v->target];
+            if (target_moby->oclass == 0x118) {
+                mv = target_moby->vars;
+                target_moby->alpha = 0xFF;
                 self->rot = fast_add_rotations(
                     v->angle,
                     fast_normalize_angle(fast_add_rotations(v->speed, -v->angle) * mv[0]));
