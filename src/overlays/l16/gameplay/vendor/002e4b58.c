@@ -181,7 +181,7 @@ extern void FUN_L16_002e8b98_i(int, int, int, int, char *) __asm__("FUN_L16_002e
 extern void vu1_add_g_sregister_l16(int, long) __asm__("FUN_00233980");
 
 void FUN_L16_002e97a0(void) {
-    int *a = (int *)&D_L16_00161F90;
+    int *element_counts = (int *)&D_L16_00161F90;
     int *b = (int *)&D_L16_00161F98;
     int *c = (int *)D_L16_00161FA0;
     int *d = (int *)D_L16_00161FA8;
@@ -195,8 +195,8 @@ void FUN_L16_002e97a0(void) {
     font_queue_vu_state();
     for (i = 0; i < 0x2; i++) {
         if (fast_bsphere_check(D_L16_001DF2B0[i], 512.0f) != -1) {
-            FUN_L16_002e8b98_i(a[i], d[i], b[i], c[i], D_L16_001DF2D0);
-            FUN_L00_001fde98(a[i], b[i], e[i], D_L16_001DF2D0, 1);
+            FUN_L16_002e8b98_i(element_counts[i], d[i], b[i], c[i], D_L16_001DF2D0);
+            FUN_L00_001fde98(element_counts[i], b[i], e[i], D_L16_001DF2D0, 1);
         }
     }
 }
