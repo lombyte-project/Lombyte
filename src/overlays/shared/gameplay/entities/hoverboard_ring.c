@@ -381,38 +381,38 @@ void FUN_L05_003294c0(float spring_distance, float b, float focus_distance, floa
 
 extern void FUN_L05_00329358_c(void *) __asm__("FUN_L05_00329358");
 
-void FUN_L05_00329540(char *m) {
-    char *d = *(char **)(m + 0x70);
-    char *at = m + 0x30;
-    char *up = m + 0x10;
-    char *side = m + 0x20;
+void FUN_L05_00329540(char *camera) {
+    char *orbit = *(char **)(camera + 0x70);
+    char *at = camera + 0x30;
+    char *up = camera + 0x10;
+    char *side = camera + 0x20;
     struct Hero *g;
-    char *a;
+    char *focus;
     char *b;
     float target_height_offset[4];
     float look_direction[4];
     float look_target[4];
     float camera_offset[4];
     float gravity_up[4];
-    FUN_L05_00329358_c(m);
+    FUN_L05_00329358_c(camera);
     g = &hero;
-    a = d + 0x80;
-    b = d + 0xE0;
+    focus = orbit + 0x80;
+    b = orbit + 0xE0;
     normalize_vector_xyz(camera_offset, ((char *)g->moby) + 0xC0, 1.0f);
-    normalize_vector_xyz(camera_offset, camera_offset, *(float *)(d + 0xE0));
-    subtract_vector_xyz(at, a, camera_offset);
+    normalize_vector_xyz(camera_offset, camera_offset, *(float *)(orbit + 0xE0));
+    subtract_vector_xyz(at, focus, camera_offset);
     normalize_vector_xyz(gravity_up, &g->gravity_dir, -1.0f);
     normalize_vector_xyz(camera_offset, gravity_up, *(float *)(b + 0x10));
     add_vector_xyz(at, at, camera_offset);
-    normalize_vector_xyz(target_height_offset, gravity_up, *(float *)(a + 0x4C));
-    add_vector_xyz(look_target, target_height_offset, a);
+    normalize_vector_xyz(target_height_offset, gravity_up, *(float *)(focus + 0x4C));
+    add_vector_xyz(look_target, target_height_offset, focus);
     subtract_vector_xyz(look_direction, look_target, at);
-    normalize_vector_xyz(m, look_direction, 1.0f);
-    cross_vectors_xyz(up, m, gravity_up);
-    cross_vectors_xyz(side, up, m);
+    normalize_vector_xyz(camera, look_direction, 1.0f);
+    cross_vectors_xyz(up, camera, gravity_up);
+    cross_vectors_xyz(side, up, camera);
     normalize_vector_xyz(up, up, 1.0f);
     normalize_vector_xyz(side, side, 1.0f);
-    qcopy(m + 0x40, m);
+    qcopy(camera + 0x40, camera);
 }
 #include "qcopy.h"
 #include "rnc/gameplay/entities/moby.h"
