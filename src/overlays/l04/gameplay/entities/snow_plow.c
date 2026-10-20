@@ -1441,20 +1441,20 @@ void FUN_L04_002d6f68(char *moby) {
     char *dst = base + moby_vars[1] * 256;
     float weighted_first_point[4];
     float b[4];
-    float f, g;
+    float path_interpolation_factor, g;
     int idx;
     int second_point_index = 1;
     float one = 1.0f;
 
-    f = convert_integer_to_float(path_data[0] - 1);
-    g = (one - src[0]) * f;
-    f = FUN_L00_00200260(g, one);
+    path_interpolation_factor = convert_integer_to_float(path_data[0] - 1);
+    g = (one - src[0]) * path_interpolation_factor;
+    path_interpolation_factor = FUN_L00_00200260(g, one);
     idx = func_001FA898_r(g);
-    if (f == 0.0f)
+    if (path_interpolation_factor == 0.0f)
         second_point_index = 0;
     second_point_index += idx;
-    scale_vector_xyz(weighted_first_point, (char *)path_data + (idx * 16 + 0x10), one - f);
-    scale_vector_xyz(b, (char *)path_data + (second_point_index * 16 + 0x10), f);
+    scale_vector_xyz(weighted_first_point, (char *)path_data + (idx * 16 + 0x10), one - path_interpolation_factor);
+    scale_vector_xyz(b, (char *)path_data + (second_point_index * 16 + 0x10), path_interpolation_factor);
     add_vector_xyz(moby + 0x10, weighted_first_point, b);
     qcopy(dst + 0x10, moby + 0x10);
 }
