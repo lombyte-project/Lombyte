@@ -780,13 +780,13 @@ void FUN_L00_00233248(void) {
  * Ported from rac1-decomp (shared level code), where it is
  * exact; names translated to the US level program. */
 /* Stores two floats, an index and a byte, and sets the bits of a byte mask in a flag halfword. */
-void FUN_L00_00233288(float a, float b, short c, unsigned char d, unsigned char e,
-                      unsigned char f) {
+void FUN_L00_00233288(float a, float b, short c, unsigned char d, unsigned char flags_to_set,
+                      unsigned char flags_to_clear) {
     struct Hero *base = &hero;
 
     base->items[6].unk38 = c;
     base->items[6].unk3C = d;
-    base->items[6].unk3E = (base->items[6].unk3E & ~f) | e;
+    base->items[6].unk3E = (base->items[6].unk3E & ~flags_to_clear) | flags_to_set;
     base->items[6].unk30 = a;
     base->items[6].unk34 = b;
 }
