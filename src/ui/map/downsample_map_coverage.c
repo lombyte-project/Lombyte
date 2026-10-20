@@ -21,7 +21,7 @@ void downsample_map_coverage(u8 *out) {
     s32 i;
     s32 j;
     s32 k;
-    s32 m;
+    s32 packed_column_start;
     u32 b;
 
     dst = out;
@@ -44,9 +44,9 @@ void downsample_map_coverage(u8 *out) {
                     acc[k] = 1 << (k % 8);
                 }
             }
-            for (m = 0; m < 128; m += 8) {
-                *dst++ = acc[m] | acc[m + 1] | acc[m + 2] | acc[m + 3] | acc[m + 4] | acc[m + 5] |
-                         acc[m + 6] | acc[m + 7];
+            for (packed_column_start = 0; packed_column_start < 128; packed_column_start += 8) {
+                *dst++ = acc[packed_column_start] | acc[packed_column_start + 1] | acc[packed_column_start + 2] | acc[packed_column_start + 3] | acc[packed_column_start + 4] | acc[packed_column_start + 5] |
+                         acc[packed_column_start + 6] | acc[packed_column_start + 7];
             }
         }
     }
