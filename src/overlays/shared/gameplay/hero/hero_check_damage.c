@@ -2554,11 +2554,11 @@ typedef struct {
 } K2;
 /* True when p is non-null and its field f is 0x47. */
 s32 FUN_L00_00211360(K2 *p);
-s32 FUN_L00_00211360(K2 *p) {
-    if (p == 0) {
+s32 FUN_L00_00211360(K2 *candidate_moby) {
+    if (candidate_moby == 0) {
         return 0;
     }
-    if (p->f == 0x47) {
+    if (candidate_moby->f == 0x47) {
         return 1;
     }
     return 0;
