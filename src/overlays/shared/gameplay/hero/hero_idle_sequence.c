@@ -2290,7 +2290,7 @@ void FUN_L00_00209638(int seed, int limit) {
     float pos[4];
     float ang;
     int i;
-    struct Hero *p;
+    struct Hero *hero_state;
 
     if (limit < ++hero.unk908) {
         for (i = 0; i < 2; i++) {
@@ -2299,26 +2299,26 @@ void FUN_L00_00209638(int seed, int limit) {
             } else {
                 ang = FUN_001fa5c8_209638(hero.motion.rot.f[2], 0.785398f);
             }
-            p = &hero;
+            hero_state = &hero;
             v[0] = fast_cos(ang) * (D_0015ED6C * 0.6f);
             v[1] = fast_sin(ang) * (D_0015ED6C * 0.6f);
             v[2] = 0.0f;
-            pos[0] = p->motion.pos.f[0] + v[0] * 18.0f;
-            pos[1] = p->motion.pos.f[1] + v[1] * 18.0f;
-            pos[2] = p->water_surface_z;
-            v[0] -= fast_cos(p->motion.rot.f[2]) * (D_0015ED6C * 1.5f);
-            v[1] -= fast_sin(p->motion.rot.f[2]) * (D_0015ED6C * 1.5f);
+            pos[0] = hero_state->motion.pos.f[0] + v[0] * 18.0f;
+            pos[1] = hero_state->motion.pos.f[1] + v[1] * 18.0f;
+            pos[2] = hero_state->water_surface_z;
+            v[0] -= fast_cos(hero_state->motion.rot.f[2]) * (D_0015ED6C * 1.5f);
+            v[1] -= fast_sin(hero_state->motion.rot.f[2]) * (D_0015ED6C * 1.5f);
             {
                 float r = FUN_002132a8_209638(0.4f, 0.5f);
                 float d = -2.0f;
                 if (i == 0)
                     d = 2.0f;
-                FUN_L00_002718d0_209638(pos, v, &p->water_surface_z, r, d);
+                FUN_L00_002718d0_209638(pos, v, &hero_state->water_surface_z, r, d);
             }
             if (seed) {
-                p->unk908 = FUN_00213260_209638(seed);
+                hero_state->unk908 = FUN_00213260_209638(seed);
             } else {
-                p->unk908 = 0;
+                hero_state->unk908 = 0;
             }
         }
     }
