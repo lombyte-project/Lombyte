@@ -1175,40 +1175,40 @@ extern f32 probe_ground_height(void *, int, float) __asm__("FUN_00213508");
 extern void blend_moby_animation_3830(void *, int, int, int) __asm__("FUN_00212f90");
 extern int random_integer_3830(void) __asm__("FUN_001160d8");
 
-void FUN_L01_002e3830(struct Moby *m, char *p) {
+void FUN_L01_002e3830(struct Moby *moby, char *movement_state) {
     enum {
         HOVER_FACE_GOAL_AND_WAIT = 0,
         HOVER_MOVE_TOWARD_GOAL = 2
     };
     Vec4 v;
-    f32 d, ang, len, ground, near;
+    f32 reference_distance, ang, len, ground, near;
     s32 hit;
-    s16 n;
+    s16 blocked_frames;
     struct Moby *target;
 
-    subtract_vector_xyz(&v, p, &m->pos);
-    if (m->state == 6)
-        d = vector_distance(&m->pos, p + 0x30);
+    subtract_vector_xyz(&v, movement_state, &moby->pos);
+    if (moby->state == 6)
+        reference_distance = vector_distance(&moby->pos, movement_state + 0x30);
     else
-        d = vector_distance(&m->pos, &hero.motion.pos);
-    vector_distance(&m->pos, p);
+        reference_distance = vector_distance(&moby->pos, &hero.motion.pos);
+    vector_distance(&moby->pos, movement_state);
 
-    switch (m->command) {
+    switch (moby->command) {
     case HOVER_FACE_GOAL_AND_WAIT:
-        ang = fast_arc_tan(*(f32 *)(p + 0) - m->pos.x, *(f32 *)(p + 4) - m->pos.y);
-        FUN_L00_00258278(m, ang, &D_L01_001DEB4C, frame_time_sq * 11.519173f,
+        ang = fast_arc_tan(*(f32 *)(movement_state + 0) - moby->pos.x, *(f32 *)(movement_state + 4) - moby->pos.y);
+        FUN_L00_00258278(moby, ang, &D_L01_001DEB4C, frame_time_sq * 11.519173f,
                          frame_time_sq * 3.1415927f, frame_time * 11.519173f);
-        if (m->anim_flags & 2) {
-            m->anim_speed = 1.0f;
-            if (m->prev_seq != random_integer_3830() % 3) {
+        if (moby->anim_flags & 2) {
+            moby->anim_speed = 1.0f;
+            if (moby->prev_seq != random_integer_3830() % 3) {
                 int seq = random_integer_3830() % 3;
-                blend_moby_animation_3830(m, seq, 0, scale_game_frames(20));
+                blend_moby_animation_3830(moby, seq, 0, scale_game_frames(20));
             }
         }
-        if (1.3f < d) {
-            if (m->prev_seq != 5)
-                blend_moby_animation_3830(m, 5, 0, scale_game_frames(10));
-            m->command = 2;
+        if (1.3f < reference_distance) {
+            if (moby->prev_seq != 5)
+                blend_moby_animation_3830(moby, 5, 0, scale_game_frames(10));
+            moby->command = 2;
         }
         return;
     case HOVER_MOVE_TOWARD_GOAL:
@@ -1218,76 +1218,76 @@ void FUN_L01_002e3830(struct Moby *m, char *p) {
         goto inactive;
     }
 
-    target = *(struct Moby **)(p + 0x68);
+    target = *(struct Moby **)(movement_state + 0x68);
     if (target == 0) {
-        ang = fast_arc_tan(*(f32 *)(p + 0) - m->pos.x, *(f32 *)(p + 4) - m->pos.y);
-        FUN_L00_00258278(m, ang, &D_L01_001DEB4C, frame_time_sq * 11.519173f,
+        ang = fast_arc_tan(*(f32 *)(movement_state + 0) - moby->pos.x, *(f32 *)(movement_state + 4) - moby->pos.y);
+        FUN_L00_00258278(moby, ang, &D_L01_001DEB4C, frame_time_sq * 11.519173f,
                          frame_time_sq * 3.1415927f, frame_time * 11.519173f);
     } else {
-        ang = fast_arc_tan(target->pos.x - m->pos.x, target->pos.y - m->pos.y);
-        FUN_L00_00258278(m, ang, &D_L01_001DEB4C,
+        ang = fast_arc_tan(target->pos.x - moby->pos.x, target->pos.y - moby->pos.y);
+        FUN_L00_00258278(moby, ang, &D_L01_001DEB4C,
                          D_L01_00161944 * DEG_TO_RAD * frame_time_sq,
                          D_L01_00161948 * DEG_TO_RAD * frame_time_sq,
                          D_L01_0016194C * DEG_TO_RAD * frame_time);
     }
     scale_vector_xyz(&v, &v, frame_scale * 0.04f);
-    subtract_vector_xyz(&v, &v, ((f32 *)(p + 0x10)));
-    if (1.3f < d) {
+    subtract_vector_xyz(&v, &v, ((f32 *)(movement_state + 0x10)));
+    if (1.3f < reference_distance) {
         scale_vector_xyz(&v, &v, frame_scale_sq * 0.13f);
     } else {
         fast_vec_scale(&v, &v, frame_scale_sq * 0.25f);
     }
     v.f[2] *= frame_scale * -0.100000024f + 1.0f;
-    add_vector_xyz(((f32 *)(p + 0x10)), ((f32 *)(p + 0x10)), &v);
-    if (m->state == 6)
-        clamp_vector_length(((f32 *)(p + 0x10)), ((f32 *)(p + 0x10)), frame_time * 2.7f);
-    hit = FUN_L00_00258ad0(m, ((f32 *)(p + 0x10)), D_L01_001DEB38.count, 0,
+    add_vector_xyz(((f32 *)(movement_state + 0x10)), ((f32 *)(movement_state + 0x10)), &v);
+    if (moby->state == 6)
+        clamp_vector_length(((f32 *)(movement_state + 0x10)), ((f32 *)(movement_state + 0x10)), frame_time * 2.7f);
+    hit = FUN_L00_00258ad0(moby, ((f32 *)(movement_state + 0x10)), D_L01_001DEB38.count, 0,
                             1.0f, D_L01_001DEB38.spread);
-    len = fast_vec_length(((f32 *)(p + 0x10)));
+    len = fast_vec_length(((f32 *)(movement_state + 0x10)));
     if (hit != 0) {
         if (len < 0.005f) {
-            n = ++*(s16 *)(p + 0x4a);
-            if (scale_game_frames(20) < n && m->visible == 0) {
-                qcopy(&m->pos, p);
-                *(s16 *)(p + 0x4a) = 0;
+            blocked_frames = ++*(s16 *)(movement_state + 0x4a);
+            if (scale_game_frames(20) < blocked_frames && moby->visible == 0) {
+                qcopy(&moby->pos, movement_state);
+                *(s16 *)(movement_state + 0x4a) = 0;
             }
         }
-        ground = probe_ground_height(&m->pos, 0, 0.5f);
-        if ((hit & 2) || m->pos.z - ground < D_L01_00161920) {
+        ground = probe_ground_height(&moby->pos, 0, 0.5f);
+        if ((hit & 2) || moby->pos.z - ground < D_L01_00161920) {
             if (len < 0.005f) {
-                if (m->prev_seq >= 3 && m->prev_seq != random_integer_3830() % 3) {
+                if (moby->prev_seq >= 3 && moby->prev_seq != random_integer_3830() % 3) {
                     int seq = random_integer_3830() % 3;
-                    blend_moby_animation_3830(m, seq, 0, scale_game_frames(10));
+                    blend_moby_animation_3830(moby, seq, 0, scale_game_frames(10));
                 }
             } else {
                 goto animation3;
             }
         } else {
-            if (m->prev_seq != 5)
-                blend_moby_animation_3830(m, 5, 0, scale_game_frames(7));
+            if (moby->prev_seq != 5)
+                blend_moby_animation_3830(moby, 5, 0, scale_game_frames(7));
         }
     } else {
-        ground = probe_ground_height(&m->pos, 0, 0.5f);
-        if (m->pos.z - ground < D_L01_00161920) {
+        ground = probe_ground_height(&moby->pos, 0, 0.5f);
+        if (moby->pos.z - ground < D_L01_00161920) {
  animation3:
-            if (m->prev_seq != 3)
-                blend_moby_animation_3830(m, 3, 0, scale_game_frames(11));
+            if (moby->prev_seq != 3)
+                blend_moby_animation_3830(moby, 3, 0, scale_game_frames(11));
         } else {
-            if (m->prev_seq != 5)
-                blend_moby_animation_3830(m, 5, 0, scale_game_frames(7));
-            *(s16 *)(p + 0x4a) = 0;
+            if (moby->prev_seq != 5)
+                blend_moby_animation_3830(moby, 5, 0, scale_game_frames(7));
+            *(s16 *)(movement_state + 0x4a) = 0;
         }
     }
 collision_done:
-    if (m->state == 6 || !(d < 1.1f)) return;
-    near = 1.1f - d;
-    ang = fast_arc_tan(hero.motion.pos.f[0] - m->pos.x, hero.motion.pos.f[1] - m->pos.y);
-    ((f32 *)(p + 0x10))[0] -= near * fast_cos(ang) * (frame_scale_sq * 0.1f);
-    ((f32 *)(p + 0x10))[1] -= near * fast_sin(ang) * (frame_scale_sq * 0.1f);
+    if (moby->state == 6 || !(reference_distance < 1.1f)) return;
+    near = 1.1f - reference_distance;
+    ang = fast_arc_tan(hero.motion.pos.f[0] - moby->pos.x, hero.motion.pos.f[1] - moby->pos.y);
+    ((f32 *)(movement_state + 0x10))[0] -= near * fast_cos(ang) * (frame_scale_sq * 0.1f);
+    ((f32 *)(movement_state + 0x10))[1] -= near * fast_sin(ang) * (frame_scale_sq * 0.1f);
     return;
 inactive:
-    m->command = 0;
-    if (1.3f < d) m->command = 2;
+    moby->command = 0;
+    if (1.3f < reference_distance) moby->command = 2;
 }
 /* State for the parented moby.  The parent index is -1 when unattached. */
 typedef int u128_2e3f20 __attribute__((mode(TI)));
