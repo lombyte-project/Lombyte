@@ -1077,8 +1077,8 @@ void snagglebeast_update(unsigned char *moby) {
                 direction.f[1] = fast_sin(sight.rotation.f[2]);
                 direction.f[2] = 0.0f;
                 {
-                    float s = fast_vec_dot(&direction, &velocity);
-                    normalize_vector_xyz(&projection, &velocity, s);
+                    float direction_velocity_dot = fast_vec_dot(&direction, &velocity);
+                    normalize_vector_xyz(&projection, &velocity, direction_velocity_dot);
                 }
                 subtract_vector_xyz(&direction, &direction, &projection);
                 direction.f[2] = 0.0f;
@@ -1544,14 +1544,14 @@ void snagglebeast_update(unsigned char *moby) {
                             int pidx = 0;
                             float pfrac = 0.0f;
                             float d1;
-                            float d2;
+                            float moby_to_sample_distance;
                             pidx = FUN_L01_0028b510(((char *)&hero) + 0x80, path, 0.0f);
                             do {
                                 *(float *)(data + 0x1AC) += 10.0f;
                                 sample_path(path, &start, &pidx, &pfrac, *(float *)(data + 0x1AC), 1);
                                 d1 = vector_distance(((char *)&hero) + 0x80, &start);
-                                d2 = vector_distance(moby + 0x10, &start);
-                            } while (d1 < 8.0f || d2 < 12.0f);
+                                moby_to_sample_distance = vector_distance(moby + 0x10, &start);
+                            } while (d1 < 8.0f || moby_to_sample_distance < 12.0f);
                             FUN_L07_00313920((float *)&start, 0.5f);
                             subtract_vector_xyz(&direction, &start, ((char *)&hero) + 0x80);
                             zv = start.f[2];
