@@ -540,17 +540,17 @@ extern void f49(void *, void *) __asm__("FUN_001f4600");
 extern void FUN_L11_003192c8_c(void) __asm__("FUN_L11_003192c8");
 
 void FUN_L11_00319670(char *moby) {
-    char *d = *(char **)(moby + 0x78);
+    char *trail_data = *(char **)(moby + 0x78);
     float v[4];
     float w[4];
-    int t;
+    int current_frame;
     if ((level_frame & 3) == 0) {
         int cnt;
         float lim = *(float *)&D_L11_001623F0_d;
-        cnt = *(int *)(d + 0x2C0);
-        *(int *)(d + 0x2C4) = (*(int *)(d + 0x2C4) + 1) % 16;
+        cnt = *(int *)(trail_data + 0x2C0);
+        *(int *)(trail_data + 0x2C4) = (*(int *)(trail_data + 0x2C4) + 1) % 16;
         if ((float)cnt < lim) {
-            *(int *)(d + 0x2C0) = cnt + 1;
+            *(int *)(trail_data + 0x2C0) = cnt + 1;
         }
     }
     *(OvlQuad *)v = 0;
@@ -558,20 +558,20 @@ void FUN_L11_00319670(char *moby) {
     v[0] = -1.2f;
     v[2] = 0.3f;
     transform_vector_by_basis(v, v, moby + 0xC0);
-    add_vector_xyz(d + ((*(int *)(d + 0x2C4) << 4) + 0xC0), v, moby + 0x10);
-    *(float *)(d + (*(int *)(d + 0x2C4) << 4) + 0xCC) = 1.0f;
+    add_vector_xyz(trail_data + ((*(int *)(trail_data + 0x2C4) << 4) + 0xC0), v, moby + 0x10);
+    *(float *)(trail_data + (*(int *)(trail_data + 0x2C4) << 4) + 0xCC) = 1.0f;
     *(OvlQuad *)w = 0;
     w[0] = -1.2f;
     w[1] = -0.7f;
     w[2] = 0.3f;
     transform_vector_by_basis(w, w, moby + 0xC0);
-    add_vector_xyz(d + ((*(int *)(d + 0x2C4) << 4) + 0x1C0), w, moby + 0x10);
-    t = level_frame;
-    *(float *)(d + (*(int *)(d + 0x2C4) << 4) + 0x1CC) = 1.0f;
-    if (t != 0) {
-        int *p = *(int **)(d + 0x2C8);
-        if (t != *p) {
-            *p = t;
+    add_vector_xyz(trail_data + ((*(int *)(trail_data + 0x2C4) << 4) + 0x1C0), w, moby + 0x10);
+    current_frame = level_frame;
+    *(float *)(trail_data + (*(int *)(trail_data + 0x2C4) << 4) + 0x1CC) = 1.0f;
+    if (current_frame != 0) {
+        int *last_callback_frame = *(int **)(trail_data + 0x2C8);
+        if (current_frame != *last_callback_frame) {
+            *last_callback_frame = current_frame;
             f49(FUN_L11_003192c8_c, moby);
         }
     }
