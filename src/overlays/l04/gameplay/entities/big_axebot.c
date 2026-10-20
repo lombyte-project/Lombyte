@@ -146,7 +146,7 @@ static inline s32 path_next_eb20(PathPoints_eb20 *path, s32 i, s32 dir) {
     return i + dir;
 }
 
-s32 FUN_L04_0029eb20(struct Moby *m, PathPoints_eb20 *path, s32 i, s32 dir, f32 dist) {
+s32 FUN_L04_0029eb20(struct Moby *moby, PathPoints_eb20 *path, s32 i, s32 dir, f32 dist) {
     Vec4 seg;
     Vec4 rel;
     s32 next;
@@ -157,7 +157,7 @@ s32 FUN_L04_0029eb20(struct Moby *m, PathPoints_eb20 *path, s32 i, s32 dir, f32 
     fast_vec_sub(&seg, &path->point[next], &path->point[i]);
     len = fast_vec_length(&seg);
     fast_vec_normalize(&seg, &seg, 1.0f);
-    fast_vec_sub(&rel, &m->pos, &path->point[i]);
+    fast_vec_sub(&rel, &moby->pos, &path->point[i]);
     along = fast_vec_dot(&rel, &seg) + dist;
     if (len < along) {
         i = next;
@@ -167,7 +167,7 @@ s32 FUN_L04_0029eb20(struct Moby *m, PathPoints_eb20 *path, s32 i, s32 dir, f32 
         fast_vec_normalize(&seg, &seg, 1.0f);
     }
     fast_vec_normalize(&seg, &seg, along);
-    fast_vec_add(&m->pos, &seg, &path->point[i]);
+    fast_vec_add(&moby->pos, &seg, &path->point[i]);
     return i;
 }
 extern void *memset(void *, int, int) __asm__("FUN_001153fc");
