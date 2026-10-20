@@ -50,25 +50,25 @@ extern void func_L01_002B90E8_2B9198(void) __asm__("FUN_L01_002b7f30");
 
 extern short D_L01_00161224 __attribute__((sda));
 void pool_flush(char *p, int n) __asm__("FUN_L01_002b7fe0");
-void pool_flush(char *p, int n) {
+void pool_flush(char *records_base, int record_count) {
     if (1.0f - pool_light[8] <= *(float *)&D_L01_00161224) {
         *(float *)&D_L01_00161224 = pool_light[8];
         func_L01_002B90E8_2B9198();
         *(int *)&D_L01_00161220_d = *(int *)&D_L01_0016121C;
     } else {
         *(int *)&D_L01_00161220_d = 2;
-        if (n > 0) {
-            char *q = p;
-            int k = n;
+        if (record_count > 0) {
+            char *current_record = records_base;
+            int k = record_count;
             do {
-                if (*(unsigned short *)(q + 0x1E) != 0) {
-                    FUN_L01_00261d78(q + (*(int *)&D_L01_00161220_d * 0x5C0 + 0x50),
-                                     q + (*(int *)&D_L01_0016121C * 0x5C0 + 0x50),
-                                     q + (*(int *)&D_L01_00161218 * 0x5C0 + 0x50),
+                if (*(unsigned short *)(current_record + 0x1E) != 0) {
+                    FUN_L01_00261d78(current_record + (*(int *)&D_L01_00161220_d * 0x5C0 + 0x50),
+                                     current_record + (*(int *)&D_L01_0016121C * 0x5C0 + 0x50),
+                                     current_record + (*(int *)&D_L01_00161218 * 0x5C0 + 0x50),
                                      *(float *)&D_L01_00161224);
                 }
                 k--;
-                q += 0x1190;
+                current_record += 0x1190;
             } while (k != 0);
         }
     }
