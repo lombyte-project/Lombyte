@@ -44,7 +44,7 @@ extern void set_vector_length_xy(void *, void *, f32) __asm__("FUN_001f9c48");
 
 s32 fun_00213928(O_25a478 *obj, P_25a478 *p, Q_25a478 *q, u32 flags, s32 *out, f32 *fp, s32 *kp, s32 idx) __asm__("FUN_00213928");
 
-s32 fun_00213928(O_25a478 *obj, P_25a478 *p, Q_25a478 *q, u32 flags, s32 *out, f32 *fp, s32 *kp, s32 idx) {
+s32 fun_00213928(O_25a478 *obj, P_25a478 *hit_record, Q_25a478 *q, u32 flags, s32 *out, f32 *fp, s32 *kp, s32 idx) {
     enum {
         KIND_GATED_HIT_RESPONSE = 0,
         FALLBACK_HIT_RESPONSE = 1,
@@ -63,7 +63,7 @@ s32 fun_00213928(O_25a478 *obj, P_25a478 *p, Q_25a478 *q, u32 flags, s32 *out, f
         SUBSTATE_GATED_COOLDOWN_DAMAGE_CLEARING_HIT_STATE = 7
     };
     V_25a478 v;
-    V_25a478 t;
+    V_25a478 combined_hit_vector;
     s32 r;
     s32 kind;
     s32 res;
@@ -71,8 +71,8 @@ s32 fun_00213928(O_25a478 *obj, P_25a478 *p, Q_25a478 *q, u32 flags, s32 *out, f
 
     *out = 0;
     if (kp) *kp = -1;
-    if (p && p->tgt && (p->tgt->hA6 == 0x131 || p->tgt->hA6 == 0xA8) && q) {
-        p->f2C = D_0015FFC8[q->b8];
+    if (hit_record && hit_record->tgt && (hit_record->tgt->hA6 == 0x131 || hit_record->tgt->hA6 == 0xA8) && q) {
+        hit_record->f2C = D_0015FFC8[q->b8];
     }
     if (!obj) {
         if (q) {
@@ -91,7 +91,7 @@ s32 fun_00213928(O_25a478 *obj, P_25a478 *p, Q_25a478 *q, u32 flags, s32 *out, f
         }
     }
     if (idx == 4) idx = q->b8;
-    if (!p) {
+    if (!hit_record) {
         if (q) {
             fast_dec_timer_s16(&q->h1C);
             q->h16 = -1;
@@ -100,52 +100,52 @@ s32 fun_00213928(O_25a478 *obj, P_25a478 *p, Q_25a478 *q, u32 flags, s32 *out, f
         if (fp) *fp = 0;
         return 0xB;
     }
-    if (p->u.s.f1C == 5627.9248f) {
-        V_25a478 *pv = &p->u.pos;
-        fast_vec_scale(pv, pv, D_001CC0C8[idx][p->state]);
-        kind = p->kind;
-        p->u.s.f1C = 5627.9248f;
+    if (hit_record->u.s.f1C == 5627.9248f) {
+        V_25a478 *pv = &hit_record->u.pos;
+        fast_vec_scale(pv, pv, D_001CC0C8[idx][hit_record->state]);
+        kind = hit_record->kind;
+        hit_record->u.s.f1C = 5627.9248f;
         if (kind == 0x47) {
             v.f[0] = fast_cos(fast_arc_tan(obj->x - hero.motion.pos.f[0], obj->y - hero.motion.pos.f[1]));
             v.f[1] = fast_sin(fast_arc_tan(obj->x - hero.motion.pos.f[0], obj->y - hero.motion.pos.f[1]));
             v.f[2] = 1.0f;
             fast_vec_normalize(&v, &v, fast_vec_length(pv) * 0.7f);
             fast_vec_scale(pv, pv, 0.3f);
-            add_vector_xyz(&t, pv, &v);
-            pv->q = t.q;
+            add_vector_xyz(&combined_hit_vector, pv, &v);
+            pv->q = combined_hit_vector.q;
             set_vector_length_xy(pv, pv, 1.0f);
         }
     } else {
-        if (!p->tgt) { p->state = 8; kind = 0x47; }
-        else { kind = p->tgt->hA6; p->state = 8; }
+        if (!hit_record->tgt) { hit_record->state = 8; kind = 0x47; }
+        else { kind = hit_record->tgt->hA6; hit_record->state = 8; }
     }
-    switch (p->state) {
+    switch (hit_record->state) {
     case KIND_GATED_HIT_STATE:
-        if (p->kind == 1 || p->kind == 2) { *out = 2; r = 0; break; }
+        if (hit_record->kind == 1 || hit_record->kind == 2) { *out = 2; r = 0; break; }
         goto dflt;
     case SUBSTATE_GATED_DAMAGE_PRESERVING_HIT_STATE:
-        if (p->sub < 2) { *out = 2; r = 0xB; break; }
-        if (p->sub == 2) { *out = 2; r = 5; break; }
+        if (hit_record->sub < 2) { *out = 2; r = 0xB; break; }
+        if (hit_record->sub == 2) { *out = 2; r = 5; break; }
         *out = 2; r = 9;
         break;
     case SUBSTATE_GATED_HIT_STATE:
-        if (p->sub < 2) { *out = 2; r = 8; break; }
+        if (hit_record->sub < 2) { *out = 2; r = 8; break; }
         *out = 2; r = 0xD;
         break;
     case COOLDOWN_RESETTING_HIT_STATE:
-        if (p->sub < 2) { *out = 2; r = 0xA; break; }
-        if (p->sub < 3) { *out = 2; r = 0xF; break; }
+        if (hit_record->sub < 2) { *out = 2; r = 0xA; break; }
+        if (hit_record->sub < 3) { *out = 2; r = 0xF; break; }
         *out = 2; r = 0x10; q->h14 = -1; q->h1C = 0;
         break;
     case FIXED_RESPONSE_HIT_STATE:
         *out = 2; r = 0xE;
         break;
     case SUBSTATE_GATED_AUXILIARY_FLAG_HIT_STATE:
-        if (p->sub < 2) { *out = 3; r = 4; break; }
+        if (hit_record->sub < 2) { *out = 3; r = 4; break; }
         *out = 4; r = 7;
         break;
     case SUBSTATE_GATED_COOLDOWN_DAMAGE_CLEARING_HIT_STATE:
-        if (p->sub < 2) { *out = 2; r = 0xC; break; }
+        if (hit_record->sub < 2) { *out = 2; r = 0xC; break; }
         *out = 2; r = 0x11;
         break;
     default:
@@ -183,20 +183,20 @@ s32 fun_00213928(O_25a478 *obj, P_25a478 *p, Q_25a478 *q, u32 flags, s32 *out, f
             if (!(flags & 4)) res = 0xB;
             if (!(flags & 8)) *out = 1;
         z:
-            p->f2C = 0;
+            hit_record->f2C = 0;
             break;
         case DAMAGE_PRESERVING_COOLDOWN_RESPONSE:
             res = 0xC;
             break;
         default:
-            p->f2C = 0;
+            hit_record->f2C = 0;
             res = 0xD;
             break;
         }
     }
     q->h14 = kind;
     q->h16 = kind;
-    if (fp) *fp = p->f2C;
+    if (fp) *fp = hit_record->f2C;
     if (r == 4) {
         o = ReadStateField(obj);
         if (o) o->b2E = 1;
