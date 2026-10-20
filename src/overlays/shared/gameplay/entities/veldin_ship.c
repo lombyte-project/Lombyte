@@ -2816,12 +2816,12 @@ void FUN_L00_002d5988(Obj_2d5988 *moby, Path_2d5988 *path, s32 arrival_state) {
         xa = st->v60 * 0.34906584f * FUN_001f9dc8_2d5988(r) / (D_0015ED6C_2d5988 * 16.0f);
         xb = st->v60 * -0.34906584f * FUN_001f9de0_2d5988(r) / (D_0015ED6C_2d5988 * 16.0f);
         {
-            f32 q44, k70;
-            q44 = turn_f(&st->v68, moby->f44, xa, D_0015ED70_2d5988 * 0.52359879f,
+            f32 updated_rotation_y, k70;
+            updated_rotation_y = turn_f(&st->v68, moby->f44, xa, D_0015ED70_2d5988 * 0.52359879f,
                                           D_0015ED70_2d5988 * 1.04719758f,
                                           D_0015ED6C_2d5988 * 0.785398185f);
             k70 = D_0015ED70_2d5988;
-            moby->f44 = q44;
+            moby->f44 = updated_rotation_y;
             moby->f40 = turn_f(&st->v64, moby->f40, xb, k70 * 1.04719758f,
                                              k70 * 2.09439516f, D_0015ED6C_2d5988 * 1.57079637f);
         }
