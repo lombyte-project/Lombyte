@@ -95,7 +95,7 @@ extern _Bigint *_Balloc(struct _reent *, s32);
 extern s32 Dcmp(_Bigint *, _Bigint *);
 
 _Bigint *__mdiff(struct _reent *ptr, _Bigint *a, _Bigint *b) {
-    _Bigint *c;
+    _Bigint *difference;
     s32 i, wa, wb;
     __Long borrow, y;
     __ULong *xa, *xae, *xb, *xbe, *xc;
@@ -103,28 +103,28 @@ _Bigint *__mdiff(struct _reent *ptr, _Bigint *a, _Bigint *b) {
 
     i = Dcmp(a, b);
     if (!i) {
-        c = _Balloc(ptr, 0);
-        c->_wds = 1;
-        c->_x[0] = 0;
-        return c;
+        difference = _Balloc(ptr, 0);
+        difference->_wds = 1;
+        difference->_x[0] = 0;
+        return difference;
     }
     if (i < 0) {
-        c = a;
+        difference = a;
         a = b;
-        b = c;
+        b = difference;
         i = 1;
     } else {
         i = 0;
     }
-    c = _Balloc(ptr, a->_k);
-    c->_sign = i;
+    difference = _Balloc(ptr, a->_k);
+    difference->_sign = i;
     wa = a->_wds;
     xa = a->_x;
     xae = xa + wa;
     wb = b->_wds;
     xb = b->_x;
     xbe = xb + wb;
-    xc = c->_x;
+    xc = difference->_x;
     borrow = 0;
     do {
         y = (*xa & 0xffff) - (*xb & 0xffff) + borrow;
@@ -146,6 +146,6 @@ _Bigint *__mdiff(struct _reent *ptr, _Bigint *a, _Bigint *b) {
     }
     while (!*--xc)
         wa--;
-    c->_wds = wa;
-    return c;
+    difference->_wds = wa;
+    return difference;
 }
