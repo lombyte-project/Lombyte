@@ -2219,62 +2219,62 @@ extern int FUN_L00_0025df68(void *, void *, float *, int *, float *, int, float,
 extern int FUN_L09_00294ae0(void *, void *, void *, int, int, float);
 void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 
-void FUN_L13_0030bb70(struct Moby *m) {
-    int *d = (int *)m->pvars;
+void FUN_L13_0030bb70(struct Moby *moby) {
+    int *moby_vars = (int *)moby->pvars;
     char *path;
     char *pth;
-    char *o;
+    char *target_moby;
     float v[4];
     int idx;
     float t;
     int i;
-    if (m->state == 0) {
-        m->update_dist = 0xFF;
-        if (d[1] != -1) {
-            path = D_L13_001B07B0[d[1]];
+    if (moby->state == 0) {
+        moby->update_dist = 0xFF;
+        if (moby_vars[1] != -1) {
+            path = D_L13_001B07B0[moby_vars[1]];
             for (i = 0; i < *(int *)path; i++) {
                 *(float *)(path + (i << 4) + 0x1C) = FUN_001f9b48(
                     path + (i * 16 + 0x10), path + ((i + 1) % *(int *)path * 16 + 0x10));
             }
         }
-        d[2] = 0;
-        d[3] = 0;
-        m->state = 1;
-        d[4] = 0;
+        moby_vars[2] = 0;
+        moby_vars[3] = 0;
+        moby->state = 1;
+        moby_vars[4] = 0;
     }
-    if (d[0] == -1)
+    if (moby_vars[0] == -1)
         return;
-    o = (char *)(D_L13_0015FFD8_m + (d[0] << 8));
-    if (o == 0 || ((unsigned char *)o)[0x20] == 0xFE || ((unsigned char *)o)[0x20] == 0xFD) {
-        mark_moby_for_removal(m);
+    target_moby = (char *)(D_L13_0015FFD8_m + (moby_vars[0] << 8));
+    if (target_moby == 0 || ((unsigned char *)target_moby)[0x20] == 0xFE || ((unsigned char *)target_moby)[0x20] == 0xFD) {
+        mark_moby_for_removal(moby);
         return;
     }
-    if (((unsigned char *)o)[0x20] >= 7) {
-        d[4]++;
-        if (d[1] == -1)
+    if (((unsigned char *)target_moby)[0x20] >= 7) {
+        moby_vars[4]++;
+        if (moby_vars[1] == -1)
             return;
-        pth = D_L13_001B07B0[d[1]];
-        if (m->state == 1) {
-            FUN_L00_0025df68(pth, o + 0x10, v, &idx, &t, 0, 100.0f, 1.0f, 0.0f);
-            if (idx > d[2] || t > ((float *)d)[3] || d[4] < 0x1E) {
-                d[2] = idx;
-                ((float *)d)[3] = t;
-                qcopy(&m->pos, v);
+        pth = D_L13_001B07B0[moby_vars[1]];
+        if (moby->state == 1) {
+            FUN_L00_0025df68(pth, target_moby + 0x10, v, &idx, &t, 0, 100.0f, 1.0f, 0.0f);
+            if (idx > moby_vars[2] || t > ((float *)moby_vars)[3] || moby_vars[4] < 0x1E) {
+                moby_vars[2] = idx;
+                ((float *)moby_vars)[3] = t;
+                qcopy(&moby->pos, v);
             } else {
-                m->state = 2;
+                moby->state = 2;
             }
         }
-        if (m->state == 2) {
-            if (d[2] < *(int *)pth - 1) {
-                int k = FUN_L09_00294ae0(m, pth, &m->pos, d[2], 1, frame_scale * 0.25f);
-                d[2] = k;
-                ((float *)d)[3] = FUN_001f9b48(&m->pos, pth + (k * 16 + 0x10));
+        if (moby->state == 2) {
+            if (moby_vars[2] < *(int *)pth - 1) {
+                int k = FUN_L09_00294ae0(moby, pth, &moby->pos, moby_vars[2], 1, frame_scale * 0.25f);
+                moby_vars[2] = k;
+                ((float *)moby_vars)[3] = FUN_001f9b48(&moby->pos, pth + (k * 16 + 0x10));
             } else {
-                m->state = 3;
+                moby->state = 3;
             }
         }
     } else {
-        qcopy(&m->pos, o + 0x10);
+        qcopy(&moby->pos, target_moby + 0x10);
     }
 }
 #include "sda.h"
