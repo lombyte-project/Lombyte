@@ -2325,8 +2325,8 @@ void FUN_L08_002dc9a8(struct Moby *moby) {
         DETONATION_EFFECT_TWO_COLOR_CHOICE = 2,
         DETONATION_EFFECT_SPHERICAL_VELOCITY = 3
     };
-    char *m = (char *)moby;
-    char *data = *(char **)(m + 0x78);
+    char *moby_bytes = (char *)moby;
+    char *data = *(char **)(moby_bytes + 0x78);
     float original[4];
     EffectRecord_2DC9A8 record;
     float *position;
@@ -2337,33 +2337,33 @@ void FUN_L08_002dc9a8(struct Moby *moby) {
     int i, axis;
     float angle;
 
-    if (FUN_L08_002dc9a8_collision(m + 0x10, 0.5f, 0, m, 0) != 0 &&
+    if (FUN_L08_002dc9a8_collision(moby_bytes + 0x10, 0.5f, 0, moby_bytes, 0) != 0 &&
         D_L08_00174658_2DC9A8 != 0 &&
         (D_L08_00174658_2DC9A8 != *(int *)(data + 0x20) || *(int *)(data + 0x14) != 0)) {
-        m[0x20] = 99;
+        moby_bytes[0x20] = 99;
     }
-    switch ((unsigned char)m[0x20]) {
+    switch ((unsigned char)moby_bytes[0x20]) {
     case PROJECTILE_STATE_FLYING: {
-        position = (float *)(m + 0x10);
+        position = (float *)(moby_bytes + 0x10);
         qcopy(original, position);
         FUN_L08_002dc9a8_transform(position, position, data);
         *(float *)(data + 8) -= D_0015ED70 * 10.8f;
         qcopy(record.pos, position);
-        record.owner = m;
+        record.owner = moby_bytes;
         record.flags = 0x810000;
         record.state = 1;
         record.scale = 1.0f;
         qcopy(record.velocity, data);
-        if (FUN_L08_002dc9a8_trace(original, &record, 0, m, 0) != 0) {
+        if (FUN_L08_002dc9a8_trace(original, &record, 0, moby_bytes, 0) != 0) {
             if (*(int *)(data + 0x20) != 0 &&
                 D_L08_00174640.moby != *(int *)(data + 0x20)) {
-                m[0x20] = 99;
+                moby_bytes[0x20] = 99;
                 qcopy(position, D_L08_00174640.point.f);
                 FUN_L08_002dc9a8_add(data, data, &D_L08_00174640.normal_x);
                 FUN_L08_002dc9a8_scale(D_0015ED6C_lui + D_0015ED6C_lui, data, data);
             }
         } else {
-            if (FUN_L08_002dc9a8_test(data + 0x10) != 0) m[0x20] = 99;
+            if (FUN_L08_002dc9a8_test(data + 0x10) != 0) moby_bytes[0x20] = 99;
         }
     } break;
     case PROJECTILE_STATE_DETONATE: {
@@ -2372,13 +2372,13 @@ void FUN_L08_002dc9a8(struct Moby *moby) {
         record.pos[2] = D_0015ED6C_lui * 12.0f;
         record.pos[3] = 0.0f;
         *(EffectVectorCopy_2DC9A8 *)original = *(EffectVectorCopy_2DC9A8 *)record.pos;
-        record.owner = m;
+        record.owner = moby_bytes;
         record.flags = 0x810001;
         record.scale = 1.0f;
         FUN_L08_002dc9a8_setup(record.velocity);
         record.state = 0;
-        FUN_L08_002dc9a8_collision(m + 0x10, 1.0f, 9, m, record.velocity);
-        FUN_L08_002dc9a8_start(0, 0, m);
+        FUN_L08_002dc9a8_collision(moby_bytes + 0x10, 1.0f, 9, moby_bytes, record.velocity);
+        FUN_L08_002dc9a8_start(0, 0, moby_bytes);
         for (i = 0; i < 50; i++) {
             axis = i % 4;
             *(u128 *)velocity = 0;
@@ -2394,7 +2394,7 @@ void FUN_L08_002dc9a8(struct Moby *moby) {
             record.pos[0] = FUN_L08_002dc9a8_sin(angle) * radius;
             record.pos[1] = FUN_L08_002dc9a8_cos(angle) * radius;
             record.pos[2] = 0.0f;
-            FUN_L08_002dc9a8_transform(record.pos, record.pos, m + 0x10);
+            FUN_L08_002dc9a8_transform(record.pos, record.pos, moby_bytes + 0x10);
             frame_time = radius * D_0015ED6C_lui;
             radius *= 0.717f;
             record.pos[2] -= radius;
@@ -2435,7 +2435,7 @@ void FUN_L08_002dc9a8(struct Moby *moby) {
             case DETONATION_EFFECT_NO_EMISSION: break;
             }
         }
-        FUN_L08_002dc9a8_finish(m);
+        FUN_L08_002dc9a8_finish(moby_bytes);
     } break;
     }
 }
