@@ -359,8 +359,8 @@ void FUN_L16_002d6740(struct Moby *moby) {
 
 extern float D_L16_00161C74;
 
-void FUN_L16_002de3b8(float f) {
-    D_L16_00161C74 = f;
+void FUN_L16_002de3b8(float new_value) {
+    D_L16_00161C74 = new_value;
 }
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002E2248), where it is exact; names translated to the US level program. */
 
