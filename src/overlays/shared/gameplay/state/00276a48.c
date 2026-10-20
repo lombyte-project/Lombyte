@@ -90,7 +90,7 @@ extern f32 vec_distance_276fe8(OvlVec4 *, OvlVec4 *) __asm__("FUN_001f9b80");
 
 s32 follow_path(s32 *ids, s32 n, s32 path_index, f32 radius,
                        OvlVec4 *pos, OvlVec4 *target, OvlVec4 *out) __asm__("FUN_L01_00276fe8");
-s32 follow_path(s32 *ids, s32 n, s32 path_index, f32 radius,
+s32 follow_path(s32 *ids, s32 id_count, s32 path_index, f32 radius,
                        OvlVec4 *pos, OvlVec4 *target, OvlVec4 *out) {
     OvlVec4 side;
     OvlVec4 left;
@@ -105,7 +105,7 @@ s32 follow_path(s32 *ids, s32 n, s32 path_index, f32 radius,
     f32 x;
     s32 from_mask, to_mask;
 
-    for (j = 0; j < n; j++) {
+    for (j = 0; j < id_count; j++) {
         if (radius != 0.0f) {
             vec_sub_276a48(&side, pos, target);
             vec_normalize_276a48(&side, &side, radius);
@@ -127,8 +127,8 @@ s32 follow_path(s32 *ids, s32 n, s32 path_index, f32 radius,
     }
     if (hit) {
         path = D_L01_001B0930_276a48[path_index];
-        from_mask = FUN_L01_00276a48(ids, n, radius, path_index, pos);
-        to_mask = FUN_L01_00276a48(ids, n, radius, path_index, target);
+        from_mask = FUN_L01_00276a48(ids, id_count, radius, path_index, pos);
+        to_mask = FUN_L01_00276a48(ids, id_count, radius, path_index, target);
         mask = FUN_L01_00276c40(path_index, from_mask, to_mask);
         if (mask != 0) {
             nearest = 10000.0f;
