@@ -1069,7 +1069,7 @@ int FUN_L00_002e7a30(unsigned char *camera_moby) {
     V_2e7a30 ndir;
     V_2e7a30 step;
     V_2e7a30 save;
-    V_2e7a30 d;
+    V_2e7a30 position_delta;
     unsigned char *base;
     unsigned char *orbit;
     unsigned char *e;
@@ -1101,9 +1101,9 @@ int FUN_L00_002e7a30(unsigned char *camera_moby) {
                 if (FUN_L00_002e7618_2e7a30(camera_moby, pos, i, dist, spd)) {
                     found = 1;
                     if (g->vehicle_mode != 2 && absolute_float(D_0013CA40_2e7a30) > 0.05f) {
-                        subtract_vector_xyz(d, step, save);
-                        FUN_001f9bf8_2e7a30(d, d, 1.0f);
-                        if (absolute_float(FUN_001f9ab0_2e7a30(D_L00_00166E40_2e7a30, d)) <
+                        subtract_vector_xyz(position_delta, step, save);
+                        FUN_001f9bf8_2e7a30(position_delta, position_delta, 1.0f);
+                        if (absolute_float(FUN_001f9ab0_2e7a30(D_L00_00166E40_2e7a30, position_delta)) <
                             0.75f) {
                             float lim;
                             float cf;
@@ -1118,8 +1118,8 @@ int FUN_L00_002e7a30(unsigned char *camera_moby) {
                             }
                         }
                     }
-                    subtract_vector_xyz(d, pos, target + 0x50);
-                    FUN_001f9bf8_2e7a30(orbit, d, *(float *)(orbit + 0x2C) - *(float *)(e + 0x30));
+                    subtract_vector_xyz(position_delta, pos, target + 0x50);
+                    FUN_001f9bf8_2e7a30(orbit, position_delta, *(float *)(orbit + 0x2C) - *(float *)(e + 0x30));
                     FUN_001f9bf8_2e7a30(ndir, orbit, 1.0f);
                 }
             }
