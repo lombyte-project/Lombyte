@@ -1586,18 +1586,18 @@ extern void FUN_L00_002ebbd8_u(void *) __asm__("FUN_L00_002ebbd8");
 void refresh_point_light(s32 arg0) __asm__("FUN_00201f58");
 extern char D_L00_00166D80_c[] __asm__("D_L00_00166C80");
 
-void FUN_L00_002ec6c0(char *m) {
+void FUN_L00_002ec6c0(char *camera_object) {
     struct Hero *b = &hero;
-    char *p = *(char **)(m + 0x70) + 0xB8;
+    char *p = *(char **)(camera_object + 0x70) + 0xB8;
     int v = b->state.current;
-    char *q;
+    char *camera_position;
     int x, y;
     if (v == 0x2C) {
-        q = m + 0x30;
+        camera_position = camera_object + 0x30;
         x = *(int *)(p + 8);
         y = ((int)b->unk994);
     } else {
-        q = m + 0x30;
+        camera_position = camera_object + 0x30;
         if ((unsigned)(v - 0x24) >= 3)
             goto done;
         x = *(int *)(p + 8);
@@ -1606,17 +1606,17 @@ void FUN_L00_002ec6c0(char *m) {
     if (x != y) {
         char *g = D_L00_00166D80_c;
         char *r = *(char **)(g + 0x184);
-        qcopy(r + 0x30, q);
-        qcopy(r, m);
-        qcopy(r + 0x10, m + 0x10);
-        qcopy(r + 0x20, m + 0x20);
-        FUN_L00_002ebbd8_u(m);
+        qcopy(r + 0x30, camera_position);
+        qcopy(r, camera_object);
+        qcopy(r + 0x10, camera_object + 0x10);
+        qcopy(r + 0x20, camera_object + 0x20);
+        FUN_L00_002ebbd8_u(camera_object);
         *(int *)(g + 0x2F4) = scale_game_frames(0x2D);
     }
 done:
-    refresh_point_light((int)m);
-    FUN_L00_001ed6a8(q, 0.5f);
-    *(int *)(*(char **)(m + 0x70) + 0x80) = 0;
+    refresh_point_light((int)camera_object);
+    FUN_L00_001ed6a8(camera_position, 0.5f);
+    *(int *)(*(char **)(camera_object + 0x70) + 0x80) = 0;
 }
 #define NOT_SDA
 
