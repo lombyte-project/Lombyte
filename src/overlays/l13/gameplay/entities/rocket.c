@@ -1365,27 +1365,27 @@ extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8")
 extern void add_vector_xyz(void *, void *, void *);
 extern void normalize_vector_xyz(void *, void *, float);
 
-void FUN_L13_00309370(struct Moby *m) {
-    char *d = (char *)m->pvars;
+void FUN_L13_00309370(struct Moby *moby) {
+    char *moby_vars = (char *)moby->pvars;
     float v[4];
     int i;
-    probe_ground_height(&m->pos, 0, 0.5f);
-    normalize_vector_xyz(d + 0x200, D_L13_00174180, 1.0f);
-    moby_point_position(m, 0, d + 0x1F0);
+    probe_ground_height(&moby->pos, 0, 0.5f);
+    normalize_vector_xyz(moby_vars + 0x200, D_L13_00174180, 1.0f);
+    moby_point_position(moby, 0, moby_vars + 0x1F0);
     for (i = 0; i < 16; i++) {
         float a = (convert_integer_to_float(i) * 0.0625f - 0.5f) *
                   (D_L13_00161E80 * DEG_TO_RAD);
-        v[0] = fast_cos(fast_add_rotations(a, m->rot.z)) * 0.5f;
-        v[1] = fast_sin(fast_add_rotations(a, m->rot.z)) * 0.5f;
+        v[0] = fast_cos(fast_add_rotations(a, moby->rot.z)) * 0.5f;
+        v[1] = fast_sin(fast_add_rotations(a, moby->rot.z)) * 0.5f;
         v[2] = 0.0f;
-        add_vector_xyz(d + 0x210 + i * 16, d + 0x1F0, v);
+        add_vector_xyz(moby_vars + 0x210 + i * 16, moby_vars + 0x1F0, v);
         if (i == 0 || i == 15) {
-            *(int *)(d + 0x21C + i * 16) = 0;
+            *(int *)(moby_vars + 0x21C + i * 16) = 0;
         } else {
-            *(float *)(d + 0x21C + i * 16) = 1.0f;
+            *(float *)(moby_vars + 0x21C + i * 16) = 1.0f;
         }
     }
-    *(float *)(d + 0x1FC) = scale_game_frames(D_L13_00161E84);
+    *(float *)(moby_vars + 0x1FC) = scale_game_frames(D_L13_00161E84);
 }
 extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 extern int fast_dec_timer(int *) __asm__("FUN_001f9740");
