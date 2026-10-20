@@ -172,14 +172,14 @@ extern float D_L14_00161FC4 __attribute__((sda));
 extern float D_L14_00161FC8 __attribute__((sda));
 void FUN_L14_002fec28(char *moby) {
     char *data = *(char **)(moby + 0x78);
-    float tmp[4];
+    float position_offset[4];
     if (*(char **)(data + 0xF4) != 0) {
-        char *p;
-        fast_vec_normalize(tmp, moby + 0xC0, D_L14_00161FC4);
-        fast_vec_add(*(char **)(data + 0xF4) + 0x10, moby + 0x10, tmp);
-        fast_vec_normalize(tmp, moby + 0xE0, D_L14_00161FC8);
-        p = *(char **)(data + 0xF4) + 0x10;
-        fast_vec_add(p, p, tmp);
+        char *linked_position;
+        fast_vec_normalize(position_offset, moby + 0xC0, D_L14_00161FC4);
+        fast_vec_add(*(char **)(data + 0xF4) + 0x10, moby + 0x10, position_offset);
+        fast_vec_normalize(position_offset, moby + 0xE0, D_L14_00161FC8);
+        linked_position = *(char **)(data + 0xF4) + 0x10;
+        fast_vec_add(linked_position, linked_position, position_offset);
     }
 }
 /* Spawns moby class 0x3A5 at the given position, owned by owner, with three randomised angle values. */
