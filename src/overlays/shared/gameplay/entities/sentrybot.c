@@ -2007,13 +2007,13 @@ void FUN_L15_0029d6c0(M_29E8A0 *missile_moby) {
                     FUN_L00_00257b90(scale_game_frames(0x3C), scale_game_frames(0x78)), 1, -1, -1);
             }
             {
-                float r4[4];
+                float random_bias_direction[4];
                 {
-                    *(u128_29E8A0 *)r4 = 0;
-                    r4[0] = random_float_between(-1.0f, 1.0f);
-                    r4[1] = random_float_between(-1.0f, 1.0f);
-                    r4[2] = random_float_between(-1.0f, 1.0f);
-                    *(u128_29E8A0 *)burst_position_or_velocity = *(u128_29E8A0 *)r4;
+                    *(u128_29E8A0 *)random_bias_direction = 0;
+                    random_bias_direction[0] = random_float_between(-1.0f, 1.0f);
+                    random_bias_direction[1] = random_float_between(-1.0f, 1.0f);
+                    random_bias_direction[2] = random_float_between(-1.0f, 1.0f);
+                    *(u128_29E8A0 *)burst_position_or_velocity = *(u128_29E8A0 *)random_bias_direction;
                 }
             }
             subtract_vector_xyz_c2(effect_bias_velocity, D_L15_001673C0, missile_moby->pos);
@@ -2056,12 +2056,12 @@ void FUN_L15_0029d6c0(M_29E8A0 *missile_moby) {
                 Cols_29E8A0 c2 = D_L15_001E2678;
                 float dir[4];
                 {
-                    float r5[4];
-                    *(u128_29E8A0 *)r5 = 0;
-                    r5[0] = random_float_between(-1.0f, 1.0f);
-                    r5[1] = random_float_between(-1.0f, 1.0f);
-                    r5[2] = random_float_between(-1.0f, 1.0f);
-                    *(u128_29E8A0 *)dir = *(u128_29E8A0 *)r5;
+                    float random_burst_direction[4];
+                    *(u128_29E8A0 *)random_burst_direction = 0;
+                    random_burst_direction[0] = random_float_between(-1.0f, 1.0f);
+                    random_burst_direction[1] = random_float_between(-1.0f, 1.0f);
+                    random_burst_direction[2] = random_float_between(-1.0f, 1.0f);
+                    *(u128_29E8A0 *)dir = *(u128_29E8A0 *)random_burst_direction;
                 }
                 fast_vec_normalize(dir, dir, random_float_between(0.0f, 3.0f) * D_0015ED6C);
                 {
