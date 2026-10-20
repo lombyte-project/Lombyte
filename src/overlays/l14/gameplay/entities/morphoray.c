@@ -960,109 +960,109 @@ extern char D_0013E550_6ee0[] __asm__("D_0013E550");
 extern f32 frame_time_macro __asm__("D_0015ED6C") __attribute__((section(".sdata")));
 /* Ported from rac1-decomp src/overlays/l14_oltanis/vendor_002FF358.c (func_L14_00308368) */
 void FUN_L14_00306ee0(struct Moby *m);
-void FUN_L14_00306ee0(struct Moby *m) {
+void FUN_L14_00306ee0(struct Moby *flying_car_moby) {
     enum {
         FLYING_CAR_INITIALIZE = 0,
         FLYING_CAR_WAIT_FOR_TRIGGER = 1,
         FLYING_CAR_FOLLOW_PATH = 2,
         FLYING_CAR_WAIT_FOR_PATH_RESET = 3
     };
-    Data_6ee0 *d = (Data_6ee0 *)m->pvars;
+    Data_6ee0 *flying_car_data = (Data_6ee0 *)flying_car_moby->pvars;
     Vec4f vec __attribute__((aligned(16)));
     char *hit;
 
-    hit = FUN_L00_0025a420_6ee0(m, 0x800000, 0);
-    m->hit_slot = 0xFF;
-    if (hit && m->state != 3) {
-        m->state = 3;
-        FUN_L00_0025f090_6ee0(m, &m->pos, 5.0f, 13.0f, -1);
-        m->flags |= 0x41;
-        m->collision = 0;
-        if (d->part >= 0) {
-            struct Moby *o = (struct Moby *)(D_L14_0015FFD8_6ee0 + (d->part << 8));
+    hit = FUN_L00_0025a420_6ee0(flying_car_moby, 0x800000, 0);
+    flying_car_moby->hit_slot = 0xFF;
+    if (hit && flying_car_moby->state != 3) {
+        flying_car_moby->state = 3;
+        FUN_L00_0025f090_6ee0(flying_car_moby, &flying_car_moby->pos, 5.0f, 13.0f, -1);
+        flying_car_moby->flags |= 0x41;
+        flying_car_moby->collision = 0;
+        if (flying_car_data->part >= 0) {
+            struct Moby *o = (struct Moby *)(D_L14_0015FFD8_6ee0 + (flying_car_data->part << 8));
             o->pos.x = o->pos.y = o->pos.z = 5.0f;
             o->flags |= 0x41;
         }
-        if (d->sound != -1) {
-            Snd_6ee0 *e = (Snd_6ee0 *)(D_0013E550_6ee0 + d->sound * 0x70);
-            if (e->f88 == m && e->b74 != 0) {
-                sound_release_6ee0(d->sound);
+        if (flying_car_data->sound != -1) {
+            Snd_6ee0 *voice_entry = (Snd_6ee0 *)(D_0013E550_6ee0 + flying_car_data->sound * 0x70);
+            if (voice_entry->f88 == flying_car_moby && voice_entry->b74 != 0) {
+                sound_release_6ee0(flying_car_data->sound);
             }
         }
-        d->sound = -1;
+        flying_car_data->sound = -1;
     }
-    switch (m->state) {
+    switch (flying_car_moby->state) {
     case FLYING_CAR_INITIALIZE:
-        if (d->path == -1) {
-            FUN_001e93b0_6ee0(D_L14_001FD118, (s16)m->save_id);
-            FUN_0020c828_6ee0(m);
+        if (flying_car_data->path == -1) {
+            FUN_001e93b0_6ee0(D_L14_001FD118, (s16)flying_car_moby->save_id);
+            FUN_0020c828_6ee0(flying_car_moby);
             return;
         }
-        if (*(int *)D_L14_001B0BB0_6ee0[d->path] == 0) {
-            FUN_001e93b0_6ee0(D_L14_001FD150, (s16)m->save_id);
-            FUN_0020c828_6ee0(m);
+        if (*(int *)D_L14_001B0BB0_6ee0[flying_car_data->path] == 0) {
+            FUN_001e93b0_6ee0(D_L14_001FD150, (s16)flying_car_moby->save_id);
+            FUN_0020c828_6ee0(flying_car_moby);
             return;
         }
-        FUN_L14_00307510_6ee0(m);
-        m->state = 2;
-        m->update_dist = 0xFF;
-        m->draw_dist = 0xFF;
-        d->sound = -1;
-        d->timer = scale_ticks_6ee0(D_L14_0016227C);
-        d->fB0 = 0;
-        d->fB4 = 0;
-        d->fBC = 0;
-        d->fC0 = 0;
-        d->fCC = 0;
-        if (d->part >= 0) {
-            struct Moby *o = (struct Moby *)(D_L14_0015FFD8_6ee0 + (d->part << 8));
-            o->draw_dist = (u16)m->draw_dist;
-            o->update_dist = m->update_dist;
+        FUN_L14_00307510_6ee0(flying_car_moby);
+        flying_car_moby->state = 2;
+        flying_car_moby->update_dist = 0xFF;
+        flying_car_moby->draw_dist = 0xFF;
+        flying_car_data->sound = -1;
+        flying_car_data->timer = scale_ticks_6ee0(D_L14_0016227C);
+        flying_car_data->fB0 = 0;
+        flying_car_data->fB4 = 0;
+        flying_car_data->fBC = 0;
+        flying_car_data->fC0 = 0;
+        flying_car_data->fCC = 0;
+        if (flying_car_data->part >= 0) {
+            struct Moby *o = (struct Moby *)(D_L14_0015FFD8_6ee0 + (flying_car_data->part << 8));
+            o->draw_dist = (u16)flying_car_moby->draw_dist;
+            o->update_dist = flying_car_moby->update_dist;
         }
-        fill_6ee0(&d->fx, 0, 0x40);
-        FUN_0020cb10_6ee0(m, 0, &d->fx);
-        FUN_L00_0025d458_6ee0(m, d->effect);
-        if (d->trigger >= 0) {
-            m->flags |= 0x41;
-            m->collision = 0;
-            if (d->part >= 0) {
-                struct Moby *o = (struct Moby *)(D_L14_0015FFD8_6ee0 + (d->part << 8));
+        fill_6ee0(&flying_car_data->fx, 0, 0x40);
+        FUN_0020cb10_6ee0(flying_car_moby, 0, &flying_car_data->fx);
+        FUN_L00_0025d458_6ee0(flying_car_moby, flying_car_data->effect);
+        if (flying_car_data->trigger >= 0) {
+            flying_car_moby->flags |= 0x41;
+            flying_car_moby->collision = 0;
+            if (flying_car_data->part >= 0) {
+                struct Moby *o = (struct Moby *)(D_L14_0015FFD8_6ee0 + (flying_car_data->part << 8));
                 o->flags |= 0x41;
             }
-            m->state = 1;
+            flying_car_moby->state = 1;
         }
         break;
     case FLYING_CAR_WAIT_FOR_TRIGGER:
-        if (inside_clip_6ee0(&hero.motion.pos, d->trigger)) {
-            m->flags &= 0xFFBE;
-            m->collision = m->pclass->collision;
-            if (d->part >= 0) {
-                struct Moby *o = (struct Moby *)(D_L14_0015FFD8_6ee0 + (d->part << 8));
+        if (inside_clip_6ee0(&hero.motion.pos, flying_car_data->trigger)) {
+            flying_car_moby->flags &= 0xFFBE;
+            flying_car_moby->collision = flying_car_moby->pclass->collision;
+            if (flying_car_data->part >= 0) {
+                struct Moby *o = (struct Moby *)(D_L14_0015FFD8_6ee0 + (flying_car_data->part << 8));
                 o->flags &= 0xFFBE;
             }
-            m->state = 2;
+            flying_car_moby->state = 2;
         }
         break;
     case FLYING_CAR_FOLLOW_PATH:
-        d->fx.b2 = 1;
-        d->fx.f20 = d->fx.f24 = d->fx.f28 = 0.0001f;
-        FUN_L00_00262b80_6ee0(m, &d->fBC, &d->fC0, D_L14_00162290, D_L14_00162294, D_L14_00162298);
-        if (FUN_L14_00307620_6ee0(m)) {
-            if (d->part >= 0) {
-                struct Moby *o = (struct Moby *)(D_L14_0015FFD8_6ee0 + (d->part << 8));
-                scale_vec_6ee0(&vec, &m->rot_row0, d->fA4);
-                add_vec_6ee0(&o->pos, &m->pos, &vec);
-                scale_vec_6ee0(&vec, &m->rot_row1, d->fA8);
+        flying_car_data->fx.b2 = 1;
+        flying_car_data->fx.f20 = flying_car_data->fx.f24 = flying_car_data->fx.f28 = 0.0001f;
+        FUN_L00_00262b80_6ee0(flying_car_moby, &flying_car_data->fBC, &flying_car_data->fC0, D_L14_00162290, D_L14_00162294, D_L14_00162298);
+        if (FUN_L14_00307620_6ee0(flying_car_moby)) {
+            if (flying_car_data->part >= 0) {
+                struct Moby *o = (struct Moby *)(D_L14_0015FFD8_6ee0 + (flying_car_data->part << 8));
+                scale_vec_6ee0(&vec, &flying_car_moby->rot_row0, flying_car_data->fA4);
+                add_vec_6ee0(&o->pos, &flying_car_moby->pos, &vec);
+                scale_vec_6ee0(&vec, &flying_car_moby->rot_row1, flying_car_data->fA8);
                 add_vec_6ee0(&o->pos, &o->pos, &vec);
-                scale_vec_6ee0(&vec, &m->rot_row2, d->fAC);
+                scale_vec_6ee0(&vec, &flying_car_moby->rot_row2, flying_car_data->fAC);
                 add_vec_6ee0(&o->pos, &o->pos, &vec);
                 if ((hero.state.control_mode == 13 && hero.unk964 == o)
                     || (hero.state.control_mode == 14 && hero.unk994 == o)) {
-                    FUN_L14_003135b8_6ee0(m);
-                    d->fCC = scale_ticks_6ee0(0x1E);
+                    FUN_L14_003135b8_6ee0(flying_car_moby);
+                    flying_car_data->fCC = scale_ticks_6ee0(0x1E);
                 } else {
-                    tick_6ee0(&d->fCC);
-                    if (d->fCC != 0) {
+                    tick_6ee0(&flying_car_data->fCC);
+                    if (flying_car_data->fCC != 0) {
                         ((Part_6ee0 *)o->pvars)->f20 = 2.0f;
                     } else {
                         Part_6ee0 *pd = (Part_6ee0 *)o->pvars;
@@ -1079,42 +1079,42 @@ void FUN_L14_00306ee0(struct Moby *m) {
         }
         break;
     case FLYING_CAR_WAIT_FOR_PATH_RESET:
-        if (tick_done_6ee0(&d->timer)) {
-            Path_6ee0 *path = D_L14_001B0BB0_6ee0[d->path];
-            FUN_L00_002502f0_6ee0(m, d->effect[4], d->effect[5], d->effect[6]);
-            m->flags &= 0xFFBE;
-            m->collision = m->pclass->collision;
-            d->timer = scale_ticks_6ee0(D_L14_0016227C);
-            m->state = 2;
-            d->f70 = 0;
-            d->f74 = 0;
-            qcopy(&m->pos, &path->a);
-            m->rot.z = atan2_6ee0(path->b.x - path->a.x, path->b.y - path->a.y);
-            d->f80 = d->f84 = d->f88 = 0.0f;
-            d->f90 = d->f94 = d->f98 = 0.0f;
-            if (d->part >= 0) {
-                struct Moby *o = (struct Moby *)(D_L14_0015FFD8_6ee0 + (d->part << 8));
+        if (tick_done_6ee0(&flying_car_data->timer)) {
+            Path_6ee0 *path = D_L14_001B0BB0_6ee0[flying_car_data->path];
+            FUN_L00_002502f0_6ee0(flying_car_moby, flying_car_data->effect[4], flying_car_data->effect[5], flying_car_data->effect[6]);
+            flying_car_moby->flags &= 0xFFBE;
+            flying_car_moby->collision = flying_car_moby->pclass->collision;
+            flying_car_data->timer = scale_ticks_6ee0(D_L14_0016227C);
+            flying_car_moby->state = 2;
+            flying_car_data->f70 = 0;
+            flying_car_data->f74 = 0;
+            qcopy(&flying_car_moby->pos, &path->a);
+            flying_car_moby->rot.z = atan2_6ee0(path->b.x - path->a.x, path->b.y - path->a.y);
+            flying_car_data->f80 = flying_car_data->f84 = flying_car_data->f88 = 0.0f;
+            flying_car_data->f90 = flying_car_data->f94 = flying_car_data->f98 = 0.0f;
+            if (flying_car_data->part >= 0) {
+                struct Moby *o = (struct Moby *)(D_L14_0015FFD8_6ee0 + (flying_car_data->part << 8));
                 o->flags &= 0xFFBE;
-                scale_vec_6ee0(&vec, &m->rot_row0, d->fA4);
-                add_vec_6ee0(&o->pos, &m->pos, &vec);
-                scale_vec_6ee0(&vec, &m->rot_row1, d->fA8);
+                scale_vec_6ee0(&vec, &flying_car_moby->rot_row0, flying_car_data->fA4);
+                add_vec_6ee0(&o->pos, &flying_car_moby->pos, &vec);
+                scale_vec_6ee0(&vec, &flying_car_moby->rot_row1, flying_car_data->fA8);
                 add_vec_6ee0(&o->pos, &o->pos, &vec);
-                scale_vec_6ee0(&vec, &m->rot_row2, d->fAC);
+                scale_vec_6ee0(&vec, &flying_car_moby->rot_row2, flying_car_data->fAC);
                 add_vec_6ee0(&o->pos, &o->pos, &vec);
             }
-            if (d->trigger >= 0) {
-                m->flags |= 0x41;
-                m->state = 1;
-                m->collision = 0;
+            if (flying_car_data->trigger >= 0) {
+                flying_car_moby->flags |= 0x41;
+                flying_car_moby->state = 1;
+                flying_car_moby->collision = 0;
             }
         }
         break;
     }
-    if (m->state == 0 || m->state == 3 || m->state == 1) {
+    if (flying_car_moby->state == 0 || flying_car_moby->state == 3 || flying_car_moby->state == 1) {
         return;
     }
-    if (FUN_L00_0028d8c0_6ee0(m, d->sound) == 0) {
-        d->sound = play_sound_6ee0(0, 4, m);
+    if (FUN_L00_0028d8c0_6ee0(flying_car_moby, flying_car_data->sound) == 0) {
+        flying_car_data->sound = play_sound_6ee0(0, 4, flying_car_moby);
     }
 }
 /* Precomputes per-point segment values of a path and snaps the moby to its first point. */
