@@ -1298,6 +1298,7 @@ void FUN_L11_0030fe50(struct Moby *m, unsigned char *d, float *t) {
         HIT_REACTION_DEATH = 1,
         HIT_REACTION_DEATH_KNOCKBACK = 2,
         HIT_REACTION_KNOCKBACK = 3,
+        HIT_REACTION_KNOCKBACK_AND_CANCEL_PROJECTILE = 4,
         HIT_REACTION_NO_RESPONSE = 11
     };
     int out;
@@ -1314,7 +1315,7 @@ void FUN_L11_0030fe50(struct Moby *m, unsigned char *d, float *t) {
             break;
         case HIT_REACTION_NONE:
         case HIT_REACTION_KNOCKBACK:
-        case 4:
+        case HIT_REACTION_KNOCKBACK_AND_CANCEL_PROJECTILE:
         case HIT_REACTION_NO_RESPONSE:
             break;
         }
