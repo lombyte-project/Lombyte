@@ -1023,7 +1023,7 @@ void FUN_L06_0022e020(void) {
     s32 sub = hero.state.step;
     s32 anim = moby->b53;
     f32 speed;
-    Vec4 v0;
+    Vec4 vector_or_hit_descriptor_scratch;
     Vec4 v10;
     Vec4 vector_or_descriptor_scratch;
     Vec4 position_or_delta_scratch;
@@ -1051,9 +1051,9 @@ void FUN_L06_0022e020(void) {
         FUN_L00_002118c8_c(1.0f, 0);
         if (hero.state.current == HERO_STATE_LOOK || hero.state.current == 0x1E) {
             if (hero.unk20A5 != 0) {
-                v0.q = 0;
-                v0.f[0] = 1.0f;
-                transform_vector_by_basis(&hero.motion.unk170, &v0, &D_L06_00167558[0x1F8]);
+                vector_or_hit_descriptor_scratch.q = 0;
+                vector_or_hit_descriptor_scratch.f[0] = 1.0f;
+                transform_vector_by_basis(&hero.motion.unk170, &vector_or_hit_descriptor_scratch, &D_L06_00167558[0x1F8]);
                 hero.motion.move_yaw = *(f32 *)D_L06_00167558;
                 turn_to(0, frame_scale_sq, frame_scale_sq * 0.0f, D_0015ED6C_c * 174.53293f);
                 if (D_L06_0015F688 > 0 && fast_dec_timer(&D_L06_0015F688) != 0) {
@@ -1247,8 +1247,8 @@ void FUN_L06_0022e020(void) {
     case 0x25: {
         f32 hit;
         f32 hit2;
-        qcopy(&v0, &((struct MobyView *)hero.unk964)->u10.v10);
-        hero.unk970 = FUN_001f9b48_c(&hero.motion.pos, &v0);
+        qcopy(&vector_or_hit_descriptor_scratch, &((struct MobyView *)hero.unk964)->u10.v10);
+        hero.unk970 = FUN_001f9b48_c(&hero.motion.pos, &vector_or_hit_descriptor_scratch);
         hero.unk96C = scale_game_frames(60);
         if (hero.unk960 > 0.0f) {
             hero.unk96C = hero.unk970 / hero.motion.speed_xy;
@@ -1274,7 +1274,7 @@ void FUN_L06_0022e020(void) {
             FUN_L00_0025bc00(&hero.motion.rot.f[1], 0, 0.0f, D_0015ED6C_c * 3.8397243f);
         } else {
             f32 an = fast_add_rotations(
-                -fast_arc_tan(vector_distance(&hero.motion.pos, &v0), v0.f[2] - hero.motion.pos.f[2]), 1.5707964f);
+                -fast_arc_tan(vector_distance(&hero.motion.pos, &vector_or_hit_descriptor_scratch), vector_or_hit_descriptor_scratch.f[2] - hero.motion.pos.f[2]), 1.5707964f);
             FUN_L00_0025bc00(&hero.motion.rot.f[1], 0, an, D_0015ED6C_c * 6.4577184f);
         }
         vector_or_descriptor_scratch.f[0] = fast_cos(fast_add_rotations(hero.motion.rot.f[2], -1.5707964f)) * -0.57f;
@@ -1294,12 +1294,12 @@ void FUN_L06_0022e020(void) {
         qcopy(&hero.motion.velocity, &hero.motion.displacement);
         fast_vec_scale(&hero.motion.velocity, &hero.motion.velocity, 0.9f);
         hero.motion.velocity.f[2] -= frame_time_sq * 15.0f;
-        qcopy(&v0, &((struct MobyView *)hero.unk964)->u10.v10);
-        hero.unk970 = FUN_001f9b48_c(&hero.motion.pos, &v0);
+        qcopy(&vector_or_hit_descriptor_scratch, &((struct MobyView *)hero.unk964)->u10.v10);
+        hero.unk970 = FUN_001f9b48_c(&hero.motion.pos, &vector_or_hit_descriptor_scratch);
         add_vector_xyz(&v10, &hero.motion.pos, &hero.motion.velocity);
-        FUN_001f9a28_c(&position_or_delta_scratch, &v10, &v0);
+        FUN_001f9a28_c(&position_or_delta_scratch, &v10, &vector_or_hit_descriptor_scratch);
         fast_vec_normalize(&position_or_delta_scratch, &position_or_delta_scratch, hero.unk97C);
-        add_vector_xyz(&vector_or_descriptor_scratch, &v0, &position_or_delta_scratch);
+        add_vector_xyz(&vector_or_descriptor_scratch, &vector_or_hit_descriptor_scratch, &position_or_delta_scratch);
         FUN_001f9a28_c(&hero.motion.velocity, &vector_or_descriptor_scratch, &hero.motion.pos);
         break;
     }
@@ -1320,18 +1320,18 @@ void FUN_L06_0022e020(void) {
         }
         hero.motion.move_yaw = hero.unk9AC;
         turn_to(0, frame_scale_sq * 0.02f, frame_scale_sq * 0.3f, D_0015ED6C_c * 4.712389f);
-        FUN_001f9a28_c(&v0, &((struct MobyView *)hero.unk994)->u10.v10, &hero.motion.pos);
-        fast_vec_normalize(&v0, &v0, 1.0f);
-        if (v0.f[2] < 0.23f) {
-            v0.f[2] = 0.23f;
+        FUN_001f9a28_c(&vector_or_hit_descriptor_scratch, &((struct MobyView *)hero.unk994)->u10.v10, &hero.motion.pos);
+        fast_vec_normalize(&vector_or_hit_descriptor_scratch, &vector_or_hit_descriptor_scratch, 1.0f);
+        if (vector_or_hit_descriptor_scratch.f[2] < 0.23f) {
+            vector_or_hit_descriptor_scratch.f[2] = 0.23f;
         }
         clear_u64_value(&vector_or_descriptor_scratch);
         vector_or_descriptor_scratch.f[2] = hero.motion.rot.f[2];
         euler_rotation_matrix(matrix_or_vector_scratch, &vector_or_descriptor_scratch);
         transpose_rotation_matrix(inverse_yaw_matrix, matrix_or_vector_scratch);
-        transform_vector(&v0, &v0, inverse_yaw_matrix);
-        v10.f[0] = -fast_arc_tan(square_root(v0.f[0] * v0.f[0] + v0.f[2] * v0.f[2]), v0.f[1]);
-        v10.f[1] = fast_arc_tan(v0.f[2], v0.f[0]);
+        transform_vector(&vector_or_hit_descriptor_scratch, &vector_or_hit_descriptor_scratch, inverse_yaw_matrix);
+        v10.f[0] = -fast_arc_tan(square_root(vector_or_hit_descriptor_scratch.f[0] * vector_or_hit_descriptor_scratch.f[0] + vector_or_hit_descriptor_scratch.f[2] * vector_or_hit_descriptor_scratch.f[2]), vector_or_hit_descriptor_scratch.f[1]);
+        v10.f[1] = fast_arc_tan(vector_or_hit_descriptor_scratch.f[2], vector_or_hit_descriptor_scratch.f[0]);
         FUN_L00_0025bc98(&hero.motion.rot.f[1], v10.f[1], &hero.motion.unkA0.f[1], 0, frame_scale_sq * 0.04f, frame_scale_sq * 0.2f,
                          D_0015ED6C_c * 9.599311f);
         FUN_L00_0025bc98(&hero.motion.rot.f[0], v10.f[0], &hero.motion.unkA0.f[0], 0, frame_scale_sq * 0.04f, frame_scale_sq * 0.2f,
@@ -1468,13 +1468,13 @@ void FUN_L06_0022e020(void) {
             }
         }
         if (hero.unk4B8 != 0.0f && hero.air_frames.s != 0) {
-            qcopy(&v0, &hero.motion.pos);
-            v0.f[2] -= 0.5f;
+            qcopy(&vector_or_hit_descriptor_scratch, &hero.motion.pos);
+            vector_or_hit_descriptor_scratch.f[2] -= 0.5f;
             matrix_or_vector_scratch[0].f[0] = fast_cos(hero.motion.rot.f[2]);
             matrix_or_vector_scratch[0].f[1] = fast_sin(hero.motion.rot.f[2]);
             matrix_or_vector_scratch[0].f[2] = 0.0f;
             make_hit_descriptor(&v10, (struct MobyView *)hero.moby, 0x30000, 1.0f, &matrix_or_vector_scratch[0]);
-            collect_mobies_in_sphere(0.8f, &v0, 0x10, (struct MobyView *)hero.moby, &v10);
+            collect_mobies_in_sphere(0.8f, &vector_or_hit_descriptor_scratch, 0x10, (struct MobyView *)hero.moby, &v10);
         }
         if (hero.unk4B8 != 0.0f && hero.air_frames.s == 0) {
             if (hero.unk4C4 == 0) {
@@ -1522,8 +1522,8 @@ void FUN_L06_0022e020(void) {
         mx = frame_time_sq * 150.0f;
         t2 = scale_game_frames(14);
         if (hero.unkA9C == 0 && hero.anim_frame > 23.5f && hero.motion.displacement.f[2] < 0.0f && hero.air_frames.s != 0) {
-            qcopy(&v0, &hero.motion.pos);
-            FUN_L00_002336e8(&v0, &v0, -0.5f);
+            qcopy(&vector_or_hit_descriptor_scratch, &hero.motion.pos);
+            FUN_L00_002336e8(&vector_or_hit_descriptor_scratch, &vector_or_hit_descriptor_scratch, -0.5f);
             matrix_or_vector_scratch[0].f[0] = fast_cos(hero.motion.rot.f[2]) * 2.0f;
             matrix_or_vector_scratch[0].f[1] = fast_sin(hero.motion.rot.f[2]) * 2.0f;
             matrix_or_vector_scratch[0].f[2] = 0.0f;
@@ -1532,7 +1532,7 @@ void FUN_L06_0022e020(void) {
             ((u8 *)&vector_or_descriptor_scratch)[9] = 1;
             ((s16 *)&vector_or_descriptor_scratch)[5] = 0x47;
             ((u8 *)&vector_or_descriptor_scratch)[8] = 0;
-            collect_mobies_in_sphere(0.4f, &v0, 0x10, (struct MobyView *)hero.moby, &v10);
+            collect_mobies_in_sphere(0.4f, &vector_or_hit_descriptor_scratch, 0x10, (struct MobyView *)hero.moby, &v10);
         }
         FUN_L00_00211870(27.0f);
         if (hero.state_timer < t1) {
@@ -1750,9 +1750,9 @@ void FUN_L06_0022e020(void) {
                 position_or_delta_scratch.f[0] = fast_cos(hero.motion.rot.f[2]) * 2.0f;
                 position_or_delta_scratch.f[1] = fast_sin(hero.motion.rot.f[2]) * 2.0f;
                 position_or_delta_scratch.f[2] = 1.3f;
-                make_hit_descriptor(&v0, (struct MobyView *)hero.moby, 0x30000, 3.0f, &position_or_delta_scratch);
+                make_hit_descriptor(&vector_or_hit_descriptor_scratch, (struct MobyView *)hero.moby, 0x30000, 3.0f, &position_or_delta_scratch);
                 ((u8 *)&v10)[9] = 3;
-                v0.f[3] = 5627.925f;
+                vector_or_hit_descriptor_scratch.f[3] = 5627.925f;
                 ((u8 *)&v10)[8] = 0;
                 a = hero.motion.rot.f[2];
                 ((s16 *)&v10)[5] = o->hA6;
@@ -1760,19 +1760,19 @@ void FUN_L06_0022e020(void) {
                 matrix_or_vector_scratch[0].f[1] = fast_sin(a) * 0.8f;
                 matrix_or_vector_scratch[0].f[2] = 0.55f;
                 add_vector_xyz(&matrix_or_vector_scratch[0], &matrix_or_vector_scratch[0], &hero.motion.pos);
-                FUN_L00_00217368(o, collect_mobies_in_sphere(0.8f, &matrix_or_vector_scratch[0], 0, o, &v0));
+                FUN_L00_00217368(o, collect_mobies_in_sphere(0.8f, &matrix_or_vector_scratch[0], 0, o, &vector_or_hit_descriptor_scratch));
                 a = fast_add_rotations(hero.motion.rot.f[2], -0.87266463f);
                 matrix_or_vector_scratch[0].f[0] = fast_cos(a) * 0.8f;
                 matrix_or_vector_scratch[0].f[1] = fast_sin(a) * 0.8f;
                 matrix_or_vector_scratch[0].f[2] = 0.55f;
                 add_vector_xyz(&matrix_or_vector_scratch[0], &matrix_or_vector_scratch[0], &hero.motion.pos);
-                FUN_L00_00217368(o, collect_mobies_in_sphere(0.8f, &matrix_or_vector_scratch[0], 0, (struct MobyView *)hero.moby, &v0));
+                FUN_L00_00217368(o, collect_mobies_in_sphere(0.8f, &matrix_or_vector_scratch[0], 0, (struct MobyView *)hero.moby, &vector_or_hit_descriptor_scratch));
                 a = fast_add_rotations(hero.motion.rot.f[2], 0.87266463f);
                 matrix_or_vector_scratch[0].f[0] = fast_cos(a) * 0.8f;
                 matrix_or_vector_scratch[0].f[1] = fast_sin(a) * 0.8f;
                 matrix_or_vector_scratch[0].f[2] = 0.55f;
                 add_vector_xyz(&matrix_or_vector_scratch[0], &matrix_or_vector_scratch[0], &hero.motion.pos);
-                FUN_L00_00217368(o, collect_mobies_in_sphere(0.8f, &matrix_or_vector_scratch[0], 0, o, &v0));
+                FUN_L00_00217368(o, collect_mobies_in_sphere(0.8f, &matrix_or_vector_scratch[0], 0, o, &vector_or_hit_descriptor_scratch));
             }
         }
         if (scale_game_frames(10) < hero.state_timer) {
@@ -1820,8 +1820,8 @@ void FUN_L06_0022e020(void) {
         if (hero.unk930 > 0.0f) {
             Vec4 *move_impulse_ptr = &hero.move_impulse;
             FUN_L00_002132b8(0.7f, 0.0f);
-            v0.q = hero.move_impulse.q;
-            hero.target_speed += forward_component(&v0);
+            vector_or_hit_descriptor_scratch.q = hero.move_impulse.q;
+            hero.target_speed += forward_component(&vector_or_hit_descriptor_scratch);
             if (hero.target_speed < D_0015ED6C_c * 0.7f) {
                 hero.target_speed = D_0015ED6C_c * 0.7f;
             }
@@ -1909,7 +1909,7 @@ void FUN_L06_0022e020(void) {
         if (hero.state.current == HERO_STATE_GRIND || hero.state.current == 0x2B) {
             f32 ang;
             f32 rr;
-            qcopy(&v0, &hero.motion.pos);
+            qcopy(&vector_or_hit_descriptor_scratch, &hero.motion.pos);
             ang = fast_add_rotations(hero.unk57C, randf_sym(0.0f, 0.5235988f));
             rr = random_float_between(D_0015ED6C_c * 4.0f, D_0015ED6C_c * 7.0f);
             v10.f[0] = fast_cos(ang) * rr;
@@ -1917,7 +1917,7 @@ void FUN_L06_0022e020(void) {
             v10.f[2] = 0.0f;
             v10.f[2] = random_float_between(D_0015ED6C_c * 3.0f, D_0015ED6C_c * 5.0f);
             v10.f[3] = -(frame_time_sq * 30.0f);
-            FUN_L00_0026d598(&v0, &v10, 0);
+            FUN_L00_0026d598(&vector_or_hit_descriptor_scratch, &v10, 0);
         }
         t = hero.items[0].item_id;
         has = D_L06_0017A240_t[t].unk18 != 0;
@@ -1958,7 +1958,7 @@ void FUN_L06_0022e020(void) {
         if (hero.state.current == 0x42) {
             r = hero.unk5CC * (f32)hero.unk578;
         }
-        sample_path((void *)hero.unk560, &v0, &hero.unk564, &hero.unk568, r, hero.unk584);
+        sample_path((void *)hero.unk560, &vector_or_hit_descriptor_scratch, &hero.unk564, &hero.unk568, r, hero.unk584);
         if (hero.unk590 != 0) {
             sample_path((void *)hero.unk594, &v10, &hero.unk598, &hero.unk59C, r, hero.unk5A0);
         }
@@ -2030,7 +2030,7 @@ void FUN_L06_0022e020(void) {
             }
         }
         idx = FUN_L00_0025d7a0((void *)hero.unk560, hero.unk564, hero.unk578, hero.unk584);
-        FUN_001f9a28_c(&vector_or_descriptor_scratch, (Vec4 *)hero.unk560 + (idx + 1), &v0);
+        FUN_001f9a28_c(&vector_or_descriptor_scratch, (Vec4 *)hero.unk560 + (idx + 1), &vector_or_hit_descriptor_scratch);
         if (fast_vec_length(&vector_or_descriptor_scratch) < 0.001f) {
             if (hero.unk564 == idx) {
                 hero.unk570 = scale_game_frames(1);
@@ -2053,18 +2053,18 @@ void FUN_L06_0022e020(void) {
             }
             if (hero.unk590 != 0 && hero.unk5A4 <= scale_game_frames(48)) {
                 f32 u;
-                FUN_001f9a28_c(&vector_or_descriptor_scratch, &v0, &v10);
+                FUN_001f9a28_c(&vector_or_descriptor_scratch, &vector_or_hit_descriptor_scratch, &v10);
                 hero.unk5A4++;
                 fast_vec_scale(&vector_or_descriptor_scratch, &vector_or_descriptor_scratch, (f32)hero.unk5A4 / (f32)scale_game_frames(48));
                 u = (f32)(hero.unk5A4 - 1) / (f32)scale_game_frames(48);
-                FUN_001f9a28_c(&position_or_delta_scratch, &v0, &v10);
+                FUN_001f9a28_c(&position_or_delta_scratch, &vector_or_hit_descriptor_scratch, &v10);
                 fast_vec_scale(&position_or_delta_scratch, &position_or_delta_scratch, u);
                 hero.motion.pos.f[2] += vector_or_descriptor_scratch.f[2] - position_or_delta_scratch.f[2];
                 add_vector_xyz(&position_or_delta_scratch, &v10, &vector_or_descriptor_scratch);
                 FUN_001f9a28_c(&vector_or_descriptor_scratch, &position_or_delta_scratch, &hero.motion.pos);
                 hero.motion.velocity.f[0] = vector_or_descriptor_scratch.f[0];
                 hero.motion.velocity.f[1] = vector_or_descriptor_scratch.f[1];
-                FUN_001f9a28_c(&vector_or_descriptor_scratch, &v0, &hero.unk500);
+                FUN_001f9a28_c(&vector_or_descriptor_scratch, &vector_or_hit_descriptor_scratch, &hero.unk500);
                 hero.motion.pos.f[2] += vector_or_descriptor_scratch.f[2];
                 if (hero.motion.pos.f[2] < hero.unk500.f[2]) {
                     if (hero.unk5A4 <= scale_game_frames(48) && hero.motion.pos.f[2] < hero.unk500.f[2]) {
@@ -2072,7 +2072,7 @@ void FUN_L06_0022e020(void) {
                     }
                 }
             } else {
-                FUN_001f9a28_c(&vector_or_descriptor_scratch, &v0, &hero.unk500);
+                FUN_001f9a28_c(&vector_or_descriptor_scratch, &vector_or_hit_descriptor_scratch, &hero.unk500);
                 hero.motion.velocity.f[0] = vector_or_descriptor_scratch.f[0];
                 hero.motion.velocity.f[1] = vector_or_descriptor_scratch.f[1];
                 hero.motion.pos.f[2] += vector_or_descriptor_scratch.f[2];
@@ -2156,7 +2156,7 @@ void FUN_L06_0022e020(void) {
             if (hero.unk574 < 0.0f) {
                 hero.unk574 = 0.0f;
             }
-            FUN_001f9a28_c(&hero.motion.velocity, &v0, &hero.unk500);
+            FUN_001f9a28_c(&hero.motion.velocity, &vector_or_hit_descriptor_scratch, &hero.unk500);
             FUN_001f9a28_c(&vector_or_descriptor_scratch, &hero.unk500, &hero.motion.pos);
             {
                 f32 mx = D_0015ED6C_c * 7.0f;
@@ -2230,7 +2230,7 @@ void FUN_L06_0022e020(void) {
         if (hero.unk4E8 == 0) {
             break;
         }
-        qcopy(&v0, &hero.unk4D0);
+        qcopy(&vector_or_hit_descriptor_scratch, &hero.unk4D0);
         a = fast_add_rotations(hero.unk4E4, 3.1415927f);
         qcopy(&hero.motion.pos, &position_or_delta_scratch);
         FUN_L00_0020bed0();
@@ -2244,7 +2244,7 @@ void FUN_L06_0022e020(void) {
             break;
         }
         a = fast_add_rotations(fast_subtract_rotations(a, b) * 0.5f, a);
-        add_vector_xyz(&matrix_or_vector_scratch[1], &v0, &v10);
+        add_vector_xyz(&matrix_or_vector_scratch[1], &vector_or_hit_descriptor_scratch, &v10);
         fast_vec_scale(&matrix_or_vector_scratch[1], &matrix_or_vector_scratch[1], 0.5f);
         hero.motion.move_yaw = a;
         turn_to(0, frame_scale_sq * 0.04f, frame_scale_sq * 0.2f, D_0015ED6C_c * 6.2831855f);
@@ -2267,10 +2267,10 @@ void FUN_L06_0022e020(void) {
             if (hero.ground_distance > 4.0f) {
                 t = 0.43633232f;
             }
-            qcopy(&v0, &hero.motion.rot);
-            FUN_L00_0025bc98(&v0.f[1], t, &hero.motion.unkA0.f[1], 0, frame_scale_sq * 0.02f, frame_scale_sq * 0.3f,
+            qcopy(&vector_or_hit_descriptor_scratch, &hero.motion.rot);
+            FUN_L00_0025bc98(&vector_or_hit_descriptor_scratch.f[1], t, &hero.motion.unkA0.f[1], 0, frame_scale_sq * 0.02f, frame_scale_sq * 0.3f,
                              D_0015ED6C_c * 2.6179938f);
-            FUN_L00_0025bc98(&v0.f[0], 0.0f, &hero.motion.unkA0.f[0], 0, frame_scale_sq * 0.02f, frame_scale_sq * 0.3f,
+            FUN_L00_0025bc98(&vector_or_hit_descriptor_scratch.f[0], 0.0f, &hero.motion.unkA0.f[0], 0, frame_scale_sq * 0.02f, frame_scale_sq * 0.3f,
                              D_0015ED6C_c * 2.6179938f);
             FUN_L00_002091d8(hero.motion.unkA0.f[0], hero.motion.unkA0.f[1], 0.0f);
             if (hero.ground_distance > 1.0f) {
@@ -2453,12 +2453,12 @@ void FUN_L06_0022e020(void) {
                 FUN_L00_00233708(&hero.motion.velocity, &hero.motion.velocity, frame_time_sq * 53.0f * (f32)hero.state_timer);
             }
             if (hero.state_timer < scale_game_frames(10) && hero.unk229C > 0.2f) {
-                qcopy(&v0, &hero.motion.pos);
-                FUN_L00_00233810(&v0, &v0, 0.5f);
-                qcopy(&v10, &v0);
+                qcopy(&vector_or_hit_descriptor_scratch, &hero.motion.pos);
+                FUN_L00_00233810(&vector_or_hit_descriptor_scratch, &vector_or_hit_descriptor_scratch, 0.5f);
+                qcopy(&v10, &vector_or_hit_descriptor_scratch);
                 v10.f[0] += fast_cos(hero.motion.rot.f[2]) * 0.85f;
                 v10.f[1] += fast_sin(hero.motion.rot.f[2]) * 0.85f;
-                if (FUN_001efa68_c(&v0, &v10, 4, (struct MobyView *)hero.moby, 0) != 0) {
+                if (FUN_001efa68_c(&vector_or_hit_descriptor_scratch, &v10, 4, (struct MobyView *)hero.moby, 0) != 0) {
                     hero.unk4A4 = 1;
                 }
             }
@@ -2493,8 +2493,8 @@ void FUN_L06_0022e020(void) {
         }
         if (hero.state.current == HERO_STATE_PACK_LONG_JUMP && scale_game_frames(8) < hero.state_timer && hero.anim_frame < 28.0f) {
             s32 collected_moby_count;
-            FUN_L00_00233660(&v0, 0.8f, 0.0f, 0.3f);
-            collected_moby_count = collect_mobies_in_sphere(0.9f, &v0, 0, (struct MobyView *)hero.moby, NULL);
+            FUN_L00_00233660(&vector_or_hit_descriptor_scratch, 0.8f, 0.0f, 0.3f);
+            collected_moby_count = collect_mobies_in_sphere(0.9f, &vector_or_hit_descriptor_scratch, 0, (struct MobyView *)hero.moby, NULL);
             if (collected_moby_count != 0) {
                 s32 i;
                 fast_vec_scale(&v10, &hero.motion.displacement, 7.0f);
@@ -2533,12 +2533,12 @@ void FUN_L06_0022e020(void) {
     case 0x65: {
         f32 l;
         f32 k;
-        FUN_001f9a28_c(&v0, &hero.unk1640, &hero.motion.pos);
-        hero.motion.move_yaw = fast_arc_tan(v0.f[0], v0.f[1]);
-        l = vector_length_xy(&v0);
+        FUN_001f9a28_c(&vector_or_hit_descriptor_scratch, &hero.unk1640, &hero.motion.pos);
+        hero.motion.move_yaw = fast_arc_tan(vector_or_hit_descriptor_scratch.f[0], vector_or_hit_descriptor_scratch.f[1]);
+        l = vector_length_xy(&vector_or_hit_descriptor_scratch);
         if (l > 0.2f) {
             hero.unk229C = 1.0f;
-            hero.motion.move_yaw = fast_arc_tan(v0.f[0], v0.f[1]);
+            hero.motion.move_yaw = fast_arc_tan(vector_or_hit_descriptor_scratch.f[0], vector_or_hit_descriptor_scratch.f[1]);
             hero.target_speed = l;
             if (l < D_L06_0017C538_c.x0C) {
                 hero.target_speed = D_L06_0017C538_c.x08 * D_0015ED6C_c;
@@ -2585,8 +2585,8 @@ void FUN_L06_0022e020(void) {
         break;
     }
     case 0x66:
-        FUN_001f9a28_c(&v0, &hero.unk1640, &hero.motion.pos);
-        if (fast_vec_dot(&v0, &hero.motion.unk150) < 0.0f) {
+        FUN_001f9a28_c(&vector_or_hit_descriptor_scratch, &hero.unk1640, &hero.motion.pos);
+        if (fast_vec_dot(&vector_or_hit_descriptor_scratch, &hero.motion.unk150) < 0.0f) {
             clear_u64_value(&hero.motion.unk150);
         }
         clear_u64_value(&hero.motion.velocity);
@@ -2639,9 +2639,9 @@ void FUN_L06_0022e020(void) {
             s32 k = tb->kind == 1 ? 0 : 2;
             moby_point_position((struct MobyView *)hero.moby, k, &v10);
             moby_point_position((struct MobyView *)hero.moby, k | 1, &vector_or_descriptor_scratch);
-            add_vector_xyz(&v0, &v10, &vector_or_descriptor_scratch);
-            fast_vec_scale(&v0, &v0, 0.5f);
-            play_entity_sound((struct MobyView *)hero.moby, 0.25f, &v0, 0x10000, 1.0f, 1.0f, 0, 1, 0);
+            add_vector_xyz(&vector_or_hit_descriptor_scratch, &v10, &vector_or_descriptor_scratch);
+            fast_vec_scale(&vector_or_hit_descriptor_scratch, &vector_or_hit_descriptor_scratch, 0.5f);
+            play_entity_sound((struct MobyView *)hero.moby, 0.25f, &vector_or_hit_descriptor_scratch, 0x10000, 1.0f, 1.0f, 0, 1, 0);
         }
         approach_value(&hero.anim_speed, 1.0f, 0.2f);
         if (hero.unkA58 != 0 || (struct MobyView *)hero.unkA54 != NULL) {
@@ -2776,7 +2776,7 @@ void FUN_L06_0022e020(void) {
         if (hero.unk4E8 == 0) {
             break;
         }
-        qcopy(&v0, &hero.unk4D0);
+        qcopy(&vector_or_hit_descriptor_scratch, &hero.unk4D0);
         a = fast_add_rotations(hero.unk4E4, 3.1415927f);
         qcopy(&hero.motion.pos, &position_or_delta_scratch);
         FUN_L00_0020bed0();
@@ -2790,7 +2790,7 @@ void FUN_L06_0022e020(void) {
             break;
         }
         a = fast_add_rotations(fast_subtract_rotations(a, b) * 0.5f, a);
-        add_vector_xyz(&matrix_or_vector_scratch[1], &v0, &v10);
+        add_vector_xyz(&matrix_or_vector_scratch[1], &vector_or_hit_descriptor_scratch, &v10);
         fast_vec_scale(&matrix_or_vector_scratch[1], &matrix_or_vector_scratch[1], 0.5f);
         hero.motion.move_yaw = a;
         turn_to(0, frame_scale_sq * 0.04f, frame_scale_sq * 0.2f, D_0015ED6C_c * 6.2831855f);
