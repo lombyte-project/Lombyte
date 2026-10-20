@@ -1485,8 +1485,8 @@ void FUN_L14_002edc18(void) {
     Q_2EF078 layer_quads[2];
     V_2EF078 arc_to_world[4];
     V_2EF078 sz[2];
-    V_2EF078 p[2];
-    V_2EF078 m2[4];
+    V_2EF078 world_arc_points[2];
+    V_2EF078 quad_to_world[4];
     V_2EF078 r[3];
     int a;
     int i;
@@ -1541,17 +1541,17 @@ void FUN_L14_002edc18(void) {
     qcopy_nc(&layer_quads[1].v[0], &sz[1]);
     scale_vector_xyz(&layer_quads[1].v[1], &layer_quads[1].v[0], -1.0f);
     nd = &D_L14_001DFD80[1];
-    transform_vector(&p[0], nd, &arc_to_world[0]);
-    transform_vector(&p[1], nd + 1, &arc_to_world[0]);
-    qcopy(&m2[0], &arc_to_world[0]);
-    subtract_vector_xyz_c2(&m2[1], D_L14_001674C0, &p[0]);
-    normalize_vector_xyz(&m2[1], &m2[1], 1.0f);
-    cross_vectors_xyz(&m2[2], &m2[1], &m2[0]);
-    qcopy(&m2[3], &p[0]);
-    transform_vector(&layer_quads[0].v[0], &layer_quads[0].v[0], &m2[0]);
-    transform_vector(&layer_quads[0].v[1], &layer_quads[0].v[1], &m2[0]);
-    transform_vector(&layer_quads[1].v[0], &layer_quads[1].v[0], &m2[0]);
-    transform_vector(&layer_quads[1].v[1], &layer_quads[1].v[1], &m2[0]);
+    transform_vector(&world_arc_points[0], nd, &arc_to_world[0]);
+    transform_vector(&world_arc_points[1], nd + 1, &arc_to_world[0]);
+    qcopy(&quad_to_world[0], &arc_to_world[0]);
+    subtract_vector_xyz_c2(&quad_to_world[1], D_L14_001674C0, &world_arc_points[0]);
+    normalize_vector_xyz(&quad_to_world[1], &quad_to_world[1], 1.0f);
+    cross_vectors_xyz(&quad_to_world[2], &quad_to_world[1], &quad_to_world[0]);
+    qcopy(&quad_to_world[3], &world_arc_points[0]);
+    transform_vector(&layer_quads[0].v[0], &layer_quads[0].v[0], &quad_to_world[0]);
+    transform_vector(&layer_quads[0].v[1], &layer_quads[0].v[1], &quad_to_world[0]);
+    transform_vector(&layer_quads[1].v[0], &layer_quads[1].v[0], &quad_to_world[0]);
+    transform_vector(&layer_quads[1].v[1], &layer_quads[1].v[1], &quad_to_world[0]);
     for (i = 1; i < 0x28; i++) {
         int b;
         float *arc_endpoint = D_L14_00161CC0;
@@ -1560,19 +1560,19 @@ void FUN_L14_002edc18(void) {
         qcopy(&layer_quads[1].v[2], &sz[1]);
         scale_vector_xyz(&layer_quads[1].v[3], &layer_quads[1].v[2], -1.0f);
         if (i == 0x27) {
-            qcopy(&p[0], arc_endpoint);
+            qcopy(&world_arc_points[0], arc_endpoint);
         } else {
-            transform_vector(&p[0], &D_L14_001DFD80[i], &arc_to_world[0]);
+            transform_vector(&world_arc_points[0], &D_L14_001DFD80[i], &arc_to_world[0]);
         }
-        qcopy(&m2[0], &arc_to_world[0]);
-        subtract_vector_xyz_c2(&m2[1], D_L14_001674C0, &p[0]);
-        normalize_vector_xyz(&m2[1], &m2[1], 1.0f);
-        cross_vectors_xyz(&m2[2], &m2[1], &m2[0]);
-        qcopy(&m2[3], &p[0]);
-        transform_vector(&layer_quads[0].v[2], &layer_quads[0].v[2], &m2[0]);
-        transform_vector(&layer_quads[0].v[3], &layer_quads[0].v[3], &m2[0]);
-        transform_vector(&layer_quads[1].v[2], &layer_quads[1].v[2], &m2[0]);
-        transform_vector(&layer_quads[1].v[3], &layer_quads[1].v[3], &m2[0]);
+        qcopy(&quad_to_world[0], &arc_to_world[0]);
+        subtract_vector_xyz_c2(&quad_to_world[1], D_L14_001674C0, &world_arc_points[0]);
+        normalize_vector_xyz(&quad_to_world[1], &quad_to_world[1], 1.0f);
+        cross_vectors_xyz(&quad_to_world[2], &quad_to_world[1], &quad_to_world[0]);
+        qcopy(&quad_to_world[3], &world_arc_points[0]);
+        transform_vector(&layer_quads[0].v[2], &layer_quads[0].v[2], &quad_to_world[0]);
+        transform_vector(&layer_quads[0].v[3], &layer_quads[0].v[3], &quad_to_world[0]);
+        transform_vector(&layer_quads[1].v[2], &layer_quads[1].v[2], &quad_to_world[0]);
+        transform_vector(&layer_quads[1].v[3], &layer_quads[1].v[3], &quad_to_world[0]);
         if (i == 0x27) {
             b = 0;
         } else {
@@ -1593,17 +1593,17 @@ void FUN_L14_002edc18(void) {
         sz[0].z = D_L14_00161C84 + (D_L14_00161C80 - D_L14_00161C84) * cubic_hermite_scalar(-1.0f, 0.0f, 1.0f, 0.0f, convert_integer_to_float(i) / convert_integer_to_float(0x28));
         sz[1].z = sz[0].z * D_L14_00161C88;
     }
-    qcopy(&m2[0], &arc_to_world[0]);
-    qcopy(&m2[1], &arc_to_world[1]);
-    qcopy(&m2[2], &arc_to_world[2]);
+    qcopy(&quad_to_world[0], &arc_to_world[0]);
+    qcopy(&quad_to_world[1], &arc_to_world[1]);
+    qcopy(&quad_to_world[2], &arc_to_world[2]);
     for (j = 0; j < 3; j++) {
-        float t;
+        float branch_age_fraction;
         short *as = D_L14_001E0350;
         V_2EF078 *os = D_L14_001E0050;
         V_2EF078 *branch_offsets;
 
-        t = convert_integer_to_float(as[j * 16]) / convert_integer_to_float(scale_game_frames_alt(D_L14_00161C70_gp));
-        a = func_001FA898_r(t * 255.0f) - D_L14_00161CE0[0];
+        branch_age_fraction = convert_integer_to_float(as[j * 16]) / convert_integer_to_float(scale_game_frames_alt(D_L14_00161C70_gp));
+        a = func_001FA898_r(branch_age_fraction * 255.0f) - D_L14_00161CE0[0];
         if (a < 0) a = 0;
         if (a > 0xFF) a = 0xFF;
         c = D_L14_00161C78 | (a << 24);
@@ -1622,11 +1622,11 @@ void FUN_L14_002edc18(void) {
         r[0].x += branch_offsets->x;
         r[0].z += branch_offsets->z;
         transform_vector(&r[2], &r[0], &arc_to_world[0]);
-        qcopy(&m2[3], &r[1]);
-        transform_vector(&layer_quads[0].v[0], &layer_quads[0].v[0], &m2[0]);
-        transform_vector(&layer_quads[0].v[1], &layer_quads[0].v[1], &m2[0]);
-        transform_vector(&layer_quads[1].v[0], &layer_quads[1].v[0], &m2[0]);
-        transform_vector(&layer_quads[1].v[1], &layer_quads[1].v[1], &m2[0]);
+        qcopy(&quad_to_world[3], &r[1]);
+        transform_vector(&layer_quads[0].v[0], &layer_quads[0].v[0], &quad_to_world[0]);
+        transform_vector(&layer_quads[0].v[1], &layer_quads[0].v[1], &quad_to_world[0]);
+        transform_vector(&layer_quads[1].v[0], &layer_quads[1].v[0], &quad_to_world[0]);
+        transform_vector(&layer_quads[1].v[1], &layer_quads[1].v[1], &quad_to_world[0]);
         branch_offset_cursor = branch_offsets + 1;
         branch_age_cursor = &as[j * 16 + 1];
         for (i = 1; i < 16; i++) {
@@ -1638,13 +1638,13 @@ void FUN_L14_002edc18(void) {
             r[0].x += branch_offset_cursor->x;
             r[0].z += branch_offset_cursor->z;
             transform_vector(&r[2], &r[0], &arc_to_world[0]);
-            qcopy(&m2[3], &r[1]);
-            transform_vector(&layer_quads[0].v[2], &layer_quads[0].v[2], &m2[0]);
-            transform_vector(&layer_quads[0].v[3], &layer_quads[0].v[3], &m2[0]);
-            transform_vector(&layer_quads[1].v[2], &layer_quads[1].v[2], &m2[0]);
-            transform_vector(&layer_quads[1].v[3], &layer_quads[1].v[3], &m2[0]);
-            t = convert_integer_to_float(*branch_age_cursor) / convert_integer_to_float(scale_game_frames_alt(D_L14_00161C70_gp));
-            a = func_001FA898_r(t * 255.0f) - D_L14_00161CE0[0];
+            qcopy(&quad_to_world[3], &r[1]);
+            transform_vector(&layer_quads[0].v[2], &layer_quads[0].v[2], &quad_to_world[0]);
+            transform_vector(&layer_quads[0].v[3], &layer_quads[0].v[3], &quad_to_world[0]);
+            transform_vector(&layer_quads[1].v[2], &layer_quads[1].v[2], &quad_to_world[0]);
+            transform_vector(&layer_quads[1].v[3], &layer_quads[1].v[3], &quad_to_world[0]);
+            branch_age_fraction = convert_integer_to_float(*branch_age_cursor) / convert_integer_to_float(scale_game_frames_alt(D_L14_00161C70_gp));
+            a = func_001FA898_r(branch_age_fraction * 255.0f) - D_L14_00161CE0[0];
             if (a < 0) a = 0;
             if (a > 0xFF) a = 0xFF;
             c = D_L14_00161C78 | (a << 24);
