@@ -98,6 +98,7 @@ void level_draw_dialog_text(void) {
     enum {
         CHOICE_DIALOG_PAIRED_BUTTONS = 0,
         CHOICE_DIALOG_SHARED_PAIRED_BUTTONS = 1,
+        CHOICE_DIALOG_ALTERNATE_BODY_PAIRED_BUTTONS = 2,
         CHOICE_DIALOG_SINGLE_CENTERED_BUTTON = 3
     };
     enum {
@@ -319,7 +320,7 @@ void level_draw_dialog_text(void) {
             font_print_center(0x135, 0x118, button_color, get_help_message_text(0x524B), -1);
             id = 0x522A;
             break;
-        case 2:
+        case CHOICE_DIALOG_ALTERNATE_BODY_PAIRED_BUTTONS:
             font_print_center(0xCA, 0x118, button_color, get_help_message_text(0x524E), -1);
             font_print_center(0x135, 0x118, button_color, get_help_message_text(0x524B), -1);
             id = 0x522B;
