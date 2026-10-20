@@ -522,7 +522,8 @@ void FUN_L01_002370b8(void) {
         HERO_STATE_DOWNHILL_SLIDE = 0x58,
         HERO_STATE_MOVE_TO_TARGET_POSITION = 0x65,
         HERO_STATE_BRAKE_AT_TARGET_POSITION = 0x66,
-        HERO_STATE_CLEAR_MOVEMENT_VELOCITY = 0x67
+        HERO_STATE_CLEAR_MOVEMENT_VELOCITY = 0x67,
+        HERO_STATE_DECELERATE_SAVED_MOTION_AND_DESCEND = 0x6A
     };
     FVec4 vec[6];
     Moby *moby;
@@ -1050,7 +1051,7 @@ void FUN_L01_002370b8(void) {
         FUN_L01_00232978(0);
         FUN_L00_00216e48_cf();
         break;
-    case 0x6A:
+    case HERO_STATE_DECELERATE_SAVED_MOTION_AND_DESCEND:
     case 0x82: {
         float len;
 
