@@ -2705,9 +2705,9 @@ void jet_fighter_update(struct Moby *moby) {
     ShipVars_2838 *v;
     ShipHit_3290 *hit;
     W4_2838 dir;
-    char *e;
+    char *voice_entry;
     int idx;
-    int n;
+    int frames_since_help_timestamp;
     float k;
     float fov;
 
@@ -2791,8 +2791,8 @@ void jet_fighter_update(struct Moby *moby) {
                 if (item_available[7] != 0) {
                     try_set_help_message(7, 0x2B09);
                 } else {
-                    n = scale_game_frames(D_0015EEA4) - help_stats[0x3C].unk2 * 600;
-                    if (n > (int)((float)scale_game_frames(0x12) * 60.0f) || help_stats[0x3C].unk2 * 600 == 0) {
+                    frames_since_help_timestamp = scale_game_frames(D_0015EEA4) - help_stats[0x3C].unk2 * 600;
+                    if (frames_since_help_timestamp > (int)((float)scale_game_frames(0x12) * 60.0f) || help_stats[0x3C].unk2 * 600 == 0) {
                         help_request(0x2AFA, 0x3C);
                     } else if (scale_game_frames(D_0015EEA4) / 600 > help_stats[0x3C].unk2) {
                         help_stats[0x3C].unk2 = scale_game_frames(D_0015EEA4) / 600;
@@ -2901,16 +2901,16 @@ void jet_fighter_update(struct Moby *moby) {
             FUN_L00_00216f90(p + 0x30, p + 0x70, 0, 1);
             idx = v->voice;
             if (idx != -1) {
-                e = D_0013E550 + idx * 0x70;
-                if (*(struct Moby **)(e + 0x88) == moby && *(unsigned char *)(e + 0x74) != 0) {
+                voice_entry = D_0013E550 + idx * 0x70;
+                if (*(struct Moby **)(voice_entry + 0x88) == moby && *(unsigned char *)(voice_entry + 0x74) != 0) {
                     release_voice_3290(idx);
                 }
             }
             v->voice = -1;
             idx = v->voice2;
             if (idx != -1) {
-                e = D_0013E550 + idx * 0x70;
-                if (*(struct Moby **)(e + 0x88) == moby && *(unsigned char *)(e + 0x74) != 0) {
+                voice_entry = D_0013E550 + idx * 0x70;
+                if (*(struct Moby **)(voice_entry + 0x88) == moby && *(unsigned char *)(voice_entry + 0x74) != 0) {
                     release_voice_3290(idx);
                 }
             }
@@ -3004,8 +3004,8 @@ void jet_fighter_update(struct Moby *moby) {
         } else {
             idx = v->voice;
             if (idx != -1) {
-                e = D_0013E550 + idx * 0x70;
-                if (*(struct Moby **)(e + 0x88) == moby && *(unsigned char *)(e + 0x74) != 0) {
+                voice_entry = D_0013E550 + idx * 0x70;
+                if (*(struct Moby **)(voice_entry + 0x88) == moby && *(unsigned char *)(voice_entry + 0x74) != 0) {
                     release_voice_3290(idx);
                 }
             }
