@@ -1096,15 +1096,15 @@ void FUN_L06_002ea498(char *moby) {
     for (i = 19; i >= 0; i--) {
         float azimuth_angle = random_angle_radians();
         float elevation_angle = random_angle_radians();
-        int t, u;
+        int random_frame_count, u;
         build_spherical_offset(spherical_offset, frame_time * 1.8f, azimuth_angle, elevation_angle);
         spherical_offset[2] += frame_time * 0.9f;
         random_vector(b, 0.0f, 0.5f);
         fast_vec_add(b, b, moby + 0x10);
         b[2] += 0.5f;
-        t = scale_game_frames(random_int_between(0x14, 0x23));
+        random_frame_count = scale_game_frames(random_int_between(0x14, 0x23));
         u = random_int_between(0x28, 0x3C);
-        FUN_L00_00269958(b, spherical_offset, 0x7000A0FF, 0xFF, t, 0x1E, u, 1);
+        FUN_L00_00269958(b, spherical_offset, 0x7000A0FF, 0xFF, random_frame_count, 0x1E, u, 1);
     }
 }
 #include "rnc/gameplay/entities/moby.h"
