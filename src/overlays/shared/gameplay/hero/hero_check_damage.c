@@ -2910,17 +2910,17 @@ extern int FUN_L00_0020d498_u(int) __asm__("FUN_L00_0020d498");
 extern void turn_to(int, float, float, float) __asm__("FUN_L00_00211e30");
 
 void FUN_L00_00211e98(void) {
-    float a, b, c;
+    float a, b, time_scaled_turn_amount;
     if (FUN_L00_0020d498_u(0) == 16) {
         a = frame_scale_sq * 0.006f;
         b = frame_scale_sq * 0.07f;
-        c = frame_time * 13.962634086608887f;
+        time_scaled_turn_amount = frame_time * 13.962634086608887f;
     } else {
         a = frame_scale_sq * 0.002f;
         b = frame_scale_sq * 0.07f;
-        c = frame_time * 6.981317043304443f;
+        time_scaled_turn_amount = frame_time * 6.981317043304443f;
     }
-    turn_to(0, a, b, c);
+    turn_to(0, a, b, time_scaled_turn_amount);
 }
 extern float D_0015ED6C_211f38 __asm__("D_0015ED6C");
 extern int FUN_L00_0020d498_211f38(int) __asm__("FUN_L00_0020d498");
