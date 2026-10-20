@@ -2039,33 +2039,33 @@ void FUN_L00_00275aa0(char *m) {
 }
 extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 
-void FUN_L00_00275d68(unsigned char *m) {
-    float *v = (float *)(m + 0x20);
+void FUN_L00_00275d68(unsigned char *particle) {
+    float *v = (float *)(particle + 0x20);
     int c;
     float t;
     if (*(int *)(v + 7)) {
         v[0] += v[4];
         v[1] += v[5];
         v[2] += v[6];
-        fast_vec_add(m + 0x10, (char *)*(int *)(v + 7) + 0x10, v);
+        fast_vec_add(particle + 0x10, (char *)*(int *)(v + 7) + 0x10, v);
     } else {
-        ((float *)(m + 0x10))[0] += v[4];
-        ((float *)(m + 0x10))[1] += v[5];
-        ((float *)(m + 0x10))[2] += v[6];
+        ((float *)(particle + 0x10))[0] += v[4];
+        ((float *)(particle + 0x10))[1] += v[5];
+        ((float *)(particle + 0x10))[2] += v[6];
     }
-    if (fast_dec_timer_s16(m + 0xA)) {
-        free_effect_particle(m);
+    if (fast_dec_timer_s16(particle + 0xA)) {
+        free_effect_particle(particle);
         return;
     }
     if (*(int *)(v + 7)) {
-        c = *(int *)(m + 4) & 0xFFFFFF;
-        *(int *)(m + 4) =
-            FUN_001fa6e0(c, *(int *)(m + 4),
-                         convert_integer_to_float(*(short *)(m + 0xA) - 1) / convert_integer_to_float(*(short *)(m + 0xA)));
+        c = *(int *)(particle + 4) & 0xFFFFFF;
+        *(int *)(particle + 4) =
+            FUN_001fa6e0(c, *(int *)(particle + 4),
+                         convert_integer_to_float(*(short *)(particle + 0xA) - 1) / convert_integer_to_float(*(short *)(particle + 0xA)));
     } else {
-        *(int *)(m + 4) =
-            FUN_001fa6e0(0, *(int *)(m + 4),
-                         convert_integer_to_float(*(short *)(m + 0xA) - 1) / convert_integer_to_float(*(short *)(m + 0xA)));
+        *(int *)(particle + 4) =
+            FUN_001fa6e0(0, *(int *)(particle + 4),
+                         convert_integer_to_float(*(short *)(particle + 0xA) - 1) / convert_integer_to_float(*(short *)(particle + 0xA)));
     }
 }
 typedef struct {
