@@ -1996,14 +1996,14 @@ void FUN_L00_00208b60(void) {
 
 extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 
-f32 FUN_L00_00208f20(f32 a, f32 b, f32 c, f32 d) {
+f32 FUN_L00_00208f20(f32 target_anim_frame, f32 b, f32 frame_delta_scale, f32 d) {
     struct Hero *g = &hero;
     f32 thresh = g->anim_frame;
     f32 step;
     f32 negone = -1.0f;
 
-    if (thresh < a) {
-        step = a - thresh;
+    if (thresh < target_anim_frame) {
+        step = target_anim_frame - thresh;
     } else {
         s32 flag = g->unkA9C;
         f32 rate = 2.0f;
@@ -2018,7 +2018,7 @@ f32 FUN_L00_00208f20(f32 a, f32 b, f32 c, f32 d) {
             u8 *arr = *(u8 **)((u8 *)obj + 0x24);
             void *entry = *(void **)(arr + (idx << 2) + 0x48);
             s32 cnt = *(u8 *)((u8 *)entry + 0x10);
-            step = a + (rate * (f32)cnt - thresh);
+            step = target_anim_frame + (rate * (f32)cnt - thresh);
         }
     }
 
@@ -2032,7 +2032,7 @@ f32 FUN_L00_00208f20(f32 a, f32 b, f32 c, f32 d) {
         }
 
         {
-            f32 target = c * step;
+            f32 target = frame_delta_scale * step;
             f32 speed = b * rate2;
             f32 result = target / speed;
 
