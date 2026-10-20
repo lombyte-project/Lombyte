@@ -112,7 +112,7 @@ void FUN_L16_002097a0(void) {
     }
     {
         struct Hero *q = &hero;
-        struct Hero *h;
+        struct Hero *hero_ptr;
         if (q->unk12E3 != 0 && q->grounded_frames != 0) {
             int k = q->state.control_mode;
             if (k != 0x10 && k != 0x14 && k != 7) {
@@ -120,11 +120,11 @@ void FUN_L16_002097a0(void) {
                 return;
             }
         }
-        h = &hero;
-        if (h->selector_13 != 0 && h->state.current != 0x7F) {
-            if (absolute_float(h->water_surface_z - (h->motion.pos.f[2] + 0.25f)) < 1.0f) {
-                if (h->water_surface_z - h->motion.pos.f[2] > 0.0f) {
-                    if (h->motion.displacement.f[2] < 0.0f) {
+        hero_ptr = &hero;
+        if (hero_ptr->selector_13 != 0 && hero_ptr->state.current != 0x7F) {
+            if (absolute_float(hero_ptr->water_surface_z - (hero_ptr->motion.pos.f[2] + 0.25f)) < 1.0f) {
+                if (hero_ptr->water_surface_z - hero_ptr->motion.pos.f[2] > 0.0f) {
+                    if (hero_ptr->motion.displacement.f[2] < 0.0f) {
                         FUN_L00_0020b930();
                         hero_set_state(HERO_STATE_SINK, 1);
                     }
