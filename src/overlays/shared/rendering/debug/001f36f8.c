@@ -516,6 +516,7 @@ void FUN_L00_001f4598(void) {
         DEBUG_OPTION_ROW_SEGMENT_INDEX = 10
     };
     enum {
+        DEBUG_CONTROL_MODE_CLEAR_UPDATE_FLAGS = 1,
         DEBUG_CONTROL_MODE_CAPTURE_HERO_CAMERA_OFFSET = 2
     };
     DebugRowCounts row_counts;
@@ -596,7 +597,7 @@ void FUN_L00_001f4598(void) {
                 case 0:
                     g_debug_menu.update_flags = 15;
                     break;
-                case 1:
+                case DEBUG_CONTROL_MODE_CLEAR_UPDATE_FLAGS:
                     g_debug_menu.update_flags = 0;
                     break;
                 case DEBUG_CONTROL_MODE_CAPTURE_HERO_CAMERA_OFFSET:
