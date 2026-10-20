@@ -147,6 +147,7 @@ void FUN_L15_0021d040(void) {
         HERO_STATE_LEDGE_SHIMMY_YAW_MINUS_90 = 27,
         HERO_STATE_LEDGE_JUMP = 28,
         HERO_STATE_WAIT_FOR_ANIMATION_THEN_IDLE = 33,
+        HERO_STATE_WAIT_FOR_ITEM_RELEASE_THEN_IDLE = 48,
         HERO_STATE_APPROACH_TARGET_POSE = 101,
         HERO_STATE_TARGET_POSE_ANIMATION_WAIT = 102,
         HERO_STATE_AT_TARGET_POSE = 103,
@@ -670,7 +671,7 @@ void FUN_L15_0021d040(void) {
                     }
                     hero_set_state(HERO_STATE_IDLE, 1);
                     break;
-                case 48:
+                case HERO_STATE_WAIT_FOR_ITEM_RELEASE_THEN_IDLE:
                     if (controller_state.held & hero.items[0].button_mask) {
                         break;
                     }
