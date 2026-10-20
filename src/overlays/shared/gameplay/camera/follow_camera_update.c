@@ -809,12 +809,12 @@ extern char *FUN_L00_001eb1f8(int);
 void FUN_L00_002ea9d8(char *src);
 void FUN_L00_002ea9d8(char *src) {
     char *g = D_L00_00166E00;
-    char *p;
+    char *camera_record;
     if (*(short *)(g + 0x86) != 5)
-        p = FUN_L00_001eb1f8(5);
+        camera_record = FUN_L00_001eb1f8(5);
     else
-        p = g;
-    qcopy(*(char **)(p + 0x70) + 0x80, src);
+        camera_record = g;
+    qcopy(*(char **)(camera_record + 0x70) + 0x80, src);
 }
 typedef struct {
     f32 v[4];
