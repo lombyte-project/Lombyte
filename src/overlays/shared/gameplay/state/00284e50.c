@@ -21,11 +21,11 @@ extern void copy_memory_aligned(int, void *, unsigned short) __asm__("FUN_001f98
 
 extern s32 D_0014C190_257218[][64] __asm__("D_0014C190");
 void jet_reset_camera(OvlQuad *a, OvlQuad *b) __asm__("FUN_L00_00284e50");
-void jet_reset_camera(OvlQuad *a, OvlQuad *b) {
+void jet_reset_camera(OvlQuad *saved_position, OvlQuad *b) {
     unsigned char *src;
     int i;
-    char *s;
-    struct Hero *p;
+    char *saved_state;
+    struct Hero *hero_state;
     char *q;
     char *g;
     int lvl;
@@ -44,30 +44,30 @@ void jet_reset_camera(OvlQuad *a, OvlQuad *b) {
         D_0014C190_257218[lvl][i >> 5] |= 1 << (i & 0x1F);
         D_L00_001BA4D0[i >> 5] |= 1 << (i & 0x1F);
     }
-    s = D_L00_001BB230;
+    saved_state = D_L00_001BB230;
     *(int *)D_L00_001BB230 = 1;
-    qcopy(s + 0x10, a);
-    qcopy(s + 0x20, b);
-    p = &hero;
+    qcopy(saved_state + 0x10, saved_position);
+    qcopy(saved_state + 0x20, b);
+    hero_state = &hero;
     q = D_001516D0;
     g = D_0013E550;
     {
-        char *o = ((char *)p->moby);
-        *(int *)(s + 0x30) = *(int *)(o + 0x38);
-        *(int *)(s + 0x34) = *(int *)(o + 0x3C);
-        *(int *)(s + 0x38) = *(int *)(o + 0x80);
-        *(int *)(s + 0x44) = p->vehicle_mode;
-        *(char **)(s + 0x48) = o;
-        *(int *)(s + 0x4C) = p->unk22CC;
-        *(int *)(s + 0x3C) = *(int *)(g + 0x64);
-        *(char *)(s + 0x40) = *(unsigned char *)(g + 0x68);
-        *(char *)(s + 0x41) = *(unsigned char *)(g + 0x69);
-        *(char *)(s + 0x42) = *(unsigned char *)(g + 0x6A);
+        char *hero_moby = ((char *)hero_state->moby);
+        *(int *)(saved_state + 0x30) = *(int *)(hero_moby + 0x38);
+        *(int *)(saved_state + 0x34) = *(int *)(hero_moby + 0x3C);
+        *(int *)(saved_state + 0x38) = *(int *)(hero_moby + 0x80);
+        *(int *)(saved_state + 0x44) = hero_state->vehicle_mode;
+        *(char **)(saved_state + 0x48) = hero_moby;
+        *(int *)(saved_state + 0x4C) = hero_state->unk22CC;
+        *(int *)(saved_state + 0x3C) = *(int *)(g + 0x64);
+        *(char *)(saved_state + 0x40) = *(unsigned char *)(g + 0x68);
+        *(char *)(saved_state + 0x41) = *(unsigned char *)(g + 0x69);
+        *(char *)(saved_state + 0x42) = *(unsigned char *)(g + 0x6A);
         c = *(signed char *)(q + 0x22);
         if (c != -1) {
-            *(int *)(s + 0xC54) = c;
+            *(int *)(saved_state + 0xC54) = c;
         } else {
-            *(int *)(s + 0xC54) = *(short *)(q + 0x38);
+            *(int *)(saved_state + 0xC54) = *(short *)(q + 0x38);
         }
     }
 }
