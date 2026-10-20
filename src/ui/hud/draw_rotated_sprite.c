@@ -25,7 +25,7 @@ void draw_rotated_sprite(s32 w, s32 texture_height, s64 buf, f32 x, f32 y, f32 c
     struct Vec4 pos;
     struct Vec4 p0;
     struct Vec4 p1;
-    struct Vec4 p2;
+    struct Vec4 uv_origin_vertex;
     struct Vec4 p3;
     struct DmaTag *tag;
     u64 *packet_payload;
@@ -40,8 +40,8 @@ void draw_rotated_sprite(s32 w, s32 texture_height, s64 buf, f32 x, f32 y, f32 c
     subtract_vector_xyz(&p0, &p0, &off);
     add_vector_xyz(&p1, &pos, &sz);
     add_vector_xyz(&p1, &p1, &off);
-    subtract_vector_xyz(&p2, &pos, &sz);
-    subtract_vector_xyz(&p2, &p2, &off);
+    subtract_vector_xyz(&uv_origin_vertex, &pos, &sz);
+    subtract_vector_xyz(&uv_origin_vertex, &uv_origin_vertex, &off);
     subtract_vector_xyz(&p3, &pos, &sz);
     add_vector_xyz(&p3, &p3, &off);
     render_packet_cursor.tag->tag = 0x10000007;
@@ -63,7 +63,7 @@ void draw_rotated_sprite(s32 w, s32 texture_height, s64 buf, f32 x, f32 y, f32 c
     packet_payload[8] = (((s32)p1.x + screen_extent.left) - 8) | ((u64)(((s32)p1.y + screen_extent.top) - 8) << 16) |
            ((u64)hud_state.z << 32);
     packet_payload[9] = 0;
-    packet_payload[10] = (((s32)p2.x + screen_extent.left) - 8) | ((u64)(((s32)p2.y + screen_extent.top) - 8) << 16) |
+    packet_payload[10] = (((s32)uv_origin_vertex.x + screen_extent.left) - 8) | ((u64)(((s32)uv_origin_vertex.y + screen_extent.top) - 8) << 16) |
             ((u64)hud_state.z << 32);
     packet_payload[11] = texture_height << 20;
     packet_payload[12] = (((s32)p3.x + screen_extent.left) - 8) | ((u64)(((s32)p3.y + screen_extent.top) - 8) << 16) |
