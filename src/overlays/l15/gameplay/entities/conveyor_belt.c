@@ -1144,6 +1144,7 @@ void ultramech_scientist_update(struct Moby *moby) {
         ULTRAMECH_SCIENTIST_INITIALIZE = 0,
         ULTRAMECH_SCIENTIST_WAIT_FOR_DIALOGUE = 1,
         ULTRAMECH_SCIENTIST_RESUME_AFTER_DIALOGUE = 2,
+        ULTRAMECH_SCIENTIST_WAIT_FOR_PRE_SCENE_CONDITIONS = 3,
         ULTRAMECH_SCIENTIST_WAIT_FOR_PRE_SCENE_DELAY = 4,
         ULTRAMECH_SCIENTIST_START_FIRST_SCENE = 5,
         ULTRAMECH_SCIENTIST_WAIT_FOR_FIRST_SCENE = 6,
@@ -1281,7 +1282,7 @@ void ultramech_scientist_update(struct Moby *moby) {
             moby->state = 9;
         }
         break;
-    case 3:
+    case ULTRAMECH_SCIENTIST_WAIT_FOR_PRE_SCENE_CONDITIONS:
         {
             char *player = D_0013E533 + 0xE1D;
             if (*(unsigned char *)(player + 0x20A4) != 2) {
