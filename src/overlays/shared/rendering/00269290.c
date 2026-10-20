@@ -2906,21 +2906,21 @@ extern s32 D_L00_00160204 __attribute__((sda));
 extern f32 D_L00_00160208 __attribute__((sda));
 extern u8 D_L00_0016020C __attribute__((sda));
 extern u8 *D_L00_001B211C __attribute__((section(".data")));
-void FUN_L00_0026fc38(O0026fc38 *o) {
-    V0026fc38 t;
-    S0026fc38 *s = &o->s;
-    o->xc = D_L00_00160200;
-    o->x4 = D_L00_00160204;
-    o->x8 += D_L00_0016020C;
-    FUN_001f9a28_0026fc38(&t, s->x4 + 0x10, D_L00_00166DC0_0026fc38);
-    FUN_001f9bf8_0026fc38(&t, &t, D_L00_00160208);
-    FUN_001f9a10_0026fc38(o->p10, s->x4 + 0x10, &t);
-    o->x2 = D_L00_001B211C[FUN_001fa6d0_0026fc38((f32)(s->x8 / 2))];
+void FUN_L00_0026fc38(O0026fc38 *particle) {
+    V0026fc38 position_offset;
+    S0026fc38 *s = &particle->s;
+    particle->xc = D_L00_00160200;
+    particle->x4 = D_L00_00160204;
+    particle->x8 += D_L00_0016020C;
+    FUN_001f9a28_0026fc38(&position_offset, s->x4 + 0x10, D_L00_00166DC0_0026fc38);
+    FUN_001f9bf8_0026fc38(&position_offset, &position_offset, D_L00_00160208);
+    FUN_001f9a10_0026fc38(particle->p10, s->x4 + 0x10, &position_offset);
+    particle->x2 = D_L00_001B211C[FUN_001fa6d0_0026fc38((f32)(s->x8 / 2))];
     s->x8++;
     if (s->x8 >= 0x1F)
         s->x8 = 0;
-    if (o->xa == 0)
-        FUN_L00_00267a08_0026fc38(o);
+    if (particle->xa == 0)
+        FUN_L00_00267a08_0026fc38(particle);
 }
 /* NEAR: only diff is a Ps2EeAs nop between mul.s and div.s after the div-check label (assembler wall). */
 typedef struct {
