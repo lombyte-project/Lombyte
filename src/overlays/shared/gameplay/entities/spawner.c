@@ -308,16 +308,16 @@ void FUN_L09_0030a9e8(unsigned char *moby, char *spawner_vars) {
 
 extern int FUN_L01_0026e008(int, int);
 
-int FUN_L09_0030aae0(int unused, char *m) {
+int FUN_L09_0030aae0(int unused, char *spawner_vars) {
     int last = -1;
     int i;
     char **slot;
-    m[0x91] = FUN_L01_0026e008(*(int *)(m + 0x94), -1);
-    for (i = 0, slot = (char **)(m + 0xB0); i < 20; i++, slot++) {
-        char *o = *slot;
-        if (o != 0 && *(short *)(o + 0xA6) == 0x75E && (unsigned char)o[0x20] != 0xFE &&
-            (unsigned char)o[0x20] != 0xFD) {
-            m[0x91]++;
+    spawner_vars[0x91] = FUN_L01_0026e008(*(int *)(spawner_vars + 0x94), -1);
+    for (i = 0, slot = (char **)(spawner_vars + 0xB0); i < 20; i++, slot++) {
+        char *slot_moby = *slot;
+        if (slot_moby != 0 && *(short *)(slot_moby + 0xA6) == 0x75E && (unsigned char)slot_moby[0x20] != 0xFE &&
+            (unsigned char)slot_moby[0x20] != 0xFD) {
+            spawner_vars[0x91]++;
         } else {
             last = i;
         }
