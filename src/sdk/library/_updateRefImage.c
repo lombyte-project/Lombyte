@@ -70,6 +70,11 @@ s32 UpdateMpegReferenceImages(struct MpegReferenceState *state,
                               s32 force_reorder) __asm__("_updateRefImage");
 
 s32 UpdateMpegReferenceImages(struct MpegReferenceState *state, s32 force_reorder) {
+    enum {
+        MPEG_PICTURE_STRUCTURE_TOP_FIELD = 1,
+        MPEG_PICTURE_STRUCTURE_BOTTOM_FIELD = 2,
+        MPEG_PICTURE_STRUCTURE_FRAME = 3
+    };
     struct MpegReferencePicture *selected_picture;
     s32 references_ready;
     s32 queue_threshold;
@@ -140,13 +145,13 @@ s32 UpdateMpegReferenceImages(struct MpegReferenceState *state, s32 force_reorde
         }
     }
     switch (state->picture_structure) {
-    case 3:
+    case MPEG_PICTURE_STRUCTURE_FRAME:
         selected_picture = state->selected_frame;
         break;
-    case 1:
+    case MPEG_PICTURE_STRUCTURE_TOP_FIELD:
         selected_picture = state->selected_top_field;
         break;
-    case 2:
+    case MPEG_PICTURE_STRUCTURE_BOTTOM_FIELD:
         selected_picture = state->selected_bottom_field;
         break;
     }
