@@ -136,6 +136,7 @@ void FUN_L01_00242930(void) {
         HERO_STATE_LATERAL_MOVE_POSITIVE_YAW = 26,
         HERO_STATE_LATERAL_MOVE_NEGATIVE_YAW = 27,
         HERO_STATE_LOOK_HOLD_IDLE_EXIT = 30,
+        HERO_STATE_ITEM_ANIMATION_FRAME_IDLE_EXIT = 32,
         HERO_STATE_ANIMATION_COMPLETION_IDLE_WAIT = 33,
         HERO_STATE_ANIMATION_FRAME_IDLE_EXIT_JUMP_WINDOW = 35,
         HERO_STATE_ITEM_BUTTON_HOLD_ANIMATION_WAIT = 46,
@@ -1875,7 +1876,7 @@ void FUN_L01_00242930(void) {
                     }
                     D_L01_0016CC00 = 0;
                     break;
-                case 32:
+                case HERO_STATE_ITEM_ANIMATION_FRAME_IDLE_EXIT:
                     if (((unsigned char *)hero.items[0].moby) != 0 && hero.unkA9C == 0 && hero.anim_frame > 20.0f) {
                         hero_set_state(HERO_STATE_IDLE, 0);
                     }
