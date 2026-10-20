@@ -235,7 +235,7 @@ extern char D_0013E550[];
 extern char D_L15_00167440_2A48B0[] __asm__("D_L15_001673C0");
 extern int D_L15_00184B28_2A48B0 __asm__("D_L15_00184AA8") __attribute__((section(".data")));
 
-void FUN_L15_002a36d0(GateMoby_2A48B0 *m)
+void FUN_L15_002a36d0(GateMoby_2A48B0 *gate_moby)
 {
     enum {
         GATE_INITIALIZE = 0,
@@ -245,143 +245,143 @@ void FUN_L15_002a36d0(GateMoby_2A48B0 *m)
         GATE_CLOSING = 4,
         GATE_POSITION_OVERRIDE = 5
     };
-    GateVars_2A48B0 *d = m->vars;
+    GateVars_2A48B0 *gate_vars = gate_moby->vars;
     float step;
 
-    switch (m->state) {
+    switch (gate_moby->state) {
     case GATE_INITIALIZE:
-        *(u128 *)&d->home = *(u128 *)&m->pos;
-        m->state = 1;
-        d->locked = 0;
-        if (d->key != -1) {
-            m->f30 = 0xFF;
+        *(u128 *)&gate_vars->home = *(u128 *)&gate_moby->pos;
+        gate_moby->state = 1;
+        gate_vars->locked = 0;
+        if (gate_vars->key != -1) {
+            gate_moby->f30 = 0xFF;
         }
-        if (D_0013DD50 != 0 && d->key != -1) {
-            m->pos.z = m->pos.z - D_L15_001614F8;
-            m->state = 5;
+        if (D_0013DD50 != 0 && gate_vars->key != -1) {
+            gate_moby->pos.z = gate_moby->pos.z - D_L15_001614F8;
+            gate_moby->state = 5;
         }
         break;
     case GATE_WAIT_TO_OPEN:
-        d->travel = 0;
-        if (d->key != -1) {
+        gate_vars->travel = 0;
+        if (gate_vars->key != -1) {
             D_L15_00184B28_2A48B0 = 0;
         }
-        if (d->trigger != -1) {
-            struct Moby *p = (struct Moby *)((char *)*(int *)&D_L15_0015FFD8_d + (d->trigger << 8));
-            if (p == 0 || p->state == 0xFE || p->state == 0xFD) {
+        if (gate_vars->trigger != -1) {
+            struct Moby *trigger_moby = (struct Moby *)((char *)*(int *)&D_L15_0015FFD8_d + (gate_vars->trigger << 8));
+            if (trigger_moby == 0 || trigger_moby->state == 0xFE || trigger_moby->state == 0xFD) {
                 if (D_L15_00161AC0 == 0) {
-                    m->state = 2;
-                    d->locked = 1;
+                    gate_moby->state = 2;
+                    gate_vars->locked = 1;
                 }
             }
         } else {
-            if (is_point_inside_clip_volume(D_0013F3D0_2A48B0, d->vol_near)) {
-                if (d->key == -1 || D_0013F3D0_2A48B0[0x2024] == 2) {
-                    m->state = 2;
+            if (is_point_inside_clip_volume(D_0013F3D0_2A48B0, gate_vars->vol_near)) {
+                if (gate_vars->key == -1 || D_0013F3D0_2A48B0[0x2024] == 2) {
+                    gate_moby->state = 2;
                 }
             }
         }
-        if (D_0013DD50 != 0 && d->key != -1) {
-            m->pos.z = d->home.z - D_L15_001614F8;
-            m->state = 5;
+        if (D_0013DD50 != 0 && gate_vars->key != -1) {
+            gate_moby->pos.z = gate_vars->home.z - D_L15_001614F8;
+            gate_moby->state = 5;
         }
         break;
     case GATE_OPENING:
         step = (D_L15_001614F8 / 0.6f) * D_0015ED6C;
-        if (d->key != -1) {
+        if (gate_vars->key != -1) {
             step = step * 5.0f;
         }
-        if (((SoundSlot_2A48B0 *)(D_0013E550 + d->sound * 0x70))->owner != m ||
-            ((SoundSlot_2A48B0 *)(D_0013E550 + d->sound * 0x70))->active == 0) {
-            d->sound = func_0022ED80_2A48B0(0, 4, m);
+        if (((SoundSlot_2A48B0 *)(D_0013E550 + gate_vars->sound * 0x70))->owner != gate_moby ||
+            ((SoundSlot_2A48B0 *)(D_0013E550 + gate_vars->sound * 0x70))->active == 0) {
+            gate_vars->sound = func_0022ED80_2A48B0(0, 4, gate_moby);
         }
-        if (D_L15_001614F8 < (d->travel = d->travel + step)) {
-            if (d->sound != -1 &&
-                ((SoundSlot_2A48B0 *)(D_0013E550 + d->sound * 0x70))->owner == m &&
-                ((SoundSlot_2A48B0 *)(D_0013E550 + d->sound * 0x70))->active != 0) {
-                release_voice_slot(d->sound);
+        if (D_L15_001614F8 < (gate_vars->travel = gate_vars->travel + step)) {
+            if (gate_vars->sound != -1 &&
+                ((SoundSlot_2A48B0 *)(D_0013E550 + gate_vars->sound * 0x70))->owner == gate_moby &&
+                ((SoundSlot_2A48B0 *)(D_0013E550 + gate_vars->sound * 0x70))->active != 0) {
+                release_voice_slot(gate_vars->sound);
             }
-            d->sound = -1;
-            d->travel = D_L15_001614F8;
-            m->state = 3;
+            gate_vars->sound = -1;
+            gate_vars->travel = D_L15_001614F8;
+            gate_moby->state = 3;
         }
         {
-            float t = d->travel;
-            float h = d->home.z;
+            float t = gate_vars->travel;
+            float h = gate_vars->home.z;
             float z;
-            if (d->key != -1) {
+            if (gate_vars->key != -1) {
                 t = -t;
                 z = h + t;
             } else {
                 z = h + t;
             }
-            m->pos.z = z;
+            gate_moby->pos.z = z;
         }
         break;
     case GATE_OPEN:
-        if (d->key != -1) {
+        if (gate_vars->key != -1) {
             D_L15_00184B28_2A48B0 = 1;
         }
-        if (is_point_inside_clip_volume(D_0013F3D0_2A48B0, d->vol_trigger) != 0 ||
-            is_point_inside_clip_volume(D_L15_00167440_2A48B0, d->vol_trigger) != 0) {
-            if (is_point_inside_clip_volume(D_0013F3D0_2A48B0, d->key) == 0) {
+        if (is_point_inside_clip_volume(D_0013F3D0_2A48B0, gate_vars->vol_trigger) != 0 ||
+            is_point_inside_clip_volume(D_L15_00167440_2A48B0, gate_vars->vol_trigger) != 0) {
+            if (is_point_inside_clip_volume(D_0013F3D0_2A48B0, gate_vars->key) == 0) {
                 break;
             }
         }
-        if (d->locked == 0) {
-            m->state = 4;
+        if (gate_vars->locked == 0) {
+            gate_moby->state = 4;
         }
         break;
     case GATE_CLOSING:
         step = (D_L15_001614F8 / 0.6f) * D_0015ED6C;
-        if (d->key != -1) {
+        if (gate_vars->key != -1) {
             step = step * 5.0f;
         }
-        if (((SoundSlot_2A48B0 *)(D_0013E550 + d->sound * 0x70))->owner != m ||
-            ((SoundSlot_2A48B0 *)(D_0013E550 + d->sound * 0x70))->active == 0) {
-            d->sound = func_0022ED80_2A48B0(0, 4, m);
+        if (((SoundSlot_2A48B0 *)(D_0013E550 + gate_vars->sound * 0x70))->owner != gate_moby ||
+            ((SoundSlot_2A48B0 *)(D_0013E550 + gate_vars->sound * 0x70))->active == 0) {
+            gate_vars->sound = func_0022ED80_2A48B0(0, 4, gate_moby);
         }
-        if ((d->travel = d->travel - step) < 0.0f) {
-            if (d->sound != -1 &&
-                ((SoundSlot_2A48B0 *)(D_0013E550 + d->sound * 0x70))->owner == m &&
-                ((SoundSlot_2A48B0 *)(D_0013E550 + d->sound * 0x70))->active != 0) {
-                release_voice_slot(d->sound);
+        if ((gate_vars->travel = gate_vars->travel - step) < 0.0f) {
+            if (gate_vars->sound != -1 &&
+                ((SoundSlot_2A48B0 *)(D_0013E550 + gate_vars->sound * 0x70))->owner == gate_moby &&
+                ((SoundSlot_2A48B0 *)(D_0013E550 + gate_vars->sound * 0x70))->active != 0) {
+                release_voice_slot(gate_vars->sound);
             }
-            d->travel = 0;
-            d->sound = -1;
-            m->state = 1;
-            if (d->key != -1) {
-                m->state = 5;
+            gate_vars->travel = 0;
+            gate_vars->sound = -1;
+            gate_moby->state = 1;
+            if (gate_vars->key != -1) {
+                gate_moby->state = 5;
                 D_L15_00184B28_2A48B0 = 0;
             }
         }
         {
-            float t = d->travel;
-            float h = d->home.z;
+            float t = gate_vars->travel;
+            float h = gate_vars->home.z;
             float z;
-            if (d->key != -1) {
+            if (gate_vars->key != -1) {
                 t = -t;
                 z = h + t;
             } else {
                 z = h + t;
             }
-            m->pos.z = z;
+            gate_moby->pos.z = z;
         }
-        if (is_point_inside_clip_volume(D_0013F3D0_2A48B0, d->vol_near) != 0 ||
-            is_point_inside_clip_volume(D_L15_00167440_2A48B0, d->vol_near) != 0) {
-            m->state = 2;
+        if (is_point_inside_clip_volume(D_0013F3D0_2A48B0, gate_vars->vol_near) != 0 ||
+            is_point_inside_clip_volume(D_L15_00167440_2A48B0, gate_vars->vol_near) != 0) {
+            gate_moby->state = 2;
         }
         break;
     case GATE_POSITION_OVERRIDE:
         if (D_0013DD50 != 0) {
-            m->pos.z = d->home.z - D_L15_001614F8;
+            gate_moby->pos.z = gate_vars->home.z - D_L15_001614F8;
             D_L15_00184B28_2A48B0 = 1;
         } else {
             if (D_001413F4[0] == 2) {
                 break;
             }
-            m->pos.z = d->home.z;
-            m->state = 1;
+            gate_moby->pos.z = gate_vars->home.z;
+            gate_moby->state = 1;
             D_L15_00184B28_2A48B0 = 0;
         }
         break;
