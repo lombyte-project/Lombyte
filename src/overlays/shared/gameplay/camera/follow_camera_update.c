@@ -358,13 +358,13 @@ void follow_camera_approach() __asm__("FUN_L00_002e5e38");
 void follow_camera_update(u8 *m) __asm__("FUN_L00_002e9c28");
 extern f32 D_L00_0015EF44_gp __asm__("D_L00_0015EF44") __attribute__((sda));
 void follow_camera_update(u8 *camera_moby) {
-    u8 *p = *(u8 **)(camera_moby + 0x70) + 0x1D0;
+    u8 *camera_spring_state = *(u8 **)(camera_moby + 0x70) + 0x1D0;
     D_L00_0015EF44_gp = D_L00_00161DB0[opt_cam_yaw_rate];
     FUN_L00_002e46b8();
     follow_camera_apply_overrides(camera_moby);
     noop_main_callback(camera_moby);
     follow_camera_springs(camera_moby);
-    noop_main_callback(camera_moby, p);
+    noop_main_callback(camera_moby, camera_spring_state);
     FUN_L00_002e9bb0(camera_moby);
     noop_main_callback(camera_moby);
     follow_camera_approach(camera_moby);
