@@ -95,7 +95,7 @@ void follow_camera_turn_and_pitch(unsigned char *camera_object, float k, float i
     unsigned char *camera_data;
     unsigned char *base;
     unsigned char *turn_pitch_state;
-    unsigned char *c;
+    unsigned char *turn_pitch_vector;
     float r;
     float lim;
     float sel;
@@ -107,11 +107,11 @@ void follow_camera_turn_and_pitch(unsigned char *camera_object, float k, float i
     camera_data = *(unsigned char **)(camera_object + 0x70);
     base = D_L00_00166E10_2e8bb8;
     turn_pitch_state = camera_data + 0x1A8;
-    c = camera_data + 0x130;
+    turn_pitch_vector = camera_data + 0x130;
     r = FUN_001ebd78_2e8bb8(camera_data + 0x1AC, *(float *)(camera_data + 0x1A8), k, D_L00_00161CAC,
                             D_L00_00161CB0, 0.0f);
     *(float *)(camera_data + 0x1A8) = r;
-    *(float *)(c + 0x34) = *(float *)(turn_pitch_state + 0x14) * r;
+    *(float *)(turn_pitch_vector + 0x34) = *(float *)(turn_pitch_state + 0x14) * r;
     if (in < -0.3f) {
         in = (in + 0.3f) * 1.4285715f;
     } else if (0.3f < in) {
@@ -135,13 +135,13 @@ void follow_camera_turn_and_pitch(unsigned char *camera_object, float k, float i
                                             D_L00_00161CB0, sel);
     lim = *(float *)(turn_pitch_state + 8) * 0.69813168f;
     if (k == 0.0f) {
-        FUN_00214890_2e8bb8(c, c, base + 0x20, *(float *)(turn_pitch_state + 0x20));
+        FUN_00214890_2e8bb8(turn_pitch_vector, turn_pitch_vector, base + 0x20, *(float *)(turn_pitch_state + 0x20));
     } else {
-        FUN_00214890_2e8bb8(c, c, base + 0x20, *(float *)(c + 0x34));
+        FUN_00214890_2e8bb8(turn_pitch_vector, turn_pitch_vector, base + 0x20, *(float *)(turn_pitch_vector + 0x34));
     }
-    reference_dot_product = FUN_001f9ab0_2e8bb8(c, base + 0x20);
-    b = FUN_001f9af0_2e8bb8(c);
-    FUN_001f9ad8_2e8bb8(axis, base + 0x20, c);
+    reference_dot_product = FUN_001f9ab0_2e8bb8(turn_pitch_vector, base + 0x20);
+    b = FUN_001f9af0_2e8bb8(turn_pitch_vector);
+    FUN_001f9ad8_2e8bb8(axis, base + 0x20, turn_pitch_vector);
     FUN_001f9bf8_2e8bb8(axis, axis, 1.0f);
     ang = FUN_001f9e90_2e8bb8(b, reference_dot_product);
     if (FUN_001f99c0_2e8bb8(ang) < FUN_001f99c0_2e8bb8(lim) && sel == D_L00_00161CC0) {
@@ -149,25 +149,25 @@ void follow_camera_turn_and_pitch(unsigned char *camera_object, float k, float i
     }
     if (ang < lim) {
         if (lim < FUN_001fa580_2e8bb8(ang, D_L00_00161CC4)) {
-            *(float *)(c + 0x38) = FUN_001fa5c8_2e8bb8(lim, ang);
+            *(float *)(turn_pitch_vector + 0x38) = FUN_001fa5c8_2e8bb8(lim, ang);
         } else {
-            *(float *)(c + 0x38) = D_L00_00161CC4;
+            *(float *)(turn_pitch_vector + 0x38) = D_L00_00161CC4;
         }
     } else if (lim < ang) {
         if (*(short *)(*(unsigned char **)(camera_object + 0x70) + 0x208) < 0) {
-            *(float *)(c + 0x38) = 0.0f;
+            *(float *)(turn_pitch_vector + 0x38) = 0.0f;
         } else if (FUN_001fa580_2e8bb8(ang, -D_L00_00161CC4) < lim) {
-            *(float *)(c + 0x38) = FUN_001fa5c8_2e8bb8(lim, ang);
+            *(float *)(turn_pitch_vector + 0x38) = FUN_001fa5c8_2e8bb8(lim, ang);
         } else {
-            *(float *)(c + 0x38) = -D_L00_00161CC4;
+            *(float *)(turn_pitch_vector + 0x38) = -D_L00_00161CC4;
         }
     } else {
-        *(float *)(c + 0x38) = 0.0f;
+        *(float *)(turn_pitch_vector + 0x38) = 0.0f;
     }
     if (lim < 0.0f) {
         *(short *)(*(unsigned char **)(camera_object + 0x70) + 0x22) = 1;
     }
-    FUN_00214890_2e8bb8(c, c, axis, *(float *)(c + 0x38));
+    FUN_00214890_2e8bb8(turn_pitch_vector, turn_pitch_vector, axis, *(float *)(turn_pitch_vector + 0x38));
 }
 #define NOT_SDA
 
