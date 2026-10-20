@@ -783,31 +783,31 @@ void FUN_L11_0030e730(int arg) {
     D_L11_001DA880[arg].n[7] = 0xFF;
     for (i = 0; i < 20; i++) {
         if (arg != i) {
-            Ent *t = D_L11_001DA880;
-            Ent *e = &t[arg];
-            float x = e->x - t[i].x;
-            float y = e->y - t[i].y;
+            Ent *tile_table = D_L11_001DA880;
+            Ent *selected_tile = &tile_table[arg];
+            float x = selected_tile->x - tile_table[i].x;
+            float y = selected_tile->y - tile_table[i].y;
             if (absolute_float(x) < 0.1f) {
                 if (absolute_float(y - 16.0f) < 0.1f)
-                    e->n[0] = i;
+                    selected_tile->n[0] = i;
                 if (absolute_float(y + 16.0f) < 0.1f)
-                    e->n[2] = i;
+                    selected_tile->n[2] = i;
             } else if (absolute_float(y) < 0.1f) {
                 if (absolute_float(x - 16.0f) < 0.1f)
-                    e->n[1] = i;
+                    selected_tile->n[1] = i;
                 if (absolute_float(x + 16.0f) < 0.1f)
-                    e->n[3] = i;
+                    selected_tile->n[3] = i;
             } else {
                 if (absolute_float(x + 16.0f) < 0.1f) {
                     if (absolute_float(y - 16.0f) < 0.1f)
-                        e->n[5] = i;
+                        selected_tile->n[5] = i;
                     if (absolute_float(y + 16.0f) < 0.1f)
-                        e->n[7] = i;
+                        selected_tile->n[7] = i;
                 } else if (absolute_float(x - 16.0f) < 0.1f) {
                     if (absolute_float(y - 16.0f) < 0.1f)
-                        e->n[4] = i;
+                        selected_tile->n[4] = i;
                     if (absolute_float(y + 16.0f) < 0.1f)
-                        e->n[6] = i;
+                        selected_tile->n[6] = i;
                 }
             }
         }
