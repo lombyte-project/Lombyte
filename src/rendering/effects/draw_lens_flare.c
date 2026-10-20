@@ -42,7 +42,7 @@ void draw_lens_flare(void) __asm__("FUN_001edc50");
 void draw_lens_flare(void) {
     f32 scr[4];
     f32 ctr[4];
-    f32 d[4];
+    f32 screen_center_delta[4];
     f32 off[4];
     f32 at[4];
     f32 dist;
@@ -71,13 +71,13 @@ void draw_lens_flare(void) {
     project_to_screen(scr, effect_ribbon.moby->pos);
     scr[0] = (scr[0] - convert_integer_to_float(screen_extent.left)) * 0.0625f;
     scr[1] = (scr[1] - convert_integer_to_float(screen_extent.top)) * 0.0625f;
-    d[0] = ctr[0] - scr[0];
-    d[1] = ctr[1] - scr[1];
+    screen_center_delta[0] = ctr[0] - scr[0];
+    screen_center_delta[1] = ctr[1] - scr[1];
     for (i = 0; i < 16; i++) {
         tex = get_effect_texture(effect_ribbon.tex[i] + 6);
         size = (i != 0) ? 0x20 : 0x40;
-        off[0] = d[0] * effect_ribbon.dist[i];
-        off[1] = d[1] * effect_ribbon.dist[i];
+        off[0] = screen_center_delta[0] * effect_ribbon.dist[i];
+        off[1] = screen_center_delta[1] * effect_ribbon.dist[i];
         at[0] = ctr[0] + off[0];
         at[1] = ctr[1] + off[1];
         fade = dist - 5.0f;
@@ -86,13 +86,13 @@ void draw_lens_flare(void) {
         } else if (fade < 0.0f) {
             fade = 0.0f;
         }
-        fx = absolute_float(d[0]) / ctr[0] * -5.0f + 5.5f;
+        fx = absolute_float(screen_center_delta[0]) / ctr[0] * -5.0f + 5.5f;
         if (fx > 1.0f) {
             fx = 1.0f;
         } else if (fx < 0.0f) {
             fx = 0.0f;
         }
-        fy = absolute_float(d[1]) / ctr[1] * -5.0f + 5.5f;
+        fy = absolute_float(screen_center_delta[1]) / ctr[1] * -5.0f + 5.5f;
         if (fy > 1.0f) {
             fy = 1.0f;
         } else if (fy < 0.0f) {
