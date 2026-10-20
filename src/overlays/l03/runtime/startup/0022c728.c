@@ -22,7 +22,7 @@ void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_0021
 
 void FUN_L03_0022c728(void) {
     char *g;
-    char *m;
+    char *moby;
     float w[4];
     float v[4];
     int i;
@@ -35,16 +35,16 @@ void FUN_L03_0022c728(void) {
         return;
     if (*(int *)(g + 0x34) >= scale_game_frames(1100))
         return;
-    m = *(char **)(g + 0x184);
-    if (m == 0)
+    moby = *(char **)(g + 0x184);
+    if (moby == 0)
         return;
     for (i = 0; i < 4; i++) {
-        float a, b;
+        float azimuth_angle, b;
         clear_vector(v);
-        moby_point_position(m, i % 2, w);
-        a = random_angle_radians();
+        moby_point_position(moby, i % 2, w);
+        azimuth_angle = random_angle_radians();
         b = random_angle_radians();
-        build_spherical_offset(v, random_float_between(frame_time * 0.7f, frame_time * 2.2f), a, b);
+        build_spherical_offset(v, random_float_between(frame_time * 0.7f, frame_time * 2.2f), azimuth_angle, b);
         FUN_L00_0026ced0(w, v, 0x80808080, 0x808080, 147000.0f,
                          random_int_between(scale_game_frames(12), scale_game_frames(35)));
     }
