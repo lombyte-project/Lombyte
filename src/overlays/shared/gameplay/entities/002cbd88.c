@@ -40,19 +40,19 @@ extern int FUN_L00_0020d568(void);
 f32 probe_ground_height(void *arg0, s32 arg1, f32 arg2) __asm__("FUN_00213508");
 
 int FUN_L15_002d6770(void) {
-    struct Hero *p;
+    struct Hero *hero_ptr;
     float vec[4];
-    float h;
+    float ground_height;
     if (FUN_L00_0020d568() != 0)
         return 1;
-    p = &hero;
-    if ((unsigned)(p->state.current - 0x18) < 2) {
-        *(OvlQuad *)vec = *(OvlQuad *)&p->motion.pos;
+    hero_ptr = &hero;
+    if ((unsigned)(hero_ptr->state.current - 0x18) < 2) {
+        *(OvlQuad *)vec = *(OvlQuad *)&hero_ptr->motion.pos;
         vec[2] = vec[2] + 2.0f;
-        h = probe_ground_height(vec, 0, 0.5f);
+        ground_height = probe_ground_height(vec, 0, 0.5f);
         if (collision_hit_material() != 0)
             return 0;
-        if (p->motion.pos.f[2] <= h)
+        if (hero_ptr->motion.pos.f[2] <= ground_height)
             return 1;
     }
     return 0;
