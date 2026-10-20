@@ -128,11 +128,11 @@ extern int func_001FA898_87158(float) __asm__("FUN_001fa6d0");
 extern int func_002140B0_87158(int) __asm__("FUN_00213260");
 extern float func_001FA888_87158(int) __asm__("FUN_001fa6c0");
 extern unsigned char *D_L01_001B25D0 __attribute__((section(".data")));
-unsigned char *FUN_L01_00287158(void *a, int b, int c, int d, float f, float g) {
+unsigned char *FUN_L01_00287158(void *spawn_position, int b, int c, int d, float f, float g) {
     unsigned char *r = func_00218928_87158(0x34);
     if (r != 0) {
         char *v = (char *)r + 0x20;
-        qcopy(r + 0x10, a);
+        qcopy(r + 0x10, spawn_position);
         *(float *)(r + 0x18) += 0.05f;
         *(int *)(r + 4) = b;
         r[3] = 0x44;
