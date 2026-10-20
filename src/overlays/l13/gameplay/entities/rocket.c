@@ -1780,7 +1780,7 @@ void FUN_L13_0030a6d8(struct Moby *moby) {
     float rot[4];
     float a[4];
     float b[4];
-    float c[4];
+    float mount_rotation[4];
 
     scale_vector_xyz(delta, &moby->pos, -1.0f);
     qcopy(rot, &moby->rot);
@@ -1796,17 +1796,17 @@ void FUN_L13_0030a6d8(struct Moby *moby) {
         float old = vars->blend;
         advance_accelerated_scalar(&vars->blend, &vars->blend_speed, 1.0f, D_0015ED70 * 4.0f, D_0015ED70 * 4.0f, D_0015ED6C * 4.0f);
         if (vars->blend < 1.0f) {
-            float t = (1.0f - vars->blend) / (1.0f - old);
+            float remaining_blend_ratio = (1.0f - vars->blend) / (1.0f - old);
             char *base;
-            FUN_L13_0030ad38(moby, b, c);
+            FUN_L13_0030ad38(moby, b, mount_rotation);
             subtract_vector_xyz(a, D_L13_001670C0, b);
             base = D_L13_001670C0 - 0x140;
-            scale_vector_xyz(a, a, t);
+            scale_vector_xyz(a, a, remaining_blend_ratio);
             add_vector_xyz(b, b, a);
-            c[1] = fast_add_rotations(fast_subtract_rotations(*(float *)(base + 0x154), c[1]) * t, c[1]);
-            c[2] = fast_add_rotations(fast_subtract_rotations(*(float *)(base + 0x158), c[2]) * t, c[2]);
+            mount_rotation[1] = fast_add_rotations(fast_subtract_rotations(*(float *)(base + 0x154), mount_rotation[1]) * remaining_blend_ratio, mount_rotation[1]);
+            mount_rotation[2] = fast_add_rotations(fast_subtract_rotations(*(float *)(base + 0x158), mount_rotation[2]) * remaining_blend_ratio, mount_rotation[2]);
             FUN_L00_002ea9d8(b);
-            FUN_L00_002eaa30(c);
+            FUN_L00_002eaa30(mount_rotation);
         } else {
             u8 s = moby->command;
             moby->command = 1;
