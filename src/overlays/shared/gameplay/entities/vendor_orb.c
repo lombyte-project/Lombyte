@@ -2269,25 +2269,25 @@ s32 fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 s32 FUN_L00_002e5678(void *, void *, void *, s32);
 void FUN_L00_002e55b8(void *, void *, void *, f32, f32, f32);
 void follow_camera_transition(O002e5730 *o, void *a) __asm__("FUN_L00_002e5730");
-void follow_camera_transition(O002e5730 *o, void *a) {
-    V002e5730 t;
-    u8 *m = o->m;
-    A002e5730 *s = (A002e5730 *)(m + 0x40);
+void follow_camera_transition(O002e5730 *camera, void *input_offset) {
+    V002e5730 target_position;
+    u8 *m = camera->m;
+    A002e5730 *attach_state = (A002e5730 *)(m + 0x40);
     f32 k, x, y;
-    u8 c;
+    u8 attach_mode;
     if (fast_dec_timer_s16(m + 0x106))
-        s->xc5 = s->xc4;
-    k = (f32)s->xc6 * s->xc8;
-    FUN_L00_002e5678(o, a, &t, s->xc4);
-    c = s->xc4;
-    if (c == 3 || c == 5 || c == 6 || c == 7 || c == 1) {
+        attach_state->xc5 = attach_state->xc4;
+    k = (f32)attach_state->xc6 * attach_state->xc8;
+    FUN_L00_002e5678(camera, input_offset, &target_position, attach_state->xc4);
+    attach_mode = attach_state->xc4;
+    if (attach_mode == 3 || attach_mode == 5 || attach_mode == 6 || attach_mode == 7 || attach_mode == 1) {
         x = D_L00_00161D30 + (D_L00_00161D28 - D_L00_00161D30) * k;
         y = D_L00_00161D34 + (D_L00_00161D2C - D_L00_00161D34) * k;
     } else {
         x = D_L00_00161D28;
         y = D_L00_00161D2C;
     }
-    FUN_L00_002e55b8(o, s->x90, &t, x, y, 0.0f);
+    FUN_L00_002e55b8(camera, attach_state->x90, &target_position, x, y, 0.0f);
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002E1660.c: func_L00_002E6CE0); names and data translated to the US level program. */
 
