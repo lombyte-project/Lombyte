@@ -1223,14 +1223,14 @@ void FUN_L14_002ae260(struct Moby *m) {
     subtract_vector_xyz(v, D_L14_001674C0_d, pos);
     len = vector_length_xyz(v);
     if (0.0f < len) {
-        float s = *(float *)(d + 0x218);
-        float f = len - *(float *)&D_L14_0016147C;
-        if (f < s) {
-            s = f;
-            if (f < 0.0f)
-                s = 0.0f;
+        float camera_pull_distance = *(float *)(d + 0x218);
+        float camera_distance_margin = len - *(float *)&D_L14_0016147C;
+        if (camera_distance_margin < camera_pull_distance) {
+            camera_pull_distance = camera_distance_margin;
+            if (camera_distance_margin < 0.0f)
+                camera_pull_distance = 0.0f;
         }
-        normalize_vector_xyz(w, v, s);
+        normalize_vector_xyz(w, v, camera_pull_distance);
         add_vector_xyz(pos, pos, w);
     }
     pk.uv[2] = 0.0f;
