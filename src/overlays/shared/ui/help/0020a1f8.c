@@ -32,9 +32,9 @@ typedef struct {
 extern S0020a228 D_L00_0017A680_0020a228 __asm__("D_L00_0017A680");
 /* Stores the two floats in D_L00_0017A680. */
 void FUN_L00_0020a228(float a, float b) {
-    S0020a228 *p = &D_L00_0017A680_0020a228;
-    p->a = a;
-    p->b = b;
+    S0020a228 *destination = &D_L00_0017A680_0020a228;
+    destination->a = a;
+    destination->b = b;
 }
 
 
