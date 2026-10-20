@@ -1484,14 +1484,14 @@ extern f32 uv_scale __asm__("D_L00_001613BC") __attribute__((sda));
 /* Draws the animated quad-strip effect attached to o; the effect set is chosen by state 0x17..0x19 / 0x2B. */
 void FUN_L00_002a7780(O_2a7780 *o) {
     R_2a7780 *r;
-    E_2a7780 *e;
+    E_2a7780 *effect_config;
     V_2a7780 v;
     s32 sel0, sel1, sel2, sel3;
     u32 color;
     f32 scale, alpha;
     s32 tex, idx, nv; s32 k;
-    s32 i, j, d, cur;
-    f32 t, w;
+    s32 i, j, elapsed_frames, cur;
+    f32 effect_progress, w;
 
     r = o->r;
     if (r == 0) return;
@@ -1519,13 +1519,13 @@ void FUN_L00_002a7780(O_2a7780 *o) {
         nv = 2;
         color = 0x408080;
     }
-    t = r->f70;
-    e = &effects[idx];
-    sel0 = e->sel[0];
-    sel1 = e->sel[1];
-    sel2 = e->sel[2];
-    sel3 = e->sel[3];
-    if (t == 1.0f) {
+    effect_progress = r->f70;
+    effect_config = &effects[idx];
+    sel0 = effect_config->sel[0];
+    sel1 = effect_config->sel[1];
+    sel2 = effect_config->sel[2];
+    sel3 = effect_config->sel[3];
+    if (effect_progress == 1.0f) {
         u8 *g = P_2a7780_G.p2080;
         qcopy(&r->m[0], g + 0xC0);
         qcopy(&r->m[1], g + 0xD0);
@@ -1533,11 +1533,11 @@ void FUN_L00_002a7780(O_2a7780 *o) {
         last_frame = frame_2a7780;
     }
     cur = frame_2a7780;
-    d = cur - last_frame;
-    if (d <= 0) d = 1;
-    r->f70 = t + (f32)d * e->f48;
+    elapsed_frames = cur - last_frame;
+    if (elapsed_frames <= 0) elapsed_frames = 1;
+    r->f70 = effect_progress + (f32)elapsed_frames * effect_config->f48;
     last_frame = cur;
-    if ((f32)(e->n * 2) <= r->f70) {
+    if ((f32)(effect_config->n * 2) <= r->f70) {
         s32 k2 = P_2a7780_G.p2080[0x52];
         if ((u32)(k2 - 0x17) < 3) return;
         if (k2 != 0x2B) r->f70 = 0.0f;
@@ -1548,19 +1548,19 @@ void FUN_L00_002a7780(O_2a7780 *o) {
     v.tag[0] = 5;
     v.tag[3] = (nv << 2) | 0x8000000040LL;
     qcopy(&r->m30, P_2a7780_G.p2080 + 0x10);
-    for (i = 0; i < e->n; i++) {
+    for (i = 0; i < effect_config->n; i++) {
         for (j = 0; j < 4; j++) {
-            s32 vi = e->idx[i][j][0];
+            s32 vi = effect_config->idx[i][j][0];
             f32 *uv;
-            if (i == sel0) v.col[j] = e->col[0][j];
-            else if (i == sel1) v.col[j] = e->col[1][j];
-            else if (i == sel2) v.col[j] = e->col[2][j];
-            else if (i == sel3) v.col[j] = e->col[3][j];
+            if (i == sel0) v.col[j] = effect_config->col[0][j];
+            else if (i == sel1) v.col[j] = effect_config->col[1][j];
+            else if (i == sel2) v.col[j] = effect_config->col[2][j];
+            else if (i == sel3) v.col[j] = effect_config->col[3][j];
             else v.col[j] = 0x50808080;
             v.col[j] = (FUN_001fa6d0_2a7780(((s32)v.col[j] >> 24) * alpha) << 24) | color;
-            FUN_001f9a68_2a7780(&v.pos[j], &e->verts[vi], scale);
-            uv = (f32 *)(e->idx[i][j][1] * 8 + (s32)e->uv);
-            w = 1.0f - r->f70 * e->f5C;
+            FUN_001f9a68_2a7780(&v.pos[j], &effect_config->verts[vi], scale);
+            uv = (f32 *)(effect_config->idx[i][j][1] * 8 + (s32)effect_config->uv);
+            w = 1.0f - r->f70 * effect_config->f5C;
             v.uv[j][0] = (uv[0] - 0.5f) * uv_scale + 0.5f;
             v.uv[j][1] = (uv[1] - 0.5f) * uv_scale + 0.5f + w;
         }
