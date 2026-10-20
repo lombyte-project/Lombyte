@@ -162,6 +162,7 @@ void FUN_L18_0022e8f8(void) {
         HERO_STATE_GRIND_JUMP = 41,
         HERO_STATE_GRIND_RAIL_TRANSFER = 42,
         HERO_STATE_GRIND_ATTACK = 43,
+        HERO_STATE_SWIM = 51,
         HERO_STATE_GRIND_COLLISION_RECOVERY = 66,
         HERO_STATE_APPROACH_TARGET = 101,
         HERO_STATE_TARGET_ARRIVAL = 103,
@@ -503,7 +504,7 @@ void FUN_L18_0022e8f8(void) {
                         return;
                     }
                     break;
-                case 51:
+                case HERO_STATE_SWIM:
                 case 53:
                     if (hero.state.current == 0x33) {
                         hero.anim_speed = hero.ground_speed * 15.0f;
