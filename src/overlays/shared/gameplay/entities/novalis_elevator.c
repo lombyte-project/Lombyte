@@ -2195,7 +2195,7 @@ void FUN_L01_002eec68(char *moby) {
     float second_spawn_angle;
     char *moby_vars;
     char *hit_record;
-    char *p;
+    char *hit_record_moby;
     char *x;
     char *search_path;
     char *spawned;
@@ -2203,7 +2203,7 @@ void FUN_L01_002eec68(char *moby) {
     char *cand;
     u128_2F0040 *wp;
     int candidate_list_index;
-    char *p2;
+    char *hit_record_moby_for_class_check;
     char *x2;
     char *b;
     int c258;
@@ -2223,19 +2223,19 @@ void FUN_L01_002eec68(char *moby) {
     if (hit_record != 0) {
         qcopy(&v, moby + 0x10);
         v.f[2] = v.f[2] + 0.5f;
-        p = *(char **)(hit_record + 0x20);
-        if (p != 0) {
-            short cls = *(short *)(p + 0xA6);
+        hit_record_moby = *(char **)(hit_record + 0x20);
+        if (hit_record_moby != 0) {
+            short cls = *(short *)(hit_record_moby + 0xA6);
             if (cls == 0x47) {
                 qcopy(&w, ((char *)D_0013F420));
                 wp = &w.q;
             } else {
-                x = *(char **)(p + 0x24);
+                x = *(char **)(hit_record_moby + 0x24);
                 if ((x != 0 && *(short *)(x + 0x46) == 5) || cls == 0xBA) {
                     qcopy(&w, &v);
                     wp = &w.q;
                 } else {
-                    qcopy(&w, p + 0x10);
+                    qcopy(&w, hit_record_moby + 0x10);
                     wp = &w.q;
                 }
             }
@@ -2308,8 +2308,8 @@ void FUN_L01_002eec68(char *moby) {
                 spawned[0x20] = 8;
                 *(float *)(spawned + 0x58) = f24;
             }
-            p2 = *(char **)(hit_record + 0x20);
-            if (p2 != 0 && (x2 = *(char **)(p2 + 0x24)) != 0 && *(short *)(x2 + 0x46) == 5) {
+            hit_record_moby_for_class_check = *(char **)(hit_record + 0x20);
+            if (hit_record_moby_for_class_check != 0 && (x2 = *(char **)(hit_record_moby_for_class_check + 0x24)) != 0 && *(short *)(x2 + 0x46) == 5) {
                 FUN_L00_00257470(moby, 0x800, -1);
             } else {
                 FUN_L00_00257470(moby, 0, -1);
