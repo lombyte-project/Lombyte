@@ -32,28 +32,28 @@ extern void FUN_001f9a68(void *, void *, float);
 extern void FUN_L00_00250df8(void *);
 
 char *FUN_L15_002e4580(char *src, float *v, char *pos) {
-    char *m = func_0020D348_m(0x3A6);
-    if (m != 0) {
-        char *p;
-        *(unsigned char *)(m + 0x30) = 0xFF;
-        *(short *)(m + 0x32) = 0xFF;
-        m[0x31] = 1;
-        m[0x20] = 0;
-        *(long *)(m + 0x38) = *(long *)(src + 0x38);
-        *(float *)(m + 0x2C) = *(float *)(m + 0x2C) * 20.0f;
-        qcopy(m + 0x10, pos);
-        p = *(char **)(m + 0x78);
-        FUN_001f9a68(p, v, 5.0f);
-        *(int *)(p + 0x38) = scale_game_frames(0xF0);
-        *(char **)(p + 0x3C) = src;
-        m[0x23] = 0x30;
-        *(unsigned short *)(m + 0x34) |= 0x200;
-        *(float *)(m + 0x48) = fast_arc_tan(v[0], v[1]);
-        *(float *)(m + 0x44) = -fast_arc_tan(vector_length_xy(v), v[2]);
-        FUN_L00_00250df8(m);
-        FUN_L00_0026daa0(m, 0x600040FF, 0x80, -1, 170000.0f);
+    char *spawned_moby = func_0020D348_m(0x3A6);
+    if (spawned_moby != 0) {
+        char *moby_vars;
+        *(unsigned char *)(spawned_moby + 0x30) = 0xFF;
+        *(short *)(spawned_moby + 0x32) = 0xFF;
+        spawned_moby[0x31] = 1;
+        spawned_moby[0x20] = 0;
+        *(long *)(spawned_moby + 0x38) = *(long *)(src + 0x38);
+        *(float *)(spawned_moby + 0x2C) = *(float *)(spawned_moby + 0x2C) * 20.0f;
+        qcopy(spawned_moby + 0x10, pos);
+        moby_vars = *(char **)(spawned_moby + 0x78);
+        FUN_001f9a68(moby_vars, v, 5.0f);
+        *(int *)(moby_vars + 0x38) = scale_game_frames(0xF0);
+        *(char **)(moby_vars + 0x3C) = src;
+        spawned_moby[0x23] = 0x30;
+        *(unsigned short *)(spawned_moby + 0x34) |= 0x200;
+        *(float *)(spawned_moby + 0x48) = fast_arc_tan(v[0], v[1]);
+        *(float *)(spawned_moby + 0x44) = -fast_arc_tan(vector_length_xy(v), v[2]);
+        FUN_L00_00250df8(spawned_moby);
+        FUN_L00_0026daa0(spawned_moby, 0x600040FF, 0x80, -1, 170000.0f);
     }
-    return m;
+    return spawned_moby;
 }
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D7C00.c: func_L15_002D7C00). */
