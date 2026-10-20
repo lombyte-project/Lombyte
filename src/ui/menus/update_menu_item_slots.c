@@ -17,7 +17,7 @@ s32 update_menu_item_slots(struct MenuScreen *menu) {
     s32 *slots;
     s32 *scan;
     s32 cur;
-    s32 tmp;
+    s32 cursor_or_scaled_frame_quotient;
     int index;
     int start_index;
     int i;
@@ -31,8 +31,8 @@ s32 update_menu_item_slots(struct MenuScreen *menu) {
         menu->data.slots.cursor = (start_index + 1) % 8;
     }
     if (controller_state.pressed_unmasked & 4) {
-        tmp = menu->data.slots.cursor;
-        menu->data.slots.cursor = (tmp + 7) % 8;
+        cursor_or_scaled_frame_quotient = menu->data.slots.cursor;
+        menu->data.slots.cursor = (cursor_or_scaled_frame_quotient + 7) % 8;
     }
     cur = menu->data.slots.cursor;
     if (cur != start_index) {
@@ -43,8 +43,8 @@ s32 update_menu_item_slots(struct MenuScreen *menu) {
             if ((u16)usage_stats.stat[21].count <= 0xFFFEU) {
                 usage_stats.stat[21].count = (u16)(usage_stats.stat[21].count + 1);
             }
-            tmp = scale_game_frames(D_0015EEA4) / 600;
-            if ((s32)usage_stats.stat[21].unk2 < tmp) {
+            cursor_or_scaled_frame_quotient = scale_game_frames(D_0015EEA4) / 600;
+            if ((s32)usage_stats.stat[21].unk2 < cursor_or_scaled_frame_quotient) {
                 usage_stats.stat[21].unk2 = (u16)(scale_game_frames(D_0015EEA4) / 600);
             }
             slots = menu->data.slots.items;
