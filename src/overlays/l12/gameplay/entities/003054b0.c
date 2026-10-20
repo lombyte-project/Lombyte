@@ -234,19 +234,19 @@ void FUN_L12_003054b0(char *moby) {
                 char *r = FUN_L00_0025a420(gun_moby, 0x50000, 0);
                 if (r == 0) {
                     int k = D_L12_001FB670[i];
-                    char *t = 0;
+                    char *fallback_moby = 0;
                     if (k == 0x11) {
-                        t = moby;
+                        fallback_moby = moby;
                     } else {
                         int id = *(int *)(owner_data + k * 0x30 + 0x20);
                         if (id != -1) {
-                            t = (char *)(D_L12_0015FFD8_gp + (id << 8));
+                            fallback_moby = (char *)(D_L12_0015FFD8_gp + (id << 8));
                         }
                     }
-                    if (t != 0) {
+                    if (fallback_moby != 0) {
                         dmg = 0.2f;
-                        r = FUN_L00_0025a420(t, 0x50000, 0);
-                        ((unsigned char *)t)[0xA4] = 0xFF;
+                        r = FUN_L00_0025a420(fallback_moby, 0x50000, 0);
+                        ((unsigned char *)fallback_moby)[0xA4] = 0xFF;
                     }
                     if (r == 0) {
                         goto done;
