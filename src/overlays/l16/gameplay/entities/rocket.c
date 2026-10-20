@@ -64,28 +64,28 @@ extern void FUN_L16_002c9650_u(char *) __asm__("FUN_L16_002c9650");
 f32 probe_ground_height(void *arg0, s32 arg1, f32 arg2) __asm__("FUN_00213508");
 float absolute_float(float input) __asm__("func_001F99C0");
 
-void FUN_L16_002c9480(struct Moby *m) {
+void FUN_L16_002c9480(struct Moby *moby) {
     enum {
         MOBY_STATE_INITIALIZE = 0,
         MOBY_STATE_SPIN_AND_DRAW_SPRITES = 1
     };
-    switch (m->state) {
+    switch (moby->state) {
     case MOBY_STATE_INITIALIZE: {
-        float f;
-        float h;
-        FUN_L16_002c9568((char *)m);
-        m->scale = m->scale * 0.9f;
-        f = probe_ground_height(&m->pos, 0, 0.5f);
-        h = absolute_float(f - m->pos.z);
-        if (h < 1.0f) {
-            m->pos.z = f + 0.9f;
+        float ground_height;
+        float vertical_distance_to_ground;
+        FUN_L16_002c9568((char *)moby);
+        moby->scale = moby->scale * 0.9f;
+        ground_height = probe_ground_height(&moby->pos, 0, 0.5f);
+        vertical_distance_to_ground = absolute_float(ground_height - moby->pos.z);
+        if (vertical_distance_to_ground < 1.0f) {
+            moby->pos.z = ground_height + 0.9f;
         }
-        m->state = 1;
+        moby->state = 1;
         break;
     }
     case MOBY_STATE_SPIN_AND_DRAW_SPRITES:
-        m->rot.z = fast_add_rotations(m->rot.z, D_0015ED6C * 4.1887903f);
-        FUN_L16_002c9650_u((char *)m);
+        moby->rot.z = fast_add_rotations(moby->rot.z, D_0015ED6C * 4.1887903f);
+        FUN_L16_002c9650_u((char *)moby);
         break;
     }
 }
