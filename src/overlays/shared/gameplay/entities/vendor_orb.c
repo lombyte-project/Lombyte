@@ -1804,8 +1804,8 @@ void FUN_L00_002e4930(char *camera) {
     int camera_timer_base_frames;
 
     if (attach_state->state == 0) {
-        struct Hero *p0 = &hero;
-        if (p0->state.control_mode == 2) {
+        struct Hero *player = &hero;
+        if (player->state.control_mode == 2) {
             attach_state->prev = attach_state->state;
             attach_state->state = 1;
             attach_state->timer = D_L00_00161D3C_gp;
