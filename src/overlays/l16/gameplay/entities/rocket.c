@@ -1926,17 +1926,17 @@ extern char *D_L16_0015FFD8;
 extern int *D_L16_001ABCC0[];
 
 int FUN_L16_002cf738(void *mv) {
-    unsigned char *m = mv;
-    unsigned short *p = (unsigned short *)D_L16_001ABCC0[m[0x21]];
-    if (p == 0)
+    unsigned char *moby = mv;
+    unsigned short *group_entry = (unsigned short *)D_L16_001ABCC0[moby[0x21]];
+    if (group_entry == 0)
         return 1;
     for (;;) {
-        unsigned char *other = D_L16_0015FFD8 + ((*p & 0x7FFF) << 8);
+        unsigned char *other = D_L16_0015FFD8 + ((*group_entry & 0x7FFF) << 8);
         if (*(short *)(other + 0xA6) == 0x222) {
             if (other[0xBC] != 0)
                 return 0;
         }
-        if ((short)*p++ < 0)
+        if ((short)*group_entry++ < 0)
             return 1;
     }
 }
