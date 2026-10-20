@@ -285,7 +285,7 @@ extern f32 FUN_001f99c0_215b68(f32) __asm__("FUN_001f99c0");
 #define X D_L00_0017A680_215b68
 
 void FUN_L00_00215b68(void) {
-    f32 t, r, n, v, c, u, a, b, d;
+    f32 t, r, n, v, clamp_bound, u, a, b, d;
     s32 st;
 
     if (hero.state.current == 0x44) {
@@ -330,13 +330,13 @@ void FUN_L00_00215b68(void) {
             X.f1198 = -0.7f;
         d = FUN_001f99c0_215b68(t) * 0.2f;
         X.f1194 = d;
-        c = 0.2f;
-        if (c < d)
+        clamp_bound = 0.2f;
+        if (clamp_bound < d)
             goto st94;
-        c = -0.2f;
-        if (d < c) {
+        clamp_bound = -0.2f;
+        if (d < clamp_bound) {
         st94:
-            X.f1194 = c;
+            X.f1194 = clamp_bound;
         }
         X.f1190 = FUN_001f99c0_215b68(t) * 0.16f;
         return;
