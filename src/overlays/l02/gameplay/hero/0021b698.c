@@ -808,6 +808,7 @@ extern s32 D_0013CB14[];
 
 void FUN_L02_00225c20(void) {
     enum {
+        HERO_STATE_VEHICLE_MODE_3_HURT = 0x56,
         HERO_STATE_MOVE_TO_TARGET_POSITION = 0x65,
         HERO_STATE_BRAKE_AT_TARGET_POSITION = 0x66,
         HERO_STATE_SINK_BELOW_SURFACE = 0x68,
@@ -2323,7 +2324,7 @@ void FUN_L02_00225c20(void) {
             FUN_L00_002334d0(hero.motion.velocity.f, hero.motion.velocity.f, frame_time_sq * 54.0f);
         }
     } break;
-    case 0x56: {
+    case HERO_STATE_VEHICLE_MODE_3_HURT: {
         float len;
 
         vel = hero.motion.velocity.f;
