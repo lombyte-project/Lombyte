@@ -16,18 +16,18 @@ extern void music_primary_replace_callback(int, long) __asm__("FUN_00216ad0");
 void music_start_track_body(int track, int track_flags, int volume) __asm__("FUN_00215d18");
 
 void music_start_track_body(int track, int track_flags, int volume) {
-    char *s = (char *)D_001516D0;
+    char *music_state_base = (char *)D_001516D0;
     char *base;
     int *tbl;
     unsigned int cur;
-    long h;
+    long track_location;
     int i;
     int flags;
 
-    if (*(short *)(s + 0x3E) == 9) {
+    if (*(short *)(music_state_base + 0x3E) == 9) {
         return;
     }
-    cur = *(unsigned int *)(s + 0x34);
+    cur = *(unsigned int *)(music_state_base + 0x34);
     if (cur == 0 || cur == 0xFFFFFFFF) {
         return;
     }
@@ -37,18 +37,18 @@ void music_start_track_body(int track, int track_flags, int volume) {
     if (tbl[i] == 0) {
         return;
     }
-    h = tbl[i];
+    track_location = tbl[i];
     flags = (track_flags & 1) ? 0x24 : 0x20;
-    *(short *)(s + 0x38) = track;
-    *(short *)(s + 0x3C) = track_flags;
-    *(short *)(s + 0x3E) = 9;
-    *(int *)(s + 0x48) = 10;
-    *(int *)(s + 0x4C) = 0xBB80;
-    *(short *)(s + 0x3A) = volume;
-    *(short *)(s + 0x44) = 0;
-    snd_play_vag_stream_by_loc_ex_cb(h, 0, 0, 0, volume, 0, 1, cur, flags,
+    *(short *)(music_state_base + 0x38) = track;
+    *(short *)(music_state_base + 0x3C) = track_flags;
+    *(short *)(music_state_base + 0x3E) = 9;
+    *(int *)(music_state_base + 0x48) = 10;
+    *(int *)(music_state_base + 0x4C) = 0xBB80;
+    *(short *)(music_state_base + 0x3A) = volume;
+    *(short *)(music_state_base + 0x44) = 0;
+    snd_play_vag_stream_by_loc_ex_cb(track_location, 0, 0, 0, volume, 0, 1, cur, flags,
                                      music_primary_replace_callback,
-                                     (long)(unsigned int)(s + 0x34));
+                                     (long)(unsigned int)(music_state_base + 0x34));
 }
 
 extern __typeof__(music_start_track_body) func_00215D18 __attribute__((alias("FUN_00215d18")));
