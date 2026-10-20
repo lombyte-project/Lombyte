@@ -61,12 +61,12 @@ void FUN_L00_00259858(char *a, int b, int c, float d) {
 #include "qcopy.h"
 /* Fills a record with b, c, d and flag 1, and copies the vector q into its start. */
 void make_hit_descriptor(char *a, int b, int c, float d, void *q) __asm__("FUN_L00_00259888");
-void make_hit_descriptor(char *a, int b, int c, float d, void *q) {
-    *(int *)(a + 0x10) = b;
-    *(int *)(a + 0x14) = c;
-    *(float *)(a + 0x1C) = d;
-    *(int *)(a + 0x20) = 1;
-    qcopy(a, q);
+void make_hit_descriptor(char *hit_descriptor, int b, int c, float d, void *direction_vector) {
+    *(int *)(hit_descriptor + 0x10) = b;
+    *(int *)(hit_descriptor + 0x14) = c;
+    *(float *)(hit_descriptor + 0x1C) = d;
+    *(int *)(hit_descriptor + 0x20) = 1;
+    qcopy(hit_descriptor, direction_vector);
 }
 #include "eetypes.h"
 #include "rnc/math/fast_math.h"
