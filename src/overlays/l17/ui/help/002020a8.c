@@ -85,7 +85,7 @@ s32 FUN_L17_0020dbe8(s32 arg) {
     u8 *mob;
     s32 flag;
     s32 id;
-    f32 a, b, frame_duration;
+    f32 xy_scale, b, frame_duration;
     OvlVec4 v;
 
     if (G.state.control_mode == 0x14) {
@@ -187,13 +187,13 @@ s32 FUN_L17_0020dbe8(s32 arg) {
             hero_set_state(HERO_STATE_HURT, 1);
         }
         frame_duration = frame_time;
-        a = frame_duration * 5.7f;
+        xy_scale = frame_duration * 5.7f;
         b = frame_duration * 2.4f;
         if (G.unk12E7 != 0) {
-            a = 0.0f;
+            xy_scale = 0.0f;
             b = frame_duration * 1.7f;
         }
-        FUN_L00_00210c80_8(&v, flag, a, b);
+        FUN_L00_00210c80_8(&v, flag, xy_scale, b);
         if (flag != 0 && tbl->unk28 == 4) {
             v.f[2] += v.f[2];
         }
