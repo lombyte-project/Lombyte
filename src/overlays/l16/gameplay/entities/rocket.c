@@ -302,7 +302,7 @@ void test_dummy_door_update(struct Moby *moby) {
         break;
     case TEST_DUMMY_DOOR_STATE_UPDATE_HEIGHT: {
         int r = fast_dec_timer((int *)(data + 8));
-        float f;
+        float target_height;
         if (r != 0) {
             if (r == 2) {
                 if (SubtractIntegerWithClamp(D_L16_00161A88 - D_L16_0015F5CC) >= 4) {
@@ -310,11 +310,11 @@ void test_dummy_door_update(struct Moby *moby) {
                     allocate_voice_for_target_entry(1, 0, moby);
                 }
             }
-            f = *(float *)data;
+            target_height = *(float *)data;
         } else {
-            f = *(float *)data + D_L16_00161A84;
+            target_height = *(float *)data + D_L16_00161A84;
         }
-        advance_accelerated_scalar(f, frame_time_sq * 10.0f, frame_time_sq * 10.0f, D_0015ED6C * 10.0f,
+        advance_accelerated_scalar(target_height, frame_time_sq * 10.0f, frame_time_sq * 10.0f, D_0015ED6C * 10.0f,
                                    &moby->pos.z, (float *)(data + 4));
         break;
     }
