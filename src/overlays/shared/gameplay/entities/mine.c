@@ -248,7 +248,7 @@ void mine_update(M910 *mine_moby) {
     };
     B910 camera_blast_parameters = D_L00_001E9830;
     B910 b = D_L00_001E9880;
-    U910 c;
+    U910 collision_response_velocity;
     U910 old;
     U910 up;
     W910 *v;
@@ -260,7 +260,7 @@ void mine_update(M910 *mine_moby) {
     up.q = 0;
     old.f[2] = frame_time + frame_time;
     up.f[2] = 1.0f;
-    c.q = old.q;
+    collision_response_velocity.q = old.q;
     v = mine_moby->v;
     if ((hero.unk20A5 != 0 || hero.unk20AF != 0) && mine_moby->state == 0) {
         mine_moby->flags |= 0x41;
@@ -401,8 +401,8 @@ void mine_update(M910 *mine_moby) {
                             if (v->vel.f[2] < frame_time * -9.8f) {
                                 mine_moby->bBC = 1;
                                 qcopy(&mine_moby->pos, &coll_hit.pos);
-                                FUN_L00_001ff660(&c, v, &coll_hit.nrm);
-                                normalize_vector_xyz(&c, &c, frame_time + frame_time);
+                                FUN_L00_001ff660(&collision_response_velocity, v, &coll_hit.nrm);
+                                normalize_vector_xyz(&collision_response_velocity, &collision_response_velocity, frame_time + frame_time);
                                 normalize_vector_xyz(&up, &coll_hit.nrm, 1.0f);
                             } else {
                                 qcopy(&mine_moby->pos, &coll_hit.pos);
@@ -422,8 +422,8 @@ void mine_update(M910 *mine_moby) {
                                 v->vel.f[2] < frame_time * -9.8f) {
                                 mine_moby->bBC = 1;
                                 qcopy(&mine_moby->pos, &coll_hit.pos);
-                                FUN_L00_001ff660(&c, v, &coll_hit.nrm);
-                                normalize_vector_xyz(&c, &c, frame_time + frame_time);
+                                FUN_L00_001ff660(&collision_response_velocity, v, &coll_hit.nrm);
+                                normalize_vector_xyz(&collision_response_velocity, &collision_response_velocity, frame_time + frame_time);
                                 normalize_vector_xyz(&up, &coll_hit.nrm, 1.0f);
                             } else {
                                 if (coll_hit.moby != 0) {
