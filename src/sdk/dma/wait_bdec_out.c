@@ -24,7 +24,7 @@ extern s32 EnableInterrupts(void);
 #define D_ENABLER ((volatile u32 *)0x1000F520)
 #define D_ENABLEW ((volatile u32 *)0x1000F590)
 
-s32 _waitBdecOut(MpegDec *d) {
+s32 _waitBdecOut(MpegDec *decoder) {
     s32 cb1[8];
     s32 cb2[8];
     s32 ret;
@@ -34,31 +34,31 @@ s32 _waitBdecOut(MpegDec *d) {
     u32 rest;
 
     ret = 1;
-    _waitIpuIdle(d);
+    _waitIpuIdle(decoder);
     if (*D4_QWC != 0 && !(*IPU_CTRL & 0x4000)) {
         do {
             if (*D3_QWC == 0 && !(*D3_CHCR & 0x100)) {
                 cb1[0] = 1;
-                _dispatchMpegCallback(d->cbData, cb1);
+                _dispatchMpegCallback(decoder->cbData, cb1);
             }
         } while (*D4_QWC != 0 && !(*IPU_CTRL & 0x4000));
     }
     bp = *IPU_BP;
     top = *IPU_TOP;
-    d->unk838 = top;
+    decoder->unk838 = top;
     if (top < 0) {
         rest = bp & 0x1F;
-        d->unk83C = rest ? 32 - rest : 0;
+        decoder->unk83C = rest ? 32 - rest : 0;
     } else {
-        d->unk83C = 32;
+        decoder->unk83C = 32;
     }
     if (*IPU_CTRL & 0x4000) {
-        _Error(d, D_00153788);
+        _Error(decoder, D_00153788);
         cb2[0] = 2;
-        _dispatchMpegCallback(d->cbData, cb2);
+        _dispatchMpegCallback(decoder->cbData, cb2);
         *(u32 *)0x10002010 = 0x40000000;
         cb2[0] = 3;
-        _dispatchMpegCallback(d->cbData, cb2);
+        _dispatchMpegCallback(decoder->cbData, cb2);
         intr = DIntr();
         *D_ENABLEW = *D_ENABLER | 0x10000;
         *D4_CHCR = 0;
