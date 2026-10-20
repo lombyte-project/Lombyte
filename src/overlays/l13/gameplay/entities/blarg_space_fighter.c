@@ -933,12 +933,12 @@ void FUN_L13_002c3f08(char *out, float scale) {
     if (*(char **)(x + 0x15F0) == 0) {
         qcopy(out, x + 0x80);
     } else {
-        char *d = *(char **)(*(char **)(x + 0x15F0) + 0x78);
+        char *vehicle_data = *(char **)(*(char **)(x + 0x15F0) + 0x78);
         float a =
-            fast_add_rotations(*(float *)(*(char **)(x + 0x15F0) + 0x48), *(float *)(d + 0x90));
+            fast_add_rotations(*(float *)(*(char **)(x + 0x15F0) + 0x48), *(float *)(vehicle_data + 0x90));
         float b =
-            fast_add_rotations(*(float *)(*(char **)(x + 0x15F0) + 0x44), *(float *)(d + 0x94));
-        build_spherical_offset(out, scale * *(float *)(d + 0x64), a, -b);
+            fast_add_rotations(*(float *)(*(char **)(x + 0x15F0) + 0x44), *(float *)(vehicle_data + 0x94));
+        build_spherical_offset(out, scale * *(float *)(vehicle_data + 0x64), a, -b);
         fast_vec_add(out, out, *(char **)(x + 0x15F0) + 0x10);
     }
 }
