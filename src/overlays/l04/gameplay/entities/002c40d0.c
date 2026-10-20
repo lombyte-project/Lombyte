@@ -32,10 +32,10 @@ typedef struct {
     s32 f;
 } T6;
 /* Returns the moby data pointer plus 0x180, or 0 when either is null. */
-s32 FUN_L04_002c41b0(T6 *p) {
+s32 FUN_L04_002c41b0(T6 *data_owner) {
     s32 v;
-    if (p != 0) {
-        v = p->f;
+    if (data_owner != 0) {
+        v = data_owner->f;
         if (v != 0) {
             return v + 0x180;
         }
