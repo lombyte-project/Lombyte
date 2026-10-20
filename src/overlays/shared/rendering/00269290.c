@@ -96,90 +96,90 @@ extern void free_effect_particle(void *) __asm__("FUN_L00_00267a08");
 float absolute_float(float input) __asm__("FUN_001f99c0");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 
-void FUN_L00_002694f8(char *m) {
-    char *p = m + 0x20;
+void FUN_L00_002694f8(char *particle) {
+    char *particle_data = particle + 0x20;
     float v[4];
-    float d, a;
-    int t, s, k;
+    float reference_distance, reference_angle_delta;
+    int t, remaining_lifetime, k;
     float *g;
-    char *q;
+    char *reference_position;
     char *B;
     char *pos;
-    t = *(int *)(p + 0x1C);
+    t = *(int *)(particle_data + 0x1C);
     if (t >= 3) {
-        s = *(short *)(m + 0xA);
-        pos = m + 0x10;
-        if (s > func_001F9850(0x78) && coll_sphere(7.99f, pos, 0x12, 0)) {
-            *(int *)(p + 0x14) = 1;
-            *(short *)(m + 0xA) = func_001F9850(0x78);
-            *(int *)(p + 0x1C) = -1;
+        remaining_lifetime = *(short *)(particle + 0xA);
+        pos = particle + 0x10;
+        if (remaining_lifetime > func_001F9850(0x78) && coll_sphere(7.99f, pos, 0x12, 0)) {
+            *(int *)(particle_data + 0x14) = 1;
+            *(short *)(particle + 0xA) = func_001F9850(0x78);
+            *(int *)(particle_data + 0x1C) = -1;
         } else {
-            *(int *)(p + 0x1C) = 0;
+            *(int *)(particle_data + 0x1C) = 0;
         }
     } else {
-        pos = m + 0x10;
+        pos = particle + 0x10;
         if (t < 0)
             goto after;
-        *(int *)(p + 0x1C) = t + 1;
+        *(int *)(particle_data + 0x1C) = t + 1;
     }
-    if (*(int *)(p + 0x1C) >= 0) {
+    if (*(int *)(particle_data + 0x1C) >= 0) {
         g = D_L00_001CB7C0;
-        *(float *)p = fast_cos(g[1]) * g[5] / 2.5f;
-        *(float *)(p + 4) = fast_sin(g[1]) * g[5] / 2.5f;
-        *(int *)(p + 8) = 0;
-        fast_vec_add(pos, pos, p);
+        *(float *)particle_data = fast_cos(g[1]) * g[5] / 2.5f;
+        *(float *)(particle_data + 4) = fast_sin(g[1]) * g[5] / 2.5f;
+        *(int *)(particle_data + 8) = 0;
+        fast_vec_add(pos, pos, particle_data);
     }
 after:
-    q = D_L00_00166DC0;
-    B = q - 0x140;
-    d = fast_vec_dist(pos, q);
-    a = fast_subtract_rotations(fast_arc_tan(*(float *)(m + 0x10) - *(float *)(B + 0x140),
-                                             *(float *)(m + 0x14) - *(float *)(B + 0x144)),
+    reference_position = D_L00_00166DC0;
+    B = reference_position - 0x140;
+    reference_distance = fast_vec_dist(pos, reference_position);
+    reference_angle_delta = fast_subtract_rotations(fast_arc_tan(*(float *)(particle + 0x10) - *(float *)(B + 0x140),
+                                             *(float *)(particle + 0x14) - *(float *)(B + 0x144)),
                                 *(float *)(B + 0x158));
-    if (absolute_float(a) > 1.0471976f) {
-        if ((*(int *)(p + 0x18))++ >= 6)
+    if (absolute_float(reference_angle_delta) > 1.0471976f) {
+        if ((*(int *)(particle_data + 0x18))++ >= 6)
             goto kill;
         v[0] = fast_cos(
-                   fast_add_rotations(*(float *)(B + 0x158), a > 0.0f ? -1.0471976f : 1.0471976f)) *
-               d;
+                   fast_add_rotations(*(float *)(B + 0x158), reference_angle_delta > 0.0f ? -1.0471976f : 1.0471976f)) *
+               reference_distance;
         v[1] = fast_sin(
-                   fast_add_rotations(*(float *)(B + 0x158), a > 0.0f ? -1.0471976f : 1.0471976f)) *
-               d;
-        v[2] = *(float *)(m + 0x18) - *(float *)(B + 0x148);
-        fast_vec_add(pos, v, q);
+                   fast_add_rotations(*(float *)(B + 0x158), reference_angle_delta > 0.0f ? -1.0471976f : 1.0471976f)) *
+               reference_distance;
+        v[2] = *(float *)(particle + 0x18) - *(float *)(B + 0x148);
+        fast_vec_add(pos, v, reference_position);
         qcopy(v, pos);
         v[2] = v[2] + 32.0f;
         if (func_L00_001EFFF0(pos, v, 0x12, 0, 0))
             goto kill;
     }
     if ((D_L00_0015F5CC & 3) == 0)
-        m[8]++;
-    s = *(short *)(m + 0xA);
-    if (func_001F9850(0x78) >= s) {
-        if (*(int *)(p + 0x14)) {
-            k = *(short *)(m + 0xA) * 0x14 / func_001F9850(0x78);
+        particle[8]++;
+    remaining_lifetime = *(short *)(particle + 0xA);
+    if (func_001F9850(0x78) >= remaining_lifetime) {
+        if (*(int *)(particle_data + 0x14)) {
+            k = *(short *)(particle + 0xA) * 0x14 / func_001F9850(0x78);
         } else {
-            k = (func_001F9850(0x78) - *(short *)(m + 0xA)) * 0x14 / func_001F9850(0x78);
+            k = (func_001F9850(0x78) - *(short *)(particle + 0xA)) * 0x14 / func_001F9850(0x78);
         }
     } else {
         k = 0x14;
     }
-    if (d < 8.0f || d > 96.0f)
+    if (reference_distance < 8.0f || reference_distance > 96.0f)
         goto kill;
-    if (d < 16.0f) {
-        k = truncate_float_to_s32(convert_integer_to_float_c(k) * (d - 8.0f) * 0.125f);
-    } else if (d > 80.0f) {
-        k = truncate_float_to_s32(convert_integer_to_float_c(k) * (96.0f - d) * 0.0625f);
+    if (reference_distance < 16.0f) {
+        k = truncate_float_to_s32(convert_integer_to_float_c(k) * (reference_distance - 8.0f) * 0.125f);
+    } else if (reference_distance > 80.0f) {
+        k = truncate_float_to_s32(convert_integer_to_float_c(k) * (96.0f - reference_distance) * 0.0625f);
     }
-    *(int *)(m + 4) = (k << 24) | (*(int *)(m + 4) & 0xFFFFFF);
-    if (fast_dec_timer_s16(m + 0xA)) {
-        if (*(int *)(p + 0x14)) {
+    *(int *)(particle + 4) = (k << 24) | (*(int *)(particle + 4) & 0xFFFFFF);
+    if (fast_dec_timer_s16(particle + 0xA)) {
+        if (*(int *)(particle_data + 0x14)) {
         kill:
-            **(char **)(p + 0x10) = 0;
-            free_effect_particle(m);
+            **(char **)(particle_data + 0x10) = 0;
+            free_effect_particle(particle);
         } else {
-            *(int *)(p + 0x14) = 1;
-            *(short *)(m + 0xA) =
+            *(int *)(particle_data + 0x14) = 1;
+            *(short *)(particle + 0xA) =
                 FUN_L00_00257b90(func_001F9850(0x78) * 3, func_001F9850(0x78) * 9);
         }
     }
