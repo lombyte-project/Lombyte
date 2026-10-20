@@ -2119,7 +2119,7 @@ unsigned char *spawn_crate_debris(unsigned char *owner, void *vel, void *pos, vo
 extern float g48_2afa48 __asm__("D_L00_00161448") __attribute__((sda));
 extern float g4c_2afa48 __asm__("D_L00_0016144C") __attribute__((sda));
 unsigned char *spawn_crate_debris(unsigned char *owner, void *vel, void *pos, void *rot, int type,
-                                int n, float lo, float hi) {
+                                int initial_bounce_count, float lo, float hi) {
     unsigned char *debris_moby = FUN_0020c4f8_2af8b0(type);
     if (debris_moby) {
         V_2af8b0 *v = *(V_2af8b0 **)(debris_moby + 0x78);
@@ -2148,7 +2148,7 @@ unsigned char *spawn_crate_debris(unsigned char *owner, void *vel, void *pos, vo
                  DEG_TO_RAD * D_0015ED6C_2af8b0;
         scale_multiplier = FUN_002132a8_2af8b0(lo, hi);
         *(float *)(debris_moby + 0x2C) *= scale_multiplier;
-        v->hc = n;
+        v->hc = initial_bounce_count;
         v->f8 = scale_multiplier * 0.25f;
         FUN_L00_00250df8_2af8b0(debris_moby);
     }
