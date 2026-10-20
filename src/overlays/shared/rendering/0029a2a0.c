@@ -44,37 +44,37 @@ extern unsigned char *D_L07_001B21F4 __asm__("D_L07_001B21F4") __attribute__((se
 extern float D_L07_00166E40[];
 
 unsigned char *FUN_L07_0029b8d8(void *m, short index, float amount, float factor);
-unsigned char *FUN_L07_0029b8d8(void *m, short index, float amount, float factor) {
+unsigned char *FUN_L07_0029b8d8(void *moby, short index, float amount, float factor) {
     float v[4];
-    float t[4];
-    unsigned char *p = create_part(0x3d);
-    if (p != 0) {
-        unsigned char *q = p + 0x20;
-        *(void **)q = m;
-        *(short *)(p + 0xa) = scale_game_frames(0x50);
-        *(float *)(q + 4) = 0.0f;
-        *(float *)(q + 8) = random_float_between(*(float *)(q + 4), 1.0f);
+    float position_offset[4];
+    unsigned char *particle = create_part(0x3d);
+    if (particle != 0) {
+        unsigned char *particle_payload = particle + 0x20;
+        *(void **)particle_payload = moby;
+        *(short *)(particle + 0xa) = scale_game_frames(0x50);
+        *(float *)(particle_payload + 4) = 0.0f;
+        *(float *)(particle_payload + 8) = random_float_between(*(float *)(particle_payload + 4), 1.0f);
         {
             int random_index = rand() & 15;
-            *(float *)(q + 0x14) = factor;
-            *(short *)(q + 0xc) = random_index;
+            *(float *)(particle_payload + 0x14) = factor;
+            *(short *)(particle_payload + 0xc) = random_index;
         }
-        p[8] = rand();
-        *(int *)(p + 4) = 0x7f7f7f;
-        *(volatile unsigned char *)(p + 9) = func_001FA898_r(4.0f) + 0x40;
-        *(volatile unsigned char *)(p + 3) = 0x48;
-        *(volatile unsigned char *)(p + 1) = 0;
-        *(volatile float *)(p + 0xc) = amount;
-        p[2] = D_L07_001B21F4[*(short *)(q + 0xc)];
-        *(float *)(q + 0x10) = frame_scale * 0.015f;
-        *(short *)(q + 0xe) = index;
-        p[8] = func_001FA898_r(*(float *)(q + 8) * 255.0f);
-        moby_point_position(*(void **)q, *(short *)(q + 0xe), v);
-        subtract_vector_xyz(t, D_L07_00166E40, v);
-        normalize_vector_xyz(t, t, *(float *)(q + 0x14));
-        add_vector_xyz(p + 0x10, v, t);
+        particle[8] = rand();
+        *(int *)(particle + 4) = 0x7f7f7f;
+        *(volatile unsigned char *)(particle + 9) = func_001FA898_r(4.0f) + 0x40;
+        *(volatile unsigned char *)(particle + 3) = 0x48;
+        *(volatile unsigned char *)(particle + 1) = 0;
+        *(volatile float *)(particle + 0xc) = amount;
+        particle[2] = D_L07_001B21F4[*(short *)(particle_payload + 0xc)];
+        *(float *)(particle_payload + 0x10) = frame_scale * 0.015f;
+        *(short *)(particle_payload + 0xe) = index;
+        particle[8] = func_001FA898_r(*(float *)(particle_payload + 8) * 255.0f);
+        moby_point_position(*(void **)particle_payload, *(short *)(particle_payload + 0xe), v);
+        subtract_vector_xyz(position_offset, D_L07_00166E40, v);
+        normalize_vector_xyz(position_offset, position_offset, *(float *)(particle_payload + 0x14));
+        add_vector_xyz(particle + 0x10, v, position_offset);
     }
-    return p;
+    return particle;
 }
 
 s32 D_L13_001B244C[1] __attribute__((section(".data"))) = {0};
