@@ -1318,18 +1318,18 @@ extern char *D_L05_001B0930[];
 
 void FUN_L05_00254358(float *out, float *rot) {
     char *g = (char *)((char *)((char *)&hero));
-    char *m = *(char **)(g + 0x86C);
+    char *path_owner_moby = *(char **)(g + 0x86C);
     char *path;
     float distance;
     int i, best;
     float tmp[4] __attribute__((aligned(16)));
 
-    if (m == 0) {
+    if (path_owner_moby == 0) {
         qcopy(out, g + 0x80);
         qcopy(rot, g + 0x90);
         return;
     }
-    path = D_L05_001B0930[*(int *)(*(char **)(m + 0x78) + 0x24)];
+    path = D_L05_001B0930[*(int *)(*(char **)(path_owner_moby + 0x78) + 0x24)];
     distance = 9999999.0f;
     best = 0;
     for (i = 0; i < *(int *)path; i += 2) {
@@ -1337,8 +1337,8 @@ void FUN_L05_00254358(float *out, float *rot) {
             char *candidate_path_record = path + i * 16;
             float limit = 4.0f;
             float angle = fast_arc_tan_c(*(float *)(candidate_path_record + 0x10) - *(float *)(hero_bytes + 0x80), *(float *)(candidate_path_record + 0x14) - *(float *)(hero_bytes + 0x84));
-            int n2 = *(int *)path + 2;
-            int next = (i + n2) % *(int *)path;
+            int path_count_plus_two = *(int *)path + 2;
+            int next = (i + path_count_plus_two) % *(int *)path;
             char *lookahead_path_record = path + next * 16;
             if (fast_difference_between_rotations(angle, fast_arc_tan_c(*(float *)(lookahead_path_record + 0x10) - *(float *)(candidate_path_record + 0x10), *(float *)(lookahead_path_record + 0x14) - *(float *)(candidate_path_record + 0x14))) > 1.5707964f) {
                 float candidate_distance_xy;
