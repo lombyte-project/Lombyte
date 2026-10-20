@@ -164,28 +164,28 @@ void enqueue_callback_list_1(s32 arg0, s32 arg1) __asm__("FUN_001f4600");
 void delete_moby(struct Obj *obj) __asm__("FUN_0020c828");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-void FUN_L07_0030e1f8(unsigned char *m) {
-    char *d = *(char **)(m + 0x78);
+void FUN_L07_0030e1f8(unsigned char *moby) {
+    char *moby_data = *(char **)(moby + 0x78);
     float r;
-    char *p;
-    *(float *)(d + 8) = *(float *)(d + 8) + *(float *)(d + 0xC);
-    *(float *)(m + 0x2C) = *(float *)(d + 8);
-    r = (*(float *)(d + 8) - *(float *)d) / (*(float *)(d + 4) - *(float *)d);
+    char *affected_moby;
+    *(float *)(moby_data + 8) = *(float *)(moby_data + 8) + *(float *)(moby_data + 0xC);
+    *(float *)(moby + 0x2C) = *(float *)(moby_data + 8);
+    r = (*(float *)(moby_data + 8) - *(float *)moby_data) / (*(float *)(moby_data + 4) - *(float *)moby_data);
     if (r < 0.2f) {
-        m[0x23] = func_001FA898_r(r * 5.0f * 127.0f);
+        moby[0x23] = func_001FA898_r(r * 5.0f * 127.0f);
     } else if (r > 0.8f) {
-        m[0x23] = func_001FA898_r((1.0f - r) * 5.0f * 127.0f);
+        moby[0x23] = func_001FA898_r((1.0f - r) * 5.0f * 127.0f);
     } else {
-        m[0x23] = 0x80;
+        moby[0x23] = 0x80;
     }
     if (r >= 1.0f) {
-        delete_moby(m);
+        delete_moby(moby);
         return;
     }
-    enqueue_callback_list_1((void *)FUN_L07_0030dcf0_u, m);
-    FUN_L07_0030e0e0_c(*(void **)(D_0013E533 + 0x2E9D), m, d);
-    for (p = D_L07_0015FFE4; p; p = *(char **)(p + 0x28)) {
-        FUN_L07_0030e0e0_c(p, m, d);
+    enqueue_callback_list_1((void *)FUN_L07_0030dcf0_u, moby);
+    FUN_L07_0030e0e0_c(*(void **)(D_0013E533 + 0x2E9D), moby, moby_data);
+    for (affected_moby = D_L07_0015FFE4; affected_moby; affected_moby = *(char **)(affected_moby + 0x28)) {
+        FUN_L07_0030e0e0_c(affected_moby, moby, moby_data);
     }
 }
 /* Spawn the class 0x419 effect moby at a position with a data block, and start its particle. */
