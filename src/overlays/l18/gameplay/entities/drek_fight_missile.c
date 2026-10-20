@@ -3094,14 +3094,14 @@ unsigned char *FUN_L18_002f6e10(struct Moby *self) {
             candidate_moby = D_L18_0015FFD8 + off;
             if (vector_distance(candidate_moby + 0x10, selection_origin) < *(float *)&D_L18_00162338) {
                 unsigned char *r;
-                int a, b;
+                int tilt_delay_frames, b;
                 float dot;
 
                 subtract_vector_xyz(v, candidate_moby + 0x10, selection_origin);
                 r = D_L18_0015FFD8 + off;
-                a = scale_game_frames(0x3C);
+                tilt_delay_frames = scale_game_frames(0x3C);
                 b = scale_game_frames(*(int *)&D_L18_0016233C);
-                FUN_L18_002d8888(r, a, b);
+                FUN_L18_002d8888(r, tilt_delay_frames, b);
                 dot = dot_vectors_xyz(v, &self->rot_row0);
                 if (0.333f < dot) {
                     float candidate_distance = vector_length_xyz(v);
