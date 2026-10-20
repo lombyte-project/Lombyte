@@ -7067,7 +7067,7 @@ extern int help_request(int a, int b) __asm__("FUN_L00_00203908");
 extern unsigned short D_00141C00 __attribute__((section(".data")));
 extern void try_set_help_message(int, int) __asm__("FUN_00215130");
 
-void FUN_L06_00302fd8(char *m) {
+void FUN_L06_00302fd8(char *shuttle_moby) {
     enum {
         SHUTTLE_AT_INITIAL_STOP = 0,
         SHUTTLE_AT_SECOND_STOP = 1,
@@ -7080,37 +7080,37 @@ void FUN_L06_00302fd8(char *m) {
         SHUTTLE_ROUTE_INITIAL_TO_THIRD_STOP = 3,
         SHUTTLE_ROUTE_THIRD_TO_INITIAL_STOP = 4
     };
-    char *d = *(char **)(m + 0x78);
-    switch (*(int *)(d + 0xBC)) {
+    char *shuttle_vars = *(char **)(shuttle_moby + 0x78);
+    switch (*(int *)(shuttle_vars + 0xBC)) {
     case SHUTTLE_AT_INITIAL_STOP: {
         int idx = current_level_index << 4;
-        int a = *(unsigned char *)(*(int *)(d + 0xF8) + idx + (int)visited52);
+        int a = *(unsigned char *)(*(int *)(shuttle_vars + 0xF8) + idx + (int)visited52);
         if (a != 0xFF) {
-            *(int *)(d + 0x9C) = 0;
+            *(int *)(shuttle_vars + 0x9C) = 0;
         } else {
-            int b = *(unsigned char *)(*(int *)(d + 0xFC) + idx + (int)visited52);
+            int b = *(unsigned char *)(*(int *)(shuttle_vars + 0xFC) + idx + (int)visited52);
             if (b == a) {
-                *(int *)(d + 0x9C) = 3;
+                *(int *)(shuttle_vars + 0x9C) = 3;
             } else {
-                *(int *)(d + 0x9C) = -1;
+                *(int *)(shuttle_vars + 0x9C) = -1;
             }
         }
         break;
     }
     case SHUTTLE_AT_SECOND_STOP:
-        *(int *)(d + 0x9C) = 1;
+        *(int *)(shuttle_vars + 0x9C) = 1;
         break;
     case SHUTTLE_AT_THIRD_STOP:
-        *(int *)(d + 0x9C) = 4;
+        *(int *)(shuttle_vars + 0x9C) = 4;
         break;
     }
-    if (D_00141C00 == 0 && *(int *)(d + 0x9C) == 0 &&
+    if (D_00141C00 == 0 && *(int *)(shuttle_vars + 0x9C) == 0 &&
         (*(unsigned char *)&D_0015EE1D != 0 || *(unsigned char *)&D_0015EE1C != 0)) {
         help_request(0x177A, 0x53);
-        *(int *)(d + 0x9C) = -1;
+        *(int *)(shuttle_vars + 0x9C) = -1;
         return;
     }
-    switch (*(int *)(d + 0x9C)) {
+    switch (*(int *)(shuttle_vars + 0x9C)) {
     case SHUTTLE_ROUTE_INITIAL_TO_SECOND_STOP:
         try_set_help_message(10, 0x1782);
         break;
