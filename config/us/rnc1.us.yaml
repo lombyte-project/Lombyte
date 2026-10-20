@@ -1962,7 +1962,7 @@ segments:
           - [0x12f848, c, gameplay/space/draw_resident_textured_quad]
           - [0x12f984, textbin, text_gap_0022ea04_before_fun_0022ea08]
           - [0x12f988, c, gameplay/space/draw_resident_textured_banner]
-          - [0x12fa28, c, assembly/textbin/gameplay/state/update_level_gameplay_frame]
+          - [0x12fa28, c, gameplay/state/update_level_gameplay_frame]
           - [0x130204, textbin, text_gap_0022f284_before_fun_0022f288]
           - [0x130208, c, textbin/render_level_frame]
           - [0x130530, c, rendering/effects/emit_six_spark_effects]
