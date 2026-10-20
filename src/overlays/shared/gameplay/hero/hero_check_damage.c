@@ -1382,7 +1382,7 @@ void FUN_L00_0020f160(char *arg, u8 *entry) {
     int cnt;
     float *sums;
     char *out;
-    int n, i, k, acc;
+    int history_window_size, i, k, acc;
     float mx;
 
     {
@@ -1423,11 +1423,11 @@ void FUN_L00_0020f160(char *arg, u8 *entry) {
 
     {
     char *b = ((char *)((char *)&hero_lui));
-    n = *(int *)(b + 0x21C0);
-    if (n < 2) {
-        n = 2;
+    history_window_size = *(int *)(b + 0x21C0);
+    if (history_window_size < 2) {
+        history_window_size = 2;
     }
-    if (*(int *)(b + 0x21BC) < n) {
+    if (*(int *)(b + 0x21BC) < history_window_size) {
         return;
     }
     }
@@ -1435,13 +1435,13 @@ void FUN_L00_0020f160(char *arg, u8 *entry) {
     out = arg + 0x40;
     cnt = 0;
 
-    for (i = 0; i < n; i++) {
+    for (i = 0; i < history_window_size; i++) {
         char *b = ((char *)((char *)&hero_lui));
         int t;
         sums = fa;
         t = i - 15;
         ri = (*(int *)(b + 0x21B8) - t) % 16;
-        for (k = 0; k < n; k++) {
+        for (k = 0; k < history_window_size; k++) {
             if (i != k) {
                 char *b = ((char *)((char *)&hero_lui));
                 int u = k - 15;
@@ -1454,20 +1454,20 @@ void FUN_L00_0020f160(char *arg, u8 *entry) {
     }
 
     mx = 0.0f;
-    for (i = 0; i < n; i++) {
+    for (i = 0; i < history_window_size; i++) {
         if (mx < fa[i]) {
             mx = fa[i];
         }
     }
 
-    for (i = 0; i < n; i++) {
+    for (i = 0; i < history_window_size; i++) {
         if (mx * 0.2f < fa[i]) {
             cnt++;
         }
     }
 
     acc = 0;
-    for (i = 0; i < n; i++) {
+    for (i = 0; i < history_window_size; i++) {
         if (mx * 0.2f < fa[i] && cnt > 0 && cnt < 3) {
             continue;
         }
