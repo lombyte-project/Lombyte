@@ -13,7 +13,7 @@ s32 update_menu_choice_list(struct MenuScreen *menu) {
     s32 *opt;
     s32 prev;
     s32 cur;
-    s32 n;
+    s32 option_count;
 
     if (menu_system.current->focus != menu) {
         return 0;
@@ -43,20 +43,20 @@ s32 update_menu_choice_list(struct MenuScreen *menu) {
     }
     item = &menu->data.choices.list[menu->data.choices.selection];
     first = item->option;
-    n = 0;
+    option_count = 0;
     if (first[0] != 0) {
         opt = &item->option[0];
         do {
-            n++;
+            option_count++;
             opt++;
             if (*opt == 0) {
                 break;
             }
-        } while (n < 4);
+        } while (option_count < 4);
     }
     if (controller_state.pressed_unmasked & PAD_CROSS) {
         if (item->value != NULL) {
-            *item->value = (*item->value + 1) % n;
+            *item->value = (*item->value + 1) % option_count;
             allocate_voice_for_target_entry(0, 0x11, menu->moby);
         }
     }
