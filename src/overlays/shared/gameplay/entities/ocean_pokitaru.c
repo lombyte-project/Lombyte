@@ -93,14 +93,14 @@ extern void set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");
 extern void FUN_L00_00250df8(void *);
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-unsigned char *FUN_L11_00308848(char *owner, float *dir, float *pos, float a, float b) {
+unsigned char *FUN_L11_00308848(char *owner, float *dir, float *pos, float travel_distance, float b) {
     unsigned char *spawned_moby = func_0020D348_m(0x3F1);
     if (spawned_moby) {
         char *moby_vars = *(char **)(spawned_moby + 0x78);
         float direction_length_xy;
         *(char **)(moby_vars + 0x1C) = owner;
         spawned_moby[0x30] = 0xFF;
-        *(short *)(spawned_moby + 0x32) = func_001FA898_r(a);
+        *(short *)(spawned_moby + 0x32) = func_001FA898_r(travel_distance);
         *(int *)(spawned_moby + 0x40) = 0;
         spawned_moby[0x31] = 1;
         direction_length_xy = vector_length_xy(dir);
@@ -114,7 +114,7 @@ unsigned char *FUN_L11_00308848(char *owner, float *dir, float *pos, float a, fl
             b = fast_vec_length(dir);
         }
         qcopy(spawned_moby + 0x10, pos);
-        *(int *)(moby_vars + 0x18) = *(int *)(moby_vars + 0x14) = func_001FA898_r(a / b);
+        *(int *)(moby_vars + 0x18) = *(int *)(moby_vars + 0x14) = func_001FA898_r(travel_distance / b);
         *(short *)(spawned_moby + 0x34) = 0x200;
         *(float *)(spawned_moby + 0x2C) =
             *(float *)(*(char **)(spawned_moby + 0x24) + 0x24) *
