@@ -1019,14 +1019,14 @@ extern struct DriftEmitter D_L01_001DEB38;
 extern s32 FUN_L00_00258ad0(void *, void *, s32, s32, f32, f32);
 
 /* shrinks and sinks the moby, then hands it to the drift emitter */
-s32 FUN_L01_002e3208(void *ctx, struct Moby *m) {
+s32 FUN_L01_002e3208(void *ctx, struct Moby *movement_state) {
     f32 shrink;
 
-    m->pos.z -= frame_time_sq * 29.7f;
+    movement_state->pos.z -= frame_time_sq * 29.7f;
     shrink = frame_scale * -0.050000012f + 1.0f;
-    m->pos.x *= shrink;
-    m->pos.y *= shrink;
-    return FUN_L00_00258ad0(ctx, &m->pos, D_L01_001DEB38.count, 0, 0.3f, D_L01_001DEB38.spread);
+    movement_state->pos.x *= shrink;
+    movement_state->pos.y *= shrink;
+    return FUN_L00_00258ad0(ctx, &movement_state->pos, D_L01_001DEB38.count, 0, 0.3f, D_L01_001DEB38.spread);
 }
 /* Picks the best lock-on target for moby from the visible-moby list: a living, drawn class-5 enemy within range whose direction from `from`
  * is inside the yaw/pitch cone (or the wider near cone when close), scored by angle error and distance,
