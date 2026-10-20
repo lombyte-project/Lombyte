@@ -135,6 +135,7 @@ void FUN_L01_00242930(void) {
         HERO_STATE_LATERAL_MOVE_HOLD = 25,
         HERO_STATE_LATERAL_MOVE_POSITIVE_YAW = 26,
         HERO_STATE_LATERAL_MOVE_NEGATIVE_YAW = 27,
+        HERO_STATE_LOOK_HOLD_IDLE_EXIT = 30,
         HERO_STATE_ANIMATION_COMPLETION_IDLE_WAIT = 33,
         HERO_STATE_ITEM_BUTTON_HOLD_ANIMATION_WAIT = 46,
         HERO_STATE_ITEM_BUTTON_HOLD_ANIMATION_DEPENDENT_EXIT = 48,
@@ -1844,7 +1845,7 @@ void FUN_L01_00242930(void) {
                         hero_set_state(0x53, 0);
                     }
                     break;
-                case 30:
+                case HERO_STATE_LOOK_HOLD_IDLE_EXIT:
                     if (hero.vehicle_mode == 0) {
                         if (hero.unk20AA == 0 || hero.unk20A5 != 0) {
                             if (controller_state.held & 0xA) {
