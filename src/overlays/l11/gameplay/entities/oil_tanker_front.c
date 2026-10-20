@@ -1740,14 +1740,14 @@ extern short D_L11_00162448 __attribute__((sda));
 extern short D_L11_0016244C __attribute__((sda));
 extern short D_L11_00162450 __attribute__((sda));
 extern short D_L11_00162454 __attribute__((sda));
-void FUN_L11_0031b098(struct Moby *m) {
+void FUN_L11_0031b098(struct Moby *source_moby) {
     float randomized_velocity[4];
     float vertical_spark_vector[4];
-    char *d;
+    char *moby_vars;
     int c0, c1, c2, c3, c4;
-    d = (char *)m->pvars;
+    moby_vars = (char *)source_moby->pvars;
     random_vector(randomized_velocity, 0.0f, *(float *)&D_L11_00162428 * D_0015ED6C_n[1]);
-    add_vector_xyz(randomized_velocity, randomized_velocity, d);
+    add_vector_xyz(randomized_velocity, randomized_velocity, moby_vars);
     clear_vector(vertical_spark_vector);
     vertical_spark_vector[2] = random_float_between_alt(*(float *)&D_L11_0016242C, *(float *)&D_L11_00162430) *
             D_0015ED6C_n[1];
@@ -1763,7 +1763,7 @@ void FUN_L11_0031b098(struct Moby *m) {
         (float)*(int *)&D_L11_00162450 * 0.8f, (float)*(int *)&D_L11_00162450 * 1.2f)));
     c4 = func_001FA898_r(multiply_global_factor_ed64(random_float_between_alt(
         (float)*(int *)&D_L11_00162454 * 0.8f, (float)*(int *)&D_L11_00162454 * 1.2f)));
-    spawn_spark(&m->pos, randomized_velocity, vertical_spark_vector, c0, c1, c2, c3, c4, -1);
+    spawn_spark(&source_moby->pos, randomized_velocity, vertical_spark_vector, c0, c1, c2, c3, c4, -1);
 }
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_0031ED48), where it is exact; names translated to the US level program. */
 
