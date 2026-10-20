@@ -460,44 +460,44 @@ void FUN_L00_00262840_262608(S_262608 *) __asm__("FUN_L00_00262840");
 void FUN_0020c880_262608(void *) __asm__("FUN_0020c880");
 void FUN_L00_00250df8_262608(void *) __asm__("FUN_L00_00250df8");
 
-void FUN_L00_00262608(S_262608 *s, int dec) {
+void FUN_L00_00262608(S_262608 *history_state, int dec) {
     unsigned char *src;
-    unsigned char *o;
-    int h, i, k, done;
+    unsigned char *destination;
+    int history_write_index, i, k, done;
     unsigned char **pp;
-    if (!s->active)
+    if (!history_state->active)
         return;
-    src = s->src;
+    src = history_state->src;
     if (!src || src[0x20] == 0xFE || src[0x20] == 0xFD) {
-        FUN_L00_00262840_262608(s);
+        FUN_L00_00262840_262608(history_state);
         return;
     }
-    h = s->head;
-    qcopy(&s->a[h], src + 0x10);
-    qcopy(&s->b[h], src + 0x40);
-    s->head = (h + 1) % 8;
-    if (++s->count > 8)
-        s->count = 8;
-    for (i = 0; i < s->n; i++) {
-        int t;
-        if (s->count >= (t = s->w[i])) {
-            o = (unsigned char *)*(int *)((char *)&s->w[i] + 0x10);
-            k = (s->head - t + 8) % 8;
-            o[0x52] = s->src[0x52];
-            o[0x53] = s->src[0x53];
-            o[0x50] = s->src[0x50];
-            o[0x51] = s->src[0x51];
-            *(float *)(o + 0x54) = *(float *)(s->src + 0x54);
-            FUN_0020c880_262608(o);
-            qcopy(o + 0x10, &s->a[k]);
-            qcopy(o + 0x40, &s->b[k]);
-            FUN_L00_00250df8_262608(o);
+    history_write_index = history_state->head;
+    qcopy(&history_state->a[history_write_index], src + 0x10);
+    qcopy(&history_state->b[history_write_index], src + 0x40);
+    history_state->head = (history_write_index + 1) % 8;
+    if (++history_state->count > 8)
+        history_state->count = 8;
+    for (i = 0; i < history_state->n; i++) {
+        int sample_delay;
+        if (history_state->count >= (sample_delay = history_state->w[i])) {
+            destination = (unsigned char *)*(int *)((char *)&history_state->w[i] + 0x10);
+            k = (history_state->head - sample_delay + 8) % 8;
+            destination[0x52] = history_state->src[0x52];
+            destination[0x53] = history_state->src[0x53];
+            destination[0x50] = history_state->src[0x50];
+            destination[0x51] = history_state->src[0x51];
+            *(float *)(destination + 0x54) = *(float *)(history_state->src + 0x54);
+            FUN_0020c880_262608(destination);
+            qcopy(destination + 0x10, &history_state->a[k]);
+            qcopy(destination + 0x40, &history_state->b[k]);
+            FUN_L00_00250df8_262608(destination);
         }
     }
     if (dec) {
         done = 1;
-        for (i = 0; i < s->n; i++) {
-            unsigned char *q = (unsigned char *)*(int *)((char *)&s->w[i] + 0x10);
+        for (i = 0; i < history_state->n; i++) {
+            unsigned char *q = (unsigned char *)*(int *)((char *)&history_state->w[i] + 0x10);
             if (q) {
                 int v = q[0x23];
                 int a = v;
@@ -510,7 +510,7 @@ void FUN_L00_00262608(S_262608 *s, int dec) {
             }
         }
         if (done)
-            FUN_L00_00262840_262608(s);
+            FUN_L00_00262840_262608(history_state);
     }
 }
 #define NOT_SDA
