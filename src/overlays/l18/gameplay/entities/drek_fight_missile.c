@@ -3433,30 +3433,30 @@ unsigned char *FUN_L00_002712b8(void *pos, float *vec, int s, int a, int col, in
                                 float y, float z, float w, float pw);
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-void FUN_L18_002f76a0(char *moby, void *p) {
-    QVec a;
+void FUN_L18_002f76a0(char *moby, void *effect_position) {
+    QVec emission_direction;
     QVec b;
     float c[4];
-    float d[4];
-    a.q = 0;
+    float scaled_emission_direction[4];
+    emission_direction.q = 0;
     b.q = 0;
-    a.v[0] = 1.0f;
-    a.v[3] = 1.0f;
+    emission_direction.v[0] = 1.0f;
+    emission_direction.v[3] = 1.0f;
     b.v[0] = 0.23f;
     b.v[3] = 1.0f;
     FUN_L00_001fefc8(moby + 0xBC);
     transform_vector_by_basis(&b, &b, moby + 0xC0);
     add_vector_xyz(c, moby + 0x10, &b);
-    transform_vector_by_basis(&a, &a, moby + 0xC0);
+    transform_vector_by_basis(&emission_direction, &emission_direction, moby + 0xC0);
     {
         int i;
         for (i = 0; i < *(int *)&D_L18_00162408; i++) {
             int h;
             normalize_vector_xyz(
-                d, &a, random_float_between(*(float *)&D_L18_0016240C, *(float *)&D_L18_00162410));
+                scaled_emission_direction, &emission_direction, random_float_between(*(float *)&D_L18_0016240C, *(float *)&D_L18_00162410));
             h = func_001FA898_r(
                 randf_sym((float)*(int *)&D_L18_00162420, (float)*(int *)&D_L18_00162424));
-            FUN_L00_002712b8(p, d,
+            FUN_L00_002712b8(effect_position, scaled_emission_direction,
                              scale_game_frames(random_int_between(*(int *)&D_L18_00162428,
                                                                 *(int *)&D_L18_0016242C)),
                              0x7F, 0xFFFFFF, h, *(float *)&D_L18_00162414,
@@ -3468,8 +3468,8 @@ void FUN_L18_002f76a0(char *moby, void *p) {
         int j;
         for (j = 0; j < *(int *)&D_L18_00162438; j++) {
             normalize_vector_xyz(
-                d, &a, random_float_between(*(float *)&D_L18_0016243C, *(float *)&D_L18_00162440));
-            FUN_L00_0026cbb0(p, d, *(int *)&D_L18_001623EC, *(int *)&D_L18_001623F0,
+                scaled_emission_direction, &emission_direction, random_float_between(*(float *)&D_L18_0016243C, *(float *)&D_L18_00162440));
+            FUN_L00_0026cbb0(effect_position, scaled_emission_direction, *(int *)&D_L18_001623EC, *(int *)&D_L18_001623F0,
                              scale_game_frames(random_int_between(*(int *)&D_L18_00162444,
                                                                 *(int *)&D_L18_00162448)),
                              1, *(float *)&D_L18_0016244C);
