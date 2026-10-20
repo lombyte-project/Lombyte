@@ -441,7 +441,7 @@ void FUN_L01_0022d090(void)
 {
     Vec4 probe, top, low, from, head, wall, to, edge;
     f32 grab_drop, drop, fwd, up, reach, step, top_margin, max_slope, edge_offset;
-    f32 wall_yaw, launch_scale, ang, five, one, limit, inc, d, half;
+    f32 wall_yaw, launch_scale, ang, five, one, limit, inc, wall_normal_offset, half;
     int found, hit, i, j, material, allowed, moby_allowed, frames;
     u8 *moby_record;
     char *moby_data;
@@ -560,23 +560,23 @@ probe_next:
             fast_add_rotations(hero.unk4E4, 3.14159274f)) < 1.13446403f) {
         limit = 2.4f;
         inc = 0.03f;
-        d = 0.0f;
+        wall_normal_offset = 0.0f;
         half = 0.5f;
         do {
             qcopy(&to, &top);
             to.f[2] = top.f[2];
-            to.f[0] += fast_cos(hero.unk4E4) * d;
-            to.f[1] += fast_sin(hero.unk4E4) * d;
+            to.f[0] += fast_cos(hero.unk4E4) * wall_normal_offset;
+            to.f[1] += fast_sin(hero.unk4E4) * wall_normal_offset;
             qcopy(&wall, &to);
             to.f[2] += half;
             wall.f[2] -= half;
             if (!collision_line(&to, &wall, 4, hero.moby, 0)) {
                 qcopy(&edge, &to);
                 edge.f[2] = top.f[2];
-                d = inc * half;
-                d = -d;
-                edge.f[0] += fast_cos(hero.unk4E4) * d;
-                edge.f[1] += fast_sin(hero.unk4E4) * d;
+                wall_normal_offset = inc * half;
+                wall_normal_offset = -wall_normal_offset;
+                edge.f[0] += fast_cos(hero.unk4E4) * wall_normal_offset;
+                edge.f[1] += fast_sin(hero.unk4E4) * wall_normal_offset;
                 qcopy(&hero.unk4D0, &edge);
                 hero.unk4D0.f[0] += fast_cos(hero.unk4E4) * edge_offset;
                 hero.unk4D0.f[1] += fast_sin(hero.unk4E4) * edge_offset;
@@ -584,8 +584,8 @@ probe_next:
                 hero.unk4D0.f[2] += grab_drop;
                 return;
             }
-            d += inc;
-        } while (d < limit);
+            wall_normal_offset += inc;
+        } while (wall_normal_offset < limit);
     }
 }
 extern CollisionHit coll_hit __asm__("D_L01_001742C0") __attribute__((section(".data")));
