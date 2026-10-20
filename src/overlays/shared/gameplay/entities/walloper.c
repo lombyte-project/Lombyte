@@ -1163,7 +1163,7 @@ extern unsigned int D_L00_001616C0 __attribute__((sda));
 extern unsigned int D_L00_001616C4 __attribute__((sda));
 extern V_2bc1a0 D_L00_001DBB60[] __attribute__((section(".data")));
 void FUN_L00_002bc1a0(void *mv) {
-    char *m = mv;
+    char *moby_bytes = mv;
     Q_2bc1a0 quad;
     V_2bc1a0 mat[4];
     V_2bc1a0 scaled_corner;
@@ -1171,8 +1171,8 @@ void FUN_L00_002bc1a0(void *mv) {
     V_2bc1a0 e;
     unsigned int c;
     int i;
-    FUN_001f9a68_2bc1a0(D_L00_001616BC, &scaled_basis_offset, m + 0xD0);
-    FUN_001f9a10_2bc1a0(&mat[3], &scaled_basis_offset, m + 0x10);
+    FUN_001f9a68_2bc1a0(D_L00_001616BC, &scaled_basis_offset, moby_bytes + 0xD0);
+    FUN_001f9a10_2bc1a0(&mat[3], &scaled_basis_offset, moby_bytes + 0x10);
     quad.tex = FUN_001f44b8_2bc1a0(D_L00_001616C8);
     quad.unk88 = 0x8000000048L;
     quad.unk80 = 0xFF9000000260L;
