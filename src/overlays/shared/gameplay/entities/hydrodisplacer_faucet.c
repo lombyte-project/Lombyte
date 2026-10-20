@@ -533,8 +533,8 @@ typedef struct {
     u64 control[4];
 } Quad_30c220;
 
-void FUN_L05_0030c220(struct Moby *m) {
-    Quad_30c220 a, b;
+void FUN_L05_0030c220(struct Moby *moby) {
+    Quad_30c220 quad_a, b;
     float rotation[4];
     float position[4];
     /* Draw helper reads four consecutive vectors: side, direction, up, position. */
@@ -550,11 +550,11 @@ void FUN_L05_0030c220(struct Moby *m) {
     float offset_a_x, offset_a_z, offset_b_x, offset_b_z;
     int i, j, k;
     float *vertex_a, *vertex_b;
-    char *vars = (char *)m->pvars;
+    char *vars = (char *)moby->pvars;
 
-    get_moby_position(m, 0, position);
+    get_moby_position(moby, 0, position);
     clear_vector(rotation);
-    rotation[2] = m->rot.z;
+    rotation[2] = moby->rot.z;
     rotation[1] = fast_sin(*(float *)(vars + 0x48)) * 0.5235988f + 0.5235988f;
     side = matrix;
     rotation_vector_30c220(side, rotation);
@@ -574,17 +574,17 @@ void FUN_L05_0030c220(struct Moby *m) {
             0x8000000000ULL;
     b.control[0] = 0;
     b.control[2] = 0xff9000000260ULL;
-    a.control[2] = 0xff9000000260ULL;
+    quad_a.control[2] = 0xff9000000260ULL;
     b.control[1] = texture;
-    a.control[1] = texture;
-    a.control[0] = 0;
+    quad_a.control[1] = texture;
+    quad_a.control[0] = 0;
     b.control[3] = flags;
-    a.control[3] = flags;
+    quad_a.control[3] = flags;
     for (k = 0; k < 4; k++) {
         float u = D_L05_001D67B0[k][0];
         float v = D_L05_001D67B0[k][1];
-        a.texcoord[k][0] = u;
-        a.texcoord[k][1] = v;
+        quad_a.texcoord[k][0] = u;
+        quad_a.texcoord[k][1] = v;
         b.texcoord[k][0] = u;
         b.texcoord[k][1] = v;
     }
@@ -592,13 +592,13 @@ void FUN_L05_0030c220(struct Moby *m) {
         pass = (float)i;
         j = 0;
         do {
-            vertex_a = a.vertex[j];
+            vertex_a = quad_a.vertex[j];
             qcopy(vertex_a, D_L05_001D67D0[j]);
             qcopy(b.vertex[j], D_L05_001D6810[j]);
             phase = (float)(i + (j & 1)) * 0.1f;
             sign = 1.0f;
             if (j > 1) sign = -1.0f;
-            a.color[j] = b.color[j] = fast_tween_color(D_L05_00161D04, D_L05_00161D08, phase);
+            quad_a.color[j] = b.color[j] = fast_tween_color(D_L05_00161D04, D_L05_00161D08, phase);
             offset_a_x = phase * 8.0f * sign;
             offset_a_z = pass * 10.0f;
             offset_b_x = phase * 6.0f * sign;
@@ -609,7 +609,7 @@ void FUN_L05_0030c220(struct Moby *m) {
             vertex_b[0] += offset_b_x;
             vertex_b[2] += offset_b_z;
         } while (++j < 4);
-        draw_quad_30c220(&a, matrix, 0);
+        draw_quad_30c220(&quad_a, matrix, 0);
         draw_quad_30c220(&b, matrix, 0);
     }
 }
