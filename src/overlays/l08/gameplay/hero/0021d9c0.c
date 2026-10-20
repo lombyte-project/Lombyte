@@ -418,6 +418,7 @@ extern s32 FUN_L00_00211870(f32);
 
 void FUN_L08_002284e0(void) {
     enum {
+        HERO_STATE_TARGET_RADIUS_CONSTRAINT = 0x26,
         HERO_STATE_MOVE_TO_POSITION = 0x65,
         HERO_STATE_BRAKE_TO_POSITION = 0x66
     };
@@ -1051,7 +1052,7 @@ void FUN_L08_002284e0(void) {
         }
         break;
     }
-    case 0x26: {
+    case HERO_STATE_TARGET_RADIUS_CONSTRAINT: {
         approach_value(&hero.unk97C, hero.unk980, frame_time * 10.0f);
         qcopy(&hero.motion.velocity, &hero.motion.displacement);
         fast_vec_scale(&hero.motion.velocity, &hero.motion.velocity, 0.9f);
