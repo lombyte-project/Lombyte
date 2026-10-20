@@ -6,11 +6,11 @@ void decode_map_rle_row(u8 *buf, s32 row, u8 *data, s16 *offsets) {
     u8 *dst;
     u8 *src;
     s16 *op;
-    s32 n;
+    s32 run_count;
     s32 i;
     s32 k;
     s32 half;
-    u8 *p;
+    u8 *packed_run_src;
     u32 lo;
     u32 hi;
     s32 count;
@@ -23,12 +23,12 @@ void decode_map_rle_row(u8 *buf, s32 row, u8 *data, s16 *offsets) {
     } else {
         src = data + 0x200;
     }
-    n = ((data + offsets[row]) - src) * 2 / 3;
-    for (i = 0; i < n; i++) {
+    run_count = ((data + offsets[row]) - src) * 2 / 3;
+    for (i = 0; i < run_count; i++) {
         k = i * 3;
-        p = src + (k >> 1);
-        lo = p[0];
-        hi = p[1];
+        packed_run_src = src + (k >> 1);
+        lo = packed_run_src[0];
+        hi = packed_run_src[1];
         if (k & 1) {
             lo = lo >> 4;
         } else {
