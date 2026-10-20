@@ -1345,7 +1345,7 @@ typedef struct {
 void FUN_L14_00314f00(char *camera) {
     u128 stand;
     char *rec = *(char **)(D_L14_0015EF50 + *(short *)(camera + 0x84) * 32 + 0x1C);
-    char *p;
+    char *camera_saved_state;
     char *p2;
     char *path;
     char *initial_camera_transform;
@@ -1360,9 +1360,9 @@ void FUN_L14_00314f00(char *camera) {
     int fov_stop_count;
 
     (*&rec)[0x38] = 3;
-    p = *(char **)(camera + 0x70);
-    *(int *)(p + 0x40) = 0;
-    camera_run = (int *)(p + 0x40);
+    camera_saved_state = *(char **)(camera + 0x70);
+    *(int *)(camera_saved_state + 0x40) = 0;
+    camera_run = (int *)(camera_saved_state + 0x40);
     camera_run[1] = 0;
     camera_run[2] = 0;
     camera_run[3] = 0;
@@ -1414,14 +1414,14 @@ void FUN_L14_00314f00(char *camera) {
                 *(float *)(camera_run + 3) += len;
         }
     }
-    p = *(char **)(camera + 0x70);
-    *(float *)(p + 0x0) = 0.03f;
-    *(float *)(p + 0x4) = 0.2f;
-    clear_4f00(p + 0x10);
-    p = *(char **)(camera + 0x70);
-    *(float *)(p + 0x20) = 0.03f;
-    *(float *)(p + 0x24) = 0.2f;
-    clear_4f00(p + 0x30);
+    camera_saved_state = *(char **)(camera + 0x70);
+    *(float *)(camera_saved_state + 0x0) = 0.03f;
+    *(float *)(camera_saved_state + 0x4) = 0.2f;
+    clear_4f00(camera_saved_state + 0x10);
+    camera_saved_state = *(char **)(camera + 0x70);
+    *(float *)(camera_saved_state + 0x20) = 0.03f;
+    *(float *)(camera_saved_state + 0x24) = 0.2f;
+    clear_4f00(camera_saved_state + 0x30);
     initial_camera_transform = D_L14_00167380.start;
     qcopy(camera + 0x30, initial_camera_transform + 0x30);
     qcopy(camera, initial_camera_transform);
