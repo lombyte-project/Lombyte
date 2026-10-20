@@ -235,13 +235,13 @@ extern float fast_normalize_angle(float) __asm__("FUN_001fa610");
 
 extern struct Hero hero_lui __asm__("D_0013F350") __attribute__((section(".data")));
 /* Picks slot w74 from the stick angle (or steps it with the 0x1000-0x8000 pad bits), counts hold frames in b71/b70, records the slot's entry when released, and closes when b70 runs out. */
-void FUN_L00_00237ba0(Obj *p) {
-    float x, y, mag, ang, a, f, r;
-    int old, n, s, k, id;
-    u8 *c = &p->b70;
+void FUN_L00_00237ba0(Obj *hud_element) {
+    float x, y, mag, ang, a, slot_position, r;
+    int old, slot_step, stick_slot_index, k, id;
+    u8 *counters = &hud_element->b70;
 
-    p->w7C = scale_game_frames(0xB4);
-    p->w6C = 0x18;
+    hud_element->w7C = scale_game_frames(0xB4);
+    hud_element->w6C = 0x18;
     if (fast_dec_timer_s16(D_00141622)) D_0013C940.w1CC = 2;
     x = D_0013C940.unk148;
     y = D_0013C940.unk14C;
@@ -251,31 +251,31 @@ void FUN_L00_00237ba0(Obj *p) {
         y /= mag;
     }
     ang = fast_arc_tan(x, y);
-    if ((p->w78 >> 24) == 0) {
-        if ((D_0013C940.w1C4 & 0xF000) || mag < 0.5f || --p->w78 == -1) {
-            p->w74 = -1;
-            p->w78 = 0x10000FF;
+    if ((hud_element->w78 >> 24) == 0) {
+        if ((D_0013C940.w1C4 & 0xF000) || mag < 0.5f || --hud_element->w78 == -1) {
+            hud_element->w74 = -1;
+            hud_element->w78 = 0x10000FF;
         }
     }
-    n = 0;
-    old = p->w74;
-    if ((p->w78 >> 24) == 1 && (D_0013C940.w1C0 & 0x10)) {
+    slot_step = 0;
+    old = hud_element->w74;
+    if ((hud_element->w78 >> 24) == 1 && (D_0013C940.w1C0 & 0x10)) {
         if (mag > 0.9f) {
             a = ang + 3.1415927f + 3.1415927f + 1.5707964f + 3.1415927f / (float)D_L00_0015FA90;
-            f = a * ((float)D_L00_0015FA90 / 6.2831855f);
+            slot_position = a * ((float)D_L00_0015FA90 / 6.2831855f);
             r = (float)old * 6.2831855f / convert_integer_to_float(D_L00_0015FA90) - 3.1415927f;
             if (old == -1 || fast_difference_between_rotations(r, fast_subtract_rotations(ang, 1.5707964f)) > 0.58904862f) {
-                s = (int)f % D_L00_0015FA90;
-                if (((s ^ 1) & 1)) {
-                    float fr = f - (float)FUN_001fa6d0(f);
-                    if (fr > 1.0f - D_L00_0015F788) s++;
-                    else if (fr < D_L00_0015F788) s--;
-                    s = (s + D_L00_0015FA90) % D_L00_0015FA90;
+                stick_slot_index = (int)slot_position % D_L00_0015FA90;
+                if (((stick_slot_index ^ 1) & 1)) {
+                    float fr = slot_position - (float)FUN_001fa6d0(slot_position);
+                    if (fr > 1.0f - D_L00_0015F788) stick_slot_index++;
+                    else if (fr < D_L00_0015F788) stick_slot_index--;
+                    stick_slot_index = (stick_slot_index + D_L00_0015FA90) % D_L00_0015FA90;
                 }
-                p->w74 = s;
-                n = -1;
-                D_L00_0015F784 = fast_normalize_angle(a - ((float)s * 0.7853982f + 0.39269909f));
-                if (D_L00_0015F784 > 0.0f) n = 1;
+                hud_element->w74 = stick_slot_index;
+                slot_step = -1;
+                D_L00_0015F784 = fast_normalize_angle(a - ((float)stick_slot_index * 0.7853982f + 0.39269909f));
+                if (D_L00_0015F784 > 0.0f) slot_step = 1;
             }
         } else if (D_0013C940.w1D8 == 0 && (D_0013C940.w1C4 & 0xF000)) {
             int w;
@@ -284,21 +284,21 @@ void FUN_L00_00237ba0(Obj *p) {
             if (D_0013C940.w1C4 & 0x4000) { int t; if (w == -1) t = D_L00_0017DC24; else t = D_L00_0015FAC0_c[D_L00_0015F72C][w].unk14; w = t; }
             if (D_0013C940.w1C4 & 0x8000) { int t; if (w == -1) t = D_L00_0017DC18; else t = D_L00_0015FAC0_c[D_L00_0015F72C][w].unk8; w = t; }
             if (D_0013C940.w1C4 & 0x2000) { int t; if (w == -1) t = D_L00_0017DC1C; else t = D_L00_0015FAC0_c[D_L00_0015F72C][w].unkC; w = t; }
-            p->w74 = w;
+            hud_element->w74 = w;
         }
         {
             Ent *t = D_L00_0015FAC0_c[D_L00_0015F72C];
-            int cur = p->w74;
-            if (t[cur].unk0 == 0 && n != 0) {
-                k = (cur + n) % D_L00_0015FA90;
-                if (t[k].unk0 != 0) p->w74 = k;
+            int cur = hud_element->w74;
+            if (t[cur].unk0 == 0 && slot_step != 0) {
+                k = (cur + slot_step) % D_L00_0015FA90;
+                if (t[k].unk0 != 0) hud_element->w74 = k;
             }
         }
     }
-    if (p->w74 != old) c[1] = 0;
-    else if (c[1] < D_L00_0015F780_gp) c[1]++;
+    if (hud_element->w74 != old) counters[1] = 0;
+    else if (counters[1] < D_L00_0015F780_gp) counters[1]++;
     if (!(D_0013C940.w1C0 & 0x10)) {
-        int sel = p->w74;
+        int sel = hud_element->w74;
         if (sel >= 0 && (id = D_L00_0015FAC0_c[D_L00_0015F72C][sel].unk18) != 0) {
             VendorItemInfo *rr;
             int ri = id;
@@ -313,17 +313,17 @@ void FUN_L00_00237ba0(Obj *p) {
             rr = &D_L00_001C40B0[ri];
             if (rr->h8 && rr->hE < weapon_ammo_counts[id]) weapon_ammo_counts[id] = rr->hE;
         }
-        if (c[0]) c[0]--;
-    } else if (c[0] < D_L00_0015F780_gp) c[0]++;
-    if (c[0] == 0) {
+        if (counters[0]) counters[0]--;
+    } else if (counters[0] < D_L00_0015F780_gp) counters[0]++;
+    if (counters[0] == 0) {
         {
-            int a = p->w78;
-            int b = p->w74;
+            int a = hud_element->w78;
+            int b = hud_element->w74;
             D_L00_0015FA9C = b;
             D_L00_0015FA98 = a;
         }
-        remove_hud_item(p->w64);
-        p->w6C = -6;
+        remove_hud_item(hud_element->w64);
+        hud_element->w6C = -6;
         D_L00_0015FA94 = D_L00_0015F3F8;
     }
 }
