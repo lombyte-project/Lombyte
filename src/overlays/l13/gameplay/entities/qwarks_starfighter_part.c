@@ -1598,26 +1598,26 @@ void FUN_L13_002f8a78(char *moby) {
         GATE_STATE_CLOSED = 3,
         GATE_STATE_OPENING = 4
     };
-    char *d = *(char **)(moby + 0x78);
-    char *c = 0;
+    char *gate_data = *(char **)(moby + 0x78);
+    char *controller_moby = 0;
     int open;
     int close;
     int step;
-    if (*(int *)d != -1) {
-        c = D_L13_0015FFD8 + (*(int *)d << 8);
+    if (*(int *)gate_data != -1) {
+        controller_moby = D_L13_0015FFD8 + (*(int *)gate_data << 8);
     }
     open = 0;
     close = 0;
     if (((unsigned char *)moby)[0x20] != 0) {
         int i;
         for (i = 0; i < 6; i++) {
-            if (((unsigned char *)c)[0x20] == (d + i)[4]) {
+            if (((unsigned char *)controller_moby)[0x20] == (gate_data + i)[4]) {
                 open = 1;
                 break;
             }
         }
         for (i = 0; i < 6; i++) {
-            if (((unsigned char *)c)[0x20] == (d + i)[0xA]) {
+            if (((unsigned char *)controller_moby)[0x20] == (gate_data + i)[0xA]) {
                 close = 1;
                 break;
             }
@@ -1625,20 +1625,20 @@ void FUN_L13_002f8a78(char *moby) {
     }
     switch (((unsigned char *)moby)[0x20]) {
     case GATE_STATE_INITIALIZE:
-        if (c == 0) {
+        if (controller_moby == 0) {
             debug_print_alt(D_L13_001F51E0, *(short *)(moby + 0xB2), *(short *)(moby + 0xA6));
             mark_moby_for_removal(moby);
             return;
         }
         set_moby_color(moby, 0x80, 0x80, 0x80);
         *(unsigned short *)(moby + 0x34) |= 0xA08;
-        if (*(int *)(d + 0x18) == 0) {
-            *(float *)(d + 0x10) = 1.0f;
+        if (*(int *)(gate_data + 0x18) == 0) {
+            *(float *)(gate_data + 0x10) = 1.0f;
             moby[0x20] = 1;
             *(int *)(moby + 0x94) = *(int *)(*(char **)(moby + 0x24) + 0x10);
             moby[0x23] = 0x14;
         } else {
-            *(float *)(d + 0x10) = 0.0f;
+            *(float *)(gate_data + 0x10) = 0.0f;
             moby[0x20] = 3;
             *(int *)(moby + 0x94) = 0;
             moby[0x23] = 0;
@@ -1655,9 +1655,9 @@ void FUN_L13_002f8a78(char *moby) {
             moby[0x20] = 4;
             *(int *)(moby + 0x94) = *(int *)(*(char **)(moby + 0x24) + 0x10);
         }
-        *(float *)(d + 0x10) -= frame_scale * 0.05f;
-        if (*(float *)(d + 0x10) < 0.0f) {
-            *(float *)(d + 0x10) = 0.0f;
+        *(float *)(gate_data + 0x10) -= frame_scale * 0.05f;
+        if (*(float *)(gate_data + 0x10) < 0.0f) {
+            *(float *)(gate_data + 0x10) = 0.0f;
             moby[0x20] = 3;
             *(int *)(moby + 0x94) = 0;
             moby[0x31] = 0;
@@ -1677,22 +1677,22 @@ void FUN_L13_002f8a78(char *moby) {
             *(int *)(moby + 0x94) = 0;
             moby[0x20] = 2;
         }
-        *(float *)(d + 0x10) += frame_scale * 0.05f;
-        if (1.0f < *(float *)(d + 0x10)) {
-            *(float *)(d + 0x10) = 1.0f;
+        *(float *)(gate_data + 0x10) += frame_scale * 0.05f;
+        if (1.0f < *(float *)(gate_data + 0x10)) {
+            *(float *)(gate_data + 0x10) = 1.0f;
             moby[0x20] = 1;
             *(int *)(moby + 0x94) = *(int *)(*(char **)(moby + 0x24) + 0x10);
         }
         break;
     }
-    moby[0x23] = func_001FA898_d(*(float *)(d + 0x10) * 20.0f);
+    moby[0x23] = func_001FA898_d(*(float *)(gate_data + 0x10) * 20.0f);
     step = 0xC0;
-    *(int *)(d + 0x14) += step;
-    if (*(int *)(d + 0x14) > 0x1000) {
-        *(int *)(d + 0x14) -= 0x1000;
+    *(int *)(gate_data + 0x14) += step;
+    if (*(int *)(gate_data + 0x14) > 0x1000) {
+        *(int *)(gate_data + 0x14) -= 0x1000;
         step -= 0x1000;
-    } else if (*(int *)(d + 0x14) < 0) {
-        *(int *)(d + 0x14) += 0x1000;
+    } else if (*(int *)(gate_data + 0x14) < 0) {
+        *(int *)(gate_data + 0x14) += 0x1000;
         step += 0x1000;
     }
     FUN_L00_0024efb0(*(unsigned char **)(moby + 0x24), step, 0);
