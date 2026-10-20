@@ -408,7 +408,7 @@ extern f32 frame_scale __asm__("D_0015ED60") __attribute__((sda));
 s32 FUN_L00_00258b50(Obj *m, Ctl *c, void *v, Vec4 *out, f32 f);
 s32 FUN_L00_00258b50(Obj *m, Ctl *c, void *v, Vec4 *out, f32 f) {
     Vec4 save;
-    Vec4 d;
+    Vec4 displacement;
     Vec4 p;
     Vec4 q;
     Glob *g;
@@ -417,22 +417,22 @@ s32 FUN_L00_00258b50(Obj *m, Ctl *c, void *v, Vec4 *out, f32 f) {
     f32 len;
     f32 sp;
     f32 lim;
-    f32 t;
+    f32 speed_increment;
     f32 h1;
     f32 h2;
-    f32 h;
-    f32 a;
+    f32 ground_height;
+    f32 normal_elevation_angle;
     f32 l2;
 
     sp = c->f1C * f;
     lim = c->f24 * f;
-    fast_vec_sub(&d, v, &m->pos);
-    len = vector_length_xy(&d);
+    fast_vec_sub(&displacement, v, &m->pos);
+    len = vector_length_xy(&displacement);
     save.q = m->pos.q;
-    t = sp * len;
-    if (sp < t)
-        t = sp;
-    c->f10 = c->f10 + t;
+    speed_increment = sp * len;
+    if (sp < speed_increment)
+        speed_increment = sp;
+    c->f10 = c->f10 + speed_increment;
     if (len < c->f10 * 10.0f)
         c->f10 = c->f10 - c->f20 * c->f10;
     if (lim < c->f10)
@@ -440,28 +440,28 @@ s32 FUN_L00_00258b50(Obj *m, Ctl *c, void *v, Vec4 *out, f32 f) {
     else if (c->f10 < -lim)
         c->f10 = -lim;
     if (c->i38 & 4) {
-        d.f[0] = FUN_001f9dc8_c(c->f4C) * c->f10;
-        d.f[1] = fast_sin(c->f4C) * c->f10;
+        displacement.f[0] = FUN_001f9dc8_c(c->f4C) * c->f10;
+        displacement.f[1] = fast_sin(c->f4C) * c->f10;
     } else {
-        d.f[0] = FUN_001f9dc8_c(m->f48) * c->f10;
-        d.f[1] = fast_sin(m->f48) * c->f10;
+        displacement.f[0] = FUN_001f9dc8_c(m->f48) * c->f10;
+        displacement.f[1] = fast_sin(m->f48) * c->f10;
     }
     if (c->i38 & 1) {
-        d.f[2] = 0.0f;
+        displacement.f[2] = 0.0f;
     } else {
-        d.f[2] = c->f18;
+        displacement.f[2] = c->f18;
         c->f18 = c->f18 - frame_time_sq_gp * 9.0f;
     }
     lim = m->pos.f[2] + 0.04f;
-    fast_vec_add(&p, &m->pos, &d);
+    fast_vec_add(&p, &m->pos, &displacement);
     p.f[2] = m->pos.f[2] - c->f30;
     if (FUN_L00_002583f0_c(&p, m, c->i38 & 0x20, c->f08, c->f0C)) {
         g = &D_L00_00173E40_c;
-        a = fast_arc_tan(g->v40.f[2], vector_length_xy(&g->v40));
+        normal_elevation_angle = fast_arc_tan(g->v40.f[2], vector_length_xy(&g->v40));
         h1 = g->f28;
-        if (0.5f < a && 0.1f < vector_length_xy(&d)) {
+        if (0.5f < normal_elevation_angle && 0.1f < vector_length_xy(&displacement)) {
             {
-                fast_vec_normalize(&q, &d, 0.57f);
+                fast_vec_normalize(&q, &displacement, 0.57f);
                 fast_vec_add(&q, &q, &m->pos);
                 q.f[2] = m->pos.f[2] - c->f30;
                 if (FUN_L00_002583f0_c(&q, m, c->i38 & 0x20, c->f08, c->f0C)) {
@@ -487,22 +487,22 @@ s32 FUN_L00_00258b50(Obj *m, Ctl *c, void *v, Vec4 *out, f32 f) {
     }
 done:
     if (!(mask & 2)) {
-        l2 = vector_length_xy(&d);
-        FUN_001f9a68_c(&p, &d, 1.0f / l2);
-        r = FUN_L00_00258ad0_c(m, &d, c->f04, c->i00, c->f30, c->i38);
+        l2 = vector_length_xy(&displacement);
+        FUN_001f9a68_c(&p, &displacement, 1.0f / l2);
+        r = FUN_L00_00258ad0_c(m, &displacement, c->f04, c->i00, c->f30, c->i38);
         if (r & 2)
             c->f18 = frame_scale * -0.01f;
         if (r & 1) {
             mask |= 1;
-            if (d.f[0] * p.f[0] + d.f[1] * p.f[1] < l2 * 0.2f)
+            if (displacement.f[0] * p.f[0] + displacement.f[1] * p.f[1] < l2 * 0.2f)
                 mask |= 2;
-            h = probe_ground_height(&m->pos, 0, 0.5f);
-            if (c->f08 < save.f[2] - h || c->f0C < h - save.f[2]) {
+            ground_height = probe_ground_height(&m->pos, 0, 0.5f);
+            if (c->f08 < save.f[2] - ground_height || c->f0C < ground_height - save.f[2]) {
                 mask |= 0x22;
                 m->pos.q = save.q;
             }
         }
-        qcopy(out, &d);
+        qcopy(out, &displacement);
     } else {
         if ((c->i38 ^ 1) & 1)
             c->f18 = frame_scale * -0.01f;
