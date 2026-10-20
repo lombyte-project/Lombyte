@@ -21,10 +21,10 @@ void FUN_L11_0030e690(char *moby) {
     do {
         int i = (*moby_index_cursor & 0x7FFF) * 256;
         char *linked_moby = (char *)(i + base);
-        char *s;
+        char *destination_record;
         *(float *)(linked_moby + 0x18) = *(float *)(moby + 0x18);
-        s = D_L11_001DA880 + *(int *)(*(char **)(linked_moby + 0x78) + 4) * 0x1190;
-        *(float *)(s + 8) = *(float *)(moby + 0x18);
+        destination_record = D_L11_001DA880 + *(int *)(*(char **)(linked_moby + 0x78) + 4) * 0x1190;
+        *(float *)(destination_record + 8) = *(float *)(moby + 0x18);
     } while (*moby_index_cursor++ >= 0);
 }
 #include "rnc/gameplay/entities/moby.h"
