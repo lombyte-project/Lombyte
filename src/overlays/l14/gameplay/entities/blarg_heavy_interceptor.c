@@ -2958,7 +2958,7 @@ void FUN_L14_002bac78(struct Moby *moby) {
     float dir[4];
     float push[4];
     int i;
-    int n;
+    int signed_puff_random_value;
     int c;
     float size;
     float bright;
@@ -3008,12 +3008,12 @@ void FUN_L14_002bac78(struct Moby *moby) {
             scale_d(ofs, (char *)moby + 0xD0, randf_sym(0.01f, 0.5f));
             add_d(at, &moby->pos, ofs);
         }
-        n = rand_below_d(6);
+        signed_puff_random_value = rand_below_d(6);
         if (rand_below_d(2) != 0)
-            n = -n;
+            signed_puff_random_value = -signed_puff_random_value;
         size = rand_between_d(20000.0f, 100000.0f);
         c = random_int_between(0x10, 0xFF);
-        puff_particle = (u8 *)spawn_puff_d(at, 0.025f, 1.0f, 1.0f, n, D_L14_0015F580, size,
+        puff_particle = (u8 *)spawn_puff_d(at, 0.025f, 1.0f, 1.0f, signed_puff_random_value, D_L14_0015F580, size,
                          c | (0x60000000 | (c << 16) | (c << 8)));
         if (puff_particle != NULL) {
             puff_particle[3] = 0x44;
