@@ -1052,7 +1052,7 @@ char *FUN_L11_00318d10(char *src, void *pos, int ticks) {
     if (mob != 0) {
         char *moby_vars;
         unsigned char *initialization_byte_cursor;
-        int i, k, t;
+        int i, k, initialization_byte_value;
         *(short *)(mob + 0x32) = 0x40;
         *(unsigned char *)(mob + 0x30) = 0xFF;
         mob[0x31] = 1;
@@ -1068,13 +1068,13 @@ char *FUN_L11_00318d10(char *src, void *pos, int ticks) {
         *(int *)(moby_vars + 0x20) = scale_game_frames(ticks);
         *(int *)(moby_vars + 0x28) = 5;
         euler_rotation_basis(mob + 0xC0, mob + 0x40);
-        for (i = 0, t = 10; i < 4; i++, t += 10, initialization_byte_cursor++) {
+        for (i = 0, initialization_byte_value = 10; i < 4; i++, initialization_byte_value += 10, initialization_byte_cursor++) {
             initialization_byte_cursor[-4] = random_integer_below(0xFF);
             if (i * (i & 1))
                 initialization_byte_cursor[0] = 0xFF;
             else
                 initialization_byte_cursor[0] = 1;
-            initialization_byte_cursor[4] = t;
+            initialization_byte_cursor[4] = initialization_byte_value;
         }
         for (k = 0x31; k >= 0; k--)
             FUN_L11_00318ed8_u(mob);
