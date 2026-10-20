@@ -1314,19 +1314,19 @@ typedef struct {
 void FUN_L00_001eb0b0(void *);
 void FUN_L00_001eb0c8(void *, void *, f32);
 void FUN_L00_002eb3b0_u(O002ebb00 *) __asm__("FUN_L00_002eb3b0");
-void FUN_L00_002ebb00(O002ebb00 *o) {
-    u8 *m = o->m;
-    u8 *a = m + 0xB0;
-    u8 *m2;
-    qcopy(a, &hero.motion.pos);
-    *(f32 *)(a + 8) += 2.0f;
+void FUN_L00_002ebb00(O002ebb00 *camera_object) {
+    u8 *m = camera_object->m;
+    u8 *raised_hero_position = m + 0xB0;
+    u8 *camera_state;
+    qcopy(raised_hero_position, &hero.motion.pos);
+    *(f32 *)(raised_hero_position + 8) += 2.0f;
     qcopy(m + 0xC0, &hero.motion.rot);
-    m2 = o->m;
-    qcopy(m2 + 0x80, a);
-    FUN_L00_001eb0b0(m2 + 0x14);
-    *(f32 *)(m2 + 0x1C) = 4.64f;
-    FUN_L00_001eb0c8(o->x50, m2 + 0x14, 0.0f);
-    FUN_L00_002eb3b0_u(o);
+    camera_state = camera_object->m;
+    qcopy(camera_state + 0x80, raised_hero_position);
+    FUN_L00_001eb0b0(camera_state + 0x14);
+    *(f32 *)(camera_state + 0x1C) = 4.64f;
+    FUN_L00_001eb0c8(camera_object->x50, camera_state + 0x14, 0.0f);
+    FUN_L00_002eb3b0_u(camera_object);
 }
 /* Sets up the camera activation moby: tuning floats, then the pose copied from the current camera. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002EB0D8.c: func_L00_002ED088), where it is exact; names translated to the US level program. */
