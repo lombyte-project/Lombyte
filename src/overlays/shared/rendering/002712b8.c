@@ -624,8 +624,8 @@ void FUN_L00_00272838(u8 *particle) {
     if (faded_intensity <= 0) {
         free_effect_particle(particle);
     } else {
-        s32 t = (faded_intensity << 8) | 0x60000000;
-        *(s32 *)(particle + 4) = ((faded_intensity << 16) | t) | faded_intensity;
+        s32 packed_alpha_green = (faded_intensity << 8) | 0x60000000;
+        *(s32 *)(particle + 4) = ((faded_intensity << 16) | packed_alpha_green) | faded_intensity;
     }
 }
 void FUN_001f9a10_002728e8(void *, void *, void *) __asm__("FUN_001f9a10");
