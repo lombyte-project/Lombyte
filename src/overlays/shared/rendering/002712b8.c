@@ -113,15 +113,15 @@ unsigned char *FUN_L00_002715e8(void *pos, int x, int color, float size, float w
     if (particle) {
         unsigned char *particle_data;
         float drift_angle_radians, r;
-        int c;
+        int resolved_color;
         qcopy(particle + 0x10, pos);
         if (color == -1) {
-            c = ((FUN_00213260_2715e8(6) + 0x14) << 24) | 0x808080;
+            resolved_color = ((FUN_00213260_2715e8(6) + 0x14) << 24) | 0x808080;
         } else {
-            c = color;
+            resolved_color = color;
         }
         particle_data = particle + 0x20;
-        *(int *)(particle + 4) = c;
+        *(int *)(particle + 4) = resolved_color;
         particle[9] = FUN_001fa6d0_2715e8(2.0f) + 0x20;
         particle[3] = 0x48;
         particle[1] = 1;
