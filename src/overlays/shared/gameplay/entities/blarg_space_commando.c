@@ -981,31 +981,31 @@ extern float scale_time(float) __asm__("FUN_001f96b0");
 /* Spawns one fragment of the break-apart at pos, flying along vel with a
  * random spin. */
 unsigned char *FUN_L06_00300c60(char *m, float *pos, float *vel) {
-    u128 p, v;
-    u128 *pp = &p;
+    u128 position_copy, v;
+    u128 *pp = &position_copy;
     u128 *pv = &v;
-    unsigned char *n;
-    char *d;
+    unsigned char *fragment_moby;
+    char *fragment_vars;
 
     *pp = *(u128 *)pos;
     *pv = *(u128 *)vel;
-    n = create_moby(ftoi_300c60(random_float_between(1085.0f, 1089.0f)));
+    fragment_moby = create_moby(ftoi_300c60(random_float_between(1085.0f, 1089.0f)));
 
-    if (n != 0) {
-        d = *(char **)(n + 0x78);
-        *(float *)(n + 0x2C) = *(float *)(*(char **)(n + 0x24) + 0x24) * D_L06_00162080_gp;
-        n[0x30] = 0xFF;
-        *(short *)(n + 0x32) = 0x7E;
-        n[0x31] = 1;
-        qcopy(n + 0x10, pp);
-        qcopy(d, pv);
-        *(float *)(d + 0x10) = random_float_between(-360.0f, 360.0f) * DEG_TO_RAD * frame_time;
-        *(float *)(d + 0x14) = random_float_between(-360.0f, 360.0f) * DEG_TO_RAD * frame_time;
-        *(float *)(d + 0x18) = random_float_between(-360.0f, 360.0f) * DEG_TO_RAD * frame_time;
-        n[0xBC] = ftoi_300c60(scale_time(random_float_between(60.0f, 120.0f)));
-        upd_a(n);
+    if (fragment_moby != 0) {
+        fragment_vars = *(char **)(fragment_moby + 0x78);
+        *(float *)(fragment_moby + 0x2C) = *(float *)(*(char **)(fragment_moby + 0x24) + 0x24) * D_L06_00162080_gp;
+        fragment_moby[0x30] = 0xFF;
+        *(short *)(fragment_moby + 0x32) = 0x7E;
+        fragment_moby[0x31] = 1;
+        qcopy(fragment_moby + 0x10, pp);
+        qcopy(fragment_vars, pv);
+        *(float *)(fragment_vars + 0x10) = random_float_between(-360.0f, 360.0f) * DEG_TO_RAD * frame_time;
+        *(float *)(fragment_vars + 0x14) = random_float_between(-360.0f, 360.0f) * DEG_TO_RAD * frame_time;
+        *(float *)(fragment_vars + 0x18) = random_float_between(-360.0f, 360.0f) * DEG_TO_RAD * frame_time;
+        fragment_moby[0xBC] = ftoi_300c60(scale_time(random_float_between(60.0f, 120.0f)));
+        upd_a(fragment_moby);
     }
-    return n;
+    return fragment_moby;
 }
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002FF000.c: func_L06_00303630), where it is exact; names translated to the US level program. */
