@@ -516,6 +516,7 @@ void FUN_L00_001f4598(void) {
         DEBUG_OPTION_ROW_SEGMENT_INDEX = 10
     };
     enum {
+        DEBUG_CONTROL_MODE_ENABLE_LOW_FOUR_UPDATE_FLAGS = 0,
         DEBUG_CONTROL_MODE_CLEAR_UPDATE_FLAGS = 1,
         DEBUG_CONTROL_MODE_CAPTURE_HERO_CAMERA_OFFSET = 2
     };
@@ -594,7 +595,7 @@ void FUN_L00_001f4598(void) {
                         g_debug_menu.control_mode = 3;
                 }
                 switch (g_debug_menu.control_mode) {
-                case 0:
+                case DEBUG_CONTROL_MODE_ENABLE_LOW_FOUR_UPDATE_FLAGS:
                     g_debug_menu.update_flags = 15;
                     break;
                 case DEBUG_CONTROL_MODE_CLEAR_UPDATE_FLAGS:
