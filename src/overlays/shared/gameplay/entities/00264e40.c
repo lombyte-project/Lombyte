@@ -118,18 +118,18 @@ extern int collect_mobies_in_sphere(float, void *, int, int, int) __asm__("FUN_L
 void FUN_L02_002651d0(char **slots, int a, int b) {
     int i;
     for (i = 6; i >= 0; i--, slots++) {
-        char *m = *slots;
-        if (m == 0)
+        char *slot_object = *slots;
+        if (slot_object == 0)
             continue;
-        if ((unsigned char)m[0] != 12) {
+        if ((unsigned char)slot_object[0] != 12) {
             *slots = 0;
             continue;
         }
-        if (m[1] < 0) {
+        if (slot_object[1] < 0) {
             *slots = 0;
         } else {
-            collect_mobies_in_sphere(*(float *)(m + 0xC) / 210000.0f * 0.25f, m + 0x10, 0, a, b);
-            if (*(short *)(m + 0xA) < 5)
+            collect_mobies_in_sphere(*(float *)(slot_object + 0xC) / 210000.0f * 0.25f, slot_object + 0x10, 0, a, b);
+            if (*(short *)(slot_object + 0xA) < 5)
                 *slots = 0;
         }
     }
