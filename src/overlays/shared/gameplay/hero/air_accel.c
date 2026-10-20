@@ -761,27 +761,27 @@ void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
 void FUN_L01_00231450(void) {
     char *g;
-    char *p;
-    char *m;
-    char *a;
+    char *previous_active_moby;
+    char *moby_to_remove;
+    char *restored_moby;
     FUN_L00_00205538();
     g = (char *)D_0013E533 + 0xE1D;
-    p = *(char **)(g + 0xA84);
+    previous_active_moby = *(char **)(g + 0xA84);
     g[0x20A4] = 0;
-    if (p != 0) {
-        *(unsigned short *)(p + 0x34) &= 0xFFF9;
+    if (previous_active_moby != 0) {
+        *(unsigned short *)(previous_active_moby + 0x34) &= 0xFFF9;
     }
     *(int *)(g + 0xA84) = 0;
-    m = *(char **)(g + 0xA8C);
-    if (m != 0) {
-        mark_moby_for_removal(m);
+    moby_to_remove = *(char **)(g + 0xA8C);
+    if (moby_to_remove != 0) {
+        mark_moby_for_removal(moby_to_remove);
         *(int *)(g + 0xA8C) = 0;
     }
     FUN_L00_00206c08();
-    a = *(char **)(g + 0xA88);
-    *(char **)(g + 0x2080) = a;
-    qcopy(a + 0x10, g + 0x80);
-    *(int *)(a + 0x98) = 0;
+    restored_moby = *(char **)(g + 0xA88);
+    *(char **)(g + 0x2080) = restored_moby;
+    qcopy(restored_moby + 0x10, g + 0x80);
+    *(int *)(restored_moby + 0x98) = 0;
     *(float *)(g + 0xA94) = 1.0f;
     FUN_L00_00232628();
     if (*(int *)(g + 0x2084) == 0x64) {
