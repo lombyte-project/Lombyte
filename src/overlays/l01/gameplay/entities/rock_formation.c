@@ -738,7 +738,7 @@ void agnogg_ship_front_update(Moby_2FC140 *moby) {
     int cnt;
     int flag;
     int i;
-    int n4;
+    int scene_start_gate_value;
     float fz;
     float fd;
 
@@ -850,11 +850,11 @@ void agnogg_ship_front_update(Moby_2FC140 *moby) {
         if (flag == 0) {
             break;
         }
-        n4 = D_001413DC[0];
-        if (n4 == 7) {
+        scene_start_gate_value = D_001413DC[0];
+        if (scene_start_gate_value == 7) {
             break;
         }
-        if (n4 == 0x14) {
+        if (scene_start_gate_value == 0x14) {
             break;
         }
         data->timer = scale_game_frames(0x2D);
