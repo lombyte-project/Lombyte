@@ -941,18 +941,18 @@ extern void release_voice(s32) __asm__("FUN_0022d798");
 s32 FUN_L03_002d3918(struct Moby *m, s32 path, s32 *snd) {
     RailFlyerVars *v = (RailFlyerVars *)m->pvars;
     struct RailPath **pp = &D_L03_001B05B0[path];
-    Vec4f tgt, d;
+    Vec4f tgt, movement_delta;
     f32 acc;
     f32 ang;
     f32 dist;
     s32 done;
-    s32 h;
+    s32 sound_voice;
 
     done = 0;
     acc = 0.0f;
     qcopy(&tgt, &(*pp)->pts[v->idx]);
-    vec_sub(&d, &tgt, &m->pos);
-    if (vec_len(&d) < D_L03_00161B08 * frame_time * 2.0f) {
+    vec_sub(&movement_delta, &tgt, &m->pos);
+    if (vec_len(&movement_delta) < D_L03_00161B08 * frame_time * 2.0f) {
         v->idx++;
         done = v->idx == (*pp)->count;
     }
@@ -960,9 +960,9 @@ s32 FUN_L03_002d3918(struct Moby *m, s32 path, s32 *snd) {
     approach_speed(&acc, dist,
                    D_L03_00161B0C * frame_time_sq_macro, D_L03_00161B0C * frame_time_sq_macro,
                    D_L03_00161B08 * frame_time, &v->speed);
-    vec_set_len(&d, &d, v->speed);
-    vec_add(&m->pos, &d, &m->pos);
-    ang = -angle_atan2(vec_len_xy(&d), d.z);
+    vec_set_len(&movement_delta, &movement_delta, v->speed);
+    vec_add(&m->pos, &movement_delta, &m->pos);
+    ang = -angle_atan2(vec_len_xy(&movement_delta), movement_delta.z);
     if (ang > 0.2617994f)
         ang = 0.2617994f;
     else if (ang < -0.2617994f)
@@ -975,15 +975,15 @@ s32 FUN_L03_002d3918(struct Moby *m, s32 path, s32 *snd) {
     approach_angle(&m->rot.x, v->yaw_vel * v->speed * D_L03_00161B1C, &v->roll_vel,
                    D_L03_00161B18 * DEG_TO_RAD * frame_time_sq_macro,
                    D_L03_00161B18 * DEG_TO_RAD * frame_time_sq_macro, frame_time * 12.566371f);
-    h = *snd;
+    sound_voice = *snd;
     if (!done) {
-        if (sound_is_playing(m, h) == 0)
+        if (sound_is_playing(m, sound_voice) == 0)
             *snd = play_moby_sound(0, 4, m, 0x330);
     } else {
-        if (h != -1) {
-            VoiceSlot *e = (VoiceSlot *)(D_0013E550 + h * 0x70);
-            if (e->owner == m && e->active)
-                release_voice(h);
+        if (sound_voice != -1) {
+            VoiceSlot *voice_slot = (VoiceSlot *)(D_0013E550 + sound_voice * 0x70);
+            if (voice_slot->owner == m && voice_slot->active)
+                release_voice(sound_voice);
         }
         *snd = -1;
     }
