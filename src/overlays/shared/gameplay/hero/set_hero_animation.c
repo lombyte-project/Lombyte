@@ -1712,20 +1712,20 @@ void build_moby_bone_transform(void *, int, void *) __asm__("FUN_0020cca8");
 void copy_matrix3x4(void *, void *) __asm__("FUN_001fa2b8");
 void refresh_moby_spatial_bounds_from_basis(void *) __asm__("FUN_0020e098");
 void FUN_L00_002092c8(void *, void *, void *, int, void *);
-void FUN_L00_00234c78(void *a, char *p) {
+void FUN_L00_00234c78(void *source_moby, char *destination_moby) {
     u128 mt[4];
-    build_moby_bone_transform(a, 4, mt);
-    qcopy(p + 0x10, &mt[3]);
-    copy_matrix3x4(p + 0xc0, mt);
-    refresh_moby_spatial_bounds_from_basis(p);
-    if (*(short *)(p + 0xa6) == 0x1b1)
-        FUN_L00_002092c8(D_L00_0017A608, D_L00_0017C680, *(void **)(p + 0x24), 6, a);
+    build_moby_bone_transform(source_moby, 4, mt);
+    qcopy(destination_moby + 0x10, &mt[3]);
+    copy_matrix3x4(destination_moby + 0xc0, mt);
+    refresh_moby_spatial_bounds_from_basis(destination_moby);
+    if (*(short *)(destination_moby + 0xa6) == 0x1b1)
+        FUN_L00_002092c8(D_L00_0017A608, D_L00_0017C680, *(void **)(destination_moby + 0x24), 6, source_moby);
     else
-        FUN_L00_002092c8(D_L00_0015F6A8, D_L00_0017C680, *(void **)(p + 0x24), 0, a);
-    *(int *)(p + 0x50) = 0;
-    *(char **)(p + 0x68) = D_L00_0017C680;
-    *(int *)(p + 0x54) = 0;
-    *(char **)(p + 0x6c) = D_L00_0017C680;
+        FUN_L00_002092c8(D_L00_0015F6A8, D_L00_0017C680, *(void **)(destination_moby + 0x24), 0, source_moby);
+    *(int *)(destination_moby + 0x50) = 0;
+    *(char **)(destination_moby + 0x68) = D_L00_0017C680;
+    *(int *)(destination_moby + 0x54) = 0;
+    *(char **)(destination_moby + 0x6c) = D_L00_0017C680;
 }
 typedef unsigned int u128_00234d40 __attribute__((mode(TI), aligned(16)));
 typedef struct {
