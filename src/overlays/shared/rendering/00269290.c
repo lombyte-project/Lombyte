@@ -2949,40 +2949,40 @@ extern f32 rfb_26fd28(f32, f32) __asm__("FUN_002132a8");
 extern s32 rnd_26fd28(void) __asm__("FUN_001160d8");
 extern u8 *tex_26fd28 __asm__("D_L00_001B20B0") __attribute__((section(".data")));
 P_26fd28 *FUN_L00_0026fd28(u128 *pos, u128 *vel, u8 c, s32 d) {
-    P_26fd28 *p;
+    P_26fd28 *particle;
     E_26fd28 *e;
-    f32 f;
-    s32 t;
-    p = alloc_26fd28(0x28);
-    if (p != 0) {
-        e = &p->e;
-        qcopy(&p->pos, pos);
+    f32 initial_rotation_phase;
+    s32 lifetime_random_value;
+    particle = alloc_26fd28(0x28);
+    if (particle != 0) {
+        e = &particle->e;
+        qcopy(&particle->pos, pos);
         qcopy(e, vel);
-        p->w4 = FUN_L00_0025bfe0(0.7f, 0.7f, 0.7f, 0.08f);
-        p->b9 = trunc_26fd28(4.0f) + 0x40;
-        p->b1 = 0;
-        p->b3 = 0x44;
-        f = rang_26fd28();
-        e->f10 = f;
-        p->b8 = (s32)(f * 256.0f);
-        p->b2 = tex_26fd28[rnd_26fd28() & 7];
+        particle->w4 = FUN_L00_0025bfe0(0.7f, 0.7f, 0.7f, 0.08f);
+        particle->b9 = trunc_26fd28(4.0f) + 0x40;
+        particle->b1 = 0;
+        particle->b3 = 0x44;
+        initial_rotation_phase = rang_26fd28();
+        e->f10 = initial_rotation_phase;
+        particle->b8 = (s32)(initial_rotation_phase * 256.0f);
+        particle->b2 = tex_26fd28[rnd_26fd28() & 7];
         e->b18 = c;
         e->h14 = 0;
         e->h16 = 0;
         if (c < 5) {
-            p->fC = rfb_26fd28(7000.0f, 10000.0f);
-            t = rnd_26fd28();
+            particle->fC = rfb_26fd28(7000.0f, 10000.0f);
+            lifetime_random_value = rnd_26fd28();
             {
-                s32 n = (s32)(8.0f / (D_0015ED60 * 0.443f));
-                p->hA = n - t % (n * 6 / 7);
+                s32 base_lifetime = (s32)(8.0f / (D_0015ED60 * 0.443f));
+                particle->hA = base_lifetime - lifetime_random_value % (base_lifetime * 6 / 7);
             }
         } else {
-            p->fC = 10000.0f;
-            p->hA = (s32)(8.0f / (D_0015ED60 * 0.443f));
+            particle->fC = 10000.0f;
+            particle->hA = (s32)(8.0f / (D_0015ED60 * 0.443f));
         }
         e->w1c = d;
     }
-    return p;
+    return particle;
 }
 typedef unsigned int U128 __attribute__((mode(TI)));
 typedef union {
