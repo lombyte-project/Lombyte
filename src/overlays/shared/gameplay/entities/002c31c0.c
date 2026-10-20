@@ -135,9 +135,9 @@ int FUN_L00_002d56e0(char *a) {
 extern int FUN_L00_002dbe20(void *);
 
 /* Runs FUN_L00_002dbe20 on the moby and sets its state to 9. */
-int FUN_L00_002d57d0(char *a) {
-    int r = FUN_L00_002dbe20(a);
-    a[0x20] = 0x9;
+int FUN_L00_002d57d0(char *moby) {
+    int r = FUN_L00_002dbe20(moby);
+    moby[0x20] = 0x9;
     return r;
 }
 #include "rnc/math/vector.h"
