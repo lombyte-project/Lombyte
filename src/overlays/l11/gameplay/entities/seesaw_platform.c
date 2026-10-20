@@ -503,7 +503,7 @@ extern float D_L11_00161F44 __attribute__((sda));
 extern float D_L11_00161F48 __attribute__((sda));
 
 /* Lays out the 4x6 grid of child mobys around this one, fanned by the progress value at pvars+0x6C. */
-void FUN_L11_0030dd18(struct Moby *m) {
+void FUN_L11_0030dd18(struct Moby *grid_controller) {
     Vec4f parent_axis0_offset;
     Vec4f parent_axis1_offset;
     Vec4f child_position_offset;
@@ -517,10 +517,10 @@ void FUN_L11_0030dd18(struct Moby *m) {
     int row;
     int col;
 
-    data = m->pvars;
+    data = grid_controller->pvars;
     grid = (struct Moby *(*)[6])data;
-    normalize_vector_xyz(&parent_axis0_offset, &m->rot_row0, D_L11_00161F40);
-    normalize_vector_xyz(&parent_axis1_offset, &m->rot_row1, D_L11_00161F44);
+    normalize_vector_xyz(&parent_axis0_offset, &grid_controller->rot_row0, D_L11_00161F40);
+    normalize_vector_xyz(&parent_axis1_offset, &grid_controller->rot_row1, D_L11_00161F44);
     progress = *(float *)(data + 0x6C);
     hi = 90.0f - progress * 180.0f;
     if (hi < -90.0f) {
@@ -536,19 +536,19 @@ void FUN_L11_0030dd18(struct Moby *m) {
         for (col = 0; col < 6; col++) {
             lim = (row < 2) ? hi : lo;
             if (row < 2) {
-                add_vector_xyz(&grid[row][col]->pos, &m->pos, &parent_axis0_offset);
+                add_vector_xyz(&grid[row][col]->pos, &grid_controller->pos, &parent_axis0_offset);
             } else {
-                subtract_vector_xyz(&grid[row][col]->pos, &m->pos, &parent_axis0_offset);
+                subtract_vector_xyz(&grid[row][col]->pos, &grid_controller->pos, &parent_axis0_offset);
             }
             angle = ((float)col - 2.5f) * 0.2617994f;
             if (row & 1) {
-                grid[row][col]->rot.z = fast_add_rotations(m->rot.z, 0.0f);
+                grid[row][col]->rot.z = fast_add_rotations(grid_controller->rot.z, 0.0f);
                 angle = fast_add_rotations(angle, lim * 0.017453292f);
                 if (angle < -0.7853982f) {
                     angle += 1.5707964f;
                 }
             } else {
-                grid[row][col]->rot.z = fast_add_rotations(m->rot.z, 3.1415927f);
+                grid[row][col]->rot.z = fast_add_rotations(grid_controller->rot.z, 3.1415927f);
                 angle = fast_sub_rotations(angle, lim * 0.017453292f);
                 if (0.7853982f < angle) {
                     angle -= 1.5707964f;
