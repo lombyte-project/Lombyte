@@ -1283,15 +1283,15 @@ extern void build_quaternion_from_axis_angle(void *, void *, float) __asm__("FUN
 
 extern int D_L00_001613AC __attribute__((sda));
 extern float D_L00_001613A8 __attribute__((sda));
-int FUN_L00_002a7210(void *ov, void *tv, float a, float b) {
-    char *o = ov;
-    char *t = tv;
-    char *p = *(char **)(o + 0x78);
+int FUN_L00_002a7210(void *ov, void *tv, float attraction_yaw_angle, float b) {
+    char *bolt_moby = ov;
+    char *target_moby = tv;
+    char *bolt_vars = *(char **)(bolt_moby + 0x78);
     int r, last, now;
     float k;
     float m[3][4] __attribute__((aligned(16)));
 
-    if (*(unsigned char *)(o + 0x20) == 4) {
+    if (*(unsigned char *)(bolt_moby + 0x20) == 4) {
         return 0;
     }
     r = fr_2a7210(3);
@@ -1299,29 +1299,29 @@ int FUN_L00_002a7210(void *ov, void *tv, float a, float b) {
     now = D_15F5CC_2a7210;
     if (last + r < now || now < last) {
         D_L00_001613AC = now;
-        allocate_voice_for_target_entry(0, 0x20, o);
+        allocate_voice_for_target_entry(0, 0x20, bolt_moby);
     } else {
-        if (a == 0.0f)
-            a = rndf_2a7210(-30.0f, 30.0f) * DEG_TO_RAD;
+        if (attraction_yaw_angle == 0.0f)
+            attraction_yaw_angle = rndf_2a7210(-30.0f, 30.0f) * DEG_TO_RAD;
         if (b == 0.0f)
             b = rndf_2a7210(0.0f, 30.0f) * DEG_TO_RAD;
     }
-    if (*(unsigned char *)(o + 0x20) == 3) {
-        vu_euler_rotation_basis(m, p + 0x10);
-        normalize_vector_xyz(p + 0x20, m[2], rndf_2a7210(3.0f, 7.0f) * D_15ED6C_2a7210);
+    if (*(unsigned char *)(bolt_moby + 0x20) == 3) {
+        vu_euler_rotation_basis(m, bolt_vars + 0x10);
+        normalize_vector_xyz(bolt_vars + 0x20, m[2], rndf_2a7210(3.0f, 7.0f) * D_15ED6C_2a7210);
     }
     {
-        *(float *)(p + 0x4C) = a;
-        *(float *)(p + 0x48) = b;
-        *(int *)(p + 0x64) = 0;
-        *(char **)(p + 0x60) = t;
-        subtract_vector_xyz(m[1], t + 0x10, o + 0x10);
-        cross_vectors_xyz(m[0], p + 0x20, m[1]);
-        normalize_vector_xyz(p + 0x30, m[0], 1.0f);
+        *(float *)(bolt_vars + 0x4C) = attraction_yaw_angle;
+        *(float *)(bolt_vars + 0x48) = b;
+        *(int *)(bolt_vars + 0x64) = 0;
+        *(char **)(bolt_vars + 0x60) = target_moby;
+        subtract_vector_xyz(m[1], target_moby + 0x10, bolt_moby + 0x10);
+        cross_vectors_xyz(m[0], bolt_vars + 0x20, m[1]);
+        normalize_vector_xyz(bolt_vars + 0x30, m[0], 1.0f);
         k = rndf_2a7210(D_L00_001613A8 * 0.333000004f, D_L00_001613A8) * DEG_TO_RAD;
-        build_quaternion_from_axis_angle(p + 0x30, p + 0x30, k * D_15ED6C_2a7210);
+        build_quaternion_from_axis_angle(bolt_vars + 0x30, bolt_vars + 0x30, k * D_15ED6C_2a7210);
     }
-    *(unsigned char *)(o + 0x20) = 4;
+    *(unsigned char *)(bolt_moby + 0x20) = 4;
     return 1;
 }
 /* Vars of a bolt moby (classes 0xD..0x10). */
