@@ -2130,17 +2130,17 @@ void FUN_L08_002dc180(struct Moby *moby) {
     char *pl = (char *)&hero.motion.pos;
     Route_2dd4f8 *a = D_L08_001B0FB0_r[*(int *)(data + 0x88)];
     Route_2dd4f8 *b = D_L08_001B0FB0_r[*(int *)(data + 0x80)];
-    Route_2dd4f8 *c = D_L08_001B0FB0_r[*(int *)(data + 0x84)];
-    float d0 = distance_xyz(pl, (char *)a + (a->count << 4));
-    float d1 = distance_xyz(pl, b->e[0]);
-    float d2 = distance_xyz(pl, c->e[0]);
+    Route_2dd4f8 *alternate_path = D_L08_001B0FB0_r[*(int *)(data + 0x84)];
+    float best_candidate_distance = distance_xyz(pl, (char *)a + (a->count << 4));
+    float configured_path_start_distance = distance_xyz(pl, b->e[0]);
+    float alternate_path_start_distance = distance_xyz(pl, alternate_path->e[0]);
     int sel = 0;
     float y;
-    if (d1 < d0) {
-        d0 = d1;
+    if (configured_path_start_distance < best_candidate_distance) {
+        best_candidate_distance = configured_path_start_distance;
         sel = 1;
     }
-    if (d2 < d0) sel = 3;
+    if (alternate_path_start_distance < best_candidate_distance) sel = 3;
     if (*(int *)(data + 0x100) == sel) return;
     *(int *)(data + 0x100) = sel;
     *(int *)(data + 0xE4) = 0;
@@ -2151,22 +2151,22 @@ void FUN_L08_002dc180(struct Moby *moby) {
     moby->collision = moby->pclass->collision;
     switch (sel) {
     case SHUTTLE_SELECT_ROUTE_END: {
-        int n = a->count;
-        unsigned char *t;
+        int route_point_count = a->count;
+        unsigned char *visited_table;
         int f94, f98;
         int fr;
-        qcopy(data + 0x60, (char *)((n << 4) + (int)a));
-        y = fast_arc_tan(*(float *)((char *)a + ((n - 2) << 4) + 0x10) - *(float *)(data + 0x60),
-                              *(float *)((char *)a + ((n - 2) << 4) + 0x14) - *(float *)(data + 0x64));
+        qcopy(data + 0x60, (char *)((route_point_count << 4) + (int)a));
+        y = fast_arc_tan(*(float *)((char *)a + ((route_point_count - 2) << 4) + 0x10) - *(float *)(data + 0x60),
+                              *(float *)((char *)a + ((route_point_count - 2) << 4) + 0x14) - *(float *)(data + 0x64));
         fr = current_level_index << 4;
-        t = visited52;
+        visited_table = visited52;
         *(float *)(data + 0x78) = y;
         *(float *)(data + 0xE4) = 1.0f;
         *(int *)(data + 0x104) = 0;
-        f94 = t[*(int *)(data + 0x94) + fr] == 0xFF;
-        f98 = t[*(int *)(data + 0x98) + fr] == 0xFF;
+        f94 = visited_table[*(int *)(data + 0x94) + fr] == 0xFF;
+        f98 = visited_table[*(int *)(data + 0x98) + fr] == 0xFF;
         if (f98) {
-            *(Route_2dd4f8 **)(data + 0x120) = c;
+            *(Route_2dd4f8 **)(data + 0x120) = alternate_path;
         } else if (f94) {
             *(Route_2dd4f8 **)(data + 0x120) = b;
         } else if (32.0f < vector_distance(&moby->pos, pl) || D_L08_0015F5CC < 5) {
@@ -2188,9 +2188,9 @@ void FUN_L08_002dc180(struct Moby *moby) {
         *(Route_2dd4f8 **)(data + 0x120) = a;
         break;
     case SHUTTLE_SELECT_ALTERNATE_PATH_START:
-        qcopy(data + 0x60, c->e[0]);
-        y = fast_arc_tan(c->e[1][0] - *(float *)(data + 0x60), c->e[1][1] - *(float *)(data + 0x64));
-        *(Route_2dd4f8 **)(data + 0x120) = c;
+        qcopy(data + 0x60, alternate_path->e[0]);
+        y = fast_arc_tan(alternate_path->e[1][0] - *(float *)(data + 0x60), alternate_path->e[1][1] - *(float *)(data + 0x64));
+        *(Route_2dd4f8 **)(data + 0x120) = alternate_path;
         break;
     default:
         return;
