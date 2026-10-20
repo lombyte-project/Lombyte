@@ -462,30 +462,30 @@ extern void fast_vec_scale(float, void *, void *) __asm__("FUN_001f9a68");
 extern void draw_2baae0(void *, void *, int) __asm__("FUN_001f7d30");
 extern void gsreg_2baae0(int, long) __asm__("FUN_00233980");
 
-void FUN_L00_002baae0(void *mv, int a, int b, int point_count, float sx, float sy, float sz) {
+void FUN_L00_002baae0(void *mv, int first_pass_alpha, int b, int point_count, float sx, float sy, float sz) {
     char *point_bytes = mv;
     RW_2baae0 *v = mv;
-    RW_2baae0 q[4];
-    RT_2baae0 t;
+    RW_2baae0 first_pass_corners[4];
+    RT_2baae0 first_pass_render_attributes;
     RW_2baae0 q2[4];
     RT_2baae0 u;
     RW_2baae0 w120, w130, w140, w150, adjusted_segment_start, adjusted_segment_end, segment_start_camera_offset, b190, s1A0, s1B0;
     int i, col0, col1;
     float len, len0, l0, l1, l2;
-    t.q0 = tex_2baae0(D_L00_00161638);
-    col0 = D_L00_001615F4 | (a << 24);
-    t.q2 = 0x8000000048L;
-    t.q1 = 0xFF9000000260L;
-    t.z4 = 0;
-    t.c[3] = col0;
-    t.c[2] = col0;
-    t.c[1] = col0;
-    t.c[0] = col0;
+    first_pass_render_attributes.q0 = tex_2baae0(D_L00_00161638);
+    col0 = D_L00_001615F4 | (first_pass_alpha << 24);
+    first_pass_render_attributes.q2 = 0x8000000048L;
+    first_pass_render_attributes.q1 = 0xFF9000000260L;
+    first_pass_render_attributes.z4 = 0;
+    first_pass_render_attributes.c[3] = col0;
+    first_pass_render_attributes.c[2] = col0;
+    first_pass_render_attributes.c[1] = col0;
+    first_pass_render_attributes.c[0] = col0;
     u.q0 = tex_2baae0(D_L00_0016163C);
     col1 = D_L00_001615F8 | (b << 24);
-    u.q2 = t.q2;
-    u.q1 = t.q1;
-    u.z4 = t.z4;
+    u.q2 = first_pass_render_attributes.q2;
+    u.q1 = first_pass_render_attributes.q1;
+    u.z4 = first_pass_render_attributes.z4;
     u.c[3] = col1;
     u.c[2] = col1;
     u.c[1] = col1;
@@ -498,14 +498,14 @@ void FUN_L00_002baae0(void *mv, int a, int b, int point_count, float sx, float s
     u.f[5] = 0;
     u.f[6] = 1.0f;
     u.f[7] = 1.0f;
-    t.f[0] = D_L00_001615EC + 0;
-    t.f[1] = 0;
-    t.f[2] = D_L00_001615EC + 0;
-    t.f[3] = 1.0f;
-    t.f[4] = D_L00_001615EC + 1.0f;
-    t.f[5] = 0;
-    t.f[6] = D_L00_001615EC + 1.0f;
-    t.f[7] = 1.0f;
+    first_pass_render_attributes.f[0] = D_L00_001615EC + 0;
+    first_pass_render_attributes.f[1] = 0;
+    first_pass_render_attributes.f[2] = D_L00_001615EC + 0;
+    first_pass_render_attributes.f[3] = 1.0f;
+    first_pass_render_attributes.f[4] = D_L00_001615EC + 1.0f;
+    first_pass_render_attributes.f[5] = 0;
+    first_pass_render_attributes.f[6] = D_L00_001615EC + 1.0f;
+    first_pass_render_attributes.f[7] = 1.0f;
     fast_vec_sub(w140, point_bytes, g_debug_camera);
     fast_vec_sub(w150, point_bytes + 0x10, point_bytes);
     fast_vec_cross(w120, w150, w140);
@@ -513,8 +513,8 @@ void FUN_L00_002baae0(void *mv, int a, int b, int point_count, float sx, float s
     if (len0 != 0)
         len0 = 1.0f / len0;
     fast_vec_scale(D_L00_001615FC * len0, w120, w120);
-    fast_vec_add(q[0], point_bytes, w120);
-    fast_vec_sub(q[1], point_bytes, w120);
+    fast_vec_add(first_pass_corners[0], point_bytes, w120);
+    fast_vec_sub(first_pass_corners[1], point_bytes, w120);
     for (i = 1; i < point_count - 1; i++) {
         fast_vec_sub(w140, v[i], g_debug_camera);
         fast_vec_sub(w150, v[i + 1], v[i]);
@@ -523,21 +523,21 @@ void FUN_L00_002baae0(void *mv, int a, int b, int point_count, float sx, float s
         if (len != 0)
             len = 1.0f / len;
         fast_vec_scale(D_L00_001615FC * len, w120, w120);
-        fast_vec_add(q[2], v[i], w120);
-        fast_vec_sub(q[3], v[i], w120);
+        fast_vec_add(first_pass_corners[2], v[i], w120);
+        fast_vec_sub(first_pass_corners[3], v[i], w120);
         if (i == 1) {
-            t.c[1] = D_L00_001615F4;
-            t.c[0] = D_L00_001615F4;
+            first_pass_render_attributes.c[1] = D_L00_001615F4;
+            first_pass_render_attributes.c[0] = D_L00_001615F4;
         } else if (i == point_count - 2) {
-            t.c[3] = D_L00_001615F4;
-            t.c[2] = D_L00_001615F4;
+            first_pass_render_attributes.c[3] = D_L00_001615F4;
+            first_pass_render_attributes.c[2] = D_L00_001615F4;
         } else if (i == 2) {
-            t.c[1] = col0;
-            t.c[0] = col0;
+            first_pass_render_attributes.c[1] = col0;
+            first_pass_render_attributes.c[0] = col0;
         }
-        draw_2baae0(q, 0, 0);
-        qcopy(q[0], q[2]);
-        qcopy(q[1], q[3]);
+        draw_2baae0(first_pass_corners, 0, 0);
+        qcopy(first_pass_corners[0], first_pass_corners[2]);
+        qcopy(first_pass_corners[1], first_pass_corners[3]);
     }
     for (i = 0; i < point_count - 1; i++) {
         fast_vec_sub(segment_start_camera_offset, point_bytes + i * 16, g_debug_camera);
