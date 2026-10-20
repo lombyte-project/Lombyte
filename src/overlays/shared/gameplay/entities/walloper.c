@@ -1246,17 +1246,17 @@ char *FUN_L00_002bc3b0(char *self, float *position, float *heading, float *pitch
     float distance, angle, elevation, headingError, limit, apparentAngle, radius, reduction;
     int i;
     char *g;
-    char *m0;
+    char *hero_moby;
 
     limit = D_L00_001616DC;
     a0s[0] = (int)self;
     *(VecQuad *)start = *(VecQuad *)position;
     g = ((char *)&hero);
-    m0 = *(char **)(g + 0x2080);
-    *(VecQuad *)end = *(VecQuad *)(m0 + 0x10);
+    hero_moby = *(char **)(g + 0x2080);
+    *(VecQuad *)end = *(VecQuad *)(hero_moby + 0x10);
     position = start;
     end[2] = position[2];
-    collision = collision_line((Vec4f *)end, (Vec4f *)position, 6, m0, 0);
+    collision = collision_line((Vec4f *)end, (Vec4f *)position, 6, hero_moby, 0);
     res[0] = 0;
     if (collision) {
         qcopy(position, &collision_hit_point);
