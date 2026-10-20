@@ -1255,9 +1255,9 @@ extern int FUN_001f96f8_26c3d0(int) __asm__("FUN_001f96f8");
 
 extern unsigned char *D_L00_001B20C8 __attribute__((section(".data")));
 void FUN_L00_0026c3d0(void *pos, u128 *mat) {
-    unsigned char *m = FUN_L00_002678b8_26c3d0(0x12);
-    if (m) {
-        float *q = (float *)(m + 0x20);
+    unsigned char *particle = FUN_L00_002678b8_26c3d0(0x12);
+    if (particle) {
+        float *particle_data = (float *)(particle + 0x20);
         u128 out[1];
         float v[4] __attribute__((aligned(16)));
         u128 mt[4];
@@ -1269,17 +1269,17 @@ void FUN_L00_0026c3d0(void *pos, u128 *mat) {
         v[1] = FUN_002132a8_26c3d0(-0.3f, 0.3f);
         v[2] = FUN_002132a8_26c3d0(-0.3f, 0.3f);
         FUN_001f9d20_26c3d0(out, v, mt);
-        FUN_001f9a10_26c3d0(m + 0x10, out, pos);
-        *(int *)(m + 4) = 0x806040;
-        m[9] = FUN_001fa6d0_26c3d0(4.0f) + 0x40;
-        m[1] = 0;
-        m[3] = 0x48;
-        m[8] = FUN_001160d8_26c3d0();
-        m[2] = *D_L00_001B20C8;
-        q[1] = 0.08f;
-        *(float *)(m + 0xC) = FUN_002132a8_26c3d0(27993.002f, 49980.0f);
-        *(s16 *)(m + 0xA) = FUN_001f96f8_26c3d0(0xD2);
-        q[3] = 1.0f;
+        FUN_001f9a10_26c3d0(particle + 0x10, out, pos);
+        *(int *)(particle + 4) = 0x806040;
+        particle[9] = FUN_001fa6d0_26c3d0(4.0f) + 0x40;
+        particle[1] = 0;
+        particle[3] = 0x48;
+        particle[8] = FUN_001160d8_26c3d0();
+        particle[2] = *D_L00_001B20C8;
+        particle_data[1] = 0.08f;
+        *(float *)(particle + 0xC) = FUN_002132a8_26c3d0(27993.002f, 49980.0f);
+        *(s16 *)(particle + 0xA) = FUN_001f96f8_26c3d0(0xD2);
+        particle_data[3] = 1.0f;
     }
 }
 typedef float f32_26c558;
