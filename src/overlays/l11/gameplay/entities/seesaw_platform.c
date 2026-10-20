@@ -1500,7 +1500,7 @@ extern float abs_0698(float) __asm__("FUN_001f99c0");
 /* Path moby update: hit handling first, then a state machine that turns toward the player or its target,
    spawns and fires a projectile (pvars 0x160) and dies by explosion or by reaching the end of its path. */
 void psytcopus_update(struct Moby *m) __asm__("FUN_L11_00310180");
-void psytcopus_update(struct Moby *m) {
+void psytcopus_update(struct Moby *psytcopus) {
     enum {
         PSYTCOPUS_STATE_INITIALIZE = 0,
         PSYTCOPUS_STATE_FACE_PLAYER = 3,
@@ -1510,21 +1510,21 @@ void psytcopus_update(struct Moby *m) {
         PSYTCOPUS_STATE_KNOCKBACK = 7,
         PSYTCOPUS_STATE_DEATH_KNOCKBACK = 8
     };
-    struct PokiPathVars *pv = (struct PokiPathVars *)m->pvars;
+    struct PokiPathVars *pv = (struct PokiPathVars *)psytcopus->pvars;
     struct Moby *target;
     Vec4f v;
     float angle;
     s32 *path;
     int r;
 
-    FUN_L11_00310698(m);
+    FUN_L11_00310698(psytcopus);
     target = pv->target;
-    FUN_L00_00263ac8_0180(m, 0, pv->unk1E0, 2.5f);
-    if (m->visible != 0 && distance_0180(&m->pos, D_L11_001677C0) < 28.0f) {
-        FUN_L00_0025a120_p(m);
-        m->shadow_range = 0x16;
+    FUN_L00_00263ac8_0180(psytcopus, 0, pv->unk1E0, 2.5f);
+    if (psytcopus->visible != 0 && distance_0180(&psytcopus->pos, D_L11_001677C0) < 28.0f) {
+        FUN_L00_0025a120_p(psytcopus);
+        psytcopus->shadow_range = 0x16;
     }
-    switch (m->state) {
+    switch (psytcopus->state) {
     case PSYTCOPUS_STATE_INITIALIZE:
         pv->unk24 = 3;
         pv->health = 3.0f;
@@ -1532,106 +1532,106 @@ void psytcopus_update(struct Moby *m) {
         pv->unk2A = 6;
         pv->unk58 = random_int_0180(8.0f);
         pv->unk5A = random_int_0180(8.0f);
-        m->state = 3;
-        if (m->prev_seq != 0) {
-            blend_0180(m, 0, 0, frames_0180(10));
+        psytcopus->state = 3;
+        if (psytcopus->prev_seq != 0) {
+            blend_0180(psytcopus, 0, 0, frames_0180(10));
         }
         if (pv->unk130 != 0) {
-            m->state = 1;
-            qcopy(&m->pos, (char *)D_L11_001B0EB0[pv->unk134] + 0x10);
+            psytcopus->state = 1;
+            qcopy(&psytcopus->pos, (char *)D_L11_001B0EB0[pv->unk134] + 0x10);
             break;
         }
-        m->state = 3;
-        if (m->prev_seq != 0) {
-            blend_0180(m, 0, 0, frames_0180(10));
+        psytcopus->state = 3;
+        if (psytcopus->prev_seq != 0) {
+            blend_0180(psytcopus, 0, 0, frames_0180(10));
         }
         break;
     case PSYTCOPUS_STATE_FACE_PLAYER:
         {
-        float *yaw = &m->rot.z;
-        angle = atan2_0180(D_001413D0->pos.x - m->pos.x, D_001413D0->pos.y - m->pos.y);
+        float *yaw = &psytcopus->rot.z;
+        angle = atan2_0180(D_001413D0->pos.x - psytcopus->pos.x, D_001413D0->pos.y - psytcopus->pos.y);
         approach_angle(yaw, angle, &pv->unk14C, frame_time_sq * 6.2831855f,
                          frame_time_sq * 6.2831855f, frame_time * 6.2831855f);
         }
         if (pv->unk114 != 2) {
-            m->state = 4;
-            if (m->prev_seq != 2) {
-                blend_0180(m, 2, 0, frames_0180(10));
+            psytcopus->state = 4;
+            if (psytcopus->prev_seq != 2) {
+                blend_0180(psytcopus, 2, 0, frames_0180(10));
             }
         }
         break;
     case PSYTCOPUS_STATE_CREATE_PROJECTILE:
         {
-        float *yaw = &m->rot.z;
-        angle = atan2_0180(target->pos.x - m->pos.x, target->pos.y - m->pos.y);
+        float *yaw = &psytcopus->rot.z;
+        angle = atan2_0180(target->pos.x - psytcopus->pos.x, target->pos.y - psytcopus->pos.y);
         approach_angle(yaw, angle, &pv->unk14C, frame_time_sq * 6.2831855f,
                          frame_time_sq * 6.2831855f, frame_time * 6.2831855f);
         }
-        if (in_window_0180(m, 15.0f) != 0) {
-            normalize_0180(&v, &m->rot_row0, D_L11_00161FC8);
-            add_0180(&v, &v, &m->pos);
+        if (in_window_0180(psytcopus, 15.0f) != 0) {
+            normalize_0180(&v, &psytcopus->rot_row0, D_L11_00161FC8);
+            add_0180(&v, &v, &psytcopus->pos);
             v.z += D_L11_00161FCC;
-            pv->unk160 = FUN_L11_00318d10_p(m, &v, 5);
+            pv->unk160 = FUN_L11_00318d10_p(psytcopus, &v, 5);
             break;
         }
-        if (m->anim_flags & 2) {
-            m->state = 5;
-            if (m->prev_seq != 3) {
-                blend_0180(m, 3, 0, frames_0180(10));
+        if (psytcopus->anim_flags & 2) {
+            psytcopus->state = 5;
+            if (psytcopus->prev_seq != 3) {
+                blend_0180(psytcopus, 3, 0, frames_0180(10));
             }
         }
         break;
     case PSYTCOPUS_STATE_FIRE_PROJECTILE:
         {
-        float *yaw = &m->rot.z;
-        angle = atan2_0180(target->pos.x - m->pos.x, target->pos.y - m->pos.y);
+        float *yaw = &psytcopus->rot.z;
+        angle = atan2_0180(target->pos.x - psytcopus->pos.x, target->pos.y - psytcopus->pos.y);
         approach_angle(yaw, angle, &pv->unk14C, frame_time_sq * 6.2831855f,
                          frame_time_sq * 6.2831855f, frame_time * 6.2831855f);
         }
-        if (pv->unk160 != 0 && in_window_0180(m, 33.0f) != 0) {
-            normalize_0180(&v, &m->rot_row0, frame_time * 30.0f);
+        if (pv->unk160 != 0 && in_window_0180(psytcopus, 33.0f) != 0) {
+            normalize_0180(&v, &psytcopus->rot_row0, frame_time * 30.0f);
             FUN_L11_00318e98_p(pv->unk160, &v);
             pv->unk160 = 0;
         }
-        if (m->anim_flags & 2) {
-            m->state = 6;
-            if (m->prev_seq != 4) {
-                blend_0180(m, 4, 0, frames_0180(10));
+        if (psytcopus->anim_flags & 2) {
+            psytcopus->state = 6;
+            if (psytcopus->prev_seq != 4) {
+                blend_0180(psytcopus, 4, 0, frames_0180(10));
             }
         }
         break;
     case PSYTCOPUS_STATE_ATTACK_RECOVERY:
-        if (m->anim_flags & 2) {
-            m->state = 3;
-            if (m->prev_seq != 0) {
-                blend_0180(m, 0, 0, frames_0180(10));
+        if (psytcopus->anim_flags & 2) {
+            psytcopus->state = 3;
+            if (psytcopus->prev_seq != 0) {
+                blend_0180(psytcopus, 0, 0, frames_0180(10));
             }
         }
         break;
     case PSYTCOPUS_STATE_KNOCKBACK:
-        r = FUN_L00_0025c698_p(m, pv->unk70);
+        r = FUN_L00_0025c698_p(psytcopus, pv->unk70);
         if (r & 0x41) {
             path = D_L11_001B0EB0[pv->unk13C];
-            if (FUN_L00_00259740_p(&m->pos, path + 4, *path) != 0) {
-                m->state = 3;
-                if (m->prev_seq != 0) {
-                    blend_0180(m, 0, 0, frames_0180(10));
+            if (FUN_L00_00259740_p(&psytcopus->pos, path + 4, *path) != 0) {
+                psytcopus->state = 3;
+                if (psytcopus->prev_seq != 0) {
+                    blend_0180(psytcopus, 0, 0, frames_0180(10));
                 }
                 break;
             }
             r = 0x100;
         }
         if (r & 0x120) {
-            FUN_L00_00257470_p(m, 0, -1);
-            FUN_L00_0025f3e8_p(m, &m->pos, -1, 0.5f, 10.0f);
-            remove_0180(m);
+            FUN_L00_00257470_p(psytcopus, 0, -1);
+            FUN_L00_0025f3e8_p(psytcopus, &psytcopus->pos, -1, 0.5f, 10.0f);
+            remove_0180(psytcopus);
         }
         break;
     case PSYTCOPUS_STATE_DEATH_KNOCKBACK:
-        if (FUN_L00_0025c698_p(m, pv->unk70) & 0x160) {
-            FUN_L00_0025f3e8_p(m, &m->pos, -1, 1.0f, 10.0f);
-            FUN_L00_00257470_p(m, 0, -1);
-            remove_0180(m);
+        if (FUN_L00_0025c698_p(psytcopus, pv->unk70) & 0x160) {
+            FUN_L00_0025f3e8_p(psytcopus, &psytcopus->pos, -1, 1.0f, 10.0f);
+            FUN_L00_00257470_p(psytcopus, 0, -1);
+            remove_0180(psytcopus);
         }
         break;
     }
