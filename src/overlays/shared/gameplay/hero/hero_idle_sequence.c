@@ -1427,12 +1427,12 @@ void FUN_L00_00207a58(void) {
 
             for (i = 0; i < 7; i++) {
                 for (j = 0; j < 3; j++) {
-                    struct Hero *h = &hero;
-                    item_moby = *(unsigned char **)&h->items[i].moby;
+                    struct Hero *hero_state = &hero;
+                    item_moby = *(unsigned char **)&hero_state->items[i].moby;
                     if (j == 1)
-                        item_moby = *(unsigned char **)&h->items[i].moby2;
+                        item_moby = *(unsigned char **)&hero_state->items[i].moby2;
                     item_scale = sequence_scale;
-                    if (i == 0 && h->vehicle_mode == 0 && 1.0f < sequence_scale)
+                    if (i == 0 && hero_state->vehicle_mode == 0 && 1.0f < sequence_scale)
                         item_scale = 1.0f;
                     if (item_moby) {
                         scale_vector_xyz(item_moby + 0xC0, item_moby + 0xC0, item_scale);
