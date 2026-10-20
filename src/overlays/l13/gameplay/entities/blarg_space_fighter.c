@@ -2648,7 +2648,7 @@ typedef struct {
 
 extern int D_L13_001D3508[];
 extern int D_L13_001D3520[];
-void FUN_L13_002e8920(struct Moby *m, char *d) {
+void FUN_L13_002e8920(struct Moby *source_moby, char *d) {
     OvlQuad zv;
     float bone_position[4];
     int i;
@@ -2657,12 +2657,12 @@ void FUN_L13_002e8920(struct Moby *m, char *d) {
             float scale_ratio;
             int r, k;
             zv = 0;
-            scale_ratio = m->scale / (m->pclass->scale * 4.0f);
-            bone_v(m, D_L13_001D3520[i], bone_position);
+            scale_ratio = source_moby->scale / (source_moby->pclass->scale * 4.0f);
+            bone_v(source_moby, D_L13_001D3520[i], bone_position);
             if (frame_count & 1) {
                 r = frames_v(rnd_v(0xF, 0x14));
                 FUN_L00_00269958(bone_position, &zv, 0xCF0000FF, 0xCF, r, ftoi_v(scale_ratio * 350.0f), -100, 1);
-            } else if (m->command == 0 || D_L13_001D3478[m->command - 1] != D_L13_001D3508[i] ||
+            } else if (source_moby->command == 0 || D_L13_001D3478[source_moby->command - 1] != D_L13_001D3508[i] ||
                        below_v(9) == 0) {
                 r = frames_v(rnd_v(0xF, 0x16));
                 FUN_L00_00269958(bone_position, &zv, 0x6000FFFF, 0x80, r, ftoi_v(scale_ratio * 600.0f), -100, 1);
