@@ -24,7 +24,7 @@ char *FUN_L16_002a09a0(char *owner, float *pos, char *vec) {
     char *moby = func_0020D348_m(0x31);
     if (moby != 0) {
         char *data;
-        float a;
+        float xy_length;
         float b;
         ((unsigned char *)moby)[0x30] = 0xFF;
         *(short *)(moby + 0x32) = 0xFF;
@@ -39,8 +39,8 @@ char *FUN_L16_002a09a0(char *owner, float *pos, char *vec) {
         *(char **)(data + 0x18) = owner;
         *(int *)(data + 0x10) = 0;
         *(float *)(moby + 0x48) = fast_arc_tan(pos[0], pos[1]);
-        a = vector_length_xy(pos);
-        b = fast_arc_tan(a, pos[2]);
+        xy_length = vector_length_xy(pos);
+        b = fast_arc_tan(xy_length, pos[2]);
         *(float *)(moby + 0x44) = -b;
         moby[0x31] = 0;
         *(unsigned short *)(moby + 0x34) |= 1;
