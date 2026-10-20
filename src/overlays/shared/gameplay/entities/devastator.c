@@ -2716,7 +2716,7 @@ extern int f_to_int(float) __asm__("FUN_001fa6d0");
 void FUN_L00_002b7568_c(void) __asm__("FUN_L00_002b7568");
 
 void FUN_L00_002b7398(void *arg) {
-    E8690 *p;
+    E8690 *effect_slot;
     unsigned short av;
     int i;
     int r;
@@ -2733,26 +2733,26 @@ void FUN_L00_002b7398(void *arg) {
         if (tick_countdown_32(&D_L00_001614D0) != 0) {
             i = 0;
             do {
-                p = &D_L00_001DB440[i];
-                if (p->c == 0) {
+                effect_slot = &D_L00_001DB440[i];
+                if (effect_slot->c == 0) {
                     D_L00_001614D0 = scale_game_frames(D_L00_001614B0);
                     av = *(unsigned short *)&D_L00_001614D0_e[2];
-                    p->b = D_L00_001614BC;
-                    p->c = 1;
-                    p->a = av;
-                    p->f = 0;
+                    effect_slot->b = D_L00_001614BC;
+                    effect_slot->c = 1;
+                    effect_slot->a = av;
+                    effect_slot->f = 0;
                     break;
                 }
             } while (++i < 10);
         }
     }
     for (i = 0; i < 10; i++) {
-        p = &D_L00_001DB440[i];
-        if (p->c != 0) {
-            if (fast_dec_timer_s16(&p->a) != 0)
-                p->c = 0;
+        effect_slot = &D_L00_001DB440[i];
+        if (effect_slot->c != 0) {
+            if (fast_dec_timer_s16(&effect_slot->a) != 0)
+                effect_slot->c = 0;
             else
-                p->f += D_L00_001614B8 * frame_time;
+                effect_slot->f += D_L00_001614B8 * frame_time;
         }
     }
     moby_point_position(arg, 0, D_L00_001614E0);
