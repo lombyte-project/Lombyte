@@ -39,37 +39,37 @@ struct Moby *FUN_L00_002630c8(void *ignore, Vec4 *pos_in, Vec4 *dir_in, f32 *yaw
     Vec4 *pp = &pos, *dp = &dir;
     struct Moby *best = 0;
     f32 best_dist = 10000.0f;
-    struct Moby *m;
+    struct Moby *candidate_moby;
 
     pos.q = pos_in->q;
     dir.q = dir_in->q;
     *yaw = fast_arc_tan(dp->f[0], dp->f[1]);
     *pitch = -fast_arc_tan(vector_length_xy(dp), dp->f[2]);
 
-    for (m = D_L00_0015FFE4; m != 0; m = m->next) {
+    for (candidate_moby = D_L00_0015FFE4; candidate_moby != 0; candidate_moby = candidate_moby->next) {
         MobyBound *b;
         f32 t_yaw, t_pitch, dist, ang;
-        if ((s8)m->state < 0)
+        if ((s8)candidate_moby->state < 0)
             continue;
-        qcopy(&target, &m->pos);
-        b = suck_get_aim_height(m);
+        qcopy(&target, &candidate_moby->pos);
+        b = suck_get_aim_height(candidate_moby);
         if (b)
             target.f[2] += b->height;
         else
             target.f[2] += 0.5f;
-        if (!(m->flags & 0x1000) || !m || !m->pclass || m->pclass->type != 5)
+        if (!(candidate_moby->flags & 0x1000) || !candidate_moby || !candidate_moby->pclass || candidate_moby->pclass->type != 5)
             continue;
         t_yaw = fast_arc_tan(target.f[0] - pp->f[0], target.f[1] - pp->f[1]);
         t_pitch = fast_arc_tan(vector_distance_xy(pp, &target), target.f[2] - pp->f[2]);
         dist = fast_vec_dist(pp, &target);
         if (dist < 7.5f &&
             fast_difference_between_rotations(hero.moby->rot.z,
-                         fast_arc_tan(m->pos.x - hero.motion.pos.f[0],
-                                      m->pos.y - hero.motion.pos.f[1])) < 1.0471976f &&
+                         fast_arc_tan(candidate_moby->pos.x - hero.motion.pos.f[0],
+                                      candidate_moby->pos.y - hero.motion.pos.f[1])) < 1.0471976f &&
             FUN_001f99c0(t_pitch) < 1.0471976f) {
             *pitch = -t_pitch;
             *yaw = t_yaw;
-            return m;
+            return candidate_moby;
         }
         if (best_dist < dist)
             continue;
@@ -84,7 +84,7 @@ struct Moby *FUN_L00_002630c8(void *ignore, Vec4 *pos_in, Vec4 *dir_in, f32 *yaw
                 ang -= shrink;
         }
         if (ang < max_angle && !collision_line(D_L00_00166DC0, &target, 6, ignore, 0)) {
-            best = m;
+            best = candidate_moby;
             best_dist = dist;
             *pitch = -t_pitch;
             *yaw = t_yaw;
