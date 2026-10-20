@@ -978,29 +978,29 @@ extern void FUN_L00_0025d1b8(struct Moby *);
 extern struct AnimTimer *suck_get_aim_height(struct Moby *) __asm__("FUN_002141f8");
 
 /* resets a spawned moby from its class defaults and restarts its animation */
-void FUN_L07_0030af40(struct Moby *m) {
+void FUN_L07_0030af40(struct Moby *moby) {
     struct SpawnClassView *cls;
-    struct AnimTimer *t;
+    struct AnimTimer *animation_timer;
 
-    m->state = 0;
-    cls = (struct SpawnClassView *)m->pclass;
-    m->command = 0;
-    m->flags = cls->flags;
-    m->scale = cls->scale;
-    m->update_dist = 0xFF;
-    m->draw_dist = 0xFF;
-    m->visible = 1;
-    update_moby_grids(m, 0x80807F7F);
-    ((struct SpawnMobyView *)m)->unk36 = 0x7F80;
-    m->unk72 = 0xFF;
-    m->hit_slot = 0xFF;
-    ((struct SpawnMobyView *)m)->unk71 = 0xFF;
-    m->collision = ((struct SpawnClassView *)m->pclass)->unk10;
-    FUN_L00_0025d1b8(m);
-    FUN_L00_00250df8(m);
-    t = suck_get_aim_height(m);
-    if (t != 0)
-        t->frames = t->length;
+    moby->state = 0;
+    cls = (struct SpawnClassView *)moby->pclass;
+    moby->command = 0;
+    moby->flags = cls->flags;
+    moby->scale = cls->scale;
+    moby->update_dist = 0xFF;
+    moby->draw_dist = 0xFF;
+    moby->visible = 1;
+    update_moby_grids(moby, 0x80807F7F);
+    ((struct SpawnMobyView *)moby)->unk36 = 0x7F80;
+    moby->unk72 = 0xFF;
+    moby->hit_slot = 0xFF;
+    ((struct SpawnMobyView *)moby)->unk71 = 0xFF;
+    moby->collision = ((struct SpawnClassView *)moby->pclass)->unk10;
+    FUN_L00_0025d1b8(moby);
+    FUN_L00_00250df8(moby);
+    animation_timer = suck_get_aim_height(moby);
+    if (animation_timer != 0)
+        animation_timer->frames = animation_timer->length;
 }
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_002CE470.c: func_L07_0030C3E0), where it is exact; names translated to the US level program. */
 
