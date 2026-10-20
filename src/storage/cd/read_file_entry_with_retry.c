@@ -15,16 +15,16 @@ s32 read_file_entry_with_retry(s32 file) __asm__("FUN_0012f368");
 s32 read_file_entry_with_retry(s32 file) {
     u8 buf[0x2800];
     sceCdRMode mode;
-    struct FileEntry *e;
+    struct FileEntry *file_entry;
     u32 i;
 
     mode.trycount = 0x20;
     mode.spindlctrl = D_0015ED58;
     mode.datapattern = 0;
     mode.pad = 0;
-    e = &D_0013A448[file];
+    file_entry = &D_0013A448[file];
     do {
-        sceCdRead(e->lsn, 5, buf, &mode);
+        sceCdRead(file_entry->lsn, 5, buf, &mode);
         while (sceCdSync(1) != 0) {
             sceGsSyncV(0);
         }
