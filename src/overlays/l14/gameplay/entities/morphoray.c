@@ -25,19 +25,19 @@ extern u8 *D_L14_00167500 __attribute__((section(".data")));
  * constants, and set both floats on the record itself. */
 void FUN_L14_003135b8(u8 *flying_car_moby) {
     u8 *g = D_L14_00167500;
-    u8 *q;
-    u8 *p;
+    u8 *linked_subrecord;
+    u8 *linked_record;
 
     if (*(s16 *)(g + 0x86) != 7) {
         return;
     }
-    q = *(u8 **)(g + 0x70) + 0x40;
-    *(s32 *)(q + 0x40) = 1;
-    *(s32 *)(q + 0x44) = (s32)flying_car_moby;
-    *(f32 *)(q + 0x4C) = 2.0f;
-    p = *(u8 **)(g + 0x70);
-    *(f32 *)(p + 0xA0) = 7.0f;
-    *(f32 *)(p + 0xB0) = 2.0f;
+    linked_subrecord = *(u8 **)(g + 0x70) + 0x40;
+    *(s32 *)(linked_subrecord + 0x40) = 1;
+    *(s32 *)(linked_subrecord + 0x44) = (s32)flying_car_moby;
+    *(f32 *)(linked_subrecord + 0x4C) = 2.0f;
+    linked_record = *(u8 **)(g + 0x70);
+    *(f32 *)(linked_record + 0xA0) = 7.0f;
+    *(f32 *)(linked_record + 0xB0) = 2.0f;
 }
 
 /* 0x003167E0, 36 bytes.  While the executable's mode word is not 0xF, mark the
