@@ -1,5 +1,5 @@
-int FUN_0021a318(int *p) {
-    p[0x11] = -1;
+int FUN_0021a318(int *destination) {
+    destination[0x11] = -1;
     return 0;
 }
 
