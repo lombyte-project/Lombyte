@@ -1826,77 +1826,77 @@ extern int func_0022ED80_i(int, int, void *) __asm__("FUN_0022da68");
 extern int func_001FA898_caa18(float) __asm__("FUN_001fa6d0");
 
 void wall_button_update(struct Moby *m) __asm__("FUN_L16_002cf198");
-void wall_button_update(struct Moby *m) {
+void wall_button_update(struct Moby *moby) {
     enum {
         WALL_BUTTON_STATE_INITIALIZE = 0,
         WALL_BUTTON_STATE_WAIT_FOR_HIT = 1,
         WALL_BUTTON_STATE_ACTIVATED = 2
     };
-    char *d = (char *)m->pvars;
-    switch ((*(unsigned char *)((char *)(m) + (0x20)))) {
+    char *wall_button_data = (char *)moby->pvars;
+    switch ((*(unsigned char *)((char *)(moby) + (0x20)))) {
     case WALL_BUTTON_STATE_INITIALIZE:
-        (*(float *)((char *)(d) + (0x68))) = random_angle_radians();
-        (*(float *)((char *)(d) + (0x30))) = 0.001f;
+        (*(float *)((char *)(wall_button_data) + (0x68))) = random_angle_radians();
+        (*(float *)((char *)(wall_button_data) + (0x30))) = 0.001f;
         if ((*(unsigned char *)((char *)(((char *)&(*(short *)&visited52_lui)) + (current_level_index << 4)) +
-                                ((*(unsigned char *)((char *)(m) + (0xB0)))))) == 255 &&
-            (*(int *)((char *)(d) + (0x64))) == -1) {
-            (*(unsigned char *)((char *)(m) + (0xBC))) = 1;
-            (*(unsigned char *)((char *)(m) + (0x20))) = 2;
-            if ((*(int *)((char *)(d) + (0x60))) != -1) {
-                FUN_L16_002e3770(D_L16_0015FFD8 + ((*(int *)((char *)(d) + (0x60))) << 8), 0);
+                                ((*(unsigned char *)((char *)(moby) + (0xB0)))))) == 255 &&
+            (*(int *)((char *)(wall_button_data) + (0x64))) == -1) {
+            (*(unsigned char *)((char *)(moby) + (0xBC))) = 1;
+            (*(unsigned char *)((char *)(moby) + (0x20))) = 2;
+            if ((*(int *)((char *)(wall_button_data) + (0x60))) != -1) {
+                FUN_L16_002e3770(D_L16_0015FFD8 + ((*(int *)((char *)(wall_button_data) + (0x60))) << 8), 0);
             }
         } else
-            (*(unsigned char *)((char *)(m) + (0x20))) = 1;
+            (*(unsigned char *)((char *)(moby) + (0x20))) = 1;
         break;
     case WALL_BUTTON_STATE_WAIT_FOR_HIT: {
         int color;
-        (*(float *)((char *)(d) + (0x68))) =
-            fast_add_rotations((*(float *)((char *)(d) + (0x68))), D_0015ED6C * 6.2831855f);
-        color = func_001FA898_caa18((fast_sin((*(float *)((char *)(d) + (0x68)))) * 4.0f - 3.0f) *
+        (*(float *)((char *)(wall_button_data) + (0x68))) =
+            fast_add_rotations((*(float *)((char *)(wall_button_data) + (0x68))), D_0015ED6C * 6.2831855f);
+        color = func_001FA898_caa18((fast_sin((*(float *)((char *)(wall_button_data) + (0x68)))) * 4.0f - 3.0f) *
                                     128.0f);
         if (color > 128)
             color = 128;
         else if (color < 32)
             color = 32;
-        (*(int *)((char *)(m) + (0x90))) = 0x80000000 | (color << 16) | (color << 8) | color;
-        if (find_moby_hit(m, 0x330000, 0)) {
-            (*(unsigned char *)((char *)(m) + (0x20))) = 2;
-            (*(int *)((char *)(m) + (0x90))) = 0x80208020;
-            (*(unsigned char *)((char *)(m) + (0xBC))) = 1;
-            (*(float *)((char *)(d) + (0x68))) = 1.5707964f;
-            func_0022ED80_i(0, 0, m);
-            if ((*(int *)((char *)(d) + (0x60))) != -1)
-                FUN_L16_002e3770(D_L16_0015FFD8 + ((*(int *)((char *)(d) + (0x60))) << 8), 0);
-            if ((*(int *)((char *)(d) + (0x64))) > 0)
-                (*(int *)((char *)(d) + (0x6C))) =
-                    scale_game_frames((*(int *)((char *)(d) + (0x64))));
+        (*(int *)((char *)(moby) + (0x90))) = 0x80000000 | (color << 16) | (color << 8) | color;
+        if (find_moby_hit(moby, 0x330000, 0)) {
+            (*(unsigned char *)((char *)(moby) + (0x20))) = 2;
+            (*(int *)((char *)(moby) + (0x90))) = 0x80208020;
+            (*(unsigned char *)((char *)(moby) + (0xBC))) = 1;
+            (*(float *)((char *)(wall_button_data) + (0x68))) = 1.5707964f;
+            func_0022ED80_i(0, 0, moby);
+            if ((*(int *)((char *)(wall_button_data) + (0x60))) != -1)
+                FUN_L16_002e3770(D_L16_0015FFD8 + ((*(int *)((char *)(wall_button_data) + (0x60))) << 8), 0);
+            if ((*(int *)((char *)(wall_button_data) + (0x64))) > 0)
+                (*(int *)((char *)(wall_button_data) + (0x6C))) =
+                    scale_game_frames((*(int *)((char *)(wall_button_data) + (0x64))));
         }
         break;
     }
     case WALL_BUTTON_STATE_ACTIVATED: {
         int color = func_001FA898_caa18(
-            (fast_sin((*(float *)((char *)(d) + (0x68)))) * 0.5f + 0.5f) * 128.0f);
+            (fast_sin((*(float *)((char *)(wall_button_data) + (0x68)))) * 0.5f + 0.5f) * 128.0f);
         if (color > 128)
             color = 128;
         else if (color < 32)
             color = 32;
-        (*(int *)((char *)(m) + (0x90))) = 0x80200020 | (color << 8);
-        if ((*(int *)((char *)(d) + (0x64))) > 0) {
-            if (tick_countdown_32((int *)(d + 0x6C))) {
-                (*(unsigned char *)((char *)(m) + (0xBC))) = 0;
-                (*(unsigned char *)((char *)(m) + (0x20))) = 1;
-                (*(float *)((char *)(d) + (0x68))) = 1.5707964f;
-                if ((*(int *)((char *)(d) + (0x60))) != -1) {
-                    FUN_L16_002e3770(D_L16_0015FFD8 + ((*(int *)((char *)(d) + (0x60))) << 8), 1);
+        (*(int *)((char *)(moby) + (0x90))) = 0x80200020 | (color << 8);
+        if ((*(int *)((char *)(wall_button_data) + (0x64))) > 0) {
+            if (tick_countdown_32((int *)(wall_button_data + 0x6C))) {
+                (*(unsigned char *)((char *)(moby) + (0xBC))) = 0;
+                (*(unsigned char *)((char *)(moby) + (0x20))) = 1;
+                (*(float *)((char *)(wall_button_data) + (0x68))) = 1.5707964f;
+                if ((*(int *)((char *)(wall_button_data) + (0x60))) != -1) {
+                    FUN_L16_002e3770(D_L16_0015FFD8 + ((*(int *)((char *)(wall_button_data) + (0x60))) << 8), 1);
                 }
-            } else if ((*(int *)((char *)(d) + (0x6C))) < scale_game_frames(90))
-                (*(float *)((char *)(d) + (0x68))) =
-                    fast_add_rotations((*(float *)((char *)(d) + (0x68))), freeze_stats_score_ref_b * 25.132742f);
+            } else if ((*(int *)((char *)(wall_button_data) + (0x6C))) < scale_game_frames(90))
+                (*(float *)((char *)(wall_button_data) + (0x68))) =
+                    fast_add_rotations((*(float *)((char *)(wall_button_data) + (0x68))), freeze_stats_score_ref_b * 25.132742f);
         }
         break;
     }
     }
-    (*(unsigned char *)((char *)(m) + (0xA4))) = 255;
+    (*(unsigned char *)((char *)(moby) + (0xA4))) = 255;
 }
 /* first other moby of type 0x228 in m's list whose 0x18 is within 0.1 of m's */
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002D0A40), where it is exact; names translated to the US level program. */
