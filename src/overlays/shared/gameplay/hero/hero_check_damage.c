@@ -1166,26 +1166,26 @@ extern void FUN_L00_002b4138_ea80(s32) __asm__("FUN_L00_002b4138");
 
 void spawn_hero_item_mobies(void) __asm__("FUN_L00_0020ea80");
 void spawn_hero_item_mobies(void) {
-    struct Moby *m;
+    struct Moby *created_moby;
     s32 id;
     s32 slot;
-    struct Hero *h;
+    struct Hero *slot_owner;
     s32 i;
-    struct Moby *m2;
-    struct Moby *m4;
-    struct Moby *m5;
-    struct Moby *m6;
+    struct Moby *slot_two_moby;
+    struct Moby *slot_four_moby;
+    struct Moby *slot_four_secondary_moby;
+    struct Moby *slot_five_moby;
     s32 id3;
-    s32 t;
+    s32 fallback_item_id;
 
     if (hero.items[0].moby == 0 && D_L00_0015F3F8_ea80 > hero.items[0].unk14 &&
         (hero.pending_item[0] == 0 || hero.pending_item[0] == 0x24)) {
         id = hero.selected_item[0];
         if (id == 0) {
-            if (D_0015ED90 != 0 || (t = D_00141660_ea80[0]) == 0)
+            if (D_0015ED90 != 0 || (fallback_item_id = D_00141660_ea80[0]) == 0)
                 id = 8;
             else
-                id = t;
+                id = fallback_item_id;
         }
         select_world_object_resource_tables(item_defs_ea80[id].cls, -1);
         for (i = 0; i < 3; i++) {
@@ -1194,21 +1194,21 @@ void spawn_hero_item_mobies(void) {
         }
         hero.items[0].item_id = id;
         slot = item_defs_ea80[id].slot;
-        h = (struct Hero *)((char *)&hero + slot * sizeof(struct HeroItemSlot));
-        m = create_moby(item_defs_ea80[h->items[0].item_id].cls);
-        if (m != 0) {
-            m->draw_dist = 0x20;
-            m->visible = 1;
-            m->spawn_frame = hero.moby->spawn_frame;
-            if (((u8 *)m->pclass)[6] != 0)
-                m->unk73 = 0x18;
-            h->items[0].moby = m;
-            h->items[0].state = 2;
+        slot_owner = (struct Hero *)((char *)&hero + slot * sizeof(struct HeroItemSlot));
+        created_moby = create_moby(item_defs_ea80[slot_owner->items[0].item_id].cls);
+        if (created_moby != 0) {
+            created_moby->draw_dist = 0x20;
+            created_moby->visible = 1;
+            created_moby->spawn_frame = hero.moby->spawn_frame;
+            if (((u8 *)created_moby->pclass)[6] != 0)
+                created_moby->unk73 = 0x18;
+            slot_owner->items[0].moby = created_moby;
+            slot_owner->items[0].state = 2;
             if (id == 8) {
-                h->items[0].button_mask = 0x80;
-                blend_moby_animation_ea80(m, 1, 0, 1);
+                slot_owner->items[0].button_mask = 0x80;
+                blend_moby_animation_ea80(created_moby, 1, 0, 1);
             } else {
-                h->items[0].button_mask = 0x20;
+                slot_owner->items[0].button_mask = 0x20;
             }
             /* The slot address is rebuilt here instead of reusing h; using h
              * changes the register allocation away from retail. */
@@ -1224,17 +1224,17 @@ void spawn_hero_item_mobies(void) {
                 id3 = D_0015ED94 != 0 ? 3 : 2;
         }
         hero.items[3].item_id = id3;
-        m = create_moby(item_defs_ea80[id3].cls);
-        if (m != 0) {
-            m->draw_dist = 0x20;
-            m->visible = 1;
-            m->spawn_frame = hero.moby->spawn_frame;
-            if (((u8 *)m->pclass)[6] != 0)
-                m->unk73 = 0x18;
+        created_moby = create_moby(item_defs_ea80[id3].cls);
+        if (created_moby != 0) {
+            created_moby->draw_dist = 0x20;
+            created_moby->visible = 1;
+            created_moby->spawn_frame = hero.moby->spawn_frame;
+            if (((u8 *)created_moby->pclass)[6] != 0)
+                created_moby->unk73 = 0x18;
             hero.items[3].state = 2;
-            hero.items[3].moby = m;
+            hero.items[3].moby = created_moby;
             if (hero.unk22D8 != 0)
-                m->flags |= 0x41;
+                created_moby->flags |= 0x41;
             if (hero.unk22D8 == 0 && hero.items[3].item_id == 3) {
                 FUN_L00_002b4138_ea80(0);
                 FUN_L00_002b4138_ea80(1);
@@ -1243,17 +1243,17 @@ void spawn_hero_item_mobies(void) {
     }
 
     if (hero.items[3].moby2 == 0) {
-        m = create_moby(item_defs_ea80[1].cls);
-        if (m != 0) {
-            m->draw_dist = 0x20;
-            m->visible = 1;
-            m->spawn_frame = hero.moby->spawn_frame;
-            if (((u8 *)m->pclass)[6] != 0)
-                m->unk73 = 0x18;
+        created_moby = create_moby(item_defs_ea80[1].cls);
+        if (created_moby != 0) {
+            created_moby->draw_dist = 0x20;
+            created_moby->visible = 1;
+            created_moby->spawn_frame = hero.moby->spawn_frame;
+            if (((u8 *)created_moby->pclass)[6] != 0)
+                created_moby->unk73 = 0x18;
             hero.items[3].state = 2;
-            hero.items[3].moby2 = m;
+            hero.items[3].moby2 = created_moby;
             if (hero.unk22D8 != 0)
-                m->flags |= 0x41;
+                created_moby->flags |= 0x41;
         }
     }
 
@@ -1262,79 +1262,79 @@ void spawn_hero_item_mobies(void) {
             hero.items[2].item_id = hero.selected_item[2];
         else
             hero.items[2].item_id = D_00141660_ea80[2];
-        m2 = create_moby(item_defs_ea80[hero.items[2].item_id].cls);
-        if (m2 != 0) {
-            m2->draw_dist = 0x20;
-            m2->visible = 1;
-            m2->spawn_frame = hero.moby->spawn_frame;
-            m2->flags |= 2;
-            m2->update = 0;
-            if (((u8 *)m2->pclass)[6] != 0)
-                m2->unk73 = 0x18;
-            m2->flags |= 0x800;
-            hero.items[2].moby = m2;
+        slot_two_moby = create_moby(item_defs_ea80[hero.items[2].item_id].cls);
+        if (slot_two_moby != 0) {
+            slot_two_moby->draw_dist = 0x20;
+            slot_two_moby->visible = 1;
+            slot_two_moby->spawn_frame = hero.moby->spawn_frame;
+            slot_two_moby->flags |= 2;
+            slot_two_moby->update = 0;
+            if (((u8 *)slot_two_moby->pclass)[6] != 0)
+                slot_two_moby->unk73 = 0x18;
+            slot_two_moby->flags |= 0x800;
+            hero.items[2].moby = slot_two_moby;
             hero.items[2].state = 2;
         }
     }
 
     if (hero.items[1].moby == 0 && D_00141660_ea80[1] != 0) {
         hero.items[1].item_id = D_00141660_ea80[1];
-        m = create_moby(item_defs_ea80[D_00141660_ea80[1]].cls);
-        if (m != 0) {
-            m->draw_dist = 0x20;
-            m->visible = 1;
-            m->spawn_frame = hero.moby->spawn_frame;
-            if (((u8 *)m->pclass)[6] != 0)
-                m->unk73 = 0x18;
-            hero.items[1].moby = m;
+        created_moby = create_moby(item_defs_ea80[D_00141660_ea80[1]].cls);
+        if (created_moby != 0) {
+            created_moby->draw_dist = 0x20;
+            created_moby->visible = 1;
+            created_moby->spawn_frame = hero.moby->spawn_frame;
+            if (((u8 *)created_moby->pclass)[6] != 0)
+                created_moby->unk73 = 0x18;
+            hero.items[1].moby = created_moby;
             hero.items[1].state = 2;
         }
-        m = create_moby(item_defs_ea80[D_00141660_ea80[1]].cls2);
-        if (m != 0) {
-            m->draw_dist = 0x20;
-            m->visible = 1;
-            m->spawn_frame = hero.moby->spawn_frame;
-            if (((u8 *)m->pclass)[6] != 0)
-                m->unk73 = 0x18;
-            hero.items[1].moby2 = m;
+        created_moby = create_moby(item_defs_ea80[D_00141660_ea80[1]].cls2);
+        if (created_moby != 0) {
+            created_moby->draw_dist = 0x20;
+            created_moby->visible = 1;
+            created_moby->spawn_frame = hero.moby->spawn_frame;
+            if (((u8 *)created_moby->pclass)[6] != 0)
+                created_moby->unk73 = 0x18;
+            hero.items[1].moby2 = created_moby;
             hero.items[1].state = 2;
         }
     }
 
     if (hero.items[4].moby == 0 && item_available[0x21] != 0) {
-        m4 = create_moby(item_defs_ea80[0x21].cls);
+        slot_four_moby = create_moby(item_defs_ea80[0x21].cls);
         hero.items[4].item_id = 0x21;
-        if (m4 != 0) {
-            m4->draw_dist = 0x20;
-            m4->visible = 1;
-            m4->spawn_frame = hero.moby->spawn_frame;
-            if (((u8 *)m4->pclass)[6] != 0)
-                m4->unk73 = 0x18;
-            hero.items[4].moby = m4;
+        if (slot_four_moby != 0) {
+            slot_four_moby->draw_dist = 0x20;
+            slot_four_moby->visible = 1;
+            slot_four_moby->spawn_frame = hero.moby->spawn_frame;
+            if (((u8 *)slot_four_moby->pclass)[6] != 0)
+                slot_four_moby->unk73 = 0x18;
+            hero.items[4].moby = slot_four_moby;
             hero.items[4].state = 2;
         }
     }
 
     if (hero.items[4].moby2 == 0 && item_available[0x22] != 0) {
-        m5 = create_moby(item_defs_ea80[0x22].cls);
+        slot_four_secondary_moby = create_moby(item_defs_ea80[0x22].cls);
         hero.items[4].item_id = 0x22;
-        if (m5 != 0) {
-            m5->draw_dist = 0x20;
-            m5->visible = 1;
-            m5->spawn_frame = hero.moby->spawn_frame;
-            hero.items[4].moby2 = m5;
+        if (slot_four_secondary_moby != 0) {
+            slot_four_secondary_moby->draw_dist = 0x20;
+            slot_four_secondary_moby->visible = 1;
+            slot_four_secondary_moby->spawn_frame = hero.moby->spawn_frame;
+            hero.items[4].moby2 = slot_four_secondary_moby;
             hero.items[4].state = 2;
         }
     }
 
     if (hero.items[5].moby == 0 && item_available[0x23] != 0) {
-        m6 = create_moby(item_defs_ea80[0x23].cls);
+        slot_five_moby = create_moby(item_defs_ea80[0x23].cls);
         hero.items[5].item_id = 0x23;
-        if (m6 != 0) {
-            m6->draw_dist = 0x20;
-            m6->visible = 1;
-            m6->spawn_frame = hero.moby->spawn_frame;
-            hero.items[5].moby = m6;
+        if (slot_five_moby != 0) {
+            slot_five_moby->draw_dist = 0x20;
+            slot_five_moby->visible = 1;
+            slot_five_moby->spawn_frame = hero.moby->spawn_frame;
+            hero.items[5].moby = slot_five_moby;
             hero.items[5].state = 2;
         }
     }
