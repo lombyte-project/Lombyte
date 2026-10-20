@@ -1401,15 +1401,15 @@ void FUN_L08_002da0f0(struct Moby *moby) {
         FUN_L00_0026f548(&pos, &v, random_integer_below(2), n);
     }
     for (i = 0; i < 16; i++) {
-        unsigned char *q;
+        unsigned char *splash;
         random_vector(v.f, 1.0f, 1.0f);
         add_vector_xyz(&v, &v, &pos);
         v.f[2] = D_L08_001D7060[2] + 0.05f;
         sc = random_float_between(0.7f, 1.0f);
         sp = i == 0 ? 2.0f : -2.0f;
-        q = spawn_splash(&v, D_L08_0015F580, &D_L08_001D7060[2], sc, sp);
-        if (q)
-            *(short *)(q + 0xA) = truncate_float_to_s32(multiply_global_factor_ed64(random_float_between(30.0f, 60.0f)));
+        splash = spawn_splash(&v, D_L08_0015F580, &D_L08_001D7060[2], sc, sp);
+        if (splash)
+            *(short *)(splash + 0xA) = truncate_float_to_s32(multiply_global_factor_ed64(random_float_between(30.0f, 60.0f)));
     }
 }
 extern float D_L08_00161998 __attribute__((sda));
