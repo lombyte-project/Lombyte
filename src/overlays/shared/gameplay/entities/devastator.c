@@ -2852,287 +2852,234 @@ void FUN_L00_002b7568(u8 *m) {
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002b77f0.s", FUN_L00_002b77f0);
 #else
-typedef unsigned int U128_2b77f0 __attribute__((mode(TI), aligned(16)));
-typedef union {
-    U128_2b77f0 q;
-    f32 f[4];
-} Vec_2b77f0;
+/* Ported from rac1-decomp (nonmatching/shared/func_L00_002B8AE8.c: func_L00_002B8AE8). */
+typedef struct PyrocitorVars_2b77f0 {
+    struct Moby *other;
+    char pad4[0x40];
+    s16 light;
+    char pad46[4];
+    s16 voice;
+    s16 timer;
+    s16 spark;
+} PyrocitorVars_2b77f0;
 
-extern s32 D_001413D4_2b77f0 __asm__("D_001413D4");
-extern u8 D_0013E530_2b77f0 __asm__("D_0013E530");
-extern void *D_001413D0_2b77f0 __asm__("D_001413D0");
-extern u8 D_0013E550_2b77f0[] __asm__("D_0013E550");
-extern u8 D_001802C0_2b77f0[] __asm__("D_L00_001802C0");
-extern Vec_2b77f0 D_0013F9C0_2b77f0 __asm__("D_0013F9C0");
-extern Vec_2b77f0 D_0013F990_2b77f0 __asm__("D_0013F990");
-extern Vec_2b77f0 D_0013F3D0_2b77f0 __asm__("D_0013F3D0");
-extern Vec_2b77f0 D_0013F420_2b77f0 __asm__("D_0013F420");
-extern Vec_2b77f0 D_00166FF0_2b77f0 __asm__("D_L00_00166FF0");
-extern Vec_2b77f0 D_00166DC0_2b77f0 __asm__("D_L00_00166DC0");
-extern Vec_2b77f0 D_00166FD0_2b77f0 __asm__("D_L00_00166FD0");
-extern Vec_2b77f0 D_00173E60_2b77f0 __asm__("D_L00_00173E60");
-extern f32 D_L00_001601E8 __asm__("D_L00_001601E8");
-extern f32 frame_time_sq __asm__("D_0015ED70");
-extern Vec_2b77f0 D_L00_0015F580_2b77f0 __asm__("D_L00_0015F580");
-extern s32 D_L00_001614F8_2b77f0 __asm__("D_L00_001614F8") __attribute__((sda));
-extern s32 D_L00_00161500_2b77f0 __asm__("D_L00_00161500") __attribute__((sda));
-extern s32 D_L00_00161504_2b77f0 __asm__("D_L00_00161504") __attribute__((sda));
-extern Vec_2b77f0 D_L00_001614F0_2b77f0 __asm__("D_L00_001614F0") __attribute__((section(".sdata")));
-extern f32 D_L00_00161510_2b77f0 __asm__("D_L00_00161510") __attribute__((sda));
-extern s32 D_L00_00161518_2b77f0 __asm__("D_L00_00161518") __attribute__((sda));
-extern s32 D_L00_0016151C_2b77f0 __asm__("D_L00_0016151C") __attribute__((sda));
-extern f32 D_L00_00161520_2b77f0 __asm__("D_L00_00161520") __attribute__((sda));
-extern f32 D_L00_00161514_2b77f0 __asm__("D_L00_00161514") __attribute__((sda));
-extern f32 D_L00_00161528_2b77f0 __asm__("D_L00_00161528") __attribute__((sda));
-extern f32 D_L00_00161524_2b77f0 __asm__("D_L00_00161524") __attribute__((sda));
-extern s32 D_L00_00161530_2b77f0 __asm__("D_L00_00161530") __attribute__((sda));
-extern f32 D_L00_00161534_2b77f0 __asm__("D_L00_00161534") __attribute__((sda));
+typedef struct FlameHit_2b77f0 {
+    Vec_2b2100 point;
+    struct Moby *moby;
+    s32 flags;
+    u8 type;
+    u8 pad[3];
+    f32 scale;
+    s32 mode;
+} FlameHit_2b77f0;
+
+extern Vec_2b2100 D_L00_0015F580_2b77f0 __asm__("D_L00_0015F580") MACRO_ADDR;
+extern f32 D_L00_001614F0 __attribute__((sda));
+extern f32 D_L00_00161500 __attribute__((sda));
+extern f32 D_L00_00161510 __attribute__((sda));
+extern f32 D_L00_00161514 __attribute__((sda));
+extern s32 D_L00_00161518 __attribute__((sda));
+extern s32 D_L00_0016151C __attribute__((sda));
+extern f32 D_L00_00161520 __attribute__((sda));
+extern f32 D_L00_00161524 __attribute__((sda));
+extern f32 D_L00_00161528 __attribute__((sda));
+extern s32 D_L00_00161530 __attribute__((sda));
+extern f32 D_L00_001601E8_2b77f0 __asm__("D_L00_001601E8");
 
 void FUN_L00_002b8230(unsigned char *);
 void FUN_L00_002b8438(char *);
-void FUN_L00_002b8798_2b77f0(void *, s32) __asm__("FUN_L00_002b8798");
-void FUN_L00_0024f7c8_2b77f0(void *, s32, void *) __asm__("FUN_L00_0024f7c8");
-f32 FUN_L00_0024edc8_2b77f0(void *) __asm__("FUN_L00_0024edc8");
-s32 FUN_001f96f8_2b77f0(s32) __asm__("FUN_001f96f8");
-void FUN_L00_00257880_2b77f0(void *, s32, s32, s32) __asm__("FUN_L00_00257880");
-void *FUN_L00_002bb360_2b77f0(void *) __asm__("FUN_L00_002bb360");
-void FUN_001f9bf8_2b77f0(void *, void *, f32) __asm__("FUN_001f9bf8");
-void FUN_001f9a40_2b77f0(void *, void *, void *, f32) __asm__("FUN_001f9a40");
-void FUN_001f9a68_2b77f0(void *, void *, f32) __asm__("FUN_001f9a68");
-f32 FUN_001f9af0_len_2b77f0(void *) __asm__("FUN_001f9af0");
-void FUN_001f9a10_2b77f0(void *, void *, void *) __asm__("FUN_001f9a10");
-f32 FUN_001f9b48_2b77f0(void *, void *) __asm__("FUN_001f9b48");
-void FUN_L00_0023e838_2b77f0(s32) __asm__("FUN_L00_0023e838");
-s32 FUN_L00_00233e98_2b77f0(s32) __asm__("FUN_L00_00233e98");
-s16 FUN_L00_0028dbe8_2b77f0(s32, s32, void *) __asm__("FUN_L00_0028dbe8");
-void FUN_L00_0020e4c8_2b77f0(void) __asm__("FUN_L00_0020e4c8");
-s16 FUN_L00_0023e5e0_2b77f0(f32, f32, void *, s32) __asm__("FUN_L00_0023e5e0");
-void FUN_L00_0020e698_2b77f0(void) __asm__("FUN_L00_0020e698");
-s32 FUN_L00_0028d8c0_2b77f0(void *, s16) __asm__("FUN_L00_0028d8c0");
-void FUN_001f9cf8_2b77f0(void *, void *, void *) __asm__("FUN_001f9cf8");
-f32 FUN_001f9de0_2b77f0(f32) __asm__("FUN_001f9de0");
-f32 FUN_001f96b0_2b77f0(f32) __asm__("FUN_L00_001fef10");
-f32 FUN_001fa6c0_2b77f0(s32) __asm__("FUN_001fa6c0");
-void FUN_001f9c48_2b77f0(void *, void *, f32) __asm__("FUN_001f9c48");
-s32 FUN_001efa68_2b77f0(void *, void *, s32, s32, s32) __asm__("FUN_001efa68");
-f32 FUN_001f9b20_2b77f0(void *, void *) __asm__("FUN_001f9b20");
-void FUN_L00_00257d78_2b77f0(void *, f32, f32) __asm__("FUN_L00_00257d78");
-f32 FUN_L00_00257b90_2b77f0(f32, f32) __asm__("FUN_L00_00257b90");
-f32 FUN_002132a8_2b77f0(f32, f32) __asm__("FUN_002132a8");
-void *FUN_L00_0026b230_2b77f0(void *, void *, u8, f32) __asm__("FUN_L00_0026b230");
-void FUN_L00_00259bc8_2b77f0(f32, f32, f32, f32, f32 *, f32 *) __asm__("FUN_L00_0025b970");
-void FUN_L00_001f2868_2b77f0(void *, f32, s32, void *, void *) __asm__("FUN_L00_001f2868");
-s32 FUN_001f9740_2b77f0(void *) __asm__("FUN_001f9770");
-f32 FUN_001f9e90_2b77f0(f32, f32) __asm__("FUN_001f9e90");
-f32 FUN_001f96b0_alt_2b77f0(f32) __asm__("FUN_001f96b0");
-s16 FUN_001fa6d0_2b77f0(f32) __asm__("FUN_001fa6d0");
-void FUN_L00_0026d598_2b77f0(void *, void *, u8) __asm__("FUN_L00_0026d598");
-void FUN_L00_00233db8_2b77f0(s32, s32) __asm__("FUN_L00_00233db8");
-void FUN_L00_0028d918_2b77f0(s32) __asm__("FUN_L00_0028d918");
-void FUN_001f9af0_2b77f0(void *, void *) __asm__("FUN_001f9af0");
-void FUN_001fa030_2b77f0(void *, void *) __asm__("FUN_001fa030");
-void FUN_001fa328_2b77f0(void *, void *, void *) __asm__("FUN_001fa328");
-void FUN_001f9c48_alt_2b77f0(void *, void *, void *) __asm__("FUN_001f9c48");
-void FUN_L00_00250df8_2b77f0(void) __asm__("FUN_L00_00250df8");
+extern f32 FUN_0020c9e0_2b77f0(struct Moby *) __asm__("FUN_0020c9e0");
+extern struct Moby *FUN_L00_002bb360_2b77f0(struct Moby *) __asm__("FUN_L00_002bb360");
+extern void lerp_vector_2b77f0(void *, void *, void *, f32) __asm__("FUN_001f9a40");
+extern s16 FUN_L00_0023e5e0_2b77f0(void *, f32, f32, s32) __asm__("FUN_L00_0023e5e0");
+extern s16 FUN_0022da68_2b77f0(s32, s32, struct Moby *) __asm__("FUN_0022da68");
+extern s32 FUN_L00_0028d8c0_2b77f0(struct Moby *, s32) __asm__("FUN_L00_0028d8c0");
+extern void normalize_vector_2b77f0(void *, void *, f32) __asm__("FUN_001f9bf8");
+extern f32 advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("FUN_00213f38");
+extern void FUN_L00_00257d78_2b77f0(void *, f32, f32) __asm__("FUN_L00_00257d78");
+extern void *FUN_L00_0026b230_2b77f0(void *, void *, s32, f32) __asm__("FUN_L00_0026b230");
+extern void FUN_L00_002b8798_2b77f0(struct Moby *, void *) __asm__("FUN_L00_002b8798");
+extern void scale_vector_2b77f0(void *, void *, f32) __asm__("FUN_001f9c48");
+extern void FUN_L00_0026d598_2b77f0(void *, void *, s32) __asm__("FUN_L00_0026d598");
+extern void FUN_001fa030_2b77f0(void *, void *) __asm__("FUN_001fa030");
+extern void FUN_001fa328_2b77f0(void *, void *, void *) __asm__("FUN_001fa328");
+extern void FUN_L00_00250df8_2b77f0(void) __asm__("FUN_L00_00250df8");
 
-void pyrocitor_update(unsigned char *m) __asm__("FUN_L00_002b77f0");
-void pyrocitor_update(unsigned char *m) {
-    unsigned char *v = *(unsigned char **)(m + 0x78);
-    Vec_2b77f0 pos, dir, scratch, endpoint, particle_pos, random_vec;
-    struct {
-        Vec_2b77f0 point;
-        s32 moby;
-        s32 flags;
-        u8 type;
-        u8 pad[3];
-        f32 scale;
-        s32 mode;
-    } hit;
-    f32 speed, length, strength, response_scale;
-    struct { f32 response[2]; s32 gate, initial_count, count; } counts;
+/* Fakematch: a second name for the pad state makes the button tests rebuild its address as retail does. */
+extern struct PadState controller_state_lui __asm__("D_0013C940");
+void pyrocitor_update(struct Moby *moby) __asm__("FUN_L00_002b77f0");
+void pyrocitor_update(struct Moby *moby) {
+    PyrocitorVars_2b77f0 *v = (PyrocitorVars_2b77f0 *)moby->pvars;
+    Vec_2b2100 pos, dir, scratch, endpoint, particle_pos, random_vec;
+    FlameHit_2b77f0 hit;
+    f32 pos_out, vel_out;
+    f32 speed, length, accel, damping;
+    s32 gate, initial_count, extra, count;
     s32 i;
-    int state;
-    s16 h;
-    s32 divisor;
+    s32 fl;
     void *effect;
-    f32 angle;
-    struct Hero *g = &hero;
+    s32 ready;
+    s32 h;
 
-    FUN_L00_002b8230(m);
-    FUN_L00_0024f7c8_2b77f0(m, 0, &pos);
-    state = m[0x20];
-    switch (state) {
+    FUN_L00_002b8230((unsigned char *)moby);
+    FUN_L00_0024f7c8_2b2100(moby, 0, &pos);
+    switch (moby->state) {
     case 0:
-        *(volatile s16 *)(v + 0x4A) = -1;
-        *(volatile s16 *)(v + 0x44) = -1;
-        m[0x20] = 1;
+        v->light = -1;
+        v->voice = -1;
+        moby->state = 1;
         break;
     case 1:
-        if (m[0x52] == 1) {
-            m[0x20] = 2;
-        }
-        if (m[0x52] != 0)
-            goto tail;
-        if (FUN_L00_0024edc8_2b77f0(m) > 10.0f &&
-            (g->items[0].button_mask & D_0013CAE0[0]) != 0 && m[0x53] != 1) {
-            FUN_L00_00257880_2b77f0(m, 1, 0, FUN_001f96f8_2b77f0(5));
-        }
+        if (moby->seq == 1)
+            moby->state = 2;
+        if (moby->seq != 0)
+            break;
+        if (FUN_0020c9e0_2b77f0(moby) > 10.0f && (controller_state.held & hero.items[0].button_mask) &&
+            moby->prev_seq != 1)
+            blend_moby_animation_2b2100(moby, 1, 0, scale_game_frames_2b2100(5));
         break;
     case 2:
-        if (*(void **)v == 0) {
-            *(void **)v = FUN_L00_002bb360_2b77f0(m);
-            if (*(void **)v != 0) {
-                unsigned char *other = *(unsigned char * volatile *)v;
-                *(u16 *)(other + 0x34) |= 0x100;
-                *(f32 *)(*(unsigned char **)(other + 0x78) + 0xC) = D_L00_00161510_2b77f0;
+        if (v->other == 0) {
+            v->other = FUN_L00_002bb360_2b77f0(moby);
+            if (v->other != 0) {
+                v->other->flags |= 0x100;
+                *(f32 *)(v->other->pvars + 0xC) = D_L00_00161510;
             }
         }
-        h = *(s16 *)(v + 0x44);
-        if (h != -1) {
-            FUN_001f9a40_2b77f0(D_001802C0_2b77f0 + *(s16 *)(v + 0x44) * 0x20, D_001802C0_2b77f0 + *(s16 *)(v + 0x44) * 0x20, &D_L00_0015F580_2b77f0, 0.1f);
-            if (FUN_001f9af0_len_2b77f0(D_001802C0_2b77f0 + *(s16 *)(v + 0x44) * 0x20) < 0.001f) {
-                FUN_L00_0023e838_2b77f0(*(s16 *)(v + 0x44));
-                *(s16 *)(v + 0x44) = -1;
+        if (v->light != -1) {
+            lerp_vector_2b77f0(&lights_2b2100[v->light], &lights_2b2100[v->light], &D_L00_0015F580_2b77f0, 0.1f);
+            if (fast_vec_length(&lights_2b2100[v->light]) < 0.001f) {
+                FUN_L00_0023e838_2b2100(v->light);
+                /* Fakematch: the dead test on moby keeps the s6/s7 assignment of retail. */
+                if (moby) v->light = -1; else v->light = -1;
             }
         }
-        if ((g->items[0].button_mask & D_0013CAE0[0]) && !g->unk20AC &&
-            FUN_L00_00233e98_2b77f0(-1)) {
-            m[0x20] = 3;
-            FUN_L00_0020e4c8_2b77f0();
-            *(s16 *)(v + 0x4C) = FUN_001f96f8_2b77f0(10);
-            if (*(s16 *)(v + 0x44) == -1)
-                *(s16 *)(v + 0x44) = FUN_L00_0023e5e0_2b77f0(7.5f, 0.0f, m + 0x10, 0);
-        } else if ((g->items[0].button_mask & D_0013CAE0[1]) &&
-                   !FUN_L00_00233e98_2b77f0(-1)) {
-            FUN_L00_0028dbe8_2b77f0(0, 0, m);
+        if ((controller_state_lui.held & hero.items[0].button_mask) && !hero.unk20AC && FUN_L00_00233e98_2b2100(-1)) {
+            moby->state = 3;
+            FUN_L00_0020e4c8_2b2100();
+            v->timer = scale_game_frames_2b2100(10);
+            if (v->light == -1)
+                v->light = FUN_L00_0023e5e0_2b77f0(&moby->pos, 7.5f, 0.0f, 0);
+        } else if ((controller_state_lui.pressed & hero.items[0].button_mask) && !FUN_L00_00233e98_2b2100(-1)) {
+            FUN_0022da68_2b77f0(0, 0, moby);
         }
         break;
     case 3:
-        if (!FUN_L00_0028d8c0_2b77f0(m, *(s16 *)(v + 0x4A)))
-        h = *(s16 *)(v + 0x44);
-            *(s16 *)(v + 0x4A) = FUN_L00_0028dbe8_2b77f0(1, 4, m);
-        if (h != -1 && m[0x20] == 3) {
+        if (!FUN_L00_0028d8c0_2b77f0(moby, v->voice))
+            v->voice = FUN_0022da68_2b77f0(1, 4, moby);
+        if (v->light != -1 && moby->state == 3) {
             dir.q = 0;
-            dir.f[0] = 2.0f;
-            dir.f[2] = 2.0f;
-            FUN_001f9cf8_2b77f0(&dir, &dir, &D_0013F990_2b77f0);
-            FUN_001f9a10_2b77f0(D_001802C0_2b77f0 + *(s16 *)(v + 0x44) * 0x20 + 0x10, &D_0013F3D0_2b77f0, &dir);
-            *(f32 *)(D_001802C0_2b77f0 + *(s16 *)(v + 0x44) * 0x20 + 0x1C) = 7.5f;
-            angle = ((f32)(D_L00_0015F5CC % 120) / 120.0f) * 6.28318f - 3.14159f;
-            FUN_001f9a40_2b77f0(&scratch, &D_L00_001614F0_2b77f0, &D_L00_00161500_2b77f0, FUN_001f9de0_2b77f0(angle) * 0.5f + 0.5f);
-            FUN_001f9a40_2b77f0(D_001802C0_2b77f0 + *(s16 *)(v + 0x44) * 0x20, D_001802C0_2b77f0 + *(s16 *)(v + 0x44) * 0x20, &scratch, 0.1f);
+            dir.f.x = 2.0f;
+            dir.f.z = 2.0f;
+            transform_vector_by_basis_2b2100(&dir, &dir, hero.basis);
+            add_vector_xyz_2b2100(&lights_2b2100[v->light].pos, &hero.motion.pos, &dir);
+            lights_2b2100[v->light].pos.f.w = 7.5f;
+            lerp_vector_2b77f0(&scratch, &D_L00_001614F0, &D_L00_00161500,
+                fast_sin_2b2100(((f32)(D_L00_0015F5CC % 120) / 120.0f) * 6.28318f - 3.14159f) * 0.5f + 0.5f);
+            lerp_vector_2b77f0(&lights_2b2100[v->light], &lights_2b2100[v->light], &scratch, 0.1f);
         }
-        counts.response[0] = counts.response[1] = 0.0f;
-        speed = FUN_001fa6c0_2b77f0(D_0013E530_2b77f0) * 4.0f;
-        counts.gate = 1;
-        if (D_L00_0015F5CC & 3)
-            counts.gate = 0;
-        if (D_001413D4_2b77f0 == 1 && (*(u16 *)(m + 0x34) & 1)) {
-            FUN_001f9bf8_2b77f0(&scratch, &D_00166FF0_2b77f0, -1.0f);
-            FUN_001f9a10_2b77f0(&scratch, &scratch, &D_00166DC0_2b77f0);
-            FUN_001f9bf8_2b77f0(&dir, &D_00166FD0_2b77f0, D_L00_00161520_2b77f0 + speed + 0.75f);
-            FUN_001f9a10_2b77f0(&endpoint, &dir, &scratch);
+        pos_out = vel_out = 0.0f;
+        speed = convert_integer_to_float_2b2100(item_text_variant[16]) * 4.0f;
+        if (!(D_L00_0015F5CC & 3))
+            gate = 1;
+        else
+            gate = 0;
+        if (hero.state.current == 1 && (moby->flags & 1)) {
+            normalize_vector_2b77f0(&scratch, camera_2b2100 + 0x370, -1.0f);
+            add_vector_xyz_2b2100(&scratch, &scratch, camera_2b2100 + 0x140);
+            normalize_vector_2b77f0(&dir, camera_2b2100 + 0x350, D_L00_00161520 + speed + 0.75f);
+            add_vector_xyz_2b2100(&endpoint, &dir, &scratch);
         } else {
-            scratch.q = pos.q;
-            FUN_001f9bf8_2b77f0(&dir, &D_0013F9C0_2b77f0, D_L00_00161520_2b77f0 + speed + 0.75f);
-            FUN_001f9a10_2b77f0(&endpoint, &dir, &pos);
+            qcopy(&scratch, &pos);
+            normalize_vector_2b77f0(&dir, &hero.unk670, D_L00_00161520 + speed + 0.75f);
+            add_vector_xyz_2b2100(&endpoint, &dir, &pos);
         }
-        if (FUN_001efa68_2b77f0(&D_0013F420_2b77f0, &scratch, 2, 0, 0)) {
+        if (collision_segment_hits_2b2100(&hero.motion.unkD0, &scratch, 2, 0, 0)) {
             length = 0.0f;
-            response_scale = D_L00_001601E8;
-        } else if (FUN_001efa68_2b77f0(&scratch, &endpoint, 2, 0, 0)) {
-            length = FUN_001f9b48_2b77f0(&scratch, &D_00173E60_2b77f0) - 0.75f;
-            if (length < 0.0f) {
+        } else if (collision_segment_hits_2b2100(&scratch, &endpoint, 2, 0, 0)) {
+            length = distance_xyz_2b2100(&scratch, collision_hit_2b2100 + 0x20) - 0.75f;
+            if (length < 0.0f)
                 length = 0.0f;
-                response_scale = D_L00_001601E8;
-            } else {
-                response_scale = D_L00_001601E8;
-            }
         } else {
-            length = D_L00_00161520_2b77f0 + speed;
-            response_scale = D_L00_001601E8;
+            length = D_L00_00161520 + speed;
         }
-        FUN_L00_00259bc8_2b77f0(length, 1.0f, response_scale * frame_time_sq,
-                                  D_L00_00161514_2b77f0 * D_0015ED6C_c, &counts.response[0], &counts.response[1]);
-        FUN_001f9bf8_2b77f0(&dir, &dir, counts.response[1]);
-        counts.initial_count = D_L00_00161518_2b77f0;
-        if (length < 4.0f || (*(u16 *)(m + 0x34) & 1))
-            counts.initial_count = 1;
-        counts.count = D_L00_0016151C_2b77f0 + counts.initial_count;
-        for (i = 0; i < counts.count; i++) {
+        accel = D_L00_001601E8_2b77f0 * frame_time_sq;
+        damping = D_L00_00161514 * frame_time;
+        advance_accelerated_scalar(&pos_out, &vel_out, length, 1.0f, accel, damping);
+        normalize_vector_2b77f0(&dir, &dir, vel_out);
+        initial_count = D_L00_00161518;
+        extra = D_L00_0016151C;
+        if (length < 4.0f || (moby->flags & 1))
+            initial_count = 1;
+        count = extra + initial_count;
+        for (i = 0; i < count; i++) {
             FUN_L00_00257d78_2b77f0(&random_vec, 0.0f,
-                ((D_L00_00161524_2b77f0 - D_L00_00161528_2b77f0) *
-                 (length / (D_L00_00161520_2b77f0 + speed)) +
-                 D_L00_00161528_2b77f0) * D_0015ED6C_c);
-            FUN_001f9a10_2b77f0(&random_vec, &random_vec, &dir);
-            angle = FUN_002132a8_2b77f0(0.0f, 1.0f);
-            FUN_001f9a68_2b77f0(&particle_pos, &dir, angle);
-            FUN_001f9a10_2b77f0(&particle_pos, &particle_pos, &scratch);
-            effect = FUN_L00_0026b230_2b77f0(&particle_pos, &random_vec,
-                                               (i < counts.initial_count) | 4, length);
-            if (i == 2 && counts.gate)
-                FUN_L00_002b8798_2b77f0(m, (s32)effect);
+                ((D_L00_00161524 - D_L00_00161528) * (length / (D_L00_00161520 + speed)) + D_L00_00161528) *
+                    frame_time);
+            add_vector_xyz_2b2100(&random_vec, &random_vec, &dir);
+            scale_vector_xyz_2b3628(&particle_pos, &dir, random_float_between_2b3628(0.0f, 1.0f));
+            add_vector_xyz_2b2100(&particle_pos, &particle_pos, &scratch);
+            if (i < initial_count)
+                fl = 1;
+            else
+                fl = 0;
+            effect = FUN_L00_0026b230_2b77f0(&particle_pos, &random_vec, fl | 4, length);
+            if (i == 2 && gate)
+                FUN_L00_002b8798_2b77f0(moby, effect);
         }
         particle_pos.q = 0;
-        particle_pos.f[0] = -0.3f;
-        FUN_001f9cf8_2b77f0(&random_vec, &particle_pos, &D_0013F990_2b77f0);
-        FUN_001f9a10_2b77f0(&random_vec, &random_vec, &pos);
-        hit.moby = (s32)m;
+        particle_pos.f.x = -0.3f;
+        transform_vector_by_basis_2b2100(&random_vec, &particle_pos, hero.basis);
+        add_vector_xyz_2b2100(&random_vec, &random_vec, &pos);
+        hit.moby = moby;
         hit.flags = 0x10000;
-        hit.scale = FUN_001fa6c0_2b77f0(D_0013E530_2b77f0) + 1.0f;
+        hit.scale = convert_integer_to_float_2b2100(item_text_variant[16]) + 1.0f;
         hit.point.q = dir.q;
         hit.mode = 1;
-        FUN_001f9c48_2b77f0(&hit.point, &hit.point, 1.0f);
-        hit.point.f[2] = 1.0f;
-        hit.point.f[3] = 5627.9248f;
+        scale_vector_2b77f0(&hit.point, &hit.point, 1.0f);
+        hit.point.f.z = 1.0f;
+        hit.point.f.w = 5627.9248f;
         hit.mode = 1;
         hit.type = 5;
-        FUN_L00_001f2868_2b77f0(&random_vec, 0.42f, 5, D_001413D0_2b77f0, &hit.point);
-        particle_pos.f[0] = -0.8f;
-        FUN_001f9cf8_2b77f0(&random_vec, &particle_pos, &D_0013F990_2b77f0);
-        FUN_001f9a10_2b77f0(&random_vec, &random_vec, &pos);
-        FUN_L00_001f2868_2b77f0(&random_vec, 0.42f, 5, D_001413D0_2b77f0, &hit.point);
-        if (FUN_001f9740_2b77f0(v + 0x4E)) {
-            *(s16 *)(v + 0x4E) = FUN_001fa6d0_2b77f0(FUN_001f96b0_2b77f0(
-                FUN_002132a8_2b77f0(10.0f, 30.0f)));
-            FUN_L00_00257d78_2b77f0(&random_vec, 0.0f, D_0015ED6C_c + D_0015ED6C_c);
-            FUN_001f9a68_2b77f0(&particle_pos, &dir, FUN_002132a8_2b77f0(0.5f, 0.1f));
-            FUN_001f9a10_2b77f0(&particle_pos, &particle_pos, &random_vec);
-            FUN_L00_0026d598_2b77f0(&scratch, &particle_pos, D_0013E530_2b77f0);
+        collect_mobies_in_sphere(&random_vec, 0.42f, 5, hero.moby, &hit);
+        particle_pos.f.x = -0.8f;
+        transform_vector_by_basis_2b2100(&random_vec, &particle_pos, hero.basis);
+        add_vector_xyz_2b2100(&random_vec, &random_vec, &pos);
+        collect_mobies_in_sphere(&random_vec, 0.42f, 5, hero.moby, &hit);
+        if (fast_dec_timer_s16(&v->spark)) {
+            v->spark = truncate_float_to_s32(FUN_001f96b0_2b2100(random_float_between_2b3628(10.0f, 30.0f)));
+            FUN_L00_00257d78_2b77f0(&random_vec, 0.0f, frame_time + frame_time);
+            scale_vector_xyz_2b3628(&particle_pos, &dir, random_float_between_2b3628(0.5f, 0.1f));
+            add_vector_xyz_2b2100(&particle_pos, &particle_pos, &random_vec);
+            FUN_L00_0026d598_2b77f0(&scratch, &particle_pos, item_text_variant[16]);
         }
-        divisor = FUN_001f96f8_2b77f0(D_L00_00161530_2b77f0);
-        if (D_L00_0015F5CC % divisor == 0)
-            FUN_L00_00233db8_2b77f0(-1, 1);
-        divisor = FUN_L00_00233e98_2b77f0(-1);
-        if (FUN_001f9740_2b77f0(v + 0x4C)) {
-            if ((g->items[0].button_mask & D_0013CAE0[0]) &&
-                !g->unk20AC && divisor)
-                goto tail;
-            m[0x20] = 2;
-            FUN_L00_0020e698_2b77f0();
-            h = *(s16 *)(v + 0x4A);
+        if (D_L00_0015F5CC % scale_game_frames_2b2100(D_L00_00161530) == 0)
+            FUN_L00_00233db8_2b2100(-1, 1);
+        ready = FUN_L00_00233e98_2b2100(-1);
+        if (fast_dec_timer_s16(&v->timer)) {
+            if ((controller_state.held & hero.items[0].button_mask) && !hero.unk20AC && ready)
+                break;
+            moby->state = 2;
+            FUN_L00_0020e698();
+            h = v->voice;
             if (h != -1) {
-                unsigned char *voice = D_0013E550_2b77f0 + h * 0x70;
-                if (*(unsigned char **)(voice + 0x88) == m && voice[0x74])
-                    FUN_L00_0028d918_2b77f0(h);
+                u8 *slot = D_0013E550 + h * 0x70;
+                if (*(struct Moby **)(slot + 0x88) == moby && slot[0x74])
+                    release_voice_slot(h);
             }
-            *(s16 *)(v + 0x4A) = -1;
-            if (!divisor)
-                FUN_L00_0028dbe8_2b77f0(0, 0, m);
+            v->voice = -1;
+            if (!ready)
+                FUN_0022da68_2b77f0(0, 0, moby);
         }
         break;
     }
-tail:
-    if (*(unsigned char **)v) {
-        unsigned char *other = *(unsigned char **)v;
-        FUN_001fa030_2b77f0(other + 0xC0, other + 0x40);
-        other = *(unsigned char **)v;
-        FUN_001fa328_2b77f0(other + 0xC0, m + 0xC0, other + 0xC0);
-        other = *(unsigned char **)v;
-        *(U128_2b77f0 *)(other + 0x10) = pos.q;
+    if (v->other) {
+        FUN_001fa030_2b77f0(&v->other->rot_row0, &v->other->rot);
+        FUN_001fa328_2b77f0(&v->other->rot_row0, &moby->rot_row0, &v->other->rot_row0);
+        qcopy(&v->other->pos, &pos);
         FUN_L00_00250df8_2b77f0();
     }
-    FUN_L00_002b8438((char *)m);
+    FUN_L00_002b8438((char *)moby);
 }
 #endif
 extern unsigned char D_0013E550_2b8230[] __asm__("D_0013E550");

@@ -5,10 +5,11 @@
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002484e0.s", FUN_L00_002484e0);
 #else
+/* Near miss (game BYTES 4/452, size-exact): left is the stack-slot order of x_min (0x60 in retail)
+ * and the row + 1 spill (0x5C): retail spills x_min after the GCSE copy of row + 1. */
 #include "rnc/globals.h"
 #include "rnc/gameplay/hero.h"
-#define NOT_SDA __attribute__((section(".data")))
-#define MACRO_ADDR
+#include "sda.h"
 
 typedef struct {
     f32 lower;
@@ -19,7 +20,6 @@ typedef struct {
 
 typedef s32 (*MapFilterCallback)(f32, f32, f32, s32, s32);
 
-/* Retail accesses +0xC, +0x38, and +0x1A4 from the same overlay base. */
 typedef struct {
     u8 pad0[0xC];
     u8 *mask;
@@ -29,13 +29,12 @@ typedef struct {
     u8 exclusion[128];
 } MapBitGrid;
 
-extern s32 D_L00_00184218 __asm__("D_L00_00184218") NOT_SDA;
-extern MapBitGrid D_L00_001841F0 __asm__("D_L00_001841F0") NOT_SDA;
-extern MapFilter D_L00_00182BA0[19][16] __asm__("D_L00_00182BA0") NOT_SDA;
-extern MapFilterCallback D_L00_00183F90[19][8] __asm__("D_L00_00183F90") NOT_SDA;
-extern u8 D_00140634 __asm__("D_00140634") NOT_SDA;
-extern s32 D_L00_001844A8[] __asm__("D_L00_001844A8") NOT_SDA;
-extern u8 D_L00_00184394[] __asm__("D_L00_00184394") NOT_SDA;
+extern s32 D_L00_00184218 NOT_SDA;
+extern s32 D_L00_0015FDF8 __attribute__((sda));
+extern MapBitGrid D_L00_001841F0_484e0 __asm__("D_L00_001841F0") NOT_SDA;
+extern MapFilter D_L00_00182BA0[19][16] NOT_SDA;
+extern MapFilterCallback D_L00_00183F90[19][8] NOT_SDA;
+extern s32 D_L00_001844A8[] NOT_SDA;
 extern void world_to_map_coords(f32, f32, f32 *, f32 *, s32) __asm__("FUN_00208408");
 extern s32 FUN_L00_00249d80(s32);
 
@@ -45,122 +44,203 @@ void FUN_L00_002484e0(f32 *position) {
     f32 py;
     s32 x;
     s32 y;
-    unsigned short x_min;
+    s32 state;
+    s32 level;
+    s32 mode15;
+    s32 mode16;
+    s32 i;
+    s32 *filter;
     s32 y_min;
     s32 x_max;
     s32 y_max;
-    s32 level;
-    short state;
-    s32 mode15;
-    s64 mode16;
-    s32 i;
-    s32 *filter = filters;
+    s32 row;
+    s32 x_min;
+    s32 column;
+    s32 row_start;
+    s32 row_end;
+    s32 column_start;
+    s32 column_end;
 
-    if (D_L00_00184218 == 0) return;
-    if (*(s32 *)0x0015fdf8 != 0) {
+    if (D_L00_00184218 == 0) {
+        return;
+    }
+    if (D_L00_0015FDF8 != 0) {
         world_to_map_coords(position[0], position[1], &px, &py, current_level_index + 100);
     } else {
         world_to_map_coords(position[0], position[1], &px, &py, current_level_index);
     }
     x = (s32)(px * 512.0f) + 1;
     y = (s32)(py * 512.0f) + 1;
-    if (x < 0 || y < 0 || x >= 512 || y >= 512) return;
+    if (x < 0 || y < 0 || x >= 512 || y >= 512) {
+        return;
+    }
 
-    /* Retail uses an absolute load of current_level_index for the filter table. */
-    level = *(s32 *)0x0015ed84;
-    if (level < 0) level = 0;
-    if (level > 18) level = 0;
-    state = (hero.state.control_mode == 17 || hero.state.control_mode == 18 || hero.base_condition == 1);
-    mode15 = hero.state.control_mode == 15;
+    level = current_level_index;
+    if (level < 0) {
+        level = 0;
+    }
+    if (level >= 19) {
+        level = 0;
+    }
+    state = 0;
+    if (hero.state.control_mode == 17 || hero.state.control_mode == 18 || hero.base_condition == 1) {
+        state = 1;
+    }
     mode16 = hero.state.control_mode == 16;
+    mode15 = hero.state.control_mode == 15;
+    y_min = y - 16;
+    y_max = y + 16;
+    x_min = x - 16;
+    x_max = x + 16;
 
-    for (i = 0; i < 16; i++, filter++) {
+    for (i = 0, filter = filters; i < 16; i++, filter++) {
+        s32 index;
         u32 flags;
-        f32 value;
         MapFilterCallback callback;
+
         *filter = 1;
-        if (i <= 0) continue;
+        if (i <= 0) {
+            continue;
+        }
         if (D_L00_00182BA0[level][i].lower != D_L00_00182BA0[level][i].upper) {
-            value = *(f32 *)((u8 *)hero.moby + 0x18);
-            if (D_L00_00182BA0[level][i].lower > value || value > D_L00_00182BA0[level][i].upper) {
+            f32 height = *(f32 *)((u8 *)hero.moby + 0x18);
+            if (D_L00_00182BA0[level][i].lower > height || height > D_L00_00182BA0[level][i].upper) {
                 *filter = 0;
                 continue;
             }
         }
+        index = D_L00_00182BA0[level][i].index;
         flags = D_L00_00182BA0[level][i].flags;
-        if (flags == 0) continue;
-        if ((flags & 1) && !state) goto reject;
-        if ((flags & 2) && state) goto reject;
-        if ((flags & 4) && !mode16) goto reject;
-        if ((flags & 8) && mode16) goto reject;
-        if ((flags & 16) && !mode15) goto reject;
-        if ((flags & 32) && mode15) goto reject;
-        if ((flags & 64) && !hero.unk308) goto reject;
-        if ((flags & 128) && !D_L00_001844A8[D_L00_00182BA0[level][i].index]) goto reject;
-#define CHECK_CALLBACK(j) \
-        if ((flags & (0x100U << (j))) != 0) { \
-            callback = D_L00_00183F90[current_level_index][j]; \
-            if (callback != 0 && !callback(position[0], position[1], position[2], x, y)) goto reject; \
+        if (flags == 0) {
+            continue;
         }
-        CHECK_CALLBACK(0)
-        CHECK_CALLBACK(1)
-        CHECK_CALLBACK(2)
-        CHECK_CALLBACK(3)
-        CHECK_CALLBACK(4)
-        CHECK_CALLBACK(5)
-        CHECK_CALLBACK(6)
-        CHECK_CALLBACK(7)
-#undef CHECK_CALLBACK
-        continue;
-reject:
-        *filter = 0;
+        if ((flags & 1) && !state) {
+                *filter = 0;
+                continue;
+            }
+        if ((flags & 2) && state) {
+                *filter = 0;
+                continue;
+            }
+        if ((flags & 4) && !mode16) {
+                *filter = 0;
+                continue;
+            }
+        if ((flags & 8) && mode16) {
+                *filter = 0;
+                continue;
+            }
+        if ((flags & 0x10) && !mode15) {
+                *filter = 0;
+                continue;
+            }
+        if ((flags & 0x20) && mode15) {
+                *filter = 0;
+                continue;
+            }
+        if ((flags & 0x40) && !hero.unk308) {
+                *filter = 0;
+                continue;
+            }
+        if ((flags & 0x80) && !D_L00_001844A8[index]) {
+                *filter = 0;
+                continue;
+            }
+        if (flags & 0x100) {
+            callback = D_L00_00183F90[current_level_index][0];
+            if (callback != 0 && !callback(position[0], position[1], position[2], x, y)) {
+                *filter = 0;
+                continue;
+            }
+        }
+        if (flags & 0x200) {
+            callback = D_L00_00183F90[current_level_index][1];
+            if (callback != 0 && !callback(position[0], position[1], position[2], x, y)) {
+                *filter = 0;
+                continue;
+            }
+        }
+        if (flags & 0x400) {
+            callback = D_L00_00183F90[current_level_index][2];
+            if (callback != 0 && !callback(position[0], position[1], position[2], x, y)) {
+                *filter = 0;
+                continue;
+            }
+        }
+        if (flags & 0x800) {
+            callback = D_L00_00183F90[current_level_index][3];
+            if (callback != 0 && !callback(position[0], position[1], position[2], x, y)) {
+                *filter = 0;
+                continue;
+            }
+        }
+        if (flags & 0x1000) {
+            callback = D_L00_00183F90[current_level_index][4];
+            if (callback != 0 && !callback(position[0], position[1], position[2], x, y)) {
+                *filter = 0;
+                continue;
+            }
+        }
+        if (flags & 0x2000) {
+            callback = D_L00_00183F90[current_level_index][5];
+            if (callback != 0 && !callback(position[0], position[1], position[2], x, y)) {
+                *filter = 0;
+                continue;
+            }
+        }
+        if (flags & 0x4000) {
+            callback = D_L00_00183F90[current_level_index][6];
+            if (callback != 0 && !callback(position[0], position[1], position[2], x, y)) {
+                *filter = 0;
+                continue;
+            }
+        }
+        if (flags & 0x8000) {
+            callback = D_L00_00183F90[current_level_index][7];
+            if (callback != 0 && !callback(position[0], position[1], position[2], x, y)) {
+                *filter = 0;
+                continue;
+            }
+        }
     }
 
-    x_min = x - 16;
-    y_min = y - 16;
-    x_max = x + 16;
-    y_max = y + 16;
+    row_start = y_min < 0 ? 0 : y_min;
+    row_end = y_max > 511 ? 511 : y_max;
+    column_start = x_min < 0 ? 0 : x_min;
+    column_end = x_max > 511 ? 511 : x_max;
+    for (row = row_start; row < row_end; row++) {
+        s32 exclusion_row = row - y + 16;
+        s32 block_row = (row >> 5) * 16;
+        s32 packed_row = row & 31;
 
-    {
-        s64 column_start = x_min;
-        s64 column_end = x_max;
-        s64 row_end = y_max;
-        if (column_start < 0) column_start = 0;
-        if (y_min < 0) y_min = 0;
-        if (column_end > 511) column_end = 511;
-        if (row_end > 511) row_end = 511;
-        {
-            s32 byte_start = (s32)column_start + 23;
-            s32 test_start = (s32)column_start + 16;
-            s32 column_offset = -x;
-            for (; y_min < row_end; y_min++) {
-                s32 rowbase = (y_min >> 5) << 4;
-                s32 row = y_min << 6;
-                s32 packed_row = (y_min & 31) * 16;
-                s32 filterrow = ((y_min - y) + 16) * 4;
-                s64 column = column_start;
-                s32 test_column = test_start + column_offset;
-                s32 byte_column = byte_start + column_offset;
-                for (; column < column_end; column++, byte_column++, test_column++) {
-                    s32 bitmap_column = (s32)column;
-                    volatile u8 *pixel;
-                    if (bitmap_column < 0) bitmap_column += 7;
-                    pixel = D_L00_001841F0.mask + row + (bitmap_column >> 3);
-                    if (*pixel != 0) {
-                        s32 bit = 1 << ((s32)column & 7);
-                        if (*pixel & bit) {
-                            s32 bitmap_column = test_column < 0 ? byte_column : test_column;
-                            u8 check = D_L00_001841F0.exclusion[(bitmap_column >> 3) + filterrow];
-                            if (((check >> (test_column - ((bitmap_column >> 3) << 3))) & 1) == 0) {
-                                u8 packed;
-                                s32 selected;
-                                FUN_L00_00249d80(((s32)column >> 5) + rowbase);
-                                packed = *(D_L00_001841F0.packed + (((s32)column & 31) >> 1) + packed_row);
-                                selected = ((s32)column & 1) ? packed >> 4 : packed & 15;
-                                if (filters[selected] != 0) *pixel &= ~bit;
-                            }
-                        }
-                    }
+        packed_row *= 16;
+
+        for (column = column_start; column < column_end; column++) {
+            u8 *pixel = D_L00_001841F0_484e0.mask + row * 64 + column / 8;
+            s32 bit;
+            s32 test_column;
+            s32 exclusion_offset;
+
+            if (*pixel == 0) {
+                continue;
+            }
+            bit = 1 << (column & 7);
+            if (!(*pixel & bit)) {
+                continue;
+            }
+            test_column = column - x + 16;
+            exclusion_offset = exclusion_row * 4;
+            if ((D_L00_001841F0_484e0.exclusion[test_column / 8 + exclusion_offset] >> (test_column % 8)) & 1) {
+                continue;
+            }
+            {
+                u8 packed;
+                u8 selected;
+                FUN_L00_00249d80((column >> 5) + block_row);
+                packed = *(D_L00_001841F0_484e0.packed + ((column & 31) >> 1) + packed_row);
+                selected = (column & 1) ? packed >> 4 : packed & 15;
+                if (filters[selected] != 0) {
+                    *pixel &= ~bit;
                 }
             }
         }

@@ -281,25 +281,15 @@ void camera_object_update(char *o) {
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002a5040.s", FUN_L00_002a5040);
 #else
-typedef struct {
-    f32 x, y, z, w;
-} Point_2a5040 __attribute__((aligned(16)));
-typedef struct {
-    Point_2a5040 corners[4];
-    u32 color[4];
-    f32 uv[8];
-    s64 draw;
-    s64 texture;
-    s64 kind;
-    s64 flags;
-} Quad_2a5040;
-typedef struct {
-    u8 pad[0x90];
-    f32 scale;
-} Vars_2a5040;
-extern f32 D_L00_00161394_2a5040 __asm__("D_L00_00161394") __attribute__((section(".data")));
-extern f32 D_L00_00161398_2a5040 __asm__("D_L00_00161398") __attribute__((sda));
-extern C_2a4e48 D_L00_00166C80_2a5040 __asm__("D_L00_00166C80") __attribute__((section(".sdata")));
+extern float D_L00_00161394 __attribute__((sda));
+extern float D_L00_00161398 __attribute__((sda));
+extern float D_L00_001D7360[][4];
+extern float D_L00_001D73F0[][2];
+extern float D_L00_001D73F4[][2];
+/* Fakematch: a second name for the table makes reload re-materialise its address as retail does. */
+extern float D_L00_001D73F4_lui[][2] __asm__("D_L00_001D73F4");
+extern int D_L00_001D7438[];
+extern s32 D_L00_001D7460[];
 extern s64 get_effect_texture(s32) __asm__("FUN_001f44b8");
 extern void draw_geometry_quad(void *, void *, s32) __asm__("FUN_001f7d30");
 extern void vu_euler_rotation_basis(void *, void *) __asm__("FUN_001fa030");
@@ -309,188 +299,174 @@ extern f32 fast_cos_2a5040(f32) __asm__("FUN_001f9dc8");
 extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
 void FUN_L00_00263618(void *, int, float, float);
 
-void FUN_L00_002a5040(u8 *moby) {
-    Quad_2a5040 quad;
-    Point_2a5040 basis[4];
-    f32 rotation[3];
-    f32 matrix[12];
-    s32 i;
-    Point_2a5040 *basis0, *basis1, *basis2, *basis3;
-    Point_2a5040 orbit_copy[4];
-    Point_2a5040 orbit[4];
-    Vars_2a5040 *vars = *(Vars_2a5040 **)(moby + 0x78);
-    s32 *indices;
-    extern f32 points[] __asm__("D_L00_001D7360");
-    f32 *uvs;
-    u32 *colors;
-    f32 phase, angle;
-    f32 uv0, uv1, uv2, uv3;
-    f32 u0, u1, u2, u3;
-    s32 index;
-    f32 zero;
-    s32 *indices1, *indices2;
-    s32 index1, index2, index3;
-    u32 color;
-    u32 color0, color1, color2, color3;
+typedef unsigned int Q_2a5040 __attribute__((mode(TI), aligned(16)));
+typedef union { Q_2a5040 q; float f[4]; } V_2a5040;
+typedef struct {
+    float v[4][4];
+    int col[4];
+    float uv[4][2];
+    unsigned long pk[4];
+} Quad_2a5040;
 
-    rotation[0] = 0.0f;
-    rotation[1] = 0.0f;
-    rotation[2] = D_L00_00166C80_2a5040.f158;
-    vu_euler_rotation_basis(matrix, rotation);
-    D_L00_00161394_2a5040 += 0.01f;
-    if (D_L00_00161394_2a5040 > 1.0f)
-        D_L00_00161394_2a5040 -= 1.0f;
-    quad.kind = 1;
-    quad.flags = 0x4000000044LL;
-    quad.draw = 0;
-    i = 0;
-    indices = (s32 *)0x1d7460;
-    basis0 = &basis[0];
-    quad.texture = get_effect_texture(0x18);
-    basis1 = &basis[1];
-    basis2 = &basis[2];
-    basis3 = &basis[3];
-    uvs = (f32 *)0x1d73f0;
-    colors = (u32 *)0x1d7438;
-    do {
-        f32 x, y, z;
-        f32 *uvs_y = points + 37;
-        index = i++ * 4;
-        transform_point_2a5040(basis0, points + indices[0] * 4, matrix);
-        indices1 = (s32 *)0x1d7464 + index;
-        transform_point_2a5040(basis1, points + *indices1 * 4, matrix);
-        indices2 = (s32 *)0x1d7468 + index;
-        transform_point_2a5040(basis2, points + *indices2 * 4, matrix);
-        transform_point_2a5040(basis3, points + indices[3] * 4, matrix);
-        x = *(f32 *)(moby + 0x10);
-        y = *(f32 *)(moby + 0x14);
-        z = *(f32 *)(moby + 0x18);
-        quad.corners[0].x = x + basis[0].x * vars->scale;
-        quad.corners[0].z = z + basis[0].z;
-        quad.corners[1].z = z + basis[1].z;
-        quad.corners[0].y = y + basis[0].y * vars->scale;
-        quad.corners[2].z = z + basis[2].z;
-        z = z + basis[3].z;
-        quad.corners[1].x = x + basis[1].x * vars->scale;
-        quad.corners[1].y = y + basis[1].y * vars->scale;
-        quad.corners[2].x = x + basis[2].x * vars->scale;
-        quad.corners[2].y = y + basis[2].y * vars->scale;
-        x = x + basis[3].x * vars->scale;
-        quad.corners[3].x = x;
-        y = y + basis[3].y * vars->scale;
-        quad.corners[3].y = y;
-        quad.corners[3].z = z;
-        index1 = *indices1;
-        index2 = *indices2;
-        index = indices[0];
-        index3 = indices[3];
-        color0 = colors[index];
-        color1 = colors[index1];
-        color2 = colors[index2];
-        color3 = colors[index3];
-        uv0 = uvs_y[index * 2] + D_L00_00161394_2a5040;
-        uv1 = uvs_y[index1 * 2] + D_L00_00161394_2a5040;
-        uv2 = uvs_y[index2 * 2] + D_L00_00161394_2a5040;
-        uv3 = uvs_y[index3 * 2] + D_L00_00161394_2a5040;
-        u0 = uvs[index * 2];
-        u1 = uvs[index1 * 2];
-        u2 = uvs[index2 * 2];
-        u3 = uvs[index3 * 2];
-        quad.color[2] = color2;
-        quad.color[3] = color3;
-        quad.color[0] = color0;
-        quad.color[1] = color1;
-        quad.uv[0] = u0;
-        quad.uv[1] = uv0;
-        quad.uv[2] = u1;
-        quad.uv[3] = uv1;
-        quad.uv[4] = u2;
-        quad.uv[5] = uv2;
-        quad.uv[6] = u3;
-        quad.uv[7] = uv3;
-        indices += 4;
-        draw_geometry_quad(&quad, 0, 1);
-    } while (i < 4);
-    quad.texture = get_effect_texture(0x1b);
-    D_L00_00161398_2a5040 += 0.01f;
-    if (D_L00_00161398_2a5040 > 1.0f)
-        D_L00_00161398_2a5040 = 0.0f;
-    phase = D_L00_00161398_2a5040;
-    *(OvlQuad *)&orbit[0] = 0;
-    orbit[0].x = -phase * 1.2f * vars->scale;
-    orbit[0].y = -phase * 1.2f * vars->scale;
-    orbit[0].z = phase * 1.4f + 1.1f;
+void FUN_L00_002a5040(char *m) {
+    char *p = *(char **)(m + 0x78);
+    Quad_2a5040 qd;
+    float q[4][4];
+    float d0[4];
+    float mtx[3][4];
+    V_2a5040 M[4];
+    V_2a5040 T[4];
+    float off, zf;
+    int k, i, i0, i1, i2, i3, col;
+    C_2a4e48 *cam;
+    float rz;
 
-    *(OvlQuad *)&orbit[1] = 0;
-    orbit[1].x = phase * 1.2f * vars->scale;
-    orbit[1].y = -phase * 1.2f * vars->scale;
-    orbit[1].z = orbit[0].z - 0.2f;
+    cam = &D_166C80_2a4e48;
+    rz = cam->f158;
+    d0[0] = 0.0f;
+    d0[1] = 0.0f;
+    d0[2] = rz;
+    vu_euler_rotation_basis(mtx, d0);
 
-    *(OvlQuad *)&orbit[2] = 0;
-    orbit[2].x = -phase * 1.2f * vars->scale;
-    orbit[2].y = phase * 1.2f * vars->scale;
-    orbit[2].z = orbit[0].z;
-
-    *(OvlQuad *)&orbit[3] = 0;
-    orbit[3].x = phase * 1.2f * vars->scale;
-    orbit[3].y = phase * 1.2f * vars->scale;
-    orbit[3].z = orbit[1].z;
-    orbit_copy[2] = orbit[2];
-    orbit_copy[0] = orbit[0];
-    orbit_copy[1] = orbit[1];
-    orbit_copy[3] = orbit[3];
-    zero = 0.0f;
-    rotation[0] = 0.0f;
-    rotation[1] = 0.0f;
-    rotation[2] = D_L00_00166C80_2a5040.f158;
-    vu_euler_rotation_basis(matrix, rotation);
-    transform_point_2a5040(basis0, &orbit_copy[0], matrix);
-    transform_point_2a5040(basis1, &orbit_copy[1], matrix);
-    transform_point_2a5040(basis2, &orbit_copy[2], matrix);
-    transform_point_2a5040(basis3, &orbit_copy[3], matrix);
-    {
-        f32 x, y, z;
-        x = *(f32 *)(moby + 0x10);
-        y = *(f32 *)(moby + 0x14);
-        z = *(f32 *)(moby + 0x18);
-        quad.corners[0].x = x + basis[0].x;
-        quad.corners[0].y = y + basis[0].y;
-        quad.corners[0].z = z + basis[0].z;
-        quad.corners[1].x = x + basis[1].x;
-        quad.corners[1].y = y + basis[1].y;
-        quad.corners[1].z = z + basis[1].z;
-        quad.corners[2].x = x + basis[2].x;
-        quad.corners[2].y = y + basis[2].y;
-        quad.corners[2].z = z + basis[2].z;
-        quad.corners[3].x = x + basis[3].x;
-        quad.corners[3].y = y + basis[3].y;
-        quad.corners[3].z = z + basis[3].z;
+    D_L00_00161394 = D_L00_00161394 + 0.01f;
+    if (1.0f < D_L00_00161394) {
+        D_L00_00161394 = D_L00_00161394 - 1.0f;
     }
-    color = ((u32)(s32)((1.0f - D_L00_00161398_2a5040) * 128.0f) << 24) | 0x808080;
-    quad.color[3] = color;
-    quad.color[0] = color;
-    quad.color[1] = color;
-    quad.color[2] = color;
-    quad.uv[0] = zero;
-    quad.uv[1] = zero;
-    quad.uv[7] = 1.0f;
-    quad.uv[2] = 1.0f;
-    quad.uv[3] = zero;
-    quad.uv[4] = zero;
-    quad.uv[5] = 1.0f;
-    quad.uv[6] = 1.0f;
-    draw_geometry_quad(&quad, 0, 1);
+
+    qd.pk[2] = 1;
+    qd.pk[3] = 0x4000000044UL;
+    qd.pk[0] = 0;
+    qd.pk[1] = get_effect_texture(0x18);
+
+    for (k = 0; k < 4; k++) {
+        float (*uvt)[2] = D_L00_001D73F4;
+        float (*uvt2)[2] = D_L00_001D73F4_lui;
+        transform_point_2a5040(q[0], D_L00_001D7360[((int (*)[4])D_L00_001D7460)[k][0]], mtx);
+        transform_point_2a5040(q[1], D_L00_001D7360[((int (*)[4])D_L00_001D7460)[k][1]], mtx);
+        transform_point_2a5040(q[2], D_L00_001D7360[((int (*)[4])D_L00_001D7460)[k][2]], mtx);
+        transform_point_2a5040(q[3], D_L00_001D7360[((int (*)[4])D_L00_001D7460)[k][3]], mtx);
+
+        qd.v[0][0] = *(float *)(m + 0x10) + q[0][0] * *(float *)(p + 0x90);
+        qd.v[0][1] = *(float *)(m + 0x14) + q[0][1] * *(float *)(p + 0x90);
+        qd.v[0][2] = *(float *)(m + 0x18) + q[0][2];
+        qd.v[1][0] = *(float *)(m + 0x10) + q[1][0] * *(float *)(p + 0x90);
+        qd.v[1][1] = *(float *)(m + 0x14) + q[1][1] * *(float *)(p + 0x90);
+        qd.v[1][2] = *(float *)(m + 0x18) + q[1][2];
+        qd.v[2][0] = *(float *)(m + 0x10) + q[2][0] * *(float *)(p + 0x90);
+        qd.v[2][1] = *(float *)(m + 0x14) + q[2][1] * *(float *)(p + 0x90);
+        qd.v[2][2] = *(float *)(m + 0x18) + q[2][2];
+        qd.v[3][0] = *(float *)(m + 0x10) + q[3][0] * *(float *)(p + 0x90);
+        qd.v[3][1] = *(float *)(m + 0x14) + q[3][1] * *(float *)(p + 0x90);
+        qd.v[3][2] = *(float *)(m + 0x18) + q[3][2];
+
+        i0 = ((int (*)[4])D_L00_001D7460)[k][0];
+        i1 = ((int (*)[4])D_L00_001D7460)[k][1];
+        i2 = ((int (*)[4])D_L00_001D7460)[k][2];
+        i3 = ((int (*)[4])D_L00_001D7460)[k][3];
+        off = D_L00_00161394;
+        qd.col[0] = D_L00_001D7438[i0];
+        qd.col[1] = D_L00_001D7438[i1];
+        qd.col[2] = D_L00_001D7438[i2];
+        qd.col[3] = D_L00_001D7438[i3];
+        qd.uv[0][0] = D_L00_001D73F0[i0][0];
+        qd.uv[0][1] = uvt[i0][0] + off;
+        qd.uv[1][0] = D_L00_001D73F0[i1][0];
+        qd.uv[1][1] = uvt[i1][0] + off;
+        qd.uv[2][0] = D_L00_001D73F0[i2][0];
+        qd.uv[2][1] = uvt2[i2][0] + off;
+        qd.uv[3][0] = D_L00_001D73F0[i3][0];
+        qd.uv[3][1] = uvt[i3][0] + off;
+        draw_geometry_quad(&qd, 0, 1);
+    }
+
+    qd.pk[1] = get_effect_texture(0x1B);
+
+    D_L00_00161398 = D_L00_00161398 + 0.01f;
+    if (1.0f < D_L00_00161398) {
+        D_L00_00161398 = 0.0f;
+    }
+
     {
-        s32 i;
-        for (i = 0; i < 4; i++) {
-            angle = (f32)i * 3.14159f * 0.5f - 3.14159f;
-            orbit[0].x = fast_cos_2a5040(angle) * 1.1f;
-            orbit[0].y = fast_sin(angle) * 1.1f;
-            orbit[0].z = 0.59f;
-            transform_point_2a5040(&orbit[0], &orbit[0], moby + 0xc0);
-            add_vector_xyz(&orbit[0], &orbit[0], moby + 0x10);
-            FUN_L00_00263618(&orbit[0], *(u32 *)(moby + 0x90) & 0xffff0000, 0.1333f, zero);
-        }
+        float g = D_L00_00161398;
+        float n = -g * 1.2f;
+        float pp = g * 1.2f;
+        float z = g * 1.4f + 1.1f;
+        float zz = z - 0.2f;
+
+        T[0].q = 0;
+        T[0].f[0] = n * *(float *)(p + 0x90);
+        T[0].f[1] = n * *(float *)(p + 0x90);
+        T[0].f[2] = z;
+        T[1].q = 0;
+        T[1].f[0] = pp * *(float *)(p + 0x90);
+        T[1].f[1] = n * *(float *)(p + 0x90);
+        T[1].f[2] = zz;
+        T[2].q = 0;
+        T[2].f[0] = n * *(float *)(p + 0x90);
+        T[2].f[1] = pp * *(float *)(p + 0x90);
+        T[2].f[2] = z;
+        T[3].q = 0;
+        T[3].f[0] = pp * *(float *)(p + 0x90);
+        T[3].f[1] = pp * *(float *)(p + 0x90);
+        T[3].f[2] = zz;
+        M[0].q = T[0].q;
+        M[1].q = T[1].q;
+        M[2].q = T[2].q;
+        M[3].q = T[3].q;
+    }
+
+    /* Fakematch: setting cam a second time hides its base from alias analysis, so the
+       yaw load waits for the orbit stores as in retail. */
+    cam = &D_166C80_2a4e48;
+    rz = cam->f158;
+    d0[0] = 0.0f;
+    d0[1] = 0.0f;
+    d0[2] = rz;
+    vu_euler_rotation_basis(mtx, d0);
+    transform_point_2a5040(q[0], M[0].f, mtx);
+    transform_point_2a5040(q[1], M[1].f, mtx);
+    transform_point_2a5040(q[2], M[2].f, mtx);
+    transform_point_2a5040(q[3], M[3].f, mtx);
+
+    col = ((int)((1.0f - D_L00_00161398) * 128.0f) << 24) | 0x808080;
+    qd.v[0][0] = *(float *)(m + 0x10) + q[0][0];
+    qd.v[0][1] = *(float *)(m + 0x14) + q[0][1];
+    qd.v[0][2] = *(float *)(m + 0x18) + q[0][2];
+    qd.v[1][0] = *(float *)(m + 0x10) + q[1][0];
+    qd.v[1][1] = *(float *)(m + 0x14) + q[1][1];
+    qd.v[1][2] = *(float *)(m + 0x18) + q[1][2];
+    qd.v[2][0] = *(float *)(m + 0x10) + q[2][0];
+    qd.v[2][1] = *(float *)(m + 0x14) + q[2][1];
+    qd.v[2][2] = *(float *)(m + 0x18) + q[2][2];
+    qd.v[3][0] = *(float *)(m + 0x10) + q[3][0];
+    qd.v[3][1] = *(float *)(m + 0x14) + q[3][1];
+    qd.v[3][2] = *(float *)(m + 0x18) + q[3][2];
+    qd.col[0] = col;
+    qd.col[1] = col;
+    qd.col[2] = col;
+    qd.col[3] = col;
+    qd.uv[0][0] = 0.0f;
+    qd.uv[0][1] = 0.0f;
+    qd.uv[1][0] = 1.0f;
+    qd.uv[1][1] = 0.0f;
+    qd.uv[2][0] = 0.0f;
+    qd.uv[2][1] = 1.0f;
+    qd.uv[3][0] = 1.0f;
+    qd.uv[3][1] = 1.0f;
+    draw_geometry_quad(&qd, 0, 1);
+
+    zf = 0.0f;
+    for (i = 0; i < 4; i++) {
+        float ang;
+        /* Fakematch: re-setting zf in the loop keeps the 0.0 in one register for the whole tail. */
+        zf = 0.0f;
+        ang = (float)i * 3.14159f * 0.5f - 3.14159f;
+        T[0].f[0] = fast_cos_2a5040(ang) * 1.1f;
+        T[0].f[1] = fast_sin(ang) * 1.1f;
+        T[0].f[2] = 0.59f;
+        transform_point_2a5040(T[0].f, T[0].f, m + 0xC0);
+        add_vector_xyz(T[0].f, T[0].f, m + 0x10);
+        FUN_L00_00263618(T[0].f, *(int *)(m + 0x90) & 0xFFFF0000, 0.1333f, zf);
     }
 }
 #endif
