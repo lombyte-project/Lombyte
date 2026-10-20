@@ -27,7 +27,7 @@ typedef struct {
 extern Rec D_L17_0017A3C0[];
 extern int hero_slot_item_id(int) __asm__("FUN_L00_0020d498");
 
-int FUN_L17_002020a8(int a) {
+int FUN_L17_002020a8(int allow_slot_item_help) {
     struct Hero *g = &hero;
     switch (g->vehicle_mode) {
     case 1:
@@ -43,7 +43,7 @@ int FUN_L17_002020a8(int a) {
         if (g2->unk12E2 != 0) {
             return 0x6E;
         }
-        if (a == 0) {
+        if (allow_slot_item_help == 0) {
             return 0;
         }
         if (g2->unk20A8 == 0) {
