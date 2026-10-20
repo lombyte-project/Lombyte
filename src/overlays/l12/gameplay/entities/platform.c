@@ -3204,16 +3204,16 @@ void helicopter_update(char *moby) {
             int node_count = *(int *)tbl;
             int prev = (cur + node_count - step) % node_count;
             int next = (cur + node_count + step) % node_count;
-            float h;
+            float segment_heading_delta;
             float ang;
             qcopy(A, tbl + prev * 16 + 0x10);
             qcopy(B, tbl + cur * 16 + 0x10);
             qcopy(C, tbl + next * 16 + 0x10);
             subtract_vector_xyz_c(A, B, A);
             subtract_vector_xyz_c(B, C, B);
-            h = fast_arc_tan(A[0], A[1]);
-            h = fast_subtract_rotations(h, fast_arc_tan(B[0], B[1]));
-            ang = h / vector_length_xyz_c(A);
+            segment_heading_delta = fast_arc_tan(A[0], A[1]);
+            segment_heading_delta = fast_subtract_rotations(segment_heading_delta, fast_arc_tan(B[0], B[1]));
+            ang = segment_heading_delta / vector_length_xyz_c(A);
             *(float *)(moby + 0x40) = fast_add_rotations_c(*(float *)(moby + 0x40),
                 fast_subtract_rotations(ang * D_L12_001619AC, *(float *)(moby + 0x40)) / D_L12_001619B0);
             if (distance_xyz(moby + 0x10, C) < D_L12_001619A8 * D_0015ED6C) {
