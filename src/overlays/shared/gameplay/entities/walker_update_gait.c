@@ -62,17 +62,17 @@ void FUN_L00_002a1538(u8 *gait_data) {
 extern float square_root(float) __asm__("FUN_001f9988");
 
 float FUN_L00_002a15c8(char *walker_moby, char *b) {
-    float s = *(float *)(b + 0xDC);
+    float root_denominator = *(float *)(b + 0xDC);
     float gap = *(float *)(walker_moby + 0x18) - *(float *)(b + 0x68);
-    float c = *(float *)(b + 0xD8) + s * 0.5f;
-    float discriminant_or_root = c * c + (s + s) * gap;
+    float root_numerator_base = *(float *)(b + 0xD8) + root_denominator * 0.5f;
+    float discriminant_or_root = root_numerator_base * root_numerator_base + (root_denominator + root_denominator) * gap;
     float res;
     if (discriminant_or_root > 0.0f) {
         discriminant_or_root = square_root(discriminant_or_root);
-        if (discriminant_or_root <= c) {
-            res = c - discriminant_or_root;
+        if (discriminant_or_root <= root_numerator_base) {
+            res = root_numerator_base - discriminant_or_root;
         } else {
-            res = c + discriminant_or_root;
+            res = root_numerator_base + discriminant_or_root;
         }
         res = res / *(float *)(b + 0xDC);
     } else {
