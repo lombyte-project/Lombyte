@@ -181,6 +181,7 @@ void FUN_L00_002c89e8(struct Moby *thrown_moby)
     enum {
         THROWN_MOBY_STATE_INITIALIZE = 0,
         THROWN_MOBY_STATE_MOVE_WITH_COLLISION = 2,
+        THROWN_MOBY_STATE_SPAWN_SEQUENCE = 3,
         THROWN_MOBY_STATE_FADE_OUT = 4
     };
     Vec4 next_pos, start, end, probe;
@@ -309,7 +310,7 @@ collision_miss:
         qcopy_nc(&thrown_moby->pos, &next_pos);
         return;
     }
-    case 3: {
+    case THROWN_MOBY_STATE_SPAWN_SEQUENCE: {
         f32 ground;
         /* Fakematch: reusing case 2's pointer here makes it cross a call, so it gets s0 there. */
         collision_point = (u8 *)&thrown_moby->pos;
