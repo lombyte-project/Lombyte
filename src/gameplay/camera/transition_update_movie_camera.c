@@ -14,8 +14,8 @@ extern void sceVu0RotMatrixZ(float *, float *, float);
 unsigned char transition_update_movie_camera(void) __asm__("FUN_001eaf88");
 
 unsigned char transition_update_movie_camera(void) {
-    char *t = D_0018CB20;
-    char *key = *(char **)(t + 0x54) + *(int *)(t + 0x38) * 32;
+    char *camera_keyframe_state = D_0018CB20;
+    char *key = *(char **)(camera_keyframe_state + 0x54) + *(int *)(camera_keyframe_state + 0x38) * 32;
     unsigned char flag = key[0xC];
     float *ang = (float *)(key + 0x10);
     char *pos;
