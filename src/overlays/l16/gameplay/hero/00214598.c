@@ -1936,14 +1936,14 @@ void FUN_L16_00214598(void) {
         }
         FUN_L00_00211be8();
         if (hero.unk930 > 0.0f) {
-            Vec4 *p = &hero.move_impulse;
+            Vec4 *move_impulse_ptr = &hero.move_impulse;
             FUN_L00_002132b8(0.7f, 0.0f);
             primary_vector_scratch.q = hero.move_impulse.q;
             hero.target_speed += forward_component(&primary_vector_scratch);
             if (hero.target_speed < frame_time * 0.7f) {
                 hero.target_speed = frame_time * 0.7f;
             }
-            clear_u64_value(p);
+            clear_u64_value(move_impulse_ptr);
         }
         k = 1.0f;
         if (hero.state.step == 1 && hero.unk3BE == 0) {
