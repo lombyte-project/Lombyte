@@ -2453,28 +2453,28 @@ extern s32 FUN_L00_0025bfe0_0026ed28(f32, f32, f32, f32) __asm__("FUN_L00_0025bf
 extern f32 D_0015ED60_0026ed28 __asm__("D_0015ED60");
 extern u8 *D_L00_001B20A0_0026ed28[] __asm__("D_L00_001B20A0") __attribute__((section(".data")));
 Part_26ed28 *FUN_L00_0026ed28(u8 *a) {
-    Part_26ed28 *p;
-    Body_26ed28 *s;
-    p = FUN_L00_002678b8_0026ed28(0x20);
-    if (p) {
-        s = &p->body;
-        s->a = a;
-        s->f4 = 0.0f;
-        s->f8 = D_0015ED60_0026ed28 * 0.016f;
-        s->fC = FUN_002132a8_0026ed28(s->f4, 1.0f);
-        s->f10 = 1.0f;
-        s->f14 = 1.0f;
-        s->f18 = 1.0f;
-        qcopy(&p->pos, a + 0x10);
-        p->w4 = FUN_L00_0025bfe0_0026ed28(1.0f, 1.0f, 1.0f, s->f4);
-        p->b9 = FUN_001fa6d0_0026ed28(4.0f) + 0x40;
-        p->b1 = 0;
-        p->b3 = 0x48;
-        p->fC = FUN_002132a8_0026ed28(50000.0f, 50000.0f);
-        p->b8 = FUN_001fa6d0_0026ed28(s->fC * 255.0f);
-        p->b2 = *D_L00_001B20A0_0026ed28[0];
+    Part_26ed28 *particle;
+    Body_26ed28 *particle_data;
+    particle = FUN_L00_002678b8_0026ed28(0x20);
+    if (particle) {
+        particle_data = &particle->body;
+        particle_data->a = a;
+        particle_data->f4 = 0.0f;
+        particle_data->f8 = D_0015ED60_0026ed28 * 0.016f;
+        particle_data->fC = FUN_002132a8_0026ed28(particle_data->f4, 1.0f);
+        particle_data->f10 = 1.0f;
+        particle_data->f14 = 1.0f;
+        particle_data->f18 = 1.0f;
+        qcopy(&particle->pos, a + 0x10);
+        particle->w4 = FUN_L00_0025bfe0_0026ed28(1.0f, 1.0f, 1.0f, particle_data->f4);
+        particle->b9 = FUN_001fa6d0_0026ed28(4.0f) + 0x40;
+        particle->b1 = 0;
+        particle->b3 = 0x48;
+        particle->fC = FUN_002132a8_0026ed28(50000.0f, 50000.0f);
+        particle->b8 = FUN_001fa6d0_0026ed28(particle_data->fC * 255.0f);
+        particle->b2 = *D_L00_001B20A0_0026ed28[0];
     }
-    return p;
+    return particle;
 }
 typedef struct {
     unsigned char *o;
