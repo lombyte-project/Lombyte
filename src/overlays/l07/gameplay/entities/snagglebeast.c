@@ -630,16 +630,16 @@ void FUN_L07_00314058(char *moby) {
 
     if (scene_state == 2 && big_head_cheat_enabled != 0) {
         for (i = 0; i < D_L07_0016C8E0.count; i++) {
-            char *e = D_L07_0016C8E0.mobys[i];
+            char *candidate_moby = D_L07_0016C8E0.mobys[i];
 
-            if (*(short *)(e + 0xA6) == *(short *)(moby + 0xA6)) {
-                unsigned char *s = D_L07_0020C6C0;
+            if (*(short *)(candidate_moby + 0xA6) == *(short *)(moby + 0xA6)) {
+                unsigned char *big_head_manipulator = D_L07_0020C6C0;
 
-                if (big_head_cheat_enabled != 0 && s[1] == 0) {
-                    attach_manipulator(e, 0xB, s);
-                    *(float *)(s + 0x20) = 2.75f;
-                    *(float *)(s + 0x24) = 2.75f;
-                    *(float *)(s + 0x28) = 2.75f;
+                if (big_head_cheat_enabled != 0 && big_head_manipulator[1] == 0) {
+                    attach_manipulator(candidate_moby, 0xB, big_head_manipulator);
+                    *(float *)(big_head_manipulator + 0x20) = 2.75f;
+                    *(float *)(big_head_manipulator + 0x24) = 2.75f;
+                    *(float *)(big_head_manipulator + 0x28) = 2.75f;
                 }
             }
         }
