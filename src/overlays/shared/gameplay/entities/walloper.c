@@ -2486,14 +2486,14 @@ void FUN_L00_002bebc8(char *destination_state) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002BA7C8.c: func_L00_002BFF08), where it is exact; names translated to the US level program. */
 
 /* Saves moby fields 0x44..0x68 and its vector into ((char *)&hero) at 0x1F10..0x1F40. */
-void FUN_L00_002bec00(char *a) {
+void FUN_L00_002bec00(char *source_state) {
     struct Hero *g = &hero;
-    g->unk1F20 = *(float *)(a + 0x50);
-    g->unk1F24 = *(float *)(a + 0x54);
-    g->unk1F28 = *(float *)(a + 0x58);
-    g->unk1F3F = *(char *)(a + 0x68);
-    g->unk1F40 = *(float *)(a + 0x44);
-    qcopy(&g->unk1F10, a);
+    g->unk1F20 = *(float *)(source_state + 0x50);
+    g->unk1F24 = *(float *)(source_state + 0x54);
+    g->unk1F28 = *(float *)(source_state + 0x58);
+    g->unk1F3F = *(char *)(source_state + 0x68);
+    g->unk1F40 = *(float *)(source_state + 0x44);
+    qcopy(&g->unk1F10, source_state);
 }
 #define NOT_SDA
 
