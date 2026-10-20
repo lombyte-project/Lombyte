@@ -139,6 +139,7 @@ void FUN_L03_0021c668(void) {
         HERO_STATE_LEDGE_SHIMMY_NEGATIVE_YAW_OFFSET = 27,
         HERO_STATE_JUMP_FROM_LEDGE = 28,
         HERO_STATE_LOOK_ALT = 30,
+        HERO_STATE_FALL_ALT = 45,
         HERO_STATE_TARGET_POSE_APPROACH = 101,
         HERO_STATE_TARGET_POSE_APPROACH_ANIMATION_WAIT = 102,
         HERO_STATE_TARGET_POSE_REACHED = 103,
@@ -1226,7 +1227,7 @@ void FUN_L03_0021c668(void) {
                     hero_set_state(HERO_STATE_IDLE, 1);
                     break;
                 case HERO_STATE_FALL:
-                case 45:
+                case HERO_STATE_FALL_ALT:
                     if (hero.state.step == 0) {
                         if (!(scale_game_frames(0x12) > hero.state_timer) ||
                             hero.ground_distance > 1.75f) {
