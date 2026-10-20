@@ -63,28 +63,28 @@ extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 unsigned char *FUN_L08_0027b450(int owner, void *pos, void *vec, short ticks, unsigned char r,
                                 unsigned char g, unsigned char b, unsigned char a, float size) {
-    unsigned char *m = FUN_L00_002678b8(0x2B);
-    unsigned char *q;
-    if (m != 0) {
-        q = m + 0x20;
-        qcopy(m + 0x10, pos);
-        qcopy(q, vec);
-        q[0x14] = r;
-        q[0x15] = g;
-        q[0x16] = b;
-        q[0x17] = a;
-        *(int *)(m + 4) = (b << 16) | (g << 8) | r;
-        m[9] = func_001FA898_r(4.0f) + 0x40;
-        m[3] = 0x48;
-        m[1] = 0;
-        m[8] = rand();
-        m[2] = *D_L08_001B292C;
-        *(float *)(m + 0xC) = size;
-        *(short *)(m + 0xA) = 0;
-        *(short *)(q + 0x18) = scale_game_frames(ticks);
-        *(int *)(q + 0x10) = owner;
+    unsigned char *effect = FUN_L00_002678b8(0x2B);
+    unsigned char *effect_data;
+    if (effect != 0) {
+        effect_data = effect + 0x20;
+        qcopy(effect + 0x10, pos);
+        qcopy(effect_data, vec);
+        effect_data[0x14] = r;
+        effect_data[0x15] = g;
+        effect_data[0x16] = b;
+        effect_data[0x17] = a;
+        *(int *)(effect + 4) = (b << 16) | (g << 8) | r;
+        effect[9] = func_001FA898_r(4.0f) + 0x40;
+        effect[3] = 0x48;
+        effect[1] = 0;
+        effect[8] = rand();
+        effect[2] = *D_L08_001B292C;
+        *(float *)(effect + 0xC) = size;
+        *(short *)(effect + 0xA) = 0;
+        *(short *)(effect_data + 0x18) = scale_game_frames(ticks);
+        *(int *)(effect_data + 0x10) = owner;
     }
-    return m;
+    return effect;
 }
 #include "eetypes.h"
 extern unsigned char *p27fe00_alloc(int) __asm__("FUN_L00_002678b8");
