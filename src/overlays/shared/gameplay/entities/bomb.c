@@ -666,7 +666,7 @@ extern float feather_radius_min __asm__("D_L00_00161868") __attribute__((sda));
 extern float feather_radius_max __asm__("D_L00_0016186C") __attribute__((sda));
 extern char D_L00_00177F00[];
 
-void FUN_L00_002c97e0(Moby *m) {
+void FUN_L00_002c97e0(Moby *chicken_moby) {
     enum {
         CHICKEN_STATE_INITIALIZE = 0,
         CHICKEN_STATE_TURN_AWAY_FROM_HERO = 2,
@@ -692,63 +692,63 @@ void FUN_L00_002c97e0(Moby *m) {
 
     path_clear = 0;
     player = &hero;
-    vars = (ChickenVars *)m->pvars;
-    anim_speed = m->anim_speed;
-    flee_angle = fast_arc_tan(m->pos.x - player->motion.pos.f[0], m->pos.y - player->motion.pos.f[1]);
-    if (m->state == 0) {
-        m->state = 1;
+    vars = (ChickenVars *)chicken_moby->pvars;
+    anim_speed = chicken_moby->anim_speed;
+    flee_angle = fast_arc_tan(chicken_moby->pos.x - player->motion.pos.f[0], chicken_moby->pos.y - player->motion.pos.f[1]);
+    if (chicken_moby->state == 0) {
+        chicken_moby->state = 1;
         vars->flee_timer = 0;
         vars->expire_timer = -1;
         vars->sound_timer = random_int_between(scale_game_frames(0x78), scale_game_frames(0x12C));
         vars->health = 1.0f;
     }
-    if (m->state == 6) {
+    if (chicken_moby->state == 6) {
         return;
     }
     if (D_0013E520[0x15] != 0) {
-        FUN_L00_00263ac8(m, chicken_manipulator_joint, vars->manipulator, 5.0f);
+        FUN_L00_00263ac8(chicken_moby, chicken_manipulator_joint, vars->manipulator, 5.0f);
     } else {
-        FUN_L00_00263ac8(m, chicken_manipulator_joint, vars->manipulator, 7.7f);
+        FUN_L00_00263ac8(chicken_moby, chicken_manipulator_joint, vars->manipulator, 7.7f);
     }
-    qcopy(&next_pos, &m->pos);
-    if (vars->expire_timer >= 0 && fast_dec_timer(&vars->expire_timer) != 0 && m->visible == 0) {
-        mark_moby_for_removal(m);
+    qcopy(&next_pos, &chicken_moby->pos);
+    if (vars->expire_timer >= 0 && fast_dec_timer(&vars->expire_timer) != 0 && chicken_moby->visible == 0) {
+        mark_moby_for_removal(chicken_moby);
         return;
     }
     if (vars->expire_timer >= 0) {
-        if ((0.9f < D_L00_0015F5D4 || 0.9f < D_L00_0015F5D0) && m->visible == 0 && vars->expire_timer != -1) {
+        if ((0.9f < D_L00_0015F5D4 || 0.9f < D_L00_0015F5D0) && chicken_moby->visible == 0 && vars->expire_timer != -1) {
             if (random_integer_below(0xC7) == 0) {
-                mark_moby_for_removal(m);
+                mark_moby_for_removal(chicken_moby);
                 return;
             }
             vars->expire_timer = random_int_between(0x14, 0x1E);
         }
         if (1.0f < D_L00_0015F5D4 || 1.0f < D_L00_0015F5D0) {
-            if (m->visible != 0) {
+            if (chicken_moby->visible != 0) {
                 if (random_integer_below(0x63) == 0) {
                     vars->health = 0.0f;
                 } else {
                     vars->expire_timer = random_int_between(0x14, 0x1E);
                 }
             } else if (random_integer_below(0x18) == 0) {
-                mark_moby_for_removal(m);
+                mark_moby_for_removal(chicken_moby);
                 return;
             }
         }
     }
     if (vars->gold > 0) {
-        m->scale += ((convert_integer_to_float(vars->gold) * 3.0f + 1.0f) * m->pclass->scale - m->scale) * 0.1f;
+        chicken_moby->scale += ((convert_integer_to_float(vars->gold) * 3.0f + 1.0f) * chicken_moby->pclass->scale - chicken_moby->scale) * 0.1f;
     }
-    size = m->scale / m->pclass->scale;
+    size = chicken_moby->scale / chicken_moby->pclass->scale;
     if (fast_dec_timer(&vars->hit_cooldown) != 0) {
-        hit = find_moby_hit(m, -1, 0);
+        hit = find_moby_hit(chicken_moby, -1, 0);
         if (hit != 0) {
-            allocate_voice_for_target_entry(1, 0, (char *)m);
+            allocate_voice_for_target_entry(1, 0, (char *)chicken_moby);
             vars->health -= hit->damage;
             vars->hit_cooldown = scale_game_frames(0x19);
         }
     }
-    m->hit_slot = 0xFF;
+    chicken_moby->hit_slot = 0xFF;
     if (vars->health < 1.0f) {
         if (vars->gold == 0) {
             for (i = 0; i < truncate_float_to_s32(size) * 20; i++) {
@@ -768,10 +768,10 @@ void FUN_L00_002c97e0(Moby *m) {
             point.z = frame_scale * 0.7f;
             point.y = frame_scale * 0.5f;
             *(u128 *)&vec = *(u128 *)&point;
-            spawn_explosion((char *)m, &vec, 0, 0.0f, 2.0f, 0, 0, 0, 4.0f, 3.0f, 9.0f, 1.0f, -1, 12.0f, 1, 1, -1, (unsigned char)vars->gold);
-            count = FUN_L00_001f2868(&m->pos, 3.0f, 0x10, m, 0);
-            *(u128 *)&point = *(u128 *)&m->pos;
-            FUN_L00_0025a9f8(m, &point, D_L00_00177F00, count, 0, 0x830000, 2, 1, 1.0f, 1.0f, 1.0f);
+            spawn_explosion((char *)chicken_moby, &vec, 0, 0.0f, 2.0f, 0, 0, 0, 4.0f, 3.0f, 9.0f, 1.0f, -1, 12.0f, 1, 1, -1, (unsigned char)vars->gold);
+            count = FUN_L00_001f2868(&chicken_moby->pos, 3.0f, 0x10, chicken_moby, 0);
+            *(u128 *)&point = *(u128 *)&chicken_moby->pos;
+            FUN_L00_0025a9f8(chicken_moby, &point, D_L00_00177F00, count, 0, 0x830000, 2, 1, 1.0f, 1.0f, 1.0f);
         }
         count = random_int_between(5, 8);
         if (0.85f < D_L00_0015F5D0 || 0.85f < D_L00_0015F5D4) {
@@ -790,22 +790,22 @@ void FUN_L00_002c97e0(Moby *m) {
             angle = random_float_between(feather_speed_min * frame_time, feather_speed_max * frame_time);
             build_spherical_offset(&vec, angle, random_angle_radians(), feather_pitch_deg * 0.017453292f);
             vec.z = random_float_between(3.5f, 5.5f) * frame_time;
-            FUN_L00_002cbf68((int)m, &point, &vec.x);
+            FUN_L00_002cbf68((int)chicken_moby, &point, &vec.x);
         }
-        allocate_voice_for_target_entry(1, 0, (char *)m);
+        allocate_voice_for_target_entry(1, 0, (char *)chicken_moby);
         if (vars->expire_timer >= 0) {
-            mark_moby_for_removal(m);
+            mark_moby_for_removal(chicken_moby);
             return;
         }
-        m->collision = 0;
-        m->flags = (m->flags & 0xEFFF) | 0x41;
+        chicken_moby->collision = 0;
+        chicken_moby->flags = (chicken_moby->flags & 0xEFFF) | 0x41;
         vars->gold = 0;
-        m->state = 6;
-        m->command = 0;
+        chicken_moby->state = 6;
+        chicken_moby->command = 0;
         return;
     }
     if (fast_dec_timer_s16(&vars->sound_timer) != 0) {
-        allocate_voice_for_target_entry(random_integer_below(100) >= 75, 0, (char *)m);
+        allocate_voice_for_target_entry(random_integer_below(100) >= 75, 0, (char *)chicken_moby);
         vars->sound_timer = random_int_between(scale_game_frames(0x78), scale_game_frames(0x12C));
     }
     if (vars->expire_timer >= 0) {
@@ -813,119 +813,119 @@ void FUN_L00_002c97e0(Moby *m) {
     } else {
         speed = 0.333f;
     }
-    switch (m->state) {
+    switch (chicken_moby->state) {
     case CHICKEN_STATE_INITIALIZE:
         break;
     case 1:
-        if (m->anim_flags & 2) {
-            blend_moby_animation(m, random_integer_below(2) == 0, 0, scale_game_frames(5));
+        if (chicken_moby->anim_flags & 2) {
+            blend_moby_animation(chicken_moby, random_integer_below(2) == 0, 0, scale_game_frames(5));
         }
-        if (fast_dec_timer_s16(&vars->flee_timer) != 0 && vector_distance(&m->pos, &hero.motion.pos) < size * 5.0f) {
-            ahead.x = fast_cos(m->rot.z) * frame_time * size;
-            ahead.y = fast_sin(m->rot.z) * frame_time * size;
+        if (fast_dec_timer_s16(&vars->flee_timer) != 0 && vector_distance(&chicken_moby->pos, &hero.motion.pos) < size * 5.0f) {
+            ahead.x = fast_cos(chicken_moby->rot.z) * frame_time * size;
+            ahead.y = fast_sin(chicken_moby->rot.z) * frame_time * size;
             ahead.z = 0.0f;
             fast_vec_add(&ahead, &ahead, &next_pos);
-            path_clear = FUN_L00_00258490(m, &next_pos, &ahead, 0, size * 0.2f, size * 0.5f, speed, 0.2617994f);
-            if (path_clear != 0 || (fast_difference_between_rotations(m->rot.z, fast_arc_tan(next_pos.x - m->pos.x, next_pos.y - m->pos.y)) < 1.5707964f && fast_vec_dist(&m->pos, &next_pos) > size * 0.01f)) {
-                m->state = 3;
-                blend_moby_animation(m, 3, 0, scale_game_frames(10));
+            path_clear = FUN_L00_00258490(chicken_moby, &next_pos, &ahead, 0, size * 0.2f, size * 0.5f, speed, 0.2617994f);
+            if (path_clear != 0 || (fast_difference_between_rotations(chicken_moby->rot.z, fast_arc_tan(next_pos.x - chicken_moby->pos.x, next_pos.y - chicken_moby->pos.y)) < 1.5707964f && fast_vec_dist(&chicken_moby->pos, &next_pos) > size * 0.01f)) {
+                chicken_moby->state = 3;
+                blend_moby_animation(chicken_moby, 3, 0, scale_game_frames(10));
             } else {
                 vars->flee_timer = random_int_between(scale_game_frames(0x3C), scale_game_frames(0xB4));
             }
-        } else if (vector_distance(&m->pos, &hero.motion.pos) < size * 5.0f && 0.5235988f < fast_difference_between_rotations(flee_angle, m->rot.z)) {
-            FUN_L00_00258490(m, &next_pos, &next_pos, 0, size * 0.2f, size * 0.5f, speed, 0.2617994f);
-            m->state = 2;
-            blend_moby_animation(m, 3, 0, scale_game_frames(10));
+        } else if (vector_distance(&chicken_moby->pos, &hero.motion.pos) < size * 5.0f && 0.5235988f < fast_difference_between_rotations(flee_angle, chicken_moby->rot.z)) {
+            FUN_L00_00258490(chicken_moby, &next_pos, &next_pos, 0, size * 0.2f, size * 0.5f, speed, 0.2617994f);
+            chicken_moby->state = 2;
+            blend_moby_animation(chicken_moby, 3, 0, scale_game_frames(10));
         } else {
-            FUN_L00_00258490(m, &next_pos, &next_pos, 0, size * 0.2f, size * 0.5f, speed, 0.2617994f);
+            FUN_L00_00258490(chicken_moby, &next_pos, &next_pos, 0, size * 0.2f, size * 0.5f, speed, 0.2617994f);
         }
         break;
     case CHICKEN_STATE_TURN_AWAY_FROM_HERO:
-        FUN_L00_00258278(m, &vars->turn_speed, flee_angle, frame_time_sq * 0.7853982f, frame_time_sq * 1.5707964f, frame_time * 0.7853982f);
-        FUN_L00_00258490(m, &next_pos, &next_pos, 0, size * 0.2f, size * 0.5f, speed, 0.2617994f);
-        if (fast_dec_timer_s16(&vars->flee_timer) != 0 && vector_distance(&m->pos, &hero.motion.pos) < size * 5.0f) {
-            ahead.x = fast_cos(m->rot.z) * frame_time * size;
-            ahead.y = fast_sin(m->rot.z) * frame_time * size;
+        FUN_L00_00258278(chicken_moby, &vars->turn_speed, flee_angle, frame_time_sq * 0.7853982f, frame_time_sq * 1.5707964f, frame_time * 0.7853982f);
+        FUN_L00_00258490(chicken_moby, &next_pos, &next_pos, 0, size * 0.2f, size * 0.5f, speed, 0.2617994f);
+        if (fast_dec_timer_s16(&vars->flee_timer) != 0 && vector_distance(&chicken_moby->pos, &hero.motion.pos) < size * 5.0f) {
+            ahead.x = fast_cos(chicken_moby->rot.z) * frame_time * size;
+            ahead.y = fast_sin(chicken_moby->rot.z) * frame_time * size;
             ahead.z = 0.0f;
             fast_vec_add(&ahead, &ahead, &next_pos);
             if (absolute_float(probe_ground_height(&ahead, 0, 0.5f) - ahead.z) <= (frame_time + frame_time) * size) {
-                m->state = 3;
-                blend_moby_animation(m, 3, 0, scale_game_frames(10));
+                chicken_moby->state = 3;
+                blend_moby_animation(chicken_moby, 3, 0, scale_game_frames(10));
             }
-        } else if (fast_difference_between_rotations(flee_angle, m->rot.z) < 0.08726646f || vector_distance(&m->pos, &hero.motion.pos) > size * 6.0f) {
-            m->state = 1;
+        } else if (fast_difference_between_rotations(flee_angle, chicken_moby->rot.z) < 0.08726646f || vector_distance(&chicken_moby->pos, &hero.motion.pos) > size * 6.0f) {
+            chicken_moby->state = 1;
             vars->flee_timer = random_int_between(scale_game_frames(0x3C), scale_game_frames(0xB4));
-            blend_moby_animation(m, random_integer_below(2) == 0, 0, scale_game_frames(5));
+            blend_moby_animation(chicken_moby, random_integer_below(2) == 0, 0, scale_game_frames(5));
         }
         break;
     case CHICKEN_STATE_FLEE_FROM_HERO:
-        if (vector_distance(&m->pos, &hero.motion.pos) > size * 6.0f) {
-            m->state = 1;
+        if (vector_distance(&chicken_moby->pos, &hero.motion.pos) > size * 6.0f) {
+            chicken_moby->state = 1;
             vars->flee_timer = random_int_between(scale_game_frames(0x3C), scale_game_frames(0xB4));
-            blend_moby_animation(m, random_integer_below(2) == 0, 0, scale_game_frames(5));
-            FUN_L00_00258490(m, &next_pos, &next_pos, 0, size * 0.2f, size * 0.5f, speed, 0.2617994f);
-        } else if (vector_distance(&m->pos, &hero.motion.pos) < size * 3.0f) {
-            FUN_L00_00258278(m, &vars->turn_speed, flee_angle, frame_time_sq * 0.7853982f, frame_time_sq * 1.5707964f, frame_time * 0.7853982f);
-            ahead.x = fast_cos(m->rot.z) * (frame_time + frame_time);
-            ahead.y = fast_sin(m->rot.z) * (frame_time + frame_time);
+            blend_moby_animation(chicken_moby, random_integer_below(2) == 0, 0, scale_game_frames(5));
+            FUN_L00_00258490(chicken_moby, &next_pos, &next_pos, 0, size * 0.2f, size * 0.5f, speed, 0.2617994f);
+        } else if (vector_distance(&chicken_moby->pos, &hero.motion.pos) < size * 3.0f) {
+            FUN_L00_00258278(chicken_moby, &vars->turn_speed, flee_angle, frame_time_sq * 0.7853982f, frame_time_sq * 1.5707964f, frame_time * 0.7853982f);
+            ahead.x = fast_cos(chicken_moby->rot.z) * (frame_time + frame_time);
+            ahead.y = fast_sin(chicken_moby->rot.z) * (frame_time + frame_time);
             ahead.z = 0.0f;
             fast_vec_add(&ahead, &ahead, &next_pos);
-            path_clear = FUN_L00_00258490(m, &next_pos, &ahead, 0, size * 0.2f, size * 0.5f, speed, 0.2617994f);
-            if (path_clear == 0 && (1.5707964f < fast_difference_between_rotations(m->rot.z, fast_arc_tan(next_pos.x - m->pos.x, next_pos.y - m->pos.y)) || fast_vec_dist(&m->pos, &next_pos) < size * 0.01f)) {
-                m->state = 1;
+            path_clear = FUN_L00_00258490(chicken_moby, &next_pos, &ahead, 0, size * 0.2f, size * 0.5f, speed, 0.2617994f);
+            if (path_clear == 0 && (1.5707964f < fast_difference_between_rotations(chicken_moby->rot.z, fast_arc_tan(next_pos.x - chicken_moby->pos.x, next_pos.y - chicken_moby->pos.y)) || fast_vec_dist(&chicken_moby->pos, &next_pos) < size * 0.01f)) {
+                chicken_moby->state = 1;
                 vars->flee_timer = random_int_between(scale_game_frames(0x3C), scale_game_frames(0xB4));
-                blend_moby_animation(m, random_integer_below(2) == 0, 0, scale_game_frames(5));
+                blend_moby_animation(chicken_moby, random_integer_below(2) == 0, 0, scale_game_frames(5));
             } else {
-                m->state = 4;
-                blend_moby_animation(m, 2, 0, scale_game_frames(10));
+                chicken_moby->state = 4;
+                blend_moby_animation(chicken_moby, 2, 0, scale_game_frames(10));
             }
         } else {
-            FUN_L00_00258278(m, &vars->turn_speed, flee_angle, frame_time_sq * 0.7853982f, frame_time_sq * 1.5707964f, frame_time * 0.7853982f);
-            ahead.x = fast_cos(m->rot.z) * frame_time * size;
-            ahead.y = fast_sin(m->rot.z) * frame_time * size;
+            FUN_L00_00258278(chicken_moby, &vars->turn_speed, flee_angle, frame_time_sq * 0.7853982f, frame_time_sq * 1.5707964f, frame_time * 0.7853982f);
+            ahead.x = fast_cos(chicken_moby->rot.z) * frame_time * size;
+            ahead.y = fast_sin(chicken_moby->rot.z) * frame_time * size;
             ahead.z = 0.0f;
             fast_vec_add(&ahead, &ahead, &next_pos);
-            path_clear = FUN_L00_00258490(m, &next_pos, &ahead, 0, size * 0.2f, size * 0.5f, speed, 0.2617994f);
-            if (path_clear == 0 && (1.5707964f < fast_difference_between_rotations(m->rot.z, fast_arc_tan(next_pos.x - m->pos.x, next_pos.y - m->pos.y)) || fast_vec_dist(&m->pos, &next_pos) < size * 0.01f)) {
-                m->state = 1;
+            path_clear = FUN_L00_00258490(chicken_moby, &next_pos, &ahead, 0, size * 0.2f, size * 0.5f, speed, 0.2617994f);
+            if (path_clear == 0 && (1.5707964f < fast_difference_between_rotations(chicken_moby->rot.z, fast_arc_tan(next_pos.x - chicken_moby->pos.x, next_pos.y - chicken_moby->pos.y)) || fast_vec_dist(&chicken_moby->pos, &next_pos) < size * 0.01f)) {
+                chicken_moby->state = 1;
                 vars->flee_timer = random_int_between(scale_game_frames(0x3C), scale_game_frames(0xB4));
-                blend_moby_animation(m, random_integer_below(2) == 0, 0, scale_game_frames(5));
+                blend_moby_animation(chicken_moby, random_integer_below(2) == 0, 0, scale_game_frames(5));
             }
         }
         break;
     case 4:
-        if (fast_dec_timer_s16(&vars->flee_timer) != 0 && vector_distance(&m->pos, &hero.motion.pos) > size * 4.0f) {
-            FUN_L00_00258278(m, &vars->turn_speed, flee_angle, frame_time_sq * 0.7853982f, frame_time_sq * 1.5707964f, frame_time * 0.7853982f);
-            ahead.x = fast_cos(m->rot.z) * frame_time * size;
-            ahead.y = fast_sin(m->rot.z) * frame_time * size;
+        if (fast_dec_timer_s16(&vars->flee_timer) != 0 && vector_distance(&chicken_moby->pos, &hero.motion.pos) > size * 4.0f) {
+            FUN_L00_00258278(chicken_moby, &vars->turn_speed, flee_angle, frame_time_sq * 0.7853982f, frame_time_sq * 1.5707964f, frame_time * 0.7853982f);
+            ahead.x = fast_cos(chicken_moby->rot.z) * frame_time * size;
+            ahead.y = fast_sin(chicken_moby->rot.z) * frame_time * size;
             ahead.z = 0.0f;
             fast_vec_add(&ahead, &ahead, &next_pos);
-            path_clear = FUN_L00_00258490(m, &next_pos, &ahead, 0, size * 0.2f, size * 0.5f, speed, 0.2617994f);
-            if (path_clear == 0 && (1.5707964f < fast_difference_between_rotations(m->rot.z, fast_arc_tan(next_pos.x - m->pos.x, next_pos.y - m->pos.y)) || fast_vec_dist(&m->pos, &next_pos) < size * 0.01f)) {
-                m->state = 1;
+            path_clear = FUN_L00_00258490(chicken_moby, &next_pos, &ahead, 0, size * 0.2f, size * 0.5f, speed, 0.2617994f);
+            if (path_clear == 0 && (1.5707964f < fast_difference_between_rotations(chicken_moby->rot.z, fast_arc_tan(next_pos.x - chicken_moby->pos.x, next_pos.y - chicken_moby->pos.y)) || fast_vec_dist(&chicken_moby->pos, &next_pos) < size * 0.01f)) {
+                chicken_moby->state = 1;
                 vars->flee_timer = random_int_between(scale_game_frames(0x3C), scale_game_frames(0xB4));
-                blend_moby_animation(m, random_integer_below(2) == 0, 0, scale_game_frames(5));
+                blend_moby_animation(chicken_moby, random_integer_below(2) == 0, 0, scale_game_frames(5));
             } else {
-                m->state = 3;
-                blend_moby_animation(m, 3, 0, scale_game_frames(10));
+                chicken_moby->state = 3;
+                blend_moby_animation(chicken_moby, 3, 0, scale_game_frames(10));
             }
         } else {
-            FUN_L00_00258278(m, &vars->turn_speed, flee_angle, frame_time_sq * 0.7853982f, frame_time_sq * 1.5707964f, frame_time * 0.7853982f);
-            ahead.x = fast_cos(m->rot.z) * (frame_time + frame_time) * size;
-            ahead.y = fast_sin(m->rot.z) * (frame_time + frame_time) * size;
+            FUN_L00_00258278(chicken_moby, &vars->turn_speed, flee_angle, frame_time_sq * 0.7853982f, frame_time_sq * 1.5707964f, frame_time * 0.7853982f);
+            ahead.x = fast_cos(chicken_moby->rot.z) * (frame_time + frame_time) * size;
+            ahead.y = fast_sin(chicken_moby->rot.z) * (frame_time + frame_time) * size;
             ahead.z = 0.0f;
             fast_vec_add(&ahead, &ahead, &next_pos);
-            path_clear = FUN_L00_00258490(m, &next_pos, &ahead, 0, size * 0.2f, size * 0.5f, speed, 0.2617994f);
-            if (path_clear == 0 && (1.5707964f < fast_difference_between_rotations(m->rot.z, fast_arc_tan(next_pos.x - m->pos.x, next_pos.y - m->pos.y)) || fast_vec_dist(&m->pos, &next_pos) < size * 0.01f)) {
-                m->state = 1;
+            path_clear = FUN_L00_00258490(chicken_moby, &next_pos, &ahead, 0, size * 0.2f, size * 0.5f, speed, 0.2617994f);
+            if (path_clear == 0 && (1.5707964f < fast_difference_between_rotations(chicken_moby->rot.z, fast_arc_tan(next_pos.x - chicken_moby->pos.x, next_pos.y - chicken_moby->pos.y)) || fast_vec_dist(&chicken_moby->pos, &next_pos) < size * 0.01f)) {
+                chicken_moby->state = 1;
                 vars->flee_timer = random_int_between(scale_game_frames(0x3C), scale_game_frames(0xB4));
-                blend_moby_animation(m, random_integer_below(2) == 0, 0, scale_game_frames(5));
+                blend_moby_animation(chicken_moby, random_integer_below(2) == 0, 0, scale_game_frames(5));
             }
         }
         break;
     case 5:
-        if (FUN_L00_002dc9f0(m, vars->unk10) != 0) {
-            m->state = 0;
+        if (FUN_L00_002dc9f0(chicken_moby, vars->unk10) != 0) {
+            chicken_moby->state = 0;
             *(short *)(vars->unk14 + 0x68) = 0;
         }
         if (random_integer_below(4) != 0) {
@@ -944,55 +944,55 @@ void FUN_L00_002c97e0(Moby *m) {
             angle = random_float_between(feather_speed_min * frame_time, feather_speed_max * frame_time);
             build_spherical_offset(spawn_velocity, angle, random_angle_radians(), feather_pitch_deg * 0.017453292f);
             vec.z = random_float_between(3.5f, 5.5f) * frame_time;
-            FUN_L00_002cbf68((int)m, spawn_point, &spawn_velocity->x);
+            FUN_L00_002cbf68((int)chicken_moby, spawn_point, &spawn_velocity->x);
         }
         return;
     }
     if (path_clear == 0) {
         float len;
         float max;
-        fast_vec_sub(&vec, &next_pos, &m->pos);
+        fast_vec_sub(&vec, &next_pos, &chicken_moby->pos);
         len = fast_vec_length(&vec);
         max = frame_time * size;
         if (max < len) {
             fast_vec_normalize(&vec, &vec, max);
         }
-        fast_vec_add(&next_pos, &m->pos, &vec);
-        if (absolute_float(FUN_L00_00259710(&next_pos) - m->pos.z) <= frame_time * size) {
-            qcopy(&m->pos, &next_pos);
+        fast_vec_add(&next_pos, &chicken_moby->pos, &vec);
+        if (absolute_float(FUN_L00_00259710(&next_pos) - chicken_moby->pos.z) <= frame_time * size) {
+            qcopy(&chicken_moby->pos, &next_pos);
         }
     } else {
-        qcopy(&m->pos, &next_pos);
+        qcopy(&chicken_moby->pos, &next_pos);
     }
     vars->fall_speed += frame_time_sq * 9.8f;
-    m->pos.z -= vars->fall_speed;
+    chicken_moby->pos.z -= vars->fall_speed;
     {
-        float ground = probe_ground_height(&m->pos, 0, 0.5f);
-        if (m->pos.z < ground && ground < m->pos.z + size * 0.25f) {
+        float ground = probe_ground_height(&chicken_moby->pos, 0, 0.5f);
+        if (chicken_moby->pos.z < ground && ground < chicken_moby->pos.z + size * 0.25f) {
             vars->fall_speed = 0.0f;
-            m->pos.z = ground;
+            chicken_moby->pos.z = ground;
         }
     }
     if (collision_hit_material() == 0) {
         vars->health = 0.0f;
     }
-    if (m->state != 5) {
+    if (chicken_moby->state != 5) {
         float pitch;
         float roll;
-        m->pos.z = coll_hit.point.f[2];
+        chicken_moby->pos.z = coll_hit.point.f[2];
         qcopy(&vec, &coll_hit.normal_x);
-        point.x = vec.x * fast_cos(m->rot.z) + vec.y * fast_sin(m->rot.z);
-        point.y = vec.y * fast_cos(m->rot.z) - vec.x * fast_sin(m->rot.z);
+        point.x = vec.x * fast_cos(chicken_moby->rot.z) + vec.y * fast_sin(chicken_moby->rot.z);
+        point.y = vec.y * fast_cos(chicken_moby->rot.z) - vec.x * fast_sin(chicken_moby->rot.z);
         point.z = vec.z;
         pitch = -fast_arc_tan(square_root(point.x * point.x + point.z * point.z), point.y);
         roll = fast_arc_tan(point.z, point.x);
-        m->rot.x = fast_add_rotations(m->rot.x, fast_subtract_rotations(pitch, m->rot.x) * (frame_time * 6.2831855f));
-        m->rot.y = fast_add_rotations(m->rot.y, fast_subtract_rotations(roll, m->rot.y) * (frame_time * 6.2831855f));
+        chicken_moby->rot.x = fast_add_rotations(chicken_moby->rot.x, fast_subtract_rotations(pitch, chicken_moby->rot.x) * (frame_time * 6.2831855f));
+        chicken_moby->rot.y = fast_add_rotations(chicken_moby->rot.y, fast_subtract_rotations(roll, chicken_moby->rot.y) * (frame_time * 6.2831855f));
     }
-    if (m->pos.z < 0.0f) {
-        mark_moby_for_removal(m);
+    if (chicken_moby->pos.z < 0.0f) {
+        mark_moby_for_removal(chicken_moby);
     } else {
-        m->anim_speed = anim_speed;
+        chicken_moby->anim_speed = anim_speed;
     }
 }
 #define NOT_SDA
