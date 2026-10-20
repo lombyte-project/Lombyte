@@ -162,7 +162,7 @@ unsigned FUN_L00_0025c0e8(unsigned c, int mask);
 unsigned FUN_L00_0025c0e8(unsigned c, int mask) {
     int v[3];
     unsigned a;
-    unsigned t;
+    unsigned repacked_color;
     if (mask == 0)
         return c;
     v[0] = c & 0xFF;
@@ -170,7 +170,7 @@ unsigned FUN_L00_0025c0e8(unsigned c, int mask) {
     v[2] = (c >> 16) & 0xFF;
     a = c >> 24;
     FUN_L00_0025c088(&v[0], &v[1], &v[2], mask);
-    t = (a << 24) | (v[2] << 16);
-    t |= v[1] << 8;
-    return t | v[0];
+    repacked_color = (a << 24) | (v[2] << 16);
+    repacked_color |= v[1] << 8;
+    return repacked_color | v[0];
 }
