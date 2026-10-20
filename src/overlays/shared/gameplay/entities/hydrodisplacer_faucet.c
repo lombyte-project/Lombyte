@@ -15,22 +15,22 @@ extern float D_0015EE6C_d4168 __asm__("D_0015ED6C");
 char *FUN_L05_002d4168(int owner, char *pos, int arg, float f0, float f1) {
     char *moby = (char *)create_moby(0x5C3);
     if (moby != 0) {
-        char *d = *(char **)(moby + 0x78);
+        char *moby_vars = *(char **)(moby + 0x78);
         ((unsigned char *)moby)[0x30] = 0xFF;
         *(short *)(moby + 0x32) = 0xFF;
         moby[0x31] = 1;
         *(float *)(moby + 0x48) = f0;
         *(float *)(moby + 0x44) = f1;
         moby[0x20] = 0;
-        *(int *)d = owner;
+        *(int *)moby_vars = owner;
         qcopy(moby + 0x10, pos);
-        *(float *)(d + 0x10) = D_0015EE6C_d4168 * 30.0f * 0.7f;
-        *(int *)(d + 8) = arg;
-        *(int *)(d + 0x14) = 0;
-        *(int *)(d + 0x18) = 0;
-        *(short *)(d + 6) = 0;
+        *(float *)(moby_vars + 0x10) = D_0015EE6C_d4168 * 30.0f * 0.7f;
+        *(int *)(moby_vars + 8) = arg;
+        *(int *)(moby_vars + 0x14) = 0;
+        *(int *)(moby_vars + 0x18) = 0;
+        *(short *)(moby_vars + 6) = 0;
         *(float *)(moby + 0x2C) *= 2.3f;
-        *(short *)(d + 4) = scale_game_frames(0x12C);
+        *(short *)(moby_vars + 4) = scale_game_frames(0x12C);
     }
     return moby;
 }
