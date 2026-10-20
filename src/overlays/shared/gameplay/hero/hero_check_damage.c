@@ -3828,7 +3828,9 @@ static inline struct Hero *hero_ptr(void) { return &hero; }
 /* Steers the velocity's xy toward the move yaw at the target speed. */
 void FUN_L00_00213e68(f32 step) {
     enum {
-        GRAVITY_MODE_WORLD_DOWN = 0
+        GRAVITY_MODE_WORLD_DOWN = 0,
+        GRAVITY_MODE_NEGATIVE_GROUND_NORMAL = 1,
+        GRAVITY_MODE_TOWARD_REFERENCE_POINT = 2
     };
     struct Hero *player = &hero;
     f32 delta[4];
@@ -3901,8 +3903,8 @@ void FUN_L00_00213e68(f32 step) {
             owner->ground_speed = owner->motion.unk168 - ratio;
         }
         break;
-    case 1:
-    case 2: {
+    case GRAVITY_MODE_NEGATIVE_GROUND_NORMAL:
+    case GRAVITY_MODE_TOWARD_REFERENCE_POINT: {
         Vec4 *current_velocity = &hero_velocity;
 
         planar_speed = gravity_length_xy(current_velocity);
