@@ -2095,8 +2095,8 @@ void FUN_L15_002edfc0(struct Moby *moby) {
         float x = template_vertex[0];
         float y = template_vertex[1];
         float rad = FUN_001f9988_2edfc0(x * x + y * y);
-        float a = FUN_L00_00200260_2edfc0(rad, D_L15_00162260);
-        float w = FUN_001fa610_2edfc0(a * 6.2831855f / D_L15_00162260);
+        float radius_remainder = FUN_L00_00200260_2edfc0(rad, D_L15_00162260);
+        float w = FUN_001fa610_2edfc0(radius_remainder * 6.2831855f / D_L15_00162260);
         float z = FUN_001f9de0_2edfc0(FUN_001fa580_2edfc0(w, data->angle));
         D_L15_001DF940[i][0] = D_L15_00162270 * template_vertex[0] + moby->pos.x;
         D_L15_001DF940[i][1] = D_L15_00162270 * template_vertex[1] + moby->pos.y;
