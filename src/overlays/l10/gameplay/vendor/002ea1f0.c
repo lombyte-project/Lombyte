@@ -304,15 +304,15 @@ struct L10Data {
 extern struct L10Data D_L10_0016CCE0;
 extern void cutscene_set_camera_target(int) __asm__("FUN_L00_002637f8");
 
-void FUN_L10_002eacd8(struct Moby *m) {
+void FUN_L10_002eacd8(struct Moby *moby) {
     enum {
         LEVEL_MODE_STATE_INITIALIZE = 0,
         LEVEL_MODE_STATE_DISPATCH = 1
     };
-    switch (m->state) {
+    switch (moby->state) {
     case LEVEL_MODE_STATE_INITIALIZE:
-        m->update_dist = 0xFF;
-        m->state = 1;
+        moby->update_dist = 0xFF;
+        moby->state = 1;
         break;
     case LEVEL_MODE_STATE_DISPATCH:
         if (D_L10_0015F5C4_vendor == 2) {
