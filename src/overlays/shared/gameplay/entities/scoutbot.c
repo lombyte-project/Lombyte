@@ -938,10 +938,10 @@ extern float convert_integer_to_float(int) __asm__("func_001FA6C0");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-void FUN_L08_002f0f68(int **tabs, int n, int *counts, int flat, float r, float g, float b,
+void FUN_L08_002f0f68(int **tabs, int table_count, int *counts, int flat, float r, float g, float b,
                       float a) {
     int i, j;
-    for (i = 0; i < n; i++) {
+    for (i = 0; i < table_count; i++) {
         for (j = 0; j < counts[i]; j++) {
             int w = tabs[i][j];
             int c0 = w & 0xFF;
