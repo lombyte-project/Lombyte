@@ -161,16 +161,16 @@ extern void FUN_L00_0025c088(int *, int *, int *, int);
 unsigned FUN_L00_0025c0e8(unsigned c, int mask);
 unsigned FUN_L00_0025c0e8(unsigned c, int mask) {
     int v[3];
-    unsigned a;
+    unsigned preserved_high_byte;
     unsigned repacked_color;
     if (mask == 0)
         return c;
     v[0] = c & 0xFF;
     v[1] = ((int)(c & 0xFF00)) >> 8;
     v[2] = (c >> 16) & 0xFF;
-    a = c >> 24;
+    preserved_high_byte = c >> 24;
     FUN_L00_0025c088(&v[0], &v[1], &v[2], mask);
-    repacked_color = (a << 24) | (v[2] << 16);
+    repacked_color = (preserved_high_byte << 24) | (v[2] << 16);
     repacked_color |= v[1] << 8;
     return repacked_color | v[0];
 }
