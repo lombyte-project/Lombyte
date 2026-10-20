@@ -311,11 +311,11 @@ void gadgebot_spawn_pad_update(char *moby) {
     char *owner_moby = *(char **)(moby + 0xB8);
     if (owner_moby != 0 && (unsigned char)owner_moby[0x20] < 2) {
         int frame_count_snapshot = *(int *)&level_frame_count;
-        float f = (float)(frame_count_snapshot % 150) / 150.0f * 2.0f * 3.14159274f;
-        if (f > 3.14159274f)
-            f -= 6.28318548f;
-        f = (fast_sin(f) + 1.0f) * 0.5f;
-        *(int *)(moby + 0x90) = fast_tween_color(0x80464646, 0x80828282, f);
+        float color_pulse_value = (float)(frame_count_snapshot % 150) / 150.0f * 2.0f * 3.14159274f;
+        if (color_pulse_value > 3.14159274f)
+            color_pulse_value -= 6.28318548f;
+        color_pulse_value = (fast_sin(color_pulse_value) + 1.0f) * 0.5f;
+        *(int *)(moby + 0x90) = fast_tween_color(0x80464646, 0x80828282, color_pulse_value);
     } else {
         *(int *)(moby + 0x90) = fast_tween_color(*(int *)(moby + 0x90), 0x80464646, 0.1f);
     }
