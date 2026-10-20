@@ -1414,7 +1414,7 @@ extern char D_00141CE4[];
 
 void FUN_L13_002f3778(struct Moby *moby) {
     char *data;
-    unsigned char *p;
+    unsigned char *menu_item_enable_base;
     moby->update_dist = 0xFF;
     data = (char *)moby->pvars;
     if (D_L13_00179710[0] == 0 && D_L13_00179710[9] == -1) {
@@ -1433,18 +1433,18 @@ void FUN_L13_002f3778(struct Moby *moby) {
                 }
             }
         join:
-            p = menu_item_enabled_115 + 0xB9;
-            if (p[0xB] != 0 || p[0xD] != 0) {
-                unsigned char *q = ((char *)&D_00141968);
-                unsigned int saturating_count = *(unsigned short *)(q + 0x378);
+            menu_item_enable_base = menu_item_enabled_115 + 0xB9;
+            if (menu_item_enable_base[0xB] != 0 || menu_item_enable_base[0xD] != 0) {
+                unsigned char *statistics_base = ((char *)&D_00141968);
+                unsigned int saturating_count = *(unsigned short *)(statistics_base + 0x378);
                 if (saturating_count <= 0xFFFE) {
-                    *(unsigned short *)(q + 0x378) = saturating_count + 1;
+                    *(unsigned short *)(statistics_base + 0x378) = saturating_count + 1;
                 }
-                if (scale_game_frames(D_0015EEA4) / 600 > *(unsigned short *)(q + 0x37A)) {
-                    *(unsigned short *)(q + 0x37A) = scale_game_frames(D_0015EEA4) / 600;
+                if (scale_game_frames(D_0015EEA4) / 600 > *(unsigned short *)(statistics_base + 0x37A)) {
+                    *(unsigned short *)(statistics_base + 0x37A) = scale_game_frames(D_0015EEA4) / 600;
                 }
-                *(unsigned int *)(q + 0x37C) =
-                    *(unsigned int *)(q + 0x37C) | (1 << current_level_index) | 0x80000000;
+                *(unsigned int *)(statistics_base + 0x37C) =
+                    *(unsigned int *)(statistics_base + 0x37C) | (1 << current_level_index) | 0x80000000;
             } else {
             direct:
                 if (is_point_inside_clip_volume(&hero.motion.pos, *(int *)data) != 0) {
