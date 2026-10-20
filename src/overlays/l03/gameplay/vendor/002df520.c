@@ -433,14 +433,14 @@ f32 cam_interp_values(void *p, f32 to, f32 stiffness, f32 damping, f32 max,
 void FUN_L03_002ebc58(void *arg) {
     char *camera = arg;
     char *camera_data = *(char **)(camera + 0x70);
-    float *p = (float *)(camera_data + 0xB0);
+    float *camera_target_data = (float *)(camera_data + 0xB0);
     float look_direction[4];
     float b[4];
     float look_offset[4];
     qcopy(b, camera_data);
-    p[2] = cam_interp_values(camera_data + 0xBC, p[2], hero.motion.pos.f[2],
+    camera_target_data[2] = cam_interp_values(camera_data + 0xBC, camera_target_data[2], hero.motion.pos.f[2],
                              *(float *)&D_L03_00161E70, *(float *)&D_L03_00161E74, 0.0f);
-    normalize_vector_xyz(look_offset, D_L03_00166F40, p[5]);
+    normalize_vector_xyz(look_offset, D_L03_00166F40, camera_target_data[5]);
     add_vector_xyz(b, look_offset, b);
     subtract_vector_xyz(look_direction, b, camera + 0x30);
     normalize_vector_xyz(camera, look_direction, 1.0f);
