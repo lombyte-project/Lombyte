@@ -142,18 +142,18 @@ typedef struct {
 extern void memset_words(void *, s32, s32) __asm__("FUN_001f97e8");
 
 void FUN_L00_0024f0e8(ListOwner_24f0e8 *owner, ListNode_24f0e8 **slot) {
-    ListNode_24f0e8 *p;
+    ListNode_24f0e8 *list_cursor;
 
     if (*slot == 0)
         return;
     if (owner->head == *slot) {
         owner->head = (*slot)->next;
     } else {
-        p = owner->head;
-        while (p->next != 0 && p->next != *slot)
-            p = p->next;
-        if (p->next == *slot)
-            p->next = (*slot)->next;
+        list_cursor = owner->head;
+        while (list_cursor->next != 0 && list_cursor->next != *slot)
+            list_cursor = list_cursor->next;
+        if (list_cursor->next == *slot)
+            list_cursor->next = (*slot)->next;
     }
     memset_words(*slot, 0, 0x40);
     *slot = 0;
