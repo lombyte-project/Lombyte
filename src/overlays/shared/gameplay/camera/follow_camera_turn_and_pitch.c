@@ -184,26 +184,26 @@ void follow_camera_auto_turn(int m) __asm__("FUN_L00_002e8f40");
 void follow_camera_auto_turn(int camera_object) {
     char *camera_data = *(char **)(camera_object + 0x70);
     char *r = camera_data + 0x1D0;
-    char *q = camera_data + 0x130;
+    char *auto_turn_vector = camera_data + 0x130;
     if (*(short *)(camera_data + 0x10) > 0) {
         float v[4];
         float vector_length;
         float lim;
         subtract_vector_xyz(v, (float *)camera_data, (float *)(camera_data + 0x90));
-        lerp_vector(D_L00_0015EF40, q, q, v);
-        vector_length = fast_vec_length(q);
-        lim = *(float *)(q + 0x2C);
+        lerp_vector(D_L00_0015EF40, auto_turn_vector, auto_turn_vector, v);
+        vector_length = fast_vec_length(auto_turn_vector);
+        lim = *(float *)(auto_turn_vector + 0x2C);
         if (lim < vector_length) {
             vector_length = lim;
-            fast_vec_normalize(q, q, vector_length);
-            *(float *)(r + 0x30) = *(float *)(q + 0x2C) - vector_length;
+            fast_vec_normalize(auto_turn_vector, auto_turn_vector, vector_length);
+            *(float *)(r + 0x30) = *(float *)(auto_turn_vector + 0x2C) - vector_length;
         } else {
             float minimum_length = lim - *(float *)(r + 0x30);
             if (vector_length < minimum_length) {
                 vector_length = minimum_length;
-                fast_vec_normalize(q, q, vector_length);
+                fast_vec_normalize(auto_turn_vector, auto_turn_vector, vector_length);
             }
-            *(float *)(r + 0x30) = *(float *)(q + 0x2C) - vector_length;
+            *(float *)(r + 0x30) = *(float *)(auto_turn_vector + 0x2C) - vector_length;
         }
     }
 }
