@@ -15,10 +15,10 @@ extern int D_L08_001F84E8[];
 extern void FUN_L00_001fde98(int, int, int, void *, int);
 extern void FUN_L08_00258090(void *, int, int, void *);
 
-void FUN_L08_00308db8(int a) {
+void FUN_L08_00308db8(int pair_index) {
     int i;
     for (i = 0; i < 0x8; i++) {
-        FUN_L08_00258090(D_L08_001F8560, D_L08_001F84E8[i], D_L08_001F4C60[i], &D_L08_001F8548[a]);
+        FUN_L08_00258090(D_L08_001F8560, D_L08_001F84E8[i], D_L08_001F4C60[i], &D_L08_001F8548[pair_index]);
         FUN_L00_001fde98(D_L08_001F4C60[i], D_L08_001F84C8[i], D_L08_001F8528[i], D_L08_001F8560,
                          1);
     }
