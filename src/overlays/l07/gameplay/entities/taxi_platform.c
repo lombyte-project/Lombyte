@@ -1472,7 +1472,7 @@ void water_update(Moby_30D8E8 *water_moby) {
     int i;
     int j;
     int k;
-    int n;
+    int water_record_index;
     float ang;
     float on;
 
@@ -1531,8 +1531,8 @@ void water_update(Moby_30D8E8 *water_moby) {
                     FUN_L01_002b8288_2cd2b0(water_records, 0x24, x, y, 2.0f, 0.2f);
                 }
             }
-            for (n = 0; n < 0x24; n++) {
-                FUN_L07_0030cd48_2cd2b0(n);
+            for (water_record_index = 0; water_record_index < 0x24; water_record_index++) {
+                FUN_L07_0030cd48_2cd2b0(water_record_index);
             }
         }
         if (water_data->fC != 0) {
