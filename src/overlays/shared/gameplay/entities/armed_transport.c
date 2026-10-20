@@ -432,11 +432,11 @@ extern void update_joint_animation(char *, char *, int, float, float) __asm__("F
 
 void FUN_L16_002e3050(char *moby) {
     float ticks = frame_scale_sq;
-    float a = ticks * 0.03f;
+    float joint_animation_smoothing_factor = ticks * 0.03f;
     float b = ticks * 0.3f;
     char *data = *(char **)(moby + 0x78);
     *(float *)(data + 0x144) = *(float *)(data + 0x17C);
-    update_joint_animation(moby, data + 0xE0, 2, a, b);
+    update_joint_animation(moby, data + 0xE0, 2, joint_animation_smoothing_factor, b);
 }
 /* Updates a moby effect and advances it when its linked object is ready. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A1B58.c: func_L16_002E6B70), where it is exact; names translated to the US level program. */
