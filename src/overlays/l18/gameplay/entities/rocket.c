@@ -1927,7 +1927,7 @@ void FUN_L18_002dba20(M_dba20 *moby) {
     V_dba20 rot[3];
     V_dba20 rv;
     D_dba20 *moby_vars = moby->data;
-    int j, k, n;
+    int j, k, ring_segment_index;
     int col;
 
     unit_matrix_dba20(draw_matrix);
@@ -1976,7 +1976,7 @@ void FUN_L18_002dba20(M_dba20 *moby) {
     clear_vector_dba20(&rv);
     rv.f[2] = D_L18_00161C64 * 0.017453292f;
     euler_basis_dba20(rot, &rv);
-    for (n = 0; (float)n < 360.0f / D_L18_00161C64; n++) {
+    for (ring_segment_index = 0; (float)ring_segment_index < 360.0f / D_L18_00161C64; ring_segment_index++) {
         draw_quad_dba20(&quad_packets[0], draw_matrix, 0);
         draw_quad_dba20(&quad_packets[1], draw_matrix, 0);
         draw_quad_dba20(&quad_packets[2], draw_matrix, 0);
