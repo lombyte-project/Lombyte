@@ -1211,7 +1211,7 @@ void follow_camera_avoid_mobies(u8 *camera_moby) {
     s32 nearby_moby_count;
     s32 i;
     s32 nearby_moby_type_id;
-    s32 s;
+    s32 retraction_timer_or_below_hold_threshold;
     f32 probe_diameter;
     f32 f;
     u8 *base;
@@ -1284,9 +1284,9 @@ void follow_camera_avoid_mobies(u8 *camera_moby) {
     if (hit) {
         goto slow;
     }
-    s = BH_2e7d20(0x34);
-    s = s < FUN_001f96f8_2e7d20(2000);
-    if (s && BH_2e7d20(0x34) > 0) {
+    retraction_timer_or_below_hold_threshold = BH_2e7d20(0x34);
+    retraction_timer_or_below_hold_threshold = retraction_timer_or_below_hold_threshold < FUN_001f96f8_2e7d20(2000);
+    if (retraction_timer_or_below_hold_threshold && BH_2e7d20(0x34) > 0) {
         goto dec;
     }
     if (!(D_0013C940_2e7d20.x < 0.3f)) {
@@ -1308,8 +1308,8 @@ dec:
     BF_2e7d20(0x30) = cosine_interpolate(0.0f, BF_2e7d20(0x30), f / convert_integer_to_float(FUN_001f96f8_2e7d20(2000)));
     goto move;
 slow:
-    s = BH_2e7d20(0x34);
-    if (FUN_001f96f8_2e7d20(2000) < s) {
+    retraction_timer_or_below_hold_threshold = BH_2e7d20(0x34);
+    if (FUN_001f96f8_2e7d20(2000) < retraction_timer_or_below_hold_threshold) {
         fast_dec_timer(b + 0x34);
     } else {
         BH_2e7d20(0x34) = FUN_001f96f8_2e7d20(2000);
