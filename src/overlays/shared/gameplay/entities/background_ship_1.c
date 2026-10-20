@@ -1001,16 +1001,16 @@ void FUN_L02_002fb9c8(char *moby) {
             return;
         }
         {
-            char *t;
+            char *first_group_target;
             char *u;
             int b;
             {
                 int e = *group;
                 b = D_L02_0015FFD8;
-                t = (char *)(b + ((e & 0x7fff) << 8));
+                first_group_target = (char *)(b + ((e & 0x7fff) << 8));
                 id = e;
             }
-            if (*(signed char *)(t + 0x20) < 0) {
+            if (*(signed char *)(first_group_target + 0x20) < 0) {
                 do {
                     if ((id << 16) < 0) {
                         *(short *)(data + 0x20) = -1;
@@ -1027,7 +1027,7 @@ void FUN_L02_002fb9c8(char *moby) {
                 } while (*(signed char *)(u + 0x20) < 0);
                 target = u;
             } else {
-                target = t;
+                target = first_group_target;
             }
         }
     } else {
