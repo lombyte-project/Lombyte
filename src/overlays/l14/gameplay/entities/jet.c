@@ -1085,8 +1085,8 @@ extern struct {
 } D_L14_00174540;
 extern char D_L14_00174580[];
 
-void FUN_L14_002ece00(struct Moby *m) {
-    L14BoltVars *v = (L14BoltVars *)m->pvars;
+void FUN_L14_002ece00(struct Moby *projectile_moby) {
+    L14BoltVars *v = (L14BoltVars *)projectile_moby->pvars;
     Vec4 old;
     Vec4 target;
     L14BoltSweep sweep;
@@ -1100,21 +1100,21 @@ void FUN_L14_002ece00(struct Moby *m) {
     int i;
     int j;
 
-    qcopy(&old, &m->pos);
-    bolt_add(&m->pos, &m->pos, &v->vel);
-    qcopy(&target, &m->pos);
+    qcopy(&old, &projectile_moby->pos);
+    bolt_add(&projectile_moby->pos, &projectile_moby->pos, &v->vel);
+    qcopy(&target, &projectile_moby->pos);
     ignore = v->ignore;
     qcopy(&aim, &v->vel);
     aim.f[2] = 0.0f;
     bolt_normalize_xy(&aim, &aim, 1.0f);
     tries = 0;
     aim.f[2] = 1.0f;
-    FUN_L00_00259888(&sweep, m, 0x10001, &aim, 1.0f);
+    FUN_L00_00259888(&sweep, projectile_moby, 0x10001, &aim, 1.0f);
     sweep.flag18 = 1;
     sweep.flag19 = 1;
     pass = v->solid == 0;
-    if (bolt_distance(&m->pos, &v->origin) > 30.0f) {
-        if (m->visible != 0) {
+    if (bolt_distance(&projectile_moby->pos, &v->origin) > 30.0f) {
+        if (projectile_moby->visible != 0) {
             for (i = 0; i < 3; i++) {
                 spark.q = 0;
                 spark.f[0] = bolt_random(-1.0f, 1.0f);
@@ -1124,10 +1124,10 @@ void FUN_L14_002ece00(struct Moby *m) {
                 bolt_normalize(&dir, &dir, bolt_length(&spark) * 0.1f);
                 bolt_add(&dir, &spark, &dir);
                 bolt_normalize(&dir, &dir, bolt_random(frame_time + frame_time, frame_time * 4.0f));
-                FUN_L07_0029a2a0(&m->pos, &dir);
+                FUN_L07_0029a2a0(&projectile_moby->pos, &dir);
             }
         }
-        bolt_remove(m);
+        bolt_remove(projectile_moby);
         return;
     }
     while (tries < 3 && bolt_coll_line(&old, &target, pass, ignore, 0) != 0) {
@@ -1139,8 +1139,8 @@ void FUN_L14_002ece00(struct Moby *m) {
             continue;
         }
         bolt_coll_line(&old, &target, pass, ignore, &sweep);
-        qcopy(&m->pos, &D_L14_00174540.pos);
-        if (m->visible != 0) {
+        qcopy(&projectile_moby->pos, &D_L14_00174540.pos);
+        if (projectile_moby->visible != 0) {
             for (j = 0; j < 5; j++) {
                 spark.q = 0;
                 spark.f[0] = bolt_random(-1.0f, 1.0f);
@@ -1151,17 +1151,17 @@ void FUN_L14_002ece00(struct Moby *m) {
                 bolt_normalize(&dir, &dir, bolt_length(&spark) * 0.5f);
                 bolt_add(&dir, &spark, &dir);
                 bolt_normalize(&dir, &dir, bolt_random(frame_time * 3.0f, frame_time * 6.0f));
-                FUN_L00_0026dd20((char *)&m->pos, (char *)&dir, 0x7F2F4F6F,
+                FUN_L00_0026dd20((char *)&projectile_moby->pos, (char *)&dir, 0x7F2F4F6F,
                                  FUN_L00_00257b90(bolt_frames(10), bolt_frames(15)), 30000.0f);
             }
         }
-        bolt_sound(0, 0, m);
-        bolt_remove(m);
+        bolt_sound(0, 0, projectile_moby);
+        bolt_remove(projectile_moby);
         return;
     }
-    if (m->pos.x < 2.0f || m->pos.x > 1021.0f || m->pos.y < 2.0f || m->pos.y > 1021.0f ||
-        m->pos.z < 2.0f || m->pos.z > 1021.0f) {
-        bolt_remove(m);
+    if (projectile_moby->pos.x < 2.0f || projectile_moby->pos.x > 1021.0f || projectile_moby->pos.y < 2.0f || projectile_moby->pos.y > 1021.0f ||
+        projectile_moby->pos.z < 2.0f || projectile_moby->pos.z > 1021.0f) {
+        bolt_remove(projectile_moby);
     }
 }
 
