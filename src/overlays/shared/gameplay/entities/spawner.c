@@ -202,7 +202,7 @@ extern char D_L09_00209280[];
 
 struct Moby *FUN_L09_0030a778(struct Moby *owner, Vec4 *pos)
 {
-    struct Moby *m;
+    struct Moby *spawned_moby;
     struct Moby *other;
     u8 *owner_vars;
     s16 *data;
@@ -217,51 +217,51 @@ struct Moby *FUN_L09_0030a778(struct Moby *owner, Vec4 *pos)
     if (owner == 0)
         return 0;
     owner_vars = owner->pvars;
-    m = 0;
+    spawned_moby = 0;
     result = 0;
-    if (FUN_L00_002591d0_30a778(&m, *(s32 *)(owner_vars + 0x94), 1, 1) == 0) {
+    if (FUN_L00_002591d0_30a778(&spawned_moby, *(s32 *)(owner_vars + 0x94), 1, 1) == 0) {
         owner_vars[0x91] = owner_vars[0x91] + 1;
-        qcopy_nc(&m->pos, pos_ptr);
-        m->pos.w = 0.0f;
-        m->state = 0;
-        m->command = 0;
-        m->flags = m->pclass->flags;
-        m->scale = m->pclass->scale;
-        m->update_dist = 0xff;
-        m->draw_dist = 0xff;
-        m->visible = 1;
-        if (*(s32 *)((u8 *)m->pclass + 0x40) != 0)
-            m->flags |= 0x10;
-        if (*((u8 *)m->pclass + 0x0f) != 0)
-            m->flags |= 0x400;
-        m->occlusion = 0x7f80;
-        m->unk71 = 0xff;
-        m->unk72 = 0xff;
-        m->hit_slot = 0xff;
+        qcopy_nc(&spawned_moby->pos, pos_ptr);
+        spawned_moby->pos.w = 0.0f;
+        spawned_moby->state = 0;
+        spawned_moby->command = 0;
+        spawned_moby->flags = spawned_moby->pclass->flags;
+        spawned_moby->scale = spawned_moby->pclass->scale;
+        spawned_moby->update_dist = 0xff;
+        spawned_moby->draw_dist = 0xff;
+        spawned_moby->visible = 1;
+        if (*(s32 *)((u8 *)spawned_moby->pclass + 0x40) != 0)
+            spawned_moby->flags |= 0x10;
+        if (*((u8 *)spawned_moby->pclass + 0x0f) != 0)
+            spawned_moby->flags |= 0x400;
+        spawned_moby->occlusion = 0x7f80;
+        spawned_moby->unk71 = 0xff;
+        spawned_moby->unk72 = 0xff;
+        spawned_moby->hit_slot = 0xff;
         if (owner_vars[0x93] != 0)
-            m->scale = m->pclass->scale * 0.1f;
-        FUN_00212ed8_30a778(m, 0, 0);
-        other = FUN_L00_002db890_30a778(m);
+            spawned_moby->scale = spawned_moby->pclass->scale * 0.1f;
+        FUN_00212ed8_30a778(spawned_moby, 0, 0);
+        other = FUN_L00_002db890_30a778(spawned_moby);
         if (other != 0) {
             *(volatile s32 *)((u8 *)other + 0x6c) = 0;
             *(volatile s32 *)((u8 *)other + 0x94) = 0;
             *(volatile s16 *)((u8 *)other + 0x68) = 0;
         }
-        if (owner->unkB4 < m->unkB4)
-            m->unkB4 = owner->unkB4;
-        if (m->unkB4 < 1)
-            m->unkB4 = 1;
-        left = (u16)owner->unkB4 - (u16)m->unkB4;
+        if (owner->unkB4 < spawned_moby->unkB4)
+            spawned_moby->unkB4 = owner->unkB4;
+        if (spawned_moby->unkB4 < 1)
+            spawned_moby->unkB4 = 1;
+        left = (u16)owner->unkB4 - (u16)spawned_moby->unkB4;
         owner->unkB4 = left;
         if ((s16)left < 0)
             owner->unkB4 = 1;
         {
-            struct Moby *target = ((struct Moby *volatile *)&m)[0];
+            struct Moby *target = ((struct Moby *volatile *)&spawned_moby)[0];
             target->collision = target->pclass->collision;
         }
-        FUN_L00_0025d1b8_30a778(m);
-        FUN_L00_00250df8_30a778(m);
-        result = m;
+        FUN_L00_0025d1b8_30a778(spawned_moby);
+        FUN_L00_00250df8_30a778(spawned_moby);
+        result = spawned_moby;
         data = FUN_002141f8_30a778(result);
         if (data != 0) {
             *(f32 *)((u8 *)data + 0x34) = 0.0f;
