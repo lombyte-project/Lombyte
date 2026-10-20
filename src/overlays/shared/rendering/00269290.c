@@ -1342,23 +1342,23 @@ s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 void FUN_L00_0026c6e8(void *pos, void *vel);
 void FUN_L00_0026c6e8(void *pos, void *vel) {
-    E0026c6e8 *e = FUN_L00_002678b8_u(0x13);
+    E0026c6e8 *particle = FUN_L00_002678b8_u(0x13);
     u32 v;
-    if (e == 0)
+    if (particle == 0)
         return;
     v = (random_integer_below(6) * 6 + 0x40) | 0x78404000;
-    e->x4 = v;
-    e->xc = v;
-    e->x9 = truncate_float_to_s32(2.0f) + 0x20;
-    e->x3 = 0x48;
-    e->x1 = 3;
-    e->x2 = *D_L00_001B20CC;
-    qcopy(e->a, pos);
-    qcopy(e->c, vel);
-    subtract_vector_xyz(e->b, pos, e->c);
-    subtract_vector_xyz(e->b, e->b, e->c);
-    e->a[3] = 0.09f;
-    e->b[3] = 0.5f;
+    particle->x4 = v;
+    particle->xc = v;
+    particle->x9 = truncate_float_to_s32(2.0f) + 0x20;
+    particle->x3 = 0x48;
+    particle->x1 = 3;
+    particle->x2 = *D_L00_001B20CC;
+    qcopy(particle->a, pos);
+    qcopy(particle->c, vel);
+    subtract_vector_xyz(particle->b, pos, particle->c);
+    subtract_vector_xyz(particle->b, particle->b, particle->c);
+    particle->a[3] = 0.09f;
+    particle->b[3] = 0.5f;
 }
 #define NOT_SDA
 
