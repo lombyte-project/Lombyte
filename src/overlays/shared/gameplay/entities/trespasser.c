@@ -76,14 +76,14 @@ void FUN_L00_00269b70_2c3440(float *, unsigned char, unsigned char, unsigned cha
 void FUN_L00_0025f800_2c3440(void *, void *) __asm__("FUN_L00_0025f800");
 void FUN_0020c828_2c3440(void *) __asm__("FUN_0020c828");
 extern s16 D_L00_001B0830_lui[] __asm__("D_L00_001B0830") __attribute__((section(".data")));
-void FUN_L00_002c3440(unsigned char *m) {
+void FUN_L00_002c3440(unsigned char *moby) {
     float v[4] __attribute__((aligned(16)));
     int i;
     int r, g;
     unsigned char b;
     float s;
     for (i = 0; i < 10; i++) {
-        qcopy(v, m + 0x10);
+        qcopy(v, moby + 0x10);
         v[0] += FUN_002132a8_2c3440(-0.2f, 0.2f);
         v[1] += FUN_002132a8_2c3440(-0.2f, 0.2f);
         v[2] += FUN_002132a8_2c3440(-0.2f, 0.2f);
@@ -94,8 +94,8 @@ void FUN_L00_002c3440(unsigned char *m) {
         FUN_L00_00269b70_2c3440(v, r, g, b, s, 0.0f,
                                 FUN_001f96f8_2c3440(FUN_001160d8_2c3440() % 40 + 10));
     }
-    FUN_L00_0025f800_2c3440(m, D_L00_001B0830_lui);
-    FUN_0020c828_2c3440(m);
+    FUN_L00_0025f800_2c3440(moby, D_L00_001B0830_lui);
+    FUN_0020c828_2c3440(moby);
 }
 typedef struct {
     u8 pad[0x60];
