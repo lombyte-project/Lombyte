@@ -1102,29 +1102,29 @@ void big_axebot_update(M_B7B0 *moby) {
     }
     if (moby->state != 0) {
         float q[4];
-        float m[4][4];
-        float e[4];
+        float bone_transform[4][4];
+        float bone_euler_angles[4];
         {
             data->f428 =
                 fast_subtract_rotations_cf(data->f428, fast_add_rotations_cf(moby->rot[2], rot));
-            build_moby_bone_transform((char *)moby, 0xC, (char *)m);
-            matrix_to_euler(m, e);
+            build_moby_bone_transform((char *)moby, 0xC, (char *)bone_transform);
+            matrix_to_euler(bone_transform, bone_euler_angles);
             FUN_L00_001fff28(q, 2, fast_add_rotations_cf(ang, data->f428));
             data->f428 = ang;
             multiply_quaternions(data->m160.q, data->m160.q, q);
         }
     }
     if (data->f424 != 0) {
-        float m2[4][4];
+        float axe_bone_transform[4][4];
         {
             M_B7B0 *axe;
 
-            build_moby_bone_transform((char *)moby, 0xD, (char *)m2);
+            build_moby_bone_transform((char *)moby, 0xD, (char *)axe_bone_transform);
             axe = data->f424;
-            qcopy(axe->pos, m2[3]);
+            qcopy(axe->pos, axe_bone_transform[3]);
             advance_moby_animation(axe);
             FUN_L00_00250df8(data->f424);
-            copy_matrix3x4(data->f424->fC0, m2);
+            copy_matrix3x4(data->f424->fC0, axe_bone_transform);
             normalize_vector_triplet(data->f424->fC0);
             refresh_moby_spatial_bounds_from_basis(data->f424);
             data->f424->f34 |= 6;
