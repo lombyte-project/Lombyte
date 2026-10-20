@@ -473,7 +473,7 @@ void FUN_L05_002d1fd8(int unused, char *position) {
     char *r;
     int i;
     char *base;
-    int n;
+    int random_spawn_value;
     r = FUN_L00_002d7e90(position, 3.0f);
     if (r)
         r[0x23] = 0x70;
@@ -483,8 +483,8 @@ void FUN_L05_002d1fd8(int unused, char *position) {
         v[0] = fast_cos(ang) * k;
         v[1] = fast_sin(ang) * k;
         v[2] = random_float_between(frame_time * 3.0f, frame_time * 6.5f);
-        n = random_int_between(0x5A, 0x78);
-        FUN_L00_0026f548(position, v, random_integer_below(2), n);
+        random_spawn_value = random_int_between(0x5A, 0x78);
+        FUN_L00_0026f548(position, v, random_integer_below(2), random_spawn_value);
     }
     for (i = 0; i < 16; i++) {
         unsigned char *splash;
