@@ -206,38 +206,38 @@ extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern f32 ground_height_at(Vec4 *) __asm__("FUN_L00_00263468");
 extern void free_effect_particle(FallingParticle *) __asm__("FUN_L00_00267a08");
 
-void FUN_L00_00268d48(FallingParticle *p)
+void FUN_L00_00268d48(FallingParticle *particle)
 {
     Vec4 step;
     Vec4 ground_test_probe;
     Vec4 ground_sample_probe;
-    Vec4 *vel = &p->vel;
+    Vec4 *vel = &particle->vel;
     f32 ground = vel->f[3];
     s32 cell_x;
     s32 cell_y;
 
-    if (p->pos.f[2] < ground || p->pos.f[0] < 0.0f || p->pos.f[1] < 0.0f
-        || 512.0f < p->pos.f[0] || 512.0f < p->pos.f[1])
+    if (particle->pos.f[2] < ground || particle->pos.f[0] < 0.0f || particle->pos.f[1] < 0.0f
+        || 512.0f < particle->pos.f[0] || 512.0f < particle->pos.f[1])
         goto die;
 
-    cell_x = p->probe.f[0];
-    cell_y = p->probe.f[1];
+    cell_x = particle->probe.f[0];
+    cell_y = particle->probe.f[1];
     add_vector_xyz(&step, vel, &particle_drift);
-    add_vector_xyz(&p->probe, &p->probe, &step);
-    add_vector_xyz(&p->pos, &p->pos, &step);
-    if (p->unk0A != 2) {
-        if (cell_x != (s32)p->probe.f[0] || cell_y != (s32)p->probe.f[1]) {
-            ground_test_probe.q = p->probe.q;
+    add_vector_xyz(&particle->probe, &particle->probe, &step);
+    add_vector_xyz(&particle->pos, &particle->pos, &step);
+    if (particle->unk0A != 2) {
+        if (cell_x != (s32)particle->probe.f[0] || cell_y != (s32)particle->probe.f[1]) {
+            ground_test_probe.q = particle->probe.q;
             if (ground_height_at(&ground_test_probe) < particle_min_ground) {
                 ground = particle_min_ground;
             } else {
-                ground_sample_probe.q = p->probe.q;
+                ground_sample_probe.q = particle->probe.q;
                 ground = ground_height_at(&ground_sample_probe);
             }
-            if (p->probe.f[2] < ground) {
+            if (particle->probe.f[2] < ground) {
                 /* shared exit; retail has one call site for all kill paths */
             die:
-                free_effect_particle(p);
+                free_effect_particle(particle);
                 return;
             }
         }
