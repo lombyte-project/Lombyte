@@ -1001,10 +1001,10 @@ void FUN_L01_00232290(void) {
         char *y = D_0013E533_c + 0xE1D;
         if (*(int *)(y + 0x2084) == 0x73) {
             float v = *(float *)(y + 0x190) * 0.8f;
-            float m = frame_time * 2.5f;
+            float minimum_value = frame_time * 2.5f;
             *(float *)(y + 0x190) = v;
-            if (v < m) {
-                *(float *)(y + 0x190) = m;
+            if (v < minimum_value) {
+                *(float *)(y + 0x190) = minimum_value;
             }
         }
     }
