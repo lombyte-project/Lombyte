@@ -557,7 +557,7 @@ extern void FUN_L04_002923b8(void *, char *);
 
 void FUN_L04_002d1418(void *moby) {
     char *moby_vars = *(char **)(moby + 0x78);
-    char *p = moby_vars + 0x160;
+    char *movement_data = moby_vars + 0x160;
     float speed;
     float angleHalf;
     float angleFull;
@@ -578,7 +578,7 @@ void FUN_L04_002d1418(void *moby) {
     *(int *)(moby_vars + 0x1f8) = *(int *)(*(char **)(*(char **)(moby + 0x24) + 0x70) + 0x14);
     *(int *)(moby_vars + 0x1fc) = *(int *)(*(char **)(*(char **)(moby + 0x24) + 0x70) + 0x14);
     *(int *)(moby_vars + 0x200) = *(int *)(*(char **)(*(char **)(moby + 0x24) + 0x70) + 0x14);
-    FUN_L04_00292370(moby, p);
+    FUN_L04_00292370(moby, movement_data);
     frameScale = frame_time_sq;
     otherScale = frame_time;
     angleFull = frameScale * 6.2831855f;
@@ -606,7 +606,7 @@ void FUN_L04_002d1418(void *moby) {
     *(unsigned char *)(moby_vars + 0x303) = 13;
     *(unsigned char *)(moby_vars + 0x302) = 15;
     *(float *)(moby_vars + 0x240) = 0.5f;
-    FUN_L04_002923b8(moby, p);
+    FUN_L04_002923b8(moby, movement_data);
 }
 #include "sda.h"
 
