@@ -1310,7 +1310,7 @@ float FUN_L18_002fc4e0(char *self, float *src) {
     float v[4];
     float b[4];
     float z = 0.0f;
-    float h = 0.5f;
+    float movement_clearance = 0.5f;
     char *moby_vars = *(char **)(self + 0x78);
     float dist;
     *(u128 *)&target_position = *(u128 *)src;
@@ -1328,8 +1328,8 @@ float FUN_L18_002fc4e0(char *self, float *src) {
     v[0] = fast_cos(*(float *)(self + 0x48)) * *(float *)(moby_vars + 0x1F0);
     v[1] = fast_sin(*(float *)(self + 0x48)) * *(float *)(moby_vars + 0x1F0);
     v[2] = -(frame_time + frame_time);
-    FUN_L00_00258830((int)self, (int)v, h, h, z, 0);
-    FUN_L00_00261d78(h, *(void **)(moby_vars + 0x1E0), self + 0x10, self + 0x10);
+    FUN_L00_00258830((int)self, (int)v, movement_clearance, movement_clearance, z, 0);
+    FUN_L00_00261d78(movement_clearance, *(void **)(moby_vars + 0x1E0), self + 0x10, self + 0x10);
     return dist;
 }
 #include "qcopy.h"
