@@ -30,7 +30,7 @@ void FUN_L00_002500b8(char *object) {
     char *e2;
     char *e3;
     char *g;
-    unsigned char *h;
+    unsigned char *entry_update_destination;
 
     for (i = 0; i < D_L00_00160014; i++) {
         subtract_vector_xyz(vec, object + 0x10, D_L00_00160040 + i * 0x30);
@@ -62,10 +62,10 @@ void FUN_L00_002500b8(char *object) {
     }
     e3 = (char *)(off + (int)D_L00_00160040);
     if (*(int *)(e3 + 0x28) >= 0) {
-        h = D_0014161B + 0x100B5;
-        if (*(short *)(h + 0x3E) == 0) {
-            if ((*(int *)(h + 0x20) & 0xFFFFFF) == 0xFF0000) {
-                *(unsigned short *)(h + 0x38) = *(int *)(e3 + 0x28);
+        entry_update_destination = D_0014161B + 0x100B5;
+        if (*(short *)(entry_update_destination + 0x3E) == 0) {
+            if ((*(int *)(entry_update_destination + 0x20) & 0xFFFFFF) == 0xFF0000) {
+                *(unsigned short *)(entry_update_destination + 0x38) = *(int *)(e3 + 0x28);
             }
         }
     }
