@@ -2676,7 +2676,7 @@ extern void blend_moby_animation_w7(void *m, int a, int b, int c) __asm__("FUN_0
 extern float D_0015ED70_lui __asm__("D_0015ED70");
 
 void sandmouse_house_update(unsigned char *m) __asm__("FUN_L01_002f2b68");
-void sandmouse_house_update(unsigned char *m) {
+void sandmouse_house_update(unsigned char *moby) {
     enum {
         SANDMOUSE_HOUSE_INITIALIZE = 0,
         SANDMOUSE_HOUSE_WAIT_FOR_INITIAL_COMMAND = 1,
@@ -2687,96 +2687,96 @@ void sandmouse_house_update(unsigned char *m) {
         SANDMOUSE_HOUSE_WAIT_FOR_POST_FOLLOWUP_COMMAND_ANIMATION_END = 6,
         SANDMOUSE_HOUSE_RESTORE_INITIAL_ANIMATION = 7
     };
-    char *d;
-    if (m == 0)
+    char *house_vars;
+    if (moby == 0)
         return;
-    d = *(char **)(m + 0x78);
-    if (d != 0) {
-        if (m[0x20] != 0) {
+    house_vars = *(char **)(moby + 0x78);
+    if (house_vars != 0) {
+        if (moby[0x20] != 0) {
             if (D_0013D4C5 != 0) {
                 if (hero.items[2].item_id == 5) {
                     float s = D_0015ED70_lui;
-                    *(float *)(m + 0x48) =
-                        FUN_L00_00258110_w7((float *)(d + 4), *(float *)(m + 0x48), *(float *)d,
+                    *(float *)(moby + 0x48) =
+                        FUN_L00_00258110_w7((float *)(house_vars + 4), *(float *)(moby + 0x48), *(float *)house_vars,
                                             s * 6.2831855f, s * 5.7595863f, 0.0f);
                 }
             }
         }
     }
-    switch (m[0x20]) {
+    switch (moby[0x20]) {
     case SANDMOUSE_HOUSE_INITIALIZE:
-        if (m[0x53] != 0) {
-            blend_moby_animation_w7(m, 0, 0, FUN_001f96f8_w7(0));
+        if (moby[0x53] != 0) {
+            blend_moby_animation_w7(moby, 0, 0, FUN_001f96f8_w7(0));
         }
-        m[0x20] = 1;
-        *(float *)d = *(float *)(m + 0x48);
+        moby[0x20] = 1;
+        *(float *)house_vars = *(float *)(moby + 0x48);
         break;
     case SANDMOUSE_HOUSE_WAIT_FOR_INITIAL_COMMAND:
-        if ((unsigned char)(m[0xBC] - 3) < 3) {
-            if (m[0x53] != 1) {
-                blend_moby_animation_w7(m, 1, 0, FUN_001f96f8_w7(10));
+        if ((unsigned char)(moby[0xBC] - 3) < 3) {
+            if (moby[0x53] != 1) {
+                blend_moby_animation_w7(moby, 1, 0, FUN_001f96f8_w7(10));
             }
-            m[0x20] = 2;
+            moby[0x20] = 2;
         }
         break;
     case SANDMOUSE_HOUSE_WAIT_FOR_INITIAL_COMMAND_ANIMATION_END:
-        if (m[0x70] & 2) {
-            if (m[0x53] != 2) {
-                blend_moby_animation_w7(m, 2, 0, FUN_001f96f8_w7(3));
+        if (moby[0x70] & 2) {
+            if (moby[0x53] != 2) {
+                blend_moby_animation_w7(moby, 2, 0, FUN_001f96f8_w7(3));
             }
-            m[0x20] = 3;
+            moby[0x20] = 3;
         }
         break;
     case SANDMOUSE_HOUSE_WAIT_FOR_FOLLOWUP_COMMAND:
-        if ((unsigned char)(m[0xBC] - 4) < 2) {
-            if (m[0x53] != 3) {
-                blend_moby_animation_w7(m, 3, 0, FUN_001f96f8_w7(3));
+        if ((unsigned char)(moby[0xBC] - 4) < 2) {
+            if (moby[0x53] != 3) {
+                blend_moby_animation_w7(moby, 3, 0, FUN_001f96f8_w7(3));
             }
-            m[0x20] = 4;
-        } else if (m[0xBC] == 7 || m[0xBC] == 1) {
-            if (m[0x53] != 6) {
-                blend_moby_animation_w7(m, 6, 0, FUN_001f96f8_w7(3));
+            moby[0x20] = 4;
+        } else if (moby[0xBC] == 7 || moby[0xBC] == 1) {
+            if (moby[0x53] != 6) {
+                blend_moby_animation_w7(moby, 6, 0, FUN_001f96f8_w7(3));
             }
-            m[0x20] = 7;
+            moby[0x20] = 7;
         }
         break;
     case SANDMOUSE_HOUSE_WAIT_FOR_FOLLOWUP_COMMAND_ANIMATION_END:
-        if (m[0x70] & 2) {
-            if (m[0x53] != 4) {
-                blend_moby_animation_w7(m, 4, 0, FUN_001f96f8_w7(3));
+        if (moby[0x70] & 2) {
+            if (moby[0x53] != 4) {
+                blend_moby_animation_w7(moby, 4, 0, FUN_001f96f8_w7(3));
             }
-            m[0x20] = 5;
+            moby[0x20] = 5;
         }
         break;
     case SANDMOUSE_HOUSE_WAIT_FOR_POST_FOLLOWUP_COMMAND:
-        if (m[0xBC] == 3 || m[0xBC] == 6 || m[0xBC] == 7 || m[0xBC] == 1) {
-            if (m[0x53] != 5) {
-                blend_moby_animation_w7(m, 5, 0, FUN_001f96f8_w7(3));
+        if (moby[0xBC] == 3 || moby[0xBC] == 6 || moby[0xBC] == 7 || moby[0xBC] == 1) {
+            if (moby[0x53] != 5) {
+                blend_moby_animation_w7(moby, 5, 0, FUN_001f96f8_w7(3));
             }
-            m[0x20] = 6;
+            moby[0x20] = 6;
         }
         break;
     case SANDMOUSE_HOUSE_WAIT_FOR_POST_FOLLOWUP_COMMAND_ANIMATION_END:
-        if (m[0x70] & 2) {
-            if (m[0xBC] == 7 || m[0xBC] == 1) {
-                if (m[0x53] != 6) {
-                    blend_moby_animation_w7(m, 6, 0, FUN_001f96f8_w7(3));
+        if (moby[0x70] & 2) {
+            if (moby[0xBC] == 7 || moby[0xBC] == 1) {
+                if (moby[0x53] != 6) {
+                    blend_moby_animation_w7(moby, 6, 0, FUN_001f96f8_w7(3));
                 }
-                m[0x20] = 7;
+                moby[0x20] = 7;
             } else {
-                if (m[0x53] != 2) {
-                    blend_moby_animation_w7(m, 2, 0, FUN_001f96f8_w7(3));
+                if (moby[0x53] != 2) {
+                    blend_moby_animation_w7(moby, 2, 0, FUN_001f96f8_w7(3));
                 }
-                m[0x20] = 3;
+                moby[0x20] = 3;
             }
         }
         break;
     case SANDMOUSE_HOUSE_RESTORE_INITIAL_ANIMATION:
-        if (m[0x70] & 2) {
-            if (m[0x53] != 0) {
-                blend_moby_animation_w7(m, 0, 0, FUN_001f96f8_w7(3));
+        if (moby[0x70] & 2) {
+            if (moby[0x53] != 0) {
+                blend_moby_animation_w7(moby, 0, 0, FUN_001f96f8_w7(3));
             }
-            m[0x20] = 1;
+            moby[0x20] = 1;
         }
         break;
     case 8:
