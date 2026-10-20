@@ -215,8 +215,8 @@ extern void light_off_67e8(int) __asm__("FUN_L00_0023e838");
 extern float cos_67e8(float) __asm__("FUN_001f9dc8");
 extern float sin_67e8(float) __asm__("FUN_001f9de0");
 
-void FUN_L14_002d67e8(struct Moby *m) {
-    char *moby_data = (char *)m->pvars;
+void FUN_L14_002d67e8(struct Moby *racer_moby) {
+    char *moby_data = (char *)racer_moby->pvars;
     char *path = *(char **)(D_L14_0015F70C + *(int *)(moby_data + 0x60) * 32 + 0x10);
     V_67e8 near;
     V_67e8 v[4];
@@ -253,24 +253,24 @@ void FUN_L14_002d67e8(struct Moby *m) {
     z = *(float *)(moby_data + 0x68);
     FUN_L00_0025df68(path, &D_0013F3D0_67e8, &near.x, (int *)(moby_data + 0x64), (float *)(moby_data + 0x68), 0, 20.0f, 5.0f, z);
     track_67e8(path, &near, moby_data + 0x64, moby_data + 0x68, 0, -*(float *)(moby_data + 0x74));
-    spring_67e8(&m->pos.x, moby_data + 0x90, near.x, 0.01f, 0.2f, z);
-    spring_67e8(&m->pos.y, moby_data + 0x94, near.y, 0.01f, 0.2f, z);
-    spring_67e8(&m->pos.z, moby_data + 0x98, near.z, 0.01f, 0.2f, z);
+    spring_67e8(&racer_moby->pos.x, moby_data + 0x90, near.x, 0.01f, 0.2f, z);
+    spring_67e8(&racer_moby->pos.y, moby_data + 0x94, near.y, 0.01f, 0.2f, z);
+    spring_67e8(&racer_moby->pos.z, moby_data + 0x98, near.z, 0.01f, 0.2f, z);
     {
         int i = *(int *)(moby_data + 0x64);
         char *p0 = path + i * 16;
         char *p1 = path + (i + 5) * 16;
-        m->rot.z = atan2_67e8(*(float *)(p1 + 0x10) - *(float *)(p0 + 0x10), *(float *)(p1 + 0x14) - *(float *)(p0 + 0x14));
+        racer_moby->rot.z = atan2_67e8(*(float *)(p1 + 0x10) - *(float *)(p0 + 0x10), *(float *)(p1 + 0x14) - *(float *)(p0 + 0x14));
     }
-    if (m->command == 5 && timer_67e8(moby_data + 0x1C8) != 0) {
-        m->command = 1;
+    if (racer_moby->command == 5 && timer_67e8(moby_data + 0x1C8) != 0) {
+        racer_moby->command = 1;
     }
-    if (m->command == 1) {
+    if (racer_moby->command == 1) {
         *(int *)(moby_data + 0x1C0) = frames_67e8(D_L14_00161A3C);
         *(int *)(moby_data + 0x1C4) = 0;
-        m->command = 2;
-        joint_matrix_67e8(m, 4, v);
-        joint_matrix_67e8(m, 5, ma);
+        racer_moby->command = 2;
+        joint_matrix_67e8(racer_moby, 4, v);
+        joint_matrix_67e8(racer_moby, 5, ma);
         normalize_67e8(&ma[0], &ma[0], 1.0f);
         normalize_67e8(&ma[1], &ma[1], 1.0f);
         normalize_67e8(&ma[2], &ma[2], 1.0f);
@@ -280,22 +280,22 @@ void FUN_L14_002d67e8(struct Moby *m) {
         matmul_67e8(mc, mb, v);
         to_quat_67e8(moby_data + 0x1D0, mc);
     }
-    yaw = m->rot.z;
-    if ((unsigned char)(m->command - 2) < 3) {
+    yaw = racer_moby->rot.z;
+    if ((unsigned char)(racer_moby->command - 2) < 3) {
         float turn;
-        float t;
+        float aim_timer_fraction;
         float k;
-        joint_matrix_67e8(m, 0, moby_data + 0xA0);
+        joint_matrix_67e8(racer_moby, 0, moby_data + 0xA0);
         blend = 1.0f;
-        t = itof_67e8(*(int *)(moby_data + 0x1C0)) / itof_67e8(frames_67e8(D_L14_00161A3C));
+        aim_timer_fraction = itof_67e8(*(int *)(moby_data + 0x1C0)) / itof_67e8(frames_67e8(D_L14_00161A3C));
         k = D_L14_00161A40;
         ti = ((RacerSeg_67e8 *)moby_data)->seg;
         tf = ((RacerSeg_67e8 *)moby_data)->frac;
-        track_67e8(path, &v[0], &ti, &tf, 0, k + (1.0f - k) * t);
+        track_67e8(path, &v[0], &ti, &tf, 0, k + (1.0f - k) * aim_timer_fraction);
         qcopy(moby_data + 0x1E0, &v[0]);
-        sub_67e8(&v[1], &v[0], &m->pos);
+        sub_67e8(&v[1], &v[0], &racer_moby->pos);
         yaw = atan2_67e8(v[1].x, v[1].y);
-        turn = sub_rot_67e8(yaw, m->rot.z);
+        turn = sub_rot_67e8(yaw, racer_moby->rot.z);
         if (turn > 1.2217305f) {
             turn = 1.2217305f;
         } else if (turn < -1.2217305f) {
@@ -303,24 +303,24 @@ void FUN_L14_002d67e8(struct Moby *m) {
         }
         (*(int *)(moby_data + 0x1C4))++;
         if (frames_67e8(30) < *(int *)(moby_data + 0x1C4)) {
-            if (m->command == 4) {
-                m->command = 0;
+            if (racer_moby->command == 4) {
+                racer_moby->command = 0;
             } else {
                 unsigned char s = 3;
-                FUN_L00_002e1f28(m, s, 1);
-                m->command = s;
+                FUN_L00_002e1f28(racer_moby, s, 1);
+                racer_moby->command = s;
             }
             *(int *)(moby_data + 0x1C4) = frames_67e8(30);
         }
-        if (m->command == 2 || m->command == 4) {
+        if (racer_moby->command == 2 || racer_moby->command == 4) {
             blend = itof_67e8(*(int *)(moby_data + 0x1C4)) / itof_67e8(frames_67e8(30));
-            if (m->command == 4) {
+            if (racer_moby->command == 4) {
                 blend = 1.0f - blend;
             }
             turn = (turn - 0.0f) * blend + 0.0f;
         }
         FUN_L00_001fff28(moby_data + 0x150, 2, turn);
-        joint_pos_67e8(m, 4, &v[2]);
+        joint_pos_67e8(racer_moby, 4, &v[2]);
         *(u128_67e8 *)&v[3] = 0;
         v[3].z = 1.0f;
         v[3].w = 1.0f;
@@ -330,7 +330,7 @@ void FUN_L14_002d67e8(struct Moby *m) {
         cross_67e8(&ma[0], &ma[2], &ma[1]);
         ma[3].x = ma[3].y = ma[3].z = 0.0f;
         ma[3].w = 1.0f;
-        joint_matrix_67e8(m, 5, mb);
+        joint_matrix_67e8(racer_moby, 5, mb);
         normalize_67e8(&mb[0], &mb[0], 1.0f);
         normalize_67e8(&mb[1], &mb[1], 1.0f);
         normalize_67e8(&mb[2], &mb[2], 1.0f);
@@ -340,9 +340,9 @@ void FUN_L14_002d67e8(struct Moby *m) {
         matmul_67e8(md, mc, ma);
         *(u128_67e8 *)&scl = 0;
         scl.w = 1.0f;
-        scl.y = 512.0f / m->scale;
+        scl.y = 512.0f / racer_moby->scale;
         to_quat_67e8(&rot, md);
-        if (m->command == 2 || m->command == 4) {
+        if (racer_moby->command == 2 || racer_moby->command == 4) {
             slerp_67e8(moby_data + 0x190, moby_data + 0x1D0, &rot, blend);
         } else {
             qcopy(moby_data + 0x190, &rot);
@@ -357,32 +357,32 @@ void FUN_L14_002d67e8(struct Moby *m) {
         qcopy(moby_data + 0x1A0, &one);
         qcopy(moby_data + 0x1B0, &scl);
         if (timer_67e8(moby_data + 0x1C0) != 0) {
-            m->command = 4;
+            racer_moby->command = 4;
             *(int *)(moby_data + 0x1C4) = 0;
         }
-        if (m->command == 3) {
-            if (FUN_L00_002e2190(m, moby_data + 0xA0, moby_data + 0x1E0) == 0) {
-                FUN_L00_002e1f28(m, 3, 1);
+        if (racer_moby->command == 3) {
+            if (FUN_L00_002e2190(racer_moby, moby_data + 0xA0, moby_data + 0x1E0) == 0) {
+                FUN_L00_002e1f28(racer_moby, 3, 1);
             }
             ray.flags = 0x10001;
-            ray.self = m;
+            ray.self = racer_moby;
             ray.i20 = 1;
             ray.f1C = 1.0f;
-            ray.dir.x = cos_67e8(m->rot.z);
-            ray.dir.y = sin_67e8(m->rot.z);
+            ray.dir.x = cos_67e8(racer_moby->rot.z);
+            ray.dir.y = sin_67e8(racer_moby->rot.z);
             ray.dir.z = 1.0f;
             ray.dir.w = 5627.925f;
             ray.b19 = 1;
-            ray.oclass = m->oclass;
+            ray.oclass = racer_moby->oclass;
             ray.b18 = 0;
-            ray_67e8(moby_data + 0xD0, moby_data + 0x1E0, 9, m, &ray);
-        } else if (m->command == 2 || m->command == 4) {
+            ray_67e8(moby_data + 0xD0, moby_data + 0x1E0, 9, racer_moby, &ray);
+        } else if (racer_moby->command == 2 || racer_moby->command == 4) {
             char *p;
             float r;
             char *muzzle = moby_data + 0xD0;
             scale_67e8(&ray, moby_data + 0xA0, D_L14_00161A44);
             add_67e8(&ray, &ray, muzzle);
-            p = FUN_L00_00274948_c(&ray, D_L14_0015F580_67e8, 0x7F, m);
+            p = FUN_L00_00274948_c(&ray, D_L14_0015F580_67e8, 0x7F, racer_moby);
             if (p != 0) {
                 char *q = p + 0x20;
                 int lifetime_frames;
@@ -416,7 +416,7 @@ void FUN_L14_002d67e8(struct Moby *m) {
         light_off_67e8(*(int *)(moby_data + 0xF0));
         *(int *)(moby_data + 0xF0) = -1;
     }
-    sub_67e8(&v[0], &D_0013F3D0_67e8, &m->pos);
+    sub_67e8(&v[0], &D_0013F3D0_67e8, &racer_moby->pos);
     target_yaw_offset = sub_rot_67e8(atan2_67e8(v[0].x, v[0].y), yaw);
     if (target_yaw_offset > 1.2217305f) {
         target_yaw_offset = 1.2217305f;
