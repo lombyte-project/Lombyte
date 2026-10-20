@@ -43,42 +43,42 @@ extern s16 log2dim(s32) __asm__("FUN_001f97a0");
  * the shell has no texture and uses vertex colours; only shell 0 does that. */
 void relocate_sky_definition(struct SpriteFile *f) __asm__("FUN_002028e0");
 
-void relocate_sky_definition(struct SpriteFile *f) {
+void relocate_sky_definition(struct SpriteFile *sky_definition) {
     s32 *src;
     s32 i;
     s32 k;
     s32 j;
     s32 a;
     s32 b;
-    s32 c;
-    s32 d;
+    s32 texture_width;
+    s32 texture_height;
     struct Group *g;
 
-    D_0016045C = f;
-    f->loaded = 1;
-    f->sprites += (s32)f;
-    f->unk14 += (s32)f;
-    f->unk18 += (s32)f;
-    if (f->unk1C != 0) {
-        f->unk1C += (s32)f;
+    D_0016045C = sky_definition;
+    sky_definition->loaded = 1;
+    sky_definition->sprites += (s32)sky_definition;
+    sky_definition->unk14 += (s32)sky_definition;
+    sky_definition->unk18 += (s32)sky_definition;
+    if (sky_definition->unk1C != 0) {
+        sky_definition->unk1C += (s32)sky_definition;
     }
     src = (s32 *)D_0016045C->sprites;
     for (i = 0; i < D_0016045C->nsprites; i++) {
         a = *src++;
         b = *src++;
-        c = *src++;
-        d = *src++;
+        texture_width = *src++;
+        texture_height = *src++;
         ((struct Sprite *)D_0016045C->sprites)[i].y = a >> 4;
         ((struct Sprite *)D_0016045C->sprites)[i].x = b >> 4;
-        ((struct Sprite *)D_0016045C->sprites)[i].w = log2dim(c);
-        ((struct Sprite *)D_0016045C->sprites)[i].h = log2dim(d);
+        ((struct Sprite *)D_0016045C->sprites)[i].w = log2dim(texture_width);
+        ((struct Sprite *)D_0016045C->sprites)[i].h = log2dim(texture_height);
         ((struct Sprite *)D_0016045C->sprites)[i].unk0 = 0;
     }
     for (k = 0; k < D_0016045C->ngroups; k++) {
-        D_0016045C->groups[k] += (s32)f;
+        D_0016045C->groups[k] += (s32)sky_definition;
         g = (struct Group *)D_0016045C->groups[k];
         for (j = 0; j < g->count; j++) {
-            ((struct Group *)((u8 *)g + j * 0x20))->items[0] += (s32)f;
+            ((struct Group *)((u8 *)g + j * 0x20))->items[0] += (s32)sky_definition;
         }
     }
 }
