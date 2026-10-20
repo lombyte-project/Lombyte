@@ -1083,14 +1083,14 @@ void gadgebot_update(unsigned char *moby) {
         break;
     }
     case GADGEBOT_FACE_TARGET: {
-        float r, k, b, d;
+        float r, k, b, max_turn_step;
         moby_transform_ptr = moby + 0x48;
         r = fast_arc_tan(*(float *)(moby_vars + 0x180) - *(float *)(moby + 0x10),
                          *(float *)(moby_vars + 0x184) - *(float *)(moby + 0x14));
         k = 6.2831855f;
         b = frame_time_sq * k;
-        d = frame_time * k;
-        approach_angle((float *)moby_transform_ptr, (float *)(moby_vars + 0x1E8), r, b, b, d);
+        max_turn_step = frame_time * k;
+        approach_angle((float *)moby_transform_ptr, (float *)(moby_vars + 0x1E8), r, b, b, max_turn_step);
         if (is_value_within_interpolated_window((char *)moby, 14.0f))
             FUN_L00_002599e8(moby, 0.5f, 1.0f, 1.0f, 1, 1, 0, 1, 0);
         if (moby[0x70] & 2) {
