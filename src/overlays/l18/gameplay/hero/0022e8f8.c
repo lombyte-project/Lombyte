@@ -166,6 +166,7 @@ void FUN_L18_0022e8f8(void) {
         HERO_STATE_SWIM_IDLE = 52,
         HERO_STATE_GRIND_COLLISION_RECOVERY = 66,
         HERO_STATE_APPROACH_TARGET = 101,
+        HERO_STATE_TARGET_APPROACH_ANIMATION_WAIT = 102,
         HERO_STATE_TARGET_ARRIVAL = 103,
         HERO_STATE_DROWNING_DEATH = 106,
         HERO_STATE_DEATH_FALL = 119
@@ -944,7 +945,7 @@ void FUN_L18_0022e8f8(void) {
                     }
                     FUN_L00_00228c18();
                     break;
-                case 102:
+                case HERO_STATE_TARGET_APPROACH_ANIMATION_WAIT:
                     if (hero.unkA98 & 2) {
                         hero_set_state(0x65, 1);
                     }
