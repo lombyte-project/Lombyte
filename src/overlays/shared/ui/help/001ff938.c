@@ -345,10 +345,10 @@ extern void FUN_00125180_20a328(void *, void *) __asm__("FUN_00125180");
 extern s32 D_L15_0017445C __attribute__((section(".data")));
 extern char D_0013F3D0[] __attribute__((section(".data")));
 void FUN_L15_0020a328(int force) {
-    V_20a328 a, d1, b, d2;
+    V_20a328 offset_position, d1, b, d2;
     char *src;
     P_20a328 *g;
-    f32 off, k, c, ang, t;
+    f32 off, k, secondary_offset_scale, ang, negative_xy_dot_product;
     int r;
 
     if (P.h308 != 0)
@@ -365,18 +365,18 @@ void FUN_L15_0020a328(int force) {
         k = 5.0f;
     }
     src = D_0013F3D0;
-    qcopy(&a, src);
-    a.f[2] += off;
+    qcopy(&offset_position, src);
+    offset_position.f[2] += off;
     qcopy(&b, src);
     b.f[2] += off * 0.3f;
     if (force || FUN_001f9b20_20a328(src + 0x60) < 0.01f) {
         g = (P_20a328 *)(src - 0x80);
-        c = 1.4f;
+        secondary_offset_scale = 1.4f;
         d1.f[0] = FUN_001f9dc8_20a328(g->f98) * k;
         d1.f[1] = FUN_001f9de0_20a328(g->f98) * k;
         *(s32 *)&d1.f[2] = 0;
-        d2.f[0] = FUN_001f9dc8_20a328(g->f98) * k * c;
-        d2.f[1] = FUN_001f9de0_20a328(g->f98) * k * c;
+        d2.f[0] = FUN_001f9dc8_20a328(g->f98) * k * secondary_offset_scale;
+        d2.f[1] = FUN_001f9de0_20a328(g->f98) * k * secondary_offset_scale;
         *(s32 *)&d2.f[2] = 0;
     } else {
         qcopy(&d1, src + 0x60);
@@ -385,21 +385,21 @@ void FUN_L15_0020a328(int force) {
         qcopy(&d2, &d1);
         FUN_001f9a68_20a328(&d2, &d2, 1.4f);
     }
-    FUN_001f9a10_20a328(&d1, &d1, &a);
+    FUN_001f9a10_20a328(&d1, &d1, &offset_position);
     FUN_001f9a10_20a328(&d2, &d2, &b);
     r = -1;
     if (FUN_001efa68_20a328(&b, &d2, 4, P.p2080, 0) && D_L15_0017445C > 0)
         r = FUN_001f0b58_20a328();
     ang = 0.0f;
-    if (FUN_001efa68_20a328(&a, &d1, 4, P.p2080, 0) && X.i1C > 0)
+    if (FUN_001efa68_20a328(&offset_position, &d1, 4, P.p2080, 0) && X.i1C > 0)
         ang = FUN_001f9e90_20a328(X.v40.f[2], FUN_001f9b20_20a328(&X.v40));
     if (0.8726646304130554f <= ang || r == 8 || r == 12) {
         P.i240 = X.i18;
         *(s32 *)&X.v40.f[2] = 0;
         FUN_00125180_20a328(&X.v40, &X.v40);
-        t = -P.vE0.f[0] * X.v40.f[0] - P.vE0.f[1] * X.v40.f[1];
-        if (0.0f < t) {
-            FUN_001f9a68_20a328(&X.v40, &X.v40, t);
+        negative_xy_dot_product = -P.vE0.f[0] * X.v40.f[0] - P.vE0.f[1] * X.v40.f[1];
+        if (0.0f < negative_xy_dot_product) {
+            FUN_001f9a68_20a328(&X.v40, &X.v40, negative_xy_dot_product);
             FUN_001f9a10_20a328(&P.vE0, &P.vE0, &X.v40);
         }
     }
