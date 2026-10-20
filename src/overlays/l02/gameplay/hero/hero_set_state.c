@@ -96,7 +96,8 @@ int hero_set_state(int a, int b) {
         HERO_STATE_DYING_ALT = 0x80
     };
     enum {
-        HERO_STATE_ITEM_RELEASE_FALL = 0x2D
+        HERO_STATE_ITEM_RELEASE_FALL = 0x2D,
+        HERO_STATE_HURT_ALT = 0x42
     };
     enum {
         HERO_STATE_ITEM_ATTACK = 0x23
@@ -1429,7 +1430,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x42: {
+    case HERO_STATE_HURT_ALT: {
         struct Hero *p = &hero;
         p->state.control_mode = 0xF;
         p->unk2284 = 0;
