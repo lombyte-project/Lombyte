@@ -288,7 +288,7 @@ void FUN_L17_002a95b8(struct Moby *moby) {
     char m1[16];
     char m2[16];
     char m3[16];
-    char m0[16];
+    char quad_vertex_scratch[16];
     int i;
     func_001F9BF0_a95b8(m3, moby_vars + 0x10, moby_vars + 0x20);
     func_001F9BF0_a95b8(m1, moby_vars + 0x10, D_L17_001676C0);
@@ -309,14 +309,14 @@ void FUN_L17_002a95b8(struct Moby *moby) {
         s.f[i].a = D_L17_001E6620_a95b8[i].a;
         s.f[i].b = D_L17_001E6620_a95b8[i].b;
     }
-    func_001F9BF0_a95b8(m0, moby_vars + 0x10, m1);
-    *(OvlQuad *)(s.pad + 0) = *(OvlQuad *)m0;
-    func_001F9BD8_a95b8(m0, moby_vars + 0x10, m1);
-    *(OvlQuad *)(s.pad + 0x10) = *(OvlQuad *)m0;
-    func_001F9BF0_a95b8(m0, moby_vars + 0x20, m2);
-    *(OvlQuad *)(s.pad + 0x20) = *(OvlQuad *)m0;
-    func_001F9BD8_a95b8(m0, moby_vars + 0x20, m2);
-    *(OvlQuad *)(s.pad + 0x30) = *(OvlQuad *)m0;
+    func_001F9BF0_a95b8(quad_vertex_scratch, moby_vars + 0x10, m1);
+    *(OvlQuad *)(s.pad + 0) = *(OvlQuad *)quad_vertex_scratch;
+    func_001F9BD8_a95b8(quad_vertex_scratch, moby_vars + 0x10, m1);
+    *(OvlQuad *)(s.pad + 0x10) = *(OvlQuad *)quad_vertex_scratch;
+    func_001F9BF0_a95b8(quad_vertex_scratch, moby_vars + 0x20, m2);
+    *(OvlQuad *)(s.pad + 0x20) = *(OvlQuad *)quad_vertex_scratch;
+    func_001F9BD8_a95b8(quad_vertex_scratch, moby_vars + 0x20, m2);
+    *(OvlQuad *)(s.pad + 0x30) = *(OvlQuad *)quad_vertex_scratch;
     func_L00_001FD1D8_a95b8(&s, 0, 0);
 }
 
