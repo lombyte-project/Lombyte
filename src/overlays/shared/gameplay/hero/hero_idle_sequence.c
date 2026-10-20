@@ -2335,25 +2335,25 @@ int FUN_00213260_209848(int) __asm__("FUN_00213260");
 void FUN_L00_00209848(int n, int lim) {
     struct Hero *P = &hero;
     if (lim < ++P->unk906) {
-        V_209848 t, v;
-        float a, r;
+        V_209848 spawn_position, v;
+        float planar_angle, r;
         int k;
-        t.x = P->motion.pos.f[0] + FUN_002132a8_209848(-0.15f, 0.15f) + P->motion.displacement.f[0] * 8.0f;
+        spawn_position.x = P->motion.pos.f[0] + FUN_002132a8_209848(-0.15f, 0.15f) + P->motion.displacement.f[0] * 8.0f;
         {
             float y = P->motion.pos.f[1] + FUN_002132a8_209848(-0.15f, 0.15f) + P->motion.displacement.f[1] * 8.0f;
-            t.z = P->water_surface_z + 0.1f;
-            t.y = y;
+            spawn_position.z = P->water_surface_z + 0.1f;
+            spawn_position.y = y;
         }
-        a = FUN_00213308_209848();
+        planar_angle = FUN_00213308_209848();
         r = FUN_002132a8_209848(D_0015ED6C * 0.0f, D_0015ED6C * 3.0f);
-        v.x = fast_cos(a) * r + P->motion.displacement.f[0] * 0.75f;
-        v.y = fast_sin(a) * r + P->motion.displacement.f[1] * 0.75f;
+        v.x = fast_cos(planar_angle) * r + P->motion.displacement.f[0] * 0.75f;
+        v.y = fast_sin(planar_angle) * r + P->motion.displacement.f[1] * 0.75f;
         v.z = FUN_002132a8_209848(D_0015ED6C * 3.0f, D_0015ED6C * 6.5f);
         k = random_int_between(0x5A, 0x78);
         if (P->unk22A4 < 0.25f)
-            FUN_L00_0026f548_209848(&t, &v, 3, k);
+            FUN_L00_0026f548_209848(&spawn_position, &v, 3, k);
         else
-            FUN_L00_0026f548_209848(&t, &v, 1, k);
+            FUN_L00_0026f548_209848(&spawn_position, &v, 1, k);
         {
             short h = FUN_00213260_209848(n);
             struct Hero *Q = &hero;
