@@ -1333,32 +1333,32 @@ void FUN_L05_00254358(float *out, float *rot) {
     distance = 9999999.0f;
     best = 0;
     for (i = 0; i < *(int *)path; i += 2) {
-            char *h = (char *)((char *)((char *)&hero));
-            char *p = path + i * 16;
+            char *hero_bytes = (char *)((char *)((char *)&hero));
+            char *candidate_path_record = path + i * 16;
             float limit = 4.0f;
-            float angle = fast_arc_tan_c(*(float *)(p + 0x10) - *(float *)(h + 0x80), *(float *)(p + 0x14) - *(float *)(h + 0x84));
+            float angle = fast_arc_tan_c(*(float *)(candidate_path_record + 0x10) - *(float *)(hero_bytes + 0x80), *(float *)(candidate_path_record + 0x14) - *(float *)(hero_bytes + 0x84));
             int n2 = *(int *)path + 2;
             int next = (i + n2) % *(int *)path;
-            char *q = path + next * 16;
-            if (fast_difference_between_rotations(angle, fast_arc_tan_c(*(float *)(q + 0x10) - *(float *)(p + 0x10), *(float *)(q + 0x14) - *(float *)(p + 0x14))) > 1.5707964f) {
-                float d;
-                if (D_0015ED84_gp == 0x10 && *(char **)(h + 0x8B4) != 0) {
-                    char *verts = *(char **)(h + 0x8B4);
-                    char *first_height_sample_point = verts + *(short *)(h + 0x8C8) * 16;
-                    char *second_height_sample_point = verts + *(short *)(h + 0x898) * 16;
+            char *lookahead_path_record = path + next * 16;
+            if (fast_difference_between_rotations(angle, fast_arc_tan_c(*(float *)(lookahead_path_record + 0x10) - *(float *)(candidate_path_record + 0x10), *(float *)(lookahead_path_record + 0x14) - *(float *)(candidate_path_record + 0x14))) > 1.5707964f) {
+                float candidate_distance_xy;
+                if (D_0015ED84_gp == 0x10 && *(char **)(hero_bytes + 0x8B4) != 0) {
+                    char *verts = *(char **)(hero_bytes + 0x8B4);
+                    char *first_height_sample_point = verts + *(short *)(hero_bytes + 0x8C8) * 16;
+                    char *second_height_sample_point = verts + *(short *)(hero_bytes + 0x898) * 16;
                     float z1 = *(float *)(first_height_sample_point + 0x18);
                     float z2 = *(float *)(second_height_sample_point + 0x18);
                     if (z1 < z2) {
-                        if (absolute_float_c(z2 - *(float *)(p + 0x18)) > limit)
+                        if (absolute_float_c(z2 - *(float *)(candidate_path_record + 0x18)) > limit)
                             goto next_point;
                     } else {
-                        if (absolute_float_c(z1 - *(float *)(p + 0x18)) > limit)
+                        if (absolute_float_c(z1 - *(float *)(candidate_path_record + 0x18)) > limit)
                             goto next_point;
                     }
                 }
-                d = vector_distance_xy_alt(((char *)&D_0013F3D0), path + i * 16 + 0x10);
-                if (d < distance) {
-                    distance = d;
+                candidate_distance_xy = vector_distance_xy_alt(((char *)&D_0013F3D0), path + i * 16 + 0x10);
+                if (candidate_distance_xy < distance) {
+                    distance = candidate_distance_xy;
                     best = i;
                 }
             }
@@ -1370,9 +1370,9 @@ void FUN_L05_00254358(float *out, float *rot) {
     out[2] = probe_ground_height(tmp, 0, 0.5f);
     clear_u64_value(rot);
     {
-        float *a = (float *)(path + best * 16);
+        float *selected_path_record = (float *)(path + best * 16);
         float *b = (float *)(path + (best + 1) * 16);
-        rot[2] = fast_arc_tan_c(b[4] - a[4], b[5] - a[5]);
+        rot[2] = fast_arc_tan_c(b[4] - selected_path_record[4], b[5] - selected_path_record[5]);
     }
 }
 extern int D_0015ED84_lui __asm__("D_0015ED84") __attribute__((section(".sdata")));
