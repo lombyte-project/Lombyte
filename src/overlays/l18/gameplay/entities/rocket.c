@@ -55,18 +55,18 @@ extern short D_L18_0015FFD8_d __asm__("D_L18_0015FFD8");
  * the US level program (data still reached through the MACRO_ADDR form). */
 // Sets the data fields 0x30 and 0x24 of each listed moby whose class is 0x247.
 void FUN_L18_002d6d50(int idx) {
-    short *p = (short *)D_L18_001AC240_u[idx];
-    if (p != 0) {
+    short *moby_list_entry = (short *)D_L18_001AC240_u[idx];
+    if (moby_list_entry != 0) {
         char *base = *(char **)&D_L18_0015FFD8_d;
         do {
-            int off = (*p & 0x7FFF) << 8;
+            int off = (*moby_list_entry & 0x7FFF) << 8;
             char *moby = (char *)off + (int)base;
             if (*(short *)(moby + 0xA6) == 0x247) {
                 char *data = *(char **)(moby + 0x78);
                 *(int *)(data + 0x30) = 1;
                 *(float *)(data + 0x24) = 1.5f;
             }
-        } while (*p++ >= 0);
+        } while (*moby_list_entry++ >= 0);
     }
 }
 
