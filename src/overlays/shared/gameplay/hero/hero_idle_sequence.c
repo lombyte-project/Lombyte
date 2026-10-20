@@ -990,68 +990,68 @@ extern void FUN_L00_00263d40(int, int);
 
 void FUN_L00_00206e00(void) {
     char *g;
-    int s;
+    int input_token;
     int i;
     if (D_0015EEA0 == 0 && alternate_animation_sequence == 0) return;
     g = (char *)&hero;
-    s = 0;
+    input_token = 0;
     if (*(int *)(g + 0x198) == scale_game_frames_c2(0xF)) {
         if (*(int *)(g + 0x208C) == 4) {
             int b = *(int *)(g + 0x2084);
             if (b == 0xB) {
                 int c = *(int *)(g + 0x450);
                 if (c == 0) {
-                    s = 1;
-                    if (D_0015EDB4[0]) s = 2;
+                    input_token = 1;
+                    if (D_0015EDB4[0]) input_token = 2;
                 } else if (c == 1) {
-                    s = 2;
-                    if (D_0015EDB4[0]) s = 1;
+                    input_token = 2;
+                    if (D_0015EDB4[0]) input_token = 1;
                 } else if (c == 3) {
-                    s = 3;
+                    input_token = 3;
                 }
             } else if (b == 0x11) {
-                s = 9;
+                input_token = 9;
             } else if (b == 0xA) {
-                s = 0xA;
+                input_token = 0xA;
             } else if (b == 0xE) {
-                s = 5;
+                input_token = 5;
             }
         } else if (*(int *)(g + 0x208C) == 6) {
             int b = *(int *)(g + 0x2084);
             if (b == 0x14) {
-                s = 6;
+                input_token = 6;
             } else if (b == 0x13) {
-                s = *(int *)(g + 0xA60) + 0xC;
+                input_token = *(int *)(g + 0xA60) + 0xC;
             } else if (b == 0x15) {
-                s = 4;
+                input_token = 4;
             }
         } else if (*(int *)(g + 0x2084) == 0x22) {
-            s = 0xB;
+            input_token = 0xB;
         }
     } else if (*(int *)(g + 0x198) == scale_game_frames_c2(0x3C)) {
         if (*(int *)(g + 0x2084) == 4) {
-            s = 7;
+            input_token = 7;
         } else if (*(int *)(g + 0x2084) == 8) {
-            s = 8;
+            input_token = 8;
         }
     }
-    if (s == 0) return;
+    if (input_token == 0) return;
     {
-    char *q = (char *)&hero;
-    unsigned char *b0 = (unsigned char *)q + 0x21C4;
-    b0[*(int *)(q + 0x21D4)] = s;
-    *(int *)(q + 0x21D4) += 1;
+    char *history_owner = (char *)&hero;
+    unsigned char *b0 = (unsigned char *)history_owner + 0x21C4;
+    b0[*(int *)(history_owner + 0x21D4)] = input_token;
+    *(int *)(history_owner + 0x21D4) += 1;
     for (i = 0; i < 12; i++) {
         char *g2 = (char *)&hero;
         unsigned char *b = (unsigned char *)g2 + 0x21C4;
-        int n = 0;
+        int sequence_length = 0;
         int j;
         int k;
-        while (D_L00_00179700[n + i * 16] != 0) n++;
-        if (n == 0) continue;
-        k = *(int *)(g2 + 0x21D4) - n;
+        while (D_L00_00179700[sequence_length + i * 16] != 0) sequence_length++;
+        if (sequence_length == 0) continue;
+        k = *(int *)(g2 + 0x21D4) - sequence_length;
         if (k < 0) k += 16;
-        for (j = 0; j < n; j++) {
+        for (j = 0; j < sequence_length; j++) {
             if (*(unsigned char *)(k + (int)b) != D_L00_00179700[j + i * 16]) {
                 j = -1;
                 break;
@@ -1059,11 +1059,11 @@ void FUN_L00_00206e00(void) {
             k++;
             if (k >= 16) k -= 16;
         }
-        if (j == n) {
-            int t = D_0015EDB0[i] == 0;
+        if (j == sequence_length) {
+            int toggled_selector = D_0015EDB0[i] == 0;
             D_0015EDC0[i] = 1;
-            D_0015EDB0[i] = t;
-            FUN_L00_00263d40(t ? 0x4FBE : 0x4FBF, -1);
+            D_0015EDB0[i] = toggled_selector;
+            FUN_L00_00263d40(toggled_selector ? 0x4FBE : 0x4FBF, -1);
             break;
         }
     }
