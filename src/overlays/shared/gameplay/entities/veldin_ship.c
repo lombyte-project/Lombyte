@@ -3510,11 +3510,11 @@ extern float D_L00_001E1200[][4];
 extern float D_L00_001E13E0[];
 extern float D_L00_001E13E4[];
 extern void vu1_add_g_sregister(s32, s64) __asm__("FUN_00233980");
-void FUN_L00_002d73e8(P *p) {
+void FUN_L00_002d73e8(P *spawner) {
     Vec4 position, up;
     Vec4 facing[4], flipped[4];
     struct GeometryQuad quad;
-    Q *q = p->q;
+    Q *q = spawner->q;
     T *volume;
     int mesh_alpha, mesh_color, end;
     Vec4 *transform;
@@ -3528,7 +3528,7 @@ void FUN_L00_002d73e8(P *p) {
     mesh_color = q->mesh_blue << 16 | q->mesh_green << 8 | q->mesh_red;
     volume = &D_L00_001600EC[q->idx];
     end = q->start + q->count + q->extra;
-    qcopy(&position, &p->pos);
+    qcopy(&position, &spawner->pos);
     up.q = 0;
     position.f[3] = 1.0f;
     up.f[2] = 1.0f;
@@ -3594,7 +3594,7 @@ void FUN_L00_002d73e8(P *p) {
                 alpha = truncate_float_to_s32((1.0f - convert_integer_to_float(D_L00_001D5740[i]) * D_L00_00161384) * D_L00_0016199C);
             } else if (D_L00_001D60A0[i]) {
                 if (fast_dec_timer_s16(&D_L00_001D60A0[i])) {
-                    FUN_L00_002d7bf0(p, i);
+                    FUN_L00_002d7bf0(spawner, i);
                     alpha = 0;
                     D_L00_001D2860[i] = random_integer_below(2);
                 } else {
