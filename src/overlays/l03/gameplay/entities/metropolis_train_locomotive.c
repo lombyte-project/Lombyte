@@ -1134,33 +1134,33 @@ extern float spring_turn(float *vel, float cur, float target, float k, float d, 
 extern float normalize_angle(float) __asm__("FUN_L00_0025e310");
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 
-void FUN_L03_0029cff0(struct Moby *m) {
-    char *d = (char *)m->pvars;
+void FUN_L03_0029cff0(struct Moby *moby) {
+    char *moby_data = (char *)moby->pvars;
     float v[4];
-    float ang = (float)*(short *)(d + 0x132) * DEG_TO_RAD;
-    float t, x, y, z, w;
-    fast_subtract_rotations(m->rot.z, ang);
-    x = fast_arc_tan(*(float *)(d + 0xD0) - *(float *)(d + 0xE0),
-                     *(float *)(d + 0xD4) - *(float *)(d + 0xE4));
+    float ang = (float)*(short *)(moby_data + 0x132) * DEG_TO_RAD;
+    float yaw_step, x, y, z, w;
+    fast_subtract_rotations(moby->rot.z, ang);
+    x = fast_arc_tan(*(float *)(moby_data + 0xD0) - *(float *)(moby_data + 0xE0),
+                     *(float *)(moby_data + 0xD4) - *(float *)(moby_data + 0xE4));
     x = fast_add_rotations(x, ang);
-    y = fast_subtract_rotations(x, m->rot.z);
-    t = y * (1.0f / *(float *)(d + 0x120) * frame_scale);
-    m->rot.z = fast_add_rotations(t, m->rot.z);
-    subtract_vector_xyz(v, d + 0xD0, d + 0xE0);
+    y = fast_subtract_rotations(x, moby->rot.z);
+    yaw_step = y * (1.0f / *(float *)(moby_data + 0x120) * frame_scale);
+    moby->rot.z = fast_add_rotations(yaw_step, moby->rot.z);
+    subtract_vector_xyz(v, moby_data + 0xD0, moby_data + 0xE0);
     z = fast_arc_tan(vector_length_xy(v), v[2]);
-    m->rot.y =
-        spring_turn((float *)(d + 0x11C), m->rot.y, -z,
-                         *(float *)(d + 0x118) * 10.0f * DEG_TO_RAD * frame_time_sq,
-                         *(float *)(d + 0x118) * 5.0f * DEG_TO_RAD * frame_time_sq,
-                         *(float *)(d + 0x118) * DEG_TO_RAD * frame_time);
-    w = normalize_angle(t * *(float *)(d + 0x124));
-    w = fast_subtract_rotations(m->rot.x, w);
-    w = normalize_angle(w * *(float *)(d + 0x128));
-    m->rot.x =
-        spring_turn((float *)(d + 0x114), m->rot.x, w,
-                         *(float *)(d + 0x110) * 10.0f * DEG_TO_RAD * frame_time_sq,
-                         *(float *)(d + 0x110) * 5.0f * DEG_TO_RAD * frame_time_sq,
-                         *(float *)(d + 0x110) * DEG_TO_RAD * frame_time);
+    moby->rot.y =
+        spring_turn((float *)(moby_data + 0x11C), moby->rot.y, -z,
+                         *(float *)(moby_data + 0x118) * 10.0f * DEG_TO_RAD * frame_time_sq,
+                         *(float *)(moby_data + 0x118) * 5.0f * DEG_TO_RAD * frame_time_sq,
+                         *(float *)(moby_data + 0x118) * DEG_TO_RAD * frame_time);
+    w = normalize_angle(yaw_step * *(float *)(moby_data + 0x124));
+    w = fast_subtract_rotations(moby->rot.x, w);
+    w = normalize_angle(w * *(float *)(moby_data + 0x128));
+    moby->rot.x =
+        spring_turn((float *)(moby_data + 0x114), moby->rot.x, w,
+                         *(float *)(moby_data + 0x110) * 10.0f * DEG_TO_RAD * frame_time_sq,
+                         *(float *)(moby_data + 0x110) * 5.0f * DEG_TO_RAD * frame_time_sq,
+                         *(float *)(moby_data + 0x110) * DEG_TO_RAD * frame_time);
 }
 extern char D_0013E550_29d2e0[] __asm__("D_0013E550");
 extern unsigned char D_0013D408_29d2e0[] __asm__("D_0013D408");
