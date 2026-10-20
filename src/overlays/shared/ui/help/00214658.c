@@ -949,7 +949,7 @@ float FUN_L00_00233d30_217118(void *) __asm__("FUN_L00_00233d30");
 void FUN_L00_00213de8_217118(float) __asm__("FUN_L00_00213de8");
 
 void FUN_L00_00217118(float velocity_scale, float b) {
-    OvlQuad t[1];
+    OvlQuad collision_query_position[1];
     OvlQuad u[1];
     unsigned char *P = (&hero.motion.velocity);
     unsigned char *G;
@@ -968,15 +968,15 @@ void FUN_L00_00217118(float velocity_scale, float b) {
     if (*(int *)(Q + 0x2084) == 0x20)
         velocity_scale = 2.0f;
     Q += 0xE0;
-    FUN_001f9a68_217118(t, velocity_scale, Q);
-    if (0.0f < b && gravity_length_xy(t) < b) {
-        FUN_L00_00233ba0_217118(t, t, 0.0f);
-        FUN_L00_00233708_217118(t, t, b);
+    FUN_001f9a68_217118(collision_query_position, velocity_scale, Q);
+    if (0.0f < b && gravity_length_xy(collision_query_position) < b) {
+        FUN_L00_00233ba0_217118(collision_query_position, collision_query_position, 0.0f);
+        FUN_L00_00233708_217118(collision_query_position, collision_query_position, b);
     }
-    gravity_set_z(t, t, 0.0f);
-    FUN_001f9a10_217118(t, t, (&hero.motion.pos));
-    qcopy(u, t);
-    FUN_L00_00233810_217118(t, t, 0.3f);
+    gravity_set_z(collision_query_position, collision_query_position, 0.0f);
+    FUN_001f9a10_217118(collision_query_position, collision_query_position, (&hero.motion.pos));
+    qcopy(u, collision_query_position);
+    FUN_L00_00233810_217118(collision_query_position, collision_query_position, 0.3f);
     P = ((char *)&hero);
     k = -0.2f;
     if (*(int *)(P + 0x2084) == 0x20)
@@ -985,7 +985,7 @@ void FUN_L00_00217118(float velocity_scale, float b) {
         k = -0.7f;
     FUN_L00_00233810_217118(u, u, k);
     r = 1.0f;
-    if (FUN_L00_001efc70_217118(t, u, 4, *(void **)(P + 0x2080), 0)) {
+    if (FUN_L00_001efc70_217118(collision_query_position, u, 4, *(void **)(P + 0x2080), 0)) {
         collision_hit_data = coll_hit;
         if (*(int *)(collision_hit_data + 0x1C) > 0 && FUN_L00_00233d30_217118(collision_hit_data + 0x40) <= 0.87266463f)
             r = 0.0f;
