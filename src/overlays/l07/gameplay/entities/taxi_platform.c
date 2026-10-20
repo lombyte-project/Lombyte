@@ -2342,7 +2342,7 @@ void FUN_L07_0030e720(struct Moby *moby, LaunchParams *l, Vec4f *dir) {
 }
 
 void FUN_L07_0030e858(struct Moby *moby, LaunchParams *l, Vec4f *dir) {
-    Vec4f d;
+    Vec4f knockback_direction_copy;
     f32 ang;
 
     l->gravity = frame_time_sq * 29.400002f;
@@ -2360,8 +2360,8 @@ void FUN_L07_0030e858(struct Moby *moby, LaunchParams *l, Vec4f *dir) {
     l->unk50 = 8.0f;
     l->unk54 = 19.0f;
     l->unk3D = 0;
-    *(u128 *)&d = *(u128 *)dir;
-    trooper_knockback_arc(&d, &ang, &l->unk18, &l->unk1C);
+    *(u128 *)&knockback_direction_copy = *(u128 *)dir;
+    trooper_knockback_arc(&knockback_direction_copy, &ang, &l->unk18, &l->unk1C);
     trooper_start_knockback(ang, moby, l, 6, 1, 0);
 }
 
