@@ -6,9 +6,9 @@
 extern float D_L01_001CAE60[];
 
 void pool_set_scale(float s) __asm__("FUN_L01_002b7ef0");
-void pool_set_scale(float s) {
+void pool_set_scale(float requested_scale) {
     unsigned int i;
-    float k = s / D_L01_001CAE60[16];
+    float k = requested_scale / D_L01_001CAE60[16];
     for (i = 0; i < 0x5C; i++) {
         D_L01_001CAE60[i] = D_L01_001CAE60[i] * k;
     }
