@@ -373,10 +373,10 @@ void FUN_L06_00227cf8(void) {
         }
         FUN_L00_00206c08_227cf8();
         {
-            unsigned char *o = g2->unkA88;
-            g2->moby = (struct Moby *)o;
-            qcopy(o + 0x10, &g2->motion.pos);
-            *(int *)(o + 0x98) = 0;
+            unsigned char *restored_hero_moby = g2->unkA88;
+            g2->moby = (struct Moby *)restored_hero_moby;
+            qcopy(restored_hero_moby + 0x10, &g2->motion.pos);
+            *(int *)(restored_hero_moby + 0x98) = 0;
         }
         g2->unkA94 = 1.0f;
         FUN_L00_00232628_227cf8();
