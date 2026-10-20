@@ -1460,7 +1460,7 @@ extern u8 *FUN_0026d000_2cbcc0(f32, f32, f32, f32, void *, s32, void *, u32) __a
 extern float D_0015ED6C_lui __asm__("D_0015ED6C");
 extern float D_0015ED60;
 
-void FUN_L00_002cbcc0(u8 *m, s32 enabled)
+void FUN_L00_002cbcc0(u8 *shot_moby, s32 enabled)
 {
     s32 i;
     s32 j;
@@ -1473,13 +1473,13 @@ void FUN_L00_002cbcc0(u8 *m, s32 enabled)
     u8 *effect;
     s32 alpha;
 
-    handle = (void **)(*(u8 **)(m + 0x78) + 0x2c);
+    handle = (void **)(*(u8 **)(shot_moby + 0x78) + 0x2c);
     for (i = 16; i >= 0; i--) {
         if (*handle != 0)
             FUN_00267a08_2cbcc0(*handle);
         *handle++ = 0;
     }
-    pos = m + 0x10;
+    pos = shot_moby + 0x10;
 
     if (enabled != 0) {
         V4 *vector = &vectors[1];
