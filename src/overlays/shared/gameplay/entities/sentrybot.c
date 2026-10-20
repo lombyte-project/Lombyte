@@ -2225,23 +2225,23 @@ void FUN_L15_0029edb0(Moby29FF90 *moby) {
     float w[4];
     float v[4];
     float temporary_position[4];
-    Data29FF90 *d = moby->data;
+    Data29FF90 *moby_data = moby->data;
 
     switch (moby->state) {
     case CHARGING:
-        if (d->active != 0 && ((Hero29FF90 *)&hero)->f20A4 == 2) {
-            float t;
+        if (moby_data->active != 0 && ((Hero29FF90 *)&hero)->f20A4 == 2) {
+            float charge_emission_factor;
             int i;
 
-            if (d->f10 == 0) {
+            if (moby_data->f10 == 0) {
                 D_L15_0015F330.on = 1;
                 D_L15_0015F330.col.rgba = 0xFFFF00;
             }
-            d->f10++;
-            t = convert_integer_to_float_c(d->f10) / multiply_global_factor_ed64(30.0f);
-            if (t > 1.0f) t = 1.0f;
-            t = t * t;
-            for (i = 0; i < func_001FA898_r(t * 10.0f); i++) {
+            moby_data->f10++;
+            charge_emission_factor = convert_integer_to_float_c(moby_data->f10) / multiply_global_factor_ed64(30.0f);
+            if (charge_emission_factor > 1.0f) charge_emission_factor = 1.0f;
+            charge_emission_factor = charge_emission_factor * charge_emission_factor;
+            for (i = 0; i < func_001FA898_r(charge_emission_factor * 10.0f); i++) {
                 int g;
                 int r;
                 int rc;
@@ -2259,66 +2259,66 @@ void FUN_L15_0029edb0(Moby29FF90 *moby) {
                 FUN_L00_001ff290(v, w, moby->pos);
                 FUN_L15_0025e2c0((0x7F << 24) | (rc << 16) | (g << 8) | 0x4F, w, (char *)moby);
             }
-            if (d->f10 < 0x32) {
-                int a = D_L15_0015F330.col.b[3];
+            if (moby_data->f10 < 0x32) {
+                int fade_alpha = D_L15_0015F330.col.b[3];
 
-                if (D_L15_0015F330.reg == 0 && a == 0xFF) a = 0x25;
+                if (D_L15_0015F330.reg == 0 && fade_alpha == 0xFF) fade_alpha = 0x25;
                 D_L15_0015F330.reg = 0x1F00000042L;
-                if (a < 0x25 - scale_game_frames_alt(1)) a = a + scale_game_frames_alt(1);
-                else a = 0x25;
-                D_L15_0015F330.col.rgba = (D_L15_0015F330.col.rgba & 0xFFFF00) | (a << 24);
+                if (fade_alpha < 0x25 - scale_game_frames_alt(1)) fade_alpha = fade_alpha + scale_game_frames_alt(1);
+                else fade_alpha = 0x25;
+                D_L15_0015F330.col.rgba = (D_L15_0015F330.col.rgba & 0xFFFF00) | (fade_alpha << 24);
             } else {
                 D_L15_0015F330.col.rgba = D_L15_0015F330.col.rgba | 0xFF000000;
             }
-            if (d->light != -1) {
-                float s;
+            if (moby_data->light != -1) {
+                float light_charge_fraction;
                 int n;
 
-                (D_L15_001808C0 + d->light)->f10 = moby->pos[0];
-                (D_L15_001808C0 + d->light)->f14 = moby->pos[1];
-                (D_L15_001808C0 + d->light)->f18 = moby->pos[2];
-                n = d->f10;
+                (D_L15_001808C0 + moby_data->light)->f10 = moby->pos[0];
+                (D_L15_001808C0 + moby_data->light)->f14 = moby->pos[1];
+                (D_L15_001808C0 + moby_data->light)->f18 = moby->pos[2];
+                n = moby_data->f10;
                 if (n > 0x32) n = 0x32;
                 if (n < 0) n = 0;
-                (D_L15_001808C0 + d->light)->f1C = convert_integer_to_float_c(n) * 7.0f / 50.0f;
-                s = convert_integer_to_float_c(d->f10) / multiply_global_factor_ed64(30.0f);
-                if (s > 1.0f) s = 1.0f;
-                func_L00_0026AA10_29FF90(&D_L15_001808C0[d->light].f10, random_int_between(0xF, 0x2F), random_int_between(0x2F, 0x3F),
-                                         random_int_between(0x3F, 0x7F), s * 4.0f * 210000.0f, 0.0f, scale_game_frames_alt(0x14));
-                (D_L15_001808C0 + d->light)->f0 = random_float_between((D_L15_001808C0 + d->light)->f0 * 0.8f, (D_L15_001808C0 + d->light)->f1C * 2.0f / 7.0f);
-                (D_L15_001808C0 + d->light)->f4 = random_float_between(
-                    (D_L15_001808C0 + d->light)->f0 < (D_L15_001808C0 + d->light)->f4 * 0.8f ? (D_L15_001808C0 + d->light)->f0 : (D_L15_001808C0 + d->light)->f4 * 0.8f,
-                    (D_L15_001808C0 + d->light)->f0);
+                (D_L15_001808C0 + moby_data->light)->f1C = convert_integer_to_float_c(n) * 7.0f / 50.0f;
+                light_charge_fraction = convert_integer_to_float_c(moby_data->f10) / multiply_global_factor_ed64(30.0f);
+                if (light_charge_fraction > 1.0f) light_charge_fraction = 1.0f;
+                func_L00_0026AA10_29FF90(&D_L15_001808C0[moby_data->light].f10, random_int_between(0xF, 0x2F), random_int_between(0x2F, 0x3F),
+                                         random_int_between(0x3F, 0x7F), light_charge_fraction * 4.0f * 210000.0f, 0.0f, scale_game_frames_alt(0x14));
+                (D_L15_001808C0 + moby_data->light)->f0 = random_float_between((D_L15_001808C0 + moby_data->light)->f0 * 0.8f, (D_L15_001808C0 + moby_data->light)->f1C * 2.0f / 7.0f);
+                (D_L15_001808C0 + moby_data->light)->f4 = random_float_between(
+                    (D_L15_001808C0 + moby_data->light)->f0 < (D_L15_001808C0 + moby_data->light)->f4 * 0.8f ? (D_L15_001808C0 + moby_data->light)->f0 : (D_L15_001808C0 + moby_data->light)->f4 * 0.8f,
+                    (D_L15_001808C0 + moby_data->light)->f0);
             } else if ((D_L15_0015F5CC_macro & 3) == 0) {
-                d->light = FUN_L00_0023e5e0(moby->pos, 0.0f, 0.0f, 0);
+                moby_data->light = FUN_L00_0023e5e0(moby->pos, 0.0f, 0.0f, 0);
             }
         } else {
             D_L15_0015F320.on = 0;
             D_L15_0015F330.on = 0;
-            d->f10 = 0;
-            d->vel[0] = fast_cos_c2(((Hero29FF90 *)&hero)->f98) * (D_0015ED6C * 40.0f);
-            d->vel[1] = fast_sin_c2(((Hero29FF90 *)&hero)->f98) * (D_0015ED6C * 40.0f);
-            d->vel[2] = 0.0f;
+            moby_data->f10 = 0;
+            moby_data->vel[0] = fast_cos_c2(((Hero29FF90 *)&hero)->f98) * (D_0015ED6C * 40.0f);
+            moby_data->vel[1] = fast_sin_c2(((Hero29FF90 *)&hero)->f98) * (D_0015ED6C * 40.0f);
+            moby_data->vel[2] = 0.0f;
             moby->state = 1;
-            d->f14 = 0;
+            moby_data->f14 = 0;
         }
         break;
     case EXPANDING_BLAST: {
-        float r = D_0015ED6C * 40.0f * convert_integer_to_float_c(d->f14) * 0.5f + 3.0f;
+        float r = D_0015ED6C * 40.0f * convert_integer_to_float_c(moby_data->f14) * 0.5f + 3.0f;
         int cnt;
         int n;
         int col;
 
-        d->f14++;
-        if (d->light != -1) {
-            (D_L15_001808C0 + d->light)->f1C = (D_L15_001808C0 + d->light)->f1C * (frame_scale_macro * -0.6f + 1.0f);
-            if ((D_L15_001808C0 + d->light)->f1C < 0.0001f) {
-                FUN_L00_0023e838(d->light);
-                d->light = -1;
+        moby_data->f14++;
+        if (moby_data->light != -1) {
+            (D_L15_001808C0 + moby_data->light)->f1C = (D_L15_001808C0 + moby_data->light)->f1C * (frame_scale_macro * -0.6f + 1.0f);
+            if ((D_L15_001808C0 + moby_data->light)->f1C < 0.0001f) {
+                FUN_L00_0023e838(moby_data->light);
+                moby_data->light = -1;
             }
         }
-        if (scale_game_frames_alt(0x3C) < d->f14 || *(unsigned char *)(((char *)&D_001413F4)) != 2
-            || (FUN_L00_001ff290(temporary_position, moby->pos, d), moby->pos[0] < 2.0f) || moby->pos[0] > 1021.0f
+        if (scale_game_frames_alt(0x3C) < moby_data->f14 || *(unsigned char *)(((char *)&D_001413F4)) != 2
+            || (FUN_L00_001ff290(temporary_position, moby->pos, moby_data), moby->pos[0] < 2.0f) || moby->pos[0] > 1021.0f
             || moby->pos[1] < 2.0f || moby->pos[1] > 1021.0f
             || moby->pos[2] < 2.0f || moby->pos[2] > 1021.0f) {
             mark_moby_for_removal_c2(D_L15_00161484);
@@ -2328,7 +2328,7 @@ void FUN_L15_0029edb0(Moby29FF90 *moby) {
         n = func_L00_001F2BE8_29FF90(moby->pos, r, 0x10, moby, 0);
         *(u128_29FF90 *)temporary_position = *(u128_29FF90 *)moby->pos;
         send_blast_hits(moby, temporary_position, D_L15_00178500, n, 0, 0x8B0000, 2, 1, 20.0f, 1.0f, 1.0f);
-        cnt = scale_game_frames_alt(0x3C) - d->f14 < scale_game_frames_alt(5) ? scale_game_frames_alt(0x3C) - d->f14 : scale_game_frames_alt(5);
+        cnt = scale_game_frames_alt(0x3C) - moby_data->f14 < scale_game_frames_alt(5) ? scale_game_frames_alt(0x3C) - moby_data->f14 : scale_game_frames_alt(5);
         func_L00_0026E940_29FF90(r * 0.5f * 210000.0f, (char *)moby,
                                  (0x4F << 24) | (random_int_between(0x3F, 0x7F) << 16) | (random_int_between(0x2F, 0x3F) << 8) | random_int_between(0xF, 0x2F),
                                  cnt, -1);
@@ -2357,7 +2357,7 @@ void FUN_L15_0029edb0(Moby29FF90 *moby) {
                 Part29FF90 *p = (Part29FF90 *)FUN_L00_00274948(moby->pos, D_L15_0015F580, 0x7F, moby);
 
                 if (p != 0) {
-                    PartSub29FF90 *q = &p->sub;
+                    PartSub29FF90 *particle_subrecord = &p->sub;
 
                     if (i == 2 && random_integer_below_c2(8) == 0) {
                         p->fC = 180000.0f;
@@ -2366,16 +2366,16 @@ void FUN_L15_0029edb0(Moby29FF90 *moby) {
                     }
                     p->fC = p->fC * r;
                     p->fA = scale_game_frames_alt(2);
-                    q->f10 = 1.0f / convert_integer_to_float_c(p->fA);
-                    q->f18 = 0x7F7F7F;
-                    q->f16 = 3;
+                    particle_subrecord->f10 = 1.0f / convert_integer_to_float_c(p->fA);
+                    particle_subrecord->f18 = 0x7F7F7F;
+                    particle_subrecord->f16 = 3;
                 }
             }
         }
         break;
     }
     }
-    d->active = 0;
+    moby_data->active = 0;
 }
 /* Shared level 15/17 moby update (class 77): steers the moby toward its target and runs its state machine. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_002A3668), where it is exact; names translated to the US level program. */
