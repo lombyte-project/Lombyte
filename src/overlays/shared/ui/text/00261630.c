@@ -22,7 +22,7 @@ void FUN_L00_00261630(u8 *o, u8 *s, f32 a, f32 b) {
     OvlQuad v[1];
     u8 *pos;
     s32 n, t;
-    f32 d;
+    f32 planar_distance;
     if (*(s16 *)(s + 0x28) == 0) {
         pos = o + 0x10;
         *(f32 *)(s + 0x24) += FUN_L00_00257c48_261630(0.7853982f, 2.6179938f);
@@ -39,22 +39,22 @@ void FUN_L00_00261630(u8 *o, u8 *s, f32 a, f32 b) {
     ((f32 *)v)[1] += FUN_001f9de0_261630(*(f32 *)(o + 0x48)) * *(f32 *)(s + 0x14);
     n = FUN_L00_00258490_261630(o, pos, v, 0, a, *(f32 *)(s + 0x10), b, 0.52359879f);
     *(f32 *)(o + 0x18) = FUN_00213508_261630(pos, 0, 0.5f);
-    d = FUN_001f9b80_261630(pos, s);
-    if (n == 0 || *(f32 *)(s + 0x1C) < d) {
+    planar_distance = FUN_001f9b80_261630(pos, s);
+    if (n == 0 || *(f32 *)(s + 0x1C) < planar_distance) {
         *(f32 *)(s + 0x24) = FUN_001f9e90_261630(*(f32 *)(s + 0) - *(f32 *)(o + 0x10),
                                                  *(f32 *)(s + 4) - *(f32 *)(o + 0x14));
         t = FUN_001f96f8_261630(0x1E);
         *(s16 *)(s + 0x2A) = FUN_L00_00257b90_261630(t, FUN_001f96f8_261630(0x5A));
         *(s16 *)(s + 0x28) = 1;
     } else {
-        d = FUN_001f9b80_261630(pos, &hero.motion.pos.f[0]);
-        if (d < *(f32 *)(s + 0x20)) {
-            d = d / *(f32 *)(s + 0x20);
+        planar_distance = FUN_001f9b80_261630(pos, &hero.motion.pos.f[0]);
+        if (planar_distance < *(f32 *)(s + 0x20)) {
+            planar_distance = planar_distance / *(f32 *)(s + 0x20);
             *(f32 *)(s + 0x24) = FUN_L00_0025b750_261630(
                 *(f32 *)(s + 0x24),
                 FUN_001f9e90_261630(*(f32 *)(o + 0x10) - hero.motion.pos.f[0],
                                     *(f32 *)(o + 0x14) - hero.motion.pos.f[1]),
-                d);
+                planar_distance);
         }
     }
 }
