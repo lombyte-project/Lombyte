@@ -70,10 +70,10 @@ extern void FUN_L00_00212ff0(void);
 void FUN_L02_002226d8(void)
 {
     Vec4 old_pos;
-    Vec4 tmp;
+    Vec4 movement_vector_scratch;
     Vec4 velocity_projection_source;
     f32 limit;
-    f32 d;
+    f32 velocity_measure;
     f32 w;
 
     qcopy(&old_pos, &hero.motion.pos);
@@ -82,15 +82,15 @@ void FUN_L02_002226d8(void)
     /* cap the speed; states 0x22 and 0x14 cap the horizontal part and the fall speed */
     if (hero.state.current == 0x22 || hero.state.current == HERO_STATE_WRENCH_SLAM) {
         if (hero.unk1CC == 0) {
-            d = gravity_length_xy(&hero.motion.velocity);
+            velocity_measure = gravity_length_xy(&hero.motion.velocity);
             limit = hero.unk234 - 0.02f;
-            if (limit < d) {
+            if (limit < velocity_measure) {
                 normalize_vector_xyz(&hero.motion.velocity, &hero.motion.velocity, limit);
             }
         }
-        d = gravity_z(&hero.motion.velocity);
+        velocity_measure = gravity_z(&hero.motion.velocity);
         limit = -hero.ground_distance;
-        if (d < limit) {
+        if (velocity_measure < limit) {
             if (0.0f < limit) {
                 limit = 0.0f;
             }
@@ -98,9 +98,9 @@ void FUN_L02_002226d8(void)
         }
     } else if (hero.state.control_mode != 0xD) {
         if (hero.state.control_mode != 0xE && hero.unk1CC == 0) {
-            d = vector_length_xyz(&hero.motion.velocity);
+            velocity_measure = vector_length_xyz(&hero.motion.velocity);
             limit = hero.unk234 - 0.02f;
-            if (limit < d) {
+            if (limit < velocity_measure) {
                 normalize_vector_xyz(&hero.motion.velocity, &hero.motion.velocity, limit);
             }
         }
@@ -126,43 +126,43 @@ void FUN_L02_002226d8(void)
     qcopy(&hero.motion.unk130, &hero.motion.unk110);
     qcopy(&hero.motion.unk120, &hero.motion.unk110);
     normalize_vector_xyz(&hero.motion.unk110, &hero.motion.unk110, 1.0f);
-    d = dot_vectors_xyz(&hero.motion.unk110, &hero.motion.velocity);
-    if (d < 0.0f) {
-        d = 0.0f;
+    velocity_measure = dot_vectors_xyz(&hero.motion.unk110, &hero.motion.velocity);
+    if (velocity_measure < 0.0f) {
+        velocity_measure = 0.0f;
     }
-    normalize_vector_xyz(&hero.motion.unk110, &hero.motion.velocity, d);
+    normalize_vector_xyz(&hero.motion.unk110, &hero.motion.velocity, velocity_measure);
 
-    qcopy(&tmp, &hero.motion.velocity);
-    gravity_flatten(&tmp, &tmp);
+    qcopy(&movement_vector_scratch, &hero.motion.velocity);
+    gravity_flatten(&movement_vector_scratch, &movement_vector_scratch);
     gravity_flatten(&hero.motion.unk130, &hero.motion.unk130);
     normalize_vector_xyz(&hero.motion.unk130, &hero.motion.unk130, 1.0f);
-    d = dot_vectors_xyz(&hero.motion.unk130, &tmp);
-    if (d < 0.0f) {
-        d = 0.0f;
+    velocity_measure = dot_vectors_xyz(&hero.motion.unk130, &movement_vector_scratch);
+    if (velocity_measure < 0.0f) {
+        velocity_measure = 0.0f;
     }
-    normalize_vector_xyz(&hero.motion.unk130, &tmp, d);
+    normalize_vector_xyz(&hero.motion.unk130, &movement_vector_scratch, velocity_measure);
 
     qcopy(&velocity_projection_source, &hero.motion.velocity);
     FUN_L00_00233ba0((float *)&velocity_projection_source, (float *)&velocity_projection_source, 0.0f);
     FUN_L00_00233ba0((float *)&hero.motion.unk120, (float *)&hero.motion.unk120, 0.0f);
     normalize_vector_xyz(&hero.motion.unk120, &hero.motion.unk120, 1.0f);
-    d = dot_vectors_xyz(&hero.motion.unk120, &velocity_projection_source);
-    if (d < 0.0f) {
-        d = 0.0f;
+    velocity_measure = dot_vectors_xyz(&hero.motion.unk120, &velocity_projection_source);
+    if (velocity_measure < 0.0f) {
+        velocity_measure = 0.0f;
     }
-    normalize_vector_xyz(&hero.motion.unk120, &velocity_projection_source, d);
+    normalize_vector_xyz(&hero.motion.unk120, &velocity_projection_source, velocity_measure);
 
     hero.motion.speed_xy = vector_length_xyz(&hero.motion.unk110);
     hero.motion.unk164 = vector_length_xy(&hero.motion.unk110);
     /* read through the address, as retail reloads the base register here */
-    tmp.q = (&hero.motion.unk110)->q;
-    hero.motion.unk168 = forward_component(&tmp);
+    movement_vector_scratch.q = (&hero.motion.unk110)->q;
+    hero.motion.unk168 = forward_component(&movement_vector_scratch);
     if (hero.motion.unk168 < 0.0f) {
         hero.motion.unk168 = 0.0f;
     }
 
     /* apply the push, keeping its w */
-    qcopy(&tmp, &hero.motion.pos);
+    qcopy(&movement_vector_scratch, &hero.motion.pos);
     if (vector_length_xyz(&hero.motion.platform_delta) > 0.0001f) {
         add_vector_xyz(&hero.motion.pos, &hero.motion.pos, &hero.motion.platform_delta);
         w = hero.motion.platform_delta.f[3];
@@ -173,7 +173,7 @@ void FUN_L02_002226d8(void)
         subtract_vector_xyz(&hero.motion.displacement, &hero.motion.pos, &old_pos);
         FUN_L00_00212ff0();
     }
-    subtract_vector_xyz(&hero.motion.platform_carry, &hero.motion.pos, &tmp);
+    subtract_vector_xyz(&hero.motion.platform_carry, &hero.motion.pos, &movement_vector_scratch);
     {
         /* push w moves to unk140.w; a block-local keeps retail's order */
         f32 push_w = hero.motion.platform_delta.f[3];
