@@ -24,13 +24,13 @@ extern char D_L01_00167240_b618[] __asm__("D_L01_00167240");
 extern char *D_L01_0015FFD8_b618 __asm__("D_L01_0015FFD8");
 
 extern char D_L01_00180740[];
-void FUN_L01_0030b618(u8 *m) {
+void FUN_L01_0030b618(u8 *moby) {
     enum {
         EFFECT_STATE_INITIALIZE = 0,
         EFFECT_STATE_UPDATE = 1
     };
-    s32 state = m[0x20];
-    char *e = *(char **)(m + 0x78);
+    s32 state = moby[0x20];
+    char *effect_vars = *(char **)(moby + 0x78);
     s32 i;
     s32 current;
     s32 next;
@@ -45,24 +45,24 @@ void FUN_L01_0030b618(u8 *m) {
 
     switch (state) {
     case EFFECT_STATE_INITIALIZE:
-        if (*(s32 *)(e + 0x58) < 2) {
-            mark_moby_for_removal_b618(m);
+        if (*(s32 *)(effect_vars + 0x58) < 2) {
+            mark_moby_for_removal_b618(moby);
             return;
         }
         {
             s32 i;
-            for (i = 0; i < *(s32 *)(e + 0x58); i++) {
-                f32 *point = ((f32 *)e) + i * 4;
+            for (i = 0; i < *(s32 *)(effect_vars + 0x58); i++) {
+                f32 *point = ((f32 *)effect_vars) + i * 4;
                 point[0] *= 0.00390625f;
                 point[1] *= 0.00390625f;
                 point[2] *= 0.00390625f;
                 point[3] *= 0.00390625f;
             }
         }
-        *(s32 *)(e + 0x68) = -1;
-        if (m[0x30] < truncate_float_to_s32_b618(*(f32 *)(e + 0x5c)) + 4)
-            m[0x30] = truncate_float_to_s32_b618(*(f32 *)(e + 0x5c)) + 4;
-        m[0x20] = 1;
+        *(s32 *)(effect_vars + 0x68) = -1;
+        if (moby[0x30] < truncate_float_to_s32_b618(*(f32 *)(effect_vars + 0x5c)) + 4)
+            moby[0x30] = truncate_float_to_s32_b618(*(f32 *)(effect_vars + 0x5c)) + 4;
+        moby[0x20] = 1;
         return;
     case EFFECT_STATE_UPDATE:
         break;
@@ -70,78 +70,78 @@ void FUN_L01_0030b618(u8 *m) {
         return;
     }
 
-    elapsed = distance_xyz_b618(m + 0x10, D_L01_00167240_b618);
-    active = elapsed < *(f32 *)(e + 0x5c) ? 1.0f : 0.0f;
-    if (active != 0.0f && *(s32 *)(e + 0x80) != -1) {
-        if (!is_point_inside_clip_volume_b618(D_L01_00167240_b618, *(s32 *)(e + 0x80)))
+    elapsed = distance_xyz_b618(moby + 0x10, D_L01_00167240_b618);
+    active = elapsed < *(f32 *)(effect_vars + 0x5c) ? 1.0f : 0.0f;
+    if (active != 0.0f && *(s32 *)(effect_vars + 0x80) != -1) {
+        if (!is_point_inside_clip_volume_b618(D_L01_00167240_b618, *(s32 *)(effect_vars + 0x80)))
             active = 0.0f;
     }
-    i = *(s32 *)(e + 0x84);
+    i = *(s32 *)(effect_vars + 0x84);
     if (i != -1 && *(s8 *)((D_L01_0015FFD8_b618 + 0x20) + i * 0x100) < 0) {
-        slot = *(s32 *)(e + 0x68);
+        slot = *(s32 *)(effect_vars + 0x68);
         if (slot != -1)
             FUN_L00_0023e838(slot);
-        mark_moby_for_removal_b618(m);
+        mark_moby_for_removal_b618(moby);
         return;
     }
     if (active != 0.0f) {
 
-        if (is_timer_active_b618(e + 0x6c)) {
-            current = random_integer_between_b618(*(s32 *)(e + 0x50), *(s32 *)(e + 0x54));
-            *(s32 *)(e + 0x74) = *(s32 *)(e + 0x78);
-            *(s32 *)(e + 0x70) = current;
-            *(s32 *)(e + 0x6c) = current;
-            next = random_integer_between_b618(1, *(s32 *)(e + 0x58) - 1);
-            i = (*(s32 *)(e + 0x78) + next) % *(s32 *)(e + 0x58);
-            *(s32 *)(e + 0x7c) = *(s32 *)(e + 0x7c) == 0;
-            *(s32 *)(e + 0x78) = i;
+        if (is_timer_active_b618(effect_vars + 0x6c)) {
+            current = random_integer_between_b618(*(s32 *)(effect_vars + 0x50), *(s32 *)(effect_vars + 0x54));
+            *(s32 *)(effect_vars + 0x74) = *(s32 *)(effect_vars + 0x78);
+            *(s32 *)(effect_vars + 0x70) = current;
+            *(s32 *)(effect_vars + 0x6c) = current;
+            next = random_integer_between_b618(1, *(s32 *)(effect_vars + 0x58) - 1);
+            i = (*(s32 *)(effect_vars + 0x78) + next) % *(s32 *)(effect_vars + 0x58);
+            *(s32 *)(effect_vars + 0x7c) = *(s32 *)(effect_vars + 0x7c) == 0;
+            *(s32 *)(effect_vars + 0x78) = i;
         }
-        phase = itof_s_b618(*(s32 *)(e + 0x70) - *(s32 *)(e + 0x6c));
-        phase = phase / itof_s_b618(*(s32 *)(e + 0x70));
+        phase = itof_s_b618(*(s32 *)(effect_vars + 0x70) - *(s32 *)(effect_vars + 0x6c));
+        phase = phase / itof_s_b618(*(s32 *)(effect_vars + 0x70));
         phase *= 3.1415927f;
         blend = phase * 0.5f;
-        if (*(s32 *)(e + 0x7c) != 0)
+        if (*(s32 *)(effect_vars + 0x7c) != 0)
             blend += 1.5707964f;
         blend = fast_sin(blend);
 
-        if (*(s32 *)(e + 0x7c) != 0) {
-            first = ((OvlQuad *)e)[*(s32 *)(e + 0x78)];
-            second = ((OvlQuad *)e)[*(s32 *)(e + 0x74)];
-            interpolate_vector_b618(e + 0x40, &first, &second, blend);
+        if (*(s32 *)(effect_vars + 0x7c) != 0) {
+            first = ((OvlQuad *)effect_vars)[*(s32 *)(effect_vars + 0x78)];
+            second = ((OvlQuad *)effect_vars)[*(s32 *)(effect_vars + 0x74)];
+            interpolate_vector_b618(effect_vars + 0x40, &first, &second, blend);
         } else {
-            first = ((OvlQuad *)e)[*(s32 *)(e + 0x74)];
-            second = ((OvlQuad *)e)[*(s32 *)(e + 0x78)];
-            interpolate_vector_b618(e + 0x40, &first, &second, blend);
+            first = ((OvlQuad *)effect_vars)[*(s32 *)(effect_vars + 0x74)];
+            second = ((OvlQuad *)effect_vars)[*(s32 *)(effect_vars + 0x78)];
+            interpolate_vector_b618(effect_vars + 0x40, &first, &second, blend);
         }
-        cutoff = *(f32 *)(e + 0x5c) * 0.75f;
+        cutoff = *(f32 *)(effect_vars + 0x5c) * 0.75f;
         {
-            f32 denominator = *(f32 *)(e + 0x5c) - cutoff;
+            f32 denominator = *(f32 *)(effect_vars + 0x5c) - cutoff;
             if (cutoff < elapsed) {
                 f32 fade = (elapsed - cutoff) / denominator;
                 qzero(&first);
-                second = *(OvlQuad *)(e + 0x40);
-                interpolate_vector_b618(e + 0x40, &second, &first, fade);
+                second = *(OvlQuad *)(effect_vars + 0x40);
+                interpolate_vector_b618(effect_vars + 0x40, &second, &first, fade);
             }
         }
-        slot = *(s32 *)(e + 0x68);
+        slot = *(s32 *)(effect_vars + 0x68);
         if (slot == -1) {
-            slot = FUN_L00_0023e738(m + 0x10, *(f32 *)(e + 0x60), *(f32 *)(e + 0x4c),
-                                  *(f32 *)(e + 0x40), *(f32 *)(e + 0x44),
-                                  *(f32 *)(e + 0x48));
-            *(s32 *)(e + 0x68) = slot;
+            slot = FUN_L00_0023e738(moby + 0x10, *(f32 *)(effect_vars + 0x60), *(f32 *)(effect_vars + 0x4c),
+                                  *(f32 *)(effect_vars + 0x40), *(f32 *)(effect_vars + 0x44),
+                                  *(f32 *)(effect_vars + 0x48));
+            *(s32 *)(effect_vars + 0x68) = slot;
             return;
         }
         {
-            char *p = D_L01_00180740 + slot * 0x20;
-            qcopy(p + 0x10, m + 0x10);
-            *(f32 *)(p + 0x1c) = *(f32 *)(e + 0x60);
-            qcopy(p, e + 0x40);
+            char *effect_entry = D_L01_00180740 + slot * 0x20;
+            qcopy(effect_entry + 0x10, moby + 0x10);
+            *(f32 *)(effect_entry + 0x1c) = *(f32 *)(effect_vars + 0x60);
+            qcopy(effect_entry, effect_vars + 0x40);
         }
     } else {
-        slot = *(s32 *)(e + 0x68);
+        slot = *(s32 *)(effect_vars + 0x68);
         if (slot != -1) {
             FUN_L00_0023e838(slot);
-            *(s32 *)(e + 0x68) = -1;
+            *(s32 *)(effect_vars + 0x68) = -1;
         }
     }
 }
