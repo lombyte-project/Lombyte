@@ -1029,7 +1029,7 @@ int FUN_L15_00299ca0(void *mm) {
     char *moby = mm;
     int idx = *(int *)(*(char **)(moby + 0x78) + 0x128);
     char *linked_moby;
-    float d;
+    float linked_moby_distance_xy;
     short *group_moby_entry;
     if (idx == -1)
         return 0;
@@ -1038,7 +1038,7 @@ int FUN_L15_00299ca0(void *mm) {
         return 0;
     if (((unsigned char *)moby)[0x21] == 0xFF)
         return 1;
-    d = FUN_001f9b80((float *)(moby + 0x10), (float *)(linked_moby + 0x10));
+    linked_moby_distance_xy = FUN_001f9b80((float *)(moby + 0x10), (float *)(linked_moby + 0x10));
     group_moby_entry = (short *)D_L15_001ABE40[((unsigned char *)moby)[0x21]];
     if (group_moby_entry == 0)
         return 1;
@@ -1050,7 +1050,7 @@ int FUN_L15_00299ca0(void *mm) {
             int j = *(int *)(*(char **)(listed_moby + 0x78) + 0x128);
             if (j != -1) {
                 if (FUN_001f9b80((float *)(listed_moby + 0x10),
-                                 (float *)((char *)D_L15_0015FFD8_m + (j << 8) + 0x10)) < d)
+                                 (float *)((char *)D_L15_0015FFD8_m + (j << 8) + 0x10)) < linked_moby_distance_xy)
                     return 0;
             }
         }
