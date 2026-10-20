@@ -37,40 +37,40 @@ extern float vector_distance_xy(void *, void *) __asm__("FUN_001f9b80");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 
-char *FUN_L11_00308670(float *pos, float *aim, float r1, float r2, float maxd) {
+char *FUN_L11_00308670(float *pos, float *aim, float max_yaw_error, float max_pitch_error, float maxd) {
     char *best = 0;
-    char *q;
-    char *p = D_L11_0015FFE4;
+    char *candidate_position;
+    char *candidate_moby = D_L11_0015FFE4;
     float bestd = 10.0f;
-    while (p != 0) {
-        if ((*(unsigned short *)(p + 0x34) & 0x1000) && p != 0 && *(char **)(p + 0x24) != 0 &&
-            *(short *)(*(char **)(p + 0x24) + 0x46) == 5) {
-            float d;
-            q = p + 0x10;
-            d = vector_distance_xy(pos, q);
-            if (d < maxd) {
-                float tmp[4];
+    while (candidate_moby != 0) {
+        if ((*(unsigned short *)(candidate_moby + 0x34) & 0x1000) && candidate_moby != 0 && *(char **)(candidate_moby + 0x24) != 0 &&
+            *(short *)(*(char **)(candidate_moby + 0x24) + 0x46) == 5) {
+            float distance_xy;
+            candidate_position = candidate_moby + 0x10;
+            distance_xy = vector_distance_xy(pos, candidate_position);
+            if (distance_xy < maxd) {
+                float adjusted_target_position[4];
                 float ra, rb, y, score;
-                qcopy(tmp, q);
-                tmp[2] = tmp[2] + 0.4f;
+                qcopy(adjusted_target_position, candidate_position);
+                adjusted_target_position[2] = adjusted_target_position[2] + 0.4f;
                 ra = fast_difference_between_rotations(
-                    aim[2], fast_arc_tan(tmp[0] - pos[0], tmp[1] - pos[1]));
+                    aim[2], fast_arc_tan(adjusted_target_position[0] - pos[0], adjusted_target_position[1] - pos[1]));
                 ra = ra * ra;
-                if (ra < r1 * r1) {
-                    y = fast_difference_between_rotations(aim[1], fast_arc_tan(d, tmp[2] - pos[2]));
+                if (ra < max_yaw_error * max_yaw_error) {
+                    y = fast_difference_between_rotations(aim[1], fast_arc_tan(distance_xy, adjusted_target_position[2] - pos[2]));
                     rb = y * y;
-                    if (rb < r2 * r2) {
+                    if (rb < max_pitch_error * max_pitch_error) {
                         score = ra * rb * 30.0f;
-                        score = score + square_root(fast_vec_dist(pos, tmp));
+                        score = score + square_root(fast_vec_dist(pos, adjusted_target_position));
                         if (score < bestd) {
                             bestd = score;
-                            best = p;
+                            best = candidate_moby;
                         }
                     }
                 }
             }
         }
-        p = *(char **)(p + 0x28);
+        candidate_moby = *(char **)(candidate_moby + 0x28);
     }
     return best;
 }
