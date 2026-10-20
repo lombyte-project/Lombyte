@@ -345,17 +345,17 @@ float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 int stick_direction_vs_facing(void) __asm__("FUN_L00_00221df8");
 int stick_direction_vs_facing(void) {
     int r = 2;
-    float a;
+    float move_yaw_relative_to_facing;
     stick_target(0, 1.0f);
     {
         struct Hero *g = &hero;
-        a = fast_subtract_rotations(g->motion.move_yaw, g->motion.rot.f[2]);
+        move_yaw_relative_to_facing = fast_subtract_rotations(g->motion.move_yaw, g->motion.rot.f[2]);
     }
-    if (fast_difference_between_rotations(a, 3.1415927f) < 0.7853982f)
+    if (fast_difference_between_rotations(move_yaw_relative_to_facing, 3.1415927f) < 0.7853982f)
         r = 3;
-    else if (fast_difference_between_rotations(a, -1.5707964f) < 0.7853982f)
+    else if (fast_difference_between_rotations(move_yaw_relative_to_facing, -1.5707964f) < 0.7853982f)
         r = 1;
-    else if (fast_difference_between_rotations(a, 1.5707964f) < 0.7853982f)
+    else if (fast_difference_between_rotations(move_yaw_relative_to_facing, 1.5707964f) < 0.7853982f)
         r = 0;
     return r;
 }
