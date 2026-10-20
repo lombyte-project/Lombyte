@@ -3028,7 +3028,7 @@ extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a
 void FUN_L11_00313f60(struct Moby *moby, float *horizontal_steering_input, float *b) {
     char *ship_vars = (char *)moby->pvars;
     float v[4];
-    float zz, dist, boundary_radius, hi, lo, f, upper_altitude_limit, k, r, heading_difference;
+    float zz, dist, boundary_radius, hi, lo, boundary_center_heading, upper_altitude_limit, k, r, heading_difference;
     scale_vector_xyz(v, ship_vars + 0x10, *(float *)(ship_vars + 0x64) * (float)scale_game_frames(0x3C));
     add_vector_xyz(v, v, &moby->pos);
     zz = v[2];
@@ -3038,10 +3038,10 @@ void FUN_L11_00313f60(struct Moby *moby, float *horizontal_steering_input, float
     hi = *(float *)(D_L17_001600EC_t[*(int *)(ship_vars + 0x104)] + 0x28);
     lo = *(float *)(D_L17_001600EC_t[*(int *)(ship_vars + 0x104)] + 0x38);
     upper_altitude_limit = hi + lo;
-    f = fast_add_rotations(fast_arc_tan(v[0], v[1]), 3.141590118408203f);
+    boundary_center_heading = fast_add_rotations(fast_arc_tan(v[0], v[1]), 3.141590118408203f);
     if (boundary_radius - 10.0f < dist) {
         r = (dist - boundary_radius + 10.0f) / 10.0f;
-        heading_difference = fast_subtract_rotations(f, *(float *)(ship_vars + 0x38));
+        heading_difference = fast_subtract_rotations(boundary_center_heading, *(float *)(ship_vars + 0x38));
         if (r > 1.0f)
             r = 1.0f;
         else if (r < 0.0f)
