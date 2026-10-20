@@ -33,7 +33,7 @@ s32 FUN_L08_00222800(s32 arg) {
     u8 *mob;
     s32 flag;
     s32 id;
-    f32 a, b, frame_time_scale;
+    f32 xy_response_scale, b, frame_time_scale;
     OvlVec4 v;
 
     if (G.state.control_mode == 0x14) {
@@ -135,13 +135,13 @@ s32 FUN_L08_00222800(s32 arg) {
             hero_set_state(HERO_STATE_HURT, 1);
         }
         frame_time_scale = frame_time;
-        a = frame_time_scale * 5.7f;
+        xy_response_scale = frame_time_scale * 5.7f;
         b = frame_time_scale * 2.4f;
         if (G.unk12E7 != 0) {
-            a = 0.0f;
+            xy_response_scale = 0.0f;
             b = frame_time_scale * 1.7f;
         }
-        FUN_L00_00210c80_8(&v, flag, a, b);
+        FUN_L00_00210c80_8(&v, flag, xy_response_scale, b);
         if (flag != 0 && tbl->unk28 == 4) {
             v.f[2] += v.f[2];
         }
