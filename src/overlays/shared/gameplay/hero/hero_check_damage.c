@@ -2641,19 +2641,19 @@ void hero_update(void)
     s32 buttons;
     s32 negative_x;
     u8 mode;
-    struct Hero *p;
+    struct Hero *hero_state;
     u8 *source;
     Vec4 *positions;
 
     mode = FUN_L00_00233440();
-    p = &hero;
-    p->unk20B3 = mode;
-    p->unk229C = FUN_L00_00211830();
-    p->unk240 = 0;
+    hero_state = &hero;
+    hero_state->unk20B3 = mode;
+    hero_state->unk229C = FUN_L00_00211830();
+    hero_state->unk240 = 0;
     source = controller_state;
-    p->stick_x = *(f32 *)(source + 0x108);
-    p->stick_y = *(f32 *)(source + 0x10C);
-    if (FUN_L00_001ff408(&p->stick_x) < 0.25f) {
+    hero_state->stick_x = *(f32 *)(source + 0x108);
+    hero_state->stick_y = *(f32 *)(source + 0x10C);
+    if (FUN_L00_001ff408(&hero_state->stick_x) < 0.25f) {
         /* Stick near centre: take the d-pad instead. The differences are
            written back into left and up, which is how retail allocates them. */
         s32 up, right, down, left;
@@ -2665,28 +2665,28 @@ void hero_update(void)
         up = (buttons >> 12) & 1;
         left = right - left;
         up = down - up;
-        p->stick_x = (f32)left;
-        p->stick_y = (f32)up;
+        hero_state->stick_x = (f32)left;
+        hero_state->stick_y = (f32)up;
     }
     hero_update_movement();
 
-    p->unk2128[p->unk21A8] = p->motion.rot.f[2];
-    p->unk21A8 = (p->unk21A8 + 1) % 32;
-    ++p->unk21AC;
-    if (p->unk21AC > 0x20)
-        p->unk21AC = 0x20;
+    hero_state->unk2128[hero_state->unk21A8] = hero_state->motion.rot.f[2];
+    hero_state->unk21A8 = (hero_state->unk21A8 + 1) % 32;
+    ++hero_state->unk21AC;
+    if (hero_state->unk21AC > 0x20)
+        hero_state->unk21AC = 0x20;
 
-    positions = p->unk1B00;
-    index = p->unk21B0;
-    qcopy_nc(&positions[index], &p->motion.pos);
-    p->unk21B0 = (index + 1) % 32;
-    ++p->unk21B4;
-    if (p->unk21B4 > 0x20)
-        p->unk21B4 = 0x20;
+    positions = hero_state->unk1B00;
+    index = hero_state->unk21B0;
+    qcopy_nc(&positions[index], &hero_state->motion.pos);
+    hero_state->unk21B0 = (index + 1) % 32;
+    ++hero_state->unk21B4;
+    if (hero_state->unk21B4 > 0x20)
+        hero_state->unk21B4 = 0x20;
 
-    FUN_L00_001ffa70(p, &p->motion.rot);
-    FUN_L00_001ff9e8(p->unk40);
-    matrix_from_basis_rows(p->unk40, p);
+    FUN_L00_001ffa70(hero_state, &hero_state->motion.rot);
+    FUN_L00_001ff9e8(hero_state->unk40);
+    matrix_from_basis_rows(hero_state->unk40, hero_state);
     FUN_L00_00211380();
     FUN_L00_00221310();
     FUN_L00_002215c8();
