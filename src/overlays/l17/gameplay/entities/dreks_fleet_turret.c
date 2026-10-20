@@ -561,46 +561,46 @@ extern char *D_L17_0015FFD8_m __asm__("D_L17_0015FFD8") __attribute__((section("
 
 /* Spreads the class-0x733 mobies of this moby's group evenly along its path. */
 void FUN_L17_002cbd38(char *m) {
-    char *d;
+    char *turret_vars;
     char *path;
     char *mobys;
-    char *o;
+    char *matched_moby;
     char *od;
-    short *s;
+    short *group_entry;
     int i;
-    short n;
+    short class_733_moby_count;
     short k;
     short step;
 
-    d = *(char **)(m + 0x78);
-    n = 0;
+    turret_vars = *(char **)(m + 0x78);
+    class_733_moby_count = 0;
     k = 0;
-    i = *(short *)(d + 0x80);
+    i = *(short *)(turret_vars + 0x80);
     if (i == -1)
         return;
-    s = D_L17_001AC140[i];
-    if (s == 0)
+    group_entry = D_L17_001AC140[i];
+    if (group_entry == 0)
         return;
     do {
-        if (*(short *)(((*s & 0x7FFF) << 8) + 0xA6 + D_L17_0015FFD8) == 0x733)
-            n++;
-    } while (*s++ >= 0);
-    path = ((char **)D_L17_001B0DB0)[*(int *)(d + 0x84)];
-    step = *(int *)path / n;
-    s = D_L17_001AC140[i];
+        if (*(short *)(((*group_entry & 0x7FFF) << 8) + 0xA6 + D_L17_0015FFD8) == 0x733)
+            class_733_moby_count++;
+    } while (*group_entry++ >= 0);
+    path = ((char **)D_L17_001B0DB0)[*(int *)(turret_vars + 0x84)];
+    step = *(int *)path / class_733_moby_count;
+    group_entry = D_L17_001AC140[i];
     mobys = D_L17_0015FFD8_m;
     do {
-        i = (*s & 0x7FFF) << 8;
+        i = (*group_entry & 0x7FFF) << 8;
         if (*(short *)(i + 0xA6 + mobys) == 0x733) {
-            o = i + mobys;
-            od = *(char **)(o + 0x78);
-            qcopy(o + 0x10, path + 0x10 + k * 0x10);
-            *(int *)(od + 0x60) = *(int *)(d + 0x84);
+            matched_moby = i + mobys;
+            od = *(char **)(matched_moby + 0x78);
+            qcopy(matched_moby + 0x10, path + 0x10 + k * 0x10);
+            *(int *)(od + 0x60) = *(int *)(turret_vars + 0x84);
             *(int *)(od + 0x64) = k;
             *(int *)(od + 0x68) = 0;
             k += step;
         }
-    } while (*s++ >= 0);
+    } while (*group_entry++ >= 0);
 }
 
 #define NOT_SDA
