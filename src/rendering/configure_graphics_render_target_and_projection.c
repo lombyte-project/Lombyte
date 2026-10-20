@@ -20,11 +20,11 @@ void configure_graphics_render_target_and_projection(s32 tw, s32 th, s32 fixed, 
     if (fixed != 0) {
         base = D_001518EE[0] << 13;
     } else {
-        s32 t = tw + th;
-        if (t > 16) {
-            t = 16;
+        s32 allocation_size_shift = tw + th;
+        if (allocation_size_shift > 16) {
+            allocation_size_shift = 16;
         }
-        base = gs_texture_allocation_base - (4 << t);
+        base = gs_texture_allocation_base - (4 << allocation_size_shift);
         base = (base >> 13) << 13;
     }
     setup_render_target(tw, th, base);
