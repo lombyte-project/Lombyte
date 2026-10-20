@@ -257,8 +257,8 @@ void FUN_L17_002e8e08(struct Moby *moby) {
     float a[4];
     float b[4];
     float c[4];
-    float e[4];
-    float f[4];
+    float lowered_hero_position[4];
+    float movement_midpoint[4];
     float w[12];
     char *drone_vars = (char *)moby->pvars;
     char *target_position;
@@ -274,10 +274,10 @@ void FUN_L17_002e8e08(struct Moby *moby) {
         moby->draw_dist = 0;
         moby->visible = 0;
         target_position = drone_vars + 0x10;
-        *(OvlQuad *)e = *(OvlQuad *)(&hero.motion.unkD0);
-        e[2] = e[2] - 0.5f;
-        if (FUN_001f9b80_q(e, target_position) < 8.0f) {
-            FUN_001f9a40_q(target_position, e, target_position, 0.99f);
+        *(OvlQuad *)lowered_hero_position = *(OvlQuad *)(&hero.motion.unkD0);
+        lowered_hero_position[2] = lowered_hero_position[2] - 0.5f;
+        if (FUN_001f9b80_q(lowered_hero_position, target_position) < 8.0f) {
+            FUN_001f9a40_q(target_position, lowered_hero_position, target_position, 0.99f);
         }
         if (FUN_001f9b80_q(&moby->pos, target_position) > 4.0f) {
             if (FUN_001fa688_q(moby->rot.z,
@@ -292,12 +292,12 @@ void FUN_L17_002e8e08(struct Moby *moby) {
         step = 0;
         add_vector_xyz_q(a, &moby->pos, drone_vars);
         add_vector_xyz_q(b, &moby->pos, c);
-        FUN_001f9a40_q(f, a, &moby->pos, 0.5f);
+        FUN_001f9a40_q(movement_midpoint, a, &moby->pos, 0.5f);
         if (*(int *)(drone_vars + 0x38) < 0x3C) {
             step = (0x3C - *(int *)(drone_vars + 0x38)) >> 2;
         }
         FUN_L17_0026fdd0_q((char *)a, 1, step);
-        FUN_L17_0026fdd0_q((char *)f, 1, step);
+        FUN_L17_0026fdd0_q((char *)movement_midpoint, 1, step);
         FUN_L17_0026fdd0_q((char *)a, 0, step);
         b[2] = b[2] + 0.25f;
         func_L00_0025A8C0_alt_q((char *)w, (int)moby, 1, 6.0f, drone_vars);
