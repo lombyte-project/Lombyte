@@ -917,33 +917,33 @@ float FUN_002132a8_26b790(float, float) __asm__("FUN_002132a8");
 extern unsigned char *D_L00_001B20B4 __attribute__((section(".data")));
 unsigned char *FUN_L00_0026b790(void *pos, int spd, int color, float j, float lo, float hi, float w,
                                 float size) {
-    unsigned char *m = FUN_L00_002678b8_26b790(0xD);
-    if (m) {
-        unsigned char *q;
-        qcopy(m + 0x10, pos);
-        q = m + 0x20;
-        *(int *)(m + 4) = color;
-        m[9] = FUN_001fa6d0_26b790(4.0f) + 0x40;
-        m[3] = 0x48;
-        *(float *)(m + 0xC) = size;
-        m[1] = 0;
-        m[8] = 0;
-        m[2] = *D_L00_001B20B4;
-        *(float *)(m + 0x10) += FUN_L00_00257c48_26b790(0.0f, j);
-        *(float *)(m + 0x14) += FUN_L00_00257c48_26b790(0.0f, j);
-        *(float *)(m + 0x18) += FUN_L00_00257c48_26b790(0.0f, j);
-        *(short *)(m + 0xA) = FUN_001f96f8_26b790(10);
-        *(int *)(q + 4) = 0;
+    unsigned char *particle = FUN_L00_002678b8_26b790(0xD);
+    if (particle) {
+        unsigned char *particle_data;
+        qcopy(particle + 0x10, pos);
+        particle_data = particle + 0x20;
+        *(int *)(particle + 4) = color;
+        particle[9] = FUN_001fa6d0_26b790(4.0f) + 0x40;
+        particle[3] = 0x48;
+        *(float *)(particle + 0xC) = size;
+        particle[1] = 0;
+        particle[8] = 0;
+        particle[2] = *D_L00_001B20B4;
+        *(float *)(particle + 0x10) += FUN_L00_00257c48_26b790(0.0f, j);
+        *(float *)(particle + 0x14) += FUN_L00_00257c48_26b790(0.0f, j);
+        *(float *)(particle + 0x18) += FUN_L00_00257c48_26b790(0.0f, j);
+        *(short *)(particle + 0xA) = FUN_001f96f8_26b790(10);
+        *(int *)(particle_data + 4) = 0;
         if (FUN_00213260_26b790(2)) {
-            *(int *)(q + 8) = spd;
+            *(int *)(particle_data + 8) = spd;
         } else {
-            *(int *)(q + 8) = -spd;
+            *(int *)(particle_data + 8) = -spd;
         }
-        *(int *)(q + 0x14) = color & 0xFFFFFF;
-        *(float *)(q + 0xC) = FUN_002132a8_26b790(lo, hi);
-        *(float *)(q + 0x10) = w;
+        *(int *)(particle_data + 0x14) = color & 0xFFFFFF;
+        *(float *)(particle_data + 0xC) = FUN_002132a8_26b790(lo, hi);
+        *(float *)(particle_data + 0x10) = w;
     }
-    return m;
+    return particle;
 }
 typedef struct {
     u8 p0[4];
