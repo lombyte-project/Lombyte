@@ -1121,22 +1121,22 @@ float FUN_L14_002b35d8(char *moby, int flag, float target_angle) {
     }
     FUN_L00_001fff28(state + 0x170, 2, *(float *)(state + 0x268));
     if (flag) {
-        float a[4];
+        float owner_aim_position[4];
         float b[4];
-        float c[4];
+        float pitch_quaternion[4];
         float *bp;
         float *cp;
         struct Hero *g;
-        float t;
-        qcopy(a, owner + 0x10);
+        float target_pitch_angle;
+        qcopy(owner_aim_position, owner + 0x10);
         g = &hero;
-        if (((char *)g->moby) == owner) a[2] = a[2] - g->ground_distance;
+        if (((char *)g->moby) == owner) owner_aim_position[2] = owner_aim_position[2] - g->ground_distance;
         bp = b;
-        subtract_vector_xyz_c2(bp, a, moby + 0x10);
+        subtract_vector_xyz_c2(bp, owner_aim_position, moby + 0x10);
         b[2] = b[2] + 1.5f;
-        t = -fast_arc_tan(vector_length_xy(bp), b[2]);
-        func_L00_0025CE58_2B4828((float *)(state + 0x280), t, (float *)(state + 0x284), frame_time_sq * 12.566370964050293f, frame_time_sq * 12.566370964050293f, frame_time * 6.2831854820251465f);
-        cp = c;
+        target_pitch_angle = -fast_arc_tan(vector_length_xy(bp), b[2]);
+        func_L00_0025CE58_2B4828((float *)(state + 0x280), target_pitch_angle, (float *)(state + 0x284), frame_time_sq * 12.566370964050293f, frame_time_sq * 12.566370964050293f, frame_time * 6.2831854820251465f);
+        cp = pitch_quaternion;
         FUN_L00_001fff28(cp, 1, *(float *)(state + 0x280));
         multiply_quaternions(state + 0x170, state + 0x170, cp);
     }
