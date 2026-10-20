@@ -297,11 +297,11 @@ extern void clear_memory(void *, int, int) __asm__("FUN_001153fc");
 void FUN_L18_002f0390(struct Moby *moby) {
     struct GeometryQuad quads[16];
     float extra[8];
-    short *p;
-    struct Moby *m;
+    short *group_entry;
+    struct Moby *missile_moby;
     char *data;
     float offset;
-    float t;
+    float color_blend_factor;
     int i;
     int j;
     int k;
@@ -321,26 +321,26 @@ void FUN_L18_002f0390(struct Moby *moby) {
         for (j = 0; j < 4; j++) {
             quads[i].texture_coordinates[j][0] = D_L18_001DA2F0[j][0];
             quads[i].texture_coordinates[j][1] = D_L18_001DA2F0[j][1];
-            t = convert_integer_to_float_group_quad(i + 1 - (j >> 1)) * 0.25f + offset;
-            if (t > 1.0f) {
-                t = 1.0f;
-            } else if (t < 0.0f) {
-                t = 0.0f;
+            color_blend_factor = convert_integer_to_float_group_quad(i + 1 - (j >> 1)) * 0.25f + offset;
+            if (color_blend_factor > 1.0f) {
+                color_blend_factor = 1.0f;
+            } else if (color_blend_factor < 0.0f) {
+                color_blend_factor = 0.0f;
             }
-            quads[i].colors[j] = interpolate_color(D_L18_00162250, D_L18_00162254, t);
+            quads[i].colors[j] = interpolate_color(D_L18_00162250, D_L18_00162254, color_blend_factor);
         }
     }
     clear_memory(extra, 0, 0x20);
     extra[2] = 0.15f;
     extra[6] = -0.15f;
-    p = D_L18_001AC240[moby->group];
+    group_entry = D_L18_001AC240[moby->group];
     do {
     again:
-        m = (struct Moby *)(((*p & 0x7FFF) << 8) + (int)D_L18_0015FFD8);
-        if (m->oclass != 0x54B) {
+        missile_moby = (struct Moby *)(((*group_entry & 0x7FFF) << 8) + (int)D_L18_0015FFD8);
+        if (missile_moby->oclass != 0x54B) {
             goto again;
         }
-        data = (char *)m->pvars;
+        data = (char *)missile_moby->pvars;
         for (n = 0; n < *(short *)(data + 0x164); n++) {
             base = (*(short *)(data + 0x166) - n + 15) & 15;
             if (D_L18_0016223C == 0) {
@@ -351,7 +351,7 @@ void FUN_L18_002f0390(struct Moby *moby) {
                 draw_geometry_quad(&quads[n], 0, 0);
             }
         }
-    } while (*p++ >= 0);
+    } while (*group_entry++ >= 0);
 }
 /* Per-frame callback: swings every class 0x54B moby in the group around its base point by its state. */
 extern int D_L18_00162238_gp __asm__("D_L18_00162238") __attribute__((sda));
