@@ -1442,11 +1442,11 @@ extern void FUN_L00_00211250_23c710(void) __asm__("FUN_L00_00211250");
 extern Entry70_23c710 D_L01_00179D70[];
 void FUN_L01_0023c710(void) {
     Vec4 sum;
-    Vec4 d;
+    Vec4 sample_delta;
     struct Moby *m;
     s32 i;
     s32 n;
-    s32 n8;
+    s32 sample_count;
 
     if (hero.unk20AD == 0) {
         FUN_L00_002165b8_23c710();
@@ -1525,17 +1525,17 @@ void FUN_L01_0023c710(void) {
     if (hero.air_frames.s != 0 && FUN_L00_00233a78_23c710(&hero.motion.velocity) < 0.0f) {
         if (hero.unk21B4 != 0x20) goto skip;
         FUN_001f99f8_23c710(&sum);
-        n8 = 8;
-        for (i = 0; i < n8; i++) {
+        sample_count = 8;
+        for (i = 0; i < sample_count; i++) {
             n = hero.unk21B0 - i;
             {
                 s32 a = (n + 0x1F) % 32;
                 s32 b = (n + 0x1E) % 32;
-                FUN_001f9a28_23c710(&d, &hero.unk1B00[a], &hero.unk1B00[b]);
+                FUN_001f9a28_23c710(&sample_delta, &hero.unk1B00[a], &hero.unk1B00[b]);
             }
-            FUN_001f9a10_23c710(&sum, &sum, &d);
+            FUN_001f9a10_23c710(&sum, &sum, &sample_delta);
         }
-        FUN_001f9a68_23c710(&sum, &sum, 1.0f / (f32)n8);
+        FUN_001f9a68_23c710(&sum, &sum, 1.0f / (f32)sample_count);
         if (FUN_001f9af0_23c710(&sum) < frame_time) {
             hero.unk1E2++;
             goto skip;
