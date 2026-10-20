@@ -13,7 +13,7 @@ void _initRefImages(unsigned int *out0, unsigned int *out1, unsigned int *out2, 
                     unsigned int *out4, unsigned int *out5, unsigned int *out6, unsigned int *out7,
                     unsigned int *out8, void *addr0, void *addr1, void *addr2, int width,
                     int height) {
-    int q;
+    int pixel_count_div_512;
 
     *out0 = (unsigned int)UncAddr(addr0);
     *out1 = (unsigned int)UncAddr(addr1);
@@ -22,9 +22,9 @@ void _initRefImages(unsigned int *out0, unsigned int *out1, unsigned int *out2, 
     *out4 = (unsigned int)UncAddr(addr1);
     *out5 = (unsigned int)UncAddr(addr2);
 
-    q = (width * height) / 512;
+    pixel_count_div_512 = (width * height) / 512;
 
-    *out6 = (unsigned int)UncAddr((char *)addr0 + q * 384);
-    *out7 = (unsigned int)UncAddr((char *)addr1 + q * 384);
-    *out8 = (unsigned int)UncAddr((char *)addr2 + q * 384);
+    *out6 = (unsigned int)UncAddr((char *)addr0 + pixel_count_div_512 * 384);
+    *out7 = (unsigned int)UncAddr((char *)addr1 + pixel_count_div_512 * 384);
+    *out8 = (unsigned int)UncAddr((char *)addr2 + pixel_count_div_512 * 384);
 }
