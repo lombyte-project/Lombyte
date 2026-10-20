@@ -556,8 +556,8 @@ char *FUN_L00_0020d8f8(float range_limit, float b, float angular_error_limit, fl
     int i = 0;
     char *candidate_moby;
     while ((candidate_moby = active_mobies[i]) != 0) {
-        float *f = FUN_002141f8_20d8f8(candidate_moby);
-        if (f != 0 && *f != 0.0f && (*(unsigned short *)(candidate_moby + 0x34) & 0x1000)) {
+        float *candidate_eligibility_value = FUN_002141f8_20d8f8(candidate_moby);
+        if (candidate_eligibility_value != 0 && *candidate_eligibility_value != 0.0f && (*(unsigned short *)(candidate_moby + 0x34) & 0x1000)) {
             int out;
             float dist = FUN_L00_0020d6b0(candidate_moby, b, range_limit, angular_error_limit, elevation_angle_limit, &out);
             if (out == 0 && dist < bd) {
