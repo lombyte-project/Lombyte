@@ -895,10 +895,10 @@ extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa6
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float FUN_001f99c0(float);
 
-int FUN_L02_002fb788(char *moby, float a, float b) {
-    float d[4];
-    float p[4];
-    float q[4];
+int FUN_L02_002fb788(char *moby, float residual_angle_limit_degrees, float b) {
+    float target_displacement[4];
+    float scaled_axis_vector[4];
+    float target_axis_residual[4];
     float r[4];
     char *data;
     char *vec = D_L02_00167410;
@@ -915,18 +915,18 @@ int FUN_L02_002fb788(char *moby, float a, float b) {
 
     data = *(char **)(tbl + *(short *)(moby + 0x84) * 32 + 0x1C);
     src = *(char **)(data + 0x48);
-    if (a == 0.0f && b == 0.0f) {
+    if (residual_angle_limit_degrees == 0.0f && b == 0.0f) {
         return 1;
     }
     g = D_L02_00167280;
-    fast_vec_sub(d, src + 0x10, *(char **)(g + 0x180) + 0x30);
-    dot1 = fast_vec_dot(d, (vec + 0x30));
-    fast_vec_scale(p, (vec + 0x30), dot1);
-    fast_vec_sub(q, d, p);
-    lenq = fast_vec_length(q);
+    fast_vec_sub(target_displacement, src + 0x10, *(char **)(g + 0x180) + 0x30);
+    dot1 = fast_vec_dot(target_displacement, (vec + 0x30));
+    fast_vec_scale(scaled_axis_vector, (vec + 0x30), dot1);
+    fast_vec_sub(target_axis_residual, target_displacement, scaled_axis_vector);
+    lenq = fast_vec_length(target_axis_residual);
     dot2 = fast_vec_dot(*(char **)(g + 0x180), (vec + 0x30));
-    fast_vec_scale(p, (vec + 0x30), dot2);
-    fast_vec_sub(r, *(char **)(g + 0x180), p);
+    fast_vec_scale(scaled_axis_vector, (vec + 0x30), dot2);
+    fast_vec_sub(r, *(char **)(g + 0x180), scaled_axis_vector);
     lenr = fast_vec_length(r);
     if (b != 0.0f) {
         float target_axis_angle = fast_arc_tan(lenq, dot1);
@@ -936,15 +936,15 @@ int FUN_L02_002fb788(char *moby, float a, float b) {
             return 0;
         }
     }
-    if (a == 0.0f) {
+    if (residual_angle_limit_degrees == 0.0f) {
         return 1;
     }
-    dot3 = fast_vec_dot(q, r);
+    dot3 = fast_vec_dot(target_axis_residual, r);
     den = lenr * lenq;
     if (den == 0.0f) {
         return 0;
     }
-    if (FUN_001f99c0(1.5707964f - fast_arc_sin(dot3 / den)) < a * DEG_TO_RAD) {
+    if (FUN_001f99c0(1.5707964f - fast_arc_sin(dot3 / den)) < residual_angle_limit_degrees * DEG_TO_RAD) {
         return 1;
     }
     return 0;
