@@ -104,11 +104,11 @@ extern float D_L00_0015FCA0;
 extern float D_L00_0015FCA4;
 float ground_height_at(Vec4 *v) __asm__("FUN_L00_00263468");
 float ground_height_at(Vec4 *v) {
-    Vec4 t;
+    Vec4 sample_position;
     int iy, ix;
-    t.q = v->q;
-    iy = t.f[1];
-    ix = t.f[0];
+    sample_position.q = v->q;
+    iy = sample_position.f[1];
+    ix = sample_position.f[0];
     return (D_L00_0015FCA4 - D_L00_0015FCA0) *
                (1.0f - (D_L00_0015FCA8 + D_L00_0015FC98 * iy)[ix] / 255.0f) +
            D_L00_0015FCA0;
