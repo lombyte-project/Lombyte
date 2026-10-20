@@ -901,12 +901,12 @@ void FUN_L00_00206c08(void) {
     s32 voice;
     struct Moby *moby;
     s32 active;
-    struct Hero *h;
+    struct Hero *hero_state;
     struct Moby **mobys;
 
-    h = &hero;
-    mobys = h->unk2238;
-    slot = &h->unk2218;
+    hero_state = &hero;
+    mobys = hero_state->unk2238;
+    slot = &hero_state->unk2218;
     off = 0;
     for (i = 7; i >= 0; i--) {
         moby = *(struct Moby **)(off + (s32)mobys);
@@ -917,7 +917,7 @@ void FUN_L00_00206c08(void) {
             }
             active = voice_pool.voices[voice].state;
         } else {
-            if (voice == -1 || voice_pool.voices[voice].owner != (VoiceMoby *)h->moby) {
+            if (voice == -1 || voice_pool.voices[voice].owner != (VoiceMoby *)hero_state->moby) {
                 goto clear;
             }
             active = voice_pool.voices[voice].state;
