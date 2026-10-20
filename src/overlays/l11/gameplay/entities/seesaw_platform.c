@@ -61,7 +61,7 @@ void FUN_L11_0030d1b0(struct Moby *m);
 
 /* Controller for the child moby sets laid out by FUN_L11_0030d1b0: spawns them, waits for its linked
    moby, fades in, then unfolds the sets one after another while blending between two D_L11_001600EC points. */
-void FUN_L11_0030c788(struct Moby *m) {
+void FUN_L11_0030c788(struct Moby *child_sets_controller) {
     enum {
         CHILD_SETS_STATE_CREATE_CHILDREN = 0,
         CHILD_SETS_STATE_WAIT_FOR_LINK_TRIGGER = 1,
@@ -69,16 +69,16 @@ void FUN_L11_0030c788(struct Moby *m) {
         CHILD_SETS_STATE_UNFOLD_AND_BLEND_POSES = 3,
         CHILD_SETS_STATE_FADE_AFTER_HERO_HANDOFF = 4
     };
-    CamVars_c788 *pv = (CamVars_c788 *)m->pvars;
+    CamVars_c788 *pv = (CamVars_c788 *)child_sets_controller->pvars;
     Vec4f pos;
     Vec4f rot;
     int i;
 
-    switch (m->state) {
+    switch (child_sets_controller->state) {
     case CHILD_SETS_STATE_CREATE_CHILDREN:
-        m->visible = 0;
-        m->collision = 0;
-        m->flags |= 1;
+        child_sets_controller->visible = 0;
+        child_sets_controller->collision = 0;
+        child_sets_controller->flags |= 1;
         D_L11_00161EC4 = 0.0f;
         D_L11_00161EC8 = 0.0f;
         D_L11_00161ECC = 0.0f;
@@ -86,14 +86,14 @@ void FUN_L11_0030c788(struct Moby *m) {
         D_L11_00161ED4 = 0.0f;
         D_L11_00161ED8 = 0.0f;
         D_L11_00161EDC = 0.0f;
-        m->command = 0;
+        child_sets_controller->command = 0;
         for (i = 0; i < 6; i++) {
             D_L11_001DA710[i] = create_moby_c788(0x480);
             D_L11_001DA710[i]->draw_dist = 0x40;
             D_L11_001DA710[i]->visible = 1;
             D_L11_001DA710[i]->spawn_frame = hero.moby->spawn_frame;
-            qcopy_nc(&D_L11_001DA710[i]->pos, &m->pos);
-            qcopy_nc(&D_L11_001DA710[i]->rot, &m->rot);
+            qcopy_nc(&D_L11_001DA710[i]->pos, &child_sets_controller->pos);
+            qcopy_nc(&D_L11_001DA710[i]->rot, &child_sets_controller->rot);
             D_L11_001DA710[i]->flags |= 1;
             D_L11_001DA710[i]->visible = 0;
             D_L11_001DA710[i]->collision = 0;
@@ -103,8 +103,8 @@ void FUN_L11_0030c788(struct Moby *m) {
             D_L11_00161F20[i]->draw_dist = 0x40;
             D_L11_00161F20[i]->visible = 1;
             D_L11_00161F20[i]->spawn_frame = hero.moby->spawn_frame;
-            qcopy_nc(&D_L11_00161F20[i]->pos, &m->pos);
-            qcopy_nc(&D_L11_00161F20[i]->rot, &m->rot);
+            qcopy_nc(&D_L11_00161F20[i]->pos, &child_sets_controller->pos);
+            qcopy_nc(&D_L11_00161F20[i]->rot, &child_sets_controller->rot);
             D_L11_00161F20[i]->flags |= 1;
             D_L11_00161F20[i]->visible = 0;
             D_L11_00161F20[i]->collision = 0;
@@ -114,8 +114,8 @@ void FUN_L11_0030c788(struct Moby *m) {
             D_L11_00161F30[i]->draw_dist = 0x40;
             D_L11_00161F30[i]->visible = 1;
             D_L11_00161F30[i]->spawn_frame = hero.moby->spawn_frame;
-            qcopy_nc(&D_L11_00161F30[i]->pos, &m->pos);
-            qcopy_nc(&D_L11_00161F30[i]->rot, &m->rot);
+            qcopy_nc(&D_L11_00161F30[i]->pos, &child_sets_controller->pos);
+            qcopy_nc(&D_L11_00161F30[i]->rot, &child_sets_controller->rot);
             D_L11_00161F30[i]->flags |= 1;
             D_L11_00161F30[i]->visible = 0;
             D_L11_00161F30[i]->collision = 0;
@@ -126,8 +126,8 @@ void FUN_L11_0030c788(struct Moby *m) {
             D_L11_00161F10[i]->draw_dist = 0x40;
             D_L11_00161F10[i]->visible = 1;
             D_L11_00161F10[i]->spawn_frame = hero.moby->spawn_frame;
-            qcopy_nc(&D_L11_00161F10[i]->pos, &m->pos);
-            qcopy_nc(&D_L11_00161F10[i]->rot, &m->rot);
+            qcopy_nc(&D_L11_00161F10[i]->pos, &child_sets_controller->pos);
+            qcopy_nc(&D_L11_00161F10[i]->rot, &child_sets_controller->rot);
             D_L11_00161F10[i]->flags |= 0x20;
             cv = D_L11_00161F10[i]->pvars;
             *(char **)(cv + 8) = cv + 0x20;
@@ -136,12 +136,12 @@ void FUN_L11_0030c788(struct Moby *m) {
             D_L11_00161F10[i]->visible = 0;
             D_L11_00161F10[i]->collision = 0;
         }
-        FUN_L11_0030d1b0(m);
-        m->state = 1;
+        FUN_L11_0030d1b0(child_sets_controller);
+        child_sets_controller->state = 1;
         break;
     case CHILD_SETS_STATE_WAIT_FOR_LINK_TRIGGER:
         if (pv->link != -1 && FUN_L11_0030f270_c788((void *)(D_L11_0015FFD8_c788 + (pv->link << 8)))) {
-            m->state = 2;
+            child_sets_controller->state = 2;
         }
         break;
     case CHILD_SETS_STATE_FADE_BEFORE_ACTIVATION:
@@ -149,12 +149,12 @@ void FUN_L11_0030c788(struct Moby *m) {
         D_L11_0015F3FC = pv->fade;
         if (1.0f <= pv->fade) {
             int j;
-            m->state = 3;
+            child_sets_controller->state = 3;
             qcopy(&pos, &((struct Moby *)(D_L11_0015FFD8_c788 + (pv->link << 8)))->pos);
             pos.z += 5.0f;
             pos.z = probe_ground_height(&pos, 0, 0.5f);
             zero_vector_c788(&rot);
-            rot.z = atan2_c788(m->pos.x - pos.x, m->pos.y - pos.y);
+            rot.z = atan2_c788(child_sets_controller->pos.x - pos.x, child_sets_controller->pos.y - pos.y);
             FUN_L00_00216f90(&pos, &rot, 0x72, 1);
             jet_mount((char *)(D_L11_001600EC_c788 + (pv->from << 7)) + 0x30,
                              (char *)(D_L11_001600EC_c788 + (pv->to << 7)) + 0x70, 1, 0, 0);
@@ -178,7 +178,7 @@ void FUN_L11_0030c788(struct Moby *m) {
                 D_L11_00161F10[j]->visible = 1;
                 D_L11_00161F10[j]->collision = D_L11_00161F10[j]->pclass->collision;
             }
-            FUN_0022da68_c788(0, 0, m);
+            FUN_0022da68_c788(0, 0, child_sets_controller);
         }
         break;
     case CHILD_SETS_STATE_UNFOLD_AND_BLEND_POSES:
@@ -186,14 +186,14 @@ void FUN_L11_0030c788(struct Moby *m) {
             approach_c788(&D_L11_00161EC4, &D_L11_00161EE0, 1.0f, frame_time_sq, frame_time_sq, frame_time);
         }
         if (0.9f < D_L11_00161EC4 && D_L11_00161EC8 == 0.0f) {
-            FUN_0022da68_c788(1, 0, m);
+            FUN_0022da68_c788(1, 0, child_sets_controller);
         }
         if (0.9f < D_L11_00161EC4 && D_L11_00161EC8 < 1.0f) {
             approach_c788(&D_L11_00161EC8, &D_L11_00161EE4, 1.0f, frame_time_sq + frame_time_sq,
                           frame_time_sq + frame_time_sq, frame_time + frame_time);
         }
         if (0.5f < D_L11_00161EC8 && D_L11_00161ECC == 0.0f) {
-            FUN_0022da68_c788(1, 0, m);
+            FUN_0022da68_c788(1, 0, child_sets_controller);
         }
         if (0.5f < D_L11_00161EC8 && D_L11_00161ECC < 1.0f) {
             approach_c788(&D_L11_00161ECC, &D_L11_00161EE8, 1.0f, frame_time_sq + frame_time_sq,
@@ -211,11 +211,11 @@ void FUN_L11_0030c788(struct Moby *m) {
             approach_c788(&D_L11_00161ED8, &D_L11_00161EF4, 1.0f, frame_time_sq + frame_time_sq,
                           frame_time_sq * 4.0f, frame_time + frame_time);
         }
-        FUN_L11_0030d1b0(m);
+        FUN_L11_0030d1b0(child_sets_controller);
         if (alternate_item_available_c788[0x56] != 0 && D_0013CAE4 != 0) {
-            m->command = 1;
+            child_sets_controller->command = 1;
         }
-        if (D_L11_00161ED8 < 1.0f && m->command == 0) {
+        if (D_L11_00161ED8 < 1.0f && child_sets_controller->command == 0) {
             approach_value_c788(&pv->fade, 0.0f, frame_time * 4.0f);
         } else {
             approach_value_c788(&pv->fade, 1.0f, frame_time * 4.0f);
@@ -236,8 +236,8 @@ void FUN_L11_0030c788(struct Moby *m) {
             D_L11_00161ED0 = 1.0f;
             D_L11_00161ED4 = 1.0f;
             D_L11_00161ED8 = 1.0f;
-            FUN_L11_0030d1b0(m);
-            m->state = 4;
+            FUN_L11_0030d1b0(child_sets_controller);
+            child_sets_controller->state = 4;
             FUN_L00_002eac18(3);
             FUN_L00_00216f90(&hero.motion.pos, &hero.motion.rot, 0, 1);
             alternate_item_available_c788[0x56] = 1;
@@ -247,7 +247,7 @@ void FUN_L11_0030c788(struct Moby *m) {
         approach_value_c788(&pv->fade, 0.0f, frame_time * 4.0f);
         D_L11_0015F3FC = pv->fade;
         if (pv->fade == 0.0f) {
-            m->state = 5;
+            child_sets_controller->state = 5;
         }
         break;
     }
