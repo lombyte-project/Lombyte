@@ -157,11 +157,11 @@ int FUN_L00_0020cd08(Vec4 *from, s32 **outOwner, Vec4 *to, s32 *outI, f32 *outF,
     s32 gotI;
     f32 gotF;
     s32 i;
-    Vec4 *p = &pos;
+    Vec4 *query_position = &pos;
     f32 distance_limit, height_limit, distance, height;
     struct Hero *hero_state;
 
-    *(u128 *)p = *(u128 *)from;
+    *(u128 *)query_position = *(u128 *)from;
     for (i = 0; i < D_L00_0015F710; i++) {
         if (skip != 0 && D_L00_0015F70C[i].owner == skip)
             continue;
@@ -169,9 +169,9 @@ int FUN_L00_0020cd08(Vec4 *from, s32 **outOwner, Vec4 *to, s32 *outI, f32 *outF,
             continue;
         if (*D_L00_0015F70C[i].owner == 0)
             continue;
-        if (FUN_001f9b48(&D_L00_0015F70C[i], p) > D_L00_0015F70C[i].sphere.f[3])
+        if (FUN_001f9b48(&D_L00_0015F70C[i], query_position) > D_L00_0015F70C[i].sphere.f[3])
             continue;
-        if (!FUN_L00_0025df68(D_L00_0015F70C[i].owner, p, to, &gotI, &gotF, D_L00_0015F70C[i].kind,
+        if (!FUN_L00_0025df68(D_L00_0015F70C[i].owner, query_position, to, &gotI, &gotF, D_L00_0015F70C[i].kind,
                               12.0f, 10.0f, 0.0f))
             continue;
         hero_state = &hero;
@@ -183,8 +183,8 @@ int FUN_L00_0020cd08(Vec4 *from, s32 **outOwner, Vec4 *to, s32 *outI, f32 *outF,
             height_limit = 10.0f;
             distance_limit += 0.5f;
         }
-        distance = vector_distance(p, to);
-        height = FUN_001f99c0(p->f[2] - to->f[2]);
+        distance = vector_distance(query_position, to);
+        height = FUN_001f99c0(query_position->f[2] - to->f[2]);
         if (!(distance < distance_limit && height < height_limit))
             continue;
         *outOwner = D_L00_0015F70C[i].owner;
