@@ -3294,20 +3294,20 @@ typedef struct {
 typedef void (*CB09)(M09 *);
 void FUN_L00_002df3d8_u(M09 *) __asm__("FUN_L00_002df3d8");
 void FUN_001f4600(CB09, M09 *);
-void FUN_L00_002df4a8(M09 *m) {
+void FUN_L00_002df4a8(M09 *moby) {
     u8 b;
     s32 v;
     S09 *s;
-    b = m->pad[0x21];
+    b = moby->pad[0x21];
     if (b == 0xFF)
         return;
-    s = m->s;
+    s = moby->s;
     v = D_L00_0015F5CC;
     if (v == 0)
         return;
     if (v != *s->p) {
         *s->p = v;
-        FUN_001f4600(FUN_L00_002df3d8_u, m);
+        FUN_001f4600(FUN_L00_002df3d8_u, moby);
     }
 }
 /* update for the pulsing colour object */
