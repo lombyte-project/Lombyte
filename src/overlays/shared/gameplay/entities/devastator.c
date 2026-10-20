@@ -2092,7 +2092,7 @@ s32 random_integer_below(s32 arg0) __asm__("FUN_00213260");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void FUN_L00_002b5d00(char *m, int flag) {
-    float tmp[4];
+    float elevated_spawn_position[4];
     float d[4];
     float n[4];
     V6 A;
@@ -2100,11 +2100,11 @@ void FUN_L00_002b5d00(char *m, int flag) {
     float len, extra, sc;
     int count, i, j;
 
-    qcopy(tmp, m + 0x10);
-    tmp[2] += 0.3f;
-    FUN_L00_0026b790(tmp, 1, 0x40808080, 0.3f, 1.01f, 1.075f, 0.05f, 50000.0f);
+    qcopy(elevated_spawn_position, m + 0x10);
+    elevated_spawn_position[2] += 0.3f;
+    FUN_L00_0026b790(elevated_spawn_position, 1, 0x40808080, 0.3f, 1.01f, 1.075f, 0.05f, 50000.0f);
     for (j = 4; j >= 0; j--) {
-        FUN_L00_0026b790(tmp, 1, 0x40808080, 0.3f, 1.01f, 1.07f, 0.05f, 50000.0f);
+        FUN_L00_0026b790(elevated_spawn_position, 1, 0x40808080, 0.3f, 1.01f, 1.07f, 0.05f, 50000.0f);
     }
     if (flag != 0) {
         subtract_vector_xyz(d, D_L00_00166DC0, m + 0x10);
