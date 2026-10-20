@@ -191,14 +191,14 @@ int FUN_001fa6d0_00269958(float) __asm__("FUN_001fa6d0");
 int FUN_001160d8_00269958(void) __asm__("FUN_001160d8");
 extern unsigned char *D_L00_001B2090 __attribute__((section(".data")));
 void FUN_L00_00269958(u128 *a, u128 *b, int c, int d, int n, int s1, int s2, int flag);
-void FUN_L00_00269958(u128 *spawn_position, u128 *b, int c, int d, int lifetime, int scalar_base, int scalar_delta, int flag) {
+void FUN_L00_00269958(u128 *spawn_position, u128 *b, int initial_color, int d, int lifetime, int scalar_base, int scalar_delta, int flag) {
     unsigned char *particle = FUN_L00_002678b8_00269958(4);
     if (particle) {
         int *particle_data;
         unsigned char *particle_position;
         qcopy(particle + 0x10, spawn_position);
         particle_position = particle + 0x10;
-        *(int *)(particle + 4) = c;
+        *(int *)(particle + 4) = initial_color;
         particle[9] = FUN_001fa6d0_00269958(4.0f) - 0x60;
         particle[3] = flag ? 0x48 : 0x44;
         particle[1] = 0;
@@ -210,7 +210,7 @@ void FUN_L00_00269958(u128 *spawn_position, u128 *b, int c, int d, int lifetime,
         qcopy(particle_data, b);
         *(short *)(particle + 0xa) = lifetime;
         particle_data[7] = lifetime;
-        particle_data[4] = c;
+        particle_data[4] = initial_color;
         particle_data[5] = d;
         *(short *)((char *)particle_data + 0x18) = scalar_delta;
         *(short *)((char *)particle_data + 0x1a) = scalar_base;
