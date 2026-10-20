@@ -2654,9 +2654,9 @@ extern char *FUN_L00_002db890(char *);
 extern int FUN_L00_002dbc30(char *, int, int, float);
 extern void FUN_0022da68(int, int, char *);
 
-int FUN_L01_002f1d18(char *moby, int a, int b, float f) {
+int FUN_L01_002f1d18(char *moby, int a, int b, float position_z_offset) {
     char *h = FUN_L00_002db890(moby);
-    int r = FUN_L00_002dbc30(moby, a, b, f);
+    int r = FUN_L00_002dbc30(moby, a, b, position_z_offset);
     if (r != 0) {
         moby[0x20] = 7;
     } else if ((unsigned char)moby[0x20] == 7) {
