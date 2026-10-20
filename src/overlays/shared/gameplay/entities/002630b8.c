@@ -507,65 +507,65 @@ void *FUN_L00_00263fd8(char *src, int cls, float *pos, void *mat, int a8, int a9
                        float *v11, float scale, float *v12);
 void *FUN_L00_00263fd8(char *src, int cls, float *pos, void *mat, int random_default_override, int fragment_mode, float *initial_velocity,
                        float *random_vector_override, float scale, float *class_vector_override) {
-    char *m = (char *)func_0020D348_m(cls);
-    char *d;
-    float t[4];
+    char *fragment_moby = (char *)func_0020D348_m(cls);
+    char *fragment_pvars;
+    float vector_scratch[4];
     float r, f21, k, k2;
 
-    if (m != 0) {
+    if (fragment_moby != 0) {
         r = *(float *)(src + 0x2C) / *(float *)(*(char **)(src + 0x24) + 0x24);
-        *(float *)(m + 0x2C) = *(float *)(*(char **)(m + 0x24) + 0x24) * r;
-        m[0x31] = 1;
-        *(unsigned short *)(m + 0x34) |= 0x100;
-        d = *(char **)(m + 0x78);
-        *(long *)(m + 0x38) = *(long *)(src + 0x38);
-        m[0x20] = 1;
-        qcopy(m + 0x10, pos);
-        euler_rotation_basis(m + 0xC0, mat);
-        *(unsigned char *)(m + 0x30) = 0xFF;
-        *(short *)(m + 0x32) = 0x80;
-        *(int *)(m + 0x94) = 0;
+        *(float *)(fragment_moby + 0x2C) = *(float *)(*(char **)(fragment_moby + 0x24) + 0x24) * r;
+        fragment_moby[0x31] = 1;
+        *(unsigned short *)(fragment_moby + 0x34) |= 0x100;
+        fragment_pvars = *(char **)(fragment_moby + 0x78);
+        *(long *)(fragment_moby + 0x38) = *(long *)(src + 0x38);
+        fragment_moby[0x20] = 1;
+        qcopy(fragment_moby + 0x10, pos);
+        euler_rotation_basis(fragment_moby + 0xC0, mat);
+        *(unsigned char *)(fragment_moby + 0x30) = 0xFF;
+        *(short *)(fragment_moby + 0x32) = 0x80;
+        *(int *)(fragment_moby + 0x94) = 0;
         if (random_default_override == 0)
-            *(int *)(d + 0x30) =
+            *(int *)(fragment_pvars + 0x30) =
                 func_001FA898_r(multiply_global_factor_ed64(random_float_between_alt(60.0f, 120.0f)));
         else
-            *(int *)(d + 0x30) = random_default_override;
-        *(int *)(d + 0x34) = fragment_mode;
-        if (*(float *)(d + 0x38) == 0.0f)
-            *(float *)(d + 0x38) = random_float_between_alt(10.0f, 15.0f) * frame_time_sq;
+            *(int *)(fragment_pvars + 0x30) = random_default_override;
+        *(int *)(fragment_pvars + 0x34) = fragment_mode;
+        if (*(float *)(fragment_pvars + 0x38) == 0.0f)
+            *(float *)(fragment_pvars + 0x38) = random_float_between_alt(10.0f, 15.0f) * frame_time_sq;
         else
-            *(float *)(d + 0x38) = scale;
+            *(float *)(fragment_pvars + 0x38) = scale;
         if (fast_vec_length(initial_velocity) == 0.0f) {
             f21 = random_angle_radians();
             k = random_float_between_alt(2.0f, 4.0f) * frame_time;
-            t[0] = fast_cos(f21) * k;
-            t[1] = fast_sin(f21) * k;
-            t[2] = 0.0f;
-            t[2] = random_float_between_alt(5.0f, 8.0f) * frame_time;
-            qcopy(d, t);
+            vector_scratch[0] = fast_cos(f21) * k;
+            vector_scratch[1] = fast_sin(f21) * k;
+            vector_scratch[2] = 0.0f;
+            vector_scratch[2] = random_float_between_alt(5.0f, 8.0f) * frame_time;
+            qcopy(fragment_pvars, vector_scratch);
         } else {
-            qcopy(d, initial_velocity);
+            qcopy(fragment_pvars, initial_velocity);
         }
         if (fast_vec_length(random_vector_override) == 0.0f) {
             float g = D_0015ED6C_s[0];
-            random_vector(t, g * 3.1415927f, g * 6.2831855f);
-            qcopy(d + 0x10, t);
+            random_vector(vector_scratch, g * 3.1415927f, g * 6.2831855f);
+            qcopy(fragment_pvars + 0x10, vector_scratch);
         } else {
-            qcopy(d + 0x10, random_vector_override);
+            qcopy(fragment_pvars + 0x10, random_vector_override);
         }
         if (fast_vec_length(class_vector_override) == 0.0f && class_vector_override[3] == 0.0f) {
-            qcopy(t, *(char **)(m + 0x24) + 0x30);
-            k2 = *(float *)(m + 0x2C);
+            qcopy(vector_scratch, *(char **)(fragment_moby + 0x24) + 0x30);
+            k2 = *(float *)(fragment_moby + 0x2C);
             k2 = k2 * 0.0009765625f;
-            fast_vec_scale(t, t, k2);
-            t[3] = t[3] * k2;
-            qcopy(d + 0x20, t);
+            fast_vec_scale(vector_scratch, vector_scratch, k2);
+            vector_scratch[3] = vector_scratch[3] * k2;
+            qcopy(fragment_pvars + 0x20, vector_scratch);
         } else {
-            qcopy(d + 0x20, class_vector_override);
+            qcopy(fragment_pvars + 0x20, class_vector_override);
         }
-        FUN_L00_00250df8(m);
+        FUN_L00_00250df8(fragment_moby);
     }
-    return m;
+    return fragment_moby;
 }
 extern s32 D_L00_0015F590;
 extern s32 D_L00_0015F594;
