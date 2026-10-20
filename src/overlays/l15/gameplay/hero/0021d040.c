@@ -150,6 +150,7 @@ void FUN_L15_0021d040(void) {
         HERO_STATE_TARGET_POSE_ANIMATION_WAIT = 102,
         HERO_STATE_AT_TARGET_POSE = 103,
         HERO_STATE_WAIT_FOR_JUMP_OR_RESPAWN = 104,
+        HERO_STATE_WAIT_FOR_ANIMATION_THEN_RESPAWN = 106,
         HERO_STATE_FALL_TO_RESPAWN = 119,
         HERO_STATE_WAIT_FOR_RESPAWN_HEIGHT_OR_TIMEOUT = 123
     };
@@ -468,7 +469,7 @@ void FUN_L15_0021d040(void) {
                 case 71:
                 case 87:
                 case 98:
-                case 106:
+                case HERO_STATE_WAIT_FOR_ANIMATION_THEN_RESPAWN:
                 case 128:
                 case 130:
                     if (hero.unkA98 & 2) {
