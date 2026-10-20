@@ -33,7 +33,7 @@ f32 FUN_L02_002360c8(f32 a, f32 b, f32 target_z) {
         HERO_TRAJECTORY_STORED_VECTOR_ACCELERATION = 1,
         HERO_TRAJECTORY_POSITION_OFFSET_ACCELERATION = 2
     };
-    f32 t[4];
+    f32 trajectory_position[4];
     V4_32b90 v;
     V4_32b90 vector_scratch;
     V4_32b90 hero_position_copy;
@@ -43,13 +43,13 @@ f32 FUN_L02_002360c8(f32 a, f32 b, f32 target_z) {
     switch (hero.unk20B3) {
     case HERO_TRAJECTORY_Z_AXIS_ACCELERATION:
         if (target_z < 0.0f) {
-            FUN_001f9a68_32b90(t, &hero.motion.velocity, a);
-            t[2] -= ((a * a + a) * 0.5f) * b;
-            FUN_001f9a10_32b90(t, t, &hero.motion.pos);
+            FUN_001f9a68_32b90(trajectory_position, &hero.motion.velocity, a);
+            trajectory_position[2] -= ((a * a + a) * 0.5f) * b;
+            FUN_001f9a10_32b90(trajectory_position, trajectory_position, &hero.motion.pos);
             v.q = hero.motion.pos.q;
-            FUN_L00_0025d238_32b90(&v, t);
+            FUN_L00_0025d238_32b90(&v, trajectory_position);
             qcopy(&v, &hero.motion.pos);
-            if (FUN_001efa68_32b90(&v, t, 0x324, 0, 0) != 0) {
+            if (FUN_001efa68_32b90(&v, trajectory_position, 0x324, 0, 0) != 0) {
                 if (FUN_L00_00233d30_32b90((f32 *)D_L02_00174480) <= 0.87266463f) {
                     target_z = *(f32 *)(D_L02_00174480 - 0x18);
                 }
@@ -67,13 +67,13 @@ f32 FUN_L02_002360c8(f32 a, f32 b, f32 target_z) {
         qcopy(&v, &hero.unk270);
         FUN_001f9bf8_32b90(&v, &v, b);
         FUN_001f9a68_32b90(&v, &v, -1.0f);
-        FUN_001f9a68_32b90(t, &hero.motion.velocity, a);
+        FUN_001f9a68_32b90(trajectory_position, &hero.motion.velocity, a);
         FUN_001f9a68_32b90(&vector_scratch, &v, ((a * a + a) * 0.5f) * b);
-        FUN_001f9a10_32b90(t, &vector_scratch, t);
-        FUN_001f9a10_32b90(t, &hero.motion.pos, t);
+        FUN_001f9a10_32b90(trajectory_position, &vector_scratch, trajectory_position);
+        FUN_001f9a10_32b90(trajectory_position, &hero.motion.pos, trajectory_position);
         hero_position_copy.q = hero.motion.pos.q;
-        FUN_L00_0025d238_32b90(&hero_position_copy, t);
-        if (FUN_001efa68_32b90(&hero.motion.pos, t, 0x324, 0, 0) != 0) {
+        FUN_L00_0025d238_32b90(&hero_position_copy, trajectory_position);
+        if (FUN_001efa68_32b90(&hero.motion.pos, trajectory_position, 0x324, 0, 0) != 0) {
             f32 nb;
             nb = b * -0.5f;
             z = FUN_L00_00233a78_32b90(&hero.motion.velocity) - nb;
@@ -91,13 +91,13 @@ f32 FUN_L02_002360c8(f32 a, f32 b, f32 target_z) {
         FUN_001f9a28_32b90(&v, &hero.motion.pos, &vector_scratch);
         FUN_001f9bf8_32b90(&v, &v, b);
         FUN_001f9a68_32b90(&v, &v, -1.0f);
-        FUN_001f9a68_32b90(t, &hero.motion.velocity, a);
+        FUN_001f9a68_32b90(trajectory_position, &hero.motion.velocity, a);
         FUN_001f9a68_32b90(&vector_scratch, &v, ((a * a + a) * 0.5f) * b);
-        FUN_001f9a10_32b90(t, &vector_scratch, t);
-        FUN_001f9a10_32b90(t, &hero.motion.pos, t);
+        FUN_001f9a10_32b90(trajectory_position, &vector_scratch, trajectory_position);
+        FUN_001f9a10_32b90(trajectory_position, &hero.motion.pos, trajectory_position);
         hero_position_copy.q = hero.motion.pos.q;
-        FUN_L00_0025d238_32b90(&hero_position_copy, t);
-        if (FUN_001efa68_32b90(&hero.motion.pos, t, 0x324, 0, 0) != 0) {
+        FUN_L00_0025d238_32b90(&hero_position_copy, trajectory_position);
+        if (FUN_001efa68_32b90(&hero.motion.pos, trajectory_position, 0x324, 0, 0) != 0) {
             f32 nb;
             nb = b * -0.5f;
             z = FUN_L00_00233a78_32b90(&hero.motion.velocity) - nb;
