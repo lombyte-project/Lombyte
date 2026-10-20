@@ -1618,96 +1618,96 @@ extern L16WatchPlayer D_0013E633_watch __asm__("D_0013E533");
 
 extern char *D_L12_001600EC;
 void miner_update(L16WatchMoby *m) __asm__("FUN_L12_002e6c48");
-void miner_update(L16WatchMoby *m) {
+void miner_update(L16WatchMoby *moby) {
     enum {
         MINER_INITIALIZE = 0,
         MINER_UPDATE_DIALOGUE = 1,
         MINER_APPLY_DIALOGUE_COMPLETION = 2
     };
     L16WatchScratch scratch;
-    L16WatchData *d = m->data;
+    L16WatchData *moby_data = moby->data;
     float rate;
     float head_rate;
     int tracking;
-    FUN_L12_002e6b60((char *)m);
-    switch (m->state) {
+    FUN_L12_002e6b60((char *)moby);
+    switch (moby->state) {
     case MINER_INITIALIZE:
         if (alternate_item_available[1] != 0) {
-            FUN_0020c828_c(m);
+            FUN_0020c828_c(moby);
             return;
         }
-        m->state = 1;
-        initialize_npc_dialogue(m, &d->activation);
-        initialize_moby_grounding(m);
+        moby->state = 1;
+        initialize_npc_dialogue(moby, &moby_data->activation);
+        initialize_moby_grounding(moby);
         break;
     case MINER_UPDATE_DIALOGUE:
-        if (alternate_item_available[1] == 0 && update_npc_dialogue(m, &d->activation)) {
-            FUN_L01_002783a8_c(m, 2.5f);
-            *(int *)((char *)m + 0x58) = 0;
-            m->state = 2;
+        if (alternate_item_available[1] == 0 && update_npc_dialogue(moby, &moby_data->activation)) {
+            FUN_L01_002783a8_c(moby, 2.5f);
+            *(int *)((char *)moby + 0x58) = 0;
+            moby->state = 2;
         }
         break;
     case MINER_APPLY_DIALOGUE_COMPLETION:
         if (D_L12_0015F5C4 != 2) {
-            *(float *)((char *)m + 0x58) = 1.0f;
+            *(float *)((char *)moby + 0x58) = 1.0f;
             alternate_item_available[1] = 1;
             FUN_L00_00263d40_c(0x2EE7, scale_game_frames(300));
             alternate_item_available[0x61] = 1;
-            jet_clear_persistent(m->widget);
-            if (d->region != -1) {
-                char *p = D_L12_001600EC + (d->region << 7);
+            jet_clear_persistent(moby->widget);
+            if (moby_data->region != -1) {
+                char *p = D_L12_001600EC + (moby_data->region << 7);
                 jet_reset_camera(p + 0x30, p + 0x70);
             }
             memcard_save_data(0, -1);
-            m->state = 1;
+            moby->state = 1;
         }
     }
     rate = 0.02f;
     head_rate = 0.3f;
     tracking = 0;
-    if (m->animation == 0) {
+    if (moby->animation == 0) {
         char *player = (char *)&D_0013E633_watch + 0xE9D;
         tracking = 1;
-        if (vector_distance(m->position, player) < 8.0f &&
+        if (vector_distance(moby->position, player) < 8.0f &&
             FUN_001f9e90_cf(
-                m->yaw,
+                moby->yaw,
                 FUN_001fa688_cf(((L16WatchPlayer *)((char *)&D_0013E633_watch + 0xE1D))->aim[0] -
-                                    m->position[0],
+                                    moby->position[0],
                                 ((L16WatchPlayer *)((char *)&D_0013E633_watch + 0xE1D))->aim[1] -
-                                    m->position[1])) < 1.5707964f) {
+                                    moby->position[1])) < 1.5707964f) {
             if (vector_length_xyz(player + 0x80) > 0.01f)
-                d->moving_timer = scale_game_frames(120);
+                moby_data->moving_timer = scale_game_frames(120);
             else
-                tick_countdown_32(&d->moving_timer);
-        } else if (d->moving_timer) {
-            d->moving_timer = 0;
-            qcopy(d->target, (char *)&D_0013E633_watch + 0xEED);
+                tick_countdown_32(&moby_data->moving_timer);
+        } else if (moby_data->moving_timer) {
+            moby_data->moving_timer = 0;
+            qcopy(moby_data->target, (char *)&D_0013E633_watch + 0xEED);
         }
-        if (tick_countdown_32(&d->target_timer)) {
+        if (tick_countdown_32(&moby_data->target_timer)) {
             float heading;
-            d->target_timer =
+            moby_data->target_timer =
                 random_float_between_cf(multiply_global_factor_ed64(truncate_float_to_s32_cf(180.0f, 300.0f)));
             heading =
-                fast_add_rotations(m->yaw, truncate_float_to_s32_cf(-90.0f, 90.0f) * DEG_TO_RAD);
-            build_spherical_offset(d->target, 6.0f, heading,
+                fast_add_rotations(moby->yaw, truncate_float_to_s32_cf(-90.0f, 90.0f) * DEG_TO_RAD);
+            build_spherical_offset(moby_data->target, 6.0f, heading,
                                    truncate_float_to_s32_cf(0.0f, 30.0f) * DEG_TO_RAD);
-            add_vector_xyz(d->target, d->target, m->position);
+            add_vector_xyz(moby_data->target, moby_data->target, moby->position);
         }
-        if (d->moving_timer) {
+        if (moby_data->moving_timer) {
             qcopy(scratch.target, (char *)&D_0013E633_watch + 0xEED);
             rate = 0.04f;
             head_rate = 0.3f;
         } else {
-            qcopy(scratch.target, d->target);
+            qcopy(scratch.target, moby_data->target);
         }
     }
     if (tracking) {
         float yaw;
         float pitch;
-        qcopy(scratch.eye, m->position);
+        qcopy(scratch.eye, moby->position);
         scratch.eye[2] += 1.0f;
         subtract_vector_xyz(scratch.delta, scratch.target, scratch.eye);
-        yaw = fast_subtract_rotations(FUN_001fa688_cf(scratch.delta[0], scratch.delta[1]), m->yaw);
+        yaw = fast_subtract_rotations(FUN_001fa688_cf(scratch.delta[0], scratch.delta[1]), moby->yaw);
         pitch = -FUN_001fa688_cf(vector_length_xy(scratch.delta), scratch.delta[2]);
         if (yaw > 1.5707964f)
             yaw = 1.5707964f;
@@ -1717,29 +1717,29 @@ void miner_update(L16WatchMoby *m) {
             pitch = 0.5235988f;
         else if (pitch < -0.5235988f)
             pitch = -0.5235988f;
-        d->pitch = pitch;
-        d->yaw = yaw * 0.3f;
-        d->head_yaw = yaw * 0.7f;
+        moby_data->pitch = pitch;
+        moby_data->yaw = yaw * 0.3f;
+        moby_data->head_yaw = yaw * 0.7f;
     }
     if (D_0015EDB0_b)
-        d->height = 2.75f;
-    update_joint_animation(rate * frame_scale_sq, head_rate * frame_scale_sq, m, d->body, 1);
-    update_joint_animation(rate * frame_scale_sq, head_rate * frame_scale_sq, m, (char *)d + 0xE0, 0);
-    if (*(int *)((char *)d + 0x180) == 0) {
-        char *o = func_0020D348_m_x(0x11F);
-        *(char **)((char *)d + 0x180) = o;
-        if (o) {
-            *(unsigned short *)(o + 0x32) = *(unsigned short *)((char *)m + 0x32);
-            (*(unsigned char **)((char *)d + 0x180))[0x31] = 1;
+        moby_data->height = 2.75f;
+    update_joint_animation(rate * frame_scale_sq, head_rate * frame_scale_sq, moby, moby_data->body, 1);
+    update_joint_animation(rate * frame_scale_sq, head_rate * frame_scale_sq, moby, (char *)moby_data + 0xE0, 0);
+    if (*(int *)((char *)moby_data + 0x180) == 0) {
+        char *created_moby = func_0020D348_m_x(0x11F);
+        *(char **)((char *)moby_data + 0x180) = created_moby;
+        if (created_moby) {
+            *(unsigned short *)(created_moby + 0x32) = *(unsigned short *)((char *)moby + 0x32);
+            (*(unsigned char **)((char *)moby_data + 0x180))[0x31] = 1;
             {
-                char *p = *(char **)((char *)d + 0x180);
-                qcopy(p + 0x10, (char *)m + 0x10);
-                qcopy(p + 0x40, (char *)m + 0x40);
+                char *p = *(char **)((char *)moby_data + 0x180);
+                qcopy(p + 0x10, (char *)moby + 0x10);
+                qcopy(p + 0x40, (char *)moby + 0x40);
             }
-            FUN_L00_00250df8_x(m);
+            FUN_L00_00250df8_x(moby);
         }
     } else {
-        FUN_L12_0027b9c0_x(m, *(void **)((char *)d + 0x180), 2);
+        FUN_L12_0027b9c0_x(moby, *(void **)((char *)moby_data + 0x180), 2);
     }
 }
 extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
