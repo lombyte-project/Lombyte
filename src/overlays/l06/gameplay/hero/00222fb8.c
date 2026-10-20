@@ -1832,17 +1832,17 @@ void FUN_L06_0022e020(void) {
         if (hero.state.step == 1 && hero.unk3BE == 0) {
             turn_to(0, frame_scale_sq * 0.008f, frame_scale_sq * 0.15f, D_0015ED6C_c * 9.948377f);
         } else {
-            f32 c = hero.unk229C;
+            f32 turn_control_value = hero.unk229C;
             f32 r = hero.motion.unk188;
             if (hero.unk20A8 != 0) {
                 k = 1.0f - r * 0.55f;
                 if (k < 0.0f) {
                     k = 0.0f;
                 }
-            } else if (c < 0.8f && r > 0.5235988f) {
+            } else if (turn_control_value < 0.8f && r > 0.5235988f) {
                 k = 0.0f;
             }
-            if (c > D_L06_0017C544[0]) {
+            if (turn_control_value > D_L06_0017C544[0]) {
                 FUN_L00_00211f38();
             } else {
                 f32 f = hero.unk229C + 0.35f;
