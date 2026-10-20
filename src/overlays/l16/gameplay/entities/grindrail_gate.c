@@ -1732,17 +1732,17 @@ void FUN_L16_002e70c0(struct Moby *moby) {
 
 void FUN_L16_002e7168(struct Moby *moby) {
     char *data = (char *)moby->pvars;
-    int *p;
+    int *group_index_entry;
     int i;
-    p = (int *)(data + 0x60);
+    group_index_entry = (int *)(data + 0x60);
     for (i = 15; i >= 0; i--) {
-        jet_group_state(p[0], 0, 0, 0);
-        p++;
+        jet_group_state(group_index_entry[0], 0, 0, 0);
+        group_index_entry++;
     }
-    p = (int *)(data + 0xA0);
+    group_index_entry = (int *)(data + 0xA0);
     for (i = 7; i >= 0; i--) {
-        jet_group_state(p[0], 1, 1, 0);
-        p++;
+        jet_group_state(group_index_entry[0], 1, 1, 0);
+        group_index_entry++;
     }
     FUN_L16_002de3b8(100.0f);
     jet_game_state(0, 8);
