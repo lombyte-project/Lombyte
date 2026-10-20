@@ -1968,12 +1968,12 @@ void hero_switch_item(int i) {
     {
         struct Hero *g = &hero;
         int *qb = g->restore_item;
-        int *q = qb + i;
-        if (*q != 0) {
+        int *restore_item_request = qb + i;
+        if (*restore_item_request != 0) {
             int *r;
             int *rb;
             int w;
-            *q = 0;
+            *restore_item_request = 0;
             rb = g->saved_item;
             r = rb + i;
             w = *r;
@@ -2022,8 +2022,8 @@ void hero_switch_item(int i) {
         int v;
         struct Hero *g = &hero;
         int *ab = g->pending_item;
-        int *a = ab + i;
-        v = *a;
+        int *pending_item_entry = ab + i;
+        v = *pending_item_entry;
         if (v != 0) {
             int *bb = g->selected_item;
             int *b = bb + i;
@@ -2050,7 +2050,7 @@ void hero_switch_item(int i) {
                 }
                 changed = 1;
             } else {
-                *a = 0;
+                *pending_item_entry = 0;
             }
         }
     }
@@ -2112,8 +2112,8 @@ void hero_switch_item(int i) {
             }
         }
         {
-            struct Hero *e = (struct Hero *)(((char *)&hero) + i * sizeof(struct HeroItemSlot));
-            e->items[0].state = 3;
+            struct Hero *slot_owner = (struct Hero *)(((char *)&hero) + i * sizeof(struct HeroItemSlot));
+            slot_owner->items[0].state = 3;
         }
     }
 }
