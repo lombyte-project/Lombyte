@@ -413,25 +413,25 @@ void FUN_L00_00221ee0(void) {
         f32 f[4];
     } v, w;
     s32 out;
-    M_221ee0 *m;
+    M_221ee0 *candidate_moby;
     M_221ee0 *best;
     Q_221ee0 *q;
-    f32 x, t, max_target_distance, bestd, d, target_angle_limit, target_elevation_angle_limit;
+    f32 x, target_distance_override, max_target_distance, bestd, target_score, target_angle_limit, target_elevation_angle_limit;
     s32 k;
     best = 0;
     G.h99E = 0;
     bestd = 1e8f;
-    for (m = D_L00_0015FFE4_221ee0; m != 0; m = m->next) {
-        if (m->hA6 != 0x323)
+    for (candidate_moby = D_L00_0015FFE4_221ee0; candidate_moby != 0; candidate_moby = candidate_moby->next) {
+        if (candidate_moby->hA6 != 0x323)
             continue;
-        q = m->q;
+        q = candidate_moby->q;
         if (q->i0 == 0)
             continue;
-        if (m->h34 & 1)
+        if (candidate_moby->h34 & 1)
             continue;
-        if (3.0f < G.q80.f[2] - *(f32 *)((u8 *)m + 0x18))
+        if (3.0f < G.q80.f[2] - *(f32 *)((u8 *)candidate_moby + 0x18))
             continue;
-        if (q->f20 != 0.0f && q->f20 < FUN_001f9b48_221ee0(&G.q80, &m->q10))
+        if (q->f20 != 0.0f && q->f20 < FUN_001f9b48_221ee0(&G.q80, &candidate_moby->q10))
             continue;
         k = G.i2084;
         target_angle_limit = 0.7853982f;
@@ -444,21 +444,21 @@ void FUN_L00_00221ee0(void) {
             target_elevation_angle_limit = 0.08726646f;
             target_angle_limit = target_elevation_angle_limit;
         }
-        t = q->f20;
+        target_distance_override = q->f20;
         max_target_distance = 16.0f;
         x = G.f98;
-        if (t != 0.0f)
-            max_target_distance = t;
-        d = FUN_L00_0020d6b0_221ee0(m, &out, x, max_target_distance, target_angle_limit, target_elevation_angle_limit);
+        if (target_distance_override != 0.0f)
+            max_target_distance = target_distance_override;
+        target_score = FUN_L00_0020d6b0_221ee0(candidate_moby, &out, x, max_target_distance, target_angle_limit, target_elevation_angle_limit);
         if (out != 0)
             continue;
-        if (m->b31 == 0)
-            d += 10.0f;
+        if (candidate_moby->b31 == 0)
+            target_score += 10.0f;
         if (q->i1C >= 0 && FUN_00214720_221ee0(&G.q80, q->i1C) != 0)
             continue;
-        if (d < bestd) {
-            bestd = d;
-            best = m;
+        if (target_score < bestd) {
+            bestd = target_score;
+            best = candidate_moby;
         }
     }
     G.p990 = best;
