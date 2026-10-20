@@ -323,7 +323,7 @@ void scale_2c5dc8(void *, void *, float) __asm__("FUN_001f9bf8");
 void draw_2c5dc8(void *, int, int) __asm__("FUN_001f7d30");
 void FUN_L00_002c5dc8(char *moby) {
     Quad_2c5dc8 segment_quad;
-    V_2c5dc8 b, segment_center, attachment_position, segment_direction, f, g, e, segment_to_reference, k;
+    V_2c5dc8 b, segment_center, attachment_position, segment_direction, f, g, wobble_vector_scratch, segment_to_reference, k;
     Vars_2c5dc8 *v;
     unsigned int col;
     float half = 0.05f;
@@ -356,9 +356,9 @@ void FUN_L00_002c5dc8(char *moby) {
     sub_2c5dc8(&segment_direction, &attachment_position, &b);
     distance_along_span = 0.0f;
     len = len_2c5dc8(&segment_direction);
-    qcopy(&e, &segment_direction);
-    e.f[2] -= 0.1f;
-    cross_2c5dc8(&f, &segment_direction, &e);
+    qcopy(&wobble_vector_scratch, &segment_direction);
+    wobble_vector_scratch.f[2] -= 0.1f;
+    cross_2c5dc8(&f, &segment_direction, &wobble_vector_scratch);
     cross_2c5dc8(&g, &segment_direction, &f);
     qcopy(&segment_quad.corner[0], &b);
     qcopy(&segment_quad.corner[2], &b);
@@ -382,9 +382,9 @@ void FUN_L00_002c5dc8(char *moby) {
         scale_2c5dc8(&k, &k, 0.05f);
         add_2c5dc8(&segment_quad.corner[1], &segment_quad.corner[1], &k);
         sub_2c5dc8(&segment_quad.corner[3], &segment_quad.corner[3], &k);
-        scale_2c5dc8(&e, &f, amp);
-        add_2c5dc8(&segment_quad.corner[1], &segment_quad.corner[1], &e);
-        add_2c5dc8(&segment_quad.corner[3], &segment_quad.corner[3], &e);
+        scale_2c5dc8(&wobble_vector_scratch, &f, amp);
+        add_2c5dc8(&segment_quad.corner[1], &segment_quad.corner[1], &wobble_vector_scratch);
+        add_2c5dc8(&segment_quad.corner[3], &segment_quad.corner[3], &wobble_vector_scratch);
         draw_2c5dc8(&segment_quad, 0, 1);
         qcopy(&b, &segment_center);
         qcopy(&segment_quad.corner[0], &segment_quad.corner[1]);
