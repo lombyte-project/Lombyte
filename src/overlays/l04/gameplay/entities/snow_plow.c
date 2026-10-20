@@ -1773,36 +1773,36 @@ extern unsigned char *func_L00_00273E08_298940(void *, int, unsigned char, int, 
 extern int func_001FA898_298940(float) __asm__("FUN_001fa6d0");
 extern char D_L10_00167240_298940[] __asm__("D_L04_00166F40");
 extern int D_L04_0015F5C4;
-void FUN_L04_002e1d00(char *m) {
-    L10SpriteData_298940 *p = *(L10SpriteData_298940 **)(m + 0x78);
+void FUN_L04_002e1d00(char *moby) {
+    L10SpriteData_298940 *sprite_data = *(L10SpriteData_298940 **)(moby + 0x78);
     float d[4] __attribute__((aligned(16)));
     float e[4] __attribute__((aligned(16)));
     int i, col;
-    float f;
+    float timer_progress;
 
-    *(float *)(m + 0x18) += 0.25f;
-    func_001F9BF0_298940(d, D_L10_00167240_298940, m + 0x10);
+    *(float *)(moby + 0x18) += 0.25f;
+    func_001F9BF0_298940(d, D_L10_00167240_298940, moby + 0x10);
     func_L00_001FF4B0_298940(d, d, -0.3f);
     func_L00_001FF4B0_298940(e, d, 0.1f);
-    func_001F9BD8_298940(d, d, m + 0x10);
-    *(float *)(m + 0x18) -= 0.25f;
+    func_001F9BD8_298940(d, d, moby + 0x10);
+    *(float *)(moby + 0x18) -= 0.25f;
     for (i = 0; i < 4; i++) {
-        float h = p->a[i] + p->b[i];
-        p->a[i] = h;
+        float h = sprite_data->a[i] + sprite_data->b[i];
+        sprite_data->a[i] = h;
         if (255.0f <= h) {
-            p->a[i] = h - 255.0f;
+            sprite_data->a[i] = h - 255.0f;
         } else if (h <= 0.0f) {
-            p->a[i] = h + 255.0f;
+            sprite_data->a[i] = h + 255.0f;
         }
-        if (func_001F9908_298940(&p->c[i])) {
-            p->c[i] = func_001F9850_298940(0xFF);
+        if (func_001F9908_298940(&sprite_data->c[i])) {
+            sprite_data->c[i] = func_001F9850_298940(0xFF);
         }
-        f = func_001FA888_298940(func_001F9850_298940(0xFF) - p->c[i]);
-        f = f / (float)func_001F9850_298940(0xFF);
-        col = func_001FA8A8_298940(0x4040FFFF, 0x1040FFFF, func_001F9B88_298940(0.5f - f));
+        timer_progress = func_001FA888_298940(func_001F9850_298940(0xFF) - sprite_data->c[i]);
+        timer_progress = timer_progress / (float)func_001F9850_298940(0xFF);
+        col = func_001FA8A8_298940(0x4040FFFF, 0x1040FFFF, func_001F9B88_298940(0.5f - timer_progress));
         if (D_L04_0015F5C4 != 2)
-            func_L00_00273E08_298940(d, col, func_001FA898_298940(p->a[i]) & 0xFF, 0x35, 1, 2, 0,
-                                     p->d[i]);
+            func_L00_00273E08_298940(d, col, func_001FA898_298940(sprite_data->a[i]) & 0xFF, 0x35, 1, 2, 0,
+                                     sprite_data->d[i]);
         func_001F9BD8_298940(d, d, e);
     }
 }
