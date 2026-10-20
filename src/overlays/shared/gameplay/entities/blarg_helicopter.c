@@ -361,6 +361,7 @@ void spawner_update(struct Moby *moby) {
     };
     enum {
         SPAWNER_ACTIVATION_ENTER_SPAWN_ENABLED = 0,
+        SPAWNER_ACTIVATION_SET_SPAWN_ENABLED = 3,
         SPAWNER_ACTIVATION_STAY_IN_PROXIMITY_WAIT = 6
     };
     int used[4];
@@ -482,7 +483,7 @@ void spawner_update(struct Moby *moby) {
             case 2:
                 moby->state = 7;
                 break;
-            case 3:
+            case SPAWNER_ACTIVATION_SET_SPAWN_ENABLED:
                 moby->state = 2;
                 break;
             case 4:
