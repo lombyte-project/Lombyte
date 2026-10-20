@@ -196,7 +196,7 @@ void FUN_L07_0031b3f0(struct Moby *moby) {
     };
     struct SwingGateVars *vars = (struct SwingGateVars *)moby->pvars;
     struct Moby *target;
-    float f;
+    float updated_y_rotation;
 
     if (vars == 0)
         return;
@@ -235,9 +235,9 @@ void FUN_L07_0031b3f0(struct Moby *moby) {
             moby->state = 2;
             break;
         }
-        f = fast_subtract_rotations(moby->rot.y, vars->rate);
-        moby->rot.y = f;
-        if (0.0f < f) {
+        updated_y_rotation = fast_subtract_rotations(moby->rot.y, vars->rate);
+        moby->rot.y = updated_y_rotation;
+        if (0.0f < updated_y_rotation) {
             moby->rot.y = 0;
             vars->vel = 0;
             moby->state = 1;
