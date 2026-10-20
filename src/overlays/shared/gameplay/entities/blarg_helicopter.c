@@ -1426,7 +1426,7 @@ extern void FUN_L01_002787a0(void *);
 void mark_moby_for_removal_c(struct Obj *obj) __asm__("FUN_0020c828");
 
 void statue_update(unsigned char *m) __asm__("FUN_L03_002d3cd8");
-void statue_update(unsigned char *m) {
+void statue_update(unsigned char *statue_moby) {
     enum {
         STATUE_INITIALIZE = 0,
         STATUE_WAITING_FOR_HIT = 1,
@@ -1435,10 +1435,10 @@ void statue_update(unsigned char *m) {
     int flag = 0;
     float z;
     char *p, *pos, *vel;
-    char *x = find_moby_hit(m, 0x10000, 0);
-    switch (m[0x20]) {
+    char *x = find_moby_hit(statue_moby, 0x10000, 0);
+    switch (statue_moby[0x20]) {
     case STATUE_INITIALIZE:
-        m[0x20] = 1;
+        statue_moby[0x20] = 1;
         break;
     case STATUE_WAITING_FOR_HIT:
         if (x != 0) {
@@ -1446,19 +1446,19 @@ void statue_update(unsigned char *m) {
                 flag = 1;
         }
         if (flag)
-            m[0x20] = 2;
+            statue_moby[0x20] = 2;
         break;
     case STATUE_BREAK_APART:
-        allocate_voice_for_target_entry(0, 0, (int)m);
+        allocate_voice_for_target_entry(0, 0, (int)statue_moby);
         z = 0.0f;
         p = D_L03_0015F580;
-        pos = m + 0x10;
-        FUN_L01_002787a0(m);
-        vel = m + 0x40;
-        FUN_L00_00263fd8(m, 0x727, pos, vel, 0, 0, z, p, p, p);
-        FUN_L00_00263fd8(m, 0x728, pos, vel, 0, 0, z, p, p, p);
-        FUN_L00_00263fd8(m, 0x729, pos, vel, 0, 0, z, p, p, p);
-        mark_moby_for_removal_c(m);
+        pos = statue_moby + 0x10;
+        FUN_L01_002787a0(statue_moby);
+        vel = statue_moby + 0x40;
+        FUN_L00_00263fd8(statue_moby, 0x727, pos, vel, 0, 0, z, p, p, p);
+        FUN_L00_00263fd8(statue_moby, 0x728, pos, vel, 0, 0, z, p, p, p);
+        FUN_L00_00263fd8(statue_moby, 0x729, pos, vel, 0, 0, z, p, p, p);
+        mark_moby_for_removal_c(statue_moby);
         break;
     }
 }
