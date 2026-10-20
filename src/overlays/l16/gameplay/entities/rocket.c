@@ -1904,18 +1904,18 @@ void wall_button_update(struct Moby *m) {
 float absolute_float(float input) __asm__("func_001F99C0");
 extern short *D_L16_001ABFC0_2d0a40[] __asm__("D_L16_001ABCC0");
 
-int FUN_L16_002cf678(struct Moby *m) {
-    short *p = D_L16_001ABFC0_2d0a40[m->group];
-    if (p == 0)
+int FUN_L16_002cf678(struct Moby *moby) {
+    short *group_entry = D_L16_001ABFC0_2d0a40[moby->group];
+    if (group_entry == 0)
         return 0;
     while (1) {
-        char *o = D_L16_0015FFD8 + ((*(unsigned short *)p & 0x7FFF) << 8);
-        if (*(short *)(o + 0xA6) == 0x228 && m != o) {
-            if (absolute_float(*(float *)(o + 0x18) - m->pos.z) < 0.1f) {
-                return (int)o;
+        char *candidate_moby = D_L16_0015FFD8 + ((*(unsigned short *)group_entry & 0x7FFF) << 8);
+        if (*(short *)(candidate_moby + 0xA6) == 0x228 && moby != candidate_moby) {
+            if (absolute_float(*(float *)(candidate_moby + 0x18) - moby->pos.z) < 0.1f) {
+                return (int)candidate_moby;
             }
         }
-        if (*p++ < 0)
+        if (*group_entry++ < 0)
             return 0;
     }
 }
