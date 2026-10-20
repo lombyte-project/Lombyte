@@ -21,7 +21,7 @@ unsigned char *FUN_L13_00280400(char *moby, unsigned char joint_index, int b, in
     if (particle != 0) {
         char *world_position;
         int v;
-        unsigned short t;
+        unsigned short moby_a6_value;
         unsigned char *attachment_data;
         *(int *)(particle + 4) = b;
         *(int *)(particle + 0xC) = c;
@@ -37,8 +37,8 @@ unsigned char *FUN_L13_00280400(char *moby, unsigned char joint_index, int b, in
         *(float *)(particle + 0x1C) = x;
         *(char **)(particle + 0x30) = moby;
         attachment_data = particle + 0x30;
-        t = *(unsigned short *)(moby + 0xA6);
-        *(short *)(attachment_data + 6) = t;
+        moby_a6_value = *(unsigned short *)(moby + 0xA6);
+        *(short *)(attachment_data + 6) = moby_a6_value;
         attachment_data[4] = joint_index;
         *(float *)(attachment_data + 8) = x;
         *(float *)(attachment_data + 0xC) = z;
