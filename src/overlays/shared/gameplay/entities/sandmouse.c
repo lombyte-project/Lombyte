@@ -1690,7 +1690,7 @@ void FUN_L01_00315de0(Camera *cam) {
     CameraPreset *camera_preset = rows[cam->preset].preset;
     OvlVec4 at, delta, to_camera;
     s32 seg;
-    f32 t;
+    f32 path_fraction;
 
     qcopy((char *)cam + 0x30, (char *)src + 0x30);
     qcopy(cam, src);
@@ -1715,8 +1715,8 @@ void FUN_L01_00315de0(Camera *cam) {
         s32 next;
         path = D_L01_001B0930[camera_preset->track_path];
         seg = 0;
-        t = 0.0f;
-        if (FUN_L00_0025df68(path, &D_0013F3D0_315de0, &at, &seg, &t,
+        path_fraction = 0.0f;
+        if (FUN_L00_0025df68(path, &D_0013F3D0_315de0, &at, &seg, &path_fraction,
                              0, 20.0f, 1.0f, 0.0f)) {
             s32 count = path->count;
             next = seg + 1;
