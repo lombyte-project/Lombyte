@@ -22,11 +22,11 @@
 #define MAXEXP     308
 #define to_char(n) ((n) + '0')
 
-int exponent(char *p0, int exp, int fmtch) {
+int exponent(char *destination, int exp, int fmtch) {
     register char *p, *t;
     char expbuf[MAXEXP];
 
-    p = p0;
+    p = destination;
     *p++ = fmtch;
     if (exp < 0) {
         exp = -exp;
@@ -45,5 +45,5 @@ int exponent(char *p0, int exp, int fmtch) {
         *p++ = '0';
         *p++ = to_char(exp);
     }
-    return (p - p0);
+    return (p - destination);
 }
