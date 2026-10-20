@@ -1322,15 +1322,15 @@ extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 void FUN_L08_002e2250(struct Moby *moby) {
     char *data = *(char **)((char *)moby + 0x78);
     char *entries = data + 0x60;
-    char *p = entries;
+    char *part_entry_cursor = entries;
     int i;
     int score = 0;
     int state = -1;
     int chosen = 0;
     char *base;
-    for (i = 0; i < 34; i++, p += 16) {
-        char *m = *(char **)p;
-        if (m != 0 && FUN_L00_0025a420(m, 0x10000, 0) != 0) {
+    for (i = 0; i < 34; i++, part_entry_cursor += 16) {
+        char *part_moby = *(char **)part_entry_cursor;
+        if (part_moby != 0 && FUN_L00_0025a420(part_moby, 0x10000, 0) != 0) {
             if (i < 7) {
                 if (score <= 0) { score = 1; state = 1; }
             } else if (i < 10) {
@@ -1338,7 +1338,7 @@ void FUN_L08_002e2250(struct Moby *moby) {
             } else {
                 if (score < 4) { score += 4; chosen = i; state = 2; }
             }
-            (*(unsigned char **)p)[0xA4] = 0xFF;
+            (*(unsigned char **)part_entry_cursor)[0xA4] = 0xFF;
         }
     }
     *(short *)(data + 0x28C) += score;
