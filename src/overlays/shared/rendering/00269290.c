@@ -1197,51 +1197,51 @@ extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern int FUN_L00_002371e0_c(int, int, float) __asm__("FUN_L00_002371e0");
 extern void FUN_L00_0026bed0_c(void *, void *, int, int, float, int, int) __asm__("FUN_L00_0026bed0");
 
-void FUN_L00_0026c088(Part_0026CF28 *m) {
+void FUN_L00_0026c088(Part_0026CF28 *particle) {
     float saved[4];
     float grav[4] = { D_0015ED70 * 4.8f, D_0015ED70 * 24.5f, D_0015ED70 * 9.8f, -(D_0015ED70 * 0.24f) };
-    Data_0026CF28 *p = (Data_0026CF28 *)(m + 1);
-    int c, r, k;
+    Data_0026CF28 *particle_data = (Data_0026CF28 *)(particle + 1);
+    int alpha, r, k;
     float f;
 
-    if (p->kind == 3 && D_L00_0015F5D0 > 0.95f)
-        tick_countdown_32_alt(&m->timer);
-    if (tick_countdown_32_alt(&m->timer)) {
-        free_effect_particle(m);
+    if (particle_data->kind == 3 && D_L00_0015F5D0 > 0.95f)
+        tick_countdown_32_alt(&particle->timer);
+    if (tick_countdown_32_alt(&particle->timer)) {
+        free_effect_particle(particle);
         return;
     }
     {
-        float f20 = convert_integer_to_float_c2(m->timer);
-        m->col = FUN_L00_002371e0_c(p->c14, p->c10, f20 / convert_integer_to_float_c2(p->life));
-        c = m->col >> 24;
-        f = distance_xyz(m->pos, D_L00_00166DC0);
-        if (m->timer < scale_game_frames_alt(6))
-            c = c * m->timer / scale_game_frames_alt(6);
+        float f20 = convert_integer_to_float_c2(particle->timer);
+        particle->col = FUN_L00_002371e0_c(particle_data->c14, particle_data->c10, f20 / convert_integer_to_float_c2(particle_data->life));
+        alpha = particle->col >> 24;
+        f = distance_xyz(particle->pos, D_L00_00166DC0);
+        if (particle->timer < scale_game_frames_alt(6))
+            alpha = alpha * particle->timer / scale_game_frames_alt(6);
         if (f < 4.0f) {
-            free_effect_particle(m);
+            free_effect_particle(particle);
             return;
         }
         if (f < 8.0f)
-            c = truncate_float_to_s32(convert_integer_to_float_c2(c) * (f - 4.0f) * 0.25f);
-        m->col = (c << 24) | (m->col & 0xFFFFFF);
-        add_vector_xyz(m->pos, m->pos, p);
-        k = p->kind;
-        p->vel[2] -= grav[k];
-        qcopy(saved, m->pos);
-        if (m->pos[2] < p->vel[3]) {
+            alpha = truncate_float_to_s32(convert_integer_to_float_c2(alpha) * (f - 4.0f) * 0.25f);
+        particle->col = (alpha << 24) | (particle->col & 0xFFFFFF);
+        add_vector_xyz(particle->pos, particle->pos, particle_data);
+        k = particle_data->kind;
+        particle_data->vel[2] -= grav[k];
+        qcopy(saved, particle->pos);
+        if (particle->pos[2] < particle_data->vel[3]) {
             if (k == 1) {
-                int u, w, t;
+                int u, w, minimum_spawn_lifetime;
                 u = FUN_L00_002371e0_c(0x7F000000, 0x7F182030, random_float_between(0.25f, 1.0f));
                 w = FUN_L00_002371e0_c(0, 0x5F5F5F, random_float_between(0.5f, 1.0f));
-                p->vel[2] = 0;
+                particle_data->vel[2] = 0;
                 f = random_float_between(200000.0f, 300000.0f);
-                t = scale_game_frames_alt(0x5A);
-                r = FUN_L00_00257b90(t, scale_game_frames_alt(0x96));
-                FUN_L00_0026bed0_c(m->pos, p, u, w, f, r, 3);
+                minimum_spawn_lifetime = scale_game_frames_alt(0x5A);
+                r = FUN_L00_00257b90(minimum_spawn_lifetime, scale_game_frames_alt(0x96));
+                FUN_L00_0026bed0_c(particle->pos, particle_data, u, w, f, r, 3);
             }
-            free_effect_particle(m);
+            free_effect_particle(particle);
         } else
-            m->b8++;
+            particle->b8++;
     }
 }
 #include "qzero.h"
