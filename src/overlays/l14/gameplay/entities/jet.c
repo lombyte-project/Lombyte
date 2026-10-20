@@ -2487,21 +2487,21 @@ struct L14PickVars {
 };
 
 void FUN_L14_002f1040(struct Moby *moby) {
-    struct L14PickVars *d = (struct L14PickVars *)moby->pvars;
+    struct L14PickVars *taxi_vars = (struct L14PickVars *)moby->pvars;
     int i;
-    d->picked = -1;
+    taxi_vars->picked = -1;
     for (i = 0; i < 5; i++) {
-        if (FUN_001f9b48_2f1040(&moby->pos, D_L14_001600EC_2f1040[d->points[i]].pos) < 1.0f) {
-            d->picked = i;
+        if (FUN_001f9b48_2f1040(&moby->pos, D_L14_001600EC_2f1040[taxi_vars->points[i]].pos) < 1.0f) {
+            taxi_vars->picked = i;
             break;
         }
     }
     moby->state = 1;
     {
-        int k = d->points[d->picked];
-        struct L14PathPoint *t = D_L14_001600EC_2f1040;
-        qcopy(d->pos, t[k].pos);
-        qcopy(d->rot, t[k].rot);
+        int k = taxi_vars->points[taxi_vars->picked];
+        struct L14PathPoint *taxi_stops = D_L14_001600EC_2f1040;
+        qcopy(taxi_vars->pos, taxi_stops[k].pos);
+        qcopy(taxi_vars->rot, taxi_stops[k].rot);
     }
 }
 /* Picks the path for the current point and sets the travel speeds; same source as FUN_L16_002e4a58 with five points. */
