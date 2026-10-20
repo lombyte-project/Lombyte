@@ -4,8 +4,8 @@
 #include "asm.h"
 
 /* For a below 0xE0 true when z is 42..43, else when z is at least 39. */
-int FUN_L00_002497f8(int a, float x, float y, float z) {
-    if (a < 0xE0) {
+int FUN_L00_002497f8(int z_range_selector, float x, float y, float z) {
+    if (z_range_selector < 0xE0) {
         return z >= 42.0f && z <= 43.0f;
     }
     return z >= 39.0f;
