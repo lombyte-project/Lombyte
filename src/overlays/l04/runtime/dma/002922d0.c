@@ -114,13 +114,13 @@ void FUN_L04_002923b8(struct Moby *moby, LegRig *rig) {
 extern int walker_gait_mask(int *a, char *b) __asm__("FUN_L00_002a13f0");
 
 int FUN_L04_002927d0(char *moby, char *rig) {
-    int **p = (int **)(rig + 0x70);
+    int **record_cursor = (int **)(rig + 0x70);
     int *found = 0;
     int i;
     for (i = 12; i >= 0; i--) {
-        int *e = *p++;
-        if (*e == (int)(unsigned char)moby[0x52])
-            found = e;
+        int *candidate_record = *record_cursor++;
+        if (*candidate_record == (int)(unsigned char)moby[0x52])
+            found = candidate_record;
     }
     if (found == 0)
         return (unsigned char)rig[0xB6];
