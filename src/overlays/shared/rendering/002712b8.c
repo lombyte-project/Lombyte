@@ -1817,48 +1817,48 @@ extern void add_vector_xyz(void *, void *, void *);
 extern void scale_vector_xyz(void *, void *, float);
 extern void transform_vector_by_basis(void *, void *, void *);
 
-void FUN_L00_00275510(char *m) {
-    char *s = m + 0x20;
-    char *d = *(char **)(s + 0x1C);
-    float t[3];
+void FUN_L00_00275510(char *particle) {
+    char *particle_data = particle + 0x20;
+    char *d = *(char **)(particle_data + 0x1C);
+    float local_velocity[3];
     float u[3];
     float w[3];
-    char *o;
-    float q;
+    char *parent_moby;
+    float velocity_decay_factor;
     float r;
     int k;
-    k = *(int *)(d + 0xC) - *(short *)(m + 0xA);
+    k = *(int *)(d + 0xC) - *(short *)(particle + 0xA);
     r = convert_integer_to_float(*(short *)(d + 8) * k / *(int *)(d + 0xC) + *(short *)(d + 0xA));
-    q = frame_scale * -0.01999998f + 1.0f;
-    *(float *)(m + 0xC) = r * 1000.0f;
-    t[0] = *(float *)(m + 0x20);
-    t[1] = *(float *)(s + 4);
-    t[2] = *(float *)(s + 8);
-    scale_vector_xyz(t, t, q);
-    *(float *)(m + 0x20) = t[0];
-    *(float *)(s + 4) = t[1];
-    *(float *)(s + 8) = t[2];
-    o = *(char **)(s + 0xC);
-    if (o != 0 && (unsigned char)o[0x20] != 0xFE && (unsigned char)o[0x20] != 0xFD) {
-        u[0] = *(float *)(s + 0x10);
-        u[1] = *(float *)(s + 0x14);
-        u[2] = *(float *)(s + 0x18);
-        add_vector_xyz(u, u, t);
-        *(float *)(s + 0x10) = u[0];
-        *(float *)(s + 0x14) = u[1];
-        *(float *)(s + 0x18) = u[2];
-        transform_vector_by_basis(w, u, *(char **)(s + 0xC) + 0xC0);
-        add_vector_xyz(m + 0x10, *(char **)(s + 0xC) + 0x10, w);
+    velocity_decay_factor = frame_scale * -0.01999998f + 1.0f;
+    *(float *)(particle + 0xC) = r * 1000.0f;
+    local_velocity[0] = *(float *)(particle + 0x20);
+    local_velocity[1] = *(float *)(particle_data + 4);
+    local_velocity[2] = *(float *)(particle_data + 8);
+    scale_vector_xyz(local_velocity, local_velocity, velocity_decay_factor);
+    *(float *)(particle + 0x20) = local_velocity[0];
+    *(float *)(particle_data + 4) = local_velocity[1];
+    *(float *)(particle_data + 8) = local_velocity[2];
+    parent_moby = *(char **)(particle_data + 0xC);
+    if (parent_moby != 0 && (unsigned char)parent_moby[0x20] != 0xFE && (unsigned char)parent_moby[0x20] != 0xFD) {
+        u[0] = *(float *)(particle_data + 0x10);
+        u[1] = *(float *)(particle_data + 0x14);
+        u[2] = *(float *)(particle_data + 0x18);
+        add_vector_xyz(u, u, local_velocity);
+        *(float *)(particle_data + 0x10) = u[0];
+        *(float *)(particle_data + 0x14) = u[1];
+        *(float *)(particle_data + 0x18) = u[2];
+        transform_vector_by_basis(w, u, *(char **)(particle_data + 0xC) + 0xC0);
+        add_vector_xyz(particle + 0x10, *(char **)(particle_data + 0xC) + 0x10, w);
     } else {
-        free_effect_particle(m);
+        free_effect_particle(particle);
         return;
     }
-    m[8] = m[8] + 1;
-    *(int *)(m + 4) =
-        mine_blend_color((float)*(short *)(m + 0xA) / convert_integer_to_float(*(int *)(d + 0xC)),
+    particle[8] = particle[8] + 1;
+    *(int *)(particle + 4) =
+        mine_blend_color((float)*(short *)(particle + 0xA) / convert_integer_to_float(*(int *)(d + 0xC)),
                             *(int *)(d + 4), *(int *)d);
-    if (fast_dec_timer(m + 0xA)) {
-        free_effect_particle(m);
+    if (fast_dec_timer(particle + 0xA)) {
+        free_effect_particle(particle);
     }
 }
 extern void FUN_001f9a10_002756f0(void *, void *, void *) __asm__("FUN_001f9a10");
