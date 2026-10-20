@@ -1244,9 +1244,9 @@ extern void add_vector_xyz(void *, void *, void *);
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void normalize_vector_xyz(void *, void *, float);
 
-void FUN_L09_002ee110(struct Moby *m) {
-    char *d = (char *)m->pvars;
-    char *r = find_moby_hit(m, 0x10000, 0);
+void FUN_L09_002ee110(struct Moby *moby) {
+    char *d = (char *)moby->pvars;
+    char *r = find_moby_hit(moby, 0x10000, 0);
     Vx v;
     Vx b;
     int i;
@@ -1254,11 +1254,11 @@ void FUN_L09_002ee110(struct Moby *m) {
         *(float *)d = *(float *)d - *(float *)(r + 0x2C);
         if (0.0f < *(float *)d) {
             d[0x47] = 0x46;
-            trooper_anim_update(m, (short *)(d + 0x40));
+            trooper_anim_update(moby, (short *)(d + 0x40));
         } else {
-            char *pos = &m->pos;
-            v.x = fast_cos(m->rot.z) * (frame_time * 20.0f);
-            v.y = fast_sin(m->rot.z) * (frame_time * 20.0f);
+            char *pos = &moby->pos;
+            v.x = fast_cos(moby->rot.z) * (frame_time * 20.0f);
+            v.y = fast_sin(moby->rot.z) * (frame_time * 20.0f);
             v.z = 0.0f;
             for (i = 24; i >= 0; i--) {
                 union {
@@ -1279,13 +1279,13 @@ void FUN_L09_002ee110(struct Moby *m) {
                 FUN_L00_0026dd20(pos, (char *)&b, 0x5F7F4F2F, (int)d,
                                  random_float_between(20000.0f, 50000.0f));
             }
-            *(OvlQuad *)&b = *(OvlQuad *)&m->pos;
-            FUN_L09_002ee380(m, &b, m->rot.z);
-            mark_moby_for_removal(m);
+            *(OvlQuad *)&b = *(OvlQuad *)&moby->pos;
+            FUN_L09_002ee380(moby, &b, moby->rot.z);
+            mark_moby_for_removal(moby);
             return;
         }
     }
-    m->hit_slot = 0xFF;
+    moby->hit_slot = 0xFF;
 }
 typedef unsigned int u128_ee380 __attribute__((mode(TI)));
 #include "qcopy.h"
