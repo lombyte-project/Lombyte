@@ -1163,13 +1163,13 @@ void FUN_L11_00319028(struct Moby *moby) {
     float position_step[4];
     char *data = (char *)moby->pvars;
     unsigned char *q;
-    float *p = &moby->pos.x;
+    float *moby_position = &moby->pos.x;
     int i;
-    subtract_vector_xyz_q(effect_position, D_L11_001677C0_q, p);
+    subtract_vector_xyz_q(effect_position, D_L11_001677C0_q, moby_position);
     q = (unsigned char *)(data + 0x10);
     normalize_vector_xyz_q(effect_position, effect_position, -0.3f);
     normalize_vector_xyz_q(position_step, effect_position, 0.1f);
-    add_vector_xyz_q(effect_position, effect_position, p);
+    add_vector_xyz_q(effect_position, effect_position, moby_position);
     for (i = 0; i < 4; i++) {
         int a =
             FUN_001fa6e0_q(*(int *)&D_L11_00162380, *(int *)&D_L11_00162384, (float)i * 0.333f);
