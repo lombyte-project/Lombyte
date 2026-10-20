@@ -1951,28 +1951,28 @@ extern void transform_vector_by_basis(void *, void *, void *);
 
 void FUN_L01_0031a128(int *moby) {
     float v[8];
-    int *p = (int *)moby[2];
-    if (((unsigned *)p)[3] != 0xFFFFFFFF) {
+    int *music_trigger_data = (int *)moby[2];
+    if (((unsigned *)music_trigger_data)[3] != 0xFFFFFFFF) {
         subtract_vector_xyz(v, &hero.motion.pos, (char *)moby + 0x40);
         v[3] = 0;
         transform_vector_by_basis(v + 4, v, (char *)moby + 0x50);
         if (absolute_float(v[4]) <= 1.0f && absolute_float(v[5]) <= 1.0f &&
             absolute_float(v[6]) <= 1.0f) {
-            p[2] = 1;
+            music_trigger_data[2] = 1;
             return;
         }
-        if (p[2] != 0) {
-            short *s = (short *)p;
+        if (music_trigger_data[2] != 0) {
+            short *s = (short *)music_trigger_data;
             if (s[7] == -1)
                 s[7] = s[6];
             if (s[6] == -1)
                 s[6] = s[7];
             if (v[4] > 0) {
-                jet_game_state(p[1], s[7]);
+                jet_game_state(music_trigger_data[1], s[7]);
             } else {
-                jet_game_state(p[0], s[6]);
+                jet_game_state(music_trigger_data[0], s[6]);
             }
-            p[2] = 0;
+            music_trigger_data[2] = 0;
         }
     }
 }
