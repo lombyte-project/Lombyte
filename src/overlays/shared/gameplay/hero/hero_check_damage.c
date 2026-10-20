@@ -3463,17 +3463,17 @@ extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
 
-void FUN_L00_002132b8(float a, float b) {
-    char *p = D_0013E533_lui + 0x173D;
-    char *q = p - 0x920;
+void FUN_L00_002132b8(float scale_factor, float b) {
+    char *move_impulse = D_0013E533_lui + 0x173D;
+    char *hero_base = move_impulse - 0x920;
     float v;
-    build_spherical_offset(p, *(float *)(q + 0x930), *(float *)(q + 0x938), *(float *)(q + 0x934));
-    fast_vec_scale(p, p, a);
-    v = fast_vec_length(p);
+    build_spherical_offset(move_impulse, *(float *)(hero_base + 0x930), *(float *)(hero_base + 0x938), *(float *)(hero_base + 0x934));
+    fast_vec_scale(move_impulse, move_impulse, scale_factor);
+    v = fast_vec_length(move_impulse);
     if (v <= b) {
-        clear_u64_value(p);
+        clear_u64_value(move_impulse);
     } else {
-        fast_vec_normalize(p, p, v - b);
+        fast_vec_normalize(move_impulse, move_impulse, v - b);
     }
 }
 typedef unsigned int u128_213350 __attribute__((mode(TI), aligned(16)));
