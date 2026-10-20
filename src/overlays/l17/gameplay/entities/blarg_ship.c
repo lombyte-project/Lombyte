@@ -880,17 +880,17 @@ extern void *FUN_L00_00263fd8(char *src, int cls, float *pos, void *mat, int a8,
 void mark_moby_for_removal_c(void *obj) __asm__("FUN_0020c828");
 
 extern float D_L17_0015F580_macro[] __asm__("D_L17_0015F580") __attribute__((section(".sdata")));
-void FUN_L17_002f5390(struct Moby *m) {
+void FUN_L17_002f5390(struct Moby *moby) {
     enum {
         HIT_EFFECT_INITIALIZE = 0,
         HIT_EFFECT_WAIT_FOR_HIT = 1,
         HIT_EFFECT_EMIT_AND_REMOVE = 2
     };
     int flag = 0;
-    char *r = find_moby_hit(m, 0x10000, 0);
-    switch (m->state) {
+    char *r = find_moby_hit(moby, 0x10000, 0);
+    switch (moby->state) {
     case HIT_EFFECT_INITIALIZE:
-        m->state = 1;
+        moby->state = 1;
         break;
     case HIT_EFFECT_WAIT_FOR_HIT:
         if (r) {
@@ -898,17 +898,17 @@ void FUN_L17_002f5390(struct Moby *m) {
                 flag = 1;
         }
         if (flag)
-            m->state = 2;
+            moby->state = 2;
         break;
     case HIT_EFFECT_EMIT_AND_REMOVE:
-        allocate_voice_for_target_entry(0, 0, (int)m);
-        FUN_L00_00257470(m, 0, -1);
-        FUN_L01_002787a0(m);
-        FUN_L00_00263fd8((char *)m, 0x753, &m->pos.x, &m->rot, 0, 0, D_L17_0015F580_macro,
+        allocate_voice_for_target_entry(0, 0, (int)moby);
+        FUN_L00_00257470(moby, 0, -1);
+        FUN_L01_002787a0(moby);
+        FUN_L00_00263fd8((char *)moby, 0x753, &moby->pos.x, &moby->rot, 0, 0, D_L17_0015F580_macro,
                          D_L17_0015F580_macro, 0.0f, D_L17_0015F580_macro);
-        FUN_L00_00263e30(m, 0x756, 1, 0x756, 1, 1, 2);
-        FUN_L01_00278e20(m, 0x755);
-        mark_moby_for_removal_c(m);
+        FUN_L00_00263e30(moby, 0x756, 1, 0x756, 1, 1, 2);
+        FUN_L01_00278e20(moby, 0x755);
+        mark_moby_for_removal_c(moby);
         break;
     }
 }
