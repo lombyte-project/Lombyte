@@ -1002,39 +1002,39 @@ s32 is_point_inside_clip_volume(s32 arg0, s32 arg1) __asm__("FUN_00214720");
 void FUN_L00_00259710(void *a);
 extern float func_L00_0025A748_f(void *) __asm__("FUN_L00_00259710");
 
-int FUN_L11_002d25e8(struct Moby *m, float *out) {
-    char *s = (char *)m->pvars;
-    int *p = (int *)(s + 0xF8);
+int FUN_L11_002d25e8(struct Moby *moby, float *out) {
+    char *pvars = (char *)moby->pvars;
+    int *clip_volume_index_ptr = (int *)(pvars + 0xF8);
     int i;
     int found = 0;
-    float a[4];
+    float candidate_position[4];
     float b[4];
     float g;
     for (i = 0; i < 2; i++) {
-        if (is_point_inside_clip_volume(&m->pos, *p)) {
+        if (is_point_inside_clip_volume(&moby->pos, *clip_volume_index_ptr)) {
             found = 1;
             break;
         }
-        p++;
+        clip_volume_index_ptr++;
     }
     if (found) {
-        float *pos = &m->pos.x;
-        subtract_vector_xyz(a, out, pos);
-        if (vector_length_xyz(a) > 4.0f)
-            normalize_vector_xyz(a, a, 4.0f);
-        add_vector_xyz(a, a, pos);
+        float *pos = &moby->pos.x;
+        subtract_vector_xyz(candidate_position, out, pos);
+        if (vector_length_xyz(candidate_position) > 4.0f)
+            normalize_vector_xyz(candidate_position, candidate_position, 4.0f);
+        add_vector_xyz(candidate_position, candidate_position, pos);
         {
-            int *q = D_L11_001B0EB0[*(int *)(s - (-(*(int *)(s + 0x158) * 4)) + 0x60)];
-            if (point_in_path_xy(a, q + 4, *q)) {
-                a[2] += 5.0f;
-                g = func_L00_0025A748_f(a);
-                if (absolute_float(g - m->pos.z) > 0.5f) {
+            int *path_entry = D_L11_001B0EB0[*(int *)(pvars - (-(*(int *)(pvars + 0x158) * 4)) + 0x60)];
+            if (point_in_path_xy(candidate_position, path_entry + 4, *path_entry)) {
+                candidate_position[2] += 5.0f;
+                g = func_L00_0025A748_f(candidate_position);
+                if (absolute_float(g - moby->pos.z) > 0.5f) {
                     qcopy(b, pos);
                     b[2] += 0.15f;
-                    a[2] = g + 0.15f;
-                    if (collision_line(b, a, 2, m, 0)) {
-                        a[2] = g;
-                        qcopy(out, a);
+                    candidate_position[2] = g + 0.15f;
+                    if (collision_line(b, candidate_position, 2, moby, 0)) {
+                        candidate_position[2] = g;
+                        qcopy(out, candidate_position);
                         return 1;
                     }
                 }
