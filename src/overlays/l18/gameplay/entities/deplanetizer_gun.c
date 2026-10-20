@@ -802,23 +802,23 @@ void FUN_L18_002fa728(char *moby) {
         UPDATE_TRANSFORM_FROM_HISTORY = 1
     };
     char *data = *(char **)(moby + 0x78);
-    char tmp[16];
+    char position_delta[16];
     char *child;
     switch (*(unsigned char *)(moby + 0x20)) {
     case INITIALIZE_TRANSFORM_HISTORY:
         moby[0x20] = 1;
         break;
     case UPDATE_TRANSFORM_FROM_HISTORY:
-        fast_vec_sub(tmp, moby + 0x10, data + 0x60);
-        update_entity_matrix(data + 0x20, tmp, data + 0x70, moby + 0x40);
+        fast_vec_sub(position_delta, moby + 0x10, data + 0x60);
+        update_entity_matrix(data + 0x20, position_delta, data + 0x70, moby + 0x40);
         break;
     }
     if (*(unsigned char *)(moby + 0xBC) != 0 && *(int *)(data + 0x80) != 0 &&
         *(int *)(data + 0x84) == 0) {
-        char *c = func_0020D348_m(0x764);
-        *(char **)(data + 0x84) = c;
-        if (c != 0) {
-            *(unsigned short *)(c + 0x32) = *(unsigned short *)(moby + 0x32);
+        char *new_child = func_0020D348_m(0x764);
+        *(char **)(data + 0x84) = new_child;
+        if (new_child != 0) {
+            *(unsigned short *)(new_child + 0x32) = *(unsigned short *)(moby + 0x32);
             (*(char **)(data + 0x84))[0x31] = 1;
             *(long *)(*(char **)(data + 0x84) + 0x38) = *(long *)(moby + 0x38);
             *(float *)(*(char **)(data + 0x84) + 0x2C) *=
