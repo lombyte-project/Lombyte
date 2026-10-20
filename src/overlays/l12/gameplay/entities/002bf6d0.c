@@ -11,16 +11,16 @@ extern int D_L12_0015FFD8; /* no foreign declaration */
 extern short *D_L12_001ABCC0[];
 
 void FUN_L12_002bf6d0(struct Moby *moby) {
-    short *p = D_L12_001ABCC0[moby->group];
+    short *group_index_cursor = D_L12_001ABCC0[moby->group];
     int base = D_L12_0015FFD8;
     do {
-        int i = (*p & 0x7FFF) * 256;
-        char *e = (char *)(i + base);
-        char *s;
-        *(float *)(e + 0x18) = moby->pos.z;
-        s = D_L12_001CBF40 + *(int *)(*(char **)(e + 0x78) + 0xc) * 0x1190;
-        *(float *)(s + 8) = moby->pos.z;
-    } while (*p++ >= 0);
+        int i = (*group_index_cursor & 0x7FFF) * 256;
+        char *indexed_record = (char *)(i + base);
+        char *linked_record;
+        *(float *)(indexed_record + 0x18) = moby->pos.z;
+        linked_record = D_L12_001CBF40 + *(int *)(*(char **)(indexed_record + 0x78) + 0xc) * 0x1190;
+        *(float *)(linked_record + 8) = moby->pos.z;
+    } while (*group_index_cursor++ >= 0);
 }
 #include "sda.h"
 
