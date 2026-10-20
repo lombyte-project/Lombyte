@@ -661,7 +661,7 @@ void FUN_L15_002eb108(struct Moby *moby) {
     int g;
     int b;
     float scale;
-    Quad4 *p;
+    Quad4 *v_scroll_factors;
     float *output_vertex;
     scale = convert_integer_to_float(D_L15_0015F5CC) * (D_L15_0016216C * frame_time);
     vu1_add_gs_register(6, get_effect_texture(D_L15_00162158));
@@ -673,7 +673,7 @@ void FUN_L15_002eb108(struct Moby *moby) {
                                                       DEG_TO_RAD * frame_time);
     get_moby_color(moby, &r, &g, &b);
     /* The second float of each pair in t: p->f[0] is t.f[1], p->f[2] is t.f[3]. */
-    p = (Quad4 *)&uv_scroll_factors.f[1];
+    v_scroll_factors = (Quad4 *)&uv_scroll_factors.f[1];
     color = (D_L15_0016215C << 24) | (b << 16) | (g << 8) | r;
     output_vertex = D_L15_001DE200;
     do {
@@ -698,7 +698,7 @@ void FUN_L15_002eb108(struct Moby *moby) {
             D_L15_001DE530[n][0] =
                 D_L15_001DDED0[n][0] + FUN_L00_00200260(scale * uv_scroll_factors.f[j * 2], 1.0f);
             D_L15_001DE530[n][1] =
-                D_L15_001DDED0[n][1] + FUN_L00_00200260(scale * p->f[j * 2], 1.0f);
+                D_L15_001DDED0[n][1] + FUN_L00_00200260(scale * v_scroll_factors->f[j * 2], 1.0f);
         }
         font_queue_vu_state();
         for (k = 0; k < 1; k++) {
