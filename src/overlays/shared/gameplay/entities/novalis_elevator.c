@@ -2460,9 +2460,9 @@ char *FUN_L01_002ef478(char *self, int idx) {
         if ((*(Ent_2ef478 * *)&D_L01_0015FFD8)[i].flags & 0x1000) {
             if ((*(Ent_2ef478 * *)&D_L01_0015FFD8)[i].type == 0x26F) {
                 if ((*(Ent_2ef478 * *)&D_L01_0015FFD8)[i].state < 0x7F) {
-                    float d = dist_2ef478((*(Ent_2ef478 * *)&D_L01_0015FFD8)[i].pos, self + 0x10);
-                    if (d < best) {
-                        best = d;
+                    float candidate_distance = dist_2ef478((*(Ent_2ef478 * *)&D_L01_0015FFD8)[i].pos, self + 0x10);
+                    if (candidate_distance < best) {
+                        best = candidate_distance;
                         res = D_L01_0015FFD8 + (i << 8);
                     }
                 }
