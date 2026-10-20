@@ -35,14 +35,14 @@ typedef struct Obj40 {
    at D_00153A80 and report it. Returns whether it fits. */
 int FinishMpegReferenceImage(void *object) __asm__("FUN_00129b38");
 int FinishMpegReferenceImage(void *object) {
-    Obj40 *s = (Obj40 *)object;
+    Obj40 *reference_image_object = (Obj40 *)object;
     int r = 1;
-    if (s->unk008 != 2) {
-        int v = s->unk118;
-        s->unk008 = 2;
-        s->unk0AC = v;
+    if (reference_image_object->unk008 != 2) {
+        int v = reference_image_object->unk118;
+        reference_image_object->unk008 = 2;
+        reference_image_object->unk0AC = v;
     }
-    s->unk820 = r;
+    reference_image_object->unk820 = r;
     return r;
 }
 
