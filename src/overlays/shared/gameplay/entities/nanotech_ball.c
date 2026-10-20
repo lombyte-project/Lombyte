@@ -281,48 +281,48 @@ extern s32 D_L00_00161A88 __attribute__((sda));
 extern f32 D_L00_00161A90[1] __attribute__((sda));
 extern f32 D_L00_00161AA0[1] __attribute__((sda));
 extern f32 D_L00_00161AB0[1] __attribute__((sda));
-s32 FUN_L00_002d8510(M_2d8510 *m) {
-    O_2d8510 *o;
-    V_2d8510 a, b;
+s32 FUN_L00_002d8510(M_2d8510 *moby) {
+    O_2d8510 *effect_data;
+    V_2d8510 effect_position, b;
     s32 i, ret, c, hi, al;
     f32 z, t, f;
     u8 *p;
-    o = m->p78;
-    FUN_001f9a28_2d8510(&a, &(*(V_2d8510 *)g_debug_camera), &m->v10);
+    effect_data = moby->p78;
+    FUN_001f9a28_2d8510(&effect_position, &(*(V_2d8510 *)g_debug_camera), &moby->v10);
     ret = 0;
-    fast_vec_normalize(&a, &a, -0.3f);
-    fast_vec_normalize(&b, &a, 0.1f);
-    fast_vec_add(&a, &a, &m->v10);
-    z = a.z;
+    fast_vec_normalize(&effect_position, &effect_position, -0.3f);
+    fast_vec_normalize(&b, &effect_position, 0.1f);
+    fast_vec_add(&effect_position, &effect_position, &moby->v10);
+    z = effect_position.z;
     for (i = 0; i < 4; i++) {
-        if (FUN_001f9770_2d8510(&o->h58[i]))
+        if (FUN_001f9770_2d8510(&effect_data->h58[i]))
             continue;
-        if (o->h58[i] > FUN_001f96f8_2d8510(0x30))
+        if (effect_data->h58[i] > FUN_001f96f8_2d8510(0x30))
             ret = 1;
-        f = o->f60[i] += D_L00_00161A90[i];
+        f = effect_data->f60[i] += D_L00_00161A90[i];
         if (255.0f <= f)
-            o->f60[i] = f - 255.0f;
+            effect_data->f60[i] = f - 255.0f;
         else if (f <= 0.0f)
-            o->f60[i] = f + 255.0f;
-        t = FUN_001fa6c0_2d8510(FUN_001f96f8_2d8510(0xFF) - o->h58[i]);
+            effect_data->f60[i] = f + 255.0f;
+        t = FUN_001fa6c0_2d8510(FUN_001f96f8_2d8510(0xFF) - effect_data->h58[i]);
         t = t / (f32)FUN_001f96f8_2d8510(0xFF);
         c = FUN_001fa6e0_2d8510(D_L00_00161A7C, D_L00_00161A80,
                                 absolute_float(0.5f - t));
         hi = c >> 24;
-        t = 1.0f - o->h58[i] / FUN_001fa6c0_2d8510(FUN_001f96f8_2d8510(D_L00_00161A58_gp));
+        t = 1.0f - effect_data->h58[i] / FUN_001fa6c0_2d8510(FUN_001f96f8_2d8510(D_L00_00161A58_gp));
         al = FUN_001fa6d0_2d8510(FUN_001fa6c0_2d8510(hi) * (1.0f - t)) << 24;
         c = al | (c & 0xFFFFFF);
-        a.z = z + D_L00_00161AB0[i];
-        p = FUN_L00_00272f68_2d8510(&a, c, FUN_001fa6d0_2d8510(o->f60[i]), D_L00_00161A88, 0,
+        effect_position.z = z + D_L00_00161AB0[i];
+        p = FUN_L00_00272f68_2d8510(&effect_position, c, FUN_001fa6d0_2d8510(effect_data->f60[i]), D_L00_00161A88, 0,
                                     2, 1, D_L00_00161AA0[i] * t);
         if (p)
             p[2] = *D_L00_001B2080_2d8510.pF8;
-        p = FUN_L00_00272f68_2d8510(&a, al | 0xFFFFFF, FUN_001fa6d0_2d8510(o->f60[i]),
+        p = FUN_L00_00272f68_2d8510(&effect_position, al | 0xFFFFFF, FUN_001fa6d0_2d8510(effect_data->f60[i]),
                                     D_L00_00161A88, D_L00_00161A84, 2, 1,
                                     D_L00_00161AA0[i] * (t * 0.7f));
         if (p)
             p[2] = *D_L00_001B2080_2d8510.pF8;
-        fast_vec_add(&a, &a, &b);
+        fast_vec_add(&effect_position, &effect_position, &b);
     }
     return ret;
 }
