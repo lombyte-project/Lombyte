@@ -674,22 +674,22 @@ extern float D_L16_001618F0 __attribute__((sda));
 extern float D_L16_001618F4 __attribute__((sda));
 extern float D_L16_001618F8 __attribute__((sda));
 extern float D_L16_001618FC __attribute__((sda));
-void FUN_L16_002c44f0(struct Moby *m, void *p) {
+void FUN_L16_002c44f0(struct Moby *moby, void *new_position) {
     float origin[4];
     float pos[4];
     float vel[4];
     float out[4];
     float a, b, radius, speed;
     int i;
-    char *d;
-    *(OvlQuad *)origin = *(OvlQuad *)p;
+    char *moby_data;
+    *(OvlQuad *)origin = *(OvlQuad *)new_position;
     {
         float *start = origin;
-        qcopy(&m->pos, start);
+        qcopy(&moby->pos, start);
         qcopy(pos, start);
     }
     origin[2] += 0.3f;
-    if (FUN_L00_001f0d60_q(0.2f, pos, 0, m)) {
+    if (FUN_L00_001f0d60_q(0.2f, pos, 0, moby)) {
         float *effectPosition = out;
         float *effectVelocity = vel;
         i = 3;
@@ -700,7 +700,7 @@ void FUN_L16_002c44f0(struct Moby *m, void *p) {
             b = random_angle_radians_q();
             func_00215C00_57_q(radius, a, b, effectPosition);
             out[2] += D_L16_001618F4;
-            add_vector_xyz_q(effectPosition, effectPosition, &m->pos);
+            add_vector_xyz_q(effectPosition, effectPosition, &moby->pos);
             speed = random_float_between_alt_q(D_L16_001618EC * D_0015ED6C,
                                                D_L16_001618F0 * D_0015ED6C);
             b = random_angle_radians_q();
@@ -708,18 +708,18 @@ void FUN_L16_002c44f0(struct Moby *m, void *p) {
                                effectVelocity);
             speed = random_float_between_alt_q(3.5f, 5.5f);
             vel[2] = speed * D_0015ED6C;
-            FUN_L00_002cbf68_q(m, effectPosition, effectVelocity);
+            FUN_L00_002cbf68_q(moby, effectPosition, effectVelocity);
         } while (--i >= 0);
-        func_0022ED80_57_q(1, 0, m);
+        func_0022ED80_57_q(1, 0, moby);
     } else {
-        d = (char *)m->pvars;
-        *(float *)(d + 0x78) = 1.0f;
-        if (m->prev_seq != 2)
-            blend_moby_animation_q(m, 2, 0, 1);
-        m->flags = (m->flags | 0x1000) & 0xFFBE;
-        m->collision = m->pclass->collision;
-        m->state = 4;
-        *(short *)(d + 0x66) = scale_game_frames_q(0xB4);
+        moby_data = (char *)moby->pvars;
+        *(float *)(moby_data + 0x78) = 1.0f;
+        if (moby->prev_seq != 2)
+            blend_moby_animation_q(moby, 2, 0, 1);
+        moby->flags = (moby->flags | 0x1000) & 0xFFBE;
+        moby->collision = moby->pclass->collision;
+        moby->state = 4;
+        *(short *)(moby_data + 0x66) = scale_game_frames_q(0xB4);
     }
 }
 /* Update a thrown bomb (class 0x119): fly and bounce off what it hits and off the ground, rest, then burst. */
