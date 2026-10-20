@@ -1205,26 +1205,26 @@ int FUN_L00_00239df8(HudElem *m)
 extern s32 D_00141398 NOT_SDA;
 extern s32 D_L00_0015F7F0_gp __asm__("D_L00_0015F7F0") __attribute__((sda));
 s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
-void FUN_L00_0023a218(u8 *m) {
-    u8 *q = m + 0x70;
+void FUN_L00_0023a218(u8 *hud_element) {
+    u8 *visibility_counters = hud_element + 0x70;
     if (D_00141398) {
         s32 r = scale_game_frames(10);
         s32 lim = D_L00_0015F7F0_gp;
-        *(s32 *)(m + 0x7C) = r;
-        if (m[0x70] < lim) {
-            m[0x70]++;
-        } else if (q[1] < lim) {
-            q[1]++;
+        *(s32 *)(hud_element + 0x7C) = r;
+        if (hud_element[0x70] < lim) {
+            hud_element[0x70]++;
+        } else if (visibility_counters[1] < lim) {
+            visibility_counters[1]++;
         }
     } else {
-        *(s32 *)(m + 0x7C) = 0;
-        *(s32 *)(m + 0x6C) = 1;
-        if (q[1]) {
-            q[1]--;
-        } else if (m[0x70]) {
-            m[0x70]--;
+        *(s32 *)(hud_element + 0x7C) = 0;
+        *(s32 *)(hud_element + 0x6C) = 1;
+        if (visibility_counters[1]) {
+            visibility_counters[1]--;
+        } else if (hud_element[0x70]) {
+            hud_element[0x70]--;
         } else {
-            *(s32 *)(m + 0x6C) = -6;
+            *(s32 *)(hud_element + 0x6C) = -6;
         }
     }
 }
