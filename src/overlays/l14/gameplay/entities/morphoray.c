@@ -578,7 +578,7 @@ void FUN_L14_00305b18(struct Moby *morphoray_moby) {
     float *a;
     int *t;
     int i, j, c, k;
-    float f, g;
+    float unwrapped_particle_value, g;
     j = 0;
     effect_data->z += 0.1f;
     subtract_vector_xyz(v, D_L14_001674C0, effect_data);
@@ -589,12 +589,12 @@ void FUN_L14_00305b18(struct Moby *morphoray_moby) {
     add_vector_xyz(v, v, effect_data);
     effect_data->z -= 0.1f;
     for (i = 3; i >= 0; i--) {
-        f = *a + effect_data->b[j];
-        *a = f;
-        if (f >= 255.0f) {
-            *a = f - 255.0f;
-        } else if (f <= 0.0f) {
-            *a = f + 255.0f;
+        unwrapped_particle_value = *a + effect_data->b[j];
+        *a = unwrapped_particle_value;
+        if (unwrapped_particle_value >= 255.0f) {
+            *a = unwrapped_particle_value - 255.0f;
+        } else if (unwrapped_particle_value <= 0.0f) {
+            *a = unwrapped_particle_value + 255.0f;
         }
         if (func_001F9908_r(t)) {
             effect_data->t[j] = scale_game_frames(255);
