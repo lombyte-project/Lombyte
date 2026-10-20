@@ -10,7 +10,7 @@ void draw_framebuffer_rect(s32 x0, s32 y0, s32 x1, s32 y1, s32 ox, s32 oy,
 
 void draw_framebuffer_rect(s32 x0, s32 y0, s32 x1, s32 y1, s32 ox, s32 oy, u32 color) {
     struct DmaTag *tag;
-    u64 *q;
+    u64 *packet_payload;
     s32 ax;
     s32 ay;
     s32 bx;
@@ -35,20 +35,20 @@ void draw_framebuffer_rect(s32 x0, s32 y0, s32 x1, s32 y1, s32 ox, s32 oy, u32 c
     bx -= ox << 3;
     ax -= ox << 3;
     tag = render_packet_cursor.tag;
-    q = (u64 *)(tag + 1);
+    packet_payload = (u64 *)(tag + 1);
     render_packet_cursor.tag = tag + 1;
-    q[0] = 0x1000000000000001;
-    q[1] = 0xE;
-    q[2] = 0x33003;
-    q[3] = 0x47;
-    q[4] = 0x2400000000000001;
-    q[5] = 0x10;
-    q[6] = 0x106;
-    q[7] = color;
-    q[8] = 0x2400000000008001;
-    q[9] = 0x44;
-    q[10] = ax | ((u64)ay << 16);
-    q[11] = bx | ((u64)by << 16);
+    packet_payload[0] = 0x1000000000000001;
+    packet_payload[1] = 0xE;
+    packet_payload[2] = 0x33003;
+    packet_payload[3] = 0x47;
+    packet_payload[4] = 0x2400000000000001;
+    packet_payload[5] = 0x10;
+    packet_payload[6] = 0x106;
+    packet_payload[7] = color;
+    packet_payload[8] = 0x2400000000008001;
+    packet_payload[9] = 0x44;
+    packet_payload[10] = ax | ((u64)ay << 16);
+    packet_payload[11] = bx | ((u64)by << 16);
     render_packet_cursor.tag = (struct DmaTag *)((u8 *)render_packet_cursor.tag + 0x60);
     vu1_add_g_sregister(0x42, 0x8000000044ULL);
     vu1_add_vif_code(0x13000000);
