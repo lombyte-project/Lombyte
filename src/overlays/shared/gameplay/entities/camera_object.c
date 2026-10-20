@@ -2630,7 +2630,7 @@ int FUN_L00_002aa2a8(char *trajectory_state, char *moby, int mode) {
     int x;
     char *base = D_0013F350;
     int i;
-    char *tmp;
+    char *owner_moby_vars;
     if (*(int *)(base + 0x2084) == 0x72) return 0;
     if (D_L00_0015F5C4_c != 0) return 0;
     qcopy(C, moby + 0x10);
@@ -2646,12 +2646,12 @@ int FUN_L00_002aa2a8(char *trajectory_state, char *moby, int mode) {
         }
         x = scale_game_frames_alt(0x78);
     } else {
-        tmp = *(char **)(*(char **)(trajectory_state + 0x30) + 0x78);
+        owner_moby_vars = *(char **)(*(char **)(trajectory_state + 0x30) + 0x78);
         qcopy(w, moby + 0x10);
         qcopy(B, trajectory_state);
         {
             short xs = *(short *)(trajectory_state + 0x34);
-            int c50 = *(int *)(tmp + 0x50);
+            int c50 = *(int *)(owner_moby_vars + 0x50);
             x = xs;
             if (c50 != 0) *(short *)(trajectory_state + 0x36) = 1;
         }
