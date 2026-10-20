@@ -3205,10 +3205,10 @@ extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern void free_effect_particle(void *) __asm__("FUN_L00_00267a08");
 
 /* Calls free_effect_particle on a once fast_dec_timer_s16(a + 0xA) returns non-zero; skips id -1. */
-void FUN_L00_00270710(char *a) {
-    if (*(short *)(a + 0xA) != -1) {
-        if (fast_dec_timer_s16(a + 0xA) != 0) {
-            free_effect_particle(a);
+void FUN_L00_00270710(char *particle) {
+    if (*(short *)(particle + 0xA) != -1) {
+        if (fast_dec_timer_s16(particle + 0xA) != 0) {
+            free_effect_particle(particle);
         }
     }
 }
