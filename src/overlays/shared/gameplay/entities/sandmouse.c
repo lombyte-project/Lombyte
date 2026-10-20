@@ -596,88 +596,88 @@ extern void FUN_L00_00258278(struct Moby *, f32 *, f32, f32, f32, f32);
 extern s32 FUN_L00_00258ad0(struct Moby *, Vec4 *, f32, f32, s32, s32);
 extern f32 normalize_angle(f32) __asm__("FUN_L00_0025e310");
 
-void FUN_L01_0030d880(struct Moby *m, struct HoverVars *p) {
+void FUN_L01_0030d880(struct Moby *moby, struct HoverVars *hover_vars) {
     enum {
         HOVER_COMMAND_FACE_GOAL = 0,
         HOVER_COMMAND_MOVE_TO_GOAL = 2
     };
     Vec4 v;
-    f32 d;
+    f32 reference_distance;
     f32 k;
     f32 ang;
     f32 len;
     s32 hit;
-    s16 n;
-    struct HoverTuning *t;
+    s16 stuck_frames;
+    struct HoverTuning *hover_tuning;
 
-    fast_vec_sub(&v, p, &m->pos);
-    if (m->state == 6) {
-        d = vector_distance(&m->pos, &p->unk30);
+    fast_vec_sub(&v, hover_vars, &moby->pos);
+    if (moby->state == 6) {
+        reference_distance = vector_distance(&moby->pos, &hover_vars->unk30);
     } else {
-        d = vector_distance(&m->pos, &hero.motion.pos);
+        reference_distance = vector_distance(&moby->pos, &hero.motion.pos);
     }
-    vector_distance(&m->pos, p);
-    switch (m->command) {
+    vector_distance(&moby->pos, hover_vars);
+    switch (moby->command) {
     case HOVER_COMMAND_FACE_GOAL:
-        ang = fast_arc_tan(p->goal.f[0] - m->pos.x, p->goal.f[1] - m->pos.y);
-        FUN_L00_00258278(m, &D_L01_001DEB4C, ang, frame_time_sq * 6.2831855f, frame_time_sq * 3.1415927f,
+        ang = fast_arc_tan(hover_vars->goal.f[0] - moby->pos.x, hover_vars->goal.f[1] - moby->pos.y);
+        FUN_L00_00258278(moby, &D_L01_001DEB4C, ang, frame_time_sq * 6.2831855f, frame_time_sq * 3.1415927f,
                          frame_time * 11.519173f);
-        if (1.3f < d) {
-            m->command = 2;
+        if (1.3f < reference_distance) {
+            moby->command = 2;
         }
         break;
     case HOVER_COMMAND_MOVE_TO_GOAL:
-        if (p->target == 0) {
-            ang = fast_arc_tan(p->goal.f[0] - m->pos.x, p->goal.f[1] - m->pos.y);
-            FUN_L00_00258278(m, &D_L01_001DEB4C, ang, frame_time_sq * 6.2831855f, frame_time_sq * 3.1415927f,
+        if (hover_vars->target == 0) {
+            ang = fast_arc_tan(hover_vars->goal.f[0] - moby->pos.x, hover_vars->goal.f[1] - moby->pos.y);
+            FUN_L00_00258278(moby, &D_L01_001DEB4C, ang, frame_time_sq * 6.2831855f, frame_time_sq * 3.1415927f,
                              frame_time * 11.519173f);
         } else {
-            ang = fast_arc_tan(p->target->pos.x - m->pos.x, p->target->pos.y - m->pos.y);
-            FUN_L00_00258278(m, &D_L01_001DEB4C, ang,
+            ang = fast_arc_tan(hover_vars->target->pos.x - moby->pos.x, hover_vars->target->pos.y - moby->pos.y);
+            FUN_L00_00258278(moby, &D_L01_001DEB4C, ang,
                              D_L01_001620C4 * DEG_TO_RAD * frame_time_sq, D_L01_001620C8 * DEG_TO_RAD * frame_time_sq,
                              D_L01_001620CC * DEG_TO_RAD * frame_time);
         }
         fast_vec_scale(&v, &v, frame_scale * 0.04f);
-        fast_vec_sub(&v, &v, &p->vel);
-        if (1.3f < d) {
+        fast_vec_sub(&v, &v, &hover_vars->vel);
+        if (1.3f < reference_distance) {
             fast_vec_scale(&v, &v, frame_scale_sq * 0.13f);
         } else {
             fast_vec_scale(&v, &v, frame_scale_sq * 0.25f);
         }
         v.f[2] *= frame_scale * -0.100000024f + 1.0f;
-        fast_vec_add(&p->vel, &p->vel, &v);
-        if (m->state == 6) {
-            clamp_vector_length(&p->vel, &p->vel, frame_time * 2.7f);
+        fast_vec_add(&hover_vars->vel, &hover_vars->vel, &v);
+        if (moby->state == 6) {
+            clamp_vector_length(&hover_vars->vel, &hover_vars->vel, frame_time * 2.7f);
         }
-        t = &D_L01_001DEB38;
-        hit = FUN_L00_00258ad0(m, &p->vel, 1.0f, t->unk30, t->unk0, 0);
-        len = fast_vec_length(&p->vel);
+        hover_tuning = &D_L01_001DEB38;
+        hit = FUN_L00_00258ad0(moby, &hover_vars->vel, 1.0f, hover_tuning->unk30, hover_tuning->unk0, 0);
+        len = fast_vec_length(&hover_vars->vel);
         if (hit == 0) {
-            p->stuck = 0;
+            hover_vars->stuck = 0;
         } else if (len < 0.005f) {
-            n = ++p->stuck;
-            if (scale_game_frames(20) < n && m->visible == 0) {
-                qcopy(&m->pos, p);
-                p->stuck = 0;
+            stuck_frames = ++hover_vars->stuck;
+            if (scale_game_frames(20) < stuck_frames && moby->visible == 0) {
+                qcopy(&moby->pos, hover_vars);
+                hover_vars->stuck = 0;
             }
         }
-        if (d < 1.1f) {
-            k = 1.1f - d;
-            ang = fast_arc_tan(hero.motion.pos.f[0] - m->pos.x, hero.motion.pos.f[1] - m->pos.y);
-            p->vel.f[0] -= k * fast_cos(ang) * (frame_scale_sq * 0.1f);
-            p->vel.f[1] -= k * fast_sin(ang) * (frame_scale_sq * 0.1f);
+        if (reference_distance < 1.1f) {
+            k = 1.1f - reference_distance;
+            ang = fast_arc_tan(hero.motion.pos.f[0] - moby->pos.x, hero.motion.pos.f[1] - moby->pos.y);
+            hover_vars->vel.f[0] -= k * fast_cos(ang) * (frame_scale_sq * 0.1f);
+            hover_vars->vel.f[1] -= k * fast_sin(ang) * (frame_scale_sq * 0.1f);
         }
         break;
     default:
-        m->command = 0;
-        if (1.3f < d) {
-            m->command = 2;
+        moby->command = 0;
+        if (1.3f < reference_distance) {
+            moby->command = 2;
         }
         break;
     }
-    t = &D_L01_001DEB38;
-    m->rot.x += (normalize_angle(t->yaw_speed * D_L01_001620D0) - m->rot.x) * D_L01_001620D8;
-    m->rot.y += (normalize_angle(fast_vec_length(&p->vel) * D_L01_001620D4) - m->rot.y) * D_L01_001620DC;
+    hover_tuning = &D_L01_001DEB38;
+    moby->rot.x += (normalize_angle(hover_tuning->yaw_speed * D_L01_001620D0) - moby->rot.x) * D_L01_001620D8;
+    moby->rot.y += (normalize_angle(fast_vec_length(&hover_vars->vel) * D_L01_001620D4) - moby->rot.y) * D_L01_001620DC;
 }
 #include "sda.h"
 
