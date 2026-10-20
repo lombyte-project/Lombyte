@@ -3239,7 +3239,7 @@ extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 void FUN_L00_0020b960(void) {
     u8 save = P.b12ED;
     s16 saved_flag_selector = P.h12E0;
-    f32 d;
+    f32 height_difference;
     int target_state;
     fast_mem_zero16(&P.h12E0, 0x10);
     P.b12ED = save;
@@ -3261,9 +3261,9 @@ void FUN_L00_0020b960(void) {
         P.f2F0 = P.f2D8 + 0.2f;
     }
     if (saved_flag_selector == 0) {
-        d = P.f2F0 - P.f2D8;
-        P.f22A4 = d;
-        if (d < 0.85f && 0.25f < d)
+        height_difference = P.f2F0 - P.f2D8;
+        P.f22A4 = height_difference;
+        if (height_difference < 0.85f && 0.25f < height_difference)
             P.b20A9 = 1;
         P.b12E4 = 1;
     }
