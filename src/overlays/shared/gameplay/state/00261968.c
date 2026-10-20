@@ -544,38 +544,38 @@ void FUN_L00_00259f50_2628d8(void *, void *) __asm__("FUN_L00_00259f50");
 void FUN_001f99f8_2628d8(void *) __asm__("FUN_001f99f8");
 
 void update_joint_animation(void *m, unsigned char *p, int c, float fa, float fb) __asm__("FUN_L00_002628d8");
-void update_joint_animation(void *m, unsigned char *p, int c, float fa, float fb) {
-    unsigned char *o = *(unsigned char **)(p + 0x78);
-    float f;
-    if (!o) {
-        *(void **)(p + 0x78) = m;
-    } else if (o != m) {
-        if (p[1] && o[0x20] < 0x7F)
-            FUN_0020cb88_2628d8(o, p);
-        p[1] = 0;
-        *(void **)(p + 0x78) = m;
+void update_joint_animation(void *moby, unsigned char *joint_animation_state, int c, float fa, float fb) {
+    unsigned char *previous_moby = *(unsigned char **)(joint_animation_state + 0x78);
+    float uniform_scale;
+    if (!previous_moby) {
+        *(void **)(joint_animation_state + 0x78) = moby;
+    } else if (previous_moby != moby) {
+        if (joint_animation_state[1] && previous_moby[0x20] < 0x7F)
+            FUN_0020cb88_2628d8(previous_moby, joint_animation_state);
+        joint_animation_state[1] = 0;
+        *(void **)(joint_animation_state + 0x78) = moby;
     }
-    if (*(float *)(p + 0x60) == 0.0f && *(float *)(p + 0x64) == 0.0f &&
-        *(float *)(p + 0x68) == 0.0f && *(float *)(p + 0x70) == 1.0f &&
-        FUN_001f99c0_2628d8(*(float *)(p + 0x40)) < 0.005f &&
-        FUN_001f99c0_2628d8(*(float *)(p + 0x44)) < 0.005f &&
-        FUN_001f99c0_2628d8(*(float *)(p + 0x48)) < 0.005f) {
-        if (p[1])
-            FUN_0020cb88_2628d8(m, p);
+    if (*(float *)(joint_animation_state + 0x60) == 0.0f && *(float *)(joint_animation_state + 0x64) == 0.0f &&
+        *(float *)(joint_animation_state + 0x68) == 0.0f && *(float *)(joint_animation_state + 0x70) == 1.0f &&
+        FUN_001f99c0_2628d8(*(float *)(joint_animation_state + 0x40)) < 0.005f &&
+        FUN_001f99c0_2628d8(*(float *)(joint_animation_state + 0x44)) < 0.005f &&
+        FUN_001f99c0_2628d8(*(float *)(joint_animation_state + 0x48)) < 0.005f) {
+        if (joint_animation_state[1])
+            FUN_0020cb88_2628d8(moby, joint_animation_state);
         return;
     }
-    FUN_L00_0025bc98_2628d8(p + 0x40, p + 0x50, *(float *)(p + 0x60), fa, fb, 0.0f, 0);
-    FUN_L00_0025bc98_2628d8(p + 0x44, p + 0x54, *(float *)(p + 0x64), fa, fb, 0.0f, 0);
-    FUN_L00_0025bc98_2628d8(p + 0x48, p + 0x58, *(float *)(p + 0x68), fa, fb, 0.0f, 0);
-    if (!p[1])
-        FUN_0020cb10_2628d8(m, c, p);
-    FUN_L00_00259f50_2628d8(p + 0x10, p + 0x40);
-    f = *(float *)(p + 0x70);
-    *(float *)(p + 0x20) = f;
-    *(float *)(p + 0x24) = f;
-    *(float *)(p + 0x28) = f;
-    FUN_001f99f8_2628d8(p + 0x60);
-    *(float *)(p + 0x70) = 1.0f;
+    FUN_L00_0025bc98_2628d8(joint_animation_state + 0x40, joint_animation_state + 0x50, *(float *)(joint_animation_state + 0x60), fa, fb, 0.0f, 0);
+    FUN_L00_0025bc98_2628d8(joint_animation_state + 0x44, joint_animation_state + 0x54, *(float *)(joint_animation_state + 0x64), fa, fb, 0.0f, 0);
+    FUN_L00_0025bc98_2628d8(joint_animation_state + 0x48, joint_animation_state + 0x58, *(float *)(joint_animation_state + 0x68), fa, fb, 0.0f, 0);
+    if (!joint_animation_state[1])
+        FUN_0020cb10_2628d8(moby, c, joint_animation_state);
+    FUN_L00_00259f50_2628d8(joint_animation_state + 0x10, joint_animation_state + 0x40);
+    uniform_scale = *(float *)(joint_animation_state + 0x70);
+    *(float *)(joint_animation_state + 0x20) = uniform_scale;
+    *(float *)(joint_animation_state + 0x24) = uniform_scale;
+    *(float *)(joint_animation_state + 0x28) = uniform_scale;
+    FUN_001f99f8_2628d8(joint_animation_state + 0x60);
+    *(float *)(joint_animation_state + 0x70) = 1.0f;
 }
 #define NOT_SDA
 
