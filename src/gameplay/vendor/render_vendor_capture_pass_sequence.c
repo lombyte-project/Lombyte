@@ -21,10 +21,10 @@ extern float convert_integer_to_float(int) __asm__("func_001FA6C0");
 extern int truncate_float_to_s32(float) __asm__("func_001FA6D0");
 extern void project_graphics_bounds_float(void *, void *, float *, float *, float *,
                                           float *) __asm__("func_00237C80");
-extern void configure_capture_target(int, int, float) __asm__("func_00239690");
+extern void configure_capture_target(int, int, float) __asm__("FUN_00239690");
 extern void draw_centered_capture_background(int, int) __asm__("func_001FB740");
 extern void vu1_add_g_sregister(int, long) __asm__("func_00233980");
-extern void update_scrolling_status_message(char *) __asm__("func_00238520");
+extern void update_scrolling_status_message(char *) __asm__("FUN_00238520");
 extern void render_vendor_item_details_pass(char *) __asm__("func_002389E0");
 extern void render_capture_effect_pass(char *) __asm__("FUN_00238630");
 extern void render_vendor_buy_label_pass(char *, int, int) __asm__("func_00238F08");

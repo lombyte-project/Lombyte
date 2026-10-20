@@ -34,11 +34,11 @@ extern void noop_main_callback() __asm__("func_001E93E8");
 extern void noop_callback_k(u8 *, u8 *, s32, s32) __asm__("func_001E9440");
 extern void fade_to_black(s32) __asm__("func_001F4A58");
 extern void set_animation_parameter(s32, s32) __asm__("func_001FF570");
-extern void update_resource_counter() __asm__("func_001FF768");
+extern void decrement_resource_counter(void) __asm__("UpdateResourceCounter");
 extern void load_and_initialize_level_chunk() __asm__("func_00209370");
-extern void initialize_global_state_entry(s32) __asm__("func_0022E188");
-extern void snd_continue_all_sounds_in_group(s32) __asm__("func_0012E418");
-extern void music_unpause() __asm__("func_00216088");
+extern void InitializeGlobalStateEntry(s32 value);
+extern void snd_continue_all_sounds_in_group(s32) __asm__("FUN_0012e418");
+extern void music_unpause();
 extern void snd_flush_sound_commands() __asm__("func_0012DC80");
 void update_mode_freeze(void) __asm__("FUN_001fce28");
 
@@ -192,7 +192,7 @@ void update_mode_freeze(void) {
                         set_animation_parameter(hero.unk880, 0);
                         hero.unk880 = -1;
                     }
-                    update_resource_counter();
+                    decrement_resource_counter();
                     if (scale_game_frames(0x1068) < hero.unk19C) {
                         if (current_level_index == 5) {
                             D_0015EE38++;
@@ -299,7 +299,7 @@ void update_mode_freeze(void) {
                     mode_freeze_flags = mode_freeze_flags & (~2);
                     mode_freeze_flags = mode_freeze_flags & (~4);
                     mode_freeze_flags = mode_freeze_flags | 0x20;
-                    initialize_global_state_entry(0);
+                    InitializeGlobalStateEntry(0);
                     D_0013E05A[0] = 1;
                 } else if (controller_state.pressed & PAD_TRIANGLE) {
                     mode_freeze_flags = mode_freeze_flags & (~2);
@@ -321,7 +321,7 @@ void update_mode_freeze(void) {
                 mode_freeze_flags = mode_freeze_flags & (~2);
                 mode_freeze_flags = mode_freeze_flags & (~4);
                 mode_freeze_flags = mode_freeze_flags | 0x20;
-                initialize_global_state_entry(0);
+                InitializeGlobalStateEntry(0);
                 D_0013E05A[0] = 1;
             } else if (controller_state.pressed & PAD_TRIANGLE) {
                 mode_freeze_flags |= 0x20;
@@ -337,7 +337,7 @@ void update_mode_freeze(void) {
                         load_and_initialize_level_chunk();
                         mode_freeze_flags = mode_freeze_flags & (~2);
                         mode_freeze_flags = mode_freeze_flags & (~4);
-                        initialize_global_state_entry(0);
+                        InitializeGlobalStateEntry(0);
                         D_0013E05A[0] = 1;
                     }
                     if (pad->pressed & PAD_TRIANGLE) {
