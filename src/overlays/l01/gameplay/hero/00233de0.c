@@ -1381,14 +1381,14 @@ void FUN_L01_002370b8(void) {
             }
             e = d - off;
             if (absolute_float(e) < range + 3.0f) {
-                float q;
+                float approach_speed_scale;
 
-                q = e / 0.9f;
-                if (q > cap) {
-                    q = cap;
+                approach_speed_scale = e / 0.9f;
+                if (approach_speed_scale > cap) {
+                    approach_speed_scale = cap;
                 }
-                if (q > 1.0f) {
-                    hero.speed_scale = q;
+                if (approach_speed_scale > 1.0f) {
+                    hero.speed_scale = approach_speed_scale;
                 }
             }
         }
