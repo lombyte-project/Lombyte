@@ -30,9 +30,9 @@ s32 FUN_L03_00205830(Vec4 *from, s32 **outOwner, Vec4 *to, s32 *outI, f32 *outF,
     s32 gotI;
     f32 gotF;
     s32 i;
-    Vec4 *p = &pos;
+    Vec4 *source_position_ptr = &pos;
 
-    *(u128 *)p = *(u128 *)from;
+    *(u128 *)source_position_ptr = *(u128 *)from;
     for (i = 0; i < D_L03_0015F710; i++) {
         if (skip != 0 && D_L03_0015F70C[i].owner == skip)
             continue;
@@ -40,14 +40,14 @@ s32 FUN_L03_00205830(Vec4 *from, s32 **outOwner, Vec4 *to, s32 *outI, f32 *outF,
             continue;
         if (*D_L03_0015F70C[i].owner == 0)
             continue;
-        if (fast_vec_dist(&D_L03_0015F70C[i], p) > D_L03_0015F70C[i].sphere.f[3])
+        if (fast_vec_dist(&D_L03_0015F70C[i], source_position_ptr) > D_L03_0015F70C[i].sphere.f[3])
             continue;
-        if (!FUN_L00_0025df68(D_L03_0015F70C[i].owner, p, to, &gotI, &gotF, D_L03_0015F70C[i].kind,
+        if (!FUN_L00_0025df68(D_L03_0015F70C[i].owner, source_position_ptr, to, &gotI, &gotF, D_L03_0015F70C[i].kind,
                               12.0f, 10.0f, 0.0f))
             continue;
-        if (!(vector_distance(p, to) < 1.7f))
+        if (!(vector_distance(source_position_ptr, to) < 1.7f))
             continue;
-        if (!(FUN_001f99c0(p->f[2] - to->f[2]) < 1.5f))
+        if (!(FUN_001f99c0(source_position_ptr->f[2] - to->f[2]) < 1.5f))
             continue;
         *outOwner = D_L03_0015F70C[i].owner;
         *outI = gotI;
