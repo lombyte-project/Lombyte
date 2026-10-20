@@ -23,9 +23,9 @@ s32 D_L17_0016A580[220] = {0};
 s32 D_L18_0016A680[220] = {0};
 /* Moves the word at 0x364 of D_L00_00169C80 to 0x368 and clears 0x364 and 0x1B0. */
 void FUN_L00_001f6d70(void) {
-    s32 *p = D_L00_00169C80;
-    s32 v = p[0x364 / 4];
-    p[0x364 / 4] = 0;
-    p[0x1B0 / 4] = 0;
-    p[0x368 / 4] = v;
+    s32 *array_base = D_L00_00169C80;
+    s32 v = array_base[0x364 / 4];
+    array_base[0x364 / 4] = 0;
+    array_base[0x1B0 / 4] = 0;
+    array_base[0x368 / 4] = v;
 }
