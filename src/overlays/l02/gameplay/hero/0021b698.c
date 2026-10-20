@@ -810,7 +810,8 @@ void FUN_L02_00225c20(void) {
     enum {
         HERO_STATE_MOVE_TO_TARGET_POSITION = 0x65,
         HERO_STATE_BRAKE_AT_TARGET_POSITION = 0x66,
-        HERO_STATE_SINK_BELOW_SURFACE = 0x68
+        HERO_STATE_SINK_BELOW_SURFACE = 0x68,
+        HERO_STATE_SINK_STRAIGHT_DOWN = 0x7B
     };
     FVec4 vec[14];
     Moby *moby;
@@ -2254,7 +2255,7 @@ void FUN_L02_00225c20(void) {
                                   ? frame_time * 0.25f
                                   : frame_time);
     } break;
-    case 0x7B:
+    case HERO_STATE_SINK_STRAIGHT_DOWN:
         clear_vector(hero.motion.velocity.f);
         hero.motion.velocity.f[2] = -frame_time;
         break;
