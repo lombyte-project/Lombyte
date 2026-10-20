@@ -113,7 +113,7 @@ void FUN_L14_002d6570(struct Moby *m) {
     unsigned short *moby_index_cursor = D_L14_001ABF40_6570[m->group];
     char **out;
     int i;
-    float s;
+    float path_step_distance;
     if (moby_index_cursor == 0) {
         return;
     }
@@ -143,10 +143,10 @@ void FUN_L14_002d6570(struct Moby *m) {
         char *path = *(char **)(D_L14_0015F70C_6570 + *(int *)(od + 0x60) * 32 + 0x10);
         o[0x20] = 6;
         ((M_6570 *)o)->f48 = angle_atan2(hero.motion.pos.f[0] - m->pos.x, hero.motion.pos.f[1] - m->pos.y);
-        s = -D_L14_00161A38_gp;
+        path_step_distance = -D_L14_00161A38_gp;
         *(int *)(od + 0x64) = hero.unk564;
         *(float *)(od + 0x68) = hero.unk568;
-        FUN_L00_0025d808_6570(path, o + 0x10, od + 0x64, od + 0x68, 0, s);
+        FUN_L00_0025d808_6570(path, o + 0x10, od + 0x64, od + 0x68, 0, path_step_distance);
         clear_u64_value(od + 0x90);
         *(int *)(od + 0xF8) = i * 2;
         *(int *)(od + 0xFC) = i * 2 + 1;
