@@ -92,11 +92,11 @@ int FUN_L00_00231db0(int key, int *out) {
 extern int hero_slot_item_id(int) __asm__("FUN_L00_0020d498");
 void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
-void FUN_L00_00231e78(int id, int arg, float t) {
+void FUN_L00_00231e78(int id, int arg, float blend_frames) {
     struct Hero *base = &hero;
     struct Hero *blk2;
     struct Hero *blk3;
-    char *a;
+    char *slot3_moby;
     char *b;
     int seq0;
     int seq1;
@@ -106,22 +106,22 @@ void FUN_L00_00231e78(int id, int arg, float t) {
     if (base->items[3].state != 2) {
         return;
     }
-    a = ((char *)base->items[3].moby);
+    slot3_moby = ((char *)base->items[3].moby);
     b = ((char *)base->items[3].moby2);
-    if (a == 0 || b == 0) {
+    if (slot3_moby == 0 || b == 0) {
         return;
     }
     if (FUN_L00_00231ff8(id, &seq0, &seq1) != 0 && id != 0) {
-        if (*(unsigned char *)(a + 0x53) == seq0) {
+        if (*(unsigned char *)(slot3_moby + 0x53) == seq0) {
             return;
         }
-        blend_moby_animation(a, seq0, arg, (int)t);
-        blend_moby_animation(b, seq1, arg, (int)t);
+        blend_moby_animation(slot3_moby, seq0, arg, (int)blend_frames);
+        blend_moby_animation(b, seq1, arg, (int)blend_frames);
         return;
     }
     blk2 = &hero;
     ok = 1;
-    if (blk2->state.control_mode == 0 && FUN_L00_00231db0(*(unsigned char *)(a + 0x53), &id) != 0) {
+    if (blk2->state.control_mode == 0 && FUN_L00_00231db0(*(unsigned char *)(slot3_moby + 0x53), &id) != 0) {
         if (id == 0) {
             ok = 0;
         }
@@ -134,8 +134,8 @@ void FUN_L00_00231e78(int id, int arg, float t) {
     if (blk3->state.prev == 8 && hero_slot_item_id(3) == 2) {
         seq = scale_game_frames(0x13);
     }
-    if (*(unsigned char *)(a + 0x53) != 1) {
-        blend_moby_animation(a, 1, 0, seq);
+    if (*(unsigned char *)(slot3_moby + 0x53) != 1) {
+        blend_moby_animation(slot3_moby, 1, 0, seq);
     }
     if (*(unsigned char *)(b + 0x53) != 1) {
         blend_moby_animation(b, 1, 0, seq);
