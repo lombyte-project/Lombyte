@@ -17,7 +17,7 @@ extern unsigned char *create_part(int) __asm__("FUN_L00_002678b8");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 extern unsigned char *D_L08_001B29A4 __attribute__((section(".data")));
-void FUN_L08_0027f5f0(void *pos, int kind, void *vel, float f) {
+void FUN_L08_0027f5f0(void *pos, int kind, void *vel, float velocity_w_override) {
     float v[4];
     unsigned char *particle;
     float *vp = v;
@@ -48,7 +48,7 @@ void FUN_L08_0027f5f0(void *pos, int kind, void *vel, float f) {
         particle[8] = (int)random_float_between_alt(0.0f, 360.0f);
         *(OvlQuad *)(particle + 0x10) = *(OvlQuad *)pos;
         *(OvlQuad *)(particle + 0x20) = *(OvlQuad *)vp;
-        *(float *)(particle + 0x2C) = f;
+        *(float *)(particle + 0x2C) = velocity_w_override;
     }
 }
 
