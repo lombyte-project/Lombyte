@@ -1409,39 +1409,39 @@ void gravity_set_z(void *, void *, float) __asm__("FUN_L00_00233b20");
 extern float D_L00_001797D8[] __attribute__((section(".data")));
 void FUN_L00_00207a58(void) {
     struct Hero *G = &hero;
-    OvlQuad t[1];
-    float s, f;
+    OvlQuad planar_offset[1];
+    float sequence_scale, item_scale;
     int i, j;
-    unsigned char *o;
+    unsigned char *item_moby;
     if (G->unk22DC) {
-        s = D_L00_001797D8[++G->unk22DC];
-        if (s == -1.0f) {
+        sequence_scale = D_L00_001797D8[++G->unk22DC];
+        if (sequence_scale == -1.0f) {
             G->unk22DC = 0;
             return;
         }
         scale_vector_xyz(((unsigned char *)G->moby) + 0xC0,
-                            ((unsigned char *)G->moby) + 0xC0, s);
+                            ((unsigned char *)G->moby) + 0xC0, sequence_scale);
         scale_vector_xyz(((unsigned char *)G->moby) + 0xD0,
-                            ((unsigned char *)G->moby) + 0xD0, s);
+                            ((unsigned char *)G->moby) + 0xD0, sequence_scale);
         if (G->vehicle_mode == 0) {
 
             for (i = 0; i < 7; i++) {
                 for (j = 0; j < 3; j++) {
                     struct Hero *h = &hero;
-                    o = *(unsigned char **)&h->items[i].moby;
+                    item_moby = *(unsigned char **)&h->items[i].moby;
                     if (j == 1)
-                        o = *(unsigned char **)&h->items[i].moby2;
-                    f = s;
-                    if (i == 0 && h->vehicle_mode == 0 && 1.0f < s)
-                        f = 1.0f;
-                    if (o) {
-                        scale_vector_xyz(o + 0xC0, o + 0xC0, f);
-                        scale_vector_xyz(o + 0xD0, o + 0xD0, f);
-                        subtract_vector_xyz(t, o + 0x10, &hero.motion.unkD0);
-                        gravity_set_z(t, t, 0.0f);
-                        subtract_vector_xyz(o + 0x10, o + 0x10, t);
-                        scale_vector_xyz(t, t, s);
-                        add_vector_xyz(o + 0x10, o + 0x10, t);
+                        item_moby = *(unsigned char **)&h->items[i].moby2;
+                    item_scale = sequence_scale;
+                    if (i == 0 && h->vehicle_mode == 0 && 1.0f < sequence_scale)
+                        item_scale = 1.0f;
+                    if (item_moby) {
+                        scale_vector_xyz(item_moby + 0xC0, item_moby + 0xC0, item_scale);
+                        scale_vector_xyz(item_moby + 0xD0, item_moby + 0xD0, item_scale);
+                        subtract_vector_xyz(planar_offset, item_moby + 0x10, &hero.motion.unkD0);
+                        gravity_set_z(planar_offset, planar_offset, 0.0f);
+                        subtract_vector_xyz(item_moby + 0x10, item_moby + 0x10, planar_offset);
+                        scale_vector_xyz(planar_offset, planar_offset, sequence_scale);
+                        add_vector_xyz(item_moby + 0x10, item_moby + 0x10, planar_offset);
                     }
                 }
             }
