@@ -1465,7 +1465,7 @@ extern void mark_moby_for_removal_2ef9b0(void *) __asm__("FUN_0020c828");
    slows down or bounces off, shrinking, with a new random spin. */
 void FUN_L09_002ef9b0(struct Moby *moby) {
     float old[4];
-    float q[4];
+    float spark_velocity[4];
     float r[4];
     float *vel = (float *)moby->pvars;
     float *pos = (float *)&moby->pos;
@@ -1488,11 +1488,11 @@ void FUN_L09_002ef9b0(struct Moby *moby) {
             r[0] = random_float_2ef9b0(-1.0f, 1.0f);
             r[1] = random_float_2ef9b0(-1.0f, 1.0f);
             r[2] = random_float_2ef9b0(-1.0f, 1.0f);
-            *(OvlQuad *)q = *(OvlQuad *)r;
-            normalize_vector_xyz(q, q, vector_length_xyz(r) * 0.5f);
-            add_vector_xyz(q, r, q);
-            normalize_vector_xyz(q, q, random_float_2ef9b0(D_0015ED6C_2ef9b0 * 3.0f, D_0015ED6C_2ef9b0 * 6.0f));
-            spawn_spark_2ef9b0(&moby->pos, q, 0x7F2F4F6F,
+            *(OvlQuad *)spark_velocity = *(OvlQuad *)r;
+            normalize_vector_xyz(spark_velocity, spark_velocity, vector_length_xyz(r) * 0.5f);
+            add_vector_xyz(spark_velocity, r, spark_velocity);
+            normalize_vector_xyz(spark_velocity, spark_velocity, random_float_2ef9b0(D_0015ED6C_2ef9b0 * 3.0f, D_0015ED6C_2ef9b0 * 6.0f));
+            spawn_spark_2ef9b0(&moby->pos, spark_velocity, 0x7F2F4F6F,
                                random_int_between(scale_game_frames_2ef9b0(10), scale_game_frames_2ef9b0(15)),
                                100000.0f);
         }
