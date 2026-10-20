@@ -2145,7 +2145,7 @@ extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 
-float FUN_L06_002f2148(char *moby, char *b, int c) {
+float FUN_L06_002f2148(char *moby, char *b, int target_kind) {
     float r = vector_distance(moby + 0x10, b + 0x10);
     float *g = (float *)D_L06_00167400;
     float t = fast_difference_between_rotations(
@@ -2159,7 +2159,7 @@ float FUN_L06_002f2148(char *moby, char *b, int c) {
     if (((unsigned char *)b)[0x31] == 0) {
         r += 10.0f;
     }
-    if (c == 9) {
+    if (target_kind == 9) {
         r += 100.0f;
     }
     return r;
