@@ -3441,80 +3441,80 @@ s32 allocate_voice_for_target_entry_c(s32 entry_index, s32 flags,
                                       void *target) __asm__("FUN_0022da68");
 void mark_moby_for_removal_c(void *obj) __asm__("FUN_0020c828");
 
-void FUN_L07_00311bc8(char *m) {
+void FUN_L07_00311bc8(char *moby) {
     enum {
         LEAF_INITIALIZE = 0,
         LEAF_WAIT_FOR_HERO_CONTACT = 1,
         LEAF_TIMED_SWAY_AND_DESCENT = 2,
         LEAF_ACCELERATED_FALL = 3
     };
-    char *d;
+    char *moby_data;
     float prev[4];
     float v[4];
     float t;
     float g;
-    if (m == 0)
+    if (moby == 0)
         return;
-    d = *(char **)(m + 0x78);
-    if (d == 0)
+    moby_data = *(char **)(moby + 0x78);
+    if (moby_data == 0)
         return;
-    qcopy(prev, m + 0x10);
-    switch (((unsigned char *)m)[0x20]) {
+    qcopy(prev, moby + 0x10);
+    switch (((unsigned char *)moby)[0x20]) {
     case LEAF_INITIALIZE:
-        *(int *)(d + 0x20) = 0;
-        *(short *)(d + 0x24) = 0;
-        d[0x28] = 4;
-        *(short *)(d + 0x3E) = 0xD;
-        set_moby_color(m, 0x50, 0x40, 0x10);
-        *(float *)(m + 0x40) += random_float_between_alt(-0.034906585f, 0.034906585f);
-        *(float *)(m + 0x44) += random_float_between_alt(-0.034906585f, 0.034906585f);
-        *(float *)(m + 0x18) += random_float_between_alt(-0.02f, 0.02f);
-        m[0x20] = 1;
+        *(int *)(moby_data + 0x20) = 0;
+        *(short *)(moby_data + 0x24) = 0;
+        moby_data[0x28] = 4;
+        *(short *)(moby_data + 0x3E) = 0xD;
+        set_moby_color(moby, 0x50, 0x40, 0x10);
+        *(float *)(moby + 0x40) += random_float_between_alt(-0.034906585f, 0.034906585f);
+        *(float *)(moby + 0x44) += random_float_between_alt(-0.034906585f, 0.034906585f);
+        *(float *)(moby + 0x18) += random_float_between_alt(-0.02f, 0.02f);
+        moby[0x20] = 1;
         break;
     case LEAF_WAIT_FOR_HERO_CONTACT:
-        if (FUN_L01_00277fb8(m)) {
-            *(float *)(d + 0xA8) = *(float *)(m + 0x40);
-            *(float *)(d + 0xAC) = *(float *)(m + 0x44);
-            *(short *)(d + 0xA0) = scale_game_frames(0x1E);
-            if (*(short *)(d + 0xA2) != -1)
-                allocate_voice_for_target_entry_c(*(short *)(d + 0xA2), 0, (int)m);
-            m[0x20] = 2;
+        if (FUN_L01_00277fb8(moby)) {
+            *(float *)(moby_data + 0xA8) = *(float *)(moby + 0x40);
+            *(float *)(moby_data + 0xAC) = *(float *)(moby + 0x44);
+            *(short *)(moby_data + 0xA0) = scale_game_frames(0x1E);
+            if (*(short *)(moby_data + 0xA2) != -1)
+                allocate_voice_for_target_entry_c(*(short *)(moby_data + 0xA2), 0, (int)moby);
+            moby[0x20] = 2;
         }
         break;
     case LEAF_TIMED_SWAY_AND_DESCENT:
-        *(float *)(m + 0x40) =
-            fast_sin(normalize_angle(convert_integer_to_float(*(short *)(d + 0xA0)) * 0.75f)) *
+        *(float *)(moby + 0x40) =
+            fast_sin(normalize_angle(convert_integer_to_float(*(short *)(moby_data + 0xA0)) * 0.75f)) *
             DEG_TO_RAD;
         {
             float c =
-                fast_cos(normalize_angle(convert_integer_to_float(*(short *)(d + 0xA0)) * 0.89f));
-            float e = frame_scale;
-            *(float *)(m + 0x44) = c * DEG_TO_RAD;
-            *(float *)(m + 0x18) -= e * 0.002f;
+                fast_cos(normalize_angle(convert_integer_to_float(*(short *)(moby_data + 0xA0)) * 0.89f));
+            float descent_frame_scale = frame_scale;
+            *(float *)(moby + 0x44) = c * DEG_TO_RAD;
+            *(float *)(moby + 0x18) -= descent_frame_scale * 0.002f;
         }
-        if (fast_dec_timer_s16(d + 0xA0)) {
-            *(float *)(d + 0xA4) = frame_scale * 0.002f;
-            m[0x20] = 3;
+        if (fast_dec_timer_s16(moby_data + 0xA0)) {
+            *(float *)(moby_data + 0xA4) = frame_scale * 0.002f;
+            moby[0x20] = 3;
         }
         break;
     case LEAF_ACCELERATED_FALL:
-        t = (1.3962634f - *(float *)(m + 0x40)) * 0.05f;
-        *(float *)(m + 0x40) += t;
+        t = (1.3962634f - *(float *)(moby + 0x40)) * 0.05f;
+        *(float *)(moby + 0x40) += t;
         t = fast_sin(t);
         g = frame_time_sq * 9.8f;
-        *(float *)(m + 0x18) -= t + t;
-        *(float *)(d + 0xA4) += g;
-        *(float *)(m + 0x18) -= *(float *)(d + 0xA4);
-        if (*(float *)(m + 0x18) < 2.0f) {
-            mark_moby_for_removal_c(m);
+        *(float *)(moby + 0x18) -= t + t;
+        *(float *)(moby_data + 0xA4) += g;
+        *(float *)(moby + 0x18) -= *(float *)(moby_data + 0xA4);
+        if (*(float *)(moby + 0x18) < 2.0f) {
+            mark_moby_for_removal_c(moby);
             return;
         }
         break;
     case 4:
         break;
     }
-    subtract_vector_xyz(v, m + 0x10, prev);
-    update_entity_matrix(d + 0x60, v, m + 0x40, m + 0x40);
+    subtract_vector_xyz(v, moby + 0x10, prev);
+    update_entity_matrix(moby_data + 0x60, v, moby + 0x40, moby + 0x40);
 }
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_002CE470.c: func_L07_00313298), where it is exact; names translated to the US level program. */
 
