@@ -2874,9 +2874,9 @@ extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void FUN_L17_002efa48(void *moby_v, int arg) {
     Moby_2F1558 *moby = (Moby_2F1558 *)moby_v;
-    Data_2F1558 *d;
-    Hit_2F1558 *q;
-    float tmp[4];
+    Data_2F1558 *moby_vars;
+    Hit_2F1558 *hit_record;
+    float position_buffer[4];
     int x;
     float y;
     float ang;
@@ -2884,54 +2884,54 @@ void FUN_L17_002efa48(void *moby_v, int arg) {
     float yaw;
     float ang2;
 
-    d = moby->data;
+    moby_vars = moby->data;
     if (moby->state == 0) {
         return;
     }
-    if (d->i38 != 0) {
-        d->f1D4 = func_001FA898_r(multiply_global_factor_ed64(random_float_between(180.0f, 240.0f)));
-        d->i38 = 0;
+    if (moby_vars->i38 != 0) {
+        moby_vars->f1D4 = func_001FA898_r(multiply_global_factor_ed64(random_float_between(180.0f, 240.0f)));
+        moby_vars->i38 = 0;
     }
-    update_float_countdown(&d->f1D4);
+    update_float_countdown(&moby_vars->f1D4);
     y = 0;
-    q = (Hit_2F1558 *)find_moby_hit(moby, 0x330000, 0);
-    hit_reaction(moby, q, &d->f20, 0, &x, &y, 0, 4);
+    hit_record = (Hit_2F1558 *)find_moby_hit(moby, 0x330000, 0);
+    hit_reaction(moby, hit_record, &moby_vars->f20, 0, &x, &y, 0, 4);
     if (x != 1 && moby->state != 15) {
-        d->f20 -= y;
-        d->f130 = frame_time_sq * 42.0f;
-        d->f134 = frame_time_sq * 24.0f;
-        d->b15D = 0;
-        d->i144 = 9;
-        d->f13C = frame_time * 15.7f;
-        d->f138 = frame_time * 19.0f;
-        d->f170 = -1.0f;
-        d->f174 = -1.0f;
-        *(OvlQuad *)tmp = *(OvlQuad *)q->pos;
-        trooper_knockback_arc(tmp, &ang, &d->f138, &d->f13C);
-        if (q != 0 && q->moby != 0 && q->moby->hA6 == 0x63) {
-            ang = fast_arc_tan(d->f1F0 - moby->pos[0], d->f1F4 - moby->pos[1]);
+        moby_vars->f20 -= y;
+        moby_vars->f130 = frame_time_sq * 42.0f;
+        moby_vars->f134 = frame_time_sq * 24.0f;
+        moby_vars->b15D = 0;
+        moby_vars->i144 = 9;
+        moby_vars->f13C = frame_time * 15.7f;
+        moby_vars->f138 = frame_time * 19.0f;
+        moby_vars->f170 = -1.0f;
+        moby_vars->f174 = -1.0f;
+        *(OvlQuad *)position_buffer = *(OvlQuad *)hit_record->pos;
+        trooper_knockback_arc(position_buffer, &ang, &moby_vars->f138, &moby_vars->f13C);
+        if (hit_record != 0 && hit_record->moby != 0 && hit_record->moby->hA6 == 0x63) {
+            ang = fast_arc_tan(moby_vars->f1F0 - moby->pos[0], moby_vars->f1F4 - moby->pos[1]);
         }
-        trooper_start_knockback(ang, moby, d->v120, 0xB, 1, 0);
+        trooper_start_knockback(ang, moby, moby_vars->v120, 0xB, 1, 0);
         moby->state = 15;
-        d->b117 = 0xF0;
-        trooper_anim_update(moby, d->h110);
+        moby_vars->b117 = 0xF0;
+        trooper_anim_update(moby, moby_vars->h110);
     }
     moby->bA4 = 0xFF;
     if (arg != 0) {
         return;
     }
-    if (FUN_L00_0025ff38(128.0f, (char *)moby, d->v180, 0, 0, 0, 0) == 2) {
+    if (FUN_L00_0025ff38(128.0f, (char *)moby, moby_vars->v180, 0, 0, 0, 0) == 2) {
         return;
     }
-    if (FUN_001f9b48(moby->pos, d->v1B0) < 64.0f) {
-        ang2 = fast_arc_tan(d->v180[0] - moby->pos[0], d->v180[1] - moby->pos[1]);
+    if (FUN_001f9b48(moby->pos, moby_vars->v1B0) < 64.0f) {
+        ang2 = fast_arc_tan(moby_vars->v180[0] - moby->pos[0], moby_vars->v180[1] - moby->pos[1]);
         yaw = fast_difference_between_rotations(moby->f48, ang2);
-        qcopy(tmp, moby->pos);
-        tmp[2] += 1.0f;
-        r = coll_line_fix(tmp, (&hero.motion.unkD0), 2, 0, 0) == 0;
-        d->b1E4 = r;
+        qcopy(position_buffer, moby->pos);
+        position_buffer[2] += 1.0f;
+        r = coll_line_fix(position_buffer, (&hero.motion.unkD0), 2, 0, 0) == 0;
+        moby_vars->b1E4 = r;
         if (yaw < 1.0471976f) {
-            d->b1E4 = r << 1;
+            moby_vars->b1E4 = r << 1;
         }
     }
 }
