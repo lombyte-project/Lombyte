@@ -451,10 +451,10 @@ void FUN_L02_002ef020(struct Moby *moby) {
         SMOKE_VENT_STATE_REMOVE = 3
     };
     char *data = (char *)moby->pvars;
-    Vec4 p;
+    Vec4 view_sphere;
     Vec4 vel;
     Vec4 acc;
-    Vec4 tmp;
+    Vec4 vector_perturbation;
     s32 count1;
     s32 k1;
     s32 time_a1_burst;
@@ -484,18 +484,18 @@ void FUN_L02_002ef020(struct Moby *moby) {
         build_rotation_matrix(&moby->rot_row0, &moby->rot);
         break;
     case SMOKE_VENT_STATE_VIEW_GATED_EMISSION:
-        qcopy(&p, &moby->pos);
-        p.f[3] = 6.0f;
-        if (sphere_in_view(&p, 120.0f) == -1) {
+        qcopy(&view_sphere, &moby->pos);
+        view_sphere.f[3] = 6.0f;
+        if (sphere_in_view(&view_sphere, 120.0f) == -1) {
             break;
         }
         if (tick_timer32((s32 *)(data + 0xC0)) != 0) {
             *(s32 *)(data + 0xC0) = truncate_time(scale_time(random_float((f32)D_L02_0016210C, (f32)D_L02_00162110)));
             count1 = random_remainder(7) != 0 ? 1 : random_remainder(5) + 5;
             for (k1 = 0; k1 < count1; k1++) {
-                random_vector_jitter(&tmp, 0.0f, D_L02_001620D8 * frame_time);
+                random_vector_jitter(&vector_perturbation, 0.0f, D_L02_001620D8 * frame_time);
                 scale_vector_by(D_L02_001620C8 * (random_float(-D_L02_001620D4, D_L02_001620D4) + 1.0f) * frame_time, &vel, &moby->rot_row0);
-                add_vector(&vel, &vel, &tmp);
+                add_vector(&vel, &vel, &vector_perturbation);
                 scale_vector_by(D_L02_001620CC * (random_float(-D_L02_001620D4, D_L02_001620D4) + 1.0f) * frame_time, &acc, &vel);
                 acc.f[2] -= D_L02_001620D0 * frame_time;
                 vel.f[3] = random_float(D_L02_001620EC, D_L02_001620F0);
@@ -516,8 +516,8 @@ void FUN_L02_002ef020(struct Moby *moby) {
         rise1_puff = D_L02_0016208C * (random_float(-D_L02_00162094, D_L02_00162094) + 1.0f) * frame_time;
         clear_vector(&acc);
         acc.f[2] = rise1_puff;
-        scale_vector_by(random_float(-D_L02_00162090, D_L02_00162090) * frame_time, &tmp, &moby->rot_row1);
-        add_vector(&acc, &acc, &tmp);
+        scale_vector_by(random_float(-D_L02_00162090, D_L02_00162090) * frame_time, &vector_perturbation, &moby->rot_row1);
+        add_vector(&acc, &acc, &vector_perturbation);
         vel.f[3] = random_float(D_L02_001620A8, D_L02_001620AC);
         acc.f[3] = random_float(D_L02_001620B0, D_L02_001620B4);
         color_a1_puff = lerp_color(D_L02_001620B8, D_L02_001620BC, random_float(0.0f, 1.0f));
@@ -536,18 +536,18 @@ void FUN_L02_002ef020(struct Moby *moby) {
             }
             *(s32 *)(data + 0xC4) = truncate_time(scale_time(random_float(120.0f, 180.0f)));
         }
-        qcopy(&p, &moby->pos);
-        p.f[3] = 6.0f;
-        if (sphere_in_view(&p, 120.0f) == -1 && random_remainder(4) != 0) {
+        qcopy(&view_sphere, &moby->pos);
+        view_sphere.f[3] = 6.0f;
+        if (sphere_in_view(&view_sphere, 120.0f) == -1 && random_remainder(4) != 0) {
             break;
         }
         if (tick_timer32((s32 *)(data + 0xC0)) != 0) {
             *(s32 *)(data + 0xC0) = truncate_time(scale_time(random_float((f32)D_L02_0016215C, (f32)D_L02_00162160)));
             count2 = random_remainder(7) != 0 ? 1 : random_remainder(5) + 5;
             for (k2 = 0; k2 < count2; k2++) {
-                random_vector_jitter(&tmp, 0.0f, D_L02_00162128 * frame_time);
+                random_vector_jitter(&vector_perturbation, 0.0f, D_L02_00162128 * frame_time);
                 scale_vector_by(D_L02_00162118 * (random_float(-D_L02_00162124, D_L02_00162124) + 1.0f) * frame_time, &vel, &moby->rot_row0);
-                add_vector(&vel, &vel, &tmp);
+                add_vector(&vel, &vel, &vector_perturbation);
                 scale_vector_by(D_L02_0016211C * (random_float(-D_L02_00162124, D_L02_00162124) + 1.0f) * frame_time, &acc, &vel);
                 acc.f[2] -= D_L02_00162120 * frame_time;
                 vel.f[3] = random_float(D_L02_0016213C, D_L02_00162140);
@@ -565,8 +565,8 @@ void FUN_L02_002ef020(struct Moby *moby) {
         rise2_puff = D_L02_0016204C * (random_float(-D_L02_00162054, D_L02_00162054) + 1.0f) * frame_time;
         clear_vector(&acc);
         acc.f[2] = rise2_puff;
-        scale_vector_by(random_float(-D_L02_00162050, D_L02_00162050) * frame_time, &tmp, &moby->rot_row1);
-        add_vector(&acc, &acc, &tmp);
+        scale_vector_by(random_float(-D_L02_00162050, D_L02_00162050) * frame_time, &vector_perturbation, &moby->rot_row1);
+        add_vector(&acc, &acc, &vector_perturbation);
         vel.f[3] = random_float(D_L02_00162068, D_L02_0016206C);
         acc.f[3] = random_float(D_L02_00162070, D_L02_00162074);
         color_a2_puff = lerp_color(D_L02_00162078, D_L02_0016207C, random_float(0.0f, 1.0f));
