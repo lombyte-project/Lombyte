@@ -243,10 +243,10 @@ u8 D_L15_00180C40[8][1024] = {0};
 u8 D_L16_00180AC0[8][1024] = {0};
 u8 D_L17_00180F40[8][1024] = {0};
 u8 D_L18_00181040[8][1024] = {0};
-int FUN_L00_0023e5e0(u128 *v, float a, float b, int col) {
+int FUN_L00_0023e5e0(u128 *v, float radius, float b, int col) {
     int i;
-    T_0023e5e0 *t;
-    P_0023e5e0 *p;
+    T_0023e5e0 *slot_state;
+    P_0023e5e0 *parameter_entry;
     if (0.8f < D_L00_0015F5D4)
         return -1;
     for (i = 0; i < 8; i++)
@@ -254,17 +254,17 @@ int FUN_L00_0023e5e0(u128 *v, float a, float b, int col) {
             break;
     if (i == 8)
         return -1;
-    t = &D_L00_001804C0_0023e5e0[i];
-    p = &D_L00_001802C0_0023e5e0[i];
-    qcopy(&p->pos, v);
-    p->pos.f[3] = a;
-    p->x = FUN_001fa6c0_0023e5e0(col & 0xFF) * 0.0078125f;
-    p->y = FUN_001fa6c0_0023e5e0((col >> 8) & 0xFF) * 0.0078125f;
-    p->z = FUN_001fa6c0_0023e5e0((col >> 16) & 0xFF) * 0.0078125f;
-    p->b_0023e5e0 = b;
-    FUN_001f9810_0023e5e0(t, 0x30);
-    t->used = 1;
-    t->buf = (char *)D_L00_00180640[i];
+    slot_state = &D_L00_001804C0_0023e5e0[i];
+    parameter_entry = &D_L00_001802C0_0023e5e0[i];
+    qcopy(&parameter_entry->pos, v);
+    parameter_entry->pos.f[3] = radius;
+    parameter_entry->x = FUN_001fa6c0_0023e5e0(col & 0xFF) * 0.0078125f;
+    parameter_entry->y = FUN_001fa6c0_0023e5e0((col >> 8) & 0xFF) * 0.0078125f;
+    parameter_entry->z = FUN_001fa6c0_0023e5e0((col >> 16) & 0xFF) * 0.0078125f;
+    parameter_entry->b_0023e5e0 = b;
+    FUN_001f9810_0023e5e0(slot_state, 0x30);
+    slot_state->used = 1;
+    slot_state->buf = (char *)D_L00_00180640[i];
     return i;
 }
 #include "eetypes.h"
