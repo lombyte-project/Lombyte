@@ -21,17 +21,17 @@ extern int hit_reaction(void *, void *, void *, int, void *, void *, int, int) _
 extern void trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
 extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 
-void FUN_L17_002cbc10(char *m) {
+void FUN_L17_002cbc10(char *turret_moby) {
     char *turret_vars;
     char *hit_animation_state;
     char *r;
     int st;
     float fv;
     int depletion_status;
-    turret_vars = *(char **)(m + 0x78);
-    if (*(unsigned char *)(m + 0x20) != 0) {
+    turret_vars = *(char **)(turret_moby + 0x78);
+    if (*(unsigned char *)(turret_moby + 0x20) != 0) {
         fv = 0.0f;
-        r = find_moby_hit(m, 0x330000, 0);
+        r = find_moby_hit(turret_moby, 0x330000, 0);
         if (r != 0) {
             if (*(int *)(r + 0x20) != 0) {
                 int hit_moby_class_id = *(short *)(*(char **)(r + 0x20) + 0xA6);
@@ -42,22 +42,22 @@ void FUN_L17_002cbc10(char *m) {
             }
         }
         hit_animation_state = turret_vars + 0x60;
-        hit_reaction(m, r, turret_vars + 0x20, 0, &st, &fv, 0, 4);
-        if (st != 1 && *(unsigned char *)(m + 0x20) != 4) {
+        hit_reaction(turret_moby, r, turret_vars + 0x20, 0, &st, &fv, 0, 4);
+        if (st != 1 && *(unsigned char *)(turret_moby + 0x20) != 4) {
             float t = *(float *)(turret_vars + 0x20) - fv;
             *(float *)(turret_vars + 0x20) = t;
             depletion_status = 0xB;
             if (t <= 0.0f)
                 depletion_status = 1;
             if (depletion_status == 1) {
-                *(unsigned char *)(m + 0x20) = 4;
-                *(short *)(m + 0x34) &= 0xEFFF;
+                *(unsigned char *)(turret_moby + 0x20) = 4;
+                *(short *)(turret_moby + 0x34) &= 0xEFFF;
             }
             *(unsigned char *)(turret_vars + 0x67) = 0xF0;
-            trooper_anim_update(m, (short *)hit_animation_state);
+            trooper_anim_update(turret_moby, (short *)hit_animation_state);
         }
-        *(unsigned char *)(m + 0xA4) = 0xFF;
-        trooper_anim_finish(m, hit_animation_state);
+        *(unsigned char *)(turret_moby + 0xA4) = 0xFF;
+        trooper_anim_finish(turret_moby, hit_animation_state);
     }
 }
 
