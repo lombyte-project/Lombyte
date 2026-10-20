@@ -514,7 +514,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
     char *mem;
     float *ship;
     short *idx = D_L00_001AC780; /* moby index by file order; a pointer local, so its address is formed at each use */
-    int tmp; /* scratch int: the level number in the moby loop, a group's offset and end flag in the group loop */
+    int level_or_group_scratch; /* scratch int: the level number in the moby loop, a group's offset and end flag in the group loop */
 
     hdr = D_L00_00173E00.f4;
     mem = D_L00_00173E00.f18;
@@ -963,9 +963,9 @@ char *load_level_gameplay(int skip_gameplay_read) {
             b1 = bolts;
             b2 = b1;
             if (flags != 0) {
-                tmp = D_0015ED84; /* read before the test: see the group loop */
+                level_or_group_scratch = D_0015ED84; /* read before the test: see the group loop */
                 if (flags & 0x10) {
-                    vis = FUN_L00_00284d90(tmp, uid);
+                    vis = FUN_L00_00284d90(level_or_group_scratch, uid);
                 } else {
                     vis = 0xFF;
                 }
@@ -1205,9 +1205,9 @@ char *load_level_gameplay(int skip_gameplay_read) {
         }
         FillTransferWords(D_L00_001AB840, 0, 0x1C0);
         for (i = 0; i < n; i++, offs++) {
-            tmp = *offs;
-            if (tmp >= 0) {
-                int g = (int)(base + tmp);
+            level_or_group_scratch = *offs;
+            if (level_or_group_scratch >= 0) {
+                int g = (int)(base + level_or_group_scratch);
                 unsigned short *src;
                 short *dst;
 
@@ -1219,15 +1219,15 @@ char *load_level_gameplay(int skip_gameplay_read) {
                     int id = *src;
                     short t;
 
-                    tmp = *(short *)src;
+                    level_or_group_scratch = *(short *)src;
                     g = (id & 0x7FFF) << 1; /* the entry's slot in the moby index, in two steps */
                     g += (int)idx;
-                    tmp &= 0x8000;
+                    level_or_group_scratch &= 0x8000;
                     t = *(short *)g;
                     if (t >= 0) {
                         *dst++ = t;
                     }
-                    if (tmp) {
+                    if (level_or_group_scratch) {
                         if (D_L00_001AB840[i] < (int)dst) {
                             dst[-1] |= 0x8000;
                         } else {
@@ -1236,7 +1236,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
                         break;
                     }
                     src++;
-                } while (!tmp);
+                } while (!level_or_group_scratch);
             }
         }
     }
