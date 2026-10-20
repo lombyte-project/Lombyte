@@ -368,16 +368,16 @@ extern void FUN_L08_00313ba8(void *);
 
 extern char D_L12_00161EF0 __attribute__((sda));
 void FUN_L12_003032e8(struct Moby *moby) {
-    float m[8];
+    float position_and_rotation[8];
     char *data = (char *)moby->pvars;
     FUN_L08_00313ba8(moby);
-    transform_vector_by_basis(m, &D_L12_00161EF0, &moby->rot_row0);
-    fast_vec_add(m, m, &moby->pos);
-    FUN_L00_002ea9d8(m);
-    m[4] = 0;
-    m[5] = -*(float *)(data + 0x74);
-    m[6] = fast_add_rotations(1.5707964f, moby->rot.z);
-    FUN_L00_002eaa30(m + 4);
+    transform_vector_by_basis(position_and_rotation, &D_L12_00161EF0, &moby->rot_row0);
+    fast_vec_add(position_and_rotation, position_and_rotation, &moby->pos);
+    FUN_L00_002ea9d8(position_and_rotation);
+    position_and_rotation[4] = 0;
+    position_and_rotation[5] = -*(float *)(data + 0x74);
+    position_and_rotation[6] = fast_add_rotations(1.5707964f, moby->rot.z);
+    FUN_L00_002eaa30(position_and_rotation + 4);
 }
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
