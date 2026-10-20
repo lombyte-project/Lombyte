@@ -9,7 +9,7 @@ extern E002a1968 D_0013E550[];
 /* Sets word 0x20 of voice entry i to v; returns 1. */
 s32 vendor_volume(s32 i, s32 v) __asm__("FUN_L01_002a1968");
 s32 vendor_volume(s32 i, s32 v) {
-    E002a1968 *p = &D_0013E550[i];
-    p->w[0x20] = v;
+    E002a1968 *voice_entry = &D_0013E550[i];
+    voice_entry->w[0x20] = v;
     return 1;
 }
