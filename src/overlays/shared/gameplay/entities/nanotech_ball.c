@@ -1061,7 +1061,7 @@ extern G_2db508 D_0013F350_a __asm__("D_0013F350");
 extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
 extern void blend_moby_animation_alt(void *, int, int, int) __asm__("FUN_00212f90");
 
-int FUN_L00_002da058(u8 *cannon_moby, void *q, void *m_, void *r_, void *buf) {
+int FUN_L00_002da058(u8 *cannon_moby, void *cannon_data, void *m_, void *r_, void *buf) {
     char *candidate_moby = (char *)m_;
     char *r = (char *)r_;
     int ret = 0;
