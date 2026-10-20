@@ -99,7 +99,8 @@ int hero_set_state(int a, int b) {
         HERO_STATE_VEHICLE_MODE_3_HURT = 0x56,
         HERO_STATE_VEHICLE_MODE_3_DYING = 0x57,
         HERO_STATE_STOP_GRAVITY_XY = 0x66,
-        HERO_STATE_IDLE_RESET_MOTION = 0x67
+        HERO_STATE_IDLE_RESET_MOTION = 0x67,
+        HERO_STATE_DYING_LIMIT_MOTION = 0x80
     };
     int old2088;
     char *moby;
@@ -221,7 +222,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0x45, 0, (float)scale_game_frames(0xC));
         break;
     }
-    case 0x80: {
+    case HERO_STATE_DYING_LIMIT_MOTION: {
         struct Hero *p = &hero;
         p->state.control_mode = 0x14;
         p->unk2284 = 0;
