@@ -1558,7 +1558,7 @@ void FUN_L13_00309e88(struct Moby *moby) {
     };
     Bob_9e88 *b;
     float height_half_span_or_tile_enabled;
-    int i, j, k, n;
+    int i, j, k, tile_index;
     int cr, cg;
 
     struct Hero *g = &hero;
@@ -1619,8 +1619,8 @@ void FUN_L13_00309e88(struct Moby *moby) {
                     pool_ripple(x, y, 2.0f, 0.2f, Tiles_9e88, 22);
                 }
             }
-            for (n = 0; n < 22; n++)
-                FUN_L13_0030a488(n);
+            for (tile_index = 0; tile_index < 22; tile_index++)
+                FUN_L13_0030a488(tile_index);
         }
         moby->draw_dist = 0;
         moby->state = 1;
