@@ -2069,15 +2069,15 @@ void FUN_L18_002dc0c8(struct Moby *moby, void *segment_start, void *segment_end)
 
 extern s32 D_L18_00161C9C_d __asm__("D_L18_00161C9C") __attribute__((sda));
 
-void FUN_L18_002dc458(struct Moby *moby, void *pos, float f) {
-    int *d = (int *)moby->pvars;
+void FUN_L18_002dc458(struct Moby *moby, void *pos, float radius) {
+    int *moby_vars = (int *)moby->pvars;
     int lim;
     qcopy(&moby->pos, pos);
     lim = *(int *)&D_L18_00161C9C_d;
-    d[2] += 2;
-    *(float *)d = f;
-    if (scale_game_frames(lim) < d[2]) {
-        d[2] = scale_game_frames(*(int *)&D_L18_00161C9C_d);
+    moby_vars[2] += 2;
+    *(float *)moby_vars = radius;
+    if (scale_game_frames(lim) < moby_vars[2]) {
+        moby_vars[2] = scale_game_frames(*(int *)&D_L18_00161C9C_d);
     }
 }
 /* Ported from rac1-decomp nonmatching/l18_veldin2/func_L18_002DD8A8.c (func_L18_002DD8A8) */
