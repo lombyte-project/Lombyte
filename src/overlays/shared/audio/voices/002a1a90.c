@@ -9,20 +9,20 @@
 
 /* Ported from rac1-decomp (src/overlays/shared/sound_002A2C90.c: func_L01_002A2C90), where it is exact; names translated to the US level program. */
 
-void FUN_L01_002a1a90(int a, int b, int c, int d, int e) {
-    char *p = D_0013E533 + 0x1D;
-    *(int *)(p + 0x60) = a;
-    if ((unsigned char)p[0x68] != b) {
-        p[0x68] = b;
-        p[0x6B] |= 1;
+void FUN_L01_002a1a90(int moby_address, int b, int c, int d, int e) {
+    char *state_base = D_0013E533 + 0x1D;
+    *(int *)(state_base + 0x60) = moby_address;
+    if ((unsigned char)state_base[0x68] != b) {
+        state_base[0x68] = b;
+        state_base[0x6B] |= 1;
     }
-    if (*(int *)(p + 0x64) != c) {
-        *(int *)(p + 0x64) = c;
-        p[0x6B] |= 4;
+    if (*(int *)(state_base + 0x64) != c) {
+        *(int *)(state_base + 0x64) = c;
+        state_base[0x6B] |= 4;
     }
-    if ((unsigned char)p[0x69] != d || (unsigned char)p[0x6A] != e) {
-        p[0x6A] = e;
-        p[0x69] = d;
-        p[0x6B] |= 2;
+    if ((unsigned char)state_base[0x69] != d || (unsigned char)state_base[0x6A] != e) {
+        state_base[0x6A] = e;
+        state_base[0x69] = d;
+        state_base[0x6B] |= 2;
     }
 }
