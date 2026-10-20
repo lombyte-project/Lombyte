@@ -395,41 +395,41 @@ int FUN_001fa6d0_272060(float) __asm__("FUN_001fa6d0");
 extern unsigned char *D_L00_001B2154 __attribute__((section(".data")));
 unsigned char *FUN_L00_00272060(void *pos, int s, int color, int mode, int b, float *v, float x,
                                 float y, float z);
-unsigned char *FUN_L00_00272060(void *pos, int s, int color, int mode, int b, float *v, float x,
+unsigned char *FUN_L00_00272060(void *pos, int lifetime_frames, int color, int mode, int b, float *v, float x,
                                 float y, float z) {
-    unsigned char *m = p27fe00_alloc(0x35);
-    if (m) {
-        unsigned char *q = m + 0x20;
-        qcopy(m + 0x10, pos);
-        *(float *)(m + 0x18) += 0.05f;
-        *(int *)(m + 4) = color;
-        m[3] = 0x48;
-        m[9] = FUN_001fa6d0_272060(0.4f) + 0x20;
-        m[1] = 0;
-        m[2] = *D_L00_001B2154;
-        *(short *)(m + 0xA) = s;
-        *(float *)(m + 0xC) = x * 210000.0f;
+    unsigned char *particle = p27fe00_alloc(0x35);
+    if (particle) {
+        unsigned char *particle_data = particle + 0x20;
+        qcopy(particle + 0x10, pos);
+        *(float *)(particle + 0x18) += 0.05f;
+        *(int *)(particle + 4) = color;
+        particle[3] = 0x48;
+        particle[9] = FUN_001fa6d0_272060(0.4f) + 0x20;
+        particle[1] = 0;
+        particle[2] = *D_L00_001B2154;
+        *(short *)(particle + 0xA) = lifetime_frames;
+        *(float *)(particle + 0xC) = x * 210000.0f;
         if (mode == 0) {
-            m[8] = 0;
+            particle[8] = 0;
         } else if (mode == 1) {
-            m[8] = 0x20;
+            particle[8] = 0x20;
         } else {
-            m[8] = FUN_00213260_272060(0xFF);
+            particle[8] = FUN_00213260_272060(0xFF);
         }
-        *(float *)(q + 0) = *(float *)(m + 0xC);
-        *(float *)(q + 4) = y * 210000.0f;
-        *(short *)(q + 8) = s;
-        q[0xA] = b;
-        q[0xB] = color >> 24;
-        *(float *)(q + 0x18) = z;
+        *(float *)(particle_data + 0) = *(float *)(particle + 0xC);
+        *(float *)(particle_data + 4) = y * 210000.0f;
+        *(short *)(particle_data + 8) = lifetime_frames;
+        particle_data[0xA] = b;
+        particle_data[0xB] = color >> 24;
+        *(float *)(particle_data + 0x18) = z;
         {
-            float *p = (float *)(q + 0xC);
-            p[0] = v[0];
-            p[1] = v[1];
-            p[2] = v[2];
+            float *particle_velocity = (float *)(particle_data + 0xC);
+            particle_velocity[0] = v[0];
+            particle_velocity[1] = v[1];
+            particle_velocity[2] = v[2];
         }
     }
-    return m;
+    return particle;
 }
 /* Ported from rac1-decomp (src/overlays/shared/partupd_00272158.c: func_L00_00273090), where it is exact; names translated to the US level program. */
 
