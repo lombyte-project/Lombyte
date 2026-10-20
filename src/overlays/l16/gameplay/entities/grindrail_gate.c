@@ -2538,31 +2538,31 @@ extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 
-void FUN_L16_002e8b98(int n, Vec3f *p1, Vec3f *p2, int unused, float *out) {
+void FUN_L16_002e8b98(int point_count, Vec3f *p1, Vec3f *point_positions, int unused, float *out) {
     int i;
-    float a[4];
+    float relative_direction[4];
     float v[4];
     float t[4];
     float w[4];
 
-    for (i = 0; i < n; i++) {
-        float d;
+    for (i = 0; i < point_count; i++) {
+        float direction_dot_product;
         float len;
 
         v[3] = 1.0f;
-        v[0] = p2[i].x;
-        v[1] = p2[i].y;
-        v[2] = p2[i].z;
-        fast_vec_sub(a, v, D_L16_001671C0);
-        fast_vec_normalize(a, a, 1.0f);
+        v[0] = point_positions[i].x;
+        v[1] = point_positions[i].y;
+        v[2] = point_positions[i].z;
+        fast_vec_sub(relative_direction, v, D_L16_001671C0);
+        fast_vec_normalize(relative_direction, relative_direction, 1.0f);
         w[3] = 1.0f;
         w[0] = p1[i].x;
         w[1] = p1[i].y;
         w[2] = p1[i].z;
         fast_vec_normalize(w, w, 1.0f);
-        d = fast_vec_dot(w, a);
-        fast_vec_scale(t, w, d + d);
-        fast_vec_sub(t, a, t);
+        direction_dot_product = fast_vec_dot(w, relative_direction);
+        fast_vec_scale(t, w, direction_dot_product + direction_dot_product);
+        fast_vec_sub(t, relative_direction, t);
         fast_vec_normalize(t, t, 1.0f);
         t[2] = t[2] + 1.0f;
         len = fast_vec_length(t);
