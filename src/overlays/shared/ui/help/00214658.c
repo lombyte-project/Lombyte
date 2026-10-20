@@ -1000,18 +1000,18 @@ extern int *D_L00_00177F00[];
 extern void FUN_L00_002336e8(float *dst, float *src, float h);
 extern void FUN_L00_002a7e20(void *, int);
 
-void FUN_L00_00217368(int a, int n) {
-    if (n != 0) {
+void FUN_L00_00217368(int a, int entry_count) {
+    if (entry_count != 0) {
         char *d = D_0013E533 + 0xE1D;
         int i;
         if (*(int *)(d + 0xA64) == 0) {
             allocate_voice_for_target_entry(1, 0, a);
             *(int *)(d + 0xA64) = 1;
         }
-        for (i = 0; i < n; i++) {
+        for (i = 0; i < entry_count; i++) {
             int *m = D_L00_00177F00[i];
-            int t = (m && (m = (int *)m[9])) ? *(short *)((char *)m + 0x46) : 0;
-            if (t == 5 || t == 9) {
+            int entry_type = (m && (m = (int *)m[9])) ? *(short *)((char *)m + 0x46) : 0;
+            if (entry_type == 5 || entry_type == 9) {
                 float v[4] __attribute__((aligned(16)));
                 qcopy(v, (char *)D_L00_00177F00[i] + 0x10);
                 FUN_L00_002336e8(v, v, 0.5f);
