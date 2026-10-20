@@ -2564,7 +2564,7 @@ void FUN_L16_00214598(void) {
     case 0x4C:
     case 0x5E:
     case 0x69: {
-        s32 t198;
+        s32 jump_frame_or_trail_mode;
         s32 jump_phase_frame_threshold;
         if (hero.state.current == 0x1C && hero.unk22D8 == 0 && hero.items[3].item_id == 3) {
             if (FUN_L00_00211870(10.0f) != 0) {
@@ -2591,12 +2591,12 @@ void FUN_L16_00214598(void) {
                 FUN_L00_00209a40(7, 0);
             }
         }
-        t198 = hero.state_timer;
+        jump_frame_or_trail_mode = hero.state_timer;
         jump_phase_frame_threshold = hero.unk420;
-        if (t198 == jump_phase_frame_threshold) {
+        if (jump_frame_or_trail_mode == jump_phase_frame_threshold) {
             qcopy(&hero.unk400, &hero.motion.pos);
         }
-        if (hero.unk418 != 0 || (t198 < jump_phase_frame_threshold && hero.state.current != HERO_STATE_HIGH_JUMP && hero.state.current != HERO_STATE_PACK_LONG_JUMP && hero.state.current != 0xC &&
+        if (hero.unk418 != 0 || (jump_frame_or_trail_mode < jump_phase_frame_threshold && hero.state.current != HERO_STATE_HIGH_JUMP && hero.state.current != HERO_STATE_PACK_LONG_JUMP && hero.state.current != 0xC &&
                             hero.state.current != 0x11 && hero.state.current != 0x1C && hero.state.current != 0x4C)) {
             f32 sv;
             turn_to(0, frame_scale_sq * 0.015f, frame_scale_sq * 0.2f, frame_time * 15.009831f);
@@ -2667,8 +2667,8 @@ void FUN_L16_00214598(void) {
             FUN_L00_00215340();
         }
         if (hero.state.current == HERO_STATE_PACK_LONG_JUMP || hero.state.current == 0xD) {
-            t198 = (scale_game_frames(12) < hero.state_timer) * 2;
-            FUN_L00_00262608(&hero.trail.pos[0], t198);
+            jump_frame_or_trail_mode = (scale_game_frames(12) < hero.state_timer) * 2;
+            FUN_L00_00262608(&hero.trail.pos[0], jump_frame_or_trail_mode);
         }
         if (hero.state.current == HERO_STATE_PACK_LONG_JUMP && scale_game_frames(8) < hero.state_timer && hero.anim_frame < 28.0f) {
             s32 n;
