@@ -3418,44 +3418,44 @@ s32 FUN_001fa6d0_2710a0(f32) __asm__("FUN_001fa6d0");
 s32 FUN_001f96f8_2710a0(s32) __asm__("FUN_001f96f8");
 void FUN_001f9a10_2710a0(void *, void *, void *) __asm__("FUN_001f9a10");
 void FUN_L00_00267a08_2710a0(void *) __asm__("FUN_L00_00267a08");
-void FUN_L00_002710a0(u8 *p) {
-    u8 *q = p + 0x20;
-    s16 t;
+void FUN_L00_002710a0(u8 *particle) {
+    u8 *particle_data = particle + 0x20;
+    s16 elapsed_ticks;
     f32 f, x;
     u8 r, g, b, a;
-    t = ++*(s16 *)(p + 0xA);
-    if (*(s16 *)(q + 0x18) < t) {
-        FUN_L00_00267a08_2710a0(p);
+    elapsed_ticks = ++*(s16 *)(particle + 0xA);
+    if (*(s16 *)(particle_data + 0x18) < elapsed_ticks) {
+        FUN_L00_00267a08_2710a0(particle);
         return;
     }
-    f = FUN_001fa6c0_2710a0(t);
-    f = f / FUN_001fa6c0_2710a0(*(s16 *)(q + 0x18));
+    f = FUN_001fa6c0_2710a0(elapsed_ticks);
+    f = f / FUN_001fa6c0_2710a0(*(s16 *)(particle_data + 0x18));
     f = 1.0f - f;
-    r = FUN_001fa6d0_2710a0(FUN_001fa6c0_2710a0(q[0x14]) + f * -0.001f);
-    g = FUN_001fa6d0_2710a0(FUN_001fa6c0_2710a0(q[0x15]) + f * -0.0011f);
-    b = FUN_001fa6d0_2710a0(FUN_001fa6c0_2710a0(q[0x16]) + f * -0.00111f);
-    if (*(s16 *)(p + 0xA) < FUN_001f96f8_2710a0(0x1E)) {
-        f = FUN_001fa6c0_2710a0(*(s16 *)(p + 0xA));
+    r = FUN_001fa6d0_2710a0(FUN_001fa6c0_2710a0(particle_data[0x14]) + f * -0.001f);
+    g = FUN_001fa6d0_2710a0(FUN_001fa6c0_2710a0(particle_data[0x15]) + f * -0.0011f);
+    b = FUN_001fa6d0_2710a0(FUN_001fa6c0_2710a0(particle_data[0x16]) + f * -0.00111f);
+    if (*(s16 *)(particle + 0xA) < FUN_001f96f8_2710a0(0x1E)) {
+        f = FUN_001fa6c0_2710a0(*(s16 *)(particle + 0xA));
         f = f / FUN_001fa6c0_2710a0(FUN_001f96f8_2710a0(0x1E));
-        x = FUN_001fa6c0_2710a0(q[0x17]);
+        x = FUN_001fa6c0_2710a0(particle_data[0x17]);
         a = FUN_001fa6d0_2710a0(x * f);
     } else {
-        f = FUN_001fa6c0_2710a0(*(s16 *)(p + 0xA) - FUN_001f96f8_2710a0(0x1E));
-        f = f / FUN_001fa6c0_2710a0(*(s16 *)(q + 0x18) - FUN_001f96f8_2710a0(0x1E));
-        x = FUN_001fa6c0_2710a0(q[0x17]);
+        f = FUN_001fa6c0_2710a0(*(s16 *)(particle + 0xA) - FUN_001f96f8_2710a0(0x1E));
+        f = f / FUN_001fa6c0_2710a0(*(s16 *)(particle_data + 0x18) - FUN_001f96f8_2710a0(0x1E));
+        x = FUN_001fa6c0_2710a0(particle_data[0x17]);
         f = 1.0f - f;
         a = FUN_001fa6d0_2710a0(x * f);
     }
     {
-        u32 c = a << 24;
-        c |= b << 16;
-        c |= g << 8;
-        c |= r;
-        *(u32 *)(p + 4) = c;
+        u32 packed_color = a << 24;
+        packed_color |= b << 16;
+        packed_color |= g << 8;
+        packed_color |= r;
+        *(u32 *)(particle + 4) = packed_color;
     }
-    p[8]++;
-    FUN_001f9a10_2710a0(p + 0x10, p + 0x10, q);
-    *(f32 *)(q + 8) += frame_scale_sq * 0.0005f;
+    particle[8]++;
+    FUN_001f9a10_2710a0(particle + 0x10, particle + 0x10, particle_data);
+    *(f32 *)(particle_data + 8) += frame_scale_sq * 0.0005f;
 }
 
 s32 D_L01_001B2548[1] __attribute__((section(".data"))) = {0};
