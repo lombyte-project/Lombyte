@@ -387,14 +387,14 @@ int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 void FUN_L00_0026f548_2e01b0(V_2e01b0 *, V_2e01b0 *, int, int) __asm__("FUN_L00_0026f548");
 int FUN_001f96f8_2e01b0(int) __asm__("FUN_001f96f8");
 void FUN_L00_002e01b0(char *moby) {
-    V_2e01b0 t, v;
+    V_2e01b0 effect_position, v;
     char *moby_data = *(char **)(moby + 0x78);
     struct Hero *g;
     int countdown_lower_bound;
     float r;
     if (FUN_001f9740_2e01b0(moby_data + 4) == 0)
         return;
-    add_vector_xyz_cf(moby, 0, &t);
+    add_vector_xyz_cf(moby, 0, &effect_position);
     r = -FUN_002132a8_2e01b0(D_0015ED6C_2e01b0, D_0015ED6C_2e01b0 * 3.0f);
     fast_vec_normalize(&v, moby + 0xD0, r);
     g = &hero;
@@ -402,7 +402,7 @@ void FUN_L00_002e01b0(char *moby) {
     v.y += g->motion.displacement.f[1] * 0.8f;
     v.z += g->motion.displacement.f[2] +
            FUN_002132a8_2e01b0(D_0015ED6C_2e01b0 * -0.5f, D_0015ED6C_2e01b0 + D_0015ED6C_2e01b0);
-    FUN_L00_0026f548_2e01b0(&t, &v, 2, random_int_between(0x5A, 0x78));
+    FUN_L00_0026f548_2e01b0(&effect_position, &v, 2, random_int_between(0x5A, 0x78));
     countdown_lower_bound = FUN_001f96f8_2e01b0(5);
     *(int *)(moby_data + 4) = random_int_between(countdown_lower_bound, FUN_001f96f8_2e01b0(15));
 }
