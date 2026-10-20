@@ -40,8 +40,8 @@ typedef struct {
 } O_FUN_L14_00305a38;
 s32 random_integer_below(s32) __asm__("FUN_00213260");
 s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
-void FUN_L14_00305a38(O_FUN_L14_00305a38 *o) {
-    M_FUN_L14_00305a38 *m = o->m;
+void FUN_L14_00305a38(O_FUN_L14_00305a38 *moby) {
+    M_FUN_L14_00305a38 *m = moby->m;
     s32 i;
     for (i = 0; i < 4; i++)
         m->r[i] = random_integer_below(0xFF);
