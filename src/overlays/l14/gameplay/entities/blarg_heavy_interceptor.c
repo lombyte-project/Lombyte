@@ -1351,7 +1351,7 @@ void FUN_L14_002ae6d8(struct Moby *moby) {
 void FUN_L14_002ae7d8(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     char *seg = (char *)D_L14_001B0BB0[*(int *)(data + 0x78)];
-    int n = *(int *)(data + 0x84);
+    int source_segment_index = *(int *)(data + 0x84);
     float dist = 0.0f;
     float out[4];
     int idx;
@@ -1359,18 +1359,18 @@ void FUN_L14_002ae7d8(struct Moby *moby) {
     int i;
     int *tab;
     int dir;
-    float t;
+    float destination_path_distance;
 
-    for (i = 0; i < n; i++) {
+    for (i = 0; i < source_segment_index; i++) {
         dist += *(float *)(seg + i * 16 + 0x1C);
     }
     dist += *(float *)(data + 0x1CC);
     tab = D_L14_001B0BB0[*(int *)(data + 0x74)];
-    t = dist / *(float *)(data + 0x16C) * *(float *)(data + 0x190);
+    destination_path_distance = dist / *(float *)(data + 0x16C) * *(float *)(data + 0x190);
     dir = *(short *)(data + 0x8A);
     idx = 0;
     frac = 0.0f;
-    FUN_L00_0025d808_2af918(tab, out, &idx, &frac, dir, t);
+    FUN_L00_0025d808_2af918(tab, out, &idx, &frac, dir, destination_path_distance);
     FUN_L00_0025b8c0_c(&moby->pos.x, (float *)(data + 0x194), out[0],
                        *(float *)&D_L14_001613A0_d, *(float *)&D_L14_001613A4_d, 0.0f);
     FUN_L00_0025b8c0_c(&moby->pos.y, (float *)(data + 0x198), out[1],
