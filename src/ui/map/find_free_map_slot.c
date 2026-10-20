@@ -7,14 +7,14 @@ extern struct Slots D_001A0368;
 s32 find_free_map_slot(s32 reverse) __asm__("FUN_00204ef8");
 
 s32 find_free_map_slot(s32 reverse) {
-    struct Slots *s = &D_001A0368;
+    struct Slots *slots = &D_001A0368;
     s32 *used;
     s32 *owner;
     s32 i;
     s32 j;
 
-    used = s->used;
-    owner = s->owner;
+    used = slots->used;
+    owner = slots->owner;
     for (i = 0; i < 5; i++) {
         j = reverse ? 4 - i : i;
         if (used[j] != 0 && owner[j] == -1) {
