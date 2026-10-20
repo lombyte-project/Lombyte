@@ -326,30 +326,30 @@ void FUN_L11_0030d1b0(struct Moby *m) {
         FUN_L00_00250df8(D_L11_00161F20[j]);
     }
     for (n = 0; n < 4; n++) {
-        float f;
+        float rotation_y_progress;
         normalize_vector_xyz(&v, &D_L11_00161F20[n]->rot_row2, D_L11_00161EFC);
         normalize_vector_xyz(&a, &D_L11_00161F20[n]->rot_row1, D_L11_00161F00);
         add_vector_xyz(&v, &v, &a);
         add_vector_xyz(&D_L11_00161F30[n]->pos, &D_L11_00161F20[n]->pos, &v);
         qcopy(&D_L11_00161F30[n]->rot, &D_L11_00161F20[n]->rot);
-        f = (n & 1) ? D_L11_00161ED0 : D_L11_00161ED4;
+        rotation_y_progress = (n & 1) ? D_L11_00161ED0 : D_L11_00161ED4;
         D_L11_00161F30[n]->rot.y = fast_add_rotations(D_L11_00161F30[n]->rot.y,
-            -(D_L11_00161F04 * 0.017453292f) * f);
+            -(D_L11_00161F04 * 0.017453292f) * rotation_y_progress);
         FUN_L00_00250df8(D_L11_00161F30[n]);
     }
     for (q = 0; q < 4; q++) {
         float sgn;
-        float d;
+        float signed_axis0_offset;
         sgn = -1.0f;
         if (q >= 2) {
             sgn = 1.0f;
         }
-        d = (float)(q & 1) * 7.5f + 3.75f + (1.0f - D_L11_00161ED8) * 13.25f;
-        if (20.0f < d) {
-            d = 20.0f;
+        signed_axis0_offset = (float)(q & 1) * 7.5f + 3.75f + (1.0f - D_L11_00161ED8) * 13.25f;
+        if (20.0f < signed_axis0_offset) {
+            signed_axis0_offset = 20.0f;
         }
-        d *= sgn;
-        normalize_vector_xyz(&v, &m->rot_row0, d + 14.0f);
+        signed_axis0_offset *= sgn;
+        normalize_vector_xyz(&v, &m->rot_row0, signed_axis0_offset + 14.0f);
         v.z = D_L11_00161F08;
         add_vector_xyz(&D_L11_00161F10[q]->pos, &v, &m->pos);
         qcopy_nc(&D_L11_00161F10[q]->rot, &m->rot);
