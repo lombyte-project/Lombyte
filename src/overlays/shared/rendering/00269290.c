@@ -2731,9 +2731,9 @@ void FUN_L00_0026f660(char *particle) {
         fast_vec_add(&next_position, particle_position, b);
         if (func_L00_001EFFF0(particle_position, &next_position, 2, 0, 0)) {
             if (collision_hit_material() != 0) {
-                int *d = D_L00_00173E40;
-                *(float *)((char *)d + 0x28) += 0.05f;
-                FUN_L00_002741a0(d + 8, -1, 0.25f, 3150.0f);
+                int *collision_data = D_L00_00173E40;
+                *(float *)((char *)collision_data + 0x28) += 0.05f;
+                FUN_L00_002741a0(collision_data + 8, -1, 0.25f, 3150.0f);
             }
             free_effect_particle(particle);
             return;
