@@ -1443,7 +1443,7 @@ extern Entry70_23c710 D_L01_00179D70[];
 void FUN_L01_0023c710(void) {
     Vec4 sum;
     Vec4 sample_delta;
-    struct Moby *m;
+    struct Moby *vehicle_moby;
     s32 i;
     s32 n;
     s32 sample_count;
@@ -1504,12 +1504,12 @@ void FUN_L01_0023c710(void) {
                 hero.unk20A6 = 1;
             }
         } else {
-            m = FUN_0020c4f8_23c710(0x27A);
-            hero.unkA8C = m;
-            if (m != 0) {
-                qcopy(&m->pos, &hero.motion.pos);
-                qcopy(&m->rot, &hero.motion.rot);
-                m->draw_dist = 0x40;
+            vehicle_moby = FUN_0020c4f8_23c710(0x27A);
+            hero.unkA8C = vehicle_moby;
+            if (vehicle_moby != 0) {
+                qcopy(&vehicle_moby->pos, &hero.motion.pos);
+                qcopy(&vehicle_moby->rot, &hero.motion.rot);
+                vehicle_moby->draw_dist = 0x40;
                 ((struct Moby *)hero.unkA8C)->visible = 1;
                 ((struct Moby *)hero.unkA8C)->glow_color = 0;
                 ((struct Moby *)hero.unkA8C)->spawn_frame = hero.moby->spawn_frame;
@@ -1529,9 +1529,9 @@ void FUN_L01_0023c710(void) {
         for (i = 0; i < sample_count; i++) {
             n = hero.unk21B0 - i;
             {
-                s32 a = (n + 0x1F) % 32;
+                s32 sample_index = (n + 0x1F) % 32;
                 s32 b = (n + 0x1E) % 32;
-                FUN_001f9a28_23c710(&sample_delta, &hero.unk1B00[a], &hero.unk1B00[b]);
+                FUN_001f9a28_23c710(&sample_delta, &hero.unk1B00[sample_index], &hero.unk1B00[b]);
             }
             FUN_001f9a10_23c710(&sum, &sum, &sample_delta);
         }
