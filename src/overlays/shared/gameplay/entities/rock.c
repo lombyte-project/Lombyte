@@ -1912,27 +1912,27 @@ extern void FUN_L00_00250df8(void *);
 
 extern float D_L01_00161F78 __attribute__((sda));
 extern float D_L01_00161F80 __attribute__((sda));
-void FUN_L01_003092d0(char *m) {
-    char *d = *(char **)(m + 0x78);
-    char **p = (char **)(d + 0x14);
+void FUN_L01_003092d0(char *parent_moby) {
+    char *parent_data = *(char **)(parent_moby + 0x78);
+    char **child_slot = (char **)(parent_data + 0x14);
     float v[4];
     int i;
     for (i = 2; i >= 0; i--) {
-        float t;
+        float child_offset_length;
         float u;
-        char *o = *p;
-        qcopy(o + 0x10, m + 0x10);
+        char *child_moby = *child_slot;
+        qcopy(child_moby + 0x10, parent_moby + 0x10);
         u = D_L01_00161F80 * DEG_TO_RAD;
-        *(float *)(o + 0x18) += D_L01_00161F78;
-        *(float *)(*p + 0x44) = u;
-        t = *(float *)(d + 0x20) * 2.4f - 1.2f;
-        euler_rotation_basis(*p + 0xC0, *p + 0x40);
-        fast_vec_normalize(v, *p + 0xC0, t);
-        fast_vec_add(*p + 0x10, *p + 0x10, v);
-        *(float *)(*p + 0x44) = *(float *)(d + 0x24) * -1.0471976f - 0.34906584f;
-        euler_rotation_basis(*p + 0xC0, *p + 0x40);
-        FUN_L00_00250df8(*p);
-        p++;
+        *(float *)(child_moby + 0x18) += D_L01_00161F78;
+        *(float *)(*child_slot + 0x44) = u;
+        child_offset_length = *(float *)(parent_data + 0x20) * 2.4f - 1.2f;
+        euler_rotation_basis(*child_slot + 0xC0, *child_slot + 0x40);
+        fast_vec_normalize(v, *child_slot + 0xC0, child_offset_length);
+        fast_vec_add(*child_slot + 0x10, *child_slot + 0x10, v);
+        *(float *)(*child_slot + 0x44) = *(float *)(parent_data + 0x24) * -1.0471976f - 0.34906584f;
+        euler_rotation_basis(*child_slot + 0xC0, *child_slot + 0x40);
+        FUN_L00_00250df8(*child_slot);
+        child_slot++;
     }
 }
 /* Picks a per-stage table by the current stage number and passes the entry for the moby's index on. */
