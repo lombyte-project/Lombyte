@@ -546,13 +546,13 @@ extern float animation_start(int, int) __asm__("FUN_L04_002418b0");
 extern float FUN_001f99c0(float);
 extern int rig_pick_mode(struct Moby *m, LegRig *rig, float t) __asm__("FUN_L04_002927d0");
 
-void FUN_L04_00295de8(struct Moby *m, LegRig *rig) {
+void FUN_L04_00295de8(struct Moby *moby, LegRig *rig) {
     int joints[6];
     float mtx[4][4];
-    float t;
+    float animation_time;
     int i;
     int j;
-    LegRigAnim **e;
+    LegRigAnim **animation_cursor;
 
     joints[0] = rig->legs[0].joint;
     joints[1] = rig->legs[0].joint2;
@@ -560,34 +560,34 @@ void FUN_L04_00295de8(struct Moby *m, LegRig *rig) {
     joints[3] = rig->legs[1].joint2;
     joints[4] = rig->jointB4;
     joints[5] = rig->jointB5;
-    transform_scaled_vertex_batch(m, 6, joints, rig);
+    transform_scaled_vertex_batch(moby, 6, joints, rig);
     for (i = 0; i < 2; i++) {
-        get_joint_matrix(m, rig->legs[i].joint, mtx[0]);
+        get_joint_matrix(moby, rig->legs[i].joint, mtx[0]);
         rig->legs[i].upper_turn = 0;
         rig->legs[i].lower_turn = 0;
         rig->legs[i].yaw = fast_arc_tan(mtx[1][0], mtx[1][1]);
         if (rig->legs[i].manip_b.attached == 0)
-            attach_manipulator(m, rig->legs[i].slot_b, &rig->legs[i].manip_b);
+            attach_manipulator(moby, rig->legs[i].slot_b, &rig->legs[i].manip_b);
         if (rig->legs[i].manip_a.attached == 0)
-            attach_manipulator(m, rig->legs[i].slot_a, &rig->legs[i].manip_a);
+            attach_manipulator(moby, rig->legs[i].slot_a, &rig->legs[i].manip_a);
     }
-    if (m->seq != 0xFF) {
-        t = compute_interpolated_record_value(m);
+    if (moby->seq != 0xFF) {
+        animation_time = compute_interpolated_record_value(moby);
     } else {
-        t = convert_integer_to_float(m->prev_frame);
-        t += animation_start(m->class_slot, m->prev_seq);
+        animation_time = convert_integer_to_float(moby->prev_frame);
+        animation_time += animation_start(moby->class_slot, moby->prev_seq);
     }
     rig->mode = 5;
     rig->speed = 0.0f;
     rig->unkB7 = 0;
-    e = rig->anims;
-    for (j = 12; j >= 0; j--, e++) {
-        if ((*e)->id == m->prev_seq) {
-            rig->speed = FUN_001f99c0(m->anim_speed * (*e)->rate);
+    animation_cursor = rig->anims;
+    for (j = 12; j >= 0; j--, animation_cursor++) {
+        if ((*animation_cursor)->id == moby->prev_seq) {
+            rig->speed = FUN_001f99c0(moby->anim_speed * (*animation_cursor)->rate);
             rig->unkB7 = D_L04_001CA938[12 - j][0];
         }
     }
-    rig->mode = rig_pick_mode(m, rig, t);
+    rig->mode = rig_pick_mode(moby, rig, animation_time);
     rig->unkB8 = 0;
     rig->unkBC = 0;
     rig->unkC8 = 0;
