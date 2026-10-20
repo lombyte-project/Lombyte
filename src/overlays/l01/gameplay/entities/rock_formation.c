@@ -1356,7 +1356,7 @@ void FUN_L01_002feb58(void *arg) {
     s32 m;
     Vec4 *v;
     Vec4 *w;
-    f32 s;
+    f32 glow_factor;
 
     if (D_L01_00161CE0 == 0) {
         D_L01_00161CE0 = 1;
@@ -1388,10 +1388,10 @@ void FUN_L01_002feb58(void *arg) {
             }
         }
     }
-    s = fast_sin((convert_integer_to_float(level_frame_count & 0x3F) - 32.0f) * 0.09817477f);
-    s = s * 0.5f + 0.5f;
+    glow_factor = fast_sin((convert_integer_to_float(level_frame_count & 0x3F) - 32.0f) * 0.09817477f);
+    glow_factor = glow_factor * 0.5f + 0.5f;
     for (g = 3; g >= 0; g--) {
-        D_L01_001FBC80[g].glow = s;
+        D_L01_001FBC80[g].glow = glow_factor;
     }
     enqueue_callback_list_1(FUN_L01_002feb28, arg);
 }
