@@ -181,15 +181,15 @@ extern void lerp_vector(float, void *, void *, void *) __asm__("FUN_001f9a40");
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 
 void follow_camera_auto_turn(int m) __asm__("FUN_L00_002e8f40");
-void follow_camera_auto_turn(int m) {
-    char *p = *(char **)(m + 0x70);
-    char *r = p + 0x1D0;
-    char *q = p + 0x130;
-    if (*(short *)(p + 0x10) > 0) {
+void follow_camera_auto_turn(int camera_object) {
+    char *camera_data = *(char **)(camera_object + 0x70);
+    char *r = camera_data + 0x1D0;
+    char *q = camera_data + 0x130;
+    if (*(short *)(camera_data + 0x10) > 0) {
         float v[4];
         float vector_length;
         float lim;
-        subtract_vector_xyz(v, (float *)p, (float *)(p + 0x90));
+        subtract_vector_xyz(v, (float *)camera_data, (float *)(camera_data + 0x90));
         lerp_vector(D_L00_0015EF40, q, q, v);
         vector_length = fast_vec_length(q);
         lim = *(float *)(q + 0x2C);
