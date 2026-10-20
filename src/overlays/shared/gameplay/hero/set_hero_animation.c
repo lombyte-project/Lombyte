@@ -948,28 +948,28 @@ void FUN_001f9d20_00233708(Vec4_00233708 *, Vec4_00233708 *,
                            Mtx_00233708 *) __asm__("FUN_001f9d20");
 void FUN_001f9a10_00233708(Vec4_00233708 *, Vec4_00233708 *,
                            Vec4_00233708 *) __asm__("FUN_001f9a10");
-void FUN_L00_00233708(Vec4_00233708 *out, Vec4_00233708 *in, float d) {
+void FUN_L00_00233708(Vec4_00233708 *out, Vec4_00233708 *in, float offset_scale) {
     enum {
         GRAVITY_MODE_WORLD_Z = 0,
         GRAVITY_MODE_VECTOR_AXIS = 1,
         GRAVITY_MODE_DIRECTION_AXIS = 2
     };
     struct Hero *g = &hero;
-    Mtx_00233708 m;
+    Mtx_00233708 moby_rotation_matrix;
     Vec4_00233708 v;
     switch (g->unk20B3) {
     case GRAVITY_MODE_WORLD_Z:
         *(u128_00233708 *)out = *(u128_00233708 *)in;
-        out->x += FUN_001f9dc8_00233708(*(float *)(((char *)g->moby) + 0x48)) * d;
-        out->y += FUN_001f9de0_00233708(*(float *)(((char *)g->moby) + 0x48)) * d;
+        out->x += FUN_001f9dc8_00233708(*(float *)(((char *)g->moby) + 0x48)) * offset_scale;
+        out->y += FUN_001f9de0_00233708(*(float *)(((char *)g->moby) + 0x48)) * offset_scale;
         break;
     case GRAVITY_MODE_VECTOR_AXIS:
     case GRAVITY_MODE_DIRECTION_AXIS:
-        v.x = FUN_001f9dc8_00233708(0.0f) * d;
-        v.y = FUN_001f9de0_00233708(0.0f) * d;
+        v.x = FUN_001f9dc8_00233708(0.0f) * offset_scale;
+        v.y = FUN_001f9de0_00233708(0.0f) * offset_scale;
         v.z = 0.0f;
-        FUN_001fa050_00233708(&m, ((char *)g->moby) + 0x40);
-        FUN_001f9d20_00233708(&v, &v, &m);
+        FUN_001fa050_00233708(&moby_rotation_matrix, ((char *)g->moby) + 0x40);
+        FUN_001f9d20_00233708(&v, &v, &moby_rotation_matrix);
         FUN_001f9a10_00233708(out, in, &v);
         break;
     }
