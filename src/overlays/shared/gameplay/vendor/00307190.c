@@ -124,32 +124,32 @@ extern int D_L08_00162374;
 extern short D_L08_0016234C __attribute__((sda));
 extern short D_L08_00162350 __attribute__((sda));
 void FUN_L08_00307b90(int arg) {
-    float a, b, c, d;
+    float xy_random_range_scale, b, count_interpolation_end, count_interpolation_start;
     float v[2];
-    float t;
+    float xy_length_ratio;
     if (arg == 0) {
-        a = 5.0f;
+        xy_random_range_scale = 5.0f;
         b = 2.0f;
-        c = 8.0f;
-        d = 4.0f;
+        count_interpolation_end = 8.0f;
+        count_interpolation_start = 4.0f;
     } else {
-        a = 2.5f;
+        xy_random_range_scale = 2.5f;
         b = 20.0f;
-        c = 3.0f;
-        d = 2.0f;
+        count_interpolation_end = 3.0f;
+        count_interpolation_start = 2.0f;
     }
     if (*(float *)&D_L08_0016234C >= 0.0f)
-        d = *(float *)&D_L08_0016234C;
+        count_interpolation_start = *(float *)&D_L08_0016234C;
     if (*(float *)&D_L08_00162350 >= 0.0f)
-        c = *(float *)&D_L08_00162350;
-    D_L08_00162360[0] = random_float_between_alt(-(a * frame_time), a * frame_time);
-    D_L08_00162360[1] = random_float_between_alt(-(a * frame_time), a * frame_time);
+        count_interpolation_end = *(float *)&D_L08_00162350;
+    D_L08_00162360[0] = random_float_between_alt(-(xy_random_range_scale * frame_time), xy_random_range_scale * frame_time);
+    D_L08_00162360[1] = random_float_between_alt(-(xy_random_range_scale * frame_time), xy_random_range_scale * frame_time);
     b = multiply_global_factor_ed64(b);
     D_L08_00162370 = random_float_between_alt(b, multiply_global_factor_ed64(10.0f));
-    v[0] = a * frame_time;
+    v[0] = xy_random_range_scale * frame_time;
     v[1] = v[0];
-    t = vector_length_xy(D_L08_00162360) / fast_vec_length(v);
-    D_L08_00162374 = (int)(t * (c - d) + d);
+    xy_length_ratio = vector_length_xy(D_L08_00162360) / fast_vec_length(v);
+    D_L08_00162374 = (int)(xy_length_ratio * (count_interpolation_end - count_interpolation_start) + count_interpolation_start);
 }
 #include "rnc/gameplay/entities/moby.h"
 
