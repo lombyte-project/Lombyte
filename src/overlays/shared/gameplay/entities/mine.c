@@ -1603,41 +1603,41 @@ extern short D_L00_00161430 __attribute__((sda));
 extern B910 D_L00_001E98D0;
 extern Colors6_2adb30 D_L00_001E9920;
 extern Colors6_2adb30 D_L00_001E9938;
-void bomb_update(BombMoby_2adb30 *m) {
+void bomb_update(BombMoby_2adb30 *bomb_moby) {
     B910 rec = D_L00_001E98D0;
     Vec_2adb30 delta;
     Vec_2adb30 old;
-    Vec_2adb30 a;
+    Vec_2adb30 blast_velocity;
     Vec_2adb30 b;
     Vec_2adb30 proj;
     BombData_2adb30 *d;
     b.q = 0;
     b.f[2] = D_0015ED6C_2adb30 * 2.0f;
-    a.q = b.q;
+    blast_velocity.q = b.q;
     b.q = 0;
     b.f[2] = 1.0f;
-    d = m->d;
-    if ((D_G910.hero == 0 || D_G910.hero->cls != 0xC0) && m->state == 0) {
-        FUN_0020c828_2adb30(m);
+    d = bomb_moby->d;
+    if ((D_G910.hero == 0 || D_G910.hero->cls != 0xC0) && bomb_moby->state == 0) {
+        FUN_0020c828_2adb30(bomb_moby);
         return;
     }
-    if (D_G910.b20A4 != 0 && m->state == 0) {
-        FUN_0020c828_2adb30(m);
+    if (D_G910.b20A4 != 0 && bomb_moby->state == 0) {
+        FUN_0020c828_2adb30(bomb_moby);
         return;
     }
-    if ((D_G910.b20A5 != 0 || D_G910.b20AF != 0) && m->state == 0) {
-        m->flags |= 0x41;
+    if ((D_G910.b20A5 != 0 || D_G910.b20AF != 0) && bomb_moby->state == 0) {
+        bomb_moby->flags |= 0x41;
     } else {
-        m->flags &= ~0x41;
+        bomb_moby->flags &= ~0x41;
     }
     if (d->owner->cls == 0xC0 && d->h56 == 0 && FUN_001f9af0_2adb30(d) > 0.0f) {
         if (D_G910.p2FC == 0 || FUN_L00_002603d0_2adb30(D_G910.p2FC) == 0) {
-            FUN_L00_002ad410_2adb30(d, m, 1);
-        } else if (FUN_L00_002ad410_2adb30(d, m, 0) == 0) {
-            FUN_L00_002ad410_2adb30(d, m, 2);
+            FUN_L00_002ad410_2adb30(d, bomb_moby, 1);
+        } else if (FUN_L00_002ad410_2adb30(d, bomb_moby, 0) == 0) {
+            FUN_L00_002ad410_2adb30(d, bomb_moby, 2);
         }
     }
-    if (m->state == 1) {
+    if (bomb_moby->state == 1) {
         Vec_2adb30 c;
         float t;
         int cr;
@@ -1653,7 +1653,7 @@ void bomb_update(BombMoby_2adb30 *m) {
         cr = FUN_001fa6d0_2adb30((c.f[0] - 255.0f) * t + 255.0f);
         cg = FUN_001fa6d0_2adb30((c.f[1] - 64.0f) * t + 64.0f);
         cb = FUN_001fa6d0_2adb30((c.f[2] - 64.0f) * t + 64.0f);
-        m->color = (cb << 16) | (0xFF << 24) | (cg << 8) | cr;
+        bomb_moby->color = (cb << 16) | (0xFF << 24) | (cg << 8) | cr;
         if (d->h68 == 0) {
             if ((D_L00_0015F5CC_2adb30 & 7) == 0) {
                 int i;
@@ -1678,27 +1678,27 @@ void bomb_update(BombMoby_2adb30 *m) {
                     n1 = FUN_001fa6d0_2adb30(FUN_001f96b0_2adb30((float)*(int *)&D_L00_00161400 * (FUN_002132a8_2adb30(-*(float *)&D_L00_00161408, *(float *)&D_L00_00161408) + 1.0f)));
                     n2 = FUN_001fa6d0_2adb30(FUN_001f96b0_2adb30((float)*(int *)&D_L00_00161404 * (FUN_002132a8_2adb30(-*(float *)&D_L00_00161408, *(float *)&D_L00_00161408) + 1.0f)));
                     v2.f[2] -= *(float *)&D_L00_001613F0 * frame_time_sq_macro * (float)n1;
-                    spawn_spark(&m->pos, &spark_velocity, &v2, p0, p1, n0, n1, n2, *(int *)&D_L00_00161430);
+                    spawn_spark(&bomb_moby->pos, &spark_velocity, &v2, p0, p1, n0, n1, n2, *(int *)&D_L00_00161430);
                 }
             }
         }
         {
             BombHit_2adb30 q;
-            m->rx = FUN_001fa580_2adb30(m->rx, D_0015ED6C_2adb30 * 2.0943952f);
-            m->ry = FUN_001fa580_2adb30(m->ry, D_0015ED6C_2adb30 * 7.8539815f);
-            qcopy_nc(&old, &m->pos);
-            FUN_001f9a10_2adb30(&m->pos, &m->pos, d);
+            bomb_moby->rx = FUN_001fa580_2adb30(bomb_moby->rx, D_0015ED6C_2adb30 * 2.0943952f);
+            bomb_moby->ry = FUN_001fa580_2adb30(bomb_moby->ry, D_0015ED6C_2adb30 * 7.8539815f);
+            qcopy_nc(&old, &bomb_moby->pos);
+            FUN_001f9a10_2adb30(&bomb_moby->pos, &bomb_moby->pos, d);
             if (d->h68 == 0) {
                 d->v.f[2] -= frame_time_sq_macro * 11.0f;
             } else {
                 d->v.f[2] -= frame_time_sq_macro * 11.0f / 10.0f;
                 if (FUN_00213260_2adb30(FUN_001f96f8_2adb30(6) - 1) == 0) {
-                    float h = FUN_002135f0_2adb30((float *)&m->pos, &q);
+                    float h = FUN_002135f0_2adb30((float *)&bomb_moby->pos, &q);
                     FUN_001f9a68_2adb30(&q, d, 0.25f);
-                    random_integer_below_cf(&m->pos, &q, FUN_002132a8_2adb30(0.05f, 0.1f) * 210000.0f, h);
+                    random_integer_below_cf(&bomb_moby->pos, &q, FUN_002132a8_2adb30(0.05f, 0.1f) * 210000.0f, h);
                 }
             }
-            q.moby = m;
+            q.moby = bomb_moby;
             q.flags = 0x830000;
             if (d->h54 < FUN_001f96f8_2adb30(0x12C) - FUN_001f96f8_2adb30(0xA)) {
                 q.flags |= 1;
@@ -1710,23 +1710,23 @@ void bomb_update(BombMoby_2adb30 *m) {
             q.dir.f[2] = 1.0f;
             q.dir.f[3] = 5627.9248f;
             q.kind = 2;
-            q.cls = m->cls;
+            q.cls = bomb_moby->cls;
             q.on = 1;
             if (d->h68 != 0) {
                 d->h68++;
             }
-            if (FUN_001efa68_2adb30(&old, &m->pos, 0x10, (int)m, (int)&q)) {
+            if (FUN_001efa68_2adb30(&old, &bomb_moby->pos, 0x10, (int)bomb_moby, (int)&q)) {
                 if (d->h68 == 0 && collision_hit_material() == 0 && d->v.f[2] < 0.0f) {
                     Vec_2adb30 p;
                     Vec_2adb30 vel;
                     char *s;
                     int i;
-                    FUN_L00_002a3ec8_2adb30(*(int *)&D_L00_001612D0_gp, *(int *)&D_L00_001612D8_gp, 1, m->pos.f[0], m->pos.f[1], 0.5f, -0.35f);
+                    FUN_L00_002a3ec8_2adb30(*(int *)&D_L00_001612D0_gp, *(int *)&D_L00_001612D8_gp, 1, bomb_moby->pos.f[0], bomb_moby->pos.f[1], 0.5f, -0.35f);
                     d->h68 = 1;
                     FUN_001f99f8_2adb30(d->v.f);
                     d->v.f[2] = D_0015ED6C_2adb30 * -1.5f;
-                    p.f[0] = m->pos.f[0];
-                    p.f[1] = m->pos.f[1];
+                    p.f[0] = bomb_moby->pos.f[0];
+                    p.f[1] = bomb_moby->pos.f[1];
                     p.f[2] = D_L00_00173E68_2adb30[0];
                     s = FUN_L00_002d7e90_2adb30(&p, 2.0f);
                     if (s != 0) {
@@ -1747,40 +1747,40 @@ void bomb_update(BombMoby_2adb30 *m) {
                         if ((coll_hit.moby != D_G910.cam && coll_hit.moby != d->owner) || d->h54 < FUN_001f96f8_2adb30(0x12C) - FUN_001f96f8_2adb30(0xA)) {
                             if (((BombMoby_2adb30 *)coll_hit.moby)->f74 != D_L00_00160770 || coll_hit.moby->cls == 0x336) {
                                 H910 *h = &coll_hit;
-                                m->bBC = 1;
-                                qcopy(&m->pos, &h->pos);
-                                FUN_L00_001ff660_2adb30(&a, d, &h->nrm);
-                                FUN_001f9bf8_2adb30(&a, &a, D_0015ED6C_2adb30 * 2.0f);
+                                bomb_moby->bBC = 1;
+                                qcopy(&bomb_moby->pos, &h->pos);
+                                FUN_L00_001ff660_2adb30(&blast_velocity, d, &h->nrm);
+                                FUN_001f9bf8_2adb30(&blast_velocity, &blast_velocity, D_0015ED6C_2adb30 * 2.0f);
                                 FUN_001f9bf8_2adb30(&b, &h->nrm, 1.0f);
                             }
                         }
                     } else if (coll_hit.i1C > 0) {
                         H910 *h = &coll_hit;
-                        m->bBC = 1;
-                        qcopy(&m->pos, &h->pos);
-                        FUN_L00_001ff660_2adb30(&a, d, &h->nrm);
-                        FUN_001f9bf8_2adb30(&a, &a, D_0015ED6C_2adb30 * 2.0f);
+                        bomb_moby->bBC = 1;
+                        qcopy(&bomb_moby->pos, &h->pos);
+                        FUN_L00_001ff660_2adb30(&blast_velocity, d, &h->nrm);
+                        FUN_001f9bf8_2adb30(&blast_velocity, &blast_velocity, D_0015ED6C_2adb30 * 2.0f);
                         FUN_001f9bf8_2adb30(&b, &h->nrm, 1.0f);
                     }
                 }
             } else if (FUN_001f9770_2adb30(&d->h54)) {
-                m->bBC = 1;
-                FUN_001f9a10_2adb30(&a, &a, d);
+                bomb_moby->bBC = 1;
+                FUN_001f9a10_2adb30(&blast_velocity, &blast_velocity, d);
             }
-            if (m->bBC != 0) {
+            if (bomb_moby->bBC != 0) {
                 float s = FUN_001fa6c0_2adb30((unsigned char)D_E910.p0[0xA]) + 1.0f;
                 float dist;
                 Vec_2adb30 v;
                 int i;
-                FUN_001f9a68_2adb30(&a, &a, s);
-                FUN_001f9a28_2adb30(&delta, g_debug_camera, &m->pos);
+                FUN_001f9a68_2adb30(&blast_velocity, &blast_velocity, s);
+                FUN_001f9a28_2adb30(&delta, g_debug_camera, &bomb_moby->pos);
                 dist = FUN_001f9af0_2adb30(&delta);
                 if (d->h68 < FUN_001f96f8_2adb30(0x14)) {
                     int n;
-                    n = probe_world_sphere(&m->pos, 0x10, m, 0, s * 0.5f);
-                    v.q = m->pos.q;
-                    mine_blast_mobys(m, &v, D_L00_00177F00_2adb30, n, 0, 0x830000, 2, 1, 2.0f, 1.0f, 1.0f);
-                    m->state = 2;
+                    n = probe_world_sphere(&bomb_moby->pos, 0x10, bomb_moby, 0, s * 0.5f);
+                    v.q = bomb_moby->pos.q;
+                    mine_blast_mobys(bomb_moby, &v, D_L00_00177F00_2adb30, n, 0, 0x830000, 2, 1, 2.0f, 1.0f, 1.0f);
+                    bomb_moby->state = 2;
                 }
                 {
                     int k;
@@ -1797,8 +1797,8 @@ void bomb_update(BombMoby_2adb30 *m) {
                         FUN_001f9bf8_2adb30(&proj, &b, FUN_002132a8_2adb30(0.0f, 1.0f));
                         FUN_001f9a10_2adb30(&v, &v, &proj);
                         FUN_001f9bf8_2adb30(&v, &v, s * FUN_002132a8_2adb30(3.5f, 6.5f) * D_0015ED6C_2adb30);
-                        FUN_001f9a10_2adb30(&v, &v, &a);
-                        FUN_L00_002af450_2adb30((char *)&m->pos, (char *)&v, FUN_L00_00257b90_2adb30(FUN_001f96f8_2adb30(0x3C), FUN_001f96f8_2adb30(0x78)), 0, (unsigned char)D_E910.p0[0xA]);
+                        FUN_001f9a10_2adb30(&v, &v, &blast_velocity);
+                        FUN_L00_002af450_2adb30((char *)&bomb_moby->pos, (char *)&v, FUN_L00_00257b90_2adb30(FUN_001f96f8_2adb30(0x3C), FUN_001f96f8_2adb30(0x78)), 0, (unsigned char)D_E910.p0[0xA]);
                     }
                 }
                 if (d->h68 < FUN_001f96f8_2adb30(0x14)) {
@@ -1822,8 +1822,8 @@ void bomb_update(BombMoby_2adb30 *m) {
                             FUN_001f9bf8_2adb30(&proj, &b, FUN_002132a8_2adb30(0.0f, 1.0f));
                             FUN_001f9a10_2adb30(&v, &v, &proj);
                             FUN_001f9bf8_2adb30(&v, &v, s * FUN_002132a8_2adb30(6.5f, 10.0f) * D_0015ED6C_2adb30);
-                            FUN_001f9a10_2adb30(&v, &v, &a);
-                            FUN_L00_002af450_2adb30((char *)&m->pos, (char *)&v, FUN_L00_00257b90_2adb30(FUN_001f96f8_2adb30(0x3C), FUN_001f96f8_2adb30(0x5A)), 1, (unsigned char)D_E910.p0[0xA]);
+                            FUN_001f9a10_2adb30(&v, &v, &blast_velocity);
+                            FUN_L00_002af450_2adb30((char *)&bomb_moby->pos, (char *)&v, FUN_L00_00257b90_2adb30(FUN_001f96f8_2adb30(0x3C), FUN_001f96f8_2adb30(0x5A)), 1, (unsigned char)D_E910.p0[0xA]);
                         }
                     }
                     t.q = 0;
@@ -1836,7 +1836,7 @@ void bomb_update(BombMoby_2adb30 *m) {
                     FUN_001f9bf8_2adb30(&delta, &delta, dist * 2.0f * D_0015ED6C_2adb30);
                     FUN_001f9a10_2adb30(&v, &v, &delta);
                     FUN_001f9c90_2adb30(&v, &v, D_0015ED6C_2adb30 * 10.0f);
-                    FUN_L00_002af450_2adb30((char *)&m->pos, (char *)&v, FUN_L00_00257b90_2adb30(FUN_001f96f8_2adb30(0x3C), FUN_001f96f8_2adb30(0x5A)), 1, (unsigned char)D_E910.p0[0xA]);
+                    FUN_L00_002af450_2adb30((char *)&bomb_moby->pos, (char *)&v, FUN_L00_00257b90_2adb30(FUN_001f96f8_2adb30(0x3C), FUN_001f96f8_2adb30(0x5A)), 1, (unsigned char)D_E910.p0[0xA]);
                     if (dist < 6.0f) {
                         cnt = FUN_001fa6d0_2adb30(dist) + 1;
                     } else {
@@ -1850,7 +1850,7 @@ void bomb_update(BombMoby_2adb30 *m) {
                         float spd = s * FUN_002132a8_2adb30(8.0f, 10.0f) * D_0015ED6C_2adb30 - g * D_0015ED6C_2adb30;
                         Colors6_2adb30 c1 = D_L00_001E9920;
                         Colors6_2adb30 c2 = D_L00_001E9938;
-                        FUN_L00_0026a9f0_2adb30(&m->pos, &a,
+                        FUN_L00_0026a9f0_2adb30(&bomb_moby->pos, &blast_velocity,
                                           FUN_L00_0025c0e8_2adb30(c1.c[FUN_00213260_2adb30(6)], (unsigned char)D_E910.p0[0xA]),
                                           FUN_L00_0025c0e8_2adb30(c2.c[FUN_00213260_2adb30(6)], (unsigned char)D_E910.p0[0xA]),
                                           s * 400000.0f,
@@ -1862,34 +1862,34 @@ void bomb_update(BombMoby_2adb30 *m) {
                         int r;
                         int gg;
                         int bb;
-                        FUN_L00_002df808_2adb30(m, &m->pos, &a, s * 4.0f, FUN_001f96f8_2adb30(0xF), 0x7F, 0x7F, 0x7F, 0x20);
+                        FUN_L00_002df808_2adb30(bomb_moby, &bomb_moby->pos, &blast_velocity, s * 4.0f, FUN_001f96f8_2adb30(0xF), 0x7F, 0x7F, 0x7F, 0x20);
                         r = 0x7F;
                         gg = 0x20;
                         bb = 0;
                         FUN_L00_0025c088_2adb30(&r, &gg, &bb, (unsigned char)D_E910.p0[0xA]);
-                        FUN_L00_002df808_2adb30(m, &m->pos, &a, s * 4.0f, FUN_001f96f8_2adb30(0x18), r, gg, bb, 0x20);
+                        FUN_L00_002df808_2adb30(bomb_moby, &bomb_moby->pos, &blast_velocity, s * 4.0f, FUN_001f96f8_2adb30(0x18), r, gg, bb, 0x20);
                     }
                     r2 = 0x7F;
                     g2 = 0x3F;
                     b2 = 0;
                     FUN_L00_0025c088_2adb30(&r2, &g2, &b2, (unsigned char)D_E910.p0[0xA]);
-                    FUN_L00_002df808_2adb30(m, &m->pos, &a, s * 4.0f, FUN_001f96f8_2adb30(0x14), r2, g2, b2, 0x30);
+                    FUN_L00_002df808_2adb30(bomb_moby, &bomb_moby->pos, &blast_velocity, s * 4.0f, FUN_001f96f8_2adb30(0x14), r2, g2, b2, 0x30);
                     r2 = 0x60;
                     g2 = 0x10;
                     b2 = 0;
                     FUN_L00_0025c088_2adb30(&r2, &g2, &b2, (unsigned char)D_E910.p0[0xA]);
-                    FUN_L00_002df808_2adb30(m, &m->pos, &a, s * 3.5f, FUN_001f96f8_2adb30(0x1B), r2, g2, b2, 0x40);
+                    FUN_L00_002df808_2adb30(bomb_moby, &bomb_moby->pos, &blast_velocity, s * 3.5f, FUN_001f96f8_2adb30(0x1B), r2, g2, b2, 0x40);
                     r2 = 0x20;
                     g2 = 0;
                     b2 = 0;
                     FUN_L00_0025c088_2adb30(&r2, &g2, &b2, (unsigned char)D_E910.p0[0xA]);
-                    FUN_L00_002df808_2adb30(m, &m->pos, &a, s * 3.0f, FUN_001f96f8_2adb30(0x1D), r2, g2, b2, 0x20);
+                    FUN_L00_002df808_2adb30(bomb_moby, &bomb_moby->pos, &blast_velocity, s * 3.0f, FUN_001f96f8_2adb30(0x1D), r2, g2, b2, 0x20);
                 }
                 if (d->h68 >= FUN_001f96f8_2adb30(0x14)) {
                     float h;
-                    m->pos.f[2] += 1.0f;
-                    h = FUN_002135f0_2adb30((float *)&m->pos, &v);
-                    m->pos.f[2] -= 1.0f;
+                    bomb_moby->pos.f[2] += 1.0f;
+                    h = FUN_002135f0_2adb30((float *)&bomb_moby->pos, &v);
+                    bomb_moby->pos.f[2] -= 1.0f;
                     {
                         int i;
                         for (i = 0; i < 150; i++) {
@@ -1901,18 +1901,18 @@ void bomb_update(BombMoby_2adb30 *m) {
                             t.f[2] = FUN_002132a8_2adb30(-0.5f, 2.0f);
                             u.q = t.q;
                             FUN_001f9bf8_2adb30(&u, &u, s * FUN_002132a8_2adb30(D_0015ED6C_2adb30 * 4.0f, D_0015ED6C_2adb30 * 8.0f));
-                            random_integer_below_cf(&m->pos, &u, FUN_002132a8_2adb30(0.05f, 0.1f) * 210000.0f, h);
+                            random_integer_below_cf(&bomb_moby->pos, &u, FUN_002132a8_2adb30(0.05f, 0.1f) * 210000.0f, h);
                         }
                     }
                 }
                 d->v.f[0] = 0.0f;
-                m->bBC = 0;
+                bomb_moby->bBC = 0;
                 if (d->h68 >= FUN_001f96f8_2adb30(0x14)) {
-                    trooper_play_sound(0x16, 0, (int)m, 0);
+                    trooper_play_sound(0x16, 0, (int)bomb_moby, 0);
                 } else if ((unsigned char)D_E910.p0[0xA] != 0) {
-                    FUN_0022da68_2adb30(1, 0, (int)m);
+                    FUN_0022da68_2adb30(1, 0, (int)bomb_moby);
                 } else {
-                    FUN_0022da68_2adb30(0, 0, (int)m);
+                    FUN_0022da68_2adb30(0, 0, (int)bomb_moby);
                 }
                 if (d->h68 != 0) {
                     float gz;
@@ -1921,7 +1921,7 @@ void bomb_update(BombMoby_2adb30 *m) {
                     int cg = 0x60;
                     int cb = 0x7F;
                     int delay = 0;
-                    v.q = m->pos.q;
+                    v.q = bomb_moby->pos.q;
                     v.f[2] += 3.5f;
                     gz = FUN_00213508_2adb30(&v, 0, 0.5f);
                     wz = allocate_voice_for_target_entry_cf(&v);
@@ -1943,7 +1943,7 @@ void bomb_update(BombMoby_2adb30 *m) {
                             w.f[0] = FUN_001f9dc8_2adb30(ang) * r;
                             w.f[1] = FUN_001f9de0_2adb30(ang) * r;
                             w.f[2] = 0.0f;
-                            FUN_001f9a10_2adb30(&w, &w, &m->pos);
+                            FUN_001f9a10_2adb30(&w, &w, &bomb_moby->pos);
                             w.f[2] = gz + 0.5f;
                             v2.f[2] -= r * D_0015ED6C_2adb30 * 8.0f;
                             FUN_L00_002738e8_2adb30(&w, &v2, delay, FUN_002132a8_2adb30(0.25f, 1.0f), gz, frame_time_sq_macro * 20.0f, (0x16 << 24) | (cb << 16) | (cg << 8) | cr, (cb << 16) | (cg << 8) | cr, 1);
@@ -1958,7 +1958,7 @@ void bomb_update(BombMoby_2adb30 *m) {
                             w.f[2] = FUN_002132a8_2adb30(D_0015ED6C_2adb30 * 4.0f, D_0015ED6C_2adb30 * 14.0f);
                             FUN_001f9bf8_2adb30(&w, &w, FUN_002132a8_2adb30(1.5f, 3.0f) * D_0015ED6C_2adb30);
                             w.f[2] = FUN_002132a8_2adb30(3.0f, 6.0f) * D_0015ED6C_2adb30;
-                            v2.q = m->pos.q;
+                            v2.q = bomb_moby->pos.q;
                             v2.f[2] = gz;
                             sz = FUN_002132a8_2adb30(31500.002f, 52500.0f);
                             life = FUN_L00_00257b90_2adb30(FUN_001f96f8_2adb30(0x5A), FUN_001f96f8_2adb30(0x96));
@@ -1968,32 +1968,32 @@ void bomb_update(BombMoby_2adb30 *m) {
                 }
                 player_camera.f160 = dist < 20.0f ? 0.4f - dist * 0.0175f : 0.4f - 20.0f * 0.0175f;
                 player_camera.i168 = FUN_001f96f8_2adb30(0x19);
-                distance_xyz(&m->pos, D_G910.pos);
-                mine_camera_blast((char *)&rec, (char *)&m->pos, 0, 0);
-                if (m->state != 2) {
-                    FUN_0020c828_2adb30(m);
+                distance_xyz(&bomb_moby->pos, D_G910.pos);
+                mine_camera_blast((char *)&rec, (char *)&bomb_moby->pos, 0, 0);
+                if (bomb_moby->state != 2) {
+                    FUN_0020c828_2adb30(bomb_moby);
                     return;
                 }
             }
         }
-    } else if (m->state != 2) {
+    } else if (bomb_moby->state != 2) {
         int v;
         d->h6a++;
         v = FUN_001fa6d0_2adb30(FUN_001f9de0_2adb30(normalize_angle((float)d->h6a * 0.068f)) * 96.0f) + 0x9F;
-        m->color = (v << 16) | (0xFF << 24) | (v << 8) | v;
+        bomb_moby->color = (v << 16) | (0xFF << 24) | (v << 8) | v;
     }
-    if (m->state == 2) {
+    if (bomb_moby->state == 2) {
         Vec_2adb30 p;
         float r;
         int n;
-        m->flags |= 0x41;
+        bomb_moby->flags |= 0x41;
         r = FUN_L00_0025b6a8_2adb30(0.5f, (FUN_001fa6c0_2adb30(*((unsigned char *)&D_E910 + 0xA)) + 1.0f) * 3.0f - 0.5f,
-                              FUN_001fa6c0_2adb30(m->bBC) / (float)FUN_001f96f8_2adb30(0xF));
-        n = probe_world_sphere(&m->pos, 0x10, m, 0, r);
-        p.q = m->pos.q;
-        mine_blast_mobys(m, &p, D_L00_00177F00_2adb30, n, 0, 0x830000, 2, 1, 2.0f, 1.0f, 1.0f);
-        if (++m->bBC > FUN_001f96f8_2adb30(0xF)) {
-            FUN_0020c828_2adb30(m);
+                              FUN_001fa6c0_2adb30(bomb_moby->bBC) / (float)FUN_001f96f8_2adb30(0xF));
+        n = probe_world_sphere(&bomb_moby->pos, 0x10, bomb_moby, 0, r);
+        p.q = bomb_moby->pos.q;
+        mine_blast_mobys(bomb_moby, &p, D_L00_00177F00_2adb30, n, 0, 0x830000, 2, 1, 2.0f, 1.0f, 1.0f);
+        if (++bomb_moby->bBC > FUN_001f96f8_2adb30(0xF)) {
+            FUN_0020c828_2adb30(bomb_moby);
         }
     }
 }
