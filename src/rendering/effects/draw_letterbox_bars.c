@@ -20,7 +20,7 @@ void draw_letterbox_bars(void) __asm__("FUN_001f4d98");
 extern s32 occl_chain_active_macro __asm__("D_0015F444") MACRO_ADDR;
 extern s32 occl_chain_frames_macro __asm__("D_0015F448") MACRO_ADDR;
 void draw_letterbox_bars(void) {
-    int h;
+    int bar_height;
 
     if (occl_chain_active_macro != 0) {
         if (occl_chain_frames_macro < 24) {
@@ -32,11 +32,11 @@ void draw_letterbox_bars(void) {
         }
         occl_chain_frames_macro--;
     }
-    h = occl_chain_frames_macro;
-    if (h == 0) {
+    bar_height = occl_chain_frames_macro;
+    if (bar_height == 0) {
         return;
     }
-    h <<= 4;
+    bar_height <<= 4;
     render_packet_cursor.words[0] = 0x10000007;
     render_packet_cursor.words[1] = 0;
     render_packet_cursor.words[2] = 0;
@@ -67,13 +67,13 @@ void draw_letterbox_bars(void) {
         render_packet_cursor.words = base + 4;
         p = (long *)render_packet_cursor.words;
         p[0] = screen_extent.left | ((long)screen_extent.top << 16) | ((long)0xFFFFF3 << 32);
-        p[1] = screen_extent.left | ((long)(screen_extent.top + h) << 16) | ((long)0xFFFFF3 << 32);
+        p[1] = screen_extent.left | ((long)(screen_extent.top + bar_height) << 16) | ((long)0xFFFFF3 << 32);
         p[2] = screen_extent.right | ((long)screen_extent.top << 16) | ((long)0xFFFFF3 << 32);
-        p[3] = screen_extent.right | ((long)(screen_extent.top + h) << 16) | ((long)0xFFFFF3 << 32);
+        p[3] = screen_extent.right | ((long)(screen_extent.top + bar_height) << 16) | ((long)0xFFFFF3 << 32);
         p[4] = screen_extent.right | ((long)screen_extent.bottom << 16) | ((long)0xFFFFF3 << 32);
-        p[5] = screen_extent.right | ((long)(screen_extent.bottom - h) << 16) | ((long)0xFFFFF3 << 32);
+        p[5] = screen_extent.right | ((long)(screen_extent.bottom - bar_height) << 16) | ((long)0xFFFFF3 << 32);
         p[6] = screen_extent.left | ((long)screen_extent.bottom << 16) | ((long)0xFFFFF3 << 32);
-        p[7] = screen_extent.left | ((long)(screen_extent.bottom - h) << 16) | ((long)0xFFFFF3 << 32);
+        p[7] = screen_extent.left | ((long)(screen_extent.bottom - bar_height) << 16) | ((long)0xFFFFF3 << 32);
     }
     render_packet_cursor.words = (int *)((char *)render_packet_cursor.words + 0x40);
 }
