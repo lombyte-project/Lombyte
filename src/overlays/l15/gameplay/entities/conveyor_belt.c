@@ -681,8 +681,8 @@ void FUN_L15_002eb108(struct Moby *moby) {
         float x = template_vertex[0];
         float y = template_vertex[1];
         float rad = square_root(x * x + y * y);
-        float a = FUN_L00_00200260(rad, D_L15_00162160);
-        float w = wrap_angle(a * 6.2831855f / D_L15_00162160);
+        float radius_remainder = FUN_L00_00200260(rad, D_L15_00162160);
+        float w = wrap_angle(radius_remainder * 6.2831855f / D_L15_00162160);
         float z = fast_sin(fast_add_rotations(w, data->angle));
         output_vertex[0] = template_vertex[0] + moby->pos.x;
         *(float *)((char *)D_L15_001DE200 + 4 + off) = template_vertex[1] + moby->pos.y;
