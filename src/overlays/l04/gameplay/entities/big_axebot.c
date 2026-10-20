@@ -977,12 +977,12 @@ void big_axebot_update(M_B7B0 *moby) {
         }
         if (hd > 20.0f) {
             if (moby->f58 > 1.0f) {
-                float s = moby->f58 - frame_time * 3.0f;
+                float animation_speed = moby->f58 - frame_time * 3.0f;
 
-                if (s < 1.0f) {
-                    s = 1.0f;
+                if (animation_speed < 1.0f) {
+                    animation_speed = 1.0f;
                 }
-                FUN_L04_002ba448_c(moby, s);
+                FUN_L04_002ba448_c(moby, animation_speed);
             }
         }
         if (moby->f52 == 4 && (moby->f70 & 2)) {
