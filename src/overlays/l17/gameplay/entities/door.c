@@ -3448,13 +3448,13 @@ void FUN_L17_002f10c8(struct Moby *moby) {
     int j;
     int k;
     int color;
-    Quad4 t;
+    Quad4 uv_scroll_factors;
     int r;
     int g;
     int b;
     float scale;
-    Quad4 *p;
-    float *o;
+    Quad4 *v_scroll_factors;
+    float *output_vertex;
     scale = convert_integer_to_float(D_L17_0015F5CC) * (D_L17_0016238C * frame_time);
     vu1_add_g_sregister(6, get_effect_texture(D_L17_00162378));
     vu1_add_g_sregister(0x42, ((long)D_L17_00162374 << 32) | 0x44);
@@ -3465,32 +3465,32 @@ void FUN_L17_002f10c8(struct Moby *moby) {
                                                       DEG_TO_RAD * frame_time);
     get_moby_color(moby, &r, &g, &b);
     /* The second float of each pair in t: p->f[0] is t.f[1], p->f[2] is t.f[3]. */
-    p = (Quad4 *)&t.f[1];
+    v_scroll_factors = (Quad4 *)&uv_scroll_factors.f[1];
     color = (D_L17_0016237C << 24) | (b << 16) | (g << 8) | r;
-    o = D_L17_001DDBA0;
+    output_vertex = D_L17_001DDBA0;
     do {
-        float *s = &D_L17_001DD760[i * 3];
-        float x = s[0];
-        float y = s[1];
+        float *template_vertex = &D_L17_001DD760[i * 3];
+        float x = template_vertex[0];
+        float y = template_vertex[1];
         float rad = square_root(x * x + y * y);
         float a = FUN_L00_00200260(rad, D_L17_00162380);
         float w = wrap_angle(a * 6.2831855f / D_L17_00162380);
         float z = fast_sin(fast_add_rotations(w, data->angle));
-        o[0] = s[0] + moby->pos.x;
-        *(float *)((char *)D_L17_001DDBA0 + 4 + off) = s[1] + moby->pos.y;
-        o[2] = s[2] + moby->pos.z + D_L17_00162388 * z;
+        output_vertex[0] = template_vertex[0] + moby->pos.x;
+        *(float *)((char *)D_L17_001DDBA0 + 4 + off) = template_vertex[1] + moby->pos.y;
+        output_vertex[2] = template_vertex[2] + moby->pos.z + D_L17_00162388 * z;
         D_L17_001DDF28[i] = color;
         i++;
         off += 12;
-        o += 3;
+        output_vertex += 3;
     } while (i < 45);
     for (j = 0; j < 2; j++) {
         for (n = 0; n < 45; n++) {
-            t = D_L17_00162390;
+            uv_scroll_factors = D_L17_00162390;
             D_L17_001DDDC0[n][0] =
-                D_L17_001DD980[n][0] + FUN_L00_00200260(scale * t.f[j * 2], 1.0f);
+                D_L17_001DD980[n][0] + FUN_L00_00200260(scale * uv_scroll_factors.f[j * 2], 1.0f);
             D_L17_001DDDC0[n][1] =
-                D_L17_001DD980[n][1] + FUN_L00_00200260(scale * p->f[j * 2], 1.0f);
+                D_L17_001DD980[n][1] + FUN_L00_00200260(scale * v_scroll_factors->f[j * 2], 1.0f);
         }
         font_queue_vu_state();
         for (k = 0; k < 1; k++) {
