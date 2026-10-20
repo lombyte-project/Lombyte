@@ -1481,32 +1481,32 @@ extern float FUN_001fa6c0_274948(int) __asm__("FUN_001fa6c0");
 
 extern unsigned char *D_L00_001B2194 __attribute__((section(".data")));
 unsigned char *FUN_L00_00274948(u128 *a, u128 *b, int c, int d);
-unsigned char *FUN_L00_00274948(u128 *a, u128 *b, int c, int d) {
-    unsigned char *m = p27fe00_alloc(0x45);
-    if (m) {
-        unsigned char *q;
-        float f;
-        int t;
-        qcopy(m + 0x10, a);
-        q = m + 0x20;
-        m[9] = FUN_001fa6d0_274948(4.0f) + 0x70;
-        m[1] = 0;
-        m[3] = 0x48;
-        *(float *)(m + 0xC) = FUN_002132a8_274948(8000.0f, 50000.0f);
-        m[8] = FUN_00213260_274948(0x100);
-        m[2] = *D_L00_001B2194;
-        t = FUN_001f96f8_274948(random_int_between(10, 0x1E));
-        *(s16 *)(m + 0xA) = t;
-        f = 1.0f / FUN_001fa6c0_274948((s16)t);
-        *(int *)(q + 0x1C) = d;
-        *(s16 *)(q + 0x14) = c;
-        *(int *)(q + 0x18) = 0x7F7F7F;
-        *(s16 *)(q + 0x16) = 0;
-        *(float *)(q + 0x10) = f;
-        qcopy(q, b);
-        *(int *)(m + 4) = (c << 24) | 0x7F7F7F;
+unsigned char *FUN_L00_00274948(u128 *position, u128 *b, int initial_alpha, int d) {
+    unsigned char *particle = p27fe00_alloc(0x45);
+    if (particle) {
+        unsigned char *particle_data;
+        float inverse_lifetime_frames;
+        int lifetime_frames;
+        qcopy(particle + 0x10, position);
+        particle_data = particle + 0x20;
+        particle[9] = FUN_001fa6d0_274948(4.0f) + 0x70;
+        particle[1] = 0;
+        particle[3] = 0x48;
+        *(float *)(particle + 0xC) = FUN_002132a8_274948(8000.0f, 50000.0f);
+        particle[8] = FUN_00213260_274948(0x100);
+        particle[2] = *D_L00_001B2194;
+        lifetime_frames = FUN_001f96f8_274948(random_int_between(10, 0x1E));
+        *(s16 *)(particle + 0xA) = lifetime_frames;
+        inverse_lifetime_frames = 1.0f / FUN_001fa6c0_274948((s16)lifetime_frames);
+        *(int *)(particle_data + 0x1C) = d;
+        *(s16 *)(particle_data + 0x14) = initial_alpha;
+        *(int *)(particle_data + 0x18) = 0x7F7F7F;
+        *(s16 *)(particle_data + 0x16) = 0;
+        *(float *)(particle_data + 0x10) = inverse_lifetime_frames;
+        qcopy(particle_data, b);
+        *(int *)(particle + 4) = (initial_alpha << 24) | 0x7F7F7F;
     }
-    return m;
+    return particle;
 }
 s32 FUN_001f9770_274a70(void *) __asm__("FUN_001f9770");
 void FUN_001f9a10_274a70(void *, void *, void *) __asm__("FUN_001f9a10");
