@@ -2740,7 +2740,7 @@ void FUN_L14_002b5968(struct Moby *moby, float *point, float angle) {
     PuffParticleTail *tail;
     int i;
     int j;
-    int n;
+    int signed_puff_random_value;
     int color;
     int packed_color;
     int low_color;
@@ -2752,14 +2752,14 @@ void FUN_L14_002b5968(struct Moby *moby, float *point, float angle) {
     offset[2] = 0.0f;
     add_vector_xyz(pos, point, offset);
     for (i = 5; i >= 0; i--) {
-        n = random_integer_below(2);
-        if (random_integer_below(2)) n = -n;
+        signed_puff_random_value = random_integer_below(2);
+        if (random_integer_below(2)) signed_puff_random_value = -signed_puff_random_value;
         puff_size = random_float_between(40000.0f, 150000.0f);
         color = random_int_between(10, 0x7f);
         low_color = (color << 8) | 0x7f000000;
         high_color = color << 16;
         packed_color = color | (high_color | low_color);
-        part = spawn_puff(pos, 0.2f, 1.0f, 1.01f, n, D_L14_0015F580_x, puff_size, packed_color);
+        part = spawn_puff(pos, 0.2f, 1.0f, 1.01f, signed_puff_random_value, D_L14_0015F580_x, puff_size, packed_color);
         if (part) {
             tail = &part->tail;
             part->life = scale_game_frames(120);
