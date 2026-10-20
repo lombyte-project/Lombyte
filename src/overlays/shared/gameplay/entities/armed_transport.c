@@ -371,25 +371,25 @@ extern float func_00214D88_path42_q(float, float, float, float, float *,
                                     float *) __asm__("FUN_00213f38");
 
 extern float D_L16_00161D84 __attribute__((sda));
-int FUN_L16_002e2e88(char *m, char *path) {
-    char *d = *(char **)(m + 0x78);
-    float progress = (float)*(int *)(d + 0x168) + *(float *)(d + 0x16C) +
-                     *(float *)(d + 0x170) / *(float *)(d + 0x174);
+int FUN_L16_002e2e88(char *transport_moby, char *path) {
+    char *transport_data = *(char **)(transport_moby + 0x78);
+    float progress = (float)*(int *)(transport_data + 0x168) + *(float *)(transport_data + 0x16C) +
+                     *(float *)(transport_data + 0x170) / *(float *)(transport_data + 0x174);
     int index = truncate_float_to_s32(progress);
     float speed;
     float distance, rate;
     char *position;
-    *(int *)(d + 0x168) = index;
-    *(float *)(d + 0x16C) = progress - (float)index;
+    *(int *)(transport_data + 0x168) = index;
+    *(float *)(transport_data + 0x16C) = progress - (float)index;
     if (index < *(int *)path - 1) {
-        position = m + 0x10;
-        func_00215CA8_path42_q(progress, path, 0, position, m + 0x40, 0);
-        *(float *)(d + 0x194) = *(float *)(m + 0x18);
+        position = transport_moby + 0x10;
+        func_00215CA8_path42_q(progress, path, 0, position, transport_moby + 0x40, 0);
+        *(float *)(transport_data + 0x194) = *(float *)(transport_moby + 0x18);
         speed = 0.0f;
         distance = func_001F9D10_path42_q(position, path + (*(int *)path << 4));
         rate = D_L16_00161D84 * *(float *)&D_0015ED70_u;
         func_00214D88_path42_q(distance, rate, rate, *(float *)&D_L16_00161D80_q * frame_time,
-                               &speed, (float *)(d + 0x170));
+                               &speed, (float *)(transport_data + 0x170));
         return 0;
     }
     return 1;
