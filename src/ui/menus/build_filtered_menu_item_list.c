@@ -40,12 +40,12 @@ extern struct Menu D_001D1088;
 s32 build_filtered_menu_item_list(void) __asm__("FUN_002216c0");
 
 s32 build_filtered_menu_item_list(void) {
-    s32 n;
+    s32 filtered_item_count;
     s32 i;
     s32 id;
-    struct Info *e;
+    struct Info *item_info;
 
-    n = 0;
+    filtered_item_count = 0;
     for (i = 0; i < 14; i++) {
         if (i < 6) {
             id = D_001CEC20[i].id;
@@ -57,18 +57,18 @@ s32 build_filtered_menu_item_list(void) {
             id = D_001CECA0[i - 12].id;
         }
         if (item_available[id] != 0) {
-            e = &D_001863D0[id];
-            D_001D61B8[n].icon = e->icon;
-            D_001D61B8[n].unk2 = 0;
-            D_001D61B8[n].unk4 = 0;
-            D_001D61B8[n].id = id;
-            D_001D6248[n] = e->a;
-            D_001D6280[n] = e->b;
-            D_001D61B8[n].index = i;
-            n++;
+            item_info = &D_001863D0[id];
+            D_001D61B8[filtered_item_count].icon = item_info->icon;
+            D_001D61B8[filtered_item_count].unk2 = 0;
+            D_001D61B8[filtered_item_count].unk4 = 0;
+            D_001D61B8[filtered_item_count].id = id;
+            D_001D6248[filtered_item_count] = item_info->a;
+            D_001D6280[filtered_item_count] = item_info->b;
+            D_001D61B8[filtered_item_count].index = i;
+            filtered_item_count++;
         }
     }
-    D_001D1088.count = n;
+    D_001D1088.count = filtered_item_count;
     return 0;
 }
 
