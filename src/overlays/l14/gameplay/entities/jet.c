@@ -1202,7 +1202,7 @@ extern float D_L14_00161CD8;
 
 extern float D_L14_00161CCC;
 void FUN_L14_002ed280(struct Moby *moby) {
-    char *d = (char *)moby->pvars;
+    char *moby_vars = (char *)moby->pvars;
     int idx[5];
     float v[4];
     int st;
@@ -1233,19 +1233,19 @@ void FUN_L14_002ed280(struct Moby *moby) {
     }
     if (tick_countdown_32_alt(&D_L14_00161C50) == 0) return;
     if (*(int *)&D_L14_00161C58 == 0) {
-        int *path = D_L14_001B0F30_ee[*(int *)d];
+        int *path = D_L14_001B0F30_ee[*(int *)moby_vars];
         int i;
-        int n = 0;
-        for (i = 0; i < path[0] && n < 5; i++) {
+        int visible_point_count = 0;
+        for (i = 0; i < path[0] && visible_point_count < 5; i++) {
             qcopy(v, (char *)path + i * 16 + 0x10);
             v[2] += *(float *)&D_L14_00161C64;
             v[3] = *(float *)&D_L14_00161C60;
             if (fast_bsphere_check(v, 255.0f) > 0) {
-                idx[n++] = i;
+                idx[visible_point_count++] = i;
             }
         }
-        if (n > 0) {
-            int k = random_integer_below(n);
+        if (visible_point_count > 0) {
+            int k = random_integer_below(visible_point_count);
             qcopy(D_L14_00161CC0, (char *)path + idx[k] * 16 + 0x10);
             D_L14_00161CCC = 1.0f;
             qcopy(D_L14_00161CD0, D_L14_00161CC0);
