@@ -3430,22 +3430,22 @@ extern void FUN_L13_002ea330_c2(char *a, char *b, float f) __asm__("FUN_L13_002e
 
 float FUN_L13_002ea400(float *pos, float *pitch, float *yaw, float lead) {
     struct Hero *base = &hero;
-    char *t = ((char *)base->ship_moby);
+    char *hero_ship_moby = ((char *)base->ship_moby);
     float v[4];
     float y;
     float p;
-    if (t != 0 && *(short *)(t + 0xA6) == 0x45) {
+    if (hero_ship_moby != 0 && *(short *)(hero_ship_moby + 0xA6) == 0x45) {
         if (lead > 0.0f) {
             FUN_L13_002ea330_c2((char *)v, (char *)pos, lead);
         } else {
-            qcopy(v, t + 0x10);
+            qcopy(v, hero_ship_moby + 0x10);
         }
         y = fast_arc_tan(v[0] - pos[0], v[1] - pos[1]);
         p = -fast_arc_tan(vector_distance(pos, v), v[2] - pos[2]);
     } else {
-        struct Hero *p0 = &hero;
-        y = fast_arc_tan(p0->motion.pos.f[0] - pos[0], p0->motion.pos.f[1] - pos[1]);
-        p = -fast_arc_tan(vector_distance(pos, &p0->motion.pos), p0->motion.pos.f[2] - pos[2]);
+        struct Hero *hero_state = &hero;
+        y = fast_arc_tan(hero_state->motion.pos.f[0] - pos[0], hero_state->motion.pos.f[1] - pos[1]);
+        p = -fast_arc_tan(vector_distance(pos, &hero_state->motion.pos), hero_state->motion.pos.f[2] - pos[2]);
     }
     if (yaw != 0)
         *yaw = y;
