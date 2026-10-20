@@ -135,6 +135,7 @@ extern float D_L06_00167558_lui __asm__("D_L06_00167558") __attribute__((section
 void FUN_L06_0023b440(void) {
     enum {
         HERO_STATE_DOUBLE_JUMP = 14,
+        HERO_STATE_LEDGE_HANG_ENTRY = 24,
         HERO_STATE_LEDGE_HANG = 25,
         HERO_STATE_LEDGE_JUMP = 28,
         HERO_STATE_GRIND_JUMP = 41,
@@ -1275,7 +1276,7 @@ void FUN_L06_0023b440(void) {
                         }
                     }
                     break;
-                case 24:
+                case HERO_STATE_LEDGE_HANG_ENTRY:
                     if (13.5f < hero.anim_frame) {
                         hero_set_state(0x19, 0);
                     }
