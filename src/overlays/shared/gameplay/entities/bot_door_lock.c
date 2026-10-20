@@ -394,19 +394,19 @@ extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 void FUN_L06_0030bef8(char *src, int duration_updates, int start_color, int end_color) {
     OvlQuad v;
     char *vp = (char *)&v;
-    unsigned char *m;
+    unsigned char *effect_moby;
     v = *(OvlQuad *)src;
-    m = (unsigned char *)mk_b(0x76A);
-    if (m) {
-        char *e = *(char **)(m + 0x78);
-        float f;
-        qcopy(m + 0x10, vp);
-        f = convert_integer_to_float(duration_updates);
-        *(int *)(e + 0xC) = end_color;
-        *(int *)(e + 0x8) = start_color;
-        *(float *)(e + 0x4) = 2.0f / f;
-        m[0x30] = 0xFF;
-        m[0x20] = 1;
+    effect_moby = (unsigned char *)mk_b(0x76A);
+    if (effect_moby) {
+        char *effect_data = *(char **)(effect_moby + 0x78);
+        float duration_as_float;
+        qcopy(effect_moby + 0x10, vp);
+        duration_as_float = convert_integer_to_float(duration_updates);
+        *(int *)(effect_data + 0xC) = end_color;
+        *(int *)(effect_data + 0x8) = start_color;
+        *(float *)(effect_data + 0x4) = 2.0f / duration_as_float;
+        effect_moby[0x30] = 0xFF;
+        effect_moby[0x20] = 1;
     }
 }
 extern void vu1_add_g_sregister(s32, s64) __asm__("FUN_00233980");
