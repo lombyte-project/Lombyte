@@ -3056,35 +3056,35 @@ float absolute_float(float input) __asm__("FUN_001f99c0");
 
 
 int FUN_L00_002279b0(void) {
-    struct Hero *p = &hero;
+    struct Hero *hero_ptr = &hero;
     struct Hero *q;
     struct Hero *u;
     int r;
     float ray_start[4];
     float ray_end[4];
-    float t;
+    float surface_height_tolerance;
     float scale;
-    if (p->state.current == 0x6A) {
+    if (hero_ptr->state.current == 0x6A) {
         return 0;
     }
     r = 0;
-    if (p->base_condition != 0) {
-        if (p->state.control_mode == 0x11) {
-            if (p->state.step != 1) {
-                if (0.0f < p->motion.displacement.f[2]) {
-                    if (p->water_surface_z - 0.4f < p->motion.pos.f[2]) {
+    if (hero_ptr->base_condition != 0) {
+        if (hero_ptr->state.control_mode == 0x11) {
+            if (hero_ptr->state.step != 1) {
+                if (0.0f < hero_ptr->motion.displacement.f[2]) {
+                    if (hero_ptr->water_surface_z - 0.4f < hero_ptr->motion.pos.f[2]) {
                         r = 1;
                     }
                 }
             }
-        } else if (p->state.control_mode != 0x12 && p->state.control_mode != 3) {
-            t = 0.2f;
-            if (t < absolute_float(p->motion.velocity.f[2]) + 0.07f) {
-                t = absolute_float(p->motion.velocity.f[2]) + 0.07f;
+        } else if (hero_ptr->state.control_mode != 0x12 && hero_ptr->state.control_mode != 3) {
+            surface_height_tolerance = 0.2f;
+            if (surface_height_tolerance < absolute_float(hero_ptr->motion.velocity.f[2]) + 0.07f) {
+                surface_height_tolerance = absolute_float(hero_ptr->motion.velocity.f[2]) + 0.07f;
             }
-            if (absolute_float(p->water_surface_z - (p->motion.pos.f[2] + 0.45f)) < t) {
-                if (p->state.control_mode != 4 || p->unk41E != 0) {
-                    if (0.8f < p->unk22A4 && p->motion.displacement.f[2] < 0.0f) {
+            if (absolute_float(hero_ptr->water_surface_z - (hero_ptr->motion.pos.f[2] + 0.45f)) < surface_height_tolerance) {
+                if (hero_ptr->state.control_mode != 4 || hero_ptr->unk41E != 0) {
+                    if (0.8f < hero_ptr->unk22A4 && hero_ptr->motion.displacement.f[2] < 0.0f) {
                         r = 1;
                     }
                 }
@@ -3097,14 +3097,14 @@ int FUN_L00_002279b0(void) {
             }
         }
     }
-    p = &hero;
-    t = 0.27f;
-    if (t < absolute_float(p->motion.velocity.f[2]) + 0.07f) {
-        t = absolute_float(p->motion.velocity.f[2]);
+    hero_ptr = &hero;
+    surface_height_tolerance = 0.27f;
+    if (surface_height_tolerance < absolute_float(hero_ptr->motion.velocity.f[2]) + 0.07f) {
+        surface_height_tolerance = absolute_float(hero_ptr->motion.velocity.f[2]);
     }
-    if (p->state.current == 0x12) {
-        if (p->unk41E != 0) {
-            if (p->motion.pos.f[2] < p->water_surface_z - 0.7f) {
+    if (hero_ptr->state.current == 0x12) {
+        if (hero_ptr->unk41E != 0) {
+            if (hero_ptr->motion.pos.f[2] < hero_ptr->water_surface_z - 0.7f) {
                 r = 1;
             }
         }
