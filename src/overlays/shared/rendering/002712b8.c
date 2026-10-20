@@ -447,22 +447,22 @@ static __inline__ void vcopy_273090(float *d, float *s) {
 
 void FUN_L00_002721f0(char *part) {
     char *data = part + 0x20;
-    float t;
+    float interpolation_factor;
     float velocity[4] __attribute__((aligned(16)));
     int alpha;
     part[8] += data[0xA];
     if (*(short *)(data + 8) - *(short *)(part + 0xA) < 6) {
         int start;
         int end;
-        t = (float)(*(short *)(data + 8) - *(short *)(part + 0xA)) / 5.0f;
-        *(float *)(part + 0xC) = *(float *)(data + 4) + ((*(float *)(part + 0x20) + *(float *)(data + 4)) * 0.5f - *(float *)(data + 4)) * t;
+        interpolation_factor = (float)(*(short *)(data + 8) - *(short *)(part + 0xA)) / 5.0f;
+        *(float *)(part + 0xC) = *(float *)(data + 4) + ((*(float *)(part + 0x20) + *(float *)(data + 4)) * 0.5f - *(float *)(data + 4)) * interpolation_factor;
         end = (unsigned char)data[0xB] >> 1;
         start = (unsigned char)data[0xB];
-        alpha = truncate_float_to_s32((float)start + (float)(end - start) * t);
+        alpha = truncate_float_to_s32((float)start + (float)(end - start) * interpolation_factor);
     } else {
-        t = (float)*(short *)(part + 0xA) / convert_integer_to_float(*(short *)(data + 8) - 6);
-        *(float *)(part + 0xC) = *(float *)(part + 0x20) + ((*(float *)(part + 0x20) + *(float *)(data + 4)) * 0.5f - *(float *)(part + 0x20)) * t;
-        alpha = truncate_float_to_s32((float)((unsigned char)data[0xB] >> 1) * t + 0.0f);
+        interpolation_factor = (float)*(short *)(part + 0xA) / convert_integer_to_float(*(short *)(data + 8) - 6);
+        *(float *)(part + 0xC) = *(float *)(part + 0x20) + ((*(float *)(part + 0x20) + *(float *)(data + 4)) * 0.5f - *(float *)(part + 0x20)) * interpolation_factor;
+        alpha = truncate_float_to_s32((float)((unsigned char)data[0xB] >> 1) * interpolation_factor + 0.0f);
     }
     *(int *)(part + 4) = (alpha << 24) | (*(int *)(part + 4) & 0xFFFFFF);
     vcopy_273090(velocity, (float *)(data + 0xC));
