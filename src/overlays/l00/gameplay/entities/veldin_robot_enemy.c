@@ -743,40 +743,40 @@ extern void FUN_L00_002e2250(s32, s32);
 extern void FUN_L00_002e2af0();
 void enqueue_callback_list_1(s32 arg0, s32 arg1) __asm__("FUN_001f4600");
 
-void FUN_L00_002e1df0(SlotMoby *m) {
+void FUN_L00_002e1df0(SlotMoby *slot_controller) {
     enum {
         SLOT_CONTROLLER_STATE_INITIALIZE = 0,
         SLOT_CONTROLLER_STATE_PROCESS_SLOTS = 1
     };
     s32 i;
     s32 j;
-    s32 n;
+    s32 dispatched_slot_count;
     s32 st;
 
-    switch (m->state) {
+    switch (slot_controller->state) {
     case SLOT_CONTROLLER_STATE_INITIALIZE:
         for (j = 0; j < 3; j++) {
             D_L00_00161BF8[j] = 0;
             D_L00_00161C88[j] = 0;
         }
-        m->state = 1;
-        m->alpha = 0xFF;
+        slot_controller->state = 1;
+        slot_controller->alpha = 0xFF;
         break;
     case SLOT_CONTROLLER_STATE_PROCESS_SLOTS:
-        n = 0;
+        dispatched_slot_count = 0;
         for (i = 0; i < 3; i++) {
             st = D_L00_00161BF8[i];
             if (st == 1) {
             } else if (st == 4) {
                 FUN_L00_002e20f8(i);
             } else if (st != 0) {
-                n++;
+                dispatched_slot_count++;
                 FUN_L00_002e2250(D_L00_00161C88[i], i);
                 D_L00_00161BF8[i] = 4;
             }
         }
-        if (n != 0) {
-            enqueue_callback_list_1((s32)FUN_L00_002e2af0, (s32)m);
+        if (dispatched_slot_count != 0) {
+            enqueue_callback_list_1((s32)FUN_L00_002e2af0, (s32)slot_controller);
         }
         break;
     }
