@@ -1999,7 +1999,7 @@ int FUN_L14_002b4500(int index) {
     unsigned char *retracting_moby;
     unsigned char *turret_vars;
     int st;
-    int t;
+    int moby_index_or_retract_frames;
     float inverse_retract_frames;
     float g;
     if (list_entry == 0) {
@@ -2018,15 +2018,15 @@ int FUN_L14_002b4500(int index) {
     } while (*list_entry++ >= 0);
     list_entry = D_L14_001ABF40_b45[index];
     do {
-        t = *(unsigned short *)list_entry & 0x7FFF;
-        retracting_moby = D_L14_0015FFD0_m45[2] + (t << 8);
+        moby_index_or_retract_frames = *(unsigned short *)list_entry & 0x7FFF;
+        retracting_moby = D_L14_0015FFD0_m45[2] + (moby_index_or_retract_frames << 8);
         if (retracting_moby[0x20] == 3) {
             turret_vars = *(unsigned char **)(retracting_moby + 0x78);
             FUN_00212ed8_b45(retracting_moby, 4, 0);
             retracting_moby[0x20] = 5;
-            t = FUN_001f96f8_b45(D_L14_0016150C_b45);
-            *(short *)(turret_vars + 0x74) = t;
-            inverse_retract_frames = 1.0f / FUN_001fa6c0_b45(t);
+            moby_index_or_retract_frames = FUN_001f96f8_b45(D_L14_0016150C_b45);
+            *(short *)(turret_vars + 0x74) = moby_index_or_retract_frames;
+            inverse_retract_frames = 1.0f / FUN_001fa6c0_b45(moby_index_or_retract_frames);
             g = 1.0f / (*(short *)(turret_vars + 0x74) * D_L14_00161510_b45);
             *(float *)(turret_vars + 0x78) = inverse_retract_frames;
             *(float *)(retracting_moby + 0x58) = g;
