@@ -2235,8 +2235,8 @@ extern s32 irand_2edad8(s32) __asm__("FUN_00213260");
 extern s32 scale_2edad8(s32) __asm__("FUN_001f96f8");
 void FUN_L00_002edad8(u8 *sound_emitter) {
     V_2edad8 reference_position_delta;
-    V_2edad8 e;
-    V_2edad8 a;
+    V_2edad8 uniform_range_vector;
+    V_2edad8 transformed_reference_position_delta;
     V_2edad8 b;
     V_2edad8 r;
     S_2edad8 *playback_state;
@@ -2245,21 +2245,21 @@ void FUN_L00_002edad8(u8 *sound_emitter) {
     playback_state = *(S_2edad8 **)(sound_emitter + 8);
     {
         f32 g = *(f32 *)(sound_emitter + 0xC);
-        e.f[0] = g;
-        e.f[1] = g;
-        e.f[2] = g;
+        uniform_range_vector.f[0] = g;
+        uniform_range_vector.f[1] = g;
+        uniform_range_vector.f[2] = g;
     }
     sub_2edad8(&reference_position_delta, D_L00_00166DC0_2edad8, sound_emitter + 0x40);
     reference_position_delta.f[3] = 0;
-    mul_2edad8(&a, &reference_position_delta, sound_emitter + 0x50);
-    mul_2edad8(&b, &e, sound_emitter + 0x50);
-    f = fabs_2edad8(a.f[0]);
+    mul_2edad8(&transformed_reference_position_delta, &reference_position_delta, sound_emitter + 0x50);
+    mul_2edad8(&b, &uniform_range_vector, sound_emitter + 0x50);
+    f = fabs_2edad8(transformed_reference_position_delta.f[0]);
     if (!(f <= fabs_2edad8(b.f[0]) + 1.0f))
         return;
-    f = fabs_2edad8(a.f[1]);
+    f = fabs_2edad8(transformed_reference_position_delta.f[1]);
     if (!(f <= fabs_2edad8(b.f[1]) + 1.0f))
         return;
-    f = fabs_2edad8(a.f[2]);
+    f = fabs_2edad8(transformed_reference_position_delta.f[2]);
     if (!(f <= fabs_2edad8(b.f[2]) + 1.0f))
         return;
     v = D_0013E550_2edad8 + playback_state->h * 0x70;
