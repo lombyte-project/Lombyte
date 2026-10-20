@@ -324,28 +324,28 @@ void FUN_L02_002ecc68(char *self);
 void FUN_L02_002ecd50(char *moby) {
     int i;
     char *data;
-    char *p;
+    char *joint_position_out;
     int v;
-    int r, g, b, c;
+    int r, g, b, packed_color;
     int *q;
 
     if (*(unsigned char *)(moby + 0x21) == 0xFF) {
         return;
     }
     data = *(char **)(moby + 0x78);
-    p = data + 0x80;
+    joint_position_out = data + 0x80;
     for (i = 0; i < 6; i++) {
-        moby_point_position(moby, i + 2, p);
-        p += 0x10;
+        moby_point_position(moby, i + 2, joint_position_out);
+        joint_position_out += 0x10;
     }
     v = D_L02_0015F5CC;
     r = *(unsigned char *)(moby + 0x92);
     g = *(unsigned char *)(moby + 0x91);
     b = *(unsigned char *)(moby + 0x90);
-    c = (r << 16) | 0x30000000;
-    c |= g << 8;
-    c |= b;
-    *(int *)(data + 0xE0) = c;
+    packed_color = (r << 16) | 0x30000000;
+    packed_color |= g << 8;
+    packed_color |= b;
+    *(int *)(data + 0xE0) = packed_color;
     if (v != 0) {
         q = *(int **)(data + 0xE4);
         if (v != *q) {
