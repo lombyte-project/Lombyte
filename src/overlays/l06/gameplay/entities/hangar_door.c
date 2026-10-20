@@ -309,15 +309,15 @@ int FUN_L06_002fb2a8(char *moby) {
     char *data;
     char *pos;
     struct Hero *x;
-    float t;
+    float blend_acceleration_step;
     data = *(char **)(moby + 0x78);
     clear_u64_value(output_rotation);
     if (*(unsigned char *)(moby + 0x53) == 8) {
         qcopy(output_position, D_L06_00167540);
         pos = moby + 0x10;
     } else {
-        t = *(float *)&D_0015ED70_s * 3.0f;
-        FUN_00213f38((float *)(data + 0x118), (float *)(data + 0x11C), 1.0f, t, t,
+        blend_acceleration_step = *(float *)&D_0015ED70_s * 3.0f;
+        FUN_00213f38((float *)(data + 0x118), (float *)(data + 0x11C), 1.0f, blend_acceleration_step, blend_acceleration_step,
                      frame_time + frame_time);
         fast_vec_normalize(moby_offset_position, moby + 0xC0, 8.0f);
         fast_vec_add(moby_offset_position, moby_offset_position, moby + 0x10);
