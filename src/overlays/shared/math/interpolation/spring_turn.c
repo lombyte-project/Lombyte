@@ -28,22 +28,22 @@ extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
    Scalar analogue matched at src/game/mobyutil.c:func_00214220. */
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_00258FA8), where it is exact; names translated to the US level program. */
 
-void FUN_L00_00257f70(void *dst, void *a, void *b, float t) {
-    float tmp[4];
+void FUN_L00_00257f70(void *dst, void *start_vector, void *b, float interpolation_fraction) {
+    float interpolation_delta[4];
     float ease;
 
-    if (t == 0.0f) {
-        qcopy(dst, a);
+    if (interpolation_fraction == 0.0f) {
+        qcopy(dst, start_vector);
         return;
     }
-    if (t == 1.0f) {
+    if (interpolation_fraction == 1.0f) {
         qcopy(dst, b);
         return;
     }
-    ease = (1.0f - fast_cos(t * 3.14159274f)) * 0.5f;
-    subtract_vector_xyz(tmp, b, a);
-    scale_vector_xyz(tmp, tmp, ease);
-    add_vector_xyz(dst, a, tmp);
+    ease = (1.0f - fast_cos(interpolation_fraction * 3.14159274f)) * 0.5f;
+    subtract_vector_xyz(interpolation_delta, b, start_vector);
+    scale_vector_xyz(interpolation_delta, interpolation_delta, ease);
+    add_vector_xyz(dst, start_vector, interpolation_delta);
 }
 #define NOT_SDA
 
