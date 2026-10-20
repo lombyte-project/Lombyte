@@ -42,28 +42,28 @@ int memcard_save_data(int slot, int flags) {
     copy_level_object_positions();
     save_map_coverage(D_00141EC0 + (current_level_index << 11));
     {
-        char *p = D_0013D290;
-        int active = *(int *)(p + 0xC0);
+        char *memory_card_control = D_0013D290;
+        int active = *(int *)(memory_card_control + 0xC0);
         int mask;
 
-        if (active == -1 || *(int *)(p + active * 0xB8 + 0x14) < 0) {
+        if (active == -1 || *(int *)(memory_card_control + active * 0xB8 + 0x14) < 0) {
             return slot == 0;
         }
-        mask = *(int *)(p + 0xF4) | slot;
-        *(int *)(p + 0xF4) = mask;
+        mask = *(int *)(memory_card_control + 0xF4) | slot;
+        *(int *)(memory_card_control + 0xF4) = mask;
         if (mask == 0) {
             goto done;
         }
         if (slot == 0) {
             mode_freeze_flags |= 0x200;
         }
-        if (*(int *)(p + 0xD4) >= 3) {
+        if (*(int *)(memory_card_control + 0xD4) >= 3) {
             goto done;
         }
-        if (*(int *)(p + 0xDC) >= 0) {
+        if (*(int *)(memory_card_control + 0xDC) >= 0) {
             goto done;
         }
-        *(int *)(p + 0xC8) = current_level_index;
+        *(int *)(memory_card_control + 0xC8) = current_level_index;
         saved = 0;
         if (flags >= 0) {
             current_level_index = flags;
@@ -74,23 +74,23 @@ int memcard_save_data(int slot, int flags) {
         }
     }
     {
-        char *q = D_0013D290;
-        char *names = q + 0x30;
+        char *memory_card_state = D_0013D290;
+        char *names = memory_card_state + 0x30;
 
-        *(int *)(q + *(int *)(q + 0x14) * 0x1C + 0x24) = current_bolt_count_macro;
-        *(int *)(q + *(int *)(q + 0x14) * 0x1C + 0x20) = current_level_index;
-        *(int *)(q + *(int *)(q + 0x14) * 0x1C + 0x2C) = D_0015EE24;
-        memcpy(names + *(int *)(q + 0x14) * 0x1C, D_0015EE98, 8);
-        *(int *)(q + *(int *)(q + 0x14) * 0x1C + 0x28) = alternate_animation_sequence_macro;
+        *(int *)(memory_card_state + *(int *)(memory_card_state + 0x14) * 0x1C + 0x24) = current_bolt_count_macro;
+        *(int *)(memory_card_state + *(int *)(memory_card_state + 0x14) * 0x1C + 0x20) = current_level_index;
+        *(int *)(memory_card_state + *(int *)(memory_card_state + 0x14) * 0x1C + 0x2C) = D_0015EE24;
+        memcpy(names + *(int *)(memory_card_state + 0x14) * 0x1C, D_0015EE98, 8);
+        *(int *)(memory_card_state + *(int *)(memory_card_state + 0x14) * 0x1C + 0x28) = alternate_animation_sequence_macro;
         memcard_prepare_data(D_0014EED0, 0, mc_gamedata);
-        memcard_prepare_data(D_001506D0, *(int *)(q + 0xC8), mc_leveldata);
+        memcard_prepare_data(D_001506D0, *(int *)(memory_card_state + 0xC8), mc_leveldata);
         if (flags >= 0) {
             level_visit_state[current_level_index] = saved;
-            current_level_index = *(int *)(q + 0xC8);
+            current_level_index = *(int *)(memory_card_state + 0xC8);
         }
-        if (*(int *)(q + 0xDC) < 0) {
-            *(int *)(q + 0xDC) = 0xF;
-            *(int *)(q + 0xE0) = *(int *)(q + 0xC0);
+        if (*(int *)(memory_card_state + 0xDC) < 0) {
+            *(int *)(memory_card_state + 0xDC) = 0xF;
+            *(int *)(memory_card_state + 0xE0) = *(int *)(memory_card_state + 0xC0);
         }
     }
 done: {
