@@ -1923,51 +1923,51 @@ extern char *D_L14_001B0BB0_rail[] __asm__("D_L14_001B0BB0");
 extern float FUN_001f9b48(void *, void *);
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 
-void FUN_L14_002eef60(struct Moby *m) {
-    char *d = (char *)m->pvars;
+void FUN_L14_002eef60(struct Moby *moby) {
+    char *moby_vars = (char *)moby->pvars;
     int *path;
-    int *e;
+    int *primary_path;
     int *first;
     int i;
 
-    if (*(int *)(d + 0xA0) == -1) {
-        mark_moby_for_removal(m);
+    if (*(int *)(moby_vars + 0xA0) == -1) {
+        mark_moby_for_removal(moby);
         return;
     }
-    e = (int *)D_L14_001B0BB0_rail[*(int *)(d + 0xA0)];
-    if (*e == 0 || *(int *)(d + 0x114) == -1 ||
-        *(int *)D_L14_001B0BB0_rail[*(int *)(d + 0x114)] != 11) {
-        mark_moby_for_removal(m);
+    primary_path = (int *)D_L14_001B0BB0_rail[*(int *)(moby_vars + 0xA0)];
+    if (*primary_path == 0 || *(int *)(moby_vars + 0x114) == -1 ||
+        *(int *)D_L14_001B0BB0_rail[*(int *)(moby_vars + 0x114)] != 11) {
+        mark_moby_for_removal(moby);
         return;
     }
 
-    *(float *)(d + 0xB4) = 0.0f;
-    path = e;
+    *(float *)(moby_vars + 0xB4) = 0.0f;
+    path = primary_path;
     first = path + 4;
     for (i = 0; i < *path - 1; i++) {
         ((f32 *)path)[i * 4 + 7] = FUN_001f9b48(&path[i * 4 + 4], &path[i * 4 + 8]);
-        *(float *)(d + 0xB4) += ((f32 *)path)[i * 4 + 7];
+        *(float *)(moby_vars + 0xB4) += ((f32 *)path)[i * 4 + 7];
     }
     {
-        f32 len = FUN_001f9b48(&((f32 *)e)[i * 4 + 4], first);
-        char *pt = (char *)e + i * 16;
+        f32 len = FUN_001f9b48(&((f32 *)primary_path)[i * 4 + 4], first);
+        char *pt = (char *)primary_path + i * 16;
         *(f32 *)(pt + 0x1C) = len;
     }
 
-    path = (int *)D_L14_001B0BB0_rail[*(int *)(d + 0xB8)];
-    *(float *)(d + 0xBC) = 0.0f;
+    path = (int *)D_L14_001B0BB0_rail[*(int *)(moby_vars + 0xB8)];
+    *(float *)(moby_vars + 0xBC) = 0.0f;
     for (i = 0; i < *path - 1; i++) {
         ((f32 *)path)[i * 4 + 7] = FUN_001f9b48(&path[i * 4 + 4], &path[i * 4 + 8]);
-        *(float *)(d + 0xBC) += ((f32 *)path)[i * 4 + 7];
+        *(float *)(moby_vars + 0xBC) += ((f32 *)path)[i * 4 + 7];
     }
     {
         f32 len = FUN_001f9b48(&((f32 *)path)[i * 4 + 4], path + 4);
         char *pt = (char *)path + i * 16;
         *(f32 *)(pt + 0x1C) = len;
     }
-    *(float *)(d + 0xAC) = -1.0f;
-    *(int *)(d + 0xA8) = 0;
-    *(int *)(d + 0xA4) = 0;
+    *(float *)(moby_vars + 0xAC) = -1.0f;
+    *(int *)(moby_vars + 0xA8) = 0;
+    *(int *)(moby_vars + 0xA4) = 0;
 }
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002E0538.c: func_L14_002F05D8), where it is exact; names translated to the US level program. */
 
