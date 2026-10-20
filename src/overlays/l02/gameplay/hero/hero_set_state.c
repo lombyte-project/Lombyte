@@ -1903,6 +1903,7 @@ void FUN_L02_00230988(void) {
         HERO_STATE_LOOK_ALT = 30,
         HERO_STATE_HELD_ITEM_ATTACK = 32,
         HERO_STATE_ITEM_ATTACK = 35,
+        HERO_STATE_ITEM_HOLD = 44,
         HERO_STATE_ITEM_RELEASE_FALL = 45,
         HERO_STATE_VEHICLE_IDLE = 83,
         HERO_STATE_VEHICLE_RUN = 84,
@@ -2729,7 +2730,7 @@ void FUN_L02_00230988(void) {
                     hero_set_state(HERO_STATE_FALL, 1);
                     hero.unk2284 = 0;
                     break;
-                case 44:
+                case HERO_STATE_ITEM_HOLD:
                     if (controller_state.held & hero.items[0].button_mask) {
                         break;
                     }
