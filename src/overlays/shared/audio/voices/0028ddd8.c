@@ -35,24 +35,24 @@ extern int D_L00_0015F574;
 
 int FUN_L00_0028de68(int voice_group_index, int voice_pair_index, int voice_index_offset, int voice_flags, int voice_moby) {
     int idx;
-    int h;
-    int t;
+    int voice_slot_index;
+    int voice_definition_offset;
 
-    t = D_L00_001BD820[current_level_index] + voice_group_index * 4;
-    t += voice_pair_index * 2;
-    t += voice_index_offset;
-    idx = t + D_L00_0015F574;
+    voice_definition_offset = D_L00_001BD820[current_level_index] + voice_group_index * 4;
+    voice_definition_offset += voice_pair_index * 2;
+    voice_definition_offset += voice_index_offset;
+    idx = voice_definition_offset + D_L00_0015F574;
 
     if (idx >= D_L00_0015F5F0) {
         return -1;
     }
-    h = allocate_voice_slot(D_L00_0015F5F4 + idx * 32, voice_flags, voice_moby, 0, 0x400);
-    if (h >= 0) {
-        char *rec = D_0013E550_c + h * 0x70;
+    voice_slot_index = allocate_voice_slot(D_L00_0015F5F4 + idx * 32, voice_flags, voice_moby, 0, 0x400);
+    if (voice_slot_index >= 0) {
+        char *rec = D_0013E550_c + voice_slot_index * 0x70;
         *(int *)(rec + 0x88) = voice_moby;
         *(short *)(rec + 0x7E) = idx;
     }
-    return h;
+    return voice_slot_index;
 }
 typedef struct {
     s32 w[0x1C];
