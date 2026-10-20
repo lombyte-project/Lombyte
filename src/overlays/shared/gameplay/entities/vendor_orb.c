@@ -884,7 +884,7 @@ void FUN_L00_002e2250(int unused, int beam) {
     Pt_2E3700 *point;
     int i;
     int j;
-    int n;
+    int second_strand_point_index;
 
     func_001F9BF0_2E3700(span, &D_L00_001E7130_2E3700[beam], &D_L00_001E70A0_2E3700[beam]);
     step = fast_vec_length(span) / 20.0f;
@@ -927,8 +927,8 @@ void FUN_L00_002e2250(int unused, int beam) {
     func_001F9EE8_2E3700(tip, &D_L00_001E7190_2E3700[strand][18], dir);
     qcopy(&D_L00_001E7160_2E3700[beam], tip);
     point = D_L00_001E7190_2E3700[next_strand];
-    for (n = 0; n < 19; n++) {
-        float fn = (float)n;
+    for (second_strand_point_index = 0; second_strand_point_index < 19; second_strand_point_index++) {
+        float fn = (float)second_strand_point_index;
         float twist;
         float swell;
         float height;
