@@ -3220,43 +3220,43 @@ extern int FUN_L00_0025bfe0(float, float, float, float);
 extern unsigned char *D_L00_001B20B0 __attribute__((section(".data")));
 extern void *FUN_L00_002678b8_c2(int) __asm__("FUN_L00_002678b8");
 
-void *FUN_L00_00270758(char *a, char *b, unsigned char c, int d) {
-    char *p = FUN_L00_002678b8_c2(0x2A);
+void *FUN_L00_00270758(char *spawn_position, char *b, unsigned char c, int d) {
+    char *particle = FUN_L00_002678b8_c2(0x2A);
 
-    if (p != 0) {
-        char *q = p + 0x20;
-        float f;
+    if (particle != 0) {
+        char *particle_data = particle + 0x20;
+        float initial_rotation_phase;
         int rnd;
 
-        qcopy(p + 0x10, a);
-        qcopy(q, b);
-        *(int *)(p + 4) = FUN_L00_0025bfe0(0.7f, 0.7f, 0.7f, 0.08f);
-        p[9] = (char)(truncate_float_to_s32(4.0f) + 0x40);
-        p[1] = 0;
-        p[3] = 0x44;
-        f = random_float_between_alt(0.0f, 1.0f);
-        *(float *)(q + 0x10) = f;
-        p[8] = (char)(int)(f * 256.0f);
-        p[2] = D_L00_001B20B0[rand() & 7];
-        q[0x18] = c;
-        *(short *)(q + 0x14) = 0;
-        *(short *)(q + 0x16) = 0;
+        qcopy(particle + 0x10, spawn_position);
+        qcopy(particle_data, b);
+        *(int *)(particle + 4) = FUN_L00_0025bfe0(0.7f, 0.7f, 0.7f, 0.08f);
+        particle[9] = (char)(truncate_float_to_s32(4.0f) + 0x40);
+        particle[1] = 0;
+        particle[3] = 0x44;
+        initial_rotation_phase = random_float_between_alt(0.0f, 1.0f);
+        *(float *)(particle_data + 0x10) = initial_rotation_phase;
+        particle[8] = (char)(int)(initial_rotation_phase * 256.0f);
+        particle[2] = D_L00_001B20B0[rand() & 7];
+        particle_data[0x18] = c;
+        *(short *)(particle_data + 0x14) = 0;
+        *(short *)(particle_data + 0x16) = 0;
         if (c < 5) {
-            int n;
+            int base_lifetime;
             int y;
 
-            *(float *)(p + 0xC) = random_float_between_alt(7000.0f, 10000.0f);
+            *(float *)(particle + 0xC) = random_float_between_alt(7000.0f, 10000.0f);
             rnd = rand();
-            n = (int)(8.0f / (D_0015ED60_c2 * 0.443f));
-            y = n * 6 / 7;
-            *(short *)(p + 0xA) = n - rnd % y;
+            base_lifetime = (int)(8.0f / (D_0015ED60_c2 * 0.443f));
+            y = base_lifetime * 6 / 7;
+            *(short *)(particle + 0xA) = base_lifetime - rnd % y;
         } else {
-            *(short *)(p + 0xA) = (int)(8.0f / (D_0015ED60_c2 * 0.443f));
-            *(float *)(p + 0xC) = 10000.0f;
+            *(short *)(particle + 0xA) = (int)(8.0f / (D_0015ED60_c2 * 0.443f));
+            *(float *)(particle + 0xC) = 10000.0f;
         }
-        *(int *)(q + 0x1C) = d;
+        *(int *)(particle_data + 0x1C) = d;
     }
-    return p;
+    return particle;
 }
 typedef unsigned int Q_270948 __attribute__((mode(TI)));
 typedef union {
