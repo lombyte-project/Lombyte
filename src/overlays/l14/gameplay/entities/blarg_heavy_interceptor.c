@@ -2236,7 +2236,7 @@ void minibomber_update(Moby_2B5938 *moby) {
     float *tgt;
     char *buf;
     float tg;
-    float a;
+    float blended_aim_angle;
     float n;
     float g;
     float spd;
@@ -2386,8 +2386,8 @@ void minibomber_update(Moby_2B5938 *moby) {
     }
     case MINIBOMBER_STATE_HOLD_AT_PATH_END:
         tg = 0.0f;
-        a = blend_scalar_alt(tg, d->f104, (float)d->f102 / convert_integer_to_float(scale_game_frames_c(D_L14_00161560)));
-        FUN_L00_001fff28(d->f120, 2, a);
+        blended_aim_angle = blend_scalar_alt(tg, d->f104, (float)d->f102 / convert_integer_to_float(scale_game_frames_c(D_L14_00161560)));
+        FUN_L00_001fff28(d->f120, 2, blended_aim_angle);
         if (vector_distance(moby->pos, d->fB0->pos) < D_L14_00161570) {
             if (d->f10C == 0) {
                 d->fE8 = 0;
@@ -2450,13 +2450,13 @@ void minibomber_update(Moby_2B5938 *moby) {
     case MINIBOMBER_STATE_AIM_AT_BOMB_POINT: {
         PathNode_2B5938 *q = D_L14_001B0F30_2B5938[d->fD8] + d->f100;
         tg = fast_subtract_rotations(fast_arc_tan(q[1].v[0] - moby->pos[0], q[1].v[1] - moby->pos[1]), moby->rot);
-        a = blend_scalar_alt(tg, d->f104, (float)d->f102 / convert_integer_to_float(scale_game_frames_c(D_L14_0016155C)));
-        FUN_L00_001fff28(d->f120, 2, a);
+        blended_aim_angle = blend_scalar_alt(tg, d->f104, (float)d->f102 / convert_integer_to_float(scale_game_frames_c(D_L14_0016155C)));
+        FUN_L00_001fff28(d->f120, 2, blended_aim_angle);
         if (moby->f53 == 2) {
             moby->state = 4;
             d->f102 = scale_game_frames_c(D_L14_00161560);
         } else if (FUN_001f9770_c(&d->f102) != 0) {
-            d->f104 = a;
+            d->f104 = blended_aim_angle;
             moby->state = 6;
             set_moby_animation_c(moby, 1, 0);
         }
@@ -2496,8 +2496,8 @@ void minibomber_update(Moby_2B5938 *moby) {
                                  -1, 0);
         i = d->f108;
         if (i != -1) {
-            char *e = D_0013E550_c + i * 0x70;
-            if (*(Moby_2B5938 **)(e + 0x88) == moby && *(unsigned char *)(e + 0x74) != 0) {
+            char *voice_slot = D_0013E550_c + i * 0x70;
+            if (*(Moby_2B5938 **)(voice_slot + 0x88) == moby && *(unsigned char *)(voice_slot + 0x74) != 0) {
                 release_voice_slot_c(i);
             }
         }
