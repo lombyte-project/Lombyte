@@ -105,7 +105,7 @@ void FUN_L15_0020a7a0(void) {
     s32 r;
     s32 i;
     f32 surface_probe_angle;
-    u8 *p;
+    u8 *aim_height_data;
 
     s32 k;
     f32 g;
@@ -170,8 +170,8 @@ void FUN_L15_0020a7a0(void) {
         if (FUN_L00_0025e3b8(HH.moby)) {
             hero.unk30A = 1;
         }
-        p = suck_get_aim_height(HH.moby);
-        if (p != 0 && (*(u16 *)(p + 0x1E) & 8)) {
+        aim_height_data = suck_get_aim_height(HH.moby);
+        if (aim_height_data != 0 && (*(u16 *)(aim_height_data + 0x1E) & 8)) {
             hero.unk30A = 1;
         }
     }
