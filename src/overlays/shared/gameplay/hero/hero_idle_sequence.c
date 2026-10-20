@@ -1940,9 +1940,9 @@ void FUN_L00_00208b60(void) {
     c = FUN_001f9dc8_208b60(planar_angle);
     s = FUN_001f9de0_208b60(planar_angle);
     {
-        f32 e = FUN_001f9dc8_208b60(G.fD20);
-        v.f[0] = c * e;
-        v.f[1] = s * e;
+        f32 direction_xy_scale = FUN_001f9dc8_208b60(G.fD20);
+        v.f[0] = c * direction_xy_scale;
+        v.f[1] = s * direction_xy_scale;
     }
     v.f[2] = -FUN_001f9de0_208b60(G.fD20);
     qcopy(&D_L00_001AEB90, &v);
