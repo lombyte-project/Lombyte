@@ -1283,7 +1283,7 @@ extern s32 FUN_L00_0025df68(void *, void *, void *, s32 *, f32 *, s32, f32, f32,
 void FUN_L01_00314e98(Camera *cam) {
     Vec4 at;
     s32 seg;
-    f32 t;
+    f32 path_fraction_or_length;
     CameraPreset *preset = D_L01_0015EF50[cam->preset].preset;
     CameraControl *control;
     CameraFocus *focus;
@@ -1342,7 +1342,7 @@ void FUN_L01_00314e98(Camera *cam) {
         look_path = D_L01_001B0930[preset->look_path];
         preset->ready = 1;
         for (i = 0; i < preset_path->count; i++) {
-            FUN_L00_0025df68(b, &preset_path->pts[i], &at, &seg, &t, 0, 20.0f, 5.0f, 0.0f);
+            FUN_L00_0025df68(b, &preset_path->pts[i], &at, &seg, &path_fraction_or_length, 0, 20.0f, 5.0f, 0.0f);
             preset_path->pts[i].f[0] = preset_path->pts[i].f[3];
             preset_path->pts[i].f[3] = seg;
         }
@@ -1353,15 +1353,15 @@ void FUN_L01_00314e98(Camera *cam) {
             if (segment_count < 0) {
                 segment_count += b->count;
             }
-            t = 0.0f;
+            path_fraction_or_length = 0.0f;
             for (k = 0; k < segment_count; k++) {
-                t += b->pts[(j + i) % b->count].f[3];
+                path_fraction_or_length += b->pts[(j + i) % b->count].f[3];
             }
-            preset_path->pts[i].f[1] = t;
+            preset_path->pts[i].f[1] = path_fraction_or_length;
             prev = i;
         }
         for (i = 0; i < look_path->count; i++) {
-            FUN_L00_0025df68(target_path, &look_path->pts[i], &at, &seg, &t, 0, 20.0f, 5.0f, 0.0f);
+            FUN_L00_0025df68(target_path, &look_path->pts[i], &at, &seg, &path_fraction_or_length, 0, 20.0f, 5.0f, 0.0f);
             look_path->pts[i].f[0] = look_path->pts[i].f[3];
             look_path->pts[i].f[3] = seg;
         }
@@ -1372,11 +1372,11 @@ void FUN_L01_00314e98(Camera *cam) {
             if (segment_count < 0) {
                 segment_count += target_path->count;
             }
-            t = 0.0f;
+            path_fraction_or_length = 0.0f;
             for (k = 0; k < segment_count; k++) {
-                t += target_path->pts[(j + i) % target_path->count].f[3];
+                path_fraction_or_length += target_path->pts[(j + i) % target_path->count].f[3];
             }
-            look_path->pts[i].f[1] = t;
+            look_path->pts[i].f[1] = path_fraction_or_length;
             prev = i;
         }
     }
