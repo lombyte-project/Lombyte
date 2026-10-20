@@ -29,20 +29,20 @@ extern short D_L00_0015F934 __attribute__((sda));
 extern short D_L00_0015F938 __attribute__((sda));
 extern short D_L00_0015F93C __attribute__((sda));
 extern short D_L00_0015F940 __attribute__((sda));
-int FUN_L00_0023a7a8(char *m) {
+int FUN_L00_0023a7a8(char *hud_element) {
     char buf[16];
-    char *q = m + 0x70;
+    char *q = hud_element + 0x70;
     int x4;
     int y = 0x12;
-    int x, a, alpha, w, text_color, tex, c1, wd, displayed_numerator;
+    int x, frame_alpha, alpha, w, text_color, tex, c1, wd, displayed_numerator;
     float f21, f20;
     if (pal_mode)
         y = 0xA;
-    x = *(int *)(m + 0x50);
-    if (*(unsigned char *)(m + 0x70) == 0)
-        return *(int *)(m + 0x58);
+    x = *(int *)(hud_element + 0x50);
+    if (*(unsigned char *)(hud_element + 0x70) == 0)
+        return *(int *)(hud_element + 0x58);
     {
-        f20 = convert_integer_to_float(*(unsigned char *)(m + 0x70));
+        f20 = convert_integer_to_float(*(unsigned char *)(hud_element + 0x70));
         f21 = f20 / convert_integer_to_float(*(int *)&D_L00_0015F91C_gp);
         if (f21 > 1.0f)
             f21 = 1.0f;
@@ -55,23 +55,23 @@ int FUN_L00_0023a7a8(char *m) {
         else if (f20 < 0.0f)
             f20 = 0.0f;
         alpha = truncate_float_to_s32(f21 * 128.0f);
-        a = truncate_float_to_s32((float)alpha * 0.7f);
-        if (*(int *)(m + 8) < 100)
+        frame_alpha = truncate_float_to_s32((float)alpha * 0.7f);
+        if (*(int *)(hud_element + 8) < 100)
             w = *(int *)&D_L00_0015F924;
         else
             w = *(int *)&D_L00_0015F928;
         x4 = x + 4;
         wd = x + truncate_float_to_s32((float)w * f21);
         draw_hud_sprite(find_valid_animation_frame_index_alt(0x7580, 1), x - 0x1C, y, 0x20, 0x20,
-                        a);
-        draw_hud_sprite(find_valid_animation_frame_index_alt(0x7580, 0), x4, y, wd, 0x20, a);
+                        frame_alpha);
+        draw_hud_sprite(find_valid_animation_frame_index_alt(0x7580, 0), x4, y, wd, 0x20, frame_alpha);
         draw_hud_sprite_flipped(find_valid_animation_frame_index_alt(0x7580, 1), x4 + wd, y, 0x20,
-                                0x20, a);
-        tex = find_valid_animation_frame_index_alt(*(int *)m, 3);
-        *(int *)(m + 0x44) = tex;
-        hud_frame(m, tex, x, y, 0, alpha);
-        displayed_numerator = *(int *)(m + 0x74);
-        sprintf_alt(buf, D_L00_0015F7C8, displayed_numerator, *(int *)(m + 8));
+                                0x20, frame_alpha);
+        tex = find_valid_animation_frame_index_alt(*(int *)hud_element, 3);
+        *(int *)(hud_element + 0x44) = tex;
+        hud_frame(hud_element, tex, x, y, 0, alpha);
+        displayed_numerator = *(int *)(hud_element + 0x74);
+        sprintf_alt(buf, D_L00_0015F7C8, displayed_numerator, *(int *)(hud_element + 8));
         if (displayed_numerator != 0)
             text_color = fast_tween_color(*(int *)&D_L00_0015F92C, *(int *)&D_L00_0015F930, f20);
         else
@@ -84,7 +84,7 @@ int FUN_L00_0023a7a8(char *m) {
         font_print_right(x + *(int *)&D_L00_0015F93C + w, y + *(int *)&D_L00_0015F940, text_color, buf,
                          -1);
     }
-    return *(int *)(m + 0x58);
+    return *(int *)(hud_element + 0x58);
 }
 typedef struct {
     unsigned short id;
