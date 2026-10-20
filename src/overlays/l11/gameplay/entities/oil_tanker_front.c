@@ -1050,23 +1050,23 @@ s32 random_integer_below(s32 arg0) __asm__("FUN_00213260");
 char *FUN_L11_00318d10(char *src, void *pos, int ticks) {
     char *mob = func_0020D348_m(0x511);
     if (mob != 0) {
-        char *d;
+        char *moby_vars;
         unsigned char *p;
         int i, k, t;
         *(short *)(mob + 0x32) = 0x40;
         *(unsigned char *)(mob + 0x30) = 0xFF;
         mob[0x31] = 1;
         *(int *)(mob + 0x2C) = 0;
-        d = *(char **)(mob + 0x78);
+        moby_vars = *(char **)(mob + 0x78);
         *(long *)(mob + 0x38) = *(long *)(src + 0x38);
         mob[0x20] = 1;
         qcopy(mob + 0x10, pos);
         qcopy(mob + 0x40, src + 0x40);
-        clear_u64_value(d);
-        *(char **)(d + 0x24) = src;
-        p = (unsigned char *)(d + 0x14);
-        *(int *)(d + 0x20) = scale_game_frames(ticks);
-        *(int *)(d + 0x28) = 5;
+        clear_u64_value(moby_vars);
+        *(char **)(moby_vars + 0x24) = src;
+        p = (unsigned char *)(moby_vars + 0x14);
+        *(int *)(moby_vars + 0x20) = scale_game_frames(ticks);
+        *(int *)(moby_vars + 0x28) = 5;
         euler_rotation_basis(mob + 0xC0, mob + 0x40);
         for (i = 0, t = 10; i < 4; i++, t += 10, p++) {
             p[-4] = random_integer_below(0xFF);
