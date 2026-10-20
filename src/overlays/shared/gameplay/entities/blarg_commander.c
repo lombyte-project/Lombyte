@@ -116,29 +116,29 @@ extern void func_L00_0025F4A8_alt(void *, void *, void *, float, float, int, int
 void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
 void blarg_commander_update(char *m) __asm__("FUN_L12_00308918");
-void blarg_commander_update(char *m) {
+void blarg_commander_update(char *moby) {
     int st;
-    char *d;
-    char *p;
+    char *moby_pvars;
+    char *motion_state;
     int r;
-    MO *mo = (MO *)m;
+    MO *mo = (MO *)moby;
     char v[16];
-    st = *(unsigned char *)(m + 0x53);
-    d = *(char **)(m + 0x78);
+    st = *(unsigned char *)(moby + 0x53);
+    moby_pvars = *(char **)(moby + 0x78);
     if (st == 1) {
-        p = d + 0x20;
-        r = mine_fall(m, p);
+        motion_state = moby_pvars + 0x20;
+        r = mine_fall(moby, motion_state);
         mo->vx = fast_add_rotations(mo->vx, frame_time * 4.3633232f);
         mo->vy = fast_add_rotations(mo->vy, frame_time * 4.3633232f);
-        *(unsigned short *)(m + 0x34) &= 0xEFFF;
+        *(unsigned short *)(moby + 0x34) &= 0xEFFF;
         if (r & 0x61) {
-            qcopy(v, m + 0x10);
+            qcopy(v, moby + 0x10);
             ((float *)v)[2] += 1.0f;
-            func_L00_0025F4A8_alt(m, p, v, 0.0f, 0.0f, 5, 2, 4, 2.0f, 1.0f, 9.0f, 1.0f, 0, 15.0f, 1,
+            func_L00_0025F4A8_alt(moby, motion_state, v, 0.0f, 0.0f, 5, 2, 4, 2.0f, 1.0f, 9.0f, 1.0f, 0, 15.0f, 1,
                                   st, -1, 0);
-            mark_moby_for_removal(m);
-        } else if (*(float *)(m + 0x18) < 5.0f) {
-            mark_moby_for_removal(m);
+            mark_moby_for_removal(moby);
+        } else if (*(float *)(moby + 0x18) < 5.0f) {
+            mark_moby_for_removal(moby);
         }
     }
 }
