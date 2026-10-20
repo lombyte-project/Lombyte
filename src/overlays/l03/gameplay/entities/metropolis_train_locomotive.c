@@ -1204,7 +1204,7 @@ void FUN_L03_0029d2e0(char *moby, void *vel_in, int flag) {
     char *data;
     char *hit;
     int idx;
-    unsigned char *e;
+    unsigned char *voice_slot_entry;
 
     data = *(char **)(moby + 0x78);
     hit = find_moby_hit(moby, 0xA30000, 0);
@@ -1283,8 +1283,8 @@ void FUN_L03_0029d2e0(char *moby, void *vel_in, int flag) {
             *(unsigned short *)(moby + 0x34) |= 0x41;
             idx = *(int *)(data + 0x150);
             if (idx != -1) {
-                e = (unsigned char *)D_0013E550_29d2e0 + idx * 0x70;
-                if (*(char **)(e + 0x88) == moby && e[0x74]) {
+                voice_slot_entry = (unsigned char *)D_0013E550_29d2e0 + idx * 0x70;
+                if (*(char **)(voice_slot_entry + 0x88) == moby && voice_slot_entry[0x74]) {
                     release_voice_slot(idx);
                 }
             }
