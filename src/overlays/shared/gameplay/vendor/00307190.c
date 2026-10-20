@@ -307,16 +307,16 @@ void FUN_L08_00307cf0(Moby *moby) {
                 D_L08_00160260 = ((Cam_3091B0 *)(D_L08_00167640_3091B0 - 0x140))->f148 - D_L08_0016235C;
                 ground_height = func_L00_002644E0_3091B0(&pt);
                 if (ground_height < ((Cam_3091B0 *)(D_L08_00167640_3091B0 - 0x140))->f148 + D_L08_00162344) {
-                    void *q;
+                    void *distance_selected_spawn_argument;
                     if (ground_height < D_L08_00160260) {
                         w = D_L08_00160260;
                     } else {
                         w = ground_height;
                     }
-                    q = 0;
-                    if (8.0f < origin_distance_xy) q = D_L08_00162358;
-                    if (flag == 0) func_L08_00273A80_3091B0(&pt, q, w, &par);
-                    if (flag == 1) func_L08_002803B8_3091B0(&pt, q, w, &par);
+                    distance_selected_spawn_argument = 0;
+                    if (8.0f < origin_distance_xy) distance_selected_spawn_argument = D_L08_00162358;
+                    if (flag == 0) func_L08_00273A80_3091B0(&pt, distance_selected_spawn_argument, w, &par);
+                    if (flag == 1) func_L08_002803B8_3091B0(&pt, distance_selected_spawn_argument, w, &par);
                 }
             } while (--cnt != 0);
         }
