@@ -1311,64 +1311,64 @@ extern void FUN_L00_0024efb0_c(void *, int, int) __asm__("FUN_L00_0024efb0");
 extern s32 D_0014C190_257218[][64] __asm__("D_0014C190");
 extern char D_L13_001F4FB0[];
 void forcefield_update(unsigned char *m) __asm__("FUN_L13_002ed4a8");
-void forcefield_update(unsigned char *m) {
+void forcefield_update(unsigned char *moby) {
     enum {
         FORCEFIELD_STATE_INITIALIZE = 0,
         FORCEFIELD_STATE_MONITOR_LINKED_MOBY = 1,
         FORCEFIELD_STATE_FADE_OUT = 2,
         FORCEFIELD_STATE_REMOVE = 3
     };
-    char *d = *(char **)(m + 0x78);
+    char *forcefield_data = *(char **)(moby + 0x78);
     int a;
-    switch (m[0x20]) {
+    switch (moby[0x20]) {
     case FORCEFIELD_STATE_INITIALIZE:
-        m[0x20] = 1;
-        m[0x23] = 0x14;
-        *(unsigned short *)(m + 0x34) |= 0xA08;
-        *(short *)(d + 0xE) = -1;
-        *(float *)(d + 4) = 1.0f;
-        glow_n(m, 0x80, 0x80, 0x80);
+        moby[0x20] = 1;
+        moby[0x23] = 0x14;
+        *(unsigned short *)(moby + 0x34) |= 0xA08;
+        *(short *)(forcefield_data + 0xE) = -1;
+        *(float *)(forcefield_data + 4) = 1.0f;
+        glow_n(moby, 0x80, 0x80, 0x80);
         break;
     case FORCEFIELD_STATE_MONITOR_LINKED_MOBY:
-        if (*(int *)d != -1) {
-            unsigned char *o = (unsigned char *)(D_L13_0015FFD8_n + (*(int *)d << 8));
-            if (o == 0 || o[0x20] == 0xFE || o[0x20] == 0xFD ||
-                (D_0014C190_257218[D_0015ED84_n][*(short *)(o + 0xB2) >> 5] >> (*(unsigned short *)(o + 0xB2) & 0x1F)) & 1) {
-                *(float *)(d + 4) = 1.0f;
-                m[0x20] = 2;
+        if (*(int *)forcefield_data != -1) {
+            unsigned char *linked_moby = (unsigned char *)(D_L13_0015FFD8_n + (*(int *)forcefield_data << 8));
+            if (linked_moby == 0 || linked_moby[0x20] == 0xFE || linked_moby[0x20] == 0xFD ||
+                (D_0014C190_257218[D_0015ED84_n][*(short *)(linked_moby + 0xB2) >> 5] >> (*(unsigned short *)(linked_moby + 0xB2) & 0x1F)) & 1) {
+                *(float *)(forcefield_data + 4) = 1.0f;
+                moby[0x20] = 2;
             }
         } else {
-            *(float *)(d + 4) = 1.0f;
-            m[0x20] = 2;
-            stub_printf(D_L13_001F4FB0, *(short *)(m + 0xA6), *(short *)(m + 0xB2));
+            *(float *)(forcefield_data + 4) = 1.0f;
+            moby[0x20] = 2;
+            stub_printf(D_L13_001F4FB0, *(short *)(moby + 0xA6), *(short *)(moby + 0xB2));
         }
-        FUN_L13_002ed158(m, d);
+        FUN_L13_002ed158(moby, forcefield_data);
         break;
     case FORCEFIELD_STATE_FADE_OUT:
-        *(float *)(d + 4) -= frame_scale * 0.05f;
-        if (*(float *)(d + 4) < 0.0f)
-            m[0x20] = 3;
+        *(float *)(forcefield_data + 4) -= frame_scale * 0.05f;
+        if (*(float *)(forcefield_data + 4) < 0.0f)
+            moby[0x20] = 3;
         else
-            m[0x23] = ftoi_n(*(float *)(d + 4) * 20.0f);
+            moby[0x23] = ftoi_n(*(float *)(forcefield_data + 4) * 20.0f);
         break;
     case FORCEFIELD_STATE_REMOVE:
-        if (*(short *)(d + 0xE) != -1) {
-            FUN_L00_0023e838(*(short *)(d + 0xE));
-            *(short *)(d + 0xE) = -1;
+        if (*(short *)(forcefield_data + 0xE) != -1) {
+            FUN_L00_0023e838(*(short *)(forcefield_data + 0xE));
+            *(short *)(forcefield_data + 0xE) = -1;
         }
-        mark_moby_for_removal(m);
+        mark_moby_for_removal(moby);
         return;
     }
     a = 0xC0;
-    *(short *)(d + 0xC) += 0xC0;
-    if (*(short *)(d + 0xC) > 0x1000) {
-        *(short *)(d + 0xC) -= 0x1000;
+    *(short *)(forcefield_data + 0xC) += 0xC0;
+    if (*(short *)(forcefield_data + 0xC) > 0x1000) {
+        *(short *)(forcefield_data + 0xC) -= 0x1000;
         a = -0xF40;
-    } else if (*(short *)(d + 0xC) < 0) {
-        *(short *)(d + 0xC) += 0x1000;
+    } else if (*(short *)(forcefield_data + 0xC) < 0) {
+        *(short *)(forcefield_data + 0xC) += 0x1000;
         a = 0x10C0;
     }
-    FUN_L00_0024efb0_c(*(void **)(m + 0x24), a, 0);
+    FUN_L00_0024efb0_c(*(void **)(moby + 0x24), a, 0);
 }
 #define NOT_SDA
 
