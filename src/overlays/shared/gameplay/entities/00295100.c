@@ -545,42 +545,42 @@ extern void normalize_vector_xyz(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 int FUN_L00_00298de8(void) {
     float m[16] __attribute__((aligned(16)));
-    OvlQuad t[1];
-    char *e = D_L00_0016C860_298de8.p54 + D_L00_0016C860_298de8.i38 * 32;
-    float *v = (float *)(e + 0x10);
-    int r = *(unsigned char *)(e + 0xC);
+    OvlQuad camera_offset[1];
+    char *camera_key = D_L00_0016C860_298de8.p54 + D_L00_0016C860_298de8.i38 * 32;
+    float *v = (float *)(camera_key + 0x10);
+    int r = *(unsigned char *)(camera_key + 0xC);
     char *x = D_L00_0016CA40_298de8;
-    char *o;
-    char *c;
+    char *camera_position;
+    char *camera_state;
     float k;
     float f = v[3];
     *(float *)(x + 0xB0) = f;
     if (D_0015EDB0_298de8)
         *(float *)(x + 0xB0) = f * D_L00_0015F59C;
     f1f2d98_298de8();
-    o = D_L00_00166C80_298de8 + 0x140;
-    qcopy(o, e);
+    camera_position = D_L00_00166C80_298de8 + 0x140;
+    qcopy(camera_position, camera_key);
     munit_298de8(m);
     mrx_298de8(m, m, v[0]);
     mry_298de8(m, m, v[1]);
     mrz_298de8(m, m, v[2]);
-    c = D_L00_00166C80_298de8;
-    *(float *)(c + 0x350) = -m[8];
-    *(float *)(c + 0x360) = -m[0];
-    *(float *)(c + 0x370) = m[4];
-    *(float *)(c + 0x354) = -m[9];
-    *(float *)(c + 0x364) = -m[1];
-    *(float *)(c + 0x374) = m[5];
-    *(float *)(c + 0x358) = -m[10];
-    *(float *)(c + 0x368) = -m[2];
-    *(float *)(c + 0x378) = m[6];
+    camera_state = D_L00_00166C80_298de8;
+    *(float *)(camera_state + 0x350) = -m[8];
+    *(float *)(camera_state + 0x360) = -m[0];
+    *(float *)(camera_state + 0x370) = m[4];
+    *(float *)(camera_state + 0x354) = -m[9];
+    *(float *)(camera_state + 0x364) = -m[1];
+    *(float *)(camera_state + 0x374) = m[5];
+    *(float *)(camera_state + 0x358) = -m[10];
+    *(float *)(camera_state + 0x368) = -m[2];
+    *(float *)(camera_state + 0x378) = m[6];
     if (D_0015EDB4_298de8)
-        cross_vectors_xyz(o + 0x220, o + 0x230, o + 0x210);
+        cross_vectors_xyz(camera_position + 0x220, camera_position + 0x230, camera_position + 0x210);
     k = D_L00_0015F5A0_298de8;
     if (D_0015EDB0_298de8b && k != 0.0f) {
-        qcopy(t, o + 0x210);
-        normalize_vector_xyz(t, t, k);
-        subtract_vector_xyz(o, o, t);
+        qcopy(camera_offset, camera_position + 0x210);
+        normalize_vector_xyz(camera_offset, camera_offset, k);
+        subtract_vector_xyz(camera_position, camera_position, camera_offset);
     }
     return r;
 }
