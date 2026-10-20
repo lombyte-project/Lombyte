@@ -921,31 +921,31 @@ void FUN_L06_002f4390(char *m) {
 
 extern void FUN_L00_00250df8(void *);
 
-void FUN_L06_002f54a0(char *a) {
-    char *data = *(char **)(a + 0x78);
-    char **p;
+void FUN_L06_002f54a0(char *moby) {
+    char *data = *(char **)(moby + 0x78);
+    char **linked_mobys;
     int i;
-    a[0xBC] = 1;
-    if (*(unsigned char *)(a + 0x20) == 6) {
-        a[0x20] = 2;
-        a[0x31] = 1;
-        *(unsigned short *)(a + 0x34) &= 0xFFFE;
+    moby[0xBC] = 1;
+    if (*(unsigned char *)(moby + 0x20) == 6) {
+        moby[0x20] = 2;
+        moby[0x31] = 1;
+        *(unsigned short *)(moby + 0x34) &= 0xFFFE;
         *(int *)(data + 0x14) = 0;
-        *(float *)(a + 0x40) =
+        *(float *)(moby + 0x40) =
             fast_subtract_rotations(*(float *)(data + 0x10), *(float *)(data + 0x14));
-        FUN_L00_00250df8(a);
-        p = (char **)(data + 0x24);
+        FUN_L00_00250df8(moby);
+        linked_mobys = (char **)(data + 0x24);
         for (i = 0; i < 7; i++) {
-            char *c = p[i];
-            char *d;
-            c[0x20] = 3;
-            d = *(char **)(c + 0x78);
-            *(unsigned short *)(p[i] + 0x34) &= 0xFFFE;
-            p[i][0x31] = 1;
-            *(int *)(d + 0x14) = 0;
-            *(float *)(p[i] + 0x40) =
-                fast_subtract_rotations(*(float *)(d + 0x10), *(float *)(d + 0x14));
-            FUN_L00_00250df8(p[i]);
+            char *linked_moby = linked_mobys[i];
+            char *linked_data;
+            linked_moby[0x20] = 3;
+            linked_data = *(char **)(linked_moby + 0x78);
+            *(unsigned short *)(linked_mobys[i] + 0x34) &= 0xFFFE;
+            linked_mobys[i][0x31] = 1;
+            *(int *)(linked_data + 0x14) = 0;
+            *(float *)(linked_mobys[i] + 0x40) =
+                fast_subtract_rotations(*(float *)(linked_data + 0x10), *(float *)(linked_data + 0x14));
+            FUN_L00_00250df8(linked_mobys[i]);
         }
     }
 }
