@@ -393,7 +393,7 @@ void FUN_L11_0030dd18(struct Moby *m);
 
 /* Spawns the 4x6 child grid, waits for its linked moby, then fades and blends between two D_L11_001600EC
    points (pos at 0x30, rotation at 0x70) before handing back to the hero. */
-void FUN_L11_0030d800(struct Moby *m) {
+void FUN_L11_0030d800(struct Moby *grid_controller) {
     enum {
         CHILD_GRID_STATE_CREATE_CHILDREN = 0,
         CHILD_GRID_STATE_WAIT_LINK_COMMAND = 1,
@@ -402,14 +402,14 @@ void FUN_L11_0030d800(struct Moby *m) {
         CHILD_GRID_STATE_FADE_TO_HERO_POSE = 4,
         CHILD_GRID_STATE_IDLE = 5
     };
-    GridVars_d800 *pv = (GridVars_d800 *)m->pvars;
+    GridVars_d800 *pv = (GridVars_d800 *)grid_controller->pvars;
     Vec4f pos;
     Vec4f rot;
     int row;
     int col;
     float old;
 
-    switch (m->state) {
+    switch (grid_controller->state) {
     case CHILD_GRID_STATE_CREATE_CHILDREN:
         for (row = 0; row < 4; row++) {
             for (col = 0; col < 6; col++) {
@@ -417,24 +417,24 @@ void FUN_L11_0030d800(struct Moby *m) {
                 pv->grid[row][col]->draw_dist = 0x40;
                 pv->grid[row][col]->visible = 1;
                 pv->grid[row][col]->spawn_frame = hero.moby->spawn_frame;
-                pv->grid[row][col]->flags = m->flags;
-                qcopy_nc(&pv->grid[row][col]->pos, &m->pos);
-                qcopy(&pv->grid[row][col]->rot, &m->rot);
+                pv->grid[row][col]->flags = grid_controller->flags;
+                qcopy_nc(&pv->grid[row][col]->pos, &grid_controller->pos);
+                qcopy(&pv->grid[row][col]->rot, &grid_controller->rot);
             }
         }
         pv->t = 0.0f;
-        m->state = 1;
+        grid_controller->state = 1;
         break;
     case CHILD_GRID_STATE_WAIT_LINK_COMMAND: {
         struct Moby *link = (struct Moby *)((pv->link << 8) + D_L11_0015FFD8_d800);
         if (link->command == 1) {
-            m->state = 2;
+            grid_controller->state = 2;
             pv->fade = -1.0f;
             D_L11_00161F54 = 0;
-            FUN_0022da68_d800(0, 0, m);
+            FUN_0022da68_d800(0, 0, grid_controller);
         } else if (link->command == 2) {
             pv->t = 1.0f;
-            m->state = 5;
+            grid_controller->state = 5;
         }
         break;
     }
@@ -449,7 +449,7 @@ void FUN_L11_0030d800(struct Moby *m) {
             cam = (char *)(D_L11_001600EC_d800 + (pv->from << 7));
             jet_mount(cam + 0x30, cam + 0x70, 1, 0, 0);
         } else if (1.0f <= pv->fade) {
-            m->state = 3;
+            grid_controller->state = 3;
         }
         break;
     case CHILD_GRID_STATE_BLEND_POINT_POSES:
@@ -471,7 +471,7 @@ void FUN_L11_0030d800(struct Moby *m) {
         FUN_L00_002ea9d8(&pos);
         FUN_L00_002eaa30(&rot);
         if (1.0f <= pv->t) {
-            m->state = 4;
+            grid_controller->state = 4;
             pv->fade = -1.0f;
         }
         break;
@@ -483,13 +483,13 @@ void FUN_L11_0030d800(struct Moby *m) {
             FUN_L00_00216f90(&hero.motion.pos, &hero.motion.rot, 0, 1);
             FUN_L00_002eac18(3);
         } else if (1.0f <= pv->fade) {
-            m->state = 5;
+            grid_controller->state = 5;
         }
         break;
     case CHILD_GRID_STATE_IDLE:
         break;
     }
-    FUN_L11_0030dd18(m);
+    FUN_L11_0030dd18(grid_controller);
 }
 extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
