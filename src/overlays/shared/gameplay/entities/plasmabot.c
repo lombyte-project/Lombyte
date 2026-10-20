@@ -1765,7 +1765,7 @@ void FUN_L14_002e03b8(Moby *moby) {
     Particle_2E17B8 *spawned_particle;
     ParticleFade_2E17B8 *fade;
     int i;
-    int n;
+    int signed_particle_variation;
     int color_intensity;
     int alpha;
     float size;
@@ -1819,14 +1819,14 @@ void FUN_L14_002e03b8(Moby *moby) {
     }
     func_L00_0026DA50_2E17B8(&pos, &vel, 0x4F007FFF, 0x1FFFFFFF,
                              func_L00_00258BC8_2E17B8(func_001F9850_2E17B8(10), func_001F9850_2E17B8(20)), 1, 60000.0f);
-    n = func_002140B0_2E17B8(6);
+    signed_particle_variation = func_002140B0_2E17B8(6);
     if (func_002140B0_2E17B8(2) != 0) {
-        n = -n;
+        signed_particle_variation = -signed_particle_variation;
     }
     size = func_002140F8_2E17B8(60000.0f, 140000.0f);
     color_intensity = func_L00_00258BC8_2E17B8(0x30, 0xFF);
     alpha = 0x60000000;
-    spawned_particle = func_L00_0026DEA0_2E17B8(&pos, 0.025f, 1.0f, 1.0f, n, &vel, size, color_intensity | ((color_intensity << 16) | ((color_intensity << 8) | alpha)));
+    spawned_particle = func_L00_0026DEA0_2E17B8(&pos, 0.025f, 1.0f, 1.0f, signed_particle_variation, &vel, size, color_intensity | ((color_intensity << 16) | ((color_intensity << 8) | alpha)));
     if (spawned_particle != 0) {
         ParticleFade_2E17B8 *ef;
         ef = &spawned_particle->fade;
