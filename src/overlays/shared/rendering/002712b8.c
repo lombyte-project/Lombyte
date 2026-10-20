@@ -1753,46 +1753,46 @@ extern void FUN_001f9a10_275320(void *, void *, void *) __asm__("FUN_001f9a10");
 extern float ground_height_at(void *) __asm__("FUN_L00_00263468");
 extern void FUN_L00_002634f8_275320(void *) __asm__("FUN_L00_002634f8");
 
-void FUN_L00_00275320(O_275320 *o) {
+void FUN_L00_00275320(O_275320 *particle) {
     V_275320 tmp;
     V_275320 ground_probe_position;
     V_275320 ground_recheck_position;
-    V_275320 *vel = &o->vel;
-    float h;
+    V_275320 *vel = &particle->vel;
+    float ground_height_threshold;
     int ix;
     int iy;
     V_275320 *p;
 
-    h = vel->f[3];
-    if (o->pos.f[0] < 0.0f || o->pos.f[1] < 0.0f || 512.0f < o->pos.f[0] || 512.0f < o->pos.f[1]) {
-        free_effect_particle(o);
+    ground_height_threshold = vel->f[3];
+    if (particle->pos.f[0] < 0.0f || particle->pos.f[1] < 0.0f || 512.0f < particle->pos.f[0] || 512.0f < particle->pos.f[1]) {
+        free_effect_particle(particle);
         return;
     }
-    if (o->pos.f[2] < h) {
-        tmp.q = o->pos.q;
+    if (particle->pos.f[2] < ground_height_threshold) {
+        tmp.q = particle->pos.q;
         FUN_L00_002634f8_275320(&tmp);
-        free_effect_particle(o);
+        free_effect_particle(particle);
         return;
     }
-    tmp.q = o->vel.q;
-    ix = o->pos.f[0];
-    iy = o->pos.f[1];
+    tmp.q = particle->vel.q;
+    ix = particle->pos.f[0];
+    iy = particle->pos.f[1];
     tmp.f[3] = 0.0f;
-    FUN_001f9a10_275320(&o->pos, &o->pos, &tmp);
-    FUN_001f9a10_275320(&o->pos, &o->pos, particle_drift);
-    if (ix != (int)o->pos.f[0] || iy != (int)o->pos.f[1]) {
-        ground_probe_position.q = o->pos.q;
-        h = ground_height_at(&ground_probe_position);
-        if (h < particle_min_ground) {
-            h = particle_min_ground;
+    FUN_001f9a10_275320(&particle->pos, &particle->pos, &tmp);
+    FUN_001f9a10_275320(&particle->pos, &particle->pos, particle_drift);
+    if (ix != (int)particle->pos.f[0] || iy != (int)particle->pos.f[1]) {
+        ground_probe_position.q = particle->pos.q;
+        ground_height_threshold = ground_height_at(&ground_probe_position);
+        if (ground_height_threshold < particle_min_ground) {
+            ground_height_threshold = particle_min_ground;
         } else {
-            ground_recheck_position.q = o->pos.q;
-            h = ground_height_at(&ground_recheck_position);
+            ground_recheck_position.q = particle->pos.q;
+            ground_height_threshold = ground_height_at(&ground_recheck_position);
         }
-        if (o->pos.f[2] < h) {
-            ground_probe_position.q = o->pos.q;
+        if (particle->pos.f[2] < ground_height_threshold) {
+            ground_probe_position.q = particle->pos.q;
             FUN_L00_002634f8_275320(&ground_probe_position);
-            free_effect_particle(o);
+            free_effect_particle(particle);
             return;
         }
     }
@@ -1801,7 +1801,7 @@ void FUN_L00_00275320(O_275320 *o) {
     tmp.f[3] = 0.0f;
     tmp.f[2] = -(frame_time_sq * 0.5f);
     FUN_001f9a10_275320(vel, &tmp, vel);
-    vel->f[3] = h + particle_clearance;
+    vel->f[3] = ground_height_threshold + particle_clearance;
 }
 
 #define NOT_SDA
