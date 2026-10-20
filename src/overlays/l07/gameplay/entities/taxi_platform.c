@@ -40,35 +40,35 @@ extern void make_hit_descriptor(char *arg, int a, int b, void *src, float scale)
 void blend_moby_animation_u(MobyAnim *moby, int new_seq, int frame_index, int blend_frames) __asm__("FUN_00212f90");
 
 unsigned char *FUN_L07_0030b538(void *pos, float *dir, int a, int b) {
-    unsigned char *m = func_0020D348_m(0x370);
-    if (m) {
-        char *d;
+    unsigned char *spawned_moby = func_0020D348_m(0x370);
+    if (spawned_moby) {
+        char *moby_data;
         float V[4];
-        m[0x30] = 0xFF;
-        *(short *)(m + 0x32) = 0x7F;
-        m[0x31] = 1;
-        *(int *)(m + 0x40) = 0;
-        d = *(char **)(m + 0x78);
-        *(float *)(m + 0x44) = -fast_arc_tan(vector_length_xy(dir), dir[2]);
-        *(float *)(m + 0x48) = fast_arc_tan(dir[0], dir[1]);
-        qcopy(m + 0x10, pos);
-        qcopy(d + 0x40, pos);
-        qcopy(d + 0x30, dir);
-        qcopy(V, d + 0x30);
+        spawned_moby[0x30] = 0xFF;
+        *(short *)(spawned_moby + 0x32) = 0x7F;
+        spawned_moby[0x31] = 1;
+        *(int *)(spawned_moby + 0x40) = 0;
+        moby_data = *(char **)(spawned_moby + 0x78);
+        *(float *)(spawned_moby + 0x44) = -fast_arc_tan(vector_length_xy(dir), dir[2]);
+        *(float *)(spawned_moby + 0x48) = fast_arc_tan(dir[0], dir[1]);
+        qcopy(spawned_moby + 0x10, pos);
+        qcopy(moby_data + 0x40, pos);
+        qcopy(moby_data + 0x30, dir);
+        qcopy(V, moby_data + 0x30);
         V[2] = 0.0f;
         set_vector_length_xy(V, V, 1.0f);
         V[2] = 1.0f;
-        make_hit_descriptor(d, (int)m, 0x10001, V, 1.0f);
-        d[0x18] = 1;
-        d[0x19] = 1;
-        blend_moby_animation_u(m, 1, 0, scale_game_frames(5));
-        *(short *)(m + 0x34) = 0x208;
-        *(int *)(d + 0x50) = a;
-        *(int *)(d + 0x54) = b;
-        m[0x23] = 0x10;
-        FUN_L00_00250df8(m);
+        make_hit_descriptor(moby_data, (int)spawned_moby, 0x10001, V, 1.0f);
+        moby_data[0x18] = 1;
+        moby_data[0x19] = 1;
+        blend_moby_animation_u(spawned_moby, 1, 0, scale_game_frames(5));
+        *(short *)(spawned_moby + 0x34) = 0x208;
+        *(int *)(moby_data + 0x50) = a;
+        *(int *)(moby_data + 0x54) = b;
+        spawned_moby[0x23] = 0x10;
+        FUN_L00_00250df8(spawned_moby);
     }
-    return m;
+    return spawned_moby;
 }
 /* spawns a moby with random velocity and copies position */
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_002CE470.c: func_L07_0030CE70), where it is exact; names translated to the US level program. */
