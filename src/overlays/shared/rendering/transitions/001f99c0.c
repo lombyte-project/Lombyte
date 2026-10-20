@@ -17,10 +17,10 @@ extern void FUN_L00_002a0f18(void *, int, int);
 void vu1_init_chain(void) __asm__("FUN_002335d0");
 
 /* Calls 002a09d8(1), waits for vsync, counts a frame, starts the VU1 chain, calls 002a0f18. */
-void FUN_L00_001f99c0(void *a) {
+void FUN_L00_001f99c0(void *destination) {
     FUN_L00_002a09d8(1);
     sceGsSyncV(0);
     D_L00_0015F3F8 = D_L00_0015F3F8 + 1;
     vu1_init_chain();
-    FUN_L00_002a0f18(a, draw_buffer_address, *(int *)((char *)D_0013E05A + 0x4AA) << 11);
+    FUN_L00_002a0f18(destination, draw_buffer_address, *(int *)((char *)D_0013E05A + 0x4AA) << 11);
 }
