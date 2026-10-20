@@ -3505,11 +3505,11 @@ extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8")
 extern void FUN_L13_002ea330_c(char *a, char *b, float f) __asm__("FUN_L13_002ea330");
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 
-unsigned char *FUN_L13_002ea6b8(char *a, char *b) {
+unsigned char *FUN_L13_002ea6b8(char *firing_moby, char *b) {
     float spawn_position[4], projectile_velocity[4], predicted_target_position[4], scratch_vector[4], random_velocity_offset[4];
     struct Hero *x;
     unsigned char *r;
-    moby_point_position(a, 0xE, spawn_position);
+    moby_point_position(firing_moby, 0xE, spawn_position);
     x = &hero;
     if (((char *)x->ship_moby) != 0 && *(short *)(((char *)x->ship_moby) + 0xA6) == 0x45) {
         FUN_L13_002ea330_c((char *)predicted_target_position, (char *)spawn_position, frame_time * 20.0f);
@@ -3527,8 +3527,8 @@ unsigned char *FUN_L13_002ea6b8(char *a, char *b) {
         random_vector(projectile_velocity, frame_time * 0.0f, frame_time * 30.0f);
     }
     add_vector_xyz(projectile_velocity, projectile_velocity, b + 0x70);
-    r = FUN_L13_002c1f28_c(a, (char *)spawn_position, (char *)projectile_velocity);
+    r = FUN_L13_002c1f28_c(firing_moby, (char *)spawn_position, (char *)projectile_velocity);
     if (r)
-        allocate_voice_for_target_entry(3, 0, (int)a);
+        allocate_voice_for_target_entry(3, 0, (int)firing_moby);
     return r;
 }
