@@ -1795,10 +1795,10 @@ void FUN_L00_0029b680(void) {
     *(int *)(P.p20 + 0x194) = 0;
     FUN_001f9a10_29b680(v, &D_L00_00161090, D_L00_001C8920[P.ent[P.i58].k]);
     if (P.ent[P.i58].f == 0) {
-        float h = D_L00_001C8920[P.ent[P.i58].k][3];
-        v[2] += h;
+        float item_z_offset = D_L00_001C8920[P.ent[P.i58].k][3];
+        v[2] += item_z_offset;
         if (discount_purchase_pricing) {
-            v[2] += h;
+            v[2] += item_z_offset;
         }
     }
     FUN_001f9cf8_29b680(P.p20 + 0x110, v, P.p1C + 0xC0);
