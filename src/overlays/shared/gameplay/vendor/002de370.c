@@ -104,16 +104,16 @@ void FUN_L03_002e8730(char *m) {
     char *data = *(char **)(m + 0x70);
     float *height = (float *)(data + 0x10);
     char *result;
-    float angle, t;
+    float angle, rotation_scale;
     qcopy(position, hero.motion.pos.f);
     position[2] += height[19];
     result = m + 0x40;
     subtract_vector_xyz(direction, position, m + 0x30);
     normalize_vector_xyz(direction, direction, 1.0f);
     angle = approximate_arcsine(dot_vectors_xyz(direction, m));
-    t = rope_spring_turn(data, 0.0f, 1.57079637f - angle, *(float *)(data + 4),
+    rotation_scale = rope_spring_turn(data, 0.0f, 1.57079637f - angle, *(float *)(data + 4),
                          *(float *)(data + 8), *(float *)(data + 12));
-    FUN_L03_0024e6f8(t, (float *)m, (float *)result, direction, 1);
+    FUN_L03_0024e6f8(rotation_scale, (float *)m, (float *)result, direction, 1);
     normalize_vector_xyz(result, m, 1.0f);
     qcopy(m, result);
     cross_vectors_xyz(m + 0x10, m, D_L03_00166F30);
