@@ -301,7 +301,7 @@ void crate_drop_bolts(u8 *crate_moby) {
         CRATE_DROP_AUTO_SELECT = 0,
         CRATE_DROP_FALLBACK_ITEM = 1
     };
-    T_2d0538 tmp;
+    T_2d0538 unused_global_copy;
     V_2d0538 trajectory_vector, adjusted_position, scratch_vector;
     s32 drop_type_or_skip_spawn;
     f32 f54, f58;
@@ -312,7 +312,7 @@ void crate_drop_bolts(u8 *crate_moby) {
 
     b = *(u8 **)(crate_moby + 0x78);
     crate_class = *(s16 *)(crate_moby + 0xA6);
-    tmp = D_L00_001E9E30;
+    unused_global_copy = D_L00_001E9E30;
     drop_type_or_skip_spawn = *(s16 *)(b + 0xC6) == 0;
     if (crate_class == 0x1F5)
         drop_type_or_skip_spawn = 0;
