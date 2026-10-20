@@ -184,16 +184,16 @@ extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 void FUN_L15_002007d8(void) {
     struct Hero *base = &hero;
     if (base->state.current == 0x6B && base->unk8BC == 0) {
-        char *m;
+        char *position_target;
         float v[4];
         float w[16];
         FUN_L00_00262b00(1.1f, frame_time * 5.2359877f, ((char *)base->moby),
                          (float *)(&base->unk6A8), (float *)(&base->unk6AC));
-        m = ((char *)base->unk86C);
-        if (m != 0) {
+        position_target = ((char *)base->unk86C);
+        if (position_target != 0) {
             char *cam;
             cam = ((char *)base->moby);
-            qcopy(m + 0x10, cam + 0x10);
+            qcopy(position_target + 0x10, cam + 0x10);
             *(u128 *)v = 0;
             v[2] = 0.21f;
             transform_vector_by_basis(v, v, cam + 0xC0);
