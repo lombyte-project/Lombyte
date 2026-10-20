@@ -146,6 +146,7 @@ int r1_repeat_timer __asm__("D_L08_0015F678") = 0;
 void FUN_L08_002370d8(void) {
     enum {
         HERO_STATE_DOUBLE_JUMP = 14,
+        HERO_STATE_ITEM_BUTTON_HOLD = 23,
         HERO_STATE_LEDGE_HANG_ENTRY = 24,
         HERO_STATE_LEDGE_HANG = 25,
         HERO_STATE_LEDGE_SHIMMY_POSITIVE_YAW_OFFSET = 26,
@@ -683,7 +684,7 @@ void FUN_L08_002370d8(void) {
                         }
                     }
                     break;
-                case 23:
+                case HERO_STATE_ITEM_BUTTON_HOLD:
                     if (controller_state.held & hero.items[0].button_mask) {
                         break;
                     }
