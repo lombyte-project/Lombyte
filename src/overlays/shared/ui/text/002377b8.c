@@ -936,7 +936,7 @@ extern s32 D_L00_0015F7F8[1] __attribute__((sda));
 extern Pt D_L00_0017E478[];
 extern Pt D_L00_0017E460[];
 
-s32 FUN_L00_00239810(Hud *m) {
+s32 FUN_L00_00239810(Hud *hud_element) {
     s32 x;
     s32 y;
     s32 cnt;
@@ -948,7 +948,7 @@ s32 FUN_L00_00239810(Hud *m) {
     s32 sel;
     Pt *tab;
     s32 mode;
-    s32 a;
+    s32 first_panel_half_width;
     s32 b;
     s32 x0;
     s32 yy;
@@ -957,34 +957,34 @@ s32 FUN_L00_00239810(Hud *m) {
     s32 i;
     s32 r;
     Pt *e;
-    u8 *q;
+    u8 *visibility_counters;
 
     if (hero.vehicle_mode == 2)
         goto out;
     if (hero.state.current == 0x32)
         goto out;
-    x = m->x;
+    x = hud_element->x;
     if (pal_mode != 0)
         y = D_L00_0015F808 + 10;
     else
         y = D_L00_0015F808 + 0x12;
-    cnt = m->cnt;
-    q = m->ab;
-    if (q[0] == 0)
+    cnt = hud_element->cnt;
+    visibility_counters = hud_element->ab;
+    if (visibility_counters[0] == 0)
         goto out;
-    ratio_x = convert_integer_to_float(q[0]) / convert_integer_to_float(D_L00_0015F7F0_gp);
+    ratio_x = convert_integer_to_float(visibility_counters[0]) / convert_integer_to_float(D_L00_0015F7F0_gp);
     if (1.0f < ratio_x)
         ratio_x = 1.0f;
     else if (ratio_x < 0.0f)
         ratio_x = 0.0f;
-    ratio_y = convert_integer_to_float(q[1]) / convert_integer_to_float(D_L00_0015F7F0_gp);
+    ratio_y = convert_integer_to_float(visibility_counters[1]) / convert_integer_to_float(D_L00_0015F7F0_gp);
     if (1.0f < ratio_y)
         ratio_y = 1.0f;
     else if (ratio_y < 0.0f)
         ratio_y = 0.0f;
     alpha = truncate_float_to_s32(ratio_y * 128.0f);
     w = truncate_float_to_s32((f32)D_L00_0015F820 * ratio_x);
-    p = m->p;
+    p = hud_element->p;
     sel = p[0] >> 1;
     mode = hero_max_health;
     if (cnt == 0)
@@ -993,23 +993,23 @@ s32 FUN_L00_00239810(Hud *m) {
         mode = hero.health.unk22AC;
     if (mode == 8) {
         tab = D_L00_0017E478;
-        a = truncate_float_to_s32(ratio_x * 48.0f);
+        first_panel_half_width = truncate_float_to_s32(ratio_x * 48.0f);
         b = truncate_float_to_s32(ratio_x * 48.0f);
     } else if (mode == 5) {
         tab = D_L00_0017E460;
-        a = truncate_float_to_s32(ratio_x * 32.0f);
+        first_panel_half_width = truncate_float_to_s32(ratio_x * 32.0f);
         b = truncate_float_to_s32(ratio_x * 16.0f);
     } else {
         b = 0;
         tab = (Pt *)D_L00_0015F7F8;
-        a = truncate_float_to_s32(ratio_x * 48.0f);
+        first_panel_half_width = truncate_float_to_s32(ratio_x * 48.0f);
     }
     yy = y + D_L00_0015F810;
     h1 = FUN_001ff960_c(0x7580, 1);
     h2 = FUN_001ff960_c(0x7580, 0);
-    draw_hud_sprite_flipped(h1, x + a, yy, D_L00_0015F81C, D_L00_0015F81C, w);
-    FUN_001ffc30_c(h2, x - a, yy, a * 2, D_L00_0015F81C, w);
-    FUN_001ffc30_c(h1, x - a - D_L00_0015F81C, yy, D_L00_0015F81C, D_L00_0015F81C, w);
+    draw_hud_sprite_flipped(h1, x + first_panel_half_width, yy, D_L00_0015F81C, D_L00_0015F81C, w);
+    FUN_001ffc30_c(h2, x - first_panel_half_width, yy, first_panel_half_width * 2, D_L00_0015F81C, w);
+    FUN_001ffc30_c(h1, x - first_panel_half_width - D_L00_0015F81C, yy, D_L00_0015F81C, D_L00_0015F81C, w);
     if (b != 0) {
         yy += D_L00_0015F80C;
         draw_hud_sprite_flipped(h1, x + b, yy, D_L00_0015F81C, D_L00_0015F81C, w);
@@ -1019,10 +1019,10 @@ s32 FUN_L00_00239810(Hud *m) {
     }
     for (i = 0; i < mode; i++) {
         r = FUN_001ff960_c(0x7536, sel);
-        FUN_L00_0023b120_c(m, r, x + tab[i].x, y + tab[i].y, 1, alpha);
+        FUN_L00_0023b120_c(hud_element, r, x + tab[i].x, y + tab[i].y, 1, alpha);
         if (sel != 0x1E) {
             r = FUN_001ff960_c(0x7536, 0x1E);
-            FUN_L00_0023b120_c(m, r, x + tab[i].x, y + tab[i].y, 1, alpha);
+            FUN_L00_0023b120_c(hud_element, r, x + tab[i].x, y + tab[i].y, 1, alpha);
             r = FUN_001ff960_c(0x7536, 0x1F);
             FUN_001ffc30_c(r, x + tab[i].x + 0xE, y + tab[i].y - 0x11, 0x22, 0x22,
                            truncate_float_to_s32((f32)(p[1] >> 4) * ratio_y));
@@ -1033,7 +1033,7 @@ s32 FUN_L00_00239810(Hud *m) {
         }
     }
 out:
-    return m->ret;
+    return hud_element->ret;
 }
 #define NOT_SDA
 
