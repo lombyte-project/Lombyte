@@ -1230,57 +1230,57 @@ extern void FUN_L00_00208038_c(void *, int, float, float) __asm__("FUN_L00_00208
 extern void fcb10_207430(void *, int, void *) __asm__("FUN_0020cb10");
 
 extern float D_0015EE18_gp __attribute__((sda));
-void FUN_L00_00207430(char *o) {
+void FUN_L00_00207430(char *moby) {
     union {
         OvlQuad q;
         float f[4];
     } v;
     int k, r, g;
-    float f, c, s;
-    unsigned char *t;
+    float f, glow_wave, red_blue_swing;
+    unsigned char *manipulator;
 
-    *(unsigned short *)(o + 0x34) |= 0x10;
+    *(unsigned short *)(moby + 0x34) |= 0x10;
     k = fr_207430(100);
     f = convert_integer_to_float(k);
-    c = fast_sin((float)(D_15F5CC_207430 % k) / f * 2.0f * 3.1415927f + -3.1415927f);
-    s = c * 24.0f;
-    r = f2i_207430(s);
-    g = f2i_207430(c * 52.0f);
+    glow_wave = fast_sin((float)(D_15F5CC_207430 % k) / f * 2.0f * 3.1415927f + -3.1415927f);
+    red_blue_swing = glow_wave * 24.0f;
+    r = f2i_207430(red_blue_swing);
+    g = f2i_207430(glow_wave * 52.0f);
     {
-        int w = ((f2i_207430(s) + 0x4C) << 16) | 0x80000000;
+        int w = ((f2i_207430(red_blue_swing) + 0x4C) << 16) | 0x80000000;
         w |= (g + 0xA2) << 8;
         w |= r + 0x44;
-        *(int *)(o + 0x90) = w;
+        *(int *)(moby + 0x90) = w;
     }
-    if (*(short *)(o + 0xA6) == 0x1A3) {
-        f4f7c8_207430(o, 6, &v);
+    if (*(short *)(moby + 0xA6) == 0x1A3) {
+        f4f7c8_207430(moby, 6, &v);
         v.f[2] -= 0.07f;
-        if (2.0f < fabs_207430(*(float *)(o + 0x18) - v.f[2])) {
+        if (2.0f < fabs_207430(*(float *)(moby + 0x18) - v.f[2])) {
             FUN_L00_00208038_c(&v, 0x200000C0, 0.25f, 0.15f);
         }
     } else {
-        f4f7c8_207430(o, 1, &v);
+        f4f7c8_207430(moby, 1, &v);
         v.f[2] -= 0.00700000022f;
         FUN_L00_00208038_c(&v, 0x200000C0, 0.0469999984f, 0.15f);
     }
-    t = D_17C380_207430;
-    if (*(short *)(o + 0xA6) == 0x1A3) {
-        t = D_17C3C0_207430;
-    } else if (*(short *)(o + 0xA6) == 0x555) {
-        t = D_17C400_207430;
+    manipulator = D_17C380_207430;
+    if (*(short *)(moby + 0xA6) == 0x1A3) {
+        manipulator = D_17C3C0_207430;
+    } else if (*(short *)(moby + 0xA6) == 0x555) {
+        manipulator = D_17C400_207430;
     }
-    if (*(unsigned char *)0x15EDB3 && t[1] == 0) {
+    if (*(unsigned char *)0x15EDB3 && manipulator[1] == 0) {
         float x;
-        if (*(short *)(o + 0xA6) == 0x1A3) {
-            fcb10_207430(o, 1, t);
+        if (*(short *)(moby + 0xA6) == 0x1A3) {
+            fcb10_207430(moby, 1, manipulator);
             x = D_0015EE18_gp;
         } else {
-            fcb10_207430(o, 2, t);
+            fcb10_207430(moby, 2, manipulator);
             x = D_0015EE18;
         }
-        *(float *)(t + 0x20) = x;
-        *(float *)(t + 0x24) = x;
-        *(float *)(t + 0x28) = x;
+        *(float *)(manipulator + 0x20) = x;
+        *(float *)(manipulator + 0x24) = x;
+        *(float *)(manipulator + 0x28) = x;
     }
 }
 extern void glow_n(void *, int, int, int) __asm__("FUN_L00_002502f0");
