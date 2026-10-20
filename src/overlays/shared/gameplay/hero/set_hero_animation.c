@@ -24,22 +24,22 @@ void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__(
 
 void FUN_L00_00231d08(void) {
     struct Hero *base = &hero;
-    char *a = ((char *)base->items[3].moby);
+    char *slot3_moby = ((char *)base->items[3].moby);
     char *b = ((char *)base->items[3].moby2);
     int buf[2];
     int seq;
 
-    if (a == 0 || b == 0) {
+    if (slot3_moby == 0 || b == 0) {
         return;
     }
-    if (*(unsigned char *)(a + 0x53) != 1) {
+    if (*(unsigned char *)(slot3_moby + 0x53) != 1) {
         return;
     }
     if (FUN_L00_00231ff8(0, &buf[0], &buf[1]) == 0) {
         return;
     }
     seq = buf[0];
-    blend_moby_animation(a, seq, 0, scale_game_frames(7));
+    blend_moby_animation(slot3_moby, seq, 0, scale_game_frames(7));
     seq = buf[1];
     blend_moby_animation(b, seq, 0, scale_game_frames(7));
 }
