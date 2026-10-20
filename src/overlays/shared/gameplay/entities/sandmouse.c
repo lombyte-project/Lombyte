@@ -1962,15 +1962,15 @@ void FUN_L01_0031a128(int *moby) {
             return;
         }
         if (music_trigger_data[2] != 0) {
-            short *s = (short *)music_trigger_data;
-            if (s[7] == -1)
-                s[7] = s[6];
-            if (s[6] == -1)
-                s[6] = s[7];
+            short *music_trigger_halfwords = (short *)music_trigger_data;
+            if (music_trigger_halfwords[7] == -1)
+                music_trigger_halfwords[7] = music_trigger_halfwords[6];
+            if (music_trigger_halfwords[6] == -1)
+                music_trigger_halfwords[6] = music_trigger_halfwords[7];
             if (v[4] > 0) {
-                jet_game_state(music_trigger_data[1], s[7]);
+                jet_game_state(music_trigger_data[1], music_trigger_halfwords[7]);
             } else {
-                jet_game_state(music_trigger_data[0], s[6]);
+                jet_game_state(music_trigger_data[0], music_trigger_halfwords[6]);
             }
             music_trigger_data[2] = 0;
         }
