@@ -606,9 +606,9 @@ void FUN_L01_002fb4b8(void) {
 
     if (cutscene_mode == 2 && D_0015EDB0 != 0) {
         for (i = 0; i < D_L01_0016CCE0.count; i++) {
-            int t = D_L01_0016CCE0.list[i]->type;
+            int moby_type = D_L01_0016CCE0.list[i]->type;
 
-            if ((t == 0x398 || t == 0x1BF) && D_L01_0017C8C0.active == 0) {
+            if ((moby_type == 0x398 || moby_type == 0x1BF) && D_L01_0017C8C0.active == 0) {
                 attach_manipulator(D_L01_0016CCE0.list[i], 0, &D_L01_0017C8C0);
                 D_L01_0017C8C0.z = D_L01_0017C8C0.y = D_L01_0017C8C0.x = 2.1f;
             }
