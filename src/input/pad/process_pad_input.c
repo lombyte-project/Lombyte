@@ -50,15 +50,15 @@ extern float convert_integer_to_float(s32) __asm__("func_001FA6C0");
 
 void process_pad_input(Pad *p, u8 *buf, s32 len) __asm__("FUN_00217328");
 
-void process_pad_input(Pad *p, u8 *buf, s32 len) {
+void process_pad_input(Pad *pad_state, u8 *buf, s32 len) {
     float v[2];
     s32 i, j, k;
     s32 cur, old, ncur, nold;
     float mag, ang;
 
-    p->raw = p->held = ((buf[0] << 8) | buf[1]) ^ 0xFFFF;
+    pad_state->raw = pad_state->held = ((buf[0] << 8) | buf[1]) ^ 0xFFFF;
     for (i = 15; i >= 0; i--) {
-        p->axes[i] = 0;
+        pad_state->axes[i] = 0;
     }
     if (len >= 6) {
         for (i = 0; i < 4; i++) {
@@ -67,122 +67,122 @@ void process_pad_input(Pad *p, u8 *buf, s32 len) {
                 axis_center_distance = -axis_center_distance;
             if (axis_center_distance >= 0x30) {
                 float scaled_axis_magnitude = convert_integer_to_float(axis_center_distance - 0x30) / convert_integer_to_float(0x4C);
-                p->axes[i] = scaled_axis_magnitude;
+                pad_state->axes[i] = scaled_axis_magnitude;
                 if (scaled_axis_magnitude > 1.0f) {
-                    p->axes[i] = 1.0f;
+                    pad_state->axes[i] = 1.0f;
                 }
                 if (buf[i + 2] < 0x7F) {
-                    p->axes[i] = -p->axes[i];
+                    pad_state->axes[i] = -pad_state->axes[i];
                 }
             }
         }
     }
     if (len >= 0x12) {
         for (i = 4; i < 16; i++) {
-            p->axes[i] = convert_integer_to_float(buf[i + 2]) * 0.003921569f;
+            pad_state->axes[i] = convert_integer_to_float(buf[i + 2]) * 0.003921569f;
         }
     }
     if (D_0015EDB4) {
-        p->axes[2] = -p->axes[2];
-        p->axes[0] = -p->axes[0];
-        SWAPLR(p->held);
-        p->raw = p->held;
+        pad_state->axes[2] = -pad_state->axes[2];
+        pad_state->axes[0] = -pad_state->axes[0];
+        SWAPLR(pad_state->held);
+        pad_state->raw = pad_state->held;
     }
     {
-        float *dst = p->prev, *src = p->axes;
+        float *dst = pad_state->prev, *src = pad_state->axes;
         for (i = 15; i >= 0; i--) {
             *dst++ = *src++;
         }
     }
-    if (((volatile float *)p->axes)[2] != 0.0f || ((volatile float *)p->axes)[3] != 0.0f) {
-        p->moving = 1;
+    if (((volatile float *)pad_state->axes)[2] != 0.0f || ((volatile float *)pad_state->axes)[3] != 0.0f) {
+        pad_state->moving = 1;
     } else {
-        p->moving = 0;
+        pad_state->moving = 0;
     }
-    if (p->axes[2] < 0.0f)
-        p->held |= 0x8000;
-    if (p->axes[2] > 0.0f)
-        p->held |= 0x2000;
-    if (p->axes[3] < 0.0f)
-        p->held |= 0x1000;
-    if (p->axes[3] > 0.0f)
-        p->held |= 0x4000;
-    p->nodir = (p->held & 0xF000) == 0;
-    p->none = p->held == 0;
-    p->pressed = ~p->old & p->held;
-    p->x1B4 = ~p->old & p->raw;
-    p->released = ~p->held & p->old;
-    p->x1B8 = ~p->held & p->x1BC;
-    p->x1C4 = p->pressed;
-    p->x1C8 = p->released;
-    p->x1C0 = p->held;
-    p->x348 = p->held;
+    if (pad_state->axes[2] < 0.0f)
+        pad_state->held |= 0x8000;
+    if (pad_state->axes[2] > 0.0f)
+        pad_state->held |= 0x2000;
+    if (pad_state->axes[3] < 0.0f)
+        pad_state->held |= 0x1000;
+    if (pad_state->axes[3] > 0.0f)
+        pad_state->held |= 0x4000;
+    pad_state->nodir = (pad_state->held & 0xF000) == 0;
+    pad_state->none = pad_state->held == 0;
+    pad_state->pressed = ~pad_state->old & pad_state->held;
+    pad_state->x1B4 = ~pad_state->old & pad_state->raw;
+    pad_state->released = ~pad_state->held & pad_state->old;
+    pad_state->x1B8 = ~pad_state->held & pad_state->x1BC;
+    pad_state->x1C4 = pad_state->pressed;
+    pad_state->x1C8 = pad_state->released;
+    pad_state->x1C0 = pad_state->held;
+    pad_state->x348 = pad_state->held;
     if (D_0015EDB4) {
-        p->prev[2] = -p->prev[2];
-        p->prev[0] = -p->prev[0];
-        SWAPLR(p->x1C0);
-        SWAPLR(p->x1C4);
-        SWAPLR(p->x1C8);
+        pad_state->prev[2] = -pad_state->prev[2];
+        pad_state->prev[0] = -pad_state->prev[0];
+        SWAPLR(pad_state->x1C0);
+        SWAPLR(pad_state->x1C4);
+        SWAPLR(pad_state->x1C8);
     }
-    if (p->mode == 1) {
-        p->held = *(volatile s32 *)&p->held & ~0x5030;
-        p->pressed &= ~0x5030;
-        p->released &= ~0x5030;
-        p->axes[0] = 0.0f;
-        p->axes[1] = 0.0f;
-        p->mode = 0;
+    if (pad_state->mode == 1) {
+        pad_state->held = *(volatile s32 *)&pad_state->held & ~0x5030;
+        pad_state->pressed &= ~0x5030;
+        pad_state->released &= ~0x5030;
+        pad_state->axes[0] = 0.0f;
+        pad_state->axes[1] = 0.0f;
+        pad_state->mode = 0;
     }
-    if (p->mode == 2) {
-        p->held = *(volatile s32 *)&p->held & 0x900;
-        p->pressed &= 0x900;
-        p->released &= 0x900;
-        p->raw = *(volatile s32 *)&p->raw & 0x900;
-        p->nodir = 1;
-        p->axes[2] = 0.0f;
-        p->axes[3] = 0.0f;
-        p->mode = 0;
+    if (pad_state->mode == 2) {
+        pad_state->held = *(volatile s32 *)&pad_state->held & 0x900;
+        pad_state->pressed &= 0x900;
+        pad_state->released &= 0x900;
+        pad_state->raw = *(volatile s32 *)&pad_state->raw & 0x900;
+        pad_state->nodir = 1;
+        pad_state->axes[2] = 0.0f;
+        pad_state->axes[3] = 0.0f;
+        pad_state->mode = 0;
     }
-    v[0] = p->axes[2];
-    v[1] = p->axes[3];
+    v[0] = pad_state->axes[2];
+    v[1] = pad_state->axes[3];
     mag = vector_length_xy(v);
     ang = fast_arc_tan(v[0], v[1]);
-    p->hist_mag[p->idx] = mag;
-    p->hist_ang[p->idx] = ang;
+    pad_state->hist_mag[pad_state->idx] = mag;
+    pad_state->hist_ang[pad_state->idx] = ang;
     if (mag > 0.9f) {
         for (j = 1; j < scale_game_frames(4); j++) {
-            float historical_magnitude = p->hist_mag[(p->idx - j + 30) % 30];
+            float historical_magnitude = pad_state->hist_mag[(pad_state->idx - j + 30) % 30];
             if (historical_magnitude > 0.9f)
                 break;
             if (historical_magnitude < 0.25f) {
-                p->pressed |= 0x10000;
+                pad_state->pressed |= 0x10000;
                 break;
             }
         }
-        if (!(p->pressed & 0x10000)) {
+        if (!(pad_state->pressed & 0x10000)) {
             for (k = 1; k < scale_game_frames(5); k++) {
-                if (fast_difference_between_rotations(p->hist_ang[(p->idx - k + 30) % 30], ang) >
+                if (fast_difference_between_rotations(pad_state->hist_ang[(pad_state->idx - k + 30) % 30], ang) >
                     0.9599311f) {
-                    p->pressed |= 0x10000;
+                    pad_state->pressed |= 0x10000;
                     break;
                 }
             }
         }
     }
-    p->hist_btn[p->idx] = p->pressed;
-    p->idx = (p->idx + 1) % 30;
-    if (++p->count > 30) {
-        p->count = 30;
+    pad_state->hist_btn[pad_state->idx] = pad_state->pressed;
+    pad_state->idx = (pad_state->idx + 1) % 30;
+    if (++pad_state->count > 30) {
+        pad_state->count = 30;
     }
-    if (p->rep_rate) {
-        cur = p->held;
-        if (cur != 0 && cur == p->old) {
-            u8 repeat_timer_value = --p->rep_timer;
+    if (pad_state->rep_rate) {
+        cur = pad_state->held;
+        if (cur != 0 && cur == pad_state->old) {
+            u8 repeat_timer_value = --pad_state->rep_timer;
             if (0 == repeat_timer_value || repeat_timer_value == 0xFF) {
-                p->rep_timer = p->rep_rate;
-                p->pressed = cur;
+                pad_state->rep_timer = pad_state->rep_rate;
+                pad_state->pressed = cur;
             }
         } else {
-            p->rep_timer = p->rep_delay;
+            pad_state->rep_timer = pad_state->rep_delay;
         }
     }
 }
