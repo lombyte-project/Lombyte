@@ -1360,7 +1360,7 @@ void FUN_L03_002ce238(char *helicopter_moby) {
     int res;
     char *helicopter_data;
     char *r;
-    float a, b, p, q;
+    float a, b, reaction_roll_angle, reaction_pitch_angle;
     helicopter_data = *(char **)(helicopter_moby + 0x78);
     fv = 0.0f;
     r = find_moby_hit(helicopter_moby, 0x330000, 0);
@@ -1377,14 +1377,14 @@ void FUN_L03_002ce238(char *helicopter_moby) {
                 a = fast_arc_tan(*(float *)(helicopter_moby + 0x10) - *(float *)(r + 0),
                                  *(float *)(helicopter_moby + 0x14) - *(float *)(r + 4));
                 b = fast_subtract_rotations(a, *(float *)(helicopter_moby + 0x48));
-                p = fast_cos(b) * 0.08726646f;
-                q = fast_sin(b) * -0.34906584f;
-                if (absolute_float(*(float *)(helicopter_moby + 0x40)) < absolute_float(q)) {
-                    *(float *)(helicopter_moby + 0x40) = q;
+                reaction_roll_angle = fast_cos(b) * 0.08726646f;
+                reaction_pitch_angle = fast_sin(b) * -0.34906584f;
+                if (absolute_float(*(float *)(helicopter_moby + 0x40)) < absolute_float(reaction_pitch_angle)) {
+                    *(float *)(helicopter_moby + 0x40) = reaction_pitch_angle;
                     *(float *)(helicopter_data + 0x218) = 0.0f;
                 }
-                if (absolute_float(*(float *)(helicopter_moby + 0x44)) < absolute_float(p)) {
-                    *(float *)(helicopter_moby + 0x44) = p;
+                if (absolute_float(*(float *)(helicopter_moby + 0x44)) < absolute_float(reaction_roll_angle)) {
+                    *(float *)(helicopter_moby + 0x44) = reaction_roll_angle;
                     *(float *)(helicopter_data + 0x21C) = 0.0f;
                 }
                 *(float *)(helicopter_data + 0x214) = frame_time * 4.0f;
