@@ -2982,7 +2982,7 @@ void spiderbot_update(unsigned char *moby) {
     float A[4];
     float B[4];
     float C[4];
-    unsigned char *d = *(unsigned char **)(moby + 0x78);
+    unsigned char *moby_data = *(unsigned char **)(moby + 0x78);
     *(u128_2A8090 *)old = *(u128_2A8090 *)(moby + 0x10);
     {
     float D[4];
@@ -2990,35 +2990,35 @@ void spiderbot_update(unsigned char *moby) {
     float T[4];
     switch (moby[0x20]) {
     case SPIDERBOT_INITIALIZE:
-        *(u128_2A8090 *)d = *(u128_2A8090 *)old;
-        *(float *)(moby + 0x58) = *(float *)(d + 0x30) / 1.5f;
-        *(float *)(d + 0x28) = *(float *)(d + 0x28) * 0.017453292f;
-        if (*(int *)(d + 0x20) == 0) {
+        *(u128_2A8090 *)moby_data = *(u128_2A8090 *)old;
+        *(float *)(moby + 0x58) = *(float *)(moby_data + 0x30) / 1.5f;
+        *(float *)(moby_data + 0x28) = *(float *)(moby_data + 0x28) * 0.017453292f;
+        if (*(int *)(moby_data + 0x20) == 0) {
             moby[0x20] = 1;
-            *(float *)(d + 0x2C) = *(float *)(moby + 0x48);
-        } else if (*(int *)(d + 0x20) >= 3) {
+            *(float *)(moby_data + 0x2C) = *(float *)(moby + 0x48);
+        } else if (*(int *)(moby_data + 0x20) >= 3) {
             moby[0x20] = 2;
-            *(float *)(d + 0x2C) = *(float *)(moby + 0x48);
+            *(float *)(moby_data + 0x2C) = *(float *)(moby + 0x48);
         } else {
             moby[0x20] = 3;
         }
         break;
     case SPIDERBOT_CIRCULAR_MOTION: {
         *(u128_2A8090 *)C = 0;
-        C[2] = *(float *)(d + 0x24);
+        C[2] = *(float *)(moby_data + 0x24);
         *(u128_2A8090 *)D = 0;
         *(u128_2A8090 *)B = *(u128_2A8090 *)C;
-        *(float *)(d + 0x28) = fast_add_rotations_c2(*(float *)(d + 0x28),
-            360.0f / (*(float *)(d + 0x24) * 6.2831855f / *(float *)(d + 0x30)) * 0.017453292f * D_0015ED6C);
-        *(float *)(moby + 0x58) = *(float *)(d + 0x30) / 1.5f;
-        C[0] = fast_cos_c4(*(float *)(d + 0x2C));
-        C[1] = fast_sin_c4(*(float *)(d + 0x2C));
+        *(float *)(moby_data + 0x28) = fast_add_rotations_c2(*(float *)(moby_data + 0x28),
+            360.0f / (*(float *)(moby_data + 0x24) * 6.2831855f / *(float *)(moby_data + 0x30)) * 0.017453292f * D_0015ED6C);
+        *(float *)(moby + 0x58) = *(float *)(moby_data + 0x30) / 1.5f;
+        C[0] = fast_cos_c4(*(float *)(moby_data + 0x2C));
+        C[1] = fast_sin_c4(*(float *)(moby_data + 0x2C));
         C[2] = 0.0f;
-        build_look_at_matrix(A, B, C, *(float *)(d + 0x28));
-        add_vector_xyz(T, d, A);
+        build_look_at_matrix(A, B, C, *(float *)(moby_data + 0x28));
+        add_vector_xyz(T, moby_data, A);
         *(u128_2A8090 *)(moby + 0x10) = *(u128_2A8090 *)T;
-        D[2] = fast_add_rotations_c2(*(float *)(d + 0x2C), 1.5707964f);
-        D[1] = fast_add_rotations_c2(-*(float *)(d + 0x28), 3.1415927f);
+        D[2] = fast_add_rotations_c2(*(float *)(moby_data + 0x2C), 1.5707964f);
+        D[1] = fast_add_rotations_c2(-*(float *)(moby_data + 0x28), 3.1415927f);
         euler_rotation_matrix(M, D);
         copy_matrix3x4(moby + 0xC0, M);
         normalize_vector_triplet(moby + 0xC0);
@@ -3029,23 +3029,23 @@ void spiderbot_update(unsigned char *moby) {
         float b1;
         float b2;
         *(u128_2A8090 *)C = 0;
-        C[2] = -*(float *)(d + 0x24);
+        C[2] = -*(float *)(moby_data + 0x24);
         *(u128_2A8090 *)D = 0;
         *(u128_2A8090 *)B = *(u128_2A8090 *)C;
-        b1 = fast_add_rotations_c2(fast_normalize_angle(fast_cos_c4(*(float *)(d + 0x28)) * 1.5707964f),
-                           *(int *)(d + 0x20) == 4 ? 1.5707964f : 0.0f);
-        *(float *)(d + 0x28) = fast_add_rotations_c2(*(float *)(d + 0x28),
-            360.0f / (*(float *)(d + 0x24) * 6.2831855f / *(float *)(d + 0x30)) * 0.017453292f * D_0015ED6C);
-        b2 = fast_add_rotations_c2(fast_normalize_angle(fast_cos_c4(*(float *)(d + 0x28)) * 1.5707964f),
-                           *(int *)(d + 0x20) == 4 ? 1.5707964f : 0.0f);
-        *(float *)(moby + 0x58) = *(float *)(d + 0x24) * fast_subtract_rotations(b2, b1) / (D_0015ED6C * 1.5f);
-        C[0] = fast_cos_c4(*(float *)(d + 0x2C));
-        C[1] = fast_sin_c4(*(float *)(d + 0x2C));
+        b1 = fast_add_rotations_c2(fast_normalize_angle(fast_cos_c4(*(float *)(moby_data + 0x28)) * 1.5707964f),
+                           *(int *)(moby_data + 0x20) == 4 ? 1.5707964f : 0.0f);
+        *(float *)(moby_data + 0x28) = fast_add_rotations_c2(*(float *)(moby_data + 0x28),
+            360.0f / (*(float *)(moby_data + 0x24) * 6.2831855f / *(float *)(moby_data + 0x30)) * 0.017453292f * D_0015ED6C);
+        b2 = fast_add_rotations_c2(fast_normalize_angle(fast_cos_c4(*(float *)(moby_data + 0x28)) * 1.5707964f),
+                           *(int *)(moby_data + 0x20) == 4 ? 1.5707964f : 0.0f);
+        *(float *)(moby + 0x58) = *(float *)(moby_data + 0x24) * fast_subtract_rotations(b2, b1) / (D_0015ED6C * 1.5f);
+        C[0] = fast_cos_c4(*(float *)(moby_data + 0x2C));
+        C[1] = fast_sin_c4(*(float *)(moby_data + 0x2C));
         C[2] = 0.0f;
         build_look_at_matrix(A, B, C, b2);
-        add_vector_xyz(T, d, A);
+        add_vector_xyz(T, moby_data, A);
         *(u128_2A8090 *)(moby + 0x10) = *(u128_2A8090 *)T;
-        D[2] = fast_add_rotations_c2(*(float *)(d + 0x2C), 1.5707964f);
+        D[2] = fast_add_rotations_c2(*(float *)(moby_data + 0x2C), 1.5707964f);
         D[1] = fast_add_rotations_c2(-b2, 0.0f);
         euler_rotation_matrix(M, D);
         copy_matrix3x4(moby + 0xC0, M);
@@ -3056,14 +3056,14 @@ void spiderbot_update(unsigned char *moby) {
     case SPIDERBOT_LINEAR_OSCILLATION: {
         float w;
         float x;
-        w = fast_cos_c4(*(float *)(d + 0x28)) * *(float *)(d + 0x24);
-        *(float *)(d + 0x28) = fast_add_rotations_c2(*(float *)(d + 0x28),
-            360.0f / (*(float *)(d + 0x24) * 6.2831855f / *(float *)(d + 0x30)) * 0.017453292f * D_0015ED6C);
-        x = fast_cos_c4(*(float *)(d + 0x28)) * *(float *)(d + 0x24);
+        w = fast_cos_c4(*(float *)(moby_data + 0x28)) * *(float *)(moby_data + 0x24);
+        *(float *)(moby_data + 0x28) = fast_add_rotations_c2(*(float *)(moby_data + 0x28),
+            360.0f / (*(float *)(moby_data + 0x24) * 6.2831855f / *(float *)(moby_data + 0x30)) * 0.017453292f * D_0015ED6C);
+        x = fast_cos_c4(*(float *)(moby_data + 0x28)) * *(float *)(moby_data + 0x24);
         *(float *)(moby + 0x58) = (x - w) / (D_0015ED6C * 1.5f);
-        build_spherical_offset(A, x, *(int *)(d + 0x20) != 2 ? *(float *)(moby + 0x48) : 0.0f,
-                      *(int *)(d + 0x20) == 2 ? 1.5707964f : 0.0f);
-        add_vector_xyz(B, d, A);
+        build_spherical_offset(A, x, *(int *)(moby_data + 0x20) != 2 ? *(float *)(moby + 0x48) : 0.0f,
+                      *(int *)(moby_data + 0x20) == 2 ? 1.5707964f : 0.0f);
+        add_vector_xyz(B, moby_data, A);
         *(u128_2A8090 *)(moby + 0x10) = *(u128_2A8090 *)B;
         break;
     }
@@ -3092,23 +3092,23 @@ void spiderbot_update(unsigned char *moby) {
         *(u128_2A8090 *)C = *(u128_2A8090 *)T2;
         collision_line(moby + 0x10, A, 9, moby, &R);
         if (collision_line(moby + 0x10, A, 2, 0, 0)) {
-            *(u128_2A8090 *)(d + 0x10) = *(u128_2A8090 *)D_L15_00174460;
+            *(u128_2A8090 *)(moby_data + 0x10) = *(u128_2A8090 *)D_L15_00174460;
         } else {
-            *(u128_2A8090 *)(d + 0x10) = *(u128_2A8090 *)A;
+            *(u128_2A8090 *)(moby_data + 0x10) = *(u128_2A8090 *)A;
         }
         for (i = 0; i < D_L15_00161558; i++) {
-            float s;
+            float effect_direction_sign;
             float len;
             int k;
             unsigned char life;
-            s = -1.0f;
-            if (rand() & 1) s = 1.0f;
+            effect_direction_sign = -1.0f;
+            if (rand() & 1) effect_direction_sign = 1.0f;
             k = truncate_float_to_s32_c5(FUN_L04_001f1978(random_float_between(D_L15_00161560 * 0.5f, D_L15_00161560)));
-            subtract_vector_xyz_c3(T2, d + 0x10, moby + 0x10);
+            subtract_vector_xyz_c3(T2, moby_data + 0x10, moby + 0x10);
             *(u128_2A8090 *)B = *(u128_2A8090 *)T2;
-            fast_vec_scale(B, B, s);
+            fast_vec_scale(B, B, effect_direction_sign);
             len = fast_vec_length(B);
-            *(u128_2A8090 *)A = s < 0.0f ? *(u128_2A8090 *)(d + 0x10) : *(u128_2A8090 *)(moby + 0x10);
+            *(u128_2A8090 *)A = effect_direction_sign < 0.0f ? *(u128_2A8090 *)(moby_data + 0x10) : *(u128_2A8090 *)(moby + 0x10);
             life = k;
             fast_vec_scale(B, B, random_float_between(0.0f, 0.9f));
             FUN_L00_001ff290(T2, A, B);
