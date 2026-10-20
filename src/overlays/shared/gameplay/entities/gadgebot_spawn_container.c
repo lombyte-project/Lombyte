@@ -3113,7 +3113,7 @@ void FUN_L06_002f7628(char *moby) {
     add_vector_xyz(pos, pos, beam->tgt + 0x10);
     for (i = 0; i < 4; i++) {
         float timer_progress;
-        int c;
+        int beam_sprite_color;
         beam->ph[i] += beam->spd[i];
         if (255.0f <= beam->ph[i]) {
             beam->ph[i] -= 255.0f;
@@ -3124,8 +3124,8 @@ void FUN_L06_002f7628(char *moby) {
             beam->t[i] = scale_game_frames(0xFF);
         }
         timer_progress = convert_integer_to_float(scale_game_frames(0xFF) - beam->t[i]) / (float)scale_game_frames(0xFF);
-        c = fast_tween_color(D_L06_00161E58, D_L06_00161E5C, absolute_float(0.5f - timer_progress));
-        func_L00_00273E08_g(pos, c, func_001FA898_g(beam->ph[i]), D_L06_00161E64, D_L06_00161E60, 2, 0,
+        beam_sprite_color = fast_tween_color(D_L06_00161E58, D_L06_00161E5C, absolute_float(0.5f - timer_progress));
+        func_L00_00273E08_g(pos, beam_sprite_color, func_001FA898_g(beam->ph[i]), D_L06_00161E64, D_L06_00161E60, 2, 0,
                           beam->sz[i]);
         add_vector_xyz(pos, pos, step);
     }
