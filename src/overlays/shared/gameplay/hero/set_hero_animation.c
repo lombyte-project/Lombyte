@@ -227,22 +227,22 @@ void FUN_L00_00232128(void) {
 extern s16 *D_001415CC[];
 /* Looks a0 up in the -1-terminated pair list at D_001415CC[0]; stores the pair value in *a1. */
 s32 FUN_L00_002321c0(s32 key, s32 *out_value) {
-    s16 *q = D_001415CC[0];
-    s16 *p;
-    if (q == 0) {
+    s16 *pair_table = D_001415CC[0];
+    s16 *current_pair;
+    if (pair_table == 0) {
         return 0;
     }
-    if (q[0] == -1) {
+    if (pair_table[0] == -1) {
         goto end;
     }
-    p = q;
+    current_pair = pair_table;
     do {
-        if (key == p[0]) {
-            *out_value = p[1];
+        if (key == current_pair[0]) {
+            *out_value = current_pair[1];
             return 1;
         }
-        p += 2;
-    } while (p[0] != -1);
+        current_pair += 2;
+    } while (current_pair[0] != -1);
 end:
     *out_value = 0;
     return 0;
