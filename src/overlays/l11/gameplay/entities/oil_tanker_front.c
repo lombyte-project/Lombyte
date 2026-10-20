@@ -282,27 +282,27 @@ extern char *D_L11_0015FFD8;
 
 /* Counts the listed mobys of class 0x4DE in states 13 to 17. */
 short FUN_L11_00316090(struct Moby *self) {
-    unsigned short *p;
-    short n;
+    unsigned short *moby_list_entry;
+    short matching_moby_count;
     char *base;
 
     if (self->group == 0xFF)
         return 0;
-    p = (unsigned short *)D_L11_001AC240[self->group];
-    n = 0;
-    if (p == 0)
+    moby_list_entry = (unsigned short *)D_L11_001AC240[self->group];
+    matching_moby_count = 0;
+    if (moby_list_entry == 0)
         return 0;
     base = D_L11_0015FFD8;
     for (;;) {
-        struct Moby *moby = (struct Moby *)(base + ((*p & 0x7FFF) << 8));
+        struct Moby *moby = (struct Moby *)(base + ((*moby_list_entry & 0x7FFF) << 8));
         if (moby->oclass == 0x4DE) {
             if (moby->state >= 13) {
                 if (moby->state < 18)
-                    n++;
+                    matching_moby_count++;
             }
         }
-        if ((short)*p++ < 0)
-            return n;
+        if ((short)*moby_list_entry++ < 0)
+            return matching_moby_count;
     }
 }
 /* True when the moby is in state 0x14, 0xB, 0x12 or 0xC. */
