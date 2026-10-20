@@ -1688,17 +1688,17 @@ extern GameFlags_db558 race_gates __asm__("D_0013D5B0");
    releases its reward moby once the item is owned, can warp the hero, and turns
    its head toward the hero or random points while idle. */
 void big_al_update(struct Moby *m) __asm__("FUN_L03_002db558");
-void big_al_update(struct Moby *m) {
+void big_al_update(struct Moby *guide_moby) {
     enum {
         BIG_AL_INITIALIZE = 0,
         BIG_AL_UPDATE_DIALOGUE = 1,
         BIG_AL_RESOLVE_DIALOGUE = 2
     };
-    struct GuideVars *v = (struct GuideVars *)m->pvars;
+    struct GuideVars *v = (struct GuideVars *)guide_moby->pvars;
     struct Moby *t;
-    struct Moby *o;
+    struct Moby *reward_moby;
     Vec4 *g;
-    struct Hero *h;
+    struct Hero *hero_state;
     float scratch_target[4];
     float eye[4];
     float delta[4];
@@ -1709,25 +1709,25 @@ void big_al_update(struct Moby *m) {
     int tracking;
     u8 group;
 
-    FUN_L03_002db480(m);
-    switch (m->state) {
+    FUN_L03_002db480(guide_moby);
+    switch (guide_moby->state) {
     case BIG_AL_INITIALIZE:
         if (race_gates.unk14C == 0) {
-            m->rot.z = fast_add_rotations(m->rot.z, 3.1415927f);
+            guide_moby->rot.z = fast_add_rotations(guide_moby->rot.z, 3.1415927f);
             v->turned = 0;
         } else {
             v->turned = 1;
         }
-        if (visited52[m->mission + current_level_index * 16] == 0xFF && v->link != -1) {
+        if (visited52[guide_moby->mission + current_level_index * 16] == 0xFF && v->link != -1) {
             t = (struct Moby *)((v->link << 8) + D_L03_0015FFD8_i);
             if (t->oclass == 0x3F4) {
                 *(s32 *)(t->pvars + 0x8C) = 1;
             }
         }
-        m->spawn_frame = *(u64 *)(D_001413D0_db558[0] + 0x38);
-        m->state = 1;
-        initialize_npc_dialogue(m, (struct TalkState *)&v->talk);
-        initialize_moby_grounding(m);
+        guide_moby->spawn_frame = *(u64 *)(D_001413D0_db558[0] + 0x38);
+        guide_moby->state = 1;
+        initialize_npc_dialogue(guide_moby, (struct TalkState *)&v->talk);
+        initialize_moby_grounding(guide_moby);
         if (D_0013D4C2[0] != 0) {
             v->talk.unk36 = -1;
         }
@@ -1739,36 +1739,36 @@ void big_al_update(struct Moby *m) {
                 t->state = 1;
                 D_L03_001BA6D0.collected[(s16)((struct Moby *)((v->reward << 8) + D_L03_0015FFD8_i))->save_id] =
                     ((struct Moby *)((v->reward << 8) + D_L03_0015FFD8_i))->mission + 2;
-                o = (struct Moby *)((v->reward << 8) + D_L03_0015FFD8_i);
+                reward_moby = (struct Moby *)((v->reward << 8) + D_L03_0015FFD8_i);
                 {
-                    s32 k = o->mission;
+                    s32 k = reward_moby->mission;
                     u32 u = k & 0xFF;
                     if (k == 0xFF || (D_L03_0015FC88[u] != 0xFF && visited52[u + current_level_index * 16] == 0xFF)) {
-                        D_L03_001BB330.collected[(s16)o->save_id] = k + 2;
+                        D_L03_001BB330.collected[(s16)reward_moby->save_id] = k + 2;
                     }
                 }
             }
         }
-        if (item_available[2] != 0 && visited52[m->mission + current_level_index * 16] == 0xFF) {
+        if (item_available[2] != 0 && visited52[guide_moby->mission + current_level_index * 16] == 0xFF) {
             break;
         }
-        if (update_npc_dialogue(m, (struct TalkState *)&v->talk)) {
+        if (update_npc_dialogue(guide_moby, (struct TalkState *)&v->talk)) {
             if (v->turned == 0) {
-                m->rot.z = fast_add_rotations(m->rot.z, 3.1415927f);
+                guide_moby->rot.z = fast_add_rotations(guide_moby->rot.z, 3.1415927f);
                 v->turned = 1;
             }
-            begin_dialogue_camera_transition(m, 2.7f);
-            m->anim_speed = 0.0f;
-            m->state = 2;
+            begin_dialogue_camera_transition(guide_moby, 2.7f);
+            guide_moby->anim_speed = 0.0f;
+            guide_moby->state = 2;
         }
         break;
     case BIG_AL_RESOLVE_DIALOGUE:
         if (D_L03_0015F5C4 == 2) {
             break;
         }
-        m->anim_speed = 1.0f;
+        guide_moby->anim_speed = 1.0f;
         if (v->talk.mode != 2) {
-            jet_clear_persistent(m->mission);
+            jet_clear_persistent(guide_moby->mission);
             if (v->link != -1) {
                 t = (struct Moby *)((v->link << 8) + D_L03_0015FFD8_i);
                 if (t->oclass == 0x3F4) {
@@ -1779,7 +1779,7 @@ void big_al_update(struct Moby *m) {
                 jet_reset_camera(D_L03_001600EC + v->warp * 128 + 0x30, D_L03_001600EC + v->warp * 128 + 0x70);
             }
         }
-        m->state = 1;
+        guide_moby->state = 1;
         if (v->talk.mode != 2) {
             break;
         }
@@ -1791,17 +1791,17 @@ void big_al_update(struct Moby *m) {
                 t->state = 1;
                 D_L03_001BA6D0.collected[(s16)((struct Moby *)((v->reward << 8) + D_L03_0015FFD8_i))->save_id] =
                     ((struct Moby *)((v->reward << 8) + D_L03_0015FFD8_i))->mission + 2;
-                o = (struct Moby *)((v->reward << 8) + D_L03_0015FFD8_i);
+                reward_moby = (struct Moby *)((v->reward << 8) + D_L03_0015FFD8_i);
                 /* Fakematch: same record test as above; the goto and the do/while (0)
                    loop note keep the group byte's zero-extend ahead of the table address. */
-                if (o->mission == 0xFF)
+                if (reward_moby->mission == 0xFF)
                     goto rec2;
                 do {
-                    group = o->mission;
+                    group = reward_moby->mission;
                 } while (0);
                 if (D_L03_0015FC88[group] != 0xFF && visited52[group + current_level_index * 16] == 0xFF) {
                 rec2:
-                    D_L03_001BB330.collected[(s16)o->save_id] = o->mission + 2;
+                    D_L03_001BB330.collected[(s16)reward_moby->save_id] = reward_moby->mission + 2;
                 }
             }
         }
@@ -1815,12 +1815,12 @@ void big_al_update(struct Moby *m) {
     rate = 0.02f;
     head_rate = 0.3f;
     tracking = 0;
-    if (m->prev_seq == 0) {
+    if (guide_moby->prev_seq == 0) {
         g = &hero.motion.pos;
         tracking = 1;
-        if (taxi_dist2(&m->pos, g) < 8.0f &&
-            (h = (struct Hero *)((u8 *)g - 0x80),
-             fast_difference_between_rotations(m->rot.z, taxi_atan2(h->motion.unkD0.f[0] - m->pos.x, h->motion.unkD0.f[1] - m->pos.y))) <
+        if (taxi_dist2(&guide_moby->pos, g) < 8.0f &&
+            (hero_state = (struct Hero *)((u8 *)g - 0x80),
+             fast_difference_between_rotations(guide_moby->rot.z, taxi_atan2(hero_state->motion.unkD0.f[0] - guide_moby->pos.x, hero_state->motion.unkD0.f[1] - guide_moby->pos.y))) <
                 1.5707964f) {
             if (vec_len((u8 *)g + 0x80) > 0.01f) {
                 v->watch_timer = scale_game_frames(120);
@@ -1834,9 +1834,9 @@ void big_al_update(struct Moby *m) {
         if (fast_dec_timer(&v->target_timer)) {
             float heading;
             v->target_timer = truncate_float_to_s32(multiply_global_factor_ed64(random_float_between(180.0f, 300.0f)));
-            heading = fast_add_rotations(m->rot.z, random_float_between(-90.0f, 90.0f) * DEG_TO_RAD);
+            heading = fast_add_rotations(guide_moby->rot.z, random_float_between(-90.0f, 90.0f) * DEG_TO_RAD);
             build_spherical_offset(&v->target, 6.0f, heading, random_float_between(0.0f, 30.0f) * DEG_TO_RAD);
-            vec_add(&v->target, &v->target, &m->pos);
+            vec_add(&v->target, &v->target, &guide_moby->pos);
         }
         if (v->watch_timer) {
             qcopy(scratch_target, &hero.motion.unkD0);
@@ -1847,10 +1847,10 @@ void big_al_update(struct Moby *m) {
         }
     }
     if (tracking) {
-        qcopy(eye, &m->pos);
+        qcopy(eye, &guide_moby->pos);
         eye[2] += 1.0f;
         taxi_vec_sub(delta, scratch_target, eye);
-        yaw = fast_subtract_rotations(taxi_atan2(delta[0], delta[1]), m->rot.z);
+        yaw = fast_subtract_rotations(taxi_atan2(delta[0], delta[1]), guide_moby->rot.z);
         pitch = -taxi_atan2(vec_len_xy(delta), delta[2]);
         if (yaw > 1.5707964f)
             yaw = 1.5707964f;
@@ -1865,8 +1865,8 @@ void big_al_update(struct Moby *m) {
     }
     if (big_head_cheat_enabled)
         v->head.height = 2.75f;
-    update_joint_animation(rate * frame_scale_sq, head_rate * frame_scale_sq, m, &v->head, 1);
-    update_joint_animation(rate * frame_scale_sq, head_rate * frame_scale_sq, m, &v->body, 0);
+    update_joint_animation(rate * frame_scale_sq, head_rate * frame_scale_sq, guide_moby, &v->head, 1);
+    update_joint_animation(rate * frame_scale_sq, head_rate * frame_scale_sq, guide_moby, &v->body, 0);
 }
 
 /* Pvars of the dialogue moby robot_qwark_update drives (initialize_npc_dialogue / update_npc_dialogue state). */
