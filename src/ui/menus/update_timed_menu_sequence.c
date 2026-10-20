@@ -46,7 +46,7 @@ s32 update_timed_menu_sequence(struct Menu *menu) {
         WAIT_FOR_FINAL_DELAY = 19
     };
     int flag;
-    s32 n;
+    s32 previous_counter_value;
 
     flag = (((struct PadStateWords *)&controller_state)->buttons.held_pressed & 0xF) == 0xF;
     if ((menu_system.unkDC == 0) || (flag && (((s32)((struct PadStateWords *)&controller_state)->buttons.held_pressed) & 0x10))) {
@@ -61,10 +61,10 @@ s32 update_timed_menu_sequence(struct Menu *menu) {
             }
         }
     }
-    n = menu->unk40;
-    menu->unk40 = n - 1;
+    previous_counter_value = menu->unk40;
+    menu->unk40 = previous_counter_value - 1;
     if (flag) {
-        menu->unk40 = n - 2;
+        menu->unk40 = previous_counter_value - 2;
     }
     if (menu->unk40 < 0) {
         menu->unk40 = 0;
@@ -102,10 +102,10 @@ s32 update_timed_menu_sequence(struct Menu *menu) {
     case ADVANCE_FOURTH_PROGRESS_PHASE:
 
     case ADVANCE_FIFTH_PROGRESS_PHASE:
-        n = menu->unk3C;
-        menu->unk3C = n + 0xA;
+        previous_counter_value = menu->unk3C;
+        menu->unk3C = previous_counter_value + 0xA;
         if (flag) {
-            menu->unk3C = n + 0x14;
+            menu->unk3C = previous_counter_value + 0x14;
         }
         if (menu->unk54 != 0) {
             menu->unk40 = scale_game_frames(0xB4);
