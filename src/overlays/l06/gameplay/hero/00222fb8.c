@@ -609,7 +609,7 @@ void FUN_L06_0022b438(void) {
     HopVec_2b438 velocity_contribution;
     f32 x;
     f32 speed;
-    f32 a;
+    f32 speed_component_or_yaw_delta;
     f32 speed_decay_step;
     f32 arg;
     s32 state;
@@ -672,9 +672,9 @@ void FUN_L06_0022b438(void) {
         }
         hero.motion.velocity.f[0] = FUN_001f9dc8_2b438(hero.unk438) * hero.unk458;
         hero.motion.velocity.f[1] = FUN_001f9de0_2b438(hero.unk438) * hero.unk458;
-        a = hero.unk454 * FUN_001f9de0_2b438(FUN_001fa688_2b438(hero.unk43C, hero.unk438));
-        hero.motion.velocity.f[0] += FUN_001f9dc8_2b438(hero.unk43C) * a;
-        hero.motion.velocity.f[1] += FUN_001f9de0_2b438(hero.unk43C) * a;
+        speed_component_or_yaw_delta = hero.unk454 * FUN_001f9de0_2b438(FUN_001fa688_2b438(hero.unk43C, hero.unk438));
+        hero.motion.velocity.f[0] += FUN_001f9dc8_2b438(hero.unk43C) * speed_component_or_yaw_delta;
+        hero.motion.velocity.f[1] += FUN_001f9de0_2b438(hero.unk43C) * speed_component_or_yaw_delta;
         FUN_L00_002132b8_2b438(0.7f, ED6C * 0.0f);
         qcopy(&hero.motion.unk150, &hero.move_impulse);
     } else if (state == 0x11) {
@@ -699,8 +699,8 @@ void FUN_L06_0022b438(void) {
             x = hero.motion.rot.f[2];
             hero.motion.unk188 = FUN_L00_0025bc98_2b438(&x, &hero.motion.unk184, 0, hero.motion.move_yaw, ED64 * 0.018f, ED64 * 0.2f,
                                             ED6C * 7.330383f);
-            a = FUN_001fa5c8_2b438(x, hero.motion.rot.f[2]);
-            FUN_L00_002091d8_2b438(0.0f, 0.0f, a);
+            speed_component_or_yaw_delta = FUN_001fa5c8_2b438(x, hero.motion.rot.f[2]);
+            FUN_L00_002091d8_2b438(0.0f, 0.0f, speed_component_or_yaw_delta);
         } else {
             FUN_L00_00211e30_2b438(0, ED64 * 0.04f, ED64 * 0.2f, hero.unk414);
         }
