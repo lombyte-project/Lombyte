@@ -1625,32 +1625,32 @@ extern void FUN_L00_00234808_u(void) __asm__("FUN_L00_00234808");
 void FUN_L00_00234a50(int moby_override) {
     char *d;
     struct Hero *base;
-    char *o;
-    char *t;
+    char *listed_moby;
+    char *item_moby;
     int i;
     if (D_L00_0015F5C4 == 2 || D_L00_0015F5C4 == 6) {
         d = D_L00_0016C860;
         for (i = 0; i < *(short *)(d + 0x44); i++) {
-            o = *(char **)(d + 0x178 + i * 4);
-            if ((unsigned short)(*(unsigned short *)(o + 0xA6) - 0x509) < 2) {
-                *(unsigned short *)(o + 0x34) |= 0x800;
+            listed_moby = *(char **)(d + 0x178 + i * 4);
+            if ((unsigned short)(*(unsigned short *)(listed_moby + 0xA6) - 0x509) < 2) {
+                *(unsigned short *)(listed_moby + 0x34) |= 0x800;
             }
         }
         FUN_L00_00209240(moby_override);
         FUN_L00_0020f580();
         FUN_L00_00234808_u();
         base = &hero;
-        t = ((char *)base->items[4].moby);
-        if (t != 0) {
-            *(unsigned short *)(t + 0x34) &= 0xFFFE;
+        item_moby = ((char *)base->items[4].moby);
+        if (item_moby != 0) {
+            *(unsigned short *)(item_moby + 0x34) &= 0xFFFE;
         }
-        t = ((char *)base->items[4].moby2);
-        if (t != 0) {
-            *(unsigned short *)(t + 0x34) &= 0xFFFE;
+        item_moby = ((char *)base->items[4].moby2);
+        if (item_moby != 0) {
+            *(unsigned short *)(item_moby + 0x34) &= 0xFFFE;
         }
-        t = ((char *)base->items[5].moby);
-        if (t != 0) {
-            *(unsigned short *)(t + 0x34) &= 0xFFFE;
+        item_moby = ((char *)base->items[5].moby);
+        if (item_moby != 0) {
+            *(unsigned short *)(item_moby + 0x34) &= 0xFFFE;
         }
     }
 }
