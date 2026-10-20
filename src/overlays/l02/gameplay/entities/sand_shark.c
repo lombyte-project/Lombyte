@@ -339,7 +339,7 @@ void sand_shark_update(struct Moby *moby) {
     };
     Varsd3e50 *vars;
     OvlVec4 position_or_offset_scratch;
-    OvlVec4 v1;
+    OvlVec4 target_or_particle_vector;
     OvlVec4 target_home_delta;
     OvlVec4 navigation_point;
     OvlVec4 particle_position_or_forward_step;
@@ -451,8 +451,8 @@ void sand_shark_update(struct Moby *moby) {
             vars->turn_offset = rand_between_e50(-f, f);
         }
         if (moby->visible != 0 && (rand_below_e50(0xFF) & 1)) {
-            v1.q = *(OvlQuad *)&moby->pos;
-            FUN_L02_002d5a68_e50(&v1);
+            target_or_particle_vector.q = *(OvlQuad *)&moby->pos;
+            FUN_L02_002d5a68_e50(&target_or_particle_vector);
         }
         moby->pos.z -= D_L02_0016191C;
         if (vars->unk214 != 2) {
@@ -493,9 +493,9 @@ void sand_shark_update(struct Moby *moby) {
         break;
     case SAND_SHARK_APPROACH_TARGET_WITH_PATH_PROXIMITY_CHECK: {
         int hit14;
-        qcopy(&v1, &vars->target);
+        qcopy(&target_or_particle_vector, &vars->target);
         hit14 = 0;
-        FUN_L00_00258278_c(moby, atan2_e50(v1.f[0] - moby->pos.x, v1.f[1] - moby->pos.y) + vars->turn_offset, &vars->turn_vel,
+        FUN_L00_00258278_c(moby, atan2_e50(target_or_particle_vector.f[0] - moby->pos.x, target_or_particle_vector.f[1] - moby->pos.y) + vars->turn_offset, &vars->turn_vel,
                  0.05f, 0.3f, 0.2f);
         position_or_offset_scratch.f[0] = 2.0f * fast_cos_e50(moby->rot.z);
         position_or_offset_scratch.f[1] = 2.0f * fast_sin_e50(moby->rot.z);
@@ -503,7 +503,7 @@ void sand_shark_update(struct Moby *moby) {
         fast_vec_add(&position_or_offset_scratch, &position_or_offset_scratch, &moby->pos);
         FUN_L00_00258b50(moby, &vars->walk_mode, &position_or_offset_scratch, &target_home_delta, 1.0f);
         FUN_L02_002d63c0_e50(moby);
-        if (FUN_L00_00261b48(vars->path, &moby->pos, &v1, &navigation_point) && distance_e50(&moby->pos, &navigation_point) < vars->unk294) {
+        if (FUN_L00_00261b48(vars->path, &moby->pos, &target_or_particle_vector, &navigation_point) && distance_e50(&moby->pos, &navigation_point) < vars->unk294) {
             hit14 = 1;
         }
         if (vars->unk25E != 0) {
@@ -512,7 +512,7 @@ void sand_shark_update(struct Moby *moby) {
                 if (moby->prev_seq != 5) {
                     blend_e50(moby, 5, 0, scale_ticks_e50(0xA));
                 }
-            } else if (FUN_001f9b80_e50(&moby->pos, &v1) < 1.5f) {
+            } else if (FUN_001f9b80_e50(&moby->pos, &target_or_particle_vector) < 1.5f) {
                 moby->state = 6;
                 if (moby->prev_seq != 1) {
                     blend_e50(moby, 1, 0, scale_ticks_e50(0xA));
@@ -622,7 +622,7 @@ void sand_shark_update(struct Moby *moby) {
         position_or_offset_scratch.f[1] = 2.0f * fast_sin_e50(moby->rot.z);
         position_or_offset_scratch.f[2] = 0.0f;
         fast_vec_add(&position_or_offset_scratch, &position_or_offset_scratch, &moby->pos);
-        FUN_L00_00258b50(moby, &vars->walk_mode, &position_or_offset_scratch, &v1, 1.0f);
+        FUN_L00_00258b50(moby, &vars->walk_mode, &position_or_offset_scratch, &target_or_particle_vector, 1.0f);
         FUN_L02_002d63c0_e50(moby);
         if (moby->state == 0x16) {
             moby->pos.z -= D_L02_0016191C;
@@ -693,7 +693,7 @@ void sand_shark_update(struct Moby *moby) {
         position_or_offset_scratch.f[1] = 2.0f * fast_sin_e50(moby->rot.z);
         position_or_offset_scratch.f[2] = 0.0f;
         fast_vec_add(&position_or_offset_scratch, &position_or_offset_scratch, &moby->pos);
-        FUN_L00_00258b50(moby, &vars->walk_mode, &position_or_offset_scratch, &v1, 1.0f);
+        FUN_L00_00258b50(moby, &vars->walk_mode, &position_or_offset_scratch, &target_or_particle_vector, 1.0f);
         if (moby->state == 0x17) {
             moby->pos.z -= D_L02_0016191C;
         }
@@ -804,11 +804,11 @@ void sand_shark_update(struct Moby *moby) {
     case SAND_SHARK_BALLISTIC_FLIGHT_WITH_PARTICLES: {
         int life;
 
-        FUN_L00_00257d78_e50(&v1, 0.0f, 0.2f);
-        fast_vec_add(&position_or_offset_scratch, &v1, &moby->pos);
-        fast_vec_scale(&v1, &v1, D_0015ED6C * 5.0f);
+        FUN_L00_00257d78_e50(&target_or_particle_vector, 0.0f, 0.2f);
+        fast_vec_add(&position_or_offset_scratch, &target_or_particle_vector, &moby->pos);
+        fast_vec_scale(&target_or_particle_vector, &target_or_particle_vector, D_0015ED6C * 5.0f);
         life = scale_ticks_e50(random_int_between(0x14, 0x28));
-        FUN_L00_00269958_e50(&moby->pos, &v1, D_L02_001619E4, D_L02_001619E8, life, 0x64,
+        FUN_L00_00269958_e50(&moby->pos, &target_or_particle_vector, D_L02_001619E4, D_L02_001619E8, life, 0x64,
                              random_int_between(0x78, 0x96), 0);
     }
         /* fallthrough */
