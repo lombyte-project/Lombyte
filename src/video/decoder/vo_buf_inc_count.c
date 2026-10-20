@@ -14,11 +14,11 @@ extern s32 DIntr(void);
 extern s32 EnableInterrupts(void);
 void vo_buf_inc_count(VoBuf *f) __asm__("FUN_0023d210");
 
-void vo_buf_inc_count(VoBuf *f) {
+void vo_buf_inc_count(VoBuf *vo_buf) {
     DIntr();
-    f->data[f->write].status = 2;
-    f->count++;
-    f->write = (f->write + 1) % f->size;
+    vo_buf->data[vo_buf->write].status = 2;
+    vo_buf->count++;
+    vo_buf->write = (vo_buf->write + 1) % vo_buf->size;
     EnableInterrupts();
 }
 
