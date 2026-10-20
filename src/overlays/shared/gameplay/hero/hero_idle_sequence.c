@@ -2574,9 +2574,9 @@ void FUN_L00_0020a318(void) {
     char *g = (char *)((unsigned char *)&D_0013E533) + 0xE1D;
     char *p;
     char *p2;
-    char *h;
+    char *hero_position;
     char *g2;
-    float f12, f13, f, s, frame_scale_squared;
+    float f12, f13, f, state_frame_scale_squared, frame_scale_squared;
     *(short *)(g + 0x22C8) = 0;
     if (*(unsigned char *)(g + 0x20AB) == 0)
         return;
@@ -2584,10 +2584,10 @@ void FUN_L00_0020a318(void) {
         return;
     if (*(int *)(g + 0x2084) == 0x81) {
         p = D_L00_0017A680_d;
-        s = frame_scale_sq;
+        state_frame_scale_squared = frame_scale_sq;
         *(float *)(p + 0x694) = -0.349065840f;
-        *(float *)(p + 0x6D4) = s * 0.05f;
-        *(float *)(p + 0x6D8) = s * 0.3f;
+        *(float *)(p + 0x6D4) = state_frame_scale_squared * 0.05f;
+        *(float *)(p + 0x6D8) = state_frame_scale_squared * 0.3f;
     }
     f13 = 1.29999995f;
     if (*(short *)(g + 0x22C8) != 0)
@@ -2607,8 +2607,8 @@ void FUN_L00_0020a318(void) {
     p2 = D_L00_0017A680_d;
     *(float *)(p2 + 0x6D4) = frame_scale_squared * 0.05f;
     *(float *)(p2 + 0x6D8) = frame_scale_squared * 0.3f;
-    h = (char *)((unsigned char *)&D_0013E533) + 0xE9D;
-    f = fast_vec_dist(h, collision_hit_point);
+    hero_position = (char *)((unsigned char *)&D_0013E533) + 0xE9D;
+    f = fast_vec_dist(hero_position, collision_hit_point);
     g2 = (char *)((unsigned char *)&D_0013E533) + 0xE1D;
     f = f - *(float *)(g2 + 0x234);
     f = (1.29999995f - f) / 1.29999995f;
