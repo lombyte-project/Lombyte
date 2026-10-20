@@ -34,7 +34,7 @@ void FUN_L00_0028e180(unsigned char *moby) {
     float proximity_test_position[4];
     int v;
     int one;
-    unsigned char *q;
+    unsigned char *hero_position_or_scene_flags;
 
     if (moby[0x20] != 0x2A) {
         if (moby[0x31] != 0) {
@@ -61,11 +61,11 @@ void FUN_L00_0028e180(unsigned char *moby) {
                 *(short *)(proximity_state_data + 0xC) = 0;
             }
         } else {
-            q = (unsigned char *)(&hero.motion.pos);
-            if (vector_distance(moby_position, q) < 6.0f) {
+            hero_position_or_scene_flags = (unsigned char *)(&hero.motion.pos);
+            if (vector_distance(moby_position, hero_position_or_scene_flags) < 6.0f) {
                 transform_vector_by_basis(proximity_test_position, D_L00_001BD880 + ship_index[0] * 16, moby + 0xC0);
                 add_vector_xyz(proximity_test_position, proximity_test_position, moby_position);
-                if (FUN_001f9b48(proximity_test_position, q) < 4.0f) {
+                if (FUN_001f9b48(proximity_test_position, hero_position_or_scene_flags) < 4.0f) {
                     *(short *)(proximity_state_data + 0xC) = 1;
                 }
             }
@@ -89,19 +89,19 @@ void FUN_L00_0028e180(unsigned char *moby) {
         }
     } else {
         if (D_L00_0015F5C4 != 2) {
-            q = D_0013D388;
-            if (q[0x48] == 0 && D_0013D4DC[0] != 0) {
+            hero_position_or_scene_flags = D_0013D388;
+            if (hero_position_or_scene_flags[0x48] == 0 && D_0013D4DC[0] != 0) {
                 start_scene(4);
-                q[0x48] = 1;
-            } else if ((q = D_0013D388)[0x49] == 0 && D_0013DD4B[0] != 0) {
+                hero_position_or_scene_flags[0x48] = 1;
+            } else if ((hero_position_or_scene_flags = D_0013D388)[0x49] == 0 && D_0013DD4B[0] != 0) {
                 start_scene(5);
-                q[0x49] = 1;
-            } else if ((q = D_0013D388)[0x4A] == 0 && D_0013DD4B[0] != 0) {
+                hero_position_or_scene_flags[0x49] = 1;
+            } else if ((hero_position_or_scene_flags = D_0013D388)[0x4A] == 0 && D_0013DD4B[0] != 0) {
                 FUN_L00_00299460(0xB);
-                q[0x4A] = 1;
-            } else if ((q = D_0013D388)[0x4B] == 0 && D_0013DD4B[0] != 0) {
+                hero_position_or_scene_flags[0x4A] = 1;
+            } else if ((hero_position_or_scene_flags = D_0013D388)[0x4B] == 0 && D_0013DD4B[0] != 0) {
                 start_scene(6);
-                q[0x4B] = 1;
+                hero_position_or_scene_flags[0x4B] = 1;
             } else {
                 moby[0x20] = 0;
                 *(unsigned short *)(moby + 0x34) &= 0xFFBE;
