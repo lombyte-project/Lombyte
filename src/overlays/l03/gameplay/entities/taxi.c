@@ -1914,14 +1914,14 @@ extern void FUN_L00_0026ced0(void *, void *, u32, u32, s32, f32);
  * approached, and once hit by a type 3 hit or already recorded as collected
  * it breaks, records its save bit, and keeps sparking. */
 void robot_qwark_update(struct Moby *m) __asm__("FUN_L03_002dbd90");
-void robot_qwark_update(struct Moby *m) {
+void robot_qwark_update(struct Moby *robot_qwark_moby) {
     enum {
         ROBOT_QWARK_INITIALIZE = 0,
         ROBOT_QWARK_UPDATE_DIALOGUE = 1,
         ROBOT_QWARK_RESOLVE_DIALOGUE = 2,
         ROBOT_QWARK_BROKEN_SPARKING = 3
     };
-    struct TalkerVars *dialogue_state = (struct TalkerVars *)m->pvars;
+    struct TalkerVars *dialogue_state = (struct TalkerVars *)robot_qwark_moby->pvars;
     TalkerHit *hit;
     u8 type;
     char *w;
@@ -1929,61 +1929,61 @@ void robot_qwark_update(struct Moby *m) {
     OvlVec4 pos;
     float unused_vector_scratch[4];
 
-    if (m->visible != 0 && FUN_001f9b48(&m->pos, D_L03_00166EC0) < 26.0f) {
-        FUN_L00_0025a120(m);
-        m->shadow_range = 0x15;
+    if (robot_qwark_moby->visible != 0 && FUN_001f9b48(&robot_qwark_moby->pos, D_L03_00166EC0) < 26.0f) {
+        FUN_L00_0025a120(robot_qwark_moby);
+        robot_qwark_moby->shadow_range = 0x15;
     }
-    if (D_L03_001BB330.collected[(s16)m->save_id] != 0 ||
-        (D_0014C190_257218[current_level_index][(s16)m->save_id >> 5] >> (m->save_id & 0x1F)) & 1) {
-        if (m->state != 3) {
-            m->state = 3;
-            set_moby_animation(m, 1, 0);
+    if (D_L03_001BB330.collected[(s16)robot_qwark_moby->save_id] != 0 ||
+        (D_0014C190_257218[current_level_index][(s16)robot_qwark_moby->save_id >> 5] >> (robot_qwark_moby->save_id & 0x1F)) & 1) {
+        if (robot_qwark_moby->state != 3) {
+            robot_qwark_moby->state = 3;
+            set_moby_animation(robot_qwark_moby, 1, 0);
         }
     }
-    hit = talker_find_hit(m, -1, 0);
+    hit = talker_find_hit(robot_qwark_moby, -1, 0);
     if (hit != 0 && hit->source != 0 && (type = hit->type) == 3 &&
-        D_L03_001BB330.collected[(s16)m->save_id] == 0 &&
-        (((D_0014C190_257218[current_level_index][(s16)m->save_id >> 5] >> (m->save_id & 0x1F)) ^ 1) & 1)) {
+        D_L03_001BB330.collected[(s16)robot_qwark_moby->save_id] == 0 &&
+        (((D_0014C190_257218[current_level_index][(s16)robot_qwark_moby->save_id >> 5] >> (robot_qwark_moby->save_id & 0x1F)) ^ 1) & 1)) {
         if (D_0013D408[5] == 0) {
             D_0013D408[5] = 1;
             allocate_voice_for_bank_entry(1, 0, 0);
             queue_dialogue_message(0x53D6, -1);
         }
-        pos.q = *(OvlQuad *)&m->pos;
+        pos.q = *(OvlQuad *)&robot_qwark_moby->pos;
         pos.f[2] += 1.0f;
         vel.q = 0;
-        talker_spawn_debris(m, &vel, &pos, 0.0f, 0.0f, 10, 3, 16, 4.0f, 2.0f, 9.0f, 0, 1.0f, 15.0f, 1, 1, -1, 0);
-        m->state = type;
-        set_moby_animation(m, 1, 0);
-        D_0014C190_257218[current_level_index][(s16)m->save_id >> 5] |= 1 << (m->save_id & 0x1F);
-        D_L03_001BA5D0[(s16)m->save_id >> 5] |= 1 << (m->save_id & 0x1F);
+        talker_spawn_debris(robot_qwark_moby, &vel, &pos, 0.0f, 0.0f, 10, 3, 16, 4.0f, 2.0f, 9.0f, 0, 1.0f, 15.0f, 1, 1, -1, 0);
+        robot_qwark_moby->state = type;
+        set_moby_animation(robot_qwark_moby, 1, 0);
+        D_0014C190_257218[current_level_index][(s16)robot_qwark_moby->save_id >> 5] |= 1 << (robot_qwark_moby->save_id & 0x1F);
+        D_L03_001BA5D0[(s16)robot_qwark_moby->save_id >> 5] |= 1 << (robot_qwark_moby->save_id & 0x1F);
     }
-    m->hit_slot = 0xFF;
-    if (D_0013D4CC[0] != 0 && m->state != 3) {
+    robot_qwark_moby->hit_slot = 0xFF;
+    if (D_0013D4CC[0] != 0 && robot_qwark_moby->state != 3) {
         return;
     }
-    switch (m->state) {
+    switch (robot_qwark_moby->state) {
     case ROBOT_QWARK_INITIALIZE:
-        m->spawn_frame = *(u64 *)(D_001413D0[0] + 0x38);
-        m->state = 1;
-        talker_init(m, dialogue_state);
+        robot_qwark_moby->spawn_frame = *(u64 *)(D_001413D0[0] + 0x38);
+        robot_qwark_moby->state = 1;
+        talker_init(robot_qwark_moby, dialogue_state);
         if (D_0013D388[0x19] != 0) {
             dialogue_state->mode = 1;
             dialogue_state->unk36 = 2;
         }
         break;
     case ROBOT_QWARK_UPDATE_DIALOGUE:
-        if (talker_update(m, dialogue_state)) {
+        if (talker_update(robot_qwark_moby, dialogue_state)) {
             D_0013D388[0x19] = 1;
-            begin_dialogue_camera_transition(m, 2.7f);
-            m->state = 2;
+            begin_dialogue_camera_transition(robot_qwark_moby, 2.7f);
+            robot_qwark_moby->state = 2;
         }
         break;
     case ROBOT_QWARK_RESOLVE_DIALOGUE:
         if (D_L03_0015F5C4 == 2) {
             break;
         }
-        m->state = 1;
+        robot_qwark_moby->state = 1;
         if (dialogue_state->mode == 2 && dialogue_state->warp != -1) {
             w = D_L03_001600EC + dialogue_state->warp * 128;
             jet_reset_camera(w + 0x30, w + 0x70);
@@ -1996,7 +1996,7 @@ void robot_qwark_update(struct Moby *m) {
         pos.f[0] = talker_cos(talker_rand_angle()) * talker_rand_range(0.0f, 0.5f) * talker_rand_range(0.0f, 1.0f);
         pos.f[1] = talker_sin(talker_rand_angle()) * talker_rand_range(0.0f, 0.5f) * talker_rand_range(0.0f, 1.0f);
         pos.f[2] = 0.0f;
-        FUN_L00_001ff290(unused_vector_scratch, &pos, &m->pos);
+        FUN_L00_001ff290(unused_vector_scratch, &pos, &robot_qwark_moby->pos);
         if (talker_rand_below(3) == 0) {
             FUN_L00_0026ced0(&pos, &vel, 0x20202020, 0x7F7F7F, scale_game_frames(FUN_L00_00257b90(0x3C, 0x78)),
                              157500.0f);
