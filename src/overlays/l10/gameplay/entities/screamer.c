@@ -2722,22 +2722,22 @@ extern int absolute_float_cf(void *, void *, int) __asm__("FUN_L00_00259740");
 extern int follow_5968(float, void *, void *, int, int, void *, int) __asm__("FUN_L00_0025ff38");
 extern char *D_L10_001B0930_5968[] __asm__("D_L10_001B0930");
 
-void FUN_L10_002e5968(struct Moby *m) {
+void FUN_L10_002e5968(struct Moby *moby) {
     enum {
         LETHAL_HIT_RESPONSE = 1,
         COLOR_UPDATE_ONLY_HIT_RESPONSE = 9,
         COLOR_EFFECT_ONLY_HIT_RESPONSE = 12,
         NO_REACTION_HIT_RESPONSE = 13
     };
-    unsigned char *d = m->pvars;
-    char *info = info_5968(m, 0x370000, 0);
+    unsigned char *pvars = moby->pvars;
+    char *info = info_5968(moby, 0x370000, 0);
     int out;
     float dmg;
     int r;
     dmg = 0.0f;
-    r = fun_00213928(m, info, d + 0x20, 5, &out, &dmg, 0, 4);
-    if (info != 0 && out != 1 && m->state != 8) {
-        if ((*(float *)(d + 0x20) -= dmg) <= 0.0f) {
+    r = fun_00213928(moby, info, pvars + 0x20, 5, &out, &dmg, 0, 4);
+    if (info != 0 && out != 1 && moby->state != 8) {
+        if ((*(float *)(pvars + 0x20) -= dmg) <= 0.0f) {
             r = 1;
         }
         if (*(int *)(info + 0x24) & 0x40000) {
@@ -2747,49 +2747,49 @@ void FUN_L10_002e5968(struct Moby *m) {
         case COLOR_UPDATE_ONLY_HIT_RESPONSE:
         case 10:
         case COLOR_EFFECT_ONLY_HIT_RESPONSE:
-            d[0xC7] = 0xFA;
-            trooper_anim_update(m, d + 0xC0);
+            pvars[0xC7] = 0xFA;
+            trooper_anim_update(moby, pvars + 0xC0);
             break;
         case LETHAL_HIT_RESPONSE:
-            d[0xC7] = 0xFA;
-            trooper_anim_update(m, d + 0xC0);
-            m->state = 8;
+            pvars[0xC7] = 0xFA;
+            trooper_anim_update(moby, pvars + 0xC0);
+            moby->state = 8;
             break;
         case NO_REACTION_HIT_RESPONSE:
             break;
         default:
-            d[0xC7] = 0xFA;
-            *(short *)(d + 0x26) = scale_game_frames(0x3C);
-            trooper_anim_update(m, d + 0xC0);
-            blend_moby_animation(m, 4, 0, scale_game_frames(6));
-            m->command = m->state;
-            m->state = 7;
+            pvars[0xC7] = 0xFA;
+            *(short *)(pvars + 0x26) = scale_game_frames(0x3C);
+            trooper_anim_update(moby, pvars + 0xC0);
+            blend_moby_animation(moby, 4, 0, scale_game_frames(6));
+            moby->command = moby->state;
+            moby->state = 7;
             break;
         }
     }
-    m->hit_slot = 0xFF;
-    trooper_anim_finish(m, d + 0xC0);
+    moby->hit_slot = 0xFF;
+    trooper_anim_finish(moby, pvars + 0xC0);
     if (hero.vehicle_mode == 1) {
-        FUN_L06_002f34d8(101.0f, m, d + 0x110);
-        if (*(char **)(d + 0x110) == 0) {
-            *(int *)(d + 0x114) = 2;
+        FUN_L06_002f34d8(101.0f, moby, pvars + 0x110);
+        if (*(char **)(pvars + 0x110) == 0) {
+            *(int *)(pvars + 0x114) = 2;
         } else {
-            char *path = D_L10_001B0930_5968[*(int *)(d + 0x190)];
-            if (absolute_float_cf(*(char **)(d + 0x110) + 0x10, path + 0x10, *(int *)path) == 0) {
-                *(int *)(d + 0x110) = 0;
-                *(int *)(d + 0x114) = 2;
+            char *path = D_L10_001B0930_5968[*(int *)(pvars + 0x190)];
+            if (absolute_float_cf(*(char **)(pvars + 0x110) + 0x10, path + 0x10, *(int *)path) == 0) {
+                *(int *)(pvars + 0x110) = 0;
+                *(int *)(pvars + 0x114) = 2;
             } else {
-                *(int *)(d + 0x114) = 0;
+                *(int *)(pvars + 0x114) = 0;
             }
         }
     } else {
-        char *path = D_L10_001B0930_5968[*(int *)(d + 0x190)];
-        if (follow_5968(101.0f, m, d + 0xD0, 0, 0, path + 0x10, *(int *)path) != 2 && m->visible == 0) {
-            *(int *)(d + 0x114) = 2;
+        char *path = D_L10_001B0930_5968[*(int *)(pvars + 0x190)];
+        if (follow_5968(101.0f, moby, pvars + 0xD0, 0, 0, path + 0x10, *(int *)path) != 2 && moby->visible == 0) {
+            *(int *)(pvars + 0x114) = 2;
         }
     }
-    if (*(int *)(d + 0x110) == 0) {
-        *(int *)(d + 0x110) = (int)hero.moby;
+    if (*(int *)(pvars + 0x110) == 0) {
+        *(int *)(pvars + 0x110) = (int)hero.moby;
     }
 }
 extern s32 D_L10_00161EF0 __attribute__((sda));
