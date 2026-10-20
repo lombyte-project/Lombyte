@@ -1610,17 +1610,17 @@ void FUN_L11_00246b70(void) {
         if (hero.state.step == 1 && hero.unk3BE == 0) {
             turn_to(0, frame_scale_sq * 0.008f, frame_scale_sq * 0.15f, frame_time * 9.948377f);
         } else {
-            f32 c = hero.unk229C;
+            f32 turn_response_factor = hero.unk229C;
             f32 r = hero.motion.unk188;
             if (hero.unk20A8 != 0) {
                 k = 1.0f - r * 0.55f;
                 if (k < 0.0f) {
                     k = 0.0f;
                 }
-            } else if (c < 0.8f && r > 0.5235988f) {
+            } else if (turn_response_factor < 0.8f && r > 0.5235988f) {
                 k = 0.0f;
             }
-            if (c > D_L11_0017C7B8_f[3]) {
+            if (turn_response_factor > D_L11_0017C7B8_f[3]) {
                 FUN_L00_00211f38();
             } else {
                 f32 f = hero.unk229C + 0.35f;
