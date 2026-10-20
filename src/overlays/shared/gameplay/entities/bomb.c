@@ -669,6 +669,7 @@ extern char D_L00_00177F00[];
 void FUN_L00_002c97e0(Moby *chicken_moby) {
     enum {
         CHICKEN_STATE_INITIALIZE = 0,
+        CHICKEN_STATE_IDLE = 1,
         CHICKEN_STATE_TURN_AWAY_FROM_HERO = 2,
         CHICKEN_STATE_FLEE_FROM_HERO = 3
     };
@@ -816,7 +817,7 @@ void FUN_L00_002c97e0(Moby *chicken_moby) {
     switch (chicken_moby->state) {
     case CHICKEN_STATE_INITIALIZE:
         break;
-    case 1:
+    case CHICKEN_STATE_IDLE:
         if (chicken_moby->anim_flags & 2) {
             blend_moby_animation(chicken_moby, random_integer_below(2) == 0, 0, scale_game_frames(5));
         }
