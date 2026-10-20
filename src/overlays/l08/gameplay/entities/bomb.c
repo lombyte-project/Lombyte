@@ -134,7 +134,7 @@ void FUN_L08_002b82a0(Moby_2B94B0 *moby)
     };
     MobyData_2B94B0 *moby_data = moby->data;
     float A[4], F[4], B[4], C[4], P[4], E[4];
-    float f20, bob_phase_radians, f;
+    float f20, bob_phase_radians, adjusted_speed_or_bob_sine;
     int hit, ok, bob_period_ticks;
 
     moby_data->ticks++;
@@ -171,8 +171,8 @@ void FUN_L08_002b82a0(Moby_2B94B0 *moby)
                 }
                 if (ok != 0) {
                     func_L00_001FF610_2B94B0(F, moby_data->vel, D_L08_00174700_2B94B0);
-                    f = fast_vec_length(F) - D_L08_0016145C;
-                    fast_vec_normalize(moby_data->vel, F, f < 0.0f ? 0.0f : f);
+                    adjusted_speed_or_bob_sine = fast_vec_length(F) - D_L08_0016145C;
+                    fast_vec_normalize(moby_data->vel, F, adjusted_speed_or_bob_sine < 0.0f ? 0.0f : adjusted_speed_or_bob_sine);
                 } else {
                     clear_u64_value(moby_data->vel);
                     qcopy(P, (D_L08_001746D8_2B94B0 + 8));
@@ -217,9 +217,9 @@ void FUN_L08_002b82a0(Moby_2B94B0 *moby)
     }
     bob_period_ticks = D_L08_00161460;
     bob_phase_radians = (float)(moby_data->ticks % bob_period_ticks) / (float)(bob_period_ticks - 1) * 6.2831855f - 3.1415927f;
-    f = func_001F9FA8_2B94B0(bob_phase_radians);
+    adjusted_speed_or_bob_sine = func_001F9FA8_2B94B0(bob_phase_radians);
     moby_data->f8 = moby->pos[2];
-    moby->pos[2] = moby->pos[2] + D_L08_00161464 * f;
+    moby->pos[2] = moby->pos[2] + D_L08_00161464 * adjusted_speed_or_bob_sine;
 }
 #define NOT_SDA
 
