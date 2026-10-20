@@ -233,17 +233,17 @@ void FUN_L00_00245c28(void) {
         run_state_handler();
         if (memory_card_state.state >= 3 || memory_card_state.pending_state >= 0) {
             if (D_L00_001B9CF0.unk13C == 0) {
-                int n = 55;
+                int rotation_period_frames = 55;
                 float size;
                 float ang;
-                int t;
+                int hud_sprite;
 
                 setup_gif_paging(0);
                 size = 272.0f;
                 vu1_add_gs_register(0x47, 0x3004B);
-                t = find_hud_sprite(0x755D, 0);
-                draw_hud_sprite(t, 0x32, 0x12C, 0x40, 0x40, 0x80);
-                ang = (float)(D_L00_0015F3F8 % n) * -6.2831855f / (float)n;
+                hud_sprite = find_hud_sprite(0x755D, 0);
+                draw_hud_sprite(hud_sprite, 0x32, 0x12C, 0x40, 0x40, 0x80);
+                ang = (float)(D_L00_0015F3F8 % rotation_period_frames) * -6.2831855f / (float)rotation_period_frames;
                 draw_rotated_sprite(1312.0f, 5312.0f, 0x40, 0x40, get_frame_texture(find_hud_sprite(0x755D, 1)),
                                     size, size, ang);
                 do_gif_paging();
