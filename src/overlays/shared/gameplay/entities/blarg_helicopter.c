@@ -355,6 +355,7 @@ void spawner_update(struct Moby *moby) {
         SPAWNER_TARGET_COUNT_ANGULAR_SPREAD = 0,
         SPAWNER_TARGET_HALF_REFERENCE_OFFSET = 1,
         SPAWNER_TARGET_UNUSED_POINT = 2,
+        SPAWNER_TARGET_HELPER_INDEXED_POINT = 3,
         SPAWNER_TARGET_COUNT_INDEXED_POINT = 4,
         SPAWNER_TARGET_SKIP_SETUP = 5
     };
@@ -609,7 +610,7 @@ void spawner_update(struct Moby *moby) {
                 qcopy(&target_position, &spawn_position);
                 break;
             }
-            case 3: {
+            case SPAWNER_TARGET_HELPER_INDEXED_POINT: {
                 int *p = spawner_data->pts;
                 int n = 0;
                 int k;
