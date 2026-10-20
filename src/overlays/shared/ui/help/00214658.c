@@ -448,66 +448,66 @@ void mmul_216130(void *, void *, void *) __asm__("FUN_001fa378");
 void xform_216130(void *, void *, void *) __asm__("FUN_001f9d20");
 float smooth_216130(float *, void *, float, float, float, float, int) __asm__("FUN_L00_0025bc98");
 void set_216130(void *, void *) __asm__("FUN_00214598");
-void FUN_L00_00216130(V_216130 *v, M_216130 *m, void *p, float a, float b, float c) {
+void FUN_L00_00216130(V_216130 *v, M_216130 *working_matrix, void *rotation_output, float a, float b, float c) {
     M_216130 m0;
     M_216130 m1;
     V_216130 r;
     V_216130 x;
-    float t;
+    float smoothed_pitch;
     float d, pitch, yaw, roll;
-    t = 0.0f;
+    smoothed_pitch = 0.0f;
     {
-        QM_216130 *d = (QM_216130 *)m, *s = (QM_216130 *)&hero;
-        d->q[0] = s->q[0];
-        d->q[1] = s->q[1];
-        d->q[2] = s->q[2];
-        d->q[3] = s->q[3];
+        QM_216130 *d = (QM_216130 *)working_matrix, *hero_matrix_source = (QM_216130 *)&hero;
+        d->q[0] = hero_matrix_source->q[0];
+        d->q[1] = hero_matrix_source->q[1];
+        d->q[2] = hero_matrix_source->q[2];
+        d->q[3] = hero_matrix_source->q[3];
     }
-    d = dot_vectors_xyz(v, &m->r[2]);
+    d = dot_vectors_xyz(v, &working_matrix->r[2]);
     pitch = atan2_216130(d, seg_sqrt(1.0f - d * d));
-    cross_vectors_xyz(&x, v, &m->r[2]);
+    cross_vectors_xyz(&x, v, &working_matrix->r[2]);
     if (x.f[2] < 0.99f) {
         roll = atan2_216130(x.f[0], x.f[1]);
         r.f[0] = 0.0f;
         r.f[1] = 0.0f;
         r.f[2] = -roll;
         fun_001fa070(&m1, &r);
-        mmul_216130(m, &m1, m);
+        mmul_216130(working_matrix, &m1, working_matrix);
         xform_216130(&x, &x, &m1);
         yaw = atan2_216130(x.f[2], x.f[0]);
         r.f[0] = 0.0f;
         r.f[2] = 0.0f;
         r.f[1] = -yaw;
         fun_001fa070(&m0, &r);
-        mmul_216130(m, &m0, m);
+        mmul_216130(working_matrix, &m0, working_matrix);
         xform_216130(&x, &x, &m0);
     } else {
         roll = 0.0f;
         yaw = roll;
     }
-    if (p) {
+    if (rotation_output) {
         r.f[2] = pitch;
         r.f[0] = 0.0f;
     } else {
-        smooth_216130(&t, (&hero.motion.unkA0.f[1]), pitch, a, b, c, 0);
+        smooth_216130(&smoothed_pitch, (&hero.motion.unkA0.f[1]), pitch, a, b, c, 0);
         r.f[0] = 0.0f;
-        r.f[2] = t;
+        r.f[2] = smoothed_pitch;
     }
     r.f[1] = 0.0f;
     fun_001fa070(&m1, &r);
-    mmul_216130(m, &m1, m);
+    mmul_216130(working_matrix, &m1, working_matrix);
     r.f[1] = yaw;
     r.f[2] = 0.0f;
     fun_001fa070(&m0, &r);
-    mmul_216130(m, &m0, m);
+    mmul_216130(working_matrix, &m0, working_matrix);
     r.f[2] = roll;
     r.f[1] = 0.0f;
     fun_001fa070(&m1, &r);
-    mmul_216130(m, &m1, m);
-    if (p)
-        set_216130(m, p);
+    mmul_216130(working_matrix, &m1, working_matrix);
+    if (rotation_output)
+        set_216130(working_matrix, rotation_output);
     else
-        set_216130(m, (&hero.motion.rot));
+        set_216130(working_matrix, (&hero.motion.rot));
 }
 typedef union {
     OvlQuad q;
