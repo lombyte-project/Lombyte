@@ -144,7 +144,7 @@ extern void follow_camera_set_lateral_spring(f32, f32) __asm__("FUN_L00_002e8590
 /* Per-frame follow camera adjustments driven by the hero's state: sway, zoom and lookat tweaks, then the shake timers in m->h12/h14/h16. */
 void follow_camera_apply_overrides(O_2e6000 *o) __asm__("FUN_L00_002e6000");
 void follow_camera_apply_overrides(O_2e6000 *camera_moby) {
-    S220_2e6000 *s;
+    S220_2e6000 *camera_override_state;
     S40_2e6000 *q;
     S1D0_2e6000 *camera_spring_state;
     M_2e6000 *m;
@@ -158,8 +158,8 @@ void follow_camera_apply_overrides(O_2e6000 *camera_moby) {
     s32 *lp;
     u8 *aim_height_data;
 
-    s = (S220_2e6000 *)((u8 *)camera_moby->m + 0x220);
-    if (hero.unk2284 == 0xD && s->i10 != 0x14D) {
+    camera_override_state = (S220_2e6000 *)((u8 *)camera_moby->m + 0x220);
+    if (hero.unk2284 == 0xD && camera_override_state->i10 != 0x14D) {
         f = fast_add_rotations(hero.unk4E4, 3.14159265f);
         v[0] = fast_cos(f);
         v[1] = fast_sin(f);
@@ -186,7 +186,7 @@ void follow_camera_apply_overrides(O_2e6000 *camera_moby) {
     }
     if (hero.state.control_mode == 0x10) camera_moby->m->fF0 = 0.25f;
     if (hero.vehicle_mode == 1) {
-        if (s->i0 == 0) {
+        if (camera_override_state->i0 == 0) {
             q = (S40_2e6000 *)((u8 *)camera_moby->m + 0x40);
             follow_camera_set_distance(1, 3.0f, 0.003f);
             if (flag == 0) {
@@ -197,7 +197,7 @@ void follow_camera_apply_overrides(O_2e6000 *camera_moby) {
         *(f32 *)((u8 *)camera_moby->m + 0x20C) = 0.6f;
     }
     if (hero.vehicle_mode == 2) {
-        if (s->i10 < 2) {
+        if (camera_override_state->i10 < 2) {
             follow_camera_set_offset_scale(0, D_L00_00161D98, 0.005f);
             follow_camera_set_distance(1, D_L00_00161D9C, 0.003f);
             follow_camera_set_height(D_L00_00161DA0, 0.003f);
@@ -215,7 +215,7 @@ void follow_camera_apply_overrides(O_2e6000 *camera_moby) {
     x = &player_camera[1];
     if (x->fn != 0) x->fn();
     player_camera_state = &player_camera[0];
-    if (player_camera_state->p25C != 0 && s->i10 < 2) {
+    if (player_camera_state->p25C != 0 && camera_override_state->i10 < 2) {
         if ((s8)player_camera_state->p25C[0x20] < 0) {
             player_camera_state->p25C = 0;
         } else {
@@ -229,14 +229,14 @@ void follow_camera_apply_overrides(O_2e6000 *camera_moby) {
             FUN_L00_002e8970(x->p25C + 0x10, f * 0.20943952f, 0.0f);
         }
     }
-    s->i10 = 0;
+    camera_override_state->i10 = 0;
     nearby_moby_count = collect_mobies_in_sphere(&D_0013F3D0_2e6000, 1, D_0013F3D0_2e6000.i2000, 0, 15.0f);
     if (nearby_moby_count > 0) {
         lp = D_L00_00177F00;
         for (i = 0; i < nearby_moby_count; lp++, i++) {
             aim_height_data = suck_get_aim_height(*lp);
             if (aim_height_data != 0 && (f32)aim_height_data[0xD] != 0.0f) {
-                s->i10 = 1;
+                camera_override_state->i10 = 1;
                 break;
             }
         }
