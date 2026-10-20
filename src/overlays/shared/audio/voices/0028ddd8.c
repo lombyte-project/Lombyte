@@ -61,8 +61,8 @@ extern E0028df38 D_0013E550[];
 /* Sets word 0x21 of voice entry i to v; returns 1. */
 s32 engine_voice_set_pitch(s32 i, s32 v) __asm__("FUN_L00_0028df38");
 s32 engine_voice_set_pitch(s32 i, s32 v) {
-    E0028df38 *p = &D_0013E550[i];
-    p->w[0x21] = v;
+    E0028df38 *voice_entry = &D_0013E550[i];
+    voice_entry->w[0x21] = v;
     return 1;
 }
 #define NOT_SDA
