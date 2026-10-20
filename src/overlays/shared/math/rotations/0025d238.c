@@ -127,12 +127,12 @@ void trooper_anim_finish(s32 id, S_25d538 *animation_state) {
     }
     glow_n(id, r, g, b);
 }
-s32 FUN_L00_0025d7a0(s32 *tab, s32 i, s32 d, s32 wrap) {
+s32 FUN_L00_0025d7a0(s32 *tab, s32 i, s32 index_offset, s32 wrap) {
     if (wrap) {
-        i = (i + d + tab[0]) % tab[0];
+        i = (i + index_offset + tab[0]) % tab[0];
     } else {
-        i += d;
-        if (d < 0) {
+        i += index_offset;
+        if (index_offset < 0) {
             if (i < 0)
                 i = 0;
         } else {
