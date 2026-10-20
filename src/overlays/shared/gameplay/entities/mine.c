@@ -3025,9 +3025,9 @@ int count_2b1de0(float) __asm__("FUN_001fa6d0");
 int random_bit_2b1de0(int) __asm__("FUN_00213260");
 
 extern V_2b1af0 D_0013F9B0;
-void FUN_L00_002b1de0(unsigned char *o) {
+void FUN_L00_002b1de0(unsigned char *source_object) {
     V_2b1af0 c;
-    V_2b1af0 a;
+    V_2b1af0 emission_offset;
     V_2b1af0 b;
     V_2b1af0 d;
     int i;
@@ -3035,12 +3035,12 @@ void FUN_L00_002b1de0(unsigned char *o) {
     int t;
     float angle;
 
-    *(OvlQuad *)&a = 0;
-    a.f[0] = 0.3f;
-    a.f[1] = -1.2f;
-    a.f[3] = 1.0f;
-    transform_vector_by_basis(&a, &a, o + 0xC0);
-    add_2b1af0(&b, o + 0x10, &a);
+    *(OvlQuad *)&emission_offset = 0;
+    emission_offset.f[0] = 0.3f;
+    emission_offset.f[1] = -1.2f;
+    emission_offset.f[3] = 1.0f;
+    transform_vector_by_basis(&emission_offset, &emission_offset, source_object + 0xC0);
+    add_2b1af0(&b, source_object + 0x10, &emission_offset);
     for (i = 0; i < count_2b1de0(24.0f); i++) {
         angle = rnd_2b1af0(0.0f, 0.1308997f);
         build_look_at_matrix(&c, &D_0013F9B0, (char *)&D_0013F9B0 - 0x20,
@@ -3072,5 +3072,5 @@ void FUN_L00_002b1de0(unsigned char *o) {
                          rndi_2b1af0(low, high), 1, 10000.0f);
         }
     }
-    o[0xBC] = fr_2b1af0(5);
+    source_object[0xBC] = fr_2b1af0(5);
 }
