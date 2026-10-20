@@ -2483,7 +2483,7 @@ extern int D_0015ED84;
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 
 void blarg_ship_update(Ship_5E48 *m) __asm__("FUN_L10_002e4a88");
-void blarg_ship_update(Ship_5E48 *m) {
+void blarg_ship_update(Ship_5E48 *ship) {
     enum {
         BLARG_SHIP_STATE_INITIALIZE = 0,
         BLARG_SHIP_STATE_WAIT_FOR_TARGET_IN_VOLUME = 1,
@@ -2495,46 +2495,46 @@ void blarg_ship_update(Ship_5E48 *m) {
         BLARG_SHIP_STATE_HIT_REACTION = 7,
         BLARG_SHIP_STATE_EXPLODE = 8
     };
-    ShipD_5E48 *d = m->d;
+    ShipD_5E48 *d = ship->d;
     Ship_5E48 *tgt;
     V_2E52B0 A;
     V_2E52B0 B;
     V_2E52B0 C;
     V_2E52B0 E;
     V_2E52B0 D;
-    float a;
+    float desired_heading;
     float b;
 
-    FUN_L00_00263ac8(2.5f, (int)m, 2, d->a1D0);
+    FUN_L00_00263ac8(2.5f, (int)ship, 2, d->a1D0);
     if (d->i140 == -1) {
-        DebugPrint(D_L10_001DD390, m->sA6, m->hA8);
+        DebugPrint(D_L10_001DD390, ship->sA6, ship->hA8);
         goto del;
     }
-    FUN_L10_002e5968_c((char *)m);
+    FUN_L10_002e5968_c((char *)ship);
     tgt = d->tgt;
-    switch (m->state) {
+    switch (ship->state) {
     case BLARG_SHIP_STATE_INITIALIZE:
-        m->s34 |= 0x1000;
+        ship->s34 |= 0x1000;
         d->f20 = 9.0f;
         d->s24 = truncate_float_to_s32_c2(9.0f);
         d->b28 = 3;
         d->b29 = 0;
         d->f19C = 0.0f;
-        m->s32 = 0x7F;
-        qcopy(&m->pos, &D_L10_001B0C30_2E52B0[d->i140]->nodes[0]);
+        ship->s32 = 0x7F;
+        qcopy(&ship->pos, &D_L10_001B0C30_2E52B0[d->i140]->nodes[0]);
         d->s196 = scale_game_frames_c2(D_L10_00161EE4);
-        m->i94 = 0;
-        m->s34 |= 0x41;
-        if (m->b53 != 0) blend_moby_animation(m, 0, 0, 0);
-        m->state = 1;
-        if (visited52[m->bB0 + (D_0015ED84 << 4)] != 0xFF) break;
+        ship->i94 = 0;
+        ship->s34 |= 0x41;
+        if (ship->b53 != 0) blend_moby_animation(ship, 0, 0, 0);
+        ship->state = 1;
+        if (visited52[ship->bB0 + (D_0015ED84 << 4)] != 0xFF) break;
         goto del;
     case BLARG_SHIP_STATE_WAIT_FOR_TARGET_IN_VOLUME:
         if (!is_point_inside_clip_volume(&tgt->pos, d->i148)) break;
-        m->state = 2;
-        if (m->b53 != 1) blend_moby_animation(m, 1, 0, scale_game_frames_c2(20));
-        m->s34 &= 0xFFBE;
-        m->i94 = *(int *)(m->p24 + 0x10);
+        ship->state = 2;
+        if (ship->b53 != 1) blend_moby_animation(ship, 1, 0, scale_game_frames_c2(20));
+        ship->s34 &= 0xFFBE;
+        ship->i94 = *(int *)(ship->p24 + 0x10);
         if (*(int *)D_L10_00179890 == 0 && *(int *)(D_L10_00179890 + 0x24) == -1
             && D_001413F4[0] == 0 && *(unsigned short *)D_00141C48 == 0
             && D_0013D4CB[0] == 0) {
@@ -2542,46 +2542,46 @@ void blarg_ship_update(Ship_5E48 *m) {
         }
         break;
     case BLARG_SHIP_STATE_RISE_TO_ENTRY_PATH:
-        a = fast_arc_tan(tgt->pos.x - m->pos.x, tgt->pos.y - m->pos.y);
-        FUN_L00_00258278((char *)m, &d->f198, a, 0.02f, 0.3f, D_0015ED6C * 3.1415927f);
-        b = fast_arc_tan(vector_distance_xy_alt(&m->pos, &tgt->pos), tgt->pos.z - m->pos.z);
-        m->f44 = FUN_L00_00258110_c(&d->f19C, m->f44, -b, 0.02f, 0.3f, D_0015ED6C * 3.1415927f);
-        if ((m->b70 & 2) && m->b53 == 1) blend_moby_animation(m, 2, 0, scale_game_frames_c2(20));
-        m->pos.z += D_0015ED6C * 4.0f;
-        if (fast_vec_dist(&m->pos, &D_L10_001B0C30_2E52B0[d->i140]->nodes[0]) < 0.5f) {
-            m->state = 3;
-            if (m->b53 != 2) blend_moby_animation(m, 2, 0, scale_game_frames_c2(10));
+        desired_heading = fast_arc_tan(tgt->pos.x - ship->pos.x, tgt->pos.y - ship->pos.y);
+        FUN_L00_00258278((char *)ship, &d->f198, desired_heading, 0.02f, 0.3f, D_0015ED6C * 3.1415927f);
+        b = fast_arc_tan(vector_distance_xy_alt(&ship->pos, &tgt->pos), tgt->pos.z - ship->pos.z);
+        ship->f44 = FUN_L00_00258110_c(&d->f19C, ship->f44, -b, 0.02f, 0.3f, D_0015ED6C * 3.1415927f);
+        if ((ship->b70 & 2) && ship->b53 == 1) blend_moby_animation(ship, 2, 0, scale_game_frames_c2(20));
+        ship->pos.z += D_0015ED6C * 4.0f;
+        if (fast_vec_dist(&ship->pos, &D_L10_001B0C30_2E52B0[d->i140]->nodes[0]) < 0.5f) {
+            ship->state = 3;
+            if (ship->b53 != 2) blend_moby_animation(ship, 2, 0, scale_game_frames_c2(10));
         }
         break;
     case BLARG_SHIP_STATE_FOLLOW_ENTRY_PATH:
         qcopy(&A, &D_L10_001B0C30_2E52B0[d->i140]->nodes[d->i158]);
-        a = fast_arc_tan(A.x - m->pos.x, A.y - m->pos.y);
-        FUN_L00_00258278((char *)m, &d->f198, a, 0.02f, 0.3f, D_0015ED6C * 12.566371f);
-        b = fast_arc_tan(vector_distance_xy_alt(&m->pos, &tgt->pos), tgt->pos.z - m->pos.z);
-        m->f44 = FUN_L00_00258110_c(&d->f19C, m->f44, -b, 0.02f, 0.3f, D_0015ED6C * 3.1415927f);
-        func_001F9BF0_2E52B0(&B, &A, &m->pos);
+        desired_heading = fast_arc_tan(A.x - ship->pos.x, A.y - ship->pos.y);
+        FUN_L00_00258278((char *)ship, &d->f198, desired_heading, 0.02f, 0.3f, D_0015ED6C * 12.566371f);
+        b = fast_arc_tan(vector_distance_xy_alt(&ship->pos, &tgt->pos), tgt->pos.z - ship->pos.z);
+        ship->f44 = FUN_L00_00258110_c(&d->f19C, ship->f44, -b, 0.02f, 0.3f, D_0015ED6C * 3.1415927f);
+        func_001F9BF0_2E52B0(&B, &A, &ship->pos);
         fast_vec_normalize(&d->a120, &B, D_0015ED6C * 8.0f);
-        add_vector_xyz_c3(&m->pos, &m->pos, &d->a120);
+        add_vector_xyz_c3(&ship->pos, &ship->pos, &d->a120);
         if (fast_vec_length_c(&B) < 0.5f) {
             int n = d->i158 + 1;
             if (n < D_L10_001B0C30_2E52B0[d->i140]->count) {
                 d->i158 = n;
             } else {
                 d->i158 = 0;
-                m->state = 4;
+                ship->state = 4;
                 d->i168 = truncate_float_to_s32_c2(FUN_L04_001f1978(d->f160 * 60.0f));
             }
         }
         break;
     case BLARG_SHIP_STATE_FIRE_AT_TARGET:
         if (is_point_inside_clip_volume(&(&hero)->motion.pos, d->i1B0)) {
-            m->state = 6;
+            ship->state = 6;
             break;
         }
         *(u128_2E52B0 *)&A = *(u128_2E52B0 *)&tgt->pos;
         if ((&hero)->vehicle_mode != 1) {
             *(u128_2E52B0 *)&A = *(u128_2E52B0 *)&d->vF0;
-            collision_line(&m->pos, &A, 0, m, 0);
+            collision_line(&ship->pos, &A, 0, ship, 0);
         } else {
             if ((Ship_5E48 *)(&hero)->moby == tgt) {
                 fast_vec_scale(&C, &(&hero)->motion.displacement, (float)scale_game_frames_c2(20));
@@ -2592,40 +2592,40 @@ void blarg_ship_update(Ship_5E48 *m) {
             A.z += 0.2f;
             D_L10_001742D8 = tgt;
         }
-        a = fast_arc_tan(tgt->pos.x - m->pos.x, tgt->pos.y - m->pos.y);
-        FUN_L00_00258278((char *)m, &d->f198, a, 0.02f, 0.3f, D_0015ED6C * 12.566371f);
-        b = fast_arc_tan(vector_distance_xy_alt(&m->pos, &A), A.z - m->pos.z);
-        m->f44 = FUN_L00_00258110_c(&d->f19C, m->f44, -b, 0.02f, 0.3f, D_0015ED6C * 3.1415927f);
-        if (fast_difference_between_rotations_c2(m->f48, fast_arc_tan(tgt->pos.x - m->pos.x, tgt->pos.y - m->pos.y)) < 0.17453292f) {
-            if (m->b53 != 3) blend_moby_animation(m, 3, 0, scale_game_frames_c2(6));
-            m->f58 = D_L10_00161EEC;
+        desired_heading = fast_arc_tan(tgt->pos.x - ship->pos.x, tgt->pos.y - ship->pos.y);
+        FUN_L00_00258278((char *)ship, &d->f198, desired_heading, 0.02f, 0.3f, D_0015ED6C * 12.566371f);
+        b = fast_arc_tan(vector_distance_xy_alt(&ship->pos, &A), A.z - ship->pos.z);
+        ship->f44 = FUN_L00_00258110_c(&d->f19C, ship->f44, -b, 0.02f, 0.3f, D_0015ED6C * 3.1415927f);
+        if (fast_difference_between_rotations_c2(ship->f48, fast_arc_tan(tgt->pos.x - ship->pos.x, tgt->pos.y - ship->pos.y)) < 0.17453292f) {
+            if (ship->b53 != 3) blend_moby_animation(ship, 3, 0, scale_game_frames_c2(6));
+            ship->f58 = D_L10_00161EEC;
         }
-        if (m->b52 == 3 && d->i114 != 2 && D_L10_001742D8 == tgt) {
-            int near = is_value_within_interpolated_window((char *)m, 1.0f);
-            int far = is_value_within_interpolated_window((char *)m, 16.0f);
+        if (ship->b52 == 3 && d->i114 != 2 && D_L10_001742D8 == tgt) {
+            int near = is_value_within_interpolated_window((char *)ship, 1.0f);
+            int far = is_value_within_interpolated_window((char *)ship, 16.0f);
             if (near || far) {
-                FUN_L00_0024f7c8(m, far == 0, &C);
-                build_spherical_offset_c(&B, 1.0f, m->f48, -m->f44);
+                FUN_L00_0024f7c8(ship, far == 0, &C);
+                build_spherical_offset_c(&B, 1.0f, ship->f48, -ship->f44);
                 FUN_L00_001ff290(&D, &C, &B);
                 func_001F9BF0_2E52B0(&B, &A, &C);
                 fast_vec_normalize(&B, &B, D_L10_00161EE8 * D_0015ED6C);
                 fast_vec_scale(&E, &B, FUN_L04_001f1978(3.0f));
                 FUN_L00_001ff290(&D, &E, &C);
-                FUN_L03_00250ae8(m, &E, 0);
-                FUN_L10_002cc1b8(&B, &C, (int)m, (int)tgt, scale_game_frames_c2(300), 1.0f);
+                FUN_L03_00250ae8(ship, &E, 0);
+                FUN_L10_002cc1b8(&B, &C, (int)ship, (int)tgt, scale_game_frames_c2(300), 1.0f);
             }
-        } else if (m->b52 == 3 && m->b53 != 2) {
-            blend_moby_animation(m, 2, 0, scale_game_frames_c2(10));
+        } else if (ship->b52 == 3 && ship->b53 != 2) {
+            blend_moby_animation(ship, 2, 0, scale_game_frames_c2(10));
         }
         if (tick_countdown_32_alt(&d->i168)) {
-            if (m->b53 != 2) blend_moby_animation(m, 2, 0, scale_game_frames_c2(10));
-            m->state = 5;
+            if (ship->b53 != 2) blend_moby_animation(ship, 2, 0, scale_game_frames_c2(10));
+            ship->state = 5;
             d->i168 = truncate_float_to_s32_c2(FUN_L04_001f1978(d->f164 * 60.0f));
         }
         qcopy(&B, &D_L10_001B0C30_2E52B0[d->i144]->nodes[d->i158]);
-        func_001F9BF0_2E52B0(&C, &B, &m->pos);
+        func_001F9BF0_2E52B0(&C, &B, &ship->pos);
         FUN_L00_0025f730_c(&C, D_0015ED6C * 8.0f);
-        add_vector_xyz_c3(&m->pos, &m->pos, &C);
+        add_vector_xyz_c3(&ship->pos, &ship->pos, &C);
         if (fast_vec_length_c(&C) < D_0015ED6C) {
             int n = d->i158 + 1;
             if (n < D_L10_001B0C30_2E52B0[d->i144]->count) d->i158 = n;
@@ -2633,13 +2633,13 @@ void blarg_ship_update(Ship_5E48 *m) {
         break;
     case BLARG_SHIP_STATE_FIRE_COOLDOWN:
         if (is_point_inside_clip_volume(&(&hero)->motion.pos, d->i1B0)) {
-            m->state = 6;
+            ship->state = 6;
             break;
         }
         *(u128_2E52B0 *)&A = *(u128_2E52B0 *)&tgt->pos;
         if ((&hero)->vehicle_mode != 1) {
             *(u128_2E52B0 *)&A = *(u128_2E52B0 *)&d->vF0;
-            collision_line(&m->pos, &A, 0, m, 0);
+            collision_line(&ship->pos, &A, 0, ship, 0);
         } else {
             if ((Ship_5E48 *)(&hero)->moby == tgt) {
                 fast_vec_scale(&C, &(&hero)->motion.displacement, (float)scale_game_frames_c2(20));
@@ -2650,68 +2650,68 @@ void blarg_ship_update(Ship_5E48 *m) {
             A.z += 0.2f;
             D_L10_001742D8 = tgt;
         }
-        a = fast_arc_tan(tgt->pos.x - m->pos.x, tgt->pos.y - m->pos.y);
-        FUN_L00_00258278((char *)m, &d->f198, a, 0.02f, 0.3f, D_0015ED6C * 12.566371f);
-        b = fast_arc_tan(vector_distance_xy_alt(&m->pos, &A), A.z - m->pos.z);
-        m->f44 = FUN_L00_00258110_c(&d->f19C, m->f44, -b, 0.02f, 0.3f, D_0015ED6C * 3.1415927f);
+        desired_heading = fast_arc_tan(tgt->pos.x - ship->pos.x, tgt->pos.y - ship->pos.y);
+        FUN_L00_00258278((char *)ship, &d->f198, desired_heading, 0.02f, 0.3f, D_0015ED6C * 12.566371f);
+        b = fast_arc_tan(vector_distance_xy_alt(&ship->pos, &A), A.z - ship->pos.z);
+        ship->f44 = FUN_L00_00258110_c(&d->f19C, ship->f44, -b, 0.02f, 0.3f, D_0015ED6C * 3.1415927f);
         if (tick_countdown_32_alt(&d->i168)) {
-            blend_moby_animation(m, 3, 0, scale_game_frames_c2(10));
-            m->f58 = D_L10_00161EEC;
-            m->state = 4;
+            blend_moby_animation(ship, 3, 0, scale_game_frames_c2(10));
+            ship->f58 = D_L10_00161EEC;
+            ship->state = 4;
             d->i168 = truncate_float_to_s32_c2(FUN_L04_001f1978(d->f160 * 60.0f));
         }
         qcopy(&B, &D_L10_001B0C30_2E52B0[d->i144]->nodes[d->i158]);
-        func_001F9BF0_2E52B0(&C, &B, &m->pos);
+        func_001F9BF0_2E52B0(&C, &B, &ship->pos);
         FUN_L00_0025f730_c(&C, D_0015ED6C * 8.0f);
-        add_vector_xyz_c3(&m->pos, &m->pos, &C);
+        add_vector_xyz_c3(&ship->pos, &ship->pos, &C);
         if (fast_vec_length_c(&C) < D_0015ED6C) {
             int n = d->i158 + 1;
             if (n < D_L10_001B0C30_2E52B0[d->i144]->count) d->i158 = n;
         }
         break;
     case BLARG_SHIP_STATE_FLY_AWAY:
-        m->pos.z += D_0015ED6C * 10.0f;
-        m->f2C *= frame_scale * -0.015299976f + 1.0f;
-        if (250.0f < m->pos.z) goto del;
-        if (!(m->f2C < 0.01f)) break;
+        ship->pos.z += D_0015ED6C * 10.0f;
+        ship->f2C *= frame_scale * -0.015299976f + 1.0f;
+        if (250.0f < ship->pos.z) goto del;
+        if (!(ship->f2C < 0.01f)) break;
         goto del;
     case BLARG_SHIP_STATE_HIT_REACTION: {
         unsigned char next;
-        if (m->b52 != 4) break;
-        if (!(m->b70 & 2)) break;
-        next = m->bBC;
+        if (ship->b52 != 4) break;
+        if (!(ship->b70 & 2)) break;
+        next = ship->bBC;
         if (next == 4) {
-            blend_moby_animation(m, 3, 0, scale_game_frames_c2(10));
-            m->f58 = D_L10_00161EEC;
-            m->state = next;
+            blend_moby_animation(ship, 3, 0, scale_game_frames_c2(10));
+            ship->f58 = D_L10_00161EEC;
+            ship->state = next;
             d->i168 = truncate_float_to_s32_c2(FUN_L04_001f1978(d->f160 * 60.0f));
         } else if (next == 6) {
-            blend_moby_animation(m, 2, 0, scale_game_frames_c2(10));
-            m->state = next;
+            blend_moby_animation(ship, 2, 0, scale_game_frames_c2(10));
+            ship->state = next;
         } else {
-            blend_moby_animation(m, 2, 0, scale_game_frames_c2(10));
-            m->state = 5;
+            blend_moby_animation(ship, 2, 0, scale_game_frames_c2(10));
+            ship->state = 5;
             d->i168 = truncate_float_to_s32_c2(FUN_L04_001f1978(d->f164 * 60.0f));
         }
         break;
     }
     case BLARG_SHIP_STATE_EXPLODE: {
         float z = 0.0f;
-        spawn_explosion(m, d->a40, &m->pos, z, z, 5, 2, 4, 2.0f, 1.0f, 9.0f, 1.0f, 5, 15.0f, 1, 1, -1, 0);
-        FUN_L00_00257470(m, 0, -1);
-        FUN_L00_00263fd8_c((char *)m, 0x5FD, (float *)&m->pos, (char *)m + 0x40, 0, 0, 0.0f, D_L10_0015F580, D_L10_0015F580, D_L10_0015F580);
-        FUN_L00_00263fd8_c((char *)m, 0x5FE, (float *)&m->pos, (char *)m + 0x40, 0, 0, 0.0f, D_L10_0015F580, D_L10_0015F580, D_L10_0015F580);
-        mark_moby_for_removal_c2(m);
+        spawn_explosion(ship, d->a40, &ship->pos, z, z, 5, 2, 4, 2.0f, 1.0f, 9.0f, 1.0f, 5, 15.0f, 1, 1, -1, 0);
+        FUN_L00_00257470(ship, 0, -1);
+        FUN_L00_00263fd8_c((char *)ship, 0x5FD, (float *)&ship->pos, (char *)ship + 0x40, 0, 0, 0.0f, D_L10_0015F580, D_L10_0015F580, D_L10_0015F580);
+        FUN_L00_00263fd8_c((char *)ship, 0x5FE, (float *)&ship->pos, (char *)ship + 0x40, 0, 0, 0.0f, D_L10_0015F580, D_L10_0015F580, D_L10_0015F580);
+        mark_moby_for_removal_c2(ship);
         return;
     del:
-        mark_moby_for_removal_c2(m);
+        mark_moby_for_removal_c2(ship);
         return;
     }
     }
-    if (m->b31 != 0) {
-        if (fast_vec_dist(&m->pos, D_L10_00167240) < 28.0f) {
-            FUN_L00_0025a120(m);
-            m->b7F = 0x16;
+    if (ship->b31 != 0) {
+        if (fast_vec_dist(&ship->pos, D_L10_00167240) < 28.0f) {
+            FUN_L00_0025a120(ship);
+            ship->b7F = 0x16;
         }
     }
 }
