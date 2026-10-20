@@ -658,7 +658,7 @@ void FUN_L06_002348d0(void) {
     Vec4 history_delta;
     struct Moby *spawned_moby;
     s32 i;
-    s32 n;
+    s32 history_index_base;
     s32 sample_count;
 
     if (hero.unk20AD == 0) {
@@ -740,11 +740,11 @@ void FUN_L06_002348d0(void) {
         FUN_001f99f8_2348d0(&sum);
         sample_count = 8;
         for (i = 0; i < sample_count; i++) {
-            n = hero.unk21B0 - i;
+            history_index_base = hero.unk21B0 - i;
             {
-                s32 a = (n + 0x1F) % 32;
-                s32 b = (n + 0x1E) % 32;
-                FUN_001f9a28_2348d0(&history_delta, &hero.unk1B00[a], &hero.unk1B00[b]);
+                s32 history_sample_index = (history_index_base + 0x1F) % 32;
+                s32 b = (history_index_base + 0x1E) % 32;
+                FUN_001f9a28_2348d0(&history_delta, &hero.unk1B00[history_sample_index], &hero.unk1B00[b]);
             }
             FUN_001f9a10_2348d0(&sum, &sum, &history_delta);
         }
