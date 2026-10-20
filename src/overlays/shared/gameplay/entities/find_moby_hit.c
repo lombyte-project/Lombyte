@@ -828,8 +828,8 @@ float FUN_L00_0025b750(float start_angle, float b, float blend_fraction) {
 
 float absolute_float(float input) __asm__("func_001F99C0");
 
-void FUN_L00_0025b798(float *ptr, float rate, float b, float c, float limit) {
-    float v = *ptr + (b * rate - c * (*ptr));
+void FUN_L00_0025b798(float *ptr, float rate, float b, float damping_coefficient, float limit) {
+    float v = *ptr + (b * rate - damping_coefficient * (*ptr));
 
     *ptr = v;
     if (0.0f < limit) {
