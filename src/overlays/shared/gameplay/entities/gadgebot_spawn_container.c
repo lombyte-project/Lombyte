@@ -1063,7 +1063,7 @@ void FUN_L06_002ea198(struct Moby *moby, Vec4 *dir) {
             int color1;
             int life;
             int fade;
-            float n;
+            float third_frame_count_base;
             vel.f[3] = size * D_L06_00161C40;
             accel.f[3] = size * D_L06_00161C44;
             FUN_L00_0025f8e0(&pos, D_L06_00161C24);
@@ -1072,9 +1072,9 @@ void FUN_L06_002ea198(struct Moby *moby, Vec4 *dir) {
             color1 = fast_tween_color(D_L06_00161C4C, D_L06_00161C54, random_float_between(0.0f, 1.0f));
             life = scale_game_frames(D_L06_00161C58);
             fade = scale_game_frames(D_L06_00161C5C);
-            n = (float)D_L06_00161C60;
+            third_frame_count_base = (float)D_L06_00161C60;
             spawn_spark(&pos, &vel, &accel, color0, color1, life, fade,
-                        truncate_float_to_s32(scale_time(random_float_between(n * 0.5f, n * 2.5f))), -1);
+                        truncate_float_to_s32(scale_time(random_float_between(third_frame_count_base * 0.5f, third_frame_count_base * 2.5f))), -1);
         }
     }
 }
