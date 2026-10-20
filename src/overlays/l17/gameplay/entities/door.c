@@ -2320,14 +2320,14 @@ extern char D_L17_001676C0[];
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern void set_vector_length_xy(void *, void *, float) __asm__("FUN_001f9c48");
 
-void FUN_L17_002ee9c0(struct Moby *moby, char *temp, char *state) {
-    subtract_vector_xyz(temp, D_L17_001676C0, &moby->pos);
-    set_vector_length_xy(temp, temp, 2.5f);
-    *(float *)(temp + 8) = 1.5f;
-    add_vector_xyz(temp, temp, &moby->pos);
+void FUN_L17_002ee9c0(struct Moby *moby, char *camera_position, char *state) {
+    subtract_vector_xyz(camera_position, D_L17_001676C0, &moby->pos);
+    set_vector_length_xy(camera_position, camera_position, 2.5f);
+    *(float *)(camera_position + 8) = 1.5f;
+    add_vector_xyz(camera_position, camera_position, &moby->pos);
     clear_u64_value(state);
     *(float *)(state + 8) =
-        fast_arc_tan(hero.motion.unkD0.f[0] - *(float *)temp, hero.motion.unkD0.f[1] - *(float *)(temp + 4));
+        fast_arc_tan(hero.motion.unkD0.f[0] - *(float *)camera_position, hero.motion.unkD0.f[1] - *(float *)(camera_position + 4));
     *(int *)(state + 4) = 0;
 }
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002AA068.c: func_L17_002F0580), where it is exact; names translated to the US level program. */
