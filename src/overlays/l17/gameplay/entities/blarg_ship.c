@@ -456,16 +456,16 @@ extern float D_L17_001DE058[];
 extern float D_L17_001DE070[];
 extern float D_L17_001623D4 __attribute__((sda));
 void FUN_L17_002f3848(struct Moby *moby) {
-    char *d = (char *)moby->pvars;
+    char *moby_pvars = (char *)moby->pvars;
     float offset_accumulator[4];
     float pvar_angle_offset[4];
     float vector_sum[4];
     int i;
-    if (*(int *)(d + 0x4C) != -1) {
+    if (*(int *)(moby_pvars + 0x4C) != -1) {
         struct Hero *g = &hero;
         if (g->state.current != 0x32 || ((char *)g->ship_moby) == 0 ||
             *(short *)(((char *)g->ship_moby) + 0xA6) != 0x563) {
-            if (is_point_inside_clip_volume_u(&hero.motion.pos, *(int *)(d + 0x4C))) {
+            if (is_point_inside_clip_volume_u(&hero.motion.pos, *(int *)(moby_pvars + 0x4C))) {
                 D_L17_0015F638 = 150.0f;
                 goto done;
             }
@@ -478,18 +478,18 @@ done:
         for (i = 0; i < 5; i++) {
             D_L17_001DE0D0[i] = (float)i * 25.0f;
         }
-        qcopy(d, &moby->pos);
+        qcopy(moby_pvars, &moby->pos);
         build_spherical_offset(
             offset_accumulator, (D_L17_001623D4 + D_L17_001623D0) / D_L17_001623D8,
             moby->rot.z, 0.0f);
         build_spherical_offset(pvar_angle_offset, D_L17_001623D0 / D_L17_001623D8,
-                               *(float *)(d + 0x44), 0.0f);
+                               *(float *)(moby_pvars + 0x44), 0.0f);
         add_vector_xyz(vector_sum, offset_accumulator, pvar_angle_offset);
         *(OvlQuad *)offset_accumulator = *(OvlQuad *)vector_sum;
-        add_vector_xyz(vector_sum, d, offset_accumulator);
-        *(OvlQuad *)(d + 0x10) = *(OvlQuad *)vector_sum;
+        add_vector_xyz(vector_sum, moby_pvars, offset_accumulator);
+        *(OvlQuad *)(moby_pvars + 0x10) = *(OvlQuad *)vector_sum;
         moby->update_dist = 0xFF;
-        *(float *)(d + 0x10) -= 300.0f;
+        *(float *)(moby_pvars + 0x10) -= 300.0f;
     } else {
         for (i = 0; i < 5; i++) {
             D_L17_001DE040[i] += D_L17_001DE070[i] * D_L17_001DE058[i] * frame_delta_time;
