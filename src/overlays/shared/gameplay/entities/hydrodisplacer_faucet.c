@@ -906,15 +906,15 @@ extern float advance_accelerated_scalar(float, float, float, float, float *,
                                         float *) __asm__("FUN_00213f38");
 extern void sample_camera_path(int *, int, void *, float *, int, float) __asm__("FUN_00214e58");
 
-int FUN_L05_003195f8(char *m) {
-    char *d = *(char **)(m + 0x78);
+int FUN_L05_003195f8(char *moby) {
+    char *moby_vars = *(char **)(moby + 0x78);
     int *path;
-    advance_accelerated_scalar(1.0f, *(float *)(d + 0xD8), *(float *)(d + 0xD8),
-                               *(float *)(d + 0xD4), (float *)(d + 0xC0), (float *)(d + 0xC4));
-    path = *(int **)(d + 0xAC);
-    sample_camera_path(path, 0, d + 0x60, (float *)(d + 0x70), 0,
-                       *(float *)(d + 0xC0) * (float)(*path - 1));
-    return *(float *)(d + 0xC0) >= 1.0f;
+    advance_accelerated_scalar(1.0f, *(float *)(moby_vars + 0xD8), *(float *)(moby_vars + 0xD8),
+                               *(float *)(moby_vars + 0xD4), (float *)(moby_vars + 0xC0), (float *)(moby_vars + 0xC4));
+    path = *(int **)(moby_vars + 0xAC);
+    sample_camera_path(path, 0, moby_vars + 0x60, (float *)(moby_vars + 0x70), 0,
+                       *(float *)(moby_vars + 0xC0) * (float)(*path - 1));
+    return *(float *)(moby_vars + 0xC0) >= 1.0f;
 }
 /* Plays the sound that goes with the moby's current variant. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002CF2C0.c: func_L05_0031ABA0), where it is exact; names translated to the US level program. */
