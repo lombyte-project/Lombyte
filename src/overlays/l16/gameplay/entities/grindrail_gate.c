@@ -1285,7 +1285,7 @@ float absolute_float(float input) __asm__("func_001F99C0");
 
 void FUN_L16_002e6208(void *arg) {
     L16PursuitMoby *m = arg;
-    L16PursuitData *d = m->data;
+    L16PursuitData *pursuit_data = m->data;
     char *hit;
     int a;                      /* the reaction kind, later the path */
     int b;                      /* the reaction flags, later the path's slot in the table */
@@ -1297,41 +1297,41 @@ void FUN_L16_002e6208(void *arg) {
     hit = find_moby_hit(m, 0x330000, 0);
     if (hit) {
         b = 0x200;
-        d->flags = b;
-        d->strength = 0.5f;
-        d->speed = D_L16_00161E54 * frame_time_sq;
-        d->acceleration = D_L16_00161E58 * frame_time_sq;
-        d->jump_speed = D_L16_00161E60 * frame_time;
-        d->turn_speed = D_L16_00161E5C * frame_time;
+        pursuit_data->flags = b;
+        pursuit_data->strength = 0.5f;
+        pursuit_data->speed = D_L16_00161E54 * frame_time_sq;
+        pursuit_data->acceleration = D_L16_00161E58 * frame_time_sq;
+        pursuit_data->jump_speed = D_L16_00161E60 * frame_time;
+        pursuit_data->turn_speed = D_L16_00161E5C * frame_time;
         a = 0x29;
-        d->kind = a;
-        d->pending = 0;
-        d->timer = frame_time * 2.0f;
+        pursuit_data->kind = a;
+        pursuit_data->pending = 0;
+        pursuit_data->timer = frame_time * 2.0f;
         m->flags &= ~0x1000;
         *(OvlQuad *)scratch = *(OvlQuad *)(hit + 0x10);
-        trooper_knockback_arc(scratch, scratch + 4, &d->jump_speed, &d->turn_speed);
-        trooper_start_knockback(m, d->knock, 5, 1, 0, scratch[4]);
-        d->f170 = 8.0f;
-        d->f174 = 16.0f;
+        trooper_knockback_arc(scratch, scratch + 4, &pursuit_data->jump_speed, &pursuit_data->turn_speed);
+        trooper_start_knockback(m, pursuit_data->knock, 5, 1, 0, scratch[4]);
+        pursuit_data->f170 = 8.0f;
+        pursuit_data->f174 = 16.0f;
         m->state = 8;
         m->i94 = 0;
-        d->reaction_time = 0x78;
-        trooper_anim_update(m, d->reaction);
+        pursuit_data->reaction_time = 0x78;
+        trooper_anim_update(m, pursuit_data->reaction);
     }
     m->bA4 = 0xFF;
-    trooper_anim_finish(m, d->reaction);
-    b = (int)&D_L16_001B0930[d->path];
+    trooper_anim_finish(m, pursuit_data->reaction);
+    b = (int)&D_L16_001B0930[pursuit_data->path];
     a = *(int *)b;
-    if (FUN_L00_0025ff38(m, d->target, 16.0f, 0, 0, (void *)(a + 0x10), *(int *)a) != 2) {
-        if (vector_distance(d->home, d->target) > 16.0f ||
-            absolute_float(m->position[2] - d->target[2]) > 3.0f) {
-            d->i1C4 = 2;
+    if (FUN_L00_0025ff38(m, pursuit_data->target, 16.0f, 0, 0, (void *)(a + 0x10), *(int *)a) != 2) {
+        if (vector_distance(pursuit_data->home, pursuit_data->target) > 16.0f ||
+            absolute_float(m->position[2] - pursuit_data->target[2]) > 3.0f) {
+            pursuit_data->i1C4 = 2;
         }
     }
-    if (d->i1C0 == 0) {
-        struct Hero *h = &hero;
-        d->i1C0 = (int)h->moby;
-        qcopy(d->target, &h->motion.pos);
+    if (pursuit_data->i1C0 == 0) {
+        struct Hero *player = &hero;
+        pursuit_data->i1C0 = (int)player->moby;
+        qcopy(pursuit_data->target, &player->motion.pos);
     }
 }
 /* Steers and moves a moby toward a target point, returning the distance. */
