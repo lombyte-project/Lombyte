@@ -118,7 +118,9 @@ void sentrybot_update(unsigned char *moby) {
         SENTRYBOT_ANIM_TURN_AROUND = 12
     };
     enum {
+        SENTRYBOT_WAIT_FOR_ANIMATION_THEN_EMIT_WITH_NEGATIVE_JOINT_AIM = 16,
         SENTRYBOT_EMIT_WITH_NEGATIVE_JOINT_AIM = 17,
+        SENTRYBOT_WAIT_FOR_ANIMATION_THEN_EMIT_WITH_POSITIVE_JOINT_AIM = 18,
         SENTRYBOT_EMIT_WITH_POSITIVE_JOINT_AIM = 19
     };
     float va[4];
@@ -606,7 +608,7 @@ void sentrybot_update(unsigned char *moby) {
                              (void *)0xE);
         }
         break;
-    case 18:
+    case SENTRYBOT_WAIT_FOR_ANIMATION_THEN_EMIT_WITH_POSITIVE_JOINT_AIM:
         *(short *)(data + 0x19C) = 0;
         *(short *)(data + 0x194) = 0;
         FUN_L15_0029a0d0(moby);
@@ -623,7 +625,7 @@ void sentrybot_update(unsigned char *moby) {
             }
         }
         break;
-    case 16:
+    case SENTRYBOT_WAIT_FOR_ANIMATION_THEN_EMIT_WITH_NEGATIVE_JOINT_AIM:
         *(short *)(data + 0x19C) = 0;
         *(short *)(data + 0x194) = 0;
         FUN_L15_0029a0d0(moby);
