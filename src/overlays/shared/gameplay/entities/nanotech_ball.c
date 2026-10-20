@@ -2050,8 +2050,8 @@ void FUN_L00_002dbf28(char *self, char *q) {
     B50_DD3D8 blk;
     float a[4];
     float b[4];
-    float c[4];
-    float d[4];
+    float spray_axis[4];
+    float spray_axis_component[4];
     float e[4];
     float g[4];
     I6_DD3D8 first_color_choices;
@@ -2062,12 +2062,12 @@ void FUN_L00_002dbf28(char *self, char *q) {
     int step, i, j, k;
 
     blk = D_L00_001EA0B0;
-    *(u128_DD3D8 *)c = 0;
-    c[2] = D_0015ED6C + D_0015ED6C;
+    *(u128_DD3D8 *)spray_axis = 0;
+    spray_axis[2] = D_0015ED6C + D_0015ED6C;
     i = 0;
-    *(u128_DD3D8 *)b = *(u128_DD3D8 *)c;
-    *(u128_DD3D8 *)c = 0;
-    c[2] = 1.0f;
+    *(u128_DD3D8 *)b = *(u128_DD3D8 *)spray_axis;
+    *(u128_DD3D8 *)spray_axis = 0;
+    spray_axis[2] = 1.0f;
     f22 = convert_integer_to_float((&D_0013E520)->b9) + 1.0f;
     step = 1;
     if ((&D_0013E520)->b9 == 0) step = 2;
@@ -2079,11 +2079,11 @@ void FUN_L00_002dbf28(char *self, char *q) {
         g[0] = random_float_between(-1.0f, 1.0f);
         g[1] = random_float_between(-1.0f, 1.0f);
         *(u128_DD3D8 *)e = *(u128_DD3D8 *)g;
-        dt = fast_vec_dot(e, c);
-        fast_vec_normalize_c(d, c, dt);
-        subtract_vector_xyz_c3(e, e, d);
-        fast_vec_normalize_c(d, c, random_float_between(0.0f, 1.0f));
-        add_vector_xyz(e, e, d);
+        dt = fast_vec_dot(e, spray_axis);
+        fast_vec_normalize_c(spray_axis_component, spray_axis, dt);
+        subtract_vector_xyz_c3(e, e, spray_axis_component);
+        fast_vec_normalize_c(spray_axis_component, spray_axis, random_float_between(0.0f, 1.0f));
+        add_vector_xyz(e, e, spray_axis_component);
         fast_vec_normalize_c(e, e, f22 * random_float_between(3.5f, 6.5f) * D_0015ED6C);
         add_vector_xyz(e, e, b);
         {
@@ -2096,11 +2096,11 @@ void FUN_L00_002dbf28(char *self, char *q) {
         g[0] = random_float_between(-1.0f, 1.0f);
         g[1] = random_float_between(-1.0f, 1.0f);
         *(u128_DD3D8 *)e = *(u128_DD3D8 *)g;
-        dt = fast_vec_dot(e, c);
-        fast_vec_normalize_c(d, c, dt);
-        subtract_vector_xyz_c3(e, e, d);
-        fast_vec_normalize_c(d, c, random_float_between(0.0f, 1.0f));
-        add_vector_xyz(e, e, d);
+        dt = fast_vec_dot(e, spray_axis);
+        fast_vec_normalize_c(spray_axis_component, spray_axis, dt);
+        subtract_vector_xyz_c3(e, e, spray_axis_component);
+        fast_vec_normalize_c(spray_axis_component, spray_axis, random_float_between(0.0f, 1.0f));
+        add_vector_xyz(e, e, spray_axis_component);
         fast_vec_normalize_c(e, e, f22 * random_float_between(6.5f, 10.0f) * D_0015ED6C);
         add_vector_xyz(e, e, b);
         {
