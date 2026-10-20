@@ -2632,7 +2632,7 @@ void transport_pod_update(unsigned char *moby) {
     int i;
     int *path;
     int lim;
-    int t;
+    int adjusted_help_ticks;
     float s;
     OvlVec4 delta;
     OvlVec4 rot;
@@ -2857,10 +2857,10 @@ void transport_pod_update(unsigned char *moby) {
         if (absolute_float_dc88(*(float *)(transport_pod_vars->rail_a + 0x18) - ((struct Moby *)moby)->pos.z - 2.0f) < 0.01f &&
             absolute_float_dc88(*(float *)(transport_pod_vars->rail_b + 0x18) - ((struct Moby *)moby)->pos.z + 4.0f) < 0.01f) {
             {
-                t = scale_ticks(D_0015EEA4_gp) - usage_stats.stat[9].unk2 * 600;
+                adjusted_help_ticks = scale_ticks(D_0015EEA4_gp) - usage_stats.stat[9].unk2 * 600;
             }
             lim = scale_ticks(3600) * 60.0f;
-            if (lim < t) {
+            if (lim < adjusted_help_ticks) {
                 extern int D_0015ED84_dc88 __asm__("D_0015ED84") __attribute__((sda));
                 if (!(D_00141BAC & (1 << D_0015ED84_dc88))) {
                     help_request(0x7DD, 0x48);
