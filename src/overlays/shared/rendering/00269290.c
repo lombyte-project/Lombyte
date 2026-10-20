@@ -269,13 +269,13 @@ extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 
 void FUN_L00_00269b70(void *pos, unsigned char red, unsigned char green, unsigned char blue, int target, float a, float b) {
     char *particle;
-    float *q;
+    float *particle_data;
     if (target) {
         particle = FUN_L00_002678b8(5);
         if (particle) {
             qcopy(particle + 0x10, pos);
             *(int *)(particle + 4) = 0x7F000000 | (blue << 16) | (green << 8) | red;
-            q = (float *)(particle + 0x20);
+            particle_data = (float *)(particle + 0x20);
             particle[9] = truncate_float_to_s32(4.0f) - 0x60;
             particle[3] = 0x48;
             *(float *)(particle + 0xC) = b;
@@ -283,7 +283,7 @@ void FUN_L00_00269b70(void *pos, unsigned char red, unsigned char green, unsigne
             particle[8] = 0;
             particle[2] = **(unsigned char **)&D_L00_001B2094;
             *(int *)(particle + 0x20) = target;
-            q[1] = a / convert_integer_to_float(target);
+            particle_data[1] = a / convert_integer_to_float(target);
         }
     }
 }
