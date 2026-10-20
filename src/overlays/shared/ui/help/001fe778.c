@@ -16,7 +16,7 @@ extern Rec D_L15_0017A0C0[];
 extern int hero_slot_item_id(int) __asm__("FUN_L00_0020d498");
 
 /* Same routine as FUN_L06_0021d0a0, with case 2 in place of case 1. */
-int FUN_L15_001fe778(int a) {
+int FUN_L15_001fe778(int allow_item_lookup) {
     struct Hero *g = &hero;
     switch (g->vehicle_mode) {
     case 2:
@@ -29,7 +29,7 @@ int FUN_L15_001fe778(int a) {
         if (g2->health.hp == 1) {
             return 0x54;
         }
-        if (a == 0) {
+        if (allow_item_lookup == 0) {
             return 0;
         }
         if (g2->unk20A8 == 0) {
