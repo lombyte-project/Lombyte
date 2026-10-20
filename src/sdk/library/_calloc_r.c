@@ -40,16 +40,16 @@ extern void *memset(void *dst, s32 value, u32 size);
         }                                                                                          \
     } while (0)
 
-void *_calloc_r(struct _reent *ptr, u32 n, u32 elem_size) {
-    u32 sz = n * elem_size;
+void *_calloc_r(struct _reent *ptr, u32 element_count, u32 elem_size) {
+    u32 sz = element_count * elem_size;
     void *mem;
 
     mem = _malloc_r(ptr, sz);
     if (mem == 0) {
         return 0;
     } else {
-        u32 *p = (u32 *)((u8 *)mem - SIZE_SZ);
-        u32 csz = *p & ~(u32)(SIZE_SZ - 1);
+        u32 *chunk_size_ptr = (u32 *)((u8 *)mem - SIZE_SZ);
+        u32 csz = *chunk_size_ptr & ~(u32)(SIZE_SZ - 1);
         MALLOC_ZERO(mem, csz - SIZE_SZ);
         return mem;
     }
