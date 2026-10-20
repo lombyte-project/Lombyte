@@ -1905,32 +1905,32 @@ void elevator_update(L16PlatformMoby *moby) {
         ELEVATOR_MOVE_TO_GOAL = 3
     };
     L16PlatformVector delta, old_rotation, motion;
-    L16PlatformData *d = moby->data;
+    L16PlatformData *elevator_vars = moby->data;
     float *position = moby->position;
     float *rotation = moby->rotation;
 
     scale_vector_xyz(delta.v, position, -1.0f);
     qcopy(old_rotation.v, rotation);
-    if (d) {
+    if (elevator_vars) {
         switch (moby->state) {
         case ELEVATOR_INITIALIZE:
             motion.q = 0;
             motion.v[2] = 1.0f;
-            d->particle = -1;
-            transform_vector_by_basis(motion.v, motion.v, D_L02_001600FC + (d->joint << 7));
-            d->goal = motion.v[2] + *(float *)(D_L02_001600FC + d->joint * 0x80 + 0x38);
-            moby->position[2] = motion.v[2] + *(float *)(D_L02_001600FC + d->joint * 0x80 + 0x38) + D_L02_00161BD0;
+            elevator_vars->particle = -1;
+            transform_vector_by_basis(motion.v, motion.v, D_L02_001600FC + (elevator_vars->joint << 7));
+            elevator_vars->goal = motion.v[2] + *(float *)(D_L02_001600FC + elevator_vars->joint * 0x80 + 0x38);
+            moby->position[2] = motion.v[2] + *(float *)(D_L02_001600FC + elevator_vars->joint * 0x80 + 0x38) + D_L02_00161BD0;
             moby->reverse = 1;
-            if (d->stop) {
+            if (elevator_vars->stop) {
                 moby->state = 2;
             } else {
                 moby->state = 1;
             }
             break;
         case ELEVATOR_WAIT_AT_STOP:
-            if (voice_is_playing(moby, d->particle)) {
-                release_voice_slot(d->particle);
-                d->particle = -1;
+            if (voice_is_playing(moby, elevator_vars->particle)) {
+                release_voice_slot(elevator_vars->particle);
+                elevator_vars->particle = -1;
             }
             if (vector_distance(position, hero.motion.pos.f) < 20.0f) {
                 clear_u64_value(motion.v);
@@ -1939,12 +1939,12 @@ void elevator_update(L16PlatformMoby *moby) {
                 } else {
                     motion.v[2] = 1.0f;
                 }
-                transform_vector(motion.v, motion.v, D_L02_001600FC + (d->joint << 7));
-                motion.v[2] = motion.v[2] + *(float *)(D_L02_001600FC + d->joint * 0x80 + 0x38) + D_L02_00161BD0;
+                transform_vector(motion.v, motion.v, D_L02_001600FC + (elevator_vars->joint << 7));
+                motion.v[2] = motion.v[2] + *(float *)(D_L02_001600FC + elevator_vars->joint * 0x80 + 0x38) + D_L02_00161BD0;
                 if (absolute_float(hero.motion.pos.f[2] - motion.v[2]) < 1.0f) {
                     moby->reverse = (moby->reverse + 1) & 1;
-                    d->goal = motion.v[2];
-                    d->speed = 0.0f;
+                    elevator_vars->goal = motion.v[2];
+                    elevator_vars->speed = 0.0f;
                     moby->state = 3;
                     break;
                 }
@@ -1957,9 +1957,9 @@ void elevator_update(L16PlatformMoby *moby) {
                     motion.v[2] = 1.0f;
                 }
                 moby->reverse = (moby->reverse + 1) & 1;
-                transform_vector(motion.v, motion.v, D_L02_001600FC + (d->joint << 7));
-                d->goal = motion.v[2] + *(float *)(D_L02_001600FC + d->joint * 0x80 + 0x38) + D_L02_00161BD0;
-                d->speed = 0.0f;
+                transform_vector(motion.v, motion.v, D_L02_001600FC + (elevator_vars->joint << 7));
+                elevator_vars->goal = motion.v[2] + *(float *)(D_L02_001600FC + elevator_vars->joint * 0x80 + 0x38) + D_L02_00161BD0;
+                elevator_vars->speed = 0.0f;
                 moby->state = 3;
             }
             break;
@@ -1972,50 +1972,50 @@ void elevator_update(L16PlatformMoby *moby) {
                     motion.v[2] = 1.0f;
                 }
                 moby->reverse = (moby->reverse + 1) & 1;
-                transform_vector(motion.v, motion.v, D_L02_001600FC + (d->joint << 7));
-                d->goal = motion.v[2] + *(float *)(D_L02_001600FC + d->joint * 0x80 + 0x38) + D_L02_00161BD0;
-                d->speed = 0.0f;
+                transform_vector(motion.v, motion.v, D_L02_001600FC + (elevator_vars->joint << 7));
+                elevator_vars->goal = motion.v[2] + *(float *)(D_L02_001600FC + elevator_vars->joint * 0x80 + 0x38) + D_L02_00161BD0;
+                elevator_vars->speed = 0.0f;
                 moby->state = 3;
             }
             break;
         case ELEVATOR_MOVE_TO_GOAL: {
             float speed;
 
-            if (!FUN_L00_0025fa38(&hero.motion.unkD0, d->joint)
+            if (!FUN_L00_0025fa38(&hero.motion.unkD0, elevator_vars->joint)
                 || absolute_float(moby->position[2] - hero.motion.pos.f[2] - 2.0f) > 1.0f
-                || moby->position[2] < d->goal) {
-                speed = advance_accelerated_scalar(&moby->position[2], &d->speed, d->goal,
+                || moby->position[2] < elevator_vars->goal) {
+                speed = advance_accelerated_scalar(&moby->position[2], &elevator_vars->speed, elevator_vars->goal,
                                       D_L02_00161BE0 * frame_time_sq, D_L02_00161BE0 * frame_time_sq,
                                       D_L02_00161BDC * D_0015ED6C);
             } else {
-                speed = advance_accelerated_scalar(&moby->position[2], &d->speed, moby->position[2],
+                speed = advance_accelerated_scalar(&moby->position[2], &elevator_vars->speed, moby->position[2],
                                       D_L02_00161BE0 * 4.0f * frame_time_sq, D_L02_00161BE0 * 4.0f * frame_time_sq,
                                       D_L02_00161BDC * D_0015ED6C);
             }
             clear_u64_value(motion.v);
             motion.v[2] = speed;
-            update_entity_matrix((char *)d->basis, motion.v, moby->rotation, moby->rotation);
+            update_entity_matrix((char *)elevator_vars->basis, motion.v, moby->rotation, moby->rotation);
             if (motion.v[2] != 0.0f) {
-                if (!voice_is_playing(moby, d->particle)) {
-                    d->particle = allocate_voice_for_target_entry_alt(0, 4, (int)moby);
+                if (!voice_is_playing(moby, elevator_vars->particle)) {
+                    elevator_vars->particle = allocate_voice_for_target_entry_alt(0, 4, (int)moby);
                 }
-            } else if (voice_is_playing(moby, d->particle)) {
-                release_voice_slot(d->particle);
-                d->particle = -1;
+            } else if (voice_is_playing(moby, elevator_vars->particle)) {
+                release_voice_slot(elevator_vars->particle);
+                elevator_vars->particle = -1;
             }
-            if (moby->position[2] == d->goal && (hero.ground_moby != (struct Moby *)moby || hero.air_frames.s != 0)) {
-                clear_u64_value(d->basis[1]);
+            if (moby->position[2] == elevator_vars->goal && (hero.ground_moby != (struct Moby *)moby || hero.air_frames.s != 0)) {
+                clear_u64_value(elevator_vars->basis[1]);
                 moby->state = 2;
                 break;
             }
-            if (d->speed != 0.0f) {
+            if (elevator_vars->speed != 0.0f) {
                 enqueue_callback_list_1(FUN_L02_002dc2c8, moby);
             }
             break;
         }
         }
         add_vector_xyz(delta.v, delta.v, moby->position);
-        update_entity_matrix((char *)d->basis, delta.v, old_rotation.v, moby->rotation);
+        update_entity_matrix((char *)elevator_vars->basis, delta.v, old_rotation.v, moby->rotation);
     }
 }
 
