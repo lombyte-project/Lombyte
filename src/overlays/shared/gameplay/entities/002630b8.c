@@ -236,7 +236,7 @@ extern Effect_2637f8 *FUN_L00_0026d000_2637f8(void *, f32, f32, f32, s32, void *
     __asm__("FUN_L00_0026d000");
 extern u8 D_L00_0015F580_2637f8[] __asm__("D_L00_0015F580") __attribute__((section(".sdata")));
 void cutscene_set_camera_target(u8 *m) __asm__("FUN_L00_002637f8");
-void cutscene_set_camera_target(u8 *m) {
+void cutscene_set_camera_target(u8 *moby) {
     Vec4_2634f8 vectors[4];
     Vec4_2634f8 pos;
     Vec4_2634f8 scaled;
@@ -244,8 +244,8 @@ void cutscene_set_camera_target(u8 *m) {
     s32 count;
     s32 w24;
     Effect_2637f8 *effect;
-    if (*(s16 *)(m + 0xa6) == 0x2ee && m != 0) {
-        FUN_0020cca8_2637f8(m, 0, vectors);
+    if (*(s16 *)(moby + 0xa6) == 0x2ee && moby != 0) {
+        FUN_0020cca8_2637f8(moby, 0, vectors);
         fraction = FUN_001f9af0_2637f8(vectors) / 1.026f;
         if (1.0f < fraction)
             fraction = 1.0f;
@@ -260,11 +260,11 @@ void cutscene_set_camera_target(u8 *m) {
             b2A = 0x50;
             count = 1;
             do {
-                s32 n;
-                n = FUN_00213260_2637f8(0x10);
+                s32 signed_random_value;
+                signed_random_value = FUN_00213260_2637f8(0x10);
                 if (FUN_00213260_2637f8(2) != 0)
-                    n = -n;
-                effect = FUN_L00_0026d000_2637f8(&pos, size, 1.0f, 0.75f, n,
+                    signed_random_value = -signed_random_value;
+                effect = FUN_L00_0026d000_2637f8(&pos, size, 1.0f, 0.75f, signed_random_value,
                                                    D_L00_0015F580_2637f8, lifetime, 0x503030ff);
                 if (effect) {
                     EffectTail_2637f8 *tail = &effect->tail;
