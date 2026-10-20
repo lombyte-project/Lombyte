@@ -461,7 +461,7 @@ void FUN_L06_002ff2c8(void *arg);
 extern void allocate_voice_for_bank_entry(int, int, int) __asm__("FUN_0022db10");
 float absolute_float(float input) __asm__("func_001F99C0");
 
-void FUN_L06_002feb40(char *m) {
+void FUN_L06_002feb40(char *moby) {
     enum {
         HIT_RESPONSE_WITHOUT_KNOCKBACK = 0,
         FATAL_HIT_RESPONSE = 1,
@@ -477,10 +477,10 @@ void FUN_L06_002feb40(char *m) {
         HIT_RESPONSE_PRESERVING_MOBY_STATE = 11
     };
     extern unsigned char D_0013D408[];
-    char *d;
-    char *t;
-    char *p;
-    int *e;
+    char *vars;
+    char *hit_record;
+    char *fragment;
+    int *route_record;
     int r;
     int k;
     int bits;
@@ -488,32 +488,32 @@ void FUN_L06_002feb40(char *m) {
     float vec2[4];
     int hit;
     float dt;
-    float f;
+    float remaining_health;
     float lo, hi, spd, off, pull;
 
-    d = *(char **)(m + 0x78);
-    *(float *)(m + 0x2C) = *(float *)(*(char **)(m + 0x24) + 0x24) * D_L06_00161FA8;
-    FUN_L06_002ff2c8(m);
-    if (*(int *)(d + 0x38) != 0) {
-        *(int *)(d + 0x188) = truncate_float_to_s32_c(FUN_L04_001f1978(random_float_between_c(180.0f, 240.0f)));
-        *(int *)(d + 0x38) = 0;
+    vars = *(char **)(moby + 0x78);
+    *(float *)(moby + 0x2C) = *(float *)(*(char **)(moby + 0x24) + 0x24) * D_L06_00161FA8;
+    FUN_L06_002ff2c8(moby);
+    if (*(int *)(vars + 0x38) != 0) {
+        *(int *)(vars + 0x188) = truncate_float_to_s32_c(FUN_L04_001f1978(random_float_between_c(180.0f, 240.0f)));
+        *(int *)(vars + 0x38) = 0;
     }
-    tick_countdown_32_alt((s32 *)(d + 0x188));
+    tick_countdown_32_alt((s32 *)(vars + 0x188));
     *(int *)&dt = 0;
-    t = FUN_L00_0025a420(m, 0x330000, 0);
-    r = fun_00213928(m, t, d + 0x20, 0, &hit, &dt, 0, 4);
-    if (hit != 1 && (unsigned char)m[0x20] != 0x10) {
-        if (current_level_index_gp == 0xA && t != 0 && *(char **)(t + 0x20) != 0 &&
-            *(short *)(*(char **)(t + 0x20) + 0xA6) == 0x31A && D_0013D408[0x11] == 0) {
+    hit_record = FUN_L00_0025a420(moby, 0x330000, 0);
+    r = fun_00213928(moby, hit_record, vars + 0x20, 0, &hit, &dt, 0, 4);
+    if (hit != 1 && (unsigned char)moby[0x20] != 0x10) {
+        if (current_level_index_gp == 0xA && hit_record != 0 && *(char **)(hit_record + 0x20) != 0 &&
+            *(short *)(*(char **)(hit_record + 0x20) + 0xA6) == 0x31A && D_0013D408[0x11] == 0) {
             D_0013D408[0x11] = 1;
             allocate_voice_for_bank_entry(1, 0, 0);
             FUN_L00_00263d40(0x53D6, -1);
         }
-        f = *(float *)(d + 0x20) - dt;
-        *(float *)(d + 0x20) = f;
-        if (f <= 0.0f) r = 1;
-        *(int *)(d + 0x80) = 0x1F4;
-        *(float *)(d + 0x88) = 0.5f;
+        remaining_health = *(float *)(vars + 0x20) - dt;
+        *(float *)(vars + 0x20) = remaining_health;
+        if (remaining_health <= 0.0f) r = 1;
+        *(int *)(vars + 0x80) = 0x1F4;
+        *(float *)(vars + 0x88) = 0.5f;
         switch (r) {
         case NONFATAL_KNOCKBACK_HIT_RESPONSE:
         case TIMED_NONFATAL_KNOCKBACK_HIT_RESPONSE:
@@ -525,20 +525,20 @@ void FUN_L06_002feb40(char *m) {
         case SIXTY_FRAME_KNOCKBACK_HIT_RESPONSE:
         {
             char *q;
-            int n;
+            int knockback_frames;
             float b, a;
-            m[0x20] = 0xF;
-            q = d + 0x60;
-            n = scale_game_frames_c(0x3C);
+            moby[0x20] = 0xF;
+            q = vars + 0x60;
+            knockback_frames = scale_game_frames_c(0x3C);
             a = D_L06_00161FB0 * D_0015ED6C;
             b = D_L06_00161FB4 * D_0015ED6C;
-            *(short *)(d + 0x26) = n;
-            *(float *)(d + 0x7C) = b;
-            *(float *)(d + 0x78) = a;
-            *(float *)(d + 0xB0) = 8.0f;
-            *(float *)(d + 0xB4) = 15.0f;
-            trooper_start_knockback(m, q, fast_arc_tan(*(float *)(t + 0x10), *(float *)(t + 0x14)), 7, 1, 0);
-            *(unsigned char *)(d + 0x117) = 0xFA;
+            *(short *)(vars + 0x26) = knockback_frames;
+            *(float *)(vars + 0x7C) = b;
+            *(float *)(vars + 0x78) = a;
+            *(float *)(vars + 0xB0) = 8.0f;
+            *(float *)(vars + 0xB4) = 15.0f;
+            trooper_start_knockback(moby, q, fast_arc_tan(*(float *)(hit_record + 0x10), *(float *)(hit_record + 0x14)), 7, 1, 0);
+            *(unsigned char *)(vars + 0x117) = 0xFA;
             break;
         }
         case FATAL_HIT_RESPONSE:
@@ -546,28 +546,28 @@ void FUN_L06_002feb40(char *m) {
         {
             char *q;
             float a, b;
-            m[0x20] = 0x10;
-            q = d + 0x60;
+            moby[0x20] = 0x10;
+            q = vars + 0x60;
             a = D_L06_00161FB8 * D_0015ED6C;
             b = D_L06_00161FBC * D_0015ED6C;
-            *(unsigned short *)(m + 0x34) &= 0xEFFF;
-            *(float *)(d + 0x78) = a;
-            *(float *)(d + 0x7C) = b;
-            *(float *)(d + 0xB0) = 9.0f;
-            *(float *)(d + 0xB4) = 18.0f;
+            *(unsigned short *)(moby + 0x34) &= 0xEFFF;
+            *(float *)(vars + 0x78) = a;
+            *(float *)(vars + 0x7C) = b;
+            *(float *)(vars + 0xB0) = 9.0f;
+            *(float *)(vars + 0xB4) = 18.0f;
             bits = 0;
             lo = *(float *)&bits;
             bits = 0x3E4CCCCD;
             hi = *(float *)&bits;
-            a = fast_arc_tan(*(float *)(t + 0x10), *(float *)(t + 0x14));
+            a = fast_arc_tan(*(float *)(hit_record + 0x10), *(float *)(hit_record + 0x14));
             bits = 0x40400000;
             off = *(float *)&bits;
-            trooper_start_knockback(m, q, a, 9, 1, 0);
+            trooper_start_knockback(moby, q, a, 9, 1, 0);
             bits = 0x40E00000;
             pull = *(float *)&bits;
             for (k = 0; k < 10; k++) {
                 float ang;
-                qcopy(vv, m + 0x10);
+                qcopy(vv, moby + 0x10);
                 vv[2] = vv[2] + 2.5f;
                 vv[0] = vv[0] + FUN_L00_00257c48(lo, hi);
                 vv[1] = vv[1] + FUN_L00_00257c48(lo, hi);
@@ -577,16 +577,16 @@ void FUN_L06_002feb40(char *m) {
                 vec2[0] = fast_cos(ang) * spd;
                 vec2[1] = fast_sin_c2(ang) * spd;
                 vec2[2] = lo;
-                vec2[0] = vec2[0] + fast_cos(fast_arc_tan(*(float *)(t + 0x10), *(float *)(t + 0x14))) * (D_0015ED6C * pull);
-                vec2[1] = vec2[1] + fast_sin_c2(fast_arc_tan(*(float *)(t + 0x10), *(float *)(t + 0x14))) * (D_0015ED6C * pull);
+                vec2[0] = vec2[0] + fast_cos(fast_arc_tan(*(float *)(hit_record + 0x10), *(float *)(hit_record + 0x14))) * (D_0015ED6C * pull);
+                vec2[1] = vec2[1] + fast_sin_c2(fast_arc_tan(*(float *)(hit_record + 0x10), *(float *)(hit_record + 0x14))) * (D_0015ED6C * pull);
                 vec2[2] = random_float_between_c(off, 8.5f) * D_0015ED6C;
-                p = FUN_L06_00300c60_c((int)m, (char *)vv, (char *)vec2);
-                if (p != 0) {
-                    *(float *)(p + 0x2C) = *(float *)(p + 0x2C) * 0.4f;
+                fragment = FUN_L06_00300c60_c((int)moby, (char *)vv, (char *)vec2);
+                if (fragment != 0) {
+                    *(float *)(fragment + 0x2C) = *(float *)(fragment + 0x2C) * 0.4f;
                 }
             }
-            *(unsigned char *)(d + 0x117) = 0xFA;
-            FUN_L00_00257470(m, 0, -1);
+            *(unsigned char *)(vars + 0x117) = 0xFA;
+            FUN_L00_00257470(moby, 0, -1);
             break;
         }
         case HIT_RESPONSE_WITHOUT_KNOCKBACK:
@@ -594,28 +594,28 @@ void FUN_L06_002feb40(char *m) {
         default:
             break;
         }
-        trooper_anim_update(m, (short *)(d + 0x110));
+        trooper_anim_update(moby, (short *)(vars + 0x110));
     }
-    *(unsigned char *)(m + 0xA4) = 0xFF;
-    trooper_anim_finish(m, d + 0x110);
-    if (*(int *)(d + 0x188) != 0) {
-        *(float *)(d + 0x198) = D_L06_00161FAC + 6.0f;
+    *(unsigned char *)(moby + 0xA4) = 0xFF;
+    trooper_anim_finish(moby, vars + 0x110);
+    if (*(int *)(vars + 0x188) != 0) {
+        *(float *)(vars + 0x198) = D_L06_00161FAC + 6.0f;
     } else {
-        *(float *)(d + 0x198) = D_L06_00161FAC;
+        *(float *)(vars + 0x198) = D_L06_00161FAC;
     }
     {
-    char *q = d + 0x120;
-    e = D_L06_001B0C30[*(int *)(d + 0x180)];
-    if (FUN_L00_0025ff38(*(float *)(d + 0x198), m, q, 0, 0, e + 4, *e) != 2) {
-        if (*(float *)(d + 0x198) < vector_distance_xy_alt(d + 0x170, d + 0x120)) {
-            *(int *)(d + 0x164) = 2;
-        } else if (3.0f < absolute_float(*(float *)(m + 0x18) - *(float *)(d + 0x128))) {
-            *(int *)(d + 0x164) = 2;
+    char *q = vars + 0x120;
+    route_record = D_L06_001B0C30[*(int *)(vars + 0x180)];
+    if (FUN_L00_0025ff38(*(float *)(vars + 0x198), moby, q, 0, 0, route_record + 4, *route_record) != 2) {
+        if (*(float *)(vars + 0x198) < vector_distance_xy_alt(vars + 0x170, vars + 0x120)) {
+            *(int *)(vars + 0x164) = 2;
+        } else if (3.0f < absolute_float(*(float *)(moby + 0x18) - *(float *)(vars + 0x128))) {
+            *(int *)(vars + 0x164) = 2;
         }
     }
     }
-    if (*(int *)(d + 0x160) == 0) {
-        *(int *)(d + 0x160) = *(int *)(((char *)&D_001413D0));
+    if (*(int *)(vars + 0x160) == 0) {
+        *(int *)(vars + 0x160) = *(int *)(((char *)&D_001413D0));
     }
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002FF000.c: func_L06_00300530), where it is exact; names translated to the US level program. */
