@@ -32,21 +32,21 @@ s32 video_callback(s32 unused_callback_arg, struct VdecCb *cb, struct VdecBuf *a
     u8 *ps;
     u8 *end;
     s32 len;
-    s32 n;
+    s32 first_source_byte_count;
     s32 rest;
     s32 ret;
 
     len = cb->len;
     ps = cb->data;
     end = ab->data + ab->size;
-    n = end - ps;
-    if (len < n) {
-        n = len;
+    first_source_byte_count = end - ps;
+    if (len < first_source_byte_count) {
+        first_source_byte_count = len;
     }
-    rest = len - n;
+    rest = len - first_source_byte_count;
     video_dec_begin_put(D_0016120C + 0xD9048, &ptr0, &len0, &ptr1, &len1);
     ret = cpy2area((ptr0 & 0x0FFFFFFF) | 0x20000000, len0,
-                                   (ptr1 & 0x0FFFFFFF) | 0x20000000, len1, ps, n, ab, rest);
+                                   (ptr1 & 0x0FFFFFFF) | 0x20000000, len1, ps, first_source_byte_count, ab, rest);
     if (ret > 0) {
         if (video_dec_put_ts(D_0016120C + 0xD9048, cb->pts, cb->dts, ptr0, ret) == 0) {
             err_message(D_001E8B08);
