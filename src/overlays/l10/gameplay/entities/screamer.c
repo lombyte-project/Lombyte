@@ -1367,17 +1367,17 @@ void toxic_crab_update(Moby2E30F8 *m) {
         FUN_L01_0026d930((char *)&crab_data->iD0);
         {
             float k = D_L10_00161E24 * 1024.0f;
-            float s;
+            float initial_movement_step;
             float e;
             int r;
             crab_data->fDC = 0.5f;
             crab_data->fD8 = 2.0f;
             r = truncate_float_to_s32(k);
-            s = crab_data->f1A4 * frame_time;
+            initial_movement_step = crab_data->f1A4 * frame_time;
             e = D_L10_00161E24;
             crab_data->iD0 = r;
             crab_data->fD4 = e;
-            crab_data->fF4 = s;
+            crab_data->fF4 = initial_movement_step;
         }
         {
             int k = crab_data->i1BC;
