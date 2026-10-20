@@ -366,7 +366,7 @@ extern void trooper_anim_finish(struct Moby *, void *) __asm__("FUN_L00_0025d538
 
 extern f32 frame_time_sq_macro __asm__("D_0015ED70") __attribute__((section(".sdata")));
 /* Trooper hit handler: takes damage, then knocks back away from the attacker by hit strength (dying on lethal hits). */
-void FUN_L03_002ca808(struct Moby *m) {
+void FUN_L03_002ca808(struct Moby *damaged_moby) {
     enum {
         TROOPER_DAMAGE_LETHAL = 1,
         TROOPER_DAMAGE_SHORT_KNOCKBACK = 3,
@@ -374,7 +374,7 @@ void FUN_L03_002ca808(struct Moby *m) {
         TROOPER_DAMAGE_LONG_KNOCKBACK_ALTERNATE = 5,
         TROOPER_DAMAGE_SHORT_KNOCKBACK_ALTERNATE = 6
     };
-    TrooperVars *v = (TrooperVars *)m->pvars;
+    TrooperVars *v = (TrooperVars *)damaged_moby->pvars;
     TrooperHit *hit_record;
     Vec4 at;
     s32 hit;
@@ -383,16 +383,16 @@ void FUN_L03_002ca808(struct Moby *m) {
     s32 r;
 
     dmg = 0.0f;
-    hit_record = trooper_find_hit(m, 0x330000, 0);
-    r = trooper_take_damage(m, hit_record, &v->health, 0, &hit, &dmg, 0, 4);
-    if (hit != 1 && m->state != 5) {
+    hit_record = trooper_find_hit(damaged_moby, 0x330000, 0);
+    r = trooper_take_damage(damaged_moby, hit_record, &v->health, 0, &hit, &dmg, 0, 4);
+    if (hit != 1 && damaged_moby->state != 5) {
         if (hit_record->source != NULL) {
             if (hit_record->source != hero.items[0].moby)
-                ang = trooper_atan2(m->pos.x - hit_record->source->pos.x, m->pos.y - hit_record->source->pos.y);
+                ang = trooper_atan2(damaged_moby->pos.x - hit_record->source->pos.x, damaged_moby->pos.y - hit_record->source->pos.y);
             else
-                ang = trooper_atan2(m->pos.x - hero.motion.pos.f[0], m->pos.y - hero.motion.pos.f[1]);
+                ang = trooper_atan2(damaged_moby->pos.x - hero.motion.pos.f[0], damaged_moby->pos.y - hero.motion.pos.f[1]);
         } else {
-            ang = trooper_atan2(m->pos.x - hero.motion.pos.f[0], m->pos.y - hero.motion.pos.f[1]);
+            ang = trooper_atan2(damaged_moby->pos.x - hero.motion.pos.f[0], damaged_moby->pos.y - hero.motion.pos.f[1]);
         }
         v->health -= dmg;
         if (v->health <= 0.0f)
@@ -406,11 +406,11 @@ void FUN_L03_002ca808(struct Moby *m) {
             v->kb_frames = 9;
             *(u128 *)&at = *(u128 *)&hit_record->pos;
             trooper_knockback_arc(&at, &ang, &v->kb_lift, &v->kb_gravity);
-            trooper_start_knockback(trooper_atan2(m->pos.x - hero.motion.pos.f[0], m->pos.y - hero.motion.pos.f[1]),
-                                    m, v->knockback, 3, 1, 0);
+            trooper_start_knockback(trooper_atan2(damaged_moby->pos.x - hero.motion.pos.f[0], damaged_moby->pos.y - hero.motion.pos.f[1]),
+                                    damaged_moby, v->knockback, 3, 1, 0);
             v->kb_min = 5.0f;
             v->kb_max = 10.0f;
-            m->state = 4;
+            damaged_moby->state = 4;
             break;
         case TROOPER_DAMAGE_LONG_KNOCKBACK:
         case TROOPER_DAMAGE_LONG_KNOCKBACK_ALTERNATE:
@@ -420,11 +420,11 @@ void FUN_L03_002ca808(struct Moby *m) {
             v->kb_frames = 9;
             *(u128 *)&at = *(u128 *)&hit_record->pos;
             trooper_knockback_arc(&at, &ang, &v->kb_lift, &v->kb_gravity);
-            trooper_start_knockback(trooper_atan2(m->pos.x - hero.motion.pos.f[0], m->pos.y - hero.motion.pos.f[1]),
-                                    m, v->knockback, 4, 1, 0);
+            trooper_start_knockback(trooper_atan2(damaged_moby->pos.x - hero.motion.pos.f[0], damaged_moby->pos.y - hero.motion.pos.f[1]),
+                                    damaged_moby, v->knockback, 4, 1, 0);
             v->kb_min = 7.5f;
             v->kb_max = 15.0f;
-            m->state = 4;
+            damaged_moby->state = 4;
             break;
         case TROOPER_DAMAGE_LETHAL:
             v->kb_speed = D_L03_001618F8 * frame_time_sq_macro;
@@ -433,19 +433,19 @@ void FUN_L03_002ca808(struct Moby *m) {
             v->kb_frames = 9;
             *(u128 *)&at = *(u128 *)&hit_record->pos;
             trooper_knockback_arc(&at, &ang, &v->kb_lift, &v->kb_gravity);
-            trooper_start_knockback(trooper_atan2(m->pos.x - hero.motion.pos.f[0], m->pos.y - hero.motion.pos.f[1]),
-                                    m, v->knockback, 5, 1, 0);
+            trooper_start_knockback(trooper_atan2(damaged_moby->pos.x - hero.motion.pos.f[0], damaged_moby->pos.y - hero.motion.pos.f[1]),
+                                    damaged_moby, v->knockback, 5, 1, 0);
             v->kb_min = 8.0f;
             v->kb_max = 15.0f;
-            m->flags &= 0xEFFF;
+            damaged_moby->flags &= 0xEFFF;
             *((u8 *)v + 0x67) = 0xFA;
-            m->state = 5;
+            damaged_moby->state = 5;
             break;
         }
-        trooper_anim_update(m, v->anim);
+        trooper_anim_update(damaged_moby, v->anim);
     }
-    m->hit_slot = 0xFF;
-    trooper_anim_finish(m, v->anim);
+    damaged_moby->hit_slot = 0xFF;
+    trooper_anim_finish(damaged_moby, v->anim);
 }
 #include "rnc/overlay/quad.h"
 
