@@ -30,9 +30,9 @@ void FUN_L17_002ea418(unsigned char a, unsigned char b, unsigned char c, unsigne
 
 extern int FUN_L00_002dbe20(void *);
 
-int FUN_L17_002f0040(struct Moby *a) {
-    int r = FUN_L00_002dbe20(a);
-    a->state = 0xc;
+int FUN_L17_002f0040(struct Moby *moby) {
+    int r = FUN_L00_002dbe20(moby);
+    moby->state = 0xc;
     return r;
 }
 extern void FUN_L17_002f0448(struct Moby *m);
