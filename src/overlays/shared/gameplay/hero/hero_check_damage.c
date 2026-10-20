@@ -3141,7 +3141,7 @@ void FUN_001f9bf8_002126b8(Vec4_002126b8 *, void *, float) __asm__("FUN_001f9bf8
 void FUN_001f9a10_002126b8(void *, void *, void *) __asm__("FUN_001f9a10");
 void FUN_L00_0025d238_002126b8(Vec4_002126b8 *, void *) __asm__("FUN_L00_0025d238");
 void hero_get_collision_ray_endpoints(Vec4_002126b8 *, Vec4_002126b8 *, int, float, float) __asm__("FUN_L00_002126b8");
-void hero_get_collision_ray_endpoints(Vec4_002126b8 *a, Vec4_002126b8 *b, int mode, float fa, float fb) {
+void hero_get_collision_ray_endpoints(Vec4_002126b8 *ray_start, Vec4_002126b8 *b, int mode, float fa, float fb) {
     Vec4_002126b8 t[2];
     if (mode) {
         char *up = (char *)&hero.gravity_dir;
@@ -3149,8 +3149,8 @@ void hero_get_collision_ray_endpoints(Vec4_002126b8 *a, Vec4_002126b8 *b, int mo
         FUN_001f9bf8_002126b8(&t[0], up, -fb);
         FUN_001f9a10_002126b8(b, base, &t[0]);
         FUN_001f9bf8_002126b8(&t[0], up, -fa);
-        FUN_001f9a10_002126b8(a, base, &t[0]);
-        *(u128_002126b8 *)&t[1] = *(u128_002126b8 *)a;
+        FUN_001f9a10_002126b8(ray_start, base, &t[0]);
+        *(u128_002126b8 *)&t[1] = *(u128_002126b8 *)ray_start;
         FUN_L00_0025d238_002126b8(&t[1], b);
     } else {
         qcopy(&t[0], &hero.motion.pos);
@@ -3158,8 +3158,8 @@ void hero_get_collision_ray_endpoints(Vec4_002126b8 *a, Vec4_002126b8 *b, int mo
         b->z += fb;
         if (b->z < 0.0f)
             b->z = 0.0f;
-        qcopy(a, &t[0]);
-        a->z += fa;
+        qcopy(ray_start, &t[0]);
+        ray_start->z += fa;
     }
 }
 typedef union {
