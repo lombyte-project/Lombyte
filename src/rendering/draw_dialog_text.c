@@ -105,6 +105,7 @@ void draw_dialog_text(void) {
         MODE_FREEZE_TIMER_GATED_CENTERED_FOOTER_MESSAGE = 2,
         MODE_FREEZE_FORMATTED_CENTERED_FOOTER_MESSAGE = 5,
         MODE_FREEZE_ALTERNATE_LEFT_PAIRED_FOOTER_MESSAGE = 6,
+        MODE_FREEZE_FLAG_GATED_PAIRED_OR_CENTERED_FOOTER_MESSAGE = 12,
         MODE_FREEZE_CENTERED_FOOTER_MESSAGE = 17,
         MODE_FREEZE_PAIRED_FOOTER_MESSAGE = 23,
         MODE_FREEZE_FORMATTED_PAIRED_FOOTER_MESSAGE = 24
@@ -182,7 +183,7 @@ void draw_dialog_text(void) {
             right = 0x524B;
             text = get_help_message_text(0x4FAF);
             break;
-        case 12:
+        case MODE_FREEZE_FLAG_GATED_PAIRED_OR_CENTERED_FOOTER_MESSAGE:
             if (!(mode_freeze_flags & 2)) {
                 mid = 0x4FA8;
                 text = get_help_message_text(0x4FA7);
