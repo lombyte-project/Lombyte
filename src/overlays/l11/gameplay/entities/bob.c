@@ -1685,10 +1685,10 @@ unsigned char *FUN_L11_00309378(char *src, char *pos, char *target, char *vec, i
         qcopy(moby + 0x10, pos);
         qcopy(moby + 0x40, vec);
         if (target != 0) {
-            char *e;
-            e = suck_get_aim_height(target);
-            if (e != 0) {
-                *(unsigned short *)(e + 0x1E) |= 0x80;
+            char *target_aux_data;
+            target_aux_data = suck_get_aim_height(target);
+            if (target_aux_data != 0) {
+                *(unsigned short *)(target_aux_data + 0x1E) |= 0x80;
             }
         }
         *(int *)(data + 0x28) = arg;
