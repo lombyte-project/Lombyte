@@ -666,7 +666,7 @@ void FUN_L00_002167d0(void) {
     struct Hero *q;
     Vec4 *r;
     V4 target_velocity, target_velocity_before_impulse, saved_move_impulse, xy_velocity_scratch, slope_velocity_delta;
-    f32 f20, f21, f22, a, b, c, d, e, h, k;
+    f32 f20, f21, f22, impulse_step_factor, b, base_impulse_step, frame_duration, e, target_speed_y, k;
 
     FUN_L00_002118c8_c(0, 1.0f);
     f20 = 0.2f;
@@ -681,15 +681,15 @@ void FUN_L00_002167d0(void) {
     }
     f20 = 5.9f;
     target_velocity.f[0] = fast_cos(hero.motion.move_yaw) * hero.target_speed * (frame_time * f20);
-    h = fast_sin(hero.motion.move_yaw) * hero.target_speed;
+    target_speed_y = fast_sin(hero.motion.move_yaw) * hero.target_speed;
     target_velocity.f[2] = 0.0f;
-    d = frame_time;
-    f20 = d * f20;
-    target_velocity.f[1] = h * f20;
+    frame_duration = frame_time;
+    f20 = frame_duration * f20;
+    target_velocity.f[1] = target_speed_y * f20;
     qcopy(&target_velocity_before_impulse, &target_velocity);
     f21 = target_velocity.f[2];
     if (f21 < hero.unk930) {
-        FUN_L00_002132b8(0.7f, d * f21);
+        FUN_L00_002132b8(0.7f, frame_duration * f21);
         qcopy(&saved_move_impulse, &hero.move_impulse);
         FUN_001f9a10_c(&target_velocity, &target_velocity, &hero.move_impulse);
         FUN_001f99f8_c(&hero.move_impulse);
@@ -726,12 +726,12 @@ void FUN_L00_002167d0(void) {
             f20 = f20 / e;
         }
         b = vector_length_xy(&saved_move_impulse);
-        a = (b - f20) / b;
-        c = frame_time_sq * 3.0f;
-        b = c * a;
+        impulse_step_factor = (b - f20) / b;
+        base_impulse_step = frame_time_sq * 3.0f;
+        b = base_impulse_step * impulse_step_factor;
         if (hero.unk229C < 0.3f) {
-            if (b < c) {
-                b = c;
+            if (b < base_impulse_step) {
+                b = base_impulse_step;
             }
         }
         if (f21 < b) {
