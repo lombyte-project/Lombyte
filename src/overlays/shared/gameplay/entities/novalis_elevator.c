@@ -441,30 +441,30 @@ void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_0021
 
 void FUN_L01_002c72c8(void) {
     float v[4];
-    float p[4];
-    float a, b;
+    float spawn_position[4];
+    float base_angle, b;
     int i;
     fast_vec_sub(v, D_L01_00167240, D_L01_001742E0);
-    a = -fast_arc_tan(vector_length_xy(v), v[2]);
+    base_angle = -fast_arc_tan(vector_length_xy(v), v[2]);
     fast_arc_tan(v[0], v[1]);
     for (i = 19; i >= 0; i--) {
         float x, y;
-        x = fast_add_rotations(randf_sym(0.0f, 3.1415927f), a);
-        y = fast_add_rotations(randf_sym(0.0f, 3.1415927f), a);
+        x = fast_add_rotations(randf_sym(0.0f, 3.1415927f), base_angle);
+        y = fast_add_rotations(randf_sym(0.0f, 3.1415927f), base_angle);
         build_spherical_offset(v, 0.2f, y, x);
-        fast_vec_scale(p, v, random_float_between_alt(1.0f, 3.0f));
-        fast_vec_add(p, p, D_L01_001742E0);
-        FUN_L00_0026c6e8((char *)p, (char *)v);
+        fast_vec_scale(spawn_position, v, random_float_between_alt(1.0f, 3.0f));
+        fast_vec_add(spawn_position, spawn_position, D_L01_001742E0);
+        FUN_L00_0026c6e8((char *)spawn_position, (char *)v);
     }
     for (i = 9; i >= 0; i--) {
         float x, y;
-        p[0] = D_L01_001742C0[8] + randf_sym(0.0f, 0.1f);
-        p[1] = D_L01_001742C0[9] + randf_sym(0.0f, 0.1f);
-        p[2] = D_L01_001742C0[10] + randf_sym(0.0f, 0.1f);
-        x = fast_add_rotations(randf_sym(0.0f, 3.1415927f), a);
-        y = fast_add_rotations(randf_sym(0.0f, 3.1415927f), a);
+        spawn_position[0] = D_L01_001742C0[8] + randf_sym(0.0f, 0.1f);
+        spawn_position[1] = D_L01_001742C0[9] + randf_sym(0.0f, 0.1f);
+        spawn_position[2] = D_L01_001742C0[10] + randf_sym(0.0f, 0.1f);
+        x = fast_add_rotations(randf_sym(0.0f, 3.1415927f), base_angle);
+        y = fast_add_rotations(randf_sym(0.0f, 3.1415927f), base_angle);
         build_spherical_offset(v, 0.05f, y, x);
-        FUN_L00_0026cbb0(p, v, 0x4F007FFF, 0x1FFFFFFF,
+        FUN_L00_0026cbb0(spawn_position, v, 0x4F007FFF, 0x1FFFFFFF,
                          FUN_L00_00257b90(scale_game_frames(10), scale_game_frames(20)), 1, 20000.0f);
     }
 }
