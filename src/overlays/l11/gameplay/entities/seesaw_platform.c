@@ -930,30 +930,30 @@ struct L11TiltVars {
 /* Tilting platform: rot.y springs back and is damped through its spin; the hero standing on it tilts it toward
    his side, and a tilt past D_L11_00161F84 degrees knocks him into hero state 6. */
 void seesaw_platform_update(struct Moby *m) __asm__("FUN_L11_0030eb90");
-void seesaw_platform_update(struct Moby *m) {
+void seesaw_platform_update(struct Moby *platform) {
     Vec4f v;
     Vec4f rot;
     float matrix[16] __attribute__((aligned(16)));
     Vec4f diff;
-    struct L11TiltVars *d = (struct L11TiltVars *)m->pvars;
+    struct L11TiltVars *platform_vars = (struct L11TiltVars *)platform->pvars;
     float spin;
     float change;
     float scaled;
 
-    scale_vector_xyz(&v, &m->pos, -1.0f);
-    qcopy(&rot, &m->rot);
-    d->unk5C = 1;
-    spin = d->spin;
+    scale_vector_xyz(&v, &platform->pos, -1.0f);
+    qcopy(&rot, &platform->rot);
+    platform_vars->unk5C = 1;
+    spin = platform_vars->spin;
     /* two separate updates (not one sum): gives retail's FP register allocation */
-    d->spin = spin + D_L11_00161F7C * 0.017453292f * frame_time_sq * (D_L11_00161F6C * m->rot.y);
-    d->spin = d->spin + D_L11_00161F80 * 0.017453292f * frame_time_sq * (D_L11_00161F70 * spin);
-    if (hero.ground_moby == m && hero.air_frames.s == 0) {
-        subtract_vector_xyz(&diff, &hero.motion.pos, &m->pos);
-        transpose_rotation_matrix(matrix, &m->rot_row0);
+    platform_vars->spin = spin + D_L11_00161F7C * 0.017453292f * frame_time_sq * (D_L11_00161F6C * platform->rot.y);
+    platform_vars->spin = platform_vars->spin + D_L11_00161F80 * 0.017453292f * frame_time_sq * (D_L11_00161F70 * spin);
+    if (hero.ground_moby == platform && hero.air_frames.s == 0) {
+        subtract_vector_xyz(&diff, &hero.motion.pos, &platform->pos);
+        transpose_rotation_matrix(matrix, &platform->rot_row0);
         transform_vector(&diff, &diff, matrix);
         scaled = D_L11_00161F68 * diff.x;
         change = D_L11_00161F78 * 0.017453292f * frame_time_sq * scaled;
-        if (d->spin * change < 0.0f && m->rot.y * change < 0.0f) {
+        if (platform_vars->spin * change < 0.0f && platform->rot.y * change < 0.0f) {
             change += change;
         }
         if (change < 0.0f) {
@@ -961,15 +961,15 @@ void seesaw_platform_update(struct Moby *m) {
         } else {
             change += D_L11_00161F74 * 0.017453292f * frame_time_sq;
         }
-        d->spin = d->spin + change;
-        if (absolute_float_eb90(m->rot.y) > D_L11_00161F84 * 0.017453292f &&
+        platform_vars->spin = platform_vars->spin + change;
+        if (absolute_float_eb90(platform->rot.y) > D_L11_00161F84 * 0.017453292f &&
             (u32)hero.state.control_mode < 2) {
             hero_set_state(HERO_STATE_FALL, 1);
         }
     }
-    m->rot.y = fast_add_rotations(m->rot.y, d->spin);
-    add_vector_xyz(&v, &v, &m->pos);
-    update_entity_matrix(d->unk20, &v, &rot, &m->rot);
+    platform->rot.y = fast_add_rotations(platform->rot.y, platform_vars->spin);
+    add_vector_xyz(&v, &v, &platform->pos);
+    update_entity_matrix(platform_vars->unk20, &v, &rot, &platform->rot);
 }
 /* Waits for its linked moby, then either hands off to a cutscene or turns toward its target. */
 extern char *D_L11_0015FFD8_t __asm__("D_L11_0015FFD8");
