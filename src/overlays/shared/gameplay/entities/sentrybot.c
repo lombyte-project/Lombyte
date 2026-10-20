@@ -2564,22 +2564,22 @@ extern void rotation_matrix_from_euler(void *, void *) __asm__("FUN_001fa050");
 extern void draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
 
 void FUN_L15_002a29b8(unsigned char *moby) {
-    EffectQuad q;
+    EffectQuad effect_quad;
     float angles[4] __attribute__((aligned(16)));
     float rotation[12] __attribute__((aligned(16)));
     float position[4] __attribute__((aligned(16)));
-    unsigned short *p;
+    unsigned short *group_moby_entry;
     int i, j;
 
-    q.texture = get_effect_texture(8);
-    q.r80 = 0xff9000000260LL;
-    q.alpha = 0x8000000044LL;
-    q.r70 = 0;
+    effect_quad.texture = get_effect_texture(8);
+    effect_quad.r80 = 0xff9000000260LL;
+    effect_quad.alpha = 0x8000000044LL;
+    effect_quad.r70 = 0;
     {
         int count = 3;
         float *source = D_L15_001CE210;
-        float *v = &q.uv[0][1];
-        float *u = &q.uv[0][0];
+        float *v = &effect_quad.uv[0][1];
+        float *u = &effect_quad.uv[0][0];
         do {
             count--;
             *u = source[0];
@@ -2589,9 +2589,9 @@ void FUN_L15_002a29b8(unsigned char *moby) {
             v += 2;
         } while (count >= 0);
     }
-    p = (unsigned short *)D_L15_001ABE40[MOBY(moby)->group];
+    group_moby_entry = (unsigned short *)D_L15_001ABE40[MOBY(moby)->group];
     do {
-        unsigned char *other = (unsigned char *)(D_L15_0015FFD8 + ((*p & 0x7fff) << 8));
+        unsigned char *other = (unsigned char *)(D_L15_0015FFD8 + ((*group_moby_entry & 0x7fff) << 8));
         if (MOBY(other)->state != 1) {
             clear_vector(angles);
             angles[2] = fast_atan2(D_L15_00167280.position[0] - MOBY(other)->pos.x,
@@ -2603,16 +2603,16 @@ void FUN_L15_002a29b8(unsigned char *moby) {
             position[2] += D_L15_001614C4;
             position[3] = 1.0f;
             for (i = 0; i < 4; i++) {
-                int *colors = q.col;
+                int *colors = effect_quad.col;
                 int color = (&D_L15_001614C8)[i];
                 for (j = 0; j < 4; j++) {
                     colors[j] = color;
-                    qcopy(q.v[j], D_L15_001CE110[i][j]);
+                    qcopy(effect_quad.v[j], D_L15_001CE110[i][j]);
                 }
-                draw_geometry_quad(&q, rotation, 0);
+                draw_geometry_quad(&effect_quad, rotation, 0);
             }
         }
-    } while ((short)*p++ >= 0);
+    } while ((short)*group_moby_entry++ >= 0);
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_002A3DD0), where it is exact; names translated to the US level program. */
 
