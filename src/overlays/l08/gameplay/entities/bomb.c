@@ -123,7 +123,7 @@ extern int D_L08_001746D8_2B94B0i __asm__("D_L08_00174658") __attribute__((secti
 extern char D_L08_00174700_2B94B0[] __asm__("D_L08_00174680");
 extern s32 D_0013DF38_arr[] __asm__("D_0013DF38");
 
-void FUN_L08_002b82a0(Moby_2B94B0 *m)
+void FUN_L08_002b82a0(Moby_2B94B0 *moby)
 {
     enum {
         MOBY_STATE_INITIALIZE = 0,
@@ -132,36 +132,36 @@ void FUN_L08_002b82a0(Moby_2B94B0 *m)
         MOBY_STATE_VERTICAL_BOB_ONLY = 3,
         MOBY_STATE_REMOVE = 4
     };
-    MobyData_2B94B0 *d = m->data;
+    MobyData_2B94B0 *moby_data = moby->data;
     float A[4], F[4], B[4], C[4], P[4], E[4];
-    float f20, t, f;
-    int hit, ok, n;
+    float f20, bob_phase_radians, f;
+    int hit, ok, bob_period_ticks;
 
-    d->ticks++;
-    if (m->state != 0) m->pos[2] = d->f8;
-    switch (m->state) {
+    moby_data->ticks++;
+    if (moby->state != 0) moby->pos[2] = moby_data->f8;
+    switch (moby->state) {
     case MOBY_STATE_INITIALIZE:
-        func_L08_002B9438_2B94B0(m);
-        if (d->f2C != 0) m->state = 1;
-        else m->state = 2;
+        func_L08_002B9438_2B94B0(moby);
+        if (moby_data->f2C != 0) moby->state = 1;
+        else moby->state = 2;
         break;
     case MOBY_STATE_PHYSICS_MOVEMENT:
-        qcopy(P, m->pos);
-        d->vel[2] = d->vel[2] - D_0015ED70 * 9.8f;
-        f20 = fast_vec_length(d->vel);
+        qcopy(P, moby->pos);
+        moby_data->vel[2] = moby_data->vel[2] - D_0015ED70 * 9.8f;
+        f20 = fast_vec_length(moby_data->vel);
         if (D_L08_0016144C * 1.8f * frame_scale < f20) {
-            fast_vec_normalize(d->vel, d->vel, D_L08_0016144C * 1.8f * frame_scale);
+            fast_vec_normalize(moby_data->vel, moby_data->vel, D_L08_0016144C * 1.8f * frame_scale);
             f20 = D_L08_0016144C * 1.8f * frame_scale;
         }
-        add_vector_xyz(A, P, d->vel);
-        fast_vec_normalize(B, d->vel, D_L08_0016144C);
+        add_vector_xyz(A, P, moby_data->vel);
+        fast_vec_normalize(B, moby_data->vel, D_L08_0016144C);
         subtract_vector_xyz(B, P, B);
-        fast_vec_normalize(C, d->vel, f20 + D_L08_0016144C);
+        fast_vec_normalize(C, moby_data->vel, f20 + D_L08_0016144C);
         add_vector_xyz(C, C, P);
-        if (D_L08_0015F5CC % 2 == (((char *)m - D_L08_0015FFD8) >> 8) % 2
+        if (D_L08_0015F5CC % 2 == (((char *)moby - D_L08_0015FFD8) >> 8) % 2
             && func_L00_001F39B0_2B94B0(B, C, 2, 0, 0) != 0) {
             ok = 1;
-            if (D_L08_001746D8_2B94B0i == 0 || d->ticks >= 10) {
+            if (D_L08_001746D8_2B94B0i == 0 || moby_data->ticks >= 10) {
                 if (f20 < D_L08_00161458) {
                     ok = 0;
                 } else {
@@ -170,16 +170,16 @@ void FUN_L08_002b82a0(Moby_2B94B0 *m)
                     add_vector_xyz(P, (D_L08_001746D8_2B94B0 + 8), E);
                 }
                 if (ok != 0) {
-                    func_L00_001FF610_2B94B0(F, d->vel, D_L08_00174700_2B94B0);
+                    func_L00_001FF610_2B94B0(F, moby_data->vel, D_L08_00174700_2B94B0);
                     f = fast_vec_length(F) - D_L08_0016145C;
-                    fast_vec_normalize(d->vel, F, f < 0.0f ? 0.0f : f);
+                    fast_vec_normalize(moby_data->vel, F, f < 0.0f ? 0.0f : f);
                 } else {
-                    clear_u64_value(d->vel);
+                    clear_u64_value(moby_data->vel);
                     qcopy(P, (D_L08_001746D8_2B94B0 + 8));
                     P[2] = P[2] + D_L08_0016144C;
                     if (*(int *)D_L08_001746D8_2B94B0 == 0) {
-                        clear_u64_value(d->vel);
-                        m->state = 2;
+                        clear_u64_value(moby_data->vel);
+                        moby->state = 2;
                     }
                 }
             } else {
@@ -188,38 +188,38 @@ void FUN_L08_002b82a0(Moby_2B94B0 *m)
         } else {
             qcopy(P, A);
         }
-        qcopy(m->pos, P);
+        qcopy(moby->pos, P);
     case MOBY_STATE_CHECK_COLLECTION:
         hit = 0;
-        m->f48 = func_001FA748_2B94B0(m->f48, d->fC);
+        moby->f48 = func_001FA748_2B94B0(moby->f48, moby_data->fC);
         if (((Hero_2B94B0 *)((char *)&hero))->f208C == 15) {
-            if (vector_distance(((Hero_2B94B0 *)((char *)&hero))->v510, m->pos) < 0.5f) hit = 1;
-            if (vector_distance(((Hero_2B94B0 *)((char *)&hero))->v520, m->pos) < 0.5f) hit = 1;
-            if (vector_distance(((Hero_2B94B0 *)((char *)&hero))->v530, m->pos) < 0.5f) hit = 1;
-        } else if (vector_distance(m->pos, ((Hero_2B94B0 *)((char *)&hero))->pos) < ((Hero_2B94B0 *)((char *)&hero))->f2288) {
-            if (absolute_float(m->pos[2] - ((Hero_2B94B0 *)((char *)&hero))->pos[2]) < ((Hero_2B94B0 *)((char *)&hero))->f228C) hit = 1;
+            if (vector_distance(((Hero_2B94B0 *)((char *)&hero))->v510, moby->pos) < 0.5f) hit = 1;
+            if (vector_distance(((Hero_2B94B0 *)((char *)&hero))->v520, moby->pos) < 0.5f) hit = 1;
+            if (vector_distance(((Hero_2B94B0 *)((char *)&hero))->v530, moby->pos) < 0.5f) hit = 1;
+        } else if (vector_distance(moby->pos, ((Hero_2B94B0 *)((char *)&hero))->pos) < ((Hero_2B94B0 *)((char *)&hero))->f2288) {
+            if (absolute_float(moby->pos[2] - ((Hero_2B94B0 *)((char *)&hero))->pos[2]) < ((Hero_2B94B0 *)((char *)&hero))->f228C) hit = 1;
         }
         if (hit == 0) break;
-        if (d->target != 0) d->target->fA = 0;
-        current_bolt_count = current_bolt_count + d->f20;
-        ((int *)D_0013DF38_arr)[D_0015ED84] = ((int *)D_0013DF38_arr)[D_0015ED84] + d->f20;
-        allocate_voice_for_target_entry(0, 0, m);
+        if (moby_data->target != 0) moby_data->target->fA = 0;
+        current_bolt_count = current_bolt_count + moby_data->f20;
+        ((int *)D_0013DF38_arr)[D_0015ED84] = ((int *)D_0013DF38_arr)[D_0015ED84] + moby_data->f20;
+        allocate_voice_for_target_entry(0, 0, moby);
         func_001FFB38_2B94B0(2, 0x754E, func_L00_0023A658_2B94B0, func_L00_0023A690_2B94B0,
                              func_L00_0023A788_2B94B0, &current_bolt_count, 0x98967F);
-        mark_moby_for_removal(m);
+        mark_moby_for_removal(moby);
         return;
     case MOBY_STATE_VERTICAL_BOB_ONLY:
         break;
     case MOBY_STATE_REMOVE:
-        if (d->target != 0) d->target->fA = 0;
-        mark_moby_for_removal(m);
+        if (moby_data->target != 0) moby_data->target->fA = 0;
+        mark_moby_for_removal(moby);
         return;
     }
-    n = D_L08_00161460;
-    t = (float)(d->ticks % n) / (float)(n - 1) * 6.2831855f - 3.1415927f;
-    f = func_001F9FA8_2B94B0(t);
-    d->f8 = m->pos[2];
-    m->pos[2] = m->pos[2] + D_L08_00161464 * f;
+    bob_period_ticks = D_L08_00161460;
+    bob_phase_radians = (float)(moby_data->ticks % bob_period_ticks) / (float)(bob_period_ticks - 1) * 6.2831855f - 3.1415927f;
+    f = func_001F9FA8_2B94B0(bob_phase_radians);
+    moby_data->f8 = moby->pos[2];
+    moby->pos[2] = moby->pos[2] + D_L08_00161464 * f;
 }
 #define NOT_SDA
 
