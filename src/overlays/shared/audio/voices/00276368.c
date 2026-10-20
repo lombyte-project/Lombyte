@@ -172,7 +172,7 @@ void FUN_L00_00276368(void) {
     struct GameState *state = &D_L00_001B9CF0;
     Own *page;
     s32 small_buffers = 0;
-    s32 state_id, i, j, n, seq, texture_start, next;
+    s32 state_id, i, j, item_index, seq, texture_start, next;
     s32 *slot;
 
     D_L00_00173E40_lui[4] |= 0x80000000;
@@ -325,8 +325,8 @@ void FUN_L00_00276368(void) {
     FUN_L00_00235668(1);
     D_L00_001B9CF0.saved_seq_count = ((struct MobyClass *)D_L00_00197300[0])->seq_count;
     ((struct MobyClass *)D_L00_00197300[0])->seq_count += 0x1C;
-    for (n = 0; n < 4; n++) {
-        D_L00_001B9CF0.saved_items[n] = D_00141660[n];
+    for (item_index = 0; item_index < 4; item_index++) {
+        D_L00_001B9CF0.saved_items[item_index] = D_00141660[item_index];
     }
 
     if (D_L00_001B9CF0.owner != 0) {
