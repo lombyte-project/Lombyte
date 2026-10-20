@@ -420,10 +420,10 @@ zero:
     return 0;
 }
 /* Returns a, or the byte at p+0xA5 when a is 0xFF. */
-s32 FUN_L00_0020d5b8(u8 *p, s32 a) {
-    if (a == 0xFF)
-        a = p[0xA5];
-    return a;
+s32 FUN_L00_0020d5b8(u8 *moby_bytes, s32 animation_id) {
+    if (animation_id == 0xFF)
+        animation_id = moby_bytes[0xA5];
+    return animation_id;
 }
 /* FUN_L00_0020d5d0 -- per-mode angle helper.
  *
