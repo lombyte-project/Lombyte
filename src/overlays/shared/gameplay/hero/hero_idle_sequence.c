@@ -1996,7 +1996,7 @@ void FUN_L00_00208b60(void) {
 
 extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 
-f32 FUN_L00_00208f20(f32 target_anim_frame, f32 b, f32 frame_delta_scale, f32 d) {
+f32 FUN_L00_00208f20(f32 target_anim_frame, f32 b, f32 frame_delta_scale, f32 anim_speed_step) {
     struct Hero *g = &hero;
     f32 thresh = g->anim_frame;
     f32 step;
@@ -2036,11 +2036,11 @@ f32 FUN_L00_00208f20(f32 target_anim_frame, f32 b, f32 frame_delta_scale, f32 d)
             f32 speed = b * rate2;
             f32 result = target / speed;
 
-            if (d == negone) {
+            if (anim_speed_step == negone) {
                 g2->anim_speed = result;
                 return negone;
             }
-            return approach_value((f32 *)(&g2->anim_speed), result, d);
+            return approach_value((f32 *)(&g2->anim_speed), result, anim_speed_step);
         }
     }
 
