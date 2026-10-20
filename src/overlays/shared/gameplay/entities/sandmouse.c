@@ -832,7 +832,7 @@ void detach_manipulator(void *moby, void *manip) __asm__("FUN_0020cb88");
 #define VOICE(i) (voice_pool_lui + (i) * 0x70)
 
 void sandmouse_update(Moby *m) __asm__("FUN_L01_0030df40");
-void sandmouse_update(Moby *m) {
+void sandmouse_update(Moby *sandmouse_moby) {
     enum {
         SANDMOUSE_STATE_INITIALIZE = 0,
         SANDMOUSE_STATE_WAIT_FOR_ACTIVATION = 1,
@@ -843,64 +843,64 @@ void sandmouse_update(Moby *m) {
         SANDMOUSE_STATE_FADE_OUT = 6,
         SANDMOUSE_STATE_RESET = 7
     };
-    Pv_30F318 *p;
+    Pv_30F318 *sandmouse_vars;
     f32 ang;
     int dv;
-    s16 t;
-    if (m == 0) return;
-    p = (Pv_30F318 *)m->pvars;
-    if (p == 0) return;
-    if (p->link != -1) {
-        if (m->state >= 5) {
-            *(f32 *)LNK(p->link)->pvars = fast_arc_tan(m->pos.x - LNK(p->link)->pos.x, m->pos.y - LNK(p->link)->pos.y);
+    s16 timer_frames;
+    if (sandmouse_moby == 0) return;
+    sandmouse_vars = (Pv_30F318 *)sandmouse_moby->pvars;
+    if (sandmouse_vars == 0) return;
+    if (sandmouse_vars->link != -1) {
+        if (sandmouse_moby->state >= 5) {
+            *(f32 *)LNK(sandmouse_vars->link)->pvars = fast_arc_tan(sandmouse_moby->pos.x - LNK(sandmouse_vars->link)->pos.x, sandmouse_moby->pos.y - LNK(sandmouse_vars->link)->pos.y);
         } else {
             char *hero = D_0013F350;
-            *(f32 *)LNK(p->link)->pvars = fast_arc_tan(*(f32 *)(hero + 0x80) - LNK(p->link)->pos.x, *(f32 *)(hero + 0x84) - LNK(p->link)->pos.y);
+            *(f32 *)LNK(sandmouse_vars->link)->pvars = fast_arc_tan(*(f32 *)(hero + 0x80) - LNK(sandmouse_vars->link)->pos.x, *(f32 *)(hero + 0x84) - LNK(sandmouse_vars->link)->pos.y);
         }
-        if (p->link != -1) {
-            LNK(p->link)->collision = 0;
+        if (sandmouse_vars->link != -1) {
+            LNK(sandmouse_vars->link)->collision = 0;
         }
     }
-    if (m->state >= 3) {
+    if (sandmouse_moby->state >= 3) {
         if (big_head_cheat_enabled != 0) {
-            if (*((u8 *)p + 0x91) == 0) {
-                attach_manipulator(m, 5, (u8 *)p + 0x90);
+            if (*((u8 *)sandmouse_vars + 0x91) == 0) {
+                attach_manipulator(sandmouse_moby, 5, (u8 *)sandmouse_vars + 0x90);
             }
-            *(f32 *)((u8 *)p + 0xB0) = 2.1f;
-            *(f32 *)((u8 *)p + 0xB4) = 2.1f;
-            *(f32 *)((u8 *)p + 0xB8) = 2.1f;
-        } else if (*((u8 *)p + 0x91) != 0) {
-            detach_manipulator(m, (u8 *)p + 0x90);
+            *(f32 *)((u8 *)sandmouse_vars + 0xB0) = 2.1f;
+            *(f32 *)((u8 *)sandmouse_vars + 0xB4) = 2.1f;
+            *(f32 *)((u8 *)sandmouse_vars + 0xB8) = 2.1f;
+        } else if (*((u8 *)sandmouse_vars + 0x91) != 0) {
+            detach_manipulator(sandmouse_moby, (u8 *)sandmouse_vars + 0x90);
         }
-        FUN_L01_0030ded0(m);
+        FUN_L01_0030ded0(sandmouse_moby);
     }
-    switch (m->state) {
+    switch (sandmouse_moby->state) {
     case SANDMOUSE_STATE_INITIALIZE:
-        qzero(p);
-        qzero(&p->vel);
-        p->stuck = 0;
-        p->timer = 0;
-        if (m->prev_seq != 0) {
-            blend_moby_animation(m, 0, 0, scale_game_frames(10));
+        qzero(sandmouse_vars);
+        qzero(&sandmouse_vars->vel);
+        sandmouse_vars->stuck = 0;
+        sandmouse_vars->timer = 0;
+        if (sandmouse_moby->prev_seq != 0) {
+            blend_moby_animation(sandmouse_moby, 0, 0, scale_game_frames(10));
         }
-        m->update_dist = 0xFF;
-        m->draw_dist = 0xFF;
-        if (p->link != -1) {
-            qcopy(&m->pos, &LNK(p->link)->pos);
-            m->pos.z += 0.02f;
-            if (D_L01_001BB6B0.collected[(short)m->save_id] != 0
-                || (*(int *)(D_0014C190 + (((short)m->save_id >> 5) * 4 + (current_level_index << 8))) >> (m->save_id & 0x1F)) & 1) {
+        sandmouse_moby->update_dist = 0xFF;
+        sandmouse_moby->draw_dist = 0xFF;
+        if (sandmouse_vars->link != -1) {
+            qcopy(&sandmouse_moby->pos, &LNK(sandmouse_vars->link)->pos);
+            sandmouse_moby->pos.z += 0.02f;
+            if (D_L01_001BB6B0.collected[(short)sandmouse_moby->save_id] != 0
+                || (*(int *)(D_0014C190 + (((short)sandmouse_moby->save_id >> 5) * 4 + (current_level_index << 8))) >> (sandmouse_moby->save_id & 0x1F)) & 1) {
                 debug_print(D_L01_0020BA10);
-                mark_moby_for_removal(m);
+                mark_moby_for_removal(sandmouse_moby);
                 return;
             }
         } else {
             debug_print(D_L01_0020BA30);
-            mark_moby_for_removal(m);
+            mark_moby_for_removal(sandmouse_moby);
             return;
         }
-        qcopy(&p->a20, &m->pos);
-        qcopy(&p->a30, &m->pos);
+        qcopy(&sandmouse_vars->a20, &sandmouse_moby->pos);
+        qcopy(&sandmouse_vars->a30, &sandmouse_moby->pos);
         FUN_L01_0026d930(&D_L01_001DEB38_lui);
         D_L01_001DEB38_lui.unk0 = 500;
         D_L01_001DEB38_lui.unk8 = 0.15f;
@@ -917,8 +917,8 @@ void sandmouse_update(Moby *m) {
         D_L01_001DEB38_lui.unk44 = frame_time * 11.519173f;
         D_L01_001DEB38_lui.unk48 = scale_game_frames(4);
         D_L01_001DEB38_lui.unk28 = 3.1415927f;
-        m->state = 1;
-        m->draw_dist = 0;
+        sandmouse_moby->state = 1;
+        sandmouse_moby->draw_dist = 0;
         break;
     case SANDMOUSE_STATE_WAIT_FOR_ACTIVATION:
         if (D_0013D4C5 != 0) {
@@ -927,247 +927,247 @@ void sandmouse_update(Moby *m) {
                 char *hero_bytes = D_0013F350;
                 if (*(int *)(hero_bytes + 0x1158) != 5) break;
             }
-            p->k5C = 0;
-            p->k58 = scale_game_frames(*(int *)&D_L01_00162098);
-            if (m->visible != 0) {
-                if ((m->anim_flags & 2) && m->prev_seq != 2) {
-                    blend_moby_animation(m, 2, 0, scale_game_frames(10));
+            sandmouse_vars->k5C = 0;
+            sandmouse_vars->k58 = scale_game_frames(*(int *)&D_L01_00162098);
+            if (sandmouse_moby->visible != 0) {
+                if ((sandmouse_moby->anim_flags & 2) && sandmouse_moby->prev_seq != 2) {
+                    blend_moby_animation(sandmouse_moby, 2, 0, scale_game_frames(10));
                 }
             }
-            if (p->link != -1) {
-                if (is_point_inside_clip_volume(D_0013F350 + 0x80, p->radius)) {
-                    LNK(p->link)->command = 3;
+            if (sandmouse_vars->link != -1) {
+                if (is_point_inside_clip_volume(D_0013F350 + 0x80, sandmouse_vars->radius)) {
+                    LNK(sandmouse_vars->link)->command = 3;
                 } else {
-                    LNK(p->link)->command = 1;
+                    LNK(sandmouse_vars->link)->command = 1;
                 }
             }
             hero_bytes = D_0013F350;
             if (*(int *)(hero_bytes + 0x1130) != 0) {
-                Vec4 a;
+                Vec4 linked_probe_start;
                 Vec4 b;
                 f32 angle_to_hero;
                 if (*(int *)(hero_bytes + 0x1158) != 5) break;
-                angle_to_hero = fast_arc_tan(*(f32 *)(hero_bytes + 0x80) - m->pos.x, *(f32 *)(hero_bytes + 0x84) - m->pos.y);
-                FUN_L00_00258278_df40(m, angle_to_hero, &D_L01_001DEB4C,
+                angle_to_hero = fast_arc_tan(*(f32 *)(hero_bytes + 0x80) - sandmouse_moby->pos.x, *(f32 *)(hero_bytes + 0x84) - sandmouse_moby->pos.y);
+                FUN_L00_00258278_df40(sandmouse_moby, angle_to_hero, &D_L01_001DEB4C,
                     frame_time_sq * 6.2831855f, frame_time_sq * 3.1415927f, frame_time * 11.519173f);
-                qcopy(&a, &LNK(p->link)->pos);
-                a.f[2] += 0.5f;
+                qcopy(&linked_probe_start, &LNK(sandmouse_vars->link)->pos);
+                linked_probe_start.f[2] += 0.5f;
                 qcopy(&b, hero_bytes + 0x80);
                 b.f[2] += 0.2f;
-                if (is_point_inside_clip_volume(hero_bytes + 0x80, p->radius) == 0) break;
-                if (collision_line(&a, &b, 0, m, 0)) {
+                if (is_point_inside_clip_volume(hero_bytes + 0x80, sandmouse_vars->radius) == 0) break;
+                if (collision_line(&linked_probe_start, &b, 0, sandmouse_moby, 0)) {
                     if (D_L01_001742D8 != *(Moby **)(hero_bytes + 0x2080)) break;
                 }
-                FUN_L01_002e30b8(m, p);
+                FUN_L01_002e30b8(sandmouse_moby, sandmouse_vars);
                 if (*(Moby **)(hero_bytes + 0x1130) != 0 && (*(Moby **)(hero_bytes + 0x1130))->oclass == 0x1B1
                     && (*(Moby **)(hero_bytes + 0x1130))->state != 0xFE && (*(Moby **)(hero_bytes + 0x1130))->state != 0xFD) {
                     (*(Moby **)(hero_bytes + 0x1130))->state = 1;
                 }
-                D_L01_001DEB38_lui.owner = m;
+                D_L01_001DEB38_lui.owner = sandmouse_moby;
                 FUN_L01_0023cf98(0x1F, 0);
                 FUN_L00_002323b8((float)scale_game_frames(6), 0, 0);
-                if (p->link != -1) {
-                    LNK(p->link)->command = 5;
-                    m->state = 2;
+                if (sandmouse_vars->link != -1) {
+                    LNK(sandmouse_vars->link)->command = 5;
+                    sandmouse_moby->state = 2;
                 } else {
-                    m->draw_dist = 0xFF;
-                    if (m->prev_seq != 0) {
-                        blend_moby_animation(m, 0, 0, scale_game_frames(10));
+                    sandmouse_moby->draw_dist = 0xFF;
+                    if (sandmouse_moby->prev_seq != 0) {
+                        blend_moby_animation(sandmouse_moby, 0, 0, scale_game_frames(10));
                     }
-                    m->state = 3;
+                    sandmouse_moby->state = 3;
                 }
             }
         }
         break;
     case SANDMOUSE_STATE_WAIT_FOR_LINK:
-        if (p->link != -1) {
-            if (LNK(p->link)->state == 5) {
-                if (m->prev_seq != 0) {
-                    blend_moby_animation(m, 0, 0, scale_game_frames(10));
+        if (sandmouse_vars->link != -1) {
+            if (LNK(sandmouse_vars->link)->state == 5) {
+                if (sandmouse_moby->prev_seq != 0) {
+                    blend_moby_animation(sandmouse_moby, 0, 0, scale_game_frames(10));
                 }
-                m->state = 3;
-                p->timer = 0;
-                m->draw_dist = 0xFF;
+                sandmouse_moby->state = 3;
+                sandmouse_vars->timer = 0;
+                sandmouse_moby->draw_dist = 0xFF;
             }
         } else {
-            p->timer = 0;
-            m->draw_dist = 0xFF;
-            if (m->prev_seq != 0) {
-                blend_moby_animation(m, 0, 0, scale_game_frames(20));
+            sandmouse_vars->timer = 0;
+            sandmouse_moby->draw_dist = 0xFF;
+            if (sandmouse_moby->prev_seq != 0) {
+                blend_moby_animation(sandmouse_moby, 0, 0, scale_game_frames(20));
             }
-            if (p->slot == -1) {
-                p->slot = allocate_voice_for_target_entry(1, 4, (struct VoiceTarget *)m);
+            if (sandmouse_vars->slot == -1) {
+                sandmouse_vars->slot = allocate_voice_for_target_entry(1, 4, (struct VoiceTarget *)sandmouse_moby);
             }
-            m->state = 3;
+            sandmouse_moby->state = 3;
         }
         break;
     case SANDMOUSE_STATE_MOVE_TO_GOAL: {
         int r;
         {
-            char *v = VOICE(p->slot);
-            if (*(Moby **)(v + 0x88) != m || *(u8 *)(v + 0x74) == 0) {
-                p->slot = -1;
-                p->slot = allocate_voice_for_target_entry(1, 4, (struct VoiceTarget *)m);
+            char *v = VOICE(sandmouse_vars->slot);
+            if (*(Moby **)(v + 0x88) != sandmouse_moby || *(u8 *)(v + 0x74) == 0) {
+                sandmouse_vars->slot = -1;
+                sandmouse_vars->slot = allocate_voice_for_target_entry(1, 4, (struct VoiceTarget *)sandmouse_moby);
             }
         }
-        if (0.6f < vector_distance(&m->pos, &p->a30) && p->timer == 0) {
+        if (0.6f < vector_distance(&sandmouse_moby->pos, &sandmouse_vars->a30) && sandmouse_vars->timer == 0) {
             D_L01_001DEB38_lui.unk4 = 0.7f;
-            FUN_L01_0030d260(m, p);
-            FUN_L01_0030d880(m, (struct HoverVars *)p);
-            r = p->stuck < 0x15;
+            FUN_L01_0030d260(sandmouse_moby, sandmouse_vars);
+            FUN_L01_0030d880(sandmouse_moby, (struct HoverVars *)sandmouse_vars);
+            r = sandmouse_vars->stuck < 0x15;
             r = r ? 0 : 2;
         } else {
-            FUN_L01_002e30b8(m, p);
-            ang = fast_arc_tan(p->goal.f[0] - m->pos.x, p->goal.f[1] - m->pos.y);
-            FUN_L00_00258278_df40(m, ang, &D_L01_001DEB38_lui.yaw_speed,
+            FUN_L01_002e30b8(sandmouse_moby, sandmouse_vars);
+            ang = fast_arc_tan(sandmouse_vars->goal.f[0] - sandmouse_moby->pos.x, sandmouse_vars->goal.f[1] - sandmouse_moby->pos.y);
+            FUN_L00_00258278_df40(sandmouse_moby, ang, &D_L01_001DEB38_lui.yaw_speed,
                 frame_time_sq * 6.2831855f, frame_time_sq * 3.1415927f, frame_time * 11.519173f);
-            p->vel.f[2] = 0;
-            r = FUN_L00_00259028(m, &D_L01_001DEB38_lui, p, &p->vel);
+            sandmouse_vars->vel.f[2] = 0;
+            r = FUN_L00_00259028(sandmouse_moby, &D_L01_001DEB38_lui, sandmouse_vars, &sandmouse_vars->vel);
         }
-        if ((r & 6) != 0 || fast_vec_dist(&m->pos, p) < 0.25f) {
-            if (m->prev_seq != 2) {
-                blend_moby_animation(m, 2, 0, scale_game_frames(10));
+        if ((r & 6) != 0 || fast_vec_dist(&sandmouse_moby->pos, sandmouse_vars) < 0.25f) {
+            if (sandmouse_moby->prev_seq != 2) {
+                blend_moby_animation(sandmouse_moby, 2, 0, scale_game_frames(10));
             }
-            qzero(&p->vel);
-            m->state = 4;
-            p->timer = scale_game_frames(0x78);
+            qzero(&sandmouse_vars->vel);
+            sandmouse_moby->state = 4;
+            sandmouse_vars->timer = scale_game_frames(0x78);
         }
-        if (m->anim_flags & 2) {
-            if (m->prev_seq != 1) {
-                blend_moby_animation(m, 1, 0, scale_game_frames(FUN_L00_00257b90(7, 12)));
+        if (sandmouse_moby->anim_flags & 2) {
+            if (sandmouse_moby->prev_seq != 1) {
+                blend_moby_animation(sandmouse_moby, 1, 0, scale_game_frames(FUN_L00_00257b90(7, 12)));
             }
-            m->anim_speed = random_float_between(0.95f, 1.05f);
+            sandmouse_moby->anim_speed = random_float_between(0.95f, 1.05f);
         }
         break;
     }
     case SANDMOUSE_STATE_BEGIN_FOLLOW_HERO_AND_FIRE:
         {
-            char *v = VOICE(p->slot);
-            if (*(Moby **)(v + 0x88) != m || *(u8 *)(v + 0x74) == 0) {
-                p->slot = -1;
-                p->slot = allocate_voice_for_target_entry(1, 4, (struct VoiceTarget *)m);
+            char *v = VOICE(sandmouse_vars->slot);
+            if (*(Moby **)(v + 0x88) != sandmouse_moby || *(u8 *)(v + 0x74) == 0) {
+                sandmouse_vars->slot = -1;
+                sandmouse_vars->slot = allocate_voice_for_target_entry(1, 4, (struct VoiceTarget *)sandmouse_moby);
             }
         }
         FUN_L01_0023cf98(0, 1);
-        m->flags &= 0xFFBE;
-        if (p->link != -1) {
-            LNK(p->link)->flags &= 0xFFBE;
+        sandmouse_moby->flags &= 0xFFBE;
+        if (sandmouse_vars->link != -1) {
+            LNK(sandmouse_vars->link)->flags &= 0xFFBE;
         }
-        m->state = 5;
+        sandmouse_moby->state = 5;
         break;
     case SANDMOUSE_STATE_FOLLOW_HERO_AND_FIRE:
         {
-            char *v = VOICE(p->slot);
-            if (*(Moby **)(v + 0x88) != m || *(u8 *)(v + 0x74) == 0) {
-                p->slot = -1;
-                p->slot = allocate_voice_for_target_entry(1, 4, (struct VoiceTarget *)m);
+            char *v = VOICE(sandmouse_vars->slot);
+            if (*(Moby **)(v + 0x88) != sandmouse_moby || *(u8 *)(v + 0x74) == 0) {
+                sandmouse_vars->slot = -1;
+                sandmouse_vars->slot = allocate_voice_for_target_entry(1, 4, (struct VoiceTarget *)sandmouse_moby);
             }
         }
-        if (p->timer == scale_game_frames(20) || *(int *)&D_L01_0016209C - 5 < p->k5C) {
-            if (m->prev_seq != 2) {
-                blend_moby_animation(m, 2, 0, scale_game_frames(5));
+        if (sandmouse_vars->timer == scale_game_frames(20) || *(int *)&D_L01_0016209C - 5 < sandmouse_vars->k5C) {
+            if (sandmouse_moby->prev_seq != 2) {
+                blend_moby_animation(sandmouse_moby, 2, 0, scale_game_frames(5));
             }
-        } else if (t = p->timer, scale_game_frames(20) < t && (m->anim_flags & 2)) {
-            if (m->prev_seq != 1) {
-                blend_moby_animation(m, 1, 0, scale_game_frames(FUN_L00_00257b90(7, 12)));
+        } else if (timer_frames = sandmouse_vars->timer, scale_game_frames(20) < timer_frames && (sandmouse_moby->anim_flags & 2)) {
+            if (sandmouse_moby->prev_seq != 1) {
+                blend_moby_animation(sandmouse_moby, 1, 0, scale_game_frames(FUN_L00_00257b90(7, 12)));
             }
-            m->anim_speed = random_float_between(0.95f, 1.05f);
+            sandmouse_moby->anim_speed = random_float_between(0.95f, 1.05f);
         }
         {
             char *hero_bytes = D_0013F350;
             if (*(int *)(hero_bytes + 0x1130) != 0 && *(int *)(hero_bytes + 0x1158) == 5
                 && *(int *)(hero_bytes + 0x208C) != 0x16 && *(int *)(hero_bytes + 0x208C) != 0x14
                 && *(u8 *)(hero_bytes + 0x20A4) == 0 && *(s16 *)(D_L01_00167280 + 0x86) != 0x14
-                && fast_dec_timer(&p->k58) == 0 && p->k5C < *(int *)&D_L01_0016209C) {
-                FUN_L01_0030d260(m, p);
-                FUN_L01_0030d880(m, (struct HoverVars *)p);
+                && fast_dec_timer(&sandmouse_vars->k58) == 0 && sandmouse_vars->k5C < *(int *)&D_L01_0016209C) {
+                FUN_L01_0030d260(sandmouse_moby, sandmouse_vars);
+                FUN_L01_0030d880(sandmouse_moby, (struct HoverVars *)sandmouse_vars);
             } else {
-                qzero(&p->vel);
-                p->timer = *(int *)&D_L01_001620A4;
-                if (p->slot != -1) {
-                    char *v = VOICE(p->slot);
-                    if (*(Moby **)(v + 0x88) == m && *(u8 *)(v + 0x74) != 0) {
-                        release_voice_slot(p->slot);
+                qzero(&sandmouse_vars->vel);
+                sandmouse_vars->timer = *(int *)&D_L01_001620A4;
+                if (sandmouse_vars->slot != -1) {
+                    char *v = VOICE(sandmouse_vars->slot);
+                    if (*(Moby **)(v + 0x88) == sandmouse_moby && *(u8 *)(v + 0x74) != 0) {
+                        release_voice_slot(sandmouse_vars->slot);
                     }
                 }
-                p->slot = -1;
-                allocate_voice_for_target_entry(2, 0, (struct VoiceTarget *)m);
-                m->state = 6;
-                if (p->link != -1) {
-                    LNK(p->link)->command = 5;
+                sandmouse_vars->slot = -1;
+                allocate_voice_for_target_entry(2, 0, (struct VoiceTarget *)sandmouse_moby);
+                sandmouse_moby->state = 6;
+                if (sandmouse_vars->link != -1) {
+                    LNK(sandmouse_vars->link)->command = 5;
                 }
             }
         }
-        FUN_L01_0030d5f0(m, p);
+        FUN_L01_0030d5f0(sandmouse_moby, sandmouse_vars);
         break;
     case SANDMOUSE_STATE_FADE_OUT:
-        if (p->slot != -1) {
-            char *v = VOICE(p->slot);
-            if (*(Moby **)(v + 0x88) == m && *(u8 *)(v + 0x74) != 0) {
-                release_voice_slot(p->slot);
+        if (sandmouse_vars->slot != -1) {
+            char *v = VOICE(sandmouse_vars->slot);
+            if (*(Moby **)(v + 0x88) == sandmouse_moby && *(u8 *)(v + 0x74) != 0) {
+                release_voice_slot(sandmouse_vars->slot);
             }
         }
-        p->slot = -1;
-        if (fast_dec_timer_s16(&p->timer) != 0) {
-            m->alpha = 0x80;
-            qcopy(&m->pos, &p->a30);
-            qcopy(p, &p->a30);
-            qzero(&p->vel);
-            m->state = 7;
-            m->flags &= 0xFDFF;
+        sandmouse_vars->slot = -1;
+        if (fast_dec_timer_s16(&sandmouse_vars->timer) != 0) {
+            sandmouse_moby->alpha = 0x80;
+            qcopy(&sandmouse_moby->pos, &sandmouse_vars->a30);
+            qcopy(sandmouse_vars, &sandmouse_vars->a30);
+            qzero(&sandmouse_vars->vel);
+            sandmouse_moby->state = 7;
+            sandmouse_moby->flags &= 0xFDFF;
         } else {
             Vec4 pos;
             Vec4 vel = {0};
             int c0, c1, c2, color, life, spin;
             f32 size;
-            qcopy(&pos, &m->pos);
+            qcopy(&pos, &sandmouse_moby->pos);
             FUN_L00_0025f8e0(&pos, *(f32 *)&D_L01_001620B0);
             c0 = (rand() + 0x30) & 0x3F;
             c1 = (rand() + 0x20) & 0x3F;
             c2 = rand() & 0x2F;
             color = c0 | (c1 << 8) | (c2 << 16) | (*(int *)&D_L01_001620BC << 24);
             spin = rand() % 2;
-            if (p->timer & 1) spin = -spin;
+            if (sandmouse_vars->timer & 1) spin = -spin;
             life = FUN_L00_00257b90(*(int *)&D_L01_001620A8, *(int *)&D_L01_001620AC);
             size = random_float_between(*(f32 *)&D_L01_001620B4, *(f32 *)&D_L01_001620B8);
             FUN_L00_00272060(&pos, life, size, 0.001f, color,
                 2, spin, &vel, *(f32 *)&D_L01_001620C0 * frame_time_sq);
             dv = *(int *)&D_L01_001620A4;
-            m->flags |= 0x200;
-            m->alpha -= 0x80 / dv;
-            m->rot.z = fast_add_rotations(m->rot.z, frame_time * 25.132742f);
+            sandmouse_moby->flags |= 0x200;
+            sandmouse_moby->alpha -= 0x80 / dv;
+            sandmouse_moby->rot.z = fast_add_rotations(sandmouse_moby->rot.z, frame_time * 25.132742f);
         }
         break;
     case SANDMOUSE_STATE_RESET:
-        if (p->slot != -1) {
-            char *v = VOICE(p->slot);
-            if (*(Moby **)(v + 0x88) == m && *(u8 *)(v + 0x74) != 0) {
-                release_voice_slot(p->slot);
+        if (sandmouse_vars->slot != -1) {
+            char *v = VOICE(sandmouse_vars->slot);
+            if (*(Moby **)(v + 0x88) == sandmouse_moby && *(u8 *)(v + 0x74) != 0) {
+                release_voice_slot(sandmouse_vars->slot);
             }
         }
-        p->slot = -1;
-        qzero(&p->vel);
-        qcopy(p, &LNK(p->link)->pos);
+        sandmouse_vars->slot = -1;
+        qzero(&sandmouse_vars->vel);
+        qcopy(sandmouse_vars, &LNK(sandmouse_vars->link)->pos);
         D_L01_001DEB38_lui.owner = 0;
-        ang = fast_arc_tan(p->goal.f[0] - m->pos.x, p->goal.f[1] - m->pos.y);
-        FUN_L00_00258278_df40(m, ang, &D_L01_001DEB38_lui.yaw_speed,
+        ang = fast_arc_tan(sandmouse_vars->goal.f[0] - sandmouse_moby->pos.x, sandmouse_vars->goal.f[1] - sandmouse_moby->pos.y);
+        FUN_L00_00258278_df40(sandmouse_moby, ang, &D_L01_001DEB38_lui.yaw_speed,
             frame_time_sq * 6.2831855f, frame_time_sq * 3.1415927f, frame_time * 11.519173f);
-        if (m->prev_seq != 0) {
-            blend_moby_animation(m, 0, 0, scale_game_frames(6));
+        if (sandmouse_moby->prev_seq != 0) {
+            blend_moby_animation(sandmouse_moby, 0, 0, scale_game_frames(6));
         }
-        LNK(p->link)->command = 1;
-        m->state = 1;
-        m->draw_dist = 0;
+        LNK(sandmouse_vars->link)->command = 1;
+        sandmouse_moby->state = 1;
+        sandmouse_moby->draw_dist = 0;
         break;
     case 8:
         break;
     }
-    if (m->state >= 2) {
-        jet_animate(m, 0.3f);
-        ((void (*)(void *, void *))FUN_L01_0030dda0)(m, p);
+    if (sandmouse_moby->state >= 2) {
+        jet_animate(sandmouse_moby, 0.3f);
+        ((void (*)(void *, void *))FUN_L01_0030dda0)(sandmouse_moby, sandmouse_vars);
     }
-    if (p->link != -1) {
-        LNK(p->link)->collision = LNK(p->link)->pclass->collision;
+    if (sandmouse_vars->link != -1) {
+        LNK(sandmouse_vars->link)->collision = LNK(sandmouse_vars->link)->pclass->collision;
     }
 }
 /* Camera blocks FUN_L01_00314e98 resets (camera + 0x70 and its preset row in D_L01_0015EF50) */
