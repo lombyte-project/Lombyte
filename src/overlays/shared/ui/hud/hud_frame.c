@@ -59,7 +59,7 @@ extern int D_0013E500_23b6c0[] __asm__("D_0013E500");
 extern int D_L00_0017E4D8_23b6c0[] __asm__("D_L00_0017E4D8") __attribute__((section(".data")));
 extern u64 FUN_001ffa10_23b6c0(int) __asm__("FUN_001ffa10");
 
-void FUN_L00_0023b6c0(int tex, int x, int y, int w, int h, int a) {
+void FUN_L00_0023b6c0(int tex, int x, int y, int w, int h, int alpha) {
     u64 *packet_words;
     int *coordinate_offsets;
     int *g;
@@ -73,7 +73,7 @@ void FUN_L00_0023b6c0(int tex, int x, int y, int w, int h, int a) {
     packet_words[1] = 0x5353106;
     packet_words[2] = FUN_001ffa10_23b6c0(tex);
     packet_words[3] = 0x156;
-    packet_words[4] = ((u64)a << 24) | 0x7F7F7F;
+    packet_words[4] = ((u64)alpha << 24) | 0x7F7F7F;
     packet_words[5] = 0;
     coordinate_offsets = D_0013E500_23b6c0;
     g = D_L00_0017E4D8_23b6c0;
