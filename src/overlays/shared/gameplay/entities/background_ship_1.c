@@ -380,19 +380,19 @@ void background_ship_2_update(char *moby) {
         BACKGROUND_SHIP_2_FOLLOW_PATH = 1,
         BACKGROUND_SHIP_2_REMOVE = 2
     };
-    char *d;
-    char *t;
+    char *moby_data;
+    char *path;
     int r;
     int flag = 0;
     float tv[4];
     float f70;
-    float p2;
+    float path_travel_distance;
     float x;
     int r1;
     int r2;
     int r3;
-    d = *(char **)(moby + 0x78);
-    t = D_L02_001B0AB0[*(int *)(d + 0x60)];
+    moby_data = *(char **)(moby + 0x78);
+    path = D_L02_001B0AB0[*(int *)(moby_data + 0x60)];
     r = (int)find_moby_hit(moby, 0x10000, 0);
     switch (*(unsigned char *)(moby + 0x20)) {
     case BACKGROUND_SHIP_2_INITIALIZE: {
@@ -403,26 +403,26 @@ void background_ship_2_update(char *moby) {
             *(float *)(moby + 0x2C) = *(float *)(moby + 0x2C) * 0.5f;
         }
         m1 = -1;
-        if (*(int *)(d + 0x60) == m1) {
+        if (*(int *)(moby_data + 0x60) == m1) {
             stub_printf(D_L02_001FADB0, *(short *)(moby + 0xB2));
             delete_moby(moby);
             return;
         }
-        if (*(int *)D_L02_001B0AB0[*(int *)(d + 0x60)] == 0) {
+        if (*(int *)D_L02_001B0AB0[*(int *)(moby_data + 0x60)] == 0) {
             stub_printf(D_L02_001FADD0, *(short *)(moby + 0xB2));
             delete_moby(moby);
             return;
         }
-        f70 = distance_xyz(D_L02_001B0AB0[*(int *)(d + 0x60)] + 0x10, D_L02_001B0AB0[*(int *)(d + 0x60)] + 0x20);
-        *(unsigned char *)(d + 0x2C) = 0x28;
-        *(float *)(d + 0x70) = f70;
-        *(unsigned char *)(d + 0x2B) = 1;
-        qcopy(moby + 0x10, D_L02_001B0AB0[*(int *)(d + 0x60)] + 0x10);
-        *(float *)(d + 0x68) = random_angle_radians();
-        *(int *)(d + 0x6C) = m1;
+        f70 = distance_xyz(D_L02_001B0AB0[*(int *)(moby_data + 0x60)] + 0x10, D_L02_001B0AB0[*(int *)(moby_data + 0x60)] + 0x20);
+        *(unsigned char *)(moby_data + 0x2C) = 0x28;
+        *(float *)(moby_data + 0x70) = f70;
+        *(unsigned char *)(moby_data + 0x2B) = 1;
+        qcopy(moby + 0x10, D_L02_001B0AB0[*(int *)(moby_data + 0x60)] + 0x10);
+        *(float *)(moby_data + 0x68) = random_angle_radians();
+        *(int *)(moby_data + 0x6C) = m1;
         *(unsigned char *)(moby + 0x20) = 1;
         *(unsigned short *)(moby + 0x34) |= 0x10;
-        *(float *)(d + 0x64) = *(float *)(d + 0x74) * (float)*(int *)t;
+        *(float *)(moby_data + 0x64) = *(float *)(moby_data + 0x74) * (float)*(int *)path;
         break;
     }
     case BACKGROUND_SHIP_2_FOLLOW_PATH:
@@ -431,21 +431,21 @@ void background_ship_2_update(char *moby) {
             return;
         }
         qcopy(tv, moby + 0x10);
-        if (voice_is_playing(moby, *(int *)(d + 0x6C)) == 0) {
-            *(int *)(d + 0x6C) = func_0022ED80_r(1, 4, (int)moby);
+        if (voice_is_playing(moby, *(int *)(moby_data + 0x6C)) == 0) {
+            *(int *)(moby_data + 0x6C) = func_0022ED80_r(1, 4, (int)moby);
         }
-        p2 = D_L02_00161FC0 * frame_time;
+        path_travel_distance = D_L02_00161FC0 * frame_time;
         if (current_level_index == 10) {
-            p2 = p2 * 0.25f;
+            path_travel_distance = path_travel_distance * 0.25f;
         }
-        *(float *)(d + 0x64) = *(float *)(d + 0x64) + p2 / *(float *)(d + 0x70);
-        if ((float)*(int *)t < *(float *)(d + 0x64)) {
-            *(float *)(d + 0x64) = *(float *)(d + 0x64) - (float)*(int *)t;
+        *(float *)(moby_data + 0x64) = *(float *)(moby_data + 0x64) + path_travel_distance / *(float *)(moby_data + 0x70);
+        if ((float)*(int *)path < *(float *)(moby_data + 0x64)) {
+            *(float *)(moby_data + 0x64) = *(float *)(moby_data + 0x64) - (float)*(int *)path;
         }
         if ((unsigned int)(current_level_index - 9) < 2) {
-            sample_camera_path((int *)t, 1, moby + 0x10, (float *)(moby + 0x40), 0, *(float *)(d + 0x64));
+            sample_camera_path((int *)path, 1, moby + 0x10, (float *)(moby + 0x40), 0, *(float *)(moby_data + 0x64));
         } else {
-            sample_camera_path((int *)t, 0, moby + 0x10, (float *)(moby + 0x40), 0, *(float *)(d + 0x64));
+            sample_camera_path((int *)path, 0, moby + 0x10, (float *)(moby + 0x40), 0, *(float *)(moby_data + 0x64));
         }
         if (*(float *)(moby + 0x10) < 8.0f) {
             *(int *)(moby + 0x94) = 0;
@@ -508,7 +508,7 @@ void background_ship_2_update(char *moby) {
         break;
     }
     if (*(unsigned char *)(moby + 0x31) != 0) {
-        x = fast_sin(*(float *)(d + 0x68)) * 4.0f - 3.0f;
+        x = fast_sin(*(float *)(moby_data + 0x68)) * 4.0f - 3.0f;
         if (1.0f < x) {
             x = 1.0f;
         } else if (x < 0.0f) {
@@ -520,7 +520,7 @@ void background_ship_2_update(char *moby) {
             res = fast_tween_color(D_L02_00161FC8, D_L02_00161FCC, x);
             k = D_L02_00161FC4 * 0.017453292f * frame_time;
             *(int *)(moby + 0x90) = res;
-            *(float *)(d + 0x68) = fast_add_rotations(*(float *)(d + 0x68), k);
+            *(float *)(moby_data + 0x68) = fast_add_rotations(*(float *)(moby_data + 0x68), k);
         }
         FUN_L02_002ecd50_c(moby);
     }
