@@ -512,6 +512,9 @@ int FUN_L00_0025aca0(float density, unsigned char *entity, int maximum, Vec4_25a
         SHAPE_INDEXED_CENTER_SPHERE = 2,
         SHAPE_ENDPOINT_SEGMENT_WITH_BALL_OFFSET = 4
     };
+    enum {
+        SHAPE_XY_DISK_WITH_Z_EXTENT = 3
+    };
     float weights[20];
     unsigned char *entries[20];
     Vec4_25aca0 first, second, third, fourth, fifth;
@@ -565,7 +568,7 @@ int FUN_L00_0025aca0(float density, unsigned char *entity, int maximum, Vec4_25a
                         weights[count] = radius * 4.1887903f * radius * radius;
                         break;
                     }
-                    case 3: {
+                    case SHAPE_XY_DISK_WITH_Z_EXTENT: {
                         float radius, extent;
                         qcopy(&first, (void *)((entry + 0x10)));
                         FUN_001f9a68_25aca0(*(float *)(entity + 0x2c), &first, &first);
@@ -635,7 +638,7 @@ int FUN_L00_0025aca0(float density, unsigned char *entity, int maximum, Vec4_25a
             } while (0);
             break;
         }
-        case 3: {
+        case SHAPE_XY_DISK_WITH_Z_EXTENT: {
             float radius, extent, weight, random, angle;
             qcopy(&first, (void *)((entry + 0x10)));
             FUN_001f9a68_25aca0(*(float *)(entity + 0x2c), &first, &first);
