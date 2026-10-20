@@ -3451,15 +3451,15 @@ void FUN_L18_002f76a0(char *moby, void *effect_position) {
     {
         int i;
         for (i = 0; i < *(int *)&D_L18_00162408; i++) {
-            int h;
+            int random_particle_parameter;
             normalize_vector_xyz(
                 scaled_emission_direction, &emission_direction, random_float_between(*(float *)&D_L18_0016240C, *(float *)&D_L18_00162410));
-            h = func_001FA898_r(
+            random_particle_parameter = func_001FA898_r(
                 randf_sym((float)*(int *)&D_L18_00162420, (float)*(int *)&D_L18_00162424));
             FUN_L00_002712b8(effect_position, scaled_emission_direction,
                              scale_game_frames(random_int_between(*(int *)&D_L18_00162428,
                                                                 *(int *)&D_L18_0016242C)),
-                             0x7F, 0xFFFFFF, h, *(float *)&D_L18_00162414,
+                             0x7F, 0xFFFFFF, random_particle_parameter, *(float *)&D_L18_00162414,
                              *(float *)&D_L18_00162418, *(float *)&D_L18_00162430,
                              *(float *)&D_L18_0016241C, 0.85f);
         }
