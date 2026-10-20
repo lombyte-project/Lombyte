@@ -585,16 +585,16 @@ extern short D_L02_00162024 __attribute__((sda));
 extern short D_L02_00162028 __attribute__((sda));
 extern short D_L02_0016202C __attribute__((sda));
 
-void FUN_L02_002ed658(char *m, void *previous_position) {
+void FUN_L02_002ed658(char *moby, void *previous_position) {
     float first_spark_vector[4], second_spark_vector[4], position_delta[4], random_offset[4], emission_position[4];
     int i;
 
-    fast_vec_sub(position_delta, m + 0x10, previous_position);
+    fast_vec_sub(position_delta, moby + 0x10, previous_position);
     for (i = 0; i < 2; i++) {
-        int a, b, c, d, e;
-        char *p;
+        int first_spark_color, b, frame_count, second_frame_count, third_frame_count;
+        char *spark_part;
 
-        moby_point_position(m, i, emission_position);
+        moby_point_position(moby, i, emission_position);
         fast_vec_scale(first_spark_vector, position_delta, *(float *)&D_L02_00162014);
         fast_vec_scale(second_spark_vector, position_delta, *(float *)&D_L02_00162018);
         random_vector(random_offset, 0.0f, *(float *)&D_L02_0016201C * frame_time);
@@ -603,23 +603,23 @@ void FUN_L02_002ed658(char *m, void *previous_position) {
             random_float_between(*(float *)&D_L02_00161FF4, *(float *)&D_L02_00161FF8) / 1.5f;
         second_spark_vector[3] =
             random_float_between(*(float *)&D_L02_00161FFC, *(float *)&D_L02_00162000) / 1.5f;
-        a = fast_tween_color(*(int *)&D_L02_00162020, *(int *)&D_L02_00162024,
+        first_spark_color = fast_tween_color(*(int *)&D_L02_00162020, *(int *)&D_L02_00162024,
                          random_float_between(0.0f, 1.0f));
         b = fast_tween_color(*(int *)&D_L02_00162028, *(int *)&D_L02_0016202C,
                          random_float_between(0.0f, 1.0f));
-        c = func_001FA898_r(multiply_global_factor_ed64(
+        frame_count = func_001FA898_r(multiply_global_factor_ed64(
             (float)*(int *)&D_L02_00161FE4 * random_float_between(0.0f, 1.0f) + 1.0f));
-        d = func_001FA898_r(multiply_global_factor_ed64(
+        second_frame_count = func_001FA898_r(multiply_global_factor_ed64(
             (float)*(int *)&D_L02_00161FE8 *
             (random_float_between(-*(float *)&D_L02_00161FF0, *(float *)&D_L02_00161FF0) +
              1.0f)));
-        e = func_001FA898_r(multiply_global_factor_ed64(
+        third_frame_count = func_001FA898_r(multiply_global_factor_ed64(
             (float)*(int *)&D_L02_00161FEC *
             (random_float_between(-*(float *)&D_L02_00161FF0, *(float *)&D_L02_00161FF0) +
              1.0f)));
-        p = spawn_spark(emission_position, first_spark_vector, second_spark_vector, a, b, c, d, e, -1);
-        if (p != 0) {
-            p[9] = func_001FA898_r(8.0f) + 0x60;
+        spark_part = spawn_spark(emission_position, first_spark_vector, second_spark_vector, first_spark_color, b, frame_count, second_frame_count, third_frame_count, -1);
+        if (spark_part != 0) {
+            spark_part[9] = func_001FA898_r(8.0f) + 0x60;
         }
     }
 }
