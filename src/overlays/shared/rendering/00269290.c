@@ -970,29 +970,29 @@ int FUN_001f9770_0026b910(s16 *) __asm__("FUN_001f9770");
 int FUN_001f96f8_0026b910(int) __asm__("FUN_001f96f8");
 s32 FUN_001fa6d0_0026b910(f32) __asm__("FUN_001fa6d0");
 void FUN_L00_00267a08_0026b910(void *) __asm__("FUN_L00_00267a08");
-void FUN_L00_0026b910(Part_26b910 *p) {
-    Body_26b910 *s = &p->body;
-    p->b8 += s->b8;
-    p->f18 += s->f10;
-    p->fC *= s->fC;
-    if (s->w4 == 0) {
-        if (FUN_001f9770_0026b910(&p->hA)) {
-            s->w4 = 1;
-            p->hA = FUN_001f96f8_0026b910(30);
-            p->w4 = s->w14 | 0x7F000000;
+void FUN_L00_0026b910(Part_26b910 *particle) {
+    Body_26b910 *particle_data = &particle->body;
+    particle->b8 += particle_data->b8;
+    particle->f18 += particle_data->f10;
+    particle->fC *= particle_data->fC;
+    if (particle_data->w4 == 0) {
+        if (FUN_001f9770_0026b910(&particle->hA)) {
+            particle_data->w4 = 1;
+            particle->hA = FUN_001f96f8_0026b910(30);
+            particle->w4 = particle_data->w14 | 0x7F000000;
         } else {
             int r = FUN_001f96f8_0026b910(10);
             float k = 96.0f / (float)FUN_001f96f8_0026b910(10);
-            p->w4 = ((FUN_001fa6d0_0026b910((float)(r - p->hA) * k) + 0x20) << 24) | s->w14;
+            particle->w4 = ((FUN_001fa6d0_0026b910((float)(r - particle->hA) * k) + 0x20) << 24) | particle_data->w14;
         }
     } else {
-        if (FUN_001f9770_0026b910(&p->hA)) {
-            FUN_L00_00267a08_0026b910(p);
+        if (FUN_001f9770_0026b910(&particle->hA)) {
+            FUN_L00_00267a08_0026b910(particle);
             return;
         }
-        p->w4 = (FUN_001fa6d0_0026b910((float)p->hA * (127.0f / (float)FUN_001f96f8_0026b910(30)))
+        particle->w4 = (FUN_001fa6d0_0026b910((float)particle->hA * (127.0f / (float)FUN_001f96f8_0026b910(30)))
                  << 24) |
-                s->w14;
+                particle_data->w14;
     }
 }
 extern char D_L00_00166DC0_0026ba68[] __asm__("D_L00_00166DC0");
