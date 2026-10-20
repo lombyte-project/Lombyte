@@ -1143,8 +1143,8 @@ void FUN_L01_00232dc0(void) {
     f32 f;
     s32 r;
     s32 i;
-    f32 a;
-    u8 *p;
+    f32 side_probe_angle;
+    u8 *hit_moby_record;
 
     s32 k;
     f32 g;
@@ -1209,8 +1209,8 @@ void FUN_L01_00232dc0(void) {
         if (FUN_L00_0025e3b8(HH.moby)) {
             hero.unk30A = 1;
         }
-        p = suck_get_aim_height(HH.moby);
-        if (p != 0 && (*(u16 *)(p + 0x1E) & 8)) {
+        hit_moby_record = suck_get_aim_height(HH.moby);
+        if (hit_moby_record != 0 && (*(u16 *)(hit_moby_record + 0x1E) & 8)) {
             hero.unk30A = 1;
         }
     }
@@ -1282,12 +1282,12 @@ d1:
         hero.unk2E8.f = ground_delta_or_angles.f[0];
     }
     for (i = 0; i < 2; i++) {
-        a = 1.5707964f;
+        side_probe_angle = 1.5707964f;
         if (i == 1) {
-            a = -a;
+            side_probe_angle = -side_probe_angle;
         }
-        FUN_L00_002335c8(&side_ray_start, 0.2f, a, 0.45f);
-        FUN_L00_002335c8(&unused_side_probe_point, 0.2f, a, -0.45f);
+        FUN_L00_002335c8(&side_ray_start, 0.2f, side_probe_angle, 0.45f);
+        FUN_L00_002335c8(&unused_side_probe_point, 0.2f, side_probe_angle, -0.45f);
         if (FUN_001efa68_c(&side_ray_start, &collision_ray_end, 0x22, (s32)hero.moby, 0)) {
             f = HH.point.f[2] - hero.ground_z.f;
             hero.unk2C0.f[i] = f;
