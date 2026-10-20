@@ -44,12 +44,12 @@ void FUN_L16_002cfc00(struct Moby *moby) {
         FUN_L00_002591d0((int *)&l1, *(int *)(od + 0x44), 0, 0);
         while (l1) {
             if (*(short *)(l1 + 0xA6) == 0x473) {
-                float a[4];
+                float adjusted_position[4];
                 float m[16];
                 char *pos = l1;
-                qcopy(a, data + 0x260);
-                a[2] += 0.8f;
-                subtract_vector_xyz(v, pos + 0x10, a);
+                qcopy(adjusted_position, data + 0x260);
+                adjusted_position[2] += 0.8f;
+                subtract_vector_xyz(v, pos + 0x10, adjusted_position);
                 if (!(8.0f < vector_length_xyz(v))) {
                     set_identity_matrix(m);
                     transpose_rotation_matrix(m, l1 + 0xC0);
