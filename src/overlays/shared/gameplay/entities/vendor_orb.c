@@ -2507,12 +2507,12 @@ void FUN_L00_002e8490(float f) {
 extern char *D_L00_00166E00_002e84b8 __asm__("D_L00_00166E00") __attribute__((section(".data")));
 /* Sets a flag and two floats at +0x130 of D_L00_00166E00+0x70 while its short at 0x86 is 0. */
 void follow_camera_set_height(float a, float b) __asm__("FUN_L00_002e84b8");
-void follow_camera_set_height(float a, float b) {
-    char *p = D_L00_00166E00_002e84b8;
-    if (*(short *)(p + 0x86) == 0) {
-        char *q = *(char **)(p + 0x70) + 0x130;
+void follow_camera_set_height(float height, float b) {
+    char *current_camera = D_L00_00166E00_002e84b8;
+    if (*(short *)(current_camera + 0x86) == 0) {
+        char *q = *(char **)(current_camera + 0x70) + 0x130;
         *(short *)(q + 0x3e) = 1;
-        *(float *)(q + 0x4c) = a;
+        *(float *)(q + 0x4c) = height;
         *(float *)(q + 0x54) = b;
     }
 }
