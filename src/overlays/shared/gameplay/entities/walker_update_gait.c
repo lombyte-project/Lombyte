@@ -42,11 +42,11 @@ void FUN_L00_001fff28(void *, s32, f32);
 void FUN_L00_002a1538(u8 *gait_data) {
     s32 i;
     u8 *r = gait_data + 0x130;
-    u8 *q = gait_data + 0x170;
+    u8 *gait_helper_record_base = gait_data + 0x170;
     for (i = 0; i < 2; i++) {
         u8 *gait_region_base = gait_data + i * 0xB0;
         if (gait_region_base[0x161] != 0)
-            FUN_L00_001fff28(q + i * 0xB0, 2, 0.0f);
+            FUN_L00_001fff28(gait_helper_record_base + i * 0xB0, 2, 0.0f);
         if (gait_region_base[0x121] != 0)
             FUN_L00_001fff28(r + i * 0xB0, 2, 0.0f);
         *(s32 *)(gait_region_base + 0x104) = 0;
