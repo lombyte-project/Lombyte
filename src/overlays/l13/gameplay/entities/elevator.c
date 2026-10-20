@@ -609,12 +609,12 @@ void FUN_L13_002b47a0(struct Moby *moby) {
     float v[4];
     float horizontal_offset[4];
     char *data;
-    float d, x, ang;
+    float target_distance, x, ang;
     data = (char *)moby->pvars;
     if (frame_count % D_L13_0016138C == 0) {
         moby_point_position(moby, 0, v);
-        d = vector_distance(&moby->pos, *(char **)(data + 0x40) + 0x10);
-        x = (20.0f - d) / 20.0f * 5.0f + 2.5f;
+        target_distance = vector_distance(&moby->pos, *(char **)(data + 0x40) + 0x10);
+        x = (20.0f - target_distance) / 20.0f * 5.0f + 2.5f;
         ang = fast_add_rotations(random_float_between(-x, x) * DEG_TO_RAD,
                                  moby->rot.z);
         horizontal_offset[0] = fast_cos(ang) * (D_L13_00161388 * frame_time);
