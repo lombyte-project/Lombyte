@@ -1314,7 +1314,7 @@ void FUN_L14_002ed530(char *moby) {
     float r;
     int i;
     int j;
-    int n;
+    int branch_age_index;
     float *main_arc_point;
     s32 *starts;
     u16 *main_arc_age;
@@ -1356,7 +1356,7 @@ void FUN_L14_002ed530(char *moby) {
         }
         for (j = 0; j < 3; j++) {
             int k = FUN_L00_00257b90_d530(5, 22);
-            int m;
+            int branch_point_index;
             float (*row)[4] = D_L14_001E0050_d530[j];
             u16 *sq = D_L14_001E0350_d530[j];
             starts[j] = k;
@@ -1367,7 +1367,7 @@ void FUN_L14_002ed530(char *moby) {
             ang = arc_random(0.5235988f, 1.3962634f) * sign;
             row[0][0] = r * arc_cos(ang);
             row[0][2] = r * arc_sin(ang);
-            for (m = 1; m < 16; m++) {
+            for (branch_point_index = 1; branch_point_index < 16; branch_point_index++) {
                 float angle_step;
                 float na;
                 r = arc_random(1.0f, 10.0f);
@@ -1378,9 +1378,9 @@ void FUN_L14_002ed530(char *moby) {
                 } else {
                     ang = na;
                 }
-                D_L14_001E0050_d530[j][m][0] = r * arc_cos(ang);
-                D_L14_001E0050_d530[j][m][2] = r * arc_sin(ang);
-                D_L14_001E0350_d530[j][m] = D_L14_001E0000[starts[j] + m];
+                D_L14_001E0050_d530[j][branch_point_index][0] = r * arc_cos(ang);
+                D_L14_001E0050_d530[j][branch_point_index][2] = r * arc_sin(ang);
+                D_L14_001E0350_d530[j][branch_point_index] = D_L14_001E0000[starts[j] + branch_point_index];
             }
             sign = -sign;
         }
@@ -1402,10 +1402,10 @@ void FUN_L14_002ed530(char *moby) {
         }
         arc_frames(D_L14_00161C70_gp);
         for (j = 0; j < 3; j++) {
-            for (n = 0; n < 16; n++) {
-                s16 v = ++D_L14_001E0350_d530[j][n];
+            for (branch_age_index = 0; branch_age_index < 16; branch_age_index++) {
+                s16 v = ++D_L14_001E0350_d530[j][branch_age_index];
                 if (arc_frames(D_L14_00161C70_gp) < v) {
-                    D_L14_001E0350_d530[j][n] = arc_frames(D_L14_00161C70_gp);
+                    D_L14_001E0350_d530[j][branch_age_index] = arc_frames(D_L14_00161C70_gp);
                 }
             }
         }
