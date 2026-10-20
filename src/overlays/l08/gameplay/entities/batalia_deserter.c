@@ -706,8 +706,8 @@ void FUN_L08_003084d8(struct Moby *moby) {
         break;
     case MOBY_ACTIVE:
         if (D_L08_0015F5C4 == 2) {
-            int t = D_L08_0016D060_c.a;
-            if ((t >= 1 && t <= 2) || t == 4 || t == 5) {
+            int object_selector = D_L08_0016D060_c.a;
+            if ((object_selector >= 1 && object_selector <= 2) || object_selector == 4 || object_selector == 5) {
                 if (D_L08_0016D060_c.a != 1 || scale_game_frames(0x8CE) < D_L08_0016D060_c.b) {
                     k = 0;
                     if (D_L08_0016D060_c.a == 1 || D_L08_0016D060_c.a == 4)
