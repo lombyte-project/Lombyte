@@ -3281,12 +3281,12 @@ extern float D_L18_001623E4 __attribute__((sda));
 /* Ported from rac1-decomp src/overlays/l18_veldin2/vendor_002F2AE0.c (func_L18_002F86E8) */
 void FUN_L18_002f7288(char *moby) {
     char *boss_data = *(char **)(moby + 0x78);
-    char *t = *(char **)(D_L18_0015EF50 + *(int *)(boss_data + 0x224) * 32 + 0x1c);
+    char *selected_scalar_record = *(char **)(D_L18_0015EF50 + *(int *)(boss_data + 0x224) * 32 + 0x1c);
     float f;
     float x;
     float y;
-    float *p0;
-    float *p1;
+    float *first_scalar_value;
+    float *second_scalar_value;
     float *p2;
     float *p3;
     unsigned char st;
@@ -3310,13 +3310,13 @@ void FUN_L18_002f7288(char *moby) {
             *(int *)(boss_data + 0x360) == 0) {
             x = D_L18_001623D0;
             y = D_L18_001623D4;
-            p0 = (float *)(t + 0x34);
-            p1 = (float *)(t + 0x38);
+            first_scalar_value = (float *)(selected_scalar_record + 0x34);
+            second_scalar_value = (float *)(selected_scalar_record + 0x38);
             p2 = (float *)(boss_data + 0x378);
             p3 = (float *)(boss_data + 0x37c);
         } else {
-            p0 = (float *)(t + 0x34);
-            p1 = (float *)(t + 0x38);
+            first_scalar_value = (float *)(selected_scalar_record + 0x34);
+            second_scalar_value = (float *)(selected_scalar_record + 0x38);
             p3 = (float *)(boss_data + 0x37c);
             p2 = (float *)(boss_data + 0x378);
             if (vector_distance(hero.motion.pos.f,
@@ -3328,16 +3328,16 @@ void FUN_L18_002f7288(char *moby) {
     } else if (st == 9 || st == 6) {
         x = D_L18_001623E0;
         y = D_L18_001623E4;
-        p0 = (float *)(t + 0x34);
-        p1 = (float *)(t + 0x38);
+        first_scalar_value = (float *)(selected_scalar_record + 0x34);
+        second_scalar_value = (float *)(selected_scalar_record + 0x38);
         p2 = (float *)(boss_data + 0x378);
         p3 = (float *)(boss_data + 0x37c);
     } else if (st == 0 || st == 10 || st == 11 || st == 1 || st == 0x1b) {
         int i;
         char *g;
         char *q;
-        p0 = (float *)(t + 0x34);
-        p1 = (float *)(t + 0x38);
+        first_scalar_value = (float *)(selected_scalar_record + 0x34);
+        second_scalar_value = (float *)(selected_scalar_record + 0x38);
         for (i = 0, p2 = (float *)(boss_data + 0x378), p3 = (float *)(boss_data + 0x37c); i < 0x30; i++) {
             char *scanned_entry;
             if (*(int *)(boss_data + 0x3ec) == 0) {
@@ -3372,8 +3372,8 @@ void FUN_L18_002f7288(char *moby) {
             }
         }
     } else {
-        p0 = (float *)(t + 0x34);
-        p1 = (float *)(t + 0x38);
+        first_scalar_value = (float *)(selected_scalar_record + 0x34);
+        second_scalar_value = (float *)(selected_scalar_record + 0x38);
         p2 = (float *)(boss_data + 0x378);
         p3 = (float *)(boss_data + 0x37c);
         if (*(float *)(boss_data + 0x38c) > 0.0f) {
@@ -3382,9 +3382,9 @@ void FUN_L18_002f7288(char *moby) {
                      boss_data + 0x36c, 0x15e);
         }
     }
-    advance_accelerated_scalar_7288(p0, x, p2, *(float *)&D_L18_001623B4 * D_0015ED6C_e[1],
+    advance_accelerated_scalar_7288(first_scalar_value, x, p2, *(float *)&D_L18_001623B4 * D_0015ED6C_e[1],
                      *(float *)&D_L18_001623B4 * D_0015ED6C_e[1], D_L18_001623B0 * D_0015ED6C_e[0]);
-    advance_accelerated_scalar_7288(p1, y, p3, *(float *)&D_L18_001623B4 * D_0015ED6C_e[1],
+    advance_accelerated_scalar_7288(second_scalar_value, y, p3, *(float *)&D_L18_001623B4 * D_0015ED6C_e[1],
                      *(float *)&D_L18_001623B4 * D_0015ED6C_e[1], D_L18_001623B0 * D_0015ED6C_e[0]);
 }
 
