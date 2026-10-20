@@ -303,9 +303,9 @@ void poison_vessel_update(Moby_2E9358 *moby) {
     case POISON_VESSEL_FOLLOW_TARGET:
         probe_ground_height(&moby->pos, 0, 0.5f);
         if (data->target != 0) {
-            Moby_2E9358 *t = data->target;
+            Moby_2E9358 *target_moby = data->target;
 
-            if (t->state == 0xFE || data->target->state == 0xFD) {
+            if (target_moby->state == 0xFE || data->target->state == 0xFD) {
                 moby->bBC = state;
                 data->target = 0;
             } else if (D_L15_001744D8_2E9358 != 0) {
