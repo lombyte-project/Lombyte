@@ -107,8 +107,8 @@ extern int D_0013E500_23bac0[] __asm__("D_0013E500");
 extern G_23bac0 D_L00_0017E4D8_23bac0 __asm__("D_L00_0017E4D8") __attribute__((section(".data")));
 extern u64_23bac0 FUN_001ffa10_23bac0(int) __asm__("FUN_001ffa10");
 void FUN_L00_0023bac0(int id, int x, int y, int w, int h, int a) {
-    u64_23bac0 *p;
-    int *s;
+    u64_23bac0 *packet_words;
+    int *coordinate_offsets;
     G_23bac0 *g = &D_L00_0017E4D8_23bac0;
     R_23bac0 *r = &g->rec[g->tab[id].k];
     int ww = 1 << r->lw;
@@ -118,28 +118,28 @@ void FUN_L00_0023bac0(int id, int x, int y, int w, int h, int a) {
     *(int *)(D_L00_001611C0_23bac0 + 8) = 0;
     *(int *)(D_L00_001611C0_23bac0 + 12) = 0x50000007;
     D_L00_001611C0_23bac0 += 0x10;
-    p = (u64_23bac0 *)D_L00_001611C0_23bac0;
-    p[0] = 0xB400000000008001UL;
-    p[1] = 0x53535353106UL;
-    p[2] = FUN_001ffa10_23bac0(id);
-    p[3] = 0x154;
-    p[4] = ((u64_23bac0)a << 24) | 0x7F7F7F;
-    p[5] = ww << 4;
-    s = D_0013E500_23bac0;
-    p[6] = (u64_23bac0)(((x << 4) + s[4] - 8) | (((u64_23bac0)((y << 4) + s[5] - 8)) << 16)) |
+    packet_words = (u64_23bac0 *)D_L00_001611C0_23bac0;
+    packet_words[0] = 0xB400000000008001UL;
+    packet_words[1] = 0x53535353106UL;
+    packet_words[2] = FUN_001ffa10_23bac0(id);
+    packet_words[3] = 0x154;
+    packet_words[4] = ((u64_23bac0)a << 24) | 0x7F7F7F;
+    packet_words[5] = ww << 4;
+    coordinate_offsets = D_0013E500_23bac0;
+    packet_words[6] = (u64_23bac0)(((x << 4) + coordinate_offsets[4] - 8) | (((u64_23bac0)((y << 4) + coordinate_offsets[5] - 8)) << 16)) |
            ((u64_23bac0)g->zc << 32);
-    p[7] = (hh << 20) + (ww << 4);
-    p[8] = (u64_23bac0)((((x + w) << 4) + s[4] - 8) | (((u64_23bac0)((y << 4) + s[5] - 8)) << 16)) |
+    packet_words[7] = (hh << 20) + (ww << 4);
+    packet_words[8] = (u64_23bac0)((((x + w) << 4) + coordinate_offsets[4] - 8) | (((u64_23bac0)((y << 4) + coordinate_offsets[5] - 8)) << 16)) |
            ((u64_23bac0)g->zc << 32);
-    p[9] = 0;
-    p[10] =
-        (u64_23bac0)(((x << 4) + s[4] - 8) | (((u64_23bac0)(((y + h) << 4) + s[5] - 8)) << 16)) |
+    packet_words[9] = 0;
+    packet_words[10] =
+        (u64_23bac0)(((x << 4) + coordinate_offsets[4] - 8) | (((u64_23bac0)(((y + h) << 4) + coordinate_offsets[5] - 8)) << 16)) |
         ((u64_23bac0)g->zc << 32);
-    p[11] = hh << 20;
-    p[12] = (u64_23bac0)((((x + w) << 4) + s[4] - 8) |
-                         (((u64_23bac0)(((y + h) << 4) + s[5] - 8)) << 16)) |
+    packet_words[11] = hh << 20;
+    packet_words[12] = (u64_23bac0)((((x + w) << 4) + coordinate_offsets[4] - 8) |
+                         (((u64_23bac0)(((y + h) << 4) + coordinate_offsets[5] - 8)) << 16)) |
             ((u64_23bac0)g->zc << 32);
-    p[13] = 0;
+    packet_words[13] = 0;
     *(char *volatile *)&D_L00_001611C0_23bac0 += 0x70;
 }
 typedef struct O23cdb8 {
