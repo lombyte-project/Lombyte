@@ -105,7 +105,7 @@ void snow_plow_update(struct Moby *moby) {
         SNOW_PLOW_CLASS_OFFSET_WITH_TARGET_VOICE_SELECTOR_ZERO = 0x59
     };
     Vec4 old;
-    Vec4 delta, *d;
+    Vec4 delta, *return_delta_ptr;
     /* The sphere query is its position followed by the record; the hit cases pass one or the other. */
     Vec4 sphere_pos;
     struct {
@@ -209,14 +209,14 @@ void snow_plow_update(struct Moby *moby) {
             fast_vec_sub(&delta, data + 0x160, &moby->pos);
             length = fast_vec_length(&delta);
             step = frame_time * 3.0f;
-            d = &delta;
+            return_delta_ptr = &delta;
             if (length < step) {
                 speed = length;
             } else {
                 length -= step; /* distance left after this step */
                 speed = step;
             }
-            normalize_vector_xyz(d, d, speed);
+            normalize_vector_xyz(return_delta_ptr, return_delta_ptr, speed);
             add_vector_xyz(&moby->pos, &moby->pos, &delta);
             break;
         }
