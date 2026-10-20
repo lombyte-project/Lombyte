@@ -161,18 +161,18 @@ extern float D_L00_0016138C_gp __asm__("D_L00_0016138C") __attribute__((sda));
 #include "rnc/globals.h"
 int scale_game_frames(int) __asm__("FUN_001f96f8");
 float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
-void FUN_L00_002a4cd8(unsigned char *p) {
+void FUN_L00_002a4cd8(unsigned char *state_object) {
     enum {
         INITIALIZE_FRAME_TIMING = 0,
         UPDATE_WRAPPED_VALUE = 1
     };
     float one;
     int r;
-    switch (p[0x20]) {
+    switch (state_object[0x20]) {
     case INITIALIZE_FRAME_TIMING:
         D_L00_00161390 = 0;
-        p[0x20] = 1;
-        p[0x30] = 0xFF;
+        state_object[0x20] = 1;
+        state_object[0x30] = 0xFF;
         one = 1.0f;
         D_L00_0016137C_gp = scale_game_frames(D_L00_00161368);
         r = scale_game_frames(D_L00_0016136C);
