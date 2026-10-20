@@ -2260,7 +2260,7 @@ float FUN_002132a8_00209540(float, float) __asm__("FUN_002132a8");
 void FUN_L00_002715e8_00209540(float *, V4_00209540 *, int, float,
                                float) __asm__("FUN_L00_002715e8");
 int FUN_00213260_00209540(int) __asm__("FUN_00213260");
-void FUN_L00_00209540(int a, int lim) {
+void FUN_L00_00209540(int counter_reset_range, int lim) {
     G_00209540 *g = &D_0013F350_00209540;
     if (lim < ++g->cnt) {
         float v[4];
@@ -2273,7 +2273,7 @@ void FUN_L00_00209540(int a, int lim) {
             float s = FUN_002132a8_00209540(0.4f, 0.6f);
             FUN_L00_002715e8_00209540(v, &g->pos, -1, s, 5250.0f);
         }
-        g->cnt = FUN_00213260_00209540(a);
+        g->cnt = FUN_00213260_00209540(counter_reset_range);
     }
 }
 extern float D_0015ED6C;
