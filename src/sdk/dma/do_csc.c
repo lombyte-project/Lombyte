@@ -9,7 +9,7 @@ extern s32 EnableInterrupts(void);
 extern void _sendIpuCommand(MpegDec *d, u32 cmd);
 extern void _dispatchMpegCallback(void *cb, s32 *arg);
 
-void _doCSC(MpegDec *d, u32 src, s32 mbs) {
+void _doCSC(MpegDec *decoder, u32 src, s32 mbs) {
     s32 cbarg[8];
     s32 intr;
 
@@ -22,9 +22,9 @@ void _doCSC(MpegDec *d, u32 src, s32 mbs) {
     if (intr) {
         EnableInterrupts();
     }
-    _sendIpuCommand(d, 0x70000000 | mbs);
+    _sendIpuCommand(decoder, 0x70000000 | mbs);
     cbarg[0] = 4;
-    _dispatchMpegCallback(d->cbData, cbarg);
+    _dispatchMpegCallback(decoder->cbData, cbarg);
     while ((*(volatile u32 *)0x1000B000 >> 8) & 1) {
     }
     while ((s32) * (volatile u32 *)0x10002010 < 0) {
