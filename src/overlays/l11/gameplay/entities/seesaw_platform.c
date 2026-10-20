@@ -1916,23 +1916,23 @@ extern int D_L11_0015FFD8; /* no foreign declaration */
 extern short *D_L11_001AC240[];
 
 void FUN_L11_00311be8(void *moby, void *active_moby_count, void *visible_moby_count) {
-    char *d = *(char **)((char *)moby + 0x78);
-    int type = *(short *)(d + 0x108);
-    short *p;
+    char *moby_private_data = *(char **)((char *)moby + 0x78);
+    int type = *(short *)(moby_private_data + 0x108);
+    short *moby_list_entry;
     *(unsigned short *)active_moby_count = 0;
     *(unsigned short *)visible_moby_count = 0;
-    p = D_L11_001AC240[type];
-    if (p == 0)
+    moby_list_entry = D_L11_001AC240[type];
+    if (moby_list_entry == 0)
         return;
     do {
-        int off = (*(unsigned short *)p & 0x7FFF) << 8;
+        int off = (*(unsigned short *)moby_list_entry & 0x7FFF) << 8;
         if (((char *)D_L11_0015FFD8)[off + 0x20] >= 0) {
             (*(unsigned short *)active_moby_count)++;
             if (((unsigned char *)D_L11_0015FFD8)[off + 0x31] != 0) {
                 (*(unsigned short *)visible_moby_count)++;
             }
         }
-    } while (*p++ >= 0);
+    } while (*moby_list_entry++ >= 0);
 }
 /* Keeps the moby's current target, picking a new one when it is lost and restarting the timer. */
 
