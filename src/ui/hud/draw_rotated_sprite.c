@@ -28,7 +28,7 @@ void draw_rotated_sprite(s32 w, s32 h, s64 buf, f32 x, f32 y, f32 cx, f32 cy, f3
     struct Vec4 p2;
     struct Vec4 p3;
     struct DmaTag *tag;
-    u64 *q;
+    u64 *packet_payload;
 
     pos.x = x;
     pos.y = y;
@@ -49,26 +49,26 @@ void draw_rotated_sprite(s32 w, s32 h, s64 buf, f32 x, f32 y, f32 cx, f32 cy, f3
     render_packet_cursor.tag->vif0 = 0;
     render_packet_cursor.tag->vif1 = 0x50000007;
     tag = render_packet_cursor.tag;
-    q = (u64 *)(tag + 1);
+    packet_payload = (u64 *)(tag + 1);
     render_packet_cursor.tag = tag + 1;
-    q[0] = 0xB400000000008001;
-    q[1] = 0x53535353106;
-    q[2] = buf;
-    q[3] = 0x154;
-    q[4] = 0x807F7F7F;
-    q[5] = w << 4;
-    q[6] = (((s32)p0.x + screen_extent.left) - 8) | ((u64)(((s32)p0.y + screen_extent.top) - 8) << 16) |
+    packet_payload[0] = 0xB400000000008001;
+    packet_payload[1] = 0x53535353106;
+    packet_payload[2] = buf;
+    packet_payload[3] = 0x154;
+    packet_payload[4] = 0x807F7F7F;
+    packet_payload[5] = w << 4;
+    packet_payload[6] = (((s32)p0.x + screen_extent.left) - 8) | ((u64)(((s32)p0.y + screen_extent.top) - 8) << 16) |
            ((u64)hud_state.z << 32);
-    q[7] = (h << 20) + (w << 4);
-    q[8] = (((s32)p1.x + screen_extent.left) - 8) | ((u64)(((s32)p1.y + screen_extent.top) - 8) << 16) |
+    packet_payload[7] = (h << 20) + (w << 4);
+    packet_payload[8] = (((s32)p1.x + screen_extent.left) - 8) | ((u64)(((s32)p1.y + screen_extent.top) - 8) << 16) |
            ((u64)hud_state.z << 32);
-    q[9] = 0;
-    q[10] = (((s32)p2.x + screen_extent.left) - 8) | ((u64)(((s32)p2.y + screen_extent.top) - 8) << 16) |
+    packet_payload[9] = 0;
+    packet_payload[10] = (((s32)p2.x + screen_extent.left) - 8) | ((u64)(((s32)p2.y + screen_extent.top) - 8) << 16) |
             ((u64)hud_state.z << 32);
-    q[11] = h << 20;
-    q[12] = (((s32)p3.x + screen_extent.left) - 8) | ((u64)(((s32)p3.y + screen_extent.top) - 8) << 16) |
+    packet_payload[11] = h << 20;
+    packet_payload[12] = (((s32)p3.x + screen_extent.left) - 8) | ((u64)(((s32)p3.y + screen_extent.top) - 8) << 16) |
             ((u64)hud_state.z << 32);
-    q[13] = 0;
+    packet_payload[13] = 0;
     render_packet_cursor.tag = (struct DmaTag *)((u8 *)render_packet_cursor.tag + 0x70);
 }
 
