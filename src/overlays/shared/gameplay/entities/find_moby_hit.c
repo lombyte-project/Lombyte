@@ -788,7 +788,7 @@ typedef struct {
 
 /* Interpolates the four components of two copied vectors by t into dst. */
 void FUN_L00_0025b6b8(f32 *dst, f32 *a, f32 *b, f32 t);
-void FUN_L00_0025b6b8(f32 *dst, f32 *start_vector, f32 *b, f32 t) {
+void FUN_L00_0025b6b8(f32 *dst, f32 *start_vector, f32 *b, f32 interpolation_factor) {
     Vec4 left, right;
     /* Fakematch: the struct copy of dst and the dead dst = 0 stores keep each store ahead of the next call's loads. */
     OutPtr out = { dst };
@@ -797,13 +797,13 @@ void FUN_L00_0025b6b8(f32 *dst, f32 *start_vector, f32 *b, f32 t) {
     left.q = *(u128 *)start_vector;
     right.q = *(u128 *)b;
     b = right.f;
-    out.p[0] = FUN_L00_0025b6a8(left.f[0], b[0], t);
+    out.p[0] = FUN_L00_0025b6a8(left.f[0], b[0], interpolation_factor);
     dst = out.p;
     out = (OutPtr){ dst };
     dst = 0;
-    out.p[1] = FUN_L00_0025b6a8(left.f[1], b[1], t);
-    out.p[2] = FUN_L00_0025b6a8(left.f[2], b[2], t);
-    out.p[3] = FUN_L00_0025b6a8(left.f[3], b[3], t);
+    out.p[1] = FUN_L00_0025b6a8(left.f[1], b[1], interpolation_factor);
+    out.p[2] = FUN_L00_0025b6a8(left.f[2], b[2], interpolation_factor);
+    out.p[3] = FUN_L00_0025b6a8(left.f[3], b[3], interpolation_factor);
 }
 #define NOT_SDA
 
