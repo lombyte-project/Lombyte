@@ -114,7 +114,7 @@ int FUN_L00_0023aaa8(O_23aaa8 *hud_frame_state) {
     };
     T_23aaa8 *frame_sequence = &D_L00_0017E4F4[hud_frame_state->id];
     int r;
-    int k, a;
+    int k, restart_start_offset;
     r = 0;
     if (frame_sequence->id != 0xFFFF) {
         switch (hud_frame_state->mode) {
@@ -147,8 +147,8 @@ int FUN_L00_0023aaa8(O_23aaa8 *hud_frame_state) {
                     r += frame_sequence->base;
                 } else {
                     r = frame_sequence->base;
-                    a = FUN_001f96f8_23aaa8(0xA);
-                    hud_frame_state->start = frame_sequence->n * 2 + a + FUN_00213260_23aaa8(FUN_001f96f8_23aaa8(0x1E));
+                    restart_start_offset = FUN_001f96f8_23aaa8(0xA);
+                    hud_frame_state->start = frame_sequence->n * 2 + restart_start_offset + FUN_00213260_23aaa8(FUN_001f96f8_23aaa8(0x1E));
                 }
             } else {
                 r = hud_frame_state->frame;
