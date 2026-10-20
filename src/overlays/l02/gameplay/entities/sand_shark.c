@@ -61,7 +61,7 @@ extern void FUN_L02_002a40f0(void *);
 
 void FUN_L02_002a4818(int a, int b, int c, int d, float x, float y, float z, float w, int e, int f,
                       int g);
-void FUN_L02_002a4818(int a, int b, int c, int d, float x, float y, float z, float w, int e, int f,
+void FUN_L02_002a4818(int a, int b, int c, int ticks_per_frame, float x, float y, float z, float w, int frame_table_start_index, int frame_count,
                       int g) {
     char scratch[0x40];
     scratch[0x30] = a;
@@ -71,9 +71,9 @@ void FUN_L02_002a4818(int a, int b, int c, int d, float x, float y, float z, flo
     *(float *)(scratch + 0x24) = y;
     *(float *)(scratch + 0x28) = z;
     *(float *)(scratch + 0x2C) = w;
-    *(short *)(scratch + 0x3C) = e;
-    scratch[0x3E] = f;
-    scratch[0x33] = d;
+    *(short *)(scratch + 0x3C) = frame_table_start_index;
+    scratch[0x3E] = frame_count;
+    scratch[0x33] = ticks_per_frame;
     ((unsigned char *)scratch)[0x3F] = 0x80;
     *(int *)(scratch + 0x1C) = g;
     FUN_L02_002a40f0(scratch);
