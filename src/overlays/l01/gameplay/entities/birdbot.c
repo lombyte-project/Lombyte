@@ -2844,43 +2844,43 @@ extern void FUN_L00_0026daa0(void *, u32, s32, s32, f32);
 extern s32 allocate_voice_for_target_entry(s32, s32, void *) __asm__("FUN_0022da68");
 
 BeamMoby *FUN_L01_002f68a0(void *owner, u128 *pos, u128 *dir, u128 *color, s32 kind) {
-    Vec4 p;
-    Vec4 d;
+    Vec4 position_copy;
+    Vec4 direction_copy;
     Vec4 c;
-    BeamMoby *m;
+    BeamMoby *created_moby;
     BeamVars *v;
     Vec4 *pp;
     Vec4 *pd;
     Vec4 *pc;
 
-    pp = &p;
-    pd = &d;
+    pp = &position_copy;
+    pd = &direction_copy;
     pc = &c;
-    p.q = *pos;
-    d.q = *dir;
+    position_copy.q = *pos;
+    direction_copy.q = *dir;
     c.q = *color;
-    m = create_moby(0x2AE);
-    if (m != NULL) {
-        v = m->vars;
+    created_moby = create_moby(0x2AE);
+    if (created_moby != NULL) {
+        v = created_moby->vars;
         v->owner = owner;
-        m->w40 = 0;
-        m->b30 = 0xFF;
-        m->h32 = 0xFF;
-        m->b31 = 1;
-        m->scale = m->scale * 0.25f;
-        m->rot_x = -fast_arc_tan(vector_length_xy(pd), pd->f[2]);
-        m->rot_z = fast_arc_tan(d.f[0], pd->f[1]);
-        qcopy(&m->pos, pp);
+        created_moby->w40 = 0;
+        created_moby->b30 = 0xFF;
+        created_moby->h32 = 0xFF;
+        created_moby->b31 = 1;
+        created_moby->scale = created_moby->scale * 0.25f;
+        created_moby->rot_x = -fast_arc_tan(vector_length_xy(pd), pd->f[2]);
+        created_moby->rot_z = fast_arc_tan(direction_copy.f[0], pd->f[1]);
+        qcopy(&created_moby->pos, pp);
         qcopy(&v->dir, pd);
         qcopy(&v->color, pc);
         v->kind = kind;
         v->len = fast_vec_length(pd);
-        FUN_L00_0026daa0(m, 0x2F4F7F7F, scale_game_frames(0x78), -1, 420000.0f);
-        FUN_L00_0026daa0(m, 0x4F6F7F7F, scale_game_frames(0x78), -1, 210000.0f);
-        allocate_voice_for_target_entry(0, 0, m);
-        FUN_L00_00250df8(m);
+        FUN_L00_0026daa0(created_moby, 0x2F4F7F7F, scale_game_frames(0x78), -1, 420000.0f);
+        FUN_L00_0026daa0(created_moby, 0x4F6F7F7F, scale_game_frames(0x78), -1, 210000.0f);
+        allocate_voice_for_target_entry(0, 0, created_moby);
+        FUN_L00_00250df8(created_moby);
     }
-    return m;
+    return created_moby;
 }
 typedef struct {
     s32 v[4];
