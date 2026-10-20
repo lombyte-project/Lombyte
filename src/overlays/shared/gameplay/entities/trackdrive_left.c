@@ -991,19 +991,19 @@ extern int D_L02_00161AB0 __attribute__((sda));
 extern int D_L02_00161AB4 __attribute__((sda));
 extern int D_L02_00161AB8 __attribute__((sda));
 void FUN_L02_002dae88(void) {
-    Q_2dae88 q;
-    int c[4];
+    Q_2dae88 packed_vertices;
+    int vertex_colors[4];
     int b[4];
-    Q_2dae88 *p = D_L02_001D3310;
+    Q_2dae88 *vertex_quad_cursor = D_L02_001D3310;
     int i;
     for (i = 3; i >= 0; i--) {
         b[0] = D_L02_00161AAC;
         b[1] = D_L02_00161AB0;
         b[2] = D_L02_00161AB4;
         b[3] = D_L02_00161AB8;
-        c[0] = c[1] = c[2] = c[3] = D_L02_00161B94;
-        q = *p++;
-        f20bc88_2dae88(&q, b, c, tex_2dae88(D_L02_00161B1C_gp + 0x28), 1);
+        vertex_colors[0] = vertex_colors[1] = vertex_colors[2] = vertex_colors[3] = D_L02_00161B94;
+        packed_vertices = *vertex_quad_cursor++;
+        f20bc88_2dae88(&packed_vertices, b, vertex_colors, tex_2dae88(D_L02_00161B1C_gp + 0x28), 1);
     }
 }
 
