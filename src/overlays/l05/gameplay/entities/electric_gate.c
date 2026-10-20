@@ -2426,45 +2426,45 @@ void FUN_L05_003193a8(char *moby) {
         TAXI_PRIMARY_BRANCH_STOP = 3,
         TAXI_FALLBACK_BRANCH_STOP = 4
     };
-    char *d = *(char **)(moby + 0x78);
-    char *p;
+    char *taxi_data = *(char **)(moby + 0x78);
+    char *selected_path;
     float inv, a, b, r;
-    switch (*(short *)(d + 0xB4)) {
+    switch (*(short *)(taxi_data + 0xB4)) {
     case TAXI_PAIRED_ROUTE_FIRST_STOP:
-        *(char **)(d + 0xAC) = D_L05_001B0930[*(int *)(d + 0x94)];
-        *(short *)(d + 0xB6) = 1;
+        *(char **)(taxi_data + 0xAC) = D_L05_001B0930[*(int *)(taxi_data + 0x94)];
+        *(short *)(taxi_data + 0xB6) = 1;
         break;
     case TAXI_PAIRED_ROUTE_SECOND_STOP:
-        *(char **)(d + 0xAC) = D_L05_001B0930[*(int *)(d + 0x98)];
-        *(short *)(d + 0xB6) = 0;
+        *(char **)(taxi_data + 0xAC) = D_L05_001B0930[*(int *)(taxi_data + 0x98)];
+        *(short *)(taxi_data + 0xB6) = 0;
         break;
     case TAXI_BRANCHING_STOP:
-        if (D_0014C050[current_level_index][*(int *)(d + 0xB8)] != 0xFF) {
-            *(char **)(d + 0xAC) = D_L05_001B0930[*(int *)(d + 0x9C)];
-            *(short *)(d + 0xB6) = 3;
+        if (D_0014C050[current_level_index][*(int *)(taxi_data + 0xB8)] != 0xFF) {
+            *(char **)(taxi_data + 0xAC) = D_L05_001B0930[*(int *)(taxi_data + 0x9C)];
+            *(short *)(taxi_data + 0xB6) = 3;
         } else {
-            *(char **)(d + 0xAC) = D_L05_001B0930[*(int *)(d + 0xA4)];
-            *(short *)(d + 0xB6) = 4;
+            *(char **)(taxi_data + 0xAC) = D_L05_001B0930[*(int *)(taxi_data + 0xA4)];
+            *(short *)(taxi_data + 0xB6) = 4;
         }
         break;
     case TAXI_PRIMARY_BRANCH_STOP:
-        *(char **)(d + 0xAC) = D_L05_001B0930[*(int *)(d + 0xA0)];
-        *(short *)(d + 0xB6) = 2;
+        *(char **)(taxi_data + 0xAC) = D_L05_001B0930[*(int *)(taxi_data + 0xA0)];
+        *(short *)(taxi_data + 0xB6) = 2;
         break;
     case TAXI_FALLBACK_BRANCH_STOP:
-        *(char **)(d + 0xAC) = D_L05_001B0930[*(int *)(d + 0xA8)];
-        *(short *)(d + 0xB6) = 2;
+        *(char **)(taxi_data + 0xAC) = D_L05_001B0930[*(int *)(taxi_data + 0xA8)];
+        *(short *)(taxi_data + 0xB6) = 2;
         break;
     }
-    p = *(char **)(d + 0xAC);
-    r = FUN_001f9b48(p + 0x10, p + 0x20);
+    selected_path = *(char **)(taxi_data + 0xAC);
+    r = FUN_001f9b48(selected_path + 0x10, selected_path + 0x20);
     a = frame_time * 20.0f;
     b = frame_time_sq * 5.0f;
-    inv = 1.0f / (r * (float)**(int **)(d + 0xAC));
-    *(int *)(d + 0xC4) = 0;
-    *(int *)(d + 0xC0) = 0;
-    *(float *)(d + 0xD4) = a * inv;
-    *(float *)(d + 0xD8) = b * inv;
+    inv = 1.0f / (r * (float)**(int **)(taxi_data + 0xAC));
+    *(int *)(taxi_data + 0xC4) = 0;
+    *(int *)(taxi_data + 0xC0) = 0;
+    *(float *)(taxi_data + 0xD4) = a * inv;
+    *(float *)(taxi_data + 0xD8) = b * inv;
 }
 /* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_0030EB68.c: func_L05_0031B138), where it is exact; names translated to the US level program. */
 
