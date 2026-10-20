@@ -2870,7 +2870,7 @@ extern void vu_euler_rotation_basis(void *, void *) __asm__("FUN_001fa030");
 extern Moby *create_moby(int) __asm__("FUN_0020c4f8");
 extern int func_0022ED80_2F6330(int, int, void *) __asm__("FUN_0022da68");
 
-void FUN_L06_002f4f00(Moby *m) {
+void FUN_L06_002f4f00(Moby *moby) {
     enum {
         SPAWN_CHILD_MOBYS = 0,
         INITIALIZE_BASE_TRANSFORM = 1,
@@ -2881,107 +2881,107 @@ void FUN_L06_002f4f00(Moby *m) {
         RESTORE_ROTATION_THEN_WAIT_FOR_TRIGGER_AND_CHILDREN = 8,
         RESTORE_ROTATION_THEN_UPDATE_POSITION_FROM_BASE = 9
     };
-    Vars_2F6330 *d = (Vars_2F6330 *)(*(void **)&m->pvars);
-    float tmp[4];
+    Vars_2F6330 *moby_vars = (Vars_2F6330 *)(*(void **)&moby->pvars);
+    float position_offset[4];
     int i;
     int j;
     int k;
     int flag;
 
-    switch (m->state) {
+    switch (moby->state) {
     case SPAWN_CHILD_MOBYS:
-        d->unk10 = (*(float (*)[4])&m->rot)[0];
-        qcopy(d->pos, (*(float (*)[4])&m->pos));
-        m->state = 2;
+        moby_vars->unk10 = (*(float (*)[4])&moby->rot)[0];
+        qcopy(moby_vars->pos, (*(float (*)[4])&moby->pos));
+        moby->state = 2;
         for (i = 0; i < 7; i++) {
-            d->slots[i] = create_moby(0x3FD);
-            (*(char *)&d->slots[i]->update_dist) = 0x40;
-            d->slots[i]->draw_dist = 0x40;
-            (*(char *)&d->slots[i]->visible) = 1;
-            (*(long *)&d->slots[i]->spawn_frame) = (*(long *)&m->spawn_frame);
-            d->slots[i]->flags = m->flags;
-            qcopy_nc((*(float (*)[4])&d->slots[i]->pos), (*(float (*)[4])&m->pos));
-            qcopy_nc((*(float (*)[4])&d->slots[i]->rot), (*(float (*)[4])&m->rot));
-            (*(float (*)[4])&d->slots[i]->rot)[0] = fast_add_rotations((*(float (*)[4])&d->slots[i]->rot)[0], (float)((i + 1) * 45) * 0.017453292f);
-            d->slots[i]->state = 1;
-            vu_euler_rotation_basis((*(float (*)[4])&d->slots[i]->rot_row0), (*(float (*)[4])&d->slots[i]->rot));
+            moby_vars->slots[i] = create_moby(0x3FD);
+            (*(char *)&moby_vars->slots[i]->update_dist) = 0x40;
+            moby_vars->slots[i]->draw_dist = 0x40;
+            (*(char *)&moby_vars->slots[i]->visible) = 1;
+            (*(long *)&moby_vars->slots[i]->spawn_frame) = (*(long *)&moby->spawn_frame);
+            moby_vars->slots[i]->flags = moby->flags;
+            qcopy_nc((*(float (*)[4])&moby_vars->slots[i]->pos), (*(float (*)[4])&moby->pos));
+            qcopy_nc((*(float (*)[4])&moby_vars->slots[i]->rot), (*(float (*)[4])&moby->rot));
+            (*(float (*)[4])&moby_vars->slots[i]->rot)[0] = fast_add_rotations((*(float (*)[4])&moby_vars->slots[i]->rot)[0], (float)((i + 1) * 45) * 0.017453292f);
+            moby_vars->slots[i]->state = 1;
+            vu_euler_rotation_basis((*(float (*)[4])&moby_vars->slots[i]->rot_row0), (*(float (*)[4])&moby_vars->slots[i]->rot));
         }
         break;
     case INITIALIZE_BASE_TRANSFORM:
-        d->unk10 = (*(float (*)[4])&m->rot)[0];
-        qcopy(d->pos, (*(float (*)[4])&m->pos));
-        m->state = 3;
-        normalize_vector_xyz(tmp, (*(float (*)[4])&m->rot_row2), D_L06_00161D48);
-        add_vector_xyz((*(float (*)[4])&m->pos), tmp, d);
+        moby_vars->unk10 = (*(float (*)[4])&moby->rot)[0];
+        qcopy(moby_vars->pos, (*(float (*)[4])&moby->pos));
+        moby->state = 3;
+        normalize_vector_xyz(position_offset, (*(float (*)[4])&moby->rot_row2), D_L06_00161D48);
+        add_vector_xyz((*(float (*)[4])&moby->pos), position_offset, moby_vars);
         break;
     case WAIT_FOR_TRIGGER_AND_CHILDREN:
-        if (m->command == 0) {
+        if (moby->command == 0) {
             flag = 0;
-            if (d->idx >= 0) {
-                                if (D_L06_0015FFD8[d->idx].oclass == 0x5A8) {
-                    if (vector_distance(D_0013F3D0, (*(float (*)[4])&D_L06_0015FFD8[d->idx].pos)) < 20.0f) {
+            if (moby_vars->idx >= 0) {
+                                if (D_L06_0015FFD8[moby_vars->idx].oclass == 0x5A8) {
+                    if (vector_distance(D_0013F3D0, (*(float (*)[4])&D_L06_0015FFD8[moby_vars->idx].pos)) < 20.0f) {
                         flag = 1;
                     }
-                } else if (D_L06_0015FFD8[d->idx].oclass == 0x24A) {
-                    flag = D_L06_0015FFD8[d->idx].command != 0;
+                } else if (D_L06_0015FFD8[moby_vars->idx].oclass == 0x24A) {
+                    flag = D_L06_0015FFD8[moby_vars->idx].command != 0;
                 } else {
-                    flag = D_L06_0015FFD8[d->idx].state >= 3;
+                    flag = D_L06_0015FFD8[moby_vars->idx].state >= 3;
                 }
             } else {
-                if (vector_distance((*(float (*)[4])&m->pos), D_0013F3D0) < 6.0f && D_L06_00161D44 == 0.0f) {
+                if (vector_distance((*(float (*)[4])&moby->pos), D_0013F3D0) < 6.0f && D_L06_00161D44 == 0.0f) {
                     flag = 1;
                 }
             }
             if (flag) {
                 for (j = 0; j < 7; j++) {
-                    if (d->slots[j]->state != 3) {
+                    if (moby_vars->slots[j]->state != 3) {
                         flag = 0;
                     }
                 }
                 if (flag) {
-                    func_0022ED80_2F6330(0, 0, m);
-                    m->state = 4;
-                    d->unk18 = 0;
-                    d->unk14 = 0.0f;
+                    func_0022ED80_2F6330(0, 0, moby);
+                    moby->state = 4;
+                    moby_vars->unk18 = 0;
+                    moby_vars->unk14 = 0.0f;
                     for (k = 0; k < 7; k++) {
-                        d->slots[k]->state = 5;
+                        moby_vars->slots[k]->state = 5;
                     }
                 }
             }
         }
     case UPDATE_POSITION_FROM_BASE:
-        normalize_vector_xyz(tmp, (*(float (*)[4])&m->rot_row2), D_L06_00161D48);
-        add_vector_xyz((*(float (*)[4])&m->pos), tmp, d);
+        normalize_vector_xyz(position_offset, (*(float (*)[4])&moby->rot_row2), D_L06_00161D48);
+        add_vector_xyz((*(float (*)[4])&moby->pos), position_offset, moby_vars);
         break;
     case ROTATE_AND_HIDE_AFTER_TRIGGER_AND_CHILDREN:
     case ROTATE_AND_HIDE:
-        approach_angle(&d->unk14, &d->unk20, 1.0471976f,
+        approach_angle(&moby_vars->unk14, &moby_vars->unk20, 1.0471976f,
                           D_L06_00161D38 * 0.017453292f * D_0015ED70,
                           D_L06_00161D3C * 0.017453292f * D_0015ED70,
                           D_L06_00161D40 * 0.017453292f * D_0015ED6C);
-        (*(float (*)[4])&m->rot)[0] = fast_subtract_rotations(d->unk10, d->unk14);
-        if (d->unk14 >= 1.0471976f) {
-            m->flags |= 1;
-            (*(char *)&m->visible) = 0;
-            if (m->state == 4) {
-                m->state = 6;
+        (*(float (*)[4])&moby->rot)[0] = fast_subtract_rotations(moby_vars->unk10, moby_vars->unk14);
+        if (moby_vars->unk14 >= 1.0471976f) {
+            moby->flags |= 1;
+            (*(char *)&moby->visible) = 0;
+            if (moby->state == 4) {
+                moby->state = 6;
             } else {
-                m->state = 7;
+                moby->state = 7;
             }
         }
         break;
     case RESTORE_ROTATION_THEN_WAIT_FOR_TRIGGER_AND_CHILDREN:
     case RESTORE_ROTATION_THEN_UPDATE_POSITION_FROM_BASE:
-        approach_angle(&d->unk14, &d->unk20, 0.0f,
+        approach_angle(&moby_vars->unk14, &moby_vars->unk20, 0.0f,
                           D_L06_00161D38 * 0.017453292f * D_0015ED70,
                           D_L06_00161D3C * 0.017453292f * D_0015ED70,
                           D_L06_00161D40 * 0.017453292f * D_0015ED6C);
-        (*(float (*)[4])&m->rot)[0] = fast_subtract_rotations(d->unk10, d->unk14);
-        if (d->unk14 <= 0.0f) {
-            if (m->state == 8) {
-                m->state = 2;
+        (*(float (*)[4])&moby->rot)[0] = fast_subtract_rotations(moby_vars->unk10, moby_vars->unk14);
+        if (moby_vars->unk14 <= 0.0f) {
+            if (moby->state == 8) {
+                moby->state = 2;
             } else {
-                m->state = 3;
+                moby->state = 3;
             }
         }
         break;
