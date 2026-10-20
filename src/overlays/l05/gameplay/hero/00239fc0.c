@@ -14,59 +14,59 @@ void FUN_L00_0020b930_239fc0(void) __asm__("FUN_L00_0020b930");
 extern int hero_set_state(int, int) __asm__("FUN_L05_0024cee8");
 void FUN_L05_00239fc0(void) {
     u8 save = hero.unk12ED;
-    s16 t = hero.ground_type;
-    f32 d;
+    s16 saved_ground_type = hero.ground_type;
+    f32 water_depth;
     int s;
     FUN_001f9810_239fc0(&hero.ground_type, 0x10);
     hero.unk12ED = save;
     hero.ground_type = -1;
     hero.unk20A9 = 0;
     hero.unk308 = 0;
-    if (t == -1)
+    if (saved_ground_type == -1)
         return;
-    if (t == 2) {
+    if (saved_ground_type == 2) {
         if (hero.frames_off_ground.s == 0 || hero.ground_distance < 0.3f) {
             hero.unk12E7 = 1;
             if (hero.vehicle_mode == 0 && ((u8 *)hero.items[1].moby) != 0 && *(s16 *)(((u8 *)hero.items[1].moby) + 0xA6) == 0xAD)
                 hero.unk308 = 1;
         }
     }
-    if (t == 14) {
+    if (saved_ground_type == 14) {
         hero.base_condition = 1;
         hero.unk22A4 = 0.2f;
         hero.water_surface_z = hero.ground_z.f + 0.2f;
     }
-    if (t == 0) {
-        d = hero.water_surface_z - hero.ground_z.f;
-        hero.unk22A4 = d;
-        if (d < 0.85f && 0.25f < d)
+    if (saved_ground_type == 0) {
+        water_depth = hero.water_surface_z - hero.ground_z.f;
+        hero.unk22A4 = water_depth;
+        if (water_depth < 0.85f && 0.25f < water_depth)
             hero.unk20A9 = 1;
         hero.base_condition = 1;
     }
-    if (t == 3)
+    if (saved_ground_type == 3)
         hero.selector_3 = 1;
     if (current_level_index == 13 && hero.state.current != 0x7B &&
         FUN_L00_001f0d60_239fc0((u8 *)&hero.motion.unkD0, 2, 0, hero.unk234 + 0.03f) &&
         FUN_001f0b58_239fc0() == 11) {
         goto s7B;
     }
-    if (t == 11)
+    if (saved_ground_type == 11)
         hero.selector_11 = 1;
-    if (t == 5)
+    if (saved_ground_type == 5)
         hero.unk12E8 = 1;
-    if (t == 6)
+    if (saved_ground_type == 6)
         hero.unk12E9 = 1;
-    if (t == 4)
+    if (saved_ground_type == 4)
         hero.unk12E3 = 1;
-    if (t == 13)
+    if (saved_ground_type == 13)
         hero.selector_13 = 1;
-    if (t == 1)
+    if (saved_ground_type == 1)
         hero.selector_1 = 1;
-    if (t == 8)
+    if (saved_ground_type == 8)
         hero.on_slip_ground = 1;
-    if (t == 9)
+    if (saved_ground_type == 9)
         hero.unk12EE = 1;
-    if (t == 12)
+    if (saved_ground_type == 12)
         hero.on_slip_ground = 1;
     if (hero.unk12E3 && hero.grounded_frames && hero.state.control_mode != 0x10 && hero.state.control_mode != 0x14 && hero.state.control_mode != 7) {
         s = 0x31;
