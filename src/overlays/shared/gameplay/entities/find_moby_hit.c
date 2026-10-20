@@ -36,8 +36,8 @@ int point_in_path_xy(float *test_point, float *v, int vertex_count) {
 }
 /* True when the pointer at a+0x94 is set and its word at +8 is non-zero. */
 int FUN_L00_00259830(char *moby) {
-    char *p = *(char **)(moby + 0x94);
-    if (p && *(int *)(p + 8))
+    char *moby_linked_record = *(char **)(moby + 0x94);
+    if (moby_linked_record && *(int *)(moby_linked_record + 8))
         return 1;
     return 0;
 }
