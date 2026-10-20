@@ -171,7 +171,7 @@ void FUN_L00_0023e268(void) {
     s32 i;
     s32 j;
     s32 k;
-    s32 n;
+    s32 effect_spawn_attempt_index;
     f32 azimuth_angle;
     f32 b;
     s32 r;
@@ -198,9 +198,9 @@ void FUN_L00_0023e268(void) {
         D_L00_0016C860.timer < scale_game_frames(1100)) {
         src = (char *)D_L00_0016C860.unk184;
         if (src != 0) {
-            for (n = 0; n < 4; n++) {
+            for (effect_spawn_attempt_index = 0; effect_spawn_attempt_index < 4; effect_spawn_attempt_index++) {
                 clear_u64_value(&v);
-                moby_point_position(src, n % 2, &buf);
+                moby_point_position(src, effect_spawn_attempt_index % 2, &buf);
                 azimuth_angle = veldin_random_angle();
                 b = veldin_random_angle();
                 build_spherical_offset(
