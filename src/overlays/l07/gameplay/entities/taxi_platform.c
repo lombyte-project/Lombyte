@@ -194,24 +194,24 @@ void FUN_L07_0030e1f8(unsigned char *m) {
 extern char *FUN_L00_0026daa0(char *src, int col, int w, int v, float x);
 
 char *FUN_L07_0030e370(char *pos, char *vec, int arg) {
-    char *m = func_0020D348_m(0x419);
-    if (m != 0) {
+    char *spawned_moby = func_0020D348_m(0x419);
+    if (spawned_moby != 0) {
         char *data;
-        *(short *)(m + 0x32) = *(unsigned char *)(m + 0x30) = 0xFF;
-        m[0x31] = 1;
-        data = *(char **)(m + 0x78);
-        *(float *)(m + 0x40) = random_angle_radians();
-        *(float *)(m + 0x44) = random_angle_radians();
-        *(float *)(m + 0x48) = random_angle_radians();
-        qcopy(m + 0x10, pos);
+        *(short *)(spawned_moby + 0x32) = *(unsigned char *)(spawned_moby + 0x30) = 0xFF;
+        spawned_moby[0x31] = 1;
+        data = *(char **)(spawned_moby + 0x78);
+        *(float *)(spawned_moby + 0x40) = random_angle_radians();
+        *(float *)(spawned_moby + 0x44) = random_angle_radians();
+        *(float *)(spawned_moby + 0x48) = random_angle_radians();
+        qcopy(spawned_moby + 0x10, pos);
         qcopy(data, vec);
         *(int *)(data + 0x10) = arg;
-        m[0x23] = 0x30;
-        *(unsigned short *)(m + 0x34) |= 0x200;
-        FUN_L00_00250df8(m);
-        FUN_L00_0026daa0(m, 0x800040FF, 0x80, -1, 500000.0f);
+        spawned_moby[0x23] = 0x30;
+        *(unsigned short *)(spawned_moby + 0x34) |= 0x200;
+        FUN_L00_00250df8(spawned_moby);
+        FUN_L00_0026daa0(spawned_moby, 0x800040FF, 0x80, -1, 500000.0f);
     }
-    return m;
+    return spawned_moby;
 }
 #define NOT_SDA
 
