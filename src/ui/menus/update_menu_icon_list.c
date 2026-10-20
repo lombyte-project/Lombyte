@@ -58,7 +58,7 @@ int update_menu_icon_list(char *menu) {
         if (t / 0x260 >= *(int *)(menu + 0x40)) {
             *(int *)(menu + 0x5C) = 0x60;
         } else {
-            int q = (t - 0x28) / 0x260;
+            int cursor_scroll_offset_base = (t - 0x28) / 0x260;
             int max_cursor_scroll_offset;
 
             int c = *(volatile int *)(menu + 0x3C);
@@ -68,7 +68,7 @@ int update_menu_icon_list(char *menu) {
                     *(int *)(menu + 0x60) = 0;
                 }
             }
-            max_cursor_scroll_offset = q - 2;
+            max_cursor_scroll_offset = cursor_scroll_offset_base - 2;
             if (*(int *)(menu + 0x60) < *(int *)(menu + 0x3C) - max_cursor_scroll_offset) {
                 *(int *)(menu + 0x60) = *(int *)(menu + 0x3C) - max_cursor_scroll_offset;
             }
