@@ -20,20 +20,20 @@ extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
 
-int FUN_L08_002e0228(struct Moby *m) {
-    float a[4];
+int FUN_L08_002e0228(struct Moby *moby) {
+    float facing_direction[4];
     float b[4];
-    int *p = (int *)((char *)m->pvars + 0x60);
+    int *linked_targets = (int *)((char *)moby->pvars + 0x60);
     int i;
     for (i = 0; i < 8; i++) {
-        if (p[i] != 0) {
-            float d;
-            build_spherical_offset(a, 1.0f, m->rot.z, -m->rot.y);
-            fast_vec_sub(b, (char *)p[i] + 0x10, D_L08_001675C0);
+        if (linked_targets[i] != 0) {
+            float direction_dot;
+            build_spherical_offset(facing_direction, 1.0f, moby->rot.z, -moby->rot.y);
+            fast_vec_sub(b, (char *)linked_targets[i] + 0x10, D_L08_001675C0);
             fast_vec_normalize(b, b, 1.0f);
-            d = fast_vec_dot(b, a);
-            if (fast_cos(0.06981317f) < d)
-                return p[i];
+            direction_dot = fast_vec_dot(b, facing_direction);
+            if (fast_cos(0.06981317f) < direction_dot)
+                return linked_targets[i];
         }
     }
     return 0;
