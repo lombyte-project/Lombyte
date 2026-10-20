@@ -12,27 +12,27 @@
 
 extern int FUN_L00_00261968(int, void *, void *);
 
-void FUN_L05_0028be78(int *list, int n, int idx) {
-    char *t = D_L05_001B0930[idx];
+void FUN_L05_0028be78(int *list, int list_count, int idx) {
+    char *adjacency_table = D_L05_001B0930[idx];
     int i, j, k, found;
     {
         int c;
-        for (c = 0; c < *(int *)t; c++) {
-            *(int *)(t + 0x1C + c * 16) = 0;
+        for (c = 0; c < *(int *)adjacency_table; c++) {
+            *(int *)(adjacency_table + 0x1C + c * 16) = 0;
         }
     }
-    for (i = 0; i < *(int *)t; i++) {
-        for (j = i + 1; j < *(int *)t; j++) {
+    for (i = 0; i < *(int *)adjacency_table; i++) {
+        for (j = i + 1; j < *(int *)adjacency_table; j++) {
             found = 0;
-            for (k = 0; k < n; k++) {
-                if (FUN_L00_00261968(list[k], t + 0x10 + i * 16, t + 0x10 + j * 16) != 0) {
+            for (k = 0; k < list_count; k++) {
+                if (FUN_L00_00261968(list[k], adjacency_table + 0x10 + i * 16, adjacency_table + 0x10 + j * 16) != 0) {
                     found = 1;
                     break;
                 }
             }
             if (found == 0) {
-                int *pi = (int *)(t + 0x10 + i * 16);
-                int *pj = (int *)(t + 0x10 + j * 16);
+                int *pi = (int *)(adjacency_table + 0x10 + i * 16);
+                int *pj = (int *)(adjacency_table + 0x10 + j * 16);
                 pi[3] |= 1 << j;
                 pj[3] |= 1 << i;
             }
