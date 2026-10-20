@@ -855,9 +855,9 @@ extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 
 /* Clamps vector a to length x: normalizes it to x when vector_length_xyz is longer. */
 void FUN_L00_0025f730(void *a, float x);
-void FUN_L00_0025f730(void *a, float x) {
-    if (x < fast_vec_length(a)) {
-        fast_vec_normalize(a, a, x);
+void FUN_L00_0025f730(void *vector, float x) {
+    if (x < fast_vec_length(vector)) {
+        fast_vec_normalize(vector, vector, x);
     }
 }
 #define NOT_SDA
