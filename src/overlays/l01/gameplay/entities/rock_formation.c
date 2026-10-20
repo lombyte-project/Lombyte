@@ -967,8 +967,8 @@ void bridge_half_update(PendulumMoby *self) {
     };
     PendulumVars *v;
     PendVec4 arm;
-    PendVec4 d;
-    s32 h;
+    PendVec4 swing_offset;
+    s32 voice_slot_index;
     u8 *voice;
 
     v = self->vars;
@@ -991,11 +991,11 @@ void bridge_half_update(PendulumMoby *self) {
             v->swing = 0.0f;
         }
         if (v->swing == 0.0f) {
-            h = v->sound;
-            if (h != -1) {
-                voice = D_0013E550 + h * 0x70;
+            voice_slot_index = v->sound;
+            if (voice_slot_index != -1) {
+                voice = D_0013E550 + voice_slot_index * 0x70;
                 if (*(void **)(voice + 0x88) == self && voice[0x74] != 0) {
-                    release_voice_slot(h);
+                    release_voice_slot(voice_slot_index);
                 }
             }
             v->sound = -1;
@@ -1009,10 +1009,10 @@ void bridge_half_update(PendulumMoby *self) {
     arm.q = 0;
     arm.f[2] = -11.0f;
     fast_vec_add(&arm, &arm, &v->pivot);
-    d.f[0] = fast_cos(self->rot_z) * 11.0f * fast_sin(self->rot_x);
-    d.f[1] = fast_sin(self->rot_z) * 11.0f * fast_sin(self->rot_x);
-    d.f[2] = fast_cos(self->rot_x) * 11.0f;
-    fast_vec_add(&self->pos, &arm, &d);
+    swing_offset.f[0] = fast_cos(self->rot_z) * 11.0f * fast_sin(self->rot_x);
+    swing_offset.f[1] = fast_sin(self->rot_z) * 11.0f * fast_sin(self->rot_x);
+    swing_offset.f[2] = fast_cos(self->rot_x) * 11.0f;
+    fast_vec_add(&self->pos, &arm, &swing_offset);
 }
 #include "sda.h"
 
