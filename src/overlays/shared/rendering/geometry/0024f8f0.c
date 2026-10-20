@@ -14,15 +14,15 @@ void FUN_00210850(char *, int, int, M4 *);
 void multiply_matrix(void *, Mtx *, void *) __asm__("FUN_001fa378");
 void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
-void FUN_L00_0024f8f0(char *p, int matrix_count, int c, M4 *out) {
+void FUN_L00_0024f8f0(char *transform_source, int matrix_count, int c, M4 *out) {
     Mtx rotation_matrix;
-    float translation_scale = *(float *)(p + 0x2C) * (1.0f / 1024.0f);
+    float translation_scale = *(float *)(transform_source + 0x2C) * (1.0f / 1024.0f);
     int i;
-    copy_matrix_rotation(&rotation_matrix, p + 0xC0);
-    FUN_00210850(p, matrix_count, c, out);
+    copy_matrix_rotation(&rotation_matrix, transform_source + 0xC0);
+    FUN_00210850(transform_source, matrix_count, c, out);
     for (i = 0; i < matrix_count; i++) {
         multiply_matrix(&out[i], &rotation_matrix, &out[i]);
         fast_vec_scale(out[i].t, out[i].t, translation_scale);
-        add_vector_xyz(out[i].t, out[i].t, p + 0x10);
+        add_vector_xyz(out[i].t, out[i].t, transform_source + 0x10);
     }
 }
