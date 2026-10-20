@@ -2204,7 +2204,7 @@ void FUN_L00_00232628_210a08(void) __asm__("FUN_L00_00232628");
 void FUN_L00_00257024_210a08(char *) __asm__("FUN_L00_00257024");
 void FUN_L00_00207a58_210a08(void) __asm__("FUN_L00_00207a58");
 extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
-void FUN_L00_00210a08(int mode, int b, char *m) {
+void FUN_L00_00210a08(int mode, int b, char *vehicle_moby) {
     enum {
         VEHICLE_MODE_CLANK = 1,
         VEHICLE_MODE_GIANT_CLANK = 2
@@ -2221,8 +2221,8 @@ void FUN_L00_00210a08(int mode, int b, char *m) {
     FUN_L00_00206c08_210a08();
     FUN_L00_00205538_210a08();
     g->vehicle_mode = mode;
-    g->unkA84 = (u8 *)m;
-    g->moby = (struct Moby *)m;
+    g->unkA84 = (u8 *)vehicle_moby;
+    g->moby = (struct Moby *)vehicle_moby;
     FUN_L00_00211380_210a08();
     g->capsule_top = g->unk228;
     g->unk224 = g->unk22C;
