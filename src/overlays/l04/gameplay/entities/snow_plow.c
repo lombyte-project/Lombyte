@@ -865,7 +865,7 @@ void woodcut_bot_update(WBMoby *m) {
         d->fE8 = 0.35f;
         if (p != 0 && damage != 0.0f && m->state != 0 && d->t3C4 == 0) {
             unsigned char *src;
-            float a;
+            float knockback_gravity_step;
             float b;
             float c;
 
@@ -885,11 +885,11 @@ void woodcut_bot_update(WBMoby *m) {
                 angle = fast_arc_tan(m->pos[0] - h->motion.pos.f[0],
                                      m->pos[1] - h->motion.pos.f[1]);
             }
-            a = frame_time_sq * 30.0f;
+            knockback_gravity_step = frame_time_sq * 30.0f;
             b = frame_time_sq * 10.0f;
             c = frame_time * 5.5f;
             d->fE4 = 9;
-            d->fD0 = a;
+            d->fD0 = knockback_gravity_step;
             d->fFD = 0;
             d->fD4 = b;
             d->fD8 = c;
