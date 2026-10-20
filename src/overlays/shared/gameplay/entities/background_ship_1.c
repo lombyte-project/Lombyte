@@ -327,7 +327,7 @@ void FUN_L02_002ecd50(char *moby) {
     char *joint_position_out;
     int v;
     int r, g, b, packed_color;
-    int *q;
+    int *cached_global_value_ptr;
 
     if (*(unsigned char *)(moby + 0x21) == 0xFF) {
         return;
@@ -347,9 +347,9 @@ void FUN_L02_002ecd50(char *moby) {
     packed_color |= b;
     *(int *)(data + 0xE0) = packed_color;
     if (v != 0) {
-        q = *(int **)(data + 0xE4);
-        if (v != *q) {
-            *q = v;
+        cached_global_value_ptr = *(int **)(data + 0xE4);
+        if (v != *cached_global_value_ptr) {
+            *cached_global_value_ptr = v;
             enqueue_callback_list_1(FUN_L02_002ecc68, moby);
         }
     }
