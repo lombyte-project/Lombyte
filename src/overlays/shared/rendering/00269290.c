@@ -472,26 +472,26 @@ unsigned char *FUN_L00_002678b8_0026a4c8(int) __asm__("FUN_L00_002678b8");
 int FUN_001fa6d0_0026a4c8(float) __asm__("FUN_001fa6d0");
 float FUN_001fa6c0_0026a4c8(int) __asm__("FUN_001fa6c0");
 void FUN_L00_0026a4c8(u128 *a, u128 *b, int c, int d, int n, float f);
-void FUN_L00_0026a4c8(u128 *a, u128 *b, int c, int d, int n, float f) {
-    if (n) {
-        unsigned char *m = FUN_L00_002678b8_0026a4c8(8);
-        if (m) {
-            int *e;
-            qcopy(m + 0x10, a);
-            e = (int *)(m + 0x20);
-            *(int *)(m + 4) = c;
-            m[9] = FUN_001fa6d0_0026a4c8(4.0f) - 0x60;
-            m[3] = 0x48;
-            m[1] = 0;
-            *(int *)(m + 0xc) = 0;
-            m[8] = 0;
-            m[2] = *D_L00_001B20A0_0026a4c8;
-            qcopy(e, b);
-            *(short *)(m + 0xa) = n;
-            e[6] = n;
-            *(float *)&e[7] = f / FUN_001fa6c0_0026a4c8(n);
-            e[4] = c;
-            e[5] = d;
+void FUN_L00_0026a4c8(u128 *spawn_position, u128 *b, int initial_color, int final_color, int lifetime, float f) {
+    if (lifetime) {
+        unsigned char *particle = FUN_L00_002678b8_0026a4c8(8);
+        if (particle) {
+            int *particle_data;
+            qcopy(particle + 0x10, spawn_position);
+            particle_data = (int *)(particle + 0x20);
+            *(int *)(particle + 4) = initial_color;
+            particle[9] = FUN_001fa6d0_0026a4c8(4.0f) - 0x60;
+            particle[3] = 0x48;
+            particle[1] = 0;
+            *(int *)(particle + 0xc) = 0;
+            particle[8] = 0;
+            particle[2] = *D_L00_001B20A0_0026a4c8;
+            qcopy(particle_data, b);
+            *(short *)(particle + 0xa) = lifetime;
+            particle_data[6] = lifetime;
+            *(float *)&particle_data[7] = f / FUN_001fa6c0_0026a4c8(lifetime);
+            particle_data[4] = initial_color;
+            particle_data[5] = final_color;
         }
     }
 }
