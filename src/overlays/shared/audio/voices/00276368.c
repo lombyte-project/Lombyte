@@ -449,7 +449,7 @@ void FUN_L00_00276bd0(void) {
     };
     Own *owner;
     Own *u8p;
-    Mth *m;
+    Mth *active_callback_object;
     Ent *t;
     NO *obj;
     s32 v;
@@ -617,15 +617,15 @@ L2:
             }
         }
         if (D_L00_001B9CF0.owner != 0 && D_L00_001B9CF0.owner->unk80 != 0) {
-            m = D_L00_001B9CF0.owner->unk40;
-            if (m->fC != 0) {
-                m->fC(m, 1);
+            active_callback_object = D_L00_001B9CF0.owner->unk40;
+            if (active_callback_object->fC != 0) {
+                active_callback_object->fC(active_callback_object, 1);
             }
             D_L00_001B9CF0.owner->unk40 = D_L00_001B9CF0.owner->unk80;
             D_L00_001B9CF0.owner->unk80 = 0;
-            m = D_L00_001B9CF0.owner->unk40;
-            if (m->f8 != 0) {
-                m->f8(m, 1);
+            active_callback_object = D_L00_001B9CF0.owner->unk40;
+            if (active_callback_object->f8 != 0) {
+                active_callback_object->f8(active_callback_object, 1);
             }
         }
     }
