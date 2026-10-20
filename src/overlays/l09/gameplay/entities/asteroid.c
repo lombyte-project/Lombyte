@@ -1342,7 +1342,7 @@ extern void mark_moby_for_removal_2ef430(void *) __asm__("FUN_0020c828");
    bursts it into two sparks and removes it when its timer runs out or it leaves the area. */
 void FUN_L09_002ef430(struct Moby *moby) {
     float old[4];
-    float q[4];
+    float spark_velocity[4];
     float r[4];
     float *vel = (float *)moby->pvars;
     float *pos = (float *)&moby->pos;
@@ -1364,11 +1364,11 @@ void FUN_L09_002ef430(struct Moby *moby) {
             r[0] = random_float_2ef430(-1.0f, 1.0f);
             r[1] = random_float_2ef430(-1.0f, 1.0f);
             r[2] = random_float_2ef430(-1.0f, 1.0f);
-            *(OvlQuad *)q = *(OvlQuad *)r;
-            normalize_vector_xyz(q, q, vector_length_xyz(r) * 0.5f);
-            add_vector_xyz(q, r, q);
-            normalize_vector_xyz(q, q, random_float_2ef430(D_0015ED6C_2ef430 * 3.0f, D_0015ED6C_2ef430 * 6.0f));
-            spawn_spark_2ef430(&moby->pos, q, 0x7F2F4F6F,
+            *(OvlQuad *)spark_velocity = *(OvlQuad *)r;
+            normalize_vector_xyz(spark_velocity, spark_velocity, vector_length_xyz(r) * 0.5f);
+            add_vector_xyz(spark_velocity, r, spark_velocity);
+            normalize_vector_xyz(spark_velocity, spark_velocity, random_float_2ef430(D_0015ED6C_2ef430 * 3.0f, D_0015ED6C_2ef430 * 6.0f));
+            spawn_spark_2ef430(&moby->pos, spark_velocity, 0x7F2F4F6F,
                                random_int_between(scale_game_frames_2ef430(10), scale_game_frames_2ef430(15)),
                                30000.0f);
         }
