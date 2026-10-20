@@ -322,11 +322,11 @@ void FUN_L08_003063f0(struct Moby *moby) {
             D_L08_0015F5A0 = -0.1f;
         }
         for (i = 0; i < D_L08_0016D060_d.n; i++) {
-            char *o = D_L08_0016D060_d.objs[i];
-            if (*(short *)(o + 0xA6) == moby->oclass || *(short *)(o + 0xA6) == 0x306) {
+            char *candidate_moby = D_L08_0016D060_d.objs[i];
+            if (*(short *)(candidate_moby + 0xA6) == moby->oclass || *(short *)(candidate_moby + 0xA6) == 0x306) {
                 if (D_L08_0017CC40_d[1] == 0) {
                     float f;
-                    attach_manipulator(o, 0, D_L08_0017CC40_d);
+                    attach_manipulator(candidate_moby, 0, D_L08_0017CC40_d);
                     f = *(float *)&D_L08_00162300;
                     *(float *)(D_L08_0017CC40_d + 0x20) = f;
                     *(float *)(D_L08_0017CC40_d + 0x24) = f;
