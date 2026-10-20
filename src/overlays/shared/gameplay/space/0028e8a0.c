@@ -103,7 +103,7 @@ int f122298_28e9c8(int) __asm__("FUN_00122298");
 int f215b10_28e9c8(void) __asm__("FUN_00215b10");
 void FUN_L00_0028e9c8(int a) {
     O_28e9c8 *moby;
-    int secondary_track_index, n, audio_stream_table_index, alternate_audio_stream_table_index, u;
+    int secondary_track_index, base_audio_selection_index, audio_stream_table_index, alternate_audio_stream_table_index, u;
     D_0013E030_28e9c8.x24 = -1;
     D_L00_0015F5D8 = 1;
     D_0013E030_28e9c8.x20 = a;
@@ -128,10 +128,10 @@ void FUN_L00_0028e9c8(int a) {
             moby->flags |= 0x80;
     }
     if (a == 0) {
-        n = D_0013E030_28e9c8.x26;
-        audio_stream_table_index = n + 1;
-        secondary_track_index = n + 6;
-        if (current_level_index == 10 && n == 1 && D_0013D4C6_28e9c8 == 0) {
+        base_audio_selection_index = D_0013E030_28e9c8.x26;
+        audio_stream_table_index = base_audio_selection_index + 1;
+        secondary_track_index = base_audio_selection_index + 6;
+        if (current_level_index == 10 && base_audio_selection_index == 1 && D_0013D4C6_28e9c8 == 0) {
             audio_stream_table_index = 0;
             secondary_track_index = 11;
         } else if (current_level_index == 14 && D_0013E030_28e9c8.x26 == 2) {
@@ -141,13 +141,13 @@ void FUN_L00_0028e9c8(int a) {
         FUN_L00_00245610(audio_stream_table_index, fr_28e9c8(6));
     } else {
         int k, r;
-        n = D_0013E030_28e9c8.x26;
+        base_audio_selection_index = D_0013E030_28e9c8.x26;
         k = D_0013E030_28e9c8.x2c;
-        secondary_track_index = n + 3;
+        secondary_track_index = base_audio_selection_index + 3;
         if (k)
-            secondary_track_index = n;
-        alternate_audio_stream_table_index = n + 5;
-        if (current_level_index == 10 && n == 1 && D_0013D4C6_28e9c8 == 0) {
+            secondary_track_index = base_audio_selection_index;
+        alternate_audio_stream_table_index = base_audio_selection_index + 5;
+        if (current_level_index == 10 && base_audio_selection_index == 1 && D_0013D4C6_28e9c8 == 0) {
             secondary_track_index = 10;
             if (k)
                 secondary_track_index = 9;
