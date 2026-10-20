@@ -93,7 +93,8 @@ int hero_set_state(int a, int b) {
         HERO_STATE_DEATH_FALL = 0x77
     };
     enum {
-        HERO_STATE_DOUBLE_JUMP = 0xE
+        HERO_STATE_DOUBLE_JUMP = 0xE,
+        HERO_STATE_LOOK_ALT = 0x1E
     };
     int old2088;
     char *moby;
@@ -1449,7 +1450,7 @@ int hero_set_state(int a, int b) {
         set_hero_animation(FUN_L01_00226f10(0), 0, (float)scale_game_frames(0xA));
         break;
     }
-    case 0x1E: {
+    case HERO_STATE_LOOK_ALT: {
         struct Hero *p = &hero;
         p->unk2284 = 0x51;
         p->state.control_mode = 0;
