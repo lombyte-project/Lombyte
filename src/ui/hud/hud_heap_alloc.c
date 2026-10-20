@@ -5,18 +5,18 @@ extern s32 initialize_resource_entry() __asm__("InitializeResourceEntry");
 s32 hud_heap_alloc(s32 size) __asm__("FUN_001ff288");
 
 s32 hud_heap_alloc(s32 size) {
-    struct HudState *p = &hud_state;
+    struct HudState *hud_state_ptr = &hud_state;
     s32 cur;
 
-    if (p->heap_cur == 0) {
+    if (hud_state_ptr->heap_cur == 0) {
         initialize_resource_entry();
     }
-    if (p->heap_end - p->heap_cur < size) {
+    if (hud_state_ptr->heap_end - hud_state_ptr->heap_cur < size) {
         return 0;
     }
-    cur = p->heap_cur;
+    cur = hud_state_ptr->heap_cur;
     size = (size + 15) & 0xFFFFFFF0;
-    p->heap_cur = cur + size;
+    hud_state_ptr->heap_cur = cur + size;
     return cur;
 }
 
