@@ -126,36 +126,36 @@ extern float D_L16_001613E0 __attribute__((sda));
 extern float D_L16_001613E4 __attribute__((sda));
 
 char *FUN_L16_002a0dc0(char *owner, char *vec, void *pos, void *vel, int c, float unused) {
-    char *m = (char *)func_0020D348_m(0x32);
-    char *d;
-    float len, x, t, y;
-    if (m) {
-        *(unsigned char *)(m + 0x30) = 0xFF;
-        *(short *)(m + 0x32) = 0xFF;
-        m[0x31] = 1;
-        m[0x20] = 0;
-        *(unsigned long *)(m + 0x38) = *(unsigned long *)(owner + 0x38);
-        *(float *)(m + 0x2C) = *(float *)(m + 0x2C) * 3.0f;
-        qcopy(m + 0x10, pos);
-        d = *(char **)(m + 0x78);
-        qcopy(d, vec);
-        qcopy(d + 0x10, vel);
-        *(int *)(d + 0x30) = c;
-        *(int *)(d + 0x20) = c;
+    char *spawned_moby = (char *)func_0020D348_m(0x32);
+    char *moby_data;
+    float len, x, random_angle_radians, y;
+    if (spawned_moby) {
+        *(unsigned char *)(spawned_moby + 0x30) = 0xFF;
+        *(short *)(spawned_moby + 0x32) = 0xFF;
+        spawned_moby[0x31] = 1;
+        spawned_moby[0x20] = 0;
+        *(unsigned long *)(spawned_moby + 0x38) = *(unsigned long *)(owner + 0x38);
+        *(float *)(spawned_moby + 0x2C) = *(float *)(spawned_moby + 0x2C) * 3.0f;
+        qcopy(spawned_moby + 0x10, pos);
+        moby_data = *(char **)(spawned_moby + 0x78);
+        qcopy(moby_data, vec);
+        qcopy(moby_data + 0x10, vel);
+        *(int *)(moby_data + 0x30) = c;
+        *(int *)(moby_data + 0x20) = c;
         len = fast_vec_length(vec);
         x = D_L16_001613E0;
-        *(float *)(d + 0x24) = len;
-        t = random_float_between_alt(-x, x) * DEG_TO_RAD;
+        *(float *)(moby_data + 0x24) = len;
+        random_angle_radians = random_float_between_alt(-x, x) * DEG_TO_RAD;
         y = D_L16_001613E4;
-        *(float *)(d + 0x28) = t;
-        *(float *)(d + 0x2C) = random_float_between_alt(0.0f, y) * DEG_TO_RAD;
-        *(int *)(d + 0x34) = 0;
-        *(float *)(m + 0x48) = fast_arc_tan(*(float *)vec, *(float *)(vec + 4));
-        *(float *)(m + 0x44) = -fast_arc_tan(vector_length_xy(vec), *(float *)(vec + 8));
-        m[0x31] = 0;
-        *(unsigned short *)(m + 0x34) |= 1;
+        *(float *)(moby_data + 0x28) = random_angle_radians;
+        *(float *)(moby_data + 0x2C) = random_float_between_alt(0.0f, y) * DEG_TO_RAD;
+        *(int *)(moby_data + 0x34) = 0;
+        *(float *)(spawned_moby + 0x48) = fast_arc_tan(*(float *)vec, *(float *)(vec + 4));
+        *(float *)(spawned_moby + 0x44) = -fast_arc_tan(vector_length_xy(vec), *(float *)(vec + 8));
+        spawned_moby[0x31] = 0;
+        *(unsigned short *)(spawned_moby + 0x34) |= 1;
     }
-    return m;
+    return spawned_moby;
 }
 
 #include "qcopy.h"
