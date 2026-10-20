@@ -1879,7 +1879,7 @@ void FUN_L11_0031e2f0(struct Moby *moby) {
     float v[4];
     float w[4];
     float effect_distance;
-    char *s;
+    char *reference_position_base;
 
     switch (moby->state) {
     case EFFECT_INITIALIZE:
@@ -1906,8 +1906,8 @@ void FUN_L11_0031e2f0(struct Moby *moby) {
         }
         break;
     case EFFECT_UPDATE_AND_QUEUE_DRAW:
-        s = D_L11_00167680;
-        if (*(float *)(s + 0x148) < 170.0f)
+        reference_position_base = D_L11_00167680;
+        if (*(float *)(reference_position_base + 0x148) < 170.0f)
             return;
         v[0] = D_L11_001624E8;
         v[1] = D_L11_001624EC;
@@ -1915,13 +1915,13 @@ void FUN_L11_0031e2f0(struct Moby *moby) {
         v[3] = D_L11_001624F4;
         if (fast_bsphere_check(v, 1000.0f) < 0)
             return;
-        if (!(180.0f < *(float *)(s + 0x148)))
+        if (!(180.0f < *(float *)(reference_position_base + 0x148)))
             return;
         w[0] = D_L11_001624E8;
         w[1] = D_L11_001624EC;
         w[2] = D_L11_001624F0;
         w[3] = 1.0f;
-        subtract_vector_xyz(w, s + 0x140, w);
+        subtract_vector_xyz(w, reference_position_base + 0x140, w);
         effect_distance = vector_length_xyz(w);
         if (effect_distance <= 35.0f) {
             FUN_L08_002f12a0(0);
