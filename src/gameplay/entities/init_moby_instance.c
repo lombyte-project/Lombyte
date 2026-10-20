@@ -90,14 +90,14 @@ void init_moby_instance(void *moby_mem, int oClass) __asm__("FUN_0020c5f0");
 
 void init_moby_instance(void *moby_mem, int oClass) {
     MobyI *m = (MobyI *)moby_mem;
-    unsigned char c;
+    unsigned char resident_class_slot;
     int idx;
     MobyIClass *pClass;
 
     fill_transfer_words(m, 0, 0x100);
-    c = resident_class_slot_by_id[oClass];
+    resident_class_slot = resident_class_slot_by_id[oClass];
     m->unk23 = 0x80;
-    m->oClass = c;
+    m->oClass = resident_class_slot;
     m->unkA4 = 0xFF;
     m->unk21 = 0xFF;
     m->unk71 = 0xFF;
@@ -121,7 +121,7 @@ void init_moby_instance(void *moby_mem, int oClass) {
     }
     pClass = moby_class_resources[m->oClass];
     if (pClass != 0) {
-        MobyIClass *p;
+        MobyIClass *class_resource;
 
         m->pClass = pClass;
         m->unk72 = pClass->unk0E;
@@ -160,11 +160,11 @@ void init_moby_instance(void *moby_mem, int oClass) {
         if (m->pClass->seq->nframes >= 2) {
             m->flags &= 0xFFFD;
         }
-        p = m->pClass;
-        if (p->unk0C == 1) {
-            if (p->seq->nframes < 2) {
+        class_resource = m->pClass;
+        if (class_resource->unk0C == 1) {
+            if (class_resource->seq->nframes < 2) {
                 m->unk58 = 0.0f;
-                if (p->seq->unk11 < 0) {
+                if (class_resource->seq->unk11 < 0) {
                     m->flags |= 0x40;
                 }
             }
