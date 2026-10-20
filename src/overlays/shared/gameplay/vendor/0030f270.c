@@ -19,10 +19,10 @@ extern void FUN_L08_00258090(void *, int, int, void *);
 extern Pair D_L11_00162628[] __attribute__((section(".sdata")));
 extern int D_L11_00217710[];
 extern int D_L11_002176F8[];
-void FUN_L11_0031e858(int a) {
+void FUN_L11_0031e858(int pair_index) {
     int i;
     for (i = 0; i < 0x5; i++) {
-        FUN_L08_00258090(D_L11_00217770, D_L11_00217710[i], D_L11_00215268[i], &D_L11_00162628[a]);
+        FUN_L08_00258090(D_L11_00217770, D_L11_00217710[i], D_L11_00215268[i], &D_L11_00162628[pair_index]);
         FUN_L00_001fde98(D_L11_00215268[i], D_L11_002176F8[i], D_L11_00217740[i], D_L11_00217770,
                          1);
     }
