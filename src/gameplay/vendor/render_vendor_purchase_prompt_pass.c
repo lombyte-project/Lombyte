@@ -37,23 +37,23 @@ extern void font_print_center_small(s32, s32, u64, s32, s32) __asm__("func_001F6
 void render_vendor_purchase_prompt_pass(void) __asm__("FUN_00239160");
 
 void render_vendor_purchase_prompt_pass(void) {
-    struct Shop *s;
+    struct Shop *vendor_shop;
     s32 id;
     s32 cost;
 
     draw_framebuffer_rect(0, 0, 0x200, 0x80, 0x200, 0x80, 0);
-    s = &D_001E63C0;
-    if (s->open != 0) {
-        if (s->slots[s->cur].kind == 1) {
-            if (weapon_ammo_counts[s->slots[s->cur].id] >= D_001DFFB0[s->slots[s->cur].id].need) {
+    vendor_shop = &D_001E63C0;
+    if (vendor_shop->open != 0) {
+        if (vendor_shop->slots[vendor_shop->cur].kind == 1) {
+            if (weapon_ammo_counts[vendor_shop->slots[vendor_shop->cur].id] >= D_001DFFB0[vendor_shop->slots[vendor_shop->cur].id].need) {
                 return;
             }
         }
-        if (s->slots[s->cur].kind == 1) {
-            if (s->hard != 0) {
-                cost = D_001DFFB0[s->slots[s->cur].id].costHard;
+        if (vendor_shop->slots[vendor_shop->cur].kind == 1) {
+            if (vendor_shop->hard != 0) {
+                cost = D_001DFFB0[vendor_shop->slots[vendor_shop->cur].id].costHard;
             } else {
-                cost = D_001DFFB0[s->slots[s->cur].id].cost;
+                cost = D_001DFFB0[vendor_shop->slots[vendor_shop->cur].id].cost;
             }
             if (current_bolt_count < cost) {
                 return;
@@ -61,9 +61,9 @@ void render_vendor_purchase_prompt_pass(void) {
             id = 0x4EE0;
         } else {
             if (discount_purchase_pricing[0] != 0) {
-                cost = D_001DFFB0[s->slots[s->cur].id].boltsHard;
+                cost = D_001DFFB0[vendor_shop->slots[vendor_shop->cur].id].boltsHard;
             } else {
-                cost = D_001DFFB0[s->slots[s->cur].id].bolts;
+                cost = D_001DFFB0[vendor_shop->slots[vendor_shop->cur].id].bolts;
             }
             if (current_bolt_count < cost) {
                 return;
