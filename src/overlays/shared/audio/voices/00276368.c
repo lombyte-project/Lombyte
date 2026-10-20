@@ -685,7 +685,7 @@ void FUN_L00_002772c0(int transfer_only) {
     int i;
     int k;
     int j;
-    int n;
+    int flashing_panel_index;
     int pass;
     int flags;
     int never;
@@ -852,9 +852,9 @@ void FUN_L00_002772c0(int transfer_only) {
         }
     }
     setup_gif_paging(0);
-    for (n = 0; n < 14; n++) {
-        if (D_L00_001B23C0[n] != 0 && (n != 6 || D_L00_001B9CF0.unkD8 != 0)) {
-            draw_menu_flashing_panel((int)D_L00_001B9E90[n]);
+    for (flashing_panel_index = 0; flashing_panel_index < 14; flashing_panel_index++) {
+        if (D_L00_001B23C0[flashing_panel_index] != 0 && (flashing_panel_index != 6 || D_L00_001B9CF0.unkD8 != 0)) {
+            draw_menu_flashing_panel((int)D_L00_001B9E90[flashing_panel_index]);
         }
     }
     do_gif_paging();
