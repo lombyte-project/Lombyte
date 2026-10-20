@@ -438,16 +438,16 @@ struct Moby *spawn_debris_chunk(Vec4f *pos, Vec4f *vel, s32 oclass, s32 a3, s32 
                               f32 scale, f32 gravity, f32 spin, f32 seconds) __asm__("FUN_L01_002f8530");
 struct Moby *spawn_debris_chunk(Vec4f *pos, Vec4f *vel, s32 oclass, s32 initial_timer, s32 fade_out,
                               f32 scale, f32 gravity, f32 spin, f32 seconds) {
-    u128 p;
+    u128 spawn_position_snapshot;
     u128 v;
-    u128 *pp = &p;
+    u128 *pp = &spawn_position_snapshot;
     u128 *vp = &v;
     struct Moby *debris_moby;
     DebrisVars_2f8530 *pv;
     f32 r;
     f32 initial_spin;
 
-    p = *(u128 *)pos;
+    spawn_position_snapshot = *(u128 *)pos;
     v = *(u128 *)vel;
     debris_moby = create_moby_local(oclass);
     if (debris_moby != 0) {
