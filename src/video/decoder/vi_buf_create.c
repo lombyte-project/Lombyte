@@ -38,24 +38,24 @@ s32 vi_buf_reset(ViBuf *f) __asm__("FUN_0023bcc0");
 s32 vi_buf_create(ViBuf *f, u128 *data, u128 *tag, s32 size, TimeStamp *ts,
                   s32 n_ts) __asm__("FUN_0023bc48");
 
-s32 vi_buf_create(ViBuf *f, u128 *data, u128 *tag, s32 size, TimeStamp *ts, s32 n_ts) {
+s32 vi_buf_create(ViBuf *video_input_buffer, u128 *data, u128 *tag, s32 size, TimeStamp *ts, s32 n_ts) {
     struct SemaParam param;
 
-    f->data = data;
-    f->tag = (u128 *)((((u32)tag) & UNCMASK) | UNCBASE);
-    f->n = size;
-    f->buffSize = size * VIBUF_ELM_SIZE;
+    video_input_buffer->data = data;
+    video_input_buffer->tag = (u128 *)((((u32)tag) & UNCMASK) | UNCBASE);
+    video_input_buffer->n = size;
+    video_input_buffer->buffSize = size * VIBUF_ELM_SIZE;
 
-    f->ts = ts;
-    f->n_ts = n_ts;
+    video_input_buffer->ts = ts;
+    video_input_buffer->n_ts = n_ts;
 
     param.initCount = 1;
     param.maxCount = 1;
-    f->sema = CreateSema(&param);
+    video_input_buffer->sema = CreateSema(&param);
 
-    vi_buf_reset(f);
+    vi_buf_reset(video_input_buffer);
 
-    f->totalBytes = 0;
+    video_input_buffer->totalBytes = 0;
 
     return 1;
 }
