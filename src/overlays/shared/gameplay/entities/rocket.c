@@ -28,7 +28,7 @@ void FUN_L10_00298940(char *moby) {
     float d[4] __attribute__((aligned(16)));
     float e[4] __attribute__((aligned(16)));
     int i, col;
-    float f;
+    float color_blend_offset;
 
     *(float *)(moby + 0x18) += 0.5f;
     func_001F9BF0_298940(d, D_L10_00167240, moby + 0x10);
@@ -47,9 +47,9 @@ void FUN_L10_00298940(char *moby) {
         if (func_001F9908_298940(&sprite_data->c[i])) {
             sprite_data->c[i] = func_001F9850_298940(0xFF);
         }
-        f = func_001FA888_298940(func_001F9850_298940(0xFF) - sprite_data->c[i]);
-        f = f / (float)func_001F9850_298940(0xFF);
-        col = func_001FA8A8_298940(0x4040FFFF, 0x1040FFFF, func_001F9B88_298940(0.5f - f));
+        color_blend_offset = func_001FA888_298940(func_001F9850_298940(0xFF) - sprite_data->c[i]);
+        color_blend_offset = color_blend_offset / (float)func_001F9850_298940(0xFF);
+        col = func_001FA8A8_298940(0x4040FFFF, 0x1040FFFF, func_001F9B88_298940(0.5f - color_blend_offset));
         func_L00_00273E08_298940(d, col, func_001FA898_298940(sprite_data->a[i]) & 0xFF, 0x35, 1, 2, 0,
                                  sprite_data->d[i]);
         func_001F9BD8_298940(d, d, e);
