@@ -18,10 +18,10 @@ void format_menu_item_text(s32 idx, u8 *dst) __asm__("FUN_00208280");
 void format_menu_item_text(s32 idx, u8 *dst) {
     u8 buf[0x10];
     u8 *src;
-    u8 *p;
+    u8 *replacement_cursor;
 
     src = get_help_message_text(level_map_selection.icons[idx].label_text_id);
-    p = buf;
+    replacement_cursor = buf;
     if (src == 0) {
         return;
     }
@@ -39,8 +39,8 @@ void format_menu_item_text(s32 idx, u8 *dst) {
         sprintf((char *)buf, D_0015FDA8);
     }
     src++;
-    while (*p != '\0') {
-        *dst++ = *p++;
+    while (*replacement_cursor != '\0') {
+        *dst++ = *replacement_cursor++;
     }
     while (*src != '\0') {
         *dst++ = *src++;
