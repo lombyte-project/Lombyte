@@ -3658,112 +3658,112 @@ extern char *func_0020D348_m(int) __asm__("FUN_0020c4f8");
 extern void func_L18_002F9AB8_v(void *) __asm__("FUN_L18_002f8658");
 
 void rocket_tank_update(M1454 *m) __asm__("FUN_L18_002f7c40");
-void rocket_tank_update(M1454 *m) {
+void rocket_tank_update(M1454 *moby) {
     enum {
         ROCKET_TANK_INITIALIZE = 0,
         ROCKET_TANK_PATROLLING = 1,
         ROCKET_TANK_FIRING = 2
     };
-    D1454 *d = m->data;
-    FUN_L18_002f8050(m);
-    switch (m->state) {
+    D1454 *tank_data = moby->data;
+    FUN_L18_002f8050(moby);
+    switch (moby->state) {
     case ROCKET_TANK_INITIALIZE:
-        attach_manipulator((char *)m, 0, d->buf);
-        *(short *)((char *)d + 0x24) = 6;
-        *(unsigned char *)((char *)d + 0x28) = 3;
-        *(float *)((char *)d + 0x20) = 6.0f;
-        d->w124 = scale_game_frames(240);
-        d->w120 = 0;
-        if (d->c138 == 0) {
+        attach_manipulator((char *)moby, 0, tank_data->buf);
+        *(short *)((char *)tank_data + 0x24) = 6;
+        *(unsigned char *)((char *)tank_data + 0x28) = 3;
+        *(float *)((char *)tank_data + 0x20) = 6.0f;
+        tank_data->w124 = scale_game_frames(240);
+        tank_data->w120 = 0;
+        if (tank_data->c138 == 0) {
             char *c = func_0020D348_m(0x14B);
-            d->c138 = c;
+            tank_data->c138 = c;
             c[0x30] = 0x40;
-            *(short *)(d->c138 + 0x32) = 0x40;
-            d->c138[0x31] = 1;
+            *(short *)(tank_data->c138 + 0x32) = 0x40;
+            tank_data->c138[0x31] = 1;
             {
                 char *pl = ((char *)hero.moby);
                 long t = *(long *)(pl + 0x38);
-                *(long *)(d->c138 + 0x38) = t;
+                *(long *)(tank_data->c138 + 0x38) = t;
             }
-            *(unsigned short *)(d->c138 + 0x34) = 0x4000;
+            *(unsigned short *)(tank_data->c138 + 0x34) = 0x4000;
             {
-                char *t = d->c138;
-                qcopy(t + 0x10, (char *)m + 0x10);
+                char *t = tank_data->c138;
+                qcopy(t + 0x10, (char *)moby + 0x10);
                 *(int *)(t + 0x94) = 0;
             }
-            blend_moby_animation(d->c138, 0, 0, 0);
-            FUN_L00_00250df8(d->c138);
+            blend_moby_animation(tank_data->c138, 0, 0, 0);
+            FUN_L00_00250df8(tank_data->c138);
         }
-        if (d->c13c == 0) {
+        if (tank_data->c13c == 0) {
             char *c = func_0020D348_m(0x14B);
-            d->c13c = c;
+            tank_data->c13c = c;
             c[0x30] = 0x40;
-            *(short *)(d->c13c + 0x32) = 0x40;
-            d->c13c[0x31] = 1;
+            *(short *)(tank_data->c13c + 0x32) = 0x40;
+            tank_data->c13c[0x31] = 1;
             {
                 char *pl = ((char *)hero.moby);
                 long t = *(long *)(pl + 0x38);
-                *(long *)(d->c13c + 0x38) = t;
+                *(long *)(tank_data->c13c + 0x38) = t;
             }
-            *(unsigned short *)(d->c13c + 0x34) = 0x8000;
+            *(unsigned short *)(tank_data->c13c + 0x34) = 0x8000;
             {
-                char *t = d->c13c;
-                qcopy(t + 0x10, (char *)m + 0x10);
+                char *t = tank_data->c13c;
+                qcopy(t + 0x10, (char *)moby + 0x10);
                 *(int *)(t + 0x94) = 0;
             }
-            blend_moby_animation(d->c13c, 0, 0, 0);
-            FUN_L00_00250df8(d->c13c);
+            blend_moby_animation(tank_data->c13c, 0, 0, 0);
+            FUN_L00_00250df8(tank_data->c13c);
         }
-        if (m->b53 != 1) {
-            blend_moby_animation(m, 1, 0, scale_game_frames(10));
+        if (moby->b53 != 1) {
+            blend_moby_animation(moby, 1, 0, scale_game_frames(10));
         }
-        m->state = 1;
+        moby->state = 1;
         break;
     case ROCKET_TANK_PATROLLING:
-        func_L18_002F9AB8_v(m);
-        if (*(int *)((char *)d + 0xB4) != 2) {
-            d->f134 = 0;
-            d->f130 = 10.0f;
-            if (m->b53 != 2) {
-                blend_moby_animation(m, 2, 0, scale_game_frames(20));
+        func_L18_002F9AB8_v(moby);
+        if (*(int *)((char *)tank_data + 0xB4) != 2) {
+            tank_data->f134 = 0;
+            tank_data->f130 = 10.0f;
+            if (moby->b53 != 2) {
+                blend_moby_animation(moby, 2, 0, scale_game_frames(20));
             }
-            m->state = 2;
+            moby->state = 2;
         }
         break;
     case ROCKET_TANK_FIRING:
-        func_L18_002F9AB8_v(m);
-        approach_value(&d->f130, 30.0f, frame_time * 6.0f);
-        d->f134 = fast_add_rotations(d->f134, frame_time * 6.2831855f);
-        if (is_value_within_interpolated_window((char *)m, 4.0f) ||
-            is_value_within_interpolated_window((char *)m, 10.0f)) {
+        func_L18_002F9AB8_v(moby);
+        approach_value(&tank_data->f130, 30.0f, frame_time * 6.0f);
+        tank_data->f134 = fast_add_rotations(tank_data->f134, frame_time * 6.2831855f);
+        if (is_value_within_interpolated_window((char *)moby, 4.0f) ||
+            is_value_within_interpolated_window((char *)moby, 10.0f)) {
             float v[4];
             float w[4];
-            float s;
-            if (compute_interpolated_record_value(m) < 7.0f) {
-                moby_point_position(m, 1, w);
-                s = *(float *)&D_L18_0016247C_gp;
+            float firing_vector_scale;
+            if (compute_interpolated_record_value(moby) < 7.0f) {
+                moby_point_position(moby, 1, w);
+                firing_vector_scale = *(float *)&D_L18_0016247C_gp;
             } else {
-                moby_point_position(m, 2, w);
-                s = *(float *)&D_L18_0016247C;
+                moby_point_position(moby, 2, w);
+                firing_vector_scale = *(float *)&D_L18_0016247C;
             }
-            s *= frame_time;
-            v[0] = fast_cos(d->f110) * (fast_cos(d->f118) * s);
-            v[1] = fast_sin(d->f110) * (fast_cos(d->f118) * s);
+            firing_vector_scale *= frame_time;
+            v[0] = fast_cos(tank_data->f110) * (fast_cos(tank_data->f118) * firing_vector_scale);
+            v[1] = fast_sin(tank_data->f110) * (fast_cos(tank_data->f118) * firing_vector_scale);
             v[2] = 0;
-            v[2] = -fast_sin(d->f118) * s;
-            allocate_voice_for_target_entry(0, 0, (int)m);
-            FUN_L03_00250ae8(m, w, 0);
-            if (vector_distance((char *)m + 0x10, &hero.motion.pos) > 10.0f) {
-                FUN_L18_002a75f0((char *)m, w, v, 0);
+            v[2] = -fast_sin(tank_data->f118) * firing_vector_scale;
+            allocate_voice_for_target_entry(0, 0, (int)moby);
+            FUN_L03_00250ae8(moby, w, 0);
+            if (vector_distance((char *)moby + 0x10, &hero.motion.pos) > 10.0f) {
+                FUN_L18_002a75f0((char *)moby, w, v, 0);
             } else {
-                FUN_L18_002a75f0((char *)m, w, v, 1);
+                FUN_L18_002a75f0((char *)moby, w, v, 1);
             }
         }
-        if (*(int *)((char *)d + 0xB4) == 2) {
-            if (m->b53 != 1) {
-                blend_moby_animation(m, 1, 0, scale_game_frames(20));
+        if (*(int *)((char *)tank_data + 0xB4) == 2) {
+            if (moby->b53 != 1) {
+                blend_moby_animation(moby, 1, 0, scale_game_frames(20));
             }
-            m->state = 1;
+            moby->state = 1;
         }
         break;
     }
