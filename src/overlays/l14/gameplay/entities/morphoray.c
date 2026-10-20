@@ -2060,10 +2060,10 @@ extern char *D_L14_0015EF50;
 extern u8 *D_L14_00167500 __attribute__((section(".data")));
 
 int FUN_L14_00316748(char *moby, char *other) {
-    char *e = *(char **)(D_L14_0015EF50 + *(short *)(moby + 0x84) * 32 + 0x1C);
-    if (*(int *)(e + 0x20) == 0 && *(short *)(D_L14_00167500 + 0x86) == 0x14) {
-        *(int *)(e + 0x20) = 1;
-    } else if (*(int *)(e + 0x20) == 1) {
+    char *slot_record = *(char **)(D_L14_0015EF50 + *(short *)(moby + 0x84) * 32 + 0x1C);
+    if (*(int *)(slot_record + 0x20) == 0 && *(short *)(D_L14_00167500 + 0x86) == 0x14) {
+        *(int *)(slot_record + 0x20) = 1;
+    } else if (*(int *)(slot_record + 0x20) == 1) {
         if (*(short *)(D_L14_00167500 + 0x86) != 0x14)
             return 1;
         if (other == 0 || *(short *)(other + 0x7E) != 0)
