@@ -68,7 +68,7 @@ extern int measure_text_width_regular(char *, int) __asm__("FUN_L05_00229d48");
 extern int get_icon_frame(int, int) __asm__("FUN_001ff960");
 extern void draw_hud_sprite(int, int, int, int, int, int) __asm__("FUN_001ffc30");
 
-int FUN_L05_00266320(HudElem *e) {
+int FUN_L05_00266320(HudElem *hud_element) {
     /* The retail GP is 0x166C00; this renderer uses the preceding
        data words, rather than the timer renderer's shared globals. */
     extern int D_L05_0015F984 __attribute__((sda));
@@ -88,7 +88,7 @@ int FUN_L05_00266320(HudElem *e) {
     char small_buf[16];
     int x, y, count;
 
-    if (e->unk6C <= 0) {
+    if (hud_element->unk6C <= 0) {
         return 0;
     }
     {
@@ -132,7 +132,7 @@ int FUN_L05_00266320(HudElem *e) {
         sprintf(small_buf, D_L05_0015F860, hero.unk8CE);
         /* Fakematch: the dead early copy of the default row gives retail's register order. */
         y2 = D_0015ED80 ? 10 : 18;
-        x2 = e->unk50;
+        x2 = hud_element->unk50;
         if (D_0013D388[0] == 0) {
             y2 = D_0015ED80 ? 10 : 18;
         } else {
@@ -148,7 +148,7 @@ int FUN_L05_00266320(HudElem *e) {
             FUN_L00_001fb470(x2 + 0x28, y2 + 7, 0x80202080, small_buf, -1);
         }
     }
-    return e->w;
+    return hud_element->w;
 }
 
 int FUN_L05_00266710(HudElem *hud_element) {
