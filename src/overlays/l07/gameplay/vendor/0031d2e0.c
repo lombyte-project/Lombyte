@@ -201,14 +201,14 @@ void FUN_L07_0031eba8(char *moby) {
             for (i = 0; i < 4; i++) {
                 moby_point_position(mob, i, buf);
                 for (j = 9; j >= 0; j--) {
-                    float d = random_float_between(20000.0f, 200000.0f);
+                    float effect_size = random_float_between(20000.0f, 200000.0f);
                     int col = (random_int_between(0x20, 0x80) << 24) | 0x7F7F7F;
                     int v = random_int_between(0, 4);
                     char *effect;
                     char *effect_tail;
                     if (random_integer_below(2) != 0)
                         v = -v;
-                    effect = func_L00_0026DEA0_c(buf, v, D_L07_0015F580, col, 0.6f, 1.0f, 1.01f, d);
+                    effect = func_L00_0026DEA0_c(buf, v, D_L07_0015F580, col, 0.6f, 1.0f, 1.01f, effect_size);
                     if (effect != 0) {
                         effect_tail = effect + 0x20;
                         *(short *)(effect + 0xA) = scale_game_frames(random_int_between(0x3C, 0x5A));
