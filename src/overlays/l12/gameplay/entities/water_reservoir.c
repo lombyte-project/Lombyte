@@ -362,9 +362,9 @@ extern unsigned char D_0013D50F_e[] __asm__("D_0013D408");
 void FUN_L12_002ed280(struct Moby *moby) {
     int *moby_vars = (int *)moby->pvars;
     if (FUN_L01_0026e008(moby_vars[3], -1) == 0) {
-        unsigned char *s = D_0013D50F_e;
-        if (s[0x14] == 0) {
-            s[0x14] = 1;
+        unsigned char *dialogue_trigger_state = D_0013D50F_e;
+        if (dialogue_trigger_state[0x14] == 0) {
+            dialogue_trigger_state[0x14] = 1;
             allocate_voice_for_bank_entry_alt(1, 0, 0);
             queue_dialogue_message(0x53D6, -1);
         }
