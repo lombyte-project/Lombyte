@@ -1137,50 +1137,50 @@ extern float func_L00_0025CE58_f(float *, float, float *, float, float,
                                  float) __asm__("FUN_L00_0025be00");
 
 void swingshot_versatarget_update(char *m) __asm__("FUN_L02_002e0450");
-void swingshot_versatarget_update(char *m) {
+void swingshot_versatarget_update(char *moby) {
     enum {
         VERSATARGET_STATE_INITIALIZE = 0,
         VERSATARGET_STATE_ACTIVE = 1,
         VERSATARGET_STATE_INACTIVE = 2
     };
-    char *d = *(char **)(m + 0x78);
+    char *moby_data = *(char **)(moby + 0x78);
     float v[4];
     float w[4];
-    char *o;
-    switch (((unsigned char *)m)[0x20]) {
+    char *linked_moby;
+    switch (((unsigned char *)moby)[0x20]) {
     case VERSATARGET_STATE_INITIALIZE:
-        if (*(int *)(d + 0x30) != -1 ||
-            (*(int *)(d + 0x3C) != -1 &&
-             (o = (char *)(D_L02_0015FFD8 + (*(int *)(d + 0x3C) << 8))) != 0 &&
-             ((unsigned char *)o)[0x20] != 0xFE && ((unsigned char *)o)[0x20] != 0xFD)) {
-            ((unsigned char *)m)[0x30] = 0xFF;
-            m[0x20] = 2;
-            *(unsigned short *)(m + 0x34) |= 0x41;
+        if (*(int *)(moby_data + 0x30) != -1 ||
+            (*(int *)(moby_data + 0x3C) != -1 &&
+             (linked_moby = (char *)(D_L02_0015FFD8 + (*(int *)(moby_data + 0x3C) << 8))) != 0 &&
+             ((unsigned char *)linked_moby)[0x20] != 0xFE && ((unsigned char *)linked_moby)[0x20] != 0xFD)) {
+            ((unsigned char *)moby)[0x30] = 0xFF;
+            moby[0x20] = 2;
+            *(unsigned short *)(moby + 0x34) |= 0x41;
         } else {
-            set_moby_color(m, 0xC0, 0xC0, 0xC0);
-            func_L02_002FBB10_c(m);
-            m[0x20] = 1;
+            set_moby_color(moby, 0xC0, 0xC0, 0xC0);
+            func_L02_002FBB10_c(moby);
+            moby[0x20] = 1;
         }
         break;
     case VERSATARGET_STATE_ACTIVE:
-        if (*(short *)(m + 0xA6) == 0x323) {
+        if (*(short *)(moby + 0xA6) == 0x323) {
             struct Hero *g = &hero;
-            float *rz = (float *)(m + 0x48);
-            float yaw = fast_arc_tan(g->motion.pos.f[0] - *(float *)(m + 0x10),
-                                     g->motion.pos.f[1] - *(float *)(m + 0x14));
-            func_L00_0025CE58_f(rz, yaw, (float *)(d + 0x38), frame_time_sq * 6.2831855f,
+            float *rz = (float *)(moby + 0x48);
+            float yaw = fast_arc_tan(g->motion.pos.f[0] - *(float *)(moby + 0x10),
+                                     g->motion.pos.f[1] - *(float *)(moby + 0x14));
+            func_L00_0025CE58_f(rz, yaw, (float *)(moby_data + 0x38), frame_time_sq * 6.2831855f,
                                 frame_time_sq * 6.2831855f, frame_time * 12.566371f);
             if (D_L02_0015F5CC & 1) {
-                if (((unsigned char *)m)[0x31] != 0) {
-                    float s = 1.0f;
-                    int a;
+                if (((unsigned char *)moby)[0x31] != 0) {
+                    float direction_sign = 1.0f;
+                    int particle_lifetime;
                     if (D_L02_0015F5CC & 4)
-                        s = -1.0f;
-                    normalize_vector_xyz(v, m + 0xD0, s * D_L02_00161CBC);
+                        direction_sign = -1.0f;
+                    normalize_vector_xyz(v, moby + 0xD0, direction_sign * D_L02_00161CBC);
                     normalize_vector_xyz(w, v, -2.0f / multiply_global_factor_ed64(D_L02_00161CB0));
-                    add_vector_xyz(v, v, m + 0x10);
-                    a = truncate_float_to_s32(multiply_global_factor_ed64(D_L02_00161CB0)) & 0xFF;
-                    FUN_L00_002730e0(v, w, D_L02_00161CB4, a,
+                    add_vector_xyz(v, v, moby + 0x10);
+                    particle_lifetime = truncate_float_to_s32(multiply_global_factor_ed64(D_L02_00161CB0)) & 0xFF;
+                    FUN_L00_002730e0(v, w, D_L02_00161CB4, particle_lifetime,
                                      random_integer_below(0xFF) & 0xFF, 0,
                                      D_L02_00161CB8);
                 }
@@ -1189,17 +1189,17 @@ void swingshot_versatarget_update(char *m) {
         {
             struct Hero *g2 = &hero;
             if (g2->state.current != 0x2C)
-                func_L02_002FBC00_c(m);
+                func_L02_002FBC00_c(moby);
         }
         break;
     case VERSATARGET_STATE_INACTIVE:
-        if (D_0014C050_a[*(int *)(d + 0x30) + (current_level_index << 4)] != 0 ||
-            (*(int *)(d + 0x3C) != -1 &&
-             ((o = (char *)(D_L02_0015FFD8 + (*(int *)(d + 0x3C) << 8))) == 0 ||
-              ((unsigned char *)o)[0x20] == 0xFE || ((unsigned char *)o)[0x20] == 0xFD))) {
-            *(unsigned short *)(m + 0x34) &= 0xFFBE;
-            *(int *)(d + 0x30) = -1;
-            m[0x20] = 0;
+        if (D_0014C050_a[*(int *)(moby_data + 0x30) + (current_level_index << 4)] != 0 ||
+            (*(int *)(moby_data + 0x3C) != -1 &&
+             ((linked_moby = (char *)(D_L02_0015FFD8 + (*(int *)(moby_data + 0x3C) << 8))) == 0 ||
+              ((unsigned char *)linked_moby)[0x20] == 0xFE || ((unsigned char *)linked_moby)[0x20] == 0xFD))) {
+            *(unsigned short *)(moby + 0x34) &= 0xFFBE;
+            *(int *)(moby_data + 0x30) = -1;
+            moby[0x20] = 0;
         }
         break;
     }
