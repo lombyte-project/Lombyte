@@ -17,18 +17,18 @@ typedef struct Bigint {
      ((unsigned short *)(xc))[0] = (unsigned short)(lo), (xc)++)
 
 int quorem(Bigint *b, Bigint *S) {
-    int n;
+    int word_count_or_index;
     int borrow, y, z;
     unsigned int carry, quotient_digit, ys, si, zs;
     unsigned int *bx, *bxe, *sx, *sxe;
 
-    n = S->wds;
-    if (b->wds < n)
+    word_count_or_index = S->wds;
+    if (b->wds < word_count_or_index)
         return 0;
     sx = S->x;
-    sxe = sx + --n;
+    sxe = sx + --word_count_or_index;
     bx = b->x;
-    bxe = bx + n;
+    bxe = bx + word_count_or_index;
     quotient_digit = *bxe / (*sxe + 1);
     if (quotient_digit) {
         borrow = 0;
@@ -47,8 +47,8 @@ int quorem(Bigint *b, Bigint *S) {
         if (!*bxe) {
             bx = b->x;
             while (--bxe > bx && !*bxe)
-                --n;
-            b->wds = n;
+                --word_count_or_index;
+            b->wds = word_count_or_index;
         }
     }
     if (Dcmp(b, S) >= 0) {
@@ -69,11 +69,11 @@ int quorem(Bigint *b, Bigint *S) {
             STOREINC(bx, z, y);
         } while (sx <= sxe);
         bx = b->x;
-        bxe = bx + n;
+        bxe = bx + word_count_or_index;
         if (!*bxe) {
             while (--bxe > bx && !*bxe)
-                --n;
-            b->wds = n;
+                --word_count_or_index;
+            b->wds = word_count_or_index;
         }
     }
     return quotient_digit;
