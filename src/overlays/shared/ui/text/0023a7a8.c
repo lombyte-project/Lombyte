@@ -182,35 +182,35 @@ extern void apply_pending_animation(void *) __asm__("FUN_001ff418");
 
 int scale_game_frames(int) __asm__("FUN_001f96f8");
 int FUN_L00_0023ac78(int call) {
-    int n = 0;
-    E_23ac78 *e;
+    int positive_timer_count = 0;
+    E_23ac78 *hud_element;
     H_23ac78 *h;
     FUN_L00_0023adb8();
-    e = hud_elements;
+    hud_element = hud_elements;
     h = &D_L00_0017E4D8;
     do {
-        if ((e->flags & 0x10) || h->b != 0) {
-            if (e->t < scale_game_frames(10)) {
-                e->t = scale_game_frames(10);
+        if ((hud_element->flags & 0x10) || h->b != 0) {
+            if (hud_element->t < scale_game_frames(10)) {
+                hud_element->t = scale_game_frames(10);
             }
         }
-        if (e->t > 0 && --e->t > 0) {
-            n++;
-            if (e->lvl < 30)
-                e->lvl++;
+        if (hud_element->t > 0 && --hud_element->t > 0) {
+            positive_timer_count++;
+            if (hud_element->lvl < 30)
+                hud_element->lvl++;
         } else {
-            if (e->lvl >= -5)
-                e->lvl--;
+            if (hud_element->lvl >= -5)
+                hud_element->lvl--;
         }
-        if (e->on && e->lvl == -6) {
-            apply_pending_animation(e);
+        if (hud_element->on && hud_element->lvl == -6) {
+            apply_pending_animation(hud_element);
         }
-        if (call && e->cb) {
-            e->cb(e);
+        if (call && hud_element->cb) {
+            hud_element->cb(hud_element);
         }
-        e++;
-    } while ((int)e < (int)(hud_elements + 13));
-    return n;
+        hud_element++;
+    } while ((int)hud_element < (int)(hud_elements + 13));
+    return positive_timer_count;
 }
 extern int D_L00_0015F968_gp __asm__("D_L00_0015F968") __attribute__((sda));
 extern int D_L00_0015F96C;
