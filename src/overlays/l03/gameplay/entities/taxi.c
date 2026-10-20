@@ -1304,8 +1304,8 @@ void helga_update(struct Moby *m) {
     };
     struct QuestGiverVars *v = (struct QuestGiverVars *)m->pvars;
     struct TalkState *talk = &v->talk;
-    struct Moby *t;
-    struct Moby *o;
+    struct Moby *helper_moby;
+    struct Moby *reward_moby;
     u8 group;
     s32 *flag;
     Vec4 *g;
@@ -1324,9 +1324,9 @@ void helga_update(struct Moby *m) {
     case HELGA_INITIALIZE:
         if (D_0013D4CC[0] != 0) {
             if (v->link != -1) {
-                t = (struct Moby *)((v->link << 8) + D_L03_0015FFD8_i);
-                if (t->oclass == 0x3F4) {
-                    flag = (s32 *)(t->pvars + 0x8C);
+                helper_moby = (struct Moby *)((v->link << 8) + D_L03_0015FFD8_i);
+                if (helper_moby->oclass == 0x3F4) {
+                    flag = (s32 *)(helper_moby->pvars + 0x8C);
                     *flag = 1;
                     FUN_L01_0029b0a0(flag, 4, m, 2, D_L03_001BA720);
                 }
@@ -1335,9 +1335,9 @@ void helga_update(struct Moby *m) {
             return;
         }
         if (visited52[m->mission + current_level_index * 16] == 0xFF && v->link != -1) {
-            t = (struct Moby *)((v->link << 8) + D_L03_0015FFD8_i);
-            if (t->oclass == 0x3F4) {
-                flag = (s32 *)(t->pvars + 0x8C);
+            helper_moby = (struct Moby *)((v->link << 8) + D_L03_0015FFD8_i);
+            if (helper_moby->oclass == 0x3F4) {
+                flag = (s32 *)(helper_moby->pvars + 0x8C);
                 *flag = 1;
                 FUN_L01_0029b0a0(flag, 4, m, 2, D_L03_001BA720);
             }
@@ -1354,9 +1354,9 @@ void helga_update(struct Moby *m) {
             begin_dialogue_camera_transition(m, 2.3f);
             m->state = 2;
             if (v->link != -1) {
-                t = (struct Moby *)((v->link << 8) + D_L03_0015FFD8_i);
-                if (t->oclass == 0x3F4) {
-                    flag = (s32 *)(t->pvars + 0x8C);
+                helper_moby = (struct Moby *)((v->link << 8) + D_L03_0015FFD8_i);
+                if (helper_moby->oclass == 0x3F4) {
+                    flag = (s32 *)(helper_moby->pvars + 0x8C);
                     *flag = 1;
                     FUN_L01_0029b0a0(flag, 4, m, 2, D_L03_001BA720);
                 }
@@ -1368,9 +1368,9 @@ void helga_update(struct Moby *m) {
             if (v->talk.mode != 2) {
                 jet_clear_persistent(m->mission);
                 if (v->link != -1) {
-                    t = (struct Moby *)((v->link << 8) + D_L03_0015FFD8_i);
-                    if (t->oclass == 0x3F4) {
-                        flag = (s32 *)(t->pvars + 0x8C);
+                    helper_moby = (struct Moby *)((v->link << 8) + D_L03_0015FFD8_i);
+                    if (helper_moby->oclass == 0x3F4) {
+                        flag = (s32 *)(helper_moby->pvars + 0x8C);
                         *flag = 1;
                         FUN_L01_0029b0a0(flag, 4, m, 2, D_L03_001BA720);
                     }
@@ -1387,29 +1387,29 @@ void helga_update(struct Moby *m) {
                 if (v->reward != -1) {
                     D_L03_001BA6D0.collected[(s16)((struct Moby *)((v->reward << 8) + D_L03_0015FFD8_i))->save_id] =
                         ((struct Moby *)((v->reward << 8) + D_L03_0015FFD8_i))->mission + 2;
-                    o = (struct Moby *)((v->reward << 8) + D_L03_0015FFD8_i);
+                    reward_moby = (struct Moby *)((v->reward << 8) + D_L03_0015FFD8_i);
                     /* Fakematch: same record as the || test in the level's other reward
                        code; the do/while (0) blocks keep the loop notes that make gcc
                        predict the 0xFF branch taken and keep the group load ahead of the
                        table load. */
-                    if (o->mission == 0xFF)
+                    if (reward_moby->mission == 0xFF)
                         goto record;
                     do {
-                        group = o->mission;
+                        group = reward_moby->mission;
                     } while (0);
                     if (D_L03_0015FC88[group] != 0xFF && visited52[group + current_level_index * 16] == 0xFF) {
                         /* Fakematch: see above. */
                         do {
                         record:
-                            D_L03_001BB330.collected[(s16)o->save_id] = o->mission + 2;
+                            D_L03_001BB330.collected[(s16)reward_moby->save_id] = reward_moby->mission + 2;
                         } while (0);
                     }
                     taxi_kill(&D_L03_0015FFD8[v->reward]);
                 }
                 if (v->link != -1) {
-                    t = (struct Moby *)((v->link << 8) + D_L03_0015FFD8_i);
-                    if (t->oclass == 0x3F4) {
-                        u8 *tv = t->pvars;
+                    helper_moby = (struct Moby *)((v->link << 8) + D_L03_0015FFD8_i);
+                    if (helper_moby->oclass == 0x3F4) {
+                        u8 *tv = helper_moby->pvars;
                         *(s32 *)(tv + 0x7C) = 0;
                         *(s32 *)(tv + 0x8C) = 0;
                         *(s32 *)(tv + 0xA0) = v->link_arg;
@@ -1420,9 +1420,9 @@ void helga_update(struct Moby *m) {
                 return;
             }
         } else if (v->talk.unk36 == 2 && v->link != -1) {
-            t = (struct Moby *)((v->link << 8) + D_L03_0015FFD8_i);
-            if (t->oclass == 0x3F4) {
-                u8 *tv = t->pvars;
+            helper_moby = (struct Moby *)((v->link << 8) + D_L03_0015FFD8_i);
+            if (helper_moby->oclass == 0x3F4) {
+                u8 *tv = helper_moby->pvars;
                 *(s32 *)(tv + 0x7C) = 0;
                 *(s32 *)(tv + 0x8C) = 0;
                 *(s32 *)(tv + 0xA0) = v->link_arg;
