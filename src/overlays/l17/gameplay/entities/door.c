@@ -781,20 +781,20 @@ extern int FUN_L17_002eace8_u(int, char *, char *, char *, float, float, float, 
 #define FLAG    (hero.ship_ammo)
 
 extern char D_L17_001676D0_lui[] __asm__("D_L17_001676D0") __attribute__((section(".data")));
-void FUN_L17_002eb768(int a, char *p) {
+void FUN_L17_002eb768(int ship_moby, char *ship_vars) {
     char *g = 0;
     char *pad;
-    char *t;
+    char *locked_target;
     char *r;
     float v[4];
-    int h;
+    int lock_timer_reload;
     if (!(D_L17_0015F5C4 >= 3 && D_L17_0015F5C4 <= 4)) {
-        fast_dec_timer((int *)(p + 0x8C));
+        fast_dec_timer((int *)(ship_vars + 0x8C));
     }
-    if (W(p, 0x8C) != 0 && P(p, 0x88) != 0 && H(P(p, 0x88), 0xA6) == W(p, 0x128) &&
-        B(P(p, 0x88), 0x20) != 0xFE && B(P(p, 0x88), 0x20) != 0xFD) {
+    if (W(ship_vars, 0x8C) != 0 && P(ship_vars, 0x88) != 0 && H(P(ship_vars, 0x88), 0xA6) == W(ship_vars, 0x128) &&
+        B(P(ship_vars, 0x88), 0x20) != 0xFE && B(P(ship_vars, 0x88), 0x20) != 0xFD) {
         pad = (char *)D_0013C940_u;
-        if (B(P(p, 0x88), 0x31) != 0) {
+        if (B(P(ship_vars, 0x88), 0x31) != 0) {
             if (W(pad, 0x1B4) & 0x2000) {
                 goto take;
             }
@@ -806,42 +806,42 @@ void FUN_L17_002eb768(int a, char *p) {
     pad = (char *)D_0013C940_u;
     if (W(pad, 0x1B4) & 0x2000) {
     take:
-        g = P(p, 0x88);
+        g = P(ship_vars, 0x88);
     }
-    W(p, 0xEC) = 0;
-    W(p, 0x128) = -1;
-    W(p, 0x88) = 0;
+    W(ship_vars, 0xEC) = 0;
+    W(ship_vars, 0x128) = -1;
+    W(ship_vars, 0x88) = 0;
 skip:
     qcopy(v, D_L17_001676D0_lui);
-    r = (char *)FUN_L17_002eace8_u(a, p, D_L17_001676D0_lui - 0x10, (char *)v, 0.19634955f, 0.19634955f,
-                                   255.0f, P(p, 0x88), g);
-    if ((r != P(p, 0x88) && W(p, 0x8C) >= 0x1F5) || FLAG == 0) {
-        W(p, 0xEC) = 0;
-        W(p, 0x128) = -1;
-        W(p, 0x88) = 0;
+    r = (char *)FUN_L17_002eace8_u(ship_moby, ship_vars, D_L17_001676D0_lui - 0x10, (char *)v, 0.19634955f, 0.19634955f,
+                                   255.0f, P(ship_vars, 0x88), g);
+    if ((r != P(ship_vars, 0x88) && W(ship_vars, 0x8C) >= 0x1F5) || FLAG == 0) {
+        W(ship_vars, 0xEC) = 0;
+        W(ship_vars, 0x128) = -1;
+        W(ship_vars, 0x88) = 0;
     }
-    if (r != 0 && (P(p, 0x88) == 0 || (H(P(p, 0x88), 0xA6) != 0x3EB && H(r, 0xA6) == 0x3EB)) &&
+    if (r != 0 && (P(ship_vars, 0x88) == 0 || (H(P(ship_vars, 0x88), 0xA6) != 0x3EB && H(r, 0xA6) == 0x3EB)) &&
         FLAG != 0) {
-        P(p, 0x88) = r;
-        h = D_L17_0016216C;
-        W(p, 0x128) = H(r, 0xA6);
-        W(p, 0x8C) = h;
+        P(ship_vars, 0x88) = r;
+        lock_timer_reload = D_L17_0016216C;
+        W(ship_vars, 0x128) = H(r, 0xA6);
+        W(ship_vars, 0x8C) = lock_timer_reload;
     }
-    if (r != P(p, 0x88)) {
-        W(p, 0x118) = W(p, 0x118) + 1;
-        if (scale_game_frames(0x3C) < W(p, 0x118)) {
-            W(p, 0xEC) = 0;
-            W(p, 0x128) = -1;
-            W(p, 0x88) = 0;
+    if (r != P(ship_vars, 0x88)) {
+        W(ship_vars, 0x118) = W(ship_vars, 0x118) + 1;
+        if (scale_game_frames(0x3C) < W(ship_vars, 0x118)) {
+            W(ship_vars, 0xEC) = 0;
+            W(ship_vars, 0x128) = -1;
+            W(ship_vars, 0x88) = 0;
         }
     } else {
-        W(p, 0x118) = 0;
+        W(ship_vars, 0x118) = 0;
     }
-    t = P(p, 0x88);
-    if (t != 0 && W(p, 0x84) == 0) {
-        if (H(t, 0xA6) != W(p, 0x128) || B(t, 0x20) == 0xFE || B(t, 0x20) == 0xFD) {
-            W(p, 0x88) = 0;
-            W(p, 0x128) = -1;
+    locked_target = P(ship_vars, 0x88);
+    if (locked_target != 0 && W(ship_vars, 0x84) == 0) {
+        if (H(locked_target, 0xA6) != W(ship_vars, 0x128) || B(locked_target, 0x20) == 0xFE || B(locked_target, 0x20) == 0xFD) {
+            W(ship_vars, 0x88) = 0;
+            W(ship_vars, 0x128) = -1;
         }
     }
 }
