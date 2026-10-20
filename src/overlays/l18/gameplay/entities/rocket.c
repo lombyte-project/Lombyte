@@ -182,18 +182,18 @@ extern float D_L18_00161CA0 __attribute__((sda));
 void FUN_L18_002dc260(struct Moby *moby) {
     char buf[0x30];
     float v[4];
-    float *d = (float *)moby->pvars;
+    float *moby_vars = (float *)moby->pvars;
     char *tgt;
     char *pos;
     int flag;
 
-    if (tick_countdown_32((int *)(d + 2))) {
+    if (tick_countdown_32((int *)(moby_vars + 2))) {
         mark_moby_for_removal(moby);
         return;
     }
     pos = &moby->pos;
     tgt = D_0013E533 + 0xE9D;
-    if (vector_distance(pos, tgt) < d[0] + 0.5f) {
+    if (vector_distance(pos, tgt) < moby_vars[0] + 0.5f) {
         fast_vec_sub(v, tgt, pos);
         v[2] = 0.0f;
         fast_vec_normalize(v, v, frame_time * 4.0f);
@@ -202,9 +202,9 @@ void FUN_L18_002dc260(struct Moby *moby) {
         FUN_L00_00259a88(*(int *)(tgt + 0x2000), buf);
     }
     flag = game_frame & 4;
-    d[1] = d[1] + D_L18_00161CA0 * frame_time;
+    moby_vars[1] = moby_vars[1] + D_L18_00161CA0 * frame_time;
     if (flag == 0) {
-        play_entity_sound(*(int *)(d + 3), d[0], pos, 0x10000, 1.0f, 1.0f, 0, 1, 0);
+        play_entity_sound(*(int *)(moby_vars + 3), moby_vars[0], pos, 0x10000, 1.0f, 1.0f, 0, 1, 0);
     }
     enqueue_callback_list_1(FUN_L18_002dc4b8, moby);
 }
