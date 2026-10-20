@@ -330,8 +330,8 @@ void FUN_L03_00292d10(struct Moby *moby) {
     char *data;
     char *car;
     char *car_data;
-    char *p;
-    char *q;
+    char *moby_position;
+    char *moby_rotation;
     int next_id;
     int id;
     float *dp;
@@ -339,10 +339,10 @@ void FUN_L03_00292d10(struct Moby *moby) {
 
     data = (char *)moby->pvars;
     moby->unk72 = 0x40;
-    p = &moby->pos;
-    qcopy(old_pos, p);
-    q = &moby->rot;
-    qcopy(old_rot, q);
+    moby_position = &moby->pos;
+    qcopy(old_pos, moby_position);
+    moby_rotation = &moby->rot;
+    qcopy(old_rot, moby_rotation);
     next_id = *(int *)(data + 0xA0);
     if (next_id != -1) {
         id = next_id;
