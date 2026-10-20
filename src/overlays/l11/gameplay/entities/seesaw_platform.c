@@ -1637,7 +1637,7 @@ void psytcopus_update(struct Moby *psytcopus) {
     }
 }
 /* Hit handling for the psytcopus_update moby: takes damage, picks the hurt or death reaction, keeps it on its path. */
-void FUN_L11_00310698(struct Moby *m) {
+void FUN_L11_00310698(struct Moby *psytcopus) {
     enum {
         HIT_REACTION_NONE = 0,
         HIT_REACTION_DEATH = 1,
@@ -1650,7 +1650,7 @@ void FUN_L11_00310698(struct Moby *m) {
         HIT_REACTION_HURT_WITHOUT_STATE_CHANGE = 10,
         HIT_REACTION_NO_RESPONSE = 11
     };
-    struct PokiPathVars *pv = (struct PokiPathVars *)m->pvars;
+    struct PokiPathVars *pv = (struct PokiPathVars *)psytcopus->pvars;
     Vec4f v;
     int hits;
     float damage;
@@ -1659,20 +1659,20 @@ void FUN_L11_00310698(struct Moby *m) {
     char *info;
     s32 *path;
     u32 r;
-    float f;
+    float source_to_psytcopus_heading;
 
     FUN_001f9740_p(&pv->unk158);
-    m->scale = m->pclass->scale * D_L11_00161F9C;
+    psytcopus->scale = psytcopus->pclass->scale * D_L11_00161F9C;
     if (pv->unk160 != 0) {
-        normalize_0180(&v, &m->rot_row0, D_L11_00161FC8);
-        add_0180(&v, &v, &m->pos);
+        normalize_0180(&v, &psytcopus->rot_row0, D_L11_00161FC8);
+        add_0180(&v, &v, &psytcopus->pos);
         v.z += D_L11_00161FCC;
         FUN_L11_00318e78_p(pv->unk160, &v);
     }
     damage = 0.0f;
-    info = hit_info_0698(m, 0x330000, 0);
-    r = take_hit_0698(m, info, &pv->health, 0, &hits, &damage, 0, 4);
-    if (hits != 1 && m->state != 8) {
+    info = hit_info_0698(psytcopus, 0x330000, 0);
+    r = take_hit_0698(psytcopus, info, &pv->health, 0, &hits, &damage, 0, 4);
+    if (hits != 1 && psytcopus->state != 8) {
         pv->health -= damage;
         if (pv->health <= 0.0f) {
             r = 1;
@@ -1701,13 +1701,13 @@ void FUN_L11_00310698(struct Moby *m) {
             pv->unk8C = D_L11_00161F8C * frame_time;
             pv->unkC0 = 3.0f;
             pv->unkC4 = 6.0f;
-            f = atan2_0180(m->pos.x - (*(struct Moby **)(info + 0x20))->pos.x,
-                                m->pos.y - (*(struct Moby **)(info + 0x20))->pos.y);
+            source_to_psytcopus_heading = atan2_0180(psytcopus->pos.x - (*(struct Moby **)(info + 0x20))->pos.x,
+                                psytcopus->pos.y - (*(struct Moby **)(info + 0x20))->pos.y);
             *(u128 *)&v = *(u128 *)(info + 0x10);
-            angle1 = f;
+            angle1 = source_to_psytcopus_heading;
             FUN_L00_0025ab48_p(&v, &angle1, &pv->unk88, &pv->unk8C);
-            FUN_L00_0025c558_p(m, pv->unk70, 5, 1, 0, angle1);
-            m->state = 7;
+            FUN_L00_0025c558_p(psytcopus, pv->unk70, 5, 1, 0, angle1);
+            psytcopus->state = 7;
             pv->unk67 = 0x78;
             if (pv->unk160 != 0) {
                 FUN_L00_002371e0_p(pv->unk160);
@@ -1717,35 +1717,35 @@ void FUN_L11_00310698(struct Moby *m) {
             break;
         case HIT_REACTION_DEATH:
         case HIT_REACTION_DEATH_KNOCKBACK:
-            m->flags &= 0xEFFF;
+            psytcopus->flags &= 0xEFFF;
             pv->unk80 = D_L11_00161F88 * frame_time_sq;
             pv->unk88 = D_L11_00161F98 * frame_time;
             pv->unk8C = D_L11_00161F94 * frame_time;
             pv->unkC0 = 4.0f;
             pv->unkC4 = 10.0f;
-            f = atan2_0180(m->pos.x - (*(struct Moby **)(info + 0x20))->pos.x,
-                                m->pos.y - (*(struct Moby **)(info + 0x20))->pos.y);
+            source_to_psytcopus_heading = atan2_0180(psytcopus->pos.x - (*(struct Moby **)(info + 0x20))->pos.x,
+                                psytcopus->pos.y - (*(struct Moby **)(info + 0x20))->pos.y);
             *(u128 *)&v = *(u128 *)(info + 0x10);
-            angle2 = f;
+            angle2 = source_to_psytcopus_heading;
             FUN_L00_0025ab48_p(&v, &angle2, &pv->unk88, &pv->unk8C);
-            FUN_L00_0025c558_p(m, pv->unk70, 6, 1, 0, angle2);
-            m->state = 8;
+            FUN_L00_0025c558_p(psytcopus, pv->unk70, 6, 1, 0, angle2);
+            psytcopus->state = 8;
             pv->unk67 = 0xF0;
             if (pv->unk160 != 0) {
                 FUN_L00_002371e0_p(pv->unk160);
                 pv->unk160 = 0;
             }
-            FUN_L00_00257470_p(m, 0, -1);
+            FUN_L00_00257470_p(psytcopus, 0, -1);
             break;
         }
-        FUN_L00_0025d458_p(m, pv->unk60);
+        FUN_L00_0025d458_p(psytcopus, pv->unk60);
     }
-    m->hit_slot = 0xFF;
-    FUN_L00_0025d538_p(m, pv->unk60);
+    psytcopus->hit_slot = 0xFF;
+    FUN_L00_0025d538_p(psytcopus, pv->unk60);
     pv->unk140 = 24.0f;
     path = D_L11_001B0EB0[pv->unk13C];
-    if (FUN_L00_0025ff38_p(m, &pv->unkD0, 0, 0, path + 4, *path, pv->unk140) != 2 &&
-        (pv->unk140 < distance_0698(&m->pos, &pv->unkD0) || abs_0698(m->pos.z - pv->unkD0.z) > 3.0f)) {
+    if (FUN_L00_0025ff38_p(psytcopus, &pv->unkD0, 0, 0, path + 4, *path, pv->unk140) != 2 &&
+        (pv->unk140 < distance_0698(&psytcopus->pos, &pv->unkD0) || abs_0698(psytcopus->pos.z - pv->unkD0.z) > 3.0f)) {
         pv->unk114 = 2;
     }
     if (pv->target == 0) {
