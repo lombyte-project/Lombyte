@@ -2954,11 +2954,11 @@ void FUN_00213ed8_00212088(f32 *, f32, f32) __asm__("FUN_00213ed8");
 /* Approaches field b toward a, at rate x while below it and y otherwise. */
 void speed_step(f32 x, f32 y) __asm__("FUN_L00_00212088");
 void speed_step(f32 x, f32 y) {
-    struct Hero *p = &hero;
-    if (p->ground_speed < p->target_speed)
-        FUN_00213ed8_00212088(&p->ground_speed, p->target_speed, x);
+    struct Hero *hero_state = &hero;
+    if (hero_state->ground_speed < hero_state->target_speed)
+        FUN_00213ed8_00212088(&hero_state->ground_speed, hero_state->target_speed, x);
     else
-        FUN_00213ed8_00212088(&p->ground_speed, p->target_speed, y);
+        FUN_00213ed8_00212088(&hero_state->ground_speed, hero_state->target_speed, y);
 }
 extern float fast_cos(float) __asm__("FUN_001f9dc8");
 
