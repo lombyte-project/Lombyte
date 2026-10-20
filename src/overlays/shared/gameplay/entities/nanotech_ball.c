@@ -342,16 +342,16 @@ extern u128 D_L00_001E3CA0_002d8850[] __asm__("D_L00_001E3CA0");
 void FUN_00214890_002d8850(void *, void *, void *, float) __asm__("FUN_00214890");
 void FUN_001f9bf8_002d8850(void *, void *, float) __asm__("FUN_001f9bf8");
 void FUN_001f9a10_002d8850(void *, void *, void *) __asm__("FUN_001f9a10");
-void FUN_L00_002d8850(unsigned char *p, float *out, int i) {
-    u128 t;
-    M_002d8850 *m = *(M_002d8850 **)(p + 0x78);
+void FUN_L00_002d8850(unsigned char *moby, float *out, int i) {
+    u128 slot_offset;
+    M_002d8850 *moby_data = *(M_002d8850 **)(moby + 0x78);
     char *e;
-    FUN_00214890_002d8850(&t, &D_L00_001E3CA0_002d8850[i], &m->p20, m->p20.f[3]);
-    e = m->e[i];
-    if (e && p[0x20] == 2)
-        FUN_001f9bf8_002d8850(&t, &t, *(float *)(e + 0x28));
-    FUN_001f9a10_002d8850(out, &m->p10, &t);
-    out[2] += m->f0_002d8850;
+    FUN_00214890_002d8850(&slot_offset, &D_L00_001E3CA0_002d8850[i], &moby_data->p20, moby_data->p20.f[3]);
+    e = moby_data->e[i];
+    if (e && moby[0x20] == 2)
+        FUN_001f9bf8_002d8850(&slot_offset, &slot_offset, *(float *)(e + 0x28));
+    FUN_001f9a10_002d8850(out, &moby_data->p10, &slot_offset);
+    out[2] += moby_data->f0_002d8850;
 }
 typedef f32 V4[4] __attribute__((aligned(16)));
 extern V4 D_L00_001E3CA0[];
