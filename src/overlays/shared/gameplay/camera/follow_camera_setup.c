@@ -1199,7 +1199,7 @@ void init_camera_system(void) __asm__("FUN_L00_001ed280");
 void follow_camera_avoid_mobies(u8 *m) __asm__("FUN_L00_002e7d20");
 extern s32 current_level_index_macro __asm__("D_0015ED84") __attribute__((section(".sdata")));
 extern s32 camera_collision_mask __asm__("D_L00_0015EF58") __attribute__((sda));
-void follow_camera_avoid_mobies(u8 *m) {
+void follow_camera_avoid_mobies(u8 *camera_moby) {
     V_2e7d20 probe_center, moby_offset_or_camera_endpoint, v20, planar_moby_direction, orbit_side_direction;
     W_2e7d20 w;
     u8 *x;
@@ -1207,49 +1207,49 @@ void follow_camera_avoid_mobies(u8 *m) {
     u8 *b;
     s32 hit, cnt, any;
     s32 j;
-    u8 *o;
-    s32 n;
+    u8 *nearby_moby;
+    s32 nearby_moby_count;
     s32 i;
     s32 t;
     s32 s;
-    f32 h;
+    f32 probe_diameter;
     f32 f;
     u8 *base;
     f32 g;
-    u8 *q;
+    u8 *restored_moby;
 
     base = D_L00_00166E10_2e7d20;
-    x = *(u8 **)(m + 0x70);
+    x = *(u8 **)(camera_moby + 0x70);
     a = x + 0x130;
     b = x + 0x1D0;
     hit = 0;
     cnt = 0;
     any = 0;
-    h = AF_2e7d20(0x2C) - BF_2e7d20(0x30) + 1.5f;
+    probe_diameter = AF_2e7d20(0x2C) - BF_2e7d20(0x30) + 1.5f;
     if (current_level_index_macro == 0xF) {
         any = D_0013F350_2e7d20.b20A4 == 2;
     }
     lerp_vector(&probe_center, x + 0x90, base - 0x50, 0.5f);
-    n = probe_world_sphere(&probe_center, 1, D_0013F350_2e7d20.p2080, 0, h * 0.5f);
-    if (n > 0) {
-        i = n;
+    nearby_moby_count = probe_world_sphere(&probe_center, 1, D_0013F350_2e7d20.p2080, 0, probe_diameter * 0.5f);
+    if (nearby_moby_count > 0) {
+        i = nearby_moby_count;
         j = 0;
         do {
-            o = D_L00_00177F00_2e7d20[j];
-            if (*(s32 *)(o + 0x94) == 0) {
+            nearby_moby = D_L00_00177F00_2e7d20[j];
+            if (*(s32 *)(nearby_moby + 0x94) == 0) {
                 goto next;
             }
-            if (FUN_L00_00259830(o) && !any) {
+            if (FUN_L00_00259830(nearby_moby) && !any) {
                 goto next;
             }
-            t = *(s16 *)(o + 0xA6);
+            t = *(s16 *)(nearby_moby + 0xA6);
             if (t != 0x72 && t != 0xB && t != 0x2C && t != 0x9A && t != 0xFF && t != 0x392 && t != 0x452 && t != 0x353) {
-                D_L00_001E75C0[cnt] = o;
+                D_L00_001E75C0[cnt] = nearby_moby;
                 cnt++;
-                *(s32 *)(o + 0x94) = 0;
+                *(s32 *)(nearby_moby + 0x94) = 0;
                 goto next;
             }
-            FUN_001f9a28_2e7d20(&moby_offset_or_camera_endpoint, o + 0x10, (x + 0x90));
+            FUN_001f9a28_2e7d20(&moby_offset_or_camera_endpoint, nearby_moby + 0x10, (x + 0x90));
             FUN_001f9a68_2e7d20(&v20, base + 0x30, FUN_001f9ab0_2e7d20(base + 0x30, &moby_offset_or_camera_endpoint));
             FUN_001f9a28_2e7d20(&planar_moby_direction, &moby_offset_or_camera_endpoint, &v20);
             FUN_001f9bf8_2e7d20(&planar_moby_direction, &planar_moby_direction, 1.0f);
@@ -1269,10 +1269,10 @@ void follow_camera_avoid_mobies(u8 *m) {
         } while (--i != 0);
     }
     if (D_0013F350_2e7d20.i2084 != 0x7F && (current_level_index_macro != 0xD || D_0013F350_2e7d20.i2084 != 0x7B)) {
-        hit = FUN_L00_002e7a30_2e7d20(m) != 0;
+        hit = FUN_L00_002e7a30_2e7d20(camera_moby) != 0;
     }
-    hit = FUN_L00_002e7520_2e7d20(m) == 0 ? hit : 1;
-    hit = FUN_L00_002e7318_2e7d20(m) == 0 ? hit : 1;
+    hit = FUN_L00_002e7520_2e7d20(camera_moby) == 0 ? hit : 1;
+    hit = FUN_L00_002e7318_2e7d20(camera_moby) == 0 ? hit : 1;
     g = AF_2e7d20(0x2C);
     if (g - BF_2e7d20(0x30) < D_L00_00161CD0) {
         BF_2e7d20(0x30) = g - D_L00_00161CD0;
@@ -1352,8 +1352,8 @@ fin:
         u8 **op = D_L00_001E75C0;
         s32 k = cnt;
         do {
-            q = *op++;
-            *(s32 *)(q + 0x94) = *(s32 *)(*(u8 **)(q + 0x24) + 0x10);
+            restored_moby = *op++;
+            *(s32 *)(restored_moby + 0x94) = *(s32 *)(*(u8 **)(restored_moby + 0x24) + 0x10);
         } while (--k != 0);
     }
 }
