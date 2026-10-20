@@ -1006,13 +1006,13 @@ void energy_sphere_update(unsigned char *moby) {
     switch (moby[0x20]) {
     case ENERGY_SPHERE_APPROACH_SCALE_AND_REMOVE:
         if (func_001F9908_i(data + 0x20)) {
-            float *p = *(float **)(moby + 0x24);
+            float *scale_approach_pointer = *(float **)(moby + 0x24);
             float scale_approach_frames = (float)scale_game_frames(0x14);
-            float target_scale = p[9];
+            float target_scale = scale_approach_pointer[9];
             float b = (*(float **)(moby + 0x24))[9] / scale_approach_frames;
-            p = (float *)(data + 0x1C);
+            scale_approach_pointer = (float *)(data + 0x1C);
             approach_value((float *)(moby + 0x2C), target_scale, b);
-            approach_value(p, *(float *)&D_L11_00162388,
+            approach_value(scale_approach_pointer, *(float *)&D_L11_00162388,
                            *(float *)&D_L11_00162388 / (float)scale_game_frames(0x14));
         }
         if (func_001F9908_i(data + 0x28)) {
