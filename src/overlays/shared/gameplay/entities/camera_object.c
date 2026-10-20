@@ -807,7 +807,7 @@ void bolt_update(Bolt *obj) {
         BOLT_INITIALIZE_CLASS_FIFTY = 0x10
     };
     BoltVars *v = obj->vars;
-    Vec4 a;
+    Vec4 geometry_scratch;
     Vec4 b;
     Vec4 rotation_scratch;
     Vec4 collection_offset;
@@ -844,11 +844,11 @@ void bolt_update(Bolt *obj) {
         if (FUN_00213260(2) == 0) {
             v->unk55 |= 1;
         }
-        fast_vec_normalize(&a, &obj->unkE0, 0.2f);
-        fast_vec_add(&a, &a, &obj->pos);
+        fast_vec_normalize(&geometry_scratch, &obj->unkE0, 0.2f);
+        fast_vec_add(&geometry_scratch, &geometry_scratch, &obj->pos);
         fast_vec_normalize(&b, &obj->unkE0, -3.0f);
         fast_vec_add(&b, &b, &obj->pos);
-        hit = FUN_001efa68(&a, &b, 0x22, 0, 0);
+        hit = FUN_001efa68(&geometry_scratch, &b, 0x22, 0, 0);
         if (v->landed == 0 && hit != 0) {
             qcopy(&v->pos, &D_L00_00173E40.point);
             clear_u64_value(&v->rot);
@@ -913,8 +913,8 @@ void bolt_update(Bolt *obj) {
         clear_u64_value(&v->rot);
         v->rot.f[2] = fast_arc_tan(D_L00_00173E40.normal_x, D_L00_00173E40.normal_y);
         v->rot.f[1] = fast_arc_tan(D_L00_00173E40.normal_z, vector_length_xy(&D_L00_00173E40.normal_x));
-        fast_vec_sub(&a, &obj->pos, &D_L00_00173E40.point);
-        FUN_L00_001ff660(&v->vel, &v->vel, &a);
+        fast_vec_sub(&geometry_scratch, &obj->pos, &D_L00_00173E40.point);
+        FUN_L00_001ff660(&v->vel, &v->vel, &geometry_scratch);
         if (vector_distance(&obj->pos, &hero.motion.pos) < hero.reach_distance &&
             FUN_001f99c0(obj->pos.f[2] - hero.motion.pos.f[2]) < hero.reach_height) {
             if (hero.health.hp == 0) {
@@ -925,7 +925,7 @@ void bolt_update(Bolt *obj) {
             return;
         }
         ang = 0.7853982f;
-        if (!(fast_arc_tan(a.f[2], vector_length_xy(&a)) < ang)) {
+        if (!(fast_arc_tan(geometry_scratch.f[2], vector_length_xy(&geometry_scratch)) < ang)) {
             return;
         }
         if (!(fast_arc_tan(D_L00_00173E40.normal_z, vector_length_xy(&D_L00_00173E40.normal_x)) < ang)) {
@@ -945,8 +945,8 @@ void bolt_update(Bolt *obj) {
         FUN_L00_002a6de8_c(obj, &b, 0);
         k = 0.25f;
         b.f[2] += k;
-        matrix_to_euler(&obj->rot, &a);
-        FUN_L00_00259f50(&rotation_scratch, &a);
+        matrix_to_euler(&obj->rot, &geometry_scratch);
+        FUN_L00_00259f50(&rotation_scratch, &geometry_scratch);
         rotation_blend_step = 1.0f / convert_integer_to_float(v->hop_left);
         settling_hop_phase = convert_integer_to_float(v->hop_left) / convert_integer_to_float(v->hop_frames);
         quaternion_nlerp(&v->spin, &v->spin, &rotation_scratch, rotation_blend_step);
@@ -979,8 +979,8 @@ void bolt_update(Bolt *obj) {
             v->hop_left--;
         }
         if (v->slot >= 0) {
-            transform_vector_by_basis(&a, &D_L00_001D73D0[obj->oclass], &obj->rot);
-            fast_vec_add(&glints[v->slot], &a, &obj->pos);
+            transform_vector_by_basis(&geometry_scratch, &D_L00_001D73D0[obj->oclass], &obj->rot);
+            fast_vec_add(&glints[v->slot], &geometry_scratch, &obj->pos);
             if (glints[v->slot].moby != (((u8 *)obj - D_L00_0015FFD8) >> 8)) {
                 v->slot = -1;
             }
@@ -989,9 +989,9 @@ void bolt_update(Bolt *obj) {
         if (--v->slot_timer > 0) {
             return;
         }
-        transform_vector_by_basis(&a, &D_L00_001D73D0[obj->oclass], &obj->rot);
-        fast_vec_add(&a, &a, &obj->pos);
-        v->slot = FUN_L00_001fe990(&a, ((u8 *)obj - D_L00_0015FFD8) >> 8, 1.4f);
+        transform_vector_by_basis(&geometry_scratch, &D_L00_001D73D0[obj->oclass], &obj->rot);
+        fast_vec_add(&geometry_scratch, &geometry_scratch, &obj->pos);
+        v->slot = FUN_L00_001fe990(&geometry_scratch, ((u8 *)obj - D_L00_0015FFD8) >> 8, 1.4f);
         v->slot_timer = FUN_L00_00257b90(scale_game_frames(300), scale_game_frames(600));
         } else if (v->hop_left != 0) {
             v->hop_left--;
@@ -1000,22 +1000,22 @@ void bolt_update(Bolt *obj) {
     case BOLT_MOVE_TO_HERO:
         flag = 0;
         if (v->unk60->oclass == 0) {
-            fast_vec_sub(&a, &obj->pos, &hero.ground_point);
-            transform_vector(&a, &a, hero.unk40);
-            if (a.f[2] < 0.0f) {
+            fast_vec_sub(&geometry_scratch, &obj->pos, &hero.ground_point);
+            transform_vector(&geometry_scratch, &geometry_scratch, hero.unk40);
+            if (geometry_scratch.f[2] < 0.0f) {
                 flag = 1;
             }
         }
         if (flag) {
-            fast_vec_normalize(&a, &hero.unk0[8], D_0015ED6C * 7.0f);
-            fast_vec_sub(&b, &a, &v->vel);
+            fast_vec_normalize(&geometry_scratch, &hero.unk0[8], D_0015ED6C * 7.0f);
+            fast_vec_sub(&b, &geometry_scratch, &v->vel);
             FUN_L00_0025f730(&b, frame_time_sq * 50.0f);
             fast_vec_add(&v->vel, &v->vel, &b);
         } else {
             velocity_decay_step = frame_time_sq * 10.0f;
             if (velocity_decay_step < fast_vec_length(&v->vel)) {
-                fast_vec_normalize(&a, &v->vel, velocity_decay_step);
-                fast_vec_sub(&v->vel, &v->vel, &a);
+                fast_vec_normalize(&geometry_scratch, &v->vel, velocity_decay_step);
+                fast_vec_sub(&v->vel, &v->vel, &geometry_scratch);
             }
             approach_value(&v->speed, D_0015ED6C * 48.0f, frame_time_sq * 16.0f);
             x = D_0015ED6C * 8.0f;
@@ -1024,8 +1024,8 @@ void bolt_update(Bolt *obj) {
                 fast_vec_add(&obj->pos, &obj->pos, &b);
             }
         }
-        quaternion_to_rotation_basis(&v->spin, &a);
-        multiply_matrix3x3(&obj->rot, &a, &obj->rot);
+        quaternion_to_rotation_basis(&v->spin, &geometry_scratch);
+        multiply_matrix3x3(&obj->rot, &geometry_scratch, &obj->rot);
         fast_vec_add(&obj->pos, &obj->pos, &v->vel);
         fast_vec_sub(&collection_offset, &hero.motion.unkD0, &obj->pos);
         if (v->speed < fast_vec_length(&collection_offset)) {
