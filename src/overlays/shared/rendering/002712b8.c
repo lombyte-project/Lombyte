@@ -1581,15 +1581,15 @@ unsigned char *FUN_L00_00274cf8(void *a, int idx, float ang) {
 extern void free_effect_particle(void *) __asm__("FUN_L00_00267a08");
 
 /* Every second tick lowers the top byte at a+4 by 1; calls 00267a08 once it reaches 0. */
-void FUN_L00_00274de0(char *a) {
-    int t = *(unsigned short *)(a + 0xA) - 1;
-    *(short *)(a + 0xA) = t;
-    if ((short)t == 0) {
-        *(int *)(a + 4) += 0xFF000000;
-        *(short *)(a + 0xA) = 2;
+void FUN_L00_00274de0(char *particle) {
+    int decremented_fade_timer = *(unsigned short *)(particle + 0xA) - 1;
+    *(short *)(particle + 0xA) = decremented_fade_timer;
+    if ((short)decremented_fade_timer == 0) {
+        *(int *)(particle + 4) += 0xFF000000;
+        *(short *)(particle + 0xA) = 2;
     }
-    if ((*(int *)(a + 4) & 0xFF000000) == 0)
-        free_effect_particle(a);
+    if ((*(int *)(particle + 4) & 0xFF000000) == 0)
+        free_effect_particle(particle);
 }
 typedef struct {
     f32 x, y, z, w;
