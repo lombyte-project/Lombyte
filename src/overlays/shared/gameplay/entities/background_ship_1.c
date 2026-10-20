@@ -786,18 +786,18 @@ void FUN_L02_002fa7c8(char *candidate_moby) {
     float v[4];
     char *g = D_L02_00167280_c;
     char *p = *(char **)(g + 0x180);
-    char *h;
+    char *candidate_selection_state;
     float vector_distance;
     float accumulated_amount;
     float ang;
     if (*(short *)(p + 0x86) == 0) {
         if (!(0.05f < absolute_float(*(float *)(D_0013CA44)))) {
-            h = g + 0x380;
+            candidate_selection_state = g + 0x380;
             subtract_vector_xyz(v, candidate_moby + 0x10, &hero.motion.pos);
             vector_distance = vector_length_xyz(v);
             if (vector_distance < 22.0f) {
                 if (0.0f < vector_distance) {
-                    if (vector_distance < *(float *)(h + 8)) {
+                    if (vector_distance < *(float *)(candidate_selection_state + 8)) {
                         if (0.0f < v[2]) {
                             ang = 1.5707964f - fast_arc_sin(dot_vectors_xyz(p, v) / vector_distance);
                             if (ang < 1.1170107f) {
@@ -808,13 +808,13 @@ void FUN_L02_002fa7c8(char *candidate_moby) {
                                 }
                                 ang = 1.5707964f - fast_arc_sin(dot_vectors_xyz(p, v) / vector_distance);
                                 if (ang < 0.62831855f) {
-                                    accumulated_amount = *(float *)(h + 0xC) + *(float *)&D_L02_0016238C;
+                                    accumulated_amount = *(float *)(candidate_selection_state + 0xC) + *(float *)&D_L02_0016238C;
                                     *(char **)(g + 0x380) = p;
-                                    *(float *)(h + 8) = vector_distance;
-                                    *(char **)(h + 4) = candidate_moby;
-                                    *(float *)(h + 0xC) = accumulated_amount;
+                                    *(float *)(candidate_selection_state + 8) = vector_distance;
+                                    *(char **)(candidate_selection_state + 4) = candidate_moby;
+                                    *(float *)(candidate_selection_state + 0xC) = accumulated_amount;
                                     if (1.0f < accumulated_amount) {
-                                        *(float *)(h + 0xC) = 1.0f;
+                                        *(float *)(candidate_selection_state + 0xC) = 1.0f;
                                     }
                                 }
                             }
