@@ -835,33 +835,33 @@ extern f32 D_L18_00161994_q __asm__("D_L18_00161994") __attribute__((sda));
 extern void trooper_scale(void *, void *, float) __asm__("FUN_001f9c48");
 void blend_moby_animation_q(MobyAnim_q *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
-char *FUN_L18_002d5cf8(float f, int a0, int idx, float *p6, float *p7, int detonation_countdown) {
+char *FUN_L18_002d5cf8(float horizontal_speed, int a0, int idx, float *launch_position, float *target_position, int detonation_countdown) {
     float v[4];
     float r;
     float g;
     char *found = 0;
-    short *p = (short *)D_L18_001AC240_q[idx];
+    short *moby_list_entry = (short *)D_L18_001AC240_q[idx];
     char *moby;
     char *data;
     char *d2;
-    if (p == 0) {
+    if (moby_list_entry == 0) {
         return 0;
     }
     {
         char *base = D_L18_0015FFD8_m;
-        unsigned short s;
+        unsigned short encoded_moby_entry;
         do {
-            s = *p;
+            encoded_moby_entry = *moby_list_entry;
             {
-                char *m = base + ((s & 0x7FFF) << 8);
-                if (*(short *)(m + 0xA6) == 0x238) {
-                    if (((unsigned char *)m)[0x20] == 5) {
-                        found = m;
+                char *candidate_moby = base + ((encoded_moby_entry & 0x7FFF) << 8);
+                if (*(short *)(candidate_moby + 0xA6) == 0x238) {
+                    if (((unsigned char *)candidate_moby)[0x20] == 5) {
+                        found = candidate_moby;
                     }
                 }
             }
-            p++;
-        } while ((short)s >= 0);
+            moby_list_entry++;
+        } while ((short)encoded_moby_entry >= 0);
     }
     moby = found;
     if (moby != 0) {
@@ -875,22 +875,22 @@ char *FUN_L18_002d5cf8(float f, int a0, int idx, float *p6, float *p7, int deton
         if (((unsigned char *)moby)[0x53] != 0) {
             blend_moby_animation_q(moby, 0, 0, 1);
         }
-        qcopy(moby + 0x10, p6);
+        qcopy(moby + 0x10, launch_position);
         r = *(float *)&D_L18_00161994_q;
         *(int *)(moby + 0x40) = 0;
         *(float *)(moby + 0x44) = -r;
-        p7[2] = p7[2] + 0.75f;
-        subtract_vector_xyz(v, p7, p6);
+        target_position[2] = target_position[2] + 0.75f;
+        subtract_vector_xyz(v, target_position, launch_position);
         trooper_scale(v, v, vector_length_xy(v) - *(float *)&D_L18_00161994_q);
-        add_vector_xyz(v, v, p6);
+        add_vector_xyz(v, v, launch_position);
         data = *(char **)(moby + 0x78);
         qcopy(data + 0x170, v);
-        subtract_vector_xyz(data + 0x180, v, p6);
+        subtract_vector_xyz(data + 0x180, v, launch_position);
         *(int *)(data + 0x188) = 0;
-        normalize_vector_xyz(data + 0x180, data + 0x180, f);
+        normalize_vector_xyz(data + 0x180, data + 0x180, horizontal_speed);
         g = D_0015EE70 * 10.0f;
         *(short *)(data + 0xC8) = 0;
-        *(float *)(data + 0x188) = FUN_L00_0025abf0_q(p6, v, 0, f, -g);
+        *(float *)(data + 0x188) = FUN_L00_0025abf0_q(launch_position, v, 0, horizontal_speed, -g);
         *(float *)(moby + 0x48) =
             angle_atan2(*(float *)(data + 0x180), *(float *)(data + 0x184));
         *(int *)(data + 0x194) = detonation_countdown;
