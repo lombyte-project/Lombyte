@@ -12,21 +12,21 @@
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 
 void FUN_L02_0023ccc8(char *m) {
-    unsigned char *p = (unsigned char *)(m + 0x70);
+    unsigned char *transition_counters = (unsigned char *)(m + 0x70);
     if (*(int *)(m + 0x7C) >= scale_game_frames(5)) {
-        if (p[0] < scale_game_frames(8)) {
-            p[0] = p[0] + 1;
-        } else if (p[1] < scale_game_frames(8)) {
-            p[1] = p[1] + 1;
+        if (transition_counters[0] < scale_game_frames(8)) {
+            transition_counters[0] = transition_counters[0] + 1;
+        } else if (transition_counters[1] < scale_game_frames(8)) {
+            transition_counters[1] = transition_counters[1] + 1;
         }
     } else {
-        if (p[1] != 0 || p[0] != 0) {
+        if (transition_counters[1] != 0 || transition_counters[0] != 0) {
             *(int *)(m + 0x6C) = 1;
         }
-        if (p[1] != 0) {
-            p[1] = p[1] - 1;
-        } else if (p[0] != 0) {
-            p[0] = p[0] - 1;
+        if (transition_counters[1] != 0) {
+            transition_counters[1] = transition_counters[1] - 1;
+        } else if (transition_counters[0] != 0) {
+            transition_counters[0] = transition_counters[0] - 1;
         }
     }
     *(int *)(m + 0x74) = **(int **)(m + 0xC);
