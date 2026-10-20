@@ -870,46 +870,46 @@ extern int func_0022ED80_6478(int, int, void *) __asm__("FUN_0022da68");
 int D_L16_00161DD8 = 600;
 int D_L16_00161DDC = 0x80808080;
 int D_L16_00161DE0 = 0x80202020;
-void FUN_L16_002e5010(struct Moby *m) {
+void FUN_L16_002e5010(struct Moby *gate_moby) {
     enum {
         GRINDRAIL_GATE_INITIALIZE = 0,
         GRINDRAIL_GATE_CHECK_HERO_BOUNDS = 1,
         GRINDRAIL_GATE_WAIT_FOR_COMMAND_TIMEOUT = 2
     };
-    char *d = (char *)m->pvars;
+    char *command_timer = (char *)gate_moby->pvars;
     char *g;
     float pos[16];
     float mat[4];
-    float f;
+    float glow_cycle_phase;
     int period = scale_game_frames(30);
-    f = convert_integer_to_float(D_L16_0015F5CC % period) / convert_integer_to_float(period);
-    m->glow_color = FUN_001fa6e0_u(fast_sin(f * 6.28318f - 3.14159f) * 0.5f + 0.5f,
+    glow_cycle_phase = convert_integer_to_float(D_L16_0015F5CC % period) / convert_integer_to_float(period);
+    gate_moby->glow_color = FUN_001fa6e0_u(fast_sin(glow_cycle_phase * 6.28318f - 3.14159f) * 0.5f + 0.5f,
                                         D_L16_00161DDC, D_L16_00161DE0);
-    switch (m->state) {
+    switch (gate_moby->state) {
     case GRINDRAIL_GATE_INITIALIZE:
-        m->state = 1;
-        m->update_dist = 0xFF;
+        gate_moby->state = 1;
+        gate_moby->update_dist = 0xFF;
         break;
     case GRINDRAIL_GATE_CHECK_HERO_BOUNDS:
         g = (char *)&hero.motion.pos;
-        if (FUN_001f9b48(&m->pos, g) < 16.0f) {
-            transpose_rotation_matrix(pos, &m->rot_row0);
-            subtract_vector_xyz(mat, g, &m->pos);
+        if (FUN_001f9b48(&gate_moby->pos, g) < 16.0f) {
+            transpose_rotation_matrix(pos, &gate_moby->rot_row0);
+            subtract_vector_xyz(mat, g, &gate_moby->pos);
             transform_vector(mat, mat, pos);
             if (D_L16_001D9750[0] < mat[0] && mat[0] < D_L16_001D9750[1] &&
                 D_L16_001D9750[2] < mat[1] && mat[1] < D_L16_001D9750[3] &&
                 D_L16_001D9750[4] < mat[2] && mat[2] < D_L16_001D9750[5]) {
-                m->command = 1;
-                m->state = 2;
-                *(int *)d = scale_game_frames(D_L16_00161DD8);
-                func_0022ED80_6478(1, 0, m);
+                gate_moby->command = 1;
+                gate_moby->state = 2;
+                *(int *)command_timer = scale_game_frames(D_L16_00161DD8);
+                func_0022ED80_6478(1, 0, gate_moby);
             }
         }
         break;
     case GRINDRAIL_GATE_WAIT_FOR_COMMAND_TIMEOUT:
-        if (tick_countdown_32_u((int *)d)) {
-            m->state = 1;
-            m->command = 0;
+        if (tick_countdown_32_u((int *)command_timer)) {
+            gate_moby->state = 1;
+            gate_moby->command = 0;
         }
         break;
     }
