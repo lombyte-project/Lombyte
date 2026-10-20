@@ -2200,40 +2200,40 @@ extern void pos_26e3a8(void *, s32, void *) __asm__("FUN_L00_0024f7c8");
 extern void vsub_26e3a8(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void vscl_26e3a8(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void vadd_26e3a8(void *, void *, void *) __asm__("FUN_001f9a10");
-void FUN_L00_0026e3a8(P_26e3a8 *p) {
+void FUN_L00_0026e3a8(P_26e3a8 *particle) {
     E_26e3a8 *e;
     f32 lim;
     f32 a[4] __attribute__((aligned(16)));
     f32 v[4] __attribute__((aligned(16)));
-    if (p == 0) {
+    if (particle == 0) {
         return;
     }
-    e = &p->e;
-    if (tick_26e3a8(&p->hA) || e->m == 0 || e->m->b20 < 0) {
+    e = &particle->e;
+    if (tick_26e3a8(&particle->hA) || e->m == 0 || e->m->b20 < 0) {
         goto kill;
     }
     e->hC = (e->hC + 1) & 0xF;
-    if (p->fC < 159600.0f) {
-        p->fC += D_0015ED60 * 3989.99976f;
-        if (159600.0f < p->fC) {
-            p->fC = 159600.0f;
+    if (particle->fC < 159600.0f) {
+        particle->fC += D_0015ED60 * 3989.99976f;
+        if (159600.0f < particle->fC) {
+            particle->fC = 159600.0f;
         }
-    } else if (159600.0f < p->fC) {
-        p->fC -= D_0015ED60 * 15959.999f;
-        if (p->fC < 159600.0f) {
-            p->fC = 159600.0f;
+    } else if (159600.0f < particle->fC) {
+        particle->fC -= D_0015ED60 * 15959.999f;
+        if (particle->fC < 159600.0f) {
+            particle->fC = 159600.0f;
         }
     }
     e->f8 += D_0015ED60 * 0.001f;
-    p->b8 = trunc_26e3a8(e->f8 * 255.0f);
-    p->b2 = tab_26e3a8[e->hC];
-    if (p->fC <= 159600.0f || 0.0f < e->f10) {
-        f32 *q = &e->f4;
-        *q += q[3];
+    particle->b8 = trunc_26e3a8(e->f8 * 255.0f);
+    particle->b2 = tab_26e3a8[e->hC];
+    if (particle->fC <= 159600.0f || 0.0f < e->f10) {
+        f32 *alpha_value = &e->f4;
+        *alpha_value += alpha_value[3];
     }
     {
         f32 x;
-        if (p->fC <= 159600.0f) {
+        if (particle->fC <= 159600.0f) {
             x = e->f4;
             lim = 0.3f;
         } else {
@@ -2243,7 +2243,7 @@ void FUN_L00_0026e3a8(P_26e3a8 *p) {
         if (!(lim < x)) {
             if (x < 0.0f) {
             kill:
-                kill_26e3a8(p);
+                kill_26e3a8(particle);
                 return;
             }
         } else {
@@ -2251,13 +2251,13 @@ void FUN_L00_0026e3a8(P_26e3a8 *p) {
             e->f4 = x + e->f10;
         }
     }
-    p->w4 = (p->w4 & 0xFFFFFF) + (trunc_26e3a8(e->f4 * 256.0f) << 24);
+    particle->w4 = (particle->w4 & 0xFFFFFF) + (trunc_26e3a8(e->f4 * 256.0f) << 24);
     e->f14 += (1.0f - e->f14) * (D_0015ED60 * 0.175f);
     if (e->hE != -1) {
         pos_26e3a8(e->m, e->hE, a);
         vsub_26e3a8(v, org_26e3a8, a);
         vscl_26e3a8(v, v, e->f14);
-        vadd_26e3a8(p->pos, a, v);
+        vadd_26e3a8(particle->pos, a, v);
     }
 }
 typedef union {
