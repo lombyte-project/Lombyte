@@ -12,15 +12,15 @@
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 float absolute_float(float input) __asm__("func_001F99C0");
 
-float FUN_L00_0025bb38(int n, float x, float y) {
-    float d = fast_subtract_rotations(x, y);
-    if (n == 0 || d * (float)n > 0.0f)
-        return d;
-    if (absolute_float(d) <= 0.0017453292f)
+float FUN_L00_0025bb38(int rotation_direction, float x, float y) {
+    float angle_delta = fast_subtract_rotations(x, y);
+    if (rotation_direction == 0 || angle_delta * (float)rotation_direction > 0.0f)
+        return angle_delta;
+    if (absolute_float(angle_delta) <= 0.0017453292f)
         return 0.0f;
-    if (d > 0.0f)
-        return d - 6.2831855f;
-    return d + 6.2831855f;
+    if (angle_delta > 0.0f)
+        return angle_delta - 6.2831855f;
+    return angle_delta + 6.2831855f;
 }
 extern float FUN_L00_0025bb38_c(float, void *, float) __asm__("FUN_L00_0025bb38");
 float fast_add_rotations(float, float) __asm__("FUN_001fa580");
