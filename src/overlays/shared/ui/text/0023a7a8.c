@@ -31,7 +31,7 @@ extern short D_L00_0015F93C __attribute__((sda));
 extern short D_L00_0015F940 __attribute__((sda));
 int FUN_L00_0023a7a8(char *hud_element) {
     char buf[16];
-    char *q = hud_element + 0x70;
+    char *fade_control_bytes = hud_element + 0x70;
     int x4;
     int y = 0x12;
     int x, frame_alpha, alpha, w, text_color, tex, c1, wd, displayed_numerator;
@@ -48,7 +48,7 @@ int FUN_L00_0023a7a8(char *hud_element) {
             f21 = 1.0f;
         else if (f21 < 0.0f)
             f21 = 0.0f;
-        f20 = convert_integer_to_float(*(unsigned char *)(q + 1));
+        f20 = convert_integer_to_float(*(unsigned char *)(fade_control_bytes + 1));
         f20 = f20 / convert_integer_to_float(*(int *)&D_L00_0015F920_gp);
         if (f20 > 1.0f)
             f20 = 1.0f;
