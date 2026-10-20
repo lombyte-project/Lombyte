@@ -1475,33 +1475,33 @@ extern void *FUN_L00_002678b8_c(int) __asm__("FUN_L00_002678b8");
 
 extern unsigned char *D_L00_001B20D4 __attribute__((section(".data")));
 char *FUN_L00_0026cbb0(void *pos, void *dir, int c, int d, int n, int k, float f);
-char *FUN_L00_0026cbb0(void *pos, void *dir, int c, int d, int n, int k, float f) {
-    char *p;
-    char *q;
+char *FUN_L00_0026cbb0(void *pos, void *dir, int initial_color, int final_color, int lifetime, int k, float f) {
+    char *particle;
+    char *particle_data;
     int v;
-    if (n == 0)
+    if (lifetime == 0)
         return 0;
-    p = FUN_L00_002678b8_c(0x15);
-    if (p) {
-        qcopy(p + 0x10, pos);
-        *(int *)(p + 4) = c;
+    particle = FUN_L00_002678b8_c(0x15);
+    if (particle) {
+        qcopy(particle + 0x10, pos);
+        *(int *)(particle + 4) = initial_color;
         v = truncate_float_to_s32(4.0f) - 0x60;
-        p[1] = 0;
-        *(float *)(p + 0xC) = f;
-        p[3] = 0x48;
-        p[9] = v;
-        p[8] = rand();
-        q = p + 0x20;
-        p[2] = *D_L00_001B20D4;
-        *(short *)(p + 0xA) = n;
-        *(short *)(q + 0x18) = n;
-        *(float *)(q + 0x1C) = f;
-        *(int *)(q + 0x10) = c;
-        *(int *)(q + 0x14) = d;
-        *(short *)(q + 0x1A) = k;
-        qcopy(q, dir);
+        particle[1] = 0;
+        *(float *)(particle + 0xC) = f;
+        particle[3] = 0x48;
+        particle[9] = v;
+        particle[8] = rand();
+        particle_data = particle + 0x20;
+        particle[2] = *D_L00_001B20D4;
+        *(short *)(particle + 0xA) = lifetime;
+        *(short *)(particle_data + 0x18) = lifetime;
+        *(float *)(particle_data + 0x1C) = f;
+        *(int *)(particle_data + 0x10) = initial_color;
+        *(int *)(particle_data + 0x14) = final_color;
+        *(short *)(particle_data + 0x1A) = k;
+        qcopy(particle_data, dir);
     }
-    return p;
+    return particle;
 }
 typedef struct {
     f32 v[4];
