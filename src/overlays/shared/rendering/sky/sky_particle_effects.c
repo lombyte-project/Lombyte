@@ -101,30 +101,30 @@ void sky_particles_update(void) __asm__("FUN_L00_00289108");
 void sky_particles_update(void) {
     int i;
     for (i = 0; i < D_L00_0016051C_289108->n; i++) {
-        E_289108 *e = &D_L00_0016051C_289108->list[i];
-        if (e->b0 == 0) {
-            unsigned short *h = &e->hC;
-            float a, b;
-            e->hC++;
-            h[1]++;
-            a = convert_integer_to_float((e->hC & 0xFFF) - 0x800) * 0.0015339808f;
-            b = convert_integer_to_float((h[1] & 0xFFF) - 0x800) * 0.0015339808f;
-            e->f10 = fast_cos(a) * fast_sin(b) * 50.0f;
-            e->f14 = fast_sin(a) * fast_sin(b) * 50.0f;
-            e->f18 = absolute_float(fast_cos(b)) * 50.0f;
-            if ((e->hC & 0x3F) < 8) {
-                e->w4 = 0x702020F0;
+        E_289108 *particle = &D_L00_0016051C_289108->list[i];
+        if (particle->b0 == 0) {
+            unsigned short *phase_halves = &particle->hC;
+            float azimuth_radians, b;
+            particle->hC++;
+            phase_halves[1]++;
+            azimuth_radians = convert_integer_to_float((particle->hC & 0xFFF) - 0x800) * 0.0015339808f;
+            b = convert_integer_to_float((phase_halves[1] & 0xFFF) - 0x800) * 0.0015339808f;
+            particle->f10 = fast_cos(azimuth_radians) * fast_sin(b) * 50.0f;
+            particle->f14 = fast_sin(azimuth_radians) * fast_sin(b) * 50.0f;
+            particle->f18 = absolute_float(fast_cos(b)) * 50.0f;
+            if ((particle->hC & 0x3F) < 8) {
+                particle->w4 = 0x702020F0;
             } else {
-                e->w4 = 0x202020F0;
+                particle->w4 = 0x202020F0;
             }
-        } else if (e->b0 == 1) {
+        } else if (particle->b0 == 1) {
             int r = rand() >> 16;
             int t = ((r & 0x1F00) << 10) - 0x202020;
-            int c = *(int *)&e->hC;
+            int c = *(int *)&particle->hC;
             c += t;
             c += (r & 0x1F0) << 6;
             c += (r & 0x1F) << 2;
-            e->w4 = c;
+            particle->w4 = c;
         }
     }
 }
