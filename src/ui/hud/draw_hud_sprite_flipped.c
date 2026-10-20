@@ -8,7 +8,7 @@ extern u64 get_frame_texture(s32) __asm__("func_001FFA10");
 
 void draw_hud_sprite_flipped(s32 id, s32 x, s32 y, s32 w, s32 h, s32 alpha) __asm__("FUN_001ffe18");
 
-void draw_hud_sprite_flipped(s32 id, s32 x, s32 y, s32 w, s32 h, s32 alpha) {
+void draw_hud_sprite_flipped(s32 id, s32 x, s32 y, s32 w, s32 sprite_height, s32 alpha) {
     struct HudTexPage *image_page;
     struct DmaTag *tag;
     u64 *packet_words;
@@ -31,14 +31,14 @@ void draw_hud_sprite_flipped(s32 id, s32 x, s32 y, s32 w, s32 h, s32 alpha) {
     packet_words[3] = 0x154;
     packet_words[4] = ((u64)alpha << 24) | 0x7F7F7F;
     packet_words[5] = tw << 4;
-    packet_words[6] = (((x << 4) + screen_extent.left) - 8) | ((u64)((((y + h) << 4) + screen_extent.top) - 8) << 16) |
+    packet_words[6] = (((x << 4) + screen_extent.left) - 8) | ((u64)((((y + sprite_height) << 4) + screen_extent.top) - 8) << 16) |
            ((u64)hud_state.z << 32);
     packet_words[7] = (th << 20) + (tw << 4);
     packet_words[8] = (((x << 4) + screen_extent.left) - 8) | ((u64)(((y << 4) + screen_extent.top) - 8) << 16) |
            ((u64)hud_state.z << 32);
     packet_words[9] = 0;
     packet_words[10] = ((((x + w) << 4) + screen_extent.left) - 8) |
-            ((u64)((((y + h) << 4) + screen_extent.top) - 8) << 16) | ((u64)hud_state.z << 32);
+            ((u64)((((y + sprite_height) << 4) + screen_extent.top) - 8) << 16) | ((u64)hud_state.z << 32);
     packet_words[11] = th << 20;
     packet_words[12] = ((((x + w) << 4) + screen_extent.left) - 8) | ((u64)(((y << 4) + screen_extent.top) - 8) << 16) |
             ((u64)hud_state.z << 32);
