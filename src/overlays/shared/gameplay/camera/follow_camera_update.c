@@ -161,36 +161,36 @@ extern float D_L00_00161CEC __attribute__((sda));
 extern float D_L00_00161CF0 __attribute__((sda));
 extern float D_L00_00161D14 __attribute__((sda));
 extern float D_L00_00161D18 __attribute__((sda));
-void follow_camera_pull_back(char *o, float *x, float *y) {
+void follow_camera_pull_back(char *camera_object, float *x, float *y) {
     C_2e9518 *C = &D_166E10_2e9518;
-    char *v = *(char **)(o + 0x70);
-    S_2e9518 *s = (S_2e9518 *)(v + 0x220);
+    char *v = *(char **)(camera_object + 0x70);
+    S_2e9518 *pull_back_state = (S_2e9518 *)(v + 0x220);
     char *t = v + 0x130;
-    float k, e, f;
+    float k, pull_back_target, interpolated_pull_back_value;
 
-    if (s->h6 == 0) {
-        if (s->h4 != 0 && C->fA4 == 0.0f && dot_2e9518(D_001413D0_2e9518 + 0xC0, o) <= -0.3f) {
+    if (pull_back_state->h6 == 0) {
+        if (pull_back_state->h4 != 0 && C->fA4 == 0.0f && dot_2e9518(D_001413D0_2e9518 + 0xC0, camera_object) <= -0.3f) {
             goto on;
         }
-        if (0.0001f < fabs_2e9518(C->fA4) && dot_2e9518(C->v80, o) <= -0.3f) {
+        if (0.0001f < fabs_2e9518(C->fA4) && dot_2e9518(C->v80, camera_object) <= -0.3f) {
         on:
-            s->h4 = fr_2e9518(0x78);
+            pull_back_state->h4 = fr_2e9518(0x78);
             k = C->fA4 * 14.2857f;
             if (1.0f < k)
                 k = 1.0f;
-            e = D_001413F4_2e9518 == 1 ? 4.0f : s->fC;
-            f = *(float *)(t + 0x58) + (e - *(float *)(t + 0x58)) * k;
-            if (s->f8 < f)
-                s->f8 = f;
-            pitch_s(0, s->f8, 0.003f);
+            pull_back_target = D_001413F4_2e9518 == 1 ? 4.0f : pull_back_state->fC;
+            interpolated_pull_back_value = *(float *)(t + 0x58) + (pull_back_target - *(float *)(t + 0x58)) * k;
+            if (pull_back_state->f8 < interpolated_pull_back_value)
+                pull_back_state->f8 = interpolated_pull_back_value;
+            pitch_s(0, pull_back_state->f8, 0.003f);
             *x = D_L00_00161CEC + (D_L00_00161D14 - D_L00_00161CEC) * k;
             *y = D_L00_00161CF0 + (D_L00_00161D18 - D_L00_00161CF0) * k;
             return;
         }
     }
-    if (s->h4 != 0) {
-        s->h4 = 0;
-        s->f8 = *(float *)(t + 0x58);
+    if (pull_back_state->h4 != 0) {
+        pull_back_state->h4 = 0;
+        pull_back_state->f8 = *(float *)(t + 0x58);
     }
     *x = D_L00_00161CEC;
     *y = D_L00_00161CF0;
