@@ -616,7 +616,7 @@ void FUN_L08_002d4108(char *arg) {
     Pk_002d4108 pk;
     float up[4];
     float M[4][4];
-    float t[4];
+    float position_offset[4];
     s32 i;
     OvlQuad z = 0;
     u32 col;
@@ -642,8 +642,8 @@ void FUN_L08_002d4108(char *arg) {
     fast_vec_cross(M[1], M[0], up);
     fast_vec_normalize(M[1], M[1], 1.0f);
     fast_vec_cross(M[2], M[1], M[0]);
-    fast_vec_scale(t, M[0], D_L08_00161898);
-    fast_vec_add(M[3], M[3], t);
+    fast_vec_scale(position_offset, M[0], D_L08_00161898);
+    fast_vec_add(M[3], M[3], position_offset);
     col = (*(u32 *)(arg + 0x90) & 0xFFFFFF) | 0x40000000;
     pk.col[3] = col;
     pk.col[2] = col;
