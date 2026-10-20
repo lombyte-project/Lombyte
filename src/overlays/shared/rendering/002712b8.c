@@ -1242,33 +1242,33 @@ extern int FUN_001fa6d0_2741a0(float) __asm__("FUN_001fa6d0");
 extern float FUN_002132a8_2741a0(float, float) __asm__("FUN_002132a8");
 
 extern unsigned char *D_L00_001B2188 __attribute__((section(".data")));
-unsigned char *FUN_L00_002741a0(void *a, int color, float s, float z) {
-    unsigned char *m = p27fe00_alloc(0x42);
-    if (m) {
-        float *q;
+unsigned char *FUN_L00_002741a0(void *position, int color, float size_scale, float z) {
+    unsigned char *particle = p27fe00_alloc(0x42);
+    if (particle) {
+        float *particle_data;
         float ang, r;
-        qcopy(m + 0x10, a);
-        *(int *)(m + 4) = color == -1 ? ((FUN_00213260_2741a0(6) + 0x14) << 24) | 0x808080 : color;
-        m[9] = FUN_001fa6d0_2741a0(2.0f) + 0x20;
-        m[3] = 0x48;
-        m[1] = 1;
+        qcopy(particle + 0x10, position);
+        *(int *)(particle + 4) = color == -1 ? ((FUN_00213260_2741a0(6) + 0x14) << 24) | 0x808080 : color;
+        particle[9] = FUN_001fa6d0_2741a0(2.0f) + 0x20;
+        particle[3] = 0x48;
+        particle[1] = 1;
         if (FUN_00213260_2741a0(0x100) & 1) {
-            m[2] = D_L00_001B2188[0];
+            particle[2] = D_L00_001B2188[0];
         } else {
-            m[2] = D_L00_001B2188[1];
+            particle[2] = D_L00_001B2188[1];
         }
-        m[8] = rand_e50();
-        q = (float *)(m + 0x20);
-        *(s16 *)(m + 0xA) = 4;
-        *(float *)(m + 0xC) = s * 210000.0f;
+        particle[8] = rand_e50();
+        particle_data = (float *)(particle + 0x20);
+        *(s16 *)(particle + 0xA) = 4;
+        *(float *)(particle + 0xC) = size_scale * 210000.0f;
         ang = random_angle_radians();
         r = FUN_002132a8_2741a0(0.0015f, 0.0025f);
-        q[0] = fast_cos(ang) * r;
-        q[1] = fast_sin(ang) * r;
-        q[4] = z;
-        q[2] = 0;
+        particle_data[0] = fast_cos(ang) * r;
+        particle_data[1] = fast_sin(ang) * r;
+        particle_data[4] = z;
+        particle_data[2] = 0;
     }
-    return m;
+    return particle;
 }
 #define NOT_SDA
 
