@@ -390,15 +390,15 @@ void FUN_L01_0028b8c8(void *out, int *l, int idx, float a, float b) {
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 
-void FUN_L01_0028ba80(float t, void *out, void *start_point, void *end_point, void *start_tangent, void *end_tangent) {
+void FUN_L01_0028ba80(float segment_parameter, void *out, void *start_point, void *end_point, void *start_tangent, void *end_tangent) {
     char weighted_vector[16];
-    float t_squared = t * t;
-    float t_cubed = t_squared * t;
+    float t_squared = segment_parameter * segment_parameter;
+    float t_cubed = t_squared * segment_parameter;
     float b = t_squared * 3.0f;
     float twice_t_cubed = t_cubed + t_cubed;
     float twice_t_squared = t_squared + t_squared;
     fast_vec_scale(out, start_point, twice_t_cubed - b + 1.0f);
-    fast_vec_scale(weighted_vector, start_tangent, t_cubed - twice_t_squared + t);
+    fast_vec_scale(weighted_vector, start_tangent, t_cubed - twice_t_squared + segment_parameter);
     fast_vec_add(out, out, weighted_vector);
     fast_vec_scale(weighted_vector, end_tangent, t_cubed - t_squared);
     fast_vec_add(out, out, weighted_vector);
