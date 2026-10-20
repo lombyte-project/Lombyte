@@ -539,7 +539,7 @@ void spawn_explosion(char *owner_moby, void *unused, char *pos, float fA, float 
     Q_25e450 effect_vector_work;
     float dist;
     float f3;
-    float t;
+    float proximity_speed_reduction;
     int cnt4;
     int i;
 
@@ -619,8 +619,8 @@ void spawn_explosion(char *owner_moby, void *unused, char *pos, float fA, float 
     } else {
         cnt4 = k8;
     }
-    t = 0.0f;
-    if (dist < 7.0f) t = 7.0f - dist;
+    proximity_speed_reduction = 0.0f;
+    if (dist < 7.0f) proximity_speed_reduction = 7.0f - dist;
     {
     int i;
     for (i = 0; i < cnt4; i++) {
@@ -630,7 +630,7 @@ void spawn_explosion(char *owner_moby, void *unused, char *pos, float fA, float 
         sp = random_float_between_25e450(8.0f, 10.0f) * frame_time_macro;
         c0 = D_L00_001E9030_25e450;
         c1 = D_L00_001E9048_25e450;
-        sp = sp - t * frame_time_macro;
+        sp = sp - proximity_speed_reduction * frame_time_macro;
         sp = sp * fF;
         func_L00_0026B890_25e450(pos, &vb, func_L00_0025D140_25e450(c0.v[random_integer_below_25e450(6)], flag),
             func_L00_0025D140_25e450(c1.v[random_integer_below_25e450(6)], flag), fF * 400000.0f,
