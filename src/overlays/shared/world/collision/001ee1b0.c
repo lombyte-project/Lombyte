@@ -75,22 +75,22 @@ int FUN_L00_001ee318(V_1ee318 *pt, int *vol, float rad) {
         VOLUME_TYPE_CYLINDER = 6,
         VOLUME_TYPE_CYLINDER_WITH_ENDPOINT_SPHERES = 7
     };
-    V_1ee318 p;
+    V_1ee318 query_point;
     V_1ee318 c;
-    V_1ee318 d;
+    V_1ee318 volume_delta;
     V_1ee318 l;
     int r;
 
-    p.q = pt->q;
-    pt = &p;
+    query_point.q = pt->q;
+    pt = &query_point;
     switch (vol[4]) {
     case VOLUME_TYPE_BOX: {
         unsigned char *e;
         e = D_L00_001600EC_1ee318;
         e += vol[5] << 7;
-        FUN_001f9a28_1ee318(&d, pt, e + 0x30);
-        d.i[3] = 0;
-        FUN_001f9cf8_1ee318(&l, &d, e + 0x40);
+        FUN_001f9a28_1ee318(&volume_delta, pt, e + 0x30);
+        volume_delta.i[3] = 0;
+        FUN_001f9cf8_1ee318(&l, &volume_delta, e + 0x40);
         return -1.0f <= l.f[0] && l.f[0] <= 1.0f && -1.0f <= l.f[1] && l.f[1] <= 1.0f &&
                -1.0f <= l.f[2] && l.f[2] <= 1.0f;
     }
@@ -99,9 +99,9 @@ int FUN_L00_001ee318(V_1ee318 *pt, int *vol, float rad) {
         e = D_L00_001600FC_1ee318;
         e += vol[5] << 7;
         r = 0;
-        FUN_001f9a28_1ee318(&d, pt, e + 0x30);
-        d.i[3] = 0;
-        FUN_001f9cf8_1ee318(&l, &d, e + 0x40);
+        FUN_001f9a28_1ee318(&volume_delta, pt, e + 0x30);
+        volume_delta.i[3] = 0;
+        FUN_001f9cf8_1ee318(&l, &volume_delta, e + 0x40);
         if (FUN_001f9b20_1ee318(&l) < 1.0f && -1.0f <= l.f[2] && l.f[2] <= 1.0f) {
             r = 1;
         }
@@ -112,16 +112,16 @@ int FUN_L00_001ee318(V_1ee318 *pt, int *vol, float rad) {
         e = D_L00_001600F4_1ee318;
         e += vol[5] << 7;
         {
-            float s = FUN_001f9af0_1ee318(e) + rad;
-            return FUN_001f9b48_1ee318(pt, e + 0x30) < s;
+            float expanded_radius = FUN_001f9af0_1ee318(e) + rad;
+            return FUN_001f9b48_1ee318(pt, e + 0x30) < expanded_radius;
         }
     }
     case VOLUME_TYPE_CYLINDER_WITH_ENDPOINT_SPHERES: {
         unsigned char *e;
         e = D_L00_001600E4 + vol[5] * 0x90;
-        FUN_001f9a28_1ee318(&d, pt, e + 0x30);
-        d.i[3] = 0;
-        FUN_001f9cf8_1ee318(&l, &d, e + 0x40);
+        FUN_001f9a28_1ee318(&volume_delta, pt, e + 0x30);
+        volume_delta.i[3] = 0;
+        FUN_001f9cf8_1ee318(&l, &volume_delta, e + 0x40);
         if (FUN_001f9b20_1ee318(&l) < 1.0f && -1.0f <= l.f[2] && l.f[2] <= 1.0f) {
             return 1;
         }
