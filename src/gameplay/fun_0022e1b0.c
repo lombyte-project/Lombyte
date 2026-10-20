@@ -19,7 +19,7 @@ int FUN_00213260_28efc8(int) __asm__("FUN_00213260");
 float FUN_001fa6c0_28efc8(int) __asm__("func_001FA6C0");
 void FUN_L00_001fd228_28efc8(void *, void *, int) __asm__("func_001F7D30");
 extern int D_001604C0[1] __attribute__((sda));
-void FUN_0022e1b0(unsigned char *m) {
+void FUN_0022e1b0(unsigned char *quad_source) {
     struct GeometryQuad quad;
     QuadOffset v;
     QuadOffset *tbl;
@@ -35,15 +35,15 @@ void FUN_0022e1b0(unsigned char *m) {
         quad.texture_coordinates[j][0] = quad_uvs[j][0];
         quad.texture_coordinates[j][1] = quad_uvs[j][1];
     }
-    FUN_001f9a68_28efc8(0.0009765625f, &v, m);
+    FUN_001f9a68_28efc8(0.0009765625f, &v, quad_source);
     for (i = 0; i < D_001604C0[level_render_state.content_variant]; i++) {
-        int quad_alpha = m[0xBC];
+        int quad_alpha = quad_source[0xBC];
         unsigned int col;
         float quad_scale;
-        if (*(short *)(m + 0xB2)) quad_alpha += FUN_00213260_28efc8(*(short *)(m + 0xB2));
+        if (*(short *)(quad_source + 0xB2)) quad_alpha += FUN_00213260_28efc8(*(short *)(quad_source + 0xB2));
         quad_scale = FUN_001fa6c0_28efc8(quad_alpha) * (tbl[i].f[3] / 40.0f);
         col = (quad_alpha << 24) | 0x2058B0;
-        if (*(short *)(m + 0xA6) == 0x215) col = (quad_alpha << 24) | 0x308000;
+        if (*(short *)(quad_source + 0xA6) == 0x215) col = (quad_alpha << 24) | 0x308000;
         for (k = 0; k < 4; k++) {
             quad.colors[k] = col;
             FUN_001f9a68_28efc8(quad_scale, &quad.positions[k], &quad_corners[k]);
