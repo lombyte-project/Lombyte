@@ -1609,11 +1609,11 @@ void floating_platform_update(struct Moby *moby) {
     update_entity_matrix(data + 0x20, delta, old_rot, &moby->rot);
 }
 /* Starts the moby's next phase with the given pair if it is waiting. */
-int FUN_L18_002d8888(struct Moby *arg, int a, int b) {
+int FUN_L18_002d8888(struct Moby *arg, int tilt_delay_frames, int b) {
     int *data = (int *)arg->pvars;
     if (arg->state == 1) {
         arg->state = 3;
-        data[0x7C / 4] = a;
+        data[0x7C / 4] = tilt_delay_frames;
         data[0x78 / 4] = b;
         return 1;
     }
