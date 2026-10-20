@@ -285,7 +285,7 @@ extern f32 FUN_001f99c0_215b68(f32) __asm__("FUN_001f99c0");
 #define X D_L00_0017A680_215b68
 
 void FUN_L00_00215b68(void) {
-    f32 t, r, n, v, clamp_bound, u, unclamped_f1240, b, unclamped_f1194;
+    f32 t, r, n, v, clamp_bound, u, unclamped_negated_value, b, unclamped_magnitude;
     s32 st;
 
     if (hero.state.current == 0x44) {
@@ -315,11 +315,11 @@ void FUN_L00_00215b68(void) {
             t = 1.25f;
         else if (t < -1.25f)
             t = -1.25f;
-        unclamped_f1240 = -t * 0.52f;
-        X.f1240 = unclamped_f1240;
-        if (0.28f < unclamped_f1240)
+        unclamped_negated_value = -t * 0.52f;
+        X.f1240 = unclamped_negated_value;
+        if (0.28f < unclamped_negated_value)
             X.f1240 = 0.28f;
-        else if (unclamped_f1240 < -0.28f)
+        else if (unclamped_negated_value < -0.28f)
             X.f1240 = -0.28f;
         b = t * 1.7f;
         X.f1198 = b;
@@ -328,13 +328,13 @@ void FUN_L00_00215b68(void) {
             X.f1198 = 0.7f;
         else if (b < -0.7f)
             X.f1198 = -0.7f;
-        unclamped_f1194 = FUN_001f99c0_215b68(t) * 0.2f;
-        X.f1194 = unclamped_f1194;
+        unclamped_magnitude = FUN_001f99c0_215b68(t) * 0.2f;
+        X.f1194 = unclamped_magnitude;
         clamp_bound = 0.2f;
-        if (clamp_bound < unclamped_f1194)
+        if (clamp_bound < unclamped_magnitude)
             goto st94;
         clamp_bound = -0.2f;
-        if (unclamped_f1194 < clamp_bound) {
+        if (unclamped_magnitude < clamp_bound) {
         st94:
             X.f1194 = clamp_bound;
         }
