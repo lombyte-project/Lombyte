@@ -60,43 +60,43 @@ extern void FUN_L00_001ff318_271450(void *, void *, float) __asm__("FUN_L00_001f
 extern void FUN_L00_001ff290_271450(void *, void *, void *) __asm__("FUN_L00_001ff290");
 extern void FUN_001f9a68_271450(void *, void *, float) __asm__("FUN_001f9a68");
 
-void FUN_L00_00271450(unsigned char *p) {
+void FUN_L00_00271450(unsigned char *particle) {
     float v[4];
     OvlQuad t[1];
     OvlQuad m[1];
-    unsigned char *q;
+    unsigned char *particle_data;
     unsigned char *r;
-    float a;
+    float initial_alpha;
     int w;
 
-    if (fast_dec_timer(p + 0xA)) {
-        free_effect_particle(p);
+    if (fast_dec_timer(particle + 0xA)) {
+        free_effect_particle(particle);
     } else {
-        q = p + 0x20;
-        r = p + 0x10;
-        a = FUN_001fa6c0_271450(*(short *)(q + 0x1E));
+        particle_data = particle + 0x20;
+        r = particle + 0x10;
+        initial_alpha = FUN_001fa6c0_271450(*(short *)(particle_data + 0x1E));
         w = FUN_001fa6d0_271450(
-            a * ((float)*(short *)(p + 0xA) / FUN_001fa6c0_271450(*(short *)(q + 0x1C))));
-        w = (w << 24) | (q[0x13] << 16);
-        w |= q[0x12] << 8;
-        w |= q[0x11];
-        *(int *)(p + 4) = w;
-        v[0] = *(float *)(p + 0x20);
-        v[1] = *(float *)(q + 4);
-        v[2] = *(float *)(q + 8);
+            initial_alpha * ((float)*(short *)(particle + 0xA) / FUN_001fa6c0_271450(*(short *)(particle_data + 0x1C))));
+        w = (w << 24) | (particle_data[0x13] << 16);
+        w |= particle_data[0x12] << 8;
+        w |= particle_data[0x11];
+        *(int *)(particle + 4) = w;
+        v[0] = *(float *)(particle + 0x20);
+        v[1] = *(float *)(particle_data + 4);
+        v[2] = *(float *)(particle_data + 8);
         *(int *)&v[3] = 0;
         FUN_001f9a10_271450(r, r, v);
         t[0] = *(OvlQuad *)(&hero.motion.platform_carry);
-        FUN_L00_001ff318_271450(m, t, *(float *)(p + 0x1C));
+        FUN_L00_001ff318_271450(m, t, *(float *)(particle + 0x1C));
         FUN_L00_001ff290_271450(m, r, t);
-        FUN_001f9a68_271450(m, &hero.gravity_dir, *(float *)(q + 0xC));
+        FUN_001f9a68_271450(m, &hero.gravity_dir, *(float *)(particle_data + 0xC));
         FUN_001f9a10_271450(v, v, m);
-        FUN_001f9a68_271450(v, v, *(float *)(q + 0x18));
-        *(float *)(p + 0x20) = v[0];
-        *(float *)(q + 4) = v[1];
-        *(float *)(q + 8) = v[2];
-        p[8] += q[0x10];
-        *(float *)(p + 0xC) += *(float *)(q + 0x14);
+        FUN_001f9a68_271450(v, v, *(float *)(particle_data + 0x18));
+        *(float *)(particle + 0x20) = v[0];
+        *(float *)(particle_data + 4) = v[1];
+        *(float *)(particle_data + 8) = v[2];
+        particle[8] += particle_data[0x10];
+        *(float *)(particle + 0xC) += *(float *)(particle_data + 0x14);
     }
 }
 #include "qcopy.h"
