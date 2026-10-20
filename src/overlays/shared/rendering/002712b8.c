@@ -350,21 +350,21 @@ void FUN_L00_001ff318(V *, V *, f32);
 void FUN_L00_001ff290(V *, V *, V *);
 s32 fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 void free_effect_particle(void *) __asm__("FUN_L00_00267a08");
-void FUN_L00_00271ec8(u8 *m) {
+void FUN_L00_00271ec8(u8 *particle) {
     V t;
-    V *v = (V *)(m + 0x20);
+    V *v = (V *)(particle + 0x20);
     u32 c;
     FUN_L00_001ff318(&t, v, 0.95f);
     v->z += frame_time_sq * 5.0f;
-    FUN_L00_001ff290(&t, (V *)(m + 0x10), v);
-    c = *(u32 *)(m + 4) + 0xFE000000;
-    *(u32 *)(m + 4) = c;
-    if ((c & 0xFF000000) - 1 > 0x5EFFFFFF || fast_dec_timer_s16(m + 0xA) != 0) {
-        free_effect_particle(m);
+    FUN_L00_001ff290(&t, (V *)(particle + 0x10), v);
+    c = *(u32 *)(particle + 4) + 0xFE000000;
+    *(u32 *)(particle + 4) = c;
+    if ((c & 0xFF000000) - 1 > 0x5EFFFFFF || fast_dec_timer_s16(particle + 0xA) != 0) {
+        free_effect_particle(particle);
     } else {
-        f32 f = *(f32 *)(m + 0xC);
-        m[8]++;
-        *(f32 *)(m + 0xC) = f + (210000.0f - f) * 0.07f;
+        f32 current_size = *(f32 *)(particle + 0xC);
+        particle[8]++;
+        *(f32 *)(particle + 0xC) = current_size + (210000.0f - current_size) * 0.07f;
     }
 }
 #define NOT_SDA
