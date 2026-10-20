@@ -65,19 +65,19 @@ void start_camera_blend(void *arg) {
     D_001871B0_h = 3;
     *(unsigned char *)(r + 2) = r[3];
     if (*(unsigned char *)(r + 2) == 0) {
-        char *a = r + 0x10;
+        char *primary_transition_state = r + 0x10;
 
-        *(float *)(a + 0x10) = *(float *)(a + 0x14);
-        *(int *)(a + 0xC) = 0;
+        *(float *)(primary_transition_state + 0x10) = *(float *)(primary_transition_state + 0x14);
+        *(int *)(primary_transition_state + 0xC) = 0;
         qcopy(r + 0x40, r + 0x50);
-        *(float *)(a + 0x0) = 0;
-        *(float *)(a + 0x4) = *(float *)(a + 0x8);
+        *(float *)(primary_transition_state + 0x0) = 0;
+        *(float *)(primary_transition_state + 0x4) = *(float *)(primary_transition_state + 0x8);
         qcopy(r + 0x30, r + 0x60);
     } else {
         char *b = r + 0x70;
-        int n = ++*(int *)(b + 0x14);
+        int configured_frame_count = ++*(int *)(b + 0x14);
 
-        *(int *)(b + 0xC) = scale_game_frames(n);
+        *(int *)(b + 0xC) = scale_game_frames(configured_frame_count);
         *(float *)(b + 0x10) = 1.0f / convert_integer_to_float(*(int *)(b + 0xC));
     }
 }
