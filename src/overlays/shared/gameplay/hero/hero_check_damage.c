@@ -3807,15 +3807,15 @@ void FUN_L00_00213880(void)
 
 /* Scales four vectors and one float of the hero by s. */
 void FUN_L00_00213de8(float scale_factor) {
-    char *p = D_0013E533_lui + 0xF1D;
-    float *f;
+    char *movement_vector_base = D_0013E533_lui + 0xF1D;
+    float *hero_float_base;
 
-    fast_vec_scale(p, p, scale_factor);
-    fast_vec_scale(p + 0x10, p + 0x10, scale_factor);
-    fast_vec_scale(p - 0x20, p - 0x20, scale_factor);
-    fast_vec_scale(p + 0x50, p + 0x50, scale_factor);
-    f = (float *)(p - 0x100);
-    f[0x194 / 4] = f[0x194 / 4] * scale_factor;
+    fast_vec_scale(movement_vector_base, movement_vector_base, scale_factor);
+    fast_vec_scale(movement_vector_base + 0x10, movement_vector_base + 0x10, scale_factor);
+    fast_vec_scale(movement_vector_base - 0x20, movement_vector_base - 0x20, scale_factor);
+    fast_vec_scale(movement_vector_base + 0x50, movement_vector_base + 0x50, scale_factor);
+    hero_float_base = (float *)(movement_vector_base - 0x100);
+    hero_float_base[0x194 / 4] = hero_float_base[0x194 / 4] * scale_factor;
 }
 /* Ported from rac1-decomp (src/overlays/shared/help_0020CDF0.c: func_L00_00214520). */
 #define HERO_OF(v) ((struct Hero *)((char *)(v) - 0xE0))
