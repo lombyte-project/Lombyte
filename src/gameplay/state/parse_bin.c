@@ -18,34 +18,34 @@ s64 parse_bin(void) __asm__("FUN_0012d8f8");
    bottom with the entry jump. Returns the id of the first chunk that
    differs. */
 s64 parse_bin(void) {
-    u8 *p;
-    struct Chunk *c;
+    u8 *chunk_cursor;
+    struct Chunk *chunk;
     u8 *dst;
     u8 *src;
     s64 id;
 
     id = 0;
-    p = (u8 *)(level_root[0] + (s32)level_root);
-    while (c = (struct Chunk *)p, p = (u8 *)(c + 1), dst = c->dst, src = p,
-           (id == 0) ? (id = c->id, 1) : (id == c->id)) {
-        if (((c->size & 7) == 0) && (((u32)p & 7) == 0) && (((u32)dst & 7) == 0)) {
+    chunk_cursor = (u8 *)(level_root[0] + (s32)level_root);
+    while (chunk = (struct Chunk *)chunk_cursor, chunk_cursor = (u8 *)(chunk + 1), dst = chunk->dst, src = chunk_cursor,
+           (id == 0) ? (id = chunk->id, 1) : (id == chunk->id)) {
+        if (((chunk->size & 7) == 0) && (((u32)chunk_cursor & 7) == 0) && (((u32)dst & 7) == 0)) {
             u8 *d = dst;
-            u8 *s = p;
-            u8 *e = dst + c->size;
+            u8 *s = chunk_cursor;
+            u8 *e = dst + chunk->size;
             while (d != e) {
                 *(u64 *)d = *(u64 *)s;
                 d += 8;
                 s += 8;
             }
         } else {
-            u8 *e = dst + c->size;
+            u8 *e = dst + chunk->size;
             while (dst != e) {
                 *(u32 *)dst = *(u32 *)src;
                 dst += 4;
                 src += 4;
             }
         }
-        p += c->size;
+        chunk_cursor += chunk->size;
     }
     return id;
 }
