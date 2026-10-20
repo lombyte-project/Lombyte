@@ -961,16 +961,16 @@ extern int *D_L16_001ABFC0_c9a50[] __asm__("D_L16_001ABCC0");
 extern char *D_L16_00160098_c9a50 __asm__("D_L16_0015FFD8");
 extern char D_L16_001671C0[];
 extern char D_0013E633_c9a50[] __asm__("D_0013E550");
-void FUN_L16_002c9a50(struct Moby *m) {
-    short *p = (short *)D_L16_001ABFC0_c9a50[m->group];
-    char *d = (char *)m->pvars;
+void FUN_L16_002c9a50(struct Moby *moby) {
+    short *group_entry = (short *)D_L16_001ABFC0_c9a50[moby->group];
+    char *moby_data = (char *)moby->pvars;
     char *nearest = 0;
     float best = 1024.0f;
     float v[4];
-    if (p == 0)
+    if (group_entry == 0)
         return;
     do {
-        char *other = D_L16_00160098_c9a50 + (((unsigned short)*p & 0x7FFF) << 8);
+        char *other = D_L16_00160098_c9a50 + (((unsigned short)*group_entry & 0x7FFF) << 8);
         if (*(short *)(other + 0xA6) == 0x1D7) {
             float dist = func_001F9D10_c9a50(D_L16_001671C0, other + 0x10);
             if (dist < best) {
@@ -978,9 +978,9 @@ void FUN_L16_002c9a50(struct Moby *m) {
                 best = dist;
             }
         }
-    } while (*p++ >= 0);
+    } while (*group_entry++ >= 0);
     if (func_001F9D10_c9a50(nearest + 0x10, D_L16_001671C0) < 64.0f) {
-        int idx = *(int *)(d + 0x74);
+        int idx = *(int *)(moby_data + 0x74);
         char *slot;
         if (idx >= 0) {
             char *target;
@@ -988,17 +988,17 @@ void FUN_L16_002c9a50(struct Moby *m) {
             target = *(char **)(slot + 0x88);
             if (target && *(short *)(target + 0xA6) == 0x1D7) {
                 func_L00_001FF4B0_c9a50(v, nearest + 0xE0, 2.5f);
-                func_001F9BD8_c9a50(D_0013E633_c9a50 + 0x90 + *(int *)(d + 0x74) * 0x70, v,
+                func_001F9BD8_c9a50(D_0013E633_c9a50 + 0x90 + *(int *)(moby_data + 0x74) * 0x70, v,
                                     nearest + 0x10);
-                *(char **)(D_0013E633_c9a50 + 0x88 + *(int *)(d + 0x74) * 0x70) = nearest;
+                *(char **)(D_0013E633_c9a50 + 0x88 + *(int *)(moby_data + 0x74) * 0x70) = nearest;
                 return;
             }
         }
         idx = func_0022ED80_cae18_c9a50(0, 13, nearest);
-        *(int *)(d + 0x74) = idx;
+        *(int *)(moby_data + 0x74) = idx;
         if (idx >= 0) {
-            func_L00_001FF4B0_c9a50(v, &m->rot_row2, 2.5f);
-            func_001F9BD8_c9a50(D_0013E633_c9a50 + 0x90 + *(int *)(d + 0x74) * 0x70, v, &m->pos);
+            func_L00_001FF4B0_c9a50(v, &moby->rot_row2, 2.5f);
+            func_001F9BD8_c9a50(D_0013E633_c9a50 + 0x90 + *(int *)(moby_data + 0x74) * 0x70, v, &moby->pos);
         }
     }
 }
