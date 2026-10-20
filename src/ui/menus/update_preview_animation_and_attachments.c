@@ -4,9 +4,6 @@
 #include "asm.h"
 #include "rnc/ui/menus/item_preview/preview_animation.h"
 
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/expected/asm/assembly/textbin/ui/menus/update_preview_animation_and_attachments/FUN_00225e70.s", FUN_00225e70);
-#else
 #include "rnc/gameplay/entities/moby_class_tables.h"
 #include "types.h"
 #include "rnc/ui/menus/menu_system.h"
@@ -242,7 +239,7 @@ s32 update_preview_animation_and_attachments(Moby *source_moby, Moby *primary_it
                 (*attachment2)->flags = 0;
                 moby = *attachment2;
                 qcopy(&moby->position, &source_moby->position);
-                qcopy(&(*attachment2)->rotation, &source_moby->rotation);
+                qcopy(&moby->rotation, &source_moby->rotation);
                 if (moby->oclass == 0x4A) {
                     moby->scale *= 3.0f;
                 }
@@ -253,6 +250,7 @@ s32 update_preview_animation_and_attachments(Moby *source_moby, Moby *primary_it
     }
     return 0;
 }
-#endif /* NON_MATCHING */
 
 PreviewAnimationRequest active_preview_animation = {0};
+
+extern __typeof__(update_preview_animation_and_attachments) func_00225E70 __attribute__((alias("FUN_00225e70")));

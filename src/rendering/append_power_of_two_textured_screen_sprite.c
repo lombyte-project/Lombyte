@@ -1,10 +1,4 @@
 #include "types.h"
-#include "asm.h"
-
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/expected/asm/assembly/textbin/rendering/append_power_of_two_textured_screen_sprite/FUN_00200468.s", FUN_00200468);
-#else
-#include "types.h"
 #include "rnc/rendering/screen.h"
 
 struct SpritePacket {
@@ -38,17 +32,15 @@ void append_power_of_two_textured_screen_sprite(u64 tex0, s32 screen_x, s32 scre
                                                 s32 texture_width_log2, s32 texture_height_log2,
                                                 s32 screen_width, s32 screen_height, s32 texture_u,
                                                 s32 texture_v,
-                                                volatile s32 alpha) __asm__("FUN_00200468");
+                                                s32 alpha) __asm__("FUN_00200468");
 
 void append_power_of_two_textured_screen_sprite(u64 tex0, s32 screen_x, s32 screen_y,
                                                 s32 texture_width_log2, s32 texture_height_log2,
                                                 s32 screen_width, s32 screen_height, s32 texture_u,
-                                                s32 texture_v, volatile s32 alpha) {
+                                                s32 texture_v, s32 alpha) {
     struct SpritePacket *tag;
     u64 *packet_words;
     s64 packed_first_uv;
-    /* Keep the signed alpha in the upper word before packing it into RGBAQ. */
-    u64 color_alpha = (u64)(s64)alpha << 32;
 
     render_packet_cursor.p->dma_word0 = 0x10000005;
     render_packet_cursor.p->dma_addr = 0;
@@ -61,7 +53,7 @@ void append_power_of_two_textured_screen_sprite(u64 tex0, s32 screen_x, s32 scre
     tag->gif_tag = 0x7400000000008001;
     packet_words[1] = 0x5353106;
     packet_words[2] = tex0;
-    packet_words[4] = ((s64)color_alpha >> 8) | 0x7F7F7F;
+    packet_words[4] = ((s64)alpha << 24) | 0x7F7F7F;
     packet_words[3] = 0x156;
     packet_words[5] = packed_first_uv;
     packet_words[6] = (screen_x + screen_extent.left - 8) |
@@ -78,5 +70,3 @@ void append_power_of_two_textured_screen_sprite(u64 tex0, s32 screen_x, s32 scre
 
 extern __typeof__(append_power_of_two_textured_screen_sprite) func_00200468
     __attribute__((alias("FUN_00200468")));
-
-#endif /* NON_MATCHING */
