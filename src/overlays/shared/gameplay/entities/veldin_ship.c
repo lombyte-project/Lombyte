@@ -1365,8 +1365,8 @@ extern void func_L00_001FD1D8_2D3F40(void *, void *, int) __asm__("FUN_001f7d30"
 void FUN_L00_002d2a90(Moby_2D3F40 *moby) {
     Quad_2D3F40 q;
     Vu_2D3F40 tt[6];
-    Data_2D3F40 *d = moby->data;
-    float t, s, k;
+    Data_2D3F40 *trail_data = moby->data;
+    float t, unwrapped_phase, k;
     int col;
     int tex;
 
@@ -1380,28 +1380,28 @@ void FUN_L00_002d2a90(Moby_2D3F40 *moby) {
     q.uv[6] = q.uv[2] = 1.0f;
     q.uv[3] = q.uv[1] = 0.0f;
     q.uv[7] = q.uv[5] = 1.0f;
-    d->t = d->t + D_0015ED6C;
-    if (1.0f < d->t) {
-        d->t = d->t - 1.0f;
+    trail_data->t = trail_data->t + D_0015ED6C;
+    if (1.0f < trail_data->t) {
+        trail_data->t = trail_data->t - 1.0f;
     }
-    if (d->t > d->tmax) {
-        d->tmax = d->t;
+    if (trail_data->t > trail_data->tmax) {
+        trail_data->tmax = trail_data->t;
     }
-    t = d->t;
+    t = trail_data->t;
     tt[1].q = 0;
     tt[1].f[0] = 1.0f;
-    func_L00_001FF4B0_2D3F40(tt[0].f, d->dir, 1.0f);
+    func_L00_001FF4B0_2D3F40(tt[0].f, trail_data->dir, 1.0f);
     cross_vectors_xyz(tt[2].f, tt[0].f, tt[1].f);
     func_L00_001FF4B0_2D3F40(tt[2].f, tt[2].f, 1.0f);
     cross_vectors_xyz(tt[1].f, tt[0].f, tt[2].f);
     func_L00_001FF4B0_2D3F40(tt[1].f, tt[1].f, 1.0f);
-    for (s = d->t; d->t - 1.0f < s; s -= 0.1f) {
-        if (t <= d->tmax) {
+    for (unwrapped_phase = trail_data->t; trail_data->t - 1.0f < unwrapped_phase; unwrapped_phase -= 0.1f) {
+        if (t <= trail_data->tmax) {
             k = t * 0.5f + 0.23f;
             func_L00_001FF4B0_2D3F40(tt[3].f, tt[0].f, t);
             func_L00_001FF4B0_2D3F40(tt[4].f, tt[1].f, k);
             func_L00_001FF4B0_2D3F40(tt[5].f, tt[2].f, k);
-            fast_vec_sub(q.v[0], d->pos, tt[3].f);
+            fast_vec_sub(q.v[0], trail_data->pos, tt[3].f);
             qcopy(q.v[1], q.v[0]);
             qcopy(q.v[2], q.v[0]);
             qcopy(q.v[3], q.v[0]);
