@@ -1771,76 +1771,76 @@ typedef struct {
 /* Hit reaction: takes damage, flinches or dies (knocked away from the hero), then retargets. */
 void FUN_L02_002d85b8(void *arg) {
     char *moby = arg;
-    Vars85b8 *d = *(Vars85b8 **)(moby + 0x78);
-    char *h;
-    char *t;
+    Vars85b8 *moby_vars = *(Vars85b8 **)(moby + 0x78);
+    char *hit_record;
+    char *current_target;
     int target[20];
     int hit;
     float dmg;
 
     dmg = 0.0f;
-    h = find_moby_hit(moby, 0x330000, 0);
-    if (h != 0 && *(short *)(*(char **)(h + 0x20) + 0xA6) == 0x264) {
-        h = 0;
+    hit_record = find_moby_hit(moby, 0x330000, 0);
+    if (hit_record != 0 && *(short *)(*(char **)(hit_record + 0x20) + 0xA6) == 0x264) {
+        hit_record = 0;
     }
-    fun_00213928(moby, h, &d->hp, 0, &hit, &dmg, 0, 4);
+    fun_00213928(moby, hit_record, &moby_vars->hp, 0, &hit, &dmg, 0, 4);
     if (hit != 1 && ((unsigned char *)moby)[0x20] != 0x11) {
-        d->hp -= dmg;
-        d->i90 = trunc_d57f8(614.4f);
-        d->f98 = 0.6f;
-        if (0.0f < d->hp) {
+        moby_vars->hp -= dmg;
+        moby_vars->i90 = trunc_d57f8(614.4f);
+        moby_vars->f98 = 0.6f;
+        if (0.0f < moby_vars->hp) {
             if (dmg < 1.0f) {
-                d->flash = 100;
+                moby_vars->flash = 100;
             } else {
-                void *k = d->knock;
-                d->flash = 0x78;
-                d->f80 = D_L02_00161A84 * frame_time_sq;
-                d->f84 = D_L02_00161A78 * frame_time_sq;
-                d->f88 = D_L02_00161A6C * D_0015ED6C;
-                d->f8C = D_L02_00161A70 * D_0015ED6C;
-                d->fBC = D_L02_00161A9C * D_0015ED6C;
-                d->fA0 = 0.5f;
-                d->i94 = 25;
-                d->bAD = 0;
+                void *k = moby_vars->knock;
+                moby_vars->flash = 0x78;
+                moby_vars->f80 = D_L02_00161A84 * frame_time_sq;
+                moby_vars->f84 = D_L02_00161A78 * frame_time_sq;
+                moby_vars->f88 = D_L02_00161A6C * D_0015ED6C;
+                moby_vars->f8C = D_L02_00161A70 * D_0015ED6C;
+                moby_vars->fBC = D_L02_00161A9C * D_0015ED6C;
+                moby_vars->fA0 = 0.5f;
+                moby_vars->i94 = 25;
+                moby_vars->bAD = 0;
                 trooper_start_knockback(fast_arc_tan(*(float *)(moby + 0x10) - hero.motion.pos.f[0],
                                               *(float *)(moby + 0x14) - hero.motion.pos.f[1]),
                                  moby, k, 0xB, 1, 0);
-                d->fC0 = 6.5f;
-                d->fC4 = 11.0f;
+                moby_vars->fC0 = 6.5f;
+                moby_vars->fC4 = 11.0f;
                 moby[0x20] = 0x10;
             }
         } else {
-            void *k2 = d->knock;
-            d->f80 = D_L02_00161A84 * frame_time_sq;
-            d->f84 = D_L02_00161A74 * frame_time_sq;
-            d->f88 = D_L02_00161A64 * D_0015ED6C;
-            d->f8C = D_L02_00161A68 * D_0015ED6C;
-            d->fBC = D_L02_00161A9C * D_0015ED6C;
-            d->i94 = 9;
-            d->bAD = 0;
+            void *k2 = moby_vars->knock;
+            moby_vars->f80 = D_L02_00161A84 * frame_time_sq;
+            moby_vars->f84 = D_L02_00161A74 * frame_time_sq;
+            moby_vars->f88 = D_L02_00161A64 * D_0015ED6C;
+            moby_vars->f8C = D_L02_00161A68 * D_0015ED6C;
+            moby_vars->fBC = D_L02_00161A9C * D_0015ED6C;
+            moby_vars->i94 = 9;
+            moby_vars->bAD = 0;
             trooper_start_knockback(fast_arc_tan(*(float *)(moby + 0x10) - hero.motion.pos.f[0],
                                           *(float *)(moby + 0x14) - hero.motion.pos.f[1]),
                              moby, k2, 0xE, 1, 0);
-            d->fC0 = 6.5f;
-            d->fC4 = 13.0f;
+            moby_vars->fC0 = 6.5f;
+            moby_vars->fC4 = 13.0f;
             *(unsigned short *)(moby + 0x34) &= 0xEFFF;
-            d->flash = 0xFA;
+            moby_vars->flash = 0xFA;
             moby[0x20] = 0x11;
         }
-        trooper_anim_update(moby, d->anim);
+        trooper_anim_update(moby, moby_vars->anim);
     }
     ((unsigned char *)moby)[0xA4] = 0xFF;
-    t = d->target;
-    if (t == 0 || t[0x20] < 0 ||
-        (*(short *)(t + 0xA6) != 0x10E && *(short *)(t + 0xA6) != 0xCB && *(short *)(t + 0xA6) != 0) ||
+    current_target = moby_vars->target;
+    if (current_target == 0 || current_target[0x20] < 0 ||
+        (*(short *)(current_target + 0xA6) != 0x10E && *(short *)(current_target + 0xA6) != 0xCB && *(short *)(current_target + 0xA6) != 0) ||
         ((unsigned char *)moby)[0x20] != 0xC) {
         FUN_L02_00261c80(moby, (char *)target, 14.0f);
-        d->target = (char *)target[16];
+        moby_vars->target = (char *)target[16];
     }
-    if (d->target == 0) {
-        d->target = ((char *)hero.moby);
+    if (moby_vars->target == 0) {
+        moby_vars->target = ((char *)hero.moby);
     }
-    trooper_anim_finish(moby, d->anim);
+    trooper_anim_finish(moby, moby_vars->anim);
 }
 
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
