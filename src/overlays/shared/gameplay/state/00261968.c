@@ -420,7 +420,7 @@ typedef struct {
     s32 x138;
 } O00262528;
 E00262528 *create_moby(s32) __asm__("FUN_0020c4f8");
-void FUN_L00_00262528(O00262528 *history_state, s32 a, s32 b) {
+void FUN_L00_00262528(O00262528 *history_state, s32 initial_decay_value, s32 b) {
     E00262528 *spawned_moby;
     if (history_state->x138 == 4)
         return;
@@ -437,9 +437,9 @@ void FUN_L00_00262528(O00262528 *history_state, s32 a, s32 b) {
     spawned_moby->x94 = 0;
     if (spawned_moby->xa6 == 0)
         spawned_moby->x72 = 0;
-    spawned_moby->x23 = a;
+    spawned_moby->x23 = initial_decay_value;
     history_state->x110[history_state->x138] = b;
-    history_state->x100[history_state->x138] = a;
+    history_state->x100[history_state->x138] = initial_decay_value;
     history_state->x120[history_state->x138] = spawned_moby;
     history_state->x138++;
 }
