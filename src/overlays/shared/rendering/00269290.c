@@ -3220,7 +3220,7 @@ extern int FUN_L00_0025bfe0(float, float, float, float);
 extern unsigned char *D_L00_001B20B0 __attribute__((section(".data")));
 extern void *FUN_L00_002678b8_c2(int) __asm__("FUN_L00_002678b8");
 
-void *FUN_L00_00270758(char *spawn_position, char *b, unsigned char c, int d) {
+void *FUN_L00_00270758(char *spawn_position, char *b, unsigned char initial_flags, int d) {
     char *particle = FUN_L00_002678b8_c2(0x2A);
 
     if (particle != 0) {
@@ -3238,10 +3238,10 @@ void *FUN_L00_00270758(char *spawn_position, char *b, unsigned char c, int d) {
         *(float *)(particle_data + 0x10) = initial_rotation_phase;
         particle[8] = (char)(int)(initial_rotation_phase * 256.0f);
         particle[2] = D_L00_001B20B0[rand() & 7];
-        particle_data[0x18] = c;
+        particle_data[0x18] = initial_flags;
         *(short *)(particle_data + 0x14) = 0;
         *(short *)(particle_data + 0x16) = 0;
-        if (c < 5) {
+        if (initial_flags < 5) {
             int base_lifetime;
             int y;
 
