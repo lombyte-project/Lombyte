@@ -2437,7 +2437,7 @@ void FUN_L13_002b97f8(char *moby) {
     char *screen_dimensions;
     unsigned char *base;
     unsigned char *g;
-    unsigned char *h;
+    unsigned char *player_health_state;
     unsigned char *b;
     int sp10;
     int sp14;
@@ -2508,13 +2508,13 @@ void FUN_L13_002b97f8(char *moby) {
     if (*(float *)(b + 0x15FC) < *(float *)(b + 0x1600) / 10.0f && (frame_count / 90) & 1) {
         font_print_center_small(0x100, 0x186, 0x80000080L, func_001FE540_id(0x5269), 0x64);
     }
-    h = D_0013F350;
-    hud_health_step = *(float *)(h + 0x15FC) - *(float *)(moby_vars + 0xF0);
+    player_health_state = D_0013F350;
+    hud_health_step = *(float *)(player_health_state + 0x15FC) - *(float *)(moby_vars + 0xF0);
     hud_health_step *= 0.2f;
     hud_health_step_magnitude = absolute_float(hud_health_step);
     if (hud_health_step_magnitude > 1.0f) hud_health_step /= hud_health_step_magnitude;
     *(float *)(moby_vars + 0xF0) += hud_health_step;
-    v = func_001FA898_r(*(float *)(moby_vars + 0xF0) * 251.0f / *(float *)(h + 0x1600)) + 2;
+    v = func_001FA898_r(*(float *)(moby_vars + 0xF0) * 251.0f / *(float *)(player_health_state + 0x1600)) + 2;
     if (v > 0xFD) v = 0xFD;
     if (v < 2) v = 2;
     lo = *(int *)(moby_vars + 0xF4) <= v ? *(int *)(moby_vars + 0xF4) : v;
