@@ -82,33 +82,33 @@ extern float fast_cos(float) __asm__("func_001F9DC8");
 extern float fast_sin(float) __asm__("func_001F9DE0");
 extern int D_L01_001CB1B0[];
 
-void FUN_L01_002b80d0(float *m) {
+void FUN_L01_002b80d0(float *offset_animation_state) {
     int i;
     float u0, first_v_offset, u1, second_v_offset;
     float unwrapped_offset;
     float *src, *dst;
-    unwrapped_offset = m[8] + m[10];
-    m[8] = unwrapped_offset;
+    unwrapped_offset = offset_animation_state[8] + offset_animation_state[10];
+    offset_animation_state[8] = unwrapped_offset;
     if (1.0f < unwrapped_offset) {
-        m[8] = unwrapped_offset - 1.0f;
+        offset_animation_state[8] = unwrapped_offset - 1.0f;
     }
-    if (m[8] < 0.0f) {
-        m[8] = m[8] + 1.0f;
+    if (offset_animation_state[8] < 0.0f) {
+        offset_animation_state[8] = offset_animation_state[8] + 1.0f;
     }
-    unwrapped_offset = m[9] + m[11];
-    m[9] = unwrapped_offset;
+    unwrapped_offset = offset_animation_state[9] + offset_animation_state[11];
+    offset_animation_state[9] = unwrapped_offset;
     if (1.0f < unwrapped_offset) {
-        m[9] = unwrapped_offset - 1.0f;
+        offset_animation_state[9] = unwrapped_offset - 1.0f;
     }
-    if (m[9] < 0.0f) {
-        m[9] = m[9] + 1.0f;
+    if (offset_animation_state[9] < 0.0f) {
+        offset_animation_state[9] = offset_animation_state[9] + 1.0f;
     }
-    m[12] = fast_add_rotations(m[12], m[14]);
-    m[13] = fast_add_rotations(m[13], m[15]);
-    u0 = m[8] + fast_cos(m[12]) * m[16];
-    first_v_offset = m[9] + fast_sin(m[12]) * m[16];
-    u1 = m[8] + fast_cos(m[13]) * m[16];
-    second_v_offset = m[9] + fast_sin(m[13]) * m[16];
+    offset_animation_state[12] = fast_add_rotations(offset_animation_state[12], offset_animation_state[14]);
+    offset_animation_state[13] = fast_add_rotations(offset_animation_state[13], offset_animation_state[15]);
+    u0 = offset_animation_state[8] + fast_cos(offset_animation_state[12]) * offset_animation_state[16];
+    first_v_offset = offset_animation_state[9] + fast_sin(offset_animation_state[12]) * offset_animation_state[16];
+    u1 = offset_animation_state[8] + fast_cos(offset_animation_state[13]) * offset_animation_state[16];
+    second_v_offset = offset_animation_state[9] + fast_sin(offset_animation_state[13]) * offset_animation_state[16];
     for (i = 0; i < 0x5C; i += 2) {
         if (D_L01_001CB1B0[i >> 1] == 0) {
             D_L01_001CAE60[i] = D_L01_001CAFE0[i] + u0;
