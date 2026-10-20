@@ -128,7 +128,7 @@ s32 FUN_L06_00227e78(s32 arg) {
     u8 *mob;
     s32 flag;
     s32 id;
-    f32 a, b, hurt_impulse_scale;
+    f32 horizontal_hurt_impulse_scale, b, hurt_impulse_scale;
     OvlVec4 v;
 
     if (G.state.control_mode == 0x14) {
@@ -198,13 +198,13 @@ s32 FUN_L06_00227e78(s32 arg) {
         }
         hero_set_state(HERO_STATE_HURT, 1);
         hurt_impulse_scale = D_0015ED6C_8;
-        a = hurt_impulse_scale * 5.7f;
+        horizontal_hurt_impulse_scale = hurt_impulse_scale * 5.7f;
         b = hurt_impulse_scale * 2.4f;
         if (G.unk12E7 != 0) {
-            a = 0.0f;
+            horizontal_hurt_impulse_scale = 0.0f;
             b = hurt_impulse_scale * 1.7f;
         }
-        FUN_L00_00210c80_8(&v, flag, a, b);
+        FUN_L00_00210c80_8(&v, flag, horizontal_hurt_impulse_scale, b);
         if (flag != 0 && tbl->unk28 == 4) {
             v.f[2] += v.f[2];
         }
