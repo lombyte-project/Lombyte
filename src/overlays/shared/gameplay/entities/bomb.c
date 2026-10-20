@@ -2505,17 +2505,7 @@ char *FUN_L00_002ce1f0(int a, void *pos) {
     return m;
 }
 
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002ce358.s", FUN_L00_002ce358);
-#else
 /* Ported from rac1-decomp (nonmatching/shared/func_L00_002CF808.c: func_L00_002CF808). */
-typedef u32 VecQuad __attribute__((mode(TI), aligned(16)));
-
-
-typedef struct Hero Hero;
-
-typedef struct MobyClass MobyClass;
-
 typedef int OvlQuad_2C9820 __attribute__((mode(TI)));
 
 typedef struct {
@@ -2531,7 +2521,6 @@ typedef struct {
     f32 normal_y; /* 0x44: FUN_001f9e90 (atan2) of normal_x, normal_y is stored in the hero */
     f32 normal_z; /* 0x48: ledge probes compare atan2(normal_z, xy length) with 20 degrees */
 } CollisionHit_2C9820;
-
 
 typedef struct {
     Vec4 position;            /* 0x00: movement this frame */
@@ -2566,6 +2555,15 @@ typedef struct {
     struct Moby *slots[6];    /* 0x2020 */
 } DroneSlots_2CF808;
 
+/* Hit record passed to FUN_L00_00259a88; the drone builds it over its direction and rotated vectors. */
+typedef struct {
+    Vec4 direction;           /* 0x00 */
+    s32 unk10[2];
+    u8 kind;                  /* 0x18 */
+    u8 mode;                  /* 0x19 */
+    u16 oclass;               /* 0x1A */
+    f32 amount;               /* 0x1C: read back after the hit */
+} BombHit_2CF808;
 
 extern struct Hero D_0013F450_C9820 __asm__("D_0013F350");
 extern s32 D_L00_0015F6A8_2C9820 __asm__("D_L00_0015F5C4");
@@ -2590,12 +2588,12 @@ extern void func_L00_001FF548_2CF808(void *, void *, f32) __asm__("FUN_001f9c90"
 extern s32 func_001F9938_2CF808(void *) __asm__("FUN_001f9770");
 extern s32 func_L00_001F10E0_2CF808(f32, void *, s32, void *) __asm__("FUN_L00_001f0d60");
 extern s32 func_L00_00259868_2CF808(f32, f32, f32, void *, void *, s32) __asm__("FUN_L00_00258830");
-extern void func_L00_0025A890_2CF808(f32, void *, void *, s32) __asm__("FUN_L00_00259858");
+extern void func_L00_0025A890_2CF808(void *, void *, s32, f32) __asm__("FUN_L00_00259858");
 extern void func_L00_0025AAC0_2CF808(void *, void *) __asm__("FUN_L00_00259a88");
 extern void func_L00_0025B040_2CF808(f32, void *) __asm__("FUN_L00_00259fe8");
 extern void *func_L00_0025B478_2CF808(void *, s32, s32) __asm__("FUN_L00_0025a420");
-extern f32 func_L00_00259148_2CF808(f32 *, f32, f32, f32, f32, f32) __asm__("FUN_L00_00258110");
-extern void func_L00_0025F4A8_2CF808(f32, f32, f32, f32, f32, f32, f32, void *, void *, s32, s32, s32, s32, s32, s32, s32, s32, s32) __asm__("FUN_L00_0025e450");
+extern f32 func_L00_00259148_2CF808(f32, f32, f32, f32, f32, f32 *) __asm__("FUN_L00_00258110");
+extern void func_L00_0025F4A8_2CF808(void *, void *, void *, f32, f32, s32, s32, s32, f32, f32, f32, s32, f32, f32, s32, s32, s32, s32) __asm__("FUN_L00_0025e450");
 extern void func_0022ED80_2CF808(s32, s32, void *) __asm__("FUN_0022da68");
 extern s32 func_001160D8_2CF808(void) __asm__("FUN_001160d8");
 extern void func_0020D678_2CF808(void *) __asm__("FUN_0020c828");
@@ -2609,21 +2607,15 @@ extern void func_001F9C30_2CF808(void *, void *, f32) __asm__("FUN_001f9a68");
 void FUN_L00_002ce358(struct Moby *m) {
     DroneVars_2CF808 *v = (DroneVars_2CF808 *)m->pvars;
     Vec4 collision_data[1], old_pos;
-    union {
-        struct { Vec4 direction, rotated; } vectors;
-        u8 effect[0x20];
-    } scratch;
+    Vec4 direction, rotated;
     Vec4 target_pos, matrix[4];
     struct Moby *target;
     struct Moby *closest;
     struct Moby *other;
-    void *hit;
     f32 f, distance;
     s32 i, count, category, random, health;
     s32 state;
-    struct Moby **slots, **exclusions;
     struct Moby *drone;
-    struct Moby **slot;
     s32 k, n;
 
     if (D_L00_0015F6A8_2C9820 == 2 || D_L00_0015F6A8_2C9820 == 5 ||
@@ -2671,9 +2663,8 @@ void FUN_L00_002ce358(struct Moby *m) {
                 qcopy(&old_pos, &other->pos);
                 if (h != 0)
                     old_pos.f[2] += *(f32 *)(h + 0x10);
-                slots = ((DroneSlots_2CF808 *)&D_0013F450_C9820)->slots;
-                for (i = 5; i >= 0; i--, slots++) {
-                    drone = *slots;
+                for (i = 0; i < 6; i++) {
+                    drone = ((DroneSlots_2CF808 *)&D_0013F450_C9820)->slots[i];
                     if (drone != 0) {
                         struct Moby *t = *(struct Moby **)(drone->pvars + 0x30);
                         if (t == 0 || t->state == 0xFE || t->state == 0xFD) {
@@ -2687,12 +2678,13 @@ void FUN_L00_002ce358(struct Moby *m) {
                 }
                 if (closest != 0) {
                     DroneVars_2CF808 *assigned = (DroneVars_2CF808 *)closest->pvars;
+                    char *h2;
                     assigned->target = other;
                     assigned->target_oclass = other->oclass;
-                    h = func_L00_0025D390_2CF808(other);
+                    h2 = func_L00_0025D390_2CF808(other);
                     qcopy(&old_pos, &other->pos);
-                    if (h != 0)
-                        old_pos.f[2] += *(f32 *)(h + 0x10);
+                    if (h2 != 0)
+                        old_pos.f[2] += *(f32 *)(h2 + 0x10);
                     qcopy(&assigned->offset, &old_pos);
                     closest->state = 3;
                     random = func_001160D8_2CF808() % 3;
@@ -2749,20 +2741,20 @@ state2:
         v->yaw = func_001FA748_2CF808(v->yaw, distance * (D_0015EE60_2CF808 * 0.05f));
         distance = func_001FA790_2CF808(v->pitch, v->elevation);
         v->elevation = func_001FA748_2CF808(v->elevation, distance * (D_0015EE60_2CF808 * 0.01f));
-        scratch.vectors.direction.f[0] = func_001F9F90_2CF808(v->yaw) * v->strength;
-        scratch.vectors.direction.f[1] = func_001F9FA8_2CF808(v->yaw) * v->strength;
-        scratch.vectors.direction.f[2] = 0.0f;
-        scratch.vectors.rotated.f[0] = 0.0f;
-        scratch.vectors.rotated.f[1] = v->elevation;
-        scratch.vectors.rotated.f[2] = 0.0f;
-        scratch.vectors.rotated.f[3] = 0.0f;
-        func_001FA218_2CF808(matrix, &scratch.vectors.rotated);
-        func_001F9EE8_2CF808(&scratch.vectors.direction, &scratch.vectors.direction, matrix);
+        direction.f[0] = func_001F9F90_2CF808(v->yaw) * v->strength;
+        direction.f[1] = func_001F9FA8_2CF808(v->yaw) * v->strength;
+        direction.f[2] = 0.0f;
+        rotated.f[0] = 0.0f;
+        rotated.f[1] = v->elevation;
+        rotated.f[2] = 0.0f;
+        rotated.f[3] = 0.0f;
+        func_001FA218_2CF808(matrix, &rotated);
+        func_001F9EE8_2CF808(&direction, &direction, matrix);
         func_001F9BD8_2CF808(&target_pos, &D_0013F450_C9820.motion, (u8 *)D_0013F450_C9820.moby + 0xE0);
-        target_pos.f[0] += scratch.vectors.direction.f[0];
-        target_pos.f[1] += scratch.vectors.direction.f[1];
+        target_pos.f[0] += direction.f[0];
+        target_pos.f[1] += direction.f[1];
         v->height = v->height + (target_pos.f[2] - v->height) * (D_0015EE60_2CF808 * 0.05f);
-        target_pos.f[2] = v->height + scratch.vectors.direction.f[2];
+        target_pos.f[2] = v->height + direction.f[2];
         func_001F9BF0_2CF808(&target_pos, &target_pos, &m->pos);
         func_L00_001FF548_2CF808(&target_pos, &target_pos, D_0015EE6C_2CF808 * 10.0f);
         if (func_L00_00259868_2CF808(0.0f, 0.18f, 0.0f, m, &target_pos, 0) & 1) {
@@ -2774,35 +2766,29 @@ state2:
         }
         qcopy(&collision_data[0], &m->pos);
         if (func_L00_001F10E0_2CF808(0.2f, &collision_data[0], 0, m)) {
-            struct Moby *hm, *hm2, *hm3;
-            hm = (struct Moby *)D_L00_00173F40_C9820.moby;
-            if (hm && hm->oclass == 0 && hm->state != 0xFE && hm->state != 0xFD)
+            if (((struct Moby *)D_L00_00173F40_C9820.moby) && ((struct Moby *)D_L00_00173F40_C9820.moby)->oclass == 0 && ((struct Moby *)D_L00_00173F40_C9820.moby)->state != 0xFE && ((struct Moby *)D_L00_00173F40_C9820.moby)->state != 0xFD)
                 goto update_rotations;
-            category = 0;
-            hm2 = (struct Moby *)D_L00_00173F40_C9820.moby;
-            if (hm2 && hm2->pclass)
-                category = *(u8 *)((u8 *)hm2->pclass + 0x46);
-            hm3 = (struct Moby *)D_L00_00173F40_C9820.moby;
-            if (hm3 && hm3->state != 0xFE && hm3->state != 0xFD &&
+            category = ((struct Moby *)D_L00_00173F40_C9820.moby) && ((struct Moby *)D_L00_00173F40_C9820.moby)->pclass ? *(u8 *)((u8 *)((struct Moby *)D_L00_00173F40_C9820.moby)->pclass + 0x46) : 0;
+            if (((struct Moby *)D_L00_00173F40_C9820.moby) && ((struct Moby *)D_L00_00173F40_C9820.moby)->state != 0xFE && ((struct Moby *)D_L00_00173F40_C9820.moby)->state != 0xFD &&
                 (category == 5 || category == 7 || category == 8)) {
-                func_L00_0025A890_2CF808(1.0f, scratch.effect, m, 0x10000);
-                func_L00_001FF500_2CF808(scratch.effect, &v->position, 1.0f);
-                *(f32 *)(scratch.effect + 8) = 1.0f;
-                *(f32 *)(scratch.effect + 12) = 5627.925f;
-                scratch.effect[0x18] = 1;
-                scratch.effect[0x19] = 2;
-                *(u16 *)(scratch.effect + 0x1A) = m->oclass;
-                func_L00_0025AAC0_2CF808((struct Moby *)D_L00_00173F40_C9820.moby, scratch.effect);
+                func_L00_0025A890_2CF808(((BombHit_2CF808 *)&direction), m, 0x10000, 1.0f);
+                func_L00_001FF500_2CF808(((BombHit_2CF808 *)&direction), &v->position, 1.0f);
+                ((BombHit_2CF808 *)&direction)->direction.f[2] = 1.0f;
+                ((BombHit_2CF808 *)&direction)->direction.f[3] = 5627.925f;
+                ((BombHit_2CF808 *)&direction)->kind = 1;
+                ((BombHit_2CF808 *)&direction)->mode = 2;
+                ((BombHit_2CF808 *)&direction)->oclass = m->oclass;
+                func_L00_0025AAC0_2CF808((struct Moby *)D_L00_00173F40_C9820.moby, ((BombHit_2CF808 *)&direction));
                 if (category == 5) {
                     if (D_L00_00173F40_C9820.moby && ((struct Moby *)D_L00_00173F40_C9820.moby)->oclass == 0x4D6 && (health = v->health) > 0) {
-                        random = func_001FA898_2CF808(*(f32 *)(scratch.effect + 0x1C));
+                        random = func_001FA898_2CF808(((BombHit_2CF808 *)&direction)->amount);
                         if (random > 0)
-                            random = health - func_001FA898_2CF808(*(f32 *)(scratch.effect + 0x1C));
+                            random = health - func_001FA898_2CF808(((BombHit_2CF808 *)&direction)->amount);
                         else
                             random = health - 1;
                         v->health = random;
                     } else {
-                        func_L00_0025F4A8_2CF808(0, 0, 0.4f, 0.2f, 4.0f, 1.0f, 8.0f, m, v, 0, 0, 1, 1, 1, 1, 1, -1, 0);
+                        func_L00_0025F4A8_2CF808(m, v, 0, 0.0f, 0.0f, 0, 1, 1, 0.4f, 0.2f, 4.0f, 1, 1.0f, 8.0f, 1, 1, -1, 0);
                         m->state = 4;
                     }
                 }
@@ -2813,8 +2799,8 @@ update_rotations:
         {
             f32 yaw = func_L00_001FF860_2CF808(m->pos.x - old_pos.f[0], m->pos.y - old_pos.f[1]);
             f32 pitch = -func_L00_001FF860_2CF808(func_001F9D48_2CF808(&old_pos, &m->pos), m->pos.z - old_pos.f[2]);
-            m->rot.z = func_L00_00259148_2CF808(&v->yaw_velocity, m->rot.z, yaw, D_0015EE70_2CF808 * 6.2831855f, D_0015EE70_2CF808 * 3.1415927f, D_0015EE6C_2CF808 * 6.2831855f);
-            m->rot.y = func_L00_00259148_2CF808(&v->pitch_velocity, m->rot.y, pitch, D_0015EE70_2CF808 * 6.2831855f, D_0015EE70_2CF808 * 3.1415927f, D_0015EE6C_2CF808 * 6.2831855f);
+            m->rot.z = func_L00_00259148_2CF808(m->rot.z, yaw, D_0015EE70_2CF808 * 6.2831855f, D_0015EE70_2CF808 * 3.1415927f, D_0015EE6C_2CF808 * 6.2831855f, &v->yaw_velocity);
+            m->rot.y = func_L00_00259148_2CF808(m->rot.y, pitch, D_0015EE70_2CF808 * 6.2831855f, D_0015EE70_2CF808 * 3.1415927f, D_0015EE6C_2CF808 * 6.2831855f, &v->pitch_velocity);
         }
         goto update_effects;
     }
@@ -2832,10 +2818,10 @@ state3:
             qcopy(&target_pos, &v->target->pos);
             if (h != 0)
                 target_pos.f[2] += *(f32 *)(h + 0x10);
-            func_001F9BF0_2CF808(&scratch.vectors.direction, &target_pos, &v->offset);
-            func_001F9C30_2CF808(&scratch.vectors.direction, &scratch.vectors.direction, 3.1f);
-            func_001F9BD8_2CF808(&scratch.vectors.rotated, &target_pos, &scratch.vectors.direction);
-            func_001F9BF0_2CF808(&v->position, &scratch.vectors.rotated, &m->pos);
+            func_001F9BF0_2CF808(&direction, &target_pos, &v->offset);
+            func_001F9C30_2CF808(&direction, &direction, 3.1f);
+            func_001F9BD8_2CF808(&rotated, &target_pos, &direction);
+            func_001F9BF0_2CF808(&v->position, &rotated, &m->pos);
             func_001F9C30_2CF808(&v->position, &v->position, D_0015EE60_2CF808 * -0.8f + 1.0f);
             func_001F9BD8_2CF808(&m->pos, &m->pos, &v->position);
             qcopy(&v->offset, &target_pos);
@@ -2846,24 +2832,24 @@ state3:
                     qcopy(&m->pos, &D_L00_00173F70_2CF808);
                 } else {
                     s32 cat2 = hm->pclass ? *(u8 *)((u8 *)hm->pclass + 0x46) : 0;
-                    func_L00_0025A890_2CF808(1.0f, scratch.effect, m, 0x10000);
-                    func_L00_001FF500_2CF808(scratch.effect, &v->position, 1.0f);
-                    *(f32 *)(scratch.effect + 8) = 1.0f;
-                    *(f32 *)(scratch.effect + 12) = 5627.925f;
-                    scratch.effect[0x18] = 1;
-                    scratch.effect[0x19] = 2;
-                    *(u16 *)(scratch.effect + 0x1A) = m->oclass;
-                    func_L00_0025AAC0_2CF808((struct Moby *)D_L00_00173F40_C9820.moby, scratch.effect);
+                    func_L00_0025A890_2CF808(((BombHit_2CF808 *)&direction), m, 0x10000, 1.0f);
+                    func_L00_001FF500_2CF808(((BombHit_2CF808 *)&direction), &v->position, 1.0f);
+                    ((BombHit_2CF808 *)&direction)->direction.f[2] = 1.0f;
+                    ((BombHit_2CF808 *)&direction)->direction.f[3] = 5627.925f;
+                    ((BombHit_2CF808 *)&direction)->kind = 1;
+                    ((BombHit_2CF808 *)&direction)->mode = 2;
+                    ((BombHit_2CF808 *)&direction)->oclass = m->oclass;
+                    func_L00_0025AAC0_2CF808((struct Moby *)D_L00_00173F40_C9820.moby, ((BombHit_2CF808 *)&direction));
                     if (cat2 == 5) {
                         if (D_L00_00173F40_C9820.moby && ((struct Moby *)D_L00_00173F40_C9820.moby)->oclass == 0x4D6 && (health = v->health) > 0) {
-                            random = func_001FA898_2CF808(*(f32 *)(scratch.effect + 0x1C));
+                            random = func_001FA898_2CF808(((BombHit_2CF808 *)&direction)->amount);
                             if (random > 0)
-                                random = health - func_001FA898_2CF808(*(f32 *)(scratch.effect + 0x1C));
+                                random = health - func_001FA898_2CF808(((BombHit_2CF808 *)&direction)->amount);
                             else
                                 random = health - 1;
                             v->health = random;
                         } else {
-                            func_L00_0025F4A8_2CF808(0, 0, 0.4f, 0.2f, 4.0f, 1.0f, 8.0f, m, v, 0, 0, 1, 1, 1, 1, 1, -1, 0);
+                            func_L00_0025F4A8_2CF808(m, v, 0, 0.0f, 0.0f, 0, 1, 1, 0.4f, 0.2f, 4.0f, 1, 1.0f, 8.0f, 1, 1, -1, 0);
                             m->state = 4;
                         }
                     }
@@ -2915,7 +2901,6 @@ state5:
 update_effects:
     func_L00_0025B040_2CF808(0.17f, m);
 }
-#endif
 /* Crate update (pvars at moby + 0x78). */
 typedef struct {
     u8 pad00[0x1E];
