@@ -13,20 +13,20 @@ typedef struct {
 extern Ent09 D_L00_00167150_u[] __asm__("D_L00_00167150");
 /* Finds the 0xA0-byte entry in D_L00_00167150 whose short at 0x86 equals id; 0 when none. */
 s32 FUN_L00_001eb1f8(s32 id) {
-    s32 p;
-    s32 e;
+    s32 camera_record_address;
+    s32 camera_table_end_address;
     s16 v;
-    p = (s32)&D_L00_00167150_u[0];
-    e = p + 0x1E00;
+    camera_record_address = (s32)&D_L00_00167150_u[0];
+    camera_table_end_address = camera_record_address + 0x1E00;
     for (;;) {
-        v = *(s16 *)(p + 0x86);
+        v = *(s16 *)(camera_record_address + 0x86);
         if (v != id) {
-            p += 0xA0;
-            if (p < e)
+            camera_record_address += 0xA0;
+            if (camera_record_address < camera_table_end_address)
                 continue;
             return 0;
         }
-        return p;
+        return camera_record_address;
     }
 }
 float FUN_001fa5c8_001eb328(float, float) __asm__("FUN_001fa5c8");
