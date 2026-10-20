@@ -1937,7 +1937,7 @@ segments:
           - [0x12e76c, textbin, text_gap_0022d7ec_after_fun_0022d798]
           - [0x12e770, c, audio/voices/allocate_voice_slot]
           - [0x12e9e4, textbin, text_gap_0022da64_before_fun_0022da68]
-          - [0x12e9e8, c, audio/sound/allocate_voice_for_target_entry]
+          - [0x12e9e8, c, audio/voices/allocate_voice_for_target_entry]
           - [0x12ea8c, textbin, text_gap_0022db0c_before_fun_0022db10]
           - [0x12ea90, c, audio/voices/allocate_voice_for_bank_entry]
           - [0x12eb1c, textbin, text_gap_0022db9c_before_fun_0022dba0]

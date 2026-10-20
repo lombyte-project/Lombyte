@@ -2,8 +2,6 @@
 #include "rnc/gameplay/hero.h"
 #include "asm.h"
 
-#include "types.h"
-
 #include "eetypes.h"
 #include "qcopy.h"
 #include "qzero.h"
@@ -22,6 +20,10 @@ extern s32 calculate_voice_volume(VoiceSlot *, VoiceVector *) __asm__("FUN_0022c
 s32 allocate_voice_slot(VoiceDefinition *, u32, VoiceMoby *, VoiceVector *,
                         s32) __asm__("FUN_0022d7f0");
 
+/* Reserve a game-side slot and queue its start for sound_update.
+ * Ordinary owners search 26 slots; the hero, its first item, and class 0x472
+ * may use all 30. A rejected definition, full pool, or low volume returns -1.
+ * Retain the goto structure and address windows for retail code generation. */
 s32 allocate_voice_slot(VoiceDefinition *definition, u32 flags, VoiceMoby *moby,
                         VoiceVector *position, s32 volume) {
     s32 volume_offset;
@@ -40,10 +42,10 @@ s32 allocate_voice_slot(VoiceDefinition *definition, u32 flags, VoiceMoby *moby,
     source_inactive = definition->source_state == 0;
     if ((flags & 4) == 0) {
         if ((source_inactive ^ 1) != 0) {
-        result = -1;
+            result = -1;
             goto return_result;
         }
-    slot_limit = 0x1A;
+        slot_limit = 0x1A;
         goto check_moby;
     } else {
         if (source_inactive) {
@@ -69,7 +71,7 @@ use_extended_pool:
     slot_limit = 0x1E;
 find_free_slot:
     for (slot_index = 0; slot_index < slot_limit; slot_index++) {
-        if (voice_pool.voices[slot_index].state == 0) {
+        if (voice_pool.voices[slot_index].state == VOICE_SLOT_FREE) {
             break;
         }
     }
@@ -78,11 +80,11 @@ find_free_slot:
     }
     slot = (VoicePoolWindow *)((u8 *)&voice_pool + slot_index * 0x70);
     slot->voice.definition = definition;
-    slot->voice.source_value = (u16)definition->source_value;
+    slot->voice.sound_index = (u16)definition->sound_index;
     slot->voice.linked_index = -1;
     slot->voice.volume = volume;
     slot->voice.owner = 0;
-    slot->voice.reserved1C = 0;
+    slot->voice.owner_context = 0;
     qzero(&voice_pool.voices[slot_index].position_offset);
     if (position != NULL) {
         goto set_position;
@@ -121,7 +123,7 @@ check_calculated_volume:
     }
     committed_slot = (VoicePoolWindow *)((u8 *)&voice_pool + slot_index * 0x70);
     committed_slot->voice.flags = flags;
-    committed_slot->voice.state = 7;
+    committed_slot->voice.state = VOICE_SLOT_START_QUEUED;
     committed_slot->voice.history_position = 0;
     pitch_bend_max = definition->pitch_bend_max;
     pitch_bend_min = definition->pitch_bend_min;

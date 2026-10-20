@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/audio/voice_state.h"
 
 /* This window includes the pool header; state is slot-relative offset 4. */
 struct VoiceReleaseWindow {
@@ -13,6 +14,10 @@ struct VoiceReleaseWindow {
 extern u8 D_0013E550[];
 void release_voice_slot(s32 slot_index) __asm__("FUN_0022d798");
 
+/* Cancel a queued start immediately; otherwise request asynchronous stop.
+ * Negative indices are ignored. Nonnegative indices must be valid pool
+ * indices: retail has no upper-bound check. The legacy name does not imply
+ * that an already-started slot becomes free before sound_update/callbacks. */
 void release_voice_slot(s32 slot_index) {
     u8 state;
     struct VoiceReleaseWindow *slot;
@@ -22,21 +27,21 @@ void release_voice_slot(s32 slot_index) {
     }
     slot = (struct VoiceReleaseWindow *)((slot_index * 0x70) + D_0013E550);
     state = slot->state;
-    if (state != 7) {
+    if (state != VOICE_SLOT_START_QUEUED) {
         goto request_release;
     }
     slot->owner = 0;
     slot->owner_context = 0;
-    slot->state = 0U;
+    slot->state = (u8)VOICE_SLOT_FREE;
     return;
 request_release:
-    if (state == 0) {
+    if (state == VOICE_SLOT_FREE) {
         goto done;
     }
-    if (state == 6) {
+    if (state == VOICE_SLOT_STOP_PENDING) {
         goto done;
     }
-    slot->state = 4U;
+    slot->state = (u8)VOICE_SLOT_STOP_REQUESTED;
 done:
     return;
 }
