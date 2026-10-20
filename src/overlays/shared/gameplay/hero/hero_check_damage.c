@@ -593,7 +593,7 @@ int FUN_001f96f8_20da68(int) __asm__("FUN_001f96f8");
 void FUN_L00_0024f3e0_20da68(char *, char *, int, int, int, int) __asm__("FUN_L00_0024f3e0");
 void FUN_L00_0024f190_20da68(char *, char *) __asm__("FUN_L00_0024f190");
 void FUN_L00_0020da68(void) {
-    int on, anim, r, c;
+    int on, anim, r, hero_animation_id;
     float spd, t;
     unsigned char *m;
     char *q;
@@ -617,8 +617,8 @@ void FUN_L00_0020da68(void) {
     }
     if (hero.health.hp == 1) {
         on = 1;
-        c = (unsigned char)((char *)hero.moby)[0x53];
-        if (c == 0x54 || c == 0x82 || c == 0x5A) {
+        hero_animation_id = (unsigned char)((char *)hero.moby)[0x53];
+        if (hero_animation_id == 0x54 || hero_animation_id == 0x82 || hero_animation_id == 0x5A) {
             if (!hero.unkA9C)
                 on = 0;
         }
