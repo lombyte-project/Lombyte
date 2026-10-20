@@ -479,8 +479,8 @@ int FUN_L00_0025e368(char *moby) {
     return r;
 }
 /* True for a moby of one of eight listed classes. */
-s32 FUN_L00_0025e3f8(void *p) {
-    s16 v = *(s16 *)((char *)p + 0xA6);
+s32 FUN_L00_0025e3f8(void *moby) {
+    s16 v = *(s16 *)((char *)moby + 0xA6);
     if (v == 0xE2 || v == 0xCC || v == 0xDE || v == 0x3EE || v == 0xD6 || v == 0xE1 || v == 0xD5 ||
         v == 0xDF) {
         return 1;
