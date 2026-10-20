@@ -462,14 +462,14 @@ extern void fast_vec_scale(float, void *, void *) __asm__("FUN_001f9a68");
 extern void draw_2baae0(void *, void *, int) __asm__("FUN_001f7d30");
 extern void gsreg_2baae0(int, long) __asm__("FUN_00233980");
 
-void FUN_L00_002baae0(void *mv, int a, int b, int n, float sx, float sy, float sz) {
-    char *m = mv;
+void FUN_L00_002baae0(void *mv, int a, int b, int point_count, float sx, float sy, float sz) {
+    char *point_bytes = mv;
     RW_2baae0 *v = mv;
     RW_2baae0 q[4];
     RT_2baae0 t;
     RW_2baae0 q2[4];
     RT_2baae0 u;
-    RW_2baae0 w120, w130, w140, w150, r160, r170, segment_start_camera_offset, b190, s1A0, s1B0;
+    RW_2baae0 w120, w130, w140, w150, adjusted_segment_start, adjusted_segment_end, segment_start_camera_offset, b190, s1A0, s1B0;
     int i, col0, col1;
     float len, len0, l0, l1, l2;
     t.q0 = tex_2baae0(D_L00_00161638);
@@ -506,16 +506,16 @@ void FUN_L00_002baae0(void *mv, int a, int b, int n, float sx, float sy, float s
     t.f[5] = 0;
     t.f[6] = D_L00_001615EC + 1.0f;
     t.f[7] = 1.0f;
-    fast_vec_sub(w140, m, g_debug_camera);
-    fast_vec_sub(w150, m + 0x10, m);
+    fast_vec_sub(w140, point_bytes, g_debug_camera);
+    fast_vec_sub(w150, point_bytes + 0x10, point_bytes);
     fast_vec_cross(w120, w150, w140);
     len0 = fast_vec_length(w120);
     if (len0 != 0)
         len0 = 1.0f / len0;
     fast_vec_scale(D_L00_001615FC * len0, w120, w120);
-    fast_vec_add(q[0], m, w120);
-    fast_vec_sub(q[1], m, w120);
-    for (i = 1; i < n - 1; i++) {
+    fast_vec_add(q[0], point_bytes, w120);
+    fast_vec_sub(q[1], point_bytes, w120);
+    for (i = 1; i < point_count - 1; i++) {
         fast_vec_sub(w140, v[i], g_debug_camera);
         fast_vec_sub(w150, v[i + 1], v[i]);
         fast_vec_cross(w120, w150, w140);
@@ -528,7 +528,7 @@ void FUN_L00_002baae0(void *mv, int a, int b, int n, float sx, float sy, float s
         if (i == 1) {
             t.c[1] = D_L00_001615F4;
             t.c[0] = D_L00_001615F4;
-        } else if (i == n - 2) {
+        } else if (i == point_count - 2) {
             t.c[3] = D_L00_001615F4;
             t.c[2] = D_L00_001615F4;
         } else if (i == 2) {
@@ -539,9 +539,9 @@ void FUN_L00_002baae0(void *mv, int a, int b, int n, float sx, float sy, float s
         qcopy(q[0], q[2]);
         qcopy(q[1], q[3]);
     }
-    for (i = 0; i < n - 1; i++) {
-        fast_vec_sub(segment_start_camera_offset, m + i * 16, g_debug_camera);
-        fast_vec_sub(b190, m + i * 16 + 16, g_debug_camera);
+    for (i = 0; i < point_count - 1; i++) {
+        fast_vec_sub(segment_start_camera_offset, point_bytes + i * 16, g_debug_camera);
+        fast_vec_sub(b190, point_bytes + i * 16 + 16, g_debug_camera);
         l0 = fast_vec_length(segment_start_camera_offset);
         l1 = fast_vec_length(b190);
         if (l1 < l0) {
@@ -555,26 +555,26 @@ void FUN_L00_002baae0(void *mv, int a, int b, int n, float sx, float sy, float s
             else
                 fast_vec_scale(l1 / l0, segment_start_camera_offset, segment_start_camera_offset);
         }
-        fast_vec_add(r160, g_debug_camera, segment_start_camera_offset);
-        fast_vec_add(r170, g_debug_camera, b190);
-        fast_vec_sub(w150, r170, r160);
+        fast_vec_add(adjusted_segment_start, g_debug_camera, segment_start_camera_offset);
+        fast_vec_add(adjusted_segment_end, g_debug_camera, b190);
+        fast_vec_sub(w150, adjusted_segment_end, adjusted_segment_start);
         fast_vec_scale(sz, s1B0, w150);
-        fast_vec_sub(r160, r160, s1B0);
-        fast_vec_add(r170, r170, s1B0);
-        fast_vec_sub(s1A0, g_debug_camera, r160);
+        fast_vec_sub(adjusted_segment_start, adjusted_segment_start, s1B0);
+        fast_vec_add(adjusted_segment_end, adjusted_segment_end, s1B0);
+        fast_vec_sub(s1A0, g_debug_camera, adjusted_segment_start);
         fast_vec_cross(w120, s1A0, w150);
         l2 = fast_vec_length(w120);
         if (l2 != 0)
             l2 = 1.0f / l2;
         fast_vec_scale(sy * l2, w130, w120);
-        fast_vec_add(q2[0], r160, w130);
-        fast_vec_sub(q2[1], r160, w130);
-        fast_vec_add(q2[2], r170, w130);
-        fast_vec_sub(q2[3], r170, w130);
+        fast_vec_add(q2[0], adjusted_segment_start, w130);
+        fast_vec_sub(q2[1], adjusted_segment_start, w130);
+        fast_vec_add(q2[2], adjusted_segment_end, w130);
+        fast_vec_sub(q2[3], adjusted_segment_end, w130);
         if (i == 0) {
             u.c[1] = D_L00_001615F8;
             u.c[0] = D_L00_001615F8;
-        } else if (i == n - 2) {
+        } else if (i == point_count - 2) {
             u.c[3] = D_L00_001615F8;
             u.c[2] = D_L00_001615F8;
         } else if (i == 1) {
