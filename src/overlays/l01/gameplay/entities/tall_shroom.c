@@ -89,8 +89,8 @@ void FUN_L01_0030acb8(struct Moby *moby) {
         TUTORIAL_HINT_STATE_UPDATE = 1
     };
     s32 *data;
-    struct Moby *m;
-    struct Moby *m2;
+    struct Moby *hint_candidate_moby;
+    struct Moby *health_hint_candidate_moby;
     s32 t;
 
     data = (s32 *)moby->pvars;
@@ -147,9 +147,9 @@ void FUN_L01_0030acb8(struct Moby *moby) {
         }
         if (help_records[0x42].id < 2 && is_point_inside_clip_volume(&hero.motion.pos, data[12]) && hero.state.prev == 0x3B &&
             hero.state_timer == 0) {
-            for (m = moby_list; m != 0; m = m->next) {
-                if (m->oclass == 0x118 && distance_xyz(&m->pos, &hero.motion.pos) < 3.0f &&
-                    *(f32 *)m->pvars != 1.0f) {
+            for (hint_candidate_moby = moby_list; hint_candidate_moby != 0; hint_candidate_moby = hint_candidate_moby->next) {
+                if (hint_candidate_moby->oclass == 0x118 && distance_xyz(&hint_candidate_moby->pos, &hero.motion.pos) < 3.0f &&
+                    *(f32 *)hint_candidate_moby->pvars != 1.0f) {
                     data[13]++;
                     if (data[13] == 3 || data[13] == 6) {
                         help_request(0x3EE, 0x42);
@@ -189,10 +189,10 @@ void FUN_L01_0030acb8(struct Moby *moby) {
         } else {
             data[11] = 0;
         }
-        for (m2 = moby_list; m2 != 0; m2 = m2->next) {
-            if (m2->oclass == 0x326 && distance_xyz(&m2->pos, &hero.motion.pos) < 10.0f && help_state.state == 0 &&
+        for (health_hint_candidate_moby = moby_list; health_hint_candidate_moby != 0; health_hint_candidate_moby = health_hint_candidate_moby->next) {
+            if (health_hint_candidate_moby->oclass == 0x326 && distance_xyz(&health_hint_candidate_moby->pos, &hero.motion.pos) < 10.0f && help_state.state == 0 &&
                 help_state.cur == -1 && help_records[1].id == 0 && help_records[2].id == 0 &&
-                usage_stats.stat[13].count == 0 && FUN_L00_002d8128(m2) == 0) {
+                usage_stats.stat[13].count == 0 && FUN_L00_002d8128(health_hint_candidate_moby) == 0) {
                 if (hero.health.hp < hero_max_health) {
                     if (usage_stats.stat[13].count < 0xFFFF) {
                         usage_stats.stat[13].count++;
@@ -203,7 +203,7 @@ void FUN_L01_0030acb8(struct Moby *moby) {
                     }
                     usage_stats.stat[13].level_mask = usage_stats.stat[13].level_mask | (1 << current_level_index_macro) | 0x80000000;
                     help_request(1, 1);
-                } else if (FUN_L01_00275690(255.0f, m2) != 0) {
+                } else if (FUN_L01_00275690(255.0f, health_hint_candidate_moby) != 0) {
                     help_request(2, 2);
                 }
             }
