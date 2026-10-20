@@ -542,13 +542,13 @@ void FUN_L00_00238b18(char *p) {
     D_L00_0015F72C = 0;
 }
 
-void FUN_L00_00238b80(Obj *o) {
+void FUN_L00_00238b80(Obj *hud_element) {
     float x, y, len, ang;
-    int old, cur, n, t;
-    u8 *c = &o->b70;
+    int old, cur, slot_count, next_slot_index;
+    u8 *counters = &hud_element->b70;
 
-    o->w7C = scale_game_frames(0xB4);
-    o->w6C = 0x18;
+    hud_element->w7C = scale_game_frames(0xB4);
+    hud_element->w6C = 0x18;
     D_0013C940.w1CC = 2;
     x = D_0013C940.unk148;
     y = D_0013C940.unk14C;
@@ -558,77 +558,77 @@ void FUN_L00_00238b80(Obj *o) {
         y /= len;
     }
     ang = fast_arc_tan(x, y);
-    if ((o->w78 >> 24) == 0 && D_L00_0017E504 != 0) {
-        if ((D_0013C940.w1C4 & 0xF000) || len < 0.5f || --o->w78 == -1) {
-            o->w74 = -1;
-            o->w78 = 0x10000FF;
+    if ((hud_element->w78 >> 24) == 0 && D_L00_0017E504 != 0) {
+        if ((D_0013C940.w1C4 & 0xF000) || len < 0.5f || --hud_element->w78 == -1) {
+            hud_element->w74 = -1;
+            hud_element->w78 = 0x10000FF;
         }
     }
-    old = o->w74;
-    if (*((s8 *)o + 0x7B) == 1) {
+    old = hud_element->w74;
+    if (*((s8 *)hud_element + 0x7B) == 1) {
         if (0.9f < len) {
-            n = D_L00_0015FA90;
-            o->w74 = (int)((ang + 3.1415927f + 3.1415927f + 1.5707964f + 3.1415927f / (float)n) *
-                           ((float)n / 6.2831855f)) %
-                     n;
+            slot_count = D_L00_0015FA90;
+            hud_element->w74 = (int)((ang + 3.1415927f + 3.1415927f + 1.5707964f + 3.1415927f / (float)slot_count) *
+                           ((float)slot_count / 6.2831855f)) %
+                     slot_count;
         }
         if (D_0013C940.w1C4 & 0xF000) {
-            cur = o->w74;
+            cur = hud_element->w74;
             if (D_0013C940.w1C4 & 0x1000) {
                 if (cur == -1)
-                    t = D_L00_0017DC40;
+                    next_slot_index = D_L00_0017DC40;
                 else
-                    t = D_L00_0015FAC0_c[D_L00_0015F72C][cur].unk10;
-                cur = t;
+                    next_slot_index = D_L00_0015FAC0_c[D_L00_0015F72C][cur].unk10;
+                cur = next_slot_index;
             }
             if (D_0013C940.w1C4 & 0x4000) {
                 if (cur == -1)
-                    t = D_L00_0017DC44;
+                    next_slot_index = D_L00_0017DC44;
                 else
-                    t = D_L00_0015FAC0_c[D_L00_0015F72C][cur].unk14;
-                cur = t;
+                    next_slot_index = D_L00_0015FAC0_c[D_L00_0015F72C][cur].unk14;
+                cur = next_slot_index;
             }
             if (D_0013C940.w1C4 & 0x8000) {
                 if (cur == -1)
-                    t = D_L00_0017DC38;
+                    next_slot_index = D_L00_0017DC38;
                 else
-                    t = D_L00_0015FAC0_c[D_L00_0015F72C][cur].unk8;
-                cur = t;
+                    next_slot_index = D_L00_0015FAC0_c[D_L00_0015F72C][cur].unk8;
+                cur = next_slot_index;
             }
             if (D_0013C940.w1C4 & 0x2000) {
                 if (cur == -1)
-                    t = D_L00_0017DC3C;
+                    next_slot_index = D_L00_0017DC3C;
                 else
-                    t = D_L00_0015FAC0_c[D_L00_0015F72C][cur].unkC;
-                cur = t;
+                    next_slot_index = D_L00_0015FAC0_c[D_L00_0015F72C][cur].unkC;
+                cur = next_slot_index;
             }
-            o->w74 = cur;
+            hud_element->w74 = cur;
         }
     }
-    if (o->w74 != old) {
-        c[1] = 0;
-    } else if (c[1] < D_L00_0015F780_gp) {
-        c[1]++;
+    if (hud_element->w74 != old) {
+        counters[1] = 0;
+    } else if (counters[1] < D_L00_0015F780_gp) {
+        counters[1]++;
     }
     if (!(D_0013C940.w1C0 & 0x10)) {
-        if (o->w74 == -1)
+        if (hud_element->w74 == -1)
             D_00141610[0] = 0;
         else
-            D_00141610[0] = D_L00_0015FAC0_c[D_L00_0015F72C][o->w74].unk18;
-        if (c[0] != 0)
-            c[0]--;
-    } else if (c[0] < D_L00_0015F780_gp) {
-        c[0]++;
+            D_00141610[0] = D_L00_0015FAC0_c[D_L00_0015F72C][hud_element->w74].unk18;
+        if (counters[0] != 0)
+            counters[0]--;
+    } else if (counters[0] < D_L00_0015F780_gp) {
+        counters[0]++;
     }
-    if (c[0] == 0) {
+    if (counters[0] == 0) {
         {
-            int a = o->w78;
-            int b = o->w74;
+            int a = hud_element->w78;
+            int b = hud_element->w74;
             D_L00_0015FA9C = b;
             D_L00_0015FA98 = a;
         }
-        remove_hud_item(o->w64);
-        o->w6C = -6;
+        remove_hud_item(hud_element->w64);
+        hud_element->w6C = -6;
         D_L00_0015FA94 = D_L00_0015F3F8;
     }
 }
