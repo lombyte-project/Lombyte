@@ -359,9 +359,9 @@ extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
 extern void allocate_voice_for_bank_entry_alt(int, int, int) __asm__("FUN_0022db10");
 extern unsigned char D_0013D50F_e[] __asm__("D_0013D408");
 
-void FUN_L12_002ed280(struct Moby *m) {
-    int *d = (int *)m->pvars;
-    if (FUN_L01_0026e008(d[3], -1) == 0) {
+void FUN_L12_002ed280(struct Moby *moby) {
+    int *moby_vars = (int *)moby->pvars;
+    if (FUN_L01_0026e008(moby_vars[3], -1) == 0) {
         unsigned char *s = D_0013D50F_e;
         if (s[0x14] == 0) {
             s[0x14] = 1;
@@ -380,7 +380,7 @@ void FUN_L12_002ed280(struct Moby *m) {
                 *(unsigned short *)(h + 0x36A) = scale_game_frames_c(D_0015EEA4) / 600;
             }
             *(unsigned int *)(h + 0x36C) = *(unsigned int *)(h + 0x36C) | (1 << current_level_index) | 0x80000000;
-            if (is_point_inside_clip_volume(&q->motion.pos, d[0])) {
+            if (is_point_inside_clip_volume(&q->motion.pos, moby_vars[0])) {
                 help_request(0x2EE3, 0x6D);
             }
         }
@@ -392,15 +392,15 @@ void FUN_L12_002ed280(struct Moby *m) {
                 && scale_game_frames_c(D_0015EEA4) - *(unsigned short *)(h + 0x372) * 600 > scale_game_frames_c(72000))) {
             struct Hero *q = &hero;
             if (q->state.current == 0x81) {
-                d[1]++;
+                moby_vars[1]++;
                 if ((pad_held[0] & 3) && 0.3f < q->unk229C) {
-                    d[2]++;
+                    moby_vars[2]++;
                 } else {
-                    d[2] = 0;
+                    moby_vars[2] = 0;
                 }
-                if (scale_game_frames_c(0x28) < d[2]) {
+                if (scale_game_frames_c(0x28) < moby_vars[2]) {
                     char *g = D_00141968_h;
-                    d[1] = 0;
+                    moby_vars[1] = 0;
                     if (*(unsigned short *)(g + 0x370) <= 0xFFFE) {
                         *(unsigned short *)(g + 0x370) = *(unsigned short *)(g + 0x370) + 1;
                     }
@@ -413,7 +413,7 @@ void FUN_L12_002ed280(struct Moby *m) {
                     int a = scale_game_frames_c(0x1C20);
                     int b = scale_game_frames_c(0x708);
                     char *k = D_00141968_h;
-                    if (*(unsigned short *)(k + 0x370) * a + b < d[1]) {
+                    if (*(unsigned short *)(k + 0x370) * a + b < moby_vars[1]) {
                         help_request(0x2EE4, 0x6E);
                     }
                 }
