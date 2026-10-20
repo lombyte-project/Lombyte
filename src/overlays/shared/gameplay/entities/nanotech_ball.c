@@ -1062,33 +1062,33 @@ extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
 extern void blend_moby_animation_alt(void *, int, int, int) __asm__("FUN_00212f90");
 
 int FUN_L00_002da058(u8 *p, void *q, void *m_, void *r_, void *buf) {
-    char *m = (char *)m_;
+    char *candidate_moby = (char *)m_;
     char *r = (char *)r_;
     int ret = 0;
     int (*fn)(void *, void *, void *) =
-        **(int (***)(void *, void *, void *))(*(char **)(m + 0x24) + 0x2C);
+        **(int (***)(void *, void *, void *))(*(char **)(candidate_moby + 0x24) + 0x2C);
     char *x;
     int c;
-    int n;
+    int occupied_slot_count;
     int i;
     if (fn != 0) {
-        ret = fn(m, buf, p);
+        ret = fn(candidate_moby, buf, p);
         if (ret == 2 && *(short *)(r + 0x68) != 3) {
 
-            n = D_0013F350_a.i2078 + D_0013F350_a.i207C;
-            if (D_0013E529 == 0 ? n < 5 : n < 10) {
+            occupied_slot_count = D_0013F350_a.i2078 + D_0013F350_a.i207C;
+            if (D_0013E529 == 0 ? occupied_slot_count < 5 : occupied_slot_count < 10) {
                 x = *(char **)(r + 0x70);
-                if (((unsigned char *)m)[0x53] != (unsigned char)x[3]) {
-                    blend_moby_animation_alt(m, (unsigned char)x[3], 0, scale_game_frames_alt(10));
+                if (((unsigned char *)candidate_moby)[0x53] != (unsigned char)x[3]) {
+                    blend_moby_animation_alt(candidate_moby, (unsigned char)x[3], 0, scale_game_frames_alt(10));
                 }
                 *(short *)(r + 0x68) = 3;
                 *(int *)(r + 0x6C) = 0;
-                *(float *)(m + 0x58) = 1.0f;
-                *(float *)(r + 0x64) = vector_distance_xy(m + 0x10, buf);
+                *(float *)(candidate_moby + 0x58) = 1.0f;
+                *(float *)(r + 0x64) = vector_distance_xy(candidate_moby + 0x10, buf);
                 for (i = 0; i < (D_0013E529 == 0 ? 5 : 10); i++) {
                     G_2db508 *gg = &D_0013F350;
                     if (D_001413A0[i] == 0) {
-                        D_001413A0[i] = m;
+                        D_001413A0[i] = candidate_moby;
                         *(short *)(r + 0x6A) = i;
                         gg->i207C++;
                         break;
