@@ -1873,23 +1873,23 @@ void FUN_L14_00315d48(char *cam) {
         ((CamBones5d48 *)D_L14_0017AD80)->f278 = D_L14_001624AC * 0.017453292f;
     }
     if (rec->n30 < 3 && D_L14_001F6C08[rec->n30][side] <= D_L14_001624C0) {
-        struct Moby *m0 = (struct Moby *)(D_L14_0015FFD8_5d48 + (rec->m24 << 8));
-        struct Moby *m1 = (struct Moby *)(D_L14_0015FFD8_5d48 + (rec->m28 << 8));
-        struct Moby *m2 = (struct Moby *)(D_L14_0015FFD8_5d48 + (rec->m2C << 8));
+        struct Moby *first_linked_moby = (struct Moby *)(D_L14_0015FFD8_5d48 + (rec->m24 << 8));
+        struct Moby *second_linked_moby = (struct Moby *)(D_L14_0015FFD8_5d48 + (rec->m28 << 8));
+        struct Moby *third_linked_moby = (struct Moby *)(D_L14_0015FFD8_5d48 + (rec->m2C << 8));
 
-        if (hero.unk560 == D_L14_0015F70C_z[MOBYDATA_5d48(m0)->zone].id) {
-            m0->command = 1;
+        if (hero.unk560 == D_L14_0015F70C_z[MOBYDATA_5d48(first_linked_moby)->zone].id) {
+            first_linked_moby->command = 1;
             if (rec->n30 > 0) {
                 {
-                    CamMobyData5d48 *d = MOBYDATA_5d48(m1);
+                    CamMobyData5d48 *d = MOBYDATA_5d48(second_linked_moby);
 
-                    m1->command = 5;
+                    second_linked_moby->command = 5;
                     if (rec->n30 == 2) {
                         CamMobyData5d48 *d2;
 
                         d->timer = scale_ticks_5d48(0x2D);
-                        m2->command = 5;
-                        d2 = MOBYDATA_5d48(m2);
+                        third_linked_moby->command = 5;
+                        d2 = MOBYDATA_5d48(third_linked_moby);
                         d2->timer = scale_ticks_5d48(0x6E);
                     } else if (rec->n30 == 3) {
                         d->timer = scale_ticks_5d48(0x2D);
@@ -1898,19 +1898,19 @@ void FUN_L14_00315d48(char *cam) {
                     }
                 }
             }
-        } else if (hero.unk560 == D_L14_0015F70C_z[MOBYDATA_5d48(m1)->zone].id) {
-            m1->command = 1;
+        } else if (hero.unk560 == D_L14_0015F70C_z[MOBYDATA_5d48(second_linked_moby)->zone].id) {
+            second_linked_moby->command = 1;
             if (rec->n30 > 0) {
                 if (random_integer_below(2)) {
-                    CamMobyData5d48 *d = MOBYDATA_5d48(m0);
+                    CamMobyData5d48 *d = MOBYDATA_5d48(first_linked_moby);
 
-                    m0->command = 5;
+                    first_linked_moby->command = 5;
                     if (rec->n30 == 2) {
                         CamMobyData5d48 *d2;
 
                         d->timer = scale_ticks_5d48(0x2D);
-                        m2->command = 5;
-                        d2 = MOBYDATA_5d48(m2);
+                        third_linked_moby->command = 5;
+                        d2 = MOBYDATA_5d48(third_linked_moby);
                         d2->timer = scale_ticks_5d48(0x6E);
                     } else if (rec->n30 == 3) {
                         d->timer = scale_ticks_5d48(0x2D);
@@ -1918,15 +1918,15 @@ void FUN_L14_00315d48(char *cam) {
                         d->timer = scale_ticks_5d48(0x50);
                     }
                 } else {
-                    CamMobyData5d48 *d = MOBYDATA_5d48(m2);
+                    CamMobyData5d48 *d = MOBYDATA_5d48(third_linked_moby);
 
-                    m2->command = 5;
+                    third_linked_moby->command = 5;
                     if (rec->n30 == 2) {
                         CamMobyData5d48 *d2;
 
                         d->timer = scale_ticks_5d48(0x2D);
-                        m0->command = 5;
-                        d2 = MOBYDATA_5d48(m0);
+                        first_linked_moby->command = 5;
+                        d2 = MOBYDATA_5d48(first_linked_moby);
                         d2->timer = scale_ticks_5d48(0x6E);
                     } else if (rec->n30 == 3) {
                         d->timer = scale_ticks_5d48(0x2D);
@@ -1936,18 +1936,18 @@ void FUN_L14_00315d48(char *cam) {
                 }
             }
         } else {
-            m2->command = 1;
+            third_linked_moby->command = 1;
             if (rec->n30 > 0) {
                 {
-                    CamMobyData5d48 *d = MOBYDATA_5d48(m1);
+                    CamMobyData5d48 *d = MOBYDATA_5d48(second_linked_moby);
 
-                    m1->command = 5;
+                    second_linked_moby->command = 5;
                     if (rec->n30 == 2) {
                         CamMobyData5d48 *d2;
 
                         d->timer = scale_ticks_5d48(0x2D);
-                        m0->command = 5;
-                        d2 = MOBYDATA_5d48(m0);
+                        first_linked_moby->command = 5;
+                        d2 = MOBYDATA_5d48(first_linked_moby);
                         d2->timer = scale_ticks_5d48(0x6E);
                     } else if (rec->n30 == 3) {
                         d->timer = scale_ticks_5d48(0x2D);
