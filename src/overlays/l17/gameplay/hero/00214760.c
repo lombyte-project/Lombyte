@@ -311,7 +311,7 @@ void FUN_L17_00214760(void) {
     Vec4 vector_workspace;
     Vec4 temporary_vector;
     Vec4 m40[4];
-    Vec4 m80[4];
+    Vec4 transposed_rotation_matrix[4];
     Vec4 vC0;
     Vec4 vD0;
 
@@ -1002,8 +1002,8 @@ void FUN_L17_00214760(void) {
         clear_u64_value(&vector_workspace);
         vector_workspace.f[2] = hero.motion.rot.f[2];
         euler_rotation_matrix(m40, &vector_workspace);
-        transpose_rotation_matrix(m80, m40);
-        transform_vector(&scratch_vector, &scratch_vector, m80);
+        transpose_rotation_matrix(transposed_rotation_matrix, m40);
+        transform_vector(&scratch_vector, &scratch_vector, transposed_rotation_matrix);
         v10.f[0] = -fast_arc_tan(square_root(scratch_vector.f[0] * scratch_vector.f[0] + scratch_vector.f[2] * scratch_vector.f[2]), scratch_vector.f[1]);
         v10.f[1] = fast_arc_tan(scratch_vector.f[2], scratch_vector.f[0]);
         FUN_L00_0025bc98(&hero.motion.rot.f[1], v10.f[1], &hero.motion.unkA0.f[1], 0, frame_scale_sq * 0.04f, frame_scale_sq * 0.2f,
@@ -1587,14 +1587,14 @@ void FUN_L17_00214760(void) {
         }
         FUN_L00_00211be8();
         if (hero.unk930 > 0.0f) {
-            Vec4 *p = &hero.move_impulse;
+            Vec4 *move_impulse = &hero.move_impulse;
             FUN_L00_002132b8(0.7f, 0.0f);
             scratch_vector.q = hero.move_impulse.q;
             hero.target_speed += forward_component(&scratch_vector);
             if (hero.target_speed < frame_time * 0.7f) {
                 hero.target_speed = frame_time * 0.7f;
             }
-            clear_u64_value(p);
+            clear_u64_value(move_impulse);
         }
         k = 1.0f;
         if (hero.state.step == 1 && hero.unk3BE == 0) {
