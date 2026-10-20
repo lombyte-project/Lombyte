@@ -2389,15 +2389,15 @@ extern int D_L06_001AC180[];
 
 void FUN_L06_002f2910(void *moby_arg) {
     GbMoby *moby = moby_arg;
-    GbVars *d = moby->vars;
+    GbVars *gadgebot_vars = moby->vars;
     GbMoby *candidate;
     float best = 12.0f;
     int list;
     int *cursor;
 
-    d->target = 0;
-    if (d->target_group != -1) {
-        FUN_L00_002591d0(&list, d->target_group, 0, 0);
+    gadgebot_vars->target = 0;
+    if (gadgebot_vars->target_group != -1) {
+        FUN_L00_002591d0(&list, gadgebot_vars->target_group, 0, 0);
         while (list != 0) {
             if (((GbMoby *)list)->cls_id == 0x3b1 || ((GbMoby *)list)->cls_id == 0x400 ||
                 ((GbMoby *)list)->cls_id == 0x515 || ((GbMoby *)list)->cls_id == 0x516) {
@@ -2408,7 +2408,7 @@ void FUN_L06_002f2910(void *moby_arg) {
                         ((GbMoby *)list)->state != 2) {
                         if (((GbMoby *)list)->cls_id != 0x515 || *(int *)((GbMoby *)list)->vars != -1) {
                             best = vector_distance(moby->pos, ((GbMoby *)list)->pos);
-                            d->target = (GbMoby *)list;
+                            gadgebot_vars->target = (GbMoby *)list;
                         }
                     }
                 }
@@ -2427,7 +2427,7 @@ void FUN_L06_002f2910(void *moby_arg) {
                         candidate->state != 2) {
                         if (candidate->cls_id != 0x515 || *(int *)candidate->vars != -1) {
                             best = vector_distance(moby->pos, candidate->pos);
-                            d->target = candidate;
+                            gadgebot_vars->target = candidate;
                         }
                     }
                 }
@@ -2435,7 +2435,7 @@ void FUN_L06_002f2910(void *moby_arg) {
             cursor++;
         }
     }
-    d->target_searched = 1;
+    gadgebot_vars->target_searched = 1;
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D9548.c: func_L06_002F4058), where it is exact; names translated to the US level program. */
 
