@@ -1015,7 +1015,7 @@ void FUN_L10_002e17c0(struct Moby *moby)
     int st;
     float ang;
     Hit_2E2B80 *r;
-    int r19;
+    int target_selection_status;
 
     if (data->f38 != 0) {
         data->f184 = func_001FA898_2E2B80(scale_time(random_float_between(180.0f, 240.0f)));
@@ -1069,8 +1069,8 @@ void FUN_L10_002e17c0(struct Moby *moby)
         data->f180 = data->f178;
     }
     if (data->f174 == 2) {
-        r19 = ahead_f(data->f180, moby, data->fC0);
-        if (r19 != 2) {
+        target_selection_status = ahead_f(data->f180, moby, data->fC0);
+        if (target_selection_status != 2) {
             Anim_2E2B80 *bp = &D_L10_001600EC[data->f194];
             subtract_vector_xyz(v, D_0013F3D0, bp->f30);
             v[3] = 0.0f;
@@ -1080,13 +1080,13 @@ void FUN_L10_002e17c0(struct Moby *moby)
             }
         }
     } else if (moby->state == 1 && data->f18C >= 0) {
-        r19 = activate_effect_l08(data->f180, moby, data->fC0, 0, 0, D_L10_001B0C30_2E2B80[data->f18C]->pts, D_L10_001B0C30_2E2B80[data->f18C]->count);
+        target_selection_status = activate_effect_l08(data->f180, moby, data->fC0, 0, 0, D_L10_001B0C30_2E2B80[data->f18C]->pts, D_L10_001B0C30_2E2B80[data->f18C]->count);
     } else if (moby->state != 1 && data->f17C >= 0) {
-        r19 = activate_effect_l08(data->f180, moby, data->fC0, 0, 0, D_L10_001B0C30_2E2B80[data->f17C]->pts, D_L10_001B0C30_2E2B80[data->f17C]->count);
+        target_selection_status = activate_effect_l08(data->f180, moby, data->fC0, 0, 0, D_L10_001B0C30_2E2B80[data->f17C]->pts, D_L10_001B0C30_2E2B80[data->f17C]->count);
     } else {
-        r19 = ahead_f(data->f180, moby, data->fC0);
+        target_selection_status = ahead_f(data->f180, moby, data->fC0);
     }
-    if (r19 != 2) {
+    if (target_selection_status != 2) {
         if (data->f180 < vector_distance(data->f130, data->fC0)) {
             data->f104 = 2;
         } else if (moby->visible == 0) {
