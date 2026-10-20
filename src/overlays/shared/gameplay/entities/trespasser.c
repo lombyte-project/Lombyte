@@ -1118,36 +1118,36 @@ void FUN_L00_002c1778(void *mv) {
         TRESPASSER_WAIT_FOR_HERO_PROXIMITY = 1,
         TRESPASSER_SHRINK_FOR_REMOVAL = 2
     };
-    unsigned char *m = mv;
+    unsigned char *trespasser_moby = mv;
     struct Hero *P;
-    switch (m[0x20]) {
+    switch (trespasser_moby[0x20]) {
     case TRESPASSER_INITIALIZE:
-        FUN_00213508_2c1778(m + 0x10, 0, 0.5f);
-        *(float *)(m + 0x40) = 1.5707964f;
-        *(float *)(m + 0x44) = 3.1415927f;
-        *(float *)(m + 0x18) = D_L00_00173E68_2c1778 + D_L00_00161828;
-        m[0x20] = 1;
+        FUN_00213508_2c1778(trespasser_moby + 0x10, 0, 0.5f);
+        *(float *)(trespasser_moby + 0x40) = 1.5707964f;
+        *(float *)(trespasser_moby + 0x44) = 3.1415927f;
+        *(float *)(trespasser_moby + 0x18) = D_L00_00173E68_2c1778 + D_L00_00161828;
+        trespasser_moby[0x20] = 1;
         break;
     case TRESPASSER_WAIT_FOR_HERO_PROXIMITY: {
-        float r = FUN_001fa580_2c1778(*(float *)(m + 0x48), D_L00_00161830);
+        float r = FUN_001fa580_2c1778(*(float *)(trespasser_moby + 0x48), D_L00_00161830);
         int t = D_L00_0015F5CC_2c1778[0];
-        *(float *)(m + 0x48) = r;
+        *(float *)(trespasser_moby + 0x48) = r;
         if (t % 10 == 0) {
             P = &hero;
             if (P->health.hp) {
-                if (FUN_001f9b80_2c1778(m + 0x10, &P->motion.pos) < 1.0f) {
-                    if (FUN_001f99c0_2c1778(*(float *)(m + 0x18) - P->motion.pos.f[2]) < 2.0f) {
+                if (FUN_001f9b80_2c1778(trespasser_moby + 0x10, &P->motion.pos) < 1.0f) {
+                    if (FUN_001f99c0_2c1778(*(float *)(trespasser_moby + 0x18) - P->motion.pos.f[2]) < 2.0f) {
                         FUN_L00_00260860_2c1778(0x1A, 1);
-                        m[0x20] = 2;
+                        trespasser_moby[0x20] = 2;
                     }
                 }
             }
         }
     } break;
     case TRESPASSER_SHRINK_FOR_REMOVAL:
-        FUN_00213ed8_2c1778(m + 0x2C, 0.0f, *(float *)(*(char **)(m + 0x24) + 0x24) * 0.02f);
-        if (*(float *)(m + 0x2C) == 0.0f)
-            FUN_0020c828_2c1778(m);
+        FUN_00213ed8_2c1778(trespasser_moby + 0x2C, 0.0f, *(float *)(*(char **)(trespasser_moby + 0x24) + 0x24) * 0.02f);
+        if (*(float *)(trespasser_moby + 0x2C) == 0.0f)
+            FUN_0020c828_2c1778(trespasser_moby);
         break;
     }
 }
