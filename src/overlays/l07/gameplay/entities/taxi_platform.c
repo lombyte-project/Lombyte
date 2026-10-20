@@ -3524,7 +3524,7 @@ void FUN_L07_00311eb8(float radius, void *moby_, void *obj_, short pa, void *pos
     char *moby = moby_;
     char *obj = obj_;
     float v[4];
-    char *e;
+    char *effect_slot_entry;
     int y;
     if (pos == 0) {
         qcopy(v, moby + 0x10);
@@ -3547,14 +3547,14 @@ void FUN_L07_00311eb8(float radius, void *moby_, void *obj_, short pa, void *pos
         }
     }
     if (*(short *)(obj + 0x280) != -1) {
-        e = D_L07_00180340 + (*(short *)(obj + 0x280) << 5);
+        effect_slot_entry = D_L07_00180340 + (*(short *)(obj + 0x280) << 5);
         if (*(short *)(obj + 0x282) == pa && (pa == -1 || *(short *)(obj + 0x284) == 0) || *(short *)(obj + 0x282) != pa) {
             if (b != -1) {
                 *(short *)(obj + 0x284) = b;
                 *(short *)(obj + 0x286) = b;
             }
             if (radius != -1.0f) {
-                *(float *)(e + 0x1C) = radius;
+                *(float *)(effect_slot_entry + 0x1C) = radius;
             }
         } else {
             if (b != -1) {
@@ -3563,23 +3563,23 @@ void FUN_L07_00311eb8(float radius, void *moby_, void *obj_, short pa, void *pos
                     *(short *)(obj + 0x284) = y;
                 }
                 if (radius != -1.0f) {
-                    *(float *)(e + 0x1C) = radius;
+                    *(float *)(effect_slot_entry + 0x1C) = radius;
                 }
             } else if (radius != -1.0f) {
-                *(float *)(e + 0x1C) = radius;
+                *(float *)(effect_slot_entry + 0x1C) = radius;
             }
         }
         if ((int)color != -1) {
             *(int *)(obj + 0x288) = color;
-            *(float *)e = convert_integer_to_float(color & 0xFF) * 0.0078125f;
-            *(float *)(e + 4) = convert_integer_to_float(((int)color >> 8) & 0xFF) * 0.0078125f;
-            *(float *)(e + 8) = convert_integer_to_float(((int)color >> 16) & 0xFF) * 0.0078125f;
+            *(float *)effect_slot_entry = convert_integer_to_float(color & 0xFF) * 0.0078125f;
+            *(float *)(effect_slot_entry + 4) = convert_integer_to_float(((int)color >> 8) & 0xFF) * 0.0078125f;
+            *(float *)(effect_slot_entry + 8) = convert_integer_to_float(((int)color >> 16) & 0xFF) * 0.0078125f;
         }
         if (ca != -1) {
             *(int *)(obj + 0x28C) = ca;
         }
         if (pos != 0) {
-            qcopy(e + 0x10, pos);
+            qcopy(effect_slot_entry + 0x10, pos);
         }
         if (pa != -1) {
             *(short *)(obj + 0x282) = pa;
