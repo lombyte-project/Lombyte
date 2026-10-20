@@ -24,7 +24,7 @@ extern void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
 void update_camera_view_matrices(void) __asm__("FUN_001f2260");
 
 void update_camera_view_matrices(void) {
-    Vec4 m[4];
+    Vec4 camera_basis_matrix[4];
     struct G *g;
     u8 *x;
     f32 *xf;
@@ -33,29 +33,29 @@ void update_camera_view_matrices(void) {
     f32 c;
 
     if (camera_position_publication_suppressed[0] == 0) {
-        qcopy(&m[0].q, camera_rows);
-        qcopy(&m[1].q, camera_rows + 0x10);
-        qcopy(&m[2].q, camera_rows + 0x20);
+        qcopy(&camera_basis_matrix[0].q, camera_rows);
+        qcopy(&camera_basis_matrix[1].q, camera_rows + 0x10);
+        qcopy(&camera_basis_matrix[2].q, camera_rows + 0x20);
     } else {
-        sceVu0UnitMatrix(m);
-        SceVu0RotMatrixX(m, m, D_00186F40.f[0x150 / 4]);
-        SceVu0RotMatrixY(m, m, D_00186F40.f[0x154 / 4]);
-        sceVu0RotMatrixZ(m, m, D_00186F40.f[0x158 / 4]);
+        sceVu0UnitMatrix(camera_basis_matrix);
+        SceVu0RotMatrixX(camera_basis_matrix, camera_basis_matrix, D_00186F40.f[0x150 / 4]);
+        SceVu0RotMatrixY(camera_basis_matrix, camera_basis_matrix, D_00186F40.f[0x154 / 4]);
+        sceVu0RotMatrixZ(camera_basis_matrix, camera_basis_matrix, D_00186F40.f[0x158 / 4]);
     }
     g = &D_00186F40;
     x = D_0018CD00 + 0xC0;
     xf = (f32 *)D_0018CD00;
-    g->f[0] = -m[1].f[0];
+    g->f[0] = -camera_basis_matrix[1].f[0];
     g->f[0x3C / 4] = 1.0f;
     *(s32 *)&g->f[0x30 / 4] = 0;
-    g->f[0x10 / 4] = -m[1].f[1];
-    g->f[0x20 / 4] = -m[1].f[2];
-    g->f[4 / 4] = -m[2].f[0];
-    g->f[0x14 / 4] = -m[2].f[1];
-    g->f[0x24 / 4] = -m[2].f[2];
-    g->f[8 / 4] = m[0].f[0];
-    g->f[0x18 / 4] = m[0].f[1];
-    g->f[0x28 / 4] = m[0].f[2];
+    g->f[0x10 / 4] = -camera_basis_matrix[1].f[1];
+    g->f[0x20 / 4] = -camera_basis_matrix[1].f[2];
+    g->f[4 / 4] = -camera_basis_matrix[2].f[0];
+    g->f[0x14 / 4] = -camera_basis_matrix[2].f[1];
+    g->f[0x24 / 4] = -camera_basis_matrix[2].f[2];
+    g->f[8 / 4] = camera_basis_matrix[0].f[0];
+    g->f[0x18 / 4] = camera_basis_matrix[0].f[1];
+    g->f[0x28 / 4] = camera_basis_matrix[0].f[2];
     *(s32 *)&g->f[0x34 / 4] = 0;
     *(s32 *)&g->f[0x38 / 4] = 0;
     *(s32 *)&g->f[0xC / 4] = 0;
