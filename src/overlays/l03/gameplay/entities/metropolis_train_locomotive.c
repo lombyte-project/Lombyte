@@ -2546,7 +2546,7 @@ void FUN_L03_002c6fd0(Moby2C8398 *m) {
         if (FUN_L00_0024f7c8_cf((char *)m, 8.0f)) {
             float a[4];
             float b[4];
-            float c[4];
+            float scaled_launch_vector[4];
             float e[4];
             float ang;
             float df;
@@ -2568,9 +2568,9 @@ void FUN_L03_002c6fd0(Moby2C8398 *m) {
                 b[1] = scale_vector_xyz_cf(ang) * (frame_time * 6.0f);
                 b[2] = 0.0f;
             }
-            FUN_L00_001ff290_cf(c, b, truncate_float_to_s32_cf(10.0f));
-            FUN_L03_00250ae8_cf(e, c, a);
-            FUN_L03_002d4288_cf(m, c, 0);
+            FUN_L00_001ff290_cf(scaled_launch_vector, b, truncate_float_to_s32_cf(10.0f));
+            FUN_L03_00250ae8_cf(e, scaled_launch_vector, a);
+            FUN_L03_002d4288_cf(m, scaled_launch_vector, 0);
             compute_interpolated_record_value_cf(b, a, m, FUN_L03_002c6d98_cf(0x82), ang,
                                                  frame_time * 6.0f, 0.75f);
         }
