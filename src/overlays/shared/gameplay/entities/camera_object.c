@@ -2334,14 +2334,14 @@ extern void FUN_L00_0023e838(int);
 void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
 void FUN_L00_002a9be0(void) {
-    char *m = *(char **)&D_L00_001613C8_d;
-    if (m != 0) {
-        if (*(short *)(m + 0xA6) == 0x5F3) {
+    char *tracked_moby = *(char **)&D_L00_001613C8_d;
+    if (tracked_moby != 0) {
+        if (*(short *)(tracked_moby + 0xA6) == 0x5F3) {
             char *data;
             int idx;
-            if (*(unsigned char *)(m + 0x20) != 0)
+            if (*(unsigned char *)(tracked_moby + 0x20) != 0)
                 return;
-            data = *(char **)(m + 0x78);
+            data = *(char **)(tracked_moby + 0x78);
             D_L00_0015F320 = 0;
             D_L00_0015F330 = 0;
             idx = *(short *)(data + 0x2C);
