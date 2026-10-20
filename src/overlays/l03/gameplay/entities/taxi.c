@@ -1028,35 +1028,35 @@ extern void FUN_L00_00250df8(void *);
 extern struct Moby *func_0020D348_m(int) __asm__("FUN_0020c4f8");
 
 char *FUN_L03_002d4288(char *a, char *pos, struct Moby *parent, int n, float f0, float f1, float f2);
-char *FUN_L03_002d4288(char *a, char *pos, struct Moby *parent, int n, float f0, float f1, float f2) {
-    char *m = (char *)func_0020D348_m(0x341);
-    char *d;
-    if (m != 0) {
+char *FUN_L03_002d4288(char *a, char *pos, struct Moby *parent, int timer_frames, float f0, float f1, float f2) {
+    char *spawned_moby = (char *)func_0020D348_m(0x341);
+    char *moby_vars;
+    if (spawned_moby != 0) {
         float v[4];
-        *(unsigned char *)(m + 0x30) = 0xFF;
-        *(short *)(m + 0x32) = 0x7E;
-        d = *(char **)(m + 0x78);
-        m[0x31] = 1;
-        m[0x20] = 1;
-        qcopy(m + 0x10, pos);
-        qcopy(d, a);
-        *(float *)(m + 0x48) = fast_arc_tan(*(float *)d, *(float *)(d + 4));
-        *(int *)(d + 0x14) = scale_game_frames(n);
-        *(float *)(d + 0x18) = f2;
-        *(float *)(d + 0x1C) = f0;
-        *(float *)(d + 0x24) = f1;
-        *(char **)(d + 0x10) = parent;
-        *(int *)(d + 0x28) = 0;
+        *(unsigned char *)(spawned_moby + 0x30) = 0xFF;
+        *(short *)(spawned_moby + 0x32) = 0x7E;
+        moby_vars = *(char **)(spawned_moby + 0x78);
+        spawned_moby[0x31] = 1;
+        spawned_moby[0x20] = 1;
+        qcopy(spawned_moby + 0x10, pos);
+        qcopy(moby_vars, a);
+        *(float *)(spawned_moby + 0x48) = fast_arc_tan(*(float *)moby_vars, *(float *)(moby_vars + 4));
+        *(int *)(moby_vars + 0x14) = scale_game_frames(timer_frames);
+        *(float *)(moby_vars + 0x18) = f2;
+        *(float *)(moby_vars + 0x1C) = f0;
+        *(float *)(moby_vars + 0x24) = f1;
+        *(char **)(moby_vars + 0x10) = parent;
+        *(int *)(moby_vars + 0x28) = 0;
         *(OvlQuad *)v = *(OvlQuad *)&parent->pos;
         v[2] = *(float *)(pos + 8);
         if (collision_line(v, pos, 2, parent, 0) != 0) {
-            *(int *)(d + 0x14) = 0;
-            *(OvlQuad *)(m + 0x10) = *(OvlQuad *)&coll_hit;
-            *(int *)(d + 0x24) = 0;
+            *(int *)(moby_vars + 0x14) = 0;
+            *(OvlQuad *)(spawned_moby + 0x10) = *(OvlQuad *)&coll_hit;
+            *(int *)(moby_vars + 0x24) = 0;
         }
-        FUN_L00_00250df8(m);
+        FUN_L00_00250df8(spawned_moby);
     }
-    return m;
+    return spawned_moby;
 }
 #include "qcopy.h"
 #include "rnc/gameplay/entities/moby.h"
