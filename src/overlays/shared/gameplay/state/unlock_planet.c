@@ -92,11 +92,11 @@ int FUN_L00_0025fcb8(char *a, char *o, float best) {
 extern int FUN_00214720_25ff38(void *, int) __asm__("FUN_00214720");
 extern int FUN_L00_00259740_25ff38(void *, void *, int) __asm__("FUN_L00_00259740");
 int FUN_L00_0025ff38(char *a, char *o, float best, int *list, int n, float *v, int nv);
-int FUN_L00_0025ff38(char *a, char *o, float best, int *list, int n, float *v, int nv) {
+int FUN_L00_0025ff38(char *query_moby, char *target_output, float best, int *list, int n, float *v, int nv) {
     struct Hero *g = &hero_lui;
-    char *m;
-    char *p;
-    char *q;
+    char *selected_moby;
+    char *indexed_candidate;
+    char *listed_candidate;
     int res;
     int i;
     int j;
@@ -104,100 +104,100 @@ int FUN_L00_0025ff38(char *a, char *o, float best, int *list, int n, float *v, i
     int ok;
     float d;
 
-    m = (char *)g->moby;
+    selected_moby = (char *)g->moby;
     res = 0;
     if (g->state.control_mode == 0x18 || g->state.current == 0x72) {
-        m = 0;
+        selected_moby = 0;
         res = 2;
     } else if (n > 0) {
         for (k = 0; k < n - 1; k++) {
             if (FUN_00214720_25ff38(&hero_lui.motion.pos, list[k]) != 0) {
-                m = 0;
+                selected_moby = 0;
                 res = 2;
                 break;
             }
         }
     } else if (v != 0 && nv > 0) {
         if (FUN_L00_00259740_25ff38(&hero_lui.motion.pos, v, nv) == 0) {
-            m = 0;
+            selected_moby = 0;
             res = 2;
         }
     }
     for (i = 1; i <= D_L00_001B0830_lui[0]; i++) {
-        p = D_L00_0015FFD8_25fcb8 + (D_L00_001B0830_lui[i] << 8);
-        if (p == 0) continue;
-        if (*(short *)(p + 0xA6) != 0xCB && *(short *)(p + 0xA6) != 0x76C) continue;
-        if (*(unsigned char *)(p + 0x20) == 0xFE) continue;
-        if (*(unsigned char *)(p + 0x20) == 0xFD) continue;
-        if (*(unsigned char *)(p + 0x20) != 3) continue;
+        indexed_candidate = D_L00_0015FFD8_25fcb8 + (D_L00_001B0830_lui[i] << 8);
+        if (indexed_candidate == 0) continue;
+        if (*(short *)(indexed_candidate + 0xA6) != 0xCB && *(short *)(indexed_candidate + 0xA6) != 0x76C) continue;
+        if (*(unsigned char *)(indexed_candidate + 0x20) == 0xFE) continue;
+        if (*(unsigned char *)(indexed_candidate + 0x20) == 0xFD) continue;
+        if (*(unsigned char *)(indexed_candidate + 0x20) != 3) continue;
         ok = 1;
-        d = FUN_001f9b80_25fcb8(a + 0x10, p + 0x10);
+        d = FUN_001f9b80_25fcb8(query_moby + 0x10, indexed_candidate + 0x10);
         if (best <= d) {
             ok = 0;
         } else if (n > 0) {
             for (k = 0; k < n - 1; k++) {
-                if (FUN_00214720_25ff38(p + 0x10, list[k]) != 0) {
+                if (FUN_00214720_25ff38(indexed_candidate + 0x10, list[k]) != 0) {
                     ok = 0;
                     break;
                 }
             }
         } else if (v != 0 && nv > 0) {
-            if (FUN_L00_00259740_25ff38(p + 0x10, v, nv) == 0) ok = 0;
+            if (FUN_L00_00259740_25ff38(indexed_candidate + 0x10, v, nv) == 0) ok = 0;
         }
         if (ok) {
-            m = p;
+            selected_moby = indexed_candidate;
             res = 1;
             best = d;
         }
     }
     for (j = 0; j < 20; j++) {
-        q = D_L00_001DD100_25fcb8[j];
-        if (q == 0) continue;
-        if (*(short *)(q + 0xA6) != 0x10E) continue;
-        if (*(unsigned char *)(q + 0x20) == 0xFE) continue;
-        if (*(unsigned char *)(q + 0x20) == 0xFD) continue;
-        if (*(unsigned char *)(q + 0xBC) == 0) continue;
+        listed_candidate = D_L00_001DD100_25fcb8[j];
+        if (listed_candidate == 0) continue;
+        if (*(short *)(listed_candidate + 0xA6) != 0x10E) continue;
+        if (*(unsigned char *)(listed_candidate + 0x20) == 0xFE) continue;
+        if (*(unsigned char *)(listed_candidate + 0x20) == 0xFD) continue;
+        if (*(unsigned char *)(listed_candidate + 0xBC) == 0) continue;
         ok = 1;
-        d = FUN_001f9b80_25fcb8(a + 0x10, q + 0x10);
+        d = FUN_001f9b80_25fcb8(query_moby + 0x10, listed_candidate + 0x10);
         if (best <= d) {
             ok = 0;
         } else if (n > 0) {
             for (k = 0; k < n - 1; k++) {
-                if (FUN_00214720_25ff38(q + 0x10, list[k]) != 0) {
+                if (FUN_00214720_25ff38(listed_candidate + 0x10, list[k]) != 0) {
                     ok = 0;
                     break;
                 }
             }
         } else if (v != 0 && nv > 0) {
-            if (FUN_L00_00259740_25ff38(q + 0x10, v, nv) == 0) ok = 0;
+            if (FUN_L00_00259740_25ff38(listed_candidate + 0x10, v, nv) == 0) ok = 0;
         }
         if (ok) {
-            m = q;
+            selected_moby = listed_candidate;
             res = 1;
             best = d;
         }
     }
-    if (m != 0) {
-        *(char **)(o + 0x40) = m;
-        qcopy(o, m + 0x10);
-        qcopy(o + 0x10, m + 0x40);
+    if (selected_moby != 0) {
+        *(char **)(target_output + 0x40) = selected_moby;
+        qcopy(target_output, selected_moby + 0x10);
+        qcopy(target_output + 0x10, selected_moby + 0x40);
         g = &hero_lui;
-        if (m == (char *)g->moby) {
-            qcopy(o + 0x20, &g->motion.unkC0);
-            qcopy(o + 0x30, &g->motion.unkD0);
+        if (selected_moby == (char *)g->moby) {
+            qcopy(target_output + 0x20, &g->motion.unkC0);
+            qcopy(target_output + 0x30, &g->motion.unkD0);
         } else {
-            qcopy(o + 0x30, o);
-            *(float *)(o + 0x38) += 0.6f;
-            qcopy(o + 0x20, o + 0x30);
+            qcopy(target_output + 0x30, target_output);
+            *(float *)(target_output + 0x38) += 0.6f;
+            qcopy(target_output + 0x20, target_output + 0x30);
         }
     } else {
-        *(char **)(o + 0x40) = 0;
-        qzero(o);
-        qzero(o + 0x10);
-        qzero(o + 0x30);
-        qzero(o + 0x20);
+        *(char **)(target_output + 0x40) = 0;
+        qzero(target_output);
+        qzero(target_output + 0x10);
+        qzero(target_output + 0x30);
+        qzero(target_output + 0x20);
     }
-    *(int *)(o + 0x44) = res;
+    *(int *)(target_output + 0x44) = res;
     return res;
 }
 typedef float M4_260400[16] __attribute__((aligned(16)));
