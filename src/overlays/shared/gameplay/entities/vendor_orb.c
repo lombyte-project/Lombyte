@@ -1431,14 +1431,14 @@ extern int func_L00_001F10E0_s(void *, float, int, void *) __asm__("FUN_L00_001f
 
 extern float coll_hit_normal[] __asm__("D_L00_00173E80") __attribute__((section(".data")));
 void robot_arm_update(char *m) __asm__("FUN_L00_002e3d88");
-void robot_arm_update(char *m) {
+void robot_arm_update(char *moby) {
     enum {
         ROBOT_ARM_REMOVE = 0,
         ROBOT_ARM_WAIT_FOR_TIMER = 1,
         ROBOT_ARM_SPAWN_EFFECT_AND_REMOVE = 2,
         ROBOT_ARM_FADE_AND_REMOVE = 3
     };
-    char *d = *(char **)(m + 0x78);
+    char *moby_data = *(char **)(moby + 0x78);
     float effect_offset_or_world_position[4];
     float rotation_step_basis[12];
     float offset_after_rotation[4];
@@ -1449,62 +1449,62 @@ void robot_arm_update(char *m) {
     float aE0[4];
     char *rotation_step_euler;
     float r;
-    float *q;
+    float *collision_normal;
 
-    switch (*(unsigned char *)(m + 0x20)) {
+    switch (*(unsigned char *)(moby + 0x20)) {
     case ROBOT_ARM_REMOVE:
-        mark_moby_for_removal(m);
+        mark_moby_for_removal(moby);
         return;
     case ROBOT_ARM_WAIT_FOR_TIMER:
-        if (func_001F9908_r((int *)(d + 0x30))) {
-            m[0x20] = (*(int *)(d + 0x34) & 1) ? 3 : 2;
-            *(int *)(d + 0x30) = func_001FA898_r(multiply_global_factor_ed64(10.0f));
+        if (func_001F9908_r((int *)(moby_data + 0x30))) {
+            moby[0x20] = (*(int *)(moby_data + 0x34) & 1) ? 3 : 2;
+            *(int *)(moby_data + 0x30) = func_001FA898_r(multiply_global_factor_ed64(10.0f));
             return;
         }
         break;
     case ROBOT_ARM_SPAWN_EFFECT_AND_REMOVE:
-        transform_vector_by_basis(effect_offset_or_world_position, d + 0x20, m + 0xC0);
-        add_vector_xyz(effect_offset_or_world_position, effect_offset_or_world_position, m + 0x10);
-        if (*(int *)(d + 0x34) & 2) {
-            FUN_L00_0025f3e8(m, effect_offset_or_world_position, -1, *(float *)(d + 0x2C) * 0.5f, 0.0f);
+        transform_vector_by_basis(effect_offset_or_world_position, moby_data + 0x20, moby + 0xC0);
+        add_vector_xyz(effect_offset_or_world_position, effect_offset_or_world_position, moby + 0x10);
+        if (*(int *)(moby_data + 0x34) & 2) {
+            FUN_L00_0025f3e8(moby, effect_offset_or_world_position, -1, *(float *)(moby_data + 0x2C) * 0.5f, 0.0f);
         } else {
-            float h = *(float *)(d + 0x2C) * 0.5f;
-            spawn_explosion(m, D_L00_0015F580, effect_offset_or_world_position, 0.0f, 0.0f, 5, *(float *)(d + 0x2C), 3, h, 9.0f, 5, h, -1, 0.0f, 0, 0, -1, 0);
+            float h = *(float *)(moby_data + 0x2C) * 0.5f;
+            spawn_explosion(moby, D_L00_0015F580, effect_offset_or_world_position, 0.0f, 0.0f, 5, *(float *)(moby_data + 0x2C), 3, h, 9.0f, 5, h, -1, 0.0f, 0, 0, -1, 0);
         }
-        mark_moby_for_removal(m);
+        mark_moby_for_removal(moby);
         return;
     case ROBOT_ARM_FADE_AND_REMOVE:
-        if (func_001F9908_r((int *)(d + 0x30))) {
-            mark_moby_for_removal(m);
+        if (func_001F9908_r((int *)(moby_data + 0x30))) {
+            mark_moby_for_removal(moby);
             return;
         }
-        m[0x23] = func_001FA898_r((float)*(int *)(d + 0x30) / multiply_global_factor_ed64(10.0f) * 128.0f);
+        moby[0x23] = func_001FA898_r((float)*(int *)(moby_data + 0x30) / multiply_global_factor_ed64(10.0f) * 128.0f);
         break;
     }
-    rotation_step_euler = d + 0x10;
+    rotation_step_euler = moby_data + 0x10;
     vu_euler_rotation_basis(rotation_step_basis, rotation_step_euler);
-    transform_vector_by_basis(effect_offset_or_world_position, d + 0x20, m + 0xC0);
-    multiply_matrix_basis_columns(m + 0xC0, rotation_step_basis, m + 0xC0);
-    transform_vector_by_basis(offset_after_rotation, d + 0x20, m + 0xC0);
+    transform_vector_by_basis(effect_offset_or_world_position, moby_data + 0x20, moby + 0xC0);
+    multiply_matrix_basis_columns(moby + 0xC0, rotation_step_basis, moby + 0xC0);
+    transform_vector_by_basis(offset_after_rotation, moby_data + 0x20, moby + 0xC0);
     subtract_vector_xyz(rotation_offset_delta, offset_after_rotation, effect_offset_or_world_position);
-    subtract_vector_xyz((float *)(m + 0x10), (float *)(m + 0x10), rotation_offset_delta);
-    add_vector_xyz(m + 0x10, m + 0x10, d);
-    r = *(float *)(d + 0x2C);
-    *(float *)(d + 8) = *(float *)(d + 8) - *(float *)(d + 0x38);
-    transform_vector_by_basis(collision_probe_position, d + 0x20, m + 0xC0);
-    add_vector_xyz(collision_probe_position, collision_probe_position, m + 0x10);
-    if (func_L00_001F10E0_s(collision_probe_position, r, 0, m)) {
+    subtract_vector_xyz((float *)(moby + 0x10), (float *)(moby + 0x10), rotation_offset_delta);
+    add_vector_xyz(moby + 0x10, moby + 0x10, moby_data);
+    r = *(float *)(moby_data + 0x2C);
+    *(float *)(moby_data + 8) = *(float *)(moby_data + 8) - *(float *)(moby_data + 0x38);
+    transform_vector_by_basis(collision_probe_position, moby_data + 0x20, moby + 0xC0);
+    add_vector_xyz(collision_probe_position, collision_probe_position, moby + 0x10);
+    if (func_L00_001F10E0_s(collision_probe_position, r, 0, moby)) {
         float speed, approach;
-        q = coll_hit_normal;
-        normalize_vector_xyz(q, q, 1.0f);
-        speed = vector_length_xyz(d);
-        approach = dot_vectors_xyz(d, q);
+        collision_normal = coll_hit_normal;
+        normalize_vector_xyz(collision_normal, collision_normal, 1.0f);
+        speed = vector_length_xyz(moby_data);
+        approach = dot_vectors_xyz(moby_data, collision_normal);
         if (approach < 0.0f) {
-            FUN_L00_001ff660(d, d, q);
-            normalize_vector_xyz(aD0, q, approach * 0.5f);
-            add_vector_xyz(d, d, aD0);
-            normalize_vector_xyz(d, d, speed);
-            cross_vectors_xyz(aE0, q, d);
+            FUN_L00_001ff660(moby_data, moby_data, collision_normal);
+            normalize_vector_xyz(aD0, collision_normal, approach * 0.5f);
+            add_vector_xyz(moby_data, moby_data, aD0);
+            normalize_vector_xyz(moby_data, moby_data, speed);
+            cross_vectors_xyz(aE0, collision_normal, moby_data);
             normalize_vector_xyz(aE0, aE0, 1.0f);
             build_quaternion_from_axis_angle(aE0, aE0, vector_length_xyz(rotation_step_euler));
             quaternion_to_matrix(aE0, bounce_rotation_matrix);
