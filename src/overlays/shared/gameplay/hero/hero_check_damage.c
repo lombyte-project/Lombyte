@@ -3434,19 +3434,19 @@ void FUN_L00_00212ff0(void) {
                 func_L00_0025C918_2136A8((float *)(&globals->motion.pos.f[2]), globals->ground_z.f, (float *)(&globals->unk304), frame_scale_sq * 0.057f, frame_scale_sq * 0.3f, D_0015ED6C_c * 2.0f);
             } else {
                 float displacement_z = globals->motion.displacement.f[2];
-                char *q;
+                char *position_z_ptr;
                 if (displacement_z < 0.0f) {
-                    float n = globals->motion.pos.f[2] - displacement_z;
+                    float displacement_reverted_z = globals->motion.pos.f[2] - displacement_z;
                     float lim = globals->ground_z.f;
-                    globals->motion.pos.f[2] = n;
-                    if (lim < n) globals->motion.pos.f[2] = lim;
+                    globals->motion.pos.f[2] = displacement_reverted_z;
+                    if (lim < displacement_reverted_z) globals->motion.pos.f[2] = lim;
                 }
-                q = D_0013E533_lui + 0xEA5;
-                func_L00_0025C918_2136A8((float *)q, *(float *)(q + 0x250), (float *)(q + 0x27C), frame_scale_sq * 0.057f, frame_scale_sq * 0.3f, D_0015ED6C_c + D_0015ED6C_c);
+                position_z_ptr = D_0013E533_lui + 0xEA5;
+                func_L00_0025C918_2136A8((float *)position_z_ptr, *(float *)(position_z_ptr + 0x250), (float *)(position_z_ptr + 0x27C), frame_scale_sq * 0.057f, frame_scale_sq * 0.3f, D_0015ED6C_c + D_0015ED6C_c);
             }
         } else {
-            struct Hero *h = &hero;
-            *(int *)&h->unk304 = 0;
+            struct Hero *hero_state = &hero;
+            *(int *)&hero_state->unk304 = 0;
         }
     }
 }
