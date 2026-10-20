@@ -2027,8 +2027,8 @@ s32 queue_animation_update(s32 chan, s32 id, s32 fn, s32 d, s32 e, s32 c,
 s32 try_set_help_message(s32 arg0, s32 arg1) __asm__("FUN_00215130");
 
 void FUN_L03_002dcbc8(struct Moby *m, int mode) {
-    char *d = (char *)m->pvars;
-    int h;
+    char *lift_vars = (char *)m->pvars;
+    int hud_key;
     switch (mode) {
     case 1:
         try_set_help_message(8, 0xBCE);
@@ -2046,12 +2046,12 @@ void FUN_L03_002dcbc8(struct Moby *m, int mode) {
         try_set_help_message(8, -1);
         break;
     }
-    h = *(int *)(d + 0xA4);
-    if (h == -1) {
-        *(int *)(d + 0xA4) = queue_animation_update(
+    hud_key = *(int *)(lift_vars + 0xA4);
+    if (hud_key == -1) {
+        *(int *)(lift_vars + 0xA4) = queue_animation_update(
             0xC, 0, (int)FUN_L00_00237190, (int)FUN_L00_002371e0, (int)FUN_L00_00237200, 0, 0);
     } else {
-        hud_keep_visible(h, 0xA);
+        hud_keep_visible(hud_key, 0xA);
     }
 }
 /* Pvars of a rail lift that carries the hero between the ends of two rail paths. */
