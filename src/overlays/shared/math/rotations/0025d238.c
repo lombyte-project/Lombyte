@@ -467,14 +467,14 @@ f32 normalize_angle(f32 a) {
 extern int FUN_L00_0025e3b8_u(void *) __asm__("FUN_L00_0025e3b8");
 
 /* False for null; true for a moby outside FUN_L00_0025e3b8's range or of class 0x1F6. */
-int FUN_L00_0025e368(char *a) {
+int FUN_L00_0025e368(char *moby) {
     int r;
-    if (a == 0) {
+    if (moby == 0) {
         r = 0;
-    } else if (FUN_L00_0025e3b8_u(a) == 0) {
+    } else if (FUN_L00_0025e3b8_u(moby) == 0) {
         r = 1;
     } else {
-        r = *(short *)(a + 0xA6) == 0x1F6;
+        r = *(short *)(moby + 0xA6) == 0x1F6;
     }
     return r;
 }
