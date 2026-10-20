@@ -38,10 +38,10 @@ void FUN_L12_0022de30(void) {
         }
     }
     if (state == 0xE) {
-        struct Hero *a = &hero;
-        a->base_condition = 1;
-        a->unk22A4 = 0.2f;
-        a->water_surface_z = a->ground_z.f + 0.2f;
+        struct Hero *hero_for_surface_update = &hero;
+        hero_for_surface_update->base_condition = 1;
+        hero_for_surface_update->unk22A4 = 0.2f;
+        hero_for_surface_update->water_surface_z = hero_for_surface_update->ground_z.f + 0.2f;
     }
     if (state == 0) {
         struct Hero *b = &hero;
@@ -78,13 +78,13 @@ void FUN_L12_0022de30(void) {
         d->on_slip_ground = 1;
     }
     {
-        struct Hero *h = &hero;
-        if (h->selector_13) {
-            if (h->state.current != 0x7F) {
-                float water_surface_distance = absolute_float(h->water_surface_z - (h->motion.pos.f[2] + 0.25f));
+        struct Hero *hero_for_sink_check = &hero;
+        if (hero_for_sink_check->selector_13) {
+            if (hero_for_sink_check->state.current != 0x7F) {
+                float water_surface_distance = absolute_float(hero_for_sink_check->water_surface_z - (hero_for_sink_check->motion.pos.f[2] + 0.25f));
                 if (water_surface_distance < 1.0f) {
-                    if (h->water_surface_z - h->motion.pos.f[2] > 0.0f) {
-                        if (h->motion.displacement.f[2] < 0.0f) {
+                    if (hero_for_sink_check->water_surface_z - hero_for_sink_check->motion.pos.f[2] > 0.0f) {
+                        if (hero_for_sink_check->motion.displacement.f[2] < 0.0f) {
                             FUN_L00_0020b930();
                             hero_set_state(HERO_STATE_SINK, 1);
                         }
