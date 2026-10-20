@@ -48,98 +48,98 @@ void FUN_L00_002a4890(void) {
         AMBIENCE_SINGLE_TARGET_CYCLE = 2,
         AMBIENCE_TWO_TARGET_CYCLE = 3
     };
-    struct Amb *s = &D_L00_001CB7C0;
-    float a, b, c, d, e;
-    switch (s->hC) {
+    struct Amb *ambience_state = &D_L00_001CB7C0;
+    float interpolation_duration, b, target_rotation, scalar_magnitude, scalar_clamp_value;
+    switch (ambience_state->hC) {
     case AMBIENCE_HOLD_STATE:
         break;
     case AMBIENCE_SINGLE_TARGET_CYCLE:
-        switch (s->hE) {
+        switch (ambience_state->hE) {
         case AMBIENCE_WAIT_AND_SELECT_TARGET:
-            if (fast_dec_timer_s16(&s->h1E)) {
-                a = convert_integer_to_float(s->h1C) * random_float_between_alt(0.5f, 1.5f);
-                c = fast_add_rotations(s->f0, random_float_between_alt(-1.0471976f, 1.0471976f));
-                b = random_float_between_alt(s->f10 * 0.5f, s->f10 * 1.5f);
-                s->f8 = fast_subtract_rotations(c, s->f4) / a;
-                s->f18 = (b - s->f14) / a;
-                s->h1E = func_001FA898_r(a);
-                s->hE = 1;
+            if (fast_dec_timer_s16(&ambience_state->h1E)) {
+                interpolation_duration = convert_integer_to_float(ambience_state->h1C) * random_float_between_alt(0.5f, 1.5f);
+                target_rotation = fast_add_rotations(ambience_state->f0, random_float_between_alt(-1.0471976f, 1.0471976f));
+                b = random_float_between_alt(ambience_state->f10 * 0.5f, ambience_state->f10 * 1.5f);
+                ambience_state->f8 = fast_subtract_rotations(target_rotation, ambience_state->f4) / interpolation_duration;
+                ambience_state->f18 = (b - ambience_state->f14) / interpolation_duration;
+                ambience_state->h1E = func_001FA898_r(interpolation_duration);
+                ambience_state->hE = 1;
             }
             break;
         case AMBIENCE_INTERPOLATE_TO_TARGET:
-            if (fast_dec_timer_s16(&s->h1E)) {
-                s->h1E = func_001FA898_r(convert_integer_to_float(s->h1C) *
+            if (fast_dec_timer_s16(&ambience_state->h1E)) {
+                ambience_state->h1E = func_001FA898_r(convert_integer_to_float(ambience_state->h1C) *
                                          random_float_between_alt(2.0f, 3.0f));
-                s->hE = 0;
+                ambience_state->hE = 0;
             } else {
-                s->f4 = fast_add_rotations(s->f4, s->f8);
-                s->f14 = s->f14 + s->f18;
-                d = absolute_float(s->f14);
-                e = D_0015ED6C * 9.6f;
-                if (e < d) {
-                    if (s->f14 < 0.0f)
-                        e = -e;
-                    s->f14 = e;
+                ambience_state->f4 = fast_add_rotations(ambience_state->f4, ambience_state->f8);
+                ambience_state->f14 = ambience_state->f14 + ambience_state->f18;
+                scalar_magnitude = absolute_float(ambience_state->f14);
+                scalar_clamp_value = D_0015ED6C * 9.6f;
+                if (scalar_clamp_value < scalar_magnitude) {
+                    if (ambience_state->f14 < 0.0f)
+                        scalar_clamp_value = -scalar_clamp_value;
+                    ambience_state->f14 = scalar_clamp_value;
                 }
             }
             break;
         }
         break;
     case AMBIENCE_TWO_TARGET_CYCLE:
-        switch (s->hE) {
+        switch (ambience_state->hE) {
         case AMBIENCE_WAIT_AND_SELECT_TARGET:
-            if (fast_dec_timer_s16(&s->h1E)) {
-                a = multiply_global_factor_ed64(random_float_between_alt(45.0f, 60.0f));
-                c = fast_add_rotations(s->f0, random_float_between_alt(-1.5707964f, 1.5707964f));
-                b = random_float_between_alt(s->f10 * 1.5f, s->f10 + s->f10);
-                s->f8 = fast_subtract_rotations(c, s->f4) / a;
-                s->f18 = (b - s->f14) / a;
-                s->h1E = func_001FA898_r(a);
-                s->hE = 1;
+            if (fast_dec_timer_s16(&ambience_state->h1E)) {
+                interpolation_duration = multiply_global_factor_ed64(random_float_between_alt(45.0f, 60.0f));
+                target_rotation = fast_add_rotations(ambience_state->f0, random_float_between_alt(-1.5707964f, 1.5707964f));
+                b = random_float_between_alt(ambience_state->f10 * 1.5f, ambience_state->f10 + ambience_state->f10);
+                ambience_state->f8 = fast_subtract_rotations(target_rotation, ambience_state->f4) / interpolation_duration;
+                ambience_state->f18 = (b - ambience_state->f14) / interpolation_duration;
+                ambience_state->h1E = func_001FA898_r(interpolation_duration);
+                ambience_state->hE = 1;
             }
             break;
         case AMBIENCE_INTERPOLATE_TO_TARGET:
-            if (fast_dec_timer_s16(&s->h1E)) {
-                s->h1E = func_001FA898_r(convert_integer_to_float(s->h1C) *
+            if (fast_dec_timer_s16(&ambience_state->h1E)) {
+                ambience_state->h1E = func_001FA898_r(convert_integer_to_float(ambience_state->h1C) *
                                          random_float_between_alt(1.0f, 1.5f));
-                s->hE = 2;
+                ambience_state->hE = 2;
             } else {
-                s->f4 = fast_add_rotations(s->f4, s->f8);
-                s->f14 = s->f14 + s->f18;
-                d = absolute_float(s->f14);
-                e = D_0015ED6C * 9.6f;
-                if (e < d) {
-                    if (s->f14 < 0.0f)
-                        e = -e;
-                    s->f14 = e;
+                ambience_state->f4 = fast_add_rotations(ambience_state->f4, ambience_state->f8);
+                ambience_state->f14 = ambience_state->f14 + ambience_state->f18;
+                scalar_magnitude = absolute_float(ambience_state->f14);
+                scalar_clamp_value = D_0015ED6C * 9.6f;
+                if (scalar_clamp_value < scalar_magnitude) {
+                    if (ambience_state->f14 < 0.0f)
+                        scalar_clamp_value = -scalar_clamp_value;
+                    ambience_state->f14 = scalar_clamp_value;
                 }
             }
             break;
         case AMBIENCE_WAIT_AND_SELECT_SECOND_TARGET:
-            if (fast_dec_timer_s16(&s->h1E)) {
-                a = multiply_global_factor_ed64(random_float_between_alt(45.0f, 60.0f));
-                c = fast_add_rotations(s->f0, random_float_between_alt(-0.785398f, 0.785398f));
-                b = random_float_between_alt(s->f10 * 0.8f, s->f10 * 1.2f);
-                s->f8 = fast_subtract_rotations(c, s->f4) / a;
-                s->f18 = (b - s->f14) / a;
-                s->h1E = func_001FA898_r(a);
-                s->hE = 3;
+            if (fast_dec_timer_s16(&ambience_state->h1E)) {
+                interpolation_duration = multiply_global_factor_ed64(random_float_between_alt(45.0f, 60.0f));
+                target_rotation = fast_add_rotations(ambience_state->f0, random_float_between_alt(-0.785398f, 0.785398f));
+                b = random_float_between_alt(ambience_state->f10 * 0.8f, ambience_state->f10 * 1.2f);
+                ambience_state->f8 = fast_subtract_rotations(target_rotation, ambience_state->f4) / interpolation_duration;
+                ambience_state->f18 = (b - ambience_state->f14) / interpolation_duration;
+                ambience_state->h1E = func_001FA898_r(interpolation_duration);
+                ambience_state->hE = 3;
             }
             break;
         case AMBIENCE_INTERPOLATE_TO_SECOND_TARGET:
-            if (fast_dec_timer_s16(&s->h1E)) {
-                s->h1E = func_001FA898_r(convert_integer_to_float(s->h1C) *
+            if (fast_dec_timer_s16(&ambience_state->h1E)) {
+                ambience_state->h1E = func_001FA898_r(convert_integer_to_float(ambience_state->h1C) *
                                          random_float_between_alt(3.0f, 5.0f));
-                s->hE = 0;
+                ambience_state->hE = 0;
             } else {
-                s->f4 = fast_add_rotations(s->f4, s->f8);
-                s->f14 = s->f14 + s->f18;
-                d = absolute_float(s->f14);
-                e = D_0015ED6C * 9.6f;
-                if (e < d) {
-                    if (s->f14 < 0.0f)
-                        e = -e;
-                    s->f14 = e;
+                ambience_state->f4 = fast_add_rotations(ambience_state->f4, ambience_state->f8);
+                ambience_state->f14 = ambience_state->f14 + ambience_state->f18;
+                scalar_magnitude = absolute_float(ambience_state->f14);
+                scalar_clamp_value = D_0015ED6C * 9.6f;
+                if (scalar_clamp_value < scalar_magnitude) {
+                    if (ambience_state->f14 < 0.0f)
+                        scalar_clamp_value = -scalar_clamp_value;
+                    ambience_state->f14 = scalar_clamp_value;
                 }
             }
             break;
