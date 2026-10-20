@@ -106,6 +106,7 @@ int hero_set_state(int a, int b) {
         HERO_STATE_LEDGE_HANG_ENTRY = 0x18,
         HERO_STATE_LEDGE_SHIMMY_YAW_PLUS_90 = 0x1A,
         HERO_STATE_LEDGE_SHIMMY_YAW_MINUS_90 = 0x1B,
+        HERO_STATE_WATER_SURFACE_MOVE = 0x36,
         HERO_STATE_WATER_SURFACE_IDLE = 0x37
     };
     int old2088;
@@ -410,7 +411,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x36: {
+    case HERO_STATE_WATER_SURFACE_MOVE: {
         struct Hero *p = &hero;
         p->state.control_mode = 0x12;
         p->unk20A7 = 1;
