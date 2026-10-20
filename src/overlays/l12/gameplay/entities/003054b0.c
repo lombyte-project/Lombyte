@@ -1186,7 +1186,7 @@ void FUN_L12_003093c8(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     char *base;
     char *hero_position;
-    char *q;
+    char *destination_base;
     if (D_L12_0015F5CC != 0 && D_L12_0015F5C4 == 0) {
         base = D_0013D388;
         if (*(unsigned char *)(*(int *)(data + 4) + base + 0x5C) != 0) {
@@ -1197,10 +1197,10 @@ void FUN_L12_003093c8(struct Moby *moby) {
         if (is_point_inside_clip_volume(hero_position, *(int *)data) != 0) {
             *(char *)(*(int *)(data + 4) + base + 0x5C) = 1;
             qcopy(D_L12_0016CCF0, hero_position);
-            q = D_L12_0016CCF0 - 0x10;
-            *(float *)(q + 0x18) = *(float *)(hero_position + 0x258);
+            destination_base = D_L12_0016CCF0 - 0x10;
+            *(float *)(destination_base + 0x18) = *(float *)(hero_position + 0x258);
             qcopy(D_L12_0016CCF0 + 0x10, hero_position + 0x10);
-            *(short *)(q + 0x46) = 1;
+            *(short *)(destination_base + 0x46) = 1;
             start_scene(*(int *)(data + 8));
         }
     }
