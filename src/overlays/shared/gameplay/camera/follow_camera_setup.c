@@ -426,37 +426,37 @@ extern float vdot_2e6bf8(void *, void *) __asm__("FUN_001f9ab0");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 
 /* Resets the camera rig state from the moby position when idle. */
-void FUN_L00_002e6bf8(char *m) {
+void FUN_L00_002e6bf8(char *camera_moby) {
     float dn[4];
-    float t[4];
-    char *d;
+    float height_offset[4];
+    char *camera_state;
     char *b;
-    char *c;
-    char *e;
+    char *orbit_state;
+    char *target_position;
 
-    if (*(short *)(m + 0x86) == 0) {
-        b = *(char **)(m + 0x70);
-        d = b;
-        c = b + 0x130;
+    if (*(short *)(camera_moby + 0x86) == 0) {
+        b = *(char **)(camera_moby + 0x70);
+        camera_state = b;
+        orbit_state = b + 0x130;
         b += 0x40;
-        e = b;
+        target_position = b;
         scale_vector_xyz(dn, &hero.gravity_dir, -1.0f);
-        qcopy(e, &hero.motion.pos);
-        qcopy(d + 0xA0, b);
-        scale_vector_xyz(d + 0x50, dn, vdot_2e6bf8(b, dn));
-        clear_u64_value(d + 0xB0);
-        clear_u64_value(d + 0xC0);
-        clear_u64_value(d + 0xE0);
-        scale_vector_xyz(t, dn, *(float *)(c + 0x30));
-        add_vector_xyz(d + 0x90, t, e);
-        scale_vector_xyz(t, dn, *(float *)(b + 0xB0));
-        add_vector_xyz(d + 0xD0, t, e);
-        qcopy(d + 0x80, d + 0xD0);
-        subtract_vector_xyz(c, m + 0x30, d + 0x90);
-        qcopy(d + 0x140, c);
-        qcopy(d, m + 0x30);
-        add_vector_xyz(d + 0x1F0, d + 0x90, c);
-        *(int *)(d + 0x220) = 0;
+        qcopy(target_position, &hero.motion.pos);
+        qcopy(camera_state + 0xA0, b);
+        scale_vector_xyz(camera_state + 0x50, dn, vdot_2e6bf8(b, dn));
+        clear_u64_value(camera_state + 0xB0);
+        clear_u64_value(camera_state + 0xC0);
+        clear_u64_value(camera_state + 0xE0);
+        scale_vector_xyz(height_offset, dn, *(float *)(orbit_state + 0x30));
+        add_vector_xyz(camera_state + 0x90, height_offset, target_position);
+        scale_vector_xyz(height_offset, dn, *(float *)(b + 0xB0));
+        add_vector_xyz(camera_state + 0xD0, height_offset, target_position);
+        qcopy(camera_state + 0x80, camera_state + 0xD0);
+        subtract_vector_xyz(orbit_state, camera_moby + 0x30, camera_state + 0x90);
+        qcopy(camera_state + 0x140, orbit_state);
+        qcopy(camera_state, camera_moby + 0x30);
+        add_vector_xyz(camera_state + 0x1F0, camera_state + 0x90, orbit_state);
+        *(int *)(camera_state + 0x220) = 0;
     }
 }
 
