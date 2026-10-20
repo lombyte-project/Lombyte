@@ -40,9 +40,10 @@ SN_SHA=293903acfb0c8aee3b7766214119be933d80eca01fb7a3c2266287d91455962f
 # (ps2eeas 1.9.25.758); the 2.0 archive above ships an older one.
 SN_AS_URL=https://raw.githubusercontent.com/AngheloAlf/SN-Systems-ProDG_for_PS2_3.01/d74f6fe08d24e7cf0df48cb570d85ad04db167c5/usr/local/sce/ee/gcc/ee/bin/Ps2EeAs.exe
 SN_AS_SHA=cb5adda955e64626564212ef7e0c1434708c4e1ef423344a92ec8033306ed3aa
-# Installed with its divbug padding turned off (scripts/patch-ps2eeas.py):
+# Installed with divbug padding off and a 64 MiB guest stack reservation
+# (scripts/patch-ps2eeas.py):
 # retail has none of the NOPs it puts in front of a div.
-SN_AS_PATCHED_SHA=457d75293b5aeb64b95ffb37ba21dbd1507e176b428ca6892b3069d1b0d1a27e
+SN_AS_PATCHED_SHA=be3032d8cdd0ceecffec4ec2e043db3ca4b5b2fc1c781d17e5b3838684b8952d
 # GCC 2.95.2 headers for the SN compiler (stdarg.h and friends are not in the
 # SN archive); sparse checkout of the Sony SDK mirror, pinned.
 SDK_MIRROR_URL=https://github.com/AngheloAlf/sce_ps2_sdk_24.git
@@ -222,7 +223,7 @@ check_installed() {
     LABEL="game compiler (tools/compilers/game-compiler)";      check test -x "$COMPILERS/game-compiler/cc1" -a -x "$COMPILERS/game-compiler/as" -a -x "$COMPILERS/game-compiler/sdk-as" -a -f "$COMPILERS/game-compiler/include/stdarg.h"
     LABEL="SDK compiler (tools/compilers/sdk-compiler)";        check test -x "$COMPILERS/sdk-compiler/bin/ee-gcc"
     LABEL="SN compiler (tools/compilers/ee-gcc-2.95.2)";        check test -f "$COMPILERS/ee-gcc-2.95.2/bin/ee-gcc.exe"
-    LABEL="SN assembler ps2eeas 1.9.25.758 (no divbug)";        check sha_ok "$COMPILERS/ee-gcc-2.95.2/ee/bin/Ps2EeAs.exe" "$SN_AS_PATCHED_SHA"
+    LABEL="SN assembler ps2eeas 1.9.25.758 (no divbug, 64 MiB stack)";        check sha_ok "$COMPILERS/ee-gcc-2.95.2/ee/bin/Ps2EeAs.exe" "$SN_AS_PATCHED_SHA"
     LABEL="SN GCC 2.95.2 headers";                              check sha_ok "$COMPILERS/ee-gcc-2.95.2/lib/gcc-lib/ee/2.95.2/include/stdarg.h" "$SDK_MIRROR_STDARG_SHA"
     LABEL="R5900 binutils (tools/binutils-mips-ps2-decompals)"; check test -x "$TOOLS/binutils-mips-ps2-decompals/mips-ps2-decompals-ld"
     LABEL="objdiff-cli (tools/objdiff)";                        check test -x "$TOOLS/objdiff/objdiff-cli"
