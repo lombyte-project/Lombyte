@@ -1982,7 +1982,7 @@ void gadgebot_update(GbMoby *moby) {
             qcopy(moby->pos, gadgebot_vars->unkE0);
             moby->state = 4;
             for (i = 0; i < 10; i++) {
-                float s = random_float_between(0.1f, 1.0f);
+                float effect_scale_factor = random_float_between(0.1f, 1.0f);
                 int cr = random_int_between(0x40, 0xFF);
                 int cg = random_int_between(0x40, 0xFF);
                 int cb = random_int_between(0x40, 0xFF);
@@ -2000,8 +2000,8 @@ void gadgebot_update(GbMoby *moby) {
                 vector_and_hit_scratch[2] = random_float_between(frame_time * 2.5f, frame_time * 5.0f);
                 t = scale_game_frames(random_int_between(0xF, 0x1E));
                 ga = (cg << 8) | 0x7F000000;
-                fa = s * 0.07f;
-                fb = s * 0.7f;
+                fa = effect_scale_factor * 0.07f;
+                fb = effect_scale_factor * 0.7f;
                 FUN_L00_00272060(position_and_displacement_scratch, t, fa, fb, (cb << 16) | ga | cr, 0,
                                  random_integer_below(2) ? 1 : -1, frame_time_sq * 15.0f, vector_and_hit_scratch);
             }
