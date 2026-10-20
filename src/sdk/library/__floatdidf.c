@@ -31,11 +31,11 @@ Boston, MA 02111-1307, USA.  */
 #include "types.h"
 
 f64 __floatdidf(s64 u) {
-    f64 d;
+    f64 converted_value;
 
-    d = (s32)(u >> 32);
-    d *= 65536.0;
-    d *= 65536.0;
-    d += (u32)(u & 0xFFFFFFFF);
-    return d;
+    converted_value = (s32)(u >> 32);
+    converted_value *= 65536.0;
+    converted_value *= 65536.0;
+    converted_value += (u32)(u & 0xFFFFFFFF);
+    return converted_value;
 }
