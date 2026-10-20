@@ -1165,11 +1165,11 @@ void FUN_L00_002b3628(struct Moby *m) {
     Vec4A_2b3628 up;
     Vec4A_2b3628 res[4];
     Vec4A_2b3628 idm[4];
-    Vec4A_2b3628 a;
+    Vec4A_2b3628 billboard_view_direction;
     Vec4A_2b3628 b;
-    Vec4A_2b3628 c;
-    Vec4A_2b3628 d;
-    Vec4A_2b3628 e;
+    Vec4A_2b3628 billboard_up_axis;
+    Vec4A_2b3628 billboard_origin;
+    Vec4A_2b3628 ribbon_vertex_position;
     Data_2b3628 *data = (Data_2b3628 *)m->pvars;
     Child_2b3628 *child = data->child;
     int i;
@@ -1234,17 +1234,17 @@ void FUN_L00_002b3628(struct Moby *m) {
     }
     draw_geometry_quad_2b3628(&pk, res, 0);
     pk.tag[1] = get_effect_texture_2b3628(0xB);
-    scale_vector_xyz_2b3628(&d, &mtx[2], -0.13f);
-    add_vector_xyz_2b3628(&d, &d, &mtx[3]);
-    subtract_vector_xyz_2b3628(&a, D_L00_00166DC0_2b3628, &d);
-    normalize_vector_xyz_2b3628(&a, &a, 1.0f);
-    fast_vec_cross_2b3628(&b, &a, &hero.gravity_dir);
+    scale_vector_xyz_2b3628(&billboard_origin, &mtx[2], -0.13f);
+    add_vector_xyz_2b3628(&billboard_origin, &billboard_origin, &mtx[3]);
+    subtract_vector_xyz_2b3628(&billboard_view_direction, D_L00_00166DC0_2b3628, &billboard_origin);
+    normalize_vector_xyz_2b3628(&billboard_view_direction, &billboard_view_direction, 1.0f);
+    fast_vec_cross_2b3628(&b, &billboard_view_direction, &hero.gravity_dir);
     normalize_vector_xyz_2b3628(&b, &b, -1.0f);
-    fast_vec_cross_2b3628(&c, &b, &a);
+    fast_vec_cross_2b3628(&billboard_up_axis, &b, &billboard_view_direction);
     pk.col[0] = pk.col[1] = pk.col[2] = pk.col[3] = 0x7F2020FF;
     for (i = 0; i < 4; i++) {
         scale_vector_xyz_2b3628(pk.pos[i], D_L00_001DA9E0[i], 0.1f);
-        transform_vector_2b3628(pk.pos[i], pk.pos[i], &a);
+        transform_vector_2b3628(pk.pos[i], pk.pos[i], &billboard_view_direction);
     }
     draw_geometry_quad_2b3628(&pk, 0, 0);
     vu1_add_g_sregister_2b3628(6, get_effect_texture_2b3628(0xA));
@@ -1254,11 +1254,11 @@ void FUN_L00_002b3628(struct Moby *m) {
     vu1_add_g_sregister_2b3628(0x4A, 0);
     font_queue_vu_state_2b3628();
     for (i = 0; i < 0xC4; i++) {
-        scale_vector_xyz_2b3628(&e, D_L00_001D9470[i], data->f20);
-        transform_vector_2b3628(&e, &e, mtx);
-        D_L00_001DAA80[i].x = e.x;
-        D_L00_001DAA80[i].y = e.y;
-        D_L00_001DAA80[i].z = e.z;
+        scale_vector_xyz_2b3628(&ribbon_vertex_position, D_L00_001D9470[i], data->f20);
+        transform_vector_2b3628(&ribbon_vertex_position, &ribbon_vertex_position, mtx);
+        D_L00_001DAA80[i].x = ribbon_vertex_position.x;
+        D_L00_001DAA80[i].y = ribbon_vertex_position.y;
+        D_L00_001DAA80[i].z = ribbon_vertex_position.z;
         D_L00_001DA0B0[i].v -= 0.025f;
         if (D_L00_001DA0B0[i].v < -7.0f) {
             D_L00_001DA0B0[i].v += 7.0f;
