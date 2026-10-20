@@ -94,7 +94,7 @@ extern int D_L12_00161F24 __attribute__((sda));
 extern int allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
 
 void FUN_L12_003054b0(char *moby) {
-    char *d = *(char **)(moby + 0x78);
+    char *owner_data = *(char **)(moby + 0x78);
     int i;
     float position_buffer[4];
     float scratch_vector[4];
@@ -106,29 +106,29 @@ void FUN_L12_003054b0(char *moby) {
     for (i = 0; i < 5; i++) {
         int idx;
         char *ent;
-        char *m;
+        char *gun_moby;
         Gun_306890 *md;
         float yaw;
         float dist;
         float dz;
         int flag;
         float ang;
-        float s;
+        float radial_scale;
 
-        if (*(int *)(d - -(i * 4) + 0x5D0) != -1) {
-        idx = *(int *)(d - -(i * 4) + 0x5D0);
-        ent = d + idx * 0x30;
-        m = (char *)(D_L12_0015FFD8_gp + (*(int *)(ent + 0x20) << 8));
-        md = *(Gun_306890 **)(m + 0x78);
+        if (*(int *)(owner_data - -(i * 4) + 0x5D0) != -1) {
+        idx = *(int *)(owner_data - -(i * 4) + 0x5D0);
+        ent = owner_data + idx * 0x30;
+        gun_moby = (char *)(D_L12_0015FFD8_gp + (*(int *)(ent + 0x20) << 8));
+        md = *(Gun_306890 **)(gun_moby + 0x78);
         qcopy(position_buffer, D_L12_00167240);
         pv1 = scratch_vector;
         position_buffer[2] -= 0.7f;
-        qcopy_nc(pv1, m + 0x10);
+        qcopy_nc(pv1, gun_moby + 0x10);
         scratch_vector[2] += 1.5f;
         md->f60 = fast_arc_tan(vector_distance_xy_alt(scratch_vector, position_buffer), position_buffer[2] - scratch_vector[2]);
-        update_joint_animation(m, (char *)md, 0, D_0015ED64 * 0.008f, D_0015ED64 * 0.3f);
-        yaw = fast_subtract_rotations(fast_add_rotations(fast_arc_tan(((Hero *)((char *)&hero))->motion.pos.f[0] - *(float *)(m + 0x10),
-                                                            ((Hero *)((char *)&hero))->motion.pos.f[1] - *(float *)(m + 0x14)),
+        update_joint_animation(gun_moby, (char *)md, 0, D_0015ED64 * 0.008f, D_0015ED64 * 0.3f);
+        yaw = fast_subtract_rotations(fast_add_rotations(fast_arc_tan(((Hero *)((char *)&hero))->motion.pos.f[0] - *(float *)(gun_moby + 0x10),
+                                                            ((Hero *)((char *)&hero))->motion.pos.f[1] - *(float *)(gun_moby + 0x14)),
                                           -1.5707964f),
                             *(float *)(moby + 0x48));
         if (md->h90 == 0) {
@@ -141,8 +141,8 @@ void FUN_L12_003054b0(char *moby) {
                 }
             }
         } else {
-            float a = fast_add_rotations(yaw, md->f8C * 0.55850536f);
-            if (func_001F9B88_304310(FUN_L00_0025bc98(ent + 0x18, a, (char *)md + 0x94, 0, D_0015ED64 * 0.022f, D_0015ED64 * 0.3f,
+            float sweep_target_yaw = fast_add_rotations(yaw, md->f8C * 0.55850536f);
+            if (func_001F9B88_304310(FUN_L00_0025bc98(ent + 0x18, sweep_target_yaw, (char *)md + 0x94, 0, D_0015ED64 * 0.022f, D_0015ED64 * 0.3f,
                                                 D_0015ED6C_gp * 0.2617994f + (float)i * (D_0015ED6C_gp * 0.05235988f)))
                 < 0.017453292f) {
                 md->f8C = -md->f8C;
@@ -164,13 +164,13 @@ void FUN_L12_003054b0(char *moby) {
             fast_dec_timer_s16(&md->h98);
             fast_dec_timer_s16(&md->h9C);
             if (md->h98 == 0) {
-                if (fast_difference_between_rotations(*(float *)(d + idx * 0x30 + 0x18), yaw) < 0.06981317f) {
+                if (fast_difference_between_rotations(*(float *)(owner_data + idx * 0x30 + 0x18), yaw) < 0.06981317f) {
                     md->h9E = scale_game_frames(0x14);
                 }
                 if (fast_dec_timer_s16(&md->h9E) == 0) {
                     if (FUN_L00_001fefc8(&md->b92) == 0) {
                         if (FUN_L00_001fefc8(&md->b93) != 0) {
-                            allocate_voice_for_target_entry(0, 0, m);
+                            allocate_voice_for_target_entry(0, 0, gun_moby);
                             md->b93 = scale_game_frames(9);
                         }
                     }
@@ -178,9 +178,9 @@ void FUN_L12_003054b0(char *moby) {
                         float rz;
                         float pitch;
                         int n;
-                        FUN_L00_0024f7c8(m, md->h9A + 1, position_buffer);
+                        FUN_L00_0024f7c8(gun_moby, md->h9A + 1, position_buffer);
                         md->h9A = md->h9A == 0;
-                        rz = fast_add_rotations(*(float *)(m + 0x48), 1.5707964f);
+                        rz = fast_add_rotations(*(float *)(gun_moby + 0x48), 1.5707964f);
                         if (D_L12_00161F00_gp != 0) {
                             qcopy(aim_target_position, D_L12_00167240);
                             aim_target_position[2] += random_float_between_c(-1.5f, 0.3f);
@@ -198,7 +198,7 @@ void FUN_L12_003054b0(char *moby) {
                         aim_target_position[2] += random_float_between_c((float)n * -0.3f, (float)n * 0.3f);
                         pitch = fast_arc_tan(vector_distance_xy_alt(position_buffer, aim_target_position), aim_target_position[2] - position_buffer[2]);
                         build_spherical_offset(scratch_vector, D_0015ED6C_gp * 80.0f, rz, pitch);
-                        if (FUN_L04_002aee30(m, position_buffer, scratch_vector, scale_game_frames(0x96)) != 0) {
+                        if (FUN_L04_002aee30(gun_moby, position_buffer, scratch_vector, scale_game_frames(0x96)) != 0) {
                             int j;
                             md->b92 = scale_game_frames(0x14);
                             for (j = 0; j < 9; j++) {
@@ -231,14 +231,14 @@ void FUN_L12_003054b0(char *moby) {
         if (D_L12_00161F04_gp == 0 && md->f80 > 0.0f) {
             if (func_001F9908_304920(&md->w84) != 0) {
                 float dmg = 1.0f;
-                char *r = FUN_L00_0025a420(m, 0x50000, 0);
+                char *r = FUN_L00_0025a420(gun_moby, 0x50000, 0);
                 if (r == 0) {
                     int k = D_L12_001FB670[i];
                     char *t = 0;
                     if (k == 0x11) {
                         t = moby;
                     } else {
-                        int id = *(int *)(d + k * 0x30 + 0x20);
+                        int id = *(int *)(owner_data + k * 0x30 + 0x20);
                         if (id != -1) {
                             t = (char *)(D_L12_0015FFD8_gp + (id << 8));
                         }
@@ -261,26 +261,26 @@ void FUN_L12_003054b0(char *moby) {
                 if (md->f80 <= 0.0f) {
                     int j;
                     int k;
-                    *(short *)(d + 0x5FC) -= 0x14;
-                    if (*(short *)(d + 0x5FC) < 0) {
-                        *(short *)(d + 0x5FC) = 0;
+                    *(short *)(owner_data + 0x5FC) -= 0x14;
+                    if (*(short *)(owner_data + 0x5FC) < 0) {
+                        *(short *)(owner_data + 0x5FC) = 0;
                     }
-                    allocate_voice_for_target_entry(1, 0, m);
-                    if (*(short *)(d + 0x5FC) > 0) {
+                    allocate_voice_for_target_entry(1, 0, gun_moby);
+                    if (*(short *)(owner_data + 0x5FC) > 0) {
                         int k = D_L12_001FB670[i];
                         if (k != 0x11) {
-                            D_L12_001FB688[k] = *(int *)(d + k * 0x30 + 0x20);
-                            *(int *)(d + k * 0x30 + 0x20) = -1;
+                            D_L12_001FB688[k] = *(int *)(owner_data + k * 0x30 + 0x20);
+                            *(int *)(owner_data + k * 0x30 + 0x20) = -1;
                         } else {
                             D_L12_001FB688[0x11] = 1;
                         }
                         FUN_L12_00306350_c2((struct Moby *)moby, k);
                         if (i == 4) {
                             for (j = 0; j < 0x11; j++) {
-                                int id = *(int *)(d + j * 0x30 + 0x20);
+                                int id = *(int *)(owner_data + j * 0x30 + 0x20);
                                 if (id != -1 && *(short *)((id << 8) + (int)D_L12_0015FFD8_gp + 0xA6) == 0x4FD) {
                                     D_L12_001FB688[j] = id;
-                                    *(int *)(d + j * 0x30 + 0x20) = -1;
+                                    *(int *)(owner_data + j * 0x30 + 0x20) = -1;
                                     FUN_L12_00306350_c2((struct Moby *)moby, j);
                                 }
                             }
@@ -288,28 +288,28 @@ void FUN_L12_003054b0(char *moby) {
                     }
                     for (k = 0; k < 0x82; k++) {
                         int c;
-                        qcopy(position_buffer, m + 0x10);
+                        qcopy(position_buffer, gun_moby + 0x10);
                         position_buffer[2] += random_float_between_c(0.1f, 0.5f);
                         ang = random_angle_radians();
-                        s = random_float_between_c(0.1f, 0.8f);
-                        position_buffer[0] += fast_cos(ang) * s;
-                        position_buffer[1] += fast_sin(ang) * s;
+                        radial_scale = random_float_between_c(0.1f, 0.8f);
+                        position_buffer[0] += fast_cos(ang) * radial_scale;
+                        position_buffer[1] += fast_sin(ang) * radial_scale;
                         c = FUN_L00_00257b90(scale_game_frames(0x5A), scale_game_frames(0xB4));
-                        s = random_float_between_c(D_0015ED6C_gp * 0.7f, D_0015ED6C_gp * 1.5f);
-                        scratch_vector[0] = fast_cos(ang) * s;
-                        scratch_vector[1] = fast_sin(ang) * s;
+                        radial_scale = random_float_between_c(D_0015ED6C_gp * 0.7f, D_0015ED6C_gp * 1.5f);
+                        scratch_vector[0] = fast_cos(ang) * radial_scale;
+                        scratch_vector[1] = fast_sin(ang) * radial_scale;
                         scratch_vector[2] = 0.0f;
                         scratch_vector[2] = random_float_between_c(D_0015ED6C_gp, D_0015ED6C_gp * 5.5f);
                         FUN_L00_0026ced0(position_buffer, scratch_vector, 0x500A1414, 0xA0A0A, 420000.0f, c);
                     }
-                    *(int *)(m + 0x94) = 0;
-                    *(unsigned short *)(m + 0x34) |= 0x41;
+                    *(int *)(gun_moby + 0x94) = 0;
+                    *(unsigned short *)(gun_moby + 0x34) |= 0x41;
                 }
             }
         done:
-            ((unsigned char *)m)[0xA4] = 0xFF;
+            ((unsigned char *)gun_moby)[0xA4] = 0xFF;
         } else {
-            ((unsigned char *)m)[0xA4] = 0xFF;
+            ((unsigned char *)gun_moby)[0xA4] = 0xFF;
         }
         if (md->f80 > 0.0f && md->f80 < 10.0f) {
             int lvl = (9 - func_001FA898_3055F8(md->f80)) / 2;
@@ -317,16 +317,16 @@ void FUN_L12_003054b0(char *moby) {
             int n = lvl + 3;
             for (j = 0; j < n; j++) {
                 int c;
-                qcopy(position_buffer, m + 0x10);
+                qcopy(position_buffer, gun_moby + 0x10);
                 position_buffer[2] += 0.7f;
                 ang = random_angle_radians();
-                s = random_float_between_c(0.1f, 0.4f);
-                position_buffer[0] += fast_cos(ang) * s;
-                position_buffer[1] += fast_sin(ang) * s;
+                radial_scale = random_float_between_c(0.1f, 0.4f);
+                position_buffer[0] += fast_cos(ang) * radial_scale;
+                position_buffer[1] += fast_sin(ang) * radial_scale;
                 c = FUN_L00_00257b90(scale_game_frames(0x19), scale_game_frames(0x37));
-                s = random_float_between_c(D_0015ED6C_gp * 0.5f, D_0015ED6C_gp * 3.0f);
-                scratch_vector[0] = fast_cos(ang) * s;
-                scratch_vector[1] = fast_sin(ang) * s;
+                radial_scale = random_float_between_c(D_0015ED6C_gp * 0.5f, D_0015ED6C_gp * 3.0f);
+                scratch_vector[0] = fast_cos(ang) * radial_scale;
+                scratch_vector[1] = fast_sin(ang) * radial_scale;
                 scratch_vector[2] = 0.0f;
                 scratch_vector[2] = random_float_between_c(D_0015ED6C_gp * 7.0f, D_0015ED6C_gp * 17.0f) * func_001FA888_3055F8(lvl) * 1.5f
                         / func_001FA888_3055F8(5);
@@ -334,15 +334,15 @@ void FUN_L12_003054b0(char *moby) {
             }
             for (j = 0; j < 3; j++) {
                 int c;
-                qcopy(position_buffer, m + 0x10);
+                qcopy(position_buffer, gun_moby + 0x10);
                 ang = random_angle_radians();
-                s = random_float_between_c(0.1f, 0.8f);
-                position_buffer[0] += fast_cos(ang) * s;
-                position_buffer[1] += fast_sin(ang) * s;
+                radial_scale = random_float_between_c(0.1f, 0.8f);
+                position_buffer[0] += fast_cos(ang) * radial_scale;
+                position_buffer[1] += fast_sin(ang) * radial_scale;
                 c = FUN_L00_00257b90(scale_game_frames(0x28), scale_game_frames(0x46));
-                s = random_float_between_c(D_0015ED6C_gp * 0.1f, D_0015ED6C_gp * 0.4f);
-                scratch_vector[0] = fast_cos(ang) * s;
-                scratch_vector[1] = fast_sin(ang) * s;
+                radial_scale = random_float_between_c(D_0015ED6C_gp * 0.1f, D_0015ED6C_gp * 0.4f);
+                scratch_vector[0] = fast_cos(ang) * radial_scale;
+                scratch_vector[1] = fast_sin(ang) * radial_scale;
                 scratch_vector[2] = 0.0f;
                 scratch_vector[2] = random_float_between_c(D_0015ED6C_gp * 2.4f, D_0015ED6C_gp * 5.5f);
                 FUN_L00_0026ced0(position_buffer, scratch_vector, 0x460A1414, 0xA0A0A, 504000.03f, c);
@@ -351,7 +351,7 @@ void FUN_L12_003054b0(char *moby) {
         }
     }
     FUN_L12_003064e8_c2(moby);
-    if (*(short *)(d + 0x5FC) <= 0 && D_L12_00161F04_gp == 0) {
+    if (*(short *)(owner_data + 0x5FC) <= 0 && D_L12_00161F04_gp == 0) {
         D_L12_00161F24 = 1;
         moby[0x20] = 4;
         moby[0xBC] = 0;
