@@ -1115,21 +1115,21 @@ void FUN_L08_002e16c0(Moby_2E2A38 *debris_moby) {
             return;
         }
         if (random_integer_below_c(3) == 0) {
-            int *q;
-            int a;
+            int *trail_parameter_entry;
+            int trail_frame_count;
             int b;
             clear_u64_value(particle_primary_vector);
             tab = D_L08_00161C30;
-            q = &tab.v[random_integer_below_c(2)];
+            trail_parameter_entry = &tab.v[random_integer_below_c(2)];
             {
                 int lo = scale_game_frames_alt(15), hi = scale_game_frames_alt(20);
-                a = FUN_L00_00257b90(lo, hi);
+                trail_frame_count = FUN_L00_00257b90(lo, hi);
             }
             {
                 int lo = scale_game_frames_alt(25);
                 b = FUN_L00_00257b90(lo, scale_game_frames_alt(30));
             }
-            func_L00_0026B890_2E2A38(debris_moby->pos, particle_primary_vector, 0x2F3F3F7F, *q, a, b, 0, 0, 400000.0f,
+            func_L00_0026B890_2E2A38(debris_moby->pos, particle_primary_vector, 0x2F3F3F7F, *trail_parameter_entry, trail_frame_count, b, 0, 0, 400000.0f,
                                      random_float_between_c2(8.0f, 16.0f) * D_0015ED6C_gp);
         }
         if (debris_moby->pos[2] < 15.2f) {
