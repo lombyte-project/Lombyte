@@ -168,7 +168,7 @@ void FUN_L07_0031eba8(char *moby) {
     int state = *(unsigned char *)(moby + 0x20);
     int current_scene_state;
     int k;
-    int t;
+    int scene_state_offset;
     int i;
     int j;
     char *mob;
@@ -184,9 +184,9 @@ void FUN_L07_0031eba8(char *moby) {
         if (current_scene_state != 2)
             return;
         S = D_L07_0016C960_c;
-        t = *(int *)(S + 0x30) - 3;
-        if ((unsigned)t < 2) {
-            int idx = (unsigned)t > 1 ? 0 : 2;
+        scene_state_offset = *(int *)(S + 0x30) - 3;
+        if ((unsigned)scene_state_offset < 2) {
+            int idx = (unsigned)scene_state_offset > 1 ? 0 : 2;
             cutscene_set_camera_target(((L07SparkState *)S)->arr[idx]);
         }
         if (*(int *)(S + 0x30) != current_scene_state)
