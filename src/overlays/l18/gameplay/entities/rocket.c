@@ -359,7 +359,7 @@ void FUN_L18_002a7220(char *moby) {
     char *data = *(char **)(moby + 0x78);
     float *p;
     float f20, f1;
-    char *t;
+    char *referenced_moby;
 
     *(float *)(moby + 0x40) = fast_add_rotations(*(float *)(moby + 0x40), frame_time * 6.2831855f);
     if (*(short *)(data + 0x12) != 0) {
@@ -376,10 +376,10 @@ void FUN_L18_002a7220(char *moby) {
         }
     }
     add_vector_xyz(next_position, moby + 0x10, data);
-    t = *(char **)(data + 0x14);
-    if (t != 0 && *(short *)(t + 0xA6) == 0x2E && ((unsigned char *)t)[0x20] != 0xFE &&
-        ((unsigned char *)t)[0x20] != 0xFD) {
-        subtract_vector_xyz(b, moby + 0x10, t + 0x10);
+    referenced_moby = *(char **)(data + 0x14);
+    if (referenced_moby != 0 && *(short *)(referenced_moby + 0xA6) == 0x2E && ((unsigned char *)referenced_moby)[0x20] != 0xFE &&
+        ((unsigned char *)referenced_moby)[0x20] != 0xFD) {
+        subtract_vector_xyz(b, moby + 0x10, referenced_moby + 0x10);
         b[2] = 0.0f;
         normalize_vector_xyz(b, b, 2.0f);
         b[3] = 5627.925f;
