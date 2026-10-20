@@ -1215,8 +1215,8 @@ extern Vec4 D_L07_00173EE0;
 extern char D_L07_00173F00[];
 
 /* Bolt update: flies on, sparks out at the end of its range, bursts on impact, removes it out of bounds. */
-void FUN_L07_0030b6a8(struct Moby *m) {
-    BoltVars *v = (BoltVars *)m->pvars;
+void FUN_L07_0030b6a8(struct Moby *moby) {
+    BoltVars *v = (BoltVars *)moby->pvars;
     Vec4 old;
     Vec4 dir;
     Vec4 spark;
@@ -1224,11 +1224,11 @@ void FUN_L07_0030b6a8(struct Moby *m) {
     int i;
     int j;
 
-    qcopy(&old, &m->pos);
-    add_vector_xyz(&m->pos, &m->pos, &v->vel);
+    qcopy(&old, &moby->pos);
+    add_vector_xyz(&moby->pos, &moby->pos, &v->vel);
     pass = v->solid == 0;
-    if (vector_distance(&m->pos, &v->origin) > 30.0f) {
-        if (m->visible != 0) {
+    if (vector_distance(&moby->pos, &v->origin) > 30.0f) {
+        if (moby->visible != 0) {
             for (i = 0; i < 3; i++) {
                 spark.q = 0;
                 spark.f[0] = random_float_between(-1.0f, 1.0f);
@@ -1239,16 +1239,16 @@ void FUN_L07_0030b6a8(struct Moby *m) {
                 add_vector_xyz(&dir, &spark, &dir);
                 normalize_vector_xyz(&dir, &dir,
                                      random_float_between(frame_time + frame_time, frame_time * 4.0f));
-                FUN_L07_0029a2a0(&m->pos, &dir);
+                FUN_L07_0029a2a0(&moby->pos, &dir);
             }
         }
-        mark_moby_for_removal(m);
+        mark_moby_for_removal(moby);
         return;
     }
-    if ((m->visible != 0 || vector_distance(&m->pos, &hero.motion.pos) < 30.0f) &&
-        collision_line(&old, &m->pos, pass, v->ignore, v) != 0) {
-        qcopy(&m->pos, &D_L07_00173EE0);
-        if (m->visible != 0) {
+    if ((moby->visible != 0 || vector_distance(&moby->pos, &hero.motion.pos) < 30.0f) &&
+        collision_line(&old, &moby->pos, pass, v->ignore, v) != 0) {
+        qcopy(&moby->pos, &D_L07_00173EE0);
+        if (moby->visible != 0) {
             for (j = 0; j < 5; j++) {
                 spark.q = 0;
                 spark.f[0] = random_float_between(-1.0f, 1.0f);
@@ -1260,18 +1260,18 @@ void FUN_L07_0030b6a8(struct Moby *m) {
                 add_vector_xyz(&dir, &spark, &dir);
                 normalize_vector_xyz(&dir, &dir,
                                      random_float_between(frame_time * 3.0f, frame_time * 6.0f));
-                FUN_L00_0026dd20((char *)&m->pos, (char *)&dir, 0x7F2F4F6F,
+                FUN_L00_0026dd20((char *)&moby->pos, (char *)&dir, 0x7F2F4F6F,
                                  random_int_between(scale_game_frames(10), scale_game_frames(15)),
                                  30000.0f);
             }
         }
-        play_moby_sound(0, 0, m);
-        mark_moby_for_removal(m);
+        play_moby_sound(0, 0, moby);
+        mark_moby_for_removal(moby);
         return;
     }
-    if (m->pos.x < 2.0f || m->pos.x > 1021.0f || m->pos.y < 2.0f || m->pos.y > 1021.0f ||
-        m->pos.z < 2.0f || m->pos.z > 1021.0f) {
-        mark_moby_for_removal(m);
+    if (moby->pos.x < 2.0f || moby->pos.x > 1021.0f || moby->pos.y < 2.0f || moby->pos.y > 1021.0f ||
+        moby->pos.z < 2.0f || moby->pos.z > 1021.0f) {
+        mark_moby_for_removal(moby);
     }
 }
 /* Pvars of a tumbling piece of debris. */
