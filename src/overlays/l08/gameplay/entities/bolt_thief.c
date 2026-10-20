@@ -113,9 +113,9 @@ extern int FUN_L08_002e1c98_c() __asm__("FUN_L08_002e1c98");
 
 void FUN_L08_002e8788(char *moby) {
     char *data = *(char **)(moby + 0x78);
-    char *e = data + 0xBC;
+    char *anchor_joint_cursor = data + 0xBC;
     int i = 0;
-    char *c;
+    char *child_moby;
     char *c2;
     char *c3;
     *(char **)(data + 0x60) = moby;
@@ -126,12 +126,12 @@ void FUN_L08_002e8788(char *moby) {
     *(char **)(data + 0x94) = moby;
     *(int *)(data + 0x98) = 1;
     *(int *)(data + 0x9C) = 0;
-    c = FUN_L08_002e1c98_c(moby, 0x1BD, 0, 2);
-    *(char **)(data + 0x70) = c;
+    child_moby = FUN_L08_002e1c98_c(moby, 0x1BD, 0, 2);
+    *(char **)(data + 0x70) = child_moby;
     *(int *)(data + 0x7C) = 2;
     *(char **)(data + 0x74) = moby;
     *(int *)(data + 0x78) = 0;
-    *(float *)(c + 0x2C) = *(float *)(*(char **)(c + 0x24) + 0x24) * 0.75f;
+    *(float *)(child_moby + 0x2C) = *(float *)(*(char **)(child_moby + 0x24) + 0x24) * 0.75f;
     c2 = FUN_L08_002e1c98_c(moby, 0x1BA, 1, 1);
     *(char **)(data + 0x80) = c2;
     *(char **)(data + 0x84) = moby;
@@ -145,11 +145,11 @@ void FUN_L08_002e8788(char *moby) {
     do {
         int j = i + 2;
         i++;
-        *(char **)(e - 0xC) = FUN_L08_002e1c98_c(*(char **)(data + 0x90), 0x1BB, 0, j);
-        *(char **)(e - 8) = *(char **)(data + 0x90);
-        *(int *)(e - 4) = 0;
-        *(int *)e = j;
-        e += 0x10;
+        *(char **)(anchor_joint_cursor - 0xC) = FUN_L08_002e1c98_c(*(char **)(data + 0x90), 0x1BB, 0, j);
+        *(char **)(anchor_joint_cursor - 8) = *(char **)(data + 0x90);
+        *(int *)(anchor_joint_cursor - 4) = 0;
+        *(int *)anchor_joint_cursor = j;
+        anchor_joint_cursor += 0x10;
     } while (i < 8);
 }
 /* Re-aims the twelve child mobys of a parent, adjusts the parent's spin, then runs the children's follow-up. */
