@@ -15,16 +15,16 @@ void patch_moby_gifs(void) __asm__("FUN_0020cef8");
 
 void patch_moby_gifs(void) {
     s32 *id;
-    struct GifEntry *e;
+    struct GifEntry *gif_entry;
     u8 *tex;
     u32 *gif;
     struct TexRemap *r;
 
     for (id = moby_class_rectify; *id >= 0; id++) {
-        e = ((struct MobyClass *)moby_class_resources[*id])->gifs;
-        for (;; e++) {
-            gif = (u32 *)(e->gif & 0x7FFFFFFF);
-            tex = e->tex;
+        gif_entry = ((struct MobyClass *)moby_class_resources[*id])->gifs;
+        for (;; gif_entry++) {
+            gif = (u32 *)(gif_entry->gif & 0x7FFFFFFF);
+            tex = gif_entry->tex;
             if (*tex != 0xFF) {
                 do {
                     r = &moby_gs_loc_stash[*tex];
@@ -38,7 +38,7 @@ void patch_moby_gifs(void) {
                     gif += 16;
                 } while (*tex != 0xFF);
             }
-            if (e->gif < 0) {
+            if (gif_entry->gif < 0) {
                 break;
             }
         }
