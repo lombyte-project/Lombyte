@@ -1083,15 +1083,15 @@ void FUN_L05_00253850(void) {
             k->unkA9C == 0 &&
             k->unkAB0 < ((unsigned char *)((char *)k->moby))[0x51] &&
             ((unsigned char *)((char *)k->moby))[0x51] < k->unkAB4) {
-            int t = k->unk888;
-            if (t > scale_game_frames(0x1E)) {
+            int animation_transition_frames = k->unk888;
+            if (animation_transition_frames > scale_game_frames(0x1E)) {
                 int x = FUN_L05_002551b8_c();
                 set_hero_animation(x, 9, (float)scale_game_frames(0x11));
             } else {
-                t = k->unk888;
-                if (t < scale_game_frames(0xA))
-                    t = scale_game_frames(0xA);
-                set_hero_animation(FUN_L05_002551b8_c(), 0xD, (float)t);
+                animation_transition_frames = k->unk888;
+                if (animation_transition_frames < scale_game_frames(0xA))
+                    animation_transition_frames = scale_game_frames(0xA);
+                set_hero_animation(FUN_L05_002551b8_c(), 0xD, (float)animation_transition_frames);
             }
         }
     }
