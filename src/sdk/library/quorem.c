@@ -19,7 +19,7 @@ typedef struct Bigint {
 int quorem(Bigint *b, Bigint *S) {
     int n;
     int borrow, y, z;
-    unsigned int carry, q, ys, si, zs;
+    unsigned int carry, quotient_digit, ys, si, zs;
     unsigned int *bx, *bxe, *sx, *sxe;
 
     n = S->wds;
@@ -29,14 +29,14 @@ int quorem(Bigint *b, Bigint *S) {
     sxe = sx + --n;
     bx = b->x;
     bxe = bx + n;
-    q = *bxe / (*sxe + 1);
-    if (q) {
+    quotient_digit = *bxe / (*sxe + 1);
+    if (quotient_digit) {
         borrow = 0;
         carry = 0;
         do {
             si = *sx++;
-            ys = (si & 0xffff) * q + carry;
-            zs = (si >> 16) * q + (ys >> 16);
+            ys = (si & 0xffff) * quotient_digit + carry;
+            zs = (si >> 16) * quotient_digit + (ys >> 16);
             carry = zs >> 16;
             y = (*bx & 0xffff) - (ys & 0xffff) + borrow;
             borrow = y >> 16;
@@ -52,7 +52,7 @@ int quorem(Bigint *b, Bigint *S) {
         }
     }
     if (Dcmp(b, S) >= 0) {
-        q++;
+        quotient_digit++;
         borrow = 0;
         carry = 0;
         bx = b->x;
@@ -76,5 +76,5 @@ int quorem(Bigint *b, Bigint *S) {
             b->wds = n;
         }
     }
-    return q;
+    return quotient_digit;
 }
