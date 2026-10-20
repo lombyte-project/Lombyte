@@ -27,7 +27,7 @@ extern int hero_set_state(int, int) __asm__("FUN_L14_0022ff58");
 float absolute_float(float input) __asm__("func_001F99C0");
 
 void FUN_L14_0021dd30(void) {
-    struct Hero *h;
+    struct Hero *hero_ptr;
     struct Hero *g = &hero;
     int keep = g->unk12ED;
     int st = g->ground_type;
@@ -42,8 +42,8 @@ void FUN_L14_0021dd30(void) {
         if (g->frames_off_ground.s == 0 || g->ground_distance < 0.3f) {
             g->unk12E7 = 1;
             if (g->vehicle_mode == 0) {
-                char *p = ((char *)g->items[1].moby);
-                if (p != 0 && *(short *)(p + 0xA6) == 0xAD) {
+                char *item_moby_bytes = ((char *)g->items[1].moby);
+                if (item_moby_bytes != 0 && *(short *)(item_moby_bytes + 0xA6) == 0xAD) {
                     g->unk308 = 1;
                 }
             }
@@ -88,13 +88,13 @@ void FUN_L14_0021dd30(void) {
         struct Hero *q = &hero;
         q->on_slip_ground = 1;
     }
-    h = &hero;
-    if (h->selector_13 != 0) {
-        if (h->state.current == 0x7F)
+    hero_ptr = &hero;
+    if (hero_ptr->selector_13 != 0) {
+        if (hero_ptr->state.current == 0x7F)
             return;
-        if (absolute_float(h->water_surface_z - (h->motion.pos.f[2] + 0.25f)) < 1.0f) {
-            if (h->water_surface_z - h->motion.pos.f[2] > 0.0f) {
-                if (h->motion.displacement.f[2] < 0.0f) {
+        if (absolute_float(hero_ptr->water_surface_z - (hero_ptr->motion.pos.f[2] + 0.25f)) < 1.0f) {
+            if (hero_ptr->water_surface_z - hero_ptr->motion.pos.f[2] > 0.0f) {
+                if (hero_ptr->motion.displacement.f[2] < 0.0f) {
                     FUN_L00_0020b930();
                     hero_set_state(HERO_STATE_SINK, 1);
                 }
