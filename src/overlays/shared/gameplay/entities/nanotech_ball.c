@@ -2052,7 +2052,7 @@ void FUN_L00_002dbf28(char *self, char *q) {
     float b[4];
     float spray_axis[4];
     float spray_axis_component[4];
-    float e[4];
+    float spray_vector_or_effect_position[4];
     float g[4];
     I6_DD3D8 first_color_choices;
     I6_DD3D8 second_color_choices;
@@ -2078,49 +2078,49 @@ void FUN_L00_002dbf28(char *self, char *q) {
         *(u128_DD3D8 *)g = 0;
         g[0] = random_float_between(-1.0f, 1.0f);
         g[1] = random_float_between(-1.0f, 1.0f);
-        *(u128_DD3D8 *)e = *(u128_DD3D8 *)g;
-        dt = fast_vec_dot(e, spray_axis);
+        *(u128_DD3D8 *)spray_vector_or_effect_position = *(u128_DD3D8 *)g;
+        dt = fast_vec_dot(spray_vector_or_effect_position, spray_axis);
         fast_vec_normalize_c(spray_axis_component, spray_axis, dt);
-        subtract_vector_xyz_c3(e, e, spray_axis_component);
+        subtract_vector_xyz_c3(spray_vector_or_effect_position, spray_vector_or_effect_position, spray_axis_component);
         fast_vec_normalize_c(spray_axis_component, spray_axis, random_float_between(0.0f, 1.0f));
-        add_vector_xyz(e, e, spray_axis_component);
-        fast_vec_normalize_c(e, e, f22 * random_float_between(3.5f, 6.5f) * D_0015ED6C);
-        add_vector_xyz(e, e, b);
+        add_vector_xyz(spray_vector_or_effect_position, spray_vector_or_effect_position, spray_axis_component);
+        fast_vec_normalize_c(spray_vector_or_effect_position, spray_vector_or_effect_position, f22 * random_float_between(3.5f, 6.5f) * D_0015ED6C);
+        add_vector_xyz(spray_vector_or_effect_position, spray_vector_or_effect_position, b);
         {
             int h = scale_game_frames_c(60);
-            FUN_L00_002af450(self + 0x10, (char *)e, FUN_L00_00257b90_c(h, scale_game_frames_c(120)), 0, (&D_0013E520)->b9);
+            FUN_L00_002af450(self + 0x10, (char *)spray_vector_or_effect_position, FUN_L00_00257b90_c(h, scale_game_frames_c(120)), 0, (&D_0013E520)->b9);
         }
     }
     for (j = 0; j < 4 / step; j++) {
         *(u128_DD3D8 *)g = 0;
         g[0] = random_float_between(-1.0f, 1.0f);
         g[1] = random_float_between(-1.0f, 1.0f);
-        *(u128_DD3D8 *)e = *(u128_DD3D8 *)g;
-        dt = fast_vec_dot(e, spray_axis);
+        *(u128_DD3D8 *)spray_vector_or_effect_position = *(u128_DD3D8 *)g;
+        dt = fast_vec_dot(spray_vector_or_effect_position, spray_axis);
         fast_vec_normalize_c(spray_axis_component, spray_axis, dt);
-        subtract_vector_xyz_c3(e, e, spray_axis_component);
+        subtract_vector_xyz_c3(spray_vector_or_effect_position, spray_vector_or_effect_position, spray_axis_component);
         fast_vec_normalize_c(spray_axis_component, spray_axis, random_float_between(0.0f, 1.0f));
-        add_vector_xyz(e, e, spray_axis_component);
-        fast_vec_normalize_c(e, e, f22 * random_float_between(6.5f, 10.0f) * D_0015ED6C);
-        add_vector_xyz(e, e, b);
+        add_vector_xyz(spray_vector_or_effect_position, spray_vector_or_effect_position, spray_axis_component);
+        fast_vec_normalize_c(spray_vector_or_effect_position, spray_vector_or_effect_position, f22 * random_float_between(6.5f, 10.0f) * D_0015ED6C);
+        add_vector_xyz(spray_vector_or_effect_position, spray_vector_or_effect_position, b);
         {
             int h = scale_game_frames_c(60);
-            FUN_L00_002af450(self + 0x10, (char *)e, FUN_L00_00257b90_c(h, scale_game_frames_c(90)), 1, (&D_0013E520)->b9);
+            FUN_L00_002af450(self + 0x10, (char *)spray_vector_or_effect_position, FUN_L00_00257b90_c(h, scale_game_frames_c(90)), 1, (&D_0013E520)->b9);
         }
     }
     *(u128_DD3D8 *)g = 0;
     g[0] = random_float_between(-1.0f, 1.0f);
     g[1] = random_float_between(-1.0f, 1.0f);
     g[2] = random_float_between(-1.0f, 1.0f);
-    *(u128_DD3D8 *)e = *(u128_DD3D8 *)g;
+    *(u128_DD3D8 *)spray_vector_or_effect_position = *(u128_DD3D8 *)g;
     to_camera[2] += dist * 0.5f;
-    fast_vec_normalize_c(e, e, dist / 5.0f * D_0015ED6C);
+    fast_vec_normalize_c(spray_vector_or_effect_position, spray_vector_or_effect_position, dist / 5.0f * D_0015ED6C);
     fast_vec_normalize_c(to_camera, to_camera, (dist + dist) * D_0015ED6C);
-    add_vector_xyz(e, e, to_camera);
-    clamp_vector_length(e, e, D_0015ED6C * 10.0f);
+    add_vector_xyz(spray_vector_or_effect_position, spray_vector_or_effect_position, to_camera);
+    clamp_vector_length(spray_vector_or_effect_position, spray_vector_or_effect_position, D_0015ED6C * 10.0f);
     {
         int h = scale_game_frames_c(60);
-        FUN_L00_002af450(self + 0x10, (char *)e, FUN_L00_00257b90_c(h, scale_game_frames_c(90)), 1, (&D_0013E520)->b9);
+        FUN_L00_002af450(self + 0x10, (char *)spray_vector_or_effect_position, FUN_L00_00257b90_c(h, scale_game_frames_c(90)), 1, (&D_0013E520)->b9);
     }
     if (dist < 6.0f) {
         k = func_001FA898_r(dist) + 1;
@@ -2185,8 +2185,8 @@ void FUN_L00_002dbf28(char *self, char *q) {
     mine_camera_blast((char *)&blk, self + 0x10, 0, 0);
     if ((&D_0013E520)->b9) {
         k = func_L00_001F2BE8_DD3D8(3.0f, self + 0x10, 0x10, self, 0);
-        *(u128_DD3D8 *)e = *(u128_DD3D8 *)(self + 0x10);
-        FUN_L00_0025a9f8(self, e, D_L00_00177F00, k, 0, 0x830000, 2, 1, 2.0f, 1.0f, 1.0f);
+        *(u128_DD3D8 *)spray_vector_or_effect_position = *(u128_DD3D8 *)(self + 0x10);
+        FUN_L00_0025a9f8(self, spray_vector_or_effect_position, D_L00_00177F00, k, 0, 0x830000, 2, 1, 2.0f, 1.0f, 1.0f);
     }
 }
 #include "qzero.h"
