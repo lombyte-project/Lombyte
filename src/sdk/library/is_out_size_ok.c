@@ -7,20 +7,20 @@ extern s32 sprintf(char *d, char *f, ...);
 
 s32 _isOutSizeOK(struct MpegDecoder *decoder, struct MpegRefImage *reference_image) {
     char sp_slot[0x100];
-    s32 t;
+    s32 out_max_height;
     int new_var2;
     struct MpegRefImage *new_var;
     s32 out_size_ok;
-    t = decoder->out_max_height;
-    if (t != 0) {
+    out_max_height = decoder->out_max_height;
+    if (out_max_height != 0) {
         out_size_ok = 0;
         new_var = reference_image;
         if (decoder->out_max_width < reference_image->width) {
             goto tail;
         }
-        new_var2 = t < reference_image->height;
+        new_var2 = out_max_height < reference_image->height;
         if (reference_image->unk10) {
-            out_size_ok = (t < new_var->height) ^ 1;
+            out_size_ok = (out_max_height < new_var->height) ^ 1;
             goto tail;
         } else {
             out_size_ok = new_var2 ^ 1;
