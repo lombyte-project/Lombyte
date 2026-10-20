@@ -20,7 +20,7 @@ typedef struct {
 
 extern void copy_memory_aligned(int, void *, int) __asm__("FUN_001f9838");
 
-void FUN_L01_0029b0a0(char *source, int byte_count, char *p, int mode, Table *t) {
+void FUN_L01_0029b0a0(char *source, int byte_count, char *p, int mode, Table *entry_table) {
     short v20 = *(short *)(p + 0xB2);
     short v19 = *(short *)(p + 0xA6);
     short key;
@@ -32,8 +32,8 @@ void FUN_L01_0029b0a0(char *source, int byte_count, char *p, int mode, Table *t)
     } else {
         key = (int)source - *(unsigned short *)(p + 0x78);
     }
-    for (i = 0; i < t->n; i++) {
-        e = &t->e[i];
+    for (i = 0; i < entry_table->n; i++) {
+        e = &entry_table->e[i];
         if (e->key == key && e->a == byte_count && v20 == e->c && v19 == e->d) {
             mode = e->flag;
             if (mode) {
@@ -42,8 +42,8 @@ void FUN_L01_0029b0a0(char *source, int byte_count, char *p, int mode, Table *t)
             }
         }
     }
-    ne = &t->e[t->n];
-    t->n = t->n + 1;
+    ne = &entry_table->e[entry_table->n];
+    entry_table->n = entry_table->n + 1;
     ne->key = key;
     copy_memory_aligned((int)&ne->pad4, source, byte_count);
     ne->a = byte_count;
