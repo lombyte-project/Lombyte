@@ -58,9 +58,9 @@ void FUN_L00_00216ec0(int a, int b, int c) {
 
 extern int D_0013F350_002321a8[] __asm__("D_0013F350");
 void FUN_L00_002321a8(void) {
-    int *p = D_0013F350_002321a8;
-    p[0x2278 / 4] = 0;
-    p[0x227C / 4] = 0;
+    int *destination = D_0013F350_002321a8;
+    destination[0x2278 / 4] = 0;
+    destination[0x227C / 4] = 0;
 }
 
 f32 D_L00_0017A7D4[1] __attribute__((section(".data"))) = {0};
