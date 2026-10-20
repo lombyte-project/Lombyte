@@ -543,6 +543,7 @@ void FUN_L08_002d42d8(Moby *moby) {
         BOMBER_TANK_STATE_FOLLOW_PATH_AND_FIRE = 3,
         BOMBER_TANK_STATE_FOLLOW_PATH = 6,
         BOMBER_TANK_STATE_WAIT_FOR_TRIGGER = 11,
+        BOMBER_TANK_STATE_SCATTER_GROUP_AND_ACTIVATE = 14,
         BOMBER_TANK_STATE_DAMAGED_FOLLOW_PATH = 99
     };
     float old_pos[4];
@@ -692,7 +693,7 @@ void FUN_L08_002d42d8(Moby *moby) {
             }
         }
         break;
-    case 14:
+    case BOMBER_TANK_STATE_SCATTER_GROUP_AND_ACTIVATE:
         if (vars->mode != 2) {
             unsigned char *event_flags;
             FUN_L08_002d5d08((char *)moby);
