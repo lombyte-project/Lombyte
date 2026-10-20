@@ -3601,9 +3601,9 @@ void FUN_L18_002f7ad8(M *moby) {
         break;
     case MOBY_WAIT_FOR_SCENE_END:
         if (D_L18_00162384_w[7] != 0 && moby->f40 == 0.0f) {
-            float d = 101.6f - moby->f18;
+            float height_reflection_delta = 101.6f - moby->f18;
             moby->f40 = fast_add_rotations(moby->f40, 3.14159274f);
-            moby->f18 += d + d;
+            moby->f18 += height_reflection_delta + height_reflection_delta;
         }
         if (D_L18_0015F5C4 != 2) {
             moby->substate = 1;
