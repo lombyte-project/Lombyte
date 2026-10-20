@@ -1626,7 +1626,7 @@ extern Path_3047E8 *D_L05_001B0CB0_3047E8[] __asm__("D_L05_001B0930");
 extern char D_0013F420[];
 extern s32 D_001413D0_lui[] __asm__("D_001413D0") __attribute__((section(".data")));
 
-void FUN_L05_00303390(Moby *m) {
+void FUN_L05_00303390(Moby *moby) {
     enum {
         EXTERMIBOT_HIT_NO_RESPONSE = 0,
         EXTERMIBOT_HIT_LETHAL = 1,
@@ -1647,17 +1647,17 @@ void FUN_L05_00303390(Moby *m) {
     float dmg;
     float ang;
     float ang2;
-    Wing_3047E8 *d;
+    Wing_3047E8 *moby_data;
     Hit_3047E8 *r;
     int res;
     int k;
 
-    d = *(struct Wing_3047E8 **)&m->pvars;
-    func_001F9908_3047E8(&d->f2D4);
+    moby_data = *(struct Wing_3047E8 **)&moby->pvars;
+    func_001F9908_3047E8(&moby_data->f2D4);
     dmg = 0.0f;
-    r = func_L00_0025B478_3047E8(m, 0x330000, 0);
+    r = func_L00_0025B478_3047E8(moby, 0x330000, 0);
     if (r != 0) {
-        qcopy(working_vector, ((float *)&m->pos));
+        qcopy(working_vector, ((float *)&moby->pos));
         working_vector[2] = working_vector[2] + 0.5f;
         if (r->who != 0) {
             if (r->who->oclass == 0x47) {
@@ -1670,29 +1670,29 @@ void FUN_L05_00303390(Moby *m) {
         } else {
             qcopy(hit_test_endpoint, r->at);
         }
-        if (func_001F9D10_3047E8(working_vector, hit_test_endpoint) < 24.0f && collision_line(working_vector, hit_test_endpoint, 2, m, 0) != 0) {
+        if (func_001F9D10_3047E8(working_vector, hit_test_endpoint) < 24.0f && collision_line(working_vector, hit_test_endpoint, 2, moby, 0) != 0) {
             r = 0;
         }
     }
-    res = update_collision_l08(m, r, &d->hp, 0, &cnt, &dmg, 0, 4);
-    if (cnt != 1 && m->state != 14) {
-        d->hp = d->hp - dmg;
-        if (d->hp <= 0.0f) {
+    res = update_collision_l08(moby, r, &moby_data->hp, 0, &cnt, &dmg, 0, 4);
+    if (cnt != 1 && moby->state != 14) {
+        moby_data->hp = moby_data->hp - dmg;
+        if (moby_data->hp <= 0.0f) {
             res = 1;
         }
         k = func_001FA898_3047E8(D_L05_00161A98_gp * 409.6f);
-        d->f98 = D_L05_00161A98_gp * 0.4f;
-        d->f80 = D_L05_00161AD0 * D_0015ED70;
-        d->f90 = k;
-        d->f94 = 9;
-        d->bAD = 0;
+        moby_data->f98 = D_L05_00161A98_gp * 0.4f;
+        moby_data->f80 = D_L05_00161AD0 * D_0015ED70;
+        moby_data->f90 = k;
+        moby_data->f94 = 9;
+        moby_data->bAD = 0;
         switch (res) {
         case EXTERMIBOT_HIT_NO_RESPONSE:
         case EXTERMIBOT_HIT_NO_REACTION:
             break;
         case EXTERMIBOT_HIT_FLASH:
         case EXTERMIBOT_HIT_FLASH_ONLY:
-            d->b67 = 0xFA;
+            moby_data->b67 = 0xFA;
             break;
         case EXTERMIBOT_HIT_NONLETHAL_KNOCKBACK:
         case EXTERMIBOT_HIT_KNOCKBACK_AND_FLASH:
@@ -1700,79 +1700,79 @@ void FUN_L05_00303390(Moby *m) {
         case EXTERMIBOT_HIT_START_NONLETHAL_KNOCKBACK:
         case EXTERMIBOT_HIT_START_NONLETHAL_KNOCKBACK_AND_FLASH:
         case EXTERMIBOT_HIT_START_KNOCKBACK_WITH_FLASH:
-            d->fC0 = 5.0f;
-            d->f88 = D_L05_00161A88 * D_0015ED6C;
-            d->f8C = D_L05_00161A8C * D_0015ED6C;
-            d->fC4 = 10.0f;
-            ang = angle_atan2(m->pos.x - r->who->pos.x, m->pos.y - r->who->pos.y);
+            moby_data->fC0 = 5.0f;
+            moby_data->f88 = D_L05_00161A88 * D_0015ED6C;
+            moby_data->f8C = D_L05_00161A8C * D_0015ED6C;
+            moby_data->fC4 = 10.0f;
+            ang = angle_atan2(moby->pos.x - r->who->pos.x, moby->pos.y - r->who->pos.y);
             *(u128_3047E8 *)working_vector = r->dir;
-            trooper_knockback_arc(working_vector, &ang, &d->f88, &d->f8C);
-            trooper_start_knockback(m, d->f70, ang, 5, 1, 0);
-            m->state = 11;
-            d->b67 = 0x78;
+            trooper_knockback_arc(working_vector, &ang, &moby_data->f88, &moby_data->f8C);
+            trooper_start_knockback(moby, moby_data->f70, ang, 5, 1, 0);
+            moby->state = 11;
+            moby_data->b67 = 0x78;
             break;
         case EXTERMIBOT_HIT_LETHAL:
         case EXTERMIBOT_HIT_DEATH_KNOCKBACK:
-            m->flags &= 0xEFFF;
-            d->f80 = D_L05_00161AD4 * D_0015ED70;
-            d->f88 = D_L05_00161A90 * D_0015ED6C;
-            d->f8C = D_L05_00161A94 * D_0015ED6C;
-            d->fC0 = 5.5f;
-            d->fC4 = 11.0f;
-            ang2 = angle_atan2(m->pos.x - r->who->pos.x, m->pos.y - r->who->pos.y);
+            moby->flags &= 0xEFFF;
+            moby_data->f80 = D_L05_00161AD4 * D_0015ED70;
+            moby_data->f88 = D_L05_00161A90 * D_0015ED6C;
+            moby_data->f8C = D_L05_00161A94 * D_0015ED6C;
+            moby_data->fC0 = 5.5f;
+            moby_data->fC4 = 11.0f;
+            ang2 = angle_atan2(moby->pos.x - r->who->pos.x, moby->pos.y - r->who->pos.y);
             *(u128_3047E8 *)working_vector = r->dir;
-            trooper_knockback_arc(working_vector, &ang2, &d->f88, &d->f8C);
-            trooper_start_knockback(m, d->f70, ang2, 6, 1, 0);
-            m->state = 14;
-            d->b67 = 0xF0;
+            trooper_knockback_arc(working_vector, &ang2, &moby_data->f88, &moby_data->f8C);
+            trooper_start_knockback(moby, moby_data->f70, ang2, 6, 1, 0);
+            moby->state = 14;
+            moby_data->b67 = 0xF0;
             if (r->who != 0 && *(struct Moby **)&r->who->pclass != 0 && *(short *)((u8 *)((struct Moby *)r->who->pclass) + 0x46) == 5) {
-                stop_animation_l08(m, 0x800, -1);
+                stop_animation_l08(moby, 0x800, -1);
             } else {
-                stop_animation_l08(m, 0, -1);
+                stop_animation_l08(moby, 0, -1);
             }
             break;
         }
-        trooper_anim_update(m, d->f60);
+        trooper_anim_update(moby, moby_data->f60);
     }
-    m->hit_slot = 0xFF;
-    trooper_anim_finish(m, d->f60);
-    if (d->f38 != 0) {
-        d->f2B0 = func_001FA898_3047E8(scale_time(func_002140F8_3047E8(180.0f, 240.0f)));
-        d->f38 = 0;
+    moby->hit_slot = 0xFF;
+    trooper_anim_finish(moby, moby_data->f60);
+    if (moby_data->f38 != 0) {
+        moby_data->f2B0 = func_001FA898_3047E8(scale_time(func_002140F8_3047E8(180.0f, 240.0f)));
+        moby_data->f38 = 0;
     }
-    func_001F9908_3047E8(&d->f2B0);
-    if (d->f2B0 != 0) {
-        d->f2A0 = d->f29C + 20.0f;
+    func_001F9908_3047E8(&moby_data->f2B0);
+    if (moby_data->f2B0 != 0) {
+        moby_data->f2A0 = moby_data->f29C + 20.0f;
     } else {
-        d->f2A0 = d->f29C;
+        moby_data->f2A0 = moby_data->f29C;
     }
-    if (activate_effect_l08(d->f2A0, m, d->f120, 0, 0, D_L05_001B0CB0_3047E8[d->f2CC]->pts, D_L05_001B0CB0_3047E8[d->f2CC]->n) != 2) {
-        if (d->f2A0 < vector_distance(d->f270, d->f120) || 3.0f < func_001F9B88_3047E8(m->pos.z - d->f128)) {
-            d->f164 = 2;
+    if (activate_effect_l08(moby_data->f2A0, moby, moby_data->f120, 0, 0, D_L05_001B0CB0_3047E8[moby_data->f2CC]->pts, D_L05_001B0CB0_3047E8[moby_data->f2CC]->n) != 2) {
+        if (moby_data->f2A0 < vector_distance(moby_data->f270, moby_data->f120) || 3.0f < func_001F9B88_3047E8(moby->pos.z - moby_data->f128)) {
+            moby_data->f164 = 2;
         }
     }
-    if (d->f2C8 >= 0) {
-        Moby *t = func_L05_003053D8_3047E8(m, d->f2C8);
-        if (t != 0) {
-            if (d->f164 == 2 || vector_distance(((float *)&m->pos), ((float *)&t->pos)) < vector_distance(((float *)&m->pos), ((float *)&d->target->pos))) {
-                d->target = t;
-                d->f164 = 1;
+    if (moby_data->f2C8 >= 0) {
+        Moby *candidate_target = func_L05_003053D8_3047E8(moby, moby_data->f2C8);
+        if (candidate_target != 0) {
+            if (moby_data->f164 == 2 || vector_distance(((float *)&moby->pos), ((float *)&candidate_target->pos)) < vector_distance(((float *)&moby->pos), ((float *)&moby_data->target->pos))) {
+                moby_data->target = candidate_target;
+                moby_data->f164 = 1;
             }
         }
     }
-    if (d->target == 0) {
-        d->target = (*(Moby * *)D_001413D0_lui);
+    if (moby_data->target == 0) {
+        moby_data->target = (*(Moby * *)D_001413D0_lui);
     }
-    d->f2D8 = func_001FA748_3047E8(d->f2D8, D_0015ED6C * 9.424778f);
-    m->glow_color = fast_tween_color(D_L05_00161A74, D_L05_00161A78, (func_001F9FA8_3047E8(d->f2D8) + 1.0f) * 0.5f);
-    k = m->state;
+    moby_data->f2D8 = func_001FA748_3047E8(moby_data->f2D8, D_0015ED6C * 9.424778f);
+    moby->glow_color = fast_tween_color(D_L05_00161A74, D_L05_00161A78, (func_001F9FA8_3047E8(moby_data->f2D8) + 1.0f) * 0.5f);
+    k = moby->state;
     if (k < 10) {
-    if (k >= 4 && d->target == (*(Moby * *)D_001413D0_lui)) {
+    if (k >= 4 && moby_data->target == (*(Moby * *)D_001413D0_lui)) {
         float yaw, pitch;
-        func_001F9BF0_3047E8(working_vector, ((float *)&d->target->pos), ((float *)&m->pos));
-        yaw = func_001FA790_3047E8(angle_atan2(working_vector[0], working_vector[1]), m->rot.z);
+        func_001F9BF0_3047E8(working_vector, ((float *)&moby_data->target->pos), ((float *)&moby->pos));
+        yaw = func_001FA790_3047E8(angle_atan2(working_vector[0], working_vector[1]), moby->rot.z);
         pitch = -angle_atan2(func_001F9CE8_3047E8(working_vector), working_vector[2]);
-        if (m->flags & 0x8000) {
+        if (moby->flags & 0x8000) {
             yaw = -yaw;
         }
         if (1.5707964f < yaw) {
@@ -1785,13 +1785,13 @@ void FUN_L05_00303390(Moby *m) {
         } else if (pitch < -0.5235988f) {
             pitch = -0.5235988f;
         }
-        d->f1D4 = pitch;
-        d->f1D8 = yaw * 0.7f;
-        d->f258 = yaw * 0.3f;
+        moby_data->f1D4 = pitch;
+        moby_data->f1D8 = yaw * 0.7f;
+        moby_data->f258 = yaw * 0.3f;
     }
     }
-    update_joint_animation(m, d->f170, 1, frame_scale_sq * 0.04f, frame_scale_sq * 0.3f);
-    update_joint_animation(m, d->f1F0, 2, frame_scale_sq * 0.04f, frame_scale_sq * 0.3f);
+    update_joint_animation(moby, moby_data->f170, 1, frame_scale_sq * 0.04f, frame_scale_sq * 0.3f);
+    update_joint_animation(moby, moby_data->f1F0, 2, frame_scale_sq * 0.04f, frame_scale_sq * 0.3f);
 }
 #include "rnc/gameplay/entities/moby.h"
 
