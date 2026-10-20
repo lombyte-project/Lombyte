@@ -131,7 +131,7 @@ void background_ship_1_update(char *moby) {
     int flag = 0;
     float tv[4];
     float f70;
-    float p2;
+    float path_travel_distance;
     float x;
     int r1;
     int r2;
@@ -172,8 +172,8 @@ void background_ship_1_update(char *moby) {
         if (voice_is_playing(moby, *(int *)(moby_data + 0x6C)) == 0) {
             *(int *)(moby_data + 0x6C) = func_0022ED80_r(1, 4, (int)moby);
         }
-        p2 = *(float *)&D_L02_00161F64 * frame_time;
-        *(float *)(moby_data + 0x64) = *(float *)(moby_data + 0x64) + p2 / *(float *)(moby_data + 0x70);
+        path_travel_distance = *(float *)&D_L02_00161F64 * frame_time;
+        *(float *)(moby_data + 0x64) = *(float *)(moby_data + 0x64) + path_travel_distance / *(float *)(moby_data + 0x70);
         if ((float)*(int *)path < *(float *)(moby_data + 0x64)) {
             *(float *)(moby_data + 0x64) = *(float *)(moby_data + 0x64) - (float)*(int *)path;
         }
