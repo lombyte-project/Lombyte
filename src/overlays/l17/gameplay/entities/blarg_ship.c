@@ -429,11 +429,11 @@ void FUN_L17_002f32f0(struct Moby *moby) {
         pkt.uv[6] = fast_sin_c(fast_add_rotations(ang, 1.5707964f)) * 0.5f + 0.5f;
         pkt.uv[7] = fast_cos_c(fast_add_rotations(ang, 1.5707964f)) * 0.5f + 0.5f;
         {
-            int c = fast_tween_color(D_L17_001DE010[k], D_L17_001DE028[k], D_L17_001DE040[k]);
-            pkt.col[3] = c;
-            pkt.col[2] = c;
-            pkt.col[1] = c;
-            pkt.col[0] = c;
+            int interpolated_vertex_color = fast_tween_color(D_L17_001DE010[k], D_L17_001DE028[k], D_L17_001DE040[k]);
+            pkt.col[3] = interpolated_vertex_color;
+            pkt.col[2] = interpolated_vertex_color;
+            pkt.col[1] = interpolated_vertex_color;
+            pkt.col[0] = interpolated_vertex_color;
         }
         draw_geometry_quad(&pkt, 0, 0);
     }
