@@ -2140,16 +2140,16 @@ void FUN_L00_0026e150(M_26e150 *particle) {
     struct Q_26e150 *q = &particle->q;
     float vel = q->vel;
     float alpha_before_reversal;
-    float d;
+    float update_scale;
 
     if (0.0f < vel) {
         q->size += D_0015ED60_26e150 * 0.007f * vel;
     } else if (0.03f < q->size) {
         q->size = q->size + D_0015ED60_26e150 * 0.007f * vel;
     } else {
-        d = D_0015ED60_26e150;
-        q->size = q->size + d * 0.007f * vel * 0.2f;
-        particle->fC += d * 5460.0f;
+        update_scale = D_0015ED60_26e150;
+        q->size = q->size + update_scale * 0.007f * vel * 0.2f;
+        particle->fC += update_scale * 5460.0f;
     }
     if (q->size <= 0.0244f || FUN_001f9770_26e150(particle->cA) != 0) {
         FUN_L00_00267a08_26e150(particle);
