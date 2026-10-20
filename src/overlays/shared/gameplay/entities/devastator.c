@@ -1318,7 +1318,7 @@ void FUN_L00_002b3c50(X *x) {
     s32 i;
     s32 trail_sample_limit;
     s32 hero_state;
-    u8 *p;
+    u8 *spawned_effect;
 
     g = x->f78;
     l0.f[0] = fast_cos(random_angle_radians()) * 0.05f;
@@ -1368,9 +1368,9 @@ void FUN_L00_002b3c50(X *x) {
         q = 1.037f;
         l0.f[2] -= D_0015ED6C_c * 3.0f;
     }
-    p = FUN_L00_0026d000(&emission_position, 0.05f, 1.01f, q, 30000.0f, 6, &l0, col);
-    if (p)
-        p[3] = 0x44;
+    spawned_effect = FUN_L00_0026d000(&emission_position, 0.05f, 1.01f, q, 30000.0f, 6, &l0, col);
+    if (spawned_effect)
+        spawned_effect[3] = 0x44;
     if (g->f0C) {
         trail_sample_spacing = fast_vec_dist(&g->v10, &emission_position) * 0.16667f;
         FUN_001f9a28_c(&previous_position_delta, &g->v10, &emission_position);
@@ -1383,9 +1383,9 @@ void FUN_L00_002b3c50(X *x) {
         for (i = 1; i < trail_sample_limit; i++) {
             fast_vec_normalize(&trail_sample_position, &previous_position_delta, trail_sample_spacing * (f32)i);
             FUN_001f9a10_c(&trail_sample_position, &emission_position, &trail_sample_position);
-            p = FUN_L00_0026d000(&trail_sample_position, 0.05f, 1.01f, q, 30000.0f, 6, &l0, col);
-            if (p)
-                p[3] = 0x44;
+            spawned_effect = FUN_L00_0026d000(&trail_sample_position, 0.05f, 1.01f, q, 30000.0f, 6, &l0, col);
+            if (spawned_effect)
+                spawned_effect[3] = 0x44;
         }
     }
     qcopy(&g->v10, &emission_position);
