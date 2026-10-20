@@ -103,7 +103,7 @@ void FUN_L02_002d3a50(void *moby, void *segment_start, void *b, int puff_count, 
     int r, g, color;
     int spin;
     float scale;
-    float d;
+    float size_delta_per_puff;
     unsigned char *dust_puff;
     unsigned char *p;
 
@@ -112,7 +112,7 @@ void FUN_L02_002d3a50(void *moby, void *segment_start, void *b, int puff_count, 
     *(OvlQuad *)vel = (OvlQuad)0;
     vel[2] = 0.01f;
     vel[3] = 1.0f;
-    d = (sb - sa) / (float)puff_count;
+    size_delta_per_puff = (sb - sa) / (float)puff_count;
     for (i = 0; i < puff_count; i++) {
         fast_vec_scale(pos, step, convert_integer_to_float(i));
         fast_vec_add(pos, segment_start, pos);
@@ -124,7 +124,7 @@ void FUN_L02_002d3a50(void *moby, void *segment_start, void *b, int puff_count, 
         vel[0] = randf_sym(0.0f, 0.0025f);
         vel[1] = randf_sym(0.0f, 0.0025f);
         vel[2] = random_float_between_alt(D_L02_001619D4 * 0.1f, D_L02_001619D4);
-        dust_puff = FUN_L00_0026d000(pos, D_L02_001619DC, 1.0f, scale, spin, vel, d + sa * 210000.0f, r << 24 | color);
+        dust_puff = FUN_L00_0026d000(pos, D_L02_001619DC, 1.0f, scale, spin, vel, size_delta_per_puff + sa * 210000.0f, r << 24 | color);
         if (dust_puff) {
             p = dust_puff + 0x20;
             if (random_integer_below(2)) {
