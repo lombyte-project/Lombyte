@@ -2751,7 +2751,7 @@ extern float D_L00_00161990 __attribute__((sda));
 void FUN_L00_002d5988(Obj_2d5988 *moby, Path_2d5988 *path, s32 arrival_state) {
     St_2d5988 *st;
     s32 idx;
-    f32 t;
+    f32 segment_offset_or_fraction;
     Vec4_2d5988 v;
     Vec4_2d5988 w;
     f32 distance_along_path;
@@ -2764,8 +2764,8 @@ void FUN_L00_002d5988(Obj_2d5988 *moby, Path_2d5988 *path, s32 arrival_state) {
     f32 b;
 
     st = moby->st;
-    FUN_L00_0025df68_2d5988(path, &moby->v[0], &w, &idx, &t, 0, 999.0f, 5.0f, 0.0f);
-    distance_along_path = convert_integer_to_float(idx) * path->a[0].f[3] + t;
+    FUN_L00_0025df68_2d5988(path, &moby->v[0], &w, &idx, &segment_offset_or_fraction, 0, 999.0f, 5.0f, 0.0f);
+    distance_along_path = convert_integer_to_float(idx) * path->a[0].f[3] + segment_offset_or_fraction;
     w_ = distance_along_path + 2.0f;
     l = distance_xyz(&moby->v[0], (void *)((char *)path + path->n * 16));
     speed_increment = D_0015ED70_2d5988 * 16.0f;
@@ -2784,13 +2784,13 @@ void FUN_L00_002d5988(Obj_2d5988 *moby, Path_2d5988 *path, s32 arrival_state) {
             st->v60 = b2;
     }
     idx = truncate_float_to_s32(w_ / path->a[0].f[3]);
-    t = (w_ - convert_integer_to_float(idx) * path->a[0].f[3]) / path->a[0].f[3];
+    segment_offset_or_fraction = (w_ - convert_integer_to_float(idx) * path->a[0].f[3]) / path->a[0].f[3];
     if (idx >= path->n - 1) {
         idx = path->n - 2;
-        t = 1.0f;
+        segment_offset_or_fraction = 1.0f;
     }
     fast_vec_sub(&w, &path->b[idx], &path->a[idx]);
-    FUN_001f9a68_2d5988(&w, &w, t);
+    FUN_001f9a68_2d5988(&w, &w, segment_offset_or_fraction);
     add_vector_xyz(&w, &w, &path->a[idx]);
     l = vector_distance((void *)((char *)path + path->n * 16), &moby->v[0]);
     if (l < 1.0f) {
