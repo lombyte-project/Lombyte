@@ -6199,7 +6199,7 @@ extern f32 frame_time_sq_macro __asm__("D_0015ED70") __attribute__((section(".sd
 extern f32 frame_scale_sq_macro __asm__("D_0015ED64") __attribute__((section(".sdata")));
 /* Update of moby class 1105 (fred): steps the conversation and camera states, then turns the head toward the hero. */
 void fred_update(struct Moby *m) __asm__("FUN_L06_00301070");
-void fred_update(struct Moby *m) {
+void fred_update(struct Moby *moby) {
     enum {
         INITIALIZE_FRED_DIALOGUE = 0,
         UPDATE_FRED_DIALOGUE = 1,
@@ -6208,77 +6208,77 @@ void fred_update(struct Moby *m) {
         RAMP_FRED_POST_CUTSCENE_SCALAR_TO_ZERO = 4,
         WAIT_FOR_FRED_REMOVAL_TRIGGER = 5
     };
-    Data_301070 *d = *(struct Data_301070 **)&m->pvars;
+    Data_301070 *fred_vars = *(struct Data_301070 **)&moby->pvars;
     float rate, head_rate;
     int tracking;
-    FUN_L03_002db480_301070((char *)m);
-    if (m->visible != 0 && distance_xyz_301070(((float *)&m->pos), ((char *)D_L06_00167540)) < 24.0f) {
-        FUN_L00_0025a120_301070(m);
-        m->shadow_range = 0x13;
+    FUN_L03_002db480_301070((char *)moby);
+    if (moby->visible != 0 && distance_xyz_301070(((float *)&moby->pos), ((char *)D_L06_00167540)) < 24.0f) {
+        FUN_L00_0025a120_301070(moby);
+        moby->shadow_range = 0x13;
     }
-    switch (m->state) {
+    switch (moby->state) {
     case INITIALIZE_FRED_DIALOGUE:
         if (D_0013D505[0] != 0) goto del;
         if (D_0013D8AC_lui == 0) {
-            if (m->prev_seq != 1) {
-                blend_moby_animation_301070(m, 1, 0, scale_game_frames_301070(10));
+            if (moby->prev_seq != 1) {
+                blend_moby_animation_301070(moby, 1, 0, scale_game_frames_301070(10));
             }
-            d->f176 = 1;
-            FUN_L06_002f53e8_301070(D_L06_0015FFD8_301070 + (d->f164 << 8));
+            fred_vars->f176 = 1;
+            FUN_L06_002f53e8_301070(D_L06_0015FFD8_301070 + (fred_vars->f164 << 8));
         } else {
             {
                 Vec_301070 t;
-                normalize_vector_xyz_301070(t, ((char *)&m->rot_row0), 2.0f);
-                add_vector_xyz_301070(((float *)&m->pos), ((float *)&m->pos), t);
-                m->pos.z = probe_ground_height_301070(((float *)&m->pos), 0, 0.5f);
-                d->f176 = 0;
+                normalize_vector_xyz_301070(t, ((char *)&moby->rot_row0), 2.0f);
+                add_vector_xyz_301070(((float *)&moby->pos), ((float *)&moby->pos), t);
+                moby->pos.z = probe_ground_height_301070(((float *)&moby->pos), 0, 0.5f);
+                fred_vars->f176 = 0;
             }
         }
-        d->f174 = scale_game_frames_301070(0x2D);
-        FUN_L06_002f53e8_301070(D_L06_0015FFD8_301070 + (d->f160 << 8));
-        d->f20 = D_L06_00201880;
-        m->state = 1;
-        initialize_npc_dialogue_301070(m, d);
+        fred_vars->f174 = scale_game_frames_301070(0x2D);
+        FUN_L06_002f53e8_301070(D_L06_0015FFD8_301070 + (fred_vars->f160 << 8));
+        fred_vars->f20 = D_L06_00201880;
+        moby->state = 1;
+        initialize_npc_dialogue_301070(moby, fred_vars);
         break;
     case UPDATE_FRED_DIALOGUE:
-        if (d->f8 == 1 && is_point_inside_clip_volume_301070(&hero.motion.pos, d->f168) != 0) {
-            d->fC = 16.0f;
+        if (fred_vars->f8 == 1 && is_point_inside_clip_volume_301070(&hero.motion.pos, fred_vars->f168) != 0) {
+            fred_vars->fC = 16.0f;
         } else {
-            d->fC = 3.7f;
+            fred_vars->fC = 3.7f;
         }
-        if (FUN_L06_002e9ea0_301070(d->f170) != 0) {
-            if (FUN_001f9770_301070(&d->f174) != 0 && update_npc_dialogue_301070(m, d) != 0) {
-                m->state = 2;
-                if (d->f176 != 0) {
+        if (FUN_L06_002e9ea0_301070(fred_vars->f170) != 0) {
+            if (FUN_001f9770_301070(&fred_vars->f174) != 0 && update_npc_dialogue_301070(moby, fred_vars) != 0) {
+                moby->state = 2;
+                if (fred_vars->f176 != 0) {
                     Vec_301070 t;
-                    normalize_vector_xyz_301070(t, ((char *)&m->rot_row0), 2.0f);
-                    add_vector_xyz_301070(((float *)&m->pos), ((float *)&m->pos), t);
-                    m->pos.z = probe_ground_height_301070(((float *)&m->pos), 0, 0.5f);
-                    d->f176 = 0;
+                    normalize_vector_xyz_301070(t, ((char *)&moby->rot_row0), 2.0f);
+                    add_vector_xyz_301070(((float *)&moby->pos), ((float *)&moby->pos), t);
+                    moby->pos.z = probe_ground_height_301070(((float *)&moby->pos), 0, 0.5f);
+                    fred_vars->f176 = 0;
                 }
-                begin_dialogue_camera_transition_301070(2.2f, m);
+                begin_dialogue_camera_transition_301070(2.2f, moby);
             }
         }
         if (hero.state.control_mode == 15) {
-            FUN_L06_002f5360_301070(D_L06_0015FFD8_301070 + (d->f160 << 8));
+            FUN_L06_002f5360_301070(D_L06_0015FFD8_301070 + (fred_vars->f160 << 8));
         }
         break;
     case HANDLE_FRED_DIALOGUE_RESULT:
         if (D_L06_0015F5C4_macro != 2) {
-            if (m->prev_seq != 0) {
-                blend_moby_animation_301070(m, 0, 0, scale_game_frames_301070(10));
+            if (moby->prev_seq != 0) {
+                blend_moby_animation_301070(moby, 0, 0, scale_game_frames_301070(10));
             }
-            if (d->f4 < 2) {
-                FUN_L00_002502a0_301070(m->mission);
-                FUN_L06_002f5360_301070(D_L06_0015FFD8_301070 + (d->f164 << 8));
-                m->state = 1;
+            if (fred_vars->f4 < 2) {
+                FUN_L00_002502a0_301070(moby->mission);
+                FUN_L06_002f5360_301070(D_L06_0015FFD8_301070 + (fred_vars->f164 << 8));
+                moby->state = 1;
             }
-            if (d->f4 == 2) {
+            if (fred_vars->f4 == 2) {
                 FUN_L00_00260860_301070(0x1D, 1);
                 memcard_save_data_301070(0, -1);
                 help_request_301070(0x1775, 0x2C);
                 D_L06_0015F3FC_macro = 1.0f;
-                d->f178 = 0.0f;
+                fred_vars->f178 = 0.0f;
                 {
                     VecQ_301070 pos;
                     VecQ_301070 rot;
@@ -6293,53 +6293,53 @@ void fred_update(struct Moby *m) {
                     cutscene_camera_start_301070(pos.f, rot.f, 1, 0, 0);
                 }
                 FUN_L00_00216f90_301070(&hero.motion.pos, &hero.motion.rot, 0x72, 1);
-                FUN_L06_002f53e8_301070(D_L06_0015FFD8_301070 + (d->f164 << 8));
-                m->state = 3;
-                m->visible = 0;
-                m->flags |= 1;
-                *(int *)&m->collision = 0;
+                FUN_L06_002f53e8_301070(D_L06_0015FFD8_301070 + (fred_vars->f164 << 8));
+                moby->state = 3;
+                moby->visible = 0;
+                moby->flags |= 1;
+                *(int *)&moby->collision = 0;
             }
         }
         break;
     case INTERPOLATE_FRED_CUTSCENE_CAMERA: {
       {
-        VecQ_301070 p0;
-        VecQ_301070 p1;
-        VecQ_301070 r0;
-        VecQ_301070 r1;
+        VecQ_301070 camera_start_position;
+        VecQ_301070 camera_end_position;
+        VecQ_301070 camera_start_rotation;
+        VecQ_301070 camera_end_rotation;
         Vec_301070 pos;
         Vec_301070 rot;
-        p0.q = 0;
-        p1.q = 0;
-        r0.q = 0;
-        r1.q = 0;
-        p0.f[0] = 178.47f;
-        p0.f[1] = 319.76f;
-        p0.f[2] = 146.31f;
-        p1.f[0] = 172.55f;
-        p1.f[1] = 316.01f;
-        p1.f[2] = 145.27f;
-        r0.f[0] = 0.07f;
-        r0.f[1] = 0.18f;
-        r0.f[2] = -1.77f;
-        r1.f[0] = 0.07f;
-        r1.f[1] = 0.13f;
-        r1.f[2] = -1.21f;
-        advance_accelerated_scalar_301070(&d->f178, &d->f17C, 1.0f, frame_time_sq_macro * 0.1f, frame_time_sq_macro * 0.1f, frame_time_macro * 0.1f);
-        if (d->f178 > 0.1f) {
-            FUN_L06_002f5360_301070(D_L06_0015FFD8_301070 + (d->f160 << 8));
+        camera_start_position.q = 0;
+        camera_end_position.q = 0;
+        camera_start_rotation.q = 0;
+        camera_end_rotation.q = 0;
+        camera_start_position.f[0] = 178.47f;
+        camera_start_position.f[1] = 319.76f;
+        camera_start_position.f[2] = 146.31f;
+        camera_end_position.f[0] = 172.55f;
+        camera_end_position.f[1] = 316.01f;
+        camera_end_position.f[2] = 145.27f;
+        camera_start_rotation.f[0] = 0.07f;
+        camera_start_rotation.f[1] = 0.18f;
+        camera_start_rotation.f[2] = -1.77f;
+        camera_end_rotation.f[0] = 0.07f;
+        camera_end_rotation.f[1] = 0.13f;
+        camera_end_rotation.f[2] = -1.21f;
+        advance_accelerated_scalar_301070(&fred_vars->f178, &fred_vars->f17C, 1.0f, frame_time_sq_macro * 0.1f, frame_time_sq_macro * 0.1f, frame_time_macro * 0.1f);
+        if (fred_vars->f178 > 0.1f) {
+            FUN_L06_002f5360_301070(D_L06_0015FFD8_301070 + (fred_vars->f160 << 8));
         }
-        lerp_vector_301070(pos, p0.f, p1.f, d->f178);
-        rot[2] = fast_add_rotations_301070(fast_subtract_rotations_301070(r1.f[2], r0.f[2]) * d->f178, r0.f[2]);
-        rot[1] = fast_add_rotations_301070(fast_subtract_rotations_301070(r1.f[1], r0.f[1]) * d->f178, r0.f[1]);
-        rot[0] = fast_add_rotations_301070(fast_subtract_rotations_301070(r1.f[0], r0.f[0]) * d->f178, r0.f[0]);
+        lerp_vector_301070(pos, camera_start_position.f, camera_end_position.f, fred_vars->f178);
+        rot[2] = fast_add_rotations_301070(fast_subtract_rotations_301070(camera_end_rotation.f[2], camera_start_rotation.f[2]) * fred_vars->f178, camera_start_rotation.f[2]);
+        rot[1] = fast_add_rotations_301070(fast_subtract_rotations_301070(camera_end_rotation.f[1], camera_start_rotation.f[1]) * fred_vars->f178, camera_start_rotation.f[1]);
+        rot[0] = fast_add_rotations_301070(fast_subtract_rotations_301070(camera_end_rotation.f[0], camera_start_rotation.f[0]) * fred_vars->f178, camera_start_rotation.f[0]);
         if (D_L06_00167580 != 0 && D_L06_00167580->f86 != 5) {
-            cutscene_camera_start_301070(p0.f, r0.f, 1, 0, 0);
+            cutscene_camera_start_301070(camera_start_position.f, camera_start_rotation.f, 1, 0, 0);
         }
         FUN_L00_002ea9d8_301070(pos);
         FUN_L00_002eaa30_301070(rot);
-        if (d->f178 >= 1.0f
-            || (((Busy_301070 *)D_L06_00179B90)->f0 == 0 && ((Busy_301070 *)D_L06_00179B90)->f24 == -1 && d->f178 > 0.2f)) {
+        if (fred_vars->f178 >= 1.0f
+            || (((Busy_301070 *)D_L06_00179B90)->f0 == 0 && ((Busy_301070 *)D_L06_00179B90)->f24 == -1 && fred_vars->f178 > 0.2f)) {
             approach_value_301070(&D_L06_0015F3FC_macro, 1.0f, frame_time_macro * 4.0f);
         } else {
             approach_value_301070(&D_L06_0015F3FC_macro, 0.0f, frame_time_macro * 4.0f);
@@ -6347,7 +6347,7 @@ void fred_update(struct Moby *m) {
         if (D_L06_0015F3FC_macro == 1.0f) {
             FUN_L00_00216f90_301070(&hero.motion.pos, &hero.motion.rot, 0, 0);
             cutscene_camera_stop_301070(0);
-            m->state = 4;
+            moby->state = 4;
         }
       }
         break;
@@ -6355,14 +6355,14 @@ void fred_update(struct Moby *m) {
     case RAMP_FRED_POST_CUTSCENE_SCALAR_TO_ZERO:
         approach_value_301070(&D_L06_0015F3FC_macro, 0.0f, frame_time_macro * 4.0f);
         if (D_L06_0015F3FC_macro == 0.0f) {
-            m->state = 5;
+            moby->state = 5;
         }
         break;
     case WAIT_FOR_FRED_REMOVAL_TRIGGER:
         if (hero.state.control_mode == 15) {
-            FUN_L06_002f5360_301070(D_L06_0015FFD8_301070 + (d->f164 << 8));
+            FUN_L06_002f5360_301070(D_L06_0015FFD8_301070 + (fred_vars->f164 << 8));
         del:
-            mark_moby_for_removal_301070(m);
+            mark_moby_for_removal_301070(moby);
             return;
         }
         break;
@@ -6374,54 +6374,54 @@ void fred_update(struct Moby *m) {
         Vec_301070 target;
         Vec_301070 eye;
         Vec_301070 delta;
-        if (m->prev_seq == 0) {
+        if (moby->prev_seq == 0) {
             char *player = &hero.motion.pos;
             tracking = 1;
-            if (vector_distance_301070(((float *)&m->pos), player) < 8.0f &&
-                fast_difference_between_rotations_301070(m->rot.z,
-                    angle_atan2_301070(hero.motion.unkD0.f[0] - m->pos.x,
-                        hero.motion.unkD0.f[1] - m->pos.y)) < 1.5707964f) {
-                if (vector_length_xyz_301070(player + 0x80) > 0.01f) d->f158 = scale_game_frames_301070(120);
-                else FUN_001f9740_301070(&d->f158);
-            } else if (d->f158) {
-                d->f158 = 0;
-                qcopy(d->f140, &hero.motion.unkD0);
+            if (vector_distance_301070(((float *)&moby->pos), player) < 8.0f &&
+                fast_difference_between_rotations_301070(moby->rot.z,
+                    angle_atan2_301070(hero.motion.unkD0.f[0] - moby->pos.x,
+                        hero.motion.unkD0.f[1] - moby->pos.y)) < 1.5707964f) {
+                if (vector_length_xyz_301070(player + 0x80) > 0.01f) fred_vars->f158 = scale_game_frames_301070(120);
+                else FUN_001f9740_301070(&fred_vars->f158);
+            } else if (fred_vars->f158) {
+                fred_vars->f158 = 0;
+                qcopy(fred_vars->f140, &hero.motion.unkD0);
             }
-            if (FUN_001f9740_301070(&d->f15C)) {
+            if (FUN_001f9740_301070(&fred_vars->f15C)) {
                 float heading;
-                d->f15C = truncate_float_to_s32_301070(scale_time_301070(random_float_between_301070(180.0f, 300.0f)));
-                heading = fast_add_rotations_301070(m->rot.z, random_float_between_301070(-90.0f, 90.0f) * 0.017453292f);
-                build_spherical_offset_301070(d->f140, 6.0f, heading, random_float_between_301070(0.0f, 30.0f) * 0.017453292f);
-                add_vector_xyz_301070(d->f140, d->f140, ((float *)&m->pos));
+                fred_vars->f15C = truncate_float_to_s32_301070(scale_time_301070(random_float_between_301070(180.0f, 300.0f)));
+                heading = fast_add_rotations_301070(moby->rot.z, random_float_between_301070(-90.0f, 90.0f) * 0.017453292f);
+                build_spherical_offset_301070(fred_vars->f140, 6.0f, heading, random_float_between_301070(0.0f, 30.0f) * 0.017453292f);
+                add_vector_xyz_301070(fred_vars->f140, fred_vars->f140, ((float *)&moby->pos));
             }
-            if (d->f158) {
+            if (fred_vars->f158) {
                 qcopy(target, &hero.motion.unkD0);
                 rate = 0.04f;
                 head_rate = 0.3f;
             } else {
-                qcopy(target, d->f140);
+                qcopy(target, fred_vars->f140);
             }
         }
         if (tracking) {
             float yaw;
             float pitch;
-            qcopy(eye, ((float *)&m->pos));
+            qcopy(eye, ((float *)&moby->pos));
             eye[2] += 1.0f;
             subtract_vector_xyz_301070(delta, target, eye);
-            yaw = fast_subtract_rotations_301070(angle_atan2_301070(delta[0], delta[1]), m->rot.z);
+            yaw = fast_subtract_rotations_301070(angle_atan2_301070(delta[0], delta[1]), moby->rot.z);
             pitch = -angle_atan2_301070(vector_length_xy_301070(delta), delta[2]);
             if (yaw > 1.5707964f) yaw = 1.5707964f;
             else if (yaw < -1.5707964f) yaw = -1.5707964f;
             if (pitch > 0.5235988f) pitch = 0.5235988f;
             else if (pitch < -0.5235988f) pitch = -0.5235988f;
-            d->fA4 = pitch;
-            d->fA8 = yaw * 0.6f;
-            d->f128 = yaw * 0.4f;
+            fred_vars->fA4 = pitch;
+            fred_vars->fA8 = yaw * 0.6f;
+            fred_vars->f128 = yaw * 0.4f;
         }
     }
-    if (cheats_301070[0]) d->fB0 = 2.75f;
-    update_joint_animation_301070(rate * frame_scale_sq_macro, head_rate * frame_scale_sq_macro, m, d->f40, 0);
-    update_joint_animation_301070(rate * frame_scale_sq_macro, head_rate * frame_scale_sq_macro, m, d->fC0, 2);
+    if (cheats_301070[0]) fred_vars->fB0 = 2.75f;
+    update_joint_animation_301070(rate * frame_scale_sq_macro, head_rate * frame_scale_sq_macro, moby, fred_vars->f40, 0);
+    update_joint_animation_301070(rate * frame_scale_sq_macro, head_rate * frame_scale_sq_macro, moby, fred_vars->fC0, 2);
 }
 #include "rnc/gameplay/state/game_globals.h"
 extern char *D_L06_0015FFD8_301b90 __asm__("D_L06_0015FFD8");
