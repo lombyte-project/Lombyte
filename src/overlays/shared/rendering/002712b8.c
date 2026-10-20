@@ -1370,50 +1370,50 @@ void rotation_matrix(void *, void *) __asm__("FUN_001fa050");
 void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 void FUN_001f9cf8_274518(void *, void *, void *) __asm__("FUN_001f9cf8");
 f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
-void FUN_L00_00274518(M_274518 *m) {
-    R_274518 *r = &m->r;
-    V_274518 a, b, c;
+void FUN_L00_00274518(M_274518 *particle) {
+    R_274518 *r = &particle->r;
+    V_274518 a, b, rotation_angles;
     V_274518 mat[4];
-    u8 *p;
+    u8 *spawned_particle;
     f32 k1, k2, z;
 
     if (r->h1C == 0) {
-        if (FUN_L00_00259430_274518(m->b4, r->h1A))
+        if (FUN_L00_00259430_274518(particle->b4, r->h1A))
             goto kill;
         if (r->iC == 0)
             return;
-        a.x = m->r.unk0;
+        a.x = particle->r.unk0;
         a.y = r->unk4;
         a.z = r->unk8;
         FUN_001f9a68_274518(&a, &a, convert_integer_to_float(r->h18));
-        FUN_001f9a10_274518(m->v10, r->iC + 0x10, &a);
+        FUN_001f9a10_274518(particle->v10, r->iC + 0x10, &a);
         return;
     }
-    if (FUN_001f9770_274518(&m->hA))
+    if (FUN_001f9770_274518(&particle->hA))
         goto kill;
-    if (m->hA < FUN_001f96f8_274518(10)) {
-        if (FUN_L00_00259430_274518(m->b4, 0x10)) {
+    if (particle->hA < FUN_001f96f8_274518(10)) {
+        if (FUN_L00_00259430_274518(particle->b4, 0x10)) {
         kill:
-            free_effect_particle(m);
+            free_effect_particle(particle);
             return;
         }
     }
     if (r->h1C == 1) {
         z = 0.0f;
-        FUN_L00_002743a8_274518(0, m->v10, FUN_001f96f8_274518(10), z, z, 0, m->b7, 0);
+        FUN_L00_002743a8_274518(0, particle->v10, FUN_001f96f8_274518(10), z, z, 0, particle->b7, 0);
     } else {
         a.x = r->unk0;
         a.y = r->unk4;
         a.z = r->unk8;
         z = 0.0f;
-        p = FUN_L00_002743a8_274518((s32)r->iC, m->v10, FUN_001f96f8_274518(10), z, z, 0, m->b7,
+        spawned_particle = FUN_L00_002743a8_274518((s32)r->iC, particle->v10, FUN_001f96f8_274518(10), z, z, 0, particle->b7,
                                     &a);
-        if (p)
-            *(s16 *)(p + 0x38) = r->h18;
+        if (spawned_particle)
+            *(s16 *)(spawned_particle + 0x38) = r->h18;
     }
     if (r->h1C != 1)
         return;
-    qcopy(m->v10, r->iC + 0x10);
+    qcopy(particle->v10, r->iC + 0x10);
     k1 = 2.25f;
     a.x = FUN_001f9dc8_274518(r->unk10) * k1;
     k2 = 0.28f;
@@ -1424,13 +1424,13 @@ void FUN_L00_00274518(M_274518 *m) {
     b.y = FUN_001f9de0_274518(r->unk14) * k2;
     b.z = b.x;
     b.x = 0.0f;
-    clear_u64_value(&c);
-    c.y = r->unk10;
-    rotation_matrix(mat, &c);
+    clear_u64_value(&rotation_angles);
+    rotation_angles.y = r->unk10;
+    rotation_matrix(mat, &rotation_angles);
     transform_vector(&b, &b, mat);
     FUN_001f9a10_274518(&a, &a, &b);
     FUN_001f9cf8_274518(&a, &a, r->iC + 0xC0);
-    FUN_001f9a10_274518(m->v10, m->v10, &a);
+    FUN_001f9a10_274518(particle->v10, particle->v10, &a);
     r->unk10 = fast_add_rotations(r->unk10, frame_time * 0.9599310755729675f);
     r->unk14 = fast_add_rotations(r->unk14, frame_time * 4.363323211669922f);
 }
