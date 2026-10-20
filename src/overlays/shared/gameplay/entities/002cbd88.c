@@ -20,10 +20,10 @@ extern short D_L15_00161ACC __attribute__((sda));
 extern short D_L15_00161AD0 __attribute__((sda));
 extern short D_L15_00161AD4 __attribute__((sda));
 void FUN_L15_002cbd88(void) {
-    int n = scale_game_frames(*(int *)&D_L15_00161AD4);
-    float d = convert_integer_to_float(n);
-    float s = fast_sin((float)(D_L15_0015F5CC % n) / d * 6.28318f);
-    float v = *(float *)&D_L15_00161ABC + *(float *)&D_L15_00161AD0 * s;
+    int period_frames = scale_game_frames(*(int *)&D_L15_00161AD4);
+    float period_frames_float = convert_integer_to_float(period_frames);
+    float sine_value = fast_sin((float)(D_L15_0015F5CC % period_frames) / period_frames_float * 6.28318f);
+    float v = *(float *)&D_L15_00161ABC + *(float *)&D_L15_00161AD0 * sine_value;
     int r;
     int k;
     if (v < 0.0f)
