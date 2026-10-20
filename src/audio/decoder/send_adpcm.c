@@ -23,7 +23,7 @@ void send_adpcm(void *audio_decoder) {
     };
     struct AudioDec *ad = audio_decoder;
     int avail = 0;
-    int i, j, n;
+    int i, j, copied_byte_count;
     unsigned char *src, *dst;
 
     switch (ad->state) {
@@ -44,11 +44,11 @@ void send_adpcm(void *audio_decoder) {
             src = ad->data + (ad->put - ad->count + ad->size) % ad->size;
             src += i * ad->hdr.interSize;
             dst = D_001612BC;
-            n = 0;
-            while (n < 0x400) {
+            copied_byte_count = 0;
+            while (copied_byte_count < 0x400) {
                 for (j = 0; j < ad->hdr.interSize; j++) {
                     *dst++ = *src++;
-                    n++;
+                    copied_byte_count++;
                 }
                 src += ad->hdr.interSize * (ad->hdr.ch - 1);
             }
