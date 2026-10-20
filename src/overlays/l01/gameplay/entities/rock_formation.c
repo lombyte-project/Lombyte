@@ -734,7 +734,7 @@ void agnogg_ship_front_update(Moby_2FC140 *moby) {
     };
     Data_2FC140 *data;
     Link_2FC140 *linked_moby_data;
-    int r16;
+    int level_table_byte;
     int cnt;
     int flag;
     int i;
@@ -758,14 +758,14 @@ void agnogg_ship_front_update(Moby_2FC140 *moby) {
         moby->pos.z = moby->pos.z + fd;
         break;
     case AGNOGG_SHIP_WAIT_FOR_DESCENT_TRIGGER:
-        r16 = *(unsigned char *)(moby->fB0 + (current_level_index_macro << 4) + D_0014C050_u);
-        if (r16 == 0xFF) {
+        level_table_byte = *(unsigned char *)(moby->fB0 + (current_level_index_macro << 4) + D_0014C050_u);
+        if (level_table_byte == 0xFF) {
             if (moby->f53 != 2) {
                 blend_moby_animation(moby, 2, 0, scale_game_frames(0x14));
             }
             moby->state = 10;
             moby->flags = moby->flags & 0xFFBE;
-            moby->f32 = r16;
+            moby->f32 = level_table_byte;
             moby->f94 = moby->pclass->f10;
         } else {
             if (cutscene_mode == 0) {
