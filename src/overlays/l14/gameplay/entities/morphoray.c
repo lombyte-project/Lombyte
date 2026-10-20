@@ -56,18 +56,18 @@ extern void FUN_L00_00250df8(u8 *);
  * allocation, null when it failed.  The two 16-byte copies go through $2 with
  * each address in its own register -- the qcopy idiom, see include/qcopy.h. */
 u8 *FUN_L14_00306158(u8 *self) {
-    u8 *o = create_moby(0x574);
+    u8 *created_moby = create_moby(0x574);
 
-    if (o != 0) {
-        qcopy(o + 0x10, self + 0x10);
-        qcopy(o + 0x40, self + 0x40);
-        o[0x30] = 0x40;
-        o[0x20] = 0;
-        *(s16 *)(o + 0x32) = 0x40;
-        o[0x31] = 1;
-        FUN_L00_00250df8(o);
+    if (created_moby != 0) {
+        qcopy(created_moby + 0x10, self + 0x10);
+        qcopy(created_moby + 0x40, self + 0x40);
+        created_moby[0x30] = 0x40;
+        created_moby[0x20] = 0;
+        *(s16 *)(created_moby + 0x32) = 0x40;
+        created_moby[0x31] = 1;
+        FUN_L00_00250df8(created_moby);
     }
-    return o;
+    return created_moby;
 }
 
 /* A bouncing spark: falls under gravity leaving a three-particle trail while its trail timer runs, bounces off
