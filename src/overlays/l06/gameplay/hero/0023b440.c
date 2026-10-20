@@ -137,6 +137,8 @@ void FUN_L06_0023b440(void) {
         HERO_STATE_DOUBLE_JUMP = 14,
         HERO_STATE_LEDGE_HANG_ENTRY = 24,
         HERO_STATE_LEDGE_HANG = 25,
+        HERO_STATE_LEDGE_SHIMMY_POSITIVE_YAW_SIDE = 26,
+        HERO_STATE_LEDGE_SHIMMY_NEGATIVE_YAW_SIDE = 27,
         HERO_STATE_LEDGE_JUMP = 28,
         HERO_STATE_GRIND_JUMP = 41,
         HERO_STATE_GRIND_RAIL_TRANSFER = 42,
@@ -1334,8 +1336,8 @@ void FUN_L06_0023b440(void) {
                         }
                     }
                     break;
-                case 26:
-                case 27: {
+                case HERO_STATE_LEDGE_SHIMMY_POSITIVE_YAW_SIDE:
+                case HERO_STATE_LEDGE_SHIMMY_NEGATIVE_YAW_SIDE: {
                     float ang;
 
                     qcopy(v0, hero.motion.pos.f);
