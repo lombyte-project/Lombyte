@@ -2302,37 +2302,37 @@ s32 FUN_L00_001f0d60_x(void *, s32, s32, f32) __asm__("FUN_L00_001f0d60");
 void FUN_L00_001ff660_x(void *, void *, void *) __asm__("FUN_L00_001ff660");
 void FUN_L00_00267a08_x(O_26e670_26e670 *) __asm__("FUN_L00_00267a08");
 
-void FUN_L00_0026e670(O_26e670_26e670 *o) {
-    V_26e670_26e670 t, u, acc, w;
-    P_26e670_26e670 *P = &o->p;
+void FUN_L00_0026e670(O_26e670_26e670 *particle) {
+    V_26e670_26e670 next_position, u, acc, w;
+    P_26e670_26e670 *P = &particle->p;
 
     if ((P->h1E ^ 1) & 1) {
         O_26e670_26e670 *l = P->link;
-        P_26e670_26e670 *c = 0;
+        P_26e670_26e670 *linked_particle_data = 0;
         f32 k = 2.0f, g;
         if (l)
-            c = &l->p;
+            linked_particle_data = &l->p;
         FUN_001f99f8_x(&acc);
         g = 0.15f;
-        if (P->h1C == 0 && l != 0 && !(*(long long *)&c->x18 & 0x1FFFF00000000LL)) {
+        if (P->h1C == 0 && l != 0 && !(*(long long *)&linked_particle_data->x18 & 0x1FFFF00000000LL)) {
             f32 kk;
             f32 c02 = 0.2f, c1 = 1.0f, c999 = 0.999f;
             do {
                 kk = k * k;
-                FUN_001f9a28_x(&t, &l->pos, &o->pos);
+                FUN_001f9a28_x(&next_position, &l->pos, &particle->pos);
                 k += c1;
                 g *= c999;
-                FUN_001f9bf8_x(&t, &t, c02 / kk);
-                FUN_001f9a10_x(&acc, &acc, &t);
-                l = c->link;
+                FUN_001f9bf8_x(&next_position, &next_position, c02 / kk);
+                FUN_001f9a10_x(&acc, &acc, &next_position);
+                l = linked_particle_data->link;
                 if (l)
-                    c = &l->p;
+                    linked_particle_data = &l->p;
                 if (!l)
                     break;
-            } while (!(*(long long *)&c->x18 & 0x1FFFF00000000LL));
+            } while (!(*(long long *)&linked_particle_data->x18 & 0x1FFFF00000000LL));
         }
         g = (0.15f - g) + 1.07f;
-        if (c == 0 || c->h1C == 0)
+        if (linked_particle_data == 0 || linked_particle_data->h1C == 0)
             FUN_001f9a10_x(P, P, &acc);
         else
             FUN_001f9a68_x(P, P, 0.5f);
@@ -2341,21 +2341,21 @@ void FUN_L00_0026e670(O_26e670_26e670 *o) {
         else
             FUN_001f9a68_x(P, P, 0.97f);
         P->f08 -= frame_scale_sq * 0.02f;
-        FUN_001f9a10_x(&t, &o->pos, P);
+        FUN_001f9a10_x(&next_position, &particle->pos, P);
     } else {
-        qcopy(&t, &o->pos);
+        qcopy(&next_position, &particle->pos);
     }
     if (P->tgt) {
-        FUN_001f9a28_x(&acc, &t, &P->tgt->pos);
+        FUN_001f9a28_x(&acc, &next_position, &P->tgt->pos);
         if (0.1f < FUN_001f99c0_x(FUN_001f9af0_x(&acc) - 0.15f)) {
             FUN_001f9bf8_x(&acc, &acc, 0.15f);
-            FUN_001f9a10_x(&t, &acc, &P->tgt->pos);
+            FUN_001f9a10_x(&next_position, &acc, &P->tgt->pos);
         }
-        if (FUN_L00_001f0d60_x(&t, 0, 0, 0.15f)) {
+        if (FUN_L00_001f0d60_x(&next_position, 0, 0, 0.15f)) {
             if (P->h1C == 0)
-                qcopy(&t, &D_L00_00173E70_26e670);
+                qcopy(&next_position, &D_L00_00173E70_26e670);
             else
-                qcopy(&t, &o->pos);
+                qcopy(&next_position, &particle->pos);
             P->h1C = 1;
         } else {
             P->h1C = 0;
@@ -2363,32 +2363,32 @@ void FUN_L00_0026e670(O_26e670_26e670 *o) {
         FUN_001f9a28_x(&acc, &P->tgt->pos, &D_L00_00166DC0_26e670);
         FUN_001f9d20_x(&acc, &acc, (u8 *)&D_L00_00166DC0_26e670 - 0x80);
         FUN_001f9a68_x(&acc, &acc, 1.0f / acc.f[3]);
-        FUN_001f9a28_x(&w, &t, &D_L00_00166DC0_26e670);
+        FUN_001f9a28_x(&w, &next_position, &D_L00_00166DC0_26e670);
         FUN_001f9d20_x(&w, &w, (u8 *)&D_L00_00166DC0_26e670 - 0x80);
         FUN_001f9a68_x(&w, &w, 1.0f / w.f[3]);
         FUN_001f9a28_x(&acc, &acc, &w);
-        o->b08 = FUN_001fa6d0_x(FUN_001f9e90_x(acc.f[0], acc.f[1]) * 128.0f / 3.1415927f) - 0x20;
+        particle->b08 = FUN_001fa6d0_x(FUN_001f9e90_x(acc.f[0], acc.f[1]) * 128.0f / 3.1415927f) - 0x20;
         if (P->h1C) {
             FUN_L00_001ff660_x(P, P, &D_L00_00173E80_26e670);
             FUN_001f9a68_x(P, P, 0.95f);
         } else {
-            FUN_001f9a28_x(&u, &t, &o->pos);
+            FUN_001f9a28_x(&u, &next_position, &particle->pos);
             FUN_001f9a10_x(P, P, &u);
             FUN_001f9a68_x(P, P, 0.5f);
         }
-        FUN_001f9a28_x(&u, &t, &o->pos);
+        FUN_001f9a28_x(&u, &next_position, &particle->pos);
         FUN_001f9a10_x(P, P, &u);
         FUN_001f9a68_x(P, P, 0.5f);
     }
-    qcopy(&o->pos, &t);
+    qcopy(&particle->pos, &next_position);
     if (P->h1E & 2) {
-        s32 a = (o->i04 >> 24) - 2;
-        if (a > 0) {
-            o->i04 = (o->i04 & 0xFFFFFF) | (a << 24);
+        s32 faded_alpha = (particle->i04 >> 24) - 2;
+        if (faded_alpha > 0) {
+            particle->i04 = (particle->i04 & 0xFFFFFF) | (faded_alpha << 24);
         } else if (P->link == 0) {
             if (P->tgt)
                 P->tgt->p.link = 0;
-            FUN_L00_00267a08_x(o);
+            FUN_L00_00267a08_x(particle);
         }
     }
 }
