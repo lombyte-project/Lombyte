@@ -1831,37 +1831,37 @@ extern void FUN_L16_002e7ba0(struct Moby *);
 extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
 extern void sample_camera_path(void *, f32, s32, void *, void *, s32) __asm__("func_00214E58");
 
-void FUN_L16_002e76b8(unsigned char *m) {
+void FUN_L16_002e76b8(unsigned char *walker_moby) {
     enum {
         PATH_WALKER_INITIALIZE_GROUP = 0,
         PATH_WALKER_FOLLOW_PATH = 1
     };
     float old[4], rotation[4], trial[4];
     char *path;
-    L16WalkerData_c *d;
+    L16WalkerData_c *walker_data;
     int playing = 0;
 
-    d = *(L16WalkerData_c **)(m + 0x78);
-    path = D_L16_001B0930[d->path_index];
-    if (((*(unsigned short *)(m + 0xA6) ^ 1) & 1) != 0) {
-        if (voice_is_playing(m, d->sound) == 0) {
-            d->sound = allocate_voice_for_target_entry_alt(0, 4, (int)m);
+    walker_data = *(L16WalkerData_c **)(walker_moby + 0x78);
+    path = D_L16_001B0930[walker_data->path_index];
+    if (((*(unsigned short *)(walker_moby + 0xA6) ^ 1) & 1) != 0) {
+        if (voice_is_playing(walker_moby, walker_data->sound) == 0) {
+            walker_data->sound = allocate_voice_for_target_entry_alt(0, 4, (int)walker_moby);
         } else {
             playing = 1;
         }
     } else {
-        qcopy(old, m + 0x10);
+        qcopy(old, walker_moby + 0x10);
     }
-    switch (m[0x20]) {
+    switch (walker_moby[0x20]) {
     case PATH_WALKER_INITIALIZE_GROUP:
-        if (m[0x21] == 255) {
-            mark_moby_for_removal(m);
+        if (walker_moby[0x21] == 255) {
+            mark_moby_for_removal(walker_moby);
             return;
         }
-        FUN_L16_002e7ba0(m);
+        FUN_L16_002e7ba0(walker_moby);
         break;
     case PATH_WALKER_FOLLOW_PATH: {
-        L16WalkerData_c *other = *(L16WalkerData_c **)(d->owner + 0x78);
+        L16WalkerData_c *other = *(L16WalkerData_c **)(walker_data->owner + 0x78);
         float gap, step, next, height, acceleration;
         /* `playing` again, in a variable of case 1's own. The logic does not need it: tested directly,
            `playing` is one value from the top of the function to the test, the compiler ranks it below
@@ -1870,38 +1870,38 @@ void FUN_L16_002e76b8(unsigned char *m) {
            instruction. A same-width copy (int) is folded away and does not do it. */
         char blocked = playing;
 
-        sample_camera_path(path, d->parameter, 0, m + 0x10, (float *)(m + 0x40), 0);
+        sample_camera_path(path, walker_data->parameter, 0, walker_moby + 0x10, (float *)(walker_moby + 0x40), 0);
         acceleration = D_L16_00161E78 * frame_time_sq;
-        *(float *)(m + 0x18) += d->height_step;
-        d->parameter += d->speed;
-        approach_value_alt(&d->speed, d->target_speed, acceleration);
-        gap = other->parameter - d->parameter;
+        *(float *)(walker_moby + 0x18) += walker_data->height_step;
+        walker_data->parameter += walker_data->speed;
+        approach_value_alt(&walker_data->speed, walker_data->target_speed, acceleration);
+        gap = other->parameter - walker_data->parameter;
         if (gap < 0.0f) {
-            gap += d->period;
+            gap += walker_data->period;
         }
-        if (gap < D_L16_00161E68 && d->target_speed > other->target_speed) {
-            float saved = d->target_speed;
+        if (gap < D_L16_00161E68 && walker_data->target_speed > other->target_speed) {
+            float saved = walker_data->target_speed;
             float theirs = other->target_speed;
 
             other->target_speed = saved;
-            d->target_speed = theirs;
+            walker_data->target_speed = theirs;
         }
         if (gap < 1.5f) {
             step = frame_time_sq * 50.0f;
-            approach_value_alt(&d->speed, d->target_speed, step);
+            approach_value_alt(&walker_data->speed, walker_data->target_speed, step);
             approach_value_alt(&other->speed, other->target_speed, step);
         }
-        if (m[0x31] == 0 && blocked == 0) {
+        if (walker_moby[0x31] == 0 && blocked == 0) {
             if (gap > D_L16_00161E6C + 1.0f) {
                 height = random_float_between(D_L16_00161E7C, D_L16_00161E80);
-                if (d->owner[0x31] != 0 && d->countdown != 0) {
+                if (walker_data->owner[0x31] != 0 && walker_data->countdown != 0) {
                     next = other->parameter - random_float_between(D_L16_00161E68, D_L16_00161E6C);
-                    d->countdown--;
+                    walker_data->countdown--;
                 } else {
-                    next = d->parameter + D_L16_00161E8C * frame_time;
+                    next = walker_data->parameter + D_L16_00161E8C * frame_time;
                 }
                 if (next < 0.0f) {
-                    next += d->period;
+                    next += walker_data->period;
                 }
                 sample_camera_path(path, next, 0, trial, rotation, 1);
                 trial[2] += height;
@@ -1909,22 +1909,22 @@ void FUN_L16_002e76b8(unsigned char *m) {
                 if (fast_bsphere_check((char *)trial, (float)D_L16_00161E90) == -1) {
                     float random = random_float_between(D_L16_00161E70, D_L16_00161E74);
 
-                    d->parameter = next;
-                    d->height_step = height;
-                    d->target_speed = random * frame_time;
+                    walker_data->parameter = next;
+                    walker_data->height_step = height;
+                    walker_data->target_speed = random * frame_time;
                 }
             }
         } else {
-            d->countdown = 30;
+            walker_data->countdown = 30;
         }
-        if (d->parameter > d->period) {
-            d->parameter -= d->period;
+        if (walker_data->parameter > walker_data->period) {
+            walker_data->parameter -= walker_data->period;
         }
         break;
     }
     }
-    if (*(unsigned short *)(m + 0xA6) & 1) {
-        FUN_L16_002e7a30(m, old);
+    if (*(unsigned short *)(walker_moby + 0xA6) & 1) {
+        FUN_L16_002e7a30(walker_moby, old);
     }
 }
 /* Emits a particle near an active moby when the target is close. */
