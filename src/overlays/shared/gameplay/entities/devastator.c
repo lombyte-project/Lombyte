@@ -2796,7 +2796,7 @@ extern V_2b7568 D_L00_001DB400[] __attribute__((section(".data")));
 extern f32 D_L00_001614C8 __attribute__((sda));
 extern f32 D_L00_001614C4 __attribute__((sda));
 extern u32 D_L00_001614C0 __attribute__((sda));
-void FUN_L00_002b7568(u8 *m) {
+void FUN_L00_002b7568(u8 *source_moby) {
     Q_2b7568 quad;
     V_2b7568 quad_basis_direction;
     V_2b7568 up;
@@ -2821,7 +2821,7 @@ void FUN_L00_002b7568(u8 *m) {
     quad.uv[2].v = 0.0f;
     quad.uv[3].u = 1.0f;
     quad.uv[3].v = 1.0f;
-    setlen_2b7568(&dir, m + 0xD0, -1.0f);
+    setlen_2b7568(&dir, source_moby + 0xD0, -1.0f);
     for (i = 0; i < 10; i++) {
         if (D_L00_001DB440_2b7568[i].on == 0)
             continue;
