@@ -3220,14 +3220,14 @@ void water_update(struct Moby *moby) {
         WATER_RISE_COMPLETE = 7,
         WATER_TIMED_RISE = 8
     };
-    WaterVars_30ca80 *d = *(WaterVars_30ca80 **)&moby->pvars;
+    WaterVars_30ca80 *water_vars = *(WaterVars_30ca80 **)&moby->pvars;
 
     switch (moby->state) {
     case WATER_INITIALIZE:
-        if (d->record_index == 0) {
+        if (water_vars->record_index == 0) {
             int i;
             int j;
-            float a;
+            float light_direction_angle;
 
             water = moby->pos.z;
             rise_step = 0;
@@ -3242,9 +3242,9 @@ void water_update(struct Moby *moby) {
             light.f14 = 1.0f;
             light.f18 = 0.9f;
             light.f20 = 0.1f;
-            a = angle_atan2_30ca80(D_L05_00180340.f10, D_L05_00180340.f14);
-            light.dir_x = fast_cos_30ca80(a) * 0.57735002f;
-            light.dir_y = fast_sin_30ca80(a) * 0.57735002f;
+            light_direction_angle = angle_atan2_30ca80(D_L05_00180340.f10, D_L05_00180340.f14);
+            light.dir_x = fast_cos_30ca80(light_direction_angle) * 0.57735002f;
+            light.dir_y = fast_sin_30ca80(light_direction_angle) * 0.57735002f;
             light.dir_z = -0.57735002f;
             light.f28 = 0x29;
             light.f2C = 0x2A;
@@ -3262,7 +3262,7 @@ void water_update(struct Moby *moby) {
             D_L05_00161214 = 26.0f;
             for (i = 0; i < 0x30; i++) {
                 copy_slot_30ca80(&water_records_30ca80[i].x, D_L05_0020B440[i]);
-                water_records_30ca80[d->record_index].h1E = record_draw_values[d->record_index];
+                water_records_30ca80[water_vars->record_index].h1E = record_draw_values[water_vars->record_index];
             }
             for (j = 0; j < 0x30; j++) {
                 FUN_L05_0030d6a0_30ca80(j);
@@ -3270,8 +3270,8 @@ void water_update(struct Moby *moby) {
         }
         moby->draw_dist = 0;
         moby->flags |= 1;
-        if (d->rises != 0) {
-            if (d->f10 >= 0) {
+        if (water_vars->rises != 0) {
+            if (water_vars->f10 >= 0) {
                 moby->update_dist = 0xFF;
                 if (hero_hits >= 2) {
                     int k;
@@ -3290,69 +3290,69 @@ void water_update(struct Moby *moby) {
                 moby->pos.z = 44.0f;
             } else {
                 moby->state = 3;
-                d->timer = scale_game_frames_30ca80(0x3C);
-                if (moby->pos.z < d->lowered_z) {
-                    water_records_30ca80[d->record_index].h1E = 0;
+                water_vars->timer = scale_game_frames_30ca80(0x3C);
+                if (moby->pos.z < water_vars->lowered_z) {
+                    water_records_30ca80[water_vars->record_index].h1E = 0;
                 }
             }
         } else {
-            if (d->f10 < 0) {
+            if (water_vars->f10 < 0) {
                 float z = moby->pos.z;
-                d->lowered_z = z;
-                d->raised_z = z + 4.5f;
-                if (d->starts_raised != 0) {
+                water_vars->lowered_z = z;
+                water_vars->raised_z = z + 4.5f;
+                if (water_vars->starts_raised != 0) {
                     moby->state = 1;
-                    moby->pos.z = d->raised_z;
+                    moby->pos.z = water_vars->raised_z;
                 } else {
                     moby->state = 2;
-                    moby->pos.z = d->lowered_z;
+                    moby->pos.z = water_vars->lowered_z;
                 }
             } else {
                 moby->state = 2;
-                moby->pos.z = d->lowered_z;
+                moby->pos.z = water_vars->lowered_z;
             }
         }
-        if (d->record_index == 0x2F) {
+        if (water_vars->record_index == 0x2F) {
             *(int *)&moby->collision = 0;
         }
         break;
     case WATER_MOVE_TO_LOWERED_HEIGHT:
         if (moby->command & 4) {
-            d->moving = 1;
+            water_vars->moving = 1;
             FUN_L01_0026e0e0(moby->group, 1);
-        } else if (d->f10 >= 0) {
+        } else if (water_vars->f10 >= 0) {
             if (mission_states_30ca80[moby->mission + (current_level_index << 4)] == 0xFF) {
                 moby->state = 1;
-                moby->pos.z = d->raised_z;
+                moby->pos.z = water_vars->raised_z;
             }
         }
-        if (d->moving != 0) {
-            advance_accelerated_scalar_30ca80(&moby->pos.z, &d->speed, d->lowered_z, move_speed * D_0015ED70, move_speed * D_0015ED70, move_accel * D_0015ED6C_gp);
+        if (water_vars->moving != 0) {
+            advance_accelerated_scalar_30ca80(&moby->pos.z, &water_vars->speed, water_vars->lowered_z, move_speed * D_0015ED70, move_speed * D_0015ED70, move_accel * D_0015ED6C_gp);
             FUN_L05_0030d5c0((char *)moby);
         }
         moby->command = 1;
         if (random_integer_below_30ca80(0xC8) == 0) {
-            float x = water_records_30ca80[d->record_index].x + random_float_between_30ca80(-4.0f, 4.0f);
+            float x = water_records_30ca80[water_vars->record_index].x + random_float_between_30ca80(-4.0f, 4.0f);
             float r = random_float_between_30ca80(-4.0f, 4.0f);
-            WaterRecord_30ca80 *e = &water_records_30ca80[d->record_index];
+            WaterRecord_30ca80 *e = &water_records_30ca80[water_vars->record_index];
             pool_splash_30ca80(e, 1, 1, x, e->y + r, 1.0f, -0.05f);
         }
         break;
     case WATER_MOVE_TO_RAISED_HEIGHT:
         if (moby->command & 8) {
-            d->moving = 1;
+            water_vars->moving = 1;
             FUN_L01_0026e0e0(moby->group, 2);
         } else {
             moby->command = 2;
         }
-        if (d->moving != 0) {
-            advance_accelerated_scalar_30ca80(&moby->pos.z, &d->speed, d->raised_z, move_speed * D_0015ED70, move_speed * D_0015ED70, move_accel * D_0015ED6C_gp);
+        if (water_vars->moving != 0) {
+            advance_accelerated_scalar_30ca80(&moby->pos.z, &water_vars->speed, water_vars->raised_z, move_speed * D_0015ED70, move_speed * D_0015ED70, move_accel * D_0015ED6C_gp);
             FUN_L05_0030d5c0((char *)moby);
         }
         if (random_integer_below_30ca80(0xC8) == 0) {
-            float x = water_records_30ca80[d->record_index].x + random_float_between_30ca80(-4.0f, 4.0f);
+            float x = water_records_30ca80[water_vars->record_index].x + random_float_between_30ca80(-4.0f, 4.0f);
             float r = random_float_between_30ca80(-4.0f, 4.0f);
-            WaterRecord_30ca80 *e = &water_records_30ca80[d->record_index];
+            WaterRecord_30ca80 *e = &water_records_30ca80[water_vars->record_index];
             pool_splash_30ca80(e, 1, 1, x, e->y + r, 1.0f, -0.05f);
         }
         break;
@@ -3367,41 +3367,41 @@ void water_update(struct Moby *moby) {
                 }
             }
         }
-        if (d->f10 >= 0) {
+        if (water_vars->f10 >= 0) {
             if (vector_distance_30ca80(((float *)&moby->pos), hero.motion.pos.f) < 10.0f) {
                 Hero *h = &hero;
                 if (h->ground_moby != 0 && h->air_frames.s == 0 && h->ground_moby->oclass == 0x33E) {
-                    d->f1C = 0;
+                    water_vars->f1C = 0;
                     moby->state = 8;
                     rise_step = 0;
-                    d->timer = scale_game_frames_30ca80(rise_frames[0]);
+                    water_vars->timer = scale_game_frames_30ca80(rise_frames[0]);
                 }
             }
         }
         if (random_integer_below_30ca80(0x32) == 0) {
-            float x = water_records_30ca80[d->record_index].x + random_float_between_30ca80(-4.0f, 4.0f);
+            float x = water_records_30ca80[water_vars->record_index].x + random_float_between_30ca80(-4.0f, 4.0f);
             float r = random_float_between_30ca80(-4.0f, 4.0f);
-            WaterRecord_30ca80 *e = &water_records_30ca80[d->record_index];
+            WaterRecord_30ca80 *e = &water_records_30ca80[water_vars->record_index];
             pool_splash_30ca80(e, 1, 1, x, e->y + r, 1.0f, -0.01f);
         }
         break;
     case WATER_RISE_COMPLETE:
-        if (d->f10 >= 0) {
+        if (water_vars->f10 >= 0) {
             Hero *h = &hero;
             if (h->state.current == 0x6A && h->state_timer == 2) {
                 hero_hits++;
             }
-        } else if (d->raised_z < moby->pos.z) {
-            water_records_30ca80[d->record_index].h1E = 0;
+        } else if (water_vars->raised_z < moby->pos.z) {
+            water_records_30ca80[water_vars->record_index].h1E = 0;
             mark_moby_for_removal_30ca80(moby);
             return;
         }
         break;
     case WATER_TIMED_RISE:
-        if (func_001F9908_v(&d->timer) != 0) {
+        if (func_001F9908_v(&water_vars->timer) != 0) {
             if (rise_step < 5) {
                 rise_step++;
-                d->timer = scale_game_frames_30ca80(rise_frames[rise_step]);
+                water_vars->timer = scale_game_frames_30ca80(rise_frames[rise_step]);
             }
         }
         moby->pos.z += rise_speeds[rise_step] * D_0015ED6C_gp;
@@ -3423,7 +3423,7 @@ void water_update(struct Moby *moby) {
                 }
             }
         }
-        if (d->f10 >= 0) {
+        if (water_vars->f10 >= 0) {
             Hero *h = &hero;
             if (h->state.current == 0x6A && h->state_timer == 2) {
                 hero_hits++;
@@ -3434,28 +3434,28 @@ void water_update(struct Moby *moby) {
         }
         break;
     }
-    if (d->record_index >= 0) {
-        WaterRecord_30ca80 *e = &water_records_30ca80[d->record_index];
-        float t;
+    if (water_vars->record_index >= 0) {
+        WaterRecord_30ca80 *e = &water_records_30ca80[water_vars->record_index];
+        float restore_record_draw_value;
 
         e->z = moby->pos.z;
-        t = 0.0f;
+        restore_record_draw_value = 0.0f;
         if (FUN_L01_00275690_30ca80((char *)moby, 48.0f) != -1
-            && (!(moby->state >= 3 && moby->state <= 7) || (moby->pos.z > d->lowered_z && moby->pos.z < d->raised_z))) {
-            t = 1.0f;
+            && (!(moby->state >= 3 && moby->state <= 7) || (moby->pos.z > water_vars->lowered_z && moby->pos.z < water_vars->raised_z))) {
+            restore_record_draw_value = 1.0f;
         }
-        if (t == 0.0f) {
-            water_records_30ca80[d->record_index].h1E = 0;
+        if (restore_record_draw_value == 0.0f) {
+            water_records_30ca80[water_vars->record_index].h1E = 0;
         } else {
-            water_records_30ca80[d->record_index].h1E = record_draw_values[d->record_index];
+            water_records_30ca80[water_vars->record_index].h1E = record_draw_values[water_vars->record_index];
         }
-        if (d->record_index == 0) {
+        if (water_vars->record_index == 0) {
             finish_slots_30ca80((char *)water_records_30ca80, 0x30);
             enqueue_callback_list_1_30ca80(FUN_L05_0030d678_30ca80, moby);
         }
-        if (d->record_index == D_L05_00161D10) {
-            water_records_30ca80[d->record_index].h1E = D_L05_00161D14;
-            record_draw_values[d->record_index] = D_L05_00161D14;
+        if (water_vars->record_index == D_L05_00161D10) {
+            water_records_30ca80[water_vars->record_index].h1E = D_L05_00161D14;
+            record_draw_values[water_vars->record_index] = D_L05_00161D14;
         }
     }
 }
