@@ -171,11 +171,11 @@ void FUN_001f9a10_00263618(void *, void *, void *) __asm__("FUN_001f9a10");
 void FUN_001f9d20_00263618(void *, void *, void *) __asm__("FUN_001f9d20");
 void FUN_001f7d30_00263618(void *, s32, s32) __asm__("FUN_001f7d30");
 extern float D_L00_001B0470[4][4] __attribute__((section(".data")));
-void FUN_L00_00263618(float *pos, u32 col, float s, float r) {
+void FUN_L00_00263618(float *pos, u32 col, float quad_scale, float r) {
     Pk_00263618 pk;
     float up[4];
     float M[4][4];
-    float t[4];
+    float position_offset[4];
     s32 i;
     OvlQuad z = 0;
     *(OvlQuad *)up = z;
@@ -199,14 +199,14 @@ void FUN_L00_00263618(float *pos, u32 col, float s, float r) {
     FUN_001f9ad8_00263618(M[1], M[0], up);
     FUN_001f9bf8_00263618(M[1], M[1], 1.0f);
     FUN_001f9ad8_00263618(M[2], M[1], M[0]);
-    FUN_001f9a68_00263618(t, M[0], r);
-    FUN_001f9a10_00263618(M[3], M[3], t);
+    FUN_001f9a68_00263618(position_offset, M[0], r);
+    FUN_001f9a10_00263618(M[3], M[3], position_offset);
     pk.col[3] = col;
     pk.col[2] = col;
     pk.col[1] = col;
     pk.col[0] = col;
     for (i = 0; i < 4; i++) {
-        FUN_001f9a68_00263618(pk.m[i], D_L00_001B0470[i], s);
+        FUN_001f9a68_00263618(pk.m[i], D_L00_001B0470[i], quad_scale);
         FUN_001f9d20_00263618(pk.m[i], pk.m[i], M);
     }
     FUN_001f7d30_00263618(&pk, 0, 0);
