@@ -180,7 +180,7 @@ s32 FUN_L15_00208e10(s32 arg) {
     enum {
         HERO_VEHICLE_MODE_NORMAL = 0
     };
-    u8 *m;
+    u8 *hero_moby;
     T_210ce8 *tbl;
     u8 *mob;
     s32 flag;
@@ -204,12 +204,12 @@ s32 FUN_L15_00208e10(s32 arg) {
         return 0;
     }
     hero.unk2280 = 0;
-    m = ((u8 *)hero.moby);
-    if (m[0xA4] == 0xFF) {
+    hero_moby = ((u8 *)hero.moby);
+    if (hero_moby[0xA4] == 0xFF) {
         return 0;
     }
-    tbl = &D_L15_00178700_210ce8[m[0xA4]];
-    if (tbl->p34 != m) {
+    tbl = &D_L15_00178700_210ce8[hero_moby[0xA4]];
+    if (tbl->p34 != hero_moby) {
         return 0;
     }
     if (hero.vehicle_mode == 2) {
