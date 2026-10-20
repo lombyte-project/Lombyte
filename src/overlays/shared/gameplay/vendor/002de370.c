@@ -98,27 +98,27 @@ extern void cross_vectors_xyz(void *, void *, void *) __asm__("func_001F9AD8");
 extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 
-void FUN_L03_002e8730(char *m) {
+void FUN_L03_002e8730(char *transform_state) {
     float position[4] __attribute__((aligned(16)));
     float direction[4] __attribute__((aligned(16)));
-    char *data = *(char **)(m + 0x70);
+    char *data = *(char **)(transform_state + 0x70);
     float *height = (float *)(data + 0x10);
     char *result;
     float angle, rotation_scale;
     qcopy(position, hero.motion.pos.f);
     position[2] += height[19];
-    result = m + 0x40;
-    subtract_vector_xyz(direction, position, m + 0x30);
+    result = transform_state + 0x40;
+    subtract_vector_xyz(direction, position, transform_state + 0x30);
     normalize_vector_xyz(direction, direction, 1.0f);
-    angle = approximate_arcsine(dot_vectors_xyz(direction, m));
+    angle = approximate_arcsine(dot_vectors_xyz(direction, transform_state));
     rotation_scale = rope_spring_turn(data, 0.0f, 1.57079637f - angle, *(float *)(data + 4),
                          *(float *)(data + 8), *(float *)(data + 12));
-    FUN_L03_0024e6f8(rotation_scale, (float *)m, (float *)result, direction, 1);
-    normalize_vector_xyz(result, m, 1.0f);
-    qcopy(m, result);
-    cross_vectors_xyz(m + 0x10, m, D_L03_00166F30);
-    normalize_vector_xyz(m + 0x10, m + 0x10, 1.0f);
-    cross_vectors_xyz(m + 0x20, m + 0x10, m);
+    FUN_L03_0024e6f8(rotation_scale, (float *)transform_state, (float *)result, direction, 1);
+    normalize_vector_xyz(result, transform_state, 1.0f);
+    qcopy(transform_state, result);
+    cross_vectors_xyz(transform_state + 0x10, transform_state, D_L03_00166F30);
+    normalize_vector_xyz(transform_state + 0x10, transform_state + 0x10, 1.0f);
+    cross_vectors_xyz(transform_state + 0x20, transform_state + 0x10, transform_state);
 }
 extern int D_L03_0015EF50;
 extern int is_point_inside_clip_volume_alt(void *arg0, int arg1) __asm__("FUN_00214720");
