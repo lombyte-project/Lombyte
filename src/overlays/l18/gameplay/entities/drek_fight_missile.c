@@ -163,30 +163,30 @@ extern short *D_L18_001AC240[];
 extern unsigned char *D_L18_0015FFD8;
 
 int FUN_L18_002f0030(char *moby, int group, float *pos) {
-    short *p = D_L18_001AC240[group];
+    short *group_entry = D_L18_001AC240[group];
     int idle;
     int i;
-    if (p == 0)
+    if (group_entry == 0)
         return 1;
     idle = 1;
     while (1) {
-        unsigned char *m = (unsigned char *)(((*p & 0x7FFF) << 8) + (int)D_L18_0015FFD8);
-        if (*(short *)(m + 0xA6) == 0x54B && m[0x20] == 1) {
-            unsigned char *d = *(unsigned char **)(m + 0x78);
+        unsigned char *group_moby = (unsigned char *)(((*group_entry & 0x7FFF) << 8) + (int)D_L18_0015FFD8);
+        if (*(short *)(group_moby + 0xA6) == 0x54B && group_moby[0x20] == 1) {
+            unsigned char *missile_vars = *(unsigned char **)(group_moby + 0x78);
             idle = 0;
-            qcopy(m + 0x10, pos);
+            qcopy(group_moby + 0x10, pos);
             i = 0;
             do {
-                qcopy(d + 0x10 + i * 16, m + 0x10);
+                qcopy(missile_vars + 0x10 + i * 16, group_moby + 0x10);
                 i++;
             } while ((float)i < 4.0f);
-            *(char **)(d + 0x16C) = moby;
-            m[0x31] = 1;
-            *(unsigned short *)(m + 0x34) &= 0xFFFE;
-            *(int *)(m + 0x94) = *(int *)(*(char **)(m + 0x24) + 0x10);
-            m[0x20] = 2;
+            *(char **)(missile_vars + 0x16C) = moby;
+            group_moby[0x31] = 1;
+            *(unsigned short *)(group_moby + 0x34) &= 0xFFFE;
+            *(int *)(group_moby + 0x94) = *(int *)(*(char **)(group_moby + 0x24) + 0x10);
+            group_moby[0x20] = 2;
         }
-        if (*p++ < 0)
+        if (*group_entry++ < 0)
             return idle;
     }
     return idle;
