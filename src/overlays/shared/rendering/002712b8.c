@@ -1754,7 +1754,7 @@ extern float ground_height_at(void *) __asm__("FUN_L00_00263468");
 extern void FUN_L00_002634f8_275320(void *) __asm__("FUN_L00_002634f8");
 
 void FUN_L00_00275320(O_275320 *particle) {
-    V_275320 tmp;
+    V_275320 particle_vector_scratch;
     V_275320 ground_probe_position;
     V_275320 ground_recheck_position;
     V_275320 *vel = &particle->vel;
@@ -1769,16 +1769,16 @@ void FUN_L00_00275320(O_275320 *particle) {
         return;
     }
     if (particle->pos.f[2] < ground_height_threshold) {
-        tmp.q = particle->pos.q;
-        FUN_L00_002634f8_275320(&tmp);
+        particle_vector_scratch.q = particle->pos.q;
+        FUN_L00_002634f8_275320(&particle_vector_scratch);
         free_effect_particle(particle);
         return;
     }
-    tmp.q = particle->vel.q;
+    particle_vector_scratch.q = particle->vel.q;
     ix = particle->pos.f[0];
     iy = particle->pos.f[1];
-    tmp.f[3] = 0.0f;
-    FUN_001f9a10_275320(&particle->pos, &particle->pos, &tmp);
+    particle_vector_scratch.f[3] = 0.0f;
+    FUN_001f9a10_275320(&particle->pos, &particle->pos, &particle_vector_scratch);
     FUN_001f9a10_275320(&particle->pos, &particle->pos, particle_drift);
     if (ix != (int)particle->pos.f[0] || iy != (int)particle->pos.f[1]) {
         ground_probe_position.q = particle->pos.q;
@@ -1796,11 +1796,11 @@ void FUN_L00_00275320(O_275320 *particle) {
             return;
         }
     }
-    tmp.f[0] = 0.0f;
-    tmp.f[1] = 0.0f;
-    tmp.f[3] = 0.0f;
-    tmp.f[2] = -(frame_time_sq * 0.5f);
-    FUN_001f9a10_275320(vel, &tmp, vel);
+    particle_vector_scratch.f[0] = 0.0f;
+    particle_vector_scratch.f[1] = 0.0f;
+    particle_vector_scratch.f[3] = 0.0f;
+    particle_vector_scratch.f[2] = -(frame_time_sq * 0.5f);
+    FUN_001f9a10_275320(vel, &particle_vector_scratch, vel);
     vel->f[3] = ground_height_threshold + particle_clearance;
 }
 
