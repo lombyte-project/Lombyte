@@ -1342,14 +1342,14 @@ typedef struct {
     s16 started;
     s16 timer;
 } Run_4f00;
-void FUN_L14_00314f00(char *a) {
+void FUN_L14_00314f00(char *camera) {
     u128 stand;
-    char *rec = *(char **)(D_L14_0015EF50 + *(short *)(a + 0x84) * 32 + 0x1C);
+    char *rec = *(char **)(D_L14_0015EF50 + *(short *)(camera + 0x84) * 32 + 0x1C);
     char *p;
     char *p2;
     char *path;
-    char *m;
-    int *q;
+    char *initial_camera_transform;
+    int *camera_run;
     int *w;
     short *s;
     Stops_4f00 *st;
@@ -1357,19 +1357,19 @@ void FUN_L14_00314f00(char *a) {
     short *ss;
     float len;
     int i;
-    int n;
+    int fov_stop_count;
 
     (*&rec)[0x38] = 3;
-    p = *(char **)(a + 0x70);
+    p = *(char **)(camera + 0x70);
     *(int *)(p + 0x40) = 0;
-    q = (int *)(p + 0x40);
-    q[1] = 0;
-    q[2] = 0;
-    q[3] = 0;
-    q[4] = 0;
-    *(short *)(q + 5) = 0;
-    *((short *)(q + 5) + 1) = scale_game_frames_4f00(*(short *)(rec + 0x3A));
-    p2 = *(char **)(a + 0x70);
+    camera_run = (int *)(p + 0x40);
+    camera_run[1] = 0;
+    camera_run[2] = 0;
+    camera_run[3] = 0;
+    camera_run[4] = 0;
+    *(short *)(camera_run + 5) = 0;
+    *((short *)(camera_run + 5) + 1) = scale_game_frames_4f00(*(short *)(rec + 0x3A));
+    p2 = *(char **)(camera + 0x70);
     st = (Stops_4f00 *)(p2 + 0x58);
     {
         int k;
@@ -1385,23 +1385,23 @@ void FUN_L14_00314f00(char *a) {
     st->fov_end = atan2_4f00(1.0f, D_L14_0016D140.fB0) * 2.0f;
     if (*(int *)(rec + 0x20) >= 0) {
         path = D_L14_001B0BB0[*(int *)(rec + 0x20)];
-        n = 0;
+        fov_stop_count = 0;
         for (i = 0; i < *(int *)path; i++) {
             char *seg = path + i * 16;
             if (0.0f < *(float *)(seg + 0x1C)) {
-                st->fov[n] = *(float *)(seg + 0x1C);
-                st->seg[n] = i;
-                n++;
+                st->fov[fov_stop_count] = *(float *)(seg + 0x1C);
+                st->seg[fov_stop_count] = i;
+                fov_stop_count++;
             }
             len = FUN_001f9b48(path + (i * 16 + 0x10), path + (((i + 1) % *(int *)path) * 16 + 0x10));
             *(float *)(seg + 0x1C) = len;
             if (i < *(int *)path - 1)
-                *(float *)(q + 2) += len;
+                *(float *)(camera_run + 2) += len;
         }
     }
     if (*(short *)(rec + 0x3A) > 0) {
         *(float *)(rec + 0x3C) =
-            *(float *)(q + 2) / ConvertIntegerToFloat_4f00(scale_game_frames_4f00(*(short *)(rec + 0x3A))) * 60.0f;
+            *(float *)(camera_run + 2) / ConvertIntegerToFloat_4f00(scale_game_frames_4f00(*(short *)(rec + 0x3A))) * 60.0f;
     }
     if (*(int *)(rec + 0x24) >= 0) {
         path = D_L14_001B0BB0[*(int *)(rec + 0x24)];
@@ -1411,22 +1411,22 @@ void FUN_L14_00314f00(char *a) {
             seg = path + i * 16;
             *(float *)(seg + 0x1C) = len;
             if (i < *(int *)path - 1)
-                *(float *)(q + 3) += len;
+                *(float *)(camera_run + 3) += len;
         }
     }
-    p = *(char **)(a + 0x70);
+    p = *(char **)(camera + 0x70);
     *(float *)(p + 0x0) = 0.03f;
     *(float *)(p + 0x4) = 0.2f;
     clear_4f00(p + 0x10);
-    p = *(char **)(a + 0x70);
+    p = *(char **)(camera + 0x70);
     *(float *)(p + 0x20) = 0.03f;
     *(float *)(p + 0x24) = 0.2f;
     clear_4f00(p + 0x30);
-    m = D_L14_00167380.start;
-    qcopy(a + 0x30, m + 0x30);
-    qcopy(a, m);
-    qcopy(a + 0x10, m + 0x10);
-    qcopy(a + 0x20, m + 0x20);
+    initial_camera_transform = D_L14_00167380.start;
+    qcopy(camera + 0x30, initial_camera_transform + 0x30);
+    qcopy(camera, initial_camera_transform);
+    qcopy(camera + 0x10, initial_camera_transform + 0x10);
+    qcopy(camera + 0x20, initial_camera_transform + 0x20);
     path = D_L14_001600EC + *(int *)(rec + 0x54) * 128 + 0x30;
     stand = 0;
     ((float *)&stand)[3] = 1.0f;
