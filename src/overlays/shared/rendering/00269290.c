@@ -526,24 +526,24 @@ float FUN_001fa580_0026a6f0(float, float) __asm__("FUN_001fa580");
 int FUN_001fa6d0_0026a6f0(float) __asm__("FUN_001fa6d0");
 int FUN_001f96f8_0026a6f0(int) __asm__("FUN_001f96f8");
 extern int D_L00_001601A4 __attribute__((sda));
-void FUN_L00_0026a6f0(unsigned char *p) {
-    int *e = (int *)(p + 0x20);
+void FUN_L00_0026a6f0(unsigned char *particle) {
+    int *particle_data = (int *)(particle + 0x20);
     int v;
-    if (FUN_001f9740_0026a6f0(e)) {
-        FUN_L00_00267a08_0026a6f0(p);
+    if (FUN_001f9740_0026a6f0(particle_data)) {
+        FUN_L00_00267a08_0026a6f0(particle);
         return;
     }
-    *(float *)&e[3] = FUN_001fa580_0026a6f0(*(float *)&e[3], *(float *)&e[2]);
-    p[8] = FUN_001fa6d0_0026a6f0(*(float *)&e[3] * 128.0f / 3.1415927f) - 0x80;
-    if (FUN_001f96f8_0026a6f0(D_L00_001601A4) * 3 / 4 < e[0]) {
+    *(float *)&particle_data[3] = FUN_001fa580_0026a6f0(*(float *)&particle_data[3], *(float *)&particle_data[2]);
+    particle[8] = FUN_001fa6d0_0026a6f0(*(float *)&particle_data[3] * 128.0f / 3.1415927f) - 0x80;
+    if (FUN_001f96f8_0026a6f0(D_L00_001601A4) * 3 / 4 < particle_data[0]) {
         int t = FUN_001f96f8_0026a6f0(D_L00_001601A4);
-        v = e[4] * (t - e[0]) / (FUN_001f96f8_0026a6f0(D_L00_001601A4) / 4);
-    } else if (e[0] < FUN_001f96f8_0026a6f0(D_L00_001601A4) / 4) {
-        v = e[4] * e[0] / (FUN_001f96f8_0026a6f0(D_L00_001601A4) / 4);
+        v = particle_data[4] * (t - particle_data[0]) / (FUN_001f96f8_0026a6f0(D_L00_001601A4) / 4);
+    } else if (particle_data[0] < FUN_001f96f8_0026a6f0(D_L00_001601A4) / 4) {
+        v = particle_data[4] * particle_data[0] / (FUN_001f96f8_0026a6f0(D_L00_001601A4) / 4);
     } else {
-        v = e[4];
+        v = particle_data[4];
     }
-    *(int *)(p + 4) = (v << 24) + (p[3] == 0x48 ? 0x4F4F4F : 0x7F7F7F);
+    *(int *)(particle + 4) = (v << 24) + (particle[3] == 0x48 ? 0x4F4F4F : 0x7F7F7F);
 }
 extern float D_0015ED60_0026a880 __asm__("D_0015ED60");
 int FUN_001f9770_0026a880(void *) __asm__("FUN_001f9770");
