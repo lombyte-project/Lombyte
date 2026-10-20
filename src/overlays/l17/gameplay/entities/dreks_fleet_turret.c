@@ -105,7 +105,7 @@ void FUN_L17_002a8da0(struct Moby *beam_moby) {
         BEAM_UPDATE_OSCILLATING = 2
     };
     float c[4];
-    float a[4];
+    float beam_vector_scratch[4];
     float b[4];
     float hero_offset[4];
     float axis_aligned_hero_offset[4];
@@ -144,10 +144,10 @@ void FUN_L17_002a8da0(struct Moby *beam_moby) {
         }
         *(int *)(beam_vars + 0x60) = 0;
         *(float *)(beam_vars + 0x4C) = 0.1f;
-        *(OvlQuad *)a = 0;
-        a[0] = 13.0f;
-        transform_vector_by_basis(a, a, &beam_moby->rot_row0);
-        add_vector_xyz(b, &beam_moby->pos, a);
+        *(OvlQuad *)beam_vector_scratch = 0;
+        beam_vector_scratch[0] = 13.0f;
+        transform_vector_by_basis(beam_vector_scratch, beam_vector_scratch, &beam_moby->rot_row0);
+        add_vector_xyz(b, &beam_moby->pos, beam_vector_scratch);
         *(OvlQuad *)c = *(OvlQuad *)b;
         if (collision_line(&beam_moby->pos, c, 2, 0, 0)) {
             *(OvlQuad *)c = *(OvlQuad *)D_L17_00174760;
@@ -179,10 +179,10 @@ void FUN_L17_002a8da0(struct Moby *beam_moby) {
         }
         if (*(int *)(beam_vars + 0x40) == -1 ||
             is_point_inside_clip_volume(&hero.motion.pos, *(int *)(beam_vars + 0x40))) {
-            *(OvlQuad *)a = 0;
-            a[0] = 13.0f;
-            transform_vector_by_basis(a, a, &beam_moby->rot_row0);
-            add_vector_xyz(b, &beam_moby->pos, a);
+            *(OvlQuad *)beam_vector_scratch = 0;
+            beam_vector_scratch[0] = 13.0f;
+            transform_vector_by_basis(beam_vector_scratch, beam_vector_scratch, &beam_moby->rot_row0);
+            add_vector_xyz(b, &beam_moby->pos, beam_vector_scratch);
             *(OvlQuad *)c = *(OvlQuad *)b;
             if (collision_line(&beam_moby->pos, c, 2, 0, 0)) {
                 *(OvlQuad *)c = *(OvlQuad *)D_L17_00174760;
@@ -193,14 +193,14 @@ void FUN_L17_002a8da0(struct Moby *beam_moby) {
         }
         break;
     }
-    *(OvlQuad *)a = 0;
-    a[0] = 12.0f;
-    transform_vector_by_basis(a, a, &beam_moby->rot_row0);
+    *(OvlQuad *)beam_vector_scratch = 0;
+    beam_vector_scratch[0] = 12.0f;
+    transform_vector_by_basis(beam_vector_scratch, beam_vector_scratch, &beam_moby->rot_row0);
     add_vector_xyz(b, &beam_moby->pos, beam_vars + 0x30);
     *(OvlQuad *)c = *(OvlQuad *)b;
     if (*(int *)(beam_vars + 0x60) != 0) {
-        normalize_vector_xyz(beam_vars + 0x20, a, -(*(float *)&D_L17_00161498 - 0.2f));
-        normalize_vector_xyz(*(char **)(beam_vars + 0x60) + 0x10, a, -*(float *)&D_L17_00161498);
+        normalize_vector_xyz(beam_vars + 0x20, beam_vector_scratch, -(*(float *)&D_L17_00161498 - 0.2f));
+        normalize_vector_xyz(*(char **)(beam_vars + 0x60) + 0x10, beam_vector_scratch, -*(float *)&D_L17_00161498);
         add_vector_xyz(b, beam_vars + 0x20, c);
         e = *(char **)(beam_vars + 0x60);
         *(OvlQuad *)(beam_vars + 0x20) = *(OvlQuad *)b;
@@ -216,7 +216,7 @@ void FUN_L17_002a8da0(struct Moby *beam_moby) {
                                 *(float *)(beam_vars + 0x5C))) *
                 0.02f +
             0.09f;
-        normalize_vector_xyz(beam_vars + 0x10, a, 0.2f);
+        normalize_vector_xyz(beam_vars + 0x10, beam_vector_scratch, 0.2f);
         subtract_vector_xyz(e50, &beam_moby->pos, beam_vars + 0x10);
         *(OvlQuad *)(beam_vars + 0x10) = *(OvlQuad *)e50;
         len = vector_length_xyz(beam_vars + 0x30);
@@ -233,9 +233,9 @@ void FUN_L17_002a8da0(struct Moby *beam_moby) {
             for (i = 0; i < 7; i++) {
                 scale_vector_xyz(c, beam_vars + 0x30, random_float_between(0.0f, 0.9f));
                 FUN_L00_001ff290(hit_descriptor_and_vector_scratch, c, e50);
-                normalize_vector_xyz(a, beam_vars + 0x30,
+                normalize_vector_xyz(beam_vector_scratch, beam_vars + 0x30,
                                      random_float_between(frame_time * 10.0f, len / 20.0f));
-                FUN_L17_0026fb60(beam_moby, c, a);
+                FUN_L17_0026fb60(beam_moby, c, beam_vector_scratch);
             }
             len = -len;
             *(OvlQuad *)e50 = *(OvlQuad *)(beam_vars + 0x20);
@@ -243,15 +243,15 @@ void FUN_L17_002a8da0(struct Moby *beam_moby) {
                 scale_vector_xyz(c, beam_vars + 0x30, random_float_between(0.0f, 0.9f));
                 subtract_vector_xyz(hit_descriptor_and_vector_scratch, e50, c);
                 *(OvlQuad *)c = *(OvlQuad *)hit_descriptor_and_vector_scratch;
-                normalize_vector_xyz(a, beam_vars + 0x30,
+                normalize_vector_xyz(beam_vector_scratch, beam_vars + 0x30,
                                      random_float_between(frame_time * 10.0f, len / 20.0f));
-                FUN_L17_0026fb60(beam_moby, c, a);
+                FUN_L17_0026fb60(beam_moby, c, beam_vector_scratch);
             }
-            normalize_vector_xyz(a, beam_vars + 0x30, -random_float_between(frame_time * 0.5f, frame_time));
-            a[0] += random_float_between(-0.01f, 0.01f);
-            a[1] += random_float_between(-0.01f, 0.01f);
-            a[2] += random_float_between(-0.01f, 0.01f);
-            FUN_L17_0026fb60(0, beam_vars + 0x20, a);
+            normalize_vector_xyz(beam_vector_scratch, beam_vars + 0x30, -random_float_between(frame_time * 0.5f, frame_time));
+            beam_vector_scratch[0] += random_float_between(-0.01f, 0.01f);
+            beam_vector_scratch[1] += random_float_between(-0.01f, 0.01f);
+            beam_vector_scratch[2] += random_float_between(-0.01f, 0.01f);
+            FUN_L17_0026fb60(0, beam_vars + 0x20, beam_vector_scratch);
         }
         enqueue_callback_list_1(FUN_L17_002a95b8, beam_moby);
     }
