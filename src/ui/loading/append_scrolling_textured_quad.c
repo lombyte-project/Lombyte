@@ -26,7 +26,7 @@ void append_scrolling_textured_quad(int x, int y, int w, int h, unsigned long rg
     int y0 = y * 16 + screen_extent.top - 8;
     int y1 = (y + h) * 16 + screen_extent.top - 8;
     SpaceUvPair uv[4];
-    long *p;
+    long *quad_payload;
     int *base;
 
     uv[0].f.u = u0;
@@ -45,20 +45,20 @@ void append_scrolling_textured_quad(int x, int y, int w, int h, unsigned long rg
     base = render_packet_cursor.words;
     render_packet_cursor.words = base + 4;
     qcopy(base + 4, D_00160850);
-    p = (long *)(base + 8);
+    quad_payload = (long *)(base + 8);
     render_packet_cursor.words = base + 8;
-    p[0] = tex;
-    p[1] = 0x54;
-    p[2] = (rgba & 0xFFFFFFFFL) | (0xFE00L << 46);
-    p[3] = uv[0].bits;
-    p[4] = x0 | ((long)y0 << 16) | ((long)0xFFFFF0 << 32);
-    p[5] = uv[1].bits;
-    p[6] = x1 | ((long)y0 << 16) | ((long)0xFFFFF0 << 32);
-    p[7] = uv[2].bits;
-    p[8] = x0 | ((long)y1 << 16) | ((long)0xFFFFF0 << 32);
-    p[9] = uv[3].bits;
-    p[10] = x1 | ((long)y1 << 16) | ((long)0xFFFFF0 << 32);
-    p[11] = 0;
+    quad_payload[0] = tex;
+    quad_payload[1] = 0x54;
+    quad_payload[2] = (rgba & 0xFFFFFFFFL) | (0xFE00L << 46);
+    quad_payload[3] = uv[0].bits;
+    quad_payload[4] = x0 | ((long)y0 << 16) | ((long)0xFFFFF0 << 32);
+    quad_payload[5] = uv[1].bits;
+    quad_payload[6] = x1 | ((long)y0 << 16) | ((long)0xFFFFF0 << 32);
+    quad_payload[7] = uv[2].bits;
+    quad_payload[8] = x0 | ((long)y1 << 16) | ((long)0xFFFFF0 << 32);
+    quad_payload[9] = uv[3].bits;
+    quad_payload[10] = x1 | ((long)y1 << 16) | ((long)0xFFFFF0 << 32);
+    quad_payload[11] = 0;
     render_packet_cursor.words = (int *)((char *)render_packet_cursor.words + 0x60);
 }
 
