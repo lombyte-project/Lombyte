@@ -16,9 +16,9 @@ void FUN_L05_0028be78(int *list, int list_count, int idx) {
     char *adjacency_table = D_L05_001B0930[idx];
     int i, j, k, found;
     {
-        int c;
-        for (c = 0; c < *(int *)adjacency_table; c++) {
-            *(int *)(adjacency_table + 0x1C + c * 16) = 0;
+        int mask_clear_index;
+        for (mask_clear_index = 0; mask_clear_index < *(int *)adjacency_table; mask_clear_index++) {
+            *(int *)(adjacency_table + 0x1C + mask_clear_index * 16) = 0;
         }
     }
     for (i = 0; i < *(int *)adjacency_table; i++) {
