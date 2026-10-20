@@ -101,6 +101,9 @@ extern void scale_vector_xyz(void *, void *, float);
 extern int hero_set_state(int, int) __asm__("FUN_L05_0024cee8");
 extern char D_L05_0017C3C0[];
 int hero_set_state(int a, int b) {
+    enum {
+        HERO_STATE_VEHICLE_IDLE = 0x53
+    };
     int old2088;
     char *moby;
     int old20A7;
@@ -1806,7 +1809,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x53: {
+    case HERO_STATE_VEHICLE_IDLE: {
         struct Hero *p = &hero;
         p->state.control_mode = 0;
         p->unk2284 = 0;
