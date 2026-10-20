@@ -3187,10 +3187,10 @@ void FUN_L00_00227d40(void) {
         approach_value(&G.f690, 0.0f, frame_time * 0.7f);
     }
     if (G.i2084 != 0x7F) {
-        f32 h = G.f2F0;
+        f32 target_height = G.f2F0;
         if (G.i208C == 0x16)
-            h = G.f8A0;
-        FUN_L00_0025b8c0_227d40(&G.f69C, &G.f6A0, h, frame_scale_sq * 0.027f,
+            target_height = G.f8A0;
+        FUN_L00_0025b8c0_227d40(&G.f69C, &G.f6A0, target_height, frame_scale_sq * 0.027f,
                                 frame_scale_sq * 0.3f, 0.0f);
     }
     G.f88 = G.f69C + -0.12f + G.f690;
