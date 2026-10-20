@@ -246,7 +246,7 @@ void mine_update(M910 *mine_moby) {
         MINE_DEBRIS_SHORT_LIVED = 2,
         MINE_DEBRIS_SPHERICAL_VELOCITY = 3
     };
-    B910 a = D_L00_001E9830;
+    B910 camera_blast_parameters = D_L00_001E9830;
     B910 b = D_L00_001E9880;
     U910 c;
     U910 old;
@@ -947,7 +947,7 @@ void mine_update(M910 *mine_moby) {
                 if (D_E910.b11 != 0) {
                     mine_camera_blast((char *)&b, (char *)&mine_moby->pos, 0, 0);
                 } else {
-                    mine_camera_blast((char *)&a, (char *)&mine_moby->pos, 0, 0);
+                    mine_camera_blast((char *)&camera_blast_parameters, (char *)&mine_moby->pos, 0, 0);
                 }
                 mine_spawn_drops(mine_moby, D_L00_001B07B0);
                 mark_moby_for_removal(mine_moby);
