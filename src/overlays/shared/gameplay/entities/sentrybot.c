@@ -1640,8 +1640,8 @@ extern unsigned char D_L15_00161468 __attribute__((sda));
 extern unsigned char D_L15_0016146C __attribute__((sda));
 void FUN_L15_0029af88(char *moby) {
     char *pos = moby + 0x10;
-    int t = scale_game_frames(D_L15_0016145C);
-    spawn_glow_particle(moby, pos, (int)&D_L15_0015F580, t, D_L15_00161458,
+    int scaled_frame_count = scale_game_frames(D_L15_0016145C);
+    spawn_glow_particle(moby, pos, (int)&D_L15_0015F580, scaled_frame_count, D_L15_00161458,
                      D_L15_00161464, D_L15_00161468, D_L15_0016146C, D_L15_00161460);
 }
 /* update of moby class 256: a homing missile that leads its target, trails smoke and explodes on contact */
