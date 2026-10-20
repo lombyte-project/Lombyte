@@ -2083,21 +2083,21 @@ typedef struct {
 } Part_275eb0;
 int FUN_001f9770_00275eb0(s16 *) __asm__("FUN_001f9770");
 u32 FUN_001fa6e0_00275eb0(u32, u32, f32) __asm__("FUN_001fa6e0");
-void FUN_L00_00275eb0(Part_275eb0 *p) {
-    float a;
-    if (p->unk10 < 2.0f || 1021.0f < p->unk10 || p->unk14 < 2.0f || 1021.0f < p->unk14 || p->unk18 < 2.0f ||
-        1021.0f < p->unk18 || FUN_001f9770_00275eb0(&p->hA)) {
-        free_effect_particle(p);
+void FUN_L00_00275eb0(Part_275eb0 *particle) {
+    float remaining_frames_minus_one;
+    if (particle->unk10 < 2.0f || 1021.0f < particle->unk10 || particle->unk14 < 2.0f || 1021.0f < particle->unk14 || particle->unk18 < 2.0f ||
+        1021.0f < particle->unk18 || FUN_001f9770_00275eb0(&particle->hA)) {
+        free_effect_particle(particle);
         return;
     }
-    if (p->w20) {
-        p->unkC *= 0.99f;
-        a = convert_integer_to_float(p->hA - 1);
-        p->w4 = FUN_001fa6e0_00275eb0(0x30FFFFFF, p->w4, a / convert_integer_to_float(p->hA));
+    if (particle->w20) {
+        particle->unkC *= 0.99f;
+        remaining_frames_minus_one = convert_integer_to_float(particle->hA - 1);
+        particle->w4 = FUN_001fa6e0_00275eb0(0x30FFFFFF, particle->w4, remaining_frames_minus_one / convert_integer_to_float(particle->hA));
     } else {
-        p->unkC *= 0.95f;
-        a = convert_integer_to_float(p->hA - 1);
-        p->w4 = FUN_001fa6e0_00275eb0(0x603F1008, p->w4, a / convert_integer_to_float(p->hA));
+        particle->unkC *= 0.95f;
+        remaining_frames_minus_one = convert_integer_to_float(particle->hA - 1);
+        particle->w4 = FUN_001fa6e0_00275eb0(0x603F1008, particle->w4, remaining_frames_minus_one / convert_integer_to_float(particle->hA));
     }
 }
 typedef struct {
