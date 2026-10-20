@@ -14,7 +14,7 @@
 
 extern int hero_slot_item_id(int) __asm__("FUN_L00_0020d498");
 
-int FUN_L12_00227f10(int a) {
+int FUN_L12_00227f10(int allow_item_lookup) {
     char *base = D_0013E533 + 0xE1D;
     int i;
     char *item_table_entry;
@@ -27,7 +27,7 @@ int FUN_L12_00227f10(int a) {
     if (((unsigned char *)base)[0x12E2] != 0) {
         return 0x6E;
     }
-    if (a == 0) {
+    if (allow_item_lookup == 0) {
         return 0;
     }
     if (((unsigned char *)base)[0x20A8] == 0) {
