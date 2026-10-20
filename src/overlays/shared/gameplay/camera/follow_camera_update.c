@@ -871,31 +871,31 @@ void FUN_001f9a10_2eac18(void *, void *, void *) __asm__("FUN_001f9a10");
 void FUN_L00_002eac18(int mode);
 void FUN_L00_002eac18(int mode) {
     char *g = D_L00_00166C80_2eac18;
-    char *o = *(char **)(g + 0x180);
+    char *current_follow_camera = *(char **)(g + 0x180);
     FUN_L00_001eb448_2eac18();
     if (mode == 0) {
         float v0[4] __attribute__((aligned(16)));
         float v1[4] __attribute__((aligned(16)));
         float m[16] __attribute__((aligned(16)));
-        char *d = (char *)&hero.motion.rot;
-        char *p = o + 0x30;
-        FUN_001fa050_2eac18(m, d);
-        FUN_001fa2b8_2eac18(o, m);
+        char *hero_rotation = (char *)&hero.motion.rot;
+        char *camera_position = current_follow_camera + 0x30;
+        FUN_001fa050_2eac18(m, hero_rotation);
+        FUN_001fa2b8_2eac18(current_follow_camera, m);
         FUN_001f9bf8_2eac18(v1, m, -1.0f);
         FUN_001f9bf8_2eac18(v0, &m[8], 1.2f);
-        FUN_001f9a10_2eac18(p, d - 0x10, v0);
-        FUN_001f9a10_2eac18(p, p, v1);
+        FUN_001f9a10_2eac18(camera_position, hero_rotation - 0x10, v0);
+        FUN_001f9a10_2eac18(camera_position, camera_position, v1);
         *(short *)(*(char **)(g + 0x180) + 0x8A) = 1;
     } else if (mode == 2) {
         *(char *)(g + 0x273) = 0;
-        *(short *)(o + 0x7E) = 2;
+        *(short *)(current_follow_camera + 0x7E) = 2;
         *(float *)(g + 0x294) = 0.018f;
         *(float *)(g + 0x288) = 0.018f;
     } else if (mode == 1) {
-        *(short *)(o + 0x7E) = 3;
+        *(short *)(current_follow_camera + 0x7E) = 3;
     } else if (mode == 4) {
         *(char *)(g + 0x273) = 0;
-        *(short *)(o + 0x7E) = 5;
+        *(short *)(current_follow_camera + 0x7E) = 5;
         *(float *)(g + 0x294) = 0.018f;
         *(float *)(g + 0x288) = 0.018f;
     }
