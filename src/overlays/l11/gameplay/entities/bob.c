@@ -467,28 +467,28 @@ void FUN_L11_002d1340(void *mp) {
         RESORT_OWNER_FINAL_PATH_LEG = 3
     };
     unsigned char *moby = mp;
-    char *d = *(char **)(moby + 0x78);
+    char *moby_vars = *(char **)(moby + 0x78);
     float A[4];
     float B[4];
     qcopy(A, moby + 0x10);
-    qcopy(B, d + 0x130);
+    qcopy(B, moby_vars + 0x130);
     FUN_L00_00258830((int)moby, (int)B, 0.5f, 0.3f, 0.0f, 0x10);
-    if ((moby[0x20] >= 4 && moby[0x20] <= 6) || (moby[0x20] == 7 && *(int *)(d + 0x15C) == 3)) {
-        FUN_L00_00261d78(0.3f, *(void **)(d + 0x60 - -(*(int *)(d + 0x158) * 4)), moby + 0x10,
+    if ((moby[0x20] >= 4 && moby[0x20] <= 6) || (moby[0x20] == 7 && *(int *)(moby_vars + 0x15C) == 3)) {
+        FUN_L00_00261d78(0.3f, *(void **)(moby_vars + 0x60 - -(*(int *)(moby_vars + 0x158) * 4)), moby + 0x10,
                          moby + 0x10);
-        switch (*(int *)(d + 0x158)) {
+        switch (*(int *)(moby_vars + 0x158)) {
         case RESORT_OWNER_PENULTIMATE_PATH_LEG:
-            FUN_L00_00261d78(0.3f, *(void **)(d + 0x80), moby + 0x10, moby + 0x10);
-            FUN_L00_00261d78(0.3f, *(void **)(d + 0x84), moby + 0x10, moby + 0x10);
-            FUN_L00_00261d78(0.3f, *(void **)(d + 0x88), moby + 0x10, moby + 0x10);
+            FUN_L00_00261d78(0.3f, *(void **)(moby_vars + 0x80), moby + 0x10, moby + 0x10);
+            FUN_L00_00261d78(0.3f, *(void **)(moby_vars + 0x84), moby + 0x10, moby + 0x10);
+            FUN_L00_00261d78(0.3f, *(void **)(moby_vars + 0x88), moby + 0x10, moby + 0x10);
             break;
         case RESORT_OWNER_FINAL_PATH_LEG:
-            FUN_L00_00261d78(0.3f, *(void **)(d + 0x80), moby + 0x10, moby + 0x10);
-            FUN_L00_00261d78(0.3f, *(void **)(d + 0x84), moby + 0x10, moby + 0x10);
+            FUN_L00_00261d78(0.3f, *(void **)(moby_vars + 0x80), moby + 0x10, moby + 0x10);
+            FUN_L00_00261d78(0.3f, *(void **)(moby_vars + 0x84), moby + 0x10, moby + 0x10);
             break;
         }
     }
-    fast_vec_sub(d + 0x140, moby + 0x10, A);
+    fast_vec_sub(moby_vars + 0x140, moby + 0x10, A);
 }
 extern int FUN_L11_002d2460(struct Moby *moby);
 extern int FUN_L11_002d2340(struct Moby *moby, char *other);
