@@ -19,10 +19,10 @@ extern void debug_print_alt() __asm__("FUN_001e93b0");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void pack_render_command_fields(struct RenderEntry *, s32, s32, s32, s32) __asm__("PackRenderCommandFields");
 
-void FUN_L00_002500b8(char *o) {
+void FUN_L00_002500b8(char *object) {
     float vec[4];
     float best = 999999.0f;
-    float d;
+    float entry_distance;
     int idx = -1;
     int i;
     int off;
@@ -33,10 +33,10 @@ void FUN_L00_002500b8(char *o) {
     unsigned char *h;
 
     for (i = 0; i < D_L00_00160014; i++) {
-        subtract_vector_xyz(vec, o + 0x10, D_L00_00160040 + i * 0x30);
-        d = fast_vec_length(vec);
-        if (d <= 8.0f && d < best) {
-            best = d;
+        subtract_vector_xyz(vec, object + 0x10, D_L00_00160040 + i * 0x30);
+        entry_distance = fast_vec_length(vec);
+        if (entry_distance <= 8.0f && entry_distance < best) {
+            best = entry_distance;
             idx = i;
         }
     }
@@ -46,11 +46,11 @@ void FUN_L00_002500b8(char *o) {
     }
     off = idx * 0x30;
     e1 = (char *)(off + (int)D_L00_00160040);
-    pack_render_command_fields(o,
-                            *(int *)(o + 0x80) = (*(int *)(e1 + 0x18) << 16) +
+    pack_render_command_fields(object,
+                            *(int *)(object + 0x80) = (*(int *)(e1 + 0x18) << 16) +
                                                  (*(int *)(e1 + 0x14) << 8) + *(int *)(e1 + 0x10),
                             0, 0, 0);
-    *(int *)(o + 0x38) = *(int *)((char *)(off + (int)D_L00_00160040) + 0x1C);
+    *(int *)(object + 0x38) = *(int *)((char *)(off + (int)D_L00_00160040) + 0x1C);
     e2 = (char *)(off + (int)D_L00_00160040);
     if (*(unsigned char *)(e2 + 0x27) != 0) {
         g = D_0013E533 + 0x1D;
