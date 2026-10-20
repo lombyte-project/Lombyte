@@ -3238,16 +3238,16 @@ typedef struct {
 
 /* Stores val in the first empty of 15 slots after the list head. */
 void FUN_L00_002b8798(ListSlots8 *list, s32 val) {
-    s32 *p = list->slots;
+    s32 *list_data = list->slots;
     s32 i = 0;
-    s32 *q;
-    s32 n;
+    s32 *first_slot;
+    s32 slot_byte_offset;
 
     while (i < 15) {
-        n = i * 4;
-        q = (s32 *)((u8 *)p + 4);
-        if (*(s32 *)((u8 *)q + n) == 0) {
-            *(s32 *)((u8 *)q + n) = val;
+        slot_byte_offset = i * 4;
+        first_slot = (s32 *)((u8 *)list_data + 4);
+        if (*(s32 *)((u8 *)first_slot + slot_byte_offset) == 0) {
+            *(s32 *)((u8 *)first_slot + slot_byte_offset) = val;
             break;
         }
         i++;
