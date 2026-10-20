@@ -15,22 +15,22 @@ void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
 void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 void FUN_L00_0025d238(V0025d238 *src, V0025d238 *v) {
     V0025d238 source_copy, scaled_delta;
-    f32 *pv, *p0, *p1;
-    V0025d238 *a = &source_copy, *b = &scaled_delta;
+    f32 *pv, *source_component, *delta_component;
+    V0025d238 *source_copy_ptr = &source_copy, *b = &scaled_delta;
     s32 i;
     source_copy.q = src->q;
-    p0 = source_copy.f;
+    source_component = source_copy.f;
     pv = v->f;
-    p1 = scaled_delta.f;
+    delta_component = scaled_delta.f;
     for (i = 2; i >= 0; i--) {
         if (*pv < 0.0f) {
-            subtract_vector_xyz(b, v, a);
-            fast_vec_scale(b, b, absolute_float((*p0 - 0.1f) / *p1));
-            add_vector_xyz(v, a, b);
+            subtract_vector_xyz(b, v, source_copy_ptr);
+            fast_vec_scale(b, b, absolute_float((*source_component - 0.1f) / *delta_component));
+            add_vector_xyz(v, source_copy_ptr, b);
         }
         pv++;
-        p1++;
-        p0++;
+        delta_component++;
+        source_component++;
     }
 }
 typedef struct {
