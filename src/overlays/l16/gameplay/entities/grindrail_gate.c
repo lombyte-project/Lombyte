@@ -1284,17 +1284,17 @@ extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 float absolute_float(float input) __asm__("func_001F99C0");
 
 void FUN_L16_002e6208(void *arg) {
-    L16PursuitMoby *m = arg;
-    L16PursuitData *pursuit_data = m->data;
+    L16PursuitMoby *chomper_moby = arg;
+    L16PursuitData *pursuit_data = chomper_moby->data;
     char *hit;
     int a;                      /* the reaction kind, later the path */
     int b;                      /* the reaction flags, later the path's slot in the table */
     float scratch[8];           /* [0..3] where the hit came from, [4] the heading that gives */
 
-    if (m->state == 0) {
+    if (chomper_moby->state == 0) {
         return;
     }
-    hit = find_moby_hit(m, 0x330000, 0);
+    hit = find_moby_hit(chomper_moby, 0x330000, 0);
     if (hit) {
         b = 0x200;
         pursuit_data->flags = b;
@@ -1307,24 +1307,24 @@ void FUN_L16_002e6208(void *arg) {
         pursuit_data->kind = a;
         pursuit_data->pending = 0;
         pursuit_data->timer = frame_time * 2.0f;
-        m->flags &= ~0x1000;
+        chomper_moby->flags &= ~0x1000;
         *(OvlQuad *)scratch = *(OvlQuad *)(hit + 0x10);
         trooper_knockback_arc(scratch, scratch + 4, &pursuit_data->jump_speed, &pursuit_data->turn_speed);
-        trooper_start_knockback(m, pursuit_data->knock, 5, 1, 0, scratch[4]);
+        trooper_start_knockback(chomper_moby, pursuit_data->knock, 5, 1, 0, scratch[4]);
         pursuit_data->f170 = 8.0f;
         pursuit_data->f174 = 16.0f;
-        m->state = 8;
-        m->i94 = 0;
+        chomper_moby->state = 8;
+        chomper_moby->i94 = 0;
         pursuit_data->reaction_time = 0x78;
-        trooper_anim_update(m, pursuit_data->reaction);
+        trooper_anim_update(chomper_moby, pursuit_data->reaction);
     }
-    m->bA4 = 0xFF;
-    trooper_anim_finish(m, pursuit_data->reaction);
+    chomper_moby->bA4 = 0xFF;
+    trooper_anim_finish(chomper_moby, pursuit_data->reaction);
     b = (int)&D_L16_001B0930[pursuit_data->path];
     a = *(int *)b;
-    if (FUN_L00_0025ff38(m, pursuit_data->target, 16.0f, 0, 0, (void *)(a + 0x10), *(int *)a) != 2) {
+    if (FUN_L00_0025ff38(chomper_moby, pursuit_data->target, 16.0f, 0, 0, (void *)(a + 0x10), *(int *)a) != 2) {
         if (vector_distance(pursuit_data->home, pursuit_data->target) > 16.0f ||
-            absolute_float(m->position[2] - pursuit_data->target[2]) > 3.0f) {
+            absolute_float(chomper_moby->position[2] - pursuit_data->target[2]) > 3.0f) {
             pursuit_data->i1C4 = 2;
         }
     }
