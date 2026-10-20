@@ -810,49 +810,49 @@ extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 extern short D_L06_00161CF0 __attribute__((sda));
 void FUN_L06_002f4130(char *m) {
-    Sx s;
-    Vx a;
+    Sx collision_params;
+    Vx segment_start;
     Vx b;
     int i;
     char *pos = m + 0x10;
     int one = 1;
-    char *d;
+    char *moby_data;
     int n;
     float f25, f27, cur, prev, ang, ra, rb;
-    d = *(char **)(m + 0x78);
+    moby_data = *(char **)(m + 0x78);
     n = func_001FA898_r(*(float *)&D_L06_00161CF0 / (*(float *)&spark_speed_gp * frame_time) *
                         0.25f);
-    f25 = *(float *)(d + 0x80) * (float)n;
+    f25 = *(float *)(moby_data + 0x80) * (float)n;
     f27 = *(float *)&D_L06_00161CF0 * 0.25f;
     cur = *(float *)&D_L06_00161CF0;
-    ang = fast_subtract_rotations(*(float *)(d + 0x7C), f25 * 4.0f);
-    s.m = m;
-    s.f1C = 1.0f;
-    s.flags = hero.items[2].item_id != 6 ? 0x10001 : 0x10000;
-    s.i20 = one;
-    clear_u64_value(&s);
-    s.f8 = 1.0f;
-    s.fC = 5627.9248f;
-    s.b18 = 3;
-    s.b19 = one;
-    s.h1A = *(unsigned short *)(m + 0xA6);
+    ang = fast_subtract_rotations(*(float *)(moby_data + 0x7C), f25 * 4.0f);
+    collision_params.m = m;
+    collision_params.f1C = 1.0f;
+    collision_params.flags = hero.items[2].item_id != 6 ? 0x10001 : 0x10000;
+    collision_params.i20 = one;
+    clear_u64_value(&collision_params);
+    collision_params.f8 = 1.0f;
+    collision_params.fC = 5627.9248f;
+    collision_params.b18 = 3;
+    collision_params.b19 = one;
+    collision_params.h1A = *(unsigned short *)(m + 0xA6);
     for (i = 3; i >= 0; i--) {
         prev = cur;
-        ra = fast_add_rotations(*(float *)(d + 0x84),
-                                *(float *)(d + 0x64) * DEG_TO_RAD * fast_sin(ang));
+        ra = fast_add_rotations(*(float *)(moby_data + 0x84),
+                                *(float *)(moby_data + 0x64) * DEG_TO_RAD * fast_sin(ang));
         cur -= f27;
         ang = fast_add_rotations(ang, f25);
-        rb = fast_add_rotations(*(float *)(d + 0x84),
-                                *(float *)(d + 0x64) * DEG_TO_RAD * fast_sin(ang));
-        a.x = fast_cos(ra) * prev;
-        a.y = fast_sin(ra) * prev;
-        a.z = 0.0f;
+        rb = fast_add_rotations(*(float *)(moby_data + 0x84),
+                                *(float *)(moby_data + 0x64) * DEG_TO_RAD * fast_sin(ang));
+        segment_start.x = fast_cos(ra) * prev;
+        segment_start.y = fast_sin(ra) * prev;
+        segment_start.z = 0.0f;
         b.x = fast_cos(rb) * cur;
         b.y = fast_sin(rb) * cur;
         b.z = 0.0f;
-        add_vector_xyz(&a, &a, pos);
+        add_vector_xyz(&segment_start, &segment_start, pos);
         add_vector_xyz(&b, &b, pos);
-        coll_line_fix(&a, &b, 0, m, &s);
+        coll_line_fix(&segment_start, &b, 0, m, &collision_params);
     }
 }
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002F57C0), where it is exact; names translated to the US level program. */
