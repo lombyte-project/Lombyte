@@ -125,6 +125,7 @@ void FUN_L12_002461f0(void) {
     enum {
         HERO_STATE_ITEM_BUTTON_RELEASE_WAIT = 23,
         HERO_STATE_LOOK_RELEASE_WAIT = 30,
+        HERO_STATE_ITEM_MOBY_FRAME_EXIT_WAIT = 32,
         HERO_STATE_ITEM_ANIMATION_RELEASE_GATE = 46,
         HERO_STATE_ITEM_BUTTON_RELEASE_SEQUENCE_EXIT_WAIT = 48,
         HERO_STATE_CIRCLE_RELEASE_WAIT = 89,
@@ -2039,7 +2040,7 @@ void FUN_L12_002461f0(void) {
                     }
                     D_L12_0016CC00 = 0;
                     break;
-                case 32:
+                case HERO_STATE_ITEM_MOBY_FRAME_EXIT_WAIT:
                     if (hero.items[0].moby != 0 && hero.unkA9C == 0 && hero.anim_frame > 20.0f) {
                         hero_set_state(HERO_STATE_IDLE, 0);
                     }
