@@ -700,27 +700,27 @@ extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 extern char *func_L00_0026DEA0_c(void *, int, void *, float, float, float, float,
                                  int) __asm__("FUN_L00_0026d000");
 
-void FUN_L18_002fa250(void *a, void *b, void *c, float f0, float f1) {
+void FUN_L18_002fa250(void *first_position_source, void *b, void *c, float f0, float f1) {
     char first_effect_position[16];
     char second_effect_position[16];
     int i;
     char *m;
-    char *p;
+    char *effect_data;
     int x;
     int k2, k7f;
-    qcopy(first_effect_position, a);
+    qcopy(first_effect_position, first_position_source);
     qcopy(second_effect_position, b);
     for (i = 1; i >= 0; i--) {
         m = (char *)random_integer_below(16);
         m = func_L00_0026DEA0_c(first_effect_position, random_integer_below(2) ? -(int)m : (int)m, c, 0.0f, 1.0f, 0.9f,
                                 f0, 0x7F204080);
-        p = m + 0x20;
+        effect_data = m + 0x20;
         if (m) {
             *(short *)(m + 0xA) = scale_game_frames(15);
             m[9] = func_001FA898_r(4.0f) + 0x40;
-            *(int *)(p + 4) = 2;
-            p[0xA] = 0x7F;
-            p[0xB] = m[0xA];
+            *(int *)(effect_data + 4) = 2;
+            effect_data[0xA] = 0x7F;
+            effect_data[0xB] = m[0xA];
         }
     }
     x = 16;
@@ -731,14 +731,14 @@ void FUN_L18_002fa250(void *a, void *b, void *c, float f0, float f1) {
         int y = x;
         x = -x;
         m = func_L00_0026DEA0_c(second_effect_position, y, c, 0.0f, 1.0f, 0.97f, f1, 0x7FFFFFFF);
-        p = m + 0x20;
+        effect_data = m + 0x20;
         if (m) {
             m[9] = func_001FA898_r(4.0f) + 0x40;
             *(short *)(m + 0xA) = scale_game_frames(4);
             m[8] = random_integer_below(0xFF);
-            *(int *)(p + 4) = k2;
-            p[0xA] = k7f;
-            p[0xB] = m[0xA];
+            *(int *)(effect_data + 4) = k2;
+            effect_data[0xA] = k7f;
+            effect_data[0xB] = m[0xA];
         }
     } while (--i >= 0);
 }
