@@ -390,43 +390,43 @@ void FUN_L11_00316320(struct Moby *moby) {
         GATE_OPEN_IDLE = 5,
         GATE_APPLY_CONFIGURED_DOOR_POSE = 6
     };
-    struct L11GateVars *d = (struct L11GateVars *)moby->pvars;
+    struct L11GateVars *gate_vars = (struct L11GateVars *)moby->pvars;
     float v[4];
 
     switch (moby->state) {
     case GATE_INITIALIZE_DOORS: {
-        struct Moby *c;
+        struct Moby *door_moby;
         struct Moby *r;
         u8 *pv;
         moby->scale *= 2.0f;
-        d->left = spawn_moby_class(0x4DF);
-        d->left->draw_dist = 0x40;
-        d->left->visible = 1;
-        d->left->spawn_frame = hero.moby->spawn_frame;
-        d->left->flags = moby->flags | 0x20;
-        c = d->left;
-        qcopy(&c->pos, &moby->pos);
-        c->pos.z -= 4.0f;
-        r = d->left;
+        gate_vars->left = spawn_moby_class(0x4DF);
+        gate_vars->left->draw_dist = 0x40;
+        gate_vars->left->visible = 1;
+        gate_vars->left->spawn_frame = hero.moby->spawn_frame;
+        gate_vars->left->flags = moby->flags | 0x20;
+        door_moby = gate_vars->left;
+        qcopy(&door_moby->pos, &moby->pos);
+        door_moby->pos.z -= 4.0f;
+        r = gate_vars->left;
         qcopy(&r->rot, &moby->rot);
         r->rot.x = -(D_L11_0016230C * 0.017453292f);
-        d->left->rot.y = D_L11_00162310 * 0.017453292f;
-        pv = d->left->pvars;
+        gate_vars->left->rot.y = D_L11_00162310 * 0.017453292f;
+        pv = gate_vars->left->pvars;
         *(u8 **)(pv + 8) = pv + 0x20;
         *(u32 *)(pv + 0x5C) |= 1;
-        d->right = spawn_moby_class(0x4DF);
-        d->right->draw_dist = 0x40;
-        d->right->visible = 1;
-        d->right->spawn_frame = hero.moby->spawn_frame;
-        d->right->flags = moby->flags | 0x8020;
-        c = d->right;
-        qcopy(&c->pos, &moby->pos);
-        c->pos.z -= 4.0f;
-        r = d->right;
+        gate_vars->right = spawn_moby_class(0x4DF);
+        gate_vars->right->draw_dist = 0x40;
+        gate_vars->right->visible = 1;
+        gate_vars->right->spawn_frame = hero.moby->spawn_frame;
+        gate_vars->right->flags = moby->flags | 0x8020;
+        door_moby = gate_vars->right;
+        qcopy(&door_moby->pos, &moby->pos);
+        door_moby->pos.z -= 4.0f;
+        r = gate_vars->right;
         qcopy(&r->rot, &moby->rot);
         r->rot.x = D_L11_0016230C * 0.017453292f;
-        d->right->rot.y = D_L11_00162310 * 0.017453292f;
-        pv = d->right->pvars;
+        gate_vars->right->rot.y = D_L11_00162310 * 0.017453292f;
+        pv = gate_vars->right->pvars;
         *(u8 **)(pv + 8) = pv + 0x20;
         *(u32 *)(pv + 0x5C) |= 1;
         moby->state = 1;
@@ -434,55 +434,55 @@ void FUN_L11_00316320(struct Moby *moby) {
     }
     case GATE_WAIT_FOR_HERO_TRIGGER:
         if (vector_distance(&moby->pos.x, &hero.motion.pos.f[0]) < 12.0f &&
-            FUN_00214720(&hero.motion.pos, d->unk10) != 0) {
-            d->t = 0.0f;
+            FUN_00214720(&hero.motion.pos, gate_vars->unk10) != 0) {
+            gate_vars->t = 0.0f;
             moby->state = 2;
-            FUN_0022da68(0, 4, d->left);
+            FUN_0022da68(0, 4, gate_vars->left);
         }
         break;
     case GATE_RAISE_DOORS:
-        advance_accelerated_scalar(&d->t, &d->speed, 1.0f, frame_time_sq * 8.0f, frame_time_sq * 16.0f,
+        advance_accelerated_scalar(&gate_vars->t, &gate_vars->speed, 1.0f, frame_time_sq * 8.0f, frame_time_sq * 16.0f,
                                    frame_time * 8.0f);
         fast_vec_normalize(v, &moby->rot_row0, 0.5f);
-        fast_vec_add(&d->left->pos, &moby->pos, v);
-        d->left->pos.z = moby->pos.z + d->t * 4.0f - 4.0f;
-        fast_vec_add(&d->right->pos, &moby->pos, v);
-        d->right->pos.z = moby->pos.z + d->t * 4.0f - 4.0f;
-        FUN_L00_00250df8(d->left);
-        FUN_L00_00250df8(d->right);
-        if (d->t >= 1.0f) {
-            d->t = 0.0f;
+        fast_vec_add(&gate_vars->left->pos, &moby->pos, v);
+        gate_vars->left->pos.z = moby->pos.z + gate_vars->t * 4.0f - 4.0f;
+        fast_vec_add(&gate_vars->right->pos, &moby->pos, v);
+        gate_vars->right->pos.z = moby->pos.z + gate_vars->t * 4.0f - 4.0f;
+        FUN_L00_00250df8(gate_vars->left);
+        FUN_L00_00250df8(gate_vars->right);
+        if (gate_vars->t >= 1.0f) {
+            gate_vars->t = 0.0f;
             moby->state = 3;
         }
         break;
     case GATE_ZERO_DOOR_Y_ROTATION: {
         float a;
-        advance_accelerated_scalar(&d->t, &d->speed, 1.0f, frame_time_sq * 10.0f, frame_time_sq * 20.0f,
+        advance_accelerated_scalar(&gate_vars->t, &gate_vars->speed, 1.0f, frame_time_sq * 10.0f, frame_time_sq * 20.0f,
                                    frame_time * 10.0f);
-        a = (1.0f - d->t) * (D_L11_00162310 * 0.017453292f);
-        d->left->rot.y = a;
-        d->right->rot.y = a;
-        FUN_L00_00250df8(d->left);
-        FUN_L00_00250df8(d->right);
-        if (d->t >= 1.0f) {
-            d->t = 0.0f;
+        a = (1.0f - gate_vars->t) * (D_L11_00162310 * 0.017453292f);
+        gate_vars->left->rot.y = a;
+        gate_vars->right->rot.y = a;
+        FUN_L00_00250df8(gate_vars->left);
+        FUN_L00_00250df8(gate_vars->right);
+        if (gate_vars->t >= 1.0f) {
+            gate_vars->t = 0.0f;
             moby->state = 4;
         }
         break;
     }
     case GATE_TILT_DOORS_APART: {
         float a;
-        advance_accelerated_scalar(&d->t, &d->speed, 1.0f, frame_time_sq * 12.0f, frame_time_sq * 24.0f,
+        advance_accelerated_scalar(&gate_vars->t, &gate_vars->speed, 1.0f, frame_time_sq * 12.0f, frame_time_sq * 24.0f,
                                    frame_time * 12.0f);
-        d->left->pos.z = moby->pos.z + d->t * 0.25f;
-        d->right->pos.z = moby->pos.z + d->t * 0.25f;
-        a = d->t * 1.5707964f;
-        d->left->rot.x = -a;
-        d->right->rot.x = a;
-        FUN_L00_00250df8(d->left);
-        FUN_L00_00250df8(d->right);
-        if (d->t >= 1.0f) {
-            d->t = 0.0f;
+        gate_vars->left->pos.z = moby->pos.z + gate_vars->t * 0.25f;
+        gate_vars->right->pos.z = moby->pos.z + gate_vars->t * 0.25f;
+        a = gate_vars->t * 1.5707964f;
+        gate_vars->left->rot.x = -a;
+        gate_vars->right->rot.x = a;
+        FUN_L00_00250df8(gate_vars->left);
+        FUN_L00_00250df8(gate_vars->right);
+        if (gate_vars->t >= 1.0f) {
+            gate_vars->t = 0.0f;
             moby->state = 5;
         }
         break;
@@ -491,16 +491,16 @@ void FUN_L11_00316320(struct Moby *moby) {
         break;
     case GATE_APPLY_CONFIGURED_DOOR_POSE:
         fast_vec_normalize(v, &moby->rot_row0, 0.5f);
-        fast_vec_add(&d->left->pos, &moby->pos, v);
-        d->left->pos.z = moby->pos.z + D_L11_00162308;
-        d->left->rot.x = -(D_L11_0016230C * 0.017453292f);
-        d->left->rot.y = D_L11_00162310 * 0.017453292f;
-        FUN_L00_00250df8(d->left);
-        fast_vec_add(&d->right->pos, &moby->pos, v);
-        d->right->pos.z = moby->pos.z + D_L11_00162308;
-        d->right->rot.x = D_L11_0016230C * 0.017453292f;
-        d->right->rot.y = D_L11_00162310 * 0.017453292f;
-        FUN_L00_00250df8(d->right);
+        fast_vec_add(&gate_vars->left->pos, &moby->pos, v);
+        gate_vars->left->pos.z = moby->pos.z + D_L11_00162308;
+        gate_vars->left->rot.x = -(D_L11_0016230C * 0.017453292f);
+        gate_vars->left->rot.y = D_L11_00162310 * 0.017453292f;
+        FUN_L00_00250df8(gate_vars->left);
+        fast_vec_add(&gate_vars->right->pos, &moby->pos, v);
+        gate_vars->right->pos.z = moby->pos.z + D_L11_00162308;
+        gate_vars->right->rot.x = D_L11_0016230C * 0.017453292f;
+        gate_vars->right->rot.y = D_L11_00162310 * 0.017453292f;
+        FUN_L00_00250df8(gate_vars->right);
         break;
     }
 }
