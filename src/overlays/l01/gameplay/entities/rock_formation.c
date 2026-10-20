@@ -1280,7 +1280,7 @@ extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 
 void green_mushroom_update(SparkMoby *m) __asm__("FUN_L01_002fd9a0");
-void green_mushroom_update(SparkMoby *m) {
+void green_mushroom_update(SparkMoby *mushroom_moby) {
     enum {
         GREEN_MUSHROOM_INITIALIZE = 0,
         GREEN_MUSHROOM_WAIT_FOR_POSITIVE_HIT = 1,
@@ -1290,42 +1290,42 @@ void green_mushroom_update(SparkMoby *m) {
     s32 flag;
     s32 i;
     f32 ang;
-    f32 s;
+    f32 scale_ratio;
     SparkVec off;
     SparkVec rot;
 
     flag = 0;
-    hit = trooper_find_hit(m, 0x10000, 0);
-    switch (m->state) {
+    hit = trooper_find_hit(mushroom_moby, 0x10000, 0);
+    switch (mushroom_moby->state) {
     case GREEN_MUSHROOM_INITIALIZE:
-        m->state = 1;
+        mushroom_moby->state = 1;
         break;
     case GREEN_MUSHROOM_WAIT_FOR_POSITIVE_HIT:
         if (hit != 0 && hit->f2c > 0.0f) {
             flag = 1;
         }
         if (flag) {
-            m->state = 2;
+            mushroom_moby->state = 2;
         }
         break;
     case GREEN_MUSHROOM_SPAWN_PIECES_AND_REMOVE:
-        FUN_0022da68(0, 0, m);
-        FUN_L01_002787a0(m);
-        s = m->scale / m->pclass->radius;
+        FUN_0022da68(0, 0, mushroom_moby);
+        FUN_L01_002787a0(mushroom_moby);
+        scale_ratio = mushroom_moby->scale / mushroom_moby->pclass->radius;
         for (i = 0; i < 4; i++) {
             ang = (f32)i * 1.5707964f;
             clear_u64_value(&rot);
             rot.z = fast_add_rotations(ang, 0.87266463f);
-            off.x = fast_cos(ang) * -0.57f * s;
-            off.y = fast_sin(ang) * -0.57f * s;
+            off.x = fast_cos(ang) * -0.57f * scale_ratio;
+            off.y = fast_sin(ang) * -0.57f * scale_ratio;
             off.z = 0.0f;
-            fast_vec_add(&off, &off, &m->pos);
-            off.z += s * 1.2f;
-            FUN_L00_00263fd8(m, 0x719, &off, &rot, 0, 0, &D_L01_0015F580, &D_L01_0015F580, 0.0f,
+            fast_vec_add(&off, &off, &mushroom_moby->pos);
+            off.z += scale_ratio * 1.2f;
+            FUN_L00_00263fd8(mushroom_moby, 0x719, &off, &rot, 0, 0, &D_L01_0015F580, &D_L01_0015F580, 0.0f,
                              &D_L01_0015F580);
         }
-        FUN_L01_00278e20(m, 0x718);
-        mark_moby_for_removal(m);
+        FUN_L01_00278e20(mushroom_moby, 0x718);
+        mark_moby_for_removal(mushroom_moby);
         break;
     }
 }
