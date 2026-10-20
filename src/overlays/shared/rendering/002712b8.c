@@ -723,83 +723,83 @@ extern void normalize_vector_xyz(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void FUN_L00_00259bc8_272bc0(int, int, int, void *, void *,
                                     float) __asm__("FUN_L00_00259bc8");
 
-void FUN_L00_00272bc0(unsigned char *p) {
+void FUN_L00_00272bc0(unsigned char *particle) {
     enum {
         PARTICLE_PHASE_INITIAL_COLOR_TWEEN = 0,
         PARTICLE_PHASE_EMISSION = 1,
         PARTICLE_PHASE_EMITTED_PARTICLE = 2
     };
     V_272bc0 t;
-    unsigned char *q;
+    unsigned char *particle_data;
     unsigned char *c;
     P_272bc0 *g;
     int i;
-    float a;
+    float emitted_lifetime_frames;
     float k;
 
-    q = p + 0x20;
-    switch (q[0x14]) {
+    particle_data = particle + 0x20;
+    switch (particle_data[0x14]) {
     case PARTICLE_PHASE_INITIAL_COLOR_TWEEN: {
-        float n = FUN_001fa6c0_272bc0(q[0x11]);
-        *(int *)(p + 4) =
-            fast_tween_color((n - FUN_001fa6c0_272bc0(*(short *)(p + 0xA))) / n, 0xFF4080FF, 0);
+        float initial_tween_duration_frames = FUN_001fa6c0_272bc0(particle_data[0x11]);
+        *(int *)(particle + 4) =
+            fast_tween_color((initial_tween_duration_frames - FUN_001fa6c0_272bc0(*(short *)(particle + 0xA))) / initial_tween_duration_frames, 0xFF4080FF, 0);
     }
-        if (fast_dec_timer(p + 0xA)) {
-            if (q[0x10] == 1) {
-                free_effect_particle(p);
+        if (fast_dec_timer(particle + 0xA)) {
+            if (particle_data[0x10] == 1) {
+                free_effect_particle(particle);
             } else {
-                q[0x14] = 1;
-                *(short *)(p + 0xA) = q[0x12];
+                particle_data[0x14] = 1;
+                *(short *)(particle + 0xA) = particle_data[0x12];
             }
         }
         break;
     case PARTICLE_PHASE_EMISSION: {
-        float m;
-        for (i = 0; i < q[0x13]; i++) {
-            qcopy(t, p + 0x10);
-            m = 1.0f;
+        float emitted_speed_scale;
+        for (i = 0; i < particle_data[0x13]; i++) {
+            qcopy(t, particle + 0x10);
+            emitted_speed_scale = 1.0f;
             FUN_L00_0025f8e0_272bc0(t, 0.05f);
-            if (*(short *)(p + 0xA) < FUN_001f96f8_272bc0(10)) {
-                m = FUN_001fa6c0_272bc0(*(short *)(p + 0xA)) / (float)FUN_001f96f8_272bc0(10);
+            if (*(short *)(particle + 0xA) < FUN_001f96f8_272bc0(10)) {
+                emitted_speed_scale = FUN_001fa6c0_272bc0(*(short *)(particle + 0xA)) / (float)FUN_001f96f8_272bc0(10);
             }
-            FUN_L00_002729c8_272bc0(t, 2, q[0x11], q[0x12], q[0x13], q[0x15], *(int *)(q + 0x18),
-                                    *(float *)(q + 0x1C), m);
+            FUN_L00_002729c8_272bc0(t, 2, particle_data[0x11], particle_data[0x12], particle_data[0x13], particle_data[0x15], *(int *)(particle_data + 0x18),
+                                    *(float *)(particle_data + 0x1C), emitted_speed_scale);
         }
     }
-        if (fast_dec_timer(p + 0xA)) {
-            free_effect_particle(p);
+        if (fast_dec_timer(particle + 0xA)) {
+            free_effect_particle(particle);
         }
         c = (unsigned char *)(*(V_272bc0 *)D_0013F3D0);
-        if (vector_distance(p + 0x10, c) < 0.3f) {
+        if (vector_distance(particle + 0x10, c) < 0.3f) {
             g = (P_272bc0 *)(c - 0x80);
-            if (g->unk88 < *(float *)(p + 0x18) + 1.2f) {
-                subtract_vector_xyz(t, c, p + 0x10);
+            if (g->unk88 < *(float *)(particle + 0x18) + 1.2f) {
+                subtract_vector_xyz(t, c, particle + 0x10);
                 normalize_vector_xyz(t, t, 1.0f);
                 t[2] = 1.0f;
-                FUN_L00_00259bc8_272bc0(g->i2080, *(int *)(q + 0x18), 1, p + 0x10, t,
-                                        *(float *)(q + 0x1C));
+                FUN_L00_00259bc8_272bc0(g->i2080, *(int *)(particle_data + 0x18), 1, particle + 0x10, t,
+                                        *(float *)(particle_data + 0x1C));
             }
         }
         break;
     case PARTICLE_PHASE_EMITTED_PARTICLE:
-        FUN_001f9a10_272bc0(p + 0x10, p + 0x10, q);
-        a = FUN_001fa6c0_272bc0(q[0x15]);
-        k = a - FUN_001fa6c0_272bc0(*(short *)(p + 0xA));
-        k = k / a;
-        *(int *)(p + 4) = fast_tween_color(k, (q[0x16] << 24) | 0x4060, 0x8FAFFF);
+        FUN_001f9a10_272bc0(particle + 0x10, particle + 0x10, particle_data);
+        emitted_lifetime_frames = FUN_001fa6c0_272bc0(particle_data[0x15]);
+        k = emitted_lifetime_frames - FUN_001fa6c0_272bc0(*(short *)(particle + 0xA));
+        k = k / emitted_lifetime_frames;
+        *(int *)(particle + 4) = fast_tween_color(k, (particle_data[0x16] << 24) | 0x4060, 0x8FAFFF);
         if (k < 0.6f) {
-            *(float *)(p + 0xC) += frame_scale * 0.043f * 210000.0f;
+            *(float *)(particle + 0xC) += frame_scale * 0.043f * 210000.0f;
         } else {
-            *(float *)(p + 0xC) -= frame_scale * 0.08f * 210000.0f;
+            *(float *)(particle + 0xC) -= frame_scale * 0.08f * 210000.0f;
         }
-        p[2] = D_L00_001B2168[rand_e50() & 7];
-        if (((p - D_L00_0016016C_272bc0) >> 6) & 1) {
-            p[8]++;
+        particle[2] = D_L00_001B2168[rand_e50() & 7];
+        if (((particle - D_L00_0016016C_272bc0) >> 6) & 1) {
+            particle[8]++;
         } else {
-            p[8]--;
+            particle[8]--;
         }
-        if (fast_dec_timer(p + 0xA)) {
-            free_effect_particle(p);
+        if (fast_dec_timer(particle + 0xA)) {
+            free_effect_particle(particle);
         }
         break;
     }
