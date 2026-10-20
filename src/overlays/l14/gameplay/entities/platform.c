@@ -25,8 +25,8 @@ extern int D_L14_0015F70C;
 extern int FUN_L00_0025df68(void *, void *, float *, int *, float *, int, float, float, float);
 extern float D_L14_00161A38_gp __asm__("D_L14_00161A38") __attribute__((sda));
 
-void FUN_L14_002d6358(struct Moby *m) {
-    char *moby_data = (char *)m->pvars;
+void FUN_L14_002d6358(struct Moby *racer_moby) {
+    char *moby_data = (char *)racer_moby->pvars;
     char *path = *(char **)(D_L14_0015F70C + *(int *)(moby_data + 0x60) * 32 + 0x10);
     char *tg;
     PathPos_2D7668 nearest_path_position;
