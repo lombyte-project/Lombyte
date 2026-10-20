@@ -43,12 +43,12 @@ extern void sample_camera_path(int *, int, void *, float *, int, float) __asm__(
 
 extern float D_L05_001613D0 __attribute__((sda));
 void FUN_L05_002d7890(char *moby, int *path) {
-    float *d = *(float **)(moby + 0x78);
-    d[2] = d[2] + D_L05_001613D0 * frame_time / d[3];
-    if ((float)path[0] < d[2]) {
-        d[2] = d[2] - (float)path[0];
+    float *moby_data = *(float **)(moby + 0x78);
+    moby_data[2] = moby_data[2] + D_L05_001613D0 * frame_time / moby_data[3];
+    if ((float)path[0] < moby_data[2]) {
+        moby_data[2] = moby_data[2] - (float)path[0];
     }
-    sample_camera_path(path, 1, moby + 0x10, (float *)(moby + 0x40), 0, d[2]);
+    sample_camera_path(path, 1, moby + 0x10, (float *)(moby + 0x40), 0, moby_data[2]);
     *(float *)(moby + 0x40) = *(float *)(moby + 0x4C);
 }
 /* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_002D28D0.c: func_L05_002DC1E8), where it is exact; names translated to the US level program. */
