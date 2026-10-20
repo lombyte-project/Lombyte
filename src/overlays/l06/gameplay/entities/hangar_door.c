@@ -305,13 +305,13 @@ extern void FUN_L00_002ea9d8(void *);
 extern void FUN_L00_002eaa30(void *);
 
 int FUN_L06_002fb2a8(char *moby) {
-    float output_position[4], m[4], moby_offset_position[4], hero_offset_position[4];
+    float output_position[4], output_rotation[4], moby_offset_position[4], hero_offset_position[4];
     char *data;
     char *pos;
     struct Hero *x;
     float t;
     data = *(char **)(moby + 0x78);
-    clear_u64_value(m);
+    clear_u64_value(output_rotation);
     if (*(unsigned char *)(moby + 0x53) == 8) {
         qcopy(output_position, D_L06_00167540);
         pos = moby + 0x10;
@@ -329,11 +329,11 @@ int FUN_L06_002fb2a8(char *moby) {
         pos = moby + 0x10;
         lerp_vector(output_position, moby_offset_position, hero_offset_position, *(float *)(data + 0x118));
     }
-    m[2] = fast_arc_tan(*(float *)(moby + 0x10) - output_position[0], *(float *)(moby + 0x14) - output_position[1]);
-    m[1] = -fast_arc_tan(vector_distance(output_position, pos), *(float *)(moby + 0x18) - output_position[2]) -
+    output_rotation[2] = fast_arc_tan(*(float *)(moby + 0x10) - output_position[0], *(float *)(moby + 0x14) - output_position[1]);
+    output_rotation[1] = -fast_arc_tan(vector_distance(output_position, pos), *(float *)(moby + 0x18) - output_position[2]) -
            (1.0f - *(float *)(data + 0x118)) * 30.0f * DEG_TO_RAD;
     FUN_L00_002ea9d8(output_position);
-    FUN_L00_002eaa30(m);
+    FUN_L00_002eaa30(output_rotation);
     if (*(float *)(data + 0x118) >= 1.0f && *(unsigned char *)(moby + 0x53) == 1)
         return 1;
     return 0;
