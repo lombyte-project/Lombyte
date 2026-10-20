@@ -19,12 +19,12 @@ typedef union {
 void append_scrolling_textured_quad(int x, int y, int w, int h, unsigned long rgba, unsigned long tex, float u0,
                   float u1, float v0, float v1) __asm__("FUN_002316e8");
 
-void append_scrolling_textured_quad(int x, int y, int w, int h, unsigned long rgba, unsigned long tex, float u0,
+void append_scrolling_textured_quad(int x, int y, int w, int quad_height, unsigned long rgba, unsigned long tex, float u0,
                   float u1, float texture_v_top, float texture_v_bottom) {
     int x0 = x * 16 + screen_extent.left - 8;
     int x1 = (x + w) * 16 + screen_extent.left - 8;
     int y0 = y * 16 + screen_extent.top - 8;
-    int y1 = (y + h) * 16 + screen_extent.top - 8;
+    int y1 = (y + quad_height) * 16 + screen_extent.top - 8;
     SpaceUvPair uv[4];
     long *quad_payload;
     int *base;
