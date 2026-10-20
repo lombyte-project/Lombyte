@@ -924,9 +924,9 @@ void amoeboid_update(struct Moby *moby) {
         *(float *)(moby_data + 0x68) = 1.0f;
         {
             int r = truncate_float_to_s32_c(409.6f);
-            float f = frame_time * 4.0f;
+            float movement_speed_limit = frame_time * 4.0f;
             *(int *)(moby_data + 0x60) = r;
-            *(float *)(moby_data + 0x84) = f;
+            *(float *)(moby_data + 0x84) = movement_speed_limit;
         }
         break;
     case AMOEBOID_FOLLOW_PATH: {
