@@ -1118,7 +1118,7 @@ void FUN_L01_002e35a8(char *moby, char *state) {
     V4_w22c target_aim_position;
     V4_w22c spawn_offset;
     char *target_moby;
-    float a, b, c, d, target_yaw, dist;
+    float aim_yaw, b, initial_yaw, initial_pitch, target_yaw, dist;
 
     if (fast_dec_timer_s16(state + 0x4E) == 0)
         return;
@@ -1145,13 +1145,13 @@ void FUN_L01_002e35a8(char *moby, char *state) {
                     fast_vec_sub(&spawn_offset, &target_aim_position, &v);
                     fast_vec_normalize(&spawn_offset, &spawn_offset, D_L01_00161910);
                     fast_vec_add(&v, &v, &spawn_offset);
-                    a = fast_arc_tan(target_aim_position.f[0] - v.f[0], target_aim_position.f[1] - v.f[1]);
+                    aim_yaw = fast_arc_tan(target_aim_position.f[0] - v.f[0], target_aim_position.f[1] - v.f[1]);
                     dist = vector_distance(&v, &target_aim_position);
                     b = -fast_arc_tan(dist, target_aim_position.f[2] - v.f[2]);
-                    c = fast_arc_tan(target_aim_position.f[0] - v.f[0], target_aim_position.f[1] - v.f[1]);
+                    initial_yaw = fast_arc_tan(target_aim_position.f[0] - v.f[0], target_aim_position.f[1] - v.f[1]);
                     dist = vector_distance(&v, &target_aim_position);
-                    d = -fast_arc_tan(dist, target_aim_position.f[2] - v.f[2]);
-                    FUN_L01_0030c898(moby, &v, a, b, c, d);
+                    initial_pitch = -fast_arc_tan(dist, target_aim_position.f[2] - v.f[2]);
+                    FUN_L01_0030c898(moby, &v, aim_yaw, b, initial_yaw, initial_pitch);
                     *(short *)(state + 0x4E) = scale_game_frames(D_L01_00161900);
                     *(int *)(state + 0x64) = *(int *)(state + 0x64) + 1;
                 }
