@@ -14,12 +14,12 @@
 
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 
-void FUN_L05_002661a0(HudElem *e) {
-    e->unk7C = scale_game_frames(0xB4) + 0x1E;
-    e->w = 0x80;
-    e->unk48 = 0;
-    e->h = 0x80;
-    e->unk4A = 0;
+void FUN_L05_002661a0(HudElem *hud_element) {
+    hud_element->unk7C = scale_game_frames(0xB4) + 0x1E;
+    hud_element->w = 0x80;
+    hud_element->unk48 = 0;
+    hud_element->h = 0x80;
+    hud_element->unk4A = 0;
 }
 /* Ported from rac1-decomp (src/overlays/shared/hud_00263490.c: func_L05_00266BD8), where it is exact; names translated to the US level program. */
 
