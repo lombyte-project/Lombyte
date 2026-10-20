@@ -807,7 +807,7 @@ float absolute_float(float) __asm__("FUN_001f99c0");
 short FUN_001f96f8_2e7138(int) __asm__("FUN_001f96f8");
 
 extern float D_L00_00161CB8 __attribute__((sda));
-int FUN_L00_002e7138(unsigned char *camera_moby, void *b, int c, int d) {
+int FUN_L00_002e7138(unsigned char *camera_moby, void *b, int c, int sphere_collision_found) {
     unsigned char *camera_state = *(unsigned char **)(camera_moby + 0x70);
     unsigned char *A = camera_state + 0x130;
     unsigned char *B = camera_state + 0x1D0;
@@ -818,10 +818,10 @@ int FUN_L00_002e7138(unsigned char *camera_moby, void *b, int c, int d) {
     subtract_vector_xyz(A, b, camera_state + 0x90);
     if (*(short *)(B + 0x38)) {
         FUN_L00_001ff500_2e7138(A, A, *(float *)(A + 0x2C) - *(float *)(B + 0x30));
-        return d;
+        return sphere_collision_found;
     }
     dist = FUN_001f9af0_2e7138(A);
-    if (hero.vehicle_mode != 2 && absolute_float(D_0013CA40_2e7138) > 0.05f && d) {
+    if (hero.vehicle_mode != 2 && absolute_float(D_0013CA40_2e7138) > 0.05f && sphere_collision_found) {
         dist -= D_L00_00161CB8 * frame_scale;
         *(short *)(B + 0x34) = FUN_001f96f8_2e7138(0x884);
     }
@@ -829,7 +829,7 @@ int FUN_L00_002e7138(unsigned char *camera_moby, void *b, int c, int d) {
     if (!c && hero.state.control_mode != 2 && len < dist) {
         scale_vector_xyz(A, A, len / dist);
         *(float *)(B + 0x30) = *(float *)(A + 0x2C) - len;
-        return d;
+        return sphere_collision_found;
     }
     if (dist < k) {
         if (dist <= 1e-4f)
