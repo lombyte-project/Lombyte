@@ -1284,24 +1284,24 @@ extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa6
 extern int *D_L18_001AC240[];
 
 void *FUN_L18_002d6b58(float *a, float *b, int idx) {
-    short *p = (short *)D_L18_001AC240[idx];
+    short *moby_list_entry = (short *)D_L18_001AC240[idx];
     char *best = 0;
     float bestd = 0.0f;
-    if (p == 0)
+    if (moby_list_entry == 0)
         return 0;
     while (1) {
-        int off = (*p & 0x7FFF) << 8;
+        int off = (*moby_list_entry & 0x7FFF) << 8;
         if (*(short *)(off + (int)*(char **)&D_L18_0015FFD8_d + 0xA6) == 0x247) {
             float ang = fast_arc_tan(a[0] - b[0], a[1] - b[1]);
-            L18Pos *m = (L18Pos *)(off + (int)*(char **)&D_L18_0015FFD8_d);
+            L18Pos *candidate_moby = (L18Pos *)(off + (int)*(char **)&D_L18_0015FFD8_d);
             float d =
-                fast_difference_between_rotations(ang, fast_arc_tan(a[0] - m->x, a[1] - m->y));
+                fast_difference_between_rotations(ang, fast_arc_tan(a[0] - candidate_moby->x, a[1] - candidate_moby->y));
             if (bestd < d) {
                 bestd = d;
                 best = (char *)D_L18_0015FFD8_m + off;
             }
         }
-        if (*p++ < 0)
+        if (*moby_list_entry++ < 0)
             return best;
     }
 }
