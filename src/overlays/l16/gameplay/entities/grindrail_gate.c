@@ -2512,15 +2512,15 @@ extern int FUN_L16_002c4710(void *);
 extern short *D_L16_001ABCC0[];
 
 char *FUN_L16_002e8b08(int idx) {
-    short *p = D_L16_001ABCC0[idx];
+    short *moby_index_entry = D_L16_001ABCC0[idx];
     char *moby;
-    if (p == 0)
+    if (moby_index_entry == 0)
         return 0;
     for (;;) {
-        moby = D_L16_0015FFD8 + ((*(unsigned short *)p & 0x7FFF) << 8);
+        moby = D_L16_0015FFD8 + ((*(unsigned short *)moby_index_entry & 0x7FFF) << 8);
         if (*(short *)(moby + 0xA6) == 0x10E && FUN_L16_002c4710(moby))
             return moby;
-        if (*p++ < 0)
+        if (*moby_index_entry++ < 0)
             return 0;
     }
 }
