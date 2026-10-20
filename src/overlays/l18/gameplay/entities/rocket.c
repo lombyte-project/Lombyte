@@ -3089,13 +3089,13 @@ void FUN_L18_002eaea0(void *moby) {
     normalize_vector_xyz(&s[6], &s[6], 1.0f);
     normalize_vector_xyz(&s[7], D_0013F5E0, 1.0f);
     for (k = 0; k < 4; k++) {
-        float t;
+        float side_arc_scale;
         if (k < 2) {
             qcopy(&s[8], (char *)moby + 0x10);
-            t = 0.4f;
+            side_arc_scale = 0.4f;
         } else {
             qcopy(&s[8], data + 0x10);
-            t = 0.5f;
+            side_arc_scale = 0.5f;
         }
         if (fast_dec_timer_s16(D_L18_001620B8 + k)) {
             int j;
@@ -3103,16 +3103,16 @@ void FUN_L18_002eaea0(void *moby) {
             D_L18_001620C0[k] = 0;
             scale = FUN_L00_00257c48(0.52359879f, 1.04719758f);
             f20 = random_float_between_c(-1.04719758f, 0.17453292f);
-            scale_vector_xyz_c(&s[5], &s[0], t);
+            scale_vector_xyz_c(&s[5], &s[0], side_arc_scale);
             build_look_at_matrix(&s[5], &s[5], &s[6], f20);
             build_look_at_matrix(&s[5], &s[5], &s[7], scale);
             qcopy(&D_L18_001DA160[k].p[0], &s[8]);
             add_vector_xyz(&D_L18_001DA160[k].p[1], &s[8], &s[5]);
-            t = 1.0f;
+            side_arc_scale = 1.0f;
             for (j = 2; j < 5; j++) {
                 subtract_vector_xyz(&s[9], &D_L18_001DA150[k].p[j - 1], D_L18_001677C0_c);
-                f20 = random_float_between_c(0.17453292f, 0.959931076f) * t;
-                t = -t;
+                f20 = random_float_between_c(0.17453292f, 0.959931076f) * side_arc_scale;
+                side_arc_scale = -side_arc_scale;
                 build_look_at_matrix(&s[5], &s[5], &s[9], f20);
                 add_vector_xyz((D_L18_001DA160[k].p + j), &D_L18_001DA150[k].p[j - 1], &s[5]);
             }
