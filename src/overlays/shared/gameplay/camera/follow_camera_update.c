@@ -519,13 +519,13 @@ void FUN_L00_002e9f38(u8 *camera_object) {
     k = D_L00_00161DC0 + (D_L00_00161DC4 - D_L00_00161DC0) * r;
     st->b = FUN_001ebd78(st->b, rotation_input_target, D_L00_00161DC8, D_L00_00161DCC, D_L00_00161DD0, &st->vb);
     if (st->b != 0.0f) {
-        float a, n, z;
+        float a, prospective_pitch_angle, z;
         fast_vec_cross(&side, camera_object, &up);
         a = k * st->b;
-        n = FUN_001f99c0(FUN_001fa580_c(st->ang, a));
-        if (1.1170107f < n && FUN_001f99c0(st->ang) < n)
-            a += (0.0f - a) * (FUN_001fa5c8_c(n, 1.1170107f) / 0.3490659f);
-        if (n >= 1.1152654f && st->ang > 0.0f)
+        prospective_pitch_angle = FUN_001f99c0(FUN_001fa580_c(st->ang, a));
+        if (1.1170107f < prospective_pitch_angle && FUN_001f99c0(st->ang) < prospective_pitch_angle)
+            a += (0.0f - a) * (FUN_001fa5c8_c(prospective_pitch_angle, 1.1170107f) / 0.3490659f);
+        if (prospective_pitch_angle >= 1.1152654f && st->ang > 0.0f)
             st->z = FUN_001ebd78(st->z, 0.5f, 0.005f, 0.2f, 0.0f, &st->vz);
         else
             st->z = FUN_001ebd78(st->z, 0.0f, 0.005f, 0.2f, 0.0f, &st->vz);
@@ -538,10 +538,10 @@ void FUN_L00_002e9f38(u8 *camera_object) {
         FUN_001f9a10_c(camera_object + 0x30, camera_object + 0x30, &horizontal_view_offset);
         if (coll_sphere(camera_object + 0x30, 0x12, ((u8 *)hero.moby), 0.3f))
             st->z = FUN_001ebd78(st->z, z, 0.005f, 0.2f, z, &st->vz);
-        n = FUN_001fa580_c(st->ang, a);
-        if (FUN_001f99c0(n) > 1.4660766f) {
+        prospective_pitch_angle = FUN_001fa580_c(st->ang, a);
+        if (FUN_001f99c0(prospective_pitch_angle) > 1.4660766f) {
             float signed_pitch_limit = 1.4660766f;
-            if (!(z < n))
+            if (!(z < prospective_pitch_angle))
                 signed_pitch_limit = -1.4660766f;
             a = FUN_001fa5c8_c(signed_pitch_limit, st->ang);
         }
