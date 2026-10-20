@@ -358,10 +358,10 @@ int hero_slot_item_id(int i) {
         HERO_ITEM_SLOT_STATE_READY = 2
     };
     /* hero shifted by i slots, so items[0] is slot i */
-    struct Hero *p = (struct Hero *)(((char *)&hero) + i * sizeof(struct HeroItemSlot));
-    switch (p->items[0].state) {
+    struct Hero *slot_owner = (struct Hero *)(((char *)&hero) + i * sizeof(struct HeroItemSlot));
+    switch (slot_owner->items[0].state) {
     case HERO_ITEM_SLOT_STATE_READY:
-        return p->items[0].item_id;
+        return slot_owner->items[0].item_id;
     }
     return -1;
 }
