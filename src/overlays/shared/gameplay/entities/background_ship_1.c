@@ -49,7 +49,7 @@ void FUN_L02_002ec3f0(char *moby) {
     char *data;
     char *joint_position_out;
     int v;
-    int r, g, b, c;
+    int r, g, b, packed_color;
     int *cached_global_value_ptr;
 
     if (*(unsigned char *)(moby + 0x21) == 0xFF) {
@@ -65,10 +65,10 @@ void FUN_L02_002ec3f0(char *moby) {
     r = *(unsigned char *)(moby + 0x92);
     g = *(unsigned char *)(moby + 0x91);
     b = *(unsigned char *)(moby + 0x90);
-    c = (r << 16) | 0x30000000;
-    c |= g << 8;
-    c |= b;
-    *(int *)(data + 0xB0) = c;
+    packed_color = (r << 16) | 0x30000000;
+    packed_color |= g << 8;
+    packed_color |= b;
+    *(int *)(data + 0xB0) = packed_color;
     if (v != 0) {
         cached_global_value_ptr = *(int **)(data + 0xB4);
         if (v != *cached_global_value_ptr) {
