@@ -71,10 +71,10 @@ void FUN_L11_0031e6a8(int pair_index) {
 extern Pair D_L11_00162618[] __attribute__((section(".sdata")));
 extern int D_L11_00207888[];
 extern int D_L11_00207860[];
-void FUN_L11_0031e780(int a) {
+void FUN_L11_0031e780(int pair_index) {
     int i;
     for (i = 0; i < 0x9; i++) {
-        FUN_L08_00258090(D_L11_00217770, D_L11_00207888[i], D_L11_00200728[i], &D_L11_00162618[a]);
+        FUN_L08_00258090(D_L11_00217770, D_L11_00207888[i], D_L11_00200728[i], &D_L11_00162618[pair_index]);
         FUN_L00_001fde98(D_L11_00200728[i], D_L11_00207860[i], D_L11_002078D8[i], D_L11_00217770,
                          1);
     }
