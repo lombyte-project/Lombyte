@@ -44,10 +44,10 @@ void FUN_L17_002cbc10(char *turret_moby) {
         hit_animation_state = turret_vars + 0x60;
         hit_reaction(turret_moby, r, turret_vars + 0x20, 0, &st, &fv, 0, 4);
         if (st != 1 && *(unsigned char *)(turret_moby + 0x20) != 4) {
-            float t = *(float *)(turret_vars + 0x20) - fv;
-            *(float *)(turret_vars + 0x20) = t;
+            float remaining_value = *(float *)(turret_vars + 0x20) - fv;
+            *(float *)(turret_vars + 0x20) = remaining_value;
             depletion_status = 0xB;
-            if (t <= 0.0f)
+            if (remaining_value <= 0.0f)
                 depletion_status = 1;
             if (depletion_status == 1) {
                 *(unsigned char *)(turret_moby + 0x20) = 4;
