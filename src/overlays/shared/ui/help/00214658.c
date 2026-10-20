@@ -623,15 +623,15 @@ void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 void clear_u64_value(void *) __asm__("FUN_001f99f8");
 void FUN_L00_00216710(float x) {
     char *g = (&hero.motion.unk150);
-    float d = gravity_length_xy(g);
-    if (0.001f < d) {
+    float planar_length = gravity_length_xy(g);
+    if (0.001f < planar_length) {
         float z = 0.0f;
-        float s;
+        float reduced_planar_length;
         gravity_set_z(g, g, z);
-        s = d - x;
-        if (s < z)
-            s = z;
-        FUN_L00_00233ba0(g, g, s);
+        reduced_planar_length = planar_length - x;
+        if (reduced_planar_length < z)
+            reduced_planar_length = z;
+        FUN_L00_00233ba0(g, g, reduced_planar_length);
         add_vector_xyz(g - 0x70, g - 0x70, g);
     } else
         clear_u64_value(g);
