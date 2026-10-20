@@ -1068,38 +1068,38 @@ extern int D_L15_0015FFD8_m __asm__("D_L15_0015FFD8");
 extern int D_L15_001ABE40[];
 extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 
-int FUN_L15_00299dd8(char *m) {
-    char *d = *(char **)(m + 0x78);
+int FUN_L15_00299dd8(char *moby) {
+    char *moby_data = *(char **)(moby + 0x78);
     int best = 0;
     float bd;
-    float a[4];
+    float line_start[4];
     float b[4];
-    short *p;
-    int idx = *(int *)(d + 0x17C);
+    short *group_moby_entry;
+    int idx = *(int *)(moby_data + 0x17C);
     if (idx == -1)
         return 0;
-    p = (short *)D_L15_001ABE40[idx];
-    if (p == 0)
+    group_moby_entry = (short *)D_L15_001ABE40[idx];
+    if (group_moby_entry == 0)
         return 0;
-    qcopy(a, m + 0x10);
-    a[2] += 1.0f;
+    qcopy(line_start, moby + 0x10);
+    line_start[2] += 1.0f;
     bd = 0.0f;
     do {
-        int id = *(unsigned short *)p & 0x7FFF;
-        char *o = (char *)((id << 8) + D_L15_0015FFD8_m);
-        if (*(short *)(o + 0xA6) == 0x27B && *(unsigned char *)(o + 0x20) >= 6 &&
-            *(unsigned char *)(o + 0x20) < 0x10) {
+        int id = *(unsigned short *)group_moby_entry & 0x7FFF;
+        char *candidate_moby = (char *)((id << 8) + D_L15_0015FFD8_m);
+        if (*(short *)(candidate_moby + 0xA6) == 0x27B && *(unsigned char *)(candidate_moby + 0x20) >= 6 &&
+            *(unsigned char *)(candidate_moby + 0x20) < 0x10) {
             float f = fast_difference_between_rotations(
-                *(float *)(m + 0x48), fast_arc_tan(*(float *)(o + 0x10) - *(float *)(m + 0x10),
-                                                   *(float *)(o + 0x14) - *(float *)(m + 0x14)));
+                *(float *)(moby + 0x48), fast_arc_tan(*(float *)(candidate_moby + 0x10) - *(float *)(moby + 0x10),
+                                                   *(float *)(candidate_moby + 0x14) - *(float *)(moby + 0x14)));
             unsigned char st = ((char *)((id << 8) + D_L15_0015FFD8_m))[0x20];
             if (st == 7 || st == 0xF)
-                *(short *)(d + 0x194) = 1;
-            if (*(short *)(d + 0x194) != 0 || f < 1.2217305f) {
+                *(short *)(moby_data + 0x194) = 1;
+            if (*(short *)(moby_data + 0x194) != 0 || f < 1.2217305f) {
                 qcopy(b, (char *)((id << 8) + D_L15_0015FFD8_m) + 0x10);
-                a[2] += 1.0f;
-                if (collision_line(a, b, 2, 0, 0) == 0) {
-                    float dist = FUN_001f9b48(a, b);
+                line_start[2] += 1.0f;
+                if (collision_line(line_start, b, 2, 0, 0) == 0) {
+                    float dist = FUN_001f9b48(line_start, b);
                     if (best == 0 || dist < bd) {
                         bd = dist;
                         best = D_L15_0015FFD8_m + (id << 8);
@@ -1107,8 +1107,8 @@ int FUN_L15_00299dd8(char *m) {
                 }
             }
         }
-    } while (*p++ >= 0);
-    if (*(short *)(d + 0x194) == 0) {
+    } while (*group_moby_entry++ >= 0);
+    if (*(short *)(moby_data + 0x194) == 0) {
         if (bd > 8.0f)
             best = 0;
     }
