@@ -335,13 +335,13 @@ void FUN_L16_002d6740(struct Moby *moby) {
         MOBY_STATE_REMOVE_WITH_EFFECTS = 2
     };
     int flag = 0;
-    char *p = find_moby_hit(moby, 0x10000, 0);
+    char *hit_record = find_moby_hit(moby, 0x10000, 0);
     switch (moby->state) {
     case MOBY_STATE_INITIALIZE:
         moby->state = 1;
         break;
     case MOBY_STATE_CHECK_HIT_FOR_REMOVAL:
-        if (p != 0 && 0.0f < *(float *)(p + 0x2C))
+        if (hit_record != 0 && 0.0f < *(float *)(hit_record + 0x2C))
             flag = 1;
         if (flag)
             moby->state = 2;
