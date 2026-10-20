@@ -236,20 +236,20 @@ extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa6
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 
 void camera_object_update(char *o) __asm__("FUN_L00_002a4e48");
-void camera_object_update(char *o) {
+void camera_object_update(char *camera_object) {
     OvlQuad d[1];
     OvlQuad e[1];
     C_2a4e48 *C = &D_166C80_2a4e48;
-    char *s;
+    char *object_position;
     char *pos;
     G_2a4e48 *P;
     float f;
 
     if (C->c != 0) {
-        s = o + 0x10;
-        qcopy(s, C->c + 0x30);
+        object_position = camera_object + 0x10;
+        qcopy(object_position, C->c + 0x30);
         pos = (char *)&hero.motion.pos;
-        subtract_vector_xyz(d, s, pos);
+        subtract_vector_xyz(d, object_position, pos);
         P = (G_2a4e48 *)(pos - 0x80);
         f = dot_vectors_xyz(d, P->obj + 0xE0);
         f9a68_2a4e48(e, P->obj + 0xE0, f);
@@ -258,24 +258,24 @@ void camera_object_update(char *o) {
             f = 0.1f;
             if (vector_length_xyz(d) < f || fast_difference_between_rotations(P->f98, C->f158) < 2.3561945f ||
                 P->f164 < D_0015ED6C_2a4e48 * f) {
-                *(float *)(o + 0x18) = 15.0f;
-                *(float *)(o + 0x14) = 15.0f;
-                *(float *)(o + 0x10) = 15.0f;
+                *(float *)(camera_object + 0x18) = 15.0f;
+                *(float *)(camera_object + 0x14) = 15.0f;
+                *(float *)(camera_object + 0x10) = 15.0f;
             } else {
-                f = dot_vectors_xyz(s, P->obj + 0xE0);
+                f = dot_vectors_xyz(object_position, P->obj + 0xE0);
                 f9a68_2a4e48(e, P->obj + 0xE0, f);
-                subtract_vector_xyz(d, s, e);
+                subtract_vector_xyz(d, object_position, e);
                 f = dot_vectors_xyz(pos, P->obj + 0xE0);
                 if (P->w208C != 0x11) {
                     f9a68_2a4e48(e, P->obj + 0xE0, f);
-                    add_vector_xyz(s, d, e);
+                    add_vector_xyz(object_position, d, e);
                 }
             }
         }
     } else {
-        *(float *)(o + 0x18) = 5.0f;
-        *(float *)(o + 0x14) = 5.0f;
-        *(float *)(o + 0x10) = 5.0f;
+        *(float *)(camera_object + 0x18) = 5.0f;
+        *(float *)(camera_object + 0x14) = 5.0f;
+        *(float *)(camera_object + 0x10) = 5.0f;
     }
 }
 #ifndef NON_MATCHING
