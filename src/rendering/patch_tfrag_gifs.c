@@ -18,23 +18,23 @@ void patch_tfrag_gifs(void) __asm__("FUN_00233308");
 
 void patch_tfrag_gifs(void) {
     struct TfragGroup *g;
-    struct Tfrag *t;
+    struct Tfrag *current_tfrag;
     struct TexRemap *r;
     s32 n;
     s32 count;
 
     for (g = D_001E0F00; g->tfrags != 0; g++) {
-        t = g->tfrags;
+        current_tfrag = g->tfrags;
         count = g->count;
         for (n = 0; n < count; n++) {
-            r = &D_001E0C00[t->tex];
+            r = &D_001E0C00[current_tfrag->tex];
             if (r->lo != 0) {
-                t->tex0 = (t->tex0 & 0xFFFFC000) | r->lo;
+                current_tfrag->tex0 = (current_tfrag->tex0 & 0xFFFFC000) | r->lo;
             }
             if (r->hi != 0) {
-                t->tex1 = (t->tex1 & 0xFFFFC000) | r->hi;
+                current_tfrag->tex1 = (current_tfrag->tex1 & 0xFFFFC000) | r->hi;
             }
-            t++;
+            current_tfrag++;
         }
     }
 }
