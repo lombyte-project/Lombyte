@@ -1200,7 +1200,7 @@ void FUN_L00_002da360(u8 *cannon_moby, void *cannon_data) {
     f32 suction_yaw, b;
     M_da360 *candidate_moby;
     R *r;
-    f32 distance_xy, thr, t;
+    f32 distance_xy, thr, target_pitch_or_angle_difference;
     s32 stored_moby_count;
 
     FUN_L00_002da250_c(cannon_moby, &suction_yaw, &b, buf);
@@ -1220,12 +1220,12 @@ void FUN_L00_002da360(u8 *cannon_moby, void *cannon_data) {
                         r->h6a = -1;
                         qcopy(&v, &candidate_moby->pos);
                         v.z += 0.4f;
-                        t = fast_difference_between_rotations(
+                        target_pitch_or_angle_difference = fast_difference_between_rotations(
                             suction_yaw, fast_arc_tan(v.x - *(f32 *)(cannon_moby + 0x10), v.y - *(f32 *)(cannon_moby + 0x14)));
-                        if (t * t < thr) {
-                            t = fast_arc_tan(distance_xy, v.z - *(f32 *)(cannon_moby + 0x18));
-                            t = fast_difference_between_rotations(b, t);
-                            if (t * t < thr) {
+                        if (target_pitch_or_angle_difference * target_pitch_or_angle_difference < thr) {
+                            target_pitch_or_angle_difference = fast_arc_tan(distance_xy, v.z - *(f32 *)(cannon_moby + 0x18));
+                            target_pitch_or_angle_difference = fast_difference_between_rotations(b, target_pitch_or_angle_difference);
+                            if (target_pitch_or_angle_difference * target_pitch_or_angle_difference < thr) {
                                 if (!FUN_001efa68_c(buf, &v, 2, candidate_moby, 0))
                                     goto hit;
                                 if (r->h68 > 0)
