@@ -2735,21 +2735,21 @@ extern void FUN_L00_00263618(void *, int, float, float);
 
 void FUN_L06_002f37d0(char *owner) {
     int list;
-    float f = 0.057f;
+    float effect_scale = 0.057f;
     int i;
-    char *d;
-    char *p;
+    char *moby_vars;
+    char *effect_position;
     if (D_0015EEB0[3] != 0)
-        f = 0.114f;
+        effect_scale = 0.114f;
     FUN_L00_002591d0(&list, ((unsigned char *)owner)[0x21], 0, 0);
     while (list != 0) {
         if (*(unsigned char *)(list + 0x31) != 0) {
-            d = *(char **)(list + 0x78);
+            moby_vars = *(char **)(list + 0x78);
             if (*(short *)(list + 0xA6) == *(short *)(owner + 0xA6)) {
-                p = d + 0x140;
+                effect_position = moby_vars + 0x140;
                 for (i = 2; i >= 0; i--) {
-                    FUN_L00_00263618(p, *(int *)(d + 0x290), f, 0.08f);
-                    p += 0x10;
+                    FUN_L00_00263618(effect_position, *(int *)(moby_vars + 0x290), effect_scale, 0.08f);
+                    effect_position += 0x10;
                 }
             }
         }
