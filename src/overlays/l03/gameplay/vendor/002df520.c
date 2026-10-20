@@ -327,7 +327,7 @@ extern s32 D_L03_00167074 NOT_SDA;
 /* vendor camera init: aims the camera data at the hero, resets its blend state and places it (FUN_L03_002eb7e0) */
 void FUN_L03_002eb978(void *arg) {
     char *camera = arg;
-    char *e = *(char **)((char *)D_L03_0015EF50 + *(s16 *)(camera + 0x84) * 32 + 0x1C);
+    char *camera_config = *(char **)((char *)D_L03_0015EF50 + *(s16 *)(camera + 0x84) * 32 + 0x1C);
     char *target;
     char *pos;
     char *camera_data;
@@ -347,10 +347,10 @@ void FUN_L03_002eb978(void *arg) {
     *(s32 *)(target + 0xC) = 0;
     camera_data = *(char **)(camera + 0x70);
     p = (float *)(camera_data + 0xD0);
-    f = *(float *)(e + 0x20);
+    f = *(float *)(camera_config + 0x20);
     p[2] = f;
     *(float *)(camera_data + 0xD0) = f;
-    p[4] = *(float *)(e + 0x24);
+    p[4] = *(float *)(camera_config + 0x24);
     pos = *(char **)(camera + 0x70);
     *(s32 *)(pos + 0x28) = 0;
     *(float *)(pos + 0x20) = 0.01f;
