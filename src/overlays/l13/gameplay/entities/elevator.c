@@ -671,33 +671,33 @@ extern void FUN_L00_0025d1b8(struct Moby *moby);
 
 /* spawns a class 0x24 child that copies its parent's position and scale */
 struct Moby *FUN_L13_002b4958(struct Moby *parent) {
-    struct Moby *m;
+    struct Moby *child_moby;
     Vars *v;
 
-    m = create_moby(0x24);
-    if (m != 0) {
-        v = (Vars *)m->pvars;
+    child_moby = create_moby(0x24);
+    if (child_moby != 0) {
+        v = (Vars *)child_moby->pvars;
         v->parent = parent;
         v->unk0 = &v->unk20;
         v->unkC = v->unk60;
-        m->update_dist = parent->update_dist;
-        m->draw_dist = v->parent->draw_dist;
-        m->visible = 1;
-        m->flags |= 0x20;
-        m->state = 0;
-        m->command = 0;
-        qcopy(&m->pos, &v->parent->pos);
-        m->scale = m->pclass->scale * parent->scale / parent->pclass->scale;
+        child_moby->update_dist = parent->update_dist;
+        child_moby->draw_dist = v->parent->draw_dist;
+        child_moby->visible = 1;
+        child_moby->flags |= 0x20;
+        child_moby->state = 0;
+        child_moby->command = 0;
+        qcopy(&child_moby->pos, &v->parent->pos);
+        child_moby->scale = child_moby->pclass->scale * parent->scale / parent->pclass->scale;
         v->unk20 = 1.0f;
         v->unk24 = 1;
         v->unk29 = 1;
         v->unk2A = 3;
         v->unk28 = 0;
         v->unk30 = 0.9f;
-        FUN_L00_00250df8(m);
-        FUN_L00_0025d1b8(m);
+        FUN_L00_00250df8(child_moby);
+        FUN_L00_0025d1b8(child_moby);
     }
-    return m;
+    return child_moby;
 }
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002B2020.c: func_L13_002B5C08), where it is exact; names translated to the US level program. */
 
