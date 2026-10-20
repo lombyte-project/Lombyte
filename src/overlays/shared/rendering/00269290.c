@@ -1647,54 +1647,54 @@ extern int FUN_001fa6d0_26d1b0(float) __asm__("FUN_001fa6d0");
 extern float FUN_001fa6c0_26d1b0(int) __asm__("FUN_001fa6c0");
 extern void FUN_L00_00267a08_26d1b0(void *) __asm__("FUN_L00_00267a08");
 
-void FUN_L00_0026d1b0(unsigned char *p) {
-    unsigned char *e = p + 0x20;
+void FUN_L00_0026d1b0(unsigned char *particle) {
+    unsigned char *particle_data = particle + 0x20;
     float r;
-    int a;
+    int phase_duration;
     int x;
 
-    p[8] += e[8];
-    FUN_001f9a10_26d1b0(p + 0x10, p + 0x10, p + 0x30);
-    *(float *)(p + 0xC) *= (*(float *)(e + 0xC) - 1.0f) * D_0015ED60_26d1b0 + 1.0f;
-    if (*(int *)(e + 4) == 0) {
-        if (FUN_001f9770_26d1b0(p + 0xA)) {
-            *(int *)(e + 4) = 1;
-            *(short *)(p + 0xA) = FUN_001f96f8_26d1b0(0x14);
-            *(int *)(p + 4) = *(int *)e | 0x7F000000;
+    particle[8] += particle_data[8];
+    FUN_001f9a10_26d1b0(particle + 0x10, particle + 0x10, particle + 0x30);
+    *(float *)(particle + 0xC) *= (*(float *)(particle_data + 0xC) - 1.0f) * D_0015ED60_26d1b0 + 1.0f;
+    if (*(int *)(particle_data + 4) == 0) {
+        if (FUN_001f9770_26d1b0(particle + 0xA)) {
+            *(int *)(particle_data + 4) = 1;
+            *(short *)(particle + 0xA) = FUN_001f96f8_26d1b0(0x14);
+            *(int *)(particle + 4) = *(int *)particle_data | 0x7F000000;
         } else {
-            a = FUN_001f96f8_26d1b0(10);
-            x = FUN_001fa6d0_26d1b0((float)(a - *(short *)(p + 0xA)) *
+            phase_duration = FUN_001f96f8_26d1b0(10);
+            x = FUN_001fa6d0_26d1b0((float)(phase_duration - *(short *)(particle + 0xA)) *
                                     (96.0f / (float)FUN_001f96f8_26d1b0(10)));
-            *(int *)(p + 4) = ((x + 0x20) << 24) | *(int *)e;
+            *(int *)(particle + 4) = ((x + 0x20) << 24) | *(int *)particle_data;
         }
-    } else if (*(int *)(e + 4) == 2) {
-        if (FUN_001f9770_26d1b0(p + 0xA))
+    } else if (*(int *)(particle_data + 4) == 2) {
+        if (FUN_001f9770_26d1b0(particle + 0xA))
             goto kill;
-        r = FUN_001fa6c0_26d1b0(e[0xB]);
-        x = FUN_001fa6d0_26d1b0((float)e[0xA] * ((float)*(short *)(p + 0xA) / r) + 0.0f);
-        *(int *)(p + 4) = (x << 24) | (*(int *)e & 0xFFFFFF);
-    } else if (*(int *)(e + 4) == 3) {
-        FUN_001f9770_26d1b0(p + 0xA);
-        r = FUN_001fa6c0_26d1b0(e[0xB] - *(short *)(p + 0xA));
+        r = FUN_001fa6c0_26d1b0(particle_data[0xB]);
+        x = FUN_001fa6d0_26d1b0((float)particle_data[0xA] * ((float)*(short *)(particle + 0xA) / r) + 0.0f);
+        *(int *)(particle + 4) = (x << 24) | (*(int *)particle_data & 0xFFFFFF);
+    } else if (*(int *)(particle_data + 4) == 3) {
+        FUN_001f9770_26d1b0(particle + 0xA);
+        r = FUN_001fa6c0_26d1b0(particle_data[0xB] - *(short *)(particle + 0xA));
         r = r / FUN_001fa6c0_26d1b0(FUN_001f96f8_26d1b0(0x1E));
         if (1.0f < r)
             r = 1.0f;
-        x = FUN_001fa6d0_26d1b0((float)e[0xA] * r + 0.0f);
-        *(int *)(p + 4) = (x << 24) | (*(int *)e & 0xFFFFFF);
-        if (e[0xB] - *(short *)(p + 0xA) >= FUN_001f96f8_26d1b0(0x1E)) {
-            a = FUN_001f96f8_26d1b0(0x1E);
-            *(int *)(e + 4) = 2;
-            e[0xB] -= a;
+        x = FUN_001fa6d0_26d1b0((float)particle_data[0xA] * r + 0.0f);
+        *(int *)(particle + 4) = (x << 24) | (*(int *)particle_data & 0xFFFFFF);
+        if (particle_data[0xB] - *(short *)(particle + 0xA) >= FUN_001f96f8_26d1b0(0x1E)) {
+            phase_duration = FUN_001f96f8_26d1b0(0x1E);
+            *(int *)(particle_data + 4) = 2;
+            particle_data[0xB] -= phase_duration;
         }
     } else {
-        if (FUN_001f9770_26d1b0(p + 0xA)) {
+        if (FUN_001f9770_26d1b0(particle + 0xA)) {
         kill:
-            FUN_L00_00267a08_26d1b0(p);
+            FUN_L00_00267a08_26d1b0(particle);
             return;
         }
-        x = FUN_001fa6d0_26d1b0((float)*(short *)(p + 0xA) *
+        x = FUN_001fa6d0_26d1b0((float)*(short *)(particle + 0xA) *
                                 (127.0f / (float)FUN_001f96f8_26d1b0(0x14)));
-        *(int *)(p + 4) = (x << 24) | *(int *)e;
+        *(int *)(particle + 4) = (x << 24) | *(int *)particle_data;
     }
 }
 typedef struct {
