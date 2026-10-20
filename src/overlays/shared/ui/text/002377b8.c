@@ -1312,15 +1312,15 @@ void FUN_L00_0023b6c0(int, int, int, int, int, int);
 void draw_hud_sprite(int, int, int, int, int, int) __asm__("FUN_001ffc30");
 int FUN_L00_0023a640(char *rec) {
     int x, y;
-    int n;
+    int sprite_width;
     x = *(int *)(rec + 0x50);
     y = *(int *)(rec + 0x54);
     *(int *)(rec + 0x58) = 0x100;
     *(int *)(rec + 0x5C) = 0x40;
     hud_screen_position(rec, &x, &y);
     FUN_L00_00235ad8(rec, &x, &y, *(int *)(rec + 0x6C), 0);
-    n = *(int *)(rec + 0x74) * 0xDD / *(int *)(rec + 0x8) + 0x1B;
-    FUN_L00_0023b6c0(get_icon_frame(0x7558, 1), x, y, n, 0x40, 0x80);
+    sprite_width = *(int *)(rec + 0x74) * 0xDD / *(int *)(rec + 0x8) + 0x1B;
+    FUN_L00_0023b6c0(get_icon_frame(0x7558, 1), x, y, sprite_width, 0x40, 0x80);
     draw_hud_sprite(get_icon_frame(0x7558, 0), x, y, 0x100, 0x40, 0x80);
     draw_hud_sprite(get_icon_frame(0x7558, 2), x, y, 0x20, 0x20,
                     D_00140986 ? 0x80 : 0);
