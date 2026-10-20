@@ -2526,7 +2526,7 @@ typedef struct {
 extern int D_L00_00173E40[] __attribute__((section(".data")));
 int FUN_001efa68_002bec80(Vec4_2bec80 *, Vec4_2bec80 *, int, void *, int) __asm__("FUN_001efa68");
 unsigned int FUN_001f0b58_002bec80(void) __asm__("FUN_001f0b58");
-float FUN_L00_002bec80(Vec4_2bec80 *probe_position, void *q) {
+float FUN_L00_002bec80(Vec4_2bec80 *probe_position, void *probing_moby) {
     enum {
         COLLISION_MATERIAL_WATER = 0
     };
@@ -2541,7 +2541,7 @@ float FUN_L00_002bec80(Vec4_2bec80 *probe_position, void *q) {
         f = unclamped_lower_z;
     lower_probe_point.f[2] = f;
     b.f[2] = f + 6.0f;
-    if (FUN_001efa68_002bec80(&b, &lower_probe_point, 6, q, 0)) {
+    if (FUN_001efa68_002bec80(&b, &lower_probe_point, 6, probing_moby, 0)) {
         char *hit_moby = (*(S173E40_2bec80 *)D_L00_00173E40).o18;
         if (hit_moby && *(char **)(hit_moby + 0x24) && *(short *)(*(char **)(hit_moby + 0x24) + 0x46) == 5) {
             return (*(S173E40_2bec80 *)D_L00_00173E40).f28;
