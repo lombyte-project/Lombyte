@@ -1431,7 +1431,7 @@ extern f32 vendor_spring(f32 *, f32 *, f32, f32, f32, f32) __asm__("FUN_L00_0025
  * program. */
 void FUN_L14_002aea08(u8 *moby) {
     u8 *data = *(u8 **)(moby + 0x78);
-    f32 t;
+    f32 heading_offset;
     FUN_L00_00262b00(D_L14_001613A8, D_L14_001613AC, moby, (f32 *)(data + 0x1A0),
                      (f32 *)(data + 0x1A4));
     FUN_L00_00262b80(moby, data + 0x1A8, data + 0x1AC, D_L14_001613B0, D_L14_001613B4,
@@ -1439,10 +1439,10 @@ void FUN_L14_002aea08(u8 *moby) {
     if (*(u8 *)(moby + 0x20) == 1) {
         if (fast_dec_timer_s16((s16 *)(data + 0x1B4))) {
             *(s16 *)(data + 0x1B4) = scale_game_frames(D_L14_001613BC);
-            t = D_L14_001613C0;
+            heading_offset = D_L14_001613C0;
             if (random_integer_below(2))
-                t = -t;
-            *(f32 *)(data + 0x1B0) = fast_add_rotations(*(f32 *)(moby + 0x48), t);
+                heading_offset = -heading_offset;
+            *(f32 *)(data + 0x1B0) = fast_add_rotations(*(f32 *)(moby + 0x48), heading_offset);
         }
         vendor_spring((f32 *)(moby + 0x48), (f32 *)(data + 0x1B8), *(f32 *)(data + 0x1B0),
                          D_L14_001613C4, D_L14_001613C8, D_L14_001613CC);
