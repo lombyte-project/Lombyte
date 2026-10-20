@@ -340,7 +340,7 @@ void sand_shark_update(struct Moby *moby) {
     Varsd3e50 *vars;
     OvlVec4 v0;
     OvlVec4 v1;
-    OvlVec4 v2;
+    OvlVec4 target_home_delta;
     OvlVec4 navigation_point;
     OvlVec4 v4;
     float f;
@@ -501,7 +501,7 @@ void sand_shark_update(struct Moby *moby) {
         v0.f[1] = 2.0f * fast_sin_e50(moby->rot.z);
         v0.f[2] = 0.0f;
         fast_vec_add(&v0, &v0, &moby->pos);
-        FUN_L00_00258b50(moby, &vars->walk_mode, &v0, &v2, 1.0f);
+        FUN_L00_00258b50(moby, &vars->walk_mode, &v0, &target_home_delta, 1.0f);
         FUN_L02_002d63c0_e50(moby);
         if (FUN_L00_00261b48(vars->path, &moby->pos, &v1, &navigation_point) && distance_e50(&moby->pos, &navigation_point) < vars->unk294) {
             hit14 = 1;
@@ -631,7 +631,7 @@ void sand_shark_update(struct Moby *moby) {
             if (vars->unk278 >= 0 && !inside_e50(&vars->target, vars->unk278)) {
                 moby->state = 7;
             } else {
-            fast_vec_sub(&v2, &vars->target, &vars->home);
+            fast_vec_sub(&target_home_delta, &vars->target, &vars->home);
             if (FUN_001f9b80_e50(&moby->pos, &navigation_point) < 12.0f && moby->state == 0x16) {
                 moby->state = 0x13;
                 sound_e50(4, 0, moby);
@@ -722,13 +722,13 @@ void sand_shark_update(struct Moby *moby) {
         }
         if (vars->unk298 == 0) {
             if (vars->unk214 != 2) {
-                fast_vec_sub(&v2, &vars->target, &vars->home);
+                fast_vec_sub(&target_home_delta, &vars->target, &vars->home);
                 if (vars->unk278 >= 0) {
                     if (inside_e50(&vars->target, vars->unk278)) {
                         moby->state = 5;
                         vars->walk_step = vars->unk254 * D_0015ED6C;
                     }
-                } else if (FUN_001f9af0_e50(&v2) < vars->unk24C) {
+                } else if (FUN_001f9af0_e50(&target_home_delta) < vars->unk24C) {
                     if (moby->state == 7) {
                         moby->state = 5;
                     } else {
