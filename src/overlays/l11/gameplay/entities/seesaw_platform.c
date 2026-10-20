@@ -980,39 +980,39 @@ extern void FUN_0022da68_t(int, int, unsigned char *) __asm__("FUN_0022da68");
 extern float FUN_001fa580_t(float, float) __asm__("FUN_001fa580");
 extern float approach_angle(float *p, float a, float *v, float b, float c, float d) __asm__("FUN_L00_0025be00");
 
-void FUN_L11_0030f2a8(struct Moby *m) {
+void FUN_L11_0030f2a8(struct Moby *turning_moby) {
     enum {
         LINKED_TURN_STATE_INITIALIZE = 0,
         LINKED_TURN_STATE_WAIT_FOR_LINK = 1,
         LINKED_TURN_STATE_ROTATE_TO_TARGET = 2
     };
-    int entry_state = m->state;
-    float *private_data = (float *)m->pvars;
+    int entry_state = turning_moby->state;
+    float *private_data = (float *)turning_moby->pvars;
     float target_angle;
     float r;
     switch (entry_state) {
     case LINKED_TURN_STATE_INITIALIZE:
-        m->update_dist = 0xFF;
-        m->state = 1;
-        private_data[2] = m->rot.z;
+        turning_moby->update_dist = 0xFF;
+        turning_moby->state = 1;
+        private_data[2] = turning_moby->rot.z;
         break;
     case LINKED_TURN_STATE_WAIT_FOR_LINK:
         if (FUN_L11_0030f270(D_L11_0015FFD8_t + (*(int *)private_data << 8))) {
             if (level_frame >= 11) {
                 D_0013D3E3_t[0] = entry_state;
-                m->state = 2;
-                FUN_0022da68_t(0, 0, m);
+                turning_moby->state = 2;
+                FUN_0022da68_t(0, 0, turning_moby);
             } else {
-                m->state = 3;
-                m->rot.z = FUN_001fa580_t(private_data[2], 1.0471976f);
+                turning_moby->state = 3;
+                turning_moby->rot.z = FUN_001fa580_t(private_data[2], 1.0471976f);
             }
         }
         break;
     case LINKED_TURN_STATE_ROTATE_TO_TARGET:
         target_angle = FUN_001fa580_t(private_data[2], 1.0471976f);
         r = frame_time_sq * 0.34906584f;
-        if (approach_angle(&m->rot.z, target_angle, private_data + 1, r, r, frame_time * 0.7853982f) == 0.0f) {
-            m->state = 3;
+        if (approach_angle(&turning_moby->rot.z, target_angle, private_data + 1, r, r, frame_time * 0.7853982f) == 0.0f) {
+            turning_moby->state = 3;
         }
         break;
     }
