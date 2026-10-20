@@ -134,7 +134,7 @@ void FUN_L00_002c40a0(S_2c40a0 *self) {
     P_2c40a0 *P = &D_0013F350_2c40a0;
     s16 h = P->h1E2;
     f32 v[4];
-    f32 s, len, g;
+    f32 horizontal_separation_error, len, g;
     if (moby_vars->i68 == 0) {
         if (h == 0)
             return;
@@ -146,14 +146,14 @@ void FUN_L00_002c40a0(S_2c40a0 *self) {
     }
     FUN_001f9a28_2c40a0(v, self->v10, P->v80);
     v[2] = 0.0f;
-    s = FUN_001f9b20_2c40a0(v) - 1.4f;
-    if (s > 0.0f)
-        s = 0.0f;
+    horizontal_separation_error = FUN_001f9b20_2c40a0(v) - 1.4f;
+    if (horizontal_separation_error > 0.0f)
+        horizontal_separation_error = 0.0f;
     if (h == 0)
-        s = 0.0f;
-    FUN_L00_0025b8c0_2c40a0(&s, 0.0f, &moby_vars->f60, frame_scale_sq * 0.02f, frame_scale_sq * 0.3f,
+        horizontal_separation_error = 0.0f;
+    FUN_L00_0025b8c0_2c40a0(&horizontal_separation_error, 0.0f, &moby_vars->f60, frame_scale_sq * 0.02f, frame_scale_sq * 0.3f,
                             D_0015ED6C_2c40a0 * 4.0f);
-    if (s == 0.0f && moby_vars->f60 == 0.0f) {
+    if (horizontal_separation_error == 0.0f && moby_vars->f60 == 0.0f) {
         if (FUN_001f99c0_2c40a0(self->f18 - FUN_00213508_2c40a0(self->v10, 0.5f, 0)) < 0.02f)
             moby_vars->i68 = 0;
     }
