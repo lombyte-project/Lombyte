@@ -2668,11 +2668,11 @@ extern void steer_5730(char *moby, float *vel, float target, float k, float d,
 extern int FUN_L00_0025d808_5730() __asm__("FUN_L00_0025d808");
 int FUN_L14_002b5730(struct Moby *moby, char *path, int segment_index_address, int segment_distance_address, float *v, float *vel, float f12,
                      float f13, float f14, float f15, float f16, float f17, float f18) {
-    float tmp[3];
-    int r = FUN_L00_0025d808_5730(path, tmp, segment_index_address, segment_distance_address, 0);
-    FUN_L00_0025b8c0_5730(&moby->pos.x, v, tmp[0], f13, f14, f15);
-    FUN_L00_0025b8c0_5730(&moby->pos.y, v + 1, tmp[1], f13, f14, f15);
-    FUN_L00_0025b8c0_5730(&moby->pos.z, v + 2, tmp[2], f13, f14, f15);
+    float path_target_position[3];
+    int r = FUN_L00_0025d808_5730(path, path_target_position, segment_index_address, segment_distance_address, 0);
+    FUN_L00_0025b8c0_5730(&moby->pos.x, v, path_target_position[0], f13, f14, f15);
+    FUN_L00_0025b8c0_5730(&moby->pos.y, v + 1, path_target_position[1], f13, f14, f15);
+    FUN_L00_0025b8c0_5730(&moby->pos.z, v + 2, path_target_position[2], f13, f14, f15);
     steer_5730(moby, vel, atan_5730(v[0], v[1]), f16, f17, f18);
     return r != 0;
 }
