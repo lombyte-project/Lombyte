@@ -9,7 +9,7 @@ extern QuatNext D_0015FFD8;
 void matrix_to_quaternion(void *arg0, void *arg1) __asm__("FUN_00214260");
 
 void matrix_to_quaternion(void *output_quaternion, void *rotation_matrix) {
-    float *q = output_quaternion;
+    float *quaternion_components = output_quaternion;
     float(*m)[4] = rotation_matrix;
     QuatNext next_axis_indices = D_0015FFD8;
     float mat[3][3];
@@ -20,11 +20,11 @@ void matrix_to_quaternion(void *output_quaternion, void *rotation_matrix) {
     trace = m[0][0] + m[1][1] + m[2][2];
     if (trace > 0.0f) {
         quaternion_scale = square_root(trace + 1.0f);
-        q[3] = quaternion_scale * 0.5f;
+        quaternion_components[3] = quaternion_scale * 0.5f;
         quaternion_scale = 0.5f / quaternion_scale;
-        q[0] = (m[2][1] - m[1][2]) * quaternion_scale;
-        q[1] = (m[0][2] - m[2][0]) * quaternion_scale;
-        q[2] = (m[1][0] - m[0][1]) * quaternion_scale;
+        quaternion_components[0] = (m[2][1] - m[1][2]) * quaternion_scale;
+        quaternion_components[1] = (m[0][2] - m[2][0]) * quaternion_scale;
+        quaternion_components[2] = (m[1][0] - m[0][1]) * quaternion_scale;
     } else {
         mat[0][0] = m[0][0];
         mat[0][1] = m[0][1];
@@ -45,13 +45,13 @@ void matrix_to_quaternion(void *output_quaternion, void *rotation_matrix) {
         j = next_axis_indices.next[i];
         k = next_axis_indices.next[j];
         quaternion_scale = square_root(mat[i][i] - (mat[j][j] + mat[k][k]) + 1.0f);
-        q[i] = quaternion_scale * 0.5f;
+        quaternion_components[i] = quaternion_scale * 0.5f;
         if (quaternion_scale != 0.0f) {
             quaternion_scale = 0.5f / quaternion_scale;
         }
-        q[3] = (mat[k][j] - mat[j][k]) * quaternion_scale;
-        q[j] = (mat[j][i] + mat[i][j]) * quaternion_scale;
-        q[k] = (mat[k][i] + mat[i][k]) * quaternion_scale;
+        quaternion_components[3] = (mat[k][j] - mat[j][k]) * quaternion_scale;
+        quaternion_components[j] = (mat[j][i] + mat[i][j]) * quaternion_scale;
+        quaternion_components[k] = (mat[k][i] + mat[i][k]) * quaternion_scale;
     }
 }
 
