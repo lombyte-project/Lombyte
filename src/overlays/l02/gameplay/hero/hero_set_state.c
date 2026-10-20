@@ -1897,6 +1897,7 @@ void FUN_L02_00230988(void) {
         HERO_STATE_DOUBLE_JUMP = 14,
         HERO_STATE_LOOK_ALT = 30,
         HERO_STATE_HELD_ITEM_ATTACK = 32,
+        HERO_STATE_ITEM_RELEASE_FALL = 45,
         HERO_STATE_VEHICLE_IDLE = 83,
         HERO_STATE_VEHICLE_RUN = 84,
         HERO_STATE_VEHICLE_FALL = 85,
@@ -2871,7 +2872,7 @@ void FUN_L02_00230988(void) {
                     hero_set_state(HERO_STATE_IDLE, 1);
                     break;
                 case HERO_STATE_FALL:
-                case 45:
+                case HERO_STATE_ITEM_RELEASE_FALL:
                     if (hero.state.step == 0) {
                         if (!(scale_game_frames(0x12) > hero.state_timer) ||
                             hero.ground_distance > 1.75f) {
