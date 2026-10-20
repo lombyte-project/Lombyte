@@ -239,9 +239,9 @@ int FUN_L01_0028b510(void *reference_point, List *point_list, float target) {
     int i;
     float bestDiff = 1e11f;
     for (i = 0; i < point_list->count; i++) {
-        float d = fast_vec_dist(point_list->e[i], reference_point);
-        if (absolute_float(d - target) < bestDiff) {
-            bestDiff = d;
+        float point_distance = fast_vec_dist(point_list->e[i], reference_point);
+        if (absolute_float(point_distance - target) < bestDiff) {
+            bestDiff = point_distance;
             best = i;
         }
     }
