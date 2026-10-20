@@ -405,7 +405,7 @@ void FUN_L06_00229650(void) {
     f32 f;
     s32 r;
     s32 i;
-    f32 a;
+    f32 surface_probe_angle;
     u8 *p;
 
     s32 k;
@@ -543,12 +543,12 @@ d1:
         hero_lui.unk2E8.f = ground_offset_or_angles.f[0];
     }
     for (i = 0; i < 2; i++) {
-        a = 1.5707964f;
+        surface_probe_angle = 1.5707964f;
         if (i == 1) {
-            a = -a;
+            surface_probe_angle = -surface_probe_angle;
         }
-        FUN_L00_002335c8(&surface_probe_start, 0.2f, a, 0.45f);
-        FUN_L00_002335c8(&unused_surface_probe_point, 0.2f, a, -0.45f);
+        FUN_L00_002335c8(&surface_probe_start, 0.2f, surface_probe_angle, 0.45f);
+        FUN_L00_002335c8(&unused_surface_probe_point, 0.2f, surface_probe_angle, -0.45f);
         if (collision_line(&surface_probe_start, &collision_ray_end, 0x22, hero_lui.moby, 0)) {
             f = HH.point.f[2] - hero_lui.ground_z.f;
             hero_lui.unk2C0.f[i] = f;
