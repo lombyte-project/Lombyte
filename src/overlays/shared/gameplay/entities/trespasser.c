@@ -398,11 +398,11 @@ void moby_point_position(unsigned char *, int, void *) __asm__("FUN_L00_0024f7c8
 int scale_game_frames(int) __asm__("FUN_001f96f8");
 void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 void FUN_L00_00250df8(unsigned char *);
-unsigned char *FUN_L00_002c6f88(unsigned char *src, float f) {
+unsigned char *FUN_L00_002c6f88(unsigned char *src, float initial_hook_speed) {
     unsigned char *spawned_moby = create_moby(0xd1);
     if (spawned_moby) {
         char *moby_vars = *(char **)(spawned_moby + 0x78);
-        *(float *)(moby_vars + 4) = f;
+        *(float *)(moby_vars + 4) = initial_hook_speed;
         *(unsigned char **)moby_vars = src;
         spawned_moby[0x30] = 0xff;
         *(short *)(spawned_moby + 0x32) = 0xff;
