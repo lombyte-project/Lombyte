@@ -1306,7 +1306,7 @@ void gold_bolt_update(struct Moby *moby) {
         GOLD_BOLT_PICKUP_CUTSCENE = 2
     };
     Vars_307ca0 *vars = (Vars_307ca0 *)moby->pvars;
-    struct Hero *h;
+    struct Hero *hero_ptr;
     Vec4f at;
     Vec4f look;
     Vec4f at2;
@@ -1420,8 +1420,8 @@ void gold_bolt_update(struct Moby *moby) {
                 }
             }
         }
-        h = &hero;
-        if (h->unkA98 & 2) {
+        hero_ptr = &hero;
+        if (hero_ptr->unkA98 & 2) {
             set_hero_animation(scale_game_frames(30), 0, 0);
         }
         if (moby->seq != 0 || !tick_countdown_32(&vars->timer)) {
@@ -1431,7 +1431,7 @@ void gold_bolt_update(struct Moby *moby) {
         queue_dialogue_message(0x53B3, -1);
         D_0014BEC0[vars->id + D_0015ED84_n * 4] = 1;
         cutscene_active = 0;
-        FUN_L00_00216f90(&h->motion.pos, &h->motion.rot, 0, 0);
+        FUN_L00_00216f90(&hero_ptr->motion.pos, &hero_ptr->motion.rot, 0, 0);
         FUN_L00_002eac18(0);
         memcard_save_data(0, -1);
         mark_moby_for_removal(moby);
