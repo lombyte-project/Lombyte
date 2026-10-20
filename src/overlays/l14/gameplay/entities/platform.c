@@ -110,16 +110,16 @@ void FUN_L14_002d6570(struct Moby *m) {
     float rot[4];
     int idx;
     float t;
-    unsigned short *p = D_L14_001ABF40_6570[m->group];
+    unsigned short *moby_index_cursor = D_L14_001ABF40_6570[m->group];
     char **out;
     int i;
     float s;
-    if (p == 0) {
+    if (moby_index_cursor == 0) {
         return;
     }
     out = list;
     do {
-        char *o = D_L14_0015FFD8_6570 + ((*p & 0x7FFF) << 8);
+        char *o = D_L14_0015FFD8_6570 + ((*moby_index_cursor & 0x7FFF) << 8);
         char *od = *(char **)(o + 0x78);
         char *path = hero.unk560;
         if (path == *(char **)(D_L14_0015F70C_6570 + *(int *)(od + 0x60) * 32 + 0x10)) {
@@ -136,7 +136,7 @@ void FUN_L14_002d6570(struct Moby *m) {
             place_6570(path + (idx * 16 + 0x10), rot, 0x28, 0);
         }
         *out++ = o;
-    } while ((short)*p++ >= 0);
+    } while ((short)*moby_index_cursor++ >= 0);
     for (i = 0; i < 3; i++) {
         char *o = list[i];
         char *od = *(char **)(o + 0x78);
