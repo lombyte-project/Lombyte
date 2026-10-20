@@ -9,11 +9,11 @@ extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern void FUN_L00_00235c80(HudElem *);
 
 /* Sets unk7C to scale_game_frames(0xA) + 0x1E, clears 0x48/0x4A, w/h 0x20, calls 00235c80. */
-void FUN_L00_00237190(HudElem *e) {
-    e->unk7C = scale_game_frames(0xA) + 0x1E;
-    e->unk48 = 0;
-    e->unk4A = 0;
-    e->w = 0x20;
-    e->h = 0x20;
-    FUN_L00_00235c80(e);
+void FUN_L00_00237190(HudElem *hud_element) {
+    hud_element->unk7C = scale_game_frames(0xA) + 0x1E;
+    hud_element->unk48 = 0;
+    hud_element->unk4A = 0;
+    hud_element->w = 0x20;
+    hud_element->h = 0x20;
+    FUN_L00_00235c80(hud_element);
 }
