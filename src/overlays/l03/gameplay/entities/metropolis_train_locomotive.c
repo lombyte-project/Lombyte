@@ -3190,7 +3190,7 @@ extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 /* Hit reaction for class 574 (the path-walking enemy): takes damage from the hit, turns towards the
  * attacker (the hero when hit by the wrench or by nothing) and starts a knock-back jump whose size depends
  * on the hit kind; a lethal hit starts the death jump. */
-void FUN_L03_002c95a8(Moby2C8398 *m) {
+void FUN_L03_002c95a8(Moby2C8398 *moby) {
     enum {
         DEATH_KNOCKBACK_RESPONSE = 1,
         KNOCKBACK_WITHOUT_FACING_CHANGE_RESPONSE = 3,
@@ -3206,134 +3206,134 @@ void FUN_L03_002c95a8(Moby2C8398 *m) {
     int kind;
     float damage;
     float angle;
-    Data2C8398 *d;
+    Data2C8398 *moby_data;
     char *hit;
     char *other;
     int result;
 
     damage = 0.0f;
-    d = m->data;
-    if (d->i38 != 0) {
-        d->i38 = 0;
-        d->s252 = scale_game_frames(240);
+    moby_data = moby->data;
+    if (moby_data->i38 != 0) {
+        moby_data->i38 = 0;
+        moby_data->s252 = scale_game_frames(240);
     }
-    if (fast_dec_timer_s16(&d->s252)) {
-        d->f270 = d->f26C;
+    if (fast_dec_timer_s16(&moby_data->s252)) {
+        moby_data->f270 = moby_data->f26C;
     } else {
-        d->f270 = d->f26C + 5.0f;
+        moby_data->f270 = moby_data->f26C + 5.0f;
     }
-    hit = find_moby_hit(m, 0x330000, 0);
-    result = fun_00213928(m, hit, &d->f20, 0, &kind, &damage, 0, 4);
-    if (hit != 0 && kind != 1 && m->state != 0xD) {
+    hit = find_moby_hit(moby, 0x330000, 0);
+    result = fun_00213928(moby, hit, &moby_data->f20, 0, &kind, &damage, 0, 4);
+    if (hit != 0 && kind != 1 && moby->state != 0xD) {
         other = *(char **)(hit + 0x20);
         if (other != 0) {
             if (other != (char *)hero.items[0].moby) {
-                angle = fast_arc_tan(m->pos[0] - *(float *)(other + 0x10), m->pos[1] - *(float *)(other + 0x14));
+                angle = fast_arc_tan(moby->pos[0] - *(float *)(other + 0x10), moby->pos[1] - *(float *)(other + 0x14));
             } else {
-                angle = fast_arc_tan(m->pos[0] - hero.motion.pos.f[0], m->pos[1] - hero.motion.pos.f[1]);
+                angle = fast_arc_tan(moby->pos[0] - hero.motion.pos.f[0], moby->pos[1] - hero.motion.pos.f[1]);
             }
         } else {
-            angle = fast_arc_tan(m->pos[0] - hero.motion.pos.f[0], m->pos[1] - hero.motion.pos.f[1]);
+            angle = fast_arc_tan(moby->pos[0] - hero.motion.pos.f[0], moby->pos[1] - hero.motion.pos.f[1]);
         }
-        d->f20 -= damage;
-        if (d->f20 <= 0.0f) {
+        moby_data->f20 -= damage;
+        if (moby_data->f20 <= 0.0f) {
             result = 1;
         }
         switch (result) {
         case NO_KNOCKBACK_HIT_RESPONSE:
         case ZERO_DAMAGE_NO_KNOCKBACK_RESPONSE:
-            d->b67 = 0x78;
+            moby_data->b67 = 0x78;
             break;
         case TURN_AWAY_KNOCKBACK_RESPONSE:
-            d->b67 = 0x78;
-            d->q.f10 = frame_time_sq * 80.0f;
-            d->q.f18 = (D_L03_001618E4 / (2.0f * square_root(2.0f * D_L03_001618E0 * d->q.f10) / (frame_time_sq * 80.0f)) +
+            moby_data->b67 = 0x78;
+            moby_data->q.f10 = frame_time_sq * 80.0f;
+            moby_data->q.f18 = (D_L03_001618E4 / (2.0f * square_root(2.0f * D_L03_001618E0 * moby_data->q.f10) / (frame_time_sq * 80.0f)) +
                         D_L03_001618E8 * frame_time_sq * 0.5f *
                             (2.0f * JUMP_SPEED(D_L03_001618E0, 80.0f) / (frame_time_sq * 80.0f))) *
                        0.5f;
-            d->q.f1C = JUMP_SPEED(D_L03_001618E0, 80.0f);
-            d->q.i24 = 9;
-            d->q.b3D = 0;
+            moby_data->q.f1C = JUMP_SPEED(D_L03_001618E0, 80.0f);
+            moby_data->q.i24 = 9;
+            moby_data->q.b3D = 0;
             *(OvlQuad *)vec = *(OvlQuad *)(hit + 0x10);
-            trooper_knockback_arc(vec, &angle, &d->q.f18, &d->q.f1C);
-            if (fast_difference_between_rotations(m->rot[2], angle) < 1.0471976f) {
-                m->rot[2] = add_rotations_c95(angle, 3.1415927f);
+            trooper_knockback_arc(vec, &angle, &moby_data->q.f18, &moby_data->q.f1C);
+            if (fast_difference_between_rotations(moby->rot[2], angle) < 1.0471976f) {
+                moby->rot[2] = add_rotations_c95(angle, 3.1415927f);
             }
-            trooper_start_knockback(angle, m, (char *)d + 0x70, 5, 5, 0);
-            set_moby_animation_alt(m, 5, 5);
-            d->q.f50 = 14.0f;
-            d->q.f54 = 28.0f;
-            m->state = 10;
-            allocate_voice_for_target_entry(1, 0, (int)m);
+            trooper_start_knockback(angle, moby, (char *)moby_data + 0x70, 5, 5, 0);
+            set_moby_animation_alt(moby, 5, 5);
+            moby_data->q.f50 = 14.0f;
+            moby_data->q.f54 = 28.0f;
+            moby->state = 10;
+            allocate_voice_for_target_entry(1, 0, (int)moby);
             break;
         case KNOCKBACK_WITHOUT_FACING_CHANGE_RESPONSE:
         case ANIMATION_FIVE_KNOCKBACK_RESPONSE:
         case ANIMATION_FIVE_KNOCKBACK_WITHOUT_FACING_CHANGE_RESPONSE:
-            d->b67 = 0x78;
-            d->q.f10 = frame_time_sq * 80.0f;
-            d->q.f14 = D_L03_001618E8 * frame_time_sq;
-            d->q.f18 = D_L03_001618E4 / (2.0f * square_root(2.0f * D_L03_001618E0 * d->q.f10) / (frame_time_sq * 80.0f)) +
+            moby_data->b67 = 0x78;
+            moby_data->q.f10 = frame_time_sq * 80.0f;
+            moby_data->q.f14 = D_L03_001618E8 * frame_time_sq;
+            moby_data->q.f18 = D_L03_001618E4 / (2.0f * square_root(2.0f * D_L03_001618E0 * moby_data->q.f10) / (frame_time_sq * 80.0f)) +
                        D_L03_001618E8 * frame_time_sq * 0.5f *
                            (2.0f * JUMP_SPEED(D_L03_001618E0, 80.0f) / (frame_time_sq * 80.0f));
-            d->q.f1C = JUMP_SPEED(D_L03_001618E0, 80.0f);
-            d->q.i24 = 9;
-            d->q.b3D = 0;
+            moby_data->q.f1C = JUMP_SPEED(D_L03_001618E0, 80.0f);
+            moby_data->q.i24 = 9;
+            moby_data->q.b3D = 0;
             *(OvlQuad *)vec = *(OvlQuad *)(hit + 0x10);
-            trooper_knockback_arc(vec, &angle, &d->q.f18, &d->q.f1C);
-            trooper_start_knockback(angle, m, (char *)d + 0x70, 5, 5, 0);
-            d->q.f50 = 6.0f;
-            d->q.f54 = 13.0f;
-            m->state = 10;
-            allocate_voice_for_target_entry(1, 0, (int)m);
+            trooper_knockback_arc(vec, &angle, &moby_data->q.f18, &moby_data->q.f1C);
+            trooper_start_knockback(angle, moby, (char *)moby_data + 0x70, 5, 5, 0);
+            moby_data->q.f50 = 6.0f;
+            moby_data->q.f54 = 13.0f;
+            moby->state = 10;
+            allocate_voice_for_target_entry(1, 0, (int)moby);
             break;
         case ALTERNATE_ANIMATION_KNOCKBACK_RESPONSE:
         case ANIMATION_SIX_KNOCKBACK_RESPONSE:
-            d->b67 = 0x78;
-            d->q.f10 = frame_time_sq * 80.0f;
-            d->q.f14 = D_L03_001618E8 * frame_time_sq;
-            d->q.f18 = D_L03_001618E4 / (2.0f * square_root(2.0f * D_L03_001618E0 * d->q.f10) / (frame_time_sq * 80.0f)) +
+            moby_data->b67 = 0x78;
+            moby_data->q.f10 = frame_time_sq * 80.0f;
+            moby_data->q.f14 = D_L03_001618E8 * frame_time_sq;
+            moby_data->q.f18 = D_L03_001618E4 / (2.0f * square_root(2.0f * D_L03_001618E0 * moby_data->q.f10) / (frame_time_sq * 80.0f)) +
                        D_L03_001618E8 * frame_time_sq * 0.5f *
                            (2.0f * JUMP_SPEED(D_L03_001618E0, 80.0f) / (frame_time_sq * 80.0f));
-            d->q.f1C = JUMP_SPEED(D_L03_001618E0, 80.0f);
-            d->q.i24 = 9;
-            d->q.b3D = 0;
+            moby_data->q.f1C = JUMP_SPEED(D_L03_001618E0, 80.0f);
+            moby_data->q.i24 = 9;
+            moby_data->q.b3D = 0;
             *(OvlQuad *)vec = *(OvlQuad *)(hit + 0x10);
-            trooper_knockback_arc(vec, &angle, &d->q.f18, &d->q.f1C);
-            trooper_start_knockback(angle, m, (char *)d + 0x70, 6, 5, 2);
-            d->q.f50 = 5.0f;
-            d->q.f54 = 10.0f;
-            m->state = 10;
-            allocate_voice_for_target_entry(1, 0, (int)m);
+            trooper_knockback_arc(vec, &angle, &moby_data->q.f18, &moby_data->q.f1C);
+            trooper_start_knockback(angle, moby, (char *)moby_data + 0x70, 6, 5, 2);
+            moby_data->q.f50 = 5.0f;
+            moby_data->q.f54 = 10.0f;
+            moby->state = 10;
+            allocate_voice_for_target_entry(1, 0, (int)moby);
             break;
         case DEATH_KNOCKBACK_RESPONSE:
-            d->q.f10 = frame_time_sq * 40.0f;
-            d->q.f14 = D_L03_001618E8 * frame_time_sq;
-            d->q.f18 = 3.0f / (2.0f * square_root(2.0f * 2.0f * d->q.f10) / (frame_time_sq * 40.0f)) +
+            moby_data->q.f10 = frame_time_sq * 40.0f;
+            moby_data->q.f14 = D_L03_001618E8 * frame_time_sq;
+            moby_data->q.f18 = 3.0f / (2.0f * square_root(2.0f * 2.0f * moby_data->q.f10) / (frame_time_sq * 40.0f)) +
                        D_L03_001618E8 * frame_time_sq * 0.5f *
                            (2.0f * JUMP_SPEED(2.0f, 40.0f) / (frame_time_sq * 40.0f));
-            d->q.f1C = JUMP_SPEED(2.0f, 40.0f);
-            d->q.i24 = 9;
-            d->q.b3D = 0;
+            moby_data->q.f1C = JUMP_SPEED(2.0f, 40.0f);
+            moby_data->q.i24 = 9;
+            moby_data->q.b3D = 0;
             *(OvlQuad *)vec = *(OvlQuad *)(hit + 0x10);
-            trooper_knockback_arc(vec, &angle, &d->q.f18, &d->q.f1C);
-            trooper_start_knockback(angle, m, (char *)d + 0x70, 7, 5, 2);
-            d->q.f50 = 10.0f;
-            d->q.f54 = 20.0f;
-            d->q.f4C = 2.0f * frame_time;
-            d->b255 = 0;
-            m->flags &= 0xEFFF;
-            d->b67 = 0xFA;
-            m->state = 0xD;
-            allocate_voice_for_target_entry(3, 0, (int)m);
-            if (m->anim != 7) {
-                blend_moby_animation_c95(m, 7, 0, scale_game_frames(6));
+            trooper_knockback_arc(vec, &angle, &moby_data->q.f18, &moby_data->q.f1C);
+            trooper_start_knockback(angle, moby, (char *)moby_data + 0x70, 7, 5, 2);
+            moby_data->q.f50 = 10.0f;
+            moby_data->q.f54 = 20.0f;
+            moby_data->q.f4C = 2.0f * frame_time;
+            moby_data->b255 = 0;
+            moby->flags &= 0xEFFF;
+            moby_data->b67 = 0xFA;
+            moby->state = 0xD;
+            allocate_voice_for_target_entry(3, 0, (int)moby);
+            if (moby->anim != 7) {
+                blend_moby_animation_c95(moby, 7, 0, scale_game_frames(6));
             }
             break;
         }
-        trooper_anim_update(m, (short *)((char *)d + 0x60));
+        trooper_anim_update(moby, (short *)((char *)moby_data + 0x60));
     }
-    m->bA4 = 0xFF;
-    trooper_anim_finish(m, (char *)d + 0x60);
+    moby->bA4 = 0xFF;
+    trooper_anim_finish(moby, (char *)moby_data + 0x60);
 }
 extern int FUN_L03_0024e830(char *, char *, float);
 extern int FUN_L00_0025df68(void *, void *, void *, int *, float *, int, float, float, float);
