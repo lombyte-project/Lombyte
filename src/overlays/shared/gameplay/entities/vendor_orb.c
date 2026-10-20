@@ -2608,9 +2608,9 @@ float FUN_L00_002e86b0(char *camera, float *input_direction, float lim) {
     float b3[4];
     char *base = D_L00_00166E10;
     char *axis = base + 0x20;
-    char *d = *(char **)(camera + 0x70);
-    char *q = d + 0x1A8;
-    char *p = d + 0x130;
+    char *camera_state = *(char **)(camera + 0x70);
+    char *q = camera_state + 0x1A8;
+    char *reference_direction = camera_state + 0x130;
     float dot;
     float len;
     float ang;
@@ -2621,8 +2621,8 @@ float FUN_L00_002e86b0(char *camera, float *input_direction, float lim) {
 
     FUN_001f9a68_c4(b0, axis, fast_vec_dot(input_direction, axis));
     FUN_001f9a28(b1, input_direction, b0);
-    FUN_001f9a68_c4(b0, axis, fast_vec_dot(p, axis));
-    FUN_001f9a28(b2, (float *)p, b0);
+    FUN_001f9a68_c4(b0, axis, fast_vec_dot(reference_direction, axis));
+    FUN_001f9a28(b2, (float *)reference_direction, b0);
     dot = fast_vec_dot(b1, b2);
     len = fast_vec_length(b1);
     if (len == r) {
