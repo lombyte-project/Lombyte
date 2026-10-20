@@ -702,12 +702,12 @@ extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void scale_vector_xyz_c(void *, void *, float) __asm__("FUN_001f9a68");
 
 extern f32 frame_scale_macro __asm__("D_0015ED60") __attribute__((section(".sdata")));
-void FUN_L09_002eaea8(Moby *m) {
+void FUN_L09_002eaea8(Moby *falling_rock) {
     float movement_step[4];
     float collision_probe_offset[4];
     float position_or_movement_step[4];
     float offset_position[4];
-    Data_2EC188 *moby_vars = (*(Data_2EC188 **)&m->pvars);
+    Data_2EC188 *moby_vars = (*(Data_2EC188 **)&falling_rock->pvars);
     float len;
     float updated_rotation_x;
 
@@ -715,27 +715,27 @@ void FUN_L09_002eaea8(Moby *m) {
     normalize_vector_xyz(collision_probe_offset, movement_step, 25.0f);
     normalize_vector_xyz(movement_step, movement_step, moby_vars->f54);
     add_vector_xyz(moby_vars->pos, moby_vars->pos, movement_step);
-    subtract_vector_xyz(((f32 *)&m->pos), moby_vars->pos, D_L09_00166F40);
-    len = vector_length_xyz(((f32 *)&m->pos));
+    subtract_vector_xyz(((f32 *)&falling_rock->pos), moby_vars->pos, D_L09_00166F40);
+    len = vector_length_xyz(((f32 *)&falling_rock->pos));
     if (len > 100.0f && moby_vars->pos[2] > 27.0f) {
-        normalize_vector_xyz(((f32 *)&m->pos), ((f32 *)&m->pos), 100.0f);
-        add_vector_xyz(((f32 *)&m->pos), ((f32 *)&m->pos), D_L09_00166F40);
-        m->scale = moby_vars->f50 * (100.0f / len);
+        normalize_vector_xyz(((f32 *)&falling_rock->pos), ((f32 *)&falling_rock->pos), 100.0f);
+        add_vector_xyz(((f32 *)&falling_rock->pos), ((f32 *)&falling_rock->pos), D_L09_00166F40);
+        falling_rock->scale = moby_vars->f50 * (100.0f / len);
     } else {
-        qcopy(((f32 *)&m->pos), moby_vars->pos);
-        m->scale = moby_vars->f50;
+        qcopy(((f32 *)&falling_rock->pos), moby_vars->pos);
+        falling_rock->scale = moby_vars->f50;
     }
-    updated_rotation_x = fast_add_rotations_c(m->rot.x, moby_vars->f40);
-    m->rot.x = updated_rotation_x;
-    m->rot.y = fast_add_rotations_c(updated_rotation_x, moby_vars->f44);
-    if (m->state == 0) {
+    updated_rotation_x = fast_add_rotations_c(falling_rock->rot.x, moby_vars->f40);
+    falling_rock->rot.x = updated_rotation_x;
+    falling_rock->rot.y = fast_add_rotations_c(updated_rotation_x, moby_vars->f44);
+    if (falling_rock->state == 0) {
         if (moby_vars->pos[2] < 100.0f && moby_vars->pos[0] < 500.0f && moby_vars->pos[1] < 500.0f) {
             position_or_movement_step[0] = random_float_between_c2(-5.0f, 5.0f);
             position_or_movement_step[1] = random_float_between_c2(-5.0f, 5.0f);
             position_or_movement_step[2] = random_float_between_c2(-5.0f, 5.0f);
             add_vector_xyz(position_or_movement_step, position_or_movement_step, moby_vars->pos);
             add_vector_xyz(offset_position, position_or_movement_step, collision_probe_offset);
-            if (FUN_001efa68(position_or_movement_step, offset_position, 4, (int)m, 0) != 0 && D_L09_00173FE8 > 26.5f) {
+            if (FUN_001efa68(position_or_movement_step, offset_position, 4, (int)falling_rock, 0) != 0 && D_L09_00173FE8 > 26.5f) {
                 float scaled_movement_step[4];
                 V6_2EC188 A;
                 V6_2EC188 B;
@@ -769,9 +769,9 @@ void FUN_L09_002eaea8(Moby *m) {
                     FUN_L00_0026a9f0(moby_vars->pos, scaled_movement_step, *pa, *pb, a, b, 0, 0, 400000.0f, sc);
                 }
                 for (i = 9; i >= 0; i--) {
-                    FUN_L09_002ea528_c((char *)m, movement_step);
+                    FUN_L09_002ea528_c((char *)falling_rock, movement_step);
                 }
-                moby_vars->f58 = h = trooper_play_sound(6, 0, (int)m, 0xC1);
+                moby_vars->f58 = h = trooper_play_sound(6, 0, (int)falling_rock, 0xC1);
                 if (h != 0) {
                     vendor_volume(h, 0x800);
                 }
@@ -783,7 +783,7 @@ void FUN_L09_002eaea8(Moby *m) {
                         c->f168 = scale_game_frames(10);
                     }
                 }
-                m->state++;
+                falling_rock->state++;
                 return;
             }
         }
@@ -793,11 +793,11 @@ void FUN_L09_002eaea8(Moby *m) {
                 qcopy(position_or_movement_step, moby_vars->pos);
                 position_or_movement_step[2] = 25.0f;
                 for (j = 4; j >= 0; j--) {
-                    FUN_L09_002efe48_c(m, position_or_movement_step, movement_step, moby_vars->f50 * 4.0f, moby_vars->f50 * 12.0f);
+                    FUN_L09_002efe48_c(falling_rock, position_or_movement_step, movement_step, moby_vars->f50 * 4.0f, moby_vars->f50 * 12.0f);
                 }
                 moby_vars->f54 = moby_vars->f54 * (frame_scale_macro * -0.100000024f + 1.0f);
                 if (moby_vars->f58 <= 0) {
-                    moby_vars->f58 = trooper_play_sound(0, 0, (int)m, 0x107);
+                    moby_vars->f58 = trooper_play_sound(0, 0, (int)falling_rock, 0x107);
                 }
             }
         }
@@ -839,9 +839,9 @@ void FUN_L09_002eaea8(Moby *m) {
                     FUN_L00_0026a9f0(offset_position, position_or_movement_step, *pa, *pb, a, b, 0, 0, 1200000.0f, sc);
                 }
                 for (i = 9; i >= 0; i--) {
-                    FUN_L09_002ea528_c((char *)m, movement_step);
+                    FUN_L09_002ea528_c((char *)falling_rock, movement_step);
                 }
-                moby_vars->f58 = h = trooper_play_sound(6, 0, (int)m, 0xC1);
+                moby_vars->f58 = h = trooper_play_sound(6, 0, (int)falling_rock, 0xC1);
                 if (h != 0) {
                     vendor_volume(h, 0x800);
                 }
@@ -854,21 +854,21 @@ void FUN_L09_002eaea8(Moby *m) {
                     }
                 }
             }
-            m->state++;
+            falling_rock->state++;
         }
     } else {
-        m->state++;
+        falling_rock->state++;
         if (moby_vars->target[2] == 25.0f) {
             int j;
-            m->draw_dist = 0;
-            m->visible = 0;
+            falling_rock->draw_dist = 0;
+            falling_rock->visible = 0;
             qcopy(position_or_movement_step, moby_vars->pos);
             position_or_movement_step[2] = 25.0f;
             for (j = 1; j >= 0; j--) {
-                FUN_L09_002efe48_c(m, position_or_movement_step, movement_step, moby_vars->f50 * 4.0f, moby_vars->f50 * 12.0f);
+                FUN_L09_002efe48_c(falling_rock, position_or_movement_step, movement_step, moby_vars->f50 * 4.0f, moby_vars->f50 * 12.0f);
             }
-            if (m->state > scale_game_frames(10)) {
-                mark_moby_for_removal(m);
+            if (falling_rock->state > scale_game_frames(10)) {
+                mark_moby_for_removal(falling_rock);
             }
         } else {
             V6_2EC188 A;
@@ -905,8 +905,8 @@ void FUN_L09_002eaea8(Moby *m) {
                 }
                 FUN_L00_0026a9f0(offset_position, position_or_movement_step, *pa, *pb, a, b, 0, 0, 1200000.0f, sc);
             }
-            if (m->state >= 3) {
-                mark_moby_for_removal(m);
+            if (falling_rock->state >= 3) {
+                mark_moby_for_removal(falling_rock);
             }
         }
     }
