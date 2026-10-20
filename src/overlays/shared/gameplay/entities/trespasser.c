@@ -426,7 +426,7 @@ void FUN_0020c828_2c7070(void *) __asm__("FUN_0020c828");
 void FUN_0020e098_2c7070(void *) __asm__("FUN_0020e098");
 extern unsigned char D_001413FF __attribute__((section(".data")));
 void swingshot_hook_update(unsigned char *m) __asm__("FUN_L00_002c7070");
-void swingshot_hook_update(unsigned char *m) {
+void swingshot_hook_update(unsigned char *hook_moby) {
     enum {
         HOOK_INITIAL_ANIMATION = 0,
         HOOK_IDLE_ANIMATION = 1,
@@ -437,88 +437,88 @@ void swingshot_hook_update(unsigned char *m) {
         HOOK_SKIP_ANIMATION_TRANSITIONS = 6,
         HOOK_RETURN_ANIMATION = 7
     };
-    unsigned char **d;
-    unsigned char *o;
-    if (m == 0)
+    unsigned char **hook_vars;
+    unsigned char *owner_moby;
+    if (hook_moby == 0)
         return;
-    d = *(unsigned char ***)(m + 0x78);
-    if (d == 0)
+    hook_vars = *(unsigned char ***)(hook_moby + 0x78);
+    if (hook_vars == 0)
         return;
-    o = d[0];
-    if (o == 0 || *(short *)(o + 0xA6) != 0xD0 || o[0x20] == 0xFE || o[0x20] == 0xFD ||
-        *(unsigned char **)(*(unsigned char **)(o + 0x78) + 0x14) != m) {
+    owner_moby = hook_vars[0];
+    if (owner_moby == 0 || *(short *)(owner_moby + 0xA6) != 0xD0 || owner_moby[0x20] == 0xFE || owner_moby[0x20] == 0xFD ||
+        *(unsigned char **)(*(unsigned char **)(owner_moby + 0x78) + 0x14) != hook_moby) {
         goto kill;
     }
-    if ((*(unsigned short *)(o + 0x34) & 1) || D_001413FF) {
-        *(unsigned short *)(m + 0x34) |= 0x41;
+    if ((*(unsigned short *)(owner_moby + 0x34) & 1) || D_001413FF) {
+        *(unsigned short *)(hook_moby + 0x34) |= 0x41;
     } else {
-        *(unsigned short *)(m + 0x34) &= ~0x41;
+        *(unsigned short *)(hook_moby + 0x34) &= ~0x41;
     }
-    switch (m[0x20]) {
+    switch (hook_moby[0x20]) {
     case HOOK_INITIAL_ANIMATION:
-        if (m[0x70] & 2) {
-            if (m[0x53] != 1)
-                FUN_00212f90_2c7070(m, 1, 0, FUN_001f96f8_2c7070(10));
-            m[0x20] = 1;
-            *(float *)(m + 0x58) = 1.0f;
+        if (hook_moby[0x70] & 2) {
+            if (hook_moby[0x53] != 1)
+                FUN_00212f90_2c7070(hook_moby, 1, 0, FUN_001f96f8_2c7070(10));
+            hook_moby[0x20] = 1;
+            *(float *)(hook_moby + 0x58) = 1.0f;
         }
         break;
     case HOOK_IDLE_ANIMATION:
-        if (d[0][0x20] == 2) {
-            if (m[0x53] != 3)
-                FUN_00212f90_2c7070(m, 3, 0, FUN_001f96f8_2c7070(10));
-            m[0x20] = 3;
-            *(float *)(m + 0x58) = 1.0f;
-        } else if (d[0][0x20] == 8) {
-            if (m[0x53] != 2)
-                FUN_00212f90_2c7070(m, 2, 0, FUN_001f96f8_2c7070(10));
-            m[0x20] = 2;
-            *(float *)(m + 0x58) = 1.0f;
+        if (hook_vars[0][0x20] == 2) {
+            if (hook_moby[0x53] != 3)
+                FUN_00212f90_2c7070(hook_moby, 3, 0, FUN_001f96f8_2c7070(10));
+            hook_moby[0x20] = 3;
+            *(float *)(hook_moby + 0x58) = 1.0f;
+        } else if (hook_vars[0][0x20] == 8) {
+            if (hook_moby[0x53] != 2)
+                FUN_00212f90_2c7070(hook_moby, 2, 0, FUN_001f96f8_2c7070(10));
+            hook_moby[0x20] = 2;
+            *(float *)(hook_moby + 0x58) = 1.0f;
         }
         break;
     case HOOK_REMOVAL_ANIMATION:
-        if (m[0x70] & 2) {
+        if (hook_moby[0x70] & 2) {
         kill:
-            FUN_0020c828_2c7070(m);
+            FUN_0020c828_2c7070(hook_moby);
             return;
         }
         break;
     case HOOK_LAUNCH_ANIMATION:
-        if (m[0x70] & 2) {
-            if (m[0x53] != 4)
-                FUN_00212f90_2c7070(m, 4, 0, FUN_001f96f8_2c7070(10));
-            m[0x20] = 4;
+        if (hook_moby[0x70] & 2) {
+            if (hook_moby[0x53] != 4)
+                FUN_00212f90_2c7070(hook_moby, 4, 0, FUN_001f96f8_2c7070(10));
+            hook_moby[0x20] = 4;
         }
         break;
     case HOOK_FLIGHT_ANIMATION:
-        if ((unsigned char)(d[0][0x20] - 3) < 3) {
-            if (m[0x53] != 5)
-                FUN_00212f90_2c7070(m, 5, 0, FUN_001f96f8_2c7070(10));
-            m[0x20] = 5;
+        if ((unsigned char)(hook_vars[0][0x20] - 3) < 3) {
+            if (hook_moby[0x53] != 5)
+                FUN_00212f90_2c7070(hook_moby, 5, 0, FUN_001f96f8_2c7070(10));
+            hook_moby[0x20] = 5;
         }
         break;
     case HOOK_ATTACHED_ANIMATION:
-        if (m[0x70] & 2)
-            *(int *)(m + 0x58) = 0;
-        if ((unsigned char)(d[0][0x20] - 6) < 2) {
-            *(float *)(m + 0x58) = 1.0f;
-            if (m[0x53] != 7)
-                FUN_00212f90_2c7070(m, 7, 0, FUN_001f96f8_2c7070(10));
-            m[0x20] = 7;
+        if (hook_moby[0x70] & 2)
+            *(int *)(hook_moby + 0x58) = 0;
+        if ((unsigned char)(hook_vars[0][0x20] - 6) < 2) {
+            *(float *)(hook_moby + 0x58) = 1.0f;
+            if (hook_moby[0x53] != 7)
+                FUN_00212f90_2c7070(hook_moby, 7, 0, FUN_001f96f8_2c7070(10));
+            hook_moby[0x20] = 7;
         }
         break;
     case HOOK_SKIP_ANIMATION_TRANSITIONS:
         break;
     case HOOK_RETURN_ANIMATION:
-        if (!(m[0x70] & 2))
+        if (!(hook_moby[0x70] & 2))
             break;
     default:
-        if (m[0x53] != 1)
-            FUN_00212f90_2c7070(m, 1, 0, FUN_001f96f8_2c7070(10));
-        m[0x20] = 1;
+        if (hook_moby[0x53] != 1)
+            FUN_00212f90_2c7070(hook_moby, 1, 0, FUN_001f96f8_2c7070(10));
+        hook_moby[0x20] = 1;
         break;
     }
-    FUN_0020e098_2c7070(m);
+    FUN_0020e098_2c7070(hook_moby);
 }
 typedef union {
     u128 q;
