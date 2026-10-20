@@ -91,18 +91,16 @@ int hero_set_state(int a, int b) {
         ENTER_IDLE = 0,
         HERO_STATE_DOUBLE_JUMP = 0xE,
         ENTER_ATTACK_COMBO = 0x13,
+        HERO_STATE_LEDGE_HANG = 0x19,
         HERO_STATE_GRIND_JUMP = 0x29,
+        HERO_STATE_GRIND_RAIL_TRANSFER = 0x2A,
         HERO_STATE_GRIND_ATTACK = 0x2B,
+        HERO_STATE_GRIND_OBSTACLE_HOP = 0x42,
         HERO_STATE_APPROACH_TARGET_POSE = 0x65,
+        HERO_STATE_TARGET_POSE_STOP = 0x66,
         HERO_STATE_AT_TARGET_POSE = 0x67,
         ENTER_DROWN = 0x6A,
         ENTER_SLIP = 0x79
-    };
-    enum {
-        HERO_STATE_LEDGE_HANG = 0x19,
-        HERO_STATE_GRIND_RAIL_TRANSFER = 0x2A,
-        HERO_STATE_GRIND_OBSTACLE_HOP = 0x42,
-        HERO_STATE_TARGET_POSE_STOP = 0x66
     };
     int old2088;
     char *moby;

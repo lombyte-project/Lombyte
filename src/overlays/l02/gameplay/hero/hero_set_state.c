@@ -79,6 +79,8 @@ extern int hero_set_state(int, int) __asm__("FUN_L02_0022b728");
 extern char D_L02_0017C520[];
 int hero_set_state(int a, int b) {
     enum {
+        HERO_STATE_DOUBLE_JUMP = 0xE,
+        HERO_STATE_LOOK_ALT = 0x1E,
         HERO_STATE_HELD_ITEM_ATTACK = 0x20,
         HERO_STATE_VEHICLE_IDLE = 0x53,
         HERO_STATE_VEHICLE_RUN = 0x54,
@@ -90,11 +92,7 @@ int hero_set_state(int a, int b) {
         HERO_STATE_STOP_AT_TARGET = 0x66,
         HERO_STATE_IDLE_AT_TARGET = 0x67,
         HERO_STATE_WRENCH_COMBO_ALT = 0x70,
-        HERO_STATE_DEATH_FALL = 0x77
-    };
-    enum {
-        HERO_STATE_DOUBLE_JUMP = 0xE,
-        HERO_STATE_LOOK_ALT = 0x1E,
+        HERO_STATE_DEATH_FALL = 0x77,
         HERO_STATE_DYING_ALT = 0x80
     };
     int old2088;
