@@ -170,6 +170,9 @@ void hero_update_transitions(void) {
         HERO_STATE_GRIND_RAIL_TRANSFER = 42,
         HERO_STATE_GRIND_ATTACK = 43,
         HERO_STATE_GRIND_OBSTACLE_HOP = 66,
+        HERO_STATE_ALT_LEDGE_HANG = 75,
+        HERO_STATE_ALT_LEDGE_SHIMMY_YAW_PLUS_90 = 77,
+        HERO_STATE_ALT_LEDGE_SHIMMY_YAW_MINUS_90 = 78,
         HERO_STATE_APPROACH_TARGET_POSE = 101,
         HERO_STATE_AT_TARGET_POSE = 103,
         HERO_STATE_DROWNING = 106,
@@ -2685,7 +2688,7 @@ void hero_update_transitions(void) {
                         hero_set_state(0x4B, 1);
                     }
                     break;
-                case 75:
+                case HERO_STATE_ALT_LEDGE_HANG:
                     stick_target(0, 1.0f);
                     qcopy(v0, hero.motion.pos.f);
                     sp64 = hero.motion.rot.f[2];
@@ -2735,8 +2738,8 @@ void hero_update_transitions(void) {
                         }
                     }
                     break;
-                case 77:
-                case 78: {
+                case HERO_STATE_ALT_LEDGE_SHIMMY_YAW_PLUS_90:
+                case HERO_STATE_ALT_LEDGE_SHIMMY_YAW_MINUS_90: {
                     float ang;
 
                     qcopy(v0, hero.motion.pos.f);
