@@ -189,7 +189,7 @@ int FUN_L04_00292828(StMoby_2939E8 *moby, Steer_2939E8 *steer_state)
     float height_correction_divisor;
     float ground_height;
     float sum;
-    float t;
+    float xy_abs_sum_or_tilt;
 
     dz = 0.0f;
     height_correction_divisor = dz;
@@ -214,9 +214,9 @@ int FUN_L04_00292828(StMoby_2939E8 *moby, Steer_2939E8 *steer_state)
                 ground_height = FUN_L04_002922d0_c((float *)probe_point);
                 sum += ground_height;
                 if (0.0f < ground_height) {
-                    t = absolute_float(((StTab_2939E8 *)D_L04_00174040_2939E8)->v40.x);
-                    t = t + absolute_float(((StTab_2939E8 *)D_L04_00174040_2939E8)->v40.y);
-                    if (t < absolute_float(((StTab_2939E8 *)D_L04_00174040_2939E8)->v40.z)) {
+                    xy_abs_sum_or_tilt = absolute_float(((StTab_2939E8 *)D_L04_00174040_2939E8)->v40.x);
+                    xy_abs_sum_or_tilt = xy_abs_sum_or_tilt + absolute_float(((StTab_2939E8 *)D_L04_00174040_2939E8)->v40.y);
+                    if (xy_abs_sum_or_tilt < absolute_float(((StTab_2939E8 *)D_L04_00174040_2939E8)->v40.z)) {
                         add_vector_xyz(push, push, &((StTab_2939E8 *)D_L04_00174040_2939E8)->v40);
                         height_correction_divisor += 4.0f;
                         dz += ground_height - probe_point->z;
@@ -247,11 +247,11 @@ int FUN_L04_00292828(StMoby_2939E8 *moby, Steer_2939E8 *steer_state)
             ret = 2;
         }
         if (steer_state->kind == 0xD && 0.0f < steer_state->ground && (steer_state->mask & 0xF) == 0) {
-            t = -angle_atan2(steer_state->f8C[1], steer_state->ground - moby->pos.z);
-            if (absolute_float(t) < 0.5235988f) {
+            xy_abs_sum_or_tilt = -angle_atan2(steer_state->f8C[1], steer_state->ground - moby->pos.z);
+            if (absolute_float(xy_abs_sum_or_tilt) < 0.5235988f) {
                 pinned = 1;
                 dz += steer_state->ground - moby->pos.z;
-                steer_state->tilt = t;
+                steer_state->tilt = xy_abs_sum_or_tilt;
                 height_correction_divisor += 4.0f;
             }
         }
