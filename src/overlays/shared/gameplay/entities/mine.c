@@ -1196,9 +1196,9 @@ unsigned char *spawn_bomb(int owner, void *pos) {
         qcopy(bomb_moby + 0x40, &u);
         a = FUN_002132a8_2ace70(D_0015ED6C_2ace70 * 1.0471976f, D_0015ED6C_2ace70 * 3.1415927f);
         {
-            float d = D_0015ED6C_2ace70;
+            float frame_time = D_0015ED6C_2ace70;
             *(float *)(v + 0x58) = a;
-            *(float *)(v + 0x5C) = FUN_002132a8_2ace70(d * 1.0471976f, d * 3.1415927f);
+            *(float *)(v + 0x5C) = FUN_002132a8_2ace70(frame_time * 1.0471976f, frame_time * 3.1415927f);
         }
         FUN_L00_00250df8_2ace70(bomb_moby);
     }
