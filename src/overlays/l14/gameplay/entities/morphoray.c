@@ -123,7 +123,7 @@ extern void burst_0e00(void *, void *, void *, float, float, int, int, int, floa
 extern void remove_0e00(void *) __asm__("FUN_0020c828");
 extern float add_rot_0e00(float, float) __asm__("FUN_001fa580");
 
-void FUN_L14_00300e00(struct Moby *m)
+void FUN_L14_00300e00(struct Moby *spark_moby)
 {
     enum {
         SPARK_COUNT_NEXT_BOUNCE = 0,
@@ -131,35 +131,35 @@ void FUN_L14_00300e00(struct Moby *m)
         SPARK_ROLL_AND_FADE = 2,
         SPARK_BURST_AND_REMOVE = 3
     };
-  Spark_0e00 *d = (Spark_0e00 *) m->pvars;
+  Spark_0e00 *spark_data = (Spark_0e00 *) spark_moby->pvars;
   Vec4f next;
   Vec4f t;
   Vec4f from;
   float speed;
   float lo;
   float hi;
-  if (((on_ground_0e00(&m->pos, 0, m, 0.65f) != 0) && (D_L14_00174558 != 0)) && (D_L14_00174558 != d->owner))
+  if (((on_ground_0e00(&spark_moby->pos, 0, spark_moby, 0.65f) != 0) && (D_L14_00174558 != 0)) && (D_L14_00174558 != spark_data->owner))
   {
-    m->state = 3;
+    spark_moby->state = 3;
   }
-  if (timer_done_0e00(&d->fade) != 0)
+  if (timer_done_0e00(&spark_data->fade) != 0)
   {
-    m->state = 3;
+    spark_moby->state = 3;
   }
-  switch (m->state)
+  switch (spark_moby->state)
   {
     case SPARK_COUNT_NEXT_BOUNCE:
 
     case SPARK_WAIT_FOR_DESCENT:
     {
-      add_0e00(&next, &m->pos, &d->vel);
-      d->vel.z -= d->vel.w;
-      if ((m->state == 1) && (d->vel.z < 0.0f))
+      add_0e00(&next, &spark_moby->pos, &spark_data->vel);
+      spark_data->vel.z -= spark_data->vel.w;
+      if ((spark_moby->state == 1) && (spark_data->vel.z < 0.0f))
       {
-        m->state = 0;
+        spark_moby->state = 0;
       }
-      timer_tick_0e00(&d->trail);
-      if (d->trail != 0)
+      timer_tick_0e00(&spark_data->trail);
+      if (spark_data->trail != 0)
       {
         int i;
         for (i = 0; i < 3; i++)
@@ -167,76 +167,76 @@ void FUN_L14_00300e00(struct Moby *m)
           float one = 1.0f;
           float third = 0.3333f;
           int spin;
-          char *p;
-          *((u128 *) (&from)) = *((u128 *) (&m->pos));
+          char *trail_particle;
+          *((u128 *) (&from)) = *((u128 *) (&spark_moby->pos));
           lerp_0e00(&t, &from, &next, ((float) i) * third);
           spin = rand_0e00(6);
           if (rand_0e00(2) != 0)
           {
             spin = -spin;
           }
-          p = spawn_0e00(&t, 0.025f, one, one, spin, D_L14_0015F580, ((((float) d->trail) / itof_0e00(frames_0e00(D_L14_0016208C_0e00))) * 45000.0f) + 5000.0f, 0x80808080);
-          if (p != 0)
+          trail_particle = spawn_0e00(&t, 0.025f, one, one, spin, D_L14_0015F580, ((((float) spark_data->trail) / itof_0e00(frames_0e00(D_L14_0016208C_0e00))) * 45000.0f) + 5000.0f, 0x80808080);
+          if (trail_particle != 0)
           {
-            char *q = p + 0x20;
-            *((short *) (p + 0xA)) = frames_0e00(0x78);
+            char *q = trail_particle + 0x20;
+            *((short *) (trail_particle + 0xA)) = frames_0e00(0x78);
             *((int *) (q + 4)) = 2;
             q[0xA] = 0x7F;
-            q[0xB] = p[0xA];
+            q[0xB] = trail_particle[0xA];
           }
         }
 
       }
-      if ((collide_0e00(&m->pos, &next, 0, m, 0) != 0) && ((D_L14_00174540.owner == 0) || (D_L14_00174540.owner != d->owner)))
+      if ((collide_0e00(&spark_moby->pos, &next, 0, spark_moby, 0) != 0) && ((D_L14_00174540.owner == 0) || (D_L14_00174540.owner != spark_data->owner)))
       {
-        qcopy(&m->pos, &D_L14_00174540.hit);
+        qcopy(&spark_moby->pos, &D_L14_00174540.hit);
       }
       else
       {
-        qcopy(&m->pos, &next);
+        qcopy(&spark_moby->pos, &next);
       }
-      if (((on_ground_0e00(&m->pos, 0, m, D_L14_00162088) != 0) && ((m->state == 0) || ((m->pos.z - D_L14_00174540.hit.z) < 0.0f))) && ((D_L14_00174540.owner == 0) || (D_L14_00174540.owner != d->owner)))
+      if (((on_ground_0e00(&spark_moby->pos, 0, spark_moby, D_L14_00162088) != 0) && ((spark_moby->state == 0) || ((spark_moby->pos.z - D_L14_00174540.hit.z) < 0.0f))) && ((D_L14_00174540.owner == 0) || (D_L14_00174540.owner != spark_data->owner)))
       {
         normalize_0e00(&t, &D_L14_00174540.normal, D_L14_00162088);
-        add_0e00(&m->pos, &D_L14_00174540.hit, &t);
-        reflect_0e00(&d->vel, &d->vel, &D_L14_00174540.normal);
-        sound_0e00(1, 0, m);
-        if (m->state == 0)
+        add_0e00(&spark_moby->pos, &D_L14_00174540.hit, &t);
+        reflect_0e00(&spark_data->vel, &spark_data->vel, &D_L14_00174540.normal);
+        sound_0e00(1, 0, spark_moby);
+        if (spark_moby->state == 0)
         {
-          m->state = 1;
-          if ((++d->bounces) == 1)
+          spark_moby->state = 1;
+          if ((++spark_data->bounces) == 1)
           {
-            cap_0e00(&d->vel, &d->vel, D_L14_001620A4 * frame_time);
-            d->vel.z = d->vel.z * D_L14_001620A0;
+            cap_0e00(&spark_data->vel, &spark_data->vel, D_L14_001620A4 * frame_time);
+            spark_data->vel.z = spark_data->vel.z * D_L14_001620A0;
           }
           else
           {
-            scale_0e00(&from, &d->vel, D_L14_001620A0);
+            scale_0e00(&from, &spark_data->vel, D_L14_001620A0);
             if (length_0e00(&from) < (D_L14_00162090 * frame_time))
             {
-              cap_0e00(&d->vel, &d->vel, D_L14_00162090 * frame_time);
-              d->vel.z *= D_L14_001620A0;
+              cap_0e00(&spark_data->vel, &spark_data->vel, D_L14_00162090 * frame_time);
+              spark_data->vel.z *= D_L14_001620A0;
             }
             else
             {
-              qcopy(&d->vel, &from);
+              qcopy(&spark_data->vel, &from);
             }
           }
         }
-        if (d->bounces >= 4)
+        if (spark_data->bounces >= 4)
         {
           float min;
-          m->state = 2;
-          d->vel.z = 0.0f;
-          d->vel.w = length_0e00(&d->vel);
-          d->vel.w *= D_L14_001620A0;
+          spark_moby->state = 2;
+          spark_data->vel.z = 0.0f;
+          spark_data->vel.w = length_0e00(&spark_data->vel);
+          spark_data->vel.w *= D_L14_001620A0;
           min = D_L14_00162090 * frame_time;
-          if (d->vel.w < min)
+          if (spark_data->vel.w < min)
           {
-            d->vel.w = min;
+            spark_data->vel.w = min;
           }
-          normalize_0e00(&d->vel, &d->vel, d->vel.w);
-          d->fade_rate = 1.0f / itof_0e00(d->fade);
+          normalize_0e00(&spark_data->vel, &spark_data->vel, spark_data->vel.w);
+          spark_data->fade_rate = 1.0f / itof_0e00(spark_data->fade);
         }
       }
       break;
@@ -244,44 +244,44 @@ void FUN_L14_00300e00(struct Moby *m)
 
     case SPARK_ROLL_AND_FADE:
     {
-      float f;
+      float fade_fraction;
       int r;
       int g;
       int b;
       float min;
       *((Rgb_0e00 *) (&next)) = D_L14_001620A8;
-      f = ((float) d->fade) * d->fade_rate;
-      r = ftoi_0e00(((((Rgb_0e00 *) (&next))->r - 255.0f) * f) + 255.0f);
-      g = ftoi_0e00(((((Rgb_0e00 *) (&next))->g - 0.0f) * f) + 0.0f);
-      b = ftoi_0e00(((((Rgb_0e00 *) (&next))->b - 0.0f) * f) + 0.0f);
-      m->glow_color = 0xFF000000;
-      m->glow_color = (((b << 16) | m->glow_color) | (g << 8)) | r;
+      fade_fraction = ((float) spark_data->fade) * spark_data->fade_rate;
+      r = ftoi_0e00(((((Rgb_0e00 *) (&next))->r - 255.0f) * fade_fraction) + 255.0f);
+      g = ftoi_0e00(((((Rgb_0e00 *) (&next))->g - 0.0f) * fade_fraction) + 0.0f);
+      b = ftoi_0e00(((((Rgb_0e00 *) (&next))->b - 0.0f) * fade_fraction) + 0.0f);
+      spark_moby->glow_color = 0xFF000000;
+      spark_moby->glow_color = (((b << 16) | spark_moby->glow_color) | (g << 8)) | r;
       min = D_L14_00162090 * frame_time;
-      d->vel.w *= ((D_L14_00162094 - 1.0f) * frame_scale) + 1.0f;
-      if (d->vel.w < min)
+      spark_data->vel.w *= ((D_L14_00162094 - 1.0f) * frame_scale) + 1.0f;
+      if (spark_data->vel.w < min)
       {
-        d->vel.w = min;
+        spark_data->vel.w = min;
       }
-      normalize_0e00(&d->vel, &d->vel, d->vel.w);
-      add_0e00(&m->pos, &m->pos, &d->vel);
+      normalize_0e00(&spark_data->vel, &spark_data->vel, spark_data->vel.w);
+      add_0e00(&spark_moby->pos, &spark_moby->pos, &spark_data->vel);
       break;
     }
 
     case SPARK_BURST_AND_REMOVE:
-      burst_0e00(m, &d->vel, &m->pos, 2.0f, 1.0f, 5, 2, 4, 2.0f, 1.0f, 9.0f, 0, 1.0f, 15.0f, 1, 1, -1, 0);
-      remove_0e00(m);
+      burst_0e00(spark_moby, &spark_data->vel, &spark_moby->pos, 2.0f, 1.0f, 5, 2, 4, 2.0f, 1.0f, 9.0f, 0, 1.0f, 15.0f, 1, 1, -1, 0);
+      remove_0e00(spark_moby);
       return;
 
   }
 
-  if (m->state < 2)
+  if (spark_moby->state < 2)
   {
-    speed = length_0e00(&d->vel);
+    speed = length_0e00(&spark_data->vel);
   }
   else
-    if (m->state == 2)
+    if (spark_moby->state == 2)
   {
-    speed = d->vel.w;
+    speed = spark_data->vel.w;
   }
   else
   {
@@ -298,7 +298,7 @@ void FUN_L14_00300e00(struct Moby *m)
     speed = hi;
   }
   speed -= lo;
-  m->rot.y = add_rot_0e00((((speed / (hi - lo)) * 7.0f) + 1.0f) * 0.017453292f, m->rot.y);
+  spark_moby->rot.y = add_rot_0e00((((speed / (hi - lo)) * 7.0f) + 1.0f) * 0.017453292f, spark_moby->rot.y);
 }
 #include "sda.h"
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002FF358.c: func_L14_00302968), where it is exact; names translated to the US level program. */
