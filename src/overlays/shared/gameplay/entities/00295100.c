@@ -2237,7 +2237,7 @@ void FUN_L00_0029c648(void) {
         VENDOR_MENU_CLOSING = 2,
         VENDOR_MENU_EXIT_CUTSCENE = 3
     };
-    Vec4 a;
+    Vec4 position_scratch;
     Vec4 b;
     f32 camera_rotation_matrix[4][4];
     s32 st;
@@ -2381,10 +2381,10 @@ void FUN_L00_0029c648(void) {
         FUN_L00_00250df8(&vendor_menu.f20[1]);
         b.q = 0;
         b.f[2] = fast_sin(D_L00_00161E24) / 20.0f;
-        a.q = b.q;
-        add_vector_xyz(&a, &D_L00_001610A0, &a);
-        add_vector_xyz(&a, &a, &D_L00_001C8FF0[CUR_ITEM.fD0].v20);
-        transform_vector_by_basis(&vendor_menu.f20[2].pos, &a, vendor_menu.f1c->mtx);
+        position_scratch.q = b.q;
+        add_vector_xyz(&position_scratch, &D_L00_001610A0, &position_scratch);
+        add_vector_xyz(&position_scratch, &position_scratch, &D_L00_001C8FF0[CUR_ITEM.fD0].v20);
+        transform_vector_by_basis(&vendor_menu.f20[2].pos, &position_scratch, vendor_menu.f1c->mtx);
         add_vector_xyz(&vendor_menu.f20[2].pos, &vendor_menu.f20[2].pos, &vendor_menu.f1c->pos);
         vendor_menu.f20[2].rot.f[0] = D_L00_001C8FF0[CUR_ITEM.fD0].f10;
         vendor_menu.f20[2].rot.f[1] = D_L00_001C8FF0[CUR_ITEM.fD0].f14;
@@ -2392,10 +2392,10 @@ void FUN_L00_0029c648(void) {
         FUN_L00_00250df8(&vendor_menu.f20[2]);
         b.q = 0;
         b.f[2] = fast_sin(D_L00_00161E24) / 20.0f;
-        a.q = b.q;
-        add_vector_xyz(&a, &D_L00_001610A0, &a);
-        add_vector_xyz(&a, &a, &D_L00_001C9930[CUR_ITEM.fD0].v20);
-        transform_vector_by_basis(&vendor_menu.f20[3].pos, &a, vendor_menu.f1c->mtx);
+        position_scratch.q = b.q;
+        add_vector_xyz(&position_scratch, &D_L00_001610A0, &position_scratch);
+        add_vector_xyz(&position_scratch, &position_scratch, &D_L00_001C9930[CUR_ITEM.fD0].v20);
+        transform_vector_by_basis(&vendor_menu.f20[3].pos, &position_scratch, vendor_menu.f1c->mtx);
         add_vector_xyz(&vendor_menu.f20[3].pos, &vendor_menu.f20[3].pos, &vendor_menu.f1c->pos);
         vendor_menu.f20[3].rot.f[0] = D_L00_001C9930[CUR_ITEM.fD0].f10;
         vendor_menu.f20[3].rot.f[1] = D_L00_001C9930[CUR_ITEM.fD0].f14;
@@ -2618,9 +2618,9 @@ void FUN_L00_0029c648(void) {
                 mb->blend = 1.0f;
             }
             keys = mb->keys;
-            fast_vec_scale(&a, &keys[mb->frame], 1.0f - mb->blend);
+            fast_vec_scale(&position_scratch, &keys[mb->frame], 1.0f - mb->blend);
             fast_vec_scale(&b, &keys[mb->next_frame], mb->blend);
-            add_vector_xyz(&mb->pos, &a, &b);
+            add_vector_xyz(&mb->pos, &position_scratch, &b);
             transform_vector_by_basis(&mb->pos, &mb->pos, vendor_menu.f80);
             add_vector_xyz(&mb->pos, &mb->pos, &vendor_menu.fC0);
             mb->rot.f[2] = vendor_menu.f80[3].f[2];
