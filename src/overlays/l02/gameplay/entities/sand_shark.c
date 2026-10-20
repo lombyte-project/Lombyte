@@ -338,7 +338,7 @@ void sand_shark_update(struct Moby *moby) {
         SAND_SHARK_WAIT_FOR_LINKED_MOBY_BEFORE_INITIALIZE = 29
     };
     Varsd3e50 *vars;
-    OvlVec4 v0;
+    OvlVec4 position_or_offset_scratch;
     OvlVec4 v1;
     OvlVec4 target_home_delta;
     OvlVec4 navigation_point;
@@ -432,7 +432,7 @@ void sand_shark_update(struct Moby *moby) {
         }
         break;
     case SAND_SHARK_BEGIN_RETURN_HOME_WITH_HEIGHT_OFFSET:
-        fast_vec_sub(&v0, &hero.motion.pos, &moby->pos);
+        fast_vec_sub(&position_or_offset_scratch, &hero.motion.pos, &moby->pos);
         moby->state = 0x12;
         if (moby->prev_seq != 0) {
             blend_e50(moby, 0, 0, scale_ticks_e50(3));
@@ -440,8 +440,8 @@ void sand_shark_update(struct Moby *moby) {
         break;
     case SAND_SHARK_WANDER_AROUND_HOME:
         moby->pos.z += D_L02_0016191C;
-        qcopy(&v0, &vars->home);
-        FUN_L00_00258278_c(moby, add_rotations_e50(atan2_e50(v0.f[0] - moby->pos.x, v0.f[1] - moby->pos.y), vars->turn_offset),
+        qcopy(&position_or_offset_scratch, &vars->home);
+        FUN_L00_00258278_c(moby, add_rotations_e50(atan2_e50(position_or_offset_scratch.f[0] - moby->pos.x, position_or_offset_scratch.f[1] - moby->pos.y), vars->turn_offset),
                  &vars->turn_vel, 0.05f, 0.3f, 0.04f);
         moby->pos.x += fast_cos_e50(moby->rot.z) * D_0015ED6C;
         moby->pos.y += fast_sin_e50(moby->rot.z) * D_0015ED6C;
@@ -497,11 +497,11 @@ void sand_shark_update(struct Moby *moby) {
         hit14 = 0;
         FUN_L00_00258278_c(moby, atan2_e50(v1.f[0] - moby->pos.x, v1.f[1] - moby->pos.y) + vars->turn_offset, &vars->turn_vel,
                  0.05f, 0.3f, 0.2f);
-        v0.f[0] = 2.0f * fast_cos_e50(moby->rot.z);
-        v0.f[1] = 2.0f * fast_sin_e50(moby->rot.z);
-        v0.f[2] = 0.0f;
-        fast_vec_add(&v0, &v0, &moby->pos);
-        FUN_L00_00258b50(moby, &vars->walk_mode, &v0, &target_home_delta, 1.0f);
+        position_or_offset_scratch.f[0] = 2.0f * fast_cos_e50(moby->rot.z);
+        position_or_offset_scratch.f[1] = 2.0f * fast_sin_e50(moby->rot.z);
+        position_or_offset_scratch.f[2] = 0.0f;
+        fast_vec_add(&position_or_offset_scratch, &position_or_offset_scratch, &moby->pos);
+        FUN_L00_00258b50(moby, &vars->walk_mode, &position_or_offset_scratch, &target_home_delta, 1.0f);
         FUN_L02_002d63c0_e50(moby);
         if (FUN_L00_00261b48(vars->path, &moby->pos, &v1, &navigation_point) && distance_e50(&moby->pos, &navigation_point) < vars->unk294) {
             hit14 = 1;
@@ -555,8 +555,8 @@ void sand_shark_update(struct Moby *moby) {
         if (g < vars->home.f[2]) {
             g = vars->home.f[2];
         }
-        qcopy(&v0, &moby->pos);
-        v0.f[2] = g;
+        qcopy(&position_or_offset_scratch, &moby->pos);
+        position_or_offset_scratch.f[2] = g;
         approach_e50(&moby->pos.z, g, D_0015ED6C * 4.0f);
         if (g == moby->pos.z) {
             if (moby->prev_seq != 0xC) {
@@ -570,7 +570,7 @@ void sand_shark_update(struct Moby *moby) {
         }
         moby->pos.z -= D_L02_0016191C;
         if (scale_ticks_e50(0xA) < D_L02_0015F5CC_e50) {
-            FUN_L02_002d57f8_e50(&v0, 6);
+            FUN_L02_002d57f8_e50(&position_or_offset_scratch, 6);
         }
         break;
     }
@@ -580,8 +580,8 @@ void sand_shark_update(struct Moby *moby) {
         float g;
         moby->pos.z += D_L02_0016191C;
         g = ground_e50(&moby->pos, 0, 0.5f);
-        qcopy(&v0, &moby->pos);
-        v0.f[2] = g;
+        qcopy(&position_or_offset_scratch, &moby->pos);
+        position_or_offset_scratch.f[2] = g;
         if (approach_e50(&moby->pos.z, g + D_L02_0016191C, D_0015ED6C * 4.0f) == 0.0f) {
             if (moby->state == 0x13) {
                 moby->state = 5;
@@ -603,7 +603,7 @@ void sand_shark_update(struct Moby *moby) {
             }
         }
         moby->pos.z -= D_L02_0016191C;
-        FUN_L02_002d57f8_e50(&v0, 6);
+        FUN_L02_002d57f8_e50(&position_or_offset_scratch, 6);
         break;
     }
     case SAND_SHARK_APPROACH_TARGET:
@@ -618,11 +618,11 @@ void sand_shark_update(struct Moby *moby) {
         qcopy(&navigation_point, &vars->target);
         FUN_L00_00258278_c(moby, atan2_e50(navigation_point.f[0] - moby->pos.x, navigation_point.f[1] - moby->pos.y) + vars->turn_offset, &vars->turn_vel,
                  0.05f, 0.3f, 0.2f);
-        v0.f[0] = 2.0f * fast_cos_e50(moby->rot.z);
-        v0.f[1] = 2.0f * fast_sin_e50(moby->rot.z);
-        v0.f[2] = 0.0f;
-        fast_vec_add(&v0, &v0, &moby->pos);
-        FUN_L00_00258b50(moby, &vars->walk_mode, &v0, &v1, 1.0f);
+        position_or_offset_scratch.f[0] = 2.0f * fast_cos_e50(moby->rot.z);
+        position_or_offset_scratch.f[1] = 2.0f * fast_sin_e50(moby->rot.z);
+        position_or_offset_scratch.f[2] = 0.0f;
+        fast_vec_add(&position_or_offset_scratch, &position_or_offset_scratch, &moby->pos);
+        FUN_L00_00258b50(moby, &vars->walk_mode, &position_or_offset_scratch, &v1, 1.0f);
         FUN_L02_002d63c0_e50(moby);
         if (moby->state == 0x16) {
             moby->pos.z -= D_L02_0016191C;
@@ -657,10 +657,10 @@ void sand_shark_update(struct Moby *moby) {
         FUN_L00_00258278_c(moby, atan2_e50(vars->target.f[0] - moby->pos.x, vars->target.f[1] - moby->pos.y), &vars->turn_vel,
                  0.05f, 0.3f, 0.2f);
         if (moby->seq == moby->prev_seq && in_window_e50(moby, 13.0f)) {
-            FUN_001f9bf8_e50(&v0, &moby->rot_row0, 0.75f);
-            fast_vec_add(&v0, &v0, &moby->pos);
-            v0.f[2] += 0.5f;
-            FUN_L00_002598b0_e50(moby, &v0, 0.5f, 1, 1.0f, 1.0f, 0, 1, 0);
+            FUN_001f9bf8_e50(&position_or_offset_scratch, &moby->rot_row0, 0.75f);
+            fast_vec_add(&position_or_offset_scratch, &position_or_offset_scratch, &moby->pos);
+            position_or_offset_scratch.f[2] += 0.5f;
+            FUN_L00_002598b0_e50(moby, &position_or_offset_scratch, 0.5f, 1, 1.0f, 1.0f, 0, 1, 0);
         }
         if ((moby->anim_flags & 2) && FUN_001f9b80_e50(&moby->pos, &vars->target) > 1.5f) {
             moby->state = 5;
@@ -689,11 +689,11 @@ void sand_shark_update(struct Moby *moby) {
         }
         qcopy(&navigation_point, &vars->home);
         FUN_L00_00258278_c(moby, atan2_e50(navigation_point.f[0] - moby->pos.x, navigation_point.f[1] - moby->pos.y), &vars->turn_vel, 0.02f, 0.3f, 0.1f);
-        v0.f[0] = 2.0f * fast_cos_e50(moby->rot.z);
-        v0.f[1] = 2.0f * fast_sin_e50(moby->rot.z);
-        v0.f[2] = 0.0f;
-        fast_vec_add(&v0, &v0, &moby->pos);
-        FUN_L00_00258b50(moby, &vars->walk_mode, &v0, &v1, 1.0f);
+        position_or_offset_scratch.f[0] = 2.0f * fast_cos_e50(moby->rot.z);
+        position_or_offset_scratch.f[1] = 2.0f * fast_sin_e50(moby->rot.z);
+        position_or_offset_scratch.f[2] = 0.0f;
+        fast_vec_add(&position_or_offset_scratch, &position_or_offset_scratch, &moby->pos);
+        FUN_L00_00258b50(moby, &vars->walk_mode, &position_or_offset_scratch, &v1, 1.0f);
         if (moby->state == 0x17) {
             moby->pos.z -= D_L02_0016191C;
         }
@@ -805,7 +805,7 @@ void sand_shark_update(struct Moby *moby) {
         int life;
 
         FUN_L00_00257d78_e50(&v1, 0.0f, 0.2f);
-        fast_vec_add(&v0, &v1, &moby->pos);
+        fast_vec_add(&position_or_offset_scratch, &v1, &moby->pos);
         fast_vec_scale(&v1, &v1, D_0015ED6C * 5.0f);
         life = scale_ticks_e50(random_int_between(0x14, 0x28));
         FUN_L00_00269958_e50(&moby->pos, &v1, D_L02_001619E4, D_L02_001619E8, life, 0x64,
@@ -828,8 +828,8 @@ void sand_shark_update(struct Moby *moby) {
                 blend_e50(moby, 0xC, 0, scale_ticks_e50(1));
             }
         } else if (moby->pos.z < vars->home.f[2] + 0.6f) {
-            v0.q = *(OvlQuad *)&moby->pos;
-            FUN_L02_002d57f8_e50(&v0, 6);
+            position_or_offset_scratch.q = *(OvlQuad *)&moby->pos;
+            FUN_L02_002d57f8_e50(&position_or_offset_scratch, 6);
         }
         break;
     }
@@ -837,8 +837,8 @@ void sand_shark_update(struct Moby *moby) {
         int res = FUN_L00_0025c698_e50(moby, vars->unk120);
         if ((res & 1) && vars->unk29C == 0) {
             vars->unk29C = 1;
-            v0.q = *(OvlQuad *)&moby->pos;
-            FUN_L02_002d57f8_e50(&v0, 0x1B);
+            position_or_offset_scratch.q = *(OvlQuad *)&moby->pos;
+            FUN_L02_002d57f8_e50(&position_or_offset_scratch, 0x1B);
         }
         if (res & 0x140) {
             FUN_L00_00257470_e50(moby, 0, -1);
