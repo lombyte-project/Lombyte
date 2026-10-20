@@ -25,21 +25,21 @@ void FUN_L08_0027f5f0(void *pos, int kind, void *vel, float f) {
     particle = create_part(0x49);
     if (particle != 0) {
         float s = 0.0f;
-        int c = 0;
+        int packed_high_byte = 0;
         switch (kind) {
         case 0:
-            c = 0x20;
+            packed_high_byte = 0x20;
             s = 0.12f;
             random_float_between_alt(0.25f, 0.25f);
             break;
         case 1:
-            c = 0xD;
+            packed_high_byte = 0xD;
             s = 0.5f;
             random_float_between_alt(1.0f, 1.0f);
             break;
         }
         *(short *)(particle + 0xA) = scale_game_frames(0x37);
-        *(int *)(particle + 4) = (c << 24) | 0xFFFFFF;
+        *(int *)(particle + 4) = (packed_high_byte << 24) | 0xFFFFFF;
         particle[9] = func_001FA898_r(4.0f) + 0x20;
         particle[3] = 0x48;
         particle[1] = 0;
