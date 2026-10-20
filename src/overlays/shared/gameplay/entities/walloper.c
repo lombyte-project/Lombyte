@@ -3064,19 +3064,19 @@ unsigned char *FUN_L00_002bfe08(int a, u128 *b, u128 *initial_vector) {
 extern char *D_L00_00173E58 __attribute__((section(".data")));
 int FUN_001efa68(Vec4 *, Vec4 *, int, void *, int);
 unsigned int collision_hit_material(void) __asm__("FUN_001f0b58");
-int FUN_L00_002bfec8(unsigned char *p) {
+int FUN_L00_002bfec8(unsigned char *moby) {
     enum {
         COLLISION_MATERIAL_WATER = 0
     };
     Vec4 lower_probe_point, b;
-    int r = p[0x20];
-    qcopy(&lower_probe_point, p + 0x10);
-    qcopy(&b, p + 0x10);
+    int r = moby[0x20];
+    qcopy(&lower_probe_point, moby + 0x10);
+    qcopy(&b, moby + 0x10);
     lower_probe_point.f[2] -= 0.3f;
     b.f[2] += 1.0f;
-    if (FUN_001efa68(&b, &lower_probe_point, 6, p, 0)) {
-        char *o = D_L00_00173E58;
-        if (o && *(char **)(o + 0x24) && *(short *)(*(char **)(o + 0x24) + 0x46) == 5) {
+    if (FUN_001efa68(&b, &lower_probe_point, 6, moby, 0)) {
+        char *hit_moby = D_L00_00173E58;
+        if (hit_moby && *(char **)(hit_moby + 0x24) && *(short *)(*(char **)(hit_moby + 0x24) + 0x46) == 5) {
             r = 11;
         } else {
             switch (collision_hit_material()) {
