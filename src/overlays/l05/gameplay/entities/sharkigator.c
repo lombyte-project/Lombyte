@@ -59,24 +59,24 @@ extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern void FUN_L05_002db238_u(void *, void *) __asm__("FUN_L05_002db238");
 
-void FUN_L05_002daf58(unsigned char *m) {
-    char *r = find_moby_hit(m, 0x330000, 0);
+void FUN_L05_002daf58(unsigned char *moby) {
+    char *r = find_moby_hit(moby, 0x330000, 0);
     if (r != 0) {
         char *b = D_0013E533 + 0xF1D;
-        char *o;
-        m[0x20] = 2;
-        m[0x31] = 0;
-        *(int *)(m + 0x94) = 0;
-        *(unsigned short *)(m + 0x34) |= 1;
-        FUN_L05_002db238_u(m, b);
-        allocate_voice_for_target_entry(0, 0, (int)m);
-        o = *(char **)(r + 0x20);
-        if (o != 0 && *(short *)(o + 0xA6) == 0) {
+        char *hit_owner;
+        moby[0x20] = 2;
+        moby[0x31] = 0;
+        *(int *)(moby + 0x94) = 0;
+        *(unsigned short *)(moby + 0x34) |= 1;
+        FUN_L05_002db238_u(moby, b);
+        allocate_voice_for_target_entry(0, 0, (int)moby);
+        hit_owner = *(char **)(r + 0x20);
+        if (hit_owner != 0 && *(short *)(hit_owner + 0xA6) == 0) {
             int v = scale_game_frames(0x3C);
             char *y = b - 0x100;
             *(int *)(y + 0x8C4) += v;
         }
-        m[0xA4] = 0xFF;
+        moby[0xA4] = 0xFF;
     }
 }
 #include "qcopy.h"
