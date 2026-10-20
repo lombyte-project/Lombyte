@@ -1621,7 +1621,7 @@ void FUN_L00_002080b0(void) {
         ITEM_BRIGHT_GRAY_PULSE_GLOW = 20
     };
     Vec4_2080b0 v;
-    struct Moby *m;
+    struct Moby *item_moby;
     int i;
     int c, g;
 
@@ -1638,9 +1638,9 @@ void FUN_L00_002080b0(void) {
     hero.glow_phase = fast_add_rotations_2080b0(hero.glow_phase, D_0015ED6C_gp * 2.26892805f);
     hero.moby->glow_color = fast_tween_color_2080b0(0x806E8C6E, 0x805A3232, fast_sin_2080b0(hero.glow_phase) * 0.5f + 0.5f);
 
-    m = hero.items[0].moby;
-    if (m == 0) return;
-    if (!((m->flags ^ 1) & 1)) return;
+    item_moby = hero.items[0].moby;
+    if (item_moby == 0) return;
+    if (!((item_moby->flags ^ 1) & 1)) return;
 
     switch (hero.items[0].item_id) {
     case ITEM_GRAY_PULSE_GLOW: {
@@ -1651,17 +1651,17 @@ void FUN_L00_002080b0(void) {
         c5 = 0x28C8C8C8;
         hero.items[0].glow_phase = f;
         if (0.0f < f && f < 2.26892805f) c5 = 0x280A0A0A;
-        m->glow_color = fast_tween_color_2080b0(m->glow_color, c5, 0.07f);
+        item_moby->glow_color = fast_tween_color_2080b0(item_moby->glow_color, c5, 0.07f);
         v.q = 0;
         v.f[0] = 0.0173452497f;
         v.f[1] = -0.0391772911f;
         v.f[2] = 0.0962345004f;
-        transform_vector_by_basis_2080b0(&v, &v, &m->rot_row0);
-        add_vector_xyz_2080b0(&v, &v, &m->pos);
-        c = (*(unsigned char *)&m->glow_color);
-        g = ((unsigned char *)&m->glow_color)[1];
+        transform_vector_by_basis_2080b0(&v, &v, &item_moby->rot_row0);
+        add_vector_xyz_2080b0(&v, &v, &item_moby->pos);
+        c = (*(unsigned char *)&item_moby->glow_color);
+        g = ((unsigned char *)&item_moby->glow_color)[1];
         fr = (float)c;
-        c = ((unsigned char *)&m->glow_color)[2];
+        c = ((unsigned char *)&item_moby->glow_color)[2];
         x1 = truncate_float_to_s32_2080b0(fr * 0.2f);
         x2 = truncate_float_to_s32_2080b0((float)c * 0.2f);
         col = ((g << 5) / 200) << 24;
@@ -1684,20 +1684,20 @@ void FUN_L00_002080b0(void) {
             g = truncate_float_to_s32_2080b0(fast_sin_2080b0(f) * 90.0f) + 150;
             b = truncate_float_to_s32_2080b0(fast_sin_2080b0(f) * 20.0f) + 30;
             if (hero.unk20A8 != 0) {
-                int tmp = r;
+                int saved_red = r;
                 r = g;
-                g = tmp;
+                g = saved_red;
             }
             bs = b << 16;
             col1 = bs | 0x20000000;
             gs = g << 8;
             col1 |= gs;
             col1 |= r;
-            m->glow_color = fast_tween_color_2080b0(m->glow_color, col1, 0.13f);
+            item_moby->glow_color = fast_tween_color_2080b0(item_moby->glow_color, col1, 0.13f);
             a = hero.items[0].unk20 - scale_game_frames_2080b0(50);
             if (a > 32) a = 32;
             col = (a << 24) | bs | gs | r;
-            moby_point_position_2080b0(m, 1, &v);
+            moby_point_position_2080b0(item_moby, 1, &v);
             queue_glow_sprite_2080b0(&v, col, 0.15f, 0.04f);
         }
         break;
@@ -1721,7 +1721,7 @@ void FUN_L00_002080b0(void) {
         col |= 0x80000000;
         col |= g << 8;
         col |= r;
-        m->glow_color = fast_tween_color_2080b0(m->glow_color, col, 0.15f);
+        item_moby->glow_color = fast_tween_color_2080b0(item_moby->glow_color, col, 0.15f);
         break;
     }
     case ITEM_BRIGHT_GRAY_PULSE_GLOW: {
@@ -1732,17 +1732,17 @@ void FUN_L00_002080b0(void) {
         c5 = 0xDCDCDC;
         hero.items[0].glow_phase = f;
         if (0.0f < f && f < 2.44346094f) c5 = 0xA0A0A;
-        m->glow_color = fast_tween_color_2080b0(m->glow_color, c5, 0.07f);
+        item_moby->glow_color = fast_tween_color_2080b0(item_moby->glow_color, c5, 0.07f);
         v.q = 0;
         v.f[0] = 0.0171042103f;
         v.f[1] = -0.0939194188f;
         v.f[2] = 0.140954122f;
-        transform_vector_by_basis_2080b0(&v, &v, &m->rot_row0);
-        add_vector_xyz_2080b0(&v, &v, &m->pos);
-        c = (*(unsigned char *)&m->glow_color);
-        g = ((unsigned char *)&m->glow_color)[1];
+        transform_vector_by_basis_2080b0(&v, &v, &item_moby->rot_row0);
+        add_vector_xyz_2080b0(&v, &v, &item_moby->pos);
+        c = (*(unsigned char *)&item_moby->glow_color);
+        g = ((unsigned char *)&item_moby->glow_color)[1];
         fr = (float)c;
-        c = ((unsigned char *)&m->glow_color)[2];
+        c = ((unsigned char *)&item_moby->glow_color)[2];
         x1 = truncate_float_to_s32_2080b0(fr * 0.2f);
         x2 = truncate_float_to_s32_2080b0((float)c * 0.2f);
         col = ((g << 5) / 200) << 24;
@@ -1759,9 +1759,9 @@ void FUN_L00_002080b0(void) {
         c5 = 0x2814D214;
         hero.items[0].glow_phase = f;
         if (0.0f < f && f < 2.09439516f) c5 = 0x281414D2;
-        m->glow_color = fast_tween_color_2080b0(m->glow_color, c5, frame_scale * 0.05f);
-        moby_point_position_2080b0(m, 0, &v);
-        queue_glow_sprite_2080b0(&v, m->glow_color, 0.1f, 0.03f);
+        item_moby->glow_color = fast_tween_color_2080b0(item_moby->glow_color, c5, frame_scale * 0.05f);
+        moby_point_position_2080b0(item_moby, 0, &v);
+        queue_glow_sprite_2080b0(&v, item_moby->glow_color, 0.1f, 0.03f);
         break;
     }
     }
