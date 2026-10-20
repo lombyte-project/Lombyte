@@ -278,21 +278,21 @@ void FUN_L00_0028e9c8_eed0(s32) __asm__("FUN_L00_0028e9c8");
 extern u8 D_0013DD43 __attribute__((section(".data")));
 extern u8 D_0013D3F0[];
 void FUN_L00_0028eed0(void) {
-    int m, u;
+    int level_index, u;
     D_0013E030_eed0.x2c = 1;
     if (D_0013E030_eed0.x2a != 0)
         D_0013E030_eed0.x2a = 0;
-    m = current_level_index;
-    if (m == 1 && D_0013DD43 == 0) {
+    level_index = current_level_index;
+    if (level_index == 1 && D_0013DD43 == 0) {
         D_L00_0015F5C4 = 0;
         return;
     }
-    if (m != 0) {
-        if (m == 0xE) {
+    if (level_index != 0) {
+        if (level_index == 0xE) {
             if (D_0013D3F0[0] == 0)
                 goto out;
         }
-        if (m < 0x14)
+        if (level_index < 0x14)
             goto in;
     }
 out:
