@@ -291,7 +291,7 @@ extern void initialize_global_state_entry(s32) __asm__("FUN_0022e188");
 s32 is_point_inside_clip_volume(s32 arg0, s32 arg1) __asm__("FUN_00214720");
 
 void clank_cutscene_trigger_update(DoorMoby *m) __asm__("FUN_L00_002d9dc8");
-void clank_cutscene_trigger_update(DoorMoby *m) {
+void clank_cutscene_trigger_update(DoorMoby *moby) {
     enum {
         CLANK_TRIGGER_INITIALIZE_DIALOGUE = 0,
         CLANK_TRIGGER_POLL_DIALOGUE = 1,
@@ -299,18 +299,18 @@ void clank_cutscene_trigger_update(DoorMoby *m) {
     };
     DoorVars *vars;
 
-    vars = m->vars;
+    vars = moby->vars;
     if (D_L00_0015F5C4 == 2) {
-        m->unk31 = 0;
-        m->flags |= 1;
+        moby->unk31 = 0;
+        moby->flags |= 1;
     } else {
-        m->unk31 = 1;
-        m->flags &= ~1;
+        moby->unk31 = 1;
+        moby->flags &= ~1;
     }
-    switch (m->state) {
+    switch (moby->state) {
     case CLANK_TRIGGER_INITIALIZE_DIALOGUE:
         D_00141628[0] = 1;
-        initialize_npc_dialogue(m, vars->unk20);
+        initialize_npc_dialogue(moby, vars->unk20);
         if (D_0013D388[8] != 0) {
             vars->unk56 = 1;
             vars->unk2C = 3.0f;
@@ -319,8 +319,8 @@ void clank_cutscene_trigger_update(DoorMoby *m) {
             vars->unk2C = 255.0f;
         }
         D_0013D388[8] = 1;
-        m->alpha = 0xFF;
-        m->state = 1;
+        moby->alpha = 0xFF;
+        moby->state = 1;
         break;
     case CLANK_TRIGGER_POLL_DIALOGUE:
         if (vars->unk56 != 0) {
@@ -330,8 +330,8 @@ void clank_cutscene_trigger_update(DoorMoby *m) {
                 vars->unk2C = 3.0f;
             }
         }
-        if (update_npc_dialogue(m, vars->unk20) != 0) {
-            m->state = 2;
+        if (update_npc_dialogue(moby, vars->unk20) != 0) {
+            moby->state = 2;
             vars->unk2C = 3.0f;
         }
         if (vars->unk24 >= 4 && D_L00_0015F5C4 != 6) {
@@ -340,7 +340,7 @@ void clank_cutscene_trigger_update(DoorMoby *m) {
         break;
     case CLANK_TRIGGER_WAIT_TO_REPOLL_DIALOGUE:
         if (D_L00_0015F5C4 != 2) {
-            m->state = 1;
+            moby->state = 1;
         }
         break;
     }
