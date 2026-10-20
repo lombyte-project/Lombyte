@@ -1589,7 +1589,7 @@ void peckbot_update(Mob577 *self) {
     Vec577 *np;
     s32 res;
     s32 res12;
-    s32 n;
+    s32 frame_count_or_animation_id;
     f32 hp;
     f32 rad;
     f32 dir;
@@ -2018,8 +2018,8 @@ void peckbot_update(Mob577 *self) {
         self->flags &= ~0x1000;
         if (mine_fall(self, v->knock) & 0x140) {
             clear_u64_value(&vector_scratch);
-            n = scale_game_frames(1) * 60.0f;
-            if (FUN_L01_002efbf8(D_L01_00161A80, 3, n) >= 0) {
+            frame_count_or_animation_id = scale_game_frames(1) * 60.0f;
+            if (FUN_L01_002efbf8(D_L01_00161A80, 3, frame_count_or_animation_id) >= 0) {
                 cart_burst(self, &self->pos, 4, 0.5f, 13.0f);
             }
             FUN_L00_00263fd8(self, 0x6D3, &self->pos, &self->rot, 0, 0, 0.0f, D_L01_0015F580,
@@ -2067,8 +2067,8 @@ void peckbot_update(Mob577 *self) {
             SET_ANIM(self, 0, 0, scale_game_frames(3));
         } else if (self->anim_flags & 2) {
             random_integer_below(4);
-            n = random_integer_below(4) ? 4 : 5;
-            blend_moby_animation(self, n, 0, scale_game_frames(3));
+            frame_count_or_animation_id = random_integer_below(4) ? 4 : 5;
+            blend_moby_animation(self, frame_count_or_animation_id, 0, scale_game_frames(3));
         }
         FUN_00213508(&self->pos, 0, 0.5f);
         if (FUN_L00_001f35d8_cf() == 0 || FUN_L00_001f35d8_cf() == 8) {
