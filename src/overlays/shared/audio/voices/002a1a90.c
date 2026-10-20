@@ -9,15 +9,15 @@
 
 /* Ported from rac1-decomp (src/overlays/shared/sound_002A2C90.c: func_L01_002A2C90), where it is exact; names translated to the US level program. */
 
-void FUN_L01_002a1a90(int moby_address, int b, int c, int d, int e) {
+void FUN_L01_002a1a90(int moby_address, int b, int requested_state_value, int d, int e) {
     char *state_base = D_0013E533 + 0x1D;
     *(int *)(state_base + 0x60) = moby_address;
     if ((unsigned char)state_base[0x68] != b) {
         state_base[0x68] = b;
         state_base[0x6B] |= 1;
     }
-    if (*(int *)(state_base + 0x64) != c) {
-        *(int *)(state_base + 0x64) = c;
+    if (*(int *)(state_base + 0x64) != requested_state_value) {
+        *(int *)(state_base + 0x64) = requested_state_value;
         state_base[0x6B] |= 4;
     }
     if ((unsigned char)state_base[0x69] != d || (unsigned char)state_base[0x6A] != e) {
