@@ -1641,7 +1641,7 @@ void suckcannon_update(SuckMoby *self) {
             }
         }
         if(stored) {
-            SuckMoby *best,*m;
+            SuckMoby *best,*candidate_target;
             float yaw,pitch,limit;
             work.fire.velocity.q=0;
             copy_matrix3x4(&work.fire.rotation,D_L00_00166C80);
@@ -1673,24 +1673,24 @@ void suckcannon_update(SuckMoby *self) {
                 if(suck_hero.aim_locked) yaw=suck_hero.aim_yaw;
                 else yaw=fast_arc_tan(work.fire.velocity.f.x,work.fire.velocity.f.y);
                 pitch=-fast_arc_tan(vector_length_xy(&work.fire.velocity),work.fire.velocity.f.z);
-                m=suck_moby_list;
-                while(m) {
-                    if(m->state>=0 && m!=stored) {
+                candidate_target=suck_moby_list;
+                while(candidate_target) {
+                    if(candidate_target->state>=0 && candidate_target!=stored) {
                         float tyaw,tpitch,dyaw,distance,offangle;
                         SuckAimHeight *r;
-                        qcopy(&work.fire.point,&m->pos);
-                        r=suck_get_aim_height(m);
+                        qcopy(&work.fire.point,&candidate_target->pos);
+                        r=suck_get_aim_height(candidate_target);
                         if(r) work.fire.point.f.z+=r->height;
                         else work.fire.point.f.z+=0.5f;
-                        if((m->flags&0x1000) && m && m->cls && m->cls->category==5) {
+                        if((candidate_target->flags&0x1000) && candidate_target && candidate_target->cls && candidate_target->cls->category==5) {
                             tyaw=fast_arc_tan(work.fire.point.f.x-work.fire.launch.f.x,work.fire.point.f.y-work.fire.launch.f.y);
                             tpitch=fast_arc_tan(vector_distance_xy(&work.fire.launch,&work.fire.point),work.fire.point.f.z-work.fire.launch.f.z);
                             dyaw=fast_difference_between_rotations(yaw,tyaw);
                             distance=distance_xyz(&work.fire.launch,&work.fire.point);
                             if(distance<2.5f && fast_difference_between_rotations(suck_hero.yaw,
-                                fast_arc_tan(m->pos.f.x-suck_hero.pos.f.x,m->pos.f.y-suck_hero.pos.f.y))<1.0471976f &&
+                                fast_arc_tan(candidate_target->pos.f.x-suck_hero.pos.f.x,candidate_target->pos.f.y-suck_hero.pos.f.y))<1.0471976f &&
                                 absolute_float(tpitch)<0.7853982f) {
-                                best=m;
+                                best=candidate_target;
                                 break;
                             }
                             if(!(limit<distance)) {
@@ -1700,7 +1700,7 @@ void suckcannon_update(SuckMoby *self) {
                                 delta=distance_xyz(&work.fire.offset,&work.fire.point);
                                 offangle=1.5707964f-approximate_arcsine(1.0f-delta*delta/((distance+distance)*distance));
                                 if(0.4537856f<offangle) {
-                                    float radius=m->radius*0.0009765625f;
+                                    float radius=candidate_target->radius*0.0009765625f;
                                     float adjustment=1.5707964f-approximate_arcsine(distance/square_root_scalar(distance*distance+radius*radius));
                                     if(radius<distance) offangle-=adjustment;
                                 }
@@ -1710,13 +1710,13 @@ void suckcannon_update(SuckMoby *self) {
                                     pitch=-tpitch;
                                     if(dyaw<0.17453292f) {
                                         yaw=tyaw;
-                                        best=m;
+                                        best=candidate_target;
                                     }
                                 }
                             }
                         }
                     }
-                    m=m->next;
+                    candidate_target=candidate_target->next;
                 }
                 if(best) cannon->target=best;
             }
