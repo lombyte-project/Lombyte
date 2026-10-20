@@ -59,10 +59,10 @@ extern s32 *menu_level_indices __asm__("D_001601E0") __attribute__((sda));
 s32 draw_map_screen(struct MenuScreen *screen) {
     s32 prev;
     s32 idx;
-    s32 t;
+    s32 next_level_id;
     s32 id;
     s32 slot;
-    s32 n;
+    s32 eviction_slot_index;
     struct MapHdr *hdr;
     u8 *pal;
     u8 *pix;
@@ -72,11 +72,11 @@ s32 draw_map_screen(struct MenuScreen *screen) {
     u8 *tex;
     u8 *tbase;
     u8 *b;
-    u8 *c;
+    u8 *tex2_pixels;
     s32 pick;
     s32 next;
     s32 k;
-    struct MapEntry *e;
+    struct MapEntry *map_read_entry;
 
     update_map_zoom_and_pan();
     if (!(screen->data.raw.unk34 & 0x40)) {
@@ -108,9 +108,9 @@ s32 draw_map_screen(struct MenuScreen *screen) {
         if (idx >= 0) {
             if (controller_state.pressed_unmasked & 8) {
                 if (idx < 0x13) {
-                    t = menu_level_indices[idx + 1];
-                    if (t != 0) {
-                        level_map_selection.level = t;
+                    next_level_id = menu_level_indices[idx + 1];
+                    if (next_level_id != 0) {
+                        level_map_selection.level = next_level_id;
                     }
                 }
             }
@@ -132,11 +132,11 @@ s32 draw_map_screen(struct MenuScreen *screen) {
     }
     slot = find_map_entry_slot(id);
     if (level_map_selection.level != level_map_selection.loaded && slot != -1) {
-        n = pick_map_slot_to_evict();
-        if (level_map_selection.slot[0] != 0 && n > 0) {
-            move_map_entry_slot(n, 0);
+        eviction_slot_index = pick_map_slot_to_evict();
+        if (level_map_selection.slot[0] != 0 && eviction_slot_index > 0) {
+            move_map_entry_slot(eviction_slot_index, 0);
             if (slot == 0) {
-                slot = n;
+                slot = eviction_slot_index;
             }
         }
         func_0020B618_l(level_map_selection.slot[slot], level_map_selection.hdr);
@@ -162,13 +162,13 @@ s32 draw_map_screen(struct MenuScreen *screen) {
             tbase = (u8 *)level_map_selection.hdr;
             tex = tbase + hdr->unk10;
             b = tbase + hdr->unk14 + 0x420;
-            c = tbase + hdr->unk18 + 0x420;
+            tex2_pixels = tbase + hdr->unk18 + 0x420;
             level_map_selection.tex0 =
                 register_8bit_texture(7, 7, tex + 0x20, tex + 0x420, level_map_selection.tex_clut_vram, level_map_selection.tex0_vram);
             level_map_selection.tex1 =
                 register_8bit_texture(7, 7, tex + 0x20, b, level_map_selection.tex_clut_vram, level_map_selection.tex1_vram);
             level_map_selection.tex2 =
-                register_8bit_texture(7, 7, tex + 0x20, c, level_map_selection.tex_clut_vram, level_map_selection.tex2_vram);
+                register_8bit_texture(7, 7, tex + 0x20, tex2_pixels, level_map_selection.tex_clut_vram, level_map_selection.tex2_vram);
             if (buf != 0) {
                 register_8bit_texture(9, 9, pal, pal, 0x3FF000, level_map_selection.map_image_vram);
             }
@@ -202,13 +202,13 @@ s32 draw_map_screen(struct MenuScreen *screen) {
                     level_map_selection.slot_size[pick] = level_map_selection.unk234;
                 } else {
                     if (next & 0x100) {
-                        e = &D_00138438[next ^ 0x100];
+                        map_read_entry = &D_00138438[next ^ 0x100];
                     } else {
-                        e = &D_001383A0[next];
+                        map_read_entry = &D_001383A0[next];
                     }
-                    start_audio_stream_read(level_map_selection.slot[pick], e->a, e->b);
+                    start_audio_stream_read(level_map_selection.slot[pick], map_read_entry->a, map_read_entry->b);
                     menu_system.pending_buffer = 1;
-                    level_map_selection.slot_size[pick] = (e->b << 11) >> 4;
+                    level_map_selection.slot_size[pick] = (map_read_entry->b << 11) >> 4;
                 }
                 level_map_selection.slot_id[pick] = next | 0x1000;
                 level_map_selection.sel = pick;
