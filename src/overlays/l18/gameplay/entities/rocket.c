@@ -617,14 +617,14 @@ void FUN_L18_002d5610(void *moby_object, void *src) {
     float movement_step_copy[4];
     float *qp = movement_step_copy;
     int flags;
-    float a, b, c, hit_radius, e;
+    float a, b, effect_scale, hit_radius, e;
     *(OvlQuad *)qp = *(OvlQuad *)src;
     flags = *(int *)(*(char **)(moby + 0x78) + 0x38);
-    c = (flags & 1) ? 2.0f : 0.75f;
+    effect_scale = (flags & 1) ? 2.0f : 0.75f;
     a = (flags & 1) ? 4.0f : 2.0f;
     b = (flags & 1) ? 2.0f : 1.0f;
     hit_radius = (flags & 4) ? 0.0f : 1.5f;
-    func_L00_0025F4A8_alt(moby, qp, moby + 0x10, hit_radius, 1.0f, 0x14, 6, 0x20, a, b, 9.0f, c, 1, 5.0f, 0,
+    func_L00_0025F4A8_alt(moby, qp, moby + 0x10, hit_radius, 1.0f, 0x14, 6, 0x20, a, b, 9.0f, effect_scale, 1, 5.0f, 0,
                           0, -1, 0);
     if (hit_radius != 0.0f) {
         if (hero.vehicle_mode == 2) {
