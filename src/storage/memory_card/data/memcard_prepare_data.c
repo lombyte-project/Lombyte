@@ -19,12 +19,12 @@ s32 memcard_prepare_data(struct SaveHeader *out, s32 slot,
                          struct SaveBlock *blk) __asm__("FUN_0020ad78");
 
 s32 memcard_prepare_data(struct SaveHeader *out, s32 slot, struct SaveBlock *blk) {
-    u8 *p;
+    u8 *write_cursor;
     s32 total;
     u8 *src;
 
     total = 0;
-    p = (u8 *)(out + 1);
+    write_cursor = (u8 *)(out + 1);
     if (blk->base != 0) {
         struct SaveBlock *block = blk;
         s32 mask = -4;
@@ -32,20 +32,20 @@ s32 memcard_prepare_data(struct SaveHeader *out, s32 slot, struct SaveBlock *blk
         do {
             src = block->base + slot * block->size;
             total += 8;
-            ((s32 *)p)[0] = block->id;
-            ((s32 *)p)[1] = block->size;
-            p += 8;
-            copy_memory_aligned(p, src, block->size);
-            p += block->size;
+            ((s32 *)write_cursor)[0] = block->id;
+            ((s32 *)write_cursor)[1] = block->size;
+            write_cursor += 8;
+            copy_memory_aligned(write_cursor, src, block->size);
+            write_cursor += block->size;
             total += block->size;
-            p = (u8 *)(((s32)p + 3) & mask);
+            write_cursor = (u8 *)(((s32)write_cursor + 3) & mask);
             total = (total + 3) & mask;
             block++;
         } while (block->base != 0);
     }
     total += 8;
-    ((s32 *)p)[1] = 0;
-    ((s32 *)p)[0] = -1;
+    ((s32 *)write_cursor)[1] = 0;
+    ((s32 *)write_cursor)[0] = -1;
     out->checksum = calculate_crc16(out + 1, total);
     out->size = total;
     return total + 8;
