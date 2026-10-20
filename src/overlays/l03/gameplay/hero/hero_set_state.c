@@ -90,6 +90,7 @@ int hero_set_state(int a, int b) {
     enum {
         HERO_STATE_WATER_SURFACE_ENTRY = 0x37,
         HERO_STATE_VEHICLE_IDLE = 0x53,
+        HERO_STATE_GROUND_SPEED_CAPPED = 0x54,
         HERO_STATE_STOP_GRAVITY_SPEED = 0x66,
         HERO_STATE_IDLE_MOTION_CLEARED = 0x67,
         HERO_STATE_DROWN = 0x6A,
@@ -1573,7 +1574,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(6, 0, (float)scale_game_frames(7));
         break;
     }
-    case 0x54: {
+    case HERO_STATE_GROUND_SPEED_CAPPED: {
         struct Hero *p = &hero;
         p->state.control_mode = 1;
         p->unk2284 = 0;
