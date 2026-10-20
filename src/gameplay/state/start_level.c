@@ -30,19 +30,19 @@ extern s32 pal_mode __asm__("D_0015ED80") MACRO_ADDR;
 extern s32 game_mode_macro __asm__("D_0015F604") MACRO_ADDR;
 extern s32 depth_buffer_address __asm__("D_0015EE88") MACRO_ADDR;
 void start_level(int level) {
-    int a;
+    int movie_size_bytes;
     int b;
-    int t;
+    int movie_work_area_base;
 
     if (level < 0) {
         return;
     }
     if (pal_mode != 0) {
         b = disc_table.start_movies_alt[level].sector;
-        a = disc_table.start_movies_alt[level].size;
+        movie_size_bytes = disc_table.start_movies_alt[level].size;
     } else {
         b = disc_table.start_movies[level].sector;
-        a = disc_table.start_movies[level].size;
+        movie_size_bytes = disc_table.start_movies[level].size;
     }
     decode_mode_macro = 2;
     D_0013E550[0x6B] |= 8;
@@ -64,9 +64,9 @@ void start_level(int level) {
     }
     {
         char *g = D_001940C0;
-        t = *(int *)(g + 0x1C);
+        movie_work_area_base = *(int *)(g + 0x1C);
     }
-    play_mpeg_movie(b, a, t + 0x100000, t + 0x400000, 0);
+    play_mpeg_movie(b, movie_size_bytes, movie_work_area_base + 0x100000, movie_work_area_base + 0x400000, 0);
     sceCdSync(0);
     sceGsSyncV(0);
     wait_for_graphics_pipeline_idle(0, 0);
