@@ -3281,9 +3281,9 @@ void FUN_L00_002c7548(struct Moby *moby, CarrierVars *vars, OvlVec4 *grip)
     direction[0] = 1.0f;
     adjust_direction_2c7548(direction, direction, hero.basis);
     {
-        struct Hero *h = &hero;
-        pos[0] = cos_2c7548(add_rotations_2c7548(-0.361968011f, atan2_2c7548(h->unk670, h->unk674))) * 0.859039009f;
-        pos[1] = sin_2c7548(add_rotations_2c7548(-0.361968011f, atan2_2c7548(h->unk670, h->unk674))) * 0.859039009f;
+        struct Hero *hero_state = &hero;
+        pos[0] = cos_2c7548(add_rotations_2c7548(-0.361968011f, atan2_2c7548(hero_state->unk670, hero_state->unk674))) * 0.859039009f;
+        pos[1] = sin_2c7548(add_rotations_2c7548(-0.361968011f, atan2_2c7548(hero_state->unk670, hero_state->unk674))) * 0.859039009f;
         pos[2] = 0.0f;
         add_vector_2c7548(pos, pos, &hero.motion.pos);
         pos[2] = pos[2] + 0.390819997f;
@@ -3291,12 +3291,12 @@ void FUN_L00_002c7548(struct Moby *moby, CarrierVars *vars, OvlVec4 *grip)
         speed = (controller_state.held & 5) ? 3.5f : 2.5f;
         scale_vector_2c7548(target, direction, speed);
         add_vector_2c7548(target, target, pos);
-        if ((controller_state.held & 5) && h->unk20AC == 0) {
+        if ((controller_state.held & 5) && hero_state->unk20AC == 0) {
             *(u128 *)arc = 0;
             arc[2] = 1.0f;
             rotate_vector_2c7548(arc, arc, matrix);
             hit = 0;
-            subtract_rotations_2c7548(h->moby->rot.z, atan2_2c7548(arc[0], arc[1]));
+            subtract_rotations_2c7548(hero_state->moby->rot.z, atan2_2c7548(arc[0], arc[1]));
             angle = atan2_2c7548(arc[0], arc[1]);
             slope = atan2_2c7548(vector_length_xy_2c7548(arc), arc[2]);
             if (0.593411922f < slope) slope = 0.593411922f;
