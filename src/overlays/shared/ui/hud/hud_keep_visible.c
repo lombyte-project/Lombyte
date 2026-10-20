@@ -643,14 +643,14 @@ extern char *get_help_message_text(s32) __asm__("FUN_001fdd10");
 extern s32 sprintf(char *, const char *, ...) __asm__("FUN_00116248");
 extern void draw_framed_text(s32, s32, s32, char *) __asm__("FUN_00201200");
 
-int FUN_L00_00237200(HudElem *e) {
+int FUN_L00_00237200(HudElem *hud_element) {
     int y, i;
     int alpha, color, level;
     float fade;
     Vec4 points[2];
     Vec4 point;
     char text[64];
-    u8 *opacity = e->cnt;
+    u8 *opacity = hud_element->cnt;
     int text_y;
     int text_color;
     int never = 0;
@@ -746,5 +746,5 @@ int FUN_L00_00237200(HudElem *e) {
         }
     }
     /* Fakematch: the never-taken text_color use keeps the then-branch color copy in its own register. */
-    return e->w + (text_color & never);
+    return hud_element->w + (text_color & never);
 }
