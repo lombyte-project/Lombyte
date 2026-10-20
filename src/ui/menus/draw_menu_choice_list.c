@@ -23,10 +23,10 @@ extern void font_print_right(s32, s32, u64, s32, s32) __asm__("func_001F6940");
 
 s32 draw_menu_choice_list(struct OptMenu *m) __asm__("FUN_00221460");
 
-s32 draw_menu_choice_list(struct OptMenu *m) {
-    struct OptItem *p;
+s32 draw_menu_choice_list(struct OptMenu *menu) {
+    struct OptItem *item_cursor;
     struct OptItem *it;
-    s32 n;
+    s32 item_count;
     s32 i;
     s32 step;
     s32 y;
@@ -34,22 +34,22 @@ s32 draw_menu_choice_list(struct OptMenu *m) {
 
     vu1_add_g_sregister(0x47, 0x2004B);
     setup_gif_paging(0);
-    n = 0;
-    for (p = m->items; p->text != 0; p++) {
-        n++;
+    item_count = 0;
+    for (item_cursor = menu->items; item_cursor->text != 0; item_cursor++) {
+        item_count++;
     }
-    step = m->height / (n + 1);
-    p = m->items;
+    step = menu->height / (item_count + 1);
+    item_cursor = menu->items;
     y = step - 8;
-    for (i = 0; m->items[i].text != 0; i++) {
-        it = &m->items[i];
-        if (i == m->selected) {
+    for (i = 0; menu->items[i].text != 0; i++) {
+        it = &menu->items[i];
+        if (i == menu->selected) {
             color = 0x8020FFFF;
         } else {
             color = 0x80FFA888;
         }
         font_print_large(0xC, y, color, get_help_message_text(it->text), -1);
-        font_print_right(m->x - 0xC, y, 0x80FFA888, get_help_message_text(it->names[*it->value]),
+        font_print_right(menu->x - 0xC, y, 0x80FFA888, get_help_message_text(it->names[*it->value]),
                          -1);
         y += step;
     }
