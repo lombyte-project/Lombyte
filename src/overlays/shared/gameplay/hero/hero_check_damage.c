@@ -29,7 +29,7 @@ int FUN_L00_0020c758(Vec4 *pos, f32 *dir)
 {
     Vec4 probe, top, low, wall, edge;
     f32 drop, fwd, up, reach, min_height;
-    f32 ang, wall_yaw, d, step, top_margin, max_slope, one, five, half, inc, limit;
+    f32 ang, wall_yaw, wall_normal_offset, step, top_margin, max_slope, one, five, half, inc, limit;
     int found, hit, i, j, material;
 
     if (hero.unk308 == 2)
@@ -107,31 +107,31 @@ int FUN_L00_0020c758(Vec4 *pos, f32 *dir)
         /* walk along the wall normal until the top ends */
         limit = 2.4f;
         inc = 0.07f;
-        d = 0.0f;
+        wall_normal_offset = 0.0f;
         half = 0.5f;
         do {
             qcopy(&wall, &top);
             wall.f[2] = top.f[2];
-            wall.f[0] += fast_cos(wall_yaw) * d;
-            wall.f[1] += fast_sin(wall_yaw) * d;
+            wall.f[0] += fast_cos(wall_yaw) * wall_normal_offset;
+            wall.f[1] += fast_sin(wall_yaw) * wall_normal_offset;
             qcopy(&low, &wall);
             wall.f[2] += half;
             low.f[2] -= half;
             if (collision_line(&wall, &low, 4, hero.moby, 0)) {
-                d += inc;
+                wall_normal_offset += inc;
                 continue;
             }
             /* edge found: its point is computed but unused, as in retail */
             qcopy(&edge, &wall);
-            d = inc * half;
-            d = -d;
+            wall_normal_offset = inc * half;
+            wall_normal_offset = -wall_normal_offset;
             edge.f[2] = top.f[2];
-            edge.f[0] += fast_cos(wall_yaw) * d;
-            edge.f[1] += fast_sin(wall_yaw) * d;
+            edge.f[0] += fast_cos(wall_yaw) * wall_normal_offset;
+            edge.f[1] += fast_sin(wall_yaw) * wall_normal_offset;
             if (0.52359879f < fast_difference_between_rotations(fast_add_rotations(wall_yaw, 3.14159274f), *dir))
                 return 0;
             return 1;
-        } while (d < limit);
+        } while (wall_normal_offset < limit);
     }
     return 0;
 }
