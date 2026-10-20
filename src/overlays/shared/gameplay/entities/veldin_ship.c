@@ -1655,10 +1655,10 @@ void metal_detector_update(struct Moby *moby) {
                                      truncate_float_to_s32((10.0f - (hero.unk2044 + hero.unk2044)) * 32767.0f / 60.0f) - 0x1FFF);
                 }
                 {
-                    s32 c = truncate_float_to_s32(hero.unk2044 * 255.0f / 10.0f);
-                    s32 col = (c << 8) | 0xFF000000;
+                    s32 distance_tint_component = truncate_float_to_s32(hero.unk2044 * 255.0f / 10.0f);
+                    s32 col = (distance_tint_component << 8) | 0xFF000000;
 
-                    moby->glow_color = ((c << 16) | col) | 0xFF;
+                    moby->glow_color = ((distance_tint_component << 16) | col) | 0xFF;
                 }
                 target_moby = hero.unk2040;
                 if (target_moby != 0 && target_moby->oclass == 0x25D && target_moby->state != 0xFE && target_moby->state != 0xFD && hero.unk2044 < 1.0f) {
