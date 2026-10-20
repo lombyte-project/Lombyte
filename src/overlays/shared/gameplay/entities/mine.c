@@ -2075,9 +2075,9 @@ void debris_update(unsigned char *debris_moby) {
             *(OvlQuad *)&v = *(OvlQuad *)&random_direction;
             scale_2af5b8(&v, &v, D_0015ED6C_2af5b8);
             if (debris_moby[0xBC] & 0xFE) {
-                int a = FUN_L00_0025c0e8_c(c.c[rndi_2af5b8(4)], debris_moby[0xBC] >> 1);
+                int adjusted_color = FUN_L00_0025c0e8_c(c.c[rndi_2af5b8(4)], debris_moby[0xBC] >> 1);
                 int b = FUN_L00_0025c0e8_c(0x4FFF, debris_moby[0xBC] >> 1);
-                FUN_L00_00269958(debris_moby + 0x10, &v, a, b, fr_2af5b8(0x2D), 0x32, 0x78, 1);
+                FUN_L00_00269958(debris_moby + 0x10, &v, adjusted_color, b, fr_2af5b8(0x2D), 0x32, 0x78, 1);
             } else {
                 FUN_L00_00269958(debris_moby + 0x10, &v, c.c[rndi_2af5b8(4)], 0x4FFF, fr_2af5b8(0x2D), 0x32, 0x78,
                             1);
