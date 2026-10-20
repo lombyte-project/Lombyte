@@ -1706,48 +1706,48 @@ extern void trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
 extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 float absolute_float(float input) __asm__("func_001F99C0");
 
-void FUN_L15_002c6900(struct Moby *m) {
+void FUN_L15_002c6900(struct Moby *moby) {
     int st;
     float fv;
     int res;
-    char *d;
+    char *helicopter_vars;
     char *r;
-    float a, b, p, q;
-    d = (char *)m->pvars;
+    float hit_away_heading, b, recoil_rotation_y, recoil_rotation_x;
+    helicopter_vars = (char *)moby->pvars;
     fv = 0.0f;
-    r = find_moby_hit(m, 0x330000, 0);
-    res = hit_reaction(m, r, d + 0x20, 0, &st, &fv, 0, 4);
-    if (st != 1 && m->state != 7 && m->state != 0x40) {
-        float t = *(float *)(d + 0x20) - fv;
-        *(float *)(d + 0x20) = t;
-        if (res == 1 || t <= 0.0f) {
-            m->state = 7;
+    r = find_moby_hit(moby, 0x330000, 0);
+    res = hit_reaction(moby, r, helicopter_vars + 0x20, 0, &st, &fv, 0, 4);
+    if (st != 1 && moby->state != 7 && moby->state != 0x40) {
+        float remaining_health = *(float *)(helicopter_vars + 0x20) - fv;
+        *(float *)(helicopter_vars + 0x20) = remaining_health;
+        if (res == 1 || remaining_health <= 0.0f) {
+            moby->state = 7;
         } else if (res != 0xB) {
-            *(unsigned char *)(d + 0x67) = 0xB4;
-            trooper_anim_update(m, (short *)(d + 0x60));
-            if (*(float *)(r + 0x1C) == 5627.925f && m->state != 6) {
-                a = fast_arc_tan(m->pos.x - *(float *)(r + 0),
-                                 m->pos.y - *(float *)(r + 4));
-                b = fast_subtract_rotations(a, m->rot.z);
-                p = fast_cos(b) * 0.08726646f;
-                q = fast_sin(b) * -0.34906584f;
-                if (absolute_float(m->rot.x) < absolute_float(q)) {
-                    m->rot.x = q;
-                    *(float *)(d + 0x174) = 0.0f;
+            *(unsigned char *)(helicopter_vars + 0x67) = 0xB4;
+            trooper_anim_update(moby, (short *)(helicopter_vars + 0x60));
+            if (*(float *)(r + 0x1C) == 5627.925f && moby->state != 6) {
+                hit_away_heading = fast_arc_tan(moby->pos.x - *(float *)(r + 0),
+                                 moby->pos.y - *(float *)(r + 4));
+                b = fast_subtract_rotations(hit_away_heading, moby->rot.z);
+                recoil_rotation_y = fast_cos(b) * 0.08726646f;
+                recoil_rotation_x = fast_sin(b) * -0.34906584f;
+                if (absolute_float(moby->rot.x) < absolute_float(recoil_rotation_x)) {
+                    moby->rot.x = recoil_rotation_x;
+                    *(float *)(helicopter_vars + 0x174) = 0.0f;
                 }
-                if (absolute_float(m->rot.y) < absolute_float(p)) {
-                    m->rot.y = p;
-                    *(float *)(d + 0x178) = 0.0f;
+                if (absolute_float(moby->rot.y) < absolute_float(recoil_rotation_y)) {
+                    moby->rot.y = recoil_rotation_y;
+                    *(float *)(helicopter_vars + 0x178) = 0.0f;
                 }
-                *(float *)(d + 0x170) = frame_time * 4.0f;
-                *(short *)(d + 0x16A) = scale_game_frames(0x3C);
-                m->command = m->state;
-                m->state = 6;
+                *(float *)(helicopter_vars + 0x170) = frame_time * 4.0f;
+                *(short *)(helicopter_vars + 0x16A) = scale_game_frames(0x3C);
+                moby->command = moby->state;
+                moby->state = 6;
             }
         }
     }
-    m->hit_slot = 0xFF;
-    trooper_anim_finish(m, d + 0x60);
+    moby->hit_slot = 0xFF;
+    trooper_anim_finish(moby, helicopter_vars + 0x60);
 }
 #include "qcopy.h"
 
