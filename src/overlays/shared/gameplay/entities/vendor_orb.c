@@ -2510,10 +2510,10 @@ void follow_camera_set_height(float a, float b) __asm__("FUN_L00_002e84b8");
 void follow_camera_set_height(float height, float b) {
     char *current_camera = D_L00_00166E00_002e84b8;
     if (*(short *)(current_camera + 0x86) == 0) {
-        char *q = *(char **)(current_camera + 0x70) + 0x130;
-        *(short *)(q + 0x3e) = 1;
-        *(float *)(q + 0x4c) = height;
-        *(float *)(q + 0x54) = b;
+        char *camera_height_state = *(char **)(current_camera + 0x70) + 0x130;
+        *(short *)(camera_height_state + 0x3e) = 1;
+        *(float *)(camera_height_state + 0x4c) = height;
+        *(float *)(camera_height_state + 0x54) = b;
     }
 }
 extern char *D_L00_00166E00_c3 __asm__("D_L00_00166E00") __attribute__((section(".data")));
