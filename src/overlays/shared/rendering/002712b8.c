@@ -1513,7 +1513,7 @@ void FUN_001f9a10_274a70(void *, void *, void *) __asm__("FUN_001f9a10");
 f32 spread_k(f32, f32) __asm__("FUN_L00_00257c48");
 void FUN_L00_00274a70(u8 *particle) {
     u8 *particle_data = particle + 0x20;
-    s32 k, n;
+    s32 k, rotation_accumulator;
     f32 f;
     if (*(f32 *)(particle + 0x10) < 2.0f || 1021.0f < *(f32 *)(particle + 0x10) || *(f32 *)(particle + 0x14) < 2.0f ||
         1021.0f < *(f32 *)(particle + 0x14) || *(f32 *)(particle + 0x18) < 2.0f || 1021.0f < *(f32 *)(particle + 0x18))
@@ -1535,11 +1535,11 @@ void FUN_L00_00274a70(u8 *particle) {
     if (*(f32 *)(particle + 0x10) < 2.0f || 1021.0f < *(f32 *)(particle + 0x10) || *(f32 *)(particle + 0x14) < 2.0f ||
         1021.0f < *(f32 *)(particle + 0x14) || *(f32 *)(particle + 0x18) < 2.0f || 1021.0f < *(f32 *)(particle + 0x18))
         goto kill;
-    n = particle[8];
-    n += truncate_float_to_s32(spread_k(0.0f, 64.0f));
-    if (n >= 0x100)
-        n -= 0xFF;
-    particle[8] = n;
+    rotation_accumulator = particle[8];
+    rotation_accumulator += truncate_float_to_s32(spread_k(0.0f, 64.0f));
+    if (rotation_accumulator >= 0x100)
+        rotation_accumulator -= 0xFF;
+    particle[8] = rotation_accumulator;
     if (FUN_001f9770_274a70(particle + 0xA) != 0) {
     kill:
         free_effect_particle(particle);
