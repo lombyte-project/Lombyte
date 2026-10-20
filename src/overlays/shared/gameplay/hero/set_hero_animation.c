@@ -860,22 +860,22 @@ void FUN_L00_002334d0(f32 *out, f32 *in, f32 k) {
         GRAVITY_MODE_DIRECTION_AXIS = 2
     };
     struct Hero *b = &hero;
-    V002334d0 t;
+    V002334d0 offset_vector;
     switch (b->unk20B3) {
     case GRAVITY_MODE_WORLD_Z:
         out[2] = in[2] - k;
         break;
     case GRAVITY_MODE_VECTOR_AXIS:
-        FUN_001f9bf8_002334d0(&t, &b->unk270, -k);
-        FUN_001f9a10_002334d0(out, in, &t);
+        FUN_001f9bf8_002334d0(&offset_vector, &b->unk270, -k);
+        FUN_001f9a10_002334d0(out, in, &offset_vector);
         break;
     case GRAVITY_MODE_DIRECTION_AXIS:
         if (b->state.current == 0x3E && b->air_frames.s == 0) {
-            FUN_001f9bf8_002334d0(&t, &b->unk270, -k);
+            FUN_001f9bf8_002334d0(&offset_vector, &b->unk270, -k);
         } else {
-            FUN_001f9bf8_002334d0(&t, &hero.gravity_dir, k);
+            FUN_001f9bf8_002334d0(&offset_vector, &hero.gravity_dir, k);
         }
-        FUN_001f9a10_002334d0(out, in, &t);
+        FUN_001f9a10_002334d0(out, in, &offset_vector);
         break;
     }
 }
