@@ -1931,7 +1931,7 @@ extern int FUN_00213260_275910(int) __asm__("FUN_00213260");
 extern unsigned char *FUN_002141f8_275910(int) __asm__("FUN_002141f8");
 
 extern unsigned char *D_L00_001B21B8 __attribute__((section(".data")));
-unsigned char *FUN_L00_00275910(OvlQuad *pos, int lifetime_frames, int col, int mode, int b, float *vec, int h,
+unsigned char *FUN_L00_00275910(OvlQuad *pos, int lifetime_frames, int col, int mode, int b, float *vec, int lookup_object_reference,
                                 float x, float y) {
     unsigned char *particle = p27fe00_alloc(0x4E);
     if (particle) {
@@ -1957,10 +1957,10 @@ unsigned char *FUN_L00_00275910(OvlQuad *pos, int lifetime_frames, int col, int 
         *(short *)(particle_data + 8) = lifetime_frames;
         particle_data[0xA] = b;
         particle_data[0xB] = col >> 24;
-        *(int *)(particle_data + 0x18) = h;
+        *(int *)(particle_data + 0x18) = lookup_object_reference;
         *(float *)(particle_data + 0x1C) = 0;
-        if (h) {
-            unsigned char *r = FUN_002141f8_275910(h);
+        if (lookup_object_reference) {
+            unsigned char *r = FUN_002141f8_275910(lookup_object_reference);
             if (r)
                 *(float *)(particle_data + 0x1C) = *(float *)(r + 0x10);
         }
