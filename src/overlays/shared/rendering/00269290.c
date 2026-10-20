@@ -1773,32 +1773,32 @@ extern float FUN_002132a8_26d598(float, float) __asm__("FUN_002132a8");
 extern int FUN_001f96f8_26d598(int) __asm__("FUN_001f96f8");
 
 extern unsigned char *D_L00_001B20E4 __attribute__((section(".data")));
-void FUN_L00_0026d598(void *a, void *b, int flag) {
-    unsigned char *m = FUN_L00_002678b8_26d598(0x19);
-    if (m) {
-        float *q = (float *)(m + 0x20);
-        qcopy(m + 0x10, a);
+void FUN_L00_0026d598(void *spawn_position, void *b, int flag) {
+    unsigned char *particle = FUN_L00_002678b8_26d598(0x19);
+    if (particle) {
+        float *particle_data = (float *)(particle + 0x20);
+        qcopy(particle + 0x10, spawn_position);
         if (flag == 0) {
             float one = 1.0f;
-            *(int *)(m + 4) = FUN_L00_0025bfe0_26d598(one, one, one, 0.6f);
-            q[4] = one;
-            q[5] = one;
-            q[6] = one;
+            *(int *)(particle + 4) = FUN_L00_0025bfe0_26d598(one, one, one, 0.6f);
+            particle_data[4] = one;
+            particle_data[5] = one;
+            particle_data[6] = one;
         } else {
-            *(int *)(m + 4) = FUN_L00_0025bfe0_26d598(1.0f, 1.0f, 1.0f, 0.6f);
-            q[4] = -1.0f;
-            q[5] = -1.0f;
-            q[6] = -1.0f;
+            *(int *)(particle + 4) = FUN_L00_0025bfe0_26d598(1.0f, 1.0f, 1.0f, 0.6f);
+            particle_data[4] = -1.0f;
+            particle_data[5] = -1.0f;
+            particle_data[6] = -1.0f;
         }
-        m[9] = FUN_001fa6d0_26d598(4.0f) + 0x40;
-        m[1] = 0;
-        m[3] = 0x48;
-        *(float *)(m + 0xC) = FUN_002132a8_26d598(5000.0f, 30000.0f);
-        m[8] = 0;
-        m[2] = *D_L00_001B20E4;
-        q[7] = 0.6f;
-        *(s16 *)(m + 0xA) = FUN_001f96f8_26d598(0x50);
-        qcopy(q, b);
+        particle[9] = FUN_001fa6d0_26d598(4.0f) + 0x40;
+        particle[1] = 0;
+        particle[3] = 0x48;
+        *(float *)(particle + 0xC) = FUN_002132a8_26d598(5000.0f, 30000.0f);
+        particle[8] = 0;
+        particle[2] = *D_L00_001B20E4;
+        particle_data[7] = 0.6f;
+        *(s16 *)(particle + 0xA) = FUN_001f96f8_26d598(0x50);
+        qcopy(particle_data, b);
     }
 }
 typedef struct {
