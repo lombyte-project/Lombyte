@@ -835,7 +835,7 @@ void FUN_L00_00216e48(int idx, int a, int b) {
 
 void FUN_L00_00216ec0_00216ec0(s32, s32, s32) __asm__("FUN_L00_00216ec0");
 
-void FUN_L00_00216ec0_00216ec0(s32 a, s32 b, s32 c) {
+void FUN_L00_00216ec0_00216ec0(s32 voice_entry_index, s32 b, s32 c) {
     struct Hero *base;
     s16 *current_slot;
     s32 slots_examined = 0;
@@ -847,7 +847,7 @@ void FUN_L00_00216ec0_00216ec0(s32 a, s32 b, s32 c) {
             current_slot[0] = 1;
             current_slot[3] = c;
             current_slot[2] = b;
-            current_slot[1] = a;
+            current_slot[1] = voice_entry_index;
             return;
         }
         current_slot = current_slot + 4;
