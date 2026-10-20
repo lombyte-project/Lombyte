@@ -2168,9 +2168,9 @@ void rocket_update(char *rocket_moby) {
             subtract_vector_xyz(&u.v.a, &u.v.c, rocket_vars + 0x10);
             qcopy(rocket_vars, &u.v.c);
             {
-                float r1 = FUN_L00_001ff430(&u.v.b);
+                float target_displacement_length_squared = FUN_L00_001ff430(&u.v.b);
                 float fB = (u.v.b.f[0] * u.v.a.f[0] + u.v.b.f[1] * u.v.a.f[1] + u.v.b.f[2] * u.v.a.f[2]) * -2.0f;
-                float fA = *(float *)(rocket_vars + 0x30) * *(float *)(rocket_vars + 0x30) - r1;
+                float fA = *(float *)(rocket_vars + 0x30) * *(float *)(rocket_vars + 0x30) - target_displacement_length_squared;
                 float r2f = FUN_L00_001ff430(&u.v.a);
                 float sq = square_root_scalar(fB * fB - (4.0f * fA) * (-r2f));
                 float intercept_root_plus = (-fB + sq) / (fA + fA);
