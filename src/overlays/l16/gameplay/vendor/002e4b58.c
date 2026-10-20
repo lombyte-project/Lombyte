@@ -185,7 +185,7 @@ void FUN_L16_002e97a0(void) {
     int *b = (int *)&D_L16_00161F98;
     int *c = (int *)D_L16_00161FA0;
     int *input_vector_tables = (int *)D_L16_00161FA8;
-    int *e = (int *)D_L16_00161FB0;
+    int *packet_word_tables = (int *)D_L16_00161FB0;
     int i;
 
     vu1_add_g_sregister_l16(6, get_effect_texture_l16(0x29));
@@ -196,7 +196,7 @@ void FUN_L16_002e97a0(void) {
     for (i = 0; i < 0x2; i++) {
         if (fast_bsphere_check(D_L16_001DF2B0[i], 512.0f) != -1) {
             FUN_L16_002e8b98_i(element_counts[i], input_vector_tables[i], b[i], c[i], D_L16_001DF2D0);
-            FUN_L00_001fde98(element_counts[i], b[i], e[i], D_L16_001DF2D0, 1);
+            FUN_L00_001fde98(element_counts[i], b[i], packet_word_tables[i], D_L16_001DF2D0, 1);
         }
     }
 }
