@@ -288,9 +288,9 @@ extern void FUN_00118a80_24f440(int) __asm__("FUN_00118a80");
  * with a generic prototype for its callers. */
 void FUN_L00_0024f440_c(char *obj, int i, int j, Packet_24f440 *out) __asm__("FUN_L00_0024f440");
 void FUN_L00_0024f440_c(char *obj, int i, int j, Packet_24f440 *out) {
-    char *t = *(char **)(obj + 0x18);
+    char *frame_table_container = *(char **)(obj + 0x18);
     char *u = *(char **)(obj + 0x14);
-    int nb = (unsigned char)t[8];
+    int nb = (unsigned char)frame_table_container[8];
     int na = (unsigned char)u[8];
     Frame_24f440 *selected_frame;
     unsigned short a;
@@ -301,7 +301,7 @@ void FUN_L00_0024f440_c(char *obj, int i, int j, Packet_24f440 *out) {
     u64_24f440 *q;
 
     {
-        char **tt = (char **)(t + 0x48);
+        char **tt = (char **)(frame_table_container + 0x48);
         char *r = tt[i];
         Frame_24f440 **ss = (Frame_24f440 **)(r + 0x1C);
         selected_frame = ss[j];
