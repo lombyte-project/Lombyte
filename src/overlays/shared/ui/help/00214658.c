@@ -1038,22 +1038,22 @@ extern void FUN_L00_00269958(void *, void *, int, int, int, int, int,
 void FUN_L00_00217450(void) {
     V_217450 pos[1];
     V_217450 out;
-    int t;
+    int scaled_frame_count;
     int i;
-    char *q;
+    char *position_source;
     char *g;
     int a, b;
     float s, ang, e, r;
 
-    t = FUN_001f96f8_217450(0x28);
-    q = D_0013F3D0;
-    g = q - 0x80;
+    scaled_frame_count = FUN_001f96f8_217450(0x28);
+    position_source = D_0013F3D0;
+    g = position_source - 0x80;
     i = 9;
     do {
         a = truncate_float_to_s32(random_float_between(4200.0f, 7350.0f) / 1000.0f);
         b = truncate_float_to_s32(random_float_between(21000.0f, 31500.002f) / 1000.0f);
         s = random_float_between(frame_time * 0.15f, frame_time * 0.7f);
-        qcopy(pos, q);
+        qcopy(pos, position_source);
         if (current_level_index != 6) {
             pos[0].f[2] = *(float *)(g + 0x2F4);
         }
@@ -1064,7 +1064,7 @@ void FUN_L00_00217450(void) {
         FUN_00214db0_217450(&out, s, ang, e);
         pos[0].f[0] += FUN_001f9dc8_217450(ang) * r;
         pos[0].f[1] += FUN_001f9de0_217450(ang) * r;
-        FUN_L00_00269958(pos, &out, 0x7000C0F0, 0x70F0, t, a, b, 1);
+        FUN_L00_00269958(pos, &out, 0x7000C0F0, 0x70F0, scaled_frame_count, a, b, 1);
     } while (i >= 0);
     if (!ang) {
     }
