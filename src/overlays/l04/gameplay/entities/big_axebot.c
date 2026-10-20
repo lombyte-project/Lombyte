@@ -3114,28 +3114,28 @@ extern u8 voice_slots[] __asm__("D_0013E550");
 
 /* Door update: follows its lever's travel, pushes the lever back while opening, and runs the motor sounds. */
 void platform_booster_update(struct Moby *m) __asm__("FUN_L04_002c6bb8");
-void platform_booster_update(struct Moby *m) {
+void platform_booster_update(struct Moby *moby) {
     enum {
         PLATFORM_BOOSTER_STATE_INITIALIZE = 0,
         PLATFORM_BOOSTER_STATE_FOLLOW_LEVER = 1,
         PLATFORM_BOOSTER_STATE_ADVANCE_ANIMATION = 2
     };
-    DoorVars *v = (DoorVars *)m->pvars;
+    DoorVars *v = (DoorVars *)moby->pvars;
     f32 prev;
     struct Moby *lever;
     LeverVars *lv;
     u8 *slot;
 
-    prev = m->anim_time;
+    prev = moby->anim_time;
     if (v == NULL) {
-        mark_moby_for_removal(m);
+        mark_moby_for_removal(moby);
         return;
     }
-    switch (m->state) {
+    switch (moby->state) {
     case PLATFORM_BOOSTER_STATE_INITIALIZE:
-        moby_play_anim(m, 1, 0, scale_game_frames(300));
-        m->state = 1;
-        m->anim_speed = 0;
+        moby_play_anim(moby, 1, 0, scale_game_frames(300));
+        moby->state = 1;
+        moby->anim_speed = 0;
         v->voice = -1;
         break;
     case PLATFORM_BOOSTER_STATE_FOLLOW_LEVER:
@@ -3148,35 +3148,35 @@ void platform_booster_update(struct Moby *m) {
         }
         lv = (LeverVars *)lever->pvars;
         if (lever->state == 3) {
-            m->anim_time = 1.0f - lv->travel;
+            moby->anim_time = 1.0f - lv->travel;
         } else if (lv->travel != 1.0f ||
                    (v->target != -1 && v->locked == 0 &&
                     ((u32)hero.state.control_mode < 2 || hero.state.control_mode == 9 ||
                      hero.state.control_mode == 12) &&
                     hero.ground_moby == &level_mobys[v->target])) {
-            m->state = 2;
+            moby->state = 2;
         }
-        if (m->anim_time != prev) {
+        if (moby->anim_time != prev) {
             if (lv->travel != 1.0f && lv->travel != 0.0f) {
-                if (FUN_L00_0028d8c0(m, v->voice) == 0) {
-                    v->voice = start_moby_sound(0, 4, (int)m);
+                if (FUN_L00_0028d8c0(moby, v->voice) == 0) {
+                    v->voice = start_moby_sound(0, 4, (int)moby);
                 }
             } else {
-                if (FUN_L00_0028d8c0(m, v->voice) != 0) {
+                if (FUN_L00_0028d8c0(moby, v->voice) != 0) {
                     if (v->voice != -1) {
                         slot = voice_slots + v->voice * 0x70;
-                        if (*(struct Moby **)(slot + 0x88) == m && slot[0x74] != 0) {
+                        if (*(struct Moby **)(slot + 0x88) == moby && slot[0x74] != 0) {
                             release_voice_slot(v->voice);
                         }
                     }
                     v->voice = -1;
                 }
-                start_moby_sound(1, 0, (int)m);
+                start_moby_sound(1, 0, (int)moby);
             }
-        } else if (FUN_L00_0028d8c0(m, v->voice) != 0) {
+        } else if (FUN_L00_0028d8c0(moby, v->voice) != 0) {
             if (v->voice != -1) {
                 slot = voice_slots + v->voice * 0x70;
-                if (*(struct Moby **)(slot + 0x88) == m && slot[0x74] != 0) {
+                if (*(struct Moby **)(slot + 0x88) == moby && slot[0x74] != 0) {
                     release_voice_slot(v->voice);
                 }
             }
@@ -3187,9 +3187,9 @@ void platform_booster_update(struct Moby *m) {
         struct Moby *link;
         LeverVars *link_vars;
 
-        m->anim_time = prev + frame_time * 0.5f;
-        if (1.0f < m->anim_time) {
-            m->anim_time = 1.0f;
+        moby->anim_time = prev + frame_time * 0.5f;
+        if (1.0f < moby->anim_time) {
+            moby->anim_time = 1.0f;
         }
         if (v->lever == -1) {
             break;
@@ -3200,31 +3200,31 @@ void platform_booster_update(struct Moby *m) {
         }
         link_vars = (LeverVars *)link->pvars;
         if (link->state == 3) {
-            m->anim_time = 1.0f - link_vars->travel;
-            m->state = 1;
+            moby->anim_time = 1.0f - link_vars->travel;
+            moby->state = 1;
         } else {
-            link_vars->travel = 1.0f - m->anim_time;
+            link_vars->travel = 1.0f - moby->anim_time;
             link_vars->spin = link_vars->travel * (link_vars->rate * 6.2831855f);
         }
-        if (m->anim_time != prev) {
+        if (moby->anim_time != prev) {
             if (link_vars->travel == 1.0f || link_vars->travel == 0.0f) {
-                if (FUN_L00_0028d8c0(m, v->voice) != 0) {
+                if (FUN_L00_0028d8c0(moby, v->voice) != 0) {
                     if (v->voice != -1) {
                         slot = voice_slots + v->voice * 0x70;
-                        if (*(struct Moby **)(slot + 0x88) == m && slot[0x74] != 0) {
+                        if (*(struct Moby **)(slot + 0x88) == moby && slot[0x74] != 0) {
                             release_voice_slot(v->voice);
                         }
                     }
                     v->voice = -1;
                 }
-                start_moby_sound(1, 0, (int)m);
-            } else if (FUN_L00_0028d8c0(m, v->voice) == 0) {
-                v->voice = start_moby_sound(0, 4, (int)m);
+                start_moby_sound(1, 0, (int)moby);
+            } else if (FUN_L00_0028d8c0(moby, v->voice) == 0) {
+                v->voice = start_moby_sound(0, 4, (int)moby);
             }
-        } else if (FUN_L00_0028d8c0(m, v->voice) != 0) {
+        } else if (FUN_L00_0028d8c0(moby, v->voice) != 0) {
             if (v->voice != -1) {
                 slot = voice_slots + v->voice * 0x70;
-                if (*(struct Moby **)(slot + 0x88) == m && slot[0x74] != 0) {
+                if (*(struct Moby **)(slot + 0x88) == moby && slot[0x74] != 0) {
                     release_voice_slot(v->voice);
                 }
             }
@@ -3234,6 +3234,6 @@ void platform_booster_update(struct Moby *m) {
     }
     }
     if (v->target != -1) {
-        moby_point_position(m, 0, &level_moby_table[v->target].pos);
+        moby_point_position(moby, 0, &level_moby_table[v->target].pos);
     }
 }
