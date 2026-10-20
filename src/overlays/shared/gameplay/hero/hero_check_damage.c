@@ -3071,10 +3071,10 @@ extern void FUN_00125180_212318(void *, void *) __asm__("FUN_00125180");
 
 extern s32 D_L00_00173E5C __attribute__((section(".data")));
 void FUN_L00_00212318(int force) {
-    V_212318 a, d1, b, d2;
+    V_212318 primary_probe_start, primary_probe_offset_or_end, b, secondary_probe_offset_or_end;
     char *src;
     struct Hero *g;
-    f32 off, k, c, ang, t;
+    f32 off, k, secondary_probe_length_scale, ang, inward_velocity_component;
     int r;
 
     if (hero.unk308 != 0)
@@ -3094,41 +3094,41 @@ void FUN_L00_00212318(int force) {
         k = 5.0f;
     }
     src = D_0013F3D0_212318;
-    qcopy(&a, src);
-    a.f[2] += off;
+    qcopy(&primary_probe_start, src);
+    primary_probe_start.f[2] += off;
     qcopy(&b, src);
     b.f[2] += off * 0.3f;
     if (force || FUN_001f9b20_212318(src + 0x60) < 0.01f) {
         g = (struct Hero *)(src - 0x80);
-        c = 1.4f;
-        d1.f[0] = FUN_001f9dc8_212318(g->motion.rot.f[2]) * k;
-        d1.f[1] = FUN_001f9de0_212318(g->motion.rot.f[2]) * k;
-        *(s32 *)&d1.f[2] = 0;
-        d2.f[0] = FUN_001f9dc8_212318(g->motion.rot.f[2]) * k * c;
-        d2.f[1] = FUN_001f9de0_212318(g->motion.rot.f[2]) * k * c;
-        *(s32 *)&d2.f[2] = 0;
+        secondary_probe_length_scale = 1.4f;
+        primary_probe_offset_or_end.f[0] = FUN_001f9dc8_212318(g->motion.rot.f[2]) * k;
+        primary_probe_offset_or_end.f[1] = FUN_001f9de0_212318(g->motion.rot.f[2]) * k;
+        *(s32 *)&primary_probe_offset_or_end.f[2] = 0;
+        secondary_probe_offset_or_end.f[0] = FUN_001f9dc8_212318(g->motion.rot.f[2]) * k * secondary_probe_length_scale;
+        secondary_probe_offset_or_end.f[1] = FUN_001f9de0_212318(g->motion.rot.f[2]) * k * secondary_probe_length_scale;
+        *(s32 *)&secondary_probe_offset_or_end.f[2] = 0;
     } else {
-        qcopy(&d1, src + 0x60);
-        *(s32 *)&d1.f[2] = 0;
-        FUN_001f9a68_212318(&d1, &d1, k / FUN_001f9b20_212318(&d1));
-        qcopy(&d2, &d1);
-        FUN_001f9a68_212318(&d2, &d2, 1.4f);
+        qcopy(&primary_probe_offset_or_end, src + 0x60);
+        *(s32 *)&primary_probe_offset_or_end.f[2] = 0;
+        FUN_001f9a68_212318(&primary_probe_offset_or_end, &primary_probe_offset_or_end, k / FUN_001f9b20_212318(&primary_probe_offset_or_end));
+        qcopy(&secondary_probe_offset_or_end, &primary_probe_offset_or_end);
+        FUN_001f9a68_212318(&secondary_probe_offset_or_end, &secondary_probe_offset_or_end, 1.4f);
     }
-    FUN_001f9a10_212318(&d1, &d1, &a);
-    FUN_001f9a10_212318(&d2, &d2, &b);
+    FUN_001f9a10_212318(&primary_probe_offset_or_end, &primary_probe_offset_or_end, &primary_probe_start);
+    FUN_001f9a10_212318(&secondary_probe_offset_or_end, &secondary_probe_offset_or_end, &b);
     r = -1;
-    if (FUN_001efa68_212318(&b, &d2, 4, hero.moby, 0) && D_L00_00173E5C > 0)
+    if (FUN_001efa68_212318(&b, &secondary_probe_offset_or_end, 4, hero.moby, 0) && D_L00_00173E5C > 0)
         r = FUN_001f0b58_212318();
     ang = 0.0f;
-    if (FUN_001efa68_212318(&a, &d1, 4, hero.moby, 0) && X.i1C > 0)
+    if (FUN_001efa68_212318(&primary_probe_start, &primary_probe_offset_or_end, 4, hero.moby, 0) && X.i1C > 0)
         ang = FUN_001f9e90_212318(X.v40.f[2], FUN_001f9b20_212318(&X.v40));
     if (0.8726646304130554f <= ang || r == 8 || r == 12) {
         hero.unk240 = X.i18;
         *(s32 *)&X.v40.f[2] = 0;
         FUN_00125180_212318(&X.v40, &X.v40);
-        t = -hero.motion.velocity.f[0] * X.v40.f[0] - hero.motion.velocity.f[1] * X.v40.f[1];
-        if (0.0f < t) {
-            FUN_001f9a68_212318(&X.v40, &X.v40, t);
+        inward_velocity_component = -hero.motion.velocity.f[0] * X.v40.f[0] - hero.motion.velocity.f[1] * X.v40.f[1];
+        if (0.0f < inward_velocity_component) {
+            FUN_001f9a68_212318(&X.v40, &X.v40, inward_velocity_component);
             FUN_001f9a10_212318(&hero.motion.velocity, &hero.motion.velocity, &X.v40);
         }
     }
