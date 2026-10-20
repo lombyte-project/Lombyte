@@ -244,42 +244,42 @@ void FUN_001f9a28_25db00(void *, void *, void *) __asm__("FUN_001f9a28");
 void trooper_scale(void *, void *, float) __asm__("FUN_001f9c48");
 float FUN_001f9ab0_25db00(void *, void *) __asm__("FUN_001f9ab0");
 float FUN_001f9b80_25db00(void *, void *) __asm__("FUN_001f9b80");
-float FUN_L00_0025db00(float *out, float *p, OvlQuad *a, OvlQuad *b) {
-    float d[4];
-    float n[4];
-    OvlQuad c[1];
+float FUN_L00_0025db00(float *out, float *query_point, OvlQuad *segment_start, OvlQuad *b) {
+    float segment_delta[4];
+    float planar_normal[4];
+    OvlQuad planar_endpoint_copy[1];
     float k;
     int i;
-    float *o, *pa, *pb;
+    float *projected_point_components, *pa, *pb;
 
-    FUN_001f9a28_25db00(d, a, b);
-    n[0] = -d[1];
-    n[1] = d[0];
-    *(int *)&n[2] = 0;
-    qcopy(c, a);
-    *(int *)&((float *)c)[2] = 0;
-    trooper_scale(n, n, 1.0f);
-    k = -FUN_001f9ab0_25db00(n, c) + (n[0] * p[0] + n[1] * p[1]);
-    out[0] = p[0] - k * n[0];
-    out[1] = p[1] - k * n[1];
+    FUN_001f9a28_25db00(segment_delta, segment_start, b);
+    planar_normal[0] = -segment_delta[1];
+    planar_normal[1] = segment_delta[0];
+    *(int *)&planar_normal[2] = 0;
+    qcopy(planar_endpoint_copy, segment_start);
+    *(int *)&((float *)planar_endpoint_copy)[2] = 0;
+    trooper_scale(planar_normal, planar_normal, 1.0f);
+    k = -FUN_001f9ab0_25db00(planar_normal, planar_endpoint_copy) + (planar_normal[0] * query_point[0] + planar_normal[1] * query_point[1]);
+    out[0] = query_point[0] - k * planar_normal[0];
+    out[1] = query_point[1] - k * planar_normal[1];
     *(int *)&out[2] = 0;
-    o = out;
-    pa = (float *)a;
+    projected_point_components = out;
+    pa = (float *)segment_start;
     pb = (float *)b;
     for (i = 0; i < 2; i++) {
-        if ((o[i] > pa[i] && o[i] > pb[i]) || (o[i] < pa[i] && o[i] < pb[i]))
+        if ((projected_point_components[i] > pa[i] && projected_point_components[i] > pb[i]) || (projected_point_components[i] < pa[i] && projected_point_components[i] < pb[i]))
             break;
     }
     if (i < 2) {
-        if (FUN_001f9b80_25db00(out, a) < FUN_001f9b80_25db00(out, b)) {
-            qcopy(out, a);
+        if (FUN_001f9b80_25db00(out, segment_start) < FUN_001f9b80_25db00(out, b)) {
+            qcopy(out, segment_start);
             *(int *)&out[2] = 0;
         } else {
             qcopy(out, b);
             *(int *)&out[2] = 0;
         }
     }
-    return FUN_001f9b80_25db00(p, out);
+    return FUN_001f9b80_25db00(query_point, out);
 }
 extern float fabs_25dcd8(float) __asm__("FUN_001f99c0");
 extern float FUN_L00_0025db00_c(void *, void *, void *, void *) __asm__("FUN_L00_0025db00");
