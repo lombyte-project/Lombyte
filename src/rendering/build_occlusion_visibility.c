@@ -37,7 +37,7 @@ void build_occlusion_visibility(void) {
     s32 x, y, z;
     u8 *vis;
     u8 *gx, *gy, *gz;
-    f32 *p;
+    f32 *octant_mask_data;
     s32 bx, by, bz;
 
     x = truncate_float_to_s32(D_00186F40.x * scale);
@@ -86,12 +86,12 @@ void build_occlusion_visibility(void) {
                 fill_transfer_words(occl_visibility, -1, 0x80);
                 break;
             case OCCLUSION_FALLBACK_OCTANT_MASK:
-                p = occl_oct;
-                if (p != 0) {
-                    bx = 0.0f < D_00186F40.x - p[0];
-                    by = 0.0f < D_00186F40.y - p[1];
-                    bz = 0.0f < D_00186F40.z - p[2];
-                    fast_mem_copy(occl_visibility, (u8 *)p + ((bz + by * 2 + bx * 4) * 0x80 + 0x10),
+                octant_mask_data = occl_oct;
+                if (octant_mask_data != 0) {
+                    bx = 0.0f < D_00186F40.x - octant_mask_data[0];
+                    by = 0.0f < D_00186F40.y - octant_mask_data[1];
+                    bz = 0.0f < D_00186F40.z - octant_mask_data[2];
+                    fast_mem_copy(occl_visibility, (u8 *)octant_mask_data + ((bz + by * 2 + bx * 4) * 0x80 + 0x10),
                                  0x80);
                 } else if (camera_position_publication_suppressed[0] == 0 && occl_previous_grid != 0) {
                     fast_mem_copy(occl_visibility, occl_previous_grid, 0x80);
