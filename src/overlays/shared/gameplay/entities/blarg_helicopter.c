@@ -359,6 +359,7 @@ void spawner_update(struct Moby *moby) {
         SPAWNER_TARGET_SKIP_SETUP = 5
     };
     enum {
+        SPAWNER_ACTIVATION_ENTER_SPAWN_ENABLED = 0,
         SPAWNER_ACTIVATION_STAY_IN_PROXIMITY_WAIT = 6
     };
     int used[4];
@@ -471,7 +472,7 @@ void spawner_update(struct Moby *moby) {
     case SPAWNER_WAIT_FOR_PROXIMITY:
         if (near1) {
             switch (spawner_data->b84) {
-            case 0:
+            case SPAWNER_ACTIVATION_ENTER_SPAWN_ENABLED:
                 moby->state = 2;
                 break;
             case 1:
