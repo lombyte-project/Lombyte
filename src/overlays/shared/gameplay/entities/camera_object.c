@@ -809,7 +809,7 @@ void bolt_update(Bolt *obj) {
     BoltVars *v = obj->vars;
     Vec4 a;
     Vec4 b;
-    Vec4 c;
+    Vec4 rotation_scratch;
     Vec4 collection_offset;
     Vec4 attraction_rotation_angles;
     Vec4 attraction_rotation_basis[3];
@@ -886,8 +886,8 @@ void bolt_update(Bolt *obj) {
     case BOLT_FALLING:
         v->vel.f[2] -= frame_time_sq * 10.8f;
         fast_vec_add(&obj->pos, &obj->pos, &v->vel);
-        quaternion_to_rotation_basis(&v->spin, &c);
-        multiply_matrix3x3(&obj->rot, &c, &obj->rot);
+        quaternion_to_rotation_basis(&v->spin, &rotation_scratch);
+        multiply_matrix3x3(&obj->rot, &rotation_scratch, &obj->rot);
         switch (obj->oclass) {
         case BOLT_FALLING_CLASS_ONE:
             hr = 0.15f;
@@ -946,10 +946,10 @@ void bolt_update(Bolt *obj) {
         k = 0.25f;
         b.f[2] += k;
         matrix_to_euler(&obj->rot, &a);
-        FUN_L00_00259f50(&c, &a);
+        FUN_L00_00259f50(&rotation_scratch, &a);
         rotation_blend_step = 1.0f / convert_integer_to_float(v->hop_left);
         settling_hop_phase = convert_integer_to_float(v->hop_left) / convert_integer_to_float(v->hop_frames);
-        quaternion_nlerp(&v->spin, &v->spin, &c, rotation_blend_step);
+        quaternion_nlerp(&v->spin, &v->spin, &rotation_scratch, rotation_blend_step);
         lerp_vector(&obj->pos, &obj->pos, &b, settling_hop_phase);
         settling_hop_phase -= 0.5f;
         obj->pos.f[2] += -(settling_hop_phase * settling_hop_phase - k) * ((f32)v->hop_frames * 0.025f);
