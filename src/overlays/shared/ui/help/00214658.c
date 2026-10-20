@@ -285,7 +285,7 @@ extern f32 FUN_001f99c0_215b68(f32) __asm__("FUN_001f99c0");
 #define X D_L00_0017A680_215b68
 
 void FUN_L00_00215b68(void) {
-    f32 t, r, n, v, clamp_bound, u, unclamped_negated_value, b, unclamped_magnitude;
+    f32 t, r, negated_scaled_input, v, clamp_bound, u, unclamped_negated_value, b, unclamped_magnitude;
     s32 st;
 
     if (hero.state.current == 0x44) {
@@ -296,15 +296,15 @@ void FUN_L00_00215b68(void) {
             t = -0.7f;
         t = t * FUN_001f99c0_215b68(t) * 1.25f;
         r = hero.motion.unk164 / (frame_time * 3.0f);
-        n = -t;
-        X.f1240 = n * 0.3f;
+        negated_scaled_input = -t;
+        X.f1240 = negated_scaled_input * 0.3f;
         if (1.0f < r)
             r = 1.0f;
         if (r < 0.0f)
             r = 0.0f;
         X.f10E8 = t;
         X.f1240 = X.f1240 * r;
-        X.f10E0 = n * 0.35f;
+        X.f10E0 = negated_scaled_input * 0.35f;
         X.f1198 = t * 1.35f;
         X.f1194 = FUN_001f99c0_215b68(t) * 0.25f;
         return;
