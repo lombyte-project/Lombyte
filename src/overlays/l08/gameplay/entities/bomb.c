@@ -2128,10 +2128,10 @@ void FUN_L08_002dc180(struct Moby *moby) {
     };
     char *data = (char *)moby->pvars;
     char *pl = (char *)&hero.motion.pos;
-    Route_2dd4f8 *a = D_L08_001B0FB0_r[*(int *)(data + 0x88)];
+    Route_2dd4f8 *route = D_L08_001B0FB0_r[*(int *)(data + 0x88)];
     Route_2dd4f8 *b = D_L08_001B0FB0_r[*(int *)(data + 0x80)];
     Route_2dd4f8 *alternate_path = D_L08_001B0FB0_r[*(int *)(data + 0x84)];
-    float best_candidate_distance = distance_xyz(pl, (char *)a + (a->count << 4));
+    float best_candidate_distance = distance_xyz(pl, (char *)route + (route->count << 4));
     float configured_path_start_distance = distance_xyz(pl, b->e[0]);
     float alternate_path_start_distance = distance_xyz(pl, alternate_path->e[0]);
     int sel = 0;
@@ -2151,13 +2151,13 @@ void FUN_L08_002dc180(struct Moby *moby) {
     moby->collision = moby->pclass->collision;
     switch (sel) {
     case SHUTTLE_SELECT_ROUTE_END: {
-        int route_point_count = a->count;
+        int route_point_count = route->count;
         unsigned char *visited_table;
         int f94, f98;
         int fr;
-        qcopy(data + 0x60, (char *)((route_point_count << 4) + (int)a));
-        y = fast_arc_tan(*(float *)((char *)a + ((route_point_count - 2) << 4) + 0x10) - *(float *)(data + 0x60),
-                              *(float *)((char *)a + ((route_point_count - 2) << 4) + 0x14) - *(float *)(data + 0x64));
+        qcopy(data + 0x60, (char *)((route_point_count << 4) + (int)route));
+        y = fast_arc_tan(*(float *)((char *)route + ((route_point_count - 2) << 4) + 0x10) - *(float *)(data + 0x60),
+                              *(float *)((char *)route + ((route_point_count - 2) << 4) + 0x14) - *(float *)(data + 0x64));
         fr = current_level_index << 4;
         visited_table = visited52;
         *(float *)(data + 0x78) = y;
@@ -2183,9 +2183,9 @@ void FUN_L08_002dc180(struct Moby *moby) {
         *(Route_2dd4f8 **)(data + 0x120) = b;
         break;
     case SHUTTLE_SELECT_ROUTE_START:
-        qcopy(data + 0x60, a->e[0]);
-        y = fast_arc_tan(a->e[1][0] - *(float *)(data + 0x60), a->e[1][1] - *(float *)(data + 0x64));
-        *(Route_2dd4f8 **)(data + 0x120) = a;
+        qcopy(data + 0x60, route->e[0]);
+        y = fast_arc_tan(route->e[1][0] - *(float *)(data + 0x60), route->e[1][1] - *(float *)(data + 0x64));
+        *(Route_2dd4f8 **)(data + 0x120) = route;
         break;
     case SHUTTLE_SELECT_ALTERNATE_PATH_START:
         qcopy(data + 0x60, alternate_path->e[0]);
