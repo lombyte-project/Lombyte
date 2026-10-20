@@ -1499,7 +1499,7 @@ int FUN_L14_002aeba0(struct Moby *moby, int flag) {
     char *data = (char *)moby->pvars;
     float w[4];
     float v[4];
-    float t;
+    float rotation_angle;
     subtract_vector_xyz(v, data + 0x170, data + 0xD0);
     scale_vector_xyz(v, v, 0.5f);
     add_vector_xyz(w, data + 0xD0, v);
@@ -1510,12 +1510,12 @@ int FUN_L14_002aeba0(struct Moby *moby, int flag) {
         normalize_vector_xyz(data + 0xA0, data + 0xA0, 1.0f);
         normalize_vector_xyz(data + 0xB0, data + 0xB0, 1.0f);
         normalize_vector_xyz(data + 0xC0, data + 0xC0, 1.0f);
-        t = fast_subtract_rotations(fast_arc_tan(v[0], v[1]), moby->rot.z);
-        FUN_L00_001fff28(data + 0xF0, 2, t);
-        *(float *)(data + 0x1BC) = t;
-        t = -fast_arc_tan(vector_length_xy(v), v[2]);
-        FUN_L00_001fff28(data + 0x130, 1, t);
-        *(float *)(data + 0x1C0) = t;
+        rotation_angle = fast_subtract_rotations(fast_arc_tan(v[0], v[1]), moby->rot.z);
+        FUN_L00_001fff28(data + 0xF0, 2, rotation_angle);
+        *(float *)(data + 0x1BC) = rotation_angle;
+        rotation_angle = -fast_arc_tan(vector_length_xy(v), v[2]);
+        FUN_L00_001fff28(data + 0x130, 1, rotation_angle);
+        *(float *)(data + 0x1C0) = rotation_angle;
         qcopy(data + 0x90, data + 0x170);
         if (flag != 0) {
             enqueue_callback_list_1(FUN_L14_002ae260_u, moby);
