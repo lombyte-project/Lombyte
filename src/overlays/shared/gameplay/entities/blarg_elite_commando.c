@@ -72,51 +72,51 @@ void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 extern float func_001F9D10_2E7198(void *, void *) __asm__("FUN_001f9b48");
 
 void rocket_update(char *m) __asm__("FUN_L16_002a0a98");
-void rocket_update(char *m) {
+void rocket_update(char *rocket_moby) {
     float desired[4], next[4], delta[4], blend[4];
-    char *d = *(char **)(m + 0x78);
+    char *rocket_data = *(char **)(rocket_moby + 0x78);
     void *remaining;
     float yaw, pitch;
-    if (*(int *)(d + 0x34) == 0 && func_001F9D10_2E7198(m + 0x10, D_L16_001671C0) < 15.0f) {
-        *(int *)(d + 0x34) = 1;
-        trooper_play_sound(5, 0, (int)m, 0x54C);
+    if (*(int *)(rocket_data + 0x34) == 0 && func_001F9D10_2E7198(rocket_moby + 0x10, D_L16_001671C0) < 15.0f) {
+        *(int *)(rocket_data + 0x34) = 1;
+        trooper_play_sound(5, 0, (int)rocket_moby, 0x54C);
     }
-    if (*(unsigned char *)(m + 0x20) != 0)
+    if (*(unsigned char *)(rocket_moby + 0x20) != 0)
         return;
-    FUN_L15_0029ae18(m);
-    subtract_vector_xyz(delta, d + 0x10, m + 0x10);
+    FUN_L15_0029ae18(rocket_moby);
+    subtract_vector_xyz(delta, rocket_data + 0x10, rocket_moby + 0x10);
     yaw = fast_arc_tan(delta[0], delta[1]);
     pitch = fast_arc_tan(vector_length_xy(delta), delta[2]);
-    yaw = fast_add_rotations(yaw, *(float *)(d + 0x28));
-    pitch = fast_add_rotations(pitch, *(float *)(d + 0x2C));
+    yaw = fast_add_rotations(yaw, *(float *)(rocket_data + 0x28));
+    pitch = fast_add_rotations(pitch, *(float *)(rocket_data + 0x2C));
     if (pitch > 1.2217305f)
         pitch = 1.2217305f;
     else if (pitch < -1.2217305f)
         pitch = -1.2217305f;
-    build_spherical_offset(desired, *(float *)(d + 0x24), yaw, pitch);
-    if (tick_countdown_32_alt((int *)(d + 0x20)) == 0) {
-        float a = convert_integer_to_float(*(int *)(d + 0x20));
-        float b = convert_integer_to_float(*(int *)(d + 0x30));
-        lerp_vector(blend, desired, d, a / b);
-        add_vector_xyz(next, m + 0x10, blend);
-        *(float *)(m + 0x48) = fast_arc_tan(blend[0], blend[1]);
-        *(float *)(m + 0x44) = -fast_arc_tan(vector_length_xy(blend), blend[2]);
+    build_spherical_offset(desired, *(float *)(rocket_data + 0x24), yaw, pitch);
+    if (tick_countdown_32_alt((int *)(rocket_data + 0x20)) == 0) {
+        float blend_ticks_remaining = convert_integer_to_float(*(int *)(rocket_data + 0x20));
+        float b = convert_integer_to_float(*(int *)(rocket_data + 0x30));
+        lerp_vector(blend, desired, rocket_data, blend_ticks_remaining / b);
+        add_vector_xyz(next, rocket_moby + 0x10, blend);
+        *(float *)(rocket_moby + 0x48) = fast_arc_tan(blend[0], blend[1]);
+        *(float *)(rocket_moby + 0x44) = -fast_arc_tan(vector_length_xy(blend), blend[2]);
     } else {
-        add_vector_xyz(next, m + 0x10, desired);
-        *(float *)(m + 0x48) = yaw;
-        *(float *)(m + 0x44) = pitch;
+        add_vector_xyz(next, rocket_moby + 0x10, desired);
+        *(float *)(rocket_moby + 0x48) = yaw;
+        *(float *)(rocket_moby + 0x44) = pitch;
     }
     remaining = delta;
-    if (collision_line((m + 0x10), next, 0, m, 0) != 0 ||
-        vector_length_xyz(remaining) < *(float *)(d + 0x24)) {
+    if (collision_line((rocket_moby + 0x10), next, 0, rocket_moby, 0) != 0 ||
+        vector_length_xyz(remaining) < *(float *)(rocket_data + 0x24)) {
         if (hero.vehicle_mode == 2)
-            play_entity_sound((int)m, 2.0f, (m + 0x10), 3, 2.0f, 1.0f, 0, 1, 0);
-        trooper_play_sound(4, 0, (int)m, 0x54C);
-        spawn_explosion(m, d, (m + 0x10), 4.0f, 4.0f, 10, 3, 16, 4.0f, 2.0f, 9.0f, -1, 1.0f, 15.0f,
+            play_entity_sound((int)rocket_moby, 2.0f, (rocket_moby + 0x10), 3, 2.0f, 1.0f, 0, 1, 0);
+        trooper_play_sound(4, 0, (int)rocket_moby, 0x54C);
+        spawn_explosion(rocket_moby, rocket_data, (rocket_moby + 0x10), 4.0f, 4.0f, 10, 3, 16, 4.0f, 2.0f, 9.0f, -1, 1.0f, 15.0f,
                          1, 1, -1, 0);
-        mark_moby_for_removal(m);
+        mark_moby_for_removal(rocket_moby);
     } else
-        qcopy((m + 0x10), next);
+        qcopy((rocket_moby + 0x10), next);
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A1B58.c: func_L16_002A1F78), where it is exact; names translated to the US level program. */
 
