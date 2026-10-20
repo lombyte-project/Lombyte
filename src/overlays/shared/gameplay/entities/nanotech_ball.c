@@ -2048,7 +2048,7 @@ extern int func_L00_001F2BE8_DD3D8(float, void *, int, void *, void *) __asm__("
 
 void FUN_L00_002dbf28(char *self, char *q) {
     B50_DD3D8 blk;
-    float a[4];
+    float to_camera[4];
     float b[4];
     float spray_axis[4];
     float spray_axis_component[4];
@@ -2072,8 +2072,8 @@ void FUN_L00_002dbf28(char *self, char *q) {
     step = 1;
     if ((&D_0013E520)->b9 == 0) step = 2;
     fast_vec_scale_c(b, b, f22);
-    subtract_vector_xyz_c3(a, D_L00_00166DC0, self + 0x10);
-    dist = fast_vec_length(a);
+    subtract_vector_xyz_c3(to_camera, D_L00_00166DC0, self + 0x10);
+    dist = fast_vec_length(to_camera);
     for (; i < 10 / step; i++) {
         *(u128_DD3D8 *)g = 0;
         g[0] = random_float_between(-1.0f, 1.0f);
@@ -2113,10 +2113,10 @@ void FUN_L00_002dbf28(char *self, char *q) {
     g[1] = random_float_between(-1.0f, 1.0f);
     g[2] = random_float_between(-1.0f, 1.0f);
     *(u128_DD3D8 *)e = *(u128_DD3D8 *)g;
-    a[2] += dist * 0.5f;
+    to_camera[2] += dist * 0.5f;
     fast_vec_normalize_c(e, e, dist / 5.0f * D_0015ED6C);
-    fast_vec_normalize_c(a, a, (dist + dist) * D_0015ED6C);
-    add_vector_xyz(e, e, a);
+    fast_vec_normalize_c(to_camera, to_camera, (dist + dist) * D_0015ED6C);
+    add_vector_xyz(e, e, to_camera);
     clamp_vector_length(e, e, D_0015ED6C * 10.0f);
     {
         int h = scale_game_frames_c(60);
