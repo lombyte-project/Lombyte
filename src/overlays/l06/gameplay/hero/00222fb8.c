@@ -37,8 +37,8 @@ void FUN_L06_00222fb8(void) {
         if (g->frames_off_ground.s == 0 || g->ground_distance < 0.3f) {
             g->unk12E7 = 1;
             if (g->vehicle_mode == 0) {
-                char *m = ((char *)g->items[1].moby);
-                if (m != 0 && *(short *)(m + 0xA6) == 0xAD)
+                char *item_slot_1_moby = ((char *)g->items[1].moby);
+                if (item_slot_1_moby != 0 && *(short *)(item_slot_1_moby + 0xA6) == 0xAD)
                     g->unk308 = 1;
             }
         }
