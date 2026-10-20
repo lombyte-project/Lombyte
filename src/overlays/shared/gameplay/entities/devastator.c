@@ -2230,7 +2230,7 @@ extern float D_L00_001614A8 __attribute__((sda));
 extern int D_L00_0015F608_macro __asm__("D_L00_0015F608") __attribute__((section(".sdata")));
 /* visibomb_missile update (moby class 172): drift, homing toward the target, arming countdown. */
 void visibomb_missile_update(struct Moby *m) __asm__("FUN_L00_002b6140");
-void visibomb_missile_update(struct Moby *m) {
+void visibomb_missile_update(struct Moby *missile_moby) {
     V_2b6140 v20;
     V_2b6140 k30;
     V_2b6140 k40;
@@ -2238,7 +2238,7 @@ void visibomb_missile_update(struct Moby *m) {
     V_2b6140 v60;
     Ev_2b6140 ev;
     V_2b6140 vA0;
-    D_2b6140 *d = (D_2b6140 *)m->pvars;
+    D_2b6140 *missile_vars = (D_2b6140 *)missile_moby->pvars;
     int direct = 0;
 
     *(u128_2b6140 *)&k40 = 0;
@@ -2251,8 +2251,8 @@ void visibomb_missile_update(struct Moby *m) {
     func_L00_00204130_2b6140();
     D_L00_0017E508 = 1;
     force_help_message_2b6140(6, 0);
-    d->f10--;
-    if (!(-scale_game_frames_2b6140(100) < d->f10)
+    missile_vars->f10--;
+    if (!(-scale_game_frames_2b6140(100) < missile_vars->f10)
         || hero.state.current == 0x16
         || hero.state.current == 0x3D
         || hero.state.current == 0x72
@@ -2268,72 +2268,72 @@ void visibomb_missile_update(struct Moby *m) {
         || hero.grounded_frames == 0
         || (((Tgt_2b6140 *)hero.ground_moby) != 0
             && (((Tgt_2b6140 *)hero.ground_moby)->hA6 == 0x13E || ((Tgt_2b6140 *)hero.ground_moby)->hA6 == 0x46F))) {
-        func_L00_002B6E10_2b6140(m, d);
+        func_L00_002B6E10_2b6140(missile_moby, missile_vars);
         return;
     }
-    if (d->f10 < 0) {
-        if (d->f14 != 0) func_L00_002ECAF8_2b6140(d->f14, m);
-        func_L00_002B6AE0_2b6140(m, 0);
-        func_L00_002B6E90_2b6140(m, d);
+    if (missile_vars->f10 < 0) {
+        if (missile_vars->f14 != 0) func_L00_002ECAF8_2b6140(missile_vars->f14, missile_moby);
+        func_L00_002B6AE0_2b6140(missile_moby, 0);
+        func_L00_002B6E90_2b6140(missile_moby, missile_vars);
         return;
     }
     {
         float t = D_L00_0016149C * D_0015ED6C_2b6140;
         if (controller_state.held & 0x40) t = D_L00_001614A0 * D_0015ED6C_2b6140;
-        d->f48 += (t - d->f48) * D_L00_001614A4;
-        d->f4 += (d->f48 - d->f4) * D_L00_001614A8;
-        if (D_L00_001614A0 * D_0015ED6C_2b6140 < d->f4) d->f4 = D_L00_001614A0 * D_0015ED6C_2b6140;
+        missile_vars->f48 += (t - missile_vars->f48) * D_L00_001614A4;
+        missile_vars->f4 += (missile_vars->f48 - missile_vars->f4) * D_L00_001614A8;
+        if (D_L00_001614A0 * D_0015ED6C_2b6140 < missile_vars->f4) missile_vars->f4 = D_L00_001614A0 * D_0015ED6C_2b6140;
     }
-    func_L00_0028F210_2b6140(d->f2C, truncate_float_to_s32_2b6140((d->f48 - D_L00_0016149C * D_0015ED6C_2b6140
+    func_L00_0028F210_2b6140(missile_vars->f2C, truncate_float_to_s32_2b6140((missile_vars->f48 - D_L00_0016149C * D_0015ED6C_2b6140
         / (D_L00_001614A0 * D_0015ED6C_2b6140 - D_L00_0016149C * D_0015ED6C_2b6140)) * D_L00_00161498));
-    if (d->f10 > 0) {
-        if (d->f10 < scale_game_frames_2b6140(0xBB8) - scale_game_frames_2b6140(5)) {
+    if (missile_vars->f10 > 0) {
+        if (missile_vars->f10 < scale_game_frames_2b6140(0xBB8) - scale_game_frames_2b6140(5)) {
             float ang;
-            float dx = hero.stick_x - d->f18;
-            float dy = hero.stick_y - d->f1C;
+            float dx = hero.stick_x - missile_vars->f18;
+            float dy = hero.stick_y - missile_vars->f1C;
             float ka = D_0015ED60_2b6140 * 0.1f;
             float kb = D_0015ED60_2b6140 * 0.06f;
             float kc = D_0015ED60_2b6140 * 0.0122718466f;
-            d->f18 += dx * ka;
-            d->f1C += dy * ka;
-            m->rot.x += (d->f18 - m->rot.x) * kb;
-            ang = fast_subtract_rotations_2b6140(m->rot.y, d->f1C * kc);
-            m->rot.y = ang;
+            missile_vars->f18 += dx * ka;
+            missile_vars->f1C += dy * ka;
+            missile_moby->rot.x += (missile_vars->f18 - missile_moby->rot.x) * kb;
+            ang = fast_subtract_rotations_2b6140(missile_moby->rot.y, missile_vars->f1C * kc);
+            missile_moby->rot.y = ang;
             if (1.57079637f <= ang) {
-                m->rot.y = 1.56979632f;
+                missile_moby->rot.y = 1.56979632f;
             } else if (ang <= -1.57079637f) {
-                m->rot.y = -1.56979632f;
+                missile_moby->rot.y = -1.56979632f;
             }
-            m->rot.z = fast_subtract_rotations_2b6140(m->rot.z, d->f18 * (D_0015ED60_2b6140 * 0.0122718466f));
-            func_L00_0025B040_2b6140(m, 0.2f);
+            missile_moby->rot.z = fast_subtract_rotations_2b6140(missile_moby->rot.z, missile_vars->f18 * (D_0015ED60_2b6140 * 0.0122718466f));
+            func_L00_0025B040_2b6140(missile_moby, 0.2f);
         }
     }
-    build_spherical_offset_2b6140(&v50, d->f4, m->rot.z, -m->rot.y);
-    qcopy(&v20, &m->pos);
-    add_vector_xyz_2b6140(&m->pos, &m->pos, &v50);
-    if (scale_game_frames_2b6140(0xBB8) - scale_game_frames_2b6140(0x3C) < d->f10) {
-        float t = probe_ground_height_2b6140(&m->pos, 0, 0.5f) + d->f44;
-        if (m->pos.z < t) {
+    build_spherical_offset_2b6140(&v50, missile_vars->f4, missile_moby->rot.z, -missile_moby->rot.y);
+    qcopy(&v20, &missile_moby->pos);
+    add_vector_xyz_2b6140(&missile_moby->pos, &missile_moby->pos, &v50);
+    if (scale_game_frames_2b6140(0xBB8) - scale_game_frames_2b6140(0x3C) < missile_vars->f10) {
+        float t = probe_ground_height_2b6140(&missile_moby->pos, 0, 0.5f) + missile_vars->f44;
+        if (missile_moby->pos.z < t) {
             if (D_L00_00173E58_2b6140 == 0 || (D_L00_00173E58_2b6140->f24 != 0 && D_L00_00173E58_2b6140->f24->h46 == 5)) {
-                float s = angle_atan2_2b6140(d->f4, approach_value_2b6140(&m->pos.z, t, D_0015ED6C_2b6140 * 6.0f));
-                if (D_0015ED6C_2b6140 * 1.57079637f < s) s = D_0015ED6C_2b6140 * 1.57079637f;
-                m->rot.y -= s;
+                float ground_clearance_pitch_adjustment = angle_atan2_2b6140(missile_vars->f4, approach_value_2b6140(&missile_moby->pos.z, t, D_0015ED6C_2b6140 * 6.0f));
+                if (D_0015ED6C_2b6140 * 1.57079637f < ground_clearance_pitch_adjustment) ground_clearance_pitch_adjustment = D_0015ED6C_2b6140 * 1.57079637f;
+                missile_moby->rot.y -= ground_clearance_pitch_adjustment;
             }
         }
     }
-    if (m->pos.x < 4.5f || 1018.5f < m->pos.x || m->pos.y < 4.5f || 1018.5f < m->pos.y
-        || m->pos.z < 4.5f || 1018.5f < m->pos.z) {
-        func_L00_002B6E10_2b6140(m, d);
+    if (missile_moby->pos.x < 4.5f || 1018.5f < missile_moby->pos.x || missile_moby->pos.y < 4.5f || 1018.5f < missile_moby->pos.y
+        || missile_moby->pos.z < 4.5f || 1018.5f < missile_moby->pos.z) {
+        func_L00_002B6E10_2b6140(missile_moby, missile_vars);
         return;
     }
-    func_L00_002B6E90_2b6140(m, d);
+    func_L00_002B6E90_2b6140(missile_moby, missile_vars);
     {
-        struct Moby *skip = m;
-        func_L00_001FFED8_2b6140(&d->f24->pos, 1,
-            -(d->f1C * 0.5f + absolute_float_2b6140(d->f18 / 3.0f) + (d->f18 - m->rot.x) * 1.1f) * 0.7f);
-        func_L00_001FFED8_2b6140(&d->f28->pos, 1,
-            -(d->f1C * 0.5f + absolute_float_2b6140(d->f18 / 3.0f) - (d->f18 - m->rot.x) * 1.1f) * 0.7f);
-        ev.moby = m;
+        struct Moby *skip = missile_moby;
+        func_L00_001FFED8_2b6140(&missile_vars->f24->pos, 1,
+            -(missile_vars->f1C * 0.5f + absolute_float_2b6140(missile_vars->f18 / 3.0f) + (missile_vars->f18 - missile_moby->rot.x) * 1.1f) * 0.7f);
+        func_L00_001FFED8_2b6140(&missile_vars->f28->pos, 1,
+            -(missile_vars->f1C * 0.5f + absolute_float_2b6140(missile_vars->f18 / 3.0f) - (missile_vars->f18 - missile_moby->rot.x) * 1.1f) * 0.7f);
+        ev.moby = missile_moby;
         ev.flags = 0x830000;
         ev.f1C = 6.0f;
         ev.f20 = 1;
@@ -2343,87 +2343,87 @@ void visibomb_missile_update(struct Moby *m) {
         ev.pos.w = 5627.9248f;
         ev.pos.z = 1.0f;
         ev.b19 = 2;
-        ev.h1A = (*(unsigned short *)&m->oclass);
-        if (scale_game_frames_2b6140(0xBB8) - 40 < d->f10) skip = hero.moby;
-        if (collision_line_2b6140(&v20, &m->pos, 0, skip, &ev)) {
+        ev.h1A = (*(unsigned short *)&missile_moby->oclass);
+        if (scale_game_frames_2b6140(0xBB8) - 40 < missile_vars->f10) skip = hero.moby;
+        if (collision_line_2b6140(&v20, &missile_moby->pos, 0, skip, &ev)) {
             if (((Hit_2b6140 *)D_L00_00173E40_2b6140)->f18 != 0) {
                 direct = 0;
                 if (((Hit_2b6140 *)D_L00_00173E40_2b6140)->f18 == hero.moby) direct = 1;
-                m->command = 2;
-                qcopy(&m->pos, &((Hit_2b6140 *)D_L00_00173E40_2b6140)->v20);
+                missile_moby->command = 2;
+                qcopy(&missile_moby->pos, &((Hit_2b6140 *)D_L00_00173E40_2b6140)->v20);
                 subtract_vector_xyz_2b6140(&v60, &((Hit_2b6140 *)D_L00_00173E40_2b6140)->v50, &((Hit_2b6140 *)D_L00_00173E40_2b6140)->v60);
                 normalize_vector_xyz_2b6140(&v60, &v60, 1.0f);
                 func_L00_001FF610_2b6140(&k30, &v50, &((Hit_2b6140 *)D_L00_00173E40_2b6140)->v40);
                 normalize_vector_xyz_2b6140(&k30, &k30, D_0015ED6C_2b6140 + D_0015ED6C_2b6140);
                 normalize_vector_xyz_2b6140(&k40, &((Hit_2b6140 *)D_L00_00173E40_2b6140)->v40, 1.0f);
-                if (d->f2C != -1) {
-                    Row_2b6140 *e = (Row_2b6140 *)(D_0013E550_2b6140 + d->f2C * 0x70);
-                    if (e->f88 == m) {
-                        if (e->f74 != 0) release_voice_slot_2b6140(d->f2C);
+                if (missile_vars->f2C != -1) {
+                    Row_2b6140 *e = (Row_2b6140 *)(D_0013E550_2b6140 + missile_vars->f2C * 0x70);
+                    if (e->f88 == missile_moby) {
+                        if (e->f74 != 0) release_voice_slot_2b6140(missile_vars->f2C);
                     }
                 }
-                d->f2C = -1;
+                missile_vars->f2C = -1;
             } else if (((Hit_2b6140 *)D_L00_00173E40_2b6140)->f1C > 0) {
-                m->command = 1;
-                qcopy(&m->pos, &((Hit_2b6140 *)D_L00_00173E40_2b6140)->v20);
+                missile_moby->command = 1;
+                qcopy(&missile_moby->pos, &((Hit_2b6140 *)D_L00_00173E40_2b6140)->v20);
                 subtract_vector_xyz_2b6140(&v60, &((Hit_2b6140 *)D_L00_00173E40_2b6140)->v50, &((Hit_2b6140 *)D_L00_00173E40_2b6140)->v60);
                 normalize_vector_xyz_2b6140(&v60, &v60, 1.0f);
                 func_L00_001FF610_2b6140(&k30, &v50, &((Hit_2b6140 *)D_L00_00173E40_2b6140)->v40);
                 normalize_vector_xyz_2b6140(&k30, &k30, D_0015ED6C_2b6140 + D_0015ED6C_2b6140);
                 normalize_vector_xyz_2b6140(&k40, &((Hit_2b6140 *)D_L00_00173E40_2b6140)->v40, 1.0f);
-                if (d->f2C != -1) {
-                    Row_2b6140 *e = (Row_2b6140 *)(D_0013E550_2b6140 + d->f2C * 0x70);
-                    if (e->f88 == m) {
-                        if (e->f74 != 0) release_voice_slot_2b6140(d->f2C);
+                if (missile_vars->f2C != -1) {
+                    Row_2b6140 *e = (Row_2b6140 *)(D_0013E550_2b6140 + missile_vars->f2C * 0x70);
+                    if (e->f88 == missile_moby) {
+                        if (e->f74 != 0) release_voice_slot_2b6140(missile_vars->f2C);
                     }
                 }
-                d->f2C = -1;
+                missile_vars->f2C = -1;
             }
-        } else if (d->f10 == 0) {
-            func_L00_002B6E10_2b6140(m, d);
+        } else if (missile_vars->f10 == 0) {
+            func_L00_002B6E10_2b6140(missile_moby, missile_vars);
             return;
         }
     }
-    if (d->f10 < scale_game_frames_2b6140(0xBB8) - scale_game_frames_2b6140(0x3C)) {
+    if (missile_vars->f10 < scale_game_frames_2b6140(0xBB8) - scale_game_frames_2b6140(0x3C)) {
         if (controller_state.pressed & 0x20) {
-            m->command = 1;
-            if (d->f2C != -1) {
-                Row_2b6140 *e = (Row_2b6140 *)(D_0013E550_2b6140 + d->f2C * 0x70);
-                if (e->f88 == m) {
-                    if (e->f74 != 0) release_voice_slot_2b6140(d->f2C);
+            missile_moby->command = 1;
+            if (missile_vars->f2C != -1) {
+                Row_2b6140 *e = (Row_2b6140 *)(D_0013E550_2b6140 + missile_vars->f2C * 0x70);
+                if (e->f88 == missile_moby) {
+                    if (e->f74 != 0) release_voice_slot_2b6140(missile_vars->f2C);
                 }
             }
-            d->f2C = -1;
+            missile_vars->f2C = -1;
         }
     }
-    if (m->command != 0) {
+    if (missile_moby->command != 0) {
         int k;
         int rr;
         if (direct == 0) {
-            spawn_explosion_2b6140(m, &k30, 0, 0.0f, 0.0f, 10, 3, 16, 4.0f, 2.0f, 0.0f, 1.0f, 1, 20.0f, 1, 1, -1, 0);
-            rr = collect_mobies_in_sphere_2b6140(&m->pos, 4.0f, 16, m, 0);
-            *(u128_2b6140 *)&vA0 = *(u128_2b6140 *)((V_2b6140 *)&m->pos);
-            send_blast_hits_2b6140(m, &vA0, D_L00_00177F00_2b6140, rr, 0, 0x830000, 3, 2, 6.0f, 1.0f, 1.0f);
+            spawn_explosion_2b6140(missile_moby, &k30, 0, 0.0f, 0.0f, 10, 3, 16, 4.0f, 2.0f, 0.0f, 1.0f, 1, 20.0f, 1, 1, -1, 0);
+            rr = collect_mobies_in_sphere_2b6140(&missile_moby->pos, 4.0f, 16, missile_moby, 0);
+            *(u128_2b6140 *)&vA0 = *(u128_2b6140 *)((V_2b6140 *)&missile_moby->pos);
+            send_blast_hits_2b6140(missile_moby, &vA0, D_L00_00177F00_2b6140, rr, 0, 0x830000, 3, 2, 6.0f, 1.0f, 1.0f);
         }
-        m->flags |= 1;
-        d->f4 = D_0015ED60_2b6140 * 0.0199999996f;
-        d->f18 = d->f18 * 0.00999999978f;
-        if (scale_game_frames_2b6140(0xBB8) - scale_game_frames_2b6140(0x1E) < d->f10) {
-            d->f10 = -scale_game_frames_2b6140(100);
+        missile_moby->flags |= 1;
+        missile_vars->f4 = D_0015ED60_2b6140 * 0.0199999996f;
+        missile_vars->f18 = missile_vars->f18 * 0.00999999978f;
+        if (scale_game_frames_2b6140(0xBB8) - scale_game_frames_2b6140(0x1E) < missile_vars->f10) {
+            missile_vars->f10 = -scale_game_frames_2b6140(100);
         } else {
-            d->f10 = -1;
+            missile_vars->f10 = -1;
         }
-        qcopy(&vA0, &m->pos);
+        qcopy(&vA0, &missile_moby->pos);
         for (k = 4; k >= 0; k--) {
-            qcopy(&m->pos, &vA0);
-            func_L00_00260958_2b6140(&m->pos, 1.5f);
-            func_L00_002B6FF0_2b6140(m, 1);
-            qcopy(&m->pos, &vA0);
+            qcopy(&missile_moby->pos, &vA0);
+            func_L00_00260958_2b6140(&missile_moby->pos, 1.5f);
+            func_L00_002B6FF0_2b6140(missile_moby, 1);
+            qcopy(&missile_moby->pos, &vA0);
         }
         v50.x = 0.0f;
-        m->command = 0;
+        missile_moby->command = 0;
     }
-    if (d->f14 != 0) func_L00_002ECAF8_2b6140(d->f14, m);
+    if (missile_vars->f14 != 0) func_L00_002ECAF8_2b6140(missile_vars->f14, missile_moby);
 }
 typedef struct {
     f32 x;
