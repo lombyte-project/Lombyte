@@ -416,8 +416,8 @@ extern u8 D_L00_001DB5C0[];
 extern u8 D_L00_001DBA20[];
 void FUN_L00_002baae0(void *, s32, s32, s32, f32, f32, f32);
 void FUN_L00_002bb0b0(void *);
-void FUN_L00_002ba970(u8 *o) {
-    S2ba970 *v = *(S2ba970 **)(o + 0x78);
+void FUN_L00_002ba970(u8 *moby) {
+    S2ba970 *v = *(S2ba970 **)(moby + 0x78);
     D_L00_001615EC -= D_L00_001615F0 * frame_scale;
     if (D_L00_001615EC <= -8.0f) {
         D_L00_001615EC += 8.0f;
@@ -434,7 +434,7 @@ void FUN_L00_002ba970(u8 *o) {
                      D_L00_00161610, 0.2f);
     FUN_L00_002baae0(D_L00_001DBA20 + 0xF0, D_L00_00161666, D_L00_00161666, 5, D_L00_0016160C,
                      D_L00_00161610, 0.2f);
-    FUN_L00_002bb0b0(o);
+    FUN_L00_002bb0b0(moby);
 }
 
 #include "qcopy.h"
