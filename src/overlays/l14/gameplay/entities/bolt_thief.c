@@ -435,18 +435,18 @@ int FUN_L14_002fea80(struct Moby *moby) {
     float pos[4];
     float delta[4];
     char *data = (char *)moby->pvars;
-    float t = D_L14_00161FB8 * frame_time;
+    float path_sample_step = D_L14_00161FB8 * frame_time;
     int r;
     char *path;
     if (current_level_index == 0x10)
-        t = frame_time * 20.0f;
+        path_sample_step = frame_time * 20.0f;
     if (*(float *)(data + 0xF8) != 0.0f)
-        t = *(float *)(data + 0xF8) * frame_time;
+        path_sample_step = *(float *)(data + 0xF8) * frame_time;
     if (moby->state == 5)
         path = D_L14_001B0BB0[*(int *)(data + 0xDC)];
     else
         path = D_L14_001B0BB0[*(int *)(data + 0xD8)];
-    r = sample_path(path, pos, (float *)(data + 0xD0), (float *)(data + 0xD4), 0, t);
+    r = sample_path(path, pos, (float *)(data + 0xD0), (float *)(data + 0xD4), 0, path_sample_step);
     vendor_spring(&moby->pos.x, (float *)(data + 0xE4), pos[0], D_L14_00161FBC,
                      D_L14_00161FC0, 0.0f);
     vendor_spring(&moby->pos.y, (float *)(data + 0xE8), pos[1], D_L14_00161FBC,
