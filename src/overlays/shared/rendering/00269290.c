@@ -1826,14 +1826,14 @@ void clr_26d700(void *) __asm__("FUN_001f99f8");
 int tick_26d700(void *) __asm__("FUN_001f9770");
 void kill_26d700(P_26d700 *) __asm__("FUN_L00_00267a08");
 int rgba_26d700(float, float, float, float) __asm__("FUN_L00_0025bfe0");
-void FUN_L00_0026d700(P_26d700 *p) {
-    V_26d700 t;
+void FUN_L00_0026d700(P_26d700 *particle) {
+    V_26d700 next_position;
     S_26d700 *s;
     float r, g, b, dt;
     int neg;
-    if (p == 0)
+    if (particle == 0)
         return;
-    s = &p->s;
+    s = &particle->s;
     r = s->r;
     neg = 0;
     g = s->g;
@@ -1845,24 +1845,24 @@ void FUN_L00_0026d700(P_26d700 *p) {
         b = -b;
     }
     s->a += D_0015ED60_26d700 * 0.0f;
-    p->xc += D_0015ED60_26d700 * -100.0f;
-    add_26d700(&t, &p->pos, s);
+    particle->xc += D_0015ED60_26d700 * -100.0f;
+    add_26d700(&next_position, &particle->pos, s);
     if (s->x0 != 0.0f || s->x4 != 0.0f || s->x8 != 0.0f) {
-        if (coll_26d700(&p->pos, &t, 2, D_001413D0_26d700, 0)) {
-            p->pos = D_L00_00173E60_26d700;
+        if (coll_26d700(&particle->pos, &next_position, 2, D_001413D0_26d700, 0)) {
+            particle->pos = D_L00_00173E60_26d700;
             clr_26d700(s);
-            p->xc += p->xc;
+            particle->xc += particle->xc;
         } else {
-            p->pos = *(OvlQuad *)&t;
+            particle->pos = *(OvlQuad *)&next_position;
             if (s->xc != 0.0f)
                 s->x8 += s->xc;
             else
                 s->x8 += frame_scale_sq * -0.0063f;
         }
     }
-    if (s->a <= 0.0f || tick_26d700(&p->xa) || p->xc < 0.0f || t.f[0] < 0.01f || t.f[1] < 0.01f ||
-        t.f[2] < 0.01f) {
-        kill_26d700(p);
+    if (s->a <= 0.0f || tick_26d700(&particle->xa) || particle->xc < 0.0f || next_position.f[0] < 0.01f || next_position.f[1] < 0.01f ||
+        next_position.f[2] < 0.01f) {
+        kill_26d700(particle);
         return;
     }
     if (!neg) {
@@ -1888,7 +1888,7 @@ void FUN_L00_0026d700(P_26d700 *p) {
     s->a += dt * 0.0f;
     if (s->a < 0.0f)
         s->a = 0.0f;
-    p->x4 = rgba_26d700(r, g, b, s->a);
+    particle->x4 = rgba_26d700(r, g, b, s->a);
     if (neg > 0) {
         s->r = -r;
         s->g = -g;
@@ -1898,7 +1898,7 @@ void FUN_L00_0026d700(P_26d700 *p) {
         s->g = g;
         s->b = b;
     }
-    p->x8--;
+    particle->x8--;
 }
 typedef struct {
     float f[4];
