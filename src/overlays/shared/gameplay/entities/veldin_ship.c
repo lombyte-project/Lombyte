@@ -1548,7 +1548,7 @@ void metal_detector_update(struct Moby *moby) {
     Mtx2d2ee8 aim_basis;
     Mtx2d2ee8 normalized_bone_transform;
     Mtx2d2ee8 transposed_bone_rotation;
-    Mtx2d2ee8 m4;
+    Mtx2d2ee8 aim_rotation_product;
     f32 yaw;
     f32 pitch;
     f32 abs_yaw;
@@ -1630,8 +1630,8 @@ void metal_detector_update(struct Moby *moby) {
             transposed_bone_rotation[3][1] = zero;
             transposed_bone_rotation[3][0] = zero;
             transposed_bone_rotation[3][3] = one;
-            multiply_matrix(m4, transposed_bone_rotation, aim_basis);
-            matrix_to_quaternion(u, m4);
+            multiply_matrix(aim_rotation_product, transposed_bone_rotation, aim_basis);
+            matrix_to_quaternion(u, aim_rotation_product);
         } else {
             *(u128 *)w = 0;
             FUN_L00_00259f50(u, w);
