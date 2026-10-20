@@ -3250,7 +3250,7 @@ extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
 
 void crane_arm_update(unsigned char *m) __asm__("FUN_L12_002ec1d0");
-void crane_arm_update(unsigned char *m) {
+void crane_arm_update(unsigned char *moby) {
     enum {
         CRANE_ARM_INITIALIZE = 0,
         CRANE_ARM_WAIT_DELAY = 1,
@@ -3267,61 +3267,61 @@ void crane_arm_update(unsigned char *m) {
         CRANE_ARM_ANIM_BASE_TO_DELAY_B = 5,
         CRANE_ARM_ANIM_RETURN_TO_BASE_B = 6
     };
-    float dist = vector_distance(m + 0x10, &hero.motion.pos);
-    switch (m[0x20]) {
+    float dist = vector_distance(moby + 0x10, &hero.motion.pos);
+    switch (moby[0x20]) {
     case CRANE_ARM_INITIALIZE:
-        if (m[0x53] != 0)
-            blend_moby_animation(m, 0, 0, 0);
-        m[0x20] = 1;
-        m[0xBC] = random_integer_below(scale_game_frames(0xB4));
+        if (moby[0x53] != 0)
+            blend_moby_animation(moby, 0, 0, 0);
+        moby[0x20] = 1;
+        moby[0xBC] = random_integer_below(scale_game_frames(0xB4));
         break;
     case CRANE_ARM_WAIT_DELAY:
-        if (m[0x52] == 0 && dist < 9.0f && m[0xBC] < 2)
-            m[0xBC] = 2;
-        if (dist < 12.0f && m[0x52] == m[0x53] && m[0x52] != 0)
-            m[0xBC] = 0;
-        if (FUN_L00_001fefc8(m + 0xBC)) {
-            switch (m[0x52]) {
+        if (moby[0x52] == 0 && dist < 9.0f && moby[0xBC] < 2)
+            moby[0xBC] = 2;
+        if (dist < 12.0f && moby[0x52] == moby[0x53] && moby[0x52] != 0)
+            moby[0xBC] = 0;
+        if (FUN_L00_001fefc8(moby + 0xBC)) {
+            switch (moby[0x52]) {
             case CRANE_ARM_ANIM_BASE:
                 if (random_integer_below(0x100) & 1) {
-                    if (m[0x53] != 3)
-                        blend_moby_animation(m, 3, 0, 0);
+                    if (moby[0x53] != 3)
+                        blend_moby_animation(moby, 3, 0, 0);
                 } else {
-                    if (m[0x53] != 5)
-                        blend_moby_animation(m, 5, 0, 0);
+                    if (moby[0x53] != 5)
+                        blend_moby_animation(moby, 5, 0, 0);
                 }
                 break;
             case CRANE_ARM_ANIM_DELAY_A:
-                if (m[0x53] != 4)
-                    blend_moby_animation(m, 4, 0, 0);
+                if (moby[0x53] != 4)
+                    blend_moby_animation(moby, 4, 0, 0);
                 break;
             case CRANE_ARM_ANIM_DELAY_B:
-                if (m[0x53] != 6)
-                    blend_moby_animation(m, 6, 0, 0);
+                if (moby[0x53] != 6)
+                    blend_moby_animation(moby, 6, 0, 0);
                 break;
             }
-            m[0x20] = 2;
+            moby[0x20] = 2;
         }
         break;
     case CRANE_ARM_WAIT_ANIMATION_FLAG:
-        if (m[0x70] & 2) {
-            switch (m[0x52]) {
+        if (moby[0x70] & 2) {
+            switch (moby[0x52]) {
             case CRANE_ARM_ANIM_BASE_TO_DELAY_A:
-                if (m[0x53] != 1)
-                    blend_moby_animation(m, 1, 0, 0);
+                if (moby[0x53] != 1)
+                    blend_moby_animation(moby, 1, 0, 0);
                 break;
             case CRANE_ARM_ANIM_RETURN_TO_BASE_A:
             case CRANE_ARM_ANIM_RETURN_TO_BASE_B:
-                if (m[0x53] != 0)
-                    blend_moby_animation(m, 0, 0, 0);
+                if (moby[0x53] != 0)
+                    blend_moby_animation(moby, 0, 0, 0);
                 break;
             case CRANE_ARM_ANIM_BASE_TO_DELAY_B:
-                if (m[0x53] != 2)
-                    blend_moby_animation(m, 2, 0, 0);
+                if (moby[0x53] != 2)
+                    blend_moby_animation(moby, 2, 0, 0);
                 break;
             }
-            m[0x20] = 1;
-            m[0xBC] = random_integer_below(scale_game_frames(0xB4));
+            moby[0x20] = 1;
+            moby[0xBC] = random_integer_below(scale_game_frames(0xB4));
         }
         break;
     }
