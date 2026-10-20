@@ -303,7 +303,7 @@ typedef struct {
     int idx;
     int r[6];
 } E_9aa0;
-void FUN_L00_002e9aa0(int a) {
+void FUN_L00_002e9aa0(int unused_camera_moby) {
     int i, j, k;
     for (i = 0; i < 64; i++) {
         for (j = 0; j < 64; j++) {
