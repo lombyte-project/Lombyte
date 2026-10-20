@@ -1590,7 +1590,7 @@ void FUN_L00_0025f730_242198(void *, f32) __asm__("FUN_L00_0025f730");
 s32 FUN_L01_00226f10_242198(s32) __asm__("FUN_L01_00226f10");
 void FUN_L01_00242198(void) {
     struct Hero *b, *run_hero, *stop_idle_hero;
-    s32 n;
+    s32 run_frames_or_idle_selector;
     b = &hero;
     b->unk2284 = 0;
     FUN_L00_002118c8_242198(0, 1.0f);
@@ -1608,10 +1608,10 @@ void FUN_L01_00242198(void) {
         }
         if (hero_set_state(HERO_STATE_RUN, 0)) {
             run_hero->state.step = 1;
-            n = FUN_001f96f8_242198(8);
+            run_frames_or_idle_selector = FUN_001f96f8_242198(8);
             if (FUN_001f96f8_242198(5) < run_hero->unk418)
-                n = FUN_001f96f8_242198(14);
-            FUN_L00_002323b8_242198(4, D_L01_0015F6DC, (f32)n);
+                run_frames_or_idle_selector = FUN_001f96f8_242198(14);
+            FUN_L00_002323b8_242198(4, D_L01_0015F6DC, (f32)run_frames_or_idle_selector);
             run_hero->unk3BC = 1;
         }
         return;
@@ -1629,8 +1629,8 @@ void FUN_L01_00242198(void) {
     if (FUN_001f96f8_242198(12) < stop_idle_hero->unk418 || (stop_idle_hero->unkA98 & 2)) {
         if (hero_set_state(HERO_STATE_IDLE, 0)) {
             if (FUN_L01_00226f10_242198(0) == 0x54) {
-                n = FUN_L01_00226f10_242198(0);
-                FUN_L00_002323b8_242198(n, 0, (f32)FUN_001f96f8_242198(15));
+                run_frames_or_idle_selector = FUN_L01_00226f10_242198(0);
+                FUN_L00_002323b8_242198(run_frames_or_idle_selector, 0, (f32)FUN_001f96f8_242198(15));
             } else if (stop_idle_hero->unkA98 & 2) {
                 FUN_L00_002323b8_242198(FUN_L01_00226f10_242198(0), 0, -2.0f);
             }
