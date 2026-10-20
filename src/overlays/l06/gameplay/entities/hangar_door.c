@@ -87,11 +87,11 @@ extern int D_L06_0015FFD8_d __asm__("D_L06_0015FFD8");
  * the US level program (data still reached through the MACRO_ADDR form). */
 /* Sets each moby in the selected table to state 4 until its terminal entry. */
 void FUN_L06_002f45f0(int idx) {
-    short *p = D_L06_001ABFC0[idx];
+    short *moby_index_cursor = D_L06_001ABFC0[idx];
     do {
-        char *moby = (char *)(((*p & 0x7FFF) << 8) + (int)D_L06_0015FFD8_d);
+        char *moby = (char *)(((*moby_index_cursor & 0x7FFF) << 8) + (int)D_L06_0015FFD8_d);
         moby[0x20] = 4;
-    } while (*p++ >= 0);
+    } while (*moby_index_cursor++ >= 0);
 }
 
 #define NOT_SDA
