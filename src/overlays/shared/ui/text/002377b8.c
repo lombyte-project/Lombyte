@@ -1048,9 +1048,9 @@ extern HudCounter D_L00_0015FAB8;
 extern void FUN_L00_0023a760(HudElem *);
 
 /* Runs FUN_L00_0023a760 on e, points its unk80 at D_L00_0015FAB8 and clears that entry. */
-void FUN_L00_00239cc8(HudElem *e) {
-    FUN_L00_0023a760(e);
-    e->unk80 = &D_L00_0015FAB8;
+void FUN_L00_00239cc8(HudElem *hud_element) {
+    FUN_L00_0023a760(hud_element);
+    hud_element->unk80 = &D_L00_0015FAB8;
     D_L00_0015FAB8.unk0 = 0;
 }
 typedef struct T00239d00 {
