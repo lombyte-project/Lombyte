@@ -3161,7 +3161,7 @@ void FUN_L14_002d7198(struct Moby *m);
 void FUN_L14_002d7490(struct Moby *m);
 
 void FUN_L14_002d5f40(struct Moby *m);
-void FUN_L14_002d5f40(struct Moby *m) {
+void FUN_L14_002d5f40(struct Moby *racer_moby) {
     enum {
         RACER_STATE_INITIALIZE = 0,
         RACER_STATE_WAIT_FOR_RACE_START = 1,
@@ -3171,89 +3171,89 @@ void FUN_L14_002d5f40(struct Moby *m) {
         RACER_STATE_FOLLOW_PATH = 5,
         RACER_STATE_WAIT_FOR_EXIT_VOLUME = 6
     };
-    struct L14RacerVars *racer_vars = (struct L14RacerVars *)m->pvars;
+    struct L14RacerVars *racer_vars = (struct L14RacerVars *)racer_moby->pvars;
     u8 pos[16];
     f32 vel[3];
     unsigned char *spark;
     f32 *sv;
 
-    switch (m->state) {
+    switch (racer_moby->state) {
     case RACER_STATE_INITIALIZE:
         if (racer_vars->path == -1 || *race_paths[racer_vars->path].points == 0 || racer_vars->start_point == -1 ||
             *D_L14_001B0BB0[racer_vars->start_point] != 3 || racer_vars->volume == -1) {
-            FUN_0020c828(m);
+            FUN_0020c828(racer_moby);
             return;
         }
-        FUN_L14_002d6358(m);
-        m->state = 1;
-        m->flags = (m->flags & 0xEFFF) | 0x41;
-        m->collision = 0;
+        FUN_L14_002d6358(racer_moby);
+        racer_moby->state = 1;
+        racer_moby->flags = (racer_moby->flags & 0xEFFF) | 0x41;
+        racer_moby->collision = 0;
         racer_vars->unkF4 = -1;
         racer_vars->unkF0 = -1;
         memset_words(racer_vars->manips[0], 0, 0x40);
-        attach_manipulator(m, 2, racer_vars->manips[0]);
+        attach_manipulator(racer_moby, 2, racer_vars->manips[0]);
         memset_words(racer_vars->manips[1], 0, 0x40);
-        attach_manipulator(m, 3, racer_vars->manips[1]);
+        attach_manipulator(racer_moby, 3, racer_vars->manips[1]);
         memset_words(racer_vars->manips[2], 0, 0x40);
-        attach_manipulator(m, 4, racer_vars->manips[2]);
+        attach_manipulator(racer_moby, 4, racer_vars->manips[2]);
         return;
     case RACER_STATE_WAIT_FOR_RACE_START:
         if (race_state->phase == 0x14) {
             racer_vars->timer = scale_game_frames(racer_vars->delay);
-            m->state = 2;
+            racer_moby->state = 2;
         }
         return;
     case RACER_STATE_WAIT_FOR_START_DELAY:
         if (!fast_dec_timer(&racer_vars->timer))
             return;
-        m->flags = (m->flags | 0x1000) & 0xFFBE;
-        m->collision = m->pclass->collision;
-        m->state = 3;
-        set_moby_animation(m, 2, 0);
-        m->anim_speed = 0.5f;
+        racer_moby->flags = (racer_moby->flags | 0x1000) & 0xFFBE;
+        racer_moby->collision = racer_moby->pclass->collision;
+        racer_moby->state = 3;
+        set_moby_animation(racer_moby, 2, 0);
+        racer_moby->anim_speed = 0.5f;
         racer_vars->timer = scale_game_frames(D_L14_00161A2C);
         racer_vars->inv_time = 1.0f / convert_integer_to_float(racer_vars->timer);
-        qcopy(&m->pos, (char *)D_L14_001B0BB0[racer_vars->end_point] + 0x10);
+        qcopy(&racer_moby->pos, (char *)D_L14_001B0BB0[racer_vars->end_point] + 0x10);
     case RACER_STATE_WAIT_FOR_START_ANIMATION:
-        if (compute_interpolated_record_value(m) >= 3.0f)
-            FUN_L14_002d64d0(m);
-        if ((m->anim_flags & 2) && m->seq == m->prev_seq) {
-            m->state = 4;
-            blend_moby_animation((MobyAnim *)m, 0, 0, 10);
-            m->anim_speed = 1.0f;
+        if (compute_interpolated_record_value(racer_moby) >= 3.0f)
+            FUN_L14_002d64d0(racer_moby);
+        if ((racer_moby->anim_flags & 2) && racer_moby->seq == racer_moby->prev_seq) {
+            racer_moby->state = 4;
+            blend_moby_animation((MobyAnim *)racer_moby, 0, 0, 10);
+            racer_moby->anim_speed = 1.0f;
         }
         break;
     case RACER_STATE_COMPLETE_START_INTERPOLATION:
-        if (FUN_L14_002d64d0(m)) {
-            m->state = 5;
+        if (FUN_L14_002d64d0(racer_moby)) {
+            racer_moby->state = 5;
             racer_vars->timer = scale_game_frames(D_L14_00161A34);
         }
         break;
     case RACER_STATE_FOLLOW_PATH:
-        FUN_L14_002d7198(m);
+        FUN_L14_002d7198(racer_moby);
         break;
     case RACER_STATE_WAIT_FOR_EXIT_VOLUME:
-        FUN_L14_002d67e8(m);
-        if (is_point_inside_clip_volume(&m->pos, racer_vars->volume)) {
-            moby_point_position(m, 2, pos);
-            spark = FUN_L14_002dea98((char *)m, (char *)pos);
+        FUN_L14_002d67e8(racer_moby);
+        if (is_point_inside_clip_volume(&racer_moby->pos, racer_vars->volume)) {
+            moby_point_position(racer_moby, 2, pos);
+            spark = FUN_L14_002dea98((char *)racer_moby, (char *)pos);
             if (spark) {
                 sv = *(f32 **)(spark + 0x78);
-                vel[0] = fast_cos(m->rot.z) * (frame_scale * 0.4f);
-                vel[1] = fast_sin(m->rot.z) * (frame_scale * 0.4f);
+                vel[0] = fast_cos(racer_moby->rot.z) * (frame_scale * 0.4f);
+                vel[1] = fast_sin(racer_moby->rot.z) * (frame_scale * 0.4f);
                 vel[2] = 0.0f;
                 sv[0] = vel[0];
                 sv[1] = vel[1];
             }
-            FUN_L14_002e0170(m, &D_L14_00161A5C, 0);
-            spawn_explosion(m, &racer_vars->trail, &m->pos, 0.0f, 0.0f, 5, 2, 4, 4.0f, 2.0f, 9.0f, 1, 1.0f,
+            FUN_L14_002e0170(racer_moby, &D_L14_00161A5C, 0);
+            spawn_explosion(racer_moby, &racer_vars->trail, &racer_moby->pos, 0.0f, 0.0f, 5, 2, 4, 4.0f, 2.0f, 9.0f, 1, 1.0f,
                              15.0f, 1, 5, -1, 0);
-            FUN_0020c828(m);
+            FUN_0020c828(racer_moby);
             return;
         }
         break;
     }
-    FUN_L14_002d7490(m);
+    FUN_L14_002d7490(racer_moby);
 }
 
 char D_L14_001FBD50[] = "Turret with no aiming cuboid. UID: %d\n";
