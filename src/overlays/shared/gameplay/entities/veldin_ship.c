@@ -705,114 +705,114 @@ void break_crate(M2d1428 *moby, s32 hit, s32 source) {
         FUN_002ac910_2d09b8(moby, &launch, &spin, 3.0f, FUN_001fef20_2d09b8(29), 32, 0, 0, 32);
     }
 }
-void FUN_L00_002d1428(M2d1428 *m) {
+void FUN_L00_002d1428(M2d1428 *moby) {
     enum {
         CRATE_STATE_BREAKABLE = 1,
         CRATE_STATE_IMPACT_TRIGGERED = 5
     };
-    O2d1428 *o;
-    M2d1428 *p, *n, *next;
-    V2d1428 e, g, c2, a, b, c, d, h;
+    O2d1428 *vars;
+    M2d1428 *p, *parent_moby, *next;
+    V2d1428 collision_start, g, c2, hero_local_offset, b, previous_position, previous_rotation, position_delta;
     f32 f, v;
     s32 hit;
 
-    o = m->vars;
-    if (o->iB4 == D_L00_0015F5CC)
+    vars = moby->vars;
+    if (vars->iB4 == D_L00_0015F5CC)
         return;
-    p = m;
+    p = moby;
     do {
         next = p;
         p = next->vars->parent;
     } while (p != 0);
     p = next;
     do {
-        m = p;
-        o = m->vars;
-        p = o->next;
-        if (!(o->flags & 4))
-            o->flags &= ~0x10;
-        o->flags &= ~4;
-        if (!FUN_L00_0025e3b8(m))
+        moby = p;
+        vars = moby->vars;
+        p = vars->next;
+        if (!(vars->flags & 4))
+            vars->flags &= ~0x10;
+        vars->flags &= ~4;
+        if (!FUN_L00_0025e3b8(moby))
             return;
-        if (o->flags & 2)
+        if (vars->flags & 2)
             return;
-        o->iB4 = D_L00_0015F5CC;
-        if (m->state == 0)
+        vars->iB4 = D_L00_0015F5CC;
+        if (moby->state == 0)
             continue;
-        fast_vec_sub(&a, &hero.motion.pos, &m->pos);
-        transform_vector_by_basis(&a, &a, m->vC0);
-        if (FUN_001f99c0(a.x) < 0.55f && FUN_001f99c0(a.y) < 0.55f && a.z < 0.0f &&
-            -(hero.capsule_top + hero.unk234) < a.z) {
-            switch (m->state) {
+        fast_vec_sub(&hero_local_offset, &hero.motion.pos, &moby->pos);
+        transform_vector_by_basis(&hero_local_offset, &hero_local_offset, moby->vC0);
+        if (FUN_001f99c0(hero_local_offset.x) < 0.55f && FUN_001f99c0(hero_local_offset.y) < 0.55f && hero_local_offset.z < 0.0f &&
+            -(hero.capsule_top + hero.unk234) < hero_local_offset.z) {
+            switch (moby->state) {
             case CRATE_STATE_BREAKABLE:
             case CRATE_STATE_IMPACT_TRIGGERED:
-                break_crate(m, m->oclass == 0x1F9, 0);
-                FUN_L00_002d0538_c(m);
+                break_crate(moby, moby->oclass == 0x1F9, 0);
+                FUN_L00_002d0538_c(moby);
                 break;
             }
         }
         f = D_0015ED70_alt;
-        o->vel.z -= f * 9.8f;
-        o->vel.z = (o->vel.z < -0.3f) ? -0.3f : o->vel.z;
-        o->vel.z = (0.3f < o->vel.z) ? 0.3f : o->vel.z;
-        if (o->path) {
-            if (o->parent == 0) {
-                o->vel.w -= f * 10.0f;
-                if (approach_value(&o->fF4, 0.0f, FUN_001f99c0(o->vel.w)) == 0.0f)
-                    o->vel.w = 0.0f;
+        vars->vel.z -= f * 9.8f;
+        vars->vel.z = (vars->vel.z < -0.3f) ? -0.3f : vars->vel.z;
+        vars->vel.z = (0.3f < vars->vel.z) ? 0.3f : vars->vel.z;
+        if (vars->path) {
+            if (vars->parent == 0) {
+                vars->vel.w -= f * 10.0f;
+                if (approach_value(&vars->fF4, 0.0f, FUN_001f99c0(vars->vel.w)) == 0.0f)
+                    vars->vel.w = 0.0f;
             } else {
-                o->vel.w -= f * 10.0f;
-                if (approach_value(&o->fF4, o->parent->vars->fF4 + 1.0f, FUN_001f99c0(o->vel.w)) ==
+                vars->vel.w -= f * 10.0f;
+                if (approach_value(&vars->fF4, vars->parent->vars->fF4 + 1.0f, FUN_001f99c0(vars->vel.w)) ==
                     0.0f)
-                    *(s32 *)&o->vel.w = 0;
+                    *(s32 *)&vars->vel.w = 0;
             }
-            qcopy(&b, &o->vD0);
-            b.z += o->fF4;
-            if (m)
-                m->h36 = 0x7F80;
-            qcopy(&c, &m->pos);
-            qcopy(&d, &m->v40);
-            FUN_L00_002604f0(m, o->path, &b, o->vE0, &m->pos, &m->v40);
-            if (FUN_L00_002603d0(o->path)->flags & 4) {
-                qcopy(&o->vD0, &b);
-                o->vD0.z -= o->fF4;
+            qcopy(&b, &vars->vD0);
+            b.z += vars->fF4;
+            if (moby)
+                moby->h36 = 0x7F80;
+            qcopy(&previous_position, &moby->pos);
+            qcopy(&previous_rotation, &moby->v40);
+            FUN_L00_002604f0(moby, vars->path, &b, vars->vE0, &moby->pos, &moby->v40);
+            if (FUN_L00_002603d0(vars->path)->flags & 4) {
+                qcopy(&vars->vD0, &b);
+                vars->vD0.z -= vars->fF4;
             }
-            fast_vec_sub(&h, &m->pos, &c);
-            h.w = o->vel.w;
-            qcopy(&o->vel, &h);
-            update_entity_matrix(o->v60, &o->vel, &d, &m->v40);
+            fast_vec_sub(&position_delta, &moby->pos, &previous_position);
+            position_delta.w = vars->vel.w;
+            qcopy(&vars->vel, &position_delta);
+            update_entity_matrix(vars->v60, &vars->vel, &previous_rotation, &moby->v40);
             continue;
         }
-        if (o->parent == 0) {
-            qcopy(&e, &m->pos);
-            qcopy(&g, &m->pos);
-            e.z += o->fB0 * 0.75f;
-            g.z += o->vel.z;
-            hit = coll_line_fix(&e, &g, 2, 0, 0);
+        if (vars->parent == 0) {
+            qcopy(&collision_start, &moby->pos);
+            qcopy(&g, &moby->pos);
+            collision_start.z += vars->fB0 * 0.75f;
+            g.z += vars->vel.z;
+            hit = coll_line_fix(&collision_start, &g, 2, 0, 0);
             qcopy(&c2, &D_L00_00173E60);
         } else {
-            qcopy(&c2, &o->parent->pos);
+            qcopy(&c2, &vars->parent->pos);
             c2.z += 1.0f;
             hit = 0;
-            if (m->pos.z + o->vel.z < c2.z)
+            if (moby->pos.z + vars->vel.z < c2.z)
                 hit = 1;
         }
         if (hit != 0) {
-            f = vector_length_xyz(&o->vel);
+            f = vector_length_xyz(&vars->vel);
             if (D_0015ED6C_c * 0.5f < f) {
-                if (m->oclass == 0x1F9 && m->state == 1) {
-                    m->bBC = 0;
-                    m->state = 5;
-                } else if ((n = o->parent) != 0 && n->oclass == 0x1F9 && n->state == 1) {
-                    n->state = 5;
-                    o->parent->bBC = 0;
+                if (moby->oclass == 0x1F9 && moby->state == 1) {
+                    moby->bBC = 0;
+                    moby->state = 5;
+                } else if ((parent_moby = vars->parent) != 0 && parent_moby->oclass == 0x1F9 && parent_moby->state == 1) {
+                    parent_moby->state = 5;
+                    vars->parent->bBC = 0;
                 }
             }
-            m->pos.z = c2.z;
-            o->vel.z = 0.0f;
+            moby->pos.z = c2.z;
+            vars->vel.z = 0.0f;
         } else {
-            o->flags |= 4;
-            fast_vec_add(&m->pos, &m->pos, &o->vel);
+            vars->flags |= 4;
+            fast_vec_add(&moby->pos, &moby->pos, &vars->vel);
         }
     } while (p != 0);
 }
