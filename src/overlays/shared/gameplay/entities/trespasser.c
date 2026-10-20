@@ -21,13 +21,13 @@ extern void FUN_L00_002c1778_u(void *) __asm__("FUN_L00_002c1778");
 
 /* Runs FUN_L00_002c1778 when the moby data word 4 is set, else sets byte 0xBC from a mask test. */
 void trespasser_update(char *m) __asm__("FUN_L00_002c1718");
-void trespasser_update(char *m) {
-    if (*(int *)(*(char **)(m + 0x78) + 4) != 0) {
-        FUN_L00_002c1778_u(m);
+void trespasser_update(char *trespasser_moby) {
+    if (*(int *)(*(char **)(trespasser_moby + 0x78) + 4) != 0) {
+        FUN_L00_002c1778_u(trespasser_moby);
     } else if (*(int *)(D_0013A4E0 + 0x2600) & *(int *)(((unsigned char *)&D_0013E533) + 0x1EBD)) {
-        m[0xBC] = 1;
+        trespasser_moby[0xBC] = 1;
     } else {
-        m[0xBC] = 0;
+        trespasser_moby[0xBC] = 0;
     }
 }
 extern float FUN_001f9b48_2c1928(void *, void *) __asm__("FUN_001f9b48");
