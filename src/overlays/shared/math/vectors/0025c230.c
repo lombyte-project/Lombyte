@@ -68,30 +68,30 @@ extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_002
 
 void FUN_L00_0025c398(void *source_object, void *base_vector, void *point_source_mask) {
     V4 buf[20];
-    float tmp[4];
-    int n, i;
+    float randomized_vector[4];
+    int point_count, i;
 
-    n = FUN_L00_0025aca0(source_object, 20, buf, point_source_mask, 14.0f);
-    if (n == 0) {
+    point_count = FUN_L00_0025aca0(source_object, 20, buf, point_source_mask, 14.0f);
+    if (point_count == 0) {
         return;
     }
-    for (i = 0; i < n; i++) {
+    for (i = 0; i < point_count; i++) {
         float y = random_angle_radians();
         float z = random_angle_radians();
         unsigned char *flag = D_0013E520;
         int a, b;
 
-        build_spherical_offset(tmp, frame_time * 1.8f, y, z);
-        add_vector_xyz(tmp, tmp, base_vector);
-        tmp[2] += frame_time * 0.9f;
+        build_spherical_offset(randomized_vector, frame_time * 1.8f, y, z);
+        add_vector_xyz(randomized_vector, randomized_vector, base_vector);
+        randomized_vector[2] += frame_time * 0.9f;
         if (flag[0x10]) {
             a = scale_game_frames(random_int_between(20, 35));
             b = random_int_between(40, 60);
-            FUN_L00_00269958(&buf[i], tmp, 0x7000FFA0, 0xFF00, a, 30, b, 1);
+            FUN_L00_00269958(&buf[i], randomized_vector, 0x7000FFA0, 0xFF00, a, 30, b, 1);
         } else {
             a = scale_game_frames(random_int_between(20, 35));
             b = random_int_between(40, 60);
-            FUN_L00_00269958(&buf[i], tmp, 0x7000A0FF, 0xFF, a, 30, b, 1);
+            FUN_L00_00269958(&buf[i], randomized_vector, 0x7000A0FF, 0xFF, a, 30, b, 1);
         }
     }
 }
