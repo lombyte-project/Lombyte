@@ -163,6 +163,7 @@ void FUN_L18_0022e8f8(void) {
         HERO_STATE_GRIND_RAIL_TRANSFER = 42,
         HERO_STATE_GRIND_ATTACK = 43,
         HERO_STATE_SWIM = 51,
+        HERO_STATE_SWIM_IDLE = 52,
         HERO_STATE_GRIND_COLLISION_RECOVERY = 66,
         HERO_STATE_APPROACH_TARGET = 101,
         HERO_STATE_TARGET_ARRIVAL = 103,
@@ -539,7 +540,7 @@ void FUN_L18_0022e8f8(void) {
                         hero_set_state(0x34, 1);
                     }
                     break;
-                case 52:
+                case HERO_STATE_SWIM_IDLE:
                     if (hero.unkA98 & 2) {
                         if (((unsigned char *)hero.moby)[0x53] != 0x3C) {
                             set_hero_animation(0x3C, 0, scale_game_frames(0xB));
