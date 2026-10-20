@@ -414,7 +414,7 @@ void FUN_L11_00246b70(void) {
     Vec4 vector_and_hit_descriptor_scratch;
     Vec4 motion_vector_scratch;
     Vec4 m40[4];
-    Vec4 m80[4];
+    Vec4 transposed_yaw_rotation_matrix[4];
     Vec4 vC0;
     Vec4 vD0;
 
@@ -1094,8 +1094,8 @@ void FUN_L11_00246b70(void) {
         clear_u64_value(&vector_and_hit_descriptor_scratch);
         vector_and_hit_descriptor_scratch.f[2] = hero.motion.rot.f[2];
         euler_rotation_matrix(m40, &vector_and_hit_descriptor_scratch);
-        transpose_rotation_matrix(m80, m40);
-        transform_vector(&vector_and_hit_descriptor_head_scratch, &vector_and_hit_descriptor_head_scratch, m80);
+        transpose_rotation_matrix(transposed_yaw_rotation_matrix, m40);
+        transform_vector(&vector_and_hit_descriptor_head_scratch, &vector_and_hit_descriptor_head_scratch, transposed_yaw_rotation_matrix);
         v10.f[0] = -fast_arc_tan(square_root(vector_and_hit_descriptor_head_scratch.f[0] * vector_and_hit_descriptor_head_scratch.f[0] + vector_and_hit_descriptor_head_scratch.f[2] * vector_and_hit_descriptor_head_scratch.f[2]), vector_and_hit_descriptor_head_scratch.f[1]);
         v10.f[1] = fast_arc_tan(vector_and_hit_descriptor_head_scratch.f[2], vector_and_hit_descriptor_head_scratch.f[0]);
         FUN_L00_0025bc98(&hero.motion.rot.f[1], v10.f[1], &hero.motion.unkA0.f[1], 0, frame_scale_sq * 0.04f, frame_scale_sq * 0.2f,
@@ -1597,14 +1597,14 @@ void FUN_L11_00246b70(void) {
         }
         FUN_L01_00232290();
         if (hero.unk930 > 0.0f) {
-            Vec4 *p = &hero.move_impulse;
+            Vec4 *move_impulse_ptr = &hero.move_impulse;
             FUN_L00_002132b8(0.7f, 0.0f);
             vector_and_hit_descriptor_head_scratch.q = hero.move_impulse.q;
             hero.target_speed += forward_component(&vector_and_hit_descriptor_head_scratch);
             if (hero.target_speed < frame_time * 0.7f) {
                 hero.target_speed = frame_time * 0.7f;
             }
-            clear_u64_value(p);
+            clear_u64_value(move_impulse_ptr);
         }
         k = 1.0f;
         if (hero.state.step == 1 && hero.unk3BE == 0) {
