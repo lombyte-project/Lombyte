@@ -67,15 +67,15 @@ extern float advance_accelerated_scalar(float, float, float, float, float *,
                                         float *) __asm__("FUN_00213f38");
 extern void sample_camera_path(int *, int, void *, float *, int, float) __asm__("FUN_00214e58");
 
-int FUN_L16_002e4c40(struct Moby *m) {
-    char *d = (char *)m->pvars;
+int FUN_L16_002e4c40(struct Moby *moby) {
+    char *moby_data = (char *)moby->pvars;
     int *path;
-    advance_accelerated_scalar(1.0f, *(float *)(d + 0xC8), *(float *)(d + 0xC8),
-                               *(float *)(d + 0xc4), (float *)(d + 0xb0), (float *)(d + 0xb4));
-    path = *(int **)(d + 0xa4);
-    sample_camera_path(path, 0, d + 0x60, (float *)(d + 0x70), 0,
-                       *(float *)(d + 0xb0) * (float)(*path - 1));
-    return *(float *)(d + 0xb0) >= 1.0f;
+    advance_accelerated_scalar(1.0f, *(float *)(moby_data + 0xC8), *(float *)(moby_data + 0xC8),
+                               *(float *)(moby_data + 0xc4), (float *)(moby_data + 0xb0), (float *)(moby_data + 0xb4));
+    path = *(int **)(moby_data + 0xa4);
+    sample_camera_path(path, 0, moby_data + 0x60, (float *)(moby_data + 0x70), 0,
+                       *(float *)(moby_data + 0xb0) * (float)(*path - 1));
+    return *(float *)(moby_data + 0xb0) >= 1.0f;
 }
 #include "qcopy.h"
 #include "sda.h"
