@@ -2274,10 +2274,10 @@ int FUN_L13_002e4300(struct Moby *moby, char *arg, float *health) {
         HIT_REACTION_NO_HIT = 11
     };
     char *r = find_moby_hit(moby, 0x330000, 0);
-    int n;
+    int hit_processing_status;
     int result = 0;
     char *color_animation_state;
-    switch (hit_reaction(moby, r, health, 0, &n, 0, 0, 4)) {
+    switch (hit_reaction(moby, r, health, 0, &hit_processing_status, 0, 0, 4)) {
     case HIT_REACTION_NONE:
         break;
     case HIT_REACTION_LETHAL:
@@ -2298,7 +2298,7 @@ int FUN_L13_002e4300(struct Moby *moby, char *arg, float *health) {
         break;
     }
     color_animation_state = arg + 0x60;
-    if (n >= 2) {
+    if (hit_processing_status >= 2) {
         float lim = *(float *)(r + 0x2C);
         unsigned short fl;
         if (*health <= lim) {
