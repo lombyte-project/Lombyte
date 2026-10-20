@@ -3171,7 +3171,7 @@ void FUN_L14_002d5f40(struct Moby *m) {
         RACER_STATE_FOLLOW_PATH = 5,
         RACER_STATE_WAIT_FOR_EXIT_VOLUME = 6
     };
-    struct L14RacerVars *d = (struct L14RacerVars *)m->pvars;
+    struct L14RacerVars *racer_vars = (struct L14RacerVars *)m->pvars;
     u8 pos[16];
     f32 vel[3];
     unsigned char *spark;
@@ -3179,8 +3179,8 @@ void FUN_L14_002d5f40(struct Moby *m) {
 
     switch (m->state) {
     case RACER_STATE_INITIALIZE:
-        if (d->path == -1 || *race_paths[d->path].points == 0 || d->start_point == -1 ||
-            *D_L14_001B0BB0[d->start_point] != 3 || d->volume == -1) {
+        if (racer_vars->path == -1 || *race_paths[racer_vars->path].points == 0 || racer_vars->start_point == -1 ||
+            *D_L14_001B0BB0[racer_vars->start_point] != 3 || racer_vars->volume == -1) {
             FUN_0020c828(m);
             return;
         }
@@ -3188,32 +3188,32 @@ void FUN_L14_002d5f40(struct Moby *m) {
         m->state = 1;
         m->flags = (m->flags & 0xEFFF) | 0x41;
         m->collision = 0;
-        d->unkF4 = -1;
-        d->unkF0 = -1;
-        memset_words(d->manips[0], 0, 0x40);
-        attach_manipulator(m, 2, d->manips[0]);
-        memset_words(d->manips[1], 0, 0x40);
-        attach_manipulator(m, 3, d->manips[1]);
-        memset_words(d->manips[2], 0, 0x40);
-        attach_manipulator(m, 4, d->manips[2]);
+        racer_vars->unkF4 = -1;
+        racer_vars->unkF0 = -1;
+        memset_words(racer_vars->manips[0], 0, 0x40);
+        attach_manipulator(m, 2, racer_vars->manips[0]);
+        memset_words(racer_vars->manips[1], 0, 0x40);
+        attach_manipulator(m, 3, racer_vars->manips[1]);
+        memset_words(racer_vars->manips[2], 0, 0x40);
+        attach_manipulator(m, 4, racer_vars->manips[2]);
         return;
     case RACER_STATE_WAIT_FOR_RACE_START:
         if (race_state->phase == 0x14) {
-            d->timer = scale_game_frames(d->delay);
+            racer_vars->timer = scale_game_frames(racer_vars->delay);
             m->state = 2;
         }
         return;
     case RACER_STATE_WAIT_FOR_START_DELAY:
-        if (!fast_dec_timer(&d->timer))
+        if (!fast_dec_timer(&racer_vars->timer))
             return;
         m->flags = (m->flags | 0x1000) & 0xFFBE;
         m->collision = m->pclass->collision;
         m->state = 3;
         set_moby_animation(m, 2, 0);
         m->anim_speed = 0.5f;
-        d->timer = scale_game_frames(D_L14_00161A2C);
-        d->inv_time = 1.0f / convert_integer_to_float(d->timer);
-        qcopy(&m->pos, (char *)D_L14_001B0BB0[d->end_point] + 0x10);
+        racer_vars->timer = scale_game_frames(D_L14_00161A2C);
+        racer_vars->inv_time = 1.0f / convert_integer_to_float(racer_vars->timer);
+        qcopy(&m->pos, (char *)D_L14_001B0BB0[racer_vars->end_point] + 0x10);
     case RACER_STATE_WAIT_FOR_START_ANIMATION:
         if (compute_interpolated_record_value(m) >= 3.0f)
             FUN_L14_002d64d0(m);
@@ -3226,7 +3226,7 @@ void FUN_L14_002d5f40(struct Moby *m) {
     case RACER_STATE_COMPLETE_START_INTERPOLATION:
         if (FUN_L14_002d64d0(m)) {
             m->state = 5;
-            d->timer = scale_game_frames(D_L14_00161A34);
+            racer_vars->timer = scale_game_frames(D_L14_00161A34);
         }
         break;
     case RACER_STATE_FOLLOW_PATH:
@@ -3234,7 +3234,7 @@ void FUN_L14_002d5f40(struct Moby *m) {
         break;
     case RACER_STATE_WAIT_FOR_EXIT_VOLUME:
         FUN_L14_002d67e8(m);
-        if (is_point_inside_clip_volume(&m->pos, d->volume)) {
+        if (is_point_inside_clip_volume(&m->pos, racer_vars->volume)) {
             moby_point_position(m, 2, pos);
             spark = FUN_L14_002dea98((char *)m, (char *)pos);
             if (spark) {
@@ -3246,7 +3246,7 @@ void FUN_L14_002d5f40(struct Moby *m) {
                 sv[1] = vel[1];
             }
             FUN_L14_002e0170(m, &D_L14_00161A5C, 0);
-            spawn_explosion(m, &d->trail, &m->pos, 0.0f, 0.0f, 5, 2, 4, 4.0f, 2.0f, 9.0f, 1, 1.0f,
+            spawn_explosion(m, &racer_vars->trail, &m->pos, 0.0f, 0.0f, 5, 2, 4, 4.0f, 2.0f, 9.0f, 1, 1.0f,
                              15.0f, 1, 5, -1, 0);
             FUN_0020c828(m);
             return;
