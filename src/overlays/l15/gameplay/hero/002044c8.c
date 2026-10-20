@@ -623,6 +623,10 @@ void FUN_L15_0020ed50(void) {
     enum {
         HERO_ATTACK_RECORD_DUAL_POINT_HIT_QUERY = 2
     };
+    enum {
+        HERO_ATTACK_RECORD_POINT_3_HIT_QUERY = 0,
+        HERO_ATTACK_RECORD_POINT_4_HIT_QUERY = 1
+    };
     struct MobyView *moby = (struct MobyView *)hero.moby;
     s32 sub = hero.state.step;
     s32 anim = moby->b53;
@@ -2341,13 +2345,13 @@ void FUN_L15_0020ed50(void) {
             ((u8 *)&spatial_or_hit_descriptor_tail_work)[9] = 1;
             ((s16 *)&spatial_or_hit_descriptor_tail_work)[5] = ((struct MobyView *)hero.moby)->hA6;
             switch (hero.attack_record) {
-            case 0:
+            case HERO_ATTACK_RECORD_POINT_3_HIT_QUERY:
                 if (hero.anim_frame > 7.0f && hero.anim_frame < 14.0f) {
                     moby_point_position((struct MobyView *)hero.moby, 3, &spatial_or_hit_descriptor_work);
                     collect_mobies_in_sphere(2.0f, &spatial_or_hit_descriptor_work, 0x10, (struct MobyView *)hero.moby, &v10);
                 }
                 break;
-            case 1:
+            case HERO_ATTACK_RECORD_POINT_4_HIT_QUERY:
                 if (hero.anim_frame > 7.0f && hero.anim_frame < 14.0f) {
                     moby_point_position((struct MobyView *)hero.moby, 4, &spatial_or_hit_descriptor_work);
                     collect_mobies_in_sphere(2.0f, &spatial_or_hit_descriptor_work, 0x10, (struct MobyView *)hero.moby, &v10);
@@ -2371,8 +2375,8 @@ void FUN_L15_0020ed50(void) {
             }
         }
         switch (hero.attack_record) {
-        case 0:
-        case 1:
+        case HERO_ATTACK_RECORD_POINT_3_HIT_QUERY:
+        case HERO_ATTACK_RECORD_POINT_4_HIT_QUERY:
             if (hero.unkA9C == 0 && hero.anim_frame >= 7.0f && hero.anim_frame < 15.0f) {
                 hero.target_speed = frame_time * 21.0f;
             }
