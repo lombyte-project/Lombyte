@@ -647,6 +647,7 @@ extern s32 FUN_L00_00211870(f32);
 
 void FUN_L12_00238900(void) {
     enum {
+        HERO_STATE_DOWNHILL_MOVEMENT = 0x58,
         HERO_STATE_MOVE_TO_STORED_TARGET = 0x65
     };
     struct MobyView *moby = MV(hero.moby);
@@ -2493,7 +2494,7 @@ void FUN_L12_00238900(void) {
             FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.velocity, frame_time_sq * 54.0f);
         }
         break;
-    case 0x58:
+    case HERO_STATE_DOWNHILL_MOVEMENT:
         hero.motion.move_yaw = hero.downhill_yaw;
         hero.target_speed = frame_time * 5.5f;
         FUN_L00_00213e68(frame_time_sq * 25.0f);
