@@ -2406,12 +2406,12 @@ void FUN_L15_002a2488(char *moby) {
     float va[4];
     float pb[4];
     char *data;
-    char *p;
-    char *c;
+    char *callback_frame_stamp;
+    char *hero_base;
     float fa;
     float fb;
     float g;
-    float r0;
+    float yaw_sine;
     float r;
     float yaw;
     float target_z;
@@ -2441,10 +2441,10 @@ void FUN_L15_002a2488(char *moby) {
         life = (unsigned char)ret2;
         ret3 = random_integer_below_c(0xFF);
         FUN_L00_002730e0(pb, (char *)va, D_L15_001614B8, life, (unsigned char)ret3, 0, *(float *)&D_L15_001614BC);
-        p = *(char **)(data + 0x6C);
-        if (p == 0 || *(int *)p != D_L15_0015F5CC_macro) {
-            if (p != 0) {
-                *(int *)p = D_L15_0015F5CC_macro;
+        callback_frame_stamp = *(char **)(data + 0x6C);
+        if (callback_frame_stamp == 0 || *(int *)callback_frame_stamp != D_L15_0015F5CC_macro) {
+            if (callback_frame_stamp != 0) {
+                *(int *)callback_frame_stamp = D_L15_0015F5CC_macro;
             }
             enqueue_callback_list_1_alt(FUN_L15_002a29b8, moby);
         }
@@ -2471,15 +2471,15 @@ s2:
     return;
 
 s3:
-    c = (char *)&hero;
-    fa = *(float *)(c + 0x80) - *(float *)(moby + 0x10);
-    fb = *(float *)(c + 0x84) - *(float *)(moby + 0x14);
+    hero_base = (char *)&hero;
+    fa = *(float *)(hero_base + 0x80) - *(float *)(moby + 0x10);
+    fb = *(float *)(hero_base + 0x84) - *(float *)(moby + 0x14);
     yaw = fast_add_rotations_c(*(float *)(data + 0x64), fast_arc_tan(fa, fb));
-    target_z = *(float *)(c + 0xC8);
+    target_z = *(float *)(hero_base + 0xC8);
     g = fast_cos_c(yaw);
     va[0] = g * (*(float *)&D_L15_001614B4 * D_0015ED6C);
-    r0 = fast_sin_c(yaw);
-    va[1] = r0 * (*(float *)&D_L15_001614B4 * D_0015ED6C);
+    yaw_sine = fast_sin_c(yaw);
+    va[1] = yaw_sine * (*(float *)&D_L15_001614B4 * D_0015ED6C);
     va[2] = 0.0f;
     fd = *(float *)(moby + 0x18) - target_z;
     if (0.6f < fd) {
