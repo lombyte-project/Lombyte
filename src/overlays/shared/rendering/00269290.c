@@ -1419,54 +1419,54 @@ f32 FUN_L00_0025c230_26c860(void *, void *, void *, s32) __asm__("FUN_L00_0025c2
 s32 FUN_001f9770_26c860(void *) __asm__("FUN_001f9770");
 void FUN_L00_00267a08_26c860(void *) __asm__("FUN_L00_00267a08");
 s32 FUN_001fa6d0_26c860(f32) __asm__("FUN_001fa6d0");
-void FUN_L00_0026c860(M_26c860 *m) {
-    R_26c860 *r = &m->r;
-    V_26c860 c, a, b;
+void FUN_L00_0026c860(M_26c860 *particle) {
+    R_26c860 *r = &particle->r;
+    V_26c860 reference_position, position_offset_scratch, b;
     M3_26c860 mat;
     if (r->f10 != 0.0f) {
         f32 zero = 0.0f;
         mat.q[0] = r->p0->q[0];
         mat.q[1] = r->p0->q[1];
         mat.q[2] = r->p0->q[2];
-        a.y = FUN_001f9de0_26c860(r->f14) * r->f10;
-        a.z = FUN_001f9dc8_26c860(r->f14) * r->f10;
-        a.x = zero;
-        a.w = zero;
-        FUN_001f9d20_26c860(&b, &a, &mat);
-        FUN_001f9a28_26c860(&m->v10, &m->v10, &b);
+        position_offset_scratch.y = FUN_001f9de0_26c860(r->f14) * r->f10;
+        position_offset_scratch.z = FUN_001f9dc8_26c860(r->f14) * r->f10;
+        position_offset_scratch.x = zero;
+        position_offset_scratch.w = zero;
+        FUN_001f9d20_26c860(&b, &position_offset_scratch, &mat);
+        FUN_001f9a28_26c860(&particle->v10, &particle->v10, &b);
         r->f1C += D_0015ED60_26c860 * 0.06001f;
-        FUN_L00_0024f7c8_26c860(r->p18, 0, &c);
-        FUN_001f9a28_26c860(&a, &c, &m->v10);
-        FUN_L00_001ff500_26c860(&a, &a, r->f1C);
-        FUN_001f9a10_26c860(&m->v10, &m->v10, &a);
+        FUN_L00_0024f7c8_26c860(r->p18, 0, &reference_position);
+        FUN_001f9a28_26c860(&position_offset_scratch, &reference_position, &particle->v10);
+        FUN_L00_001ff500_26c860(&position_offset_scratch, &position_offset_scratch, r->f1C);
+        FUN_001f9a10_26c860(&particle->v10, &particle->v10, &position_offset_scratch);
         r->f14 = FUN_001fa580_26c860(r->f14, D_0015ED60_26c860 * 0.5235988f);
         r->f10 *= D_0015ED60_26c860 * -0.10000002384185791f + 1.0f;
-        a.y = FUN_001f9de0_26c860(r->f14) * r->f10;
-        a.z = FUN_001f9dc8_26c860(r->f14) * r->f10;
-        a.x = zero;
-        a.w = zero;
-        FUN_001f9d20_26c860(&b, &a, &mat);
-        FUN_001f9a10_26c860(&m->v10, &m->v10, &b);
-        if (zero < FUN_L00_0025c230_26c860(&c, r->p18 + 0xC0, &m->v10, 1)) {
-            FUN_L00_00267a08_26c860(m);
+        position_offset_scratch.y = FUN_001f9de0_26c860(r->f14) * r->f10;
+        position_offset_scratch.z = FUN_001f9dc8_26c860(r->f14) * r->f10;
+        position_offset_scratch.x = zero;
+        position_offset_scratch.w = zero;
+        FUN_001f9d20_26c860(&b, &position_offset_scratch, &mat);
+        FUN_001f9a10_26c860(&particle->v10, &particle->v10, &b);
+        if (zero < FUN_L00_0025c230_26c860(&reference_position, r->p18 + 0xC0, &particle->v10, 1)) {
+            FUN_L00_00267a08_26c860(particle);
             return;
         }
     }
     r->f4 += D_0015ED60_26c860 * 0.011f * r->fC;
-    if (r->f4 <= 0.0f || FUN_001f9770_26c860(&m->hA)) {
-        FUN_L00_00267a08_26c860(m);
+    if (r->f4 <= 0.0f || FUN_001f9770_26c860(&particle->hA)) {
+        FUN_L00_00267a08_26c860(particle);
         return;
     }
     if (1.0f <= r->f4) {
         r->fC = -r->fC;
         r->f4 += D_0015ED60_26c860 * 0.011f * r->fC;
     }
-    m->fC += D_0015ED60_26c860 * -2940.0f;
-    m->i4 = (m->i4 & 0xFFFFFF) | (FUN_001fa6d0_26c860(r->f4 * 255.0f) << 24);
+    particle->fC += D_0015ED60_26c860 * -2940.0f;
+    particle->i4 = (particle->i4 & 0xFFFFFF) | (FUN_001fa6d0_26c860(r->f4 * 255.0f) << 24);
     r->f8 += D_0015ED60_26c860 * 0.006f;
     if (1.0f < r->f8)
         r->f8 -= 1.0f;
-    m->b8 = r->f8 * 255.0f;
+    particle->b8 = r->f8 * 255.0f;
 }
 /* Ported from rac1-decomp (src/overlays/shared/partupd_0026A130.c: func_L00_0026DA50), where it is exact; names translated to the US level program. */
 
