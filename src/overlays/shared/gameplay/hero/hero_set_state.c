@@ -3027,15 +3027,15 @@ extern unsigned char D_0013E533[];
 extern void FUN_L00_0020e698(void);
 
 int FUN_L00_002276c0(void) {
-    char *p = (char *)D_0013E533 + 0xE1D;
-    int s = *(int *)(p + 0x2084);
-    if ((unsigned)(s - 2) < 2 || s == 0) {
-        if (*(unsigned char *)(p + 0x20A8) != 0) {
-            if (*(int *)(p + 0x1BC) < scale_game_frames(6)) {
-                if (*(float *)(p + 0x229C) < 0.7f) {
-                    if (*(unsigned char *)(p + 0x20AB) == 0) {
+    char *hero_base = (char *)D_0013E533 + 0xE1D;
+    int current_state = *(int *)(hero_base + 0x2084);
+    if ((unsigned)(current_state - 2) < 2 || current_state == 0) {
+        if (*(unsigned char *)(hero_base + 0x20A8) != 0) {
+            if (*(int *)(hero_base + 0x1BC) < scale_game_frames(6)) {
+                if (*(float *)(hero_base + 0x229C) < 0.7f) {
+                    if (*(unsigned char *)(hero_base + 0x20AB) == 0) {
                         FUN_L00_0020e698();
-                        *(int *)(p + 0xD14) = 2;
+                        *(int *)(hero_base + 0xD14) = 2;
                         hero_set_state(0x23, 1);
                         return 1;
                     }
