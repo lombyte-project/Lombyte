@@ -1646,14 +1646,14 @@ void FUN_L14_003159d8(struct UpdateCam *cam) {
     char *rec = *(char **)(D_L14_0015EF50_59d8 + cam->descriptor_index * 32 + 0x1C);
     char *path;
     char *tbl;
-    char *p;
+    char *camera_saved_state;
     float *v;
     int *q;
     int j;
     int *w;
     int *r;
     float sum;
-    float f;
+    float hero_heading_radians;
     int i;
 
     tbl = D_L14_0015F70C_59d8;
@@ -1681,9 +1681,9 @@ void FUN_L14_003159d8(struct UpdateCam *cam) {
         sum += *(float *)(path + i * 16 + 0x1C);
     }
     D_L14_001F6C80[2][i] = sum;
-    p = cam->saved_state;
-    *(int *)(p + 0x88) = 1;
-    q = (int *)(p + 0x88);
+    camera_saved_state = cam->saved_state;
+    *(int *)(camera_saved_state + 0x88) = 1;
+    q = (int *)(camera_saved_state + 0x88);
     q[1] = 0;
     q[2] = 0;
     q[3] = 0;
@@ -1701,9 +1701,9 @@ void FUN_L14_003159d8(struct UpdateCam *cam) {
     w[2] = 0;
     w[3] = 0;
     w[4] = 0;
-    f = atan2_59d8(hero.moby->rot_row1.x, hero.moby->rot_row1.y);
+    hero_heading_radians = atan2_59d8(hero.moby->rot_row1.x, hero.moby->rot_row1.y);
     ang[1] = v[1];
-    ang[0] = f;
+    ang[0] = hero_heading_radians;
     ang[2] = v[2];
     FUN_L00_001ed580(&cam->pos, ang, &hero.motion);
     sub_59d8(dir, &hero.motion, &cam->pos);
