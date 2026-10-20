@@ -724,9 +724,9 @@ void FUN_L14_00305d28(Moby_3071B0 *moby) {
         break;
     case HELPER_SEQUENCE_ANIMATE_SLOTS: {
         Slots_3071B0 *slots = &data->slots;
-        Moby_3071B0 *o = slots->m[data->cur];
+        Moby_3071B0 *current_slot_moby = slots->m[data->cur];
         func_001F9938_3071B0(&data->timer);
-        o->f44 = func_L00_0025C7A8_3071B0(1.5707964f, 0.0f, func_001FA888_3071B0(data->timer) * data->rate);
+        current_slot_moby->f44 = func_L00_0025C7A8_3071B0(1.5707964f, 0.0f, func_001FA888_3071B0(data->timer) * data->rate);
         if (data->timer == 0) {
             data->timer = func_001F9850_3071B0(D_L14_00162204);
             data->cur--;
@@ -759,8 +759,8 @@ void FUN_L14_00305d28(Moby_3071B0 *moby) {
         if (data->timer == 0) {
             int j;
             if (data->voice != -1) {
-                Snd_3071B0 *e = (Snd_3071B0 *)(D_0013E633_3071B0 + data->voice * 0x70);
-                if (e->f88 == moby && e->f74) {
+                Snd_3071B0 *voice_entry = (Snd_3071B0 *)(D_0013E633_3071B0 + data->voice * 0x70);
+                if (voice_entry->f88 == moby && voice_entry->f74) {
                     func_L00_0028EBF0_3071B0(data->voice);
                 }
             }
