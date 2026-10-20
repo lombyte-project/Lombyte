@@ -617,16 +617,16 @@ void FUN_L18_002d5610(void *moby_object, void *src) {
     float movement_step_copy[4];
     float *qp = movement_step_copy;
     int flags;
-    float a, b, c, d, e;
+    float a, b, c, hit_radius, e;
     *(OvlQuad *)qp = *(OvlQuad *)src;
     flags = *(int *)(*(char **)(moby + 0x78) + 0x38);
     c = (flags & 1) ? 2.0f : 0.75f;
     a = (flags & 1) ? 4.0f : 2.0f;
     b = (flags & 1) ? 2.0f : 1.0f;
-    d = (flags & 4) ? 0.0f : 1.5f;
-    func_L00_0025F4A8_alt(moby, qp, moby + 0x10, d, 1.0f, 0x14, 6, 0x20, a, b, 9.0f, c, 1, 5.0f, 0,
+    hit_radius = (flags & 4) ? 0.0f : 1.5f;
+    func_L00_0025F4A8_alt(moby, qp, moby + 0x10, hit_radius, 1.0f, 0x14, 6, 0x20, a, b, 9.0f, c, 1, 5.0f, 0,
                           0, -1, 0);
-    if (d != 0.0f) {
+    if (hit_radius != 0.0f) {
         if (hero.vehicle_mode == 2) {
             play_entity_sound((int)moby, 2.0f, moby + 0x10, 2, D_L18_0016196C, 1.0f, 0, 1,
                              0);
