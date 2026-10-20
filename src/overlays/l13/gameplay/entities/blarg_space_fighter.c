@@ -2959,7 +2959,7 @@ void FUN_L13_002e9680(void *unused, char *parent_data, int idx) {
     if (moby != 0) {
         char *data = *(char **)(moby + 0x78);
         float *v = (float *)(data + 0x10);
-        float random_half_range, r0, r1, r2;
+        float random_half_range, random_small_angle_step, r1, r2;
         cart_burst(unused, moby + 0x10, -1, 2.0f, 13.0f);
         fast_vec_scale(v, parent_data + 0x70, 0.95f);
         FUN_L00_0025f8e0(v, frame_time * 30.0f);
@@ -2967,9 +2967,9 @@ void FUN_L13_002e9680(void *unused, char *parent_data, int idx) {
         fast_vec_add(moby + 0x10, moby + 0x10, v);
         random_half_range = frame_time;
         random_half_range = random_half_range * 0.34906585f;
-        r0 = random_float_between_alt(-random_half_range, random_half_range);
+        random_small_angle_step = random_float_between_alt(-random_half_range, random_half_range);
         random_half_range = frame_time;
-        *(float *)(data + 0x30) = r0;
+        *(float *)(data + 0x30) = random_small_angle_step;
         random_half_range = random_half_range * 3.1415927f;
         r1 = random_float_between_alt(-random_half_range, random_half_range);
         random_half_range = frame_time;
