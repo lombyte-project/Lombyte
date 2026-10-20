@@ -2661,22 +2661,22 @@ int FUN_001fa6d0_0026f548(float) __asm__("FUN_001fa6d0");
 float FUN_002132a8_0026f548(float, float) __asm__("FUN_002132a8");
 
 extern unsigned char *D_L00_001B210C __attribute__((section(".data")));
-void FUN_L00_0026f548(u128 *a, u128 *b, int k, int j) {
-    unsigned char *m = FUN_L00_002678b8_0026f548(0x23);
-    if (m) {
+void FUN_L00_0026f548(u128 *spawn_position, u128 *b, int k, int j) {
+    unsigned char *particle = FUN_L00_002678b8_0026f548(0x23);
+    if (particle) {
         unsigned char *v;
-        qcopy(m + 0x10, a);
-        v = m + 0x20;
-        *(int *)(m + 4) = 0x80808080;
-        m[9] = FUN_001fa6d0_0026f548(2.0f) + 0x10;
-        m[1] = 0;
-        m[3] = 0x44;
-        *(float *)(m + 0xc) = FUN_002132a8_0026f548(10500.0f, 16800.0f);
-        m[2] = *D_L00_001B210C;
+        qcopy(particle + 0x10, spawn_position);
+        v = particle + 0x20;
+        *(int *)(particle + 4) = 0x80808080;
+        particle[9] = FUN_001fa6d0_0026f548(2.0f) + 0x10;
+        particle[1] = 0;
+        particle[3] = 0x44;
+        *(float *)(particle + 0xc) = FUN_002132a8_0026f548(10500.0f, 16800.0f);
+        particle[2] = *D_L00_001B210C;
         qcopy(v, b);
         *(int *)(v + 0x14) = j;
         *(int *)(v + 0x10) = k;
-        *(float *)(v + 0x18) = *(float *)(m + 0x18);
+        *(float *)(v + 0x18) = *(float *)(particle + 0x18);
         if (k == 2) {
             *(int *)(v + 0x18) = 0;
         }
