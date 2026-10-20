@@ -235,18 +235,18 @@ void FUN_L00_00205538(void) {
     char *c = tbl + 0x90;
     char *b = tbl + 0x60;
     for (i = 0; i < 31; i++) {
-        Ent *e = &D_L00_0017A680_c[i];
-        if (e->active != 0) {
-            s32 r = FUN_L00_00205110_c(e->type);
+        Ent *manipulator_record = &D_L00_0017A680_c[i];
+        if (manipulator_record->active != 0) {
+            s32 r = FUN_L00_00205110_c(manipulator_record->type);
             if (r != 0)
-                detach_manipulator(r, e);
+                detach_manipulator(r, manipulator_record);
         }
         clear_u64_value(D_L00_0017A680_c[i].m40);
         clear_u64_value(b);
         b += sizeof(Ent);
         clear_u64_value(c);
         c += sizeof(Ent);
-        e->scale = 1.0f;
+        manipulator_record->scale = 1.0f;
     }
 }
 #define NOT_SDA
