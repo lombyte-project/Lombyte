@@ -1769,15 +1769,15 @@ typedef struct Obj_db890 {
     s32 f78;
 } Obj_db890;
 /* Calls the class function at +0x10 for a moby not in state 0xFE/0xFD with data; else 0. */
-s32 FUN_L00_002db890(Obj_db890 *o) {
-    Fn_db890 f;
-    if (o == 0 || o->f20 == 0xFE)
+s32 FUN_L00_002db890(Obj_db890 *moby) {
+    Fn_db890 class_callback;
+    if (moby == 0 || moby->f20 == 0xFE)
         return 0;
-    if (o->f20 == 0xFD || o->f78 == 0 || o->f24 == 0)
+    if (moby->f20 == 0xFD || moby->f78 == 0 || moby->f24 == 0)
         return 0;
-    f = o->f24->f2C->f10;
-    if (f)
-        return f(o);
+    class_callback = moby->f24->f2C->f10;
+    if (class_callback)
+        return class_callback(moby);
     return 0;
 }
 void debug_print_2db8f8(void *) __asm__("FUN_001e93b0");
