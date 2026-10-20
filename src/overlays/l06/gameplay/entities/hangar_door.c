@@ -3590,7 +3590,7 @@ void FUN_L06_002fc640(Moby_2FDA70 *moby) {
     };
     Vec_2FDA70 position_delta;
     Vec_2FDA70 initial_rotation;
-    Data_2FDA70 *d = moby->data;
+    Data_2FDA70 *moby_data = moby->data;
 
     scale_vector_xyz_c(&position_delta, &moby->pos, -1.0f);
     qcopy(&initial_rotation, &moby->rot);
@@ -3604,34 +3604,34 @@ void FUN_L06_002fc640(Moby_2FDA70 *moby) {
                 D_L06_00161F78 = 0;
             }
         }
-        d->f94 = 0;
-        d->f88 = -1;
+        moby_data->f94 = 0;
+        moby_data->f88 = -1;
         if (D_0013D4AF_2FDA70[0] == 0) {
             moby->state = 1;
         } else {
             moby->state = 3;
         }
-        moby->pos.z = ((Node_2FDA70 *)D_L06_001600EC_c)[d->f78].v30.z + ((Node_2FDA70 *)D_L06_001600EC_c)[d->f78].v20.z;
+        moby->pos.z = ((Node_2FDA70 *)D_L06_001600EC_c)[moby_data->f78].v30.z + ((Node_2FDA70 *)D_L06_001600EC_c)[moby_data->f78].v20.z;
         if (((Hero_2FDA70 *)(D_0013F350))->f20A4 == 0) {
-            ((Moby_2FDA70 *)D_L06_0015FFD8_c)[d->f6C].f34 |= 1;
-            ((Moby_2FDA70 *)D_L06_0015FFD8_c)[d->f6C].f34 |= 2;
-            ((Moby_2FDA70 *)D_L06_0015FFD8_c)[d->f6C].f94 = 0;
+            ((Moby_2FDA70 *)D_L06_0015FFD8_c)[moby_data->f6C].f34 |= 1;
+            ((Moby_2FDA70 *)D_L06_0015FFD8_c)[moby_data->f6C].f34 |= 2;
+            ((Moby_2FDA70 *)D_L06_0015FFD8_c)[moby_data->f6C].f94 = 0;
         } else if (((Hero_2FDA70 *)(D_0013F350))->f20A4 == 1) {
-            FUN_L06_002f53e8_c(D_L06_0015FFD8_c + (d->f60 << 8));
+            FUN_L06_002f53e8_c(D_L06_0015FFD8_c + (moby_data->f60 << 8));
         }
-        FUN_L06_002f53e8_c(D_L06_0015FFD8_c + (d->f64 << 8));
-        FUN_L06_002f53e8_c(D_L06_0015FFD8_c + (d->f68 << 8));
+        FUN_L06_002f53e8_c(D_L06_0015FFD8_c + (moby_data->f64 << 8));
+        FUN_L06_002f53e8_c(D_L06_0015FFD8_c + (moby_data->f68 << 8));
         break;
     case WAIT_FOR_INITIAL_HERO_ACTIVATION:
-        if (is_point_inside_clip_volume(&((Hero_2FDA70 *)(D_0013F350))->pos, d->f70) != 0) {
+        if (is_point_inside_clip_volume(&((Hero_2FDA70 *)(D_0013F350))->pos, moby_data->f70) != 0) {
             if (((Flags_2FDA70 *)(alternate_item_available))->f20 == 0) {
                 ((Flags_2FDA70 *)(alternate_item_available))->f20 = 1;
             }
             moby->state = 3;
-            d->f90 = 0;
+            moby_data->f90 = 0;
         } else if (((Hero_2FDA70 *)(D_0013F350))->moby->fA6 == 0x57) {
             moby->state = 3;
-            d->f84 = 1;
+            moby_data->f84 = 1;
         }
         break;
     case WAIT_FOR_SCENE_GAME_MODE_CLEAR:
@@ -3641,35 +3641,35 @@ void FUN_L06_002fc640(Moby_2FDA70 *moby) {
         break;
     case WAIT_FOR_HERO_TRIGGER_AT_NODE_OFFSET_HEIGHT:
     case WAIT_FOR_HERO_TRIGGER_AT_NODE_BASE_HEIGHT:
-        if (fast_dec_timer(&d->f90) != 0 && is_point_inside_clip_volume(&((Hero_2FDA70 *)(D_0013F350))->pos, d->f70) != 0) {
+        if (fast_dec_timer(&moby_data->f90) != 0 && is_point_inside_clip_volume(&((Hero_2FDA70 *)(D_0013F350))->pos, moby_data->f70) != 0) {
             int ok;
             if (((Hero_2FDA70 *)(D_0013F350))->f20A4 == 1) {
                 ok = try_set_help_message(9, 0x1781) != 0;
             } else if (D_0013D5CA_2FDA70[0] == 0) {
                 ok = try_set_help_message(9, 0x177E) != 0;
-            } else if (d->f84 != 0) {
+            } else if (moby_data->f84 != 0) {
                 ok = try_set_help_message(9, 0x1785) != 0;
             } else {
                 ok = try_set_help_message(9, 0x1789) != 0;
             }
             if ((*(int *)D_0013A5E0_2FDA70 & 0x10) && ((Hero_2FDA70 *)(D_0013F350))->f2084 != 100 && ok) {
                 ((Hero_2FDA70 *)(D_0013F350))->f1F2 = scale_game_frames_alt(0x3C);
-                d->f90 = scale_game_frames_alt(0x78);
+                moby_data->f90 = scale_game_frames_alt(0x78);
                 if (((Hero_2FDA70 *)(D_0013F350))->f20A4 == 1) {
                     fade_to_black(scale_game_frames_alt(0x10));
-                    FUN_L06_002f54a0_c(D_L06_0015FFD8_c + (d->f64 << 8));
-                    FUN_L06_002f54a0_c(D_L06_0015FFD8_c + (d->f68 << 8));
-                    FUN_L06_002f5360_c(D_L06_0015FFD8_c + (d->f60 << 8));
-                    d->f84 = 0;
-                    ((Moby_2FDA70 *)D_L06_0015FFD8_c)[d->f6C].f94 = 0;
+                    FUN_L06_002f54a0_c(D_L06_0015FFD8_c + (moby_data->f64 << 8));
+                    FUN_L06_002f54a0_c(D_L06_0015FFD8_c + (moby_data->f68 << 8));
+                    FUN_L06_002f5360_c(D_L06_0015FFD8_c + (moby_data->f60 << 8));
+                    moby_data->f84 = 0;
+                    ((Moby_2FDA70 *)D_L06_0015FFD8_c)[moby_data->f6C].f94 = 0;
                     FUN_L06_00227cf8();
                     {
-                        char *b = D_L06_001600EC_c + (d->f7C << 7);
+                        char *b = D_L06_001600EC_c + (moby_data->f7C << 7);
                         FUN_L00_00216f90(b + 0x30, b + 0x70, 0, 1);
                     }
                     jet_game_state(0, 10);
-                    ((Moby_2FDA70 *)D_L06_0015FFD8_c)[d->f6C].f34 |= 1;
-                    ((Moby_2FDA70 *)D_L06_0015FFD8_c)[d->f6C].f34 |= 2;
+                    ((Moby_2FDA70 *)D_L06_0015FFD8_c)[moby_data->f6C].f34 |= 1;
+                    ((Moby_2FDA70 *)D_L06_0015FFD8_c)[moby_data->f6C].f34 |= 2;
                     if (D_0013D5DD_2FDA70[0x10] != 0 && D_L06_00161F78 == 0) {
                         D_L06_00161F78 = 1;
                         start_scene(3);
@@ -3678,38 +3678,38 @@ void FUN_L06_002fc640(Moby_2FDA70 *moby) {
                     }
                 } else if (D_0013D5CA_2FDA70[0] == 0) {
                     fade_to_black(scale_game_frames_alt(0x10));
-                    FUN_L06_002f5360_c(D_L06_0015FFD8_c + (d->f64 << 8));
-                    FUN_L06_002f53e8_c(D_L06_0015FFD8_c + (d->f68 << 8));
-                    FUN_L06_002f54a0_c(D_L06_0015FFD8_c + (d->f60 << 8));
-                    d->f84 = 1;
-                    ((Moby_2FDA70 *)D_L06_0015FFD8_c)[d->f6C].f94 = ((Moby_2FDA70 *)D_L06_0015FFD8_c)[d->f6C].cls->f10;
-                    ((Moby_2FDA70 *)D_L06_0015FFD8_c)[d->f6C].f34 &= 0xFFFE;
+                    FUN_L06_002f5360_c(D_L06_0015FFD8_c + (moby_data->f64 << 8));
+                    FUN_L06_002f53e8_c(D_L06_0015FFD8_c + (moby_data->f68 << 8));
+                    FUN_L06_002f54a0_c(D_L06_0015FFD8_c + (moby_data->f60 << 8));
+                    moby_data->f84 = 1;
+                    ((Moby_2FDA70 *)D_L06_0015FFD8_c)[moby_data->f6C].f94 = ((Moby_2FDA70 *)D_L06_0015FFD8_c)[moby_data->f6C].cls->f10;
+                    ((Moby_2FDA70 *)D_L06_0015FFD8_c)[moby_data->f6C].f34 &= 0xFFFE;
                     {
-                        char *b = D_L06_001600EC_c + (d->f80 << 7);
+                        char *b = D_L06_001600EC_c + (moby_data->f80 << 7);
                         FUN_L00_00216f90(b + 0x30, b + 0x70, 0, 1);
                     }
-                    FUN_L01_00231348(1, 0x43, (int)(D_L06_0015FFD8_c + (d->f6C << 8)));
+                    FUN_L01_00231348(1, 0x43, (int)(D_L06_0015FFD8_c + (moby_data->f6C << 8)));
                     jet_game_state(2, 7);
-                } else if (d->f84 == 0) {
+                } else if (moby_data->f84 == 0) {
                     fade_to_black(scale_game_frames_alt(0x10));
-                    FUN_L06_002f5360_c(D_L06_0015FFD8_c + (d->f64 << 8));
-                    FUN_L06_002f53e8_c(D_L06_0015FFD8_c + (d->f68 << 8));
-                    FUN_L06_002f54a0_c(D_L06_0015FFD8_c + (d->f60 << 8));
-                    d->f84 = 1;
-                    d->f94 = 1;
+                    FUN_L06_002f5360_c(D_L06_0015FFD8_c + (moby_data->f64 << 8));
+                    FUN_L06_002f53e8_c(D_L06_0015FFD8_c + (moby_data->f68 << 8));
+                    FUN_L06_002f54a0_c(D_L06_0015FFD8_c + (moby_data->f60 << 8));
+                    moby_data->f84 = 1;
+                    moby_data->f94 = 1;
                     {
-                        char *b = D_L06_001600EC_c + (d->f80 << 7);
+                        char *b = D_L06_001600EC_c + (moby_data->f80 << 7);
                         FUN_L00_00216f90(b + 0x30, b + 0x70, 0, 1);
                     }
                 } else {
                     fade_to_black(scale_game_frames_alt(0x10));
-                    FUN_L06_002f54a0_c(D_L06_0015FFD8_c + (d->f64 << 8));
-                    FUN_L06_002f53e8_c(D_L06_0015FFD8_c + (d->f68 << 8));
-                    FUN_L06_002f5360_c(D_L06_0015FFD8_c + (d->f60 << 8));
-                    d->f84 = 0;
-                    d->f94 = 0;
+                    FUN_L06_002f54a0_c(D_L06_0015FFD8_c + (moby_data->f64 << 8));
+                    FUN_L06_002f53e8_c(D_L06_0015FFD8_c + (moby_data->f68 << 8));
+                    FUN_L06_002f5360_c(D_L06_0015FFD8_c + (moby_data->f60 << 8));
+                    moby_data->f84 = 0;
+                    moby_data->f94 = 0;
                     {
-                        char *b = D_L06_001600EC_c + (d->f7C << 7);
+                        char *b = D_L06_001600EC_c + (moby_data->f7C << 7);
                         FUN_L00_00216f90(b + 0x30, b + 0x70, 0, 1);
                     }
                 }
@@ -3717,52 +3717,52 @@ void FUN_L06_002fc640(Moby_2FDA70 *moby) {
         }
         if (((Hero_2FDA70 *)(D_0013F350))->f2FC == moby
             && ((Hero_2FDA70 *)(D_0013F350))->f30E == 0
-            && fast_dec_timer(&d->f90) != 0
+            && fast_dec_timer(&moby_data->f90) != 0
             && moby->pos.z + 0.29f < ((Hero_2FDA70 *)(D_0013F350))->pos.z
             && vector_distance(&((Hero_2FDA70 *)(D_0013F350))->pos, &moby->pos) < 1.0f) {
             allocate_voice_for_target_entry(0, 0, (int)moby);
             if (moby->state == 3) {
                 moby->state = 5;
-                FUN_L06_002f53e8_c(D_L06_0015FFD8_c + (d->f64 << 8));
-                d->f90 = scale_game_frames_alt(0x78);
+                FUN_L06_002f53e8_c(D_L06_0015FFD8_c + (moby_data->f64 << 8));
+                moby_data->f90 = scale_game_frames_alt(0x78);
             } else {
                 moby->state = 6;
-                FUN_L06_002f53e8_c(D_L06_0015FFD8_c + (d->f68 << 8));
-                d->f90 = scale_game_frames_alt(0x78);
+                FUN_L06_002f53e8_c(D_L06_0015FFD8_c + (moby_data->f68 << 8));
+                moby_data->f90 = scale_game_frames_alt(0x78);
             }
         } else if (vector_distance(&moby->pos, &((Hero_2FDA70 *)(D_0013F350))->pos) < 24.0f
                    && moby->state == 3
                    && ((Hero_2FDA70 *)(D_0013F350))->pos.z + 5.0f < moby->pos.z) {
-            d->f84 = 1;
-            d->f94 = 1;
+            moby_data->f84 = 1;
+            moby_data->f94 = 1;
             moby->state = 5;
-            FUN_L06_002f53e8_c(D_L06_0015FFD8_c + (d->f64 << 8));
-            FUN_L06_002f53e8_c(D_L06_0015FFD8_c + (d->f60 << 8));
-            d->f90 = scale_game_frames_alt(0x78);
+            FUN_L06_002f53e8_c(D_L06_0015FFD8_c + (moby_data->f64 << 8));
+            FUN_L06_002f53e8_c(D_L06_0015FFD8_c + (moby_data->f60 << 8));
+            moby_data->f90 = scale_game_frames_alt(0x78);
         } else if (vector_distance(&moby->pos, &((Hero_2FDA70 *)(D_0013F350))->pos) < 24.0f
                    && moby->state == 4
                    && moby->pos.z < ((Hero_2FDA70 *)(D_0013F350))->pos.z - 5.0f) {
             moby->state = 6;
-            FUN_L06_002f53e8_c(D_L06_0015FFD8_c + (d->f68 << 8));
-            d->f90 = scale_game_frames_alt(0x78);
+            FUN_L06_002f53e8_c(D_L06_0015FFD8_c + (moby_data->f68 << 8));
+            moby_data->f90 = scale_game_frames_alt(0x78);
         }
         break;
     case MOVE_TO_NODE_BASE_HEIGHT:
     case MOVE_TO_NODE_OFFSET_HEIGHT: {
         float target;
-        float t;
-        target = ((Node_2FDA70 *)D_L06_001600EC_c)[d->f78].v30.z;
+        float height_acceleration_step;
+        target = ((Node_2FDA70 *)D_L06_001600EC_c)[moby_data->f78].v30.z;
         if (moby->state == 6) {
-            target += ((Node_2FDA70 *)D_L06_001600EC_c)[d->f78].v20.z;
+            target += ((Node_2FDA70 *)D_L06_001600EC_c)[moby_data->f78].v20.z;
         }
-        t = D_L06_00161F68 * frame_time_sq_macro;
-        advance_accelerated_scalar(&moby->pos.z, &d->f8C, target, t, t, D_L06_00161F64 * D_0015ED6C);
+        height_acceleration_step = D_L06_00161F68 * frame_time_sq_macro;
+        advance_accelerated_scalar(&moby->pos.z, &moby_data->f8C, target, height_acceleration_step, height_acceleration_step, D_L06_00161F64 * D_0015ED6C);
         if (absolute_float(moby->pos.z - target) < 0.01f) {
             if (moby->state == 6) {
                 moby->state = 7;
-                FUN_L06_002f5360_c(D_L06_0015FFD8_c + (d->f64 << 8));
+                FUN_L06_002f5360_c(D_L06_0015FFD8_c + (moby_data->f64 << 8));
             } else {
-                FUN_L06_002f5360_c(D_L06_0015FFD8_c + (d->f68 << 8));
+                FUN_L06_002f5360_c(D_L06_0015FFD8_c + (moby_data->f68 << 8));
                 moby->state = 8;
             }
         }
@@ -3779,25 +3779,25 @@ void FUN_L06_002fc640(Moby_2FDA70 *moby) {
         }
         break;
     }
-    if (d->f94 != 0) {
+    if (moby_data->f94 != 0) {
         ((Hero_2FDA70 *)(D_0013F350))->f22CB = 1;
     } else {
         ((Hero_2FDA70 *)(D_0013F350))->f22CB = 0;
     }
     if (moby->state >= 5 && moby->state <= 8) {
-        d->f9C = 0.0f;
+        moby_data->f9C = 0.0f;
         moby->f90 = D_L06_00161F74;
     } else {
-        float f;
-        d->f9C = fast_add_rotations(d->f9C, D_0015ED6C * 5.2359877f);
-        f = fast_sin(d->f9C) * 4.0f - 3.0f;
-        if (f > 1.0f) {
-            f = 1.0f;
-        } else if (f < 0.0f) {
-            f = 0.0f;
+        float color_blend;
+        moby_data->f9C = fast_add_rotations(moby_data->f9C, D_0015ED6C * 5.2359877f);
+        color_blend = fast_sin(moby_data->f9C) * 4.0f - 3.0f;
+        if (color_blend > 1.0f) {
+            color_blend = 1.0f;
+        } else if (color_blend < 0.0f) {
+            color_blend = 0.0f;
         }
-        moby->f90 = FUN_001fa6e0(D_L06_00161F6C, D_L06_00161F70, f);
+        moby->f90 = FUN_001fa6e0(D_L06_00161F6C, D_L06_00161F70, color_blend);
     }
     add_vector_xyz(&position_delta, &position_delta, &moby->pos);
-    update_entity_matrix(d->f20, &position_delta, &initial_rotation, &moby->rot);
+    update_entity_matrix(moby_data->f20, &position_delta, &initial_rotation, &moby->rot);
 }
