@@ -190,25 +190,25 @@ extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern void FUN_L00_00250df8(void *);
 
 unsigned char *FUN_L14_002ffaf8(unsigned char *owner, char *pos) {
-    unsigned char *m = func_0020D348_m(0x3A5);
-    if (m != 0) {
-        char *d = *(char **)(m + 0x78);
-        *(unsigned char **)d = owner;
-        *(int *)(d + 8) = 0;
-        *(int *)(d + 0xC) = 0;
-        *(float *)(d + 4) = -1.0f;
-        *(float *)(d + 0x10) = random_float_between_alt(0.0104719754f, 0.0209439509f);
-        *(float *)(d + 0x14) = random_float_between_alt(0.00698131695f, 0.0139626339f);
-        *(float *)(d + 0x18) = random_float_between_alt(0.00349065848f, 0.00698131695f);
-        qcopy(m + 0x10, pos);
-        *(float *)(m + 0x48) = *(float *)(owner + 0x48);
-        m[0x20] = 0;
-        m[0x30] = 0xFF;
-        *(short *)(m + 0x32) = 0xFF;
-        m[0x31] = 1;
-        FUN_L00_00250df8(m);
+    unsigned char *spawned_moby = func_0020D348_m(0x3A5);
+    if (spawned_moby != 0) {
+        char *spawned_vars = *(char **)(spawned_moby + 0x78);
+        *(unsigned char **)spawned_vars = owner;
+        *(int *)(spawned_vars + 8) = 0;
+        *(int *)(spawned_vars + 0xC) = 0;
+        *(float *)(spawned_vars + 4) = -1.0f;
+        *(float *)(spawned_vars + 0x10) = random_float_between_alt(0.0104719754f, 0.0209439509f);
+        *(float *)(spawned_vars + 0x14) = random_float_between_alt(0.00698131695f, 0.0139626339f);
+        *(float *)(spawned_vars + 0x18) = random_float_between_alt(0.00349065848f, 0.00698131695f);
+        qcopy(spawned_moby + 0x10, pos);
+        *(float *)(spawned_moby + 0x48) = *(float *)(owner + 0x48);
+        spawned_moby[0x20] = 0;
+        spawned_moby[0x30] = 0xFF;
+        *(short *)(spawned_moby + 0x32) = 0xFF;
+        spawned_moby[0x31] = 1;
+        FUN_L00_00250df8(spawned_moby);
     }
-    return m;
+    return spawned_moby;
 }
 
 #include "rnc/math/vector.h"
