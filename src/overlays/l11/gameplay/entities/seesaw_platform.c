@@ -665,7 +665,7 @@ void FUN_L11_0030e088(struct Moby *m) {
         m->scale = m->pclass->scale + m->pclass->scale;
         if (pv[1] == 0) {
             Light_e088 *l;
-            float a;
+            float light_direction_angle;
             for (i = 19; i >= 0; i--) {
                 D_L11_001DA880[i].unk1E = 0;
             }
@@ -680,9 +680,9 @@ void FUN_L11_0030e088(struct Moby *m) {
             l->unk14 = 1.0f;
             l->unk18 = 0.9f;
             l->unk20 = 0.1f;
-            a = fast_arc_tan(D_L11_001808C0[4], D_L11_001808C0[5]);
-            l->unk30 = fast_cos(a) * 0.57735f;
-            l->unk34 = fast_sin(a) * 0.57735f;
+            light_direction_angle = fast_arc_tan(D_L11_001808C0[4], D_L11_001808C0[5]);
+            l->unk30 = fast_cos(light_direction_angle) * 0.57735f;
+            l->unk34 = fast_sin(light_direction_angle) * 0.57735f;
             l->unk38 = -0.57735f;
             l->unk28 = 0x38;
             l->unk2C = 0x39;
