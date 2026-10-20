@@ -40,11 +40,11 @@ extern void FUN_L01_00309bf8(void);
 void enqueue_callback_list_1(void *fn, void *arg) __asm__("FUN_001f4600");
 
 /* Sets both flag fields to 0xFF and queues FUN_L01_00309bf8 for the moby. */
-void FUN_L01_00309c98(FlagMoby *m) {
+void FUN_L01_00309c98(FlagMoby *moby) {
     int v = 0xFF;
-    m->h32 = v;
-    m->b30 = v;
-    enqueue_callback_list_1(FUN_L01_00309bf8, m);
+    moby->h32 = v;
+    moby->b30 = v;
+    enqueue_callback_list_1(FUN_L01_00309bf8, moby);
 }
 #include "rnc/gameplay/hero.h"
 #include "rnc/gameplay/state/usage_stats.h"
