@@ -526,11 +526,11 @@ void FUN_L00_002b3458(unsigned char *m) {
         }
         goto test;
     found: {
-        unsigned char *q;
+        unsigned char *selected_object;
         v->p[i][0x20] = 0x51;
-        q = v->p[i];
-        qcopy(q + 0x10, m + 0x10);
-        q[0xA4] = 0xFF;
+        selected_object = v->p[i];
+        qcopy(selected_object + 0x10, m + 0x10);
+        selected_object[0xA4] = 0xFF;
         return;
     }
     test:
