@@ -1898,6 +1898,7 @@ void FUN_L02_00230988(void) {
         HERO_STATE_DOUBLE_JUMP = 14,
         HERO_STATE_LOOK_ALT = 30,
         HERO_STATE_HELD_ITEM_ATTACK = 32,
+        HERO_STATE_ITEM_ATTACK = 35,
         HERO_STATE_ITEM_RELEASE_FALL = 45,
         HERO_STATE_VEHICLE_IDLE = 83,
         HERO_STATE_VEHICLE_RUN = 84,
@@ -3623,7 +3624,7 @@ void FUN_L02_00230988(void) {
                         hero_set_state(HERO_STATE_IDLE, 0);
                     }
                     break;
-                case 35:
+                case HERO_STATE_ITEM_ATTACK:
                     if (19.0f < hero.anim_frame &&
                         pad_pressed_within(0x40, scale_game_frames(0xB), 0)) {
                         if (controller_state.held & 0xA) {
