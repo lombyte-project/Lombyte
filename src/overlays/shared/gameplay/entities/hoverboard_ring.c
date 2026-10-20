@@ -354,26 +354,26 @@ void FUN_L05_00329358(char *moby) {
     normalize_vector_xyz(p + 8, &hero.gravity_dir, -1.0f);
 }
 extern char *D_L05_00167200 __attribute__((section(".data")));
-void FUN_L05_003294c0(float a, float b, float c, float d, float e, float f, float g, float h) {
-    char *o = D_L05_00167200;
-    char *p = *(char **)(o + 0x70);
+void FUN_L05_003294c0(float spring_distance, float b, float focus_distance, float d, float e, float f, float g, float h) {
+    char *camera = D_L05_00167200;
+    char *orbit = *(char **)(camera + 0x70);
 
-    *(float *)(p + 0x184) = a;
-    *(float *)(p + 0x188) = b;
-    *(float *)(p + 0x180) = c;
-    *(float *)(p + 0x190) = d;
-    *(float *)(p + 0x194) = e;
-    *(float *)(p + 0x18C) = f;
-    p = *(char **)(o + 0x70);
+    *(float *)(orbit + 0x184) = spring_distance;
+    *(float *)(orbit + 0x188) = b;
+    *(float *)(orbit + 0x180) = focus_distance;
+    *(float *)(orbit + 0x190) = d;
+    *(float *)(orbit + 0x194) = e;
+    *(float *)(orbit + 0x18C) = f;
+    orbit = *(char **)(camera + 0x70);
     if (g < 0.0f) {
-        *(float *)(p + 0x10) = 0.01f;
+        *(float *)(orbit + 0x10) = 0.01f;
     } else {
-        *(float *)(p + 0x10) = g;
+        *(float *)(orbit + 0x10) = g;
     }
     if (h < 0.0f) {
-        *(float *)(p + 0x14) = 0.2f;
+        *(float *)(orbit + 0x14) = 0.2f;
     } else {
-        *(float *)(p + 0x14) = h;
+        *(float *)(orbit + 0x14) = h;
     }
 }
 /* Places the camera moby relative to the hero's target and builds its look-at basis. */
