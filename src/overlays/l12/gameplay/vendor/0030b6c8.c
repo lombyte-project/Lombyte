@@ -14,30 +14,30 @@ extern void FUN_L01_00278e20(void *, int);
 void mark_moby_for_removal(struct Moby *moby) __asm__("FUN_0020c828");
 
 void lamp_update(struct Moby *m) __asm__("FUN_L12_0030b6c8");
-void lamp_update(struct Moby *m) {
+void lamp_update(struct Moby *lamp_moby) {
     enum {
         LAMP_STATE_INITIALIZE = 0,
         LAMP_STATE_WAIT_FOR_HIT = 1,
         LAMP_STATE_REMOVE = 2
     };
     int hit = 0;
-    char *r = find_moby_hit(m, 0x10000, 0);
-    switch (m->state) {
+    char *r = find_moby_hit(lamp_moby, 0x10000, 0);
+    switch (lamp_moby->state) {
     case LAMP_STATE_INITIALIZE:
-        m->state = 1;
+        lamp_moby->state = 1;
         break;
     case LAMP_STATE_WAIT_FOR_HIT:
         if (r != 0 && *(float *)(r + 0x2C) > 0.0f)
             hit = 1;
         if (hit)
-            m->state = 2;
+            lamp_moby->state = 2;
         break;
     case LAMP_STATE_REMOVE:
-        allocate_voice_for_target_entry(0, 0, (int)m);
-        FUN_L01_002787a0(m);
-        FUN_L00_00263e30(m, 0x748, 1, 0x748, 1, 0xb, 2);
-        FUN_L01_00278e20(m, 0x747);
-        mark_moby_for_removal(m);
+        allocate_voice_for_target_entry(0, 0, (int)lamp_moby);
+        FUN_L01_002787a0(lamp_moby);
+        FUN_L00_00263e30(lamp_moby, 0x748, 1, 0x748, 1, 0xb, 2);
+        FUN_L01_00278e20(lamp_moby, 0x747);
+        mark_moby_for_removal(lamp_moby);
         break;
     }
 }
