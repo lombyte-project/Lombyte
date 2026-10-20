@@ -323,7 +323,7 @@ void scale_2c5dc8(void *, void *, float) __asm__("FUN_001f9bf8");
 void draw_2c5dc8(void *, int, int) __asm__("FUN_001f7d30");
 void FUN_L00_002c5dc8(char *moby) {
     Quad_2c5dc8 segment_quad;
-    V_2c5dc8 b, segment_center, attachment_position, segment_direction, f, g, e, h, k;
+    V_2c5dc8 b, segment_center, attachment_position, segment_direction, f, g, e, segment_to_reference, k;
     Vars_2c5dc8 *v;
     unsigned int col;
     float half = 0.05f;
@@ -377,8 +377,8 @@ void FUN_L00_002c5dc8(char *moby) {
         add_2c5dc8(&segment_center, &segment_center, &segment_direction);
         qcopy(&segment_quad.corner[1], &segment_center);
         qcopy(&segment_quad.corner[3], &segment_center);
-        sub_2c5dc8(&h, &D_L00_00166DC0_2c5dc8, &segment_center);
-        cross_2c5dc8(&k, &h, &segment_direction);
+        sub_2c5dc8(&segment_to_reference, &D_L00_00166DC0_2c5dc8, &segment_center);
+        cross_2c5dc8(&k, &segment_to_reference, &segment_direction);
         scale_2c5dc8(&k, &k, 0.05f);
         add_2c5dc8(&segment_quad.corner[1], &segment_quad.corner[1], &k);
         sub_2c5dc8(&segment_quad.corner[3], &segment_quad.corner[3], &k);
