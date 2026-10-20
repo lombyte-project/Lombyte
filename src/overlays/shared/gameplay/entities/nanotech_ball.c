@@ -47,7 +47,7 @@ s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 void FUN_L00_002d7f88(S_002d7f88 *self) {
     D_002d7f88 *moby_data = self->p78;
     O_002d7f88 *o;
-    void *m;
+    void *linked_moby_data;
     f32 t;
     moby_data->f4 += (D_L00_001616DC + D_L00_001616DC) * frame_time;
     if (fast_dec_timer(moby_data->v8) != 0 || D_L00_001616DC * 1.1f <= moby_data->f4)
@@ -58,11 +58,11 @@ void FUN_L00_002d7f88(S_002d7f88 *self) {
         mark_moby_for_removal(self);
         return;
     }
-    m = o->p78;
+    linked_moby_data = o->p78;
     clear_u64_value(self->v10);
     self->f14 = -moby_data->f4;
     transform_vector_by_basis(self->v10, self->v10, (u8 *)moby_data->o + 0xC0);
-    fast_vec_add(self->v10, self->v10, m);
+    fast_vec_add(self->v10, self->v10, linked_moby_data);
     qcopy(&self->q40, &moby_data->o->q40);
     if (moby_data->f4 > D_L00_001616DC) {
         self->b23 = truncate_float_to_s32((1.0f - (moby_data->f4 - D_L00_001616DC) * 10.0f) * 127.0f);
