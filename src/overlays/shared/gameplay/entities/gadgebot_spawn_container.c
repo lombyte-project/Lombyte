@@ -124,9 +124,9 @@ void gadgebot_spawn_container_update(unsigned char *moby) {
         GADGEBOT_CONTAINER_PULSE_AND_HANDLE_HITS = 1,
         GADGEBOT_CONTAINER_WAIT_FOR_REMOVAL = 2
     };
-    char *p = find_moby_hit(moby, 0x10000, 0);
-    float tmp[4];
-    int t;
+    char *hit_record = find_moby_hit(moby, 0x10000, 0);
+    float raised_position_snapshot[4];
+    int frame_count_snapshot;
     float f;
 
     moby[0xA4] = 0xFF;
@@ -135,23 +135,23 @@ void gadgebot_spawn_container_update(unsigned char *moby) {
         moby[0x20] = 1;
         break;
     case GADGEBOT_CONTAINER_PULSE_AND_HANDLE_HITS:
-        t = level_frame_count;
-        f = (float)(t % 150) / 150.0f * 2.0f * 3.14159274f;
+        frame_count_snapshot = level_frame_count;
+        f = (float)(frame_count_snapshot % 150) / 150.0f * 2.0f * 3.14159274f;
         if (f > 3.14159274f) {
             f -= 6.28318548f;
         }
         f = (fast_sin(f) + 1.0f) * 0.5f;
         *(int *)(moby + 0x90) = fast_tween_color(0x80464646, 0x80828282, f);
-        if (p != 0) {
-            FUN_L06_002d8178(moby, p);
+        if (hit_record != 0) {
+            FUN_L06_002d8178(moby, hit_record);
         }
         if (moby[0x31] != 0) {
             enqueue_callback_list_1((int)FUN_L06_002d8738_u, (int)moby);
         }
         break;
     case GADGEBOT_CONTAINER_WAIT_FOR_REMOVAL:
-        qcopy(tmp, moby + 0x10);
-        tmp[2] += 0.3f;
+        qcopy(raised_position_snapshot, moby + 0x10);
+        raised_position_snapshot[2] += 0.3f;
         if (FUN_L00_001fefc8(moby + 0xBC) != 0) {
             mark_moby_for_removal(moby);
         }
