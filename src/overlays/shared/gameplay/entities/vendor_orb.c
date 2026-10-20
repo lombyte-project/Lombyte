@@ -1697,18 +1697,18 @@ extern void FUN_001f9a28(float *, float *, float *);
 extern void FUN_001f9a68_c(void *, void *, float) __asm__("FUN_001f9a68");
 
 void FUN_L00_002e46b8(char *a) {
-    Vq4 t;
+    Vq4 translation_delta;
     Vq4 camera_translation_adjustment, lateral_displacement;
     char *b = D_L00_00166E10;
     char *m = *(char **)(a + 0x70);
     char *m40 = m + 0x40;
     char *g, *g3;
-    qcopy(&t, D_0013E533 + 0xF5D);
-    FUN_001f9a10_c(a + 0x30, &t, a + 0x30);
-    FUN_001f9a10_c(m + 0xA0, &t, m + 0xA0);
-    FUN_001f9a10_c(m40, &t, m40);
-    FUN_001f9a10_c(m + 0xD0, &t, m + 0xD0);
-    FUN_001f9a10_c(m, &t, m);
+    qcopy(&translation_delta, D_0013E533 + 0xF5D);
+    FUN_001f9a10_c(a + 0x30, &translation_delta, a + 0x30);
+    FUN_001f9a10_c(m + 0xA0, &translation_delta, m + 0xA0);
+    FUN_001f9a10_c(m40, &translation_delta, m40);
+    FUN_001f9a10_c(m + 0xD0, &translation_delta, m + 0xD0);
+    FUN_001f9a10_c(m, &translation_delta, m);
     g = D_0013E533 + 0xE1D;
     if (*(short *)(g + 0x308) == 0) {
         char *p = *(char **)(g + 0x2FC);
@@ -1722,13 +1722,13 @@ void FUN_L00_002e46b8(char *a) {
     g3 = D_0013E533 + 0xE1D;
     if ((unsigned)(*(int *)(g3 + 0x2084) - 0xB) < 2) {
         char *m2 = *(char **)(a + 0x70);
-        char *s = b + 0x30;
-        float f;
+        char *camera_up_axis = b + 0x30;
+        float translation_up_component;
         *(short *)(m2 + 0x10) = 0;
         FUN_001f9a68_c(&camera_translation_adjustment, b + 0x80, *(float *)(b + 0xA4));
-        f = fast_vec_dot(s, &t);
-        FUN_001f9a68_c(&lateral_displacement, s, f);
-        FUN_001f9a28((float *)&lateral_displacement, (float *)&t, (float *)&lateral_displacement);
+        translation_up_component = fast_vec_dot(camera_up_axis, &translation_delta);
+        FUN_001f9a68_c(&lateral_displacement, camera_up_axis, translation_up_component);
+        FUN_001f9a28((float *)&lateral_displacement, (float *)&translation_delta, (float *)&lateral_displacement);
         FUN_001f9a28((float *)&camera_translation_adjustment, (float *)&camera_translation_adjustment, (float *)&lateral_displacement);
         FUN_001f9a10_c(a + 0x30, &camera_translation_adjustment, a + 0x30);
         FUN_001f9a10_c(m40 + 0x60, &camera_translation_adjustment, m40 + 0x60);
