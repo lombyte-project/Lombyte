@@ -6,13 +6,13 @@ typedef struct {
     float x, y, z, w;
 } V_24c4f0;
 
-int FUN_L04_0024c4f0(float *p, float *poly, int n) {
+int FUN_L04_0024c4f0(float *query_point, float *poly, int vertex_count) {
     V_24c4f0 *v = (V_24c4f0 *)poly;
     int i;
 
-    for (i = 0; i < n; i++) {
-        if ((v[(i + 1) % n].x - v[i].x) * (p[1] - v[i].y) -
-                (v[(i + 1) % n].y - v[i].y) * (p[0] - v[i].x) >
+    for (i = 0; i < vertex_count; i++) {
+        if ((v[(i + 1) % vertex_count].x - v[i].x) * (query_point[1] - v[i].y) -
+                (v[(i + 1) % vertex_count].y - v[i].y) * (query_point[0] - v[i].x) >
             0.0f) {
             return i + 1;
         }
