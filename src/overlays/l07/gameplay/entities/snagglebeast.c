@@ -727,6 +727,7 @@ void snagglebeast_update(unsigned char *moby) {
         SNAGGLEBEAST_INITIALIZE = 0,
         SNAGGLEBEAST_IDLE = 1,
         SNAGGLEBEAST_TURN_TOWARD_TARGET = 7,
+        SNAGGLEBEAST_CAPTURE_HERO_AND_DRAIN_AMMO = 8,
         SNAGGLEBEAST_ROPE_ATTACK = 9,
         SNAGGLEBEAST_DEATH_EXPLOSION = 10,
         SNAGGLEBEAST_POST_DEATH_CLEANUP = 16
@@ -1474,7 +1475,7 @@ void snagglebeast_update(unsigned char *moby) {
         }
         break;
     }
-    case 8: {
+    case SNAGGLEBEAST_CAPTURE_HERO_AND_DRAIN_AMMO: {
         float fr;
         if (*(int *)(data + 0x294) <= 0) {
             if (FUN_L07_00313de8(moby, data, (float *)(((char *)&hero) + 0x80), 6, 0)) break;
