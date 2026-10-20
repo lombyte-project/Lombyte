@@ -2946,28 +2946,28 @@ extern f32 D_L02_00161C34_gp __asm__("D_L02_00161C34") __attribute__((sda));
 extern short D_L02_00161C38 __attribute__((sda));
 extern short D_L02_00161C3C __attribute__((sda));
 void FUN_L02_002def80(struct Moby *moby) {
-    char *d = (char *)moby->pvars;
+    char *transport_pod_vars = (char *)moby->pvars;
     advance_accelerated_scalar(
-        (float *)(*(char **)(d + 0x84) + 0x18), (float *)(d + 0x8C),
-        moby->pos.z + *(float *)(d + 0x94), *(float *)&D_L02_00161C34_gp * frame_time_sq,
+        (float *)(*(char **)(transport_pod_vars + 0x84) + 0x18), (float *)(transport_pod_vars + 0x8C),
+        moby->pos.z + *(float *)(transport_pod_vars + 0x94), *(float *)&D_L02_00161C34_gp * frame_time_sq,
         *(float *)&D_L02_00161C38 * frame_time_sq, *(float *)&D_L02_00161C30_gp * D_0015ED6C);
     advance_accelerated_scalar(
-        (float *)(*(char **)(d + 0x88) + 0x18), (float *)(d + 0x90),
-        moby->pos.z + *(float *)(d + 0x98), *(float *)&D_L02_00161C34_gp * frame_time_sq,
+        (float *)(*(char **)(transport_pod_vars + 0x88) + 0x18), (float *)(transport_pod_vars + 0x90),
+        moby->pos.z + *(float *)(transport_pod_vars + 0x98), *(float *)&D_L02_00161C34_gp * frame_time_sq,
         *(float *)&D_L02_00161C38 * frame_time_sq, *(float *)&D_L02_00161C30_gp * D_0015ED6C);
     {
         float r0 =
             fast_add_rotations(moby->rot.z,
-                               (*(float *)(*(char **)(d + 0x84) + 0x18) - moby->pos.z) *
+                               (*(float *)(*(char **)(transport_pod_vars + 0x84) + 0x18) - moby->pos.z) *
                                    *(float *)&D_L02_00161C3C * DEG_TO_RAD);
         float k = *(float *)&D_L02_00161C3C;
-        *(float *)(*(char **)(d + 0x84) + 0x48) = r0;
-        *(float *)(*(char **)(d + 0x88) + 0x48) = fast_add_rotations(
+        *(float *)(*(char **)(transport_pod_vars + 0x84) + 0x48) = r0;
+        *(float *)(*(char **)(transport_pod_vars + 0x88) + 0x48) = fast_add_rotations(
             moby->rot.z,
-            (*(float *)(*(char **)(d + 0x88) + 0x18) - moby->pos.z) * k * DEG_TO_RAD);
+            (*(float *)(*(char **)(transport_pod_vars + 0x88) + 0x18) - moby->pos.z) * k * DEG_TO_RAD);
     }
-    FUN_L00_00250df8(*(void **)(d + 0x84));
-    FUN_L00_00250df8(*(void **)(d + 0x88));
+    FUN_L00_00250df8(*(void **)(transport_pod_vars + 0x84));
+    FUN_L00_00250df8(*(void **)(transport_pod_vars + 0x88));
 }
 /* Ported from rac1-decomp (src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002E04E8), where it is exact; names translated to the US level program. */
 
