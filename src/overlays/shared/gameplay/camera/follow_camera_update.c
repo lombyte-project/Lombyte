@@ -406,27 +406,27 @@ extern void FUN_001f9a68_2e9dd0(void *, void *, float) __asm__("FUN_001f9a68");
 extern void FUN_001f9a10_2e9dd0(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void FUN_001f9ad8_2e9dd0(void *, void *, void *) __asm__("FUN_001f9ad8");
 
-void FUN_L00_002e9dd0(char *m) {
-    u128 a;
+void FUN_L00_002e9dd0(char *camera_object) {
+    u128 hero_up_axis;
     u128 b;
     struct Hero *g = &hero;
-    FUN_001f9bf8_2e9dd0(&a, ((char *)g->moby) + 0xE0, 1.0f);
+    FUN_001f9bf8_2e9dd0(&hero_up_axis, ((char *)g->moby) + 0xE0, 1.0f);
     if (g->vehicle_mode == 2) {
-        FUN_001f9a68_2e9dd0(&b, &a, 9.5f);
+        FUN_001f9a68_2e9dd0(&b, &hero_up_axis, 9.5f);
     } else if (g->vehicle_mode == 1) {
-        FUN_001f9a68_2e9dd0(&b, &a, 0.9f);
+        FUN_001f9a68_2e9dd0(&b, &hero_up_axis, 0.9f);
     } else {
-        FUN_001f9a68_2e9dd0(&b, &a, 1.6f);
+        FUN_001f9a68_2e9dd0(&b, &hero_up_axis, 1.6f);
     }
-    FUN_001f9a10_2e9dd0(m + 0x30, &D_0013F3D0_2e9dd0, &b);
+    FUN_001f9a10_2e9dd0(camera_object + 0x30, &D_0013F3D0_2e9dd0, &b);
     {
         void *d = D_L00_00166E04_2e9dd0;
-        qcopy(m + 0x20, &a);
-        FUN_001f9ad8_2e9dd0(m + 0x10, d, &a);
+        qcopy(camera_object + 0x20, &hero_up_axis);
+        FUN_001f9ad8_2e9dd0(camera_object + 0x10, d, &hero_up_axis);
     }
-    FUN_001f9bf8_2e9dd0(m + 0x10, m + 0x10, 1.0f);
-    FUN_001f9ad8_2e9dd0(m, &a, m + 0x10);
-    qcopy(m + 0x40, m);
+    FUN_001f9bf8_2e9dd0(camera_object + 0x10, camera_object + 0x10, 1.0f);
+    FUN_001f9ad8_2e9dd0(camera_object, &hero_up_axis, camera_object + 0x10);
+    qcopy(camera_object + 0x40, camera_object);
 }
 void FUN_L00_002e9dd0();
 /* Clears seven words of the object at p+0x70, calls FUN_L00_002e9dd0, clears 0x7E. */
