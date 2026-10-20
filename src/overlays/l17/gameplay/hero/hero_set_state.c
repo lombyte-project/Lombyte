@@ -111,6 +111,7 @@ int hero_set_state(int a, int b) {
         HERO_STATE_VEHICLE_RUN = 0x44,
         HERO_STATE_VEHICLE_FALL = 0x45,
         HERO_STATE_VEHICLE_SLIP = 0x52,
+        HERO_STATE_VEHICLE_MODE_3_IDLE = 0x53,
         HERO_STATE_WATER_DEATH = 0x6A
     };
     int old2088;
@@ -2095,7 +2096,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0xC, 0, (float)scale_game_frames(6));
         break;
     }
-    case 0x53: {
+    case HERO_STATE_VEHICLE_MODE_3_IDLE: {
         struct Hero *p = &hero;
         p->state.control_mode = 0;
         p->unk2284 = 0;
