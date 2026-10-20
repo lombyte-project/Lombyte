@@ -558,7 +558,7 @@ extern void FUN_L16_002d3f78_u(void *, int, int) __asm__("FUN_L16_002d3f78");
 extern s32 tick_countdown_32(void *) __asm__("func_001F9740");
 s32 allocate_voice_for_bank_entry(s32 arg1, s32 arg0, s32 arg2) __asm__("FUN_0022db10");
 
-void FUN_L16_002d38b0(struct Moby *m) {
+void FUN_L16_002d38b0(struct Moby *commando_moby) {
     enum {
         HIT_RESPONSE_UNAVAILABLE = 0,
         HIT_RESPONSE_FATAL = 1,
@@ -574,39 +574,39 @@ void FUN_L16_002d38b0(struct Moby *m) {
         HIT_RESPONSE_NO_REACTION = 11
     };
     L16DamageScratch scratch;
-    L16DamageData *d = (L16DamageData *)m->pvars;
+    L16DamageData *commando_data = (L16DamageData *)commando_moby->pvars;
     char *hit;
     unsigned int response;
     float range;
     float time_scale;
-    m->scale = m->pclass->scale;
+    commando_moby->scale = commando_moby->pclass->scale;
     scratch.amount = 0.0f;
-    hit = find_moby_hit(m, 0x330000, 0);
+    hit = find_moby_hit(commando_moby, 0x330000, 0);
     if (hit) {
         if (*(char **)(hit + 0x20)) {
             char *source = *(char **)(hit + 0x20);
             hit = *(short *)(source + 0xA6) != 0x31 ? hit : 0;
         }
     }
-    response = hit_reaction(m, hit, &d->health, 0, &scratch.status, &scratch.amount, 0, 4);
-    if (scratch.status != 1 && m->state != 9) {
-        FUN_L16_002d3f78_u(m, 0x12C, 0x168);
+    response = hit_reaction(commando_moby, hit, &commando_data->health, 0, &scratch.status, &scratch.amount, 0, 4);
+    if (scratch.status != 1 && commando_moby->state != 9) {
+        FUN_L16_002d3f78_u(commando_moby, 0x12C, 0x168);
         if (hit && *(char **)(hit + 0x20) && *(short *)(*(char **)(hit + 0x20) + 0xA6) != 0x47) {
-            d->reward_hits = 0;
+            commando_data->reward_hits = 0;
         }
-        d->health -= scratch.amount;
-        if (d->health <= 0.0f)
+        commando_data->health -= scratch.amount;
+        if (commando_data->health <= 0.0f)
             response = 1;
-        d->sound_timer = truncate_float_to_s32(512.0f);
-        d->impulse_time = frame_time_sq * 20.0f;
-        d->damping = 0.5f;
-        d->vertical_impulse = 0.0f;
-        d->active = 1;
-        d->pending = 0;
+        commando_data->sound_timer = truncate_float_to_s32(512.0f);
+        commando_data->impulse_time = frame_time_sq * 20.0f;
+        commando_data->damping = 0.5f;
+        commando_data->vertical_impulse = 0.0f;
+        commando_data->active = 1;
+        commando_data->pending = 0;
         switch (response) {
         case HIT_RESPONSE_ANIMATION_ONLY:
         case HIT_RESPONSE_DAMAGE_ANIMATION_ONLY:
-            d->animation = 0xFA;
+            commando_data->animation = 0xFA;
             break;
         case HIT_RESPONSE_KNOCKBACK_RECOVERY:
         case HIT_RESPONSE_RECOVERABLE_KNOCKBACK:
@@ -616,28 +616,28 @@ void FUN_L16_002d38b0(struct Moby *m) {
         case HIT_RESPONSE_KNOCKBACK_AND_RECOVER: {
             float impulse = frame_time * 6.0f;
             char *source;
-            d->blend_start = -1.0f;
-            d->blend_end = -1.0f;
-            d->forward_impulse = impulse;
-            d->lateral_impulse = impulse;
+            commando_data->blend_start = -1.0f;
+            commando_data->blend_end = -1.0f;
+            commando_data->forward_impulse = impulse;
+            commando_data->lateral_impulse = impulse;
             source = *(char **)(hit + 0x20);
             {
-                float heading = fast_arc_tan(m->pos.x - *(float *)(source + 0x10),
-                                             m->pos.y - *(float *)(source + 0x14));
+                float heading = fast_arc_tan(commando_moby->pos.x - *(float *)(source + 0x10),
+                                             commando_moby->pos.y - *(float *)(source + 0x14));
                 scratch.vector = *(OvlQuad *)(hit + 0x10);
                 scratch.angle = heading;
             }
-            trooper_knockback_arc(&scratch.vector, &scratch.angle, &d->forward_impulse,
-                             &d->lateral_impulse);
-            trooper_start_knockback(scratch.angle, m, d->knockback, 6, 1, 0);
-            m->state = 8;
-            d->animation = 0x78;
+            trooper_knockback_arc(&scratch.vector, &scratch.angle, &commando_data->forward_impulse,
+                             &commando_data->lateral_impulse);
+            trooper_start_knockback(scratch.angle, commando_moby, commando_data->knockback, 6, 1, 0);
+            commando_moby->state = 8;
+            commando_data->animation = 0x78;
             break;
         }
         case HIT_RESPONSE_FATAL:
         case HIT_RESPONSE_FATAL_FALL: {
             char *source;
-            if (current_level_index == 18 && d->reward_hits) {
+            if (current_level_index == 18 && commando_data->reward_hits) {
                 ++*(int *)&D_0015EE10;
                 if (*(int *)&D_0015EE10 >= 10) {
                     if (D_0013D408[0x1D] == 0) {
@@ -648,33 +648,33 @@ void FUN_L16_002d38b0(struct Moby *m) {
                 }
             }
             time_scale = frame_time_sq * 20.0f;
-            m->flags &= 0xEFFF;
-            d->impulse_time = time_scale;
+            commando_moby->flags &= 0xEFFF;
+            commando_data->impulse_time = time_scale;
             if (((L16DamageResident *)((char *)&hero))->difficulty == 2) {
                 float impulse = frame_time;
-                m->anim_speed = 0.5f;
-                d->forward_impulse = impulse * 24.0f;
-                d->lateral_impulse = impulse * 8.0f;
+                commando_moby->anim_speed = 0.5f;
+                commando_data->forward_impulse = impulse * 24.0f;
+                commando_data->lateral_impulse = impulse * 8.0f;
             } else {
                 float impulse = frame_time * 8.0f;
-                d->forward_impulse = impulse;
-                d->lateral_impulse = impulse;
+                commando_data->forward_impulse = impulse;
+                commando_data->lateral_impulse = impulse;
             }
-            d->blend_start = -1.0f;
-            d->blend_end = -1.0f;
+            commando_data->blend_start = -1.0f;
+            commando_data->blend_end = -1.0f;
             source = *(char **)(hit + 0x20);
             {
-                float heading = fast_arc_tan(m->pos.x - *(float *)(source + 0x10),
-                                             m->pos.y - *(float *)(source + 0x14));
+                float heading = fast_arc_tan(commando_moby->pos.x - *(float *)(source + 0x10),
+                                             commando_moby->pos.y - *(float *)(source + 0x14));
                 scratch.vector = *(OvlQuad *)(hit + 0x10);
                 scratch.fatal_angle = heading;
             }
-            trooper_knockback_arc(&scratch.vector, &scratch.fatal_angle, &d->forward_impulse,
-                             &d->lateral_impulse);
-            trooper_start_knockback(scratch.fatal_angle, m, d->knockback, 7, 1, 0);
-            m->state = 9;
-            d->animation = 0xF0;
-            FUN_L00_00257470(m, 0, -1);
+            trooper_knockback_arc(&scratch.vector, &scratch.fatal_angle, &commando_data->forward_impulse,
+                             &commando_data->lateral_impulse);
+            trooper_start_knockback(scratch.fatal_angle, commando_moby, commando_data->knockback, 7, 1, 0);
+            commando_moby->state = 9;
+            commando_data->animation = 0xF0;
+            FUN_L00_00257470(commando_moby, 0, -1);
             break;
         }
         case HIT_RESPONSE_UNAVAILABLE:
@@ -682,31 +682,31 @@ void FUN_L16_002d38b0(struct Moby *m) {
         default:
             break;
         }
-        trooper_anim_update(m, d->damage);
+        trooper_anim_update(commando_moby, commando_data->damage);
     }
-    m->hit_slot = 0xFF;
-    trooper_anim_finish(m, d->damage);
-    tick_countdown_32(&d->pursuit_timer);
-    if (d->reset_timer) {
-        d->pursuit_timer =
+    commando_moby->hit_slot = 0xFF;
+    trooper_anim_finish(commando_moby, commando_data->damage);
+    tick_countdown_32(&commando_data->pursuit_timer);
+    if (commando_data->reset_timer) {
+        commando_data->pursuit_timer =
             truncate_float_to_s32(multiply_global_factor_ed64(random_float_between_alt(180.0f, 240.0f)));
     }
-    d->reset_timer = 0;
+    commando_data->reset_timer = 0;
     range = 255.0f;
-    if (d->pursuit_timer == 0)
-        range = d->pursuit_range;
+    if (commando_data->pursuit_timer == 0)
+        range = commando_data->pursuit_range;
     if (((L16DamageResident *)((char *)&hero))->mode == 22) {
-        d->pursuit_mode = 2;
-    } else if (d->path_index >= 0 && d->pursuit_timer == 0) {
-        char *path = D_L16_001B0930[d->path_index];
-        FUN_L00_0025ff38(24.0f, m, d->target, 0, 0, path + 0x10, *(int *)path);
+        commando_data->pursuit_mode = 2;
+    } else if (commando_data->path_index >= 0 && commando_data->pursuit_timer == 0) {
+        char *path = D_L16_001B0930[commando_data->path_index];
+        FUN_L00_0025ff38(24.0f, commando_moby, commando_data->target, 0, 0, path + 0x10, *(int *)path);
     } else {
-        FUN_L00_0025fcb8(24.0f, m, d->target);
+        FUN_L00_0025fcb8(24.0f, commando_moby, commando_data->target);
     }
-    if (range < vector_distance_xy(&m->pos, d->target))
-        d->pursuit_mode = 2;
-    if (d->owner == 0)
-        d->owner = ((L16DamageResident *)((char *)&hero))->owner;
+    if (range < vector_distance_xy(&commando_moby->pos, commando_data->target))
+        commando_data->pursuit_mode = 2;
+    if (commando_data->owner == 0)
+        commando_data->owner = ((L16DamageResident *)((char *)&hero))->owner;
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A1B58.c: func_L16_002D5188), where it is exact; names translated to the US level program. */
 
