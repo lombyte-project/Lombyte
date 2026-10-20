@@ -1239,13 +1239,13 @@ void draw_geometry_quad(void *, s32, s32) __asm__("FUN_001f7d30");
 
 extern f32 D_L00_001E6CE0[4][4];
 void FUN_L00_002e3388(s32 unused, s32 idx) {
-    Q_e3388 q;
+    Q_e3388 geometry_quad;
     f32 a[4] __attribute__((aligned(16)));
     f32 b[4] __attribute__((aligned(16)));
     f32 c[4] __attribute__((aligned(16)));
     f32 d[4] __attribute__((aligned(16)));
     f32 e[4] __attribute__((aligned(16)));
-    f32 s;
+    f32 quad_scale;
     s32 i;
     s32 j;
 
@@ -1256,70 +1256,70 @@ void FUN_L00_002e3388(s32 unused, s32 idx) {
     FUN_001f9ad8_e3388(b, a, &hero.gravity_dir);
     FUN_001f9bf8_e3388(b, b, -1.0f);
     FUN_001f9ad8_e3388(c, b, a);
-    q.r78 = get_effect_texture(0xB);
-    q.r88 = 0xFF00000044;
-    q.r80 = 0xFF9000000260;
-    q.r70 = 5;
-    q.col[3] = -1;
-    q.col[2] = -1;
-    q.col[1] = -1;
-    q.col[0] = -1;
-    q.uv[0][0] = 0.0f;
-    q.uv[0][1] = 0.0f;
-    q.uv[1][0] = 0.0f;
-    q.uv[1][1] = 1.0f;
-    q.uv[2][0] = 1.0f;
-    q.uv[2][1] = 0.0f;
-    q.uv[3][0] = 1.0f;
-    q.uv[3][1] = 1.0f;
-    s = FUN_002132a8_e3388(0.3f, 0.325f);
+    geometry_quad.r78 = get_effect_texture(0xB);
+    geometry_quad.r88 = 0xFF00000044;
+    geometry_quad.r80 = 0xFF9000000260;
+    geometry_quad.r70 = 5;
+    geometry_quad.col[3] = -1;
+    geometry_quad.col[2] = -1;
+    geometry_quad.col[1] = -1;
+    geometry_quad.col[0] = -1;
+    geometry_quad.uv[0][0] = 0.0f;
+    geometry_quad.uv[0][1] = 0.0f;
+    geometry_quad.uv[1][0] = 0.0f;
+    geometry_quad.uv[1][1] = 1.0f;
+    geometry_quad.uv[2][0] = 1.0f;
+    geometry_quad.uv[2][1] = 0.0f;
+    geometry_quad.uv[3][0] = 1.0f;
+    geometry_quad.uv[3][1] = 1.0f;
+    quad_scale = FUN_002132a8_e3388(0.3f, 0.325f);
     e[0] = spread_k(0.0f, 0.05f);
     e[1] = spread_k(0.0f, 0.05f);
     e[2] = spread_k(0.0f, 0.05f);
     for (i = 0; i < 4; i++) {
-        FUN_001f9a68_e3388(q.v[i], D_L00_001E6CE0[i], s);
-        transform_vector(q.v[i], q.v[i], a);
-        FUN_001f9a10_e3388(q.v[i], q.v[i], e);
+        FUN_001f9a68_e3388(geometry_quad.v[i], D_L00_001E6CE0[i], quad_scale);
+        transform_vector(geometry_quad.v[i], geometry_quad.v[i], a);
+        FUN_001f9a10_e3388(geometry_quad.v[i], geometry_quad.v[i], e);
     }
-    draw_geometry_quad(&q, 0, 0);
-    q.r88 = 0xFF00000048;
-    q.col[3] = 0x607F4040;
-    q.col[2] = 0x607F4040;
-    q.col[1] = 0x607F4040;
-    q.col[0] = 0x607F4040;
+    draw_geometry_quad(&geometry_quad, 0, 0);
+    geometry_quad.r88 = 0xFF00000048;
+    geometry_quad.col[3] = 0x607F4040;
+    geometry_quad.col[2] = 0x607F4040;
+    geometry_quad.col[1] = 0x607F4040;
+    geometry_quad.col[0] = 0x607F4040;
     for (j = 0; j < 4; j++) {
-        FUN_001f9a68_e3388(q.v[j], D_L00_001E6CE0[j], s * 3.0f);
-        transform_vector(q.v[j], q.v[j], a);
+        FUN_001f9a68_e3388(geometry_quad.v[j], D_L00_001E6CE0[j], quad_scale * 3.0f);
+        transform_vector(geometry_quad.v[j], geometry_quad.v[j], a);
     }
-    draw_geometry_quad(&q, 0, 0);
+    draw_geometry_quad(&geometry_quad, 0, 0);
     qcopy(d, D_L00_001E6E10_e3388[idx]);
     FUN_001f9a28_e3388(a, g_debug_camera, d);
     FUN_001f9bf8_e3388(a, a, 1.0f);
     FUN_001f9ad8_e3388(b, a, &hero.gravity_dir);
     FUN_001f9bf8_e3388(b, b, -1.0f);
     FUN_001f9ad8_e3388(c, b, a);
-    s = FUN_002132a8_e3388(0.2f, 0.225f);
-    q.r88 = 0xFF00000044;
-    q.col[3] = -1;
-    q.col[2] = -1;
-    q.col[1] = -1;
-    q.col[0] = -1;
+    quad_scale = FUN_002132a8_e3388(0.2f, 0.225f);
+    geometry_quad.r88 = 0xFF00000044;
+    geometry_quad.col[3] = -1;
+    geometry_quad.col[2] = -1;
+    geometry_quad.col[1] = -1;
+    geometry_quad.col[0] = -1;
     for (i = 0; i < 4; i++) {
-        FUN_001f9a68_e3388(q.v[i], D_L00_001E6CE0[i], s);
-        transform_vector(q.v[i], q.v[i], a);
-        FUN_001f9a10_e3388(q.v[i], q.v[i], e);
+        FUN_001f9a68_e3388(geometry_quad.v[i], D_L00_001E6CE0[i], quad_scale);
+        transform_vector(geometry_quad.v[i], geometry_quad.v[i], a);
+        FUN_001f9a10_e3388(geometry_quad.v[i], geometry_quad.v[i], e);
     }
-    draw_geometry_quad(&q, 0, 0);
-    q.r88 = 0xFF00000048;
-    q.col[3] = 0x607F4040;
-    q.col[2] = 0x607F4040;
-    q.col[1] = 0x607F4040;
-    q.col[0] = 0x607F4040;
+    draw_geometry_quad(&geometry_quad, 0, 0);
+    geometry_quad.r88 = 0xFF00000048;
+    geometry_quad.col[3] = 0x607F4040;
+    geometry_quad.col[2] = 0x607F4040;
+    geometry_quad.col[1] = 0x607F4040;
+    geometry_quad.col[0] = 0x607F4040;
     for (i = 0; i < 4; i++) {
-        FUN_001f9a68_e3388(q.v[i], D_L00_001E6CE0[i], s * 3.0f);
-        transform_vector(q.v[i], q.v[i], a);
+        FUN_001f9a68_e3388(geometry_quad.v[i], D_L00_001E6CE0[i], quad_scale * 3.0f);
+        transform_vector(geometry_quad.v[i], geometry_quad.v[i], a);
     }
-    draw_geometry_quad(&q, 0, 0);
+    draw_geometry_quad(&geometry_quad, 0, 0);
 }
 typedef struct {
     char p0[0x60];
