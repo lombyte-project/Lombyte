@@ -226,8 +226,8 @@ extern short D_L00_00161CF8 __attribute__((sda));
 extern short D_L00_00161CFC __attribute__((sda));
 extern short D_L00_00161D00 __attribute__((sda));
 void follow_camera_orbit(int arg) {
-    char *m = (char *)arg;
-    char *d = *(char **)(m + 0x70);
+    char *camera_object = (char *)arg;
+    char *camera_state = *(char **)(camera_object + 0x70);
     float reference_up_projection[4];
     float projected_reference_offset[4];
     float current_up_projection[4];
@@ -238,60 +238,60 @@ void follow_camera_orbit(int arg) {
     float orbit_base_position[4];
     float forward_clamp_axis[4];
     float tb[4];
-    float x, bc, e, e1, y, h, r, i, s, len;
+    float x, bc, e, e1, y, current_up_component, r, i, yaw_rotation_sign, len;
     char *base = D_L00_00166E10;
     char *up = base + 0x20;
     char *base2;
     char *fw;
-    char *p130 = d + 0x130;
-    char *p140 = d + 0x140;
-    char *p1d0 = d + 0x1D0;
-    add_vector_xyz(d, d + 0x90, p130);
+    char *p130 = camera_state + 0x130;
+    char *current_orbit_offset = camera_state + 0x140;
+    char *p1d0 = camera_state + 0x1D0;
+    add_vector_xyz(camera_state, camera_state + 0x90, p130);
     x = *(float *)(p130 + 0x2C);
     x -= *(float *)(p1d0 + 0x30);
-    bc = fast_vec_length(p140);
-    FUN_L00_002e9518_c(m, &tb[0], &tb[1]);
-    bc = cam_interp_values(d + 0x158, bc, x, tb[0], tb[1], 0.0f);
+    bc = fast_vec_length(current_orbit_offset);
+    FUN_L00_002e9518_c(camera_object, &tb[0], &tb[1]);
+    bc = cam_interp_values(camera_state + 0x158, bc, x, tb[0], tb[1], 0.0f);
     e1 = fast_vec_dot(p130, up);
     y = fast_arc_sin(e1 / x);
-    h = fast_vec_dot(p140, up);
-    r = fast_arc_sin(h / bc);
-    i = rope_spring_turn(d + 0x154, r, y, *(float *)&D_L00_00161CFC, *(float *)&D_L00_00161D00,
+    current_up_component = fast_vec_dot(current_orbit_offset, up);
+    r = fast_arc_sin(current_up_component / bc);
+    i = rope_spring_turn(camera_state + 0x154, r, y, *(float *)&D_L00_00161CFC, *(float *)&D_L00_00161D00,
                          0.0f);
     fast_vec_scale(reference_up_projection, up, e1);
     subtract_vector_xyz(projected_reference_offset, p130, reference_up_projection);
-    fast_vec_scale(current_up_projection, up, h);
-    subtract_vector_xyz(projected_current_offset, p140, current_up_projection);
+    fast_vec_scale(current_up_projection, up, current_up_component);
+    subtract_vector_xyz(projected_current_offset, current_orbit_offset, current_up_projection);
     e = fast_vec_dot(projected_reference_offset, projected_current_offset);
     x = fast_vec_length(projected_reference_offset);
     x = x * fast_vec_length(projected_current_offset);
     r = 1.5707964f - fast_arc_sin(e / x);
-    x = rope_spring_turn(d + 0x150, 0.0f, r, *(float *)&D_L00_00161CF4,
+    x = rope_spring_turn(camera_state + 0x150, 0.0f, r, *(float *)&D_L00_00161CF4,
                          *(float *)&D_L00_00161CF8, 0.0f);
     fast_vec_cross(orbit_cross_scratch, projected_current_offset, up);
-    s = (fast_vec_dot(orbit_cross_scratch, projected_reference_offset) >= 0.0f) ? 1.0f : -1.0f;
+    yaw_rotation_sign = (fast_vec_dot(orbit_cross_scratch, projected_reference_offset) >= 0.0f) ? 1.0f : -1.0f;
     base2 = D_L00_00166E10;
     fw = base2 + 0x30;
-    build_look_at_matrix(rotated_orbit_offset, projected_current_offset, up, x * s);
+    build_look_at_matrix(rotated_orbit_offset, projected_current_offset, up, x * yaw_rotation_sign);
     fast_vec_cross(orbit_cross_scratch, up, rotated_orbit_offset);
     build_look_at_matrix(rotated_orbit_offset, rotated_orbit_offset, orbit_cross_scratch, i);
-    fast_vec_normalize(p140, rotated_orbit_offset, bc);
+    fast_vec_normalize(current_orbit_offset, rotated_orbit_offset, bc);
     fast_vec_scale(scaled_up_offset, up, *(float *)(p130 + 0x30));
-    add_vector_xyz(orbit_base_position, scaled_up_offset, d + 0xA0);
-    e = fast_vec_dot(p140, fw);
-    len = fast_vec_length(p140);
+    add_vector_xyz(orbit_base_position, scaled_up_offset, camera_state + 0xA0);
+    e = fast_vec_dot(current_orbit_offset, fw);
+    len = fast_vec_length(current_orbit_offset);
     if (len != 0.0f) {
         x = 1.5707964f - fast_arc_sin(e / len);
         if (absolute_float(x) < 0.2617994f) {
-            fast_vec_cross(forward_clamp_axis, p140, fw);
-            build_look_at_matrix(p140, p140, forward_clamp_axis,
+            fast_vec_cross(forward_clamp_axis, current_orbit_offset, fw);
+            build_look_at_matrix(current_orbit_offset, current_orbit_offset, forward_clamp_axis,
                                  fast_subtract_rotations(0.2617994f, absolute_float(x)));
             *(float *)(p130 + 0x28) = 0.0f;
             *(float *)(p130 + 0x20) = 0.0f;
             *(float *)(p130 + 0x24) = 0.0f;
         }
     }
-    add_vector_xyz(m + 0x30, orbit_base_position, p130 + 0x10);
+    add_vector_xyz(camera_object + 0x30, orbit_base_position, p130 + 0x10);
 }
 extern int *D_L00_0015EF80_9aa0 __asm__("D_L00_0015EF80");
 extern char *D_L00_001600F4_9aa0 __asm__("D_L00_001600F4");
