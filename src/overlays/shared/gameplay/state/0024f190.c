@@ -9,12 +9,12 @@ extern void FUN_L00_00252990(void *);
 
 /* advances an animation blend timer and steps through its frame table */
 void FUN_L00_0024f190(void *unused, unsigned char *animation_state) {
-    float s = *(float *)(animation_state + 0x28);
+    float unscaled_frame_step = *(float *)(animation_state + 0x28);
     animation_state[5] = 0;
-    if (s != 0.0f && *(float *)(animation_state + 0x2C) != 0.0f) {
-        float advanced_frame_progress = *(float *)(animation_state + 0x24) + s * *(float *)(animation_state + 0x2C);
+    if (unscaled_frame_step != 0.0f && *(float *)(animation_state + 0x2C) != 0.0f) {
+        float advanced_frame_progress = *(float *)(animation_state + 0x24) + unscaled_frame_step * *(float *)(animation_state + 0x2C);
         *(float *)(animation_state + 0x24) = advanced_frame_progress;
-        if (s > 0.0f) {
+        if (unscaled_frame_step > 0.0f) {
             if (advanced_frame_progress > 0.99f && advanced_frame_progress < 1.01f) {
                 *(float *)(animation_state + 0x24) = 1.0f;
             }
