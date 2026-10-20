@@ -1774,13 +1774,13 @@ void FUN_L16_002e7208(char *moby) {
         break;
     }
     case CLIP_TRIGGER_CHECK_LATCH: {
-        struct Hero *h = &hero;
-        if (h->state.current == 0x42) {
+        struct Hero *player = &hero;
+        if (player->state.current == 0x42) {
             *(int *)(data + 8) = 0;
-        } else if (func_00215570_e7208(&h->motion.pos, *(int *)(data + 4)) != 0) {
-            unsigned char *f = (unsigned char *)D_0013D50F_e7208;
-            if (f[0x19] == 0) {
-                f[0x19] = 1;
+        } else if (func_00215570_e7208(&player->motion.pos, *(int *)(data + 4)) != 0) {
+            unsigned char *flags = (unsigned char *)D_0013D50F_e7208;
+            if (flags[0x19] == 0) {
+                flags[0x19] = 1;
                 func_0022EE28_e7208(1, 0, 0);
                 func_L00_00264DB8_e7208(0x53D6, -1);
             }
