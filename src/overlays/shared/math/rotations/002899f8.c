@@ -8,8 +8,8 @@ typedef struct {
 } O_2899f8;
 
 O_2899f8 *FUN_L05_002899f8(O_2899f8 *a, O_2899f8 *b, O_2899f8 *c, O_2899f8 *d);
-O_2899f8 *FUN_L05_002899f8(O_2899f8 *a, O_2899f8 *b, O_2899f8 *c, O_2899f8 *d) {
-    O_2899f8 *r = a;
+O_2899f8 *FUN_L05_002899f8(O_2899f8 *initial_candidate, O_2899f8 *b, O_2899f8 *third_candidate, O_2899f8 *fourth_candidate) {
+    O_2899f8 *r = initial_candidate;
 
     if (r == 0) {
         goto none;
@@ -18,12 +18,12 @@ O_2899f8 *FUN_L05_002899f8(O_2899f8 *a, O_2899f8 *b, O_2899f8 *c, O_2899f8 *d) {
         r = b;
     }
 check_c:
-    if (c != 0 && !(r->f > c->f)) {
-        r = c;
+    if (third_candidate != 0 && !(r->f > third_candidate->f)) {
+        r = third_candidate;
     }
 check_d:
-    if (d != 0 && !(r->f > d->f)) {
-        r = d;
+    if (fourth_candidate != 0 && !(r->f > fourth_candidate->f)) {
+        r = fourth_candidate;
     }
     return r;
 
@@ -32,10 +32,10 @@ none:
         r = b;
         goto check_c;
     }
-    if (c != 0) {
-        r = c;
+    if (third_candidate != 0) {
+        r = third_candidate;
         goto check_d;
     }
-    return d;
+    return fourth_candidate;
 }
 
