@@ -124,6 +124,7 @@ void FUN_L11_00253a18(void) {
     enum {
         HERO_STATE_ITEM_BUTTON_RELEASE_WAIT = 23,
         HERO_STATE_ANIMATION_RECOVERY_WITH_JUMP_CANCEL = 35,
+        HERO_STATE_ITEM_BUTTON_RELEASE_TO_IDLE_OR_FALL = 38,
         HERO_STATE_ITEM_ANIMATION_BUTTON_HOLD_CHECK = 46,
         HERO_STATE_ITEM_BUTTON_RELEASE_WAIT_CONDITIONAL_IDLE_RESET = 48,
         HERO_STATE_ANIMATION_WAIT_TO_IDLE = 58,
@@ -1028,7 +1029,7 @@ void FUN_L11_00253a18(void) {
                     hero.unk944 = frame_time_sq * 42.0f;
                     hero.unk940 = frame_time_sq * 29.0f;
                     break;
-                case 38:
+                case HERO_STATE_ITEM_BUTTON_RELEASE_TO_IDLE_OR_FALL:
                     if (controller_state.held & hero.items[0].button_mask) {
                         break;
                     }
