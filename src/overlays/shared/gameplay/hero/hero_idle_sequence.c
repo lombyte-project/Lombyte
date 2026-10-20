@@ -2477,17 +2477,17 @@ void FUN_L00_00209ec8(void) {
     OvlQuad w[1];
     char *g;
     char *base;
-    float a, r, r0, f, theta, phi;
+    float lateral_angle, r, planar_scale, alpha_fraction, theta, phi;
     int t, c, col, life, n1, n2, k;
     OvlQuad *pt;
     g = D_0013F7EE;
     if (fast_dec_timer(g)) {
         qcopy(v, g - 0x41E);
         base = g - 0x49E;
-        a = FUN_001fa580_209ec8(*(float *)(base + 0x98), 1.5707963705062866f);
-        r0 = spread_k(D_0015ED6C * 0.2f, D_0015ED6C * 0.7f);
-        ((float *)w)[0] = fast_cos(a) * r0;
-        ((float *)w)[1] = fast_sin(a) * r0;
+        lateral_angle = FUN_001fa580_209ec8(*(float *)(base + 0x98), 1.5707963705062866f);
+        planar_scale = spread_k(D_0015ED6C * 0.2f, D_0015ED6C * 0.7f);
+        ((float *)w)[0] = fast_cos(lateral_angle) * planar_scale;
+        ((float *)w)[1] = fast_sin(lateral_angle) * planar_scale;
         ((int *)w)[2] = 0;
         ((float *)w)[3] = frame_time_sq * -8.0f;
         FUN_L00_0026d598_209ec8(v, w, 0);
@@ -2496,12 +2496,12 @@ void FUN_L00_00209ec8(void) {
     if (!fast_dec_timer(g - 2))
         return;
     t = FUN_001f96f8_209ec8(0x28);
-    f = (float)(t - *(int *)(g - 0x306)) / (float)FUN_001f96f8_209ec8(0x28);
-    if (1.0f < f)
-        f = 1.0f;
-    if (f < 0.0f)
-        f = 0.0f;
-    c = FUN_001fa6d0_209ec8(f * 240.0f);
+    alpha_fraction = (float)(t - *(int *)(g - 0x306)) / (float)FUN_001f96f8_209ec8(0x28);
+    if (1.0f < alpha_fraction)
+        alpha_fraction = 1.0f;
+    if (alpha_fraction < 0.0f)
+        alpha_fraction = 0.0f;
+    c = FUN_001fa6d0_209ec8(alpha_fraction * 240.0f);
     c = c < 0xA1 ? c : 0xA0;
     c = 0x1F < c ? c : 0x20;
     col = (c << 24) | 0xC0F0;
