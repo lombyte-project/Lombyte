@@ -2237,11 +2237,11 @@ void sand_shark_nest_update(unsigned char *moby) {
         SAND_SHARK_NEST_HIT_RECOVERY = 3,
         SAND_SHARK_NEST_DEATH_KNOCKBACK = 4
     };
-    Varscb38 *d = *(Varscb38 **)(moby + 0x78);
-    char *o;
+    Varscb38 *nest_vars = *(Varscb38 **)(moby + 0x78);
+    char *launched_shark;
     int n;
     OvlVec4 v;
-    OvlVec4 p;
+    OvlVec4 launch_position;
 
     FUN_L02_002dcfe0((struct Moby *)moby);
     if ((signed char)moby[0x20] < 0) {
@@ -2258,23 +2258,23 @@ void sand_shark_nest_update(unsigned char *moby) {
             *(short *)(moby + 0xB4) = 1;
         }
         moby[0x20] = 1;
-        d->f20 = 3.0f;
-        d->s24 = 3;
-        d->b2E = 1;
-        d->timer = scale_ticks(d->delay);
-        if (d->spawner >= 0) {
-            (*(Spawnercb38 **)((d->spawner << 8) + D_L02_0015FFD8 + 0x78))->i150 += 1;
+        nest_vars->f20 = 3.0f;
+        nest_vars->s24 = 3;
+        nest_vars->b2E = 1;
+        nest_vars->timer = scale_ticks(nest_vars->delay);
+        if (nest_vars->spawner >= 0) {
+            (*(Spawnercb38 **)((nest_vars->spawner << 8) + D_L02_0015FFD8 + 0x78))->i150 += 1;
         }
         break;
     case SAND_SHARK_NEST_WAIT_FOR_SPAWN:
-        if (fast_dec_timer(&d->timer)) {
+        if (fast_dec_timer(&nest_vars->timer)) {
             if (FUN_L02_002dd2a8_c(moby)) {
                 moby[0x20] = 2;
                 if (moby[0x53] != 1) {
                     blend_moby_animation_c3(moby, 1, 0, scale_ticks(10));
                 }
             } else {
-                d->timer = scale_ticks(d->delay);
+                nest_vars->timer = scale_ticks(nest_vars->delay);
             }
         }
         break;
@@ -2289,24 +2289,24 @@ void sand_shark_nest_update(unsigned char *moby) {
             if (n > 20) {
                 n = 20;
             }
-            d->timer = scale_ticks(d->delay + scale_ticks(n * 15));
-            o = FUN_L02_002dd2a8_c(moby);
-            if (o) {
-                char *od = *(char **)(o + 0x78);
-                if (d->spawner >= 0) {
-                    (*(Spawnercb38 **)((d->spawner << 8) + D_L02_0015FFD8 + 0x78))->i14C += 1;
+            nest_vars->timer = scale_ticks(nest_vars->delay + scale_ticks(n * 15));
+            launched_shark = FUN_L02_002dd2a8_c(moby);
+            if (launched_shark) {
+                char *od = *(char **)(launched_shark + 0x78);
+                if (nest_vars->spawner >= 0) {
+                    (*(Spawnercb38 **)((nest_vars->spawner << 8) + D_L02_0015FFD8 + 0x78))->i14C += 1;
                 }
-                qcopy(&p, moby + 0x10);
-                p.f[2] += 1.5f;
+                qcopy(&launch_position, moby + 0x10);
+                launch_position.f[2] += 1.5f;
                 fast_vec_sub(&v, od + 0x220, moby + 0x10);
                 set_vector_length_xy(&v, &v, 2.0f * D_0015ED6C);
                 v.f[2] = D_0015ED6C * 6.0f;
-                FUN_L02_002d6118((unsigned char *)o, &p, v.f);
+                FUN_L02_002d6118((unsigned char *)launched_shark, &launch_position, v.f);
             }
         }
         break;
     case SAND_SHARK_NEST_HIT_RECOVERY:
-        mine_fall(moby, d->anim);
+        mine_fall(moby, nest_vars->anim);
         if (moby[0x70] & 2) {
             moby[0x20] = 1;
             if (moby[0x53] != 0) {
@@ -2315,13 +2315,13 @@ void sand_shark_nest_update(unsigned char *moby) {
         }
         break;
     case SAND_SHARK_NEST_DEATH_KNOCKBACK:
-        if (mine_fall(moby, d->anim) & 0x40) {
-            if (d->spawner >= 0) {
+        if (mine_fall(moby, nest_vars->anim) & 0x40) {
+            if (nest_vars->spawner >= 0) {
                 extern int D_L02_0015FFD8_s __asm__("D_L02_0015FFD8") __attribute__((sda));
-                (*(Spawnercb38 **)((d->spawner << 8) + D_L02_0015FFD8_s + 0x78))->i150 -= 1;
+                (*(Spawnercb38 **)((nest_vars->spawner << 8) + D_L02_0015FFD8_s + 0x78))->i150 -= 1;
             }
             qcopy(&v, moby + 0x10);
-            spawn_explosion(moby, d->vel, &v, 0.0f, 0.0f, 5, 2, 4, 2.0f, 1.0f, 9.0f, -1, 1.0f, 15.0f, 1, 1,
+            spawn_explosion(moby, nest_vars->vel, &v, 0.0f, 0.0f, 5, 2, 4, 2.0f, 1.0f, 9.0f, -1, 1.0f, 15.0f, 1, 1,
                              -1, 0);
             FUN_L00_00263fd8((char *)moby, 0x6E4, (float *)(moby + 0x10), moby + 0x40, 0, 0, 0.0f, D_L02_0015F580,
                              D_L02_0015F580, D_L02_0015F580);
