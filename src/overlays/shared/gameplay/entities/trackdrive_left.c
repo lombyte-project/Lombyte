@@ -270,7 +270,7 @@ extern void aa_blur_pass_00233b68(void) __asm__("FUN_00233b68");
 void FUN_L02_002a46e0(void) {
     char *b;
     long *g;
-    int *q;
+    int *packet_base;
     vu1_add_vif_code(0x13000000);
     b = D_L02_0016D040;
     *(float *)(b + 0x218) = D_L02_001612F8;
@@ -283,15 +283,15 @@ void FUN_L02_002a46e0(void) {
     (*(int *volatile *)&D_L02_001611C0)[1] = 0;
     (*(int *volatile *)&D_L02_001611C0)[2] = 0x11000000;
     (*(int *volatile *)&D_L02_001611C0)[3] = 0x50000002;
-    q = *(int *volatile *)&D_L02_001611C0;
-    D_L02_001611C0 = q + 4;
-    g = (long *)(q + 4);
+    packet_base = *(int *volatile *)&D_L02_001611C0;
+    D_L02_001611C0 = packet_base + 4;
+    g = (long *)(packet_base + 4);
     g[0] = 0x1000000000008001L;
     g[1] = 0xE;
     g[2] = (long)*(int *)(b + 0x230) | ((long)*(int *)(b + 0x234) << 8) |
            ((long)*(int *)(b + 0x238) << 16);
     g[3] = 0x3D;
-    D_L02_001611C0 = q + 12;
+    D_L02_001611C0 = packet_base + 12;
     aa_blur_pass_00233b68();
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A5218.c: func_L02_002CCD18), where it is exact; names translated to the US level program. */
