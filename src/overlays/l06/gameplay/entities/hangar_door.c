@@ -563,27 +563,27 @@ extern void func_L00_0025D5B0_2eb140(void *, void *, int, int, int,
                                      float) __asm__("FUN_L00_0025c558");
 
 int FUN_L06_002e9d10(void *m_, void *pos) {
-    char *m = (char *)m_;
-    char *d = *(char **)(m + 0x78);
-    float f, g;
-    if (((unsigned char *)m)[0x20] == 0xF) {
-        qcopy(m + 0x10, pos);
-        *(int *)(m + 0x94) = *(int *)(*(char **)(m + 0x24) + 0x10);
-        *(unsigned short *)(m + 0x34) = (*(unsigned short *)(m + 0x34) & 0xFFBE) | 0x1000;
-        m[0x20] = 6;
-        clear_u64_value(m + 0x40);
-        *(float *)(m + 0x48) = random_angle_radians();
-        vu_euler_rotation_basis(m + 0xC0, m + 0x40);
+    char *moby = (char *)m_;
+    char *moby_data = *(char **)(moby + 0x78);
+    float doubled_frame_time, g;
+    if (((unsigned char *)moby)[0x20] == 0xF) {
+        qcopy(moby + 0x10, pos);
+        *(int *)(moby + 0x94) = *(int *)(*(char **)(moby + 0x24) + 0x10);
+        *(unsigned short *)(moby + 0x34) = (*(unsigned short *)(moby + 0x34) & 0xFFBE) | 0x1000;
+        moby[0x20] = 6;
+        clear_u64_value(moby + 0x40);
+        *(float *)(moby + 0x48) = random_angle_radians();
+        vu_euler_rotation_basis(moby + 0xC0, moby + 0x40);
         g = frame_time_sq * 20.0f;
-        f = frame_time + frame_time;
-        *(float *)(d + 0x130) = g;
-        *(int *)(d + 0x134) = 0;
-        *(float *)(d + 0x138) = f;
-        *(float *)(d + 0x13C) = f;
-        d[0x15D] = 3;
-        *(int *)(d + 0x144) = 5;
-        func_L00_0025D5B0_2eb140(m, d + 0x120, 2, 1, 0, random_angle_radians());
-        *(float *)(d + 0x128) = -*(float *)(d + 0x128);
+        doubled_frame_time = frame_time + frame_time;
+        *(float *)(moby_data + 0x130) = g;
+        *(int *)(moby_data + 0x134) = 0;
+        *(float *)(moby_data + 0x138) = doubled_frame_time;
+        *(float *)(moby_data + 0x13C) = doubled_frame_time;
+        moby_data[0x15D] = 3;
+        *(int *)(moby_data + 0x144) = 5;
+        func_L00_0025D5B0_2eb140(moby, moby_data + 0x120, 2, 1, 0, random_angle_radians());
+        *(float *)(moby_data + 0x128) = -*(float *)(moby_data + 0x128);
         return 1;
     }
     return 0;
