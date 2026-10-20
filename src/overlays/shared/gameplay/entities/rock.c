@@ -61,7 +61,7 @@ void FUN_L01_002f6328(struct Moby *rail_moby) {
     f32 dist;
     f32 left;
     f32 rate;
-    s32 i, j, k, n, end;
+    s32 i, j, k, remaining_segment_index, end;
 
     if (rail_vars == 0 || rail_vars->paths[0] == -1 || rail_vars->count == 0) {
         return;
@@ -103,8 +103,8 @@ void FUN_L01_002f6328(struct Moby *rail_moby) {
     }
     if (D_0015ED84 == 1) {
         left = 0.0f;
-        for (n = best_seg; n < best_path->count - 1; n++) {
-            left += best_path->pts[n].f[3];
+        for (remaining_segment_index = best_seg; remaining_segment_index < best_path->count - 1; remaining_segment_index++) {
+            left += best_path->pts[remaining_segment_index].f[3];
         }
         if (left < 8.0f) {
             rail_vars->speed = frame_time * 3.0f;
