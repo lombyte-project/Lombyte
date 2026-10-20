@@ -2762,23 +2762,23 @@ extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern int *D_L16_001ABCC0[];
 
 void *FUN_L16_002d5db0(int index, void *position) {
-    short *p = (short *)D_L16_001ABCC0[index];
+    short *group_entry = (short *)D_L16_001ABCC0[index];
     char *nearest = 0;
     float distance = 37.0f;
     char *moby;
-    float d;
-    if (!p)
+    float candidate_distance;
+    if (!group_entry)
         return 0;
     while (1) {
-        moby = D_L16_0015FFD8 + ((*(unsigned short *)p & 0x7FFF) << 8);
+        moby = D_L16_0015FFD8 + ((*(unsigned short *)group_entry & 0x7FFF) << 8);
         if (*(short *)(moby + 0xA6) != 0x28A)
             continue;
-        d = fast_vec_dist(position, moby + 0x10);
-        if (d < distance) {
-            distance = d;
+        candidate_distance = fast_vec_dist(position, moby + 0x10);
+        if (candidate_distance < distance) {
+            distance = candidate_distance;
             nearest = moby;
         }
-        if (*p++ < 0)
+        if (*group_entry++ < 0)
             return nearest;
     }
 }
