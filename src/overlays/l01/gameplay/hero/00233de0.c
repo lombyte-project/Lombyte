@@ -203,10 +203,10 @@ extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void air_accel(f32) __asm__("FUN_L01_00234358");
 
 void FUN_L01_00234b40(void) {
-    HopVec tmp;
+    HopVec added_velocity;
     f32 speed;
-    f32 a;
-    f32 d;
+    f32 additional_planar_speed;
+    f32 speed_decay_step;
     f32 arg;
     s32 state;
 
@@ -258,9 +258,9 @@ void FUN_L01_00234b40(void) {
         }
         hero.motion.velocity.f[0] = fast_cos(hero.unk438) * hero.unk458;
         hero.motion.velocity.f[1] = fast_sin(hero.unk438) * hero.unk458;
-        a = hero.unk454 * fast_sin(fast_difference_between_rotations(hero.unk43C, hero.unk438));
-        hero.motion.velocity.f[0] += fast_cos(hero.unk43C) * a;
-        hero.motion.velocity.f[1] += fast_sin(hero.unk43C) * a;
+        additional_planar_speed = hero.unk454 * fast_sin(fast_difference_between_rotations(hero.unk43C, hero.unk438));
+        hero.motion.velocity.f[0] += fast_cos(hero.unk43C) * additional_planar_speed;
+        hero.motion.velocity.f[1] += fast_sin(hero.unk43C) * additional_planar_speed;
         FUN_L00_002132b8(0.7f, frame_time * 0.0f);
         qcopy(&hero.motion.unk150, &hero.move_impulse);
     } else if (state == 0x11) {
@@ -275,8 +275,8 @@ void FUN_L01_00234b40(void) {
                 hero.motion.velocity.f[1] = fast_sin(hero.motion.move_yaw) * (frame_time * 4.9f);
             } else {
                 FUN_L00_00233ba0_u(&hero.motion.velocity, &hero.motion.velocity, 0.0f);
-                fast_vec_normalize(&tmp, &hero.motion.unk170, frame_time * 4.9f);
-                fast_vec_add(&hero.motion.velocity, &hero.motion.velocity, &tmp);
+                fast_vec_normalize(&added_velocity, &hero.motion.unk170, frame_time * 4.9f);
+                fast_vec_add(&hero.motion.velocity, &hero.motion.velocity, &added_velocity);
             }
         }
         hero.ground_speed = hero.motion.unk164;
@@ -287,9 +287,9 @@ void FUN_L01_00234b40(void) {
         arg = frame_time_sq * 20.0f;
         if (hero.target_speed < D_L01_0017C250[0] * frame_time * 0.2f) {
             if (hero.state.control_mode == 2) {
-                d = hero.unk944;
+                speed_decay_step = hero.unk944;
                 speed = vector_length_xy(&hero.motion.velocity);
-                approach_value(0.0f, d, &speed);
+                approach_value(0.0f, speed_decay_step, &speed);
                 FUN_001f9c48_u(hero.motion.velocity.f, hero.motion.velocity.f, speed);
                 return;
             }
