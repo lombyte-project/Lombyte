@@ -27,7 +27,7 @@ void FUN_L17_002cbc10(char *m) {
     char *r;
     int st;
     float fv;
-    int s;
+    int depletion_status;
     turret_vars = *(char **)(m + 0x78);
     if (*(unsigned char *)(m + 0x20) != 0) {
         fv = 0.0f;
@@ -46,10 +46,10 @@ void FUN_L17_002cbc10(char *m) {
         if (st != 1 && *(unsigned char *)(m + 0x20) != 4) {
             float t = *(float *)(turret_vars + 0x20) - fv;
             *(float *)(turret_vars + 0x20) = t;
-            s = 0xB;
+            depletion_status = 0xB;
             if (t <= 0.0f)
-                s = 1;
-            if (s == 1) {
+                depletion_status = 1;
+            if (depletion_status == 1) {
                 *(unsigned char *)(m + 0x20) = 4;
                 *(short *)(m + 0x34) &= 0xEFFF;
             }
