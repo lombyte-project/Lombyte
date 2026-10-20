@@ -147,15 +147,15 @@ extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void FUN_L00_0025f730(void *a, float x);
 
 void FUN_L16_0020f8b0(void) {
-    char tmp[16];
-    char *p = D_0013E533 + 0x158D;
+    char normalized_vector[16];
+    char *accumulated_vector = D_0013E533 + 0x158D;
     char *q;
-    qcopy(p, p - 0x670);
-    q = p - 0x770;
-    fast_vec_normalize(tmp, q, *(float *)(q + 0x194));
-    fast_vec_add(p, p, tmp);
-    qcopy(p - 0x690, p);
-    FUN_L00_0025f730(p - 0x690, *(float *)(q + 0x85C) + *(float *)(q + 0x868));
+    qcopy(accumulated_vector, accumulated_vector - 0x670);
+    q = accumulated_vector - 0x770;
+    fast_vec_normalize(normalized_vector, q, *(float *)(q + 0x194));
+    fast_vec_add(accumulated_vector, accumulated_vector, normalized_vector);
+    qcopy(accumulated_vector - 0x690, accumulated_vector);
+    FUN_L00_0025f730(accumulated_vector - 0x690, *(float *)(q + 0x85C) + *(float *)(q + 0x868));
 }
 typedef union {
     OvlQuad q;
