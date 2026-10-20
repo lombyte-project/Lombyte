@@ -128,7 +128,7 @@ extern LevelGameplayState render_sequence_lui __asm__("D_0018CB20");
 extern LevelRenderObject *D_0018CC98[];
 extern LevelProjectionState view_context __asm__("D_0018CD00");
 extern LevelRenderArchive D_001940C0;
-extern ColorPair D_001D9A30[];
+extern ColorPair warp_trail_colors[] __asm__("D_001D9A30");
 extern u128 D_001D9AE0[];
 extern f32 D_001D9B30[];
 extern f32 cam_mode_min_fov[] __asm__("D_001D9B48");
@@ -322,14 +322,14 @@ void update_level_gameplay_frame(void) {
                         ((f32)(render_sequence.end - render_sequence.time) * 0.017857144f);
                     for (color_index = 0; color_index < 3; color_index++) {
                         /* Fakematch: render_sequence_lui, see its declaration. */
-                        D_001D9A30[color_index].w0 =
-                            (D_001D9A30[color_index].w0 & 0xFFFFFF) |
+                        warp_trail_colors[color_index].w0 =
+                            (warp_trail_colors[color_index].w0 & 0xFFFFFF) |
                             ((render_sequence_lui.end - render_sequence.time) << 24);
                     }
                 } else {
                     for (fill_index = 0; fill_index < 3; fill_index++) {
-                        D_001D9A30[fill_index].w0 =
-                            (D_001D9A30[fill_index].w0 & 0xFFFFFF) | 0x38000000;
+                        warp_trail_colors[fill_index].w0 =
+                            (warp_trail_colors[fill_index].w0 & 0xFFFFFF) | 0x38000000;
                     }
                 }
             }

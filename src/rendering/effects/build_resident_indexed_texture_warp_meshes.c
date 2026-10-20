@@ -11,7 +11,7 @@ typedef struct {
     u32 w0;
     u32 w1;
 } ColorPair;
-extern ColorPair D_001D9A30[];
+extern ColorPair warp_trail_colors[] __asm__("D_001D9A30");
 extern f32 warp_trail_widths __asm__("D_001604D0") __attribute__((sda));
 
 extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
@@ -134,8 +134,8 @@ texture_ready:
                         age--;
                         progress = convert_integer_to_float(page - age) * 0.03125f;
                         quad.colors[vertex] = fast_tween_color(
-                            D_001D9A30[level_render_state.content_variant].w0,
-                            D_001D9A30[level_render_state.content_variant].w1, progress);
+                            warp_trail_colors[level_render_state.content_variant].w0,
+                            warp_trail_colors[level_render_state.content_variant].w1, progress);
                         progress = 1.0f - progress * progress;
                         normalize_vector(position, &workspace.edge_normals[vertex],
                                          progress *
