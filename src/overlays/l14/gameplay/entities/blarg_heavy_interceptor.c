@@ -1729,7 +1729,7 @@ void machinegun_turret_update(char *moby) {
     float m80[16];
     float g0;
     float phase_angle, sine_input_angle, sine_scale, target_heading;
-    int r, rem, sel, c17, m52, aiming_cuboid_index;
+    int r, rem, sel, c17, animation_sequence, aiming_cuboid_index;
     char *aiming_offset_vector;
     char *aiming_base_point;
 
@@ -1878,12 +1878,12 @@ void machinegun_turret_update(char *moby) {
         if ((*(unsigned char *)(moby + 0x70) & 2) == 0) {
             return;
         }
-        m52 = *(unsigned char *)(moby + 0x52);
-        if (m52 != 3) {
+        animation_sequence = *(unsigned char *)(moby + 0x52);
+        if (animation_sequence != 3) {
             return;
         }
         *(short *)(data + 0x76) = func_001F9850_2B4E40(D_L14_00161534);
-        *(unsigned char *)(moby + 0x20) = m52;
+        *(unsigned char *)(moby + 0x20) = animation_sequence;
         func_00213D28_2B4E40(moby, 2, 0);
         *(float *)(moby + 0x58) = 1.0f;
         return;
