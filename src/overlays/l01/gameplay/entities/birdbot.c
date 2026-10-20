@@ -1583,8 +1583,8 @@ void peckbot_update(Mob577 *self) {
     f32 knockback_travel_time;
     Mob577Vars *v;
     Mob577Hit *hit;
-    MobyNode *m;
-    void *p60;
+    MobyNode *candidate_moby;
+    void *target_moby;
     Vec577 *mp;
     Vec577 *np;
     s32 res;
@@ -1595,11 +1595,11 @@ void peckbot_update(Mob577 *self) {
     f32 dir;
     f32 g17;
     f32 g16;
-    f32 r3;
+    f32 chase_target_height_distance_ratio;
     f32 g4;
     f32 t99;
-    f32 r12;
-    f32 d13;
+    f32 recovery_target_height_distance_ratio;
+    f32 nearby_moby_heading_difference;
     f32 turn;
     f32 z;
     f32 g13;
@@ -1615,7 +1615,7 @@ void peckbot_update(Mob577 *self) {
     self->id = self->ref->id;
     self->flags &= ~0x41;
     FUN_L00_0025fcb8(self, &target, v->range + 4.0f);
-    p60 = target.p40;
+    target_moby = target.p40;
     qcopy(&oldpos, &self->pos);
     if (v->x38 != 0) {
         v->x214 = scale_game_frames(0xF0);
@@ -1883,8 +1883,8 @@ void peckbot_update(Mob577 *self) {
         }
         break;
     case PECKBOT_STATE_CHASE_TARGET:
-        r3 = FUN_001f99c0(self->pos.f[2] - target.pos.f[2]);
-        r3 = r3 / vector_distance(&self->pos, &target.pos);
+        chase_target_height_distance_ratio = FUN_001f99c0(self->pos.f[2] - target.pos.f[2]);
+        chase_target_height_distance_ratio = chase_target_height_distance_ratio / vector_distance(&self->pos, &target.pos);
         if (v->path != -1) {
             FUN_L01_0028b5e0(self, D_L01_001B0930[v->path], &target.pos, &position_scratch);
         } else {
@@ -1905,7 +1905,7 @@ void peckbot_update(Mob577 *self) {
         if (vector_distance(&self->pos, &target.pos) < 1.5f && !(res & 2)) {
             self->state = 4;
             SET_ANIM(self, 3, 0, scale_game_frames(3));
-        } else if (r3 > 1.0f || (res & 2)) {
+        } else if (chase_target_height_distance_ratio > 1.0f || (res & 2)) {
             self->pos.f[0] = oldpos.f[0];
             self->pos.f[1] = oldpos.f[1];
             self->state = 12;
@@ -1940,8 +1940,8 @@ void peckbot_update(Mob577 *self) {
             vector_scratch.f[2] = 0.0f;
             qcopy(&position_scratch, &target.pos);
             position_scratch.f[2] = position_scratch.f[2] + 0.75f;
-            if (p60 != NULL) {
-                spawn_nearby_effect(p60, self, 1, &position_scratch, &vector_scratch, 1.0f);
+            if (target_moby != NULL) {
+                spawn_nearby_effect(target_moby, self, 1, &position_scratch, &vector_scratch, 1.0f);
             }
         }
         if ((self->anim_flags & 2) && vector_distance(&self->pos, &target.pos) > 1.5f) {
@@ -2042,8 +2042,8 @@ void peckbot_update(Mob577 *self) {
         }
         break;
     case PECKBOT_STATE_RECOVER_FROM_BLOCKED_MOVEMENT:
-        r12 = FUN_001f99c0(self->pos.f[2] - target.pos.f[2]);
-        r12 = r12 / vector_distance(&self->pos, &target.pos);
+        recovery_target_height_distance_ratio = FUN_001f99c0(self->pos.f[2] - target.pos.f[2]);
+        recovery_target_height_distance_ratio = recovery_target_height_distance_ratio / vector_distance(&self->pos, &target.pos);
         if (v->path != -1) {
             FUN_L01_0028b5e0(self, D_L01_001B0930[v->path], &v->home, &position_scratch);
         } else {
@@ -2056,10 +2056,10 @@ void peckbot_update(Mob577 *self) {
         vector_scratch.f[2] = 0.0f;
         res12 = FUN_L00_00258b50(self, &v->x180, &vector_scratch, &position_scratch, 1.0f);
         fast_vec_sub(&home_to_target, &target.pos, &v->home);
-        if (vector_distance(&self->pos, &target.pos) < 1.5f && r12 <= 1.0f) {
+        if (vector_distance(&self->pos, &target.pos) < 1.5f && recovery_target_height_distance_ratio <= 1.0f) {
             self->state = 4;
             SET_ANIM(self, 3, 0, scale_game_frames(3));
-        } else if (r12 <= 1.0f && !(res12 & 2)) {
+        } else if (recovery_target_height_distance_ratio <= 1.0f && !(res12 & 2)) {
             self->state = 5;
             SET_ANIM(self, 2, 0, scale_game_frames(3));
         } else if (vector_distance(&self->pos, &target.pos) > v->range + 6.0f) {
@@ -2085,24 +2085,24 @@ void peckbot_update(Mob577 *self) {
         vector_scratch.f[1] = fast_sin(self->rot.f[2]) * (v->speed * frame_time);
         vector_scratch.f[2] = 0.0f;
         fast_vec_add(&position_scratch, &self->pos, &vector_scratch);
-        for (m = D_L01_0015FFE4; m != NULL; m = m->next) {
-            if (m == (MobyNode *)self || m->state < 0) {
+        for (candidate_moby = D_L01_0015FFE4; candidate_moby != NULL; candidate_moby = candidate_moby->next) {
+            if (candidate_moby == (MobyNode *)self || candidate_moby->state < 0) {
                 continue;
             }
-            if (m->oclass == 0 || m->oclass == 0x241) {
-                if (vector_distance(&position_scratch, &m->pos) < 2.0f) {
+            if (candidate_moby->oclass == 0 || candidate_moby->oclass == 0x241) {
+                if (vector_distance(&position_scratch, &candidate_moby->pos) < 2.0f) {
                     z = self->pos.f[2];
-                    d13 = fast_subtract_rotations(
-                        self->rot.f[2], FUN_L00_001ff8b0_cf(m->pos.f[0] - self->pos.f[0],
-                                                            m->pos.f[1] - self->pos.f[1]));
+                    nearby_moby_heading_difference = fast_subtract_rotations(
+                        self->rot.f[2], FUN_L00_001ff8b0_cf(candidate_moby->pos.f[0] - self->pos.f[0],
+                                                            candidate_moby->pos.f[1] - self->pos.f[1]));
                     turn = frame_time * 1.5707964f;
-                    if (!(d13 > 0.0f)) {
+                    if (!(nearby_moby_heading_difference > 0.0f)) {
                         turn = -turn;
                     }
                     self->rot.f[2] = fast_add_rotations(self->rot.f[2], turn);
-                    fast_vec_sub(&position_scratch, &self->pos, &m->pos);
+                    fast_vec_sub(&position_scratch, &self->pos, &candidate_moby->pos);
                     FUN_L00_001ff500_cf(&position_scratch, &position_scratch, 2.0f);
-                    fast_vec_add(&position_scratch, &position_scratch, &m->pos);
+                    fast_vec_add(&position_scratch, &position_scratch, &candidate_moby->pos);
                     position_scratch.f[2] = z;
                 }
             }
