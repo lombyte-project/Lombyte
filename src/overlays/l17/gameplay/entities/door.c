@@ -544,7 +544,8 @@ int FUN_L17_002eace8(int ship_moby, char *ship_vars, char *radar_origin, char *r
         MOBY_CLASS_STATE_GATED_MARKED_TARGET = 0x4BF,
         MOBY_CLASS_GRAY_RADAR_ICON_TWO_CONTACT = 0x4C2,
         MOBY_CLASS_GRAY_RADAR_BLIP_CONTACT = 0x4C4,
-        MOBY_CLASS_MARKED_COUNTED_TARGET = 0x504
+        MOBY_CLASS_MARKED_COUNTED_TARGET = 0x504,
+        MOBY_CLASS_RADAR_DRAW_SUPPRESSED = 0x534
     };
     float v[4];
     float w[4];
@@ -712,7 +713,7 @@ int FUN_L17_002eace8(int ship_moby, char *ship_vars, char *radar_origin, char *r
         case 0x18C:
         case 0x18F:
         case 0x190:
-        case 0x534:
+        case MOBY_CLASS_RADAR_DRAW_SUPPRESSED:
         case 0x535:
         case 0x536:
         case 0x537:
