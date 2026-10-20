@@ -1933,24 +1933,24 @@ void FUN_L14_002b4340(struct Moby *m) {
         HIT_REACTION_LOW_RED_FLASH_AND_HIT_ANIMATION = 10,
         HIT_REACTION_NONE = 11
     };
-    unsigned char *d = m->pvars;
+    unsigned char *moby_vars = m->pvars;
     int loc0;
     float f4 = 0.0f;
-    char *q;
+    char *hit_record;
     int k;
     float t;
-    q = find_moby_hit(m, 0x330000, 0);
-    if (q != 0) {
-        if (*(int *)(q + 0x20) != 0) {
-            int a = *(short *)(*(int *)(q + 0x20) + 0xA6);
-            if (a == m->oclass || a == 0x2A9)
-                q = 0;
+    hit_record = find_moby_hit(m, 0x330000, 0);
+    if (hit_record != 0) {
+        if (*(int *)(hit_record + 0x20) != 0) {
+            int hit_object_class = *(short *)(*(int *)(hit_record + 0x20) + 0xA6);
+            if (hit_object_class == m->oclass || hit_object_class == 0x2A9)
+                hit_record = 0;
         }
     }
-    k = hit_reaction(m, q, d + 0x20, 0, &loc0, &f4, 0, 4);
+    k = hit_reaction(m, hit_record, moby_vars + 0x20, 0, &loc0, &f4, 0, 4);
     if (loc0 != 1 && m->state != 6) {
-        t = *(float *)(d + 0x20) - f4;
-        *(float *)(d + 0x20) = t;
+        t = *(float *)(moby_vars + 0x20) - f4;
+        *(float *)(moby_vars + 0x20) = t;
         if (t <= 0.0f)
             k = 1;
         switch (k) {
@@ -1959,7 +1959,7 @@ void FUN_L14_002b4340(struct Moby *m) {
             break;
         case HIT_REACTION_ANIMATE_WITH_LOW_RED_FLASH:
         case HIT_REACTION_LOW_RED_FLASH_AND_HIT_ANIMATION:
-            d[0x67] = 100;
+            moby_vars[0x67] = 100;
             break;
         case HIT_REACTION_PLAY_HIT_ANIMATION:
         case HIT_REACTION_HIGH_RED_FLASH_AND_HIT_ANIMATION:
@@ -1967,20 +1967,20 @@ void FUN_L14_002b4340(struct Moby *m) {
         case 6:
         case 7:
         case 8:
-            d[0x67] = 200;
+            moby_vars[0x67] = 200;
             break;
         case HIT_REACTION_LETHAL:
         case HIT_REACTION_DESTROY:
             m->state = 6;
             m->flags &= 0xEFFF;
-            d[0x67] = 0xF0;
+            moby_vars[0x67] = 0xF0;
             FUN_L00_00257470(m, 0, -1);
             break;
         }
-        trooper_anim_update(m, (short *)(d + 0x60));
+        trooper_anim_update(m, (short *)(moby_vars + 0x60));
     }
     m->hit_slot = 0xFF;
-    trooper_anim_finish(m, d + 0x60);
+    trooper_anim_finish(m, moby_vars + 0x60);
 }
 /* Returns 0 unless every object on the list is ready, then wakes the waiting ones and sets their timers. */
 extern short *D_L14_001ABF40_b45[] __asm__("D_L14_001ABF40");
