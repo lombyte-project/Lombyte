@@ -21,16 +21,16 @@ void FUN_L05_002d6f48(unsigned char *moby) {
     unsigned char *it;
     int i;
     char *data;
-    char *q;
+    char *glow_position;
     FUN_L00_002591d0((int *)&it, moby[0x21], 0, 0);
     while (it != 0) {
         if (it[0x31] != 0) {
             data = *(char **)(it + 0x78);
             if (*(short *)(it + 0xA6) == *(short *)(moby + 0xA6)) {
-                q = data + 0x330;
+                glow_position = data + 0x330;
                 for (i = 2; i >= 0; i--) {
-                    FUN_L00_00263618(q, *(int *)(data + 0x360), 0.45f, 0.4f);
-                    q += 0x10;
+                    FUN_L00_00263618(glow_position, *(int *)(data + 0x360), 0.45f, 0.4f);
+                    glow_position += 0x10;
                 }
             }
         }
