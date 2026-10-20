@@ -2380,7 +2380,7 @@ extern s32 FUN_L00_0025f878(char *);
 void FUN_L00_002affa8(char *self, O *out, char *skip) {
     VU v;
     VU lv;
-    char *o;
+    char *candidate_moby;
     s32 p;
     s32 i;
     s32 flag;
@@ -2393,21 +2393,21 @@ void FUN_L00_002affa8(char *self, O *out, char *skip) {
     best = 10000.0f;
     yaw = *(f32 *)(self + 0x48);
     pitch = *(f32 *)(self + 0x44);
-    o = active_mobies[i];
-    if (o == 0)
+    candidate_moby = active_mobies[i];
+    if (candidate_moby == 0)
         return;
     g = &hero;
-    while (o != 0) {
-        if (*(s8 *)(o + 0x20) < 0)
+    while (candidate_moby != 0) {
+        if (*(s8 *)(candidate_moby + 0x20) < 0)
             goto next;
-        if (o == skip)
+        if (candidate_moby == skip)
             goto next;
-        qcopy(&v, o + 0x10);
+        qcopy(&v, candidate_moby + 0x10);
         spos = self + 0x10;
-        opos = o + 0x10;
+        opos = candidate_moby + 0x10;
         if (40.0f < FUN_001f9b48(&v, spos))
             goto next;
-        p = FUN_002141f8_u(o);
+        p = FUN_002141f8_u(candidate_moby);
         if (p == 0)
             goto np;
         if (p <= 0x100000)
@@ -2424,11 +2424,11 @@ void FUN_L00_002affa8(char *self, O *out, char *skip) {
         z = v.f[2] + 0.5f;
     zset:
         v.f[2] = z;
-        if (o == 0)
+        if (candidate_moby == 0)
             goto next;
-        if (*(char **)(o + 0x24) == 0)
+        if (*(char **)(candidate_moby + 0x24) == 0)
             goto next;
-        if (*(s16 *)(*(char **)(o + 0x24) + 0x46) != 5)
+        if (*(s16 *)(*(char **)(candidate_moby + 0x24) + 0x46) != 5)
             goto next;
         angh = fast_arc_tan(v.f[0] - *(f32 *)(self + 0x10), v.f[1] - *(f32 *)(self + 0x14));
         angv = fast_arc_tan(vector_distance(spos, &v), v.f[2] - *(f32 *)(self + 0x18));
@@ -2436,8 +2436,8 @@ void FUN_L00_002affa8(char *self, O *out, char *skip) {
         if (dist < 2.5f) {
             char *cam = *(char **)&g->moby;
             if (fast_difference_between_rotations(
-                    *(f32 *)(cam + 0x48), fast_arc_tan(*(f32 *)(o + 0x10) - g->motion.pos.f[0],
-                                                       *(f32 *)(o + 0x14) - g->motion.pos.f[1])) < 1.0471976f) {
+                    *(f32 *)(cam + 0x48), fast_arc_tan(*(f32 *)(candidate_moby + 0x10) - g->motion.pos.f[0],
+                                                       *(f32 *)(candidate_moby + 0x14) - g->motion.pos.f[1])) < 1.0471976f) {
                 if (FUN_001f99c0(angv) < 0.7853982f)
                     return;
             }
@@ -2456,16 +2456,16 @@ void FUN_L00_002affa8(char *self, O *out, char *skip) {
         flag = 1;
         if (FUN_001efa68_u(D_L00_00166DC0, &v, 6, self, 0) != 0) {
             s32 hit = D_L00_00173E40[6];
-            if (hit == 0 || hit != (s32)o)
+            if (hit == 0 || hit != (s32)candidate_moby)
                 flag = 0;
         } else {
             best = dist;
             pitch = -angv;
             yaw = angh;
-            if (FUN_L00_0025f878(o) != 0)
+            if (FUN_L00_0025f878(candidate_moby) != 0)
                 goto next;
             z = 0.5f;
-            out->owner = o;
+            out->owner = candidate_moby;
             if (p != 0)
                 z = *(f32 *)(p + 0x10);
             out->f2C = angh;
@@ -2479,7 +2479,7 @@ void FUN_L00_002affa8(char *self, O *out, char *skip) {
         }
     next:
         i++;
-        o = active_mobies[i];
+        candidate_moby = active_mobies[i];
     }
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002AB910.c: func_L00_002B1688), where it is exact; names translated to the US level program. */
