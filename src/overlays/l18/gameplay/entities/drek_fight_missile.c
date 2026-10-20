@@ -3852,9 +3852,9 @@ void FUN_L18_002f8050(void *mv) {
         float *pa = (float *)(moby_bytes + 0x10);
         char *pl = (char *)&hero.motion.pos;
         if (vector_distance(pa, pl) < 10.0f) {
-            char *q = pl - 0x80;
-            *(char **)(tank_data + 0xB0) = *(char **)(q + 0x2080);
-            qcopy(tank_data + 0x70, *(char **)(q + 0x2080) + 0x10);
+            char *hero_base_bytes = pl - 0x80;
+            *(char **)(tank_data + 0xB0) = *(char **)(hero_base_bytes + 0x2080);
+            qcopy(tank_data + 0x70, *(char **)(hero_base_bytes + 0x2080) + 0x10);
         } else if (*(char **)(tank_data + 0xB0)) {
             if (30.0f < vector_distance(pa, *(char **)(tank_data + 0xB0) + 0x10)) {
                 *(int *)(tank_data + 0xB4) = 2;
