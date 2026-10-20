@@ -18,7 +18,7 @@ extern int func_001FA898_r_6fb60(float) __asm__("FUN_001fa6d0");
 extern unsigned char *D_L17_001B2A54 __attribute__((section(".data")));
 unsigned char *FUN_L17_0026fb60(struct Moby *parent, void *pos, float *vec) {
     int r = func_002140B0_6fb60(5);
-    unsigned char a = func_001F9850_6fb60(r + 2);
+    unsigned char unscaled_header_value = func_001F9850_6fb60(r + 2);
     unsigned char b = func_002140B0_6fb60(0xFF);
     unsigned char *record = func_00218928_6fb60(0x4F);
     if (record != 0) {
@@ -29,9 +29,9 @@ unsigned char *FUN_L17_0026fb60(struct Moby *parent, void *pos, float *vec) {
         *(float *)(record_data + 0x18) = vec[2];
         if (parent != 0) {
             func_001F9BF0_6fb60(record_data, record + 0x10, &parent->pos);
-            *(short *)(record + 0xA) = a;
+            *(short *)(record + 0xA) = unscaled_header_value;
         } else {
-            *(short *)(record + 0xA) = a << 2;
+            *(short *)(record + 0xA) = unscaled_header_value << 2;
         }
         *(char **)(record_data + 0x1C) = parent;
         *(int *)(record + 4) = 0x604040FF;
