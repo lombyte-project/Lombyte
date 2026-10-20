@@ -1227,14 +1227,14 @@ void FUN_L14_002b3a20(char *m) {
     subtract_vector_xyz(v, ((char *)&D_L14_001674C0), pos);
     len = vector_length_xyz(v);
     if (0.0f < len) {
-        float s = D_L14_001614FC;
-        float f = len - D_L14_00161500;
-        if (f < s) {
-            s = f;
-            if (f < 0.0f)
-                s = 0.0f;
+        float position_offset_distance = D_L14_001614FC;
+        float unclamped_offset_distance = len - D_L14_00161500;
+        if (unclamped_offset_distance < position_offset_distance) {
+            position_offset_distance = unclamped_offset_distance;
+            if (unclamped_offset_distance < 0.0f)
+                position_offset_distance = 0.0f;
         }
-        normalize_vector_xyz(w, v, s);
+        normalize_vector_xyz(w, v, position_offset_distance);
         add_vector_xyz(pos, pos, w);
     }
     pk.uv[0] = 1.0f;
