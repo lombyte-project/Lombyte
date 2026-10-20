@@ -81,6 +81,7 @@ extern char D_L14_0017C620[];
 int hero_set_state(int a, int b) {
     enum {
         HERO_STATE_GRIND_JUMP = 0x29,
+        HERO_STATE_GRIND_ATTACK = 0x2B,
         HERO_STATE_GRIND_HURT = 0x42,
         HERO_STATE_VEHICLE_IDLE = 0x53,
         HERO_STATE_VEHICLE_RUN = 0x54,
@@ -1347,7 +1348,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x2B: {
+    case HERO_STATE_GRIND_ATTACK: {
         struct Hero *p = &hero;
         p->state.control_mode = 0xF;
         p->unkA64 = 0;
