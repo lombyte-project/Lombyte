@@ -783,24 +783,24 @@ extern float func_001F9878_timer(float) __asm__("FUN_001f96b0");
 extern int func_001FA898_timer(float) __asm__("FUN_001fa6d0");
 
 void FUN_L16_002d3f78(void *arg, int lower, int upper) {
-    L16GroupMoby *m = arg;
-    L16GroupTimer *d;
-    short *p;
-    if (m->group == 255) {
-        d = m->data;
-        d->timer = func_001FA898_timer(
+    L16GroupMoby *source_moby = arg;
+    L16GroupTimer *timer_data;
+    short *group_entry;
+    if (source_moby->group == 255) {
+        timer_data = source_moby->data;
+        timer_data->timer = func_001FA898_timer(
             func_001F9878_timer(random_float_between_alt((float)lower, (float)upper)));
     } else {
         L16GroupMoby *other;
-        p = D_L16_001ABCC0[m->group];
+        group_entry = D_L16_001ABCC0[source_moby->group];
     next:
-        other = (L16GroupMoby *)(((*(unsigned short *)p & 0x7FFF) << 8) + (int)D_L16_0015FFD8);
+        other = (L16GroupMoby *)(((*(unsigned short *)group_entry & 0x7FFF) << 8) + (int)D_L16_0015FFD8);
         if (other->state >= 0) {
-            d = other->data;
-            d->timer = func_001FA898_timer(
+            timer_data = other->data;
+            timer_data->timer = func_001FA898_timer(
                 func_001F9878_timer(random_float_between_alt((float)lower, (float)upper)));
         }
-        if (*p++ >= 0)
+        if (*group_entry++ >= 0)
             goto next;
     }
 }
