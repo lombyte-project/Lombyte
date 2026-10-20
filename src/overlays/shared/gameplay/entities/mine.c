@@ -2003,33 +2003,33 @@ void FUN_L00_002502f0_2af450(void *, int, int, int) __asm__("FUN_L00_002502f0");
 float FUN_002132a8_2af450(float, float) __asm__("FUN_002132a8");
 void FUN_L00_00250df8_2af450(void *) __asm__("FUN_L00_00250df8");
 unsigned char *spawn_debris(void *pos, void *vel, int n, int flag, int g) __asm__("FUN_L00_002af450");
-unsigned char *spawn_debris(void *pos, void *vel, int n, int flag, int g) {
-    unsigned char *m = FUN_0020c4f8_2af450(0x7A);
-    if (m) {
+unsigned char *spawn_debris(void *pos, void *vel, int lifetime_frames, int flag, int g) {
+    unsigned char *debris_moby = FUN_0020c4f8_2af450(0x7A);
+    if (debris_moby) {
         unsigned char *v;
         float a, d;
-        v = *(unsigned char **)(m + 0x78);
-        m[0x30] = 0xFF;
-        *(short *)(m + 0x32) = 0xFF;
-        m[0x31] = 1;
-        m[0x23] = 0x80;
-        FUN_L00_002502f0_2af450(m, 0x7F, 0x7F, 0x7F);
-        qcopy(m + 0x10, pos);
+        v = *(unsigned char **)(debris_moby + 0x78);
+        debris_moby[0x30] = 0xFF;
+        *(short *)(debris_moby + 0x32) = 0xFF;
+        debris_moby[0x31] = 1;
+        debris_moby[0x23] = 0x80;
+        FUN_L00_002502f0_2af450(debris_moby, 0x7F, 0x7F, 0x7F);
+        qcopy(debris_moby + 0x10, pos);
         qcopy(v, vel);
         a = FUN_002132a8_2af450(D_0015ED6C_2af450 * 6.2831855f, D_0015ED6C_2af450 * 12.566371f);
         d = D_0015ED6C_2af450;
         *(float *)(v + 0x10) = a;
         *(float *)(v + 0x14) = FUN_002132a8_2af450(d * 6.2831855f, d * 12.566371f);
-        *(short *)(v + 0x18) = n;
-        *(short *)(v + 0x1A) = n;
+        *(short *)(v + 0x18) = lifetime_frames;
+        *(short *)(v + 0x1A) = lifetime_frames;
         if (flag == 0) {
-            *(float *)(m + 0x2C) *= FUN_002132a8_2af450(0.5f, 0.75f);
+            *(float *)(debris_moby + 0x2C) *= FUN_002132a8_2af450(0.5f, 0.75f);
         }
-        *(float *)(v + 0x1C) = *(float *)(m + 0x2C);
-        m[0xBC] = flag | (g << 1);
-        FUN_L00_00250df8_2af450(m);
+        *(float *)(v + 0x1C) = *(float *)(debris_moby + 0x2C);
+        debris_moby[0xBC] = flag | (g << 1);
+        FUN_L00_00250df8_2af450(debris_moby);
     }
-    return m;
+    return debris_moby;
 }
 typedef struct {
     float f[4];
