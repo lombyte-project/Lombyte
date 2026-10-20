@@ -96,6 +96,8 @@ void level_draw_dialog_text(void) {
         MESSAGE_BOX_CHOICE_DIALOG = 6
     };
     enum {
+        CHOICE_DIALOG_PAIRED_BUTTONS = 0,
+        CHOICE_DIALOG_SHARED_PAIRED_BUTTONS = 1,
         CHOICE_DIALOG_SINGLE_CENTERED_BUTTON = 3
     };
     enum {
@@ -311,8 +313,8 @@ void level_draw_dialog_text(void) {
         text_color = fast_tween_color(D_L00_0015F4B0, D_L00_0015F4B4, alpha);
         button_color = fast_tween_color(0x20FFFF, 0x8020FFFF, alpha);
         switch (D_L00_00173040.choice) {
-        case 0:
-        case 1:
+        case CHOICE_DIALOG_PAIRED_BUTTONS:
+        case CHOICE_DIALOG_SHARED_PAIRED_BUTTONS:
             font_print_center(0xCA, 0x118, button_color, get_help_message_text(0x524E), -1);
             font_print_center(0x135, 0x118, button_color, get_help_message_text(0x524B), -1);
             id = 0x522A;
