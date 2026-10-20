@@ -1381,7 +1381,7 @@ void sand_mouse_update(struct Moby *moby) {
         SAND_MOUSE_DAMP_VELOCITY_BEFORE_RETURN = 19,
         SAND_MOUSE_RETURN_TO_PARENT = 20
     };
-    Data_2e3f20 *d;
+    Data_2e3f20 *sand_mouse_vars;
     float va[4];
     float vb[4];
     float ang;
@@ -1389,38 +1389,38 @@ void sand_mouse_update(struct Moby *moby) {
     if (moby == 0) {
         return;
     }
-    d = *(Data_2e3f20 **)&moby->pvars;
-    if (d == 0) {
+    sand_mouse_vars = *(Data_2e3f20 **)&moby->pvars;
+    if (sand_mouse_vars == 0) {
         return;
     }
-    if (d->parent != -1) {
+    if (sand_mouse_vars->parent != -1) {
         if (moby->state >= 5) {
-            ((Data_2e3f20 *)ents_2e3f20[d->parent].pvars)->target[0] =
-                fast_arc_tan(moby->pos.x - ents_2e3f20[d->parent].pos.x,
-                                  moby->pos.y - ents_2e3f20[d->parent].pos.y);
+            ((Data_2e3f20 *)ents_2e3f20[sand_mouse_vars->parent].pvars)->target[0] =
+                fast_arc_tan(moby->pos.x - ents_2e3f20[sand_mouse_vars->parent].pos.x,
+                                  moby->pos.y - ents_2e3f20[sand_mouse_vars->parent].pos.y);
         } else {
-            ((Data_2e3f20 *)ents_2e3f20[d->parent].pvars)->target[0] =
-                fast_arc_tan(hero_2e3f20->pos[0] - ents_2e3f20[d->parent].pos.x,
-                                  hero_2e3f20->pos[1] - ents_2e3f20[d->parent].pos.y);
+            ((Data_2e3f20 *)ents_2e3f20[sand_mouse_vars->parent].pvars)->target[0] =
+                fast_arc_tan(hero_2e3f20->pos[0] - ents_2e3f20[sand_mouse_vars->parent].pos.x,
+                                  hero_2e3f20->pos[1] - ents_2e3f20[sand_mouse_vars->parent].pos.y);
         }
-        if (d->parent != -1) {
-            *(int *)&ents_2e3f20[d->parent].collision = 0;
+        if (sand_mouse_vars->parent != -1) {
+            *(int *)&ents_2e3f20[sand_mouse_vars->parent].collision = 0;
         }
     }
     switch (moby->state) {
     case SAND_MOUSE_INITIALIZE:
-        qzero(d->target);
-        qzero(d->vel);
-        d->s4A = 0;
-        d->timer = 0;
+        qzero(sand_mouse_vars->target);
+        qzero(sand_mouse_vars->vel);
+        sand_mouse_vars->s4A = 0;
+        sand_mouse_vars->timer = 0;
         if (moby->prev_seq != 0) {
             blend_moby_animation_3830(moby, 0, 0, scale_game_frames(10));
         }
         moby->update_dist = 0xFF;
         moby->draw_dist = 0xFF;
-        if (d->parent != -1) {
+        if (sand_mouse_vars->parent != -1) {
             unsigned short id;
-            qcopy(((float *)&moby->pos), ((float *)&ents_2e3f20[d->parent].pos));
+            qcopy(((float *)&moby->pos), ((float *)&ents_2e3f20[sand_mouse_vars->parent].pos));
             moby->pos.z = moby->pos.z + 0.02f;
             if (D_L01_001BB6B0.collected[(short)(id = moby->save_id)] != 0
                 || (*(int *)((char *)D_0014C190_257218 + (((short)id >> 5) * 4 + (D_0015ED84 << 8))) >> (id & 0x1F)) & 1) {
@@ -1433,8 +1433,8 @@ void sand_mouse_update(struct Moby *moby) {
             mark_moby_for_removal(moby);
             return;
         }
-        qcopy(d->start, ((float *)&moby->pos));
-        qcopy(d->home, ((float *)&moby->pos));
+        qcopy(sand_mouse_vars->start, ((float *)&moby->pos));
+        qcopy(sand_mouse_vars->home, ((float *)&moby->pos));
         initialize_mover_2e3f20((char *)&mover_2e3f20);
         {
             int kind;
@@ -1462,18 +1462,18 @@ void sand_mouse_update(struct Moby *moby) {
         break;
     case SAND_MOUSE_WAIT_FOR_HERO_IN_VOLUME:
         if (D_0013D4C5 != 0 && hero_2e3f20->i1158 == 5) {
-            d->count = 0;
-            d->t60 = scale_game_frames(D_L01_00161918);
+            sand_mouse_vars->count = 0;
+            sand_mouse_vars->t60 = scale_game_frames(D_L01_00161918);
             if (moby->visible != 0 && (moby->anim_flags & 2)) {
                 if (moby->prev_seq != random_integer_3830() % 3) {
                     blend_moby_animation_3830(moby, random_integer_3830() % 3, 0, scale_game_frames(10));
                 }
             }
-            if (d->parent != -1) {
-                if (is_point_inside_clip_volume(hero_2e3f20->pos, d->vol)) {
-                    ents_2e3f20[d->parent].command = 3;
+            if (sand_mouse_vars->parent != -1) {
+                if (is_point_inside_clip_volume(hero_2e3f20->pos, sand_mouse_vars->vol)) {
+                    ents_2e3f20[sand_mouse_vars->parent].command = 3;
                 } else {
-                    ents_2e3f20[d->parent].command = 1;
+                    ents_2e3f20[sand_mouse_vars->parent].command = 1;
                 }
             }
             if (hero_2e3f20->helper != 0 && hero_2e3f20->i1158 == 5) {
@@ -1481,14 +1481,14 @@ void sand_mouse_update(struct Moby *moby) {
                                         hero_2e3f20->pos[1] - moby->pos.y);
                 face_target_2e3f20(moby, ang, &mover_2e3f20.yaw_speed,
                                         frame_time_sq * 11.519173f, frame_time_sq * 3.1415927f, frame_time * 11.519173f);
-                qcopy(va, ((float *)&ents_2e3f20[d->parent].pos));
+                qcopy(va, ((float *)&ents_2e3f20[sand_mouse_vars->parent].pos));
                 va[2] = va[2] + 0.5f;
                 qcopy(vb, hero_2e3f20->pos);
                 vb[2] = vb[2] + 0.2f;
-                if (is_point_inside_clip_volume(hero_2e3f20->pos, d->vol)) {
+                if (is_point_inside_clip_volume(hero_2e3f20->pos, sand_mouse_vars->vol)) {
                     if (!collision_line(va, vb, 0, moby, 0)
                         || D_L01_001742D8 == hero_2e3f20->p2080) {
-                        FUN_L01_002e30b8((int)moby, d);
+                        FUN_L01_002e30b8((int)moby, sand_mouse_vars);
                         if (hero_2e3f20->helper != 0
                             && hero_2e3f20->helper->oclass == 0x1B1
                             && hero_2e3f20->helper->state != 0xFE
@@ -1498,8 +1498,8 @@ void sand_mouse_update(struct Moby *moby) {
                         *(void **)((char *)&mover_2e3f20 + 0x50) = moby;
                         FUN_L01_0023cf98(0x1F, 0);
                         play_sound_2e3f20(0, 0, (float)scale_game_frames(6));
-                        if (d->parent != -1) {
-                            ents_2e3f20[d->parent].command = 5;
+                        if (sand_mouse_vars->parent != -1) {
+                            ents_2e3f20[sand_mouse_vars->parent].command = 5;
                             moby->state = 2;
                         } else {
                             moby->draw_dist = 0xFF;
@@ -1511,30 +1511,30 @@ void sand_mouse_update(struct Moby *moby) {
         }
         break;
     case SAND_MOUSE_WAIT_FOR_PARENT_READY:
-        if (d->parent != -1) {
-            if (ents_2e3f20[d->parent].state == 5) {
+        if (sand_mouse_vars->parent != -1) {
+            if (ents_2e3f20[sand_mouse_vars->parent].state == 5) {
                 moby->state = 3;
-                d->timer = 0;
+                sand_mouse_vars->timer = 0;
                 moby->draw_dist = 0xFF;
             }
         } else {
-            d->timer = 0;
+            sand_mouse_vars->timer = 0;
             moby->draw_dist = 0xFF;
             moby->state = 3;
         }
         break;
     case SAND_MOUSE_MOVE_TOWARD_HERO:
-        FUN_L01_002e30b8((int)moby, d);
-        ang = fast_arc_tan(d->target[0] - moby->pos.x, d->target[1] - moby->pos.y);
+        FUN_L01_002e30b8((int)moby, sand_mouse_vars);
+        ang = fast_arc_tan(sand_mouse_vars->target[0] - moby->pos.x, sand_mouse_vars->target[1] - moby->pos.y);
         face_target_2e3f20(moby, ang, &mover_2e3f20.yaw_speed,
                                 frame_time_sq * 11.519173f, frame_time_sq * 3.1415927f, frame_time * 11.519173f);
-        if ((step_mover_2e3f20(moby, &mover_2e3f20, d->target, d->vel) & 6)
+        if ((step_mover_2e3f20(moby, &mover_2e3f20, sand_mouse_vars->target, sand_mouse_vars->vel) & 6)
             || vector_distance(((float *)&moby->pos), hero_2e3f20->pos) < 1.0f) {
-            qzero(d->vel);
+            qzero(sand_mouse_vars->vel);
             moby->state = 4;
-            d->timer = scale_game_frames(0x78);
+            sand_mouse_vars->timer = scale_game_frames(0x78);
         }
-        if (vector_distance(((float *)&moby->pos), d->home) > 0.4f && d->timer == 0) {
+        if (vector_distance(((float *)&moby->pos), sand_mouse_vars->home) > 0.4f && sand_mouse_vars->timer == 0) {
             *(float *)((char *)&mover_2e3f20 + 4) = 0.7f;
             if (moby->prev_seq != 3) {
                 blend_moby_animation_3830(moby, 3, 0, scale_game_frames(3));
@@ -1544,15 +1544,15 @@ void sand_mouse_update(struct Moby *moby) {
     case SAND_MOUSE_BEGIN_FOLLOW_HERO:
         FUN_L01_0023cf98(0, 1);
         moby->flags &= 0xFFBE;
-        if (d->parent != -1) {
-            ents_2e3f20[d->parent].flags &= 0xFFBE;
+        if (sand_mouse_vars->parent != -1) {
+            ents_2e3f20[sand_mouse_vars->parent].flags &= 0xFFBE;
         }
         moby->state = 5;
         if (hero_2e3f20->helper != 0
             && hero_2e3f20->helper->oclass == 0x1B1
             && hero_2e3f20->helper->state != 0xFE
             && hero_2e3f20->helper->state != 0xFD) {
-            d->b48 = 0xFF;
+            sand_mouse_vars->b48 = 0xFF;
             hero_2e3f20->helper->state = 2;
         }
         break;
@@ -1562,29 +1562,29 @@ void sand_mouse_update(struct Moby *moby) {
             && hero_2e3f20->i208C != 0x16
             && hero_2e3f20->i208C != 0x14
             && hero_2e3f20->b20A4 == 0
-            && !fast_dec_timer(&d->t60)
-            && d->count < D_L01_0016191C) {
-            FUN_L01_002e3110((char *)moby, (char *)d);
-            FUN_L01_002e3830(moby, d);
+            && !fast_dec_timer(&sand_mouse_vars->t60)
+            && sand_mouse_vars->count < D_L01_0016191C) {
+            FUN_L01_002e3110((char *)moby, (char *)sand_mouse_vars);
+            FUN_L01_002e3830(moby, sand_mouse_vars);
         } else {
             if (moby->prev_seq != 5) {
                 blend_moby_animation_3830(moby, 5, 0, scale_game_frames(10));
             }
-            qzero(d->vel);
-            d->timer = D_L01_00161924;
+            qzero(sand_mouse_vars->vel);
+            sand_mouse_vars->timer = D_L01_00161924;
             moby->state = 6;
-            if (d->parent != -1) {
-                ents_2e3f20[d->parent].command = 5;
+            if (sand_mouse_vars->parent != -1) {
+                ents_2e3f20[sand_mouse_vars->parent].command = 5;
             }
         }
-        FUN_L01_002e35a8((char *)moby, (char *)d);
+        FUN_L01_002e35a8((char *)moby, (char *)sand_mouse_vars);
         break;
     case SAND_MOUSE_FADE_OUT_AND_RESET_HOME:
-        if (fast_dec_timer_s16(&d->timer)) {
+        if (fast_dec_timer_s16(&sand_mouse_vars->timer)) {
             moby->alpha = 0x80;
-            qcopy(((float *)&moby->pos), d->home);
-            qcopy(d->target, d->home);
-            qzero(d->vel);
+            qcopy(((float *)&moby->pos), sand_mouse_vars->home);
+            qcopy(sand_mouse_vars->target, sand_mouse_vars->home);
+            qzero(sand_mouse_vars->vel);
             moby->state = 0x13;
             moby->flags &= 0xFDFF;
         } else {
@@ -1603,7 +1603,7 @@ void sand_mouse_update(struct Moby *moby) {
             cb = random_integer_3830() & 0x2F;
             col = cr | (cg << 8) | (cb << 16) | (D_L01_0016193C << 24);
             dir = random_integer_3830() % 2;
-            if (d->timer & 1) {
+            if (sand_mouse_vars->timer & 1) {
                 dir = -dir;
             }
             n = FUN_L00_00257b90(D_L01_00161928, D_L01_0016192C);
@@ -1616,13 +1616,13 @@ void sand_mouse_update(struct Moby *moby) {
         break;
     case SAND_MOUSE_DAMP_VELOCITY_BEFORE_RETURN:
         {
-            float t = frame_scale * -0.050000012f + 1.0f;
-            d->vel[0] = d->vel[0] * t;
-            d->vel[1] = d->vel[1] * t;
+            float velocity_damping_factor = frame_scale * -0.050000012f + 1.0f;
+            sand_mouse_vars->vel[0] = sand_mouse_vars->vel[0] * velocity_damping_factor;
+            sand_mouse_vars->vel[1] = sand_mouse_vars->vel[1] * velocity_damping_factor;
         }
-        if (FUN_L01_002e3208(moby, d) & 2) {
-            qzero(d->vel);
-            qcopy(d->target, ((float *)&ents_2e3f20[d->parent].pos));
+        if (FUN_L01_002e3208(moby, sand_mouse_vars) & 2) {
+            qzero(sand_mouse_vars->vel);
+            qcopy(sand_mouse_vars->target, ((float *)&ents_2e3f20[sand_mouse_vars->parent].pos));
             moby->state = 0x14;
         }
         break;
@@ -1631,17 +1631,17 @@ void sand_mouse_update(struct Moby *moby) {
             float z;
             int r;
             mover_2e3f20.owner = 0;
-            ang = fast_arc_tan(d->target[0] - moby->pos.x, d->target[1] - moby->pos.y);
+            ang = fast_arc_tan(sand_mouse_vars->target[0] - moby->pos.x, sand_mouse_vars->target[1] - moby->pos.y);
             face_target_2e3f20(moby, ang, &mover_2e3f20.yaw_speed,
                                     frame_time_sq * 11.519173f, frame_time_sq * 3.1415927f, frame_time * 11.519173f);
             z = moby->pos.z;
-            r = step_mover_2e3f20(moby, &mover_2e3f20, d->target, d->vel);
+            r = step_mover_2e3f20(moby, &mover_2e3f20, sand_mouse_vars->target, sand_mouse_vars->vel);
             moby->pos.z = z;
             if (r & 4) {
                 if (moby->prev_seq != 0) {
                     blend_moby_animation_3830(moby, 0, 0, scale_game_frames(6));
                 }
-                ents_2e3f20[d->parent].command = 1;
+                ents_2e3f20[sand_mouse_vars->parent].command = 1;
                 moby->state = 1;
                 moby->draw_dist = 0;
             }
@@ -1651,8 +1651,8 @@ void sand_mouse_update(struct Moby *moby) {
         break;
     }
     finish_moby_2e3f20(moby, 0.3f);
-    if (d->parent != -1) {
-        *(int *)&ents_2e3f20[d->parent].collision = ents_2e3f20[d->parent].pclass->collision;
+    if (sand_mouse_vars->parent != -1) {
+        *(int *)&ents_2e3f20[sand_mouse_vars->parent].collision = ents_2e3f20[sand_mouse_vars->parent].pclass->collision;
     }
 }
 /* Burning debris: flies along its velocity leaving two smoke trails, sticks to the ground, and hurts what it hits. */
