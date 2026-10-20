@@ -583,21 +583,21 @@ void spawn_explosion(char *owner_moby, void *unused, char *pos, float fA, float 
     dist = vector_length_xyz_25e450(&effect_vector_work);
     {
     if (spray_count != 0) {
-        Q_25e450 d2;
+        Q_25e450 nearby_spray_vector;
         Q_25e450 rnd;
         int i;
         *(u128_25e450 *)&rnd = 0;
         rnd.f[0] = random_float_between_25e450(-1.0f, 1.0f);
         rnd.f[1] = random_float_between_25e450(-1.0f, 1.0f);
         rnd.f[2] = random_float_between_25e450(-1.0f, 1.0f);
-        *(u128_25e450 *)&d2 = *(u128_25e450 *)&rnd;
+        *(u128_25e450 *)&nearby_spray_vector = *(u128_25e450 *)&rnd;
         if (dist < 14.0f) {
             effect_vector_work.f[2] += dist * 0.5f;
-            normalize_vector_xyz_25e450(&d2, &d2, dist / 5.0f * frame_time_macro);
+            normalize_vector_xyz_25e450(&nearby_spray_vector, &nearby_spray_vector, dist / 5.0f * frame_time_macro);
             normalize_vector_xyz_25e450(&effect_vector_work, &effect_vector_work, (dist + dist) * frame_time_macro);
-            add_vector_xyz_25e450(&d2, &d2, &effect_vector_work);
-            func_L00_001FF548_25e450(&d2, &d2, frame_time_macro * 10.0f);
-            func_L00_002B0738_25e450(pos, &d2, random_int_between_25e450(scale_game_frames_25e450(0x3C), scale_game_frames_25e450(0x5A)), 0, 0);
+            add_vector_xyz_25e450(&nearby_spray_vector, &nearby_spray_vector, &effect_vector_work);
+            func_L00_001FF548_25e450(&nearby_spray_vector, &nearby_spray_vector, frame_time_macro * 10.0f);
+            func_L00_002B0738_25e450(pos, &nearby_spray_vector, random_int_between_25e450(scale_game_frames_25e450(0x3C), scale_game_frames_25e450(0x5A)), 0, 0);
         }
         spray_count = spray_count - 1;
         for (i = 0; i < spray_count; i++) {
@@ -648,17 +648,17 @@ void spawn_explosion(char *owner_moby, void *unused, char *pos, float fA, float 
         S6_25e450 c1 = D_L00_001E9048_25e450;
         Q_25e450 vel;
         Q_25e450 rnd;
-        int p1;
-        int p2;
+        int first_packed_color;
+        int second_packed_color;
         *(u128_25e450 *)&rnd = 0;
         rnd.f[0] = random_float_between_25e450(-1.0f, 1.0f);
         rnd.f[1] = random_float_between_25e450(-1.0f, 1.0f);
         rnd.f[2] = random_float_between_25e450(-1.0f, 1.0f);
         *(u128_25e450 *)&vel = *(u128_25e450 *)&rnd;
         normalize_vector_xyz_25e450(&vel, &vel, fF * (random_float_between_25e450(0.0f, 3.0f) * frame_time_macro));
-        p1 = func_L00_0025D140_25e450(c0.v[random_integer_below_25e450(6)], flag);
-        p2 = func_L00_0025D140_25e450(c1.v[random_integer_below_25e450(6)], flag);
-        func_L00_0026B368_25e450(pos, &vel, p1, p2,
+        first_packed_color = func_L00_0025D140_25e450(c0.v[random_integer_below_25e450(6)], flag);
+        second_packed_color = func_L00_0025D140_25e450(c1.v[random_integer_below_25e450(6)], flag);
+        func_L00_0026B368_25e450(pos, &vel, first_packed_color, second_packed_color,
             random_int_between_25e450(scale_game_frames_25e450(0x1E), scale_game_frames_25e450(0x2D)) - effect_reduction_level * 5, 200000.0f);
     }
     }
