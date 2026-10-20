@@ -22,8 +22,8 @@ s32 font_print_wrapped(s32 x, s32 y, s32 width, s32 height, u64 color, u8 *text,
     s32 j;
     s32 cx;
     s32 cy;
-    u8 *p;
-    u32 c;
+    u8 *current_text_byte;
+    u32 character_code;
     f32 start;
     f32 w;
     struct Glyph *g;
@@ -35,39 +35,39 @@ s32 font_print_wrapped(s32 x, s32 y, s32 width, s32 height, u64 color, u8 *text,
     while (i != len && text[i] != 0 && y + height >= cy + 16) {
         j = i;
         w = 0.0f;
-        p = &text[i];
+        current_text_byte = &text[i];
         start = cx;
         while (j != len && text[j] != ' ' && text[j] >= 0x10) {
             w += font[text[j]].adv;
             j++;
         }
         if ((f32)(x + width) < start + w) {
-            if (*p != ' ' && *p >= 0x10) {
+            if (*current_text_byte != ' ' && *current_text_byte >= 0x10) {
                 i--;
             }
             cx = x;
             cy += 16;
-        } else if ((u8)(*p - 8) < 8) {
+        } else if ((u8)(*current_text_byte - 8) < 8) {
             if (GlobalStateFlag != 0) {
                 color &= 0xFF000000;
-                color |= font_palette_colors[*p - 8] & 0xFFFFFF;
+                color |= font_palette_colors[*current_text_byte - 8] & 0xFFFFFF;
             }
         } else {
-            c = *p;
-            if (font[c].adv != 0) {
-                if ((u8)(c + 0x80) < 0x28) {
-                    g = (struct Glyph *)(((c + 0x40) << 2) + (s32)font);
+            character_code = *current_text_byte;
+            if (font[character_code].adv != 0) {
+                if ((u8)(character_code + 0x80) < 0x28) {
+                    g = (struct Glyph *)(((character_code + 0x40) << 2) + (s32)font);
                     draw_textured_quad(cx + g->adv, cy + g->yoff, 16, 16, g->u, g->v, 16, 16, color,
                                        extra);
                 }
-                if (*p < 0x20) {
-                    draw_textured_quad(cx, cy + font[*p].yoff, 0x18, 16, font[*p].u, font[*p].v,
+                if (*current_text_byte < 0x20) {
+                    draw_textured_quad(cx, cy + font[*current_text_byte].yoff, 0x18, 16, font[*current_text_byte].u, font[*current_text_byte].v,
                                        0x18, 16, color, extra);
-                } else if (*p > 0x20) {
-                    draw_textured_quad(cx, cy + font[*p].yoff, 16, 16, font[*p].u, font[*p].v, 16,
+                } else if (*current_text_byte > 0x20) {
+                    draw_textured_quad(cx, cy + font[*current_text_byte].yoff, 16, 16, font[*current_text_byte].u, font[*current_text_byte].v, 16,
                                        16, color, extra);
                 }
-                cx += font[*p].adv;
+                cx += font[*current_text_byte].adv;
             }
         }
         i++;
