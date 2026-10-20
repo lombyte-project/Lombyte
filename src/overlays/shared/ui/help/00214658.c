@@ -837,21 +837,21 @@ void FUN_L00_00216ec0_00216ec0(s32, s32, s32) __asm__("FUN_L00_00216ec0");
 
 void FUN_L00_00216ec0_00216ec0(s32 a, s32 b, s32 c) {
     struct Hero *base;
-    s16 *p;
-    s32 n = 0;
+    s16 *current_slot;
+    s32 slots_examined = 0;
     base = &hero;
-    p = (s16 *)(&base->unk21D8[0]);
+    current_slot = (s16 *)(&base->unk21D8[0]);
     do {
-        n = n + 1;
-        if (p[0] == 0) {
-            p[0] = 1;
-            p[3] = c;
-            p[2] = b;
-            p[1] = a;
+        slots_examined = slots_examined + 1;
+        if (current_slot[0] == 0) {
+            current_slot[0] = 1;
+            current_slot[3] = c;
+            current_slot[2] = b;
+            current_slot[1] = a;
             return;
         }
-        p = p + 4;
-    } while (n < 8);
+        current_slot = current_slot + 4;
+    } while (slots_examined < 8);
 }
 /* Ticks eight timer slots and, for each that has run out, clears a field and calls the release helper. */
 /* Ported from rac1-decomp (src/overlays/shared/help_00214D60.c: func_L00_00217698), where it is exact; names translated to the US level program. */
