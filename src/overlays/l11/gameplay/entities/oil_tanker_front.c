@@ -264,7 +264,7 @@ void FUN_L11_00315f58(char *moby, float *target_position)
 {
     char *moby_vars = *(char **)(moby + 0x78);
     float v[4];
-    float t[4];
+    float helper_scratch_buffer[4];
     float f;
     f = FUN_001fa580_c(FUN_001f9e90_c(target_position[0] - *(float *)(moby + 0x10), target_position[1] - *(float *)(moby + 0x14)), *(float *)(moby_vars + 0x24C));
     FUN_L00_0025be00_c(moby + 0x48, moby_vars + 0x250, f, frame_time_sq * 8.726646f, frame_time_sq * 8.726646f, D_6C_e[1] * 12.566371f);
@@ -274,7 +274,7 @@ void FUN_L11_00315f58(char *moby, float *target_position)
         v[0] = FUN_001f9dc8_c(*(float *)(moby + 0x48)) * 2.0f;
         v[1] = FUN_001f9de0_c(*(float *)(moby + 0x48)) * 2.0f;
         *(int *)&v[2] = 0;
-        FUN_L00_00258b50_c(moby, moby_vars + 0x180, v, t, 1.0f);
+        FUN_L00_00258b50_c(moby, moby_vars + 0x180, v, helper_scratch_buffer, 1.0f);
     }
 }
 extern short *D_L11_001AC240[];
