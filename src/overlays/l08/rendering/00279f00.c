@@ -93,21 +93,21 @@ extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern unsigned char *D_L08_001B29B4 __attribute__((section(".data")));
 
 void FUN_L08_0027fe00(u128 *pos, u128 *dir, int life, float scale) {
-    unsigned char *p;
-    unsigned char *m;
-    p = p27fe00_alloc(0x4D);
-    if (p != 0) {
-        qcopy(p + 0x10, pos);
-        m = p + 0x20;
-        *(int *)(p + 4) = 0x50504040;
-        p[9] = p27fe00_trunc(2.0f) + 0x40;
-        p[3] = 0x48;
-        p[1] = 0;
-        p[2] = *D_L08_001B29B4;
-        p[8] = 0xA0;
-        *(float *)(p + 0xC) = scale * 210000.0f;
-        *(short *)(p + 0xA) = scale_game_frames(life);
-        *(u128 *)m = *dir;
-        *(float *)(m + 0xC) = convert_integer_to_float(*(short *)(p + 0xA));
+    unsigned char *effect;
+    unsigned char *effect_data;
+    effect = p27fe00_alloc(0x4D);
+    if (effect != 0) {
+        qcopy(effect + 0x10, pos);
+        effect_data = effect + 0x20;
+        *(int *)(effect + 4) = 0x50504040;
+        effect[9] = p27fe00_trunc(2.0f) + 0x40;
+        effect[3] = 0x48;
+        effect[1] = 0;
+        effect[2] = *D_L08_001B29B4;
+        effect[8] = 0xA0;
+        *(float *)(effect + 0xC) = scale * 210000.0f;
+        *(short *)(effect + 0xA) = scale_game_frames(life);
+        *(u128 *)effect_data = *dir;
+        *(float *)(effect_data + 0xC) = convert_integer_to_float(*(short *)(effect + 0xA));
     }
 }
