@@ -643,7 +643,7 @@ extern f32 fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
 extern void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
 extern f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
 
-void FUN_L01_0030ef18(s32 n, f32 (*normals)[3], f32 (*verts)[3], s32 unused, f32 (*uv)[2]) {
+void FUN_L01_0030ef18(s32 vertex_count, f32 (*normals)[3], f32 (*verts)[3], s32 unused, f32 (*uv)[2]) {
     EnvVec eye;
     EnvVec pos;
     EnvVec refl;
@@ -651,7 +651,7 @@ void FUN_L01_0030ef18(s32 n, f32 (*normals)[3], f32 (*verts)[3], s32 unused, f32
     s32 i;
     f32 len;
 
-    for (i = 0; i < n; i++) {
+    for (i = 0; i < vertex_count; i++) {
         pos.w = 1.0f;
         pos.x = verts[i][0];
         pos.y = verts[i][1];
