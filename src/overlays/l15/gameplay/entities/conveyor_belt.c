@@ -2251,64 +2251,64 @@ extern void yaw_s(float, float) __asm__("FUN_L00_002e84b8");
 extern void zoom_s(int, float, float) __asm__("FUN_L00_002e84f0");
 
 /* Runs the aim timer while the player holds the target in view; spins the target once aimed. */
-void FUN_L15_002f88e8(char *m) {
-    char *s = *(char **)(D_L15_0015EF50 + *(short *)(m + 0x84) * 32 + 0x1C);
-    char *o = D_L15_001600EC + (*(int *)(s + 0x48) << 7);
+void FUN_L15_002f88e8(char *moby) {
+    char *slot_data = *(char **)(D_L15_0015EF50 + *(short *)(moby + 0x84) * 32 + 0x1C);
+    char *target_record = D_L15_001600EC + (*(int *)(slot_data + 0x48) << 7);
     int done;
     int hold_start_frames;
     int cone_check_delay_frames;
     int cycle_reset_frames;
     int spin_ramp_frames;
     float r;
-    float a;
-    if (FUN_L00_002e83c0(m) <= 0) {
-        *(short *)(s + 0x20) = 0;
+    float spin_angle_radians;
+    if (FUN_L00_002e83c0(moby) <= 0) {
+        *(short *)(slot_data + 0x20) = 0;
         return;
     }
-    if (FUN_L15_002f85a8(m) == 0) {
-        *(short *)(s + 0x20) = 0;
-        FUN_L00_002e8388(m);
+    if (FUN_L15_002f85a8(moby) == 0) {
+        *(short *)(slot_data + 0x20) = 0;
+        FUN_L00_002e8388(moby);
         return;
     }
     *(int *)(*(char **)(D_L15_00167400_lui + 0x70) + 0x230) = 2;
     done = 1;
-    (*(short *)(s + 0x20))++;
+    (*(short *)(slot_data + 0x20))++;
     hold_start_frames = frames_s(300);
     cone_check_delay_frames = frames_s(400);
     cycle_reset_frames = frames_s(560);
     spin_ramp_frames = frames_s(200);
     FUN_L02_002f6598(1.0f, 12.0f, 0.11f);
     if (D_0013C940_s.x != 0.0f)
-        *(short *)(s + 0x20) = hold_start_frames;
+        *(short *)(slot_data + 0x20) = hold_start_frames;
     else if (D_0013C940_s.y != 0.0f)
-        *(short *)(s + 0x20) = hold_start_frames;
-    if (*(short *)(s + 0x20) >= hold_start_frames) {
-        if (++*(int *)(s + 0x3C) >= cone_check_delay_frames && FUN_L15_002f8698(m, 30.0f, 0.0f))
-            *(short *)(s + 0x20) = cycle_reset_frames;
+        *(short *)(slot_data + 0x20) = hold_start_frames;
+    if (*(short *)(slot_data + 0x20) >= hold_start_frames) {
+        if (++*(int *)(slot_data + 0x3C) >= cone_check_delay_frames && FUN_L15_002f8698(moby, 30.0f, 0.0f))
+            *(short *)(slot_data + 0x20) = cycle_reset_frames;
         else
             done = 0;
     }
-    if (*(short *)(s + 0x20) >= cycle_reset_frames) {
+    if (*(short *)(slot_data + 0x20) >= cycle_reset_frames) {
         done = 1;
-        *(int *)(s + 0x3C) = 0;
-        *(short *)(s + 0x20) = 1;
+        *(int *)(slot_data + 0x3C) = 0;
+        *(short *)(slot_data + 0x20) = 1;
     }
-    if (spin_ramp_frames < *(short *)(s + 0x20) && *(short *)(s + 0x20) < hold_start_frames) {
-        *(int *)(s + 0x3C) = hold_start_frames;
-        *(short *)(s + 0x20) = spin_ramp_frames;
+    if (spin_ramp_frames < *(short *)(slot_data + 0x20) && *(short *)(slot_data + 0x20) < hold_start_frames) {
+        *(int *)(slot_data + 0x3C) = hold_start_frames;
+        *(short *)(slot_data + 0x20) = spin_ramp_frames;
     }
-    r = itof_s(*(short *)(s + 0x20)) / itof_s(spin_ramp_frames);
-    a = *(float *)s * DEG_TO_RAD * r;
+    r = itof_s(*(short *)(slot_data + 0x20)) / itof_s(spin_ramp_frames);
+    spin_angle_radians = *(float *)slot_data * DEG_TO_RAD * r;
     if (done)
-        FUN_L00_002e8970(o + 0x30, a, 0.0f);
-    if (*(float *)(s + 0x34) != 0.0f) {
-        pitch_s(0, *(float *)(s + 0x34), 0.003f);
+        FUN_L00_002e8970(target_record + 0x30, spin_angle_radians, 0.0f);
+    if (*(float *)(slot_data + 0x34) != 0.0f) {
+        pitch_s(0, *(float *)(slot_data + 0x34), 0.003f);
         FUN_L00_002e8620();
     }
-    if (*(float *)(s + 0x38) != 0.0f)
-        yaw_s(*(float *)(s + 0x38), 0.003f);
-    if (*(float *)(s + 0x44) != 0.0f)
-        zoom_s(0, *(float *)(s + 0x44), 0.005f);
+    if (*(float *)(slot_data + 0x38) != 0.0f)
+        yaw_s(*(float *)(slot_data + 0x38), 0.003f);
+    if (*(float *)(slot_data + 0x44) != 0.0f)
+        zoom_s(0, *(float *)(slot_data + 0x44), 0.005f);
 }
 /* Hands a vendor moby to the shop handler when the menu is idle and its slot is live. */
 
