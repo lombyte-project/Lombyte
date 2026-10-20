@@ -843,12 +843,12 @@ void FUN_L00_00239630(HudElem *hud_element) {
     unsigned char *visibility_counters = hud_element->cnt;
     HudCounter *animation_counters;
     HudCounter *g;
-    int t;
+    int unclamped_target_value;
     int max;
 
     if (hud_element->unk0C != 0) {
-        t = *hud_element->unk0C;
-        hud_element->unk78 = t > -1 ? t : 0;
+        unclamped_target_value = *hud_element->unk0C;
+        hud_element->unk78 = unclamped_target_value > -1 ? unclamped_target_value : 0;
         animation_counters = hud_element->unk80;
         animation_counters->unk0 = (animation_counters->unk0 + 1) % 60;
         animation_counters->unk2 += animation_counters->unk4;
