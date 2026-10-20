@@ -4039,14 +4039,14 @@ struct Curve {
 
 void hero_integrate_velocity(void) __asm__("FUN_L00_00214108");
 void hero_integrate_velocity(void) {
-    struct Curve *c;
+    struct Curve *velocity_curve;
     f32 z;
     Vec4 offset;
     f32 speed;
     f32 max_speed;
     s32 boost;
     s32 no_lift;
-    f32 d;
+    f32 gravity_axis_offset;
     f32 floor;
     f32 g;
 
@@ -4057,17 +4057,17 @@ void hero_integrate_velocity(void) {
             boost = hero_slot_item_id(3) == 3;
         }
         subtract_vector_xyz(&offset, hero_pos, hero_pos + 0x380);
-        d = gravity_z(&offset);
+        gravity_axis_offset = gravity_z(&offset);
         if (boost) {
-            if (2.7f < d) {
+            if (2.7f < gravity_axis_offset) {
                 max_speed *= 0.47f;
-            } else if (2.1f < d) {
+            } else if (2.1f < gravity_axis_offset) {
                 max_speed *= 0.7f;
             }
         } else {
-            if (2.1f < d) {
+            if (2.1f < gravity_axis_offset) {
                 max_speed *= 0.45f;
-            } else if (1.7f < d) {
+            } else if (1.7f < gravity_axis_offset) {
                 max_speed *= 0.7f;
             }
         }
@@ -4105,19 +4105,19 @@ void hero_integrate_velocity(void) {
                 goto tail;
             }
             if (hero.state_timer < hero.unk3D4) {
-                c = (struct Curve *)&hero.unk3D0;
-                c->frames++;
-                while (c->key == -1 || !(c->frames < scale_game_frames(c->keys[c->key].frames))) {
-                    c->key++;
-                    c->frames = 0;
-                    if (c->keys[c->key].value != -999999.0f) {
-                        c->value = c->keys[c->key].value * frame_time_sq;
+                velocity_curve = (struct Curve *)&hero.unk3D0;
+                velocity_curve->frames++;
+                while (velocity_curve->key == -1 || !(velocity_curve->frames < scale_game_frames(velocity_curve->keys[velocity_curve->key].frames))) {
+                    velocity_curve->key++;
+                    velocity_curve->frames = 0;
+                    if (velocity_curve->keys[velocity_curve->key].value != -999999.0f) {
+                        velocity_curve->value = velocity_curve->keys[velocity_curve->key].value * frame_time_sq;
                     }
                 }
-                if (c->frames > 0) {
-                    c->value += c->keys[c->key].delta * frame_time_sq;
+                if (velocity_curve->frames > 0) {
+                    velocity_curve->value += velocity_curve->keys[velocity_curve->key].delta * frame_time_sq;
                 }
-                FUN_L00_00233810(&hero_velocity, &hero_velocity, c->value);
+                FUN_L00_00233810(&hero_velocity, &hero_velocity, velocity_curve->value);
             }
         }
     }
