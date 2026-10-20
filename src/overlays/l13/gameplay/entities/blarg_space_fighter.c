@@ -182,13 +182,13 @@ void FUN_L13_002c1528(Moby_2C27B0 *rocket_moby) {
     }
     if (rocket_data->target != 0 && rocket_data->target->state != 0xFE && rocket_data->target->state != 0xFD
         && distance_xyz(&rocket_data->tpos, &rocket_data->target->pos) < 3.0f) {
-        Hero_2C27B0 *h = (Hero_2C27B0 *)(D_0013F350);
-        if (h->veh != 0 && h->veh->cls_id == 0x45 && rocket_data->owner->state != 5) {
-            Veh_2C27B0 *vd = h->veh->data;
-            float vehicle_lead_yaw = fast_add_rotations_c(h->veh->rot.z, vd->f90);
-            float b = fast_add_rotations_c(h->veh->rot.y, vd->f94);
-            build_spherical_offset_c(&scratch_vector, distance_xyz(&rocket_moby->pos, &h->veh->pos) / (rocket_data->speed + 24.0f) * vd->f64, vehicle_lead_yaw, -b);
-            add_vector_xyz(&scratch_vector, &scratch_vector, &h->veh->pos);
+        Hero_2C27B0 *hero_state = (Hero_2C27B0 *)(D_0013F350);
+        if (hero_state->veh != 0 && hero_state->veh->cls_id == 0x45 && rocket_data->owner->state != 5) {
+            Veh_2C27B0 *vd = hero_state->veh->data;
+            float vehicle_lead_yaw = fast_add_rotations_c(hero_state->veh->rot.z, vd->f90);
+            float b = fast_add_rotations_c(hero_state->veh->rot.y, vd->f94);
+            build_spherical_offset_c(&scratch_vector, distance_xyz(&rocket_moby->pos, &hero_state->veh->pos) / (rocket_data->speed + 24.0f) * vd->f64, vehicle_lead_yaw, -b);
+            add_vector_xyz(&scratch_vector, &scratch_vector, &hero_state->veh->pos);
             yaw = fast_arc_tan(scratch_vector.x - rocket_moby->pos.x, scratch_vector.y - rocket_moby->pos.y);
             pitch = -fast_arc_tan(vector_distance(&rocket_moby->pos, &scratch_vector), scratch_vector.z - rocket_moby->pos.z);
         } else {
