@@ -859,7 +859,7 @@ extern void FUN_L00_0026a9f0(void *, void *, int, int, int, int, int, int, float
 extern void spawn_glow_particle(void *, void *, void *, float, int, int, int, int, int) __asm__("FUN_L00_002ac910");
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 
-void FUN_L16_002d41f8(void *m) {
+void FUN_L16_002d41f8(void *moby) {
     float delta[4], velocity[4], position[4];
     L16ParticleChoices first, second;
     float distance, range, delay;
@@ -867,7 +867,7 @@ void FUN_L16_002d41f8(void *m) {
     void *origin;
     float *joint = position;
     void *movement;
-    moby_point_position(m, 2, joint);
+    moby_point_position(moby, 2, joint);
     subtract_vector_xyz(delta, D_L16_001671C0, joint);
     clear_u64_value(velocity);
     distance = vector_length_xyz(delta);
@@ -884,13 +884,13 @@ void FUN_L16_002d41f8(void *m) {
         int remaining = count;
         do {
             float sample;
-            int *a, *b, duration1, duration2;
+            int *first_choice, *b, duration1, duration2;
             remaining--;
             sample = random_float_between_alt(8.0f, 10.0f);
             first = D_L16_001E8300;
             second = D_L16_001E8318;
             delay = sample * frame_time - range * frame_time;
-            a = &first.values[random_integer_below(6)];
+            first_choice = &first.values[random_integer_below(6)];
             b = &second.values[random_integer_below(6)];
             {
                 int lo = scale_game_frames(15), hi = scale_game_frames(20);
@@ -900,17 +900,17 @@ void FUN_L16_002d41f8(void *m) {
                 int lo = scale_game_frames(25), hi = scale_game_frames(30);
                 duration2 = random_int_between(lo, hi);
             }
-            FUN_L00_0026a9f0(origin, movement, *a, *b, duration1, duration2, 0, 0, 400000.0f,
+            FUN_L00_0026a9f0(origin, movement, *first_choice, *b, duration1, duration2, 0, 0, 400000.0f,
                              delay);
         } while (remaining != 0);
     }
     if (D_L16_0015F5D0 < 0.95f && distance > 9.0f) {
-        spawn_glow_particle(m, origin, movement, 4.0f, scale_game_frames(15), 127, 127, 127, 32);
-        spawn_glow_particle(m, origin, movement, 4.0f, scale_game_frames(24), 127, 32, 0, 32);
+        spawn_glow_particle(moby, origin, movement, 4.0f, scale_game_frames(15), 127, 127, 127, 32);
+        spawn_glow_particle(moby, origin, movement, 4.0f, scale_game_frames(24), 127, 32, 0, 32);
     }
-    spawn_glow_particle(m, origin, movement, 4.0f, scale_game_frames(20), 127, 64, 0, 48);
-    spawn_glow_particle(m, origin, movement, 3.5f, scale_game_frames(27), 96, 16, 0, 64);
-    spawn_glow_particle(m, origin, movement, 3.0f, scale_game_frames(29), 32, 0, 0, 32);
+    spawn_glow_particle(moby, origin, movement, 4.0f, scale_game_frames(20), 127, 64, 0, 48);
+    spawn_glow_particle(moby, origin, movement, 3.5f, scale_game_frames(27), 96, 16, 0, 64);
+    spawn_glow_particle(moby, origin, movement, 3.0f, scale_game_frames(29), 32, 0, 0, 32);
 }
 /* Aim paired joints toward the owner or player, then smooth their rotations. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A1B58.c: func_L16_002D5958), where it is exact; names translated to the US level program. */
