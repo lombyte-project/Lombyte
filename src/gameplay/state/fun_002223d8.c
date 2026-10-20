@@ -1,7 +1,7 @@
-int FUN_002223d8(int *p) {
-    p[0x10] = 0;
-    p[0x14] = 0;
-    p[0xF] = 0;
+int FUN_002223d8(int *destination) {
+    destination[0x10] = 0;
+    destination[0x14] = 0;
+    destination[0xF] = 0;
     return 0;
 }
 
