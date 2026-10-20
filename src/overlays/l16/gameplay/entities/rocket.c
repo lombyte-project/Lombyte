@@ -95,21 +95,21 @@ s32 random_integer_below(s32 arg0) __asm__("FUN_00213260");
 
 void FUN_L16_002c9568(struct Moby *moby) {
     char *data = (char *)moby->pvars;
-    float *f = (float *)data;
-    int *p;
+    float *random_value_cursor = (float *)data;
+    int *frame_count_cursor;
     int i;
     int arg;
-    for (i = 3; i >= 0; i--, f++) {
-        *f = (float)random_integer_below(0xFF);
+    for (i = 3; i >= 0; i--, random_value_cursor++) {
+        *random_value_cursor = (float)random_integer_below(0xFF);
     }
-    p = (int *)(data + 0x20);
+    frame_count_cursor = (int *)(data + 0x20);
     *(float *)(data + 0x10) = -1.0f;
     *(float *)(data + 0x14) = -2.25f;
     *(float *)(data + 0x18) = 1.25f;
     *(float *)(data + 0x1C) = 2.5f;
     arg = 0x3F;
-    for (i = 3; i >= 0; i--, p++) {
-        *p = scale_game_frames(arg);
+    for (i = 3; i >= 0; i--, frame_count_cursor++) {
+        *frame_count_cursor = scale_game_frames(arg);
         arg += 0x40;
     }
     *(float *)(data + 0x30) = 3.5f;
