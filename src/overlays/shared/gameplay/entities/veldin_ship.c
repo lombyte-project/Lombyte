@@ -2374,8 +2374,8 @@ void horny_toad_update(Moby *moby) {
     }
     case HORNY_TOAD_ROAM:
         if (moby->prev_seq != 4) {
-            int n = random_int_between(0, 5);
-            if (moby->prev_seq != 4) FUN_00212f90_2d4610(moby, 4, n, scale_game_frames(10));
+            int animation_start_index = random_int_between(0, 5);
+            if (moby->prev_seq != 4) FUN_00212f90_2d4610(moby, 4, animation_start_index, scale_game_frames(10));
             moby->anim_speed = random_float_between(0.92f, 1.08f);
         }
         FUN_L00_00261630_2d4610((char *)moby, (char *)data->unk240, 0.5f, 0.5f);
