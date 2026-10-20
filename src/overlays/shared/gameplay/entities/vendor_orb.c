@@ -1034,8 +1034,8 @@ extern void FUN_L00_002e2c88(int, int, void *, int, int, int);
 extern void FUN_L00_002e3388_c(int, int) __asm__("FUN_L00_002e3388");
 extern void vu1_add_g_sregister(s32, u64) __asm__("func_00233980");
 
-void FUN_L00_002e2af0(char *m) {
-    int *d = *(int **)(m + 0x78);
+void FUN_L00_002e2af0(char *moby) {
+    int *moby_data = *(int **)(moby + 0x78);
     int i;
     vu1_add_g_sregister(0x47, 0x51001);
     for (i = 0; i < 3; i++) {
@@ -1049,8 +1049,8 @@ void FUN_L00_002e2af0(char *m) {
         D_L00_00161C78_f[i] = scroll;
         if (scroll <= -8.0f) D_L00_00161C78_f[i] = scroll + 8.0f;
         FUN_L00_002e3388_c(D_L00_00161C88_c2[i], i);
-        texture_id = d[1] + 0x28;
-        glow_texture_id = d[0] + 0x28;
+        texture_id = moby_data[1] + 0x28;
+        glow_texture_id = moby_data[0] + 0x28;
         FUN_L00_002e2c88(texture_id, glow_texture_id, &D_L00_001E6E40[pane], 0x80, 0x40, i);
         FUN_L00_002e2c88(texture_id, glow_texture_id, &D_L00_001E6E40[next_pane], 0x30, 0x10, i);
     }
