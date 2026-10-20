@@ -51,7 +51,7 @@ s32 draw_missions_menu2(struct MissionsMenu *menu) {
     s32 h;
     s32 bit;
     s32 y;
-    u32 *p;
+    u32 *mission_id_cursor;
 
     off = 0x18;
     i = 0;
@@ -62,7 +62,7 @@ s32 draw_missions_menu2(struct MissionsMenu *menu) {
     vu1_add_g_sregister(0x47, 0x10B);
     font_print_large(4, 4, 0x80FFA888, get_help_message_text(0x4F59), -1);
     if (i < count) {
-        p = (u32 *)0x70000000;
+        mission_id_cursor = (u32 *)0x70000000;
         do {
             y = off + 0xA;
             flag = menu->sel[level_map_selection.level] == i;
@@ -71,7 +71,7 @@ s32 draw_missions_menu2(struct MissionsMenu *menu) {
                 disable_global_flag();
             }
             h = font_print_wrapped_small(0x10, off, menu->unk20 - 0x11, 0x3E8, col,
-                                         get_help_message_text(*p), -1);
+                                         get_help_message_text(*mission_id_cursor), -1);
             if (flag) {
                 enable_global_flag();
             }
@@ -82,7 +82,7 @@ s32 draw_missions_menu2(struct MissionsMenu *menu) {
             bit = (mask >> i) & 1;
             i++;
             draw_menu_selection_marker(9, y, bit);
-            p++;
+            mission_id_cursor++;
             off += step * 16;
         } while (i < count);
     }
