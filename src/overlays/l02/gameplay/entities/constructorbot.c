@@ -34,53 +34,53 @@ extern void rand_vec(void *, f32, f32) __asm__("FUN_L00_00257d78");
 
 /* Shard debris update: drifts along its velocity, sheds particle trails and expires when its timer runs out. */
 void FUN_L02_002ebf20(struct Moby *m);
-void FUN_L02_002ebf20(struct Moby *m) {
+void FUN_L02_002ebf20(struct Moby *moby) {
     enum {
         SHARD_STATE_REMOVE = 0,
         SHARD_STATE_ACTIVE = 1
     };
-    ShardVars *v = (ShardVars *)m->pvars;
-    Vec4f p, back, half, jit;
-    u8 *q;
+    ShardVars *v = (ShardVars *)moby->pvars;
+    Vec4f trail_position, back, half, jit;
+    u8 *particle;
     s32 i;
 
-    switch (m->state) {
+    switch (moby->state) {
     case SHARD_STATE_REMOVE:
-        mark_moby_for_removal(m);
+        mark_moby_for_removal(moby);
         return;
     case SHARD_STATE_ACTIVE:
         break;
     default:
         return;
     }
-    vec_add(&m->pos, &m->pos, &v->vel);
+    vec_add(&moby->pos, &moby->pos, &v->vel);
     approach_value(&v->vel.z, 0.0f, D_L02_00161F58 * frame_time_sq);
-    m->rot.y = 1.5707964f - angle_atan2(vec_len_xy(&v->vel), v->vel.z);
-    qcopy(&p, &m->pos);
+    moby->rot.y = 1.5707964f - angle_atan2(vec_len_xy(&v->vel), v->vel.z);
+    qcopy(&trail_position, &moby->pos);
     vec_scale(&half, &v->vel, 0.5f);
     vec_scale(&back, &v->vel, -0.1f);
     for (i = 1; i >= 0; i--) {
         s32 t = scale_frames(float_to_int(rand_range(20.0f, 60.0f)));
-        q = spawn_particle(&p, &back, t, D_L02_00161F5C >> 24, D_L02_00161F5C & 0xFFFFFF, 3,
+        particle = spawn_particle(&trail_position, &back, t, D_L02_00161F5C >> 24, D_L02_00161F5C & 0xFFFFFF, 3,
                                  rand_range(300000.0f, 500000.0f), 10000.0f, 1.0f, -0.0002f, 0.0f);
-        if (q) {
-            q[2] = *D_L02_001B2680.tint;
-            q[9] = float_to_int(4.0f) - 0x80;
+        if (particle) {
+            particle[2] = *D_L02_001B2680.tint;
+            particle[9] = float_to_int(4.0f) - 0x80;
         }
-        vec_add(&p, &p, &half);
+        vec_add(&trail_position, &trail_position, &half);
         rand_vec(&jit, 0.5f, 1.5f);
-        vec_add(&p, &p, &jit);
+        vec_add(&trail_position, &trail_position, &jit);
     }
-    q = spawn_particle(&m->pos, &back, scale_frames(6), D_L02_00161F60 >> 24, D_L02_00161F5C & 0xFFFFFF, 3,
+    particle = spawn_particle(&moby->pos, &back, scale_frames(6), D_L02_00161F60 >> 24, D_L02_00161F5C & 0xFFFFFF, 3,
                              250000.0f, 5000.0f, 1.0f, -0.0004f, 0.0f);
-    if (q)
-        q[9] = float_to_int(4.0f) - 0x80;
-    if (m->visible == 0)
+    if (particle)
+        particle[9] = float_to_int(4.0f) - 0x80;
+    if (moby->visible == 0)
         count_down(&v->timer);
     else
         v->timer = scale_frames(60);
     if (v->timer == 0)
-        mark_moby_for_removal(m);
+        mark_moby_for_removal(moby);
 }
 #include "qcopy.h"
 extern char *create_moby_c(int) __asm__("FUN_0020c4f8");
