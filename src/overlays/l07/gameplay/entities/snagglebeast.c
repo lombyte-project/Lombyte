@@ -725,8 +725,15 @@ void snagglebeast_update(unsigned char *moby) __asm__("FUN_L07_00314150");
 void snagglebeast_update(unsigned char *moby) {
     enum {
         SNAGGLEBEAST_INITIALIZE = 0,
+        SNAGGLEBEAST_IDLE = 1,
         SNAGGLEBEAST_TURN_TOWARD_TARGET = 7,
+        SNAGGLEBEAST_ROPE_ATTACK = 9,
         SNAGGLEBEAST_DEATH_EXPLOSION = 10
+    };
+    enum {
+        SNAGGLEBEAST_ROPE_EXTEND = 3,
+        SNAGGLEBEAST_ROPE_RETRACT = 4,
+        SNAGGLEBEAST_ROPE_RETURN_TO_IDLE = 5
     };
     Vec4 oldpos;
     ChaserSight sight;
@@ -938,7 +945,7 @@ void snagglebeast_update(unsigned char *moby) {
         data[0x58] = truncate_float_to_s32(30.0f);
         data[0x5A] = truncate_float_to_s32(40.0f);
         break;
-    case 1:
+    case SNAGGLEBEAST_IDLE:
         if (moby[0x70] & 2) {
             if (moby[0x53] != (FUN_001160d8() & 1)) {
                 int r1 = FUN_001160d8() & 1;
@@ -1622,7 +1629,7 @@ void snagglebeast_update(unsigned char *moby) {
         }
         break;
     }
-    case 9:
+    case SNAGGLEBEAST_ROPE_ATTACK:
         if (*(int *)(data + 0x164) <= 0) {
             if (FUN_L07_00313de8(moby, data, (float *)(data + 0x150), 7, 1)) break;
         }
@@ -1666,7 +1673,7 @@ void snagglebeast_update(unsigned char *moby) {
                 *(int *)(data + 0x11C) = 0;
             }
             break;
-        case 3: {
+        case SNAGGLEBEAST_ROPE_EXTEND: {
             float r = vector_distance(moby + 0x10, &sight.position30);
             *(float *)(data + 0x16C) += frame_scale;
             if (r <= *(float *)(data + 0x16C)) *(int *)(data + 0x164) = 4;
@@ -1674,7 +1681,7 @@ void snagglebeast_update(unsigned char *moby) {
             enqueue_callback_list_1(FUN_L07_003131b0, moby);
             break;
         }
-        case 4:
+        case SNAGGLEBEAST_ROPE_RETRACT:
             subtract_vector_xyz(&position, data + 0x120, data + 0x110);
             normalize_vector_xyz(&position, &position, frame_scale);
             add_vector_xyz(data + 0x110, data + 0x110, &position);
@@ -1684,7 +1691,7 @@ void snagglebeast_update(unsigned char *moby) {
             }
             enqueue_callback_list_1(FUN_L07_003131b0, moby);
             break;
-        case 5:
+        case SNAGGLEBEAST_ROPE_RETURN_TO_IDLE:
             *(float *)(moby + 0x58) = 1.0f;
             *(int *)(data + 0x164) = 0;
             *(int *)(data + 0x160) = 0;
