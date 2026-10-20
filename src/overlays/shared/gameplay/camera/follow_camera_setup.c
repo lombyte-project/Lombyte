@@ -1190,7 +1190,7 @@ void make_hit_descriptor(void *, void *, s32, void *, f32) __asm__("FUN_L00_0025
 void FUN_L00_00259a88(s32, void *);
 void init_camera_system(void) __asm__("FUN_L00_001ed280");
 
-#define AF_2e7d20(o) (*(f32 *)(a + (o)))
+#define AF_2e7d20(o) (*(f32 *)(orbit_state + (o)))
 #define BF_2e7d20(o) (*(f32 *)(b + (o)))
 #define BH_2e7d20(o) (*(s16 *)(b + (o)))
 #define BI_2e7d20(o) (*(s32 *)(b + (o)))
@@ -1203,7 +1203,7 @@ void follow_camera_avoid_mobies(u8 *camera_moby) {
     V_2e7d20 probe_center, moby_offset_or_camera_endpoint, v20, planar_moby_direction, orbit_side_direction;
     W_2e7d20 w;
     u8 *x;
-    u8 *a;
+    u8 *orbit_state;
     u8 *b;
     s32 hit, cnt, any;
     s32 j;
@@ -1220,7 +1220,7 @@ void follow_camera_avoid_mobies(u8 *camera_moby) {
 
     base = D_L00_00166E10_2e7d20;
     x = *(u8 **)(camera_moby + 0x70);
-    a = x + 0x130;
+    orbit_state = x + 0x130;
     b = x + 0x1D0;
     hit = 0;
     cnt = 0;
@@ -1253,15 +1253,15 @@ void follow_camera_avoid_mobies(u8 *camera_moby) {
             FUN_001f9a68_2e7d20(&v20, base + 0x30, FUN_001f9ab0_2e7d20(base + 0x30, &moby_offset_or_camera_endpoint));
             FUN_001f9a28_2e7d20(&planar_moby_direction, &moby_offset_or_camera_endpoint, &v20);
             FUN_001f9bf8_2e7d20(&planar_moby_direction, &planar_moby_direction, 1.0f);
-            f = FUN_001f9ab0_2e7d20(&planar_moby_direction, a);
+            f = FUN_001f9ab0_2e7d20(&planar_moby_direction, orbit_state);
             f = fast_arc_sin(f / (AF_2e7d20(0x2C) - BF_2e7d20(0x30)));
             if (FUN_001f99c0_2e7d20(1.5707964f - f) < 0.43633232f) {
-                fast_vec_cross(&orbit_side_direction, a, base + 0x30);
+                fast_vec_cross(&orbit_side_direction, orbit_state, base + 0x30);
                 FUN_001f9bf8_2e7d20(&orbit_side_direction, &orbit_side_direction, 1.0f);
                 if (0.0f < FUN_001f9ab0_2e7d20(&orbit_side_direction, &moby_offset_or_camera_endpoint)) {
-                    build_look_at_matrix(a, a, base + 0x20, -0.017453292f);
+                    build_look_at_matrix(orbit_state, orbit_state, base + 0x20, -0.017453292f);
                 } else {
-                    build_look_at_matrix(a, a, base + 0x20, 0.017453292f);
+                    build_look_at_matrix(orbit_state, orbit_state, base + 0x20, 0.017453292f);
                 }
             }
         next:
@@ -1315,8 +1315,8 @@ slow:
         BH_2e7d20(0x34) = FUN_001f96f8_2e7d20(2000);
     }
 move:
-    FUN_001f9bf8_2e7d20(a, a, AF_2e7d20(0x2C) - BF_2e7d20(0x30));
-    FUN_001f9a10_2e7d20(&moby_offset_or_camera_endpoint, a, (x + 0x90));
+    FUN_001f9bf8_2e7d20(orbit_state, orbit_state, AF_2e7d20(0x2C) - BF_2e7d20(0x30));
+    FUN_001f9a10_2e7d20(&moby_offset_or_camera_endpoint, orbit_state, (x + 0x90));
     if (D_0013F350_2e7d20.i2084 == 0x7F) {
         goto clear;
     }
