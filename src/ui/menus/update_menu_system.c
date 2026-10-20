@@ -43,7 +43,7 @@ void update_menu_system(void) {
     s32 flag;
     struct MenuScreen *obj;
     struct MenuScreen **objs;
-    struct MenuScreen *m;
+    struct MenuScreen *focused_screen;
 
     menu_system.update_count = menu_system.update_count + 1;
     reset_active_camera_position_and_basis();
@@ -110,8 +110,8 @@ void update_menu_system(void) {
                 menu_system.next->screens[j]->moby = (s32)panel_slots[j];
             }
             if (flag) {
-                s32 n = menu_system.current->moby_anims[j];
-                set_moby_animation(panel_slots[j], n, ((struct Ent *)panel_slots[j])->unk24->unk48[n]->unk10 - 1);
+                s32 current_animation_index = menu_system.current->moby_anims[j];
+                set_moby_animation(panel_slots[j], current_animation_index, ((struct Ent *)panel_slots[j])->unk24->unk48[current_animation_index]->unk10 - 1);
                 ((struct Ent *)panel_slots[j])->unk58 = -1.0f;
             } else {
                 set_moby_animation(panel_slots[j], menu_system.next->moby_anims[j], 0);
@@ -133,15 +133,15 @@ void update_menu_system(void) {
             }
         }
         if (menu_system.current != 0 && menu_system.current->pending_focus != 0) {
-            m = menu_system.current->focus;
-            if (m->leave != 0) {
-                m->leave(m, 1);
+            focused_screen = menu_system.current->focus;
+            if (focused_screen->leave != 0) {
+                focused_screen->leave(focused_screen, 1);
             }
             menu_system.current->focus = menu_system.current->pending_focus;
             menu_system.current->pending_focus = 0;
-            m = menu_system.current->focus;
-            if (m->enter != 0) {
-                m->enter(m, 1);
+            focused_screen = menu_system.current->focus;
+            if (focused_screen->enter != 0) {
+                focused_screen->enter(focused_screen, 1);
             }
         }
     }
