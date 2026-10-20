@@ -3722,7 +3722,7 @@ extern s32 FUN_L00_0020d498_4198(s32) __asm__("FUN_L00_0020d498");
 extern void FUN_0020c828_4198(void *) __asm__("FUN_0020c828");
 extern void FUN_L00_002b3c50_4198(void *) __asm__("FUN_L00_002b3c50");
 
-void FUN_L00_002b4198(void *p) {
+void FUN_L00_002b4198(void *moby) {
     enum {
         STATE_INITIALIZE = 0,
         STATE_WAIT_FOR_BEAM = 1,
@@ -3730,14 +3730,14 @@ void FUN_L00_002b4198(void *p) {
         STATE_BEAM_ACTIVE = 3,
         STATE_BEAM_SHRINK = 4
     };
-    O_4198 *o = (O_4198 *)p;
-    V_4198 *v = o->v;
+    O_4198 *beam_moby = (O_4198 *)moby;
+    V_4198 *v = beam_moby->v;
     s32 flag = 0;
     s32 st;
     s32 lim;
 
     if (hero.items[3].item_id == 3) {
-        if (o->state == 1 || o->state == 3) {
+        if (beam_moby->state == 1 || beam_moby->state == 3) {
             st = hero.state.current;
             if ((u32)(st - 0xB) < 4 ||
                 (st == 0x1C && ((u8 *)((void *)hero.moby))[0x52] == ((u8 *)((void *)hero.moby))[0x53] &&
@@ -3761,18 +3761,18 @@ void FUN_L00_002b4198(void *p) {
             }
         }
     }
-    switch (o->state) {
+    switch (beam_moby->state) {
     case STATE_INITIALIZE:
-        o->f18 += 0.5f;
-        o->state = 1;
-        o->u30 = 0xFF;
-        o->u34 |= 1;
+        beam_moby->f18 += 0.5f;
+        beam_moby->state = 1;
+        beam_moby->u30 = 0xFF;
+        beam_moby->u34 |= 1;
         break;
     case STATE_WAIT_FOR_BEAM:
         if (FUN_L00_0020d498_4198(3) != 3) {
-            FUN_0020c828_4198(o);
+            FUN_0020c828_4198(beam_moby);
         } else if (flag != 0) {
-            o->state = 2;
+            beam_moby->state = 2;
             v->i0 = FUN_001f96f8_4198(2);
             v->f30 = 0.0125f / FUN_001f96f8_4198(2);
             v->f34 = 0.2f / FUN_001f96f8_4198(2);
@@ -3790,9 +3790,9 @@ void FUN_L00_002b4198(void *p) {
         v->f28 += v->f38;
         v->f2C += v->f3C;
         v->i8 = ((s32)hero.items[3].moby);
-        FUN_001f4600_4198(FUN_L00_002b3628_4198, o);
+        FUN_001f4600_4198(FUN_L00_002b3628_4198, beam_moby);
         if (FUN_001f9740_4198(v) != 0) {
-            o->state = 3;
+            beam_moby->state = 3;
             v->f20 = 0.0125f;
             v->f24 = 0.2f;
             v->f28 = 0.05f;
@@ -3802,9 +3802,9 @@ void FUN_L00_002b4198(void *p) {
         break;
     case STATE_BEAM_ACTIVE:
         v->i8 = ((s32)hero.items[3].moby);
-        FUN_001f4600_4198(FUN_L00_002b3628_4198, o);
+        FUN_001f4600_4198(FUN_L00_002b3628_4198, beam_moby);
         if (flag == 0) {
-            o->state = 4;
+            beam_moby->state = 4;
             v->i0 = FUN_001f96f8_4198(8);
             v->f30 = 0.0125f / FUN_001f96f8_4198(8);
             v->f34 = 0.2f / FUN_001f96f8_4198(8);
@@ -3812,19 +3812,19 @@ void FUN_L00_002b4198(void *p) {
             v->f3C = 0.025f / FUN_001f96f8_4198(8);
         } else {
             v->f20 = 0.0125f;
-            FUN_L00_002b3c50_4198(o);
+            FUN_L00_002b3c50_4198(beam_moby);
         }
         break;
     case STATE_BEAM_SHRINK:
         if (FUN_001f9740_4198(v) != 0) {
-            o->state = 1;
+            beam_moby->state = 1;
         } else {
             v->f20 -= v->f30;
             v->f24 -= v->f34;
             v->f28 -= v->f38;
             v->f2C -= v->f3C;
             v->i8 = ((s32)hero.items[3].moby);
-            FUN_001f4600_4198(FUN_L00_002b3628_4198, o);
+            FUN_001f4600_4198(FUN_L00_002b3628_4198, beam_moby);
         }
         break;
     }
