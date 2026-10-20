@@ -650,7 +650,7 @@ void FUN_L11_0030e088(struct Moby *m) {
     };
     int *pv = (int *)m->pvars;
     int i;
-    float f;
+    float tile_query_has_result;
 
     switch (m->state) {
     case WATER_TILE_STATE_INITIALIZE:
@@ -748,11 +748,11 @@ void FUN_L11_0030e088(struct Moby *m) {
         break;
     }
     if (pv[1] >= 0) {
-        f = 0.0f;
+        tile_query_has_result = 0.0f;
         if (FUN_L01_00275690(64.0f, m) != -1) {
-            f = 1.0f;
+            tile_query_has_result = 1.0f;
         }
-        if (f == 0.0f) {
+        if (tile_query_has_result == 0.0f) {
             D_L11_001DA880[pv[1]].unk1E = 0;
         } else {
             D_L11_001DA880[pv[1]].unk1E = 0xFFFF;
