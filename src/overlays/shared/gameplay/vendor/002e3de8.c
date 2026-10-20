@@ -30,7 +30,7 @@ void FUN_L10_002e3de8(char *moby) {
     float offset_angle_radians = random_angle_radians();
     float b = random_float_between_alt(0.0f, *(float *)&D_L10_00161E70);
     float particle_scale = random_float_between_alt(0.0f, *(float *)&D_L10_00161E60);
-    float d = random_float_between_alt(*(float *)&D_L10_00161E60, *(float *)&D_L10_00161E64);
+    float random_particle_value = random_float_between_alt(*(float *)&D_L10_00161E60, *(float *)&D_L10_00161E64);
     int random_divisor = random_int_between(*(int *)&D_L10_00161E68, *(int *)&D_L10_00161E6C);
     v[0] = fast_cos(offset_angle_radians) * b;
     v[1] = fast_sin(offset_angle_radians) * b;
@@ -39,7 +39,7 @@ void FUN_L10_002e3de8(char *moby) {
     v[2] = v[2] + 0.025f;
     g = *(int *)&D_L10_00161E58;
     h = *(int *)&D_L10_00161E5C;
-    FUN_L01_00287158(v, particle_scale, d, g, h, random_divisor);
+    FUN_L01_00287158(v, particle_scale, random_particle_value, g, h, random_divisor);
 }
 
 #define NOT_SDA
