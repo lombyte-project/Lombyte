@@ -2944,18 +2944,18 @@ extern float D_L16_001E34A0[];
 extern float D_L16_001E3828[];
 float *D_L16_00162018[4] __attribute__((section(".sdata"))) = {D_L16_001E2DB0, D_L16_001E34A0, D_L16_001E3828, 0};
 extern L16SingleSphere_2ea128 D_L16_001E5390[] __attribute__((section(".data")));
-void FUN_L16_002ea128(unsigned char *m) {
+void FUN_L16_002ea128(unsigned char *moby) {
     enum {
         MESH_RENDER_INITIALIZE_BOUNDING_SPHERES = 0,
         MESH_RENDER_QUEUE_CALLBACK = 1
     };
     int i, j;
     float maxx, maxy, maxz, minx, miny, minz;
-    float p[4];
+    float vertex_position[4];
     float *out;
     float *verts;
     int count;
-    switch (m[0x20]) {
+    switch (moby[0x20]) {
     case MESH_RENDER_INITIALIZE_BOUNDING_SPHERES: {
         for (i = 0; i <= 2; i++) {
             maxx = maxy = maxz = -1024.0f;
@@ -2993,20 +2993,20 @@ void FUN_L16_002ea128(unsigned char *m) {
             for (j = 0; j < D_L16_00162008[i]; j++) {
                 float dist;
                 out = (float *)(D_L16_001E5390 + i);
-                p[0] = ((float **)D_L16_00162018)[i][j * 3 + 0];
-                p[1] = ((float **)D_L16_00162018)[i][j * 3 + 1];
-                p[2] = ((float **)D_L16_00162018)[i][j * 3 + 2];
-                dist = FUN_001f9b48(p, out);
+                vertex_position[0] = ((float **)D_L16_00162018)[i][j * 3 + 0];
+                vertex_position[1] = ((float **)D_L16_00162018)[i][j * 3 + 1];
+                vertex_position[2] = ((float **)D_L16_00162018)[i][j * 3 + 2];
+                dist = FUN_001f9b48(vertex_position, out);
                 if (dist > out[3])
                     out[3] = dist;
             }
         }
-        m[0x20] = 1;
-        m[0x30] = *(unsigned short *)(m + 0x32) = 255;
+        moby[0x20] = 1;
+        moby[0x30] = *(unsigned short *)(moby + 0x32) = 255;
         break;
     }
     case MESH_RENDER_QUEUE_CALLBACK:
-        enqueue_callback_list_1_2ea128(FUN_L16_002e8d40, m);
+        enqueue_callback_list_1_2ea128(FUN_L16_002e8d40, moby);
         break;
     }
 }
