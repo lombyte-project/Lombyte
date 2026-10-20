@@ -2390,32 +2390,32 @@ extern void rotation_matrix(void *, void *) __asm__("FUN_001fa050");
 extern void mmul_2a9c50(void *, void *, void *) __asm__("FUN_001fa378");
 extern s64 get_effect_texture(s32) __asm__("FUN_001f44b8");
 extern void draw_geometry_quad(void *, void *, s32) __asm__("FUN_001f7d30");
-void FUN_L00_002a9c50(M_2a9c50 *m) {
+void FUN_L00_002a9c50(M_2a9c50 *moby) {
     Q_2a9c50 quad;
     V_2a9c50 mat[4];
     V_2a9c50 mz[4];
     V_2a9c50 rot;
-    PV_2a9c50 *pv = m->pv;
+    PV_2a9c50 *pv = moby->pv;
     s32 i;
     s32 odd;
-    f32 a, t;
+    f32 direction_inclination, t;
     if (D_L00_0015F5C4 == 2) {
         return;
     }
     for (i = 0; i < 2; i++) {
         odd = i & 1;
-        a = angle_atan2(seg_sqrt(pv->f20 * pv->f20 + pv->f28 * pv->f28), pv->f24);
-        rot.f[0] = appr_2a9c50(-a, 1.57079637f);
+        direction_inclination = angle_atan2(seg_sqrt(pv->f20 * pv->f20 + pv->f28 * pv->f28), pv->f24);
+        rot.f[0] = appr_2a9c50(-direction_inclination, 1.57079637f);
         rot.f[1] = angle_atan2(pv->f28, pv->f20);
         rot.f[2] = 0.0f;
         rot.f[3] = 0.0f;
         spin_angles_x = 0.0f;
         t = convert_integer_to_float(D_L00_0015F5CC % scale_game_frames(180));
         {
-            f32 d = scale_time(180.0f);
+            f32 spin_period = scale_time(180.0f);
             f32 r;
             t *= 6.28318548f;
-            r = fast_normalize_angle(t / d);
+            r = fast_normalize_angle(t / spin_period);
             if (odd) {
                 r = -r;
             }
