@@ -1824,7 +1824,7 @@ extern void FUN_L00_002715e8(void *, int, int, float, float);
 int FUN_L09_0030a298(struct Moby *moby) {
     PathFlyerVars *vars = (PathFlyerVars *)moby->pvars;
     PathNodes *path;
-    f32 d;
+    f32 endpoint_distance;
     Vec4 target;
     Vec4 step;
     Vec4 puff;
@@ -1851,9 +1851,9 @@ int FUN_L09_0030a298(struct Moby *moby) {
             if (vars->node == path->count)
                 done = 1;
         }
-        d = FUN_001f9b48(&moby->pos, &path->node[path->count - 1]);
+        endpoint_distance = FUN_001f9b48(&moby->pos, &path->node[path->count - 1]);
         v = 0.0f;
-        advance_accelerated_scalar(d, frame_time_sq * 3.0f, frame_time_sq * 3.0f, frame_time * 10.0f, &v, &vars->speed);
+        advance_accelerated_scalar(endpoint_distance, frame_time_sq * 3.0f, frame_time_sq * 3.0f, frame_time * 10.0f, &v, &vars->speed);
     } else {
         f32 v;
         if (FUN_001f9b48(&target, &moby->pos) < vars->speed + vars->speed) {
@@ -1861,9 +1861,9 @@ int FUN_L09_0030a298(struct Moby *moby) {
             if (vars->node == -1)
                 done = 1;
         }
-        d = FUN_001f9b48(&moby->pos, &path->node[0]);
+        endpoint_distance = FUN_001f9b48(&moby->pos, &path->node[0]);
         v = 0.0f;
-        advance_accelerated_scalar(d, frame_time_sq * 3.0f, frame_time_sq * 3.0f, frame_time * 10.0f, &v, &vars->speed);
+        advance_accelerated_scalar(endpoint_distance, frame_time_sq * 3.0f, frame_time_sq * 3.0f, frame_time * 10.0f, &v, &vars->speed);
     }
     if (path->node[vars->node].f[3] == 42.0f)
         vars->yaw_offset = 0.0f;
