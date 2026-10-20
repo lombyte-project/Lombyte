@@ -1462,15 +1462,15 @@ extern void fast_vec_normalize(u8 *, u8 *, f32) __asm__("FUN_001f9bf8");
  * program. */
 void FUN_L14_002aead8(u8 *moby) {
     u8 *data = *(u8 **)(moby + 0x78);
-    u8 *p;
+    u8 *bone_transform;
     f32 v[4];
     if (random_integer_below(5)) {
         qcopy(v, moby + 0x10);
         v[3] = D_L14_0016139C;
         if (fast_bsphere_check((u8 *)v, FUN_001fa6c0(*(s16 *)(moby + 0x32))) >= 0) {
-            p = data + 0xA0;
-            build_moby_bone_transform(moby, 1, p);
-            fast_vec_normalize(p, p, 1.0f);
+            bone_transform = data + 0xA0;
+            build_moby_bone_transform(moby, 1, bone_transform);
+            fast_vec_normalize(bone_transform, bone_transform, 1.0f);
             fast_vec_normalize(data + 0xB0, data + 0xB0, 1.0f);
             fast_vec_normalize(data + 0xC0, data + 0xC0, 1.0f);
             *(s32 *)(data + 0x20C) = 2;
