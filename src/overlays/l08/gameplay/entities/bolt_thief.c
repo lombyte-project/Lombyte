@@ -163,18 +163,18 @@ extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8")
 extern void FUN_L00_00250df8(void *);
 
 extern float D_L08_00161D28 __attribute__((sda));
-void FUN_L08_002e8ba0(struct Moby *a) {
-    char *data = (char *)a->pvars;
+void FUN_L08_002e8ba0(struct Moby *parent_moby) {
+    char *data = (char *)parent_moby->pvars;
     float part_joint_position[4], anchor_joint_position[4], joint_alignment_offset[4];
     char *base = data + 0x60;
     int i;
     for (i = 0; i < 12; i++) {
-        int *e = (int *)(base + 0x1C + i * 16);
-        char *m = (char *)e[-3];
+        int *anchor_joint_cursor = (int *)(base + 0x1C + i * 16);
+        char *m = (char *)anchor_joint_cursor[-3];
         if (m != 0) {
-            *(float *)(m + 0x48) = a->rot.z;
-            moby_point_position(m, e[-1], part_joint_position);
-            moby_point_position((void *)e[-2], e[0], anchor_joint_position);
+            *(float *)(m + 0x48) = parent_moby->rot.z;
+            moby_point_position(m, anchor_joint_cursor[-1], part_joint_position);
+            moby_point_position((void *)anchor_joint_cursor[-2], anchor_joint_cursor[0], anchor_joint_position);
             fast_vec_sub(joint_alignment_offset, anchor_joint_position, part_joint_position);
             fast_vec_add(m + 0x10, m + 0x10, joint_alignment_offset);
         }
