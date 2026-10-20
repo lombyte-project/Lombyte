@@ -591,7 +591,7 @@ void FUN_L02_002f8a18(int mode, int arg) {
     char *g = D_L02_00167280;
     char *cam = *(char **)(g + 0x180);
     char *camera_data = *(char **)(cam + 0x70);
-    char *e = camera_data + 0xE0;
+    char *camera_argument_pair = camera_data + 0xE0;
 
     cam[0x88] = mode;
     switch (mode) {
@@ -599,7 +599,7 @@ void FUN_L02_002f8a18(int mode, int arg) {
         qcopy(camera_data + 0x110, &hero.motion.pos);
         FUN_L00_001ed630(camera_data + 0xFC, g + 0x140, &hero.motion.pos);
     case 2:
-        *(int *)(e + 4) = arg;
+        *(int *)(camera_argument_pair + 4) = arg;
         *(int *)(camera_data + 0xE0) = arg;
         break;
     }
