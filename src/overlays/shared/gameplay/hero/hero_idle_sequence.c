@@ -107,8 +107,8 @@ int hero_idle_sequence(int allow_item_idle_sequence) {
     }
 }
 /* Returns its argument unchanged. */
-s32 FUN_L00_002050b8(s32 a) {
-    return a;
+s32 FUN_L00_002050b8(s32 input_value) {
+    return input_value;
 }
 void show_health_hud(void) __asm__("FUN_L00_00234e00");
 /* Lowers hero.health.hp by one (not below 0) and calls 00234e00. */
