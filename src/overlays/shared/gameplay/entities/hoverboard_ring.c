@@ -298,19 +298,19 @@ extern char *FUN_0020c4f8_d160(int) __asm__("FUN_0020c4f8");
 extern void FUN_L00_00250df8_d160(void *) __asm__("FUN_L00_00250df8");
 
 char *FUN_L05_0031d160(unsigned char *source_moby) {
-    unsigned char *m = (unsigned char *)FUN_0020c4f8_d160(0x5EA);
-    if (m != 0) {
-        m[0x30] = source_moby[0x30];
-        *(unsigned short *)(m + 0x32) = *(unsigned short *)(source_moby + 0x32);
-        m[0x31] = 1;
-        *(float *)(m + 0x40) = *(float *)(source_moby + 0x40);
-        *(float *)(m + 0x44) = *(float *)(source_moby + 0x44);
-        *(float *)(m + 0x48) = *(float *)(source_moby + 0x48);
-        *(long *)(m + 0x38) = *(long *)(source_moby + 0x38);
-        qcopy(m + 0x10, source_moby + 0x10);
-        FUN_L00_00250df8_d160(m);
+    unsigned char *destination_moby = (unsigned char *)FUN_0020c4f8_d160(0x5EA);
+    if (destination_moby != 0) {
+        destination_moby[0x30] = source_moby[0x30];
+        *(unsigned short *)(destination_moby + 0x32) = *(unsigned short *)(source_moby + 0x32);
+        destination_moby[0x31] = 1;
+        *(float *)(destination_moby + 0x40) = *(float *)(source_moby + 0x40);
+        *(float *)(destination_moby + 0x44) = *(float *)(source_moby + 0x44);
+        *(float *)(destination_moby + 0x48) = *(float *)(source_moby + 0x48);
+        *(long *)(destination_moby + 0x38) = *(long *)(source_moby + 0x38);
+        qcopy(destination_moby + 0x10, source_moby + 0x10);
+        FUN_L00_00250df8_d160(destination_moby);
     }
-    return (char *)m;
+    return (char *)destination_moby;
 }
 /* Sets up a moby's vector from the level table and clamps its height for the current state. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002CF2C0.c: func_L05_0032A868), where it is exact; names translated to the US level program. */
