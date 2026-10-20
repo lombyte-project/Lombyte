@@ -132,6 +132,7 @@ void FUN_L12_002461f0(void) {
         HERO_STATE_TARGET_POSE_APPROACH_RESTART_WAIT = 102,
         HERO_STATE_TARGET_POSE_WAIT = 103,
         HERO_STATE_ATTACK_RECORD_FRAME_EXIT_WAIT = 112,
+        HERO_STATE_ANIMATION_FRAME_EXIT_WAIT = 113,
         HERO_STATE_LOW_ALTITUDE_RESPAWN_WAIT = 119
     };
     struct Moby *moby;
@@ -1011,7 +1012,7 @@ void FUN_L12_002461f0(void) {
                         hero_set_state(HERO_STATE_IDLE, 1);
                     }
                     break;
-                case 113:
+                case HERO_STATE_ANIMATION_FRAME_EXIT_WAIT:
                     if (25.0f < hero.anim_frame) {
                         hero_set_state(HERO_STATE_IDLE, 1);
                     }
