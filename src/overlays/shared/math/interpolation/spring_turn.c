@@ -14,9 +14,9 @@ extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 
 /* Cosine-eased rotation from x toward y at z. */
 float FUN_L00_00257ef0(float x, float y, float z) {
-    float t = fast_subtract_rotations(y, x);
-    float c = fast_cos(z * 3.1415927f);
-    return fast_add_rotations(x, t * ((1.0f - c) * 0.5f));
+    float wrapped_angle_delta = fast_subtract_rotations(y, x);
+    float phase_cosine = fast_cos(z * 3.1415927f);
+    return fast_add_rotations(x, wrapped_angle_delta * ((1.0f - phase_cosine) * 0.5f));
 }
 #include "qcopy.h"
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
