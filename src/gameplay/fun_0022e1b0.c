@@ -37,13 +37,13 @@ void FUN_0022e1b0(unsigned char *m) {
     }
     FUN_001f9a68_28efc8(0.0009765625f, &v, m);
     for (i = 0; i < D_001604C0[level_render_state.content_variant]; i++) {
-        int c = m[0xBC];
+        int quad_alpha = m[0xBC];
         unsigned int col;
         float quad_scale;
-        if (*(short *)(m + 0xB2)) c += FUN_00213260_28efc8(*(short *)(m + 0xB2));
-        quad_scale = FUN_001fa6c0_28efc8(c) * (tbl[i].f[3] / 40.0f);
-        col = (c << 24) | 0x2058B0;
-        if (*(short *)(m + 0xA6) == 0x215) col = (c << 24) | 0x308000;
+        if (*(short *)(m + 0xB2)) quad_alpha += FUN_00213260_28efc8(*(short *)(m + 0xB2));
+        quad_scale = FUN_001fa6c0_28efc8(quad_alpha) * (tbl[i].f[3] / 40.0f);
+        col = (quad_alpha << 24) | 0x2058B0;
+        if (*(short *)(m + 0xA6) == 0x215) col = (quad_alpha << 24) | 0x308000;
         for (k = 0; k < 4; k++) {
             quad.colors[k] = col;
             FUN_001f9a68_28efc8(quad_scale, &quad.positions[k], &quad_corners[k]);
