@@ -1215,12 +1215,12 @@ void FUN_L14_002ed280(struct Moby *moby) {
     }
     st = MOBY(moby)->state;
     if (st == 1) {
-        unsigned char *p;
+        unsigned char *scene_start_guard_base;
         if (D_L14_0015F5C4 != 0) return;
-        p = (unsigned char *)D_0013D24D + 0x13B;
-        if (p[0x68] != 0) return;
+        scene_start_guard_base = (unsigned char *)D_0013D24D + 0x13B;
+        if (scene_start_guard_base[0x68] != 0) return;
         start_scene(0);
-        p[0x68] = st;
+        scene_start_guard_base[0x68] = st;
         MOBY(moby)->state = 2;
         FUN_L00_0028e990();
         return;
