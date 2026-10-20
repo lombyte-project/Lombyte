@@ -490,7 +490,7 @@ void FUN_L15_002eac90(struct Moby *moby) {
     float scale;
     int r, g, b;
     int color;
-    int i, j, m, n, q;
+    int i, j, uv_buffer_index, n, draw_buffer_index;
 
     scale = convert_integer_to_float(D_L15_0015F5CC) * (D_L15_00162104 * frame_time);
     vu1_add_gs_register(6, get_effect_texture(D_L15_001620F0));
@@ -519,21 +519,21 @@ void FUN_L15_002eac90(struct Moby *moby) {
         }
     }
     for (i = 0; i < 2; i++) {
-        for (m = 0; m < 3; m++) {
-            for (n = 0; n < D_L15_00162080[m]; n++) {
+        for (uv_buffer_index = 0; uv_buffer_index < 3; uv_buffer_index++) {
+            for (n = 0; n < D_L15_00162080[uv_buffer_index]; n++) {
                 T4 tbl = D_L15_00162108;
-                *(float *)(n * 8 + D_L15_001620A0[m]) =
-                    *(float *)(n * 8 + D_L15_001620D0[m]) +
+                *(float *)(n * 8 + D_L15_001620A0[uv_buffer_index]) =
+                    *(float *)(n * 8 + D_L15_001620D0[uv_buffer_index]) +
                     FUN_L00_00200260(scale * tbl.p[i].v[0], 1.0f);
-                *(float *)(n * 8 + D_L15_001620A0[m] + 4) =
-                    *(float *)(n * 8 + D_L15_001620D0[m] + 4) +
+                *(float *)(n * 8 + D_L15_001620A0[uv_buffer_index] + 4) =
+                    *(float *)(n * 8 + D_L15_001620D0[uv_buffer_index] + 4) +
                     FUN_L00_00200260(scale * tbl.p[i].v[1], 1.0f);
             }
         }
         font_queue_vu_state();
-        for (q = 0; q < 3; q++) {
-            FUN_L00_001fde98(D_L15_00162080[q], D_L15_00162090[q], D_L15_001620B0[q],
-                             (void *)D_L15_001620A0[q], 1);
+        for (draw_buffer_index = 0; draw_buffer_index < 3; draw_buffer_index++) {
+            FUN_L00_001fde98(D_L15_00162080[draw_buffer_index], D_L15_00162090[draw_buffer_index], D_L15_001620B0[draw_buffer_index],
+                             (void *)D_L15_001620A0[draw_buffer_index], 1);
         }
     }
 }
