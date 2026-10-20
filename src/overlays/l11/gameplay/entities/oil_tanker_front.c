@@ -1467,16 +1467,16 @@ extern short *D_L11_001AC240[];
 extern char *D_L11_0015FFD8;
 
 short FUN_L11_0031a758(int idx) {
-    short *p = D_L11_001AC240[idx];
+    short *moby_list_entry = D_L11_001AC240[idx];
     short found = 0;
     short n = 0;
     char *base = D_L11_0015FFD8;
     do {
-        unsigned char *moby = (unsigned char *)(((p[0] & 0x7FFF) << 8) + (int)base);
+        unsigned char *moby = (unsigned char *)(((moby_list_entry[0] & 0x7FFF) << 8) + (int)base);
         if (*(short *)(moby + 0xA6) == 0x527 && moby[0x20] == 5) {
             found = ++n;
         }
-    } while (*p++ >= 0);
+    } while (*moby_list_entry++ >= 0);
     return found;
 }
 extern char *D_L11_0015FFD8;
