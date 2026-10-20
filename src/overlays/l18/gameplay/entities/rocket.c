@@ -476,7 +476,7 @@ void FUN_L18_002d5050(struct Moby *moby) {
     float target_heading_basis[12];
     float configured_rotation_basis[12];
     float aA0[16];
-    float movement_blend_weight, f, k;
+    float movement_blend_weight, pitch_angle_or_remaining_frames, k;
     int r;
     if (hero.state.current == 0x72 || D_L18_0015F5C4 == 2) {
         mark_moby_for_removal(moby);
@@ -504,9 +504,9 @@ void FUN_L18_002d5050(struct Moby *moby) {
         FUN_L18_002d5488(moby, movement_step);
         fast_vec_add(&moby->pos, &moby->pos, movement_step);
         moby->rot.z = fast_arc_tan(movement_step[0], movement_step[1]);
-        f = fast_arc_tan(vector_length_xy(movement_step), movement_step[2]);
+        pitch_angle_or_remaining_frames = fast_arc_tan(vector_length_xy(movement_step), movement_step[2]);
         k = frame_time;
-        moby->rot.y = -f;
+        moby->rot.y = -pitch_angle_or_remaining_frames;
         moby->rot.x = fast_add_rotations(moby->rot.x, k * 18.849556f);
         moby_vars->c = moby_vars->c + 1;
         r = collision_line(previous_position, &moby->pos, 0, moby, 0);
@@ -525,8 +525,8 @@ void FUN_L18_002d5050(struct Moby *moby) {
             FUN_L18_002d5610_u(moby, movement_step);
             mark_moby_for_removal(moby);
         } else if (moby_vars->flags & 2) {
-            f = (float)(moby_vars->end - moby_vars->c);
-            if (f <= FUN_L04_001f1978(D_L18_00161964)) {
+            pitch_angle_or_remaining_frames = (float)(moby_vars->end - moby_vars->c);
+            if (pitch_angle_or_remaining_frames <= FUN_L04_001f1978(D_L18_00161964)) {
                 enqueue_callback_list_1(FUN_L18_002d5768, moby);
             }
         }
