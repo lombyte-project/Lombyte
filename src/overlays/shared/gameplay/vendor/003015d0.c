@@ -500,28 +500,28 @@ extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001e
 
 /* Sweeps the beam's two end lines; anything they cross takes damage pushed away from the beam. */
 void FUN_L14_00302538(char *self) {
-    struct Moby *m = (struct Moby *)self;
-    D1224 *d = (D1224 *)m->pvars;
+    struct Moby *beam_moby = (struct Moby *)self;
+    D1224 *beam_vars = (D1224 *)beam_moby->pvars;
     VendorBeamReq req;
     Vec4 dir, to_hero, base, end_a, end_b, from, to, off;
     f32 dot, len;
 
-    if (d->radius == 0.0f)
+    if (beam_vars->radius == 0.0f)
         return;
     req.flags = 0x10001;
     req.range = 1.0f;
     req.one = 1;
-    req.moby = m;
+    req.moby = beam_moby;
     clear_u64_value(&req);
     req.v[2] = 1.0f;
     req.b = 1;
     req.v[3] = 5627.925f;
     req.a = 3;
-    req.oclass = m->oclass;
-    dir.f[0] = fast_cos(m->rot.z);
-    dir.f[1] = fast_sin(m->rot.z);
+    req.oclass = beam_moby->oclass;
+    dir.f[0] = fast_cos(beam_moby->rot.z);
+    dir.f[1] = fast_sin(beam_moby->rot.z);
     dir.f[2] = 0.0f;
-    subtract_vector_xyz(&to_hero, &hero.motion.pos, &m->pos);
+    subtract_vector_xyz(&to_hero, &hero.motion.pos, &beam_moby->pos);
     to_hero.f[2] = 0.0f;
     dot = dot_vectors_xyz(&dir, &to_hero);
     if (vector_length_xyz(&to_hero) != 0.0f) {
@@ -530,47 +530,47 @@ void FUN_L14_00302538(char *self) {
         req.v[0] = dir.f[0];
         req.v[1] = dir.f[1];
     }
-    qcopy_nc(&base, &D_L14_001600EC[d->w0].origin);
-    if (d->s8) {
-        add_vector_xyz(&end_a, &base, &D_L14_001600EC[d->w0].axis[1]);
-        if (collision_line(&base, &end_a, 0, m, 0)) {
+    qcopy_nc(&base, &D_L14_001600EC[beam_vars->w0].origin);
+    if (beam_vars->s8) {
+        add_vector_xyz(&end_a, &base, &D_L14_001600EC[beam_vars->w0].axis[1]);
+        if (collision_line(&base, &end_a, 0, beam_moby, 0)) {
             subtract_vector_xyz(&from, D_L14_00174560, &base);
             len = vector_length_xyz(&from);
             scale_vector_xyz(&from, &from, len * 0.98f / len);
-            add_vector_xyz(&d->end_a, &base, &from);
-            d->s8 = 0;
+            add_vector_xyz(&beam_vars->end_a, &base, &from);
+            beam_vars->s8 = 0;
         } else {
-            qcopy(&d->end_a, &end_a);
+            qcopy(&beam_vars->end_a, &end_a);
         }
     }
-    if (d->sA) {
-        subtract_vector_xyz(&end_b, &base, &D_L14_001600EC[d->w0].axis[1]);
-        if (collision_line(&base, &end_b, 0, m, 0)) {
+    if (beam_vars->sA) {
+        subtract_vector_xyz(&end_b, &base, &D_L14_001600EC[beam_vars->w0].axis[1]);
+        if (collision_line(&base, &end_b, 0, beam_moby, 0)) {
             subtract_vector_xyz(&from, D_L14_00174560, &base);
             len = vector_length_xyz(&from);
             scale_vector_xyz(&from, &from, len * 0.98f / len);
-            add_vector_xyz(&d->end_b, &base, &from);
-            d->sA = 0;
+            add_vector_xyz(&beam_vars->end_b, &base, &from);
+            beam_vars->sA = 0;
         } else {
-            qcopy(&d->end_b, &end_b);
+            qcopy(&beam_vars->end_b, &end_b);
         }
     }
-    qcopy(&end_a, &d->end_a);
-    qcopy(&end_b, &d->end_b);
-    normalize_vector_xyz(&off, &D_L14_001600EC[d->w0].axis[0], d->radius);
+    qcopy(&end_a, &beam_vars->end_a);
+    qcopy(&end_b, &beam_vars->end_b);
+    normalize_vector_xyz(&off, &D_L14_001600EC[beam_vars->w0].axis[0], beam_vars->radius);
     add_vector_xyz(&from, &end_a, &off);
     add_vector_xyz(&to, &end_b, &off);
-    collision_line(&from, &to, 1, m, &req);
+    collision_line(&from, &to, 1, beam_moby, &req);
     subtract_vector_xyz(&from, &end_a, &off);
     subtract_vector_xyz(&to, &end_b, &off);
-    collision_line(&from, &to, 1, m, &req);
-    normalize_vector_xyz(&off, &D_L14_001600EC[d->w0].axis[2], d->radius);
+    collision_line(&from, &to, 1, beam_moby, &req);
+    normalize_vector_xyz(&off, &D_L14_001600EC[beam_vars->w0].axis[2], beam_vars->radius);
     add_vector_xyz(&from, &end_a, &off);
     add_vector_xyz(&to, &end_b, &off);
-    collision_line(&from, &to, 1, m, &req);
+    collision_line(&from, &to, 1, beam_moby, &req);
     subtract_vector_xyz(&from, &end_a, &off);
     subtract_vector_xyz(&to, &end_b, &off);
-    collision_line(&from, &to, 1, m, &req);
+    collision_line(&from, &to, 1, beam_moby, &req);
 }
 #include "sda.h"
 
