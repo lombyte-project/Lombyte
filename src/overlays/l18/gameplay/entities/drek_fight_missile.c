@@ -1547,7 +1547,8 @@ void drek_final_boss_robot_update(BossMoby *moby) {
         DREK_BOSS_APPROACH_PATH_START = 9
     };
     enum {
-        DREK_BOSS_PHASE_BEFORE_MISSILE_GROUP = 4
+        DREK_BOSS_PHASE_BEFORE_MISSILE_GROUP = 4,
+        DREK_BOSS_PHASE_AFTER_MISSILE_GROUP_START = 5
     };
     BossData *boss_data = (BossData *)moby->f78;
     BossMoby *tgt;
@@ -2422,7 +2423,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
             case DREK_BOSS_PHASE_BEFORE_MISSILE_GROUP:
                 ticks = scale_game_frames(900);
                 break;
-            case 5:
+            case DREK_BOSS_PHASE_AFTER_MISSILE_GROUP_START:
             default:
                 ticks = scale_game_frames(600);
                 break;
