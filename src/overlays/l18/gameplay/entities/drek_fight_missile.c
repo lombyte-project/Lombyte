@@ -1063,7 +1063,7 @@ extern void set_identity_matrix(void *) __asm__("FUN_001f9fc8");
 extern void fast_draw_quad_real(void *, void *, int) __asm__("FUN_001f7d30");
 
 void FUN_L18_002f2620(struct Moby *moby) {
-    FRow m[4];
+    FRow quad_positions[4];
     int colors[4];
     float uv[4][2];
     unsigned long pkt[4];
@@ -1088,13 +1088,13 @@ void FUN_L18_002f2620(struct Moby *moby) {
     for (i = 0; i < 25; i++) {
         float ofs = *(float *)&D_L18_00162308_gp;
         for (j = 0; j < 4; j++) {
-            int a = D_L18_001DA610[i][j][0];
+            int vertex_index = D_L18_001DA610[i][j][0];
             int b = D_L18_001DA610[i][j][1];
-            qcopy(&m[j], &D_L18_001DA3C0[a]);
+            qcopy(&quad_positions[j], &D_L18_001DA3C0[vertex_index]);
             uv[j][0] = D_L18_001DA7A0[b][0] + ofs;
             uv[j][1] = D_L18_001DA7A0[b][1];
         }
-        fast_draw_quad_real(m, mat, 0);
+        fast_draw_quad_real(quad_positions, mat, 0);
     }
 }
 typedef float FVec4_l18[4] __attribute__((aligned(16)));
