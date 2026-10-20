@@ -592,7 +592,7 @@ void FUN_L00_002c8078(unsigned char *moby) {
     int i;
     int r, g;
     unsigned char b;
-    float s;
+    float randomized_particle_scalar;
     switch (collision_hit_material()) {
     case COLLISION_MATERIAL_WATER:
     case 1:
@@ -609,8 +609,8 @@ void FUN_L00_002c8078(unsigned char *moby) {
             r = (rand() + 0x30) & 0x3F;
             g = (rand() + 0x20) & 0x3F;
             b = rand() & 0x2F;
-            s = random_float_between(100000.0f, 800000.0f);
-            FUN_L00_00269b70(v, r, g, b, s, 0.0f, scale_game_frames(rand() % 40 + 10));
+            randomized_particle_scalar = random_float_between(100000.0f, 800000.0f);
+            FUN_L00_00269b70(v, r, g, b, randomized_particle_scalar, 0.0f, scale_game_frames(rand() % 40 + 10));
         }
         moby[0x20] = 4;
         break;
