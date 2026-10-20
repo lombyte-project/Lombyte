@@ -12,12 +12,12 @@ extern s32 FUN_L00_00258b50(void *, void *, void *, void *, f32);
 
 /* steers the moby toward a point 100 units ahead along its heading */
 s32 FUN_L12_00271dd8(struct Moby *m, void *ctl);
-s32 FUN_L12_00271dd8(struct Moby *m, void *ctl) {
+s32 FUN_L12_00271dd8(struct Moby *moby, void *ctl) {
     Vec4 ahead;
     Vec4 out;
 
-    qcopy(&ahead, &m->pos);
-    ahead.f[0] += fast_cos(m->rot.z) * 100.0f;
-    ahead.f[1] += fast_sin(m->rot.z) * 100.0f;
-    return FUN_L00_00258b50(m, ctl, &ahead, &out, 1.0f);
+    qcopy(&ahead, &moby->pos);
+    ahead.f[0] += fast_cos(moby->rot.z) * 100.0f;
+    ahead.f[1] += fast_sin(moby->rot.z) * 100.0f;
+    return FUN_L00_00258b50(moby, ctl, &ahead, &out, 1.0f);
 }
