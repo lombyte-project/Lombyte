@@ -89,15 +89,15 @@ float spring_turn(float *turn_step, float current_angle, float b, float spring_s
 extern float FUN_001f99c0(float);
 
 void FUN_L00_00258278(unsigned char *m, float *ptr, float t, float b, float c, float limit);
-void FUN_L00_00258278(unsigned char *m, float *ptr, float t, float b, float c, float limit) {
-    float r = fast_subtract_rotations(t, *(float *)(m + 0x48));
+void FUN_L00_00258278(unsigned char *moby, float *ptr, float target_heading, float b, float damping_factor, float limit) {
+    float r = fast_subtract_rotations(target_heading, *(float *)(moby + 0x48));
     float k = r / 0.15707964f;
     float v;
     if (1.0f < k)
         k = 1.0f;
     else if (k < -1.0f)
         k = -1.0f;
-    v = *ptr + (b * k - c * (*ptr));
+    v = *ptr + (b * k - damping_factor * (*ptr));
     *ptr = v;
     if (limit != 0.0f) {
         if (limit < v) {
@@ -111,7 +111,7 @@ void FUN_L00_00258278(unsigned char *m, float *ptr, float t, float b, float c, f
     } else if (*ptr < -FUN_001f99c0(r)) {
         *ptr = -FUN_001f99c0(r);
     }
-    *(float *)(m + 0x48) = fast_add_rotations(*(float *)(m + 0x48), *ptr);
+    *(float *)(moby + 0x48) = fast_add_rotations(*(float *)(moby + 0x48), *ptr);
 }
 #include "eetypes.h"
 #include "qcopy.h"
