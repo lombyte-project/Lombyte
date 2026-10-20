@@ -3304,79 +3304,79 @@ extern s32 coll_line_fix(void *, void *, s32, s32, void *) __asm__("FUN_001efa68
 extern f32 FUN_001fa6c0_c(s32) __asm__("FUN_001fa6c0");
 extern s32 FUN_001fa6d0_c(f32) __asm__("FUN_001fa6d0");
 
-void FUN_L00_00270948(M_270948 *m) {
+void FUN_L00_00270948(M_270948 *particle) {
     V_270948 v, p;
-    C_270948 c;
-    E_270948 *e = &m->e;
-    M_270948 *n;
+    C_270948 collision_parameters;
+    E_270948 *e = &particle->e;
+    M_270948 *spawned_particle;
     f32 r, nr, a, s;
     s32 hit;
     u8 fl;
 
-    if (m->hA != 0 && FUN_001f9770_c(&m->hA)) {
+    if (particle->hA != 0 && FUN_001f9770_c(&particle->hA)) {
         e->b18 |= 0x88;
-        r = m->fC / 900000.0f;
-        m->fC *= 0.8f;
+        r = particle->fC / 900000.0f;
+        particle->fC *= 0.8f;
         nr = -r;
         FUN_001f9a68_c(&v, e, random_float_between(0.5f, 0.7f));
-        p.f[0] = m->pos.f[0] + random_float_between(nr, r);
-        p.f[1] = m->pos.f[1] + random_float_between(nr, r);
-        p.f[2] = m->pos.f[2] + random_float_between(nr, r);
+        p.f[0] = particle->pos.f[0] + random_float_between(nr, r);
+        p.f[1] = particle->pos.f[1] + random_float_between(nr, r);
+        p.f[2] = particle->pos.f[2] + random_float_between(nr, r);
         v.f[0] += random_float_between(-e->v.f[0] * 0.2f, e->v.f[0] * 0.2f);
         v.f[1] += random_float_between(-e->v.f[1] * 0.2f, e->v.f[1] * 0.2f);
         v.f[2] += random_float_between(-e->v.f[2] * 0.2f, 0.0f);
-        n = FUN_L00_00270758_c(&p, &v, 0x88, e->x1C);
-        if (n) {
-            n->hA = FUN_001f96f8_c(2);
-            n->fC = m->fC;
+        spawned_particle = FUN_L00_00270758_c(&p, &v, 0x88, e->x1C);
+        if (spawned_particle) {
+            spawned_particle->hA = FUN_001f96f8_c(2);
+            spawned_particle->fC = particle->fC;
         }
         FUN_001f9a68_c(e, e, random_float_between(0.5f, 0.7f));
         e->v.f[0] += random_float_between(-e->v.f[0] * 0.2f, e->v.f[0] * 0.2f);
         e->v.f[1] += random_float_between(-e->v.f[1] * 0.2f, e->v.f[1] * 0.2f);
         e->v.f[2] += random_float_between(-e->v.f[2] * 0.2f, 0.0f);
-        m->pos.f[0] += random_float_between(nr, r);
-        m->pos.f[1] += random_float_between(nr, r);
-        m->pos.f[2] += random_float_between(nr, r);
+        particle->pos.f[0] += random_float_between(nr, r);
+        particle->pos.f[1] += random_float_between(nr, r);
+        particle->pos.f[2] += random_float_between(nr, r);
     }
-    m->b2 = D_L00_001B20B0_c[0][(m->hA + e->h16 + (m->b2 - D_L00_001B20B0_c[0][0])) & 7];
-    fast_vec_add(&v, &m->pos, e);
+    particle->b2 = D_L00_001B20B0_c[0][(particle->hA + e->h16 + (particle->b2 - D_L00_001B20B0_c[0][0])) & 7];
+    fast_vec_add(&v, &particle->pos, e);
     hit = 0;
     if (e->h14 > FUN_001f96f8_c(3)) {
-        FUN_001f9a28_c(&p, &m->pos, e);
+        FUN_001f9a28_c(&p, &particle->pos, e);
     } else {
-        p.q = m->pos.q;
+        p.q = particle->pos.q;
     }
-    FUN_001f9a68_c(&c, &c, 0.01f);
+    FUN_001f9a68_c(&collision_parameters, &collision_parameters, 0.01f);
     fl = e->b18;
     if (fl & 8) {
-        if (!(m->x4 & 0xFF000000))
+        if (!(particle->x4 & 0xFF000000))
             goto kill;
         e->b18 = fl | 8;
         if (!FUN_00213260_c(3))
             hit = coll_line_fix(&p, &v, 0, e->x1C, 0) != 0;
     } else {
-        c.x10 = e->x1C;
-        c.x1C = 1.0f;
-        c.v.q = e->v.q;
-        c.x14 = 1;
-        c.x20 = 1;
+        collision_parameters.x10 = e->x1C;
+        collision_parameters.x1C = 1.0f;
+        collision_parameters.v.q = e->v.q;
+        collision_parameters.x14 = 1;
+        collision_parameters.x20 = 1;
         if (!FUN_00213260_c(3))
-            hit = coll_line_fix(&p, &v, 0, e->x1C, &c) != 0;
+            hit = coll_line_fix(&p, &v, 0, e->x1C, &collision_parameters) != 0;
     }
     if (hit)
         e->b18 |= 8;
     else
-        qcopy(&m->pos, &v);
+        qcopy(&particle->pos, &v);
     if (e->b18 & 8) {
         e->h16++;
-        m->fC -= 260000.0f / (f32)(s32)(8.0f / (D_0015ED60 * 0.443f)) * D_0015ED60 * 1.25f;
-        if (m->fC <= 0.0f) {
+        particle->fC -= 260000.0f / (f32)(s32)(8.0f / (D_0015ED60 * 0.443f)) * D_0015ED60 * 1.25f;
+        if (particle->fC <= 0.0f) {
         kill:
-            free_effect_particle(m);
+            free_effect_particle(particle);
             return;
         }
     } else {
-        m->fC += 260000.0f / (f32)(s32)(8.0f / (D_0015ED60 * 0.443f)) * D_0015ED60;
+        particle->fC += 260000.0f / (f32)(s32)(8.0f / (D_0015ED60 * 0.443f)) * D_0015ED60;
     }
     s = FUN_001fa6c0_c(e->h14);
     {
@@ -3389,7 +3389,7 @@ void FUN_L00_00270948(M_270948 *m) {
         a = 0.08f;
     if (e->b18 & 8)
         a /= (f32)e->h16 / 7.0f + 1.0f;
-    m->x4 = (m->x4 & 0xFFFFFF) | (FUN_001fa6d0_c(a * 256.0f) << 24);
+    particle->x4 = (particle->x4 & 0xFFFFFF) | (FUN_001fa6d0_c(a * 256.0f) << 24);
     e->v.f[2] += frame_scale_sq * 0.008f;
     if (e->h14 > FUN_001f96f8_c(0x19) || (e->b18 & 8)) {
         e->v.f[0] *= 0.95f;
@@ -3411,7 +3411,7 @@ void FUN_L00_00270948(M_270948 *m) {
         e->x10 -= 1.0f;
     if (e->x10 < 0.0f)
         e->x10 += 1.0f;
-    m->b8 = (s32)(e->x10 * 256.0f);
+    particle->b8 = (s32)(e->x10 * 256.0f);
 }
 f32 FUN_001fa6c0_2710a0(s32) __asm__("FUN_001fa6c0");
 s32 FUN_001fa6d0_2710a0(f32) __asm__("FUN_001fa6d0");
