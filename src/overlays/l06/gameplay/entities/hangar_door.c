@@ -30,16 +30,16 @@ extern int D_L06_0015FFD8_d __asm__("D_L06_0015FFD8");
  * Ported from rac1-decomp, where it is exact; names translated to
  * the US level program (data still reached through the MACRO_ADDR form). */
 void FUN_L06_002d9e78(int idx) {
-    short *p = D_L06_001ABFC0[idx];
-    if (p != 0) {
+    short *moby_index_cursor = D_L06_001ABFC0[idx];
+    if (moby_index_cursor != 0) {
         do {
-            char *moby = (char *)(((*p & 0x7FFF) << 8) + (int)D_L06_0015FFD8_d);
+            char *moby = (char *)(((*moby_index_cursor & 0x7FFF) << 8) + (int)D_L06_0015FFD8_d);
             if (*(short *)(moby + 0xA6) == 0x16F) {
                 char *data = *(char **)(moby + 0x78);
                 moby[0x20] = 2;
                 *(int *)(data + 0x28) = 0;
             }
-        } while (*p++ >= 0);
+        } while (*moby_index_cursor++ >= 0);
     }
 }
 
