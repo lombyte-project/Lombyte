@@ -2910,23 +2910,23 @@ extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 
 /* Marks the moby as killed in the level's spawn tables and releases the voice slot it still owns. */
 void FUN_L15_002a35d8(int addr) {
-    struct Moby *m = (struct Moby *)addr;
+    struct Moby *moby = (struct Moby *)addr;
     s32 slot;
-    m->collision = 0;
-    D_L15_001BABD0.killed[(s16)m->save_id] = m->mission + 2;
-    if (m->mission == 0xFF || (D_L15_0015FC88[m->mission] != 0xFF && D_0014C050[current_level_index][m->mission] == 0xFF)) {
-        D_L15_001BB830.killed[(s16)m->save_id] = m->mission + 2;
+    moby->collision = 0;
+    D_L15_001BABD0.killed[(s16)moby->save_id] = moby->mission + 2;
+    if (moby->mission == 0xFF || (D_L15_0015FC88[moby->mission] != 0xFF && D_0014C050[current_level_index][moby->mission] == 0xFF)) {
+        D_L15_001BB830.killed[(s16)moby->save_id] = moby->mission + 2;
     }
-    if (m->command != 0xFF) {
-        VoiceSlot *e;
-        slot = m->command;
-        e = (VoiceSlot *)(D_0013E550 + slot * 0x70);
-        if (e->owner == m && e->active != 0) {
+    if (moby->command != 0xFF) {
+        VoiceSlot *voice_slot;
+        slot = moby->command;
+        voice_slot = (VoiceSlot *)(D_0013E550 + slot * 0x70);
+        if (voice_slot->owner == moby && voice_slot->active != 0) {
             release_voice_slot(slot);
         }
     }
-    m->command = 0xFF;
-    m->state = 2;
+    moby->command = 0xFF;
+    moby->state = 2;
 }
 /* Spiderbot update: steps the walk/turn state, then probes ahead and sprays sparks along the path. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_002A8090), where it is exact; names translated to the US level program. */
