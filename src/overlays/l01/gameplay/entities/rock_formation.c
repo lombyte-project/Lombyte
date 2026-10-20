@@ -296,7 +296,7 @@ extern void FUN_L00_00250df8();
 BeamMoby *FUN_L01_002fa068(s32 owner, u128 *pos, u128 *target, s32 color) {
     u128 position_copy;
     u128 target_copy;
-    BeamMoby *m;
+    BeamMoby *spawned_moby;
     BeamVars *v;
     u128 *pp;
     u128 *tp;
@@ -305,26 +305,26 @@ BeamMoby *FUN_L01_002fa068(s32 owner, u128 *pos, u128 *target, s32 color) {
     tp = &target_copy;
     position_copy = *pos;
     target_copy = *target;
-    m = spawn_beam_moby(0x2D2);
-    if (m != 0) {
-        v = m->pvars;
+    spawned_moby = spawn_beam_moby(0x2D2);
+    if (spawned_moby != 0) {
+        v = spawned_moby->pvars;
         v->owner = owner;
-        m->b30 = 0x7F;
-        m->h32 = 0x7F;
-        m->b31 = 1;
-        m->scale *= 0.5f;
-        set_moby_color(m, 0x7F, 0x7F, 0x7F);
-        m->rx = random_angle_radians();
-        m->ry = random_angle_radians();
-        m->rz = random_angle_radians();
-        qcopy(&m->pos, pp);
+        spawned_moby->b30 = 0x7F;
+        spawned_moby->h32 = 0x7F;
+        spawned_moby->b31 = 1;
+        spawned_moby->scale *= 0.5f;
+        set_moby_color(spawned_moby, 0x7F, 0x7F, 0x7F);
+        spawned_moby->rx = random_angle_radians();
+        spawned_moby->ry = random_angle_radians();
+        spawned_moby->rz = random_angle_radians();
+        qcopy(&spawned_moby->pos, pp);
         qcopy(&v->target, tp);
         v->color = color;
-        FUN_L00_0026daa0(m, 0x2F00007F, color, -1, 210000.0f);
-        FUN_L00_0026daa0(m, 0x4F004F7F, v->color, -1, 115500.0f);
-        FUN_L00_00250df8(m);
+        FUN_L00_0026daa0(spawned_moby, 0x2F00007F, color, -1, 210000.0f);
+        FUN_L00_0026daa0(spawned_moby, 0x4F004F7F, v->color, -1, 115500.0f);
+        FUN_L00_00250df8(spawned_moby);
     }
-    return m;
+    return spawned_moby;
 }
 
 /*
