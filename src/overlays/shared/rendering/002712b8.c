@@ -353,13 +353,13 @@ void free_effect_particle(void *) __asm__("FUN_L00_00267a08");
 void FUN_L00_00271ec8(u8 *particle) {
     V unused_vector_argument;
     V *v = (V *)(particle + 0x20);
-    u32 c;
+    u32 faded_color;
     FUN_L00_001ff318(&unused_vector_argument, v, 0.95f);
     v->z += frame_time_sq * 5.0f;
     FUN_L00_001ff290(&unused_vector_argument, (V *)(particle + 0x10), v);
-    c = *(u32 *)(particle + 4) + 0xFE000000;
-    *(u32 *)(particle + 4) = c;
-    if ((c & 0xFF000000) - 1 > 0x5EFFFFFF || fast_dec_timer_s16(particle + 0xA) != 0) {
+    faded_color = *(u32 *)(particle + 4) + 0xFE000000;
+    *(u32 *)(particle + 4) = faded_color;
+    if ((faded_color & 0xFF000000) - 1 > 0x5EFFFFFF || fast_dec_timer_s16(particle + 0xA) != 0) {
         free_effect_particle(particle);
     } else {
         f32 current_size = *(f32 *)(particle + 0xC);
