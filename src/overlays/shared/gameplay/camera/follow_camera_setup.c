@@ -146,7 +146,7 @@ void follow_camera_apply_overrides(O_2e6000 *o) __asm__("FUN_L00_002e6000");
 void follow_camera_apply_overrides(O_2e6000 *camera_moby) {
     S220_2e6000 *s;
     S40_2e6000 *q;
-    S1D0_2e6000 *t;
+    S1D0_2e6000 *camera_spring_state;
     M_2e6000 *m;
     A_2e6000 *player_camera_state;
     A_2e6000 *x;
@@ -156,7 +156,7 @@ void follow_camera_apply_overrides(O_2e6000 *camera_moby) {
     s32 nearby_moby_count, i;
     s16 k;
     s32 *lp;
-    u8 *e;
+    u8 *aim_height_data;
 
     s = (S220_2e6000 *)((u8 *)camera_moby->m + 0x220);
     if (hero.unk2284 == 0xD && s->i10 != 0x14D) {
@@ -203,9 +203,9 @@ void follow_camera_apply_overrides(O_2e6000 *camera_moby) {
             follow_camera_set_height(D_L00_00161DA0, 0.003f);
         }
         FUN_L00_002e8620();
-        t = (S1D0_2e6000 *)((u8 *)camera_moby->m + 0x1D0);
-        t->f3C = D_L00_00161DA8;
-        t->f44 = D_L00_00161DA4;
+        camera_spring_state = (S1D0_2e6000 *)((u8 *)camera_moby->m + 0x1D0);
+        camera_spring_state->f3C = D_L00_00161DA8;
+        camera_spring_state->f44 = D_L00_00161DA4;
     }
     if (hero.unk20AA != 0 && hero.state.control_mode != 0xF) {
         FUN_L00_002e8568(0);
@@ -234,8 +234,8 @@ void follow_camera_apply_overrides(O_2e6000 *camera_moby) {
     if (nearby_moby_count > 0) {
         lp = D_L00_00177F00;
         for (i = 0; i < nearby_moby_count; lp++, i++) {
-            e = suck_get_aim_height(*lp);
-            if (e != 0 && (f32)e[0xD] != 0.0f) {
+            aim_height_data = suck_get_aim_height(*lp);
+            if (aim_height_data != 0 && (f32)aim_height_data[0xD] != 0.0f) {
                 s->i10 = 1;
                 break;
             }
