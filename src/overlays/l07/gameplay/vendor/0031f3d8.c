@@ -137,7 +137,7 @@ extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68"
 void mark_moby_for_removal_c_c2(struct Obj *obj) __asm__("FUN_0020c828");
 
 void seashell_update(unsigned char *m) __asm__("FUN_L07_0031f780");
-void seashell_update(unsigned char *m) {
+void seashell_update(unsigned char *seashell_moby) {
     enum {
         SEASHELL_INITIALIZE = 0,
         SEASHELL_WAIT_FOR_HIT = 1,
@@ -146,10 +146,10 @@ void seashell_update(unsigned char *m) {
     int flag = 0;
     float z;
     char *p, *pos, *vel;
-    char *x = find_moby_hit(m, 0x10000, 0);
-    switch (m[0x20]) {
+    char *x = find_moby_hit(seashell_moby, 0x10000, 0);
+    switch (seashell_moby[0x20]) {
     case SEASHELL_INITIALIZE:
-        m[0x20] = 1;
+        seashell_moby[0x20] = 1;
         break;
     case SEASHELL_WAIT_FOR_HIT:
         if (x != 0) {
@@ -157,19 +157,19 @@ void seashell_update(unsigned char *m) {
                 flag = 1;
         }
         if (flag)
-            m[0x20] = 2;
+            seashell_moby[0x20] = 2;
         break;
     case SEASHELL_SPAWN_AND_REMOVE:
-        allocate_voice_for_target_entry(0, 0, (int)m);
+        allocate_voice_for_target_entry(0, 0, (int)seashell_moby);
         z = 0.0f;
         p = D_L07_0015F580;
-        pos = m + 0x10;
-        FUN_L01_002787a0(m);
-        vel = m + 0x40;
-        FUN_L00_00263fd8(m, 0x698, pos, vel, 0, 0, z, p, p, p);
-        FUN_L00_00263fd8(m, 0x699, pos, vel, 0, 0, z, p, p, p);
-        FUN_L00_00263fd8(m, 0x69a, pos, vel, 0, 0, z, p, p, p);
-        mark_moby_for_removal_c_c2(m);
+        pos = seashell_moby + 0x10;
+        FUN_L01_002787a0(seashell_moby);
+        vel = seashell_moby + 0x40;
+        FUN_L00_00263fd8(seashell_moby, 0x698, pos, vel, 0, 0, z, p, p, p);
+        FUN_L00_00263fd8(seashell_moby, 0x699, pos, vel, 0, 0, z, p, p, p);
+        FUN_L00_00263fd8(seashell_moby, 0x69a, pos, vel, 0, 0, z, p, p, p);
+        mark_moby_for_removal_c_c2(seashell_moby);
         break;
     }
 }
