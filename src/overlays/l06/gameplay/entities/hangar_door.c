@@ -124,7 +124,7 @@ void FUN_L06_002f5360(char *moby) {
 void FUN_L06_002f53e8(char *moby) {
     char *data = *(char **)(moby + 0x78);
     int i;
-    char **p;
+    char **linked_moby_cursor;
     moby[0xBC] = 1;
     if ((unsigned char)moby[0x20] == 6) {
         unsigned short fl;
@@ -135,13 +135,13 @@ void FUN_L06_002f53e8(char *moby) {
         moby[0x20] = 8;
         *(unsigned short *)(moby + 0x34) = fl;
         *(int *)(data + 0x18) = 0;
-        p = (char **)(data + 0x24);
+        linked_moby_cursor = (char **)(data + 0x24);
         for (i = 6; i >= 0; i--) {
-            char *c = *p;
-            c[0x20] = 9;
-            *(unsigned short *)(*p + 0x34) &= 0xFFFE;
-            (*p)[0x31] = 1;
-            p++;
+            char *linked_moby = *linked_moby_cursor;
+            linked_moby[0x20] = 9;
+            *(unsigned short *)(*linked_moby_cursor + 0x34) &= 0xFFFE;
+            (*linked_moby_cursor)[0x31] = 1;
+            linked_moby_cursor++;
         }
     }
 }
