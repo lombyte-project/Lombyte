@@ -2747,36 +2747,36 @@ extern float FUN_001fa5c8_2d5988(f32, f32) __asm__("FUN_001fa5c8");
 extern float convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
 
 extern float D_L00_00161990 __attribute__((sda));
-void FUN_L00_002d5988(Obj_2d5988 *o, Path_2d5988 *path, s32 p) {
+void FUN_L00_002d5988(Obj_2d5988 *moby, Path_2d5988 *path, s32 arrival_state) {
     St_2d5988 *st;
     s32 idx;
     f32 t;
     Vec4_2d5988 v;
     Vec4_2d5988 w;
-    f32 d;
+    f32 distance_along_path;
     f32 w_;
-    f32 c;
-    f32 s;
+    f32 current_speed;
+    f32 speed_increment;
     f32 l;
     f32 r;
     f32 a;
     f32 b;
 
-    st = o->st;
-    FUN_L00_0025df68_2d5988(path, &o->v[0], &w, &idx, &t, 0, 999.0f, 5.0f, 0.0f);
-    d = convert_integer_to_float(idx) * path->a[0].f[3] + t;
-    w_ = d + 2.0f;
-    l = distance_xyz(&o->v[0], (void *)((char *)path + path->n * 16));
-    s = D_0015ED70_2d5988 * 16.0f;
-    c = st->v60;
-    if (l <= (c * c) / (s + s)) {
-        f32 low = c - s;
+    st = moby->st;
+    FUN_L00_0025df68_2d5988(path, &moby->v[0], &w, &idx, &t, 0, 999.0f, 5.0f, 0.0f);
+    distance_along_path = convert_integer_to_float(idx) * path->a[0].f[3] + t;
+    w_ = distance_along_path + 2.0f;
+    l = distance_xyz(&moby->v[0], (void *)((char *)path + path->n * 16));
+    speed_increment = D_0015ED70_2d5988 * 16.0f;
+    current_speed = st->v60;
+    if (l <= (current_speed * current_speed) / (speed_increment + speed_increment)) {
+        f32 low = current_speed - speed_increment;
         f32 b1 = D_L00_00161990 * D_0015ED6C_2d5988;
         st->v60 = low;
         if (low < b1)
             st->v60 = b1;
     } else {
-        f32 high = c + s;
+        f32 high = current_speed + speed_increment;
         f32 b2 = D_0015ED6C_2d5988 * 16.0f;
         st->v60 = high;
         if (b2 < high)
@@ -2791,38 +2791,38 @@ void FUN_L00_002d5988(Obj_2d5988 *o, Path_2d5988 *path, s32 p) {
     fast_vec_sub(&w, &path->b[idx], &path->a[idx]);
     FUN_001f9a68_2d5988(&w, &w, t);
     add_vector_xyz(&w, &w, &path->a[idx]);
-    l = vector_distance((void *)((char *)path + path->n * 16), &o->v[0]);
+    l = vector_distance((void *)((char *)path + path->n * 16), &moby->v[0]);
     if (l < 1.0f) {
         if (st->v60 <= D_L00_00161990 * D_0015ED6C_2d5988) {
-            o->flag = p;
+            moby->flag = arrival_state;
         }
     }
     if (idx + 1 < path->n - 8) {
-        r = FUN_001f9e90_2d5988(path->a[idx + 1].f[0] - o->v[0], path->a[idx + 1].f[1] - o->v[1]);
-        o->f48 = turn_f(&st->v6C, o->f48, r, 0.01f, 0.3f, 0.1f);
+        r = FUN_001f9e90_2d5988(path->a[idx + 1].f[0] - moby->v[0], path->a[idx + 1].f[1] - moby->v[1]);
+        moby->f48 = turn_f(&st->v6C, moby->f48, r, 0.01f, 0.3f, 0.1f);
     } else {
-        r = FUN_001f9e90_2d5988(hero.motion.pos.f[0] - o->v[0], hero.motion.pos.f[1] - o->v[1]);
-        o->f48 = turn_f(&st->v6C, o->f48, r, 0.01f, 0.3f, 0.1f);
+        r = FUN_001f9e90_2d5988(hero.motion.pos.f[0] - moby->v[0], hero.motion.pos.f[1] - moby->v[1]);
+        moby->f48 = turn_f(&st->v6C, moby->f48, r, 0.01f, 0.3f, 0.1f);
     }
-    fast_vec_sub(&v, &w, &o->v[0]);
+    fast_vec_sub(&v, &w, &moby->v[0]);
     l = FUN_001f9af0_2d5988(&v);
     if (st->v60 < l)
         l = st->v60;
     FUN_001f9bf8_2d5988(&v, &v, l);
-    add_vector_xyz(&o->v[0], &o->v[0], &v);
-    r = FUN_001fa5c8_2d5988(FUN_001f9e90_2d5988(v.f[0], v.f[1]), o->f48);
+    add_vector_xyz(&moby->v[0], &moby->v[0], &v);
+    r = FUN_001fa5c8_2d5988(FUN_001f9e90_2d5988(v.f[0], v.f[1]), moby->f48);
     {
         f32 xa, xb;
         xa = st->v60 * 0.34906584f * FUN_001f9dc8_2d5988(r) / (D_0015ED6C_2d5988 * 16.0f);
         xb = st->v60 * -0.34906584f * FUN_001f9de0_2d5988(r) / (D_0015ED6C_2d5988 * 16.0f);
         {
             f32 q44, k70;
-            q44 = turn_f(&st->v68, o->f44, xa, D_0015ED70_2d5988 * 0.52359879f,
+            q44 = turn_f(&st->v68, moby->f44, xa, D_0015ED70_2d5988 * 0.52359879f,
                                           D_0015ED70_2d5988 * 1.04719758f,
                                           D_0015ED6C_2d5988 * 0.785398185f);
             k70 = D_0015ED70_2d5988;
-            o->f44 = q44;
-            o->f40 = turn_f(&st->v64, o->f40, xb, k70 * 1.04719758f,
+            moby->f44 = q44;
+            moby->f40 = turn_f(&st->v64, moby->f40, xb, k70 * 1.04719758f,
                                              k70 * 2.09439516f, D_0015ED6C_2d5988 * 1.57079637f);
         }
     }
