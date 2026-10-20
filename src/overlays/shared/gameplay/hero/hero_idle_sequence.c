@@ -1623,7 +1623,7 @@ void FUN_L00_002080b0(void) {
     Vec4_2080b0 v;
     struct Moby *item_moby;
     int i;
-    int c, g;
+    int glow_channel_sample, g;
 
     if (hero.items[2].item_id == 5) {
         struct Moby *w = hero.items[2].moby;
@@ -1658,12 +1658,12 @@ void FUN_L00_002080b0(void) {
         v.f[2] = 0.0962345004f;
         transform_vector_by_basis_2080b0(&v, &v, &item_moby->rot_row0);
         add_vector_xyz_2080b0(&v, &v, &item_moby->pos);
-        c = (*(unsigned char *)&item_moby->glow_color);
+        glow_channel_sample = (*(unsigned char *)&item_moby->glow_color);
         g = ((unsigned char *)&item_moby->glow_color)[1];
-        fr = (float)c;
-        c = ((unsigned char *)&item_moby->glow_color)[2];
+        fr = (float)glow_channel_sample;
+        glow_channel_sample = ((unsigned char *)&item_moby->glow_color)[2];
         x1 = truncate_float_to_s32_2080b0(fr * 0.2f);
-        x2 = truncate_float_to_s32_2080b0((float)c * 0.2f);
+        x2 = truncate_float_to_s32_2080b0((float)glow_channel_sample * 0.2f);
         col = ((g << 5) / 200) << 24;
         col |= x2 << 16;
         g <<= 8;
@@ -1739,12 +1739,12 @@ void FUN_L00_002080b0(void) {
         v.f[2] = 0.140954122f;
         transform_vector_by_basis_2080b0(&v, &v, &item_moby->rot_row0);
         add_vector_xyz_2080b0(&v, &v, &item_moby->pos);
-        c = (*(unsigned char *)&item_moby->glow_color);
+        glow_channel_sample = (*(unsigned char *)&item_moby->glow_color);
         g = ((unsigned char *)&item_moby->glow_color)[1];
-        fr = (float)c;
-        c = ((unsigned char *)&item_moby->glow_color)[2];
+        fr = (float)glow_channel_sample;
+        glow_channel_sample = ((unsigned char *)&item_moby->glow_color)[2];
         x1 = truncate_float_to_s32_2080b0(fr * 0.2f);
-        x2 = truncate_float_to_s32_2080b0((float)c * 0.2f);
+        x2 = truncate_float_to_s32_2080b0((float)glow_channel_sample * 0.2f);
         col = ((g << 5) / 200) << 24;
         col |= x2 << 16;
         g <<= 8;
