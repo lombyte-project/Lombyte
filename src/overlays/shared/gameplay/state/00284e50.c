@@ -29,7 +29,7 @@ void jet_reset_camera(OvlQuad *saved_position, OvlQuad *b) {
     char *q;
     char *g;
     int lvl;
-    signed char c;
+    signed char saved_value_override;
     int v;
 
     copy_memory_aligned((int)&D_L00_001BB280, &D_L00_001BA620, 0x404);
@@ -63,9 +63,9 @@ void jet_reset_camera(OvlQuad *saved_position, OvlQuad *b) {
         *(char *)(saved_state + 0x40) = *(unsigned char *)(g + 0x68);
         *(char *)(saved_state + 0x41) = *(unsigned char *)(g + 0x69);
         *(char *)(saved_state + 0x42) = *(unsigned char *)(g + 0x6A);
-        c = *(signed char *)(q + 0x22);
-        if (c != -1) {
-            *(int *)(saved_state + 0xC54) = c;
+        saved_value_override = *(signed char *)(q + 0x22);
+        if (saved_value_override != -1) {
+            *(int *)(saved_state + 0xC54) = saved_value_override;
         } else {
             *(int *)(saved_state + 0xC54) = *(short *)(q + 0x38);
         }
