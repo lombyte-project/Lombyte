@@ -143,13 +143,13 @@ void FUN_L12_002bf140(struct Moby *moby) {
             hero.water_surface_z = moby->pos.z;
         }
         if (random_integer_below_c(200) == 0) {
-            char *p;
+            char *slot_record;
             other = random_float_between_c(-4.0f, 4.0f);
             value = *(float *)(D_L12_001CBF40_c + data[3] * 0x1190);
             value += other;
             other = random_float_between_c(-4.0f, 4.0f);
-            p = D_L12_001CBF40_c + data[3] * 0x1190;
-            move_slot_c(value, *(float *)(p + 4) + other, 1.0f, -0.05f, p, 1, 1);
+            slot_record = D_L12_001CBF40_c + data[3] * 0x1190;
+            move_slot_c(value, *(float *)(slot_record + 4) + other, 1.0f, -0.05f, slot_record, 1, 1);
         }
         break;
     }
