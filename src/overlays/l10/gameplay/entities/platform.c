@@ -2363,7 +2363,7 @@ void mark_moby_for_removal_d650(struct Obj *obj) __asm__("FUN_0020c828");
 void block_cave_update(struct Moby *m) __asm__("FUN_L10_002dd650");
 void block_cave_update(struct Moby *moby) {
     int i;
-    char *e;
+    char *table_entry;
     float w[16];
     float v[4];
     unsigned short id = moby->save_id;
@@ -2373,11 +2373,11 @@ void block_cave_update(struct Moby *moby) {
         return;
     }
     moby->draw_dist = 0x80;
-    e = D_L10_00178580;
-    for (i = 0; i < 0x40; i++, e += 0x40) {
-        if (*(char **)(e + 0x34) == moby) {
-            if (*(int *)(e + 0x24) & 0x20000) {
-                char *other_moby = *(char **)(e + 0x20);
+    table_entry = D_L10_00178580;
+    for (i = 0; i < 0x40; i++, table_entry += 0x40) {
+        if (*(char **)(table_entry + 0x34) == moby) {
+            if (*(int *)(table_entry + 0x24) & 0x20000) {
+                char *other_moby = *(char **)(table_entry + 0x20);
                 if (*(short *)(other_moby + 0xA6) == 0xAC || *(short *)(other_moby + 0xA6) == 0x99) {
                     subtract_vector_xyz(v, &moby->pos, other_moby + 0x10);
                     transpose_rotation_matrix(w, &moby->rot_row0);
@@ -2391,9 +2391,9 @@ void block_cave_update(struct Moby *moby) {
                         mark_moby_for_removal_d650(moby);
                         return;
                     }
-                    *(int *)(e + 0x34) = 0;
+                    *(int *)(table_entry + 0x34) = 0;
                 } else {
-                    *(int *)(e + 0x34) = 0;
+                    *(int *)(table_entry + 0x34) = 0;
                 }
             }
         }
