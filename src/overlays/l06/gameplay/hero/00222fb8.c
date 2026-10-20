@@ -1025,7 +1025,7 @@ void FUN_L06_0022e020(void) {
     Vec4 v20;
     Vec4 v30;
     Vec4 m40[4];
-    Vec4 m80[4];
+    Vec4 inverse_yaw_matrix[4];
     Vec4 vC0;
     Vec4 vD0;
 
@@ -1325,8 +1325,8 @@ void FUN_L06_0022e020(void) {
         clear_u64_value(&v20);
         v20.f[2] = hero.motion.rot.f[2];
         euler_rotation_matrix(m40, &v20);
-        transpose_rotation_matrix(m80, m40);
-        transform_vector(&v0, &v0, m80);
+        transpose_rotation_matrix(inverse_yaw_matrix, m40);
+        transform_vector(&v0, &v0, inverse_yaw_matrix);
         v10.f[0] = -fast_arc_tan(square_root(v0.f[0] * v0.f[0] + v0.f[2] * v0.f[2]), v0.f[1]);
         v10.f[1] = fast_arc_tan(v0.f[2], v0.f[0]);
         FUN_L00_0025bc98(&hero.motion.rot.f[1], v10.f[1], &hero.motion.unkA0.f[1], 0, frame_scale_sq * 0.04f, frame_scale_sq * 0.2f,
@@ -1815,14 +1815,14 @@ void FUN_L06_0022e020(void) {
         }
         FUN_L06_00228b40_c();
         if (hero.unk930 > 0.0f) {
-            Vec4 *p = &hero.move_impulse;
+            Vec4 *move_impulse_ptr = &hero.move_impulse;
             FUN_L00_002132b8(0.7f, 0.0f);
             v0.q = hero.move_impulse.q;
             hero.target_speed += forward_component(&v0);
             if (hero.target_speed < D_0015ED6C_c * 0.7f) {
                 hero.target_speed = D_0015ED6C_c * 0.7f;
             }
-            clear_u64_value(p);
+            clear_u64_value(move_impulse_ptr);
         }
         k = 1.0f;
         if (hero.state.step == 1 && hero.unk3BE == 0) {
@@ -2489,13 +2489,13 @@ void FUN_L06_0022e020(void) {
             FUN_L00_00262608(&hero.trail.pos[0], state_timer_or_trail_control);
         }
         if (hero.state.current == HERO_STATE_PACK_LONG_JUMP && scale_game_frames(8) < hero.state_timer && hero.anim_frame < 28.0f) {
-            s32 n;
+            s32 collected_moby_count;
             FUN_L00_00233660(&v0, 0.8f, 0.0f, 0.3f);
-            n = collect_mobies_in_sphere(0.9f, &v0, 0, (struct MobyView *)hero.moby, NULL);
-            if (n != 0) {
+            collected_moby_count = collect_mobies_in_sphere(0.9f, &v0, 0, (struct MobyView *)hero.moby, NULL);
+            if (collected_moby_count != 0) {
                 s32 i;
                 fast_vec_scale(&v10, &hero.motion.displacement, 7.0f);
-                for (i = 0; i < n; i++) {
+                for (i = 0; i < collected_moby_count; i++) {
                     if (FUN_L00_0025e3b8_c(D_L06_00178680[i]) != 0) {
                         spawn_nearby_effect(D_L06_00178680[i], (struct MobyView *)hero.moby, 0x10000, &hero.motion.pos, &v10,
                                          1.0f);
