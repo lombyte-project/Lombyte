@@ -74,12 +74,12 @@ void FUN_L00_002831c0(void) {
         } else if ((unsigned)(code - 0x25) < 0x12) {
             FUN_L00_002607d0(va);
         } else if ((unsigned)vb < 6) {
-            char *p3 = D_0013D388;
-            p3[vb] = 1;
+            char *code_flags = D_0013D388;
+            code_flags[vb] = 1;
         } else if ((unsigned)vc < 0x1e) {
-            unsigned char *q = (unsigned char *)D_0013D408 + vc;
-            if (!*q) {
-                *q = 1;
+            unsigned char *selected_code_flag = (unsigned char *)D_0013D408 + vc;
+            if (!*selected_code_flag) {
+                *selected_code_flag = 1;
                 allocate_voice_for_bank_entry(1, 0, 0);
                 FUN_L00_00263d40(0x53D6, -1);
             }
