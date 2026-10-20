@@ -20,17 +20,17 @@ typedef struct {
 
 extern void copy_memory_aligned(int, void *, int) __asm__("FUN_001f9838");
 
-void FUN_L01_0029b0a0(char *source, int byte_count, char *p, int mode, Table *entry_table) {
-    short v20 = *(short *)(p + 0xB2);
-    short v19 = *(short *)(p + 0xA6);
+void FUN_L01_0029b0a0(char *source, int byte_count, char *context_moby, int mode, Table *entry_table) {
+    short v20 = *(short *)(context_moby + 0xB2);
+    short v19 = *(short *)(context_moby + 0xA6);
     short key;
     int i;
     Entry *e;
     Entry *ne;
     if (mode == 1) {
-        key = source - p;
+        key = source - context_moby;
     } else {
-        key = (int)source - *(unsigned short *)(p + 0x78);
+        key = (int)source - *(unsigned short *)(context_moby + 0x78);
     }
     for (i = 0; i < entry_table->n; i++) {
         e = &entry_table->e[i];
