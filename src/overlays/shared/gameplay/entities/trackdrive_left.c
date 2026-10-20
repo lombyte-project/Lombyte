@@ -1560,8 +1560,8 @@ void FUN_L02_002d93e8(char *moby) {
     ctx.texture = get_effect_texture(0x10);
     FUN_L02_002dae88_c();
     {
-        int n, *marker_cursor;
-        for (n = 11, marker_cursor = markers->slot; n >= 0; --n, ++marker_cursor) {
+        int marker_reset_countdown, *marker_cursor;
+        for (marker_reset_countdown = 11, marker_cursor = markers->slot; marker_reset_countdown >= 0; --marker_reset_countdown, ++marker_cursor) {
             if (*marker_cursor != 0) *marker_cursor = 1;
         }
     }
