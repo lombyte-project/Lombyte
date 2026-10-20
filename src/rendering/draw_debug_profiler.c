@@ -110,7 +110,7 @@ extern s32 pal_mode __asm__("D_0015ED80") MACRO_ADDR;
 extern float sequence_macro __asm__("D_0015F43C") MACRO_ADDR;
 extern s32 game_mode_macro __asm__("D_0015F604") MACRO_ADDR;
 void draw_debug_profiler(void) {
-    f32 t;
+    f32 rcnt1_count_float;
     f32 div;
 
     if (D_0016045C == NULL || D_0016045C->unk4 != 0 || ((draw_enable_mask ^ 1) & 1) ||
@@ -263,8 +263,8 @@ void draw_debug_profiler(void) {
     }
     vu0_load_micro_program(D_00100AE0);
     FlushCache(0);
-    t = convert_integer_to_float(*(volatile s32 *)0x10000800);
-    D_0015F614 = t / (pal_mode != 0 ? 11520.0f : 9600.0f);
+    rcnt1_count_float = convert_integer_to_float(*(volatile s32 *)0x10000800);
+    D_0015F614 = rcnt1_count_float / (pal_mode != 0 ? 11520.0f : 9600.0f);
     vu1_sync_chain(2);
     noop_core_callback(D_0015F410, 0x11);
     if (draw_enable_mask & 2) {
