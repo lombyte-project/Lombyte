@@ -1352,7 +1352,7 @@ void red_ship_1_update(char *moby) {
     int r;
     int idx;
     unsigned char *voice_slot_entry;
-    float f;
+    float initial_speed_oscillation_phase;
     float step;
 
     *(OvlQuad *)zero = 0;
@@ -1455,10 +1455,10 @@ void red_ship_1_update(char *moby) {
         *(OvlQuad *)(moby + 0x10) = *(OvlQuad *)(data + 0xE0);
         FUN_L03_0029c8a8(moby, pos0);
         data[0x131] = 7;
-        f = *(float *)(data + 0x13C);
-        if (f > 6.2831855f) {
-            *(float *)(data + 0x13C) = f * DEG_TO_RAD;
-        } else if (*(float *)(data + 0x134) != 0.0f && f == -1.0f) {
+        initial_speed_oscillation_phase = *(float *)(data + 0x13C);
+        if (initial_speed_oscillation_phase > 6.2831855f) {
+            *(float *)(data + 0x13C) = initial_speed_oscillation_phase * DEG_TO_RAD;
+        } else if (*(float *)(data + 0x134) != 0.0f && initial_speed_oscillation_phase == -1.0f) {
             *(float *)(data + 0x13C) = random_angle_radians();
         }
         *(OvlQuad *)(data + 0xD0) = *(OvlQuad *)(data + 0xC0);
