@@ -199,12 +199,12 @@ void FUN_L16_002cf4a8(struct Moby *moby) {
                     data[3] = func_0022ED80_i(0, 4, moby);
                 }
             } else if (data[2] != 0) {
-                int h = data[3];
+                int voice_slot_index = data[3];
                 data[2] = 0;
-                if (h != -1) {
-                    char *e = D_0013E533 + 0x1D + h * 0x70;
-                    if (*(char **)(e + 0x88) == moby && *(unsigned char *)(e + 0x74) != 0) {
-                        release_voice_slot(h);
+                if (voice_slot_index != -1) {
+                    char *voice_entry_base = D_0013E533 + 0x1D + voice_slot_index * 0x70;
+                    if (*(char **)(voice_entry_base + 0x88) == moby && *(unsigned char *)(voice_entry_base + 0x74) != 0) {
+                        release_voice_slot(voice_slot_index);
                     }
                 }
                 data[3] = -1;
