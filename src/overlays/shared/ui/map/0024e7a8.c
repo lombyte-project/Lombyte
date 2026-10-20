@@ -7,13 +7,13 @@ extern u8 *D_L00_0015FFE0;
 #include "rnc/overlay/level_labels.h"
 extern s32 D_L00_0015FFBC;
 void FUN_L00_0024e7a8(void) {
-    u8 *p;
+    u8 *current_record;
     s32 flag = 0;
     D_L00_0015FFBC = 0;
-    for (p = D_L00_0015FFDC; p < D_L00_0015FFE0; p += 0x100) {
-        if ((p[0x20] >= 0xFE && (*(u32 *)&D_L00_0015F5CC) >= *(u64 *)(p + 0x38)) || flag) {
+    for (current_record = D_L00_0015FFDC; current_record < D_L00_0015FFE0; current_record += 0x100) {
+        if ((current_record[0x20] >= 0xFE && (*(u32 *)&D_L00_0015F5CC) >= *(u64 *)(current_record + 0x38)) || flag) {
             D_L00_0015FFBC++;
-            if (p[0x20] == 0xFF)
+            if (current_record[0x20] == 0xFF)
                 flag = 1;
         }
     }
