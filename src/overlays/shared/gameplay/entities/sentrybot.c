@@ -926,40 +926,40 @@ extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 void blend_moby_animation_c(void *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
-int FUN_L15_00299880(unsigned char *moby, char *d, int a, int b, float angle) {
-    float n = -fast_subtract_rotations(*(float *)(moby + 0x48), angle);
+int FUN_L15_00299880(unsigned char *moby, char *moby_data, int next_state, int b, float angle) {
+    float heading_delta = -fast_subtract_rotations(*(float *)(moby + 0x48), angle);
     float v;
     int ret = 1;
-    *(int *)(d + 0x144) = 0;
-    *(float *)(d + 0x170) = *(float *)(moby + 0x48);
-    *(float *)(d + 0x174) = angle;
-    *(float *)(d + 0x178) = n;
-    d[0x15C] = a;
-    d[0x15D] = b;
-    if (n > 2.0943952f || n < -2.0943952f) {
+    *(int *)(moby_data + 0x144) = 0;
+    *(float *)(moby_data + 0x170) = *(float *)(moby + 0x48);
+    *(float *)(moby_data + 0x174) = angle;
+    *(float *)(moby_data + 0x178) = heading_delta;
+    moby_data[0x15C] = next_state;
+    moby_data[0x15D] = b;
+    if (heading_delta > 2.0943952f || heading_delta < -2.0943952f) {
         moby[0x20] = 8;
-        v = *(float *)(d + 0x178);
+        v = *(float *)(moby_data + 0x178);
         if (v > 0.0f) {
-            *(float *)(d + 0x178) = v + -6.2831855f;
+            *(float *)(moby_data + 0x178) = v + -6.2831855f;
         }
         if (moby[0x53] != 0xC) {
             blend_moby_animation_c(moby, 0xC, 0, scale_game_frames(10));
         }
 
-    } else if (n < -0.7853982f) {
+    } else if (heading_delta < -0.7853982f) {
         moby[0x20] = 6;
         if (moby[0x53] != 0xA) {
             blend_moby_animation_c(moby, 0xA, 0, scale_game_frames(10));
         }
 
-    } else if (n > 0.7853982f) {
+    } else if (heading_delta > 0.7853982f) {
         moby[0x20] = 7;
         if (moby[0x53] != 0xB) {
             blend_moby_animation_c(moby, 0xB, 0, scale_game_frames(10));
         }
 
     } else {
-        moby[0x20] = a;
+        moby[0x20] = next_state;
         if (moby[0x53] != b) {
             blend_moby_animation_c(moby, b, 0, scale_game_frames(10));
         }
