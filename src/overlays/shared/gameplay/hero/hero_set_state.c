@@ -282,7 +282,7 @@ void FUN_L00_00221b68(void) {
     char *p;
     char *r;
     float distance_error;
-    float d;
+    float xy_distance;
     float lim;
     float ang;
     int s;
@@ -299,15 +299,15 @@ void FUN_L00_00221b68(void) {
     }
     p = (char *)D_0013E533 + 0xE1D;
     if (*(short *)(p + 0x1EA) != 0) {
-        d = vector_distance_xy(p + 0x80, p + 0x210);
+        xy_distance = vector_distance_xy(p + 0x80, p + 0x210);
         lim = *(float *)(p + 0x234) * 0.9f;
-        if (d < lim) {
+        if (xy_distance < lim) {
             ang = fast_arc_tan(*(float *)(p + 0x80) - *(float *)(p + 0x210),
                                *(float *)(p + 0x84) - *(float *)(p + 0x214));
-            if (d < *(float *)(p + 0x234) * 0.05f) {
+            if (xy_distance < *(float *)(p + 0x234) * 0.05f) {
                 ang = *(float *)(p + 0x98);
             }
-            distance_error = d - lim;
+            distance_error = xy_distance - lim;
             vendor_spring(&distance_error, (float *)(p + 0x244), 0.0f, frame_scale_sq * 0.03f, frame_scale_sq * 0.3f,
                              frame_time * 2.8f);
             *(float *)(p + 0xF0) = fast_cos(ang) * *(float *)(p + 0x244);
