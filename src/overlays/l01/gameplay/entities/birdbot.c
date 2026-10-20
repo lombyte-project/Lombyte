@@ -2772,9 +2772,9 @@ extern void FUN_L01_002f6150(void);
 void enqueue_callback_list_1(void *fn, void *arg) __asm__("FUN_001f4600");
 
 void FUN_L01_002f6180(void *arg) {
-    Vec4 c;
-    Vec4 d;
-    Vec4 *p;
+    Vec4 bounding_sphere;
+    Vec4 point_to_center;
+    Vec4 *point_cursor;
     s32 i;
     s32 j;
     s32 k;
@@ -2783,24 +2783,24 @@ void FUN_L01_002f6180(void *arg) {
     if (D_L01_00161BA0 == 0) {
         D_L01_00161BA0 = 1;
         for (i = 0; i < 2; i++) {
-            qzero(&c);
-            p = (D_L01_001E3380 + i)->pts;
+            qzero(&bounding_sphere);
+            point_cursor = (D_L01_001E3380 + i)->pts;
             for (j = 0; j < (D_L01_001E3380 + i)->count; j++) {
-                fast_vec_add(&c, &c, p);
-                p++;
+                fast_vec_add(&bounding_sphere, &bounding_sphere, point_cursor);
+                point_cursor++;
             }
-            fast_vec_scale(&c, &c, 1.0f / convert_integer_to_float((D_L01_001E3380 + i)->count));
-            c.f[3] = 0.0f;
-            p = (D_L01_001E3380 + i)->pts;
+            fast_vec_scale(&bounding_sphere, &bounding_sphere, 1.0f / convert_integer_to_float((D_L01_001E3380 + i)->count));
+            bounding_sphere.f[3] = 0.0f;
+            point_cursor = (D_L01_001E3380 + i)->pts;
             for (k = 0; k < (D_L01_001E3380 + i)->count; k++) {
-                fast_vec_sub(&d, &c, p);
-                r = fast_vec_length(&d);
-                if (c.f[3] < r) {
-                    c.f[3] = r;
+                fast_vec_sub(&point_to_center, &bounding_sphere, point_cursor);
+                r = fast_vec_length(&point_to_center);
+                if (bounding_sphere.f[3] < r) {
+                    bounding_sphere.f[3] = r;
                 }
-                p++;
+                point_cursor++;
             }
-            qcopy((D_L01_001E3380 + i)->out, &c);
+            qcopy((D_L01_001E3380 + i)->out, &bounding_sphere);
         }
     }
     enqueue_callback_list_1(FUN_L01_002f6150, arg);
