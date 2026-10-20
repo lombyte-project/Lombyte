@@ -193,9 +193,9 @@ void FUN_L02_002ee890(struct Moby *moby) {
         if (h->grounded_frames != 0) {
             data[0x15] = 0;
         } else if (is_point_inside_clip_volume(&h->motion.pos, data[0x13]) != 0) {
-            unsigned char *q = D_0013D408;
-            if (q[1] == 0) {
-                q[1] = 1;
+            unsigned char *dialogue_latch_bytes = D_0013D408;
+            if (dialogue_latch_bytes[1] == 0) {
+                dialogue_latch_bytes[1] = 1;
                 allocate_voice_for_bank_entry(1, 0, 0);
                 queue_dialogue_message(0x53D6, -1);
             }
