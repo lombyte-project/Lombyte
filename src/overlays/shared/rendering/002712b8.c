@@ -2041,7 +2041,7 @@ extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 
 void FUN_L00_00275d68(unsigned char *particle) {
     float *v = (float *)(particle + 0x20);
-    int c;
+    int color_without_alpha;
     float t;
     if (*(int *)(v + 7)) {
         v[0] += v[4];
@@ -2058,9 +2058,9 @@ void FUN_L00_00275d68(unsigned char *particle) {
         return;
     }
     if (*(int *)(v + 7)) {
-        c = *(int *)(particle + 4) & 0xFFFFFF;
+        color_without_alpha = *(int *)(particle + 4) & 0xFFFFFF;
         *(int *)(particle + 4) =
-            FUN_001fa6e0(c, *(int *)(particle + 4),
+            FUN_001fa6e0(color_without_alpha, *(int *)(particle + 4),
                          convert_integer_to_float(*(short *)(particle + 0xA) - 1) / convert_integer_to_float(*(short *)(particle + 0xA)));
     } else {
         *(int *)(particle + 4) =
