@@ -174,28 +174,28 @@ extern int p2718d0_trunc(float) __asm__("FUN_001fa6d0");
 extern float p2718d0_rndf(float, float) __asm__("FUN_002132a8");
 unsigned char *spawn_splash(u128 *pos, u128 *dir, int w, float scale, float speed) __asm__("FUN_L00_002718d0");
 unsigned char *spawn_splash(u128 *pos, u128 *dir, int w, float scale, float speed) {
-    unsigned char *p;
-    unsigned char *m;
+    unsigned char *particle;
+    unsigned char *particle_data;
     float r;
-    p = p27fe00_alloc(0x2e);
-    if (p != 0) {
-        qcopy(p + 0x10, pos);
-        m = p + 0x20;
-        *(int *)(p + 4) = ((p2718d0_rnd(10) + 0x26) << 24) | 0x808080;
-        p[9] = p2718d0_trunc(2.0f) + 0x20;
-        p[3] = 0x48;
-        p[1] = 1;
-        p[2] = *D_L00_001B2138;
-        *(short *)(p + 0xA) = 5;
-        *(float *)(p + 0xC) = scale * 210000.0f;
-        qcopy(m, dir);
+    particle = p27fe00_alloc(0x2e);
+    if (particle != 0) {
+        qcopy(particle + 0x10, pos);
+        particle_data = particle + 0x20;
+        *(int *)(particle + 4) = ((p2718d0_rnd(10) + 0x26) << 24) | 0x808080;
+        particle[9] = p2718d0_trunc(2.0f) + 0x20;
+        particle[3] = 0x48;
+        particle[1] = 1;
+        particle[2] = *D_L00_001B2138;
+        *(short *)(particle + 0xA) = 5;
+        *(float *)(particle + 0xC) = scale * 210000.0f;
+        qcopy(particle_data, dir);
         r = p2718d0_rndf(0.0f, 256.0f);
-        *(float *)(m + 0x10) = r;
-        p[8] = p2718d0_trunc(r);
-        *(float *)(m + 0x14) = speed;
-        *(int *)(m + 0x18) = w;
+        *(float *)(particle_data + 0x10) = r;
+        particle[8] = p2718d0_trunc(r);
+        *(float *)(particle_data + 0x14) = speed;
+        *(int *)(particle_data + 0x18) = w;
     }
-    return p;
+    return particle;
 }
 void FUN_001f9a10_002719f0(void *, void *, void *) __asm__("FUN_001f9a10");
 int FUN_001fa6d0_002719f0(float) __asm__("FUN_001fa6d0");
