@@ -3227,30 +3227,30 @@ typedef struct {
     s32 clip;        /* 0xA4 */
 } L14TramVars;
 /* Tram update: carries its rider moby, unlocks once the three items are bought and the camera looks at it. */
-void FUN_L14_002fcbb0(struct Moby *m) {
+void FUN_L14_002fcbb0(struct Moby *moby) {
     enum {
         TRAM_STATE_INITIALIZE = 0,
         TRAM_STATE_WAIT_FOR_UNLOCK = 1,
         TRAM_STATE_FOLLOW_PATH = 2,
         TRAM_STATE_WAIT_FOR_RESPAWN = 3
     };
-    L14TramVars *d = (L14TramVars *)m->pvars;
+    L14TramVars *moby_vars = (L14TramVars *)moby->pvars;
     Vec4 b;
-    Vec4 a;
+    Vec4 carrier_position;
 
-    if (m->state == 0) {
-        u16 id = m->save_id;
+    if (moby->state == 0) {
+        u16 id = moby->save_id;
         if (D_L14_001BB930_t.collected[(short)id] != 0 ||
             (D_0014C190_257218[current_level_index][(short)id >> 5] >> (id & 0x1F)) & 1) {
-            FUN_L14_002fe238((char *)&D_L14_0015FFD8_t[d->carrier]);
-            tram_remove(m);
+            FUN_L14_002fe238((char *)&D_L14_0015FFD8_t[moby_vars->carrier]);
+            tram_remove(moby);
             return;
         }
     }
     {
-        void *hit = tram_hit(m, 0x800000, 0);
-        m->hit_slot = 0xFF;
-        if (hit != 0 && d->carrier == -1 && m->state != 3) {
+        void *hit = tram_hit(moby, 0x800000, 0);
+        moby->hit_slot = 0xFF;
+        if (hit != 0 && moby_vars->carrier == -1 && moby->state != 3) {
             if (current_level_index == 14) {
                 D_0015EE08 = D_0015EE08 + 1;
                 if (D_0015EE08 >= 3 && D_0013D408_t[0x18] == 0) {
@@ -3259,62 +3259,62 @@ void FUN_L14_002fcbb0(struct Moby *m) {
                     FUN_L00_00263d40(0x53D6, -1);
                 }
             }
-            m->state = 3;
-            FUN_L00_0025f090(m, &m->pos, -1, 5.0f, 13.0f);
-            m->collision = 0;
-            m->flags |= 0x41;
-            if (d->sound != -1) {
-                char *e = D_0013E550 + d->sound * 0x70;
-                if (*(struct Moby **)(e + 0x88) == m && ((u8 *)e)[0x74] != 0)
-                    tram_release(d->sound);
+            moby->state = 3;
+            FUN_L00_0025f090(moby, &moby->pos, -1, 5.0f, 13.0f);
+            moby->collision = 0;
+            moby->flags |= 0x41;
+            if (moby_vars->sound != -1) {
+                char *voice_entry = D_0013E550 + moby_vars->sound * 0x70;
+                if (*(struct Moby **)(voice_entry + 0x88) == moby && ((u8 *)voice_entry)[0x74] != 0)
+                    tram_release(moby_vars->sound);
             }
-            d->sound = -1;
+            moby_vars->sound = -1;
         }
     }
-    switch (m->state) {
+    switch (moby->state) {
     case TRAM_STATE_INITIALIZE:
-        if (d->path == -1) {
-            tram_print(D_L14_001FCE98, m->save_id);
-            tram_remove(m);
+        if (moby_vars->path == -1) {
+            tram_print(D_L14_001FCE98, moby->save_id);
+            tram_remove(moby);
             return;
         }
-        if (*(int *)D_L14_001B0BB0_t[d->path] == 0) {
-            tram_print(D_L14_001FCED0, m->save_id);
-            tram_remove(m);
+        if (*(int *)D_L14_001B0BB0_t[moby_vars->path] == 0) {
+            tram_print(D_L14_001FCED0, moby->save_id);
+            tram_remove(moby);
             return;
         }
-        if (d->item[0] < 0 || d->item[1] < 0 || d->item[2] < 0) {
-            tram_remove(m);
+        if (moby_vars->item[0] < 0 || moby_vars->item[1] < 0 || moby_vars->item[2] < 0) {
+            tram_remove(moby);
             return;
         }
-        FUN_L14_002fc890(m);
-        if (d->carrier != 0) {
+        FUN_L14_002fc890(moby);
+        if (moby_vars->carrier != 0) {
             struct Moby *c;
-            m->state = 1;
-            m->update_dist = 0xFF;
-            m->flags |= 0x41;
-            m->collision = 0;
-            c = &D_L14_0015FFD8_t[d->carrier];
+            moby->state = 1;
+            moby->update_dist = 0xFF;
+            moby->flags |= 0x41;
+            moby->collision = 0;
+            c = &D_L14_0015FFD8_t[moby_vars->carrier];
             c->flags |= 0x41;
-            d->stage = 0;
+            moby_vars->stage = 0;
         } else {
-            m->state = 2;
-            m->update_dist = 0x80;
+            moby->state = 2;
+            moby->update_dist = 0x80;
         }
-        m->draw_dist = 0x80;
-        d->sound = -1;
-        d->timer = tram_frames(D_L14_00161F8C);
+        moby->draw_dist = 0x80;
+        moby_vars->sound = -1;
+        moby_vars->timer = tram_frames(D_L14_00161F8C);
         break;
     case TRAM_STATE_WAIT_FOR_UNLOCK: {
         int lvl = current_level_index * 16;
-        u8 v = visited52[d->item[0] + lvl];
+        u8 v = visited52[moby_vars->item[0] + lvl];
         if (v == 0xFF) {
-            u8 w = visited52[d->item[1] + lvl];
+            u8 w = visited52[moby_vars->item[1] + lvl];
             if (w == v) {
-                u8 x = visited52[d->item[2] + lvl];
+                u8 x = visited52[moby_vars->item[2] + lvl];
                 if (x == w && hero.frames_off_ground.s == 0 && hero.ground_moby == 0 &&
-                    tram_inside(&hero.motion.pos, d->clip) != 0) {
-                    struct Moby *carrier = &D_L14_0015FFD8_t[d->carrier];
+                    tram_inside(&hero.motion.pos, moby_vars->clip) != 0) {
+                    struct Moby *carrier = &D_L14_0015FFD8_t[moby_vars->carrier];
                     struct Moby *rider = &D_L14_0015FFD8_t[((int *)carrier->pvars)[1]];
                     float pitch;
                     qcopy(&b, &rider->pos);
@@ -3325,13 +3325,13 @@ void FUN_L14_002fcbb0(struct Moby *m) {
                                                                          rider->pos.y - D_L14_00167380_v.pos[1])) < 0.4886922f &&
                         pitch < 0.34906584f &&
                         tram_coll_line(D_L14_00167380_v.pos, &b, 0x12, rider, 0) == 0) {
-                        D_0014C190_257218[current_level_index][(short)m->save_id >> 5] |= 1 << (m->save_id & 0x1F);
-                        D_L14_001BABD0[(short)m->save_id >> 5] |= 1 << (m->save_id & 0x1F);
-                        m->flags &= 0xFFBE;
-                        m->collision = m->pclass->collision;
+                        D_0014C190_257218[current_level_index][(short)moby->save_id >> 5] |= 1 << (moby->save_id & 0x1F);
+                        D_L14_001BABD0[(short)moby->save_id >> 5] |= 1 << (moby->save_id & 0x1F);
+                        moby->flags &= 0xFFBE;
+                        moby->collision = moby->pclass->collision;
                         carrier->flags &= 0xFFBE;
-                        m->state = 2;
-                        FUN_L10_002f5a50(d->i90);
+                        moby->state = 2;
+                        FUN_L10_002f5a50(moby_vars->i90);
                         rider->draw_dist = 0xFF;
                         rider->update_dist = 0xFF;
                     }
@@ -3341,44 +3341,44 @@ void FUN_L14_002fcbb0(struct Moby *m) {
         break;
     }
     case TRAM_STATE_FOLLOW_PATH:
-        if (FUN_L14_002fd918(m) != 0)
+        if (FUN_L14_002fd918(moby) != 0)
             return;
-        if (d->carrier != 0 && d->stage < 2) {
+        if (moby_vars->carrier != 0 && moby_vars->stage < 2) {
             struct Moby *c;
-            if (d->stage == 0 && d->segment >= 0x38)
-                d->stage = 1;
-            tram_scale(&a, &m->rot_row0, 0.21f);
-            tram_scale(&b, &m->rot_row2, -1.24f);
-            tram_add(&a, &a, &b);
-            tram_add(&a, &m->pos, &a);
-            c = &D_L14_0015FFD8_t[d->carrier];
-            qcopy(&c->pos, &a);
-            qcopy(&c->rot, &m->rot);
-            if (d->stage == 1) {
+            if (moby_vars->stage == 0 && moby_vars->segment >= 0x38)
+                moby_vars->stage = 1;
+            tram_scale(&carrier_position, &moby->rot_row0, 0.21f);
+            tram_scale(&b, &moby->rot_row2, -1.24f);
+            tram_add(&carrier_position, &carrier_position, &b);
+            tram_add(&carrier_position, &moby->pos, &carrier_position);
+            c = &D_L14_0015FFD8_t[moby_vars->carrier];
+            qcopy(&c->pos, &carrier_position);
+            qcopy(&c->rot, &moby->rot);
+            if (moby_vars->stage == 1) {
                 FUN_L06_00303150((unsigned char *)c);
-                d->stage = 2;
+                moby_vars->stage = 2;
             }
         }
         break;
     case TRAM_STATE_WAIT_FOR_RESPAWN:
-        if (tram_tick(&d->timer) != 0) {
-            char *path = D_L14_001B0BB0_t[d->path];
-            m->flags &= 0xFFBE;
-            m->collision = m->pclass->collision;
-            d->timer = tram_frames(D_L14_00161F8C);
-            m->state = 2;
-            d->segment = 0;
-            d->along = 0;
-            qcopy(&m->pos, path + 0x10);
-            m->rot.z = tram_atan2(*(float *)(path + 0x20) - *(float *)(path + 0x10),
+        if (tram_tick(&moby_vars->timer) != 0) {
+            char *path = D_L14_001B0BB0_t[moby_vars->path];
+            moby->flags &= 0xFFBE;
+            moby->collision = moby->pclass->collision;
+            moby_vars->timer = tram_frames(D_L14_00161F8C);
+            moby->state = 2;
+            moby_vars->segment = 0;
+            moby_vars->along = 0;
+            qcopy(&moby->pos, path + 0x10);
+            moby->rot.z = tram_atan2(*(float *)(path + 0x20) - *(float *)(path + 0x10),
                                   *(float *)(path + 0x24) - *(float *)(path + 0x14));
-            d->f80 = d->f84 = d->f88 = d->f70 = d->f74 = d->f78 = 0.0f;
+            moby_vars->f80 = moby_vars->f84 = moby_vars->f88 = moby_vars->f70 = moby_vars->f74 = moby_vars->f78 = 0.0f;
         }
         break;
     }
-    FUN_L14_002fd310(m);
-    if (m->state != 0 && m->state != 3 && m->state != 1 && voice_is_playing(m, d->sound) == 0)
-        d->sound = tram_sound(0, 4, m);
+    FUN_L14_002fd310(moby);
+    if (moby->state != 0 && moby->state != 3 && moby->state != 1 && voice_is_playing(moby, moby_vars->sound) == 0)
+        moby_vars->sound = tram_sound(0, 4, moby);
 }
 extern f32 D_L14_00161F60 __attribute__((sda));
 extern f32 D_L14_00161F64 __attribute__((sda));
