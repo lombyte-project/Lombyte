@@ -1991,24 +1991,24 @@ int FUN_001160d8_0026dd20(void) __asm__("FUN_001160d8");
 int FUN_001fa6d0_0026dd20(float) __asm__("FUN_001fa6d0");
 extern unsigned char *D_L00_001B20EC[];
 char *FUN_L00_0026dd20(void *pos, void *dir, int a, int b, float f);
-char *FUN_L00_0026dd20(void *pos, void *dir, int a, int b, float f) {
-    char *o = FUN_L00_002678b8_0026dd20(0x1B);
-    if (o) {
-        char *q = o + 0x20;
-        qcopy(o + 0x10, pos);
-        o[8] = FUN_001160d8_0026dd20();
-        *(int *)(o + 4) = a;
-        o[9] = FUN_001fa6d0_0026dd20(4.0f) + 0x40;
-        o[3] = 0x48;
-        *(float *)(o + 0xC) = f;
-        o[1] = 0;
-        o[2] = D_L00_001B20EC[0][0];
-        *(int *)(q + 0x18) = o[7];
-        qcopy(q, dir);
-        *(int *)(q + 0x10) = b;
-        *(int *)(q + 0x14) = b;
+char *FUN_L00_0026dd20(void *pos, void *dir, int initial_color, int b, float initial_particle_scalar) {
+    char *particle = FUN_L00_002678b8_0026dd20(0x1B);
+    if (particle) {
+        char *particle_data = particle + 0x20;
+        qcopy(particle + 0x10, pos);
+        particle[8] = FUN_001160d8_0026dd20();
+        *(int *)(particle + 4) = initial_color;
+        particle[9] = FUN_001fa6d0_0026dd20(4.0f) + 0x40;
+        particle[3] = 0x48;
+        *(float *)(particle + 0xC) = initial_particle_scalar;
+        particle[1] = 0;
+        particle[2] = D_L00_001B20EC[0][0];
+        *(int *)(particle_data + 0x18) = particle[7];
+        qcopy(particle_data, dir);
+        *(int *)(particle_data + 0x10) = b;
+        *(int *)(particle_data + 0x14) = b;
     }
-    return o;
+    return particle;
 }
 #define NOT_SDA
 
