@@ -3097,7 +3097,7 @@ void FUN_L00_002b8230(unsigned char *pyrocitor_moby) {
     unsigned char *v = *(unsigned char **)(pyrocitor_moby + 0x78);
     struct UsageStats *P;
     unsigned char *voice;
-    int h, firing_frame_count;
+    int voice_slot_or_time_stat, firing_frame_count;
     if (pyrocitor_moby[0x53] == 2) {
         pyrocitor_moby[0x20] = 4;
         if (*(void **)v)
@@ -3106,11 +3106,11 @@ void FUN_L00_002b8230(unsigned char *pyrocitor_moby) {
             FUN_L00_0023e838_2b8230(*(short *)(v + 0x44));
             *(short *)(v + 0x44) = -1;
         }
-        h = *(short *)(v + 0x4A);
-        if (h != -1) {
-            voice = D_0013E550_2b8230 + h * 0x70;
+        voice_slot_or_time_stat = *(short *)(v + 0x4A);
+        if (voice_slot_or_time_stat != -1) {
+            voice = D_0013E550_2b8230 + voice_slot_or_time_stat * 0x70;
             if (*(unsigned char **)(voice + 0x88) == pyrocitor_moby && voice[0x74])
-                FUN_0022d798_2b8230(h);
+                FUN_0022d798_2b8230(voice_slot_or_time_stat);
         }
         *(short *)(v + 0x4A) = -1;
         return;
@@ -3130,8 +3130,8 @@ void FUN_L00_002b8230(unsigned char *pyrocitor_moby) {
     if (FUN_001f96f8_2b8230(0x78) < firing_frame_count) {
         if (P->stat[10].count <= 0xFFFE)
             (P->stat[10].count)++;
-        h = FUN_001f96f8_2b8230(D_0015EEA4) / 600;
-        if (P->stat[10].unk2 < h)
+        voice_slot_or_time_stat = FUN_001f96f8_2b8230(D_0015EEA4) / 600;
+        if (P->stat[10].unk2 < voice_slot_or_time_stat)
             P->stat[10].unk2 = FUN_001f96f8_2b8230(D_0015EEA4) / 600;
         P->stat[10].level_mask = P->stat[10].level_mask | (1 << D_0015ED84_2b8230) | 0x80000000;
     } else if (*(short *)(v + 0x50) < FUN_001f96f8_2b8230(0x1E)) {
