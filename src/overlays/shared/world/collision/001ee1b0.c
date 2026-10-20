@@ -19,35 +19,35 @@ extern char D_L00_001E78B0[];
 extern s32 FUN_L00_001ee318_c(V *, s32 *, f32) __asm__("FUN_L00_001ee318");
 
 s32 *FUN_L00_001ee1b0(OvlQuad *v, f32 rad) {
-    V t;
-    V d;
+    V query_point;
+    V volume_delta;
     V *tp;
     s32 i, j, k;
-    char *p;
-    char *e;
+    char *cell_volume_list;
+    char *volume_record;
     f32 f;
 
-    tp = &t;
-    t.q = *v;
-    i = truncate_float_to_s32(t.f[0] * 0.0625f);
-    j = truncate_float_to_s32(t.f[1] * 0.0625f);
+    tp = &query_point;
+    query_point.q = *v;
+    i = truncate_float_to_s32(query_point.f[0] * 0.0625f);
+    j = truncate_float_to_s32(query_point.f[1] * 0.0625f);
     if (i < 0 || j < 0 || i > 0x40 || j > 0x40) {
         debug_print(D_L00_001E78B0);
         return 0;
     }
-    p = (char *)D_L00_0015EF80[j * 64 + i];
-    if (p == 0) {
+    cell_volume_list = (char *)D_L00_0015EF80[j * 64 + i];
+    if (cell_volume_list == 0) {
         return 0;
     }
-    p += (s32)D_L00_0015EF80;
-    for (k = 0; k < *(s32 *)p; k++) {
-        e = p + 0x10 + k * 0x30;
-        subtract_vector_xyz(&d, e, tp);
-        f = *(f32 *)(e + 0xC);
-        d.f[3] = 1.0f;
-        if (vector_length_xy(&d) < f + rad) {
-            if (FUN_L00_001ee318_c(tp, (s32 *)e, rad) != 0) {
-                return (s32 *)e;
+    cell_volume_list += (s32)D_L00_0015EF80;
+    for (k = 0; k < *(s32 *)cell_volume_list; k++) {
+        volume_record = cell_volume_list + 0x10 + k * 0x30;
+        subtract_vector_xyz(&volume_delta, volume_record, tp);
+        f = *(f32 *)(volume_record + 0xC);
+        volume_delta.f[3] = 1.0f;
+        if (vector_length_xy(&volume_delta) < f + rad) {
+            if (FUN_L00_001ee318_c(tp, (s32 *)volume_record, rad) != 0) {
+                return (s32 *)volume_record;
             }
         }
     }
