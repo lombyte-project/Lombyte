@@ -17,13 +17,13 @@ extern void FUN_00210850(void *, int, int *, void *);
 void moby_point_position(char *arg0, int arg1, void *arg2) __asm__("FUN_L00_0024f7c8");
 void moby_point_position(char *moby, int joint_index, void *world_position_out) {
     char buf[0x40];
-    int n;
-    float s;
+    int joint_index_copy;
+    float point_scale;
 
-    s = *(float *)(moby + 0x2C) * 0.0009765625f;
-    n = joint_index;
-    FUN_00210850(moby, 1, &n, buf);
-    fast_vec_scale(world_position_out, buf + 0x30, s);
+    point_scale = *(float *)(moby + 0x2C) * 0.0009765625f;
+    joint_index_copy = joint_index;
+    FUN_00210850(moby, 1, &joint_index_copy, buf);
+    fast_vec_scale(world_position_out, buf + 0x30, point_scale);
     transform_vector_by_basis(world_position_out, world_position_out, moby + 0xC0);
     add_vector_xyz(world_position_out, world_position_out, moby + 0x10);
 }
