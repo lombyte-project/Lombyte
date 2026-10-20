@@ -871,41 +871,41 @@ extern unsigned char D_0013E05A[];
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void fast_vec_normalize_c(void *, void *, f32) __asm__("FUN_001f9bf8");
 
-void FUN_L00_0026b500(unsigned char *m) {
-    unsigned char *p = m + 0x20;
+void FUN_L00_0026b500(unsigned char *particle) {
+    unsigned char *particle_data = particle + 0x20;
     float r;
     float w = 1.0f;
     float ratio;
-    m[8] = m[8] + p[0x1E];
-    if (p[0x1F] & 4) {
+    particle[8] = particle[8] + particle_data[0x1E];
+    if (particle_data[0x1F] & 4) {
         w = convert_integer_to_float(D_0013E05A[0x4D6]) * 0.5f + w;
     }
-    add_vector_xyz(m + 0x10, m + 0x10, p);
-    r = -fast_vec_length_c(p);
-    advance_accelerated_scalar((float *)(m + 0x30), &r, 0.0f, 0.0f, D_L00_001601E8 * D_0015ED70, r);
-    fast_vec_normalize_c(p, p, -r);
-    *(float *)(m + 0x18) = *(float *)(m + 0x18) + D_L00_001601EC * D_0015ED6C;
-    ratio = convert_integer_to_float(*(short *)(m + 0xA)) / convert_integer_to_float(p[0x1D]);
-    if (p[0x1F] & 1) {
+    add_vector_xyz(particle + 0x10, particle + 0x10, particle_data);
+    r = -fast_vec_length_c(particle_data);
+    advance_accelerated_scalar((float *)(particle + 0x30), &r, 0.0f, 0.0f, D_L00_001601E8 * D_0015ED70, r);
+    fast_vec_normalize_c(particle_data, particle_data, -r);
+    *(float *)(particle + 0x18) = *(float *)(particle + 0x18) + D_L00_001601EC * D_0015ED6C;
+    ratio = convert_integer_to_float(*(short *)(particle + 0xA)) / convert_integer_to_float(particle_data[0x1D]);
+    if (particle_data[0x1F] & 1) {
         float lo = D_L00_001601DC * w;
-        *(float *)(m + 0xC) = ((D_L00_001601D8 - lo) * ratio + lo) * 210000.0f;
+        *(float *)(particle + 0xC) = ((D_L00_001601D8 - lo) * ratio + lo) * 210000.0f;
     } else {
         float lo = D_L00_001601BC * w;
-        *(float *)(m + 0xC) = ((D_L00_001601B8 - lo) * ratio + lo) * 210000.0f;
+        *(float *)(particle + 0xC) = ((D_L00_001601B8 - lo) * ratio + lo) * 210000.0f;
     }
-    *(int *)(m + 4) = fast_tween_color_c(*(int *)(p + 0x18), *(int *)(p + 0x14), ratio);
-    if (*(short *)(m + 0xA) < scale_game_frames_c(15)) {
-        float q = convert_integer_to_float(*(short *)(m + 0xA));
-        float t = q / convert_integer_to_float(scale_game_frames_c(10));
-        *(int *)(m + 4) = fast_tween_color_c(*(int *)(m + 4) & 0xFFFFFF, *(int *)(m + 4), t);
+    *(int *)(particle + 4) = fast_tween_color_c(*(int *)(particle_data + 0x18), *(int *)(particle_data + 0x14), ratio);
+    if (*(short *)(particle + 0xA) < scale_game_frames_c(15)) {
+        float remaining_lifetime_float = convert_integer_to_float(*(short *)(particle + 0xA));
+        float fade_ratio = remaining_lifetime_float / convert_integer_to_float(scale_game_frames_c(10));
+        *(int *)(particle + 4) = fast_tween_color_c(*(int *)(particle + 4) & 0xFFFFFF, *(int *)(particle + 4), fade_ratio);
     }
-    if (*(float *)(m + 0x10) < 2.0f || *(float *)(m + 0x10) > 1021.0f ||
-        *(float *)(m + 0x14) < 2.0f || *(float *)(m + 0x14) > 1021.0f ||
-        *(float *)(m + 0x18) < 2.0f || *(float *)(m + 0x18) > 1021.0f ||
-        fast_dec_timer_s16(m + 0xA) != 0) {
-        free_effect_particle(m);
-    } else if (*(float *)(p + 0x10) < 0.01f) {
-        *(short *)(m + 0xA) = *(short *)(m + 0xA) - 1;
+    if (*(float *)(particle + 0x10) < 2.0f || *(float *)(particle + 0x10) > 1021.0f ||
+        *(float *)(particle + 0x14) < 2.0f || *(float *)(particle + 0x14) > 1021.0f ||
+        *(float *)(particle + 0x18) < 2.0f || *(float *)(particle + 0x18) > 1021.0f ||
+        fast_dec_timer_s16(particle + 0xA) != 0) {
+        free_effect_particle(particle);
+    } else if (*(float *)(particle_data + 0x10) < 0.01f) {
+        *(short *)(particle + 0xA) = *(short *)(particle + 0xA) - 1;
     }
 }
 unsigned char *FUN_L00_002678b8_26b790(int) __asm__("FUN_L00_002678b8");
