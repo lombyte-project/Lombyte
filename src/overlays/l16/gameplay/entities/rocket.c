@@ -2360,7 +2360,7 @@ void FUN_L16_002d0058_c(L16LeapMoby *m) __asm__("FUN_L16_002d0058");
 
 extern int D_L16_00161A08 __attribute__((sda));
 void test_dummy_on_hoverboard_update(unsigned char *m) __asm__("FUN_L16_002d04a0");
-void test_dummy_on_hoverboard_update(unsigned char *m) {
+void test_dummy_on_hoverboard_update(unsigned char *moby) {
     enum {
         HOVERBOARD_DUMMY_STATE_INITIALIZE = 0,
         HOVERBOARD_DUMMY_STATE_WAIT_FOR_RACE = 1,
@@ -2368,9 +2368,9 @@ void test_dummy_on_hoverboard_update(unsigned char *m) {
         HOVERBOARD_DUMMY_STATE_WAIT_FOR_REACTIVATION = 3
     };
     float pos[4], delta[4], ahead[4], impact[4], spray[4], lateral[4], dust[4];
-    char *d = *(char **)(m + 0x78);
+    char *hoverboard_dummy_data = *(char **)(moby + 0x78);
     char *g;
-    int i, n, next;
+    int i, nearby_moby_count, next;
     /* One mask for both collision calls. Held in a local it is one more instruction when GCSE sizes its
        expression table, and that size orders the stack slots of the cached addresses (sp+0x90..0xC4):
        with the literal at both calls every one of those slots is rotated by three. */
@@ -2379,28 +2379,28 @@ void test_dummy_on_hoverboard_update(unsigned char *m) {
 
     /* No pointer locals: every address is written where it is used. The compiler caches them itself
        (d + 0x1E0 from here on, the others at the top of the active state). */
-    FUN_L00_00263b38(d + 0x1E0, 2.5f);
-    switch (m[0x20]) {
+    FUN_L00_00263b38(hoverboard_dummy_data + 0x1E0, 2.5f);
+    switch (moby[0x20]) {
     case HOVERBOARD_DUMMY_STATE_INITIALIZE: {
         float time;
         char *path;
 
-        m[0x30] = 24;
-        *(unsigned short *)(m + 0x34) |= 0x41;
-        path = D_L16_001B0930[*(int *)(d + 0x2B0)];
-        *(char **)(d + 0x2C0) = path;
-        FUN_L16_002cf9d0_c((Level16VendorVectorMoby *)m, 0, pos);
-        qcopy(m + 0x10, pos);
-        qcopy(d + 0x260, m + 0x10);
-        *(int *)(m + 0x40) = 0;
-        *(int *)(m + 0x44) = 0;
-        *(float *)(m + 0x48) = fast_arc_tan(*(float *)(path + 0x20) - *(float *)(path + 0x10),
+        moby[0x30] = 24;
+        *(unsigned short *)(moby + 0x34) |= 0x41;
+        path = D_L16_001B0930[*(int *)(hoverboard_dummy_data + 0x2B0)];
+        *(char **)(hoverboard_dummy_data + 0x2C0) = path;
+        FUN_L16_002cf9d0_c((Level16VendorVectorMoby *)moby, 0, pos);
+        qcopy(moby + 0x10, pos);
+        qcopy(hoverboard_dummy_data + 0x260, moby + 0x10);
+        *(int *)(moby + 0x40) = 0;
+        *(int *)(moby + 0x44) = 0;
+        *(float *)(moby + 0x48) = fast_arc_tan(*(float *)(path + 0x20) - *(float *)(path + 0x10),
                                             *(float *)(path + 0x24) - *(float *)(path + 0x14));
-        *(unsigned char *)(d + 0x2B) = 1;
+        *(unsigned char *)(hoverboard_dummy_data + 0x2B) = 1;
         time = D_0015ED6C;
-        offset = (float)*(int *)(d + 0x2CC) * (time * 1.55f);
-        *(float *)(d + 0x2B4) = time * 17.0f + offset;
-        *(float *)(d + 0x2B8) = time * 24.0f + offset;
+        offset = (float)*(int *)(hoverboard_dummy_data + 0x2CC) * (time * 1.55f);
+        *(float *)(hoverboard_dummy_data + 0x2B4) = time * 17.0f + offset;
+        *(float *)(hoverboard_dummy_data + 0x2B8) = time * 24.0f + offset;
         if (D_0013D4DF == 0) {
             slow = (float)(D_0015EE3C_gp - 5);
             if (slow < 0.0f) {
@@ -2410,52 +2410,52 @@ void test_dummy_on_hoverboard_update(unsigned char *m) {
             if (slow < 0.8f) {
                 slow = 0.8f;
             }
-            *(float *)(d + 0x2B4) *= slow;
-            *(float *)(d + 0x2B8) *= slow;
+            *(float *)(hoverboard_dummy_data + 0x2B4) *= slow;
+            *(float *)(hoverboard_dummy_data + 0x2B8) *= slow;
         }
-        *(float *)(d + 0x2E8) = random_angle_radians();
-        *(unsigned char *)(d + 0x29) = 0;
-        m[0x20] = 1;
+        *(float *)(hoverboard_dummy_data + 0x2E8) = random_angle_radians();
+        *(unsigned char *)(hoverboard_dummy_data + 0x29) = 0;
+        moby[0x20] = 1;
         break;
     }
     case HOVERBOARD_DUMMY_STATE_WAIT_FOR_RACE:
         if (hero.state.control_mode == 22) {
-            m[0x30] = 255;
-            *(int *)(m + 0x94) = *(int *)(*(char **)(m + 0x24) + 0x10);
-            *(unsigned short *)(m + 0x34) &= ~0x41;
-            *(short *)(d + 0x2F4) = 0;
-            *(short *)(d + 0x2F6) = scale_game_frames(180);
-            *(int *)(d + 0x2C8) = 0;
-            *(int *)(d + 0x2C4) = 0;
-            *(int *)(d + 0x2E4) = 0;
-            *(int *)(d + 0x2DC) = 0;
-            *(int *)(d + 0x2BC) = 0;
-            if (*(int *)(d + 0x2CC) % 2 == 1) {
-                *(unsigned short *)(m + 0x34) |= 0x8000;
+            moby[0x30] = 255;
+            *(int *)(moby + 0x94) = *(int *)(*(char **)(moby + 0x24) + 0x10);
+            *(unsigned short *)(moby + 0x34) &= ~0x41;
+            *(short *)(hoverboard_dummy_data + 0x2F4) = 0;
+            *(short *)(hoverboard_dummy_data + 0x2F6) = scale_game_frames(180);
+            *(int *)(hoverboard_dummy_data + 0x2C8) = 0;
+            *(int *)(hoverboard_dummy_data + 0x2C4) = 0;
+            *(int *)(hoverboard_dummy_data + 0x2E4) = 0;
+            *(int *)(hoverboard_dummy_data + 0x2DC) = 0;
+            *(int *)(hoverboard_dummy_data + 0x2BC) = 0;
+            if (*(int *)(hoverboard_dummy_data + 0x2CC) % 2 == 1) {
+                *(unsigned short *)(moby + 0x34) |= 0x8000;
             }
-            m[0xA4] = 255;
-            m[0x20] = 2;
+            moby[0xA4] = 255;
+            moby[0x20] = 2;
         }
         break;
     case HOVERBOARD_DUMMY_STATE_WAIT_FOR_REACTIVATION:
         if (hero.state.control_mode != 22) {
-            m[0x20] = 0;
+            moby[0x20] = 0;
         } else {
-            int count = *(unsigned short *)(d + 0x2F2) + 1;
+            int count = *(unsigned short *)(hoverboard_dummy_data + 0x2F2) + 1;
             short timer = count;
 
-            *(short *)(d + 0x2F2) = count;
+            *(short *)(hoverboard_dummy_data + 0x2F2) = count;
             if (scale_game_frames(240) < timer) {
                 L16RacePlayer *player = &D_L16_00167080;
 
                 if (fast_difference_between_rotations(
-                        fast_arc_tan(*(float *)(m + 0x10) - player->position[0],
-                                     *(float *)(m + 0x14) - player->position[1]),
+                        fast_arc_tan(*(float *)(moby + 0x10) - player->position[0],
+                                     *(float *)(moby + 0x14) - player->position[1]),
                         player->yaw) > 1.5707964f) {
-                    *(int *)(m + 0x94) = *(int *)(*(char **)(m + 0x24) + 0x10);
-                    *(unsigned short *)(m + 0x34) &= ~0x41;
-                    m[0xA4] = 255;
-                    m[0x20] = 2;
+                    *(int *)(moby + 0x94) = *(int *)(*(char **)(moby + 0x24) + 0x10);
+                    *(unsigned short *)(moby + 0x34) &= ~0x41;
+                    moby[0xA4] = 255;
+                    moby[0x20] = 2;
                 }
             }
         }
@@ -2463,158 +2463,158 @@ void test_dummy_on_hoverboard_update(unsigned char *m) {
     case HOVERBOARD_DUMMY_STATE_RACING:
         g = ((char *)&hero);
         if (*(int *)(g + 0x208C) != 22) {
-            m[0x20] = 0;
+            moby[0x20] = 0;
             break;
         }
-        if (find_moby_hit(m, mask, 0)) {
-            qcopy(pos, m + 0x10);
+        if (find_moby_hit(moby, mask, 0)) {
+            qcopy(pos, moby + 0x10);
             pos[2] += 0.5f;
-            spawn_explosion(m, &D_L16_0015F580, pos, 0.0f, 0.0f, 5, 15, 25, 2.5f, 1.5f, 4.0f, -1,
+            spawn_explosion(moby, &D_L16_0015F580, pos, 0.0f, 0.0f, 5, 15, 25, 2.5f, 1.5f, 4.0f, -1,
                              1.0f, 7.0f, 0, 9, -1, 0);
-            FUN_L00_00263e30(m, 0x655, 1, 0x656, 2, 2, 0);
-            FUN_L00_00263e30(m, 0x6FA, 1, 0x6FB, 1, 1, 0);
-            *(short *)(d + 0x2F2) = 0;
+            FUN_L00_00263e30(moby, 0x655, 1, 0x656, 2, 2, 0);
+            FUN_L00_00263e30(moby, 0x6FA, 1, 0x6FB, 1, 1, 0);
+            *(short *)(hoverboard_dummy_data + 0x2F2) = 0;
             *(int *)(g + 0x8A8) += 250;
-            m[0x20] = 3;
-            *(int *)(m + 0x94) = 0;
-            *(unsigned short *)(m + 0x34) |= 0x41;
+            moby[0x20] = 3;
+            *(int *)(moby + 0x94) = 0;
+            *(unsigned short *)(moby + 0x34) |= 0x41;
             break;
         }
-        m[0xA4] = 255;
-        FUN_L16_002cf9f8((char *)m);
-        FUN_L05_00307010((char *)m);
-        FUN_L16_002cff48((char *)m);
-        if (*(int *)(d + 0x2E4) != 0) {
-            (*(int *)(d + 0x2E4))++;
-            if (*(int *)(d + 0x2E4) < scale_game_frames(17)) {
-                i = *(short *)(d + 0x2F4);
+        moby[0xA4] = 255;
+        FUN_L16_002cf9f8((char *)moby);
+        FUN_L05_00307010((char *)moby);
+        FUN_L16_002cff48((char *)moby);
+        if (*(int *)(hoverboard_dummy_data + 0x2E4) != 0) {
+            (*(int *)(hoverboard_dummy_data + 0x2E4))++;
+            if (*(int *)(hoverboard_dummy_data + 0x2E4) < scale_game_frames(17)) {
+                i = *(short *)(hoverboard_dummy_data + 0x2F4);
                 distance = 0.0f;
-                while (i < *(short *)(d + 0x2F0)) {
+                while (i < *(short *)(hoverboard_dummy_data + 0x2F0)) {
                     char *path;
 
-                    next = FUN_L00_0025d7a0(*(char **)(d + 0x2C0), i, 1, 1);
-                    path = *(char **)(d + 0x2C0);
+                    next = FUN_L00_0025d7a0(*(char **)(hoverboard_dummy_data + 0x2C0), i, 1, 1);
+                    path = *(char **)(hoverboard_dummy_data + 0x2C0);
                     distance += vector_distance_xy(path + (i * 16 + 16), path + (next * 16 + 16));
                     i = next;
                 }
                 {
-                    short last = *(short *)(d + 0x2F0);
-                    short first = *(short *)(d + 0x2F4);
-                    char *path = *(char **)(d + 0x2C0);
+                    short last = *(short *)(hoverboard_dummy_data + 0x2F0);
+                    short first = *(short *)(hoverboard_dummy_data + 0x2F4);
+                    char *path = *(char **)(hoverboard_dummy_data + 0x2C0);
                     float rise = *(float *)(path - (-(last * 16)) + 0x18) -
                                  *(float *)(path - (-(first * 16)) + 0x18);
 
-                    duration = distance / *(float *)(d + 0x2BC);
+                    duration = distance / *(float *)(hoverboard_dummy_data + 0x2BC);
                     target = rise / duration + frame_time_sq * 21.0f * duration * 0.5f;
                 }
-                if (*(float *)(d + 0x2C8) < 0.0f) {
-                    *(float *)(d + 0x2C8) = 0.0f;
+                if (*(float *)(hoverboard_dummy_data + 0x2C8) < 0.0f) {
+                    *(float *)(hoverboard_dummy_data + 0x2C8) = 0.0f;
                 }
-                approach_value((float *)(d + 0x2C8), target, frame_time_sq * 110.0f);
+                approach_value((float *)(hoverboard_dummy_data + 0x2C8), target, frame_time_sq * 110.0f);
             }
         }
-        FUN_L16_002d0058_c((L16LeapMoby *)m);
-        FUN_L16_002cf9d0_c((Level16VendorVectorMoby *)m, *(short *)(d + 0x2F4), pos);
-        angle = fast_arc_tan(pos[0] - *(float *)(m + 0x10), pos[1] - *(float *)(m + 0x14));
-        FUN_L00_0025bc98(m + 0x48, d + 0x2C4, 0, angle, frame_scale_sq * 0.035f, frame_scale_sq * 0.3f,
+        FUN_L16_002d0058_c((L16LeapMoby *)moby);
+        FUN_L16_002cf9d0_c((Level16VendorVectorMoby *)moby, *(short *)(hoverboard_dummy_data + 0x2F4), pos);
+        angle = fast_arc_tan(pos[0] - *(float *)(moby + 0x10), pos[1] - *(float *)(moby + 0x14));
+        FUN_L00_0025bc98(moby + 0x48, hoverboard_dummy_data + 0x2C4, 0, angle, frame_scale_sq * 0.035f, frame_scale_sq * 0.3f,
                          D_0015ED6C * 6.981317f);
-        if (*(float *)(d + 0x268) < pos[2] - 5.0f) {
-            *(float *)(d + 0x268) = pos[2];
+        if (*(float *)(hoverboard_dummy_data + 0x268) < pos[2] - 5.0f) {
+            *(float *)(hoverboard_dummy_data + 0x268) = pos[2];
         }
-        delta[0] = fast_cos(*(float *)(m + 0x48)) * *(float *)(d + 0x2BC);
-        delta[1] = fast_sin(*(float *)(m + 0x48)) * *(float *)(d + 0x2BC);
+        delta[0] = fast_cos(*(float *)(moby + 0x48)) * *(float *)(hoverboard_dummy_data + 0x2BC);
+        delta[1] = fast_sin(*(float *)(moby + 0x48)) * *(float *)(hoverboard_dummy_data + 0x2BC);
         delta[2] = 0.0f;
-        add_vector_xyz(d + 0x260, d + 0x260, delta);
+        add_vector_xyz(hoverboard_dummy_data + 0x260, hoverboard_dummy_data + 0x260, delta);
         scale_vector_xyz(ahead, delta, 3.0f);
-        add_vector_xyz(ahead, ahead, d + 0x260);
+        add_vector_xyz(ahead, ahead, hoverboard_dummy_data + 0x260);
         ahead[2] += 0.7f;
-        n = collect_mobies_in_sphere(0.7f, ahead, 0, m, 0);
-        if (n) {
+        nearby_moby_count = collect_mobies_in_sphere(0.7f, ahead, 0, moby, 0);
+        if (nearby_moby_count) {
             scale_vector_xyz(impact, delta, 7.0f);
-            for (i = 0; i < n; i++) {
+            for (i = 0; i < nearby_moby_count; i++) {
                 if (FUN_L00_0025e3b8((int)D_L16_00178300[i])) {
-                    spawn_nearby_effect(D_L16_00178300[i], (int)m, mask, d + 0x260, impact, 1.0f);
+                    spawn_nearby_effect(D_L16_00178300[i], (int)moby, mask, hoverboard_dummy_data + 0x260, impact, 1.0f);
                 }
             }
         }
-        z = probe_ground_height(d + 0x260, 0, 0.5f);
-        gap = *(float *)(d + 0x268) - z;
-        if (gap > 0.0f || *(float *)(d + 0x2C8) > 0.0f) {
-            *(float *)(d + 0x2C8) -= frame_time_sq * 21.0f;
+        z = probe_ground_height(hoverboard_dummy_data + 0x260, 0, 0.5f);
+        gap = *(float *)(hoverboard_dummy_data + 0x268) - z;
+        if (gap > 0.0f || *(float *)(hoverboard_dummy_data + 0x2C8) > 0.0f) {
+            *(float *)(hoverboard_dummy_data + 0x2C8) -= frame_time_sq * 21.0f;
         } else if (absolute_float(gap) < 0.5f) {
-            *(float *)(d + 0x2C8) = 0.0f;
-            *(float *)(d + 0x268) = z;
-            *(int *)(d + 0x2E4) = 0;
+            *(float *)(hoverboard_dummy_data + 0x2C8) = 0.0f;
+            *(float *)(hoverboard_dummy_data + 0x268) = z;
+            *(int *)(hoverboard_dummy_data + 0x2E4) = 0;
         }
-        *(float *)(d + 0x268) += *(float *)(d + 0x2C8);
-        if (fast_dec_timer_s16(d + 0x2F6)) {
-            speed = *(float *)(d + 0x2B4);
-            if (z < *(float *)(d + 0x268)) {
+        *(float *)(hoverboard_dummy_data + 0x268) += *(float *)(hoverboard_dummy_data + 0x2C8);
+        if (fast_dec_timer_s16(hoverboard_dummy_data + 0x2F6)) {
+            speed = *(float *)(hoverboard_dummy_data + 0x2B4);
+            if (z < *(float *)(hoverboard_dummy_data + 0x268)) {
                 speed = D_0015ED6C * 19.0f;
             }
             g = ((char *)&hero);
             if (*(int *)(g + 0x894) < scale_game_frames(700)) {
                 speed += D_0015ED6C * 3.0f;
             }
-            if (*(short *)(g - (-(*(int *)(d + 0x2CC) * 2)) + 0x7C0) < *(int *)(g + 0x8C0)) {
+            if (*(short *)(g - (-(*(int *)(hoverboard_dummy_data + 0x2CC) * 2)) + 0x7C0) < *(int *)(g + 0x8C0)) {
                 speed -= D_0015ED6C;
             } else {
                 speed += D_0015ED6C;
             }
-            if (speed < *(float *)(d + 0x2BC)) {
-                approach_value((float *)(d + 0x2BC), speed, frame_time_sq * 7.0f);
+            if (speed < *(float *)(hoverboard_dummy_data + 0x2BC)) {
+                approach_value((float *)(hoverboard_dummy_data + 0x2BC), speed, frame_time_sq * 7.0f);
             } else {
-                approach_value((float *)(d + 0x2BC), speed, frame_time_sq * 15.0f);
+                approach_value((float *)(hoverboard_dummy_data + 0x2BC), speed, frame_time_sq * 15.0f);
             }
         } else {
-            approach_value((float *)(d + 0x2BC), *(float *)(d + 0x2B8), frame_time_sq * 20.0f);
+            approach_value((float *)(hoverboard_dummy_data + 0x2BC), *(float *)(hoverboard_dummy_data + 0x2B8), frame_time_sq * 20.0f);
         }
-        if (gap < 0.2f && *(float *)(d + 0x2C8) < 0.0f) {
-            *(float *)(d + 0x268) = z;
-            *(int *)(d + 0x2E4) = 0;
+        if (gap < 0.2f && *(float *)(hoverboard_dummy_data + 0x2C8) < 0.0f) {
+            *(float *)(hoverboard_dummy_data + 0x268) = z;
+            *(int *)(hoverboard_dummy_data + 0x2E4) = 0;
         }
-        rate = *(float *)(d + 0x2C4);
+        rate = *(float *)(hoverboard_dummy_data + 0x2C4);
         limit = D_0015ED6C * 2.6179938f;
         if (limit < rate) {
             rate = limit;
         } else if (rate < -limit) {
             rate = -limit;
         }
-        if (*(unsigned short *)(m + 0x34) & 0x8000) {
+        if (*(unsigned short *)(moby + 0x34) & 0x8000) {
             rate = -rate;
         }
         {
             float coefficient = frame_scale_sq;
 
-            *(float *)(d + 0x248) = rate * 30.0f;
-            *(float *)(d + 0xC8) = rate * 20.0f;
-            *(float *)(d + 0x1C8) = rate * 50.0f;
-            *(float *)(d + 0x144) = rate * 40.0f;
-            update_joint_animation(coefficient * 0.02f, coefficient * 0.3f, m, d + 0x1E0, 3);
+            *(float *)(hoverboard_dummy_data + 0x248) = rate * 30.0f;
+            *(float *)(hoverboard_dummy_data + 0xC8) = rate * 20.0f;
+            *(float *)(hoverboard_dummy_data + 0x1C8) = rate * 50.0f;
+            *(float *)(hoverboard_dummy_data + 0x144) = rate * 40.0f;
+            update_joint_animation(coefficient * 0.02f, coefficient * 0.3f, moby, hoverboard_dummy_data + 0x1E0, 3);
         }
-        update_joint_animation(frame_scale_sq * 0.02f, frame_scale_sq * 0.3f, m, d + 0x60, 0);
-        update_joint_animation(frame_scale_sq * 0.02f, frame_scale_sq * 0.3f, m, d + 0x160, 1);
-        update_joint_animation(frame_scale_sq * 0.015f, frame_scale_sq * 0.3f, m, d + 0xE0, 2);
-        qcopy(m + 0x10, d + 0x260);
+        update_joint_animation(frame_scale_sq * 0.02f, frame_scale_sq * 0.3f, moby, hoverboard_dummy_data + 0x60, 0);
+        update_joint_animation(frame_scale_sq * 0.02f, frame_scale_sq * 0.3f, moby, hoverboard_dummy_data + 0x160, 1);
+        update_joint_animation(frame_scale_sq * 0.015f, frame_scale_sq * 0.3f, moby, hoverboard_dummy_data + 0xE0, 2);
+        qcopy(moby + 0x10, hoverboard_dummy_data + 0x260);
         {
             float bob_time = D_0015ED6C;
 
-            *(float *)(m + 0x18) += 0.25f;
-            *(float *)(d + 0x2E8) = fast_add_rotations(*(float *)(d + 0x2E8), bob_time * 6.108652f);
+            *(float *)(moby + 0x18) += 0.25f;
+            *(float *)(hoverboard_dummy_data + 0x2E8) = fast_add_rotations(*(float *)(hoverboard_dummy_data + 0x2E8), bob_time * 6.108652f);
         }
-        *(float *)(m + 0x18) += fast_sin(*(float *)(d + 0x2E8)) * 0.08f;
-        subtract_vector_xyz(ahead, m + 0x10, d + 0x280);
-        qcopy(d + 0x280, m + 0x10);
-        moby_point_position(m, (D_L16_0015F5CC & 1) | 4, impact);
+        *(float *)(moby + 0x18) += fast_sin(*(float *)(hoverboard_dummy_data + 0x2E8)) * 0.08f;
+        subtract_vector_xyz(ahead, moby + 0x10, hoverboard_dummy_data + 0x280);
+        qcopy(hoverboard_dummy_data + 0x280, moby + 0x10);
+        moby_point_position(moby, (D_L16_0015F5CC & 1) | 4, impact);
         angle = random_angle_radians();
         scale = D_0015ED6C * 0.25f;
-        normalize_vector_xyz(spray, m + 0xE0, scale * fast_cos(angle));
-        normalize_vector_xyz(lateral, m + 0xD0, scale * fast_sin(angle));
+        normalize_vector_xyz(spray, moby + 0xE0, scale * fast_cos(angle));
+        normalize_vector_xyz(lateral, moby + 0xD0, scale * fast_sin(angle));
         add_vector_xyz(spray, spray, ahead);
         add_vector_xyz(spray, spray, lateral);
         qcopy(spray, ahead);
         spray[3] = 120000.0f;
-        if (*(short *)(d + 0x2F6) == 0) {
+        if (*(short *)(hoverboard_dummy_data + 0x2F6) == 0) {
             int ticks = random_int_between(scale_game_frames(10), scale_game_frames(13));
 
             FUN_L00_00269958(impact, spray, D_L16_00161A08, D_L16_00161A0C, ticks, 15, 15, 1);
