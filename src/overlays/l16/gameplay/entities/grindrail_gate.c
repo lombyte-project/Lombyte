@@ -1129,34 +1129,34 @@ void chomper_update(struct Moby *m) {
         CHOMPER_RETURN_HOME = 6,
         CHOMPER_KNOCKBACK = 8
     };
-    char *d = (char *)m->pvars;
+    char *chomper_data = (char *)m->pvars;
     FUN_L16_002e6208(m);
-    FUN_L00_00263ac8(2.1f, (int)m, 1, (unsigned char *)(d + 0x220));
+    FUN_L00_00263ac8(2.1f, (int)m, 1, (unsigned char *)(chomper_data + 0x220));
     if (m->visible != 0 && FUN_001f9b48(&m->pos, D_L16_001671C0) < 29.0f) {
         FUN_L00_0025a120(m);
         m->shadow_range = 23;
     }
     switch (m->state) {
     case CHOMPER_INITIALIZE:
-        if (*(int *)(d + 0x1F0) == -1) {
+        if (*(int *)(chomper_data + 0x1F0) == -1) {
             mark_moby_for_removal_u(m);
             return;
         }
-        *(unsigned short *)(d + 0x24) = 1;
-        *(unsigned char *)(d + 0x28) = 0;
-        *(float *)(d + 0x20) = 1.0f;
-        *(int *)(d + 0xD0) = (int)&D_L16_00161E48;
+        *(unsigned short *)(chomper_data + 0x24) = 1;
+        *(unsigned char *)(chomper_data + 0x28) = 0;
+        *(float *)(chomper_data + 0x20) = 1.0f;
+        *(int *)(chomper_data + 0xD0) = (int)&D_L16_00161E48;
         if (rand() & 1)
             m->flags |= 0x8000;
-        qcopy(d + 0x1D0, &m->pos);
+        qcopy(chomper_data + 0x1D0, &m->pos);
         m->state = 1;
         if (m->prev_seq != 2)
             blend_moby_animation_u(m, 2, 0, scale_game_frames(20));
-        *(unsigned char *)(d + 0x58) = func_001FA898_caa18(8.0f);
-        *(unsigned char *)(d + 0x5A) = func_001FA898_caa18(3.2f);
+        *(unsigned char *)(chomper_data + 0x58) = func_001FA898_caa18(8.0f);
+        *(unsigned char *)(chomper_data + 0x5A) = func_001FA898_caa18(3.2f);
         break;
     case CHOMPER_WAIT_TO_APPROACH_TARGET:
-        if (*(int *)(d + 0x1C4) != 2) {
+        if (*(int *)(chomper_data + 0x1C4) != 2) {
             m->state = 4;
             if (m->prev_seq != 0)
                 blend_moby_animation_u(m, 0, 0, scale_game_frames(20));
@@ -1166,22 +1166,22 @@ void chomper_update(struct Moby *m) {
     case 3:
         break;
     case CHOMPER_APPROACH_TARGET:
-        if (FUN_L16_002e6428_u(m, d + 0x180) < 1.25f) {
+        if (FUN_L16_002e6428_u(m, chomper_data + 0x180) < 1.25f) {
             m->state = 5;
             if (m->prev_seq != 1)
                 blend_moby_animation_u(m, 1, 0, scale_game_frames(20));
-        } else if (*(int *)(d + 0x1C4) == 2)
+        } else if (*(int *)(chomper_data + 0x1C4) == 2)
             m->state = 6;
         break;
     case CHOMPER_FACE_TARGET: {
         float *yaw = &m->rot.z;
-        float angle = fast_arc_tan(*(float *)(d + 0x180) - m->pos.x,
-                                   *(float *)(d + 0x184) - m->pos.y);
-        approach_angle(yaw, (float *)(d + 0x1F4), angle, frame_time_sq * 12.566371f,
+        float angle = fast_arc_tan(*(float *)(chomper_data + 0x180) - m->pos.x,
+                                   *(float *)(chomper_data + 0x184) - m->pos.y);
+        approach_angle(yaw, (float *)(chomper_data + 0x1F4), angle, frame_time_sq * 12.566371f,
                          frame_time_sq * 12.566371f, frame_time * 12.566371f);
         if (is_value_within_interpolated_window(m, 13.0f)) {
             FUN_L00_002599e8(m, 0, 1, 0.333f, 1.0f, 1.0f, 0, 1, 0);
-        } else if ((m->anim_flags & 2) && FUN_001f9b48(&m->pos, d + 0x180) > 1.5f) {
+        } else if ((m->anim_flags & 2) && FUN_001f9b48(&m->pos, chomper_data + 0x180) > 1.5f) {
             m->state = 4;
             if (m->prev_seq != 0)
                 blend_moby_animation_u(m, 0, 0, scale_game_frames(20));
@@ -1189,21 +1189,21 @@ void chomper_update(struct Moby *m) {
         break;
     }
     case CHOMPER_RETURN_HOME:
-        if (FUN_L16_002e6428_u(m, d + 0x1D0) < 1.0f) {
+        if (FUN_L16_002e6428_u(m, chomper_data + 0x1D0) < 1.0f) {
             m->state = 1;
             if (m->prev_seq != 2)
                 blend_moby_animation_u(m, 2, 0, scale_game_frames(20));
-        } else if (*(int *)(d + 0x1C4) != 2)
+        } else if (*(int *)(chomper_data + 0x1C4) != 2)
             m->state = 4;
         break;
     case 7:
-        if (FUN_L00_002dc9f0(m, d + 0x120)) {
+        if (FUN_L00_002dc9f0(m, chomper_data + 0x120)) {
             m->state = 1;
-            *(unsigned short *)(d + 0xC8) = 0;
+            *(unsigned short *)(chomper_data + 0xC8) = 0;
         }
         break;
     case CHOMPER_KNOCKBACK:
-        if (mine_fall(m, d + 0x120) & 0x140) {
+        if (mine_fall(m, chomper_data + 0x120) & 0x140) {
             cart_burst(m, &m->pos, 6, 0.5f, 13.0f);
             FUN_L00_00257470(m, 0, -1);
             mark_moby_for_removal_u(m);
