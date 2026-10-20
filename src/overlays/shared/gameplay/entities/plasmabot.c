@@ -1015,15 +1015,15 @@ void FUN_L14_002b2f60(char *moby) {
         case HIT_REACTION_STAGGER: case 4: case 5: case 6: case 7: case 8: case 9: case 10:
         {
             char *p60 = state + 0x60;
-            int t;
-            float e, g, k;
+            int stagger_duration_frames;
+            float frame_duration, g, k;
             FUN_L00_002e2040(moby);
             moby[0x20] = 0xA;
-            t = scale_game_frames(0x3C);
-            e = frame_time;
-            g = D_L14_001614C8 * e;
-            k = e * 8.0f;
-            *(short *)(state + 0x26) = t;
+            stagger_duration_frames = scale_game_frames(0x3C);
+            frame_duration = frame_time;
+            g = D_L14_001614C8 * frame_duration;
+            k = frame_duration * 8.0f;
+            *(short *)(state + 0x26) = stagger_duration_frames;
             *(float *)(state + 0x78) = k;
             *(float *)(state + 0x7C) = g;
             *(float *)(state + 0xB0) = 11.0f;
