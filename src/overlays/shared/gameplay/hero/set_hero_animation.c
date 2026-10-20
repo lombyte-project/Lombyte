@@ -541,7 +541,7 @@ f32 FUN_L00_00232b90(f32 prediction_frames, f32 b, f32 target_height) {
     V4_32b90 v;
     V4_32b90 trajectory_work_vector;
     V4_32b90 hero_position_copy;
-    f32 o[6];
+    f32 trajectory_solver_outputs[6];
     f32 x, y, z;
 
     switch (hero.unk20B3) {
@@ -560,10 +560,10 @@ f32 FUN_L00_00232b90(f32 prediction_frames, f32 b, f32 target_height) {
             }
         }
         if (target_height > 0.0f) {
-            if (FUN_L00_002595a0_32b90(&o[0], &o[1], b * -0.5f, hero.motion.velocity.f[2] - b * -0.5f,
+            if (FUN_L00_002595a0_32b90(&trajectory_solver_outputs[0], &trajectory_solver_outputs[1], b * -0.5f, hero.motion.velocity.f[2] - b * -0.5f,
                                        hero.motion.pos.f[2] - target_height) > 0 &&
-                o[0] > 0.0f) {
-                return o[0];
+                trajectory_solver_outputs[0] > 0.0f) {
+                return trajectory_solver_outputs[0];
             }
         }
         break;
@@ -583,8 +583,8 @@ f32 FUN_L00_00232b90(f32 prediction_frames, f32 b, f32 target_height) {
             z = FUN_L00_00233a78_32b90(&hero.motion.velocity) - nb;
             x = FUN_L00_00233a78_32b90(&hero.motion.pos);
             y = FUN_L00_00233a78_32b90(&collision_hit_point);
-            if (FUN_L00_002595a0_32b90(&o[2], &o[3], nb, z, x - y) > 0 && o[2] > 0.0f) {
-                return o[2];
+            if (FUN_L00_002595a0_32b90(&trajectory_solver_outputs[2], &trajectory_solver_outputs[3], nb, z, x - y) > 0 && trajectory_solver_outputs[2] > 0.0f) {
+                return trajectory_solver_outputs[2];
             }
         }
         break;
@@ -607,8 +607,8 @@ f32 FUN_L00_00232b90(f32 prediction_frames, f32 b, f32 target_height) {
             z = FUN_L00_00233a78_32b90(&hero.motion.velocity) - nb;
             x = FUN_L00_00233a78_32b90(&hero.motion.pos);
             y = FUN_L00_00233a78_32b90(&collision_hit_point);
-            if (FUN_L00_002595a0_32b90(&o[4], &o[5], nb, z, x - y) > 0 && o[4] > 0.0f) {
-                return o[4];
+            if (FUN_L00_002595a0_32b90(&trajectory_solver_outputs[4], &trajectory_solver_outputs[5], nb, z, x - y) > 0 && trajectory_solver_outputs[4] > 0.0f) {
+                return trajectory_solver_outputs[4];
             }
         }
         break;
