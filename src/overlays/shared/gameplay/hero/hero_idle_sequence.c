@@ -2836,12 +2836,12 @@ void FUN_L00_0020ac98(void) {
     char *g1 = (char *)hero_pos - 0x80;
     char *g2, *g3, *g4, *g5, *g6;
     int i;
-    char *m;
+    char *candidate_moby;
     char *best;
     float bestPri, bestDist;
     float v[8];
     char *q;
-    char *info, *info2, *p, *t;
+    char *info, *info2, *p, *selected_moby;
     float yaw_delta, pitch, s;
     int mode = *(int *)(g1 + 0x208C);
     if (mode != 1 && mode != 4 && mode != 2 && mode != 7 && mode != 0) {
@@ -2855,26 +2855,26 @@ void FUN_L00_0020ac98(void) {
         bestDist = 100000000.0f;
         bestPri = 0.0f;
         best = 0;
-        for (i = 0; (m = D_L00_001ABD80[i]) != 0; i++) {
-            info = (char *)suck_get_aim_height(m);
+        for (i = 0; (candidate_moby = D_L00_001ABD80[i]) != 0; i++) {
+            info = (char *)suck_get_aim_height(candidate_moby);
             if (info != 0) {
-                float d, a, sc, pri;
-                d = vector_distance(hero_pos + 0x0, m + 0x10);
-                if ((float)*(unsigned char *)(info + 0x38) < d)
+                float candidate_distance, candidate_yaw_difference, sc, pri;
+                candidate_distance = vector_distance(hero_pos + 0x0, candidate_moby + 0x10);
+                if ((float)*(unsigned char *)(info + 0x38) < candidate_distance)
                     continue;
                 g3 = (char *)hero_pos - 0x80;
-                a = fast_difference_between_rotations(
-                    FUN_001f9e90_c(*(float *)(m + 0x10) - *(float *)(g3 + 0x80),
-                                   *(float *)(m + 0x14) - *(float *)(g3 + 0x84)),
+                candidate_yaw_difference = fast_difference_between_rotations(
+                    FUN_001f9e90_c(*(float *)(candidate_moby + 0x10) - *(float *)(g3 + 0x80),
+                                   *(float *)(candidate_moby + 0x14) - *(float *)(g3 + 0x84)),
                     *(float *)(g3 + 0x98));
-                if (1.91986215f < a)
+                if (1.91986215f < candidate_yaw_difference)
                     continue;
                 if (1.04719758f <
-                    absolute_float(FUN_001f9e90_c(vector_distance(m + 0x10, hero_pos + 0x0),
-                                                 *(float *)(g3 + 0x88) - *(float *)(m + 0x18))))
+                    absolute_float(FUN_001f9e90_c(vector_distance(candidate_moby + 0x10, hero_pos + 0x0),
+                                                 *(float *)(g3 + 0x88) - *(float *)(candidate_moby + 0x18))))
                     continue;
-                sc = a * d + d;
-                if ((int)m == *(int *)(g3 + 0x2274)) {
+                sc = candidate_yaw_difference * candidate_distance + candidate_distance;
+                if ((int)candidate_moby == *(int *)(g3 + 0x2274)) {
                     sc -= 1.5f;
                     if (sc < 0.0f)
                         sc = 0.0f;
@@ -2887,7 +2887,7 @@ void FUN_L00_0020ac98(void) {
                     if (pri > bestPri)
                         bestPri = pri;
                     bestDist = sc;
-                    best = m;
+                    best = candidate_moby;
                 }
             }
         }
@@ -2903,11 +2903,11 @@ void FUN_L00_0020ac98(void) {
     v[6] += 0.5f;
     if (FUN_001efa68_ac98(v, q, 2, 0, 0))
         *(int *)(g5 + 0x2274) = 0;
-    t = *(char **)(g5 + 0x2274);
-    if (t == 0)
+    selected_moby = *(char **)(g5 + 0x2274);
+    if (selected_moby == 0)
         return;
-    qcopy(v, t + 0x10);
-    info2 = (char *)suck_get_aim_height(t);
+    qcopy(v, selected_moby + 0x10);
+    info2 = (char *)suck_get_aim_height(selected_moby);
     if (info2 != 0)
         v[2] += (float)*(unsigned char *)(info2 + 0x3A) * 0.125f;
     FUN_L00_00233660(&v[4], 0.3f, 0.0f, 0.85f);
