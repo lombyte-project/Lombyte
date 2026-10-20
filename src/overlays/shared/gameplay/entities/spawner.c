@@ -526,27 +526,27 @@ extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void FUN_L00_00250df8(void *);
 
 char *FUN_L09_0030b218(int owner, void *pos, void *rot, unsigned char a, unsigned char b) {
-    char *m = (char *)func_0020D348_m(0x75E);
-    if (m) {
-        char *moby_vars = *(char **)(m + 0x78);
+    char *spawned_moby = (char *)func_0020D348_m(0x75E);
+    if (spawned_moby) {
+        char *moby_vars = *(char **)(spawned_moby + 0x78);
         *(int *)(moby_vars + 0x10) = owner;
-        qcopy(m + 0x10, pos);
+        qcopy(spawned_moby + 0x10, pos);
         qcopy(moby_vars, rot);
-        *(float *)(m + 0x40) = random_float_between_alt(-3.1415927f, 3.1415927f);
-        *(float *)(m + 0x44) = random_float_between_alt(-3.1415927f, 3.1415927f);
+        *(float *)(spawned_moby + 0x40) = random_float_between_alt(-3.1415927f, 3.1415927f);
+        *(float *)(spawned_moby + 0x44) = random_float_between_alt(-3.1415927f, 3.1415927f);
         *(int *)(moby_vars + 0x14) = 0;
         *(short *)(moby_vars + 0x18) = scale_game_frames(500);
-        *(unsigned char *)(m + 0x30) = 0xFF;
-        *(short *)(m + 0x32) = 0x40;
-        m[0x31] = 1;
-        m[0x20] = 0;
-        *(float *)(m + 0x2C) = *(float *)(*(char **)(m + 0x24) + 0x24) * 0.3f;
+        *(unsigned char *)(spawned_moby + 0x30) = 0xFF;
+        *(short *)(spawned_moby + 0x32) = 0x40;
+        spawned_moby[0x31] = 1;
+        spawned_moby[0x20] = 0;
+        *(float *)(spawned_moby + 0x2C) = *(float *)(*(char **)(spawned_moby + 0x24) + 0x24) * 0.3f;
         moby_vars[0x1C] = b;
         moby_vars[0x1A] = a;
         moby_vars[0x1B] = 0;
-        FUN_L00_00250df8(m);
+        FUN_L00_00250df8(spawned_moby);
     }
-    return m;
+    return spawned_moby;
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C6B30.c: func_L09_0030C790), where it is exact; names translated to the US level program. */
 
