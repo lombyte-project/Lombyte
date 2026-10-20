@@ -1143,7 +1143,10 @@ void ultramech_scientist_update(struct Moby *moby) {
     enum {
         ULTRAMECH_SCIENTIST_INITIALIZE = 0,
         ULTRAMECH_SCIENTIST_WAIT_FOR_DIALOGUE = 1,
+        ULTRAMECH_SCIENTIST_WAIT_FOR_PRE_SCENE_DELAY = 4,
         ULTRAMECH_SCIENTIST_START_FIRST_SCENE = 5,
+        ULTRAMECH_SCIENTIST_WAIT_FOR_FIRST_SCENE = 6,
+        ULTRAMECH_SCIENTIST_START_SECOND_SCENE_AND_SAVE = 7,
         ULTRAMECH_SCIENTIST_SAVE_AND_DISABLE = 8
     };
     char *data;
@@ -1305,7 +1308,7 @@ void ultramech_scientist_update(struct Moby *moby) {
         moby->state = 4;
         *(int *)(data + 0x15C) = scale_game_frames(120);
         break;
-    case 4:
+    case ULTRAMECH_SCIENTIST_WAIT_FOR_PRE_SCENE_DELAY:
         if (fast_dec_timer(data + 0x15C) == 0) {
             break;
         }
@@ -1330,14 +1333,14 @@ void ultramech_scientist_update(struct Moby *moby) {
         start_scene(1);
         moby->state = 6;
         break;
-    case 6:
+    case ULTRAMECH_SCIENTIST_WAIT_FOR_FIRST_SCENE:
         if (D_L15_0015F5C4 == 2) {
             break;
         }
         FUN_L00_00299460(0x10);
         moby->state = 7;
         break;
-    case 7:
+    case ULTRAMECH_SCIENTIST_START_SECOND_SCENE_AND_SAVE:
         if (D_L15_0015F5C4 != 2) {
             FUN_L00_00262d38(0x10);
             start_scene(2);
