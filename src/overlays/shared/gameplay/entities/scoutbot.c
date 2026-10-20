@@ -347,37 +347,37 @@ float absolute_float(float input) __asm__("func_001F99C0");
 extern int func_L00_00260FB0_f(char *, void *, float, int, int, void *,
                                int) __asm__("FUN_L00_0025ff38");
 
-void FUN_L08_002d36e0(char *m) {
-    char *d = *(char **)(m + 0x78);
+void FUN_L08_002d36e0(char *moby) {
+    char *data = *(char **)(moby + 0x78);
     int hit;
     float dmg;
     int idx;
     dmg = 0.0f;
-    idx = hit_reaction(m, find_moby_hit(m, 0x330000, 0), d + 0x20, 0, &hit, &dmg, 0, 4);
-    if (hit != 1 && ((unsigned char *)m)[0x20] != 0x63) {
-        *(float *)(d + 0x20) -= dmg;
-        if (*(float *)(d + 0x20) <= 0.0f)
+    idx = hit_reaction(moby, find_moby_hit(moby, 0x330000, 0), data + 0x20, 0, &hit, &dmg, 0, 4);
+    if (hit != 1 && ((unsigned char *)moby)[0x20] != 0x63) {
+        *(float *)(data + 0x20) -= dmg;
+        if (*(float *)(data + 0x20) <= 0.0f)
             idx = 1;
         if (idx < 12) {
             if (idx >= 0) {
-                FUN_L00_00257470(m, 0, -1);
-                m[0x20] = 0x63;
+                FUN_L00_00257470(moby, 0, -1);
+                moby[0x20] = 0x63;
             }
         }
     }
-    ((unsigned char *)m)[0xA4] = 0xFF;
-    if (((unsigned char *)m)[0x20] != 0 && ((unsigned char *)m)[0x20] != 4) {
-        char *e = D_L08_001B0CB0[*(int *)(d + 0x21C)];
-        if (func_L00_00260FB0_f(m, d + 0x170, 14.0f, 0, 0, e + 0x10, *(int *)e) != 2) {
-            if (14.0f < vector_distance(d + 0x1C0, d + 0x170)) {
-                *(int *)(d + 0x1B4) = 2;
-            } else if (3.0f < absolute_float(*(float *)(d + 0x1C8) - *(float *)(d + 0x178))) {
-                *(int *)(d + 0x1B4) = 2;
+    ((unsigned char *)moby)[0xA4] = 0xFF;
+    if (((unsigned char *)moby)[0x20] != 0 && ((unsigned char *)moby)[0x20] != 4) {
+        char *path = D_L08_001B0CB0[*(int *)(data + 0x21C)];
+        if (func_L00_00260FB0_f(moby, data + 0x170, 14.0f, 0, 0, path + 0x10, *(int *)path) != 2) {
+            if (14.0f < vector_distance(data + 0x1C0, data + 0x170)) {
+                *(int *)(data + 0x1B4) = 2;
+            } else if (3.0f < absolute_float(*(float *)(data + 0x1C8) - *(float *)(data + 0x178))) {
+                *(int *)(data + 0x1B4) = 2;
             }
         }
     }
-    if (*(int *)(d + 0x1B0) == 0) {
-        *(int *)(d + 0x1B0) = ((int)hero.moby);
+    if (*(int *)(data + 0x1B0) == 0) {
+        *(int *)(data + 0x1B0) = ((int)hero.moby);
     }
 }
 typedef struct { float v[4]; } Vec_002d3878 __attribute__((aligned(16)));
