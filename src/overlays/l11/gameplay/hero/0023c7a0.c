@@ -403,6 +403,7 @@ void FUN_L11_00246b70(void) {
     enum {
         HERO_STATE_APPROACH_TARGET_MOBY = 0x25,
         HERO_STATE_CONSTRAIN_TO_TARGET_RADIUS = 0x26,
+        HERO_STATE_CONSTRAIN_TO_SPRING_RADIUS = 0x2C,
         HERO_STATE_MOVE_DOWNHILL = 0x58,
         HERO_STATE_MOVE_TO_TARGET_POSITION = 0x65,
         HERO_STATE_BRAKE_AT_TARGET_POSITION = 0x66
@@ -1071,7 +1072,7 @@ void FUN_L11_00246b70(void) {
         subtract_vector_xyz(&hero.motion.velocity, &vector_and_hit_descriptor_scratch, &hero.motion.pos);
         break;
     }
-    case 0x2C: {
+    case HERO_STATE_CONSTRAIN_TO_SPRING_RADIUS: {
         f32 vz;
         s32 above;
         if ((hero.unkA98 & 2) && moby->b53 == 0x34) {
