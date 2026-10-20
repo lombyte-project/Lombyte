@@ -1753,7 +1753,7 @@ void FUN_L18_002db460(struct Moby *moby) {
     float a[4];
     float c[4];
     float w[4];
-    float *d = (float *)moby->pvars;
+    float *moby_vars = (float *)moby->pvars;
     int i;
     int i0, i1, i2, i3, i4;
 
@@ -1767,7 +1767,7 @@ void FUN_L18_002db460(struct Moby *moby) {
         i = 0;
         for (; i < D_L18_00161C40; i++) {
             cc = c;
-            scale_vector_xyz(v, d, D_L18_00161C08);
+            scale_vector_xyz(v, moby_vars, D_L18_00161C08);
             FUN_L00_00257d78(cc, 0.0f, D_L18_00161C0C * frame_time);
             add_vector_xyz(v, cc, v);
             FUN_L00_00257d78(w, 0.0f, 0.5f);
@@ -1792,21 +1792,21 @@ void FUN_L18_002db460(struct Moby *moby) {
             a[2] = a[2] - D_L18_00161C04 * frame_time_sq * (float)i3;
             spawn_spark(w, v, a, i0, i1, i2, i3, i4, D_L18_00161C44);
         }
-        d[12] = fast_add_rotations(d[12], frame_time * 18.849556f);
+        moby_vars[12] = fast_add_rotations(moby_vars[12], frame_time * 18.849556f);
         {
             int col = FUN_001fa6e0(*(int *)&D_L18_00161BFC, D_L18_00161C00,
-                                   (fast_sin(d[12]) + 1.0f) * 0.5f);
+                                   (fast_sin(moby_vars[12]) + 1.0f) * 0.5f);
             float k = frame_time_sq * 10.0f;
             moby->glow_color = col;
-            d[2] = d[2] - k;
+            moby_vars[2] = moby_vars[2] - k;
         }
-        add_vector_xyz(&moby->pos, &moby->pos, d);
+        add_vector_xyz(&moby->pos, &moby->pos, moby_vars);
         {
-            float t = probe_ground_height(&moby->pos, 0, 0.5f);
-            if (moby->pos.z - 0.333f < t) {
+            float ground_height = probe_ground_height(&moby->pos, 0, 0.5f);
+            if (moby->pos.z - 0.333f < ground_height) {
                 moby->state = 1;
-                moby->pos.z = t + 0.333f;
-                *(int *)(d + 11) = scale_game_frames(1);
+                moby->pos.z = ground_height + 0.333f;
+                *(int *)(moby_vars + 11) = scale_game_frames(1);
             }
         }
         moby->rot.y =
@@ -1819,23 +1819,23 @@ void FUN_L18_002db460(struct Moby *moby) {
         break;
     }
     case STATE_GROUND_IMPACT_DELAY:
-        d[12] = fast_add_rotations(d[12], frame_time * 18.849556f);
+        moby_vars[12] = fast_add_rotations(moby_vars[12], frame_time * 18.849556f);
         moby->glow_color = FUN_001fa6e0(*(int *)&D_L18_00161BFC, D_L18_00161C00,
-                                             (fast_sin(d[12]) + 1.0f) * 0.5f);
-        if (tick_countdown_32((int *)(d + 11))) {
+                                             (fast_sin(moby_vars[12]) + 1.0f) * 0.5f);
+        if (tick_countdown_32((int *)(moby_vars + 11))) {
             trooper_play_sound(0xF, 0, (int)moby, 0x58E);
             moby->state = 2;
-            d[9] = 0.5f;
+            moby_vars[9] = 0.5f;
             moby->collision = 0;
             moby->visible = 0;
             moby->flags |= 1;
         }
         break;
     case STATE_EXPANDING_RING:
-        d[9] = d[9] + d[8];
+        moby_vars[9] = moby_vars[9] + moby_vars[8];
         FUN_L18_002dbe80(moby);
         enqueue_callback_list_1(FUN_L18_002dba20, moby);
-        if (d[9] > d[10]) {
+        if (moby_vars[9] > moby_vars[10]) {
             moby->state = 3;
         }
         break;
