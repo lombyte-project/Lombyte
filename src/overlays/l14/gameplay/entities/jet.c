@@ -1308,16 +1308,16 @@ extern float D_L14_001DFFE0[];
 void FUN_L14_002ed530(char *moby) {
     Vec4 delta;
     float len;
-    float t;
+    float path_fraction;
     float sign;
     float ang;
     float r;
     int i;
     int j;
     int n;
-    float *p;
+    float *main_arc_point;
     s32 *starts;
-    u16 *e;
+    u16 *main_arc_age;
 
     if (*(int *)&D_L14_00161C58 == 0) {
         *(int *)&D_L14_00161C58 = 1;
@@ -1331,21 +1331,21 @@ void FUN_L14_002ed530(char *moby) {
         D_L14_00161C74 = len / arc_itof(40);
         D_L14_00161CE0_d530 = 0;
         for (; i < 40; i++) {
-            e = &D_L14_001E0000[i];
-            p = D_L14_001DFD80_d530[i];
-            p[1] = p[2] = 0.0f;
-            p[3] = 1.0f;
-            p[0] = D_L14_00161C74 * (float)i;
+            main_arc_age = &D_L14_001E0000[i];
+            main_arc_point = D_L14_001DFD80_d530[i];
+            main_arc_point[1] = main_arc_point[2] = 0.0f;
+            main_arc_point[3] = 1.0f;
+            main_arc_point[0] = D_L14_00161C74 * (float)i;
             if (i < 39) {
-                p[2] = p[-2] + FUN_L00_00257c48(D_L14_00161C8C, D_L14_00161C90);
-                if (D_L14_00161C94 < (*&p)[2]) {
-                    p[2] = D_L14_00161C94;
-                } else if (p[2] < -D_L14_00161C94) {
-                    p[2] = -D_L14_00161C94;
+                main_arc_point[2] = main_arc_point[-2] + FUN_L00_00257c48(D_L14_00161C8C, D_L14_00161C90);
+                if (D_L14_00161C94 < (*&main_arc_point)[2]) {
+                    main_arc_point[2] = D_L14_00161C94;
+                } else if (main_arc_point[2] < -D_L14_00161C94) {
+                    main_arc_point[2] = -D_L14_00161C94;
                 }
             }
-            t = arc_itof(i) / arc_itof(40);
-            *e = arc_ftoi((float)-arc_frames(D_L14_00161C70_gp) * t + 0.0f);
+            path_fraction = arc_itof(i) / arc_itof(40);
+            *main_arc_age = arc_ftoi((float)-arc_frames(D_L14_00161C70_gp) * path_fraction + 0.0f);
         }
         arc_lerp(D_L14_001DFFE0, D_L14_001DFFE0 - 4, D_L14_001DFFE0 + 4, 0.5f);
         sign = -1.0f;
@@ -1368,13 +1368,13 @@ void FUN_L14_002ed530(char *moby) {
             row[0][0] = r * arc_cos(ang);
             row[0][2] = r * arc_sin(ang);
             for (m = 1; m < 16; m++) {
-                float d;
+                float angle_step;
                 float na;
                 r = arc_random(1.0f, 10.0f);
-                d = FUN_L00_00257c48(0.0f, 40.0f) * 0.017453292f;
-                na = arc_add_rot(ang, d);
+                angle_step = FUN_L00_00257c48(0.0f, 40.0f) * 0.017453292f;
+                na = arc_add_rot(ang, angle_step);
                 if (arc_fabs(na) > 1.3962634f || (ang > 0.0f && na < 0.0f) || (ang < 0.0f && na > 0.0f)) {
-                    ang = arc_add_rot(ang, -d);
+                    ang = arc_add_rot(ang, -angle_step);
                 } else {
                     ang = na;
                 }
