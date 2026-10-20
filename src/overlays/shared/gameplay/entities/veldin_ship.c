@@ -3230,8 +3230,8 @@ typedef struct {
 } O002d6bf0;
 s32 random_integer_below(s32) __asm__("FUN_00213260");
 s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
-void FUN_L00_002d6bf0(O002d6bf0 *o) {
-    M002d6bf0 *m = o->m;
+void FUN_L00_002d6bf0(O002d6bf0 *moby) {
+    M002d6bf0 *m = moby->m;
     s32 i;
     for (i = 0; i < 4; i++)
         m->r[i] = random_integer_below(0xFF);
