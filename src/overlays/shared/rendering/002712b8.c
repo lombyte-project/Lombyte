@@ -1301,39 +1301,39 @@ int FUN_001fa6d0(float);
 int FUN_00213260(int);
 float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 
-unsigned char *FUN_L00_002743a8(int k, u128 *pos, int n, float x, float y, int mode, int col,
+unsigned char *FUN_L00_002743a8(int k, u128 *pos, int lifetime_frames, float x, float y, int mode, int col,
                                 float *vec) {
-    unsigned char *m = FUN_L00_002678b8(0x43);
-    if (m) {
-        unsigned char *v = m + 0x20;
-        qcopy(m + 0x10, pos);
+    unsigned char *particle = FUN_L00_002678b8(0x43);
+    if (particle) {
+        unsigned char *v = particle + 0x20;
+        qcopy(particle + 0x10, pos);
         *(int *)(v + 0xC) = k;
         *(float *)(v + 0x10) = x;
         *(float *)(v + 0x14) = y;
-        *(int *)(m + 4) = col | 0x409B9B00;
-        m[9] = FUN_001fa6d0(4.0f) + 0x40;
-        m[1] = 0;
-        m[3] = 0x48;
-        *(float *)(m + 0xc) = 52500.0f;
-        m[8] = FUN_00213260(0xFF);
+        *(int *)(particle + 4) = col | 0x409B9B00;
+        particle[9] = FUN_001fa6d0(4.0f) + 0x40;
+        particle[1] = 0;
+        particle[3] = 0x48;
+        *(float *)(particle + 0xc) = 52500.0f;
+        particle[8] = FUN_00213260(0xFF);
         *(short *)(v + 0x1C) = mode;
         *(short *)(v + 0x18) = 0;
         if (mode == 0) {
-            m[2] = D_L00_001B218C[0];
+            particle[2] = D_L00_001B218C[0];
         } else {
-            m[2] = D_L00_001B218C[1];
+            particle[2] = D_L00_001B218C[1];
         }
         if (mode == 0) {
-            *(short *)(v + 0x1A) = FUN_001fa6d0(127.0f / convert_integer_to_float(n));
+            *(short *)(v + 0x1A) = FUN_001fa6d0(127.0f / convert_integer_to_float(lifetime_frames));
         }
         if (vec) {
             *(float *)(v + 0) = vec[0];
             *(float *)(v + 4) = vec[1];
             *(float *)(v + 8) = vec[2];
         }
-        *(short *)(m + 0xA) = n;
+        *(short *)(particle + 0xA) = lifetime_frames;
     }
-    return m;
+    return particle;
 }
 typedef struct {
     f32 x, y, z, w;
