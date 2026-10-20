@@ -77,70 +77,70 @@ extern int func_0022ED80_i(int, int, void *) __asm__("FUN_0022da68");
 
 extern short D_L05_00161D38 __attribute__((sda));
 void electric_gate_update(char *m) __asm__("FUN_L05_0030dc68");
-void electric_gate_update(char *m) {
+void electric_gate_update(char *gate_moby) {
     enum {
         ELECTRIC_GATE_INITIALIZE = 0,
         ELECTRIC_GATE_WAIT_FOR_TRIGGER = 1,
         ELECTRIC_GATE_TRIGGERED = 2
     };
-    char *data = *(char **)(m + 0x78);
-    int state = *(unsigned char *)(m + 0x20);
+    char *data = *(char **)(gate_moby + 0x78);
+    int state = *(unsigned char *)(gate_moby + 0x20);
     char *base;
     char *tab;
     char *pos;
-    char *q;
-    char *o;
+    char *voice_position_base;
+    char *voice_owner;
     float d;
     int idx;
     switch (state) {
     case ELECTRIC_GATE_INITIALIZE:
-        *(unsigned short *)(m + 0x34) |= 1;
-        *(unsigned char *)(m + 0x20) = 1;
-        *(unsigned char *)(m + 0x31) = 0;
+        *(unsigned short *)(gate_moby + 0x34) |= 1;
+        *(unsigned char *)(gate_moby + 0x20) = 1;
+        *(unsigned char *)(gate_moby + 0x31) = 0;
         **(int **)(data + 4) = -1;
         break;
     case ELECTRIC_GATE_WAIT_FOR_TRIGGER:
         if (*(int *)&D_L05_00161D38 != D_L05_0015F5CC_e[2]) {
             *(int *)&D_L05_00161D38 = D_L05_0015F5CC_e[2];
-            enqueue_callback_list_1(FUN_L05_0030de90, m);
+            enqueue_callback_list_1(FUN_L05_0030de90, gate_moby);
         }
-        pos = m + 0x10;
+        pos = gate_moby + 0x10;
         tab = D_L05_001671C0;
         if (FUN_001f9b48(pos, tab) < 64.0f) {
             idx = **(int **)(data + 4);
             if (idx >= 0) {
                 base = D_0013E550;
-                o = *(char **)(base + idx * 0x70 + 0x88);
-                if (o != 0) {
-                    if (*(short *)(o + 0xA6) == 0x346) {
-                        if (o != m) {
-                            if (*(unsigned char *)(o + 0x20) == state) {
+                voice_owner = *(char **)(base + idx * 0x70 + 0x88);
+                if (voice_owner != 0) {
+                    if (*(short *)(voice_owner + 0xA6) == 0x346) {
+                        if (voice_owner != gate_moby) {
+                            if (*(unsigned char *)(voice_owner + 0x20) == state) {
                                 d = FUN_001f9b48(pos, tab);
-                                if (!(d < FUN_001f9b48(o + 0x10, tab)))
+                                if (!(d < FUN_001f9b48(voice_owner + 0x10, tab)))
                                     goto after;
                             }
-                            q = base + 0x90;
-                            *(char **)(base + **(int **)(data + 4) * 0x70 + 0x88) = m;
-                            qcopy(**(int **)(data + 4) * 0x70 + q, pos);
+                            voice_position_base = base + 0x90;
+                            *(char **)(base + **(int **)(data + 4) * 0x70 + 0x88) = gate_moby;
+                            qcopy(**(int **)(data + 4) * 0x70 + voice_position_base, pos);
                         }
                         goto after;
                     }
                 }
             }
-            **(int **)(data + 4) = func_0022ED80_i(0, 4, m);
+            **(int **)(data + 4) = func_0022ED80_i(0, 4, gate_moby);
         }
     after:
         if (*(int *)data >= 0) {
             if ((*(unsigned char **)&D_L05_0015FFD8_d)[*(int *)data * 256 + 0xBC] != 0) {
-                func_0022ED80_i(1, 0, m);
-                *(int *)(m + 0x94) = 0;
-                *(unsigned char *)(m + 0x20) = 2;
+                func_0022ED80_i(1, 0, gate_moby);
+                *(int *)(gate_moby + 0x94) = 0;
+                *(unsigned char *)(gate_moby + 0x20) = 2;
             }
         }
         break;
     case ELECTRIC_GATE_TRIGGERED:
-        if (*(int *)(m + 0x94) != 0)
-            *(int *)(m + 0x94) = 0;
+        if (*(int *)(gate_moby + 0x94) != 0)
+            *(int *)(gate_moby + 0x94) = 0;
         break;
     }
 }
