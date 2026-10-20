@@ -1197,52 +1197,52 @@ extern void FUN_L00_002df1e0_c(M_da360 *) __asm__("FUN_L00_002df1e0");
 void FUN_L00_002da360(u8 *p, void *q) {
     u8 buf[0x10] __attribute__((aligned(16)));
     V_da360 v;
-    f32 a, b;
-    M_da360 *m;
+    f32 suction_yaw, b;
+    M_da360 *candidate_moby;
     R *r;
-    f32 d, thr, t;
-    s32 n;
+    f32 distance_xy, thr, t;
+    s32 stored_moby_count;
 
-    FUN_L00_002da250_c(p, &a, &b, buf);
+    FUN_L00_002da250_c(p, &suction_yaw, &b, buf);
     FUN_L00_002ddf60(p, buf);
-    for (m = D_L00_0015FFE4; m != 0; m = m->next) {
-        if (m->a6 != 0 && (m->f34 & 0x1000) &&
-            *(void **)*(u8 **)(m->p24 + 0x2c) != (void *)FUN_L00_002db848) {
-            r = FUN_L00_002db890_c(m);
+    for (candidate_moby = D_L00_0015FFE4; candidate_moby != 0; candidate_moby = candidate_moby->next) {
+        if (candidate_moby->a6 != 0 && (candidate_moby->f34 & 0x1000) &&
+            *(void **)*(u8 **)(candidate_moby->p24 + 0x2c) != (void *)FUN_L00_002db848) {
+            r = FUN_L00_002db890_c(candidate_moby);
             if (r != 0 && r->h68 < 6) {
-                d = vector_distance_xy(p + 0x10, &m->pos);
-                if (d < 15.0f && !FUN_L00_002d9f78_c() &&
-                    ((n = G2->i2078), G1->b9 == 0 ? n < 5 : n < 10)) {
+                distance_xy = vector_distance_xy(p + 0x10, &candidate_moby->pos);
+                if (distance_xy < 15.0f && !FUN_L00_002d9f78_c() &&
+                    ((stored_moby_count = G2->i2078), G1->b9 == 0 ? stored_moby_count < 5 : stored_moby_count < 10)) {
                     if (r->h68 < 3) {
                         thr = 0.043864909559488297f;
-                        if (d < 3.0f)
+                        if (distance_xy < 3.0f)
                             thr = 3.68587064743042f;
                         r->h6a = -1;
-                        qcopy(&v, &m->pos);
+                        qcopy(&v, &candidate_moby->pos);
                         v.z += 0.4f;
                         t = fast_difference_between_rotations(
-                            a, fast_arc_tan(v.x - *(f32 *)(p + 0x10), v.y - *(f32 *)(p + 0x14)));
+                            suction_yaw, fast_arc_tan(v.x - *(f32 *)(p + 0x10), v.y - *(f32 *)(p + 0x14)));
                         if (t * t < thr) {
-                            t = fast_arc_tan(d, v.z - *(f32 *)(p + 0x18));
+                            t = fast_arc_tan(distance_xy, v.z - *(f32 *)(p + 0x18));
                             t = fast_difference_between_rotations(b, t);
                             if (t * t < thr) {
-                                if (!FUN_001efa68_c(buf, &v, 2, m, 0))
+                                if (!FUN_001efa68_c(buf, &v, 2, candidate_moby, 0))
                                     goto hit;
                                 if (r->h68 > 0)
-                                    FUN_L00_002da1e0_c(m);
+                                    FUN_L00_002da1e0_c(candidate_moby);
                             } else if (r->h68 > 0)
-                                FUN_L00_002da1e0_c(m);
+                                FUN_L00_002da1e0_c(candidate_moby);
                         } else if (r->h68 > 0)
-                            FUN_L00_002da1e0_c(m);
+                            FUN_L00_002da1e0_c(candidate_moby);
                     } else if (r->h68 < 4) {
                     hit:
-                        FUN_L00_002da058(p, q, m, r, buf);
+                        FUN_L00_002da058(p, q, candidate_moby, r, buf);
                     }
                 } else if (r->h68 != 0)
-                    FUN_L00_002da1e0_c(m);
+                    FUN_L00_002da1e0_c(candidate_moby);
             }
         } else {
-            FUN_L00_002df1e0_c(m);
+            FUN_L00_002df1e0_c(candidate_moby);
         }
     }
 }
