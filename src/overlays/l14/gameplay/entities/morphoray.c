@@ -308,29 +308,29 @@ extern void FUN_L00_00250df8_f(char *) __asm__("FUN_L00_00250df8");
 extern unsigned short D_L14_0016208C_g __asm__("D_L14_0016208C") __attribute__((sda));
 
 extern float D_L14_00162098 __attribute__((sda));
-char *FUN_L14_003014e0(int owner, float *pos, float *initial_velocity, int fade_timer, float f) {
+char *FUN_L14_003014e0(int owner, float *pos, float *initial_velocity, int fade_timer, float gravity) {
     char *moby = FUN_0020c4f8_c(0x4A9);
-    float t, u;
+    float initial_yaw, u;
     unsigned short g;
     if (moby != 0) {
-        char *d = *(char **)(moby + 0x78);
+        char *spark_data = *(char **)(moby + 0x78);
         ((unsigned char *)moby)[0x30] = 0xFF;
         *(short *)(moby + 0x32) = 0xFF;
         moby[0x31] = 1;
         moby[0x20] = 0;
-        *(int *)(d + 0x24) = owner;
+        *(int *)(spark_data + 0x24) = owner;
         qcopy(moby + 0x10, pos);
-        qcopy(d + 0x10, initial_velocity);
+        qcopy(spark_data + 0x10, initial_velocity);
         g = D_L14_0016208C_g;
-        *(float *)(d + 0x1C) = f;
-        *(int *)(d + 0x20) = fade_timer;
-        *(unsigned short *)(d + 0x28) = g;
-        *(short *)(d + 0x2A) = 0;
+        *(float *)(spark_data + 0x1C) = gravity;
+        *(int *)(spark_data + 0x20) = fade_timer;
+        *(unsigned short *)(spark_data + 0x28) = g;
+        *(short *)(spark_data + 0x2A) = 0;
         *(int *)(moby + 0x40) = 0;
         *(int *)(moby + 0x44) = 0;
-        t = FUN_001f9e90_a(initial_velocity[0], initial_velocity[1]);
+        initial_yaw = FUN_001f9e90_a(initial_velocity[0], initial_velocity[1]);
         u = *(float *)(moby + 0x2C) * D_L14_00162098;
-        *(float *)(moby + 0x48) = t;
+        *(float *)(moby + 0x48) = initial_yaw;
         *(float *)(moby + 0x2C) = u;
         FUN_L00_00250df8_f(moby);
     }
