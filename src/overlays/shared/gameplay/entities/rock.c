@@ -53,7 +53,7 @@ void FUN_L01_002f6328(struct Moby *rail_moby) {
     Vec4 dir;
     Vec4 pull;
     s32 seg;
-    f32 t;
+    f32 candidate_fraction;
     s32 best_seg;
     f32 best_t;
     f32 drag;
@@ -84,14 +84,14 @@ void FUN_L01_002f6328(struct Moby *rail_moby) {
     best_path = 0;
     for (k = 0; k < rail_vars->count; k++) {
         path = D_L01_001B0930[rail_vars->paths[k]];
-        FUN_L00_0025df68(path, &hero.motion.pos, &pt, &seg, &t, 0, 999.0f, 5.0f, 0.0f);
+        FUN_L00_0025df68(path, &hero.motion.pos, &pt, &seg, &candidate_fraction, 0, 999.0f, 5.0f, 0.0f);
         dist = vector_distance(&hero.motion.pos, &pt);
         if (dist < best) {
             best_path = path;
             qcopy(&best_pt, &pt);
             best = dist;
             best_seg = seg;
-            best_t = t;
+            best_t = candidate_fraction;
         }
     }
     if (best_path == 0) {
