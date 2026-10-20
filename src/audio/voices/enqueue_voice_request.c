@@ -19,10 +19,10 @@ void enqueue_voice_request(void) {
     s32 i;
 
     for (i = 0; i < D_0013E550.count; i++) {
-        struct Handler *h = (struct Handler *)(i * 0x90 + (s32)D_0013E550.handlers);
+        struct Handler *handler = (struct Handler *)(i * 0x90 + (s32)D_0013E550.handlers);
 
-        if (h->fn != 0) {
-            h->fn(h);
+        if (handler->fn != 0) {
+            handler->fn(handler);
         }
     }
 }
