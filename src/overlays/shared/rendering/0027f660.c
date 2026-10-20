@@ -311,14 +311,14 @@ typedef struct {
     int *f10;
 } T_28b828;
 
-int FUN_L01_0028b828(T_28b828 *a, int b) {
-    int n;
-    n = (a->f4 < 0) ? 0 : (*a->f10 - 1);
+int FUN_L01_0028b828(T_28b828 *path, int b) {
+    int last_index;
+    last_index = (path->f4 < 0) ? 0 : (*path->f10 - 1);
     if (b < 0) {
-        return n + b;
+        return last_index + b;
     }
-    if (n < b) {
-        return b % (n + 1);
+    if (last_index < b) {
+        return b % (last_index + 1);
     }
     return b;
 }
