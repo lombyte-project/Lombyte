@@ -205,7 +205,7 @@ int mine_fall(char *moby, char *st) {
     int flags = 0;
 
     float sc, f21, f20, f12, t, r, rr, one;
-    int n, i;
+    int result_count, i;
 
     *(float *)(st + 0x8) = *(float *)(st + 0x8) - *(float *)(st + 0x10);
     if (*(unsigned char *)(st + 0x2E) == 1) {
@@ -277,8 +277,8 @@ int mine_fall(char *moby, char *st) {
             } else {
                 float negative_half_gravity_step = *(float *)(st + 0x10) * -0.5f;
                 f20 = 60.0f;
-                n = FUN_L00_002595a0(&f64, &f68, negative_half_gravity_step, *(float *)(st + 0x8) - negative_half_gravity_step, *(float *)(moby + 0x18) - f21);
-                if (n > 0 && 0.0f < f64 && f64 < f20) {
+                result_count = FUN_L00_002595a0(&f64, &f68, negative_half_gravity_step, *(float *)(st + 0x8) - negative_half_gravity_step, *(float *)(moby + 0x18) - f21);
+                if (result_count > 0 && 0.0f < f64 && f64 < f20) {
                     f20 = f64;
                 }
                 if (f20 < 0.0001f) {
@@ -314,10 +314,10 @@ int mine_fall(char *moby, char *st) {
     qcopy(collision_probe_position, (moby + 0x10));
     collision_probe_position[2] = collision_probe_position[2] + *(float *)(st + 0x28);
     add_vector_xyz_c(predicted_query_position, collision_probe_position, st);
-    n = func_L00_001F2BE8_d6f0(convert_integer_to_float(*(int *)(st + 0x20)) * 0.0010742187732830644f, predicted_query_position, 16, moby, 0);
-    if (i < n) {
+    result_count = func_L00_001F2BE8_d6f0(convert_integer_to_float(*(int *)(st + 0x20)) * 0.0010742187732830644f, predicted_query_position, 16, moby, 0);
+    if (i < result_count) {
         int **pp = D_L00_00177F00;
-        int k = n;
+        int k = result_count;
         do {
             if (FUN_L00_0025e3b8(*pp) == 0) {
                 if (*(int *)(st + 0x24) & 0x20) {
