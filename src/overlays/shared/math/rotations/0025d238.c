@@ -293,56 +293,56 @@ extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
 extern float dot_25dcd8(void *, void *) __asm__("FUN_001f9ab0");
 extern float FUN_L00_0025da70_c(void *, void *, float) __asm__("FUN_L00_0025da70");
 float FUN_L00_0025dcd8(OvlQuad *out, OvlQuad *p, OvlQuad *a, OvlQuad *b, float r);
-float FUN_L00_0025dcd8(OvlQuad *out, OvlQuad *p, OvlQuad *a, OvlQuad *b, float r) {
+float FUN_L00_0025dcd8(OvlQuad *out, OvlQuad *query_point, OvlQuad *segment_start, OvlQuad *b, float r) {
     OvlQuad d[2];
-    OvlQuad c[1];
-    OvlQuad e[1];
+    OvlQuad direction_copy[1];
+    OvlQuad query_point_copy[1];
     OvlQuad g[1];
-    float *o, *fa, *fb;
+    float *output_component, *fa, *fb;
     float res, t, u;
     int i;
-    if (r > 0.0f && fabs_25dcd8(((float *)p)[2] - ((float *)a)[2]) < r &&
-        fabs_25dcd8(((float *)p)[2] - ((float *)b)[2]) < r) {
-        res = FUN_L00_0025db00_c(out, p, a, b);
-        r = dist_25dcd8(a, out);
-        u = dist_25dcd8(a, b);
-        d[0] = *a;
+    if (r > 0.0f && fabs_25dcd8(((float *)query_point)[2] - ((float *)segment_start)[2]) < r &&
+        fabs_25dcd8(((float *)query_point)[2] - ((float *)b)[2]) < r) {
+        res = FUN_L00_0025db00_c(out, query_point, segment_start, b);
+        r = dist_25dcd8(segment_start, out);
+        u = dist_25dcd8(segment_start, b);
+        d[0] = *segment_start;
         d[1] = *b;
         b6b8_25dcd8(out, &d[0], &d[1], r / u);
         return res;
     }
-    vsub_25dcd8(d, b, a);
-    d[1] = *a;
+    vsub_25dcd8(d, b, segment_start);
+    d[1] = *segment_start;
     vscl_25dcd8(d, d, 1.0f);
-    qcopy(c, d);
-    t = -dot_25dcd8(p, d);
-    u = dot_25dcd8(&d[1], c);
-    scale_vector_xyz(out, d, -(t + u) / dot_25dcd8(d, c));
+    qcopy(direction_copy, d);
+    t = -dot_25dcd8(query_point, d);
+    u = dot_25dcd8(&d[1], direction_copy);
+    scale_vector_xyz(out, d, -(t + u) / dot_25dcd8(d, direction_copy));
     vadd_25dcd8(out, out, &d[1]);
     i = 0;
     fb = (float *)b;
-    fa = (float *)a;
-    o = (float *)out;
+    fa = (float *)segment_start;
+    output_component = (float *)out;
     do {
-        if (*o > *fa && *fb < *o)
+        if (*output_component > *fa && *fb < *output_component)
             break;
-        if (*o < *fa && *o < *fb)
+        if (*output_component < *fa && *output_component < *fb)
             break;
         i++;
         fb++;
         fa++;
-        o++;
+        output_component++;
     } while (i < 3);
     if (i < 3) {
-        if (dsq_25dcd8(out, a) < dsq_25dcd8(out, b)) {
-            qcopy(out, a);
+        if (dsq_25dcd8(out, segment_start) < dsq_25dcd8(out, b)) {
+            qcopy(out, segment_start);
         } else {
             qcopy(out, b);
         }
     }
-    e[0] = *p;
+    query_point_copy[0] = *query_point;
     g[0] = *out;
-    return FUN_L00_0025da70_c(e, g, 0.0f);
+    return FUN_L00_0025da70_c(query_point_copy, g, 0.0f);
 }
 extern f32 path_distance_25df68(void *, void *, f32) __asm__("FUN_L00_0025da70");
 extern void clear_vector_25df68(void *) __asm__("FUN_001f99f8");
