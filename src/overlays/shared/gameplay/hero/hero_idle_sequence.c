@@ -516,11 +516,11 @@ void FUN_L00_00205f60(int record_group_index, char *joint_index_offset, int enab
     float v[4];
     if (enable_record_dispatch) {
         struct Hero *g = &hero;
-        int c = 0;
+        int item_moby_is_type_ad = 0;
         if (((char *)g->items[1].moby)) {
-            c = *(s16 *)(((char *)g->items[1].moby) + 0xA6) == 0xAD;
+            item_moby_is_type_ad = *(s16 *)(((char *)g->items[1].moby) + 0xA6) == 0xAD;
         }
-        FUN_L00_0028de68_205f60(record_group_index, joint_index_offset, c, 0, ((int)g->moby));
+        FUN_L00_0028de68_205f60(record_group_index, joint_index_offset, item_moby_is_type_ad, 0, ((int)g->moby));
     }
     if (current_level_index == 12) {
         struct Hero *g = &hero;
