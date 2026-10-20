@@ -55,10 +55,10 @@ extern s32 FUN_001f0b58_2c8440(void) __asm__("FUN_001f0b58");
  * normal in vars and pulls the point 5% toward D_L00_00166DC0_2c8440. mode 0 needs
  * a live hit moby; mode 1 starts from the hero's hand. Returns 1 on a hit.
  */
-s32 FUN_L00_002c8440(ThrowVars_2c8440 *v, struct Moby *m, s32 mode)
+s32 FUN_L00_002c8440(ThrowVars_2c8440 *v, struct Moby *thrown_moby, s32 mode)
 {
-    Vec4 d, e, a, q, w;
-    s32 t;
+    Vec4 simulated_position, simulated_velocity, a, q, w;
+    s32 prediction_timer;
     s32 found = 0;
     s32 i;
 
@@ -66,40 +66,40 @@ s32 FUN_L00_002c8440(ThrowVars_2c8440 *v, struct Moby *m, s32 mode)
         return 0;
     if (D_L00_0015F5C4_2c8440 != 0)
         return 0;
-    qcopy(&a, &m->pos);
-    if (m->state == 1) {
-        d.f[0] = FUN_001f9dc8_2c8440(fast_add_rotations_2c8440(-0.36196801066398620605f, atan2_f_2c8440(hero.unk670, hero.unk674))) * 0.85903900861740112305f;
-        d.f[1] = FUN_001f9de0_2c8440(fast_add_rotations_2c8440(-0.36196801066398620605f, atan2_f_2c8440(hero.unk670, hero.unk674))) * 0.85903900861740112305f;
-        d.f[2] = 0.0f;
-        add_vector_xyz_2c8440(&d, &d, &hero.motion.pos);
-        d.f[2] += 0.39081999659538269043f;
-        qcopy(&e, &v->vel);
+    qcopy(&a, &thrown_moby->pos);
+    if (thrown_moby->state == 1) {
+        simulated_position.f[0] = FUN_001f9dc8_2c8440(fast_add_rotations_2c8440(-0.36196801066398620605f, atan2_f_2c8440(hero.unk670, hero.unk674))) * 0.85903900861740112305f;
+        simulated_position.f[1] = FUN_001f9de0_2c8440(fast_add_rotations_2c8440(-0.36196801066398620605f, atan2_f_2c8440(hero.unk670, hero.unk674))) * 0.85903900861740112305f;
+        simulated_position.f[2] = 0.0f;
+        add_vector_xyz_2c8440(&simulated_position, &simulated_position, &hero.motion.pos);
+        simulated_position.f[2] += 0.39081999659538269043f;
+        qcopy(&simulated_velocity, &v->vel);
         if (hero.state.control_mode == 15)
-            add_vector_xyz_2c8440(&e, &e, &hero.motion.displacement);
+            add_vector_xyz_2c8440(&simulated_velocity, &simulated_velocity, &hero.motion.displacement);
         if (hero.ground_moby && FUN_L00_002603d0_2c8440((int)hero.ground_moby) && mode)
-            add_vector_xyz_2c8440(&e, &e, &hero.motion.displacement);
-        t = scale_game_frames_2c8440(300);
+            add_vector_xyz_2c8440(&simulated_velocity, &simulated_velocity, &hero.motion.displacement);
+        prediction_timer = scale_game_frames_2c8440(300);
     } else {
         u8 *holder_vars = v->holder->pvars;
 
-        qcopy(&d, &m->pos);
-        qcopy(&e, &v->vel);
+        qcopy(&simulated_position, &thrown_moby->pos);
+        qcopy(&simulated_velocity, &v->vel);
         {
             s32 timer = v->timer;
             s32 flag = *(s32 *)(holder_vars + 0x50);
 
-            t = timer;
+            prediction_timer = timer;
             if (flag)
                 v->unk46 = 1;
         }
     }
-    e.f[2] -= D_0015ED6C * 0.5f;
+    simulated_velocity.f[2] -= D_0015ED6C * 0.5f;
     q.q = ((Vec4 *)&hero.moby->pos)->q;
-    q.f[2] = d.f[2];
-    if (collision_line_2c8440(&q, &d, 0x10, hero.moby, 0) && (FUN_001f0b58_2c8440() || 0.0f < e.f[2])) {
+    q.f[2] = simulated_position.f[2];
+    if (collision_line_2c8440(&q, &simulated_position, 0x10, hero.moby, 0) && (FUN_001f0b58_2c8440() || 0.0f < simulated_velocity.f[2])) {
         if (coll_hit.moby != 0 && coll_hit.unk1C <= 0) {
             if (((struct Moby *)coll_hit.moby != hero.moby && (struct Moby *)coll_hit.moby != v->holder)
-                || t < scale_game_frames_2c8440(300) - scale_game_frames_2c8440(10)) {
+                || prediction_timer < scale_game_frames_2c8440(300) - scale_game_frames_2c8440(10)) {
                 w.q = 0;
                 w.f[2] = 0.5f;
                 qcopy(&v->landing, &((struct Moby *)coll_hit.moby)->pos);
@@ -112,19 +112,19 @@ s32 FUN_L00_002c8440(ThrowVars_2c8440 *v, struct Moby *m, s32 mode)
             found = 1;
         }
     }
-    while (!tick_countdown_2c8440(&t) && !found) {
-        qcopy(&a, &d);
+    while (!tick_countdown_2c8440(&prediction_timer) && !found) {
+        qcopy(&a, &simulated_position);
         for (i = 9; i >= 0; i--) {
-            add_vector_xyz_2c8440(&d, &d, &e);
-            e.f[2] -= D_0015ED70 * 9.0f;
+            add_vector_xyz_2c8440(&simulated_position, &simulated_position, &simulated_velocity);
+            simulated_velocity.f[2] -= D_0015ED70 * 9.0f;
         }
-        if (!collision_line_2c8440(&a, &d, 0x10, m, 0))
+        if (!collision_line_2c8440(&a, &simulated_position, 0x10, thrown_moby, 0))
             continue;
-        if (!FUN_001f0b58_2c8440() && 0.0f < e.f[2])
+        if (!FUN_001f0b58_2c8440() && 0.0f < simulated_velocity.f[2])
             continue;
         if (coll_hit.moby != 0 && coll_hit.unk1C <= 0) {
             if (((struct Moby *)coll_hit.moby == hero.moby || (struct Moby *)coll_hit.moby == v->holder)
-                && !(t < scale_game_frames_2c8440(300) - scale_game_frames_2c8440(10)))
+                && !(prediction_timer < scale_game_frames_2c8440(300) - scale_game_frames_2c8440(10)))
                 continue;
             w.q = 0;
             w.f[2] = 0.5f;
@@ -137,7 +137,7 @@ s32 FUN_L00_002c8440(ThrowVars_2c8440 *v, struct Moby *m, s32 mode)
             break;
         }
     }
-    if (t == 0)
+    if (prediction_timer == 0)
         return 0;
     if (mode == 0) {
         if (coll_hit.moby == 0)
@@ -146,7 +146,7 @@ s32 FUN_L00_002c8440(ThrowVars_2c8440 *v, struct Moby *m, s32 mode)
             goto ret0;
     }
     if (mode != 2 || coll_hit.moby == 0 || !FUN_L00_002603d0_2c8440(coll_hit.moby))
-        FUN_001f4600_2c8440(FUN_L00_002c7df8_2c8440, m);
+        FUN_001f4600_2c8440(FUN_L00_002c7df8_2c8440, thrown_moby);
     v->normal.q = coll_hit_normal_2c8440.q;
     subtract_vector_xyz_2c8440(&a, &v->landing, &D_L00_00166DC0_2c8440);
     scale_vector_xyz_2c8440(&a, &a, 0.94999998807907104492f);
