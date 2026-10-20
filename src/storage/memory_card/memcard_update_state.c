@@ -261,9 +261,9 @@ void memcard_update_state(void) {
         switch (MC.sub) {
         case MEMCARD_PROBE_PROCESS_CHDIR_RESULT:
             if (MC.result == 0) {
-                s32 *p = &CARD.save_index;
-                if (*p < 0) {
-                    *p = -1;
+                s32 *save_index_ptr = &CARD.save_index;
+                if (*save_index_ptr < 0) {
+                    *save_index_ptr = -1;
                 }
                 MC.busy = 0;
                 MC.sub = 1;
