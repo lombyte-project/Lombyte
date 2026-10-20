@@ -2112,12 +2112,12 @@ void FUN_L10_002da690(u8 *moby) {
     uv1 = matrix1 + 1;
     uv2 = matrix2 + 1;
     {
-        int n;
-        for (n = 0; n < *(int *)(data + 4); n++) {
-            rotation_matrix(scratch + n * 0x40, moby + 0x40);
-            multiply_matrix(scratch + n * 0x40, scratch + n * 0x40, buffers.rotation);
-            *(u128_c *)(scratch + n * 0x40 + 0x30) = *(u128_c *)(moby + 0x10);
-            *(float *)(scratch + n * 0x40 + 0x38) += convert_integer_to_float(n + 1) * *(float *)(data + 8);
+        int transform_index;
+        for (transform_index = 0; transform_index < *(int *)(data + 4); transform_index++) {
+            rotation_matrix(scratch + transform_index * 0x40, moby + 0x40);
+            multiply_matrix(scratch + transform_index * 0x40, scratch + transform_index * 0x40, buffers.rotation);
+            *(u128_c *)(scratch + transform_index * 0x40 + 0x30) = *(u128_c *)(moby + 0x10);
+            *(float *)(scratch + transform_index * 0x40 + 0x38) += convert_integer_to_float(transform_index + 1) * *(float *)(data + 8);
         }
     }
     {
