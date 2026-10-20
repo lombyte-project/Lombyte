@@ -469,7 +469,7 @@ void f216f90_298b18(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 void fun_00216c48(F_298b18 *, void *, int) __asm__("FUN_00216c48");
 void FUN_L00_00265880(int);
 void FUN_L00_00298b18(void) {
-    O_298b18 *o;
+    O_298b18 *moby;
     float f, g;
     int i;
     if ((unsigned short)(D_001516D0_298b18.x5a - 6) >= 2)
@@ -489,9 +489,9 @@ void FUN_L00_00298b18(void) {
             f20c828_298b18(m);
         }
     }
-    for (o = D_L00_0015FFDC_298b18; o->st != 0xFF; o++) {
-        if (!(o->st & 0x80) && (o->type == 0x4A || o->type == 0xCB))
-            o->flags &= ~0x80;
+    for (moby = D_L00_0015FFDC_298b18; moby->st != 0xFF; moby++) {
+        if (!(moby->st & 0x80) && (moby->type == 0x4A || moby->type == 0xCB))
+            moby->flags &= ~0x80;
     }
     hero_set_state(HERO_STATE_IDLE, 1);
     g = f213508_298b18(&hero.motion.pos, 0, 0.5f);
@@ -512,11 +512,11 @@ void FUN_L00_00298b18(void) {
         D_L00_001B9CF0.unkEC = 0;
     }
     if (active_scene_trigger.moby) {
-        F_298b18 *a = active_scene_trigger.moby;
+        F_298b18 *scene_trigger_moby = active_scene_trigger.moby;
         void *b = active_scene_trigger.trigger;
         active_scene_trigger.moby = 0;
         active_scene_trigger.trigger = 0;
-        fun_00216c48(a, b, 1);
+        fun_00216c48(scene_trigger_moby, b, 1);
     }
     FUN_L00_00265880(scale_game_frames(0x1E));
 }
