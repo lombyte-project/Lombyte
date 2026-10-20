@@ -2429,7 +2429,7 @@ void mark_moby_for_removal_c(void *obj) __asm__("FUN_0020c828");
 
 extern float D_L17_0015F580_macro[] __asm__("D_L17_0015F580") __attribute__((section(".sdata")));
 void robot_dog_update(unsigned char *m) __asm__("FUN_L17_002eeb68");
-void robot_dog_update(unsigned char *m) {
+void robot_dog_update(unsigned char *robot_dog_moby) {
     enum {
         ROBOT_DOG_STATE_INITIALIZE = 0,
         ROBOT_DOG_STATE_WAIT_FOR_DETECTION_TRIGGER = 1,
@@ -2446,7 +2446,7 @@ void robot_dog_update(unsigned char *m) {
         ROBOT_DOG_STATE_RECOVER_THEN_REINITIALIZE = 12,
         ROBOT_DOG_STATE_FALL_THEN_REMOVE = 15
     };
-    Vars1382 *d;
+    Vars1382 *robot_dog_vars;
     unsigned char *tgt;
     int r;
     int a;
@@ -2455,100 +2455,100 @@ void robot_dog_update(unsigned char *m) {
     float pos[4];
 
     r = 0;
-    d = *(Vars1382 **)(m + 0x78);
-    if (m[0x20] != 12) {
-        a = d->c2B0;
+    robot_dog_vars = *(Vars1382 **)(robot_dog_moby + 0x78);
+    if (robot_dog_moby[0x20] != 12) {
+        a = robot_dog_vars->c2B0;
         if (a != -1) {
             r = is_point_inside_clip_volume(D_L17_001676C0, a) == 0;
-            b = d->c2B4;
+            b = robot_dog_vars->c2B4;
             if (b != -1) {
                 r &= is_point_inside_clip_volume(D_L17_001676C0, b) == 0;
             }
-        } else if (d->c2B8 != -1) {
+        } else if (robot_dog_vars->c2B8 != -1) {
             r = is_point_inside_clip_volume(D_L17_001676C0, a);
-            b = d->c2BC;
+            b = robot_dog_vars->c2BC;
             if (b != -1) {
                 r |= is_point_inside_clip_volume(D_L17_001676C0, b);
             }
         }
     }
-    FUN_L17_002efa48(m, r);
-    if (r != 0 && m[0x20] != 15) {
-        m[0x31] = 0;
-        *(unsigned short *)(m + 0x34) |= 1;
+    FUN_L17_002efa48(robot_dog_moby, r);
+    if (r != 0 && robot_dog_moby[0x20] != 15) {
+        robot_dog_moby[0x31] = 0;
+        *(unsigned short *)(robot_dog_moby + 0x34) |= 1;
         return;
     }
-    m[0x31] = 1;
-    *(unsigned short *)(m + 0x34) &= 0xFFFE;
-    FUN_L17_002f00a0(m);
-    FUN_L17_002f0210(m);
-    tgt = d->target;
-    FUN_L00_00263b38(d->a230, 2.1f);
-    if (m[0x31] != 0 && FUN_001f9b48(m + 0x10, D_L17_001676C0) < 29.0f) {
-        FUN_L00_0025a120(m);
-        m[0x7F] = 0x17;
+    robot_dog_moby[0x31] = 1;
+    *(unsigned short *)(robot_dog_moby + 0x34) &= 0xFFFE;
+    FUN_L17_002f00a0(robot_dog_moby);
+    FUN_L17_002f0210(robot_dog_moby);
+    tgt = robot_dog_vars->target;
+    FUN_L00_00263b38(robot_dog_vars->a230, 2.1f);
+    if (robot_dog_moby[0x31] != 0 && FUN_001f9b48(robot_dog_moby + 0x10, D_L17_001676C0) < 29.0f) {
+        FUN_L00_0025a120(robot_dog_moby);
+        robot_dog_moby[0x7F] = 0x17;
     }
-    switch (m[0x20]) {
+    switch (robot_dog_moby[0x20]) {
     case ROBOT_DOG_STATE_INITIALIZE:
-        *(unsigned short *)(m + 0x34) |= 0x1000;
-        qcopy(&d->home, m + 0x10);
-        d->b58 = 8;
-        d->b5A = 7;
-        d->b29 = 0;
-        d->s24 = 1;
-        d->f20 = 1.0f;
-        d->pD0 = &D_L17_00162200;
-        d->f1EC = random_float_between_alt(frame_time * 7.2f, frame_time * 8.7f);
-        m[0x20] = 1;
+        *(unsigned short *)(robot_dog_moby + 0x34) |= 0x1000;
+        qcopy(&robot_dog_vars->home, robot_dog_moby + 0x10);
+        robot_dog_vars->b58 = 8;
+        robot_dog_vars->b5A = 7;
+        robot_dog_vars->b29 = 0;
+        robot_dog_vars->s24 = 1;
+        robot_dog_vars->f20 = 1.0f;
+        robot_dog_vars->pD0 = &D_L17_00162200;
+        robot_dog_vars->f1EC = random_float_between_alt(frame_time * 7.2f, frame_time * 8.7f);
+        robot_dog_moby[0x20] = 1;
         blend_moby_animation_c(
-            m, 0,
+            robot_dog_moby, 0,
             random_integer_below(
-                *(unsigned char *)(*(char **)(*(char **)(m + 0x24) + 0x48) + 0x10)),
+                *(unsigned char *)(*(char **)(*(char **)(robot_dog_moby + 0x24) + 0x48) + 0x10)),
             0);
-        if (d->i1E8 == -1) {
-            d->i1E8 = d->path;
+        if (robot_dog_vars->i1E8 == -1) {
+            robot_dog_vars->i1E8 = robot_dog_vars->path;
         }
         break;
     case ROBOT_DOG_STATE_RECOVER_THEN_REINITIALIZE:
-        if (FUN_L00_002dc9f0(m, d->a120)) {
-            m[0x20] = 0;
-            d->sC8 = 0;
+        if (FUN_L00_002dc9f0(robot_dog_moby, robot_dog_vars->a120)) {
+            robot_dog_moby[0x20] = 0;
+            robot_dog_vars->sC8 = 0;
         }
         break;
     case ROBOT_DOG_STATE_WAIT_FOR_DETECTION_TRIGGER:
-        if (d->mode != 0 && random_integer_below(0x1F) == 0) {
-            m[0x20] = 2;
-            if (m[0x53] != 1) {
-                blend_moby_animation_c(m, 1, 0, scale_game_frames(10));
+        if (robot_dog_vars->mode != 0 && random_integer_below(0x1F) == 0) {
+            robot_dog_moby[0x20] = 2;
+            if (robot_dog_moby[0x53] != 1) {
+                blend_moby_animation_c(robot_dog_moby, 1, 0, scale_game_frames(10));
             }
         }
         break;
     case ROBOT_DOG_STATE_SELECT_RESPONSE_ON_ANIMATION_COMPLETION:
-        if (m[0x70] & 2) {
-            int s = d->mode;
+        if (robot_dog_moby[0x70] & 2) {
+            int s = robot_dog_vars->mode;
             if (s == 2) {
                 if (random_integer_below(3)) {
-                    if (m[0x53] != s) {
-                        blend_moby_animation_c(m, 2, 0, scale_game_frames(10));
+                    if (robot_dog_moby[0x53] != s) {
+                        blend_moby_animation_c(robot_dog_moby, 2, 0, scale_game_frames(10));
                     }
                 } else if (D_0013E533_u[0x2EC1] != 3) {
-                    m[0x20] = 7;
-                    if (m[0x53] != 8) {
-                        blend_moby_animation_c(m, 8, 0, scale_game_frames(10));
+                    robot_dog_moby[0x20] = 7;
+                    if (robot_dog_moby[0x53] != 8) {
+                        blend_moby_animation_c(robot_dog_moby, 8, 0, scale_game_frames(10));
                     }
                 } else {
-                    m[0x20] = 6;
-                    if (m[0x53] != 7) {
-                        blend_moby_animation_c(m, 7, 0, scale_game_frames(10));
+                    robot_dog_moby[0x20] = 6;
+                    if (robot_dog_moby[0x53] != 7) {
+                        blend_moby_animation_c(robot_dog_moby, 7, 0, scale_game_frames(10));
                     }
                 }
             } else {
-                m[0x20] = 5;
-                if (m[0x53] != 3) {
-                    blend_moby_animation_c(m, 3, 0, scale_game_frames(10));
+                robot_dog_moby[0x20] = 5;
+                if (robot_dog_moby[0x53] != 3) {
+                    blend_moby_animation_c(robot_dog_moby, 3, 0, scale_game_frames(10));
                 }
-                d->t1E0 = scale_game_frames(120);
-                d->t1E2 = scale_game_frames(120);
+                robot_dog_vars->t1E0 = scale_game_frames(120);
+                robot_dog_vars->t1E2 = scale_game_frames(120);
             }
         }
         break;
@@ -2556,107 +2556,107 @@ void robot_dog_update(unsigned char *m) {
         if (tgt != 0) {
             float turn;
             float ang;
-            float *yaw = (float *)(m + 0x48);
+            float *yaw = (float *)(robot_dog_moby + 0x48);
             int mode;
-            ang = fast_arc_tan(*(float *)(tgt + 0x10) - *(float *)(m + 0x10),
-                               *(float *)(tgt + 0x14) - *(float *)(m + 0x14));
+            ang = fast_arc_tan(*(float *)(tgt + 0x10) - *(float *)(robot_dog_moby + 0x10),
+                               *(float *)(tgt + 0x14) - *(float *)(robot_dog_moby + 0x14));
             turn = frame_time_sq * 4.712389f;
-            approach_angle(yaw, &d->yawvel, ang, turn, turn, frame_time * 3.4906585f);
-            if (absolute_float(d->yawvel) > frame_time * 0.08726646f) {
-                if (d->yawvel < 0.0f) {
-                    if (m[0x53] != 4) {
-                        blend_moby_animation_c(m, 4, 0, scale_game_frames(10));
+            approach_angle(yaw, &robot_dog_vars->yawvel, ang, turn, turn, frame_time * 3.4906585f);
+            if (absolute_float(robot_dog_vars->yawvel) > frame_time * 0.08726646f) {
+                if (robot_dog_vars->yawvel < 0.0f) {
+                    if (robot_dog_moby[0x53] != 4) {
+                        blend_moby_animation_c(robot_dog_moby, 4, 0, scale_game_frames(10));
                     }
                 } else {
-                    if (m[0x53] != 5) {
-                        blend_moby_animation_c(m, 5, 0, scale_game_frames(10));
+                    if (robot_dog_moby[0x53] != 5) {
+                        blend_moby_animation_c(robot_dog_moby, 5, 0, scale_game_frames(10));
                     }
                 }
             } else {
-                if (m[0x53] != 3) {
-                    blend_moby_animation_c(m, 3, 0, scale_game_frames(10));
+                if (robot_dog_moby[0x53] != 3) {
+                    blend_moby_animation_c(robot_dog_moby, 3, 0, scale_game_frames(10));
                 }
             }
-            *(float *)(m + 0x58) = 1.7f;
-            mode = d->mode;
-            if (mode == 2 && (fast_dec_timer_s16(&d->t1E2) || D_0013E533_u[0x2EC1] != 3)) {
+            *(float *)(robot_dog_moby + 0x58) = 1.7f;
+            mode = robot_dog_vars->mode;
+            if (mode == 2 && (fast_dec_timer_s16(&robot_dog_vars->t1E2) || D_0013E533_u[0x2EC1] != 3)) {
                 if (random_integer_below(3) == 0) {
-                    if (m[0x53] != mode) {
-                        blend_moby_animation_c(m, 2, 0, scale_game_frames(10));
+                    if (robot_dog_moby[0x53] != mode) {
+                        blend_moby_animation_c(robot_dog_moby, 2, 0, scale_game_frames(10));
                     }
                 } else if (D_0013E533_u[0x2EC1] != 3) {
-                    m[0x20] = 7;
-                    if (m[0x53] != 8) {
-                        blend_moby_animation_c(m, 8, 0, scale_game_frames(10));
+                    robot_dog_moby[0x20] = 7;
+                    if (robot_dog_moby[0x53] != 8) {
+                        blend_moby_animation_c(robot_dog_moby, 8, 0, scale_game_frames(10));
                     }
                 } else {
-                    m[0x20] = 6;
-                    if (m[0x53] != 7) {
-                        blend_moby_animation_c(m, 7, 0, scale_game_frames(10));
+                    robot_dog_moby[0x20] = 6;
+                    if (robot_dog_moby[0x53] != 7) {
+                        blend_moby_animation_c(robot_dog_moby, 7, 0, scale_game_frames(10));
                     }
                 }
-            } else if (d->t1E0 == 0 && d->mode == 0) {
-                m[0x20] = 3;
-                if (m[0x53] != 0) {
+            } else if (robot_dog_vars->t1E0 == 0 && robot_dog_vars->mode == 0) {
+                robot_dog_moby[0x20] = 3;
+                if (robot_dog_moby[0x53] != 0) {
                     a = random_integer_below(
-                        *(unsigned char *)(*(char **)(*(char **)(m + 0x24) + 0x48) + 0x10));
-                    blend_moby_animation_c(m, 0, a, scale_game_frames(10));
+                        *(unsigned char *)(*(char **)(*(char **)(robot_dog_moby + 0x24) + 0x48) + 0x10));
+                    blend_moby_animation_c(robot_dog_moby, 0, a, scale_game_frames(10));
                 }
             }
         } else if (random_integer_below(0x1F) == 0) {
-            m[0x20] = 3;
-            if (m[0x53] != 0) {
+            robot_dog_moby[0x20] = 3;
+            if (robot_dog_moby[0x53] != 0) {
                 a = random_integer_below(
-                    *(unsigned char *)(*(char **)(*(char **)(m + 0x24) + 0x48) + 0x10));
-                blend_moby_animation_c(m, 0, a, scale_game_frames(10));
+                    *(unsigned char *)(*(char **)(*(char **)(robot_dog_moby + 0x24) + 0x48) + 0x10));
+                blend_moby_animation_c(robot_dog_moby, 0, a, scale_game_frames(10));
             }
         }
         break;
     case ROBOT_DOG_STATE_WAIT_FOR_IDLE_ANIMATION_COMPLETION:
-        if (m[0x70] & 2) {
-            m[0x20] = 1;
-            if (m[0x53] != 0) {
+        if (robot_dog_moby[0x70] & 2) {
+            robot_dog_moby[0x20] = 1;
+            if (robot_dog_moby[0x53] != 0) {
                 a = random_integer_below(
-                    *(unsigned char *)(*(char **)(*(char **)(m + 0x24) + 0x48) + 0x10) - 1);
-                blend_moby_animation_c(m, 0, a, scale_game_frames(10));
+                    *(unsigned char *)(*(char **)(*(char **)(robot_dog_moby + 0x24) + 0x48) + 0x10) - 1);
+                blend_moby_animation_c(robot_dog_moby, 0, a, scale_game_frames(10));
             }
         }
         break;
     case ROBOT_DOG_STATE_WAIT_FOR_CHASE_TRIGGER:
     case ROBOT_DOG_STATE_WAIT_FOR_CHASE_TRIGGER_FAST_PULSE: {
-        int s = d->mode;
+        int s = robot_dog_vars->mode;
         if (s != 2) {
             if (random_integer_below(20) == 0) {
-                m[0x20] = 5;
-                if (m[0x53] != 3) {
-                    blend_moby_animation_c(m, 3, 0, scale_game_frames(10));
+                robot_dog_moby[0x20] = 5;
+                if (robot_dog_moby[0x53] != 3) {
+                    blend_moby_animation_c(robot_dog_moby, 3, 0, scale_game_frames(10));
                 }
-                d->t1E2 = scale_game_frames(120);
-                d->t1E0 = scale_game_frames(120);
+                robot_dog_vars->t1E2 = scale_game_frames(120);
+                robot_dog_vars->t1E0 = scale_game_frames(120);
             }
             break;
         }
-        if (d->f1D4 != 0.0f ||
-            point_in_path_xy((&hero.motion.pos), ((int **)D_L17_001B0DB0)[d->path] + 4,
-                             ((int **)D_L17_001B0DB0)[d->path][0]) != 0) {
+        if (robot_dog_vars->f1D4 != 0.0f ||
+            point_in_path_xy((&hero.motion.pos), ((int **)D_L17_001B0DB0)[robot_dog_vars->path] + 4,
+                             ((int **)D_L17_001B0DB0)[robot_dog_vars->path][0]) != 0) {
             if (random_integer_below(20) == 0) {
-                m[0x20] = 8;
-                if (m[0x53] != 1) {
-                    blend_moby_animation_c(m, 1, 0, scale_game_frames(10));
+                robot_dog_moby[0x20] = 8;
+                if (robot_dog_moby[0x53] != 1) {
+                    blend_moby_animation_c(robot_dog_moby, 1, 0, scale_game_frames(10));
                 }
             }
-        } else if (m[0x70] & 2) {
+        } else if (robot_dog_moby[0x70] & 2) {
             if (random_integer_below(3) == 0) {
-                if (m[0x53] != s) {
-                    blend_moby_animation_c(m, 2, 0, scale_game_frames(10));
+                if (robot_dog_moby[0x53] != s) {
+                    blend_moby_animation_c(robot_dog_moby, 2, 0, scale_game_frames(10));
                 }
             } else if (random_integer_below(7) == 0) {
-                if (m[0x53] != 8) {
-                    blend_moby_animation_c(m, 8, 0, scale_game_frames(10));
+                if (robot_dog_moby[0x53] != 8) {
+                    blend_moby_animation_c(robot_dog_moby, 8, 0, scale_game_frames(10));
                 }
             } else {
-                if (m[0x53] != 7) {
-                    blend_moby_animation_c(m, 7, 0, scale_game_frames(10));
+                if (robot_dog_moby[0x53] != 7) {
+                    blend_moby_animation_c(robot_dog_moby, 7, 0, scale_game_frames(10));
                 }
             }
         }
@@ -2664,62 +2664,62 @@ void robot_dog_update(unsigned char *m) {
     }
     case ROBOT_DOG_STATE_TURN_TOWARD_TARGET: {
         float ang;
-        ang = fast_arc_tan(d->v180[0] - *(float *)(m + 0x10), d->v180[1] - *(float *)(m + 0x14));
-        FUN_L00_00258278((char *)m, &d->yawvel, ang, 0.03f, 0.3f, frame_time * 7.8539815f);
-        if (m[0x70] & 2) {
-            if (d->f1D4 == 0.0f) {
-                if (point_in_path_xy((&hero.motion.pos), ((int **)D_L17_001B0DB0)[d->path] + 4,
-                                     ((int **)D_L17_001B0DB0)[d->path][0]) == 0) {
-                    m[0x20] = 11;
-                    if (m[0x53] != 9) {
-                        blend_moby_animation_c(m, 9, 0, scale_game_frames(10));
+        ang = fast_arc_tan(robot_dog_vars->v180[0] - *(float *)(robot_dog_moby + 0x10), robot_dog_vars->v180[1] - *(float *)(robot_dog_moby + 0x14));
+        FUN_L00_00258278((char *)robot_dog_moby, &robot_dog_vars->yawvel, ang, 0.03f, 0.3f, frame_time * 7.8539815f);
+        if (robot_dog_moby[0x70] & 2) {
+            if (robot_dog_vars->f1D4 == 0.0f) {
+                if (point_in_path_xy((&hero.motion.pos), ((int **)D_L17_001B0DB0)[robot_dog_vars->path] + 4,
+                                     ((int **)D_L17_001B0DB0)[robot_dog_vars->path][0]) == 0) {
+                    robot_dog_moby[0x20] = 11;
+                    if (robot_dog_moby[0x53] != 9) {
+                        blend_moby_animation_c(robot_dog_moby, 9, 0, scale_game_frames(10));
                     }
                     break;
                 }
             }
-            m[0x20] = 9;
-            if (m[0x53] != 9) {
-                blend_moby_animation_c(m, 9, 0, scale_game_frames(10));
+            robot_dog_moby[0x20] = 9;
+            if (robot_dog_moby[0x53] != 9) {
+                blend_moby_animation_c(robot_dog_moby, 9, 0, scale_game_frames(10));
             }
         }
         break;
     }
     case ROBOT_DOG_STATE_APPROACH_TARGET:
-        FUN_L17_002efd48_c((char *)m, d->v180, d->f1EC);
-        *(float *)(m + 0x58) = 1.8f;
-        if (point_in_path_xy((&hero.motion.pos), ((int **)D_L17_001B0DB0)[d->path] + 4,
-                             ((int **)D_L17_001B0DB0)[d->path][0]) == 0 &&
-            d->f1D4 == 0.0f) {
-            m[0x20] = 11;
-        } else if (vector_distance(m + 0x10, d->v180) < 1.8f) {
-            m[0x20] = 10;
-            if (m[0x53] != 10) {
-                blend_moby_animation_c(m, 10, 5, scale_game_frames(10));
+        FUN_L17_002efd48_c((char *)robot_dog_moby, robot_dog_vars->v180, robot_dog_vars->f1EC);
+        *(float *)(robot_dog_moby + 0x58) = 1.8f;
+        if (point_in_path_xy((&hero.motion.pos), ((int **)D_L17_001B0DB0)[robot_dog_vars->path] + 4,
+                             ((int **)D_L17_001B0DB0)[robot_dog_vars->path][0]) == 0 &&
+            robot_dog_vars->f1D4 == 0.0f) {
+            robot_dog_moby[0x20] = 11;
+        } else if (vector_distance(robot_dog_moby + 0x10, robot_dog_vars->v180) < 1.8f) {
+            robot_dog_moby[0x20] = 10;
+            if (robot_dog_moby[0x53] != 10) {
+                blend_moby_animation_c(robot_dog_moby, 10, 5, scale_game_frames(10));
             }
-        } else if (FUN_001f9b48(d->v180, &d->home) > 32.0f ||
-                   absolute_float(d->v180[2] - *(float *)(m + 0x18)) > 3.0f) {
-            m[0x20] = 11;
+        } else if (FUN_001f9b48(robot_dog_vars->v180, &robot_dog_vars->home) > 32.0f ||
+                   absolute_float(robot_dog_vars->v180[2] - *(float *)(robot_dog_moby + 0x18)) > 3.0f) {
+            robot_dog_moby[0x20] = 11;
         }
         break;
     case ROBOT_DOG_STATE_ATTACK_TARGET:
-        if (m[0x70] & 2) {
-            m[0x20] = 11;
-            if (m[0x53] != 9) {
-                blend_moby_animation_c(m, 9, 0, scale_game_frames(10));
+        if (robot_dog_moby[0x70] & 2) {
+            robot_dog_moby[0x20] = 11;
+            if (robot_dog_moby[0x53] != 9) {
+                blend_moby_animation_c(robot_dog_moby, 9, 0, scale_game_frames(10));
             }
-        } else if (absolute_float(compute_interpolated_record_value(m) - 17.5f) <= 0.25f &&
-                   absolute_float(d->v180[2] - *(float *)(m + 0x18)) < 1.0f &&
+        } else if (absolute_float(compute_interpolated_record_value(robot_dog_moby) - 17.5f) <= 0.25f &&
+                   absolute_float(robot_dog_vars->v180[2] - *(float *)(robot_dog_moby + 0x18)) < 1.0f &&
                    fast_difference_between_rotations(
-                       fast_arc_tan(d->v180[0] - *(float *)(m + 0x10),
-                                    d->v180[1] - *(float *)(m + 0x14)),
-                       *(float *)(m + 0x48)) < 0.2617994f &&
-                   d->target != 0 && vector_distance(m + 0x10, d->v180) < 2.75f) {
-            tmp[0] = fast_cos_c(*(float *)(m + 0x48)) * 0.2f;
-            tmp[1] = fast_sin_c(*(float *)(m + 0x48)) * 0.2f;
+                       fast_arc_tan(robot_dog_vars->v180[0] - *(float *)(robot_dog_moby + 0x10),
+                                    robot_dog_vars->v180[1] - *(float *)(robot_dog_moby + 0x14)),
+                       *(float *)(robot_dog_moby + 0x48)) < 0.2617994f &&
+                   robot_dog_vars->target != 0 && vector_distance(robot_dog_moby + 0x10, robot_dog_vars->v180) < 2.75f) {
+            tmp[0] = fast_cos_c(*(float *)(robot_dog_moby + 0x48)) * 0.2f;
+            tmp[1] = fast_sin_c(*(float *)(robot_dog_moby + 0x48)) * 0.2f;
             tmp[2] = 0.0f;
-            qcopy(pos, d->v180);
+            qcopy(pos, robot_dog_vars->v180);
             pos[2] += 0.75f;
-            spawn_nearby_effect((int)d->target, (int)m, 1, pos, tmp, 1.0f);
+            spawn_nearby_effect((int)robot_dog_vars->target, (int)robot_dog_moby, 1, pos, tmp, 1.0f);
         }
         break;
     case ROBOT_DOG_STATE_RETURN_HOME: {
@@ -2728,27 +2728,27 @@ void robot_dog_update(unsigned char *m) {
         float k1;
         float k2;
         float v;
-        FUN_L17_002efd48_c((char *)m, (float *)&d->home, frame_time * 5.0f);
-        *(float *)(m + 0x58) = 1.35f;
-        dist = vector_distance(m + 0x10, &d->home);
-        if ((dist < 1.4f && (m[0x70] & 2)) || dist < 0.3f) {
-            m[0x20] = 5;
-            if (m[0x53] != 3) {
-                blend_moby_animation_c(m, 3, 0, scale_game_frames(10));
+        FUN_L17_002efd48_c((char *)robot_dog_moby, (float *)&robot_dog_vars->home, frame_time * 5.0f);
+        *(float *)(robot_dog_moby + 0x58) = 1.35f;
+        dist = vector_distance(robot_dog_moby + 0x10, &robot_dog_vars->home);
+        if ((dist < 1.4f && (robot_dog_moby[0x70] & 2)) || dist < 0.3f) {
+            robot_dog_moby[0x20] = 5;
+            if (robot_dog_moby[0x53] != 3) {
+                blend_moby_animation_c(robot_dog_moby, 3, 0, scale_game_frames(10));
             }
-            d->t1E2 = scale_game_frames(120);
-            d->t1E0 = scale_game_frames(120);
-        } else if (m[0x70] & 2) {
-            far = vector_distance(m + 0x10, d->v180);
+            robot_dog_vars->t1E2 = scale_game_frames(120);
+            robot_dog_vars->t1E0 = scale_game_frames(120);
+        } else if (robot_dog_moby[0x70] & 2) {
+            far = vector_distance(robot_dog_moby + 0x10, robot_dog_vars->v180);
             k1 = multiply_global_factor_ed64(40.0f);
             k2 = multiply_global_factor_ed64(10.0f);
-            v = d->speed * frame_time;
+            v = robot_dog_vars->speed * frame_time;
             if (far < v * k1 * 0.5f + v * k2 + 1.5f) {
-                if (point_in_path_xy((&hero.motion.pos), ((int **)D_L17_001B0DB0)[d->path] + 4,
-                                     ((int **)D_L17_001B0DB0)[d->path][0]) != 0) {
-                    m[0x20] = 10;
-                    if (m[0x53] != 10) {
-                        blend_moby_animation_c(m, 10, 0, scale_game_frames(10));
+                if (point_in_path_xy((&hero.motion.pos), ((int **)D_L17_001B0DB0)[robot_dog_vars->path] + 4,
+                                     ((int **)D_L17_001B0DB0)[robot_dog_vars->path][0]) != 0) {
+                    robot_dog_moby[0x20] = 10;
+                    if (robot_dog_moby[0x53] != 10) {
+                        blend_moby_animation_c(robot_dog_moby, 10, 0, scale_game_frames(10));
                     }
                 }
             }
@@ -2756,36 +2756,36 @@ void robot_dog_update(unsigned char *m) {
         break;
     }
     case ROBOT_DOG_STATE_FALL_UNTIL_LANDING:
-        if (mine_fall(m, d->a120) & 0x60) {
+        if (mine_fall(robot_dog_moby, robot_dog_vars->a120) & 0x60) {
             clear_vector(tmp);
-            m[0x20] = 5;
-            if (m[0x53] != 3) {
-                blend_moby_animation_c(m, 3, 0, scale_game_frames(10));
+            robot_dog_moby[0x20] = 5;
+            if (robot_dog_moby[0x53] != 3) {
+                blend_moby_animation_c(robot_dog_moby, 3, 0, scale_game_frames(10));
             }
-            d->t1E2 = scale_game_frames(120);
-            d->t1E0 = scale_game_frames(120);
-        } else if (*(float *)(m + 0x18) < 2.0f) {
-            FUN_L00_00257470(m, 0, -1);
-            mark_moby_for_removal_c(m);
+            robot_dog_vars->t1E2 = scale_game_frames(120);
+            robot_dog_vars->t1E0 = scale_game_frames(120);
+        } else if (*(float *)(robot_dog_moby + 0x18) < 2.0f) {
+            FUN_L00_00257470(robot_dog_moby, 0, -1);
+            mark_moby_for_removal_c(robot_dog_moby);
         }
         break;
     case ROBOT_DOG_STATE_FALL_THEN_REMOVE:
-        *(unsigned short *)(m + 0x34) &= 0xEFFF;
-        if (mine_fall(m, d->a120) & 0x60) {
+        *(unsigned short *)(robot_dog_moby + 0x34) &= 0xEFFF;
+        if (mine_fall(robot_dog_moby, robot_dog_vars->a120) & 0x60) {
             float *zero;
             clear_vector(tmp);
             zero = D_L17_0015F580_macro;
-            cart_burst(m, m + 0x10, -1, 0.5f, 13.0f);
-            FUN_L00_00263fd8((char *)m, 0x6CE, (float *)(m + 0x10), m + 0x40, 0, 0, 0.0f, zero,
+            cart_burst(robot_dog_moby, robot_dog_moby + 0x10, -1, 0.5f, 13.0f);
+            FUN_L00_00263fd8((char *)robot_dog_moby, 0x6CE, (float *)(robot_dog_moby + 0x10), robot_dog_moby + 0x40, 0, 0, 0.0f, zero,
                              zero, zero);
-            FUN_L00_00263fd8((char *)m, 0x6CF, (float *)(m + 0x10), m + 0x40, 0, 0, 0.0f, zero,
+            FUN_L00_00263fd8((char *)robot_dog_moby, 0x6CF, (float *)(robot_dog_moby + 0x10), robot_dog_moby + 0x40, 0, 0, 0.0f, zero,
                              zero, zero);
-            FUN_L00_00263e30(m, 0x77D, 1, 0x77D, 1, 3, 2);
-            FUN_L00_00257470(m, 0, -1);
-            mark_moby_for_removal_c(m);
-        } else if (*(float *)(m + 0x18) < 2.0f) {
-            FUN_L00_00257470(m, 0, -1);
-            mark_moby_for_removal_c(m);
+            FUN_L00_00263e30(robot_dog_moby, 0x77D, 1, 0x77D, 1, 3, 2);
+            FUN_L00_00257470(robot_dog_moby, 0, -1);
+            mark_moby_for_removal_c(robot_dog_moby);
+        } else if (*(float *)(robot_dog_moby + 0x18) < 2.0f) {
+            FUN_L00_00257470(robot_dog_moby, 0, -1);
+            mark_moby_for_removal_c(robot_dog_moby);
         }
         break;
     }
