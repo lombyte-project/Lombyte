@@ -122,7 +122,7 @@ float *FUN_002141f8_0025c558(void *) __asm__("FUN_002141f8");
 void FUN_002130d8_0025c558(void *, int, int, int, int) __asm__("FUN_002130d8");
 void FUN_00212f90_0025c558(void *, int, int, int) __asm__("FUN_00212f90");
 void trooper_start_knockback(u8 *a, B_25c558 *b, int c, int d, int e, float f) __asm__("FUN_L00_0025c558");
-void trooper_start_knockback(u8 *moby, B_25c558 *b, int animation_index, int d, int e, float knockback_angle) {
+void trooper_start_knockback(u8 *moby, B_25c558 *b, int animation_index, int animation_timing_divisor, int e, float knockback_angle) {
     float *r;
     b->f0 = FUN_001f9dc8_0025c558(knockback_angle) * b->f18;
     b->f4 = FUN_001f9de0_0025c558(knockback_angle) * b->f18;
@@ -139,9 +139,9 @@ void trooper_start_knockback(u8 *moby, B_25c558 *b, int animation_index, int d, 
         *(int *)(moby + 0x94) = 0;
     }
     if (b->w24 & 2)
-        FUN_002130d8_0025c558(moby, animation_index, e, d, 1);
+        FUN_002130d8_0025c558(moby, animation_index, e, animation_timing_divisor, 1);
     else
-        FUN_00212f90_0025c558(moby, animation_index, e, d);
+        FUN_00212f90_0025c558(moby, animation_index, e, animation_timing_divisor);
 }
 #include "rnc/math/vector.h"
 
