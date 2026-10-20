@@ -2433,7 +2433,7 @@ extern void *func_001FE540_id(int) __asm__("FUN_001fdd10");
 extern int font_print_center_small(int, int, long, void *, int) __asm__("FUN_001f6b88");
 
 void FUN_L13_002b97f8(char *moby) {
-    char *d = *(char **)(moby + 0x78);
+    char *moby_vars = *(char **)(moby + 0x78);
     char *s;
     unsigned char *base;
     unsigned char *g;
@@ -2455,29 +2455,29 @@ void FUN_L13_002b97f8(char *moby) {
     int lo;
     int hi;
     int idx;
-    float t;
+    float marker_transition_fraction;
     float k;
     float m;
-    float f;
-    float q;
+    float hud_health_step;
+    float hud_health_step_magnitude;
 
-    FUN_L13_002b95b8_c((int)moby, d);
-    if (*(int *)(d + 0x88) != 0) {
-        FUN_L11_00311210(*(char **)(d + 0x88) + 0x10, &sp10, &sp14, 0);
-        if (*(int *)(d + 0x8C) > scale_game_frames_alt(0x1F4)) {
-            t = convert_integer_to_float(*(int *)(d + 0x8C) - scale_game_frames_alt(0x1F4));
-            t = t / convert_integer_to_float(scale_game_frames_alt(0x4B));
-            m = 2.0f * (1.0f - t);
-            k = t * 5.0f + 1.0f;
+    FUN_L13_002b95b8_c((int)moby, moby_vars);
+    if (*(int *)(moby_vars + 0x88) != 0) {
+        FUN_L11_00311210(*(char **)(moby_vars + 0x88) + 0x10, &sp10, &sp14, 0);
+        if (*(int *)(moby_vars + 0x8C) > scale_game_frames_alt(0x1F4)) {
+            marker_transition_fraction = convert_integer_to_float(*(int *)(moby_vars + 0x8C) - scale_game_frames_alt(0x1F4));
+            marker_transition_fraction = marker_transition_fraction / convert_integer_to_float(scale_game_frames_alt(0x4B));
+            m = 2.0f * (1.0f - marker_transition_fraction);
+            k = marker_transition_fraction * 5.0f + 1.0f;
             if (m > 1.0f) m = 1.0f;
             c = func_001FA898_r(m * 96.0f);
             func_L13_002B9590_f(convert_integer_to_float(sp10), convert_integer_to_float(sp14), k, normalize_angle(convert_integer_to_float(frame_count) / 30.0f), 0, 0xFF, 0, c);
-            *(int *)(d + 0xEC) = 0;
+            *(int *)(moby_vars + 0xEC) = 0;
         } else {
             a = 0xFF;
-            if ((*(int *)(d + 0x8C) / scale_game_frames_alt(0x14)) & 1) a = 0;
+            if ((*(int *)(moby_vars + 0x8C) / scale_game_frames_alt(0x14)) & 1) a = 0;
             func_L13_002B9590_f(convert_integer_to_float(sp10), convert_integer_to_float(sp14), 1.0f, 0.0f, 0xFF, a, 0, 0x60);
-            *(int *)(d + 0xEC) = *(int *)(d + 0x88);
+            *(int *)(moby_vars + 0xEC) = *(int *)(moby_vars + 0x88);
         }
     }
     y = 0x40;
@@ -2498,8 +2498,8 @@ void FUN_L13_002b97f8(char *moby) {
         }
         y += 0x12;
     }
-    ex = *(int *)(d + 0xE0);
-    ey = *(int *)(d + 0xE4);
+    ex = *(int *)(moby_vars + 0xE0);
+    ey = *(int *)(moby_vars + 0xE4);
     tex = get_effect_texture_c(0x11);
     append_rotated_sprite_quad(ex, ey, 40.0f, 40.0f, 0.0f, 0x3F, 0x3F, tex, 0xFFFFF3, 0xFF20FF20, 0, 0, 0.5f, 0.5f);
     append_rotated_sprite_quad(ex, ey, 40.0f, 40.0f, 0.0f, 0x3F, 0x3F, get_effect_texture_c(0x12), 0xFFFFF3, 0xFF20FF20, 0, 0, 0.5f, 0.5f);
@@ -2509,16 +2509,16 @@ void FUN_L13_002b97f8(char *moby) {
         font_print_center_small(0x100, 0x186, 0x80000080L, func_001FE540_id(0x5269), 0x64);
     }
     h = D_0013F350;
-    f = *(float *)(h + 0x15FC) - *(float *)(d + 0xF0);
-    f *= 0.2f;
-    q = absolute_float(f);
-    if (q > 1.0f) f /= q;
-    *(float *)(d + 0xF0) += f;
-    v = func_001FA898_r(*(float *)(d + 0xF0) * 251.0f / *(float *)(h + 0x1600)) + 2;
+    hud_health_step = *(float *)(h + 0x15FC) - *(float *)(moby_vars + 0xF0);
+    hud_health_step *= 0.2f;
+    hud_health_step_magnitude = absolute_float(hud_health_step);
+    if (hud_health_step_magnitude > 1.0f) hud_health_step /= hud_health_step_magnitude;
+    *(float *)(moby_vars + 0xF0) += hud_health_step;
+    v = func_001FA898_r(*(float *)(moby_vars + 0xF0) * 251.0f / *(float *)(h + 0x1600)) + 2;
     if (v > 0xFD) v = 0xFD;
     if (v < 2) v = 2;
-    lo = *(int *)(d + 0xF4) <= v ? *(int *)(d + 0xF4) : v;
-    hi = *(int *)(d + 0xF4) < v ? v : *(int *)(d + 0xF4);
+    lo = *(int *)(moby_vars + 0xF4) <= v ? *(int *)(moby_vars + 0xF4) : v;
+    hi = *(int *)(moby_vars + 0xF4) < v ? v : *(int *)(moby_vars + 0xF4);
     for (j = lo; j <= hi; j++) {
         idx = (j & 0xE7) | ((j & 0x10) >> 1) | ((j & 8) << 1);
         if (j < v) {
@@ -2528,9 +2528,9 @@ void FUN_L13_002b97f8(char *moby) {
         }
     }
     s = (char *)D_0013E500;
-    draw_textured_quad_local(0x170, *(int *)(s + 4) - 0x90, 0x80, 0x80, 0, 0, 0x80, 0x80, 0x70808080, func_001F4868_l(*(int *)(d + 0x104) + 0x28));
-    draw_textured_quad_local(0x170, *(int *)(s + 4) - 0x90, 0x80, 0x80, 0, 0, 0x80, 0x80, 0x70808080, func_001F4868_l(*(int *)(d + 0x104) + 0x29));
-    *(int *)(d + 0xF4) = v;
+    draw_textured_quad_local(0x170, *(int *)(s + 4) - 0x90, 0x80, 0x80, 0, 0, 0x80, 0x80, 0x70808080, func_001F4868_l(*(int *)(moby_vars + 0x104) + 0x28));
+    draw_textured_quad_local(0x170, *(int *)(s + 4) - 0x90, 0x80, 0x80, 0, 0, 0x80, 0x80, 0x70808080, func_001F4868_l(*(int *)(moby_vars + 0x104) + 0x29));
+    *(int *)(moby_vars + 0xF4) = v;
 }
 /* Builds a rotated offset vector from the moby, flips a facing flag on a pad press, and updates the aim. */
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002B2020.c: func_L13_002BB068), where it is exact; names translated to the US level program. */
