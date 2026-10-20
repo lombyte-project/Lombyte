@@ -39,7 +39,7 @@ extern s32 get_dma_packet_span_bytes(struct RestoreEntry *tbl) __asm__("GetDmaPa
 s32 memcard_restore_data(u8 *buf, s32 slot, struct RestoreEntry *tbl) __asm__("FUN_0020af20");
 
 s32 memcard_restore_data(u8 *buf, s32 slot, struct RestoreEntry *tbl) {
-    struct RestoreEntry *e;
+    struct RestoreEntry *matched_entry;
     s32 errors;
     s32 total;
     s32 i;
@@ -66,21 +66,21 @@ s32 memcard_restore_data(u8 *buf, s32 slot, struct RestoreEntry *tbl) {
                 goto missing;
             }
         }
-        e = (struct RestoreEntry *)(((u32)i << 4) + (u32)tbl);
-        if (e->data != 0) {
+        matched_entry = (struct RestoreEntry *)(((u32)i << 4) + (u32)tbl);
+        if (matched_entry->data != 0) {
             s32 blockSize = ((struct RestoreBlock *)buf)->size;
-            s32 entrySize = e->size;
-            dst = e->data + slot * entrySize;
+            s32 entrySize = matched_entry->size;
+            dst = matched_entry->data + slot * entrySize;
             if (blockSize == entrySize) {
                 s32 status = 1;
                 copySize = entrySize;
-                e->status = status;
+                matched_entry->status = status;
             } else if (blockSize < entrySize) {
                 copySize = blockSize;
-                e->status = -1;
+                matched_entry->status = -1;
             } else {
                 copySize = entrySize;
-                e->status = -2;
+                matched_entry->status = -2;
             }
             if (memcmp(dst, ((struct RestoreBlock *)buf)->data, copySize) != 0) {
                 D_0015FE90++;
