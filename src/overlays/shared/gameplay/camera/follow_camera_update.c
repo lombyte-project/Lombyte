@@ -910,26 +910,26 @@ extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
 extern void copy_matrix3x4(void *, void *) __asm__("FUN_001fa2b8");
 
-void FUN_L00_002ead60(char *m) {
+void FUN_L00_002ead60(char *camera_object) {
     float v[16];
-    char *q;
-    char *p;
-    *(int *)(*(char **)(m + 0x70) + 0xC0) = 4;
-    q = *(char **)(m + 0x70) + 0x30;
-    *(float *)(q + 0x20) = 0.05f;
-    *(float *)(q + 0x24) = 0.3f;
-    *(float *)(q + 0x28) = 1.0f;
-    *(short *)(q + 0x2C) = 1;
-    clear_u64_value(q);
-    p = *(char **)(m + 0x70);
-    *(float *)(p + 0x10) = 0.3f;
-    *(float *)(p + 0x14) = 0.3f;
-    *(float *)(p + 0x18) = 1.0f;
-    *(short *)(p + 0x1C) = 1;
-    clear_u64_value(p);
-    euler_rotation_matrix(v, m + 0x40);
-    copy_matrix3x4(m, v);
-    *(short *)(m + 0x7E) = 0;
+    char *rotation_spring_state;
+    char *camera_state;
+    *(int *)(*(char **)(camera_object + 0x70) + 0xC0) = 4;
+    rotation_spring_state = *(char **)(camera_object + 0x70) + 0x30;
+    *(float *)(rotation_spring_state + 0x20) = 0.05f;
+    *(float *)(rotation_spring_state + 0x24) = 0.3f;
+    *(float *)(rotation_spring_state + 0x28) = 1.0f;
+    *(short *)(rotation_spring_state + 0x2C) = 1;
+    clear_u64_value(rotation_spring_state);
+    camera_state = *(char **)(camera_object + 0x70);
+    *(float *)(camera_state + 0x10) = 0.3f;
+    *(float *)(camera_state + 0x14) = 0.3f;
+    *(float *)(camera_state + 0x18) = 1.0f;
+    *(short *)(camera_state + 0x1C) = 1;
+    clear_u64_value(camera_state);
+    euler_rotation_matrix(v, camera_object + 0x40);
+    copy_matrix3x4(camera_object, v);
+    *(short *)(camera_object + 0x7E) = 0;
 }
 #define F(p, o) (*(float *)((char *)(p) + (o)))
 
