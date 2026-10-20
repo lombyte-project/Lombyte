@@ -265,34 +265,34 @@ extern int memcard_save_data(int, int) __asm__("FUN_0020b178");
 
 extern int D_L10_0015F640;
 void magnetboots_update(struct Moby *m) __asm__("FUN_L10_00298668");
-void magnetboots_update(struct Moby *m) {
+void magnetboots_update(struct Moby *moby) {
     enum {
         MAGNETBOOTS_STATE_INITIALIZE = 0,
         MAGNETBOOTS_STATE_WAIT_FOR_HERO_PROXIMITY = 1,
         MAGNETBOOTS_STATE_WAIT_FOR_SCENE_EXIT = 2,
         MAGNETBOOTS_STATE_REMOVE = 3
     };
-    char *d = (char *)m->pvars;
-    m->rot.z = fast_add_rotations(m->rot.z, frame_time * 1.5707964f);
-    switch (m->state) {
+    char *pickup_vars = (char *)moby->pvars;
+    moby->rot.z = fast_add_rotations(moby->rot.z, frame_time * 1.5707964f);
+    switch (moby->state) {
     case MAGNETBOOTS_STATE_INITIALIZE:
-        FUN_L00_002d6bf0_p(m);
+        FUN_L00_002d6bf0_p(moby);
         if (D_0013D504[0] != 0) {
-            delete_moby(m);
+            delete_moby(moby);
             return;
         }
-        m->state = 1;
-        m->pos.z = m->pos.z + 0.5f;
-        m->scale = m->scale * 0.667f;
+        moby->state = 1;
+        moby->pos.z = moby->pos.z + 0.5f;
+        moby->scale = moby->scale * 0.667f;
         break;
     case MAGNETBOOTS_STATE_WAIT_FOR_HERO_PROXIMITY:
-        FUN_L10_00298940_p(m);
-        if (vector_distance(&m->pos, &hero.motion.pos) < 3.0f) {
-            struct Hero *h = &hero;
-            if (absolute_float(m->pos.z - h->motion.pos.f[2]) < 2.0f && h->health.hp != 0) {
-                m->flags |= 0x41;
+        FUN_L10_00298940_p(moby);
+        if (vector_distance(&moby->pos, &hero.motion.pos) < 3.0f) {
+            struct Hero *hero_ref = &hero;
+            if (absolute_float(moby->pos.z - hero_ref->motion.pos.f[2]) < 2.0f && hero_ref->health.hp != 0) {
+                moby->flags |= 0x41;
                 start_scene_p(2);
-                m->state = 2;
+                moby->state = 2;
             }
         }
         break;
@@ -301,16 +301,16 @@ void magnetboots_update(struct Moby *m) {
             queue_dialogue_message(0x271B, -1);
             D_L10_0015F640 = 0xB4;
             FUN_L00_00260860_p(0x1C, 1);
-            if (*(int *)(d + 4) != -1) {
-                char *o = D_L10_0015FFD8_p + (*(int *)(d + 4) << 8);
-                FUN_L00_00284e50_p(o + 0x10, o + 0x40);
+            if (*(int *)(pickup_vars + 4) != -1) {
+                char *linked_moby = D_L10_0015FFD8_p + (*(int *)(pickup_vars + 4) << 8);
+                FUN_L00_00284e50_p(linked_moby + 0x10, linked_moby + 0x40);
             }
             memcard_save_data(0, -1);
-            m->state = 3;
+            moby->state = 3;
         }
         break;
     case MAGNETBOOTS_STATE_REMOVE:
-        delete_moby(m);
+        delete_moby(moby);
         break;
     }
 }
