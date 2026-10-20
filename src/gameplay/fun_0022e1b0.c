@@ -39,14 +39,14 @@ void FUN_0022e1b0(unsigned char *m) {
     for (i = 0; i < D_001604C0[level_render_state.content_variant]; i++) {
         int c = m[0xBC];
         unsigned int col;
-        float s;
+        float quad_scale;
         if (*(short *)(m + 0xB2)) c += FUN_00213260_28efc8(*(short *)(m + 0xB2));
-        s = FUN_001fa6c0_28efc8(c) * (tbl[i].f[3] / 40.0f);
+        quad_scale = FUN_001fa6c0_28efc8(c) * (tbl[i].f[3] / 40.0f);
         col = (c << 24) | 0x2058B0;
         if (*(short *)(m + 0xA6) == 0x215) col = (c << 24) | 0x308000;
         for (k = 0; k < 4; k++) {
             quad.colors[k] = col;
-            FUN_001f9a68_28efc8(s, &quad.positions[k], &quad_corners[k]);
+            FUN_001f9a68_28efc8(quad_scale, &quad.positions[k], &quad_corners[k]);
             FUN_001f9a10_28efc8(&quad.positions[k], &quad.positions[k], &tbl[i]);
             FUN_001f9cf8_28efc8(&quad.positions[k], &quad.positions[k], (char *)level_render_state.player + 0xC0);
             FUN_001f9a10_28efc8(&quad.positions[k], &quad.positions[k], &v);
