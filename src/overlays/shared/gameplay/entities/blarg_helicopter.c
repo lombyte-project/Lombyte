@@ -1360,7 +1360,7 @@ void FUN_L03_002ce238(char *helicopter_moby) {
     int res;
     char *helicopter_data;
     char *r;
-    float a, b, reaction_roll_angle, reaction_pitch_angle;
+    float reaction_heading_angle, b, reaction_roll_angle, reaction_pitch_angle;
     helicopter_data = *(char **)(helicopter_moby + 0x78);
     fv = 0.0f;
     r = find_moby_hit(helicopter_moby, 0x330000, 0);
@@ -1374,9 +1374,9 @@ void FUN_L03_002ce238(char *helicopter_moby) {
             *(unsigned char *)(helicopter_data + 0x67) = 0xB4;
             trooper_anim_update(helicopter_moby, (short *)(helicopter_data + 0x60));
             if (*(float *)(r + 0x1C) == 5627.925f && *(unsigned char *)(helicopter_moby + 0x20) != 4) {
-                a = fast_arc_tan(*(float *)(helicopter_moby + 0x10) - *(float *)(r + 0),
+                reaction_heading_angle = fast_arc_tan(*(float *)(helicopter_moby + 0x10) - *(float *)(r + 0),
                                  *(float *)(helicopter_moby + 0x14) - *(float *)(r + 4));
-                b = fast_subtract_rotations(a, *(float *)(helicopter_moby + 0x48));
+                b = fast_subtract_rotations(reaction_heading_angle, *(float *)(helicopter_moby + 0x48));
                 reaction_roll_angle = fast_cos(b) * 0.08726646f;
                 reaction_pitch_angle = fast_sin(b) * -0.34906584f;
                 if (absolute_float(*(float *)(helicopter_moby + 0x40)) < absolute_float(reaction_pitch_angle)) {
