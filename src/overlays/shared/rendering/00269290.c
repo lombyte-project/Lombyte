@@ -3421,30 +3421,30 @@ void FUN_L00_00267a08_2710a0(void *) __asm__("FUN_L00_00267a08");
 void FUN_L00_002710a0(u8 *particle) {
     u8 *particle_data = particle + 0x20;
     s16 elapsed_ticks;
-    f32 f, x;
+    f32 fade_ratio, x;
     u8 r, g, b, a;
     elapsed_ticks = ++*(s16 *)(particle + 0xA);
     if (*(s16 *)(particle_data + 0x18) < elapsed_ticks) {
         FUN_L00_00267a08_2710a0(particle);
         return;
     }
-    f = FUN_001fa6c0_2710a0(elapsed_ticks);
-    f = f / FUN_001fa6c0_2710a0(*(s16 *)(particle_data + 0x18));
-    f = 1.0f - f;
-    r = FUN_001fa6d0_2710a0(FUN_001fa6c0_2710a0(particle_data[0x14]) + f * -0.001f);
-    g = FUN_001fa6d0_2710a0(FUN_001fa6c0_2710a0(particle_data[0x15]) + f * -0.0011f);
-    b = FUN_001fa6d0_2710a0(FUN_001fa6c0_2710a0(particle_data[0x16]) + f * -0.00111f);
+    fade_ratio = FUN_001fa6c0_2710a0(elapsed_ticks);
+    fade_ratio = fade_ratio / FUN_001fa6c0_2710a0(*(s16 *)(particle_data + 0x18));
+    fade_ratio = 1.0f - fade_ratio;
+    r = FUN_001fa6d0_2710a0(FUN_001fa6c0_2710a0(particle_data[0x14]) + fade_ratio * -0.001f);
+    g = FUN_001fa6d0_2710a0(FUN_001fa6c0_2710a0(particle_data[0x15]) + fade_ratio * -0.0011f);
+    b = FUN_001fa6d0_2710a0(FUN_001fa6c0_2710a0(particle_data[0x16]) + fade_ratio * -0.00111f);
     if (*(s16 *)(particle + 0xA) < FUN_001f96f8_2710a0(0x1E)) {
-        f = FUN_001fa6c0_2710a0(*(s16 *)(particle + 0xA));
-        f = f / FUN_001fa6c0_2710a0(FUN_001f96f8_2710a0(0x1E));
+        fade_ratio = FUN_001fa6c0_2710a0(*(s16 *)(particle + 0xA));
+        fade_ratio = fade_ratio / FUN_001fa6c0_2710a0(FUN_001f96f8_2710a0(0x1E));
         x = FUN_001fa6c0_2710a0(particle_data[0x17]);
-        a = FUN_001fa6d0_2710a0(x * f);
+        a = FUN_001fa6d0_2710a0(x * fade_ratio);
     } else {
-        f = FUN_001fa6c0_2710a0(*(s16 *)(particle + 0xA) - FUN_001f96f8_2710a0(0x1E));
-        f = f / FUN_001fa6c0_2710a0(*(s16 *)(particle_data + 0x18) - FUN_001f96f8_2710a0(0x1E));
+        fade_ratio = FUN_001fa6c0_2710a0(*(s16 *)(particle + 0xA) - FUN_001f96f8_2710a0(0x1E));
+        fade_ratio = fade_ratio / FUN_001fa6c0_2710a0(*(s16 *)(particle_data + 0x18) - FUN_001f96f8_2710a0(0x1E));
         x = FUN_001fa6c0_2710a0(particle_data[0x17]);
-        f = 1.0f - f;
-        a = FUN_001fa6d0_2710a0(x * f);
+        fade_ratio = 1.0f - fade_ratio;
+        a = FUN_001fa6d0_2710a0(x * fade_ratio);
     }
     {
         u32 packed_color = a << 24;
