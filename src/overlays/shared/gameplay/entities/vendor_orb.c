@@ -2428,12 +2428,12 @@ extern struct P1_388 *D_L00_00166E00_c __asm__("D_L00_00166E00");
 /* -1 while D_L00_00166E00+0x86 is set; else clears its current id, 1 if it was id. */
 s32 FUN_L00_002e8388(s32 id);
 s32 FUN_L00_002e8388(s32 id) {
-    struct P1_388 *t = D_L00_00166E00_c;
-    if (t->f86 != 0) {
+    struct P1_388 *current_camera = D_L00_00166E00_c;
+    if (current_camera->f86 != 0) {
         return -1;
     }
-    if (t->p->cur == id) {
-        t->p->cur = 0;
+    if (current_camera->p->cur == id) {
+        current_camera->p->cur = 0;
         return 1;
     }
     return 0;
