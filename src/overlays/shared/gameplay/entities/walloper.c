@@ -2089,8 +2089,8 @@ void fast_draw_quad_real(void *, void *, int) __asm__("FUN_001f7d30");
    back-facing ones */
 void FUN_L00_002bdc50(void *o) {
     Quad quad;
-    OvlVec4 d1, d2, n, e;
-    float y, a, b, t;
+    OvlVec4 edge_to_corner0, edge_to_corner2, face_normal, camera_to_corner1;
+    float y, a, b, texture_scroll_step;
     int c, i, j, k, off, jo;
 
     D_L00_0016178C = D_L00_0016178C - D_L00_00161790 * frame_scale;
@@ -2112,10 +2112,10 @@ void FUN_L00_002bdc50(void *o) {
     y = D_L00_00161718;
     D_L00_00161718 = y - D_L00_0016171C * frame_scale;
     if (D_L00_00161718 <= -8.0f) D_L00_00161718 += 8.0f;
-    t = D_L00_00161728 * frame_scale;
-    D_L00_00161720 = D_L00_00161720 - t;
+    texture_scroll_step = D_L00_00161728 * frame_scale;
+    D_L00_00161720 = D_L00_00161720 - texture_scroll_step;
     if (D_L00_00161720 <= -7.0f) D_L00_00161720 += 7.0f;
-    D_L00_00161724 = D_L00_00161724 + t;
+    D_L00_00161724 = D_L00_00161724 + texture_scroll_step;
     if (D_L00_00161724 >= 5.0f) D_L00_00161724 -= 5.0f;
     for (i = 2; i < 12; i++) {
         a = D_L00_00161720;
@@ -2125,11 +2125,11 @@ void FUN_L00_002bdc50(void *o) {
             qcopy(&quad.corner[1], &D_L00_001DC1A0[i][(j + 1) % 20]);
             qcopy(&quad.corner[2], &D_L00_001DC060[i][j]);
             qcopy(&quad.corner[3], &D_L00_001DC060[i][(j + 1) % 20]);
-            fast_vec_sub(&d1, &quad.corner[0], &quad.corner[1]);
-            fast_vec_sub(&d2, &quad.corner[2], &quad.corner[1]);
-            fast_vec_cross(&n, &d2, &d1);
-            fast_vec_sub(&e, &quad.corner[1], &(*(OvlVec4 *)g_debug_camera));
-            if (fast_vec_dot(&n, &e) >= 0.0f) {
+            fast_vec_sub(&edge_to_corner0, &quad.corner[0], &quad.corner[1]);
+            fast_vec_sub(&edge_to_corner2, &quad.corner[2], &quad.corner[1]);
+            fast_vec_cross(&face_normal, &edge_to_corner2, &edge_to_corner0);
+            fast_vec_sub(&camera_to_corner1, &quad.corner[1], &(*(OvlVec4 *)g_debug_camera));
+            if (fast_vec_dot(&face_normal, &camera_to_corner1) >= 0.0f) {
                 a += D_L00_00161714;
                 b += D_L00_00161714;
             } else {
