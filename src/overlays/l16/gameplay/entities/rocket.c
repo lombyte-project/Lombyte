@@ -2962,10 +2962,10 @@ void FUN_L16_002d6260(struct Moby *moby, void *out1, float *out2) {
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002E2290), where it is exact; names translated to the US level program. */
 
 int FUN_L16_002e0e28(char *m) {
-    unsigned char s = m[0x20];
+    unsigned char moby_state = m[0x20];
     m = *(char **)(m + 0x78);
-    if (s == 7 || s == 8) {
-        if (s == 8 && *(float *)(m + 0x34) > 0.2f) {
+    if (moby_state == 7 || moby_state == 8) {
+        if (moby_state == 8 && *(float *)(m + 0x34) > 0.2f) {
             return 2;
         }
         return 1;
