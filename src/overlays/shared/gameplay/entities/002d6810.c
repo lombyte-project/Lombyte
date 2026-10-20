@@ -161,7 +161,7 @@ void electric_water_update(struct Moby *moby) {
         ELECTRIC_WATER_OFF = 2,
         ELECTRIC_WATER_SWITCH_DISABLED = 3
     };
-    float tmp[4];
+    float unused_vector_argument[4];
     HitRecord hit;
     ElectricWaterVars *vars = (ElectricWaterVars *)moby->pvars;
     int armed = 1;
@@ -346,7 +346,7 @@ void electric_water_update(struct Moby *moby) {
             theta = random_angle_radians();
             phi = random_angle_radians();
             build_spherical_offset(&vars->bolt_aim, radius, theta, phi);
-            FUN_L00_001ff290(tmp, &vars->bolt_aim, &hero.motion.unkD0);
+            FUN_L00_001ff290(unused_vector_argument, &vars->bolt_aim, &hero.motion.unkD0);
             vars->bolt_end = vars->bolt_aim;
             vars->bolt_start = hero.motion.unkD0.q;
             FUN_L15_002d79e8((char *)moby);
