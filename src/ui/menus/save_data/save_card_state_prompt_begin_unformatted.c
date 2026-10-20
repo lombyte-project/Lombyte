@@ -7,15 +7,15 @@ extern int mode_freeze_state __asm__("D_0015EEB0") MACRO_ADDR;
 void save_card_state_prompt_begin_unformatted(void) __asm__("FUN_00208fa0");
 
 void save_card_state_prompt_begin_unformatted(void) {
-    struct MemoryCardState *s = &memory_card_state;
-    int f;
-    if (s->card[0].sync_result != -2) {
+    struct MemoryCardState *card_state = &memory_card_state;
+    int freeze_flags_snapshot;
+    if (card_state->card[0].sync_result != -2) {
         mode_freeze_state = 3;
         return;
     }
-    f = D_0015EEB4_s[0];
-    if (f & 0x20) {
-        mode_freeze_flags = f ^ 0x20;
+    freeze_flags_snapshot = D_0015EEB4_s[0];
+    if (freeze_flags_snapshot & 0x20) {
+        mode_freeze_flags = freeze_flags_snapshot ^ 0x20;
         mode_freeze_state = 5;
     }
 }
