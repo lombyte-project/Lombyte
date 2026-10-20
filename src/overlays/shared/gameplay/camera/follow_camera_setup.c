@@ -143,22 +143,22 @@ extern void follow_camera_set_lateral_spring(f32, f32) __asm__("FUN_L00_002e8590
 
 /* Per-frame follow camera adjustments driven by the hero's state: sway, zoom and lookat tweaks, then the shake timers in m->h12/h14/h16. */
 void follow_camera_apply_overrides(O_2e6000 *o) __asm__("FUN_L00_002e6000");
-void follow_camera_apply_overrides(O_2e6000 *o) {
+void follow_camera_apply_overrides(O_2e6000 *camera_moby) {
     S220_2e6000 *s;
     S40_2e6000 *q;
     S1D0_2e6000 *t;
     M_2e6000 *m;
-    A_2e6000 *a;
+    A_2e6000 *player_camera_state;
     A_2e6000 *x;
     f32 v[4];
     f32 f, sum;
     s32 flag = 0;
-    s32 n, i;
+    s32 nearby_moby_count, i;
     s16 k;
     s32 *lp;
     u8 *e;
 
-    s = (S220_2e6000 *)((u8 *)o->m + 0x220);
+    s = (S220_2e6000 *)((u8 *)camera_moby->m + 0x220);
     if (hero.unk2284 == 0xD && s->i10 != 0x14D) {
         f = fast_add_rotations(hero.unk4E4, 3.14159265f);
         v[0] = fast_cos(f);
@@ -168,33 +168,33 @@ void follow_camera_apply_overrides(O_2e6000 *o) {
         follow_camera_start_slide();
     }
     if (hero.state.control_mode == 0x11) {
-        o->m->fF0 = 0.25f;
+        camera_moby->m->fF0 = 0.25f;
         follow_camera_set_height(0.5f, 0.003f);
     }
     if (hero.state.control_mode == 5) {
         flag = 1;
         {
-            S40_2e6000 *q5 = (S40_2e6000 *)((u8 *)o->m + 0x40);
+            S40_2e6000 *camera_target = (S40_2e6000 *)((u8 *)camera_moby->m + 0x40);
             if (hero.vehicle_mode == 1) {
-                q5->fB0 = 0.25f;
+                camera_target->fB0 = 0.25f;
                 follow_camera_set_height(1.5f, 0.003f);
             } else {
-                q5->fB0 = 0.25f;
+                camera_target->fB0 = 0.25f;
                 follow_camera_set_height(2.5f, 0.003f);
             }
         }
     }
-    if (hero.state.control_mode == 0x10) o->m->fF0 = 0.25f;
+    if (hero.state.control_mode == 0x10) camera_moby->m->fF0 = 0.25f;
     if (hero.vehicle_mode == 1) {
         if (s->i0 == 0) {
-            q = (S40_2e6000 *)((u8 *)o->m + 0x40);
+            q = (S40_2e6000 *)((u8 *)camera_moby->m + 0x40);
             follow_camera_set_distance(1, 3.0f, 0.003f);
             if (flag == 0) {
                 q->fB0 = 1.0f;
                 follow_camera_set_height(1.0f, 0.003f);
             }
         }
-        *(f32 *)((u8 *)o->m + 0x20C) = 0.6f;
+        *(f32 *)((u8 *)camera_moby->m + 0x20C) = 0.6f;
     }
     if (hero.vehicle_mode == 2) {
         if (s->i10 < 2) {
@@ -203,7 +203,7 @@ void follow_camera_apply_overrides(O_2e6000 *o) {
             follow_camera_set_height(D_L00_00161DA0, 0.003f);
         }
         FUN_L00_002e8620();
-        t = (S1D0_2e6000 *)((u8 *)o->m + 0x1D0);
+        t = (S1D0_2e6000 *)((u8 *)camera_moby->m + 0x1D0);
         t->f3C = D_L00_00161DA8;
         t->f44 = D_L00_00161DA4;
     }
@@ -214,13 +214,13 @@ void follow_camera_apply_overrides(O_2e6000 *o) {
     }
     x = &player_camera[1];
     if (x->fn != 0) x->fn();
-    a = &player_camera[0];
-    if (a->p25C != 0 && s->i10 < 2) {
-        if ((s8)a->p25C[0x20] < 0) {
-            a->p25C = 0;
+    player_camera_state = &player_camera[0];
+    if (player_camera_state->p25C != 0 && s->i10 < 2) {
+        if ((s8)player_camera_state->p25C[0x20] < 0) {
+            player_camera_state->p25C = 0;
         } else {
             if (0.3f <= FUN_001f99c0(D_0013C940_2e6000.f100) || 0.3f <= FUN_001f99c0(D_0013C940_2e6000.f104)) {
-                a->i260 = 0;
+                player_camera_state->i260 = 0;
             }
             x = &player_camera[0];
             x->i260++;
@@ -230,10 +230,10 @@ void follow_camera_apply_overrides(O_2e6000 *o) {
         }
     }
     s->i10 = 0;
-    n = collect_mobies_in_sphere(&D_0013F3D0_2e6000, 1, D_0013F3D0_2e6000.i2000, 0, 15.0f);
-    if (n > 0) {
+    nearby_moby_count = collect_mobies_in_sphere(&D_0013F3D0_2e6000, 1, D_0013F3D0_2e6000.i2000, 0, 15.0f);
+    if (nearby_moby_count > 0) {
         lp = D_L00_00177F00;
-        for (i = 0; i < n; lp++, i++) {
+        for (i = 0; i < nearby_moby_count; lp++, i++) {
             e = suck_get_aim_height(*lp);
             if (e != 0 && (f32)e[0xD] != 0.0f) {
                 s->i10 = 1;
@@ -245,14 +245,14 @@ void follow_camera_apply_overrides(O_2e6000 *o) {
         FUN_L00_002e8568(0);
         follow_camera_start_slide();
         follow_camera_set_lateral_spring(0.04f, 0.2f);
-        { M_2e6000 *mm = o->m;
+        { M_2e6000 *mm = camera_moby->m;
         mm->h16 = 0;
         mm->h12 = 0;
         mm->h14 = 0; }
         return;
     }
     if (D_L00_00161D94 == 0) return;
-    m = o->m;
+    m = camera_moby->m;
     sum = 0.0f;
     {
         /* `next` is a separate variable: with a plain j++ gcc reverses the loop or gives the counter another saved register. */
