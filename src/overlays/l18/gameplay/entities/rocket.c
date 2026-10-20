@@ -2989,7 +2989,7 @@ extern void spawn_ec290(void *, int, float, float, int, int, int, void *, float)
 
 extern f32 frame_scale_macro __asm__("D_0015ED60") __attribute__((section(".sdata")));
 void FUN_L18_002eaea0(void *moby) {
-    V_ec290 s[10];
+    V_ec290 scratch_vectors[10];
     V_ec290 side_arc_segment_offsets[5];
     unsigned char flag = *(unsigned char *)D_0013E533;
     char *data = *(char **)((char *)moby + 0x78);
@@ -3008,11 +3008,11 @@ void FUN_L18_002eaea0(void *moby) {
     } else {
         *(int *)&D_L18_00162054_c = 0x7F2020;
     }
-    subtract_vector_xyz(&s[0], data + 0x10, (char *)moby + 0x10);
-    normalize_vector_xyz(&s[0], &s[0], 1.0f);
-    cross_vectors_xyz(&s[1], &s[0], D_0013F5E0);
-    build_look_at_matrix(&s[0], &s[0], &s[1], 0.17453292f);
-    scale_vector_xyz_c(&s[3], &s[0], scale);
+    subtract_vector_xyz(&scratch_vectors[0], data + 0x10, (char *)moby + 0x10);
+    normalize_vector_xyz(&scratch_vectors[0], &scratch_vectors[0], 1.0f);
+    cross_vectors_xyz(&scratch_vectors[1], &scratch_vectors[0], D_0013F5E0);
+    build_look_at_matrix(&scratch_vectors[0], &scratch_vectors[0], &scratch_vectors[1], 0.17453292f);
+    scale_vector_xyz_c(&scratch_vectors[3], &scratch_vectors[0], scale);
     qcopy(D_L18_001D9D00[0], (char *)moby + 0x10);
     qcopy(D_L18_001D9D00[1], (char *)moby + 0x10);
     for (i = 1; i < 20; i++) {
@@ -3029,21 +3029,21 @@ void FUN_L18_002eaea0(void *moby) {
         D_L18_001D9F80[i] = f21;
         azimuth_angle = random_angle_radians_c();
         b = random_angle_radians_c();
-        build_spherical_offset(&s[1], scale, azimuth_angle, b);
-        s[1].f[2] = s[1].f[2] * 0.5f;
-        lerp_vector(&s[2], &s[3], &s[1], *(float *)&D_L18_0016208C);
-        len0 = vector_length_xyz(&s[2]);
+        build_spherical_offset(&scratch_vectors[1], scale, azimuth_angle, b);
+        scratch_vectors[1].f[2] = scratch_vectors[1].f[2] * 0.5f;
+        lerp_vector(&scratch_vectors[2], &scratch_vectors[3], &scratch_vectors[1], *(float *)&D_L18_0016208C);
+        len0 = vector_length_xyz(&scratch_vectors[2]);
         if (len0 == 0.0f) {
             qcopy(&D_L18_001D9D00[0][i], &D_L18_001D9D00[0][i - 1]);
         } else {
-            scale_vector_xyz_c(&s[2], &s[2], scale / len0);
-            add_vector_xyz(&D_L18_001D9D00[0][i], &D_L18_001D9CF0[i], &s[2]);
-            qcopy(&s[3], &s[2]);
+            scale_vector_xyz_c(&scratch_vectors[2], &scratch_vectors[2], scale / len0);
+            add_vector_xyz(&D_L18_001D9D00[0][i], &D_L18_001D9CF0[i], &scratch_vectors[2]);
+            qcopy(&scratch_vectors[3], &scratch_vectors[2]);
         }
         D_L18_001D9D00[0][i].f[2] = D_L18_001D9D00[0][i].f[2] + f21;
-        subtract_vector_xyz(&s[1], &D_L18_001D9D00[0][i], &D_L18_001D9CF0[i]);
-        subtract_vector_xyz(&s[5], data + 0x10, &D_L18_001D9D00[0][i]);
-        len = vector_length_xyz(&s[5]);
+        subtract_vector_xyz(&scratch_vectors[1], &D_L18_001D9D00[0][i], &D_L18_001D9CF0[i]);
+        subtract_vector_xyz(&scratch_vectors[5], data + 0x10, &D_L18_001D9D00[0][i]);
+        len = vector_length_xyz(&scratch_vectors[5]);
         if (len != 0.0f) {
             float w;
             if (i == 19) {
@@ -3055,8 +3055,8 @@ void FUN_L18_002eaea0(void *moby) {
             } else {
                 w = 0.1f;
             }
-            scale_vector_xyz_c(&s[5], &s[5], scale / len);
-            lerp_vector(&s[3], &s[3], &s[5], w);
+            scale_vector_xyz_c(&scratch_vectors[5], &scratch_vectors[5], scale / len);
+            lerp_vector(&scratch_vectors[3], &scratch_vectors[3], &scratch_vectors[5], w);
         }
         if (i < 10) {
             float g;
@@ -3070,31 +3070,31 @@ void FUN_L18_002eaea0(void *moby) {
             secondary_bolt_z_offset = secondary_bolt_z_offset * fast_sin_c(g) + FUN_L00_00257c48(0.0f, 0.1f);
             D_L18_001D9D00[1][i].f[2] = D_L18_001D9D00[1][i].f[2] + secondary_bolt_z_offset;
             D_L18_001DA110[i] = secondary_bolt_z_offset;
-            ang = fast_add_rotations(fast_arc_tan(s[1].f[0], s[1].f[1]), 1.5707964f);
+            ang = fast_add_rotations(fast_arc_tan(scratch_vectors[1].f[0], scratch_vectors[1].f[1]), 1.5707964f);
             secondary_bolt_lateral_offset = *(float *)&D_L18_00162020 * fast_cos_c(g);
-            s[4].f[0] = fast_cos_c(ang) * secondary_bolt_lateral_offset;
-            s[4].f[1] = fast_sin_c(ang) * secondary_bolt_lateral_offset;
-            s[4].f[2] = 0.0f;
-            qcopy(&D_L18_001D9FD0[i], &s[4]);
-            add_vector_xyz(&D_L18_001D9D00[1][i], &D_L18_001D9D00[1][i], &s[4]);
+            scratch_vectors[4].f[0] = fast_cos_c(ang) * secondary_bolt_lateral_offset;
+            scratch_vectors[4].f[1] = fast_sin_c(ang) * secondary_bolt_lateral_offset;
+            scratch_vectors[4].f[2] = 0.0f;
+            qcopy(&D_L18_001D9FD0[i], &scratch_vectors[4]);
+            add_vector_xyz(&D_L18_001D9D00[1][i], &D_L18_001D9D00[1][i], &scratch_vectors[4]);
         } else {
             int r = 21 - i;
             qcopy(&D_L18_001D9D00[1][i], &D_L18_001D9D00[0][i]);
             D_L18_001D9D00[1][i].f[2] = D_L18_001D9D00[1][i].f[2] + D_L18_001DA110[r];
             add_vector_xyz(&D_L18_001D9D00[1][i], &D_L18_001D9D00[1][i], &D_L18_001D9FD0[r]);
-            qcopy(&s[4], &D_L18_001D9FD0[i]);
+            qcopy(&scratch_vectors[4], &D_L18_001D9FD0[i]);
         }
     }
-    cross_vectors_xyz(&s[6], &s[0], D_0013F5E0);
-    normalize_vector_xyz(&s[6], &s[6], 1.0f);
-    normalize_vector_xyz(&s[7], D_0013F5E0, 1.0f);
+    cross_vectors_xyz(&scratch_vectors[6], &scratch_vectors[0], D_0013F5E0);
+    normalize_vector_xyz(&scratch_vectors[6], &scratch_vectors[6], 1.0f);
+    normalize_vector_xyz(&scratch_vectors[7], D_0013F5E0, 1.0f);
     for (k = 0; k < 4; k++) {
         float side_arc_scale;
         if (k < 2) {
-            qcopy(&s[8], (char *)moby + 0x10);
+            qcopy(&scratch_vectors[8], (char *)moby + 0x10);
             side_arc_scale = 0.4f;
         } else {
-            qcopy(&s[8], data + 0x10);
+            qcopy(&scratch_vectors[8], data + 0x10);
             side_arc_scale = 0.5f;
         }
         if (fast_dec_timer_s16(D_L18_001620B8 + k)) {
@@ -3103,18 +3103,18 @@ void FUN_L18_002eaea0(void *moby) {
             D_L18_001620C0[k] = 0;
             scale = FUN_L00_00257c48(0.52359879f, 1.04719758f);
             f20 = random_float_between_c(-1.04719758f, 0.17453292f);
-            scale_vector_xyz_c(&s[5], &s[0], side_arc_scale);
-            build_look_at_matrix(&s[5], &s[5], &s[6], f20);
-            build_look_at_matrix(&s[5], &s[5], &s[7], scale);
-            qcopy(&D_L18_001DA160[k].p[0], &s[8]);
-            add_vector_xyz(&D_L18_001DA160[k].p[1], &s[8], &s[5]);
+            scale_vector_xyz_c(&scratch_vectors[5], &scratch_vectors[0], side_arc_scale);
+            build_look_at_matrix(&scratch_vectors[5], &scratch_vectors[5], &scratch_vectors[6], f20);
+            build_look_at_matrix(&scratch_vectors[5], &scratch_vectors[5], &scratch_vectors[7], scale);
+            qcopy(&D_L18_001DA160[k].p[0], &scratch_vectors[8]);
+            add_vector_xyz(&D_L18_001DA160[k].p[1], &scratch_vectors[8], &scratch_vectors[5]);
             side_arc_scale = 1.0f;
             for (j = 2; j < 5; j++) {
-                subtract_vector_xyz(&s[9], &D_L18_001DA150[k].p[j - 1], D_L18_001677C0_c);
+                subtract_vector_xyz(&scratch_vectors[9], &D_L18_001DA150[k].p[j - 1], D_L18_001677C0_c);
                 f20 = random_float_between_c(0.17453292f, 0.959931076f) * side_arc_scale;
                 side_arc_scale = -side_arc_scale;
-                build_look_at_matrix(&s[5], &s[5], &s[9], f20);
-                add_vector_xyz((D_L18_001DA160[k].p + j), &D_L18_001DA150[k].p[j - 1], &s[5]);
+                build_look_at_matrix(&scratch_vectors[5], &scratch_vectors[5], &scratch_vectors[9], f20);
+                add_vector_xyz((D_L18_001DA160[k].p + j), &D_L18_001DA150[k].p[j - 1], &scratch_vectors[5]);
             }
         } else {
             int j;
@@ -3124,7 +3124,7 @@ void FUN_L18_002eaea0(void *moby) {
                 side_arc_segment_offsets[j].f[1] += FUN_L00_00257c48(0.0f, 0.1f);
                 side_arc_segment_offsets[j].f[2] += FUN_L00_00257c48(0.0f, 0.1f);
             }
-            qcopy(&D_L18_001DA160[k].p[0], &s[8]);
+            qcopy(&D_L18_001DA160[k].p[0], &scratch_vectors[8]);
             for (j = 1; j < 5; j++) {
                 add_vector_xyz((D_L18_001DA160[k].p + j), &D_L18_001DA150[k].p[j - 1], &side_arc_segment_offsets[j]);
             }
@@ -3145,15 +3145,15 @@ void FUN_L18_002eaea0(void *moby) {
     }
     scale = FUN_L00_00257c48(0.52359879f, 1.04719758f);
     f20 = random_float_between_c(-0.52359879f, 1.04719758f);
-    scale_vector_xyz_c(&s[5], &s[0], *(float *)&D_L18_00162084 * frame_scale_macro);
-    build_look_at_matrix(&s[5], &s[5], &s[6], f20);
-    build_look_at_matrix(&s[5], &s[5], &s[7], scale);
+    scale_vector_xyz_c(&scratch_vectors[5], &scratch_vectors[0], *(float *)&D_L18_00162084 * frame_scale_macro);
+    build_look_at_matrix(&scratch_vectors[5], &scratch_vectors[5], &scratch_vectors[6], f20);
+    build_look_at_matrix(&scratch_vectors[5], &scratch_vectors[5], &scratch_vectors[7], scale);
     r = random_int_between(1, 8);
     if (random_integer_below(2)) r = -r;
     f20 = random_float_between_c(0.2f, 0.6f);
-    spawn_ec290((char *)moby + 0x10, scale_game_frames_alt(15), f20 * 0.3f, f20, *(int *)&D_L18_00162054_c | 0x7F000000, 0, r, &s[5], 0.0f);
+    spawn_ec290((char *)moby + 0x10, scale_game_frames_alt(15), f20 * 0.3f, f20, *(int *)&D_L18_00162054_c | 0x7F000000, 0, r, &scratch_vectors[5], 0.0f);
     r = -r;
-    spawn_ec290((char *)moby + 0x10, scale_game_frames_alt(15), f20 * 0.15f, f20 * 0.5f, 0x307F7F7F, 0, r, &s[5], 0.0f);
+    spawn_ec290((char *)moby + 0x10, scale_game_frames_alt(15), f20 * 0.15f, f20 * 0.5f, 0x307F7F7F, 0, r, &scratch_vectors[5], 0.0f);
     r = random_int_between(1, 8);
     if (random_integer_below(2)) r = -r;
     f20 = random_float_between_c(0.15f, 3.0f);
