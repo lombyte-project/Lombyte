@@ -646,7 +646,7 @@ void FUN_L18_002f16f0(struct Moby *moby) {
             if (moby->state != 4) {
                 float v[4];
                 float s, z, f20;
-                int n;
+                int debris_spawn_frames;
                 moby_vars->f344 = moby_vars->f344 + 0.25f;
                 if (random_integer_below(func_001FA898_r(moby_vars->f344)) == 0) {
                     s = random_float_between(-1.0471976f, 1.0471976f);
@@ -656,8 +656,8 @@ void FUN_L18_002f16f0(struct Moby *moby) {
                     v[1] = fast_sin(f20) * z;
                     v[2] = 15.0f;
                     add_vector_xyz(v, v, &hero.motion.pos);
-                    n = scale_game_frames(240);
-                    spawn_debris_chunk(v, D_L18_0015F580_c, 0x2B8, n, D_L18_001622C0, 2.0f, 1.0f,
+                    debris_spawn_frames = scale_game_frames(240);
+                    spawn_debris_chunk(v, D_L18_0015F580_c, 0x2B8, debris_spawn_frames, D_L18_001622C0, 2.0f, 1.0f,
                                      0.75f, 0);
                 }
             }
