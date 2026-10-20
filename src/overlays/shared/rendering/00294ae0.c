@@ -26,7 +26,7 @@ static inline s32 path_next(PathPoints *path, s32 i, s32 dir) {
     return i + dir;
 }
 
-s32 FUN_L09_00294ae0(struct Moby *m, PathPoints *path, Vec4 *out, s32 i, s32 dir, f32 dist) {
+s32 FUN_L09_00294ae0(struct Moby *moby, PathPoints *path, Vec4 *out, s32 i, s32 dir, f32 dist) {
     Vec4 seg;
     Vec4 rel;
     s32 next;
@@ -37,7 +37,7 @@ s32 FUN_L09_00294ae0(struct Moby *m, PathPoints *path, Vec4 *out, s32 i, s32 dir
     subtract_vector_xyz(&seg, &path->point[next], &path->point[i]);
     len = fast_vec_length(&seg);
     fast_vec_normalize(&seg, &seg, 1.0f);
-    subtract_vector_xyz(&rel, &m->pos, &path->point[i]);
+    subtract_vector_xyz(&rel, &moby->pos, &path->point[i]);
     along = fast_vec_dot(&rel, &seg) + dist;
     if (len < along) {
         i = next;
