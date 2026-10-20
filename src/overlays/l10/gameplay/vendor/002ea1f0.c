@@ -380,14 +380,14 @@ void FUN_L10_002eb7e0(struct Moby *moby) {
         HIT_RESPONSE_STATE_RESPOND_AND_REMOVE = 2
     };
     int ok = 0;
-    char *p = find_moby_hit(moby, 0x10000, 0);
+    char *hit_result = find_moby_hit(moby, 0x10000, 0);
     switch (moby->state) {
     case HIT_RESPONSE_STATE_INITIALIZE:
         moby->state = 1;
         break;
     case HIT_RESPONSE_STATE_WAIT_FOR_HIT:
-        if (p != 0) {
-            if (0.0f < *(float *)(p + 0x2C))
+        if (hit_result != 0) {
+            if (0.0f < *(float *)(hit_result + 0x2C))
                 ok = 1;
         }
         if (ok != 0)
