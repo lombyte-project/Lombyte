@@ -560,7 +560,7 @@ void dreks_fleet_turret_update(struct Moby *m) {
 extern char *D_L17_0015FFD8_m __asm__("D_L17_0015FFD8") __attribute__((section(".sdata")));
 
 /* Spreads the class-0x733 mobies of this moby's group evenly along its path. */
-void FUN_L17_002cbd38(char *m) {
+void FUN_L17_002cbd38(char *turret_moby) {
     char *turret_vars;
     char *path;
     char *mobys;
@@ -572,7 +572,7 @@ void FUN_L17_002cbd38(char *m) {
     short k;
     short step;
 
-    turret_vars = *(char **)(m + 0x78);
+    turret_vars = *(char **)(turret_moby + 0x78);
     class_733_moby_count = 0;
     k = 0;
     i = *(short *)(turret_vars + 0x80);
