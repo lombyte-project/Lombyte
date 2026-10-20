@@ -418,7 +418,7 @@ void FUN_L13_002e6c08(Moby *rocket) {
     Rocket_2E8040 *rocket_data = *(void **)&rocket->pvars;
     V4_2E8040 old;
     V4_2E8040 hitpos;
-    V4_2E8040 tmp;
+    V4_2E8040 effect_scratch_vector;
     V4_2E8040 vel;
     V4_2E8040 dir;
     unsigned char *spawned_effect;
@@ -432,16 +432,16 @@ void FUN_L13_002e6c08(Moby *rocket) {
     dir.z = func_002140F8_2E8040(-1.0f, 1.0f);
     *(Q_2E8040 *)&vel = *(Q_2E8040 *)&dir;
     func_L00_001FF4B0_2E8040(&vel, &vel, func_002140F8_2E8040(0.1f, 0.2f) * D_0015ED6C);
-    func_L00_001FF4B0_2E8040(&tmp, rocket_data, -func_002140F8_2E8040(D_0015ED6C * 0.1f, D_0015ED6C));
-    func_001F9BD8_2E8040(&vel, &vel, &tmp);
+    func_L00_001FF4B0_2E8040(&effect_scratch_vector, rocket_data, -func_002140F8_2E8040(D_0015ED6C * 0.1f, D_0015ED6C));
+    func_001F9BD8_2E8040(&vel, &vel, &effect_scratch_vector);
     spawned_effect = spawn_particle(&*(V4_2E8040 *)&rocket->pos, (float *)&vel, func_001F9850_2E8040(6), 0x7F, 0xB0B0B0, 3, 40000.0f, 1000.0f, 1.0f, -0.0004f, 0.0f);
     if (spawned_effect != 0) {
         spawned_effect[3] = 0x48;
     }
     for (trail_segment_fraction = 0.0f; trail_segment_fraction < 1.0f; trail_segment_fraction += 0.33333334f) {
-        func_L00_001FF4B0_2E8040(&tmp, rocket_data, func_002140F8_2E8040(trail_segment_fraction, trail_segment_fraction + 0.33333334f) * rocket_data->speed);
-        func_001F9BD8_2E8040(&tmp, &tmp, &*(V4_2E8040 *)&rocket->pos);
-        spawned_effect = spawn_particle(&tmp, (float *)&vel, func_001F9850_2E8040(0x3C), 0x7F, 0x606060, 3, 40000.0f, 1000.0f, 1.0f, -0.0002f, 0.0f);
+        func_L00_001FF4B0_2E8040(&effect_scratch_vector, rocket_data, func_002140F8_2E8040(trail_segment_fraction, trail_segment_fraction + 0.33333334f) * rocket_data->speed);
+        func_001F9BD8_2E8040(&effect_scratch_vector, &effect_scratch_vector, &*(V4_2E8040 *)&rocket->pos);
+        spawned_effect = spawn_particle(&effect_scratch_vector, (float *)&vel, func_001F9850_2E8040(0x3C), 0x7F, 0x606060, 3, 40000.0f, 1000.0f, 1.0f, -0.0002f, 0.0f);
         if (spawned_effect != 0) {
             Tex_2E8040 *tex = &D_L13_001B2680_2E8040;
             spawned_effect[2] = *tex->p5C;
@@ -451,7 +451,7 @@ void FUN_L13_002e6c08(Moby *rocket) {
         dir.z = 0.02f;
         func_001F9EC0_2E8040(&dir, &dir, &*(V4_2E8040 *)&rocket->rot_row0);
         func_002156E0_2E8040(&dir, &dir, &*(V4_2E8040 *)&rocket->rot_row0, func_00214158_2E8040());
-        spawned_effect = spawn_burst(&tmp, &dir, 0x4F007FFF, 0x1FFFFFFF, func_001F9850_2E8040(5), 1, 20000.0f);
+        spawned_effect = spawn_burst(&effect_scratch_vector, &dir, 0x4F007FFF, 0x1FFFFFFF, func_001F9850_2E8040(5), 1, 20000.0f);
         if (spawned_effect != 0) {
             spawned_effect[3] = 0x48;
         }
@@ -477,8 +477,8 @@ void FUN_L13_002e6c08(Moby *rocket) {
     }
     moby_point_position(rocket, 1, &hitpos);
     if (collision_line(&old, &hitpos, 0, rocket_data->owner, 0) != 0) {
-        qcopy(&tmp, &D_L13_001741E0_2E8040);
-        spawn_explosion(rocket, rocket_data, &tmp, 2.0f, 10.0f, 10, 3, 0x10, 4.0f, 2.0f, 9.0f, 1.0f, 0, 20.0f, 0, 1, -1, 0);
+        qcopy(&effect_scratch_vector, &D_L13_001741E0_2E8040);
+        spawn_explosion(rocket, rocket_data, &effect_scratch_vector, 2.0f, 10.0f, 10, 3, 0x10, 4.0f, 2.0f, 9.0f, 1.0f, 0, 20.0f, 0, 1, -1, 0);
         func_0020D678_2E8040(rocket);
         return;
     }
