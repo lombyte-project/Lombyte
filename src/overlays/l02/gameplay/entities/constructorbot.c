@@ -60,8 +60,8 @@ void FUN_L02_002ebf20(struct Moby *moby) {
     vec_scale(&half, &v->vel, 0.5f);
     vec_scale(&back, &v->vel, -0.1f);
     for (i = 1; i >= 0; i--) {
-        s32 t = scale_frames(float_to_int(rand_range(20.0f, 60.0f)));
-        particle = spawn_particle(&trail_position, &back, t, D_L02_00161F5C >> 24, D_L02_00161F5C & 0xFFFFFF, 3,
+        s32 particle_frame_count = scale_frames(float_to_int(rand_range(20.0f, 60.0f)));
+        particle = spawn_particle(&trail_position, &back, particle_frame_count, D_L02_00161F5C >> 24, D_L02_00161F5C & 0xFFFFFF, 3,
                                  rand_range(300000.0f, 500000.0f), 10000.0f, 1.0f, -0.0002f, 0.0f);
         if (particle) {
             particle[2] = *D_L02_001B2680.tint;
