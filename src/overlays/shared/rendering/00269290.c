@@ -1299,25 +1299,25 @@ extern f32_26c558 D_0015ED60;
 extern int tick_26c558(void *) __asm__("FUN_001f9770");
 extern void kill_26c558(void *) __asm__("FUN_L00_00267a08");
 extern int trunc_26c558(f32_26c558) __asm__("FUN_001fa6d0");
-void FUN_L00_0026c558(P_26c558 *p) {
-    Q_26c558 *q = &p->q;
+void FUN_L00_0026c558(P_26c558 *particle) {
+    Q_26c558 *q = &particle->q;
     q->f4 += D_0015ED60 * 0.013f * q->fC;
-    if (q->f4 <= 0.0f || tick_26c558(&p->hA)) {
-        kill_26c558(p);
+    if (q->f4 <= 0.0f || tick_26c558(&particle->hA)) {
+        kill_26c558(particle);
         return;
     }
     if (0.22f <= q->f4) {
         q->fC = -q->fC;
         q->f4 = q->f4 + D_0015ED60 * 0.013f * q->fC;
     }
-    p->fC += D_0015ED60 * 8190.0f;
-    p->w4 = (p->w4 & 0xFFFFFF) | (trunc_26c558(q->f4 * 255.0f) << 24);
+    particle->fC += D_0015ED60 * 8190.0f;
+    particle->w4 = (particle->w4 & 0xFFFFFF) | (trunc_26c558(q->f4 * 255.0f) << 24);
     q->f8 += D_0015ED60 * 0.012f;
     if (1.0f < q->f8) {
         q->f8 -= 1.0f;
     }
-    p->b8 = (int)(q->f8 * 255.0f);
-    p->f18 -= 0.02f;
+    particle->b8 = (int)(q->f8 * 255.0f);
+    particle->f18 -= 0.02f;
 }
 #include "sda.h"
 #include "qcopy.h"
