@@ -1142,100 +1142,100 @@ extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 /* Path-following enemy: respawns at its home point on request, takes hits (dies and drops to the
    ground), then follows its path and retargets the hero when it strays. */
 void FUN_L02_002d5c88(unsigned char *moby) {
-    Vars5c88 *d = *(Vars5c88 **)(moby + 0x78);
-    char *h;
+    Vars5c88 *moby_vars = *(Vars5c88 **)(moby + 0x78);
+    char *hit_record;
     int *path;
     int hit;
     float dmg;
     float k;
     float g;
-    OvlVec4 p;
+    OvlVec4 ground_probe_position;
     OvlVec4 v;
 
-    d->i280 = moby[0x20];
+    moby_vars->i280 = moby[0x20];
     if (moby[0x20] == 0) {
         return;
     }
-    if (d->b2E == 2) {
-        d->b2E = 1;
-        if (d->i288 >= 0) {
-            (*(Vars5c88 **)((d->i288 << 8) + D_L02_0015FFD8 + 0x78))->i14C -= 1;
+    if (moby_vars->b2E == 2) {
+        moby_vars->b2E = 1;
+        if (moby_vars->i288 >= 0) {
+            (*(Vars5c88 **)((moby_vars->i288 << 8) + D_L02_0015FFD8 + 0x78))->i14C -= 1;
         }
-        if ((d->i27C = FUN_L02_002d5658(moby)) == 0) {
+        if ((moby_vars->i27C = FUN_L02_002d5658(moby)) == 0) {
             mark_moby_for_removal(moby);
             return;
         }
         moby[0x20] = 0x1A;
-        qcopy(moby + 0x10, d->home);
+        qcopy(moby + 0x10, moby_vars->home);
         *(int *)(moby + 0x94) = 0;
         *(float *)(moby + 0x18) -= 10.0f;
     }
-    if (d->i38 != 0 ||
-        (!fast_dec_timer_s16(&d->t25C) && vector_distance(moby + 0x10, &hero.motion.pos) < 10.0f)) {
-        d->t25E = func_001FA898_r(multiply_global_factor_ed64(random_float_between_alt(180.0f, 240.0f)));
+    if (moby_vars->i38 != 0 ||
+        (!fast_dec_timer_s16(&moby_vars->t25C) && vector_distance(moby + 0x10, &hero.motion.pos) < 10.0f)) {
+        moby_vars->t25E = func_001FA898_r(multiply_global_factor_ed64(random_float_between_alt(180.0f, 240.0f)));
     }
-    d->i38 = 0;
-    if (fast_dec_timer_s16(&d->t25E)) {
-        d->f250 = d->f24C;
+    moby_vars->i38 = 0;
+    if (fast_dec_timer_s16(&moby_vars->t25E)) {
+        moby_vars->f250 = moby_vars->f24C;
     } else {
-        d->f250 = d->f24C + 5.0f;
+        moby_vars->f250 = moby_vars->f24C + 5.0f;
     }
     dmg = 0.0f;
-    h = find_moby_hit(moby, 0x330000, 0);
-    fun_00213928(moby, h, &d->hp, 0, &hit, &dmg, 0, 4);
+    hit_record = find_moby_hit(moby, 0x330000, 0);
+    fun_00213928(moby, hit_record, &moby_vars->hp, 0, &hit, &dmg, 0, 4);
     if (hit != 1 && moby[0x20] != 0x18) {
         FUN_L02_002d5728((char *)moby);
-        d->i29C = 0;
-        d->hp -= dmg;
-        if (d->hp <= 0.0f) {
-            d->hp -= dmg;
-            d->i140 = 0x200;
-            d->f130 = D_L02_00161914 * frame_time_sq;
-            d->f134 = D_L02_00161918 * frame_time_sq;
-            d->f138 = D_L02_0016190C * D_0015ED6C;
-            d->f13C = D_L02_00161908 * D_0015ED6C;
-            d->b15D = 0;
-            d->i144 = 9;
-            d->f16C = 2.0f * D_0015ED6C;
-            d->f148 = 0.5f;
-            qcopy(&p, moby + 0x10);
-            p.f[2] += 2.0f;
-            g = FUN_00213508(&p, 0, 0.5f);
+        moby_vars->i29C = 0;
+        moby_vars->hp -= dmg;
+        if (moby_vars->hp <= 0.0f) {
+            moby_vars->hp -= dmg;
+            moby_vars->i140 = 0x200;
+            moby_vars->f130 = D_L02_00161914 * frame_time_sq;
+            moby_vars->f134 = D_L02_00161918 * frame_time_sq;
+            moby_vars->f138 = D_L02_0016190C * D_0015ED6C;
+            moby_vars->f13C = D_L02_00161908 * D_0015ED6C;
+            moby_vars->b15D = 0;
+            moby_vars->i144 = 9;
+            moby_vars->f16C = 2.0f * D_0015ED6C;
+            moby_vars->f148 = 0.5f;
+            qcopy(&ground_probe_position, moby + 0x10);
+            ground_probe_position.f[2] += 2.0f;
+            g = FUN_00213508(&ground_probe_position, 0, 0.5f);
             if (*(float *)(moby + 0x18) < g) {
                 *(float *)(moby + 0x18) = g;
             }
-            if (d->i288 >= 0) {
+            if (moby_vars->i288 >= 0) {
                 extern int D_L02_0015FFD8_s __asm__("D_L02_0015FFD8") __attribute__((sda));
-                (*(Vars5c88 **)((d->i288 << 8) + D_L02_0015FFD8_s + 0x78))->i14C -= 1;
-                d->b15D = 0;
+                (*(Vars5c88 **)((moby_vars->i288 << 8) + D_L02_0015FFD8_s + 0x78))->i14C -= 1;
+                moby_vars->b15D = 0;
             } else {
-                p.f[2] += 0.01f;
+                ground_probe_position.f[2] += 0.01f;
             }
-            d->i144 |= 0x20;
+            moby_vars->i144 |= 0x20;
             *(unsigned short *)(moby + 0x34) &= 0xEFFF;
-            v.q = *(OvlQuad *)(h + 0x10);
-            trooper_knockback_arc(&v, &k, &d->f138, &d->f13C);
-            trooper_start_knockback(k, moby, d->knock, 6, 1, 0);
-            d->f148 = 0.85f;
-            d->f170 = 7.0f;
-            d->f174 = 14.0f;
+            v.q = *(OvlQuad *)(hit_record + 0x10);
+            trooper_knockback_arc(&v, &k, &moby_vars->f138, &moby_vars->f13C);
+            trooper_start_knockback(k, moby, moby_vars->knock, 6, 1, 0);
+            moby_vars->f148 = 0.85f;
+            moby_vars->f170 = 7.0f;
+            moby_vars->f174 = 14.0f;
             moby[0x20] = 0x18;
             *(int *)(moby + 0x94) = 0;
-            d->b117 = 0x78;
-            trooper_anim_update(moby, d->anim);
+            moby_vars->b117 = 0x78;
+            trooper_anim_update(moby, moby_vars->anim);
         }
     }
     moby[0xA4] = 0xFF;
-    trooper_anim_finish(moby, d->anim);
-    path = D_L02_001B0AB0_5c88[d->i290];
-    if (FUN_L00_0025ff38(d->f250, moby, d->tgt, 0, 0, path + 4, *path) != 2 &&
-        (d->f250 < vector_distance(d->home, d->tgt) ||
-         absolute_float_5c88(*(float *)(moby + 0x18) - d->tgt[2]) > 3.0f)) {
-        d->i214 = 2;
+    trooper_anim_finish(moby, moby_vars->anim);
+    path = D_L02_001B0AB0_5c88[moby_vars->i290];
+    if (FUN_L00_0025ff38(moby_vars->f250, moby, moby_vars->tgt, 0, 0, path + 4, *path) != 2 &&
+        (moby_vars->f250 < vector_distance(moby_vars->home, moby_vars->tgt) ||
+         absolute_float_5c88(*(float *)(moby + 0x18) - moby_vars->tgt[2]) > 3.0f)) {
+        moby_vars->i214 = 2;
     }
-    if (d->i210 == 0) {
-        d->i210 = (int)hero.moby;
-        qcopy(d->tgt, &hero.motion.pos);
+    if (moby_vars->i210 == 0) {
+        moby_vars->i210 = (int)hero.moby;
+        qcopy(moby_vars->tgt, &hero.motion.pos);
     }
 }
 #include "qcopy.h"
