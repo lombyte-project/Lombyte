@@ -2948,16 +2948,16 @@ int FUN_L17_002efd48(struct Moby *moby, float *target, float speed) {
     float *yaw = &moby->rot.z;
     float ang;
     float turn;
-    float tmp[3];
+    float movement_delta[3];
     data = (char *)moby->pvars;
     ang = fast_arc_tan(target[0] - moby->pos.x, target[1] - moby->pos.y);
     turn = frame_time_sq * 12.566371f;
     approach_angle(yaw, (float *)(data + 0x1DC), ang, turn, turn, frame_time * 7.3303828f);
     approach_value((float *)(data + 0x1D8), speed, frame_time_sq * 13.0f);
-    tmp[0] = fast_cos(moby->rot.z) * *(float *)(data + 0x1D8);
-    tmp[1] = fast_sin(moby->rot.z) * *(float *)(data + 0x1D8);
-    tmp[2] = -(frame_time * 0.5f);
-    FUN_L00_00258830((int)moby, (int)tmp, 0.5f, 0.5f, 0.0f, 0);
+    movement_delta[0] = fast_cos(moby->rot.z) * *(float *)(data + 0x1D8);
+    movement_delta[1] = fast_sin(moby->rot.z) * *(float *)(data + 0x1D8);
+    movement_delta[2] = -(frame_time * 0.5f);
+    FUN_L00_00258830((int)moby, (int)movement_delta, 0.5f, 0.5f, 0.0f, 0);
     return vector_distance(&moby->pos, target) < 0.2f;
 }
 extern int scale_ticks(int) __asm__("FUN_001f96f8");
