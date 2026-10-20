@@ -351,7 +351,7 @@ extern short D_L11_001621D8 __attribute__((sda));
 extern short D_L11_001621E8 __attribute__((sda));
 extern short D_L11_001621F8 __attribute__((sda));
 extern short D_L11_00162208 __attribute__((sda));
-void FUN_L11_003112b8(void *moby, char *t) {
+void FUN_L11_003112b8(void *moby, char *particle_emission_data) {
     int i;
     for (i = 1; i < 3; i++) {
         float vel[4];
@@ -362,7 +362,7 @@ void FUN_L11_003112b8(void *moby, char *t) {
         float scale;
 
         *(OvlQuad *)vel = 0;
-        scale = *(float *)(t + 0x64) / *(float *)&D_L11_00161FF4_gp;
+        scale = *(float *)(particle_emission_data + 0x64) / *(float *)&D_L11_00161FF4_gp;
         if (scale > 1.0f) {
             scale = 1.0f;
         } else if (scale < 0.35f) {
@@ -373,42 +373,42 @@ void FUN_L11_003112b8(void *moby, char *t) {
         qcopy(first_particle_position, pos);
         qcopy(b, pos);
         qcopy(third_particle_position, pos);
-        FUN_L00_0025f8e0(first_particle_position, *(float *)(t + 0xC4) * 0.02f + 0.02f);
-        FUN_L00_0025f8e0(b, *(float *)(t + 0xC4) * 0.02f + 0.02f);
-        FUN_L00_0025f8e0(third_particle_position, *(float *)(t + 0xC4) * 0.01f + 0.02f);
+        FUN_L00_0025f8e0(first_particle_position, *(float *)(particle_emission_data + 0xC4) * 0.02f + 0.02f);
+        FUN_L00_0025f8e0(b, *(float *)(particle_emission_data + 0xC4) * 0.02f + 0.02f);
+        FUN_L00_0025f8e0(third_particle_position, *(float *)(particle_emission_data + 0xC4) * 0.01f + 0.02f);
         vel[0] =
-            -((random_float_between_alt(6.0f, 7.0f) + *(float *)(t + 0xC4) * 2.0f) * frame_time) *
+            -((random_float_between_alt(6.0f, 7.0f) + *(float *)(particle_emission_data + 0xC4) * 2.0f) * frame_time) *
             scale;
         FUN_L01_0028a7a8(moby, first_particle_position, vel, &D_L11_001621C8, 1);
         vel[0] =
-            -((random_float_between_alt(6.0f, 7.0f) + *(float *)(t + 0xC4) * 3.0f) * frame_time) *
+            -((random_float_between_alt(6.0f, 7.0f) + *(float *)(particle_emission_data + 0xC4) * 3.0f) * frame_time) *
             scale;
         FUN_L01_0028a7a8(moby, b, vel, &D_L11_001621D8, 1);
         vel[0] =
-            -((random_float_between_alt(6.0f, 7.0f) + *(float *)(t + 0xC4) * 4.0f) * frame_time) *
+            -((random_float_between_alt(6.0f, 7.0f) + *(float *)(particle_emission_data + 0xC4) * 4.0f) * frame_time) *
             scale;
         FUN_L01_0028a7a8(moby, third_particle_position, vel, &D_L11_001621E8, 1);
-        if (*(float *)(t + 0xC4) > 0.5f) {
-            FUN_L00_0025f8e0(first_particle_position, *(float *)(t + 0xC4) * 0.02f + 0.01f);
-            FUN_L00_0025f8e0(b, *(float *)(t + 0xC4) * 0.02f + 0.01f);
-            FUN_L00_0025f8e0(third_particle_position, *(float *)(t + 0xC4) * 0.01f + 0.01f);
-            vel[0] = -((random_float_between_alt(6.0f, 7.0f) + *(float *)(t + 0xC4) * 2.0f) *
+        if (*(float *)(particle_emission_data + 0xC4) > 0.5f) {
+            FUN_L00_0025f8e0(first_particle_position, *(float *)(particle_emission_data + 0xC4) * 0.02f + 0.01f);
+            FUN_L00_0025f8e0(b, *(float *)(particle_emission_data + 0xC4) * 0.02f + 0.01f);
+            FUN_L00_0025f8e0(third_particle_position, *(float *)(particle_emission_data + 0xC4) * 0.01f + 0.01f);
+            vel[0] = -((random_float_between_alt(6.0f, 7.0f) + *(float *)(particle_emission_data + 0xC4) * 2.0f) *
                        frame_time) *
                      scale;
             FUN_L01_0028a7a8(moby, first_particle_position, vel, &D_L11_001621C8, 1);
-            vel[0] = -((random_float_between_alt(6.0f, 7.0f) + *(float *)(t + 0xC4) * 3.0f) *
+            vel[0] = -((random_float_between_alt(6.0f, 7.0f) + *(float *)(particle_emission_data + 0xC4) * 3.0f) *
                        frame_time) *
                      scale;
             FUN_L01_0028a7a8(moby, b, vel, &D_L11_001621D8, 1);
-            vel[0] = -((random_float_between_alt(6.0f, 7.0f) + *(float *)(t + 0xC4) * 4.0f) *
+            vel[0] = -((random_float_between_alt(6.0f, 7.0f) + *(float *)(particle_emission_data + 0xC4) * 4.0f) *
                        frame_time) *
                      scale;
             FUN_L01_0028a7a8(moby, third_particle_position, vel, &D_L11_001621E8, 1);
-            vel[0] = -((random_float_between_alt(6.0f, 7.0f) + *(float *)(t + 0xC4) * 2.0f) *
+            vel[0] = -((random_float_between_alt(6.0f, 7.0f) + *(float *)(particle_emission_data + 0xC4) * 2.0f) *
                        frame_time) *
                      scale;
             FUN_L01_0028a7a8(moby, first_particle_position, vel, &D_L11_001621F8, 1);
-            vel[0] = -((random_float_between_alt(6.0f, 7.0f) + *(float *)(t + 0xC4) * 3.0f) *
+            vel[0] = -((random_float_between_alt(6.0f, 7.0f) + *(float *)(particle_emission_data + 0xC4) * 3.0f) *
                        frame_time) *
                      scale;
             FUN_L01_0028a7a8(moby, pos, vel, &D_L11_00162208, 1);
