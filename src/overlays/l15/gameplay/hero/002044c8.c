@@ -627,6 +627,9 @@ void FUN_L15_0020ed50(void) {
         HERO_ATTACK_RECORD_POINT_3_HIT_QUERY = 0,
         HERO_ATTACK_RECORD_POINT_4_HIT_QUERY = 1
     };
+    enum {
+        HERO_COMBO_KIND_STAGED_TARGET_SPEED_REDUCTION = 1
+    };
     struct MobyView *moby = (struct MobyView *)hero.moby;
     s32 sub = hero.state.step;
     s32 anim = moby->b53;
@@ -1582,7 +1585,7 @@ void FUN_L15_0020ed50(void) {
                 hero.target_speed = frame_time * 4.4f * hero.speed_scale;
             }
             break;
-        case 1:
+        case HERO_COMBO_KIND_STAGED_TARGET_SPEED_REDUCTION:
             if (hero.unkA9C != 0 || hero.anim_frame < 9.0f) {
                 if (hero.anim_frame > 8.0f) {
                     hero.target_speed = frame_time * 3.0f * hero.speed_scale;
