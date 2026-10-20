@@ -226,15 +226,15 @@ void FUN_002049f0_0028ed58(s32) __asm__("FUN_002049f0");
 s32 FUN_0020b178_0028ed58(s32, s32) __asm__("FUN_0020b178");
 extern s32 D_L00_00160570[1] __attribute__((sda));
 void FUN_L00_0028ed58(s32 target_level_index) {
-    A_0028ed58 *p = &D_0013E030_0028ed58;
+    A_0028ed58 *shared_state_record = &D_0013E030_0028ed58;
     C_0028ed58 *c;
     s32 shared_table_offset;
     (&D_L00_0015F5C4)[5] = 1; /* D_L00_0015F5D8: the unit declares it sda */
     D_L00_0015F5C4 = 6;
     fade_level = 1.0f;
     D_L00_0015F400 = 0;
-    p->i20 = 0;
-    p->h24 = -1;
+    shared_state_record->i20 = 0;
+    shared_state_record->h24 = -1;
     FUN_002335a0_0028ed58();
     shared_table_offset = D_L00_001611CC - 0x60000;
     c = &D_L00_0016C860_0028ed58;
@@ -245,15 +245,15 @@ void FUN_L00_0028ed58(s32 target_level_index) {
         s32 divisor;
         FUN_L00_0028e9c8_0028ed58(8);
         divisor = pal_mode ? 0x50 : 0x60;
-        c->i34 = FUN_001f96f8_0028ed58(D_L00_00160570[p->h26]);
+        c->i34 = FUN_001f96f8_0028ed58(D_L00_00160570[shared_state_record->h26]);
         c->i3C = c->i34 / divisor;
         FUN_002049f0_0028ed58(c->i3C);
         c->i38 = c->i34 % divisor;
     } else {
         FUN_0020b178_0028ed58(0, target_level_index);
         D_L00_0015F5C0 = target_level_index;
-        p->i20 = 3;
-        p->h24 = -1;
+        shared_state_record->i20 = 3;
+        shared_state_record->h24 = -1;
     }
 }
 typedef struct {
