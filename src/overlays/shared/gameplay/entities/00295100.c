@@ -2239,7 +2239,7 @@ void FUN_L00_0029c648(void) {
     };
     Vec4 a;
     Vec4 b;
-    f32 m[4][4];
+    f32 camera_rotation_matrix[4][4];
     s32 st;
     s32 ok;
     s32 i;
@@ -2256,7 +2256,7 @@ void FUN_L00_0029c648(void) {
     CutsceneCameraKey *cam;
     f32 *rot;
     VendorMoby *mb;
-    VendorMoby *m2;
+    VendorMoby *cutscene_moby_to_remove;
     Vec4 *keys;
     s32 lim;
     u8 flag;
@@ -2566,11 +2566,11 @@ void FUN_L00_0029c648(void) {
             D_L00_0016CAF0_lui = 0.63f;
             update_view_context();
             for (j = 0; j < D_L00_0016C860.h44; j++) {
-                m2 = D_L00_0016C860.f178[j];
-                if (m2 != 0) {
-                    m2->pclass->count--;
-                    m2->pclass->slots[m2->pclass->count] = 0;
-                    mark_moby_for_removal(m2);
+                cutscene_moby_to_remove = D_L00_0016C860.f178[j];
+                if (cutscene_moby_to_remove != 0) {
+                    cutscene_moby_to_remove->pclass->count--;
+                    cutscene_moby_to_remove->pclass->slots[cutscene_moby_to_remove->pclass->count] = 0;
+                    mark_moby_for_removal(cutscene_moby_to_remove);
                 }
             }
             if (vendor_menu.f28 != 0) {
@@ -2594,19 +2594,19 @@ void FUN_L00_0029c648(void) {
         transform_vector_by_basis(D_L00_00166C80.pos.f, D_L00_00166C80.pos.f, vendor_menu.f80);
         add_vector_xyz(D_L00_00166C80.pos.f, D_L00_00166C80.pos.f, &vendor_menu.fC0);
         ang = fast_add_rotations(rot[2], vendor_menu.f80[3].f[2]);
-        sce_vu0_unit_matrix(m);
-        sce_vu0_rot_matrix_x(m, m, rot[0]);
-        sce_vu0_rot_matrix_y(m, m, rot[1]);
-        sceVu0RotMatrixZ(m, m, ang);
-        D_L00_00166C80.basis[0] = -m[2][0];
-        D_L00_00166C80.basis[4] = -m[0][0];
-        D_L00_00166C80.basis[8] = m[1][0];
-        D_L00_00166C80.basis[1] = -m[2][1];
-        D_L00_00166C80.basis[5] = -m[0][1];
-        D_L00_00166C80.basis[9] = m[1][1];
-        D_L00_00166C80.basis[2] = -m[2][2];
-        D_L00_00166C80.basis[6] = -m[0][2];
-        D_L00_00166C80.basis[10] = m[1][2];
+        sce_vu0_unit_matrix(camera_rotation_matrix);
+        sce_vu0_rot_matrix_x(camera_rotation_matrix, camera_rotation_matrix, rot[0]);
+        sce_vu0_rot_matrix_y(camera_rotation_matrix, camera_rotation_matrix, rot[1]);
+        sceVu0RotMatrixZ(camera_rotation_matrix, camera_rotation_matrix, ang);
+        D_L00_00166C80.basis[0] = -camera_rotation_matrix[2][0];
+        D_L00_00166C80.basis[4] = -camera_rotation_matrix[0][0];
+        D_L00_00166C80.basis[8] = camera_rotation_matrix[1][0];
+        D_L00_00166C80.basis[1] = -camera_rotation_matrix[2][1];
+        D_L00_00166C80.basis[5] = -camera_rotation_matrix[0][1];
+        D_L00_00166C80.basis[9] = camera_rotation_matrix[1][1];
+        D_L00_00166C80.basis[2] = -camera_rotation_matrix[2][2];
+        D_L00_00166C80.basis[6] = -camera_rotation_matrix[0][2];
+        D_L00_00166C80.basis[10] = camera_rotation_matrix[1][2];
         for (i = 0; i < D_L00_0016C860.h44; i++) {
             mb = D_L00_0016C860.f178[i];
             id = D_L00_0016C860.f38 >> 1;
