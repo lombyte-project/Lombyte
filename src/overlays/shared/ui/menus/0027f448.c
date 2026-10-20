@@ -15,7 +15,7 @@ extern E_27f448 D_L00_001BA3B8[] NOT_SDA;
 extern T_27f448 D_L00_001C1E40[] NOT_SDA;
 extern int *D_L00_001602A0 __attribute__((sda));
 extern s32 D_0013D510_lui[]  __asm__("D_0013D510")NOT_SDA;
-int FUN_L00_0027f448(P_27f448 *p) {
+int FUN_L00_0027f448(P_27f448 *selection_state) {
     int i;
     for (i = 0; i < 20 && D_0013D510_lui[i]; i++) {
         D_L00_001BA3B8[i].b = 1;
@@ -24,11 +24,11 @@ int FUN_L00_0027f448(P_27f448 *p) {
         D_L00_001BA3B8[i].d = D_L00_001C1E40[D_0013D510_lui[i]].b;
     }
     D_L00_001BA3B8[i].a = 0;
-    p->x40 = 0;
-    p->x30 |= 0x8000;
+    selection_state->x40 = 0;
+    selection_state->x30 |= 0x8000;
     for (i = 0; D_L00_001602A0[i]; i++) {
         if (D_L00_001841F0_27f448.x224 == D_L00_001602A0[i]) {
-            p->x40 = i;
+            selection_state->x40 = i;
             break;
         }
     }
