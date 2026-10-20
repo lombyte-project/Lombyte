@@ -2230,7 +2230,7 @@ void taxi_update(struct Moby *moby) {
     struct Hero *g;
     struct Hero *g2;
     float z;
-    char *m;
+    char *destination_stop_moby;
     char *voice_slot;
     PickupPose_318c78 *tab;
     float *qa;
@@ -2256,12 +2256,12 @@ void taxi_update(struct Moby *moby) {
                 FUN_L05_00319690(moby);
                 if (*(int *)(D_0013CAE4) & 0x10) {
                     moby->state = 3;
-                    m = FUN_L05_00319598(moby, *(short *)(taxi_data + 0xB6));
-                    if (m != 0) {
-                        m[0x20] = 2;
-                        *(unsigned short *)(m + 0x34) |= 1;
-                        m[0x31] = 0;
-                        *(int *)(m + 0x94) = 0;
+                    destination_stop_moby = FUN_L05_00319598(moby, *(short *)(taxi_data + 0xB6));
+                    if (destination_stop_moby != 0) {
+                        destination_stop_moby[0x20] = 2;
+                        *(unsigned short *)(destination_stop_moby + 0x34) |= 1;
+                        destination_stop_moby[0x31] = 0;
+                        *(int *)(destination_stop_moby + 0x94) = 0;
                     }
                 }
             }
