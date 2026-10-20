@@ -24,22 +24,22 @@ extern struct Pair D_001E2A00[];
 void patch_tie_texture_fields(void) __asm__("FUN_00235780");
 
 void patch_tie_texture_fields(void) {
-    s32 *p;
+    s32 *active_class_index_cursor;
     s32 i;
-    struct Obj *o;
-    struct Part *q;
-    struct Pair *e;
+    struct Obj *render_class_descriptor;
+    struct Part *render_record;
+    struct Pair *render_address_offsets;
 
-    for (p = D_001E3000; *p >= 0; p++) {
-        o = D_001E1700[*p];
-        q = o->unk2C;
-        for (i = 0; i < o->unk23; i++, q++) {
-            e = &D_001E2A00[q->unk33];
-            if (e->unk0 != 0) {
-                q->unk0 = (q->unk0 & 0xFFFFC000) | e->unk0;
+    for (active_class_index_cursor = D_001E3000; *active_class_index_cursor >= 0; active_class_index_cursor++) {
+        render_class_descriptor = D_001E1700[*active_class_index_cursor];
+        render_record = render_class_descriptor->unk2C;
+        for (i = 0; i < render_class_descriptor->unk23; i++, render_record++) {
+            render_address_offsets = &D_001E2A00[render_record->unk33];
+            if (render_address_offsets->unk0 != 0) {
+                render_record->unk0 = (render_record->unk0 & 0xFFFFC000) | render_address_offsets->unk0;
             }
-            if (e->unk2 != 0) {
-                q->unk20 = (q->unk20 & 0xFFFFC000) | e->unk2;
+            if (render_address_offsets->unk2 != 0) {
+                render_record->unk20 = (render_record->unk20 & 0xFFFFC000) | render_address_offsets->unk2;
             }
         }
     }
