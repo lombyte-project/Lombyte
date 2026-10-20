@@ -1483,19 +1483,19 @@ void FUN_L14_00315290(struct UpdateCam *cam) {
     f32 tt;
     s32 seg2;
     f32 tt2;
-    char *p = (char *)cam->saved_state;
+    char *camera_saved_state = (char *)cam->saved_state;
     char *rec = *(char **)(D_L14_0015EF50_5290 + cam->descriptor_index * 32 + 0x1C);
-    VendorCamRun_5290 *q = (VendorCamRun_5290 *)(p + 0x40);
-    VendorCamStops_5290 *s = (VendorCamStops_5290 *)(p + 0x58);
+    VendorCamRun_5290 *camera_run = (VendorCamRun_5290 *)(camera_saved_state + 0x40);
+    VendorCamStops_5290 *fov_stops = (VendorCamStops_5290 *)(camera_saved_state + 0x58);
     char *path;
     int done;
     int i;
 
-    if (q->started == 0) {
+    if (camera_run->started == 0) {
         char *pa = D_L14_001B0BB0_5290[*(int *)(rec + 0x20)];
         char *pb = D_L14_001B0BB0_5290[*(int *)(rec + 0x24)];
         D_L14_0015F404 = 1;
-        q->started = 1;
+        camera_run->started = 1;
         qcopy(&cam->pos, pa + 0x10);
         if (*(int *)(rec + 0x28) >= 0) {
             struct Moby *o = (struct Moby *)(D_L14_0015FFD8_5290 + *(int *)(rec + 0x28) * 256);
@@ -1519,13 +1519,13 @@ void FUN_L14_00315290(struct UpdateCam *cam) {
     }
     path = D_L14_001B0BB0_5290[*(int *)(rec + 0x20)];
     qcopy(dir, &cam->pos);
-    done = path_step_5290(path, &cam->pos.x, &q->seg, &q->t, 0, *(float *)(rec + 0x3C) * frame_time);
-    if (q->timer != 0 && tick_countdown_16_5290(&q->timer) != 0)
+    done = path_step_5290(path, &cam->pos.x, &camera_run->seg, &camera_run->t, 0, *(float *)(rec + 0x3C) * frame_time);
+    if (camera_run->timer != 0 && tick_countdown_16_5290(&camera_run->timer) != 0)
         done = 1;
     if (*(u8 *)(rec + 0x39) != 0)
         done = 1;
     if (done) {
-        float ang = s->fov_end * 0.5f;
+        float ang = fov_stops->fov_end * 0.5f;
         char *hp;
         char *mb;
         D_L14_0016D140.fB0 = fast_sin_5290(ang) / fast_cos_5290(ang);
@@ -1551,26 +1551,26 @@ void FUN_L14_00315290(struct UpdateCam *cam) {
         cross_5290(&cam->m2, &cam->m1, &cam->m0);
         return;
     }
-    for (i = 0; i < 7 && s->seg[i] >= 0 && s->seg[i + 1] >= 0; i++) {
-        int lo = s->seg[i];
-        if (q->seg >= lo && q->seg < s->seg[i + 1]) {
+    for (i = 0; i < 7 && fov_stops->seg[i] >= 0 && fov_stops->seg[i + 1] >= 0; i++) {
+        int lo = fov_stops->seg[i];
+        if (camera_run->seg >= lo && camera_run->seg < fov_stops->seg[i + 1]) {
             float sum = 0.0f;
             float total;
             float ang;
             int m;
             int n;
-            for (m = lo; m < q->seg; m++)
+            for (m = lo; m < camera_run->seg; m++)
                 sum += *(float *)(path + (m * 16 + 0x1C));
             total = sum;
-            sum += q->t;
-            for (n = q->seg; n < s->seg[i + 1]; n++)
+            sum += camera_run->t;
+            for (n = camera_run->seg; n < fov_stops->seg[i + 1]; n++)
                 total += *(float *)(path + (n * 16 + 0x1C));
-            ang = cosine_interpolate(s->fov[i], s->fov[i + 1], sum / total) * 0.017453292f * 0.5f;
+            ang = cosine_interpolate(fov_stops->fov[i], fov_stops->fov[i + 1], sum / total) * 0.017453292f * 0.5f;
             D_L14_0016D140.fB0 = fast_sin_5290(ang) / fast_cos_5290(ang);
             update_view_context();
         }
     }
-    q->dist += FUN_001f9b48_5290(dir, &cam->pos);
+    camera_run->dist += FUN_001f9b48_5290(dir, &cam->pos);
     if (*(int *)(rec + 0x28) >= 0) {
         struct Moby *o = (struct Moby *)(D_L14_0015FFD8_5290 + *(int *)(rec + 0x28) * 256);
         float *ofs = (float *)(rec + 0x2C);
@@ -1585,7 +1585,7 @@ void FUN_L14_00315290(struct UpdateCam *cam) {
         char *look = D_L14_001B0BB0_5290[*(int *)(rec + 0x24)];
         seg2 = 0;
         tt2 = 0.0f;
-        path_step_5290(look, u, &seg2, &tt2, 0, q->dist / q->len_a * q->len_b);
+        path_step_5290(look, u, &seg2, &tt2, 0, camera_run->dist / camera_run->len_a * camera_run->len_b);
         sub_5290(t, u, &cam->pos);
     }
     scale_5290(u, D_0013F5E0_5290, -1.0f);
