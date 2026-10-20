@@ -251,23 +251,23 @@ extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 
-void FUN_L01_0030ba18(struct Moby *m) {
+void FUN_L01_0030ba18(struct Moby *moby) {
     BlobVars *v;
     s32 hit;
     s32 i;
     s32 n;
-    s32 c;
+    s32 grey_intensity;
     s32 alpha;
     s32 grey;
     f32 s;
-    u8 *p;
+    u8 *puff;
     u8 *q;
 
-    v = (BlobVars *)m->pvars;
+    v = (BlobVars *)moby->pvars;
     if (random_integer_below(2)) {
-        enqueue_callback_list_1(FUN_L01_0030bfa8, m);
+        enqueue_callback_list_1(FUN_L01_0030bfa8, moby);
     }
-    add_vector_xyz(&m->pos, &m->pos, v);
+    add_vector_xyz(&moby->pos, &moby->pos, v);
     if (FUN_001f99c0(v->vel.x) > D_L01_00162060 * frame_scale) {
         v->vel.x *= (D_L01_0016205C - 1.0f) * frame_scale + 1.0f;
     }
@@ -278,15 +278,15 @@ void FUN_L01_0030ba18(struct Moby *m) {
         v->vel.z *= (D_L01_0016205C - 1.0f) * frame_scale + 1.0f;
     }
     v->vel.z -= D_L01_00162058 * frame_time_sq;
-    m->rot.x = fast_add_rotations(m->rot.x, v->spin.x);
-    m->rot.y = fast_add_rotations(m->rot.y, v->spin.y);
-    m->rot.z = fast_add_rotations(m->rot.z, v->spin.z);
-    if (m->pos.x < 2.0f || m->pos.x > 1021.0f || m->pos.y < 2.0f || m->pos.y > 1021.0f ||
-        m->pos.z < 2.0f || m->pos.z > 1021.0f) {
-        mark_moby_for_removal(m);
+    moby->rot.x = fast_add_rotations(moby->rot.x, v->spin.x);
+    moby->rot.y = fast_add_rotations(moby->rot.y, v->spin.y);
+    moby->rot.z = fast_add_rotations(moby->rot.z, v->spin.z);
+    if (moby->pos.x < 2.0f || moby->pos.x > 1021.0f || moby->pos.y < 2.0f || moby->pos.y > 1021.0f ||
+        moby->pos.z < 2.0f || moby->pos.z > 1021.0f) {
+        mark_moby_for_removal(moby);
         return;
     }
-    hit = coll_sphere(2.0f, &m->pos, 0, (void *)v->owner);
+    hit = coll_sphere(2.0f, &moby->pos, 0, (void *)v->owner);
     if (tick_countdown_32(&v->timer) || hit) {
         if (hit) {
             if (D_L01_001742C0.have_normal) {
@@ -295,13 +295,13 @@ void FUN_L01_0030ba18(struct Moby *m) {
                 clear_vector(v);
             }
         }
-        FUN_L00_0025e450(m, v, &m->pos, 0.0f, 0.0f, 0x14, 3, 4, 4.0f, 2.0f, 100000.0f, 0, 3.0f, 15.0f, 1, 1,
+        FUN_L00_0025e450(moby, v, &moby->pos, 0.0f, 0.0f, 0x14, 3, 4, 4.0f, 2.0f, 100000.0f, 0, 3.0f, 15.0f, 1, 1,
                          -1, 0);
-        mark_moby_for_removal(m);
+        mark_moby_for_removal(moby);
         return;
     }
     s = random_float_between(0.5f, 1.5f) * 210000.0f;
-    spark_cbb0(&m->pos, &D_L01_0015F580, 0x4F007FFF, 0x1FFFFFFF, s,
+    spark_cbb0(&moby->pos, &D_L01_0015F580, 0x4F007FFF, 0x1FFFFFFF, s,
                FUN_L00_00257b90(scale_game_frames(10), scale_game_frames(20)), 1);
     alpha = 0x60000000;
     for (i = 0; i < 2; i++) {
@@ -310,16 +310,16 @@ void FUN_L01_0030ba18(struct Moby *m) {
             n = -n;
         }
         s = random_float_between(40000.0f, 100000.0f);
-        c = FUN_L00_00257b90(0x30, 0xFF);
-        grey = (c << 8) | alpha;
-        p = spawn_puff(&m->pos, 0.025f, 1.0f, 1.0f, n, &D_L01_0015F580, s, c | ((c << 16) | grey));
-        if (p != NULL) {
-            p[3] = 0x44;
-            q = p + 0x20;
-            *(s16 *)(p + 0xA) = scale_game_frames(60);
+        grey_intensity = FUN_L00_00257b90(0x30, 0xFF);
+        grey = (grey_intensity << 8) | alpha;
+        puff = spawn_puff(&moby->pos, 0.025f, 1.0f, 1.0f, n, &D_L01_0015F580, s, grey_intensity | ((grey_intensity << 16) | grey));
+        if (puff != NULL) {
+            puff[3] = 0x44;
+            q = puff + 0x20;
+            *(s16 *)(puff + 0xA) = scale_game_frames(60);
             *(s32 *)(q + 4) = 2;
             q[0xA] = 0x60;
-            q[0xB] = p[0xA];
+            q[0xB] = puff[0xA];
         }
     }
 }
