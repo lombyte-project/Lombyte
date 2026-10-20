@@ -78,25 +78,25 @@ extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern char *func_0020D348_m(int) __asm__("FUN_0020c4f8");
 
 char *FUN_L07_0030ba90(char *pos, char *vec, int c, short d) {
-    char *m = func_0020D348_m(0x372);
-    char *p;
-    if (m) {
-        p = *(char **)(m + 0x78);
-        *(unsigned char *)(m + 0x30) = 0xFF;
-        *(unsigned short *)(m + 0x32) = 0xFF;
-        m[0x31] = 1;
-        *(float *)(m + 0x40) = random_angle_radians();
-        *(float *)(m + 0x44) = random_angle_radians();
-        *(float *)(m + 0x48) = random_angle_radians();
-        *(float *)(p + 0x18) = randf_sym(100.0f, 300.0f) * DEG_TO_RAD * frame_time;
-        *(float *)(p + 0x1C) = randf_sym(100.0f, 300.0f) * DEG_TO_RAD * frame_time;
-        qcopy(m + 0x10, pos);
-        qcopy(p, vec);
-        *(int *)(p + 0x10) = c;
-        *(int *)(p + 0x14) = d;
-        FUN_L00_00250df8(m);
+    char *spawned_moby = func_0020D348_m(0x372);
+    char *moby_data;
+    if (spawned_moby) {
+        moby_data = *(char **)(spawned_moby + 0x78);
+        *(unsigned char *)(spawned_moby + 0x30) = 0xFF;
+        *(unsigned short *)(spawned_moby + 0x32) = 0xFF;
+        spawned_moby[0x31] = 1;
+        *(float *)(spawned_moby + 0x40) = random_angle_radians();
+        *(float *)(spawned_moby + 0x44) = random_angle_radians();
+        *(float *)(spawned_moby + 0x48) = random_angle_radians();
+        *(float *)(moby_data + 0x18) = randf_sym(100.0f, 300.0f) * DEG_TO_RAD * frame_time;
+        *(float *)(moby_data + 0x1C) = randf_sym(100.0f, 300.0f) * DEG_TO_RAD * frame_time;
+        qcopy(spawned_moby + 0x10, pos);
+        qcopy(moby_data, vec);
+        *(int *)(moby_data + 0x10) = c;
+        *(int *)(moby_data + 0x14) = d;
+        FUN_L00_00250df8(spawned_moby);
     }
-    return m;
+    return spawned_moby;
 }
 extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
 
