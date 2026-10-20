@@ -43,39 +43,39 @@ s32 _sceSifCmdIntrHdlr(void) {
     SifCmdHandlerEntry *entry;
     SifCmdHandler handler;
     u128 *buffer;
-    s32 n; /* packet bytes, then quadwords, then handler index */
+    s32 packet_count_or_handler_index; /* packet bytes, then quadwords, then handler index */
     s32 i;
 
     EnableInterrupts();
     header = cmd->packet_buffer;
-    n = header->packet_size & 0xff;
-    if (n == 0) {
+    packet_count_or_handler_index = header->packet_size & 0xff;
+    if (packet_count_or_handler_index == 0) {
         return 0;
     }
-    n = (n + 15) / 16;
+    packet_count_or_handler_index = (packet_count_or_handler_index + 15) / 16;
     header->packet_size = 0;
     buffer = (u128 *)header;
-    for (i = 0; i < n; i++) {
+    for (i = 0; i < packet_count_or_handler_index; i++) {
         packet[i] = *buffer++;
     }
     isceSifSetDChain();
     header = (volatile SifCmdHeader *)packet;
     if (header->command_id < 0) {
-        n = header->command_id & 0x7fffffff;
-        if (n < cmd->system_handler_count) {
+        packet_count_or_handler_index = header->command_id & 0x7fffffff;
+        if (packet_count_or_handler_index < cmd->system_handler_count) {
             entry = cmd->system_handlers;
-            handler = entry[n].handler;
+            handler = entry[packet_count_or_handler_index].handler;
             if (handler) {
-                handler(packet, entry[n].argument);
+                handler(packet, entry[packet_count_or_handler_index].argument);
             }
         }
     } else {
-        n = header->command_id;
-        if (n < cmd->user_handler_count) {
+        packet_count_or_handler_index = header->command_id;
+        if (packet_count_or_handler_index < cmd->user_handler_count) {
             entry = cmd->user_handlers;
-            handler = entry[n].handler;
+            handler = entry[packet_count_or_handler_index].handler;
             if (handler) {
-                handler(packet, entry[n].argument);
+                handler(packet, entry[packet_count_or_handler_index].argument);
             }
         }
     }
