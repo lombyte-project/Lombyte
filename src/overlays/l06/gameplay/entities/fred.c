@@ -1055,10 +1055,10 @@ void FUN_L06_002fd460(void) {
         {
             j = 0;
             do {
-                int a = D_L06_001EF310[i][j][0];
+                int vertex_index = D_L06_001EF310[i][j][0];
                 int b = D_L06_001EF310[i][j][1];
                 float u, v;
-                transform_2fd1a0(&first.v[j], D_L06_001EED30[a], D_L06_00161F9C);
+                transform_2fd1a0(&first.v[j], D_L06_001EED30[vertex_index], D_L06_00161F9C);
                 qcopy(&second.v[j], &first.v[j]);
                 u = D_L06_001EF6B0[b][0];
                 v = D_L06_001EF6B0[b][1];
