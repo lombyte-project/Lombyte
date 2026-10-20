@@ -2545,43 +2545,43 @@ s32 FUN_001f96f8_2aa008(s32) __asm__("FUN_001f96f8");
 s32 collision_line(void *, void *, s32, void *, s32) __asm__("FUN_001efa68");
 void FUN_L00_001ff660_2aa008(void *, void *, void *) __asm__("FUN_L00_001ff660");
 void FUN_L00_002aa008(V_2aa008 *pos, N_2aa008 *self, void *arg) {
-    V_2aa008 d;
+    V_2aa008 random_offset;
     V_2aa008 t;
-    V_2aa008 e;
-    M_2aa008 *m;
+    V_2aa008 collision_position_offset;
+    M_2aa008 *moby_vars;
     struct Hero *P;
-    N_2aa008 *n;
+    N_2aa008 *scanned_moby;
     s32 count;
     N_2aa008 *best;
     s32 bestv;
     V_2aa008 *k;
     t.q = 0;
-    m = self->p78;
+    moby_vars = self->p78;
     t.f[0] = FUN_002132a8_2aa008(-1.0f, 1.0f);
     t.f[1] = FUN_002132a8_2aa008(-1.0f, 1.0f);
     t.f[2] = FUN_002132a8_2aa008(-1.0f, 1.0f);
     self->b20 = 1;
     self->f2C = self->f2C / 0.65f;
-    d.q = t.q;
-    FUN_001f9bf8_2aa008(&d, &d,
+    random_offset.q = t.q;
+    FUN_001f9bf8_2aa008(&random_offset, &random_offset,
                         FUN_002132a8_2aa008(D_0015ED6C_2aa008 * 0.01f, D_0015ED6C_2aa008 * 0.1f));
-    add_vector_xyz(m, &d, arg);
+    add_vector_xyz(moby_vars, &random_offset, arg);
     P = &hero;
     if (P->ground_moby && FUN_L00_002603d0_2aa008(P->ground_moby)) {
-        add_vector_xyz(m, m, &P->motion.displacement);
+        add_vector_xyz(moby_vars, moby_vars, &P->motion.displacement);
     }
-    m->h34 = FUN_001f96f8_2aa008(0x78);
+    moby_vars->h34 = FUN_001f96f8_2aa008(0x78);
     count = 0;
     best = 0;
     bestv = 0;
-    for (n = D_L00_0015FFE4_2aa008; n; n = n->p28) {
-        if (n->b20 != 0xFE)
-            if (n->b20 != 0xFD)
-                if (n->hA6 == self->hA6)
-                    if (n != self) {
-                        if (best == 0 || ((D_2aa008 *)n->p78)->i5C < bestv) {
-                            bestv = ((D_2aa008 *)n->p78)->i5C;
-                            best = n;
+    for (scanned_moby = D_L00_0015FFE4_2aa008; scanned_moby; scanned_moby = scanned_moby->p28) {
+        if (scanned_moby->b20 != 0xFE)
+            if (scanned_moby->b20 != 0xFD)
+                if (scanned_moby->hA6 == self->hA6)
+                    if (scanned_moby != self) {
+                        if (best == 0 || ((D_2aa008 *)scanned_moby->p78)->i5C < bestv) {
+                            bestv = ((D_2aa008 *)scanned_moby->p78)->i5C;
+                            best = scanned_moby;
                         }
                         count++;
                     }
@@ -2594,10 +2594,10 @@ void FUN_L00_002aa008(V_2aa008 *pos, N_2aa008 *self, void *arg) {
     if (collision_line(&t, pos, 0, hero.moby, 0)) {
         k = D_L00_00173E60_2aa008;
         qcopy(&self->v10, &k[0]);
-        FUN_001f9bf8_2aa008(&e, &k[2], frame_time_sq * 9.7f);
-        add_vector_xyz(&self->v10, &self->v10, &e);
-        FUN_L00_001ff660_2aa008(m, m, &k[2]);
-        scale_vector_xyz(m, m, 0.6f);
+        FUN_001f9bf8_2aa008(&collision_position_offset, &k[2], frame_time_sq * 9.7f);
+        add_vector_xyz(&self->v10, &self->v10, &collision_position_offset);
+        FUN_L00_001ff660_2aa008(moby_vars, moby_vars, &k[2]);
+        scale_vector_xyz(moby_vars, moby_vars, 0.6f);
     }
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A5138.c: func_L00_002AB548), where it is exact; names translated to the US level program. */
