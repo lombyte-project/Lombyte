@@ -145,6 +145,7 @@ extern int func_001F9908_r(int *) __asm__("FUN_001f9740");
 int r1_repeat_timer __asm__("D_L08_0015F678") = 0;
 void FUN_L08_002370d8(void) {
     enum {
+        HERO_STATE_DOUBLE_JUMP = 14,
         HERO_STATE_LEDGE_HANG_ENTRY = 24,
         HERO_STATE_LEDGE_HANG = 25,
         HERO_STATE_LEDGE_SHIMMY_POSITIVE_YAW_OFFSET = 26,
@@ -1859,7 +1860,7 @@ void FUN_L08_002370d8(void) {
                 case HERO_STATE_HIGH_JUMP:
                 case 12:
                 case 13:
-                case 14:
+                case HERO_STATE_DOUBLE_JUMP:
                 case 15:
                 case HERO_STATE_PACK_LONG_JUMP:
                 case 17:
