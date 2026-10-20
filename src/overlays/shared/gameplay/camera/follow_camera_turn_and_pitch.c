@@ -21,11 +21,11 @@ extern float D_0013CA40_2e89b0[] __asm__("D_0013CA40") __attribute__((section(".
 extern int FUN_001f96f8_2e89b0(int) __asm__("FUN_001f96f8");
 
 void follow_camera_read_stick(char *o, float *a, float *b) __asm__("FUN_L00_002e89b0");
-void follow_camera_read_stick(char *o, float *a, float *b) {
-    S_2e89b0 *s = (S_2e89b0 *)(*(char **)(o + 0x70) + 0x1A8);
+void follow_camera_read_stick(char *camera_object, float *a, float *b) {
+    S_2e89b0 *turn_pitch_state = (S_2e89b0 *)(*(char **)(camera_object + 0x70) + 0x1A8);
     struct UsageStats *g;
 
-    if (s->flags & 1) {
+    if (turn_pitch_state->flags & 1) {
         *a = 0.0f;
     } else {
         *a = D_0013CA40_2e89b0[0];
@@ -36,11 +36,11 @@ void follow_camera_read_stick(char *o, float *a, float *b) {
     if (*a == 0.0f) {
         D_L00_00161D8C = 0;
         D_L00_00161D90 = 0;
-        if (s->f1C != 0.0f) {
-            *a = s->f1C;
+        if (turn_pitch_state->f1C != 0.0f) {
+            *a = turn_pitch_state->f1C;
         }
     } else {
-        s->f14 = D_L00_0015EF44;
+        turn_pitch_state->f14 = D_L00_0015EF44;
         g = &usage_stats;
         if (g->stat[8].count < 3) {
             D_L00_00161D8C++;
@@ -56,9 +56,9 @@ void follow_camera_read_stick(char *o, float *a, float *b) {
             }
         }
     }
-    if (s->flags & 2) {
+    if (turn_pitch_state->flags & 2) {
         *b = 0.0f;
-        *b = s->f24 / 0.6981317f;
+        *b = turn_pitch_state->f24 / 0.6981317f;
     } else {
         float t = D_0013CA40_2e89b0[1];
         *b = -t;
@@ -66,7 +66,7 @@ void follow_camera_read_stick(char *o, float *a, float *b) {
             *b = t;
         }
         if (*b == 0.0f) {
-            *b = s->f24 / 0.6981317f;
+            *b = turn_pitch_state->f24 / 0.6981317f;
         }
     }
 }
