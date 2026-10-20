@@ -2526,24 +2526,24 @@ typedef struct {
 extern int D_L00_00173E40[] __attribute__((section(".data")));
 int FUN_001efa68_002bec80(Vec4_2bec80 *, Vec4_2bec80 *, int, void *, int) __asm__("FUN_001efa68");
 unsigned int FUN_001f0b58_002bec80(void) __asm__("FUN_001f0b58");
-float FUN_L00_002bec80(Vec4_2bec80 *p, void *q) {
+float FUN_L00_002bec80(Vec4_2bec80 *probe_position, void *q) {
     enum {
         COLLISION_MATERIAL_WATER = 0
     };
-    Vec4_2bec80 a, b;
-    float f, t;
-    qcopy(&a, p);
-    qcopy(&b, p);
-    t = a.f[2] - 5.0f;
-    if (t < 0.1f)
+    Vec4_2bec80 lower_probe_point, b;
+    float f, unclamped_lower_z;
+    qcopy(&lower_probe_point, probe_position);
+    qcopy(&b, probe_position);
+    unclamped_lower_z = lower_probe_point.f[2] - 5.0f;
+    if (unclamped_lower_z < 0.1f)
         f = 0.1f;
     else
-        f = t;
-    a.f[2] = f;
+        f = unclamped_lower_z;
+    lower_probe_point.f[2] = f;
     b.f[2] = f + 6.0f;
-    if (FUN_001efa68_002bec80(&b, &a, 6, q, 0)) {
-        char *o = (*(S173E40_2bec80 *)D_L00_00173E40).o18;
-        if (o && *(char **)(o + 0x24) && *(short *)(*(char **)(o + 0x24) + 0x46) == 5) {
+    if (FUN_001efa68_002bec80(&b, &lower_probe_point, 6, q, 0)) {
+        char *hit_moby = (*(S173E40_2bec80 *)D_L00_00173E40).o18;
+        if (hit_moby && *(char **)(hit_moby + 0x24) && *(short *)(*(char **)(hit_moby + 0x24) + 0x46) == 5) {
             return (*(S173E40_2bec80 *)D_L00_00173E40).f28;
         }
         switch (FUN_001f0b58_002bec80()) {
