@@ -1690,7 +1690,7 @@ typedef struct {
 } Q_275158;
 
 extern unsigned char *D_L00_001B21A0 __attribute__((section(".data")));
-unsigned char *FUN_L00_00275158(void *position, void *b, int n, float f) {
+unsigned char *FUN_L00_00275158(void *position, void *b, int n, float particle_vector_w) {
     unsigned char *particle = p27fe00_alloc(0x48);
     if (particle) {
         Q_275158 *particle_data;
@@ -1711,7 +1711,7 @@ unsigned char *FUN_L00_00275158(void *position, void *b, int n, float f) {
         qcopy(particle_data, b);
         particle_data->i14 = 0;
         particle_data->i18 = FUN_00213260_275158(0xC) - 6;
-        ((float *)particle_data)[3] = f;
+        ((float *)particle_data)[3] = particle_vector_w;
         particle_data->unk1C = *(float *)(particle + 0xC) * 0.1f;
         if (n >= 0) {
             particle_data->unk1C = *(float *)(particle + 0xC) * 0.05f;
