@@ -275,9 +275,9 @@ int mine_fall(char *moby, char *st) {
             if (*(float *)(st + 0x54) <= t) {
                 *(int *)(moby + 0x58) = 0;
             } else {
-                float h = *(float *)(st + 0x10) * -0.5f;
+                float negative_half_gravity_step = *(float *)(st + 0x10) * -0.5f;
                 f20 = 60.0f;
-                n = FUN_L00_002595a0(&f64, &f68, h, *(float *)(st + 0x8) - h, *(float *)(moby + 0x18) - f21);
+                n = FUN_L00_002595a0(&f64, &f68, negative_half_gravity_step, *(float *)(st + 0x8) - negative_half_gravity_step, *(float *)(moby + 0x18) - f21);
                 if (n > 0 && 0.0f < f64 && f64 < f20) {
                     f20 = f64;
                 }
