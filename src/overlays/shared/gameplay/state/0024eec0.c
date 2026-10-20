@@ -47,19 +47,19 @@ void FUN_L00_0024eed8(char *p, int idx, void *v, float a, float b) {
 void FUN_L00_0024efb0(unsigned char *a, int dx, int dy);
 void FUN_L00_0024efb0(unsigned char *a, int dx, int dy) {
     int i;
-    int n = a[4] + a[5];
-    int *t = *(int **)a;
-    for (i = 0; i < n; i++, t += 4) {
-        unsigned short *e = *(unsigned short **)t;
-        int c = ((unsigned char *)e)[2];
+    int entry_count = a[4] + a[5];
+    int *entry_cursor = *(int **)a;
+    for (i = 0; i < entry_count; i++, entry_cursor += 4) {
+        unsigned short *point_pair_cursor = *(unsigned short **)entry_cursor;
+        int point_pair_count = ((unsigned char *)point_pair_cursor)[2];
         int cnt;
-        e += 2;
-        if (c != 0) {
-            cnt = c;
+        point_pair_cursor += 2;
+        if (point_pair_count != 0) {
+            cnt = point_pair_count;
             do {
-                e[0] = e[0] + dx;
-                e[1] = e[1] + dy;
-                e += 2;
+                point_pair_cursor[0] = point_pair_cursor[0] + dx;
+                point_pair_cursor[1] = point_pair_cursor[1] + dy;
+                point_pair_cursor += 2;
                 cnt--;
             } while (cnt != 0);
         }
