@@ -1127,46 +1127,46 @@ extern unsigned char *mine_debris(void *a, void *b, int c, int d, float f, int n
 extern int FUN_L00_002371e0(int, int, float);
 extern u32 D_L00_00160228 __attribute__((sda));
 
-void FUN_L00_00273a68(struct EmberParticle *p) {
-    struct EmberMotion *m = &p->m;
-    Vec4 t;
+void FUN_L00_00273a68(struct EmberParticle *ember_particle) {
+    struct EmberMotion *m = &ember_particle->m;
+    Vec4 emitted_position;
     s32 cr, cg, cb;
     s32 n, c1, c2;
     f32 f;
 
-    if (fast_dec_timer_s16(&p->life))
+    if (fast_dec_timer_s16(&ember_particle->life))
         m->vel.f[2] -= m->gravity;
-    fast_vec_add(&p->pos, &p->pos, &m->vel);
-    p->spin += 2;
-    if (!(p->pos.f[2] < m->floor_z))
+    fast_vec_add(&ember_particle->pos, &ember_particle->pos, &m->vel);
+    ember_particle->spin += 2;
+    if (!(ember_particle->pos.f[2] < m->floor_z))
         return;
-    cr = p->color & 0xFF;
-    cg = (p->color & 0xFF00) >> 8;
-    cb = ((u32)p->color >> 16) & 0xFF;
+    cr = ember_particle->color & 0xFF;
+    cg = (ember_particle->color & 0xFF00) >> 8;
+    cb = ((u32)ember_particle->color >> 16) & 0xFF;
     if (!random_integer_below(D_L00_00160228 - 1)) {
-        p->pos.f[2] = m->floor_z;
+        ember_particle->pos.f[2] = m->floor_z;
         m->vel.f[0] *= random_float_between(1.0f, 3.5f);
         m->vel.f[1] *= random_float_between(1.0f, 3.5f);
         m->vel.f[2] *= random_float_between(-1.0f, -1.5f);
-        f = p->size;
+        f = ember_particle->size;
         f *= 0.5f;
         n = FUN_L00_00257b90(scale_game_frames(0x3C), scale_game_frames(0x78));
-        FUN_L00_0026bb70(&p->pos, &m->vel, p->color, m->color2, f, n, 0, p->tex, p->blend);
+        FUN_L00_0026bb70(&ember_particle->pos, &m->vel, ember_particle->color, m->color2, f, n, 0, ember_particle->tex, ember_particle->blend);
     } else {
-        p->pos.f[2] = m->floor_z;
+        ember_particle->pos.f[2] = m->floor_z;
         m->vel.f[0] += random_float_between(-5.0f, 5.0f) * frame_time;
         m->vel.f[1] += random_float_between(-5.0f, 5.0f) * frame_time;
         m->vel.f[2] *= random_float_between(-0.5f, -1.0f);
-        f = p->size;
+        f = ember_particle->size;
         f *= 0.25f;
         n = FUN_L00_00257b90(scale_game_frames(0x1E), scale_game_frames(0x3C));
-        FUN_L00_0026bb70(&p->pos, &m->vel, p->color, m->color2, f, n, 0, p->tex, p->blend);
+        FUN_L00_0026bb70(&ember_particle->pos, &m->vel, ember_particle->color, m->color2, f, n, 0, ember_particle->tex, ember_particle->blend);
     }
     if (current_level_index == 10) {
         if (!random_integer_below(0x13)) {
-            t.q = p->pos.q;
-            t.f[2] += 0.1f;
-            FUN_L00_002715e8(&t, 0, ((random_integer_below(6) + 0x34) << 24) | (cb << 16) | (cg << 8) | cr,
+            emitted_position.q = ember_particle->pos.q;
+            emitted_position.f[2] += 0.1f;
+            FUN_L00_002715e8(&emitted_position, 0, ((random_integer_below(6) + 0x34) << 24) | (cb << 16) | (cg << 8) | cr,
                              0.05f, 10500.0f);
         }
         if (!random_integer_below(9)) {
@@ -1178,14 +1178,14 @@ void FUN_L00_00273a68(struct EmberParticle *p) {
             m->vel.f[2] = 0.0f;
             fast_vec_normalize(&m->vel, &m->vel, random_float_between(1.5f, 3.0f) * frame_time);
             m->vel.f[2] = frame_time * 3.0f;
-            t.q = p->pos.q;
-            t.f[2] -= 1.5f;
+            emitted_position.q = ember_particle->pos.q;
+            emitted_position.f[2] -= 1.5f;
             f = random_float_between(420000.0f, 630000.0f);
             n = FUN_L00_00257b90(scale_game_frames(0x5A), scale_game_frames(0x96));
-            mine_debris(&t, &m->vel, c1, c2, f, n, 3);
+            mine_debris(&emitted_position, &m->vel, c1, c2, f, n, 3);
         }
     }
-    free_effect_particle(p);
+    free_effect_particle(ember_particle);
 }
 extern V00271d20 D_L00_00173E60 __attribute__((section(".data")));
 void FUN_001f9a10_273ee0(void *, void *, void *) __asm__("FUN_001f9a10");
