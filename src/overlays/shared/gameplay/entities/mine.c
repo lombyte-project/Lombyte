@@ -1027,23 +1027,23 @@ extern float FUN_001fa580_2acad8(float, float) __asm__("FUN_001fa580");
 extern int FUN_001f9770_2acad8(void *) __asm__("FUN_001f9770");
 extern void FUN_0020c828_2acad8(void *) __asm__("FUN_0020c828");
 
-void FUN_L00_002acad8(M_2acad8 *m) {
-    V_2acad8 *v = m->v;
-    float a, b;
+void FUN_L00_002acad8(M_2acad8 *particle_moby) {
+    V_2acad8 *v = particle_moby->v;
+    float elapsed_lifetime_frames, b;
     int n;
-    a = FUN_001fa6c0_2acad8(v->n - v->h1c);
+    elapsed_lifetime_frames = FUN_001fa6c0_2acad8(v->n - v->h1c);
     b = FUN_001fa6c0_2acad8(v->n);
-    m->f2c = a * v->f18 / b;
-    m->r[0] = FUN_001fa580_2acad8(m->r[0], D_0015ED6C_2acad8 * 3.1415927f);
-    m->r[1] = FUN_001fa580_2acad8(m->r[1], D_0015ED6C_2acad8 * 3.1415927f);
-    m->r[2] = FUN_001fa580_2acad8(m->r[2], D_0015ED6C_2acad8 * 3.1415927f);
+    particle_moby->f2c = elapsed_lifetime_frames * v->f18 / b;
+    particle_moby->r[0] = FUN_001fa580_2acad8(particle_moby->r[0], D_0015ED6C_2acad8 * 3.1415927f);
+    particle_moby->r[1] = FUN_001fa580_2acad8(particle_moby->r[1], D_0015ED6C_2acad8 * 3.1415927f);
+    particle_moby->r[2] = FUN_001fa580_2acad8(particle_moby->r[2], D_0015ED6C_2acad8 * 3.1415927f);
     if (FUN_001f9770_2acad8(&v->h1c)) {
-        FUN_0020c828_2acad8(m);
+        FUN_0020c828_2acad8(particle_moby);
         return;
     }
     n = v->n / 2;
     if (v->h1c < n) {
-        m->b23 = v->h1c * v->h1e / n;
+        particle_moby->b23 = v->h1c * v->h1e / n;
     }
 }
 #include "eetypes.h"
