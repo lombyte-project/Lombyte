@@ -2379,7 +2379,7 @@ extern void FUN_L00_00257470(void *, int, int);
 extern void trooper_anim_update(void *, short *) __asm__("FUN_L00_0025d458");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 
-void FUN_L07_0030e998(char *m, char *x, float *hp) {
+void FUN_L07_0030e998(char *moby, char *x, float *hp) {
     enum {
         HIT_REACTION_NONE = 0,
         SHARKIGATOR_CLEAR_HEALTH_RESPONSE = 1,
@@ -2397,11 +2397,11 @@ void FUN_L07_0030e998(char *m, char *x, float *hp) {
     char *info;
     int hit;
     int r;
-    if (((unsigned char *)m)[0x20] == 0xE)
+    if (((unsigned char *)moby)[0x20] == 0xE)
         return;
-    info = find_moby_hit(m, 0x330000, 0);
-    r = hit_reaction(m, info, hp, 0, &hit, 0, 0, 4);
-    if (((unsigned char *)m)[0xBC] != 0) {
+    info = find_moby_hit(moby, 0x330000, 0);
+    r = hit_reaction(moby, info, hp, 0, &hit, 0, 0, 4);
+    if (((unsigned char *)moby)[0xBC] != 0) {
         switch (r) {
         case HIT_REACTION_NONE:
             break;
@@ -2415,15 +2415,15 @@ void FUN_L07_0030e998(char *m, char *x, float *hp) {
         case SHARKIGATOR_START_HIT_KNOCKBACK_RECOVERY:
         case SHARKIGATOR_LAUNCH_HIT_KNOCKBACK_RECOVERY:
         case SHARKIGATOR_ENTER_HIT_KNOCKBACK_RECOVERY:
-            FUN_L07_0030e858(m, x + 0x70, info + 0x10);
-            m[0x20] = 0xC;
+            FUN_L07_0030e858(moby, x + 0x70, info + 0x10);
+            moby[0x20] = 0xC;
             break;
         case SHARKIGATOR_HIT_ANIMATION_RESPONSE:
         case SHARKIGATOR_ALTERNATE_HIT_ANIMATION_RESPONSE:
-            if (((unsigned char *)m)[0x53] != 4) {
-                blend_moby_animation(m, 4, 4, 4);
+            if (((unsigned char *)moby)[0x53] != 4) {
+                blend_moby_animation(moby, 4, 4, 4);
             }
-            m[0x20] = 0xD;
+            moby[0x20] = 0xD;
             break;
         case HIT_REACTION_NO_ANIMATION_RESPONSE:
             break;
@@ -2431,21 +2431,21 @@ void FUN_L07_0030e998(char *m, char *x, float *hp) {
         if (hit >= 2) {
             if (*hp <= *(float *)(info + 0x2C)) {
                 *hp = 0.0f;
-                *(unsigned short *)(m + 0x34) &= 0xEFFF;
-                FUN_L07_0030e720(m, x + 0x70, info + 0x10);
-                FUN_L00_00257470(m, 0, -1);
+                *(unsigned short *)(moby + 0x34) &= 0xEFFF;
+                FUN_L07_0030e720(moby, x + 0x70, info + 0x10);
+                FUN_L00_00257470(moby, 0, -1);
                 x[0x67] = 0x78;
-                trooper_anim_update(m, (short *)(x + 0x60));
-                m[0x20] = 0xE;
+                trooper_anim_update(moby, (short *)(x + 0x60));
+                moby[0x20] = 0xE;
             } else {
                 *hp -= *(float *)(info + 0x2C);
                 ((unsigned char *)x)[0x67] = 0xFA;
                 *(short *)(x + 0x26) = scale_game_frames(0x3C);
-                trooper_anim_update(m, (short *)(x + 0x60));
+                trooper_anim_update(moby, (short *)(x + 0x60));
             }
         }
     }
-    ((unsigned char *)m)[0xA4] = 0xFF;
+    ((unsigned char *)moby)[0xA4] = 0xFF;
 }
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_002CE470.c: func_L07_0030FF18), where it is exact; names translated to the US level program. */
 
