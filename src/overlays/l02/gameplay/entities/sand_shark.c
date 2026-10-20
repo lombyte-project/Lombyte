@@ -783,8 +783,8 @@ void sand_shark_update(struct Moby *moby) {
             struct Moby *dest = &D_L02_0015FFD8_e50[vars->unk28C];
             float dz = dest->pos.z - vars->home.f[2];
             float up = rand_between_e50(6.0f, 10.0f) * D_0015ED6C;
-            float t = (square_root(2.0f * (frame_time_sq * 10.8f) * dz) + 2.0f * up) / (frame_time_sq * 10.8f);
-            float speed = FUN_001f9b80_e50(&vars->home, &dest->pos) / t;
+            float flight_duration = (square_root(2.0f * (frame_time_sq * 10.8f) * dz) + 2.0f * up) / (frame_time_sq * 10.8f);
+            float speed = FUN_001f9b80_e50(&vars->home, &dest->pos) / flight_duration;
 
             fast_vec_sub(&vars->vel, &vars->home, &dest->pos);
             vars->vel.f[2] = 0.0f;
