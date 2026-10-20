@@ -2458,10 +2458,10 @@ void FUN_L07_0030eb38(char *data) {
         i = 0;
         if (count > 0) {
             do {
-                int o = i * 16;
+                int point_byte_offset = i * 16;
                 int next = (i + 1) % count;
-                *(float *)(data + o + 0x1C) =
-                    fast_vec_dist(data + (o + 0x10), data + (next * 16 + 0x10));
+                *(float *)(data + point_byte_offset + 0x1C) =
+                    fast_vec_dist(data + (point_byte_offset + 0x10), data + (next * 16 + 0x10));
                 i++;
                 count = *(int *)data;
             } while (i < count);
