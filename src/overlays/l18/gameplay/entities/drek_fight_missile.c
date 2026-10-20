@@ -548,8 +548,8 @@ void FUN_L18_002f16f0(struct Moby *moby) {
         MOBY_APPROACH_TARGET_TRANSFORM = 2,
         MOBY_FALL_AND_REMOVE = 4
     };
-    VData *d = (VData *)moby->pvars;
-    if (d) {
+    VData *moby_vars = (VData *)moby->pvars;
+    if (moby_vars) {
         float initial_acceleration_step = D_L18_00162290 * frame_time_sq;
         float initial_braking_step = D_L18_00162294 * frame_time_sq;
         float initial_maximum_speed = D_L18_00162298 * frame_time;
@@ -561,8 +561,8 @@ void FUN_L18_002f16f0(struct Moby *moby) {
             short **tp;
             short *t;
             int j;
-            qcopy(d->v10, &moby->pos);
-            qcopy(d->v20, &moby->rot);
+            qcopy(moby_vars->v10, &moby->pos);
+            qcopy(moby_vars->v20, &moby->rot);
             tp = D_L18_001AC240 + moby->group;
             j = 0;
             t = *tp;
@@ -571,65 +571,65 @@ void FUN_L18_002f16f0(struct Moby *moby) {
             while (j < 16) {
                 int idx = (unsigned short)*t & 0x7FFF;
                 if (*(short *)((idx << 8) + (int)D_L18_0015FFD8 + 0xA6) == 0x630) {
-                    d->ent[j].idx = idx;
+                    moby_vars->ent[j].idx = idx;
                     j++;
                 }
                 if (*t++ < 0)
                     break;
             }
-            d->f348 = 0;
-            d->f34C = scale_game_frames(30);
-            d->cnt = j;
-            FUN_L12_0027b268(moby, (char *)d + 0x30, j);
+            moby_vars->f348 = 0;
+            moby_vars->f34C = scale_game_frames(30);
+            moby_vars->cnt = j;
+            FUN_L12_0027b268(moby, (char *)moby_vars + 0x30, j);
             moby->state = 1;
             break;
         }
         case MOBY_APPROACH_TARGET_TRANSFORM: {
             int hero_on_group_or_class_764_moby;
             int i;
-            unsigned char *p;
+            unsigned char *hero_ground_moby;
             if (D_L18_00162288 != 0) {
-                if (d->f330 < 1.5f) {
-                    advance_accelerated_scalar(1.5f, initial_acceleration_step, initial_braking_step, initial_maximum_speed, &d->f330, &d->f334);
+                if (moby_vars->f330 < 1.5f) {
+                    advance_accelerated_scalar(1.5f, initial_acceleration_step, initial_braking_step, initial_maximum_speed, &moby_vars->f330, &moby_vars->f334);
                 } else {
-                    advance_accelerated_scalar(2.0f, b1, b2, b3, &d->f330, &d->f334);
+                    advance_accelerated_scalar(2.0f, b1, b2, b3, &moby_vars->f330, &moby_vars->f334);
                 }
             }
-            if (d->f330 > D_L18_001622B8 && d->f344 == 0.0f) {
-                d->f344 = *(int *)&D_L18_001622BC;
+            if (moby_vars->f330 > D_L18_001622B8 && moby_vars->f344 == 0.0f) {
+                moby_vars->f344 = *(int *)&D_L18_001622BC;
             }
-            if (d->f330 > D_L18_001622B4 && d->i8 != 0) {
+            if (moby_vars->f330 > D_L18_001622B4 && moby_vars->i8 != 0) {
                 moby->state = 4;
             }
             hero_on_group_or_class_764_moby = 0;
-            for (i = 0; i < d->cnt; i++) {
-                unsigned char *e = D_L18_0015FFD8 + (d->ent[i].idx << 8);
-                if (hero.ground_moby == e) {
-                    d->f348 = 1;
+            for (i = 0; i < moby_vars->cnt; i++) {
+                unsigned char *group_moby = D_L18_0015FFD8 + (moby_vars->ent[i].idx << 8);
+                if (hero.ground_moby == group_moby) {
+                    moby_vars->f348 = 1;
                     hero_on_group_or_class_764_moby = 1;
                     break;
                 }
             }
-            p = hero.ground_moby;
-            if (p != 0) {
-                short s = *(short *)(p + 0xA6);
+            hero_ground_moby = hero.ground_moby;
+            if (hero_ground_moby != 0) {
+                short s = *(short *)(hero_ground_moby + 0xA6);
                 if (s == 0x764)
                     hero_on_group_or_class_764_moby = 1;
             }
-            if (d->f348 != 0 && hero_on_group_or_class_764_moby == 0 && hero.air_frames.s == 0) {
-                if (tick_countdown_32(&d->f34C))
+            if (moby_vars->f348 != 0 && hero_on_group_or_class_764_moby == 0 && hero.air_frames.s == 0) {
+                if (tick_countdown_32(&moby_vars->f34C))
                     moby->state = 4;
             }
             break;
         }
         case MOBY_FALL_AND_REMOVE: {
             float t = frame_time_sq * 5.0f;
-            moby->pos.z += d->f340;
-            d->f340 = d->f340 - t;
+            moby->pos.z += moby_vars->f340;
+            moby_vars->f340 = moby_vars->f340 - t;
             if (moby->pos.z < 20.0f) {
                 int i;
-                for (i = 0; i < d->cnt; i++) {
-                    FUN_L18_002fa8e0(D_L18_0015FFD8 + (d->ent[i].idx << 8));
+                for (i = 0; i < moby_vars->cnt; i++) {
+                    FUN_L18_002fa8e0(D_L18_0015FFD8 + (moby_vars->ent[i].idx << 8));
                 }
                 mark_moby_for_removal(moby);
                 return;
@@ -638,17 +638,17 @@ void FUN_L18_002f16f0(struct Moby *moby) {
         }
         }
         if ((unsigned char)(moby->state - 1) < 2) {
-            lerp_vector(&moby->pos, d->v10, D_L18_001600EC + (d->i4 << 7) + 0x30, d->f330 * 0.5f);
-            lerp_vector(&moby->rot, d->v20, D_L18_001600EC + (d->i4 << 7) + 0x70, d->f330 * 0.5f);
+            lerp_vector(&moby->pos, moby_vars->v10, D_L18_001600EC + (moby_vars->i4 << 7) + 0x30, moby_vars->f330 * 0.5f);
+            lerp_vector(&moby->rot, moby_vars->v20, D_L18_001600EC + (moby_vars->i4 << 7) + 0x70, moby_vars->f330 * 0.5f);
         }
-        func_L12_0027C368_v(moby, (char *)d + 0x30, d->cnt);
-        if (d->f344 != 0.0f) {
+        func_L12_0027C368_v(moby, (char *)moby_vars + 0x30, moby_vars->cnt);
+        if (moby_vars->f344 != 0.0f) {
             if (moby->state != 4) {
                 float v[4];
                 float s, z, f20;
                 int n;
-                d->f344 = d->f344 + 0.25f;
-                if (random_integer_below(func_001FA898_r(d->f344)) == 0) {
+                moby_vars->f344 = moby_vars->f344 + 0.25f;
+                if (random_integer_below(func_001FA898_r(moby_vars->f344)) == 0) {
                     s = random_float_between(-1.0471976f, 1.0471976f);
                     f20 = fast_add_rotations(s, D_L18_001677D8);
                     z = random_float_between(0.0f, 20.0f);
