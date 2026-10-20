@@ -258,9 +258,9 @@ void FUN_L14_002d67e8(struct Moby *racer_moby) {
     spring_67e8(&racer_moby->pos.z, moby_data + 0x98, near.z, 0.01f, 0.2f, z);
     {
         int i = *(int *)(moby_data + 0x64);
-        char *p0 = path + i * 16;
-        char *p1 = path + (i + 5) * 16;
-        racer_moby->rot.z = atan2_67e8(*(float *)(p1 + 0x10) - *(float *)(p0 + 0x10), *(float *)(p1 + 0x14) - *(float *)(p0 + 0x14));
+        char *current_path_record = path + i * 16;
+        char *lookahead_path_record = path + (i + 5) * 16;
+        racer_moby->rot.z = atan2_67e8(*(float *)(lookahead_path_record + 0x10) - *(float *)(current_path_record + 0x10), *(float *)(lookahead_path_record + 0x14) - *(float *)(current_path_record + 0x14));
     }
     if (racer_moby->command == 5 && timer_67e8(moby_data + 0x1C8) != 0) {
         racer_moby->command = 1;
@@ -306,9 +306,9 @@ void FUN_L14_002d67e8(struct Moby *racer_moby) {
             if (racer_moby->command == 4) {
                 racer_moby->command = 0;
             } else {
-                unsigned char s = 3;
-                FUN_L00_002e1f28(racer_moby, s, 1);
-                racer_moby->command = s;
+                unsigned char firing_command = 3;
+                FUN_L00_002e1f28(racer_moby, firing_command, 1);
+                racer_moby->command = firing_command;
             }
             *(int *)(moby_data + 0x1C4) = frames_67e8(30);
         }
