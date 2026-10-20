@@ -746,21 +746,21 @@ extern unsigned char D_L18_001C6500[];
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 float absolute_float(float input) __asm__("func_001F99C0");
 
-void FUN_L18_002f1d08(int a, int b) {
+void FUN_L18_002f1d08(int block_lookup_index, int b) {
     int i = 0;
     int k;
-    if (((Blk *)D_L18_001C6200[D_L18_001C6500[a]])->n > i)
+    if (((Blk *)D_L18_001C6200[D_L18_001C6500[block_lookup_index]])->n > i)
         do {
             float v[4];
-            fast_vec_sub(v, ((Blk *)D_L18_001C6200[D_L18_001C6500[a]])->e + i,
+            fast_vec_sub(v, ((Blk *)D_L18_001C6200[D_L18_001C6500[block_lookup_index]])->e + i,
                          D_L18_001600EC + (b << 7) + 0x30);
             transform_vector_by_basis(v, v, D_L18_001600EC + (b << 7) + 0x40);
             k = i;
             if (absolute_float(v[0]) < 1.0f && absolute_float(v[1]) < 1.0f) {
-                ((Blk *)D_L18_001C6200[D_L18_001C6500[a]])->e[k].w0c = 0;
-                ((Blk *)D_L18_001C6200[D_L18_001C6500[a]])->e[k].w14 = 1.0f;
+                ((Blk *)D_L18_001C6200[D_L18_001C6500[block_lookup_index]])->e[k].w0c = 0;
+                ((Blk *)D_L18_001C6200[D_L18_001C6500[block_lookup_index]])->e[k].w14 = 1.0f;
             }
-        } while (++i < ((Blk *)D_L18_001C6200[D_L18_001C6500[a]])->n);
+        } while (++i < ((Blk *)D_L18_001C6200[D_L18_001C6500[block_lookup_index]])->n);
 }
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002F2AE0.c: func_L18_002F3268), where it is exact; names translated to the US level program. */
 
