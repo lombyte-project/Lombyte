@@ -1364,7 +1364,7 @@ struct Moby *FUN_L00_002a7438(struct Moby *src, void *pos, void *vel, int flags,
     };
     f32 dir[4] __attribute__((aligned(16)));
     f32 tmp[4] __attribute__((aligned(16)));
-    struct Moby *m;
+    struct Moby *spawned_bolt;
     BoltVars_u *v;
     struct Moby *root;
     u8 *color;
@@ -1375,24 +1375,24 @@ struct Moby *FUN_L00_002a7438(struct Moby *src, void *pos, void *vel, int flags,
     switch (value) {
     default:
     case BOLT_VALUE_ONE:
-        m = (struct Moby *)create_moby(0xD);
+        spawned_bolt = (struct Moby *)create_moby(0xD);
         scale = 0.65f;
         break;
     case BOLT_VALUE_FIVE:
-        m = (struct Moby *)create_moby(0xE);
+        spawned_bolt = (struct Moby *)create_moby(0xE);
         scale = 0.7f;
         break;
     case BOLT_VALUE_TWENTY:
-        m = (struct Moby *)create_moby(0xF);
+        spawned_bolt = (struct Moby *)create_moby(0xF);
         scale = 0.75f;
         break;
     case BOLT_VALUE_FIFTY:
-        m = (struct Moby *)create_moby(0x10);
+        spawned_bolt = (struct Moby *)create_moby(0x10);
         scale = 0.6f;
         break;
     }
-    if (0 != m) {
-        v = (BoltVars_u *)m->pvars;
+    if (0 != spawned_bolt) {
+        v = (BoltVars_u *)spawned_bolt->pvars;
         v->counted = counted;
         /* the bolt source is the root of src's unkB8 chain */
         root = src;
@@ -1400,30 +1400,30 @@ struct Moby *FUN_L00_002a7438(struct Moby *src, void *pos, void *vel, int flags,
             while (root->parent != 0)
                 root = root->parent;
         }
-        m->parent = root;
-        m->unk73 = 20;
-        m->flags |= 0x100;
-        m->update_dist = 0x40;
-        m->draw_dist = 0x40;
-        m->visible = 1;
-        m->state = 1;
-        m->scale = m->pclass->scale * scale;
-        euler_rotation_basis(&m->rot_row0, &m->rot);
+        spawned_bolt->parent = root;
+        spawned_bolt->unk73 = 20;
+        spawned_bolt->flags |= 0x100;
+        spawned_bolt->update_dist = 0x40;
+        spawned_bolt->draw_dist = 0x40;
+        spawned_bolt->visible = 1;
+        spawned_bolt->state = 1;
+        spawned_bolt->scale = spawned_bolt->pclass->scale * scale;
+        euler_rotation_basis(&spawned_bolt->rot_row0, &spawned_bolt->rot);
         if ((src->flags & 0x20) && (color = *(u8 **)(src->pvars + 0xC)) != 0)
-            set_moby_color(m, color[4], color[5], color[6]);
+            set_moby_color(spawned_bolt, color[4], color[5], color[6]);
         else
-            m->spawn_frame = src->spawn_frame;
+            spawned_bolt->spawn_frame = src->spawn_frame;
         v->unk6E = random_int_between(0, scale_game_frames(600));
         v->unk6C = -1;
-        qcopy(&m->pos, pos);
+        qcopy(&spawned_bolt->pos, pos);
         qcopy(v->vel, vel);
         if (random_integer_below(2))
             v->unk55 |= 1;
         v->unk50 = random_angle_radians();
         v->unk58 = random_angle_radians();
-        v->start_z = m->pos.z;
+        v->start_z = spawned_bolt->pos.z;
         spin = random_float_between(0.0f, D_L00_001613A8) * 0.017453292f * D_0015ED6C;
-        subtract_vector_xyz(tmp, &src->pos, &m->pos);
+        subtract_vector_xyz(tmp, &src->pos, &spawned_bolt->pos);
         cross_vectors_xyz(dir, v->vel, tmp);
         FUN_L00_001ff500(v->spin, dir, 1.0f);
         build_quaternion_from_axis_angle(v->spin, v->spin, spin);
@@ -1431,13 +1431,13 @@ struct Moby *FUN_L00_002a7438(struct Moby *src, void *pos, void *vel, int flags,
             angle = 0.0f;
             if (flags & 0x10)
                 angle = random_float_between(-30.0f, 30.0f) * 0.017453292f;
-            FUN_L00_002a7210(m, D_001413D0, angle, 0.0f);
+            FUN_L00_002a7210(spawned_bolt, D_001413D0, angle, 0.0f);
         }
-        FUN_L00_00250df8((u8 *)m);
+        FUN_L00_00250df8((u8 *)spawned_bolt);
     } else {
         current_bolt_count += value;
     }
-    return m;
+    return spawned_bolt;
 }
 #include "qcopy.h"
 typedef int q_2a7780 __attribute__((mode(TI)));
