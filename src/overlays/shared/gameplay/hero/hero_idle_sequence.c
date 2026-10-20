@@ -2531,9 +2531,9 @@ typedef struct {
 extern S0020a1e0 D_L00_0017A680;
 /* Stores the two floats in D_L00_0017A680. */
 void FUN_L00_0020a1e0(float a, float b) {
-    S0020a1e0 *p = &D_L00_0017A680;
-    p->a = a;
-    p->b = b;
+    S0020a1e0 *destination_record = &D_L00_0017A680;
+    destination_record->a = a;
+    destination_record->b = b;
 }
 typedef struct V0020a240 {
     f32 x, y, z, w;
