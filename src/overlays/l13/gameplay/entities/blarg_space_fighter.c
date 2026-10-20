@@ -1191,7 +1191,7 @@ void FUN_L13_002c4428(Moby_2C56B0 *moby) {
         FIGHTER_DESTRUCTION_SKIP_SPAWN_ALTERNATE = 8,
         FIGHTER_DESTRUCTION_SKIP_SPAWN_SECOND_ALTERNATE = 9
     };
-    Data_2C56B0 *d;
+    Data_2C56B0 *fighter_data;
     Moby_2C56B0 *veh;
     Veh_2C56B0 *vehd = 0;
     int close = 0;
@@ -1201,11 +1201,11 @@ void FUN_L13_002c4428(Moby_2C56B0 *moby) {
     float spawn_position[4];
     float vehicle_lead_offset[4];
 
-    d = moby->data;
+    fighter_data = moby->data;
     veh = ((Hero_2C56B0 *)(((char *)&D_0013F350)))->veh;
     path = 0;
-    if (d->fA0 != -1) {
-        path = D_L13_001B07B0[d->fA0];
+    if (fighter_data->fA0 != -1) {
+        path = D_L13_001B07B0[fighter_data->fA0];
     }
     switch (moby->state) {
     case FIGHTER_INITIALIZE:
@@ -1219,14 +1219,14 @@ void FUN_L13_002c4428(Moby_2C56B0 *moby) {
             return;
         }
         {
-            int idx = d->fA0;
+            int idx = fighter_data->fA0;
             qcopy(&moby->pos, D_L13_001B07B0[idx] + 0x10);
-            d->hB4 = 1;
-            d->hB6 = *(unsigned short *)D_L13_001B07B0[idx] - 1;
+            fighter_data->hB4 = 1;
+            fighter_data->hB6 = *(unsigned short *)D_L13_001B07B0[idx] - 1;
         }
-        qcopy(&d->v90, path + 0x20);
-        qcopy(&moby->pos, &d->v90);
-        d->fA8 = scale_game_frames_alt(0x14) + 5;
+        qcopy(&fighter_data->v90, path + 0x20);
+        qcopy(&moby->pos, &fighter_data->v90);
+        fighter_data->fA8 = scale_game_frames_alt(0x14) + 5;
         moby->b30 = 0xFF;
         moby->h32 = 0xFF;
         moby->state = 1;
@@ -1234,17 +1234,17 @@ void FUN_L13_002c4428(Moby_2C56B0 *moby) {
         moby->flags = (moby->flags | 1) & 0xEFFF;
         moby->f94 = 0;
         moby->b31 = 0;
-        d->bD0 = 1;
+        fighter_data->bD0 = 1;
         break;
     case FIGHTER_WAIT_TO_JOIN_PATH: {
         Moby_2C56B0 *p;
-        if (d->fBC == -1 || (p = (Moby_2C56B0 *)(D_L13_0015FFD8 + (d->fBC << 8))) == 0 || p->state == 0xFE
+        if (fighter_data->fBC == -1 || (p = (Moby_2C56B0 *)(D_L13_0015FFD8 + (fighter_data->fBC << 8))) == 0 || p->state == 0xFE
             || p->state == 0xFD || p->bBC == 4) {
             normalize_vector_xyz(scratch_vector, D_L13_001670C0 + 0x84, 40.0f);
             subtract_vector_xyz_c(scratch_vector, D_L13_001670C0, scratch_vector);
-            d->hB6 = d->hB4 = FUN_L01_0028b510(scratch_vector, path, 0.0f);
-            qcopy(&d->v90, path + (d->hB6 * 16 + 0x10));
-            qcopy(&moby->pos, &d->v90);
+            fighter_data->hB6 = fighter_data->hB4 = FUN_L01_0028b510(scratch_vector, path, 0.0f);
+            qcopy(&fighter_data->v90, path + (fighter_data->hB6 * 16 + 0x10));
+            qcopy(&moby->pos, &fighter_data->v90);
             moby->f94 = moby->cls->f10;
             moby->b31 = 1;
             moby->flags = (moby->flags & 0xFFFE) | 0x1000;
@@ -1257,7 +1257,7 @@ void FUN_L13_002c4428(Moby_2C56B0 *moby) {
         Boss_2C56B0 *bossd;
         float dist;
 
-        FUN_L13_002c37e0_c((unsigned char *)moby, (unsigned char *)d, &d->f20);
+        FUN_L13_002c37e0_c((unsigned char *)moby, (unsigned char *)fighter_data, &fighter_data->f20);
         if (veh != 0 && veh->state != 0xFE && veh->state != 0xFD) {
             vehd = veh->data;
             qcopy(hpos, &((Hero_2C56B0 *)(((char *)&D_0013F350)))->veh->pos);
@@ -1272,14 +1272,14 @@ void FUN_L13_002c4428(Moby_2C56B0 *moby) {
             qcopy(hpos, ((char *)&D_0013F3D0));
         }
         if (moby->b31 == 0) {
-            d->fA8++;
+            fighter_data->fA8++;
         } else if (close != 0) {
-            d->fA8 = 0;
+            fighter_data->fA8 = 0;
         }
         boss = 0;
         bossd = 0;
-        if (d->fBC != -1) {
-            Moby_2C56B0 *p = (Moby_2C56B0 *)(D_L13_0015FFD8 + (d->fBC << 8));
+        if (fighter_data->fBC != -1) {
+            Moby_2C56B0 *p = (Moby_2C56B0 *)(D_L13_0015FFD8 + (fighter_data->fBC << 8));
             if (p != 0 && p->state != 0xFE && p->state != 0xFD) {
                 boss = p;
                 bossd = p->data;
@@ -1293,18 +1293,18 @@ void FUN_L13_002c4428(Moby_2C56B0 *moby) {
         }
         {
             Snd_2C56B0 *e;
-            if (d->fD4 == -1 || (e = (Snd_2C56B0 *)(((char *)&D_0013E550) + d->fD4 * 0x70))->f88 != moby || e->b74 == 0) {
-                d->fD4 = -1;
-                d->fD4 = func_0022ED80_s(1, 4, (int)moby);
+            if (fighter_data->fD4 == -1 || (e = (Snd_2C56B0 *)(((char *)&D_0013E550) + fighter_data->fD4 * 0x70))->f88 != moby || e->b74 == 0) {
+                fighter_data->fD4 = -1;
+                fighter_data->fD4 = func_0022ED80_s(1, 4, (int)moby);
             }
         }
-        func_L13_002C5248_56B0(moby, d, 1);
+        func_L13_002C5248_56B0(moby, fighter_data, 1);
         switch (moby->bBC) {
         case FIGHTER_ATTACK_WAIT_TO_FIRE:
             if (vehd != 0 && veh->state == 4 && moby->b31 != 0 && close != 0 && boss != 0 && bossd->b10F < 3) {
-                d->fB8 = scale_game_frames_alt(0x258);
-                d->fAC = 1.0f;
-                d->fA8 = 0;
+                fighter_data->fB8 = scale_game_frames_alt(0x258);
+                fighter_data->fAC = 1.0f;
+                fighter_data->fA8 = 0;
                 moby->bBC = 1;
             }
             break;
@@ -1314,18 +1314,18 @@ void FUN_L13_002c4428(Moby_2C56B0 *moby) {
             }
             if (bossd->b10F < 4) {
                 if (moby->b31 == 0) {
-                    d->fA8++;
+                    fighter_data->fA8++;
                 }
-                if (moby->b31 == 0 || close == 0 || scale_game_frames_alt(0x14) <= d->fA8) {
-                    d->fB8 = scale_game_frames_alt(0x1E);
+                if (moby->b31 == 0 || close == 0 || scale_game_frames_alt(0x14) <= fighter_data->fA8) {
+                    fighter_data->fB8 = scale_game_frames_alt(0x1E);
                     moby->bBC = 2;
                 }
-                if (tick_countdown_32_alt(&d->fB8) != 0) {
-                    d->fB8 = scale_game_frames_alt(0x78);
+                if (tick_countdown_32_alt(&fighter_data->fB8) != 0) {
+                    fighter_data->fB8 = scale_game_frames_alt(0x78);
                     moby->bBC = 2;
                 }
-                if (tick_countdown_32_alt(&d->fA4) != 0 && D_L13_0015F5D0 < 0.9f && D_L13_0015F5D4 < 0.9f) {
-                    d->fA4 = scale_game_frames_alt(6) + func_001FA898_s((D_L13_0015F5D0 + D_L13_0015F5D4) * 1.3f);
+                if (tick_countdown_32_alt(&fighter_data->fA4) != 0 && D_L13_0015F5D0 < 0.9f && D_L13_0015F5D4 < 0.9f) {
+                    fighter_data->fA4 = scale_game_frames_alt(6) + func_001FA898_s((D_L13_0015F5D0 + D_L13_0015F5D4) * 1.3f);
                     if (vehd != 0) {
                         Vec_2C56B0 up;
                         float lateral_aim_offset[4];
@@ -1336,8 +1336,8 @@ void FUN_L13_002c4428(Moby_2C56B0 *moby) {
 
                         cross_vectors_xyz(lateral_aim_offset, &vehd->vel, up);
                         cross_vectors_xyz(up, lateral_aim_offset, &vehd->vel);
-                        normalize_vector_xyz(up, up, d->fAC * 5.0f * fast_sin(d->fB0));
-                        normalize_vector_xyz(lateral_aim_offset, lateral_aim_offset, d->fAC * 5.0f * fast_cos(d->fB0));
+                        normalize_vector_xyz(up, up, fighter_data->fAC * 5.0f * fast_sin(fighter_data->fB0));
+                        normalize_vector_xyz(lateral_aim_offset, lateral_aim_offset, fighter_data->fAC * 5.0f * fast_cos(fighter_data->fB0));
                         add_vector_xyz(scratch_vector, hpos, up);
                         add_vector_xyz(scratch_vector, scratch_vector, lateral_aim_offset);
                         FUN_L00_0025f8e0(scratch_vector, 0.6f);
@@ -1350,17 +1350,17 @@ void FUN_L13_002c4428(Moby_2C56B0 *moby) {
                         FUN_L11_00308f48((int)moby, scratch_vector, spawn_position, 121.0f, D_0015ED6C * 50.0f, 5.0f);
                         func_0022ED80_s(0, 0, (int)moby);
                     }
-                    d->fAC = d->fAC * ((random_float_between(0.92f, 0.94f) - 1.0f) * D_0015ED60 + 1.0f);
-                    if (d->fB0 > 1.5707964f) {
-                        d->fB0 = d->fB0 - random_float_between(20.0f, 40.0f) * 0.017453292f * D_0015ED6C;
+                    fighter_data->fAC = fighter_data->fAC * ((random_float_between(0.92f, 0.94f) - 1.0f) * D_0015ED60 + 1.0f);
+                    if (fighter_data->fB0 > 1.5707964f) {
+                        fighter_data->fB0 = fighter_data->fB0 - random_float_between(20.0f, 40.0f) * 0.017453292f * D_0015ED6C;
                     } else {
-                        d->fB0 = d->fB0 + random_float_between(20.0f, 40.0f) * 0.017453292f * D_0015ED6C;
+                        fighter_data->fB0 = fighter_data->fB0 + random_float_between(20.0f, 40.0f) * 0.017453292f * D_0015ED6C;
                     }
                 }
             }
             break;
         case FIGHTER_ATTACK_COOLDOWN:
-            if (tick_countdown_32_alt(&d->fB8) != 0) {
+            if (tick_countdown_32_alt(&fighter_data->fB8) != 0) {
                 moby->bBC = 0;
             }
             break;
@@ -1371,18 +1371,18 @@ void FUN_L13_002c4428(Moby_2C56B0 *moby) {
         Moby_2C56B0 *boss;
         Boss_2C56B0 *bossd;
 
-        if (d->fD4 != -1) {
-            Snd_2C56B0 *e = (Snd_2C56B0 *)(((char *)&D_0013E550) + d->fD4 * 0x70);
+        if (fighter_data->fD4 != -1) {
+            Snd_2C56B0 *e = (Snd_2C56B0 *)(((char *)&D_0013E550) + fighter_data->fD4 * 0x70);
             if (e->f88 == moby && e->b74 != 0) {
-                release_voice_slot(d->fD4);
+                release_voice_slot(fighter_data->fD4);
             }
-            d->fD4 = -1;
+            fighter_data->fD4 = -1;
         }
         subtract_vector_xyz_c(scratch_vector, D_L13_001670C0, &moby->pos);
         func_L00_0025F4A8_alt(moby, scratch_vector, 0, 0.0f, 0.0f, 5, 3, 10, 4.0f, 3.0f, 9.0f, 1.1f, -1, 20.0f, 0, 1, -1, 0);
         normalize_vector_xyz(scratch_vector, scratch_vector, 4.0f);
         subtract_vector_xyz_c(spawn_position, &moby->pos, scratch_vector);
-        scale_vector_xyz(scratch_vector, &d->vel, 0.5f);
+        scale_vector_xyz(scratch_vector, &fighter_data->vel, 0.5f);
         switch (rand() % 10) {
         case FIGHTER_DESTRUCTION_SPAWN_CLASS_E0:
             FUN_L13_002e1c50((char *)spawn_position, 0xE0);
@@ -1402,8 +1402,8 @@ void FUN_L13_002c4428(Moby_2C56B0 *moby) {
         }
         boss = 0;
         bossd = 0;
-        if (d->fBC != -1) {
-            Moby_2C56B0 *p = (Moby_2C56B0 *)(D_L13_0015FFD8 + (d->fBC << 8));
+        if (fighter_data->fBC != -1) {
+            Moby_2C56B0 *p = (Moby_2C56B0 *)(D_L13_0015FFD8 + (fighter_data->fBC << 8));
             if (p != 0 && p->state != 0xFE && p->state != 0xFD) {
                 boss = p;
                 bossd = p->data;
@@ -1421,9 +1421,9 @@ void FUN_L13_002c4428(Moby_2C56B0 *moby) {
     }
     case FIGHTER_WAIT_TO_REINITIALIZE: {
         Moby_2C56B0 *p;
-        if (d->fBC != -1 && (p = (Moby_2C56B0 *)(D_L13_0015FFD8 + (d->fBC << 8))) != 0 && p->state != 0xFE
+        if (fighter_data->fBC != -1 && (p = (Moby_2C56B0 *)(D_L13_0015FFD8 + (fighter_data->fBC << 8))) != 0 && p->state != 0xFE
             && p->state != 0xFD && p->bBC != 4) {
-            d->f20 = d->h24;
+            fighter_data->f20 = fighter_data->h24;
             moby->state = 0;
         }
         break;
