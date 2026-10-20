@@ -14,17 +14,17 @@ void matrix_to_quaternion(void *output_quaternion, void *rotation_matrix) {
     QuatNext next_axis_indices = D_0015FFD8;
     float mat[3][3];
     float trace;
-    float s;
+    float quaternion_scale;
     int i, j, k;
 
     trace = m[0][0] + m[1][1] + m[2][2];
     if (trace > 0.0f) {
-        s = square_root(trace + 1.0f);
-        q[3] = s * 0.5f;
-        s = 0.5f / s;
-        q[0] = (m[2][1] - m[1][2]) * s;
-        q[1] = (m[0][2] - m[2][0]) * s;
-        q[2] = (m[1][0] - m[0][1]) * s;
+        quaternion_scale = square_root(trace + 1.0f);
+        q[3] = quaternion_scale * 0.5f;
+        quaternion_scale = 0.5f / quaternion_scale;
+        q[0] = (m[2][1] - m[1][2]) * quaternion_scale;
+        q[1] = (m[0][2] - m[2][0]) * quaternion_scale;
+        q[2] = (m[1][0] - m[0][1]) * quaternion_scale;
     } else {
         mat[0][0] = m[0][0];
         mat[0][1] = m[0][1];
@@ -44,14 +44,14 @@ void matrix_to_quaternion(void *output_quaternion, void *rotation_matrix) {
         }
         j = next_axis_indices.next[i];
         k = next_axis_indices.next[j];
-        s = square_root(mat[i][i] - (mat[j][j] + mat[k][k]) + 1.0f);
-        q[i] = s * 0.5f;
-        if (s != 0.0f) {
-            s = 0.5f / s;
+        quaternion_scale = square_root(mat[i][i] - (mat[j][j] + mat[k][k]) + 1.0f);
+        q[i] = quaternion_scale * 0.5f;
+        if (quaternion_scale != 0.0f) {
+            quaternion_scale = 0.5f / quaternion_scale;
         }
-        q[3] = (mat[k][j] - mat[j][k]) * s;
-        q[j] = (mat[j][i] + mat[i][j]) * s;
-        q[k] = (mat[k][i] + mat[i][k]) * s;
+        q[3] = (mat[k][j] - mat[j][k]) * quaternion_scale;
+        q[j] = (mat[j][i] + mat[i][j]) * quaternion_scale;
+        q[k] = (mat[k][i] + mat[i][k]) * quaternion_scale;
     }
 }
 
