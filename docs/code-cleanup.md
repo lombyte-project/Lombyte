@@ -5,7 +5,7 @@ to make that code easier to read. To decompile new code, see
 [CONTRIBUTING.md](../CONTRIBUTING.md).
 
 For a bounded example of names, partial layouts and module boundaries, see
-[game-side voice allocation](audio-voices.md).
+[game-side voice allocation](audio-voices.md) and [IOP stash transfers](stash.md).
 
 > **The one rule:** after every change, the build must still produce exactly
 > the same bytes. Cleanup never changes what the game does.

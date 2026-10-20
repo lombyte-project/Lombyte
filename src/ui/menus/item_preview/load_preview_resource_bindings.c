@@ -5,7 +5,7 @@
 #include "rnc/ui/menus/menu_globals.h"
 
 extern u8 preview_resource_ids[] __asm__("D_001D5D38");
-extern s32 LookupResourceEntry();
+extern s32 stash_get_reserved_qwords() __asm__("LookupResourceEntry");
 extern void relocate_asset_entry_pointers() __asm__("FUN_002032e0");
 extern s32 decompress_wad() __asm__("func_0020B618");
 extern s32 get_stream_buffer_size() __asm__("func_00225D88");
@@ -59,7 +59,7 @@ void load_preview_resource_bindings(s32 first_resource, s32 resource_count) {
             binding += 1;
             resource_id = *((s32 *)(preview_resource_ids + resource_offset));
             resource_offset += 4;
-            compressed_size = LookupResourceEntry(resource_id) * 0x10;
+            compressed_size = stash_get_reserved_qwords(resource_id) * 0x10;
             buffer_offset = (resource_index + buffer_skip) * 4;
             resource_index += 1;
             buffer_address = *((s32 *)((u8 *)menu_system.unkB0 +
