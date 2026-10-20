@@ -94,6 +94,7 @@ int hero_set_state(int a, int b) {
         HERO_STATE_STOP_GRAVITY_XY = 0x66,
         HERO_STATE_IDLE_CLEAR_MOTION_VECTOR = 0x67,
         HERO_STATE_DROWN = 0x6A,
+        HERO_STATE_CLEAR_VELOCITY = 0x78,
         HERO_STATE_DYING_CLEAR_HEALTH = 0x82
     };
     int old2088;
@@ -1667,7 +1668,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(FUN_L01_00226f10(0), 0, -1.0f);
         break;
     }
-    case 0x78: {
+    case HERO_STATE_CLEAR_VELOCITY: {
         struct Hero *p = &hero;
         p->state.control_mode = 9;
         p->unk2284 = 0;
