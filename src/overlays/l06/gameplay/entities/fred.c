@@ -7711,7 +7711,7 @@ void FUN_L06_00304818(int unused, void *obj) {
             float f;
             int *pa;
             int *pb;
-            int r1;
+            int random_frame_count;
             int r3;
             i++;
             s = random_float_between(8.0f, 10.0f);
@@ -7721,8 +7721,8 @@ void FUN_L06_00304818(int unused, void *obj) {
             pa = a.v + random_integer_below(6);
             pb = b.v + random_integer_below(6);
             f = D_L06_001621B4 * 400000.0f;
-            r1 = random_int_between(scale_game_frames(0xF), scale_game_frames(0x14));
-            FUN_L00_0026a9f0(obj, pos, *pa, *pb, f, r1, random_int_between(scale_game_frames(0x19), scale_game_frames(0x1E)), 0, 0, s * D_L06_001621B4);
+            random_frame_count = random_int_between(scale_game_frames(0xF), scale_game_frames(0x14));
+            FUN_L00_0026a9f0(obj, pos, *pa, *pb, f, random_frame_count, random_int_between(scale_game_frames(0x19), scale_game_frames(0x1E)), 0, 0, s * D_L06_001621B4);
         } while (i < D_L06_001621B8);
     }
 }
