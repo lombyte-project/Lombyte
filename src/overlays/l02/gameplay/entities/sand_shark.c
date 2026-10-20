@@ -978,25 +978,25 @@ int D_L02_0016195C = 0x20306058;
 int D_L02_00161960 = -1;
 
 /* Same routine as FUN_L12_002e19a8: spawns n particles around pos, fewer when D_L02_00160178 is high. */
-void FUN_L02_002d57f8(void *pos, int n) {
+void FUN_L02_002d57f8(void *pos, int particle_count) {
     float v[4];
     float w[4];
     float vertical_motion[4];
     float radial_motion[4];
     float r;
-    float *p;
+    float *source_position;
     int i;
-    int a, b, c;
-    p = v;
-    *(OvlQuad *)p = *(OvlQuad *)pos;
+    int frame_count, b, third_frame_count;
+    source_position = v;
+    *(OvlQuad *)source_position = *(OvlQuad *)pos;
     if (D_L02_00160178 > 0x5DC) {
-        n = n / 4;
+        particle_count = particle_count / 4;
     } else if (D_L02_00160178 > 0x400) {
-        n = n / 2;
+        particle_count = particle_count / 2;
     }
-    for (i = 0; i < n; i++) {
+    for (i = 0; i < particle_count; i++) {
         r = rand_angle_d57f8();
-        qcopy(w, p);
+        qcopy(w, source_position);
         w[2] = w[2] + rand_between_d57f8(-0.25f, -0.75f);
         w[0] = w[0] + rand_between_d57f8(-0.25f, 0.25f);
         w[1] = w[1] + rand_between_d57f8(-0.25f, 0.25f);
@@ -1008,10 +1008,10 @@ void FUN_L02_002d57f8(void *pos, int n) {
         radial_motion[2] = rand_between_d57f8(D_L02_00161928, D_L02_0016192C) * D_0015ED6C;
         vertical_motion[3] = D_L02_00161938;
         radial_motion[3] = D_L02_0016193C;
-        a = trunc_d57f8(rand_between_d57f8((float)D_L02_00161940, (float)D_L02_00161944));
+        frame_count = trunc_d57f8(rand_between_d57f8((float)D_L02_00161940, (float)D_L02_00161944));
         b = trunc_d57f8(rand_between_d57f8((float)D_L02_00161948, (float)D_L02_0016194C));
-        c = trunc_d57f8(rand_between_d57f8((float)D_L02_00161950, (float)D_L02_00161954));
-        spawn_spark(w, vertical_motion, radial_motion, D_L02_00161958, D_L02_0016195C, a, b, c, D_L02_00161960);
+        third_frame_count = trunc_d57f8(rand_between_d57f8((float)D_L02_00161950, (float)D_L02_00161954));
+        spawn_spark(w, vertical_motion, radial_motion, D_L02_00161958, D_L02_0016195C, frame_count, b, third_frame_count, D_L02_00161960);
     }
 }
 
