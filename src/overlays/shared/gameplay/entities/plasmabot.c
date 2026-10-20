@@ -1957,7 +1957,7 @@ void FUN_L14_002ff640(struct Moby *moby) {
     float vel[4];
     int count;
     MobyHit_ff640 *hit;
-    float s;
+    float glow_pulse_sine;
     int r;
     int g;
 
@@ -2023,9 +2023,9 @@ void FUN_L14_002ff640(struct Moby *moby) {
     }
     }
     vars->phase = add_rotations_ff640(vars->phase, D_L14_00162000);
-    s = sin_ff640(vars->phase);
-    r = ftoi_ff640(s * 48.0f) + 0xCF;
-    g = ftoi_ff640(s * 32.0f) + 0x30;
+    glow_pulse_sine = sin_ff640(vars->phase);
+    r = ftoi_ff640(glow_pulse_sine * 48.0f) + 0xCF;
+    g = ftoi_ff640(glow_pulse_sine * 32.0f) + 0x30;
     moby->glow_color = g << 16 | (0xFF000000 | g << 8) | r;
     moby->rot.x = add_rotations_ff640(moby->rot.x, vars->spin[0]);
     moby->rot.y = add_rotations_ff640(moby->rot.y, vars->spin[1]);
