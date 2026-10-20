@@ -52,7 +52,7 @@ extern short D_L01_0015F400 __attribute__((sda));
 void FUN_L01_002aea70(char *vendor_moby, int lvl) {
     struct Hero *g = &hero;
     char *vendor_screen_state = D_L01_001CA940;
-    char *c = D_L01_0016CCE0;
+    char *relocated_address_block = D_L01_0016CCE0;
     char *sc;
     char *c2;
     struct Hero *g2;
@@ -82,13 +82,13 @@ void FUN_L01_002aea70(char *vendor_moby, int lvl) {
     clear_vector(vendor_screen_state + 0xB0);
     *(float *)(vendor_screen_state + 0xB8) = fast_add_rotations(*(float *)(vendor_moby + 0x48), -1.5707964f);
     vu_euler_rotation_basis(vendor_screen_state + 0x80, vendor_screen_state + 0xB0);
-    fill_transfer_words_alt(c, 0, 0x1C0);
+    fill_transfer_words_alt(relocated_address_block, 0, 0x1C0);
     fill_transfer_words_alt(D_L01_0017C7C0, 0, 0x40);
     calculate_dma_transfer_address();
     adjusted_address_base = D_L01_001611CC + (int)0xFFFC0000;
-    *(int *)(c + 0x58) = D_L01_00174280[1] + adjusted_address_base;
+    *(int *)(relocated_address_block + 0x58) = D_L01_00174280[1] + adjusted_address_base;
     r = D_L01_001CA4A0[lvl];
-    *(int *)(c + 0x5C) = D_L01_00174280[2] + adjusted_address_base;
+    *(int *)(relocated_address_block + 0x5C) = D_L01_00174280[2] + adjusted_address_base;
     D_L01_0015F3FC = 1.0f;
     D_L01_001611CC = adjusted_address_base;
     *(int *)&D_L01_0015F400 = 0;
