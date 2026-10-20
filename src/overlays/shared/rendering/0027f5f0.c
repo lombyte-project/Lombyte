@@ -24,17 +24,17 @@ void FUN_L08_0027f5f0(void *pos, int kind, void *vel, float velocity_w_override)
     *(OvlQuad *)v = *(OvlQuad *)vel;
     particle = create_part(0x49);
     if (particle != 0) {
-        float s = 0.0f;
+        float particle_scalar_factor = 0.0f;
         int packed_high_byte = 0;
         switch (kind) {
         case 0:
             packed_high_byte = 0x20;
-            s = 0.12f;
+            particle_scalar_factor = 0.12f;
             random_float_between_alt(0.25f, 0.25f);
             break;
         case 1:
             packed_high_byte = 0xD;
-            s = 0.5f;
+            particle_scalar_factor = 0.5f;
             random_float_between_alt(1.0f, 1.0f);
             break;
         }
@@ -44,7 +44,7 @@ void FUN_L08_0027f5f0(void *pos, int kind, void *vel, float velocity_w_override)
         particle[3] = 0x48;
         particle[1] = 0;
         particle[2] = D_L08_001B29A4[kind];
-        *(float *)(particle + 0xC) = s * 210000.0f;
+        *(float *)(particle + 0xC) = particle_scalar_factor * 210000.0f;
         particle[8] = (int)random_float_between_alt(0.0f, 360.0f);
         *(OvlQuad *)(particle + 0x10) = *(OvlQuad *)pos;
         *(OvlQuad *)(particle + 0x20) = *(OvlQuad *)vp;
