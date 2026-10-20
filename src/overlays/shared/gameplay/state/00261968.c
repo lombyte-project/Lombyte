@@ -522,17 +522,17 @@ void FUN_L00_00262608(S_262608 *history_state, int dec) {
 void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
 /* When o+0x13C is set, marks each nonzero moby of the 0x120 list for removal; clears the flag. */
-void FUN_L00_00262840(char *o) {
+void FUN_L00_00262840(char *history_state) {
     int i;
-    if (*(int *)(o + 0x13C) != 0) {
-        for (i = 0; i < *(int *)(o + 0x138); i++) {
-            int *p = (int *)(o + 0x120) + i;
-            if (*p != 0) {
-                mark_moby_for_removal(*p);
-                *p = 0;
+    if (*(int *)(history_state + 0x13C) != 0) {
+        for (i = 0; i < *(int *)(history_state + 0x138); i++) {
+            int *moby_slot = (int *)(history_state + 0x120) + i;
+            if (*moby_slot != 0) {
+                mark_moby_for_removal(*moby_slot);
+                *moby_slot = 0;
             }
         }
-        *(int *)(o + 0x13C) = 0;
+        *(int *)(history_state + 0x13C) = 0;
     }
 }
 void FUN_0020cb88_2628d8(void *, void *) __asm__("FUN_0020cb88");
