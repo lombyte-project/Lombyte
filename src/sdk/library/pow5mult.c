@@ -97,30 +97,30 @@ extern _Bigint *_multadd(struct _reent *, _Bigint *, s32, s32);
 extern void InsertLinkObject(struct _reent *, _Bigint *);
 
 _Bigint *_pow5mult(struct _reent *ptr, _Bigint *b, s32 k) {
-    _Bigint *b1, *p5, *p51;
+    _Bigint *b1, *cached_power_of_five, *next_power_of_five;
     s32 i;
 
     if (i = k & 3)
         b = _multadd(ptr, b, D_001523B8[i - 1], 0);
     if (!(k >>= 2))
         return b;
-    if (!(p5 = ptr->_p5s)) {
-        p5 = ptr->_p5s = initialize_object_resource(ptr, 625);
-        p5->_next = 0;
+    if (!(cached_power_of_five = ptr->_p5s)) {
+        cached_power_of_five = ptr->_p5s = initialize_object_resource(ptr, 625);
+        cached_power_of_five->_next = 0;
     }
     for (;;) {
         if (k & 1) {
-            b1 = _multiply(ptr, b, p5);
+            b1 = _multiply(ptr, b, cached_power_of_five);
             InsertLinkObject(ptr, b);
             b = b1;
         }
         if (!(k >>= 1))
             break;
-        if (!(p51 = p5->_next)) {
-            p51 = p5->_next = _multiply(ptr, p5, p5);
-            p51->_next = 0;
+        if (!(next_power_of_five = cached_power_of_five->_next)) {
+            next_power_of_five = cached_power_of_five->_next = _multiply(ptr, cached_power_of_five, cached_power_of_five);
+            next_power_of_five->_next = 0;
         }
-        p5 = p51;
+        cached_power_of_five = next_power_of_five;
     }
     return b;
 }
