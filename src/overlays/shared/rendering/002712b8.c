@@ -62,8 +62,8 @@ extern void FUN_001f9a68_271450(void *, void *, float) __asm__("FUN_001f9a68");
 
 void FUN_L00_00271450(unsigned char *particle) {
     float v[4];
-    OvlQuad t[1];
-    OvlQuad m[1];
+    OvlQuad scaled_platform_carry[1];
+    OvlQuad gravity_velocity_delta[1];
     unsigned char *particle_data;
     unsigned char *r;
     float initial_alpha;
@@ -86,11 +86,11 @@ void FUN_L00_00271450(unsigned char *particle) {
         v[2] = *(float *)(particle_data + 8);
         *(int *)&v[3] = 0;
         FUN_001f9a10_271450(r, r, v);
-        t[0] = *(OvlQuad *)(&hero.motion.platform_carry);
-        FUN_L00_001ff318_271450(m, t, *(float *)(particle + 0x1C));
-        FUN_L00_001ff290_271450(m, r, t);
-        FUN_001f9a68_271450(m, &hero.gravity_dir, *(float *)(particle_data + 0xC));
-        FUN_001f9a10_271450(v, v, m);
+        scaled_platform_carry[0] = *(OvlQuad *)(&hero.motion.platform_carry);
+        FUN_L00_001ff318_271450(gravity_velocity_delta, scaled_platform_carry, *(float *)(particle + 0x1C));
+        FUN_L00_001ff290_271450(gravity_velocity_delta, r, scaled_platform_carry);
+        FUN_001f9a68_271450(gravity_velocity_delta, &hero.gravity_dir, *(float *)(particle_data + 0xC));
+        FUN_001f9a10_271450(v, v, gravity_velocity_delta);
         FUN_001f9a68_271450(v, v, *(float *)(particle_data + 0x18));
         *(float *)(particle + 0x20) = v[0];
         *(float *)(particle_data + 4) = v[1];
