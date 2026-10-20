@@ -436,41 +436,41 @@ extern float func_L00_0025CCF0_spark(void *, void *, float, float, float, float,
                                      int) __asm__("FUN_L00_0025bc98");
 extern int func_L00_001EFFF0_spark(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 
-void FUN_L16_002a3f38(unsigned char *m) {
+void FUN_L16_002a3f38(unsigned char *moby) {
     enum {
         PROJECTILE_STATE_FLYING = 0,
         PROJECTILE_STATE_IMPACT = 1
     };
     L16SparkVector desired, previous, velocity, random;
     L16SparkQuery query;
-    char *d = *(char **)(m + 0x78);
+    char *projectile_data = *(char **)(moby + 0x78);
     void *position;
     void *matrix;
     char *particle;
     struct Hero *player;
     float yaw, pitch;
-    switch (m[0x20]) {
+    switch (moby[0x20]) {
     case PROJECTILE_STATE_FLYING: {
         float step, time;
         step = D_0015ED6C;
         time = frame_time_sq;
-        position = m + 0x10;
-        (*(unsigned short *)(d + 6))++;
-        approach_value((float *)(d + 0x10), step * 30.0f, time * 70.0f);
-        if (*(void **)(d + 8) && *(short *)(d + 6) > scale_game_frames_c(7)) {
-            qcopy(desired.f, *(char **)(d + 8) + 0x10);
+        position = moby + 0x10;
+        (*(unsigned short *)(projectile_data + 6))++;
+        approach_value((float *)(projectile_data + 0x10), step * 30.0f, time * 70.0f);
+        if (*(void **)(projectile_data + 8) && *(short *)(projectile_data + 6) > scale_game_frames_c(7)) {
+            qcopy(desired.f, *(char **)(projectile_data + 8) + 0x10);
             desired.f[2] += 0.7f;
-            yaw = FUN_001f9e90_c(desired.f[0] - *(float *)(m + 0x10),
-                                 desired.f[1] - *(float *)(m + 0x14));
+            yaw = FUN_001f9e90_c(desired.f[0] - *(float *)(moby + 0x10),
+                                 desired.f[1] - *(float *)(moby + 0x14));
             pitch = -FUN_001f9e90_c(FUN_001f9b80_c(position, desired.f),
-                                    desired.f[2] - *(float *)(m + 0x18));
-            func_L00_0025CCF0_spark(m + 0x48, d + 0x14, yaw, 0.03f, 0.3f,
+                                    desired.f[2] - *(float *)(moby + 0x18));
+            func_L00_0025CCF0_spark(moby + 0x48, projectile_data + 0x14, yaw, 0.03f, 0.3f,
                                     D_0015ED6C * 9.599310874938965f, 0);
-            func_L00_0025CCF0_spark(m + 0x44, d + 0x18, pitch, 0.03f, 0.3f,
+            func_L00_0025CCF0_spark(moby + 0x44, projectile_data + 0x18, pitch, 0.03f, 0.3f,
                                     D_0015ED6C * 9.599310874938965f, 0);
         }
-        build_spherical_offset(desired.f, *(float *)(d + 0x10), *(float *)(m + 0x48),
-                               -*(float *)(m + 0x44));
+        build_spherical_offset(desired.f, *(float *)(projectile_data + 0x10), *(float *)(moby + 0x48),
+                               -*(float *)(moby + 0x44));
         random.quad = 0;
         random.f[0] = random_float_between_alt_c(-1.0f, 1.0f);
         random.f[1] = random_float_between_alt_c(-1.0f, 1.0f);
@@ -482,7 +482,7 @@ void FUN_L16_002a3f38(unsigned char *m) {
                              -random_float_between_alt_c(D_0015ED6C * 0.1f, D_0015ED6C));
         add_vector_xyz(velocity.f, velocity.f, previous.f);
         normalize_vector_xyz(previous.f, desired.f,
-                             random_float_between_alt_c(0.0f, 1.0f) * *(float *)(d + 0x10));
+                             random_float_between_alt_c(0.0f, 1.0f) * *(float *)(projectile_data + 0x10));
         add_vector_xyz(previous.f, previous.f, position);
         particle = FUN_L00_002712b8(previous.f, velocity.f, scale_game_frames_c(60), 127, 0x606060,
                                     3, 40000.0f, 1000.0f, 1.0f, -0.0002f, 0.0f);
@@ -491,7 +491,7 @@ void FUN_L16_002a3f38(unsigned char *m) {
             particle[3] = 0x44;
             particle[2] = cls;
         }
-        matrix = m + 0xC0;
+        matrix = moby + 0xC0;
         FUN_L00_002712b8(position, velocity.f, scale_game_frames_c(6), 127, 0xB0B0B0, 3, 40000.0f,
                          1000.0f, 1.0f, -0.0004f, 0.0f);
         random.quad = 0;
@@ -502,14 +502,14 @@ void FUN_L16_002a3f38(unsigned char *m) {
                          20000.0f);
         qcopy(previous.f, position);
         add_vector_xyz(position, position, desired.f);
-        if (*(float *)(m + 0x10) < 2.0f || *(float *)(m + 0x14) < 2.0f ||
-            *(float *)(m + 0x18) < 2.0f)
+        if (*(float *)(moby + 0x10) < 2.0f || *(float *)(moby + 0x14) < 2.0f ||
+            *(float *)(moby + 0x18) < 2.0f)
             goto remove;
         {
             int impact_state;
             query.flags = 0x830000;
             impact_state = 1;
-            query.owner = m;
+            query.owner = moby;
             query.scale = 1.0f;
             query.active = impact_state;
             qcopy(query.direction, desired.f);
@@ -518,30 +518,30 @@ void FUN_L16_002a3f38(unsigned char *m) {
             query.direction[2] = 1.0f;
             query.direction[3] = 5627.9248046875f;
             query.kind = 3;
-            query.cls = *(unsigned short *)(m + 0xA6);
+            query.cls = *(unsigned short *)(moby + 0xA6);
             query.enabled = impact_state;
             if (func_L00_001EFFF0_spark(previous.f, position, 0, ((void *)player->moby),
                                         &query)) {
                 L16SparkHit *result = &D_L16_001742C0_hit;
                 char *hit = result->moby;
                 if (hit) {
-                    if (hit == ((char *)player->moby) || hit == *(char **)d)
+                    if (hit == ((char *)player->moby) || hit == *(char **)projectile_data)
                         break;
                 } else if (result->count <= 0)
                     break;
                 qcopy(position, result->position);
-                m[0x20] = impact_state;
-            } else if (fast_dec_timer_s16(d + 4) || FUN_001f9b80_c(position, &player->motion.pos) > 60.0f) {
+                moby[0x20] = impact_state;
+            } else if (fast_dec_timer_s16(projectile_data + 4) || FUN_001f9b80_c(position, &player->motion.pos) > 60.0f) {
             remove:
-                mark_moby_for_removal_a3f38(m);
+                mark_moby_for_removal_a3f38(moby);
             }
         }
         break;
     }
     case PROJECTILE_STATE_IMPACT:
-        func_L00_0025F4A8_alt(m, &D_L16_0015F580_spark, 0, 0.0f, 0.0f, 3, 3, 5, 1.0f, 0.5f, 4.0f,
+        func_L00_0025F4A8_alt(moby, &D_L16_0015F580_spark, 0, 0.0f, 0.0f, 3, 3, 5, 1.0f, 0.5f, 4.0f,
                               0.7f, 0, 7.0f, 0, 0, -1, 0);
-        mark_moby_for_removal_a3f38(m);
+        mark_moby_for_removal_a3f38(moby);
         break;
     }
 }
