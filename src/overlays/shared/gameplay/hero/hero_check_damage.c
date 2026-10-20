@@ -1348,16 +1348,16 @@ void spawn_hero_item_mobies(void) {
 float absolute_float(float input) __asm__("func_001F99C0");
 
 float FUN_L00_0020f0b8(float *a, float *b) {
-    float s = 0.0f;
+    float absolute_difference_sum = 0.0f;
     int i, j;
     for (i = 0; i < 3; i++) {
-        float *q = (float *)((i << 4) + (int)b);
-        float *p = (float *)((i << 4) + (int)a);
+        float *second_component_cursor = (float *)((i << 4) + (int)b);
+        float *first_component_cursor = (float *)((i << 4) + (int)a);
         for (j = 0; j < 3; j++) {
-            s += absolute_float(*p++ - *q++);
+            absolute_difference_sum += absolute_float(*first_component_cursor++ - *second_component_cursor++);
         }
     }
-    return s;
+    return absolute_difference_sum;
 }
 /* Advances the 16-slot history ring, scores slots against each other and averages the agreeing ones into arg+0x40. */
 /* Ported from rac1-decomp (src/overlays/shared/help_0020CDF0.c: func_L00_0020F7F8), where it is exact; names translated to the US level program. */
