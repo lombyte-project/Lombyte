@@ -810,20 +810,20 @@ void bolt_update(Bolt *obj) {
     Vec4 a;
     Vec4 b;
     Vec4 c;
-    Vec4 d;
-    Vec4 e;
-    Vec4 m[3];
+    Vec4 collection_offset;
+    Vec4 attraction_rotation_angles;
+    Vec4 attraction_rotation_basis[3];
     s32 hit;
     f32 sc;
     f32 hr;
     f32 ang;
     f32 k;
-    f32 t;
+    f32 velocity_decay_step;
     f32 u;
-    f32 h;
+    f32 settling_hop_phase;
     f32 dist;
     f32 x;
-    f32 s;
+    f32 rotation_blend_step;
     s32 flag;
     u8 i;
 
@@ -947,12 +947,12 @@ void bolt_update(Bolt *obj) {
         b.f[2] += k;
         matrix_to_euler(&obj->rot, &a);
         FUN_L00_00259f50(&c, &a);
-        s = 1.0f / convert_integer_to_float(v->hop_left);
-        h = convert_integer_to_float(v->hop_left) / convert_integer_to_float(v->hop_frames);
-        quaternion_nlerp(&v->spin, &v->spin, &c, s);
-        lerp_vector(&obj->pos, &obj->pos, &b, h);
-        h -= 0.5f;
-        obj->pos.f[2] += -(h * h - k) * ((f32)v->hop_frames * 0.025f);
+        rotation_blend_step = 1.0f / convert_integer_to_float(v->hop_left);
+        settling_hop_phase = convert_integer_to_float(v->hop_left) / convert_integer_to_float(v->hop_frames);
+        quaternion_nlerp(&v->spin, &v->spin, &c, rotation_blend_step);
+        lerp_vector(&obj->pos, &obj->pos, &b, settling_hop_phase);
+        settling_hop_phase -= 0.5f;
+        obj->pos.f[2] += -(settling_hop_phase * settling_hop_phase - k) * ((f32)v->hop_frames * 0.025f);
         quaternion_to_rotation_basis(&v->spin, &obj->rot);
         if (--v->hop_left != 0) {
             return;
@@ -1012,9 +1012,9 @@ void bolt_update(Bolt *obj) {
             FUN_L00_0025f730(&b, frame_time_sq * 50.0f);
             fast_vec_add(&v->vel, &v->vel, &b);
         } else {
-            t = frame_time_sq * 10.0f;
-            if (t < fast_vec_length(&v->vel)) {
-                fast_vec_normalize(&a, &v->vel, t);
+            velocity_decay_step = frame_time_sq * 10.0f;
+            if (velocity_decay_step < fast_vec_length(&v->vel)) {
+                fast_vec_normalize(&a, &v->vel, velocity_decay_step);
                 fast_vec_sub(&v->vel, &v->vel, &a);
             }
             approach_value(&v->speed, D_0015ED6C * 48.0f, frame_time_sq * 16.0f);
@@ -1027,19 +1027,19 @@ void bolt_update(Bolt *obj) {
         quaternion_to_rotation_basis(&v->spin, &a);
         multiply_matrix3x3(&obj->rot, &a, &obj->rot);
         fast_vec_add(&obj->pos, &obj->pos, &v->vel);
-        fast_vec_sub(&d, &hero.motion.unkD0, &obj->pos);
-        if (v->speed < fast_vec_length(&d)) {
+        fast_vec_sub(&collection_offset, &hero.motion.unkD0, &obj->pos);
+        if (v->speed < fast_vec_length(&collection_offset)) {
             if (!(v->unk4C == 0.0f && v->unk48 == 0.0f)) {
-                transform_vector_by_basis(&d, &d, hero.unk40);
-                clear_u64_value(&e);
-                e.f[1] = v->unk48;
-                e.f[2] = v->unk4C;
-                euler_rotation_basis(m, &e);
-                transform_vector_by_basis(&d, &d, m);
-                transform_vector_by_basis(&d, &d, hero.unk0);
+                transform_vector_by_basis(&collection_offset, &collection_offset, hero.unk40);
+                clear_u64_value(&attraction_rotation_angles);
+                attraction_rotation_angles.f[1] = v->unk48;
+                attraction_rotation_angles.f[2] = v->unk4C;
+                euler_rotation_basis(attraction_rotation_basis, &attraction_rotation_angles);
+                transform_vector_by_basis(&collection_offset, &collection_offset, attraction_rotation_basis);
+                transform_vector_by_basis(&collection_offset, &collection_offset, hero.unk0);
             }
-            fast_vec_normalize(&d, &d, v->speed);
-            fast_vec_add(&obj->pos, &obj->pos, &d);
+            fast_vec_normalize(&collection_offset, &collection_offset, v->speed);
+            fast_vec_add(&obj->pos, &obj->pos, &collection_offset);
             return;
         }
         FUN_L00_002a6b70_c(obj);
