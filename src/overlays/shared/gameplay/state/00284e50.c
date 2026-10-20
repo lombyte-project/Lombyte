@@ -91,8 +91,8 @@ void FUN_L00_00285008(void) {
     char *s = D_L00_001BB230;
     int i;
     short id;
-    u8 *m;
-    struct Hero *p;
+    u8 *record_cursor;
+    struct Hero *hero_state;
 
     if (*(int *)s == 0) {
         fill_transfer_words(D_L00_001BA5D0, 0, 0xC60);
@@ -128,18 +128,18 @@ void FUN_L00_00285008(void) {
         }
 
         for (i = 0; ; i++) {
-            m = D_L00_0015FFD8 + i * 0x100;
-            if (m >= D_L00_0015FFDC)
+            record_cursor = D_L00_0015FFD8 + i * 0x100;
+            if (record_cursor >= D_L00_0015FFDC)
                 break;
-            if (*(short *)(m + 0xA6) == id) {
+            if (*(short *)(record_cursor + 0xA6) == id) {
                 char *s = D_L00_001BB230;
-                FUN_L00_00210a08(*(int *)(s + 0x44), *(int *)(s + 0x4C), m);
+                FUN_L00_00210a08(*(int *)(s + 0x44), *(int *)(s + 0x4C), record_cursor);
                 break;
             }
         }
     }
-    p = &hero;
-    FUN_L00_00250df8(p->moby);
+    hero_state = &hero;
+    FUN_L00_00250df8(hero_state->moby);
     euler_rotation_basis((char *)hero.moby + 0xC0, &hero.motion.rot);
     init_camera_system();
     FUN_L00_002852c0();
