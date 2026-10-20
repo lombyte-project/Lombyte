@@ -1583,18 +1583,18 @@ s32 FUN_001efa68_002e42c0(OvlQuad *, OvlQuad *, s32, void *,
 s32 FUN_L00_002e42c0(OvlQuad *out, s32 flag) {
     OvlQuad v[4];
     struct Hero *g = &hero_data;
-    u8 *q = D_L00_00166E10_002e42c0;
-    f32 f;
+    u8 *camera_view = D_L00_00166E10_002e42c0;
+    f32 ground_distance;
     if (g->frames_off_ground.s == 0) {
-        FUN_L00_002e4168_002e42c0(*(s32 *)(q - 0x10), out);
+        FUN_L00_002e4168_002e42c0(*(s32 *)(camera_view - 0x10), out);
         return 1;
     }
-    FUN_L00_002e4168_002e42c0(*(s32 *)(q - 0x10), &v[0]);
-    f = g->ground_distance;
-    if (30.0f <= f || flag == 0) {
-        FUN_001f9a68_002e42c0(&v[3], q + 0x30, 0.2f);
+    FUN_L00_002e4168_002e42c0(*(s32 *)(camera_view - 0x10), &v[0]);
+    ground_distance = g->ground_distance;
+    if (30.0f <= ground_distance || flag == 0) {
+        FUN_001f9a68_002e42c0(&v[3], camera_view + 0x30, 0.2f);
         FUN_001f9a10_002e42c0(&v[1], &v[0], &v[3]);
-        FUN_001f9a68_002e42c0(&v[3], q + 0x30, -30.0f);
+        FUN_001f9a68_002e42c0(&v[3], camera_view + 0x30, -30.0f);
         FUN_001f9a10_002e42c0(&v[2], &v[0], &v[3]);
         if (FUN_001efa68_002e42c0(&v[1], &v[2], 0x12, g->moby, 0)) {
             qcopy(out, &D_L00_00173E60_002e42c0);
@@ -1603,7 +1603,7 @@ s32 FUN_L00_002e42c0(OvlQuad *out, s32 flag) {
         qcopy(out, &v[0]);
         return -1;
     } else {
-        FUN_001f9a68_002e42c0(&v[1], q + 0x30, -f);
+        FUN_001f9a68_002e42c0(&v[1], camera_view + 0x30, -ground_distance);
         FUN_001f9a10_002e42c0(out, &v[0], &v[1]);
         return 1;
     }
