@@ -48,7 +48,7 @@ extern s32 continue_audio_stream_if_ready(void) __asm__("FUN_00215b10");
 void update_resident_dialogue_animation_state(Moby *m) __asm__("FUN_00237ed0");
 
 extern u8 big_head_cheat_enabled __asm__("D_0015EDB0") MACRO_ADDR;
-void update_resident_dialogue_animation_state(Moby *m) {
+void update_resident_dialogue_animation_state(Moby *resident_moby) {
     enum {
         RESIDENT_IDLE_WAIT_TO_REQUEST_DIALOGUE = 0,
         RESIDENT_TIMED_WAIT_TO_RESTORE_IDLE_ANIMATION = 2,
@@ -61,19 +61,19 @@ void update_resident_dialogue_animation_state(Moby *m) {
         RESIDENT_WAIT_TO_START_DIALOGUE_ANIMATION = 12
     };
     s32 r;
-    s32 a;
+    s32 target_animation;
 
     if (big_head_cheat_enabled != 0) {
         if (D_001E65E0.active == 0) {
-            attach_manipulator(m, 0, &D_001E65E0);
+            attach_manipulator(resident_moby, 0, &D_001E65E0);
         }
         D_001E65E0.x = 2.37f;
         D_001E65E0.y = 2.37f;
         D_001E65E0.z = 2.37f;
     } else if (D_001E65E0.active != 0) {
-        detach_manipulator(m, &D_001E65E0);
+        detach_manipulator(resident_moby, &D_001E65E0);
     }
-    switch (m->state) {
+    switch (resident_moby->state) {
     case RESIDENT_IDLE_WAIT_TO_REQUEST_DIALOGUE:
         if (D_001E63C0.timer > scale_game_frames(600)) {
             r = random_integer_below(2);
@@ -81,71 +81,71 @@ void update_resident_dialogue_animation_state(Moby *m) {
             D_001516EC = (r * 3 + 1) * 6 + D_001E63C0.base + 10000;
             D_001610B0 = 1;
             D_001610B4 = 0;
-            if (m->anim != 2) {
-                blend_moby_animation(m, 2, 0, scale_game_frames(0x12));
+            if (resident_moby->anim != 2) {
+                blend_moby_animation(resident_moby, 2, 0, scale_game_frames(0x12));
             }
-            m->state = 12;
+            resident_moby->state = 12;
             D_001E63C0.timer = 0;
         }
         D_001E63C0.timer++;
         break;
     case RESIDENT_TIMED_WAIT_TO_RESTORE_IDLE_ANIMATION:
         if (D_001E63C0.timer > scale_game_frames(600)) {
-            if (m->anim != 3) {
-                blend_moby_animation(m, 3, 0, scale_game_frames(0x12));
+            if (resident_moby->anim != 3) {
+                blend_moby_animation(resident_moby, 3, 0, scale_game_frames(0x12));
             }
-            m->state = 3;
+            resident_moby->state = 3;
             D_001E63C0.timer = 0;
         }
         D_001E63C0.timer++;
         break;
     case RESIDENT_WAIT_TO_RESTORE_IDLE_ANIMATION:
-        if (m->flags & 2) {
-            if (m->anim != 0) {
-                blend_moby_animation(m, 0, 0, scale_game_frames(0x12));
+        if (resident_moby->flags & 2) {
+            if (resident_moby->anim != 0) {
+                blend_moby_animation(resident_moby, 0, 0, scale_game_frames(0x12));
             }
-            m->state = 0;
+            resident_moby->state = 0;
         }
         break;
     case RESIDENT_DIALOGUE_ANIMATION_AFTER_COMPLETION_WAIT:
-        if (is_value_within_interpolated_window(m, D_00161030[D_001E63C0.pick]) != 0 &&
+        if (is_value_within_interpolated_window(resident_moby, D_00161030[D_001E63C0.pick]) != 0 &&
             D_001610B4 != 0) {
             D_001610B4 = 0;
             continue_audio_stream_if_ready();
         }
-        if (m->flags & 2) {
-            if (m->anim != 2) {
-                blend_moby_animation(m, 2, 0, scale_game_frames(0x12));
+        if (resident_moby->flags & 2) {
+            if (resident_moby->anim != 2) {
+                blend_moby_animation(resident_moby, 2, 0, scale_game_frames(0x12));
             }
-            m->state = 2;
+            resident_moby->state = 2;
             D_001E63C0.timer = 0;
         }
         break;
     case RESIDENT_DIALOGUE_ANIMATION_AFTER_START_WAIT:
-        if (is_value_within_interpolated_window(m, D_00161038[D_001E63C0.pick]) != 0 &&
+        if (is_value_within_interpolated_window(resident_moby, D_00161038[D_001E63C0.pick]) != 0 &&
             D_001610B4 != 0) {
             D_001610B4 = 0;
             continue_audio_stream_if_ready();
         }
-        if (m->flags & 2) {
-            if (m->anim != 2) {
-                blend_moby_animation(m, 2, 0, scale_game_frames(0x12));
+        if (resident_moby->flags & 2) {
+            if (resident_moby->anim != 2) {
+                blend_moby_animation(resident_moby, 2, 0, scale_game_frames(0x12));
             }
-            m->state = 2;
+            resident_moby->state = 2;
             D_001E63C0.timer = 0;
         }
         break;
     case RESIDENT_DIALOGUE_ANIMATION_WAIT_TO_RESTORE_TIMED_IDLE:
-        if (is_value_within_interpolated_window(m, D_00161040[D_001E63C0.pick]) != 0 &&
+        if (is_value_within_interpolated_window(resident_moby, D_00161040[D_001E63C0.pick]) != 0 &&
             D_001610B4 != 0) {
             D_001610B4 = 0;
             continue_audio_stream_if_ready();
         }
-        if (m->flags & 2) {
-            if (m->anim != 2) {
-                blend_moby_animation(m, 2, 0, scale_game_frames(0x12));
+        if (resident_moby->flags & 2) {
+            if (resident_moby->anim != 2) {
+                blend_moby_animation(resident_moby, 2, 0, scale_game_frames(0x12));
             }
-            m->state = 2;
+            resident_moby->state = 2;
             D_001E63C0.timer = 0;
         }
         break;
@@ -154,34 +154,34 @@ void update_resident_dialogue_animation_state(Moby *m) {
             D_001610B0 = 0;
             D_001610B4 = 1;
         }
-        if (m->flags & 2) {
-            a = D_001E63FC * 3 + 4;
-            if (m->anim != a) {
-                blend_moby_animation(m, a, 0, scale_game_frames(0xC));
+        if (resident_moby->flags & 2) {
+            target_animation = D_001E63FC * 3 + 4;
+            if (resident_moby->anim != target_animation) {
+                blend_moby_animation(resident_moby, target_animation, 0, scale_game_frames(0xC));
             }
-            m->state = 4;
+            resident_moby->state = 4;
         }
         break;
     case RESIDENT_WAIT_TO_START_DIALOGUE_ANIMATION:
         if (D_0015172A == 3 && D_001610B0 != 0) {
             D_001610B4 = 1;
             D_001610B0 = 0;
-            a = D_001E63FC * 3 + 5;
-            if (m->anim != a) {
-                blend_moby_animation(m, a, 0, scale_game_frames(0x12));
+            target_animation = D_001E63FC * 3 + 5;
+            if (resident_moby->anim != target_animation) {
+                blend_moby_animation(resident_moby, target_animation, 0, scale_game_frames(0x12));
             }
-            m->state = 5;
+            resident_moby->state = 5;
         }
         break;
     case RESIDENT_WAIT_TO_START_DIALOGUE_ANIMATION_BEFORE_TIMED_IDLE_RESTORE:
         if (D_0015172A == 3 && D_001610B0 != 0) {
             D_001610B4 = 1;
             D_001610B0 = 0;
-            a = D_001E63FC * 3 + 6;
-            if (m->anim != a) {
-                blend_moby_animation(m, a, 0, scale_game_frames(0x12));
+            target_animation = D_001E63FC * 3 + 6;
+            if (resident_moby->anim != target_animation) {
+                blend_moby_animation(resident_moby, target_animation, 0, scale_game_frames(0x12));
             }
-            m->state = 6;
+            resident_moby->state = 6;
         }
         break;
     }
