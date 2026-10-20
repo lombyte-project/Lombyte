@@ -663,18 +663,18 @@ void spawn_explosion(char *owner_moby, void *unused, char *pos, float fA, float 
     }
     }
     if (owner_moby != 0 && fC > 0.0f) {
-        int r1 = 150;
-        int r2 = 150;
-        int r3 = 127;
+        int first_glow_red = 150;
+        int first_glow_blue = 150;
+        int later_glow_red = 127;
         int u;
         if (flag) {
-            r1 = 70;
-            r2 = 70;
-            r3 = 60;
+            first_glow_red = 70;
+            first_glow_blue = 70;
+            later_glow_red = 60;
         }
-        u = r3 & 0xFF;
+        u = later_glow_red & 0xFF;
         if (D_L00_0015F5D0_macro < 0.95f && fE < dist) {
-            spawn_glow_particle_25e450(owner_moby, pos, &vb, fC, scale_game_frames_25e450(0x10), r1, 0x96, r2, 0x20);
+            spawn_glow_particle_25e450(owner_moby, pos, &vb, fC, scale_game_frames_25e450(0x10), first_glow_red, 0x96, first_glow_blue, 0x20);
             spawn_glow_particle_25e450(owner_moby, pos, &vb, fC, scale_game_frames_25e450(0x16), u, 0x7F, 0x50, 0x20);
         }
         spawn_glow_particle_25e450(owner_moby, pos, &vb, fC, scale_game_frames_25e450(0x1E), u, 0x7F, 0, 0x30);
