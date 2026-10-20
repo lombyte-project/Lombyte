@@ -1370,15 +1370,15 @@ extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void free_effect_particle(void *) __asm__("FUN_L00_00267a08");
 
 /* Moves both points by the vector at 0x30; lowers the top byte at a+4 by 6, 00267a08 below 0. */
-void FUN_L00_0026c7f0(char *a) {
-    int t;
-    fast_vec_add(a + 0x10, a + 0x10, a + 0x30);
-    fast_vec_add(a + 0x20, a + 0x20, a + 0x30);
-    t = *(int *)(a + 4) + 0xFA000000;
-    *(int *)(a + 4) = t;
-    *(int *)(a + 0xC) = t;
-    if (t < 0)
-        free_effect_particle(a);
+void FUN_L00_0026c7f0(char *particle) {
+    int faded_color;
+    fast_vec_add(particle + 0x10, particle + 0x10, particle + 0x30);
+    fast_vec_add(particle + 0x20, particle + 0x20, particle + 0x30);
+    faded_color = *(int *)(particle + 4) + 0xFA000000;
+    *(int *)(particle + 4) = faded_color;
+    *(int *)(particle + 0xC) = faded_color;
+    if (faded_color < 0)
+        free_effect_particle(particle);
 }
 typedef struct {
     f32 x, y, z, w;
