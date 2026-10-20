@@ -919,7 +919,7 @@ extern int D_L18_001622F8 __attribute__((sda));
 extern float D_L18_0016230C __attribute__((sda));
 extern unsigned char D_00141400 __attribute__((section(".data")));
 extern unsigned char D_0013D406 __attribute__((section(".data")));
-void FUN_L18_002f2310(struct Moby *m) {
+void FUN_L18_002f2310(struct Moby *lift_moby) {
     enum {
         LIFT_INITIALIZE = 0,
         LIFT_SELECT_INITIAL_HEIGHT = 1,
@@ -931,71 +931,71 @@ void FUN_L18_002f2310(struct Moby *m) {
         LIFT_DRAW_25_QUAD_MESH = 1,
         LIFT_DRAW_38_QUAD_MESH = 2
     };
-    char *d = (char *)m->pvars;
+    char *lift_vars = (char *)lift_moby->pvars;
     int v;
-    switch (m->state) {
+    switch (lift_moby->state) {
     case LIFT_INITIALIZE:
         if (D_L18_001622FC != 0) {
             D_00141400 = *(unsigned char *)&D_L18_001622FC;
         }
-        *(int *)(d + 0x1C) = D_L18_001622F8++;
-        m->update_dist = 0xFF;
-        m->state = 1;
-        ((M_2310 *)m)->h34 |= 1;
-        m->draw_dist = 0;
-        m->collision = 0;
+        *(int *)(lift_vars + 0x1C) = D_L18_001622F8++;
+        lift_moby->update_dist = 0xFF;
+        lift_moby->state = 1;
+        ((M_2310 *)lift_moby)->h34 |= 1;
+        lift_moby->draw_dist = 0;
+        lift_moby->collision = 0;
         break;
     case LIFT_SELECT_INITIAL_HEIGHT:
         if (D_0013D406 != 0) {
-            *(int *)(d + 8) = (*(int *)(d + 8) + 1) & 1;
+            *(int *)(lift_vars + 8) = (*(int *)(lift_vars + 8) + 1) & 1;
         }
-        v = *(int *)(d + 8);
+        v = *(int *)(lift_vars + 8);
         D_L18_001622F8 = 0;
         if (v != 0 && D_00141400 == 0) {
-            m->state = 2;
-            m->pos.z = *(float *)(d + 0);
+            lift_moby->state = 2;
+            lift_moby->pos.z = *(float *)(lift_vars + 0);
         } else {
-            m->state = 3;
-            m->pos.z = *(float *)(d + 4);
+            lift_moby->state = 3;
+            lift_moby->pos.z = *(float *)(lift_vars + 4);
         }
         break;
     case LIFT_APPROACH_ALTERNATE_HEIGHT:
-        if (m->command & 4) {
+        if (lift_moby->command & 4) {
             D_L18_001622FC = 0;
-            m->state = 2;
-            if (*(int *)(d + 8) == 0) {
+            lift_moby->state = 2;
+            if (*(int *)(lift_vars + 8) == 0) {
                 D_0013D406 = 1;
             }
         }
-        approach_2310(&m->pos.z, (float *)(d + 0x18), *(float *)(d + 4), frame_time_sq * 4.0f,
+        approach_2310(&lift_moby->pos.z, (float *)(lift_vars + 0x18), *(float *)(lift_vars + 4), frame_time_sq * 4.0f,
                       frame_time_sq * 4.0f, D_0015ED6C_2310 * 4.0f);
-        FUN_L18_002f2598(m);
-        m->command = 1;
+        FUN_L18_002f2598(lift_moby);
+        lift_moby->command = 1;
         break;
     case LIFT_APPROACH_BASE_HEIGHT:
-        if (m->command & 8) {
-            m->state = 3;
+        if (lift_moby->command & 8) {
+            lift_moby->state = 3;
             D_L18_001622FC = 1;
         }
-        m->command = 2;
-        FUN_L18_002f2598(m);
-        approach_2310(&m->pos.z, (float *)(d + 0x18), *(float *)(d + 0), frame_time_sq * 4.0f,
+        lift_moby->command = 2;
+        FUN_L18_002f2598(lift_moby);
+        approach_2310(&lift_moby->pos.z, (float *)(lift_vars + 0x18), *(float *)(lift_vars + 0), frame_time_sq * 4.0f,
                       frame_time_sq * 4.0f, D_0015ED6C_2310 * 4.0f);
         break;
     }
-    switch (*(int *)(d + 0x14)) {
+    switch (*(int *)(lift_vars + 0x14)) {
     case LIFT_DRAW_25_QUAD_MESH:
         D_L18_00162308_gp = D_L18_00162308_gp + D_L18_0016230C * D_0015ED6C_2310;
         if (1.0f < D_L18_00162308_gp) {
             D_L18_00162308_gp -= 1.0f;
         }
-        enqueue_2310(FUN_L18_002f2620, m);
+        enqueue_2310(FUN_L18_002f2620, lift_moby);
         break;
     case LIFT_DRAW_38_QUAD_MESH:
-        enqueue_2310(FUN_L18_002f27c8, m);
+        enqueue_2310(FUN_L18_002f27c8, lift_moby);
         break;
     case LIFT_DRAW_22_QUAD_MESH:
-        enqueue_2310(FUN_L18_002f2970, m);
+        enqueue_2310(FUN_L18_002f2970, lift_moby);
         break;
     }
 }
