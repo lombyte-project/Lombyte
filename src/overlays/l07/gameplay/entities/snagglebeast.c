@@ -731,6 +731,9 @@ void snagglebeast_update(unsigned char *moby) {
         SNAGGLEBEAST_DEATH_EXPLOSION = 10
     };
     enum {
+        SNAGGLEBEAST_ROPE_START_ATTACK_ANIMATION = 0,
+        SNAGGLEBEAST_ROPE_WAIT_FOR_ORIGIN_FRAME = 1,
+        SNAGGLEBEAST_ROPE_WAIT_FOR_EXTENSION_FRAME = 2,
         SNAGGLEBEAST_ROPE_EXTEND = 3,
         SNAGGLEBEAST_ROPE_RETRACT = 4,
         SNAGGLEBEAST_ROPE_RETURN_TO_IDLE = 5
@@ -1636,12 +1639,12 @@ void snagglebeast_update(unsigned char *moby) {
         FUN_L00_00258278((struct Moby *)moby, fast_arc_tan(*(float *)(data + 0x150) - *(float *)(moby + 0x10), *(float *)(data + 0x154) - *(float *)(moby + 0x14)),
                           (float *)(data + 0x168), frame_time_sq * 2.0943952f, frame_time_sq * 0.6981317f, frame_time * 2.0943952f);
         switch (*(int *)(data + 0x164)) {
-        case 0:
+        case SNAGGLEBEAST_ROPE_START_ATTACK_ANIMATION:
             if (moby[0x53] != 7) FUN_00212f90(moby, 7, 0, random_int_between(0xA, 0xD));
             *(int *)(data + 0x160) = 0;
             *(int *)(data + 0x164) = 1;
             break;
-        case 1:
+        case SNAGGLEBEAST_ROPE_WAIT_FOR_ORIGIN_FRAME:
             if ((*(u64 *)(moby + 0x50) & 0xFFFF0000) != 0x07070000 && moby[0x53] != 7) {
                 FUN_00212f90(moby, 7, 0, random_int_between(0xA, 0xD));
             }
@@ -1658,7 +1661,7 @@ void snagglebeast_update(unsigned char *moby) {
                 }
             }
             break;
-        case 2:
+        case SNAGGLEBEAST_ROPE_WAIT_FOR_EXTENSION_FRAME:
             if ((*(u64 *)(moby + 0x50) & 0xFFFF0000) != 0x07070000 && moby[0x53] != 7) {
                 FUN_00212f90(moby, 7, 0, random_int_between(7, 0xA));
             }
