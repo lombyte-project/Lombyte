@@ -2583,8 +2583,8 @@ extern void func_L00_0025F4A8_2CF808(void *, void *, void *, f32, f32, s32, s32,
 extern struct Moby *func_L00_002CF3D8_2CF808(void *, void *) __asm__("FUN_L00_002cdf28");
 extern void func_L00_002CF328_2CF808(void *) __asm__("FUN_L00_002cde78");
 
-void FUN_L00_002ce358(struct Moby *m) {
-    DroneVars_2CF808 *v = (DroneVars_2CF808 *)m->pvars;
+void FUN_L00_002ce358(struct Moby *updated_moby) {
+    DroneVars_2CF808 *v = (DroneVars_2CF808 *)updated_moby->pvars;
     Vec4 collision_data[1], old_pos;
     Vec4 direction, rotated;
     Vec4 target_pos, matrix[4];
@@ -2599,11 +2599,11 @@ void FUN_L00_002ce358(struct Moby *m) {
 
     if (D_L00_0015F5C4_2c8440 == 2 || D_L00_0015F5C4_2c8440 == 5 ||
         D_L00_0015F5C4_2c8440 == 6 || hero.state.current == 0x32) {
-        m->flags |= 0x41;
+        updated_moby->flags |= 0x41;
         return;
     }
-    m->flags &= 0xFFBE;
-    if (m->state < 5) {
+    updated_moby->flags &= 0xFFBE;
+    if (updated_moby->state < 5) {
         ((DroneSlots_2CF808 *)&hero)->counter++;
         if (((DroneSlots_2CF808 *)&hero)->ammo_used < ((DroneSlots_2CF808 *)&hero)->counter) {
             closest = 0;
@@ -2645,12 +2645,12 @@ void FUN_L00_002ce358(struct Moby *m) {
                 for (i = 0; i < 6; i++) {
                     drone = ((DroneSlots_2CF808 *)&hero)->slots[i];
                     if (drone != 0) {
-                        struct Moby *t = *(struct Moby **)(drone->pvars + 0x30);
-                        if (t == 0 || t->state == 0xFE || t->state == 0xFD) {
-                            f32 d = vector_distance(&drone->pos, &old_pos);
-                            if (d < distance) {
+                        struct Moby *drone_target = *(struct Moby **)(drone->pvars + 0x30);
+                        if (drone_target == 0 || drone_target->state == 0xFE || drone_target->state == 0xFD) {
+                            f32 candidate_distance = vector_distance(&drone->pos, &old_pos);
+                            if (candidate_distance < distance) {
                                 closest = drone;
-                                distance = d;
+                                distance = candidate_distance;
                             }
                         }
                     }
@@ -2667,7 +2667,7 @@ void FUN_L00_002ce358(struct Moby *m) {
                     qcopy(&assigned->offset, &old_pos);
                     closest->state = 3;
                     random = rand_2cc608() % 3;
-                    allocate_voice_for_target_entry(random + (random > 0), 0, m);
+                    allocate_voice_for_target_entry(random + (random > 0), 0, updated_moby);
                     ((DroneSlots_2CF808 *)&hero)->exclusions[count] = assigned->target;
                 }
             }
@@ -2683,20 +2683,20 @@ void FUN_L00_002ce358(struct Moby *m) {
             v->pitch = (convert_integer_to_float((counter * (next / 5)) % next) / (f32)divisor * 6.2831855f - 3.1415927f) * 0.25f;
         }
         {
-            void *hit = func_L00_0025B478_2CF808(m, 1, 0);
+            void *hit = func_L00_0025B478_2CF808(updated_moby, 1, 0);
             if (hit != 0) {
                 char *h = *(char **)((char *)hit + 0x20);
                 s32 cat = h && *(char **)(h + 0x24) ? *(s16 *)(*(char **)(h + 0x24) + 0x46) : 0;
                 if (cat > 8) goto dispatch_state;
                 if (cat >= 5) {
                     if (hit == 0 || h == 0 || *(s16 *)(h + 0xA6) != 0x4D6 || fast_dec_timer_s16(&v->health))
-                        m->state = 4;
+                        updated_moby->state = 4;
                 }
             }
         }
     }
 dispatch_state:
-    state = m->state;
+    state = updated_moby->state;
     if (state == 3) goto state3;
     if (state < 4) {
         if (state == 2) goto state2;
@@ -2707,12 +2707,12 @@ dispatch_state:
     goto update_effects;
 state2:
     {
-        m->collision = 0;
-        qcopy(&old_pos, &m->pos);
-        func_L00_002CF328_2CF808(m);
+        updated_moby->collision = 0;
+        qcopy(&old_pos, &updated_moby->pos);
+        func_L00_002CF328_2CF808(updated_moby);
         {
             f32 step = frame_scale * 0.05f;
-            m->scale += (m->pclass->scale - m->scale) * step;
+            updated_moby->scale += (updated_moby->pclass->scale - updated_moby->scale) * step;
             v->strength = v->strength + (1.0f - v->strength) * step;
         }
         f = fast_add_rotations(v->desired_yaw, ((DroneSlots_2CF808 *)&hero)->phase);
@@ -2734,29 +2734,29 @@ state2:
         target_pos.f[1] += direction.f[1];
         v->height = v->height + (target_pos.f[2] - v->height) * (frame_scale * 0.05f);
         target_pos.f[2] = v->height + direction.f[2];
-        subtract_vector_xyz_2c8440(&target_pos, &target_pos, &m->pos);
+        subtract_vector_xyz_2c8440(&target_pos, &target_pos, &updated_moby->pos);
         clamp_vector_length(&target_pos, &target_pos, frame_time * 10.0f);
-        if (func_L00_00259868_2CF808(0.0f, 0.18f, 0.0f, m, &target_pos, 0) & 1) {
-            if (!m->visible) {
+        if (func_L00_00259868_2CF808(0.0f, 0.18f, 0.0f, updated_moby, &target_pos, 0) & 1) {
+            if (!updated_moby->visible) {
                 Vec4 *hitv = &D_L00_00166DC0_2c8440;
-                add_vector_xyz(&m->pos, hitv, hitv + 0x23);
-                subtract_vector_xyz_2c8440(&m->pos, &m->pos, hitv + 0x21);
+                add_vector_xyz(&updated_moby->pos, hitv, hitv + 0x23);
+                subtract_vector_xyz_2c8440(&updated_moby->pos, &updated_moby->pos, hitv + 0x21);
             }
         }
-        qcopy(&collision_data[0], &m->pos);
-        if (func_L00_001F10E0_2CF808(0.2f, &collision_data[0], 0, m)) {
+        qcopy(&collision_data[0], &updated_moby->pos);
+        if (func_L00_001F10E0_2CF808(0.2f, &collision_data[0], 0, updated_moby)) {
             if (((struct Moby *)coll_hit.moby) && ((struct Moby *)coll_hit.moby)->oclass == 0 && ((struct Moby *)coll_hit.moby)->state != 0xFE && ((struct Moby *)coll_hit.moby)->state != 0xFD)
                 goto update_rotations;
             category = ((struct Moby *)coll_hit.moby) && ((struct Moby *)coll_hit.moby)->pclass ? *(u8 *)((u8 *)((struct Moby *)coll_hit.moby)->pclass + 0x46) : 0;
             if (((struct Moby *)coll_hit.moby) && ((struct Moby *)coll_hit.moby)->state != 0xFE && ((struct Moby *)coll_hit.moby)->state != 0xFD &&
                 (category == 5 || category == 7 || category == 8)) {
-                func_L00_0025A890_2CF808(((BombHit_2CF808 *)&direction), m, 0x10000, 1.0f);
+                func_L00_0025A890_2CF808(((BombHit_2CF808 *)&direction), updated_moby, 0x10000, 1.0f);
                 set_vector_length_xy(((BombHit_2CF808 *)&direction), &v->position, 1.0f);
                 ((BombHit_2CF808 *)&direction)->direction.f[2] = 1.0f;
                 ((BombHit_2CF808 *)&direction)->direction.f[3] = 5627.925f;
                 ((BombHit_2CF808 *)&direction)->kind = 1;
                 ((BombHit_2CF808 *)&direction)->mode = 2;
-                ((BombHit_2CF808 *)&direction)->oclass = m->oclass;
+                ((BombHit_2CF808 *)&direction)->oclass = updated_moby->oclass;
                 func_L00_0025AAC0_2CF808((struct Moby *)coll_hit.moby, ((BombHit_2CF808 *)&direction));
                 if (category == 5) {
                     if (coll_hit.moby && ((struct Moby *)coll_hit.moby)->oclass == 0x4D6 && (health = v->health) > 0) {
@@ -2767,30 +2767,30 @@ state2:
                             random = health - 1;
                         v->health = random;
                     } else {
-                        func_L00_0025F4A8_2CF808(m, v, 0, 0.0f, 0.0f, 0, 1, 1, 0.4f, 0.2f, 4.0f, 1, 1.0f, 8.0f, 1, 1, -1, 0);
-                        m->state = 4;
+                        func_L00_0025F4A8_2CF808(updated_moby, v, 0, 0.0f, 0.0f, 0, 1, 1, 0.4f, 0.2f, 4.0f, 1, 1.0f, 8.0f, 1, 1, -1, 0);
+                        updated_moby->state = 4;
                     }
                 }
             }
         }
 update_rotations:
-        subtract_vector_xyz_2c8440(&v->position, &m->pos, &old_pos);
+        subtract_vector_xyz_2c8440(&v->position, &updated_moby->pos, &old_pos);
         {
-            f32 yaw = fast_arc_tan(m->pos.x - old_pos.f[0], m->pos.y - old_pos.f[1]);
-            f32 pitch = -fast_arc_tan(vector_distance(&old_pos, &m->pos), m->pos.z - old_pos.f[2]);
-            m->rot.z = func_L00_00259148_2CF808(m->rot.z, yaw, frame_time_sq * 6.2831855f, frame_time_sq * 3.1415927f, frame_time * 6.2831855f, &v->yaw_velocity);
-            m->rot.y = func_L00_00259148_2CF808(m->rot.y, pitch, frame_time_sq * 6.2831855f, frame_time_sq * 3.1415927f, frame_time * 6.2831855f, &v->pitch_velocity);
+            f32 yaw = fast_arc_tan(updated_moby->pos.x - old_pos.f[0], updated_moby->pos.y - old_pos.f[1]);
+            f32 pitch = -fast_arc_tan(vector_distance(&old_pos, &updated_moby->pos), updated_moby->pos.z - old_pos.f[2]);
+            updated_moby->rot.z = func_L00_00259148_2CF808(updated_moby->rot.z, yaw, frame_time_sq * 6.2831855f, frame_time_sq * 3.1415927f, frame_time * 6.2831855f, &v->yaw_velocity);
+            updated_moby->rot.y = func_L00_00259148_2CF808(updated_moby->rot.y, pitch, frame_time_sq * 6.2831855f, frame_time_sq * 3.1415927f, frame_time * 6.2831855f, &v->pitch_velocity);
         }
         goto update_effects;
     }
 state3:
     {
-        struct MobyClass *pclass = m->pclass;
-        m->collision = pclass->collision;
-        qcopy(&old_pos, &m->pos);
-        m->scale += (pclass->scale - m->scale) * (frame_scale * 0.05f);
-        m->collision = pclass->collision;
-        func_L00_002CF328_2CF808(m);
+        struct MobyClass *pclass = updated_moby->pclass;
+        updated_moby->collision = pclass->collision;
+        qcopy(&old_pos, &updated_moby->pos);
+        updated_moby->scale += (pclass->scale - updated_moby->scale) * (frame_scale * 0.05f);
+        updated_moby->collision = pclass->collision;
+        func_L00_002CF328_2CF808(updated_moby);
         target = v->target;
         if (target != 0 && target->oclass == v->target_oclass && target->state != 0xFE && target->state != 0xFD) {
             char *h = suck_get_aim_height(target);
@@ -2800,24 +2800,24 @@ state3:
             subtract_vector_xyz_2c8440(&direction, &target_pos, &v->offset);
             scale_vector_xyz_2c8440(&direction, &direction, 3.1f);
             add_vector_xyz(&rotated, &target_pos, &direction);
-            subtract_vector_xyz_2c8440(&v->position, &rotated, &m->pos);
+            subtract_vector_xyz_2c8440(&v->position, &rotated, &updated_moby->pos);
             scale_vector_xyz_2c8440(&v->position, &v->position, frame_scale * -0.8f + 1.0f);
-            add_vector_xyz(&m->pos, &m->pos, &v->position);
+            add_vector_xyz(&updated_moby->pos, &updated_moby->pos, &v->position);
             qcopy(&v->offset, &target_pos);
-            qcopy(&collision_data[0], &m->pos);
-            if (func_L00_001F10E0_2CF808(0.25f, &collision_data[0], 0, m)) {
+            qcopy(&collision_data[0], &updated_moby->pos);
+            if (func_L00_001F10E0_2CF808(0.25f, &collision_data[0], 0, updated_moby)) {
                 struct Moby *hm = (struct Moby *)coll_hit.moby;
                 if (!hm || hm->state == 0xFE || hm->state == 0xFD || hm != v->target || hm->oclass == 0) {
-                    qcopy(&m->pos, &D_L00_00173E70);
+                    qcopy(&updated_moby->pos, &D_L00_00173E70);
                 } else {
                     s32 cat2 = hm->pclass ? *(u8 *)((u8 *)hm->pclass + 0x46) : 0;
-                    func_L00_0025A890_2CF808(((BombHit_2CF808 *)&direction), m, 0x10000, 1.0f);
+                    func_L00_0025A890_2CF808(((BombHit_2CF808 *)&direction), updated_moby, 0x10000, 1.0f);
                     set_vector_length_xy(((BombHit_2CF808 *)&direction), &v->position, 1.0f);
                     ((BombHit_2CF808 *)&direction)->direction.f[2] = 1.0f;
                     ((BombHit_2CF808 *)&direction)->direction.f[3] = 5627.925f;
                     ((BombHit_2CF808 *)&direction)->kind = 1;
                     ((BombHit_2CF808 *)&direction)->mode = 2;
-                    ((BombHit_2CF808 *)&direction)->oclass = m->oclass;
+                    ((BombHit_2CF808 *)&direction)->oclass = updated_moby->oclass;
                     func_L00_0025AAC0_2CF808((struct Moby *)coll_hit.moby, ((BombHit_2CF808 *)&direction));
                     if (cat2 == 5) {
                         if (coll_hit.moby && ((struct Moby *)coll_hit.moby)->oclass == 0x4D6 && (health = v->health) > 0) {
@@ -2828,20 +2828,20 @@ state3:
                                 random = health - 1;
                             v->health = random;
                         } else {
-                            func_L00_0025F4A8_2CF808(m, v, 0, 0.0f, 0.0f, 0, 1, 1, 0.4f, 0.2f, 4.0f, 1, 1.0f, 8.0f, 1, 1, -1, 0);
-                            m->state = 4;
+                            func_L00_0025F4A8_2CF808(updated_moby, v, 0, 0.0f, 0.0f, 0, 1, 1, 0.4f, 0.2f, 4.0f, 1, 1.0f, 8.0f, 1, 1, -1, 0);
+                            updated_moby->state = 4;
                         }
                     }
                 }
             }
         }
         else {
-            m->state = 2;
+            updated_moby->state = 2;
             v->target_oclass = -1;
             v->target = 0;
         }
-        m->rot.z = fast_arc_tan(m->pos.x - old_pos.f[0], m->pos.y - old_pos.f[1]);
-        m->rot.y = -fast_arc_tan(vector_distance(&old_pos, &m->pos), m->pos.z - old_pos.f[2]);
+        updated_moby->rot.z = fast_arc_tan(updated_moby->pos.x - old_pos.f[0], updated_moby->pos.y - old_pos.f[1]);
+        updated_moby->rot.y = -fast_arc_tan(vector_distance(&old_pos, &updated_moby->pos), updated_moby->pos.z - old_pos.f[2]);
         goto update_effects;
     }
 state4:
@@ -2856,29 +2856,29 @@ state4:
             qcopy(&old_pos, &v->target->pos);
             if (h != 0)
                 old_pos.f[2] += *(f32 *)(h + 0x10);
-            subtract_vector_xyz_2c8440(&v->position, &old_pos, &m->pos);
+            subtract_vector_xyz_2c8440(&v->position, &old_pos, &updated_moby->pos);
             scale_vector_xyz_2c8440(&v->position, &v->position, frame_scale * -0.8f + 1.0f);
             clamp_vector_length(&v->position, &v->position, frame_scale * 0.9f);
-            add_vector_xyz(&m->pos, &m->pos, &v->position);
+            add_vector_xyz(&updated_moby->pos, &updated_moby->pos, &v->position);
         }
         goto fade_alpha;
 fade_clear:
         v->target = 0;
 fade_alpha:
-        m->alpha -= 4;
-        if (m->alpha < 6)
-            m->state = 5;
+        updated_moby->alpha -= 4;
+        if (updated_moby->alpha < 6)
+            updated_moby->state = 5;
         goto update_effects;
     }
 state5:
     {
         ((DroneSlots_2CF808 *)&hero)->ammo_used--;
         ((DroneSlots_2CF808 *)&hero)->slots[v->slot] = 0;
-        mark_moby_for_removal(m);
+        mark_moby_for_removal(updated_moby);
         return;
     }
 update_effects:
-    func_L00_0025B040_2CF808(0.17f, m);
+    func_L00_0025B040_2CF808(0.17f, updated_moby);
 }
 /* Crate update (pvars at moby + 0x78). */
 typedef struct {
