@@ -673,84 +673,84 @@ struct L11ChainPath {
 
 /* Moves each chain link along the path to a fixed distance behind the one before it and turns it to follow the curve. */
 void FUN_L11_00317820(struct Moby *moby) {
-    struct L11ChainVars *d = (struct L11ChainVars *)moby->pvars;
-    char *path = d->path;
-    struct L11ChainPath *p = (struct L11ChainPath *)d->path;
+    struct L11ChainVars *chain_vars = (struct L11ChainVars *)moby->pvars;
+    char *path = chain_vars->path;
+    struct L11ChainPath *chain_path = (struct L11ChainPath *)chain_vars->path;
     float v[4];
     int i;
 
     fast_vec_normalize(v, &moby->rot_row0, D_L11_00162328);
     fast_vec_add(v, v, &moby->pos);
-    for (i = 0; i < d->count; i++) {
-        int a = d->offsets[i];
-        int b = (a + 1) % p->count;
-        int c = (a + 2) % p->count;
-        float d0 = FUN_001f9b48(&p->pts[a], v);
-        float d1 = FUN_001f9b48(&p->pts[b], v);
-        float t;
+    for (i = 0; i < chain_vars->count; i++) {
+        int a = chain_vars->offsets[i];
+        int b = (a + 1) % chain_path->count;
+        int c = (a + 2) % chain_path->count;
+        float d0 = FUN_001f9b48(&chain_path->pts[a], v);
+        float d1 = FUN_001f9b48(&chain_path->pts[b], v);
+        float segment_fraction;
         struct Moby *link;
         float yaw0, yaw1, pitch0;
         float *qa, *qb, *qc; /* the points as raw rows: [4], [5], [6] = x, y, z */
 
         while (d1 > D_L11_00162324) {
             a = b;
-            b = (a + 1) % p->count;
+            b = (a + 1) % chain_path->count;
             d0 = d1;
-            c = (b + 1) % p->count;
-            d1 = FUN_001f9b48(&p->pts[b], v);
+            c = (b + 1) % chain_path->count;
+            d1 = FUN_001f9b48(&chain_path->pts[b], v);
         }
         {
             float *q = (float *)(path + a * 16);
 
             if (q[7] == 42.0f) {
-                u8 *lv = d->links[i]->pvars;
+                u8 *lv = chain_vars->links[i]->pvars;
                 if (*(s32 *)(lv + 0x28) == 0) {
                     if (D_L11_0015F5C4 == 0) {
-                        FUN_0022da68(2, 0, d->links[i]);
+                        FUN_0022da68(2, 0, chain_vars->links[i]);
                     }
                     *(s32 *)(lv + 0x28) = scale_game_frames(D_L11_0016232C);
                 }
             }
         }
         if (d0 > D_L11_00162324) {
-            t = (d0 - D_L11_00162324) / (d0 - d1);
+            segment_fraction = (d0 - D_L11_00162324) / (d0 - d1);
         } else {
-            t = 0.0f;
+            segment_fraction = 0.0f;
         }
-        d->offsets[i] = a;
-        d->frac[i] = t;
-        if (d->catchup[i] != 0.0f) {
-            float f = t - d->catchup[i];
-            int k = FUN_001fa6d0(f);
-            f -= (float)FUN_001fa6d0(f);
-            if (f < 0.0f) {
+        chain_vars->offsets[i] = a;
+        chain_vars->frac[i] = segment_fraction;
+        if (chain_vars->catchup[i] != 0.0f) {
+            float catchup_adjusted_progress = segment_fraction - chain_vars->catchup[i];
+            int k = FUN_001fa6d0(catchup_adjusted_progress);
+            catchup_adjusted_progress -= (float)FUN_001fa6d0(catchup_adjusted_progress);
+            if (catchup_adjusted_progress < 0.0f) {
                 k--;
-                f += 1.0f;
+                catchup_adjusted_progress += 1.0f;
             }
-            a = (a + k + p->count) % p->count;
-            b = (b + k + p->count) % p->count;
-            c = (c + k + p->count) % p->count;
-            t = f;
+            a = (a + k + chain_path->count) % chain_path->count;
+            b = (b + k + chain_path->count) % chain_path->count;
+            c = (c + k + chain_path->count) % chain_path->count;
+            segment_fraction = catchup_adjusted_progress;
         }
-        link = d->links[i];
-        lerp_vector(&link->pos, &p->pts[a], &p->pts[b], t);
-        qcopy(v, &d->links[i]->pos);
+        link = chain_vars->links[i];
+        lerp_vector(&link->pos, &chain_path->pts[a], &chain_path->pts[b], segment_fraction);
+        qcopy(v, &chain_vars->links[i]->pos);
         qa = (float *)(path + a * 16);
         qb = (float *)(path + b * 16);
         qc = (float *)(path + c * 16);
         yaw0 = fast_arc_tan(qa[4] - qb[4], qa[5] - qb[5]);
         yaw1 = fast_arc_tan(qb[4] - qc[4], qb[5] - qc[5]);
-        pitch0 = -fast_arc_tan(vector_distance(&p->pts[b].x, &p->pts[a].x),
+        pitch0 = -fast_arc_tan(vector_distance(&chain_path->pts[b].x, &chain_path->pts[a].x),
                                qa[6] - qb[6]);
-        d->links[i]->rot.y = fast_add_rotations(
-            fast_subtract_rotations(-fast_arc_tan(vector_distance(&p->pts[c].x, &p->pts[b].x),
+        chain_vars->links[i]->rot.y = fast_add_rotations(
+            fast_subtract_rotations(-fast_arc_tan(vector_distance(&chain_path->pts[c].x, &chain_path->pts[b].x),
                                                   qb[6] - qc[6]),
-                                    pitch0) * t,
+                                    pitch0) * segment_fraction,
             pitch0);
-        d->links[i]->rot.z = fast_add_rotations(fast_subtract_rotations(yaw1, yaw0) * t, yaw0);
-        FUN_L00_00250df8(d->links[i]);
-        fast_vec_normalize(v, &d->links[i]->rot_row0, D_L11_00162328);
-        fast_vec_add(v, v, &d->links[i]->pos);
+        chain_vars->links[i]->rot.z = fast_add_rotations(fast_subtract_rotations(yaw1, yaw0) * segment_fraction, yaw0);
+        FUN_L00_00250df8(chain_vars->links[i]);
+        fast_vec_normalize(v, &chain_vars->links[i]->rot_row0, D_L11_00162328);
+        fast_vec_add(v, v, &chain_vars->links[i]->pos);
     }
 }
 extern char D_00141C18[];
