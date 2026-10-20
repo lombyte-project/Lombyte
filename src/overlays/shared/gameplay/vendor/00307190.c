@@ -61,54 +61,54 @@ extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
 void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 extern int func_001F9908_i(void *) __asm__("FUN_001f9740");
 
-void FUN_L08_00307298(char *m) {
+void FUN_L08_00307298(char *fire_bolt) {
     enum {
         FIRE_BOLT_STATE_FLYING = 1,
         FIRE_BOLT_STATE_BURST_AND_REMOVE = 2
     };
-    char *d = *(char **)(m + 0x78);
+    char *bolt_data = *(char **)(fire_bolt + 0x78);
     float prev[4];
     float sc[4];
     float off[4];
     float tmp[4];
-    char *o;
-    switch (((unsigned char *)m)[0x20]) {
+    char *tracked_moby;
+    switch (((unsigned char *)fire_bolt)[0x20]) {
     case FIRE_BOLT_STATE_FLYING:
-        qcopy(prev, m + 0x10);
-        o = *(char **)(d + 0x14);
-        if (o == 0 || ((unsigned char *)o)[0x20] == 0xFE || ((unsigned char *)o)[0x20] == 0xFD) {
-            m[0x20] = 2;
+        qcopy(prev, fire_bolt + 0x10);
+        tracked_moby = *(char **)(bolt_data + 0x14);
+        if (tracked_moby == 0 || ((unsigned char *)tracked_moby)[0x20] == 0xFE || ((unsigned char *)tracked_moby)[0x20] == 0xFD) {
+            fire_bolt[0x20] = 2;
         }
         if (D_L08_0015F5D4 < 0.9f && D_L08_0015F5D0 < 0.9f) {
             int a;
-            float f = random_float_between_alt(0.95f, 0.985f);
-            scale_vector_xyz(sc, d, f);
-            normalize_vector_xyz(off, d, -0.1f);
-            FUN_L00_001ff290(tmp, off, m + 0x10);
+            float trail_velocity_scale = random_float_between_alt(0.95f, 0.985f);
+            scale_vector_xyz(sc, bolt_data, trail_velocity_scale);
+            normalize_vector_xyz(off, bolt_data, -0.1f);
+            FUN_L00_001ff290(tmp, off, fire_bolt + 0x10);
             a = scale_game_frames(random_int_between(0xF, 0x14));
             FUN_L00_00269958(off, sc, 0x6F00AFFF, 0xFF, a, 0x28,
                              scale_game_frames(random_int_between(7, 0xA)), 1);
         }
-        add_vector_xyz(m + 0x10, m + 0x10, d);
-        if (collision_line(m + 0x10, prev, 0x10, *(int *)(d + 0x10), 0) != 0) {
-            char *t = D_L08_00174640;
-            if (*(int *)(t + 0x18) != *(int *)(d + 0x10)) {
-                if (*(int *)(t + 0x18) != 0) {
-                    spawn_nearby_effect(*(void **)(t + 0x18), (int)m, 0x10001, t + 0x20, d, 1.0f);
+        add_vector_xyz(fire_bolt + 0x10, fire_bolt + 0x10, bolt_data);
+        if (collision_line(fire_bolt + 0x10, prev, 0x10, *(int *)(bolt_data + 0x10), 0) != 0) {
+            char *collision_result = D_L08_00174640;
+            if (*(int *)(collision_result + 0x18) != *(int *)(bolt_data + 0x10)) {
+                if (*(int *)(collision_result + 0x18) != 0) {
+                    spawn_nearby_effect(*(void **)(collision_result + 0x18), (int)fire_bolt, 0x10001, collision_result + 0x20, bolt_data, 1.0f);
                 }
-                m[0x20] = 2;
+                fire_bolt[0x20] = 2;
             }
         }
-        if (func_001F9908_i(d + 0x18) != 0)
-            m[0x20] = 2;
+        if (func_001F9908_i(bolt_data + 0x18) != 0)
+            fire_bolt[0x20] = 2;
         break;
     case FIRE_BOLT_STATE_BURST_AND_REMOVE:
-        if ((D_L08_0015F5D4 < 0.85f && D_L08_0015F5D0 < 0.85f) || *(int *)(d + 0x2C) == 1) {
-            cart_burst(m, m + 0x10, -1, 0.25f, 13.0f);
+        if ((D_L08_0015F5D4 < 0.85f && D_L08_0015F5D0 < 0.85f) || *(int *)(bolt_data + 0x2C) == 1) {
+            cart_burst(fire_bolt, fire_bolt + 0x10, -1, 0.25f, 13.0f);
         } else {
-            cart_burst(m, m + 0x10, -1, 0.25f, 0.0f);
+            cart_burst(fire_bolt, fire_bolt + 0x10, -1, 0.25f, 0.0f);
         }
-        mark_moby_for_removal(m);
+        mark_moby_for_removal(fire_bolt);
         break;
     }
 }
