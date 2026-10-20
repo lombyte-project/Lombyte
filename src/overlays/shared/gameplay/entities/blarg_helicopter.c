@@ -368,7 +368,7 @@ void spawner_update(struct Moby *moby) {
     Vec4A_2bef68 spawn_position;
     Vec4A_2bef68 sampled_point_scratch;
     int st;
-    Data_2C0330 *d;
+    Data_2C0330 *spawner_data;
     Hit_2C0330 *r;
     int *ids;
     int i;
@@ -380,47 +380,47 @@ void spawner_update(struct Moby *moby) {
     int room;
     int cond;
     float dist;
-    float h;
+    float target_ground_height;
     int kids = 18;
 
     if (moby == 0) return;
-    d = (Data_2C0330 *)moby->pvars;
+    spawner_data = (Data_2C0330 *)moby->pvars;
     if (moby->visible != 0 && FUN_001f9b48_2bef68(&moby->pos, D_L03_00166EC0) < 28.0f) {
         FUN_L00_0025a120_2bef68(moby);
         moby->shadow_range = 0x16;
     }
-    if (d == 0) return;
-    ids = d->ids;
-    d->count = 0;
+    if (spawner_data == 0) return;
+    ids = spawner_data->ids;
+    spawner_data->count = 0;
     for (i = 0; i < kids; i++) {
         struct Moby *o;
         int id = ids[i];
         if (id == -1) continue;
         o = (struct Moby *)(D_L03_00160058_p + (id << 8));
         if (o != 0 && o->state != 0xFE && o->state != 0xFD) {
-            d->count++;
+            spawner_data->count++;
         }
     }
     {
         struct Moby *o;
         for (o = (struct Moby *)D_L03_00160064_p; o != 0; o = o->next) {
             if (o->oclass == 0x221 && o->state != 0xFE && o->state != 0xFD) {
-                d->count++;
+                spawner_data->count++;
             }
         }
     }
     dist = FUN_001f9b80_2bef68(&moby->pos, D_0013E533_2bef68 + 0xE9D);
-    near1 = dist < d->f9C;
-    near2 = dist < d->f90;
+    near1 = dist < spawner_data->f9C;
+    near2 = dist < spawner_data->f90;
     spawn = 0;
-    timerDone = FUN_001f9770_2bef68(&d->timer) != 0;
+    timerDone = FUN_001f9770_2bef68(&spawner_data->timer) != 0;
     inVol = 0;
-    room = d->count < d->max;
-    if (d->fD0 != -1) {
-        inVol = FUN_00214720_2bef68(D_0013E533_2bef68 + 0xE9D, d->fD0) != 0;
+    room = spawner_data->count < spawner_data->max;
+    if (spawner_data->fD0 != -1) {
+        inVol = FUN_00214720_2bef68(D_0013E533_2bef68 + 0xE9D, spawner_data->fD0) != 0;
     }
     cond = inVol | near2;
-    switch (d->b82) {
+    switch (spawner_data->b82) {
     case SPAWNER_TRIGGER_DISTANCE_ONLY:
         cond = near1;
         break;
@@ -430,22 +430,22 @@ void spawner_update(struct Moby *moby) {
     case SPAWNER_TRIGGER_VOLUME_OR_DISTANCE:
         break;
     }
-    if (d->h8A == 0 && d->count != 0) {
+    if (spawner_data->h8A == 0 && spawner_data->count != 0) {
         room = 0;
     }
     r = (Hit_2C0330 *)FUN_L00_0025a420_2bef68(moby, 0xC30000, 0);
-    FUN_00213928_2bef68(moby, r, &d->hp, 0, &st, 0, 0, 4);
+    FUN_00213928_2bef68(moby, r, &spawner_data->hp, 0, &st, 0, 0, 4);
     if (st >= 2) {
-        float t = d->hp - r->f2C;
-        d->hp = t;
-        if (t > 0.0f) {
-            d->b67 = 0x5A;
-            FUN_L00_0025d458_2bef68(moby, d->f60);
+        float remaining_health = spawner_data->hp - r->f2C;
+        spawner_data->hp = remaining_health;
+        if (remaining_health > 0.0f) {
+            spawner_data->b67 = 0x5A;
+            FUN_L00_0025d458_2bef68(moby, spawner_data->f60);
         } else {
             FUN_L00_00257470_2bef68(moby, 0, -1);
             moby->state = 8;
-            d->b67 = 0x78;
-            FUN_L00_0025d458_2bef68(moby, d->f60);
+            spawner_data->b67 = 0x78;
+            FUN_L00_0025d458_2bef68(moby, spawner_data->f60);
         }
     }
     moby->hit_slot = 0xFF;
@@ -462,15 +462,15 @@ void spawner_update(struct Moby *moby) {
             }
         }
         moby->flags |= 0x1000;
-        d->b5A = 3;
-        d->b58 = 8;
-        d->b29 = 0;
+        spawner_data->b5A = 3;
+        spawner_data->b58 = 8;
+        spawner_data->b29 = 0;
         moby->state = 1;
         break;
     }
     case SPAWNER_WAIT_FOR_PROXIMITY:
         if (near1) {
-            switch (d->b84) {
+            switch (spawner_data->b84) {
             case 0:
                 moby->state = 2;
                 break;
@@ -520,7 +520,7 @@ void spawner_update(struct Moby *moby) {
         Vec4A_2bef68 *vel;
         z = 0.0f;
         p = D_L03_0015F580_macro;
-        FUN_L00_0025e450_2bef68(moby, d->f70, 0, 0.0f, 0.0f, 0x1E, 8, 0x14, 8.0f, 4.0f, 18.0f, 1.0f, 1, 15.0f, 1, 1, -1, 0);
+        FUN_L00_0025e450_2bef68(moby, spawner_data->f70, 0, 0.0f, 0.0f, 0x1E, 8, 0x14, 8.0f, 4.0f, 18.0f, 1.0f, 1, 15.0f, 1, 1, -1, 0);
         vel = (Vec4A_2bef68 *)&moby->rot;
         FUN_L00_00263fd8_2bef68(moby, 0x6C5, &moby->pos, vel, 0, 0, z, p, p, p);
         FUN_L00_00263fd8_2bef68(moby, 0x6C6, &moby->pos, vel, 0, 0, z, p, p, p);
@@ -536,15 +536,15 @@ void spawner_update(struct Moby *moby) {
     if (spawn && cond && timerDone && room) {
         int *u = used;
         FUN_001153fc_2bef68(u, 0, 0x10);
-        while (d->h8A == 0 ? d->count < d->max : d->timer == 0) {
+        while (spawner_data->h8A == 0 ? spawner_data->count < spawner_data->max : spawner_data->timer == 0) {
             FUN_L00_0024f7c8_2bef68(moby, 0, &launch_origin);
-            switch (d->b85) {
+            switch (spawner_data->b85) {
             case SPAWNER_TARGET_COUNT_ANGULAR_SPREAD: {
                 float ang;
                 float rad;
-                ang = FUN_L00_0025e310_2bef68(FUN_001fa6c0_2bef68(d->count) * 2.0f * 3.1415927f / FUN_001fa6c0_2bef68(d->max + 1) - 3.1415927f);
+                ang = FUN_L00_0025e310_2bef68(FUN_001fa6c0_2bef68(spawner_data->count) * 2.0f * 3.1415927f / FUN_001fa6c0_2bef68(spawner_data->max + 1) - 3.1415927f);
                 rad = FUN_001f9b80_2bef68(&moby->pos, D_0013E533_2bef68 + 0xE9D) * 0.5f;
-                if (d->b83 & 8) {
+                if (spawner_data->b83 & 8) {
                     rad = FUN_002132a8_2bef68(rad, 3.0f);
                 }
                 if (rad < 3.0f) {
@@ -553,11 +553,11 @@ void spawner_update(struct Moby *moby) {
                 launch_velocity.x = FUN_001f9dc8_2bef68(ang) * rad;
                 launch_velocity.y = FUN_001f9de0_2bef68(ang) * rad;
                 launch_velocity.z = 0.0f;
-                FUN_001f9c90_2bef68(&launch_velocity, &launch_velocity, d->f90);
+                FUN_001f9c90_2bef68(&launch_velocity, &launch_velocity, spawner_data->f90);
                 FUN_001f9a10_2bef68(&target_position, &launch_origin, &launch_velocity);
-                h = FUN_00213508_2bef68(&target_position, 0, 0.5f);
-                if (h != 0.0f) {
-                    target_position.z = h;
+                target_ground_height = FUN_00213508_2bef68(&target_position, 0, 0.5f);
+                if (target_ground_height != 0.0f) {
+                    target_position.z = target_ground_height;
                 }
                 break;
             }
@@ -567,17 +567,17 @@ void spawner_update(struct Moby *moby) {
                 launch_velocity.z = 0.0f;
                 FUN_001f9a68_2bef68(&launch_velocity, &launch_velocity, 0.5f);
                 len = FUN_001f9af0_2bef68(&launch_velocity);
-                if (d->b83 & 8) {
+                if (spawner_data->b83 & 8) {
                     FUN_001f9bf8_2bef68(&launch_velocity, &launch_velocity, FUN_002132a8_2bef68(len, 3.0f));
                 }
                 if (FUN_001f9af0_2bef68(&launch_velocity) < 3.0f) {
                     FUN_001f9bf8_2bef68(&launch_velocity, &launch_velocity, 3.0f);
                 }
-                FUN_001f9c90_2bef68(&launch_velocity, &launch_velocity, d->f90);
+                FUN_001f9c90_2bef68(&launch_velocity, &launch_velocity, spawner_data->f90);
                 FUN_001f9a10_2bef68(&target_position, &launch_origin, &launch_velocity);
-                h = FUN_00213508_2bef68(&target_position, 0, 0.5f);
-                if (h != 0.0f) {
-                    target_position.z = h;
+                target_ground_height = FUN_00213508_2bef68(&target_position, 0, 0.5f);
+                if (target_ground_height != 0.0f) {
+                    target_position.z = target_ground_height;
                 }
                 break;
             }
@@ -589,7 +589,7 @@ void spawner_update(struct Moby *moby) {
                 for (j = 0; j < 4; j++) {
                     float dd;
                     if (used[j] == 1) continue;
-                    if (FUN_L03_002beba0(d->pts[j], (float *)&sampled_point_scratch) != 0) continue;
+                    if (FUN_L03_002beba0(spawner_data->pts[j], (float *)&sampled_point_scratch) != 0) continue;
                     dd = FUN_001f9b80_2bef68(&moby->pos, D_0013E533_2bef68 + 0xE9D);
                     if (dd < best) {
                         qcopy(&spawn_position, &sampled_point_scratch);
@@ -602,14 +602,14 @@ void spawner_update(struct Moby *moby) {
                 }
                 FUN_001f9a28_2bef68(&launch_velocity, &spawn_position, &launch_origin);
                 len = FUN_001f9af0_2bef68(&launch_velocity);
-                if (d->b83 & 8) {
+                if (spawner_data->b83 & 8) {
                     FUN_001f9bf8_2bef68(&launch_velocity, &launch_velocity, FUN_002132a8_2bef68(len, 3.0f));
                 }
                 qcopy(&target_position, &spawn_position);
                 break;
             }
             case 3: {
-                int *p = d->pts;
+                int *p = spawner_data->pts;
                 int n = 0;
                 int k;
                 int c;
@@ -627,15 +627,15 @@ void spawner_update(struct Moby *moby) {
                 }
                 FUN_001f9a28_2bef68(&launch_velocity, &spawn_position, &launch_origin);
                 len = FUN_001f9af0_2bef68(&launch_velocity);
-                if (d->b83 & 8) {
+                if (spawner_data->b83 & 8) {
                     FUN_001f9bf8_2bef68(&launch_velocity, &launch_velocity, FUN_002132a8_2bef68(len, 3.0f));
                 }
                 qcopy(&target_position, &spawn_position);
                 break;
             }
             case SPAWNER_TARGET_COUNT_INDEXED_POINT: {
-                int *p = d->pts;
-                int cnt = d->count;
+                int *p = spawner_data->pts;
+                int cnt = spawner_data->count;
                 int n = 0;
                 int k;
                 int c;
@@ -653,7 +653,7 @@ void spawner_update(struct Moby *moby) {
                 }
                 FUN_001f9a28_2bef68(&launch_velocity, &spawn_position, &launch_origin);
                 len = FUN_001f9af0_2bef68(&launch_velocity);
-                if (d->b83 & 8) {
+                if (spawner_data->b83 & 8) {
                     FUN_001f9bf8_2bef68(&launch_velocity, &launch_velocity, FUN_002132a8_2bef68(len, 3.0f));
                 }
                 qcopy(&target_position, &spawn_position);
@@ -664,24 +664,24 @@ void spawner_update(struct Moby *moby) {
             }
             {
                 float speed;
-                char *m;
-                speed = FUN_001f9af0_2bef68(&launch_velocity) * (d->fE4 * frame_scale_macro);
+                char *spawned_moby;
+                speed = FUN_001f9af0_2bef68(&launch_velocity) * (spawner_data->fE4 * frame_scale_macro);
                 launch_velocity.z = 0.0f;
                 FUN_001f9bf8_2bef68(&launch_velocity, &launch_velocity, speed);
                 FUN_001f9bf8_2bef68(&spawn_position, &launch_velocity, 0.05f);
                 FUN_L00_0025f8e0_2bef68((float *)&spawn_position, 0.025f);
                 FUN_L00_001ff290_2bef68(&sampled_point_scratch, &spawn_position, &launch_origin);
-                launch_velocity.z = FUN_L00_0025abf0_2bef68(&spawn_position, &target_position, 0, speed, -(d->fDC * frame_time_sq_macro));
-                m = FUN_L03_002c45d8_2bef68((char *)moby, (float *)&spawn_position, (float *)&launch_velocity, d->h8C, d->b83);
-                if (m != 0) {
-                    *(unsigned char *)(m + 0x30) = 0xFF;
+                launch_velocity.z = FUN_L00_0025abf0_2bef68(&spawn_position, &target_position, 0, speed, -(spawner_data->fDC * frame_time_sq_macro));
+                spawned_moby = FUN_L03_002c45d8_2bef68((char *)moby, (float *)&spawn_position, (float *)&launch_velocity, spawner_data->h8C, spawner_data->b83);
+                if (spawned_moby != 0) {
+                    *(unsigned char *)(spawned_moby + 0x30) = 0xFF;
                 }
-                d->timer = FUN_001f96f8_2bef68(d->h8A);
-                d->count++;
+                spawner_data->timer = FUN_001f96f8_2bef68(spawner_data->h8A);
+                spawner_data->count++;
             }
         }
     }
-    FUN_L00_0025d538_2bef68(moby, d->f60);
+    FUN_L00_0025d538_2bef68(moby, spawner_data->f60);
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00292AC0.c: func_L03_002C59A0), where it is exact; names translated to the US level program. */
 
