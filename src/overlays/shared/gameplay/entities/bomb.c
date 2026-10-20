@@ -489,101 +489,101 @@ extern void fill_transfer_words(void *, int, int) __asm__("FUN_001f97e8");
 extern void FUN_L00_002c92d8_c(void *) __asm__("FUN_L00_002c92d8");
 extern void FUN_L00_00250df8(void *);
 
-struct Moby *FUN_L00_002c9348(State *a) {
-    struct Moby *n;
+struct Moby *FUN_L00_002c9348(State *source_state) {
+    struct Moby *spawned_moby;
     Sub *moby_vars;
     Loc loc;
-    struct Moby *p;
+    struct Moby *previous_slot_moby;
     void *q;
-    Opt *o;
+    Opt *color_options;
     f32 g;
     f32 c1;
     f32 sn;
 
-    n = (struct Moby *)create_moby(0x10E);
-    if (n != NULL) {
-        n->update_dist = 0x7F;
-        n->draw_dist = 0x7F;
-        n->visible = 1;
-        moby_vars = (Sub *)n->pvars;
-        if ((a->flags34 & 0x20) != 0) {
-            o = a->unk78->unk0C;
-            if (o != NULL) {
-                set_moby_color(n, o->f4, o->f5, o->f6);
+    spawned_moby = (struct Moby *)create_moby(0x10E);
+    if (spawned_moby != NULL) {
+        spawned_moby->update_dist = 0x7F;
+        spawned_moby->draw_dist = 0x7F;
+        spawned_moby->visible = 1;
+        moby_vars = (Sub *)spawned_moby->pvars;
+        if ((source_state->flags34 & 0x20) != 0) {
+            color_options = source_state->unk78->unk0C;
+            if (color_options != NULL) {
+                set_moby_color(spawned_moby, color_options->f4, color_options->f5, color_options->f6);
             } else {
-                n->spawn_frame = a->unk38;
+                spawned_moby->spawn_frame = source_state->unk38;
             }
         } else {
-            n->spawn_frame = a->unk38;
+            spawned_moby->spawn_frame = source_state->unk38;
         }
-        n->anim_speed = random_float_between(0.85f, 1.15f);
-        qcopy(&n->pos, &a->pos);
-        clear_u64_value(&n->rot);
-        n->rot.z = fast_arc_tan(n->pos.x - hero.motion.pos.f[0], n->pos.y - hero.motion.pos.f[1]);
-        g = probe_ground_height(&n->pos, 0, 0.5f);
-        if (n->pos.z <= g) {
-            n->pos.z = g;
-            n->pos.z = D_L00_00173E40.f28;
+        spawned_moby->anim_speed = random_float_between(0.85f, 1.15f);
+        qcopy(&spawned_moby->pos, &source_state->pos);
+        clear_u64_value(&spawned_moby->rot);
+        spawned_moby->rot.z = fast_arc_tan(spawned_moby->pos.x - hero.motion.pos.f[0], spawned_moby->pos.y - hero.motion.pos.f[1]);
+        g = probe_ground_height(&spawned_moby->pos, 0, 0.5f);
+        if (spawned_moby->pos.z <= g) {
+            spawned_moby->pos.z = g;
+            spawned_moby->pos.z = D_L00_00173E40.f28;
             qcopy(&loc.v, (u8 *)&D_L00_00173E40 + 0x40);
-            c1 = fast_cos(n->rot.z);
-            sn = fast_sin(n->rot.z);
+            c1 = fast_cos(spawned_moby->rot.z);
+            sn = fast_sin(spawned_moby->rot.z);
             loc.t1 = loc.v.f[0] * c1 + loc.v.f[1] * sn;
-            c1 = fast_cos(n->rot.z);
-            sn = fast_sin(n->rot.z);
+            c1 = fast_cos(spawned_moby->rot.z);
+            sn = fast_sin(spawned_moby->rot.z);
             loc.t2 = loc.v.f[1] * c1 - loc.v.f[0] * sn;
             loc.t3 = loc.v.f[2];
             g = fast_arc_tan(square_root(loc.t1 * loc.t1 + loc.t3 * loc.t3), loc.t2);
-            n->rot.x = -g;
-            n->rot.y = fast_arc_tan(loc.t3, loc.t1);
+            spawned_moby->rot.x = -g;
+            spawned_moby->rot.y = fast_arc_tan(loc.t3, loc.t1);
         }
-        n->collision = ((Part *)n->pclass)->unk10;
-        FUN_0022da68_c(1, 0, n);
-        n->state = 1;
+        spawned_moby->collision = ((Part *)spawned_moby->pclass)->unk10;
+        FUN_0022da68_c(1, 0, spawned_moby);
+        spawned_moby->state = 1;
         moby_vars->unk66 = 0;
         moby_vars->unk64 = FUN_L00_00257b90(scale_game_frames(0x78), scale_game_frames(0x12C));
         g = convert_integer_to_float(D_0013E520[0x15]);
         moby_vars->unk70 = -1;
         moby_vars->unk78 = g * 3.0f + 1.0f;
         moby_vars->unk74 = D_0013E520[0x15];
-        n->command = moby_vars->unk74;
-        FUN_L00_00257470(a, 0, -1);
-        q = suck_get_aim_height(a);
+        spawned_moby->command = moby_vars->unk74;
+        FUN_L00_00257470(source_state, 0, -1);
+        q = suck_get_aim_height(source_state);
         if (q != NULL && *(u8 *)((u8 *)q + 0xE) == 1) {
             *(u8 *)((u8 *)q + 0xE) = 2;
         } else {
-            mark_moby_for_removal(a);
+            mark_moby_for_removal(source_state);
         }
         c1 = 0.0f;
-        FUN_L00_00269b70(&n->pos, 0x7F, 0x7F, 0x7F, scale_game_frames(0xF), 1000000.0f, c1);
+        FUN_L00_00269b70(&spawned_moby->pos, 0x7F, 0x7F, 0x7F, scale_game_frames(0xF), 1000000.0f, c1);
         fill_transfer_words(moby_vars, 0, 0x20);
-        p = D_L00_001DD100[D_L00_00161854];
-        if (p != NULL && p->oclass == 0x10E && p->state != 0xFE && p->state != 0xFD) {
-            if (p->state == 5) {
+        previous_slot_moby = D_L00_001DD100[D_L00_00161854];
+        if (previous_slot_moby != NULL && previous_slot_moby->oclass == 0x10E && previous_slot_moby->state != 0xFE && previous_slot_moby->state != 0xFD) {
+            if (previous_slot_moby->state == 5) {
                 moby_vars->unk78 = c1;
-                n->flags &= ~0x20;
+                spawned_moby->flags &= ~0x20;
             } else if (!moby_vars->unk74) {
                 moby_vars->unk14 = (void *)&D_L00_001DD150[D_L00_00161854];
                 moby_vars->unk10 = (void *)(D_L00_001DDF10 + D_L00_00161854 * 0x60);
-                n->flags |= 0x1020;
+                spawned_moby->flags |= 0x1020;
                 ((Node *)moby_vars->unk14)->unk70 = (void *)D_L00_00161840;
             }
             ((Sub *)D_L00_001DD100[D_L00_00161854]->pvars)->unk70 = (void *)1;
         } else if (!moby_vars->unk74) {
             moby_vars->unk14 = (void *)&D_L00_001DD150[D_L00_00161854];
             moby_vars->unk10 = (void *)(D_L00_001DDF10 + D_L00_00161854 * 0x60);
-            n->flags |= 0x1020;
+            spawned_moby->flags |= 0x1020;
             ((Node *)moby_vars->unk14)->unk70 = (void *)D_L00_00161840;
         }
         FUN_L00_002c92d8_c(moby_vars->unk14);
-        D_L00_001DD100[D_L00_00161854] = n;
+        D_L00_001DD100[D_L00_00161854] = spawned_moby;
         D_L00_00161854_gp = D_L00_00161854 + 1;
         D_L00_00161854 = (D_L00_00161854 + 1) % 20;
         if (moby_vars->unk74) {
-            n->flags &= ~0x20;
+            spawned_moby->flags &= ~0x20;
         }
-        FUN_L00_00250df8(n);
+        FUN_L00_00250df8(spawned_moby);
     }
-    return n;
+    return spawned_moby;
 }
 #include "rnc/math/vector.h"
 
