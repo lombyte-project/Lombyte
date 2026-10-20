@@ -14,17 +14,17 @@ extern void prepare_resident_class_render_data(MobyClassData *, s32, s32,
 void register_moby_class(MobyClassData *moby, s32 arg1, s32 arg2, s32 oclass) __asm__("FUN_00203640");
 
 void register_moby_class(MobyClassData *moby, s32 indexed_textures, s32 material_map, s32 oclass) {
-    s32 n;
+    s32 class_slot;
 
-    n = D_0015FF00;
+    class_slot = D_0015FF00;
     resident_class_slot_by_id[oclass] = D_0015FF00;
-    D_001B3900[n] = oclass;
-    moby_class_resources[n] = moby;
+    D_001B3900[class_slot] = oclass;
+    moby_class_resources[class_slot] = moby;
     if (moby == 0) {
         assign_moby_class_data(oclass);
         D_0015FF00++;
     } else {
-        D_001B6180[n] = moby->unk2C;
+        D_001B6180[class_slot] = moby->unk2C;
         assign_moby_class_data(oclass);
         D_0015FF00++;
         prepare_resident_class_render_data(moby, indexed_textures, material_map, oclass);
