@@ -1624,19 +1624,19 @@ s32 FUN_001fa6e0_274e48(s32, s32, f32) __asm__("FUN_001fa6e0");
 void load_display_text_resource_entry(void *, void *) __asm__("FUN_00214bc0");
 s32 FUN_001f9770_274e48(void *) __asm__("FUN_001f9770");
 void lerp_vector(void *, void *, void *, f32) __asm__("FUN_001f9a40");
-void FUN_L00_00274e48(M_274e48 *m) {
-    R_274e48 *r = &m->r;
+void FUN_L00_00274e48(M_274e48 *particle) {
+    R_274e48 *r = &particle->r;
     V_274e48 u, a, b;
     f32 d, k;
     s32 c;
     if (D_L00_0015F5CC & 1)
-        m->b8++;
-    d = distance_xyz(&m->v10, &(*(V_274e48 *)D_0013F420));
+        particle->b8++;
+    d = distance_xyz(&particle->v10, &(*(V_274e48 *)D_0013F420));
     if (d < 5.0f && 0.0f < r->p18[2]) {
-        subtract_vector_xyz(&a, r->p18, &m->v10);
+        subtract_vector_xyz(&a, r->p18, &particle->v10);
         if (0.5f < vector_length_xyz(&a)) {
             FUN_001f9bf8_274e48(&a, &a, 0.1f / d);
-            FUN_001f9a10_274e48(&m->v10, &m->v10, &a);
+            FUN_001f9a10_274e48(&particle->v10, &particle->v10, &a);
         } else {
             FUN_001f9bf8_274e48(&a, &a, 0.005f);
             pack_vector_xyz_with_shared_scale(&a, (u8 *)r + 4);
@@ -1647,34 +1647,34 @@ void FUN_L00_00274e48(M_274e48 *m) {
         d = 1.0f;
     else if (d < 0.0f)
         d = 0.0f;
-    m->i4 = FUN_001fa6e0_274e48(r->i8, r->iC, d);
+    particle->i4 = FUN_001fa6e0_274e48(r->i8, r->iC, d);
     if (r->h10) {
         *(volatile s32 *)0x10000000 = 0;
         load_display_text_resource_entry(&u, r);
-        FUN_001f9a10_274e48(&m->v10, &m->v10, &u);
-        d = convert_integer_to_float(m->hA) / convert_integer_to_float(r->h10);
-        m->i4 = FUN_001fa6e0_274e48(m->i4 & 0xFFFFFF, m->i4, 1.0f - d);
-        if (FUN_001f9770_274e48(&m->hA)) {
+        FUN_001f9a10_274e48(&particle->v10, &particle->v10, &u);
+        d = convert_integer_to_float(particle->hA) / convert_integer_to_float(r->h10);
+        particle->i4 = FUN_001fa6e0_274e48(particle->i4 & 0xFFFFFF, particle->i4, 1.0f - d);
+        if (FUN_001f9770_274e48(&particle->hA)) {
             r->h10 = 0;
-            m->hA = r->h12;
+            particle->hA = r->h12;
         }
     } else if (r->h12) {
         load_display_text_resource_entry(&a, r);
         load_display_text_resource_entry(&b, (u8 *)r + 4);
-        lerp_vector(&u, &b, &a, convert_integer_to_float(m->hA) / convert_integer_to_float(r->h12));
-        FUN_001f9a10_274e48(&m->v10, &m->v10, &u);
-        if (FUN_001f9770_274e48(&m->hA)) {
+        lerp_vector(&u, &b, &a, convert_integer_to_float(particle->hA) / convert_integer_to_float(r->h12));
+        FUN_001f9a10_274e48(&particle->v10, &particle->v10, &u);
+        if (FUN_001f9770_274e48(&particle->hA)) {
             r->h12 = 0;
-            m->hA = r->h14;
+            particle->hA = r->h14;
         }
     } else {
         load_display_text_resource_entry(&u, (u8 *)r + 4);
-        FUN_001f9a10_274e48(&m->v10, &m->v10, &u);
-        c = m->i4 & 0xFFFFFF;
-        m->i4 =
-            FUN_001fa6e0_274e48(c, m->i4, convert_integer_to_float(m->hA) / convert_integer_to_float(r->h14));
-        if (FUN_001f9770_274e48(&m->hA))
-            free_effect_particle(m);
+        FUN_001f9a10_274e48(&particle->v10, &particle->v10, &u);
+        c = particle->i4 & 0xFFFFFF;
+        particle->i4 =
+            FUN_001fa6e0_274e48(c, particle->i4, convert_integer_to_float(particle->hA) / convert_integer_to_float(r->h14));
+        if (FUN_001f9770_274e48(&particle->hA))
+            free_effect_particle(particle);
     }
 }
 extern int FUN_001fa6d0_275158(float) __asm__("FUN_001fa6d0");
