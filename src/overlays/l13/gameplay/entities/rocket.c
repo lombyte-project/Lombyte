@@ -1215,6 +1215,9 @@ void FUN_L13_00308d10(struct Moby *moby) {
         HIT_RESULT_STUN_KNOCKBACK = 3,
         HIT_RESULT_NO_REACTION = 11
     };
+    enum {
+        GROUND_MATERIAL_DESTROYS_WALKER = 0
+    };
     struct WalkerVars_8d10 *vars = (struct WalkerVars_8d10 *)moby->pvars;
     char *hit;
     s32 code;
@@ -1305,7 +1308,7 @@ void FUN_L13_00308d10(struct Moby *moby) {
     ground = probe_ground_height_8d10(&moby->pos, 0, 0.5f);
     if (ground != 0.0f) {
         switch (ground_material_8d10()) {
-        case 0:
+        case GROUND_MATERIAL_DESTROYS_WALKER:
         case 1:
         case 3:
         case 11:
