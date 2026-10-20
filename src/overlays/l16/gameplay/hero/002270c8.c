@@ -157,6 +157,10 @@ void FUN_L16_002270c8(void) {
         HERO_STATE_GRIND_RAIL_TRANSFER = 42,
         HERO_STATE_GRIND_ATTACK = 43,
         HERO_STATE_GRIND_COLLISION_RECOVERY = 66,
+        HERO_STATE_IDLE_ALT = 83,
+        HERO_STATE_RUN_ALT = 84,
+        HERO_STATE_FALL_ALT = 85,
+        HERO_STATE_HURT_ALT = 86,
         HERO_STATE_SLIP_ALT = 88,
         HERO_STATE_APPROACH_TARGET_POSE = 101,
         HERO_STATE_AT_TARGET_POSE = 103,
@@ -2400,7 +2404,7 @@ void FUN_L16_002270c8(void) {
                         FUN_L00_00216f90(v0, v1, 0x6B, 1);
                     }
                     break;
-                case 83:
+                case HERO_STATE_IDLE_ALT:
                     if (hero.unkA98 & 2) {
                         if (((unsigned char *)hero.moby)[0x53] != 0) {
                             set_hero_animation(0, 0, scale_game_frames(0xC));
@@ -2453,7 +2457,7 @@ void FUN_L16_002270c8(void) {
                         set_hero_animation(0, 0, scale_game_frames(0x14));
                     }
                     break;
-                case 85:
+                case HERO_STATE_FALL_ALT:
                     if (hero.air_frames.s != 0) {
                         break;
                     }
@@ -2477,7 +2481,7 @@ void FUN_L16_002270c8(void) {
                     hero.anim_speed = 0.35f;
                     hero.unk1C4 = scale_game_frames(0x14);
                     break;
-                case 84:
+                case HERO_STATE_RUN_ALT:
                     hero.anim_speed = hero.motion.speed_xy * 54.0f;
                     if (!(hero.air_frames.s < scale_game_frames(5))) {
                         if (hero.ground_distance > 0.8f || hero.ground_slope.f > 0.87266463f) {
@@ -2502,7 +2506,7 @@ void FUN_L16_002270c8(void) {
                         hero_set_state(0x53, 1);
                     }
                     break;
-                case 86:
+                case HERO_STATE_HURT_ALT:
                     if (!(hero.state_timer < scale_game_frames(0x20)) && hero.air_frames.s != 0 &&
                         hero.ground_distance > 1.0f) {
                         hero_set_state(0x55, 1);
