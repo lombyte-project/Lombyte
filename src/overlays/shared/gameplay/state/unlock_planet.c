@@ -209,16 +209,16 @@ void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
 void matrix_to_euler(void *, void *) __asm__("FUN_00214598");
 int FUN_L00_00260400(int u0, char *a, void *b, void *c, float *v, void *out);
-int FUN_L00_00260400(int u0, char *a, void *b, void *input_rotation, float *v, void *out) {
+int FUN_L00_00260400(int u0, char *reference_object, void *b, void *input_rotation, float *v, void *out) {
     M4_260400 basis_rotation_matrix, composed_rotation_matrix;
-    char *o = FUN_L00_002603d0_c(a);
-    if (o == 0)
+    char *transform_record = FUN_L00_002603d0_c(reference_object);
+    if (transform_record == 0)
         return 0;
-    euler_rotation_matrix(basis_rotation_matrix, o);
-    add_vector_xyz(v, b, o + 0x10);
-    subtract_vector_xyz(v, v, a + 0x10);
+    euler_rotation_matrix(basis_rotation_matrix, transform_record);
+    add_vector_xyz(v, b, transform_record + 0x10);
+    subtract_vector_xyz(v, v, reference_object + 0x10);
     transform_vector_by_basis(v, v, basis_rotation_matrix);
-    add_vector_xyz(v, v, a + 0x10);
+    add_vector_xyz(v, v, reference_object + 0x10);
     euler_rotation_matrix(composed_rotation_matrix, input_rotation);
     multiply_matrix(composed_rotation_matrix, basis_rotation_matrix, composed_rotation_matrix);
     matrix_to_euler(composed_rotation_matrix, out);
