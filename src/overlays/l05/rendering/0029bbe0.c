@@ -10,26 +10,26 @@ extern int random_integer_below(int) __asm__("FUN_00213260");
 unsigned char *D_L05_001B25C0 __attribute__((section(".data"))) = 0;
 
 unsigned char *FUN_L05_0029bbe0(float a, void *pos, void *vel, int life, int size, int color) {
-    unsigned char *p = FUN_L00_002678b8(0x30);
-    if (p != 0) {
-        unsigned char *q;
-        qcopy(p + 0x10, pos);
-        q = p + 0x20;
-        *(int *)(p + 4) = color & 0xffffff;
-        p[9] = truncate_float_to_s32(2.0f) + 0x10;
-        p[3] = 0x44;
-        p[1] = 0;
-        p[2] = *D_L05_001B25C0;
-        *(float *)(p + 0xc) = a * 210000.0f;
-        p[8] = random_integer_below(0x100);
-        qcopy(q, vel);
-        *(float *)(q + 0x10) = 2.0f / convert_integer_to_float(life);
-        *(short *)(p + 0xa) = life;
-        *(volatile int *)(q + 0x18) = color;
-        *(volatile short *)(q + 0x1c) = size;
-        *(volatile int *)(q + 0x14) = color & 0xffffff;
+    unsigned char *allocated_object = FUN_L00_002678b8(0x30);
+    if (allocated_object != 0) {
+        unsigned char *velocity_block;
+        qcopy(allocated_object + 0x10, pos);
+        velocity_block = allocated_object + 0x20;
+        *(int *)(allocated_object + 4) = color & 0xffffff;
+        allocated_object[9] = truncate_float_to_s32(2.0f) + 0x10;
+        allocated_object[3] = 0x44;
+        allocated_object[1] = 0;
+        allocated_object[2] = *D_L05_001B25C0;
+        *(float *)(allocated_object + 0xc) = a * 210000.0f;
+        allocated_object[8] = random_integer_below(0x100);
+        qcopy(velocity_block, vel);
+        *(float *)(velocity_block + 0x10) = 2.0f / convert_integer_to_float(life);
+        *(short *)(allocated_object + 0xa) = life;
+        *(volatile int *)(velocity_block + 0x18) = color;
+        *(volatile short *)(velocity_block + 0x1c) = size;
+        *(volatile int *)(velocity_block + 0x14) = color & 0xffffff;
     }
-    return p;
+    return allocated_object;
 }
 #define NOT_SDA
 
