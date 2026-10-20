@@ -836,35 +836,35 @@ extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern void FUN_L00_0026de90(char *, int, float);
 extern short *suck_get_aim_height(unsigned char *) __asm__("FUN_002141f8");
 
-void FUN_L12_003076e0(struct Moby *m) {
-    char *d = (char *)m->pvars;
-    int *s = (int *)(d + (*(int *)(d + 0xF0) << 2));
-    struct Moby *o = (struct Moby *)((unsigned char *)D_L12_0015FFD8_p + (s[0x30] << 8));
-    struct MobyClass *p;
+void FUN_L12_003076e0(struct Moby *spawner) {
+    char *spawner_data = (char *)spawner->pvars;
+    int *s = (int *)(spawner_data + (*(int *)(spawner_data + 0xF0) << 2));
+    struct Moby *spawned_moby = (struct Moby *)((unsigned char *)D_L12_0015FFD8_p + (s[0x30] << 8));
+    struct MobyClass *moby_class;
     short *r;
     int i;
-    qcopy(&o->pos, &m->pos);
-    o->pos.z -= 0.35f;
-    o->state = 0;
-    o->command = 0;
-    p = o->pclass;
-    o->flags = p->flags;
-    o->scale = p->scale;
-    o->update_dist = 0xFF;
-    o->visible = 1;
-    o->occlusion = 0x7F80;
-    o->draw_dist = 0xFF;
-    o->unk71 = 0xFF;
-    o->unk72 = 0xFF;
-    o->hit_slot = 0xFF;
-    o->collision = p->collision;
-    o->spawn_frame = m->spawn_frame;
-    FUN_L00_00250df8(o);
-    o->parent = m;
+    qcopy(&spawned_moby->pos, &spawner->pos);
+    spawned_moby->pos.z -= 0.35f;
+    spawned_moby->state = 0;
+    spawned_moby->command = 0;
+    moby_class = spawned_moby->pclass;
+    spawned_moby->flags = moby_class->flags;
+    spawned_moby->scale = moby_class->scale;
+    spawned_moby->update_dist = 0xFF;
+    spawned_moby->visible = 1;
+    spawned_moby->occlusion = 0x7F80;
+    spawned_moby->draw_dist = 0xFF;
+    spawned_moby->unk71 = 0xFF;
+    spawned_moby->unk72 = 0xFF;
+    spawned_moby->hit_slot = 0xFF;
+    spawned_moby->collision = moby_class->collision;
+    spawned_moby->spawn_frame = spawner->spawn_frame;
+    FUN_L00_00250df8(spawned_moby);
+    spawned_moby->parent = spawner;
     for (i = 0; i < 14; i++) {
-        FUN_L00_0026de90(&m->pos, 0, random_float_between(frame_time * 3.0f, frame_time * 5.0f));
+        FUN_L00_0026de90(&spawner->pos, 0, random_float_between(frame_time * 3.0f, frame_time * 5.0f));
     }
-    r = suck_get_aim_height(o);
+    r = suck_get_aim_height(spawned_moby);
     if (r != 0) {
         *(float *)r = r[2];
     }
