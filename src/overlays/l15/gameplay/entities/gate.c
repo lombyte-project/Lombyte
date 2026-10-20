@@ -1766,34 +1766,34 @@ int FUN_L00_0025fcb8(char *a, char *o, float best);
 extern void func_L00_00260D30_t(void *, float *, float) __asm__("FUN_L00_0025fcb8");
 
 float FUN_L15_002cf110(void *m_, void *out, float r) {
-    char *m = m_;
-    float tmp[4];
+    char *moby = m_;
+    float steering_offset[4];
     float tgt[4];
     float pad[4][4]; /* unused, but retail reserves the stack space */
     float dist;
     float wsum = 0.0f;
     int clear = 1;
     float k;
-    char *o;
-    func_L00_00260D30_t(m, tgt, r);
-    dist = vector_distance(m + 0x10, tgt);
+    char *other_moby;
+    func_L00_00260D30_t(moby, tgt, r);
+    dist = vector_distance(moby + 0x10, tgt);
     clear_u64_value(out);
-    for (o = D_L15_0015FFE4; o != 0; o = *(char **)(o + 0x28)) {
-        if (o == m)
+    for (other_moby = D_L15_0015FFE4; other_moby != 0; other_moby = *(char **)(other_moby + 0x28)) {
+        if (other_moby == moby)
             continue;
-        if (*(short *)(o + 0xA6) != *(short *)(m + 0xA6))
+        if (*(short *)(other_moby + 0xA6) != *(short *)(moby + 0xA6))
             continue;
-        if (vector_distance(o + 0x10, m + 0x10) < 3.0f) {
+        if (vector_distance(other_moby + 0x10, moby + 0x10) < 3.0f) {
             wsum += 6.0f;
-            subtract_vector_xyz(tmp, m + 0x10, o + 0x10);
-            scale_vector_xyz(tmp, tmp, 6.0f);
-            add_vector_xyz(out, out, tmp);
+            subtract_vector_xyz(steering_offset, moby + 0x10, other_moby + 0x10);
+            scale_vector_xyz(steering_offset, steering_offset, 6.0f);
+            add_vector_xyz(out, out, steering_offset);
         }
-        if (vector_distance(o + 0x10, tgt) < dist)
+        if (vector_distance(other_moby + 0x10, tgt) < dist)
             clear = 0;
     }
     if (clear == 0) {
-        subtract_vector_xyz(tmp, m + 0x10, tgt);
+        subtract_vector_xyz(steering_offset, moby + 0x10, tgt);
         if (dist < 9.5f) {
             k = 10.0f;
         } else if (10.5f < dist) {
@@ -1802,19 +1802,19 @@ float FUN_L15_002cf110(void *m_, void *out, float r) {
             k = 0.0f;
         }
         wsum += 10.0f;
-        normalize_vector_xyz(tmp, tmp, k * 10.0f);
-        add_vector_xyz(out, out, tmp);
+        normalize_vector_xyz(steering_offset, steering_offset, k * 10.0f);
+        add_vector_xyz(out, out, steering_offset);
         scale_vector_xyz(out, out, 1.0f / wsum);
-        add_vector_xyz(out, out, m + 0x10);
+        add_vector_xyz(out, out, moby + 0x10);
     } else {
         qcopy(out, tgt);
     }
-    if (vector_distance(m + 0x10, out) < 1.0f) {
-        qcopy(out, m + 0x10);
-        return fast_arc_tan(tgt[0] - *(float *)(m + 0x10), tgt[1] - *(float *)(m + 0x14));
+    if (vector_distance(moby + 0x10, out) < 1.0f) {
+        qcopy(out, moby + 0x10);
+        return fast_arc_tan(tgt[0] - *(float *)(moby + 0x10), tgt[1] - *(float *)(moby + 0x14));
     }
-    return fast_arc_tan(((float *)out)[0] - *(float *)(m + 0x10),
-                        ((float *)out)[1] - *(float *)(m + 0x14));
+    return fast_arc_tan(((float *)out)[0] - *(float *)(moby + 0x10),
+                        ((float *)out)[1] - *(float *)(moby + 0x14));
 }
 
 #define NOT_SDA
