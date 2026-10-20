@@ -2011,7 +2011,7 @@ void shuttle_update(struct Moby *moby) {
     Vec4 old_pos;
     Vec4 old_rot;
     Vec4 delta;
-    Vec4 p;
+    Vec4 hero_position_probe;
 
     qcopy(&old_pos, &moby->pos);
     qcopy(&old_rot, &moby->rot);
@@ -2045,9 +2045,9 @@ void shuttle_update(struct Moby *moby) {
     case SHUTTLE_STATE_WAIT_FOR_DEPARTURE:
         if (hero.ground_moby == moby) {
             if (D_L08_00179C10.busy == 0 && D_L08_00179C10.owner == -1) {
-                qcopy(&p, &hero.motion.pos);
-                FUN_L00_00261d78(vars->stop, 0.5f, &p, &p);
-                if (distance_xyz(&hero.motion.pos, &p) < 0.001f) {
+                qcopy(&hero_position_probe, &hero.motion.pos);
+                FUN_L00_00261d78(vars->stop, 0.5f, &hero_position_probe, &hero_position_probe);
+                if (distance_xyz(&hero.motion.pos, &hero_position_probe) < 0.001f) {
                     FUN_L08_002dc7f0((char *)moby);
                     if ((D_0013CAE4[0] & 0x10) && hero.air_frames.s == 0 && D_L08_0015F594 == 10)
                         moby->state = 3;
