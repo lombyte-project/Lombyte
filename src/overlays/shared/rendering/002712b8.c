@@ -1557,10 +1557,10 @@ void FUN_L00_00274a70(u8 *particle) {
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern unsigned char *D_L00_001B2198 __attribute__((section(".data")));
 
-unsigned char *FUN_L00_00274cf8(void *a, int idx, float ang) {
+unsigned char *FUN_L00_00274cf8(void *position, int idx, float ang) {
     unsigned char *r = p27fe00_alloc(0x46);
     if (r != 0) {
-        qcopy(r + 0x10, a);
+        qcopy(r + 0x10, position);
         *(int *)(r + 4) = 0x80404040;
         r[9] = truncate_float_to_s32(2.0f) + 0x20;
         r[3] = 0x44;
