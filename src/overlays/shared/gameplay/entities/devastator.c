@@ -116,7 +116,7 @@ void devastator_update(struct Moby *devastator_moby) {
     Hit_2b2100 *hit;
     float height, limit, yaw, pitch, yaw0, pitch0;
     float size;
-    float a, b, c;
+    float muzzle_light_color_x, b, muzzle_light_color_z;
     int i;
 
     FUN_L00_002b1af0_2b2100(devastator_moby);
@@ -301,27 +301,27 @@ void devastator_update(struct Moby *devastator_moby) {
     }
     if (devastator_moby->seq != 2 && data->glow > 0) {
         if (data->glow > scale_game_frames_2b2100(10)) {
-            a = convert_integer_to_float_2b2100(scale_game_frames_2b2100(5) + scale_game_frames_2b2100(10) - data->glow) / (float)scale_game_frames_2b2100(5);
+            muzzle_light_color_x = convert_integer_to_float_2b2100(scale_game_frames_2b2100(5) + scale_game_frames_2b2100(10) - data->glow) / (float)scale_game_frames_2b2100(5);
             b = convert_integer_to_float_2b2100(scale_game_frames_2b2100(5) + scale_game_frames_2b2100(10) - data->glow) * 0.8f / (float)scale_game_frames_2b2100(5);
-            c = convert_integer_to_float_2b2100(scale_game_frames_2b2100(5) + scale_game_frames_2b2100(10) - data->glow) * 0.5f / (float)scale_game_frames_2b2100(5);
+            muzzle_light_color_z = convert_integer_to_float_2b2100(scale_game_frames_2b2100(5) + scale_game_frames_2b2100(10) - data->glow) * 0.5f / (float)scale_game_frames_2b2100(5);
         } else {
-            a = convert_integer_to_float_2b2100(data->glow) / (float)scale_game_frames_2b2100(10);
+            muzzle_light_color_x = convert_integer_to_float_2b2100(data->glow) / (float)scale_game_frames_2b2100(10);
             b = convert_integer_to_float_2b2100(data->glow) * 0.8f / (float)scale_game_frames_2b2100(10);
-            c = convert_integer_to_float_2b2100(data->glow) * 0.5f / (float)scale_game_frames_2b2100(10);
+            muzzle_light_color_z = convert_integer_to_float_2b2100(data->glow) * 0.5f / (float)scale_game_frames_2b2100(10);
         }
         FUN_L00_0024f7c8_2b2100(devastator_moby, 0, &velocity);
         velocity.f.x += fast_cos_2b2100(atan2_fast_2b2100(hero.unk670, hero.unk674));
         velocity.f.y += fast_sin_2b2100(atan2_fast_2b2100(hero.unk670, hero.unk674));
         velocity.f.z += 0.3f;
         if (data->light == -1) {
-            data->light = FUN_L00_0023e738_2b2100(&velocity, 7.0f, 0.0f, a, b, c);
+            data->light = FUN_L00_0023e738_2b2100(&velocity, 7.0f, 0.0f, muzzle_light_color_x, b, muzzle_light_color_z);
         } else {
             Light_2b2100 *muzzle_light = &lights_2b2100[data->light];
             qcopy(&muzzle_light->pos, &velocity);
             muzzle_light->pos.f.w = 7.0f;
-            muzzle_light->x = a;
+            muzzle_light->x = muzzle_light_color_x;
             muzzle_light->y = b;
-            muzzle_light->z = c;
+            muzzle_light->z = muzzle_light_color_z;
         }
         FUN_001f9770_2b2100(&data->glow);
     } else if (data->light != -1) {
