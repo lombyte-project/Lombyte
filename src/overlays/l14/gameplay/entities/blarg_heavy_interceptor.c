@@ -2831,8 +2831,8 @@ void FUN_L14_002b5c98(u8 *moby) {
     *(s32 *)(moby + 0x94) = 0;
     idx = *(s32 *)(data + 0x108);
     if (idx != -1) {
-        u8 *e = D_0013E550 + idx * 0x70;
-        if (*(u8 **)(e + 0x88) == moby && *(u8 *)(e + 0x74) != 0) {
+        u8 *voice_slot = D_0013E550 + idx * 0x70;
+        if (*(u8 **)(voice_slot + 0x88) == moby && *(u8 *)(voice_slot + 0x74) != 0) {
             release_voice_slot(idx);
         }
     }
