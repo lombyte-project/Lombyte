@@ -1245,16 +1245,16 @@ extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void normalize_vector_xyz(void *, void *, float);
 
 void FUN_L09_002ee110(struct Moby *moby) {
-    char *d = (char *)moby->pvars;
+    char *moby_vars_or_random_frames = (char *)moby->pvars;
     char *r = find_moby_hit(moby, 0x10000, 0);
     Vx v;
     Vx b;
     int i;
     if (r != 0) {
-        *(float *)d = *(float *)d - *(float *)(r + 0x2C);
-        if (0.0f < *(float *)d) {
-            d[0x47] = 0x46;
-            trooper_anim_update(moby, (short *)(d + 0x40));
+        *(float *)moby_vars_or_random_frames = *(float *)moby_vars_or_random_frames - *(float *)(r + 0x2C);
+        if (0.0f < *(float *)moby_vars_or_random_frames) {
+            moby_vars_or_random_frames[0x47] = 0x46;
+            trooper_anim_update(moby, (short *)(moby_vars_or_random_frames + 0x40));
         } else {
             char *pos = &moby->pos;
             v.x = fast_cos(moby->rot.z) * (frame_time * 20.0f);
@@ -1275,8 +1275,8 @@ void FUN_L09_002ee110(struct Moby *moby) {
                 add_vector_xyz(&b, &v, &b);
                 normalize_vector_xyz(&b, &b,
                                      random_float_between(frame_time * 3.0f, frame_time * 6.0f));
-                d = (char *)FUN_L00_00257b90(scale_game_frames(5), scale_game_frames(10));
-                FUN_L00_0026dd20(pos, (char *)&b, 0x5F7F4F2F, (int)d,
+                moby_vars_or_random_frames = (char *)FUN_L00_00257b90(scale_game_frames(5), scale_game_frames(10));
+                FUN_L00_0026dd20(pos, (char *)&b, 0x5F7F4F2F, (int)moby_vars_or_random_frames,
                                  random_float_between(20000.0f, 50000.0f));
             }
             *(OvlQuad *)&b = *(OvlQuad *)&moby->pos;
