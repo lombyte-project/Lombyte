@@ -1030,10 +1030,10 @@ void gadgebot_update(unsigned char *moby) {
         break;
     }
     case GADGEBOT_LAUNCH_FLIGHT: {
-        float a = 10.0f;
+        float launch_gravity_and_minimum_z = 10.0f;
         float r;
         moby_transform_ptr = moby + 0x10;
-        *(float *)(moby_vars + 0x1D8) = *(float *)(moby_vars + 0x1D8) - frame_time_sq * a;
+        *(float *)(moby_vars + 0x1D8) = *(float *)(moby_vars + 0x1D8) - frame_time_sq * launch_gravity_and_minimum_z;
         add_vector_xyz(moby_transform_ptr, moby_transform_ptr, moby_vars + 0x1D0);
         qcopy(position_scratch, moby_transform_ptr);
         ((float *)position_scratch)[2] += 1.0f;
@@ -1043,7 +1043,7 @@ void gadgebot_update(unsigned char *moby) {
             moby[0x20] = 2;
             if (moby[0x53])
                 blend_moby_animation(moby, 0, 0, scale_game_frames(10));
-        } else if (*(float *)(moby + 0x18) < a) {
+        } else if (*(float *)(moby + 0x18) < launch_gravity_and_minimum_z) {
             moby[0x20] = 6;
         }
         break;
