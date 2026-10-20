@@ -2881,7 +2881,7 @@ void FUN_L14_002b5dd8(struct Moby *moby) {
     float pos[4];
     int i;
     int j;
-    int n;
+    int signed_puff_value;
     int life;
     float size;
     if (moby->state < 2 || moby->state == 9)
@@ -2891,8 +2891,8 @@ void FUN_L14_002b5dd8(struct Moby *moby) {
     for (i = 0; i < 2; i++) {
         PuffParticle *part;
         PuffParticleTail *tail;
-        n = below_x(0x10);
-        part = spawn_puff(pos, 0.2f, 1.0f, 0.75f, below_x(2) == 0 ? n : -n, D_L14_0015F580_x,
+        signed_puff_value = below_x(0x10);
+        part = spawn_puff(pos, 0.2f, 1.0f, 0.75f, below_x(2) == 0 ? signed_puff_value : -signed_puff_value, D_L14_0015F580_x,
                           160000.0f, 0x7F3030FF);
         if (part) {
             tail = &part->tail;
@@ -2904,13 +2904,13 @@ void FUN_L14_002b5dd8(struct Moby *moby) {
     }
     scale_x(off, &moby->rot_row0, -1.0f);
     add_x(pos, &moby->pos, off);
-    n = 0x10;
+    signed_puff_value = 0x10;
     life = frames_x(2);
     size = 100000.0f;
     for (j = 0; j < 3; j++) {
         PuffParticle *part;
         PuffParticleTail *tail;
-        part = spawn_puff(pos, 0.05f, 1.0f, 1.0f, n, D_L14_0015F580_x, size, 0x7FFFFFFF);
+        part = spawn_puff(pos, 0.05f, 1.0f, 1.0f, signed_puff_value, D_L14_0015F580_x, size, 0x7FFFFFFF);
         if (part) {
             tail = &part->tail;
             part->life = life;
@@ -2919,7 +2919,7 @@ void FUN_L14_002b5dd8(struct Moby *moby) {
             tail->bA = 0x7F;
             tail->bB = part->life;
         }
-        n = -n;
+        signed_puff_value = -signed_puff_value;
         life *= 2;
         size -= 20000.0f;
     }
