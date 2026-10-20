@@ -2749,19 +2749,19 @@ void FUN_L12_002eae00(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     float ang = fast_subtract_rotations(fast_arc_tan(*(float *)(data + 0x70), *(float *)(data + 0x74)),
                              moby->rot.z);
-    float a = *(float *)(data + 0x94) * 0.2268928f * fast_cos(ang) / (frame_time * 10.0f);
+    float target_rotation_y = *(float *)(data + 0x94) * 0.2268928f * fast_cos(ang) / (frame_time * 10.0f);
     float b = *(float *)(data + 0x94) * -0.2268928f * fast_sin(ang) / (frame_time * 10.0f);
-    float r0, k0, d0, m0, k1, d1, m1;
+    float updated_rotation_y, k0, rotation_y_damping, rotation_y_step_limit, k1, rotation_x_damping, rotation_x_step_limit;
     k0 = frame_time_sq * 0.5235988f;
-    d0 = frame_time_sq * 1.0471976f;
-    m0 = frame_time * 0.7853982f;
-    r0 = spring_turn((float *)(data + 0x9C), moby->rot.y, a, k0, d0, m0);
+    rotation_y_damping = frame_time_sq * 1.0471976f;
+    rotation_y_step_limit = frame_time * 0.7853982f;
+    updated_rotation_y = spring_turn((float *)(data + 0x9C), moby->rot.y, target_rotation_y, k0, rotation_y_damping, rotation_y_step_limit);
     k1 = frame_time_sq * 1.0471976f;
-    d1 = frame_time_sq * 2.0943952f;
-    m1 = frame_time * 1.2217305f;
-    moby->rot.y = r0;
+    rotation_x_damping = frame_time_sq * 2.0943952f;
+    rotation_x_step_limit = frame_time * 1.2217305f;
+    moby->rot.y = updated_rotation_y;
     moby->rot.x =
-        spring_turn((float *)(data + 0x98), moby->rot.x, b, k1, d1, m1);
+        spring_turn((float *)(data + 0x98), moby->rot.x, b, k1, rotation_x_damping, rotation_x_step_limit);
 }
 extern char *D_L12_001B0930_f[] __asm__("D_L12_001B0930");
 extern float D_0015ED6C_f __asm__("D_0015ED6C");
