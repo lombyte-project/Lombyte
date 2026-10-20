@@ -1287,7 +1287,7 @@ void FUN_L16_002e6208(void *arg) {
     L16PursuitMoby *chomper_moby = arg;
     L16PursuitData *pursuit_data = chomper_moby->data;
     char *hit;
-    int a;                      /* the reaction kind, later the path */
+    int reaction_kind_or_path_address;                      /* the reaction kind, later the path */
     int b;                      /* the reaction flags, later the path's slot in the table */
     float scratch[8];           /* [0..3] where the hit came from, [4] the heading that gives */
 
@@ -1303,8 +1303,8 @@ void FUN_L16_002e6208(void *arg) {
         pursuit_data->acceleration = D_L16_00161E58 * frame_time_sq;
         pursuit_data->jump_speed = D_L16_00161E60 * frame_time;
         pursuit_data->turn_speed = D_L16_00161E5C * frame_time;
-        a = 0x29;
-        pursuit_data->kind = a;
+        reaction_kind_or_path_address = 0x29;
+        pursuit_data->kind = reaction_kind_or_path_address;
         pursuit_data->pending = 0;
         pursuit_data->timer = frame_time * 2.0f;
         chomper_moby->flags &= ~0x1000;
@@ -1321,8 +1321,8 @@ void FUN_L16_002e6208(void *arg) {
     chomper_moby->bA4 = 0xFF;
     trooper_anim_finish(chomper_moby, pursuit_data->reaction);
     b = (int)&D_L16_001B0930[pursuit_data->path];
-    a = *(int *)b;
-    if (FUN_L00_0025ff38(chomper_moby, pursuit_data->target, 16.0f, 0, 0, (void *)(a + 0x10), *(int *)a) != 2) {
+    reaction_kind_or_path_address = *(int *)b;
+    if (FUN_L00_0025ff38(chomper_moby, pursuit_data->target, 16.0f, 0, 0, (void *)(reaction_kind_or_path_address + 0x10), *(int *)reaction_kind_or_path_address) != 2) {
         if (vector_distance(pursuit_data->home, pursuit_data->target) > 16.0f ||
             absolute_float(chomper_moby->position[2] - pursuit_data->target[2]) > 3.0f) {
             pursuit_data->i1C4 = 2;
