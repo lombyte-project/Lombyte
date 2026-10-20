@@ -279,7 +279,7 @@ extern unsigned char D_0013E533[];
 
 void FUN_L00_00221b68(void) {
     char *q = (char *)D_0013E533 + 0xE1D;
-    char *p;
+    char *hero_base;
     char *r;
     float distance_error;
     float xy_distance;
@@ -297,25 +297,25 @@ void FUN_L00_00221b68(void) {
             *(short *)(r + 0x1EA) = s;
         }
     }
-    p = (char *)D_0013E533 + 0xE1D;
-    if (*(short *)(p + 0x1EA) != 0) {
-        xy_distance = vector_distance_xy(p + 0x80, p + 0x210);
-        lim = *(float *)(p + 0x234) * 0.9f;
+    hero_base = (char *)D_0013E533 + 0xE1D;
+    if (*(short *)(hero_base + 0x1EA) != 0) {
+        xy_distance = vector_distance_xy(hero_base + 0x80, hero_base + 0x210);
+        lim = *(float *)(hero_base + 0x234) * 0.9f;
         if (xy_distance < lim) {
-            ang = fast_arc_tan(*(float *)(p + 0x80) - *(float *)(p + 0x210),
-                               *(float *)(p + 0x84) - *(float *)(p + 0x214));
-            if (xy_distance < *(float *)(p + 0x234) * 0.05f) {
-                ang = *(float *)(p + 0x98);
+            ang = fast_arc_tan(*(float *)(hero_base + 0x80) - *(float *)(hero_base + 0x210),
+                               *(float *)(hero_base + 0x84) - *(float *)(hero_base + 0x214));
+            if (xy_distance < *(float *)(hero_base + 0x234) * 0.05f) {
+                ang = *(float *)(hero_base + 0x98);
             }
             distance_error = xy_distance - lim;
-            vendor_spring(&distance_error, (float *)(p + 0x244), 0.0f, frame_scale_sq * 0.03f, frame_scale_sq * 0.3f,
+            vendor_spring(&distance_error, (float *)(hero_base + 0x244), 0.0f, frame_scale_sq * 0.03f, frame_scale_sq * 0.3f,
                              frame_time * 2.8f);
-            *(float *)(p + 0xF0) = fast_cos(ang) * *(float *)(p + 0x244);
-            *(float *)(p + 0xF4) = fast_sin(ang) * *(float *)(p + 0x244);
-            *(float *)(p + 0xF8) = 0.0f;
+            *(float *)(hero_base + 0xF0) = fast_cos(ang) * *(float *)(hero_base + 0x244);
+            *(float *)(hero_base + 0xF4) = fast_sin(ang) * *(float *)(hero_base + 0x244);
+            *(float *)(hero_base + 0xF8) = 0.0f;
         }
     } else {
-        *(int *)(p + 0x244) = 0;
+        *(int *)(hero_base + 0x244) = 0;
     }
 }
 #define NOT_SDA
