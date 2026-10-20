@@ -11,12 +11,12 @@
 extern float square_root(float) __asm__("FUN_001f9988");
 
 void trooper_set_knockback(float *p, float a, float b) __asm__("FUN_L03_00250a78");
-void trooper_set_knockback(float *knockback_state, float a, float b) {
+void trooper_set_knockback(float *knockback_state, float horizontal_knockback_scale, float b) {
     float root = square_root((b + b) * knockback_state[4]);
     float x = (root + root) / knockback_state[4];
     knockback_state[7] = root;
-    knockback_state[6] = (a + a) / x;
-    knockback_state[5] = (a + a) / (x * x);
+    knockback_state[6] = (horizontal_knockback_scale + horizontal_knockback_scale) / x;
+    knockback_state[5] = (horizontal_knockback_scale + horizontal_knockback_scale) / (x * x);
 }
 #include "eetypes.h"
 
