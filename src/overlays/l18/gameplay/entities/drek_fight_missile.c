@@ -3125,18 +3125,18 @@ extern int D_L18_0015FFD8_d __asm__("D_L18_0015FFD8");
  * Ported from rac1-decomp, where it is exact; names translated to
  * the US level program (data still reached through the MACRO_ADDR form). */
 void FUN_L18_002f6fa8(int unused, int idx) {
-    short *p = D_L18_001AC240_u[idx];
-    if (p != 0) {
+    short *group_entry = D_L18_001AC240_u[idx];
+    if (group_entry != 0) {
         do {
-            unsigned char *m = D_L18_0015FFD8_d + ((*(unsigned short *)p & 0x7FFF) << 8);
-            if (m != 0 && m[0x20] != 0xFE && m[0x20] != 0xFD) {
-                unsigned short flags = *(unsigned short *)(m + 0x34);
-                *(int *)(m + 0x94) = 0;
+            unsigned char *group_moby = D_L18_0015FFD8_d + ((*(unsigned short *)group_entry & 0x7FFF) << 8);
+            if (group_moby != 0 && group_moby[0x20] != 0xFE && group_moby[0x20] != 0xFD) {
+                unsigned short flags = *(unsigned short *)(group_moby + 0x34);
+                *(int *)(group_moby + 0x94) = 0;
                 flags |= 1;
-                m[0x31] = 0;
-                *(unsigned short *)(m + 0x34) = flags;
+                group_moby[0x31] = 0;
+                *(unsigned short *)(group_moby + 0x34) = flags;
             }
-        } while (*p++ >= 0);
+        } while (*group_entry++ >= 0);
     }
 }
 
