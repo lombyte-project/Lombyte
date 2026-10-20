@@ -81,7 +81,7 @@ void FUN_L00_002c3440(unsigned char *moby) {
     int i;
     int r, g;
     unsigned char b;
-    float s;
+    float randomized_scalar;
     for (i = 0; i < 10; i++) {
         qcopy(v, moby + 0x10);
         v[0] += FUN_002132a8_2c3440(-0.2f, 0.2f);
@@ -90,8 +90,8 @@ void FUN_L00_002c3440(unsigned char *moby) {
         r = (FUN_001160d8_2c3440() + 0x30) & 0x3F;
         g = (FUN_001160d8_2c3440() + 0x20) & 0x3F;
         b = FUN_001160d8_2c3440() & 0x2F;
-        s = FUN_002132a8_2c3440(100000.0f, 600000.0f);
-        FUN_L00_00269b70_2c3440(v, r, g, b, s, 0.0f,
+        randomized_scalar = FUN_002132a8_2c3440(100000.0f, 600000.0f);
+        FUN_L00_00269b70_2c3440(v, r, g, b, randomized_scalar, 0.0f,
                                 FUN_001f96f8_2c3440(FUN_001160d8_2c3440() % 40 + 10));
     }
     FUN_L00_0025f800_2c3440(moby, D_L00_001B0830_lui);
