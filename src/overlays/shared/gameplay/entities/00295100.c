@@ -1685,7 +1685,7 @@ extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern unsigned char D_001516EC[];
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 
-void FUN_L00_0029b4d8(int a) {
+void FUN_L00_0029b4d8(int vendor_event) {
     enum {
         VENDOR_SELECTION_CHANGED = 0,
         VENDOR_AUXILIARY_MOBY_READY = 1,
@@ -1693,19 +1693,19 @@ void FUN_L00_0029b4d8(int a) {
         VENDOR_AMMO_PURCHASE = 3
     };
     char *b;
-    unsigned char *m;
-    int s;
+    unsigned char *auxiliary_moby;
+    int auxiliary_moby_state;
     int moby_state;
     int r0;
     int r1;
     if (D_L00_00161188 == 0)
         return;
     b = D_L00_001CA4C0;
-    m = *(unsigned char **)(b + 0x24);
-    switch (a) {
+    auxiliary_moby = *(unsigned char **)(b + 0x24);
+    switch (vendor_event) {
     case VENDOR_SELECTION_CHANGED:
-        s = m[0x20];
-        if (s == 2 || s == 0) {
+        auxiliary_moby_state = auxiliary_moby[0x20];
+        if (auxiliary_moby_state == 2 || auxiliary_moby_state == 0) {
             if (random_integer_below(4) == 0) {
                 if (*(int *)(b + 0x30) + scale_game_frames(0x168) < D_L00_0015F3F8) {
                     *(int *)(b + 0x30) = D_L00_0015F3F8;
@@ -1714,7 +1714,7 @@ void FUN_L00_0029b4d8(int a) {
                     D_L00_00161190 = 1;
                     D_L00_00161194 = 0;
                     *(int *)(D_001516EC) = (r0 * 3 + 2) * 6 + *(int *)(b + 0x38) + 10000;
-                    m[0x20] = 0xB;
+                    auxiliary_moby[0x20] = 0xB;
                 }
             }
         }
@@ -1722,16 +1722,16 @@ void FUN_L00_0029b4d8(int a) {
     case VENDOR_AUXILIARY_MOBY_READY:
         r1 = random_integer_below(2);
         *(int *)(b + 0x3C) = r1;
-        D_L00_00161190 = a;
+        D_L00_00161190 = vendor_event;
         D_L00_00161194 = 0;
         *(int *)(D_001516EC) = r1 * 0x12 + *(int *)(b + 0x38) + 10000;
-        if (m[0x53] != a)
-            blend_moby_animation(m, 1, 0, 10);
-        m[0x20] = 10;
+        if (auxiliary_moby[0x53] != vendor_event)
+            blend_moby_animation(auxiliary_moby, 1, 0, 10);
+        auxiliary_moby[0x20] = 10;
         break;
     case VENDOR_ITEM_PURCHASE:
     case VENDOR_AMMO_PURCHASE:
-        moby_state = m[0x20];
+        moby_state = auxiliary_moby[0x20];
         if (moby_state == 2 || moby_state == 0) {
             char *q = D_L00_001CA4C0;
             *(int *)(q + 0x34) = 0;
