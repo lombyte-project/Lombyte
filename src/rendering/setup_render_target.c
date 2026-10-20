@@ -29,20 +29,20 @@ extern int sceGsSetDefDrawEnv(void *, short, short, short, short, short);
 extern long capture_texture_tex0 __asm__("D_0015EED0") MACRO_ADDR;
 void setup_render_target(int a, int b, int c) __asm__("FUN_001fb440");
 
-void setup_render_target(int a, int b, int c) {
+void setup_render_target(int width_log2, int b, int framebuffer_address) {
     int x;
-    long *q;
-    unsigned long *d;
+    long *draw_environment_gif_tag;
+    unsigned long *draw_environment;
     long *r;
 
-    x = a - 6;
+    x = width_log2 - 6;
     if (x <= 0) {
         x = 1;
     }
-    fs_aa_buffer.target_fbp = c >> 13;
-    fs_aa_buffer.target_width = 1 << a;
+    fs_aa_buffer.target_fbp = framebuffer_address >> 13;
+    fs_aa_buffer.target_width = 1 << width_log2;
     fs_aa_buffer.target_height = 1 << b;
-    capture_texture_tex0 = (long)(c >> 8) | ((long)(1 << x) << 14) | ((long)a << 26) |
+    capture_texture_tex0 = (long)(framebuffer_address >> 8) | ((long)(1 << x) << 14) | ((long)width_log2 << 26) |
                  ((unsigned long)b << 30) | ((unsigned long)1 << 34);
     fast_mem_zero16(render_packet_cursor.words, 0xF0);
     render_packet_cursor.words[0] = 0x1000000E;
@@ -50,14 +50,14 @@ void setup_render_target(int a, int b, int c) {
     render_packet_cursor.words[2] = 0;
     render_packet_cursor.words[3] = 0x5000000E;
     render_packet_cursor.words += 4;
-    q = (long *)render_packet_cursor.words;
-    q[0] = 0x1000000000000008L;
-    q[1] = 0xE;
+    draw_environment_gif_tag = (long *)render_packet_cursor.words;
+    draw_environment_gif_tag[0] = 0x1000000000000008L;
+    draw_environment_gif_tag[1] = 0xE;
     render_packet_cursor.words += 4;
-    d = (unsigned long *)render_packet_cursor.words;
-    sceGsSetDefDrawEnv(d, fs_aa_buffer.target_psm, fs_aa_buffer.target_width, fs_aa_buffer.target_height, 3, 0);
-    ((GsFrame *)d)->FBP = fs_aa_buffer.target_fbp;
-    d[2] = fs_aa_buffer.zbp | ((unsigned long)(fs_aa_buffer.zpsm & 0xF) << 24);
+    draw_environment = (unsigned long *)render_packet_cursor.words;
+    sceGsSetDefDrawEnv(draw_environment, fs_aa_buffer.target_psm, fs_aa_buffer.target_width, fs_aa_buffer.target_height, 3, 0);
+    ((GsFrame *)draw_environment)->FBP = fs_aa_buffer.target_fbp;
+    draw_environment[2] = fs_aa_buffer.zbp | ((unsigned long)(fs_aa_buffer.zpsm & 0xF) << 24);
     render_packet_cursor.words += 0x20;
     r = (long *)render_packet_cursor.words;
     r[0] = 0x1000000000000001L;
