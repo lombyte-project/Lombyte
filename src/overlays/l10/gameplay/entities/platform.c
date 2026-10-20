@@ -185,71 +185,71 @@ void FUN_L10_00295c20(struct Moby *moby) {
         PLATFORM_STATE_SINKING_WITH_HERO = 2,
         PLATFORM_STATE_RETURN_TO_ORIGINAL_HEIGHT = 3
     };
-    char *d = (char *)moby->pvars;
+    char *platform_vars = (char *)moby->pvars;
     float prev[4];
     float v[4];
     *(OvlQuad *)prev = *(OvlQuad *)&moby->pos;
     if (FUN_L01_00277fb8(moby)) moby->state = 2;
-    fast_dec_timer((int *)(d + 0xBC));
+    fast_dec_timer((int *)(platform_vars + 0xBC));
     switch (moby->state) {
     case PLATFORM_STATE_INITIALIZE:
-        d[0x28] = 4;
-        *(short *)(d + 0x3E) = 5;
-        *(int *)(d + 0x20) = 0;
-        *(short *)(d + 0x24) = 0;
-        *(float *)(d + 0xA0) = moby->pos.z;
-        *(float *)(d + 0xA8) = random_angle_radians();
-        *(float *)(d + 0xB4) = random_angle_radians();
+        platform_vars[0x28] = 4;
+        *(short *)(platform_vars + 0x3E) = 5;
+        *(int *)(platform_vars + 0x20) = 0;
+        *(short *)(platform_vars + 0x24) = 0;
+        *(float *)(platform_vars + 0xA0) = moby->pos.z;
+        *(float *)(platform_vars + 0xA8) = random_angle_radians();
+        *(float *)(platform_vars + 0xB4) = random_angle_radians();
         {
             float r = random_angle_radians();
-            float e = frame_time * 0.13962634f;
-            *(float *)(d + 0xB8) = r;
-            *(float *)(d + 0xB0) = frame_time * 1.5707964f + randf_sym(0.0f, e);
+            float bobbing_phase_jitter_limit = frame_time * 0.13962634f;
+            *(float *)(platform_vars + 0xB8) = r;
+            *(float *)(platform_vars + 0xB0) = frame_time * 1.5707964f + randf_sym(0.0f, bobbing_phase_jitter_limit);
         }
         moby->state = 1;
     case PLATFORM_STATE_BOBBING:
-        *(int *)(d + 0xA4) = 0;
-        FUN_L00_00262b00(0.1f, *(float *)(d + 0xB0), moby, (float *)(d + 0xA8), (float *)(d + 0xAC));
-        FUN_L00_00262b80(moby, d + 0xB4, d + 0xB8, 0.047123890f, frame_time * 0.34906584f, frame_time * 0.5235988f);
+        *(int *)(platform_vars + 0xA4) = 0;
+        FUN_L00_00262b00(0.1f, *(float *)(platform_vars + 0xB0), moby, (float *)(platform_vars + 0xA8), (float *)(platform_vars + 0xAC));
+        FUN_L00_00262b80(moby, platform_vars + 0xB4, platform_vars + 0xB8, 0.047123890f, frame_time * 0.34906584f, frame_time * 0.5235988f);
         break;
     case PLATFORM_STATE_SINKING_WITH_HERO: {
-        float a = *(float *)(d + 0xA4) - (frame_time_sq + frame_time_sq);
+        float a = *(float *)(platform_vars + 0xA4) - (frame_time_sq + frame_time_sq);
         float lim = -(frame_time + frame_time);
-        *(float *)(d + 0xA4) = a;
-        if (a < lim) *(float *)(d + 0xA4) = lim;
-        moby->pos.z += *(float *)(d + 0xA4);
+        *(float *)(platform_vars + 0xA4) = a;
+        if (a < lim) *(float *)(platform_vars + 0xA4) = lim;
+        moby->pos.z += *(float *)(platform_vars + 0xA4);
         if (FUN_L01_00277fb8(moby) == 0) moby->state = 3;
-        if (*(int *)(d + 0xBC) <= 0) {
+        if (*(int *)(platform_vars + 0xBC) <= 0) {
             allocate_voice_for_target_entry(0, 0, (int)moby);
-            *(int *)(d + 0xBC) = random_int_between(0x28, 0x3C);
+            *(int *)(platform_vars + 0xBC) = random_int_between(0x28, 0x3C);
         }
         break;
     }
     case PLATFORM_STATE_RETURN_TO_ORIGINAL_HEIGHT: {
-        float vz = *(float *)(d + 0xA4);
+        float vz = *(float *)(platform_vars + 0xA4);
         float g = frame_time_sq;
         float dist, sq, t;
-        if (vz < 0.0f || (t = g + g, dist = *(float *)(d + 0xA0) - moby->pos.z, sq = vz * vz,
+        if (vz < 0.0f || (t = g + g, dist = *(float *)(platform_vars + 0xA0) - moby->pos.z, sq = vz * vz,
                           sq / (t + t) < dist)) {
             float a = vz + g;
             float mx = frame_time + frame_time;
-            *(float *)(d + 0xA4) = a;
-            if (mx < a) *(float *)(d + 0xA4) = mx;
+            *(float *)(platform_vars + 0xA4) = a;
+            if (mx < a) *(float *)(platform_vars + 0xA4) = mx;
         } else if (0.0f < dist) {
             float a = vz - sq / (dist + dist);
-            *(float *)(d + 0xA4) = a;
-            if (a < 0.0f) *(float *)(d + 0xA4) = 0.0f;
+            *(float *)(platform_vars + 0xA4) = a;
+            if (a < 0.0f) *(float *)(platform_vars + 0xA4) = 0.0f;
         }
-        moby->pos.z += *(float *)(d + 0xA4);
-        if (*(float *)(d + 0xA0) <= moby->pos.z) {
-            moby->pos.z = *(float *)(d + 0xA0);
+        moby->pos.z += *(float *)(platform_vars + 0xA4);
+        if (*(float *)(platform_vars + 0xA0) <= moby->pos.z) {
+            moby->pos.z = *(float *)(platform_vars + 0xA0);
             moby->state = 1;
         }
         break;
     }
     }
     subtract_vector_xyz(v, &moby->pos, prev);
-    update_entity_matrix(d + 0x60, v, &moby->rot, &moby->rot);
+    update_entity_matrix(platform_vars + 0x60, v, &moby->rot, &moby->rot);
 }
 /* Spinning pickup: waits until the hero is close and level with it, then plays the scene, saves and goes away. */
 extern char *D_L10_0015FFD8_p __asm__("D_L10_0015FFD8");
