@@ -809,25 +809,25 @@ int FUN_001fa6d0_00272f68(float) __asm__("FUN_001fa6d0");
 extern unsigned char *D_L00_001B2080_lui[] __asm__("D_L00_001B2080") __attribute__((section(".data")));
 unsigned char *FUN_L00_00272f68(u128 *a, int c, unsigned char b, int idx, int flag, int n, int mode,
                                 float f);
-unsigned char *FUN_L00_00272f68(u128 *a, int c, unsigned char b, int idx, int flag, int n, int mode,
-                                float f) {
-    unsigned char *m = p27fe00_alloc(0x3B);
-    if (m) {
-        int *e = (int *)(m + 0x20);
-        e[4] = mode;
+unsigned char *FUN_L00_00272f68(u128 *position, int c, unsigned char b, int idx, int flag, int lifetime_frames, int mode,
+                                float size_scale) {
+    unsigned char *particle = p27fe00_alloc(0x3B);
+    if (particle) {
+        int *particle_data = (int *)(particle + 0x20);
+        particle_data[4] = mode;
         if (mode == 1)
-            subtract_vector_xyz(e, a, D_0013F3D0);
-        qcopy(m + 0x10, a);
-        *(int *)(m + 4) = c;
-        m[9] = FUN_001fa6d0_00272f68(1.0f) + 0x20;
-        m[3] = flag ? 0x44 : 0x48;
-        m[8] = b;
-        m[1] = 0;
-        *(float *)(m + 0xc) = f * 210000.0f;
-        m[2] = *D_L00_001B2080_lui[idx];
-        *(short *)(m + 0xa) = n;
+            subtract_vector_xyz(particle_data, position, D_0013F3D0);
+        qcopy(particle + 0x10, position);
+        *(int *)(particle + 4) = c;
+        particle[9] = FUN_001fa6d0_00272f68(1.0f) + 0x20;
+        particle[3] = flag ? 0x44 : 0x48;
+        particle[8] = b;
+        particle[1] = 0;
+        *(float *)(particle + 0xc) = size_scale * 210000.0f;
+        particle[2] = *D_L00_001B2080_lui[idx];
+        *(short *)(particle + 0xa) = lifetime_frames;
     }
-    return m;
+    return particle;
 }
 void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 s32 fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
