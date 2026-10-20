@@ -41,6 +41,14 @@ void render_vendor_capture_pass_sequence(char *capture_context) __asm__("FUN_002
 /* Renders the six vendor monitor screens: projects each screen's joint box, renders its view
    off-screen and draws it back. */
 void render_vendor_capture_pass_sequence(char *capture_context) {
+    enum {
+        VENDOR_CAPTURE_PASS_SCROLLING_STATUS_MESSAGE = 0,
+        VENDOR_CAPTURE_PASS_ITEM_DETAILS = 1,
+        VENDOR_CAPTURE_PASS_EFFECT = 2,
+        VENDOR_CAPTURE_PASS_BUY_LABEL = 3,
+        VENDOR_CAPTURE_PASS_PURCHASE_PROMPT = 4,
+        VENDOR_CAPTURE_PASS_ITEM_ICON_STRIP = 5
+    };
     CaptureVector first_edge[1];
     CaptureVector second_edge[1];
     CaptureVector origin[1];
@@ -125,22 +133,22 @@ void render_vendor_capture_pass_sequence(char *capture_context) {
         draw_centered_capture_background(0x200, 0x200);
         vu1_add_g_sregister(0x42, 0x8000000064L);
         switch (pass_index) {
-        case 0:
+        case VENDOR_CAPTURE_PASS_SCROLLING_STATUS_MESSAGE:
             update_scrolling_status_message(capture_context);
             break;
-        case 1:
+        case VENDOR_CAPTURE_PASS_ITEM_DETAILS:
             render_vendor_item_details_pass(capture_context);
             break;
-        case 2:
+        case VENDOR_CAPTURE_PASS_EFFECT:
             render_capture_effect_pass(capture_context);
             break;
-        case 3:
+        case VENDOR_CAPTURE_PASS_BUY_LABEL:
             render_vendor_buy_label_pass(capture_context, (int)inner_width, (int)inner_height);
             break;
-        case 4:
+        case VENDOR_CAPTURE_PASS_PURCHASE_PROMPT:
             render_vendor_purchase_prompt_pass(capture_context);
             break;
-        case 5:
+        case VENDOR_CAPTURE_PASS_ITEM_ICON_STRIP:
             render_vendor_item_icon_strip_pass(capture_context);
             break;
         }
