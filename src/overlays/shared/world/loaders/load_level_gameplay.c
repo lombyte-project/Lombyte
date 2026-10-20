@@ -1007,7 +1007,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
             } else {
                 MobyInst *m;
                 int a;
-                float h;
+                float ground_height_offset;
                 int pv;
                 int c0;
                 int c1;
@@ -1046,13 +1046,13 @@ char *load_level_gameplay(int skip_gameplay_read) {
                 p += 4;
                 a = *(int *)p;
                 p += 4;
-                h = *(float *)p;
+                ground_height_offset = *(float *)p;
                 p += 4;
                 if (a != 0) {
                     float z = probe_ground_height(&m->f10, 0, 0.5f);
 
                     if (0.0f < z) {
-                        m->f18 = z + h;
+                        m->f18 = z + ground_height_offset;
                     }
                 }
                 p += 4;
@@ -1493,29 +1493,29 @@ char *load_level_gameplay(int skip_gameplay_read) {
     if (D_L00_0015F600 != 0 && hdr->f8C != 0) {
         int *q = (int *)((char *)hdr + hdr->f8C);
         int *q0;
-        int n1;
+        int tfrag_mapping_count;
         int n2;
-        int n3;
+        int moby_mapping_count;
         int bad1 = 1;
         int bad2;
 
         q0 = q;
-        n1 = q[0];
+        tfrag_mapping_count = q[0];
         n2 = q[1];
-        n3 = q[2];
+        moby_mapping_count = q[2];
         q += 4;
-        if (D_L00_00160F50 == n1) {
+        if (D_L00_00160F50 == tfrag_mapping_count) {
             int i;
 
             bad1 = 0;
-            for (i = 0; i < n1; i++) {
+            for (i = 0; i < tfrag_mapping_count; i++) {
                 if (D_L00_00160F4C[i].f3D != q[1]) {
                     bad1 = 1;
                 }
                 q += 2;
             }
         } else {
-            q += n1 * 2;
+            q += tfrag_mapping_count * 2;
         }
         bad2 = 1;
         if (D_L00_00160FC4 - D_L00_00160FC0 == n2) {
@@ -1545,12 +1545,12 @@ char *load_level_gameplay(int skip_gameplay_read) {
                     int j;
 
                     k++;
-                    for (j = 0; j < n3; j++) {
+                    for (j = 0; j < moby_mapping_count; j++) {
                         if (q[j * 2 + 1] == uid) {
                             break;
                         }
                     }
-                    if (j == n3) {
+                    if (j == moby_mapping_count) {
                         m->f36 = 0x7F80;
                         flag = 1;
                         cnt++;
@@ -1576,7 +1576,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
             int i;
 
             q = q0 + 4;
-            for (i = 0; i < n1; i++) {
+            for (i = 0; i < tfrag_mapping_count; i++) {
                 int w = q[0];
 
                 D_L00_00160F4C[i].f3A = ((w >> 3) << 8) | (1 << (w & 7));
@@ -1588,7 +1588,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
             int cnt = 0;
             int k = 0;
 
-            q = &q0[n1 * 2 + 4];
+            q = &q0[tfrag_mapping_count * 2 + 4];
             for (t = D_L00_00160FC0; t != D_L00_00160FC4; t++) {
                 int id = t->f18;
                 int j;
@@ -1612,7 +1612,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
         } else {
             int i;
 
-            q = &q0[n1 * 2 + 4];
+            q = &q0[tfrag_mapping_count * 2 + 4];
             for (i = 0; i < n2; i++) {
                 int w = q[0];
 
