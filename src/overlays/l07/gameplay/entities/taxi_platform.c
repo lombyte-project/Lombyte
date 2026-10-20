@@ -347,29 +347,29 @@ extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern void FUN_L00_0023e838(int);
 
-void FUN_L07_00312150(char *a) {
+void FUN_L07_00312150(char *light_effect_state) {
     int color_phase_threshold;
     float phase_remaining_fraction;
     int c;
     float *rgb_destination;
-    if (fast_dec_timer_s16(a + 0x284)) {
-        if (*(short *)(a + 0x280) != -1) {
-            FUN_L00_0023e838(*(short *)(a + 0x280));
-            *(short *)(a + 0x280) = -1;
-            *(short *)(a + 0x282) = -1;
+    if (fast_dec_timer_s16(light_effect_state + 0x284)) {
+        if (*(short *)(light_effect_state + 0x280) != -1) {
+            FUN_L00_0023e838(*(short *)(light_effect_state + 0x280));
+            *(short *)(light_effect_state + 0x280) = -1;
+            *(short *)(light_effect_state + 0x282) = -1;
         }
-    } else if (*(short *)(a + 0x280) != -1) {
-        color_phase_threshold = (*(short *)(a + 0x286) * 7) / 8;
-        if (color_phase_threshold < *(short *)(a + 0x284)) {
-            phase_remaining_fraction = convert_integer_to_float(*(short *)(a + 0x284) - color_phase_threshold);
-            phase_remaining_fraction /= convert_integer_to_float(*(short *)(a + 0x286) - color_phase_threshold);
-            c = fast_tween_color(0, *(int *)(a + 0x288), 1.0f - phase_remaining_fraction);
+    } else if (*(short *)(light_effect_state + 0x280) != -1) {
+        color_phase_threshold = (*(short *)(light_effect_state + 0x286) * 7) / 8;
+        if (color_phase_threshold < *(short *)(light_effect_state + 0x284)) {
+            phase_remaining_fraction = convert_integer_to_float(*(short *)(light_effect_state + 0x284) - color_phase_threshold);
+            phase_remaining_fraction /= convert_integer_to_float(*(short *)(light_effect_state + 0x286) - color_phase_threshold);
+            c = fast_tween_color(0, *(int *)(light_effect_state + 0x288), 1.0f - phase_remaining_fraction);
         } else {
-            phase_remaining_fraction = convert_integer_to_float(*(short *)(a + 0x284));
+            phase_remaining_fraction = convert_integer_to_float(*(short *)(light_effect_state + 0x284));
             phase_remaining_fraction /= convert_integer_to_float(color_phase_threshold);
-            c = fast_tween_color(*(int *)(a + 0x288), *(int *)(a + 0x28C), 1.0f - phase_remaining_fraction);
+            c = fast_tween_color(*(int *)(light_effect_state + 0x288), *(int *)(light_effect_state + 0x28C), 1.0f - phase_remaining_fraction);
         }
-        rgb_destination = (float *)(D_L07_00180340 + *(short *)(a + 0x280) * 32);
+        rgb_destination = (float *)(D_L07_00180340 + *(short *)(light_effect_state + 0x280) * 32);
         rgb_destination[0] = convert_integer_to_float(c & 0xFF) * 0.0078125f;
         rgb_destination[1] = convert_integer_to_float((c >> 8) & 0xFF) * 0.0078125f;
         rgb_destination[2] = convert_integer_to_float((c >> 16) & 0xFF) * 0.0078125f;
