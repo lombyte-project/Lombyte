@@ -291,15 +291,15 @@ extern float fast_cos(float) __asm__("FUN_001f9dc8");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 
-int FUN_L07_0030f1e0(char *moby, char *obj, float a, float lo, float up, float hi, float down,
+int FUN_L07_0030f1e0(char *moby, char *obj, float target_heading, float lo, float up, float hi, float down,
                      float vmax, float vmin) {
     float speed = vector_length_xy(obj + 0xD0);
     int r = 0;
-    float d = fast_difference_between_rotations(*(float *)(moby + 0x48), a);
-    if (d < lo) {
+    float heading_difference = fast_difference_between_rotations(*(float *)(moby + 0x48), target_heading);
+    if (heading_difference < lo) {
         speed += up;
         r = 1;
-    } else if (hi < d) {
+    } else if (hi < heading_difference) {
         speed -= down;
     }
     if (vmax < speed) {
