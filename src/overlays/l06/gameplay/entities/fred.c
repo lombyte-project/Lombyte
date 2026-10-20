@@ -5557,10 +5557,10 @@ void FUN_L06_002fd748(void) {
         if (!(facing > 0.0f)) {
             j = 0;
             do {
-                int a = D_L06_001DF6F0[i][j][0];
+                int vertex_index = D_L06_001DF6F0[i][j][0];
                 int b = D_L06_001DF6F0[i][j][1];
                 float u, v;
-                transform_2fd1a0(&first.v[j], D_L06_001DBFF0[a], D_L06_00161F9C);
+                transform_2fd1a0(&first.v[j], D_L06_001DBFF0[vertex_index], D_L06_00161F9C);
                 qcopy(&second.v[j], &first.v[j]);
                 u = D_L06_001E2CF0[b][0];
                 v = D_L06_001E2CF0[b][1];
