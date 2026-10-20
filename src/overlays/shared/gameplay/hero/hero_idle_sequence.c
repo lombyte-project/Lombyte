@@ -583,23 +583,23 @@ void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 void advance_moby_animation(void *) __asm__("FUN_0020d580");
 void FUN_L00_00250df8(void *);
 void FUN_L00_002061f0(void) {
-    M4_2061f0 m;
+    M4_2061f0 bone_transform;
     struct Hero *g = &hero;
-    char *o = ((char *)g->unkA88);
-    char *s;
-    o[0x7F] = 0;
-    s = ((char *)g->moby);
-    if ((*(unsigned short *)(s + 0x34) ^ 1) & 1) {
-        build_moby_bone_transform(s, 5, m);
-        qcopy(o + 0x10, &m[12]);
-        copy_matrix3x4(o + 0xC0, m);
-        matrix_to_euler(m, o + 0x40);
-        *(unsigned short *)(o + 0x34) &= 0xFFBE;
-        blend_moby_animation(o, 0x81, 0, scale_game_frames(10));
-        advance_moby_animation(o);
-        FUN_L00_00250df8(o);
+    char *destination_moby = ((char *)g->unkA88);
+    char *hero_moby;
+    destination_moby[0x7F] = 0;
+    hero_moby = ((char *)g->moby);
+    if ((*(unsigned short *)(hero_moby + 0x34) ^ 1) & 1) {
+        build_moby_bone_transform(hero_moby, 5, bone_transform);
+        qcopy(destination_moby + 0x10, &bone_transform[12]);
+        copy_matrix3x4(destination_moby + 0xC0, bone_transform);
+        matrix_to_euler(bone_transform, destination_moby + 0x40);
+        *(unsigned short *)(destination_moby + 0x34) &= 0xFFBE;
+        blend_moby_animation(destination_moby, 0x81, 0, scale_game_frames(10));
+        advance_moby_animation(destination_moby);
+        FUN_L00_00250df8(destination_moby);
     } else {
-        *(unsigned short *)(o + 0x34) |= 0x41;
+        *(unsigned short *)(destination_moby + 0x34) |= 0x41;
     }
 }
 #include "rnc/overlay/quad.h"
