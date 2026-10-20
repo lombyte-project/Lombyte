@@ -453,7 +453,7 @@ void FUN_L00_00276bd0(void) {
     Ent *t;
     NO *obj;
     s32 v;
-    s32 i, n, tmp;
+    s32 i, n, previous_decode_mode;
     s32 flag;
     s32 k;
     s32 j;
@@ -498,36 +498,36 @@ void FUN_L00_00276bd0(void) {
             debug_print(D_L00_001E91B0, D_L00_001841F0.w224);
             FUN_L00_0028ed58(D_L00_001841F0.w224);
         } else if (D_L00_001B9CF0.unkC == 3) {
-            tmp = decode_mode;
+            previous_decode_mode = decode_mode;
             decode_mode = 2;
-            D_L00_001B9CF0.unk130 = tmp;
+            D_L00_001B9CF0.unk130 = previous_decode_mode;
             fade_to_black(scale_game_frames(0x10));
             D_L00_0015F5C4 = 0;
             FUN_L00_00299460(D_L00_001B9CF0.unkE4);
         } else if (D_L00_001B9CF0.unkC == 4) {
-            tmp = decode_mode;
+            previous_decode_mode = decode_mode;
             decode_mode = 1;
-            D_L00_001B9CF0.unk130 = tmp;
+            D_L00_001B9CF0.unk130 = previous_decode_mode;
             fade_to_black(scale_game_frames(0x10));
             D_L00_0015F5C4 = 0;
             FUN_L00_00299560(D_L00_001B9CF0.unkE4);
         } else if (D_L00_001B9CF0.unkC == 6) {
-            tmp = decode_mode;
+            previous_decode_mode = decode_mode;
             decode_mode = 1;
-            D_L00_001B9CF0.unk130 = tmp;
+            D_L00_001B9CF0.unk130 = previous_decode_mode;
             fade_to_black(scale_game_frames(0x10));
             D_L00_0015F5C4 = 0;
             FUN_L00_002994f8(D_L00_001B9CF0.unkE4);
         } else if (D_L00_001B9CF0.unkC == 5) {
-            tmp = decode_mode;
+            previous_decode_mode = decode_mode;
             decode_mode = 1;
-            D_L00_001B9CF0.unk130 = tmp;
+            D_L00_001B9CF0.unk130 = previous_decode_mode;
             fade_to_black(scale_game_frames(0x10));
             D_L00_0015F5C4 = 0;
             start_scene(D_L00_001B9CF0.unkE4);
         } else if (D_L00_001B9CF0.unkC == 7) {
-            tmp = decode_mode;
-            D_L00_001B9CF0.unk130 = tmp;
+            previous_decode_mode = decode_mode;
+            D_L00_001B9CF0.unk130 = previous_decode_mode;
             fade_to_black(scale_game_frames(0x10));
             D_L00_0015F5C4 = 0;
             FUN_L00_00299a68();
