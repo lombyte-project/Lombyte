@@ -40,32 +40,32 @@ extern float FUN_001f9988_2c1928(float) __asm__("FUN_001f9988");
 extern float FUN_001f9dc8_2c1928(float) __asm__("FUN_001f9dc8");
 extern float FUN_001f9de0_2c1928(float) __asm__("FUN_001f9de0");
 
-void FUN_L00_002c1928(float *p, OvlQuad *q, float *out, float a, float b, float c) {
+void FUN_L00_002c1928(float *origin_position, OvlQuad *target_position, float *out, float gravity, float b, float max_range) {
     OvlQuad v[1];
-    float half = a * c * 0.5f;
-    float d, dz, ang, t, s;
+    float half = gravity * max_range * 0.5f;
+    float effective_horizontal_distance, dz, ang, launch_component_speed_squared, launch_component_speed;
 
-    if (c < FUN_001f9b48_2c1928(p, q)) {
-        FUN_001f9a28_2c1928(v, q, p);
-        FUN_001f9bf8_2c1928(v, v, c - 0.01f);
-        FUN_001f9a10_2c1928(v, v, p);
+    if (max_range < FUN_001f9b48_2c1928(origin_position, target_position)) {
+        FUN_001f9a28_2c1928(v, target_position, origin_position);
+        FUN_001f9bf8_2c1928(v, v, max_range - 0.01f);
+        FUN_001f9a10_2c1928(v, v, origin_position);
     } else {
-        v[0] = *q;
+        v[0] = *target_position;
     }
-    d = FUN_001f9b80_2c1928(p, v);
-    dz = ((float *)v)[2] - p[2];
-    ang = FUN_001f9e90_2c1928(((float *)v)[0] - p[0], ((float *)v)[1] - p[1]);
-    if (d < b)
-        d = b;
-    if (d <= dz)
-        dz = d - 0.01f;
-    t = a * d * d / ((d - dz) + (d - dz));
-    if (half < t)
-        t = half;
-    s = FUN_001f9988_2c1928(t);
-    out[0] = FUN_001f9dc8_2c1928(ang) * s;
-    out[1] = FUN_001f9de0_2c1928(ang) * s;
-    out[2] = s;
+    effective_horizontal_distance = FUN_001f9b80_2c1928(origin_position, v);
+    dz = ((float *)v)[2] - origin_position[2];
+    ang = FUN_001f9e90_2c1928(((float *)v)[0] - origin_position[0], ((float *)v)[1] - origin_position[1]);
+    if (effective_horizontal_distance < b)
+        effective_horizontal_distance = b;
+    if (effective_horizontal_distance <= dz)
+        dz = effective_horizontal_distance - 0.01f;
+    launch_component_speed_squared = gravity * effective_horizontal_distance * effective_horizontal_distance / ((effective_horizontal_distance - dz) + (effective_horizontal_distance - dz));
+    if (half < launch_component_speed_squared)
+        launch_component_speed_squared = half;
+    launch_component_speed = FUN_001f9988_2c1928(launch_component_speed_squared);
+    out[0] = FUN_001f9dc8_2c1928(ang) * launch_component_speed;
+    out[1] = FUN_001f9de0_2c1928(ang) * launch_component_speed;
+    out[2] = launch_component_speed;
 }
 #include "qcopy.h"
 float FUN_002132a8_2c3440(float, float) __asm__("FUN_002132a8");
