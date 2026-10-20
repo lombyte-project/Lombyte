@@ -1890,7 +1890,7 @@ void FUN_L10_002d9eb8(char *moby) {
     int debris_loop_countdown;
     int k;
     int c16;
-    int r2;
+    int debris_option_roll;
     float f20, f21;
 
     if (D_L10_001BB6B0.collected[(short)id] != 0
@@ -1922,8 +1922,8 @@ void FUN_L10_002d9eb8(char *moby) {
             f21 = random_float_between(0.5f, 1.0f);
             c16 = random_int_between(0x3C, 0x78);
             f20 = random_float_between(2.0f, 3.0f);
-            r2 = random_integer_below(4);
-            spawn_debris_chunk(&transformed_offset, &debris_vector, k, f21, c16, f20, 1.0f, 3.0f, r2 == 0);
+            debris_option_roll = random_integer_below(4);
+            spawn_debris_chunk(&transformed_offset, &debris_vector, k, f21, c16, f20, 1.0f, 3.0f, debris_option_roll == 0);
         } while (debris_loop_countdown >= 0);
         transformed_offset.q = 0;
         transformed_offset.f[0] = 2.8599999f;
