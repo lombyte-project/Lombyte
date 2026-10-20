@@ -43,29 +43,29 @@ void create_point_light(s32 i) __asm__("FUN_00201ba8");
 void create_point_light(s32 i) {
     LightSlot *slot;
     LightDef *def;
-    s16 *p;
+    s16 *instance_index_cursor;
     s16 *end;
     Vec sphere;
     TieInstance *tie;
     ShrubInstance *shrub;
     Obj40 *m;
-    s32 n;
+    s32 tie_index;
     s32 n2;
-    s32 n3;
+    s32 shrub_index;
     u32 v;
 
     slot = &point_light_data[i];
-    p = slot->buf;
-    end = p + 0x200;
+    instance_index_cursor = slot->buf;
+    end = instance_index_cursor + 0x200;
     def = &point_lights[i];
     qcopy(&sphere, &def->sphere);
     sphere.v[3] += 8.0f;
-    if (p < end) {
+    if (instance_index_cursor < end) {
         slot->n0 = 0;
-        n = 0;
-        for (tie = ties; tie != ties_end; tie++, n++) {
+        tie_index = 0;
+        for (tie = ties; tie != ties_end; tie++, tie_index++) {
             if (FUN_001f9bb0(&sphere, tie)) {
-                *p++ = n;
+                *instance_index_cursor++ = tie_index;
                 v = tie->lights;
                 if (v == 0xFFFF) {
                     tie->lights = i | 0xFFF0;
@@ -76,21 +76,21 @@ void create_point_light(s32 i) {
                 } else if ((v & 0xF000) == 0xF000) {
                     tie->lights = (v & 0x0FFF) | (i << 12);
                 } else {
-                    p--;
+                    instance_index_cursor--;
                 }
-                if (p >= end) {
+                if (instance_index_cursor >= end) {
                     break;
                 }
             }
         }
-        slot->c0 = p - slot->buf;
-        if (p < end) {
+        slot->c0 = instance_index_cursor - slot->buf;
+        if (instance_index_cursor < end) {
             slot->n1 = slot->c0;
             scale_vector(&sphere, &sphere, 1024.0f);
             m = D_00160E8C;
             for (n2 = 0; n2 < D_00160E90; n2++, m++) {
                 if (FUN_001f9bb0(&sphere, m)) {
-                    *p++ = n2;
+                    *instance_index_cursor++ = n2;
                     v = m->lights;
                     if (v == 0xFFFF) {
                         m->lights = i | 0xFFF0;
@@ -101,20 +101,20 @@ void create_point_light(s32 i) {
                     } else if ((v & 0xF000) == 0xF000) {
                         m->lights = (v & 0x0FFF) | (i << 12);
                     } else {
-                        p--;
+                        instance_index_cursor--;
                     }
-                    if (p >= end) {
+                    if (instance_index_cursor >= end) {
                         break;
                     }
                 }
             }
-            slot->c1 = (p - slot->buf) - slot->n1;
-            if (p < end) {
-                slot->n2 = p - slot->buf;
-                n3 = 0;
-                for (shrub = shrubs; shrub != shrubs_end; shrub++, n3++) {
+            slot->c1 = (instance_index_cursor - slot->buf) - slot->n1;
+            if (instance_index_cursor < end) {
+                slot->n2 = instance_index_cursor - slot->buf;
+                shrub_index = 0;
+                for (shrub = shrubs; shrub != shrubs_end; shrub++, shrub_index++) {
                     if (FUN_001f9bb0(&sphere, shrub)) {
-                        *p++ = n3;
+                        *instance_index_cursor++ = shrub_index;
                         v = shrub->lights;
                         if (v == 0xFFFF) {
                             shrub->lights = i | 0xFFF0;
@@ -125,14 +125,14 @@ void create_point_light(s32 i) {
                         } else if ((v & 0xF000) == 0xF000) {
                             shrub->lights = (v & 0x0FFF) | (i << 12);
                         } else {
-                            p--;
+                            instance_index_cursor--;
                         }
-                        if (p >= end) {
+                        if (instance_index_cursor >= end) {
                             break;
                         }
                     }
                 }
-                slot->c2 = (p - slot->buf) - slot->n2;
+                slot->c2 = (instance_index_cursor - slot->buf) - slot->n2;
             }
         }
     }
