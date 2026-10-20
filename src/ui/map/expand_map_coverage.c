@@ -8,7 +8,7 @@ void expand_map_coverage(u8 *dest, u8 *src) {
     u32 mask[0x100];
     u32 buf[0x10];
     s32 i = 0;
-    u32 *q;
+    u32 *expanded_word_cursor;
     s32 j;
     s32 k;
 
@@ -40,10 +40,10 @@ void expand_map_coverage(u8 *dest, u8 *src) {
         }
     }
     for (k = 0; k < 0x80; k++) {
-        q = buf;
+        expanded_word_cursor = buf;
         for (j = 0; j < 16; j++) {
-            *q = mask[*src];
-            q++;
+            *expanded_word_cursor = mask[*src];
+            expanded_word_cursor++;
             src++;
         }
         fast_mem_copy(dest, buf, 0x40);
