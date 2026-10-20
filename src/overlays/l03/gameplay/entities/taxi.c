@@ -1296,13 +1296,13 @@ extern void update_joint_animation(float, float, void *, void *, int) __asm__("F
    hero or, once the deal is accepted, removes the reward moby, records it and saves.
    While idle it turns its head toward the hero or toward random points. */
 void helga_update(struct Moby *m) __asm__("FUN_L03_002da870");
-void helga_update(struct Moby *m) {
+void helga_update(struct Moby *helga_moby) {
     enum {
         HELGA_INITIALIZE = 0,
         HELGA_UPDATE_DIALOGUE = 1,
         HELGA_RESOLVE_DIALOGUE = 2
     };
-    struct QuestGiverVars *v = (struct QuestGiverVars *)m->pvars;
+    struct QuestGiverVars *v = (struct QuestGiverVars *)helga_moby->pvars;
     struct TalkState *talk = &v->talk;
     struct Moby *helper_moby;
     struct Moby *reward_moby;
@@ -1319,8 +1319,8 @@ void helga_update(struct Moby *m) {
     float pitch;
     int tracking;
 
-    FUN_L03_002da710(m);
-    switch (m->state) {
+    FUN_L03_002da710(helga_moby);
+    switch (helga_moby->state) {
     case HELGA_INITIALIZE:
         if (D_0013D4CC[0] != 0) {
             if (v->link != -1) {
@@ -1328,37 +1328,37 @@ void helga_update(struct Moby *m) {
                 if (helper_moby->oclass == 0x3F4) {
                     flag = (s32 *)(helper_moby->pvars + 0x8C);
                     *flag = 1;
-                    FUN_L01_0029b0a0(flag, 4, m, 2, D_L03_001BA720);
+                    FUN_L01_0029b0a0(flag, 4, helga_moby, 2, D_L03_001BA720);
                 }
             }
-            taxi_kill(m);
+            taxi_kill(helga_moby);
             return;
         }
-        if (visited52[m->mission + current_level_index * 16] == 0xFF && v->link != -1) {
+        if (visited52[helga_moby->mission + current_level_index * 16] == 0xFF && v->link != -1) {
             helper_moby = (struct Moby *)((v->link << 8) + D_L03_0015FFD8_i);
             if (helper_moby->oclass == 0x3F4) {
                 flag = (s32 *)(helper_moby->pvars + 0x8C);
                 *flag = 1;
-                FUN_L01_0029b0a0(flag, 4, m, 2, D_L03_001BA720);
+                FUN_L01_0029b0a0(flag, 4, helga_moby, 2, D_L03_001BA720);
             }
         }
-        m->spawn_frame = *(u64 *)(D_001413D0[0] + 0x38);
-        m->state = 1;
+        helga_moby->spawn_frame = *(u64 *)(D_001413D0[0] + 0x38);
+        helga_moby->state = 1;
         talk->script = D_L03_00161BB8;
         v->talk.unk48 = 5;
-        initialize_npc_dialogue(m, talk);
-        initialize_moby_grounding(m);
+        initialize_npc_dialogue(helga_moby, talk);
+        initialize_moby_grounding(helga_moby);
         break;
     case HELGA_UPDATE_DIALOGUE:
-        if (update_npc_dialogue(m, talk)) {
-            begin_dialogue_camera_transition(m, 2.3f);
-            m->state = 2;
+        if (update_npc_dialogue(helga_moby, talk)) {
+            begin_dialogue_camera_transition(helga_moby, 2.3f);
+            helga_moby->state = 2;
             if (v->link != -1) {
                 helper_moby = (struct Moby *)((v->link << 8) + D_L03_0015FFD8_i);
                 if (helper_moby->oclass == 0x3F4) {
                     flag = (s32 *)(helper_moby->pvars + 0x8C);
                     *flag = 1;
-                    FUN_L01_0029b0a0(flag, 4, m, 2, D_L03_001BA720);
+                    FUN_L01_0029b0a0(flag, 4, helga_moby, 2, D_L03_001BA720);
                 }
             }
         }
@@ -1366,13 +1366,13 @@ void helga_update(struct Moby *m) {
     case HELGA_RESOLVE_DIALOGUE:
         if (D_L03_0015F5C4 != 2) {
             if (v->talk.mode != 2) {
-                jet_clear_persistent(m->mission);
+                jet_clear_persistent(helga_moby->mission);
                 if (v->link != -1) {
                     helper_moby = (struct Moby *)((v->link << 8) + D_L03_0015FFD8_i);
                     if (helper_moby->oclass == 0x3F4) {
                         flag = (s32 *)(helper_moby->pvars + 0x8C);
                         *flag = 1;
-                        FUN_L01_0029b0a0(flag, 4, m, 2, D_L03_001BA720);
+                        FUN_L01_0029b0a0(flag, 4, helga_moby, 2, D_L03_001BA720);
                     }
                 }
                 if (v->talk.warp != -1) {
@@ -1380,7 +1380,7 @@ void helga_update(struct Moby *m) {
                                      D_L03_001600EC + v->talk.warp * 128 + 0x70);
                 }
             }
-            m->state = 1;
+            helga_moby->state = 1;
             if (v->talk.mode == 2) {
                 FUN_L00_00260860(0xC, 1);
                 queue_dialogue_message(0xBC8, -1);
@@ -1416,7 +1416,7 @@ void helga_update(struct Moby *m) {
                     }
                 }
                 memcard_save_data(0, -1);
-                taxi_kill(m);
+                taxi_kill(helga_moby);
                 return;
             }
         } else if (v->talk.unk36 == 2 && v->link != -1) {
@@ -1433,12 +1433,12 @@ void helga_update(struct Moby *m) {
     rate = 0.02f;
     head_rate = 0.3f;
     tracking = 0;
-    if (m->prev_seq == 0) {
+    if (helga_moby->prev_seq == 0) {
         g = &hero.motion.pos;
         tracking = 1;
-        if (taxi_dist2(&m->pos, g) < 8.0f &&
+        if (taxi_dist2(&helga_moby->pos, g) < 8.0f &&
             (hero_state = (struct Hero *)((u8 *)g - 0x80),
-             fast_difference_between_rotations(m->rot.z, taxi_atan2(hero_state->motion.unkD0.f[0] - m->pos.x, hero_state->motion.unkD0.f[1] - m->pos.y))) <
+             fast_difference_between_rotations(helga_moby->rot.z, taxi_atan2(hero_state->motion.unkD0.f[0] - helga_moby->pos.x, hero_state->motion.unkD0.f[1] - helga_moby->pos.y))) <
                 1.5707964f) {
             if (vec_len((u8 *)g + 0x80) > 0.01f) {
                 v->watch_timer = scale_game_frames(120);
@@ -1452,9 +1452,9 @@ void helga_update(struct Moby *m) {
         if (fast_dec_timer(&v->target_timer)) {
             float heading;
             v->target_timer = truncate_float_to_s32(multiply_global_factor_ed64(random_float_between(180.0f, 300.0f)));
-            heading = fast_add_rotations(m->rot.z, random_float_between(-90.0f, 90.0f) * DEG_TO_RAD);
+            heading = fast_add_rotations(helga_moby->rot.z, random_float_between(-90.0f, 90.0f) * DEG_TO_RAD);
             build_spherical_offset(&v->target, 6.0f, heading, random_float_between(0.0f, 30.0f) * DEG_TO_RAD);
-            vec_add(&v->target, &v->target, &m->pos);
+            vec_add(&v->target, &v->target, &helga_moby->pos);
         }
         if (v->watch_timer) {
             qcopy(scratch_target, &hero.motion.unkD0);
@@ -1465,10 +1465,10 @@ void helga_update(struct Moby *m) {
         }
     }
     if (tracking) {
-        qcopy(eye, &m->pos);
+        qcopy(eye, &helga_moby->pos);
         eye[2] += 1.0f;
         taxi_vec_sub(delta, scratch_target, eye);
-        yaw = fast_subtract_rotations(taxi_atan2(delta[0], delta[1]), m->rot.z);
+        yaw = fast_subtract_rotations(taxi_atan2(delta[0], delta[1]), helga_moby->rot.z);
         pitch = -taxi_atan2(vec_len_xy(delta), delta[2]);
         if (yaw > 1.5707964f)
             yaw = 1.5707964f;
@@ -1483,8 +1483,8 @@ void helga_update(struct Moby *m) {
     }
     if (big_head_cheat_enabled)
         v->height = 2.75f;
-    update_joint_animation(rate * frame_scale_sq, head_rate * frame_scale_sq, m, v->body, 0);
-    update_joint_animation(rate * frame_scale_sq, head_rate * frame_scale_sq, m, v->head, 1);
+    update_joint_animation(rate * frame_scale_sq, head_rate * frame_scale_sq, helga_moby, v->body, 0);
+    update_joint_animation(rate * frame_scale_sq, head_rate * frame_scale_sq, helga_moby, v->head, 1);
 }
 
 extern float cos_2db020(float) __asm__("FUN_001f9dc8");
