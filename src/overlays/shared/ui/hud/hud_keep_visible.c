@@ -117,35 +117,35 @@ void FUN_L00_00235ad8(HudElem *hud_element, int *x, int *y, int slide_index, int
 /* updates numeric HUD values and dimensions from digit count */
 /* Ported from rac1-decomp (src/overlays/shared/hud_00235960.c: func_L00_00236610), where it is exact; names translated to the US level program. */
 
-void FUN_L00_00235c80(HudElem *e) {
-    int *value = e->unk0C;
+void FUN_L00_00235c80(HudElem *hud_element) {
+    int *value = hud_element->unk0C;
     int digits;
     int v, flags, width;
     if (value && !((int)value & 3)) {
-        e->unk78 = *value;
-        if (e->unk08 < e->unk78)
-            e->unk78 = e->unk08;
-        e->unk74 = e->unk78;
+        hud_element->unk78 = *value;
+        if (hud_element->unk08 < hud_element->unk78)
+            hud_element->unk78 = hud_element->unk08;
+        hud_element->unk74 = hud_element->unk78;
     } else {
-        e->unk78 = 99999;
-        e->unk74 = 99999;
+        hud_element->unk78 = 99999;
+        hud_element->unk74 = 99999;
     }
-    v = e->unk08;
+    v = hud_element->unk08;
     digits = 0;
-    flags = e->flags;
-    width = e->h;
+    flags = hud_element->flags;
+    width = hud_element->h;
     while (v >= 10) {
         v /= 10;
         digits++;
     }
     if (!(flags & 3) && (flags & 12)) {
-        e->h = width + (digits + 1) * 12;
-        if (e->w < 14)
-            e->w = 14;
+        hud_element->h = width + (digits + 1) * 12;
+        if (hud_element->w < 14)
+            hud_element->w = 14;
     } else {
         if (width < 12)
-            e->h = 12;
-        e->w += (digits + 1) * 14;
+            hud_element->h = 12;
+        hud_element->w += (digits + 1) * 14;
     }
 }
 /* Resets a HUD element: a timer of 30 + func_001F9850(180) (+0x7C),
