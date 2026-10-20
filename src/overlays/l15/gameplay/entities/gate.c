@@ -1322,6 +1322,15 @@ extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
  * aims its turret, and dies. */
 void helicopter_update(struct Moby *moby) __asm__("FUN_L15_002c5630");
 void helicopter_update(struct Moby *moby) {
+    enum {
+        HELICOPTER_INITIALIZE = 0,
+        HELICOPTER_WAIT_FOR_ACTIVATION = 1,
+        HELICOPTER_FOLLOW_ENTRY_PATH = 2,
+        HELICOPTER_ENGAGE_AND_FIRE = 5,
+        HELICOPTER_RECOIL = 6,
+        HELICOPTER_DEATH_EFFECTS = 7,
+        HELICOPTER_DEAD_WAIT_FOR_RESET = 0x40
+    };
     Vec4 previous_pos;
     HelicopterGoal goal;
     Vec4 move;
@@ -1378,7 +1387,7 @@ void helicopter_update(struct Moby *moby) {
         return;
     }
     switch (moby->state) {
-    case 0:
+    case HELICOPTER_INITIALIZE:
         moby->pos.z += 7.5f;
         moby->shadow_range = 0x20;
         vars->height = moby->pos.z;
@@ -1420,7 +1429,7 @@ void helicopter_update(struct Moby *moby) {
         vars->unk58 = 0;
         if (vars->pilot != 0) vars->pilot->flags |= 0x41;
         break;
-    case 1:
+    case HELICOPTER_WAIT_FOR_ACTIVATION:
         if (vars->unk1A4 != 0 && hero.vehicle_mode != 2) {
             moby->collision = 0;
             moby->flags = (moby->flags | 0x41) & 0xEFFF;
@@ -1445,7 +1454,7 @@ void helicopter_update(struct Moby *moby) {
         }
         if (vars->pilot != 0) vars->pilot->flags &= 0xFFBE;
         break;
-    case 2: {
+    case HELICOPTER_FOLLOW_ENTRY_PATH: {
         UPath *path;
         path = D_L15_001B0AB0[vars->entry_path];
         FUN_L00_0025df68(path, &moby->pos, &point, &segment, &fraction, 0, 999.0f, 5.0f, 0.0f);
@@ -1510,13 +1519,13 @@ void helicopter_update(struct Moby *moby) {
         move.q = *(u128 *)&target->pos;
         i = 0;
         if (i < path->n) {
-            UVec *p = path->pt;
-            UVec *next = p;
+            UVec *path_point = path->pt;
+            UVec *next = path_point;
             do {
-                if (vector_distance(p, &moby->pos) < best) move.q = next->q;
+                if (vector_distance(path_point, &moby->pos) < best) move.q = next->q;
                 i++;
                 next++;
-                p++;
+                path_point++;
             } while (i < path->n);
         }
         move.f[2] = target->pos.z + 7.5f;
@@ -1547,7 +1556,7 @@ void helicopter_update(struct Moby *moby) {
         }
         break;
     }
-    case 5:
+    case HELICOPTER_ENGAGE_AND_FIRE:
         moby_point_position(moby, 0, &point);
         if (goal.status != 2) {
             FUN_L15_002c52b8(moby, move.f, *(Goal_52b8 *)&goal);
@@ -1568,7 +1577,7 @@ void helicopter_update(struct Moby *moby) {
             moby->state = 4;
         }
         break;
-    case 6:
+    case HELICOPTER_RECOIL:
         if (fast_dec_timer_s16(&vars->recoil_timer)) {
             moby->state = moby->command;
             break;
@@ -1592,7 +1601,7 @@ void helicopter_update(struct Moby *moby) {
                                       frame_time_sq * 2.0943952f, frame_time * 1.5707964f);
         }
         break;
-    case 7: {
+    case HELICOPTER_DEATH_EFFECTS: {
         int i;
         move.q = 0;
         spin = random_angle_radians();
@@ -1617,7 +1626,7 @@ void helicopter_update(struct Moby *moby) {
         moby->state = 0x40;
         return;
     }
-    case 0x40:
+    case HELICOPTER_DEAD_WAIT_FOR_RESET:
         moby->collision = 0;
         moby->flags = (moby->flags | 0x41) & 0xEFFF;
         vars->unk58 = 0;
