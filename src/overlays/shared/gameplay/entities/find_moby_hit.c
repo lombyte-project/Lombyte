@@ -51,12 +51,12 @@ extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 
 /* Fills a record with b, c, d and flag 0, and clears the 64-bit value at its start. */
 void FUN_L00_00259858(char *a, int b, int c, float d);
-void FUN_L00_00259858(char *a, int b, int c, float d) {
-    *(int *)(a + 0x10) = b;
-    *(int *)(a + 0x14) = c;
-    *(float *)(a + 0x1C) = d;
-    *(int *)(a + 0x20) = 0;
-    clear_u64_value(a);
+void FUN_L00_00259858(char *hit_descriptor, int b, int c, float d) {
+    *(int *)(hit_descriptor + 0x10) = b;
+    *(int *)(hit_descriptor + 0x14) = c;
+    *(float *)(hit_descriptor + 0x1C) = d;
+    *(int *)(hit_descriptor + 0x20) = 0;
+    clear_u64_value(hit_descriptor);
 }
 #include "qcopy.h"
 /* Fills a record with b, c, d and flag 1, and copies the vector q into its start. */
