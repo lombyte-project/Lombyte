@@ -1521,7 +1521,7 @@ void FUN_L00_00207d40(void) {
     f32 k;
     int i;
     int st;
-    int n;
+    int glow_color;
     int mode;
     V_207d40 *v;
 
@@ -1534,10 +1534,10 @@ void FUN_L00_00207d40(void) {
     st = P.b20A4;
     if (st == 3) {
         int j;
-        n = P.i22E4;
+        glow_color = P.i22E4;
         v = P.v1D50;
         for (j = 2; j >= 0; j--) {
-            FUN_L00_00263618_207d40(v, n, 0.2f, 0.08f);
+            FUN_L00_00263618_207d40(v, glow_color, 0.2f, 0.08f);
             v++;
         }
         return;
