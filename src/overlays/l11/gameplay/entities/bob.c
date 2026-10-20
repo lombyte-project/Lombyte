@@ -78,25 +78,25 @@ void FUN_L11_002cb810(struct Moby *moby) {
         MOBY(moby)->state = 1;
         *(float *)(data + 4) = moby->rot.z;
         if ((moby->flags & 0x8000) == 0) {
-            char *c = func_0020D348_m(0x41);
-            *(short *)(c + 0x32) = moby->draw_dist;
-            c[0x30] = moby->update_dist;
-            *(unsigned short *)(c + 0x34) = moby->flags | 0x8000;
-            qcopy(c + 0x10, &moby->pos);
-            qcopy(c + 0x40, &moby->rot);
-            *(char **)(data + 8) = c;
-            *(float *)(*(char **)(c + 0x78) + 4) = moby->rot.z;
+            char *partner_moby = func_0020D348_m(0x41);
+            *(short *)(partner_moby + 0x32) = moby->draw_dist;
+            partner_moby[0x30] = moby->update_dist;
+            *(unsigned short *)(partner_moby + 0x34) = moby->flags | 0x8000;
+            qcopy(partner_moby + 0x10, &moby->pos);
+            qcopy(partner_moby + 0x40, &moby->rot);
+            *(char **)(data + 8) = partner_moby;
+            *(float *)(*(char **)(partner_moby + 0x78) + 4) = moby->rot.z;
         }
         break;
     case ROTATION_WAIT_FOR_TRIGGER:
         break;
     case ROTATION_APPROACH_OFFSET: {
-        float f;
+        float target_angle;
         if ((moby->flags & 0x8000) == 0)
-            f = fast_add_rotations_c(*(float *)(data + 4), 0.20769417f);
+            target_angle = fast_add_rotations_c(*(float *)(data + 4), 0.20769417f);
         else
-            f = fast_subtract_rotations(*(float *)(data + 4), 0.20769417f);
-        if (approach_angle(&moby->rot.z, f, (float *)data, frame_time_sq * 0.34906584f, frame_time_sq * 0.34906584f, frame_time * 0.7853982f) == 0.0f)
+            target_angle = fast_subtract_rotations(*(float *)(data + 4), 0.20769417f);
+        if (approach_angle(&moby->rot.z, target_angle, (float *)data, frame_time_sq * 0.34906584f, frame_time_sq * 0.34906584f, frame_time * 0.7853982f) == 0.0f)
             MOBY(moby)->state = 3;
         break;
     }
