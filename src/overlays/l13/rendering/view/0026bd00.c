@@ -12,14 +12,14 @@ extern float FUN_001f9b80_25fcb8(void *, void *) __asm__("FUN_001f9b80");
 extern short D_L13_001B0B30[] __attribute__((section(".data")));
 extern char *D_L13_001D1E90[] __attribute__((section(".data")));
 extern struct Hero hero_lui __asm__("D_0013F350") __attribute__((section(".data")));
-int FUN_L13_0026bd00(char *a, char *selection_output, float best) {
+int FUN_L13_0026bd00(char *source_object, char *selection_output, float best) {
     struct Hero *g = &hero_lui;
     char *selected_object;
     char *candidate_object;
     int res;
     int i;
     int j;
-    float d;
+    float candidate_metric;
 
     selected_object = ((char *)g->moby);
     res = 0;
@@ -39,10 +39,10 @@ int FUN_L13_0026bd00(char *a, char *selection_output, float best) {
             continue;
         if (*(unsigned char *)(candidate_object + 0x20) != 3)
             continue;
-        d = FUN_001f9b80_25fcb8(a + 0x10, candidate_object + 0x10);
-        if (d < best) {
+        candidate_metric = FUN_001f9b80_25fcb8(source_object + 0x10, candidate_object + 0x10);
+        if (candidate_metric < best) {
             selected_object = candidate_object;
-            best = d;
+            best = candidate_metric;
             res = 1;
         }
     }
@@ -58,10 +58,10 @@ int FUN_L13_0026bd00(char *a, char *selection_output, float best) {
             continue;
         if (*(unsigned char *)(candidate_object + 0xBC) == 0)
             continue;
-        d = FUN_001f9b80_25fcb8(a + 0x10, candidate_object + 0x10);
-        if (d < best) {
+        candidate_metric = FUN_001f9b80_25fcb8(source_object + 0x10, candidate_object + 0x10);
+        if (candidate_metric < best) {
             selected_object = candidate_object;
-            best = d;
+            best = candidate_metric;
             res = 1;
         }
     }
