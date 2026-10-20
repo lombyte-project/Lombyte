@@ -400,13 +400,13 @@ void FUN_L17_002f32f0(struct Moby *moby) {
     }
     *(long *)&pkt.q[2] = get_effect_texture_alt(0x2F);
     for (k = 0; k < 5; k++) {
-        float s = D_L17_001DDFF8[k];
+        float quad_side_length = D_L17_001DDFF8[k];
         float ang = D_L17_001DE0D0[k];
-        float x = *(float *)(data + 0x10) - s * 0.5f;
+        float x = *(float *)(data + 0x10) - quad_side_length * 0.5f;
         float z;
         ((float *)&pkt)[0] = x;
         ((float *)&pkt)[1] = *(float *)(data + 0x14) + 1000.0f;
-        z = *(float *)(data + 0x18) + s * 0.5f;
+        z = *(float *)(data + 0x18) + quad_side_length * 0.5f;
         ((float *)&pkt)[3] = 1.0f;
         ((float *)&pkt)[2] = z;
         pkt.m[3] = pkt.m[0];
@@ -415,11 +415,11 @@ void FUN_L17_002f32f0(struct Moby *moby) {
         ((float *)&pkt)[0] = x + 0.0f;
         ((float *)&pkt)[2] = z + 0.0f;
         ((float *)&pkt)[4] = ((float *)&pkt)[4] + 0.0f;
-        ((float *)&pkt)[6] = ((float *)&pkt)[6] - s;
-        ((float *)&pkt)[8] = ((float *)&pkt)[8] + s;
+        ((float *)&pkt)[6] = ((float *)&pkt)[6] - quad_side_length;
+        ((float *)&pkt)[8] = ((float *)&pkt)[8] + quad_side_length;
         ((float *)&pkt)[10] = ((float *)&pkt)[10] + 0.0f;
-        ((float *)&pkt)[12] = ((float *)&pkt)[12] + s;
-        ((float *)&pkt)[14] = ((float *)&pkt)[14] - s;
+        ((float *)&pkt)[12] = ((float *)&pkt)[12] + quad_side_length;
+        ((float *)&pkt)[14] = ((float *)&pkt)[14] - quad_side_length;
         pkt.uv[0] = fast_sin_c(fast_add_rotations(ang, 4.712389f)) * 0.5f + 0.5f;
         pkt.uv[1] = fast_cos_c(fast_add_rotations(ang, 4.712389f)) * 0.5f + 0.5f;
         pkt.uv[2] = fast_sin_c(fast_add_rotations(ang, 3.1415927f)) * 0.5f + 0.5f;
