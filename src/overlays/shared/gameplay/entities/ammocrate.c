@@ -310,11 +310,11 @@ unsigned char *FUN_L13_002e6a58(char *src, char *pos, char *target, char *vec, i
         qcopy(moby + 0x10, pos);
         qcopy(moby + 0x40, vec);
         if (target != 0) {
-            char *e;
+            char *target_flag_data;
             *(int *)(data + 0x3C) = *(short *)(target + 0xA6);
-            e = suck_get_aim_height(target);
-            if (e != 0) {
-                *(unsigned short *)(e + 0x1E) |= 0x80;
+            target_flag_data = suck_get_aim_height(target);
+            if (target_flag_data != 0) {
+                *(unsigned short *)(target_flag_data + 0x1E) |= 0x80;
             }
         }
         *(int *)(data + 0x28) = arg;
