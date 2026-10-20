@@ -130,19 +130,19 @@ f32 FUN_00213508_2c40a0(void *, f32, s32) __asm__("FUN_00213508");
 void FUN_001f9bf8_2c40a0(void *, void *, f32) __asm__("FUN_001f9bf8");
 void FUN_L00_00258830_2c40a0(void *, void *, f32, f32, f32, int) __asm__("FUN_L00_00258830");
 void FUN_L00_002c40a0(S_2c40a0 *self) {
-    O_2c40a0 *o = self->p78;
+    O_2c40a0 *moby_vars = self->p78;
     P_2c40a0 *P = &D_0013F350_2c40a0;
     s16 h = P->h1E2;
     f32 v[4];
     f32 s, len, g;
-    if (o->i68 == 0) {
+    if (moby_vars->i68 == 0) {
         if (h == 0)
             return;
         if (!(FUN_001f9b80_2c40a0(P->v80, self->v10) < 1.0f))
             return;
         if (!(FUN_001f99c0_2c40a0(P->f88 - self->f18) < 1.3f))
             return;
-        o->i68 = 1;
+        moby_vars->i68 = 1;
     }
     FUN_001f9a28_2c40a0(v, self->v10, P->v80);
     v[2] = 0.0f;
@@ -151,26 +151,26 @@ void FUN_L00_002c40a0(S_2c40a0 *self) {
         s = 0.0f;
     if (h == 0)
         s = 0.0f;
-    FUN_L00_0025b8c0_2c40a0(&s, 0.0f, &o->f60, frame_scale_sq * 0.02f, frame_scale_sq * 0.3f,
+    FUN_L00_0025b8c0_2c40a0(&s, 0.0f, &moby_vars->f60, frame_scale_sq * 0.02f, frame_scale_sq * 0.3f,
                             D_0015ED6C_2c40a0 * 4.0f);
-    if (s == 0.0f && o->f60 == 0.0f) {
+    if (s == 0.0f && moby_vars->f60 == 0.0f) {
         if (FUN_001f99c0_2c40a0(self->f18 - FUN_00213508_2c40a0(self->v10, 0.5f, 0)) < 0.02f)
-            o->i68 = 0;
+            moby_vars->i68 = 0;
     }
     len = FUN_001f9af0_2c40a0(v);
-    if (len < o->f60)
-        o->f60 = len;
-    if (o->f60 < len)
-        FUN_001f9bf8_2c40a0(v, v, o->f60);
+    if (len < moby_vars->f60)
+        moby_vars->f60 = len;
+    if (moby_vars->f60 < len)
+        FUN_001f9bf8_2c40a0(v, v, moby_vars->f60);
     FUN_L00_00258830_2c40a0(self, v, 0.5f, 0.4f, 0.0f, 0);
     g = FUN_00213508_2c40a0(self->v10, 0.5f, 0);
     if (self->f18 < g) {
         self->f18 = g;
-        o->f64 = 0.0f;
+        moby_vars->f64 = 0.0f;
         return;
     }
-    o->f64 -= D_0015ED70_2c40a0 * 24.0f;
-    self->f18 += o->f64;
+    moby_vars->f64 -= D_0015ED70_2c40a0 * 24.0f;
+    self->f18 += moby_vars->f64;
     if (self->f18 < g)
         self->f18 = g;
 }
