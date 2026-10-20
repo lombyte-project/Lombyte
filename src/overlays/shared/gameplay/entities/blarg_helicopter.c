@@ -1354,49 +1354,49 @@ extern void trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
 extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 float absolute_float(float input) __asm__("func_001F99C0");
 
-void FUN_L03_002ce238(char *m) {
+void FUN_L03_002ce238(char *helicopter_moby) {
     int st;
     float fv;
     int res;
-    char *d;
+    char *helicopter_data;
     char *r;
     float a, b, p, q;
-    d = *(char **)(m + 0x78);
+    helicopter_data = *(char **)(helicopter_moby + 0x78);
     fv = 0.0f;
-    r = find_moby_hit(m, 0x330000, 0);
-    res = hit_reaction(m, r, d + 0x20, 0, &st, &fv, 0, 4);
-    if (st != 1 && *(unsigned char *)(m + 0x20) != 5) {
-        float t = *(float *)(d + 0x20) - fv;
-        *(float *)(d + 0x20) = t;
-        if (res == 1 || t <= 0.0f) {
-            *(unsigned char *)(m + 0x20) = 5;
+    r = find_moby_hit(helicopter_moby, 0x330000, 0);
+    res = hit_reaction(helicopter_moby, r, helicopter_data + 0x20, 0, &st, &fv, 0, 4);
+    if (st != 1 && *(unsigned char *)(helicopter_moby + 0x20) != 5) {
+        float remaining_health = *(float *)(helicopter_data + 0x20) - fv;
+        *(float *)(helicopter_data + 0x20) = remaining_health;
+        if (res == 1 || remaining_health <= 0.0f) {
+            *(unsigned char *)(helicopter_moby + 0x20) = 5;
         } else if (res != 0xB) {
-            *(unsigned char *)(d + 0x67) = 0xB4;
-            trooper_anim_update(m, (short *)(d + 0x60));
-            if (*(float *)(r + 0x1C) == 5627.925f && *(unsigned char *)(m + 0x20) != 4) {
-                a = fast_arc_tan(*(float *)(m + 0x10) - *(float *)(r + 0),
-                                 *(float *)(m + 0x14) - *(float *)(r + 4));
-                b = fast_subtract_rotations(a, *(float *)(m + 0x48));
+            *(unsigned char *)(helicopter_data + 0x67) = 0xB4;
+            trooper_anim_update(helicopter_moby, (short *)(helicopter_data + 0x60));
+            if (*(float *)(r + 0x1C) == 5627.925f && *(unsigned char *)(helicopter_moby + 0x20) != 4) {
+                a = fast_arc_tan(*(float *)(helicopter_moby + 0x10) - *(float *)(r + 0),
+                                 *(float *)(helicopter_moby + 0x14) - *(float *)(r + 4));
+                b = fast_subtract_rotations(a, *(float *)(helicopter_moby + 0x48));
                 p = fast_cos(b) * 0.08726646f;
                 q = fast_sin(b) * -0.34906584f;
-                if (absolute_float(*(float *)(m + 0x40)) < absolute_float(q)) {
-                    *(float *)(m + 0x40) = q;
-                    *(float *)(d + 0x218) = 0.0f;
+                if (absolute_float(*(float *)(helicopter_moby + 0x40)) < absolute_float(q)) {
+                    *(float *)(helicopter_moby + 0x40) = q;
+                    *(float *)(helicopter_data + 0x218) = 0.0f;
                 }
-                if (absolute_float(*(float *)(m + 0x44)) < absolute_float(p)) {
-                    *(float *)(m + 0x44) = p;
-                    *(float *)(d + 0x21C) = 0.0f;
+                if (absolute_float(*(float *)(helicopter_moby + 0x44)) < absolute_float(p)) {
+                    *(float *)(helicopter_moby + 0x44) = p;
+                    *(float *)(helicopter_data + 0x21C) = 0.0f;
                 }
-                *(float *)(d + 0x214) = frame_time * 4.0f;
-                *(short *)(d + 0x206) = scale_game_frames(0x3C);
-                *(unsigned char *)(m + 0xBC) = *(unsigned char *)(m + 0x20);
-                *(unsigned char *)(m + 0x20) = 4;
-                allocate_voice_for_target_entry(1, 0, (int)m);
+                *(float *)(helicopter_data + 0x214) = frame_time * 4.0f;
+                *(short *)(helicopter_data + 0x206) = scale_game_frames(0x3C);
+                *(unsigned char *)(helicopter_moby + 0xBC) = *(unsigned char *)(helicopter_moby + 0x20);
+                *(unsigned char *)(helicopter_moby + 0x20) = 4;
+                allocate_voice_for_target_entry(1, 0, (int)helicopter_moby);
             }
         }
     }
-    *(unsigned char *)(m + 0xA4) = 0xFF;
-    trooper_anim_finish(m, d + 0x60);
+    *(unsigned char *)(helicopter_moby + 0xA4) = 0xFF;
+    trooper_anim_finish(helicopter_moby, helicopter_data + 0x60);
 }
 #include "sda.h"
 
