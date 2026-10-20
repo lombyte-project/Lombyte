@@ -201,7 +201,7 @@ int mine_fall(char *moby, char *st) {
     float f60, f64, f68, f6c;
     
     Vec4 *g;
-    char *q;
+    char *collision_metadata;
     int flags = 0;
 
     float sc, f21, f20, f12, t, r, rr, one;
@@ -348,8 +348,8 @@ int mine_fall(char *moby, char *st) {
         if (0.7070000171661377f <= surface_normal[2]) {
             float motion_normal_dot = fast_vec_dot_c(st, surface_normal);
             if (motion_normal_dot < 0.0f) {
-                q = (char *)g - 0x30;
-                if (*(int *)(q + 0x18) == 0 || *(int *)(q + 0x1C) > 0) {
+                collision_metadata = (char *)g - 0x30;
+                if (*(int *)(collision_metadata + 0x18) == 0 || *(int *)(collision_metadata + 0x1C) > 0) {
                     flags |= 1;
                     *(short *)(st + 0x3E) = 2;
                 }
