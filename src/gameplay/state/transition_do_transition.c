@@ -85,8 +85,8 @@ void transition_do_transition(void) __asm__("FUN_001eb798");
 
 void transition_do_transition(void) {
     WadHeader *hdr;
-    u8 *p;
-    s32 n;
+    u8 *chunk_destination;
+    s32 startup_frame_count;
     s32 level;
     s32 wait;
     s32 i;
@@ -101,36 +101,36 @@ void transition_do_transition(void) {
     load_and_initialize_level_chunk();
     tbl = &disc_table;
     transition_load_wad();
-    p = (u8 *)D_001940C8[0];
-    hdr = (WadHeader *)p;
+    chunk_destination = (u8 *)D_001940C8[0];
+    hdr = (WadHeader *)chunk_destination;
     /* The first 0x60 bytes are reserved; six descriptors start at offset 0x20. */
     /* Load chunks 1..5 before chunk 0, advancing each destination to 16-byte alignment. */
-    p = (u8 *)hdr + 0x60;
+    chunk_destination = (u8 *)hdr + 0x60;
     level_root = hdr;
-    first_size = load(p, ((volatile struct DiscFile *)&tbl->wad_chunks[1])->sector, ((volatile struct DiscFile *)&tbl->wad_chunks[1])->size);
+    first_size = load(chunk_destination, ((volatile struct DiscFile *)&tbl->wad_chunks[1])->sector, ((volatile struct DiscFile *)&tbl->wad_chunks[1])->size);
     hdr->chunk[1].size = first_size;
-    hdr->chunk[1].off = p - (u8 *)hdr;
-    p += ((u32)first_size + 0xF) & alignment_mask;
-    hdr->chunk[2].size = load(p, tbl->wad_chunks[2].sector, tbl->wad_chunks[2].size);
-    hdr->chunk[2].off = p - (u8 *)hdr;
-    p += ((u32)hdr->chunk[2].size + 0xF) & alignment_mask;
-    hdr->chunk[3].size = load(p, tbl->wad_chunks[3].sector, tbl->wad_chunks[3].size);
-    hdr->chunk[3].off = p - (u8 *)hdr;
-    p += ((u32)hdr->chunk[3].size + 0xF) & alignment_mask;
-    hdr->chunk[4].size = load(p, tbl->wad_chunks[4].sector, tbl->wad_chunks[4].size);
-    hdr->chunk[4].off = p - (u8 *)hdr;
-    p += ((u32)hdr->chunk[4].size + 0xF) & alignment_mask;
-    hdr->chunk[5].size = load(p, tbl->wad_chunks[5].sector, tbl->wad_chunks[5].size);
-    hdr->chunk[5].off = p - (u8 *)hdr;
-    p += ((u32)hdr->chunk[5].size + 0xF) & alignment_mask;
-    hdr->chunk[0].size = load(p, tbl->wad_chunks[0].sector, tbl->wad_chunks[0].size);
-    hdr->chunk[0].off = p - (u8 *)hdr;
+    hdr->chunk[1].off = chunk_destination - (u8 *)hdr;
+    chunk_destination += ((u32)first_size + 0xF) & alignment_mask;
+    hdr->chunk[2].size = load(chunk_destination, tbl->wad_chunks[2].sector, tbl->wad_chunks[2].size);
+    hdr->chunk[2].off = chunk_destination - (u8 *)hdr;
+    chunk_destination += ((u32)hdr->chunk[2].size + 0xF) & alignment_mask;
+    hdr->chunk[3].size = load(chunk_destination, tbl->wad_chunks[3].sector, tbl->wad_chunks[3].size);
+    hdr->chunk[3].off = chunk_destination - (u8 *)hdr;
+    chunk_destination += ((u32)hdr->chunk[3].size + 0xF) & alignment_mask;
+    hdr->chunk[4].size = load(chunk_destination, tbl->wad_chunks[4].sector, tbl->wad_chunks[4].size);
+    hdr->chunk[4].off = chunk_destination - (u8 *)hdr;
+    chunk_destination += ((u32)hdr->chunk[4].size + 0xF) & alignment_mask;
+    hdr->chunk[5].size = load(chunk_destination, tbl->wad_chunks[5].sector, tbl->wad_chunks[5].size);
+    hdr->chunk[5].off = chunk_destination - (u8 *)hdr;
+    chunk_destination += ((u32)hdr->chunk[5].size + 0xF) & alignment_mask;
+    hdr->chunk[0].size = load(chunk_destination, tbl->wad_chunks[0].sector, tbl->wad_chunks[0].size);
+    hdr->chunk[0].off = chunk_destination - (u8 *)hdr;
     initialize_resource_entry();
     initialize_sif_rpc();
     init_stash();
     init_hud();
     load_hud_banks();
-    for (n = *(volatile u32 *)0x10000000 / 0x109; n < scale_game_frames(0xB4); n++) {
+    for (startup_frame_count = *(volatile u32 *)0x10000000 / 0x109; startup_frame_count < scale_game_frames(0xB4); startup_frame_count++) {
         sceGsSyncV(0);
     }
     snd_reset_state_and_flush_commands();
