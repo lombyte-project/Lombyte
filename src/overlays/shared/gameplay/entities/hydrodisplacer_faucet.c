@@ -986,17 +986,17 @@ extern char D_L05_00215C00[];
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 
-void FUN_L05_003198e8(char *a) {
-    char *data = *(char **)(a + 0x78);
+void FUN_L05_003198e8(char *moby) {
+    char *data = *(char **)(moby + 0x78);
     int idx = *(int *)(data + 0xDC);
     if (idx != -1) {
-        char *p = D_L05_001B0930[idx];
-        if (*(int *)p == 7) {
+        char *vector_table_entry = D_L05_001B0930[idx];
+        if (*(int *)vector_table_entry == 7) {
             int i;
             struct Hero *g;
             for (i = 0; i < 7; i++) {
-                transform_vector_by_basis(p + 0x10 + i * 16, D_L05_00215C00 + i * 16, a + 0xC0);
-                fast_vec_add(p + 0x10 + i * 16, p + 0x10 + i * 16, a + 0x10);
+                transform_vector_by_basis(vector_table_entry + 0x10 + i * 16, D_L05_00215C00 + i * 16, moby + 0xC0);
+                fast_vec_add(vector_table_entry + 0x10 + i * 16, vector_table_entry + 0x10 + i * 16, moby + 0x10);
             }
             g = &hero;
             *(unsigned short *)&g->unk22DA = *(unsigned short *)(data + 0xDC);
