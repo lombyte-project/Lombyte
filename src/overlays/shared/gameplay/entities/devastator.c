@@ -2576,54 +2576,54 @@ s32 FUN_L00_002b6bc8(Moby *m, f32 radius) {
 
 
 void taunter_update(Moby *m) __asm__("FUN_L00_002b6f10");
-void taunter_update(Moby *m) {
-    Vars *o;
+void taunter_update(Moby *taunter_moby) {
+    Vars *taunter_vars;
     s32 v;
-    s32 a;
+    s32 voice_slot_index;
     s32 b;
     s32 i;
     s32 r1;
     s32 r2;
-    u8 *e;
+    u8 *voice_slot_window;
     s32 play_time_stat_value;
 
-    if (m == 0)
+    if (taunter_moby == 0)
         return;
-    o = m->vars;
-    if (o == 0)
+    taunter_vars = taunter_moby->vars;
+    if (taunter_vars == 0)
         return;
-    if (o->radius == 0.0f)
-        o->radius = 30.0f;
-    if (m->type == 2)
-        m->state = 3;
+    if (taunter_vars->radius == 0.0f)
+        taunter_vars->radius = 30.0f;
+    if (taunter_moby->type == 2)
+        taunter_moby->state = 3;
     D_L00_001614D4 = 1;
-    if (m->state == 0) {
-        o->anim = -1;
-        m->state++;
+    if (taunter_moby->state == 0) {
+        taunter_vars->anim = -1;
+        taunter_moby->state++;
         D_L00_001614CC = 1;
     }
-    v = m->state;
+    v = taunter_moby->state;
     if ((u8)v == 1) {
-        if (m->flags & 2) {
-            m->state = v + 1;
-            o->retry = 0;
+        if (taunter_moby->flags & 2) {
+            taunter_moby->state = v + 1;
+            taunter_vars->retry = 0;
         }
         goto end;
     }
     if ((u8)v != 2)
         goto end;
-    if (m->type == 3 && hero.unk20AC == 0) {
+    if (taunter_moby->type == 3 && hero.unk20AC == 0) {
         D_L00_001614D4 = 0;
-        o->cnt18++;
+        taunter_vars->cnt18++;
     } else {
-        o->cnt18 = 0;
+        taunter_vars->cnt18 = 0;
     }
-    if (FUN_L00_0028d8c0_u(m, o->anim) == 0) {
+    if (FUN_L00_0028d8c0_u(taunter_moby, taunter_vars->anim) == 0) {
         b = D_0013C940[0x1A4 / 4] & hero.items[0].button_mask;
-        if ((b != 0 || ((D_0013C940[0x1A0 / 4] & hero.items[0].button_mask) != 0 && o->retry >= 0x11)) &&
+        if ((b != 0 || ((D_0013C940[0x1A0 / 4] & hero.items[0].button_mask) != 0 && taunter_vars->retry >= 0x11)) &&
             hero.unk20AC == 0) {
             if (b != 0) {
-                o->frame = FUN_001f96f8_c(random_int_between(0xF, 0x2D));
+                taunter_vars->frame = FUN_001f96f8_c(random_int_between(0xF, 0x2D));
             }
             if (D_00141680.cnt < 0xFFFF)
                 D_00141680.cnt++;
@@ -2633,52 +2633,52 @@ void taunter_update(Moby *m) {
             }
             D_00141680.flags |= 1 << current_level_index;
             D_00141680.flags |= 0x80000000;
-            if (m->type != 3)
-                blend_moby_animation(m, 3, 0, FUN_001f96f8_c(3));
-            o->anim = allocate_voice_for_target_entry(o->idx, 1, m);
-            i = o->idx + 1;
-            o->idx = i;
-            r1 = truncate_float_to_s32(m->cfg->tab[i].x * 10.0f);
-            r2 = truncate_float_to_s32(m->cfg->tab[i].y * 10.0f);
-            if (!(o->idx < m->cfg->count && r1 == 0x1E && r2 == r1))
-                o->idx = 0;
-            FUN_L00_002b6bc8(m, o->radius);
-            o->retry = 0;
+            if (taunter_moby->type != 3)
+                blend_moby_animation(taunter_moby, 3, 0, FUN_001f96f8_c(3));
+            taunter_vars->anim = allocate_voice_for_target_entry(taunter_vars->idx, 1, taunter_moby);
+            i = taunter_vars->idx + 1;
+            taunter_vars->idx = i;
+            r1 = truncate_float_to_s32(taunter_moby->cfg->tab[i].x * 10.0f);
+            r2 = truncate_float_to_s32(taunter_moby->cfg->tab[i].y * 10.0f);
+            if (!(taunter_vars->idx < taunter_moby->cfg->count && r1 == 0x1E && r2 == r1))
+                taunter_vars->idx = 0;
+            FUN_L00_002b6bc8(taunter_moby, taunter_vars->radius);
+            taunter_vars->retry = 0;
             goto end;
         }
-        if (o->anim < 0) {
+        if (taunter_vars->anim < 0) {
             if ((D_0013C940[0x1A0 / 4] & hero.items[0].button_mask) != 0 && hero.unk20AC == 0)
-                o->retry++;
+                taunter_vars->retry++;
             else
-                o->retry = 0;
-            if (m->type != 1)
-                blend_moby_animation(m, 1, 0, FUN_001f96f8_c(5));
+                taunter_vars->retry = 0;
+            if (taunter_moby->type != 1)
+                blend_moby_animation(taunter_moby, 1, 0, FUN_001f96f8_c(5));
             goto end;
         }
     } else {
-        o->retry++;
-        if ((D_0013CAE0[0] & hero.items[0].button_mask) != 0 || FUN_001f96f8_c(0x1E) >= o->cnt18) {
+        taunter_vars->retry++;
+        if ((D_0013CAE0[0] & hero.items[0].button_mask) != 0 || FUN_001f96f8_c(0x1E) >= taunter_vars->cnt18) {
             if (hero.unk20AC == 0)
                 goto L7340;
         }
     }
-    if (m->type != 1)
-        blend_moby_animation(m, 1, 0, FUN_001f96f8_c(5));
-    a = o->anim;
-    if (a != -1) {
-        e = D_0013E550 + a * 0x70;
-        if (*(Moby **)(e + 0x88) == m && e[0x74] != 0)
-            release_voice_slot(a);
+    if (taunter_moby->type != 1)
+        blend_moby_animation(taunter_moby, 1, 0, FUN_001f96f8_c(5));
+    voice_slot_index = taunter_vars->anim;
+    if (voice_slot_index != -1) {
+        voice_slot_window = D_0013E550 + voice_slot_index * 0x70;
+        if (*(Moby **)(voice_slot_window + 0x88) == taunter_moby && voice_slot_window[0x74] != 0)
+            release_voice_slot(voice_slot_index);
     }
-    o->retry = 0;
-    o->anim = -1;
+    taunter_vars->retry = 0;
+    taunter_vars->anim = -1;
     goto end;
 L7340:
     if (!(D_L00_0015F5CC & 3))
-        FUN_L00_002b6bc8(m, o->radius);
+        FUN_L00_002b6bc8(taunter_moby, taunter_vars->radius);
 end:
     if ((s32)(hero.items[0].state ^ 3) != 0)
-        FUN_L00_002b7398(m);
+        FUN_L00_002b7398(taunter_moby);
 }
 
 #define NOT_SDA
