@@ -1308,16 +1308,16 @@ extern u8 *FUN_L00_0026d000(V4 *, f32, f32, f32, f32, s32, V4 *, u32);
 
 void FUN_L00_002b3c50(X *x) {
     V4 l0;
-    V4 a;
-    V4 d;
-    V4 t;
+    V4 emission_position;
+    V4 previous_position_delta;
+    V4 trail_sample_position;
     N *g;
-    f32 s;
+    f32 trail_sample_spacing;
     f32 q;
     u32 col;
     s32 i;
-    s32 n;
-    s32 m;
+    s32 trail_sample_limit;
+    s32 hero_state;
     u8 *p;
 
     g = x->f78;
@@ -1326,21 +1326,21 @@ void FUN_L00_002b3c50(X *x) {
     l0.f[2] = 0.0f;
     l0.f[2] = -random_float_between(0.01f, 0.03f);
     FUN_001f9cf8(&l0, &l0, &x->vC0);
-    qcopy(&a, &x->v10);
+    qcopy(&emission_position, &x->v10);
     if (hero.state.current == 0x81) {
         if (D_L00_0015F5CC % 3 == 0) {
-            FUN_L00_0026cbb0(&a, &l0, 0x4F007FFF, 0x1FFFFFFF, FUN_001f96f8_c2(10), 1, 10000.0f);
+            FUN_L00_0026cbb0(&emission_position, &l0, 0x4F007FFF, 0x1FFFFFFF, FUN_001f96f8_c2(10), 1, 10000.0f);
         }
     } else {
-        FUN_L00_0026cbb0(&a, &l0, 0x4F007FFF, 0x1FFFFFFF, FUN_001f96f8_c2(10), 1, 10000.0f);
+        FUN_L00_0026cbb0(&emission_position, &l0, 0x4F007FFF, 0x1FFFFFFF, FUN_001f96f8_c2(10), 1, 10000.0f);
     }
     if (g->f0C) {
-        s = fast_vec_dist(&g->v10, &a) * 0.5f;
-        FUN_001f9a28_c(&d, &g->v10, &a);
+        trail_sample_spacing = fast_vec_dist(&g->v10, &emission_position) * 0.5f;
+        FUN_001f9a28_c(&previous_position_delta, &g->v10, &emission_position);
         for (i = 1; i < 2; i++) {
-            fast_vec_normalize(&t, &d, s * (f32)i);
-            FUN_001f9a10_c(&t, &a, &t);
-            FUN_L00_0026cbb0(&t, &l0, 0x4F007FFF, 0x1FFFFFFF, FUN_001f96f8_c2(10), 1, 10000.0f);
+            fast_vec_normalize(&trail_sample_position, &previous_position_delta, trail_sample_spacing * (f32)i);
+            FUN_001f9a10_c(&trail_sample_position, &emission_position, &trail_sample_position);
+            FUN_L00_0026cbb0(&trail_sample_position, &l0, 0x4F007FFF, 0x1FFFFFFF, FUN_001f96f8_c2(10), 1, 10000.0f);
         }
     }
     g->f00 = random_integer_below(FUN_001f96f8_c2(10));
@@ -1351,7 +1351,7 @@ void FUN_L00_002b3c50(X *x) {
     l0.f[2] = -0.3f;
     l0.f[3] = 1.0f;
     FUN_001f9cf8(&l0, &l0, &x->vC0);
-    FUN_001f9a10_c(&a, &x->v10, &l0);
+    FUN_001f9a10_c(&emission_position, &x->v10, &l0);
     l0.f[3] = 1.0f;
     l0.f[2] = -0.075f;
     l0.f[0] = 0.0f;
@@ -1368,27 +1368,27 @@ void FUN_L00_002b3c50(X *x) {
         q = 1.037f;
         l0.f[2] -= D_0015ED6C_c * 3.0f;
     }
-    p = FUN_L00_0026d000(&a, 0.05f, 1.01f, q, 30000.0f, 6, &l0, col);
+    p = FUN_L00_0026d000(&emission_position, 0.05f, 1.01f, q, 30000.0f, 6, &l0, col);
     if (p)
         p[3] = 0x44;
     if (g->f0C) {
-        s = fast_vec_dist(&g->v10, &a) * 0.16667f;
-        FUN_001f9a28_c(&d, &g->v10, &a);
-        m = hero.state.current;
-        n = 4;
-        if (m == 8)
-            n = 2;
-        if (m == 0x81)
-            n = 1;
-        for (i = 1; i < n; i++) {
-            fast_vec_normalize(&t, &d, s * (f32)i);
-            FUN_001f9a10_c(&t, &a, &t);
-            p = FUN_L00_0026d000(&t, 0.05f, 1.01f, q, 30000.0f, 6, &l0, col);
+        trail_sample_spacing = fast_vec_dist(&g->v10, &emission_position) * 0.16667f;
+        FUN_001f9a28_c(&previous_position_delta, &g->v10, &emission_position);
+        hero_state = hero.state.current;
+        trail_sample_limit = 4;
+        if (hero_state == 8)
+            trail_sample_limit = 2;
+        if (hero_state == 0x81)
+            trail_sample_limit = 1;
+        for (i = 1; i < trail_sample_limit; i++) {
+            fast_vec_normalize(&trail_sample_position, &previous_position_delta, trail_sample_spacing * (f32)i);
+            FUN_001f9a10_c(&trail_sample_position, &emission_position, &trail_sample_position);
+            p = FUN_L00_0026d000(&trail_sample_position, 0.05f, 1.01f, q, 30000.0f, 6, &l0, col);
             if (p)
                 p[3] = 0x44;
         }
     }
-    qcopy(&g->v10, &a);
+    qcopy(&g->v10, &emission_position);
     g->f0C = 1;
 }
 #define NOT_SDA
