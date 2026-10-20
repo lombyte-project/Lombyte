@@ -143,27 +143,27 @@ extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void free_effect_particle(void *) __asm__("FUN_L00_00267a08");
 extern float FUN_001f99c0(float);
 
-void FUN_L00_00271748(unsigned char *m) {
-    unsigned char *v = m + 0x20;
+void FUN_L00_00271748(unsigned char *particle) {
+    unsigned char *v = particle + 0x20;
     float z;
-    fast_vec_add(m + 0x10, m + 0x10, v);
-    if (*(float *)(m + 0x10) < 2.0f || 1021.0f < *(float *)(m + 0x10) ||
-        *(float *)(m + 0x14) < 2.0f || 1021.0f < *(float *)(m + 0x14) ||
-        (z = *(float *)(m + 0x18)) < 2.0f || 1021.0f < z) {
-        free_effect_particle(m);
+    fast_vec_add(particle + 0x10, particle + 0x10, v);
+    if (*(float *)(particle + 0x10) < 2.0f || 1021.0f < *(float *)(particle + 0x10) ||
+        *(float *)(particle + 0x14) < 2.0f || 1021.0f < *(float *)(particle + 0x14) ||
+        (z = *(float *)(particle + 0x18)) < 2.0f || 1021.0f < z) {
+        free_effect_particle(particle);
         return;
     }
-    *(float *)(m + 0xC) += *(float *)(v + 0x10);
-    m[8]++;
+    *(float *)(particle + 0xC) += *(float *)(v + 0x10);
+    particle[8]++;
     if (*(float **)(v + 0x14) && FUN_001f99c0(z - **(float **)(v + 0x14)) < 0.2f) {
-        *(float *)(m + 0x18) = **(float **)(v + 0x14) + 0.02f;
+        *(float *)(particle + 0x18) = **(float **)(v + 0x14) + 0.02f;
     }
-    if (--*(short *)(m + 0xA) == 0) {
-        *(unsigned short *)(m + 0xA) = 4;
-        *(int *)(m + 4) += 0xFF000000;
+    if (--*(short *)(particle + 0xA) == 0) {
+        *(unsigned short *)(particle + 0xA) = 4;
+        *(int *)(particle + 4) += 0xFF000000;
     }
-    if (!(*(int *)(m + 4) & 0xFF000000)) {
-        free_effect_particle(m);
+    if (!(*(int *)(particle + 4) & 0xFF000000)) {
+        free_effect_particle(particle);
     }
 }
 #include "eetypes.h"
