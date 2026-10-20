@@ -3042,23 +3042,23 @@ unsigned char *create_moby(int) __asm__("FUN_0020c4f8");
 void FUN_L00_00250df8(unsigned char *);
 void FUN_L00_0025d1b8(unsigned char *);
 unsigned char *FUN_L00_002bfe08(int a, u128 *b, u128 *c) {
-    unsigned char *m = create_moby(0xba);
-    if (m) {
-        char *q;
-        m[0x30] = 0xff;
-        *(short *)(m + 0x32) = 0xff;
-        m[0x31] = 1;
-        q = *(char **)(m + 0x78);
-        m[0x20] = 0;
-        m[0xbc] = 0;
-        qcopy(m + 0x10, b);
-        qcopy(q + 0x10, c);
-        *(int *)(q + 0x60) = a;
-        FUN_L00_00250df8(m);
-        FUN_L00_0025d1b8(m);
-        *(float *)(m + 0x2c) = *(float *)(*(char **)(m + 0x24) + 0x24) * 0.1f;
+    unsigned char *spawned_moby = create_moby(0xba);
+    if (spawned_moby) {
+        char *moby_vars;
+        spawned_moby[0x30] = 0xff;
+        *(short *)(spawned_moby + 0x32) = 0xff;
+        spawned_moby[0x31] = 1;
+        moby_vars = *(char **)(spawned_moby + 0x78);
+        spawned_moby[0x20] = 0;
+        spawned_moby[0xbc] = 0;
+        qcopy(spawned_moby + 0x10, b);
+        qcopy(moby_vars + 0x10, c);
+        *(int *)(moby_vars + 0x60) = a;
+        FUN_L00_00250df8(spawned_moby);
+        FUN_L00_0025d1b8(spawned_moby);
+        *(float *)(spawned_moby + 0x2c) = *(float *)(*(char **)(spawned_moby + 0x24) + 0x24) * 0.1f;
     }
-    return m;
+    return spawned_moby;
 }
 #include "rnc/math/vector.h"
 extern char *D_L00_00173E58 __attribute__((section(".data")));
