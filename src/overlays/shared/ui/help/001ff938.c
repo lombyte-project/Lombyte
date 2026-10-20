@@ -219,7 +219,7 @@ void set_animation_parameter(s32 arg0, s32 arg1) __asm__("FUN_001ff570");
 void FUN_L15_00208ca8(void) {
     unsigned char *base = ((unsigned char *)&D_0013E533) + 0xE1D;
     unsigned char *b;
-    int p;
+    int flag_clear_target;
     void *moby_to_remove;
     char *restored_hero_moby;
     if (base[0x20A4] == 2) {
@@ -231,10 +231,10 @@ void FUN_L15_00208ca8(void) {
     }
     FUN_L00_00205538();
     b = ((unsigned char *)&D_0013E533) + 0xE1D;
-    p = *(int *)(b + 0xA84);
+    flag_clear_target = *(int *)(b + 0xA84);
     b[0x20A4] = 0;
-    if (p != 0) {
-        *(unsigned short *)(p + 0x34) &= 0xFFF9;
+    if (flag_clear_target != 0) {
+        *(unsigned short *)(flag_clear_target + 0x34) &= 0xFFF9;
     }
     moby_to_remove = *(void **)(b + 0xA8C);
     *(int *)(b + 0xA84) = 0;
