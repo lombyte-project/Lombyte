@@ -2591,339 +2591,12 @@ void FUN_L13_002b9f58(struct Moby *moby, char *obj) {
         }
     }
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002ba178.s", FUN_L13_002ba178);
-#else
-#endif
-
-/* Level 13 fighter state. Offsets come from the checked level 13 retail instructions. */
-typedef float JetVec[4] __attribute__((aligned(16)));
-typedef struct Jet Jet;
-typedef struct JetData JetData;
-typedef struct { char pad0[0x24]; float scale; } JetModel;
-struct Jet {
-    char pad0[0x10]; JetVec position;
-    unsigned char state,pad21[3]; JetModel *model; float pad28,scale;
-    unsigned char alpha,pad31; unsigned short render_flags,flags; char pad36[0xA];
-    JetVec rotation; char pad50[0x28]; JetData *data;
-    char pad7C[0x18]; int animation; char pad98[0xC];
-    unsigned char status,padA5; unsigned short class_id; char padA8[8]; unsigned char persistent;
-};
-struct JetData {
-    JetVec velocity,pad10,previous_rotation,angles,spawn_position,spawn_rotation;
-    unsigned char animation_frame,gun_side; short death_timer; float speed;
-    short missile_index,gun_index; int counter6C,counter70,pad74,pad78; float blend;
-    int gun_timer,missile_timer; char pad88[0x18];
-    float angle_a,angle_b,angle_c,limit_a,limit_b; char padB4[0xC]; int counterC0,padC4;
-    float angle_d,angle_e,angle_f; char padD4[8]; int timer;
-    int hud_x,hud_y,energy,padEC; float hud_health; int hud_previous,wait_timer;
-    int destination_path,escape_path,texture_id,engine_sound,weapon_sound;
-    char pad110[0xC]; int group_a,hit_class,target_class,lock_index,exit_path,entry_path,trigger,start_timer,group_b;
-};
-typedef struct {
-    char pad0[0x15F0]; Jet *craft; unsigned short class_id; unsigned char ammo,ammo2,ammo3,ammo4,ammo5,ammo6;
-    float health,max_health,health_scale; int health_meter; short weapon; unsigned char pad160E,pad160F;
-    char pad1610[0xA70]; Jet *moby; int state; char pad2088[0x1C]; unsigned char busy,in_craft;
-} JetPlayer;
-typedef struct { char pad0[0x1C]; int active; char pad20[0x30]; int pending; } JetTransition;
-typedef struct { char pad0[0x160]; float flash; int pad164,ticks; } JetCamera;
-typedef struct { char pad0[0xA]; unsigned short palette; char padC[4]; } JetTexture;
-typedef struct { char pad0[0x30]; JetVec position; char pad40[0x30]; JetVec rotation; } JetPath;
-typedef struct { char pad0[0x10]; JetVec velocity; Jet *source; int pad24,pad28; float damage; int flags; } JetHit;
-extern JetPlayer jet_player47 __asm__("D_0013F350");
-extern JetCamera jet_camera47 __asm__("D_L13_00166F80");
-extern JetTransition D_001516D0[];
-#include "rnc/gameplay/state/game_globals.h"
-extern unsigned char D_0013E550[];
-extern unsigned char D_0013A4E0[];
-extern float D_L13_0015ED60;
-extern int D_L13_0015ED84;
+#include "eetypes.h"
 extern float D_L13_0016CDF0 __attribute__((section(".data")));
-extern JetTexture D_L13_0016D480[];
-extern unsigned int D_L13_0015F420;
-int hp_bar_saved __asm__("D_L13_001613C4") = 0;
-extern char D_L13_001CBDE8[];
-short D_L13_00161440 = 0x7f;
-extern float D_L13_0015F3FC;
-extern int D_L13_0015F608;
-extern JetPath *D_L13_001600EC;
-extern char D_L13_001F4470[], D_L13_001F44A8[];
-extern int jet_fast_dec_timer(void *) __asm__("FUN_001f9740");
-extern JetHit *jet_find_hit(void *,int,int) __asm__("FUN_L00_0025a420");
-extern void build_spherical_offset(float *,float,float,float) __asm__("FUN_00214db0");
-extern void jet_scale_vector(void *,void *,float) __asm__("FUN_001f9c90");
-extern void jet_add_vector(void *,void *,void *) __asm__("FUN_001f9a10");
 extern void jet_reflect_vector(void *,void *,void *) __asm__("FUN_L00_001ff660");
-extern float jet_angle(float,float) __asm__("FUN_001f9e90");
-extern float jet_sub_rot(float,float) __asm__("FUN_001fa5c8");
-extern float jet_add_rot(float,float) __asm__("FUN_001fa580");
-extern float jet_length_xy(void *) __asm__("FUN_001f9b20");
-extern int jet_scale_ticks(int) __asm__("FUN_001f96f8");
 extern void jet_explosion(void *, void *, void *, float, float, int, int, int,
                           float, float, float, int, float, float, int, int, int, int)
     __asm__("FUN_L00_0025e450");
-extern void jet_group_state(int,int,int,int) __asm__("FUN_L13_002650a8");
-extern void jet_group_switch(void *,int,int,int) __asm__("FUN_L13_002651c8");
-extern void jet_group_flag(int,int) __asm__("FUN_L13_00265170");
-extern float jet_distance(void *,void *) __asm__("FUN_L00_00250430");
-extern float jet_blend(float *,float,float) __asm__("FUN_00213ed8");
-extern void jet_animate(void *,float) __asm__("FUN_L00_00259fe8");
-extern void jet_place_camera(void *,void *,int,int) __asm__("FUN_L00_00216f90");
-extern void jet_mount(void *,void *,int,int,int) __asm__("FUN_L00_002eaaa0");
-extern void FUN_L13_002ba178(void *,void *);
-extern void jet_camera_mode(void) __asm__("FUN_L00_00203b18");
-extern void jet_game_state(int,int) __asm__("FUN_L01_0027a248");
-extern void jet_set_hero_state(int,int) __asm__("FUN_L00_002223f8");
-extern void jet_end_mount(int) __asm__("FUN_L00_002eac18");
-extern void jet_set_weapon(int,int) __asm__("FUN_001ff570");
-extern void jet_update_moby(void *) __asm__("FUN_0020e098");
-extern void jet_stop_sound(int) __asm__("FUN_0022d798");
-extern void jet_death_complete(void) __asm__("FUN_L00_00211250");
-extern void jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
-extern void jet_reset_camera(void *,void *) __asm__("FUN_L00_00284e50");
-extern void jet_force_help(int,int) __asm__("FUN_002151d8");
-extern int jet_try_help(int,int) __asm__("FUN_00215130");
-extern void jet_delete_moby(void *) __asm__("FUN_0020c828");
-extern int jet_allocate_voice(int,int,int) __asm__("FUN_0022da68");
-extern int jet_check_trigger(void *,int) __asm__("FUN_00214720");
-extern int jet_fast_dec_death_timer(void *) __asm__("FUN_001f9770");
-
-void fighter_jet_update(Jet *m) __asm__("FUN_L13_002bb068");
-void fighter_jet_update(Jet *m) {
-    enum {
-        FIGHTER_JET_STATE_INITIALIZE = 0,
-        FIGHTER_JET_STATE_WAIT_FOR_ENTRY = 1,
-        FIGHTER_JET_STATE_MOUNT_PLAYER = 2,
-        FIGHTER_JET_STATE_FLIGHT = 4,
-        FIGHTER_JET_STATE_EXIT_PLAYER = 5,
-        FIGHTER_JET_STATE_STOP_DEATH_SOUNDS = 6,
-        FIGHTER_JET_STATE_WAIT_FOR_DEATH_RESET = 7,
-        FIGHTER_JET_STATE_FORCED_EXIT = 8,
-        FIGHTER_JET_STATE_DELETE = 9
-    };
-    JetData *d;
-    JetVec impulse;
-    int state,initial_state;
-    if (((JetPlayer*)(&jet_player47))->state==0x72) return;
-    d=m->data; d->hit_class=0;
-    jet_fast_dec_timer((int*)&d->timer);
-    initial_state=m->state;
-    if ((unsigned int)(initial_state-6)>=2 && (unsigned char)initial_state!=1 && (unsigned char)initial_state!=2) {
-        JetHit *hit=(JetHit*)jet_find_hit(m,0x30001,0);
-        if (hit && m->state==4) {
-            if (((JetPlayer*)(&jet_player47))->health>hit->damage) {
-                ((JetPlayer*)(&jet_player47))->health-=hit->damage;
-                if (hit->source && (unsigned int)(hit->source->class_id-0x52)<2) d->hit_class=(short)hit->source->class_id;
-                if (hit->flags&1) {
-                    float weight,yaw_delta,pitch_delta;
-                    jet_camera47.flash=1.0f; jet_camera47.ticks=jet_scale_ticks(4);
-                    weight=hit->damage*0.05f;
-                    build_spherical_offset(impulse,d->speed,d->angles[2],-d->angles[1]);
-                    jet_scale_vector(hit->velocity,hit->velocity,frame_time*3.0f);
-                    jet_add_vector(m->position,m->position,hit->velocity);
-                    jet_reflect_vector(impulse,impulse,hit->velocity);
-                    yaw_delta=jet_sub_rot(jet_angle(impulse[0],impulse[1]),d->angles[2]);
-                    d->angles[2]=jet_add_rot(d->angles[2],yaw_delta*(D_L13_0015ED60*0.1f)*weight);
-                    pitch_delta=jet_sub_rot(jet_angle(jet_length_xy(impulse),impulse[2]),d->angles[1]);
-                    d->angles[1]=jet_add_rot(d->angles[1],pitch_delta*(D_L13_0015ED60*0.1f)*weight);
-                }
-            } else {
-                build_spherical_offset(impulse,d->speed,d->angles[2],-d->angles[1]);
-                if (hit->source && (unsigned int)(hit->source->class_id-0x52)<2) d->hit_class=(short)hit->source->class_id+10000;
-                jet_camera47.flash=0.2f; jet_camera47.ticks=jet_scale_ticks(5);
-                ((JetPlayer*)(&jet_player47))->health=0.0f; m->flags|=0x41;
-                jet_explosion(m,impulse,0,0.0f,0.0f,10,3,16,4.0f,2.0f,9.0f,6,1.0f,15.0f,1,1,-1,0);
-                m->animation=0; d->death_timer=jet_scale_ticks(240); m->state=6;
-            }
-        }
-    }
-    m->status=0xFF;
-    if (((JetPlayer*)(&jet_player47))->craft==m) ((JetPlayer*)(&jet_player47))->health_meter=(int)(((JetPlayer*)(&jet_player47))->health*0.00390625f*200.0f);
-    switch(m->state) {
-    case FIGHTER_JET_STATE_INITIALIZE: {
-        float limit;
-        int *palette;
-        JetTexture *texture_table;
-        unsigned int palette_data;
-        int texture_index,initialized;
-        m->state=1; d->animation_frame=0; m->scale=m->model->scale;
-        *(float*)((char*)d+0x20)=d->angles[0]; *(float*)((char*)d+0x24)=d->angles[1];
-        limit=jet_angle(1.0f,D_L13_0016CDF0); limit+=limit;
-        d->counterC0=0; d->hit_class=0; *(float*)((char*)d+0xAC)=limit; *(float*)((char*)d+0xB0)=limit;
-        qcopy(d->angles,m->rotation); qcopy(d->spawn_rotation,m->rotation); qcopy(d->spawn_position,m->position);
-        texture_index=d->texture_id;
-        texture_table=D_L13_0016D480;
-        d->blend=0.0f;
-        texture_index+=40;
-        palette_data=D_L13_0015F420;
-        initialized=hp_bar_saved;
-        palette=(int*)(palette_data+(texture_table[texture_index].palette<<4));
-        hp_bar_clut[0]=palette;
-        if (!initialized) __builtin_memcpy(D_L13_001CBE70,palette,1024);
-        hp_bar_saved=1; d->wait_timer=1; d->energy=1;
-        if (m->persistent!=0xFF && (visited52)[m->persistent+(D_L13_0015ED84<<4)]==0xFF) m->state=9;
-        if (d->group_a>0) jet_group_state(d->group_a,0,0,0);
-        if (d->group_b>0) jet_group_state(d->group_b,0,0,0);
-        jet_group_switch(D_L13_001CBDE8,1,1,-1); jet_group_switch(&D_L13_00161440,1,-1,-1); jet_group_flag(0x102,0);
-        d->lock_index=-1; d->start_timer=jet_scale_ticks(575);
-        break;
-    }
-    case FIGHTER_JET_STATE_WAIT_FOR_ENTRY: {
-        short enter=0;
-        if (m->persistent!=0xFF && (visited52)[m->persistent+(D_L13_0015ED84<<4)]==0xFF) m->state=9;
-        else if (d->trigger!=-1 && jet_check_trigger(D_0013F3D0,d->trigger)) { d->blend=0.99f; D_L13_0015F3FC=0.99f; enter=1; }
-        else if (jet_distance(m,((JetPlayer*)(&jet_player47))->moby)<2.0f) {
-            int pressed=jet_try_help(7,0x53E4)!=0;
-            if (*(int*)(D_0013A4E0+0x2604)&0x10) enter=pressed;
-        }
-        if (enter) {
-            float limit;
-            m->scale=m->model->scale;
-            *(float*)((char*)d+0x20)=d->angles[0]; *(float*)((char*)d+0x24)=d->angles[1];
-            limit=jet_angle(1.0f,D_L13_0016CDF0); limit+=limit;
-            d->counterC0=0; d->hit_class=0; *(float*)((char*)d+0xAC)=limit; *(float*)((char*)d+0xB0)=limit;
-            qcopy(d->angles,m->rotation); d->wait_timer=1; d->energy=1; m->state=2; d->lock_index=-1;
-        } else if (d->blend!=0.0f) { jet_blend(&d->blend,0.0f,frame_time*4.0f); D_L13_0015F3FC=d->blend; }
-        jet_animate((unsigned char*)m,1.5f);
-        break;
-    }
-    case FIGHTER_JET_STATE_MOUNT_PLAYER:
-        jet_blend(&d->blend,1.0f,frame_time*4.0f); D_L13_0015F3FC=d->blend;
-        if (d->blend==1.0f) {
-            if (d->entry_path!=-1) {
-                JetPath *path=&D_L13_001600EC[d->entry_path];
-                jet_place_camera(path->position,path->rotation,50,1);
-                {
-                    int index=d->entry_path;
-                    JetPath *paths=D_L13_001600EC;
-                    qcopy(m->position,paths[index].position); qcopy(m->rotation,paths[index].rotation);
-                }
-            }
-            jet_set_hero_state(0x32,1);
-            jet_mount(m->position,m->rotation,0,0,0);
-            d->missile_index=0; d->counter6C=0; d->counter70=0; d->missile_timer=0; d->speed=D_L13_0015ED60*0.1f; d->gun_timer=0;
-            m->alpha=m->render_flags=0xFF; *(int*)((char*)((JetPlayer*)(&jet_player47))->moby+0x98)=-1;
-            qcopy(d->previous_rotation,m->rotation);
-            d->angle_a=0; d->angle_b=0; d->angle_c=0; d->angle_d=0; d->angle_e=0; d->angle_f=0; ((JetPlayer*)(&jet_player47))->craft=m; { unsigned short cls=m->class_id; ((JetPlayer*)(&jet_player47))->health=255.0f; ((JetPlayer*)(&jet_player47))->ammo=10; ((JetPlayer*)(&jet_player47))->pad160E=1; ((JetPlayer*)(&jet_player47))->ammo2=20; ((JetPlayer*)(&jet_player47))->class_id=cls; ((JetPlayer*)(&jet_player47))->ammo3=20; d->hud_previous=255; d->hud_health=0; ((JetPlayer*)(&jet_player47))->ammo4=3; ((JetPlayer*)(&jet_player47))->ammo5=3; ((JetPlayer*)(&jet_player47))->ammo6=3; ((JetPlayer*)(&jet_player47))->pad160F=0; ((JetPlayer*)(&jet_player47))->max_health=256.0f; ((JetPlayer*)(&jet_player47))->health_scale=100.0f; }
-            build_spherical_offset(d,D_L13_0015ED60*0.1f,d->angles[2],-d->angles[1]);
-            if (d->group_a>0) jet_group_state(d->group_a,1,1,1);
-            if (d->group_b>0) jet_group_state(d->group_b,1,1,1);
-            jet_group_switch(D_L13_001CBDE8,0,0,-1); jet_group_switch(&D_L13_00161440,0,-1,-1); jet_group_flag(0x102,0);
-            m->position[2]+=3.0f; m->scale=m->model->scale*0.25f; ((JetPlayer*)(&jet_player47))->in_craft=1;
-            if (d->engine_sound==-1) d->engine_sound=jet_allocate_voice(0,4,(int)m);
-            D_L13_0015F608=2; FUN_L13_002ba178(m,d); jet_camera_mode(); jet_game_state(2,4); m->state=4;
-        }
-        break;
-    case FIGHTER_JET_STATE_FLIGHT: {
-        unsigned char *audio;
-        if (d->blend!=0.0f) { jet_blend(&d->blend,0.0f,frame_time*4.0f); D_L13_0015F3FC=d->blend; }
-        jet_force_help(6,0); D_L13_0015F608=2;
-        audio=D_0013E550+d->engine_sound*0x70;
-        if (*(Jet**)(audio+0x88)!=m || !audio[0x74]) { d->engine_sound=-1; d->engine_sound=jet_allocate_voice(0,4,(int)m); }
-        FUN_L13_002ba178(m,d);
-        if (((JetPlayer*)(&jet_player47))->pad160F&1) m->state=5;
-        if (d->energy<=0) { d->wait_timer=jet_scale_ticks(1200); m->state=8; }
-        break;
-    }
-    case FIGHTER_JET_STATE_EXIT_PLAYER:
-        ((JetPlayer*)(&jet_player47))->in_craft=0; *(int*)((char*)((JetPlayer*)(&jet_player47))->moby+0x98)=0;
-        jet_set_hero_state(0,1); jet_end_mount(0); jet_set_weapon(((JetPlayer*)(&jet_player47))->weapon,0);
-        qcopy(m->position,d->spawn_position); qcopy(m->rotation,d->spawn_rotation);
-        m->scale=m->model->scale; jet_update_moby(m);
-        if (d->group_a>0) jet_group_state(d->group_a,0,0,0);
-        if (d->group_b>0) jet_group_state(d->group_b,0,0,0);
-        jet_group_switch(D_L13_001CBDE8,1,1,-1); jet_group_switch(&D_L13_00161440,1,-1,-1); jet_group_flag(0x102,0);
-        if (d->exit_path!=-1) { JetPath *path=&D_L13_001600EC[d->exit_path]; jet_place_camera(path->position,path->rotation,0,1); }
-        else jet_place_camera(d->spawn_position,D_L13_001600EC[d->destination_path].rotation,0,1);
-        {
-            int id=d->engine_sound;
-            unsigned char *audio;
-            if (id!=-1) { audio=D_0013E550+id*0x70; if (*(Jet**)(audio+0x88)==m && audio[0x74]) jet_stop_sound(id); }
-            d->engine_sound=-1;
-            id=d->weapon_sound;
-            if (id!=-1) { audio=D_0013E550+id*0x70; if (*(Jet**)(audio+0x88)==m && audio[0x74]) jet_stop_sound(id); }
-            d->weapon_sound=-1;
-        }
-        jet_game_state(0,5); d->blend=0.99f; D_L13_0015F3FC=0.99f; m->state=1;
-        break;
-    case FIGHTER_JET_STATE_STOP_DEATH_SOUNDS:
-        D_L13_0015F608=2;
-        {
-            int id=d->engine_sound;
-            unsigned char *audio;
-            if (id!=-1) { audio=D_0013E550+id*0x70; if (*(Jet**)(audio+0x88)==m && audio[0x74]) jet_stop_sound(id); }
-            d->engine_sound=-1;
-            id=d->weapon_sound;
-            if (id!=-1) { audio=D_0013E550+id*0x70; if (*(Jet**)(audio+0x88)==m && audio[0x74]) jet_stop_sound(id); }
-            d->weapon_sound=-1;
-        }
-        m->state=7; break;
-    case FIGHTER_JET_STATE_WAIT_FOR_DEATH_RESET: {
-        JetTransition *transition;
-        D_L13_0015F608=2;
-        if (jet_fast_dec_death_timer(&d->death_timer)) {
-            transition=(JetTransition*)(D_001516D0);
-            if (!transition->pending) {
-            int active=transition->active;
-            if (active==-1) {
-                jet_death_complete(); jet_end_mount(0);
-                qcopy(m->position,d->spawn_position); qcopy(m->rotation,d->spawn_rotation); jet_update_moby(m);
-                {
-            int id=d->engine_sound;
-            unsigned char *audio;
-            if (id!=active) { audio=D_0013E550+id*0x70; if (*(Jet**)(audio+0x88)==m && audio[0x74]) jet_stop_sound(id); }
-            d->engine_sound=-1;
-            id=d->weapon_sound;
-            if (id!=-1) { audio=D_0013E550+id*0x70; if (*(Jet**)(audio+0x88)==m && audio[0x74]) jet_stop_sound(id); }
-            d->weapon_sound=-1;
-        }
-                m->state=0;
-            }
-        }
-        }
-        break;
-    }
-    case FIGHTER_JET_STATE_FORCED_EXIT:
-        ((JetPlayer*)(&jet_player47))->in_craft=0; *(int*)((char*)((JetPlayer*)(&jet_player47))->moby+0x98)=0; jet_set_hero_state(0,1); jet_end_mount(0);
-        if (d->escape_path==-1) { stub_printf(D_L13_001F4470); qcopy(m->position,d->spawn_position); qcopy(m->rotation,d->spawn_rotation); }
-        else { int index=d->escape_path; JetPath *paths=D_L13_001600EC; qcopy(m->position,paths[index].position); qcopy(m->rotation,paths[index].rotation); m->position[2]+=0.57318f; }
-        m->scale=m->model->scale; jet_update_moby(m);
-        if (d->destination_path==-1) stub_printf(D_L13_001F44A8);
-        else {
-            JetPath *path;
-            if (d->group_a>0) jet_group_state(d->group_a,0,0,0);
-            if (d->group_b>0) jet_group_state(d->group_b,0,0,0);
-            jet_group_switch(D_L13_001CBDE8,1,1,-1); jet_group_switch(&D_L13_00161440,1,-1,-1); jet_group_flag(0x102,0);
-            path=&D_L13_001600EC[d->destination_path]; jet_place_camera(path->position,path->rotation,0,1);
-        }
-        if (m->persistent!=0xFF) jet_clear_persistent(m->persistent);
-        {
-            int id=d->engine_sound;
-            unsigned char *audio;
-            if (id!=-1) { audio=D_0013E550+id*0x70; if (*(Jet**)(audio+0x88)==m && audio[0x74]) jet_stop_sound(id); }
-            d->engine_sound=-1;
-            id=d->weapon_sound;
-            if (id!=-1) { audio=D_0013E550+id*0x70; if (*(Jet**)(audio+0x88)==m && audio[0x74]) jet_stop_sound(id); }
-            d->weapon_sound=-1;
-        }
-        jet_reset_camera((char *)&jet_player47+0x80,(char *)&jet_player47+0x90); m->state=9;
-        break;
-    case FIGHTER_JET_STATE_DELETE: jet_delete_moby(m); return;
-    case 10: break;
-    default: break;
-    }
-    if (m->position[0]<15.0f) m->position[0]=15.0f;
-    if (m->position[0]>1008.0f) m->position[0]=1008.0f;
-    if (m->position[1]<15.0f) m->position[1]=15.0f;
-    if (m->position[1]>1008.0f) m->position[1]=1008.0f;
-    if (m->position[2]<15.0f) m->position[2]=15.0f;
-    if (m->position[2]>1008.0f) m->position[2]=1008.0f;
-    state=m->state;
-    if ((unsigned char)state==4) { qcopy_nc((char *)&jet_player47+0x80,m->position); qcopy_nc((char *)&jet_player47+0x90,d->angles); }
-    if ((unsigned int)(state-3)<2 || (unsigned char)state==8) FUN_L13_002b8590(m,(char*)d);
-}
-#ifdef NON_MATCHING
-#include "eetypes.h"
 /* Flies the player's fighter: throttle and stick input, steering toward the path, camera, and collision response. */
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002B2020.c: func_L13_002BB3E8), where it is exact; names translated to the US level program. */
 typedef float FlightVec[4] __attribute__((aligned(16)));
@@ -3134,23 +2807,28 @@ void FUN_L13_002ba178(void *moby_arg, void *data_arg) {
             speed_fraction = excess / range;
         }
     }
+    data->speed_fraction = speed_fraction;
     {
         FlightVec camera_offsets[2];
-        FlightVec camera_pos;
-        FlightVec camera_rot;
+        /* Fakematch: retail's compiler expands the offset table initializer in place (a clobber,
+         * then a quadword clear per row); our cc1 calls memset for it, and this union
+         * initializer gives retail's sequence. */
+        union {
+            u128 q;
+            struct {
+                FlightVec pos;
+                FlightVec rot;
+            } v;
+        } camera = { 0 };
         float basis[12];
-        /* Near miss (diff 7, sched1 order of the camera_rot stores): the volatile accesses below
-         * are draft-only scheduling experiments, not believed original. */
-        *(u128 *)camera_pos = 0;
-        camera_pos[1] = *(volatile float *)&data->steer_x * -3.0f * 0.25f;
-        camera_pos[0] = (-15.0f - data->steer_y - speed_fraction * 4.0f) * 0.25f;
-        *(volatile u128 *)camera_rot = 0;
-        ((volatile float *)camera_pos)[2] = (4.0f + data->steer_y * 2.0f) * 0.25f;
-        ((volatile float *)camera_rot)[0] = -1.275f;
-        camera_rot[2] = 0.65f;
-        *(volatile float *)&data->speed_fraction = speed_fraction;
-        *(u128 *)camera_offsets[0] = *(u128 *)camera_pos;
-        *(u128 *)camera_offsets[1] = *(u128 *)camera_rot;
+        camera.v.pos[0] = (-15.0f - data->steer_y - speed_fraction * 4.0f) * 0.25f;
+        camera.v.pos[1] = data->steer_x * -3.0f * 0.25f;
+        camera.v.pos[2] = (4.0f + data->steer_y * 2.0f) * 0.25f;
+        *(u128 *)camera.v.rot = 0;
+        camera.v.rot[0] = -1.275f;
+        camera.v.rot[2] = 0.65f;
+        *(u128 *)camera_offsets[0] = *(u128 *)camera.v.pos;
+        *(u128 *)camera_offsets[1] = *(u128 *)camera.v.rot;
         if (moby->state == 2) {
             data->camera_offset_x = camera_offsets[data->camera_mode][0];
             data->camera_offset_y = camera_offsets[data->camera_mode][1];
@@ -3166,17 +2844,17 @@ void FUN_L13_002ba178(void *moby_arg, void *data_arg) {
         offset[3] = 0.0f;
         euler_rotation_basis(basis, (char *)&data->roll);
         transform_vector_by_basis(target, offset, basis);
-        add_vector_xyz(camera_pos, moby->pos, target);
-        FUN_L00_002ea9d8(camera_pos);
-        camera_rot[0] = fast_add_rotations(data->roll * 0.5f, data->steer_x * 0.03125f);
-        camera_rot[1] = fast_subtract_rotations(fast_add_rotations(data->pitch, 0.09817477f), data->steer_y * (frame_scale_gp * 0.012271847f));
-        camera_rot[2] = data->yaw;
+        add_vector_xyz(camera.v.pos, moby->pos, target);
+        FUN_L00_002ea9d8(camera.v.pos);
+        camera.v.rot[0] = fast_add_rotations(data->roll * 0.5f, data->steer_x * 0.03125f);
+        camera.v.rot[1] = fast_subtract_rotations(fast_add_rotations(data->pitch, 0.09817477f), data->steer_y * (frame_scale_gp * 0.012271847f));
+        camera.v.rot[2] = data->yaw;
         if (moby->state == 2) {
-            qcopy(&data->camera_roll, camera_rot);
+            qcopy(&data->camera_roll, camera.v.rot);
         } else {
-            spring_angle((char *)&data->camera_roll, (char *)&data->camera_roll_velocity, 0, camera_rot[0], frame_scale_sq_gp * 0.15f, frame_scale_sq_gp * 0.8f, frame_scale_gp);
-            spring_angle((char *)&data->camera_pitch, (char *)&data->camera_pitch_velocity, 0, camera_rot[1], frame_scale_sq_gp * 0.15f, frame_scale_sq_gp * 0.8f, frame_scale_gp);
-            spring_angle((char *)&data->camera_yaw, (char *)&data->camera_yaw_velocity, 0, camera_rot[2], frame_scale_sq_gp * 0.15f, frame_scale_sq_gp * 0.8f, frame_scale_gp);
+            spring_angle((char *)&data->camera_roll, (char *)&data->camera_roll_velocity, 0, camera.v.rot[0], frame_scale_sq_gp * 0.15f, frame_scale_sq_gp * 0.8f, frame_scale_gp);
+            spring_angle((char *)&data->camera_pitch, (char *)&data->camera_pitch_velocity, 0, camera.v.rot[1], frame_scale_sq_gp * 0.15f, frame_scale_sq_gp * 0.8f, frame_scale_gp);
+            spring_angle((char *)&data->camera_yaw, (char *)&data->camera_yaw_velocity, 0, camera.v.rot[2], frame_scale_sq_gp * 0.15f, frame_scale_sq_gp * 0.8f, frame_scale_gp);
         }
         camera_angles[0] = data->camera_roll;
         camera_angles[2] = data->camera_yaw;
@@ -3184,7 +2862,7 @@ void FUN_L13_002ba178(void *moby_arg, void *data_arg) {
         FUN_L00_002eaa30(camera_angles);
         if (*(short *)(D_L13_00167100 + 0x86) != 5) {
             stub_printf(D_L13_001F4450);
-            jet_mount(camera_pos, camera_angles, 0, 0, 0);
+            jet_mount(camera.v.pos, camera_angles, 0, 0, 0);
         }
     }
     vendor_spring(&data->fov, &data->fov_velocity, 1.134464f + (1.4835298f - 1.134464f) * speed_fraction, 0.05f, 1.0f, 1.0f);
@@ -3233,4 +2911,325 @@ void FUN_L13_002ba178(void *moby_arg, void *data_arg) {
     FUN_L13_002b9df8((struct Moby *)moby, (char *)data, fast_add_rotations(data->camera_yaw, -data->steer_x / 7.0f),
                      -fast_add_rotations(data->camera_pitch, -(data->steer_y / 7.0f) - 0.1f));
 }
-#endif
+
+/* Level 13 fighter state. Offsets come from the checked level 13 retail instructions. */
+typedef float JetVec[4] __attribute__((aligned(16)));
+typedef struct Jet Jet;
+typedef struct JetData JetData;
+typedef struct { char pad0[0x24]; float scale; } JetModel;
+struct Jet {
+    char pad0[0x10]; JetVec position;
+    unsigned char state,pad21[3]; JetModel *model; float pad28,scale;
+    unsigned char alpha,pad31; unsigned short render_flags,flags; char pad36[0xA];
+    JetVec rotation; char pad50[0x28]; JetData *data;
+    char pad7C[0x18]; int animation; char pad98[0xC];
+    unsigned char status,padA5; unsigned short class_id; char padA8[8]; unsigned char persistent;
+};
+struct JetData {
+    JetVec velocity,pad10,previous_rotation,angles,spawn_position,spawn_rotation;
+    unsigned char animation_frame,gun_side; short death_timer; float speed;
+    short missile_index,gun_index; int counter6C,counter70,pad74,pad78; float blend;
+    int gun_timer,missile_timer; char pad88[0x18];
+    float angle_a,angle_b,angle_c,limit_a,limit_b; char padB4[0xC]; int counterC0,padC4;
+    float angle_d,angle_e,angle_f; char padD4[8]; int timer;
+    int hud_x,hud_y,energy,padEC; float hud_health; int hud_previous,wait_timer;
+    int destination_path,escape_path,texture_id,engine_sound,weapon_sound;
+    char pad110[0xC]; int group_a,hit_class,target_class,lock_index,exit_path,entry_path,trigger,start_timer,group_b;
+};
+typedef struct {
+    char pad0[0x15F0]; Jet *craft; unsigned short class_id; unsigned char ammo,ammo2,ammo3,ammo4,ammo5,ammo6;
+    float health,max_health,health_scale; int health_meter; short weapon; unsigned char pad160E,pad160F;
+    char pad1610[0xA70]; Jet *moby; int state; char pad2088[0x1C]; unsigned char busy,in_craft;
+} JetPlayer;
+typedef struct { char pad0[0x1C]; int active; char pad20[0x30]; int pending; } JetTransition;
+typedef struct { char pad0[0x160]; float flash; int pad164,ticks; } JetCamera;
+typedef struct { char pad0[0xA]; unsigned short palette; char padC[4]; } JetTexture;
+typedef struct { char pad0[0x30]; JetVec position; char pad40[0x30]; JetVec rotation; } JetPath;
+typedef struct { char pad0[0x10]; JetVec velocity; Jet *source; int pad24,pad28; float damage; int flags; } JetHit;
+extern JetPlayer jet_player47 __asm__("D_0013F350");
+extern JetCamera jet_camera47 __asm__("D_L13_00166F80");
+extern JetTransition D_001516D0[];
+#include "rnc/gameplay/state/game_globals.h"
+extern unsigned char D_0013E550[];
+extern unsigned char D_0013A4E0[];
+extern float D_L13_0015ED60;
+extern int D_L13_0015ED84;
+extern JetTexture D_L13_0016D480[];
+extern unsigned int D_L13_0015F420;
+int hp_bar_saved __asm__("D_L13_001613C4") = 0;
+extern char D_L13_001CBDE8[];
+short D_L13_00161440 = 0x7f;
+extern float D_L13_0015F3FC;
+extern int D_L13_0015F608;
+extern JetPath *D_L13_001600EC;
+extern char D_L13_001F4470[], D_L13_001F44A8[];
+extern int jet_fast_dec_timer(void *) __asm__("FUN_001f9740");
+extern JetHit *jet_find_hit(void *,int,int) __asm__("FUN_L00_0025a420");
+extern void build_spherical_offset(float *,float,float,float) __asm__("FUN_00214db0");
+extern void jet_scale_vector(void *,void *,float) __asm__("FUN_001f9c90");
+extern void jet_add_vector(void *,void *,void *) __asm__("FUN_001f9a10");
+extern float jet_angle(float,float) __asm__("FUN_001f9e90");
+extern float jet_sub_rot(float,float) __asm__("FUN_001fa5c8");
+extern float jet_add_rot(float,float) __asm__("FUN_001fa580");
+extern float jet_length_xy(void *) __asm__("FUN_001f9b20");
+extern int jet_scale_ticks(int) __asm__("FUN_001f96f8");
+extern void jet_group_state(int,int,int,int) __asm__("FUN_L13_002650a8");
+extern void jet_group_switch(void *,int,int,int) __asm__("FUN_L13_002651c8");
+extern void jet_group_flag(int,int) __asm__("FUN_L13_00265170");
+extern float jet_distance(void *,void *) __asm__("FUN_L00_00250430");
+extern float jet_blend(float *,float,float) __asm__("FUN_00213ed8");
+extern void jet_animate(void *,float) __asm__("FUN_L00_00259fe8");
+extern void jet_place_camera(void *,void *,int,int) __asm__("FUN_L00_00216f90");
+extern void jet_mount(void *,void *,int,int,int) __asm__("FUN_L00_002eaaa0");
+extern void FUN_L13_002ba178_u(void *,void *) __asm__("FUN_L13_002ba178");
+extern void jet_camera_mode(void) __asm__("FUN_L00_00203b18");
+extern void jet_game_state(int,int) __asm__("FUN_L01_0027a248");
+extern void jet_set_hero_state(int,int) __asm__("FUN_L00_002223f8");
+extern void jet_end_mount(int) __asm__("FUN_L00_002eac18");
+extern void jet_set_weapon(int,int) __asm__("FUN_001ff570");
+extern void jet_update_moby(void *) __asm__("FUN_0020e098");
+extern void jet_stop_sound(int) __asm__("FUN_0022d798");
+extern void jet_death_complete(void) __asm__("FUN_L00_00211250");
+extern void jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
+extern void jet_reset_camera(void *,void *) __asm__("FUN_L00_00284e50");
+extern void jet_force_help(int,int) __asm__("FUN_002151d8");
+extern int jet_try_help(int,int) __asm__("FUN_00215130");
+extern void jet_delete_moby(void *) __asm__("FUN_0020c828");
+extern int jet_allocate_voice(int,int,int) __asm__("FUN_0022da68");
+extern int jet_check_trigger(void *,int) __asm__("FUN_00214720");
+extern int jet_fast_dec_death_timer(void *) __asm__("FUN_001f9770");
+
+void fighter_jet_update(Jet *m) __asm__("FUN_L13_002bb068");
+void fighter_jet_update(Jet *m) {
+    enum {
+        FIGHTER_JET_STATE_INITIALIZE = 0,
+        FIGHTER_JET_STATE_WAIT_FOR_ENTRY = 1,
+        FIGHTER_JET_STATE_MOUNT_PLAYER = 2,
+        FIGHTER_JET_STATE_FLIGHT = 4,
+        FIGHTER_JET_STATE_EXIT_PLAYER = 5,
+        FIGHTER_JET_STATE_STOP_DEATH_SOUNDS = 6,
+        FIGHTER_JET_STATE_WAIT_FOR_DEATH_RESET = 7,
+        FIGHTER_JET_STATE_FORCED_EXIT = 8,
+        FIGHTER_JET_STATE_DELETE = 9
+    };
+    JetData *d;
+    JetVec impulse;
+    int state,initial_state;
+    if (((JetPlayer*)(&jet_player47))->state==0x72) return;
+    d=m->data; d->hit_class=0;
+    jet_fast_dec_timer((int*)&d->timer);
+    initial_state=m->state;
+    if ((unsigned int)(initial_state-6)>=2 && (unsigned char)initial_state!=1 && (unsigned char)initial_state!=2) {
+        JetHit *hit=(JetHit*)jet_find_hit(m,0x30001,0);
+        if (hit && m->state==4) {
+            if (((JetPlayer*)(&jet_player47))->health>hit->damage) {
+                ((JetPlayer*)(&jet_player47))->health-=hit->damage;
+                if (hit->source && (unsigned int)(hit->source->class_id-0x52)<2) d->hit_class=(short)hit->source->class_id;
+                if (hit->flags&1) {
+                    float weight,yaw_delta,pitch_delta;
+                    jet_camera47.flash=1.0f; jet_camera47.ticks=jet_scale_ticks(4);
+                    weight=hit->damage*0.05f;
+                    build_spherical_offset(impulse,d->speed,d->angles[2],-d->angles[1]);
+                    jet_scale_vector(hit->velocity,hit->velocity,frame_time*3.0f);
+                    jet_add_vector(m->position,m->position,hit->velocity);
+                    jet_reflect_vector(impulse,impulse,hit->velocity);
+                    yaw_delta=jet_sub_rot(jet_angle(impulse[0],impulse[1]),d->angles[2]);
+                    d->angles[2]=jet_add_rot(d->angles[2],yaw_delta*(D_L13_0015ED60*0.1f)*weight);
+                    pitch_delta=jet_sub_rot(jet_angle(jet_length_xy(impulse),impulse[2]),d->angles[1]);
+                    d->angles[1]=jet_add_rot(d->angles[1],pitch_delta*(D_L13_0015ED60*0.1f)*weight);
+                }
+            } else {
+                build_spherical_offset(impulse,d->speed,d->angles[2],-d->angles[1]);
+                if (hit->source && (unsigned int)(hit->source->class_id-0x52)<2) d->hit_class=(short)hit->source->class_id+10000;
+                jet_camera47.flash=0.2f; jet_camera47.ticks=jet_scale_ticks(5);
+                ((JetPlayer*)(&jet_player47))->health=0.0f; m->flags|=0x41;
+                jet_explosion(m,impulse,0,0.0f,0.0f,10,3,16,4.0f,2.0f,9.0f,6,1.0f,15.0f,1,1,-1,0);
+                m->animation=0; d->death_timer=jet_scale_ticks(240); m->state=6;
+            }
+        }
+    }
+    m->status=0xFF;
+    if (((JetPlayer*)(&jet_player47))->craft==m) ((JetPlayer*)(&jet_player47))->health_meter=(int)(((JetPlayer*)(&jet_player47))->health*0.00390625f*200.0f);
+    switch(m->state) {
+    case FIGHTER_JET_STATE_INITIALIZE: {
+        float limit;
+        int *palette;
+        JetTexture *texture_table;
+        unsigned int palette_data;
+        int texture_index,initialized;
+        m->state=1; d->animation_frame=0; m->scale=m->model->scale;
+        *(float*)((char*)d+0x20)=d->angles[0]; *(float*)((char*)d+0x24)=d->angles[1];
+        limit=jet_angle(1.0f,D_L13_0016CDF0); limit+=limit;
+        d->counterC0=0; d->hit_class=0; *(float*)((char*)d+0xAC)=limit; *(float*)((char*)d+0xB0)=limit;
+        qcopy(d->angles,m->rotation); qcopy(d->spawn_rotation,m->rotation); qcopy(d->spawn_position,m->position);
+        texture_index=d->texture_id;
+        texture_table=D_L13_0016D480;
+        d->blend=0.0f;
+        texture_index+=40;
+        palette_data=D_L13_0015F420;
+        initialized=hp_bar_saved;
+        palette=(int*)(palette_data+(texture_table[texture_index].palette<<4));
+        hp_bar_clut[0]=palette;
+        if (!initialized) __builtin_memcpy(D_L13_001CBE70,palette,1024);
+        hp_bar_saved=1; d->wait_timer=1; d->energy=1;
+        if (m->persistent!=0xFF && (visited52)[m->persistent+(D_L13_0015ED84<<4)]==0xFF) m->state=9;
+        if (d->group_a>0) jet_group_state(d->group_a,0,0,0);
+        if (d->group_b>0) jet_group_state(d->group_b,0,0,0);
+        jet_group_switch(D_L13_001CBDE8,1,1,-1); jet_group_switch(&D_L13_00161440,1,-1,-1); jet_group_flag(0x102,0);
+        d->lock_index=-1; d->start_timer=jet_scale_ticks(575);
+        break;
+    }
+    case FIGHTER_JET_STATE_WAIT_FOR_ENTRY: {
+        short enter=0;
+        if (m->persistent!=0xFF && (visited52)[m->persistent+(D_L13_0015ED84<<4)]==0xFF) m->state=9;
+        else if (d->trigger!=-1 && jet_check_trigger(D_0013F3D0,d->trigger)) { d->blend=0.99f; D_L13_0015F3FC=0.99f; enter=1; }
+        else if (jet_distance(m,((JetPlayer*)(&jet_player47))->moby)<2.0f) {
+            int pressed=jet_try_help(7,0x53E4)!=0;
+            if (*(int*)(D_0013A4E0+0x2604)&0x10) enter=pressed;
+        }
+        if (enter) {
+            float limit;
+            m->scale=m->model->scale;
+            *(float*)((char*)d+0x20)=d->angles[0]; *(float*)((char*)d+0x24)=d->angles[1];
+            limit=jet_angle(1.0f,D_L13_0016CDF0); limit+=limit;
+            d->counterC0=0; d->hit_class=0; *(float*)((char*)d+0xAC)=limit; *(float*)((char*)d+0xB0)=limit;
+            qcopy(d->angles,m->rotation); d->wait_timer=1; d->energy=1; m->state=2; d->lock_index=-1;
+        } else if (d->blend!=0.0f) { jet_blend(&d->blend,0.0f,frame_time*4.0f); D_L13_0015F3FC=d->blend; }
+        jet_animate((unsigned char*)m,1.5f);
+        break;
+    }
+    case FIGHTER_JET_STATE_MOUNT_PLAYER:
+        jet_blend(&d->blend,1.0f,frame_time*4.0f); D_L13_0015F3FC=d->blend;
+        if (d->blend==1.0f) {
+            if (d->entry_path!=-1) {
+                JetPath *path=&D_L13_001600EC[d->entry_path];
+                jet_place_camera(path->position,path->rotation,50,1);
+                {
+                    int index=d->entry_path;
+                    JetPath *paths=D_L13_001600EC;
+                    qcopy(m->position,paths[index].position); qcopy(m->rotation,paths[index].rotation);
+                }
+            }
+            jet_set_hero_state(0x32,1);
+            jet_mount(m->position,m->rotation,0,0,0);
+            d->missile_index=0; d->counter6C=0; d->counter70=0; d->missile_timer=0; d->speed=D_L13_0015ED60*0.1f; d->gun_timer=0;
+            m->alpha=m->render_flags=0xFF; *(int*)((char*)((JetPlayer*)(&jet_player47))->moby+0x98)=-1;
+            qcopy(d->previous_rotation,m->rotation);
+            d->angle_a=0; d->angle_b=0; d->angle_c=0; d->angle_d=0; d->angle_e=0; d->angle_f=0; ((JetPlayer*)(&jet_player47))->craft=m; { unsigned short cls=m->class_id; ((JetPlayer*)(&jet_player47))->health=255.0f; ((JetPlayer*)(&jet_player47))->ammo=10; ((JetPlayer*)(&jet_player47))->pad160E=1; ((JetPlayer*)(&jet_player47))->ammo2=20; ((JetPlayer*)(&jet_player47))->class_id=cls; ((JetPlayer*)(&jet_player47))->ammo3=20; d->hud_previous=255; d->hud_health=0; ((JetPlayer*)(&jet_player47))->ammo4=3; ((JetPlayer*)(&jet_player47))->ammo5=3; ((JetPlayer*)(&jet_player47))->ammo6=3; ((JetPlayer*)(&jet_player47))->pad160F=0; ((JetPlayer*)(&jet_player47))->max_health=256.0f; ((JetPlayer*)(&jet_player47))->health_scale=100.0f; }
+            build_spherical_offset(d,D_L13_0015ED60*0.1f,d->angles[2],-d->angles[1]);
+            if (d->group_a>0) jet_group_state(d->group_a,1,1,1);
+            if (d->group_b>0) jet_group_state(d->group_b,1,1,1);
+            jet_group_switch(D_L13_001CBDE8,0,0,-1); jet_group_switch(&D_L13_00161440,0,-1,-1); jet_group_flag(0x102,0);
+            m->position[2]+=3.0f; m->scale=m->model->scale*0.25f; ((JetPlayer*)(&jet_player47))->in_craft=1;
+            if (d->engine_sound==-1) d->engine_sound=jet_allocate_voice(0,4,(int)m);
+            D_L13_0015F608=2; FUN_L13_002ba178_u(m,d); jet_camera_mode(); jet_game_state(2,4); m->state=4;
+        }
+        break;
+    case FIGHTER_JET_STATE_FLIGHT: {
+        unsigned char *audio;
+        if (d->blend!=0.0f) { jet_blend(&d->blend,0.0f,frame_time*4.0f); D_L13_0015F3FC=d->blend; }
+        jet_force_help(6,0); D_L13_0015F608=2;
+        audio=D_0013E550+d->engine_sound*0x70;
+        if (*(Jet**)(audio+0x88)!=m || !audio[0x74]) { d->engine_sound=-1; d->engine_sound=jet_allocate_voice(0,4,(int)m); }
+        FUN_L13_002ba178_u(m,d);
+        if (((JetPlayer*)(&jet_player47))->pad160F&1) m->state=5;
+        if (d->energy<=0) { d->wait_timer=jet_scale_ticks(1200); m->state=8; }
+        break;
+    }
+    case FIGHTER_JET_STATE_EXIT_PLAYER:
+        ((JetPlayer*)(&jet_player47))->in_craft=0; *(int*)((char*)((JetPlayer*)(&jet_player47))->moby+0x98)=0;
+        jet_set_hero_state(0,1); jet_end_mount(0); jet_set_weapon(((JetPlayer*)(&jet_player47))->weapon,0);
+        qcopy(m->position,d->spawn_position); qcopy(m->rotation,d->spawn_rotation);
+        m->scale=m->model->scale; jet_update_moby(m);
+        if (d->group_a>0) jet_group_state(d->group_a,0,0,0);
+        if (d->group_b>0) jet_group_state(d->group_b,0,0,0);
+        jet_group_switch(D_L13_001CBDE8,1,1,-1); jet_group_switch(&D_L13_00161440,1,-1,-1); jet_group_flag(0x102,0);
+        if (d->exit_path!=-1) { JetPath *path=&D_L13_001600EC[d->exit_path]; jet_place_camera(path->position,path->rotation,0,1); }
+        else jet_place_camera(d->spawn_position,D_L13_001600EC[d->destination_path].rotation,0,1);
+        {
+            int id=d->engine_sound;
+            unsigned char *audio;
+            if (id!=-1) { audio=D_0013E550+id*0x70; if (*(Jet**)(audio+0x88)==m && audio[0x74]) jet_stop_sound(id); }
+            d->engine_sound=-1;
+            id=d->weapon_sound;
+            if (id!=-1) { audio=D_0013E550+id*0x70; if (*(Jet**)(audio+0x88)==m && audio[0x74]) jet_stop_sound(id); }
+            d->weapon_sound=-1;
+        }
+        jet_game_state(0,5); d->blend=0.99f; D_L13_0015F3FC=0.99f; m->state=1;
+        break;
+    case FIGHTER_JET_STATE_STOP_DEATH_SOUNDS:
+        D_L13_0015F608=2;
+        {
+            int id=d->engine_sound;
+            unsigned char *audio;
+            if (id!=-1) { audio=D_0013E550+id*0x70; if (*(Jet**)(audio+0x88)==m && audio[0x74]) jet_stop_sound(id); }
+            d->engine_sound=-1;
+            id=d->weapon_sound;
+            if (id!=-1) { audio=D_0013E550+id*0x70; if (*(Jet**)(audio+0x88)==m && audio[0x74]) jet_stop_sound(id); }
+            d->weapon_sound=-1;
+        }
+        m->state=7; break;
+    case FIGHTER_JET_STATE_WAIT_FOR_DEATH_RESET: {
+        JetTransition *transition;
+        D_L13_0015F608=2;
+        if (jet_fast_dec_death_timer(&d->death_timer)) {
+            transition=(JetTransition*)(D_001516D0);
+            if (!transition->pending) {
+            int active=transition->active;
+            if (active==-1) {
+                jet_death_complete(); jet_end_mount(0);
+                qcopy(m->position,d->spawn_position); qcopy(m->rotation,d->spawn_rotation); jet_update_moby(m);
+                {
+            int id=d->engine_sound;
+            unsigned char *audio;
+            if (id!=active) { audio=D_0013E550+id*0x70; if (*(Jet**)(audio+0x88)==m && audio[0x74]) jet_stop_sound(id); }
+            d->engine_sound=-1;
+            id=d->weapon_sound;
+            if (id!=-1) { audio=D_0013E550+id*0x70; if (*(Jet**)(audio+0x88)==m && audio[0x74]) jet_stop_sound(id); }
+            d->weapon_sound=-1;
+        }
+                m->state=0;
+            }
+        }
+        }
+        break;
+    }
+    case FIGHTER_JET_STATE_FORCED_EXIT:
+        ((JetPlayer*)(&jet_player47))->in_craft=0; *(int*)((char*)((JetPlayer*)(&jet_player47))->moby+0x98)=0; jet_set_hero_state(0,1); jet_end_mount(0);
+        if (d->escape_path==-1) { stub_printf(D_L13_001F4470); qcopy(m->position,d->spawn_position); qcopy(m->rotation,d->spawn_rotation); }
+        else { int index=d->escape_path; JetPath *paths=D_L13_001600EC; qcopy(m->position,paths[index].position); qcopy(m->rotation,paths[index].rotation); m->position[2]+=0.57318f; }
+        m->scale=m->model->scale; jet_update_moby(m);
+        if (d->destination_path==-1) stub_printf(D_L13_001F44A8);
+        else {
+            JetPath *path;
+            if (d->group_a>0) jet_group_state(d->group_a,0,0,0);
+            if (d->group_b>0) jet_group_state(d->group_b,0,0,0);
+            jet_group_switch(D_L13_001CBDE8,1,1,-1); jet_group_switch(&D_L13_00161440,1,-1,-1); jet_group_flag(0x102,0);
+            path=&D_L13_001600EC[d->destination_path]; jet_place_camera(path->position,path->rotation,0,1);
+        }
+        if (m->persistent!=0xFF) jet_clear_persistent(m->persistent);
+        {
+            int id=d->engine_sound;
+            unsigned char *audio;
+            if (id!=-1) { audio=D_0013E550+id*0x70; if (*(Jet**)(audio+0x88)==m && audio[0x74]) jet_stop_sound(id); }
+            d->engine_sound=-1;
+            id=d->weapon_sound;
+            if (id!=-1) { audio=D_0013E550+id*0x70; if (*(Jet**)(audio+0x88)==m && audio[0x74]) jet_stop_sound(id); }
+            d->weapon_sound=-1;
+        }
+        jet_reset_camera((char *)&jet_player47+0x80,(char *)&jet_player47+0x90); m->state=9;
+        break;
+    case FIGHTER_JET_STATE_DELETE: jet_delete_moby(m); return;
+    case 10: break;
+    default: break;
+    }
+    if (m->position[0]<15.0f) m->position[0]=15.0f;
+    if (m->position[0]>1008.0f) m->position[0]=1008.0f;
+    if (m->position[1]<15.0f) m->position[1]=15.0f;
+    if (m->position[1]>1008.0f) m->position[1]=1008.0f;
+    if (m->position[2]<15.0f) m->position[2]=15.0f;
+    if (m->position[2]>1008.0f) m->position[2]=1008.0f;
+    state=m->state;
+    if ((unsigned char)state==4) { qcopy_nc((char *)&jet_player47+0x80,m->position); qcopy_nc((char *)&jet_player47+0x90,d->angles); }
+    if ((unsigned int)(state-3)<2 || (unsigned char)state==8) FUN_L13_002b8590(m,(char*)d);
+}
