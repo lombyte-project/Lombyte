@@ -1762,15 +1762,15 @@ s32 is_point_inside_clip_volume(s32 arg0, s32 arg1) __asm__("FUN_00214720");
 
 void FUN_L09_00300888(struct Moby *moby) {
     int *data = (int *)moby->pvars;
-    unsigned char *q;
+    unsigned char *item_unlock_flags;
     unsigned char *b;
     unsigned short *tp;
-    int n;
+    int scaled_frame_quotient;
     if (D_L09_0015F5CC > 0) {
         if (D_L09_001613C8 == 0) {
-            q = item_unlocked;
-            if (q[0xE] == 0) {
-                q[0xE] = 1;
+            item_unlock_flags = item_unlocked;
+            if (item_unlock_flags[0xE] == 0) {
+                item_unlock_flags[0xE] = 1;
                 allocate_voice_for_bank_entry(1, 0, 0);
                 queue_dialogue_message(0x53D6, -1);
                 D_L09_001613C8 = 0;
@@ -1787,8 +1787,8 @@ void FUN_L09_00300888(struct Moby *moby) {
         if (D_0013D4C2_q[9] != 0) {
             (*tp)++;
         }
-        n = scale_game_frames_q(D_0015EEA4_q) / 600;
-        if (*(unsigned short *)(b + 0x2DA) < n) {
+        scaled_frame_quotient = scale_game_frames_q(D_0015EEA4_q) / 600;
+        if (*(unsigned short *)(b + 0x2DA) < scaled_frame_quotient) {
             *(unsigned short *)(b + 0x2DA) = scale_game_frames_q(D_0015EEA4_q) / 600;
         }
         *(int *)(b + 0x2DC) = *(int *)(b + 0x2DC) | (1 << current_level_index) | 0x80000000;
