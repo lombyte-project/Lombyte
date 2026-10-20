@@ -21,16 +21,16 @@ void FUN_L15_002e46b0(struct Moby *moby) {
     int idx = *(int *)moby->pvars;
     if (idx != -1) {
         char *other = (char *)(idx * 256 + *(int *)&D_L15_0015FFD8_d);
-        char *d = *(char **)(other + 0x78);
+        char *linked_moby_vars = *(char **)(other + 0x78);
         int st = (unsigned char)other[0x20];
         float step;
         if (st == 2) {
             step = *(float *)&D_L15_00161EC0 * DEG_TO_RAD * frame_time;
-            if (*(int *)(d + 0x10) != 0)
+            if (*(int *)(linked_moby_vars + 0x10) != 0)
                 step = -step;
         } else if (st == 4) {
             step = *(float *)&D_L15_00161EC0 * DEG_TO_RAD * frame_time;
-            if (*(int *)(d + 0x10) == 0)
+            if (*(int *)(linked_moby_vars + 0x10) == 0)
                 step = -step;
         } else {
             return;
