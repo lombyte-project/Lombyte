@@ -2385,7 +2385,7 @@ void blarg_trooper_update(struct Moby *moby) {
     float dist;
     float alive;
     float best;
-    float s;
+    float target_selection_distance_limit;
     int e0;
     int e4;
     int bi;
@@ -2409,11 +2409,11 @@ void blarg_trooper_update(struct Moby *moby) {
     }
     if (flag) {
         float x = *(float *)(data + 0xDC);
-        s = x + x;
+        target_selection_distance_limit = x + x;
     } else {
-        s = *(float *)(data + 0xDC);
+        target_selection_distance_limit = *(float *)(data + 0xDC);
     }
-    FUN_L00_0025fcb8(moby, st.tgt, s);
+    FUN_L00_0025fcb8(moby, st.tgt, target_selection_distance_limit);
     target = *(char **)&st.tgt[16];
     dist = vector_distance(pos, st.tgt);
     dmg = 0.0f;
@@ -2506,12 +2506,12 @@ void blarg_trooper_update(struct Moby *moby) {
             break;
         case BLARG_TROOPER_HIT_REACTION_START_HIT_RECOVERY:
         case BLARG_TROOPER_HIT_REACTION_RECOIL_RECOVERY: {
-            int h;
+            int attacker_class;
             *(unsigned char *)(data + 0x67) = 0x96;
             blend_moby_animation_p(moby, (void *)8, 0, (void *)scale_game_frames(5));
             moby->state = 8;
-            h = *(short *)(*(char **)(hit + 0x20) + 0xA6);
-            if (h == 0x131 || h == 0xB0) {
+            attacker_class = *(short *)(*(char **)(hit + 0x20) + 0xA6);
+            if (attacker_class == 0x131 || attacker_class == 0xB0) {
                 *(float *)(data + 0xF4) = 2.0f / multiply_global_factor_ed64(15.0f) * 0.5f;
             } else {
                 *(float *)(data + 0xF4) = 2.0f / multiply_global_factor_ed64(15.0f);
@@ -2927,11 +2927,11 @@ void blarg_trooper_update(struct Moby *moby) {
         copy_matrix3x4(*(char **)(data + 0xF8) + 0xC0, st.w.m);
         normalize_vector_triplet(*(char **)(data + 0xF8) + 0xC0);
         {
-            char *q = *(char **)(data + 0xF8);
+            char *attached_gun_moby = *(char **)(data + 0xF8);
             if (moby->flags & 1) {
-                *(unsigned short *)(q + 0x34) |= 0x41;
+                *(unsigned short *)(attached_gun_moby + 0x34) |= 0x41;
             } else {
-                *(unsigned short *)(q + 0x34) &= 0xFFBE;
+                *(unsigned short *)(attached_gun_moby + 0x34) &= 0xFFBE;
             }
         }
         refresh_moby_spatial_bounds_from_basis(*(char **)(data + 0xF8));
