@@ -19,14 +19,14 @@ extern void FUN_L00_0025d1b8(void *);
 extern float D_L08_00161468 __attribute__((sda));
 extern float D_L08_0016146C __attribute__((sda));
 void FUN_L08_002b8228(struct Moby *moby) {
-    float a = D_L08_00161468;
+    float random_range_start = D_L08_00161468;
     float b = D_L08_0016146C;
     char *moby_vars;
     moby->rot.x = 0.0f;
     moby->rot.y = 0.5235988f;
     moby->rot.z = 0.0f;
     moby_vars = (char *)moby->pvars;
-    *(float *)(moby_vars + 0xC) = random_float_between(a, b);
+    *(float *)(moby_vars + 0xC) = random_float_between(random_range_start, b);
     *(int *)(moby_vars + 0x28) = 0;
     *(float *)(moby_vars + 8) = moby->pos.z;
     FUN_L00_0025d1b8(moby);
