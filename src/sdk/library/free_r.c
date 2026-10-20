@@ -97,7 +97,7 @@ extern u64 D_0012FB90[]; /* trim_threshold */
     }
 
 void _free_r(struct _reent *ptr, void *mem) {
-    struct malloc_chunk *p;
+    struct malloc_chunk *free_chunk;
     u32 hd;
     u32 sz;
     s32 idx;
@@ -113,25 +113,25 @@ void _free_r(struct _reent *ptr, void *mem) {
 
     noop_core_utility(ptr);
 
-    p = mem2chunk(mem);
-    hd = p->size;
+    free_chunk = mem2chunk(mem);
+    hd = free_chunk->size;
 
     sz = hd & ~PREV_INUSE;
-    next = chunk_at_offset(p, sz);
+    next = chunk_at_offset(free_chunk, sz);
     nextsz = chunksize(next);
 
     if (next == top) {
         sz += nextsz;
 
         if (!(hd & PREV_INUSE)) {
-            prevsz = p->prev_size;
-            p = chunk_at_offset(p, -prevsz);
+            prevsz = free_chunk->prev_size;
+            free_chunk = chunk_at_offset(free_chunk, -prevsz);
             sz += prevsz;
-            unlink(p, bck, fwd);
+            unlink(free_chunk, bck, fwd);
         }
 
-        set_head(p, sz | PREV_INUSE);
-        top = p;
+        set_head(free_chunk, sz | PREV_INUSE);
+        top = free_chunk;
         if ((unsigned long)(sz) >= (unsigned long)trim_threshold)
             _malloc_trim_r(ptr, top_pad);
         noop_core_utility_secondary(ptr);
@@ -143,14 +143,14 @@ void _free_r(struct _reent *ptr, void *mem) {
     islr = 0;
 
     if (!(hd & PREV_INUSE)) {
-        prevsz = p->prev_size;
-        p = chunk_at_offset(p, -prevsz);
+        prevsz = free_chunk->prev_size;
+        free_chunk = chunk_at_offset(free_chunk, -prevsz);
         sz += prevsz;
 
-        if (p->fd == last_remainder)
+        if (free_chunk->fd == last_remainder)
             islr = 1;
         else
-            unlink(p, bck, fwd);
+            unlink(free_chunk, bck, fwd);
     }
 
     if (!(inuse_bit_at_offset(next, nextsz))) {
@@ -158,15 +158,15 @@ void _free_r(struct _reent *ptr, void *mem) {
 
         if (!islr && next->fd == last_remainder) {
             islr = 1;
-            link_last_remainder(p);
+            link_last_remainder(free_chunk);
         } else
             unlink(next, bck, fwd);
     }
 
-    set_head(p, sz | PREV_INUSE);
-    set_foot(p, sz);
+    set_head(free_chunk, sz | PREV_INUSE);
+    set_foot(free_chunk, sz);
     if (!islr)
-        frontlink(p, sz, idx, bck, fwd);
+        frontlink(free_chunk, sz, idx, bck, fwd);
 
     noop_core_utility_secondary(ptr);
 }
