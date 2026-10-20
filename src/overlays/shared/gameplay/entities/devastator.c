@@ -1947,24 +1947,24 @@ void FUN_002151d8_2b58d8(int, int) __asm__("FUN_002151d8");
 extern int D_L00_0017E508 __attribute__((section(".data")));
 extern int D_L00_0015F608;
 extern float D_L00_0016149C __attribute__((sda));
-unsigned char *FUN_L00_002b58d8(unsigned char *a, V_2b58d8 *pos, float fa, float fb) {
-    unsigned char *m = FUN_0020c4f8_2b58d8(0xAC);
-    if (m) {
-        unsigned char *v = *(unsigned char **)(m + 0x78);
+unsigned char *FUN_L00_002b58d8(unsigned char *source_moby, V_2b58d8 *pos, float fa, float fb) {
+    unsigned char *spawned_moby = FUN_0020c4f8_2b58d8(0xAC);
+    if (spawned_moby) {
+        unsigned char *v = *(unsigned char **)(spawned_moby + 0x78);
         struct Hero *G = &hero;
-        V_2b58d8 t;
-        G->unk1FE0 = m;
+        V_2b58d8 collision_start;
+        G->unk1FE0 = spawned_moby;
         D_L00_0017E508 = 1;
-        m[0x30] = 0xFF;
-        *(short *)(m + 0x32) = 0xFF;
-        m[0x31] = 1;
-        m[0x20] = 1;
-        *(float *)(m + 0x48) = fa;
-        *(float *)(m + 0x44) = fb;
+        spawned_moby[0x30] = 0xFF;
+        *(short *)(spawned_moby + 0x32) = 0xFF;
+        spawned_moby[0x31] = 1;
+        spawned_moby[0x20] = 1;
+        *(float *)(spawned_moby + 0x48) = fa;
+        *(float *)(spawned_moby + 0x44) = fb;
         *(unsigned char **)(v + 0x24) = G->unk1F60;
         *(unsigned char **)(v + 0x28) = G->unk1FA0;
-        *(unsigned char **)(v + 0x0) = a;
-        qcopy(m + 0x10, pos);
+        *(unsigned char **)(v + 0x0) = source_moby;
+        qcopy(spawned_moby + 0x10, pos);
         *(int *)(v + 0x8) = 0;
         *(int *)(v + 0xC) = 0;
         if ((void *)G->ground_moby && FUN_L00_002603d0_2b58d8((void *)G->ground_moby))
@@ -1976,36 +1976,36 @@ unsigned char *FUN_L00_002b58d8(unsigned char *a, V_2b58d8 *pos, float fa, float
         *(int *)(v + 0x1C) = 0;
         *(int *)(v + 0x14) = 0;
         *(float *)(v + 0x44) = 0.4f;
-        FUN_L00_002b56d0_2b58d8(m);
-        FUN_L00_00250df8_2b58d8(m);
-        *(int *)(v + 0x14) = FUN_L00_002eb930_2b58d8(m);
+        FUN_L00_002b56d0_2b58d8(spawned_moby);
+        FUN_L00_00250df8_2b58d8(spawned_moby);
+        *(int *)(v + 0x14) = FUN_L00_002eb930_2b58d8(spawned_moby);
         hero_set_state(0x1D, 1);
         FUN_001f97e8_2b58d8(*(void **)(v + 0x24), 0, 0x40);
         FUN_001f97e8_2b58d8(*(void **)(v + 0x28), 0, 0x40);
-        FUN_0020cb10_2b58d8(m, 0, *(void **)(v + 0x24));
-        FUN_0020cb10_2b58d8(m, 1, *(void **)(v + 0x28));
+        FUN_0020cb10_2b58d8(spawned_moby, 0, *(void **)(v + 0x24));
+        FUN_0020cb10_2b58d8(spawned_moby, 1, *(void **)(v + 0x28));
         {
-            int r = FUN_L00_002bb360_2b58d8(m);
+            int r = FUN_L00_002bb360_2b58d8(spawned_moby);
             float k = D_L00_0016149C * D_0015ED6C_2b58d8;
             *(int *)(v + 0x20) = r;
             *(float *)(v + 0x48) = k;
         }
-        FUN_L00_0025d1b8_2b58d8(m);
-        *(int *)(v + 0x2C) = FUN_0022da68_2b58d8(0, 4, m);
-        t.q = *(OvlQuad *)(a + 0x10);
-        t.f[2] = pos->f[2];
-        if (FUN_001efa68_2b58d8(&t, pos, 0, ({
+        FUN_L00_0025d1b8_2b58d8(spawned_moby);
+        *(int *)(v + 0x2C) = FUN_0022da68_2b58d8(0, 4, spawned_moby);
+        collision_start.q = *(OvlQuad *)(source_moby + 0x10);
+        collision_start.f[2] = pos->f[2];
+        if (FUN_001efa68_2b58d8(&collision_start, pos, 0, ({
                 struct Hero *g2 = &hero;
                 (void *)g2->moby;
             }),
                                 0)) {
-            m[0xBC] = 1;
-            qcopy(m + 0x10, &D_L00_00173E60_2b58d8);
+            spawned_moby[0xBC] = 1;
+            qcopy(spawned_moby + 0x10, &D_L00_00173E60_2b58d8);
         }
         D_L00_0015F608 = 1;
         FUN_002151d8_2b58d8(6, 0);
     }
-    return m;
+    return spawned_moby;
 }
 extern int D_00141330[];
 void FUN_L00_002eba18();
