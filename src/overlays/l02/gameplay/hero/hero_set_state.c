@@ -1893,6 +1893,7 @@ extern f32 frame_scale_gp __asm__("D_0015ED60") __attribute__((sda));
 void FUN_L02_00230988(void) {
     enum {
         HERO_STATE_DOUBLE_JUMP = 14,
+        HERO_STATE_LOOK_ALT = 30,
         HERO_STATE_HELD_ITEM_ATTACK = 32,
         HERO_STATE_VEHICLE_IDLE = 83,
         HERO_STATE_VEHICLE_RUN = 84,
@@ -3582,7 +3583,7 @@ void FUN_L02_00230988(void) {
                         hero_set_state(0x53, 0);
                     }
                     break;
-                case 30:
+                case HERO_STATE_LOOK_ALT:
                     if (hero.vehicle_mode == 0) {
                         if (hero.unk20AA == 0 || hero.unk20A5 != 0) {
                             if (controller_state.held & 0xA) {
