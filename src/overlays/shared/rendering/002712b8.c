@@ -1015,21 +1015,21 @@ void FUN_L00_00273448(P_273448 *particle) {
 s32 random_integer_below(s32 arg0) __asm__("FUN_00213260");
 
 extern unsigned char *D_L00_001B2178 __attribute__((section(".data")));
-unsigned char *FUN_L00_00273708(void *a, int b, int c) {
+unsigned char *FUN_L00_00273708(void *position, int b, int particle_mode) {
     unsigned char *r = p27fe00_alloc(0x3E);
     if (r != 0) {
         unsigned char *v = r + 0x20;
-        qcopy(r + 0x10, a);
+        qcopy(r + 0x10, position);
         *(int *)(r + 4) = 0x7F7F4040;
         r[9] = truncate_float_to_s32(4.0f) + 0x40;
         r[1] = 0;
         r[3] = 0x48;
         *(float *)(r + 0xC) = 30000.0f;
         r[8] = random_integer_below(0xFF);
-        *(short *)(v + 2) = c;
-        if (c >= 2)
-            c = 0;
-        r[2] = D_L00_001B2178[c];
+        *(short *)(v + 2) = particle_mode;
+        if (particle_mode >= 2)
+            particle_mode = 0;
+        r[2] = D_L00_001B2178[particle_mode];
         *(short *)(r + 0x20) = truncate_float_to_s32(127.0f / convert_integer_to_float(b));
         *(short *)(r + 0xA) = b;
     }
