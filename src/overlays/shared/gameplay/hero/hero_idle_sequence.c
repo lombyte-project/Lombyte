@@ -2478,7 +2478,7 @@ void FUN_L00_00209ec8(void) {
     char *g;
     char *base;
     float lateral_angle, r, planar_scale, alpha_fraction, theta, phi;
-    int frame_count, alpha, col, life, n1, n2, k;
+    int frame_count, alpha, col, life, small_effect_sample, large_effect_sample, k;
     OvlQuad *pt;
     g = D_0013F7EE;
     if (fast_dec_timer(g)) {
@@ -2508,14 +2508,14 @@ void FUN_L00_00209ec8(void) {
     life = FUN_001f96f8_209ec8(0x28);
     pt = w;
     for (k = 0x38; k >= 0; k--) {
-        n1 = FUN_001fa6d0_209ec8(FUN_002132a8_209ec8(4200.0f, 7350.0f) / 1000.0f);
-        n2 = FUN_001fa6d0_209ec8(FUN_002132a8_209ec8(21000.0f, 31500.001953125f) / 1000.0f);
+        small_effect_sample = FUN_001fa6d0_209ec8(FUN_002132a8_209ec8(4200.0f, 7350.0f) / 1000.0f);
+        large_effect_sample = FUN_001fa6d0_209ec8(FUN_002132a8_209ec8(21000.0f, 31500.001953125f) / 1000.0f);
         r = FUN_002132a8_209ec8(D_0015ED6C * 0.15f, D_0015ED6C * 0.57f);
         qcopy(v, g - 0x41E);
         theta = FUN_00213308_209ec8();
         phi = FUN_00213308_209ec8();
         build_spherical_offset(pt, r, theta, phi);
-        FUN_L00_00269958(v, pt, col, 0x70F0, life, n1, n2, 1);
+        FUN_L00_00269958(v, pt, col, 0x70F0, life, small_effect_sample, large_effect_sample, 1);
     }
     frame_count = random_int_between(FUN_001f96f8_209ec8(3), FUN_001f96f8_209ec8(7));
     {
