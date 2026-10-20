@@ -2071,20 +2071,20 @@ extern int FUN_L11_00316128(char *);
 extern short *D_L11_001AC240[];
 extern s32 D_L11_0015FFF4;
 
-int FUN_L11_0030a850(struct Moby *m) {
-    int idx = *(short *)((char *)m->pvars + 0xB4);
-    short *p;
+int FUN_L11_0030a850(struct Moby *moby) {
+    int idx = *(short *)((char *)moby->pvars + 0xB4);
+    short *group_entry;
     if (idx < 0 || *(int *)&D_L11_0015FFF4 < idx)
         return 1;
-    p = D_L11_001AC240[idx];
-    if (p == 0)
+    group_entry = D_L11_001AC240[idx];
+    if (group_entry == 0)
         return 1;
     do {
-        char *o = (char *)(((*p & 0x7FFF) << 8) + D_L11_0015FFD8);
-        if (o[0x20] >= 0 && *(short *)(o + 0xA6) == 0x4DE) {
-            if (FUN_L11_00316128(o) == 0)
+        char *group_moby = (char *)(((*group_entry & 0x7FFF) << 8) + D_L11_0015FFD8);
+        if (group_moby[0x20] >= 0 && *(short *)(group_moby + 0xA6) == 0x4DE) {
+            if (FUN_L11_00316128(group_moby) == 0)
                 return 0;
         }
-    } while (*p++ >= 0);
+    } while (*group_entry++ >= 0);
     return 1;
 }
