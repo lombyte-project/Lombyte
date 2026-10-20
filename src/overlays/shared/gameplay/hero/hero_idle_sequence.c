@@ -2983,7 +2983,7 @@ extern void FUN_L00_0026de90(void *, void *, f32);
 void FUN_L00_0020b1d8(void) {
     u8 buf[0x10] __attribute__((aligned(16)));
     f32 a, b;
-    u8 *q;
+    u8 *optional_moby_basis;
     s32 i;
     if (FUN_L00_0020d568())
         return;
@@ -3022,16 +3022,16 @@ void FUN_L00_0020b1d8(void) {
             return;
         if (P.h12AC == 0)
             return;
-        q = 0;
+        optional_moby_basis = 0;
         if (P.h12AE & 1)
-            q = P.p2080 + 0xC0;
+            optional_moby_basis = P.p2080 + 0xC0;
         P.i12A8--;
         moby_point_position(P.p2080, 0x16, buf);
         for (i = 0; i < P.h12AC; i++)
-            FUN_L00_0026de90(buf, q, P.f12A0 + random_float_between(-P.f12A4, P.f12A4));
+            FUN_L00_0026de90(buf, optional_moby_basis, P.f12A0 + random_float_between(-P.f12A4, P.f12A4));
         moby_point_position(P.p2080, 0x17, buf);
         for (i = 0; i < P.h12AC; i++)
-            FUN_L00_0026de90(buf, q, P.f12A0 + random_float_between(-P.f12A4, P.f12A4));
+            FUN_L00_0026de90(buf, optional_moby_basis, P.f12A0 + random_float_between(-P.f12A4, P.f12A4));
     } else
         P.i12A8 = 0;
 }
