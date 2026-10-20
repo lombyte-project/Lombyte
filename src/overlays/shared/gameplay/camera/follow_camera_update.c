@@ -30,7 +30,7 @@ void lerp_vector(void *, void *, void *, f32) __asm__("FUN_001f9a40");
  * target moby, eases pitch/yaw and renormalises. */
 void follow_camera_build_view(u8 *p) __asm__("FUN_L00_002e9010");
 extern u8 D_L00_00166E30[];
-void follow_camera_build_view(u8 *p) {
+void follow_camera_build_view(u8 *camera) {
     u8 *q40;
     u8 *q;
     u8 *q2;
@@ -38,13 +38,13 @@ void follow_camera_build_view(u8 *p) {
     u8 *q130;
     u8 *tb;
     u8 *base;
-    u8 *p10;
-    u8 *p20;
+    u8 *side_axis;
+    u8 *view_up_axis;
     u8 *w;     /* scratch vector pointer: p + 0x10, later v4 */
     u8 *up;    /* up vector (D_L00_00166E30), set on both paths */
-    f32 r0;
+    f32 projected_view_length;
     f32 g2, g3, e2, h2;
-    f32 g, r, d, e, t, x, h;
+    f32 g, r, d, view_rotation_angle, t, x, h;
     f32 vector_scratch[4];
     f32 projected_reference_position[4];
     f32 projected_camera_position[4];
@@ -52,14 +52,14 @@ void follow_camera_build_view(u8 *p) {
     f32 adjusted_aim_position[4];
 
     base = D_L00_00166E10_2e9010;
-    q = *(u8 **)(p + 0x70);
+    q = *(u8 **)(camera + 0x70);
     q40 = q + 0x40;
     q20 = q + 0x20;
     if (q40[0xC4] == 0xB) {
-        FUN_001f9a28_2e9010(p, D_0013F3D0_2e9010, p + 0x30);
-        p10 = p + 0x10;
-        FUN_001f9bf8_2e9010(p, p, 1.0f);
-        p20 = p + 0x20;
+        FUN_001f9a28_2e9010(camera, D_0013F3D0_2e9010, camera + 0x30);
+        side_axis = camera + 0x10;
+        FUN_001f9bf8_2e9010(camera, camera, 1.0f);
+        view_up_axis = camera + 0x20;
         fast_dec_timer(q20);
         up = D_L00_00166E30;
     } else {
@@ -68,23 +68,23 @@ void follow_camera_build_view(u8 *p) {
         g = FUN_001f9ab0_2e9010(q + 0x80, tb);
         FUN_001f9a68_2e9010(vector_scratch, tb, g);
         FUN_001f9a28_2e9010(projected_reference_position, q + 0x80, vector_scratch);
-        q2 = *(u8 **)(p + 0x70);
+        q2 = *(u8 **)(camera + 0x70);
         q130 = q2 + 0x130;
-        g = FUN_001f9ab0_2e9010(p + 0x30, tb);
+        g = FUN_001f9ab0_2e9010(camera + 0x30, tb);
         FUN_001f9a68_2e9010(vector_scratch, tb, g);
-        FUN_001f9a28_2e9010(projected_camera_position, p + 0x30, vector_scratch);
+        FUN_001f9a28_2e9010(projected_camera_position, camera + 0x30, vector_scratch);
         FUN_001f9a28_2e9010(view_direction, projected_reference_position, projected_camera_position);
-        r0 = FUN_001f9af0_2e9010(view_direction);
-        if (0.05f <= r0) {
-            FUN_001f9a68_2e9010(p, view_direction, 1.0f / r0);
+        projected_view_length = FUN_001f9af0_2e9010(view_direction);
+        if (0.05f <= projected_view_length) {
+            FUN_001f9a68_2e9010(camera, view_direction, 1.0f / projected_view_length);
         }
-        w = p + 0x10;
-        FUN_001f9ad8_2e9010(w, p, up);
+        w = camera + 0x10;
+        FUN_001f9ad8_2e9010(w, camera, up);
         FUN_001f9bf8_2e9010(w, w, 1.0f);
-        p10 = w;
+        side_axis = w;
         *(f32 *)(q20 + 0x8) = FUN_001ebd78_2e9010(q + 0x30, *(f32 *)(q20 + 0x8), *(f32 *)(q130 + 0x30),
                                0.004f, 0.2f, 0.0f);
-        p20 = p + 0x20;
+        view_up_axis = camera + 0x20;
         g2 = FUN_001ebd78_2e9010(q + 0x2C, *(f32 *)(q20 + 0x4), *(f32 *)(q40 + 0xB0),
                                0.004f, 0.2f, 0.0f);
         d = *(f32 *)(q20 + 0x8) - g2;
@@ -92,16 +92,16 @@ void follow_camera_build_view(u8 *p) {
         FUN_001f9a68_2e9010(vector_scratch, up, -FUN_001f9ab0_2e9010(q2 + 0x140, up));
         FUN_001f9a28_2e9010(vector_scratch, vector_scratch, view_direction);
         w = (u8 *)adjusted_aim_position;
-        FUN_001f9a28_2e9010(w, p + 0x30, vector_scratch);
+        FUN_001f9a28_2e9010(w, camera + 0x30, vector_scratch);
         FUN_001f9a68_2e9010(vector_scratch, up, -d);
         FUN_001f9a28_2e9010(w, w, vector_scratch);
-        FUN_001f9a28_2e9010(view_direction, w, p + 0x30);
+        FUN_001f9a28_2e9010(view_direction, w, camera + 0x30);
         r = FUN_001f9af0_2e9010(view_direction);
         if (r != 0.0f) {
-            e = 1.5707964f - FUN_001f9df8_2e9010(FUN_001f9ab0_2e9010(p, view_direction) / r);
-            FUN_001f9ad8_2e9010(p20, p10, p);
-            if (FUN_001f9ab0_2e9010(p20, view_direction) < 0.0f) {
-                e = -e;
+            view_rotation_angle = 1.5707964f - FUN_001f9df8_2e9010(FUN_001f9ab0_2e9010(camera, view_direction) / r);
+            FUN_001f9ad8_2e9010(view_up_axis, side_axis, camera);
+            if (FUN_001f9ab0_2e9010(view_up_axis, view_direction) < 0.0f) {
+                view_rotation_angle = -view_rotation_angle;
             }
             g3 = FUN_001f9ab0_2e9010(q130, up);
             x = FUN_001f9e90_2e9010(FUN_001f9af0_2e9010(q130), g3) / 0.6981317f;
@@ -116,26 +116,26 @@ void follow_camera_build_view(u8 *p) {
             }
             h = FUN_L00_001eb328_2e9010(q20 + 0x18, *(f32 *)(q20 + 0x14), t, 0.005f, 0.2f, 0.0f);
             *(f32 *)(q20 + 0x14) = h;
-            e = FUN_001fa5c8_2e9010(e, h);
-            if (1.2217305f < e) {
-                e = 1.2217305f;
-            } else if (e < -1.2217305f) {
-                e = -1.2217305f;
+            view_rotation_angle = FUN_001fa5c8_2e9010(view_rotation_angle, h);
+            if (1.2217305f < view_rotation_angle) {
+                view_rotation_angle = 1.2217305f;
+            } else if (view_rotation_angle < -1.2217305f) {
+                view_rotation_angle = -1.2217305f;
             }
-            FUN_00214890_2e9010(p, p, p10, e);
-            FUN_001f9bf8_2e9010(p, p, 1.0f);
+            FUN_00214890_2e9010(camera, camera, side_axis, view_rotation_angle);
+            FUN_001f9bf8_2e9010(camera, camera, 1.0f);
         }
     }
     if (*(s16 *)q20 != 0) {
         fast_dec_timer(q20);
         e2 = FUN_001fa6c0_2e9010(*(s16 *)q20);
         h2 = e2 / FUN_001fa6c0_2e9010(FUN_001f96f8_2e9010(D_L00_00161D24_gp));
-        lerp_vector(p, p, p + 0x40, h2);
-        FUN_001f9bf8_2e9010(p, p, 1.0f);
+        lerp_vector(camera, camera, camera + 0x40, h2);
+        FUN_001f9bf8_2e9010(camera, camera, 1.0f);
     }
-    FUN_001f9ad8_2e9010(p10, p, up);
-    FUN_001f9bf8_2e9010(p10, p10, 1.0f);
-    FUN_001f9ad8_2e9010(p20, p10, p);
+    FUN_001f9ad8_2e9010(side_axis, camera, up);
+    FUN_001f9bf8_2e9010(side_axis, side_axis, 1.0f);
+    FUN_001f9ad8_2e9010(view_up_axis, side_axis, camera);
 }
 
 typedef struct {
