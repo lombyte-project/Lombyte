@@ -516,6 +516,7 @@ void FUN_L01_002370b8(void) {
         HERO_STATE_MOVE_TOWARD_PROBE_POSITION = 0x18,
         HERO_STATE_MOVE_VIA_POSITIVE_LATERAL_PROBE = 0x1A,
         HERO_STATE_MOVE_VIA_NEGATIVE_LATERAL_PROBE = 0x1B,
+        HERO_STATE_MOVE_WITH_MINIMUM_TARGET_SPEED = 0x54,
         HERO_STATE_FALL_WITH_LIMITED_DESCENT = 0x55,
         HERO_STATE_DAMP_PLANAR_VELOCITY = 0x56,
         HERO_STATE_DOWNHILL_SLIDE = 0x58,
@@ -2201,7 +2202,7 @@ void FUN_L01_002370b8(void) {
             hero.motion.velocity.f[2] = frame_time * -15.0f;
         }
         break;
-    case 0x54: {
+    case HERO_STATE_MOVE_WITH_MINIMUM_TARGET_SPEED: {
         float d;
         float k;
         float t;
