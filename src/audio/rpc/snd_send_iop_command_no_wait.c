@@ -29,7 +29,7 @@ void snd_send_iop_command_no_wait(s32 cmd, s32 size, u8 *data, s32 cb, s64 cb_da
     s32 tries;
     s32 held;
     s32 i;
-    u8 *p;
+    u8 *command_write_cursor;
 
     held = 0;
     if (GlobalTableStatus == 0 && snd_current_buffer == 0 && size == 0 && cb == 0) {
@@ -64,13 +64,13 @@ void snd_send_iop_command_no_wait(s32 cmd, s32 size, u8 *data, s32 cb, s64 cb_da
     if (held != 0) {
         GlobalTableStatus = 1;
     }
-    p = (u8 *)snd_batch_command_buffers[snd_batch_index] - (snd_batch_free_bytes[snd_batch_index] - 0x1000);
-    *(s16 *)p = cmd;
-    p += 2;
-    *(s16 *)p = size;
-    p += 2;
+    command_write_cursor = (u8 *)snd_batch_command_buffers[snd_batch_index] - (snd_batch_free_bytes[snd_batch_index] - 0x1000);
+    *(s16 *)command_write_cursor = cmd;
+    command_write_cursor += 2;
+    *(s16 *)command_write_cursor = size;
+    command_write_cursor += 2;
     for (i = 0; i < size; i++) {
-        p[i] = data[i];
+        command_write_cursor[i] = data[i];
     }
     snd_batch_free_bytes[snd_batch_index] -= need;
     snd_stream_buffers[snd_batch_index][*snd_batch_command_buffers[snd_batch_index]].func = cb;
