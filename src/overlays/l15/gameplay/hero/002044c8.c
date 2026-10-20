@@ -629,7 +629,8 @@ void FUN_L15_0020ed50(void) {
     };
     enum {
         HERO_COMBO_KIND_ANIMATION_GATED_TARGET_SPEED = 0,
-        HERO_COMBO_KIND_STAGED_TARGET_SPEED_REDUCTION = 1
+        HERO_COMBO_KIND_STAGED_TARGET_SPEED_REDUCTION = 1,
+        HERO_COMBO_KIND_FLAG_OR_ANIMATION_GATED_TARGET_SPEED = 2
     };
     struct MobyView *moby = (struct MobyView *)hero.moby;
     s32 sub = hero.state.step;
@@ -1597,7 +1598,7 @@ void FUN_L15_0020ed50(void) {
                 }
             }
             break;
-        case 2:
+        case HERO_COMBO_KIND_FLAG_OR_ANIMATION_GATED_TARGET_SPEED:
             if (hero.unkA9C != 0 || hero.anim_frame < 12.0f) {
                 hero.target_speed = frame_time * 3.7f * hero.speed_scale;
             }
