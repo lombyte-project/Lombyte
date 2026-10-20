@@ -133,7 +133,7 @@ void FUN_L14_00300e00(struct Moby *spark_moby)
     };
   Spark_0e00 *spark_data = (Spark_0e00 *) spark_moby->pvars;
   Vec4f next;
-  Vec4f t;
+  Vec4f position_scratch;
   Vec4f from;
   float speed;
   float lo;
@@ -169,13 +169,13 @@ void FUN_L14_00300e00(struct Moby *spark_moby)
           int spin;
           char *trail_particle;
           *((u128 *) (&from)) = *((u128 *) (&spark_moby->pos));
-          lerp_0e00(&t, &from, &next, ((float) i) * third);
+          lerp_0e00(&position_scratch, &from, &next, ((float) i) * third);
           spin = rand_0e00(6);
           if (rand_0e00(2) != 0)
           {
             spin = -spin;
           }
-          trail_particle = spawn_0e00(&t, 0.025f, one, one, spin, D_L14_0015F580, ((((float) spark_data->trail) / itof_0e00(frames_0e00(D_L14_0016208C_0e00))) * 45000.0f) + 5000.0f, 0x80808080);
+          trail_particle = spawn_0e00(&position_scratch, 0.025f, one, one, spin, D_L14_0015F580, ((((float) spark_data->trail) / itof_0e00(frames_0e00(D_L14_0016208C_0e00))) * 45000.0f) + 5000.0f, 0x80808080);
           if (trail_particle != 0)
           {
             char *trail_particle_subrecord = trail_particle + 0x20;
@@ -197,8 +197,8 @@ void FUN_L14_00300e00(struct Moby *spark_moby)
       }
       if (((on_ground_0e00(&spark_moby->pos, 0, spark_moby, D_L14_00162088) != 0) && ((spark_moby->state == 0) || ((spark_moby->pos.z - D_L14_00174540.hit.z) < 0.0f))) && ((D_L14_00174540.owner == 0) || (D_L14_00174540.owner != spark_data->owner)))
       {
-        normalize_0e00(&t, &D_L14_00174540.normal, D_L14_00162088);
-        add_0e00(&spark_moby->pos, &D_L14_00174540.hit, &t);
+        normalize_0e00(&position_scratch, &D_L14_00174540.normal, D_L14_00162088);
+        add_0e00(&spark_moby->pos, &D_L14_00174540.hit, &position_scratch);
         reflect_0e00(&spark_data->vel, &spark_data->vel, &D_L14_00174540.normal);
         sound_0e00(1, 0, spark_moby);
         if (spark_moby->state == 0)
