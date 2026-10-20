@@ -590,17 +590,17 @@ void FUN_L02_002f8a18(int mode, int arg) {
     };
     char *g = D_L02_00167280;
     char *cam = *(char **)(g + 0x180);
-    char *d = *(char **)(cam + 0x70);
-    char *e = d + 0xE0;
+    char *camera_data = *(char **)(cam + 0x70);
+    char *e = camera_data + 0xE0;
 
     cam[0x88] = mode;
     switch (mode) {
     case VENDOR_CAMERA_MODE_CAPTURE_HERO_POSITION:
-        qcopy(d + 0x110, &hero.motion.pos);
-        FUN_L00_001ed630(d + 0xFC, g + 0x140, &hero.motion.pos);
+        qcopy(camera_data + 0x110, &hero.motion.pos);
+        FUN_L00_001ed630(camera_data + 0xFC, g + 0x140, &hero.motion.pos);
     case 2:
         *(int *)(e + 4) = arg;
-        *(int *)(d + 0xE0) = arg;
+        *(int *)(camera_data + 0xE0) = arg;
         break;
     }
 }
