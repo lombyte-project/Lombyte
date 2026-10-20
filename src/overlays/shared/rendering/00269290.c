@@ -1540,7 +1540,7 @@ void FUN_L00_0026cbb0_0026ccb0(void *, void *, s32, s32, f32, int, int) __asm__(
 void FUN_L00_0026ccb0(O_0026ccb0_0026ccb0 *particle) {
     S_0026ccb0_0026ccb0 *s = &particle->s;
     u128 *particle_position;
-    V_0026ccb0_0026ccb0 a, b, r;
+    V_0026ccb0_0026ccb0 updated_position_copy, b, r;
     V_0026ccb0_0026ccb0 *spawn_velocity;
     f32 particle_speed;
     if (FUN_001f9770_0026ccb0(&particle->xa)) {
@@ -1552,7 +1552,7 @@ void FUN_L00_0026ccb0(O_0026ccb0_0026ccb0 *particle) {
             s->x14, s->x10, FUN_001fa6c0_0026ccb0(particle->xa) / FUN_001fa6c0_0026ccb0(s->x18));
         FUN_001f9a10_0026ccb0(particle_position, particle_position, s);
         s->v[2] -= frame_scale_sq * 0.001f;
-        qcopy(&a, particle_position);
+        qcopy(&updated_position_copy, particle_position);
         if (s->x1a != 0 && (D_L00_0015F5CC_0026ccb0 & 1)) {
             *(u128 *)&r = 0;
             r.x = FUN_002132a8_0026ccb0(-1.0f, 1.0f);
