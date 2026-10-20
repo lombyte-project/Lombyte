@@ -46,9 +46,9 @@ void update_camera_tracking_state(void) {
     Vec4 dir;
     Vec4 proj;
     struct CamColl *cam;
-    f32 d;
+    f32 displacement_dot_direction;
     s32 i;
-    struct Moby *m;
+    struct Moby *ground_moby;
 
     cam = &cam_coll_state;
     fast_vec_normalize(&dir, &hero.gravity_dir, -1.0f);
@@ -69,9 +69,9 @@ void update_camera_tracking_state(void) {
 
     subtract_vector_xyz(&cam->unk70, &hero.motion.pos, &cam->unk60);
     cam->unkA0 = fast_vec_length(&cam->unk70);
-    d = fast_vec_dot(&cam->unk70, &dir);
-    cam->unkA8 = d;
-    fast_vec_normalize(&proj, &dir, d);
+    displacement_dot_direction = fast_vec_dot(&cam->unk70, &dir);
+    cam->unkA8 = displacement_dot_direction;
+    fast_vec_normalize(&proj, &dir, displacement_dot_direction);
     qcopy(&cam->unk90, &proj);
     subtract_vector_xyz(&cam->unk80, &cam->unk70, &proj);
     cam->unkA4 = fast_vec_length(&cam->unk80);
@@ -94,18 +94,18 @@ void update_camera_tracking_state(void) {
     }
     cam->hist[i] = hero.motion.rot.f[2];
 
-    m = hero.ground_moby;
-    if (m != NULL && m->oclass != 0x4BA && m->oclass != 0x336) {
-        if (m == cam->unkD4) {
-            cam->unkDC = m->pos.z - cam->unkD8;
+    ground_moby = hero.ground_moby;
+    if (ground_moby != NULL && ground_moby->oclass != 0x4BA && ground_moby->oclass != 0x336) {
+        if (ground_moby == cam->unkD4) {
+            cam->unkDC = ground_moby->pos.z - cam->unkD8;
             if (absolute_float(cam->unkDC) < 0.001f) {
                 cam->unkDC = 0.0f;
             }
             cam->unkD8 = cam->unkD4->pos.z;
         } else {
-            cam->unkD4 = m;
+            cam->unkD4 = ground_moby;
             cam->unkDC = 0.0f;
-            cam->unkD8 = m->pos.z;
+            cam->unkD8 = ground_moby->pos.z;
         }
     } else {
         cam->unkDC = 0.0f;
