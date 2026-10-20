@@ -23,25 +23,25 @@ extern int hero_set_state(int, int) __asm__("FUN_L08_00230b38");
 float absolute_float(float input) __asm__("func_001F99C0");
 
 void FUN_L08_0021d9c0(void) {
-    struct Hero *p = &hero;
+    struct Hero *hero_ptr = &hero;
     int v;
     int x;
-    unsigned char saved = p->unk12ED;
-    v = p->ground_type;
-    fast_mem_zero16(&p->ground_type, 0x10);
-    p->unk12ED = saved;
-    p->ground_type = -1;
-    p->unk20A9 = 0;
-    p->unk308 = 0;
+    unsigned char saved = hero_ptr->unk12ED;
+    v = hero_ptr->ground_type;
+    fast_mem_zero16(&hero_ptr->ground_type, 0x10);
+    hero_ptr->unk12ED = saved;
+    hero_ptr->ground_type = -1;
+    hero_ptr->unk20A9 = 0;
+    hero_ptr->unk308 = 0;
     if (v == -1)
         return;
     if (v == 2) {
-        if (p->frames_off_ground.s == 0 || p->ground_distance < 0.3f) {
-            p->unk12E7 = 1;
-            if (p->vehicle_mode == 0) {
-                char *o = ((char *)p->items[1].moby);
-                if (o != 0 && *(short *)(o + 0xA6) == 0xAD)
-                    p->unk308 = 1;
+        if (hero_ptr->frames_off_ground.s == 0 || hero_ptr->ground_distance < 0.3f) {
+            hero_ptr->unk12E7 = 1;
+            if (hero_ptr->vehicle_mode == 0) {
+                char *item_moby = ((char *)hero_ptr->items[1].moby);
+                if (item_moby != 0 && *(short *)(item_moby + 0xA6) == 0xAD)
+                    hero_ptr->unk308 = 1;
             }
         }
     }
