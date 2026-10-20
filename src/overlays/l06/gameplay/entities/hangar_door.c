@@ -527,19 +527,19 @@ void FUN_L06_002d9d10(unsigned char *moby) {
     data = *(char **)(moby + 0x78);
     switch (moby[0x20]) {
     case INITIALIZE_POSITION_ENDPOINTS: {
-        char *p = (char *)moby + 0x10;
-        char *q;
-        qcopy(data, p);
-        q = data + 0x10;
-        normalize_vector_xyz(q, moby + 0xD0, 11.0f);
-        add_vector_xyz(q, q, p);
+        char *moby_position = (char *)moby + 0x10;
+        char *offset_position_endpoint;
+        qcopy(data, moby_position);
+        offset_position_endpoint = data + 0x10;
+        normalize_vector_xyz(offset_position_endpoint, moby + 0xD0, 11.0f);
+        add_vector_xyz(offset_position_endpoint, offset_position_endpoint, moby_position);
         moby[0x20] = 1;
         break;
     }
     case INTERPOLATE_POSITION_TO_TARGET: {
-        float a = (&frame_time)[1] * 10.0f;
+        float blend_acceleration_step = (&frame_time)[1] * 10.0f;
         advance_accelerated_scalar((float *)(data + 0x20), (float *)(data + 0x24),
-                                   *(float *)(data + 0x28), a, a, frame_time * 20.0f);
+                                   *(float *)(data + 0x28), blend_acceleration_step, blend_acceleration_step, frame_time * 20.0f);
         lerp_vector(moby + 0x10, data, data + 0x10, *(float *)(data + 0x20));
         if (*(float *)(data + 0x20) == *(float *)(data + 0x28))
             moby[0x20] = 1;
