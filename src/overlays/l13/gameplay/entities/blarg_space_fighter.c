@@ -2648,12 +2648,12 @@ typedef struct {
 
 extern int D_L13_001D3508[];
 extern int D_L13_001D3520[];
-void FUN_L13_002e8920(struct Moby *source_moby, char *d) {
+void FUN_L13_002e8920(struct Moby *source_moby, char *emission_gate_data) {
     OvlQuad zv;
     float bone_position[4];
     int i;
     for (i = 0; i < 6; i++) {
-        if (((Vd_v *)d)->on[D_L13_001D3508[i]] != 0) {
+        if (((Vd_v *)emission_gate_data)->on[D_L13_001D3508[i]] != 0) {
             float scale_ratio;
             int r, k;
             zv = 0;
