@@ -997,17 +997,17 @@ struct SpinnerVars {
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
 void robo_shack_sign_update(struct Moby *m) __asm__("FUN_L03_002d3e58");
-void robo_shack_sign_update(struct Moby *m) {
+void robo_shack_sign_update(struct Moby *sign_moby) {
     Vec4 move;
     Vec4 oldRot;
     struct SpinnerVars *v;
     move.q = 0;
-    oldRot.q = *(u128 *)&m->rot;
-    v = (struct SpinnerVars *)m->pvars;
-    m->draw_dist = 0xFF;
-    m->update_dist = 0xFF;
-    m->rot.z = fast_add_rotations(m->rot.z, frame_time * 0.47996554f);
-    update_entity_matrix(v->coll, &move, &oldRot, &m->rot);
+    oldRot.q = *(u128 *)&sign_moby->rot;
+    v = (struct SpinnerVars *)sign_moby->pvars;
+    sign_moby->draw_dist = 0xFF;
+    sign_moby->update_dist = 0xFF;
+    sign_moby->rot.z = fast_add_rotations(sign_moby->rot.z, frame_time * 0.47996554f);
+    update_entity_matrix(v->coll, &move, &oldRot, &sign_moby->rot);
 }
 
 #define NOT_SDA
