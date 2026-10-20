@@ -342,7 +342,7 @@ void sand_shark_update(struct Moby *moby) {
     OvlVec4 v1;
     OvlVec4 target_home_delta;
     OvlVec4 navigation_point;
-    OvlVec4 v4;
+    OvlVec4 particle_position_or_forward_step;
     float f;
 
     if (D_L02_001619A8 != 0) {
@@ -611,8 +611,8 @@ void sand_shark_update(struct Moby *moby) {
         if (moby->state == 0x16) {
             moby->pos.z += D_L02_0016191C;
             if (rand_below_e50(0xFF) & 1) {
-                v4.q = *(OvlQuad *)&moby->pos;
-                FUN_L02_002d5a68_e50(&v4);
+                particle_position_or_forward_step.q = *(OvlQuad *)&moby->pos;
+                FUN_L02_002d5a68_e50(&particle_position_or_forward_step);
             }
         }
         qcopy(&navigation_point, &vars->target);
@@ -683,8 +683,8 @@ void sand_shark_update(struct Moby *moby) {
         if (moby->state == 0x17) {
             moby->pos.z += D_L02_0016191C;
             if (rand_below_e50(0xFF) & 1) {
-                v4.q = *(OvlQuad *)&moby->pos;
-                FUN_L02_002d5a68_e50(&v4);
+                particle_position_or_forward_step.q = *(OvlQuad *)&moby->pos;
+                FUN_L02_002d5a68_e50(&particle_position_or_forward_step);
             }
         }
         qcopy(&navigation_point, &vars->home);
@@ -749,8 +749,8 @@ void sand_shark_update(struct Moby *moby) {
             }
         } else {
             extern float D_0015ED6C_e50s __asm__("D_0015ED6C") __attribute__((sda));
-            FUN_001f9bf8_e50(&v4, &moby->rot_row0, D_0015ED6C_e50s * 0.5f);
-            fast_vec_add(&moby->pos, &moby->pos, &v4);
+            FUN_001f9bf8_e50(&particle_position_or_forward_step, &moby->rot_row0, D_0015ED6C_e50s * 0.5f);
+            fast_vec_add(&moby->pos, &moby->pos, &particle_position_or_forward_step);
         }
         break;
     case SAND_SHARK_KNOCKBACK_UNTIL_LANDING:
