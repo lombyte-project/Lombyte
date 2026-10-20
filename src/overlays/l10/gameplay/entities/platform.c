@@ -2324,12 +2324,12 @@ extern void send_blast_hits(void *,void *,void *,int,int,int,int,int,float,float
 extern void FUN_L00_00262360_c(int,float *,float *,void *,float,float) __asm__("FUN_L00_00262360");
 
 void FUN_L10_002dd3d8(char *moby) {
- float old[4],pos[4],a,b;
+ float old[4],pos[4],path_segment_index,b;
  char *effect_data=*(char **)(moby+0x78);
  *(OvlQuad *)old=*(OvlQuad *)(moby+0x10);
  ((EffectData *)effect_data)->phase+=((EffectData *)effect_data)->speed;
  ((EffectData *)effect_data)->speed*=(((EffectData *)effect_data)->growth-1.0f)*frame_scale+1.0f;
- FUN_L00_00262360_c(((EffectData *)effect_data)->owner,&a,&b,moby+0x10,((EffectData *)effect_data)->phase,((EffectData *)effect_data)->size);
+ FUN_L00_00262360_c(((EffectData *)effect_data)->owner,&path_segment_index,&b,moby+0x10,((EffectData *)effect_data)->phase,((EffectData *)effect_data)->size);
  *(float *)(moby+0x40)=random_angle_radians();
  *(float *)(moby+0x44)=random_angle_radians();
  *(float *)(moby+0x48)=random_angle_radians();
