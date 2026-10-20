@@ -146,6 +146,7 @@ void FUN_L05_00255960(void) {
         HERO_STATE_LEDGE_SHIMMY_NEGATIVE_YAW_OFFSET = 27,
         HERO_STATE_LEDGE_JUMP = 28,
         HERO_STATE_ANIMATION_END_IDLE_WAIT = 58,
+        HERO_STATE_DELAYED_CIRCLE_RELEASE_WAIT = 89,
         HERO_STATE_JUMP_ENABLED_RESPAWN_WAIT = 104,
         HERO_STATE_JUMP_FROM_RESPAWN_WAIT = 105,
         HERO_STATE_ANIMATION_END_RESPAWN_WAIT = 106,
@@ -2094,7 +2095,7 @@ void FUN_L05_00255960(void) {
                     }
                     hero_set_state(0x53, 1);
                     break;
-                case 89:
+                case HERO_STATE_DELAYED_CIRCLE_RELEASE_WAIT:
                     if (hero.state_timer > scale_game_frames(0x2D) && !(controller_state.held & 0x20)) {
                         hero_set_state(0x53, 0);
                         set_hero_animation(0, 0, scale_game_frames(0x14));
