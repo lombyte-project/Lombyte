@@ -1593,7 +1593,7 @@ void sand_mouse_update(struct Moby *moby) {
             int cb;
             int col;
             int dir;
-            int n;
+            int particle_random_integer;
             float f;
             *(u128_2e3f20 *)vb = 0;
             qcopy(va, ((float *)&moby->pos));
@@ -1606,9 +1606,9 @@ void sand_mouse_update(struct Moby *moby) {
             if (sand_mouse_vars->timer & 1) {
                 dir = -dir;
             }
-            n = FUN_L00_00257b90(D_L01_00161928, D_L01_0016192C);
+            particle_random_integer = FUN_L00_00257b90(D_L01_00161928, D_L01_0016192C);
             f = random_float_between_alt(D_L01_00161934, D_L01_00161938);
-            spawn_particle_2e3f20(va, n, col, 2, dir, vb, f, 0.001f, D_L01_00161940 * frame_time_sq);
+            spawn_particle_2e3f20(va, particle_random_integer, col, 2, dir, vb, f, 0.001f, D_L01_00161940 * frame_time_sq);
             moby->flags |= 0x200;
             moby->alpha -= 0x80 / D_L01_00161924;
             moby->rot.z = fast_add_rotations(moby->rot.z, frame_time * 25.132742f);
