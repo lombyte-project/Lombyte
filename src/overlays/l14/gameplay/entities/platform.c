@@ -103,14 +103,14 @@ extern void FUN_L00_0025d808_6570(void *, void *, void *, void *, int, float) __
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void FUN_L00_0023e838(int);
 
-void FUN_L14_002d6570(struct Moby *m) {
+void FUN_L14_002d6570(struct Moby *group_anchor_moby) {
     char *list[4];
     float near[4];
     float v[4];
     float rot[4];
     int idx;
     float t;
-    unsigned short *moby_index_cursor = D_L14_001ABF40_6570[m->group];
+    unsigned short *moby_index_cursor = D_L14_001ABF40_6570[group_anchor_moby->group];
     char **out;
     int i;
     float path_step_distance;
@@ -142,7 +142,7 @@ void FUN_L14_002d6570(struct Moby *m) {
         char *od = *(char **)(o + 0x78);
         char *path = *(char **)(D_L14_0015F70C_6570 + *(int *)(od + 0x60) * 32 + 0x10);
         o[0x20] = 6;
-        ((M_6570 *)o)->f48 = angle_atan2(hero.motion.pos.f[0] - m->pos.x, hero.motion.pos.f[1] - m->pos.y);
+        ((M_6570 *)o)->f48 = angle_atan2(hero.motion.pos.f[0] - group_anchor_moby->pos.x, hero.motion.pos.f[1] - group_anchor_moby->pos.y);
         path_step_distance = -D_L14_00161A38_gp;
         *(int *)(od + 0x64) = hero.unk564;
         *(float *)(od + 0x68) = hero.unk568;
