@@ -1834,7 +1834,7 @@ extern void FUN_L00_0024eed8_00208a10(void *, int, void *, float,
 void FUN_L00_00208a10(void) {
     u128 v;
     float f;
-    unsigned char *o;
+    unsigned char *hero_moby;
     if (hero.unk20A5) {
         FUN_L00_00233210_00208a10();
     } else {
@@ -1842,10 +1842,10 @@ void FUN_L00_00208a10(void) {
     }
     FUN_L00_00232fe8_00208a10();
     ((unsigned char *)hero.moby)[0xA4] = 0xFF;
-    o = ((unsigned char *)hero.moby);
-    qcopy(o + 0x10, &hero.motion.pos);
-    qcopy(o + 0x40, &hero.motion.rot);
-    FUN_001f9838_00208a10(o + 0xC0, &hero, 0x30);
+    hero_moby = ((unsigned char *)hero.moby);
+    qcopy(hero_moby + 0x10, &hero.motion.pos);
+    qcopy(hero_moby + 0x40, &hero.motion.rot);
+    FUN_001f9838_00208a10(hero_moby + 0xC0, &hero, 0x30);
     upd_a(((unsigned char *)hero.moby));
     if (hero.unk1CC == 0 && *(int *)(((unsigned char *)hero.moby) + 0x94) != 0) {
         qcopy(&v, &hero.motion.pos);
