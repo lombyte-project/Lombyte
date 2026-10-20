@@ -24,7 +24,7 @@ extern unsigned char D_0013E533[];
 int FUN_L01_00226f10(int a) {
     char *g = (char *)D_0013E533 + 0xE1D;
     char *r;
-    int n;
+    int item_id;
     if (*(unsigned char *)(g + 0x20A4) == 3)
         return 0;
     if (*(int *)(g + 0x22A8) == 1)
@@ -37,8 +37,8 @@ int FUN_L01_00226f10(int a) {
         return 0;
     if (*(short *)(g + 0x22C8) != 0)
         return 0;
-    n = hero_slot_item_id(0);
-    r = D_L01_00179F40 - (-(n * 0x4C));
+    item_id = hero_slot_item_id(0);
+    r = D_L01_00179F40 - (-(item_id * 0x4C));
     return *(int *)(r + 0x24);
 }
 /* Ported from rac1-decomp (src/overlays/shared/help_002274A8.c: func_L01_002283E0), where it is exact; names translated to the US level program. */
