@@ -540,36 +540,36 @@ extern void FUN_L00_00216130_2163f0(void *, void *, float, float, float,
 #define P D_0013F350_2163f0
 
 void FUN_L00_002163f0(void) {
-    V_2163f0 m[4];
-    V_2163f0 a;
+    V_2163f0 working_matrix[4];
+    V_2163f0 reference_vector;
     V_2163f0 b;
-    V_2163f0 c;
+    V_2163f0 transformed_position_offset;
     float s;
 
-    a.q = 0;
+    reference_vector.q = 0;
     b.q = 0;
-    c.q = 0;
-    a.f[2] = 1.0f;
+    transformed_position_offset.q = 0;
+    reference_vector.f[2] = 1.0f;
     b.f[2] = 0.8f;
-    c.f[2] = 0.8f;
+    transformed_position_offset.f[2] = 0.8f;
     s = frame_scale_sq * 0.3f;
     FUN_001f9d20_2163f0(&b, &b, &P);
-    a.q = P.v270.q;
+    reference_vector.q = P.v270.q;
     if (P.b20B3 == 2) {
-        FUN_001f9a68_2163f0(&a, &P.v290, -1.0f);
+        FUN_001f9a68_2163f0(&reference_vector, &P.v290, -1.0f);
     }
     if (P.b20B3 == 1) {
         if (P.s30E < FUN_001f96f8_2163f0(10) || P.f2DC < 1.0f) {
-            a.q = P.v270.q;
+            reference_vector.q = P.v270.q;
         }
     }
     if (P.s30E != 0 && P.s1F8 != 0) {
         s = frame_scale_sq * 0.001f;
     }
-    FUN_L00_00216130_2163f0(&a, m, s, s, 0.0f, 0);
+    FUN_L00_00216130_2163f0(&reference_vector, working_matrix, s, s, 0.0f, 0);
     if (P.b20B3 == 1 && P.s30E != 0) {
-        FUN_001f9d20_2163f0(&c, &c, m);
-        subtract_vector_xyz(&P.v80, &P.v80, &c);
+        FUN_001f9d20_2163f0(&transformed_position_offset, &transformed_position_offset, working_matrix);
+        subtract_vector_xyz(&P.v80, &P.v80, &transformed_position_offset);
         FUN_001f9a10_2163f0(&P.v80, &P.v80, &b);
     }
 }
