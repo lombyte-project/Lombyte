@@ -159,7 +159,7 @@ s32 FUN_L02_0021ff70(s32 arg) {
     u8 *mob;
     s32 flag;
     s32 id;
-    f32 a, b, cached_frame_time;
+    f32 planar_impulse_scale, b, cached_frame_time;
     OvlVec4 v;
 
     if (G.state.control_mode == 0x14) {
@@ -225,13 +225,13 @@ s32 FUN_L02_0021ff70(s32 arg) {
         }
         hero_set_state(HERO_STATE_HURT, 1);
         cached_frame_time = frame_time;
-        a = cached_frame_time * 5.7f;
+        planar_impulse_scale = cached_frame_time * 5.7f;
         b = cached_frame_time * 2.4f;
         if (G.unk12E7 != 0) {
-            a = 0.0f;
+            planar_impulse_scale = 0.0f;
             b = cached_frame_time * 1.7f;
         }
-        FUN_L00_00210c80_8(&v, flag, a, b);
+        FUN_L00_00210c80_8(&v, flag, planar_impulse_scale, b);
         if (flag != 0 && tbl->unk28 == 4) {
             v.f[2] += v.f[2];
         }
