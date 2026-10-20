@@ -23,18 +23,18 @@ extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void FUN_L03_002de370(char *moby) {
     float v[4];
-    char *d = *(char **)(moby + 0x78);
-    *(float *)(d + 8) = *(float *)(d + 8) - frame_time_sq * 9.8f;
-    FUN_L00_001ff290(v, moby + 0x10, d);
-    *(float *)(moby + 0x40) = fast_add_rotations(*(float *)(moby + 0x40), *(float *)(d + 0x10));
-    *(float *)(moby + 0x44) = fast_add_rotations(*(float *)(moby + 0x44), *(float *)(d + 0x14));
-    *(float *)(moby + 0x48) = fast_add_rotations(*(float *)(moby + 0x48), *(float *)(d + 0x18));
+    char *moby_data = *(char **)(moby + 0x78);
+    *(float *)(moby_data + 8) = *(float *)(moby_data + 8) - frame_time_sq * 9.8f;
+    FUN_L00_001ff290(v, moby + 0x10, moby_data);
+    *(float *)(moby + 0x40) = fast_add_rotations(*(float *)(moby + 0x40), *(float *)(moby_data + 0x10));
+    *(float *)(moby + 0x44) = fast_add_rotations(*(float *)(moby + 0x44), *(float *)(moby_data + 0x14));
+    *(float *)(moby + 0x48) = fast_add_rotations(*(float *)(moby + 0x48), *(float *)(moby_data + 0x18));
     {
-        float a = convert_integer_to_float(*(int *)(d + 0x24));
-        float b = convert_integer_to_float(*(int *)(d + 0x20));
-        moby[0x23] = func_001FA898_r(a * 255.0f / b);
+        float remaining_timer_value = convert_integer_to_float(*(int *)(moby_data + 0x24));
+        float b = convert_integer_to_float(*(int *)(moby_data + 0x20));
+        moby[0x23] = func_001FA898_r(remaining_timer_value * 255.0f / b);
     }
-    if (fast_dec_timer((int *)(d + 0x24)) != 0) {
+    if (fast_dec_timer((int *)(moby_data + 0x24)) != 0) {
         mark_moby_for_removal(moby);
     }
 }
