@@ -583,7 +583,7 @@ void FUN_L11_002d14b0(void *arg) {
         RESORT_OWNER_FINAL_PATH_LEG = 3
     };
     struct Moby *moby = arg;
-    struct PokKeeperVars *d = (struct PokKeeperVars *)moby->pvars;
+    struct PokKeeperVars *moby_vars = (struct PokKeeperVars *)moby->pvars;
     int proximity = FUN_L11_002d2460(moby);
     float v[4];
     float r[4];
@@ -596,61 +596,61 @@ void FUN_L11_002d14b0(void *arg) {
         scale_vector_14b0(v, &moby->rot_row0, 3.0f);
         fast_vec_add(v, v, &moby->pos);
         if (FUN_L11_002d25e8(moby, v)) {
-            qcopy(&d->target, v);
-            d->target.z = ground_height_14b0(&d->target);
-            d->next_state = 3;
+            qcopy(&moby_vars->target, v);
+            moby_vars->target.z = ground_height_14b0(&moby_vars->target);
+            moby_vars->next_state = 3;
             FUN_L11_002d2088_c(moby, 7);
         }
     }
     switch (moby->state) {
     case RESORT_OWNER_INITIALIZE:
-        initialize_npc_dialogue(moby, d->talk);
+        initialize_npc_dialogue(moby, moby_vars->talk);
         moby->update_dist = 0xFF;
-        FUN_L05_0028be78(&d->unk60[0], 1, d->unk70[0]);
-        FUN_L05_0028be78(&d->unk60[1], 1, d->unk70[1]);
-        FUN_L05_0028be78(&d->unk60[2], 1, d->unk70[2]);
-        clear_u64_value(&d->unk130);
-        clear_u64_value(&d->unk140);
+        FUN_L05_0028be78(&moby_vars->unk60[0], 1, moby_vars->unk70[0]);
+        FUN_L05_0028be78(&moby_vars->unk60[1], 1, moby_vars->unk70[1]);
+        FUN_L05_0028be78(&moby_vars->unk60[2], 1, moby_vars->unk70[2]);
+        clear_u64_value(&moby_vars->unk130);
+        clear_u64_value(&moby_vars->unk140);
         if (D_0013D4EE) {
-            if (D_0014C050[d->unk10C + D_0015ED84 * 16] == 0xFF) {
-                FUN_L11_0030a840((unsigned char *)(D_L11_0015FFD8 + (d->gates[0] << 8)));
-                FUN_L11_0030a840((unsigned char *)(D_L11_0015FFD8 + (d->gates[1] << 8)));
-                FUN_L11_002cb990((struct Moby *)(D_L11_0015FFD8 + (d->unk104 << 8)));
+            if (D_0014C050[moby_vars->unk10C + D_0015ED84 * 16] == 0xFF) {
+                FUN_L11_0030a840((unsigned char *)(D_L11_0015FFD8 + (moby_vars->gates[0] << 8)));
+                FUN_L11_0030a840((unsigned char *)(D_L11_0015FFD8 + (moby_vars->gates[1] << 8)));
+                FUN_L11_002cb990((struct Moby *)(D_L11_0015FFD8 + (moby_vars->unk104 << 8)));
                 mark_moby_for_removal(moby);
                 break;
             }
         } else {
-            if (D_0014C050[d->unk10C + D_0015ED84 * 16] == 0xFF) {
-                d->leg = 3;
-                qcopy_nc(&moby->pos, &path_points_14b0[d->points[3]].pos);
-                qcopy_nc(&moby->rot, &path_points_14b0[d->points[3]].rot);
-                FUN_L11_002cb990((struct Moby *)(D_L11_0015FFD8 + (d->unk104 << 8)));
+            if (D_0014C050[moby_vars->unk10C + D_0015ED84 * 16] == 0xFF) {
+                moby_vars->leg = 3;
+                qcopy_nc(&moby->pos, &path_points_14b0[moby_vars->points[3]].pos);
+                qcopy_nc(&moby->rot, &path_points_14b0[moby_vars->points[3]].rot);
+                FUN_L11_002cb990((struct Moby *)(D_L11_0015FFD8 + (moby_vars->unk104 << 8)));
                 FUN_L11_002d2088_c(moby, 0xE);
-                d->talk_range = 10.0f;
-                FUN_L11_0030a840((unsigned char *)(D_L11_0015FFD8 + (d->gates[0] << 8)));
-                FUN_L11_0030a840((unsigned char *)(D_L11_0015FFD8 + (d->gates[1] << 8)));
+                moby_vars->talk_range = 10.0f;
+                FUN_L11_0030a840((unsigned char *)(D_L11_0015FFD8 + (moby_vars->gates[0] << 8)));
+                FUN_L11_0030a840((unsigned char *)(D_L11_0015FFD8 + (moby_vars->gates[1] << 8)));
                 break;
             }
         }
-        if (D_0014C050[d->unk108 + D_0015ED84 * 16] == 0xFF &&
-            distance_xyz(&hero.motion.pos, &path_points_14b0[d->points[1]].pos) < 12.0f) {
-            d->leg = 1;
-            qcopy_nc(&moby->pos, &path_points_14b0[d->points[1]].pos);
-            qcopy_nc(&moby->rot, &path_points_14b0[d->points[1]].rot);
+        if (D_0014C050[moby_vars->unk108 + D_0015ED84 * 16] == 0xFF &&
+            distance_xyz(&hero.motion.pos, &path_points_14b0[moby_vars->points[1]].pos) < 12.0f) {
+            moby_vars->leg = 1;
+            qcopy_nc(&moby->pos, &path_points_14b0[moby_vars->points[1]].pos);
+            qcopy_nc(&moby->rot, &path_points_14b0[moby_vars->points[1]].rot);
             FUN_L11_002d2088_c(moby, 6);
-            path_points_14b0[d->unk114].pos.z -= 500.0f;
-            FUN_L11_0030a840((unsigned char *)(D_L11_0015FFD8 + (d->gates[0] << 8)));
+            path_points_14b0[moby_vars->unk114].pos.z -= 500.0f;
+            FUN_L11_0030a840((unsigned char *)(D_L11_0015FFD8 + (moby_vars->gates[0] << 8)));
             break;
         }
-        path_points_14b0[d->unk110].pos.z -= 500.0f;
-        path_points_14b0[d->unk114].pos.z -= 500.0f;
-        d->leg = 0;
-        d->talk_range = 5.0f;
+        path_points_14b0[moby_vars->unk110].pos.z -= 500.0f;
+        path_points_14b0[moby_vars->unk114].pos.z -= 500.0f;
+        moby_vars->leg = 0;
+        moby_vars->talk_range = 5.0f;
         FUN_L11_002d2088_c(moby, 1);
         break;
     case RESORT_OWNER_CHECK_INITIAL_DIALOGUE:
-        if (d->unk56 == 0) {
-            if (hero.air_frames.s == 0 && update_npc_dialogue(moby, d->talk)) {
+        if (moby_vars->unk56 == 0) {
+            if (hero.air_frames.s == 0 && update_npc_dialogue(moby, moby_vars->talk)) {
                 begin_dialogue_camera_transition(moby, 2.5f);
                 FUN_L11_002d2088_c(moby, 2);
             }
@@ -682,33 +682,33 @@ void FUN_L11_002d14b0(void *arg) {
             FUN_L11_002d2088_c(moby, 4);
         break;
     case RESORT_OWNER_MOVE_TO_PATH_POINT:
-        FUN_L11_002d2340(moby, (char *)&path_points_14b0[d->points[d->leg]].pos);
-        if (vector_distance(&moby->pos, &d->target) < 1.0f) {
-            switch (d->leg) {
+        FUN_L11_002d2340(moby, (char *)&path_points_14b0[moby_vars->points[moby_vars->leg]].pos);
+        if (vector_distance(&moby->pos, &moby_vars->target) < 1.0f) {
+            switch (moby_vars->leg) {
             case RESORT_OWNER_FIRST_PATH_LEG: {
-                struct Moby *o = (struct Moby *)(D_L11_0015FFD8 + (d->gates[0] << 8));
-                qcopy(&d->target, &o->pos);
+                struct Moby *o = (struct Moby *)(D_L11_0015FFD8 + (moby_vars->gates[0] << 8));
+                qcopy(&moby_vars->target, &o->pos);
                 scale_vector_14b0(v, &o->rot_row0, D_L11_00161418);
-                fast_vec_add(&d->target, &d->target, v);
+                fast_vec_add(&moby_vars->target, &moby_vars->target, v);
                 scale_vector_14b0(v, &o->rot_row1, D_L11_00161414);
-                fast_vec_add(&d->target, &d->target, v);
+                fast_vec_add(&moby_vars->target, &moby_vars->target, v);
                 scale_vector_14b0(v, &o->rot_row2, D_L11_00161410);
-                fast_vec_add(&d->target, &d->target, v);
-                d->next_state = 8;
+                fast_vec_add(&moby_vars->target, &moby_vars->target, v);
+                moby_vars->next_state = 8;
                 FUN_L11_002d2088_c(moby, 7);
                 break;
             }
             case RESORT_OWNER_SECOND_PATH_LEG: {
-                struct Moby *o = (struct Moby *)(D_L11_0015FFD8 + (d->gates[1] << 8));
-                qcopy(&d->target, &o->pos);
+                struct Moby *o = (struct Moby *)(D_L11_0015FFD8 + (moby_vars->gates[1] << 8));
+                qcopy(&moby_vars->target, &o->pos);
                 scale_vector_14b0(v, &o->rot_row0, D_L11_00161418);
-                fast_vec_add(&d->target, &d->target, v);
+                fast_vec_add(&moby_vars->target, &moby_vars->target, v);
                 scale_vector_14b0(v, &o->rot_row1, -D_L11_00161414);
-                fast_vec_add(&d->target, &d->target, v);
+                fast_vec_add(&moby_vars->target, &moby_vars->target, v);
                 scale_vector_14b0(v, &o->rot_row2, D_L11_00161410);
-                fast_vec_add(&d->target, &d->target, v);
-                path_points_14b0[d->unk110].pos.z += 500.0f;
-                d->next_state = 8;
+                fast_vec_add(&moby_vars->target, &moby_vars->target, v);
+                path_points_14b0[moby_vars->unk110].pos.z += 500.0f;
+                moby_vars->next_state = 8;
                 FUN_L11_002d2088_c(moby, 7);
                 break;
             }
@@ -716,20 +716,20 @@ void FUN_L11_002d14b0(void *arg) {
                 FUN_L11_002d2088_c(moby, 0xB);
                 break;
             case RESORT_OWNER_FINAL_PATH_LEG:
-                path_points_14b0[d->unk114].pos.z += 500.0f;
+                path_points_14b0[moby_vars->unk114].pos.z += 500.0f;
                 FUN_L11_002d2088_c(moby, 0xC);
                 break;
             }
         }
         break;
     case RESORT_OWNER_CHECK_PATH_COMPLETION_DIALOGUE:
-        d->talk_range = 255.0f;
-        if (update_npc_dialogue(moby, d->talk)) {
-            jet_clear_persistent(d->unk10C);
+        moby_vars->talk_range = 255.0f;
+        if (update_npc_dialogue(moby, moby_vars->talk)) {
+            jet_clear_persistent(moby_vars->unk10C);
             D_0013D3DC = 1;
             FUN_L00_00266858(moby, 2);
-            qcopy_nc(&moby->pos, &path_points_14b0[d->points[d->leg]].pos);
-            qcopy_nc(&moby->rot, &path_points_14b0[d->points[d->leg]].rot);
+            qcopy_nc(&moby->pos, &path_points_14b0[moby_vars->points[moby_vars->leg]].pos);
+            qcopy_nc(&moby->rot, &path_points_14b0[moby_vars->points[moby_vars->leg]].rot);
             euler_rotation_basis(&moby->rot_row0, &moby->rot);
             scale_vector_14b0(v, &moby->rot_row0, 2.0f);
             fast_vec_add(v, v, &moby->pos);
@@ -744,42 +744,42 @@ void FUN_L11_002d14b0(void *arg) {
         break;
     case RESORT_OWNER_WAIT_FOR_PATH_COMPLETION_DIALOGUE_END:
         if (D_L11_0015F5C4 != 2) {
-            FUN_L11_002cb990((struct Moby *)(D_L11_0015FFD8 + (d->unk104 << 8)));
+            FUN_L11_002cb990((struct Moby *)(D_L11_0015FFD8 + (moby_vars->unk104 << 8)));
             FUN_L11_002d2088_c(moby, 0xE);
         }
         break;
     case RESORT_OWNER_JUMP_TO_TARGET:
         if (moby->anim_flags & 2)
-            FUN_L11_002d2088_c(moby, d->next_state);
+            FUN_L11_002d2088_c(moby, moby_vars->next_state);
         break;
     case RESORT_OWNER_MOVE_TO_GATE_TARGET:
-        if (vector_distance(&moby->pos, &d->target) < 0.5f)
+        if (vector_distance(&moby->pos, &moby_vars->target) < 0.5f)
             FUN_L11_002d2088_c(moby, 9);
         break;
     case RESORT_OWNER_WAIT_AT_GATE:
         {
-            int i = d->leg != 0;
-            if (FUN_L11_0030a830((struct Moby *)(D_L11_0015FFD8 + (d->gates[i] << 8))))
+            int i = moby_vars->leg != 0;
+            if (FUN_L11_0030a830((struct Moby *)(D_L11_0015FFD8 + (moby_vars->gates[i] << 8))))
                 FUN_L11_002d2088_c(moby, 0xA);
         }
         break;
     case RESORT_OWNER_MOVE_TO_GATE_DEPARTURE_TARGET:
-        if (vector_distance(&moby->pos, &d->target) < 0.5f) {
-            int n = ++d->leg;
-            qcopy(&d->target, &path_points_14b0[d->unkD0[n]].pos);
-            d->next_state = 4;
+        if (vector_distance(&moby->pos, &moby_vars->target) < 0.5f) {
+            int next_leg_index = ++moby_vars->leg;
+            qcopy(&moby_vars->target, &path_points_14b0[moby_vars->unkD0[next_leg_index]].pos);
+            moby_vars->next_state = 4;
             FUN_L11_002d2088_c(moby, 7);
         }
         break;
     case RESORT_OWNER_WAIT_TO_ADVANCE_FINAL_PATH_LEG:
-        if (FUN_L11_0030a830((struct Moby *)(D_L11_0015FFD8 + (d->unk100 << 8)))) {
-            d->leg += 1;
+        if (FUN_L11_0030a830((struct Moby *)(D_L11_0015FFD8 + (moby_vars->unk100 << 8)))) {
+            moby_vars->leg += 1;
             FUN_L11_002d2088_c(moby, 3);
         }
         break;
     case RESORT_OWNER_CHECK_POST_PATH_DIALOGUE:
-        if (D_0014C050[d->unk118 + D_0015ED84 * 16] == 0xFF && D_001413D4_14b0 != 0x32 &&
-            update_npc_dialogue(moby, d->talk)) {
+        if (D_0014C050[moby_vars->unk118 + D_0015ED84 * 16] == 0xFF && D_001413D4_14b0 != 0x32 &&
+            update_npc_dialogue(moby, moby_vars->talk)) {
             begin_dialogue_camera_transition(moby, 2.5f);
             FUN_L11_002d2088_c(moby, 0xF);
         }
