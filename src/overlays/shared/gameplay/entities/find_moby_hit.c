@@ -515,6 +515,9 @@ int FUN_L00_0025aca0(float density, unsigned char *entity, int maximum, Vec4_25a
     enum {
         SHAPE_XY_DISK_WITH_Z_EXTENT = 3
     };
+    enum {
+        SHAPE_INLINE_CENTER_SPHERE = 0
+    };
     float weights[20];
     unsigned char *entries[20];
     Vec4_25aca0 first, second, third, fourth, fifth;
@@ -550,7 +553,7 @@ int FUN_L00_0025aca0(float density, unsigned char *entity, int maximum, Vec4_25a
                 if (!(((mask >> index) ^ 1) & 1) && active) {
                     entries[count] = entry;
                     switch (type) {
-                    case 0:
+                    case SHAPE_INLINE_CENTER_SPHERE:
                     case 1:
                     case SHAPE_INDEXED_CENTER_SPHERE: {
                         if (type < 2) {
@@ -607,7 +610,7 @@ int FUN_L00_0025aca0(float density, unsigned char *entity, int maximum, Vec4_25a
         }
         entry = entries[chosen];
         switch (type = *entry) {
-        case 0:
+        case SHAPE_INLINE_CENTER_SPHERE:
         case 1:
         case SHAPE_INDEXED_CENTER_SPHERE: {
             float radius, extent;
