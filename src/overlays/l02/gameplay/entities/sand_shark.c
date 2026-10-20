@@ -2239,7 +2239,7 @@ void sand_shark_nest_update(unsigned char *moby) {
     };
     Varscb38 *nest_vars = *(Varscb38 **)(moby + 0x78);
     char *launched_shark;
-    int n;
+    int spawn_delay_factor;
     OvlVec4 v;
     OvlVec4 launch_position;
 
@@ -2285,11 +2285,11 @@ void sand_shark_nest_update(unsigned char *moby) {
                 blend_moby_animation_c3(moby, 0, 0, scale_ticks(10));
             }
         } else if (compute_interpolated_record_value(moby) == 12.0f) {
-            n = D_0014EE90[moby[0xB0]];
-            if (n > 20) {
-                n = 20;
+            spawn_delay_factor = D_0014EE90[moby[0xB0]];
+            if (spawn_delay_factor > 20) {
+                spawn_delay_factor = 20;
             }
-            nest_vars->timer = scale_ticks(nest_vars->delay + scale_ticks(n * 15));
+            nest_vars->timer = scale_ticks(nest_vars->delay + scale_ticks(spawn_delay_factor * 15));
             launched_shark = FUN_L02_002dd2a8_c(moby);
             if (launched_shark) {
                 char *od = *(char **)(launched_shark + 0x78);
