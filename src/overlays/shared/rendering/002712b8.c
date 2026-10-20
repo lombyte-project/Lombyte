@@ -615,17 +615,17 @@ void FUN_L00_002726d8(P_2726d8 *particle) {
 void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
 void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 void free_effect_particle(void *) __asm__("FUN_L00_00267a08");
-void FUN_L00_00272838(u8 *m) {
-    s32 n;
-    fast_vec_scale(m + 0x20, m + 0x20, 0.975f);
-    fast_vec_add(m + 0x10, m + 0x10, m + 0x20);
-    *(f32 *)(m + 0xC) += 6300.0f;
-    n = m[4] - 4;
-    if (n <= 0) {
-        free_effect_particle(m);
+void FUN_L00_00272838(u8 *particle) {
+    s32 faded_intensity;
+    fast_vec_scale(particle + 0x20, particle + 0x20, 0.975f);
+    fast_vec_add(particle + 0x10, particle + 0x10, particle + 0x20);
+    *(f32 *)(particle + 0xC) += 6300.0f;
+    faded_intensity = particle[4] - 4;
+    if (faded_intensity <= 0) {
+        free_effect_particle(particle);
     } else {
-        s32 t = (n << 8) | 0x60000000;
-        *(s32 *)(m + 4) = ((n << 16) | t) | n;
+        s32 t = (faded_intensity << 8) | 0x60000000;
+        *(s32 *)(particle + 4) = ((faded_intensity << 16) | t) | faded_intensity;
     }
 }
 void FUN_001f9a10_002728e8(void *, void *, void *) __asm__("FUN_001f9a10");
