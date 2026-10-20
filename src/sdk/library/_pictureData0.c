@@ -17,30 +17,30 @@ extern s32 _waitBdecOut(MpegDec *d);
 extern void _doMC(MpegDec *d, s32 flag);
 extern void _Error(MpegDec *d, char *msg);
 
-s32 _pictureData0(MpegDec *d) {
+s32 _pictureData0(MpegDec *decoder) {
     s32 ret;
     s32 mbs;
 
-    d->unk810 = 0;
-    d->unk814 = 0;
-    mbs = d->mbWidth * d->mbHeight;
-    if (d->pictStruct != 3) {
+    decoder->unk810 = 0;
+    decoder->unk814 = 0;
+    mbs = decoder->mbWidth * decoder->mbHeight;
+    if (decoder->pictStruct != 3) {
         mbs >>= 1;
     }
     do {
-        ret = _slice0(d, mbs);
+        ret = _slice0(decoder, mbs);
     } while (ret == 1 || ret == 3);
-    _waitIpuIdle(d);
-    if (_waitBdecOut(d) == 0) {
+    _waitIpuIdle(decoder);
+    if (_waitBdecOut(decoder) == 0) {
         ret = 2;
     }
     while ((*(volatile u32 *)0x1000D400 >> 8) & 1) {
     }
     if (ret == 0) {
-        _doMC(d, d->unk810 == 0);
+        _doMC(decoder, decoder->unk810 == 0);
     }
     if (ret == 1 || ret == 2) {
-        _Error(d, D_001537E0);
+        _Error(decoder, D_001537E0);
     }
     return ret == 0;
 }
