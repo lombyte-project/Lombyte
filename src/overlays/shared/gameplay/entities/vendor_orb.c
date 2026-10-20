@@ -2458,15 +2458,15 @@ typedef struct {
 } O842e83c0;
 int FUN_L00_002e83c0(int arg1, int arg2);
 int FUN_L00_002e83c0(int candidate_object, int unused) {
-    void *a = D_L00_00166E00_c2;
+    void *current_camera = D_L00_00166E00_c2;
     C842e83c0 *cur;
     u8 x;
     u8 y;
     u32 tab;
-    if (((B842e83c0 *)a)->f86 != 0) {
+    if (((B842e83c0 *)current_camera)->f86 != 0) {
         return -1;
     }
-    cur = (C842e83c0 *)(u32)((B2842e83c0 *)a)->f70;
+    cur = (C842e83c0 *)(u32)((B2842e83c0 *)current_camera)->f70;
     if (cur->f220 == 0) {
         cur->f220 = candidate_object;
         return 1;
