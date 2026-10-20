@@ -1105,7 +1105,7 @@ extern CollisionHit D_L03_00173F40;
 
 /* Homing rocket update: flies on, trails smoke, steers up or down toward a target, explodes on impact or timeout. */
 extern Vec4 D_0013F490_v __asm__("D_0013F490");
-void FUN_L03_002d43c8(struct Moby *m) {
+void FUN_L03_002d43c8(struct Moby *rocket_moby) {
     enum {
         ROCKET_FLY = 1,
         ROCKET_BURST_AND_REMOVE = 2
@@ -1117,25 +1117,25 @@ void FUN_L03_002d43c8(struct Moby *m) {
     RocketTarget target;
     Vec4 trail;
     RocketHit hit;
-    RocketVars *v = (RocketVars *)m->pvars;
+    RocketVars *v = (RocketVars *)rocket_moby->pvars;
     Vec4f *pos;
-    u8 state = m->state;
+    u8 state = rocket_moby->state;
     void **level;
     float pitch;
     float range;
 
     switch (state) {
     case ROCKET_FLY:
-        pos = &m->pos;
+        pos = &rocket_moby->pos;
         range = convert_integer_to_float(v->timer * 2) * v->speed;
-        FUN_L03_0024e830(m, &target, range);
+        FUN_L03_0024e830(rocket_moby, &target, range);
         qcopy(&old, pos);
         add_vector_xyz(pos, pos, v);
         cam.q = D_0013F490_v.q;
         cam.f[2] *= D_L03_00161B28;
         FUN_L00_001ff290(&trail, pos, &cam);
-        m->rot.z = v->heading;
-        m->rot.x = fast_add_rotations(m->rot.x, frame_time * 6.2831855f);
+        rocket_moby->rot.z = v->heading;
+        rocket_moby->rot.x = fast_add_rotations(rocket_moby->rot.x, frame_time * 6.2831855f);
         side.f[0] = fast_cos(v->heading) * v->speed * -0.5f;
         side.f[1] = fast_sin(v->heading) * v->speed * -0.5f;
         side.f[2] = 0.0f;
@@ -1150,34 +1150,34 @@ void FUN_L03_002d43c8(struct Moby *m) {
         FUN_L00_00269958(&back, &side, 0x1FFFFFFF, 0x4F4F4F, scale_game_frames(FUN_L00_00257b90(0x1E, 0x3C)),
                          0x28, FUN_L00_00257b90(0x32, 0x4B), 0);
         if (target.found != 0) {
-            pitch = -fast_arc_tan(vector_distance(pos, &target.pos), target.pos.f[2] - m->pos.z);
-            m->rot.y = spring_turn(&v->turn_vel, m->rot.y, pitch, frame_time_sq_macro * 0.7853982f,
+            pitch = -fast_arc_tan(vector_distance(pos, &target.pos), target.pos.f[2] - rocket_moby->pos.z);
+            rocket_moby->rot.y = spring_turn(&v->turn_vel, rocket_moby->rot.y, pitch, frame_time_sq_macro * 0.7853982f,
                                         frame_time_sq_macro * 3.1415927f, frame_time * 0.5235988f);
-            m->pos.z += fast_sin(-m->rot.y) * v->speed;
+            rocket_moby->pos.z += fast_sin(-rocket_moby->rot.y) * v->speed;
         }
         if (collision_line(pos, &old, 0, v->ignore, 0) != 0 ||
             coll_sphere(0.2f, pos, 0, v->ignore) != 0) {
             level = (void **)&D_L03_00173F40;
             if (level[6] != NULL) {
-                make_hit_descriptor(&hit, m, 0x10001, 1.0f, v);
+                make_hit_descriptor(&hit, rocket_moby, 0x10001, 1.0f, v);
                 hit.dir.f[0] = fast_cos(v->heading);
                 hit.dir.f[1] = fast_sin(v->heading);
                 hit.dir.f[2] = 1.0f;
                 hit.dir.f[3] = 5627.925f;
                 hit.kind = state;
                 hit.source = state;
-                hit.oclass = m->oclass;
+                hit.oclass = rocket_moby->oclass;
                 FUN_L00_00259a88(level[6], &hit);
             }
-            m->state = 2;
+            rocket_moby->state = 2;
         }
         if (fast_dec_timer(&v->timer) != 0) {
-            m->state = 2;
+            rocket_moby->state = 2;
         }
         break;
     case ROCKET_BURST_AND_REMOVE:
-        cart_burst(m, &m->pos, 0, 0.25f, 13.0f);
-        mark_moby_for_removal(m);
+        cart_burst(rocket_moby, &rocket_moby->pos, 0, 0.25f, 13.0f);
+        mark_moby_for_removal(rocket_moby);
         break;
     }
 }
