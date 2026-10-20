@@ -2546,7 +2546,7 @@ s32 collision_line(void *, void *, s32, void *, s32) __asm__("FUN_001efa68");
 void FUN_L00_001ff660_2aa008(void *, void *, void *) __asm__("FUN_L00_001ff660");
 void FUN_L00_002aa008(V_2aa008 *pos, N_2aa008 *self, void *arg) {
     V_2aa008 random_offset;
-    V_2aa008 t;
+    V_2aa008 vector_scratch;
     V_2aa008 collision_position_offset;
     M_2aa008 *moby_vars;
     struct Hero *P;
@@ -2555,14 +2555,14 @@ void FUN_L00_002aa008(V_2aa008 *pos, N_2aa008 *self, void *arg) {
     N_2aa008 *best;
     s32 bestv;
     V_2aa008 *k;
-    t.q = 0;
+    vector_scratch.q = 0;
     moby_vars = self->p78;
-    t.f[0] = FUN_002132a8_2aa008(-1.0f, 1.0f);
-    t.f[1] = FUN_002132a8_2aa008(-1.0f, 1.0f);
-    t.f[2] = FUN_002132a8_2aa008(-1.0f, 1.0f);
+    vector_scratch.f[0] = FUN_002132a8_2aa008(-1.0f, 1.0f);
+    vector_scratch.f[1] = FUN_002132a8_2aa008(-1.0f, 1.0f);
+    vector_scratch.f[2] = FUN_002132a8_2aa008(-1.0f, 1.0f);
     self->b20 = 1;
     self->f2C = self->f2C / 0.65f;
-    random_offset.q = t.q;
+    random_offset.q = vector_scratch.q;
     FUN_001f9bf8_2aa008(&random_offset, &random_offset,
                         FUN_002132a8_2aa008(D_0015ED6C_2aa008 * 0.01f, D_0015ED6C_2aa008 * 0.1f));
     add_vector_xyz(moby_vars, &random_offset, arg);
@@ -2589,9 +2589,9 @@ void FUN_L00_002aa008(V_2aa008 *pos, N_2aa008 *self, void *arg) {
     if (count >= 8)
         ((D_2aa008 *)best->p78)->i5C = -1;
     qcopy(&self->v10, pos);
-    t.q = ((Q_2aa008 *)hero.moby)->v10.q;
-    t.f[2] = pos->f[2];
-    if (collision_line(&t, pos, 0, hero.moby, 0)) {
+    vector_scratch.q = ((Q_2aa008 *)hero.moby)->v10.q;
+    vector_scratch.f[2] = pos->f[2];
+    if (collision_line(&vector_scratch, pos, 0, hero.moby, 0)) {
         k = D_L00_00173E60_2aa008;
         qcopy(&self->v10, &k[0]);
         FUN_001f9bf8_2aa008(&collision_position_offset, &k[2], frame_time_sq * 9.7f);
