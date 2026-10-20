@@ -35,7 +35,7 @@ void FUN_L00_001f3770(s32, s32, s32, s32);
 /* Calls FUN_L00_001f3770 for each queued D_L00_0016A840 entry and resets the queue. */
 void FUN_L00_001f36f8(void) {
     s32 i;
-    E001f36f8 *p;
+    E001f36f8 *unused_text_entry;
     for (i = 0; i < D_L00_0015EFC4; i++)
         FUN_L00_001f3770(D_L00_0016A840[i].a, D_L00_0016A840[i].b, D_L00_0016A840[i].c,
                          D_L00_0016A840[i].d);
