@@ -986,32 +986,32 @@ void FUN_L11_0030f2a8(struct Moby *m) {
         LINKED_TURN_STATE_WAIT_FOR_LINK = 1,
         LINKED_TURN_STATE_ROTATE_TO_TARGET = 2
     };
-    int s = m->state;
-    float *d = (float *)m->pvars;
-    float a;
+    int entry_state = m->state;
+    float *private_data = (float *)m->pvars;
+    float target_angle;
     float r;
-    switch (s) {
+    switch (entry_state) {
     case LINKED_TURN_STATE_INITIALIZE:
         m->update_dist = 0xFF;
         m->state = 1;
-        d[2] = m->rot.z;
+        private_data[2] = m->rot.z;
         break;
     case LINKED_TURN_STATE_WAIT_FOR_LINK:
-        if (FUN_L11_0030f270(D_L11_0015FFD8_t + (*(int *)d << 8))) {
+        if (FUN_L11_0030f270(D_L11_0015FFD8_t + (*(int *)private_data << 8))) {
             if (level_frame >= 11) {
-                D_0013D3E3_t[0] = s;
+                D_0013D3E3_t[0] = entry_state;
                 m->state = 2;
                 FUN_0022da68_t(0, 0, m);
             } else {
                 m->state = 3;
-                m->rot.z = FUN_001fa580_t(d[2], 1.0471976f);
+                m->rot.z = FUN_001fa580_t(private_data[2], 1.0471976f);
             }
         }
         break;
     case LINKED_TURN_STATE_ROTATE_TO_TARGET:
-        a = FUN_001fa580_t(d[2], 1.0471976f);
+        target_angle = FUN_001fa580_t(private_data[2], 1.0471976f);
         r = frame_time_sq * 0.34906584f;
-        if (approach_angle(&m->rot.z, a, d + 1, r, r, frame_time * 0.7853982f) == 0.0f) {
+        if (approach_angle(&m->rot.z, target_angle, private_data + 1, r, r, frame_time * 0.7853982f) == 0.0f) {
             m->state = 3;
         }
         break;
