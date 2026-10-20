@@ -849,33 +849,33 @@ unsigned char *FUN_L00_002730e0(float *pos, OvlQuad *vel, int color, u8 life, u8
                                 float scale);
 unsigned char *FUN_L00_002730e0(float *pos, OvlQuad *vel, int color, u8 life, u8 b, int mode,
                                 float scale) {
-    unsigned char *m;
+    unsigned char *particle;
     float *v;
     if (pos[0] < 2.0f || 1021.0f < pos[0] || pos[1] < 2.0f || 1021.0f < pos[1] || pos[2] < 2.0f ||
         1021.0f < pos[2])
         return 0;
-    m = p27fe00_alloc(0x3C);
-    if (m) {
-        v = (float *)(m + 0x20);
-        qcopy(m + 0x10, pos);
+    particle = p27fe00_alloc(0x3C);
+    if (particle) {
+        v = (float *)(particle + 0x20);
+        qcopy(particle + 0x10, pos);
         qcopy(v, vel);
         *(int *)(v + 7) = mode;
         if (mode == 1) {
             struct Hero *g = &hero;
-            v[4] = *(float *)(m + 0x10) - g->motion.pos.f[0];
-            v[5] = *(float *)(m + 0x14) - g->motion.pos.f[1];
-            v[6] = *(float *)(m + 0x18) - g->motion.pos.f[2];
+            v[4] = *(float *)(particle + 0x10) - g->motion.pos.f[0];
+            v[5] = *(float *)(particle + 0x14) - g->motion.pos.f[1];
+            v[6] = *(float *)(particle + 0x18) - g->motion.pos.f[2];
         }
-        *(int *)(m + 4) = color;
-        m[9] = FUN_001fa6d0_2730e0(1.0f) + 0x20;
-        m[3] = 0x48;
-        m[8] = b;
-        m[1] = 0;
-        *(float *)(m + 0xC) = scale * 210000.0f;
-        m[2] = *D_L00_001B2154;
-        *(short *)(m + 0xA) = life;
+        *(int *)(particle + 4) = color;
+        particle[9] = FUN_001fa6d0_2730e0(1.0f) + 0x20;
+        particle[3] = 0x48;
+        particle[8] = b;
+        particle[1] = 0;
+        *(float *)(particle + 0xC) = scale * 210000.0f;
+        particle[2] = *D_L00_001B2154;
+        *(short *)(particle + 0xA) = life;
     }
-    return m;
+    return particle;
 }
 typedef struct {
     u8 p0[4];
