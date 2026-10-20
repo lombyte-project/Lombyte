@@ -109,7 +109,7 @@ void FUN_L11_00315968(struct Moby *moby) {
         HIT_RESPONSE_NON_KNOCKBACK_REACTION_ALTERNATE = 10,
         HIT_RESPONSE_COOLDOWN_NO_KNOCKBACK = 11
     };
-    struct L11PatrolVars *d = (struct L11PatrolVars *)moby->pvars;
+    struct L11PatrolVars *patrol_vars = (struct L11PatrolVars *)moby->pvars;
     Vec4 v;
     s32 out;
     float dmg;
@@ -117,20 +117,20 @@ void FUN_L11_00315968(struct Moby *moby) {
     char *path;
 
     moby->scale = moby->pclass->scale * D_L11_001622CC;
-    d->unk1A4 = D_L11_001622FC_gp * frame_time;
-    if (d->carrier != -1 && moby->state != 0xB && moby->state != 9 && moby->state != 0x12 &&
+    patrol_vars->unk1A4 = D_L11_001622FC_gp * frame_time;
+    if (patrol_vars->carrier != -1 && moby->state != 0xB && moby->state != 9 && moby->state != 0x12 &&
         moby->state != 0x11 && moby->state != 0 && moby->state != 0xC && moby->state != 0xD) {
-        if (moby->pos.z < ((struct Moby *)D_L11_0015FFD8)[d->carrier].pos.z + 0.5f) {
+        if (moby->pos.z < ((struct Moby *)D_L11_0015FFD8)[patrol_vars->carrier].pos.z + 0.5f) {
             FUN_L00_0025f3e8(moby, &moby->pos, -1, 0.5f, 10.0f);
             mark_moby_for_removal(moby);
         }
     }
-    if (moby->state == 0xC && d->carrier != -1) {
-        if (FUN_L11_0030a830(&((struct Moby *)D_L11_0015FFD8)[d->carrier]) != 0 && moby->visible == 0) {
+    if (moby->state == 0xC && patrol_vars->carrier != -1) {
+        if (FUN_L11_0030a830(&((struct Moby *)D_L11_0015FFD8)[patrol_vars->carrier]) != 0 && moby->visible == 0) {
             mark_moby_for_removal(moby);
             return;
         }
-        if (((struct Moby *)D_L11_0015FFD8)[d->carrier].state >= 2) {
+        if (((struct Moby *)D_L11_0015FFD8)[patrol_vars->carrier].state >= 2) {
             moby->visible = 1;
             moby->flags &= ~1;
             moby->collision = moby->pclass->collision;
@@ -139,27 +139,27 @@ void FUN_L11_00315968(struct Moby *moby) {
     dmg = 0.0f;
     hit = FUN_L00_0025a420_h(moby, 0x330000, 0);
     {
-        s32 kind = fun_00213928(moby, hit, &d->hp, 0, &out, &dmg, 0, 4);
+        s32 kind = fun_00213928(moby, hit, &patrol_vars->hp, 0, &out, &dmg, 0, 4);
         if (out != 1 && moby->state != 0xB) {
-            d->hp -= dmg;
+            patrol_vars->hp -= dmg;
             if (hit->moby->oclass == 0x47) {
                 kind = 3;
             }
-            if (d->hp <= 0.0f) {
+            if (patrol_vars->hp <= 0.0f) {
                 kind = 1;
             }
-            d->unk140 = FUN_001fa6d0(512.0f);
-            d->unk148 = 0.2f;
-            d->unk134 = 0.0f;
-            d->unk130 = D_L11_001622D0 * frame_time_sq;
-            d->unk144 = 9;
-            d->unk15D = 0;
+            patrol_vars->unk140 = FUN_001fa6d0(512.0f);
+            patrol_vars->unk148 = 0.2f;
+            patrol_vars->unk134 = 0.0f;
+            patrol_vars->unk130 = D_L11_001622D0 * frame_time_sq;
+            patrol_vars->unk144 = 9;
+            patrol_vars->unk15D = 0;
             switch (kind) {
             case HIT_RESPONSE_NO_ADDITIONAL_REACTION:
                 break;
             case HIT_RESPONSE_NON_KNOCKBACK_REACTION:
             case HIT_RESPONSE_NON_KNOCKBACK_REACTION_ALTERNATE:
-                d->unk117 = 0xFA;
+                patrol_vars->unk117 = 0xFA;
                 break;
             case HIT_RESPONSE_KNOCKBACK:
             case HIT_RESPONSE_KNOCKBACK_ALTERNATE:
@@ -168,53 +168,53 @@ void FUN_L11_00315968(struct Moby *moby) {
             case HIT_RESPONSE_KNOCKBACK_ARC:
             case HIT_RESPONSE_KNOCKBACK_MOTION: {
                 float yaw;
-                d->unk138 = D_L11_001622D8 * frame_time;
-                d->unk13C = D_L11_001622D4 * frame_time;
-                d->unk170 = 7.5f;
-                d->unk174 = 11.0f;
+                patrol_vars->unk138 = D_L11_001622D8 * frame_time;
+                patrol_vars->unk13C = D_L11_001622D4 * frame_time;
+                patrol_vars->unk170 = 7.5f;
+                patrol_vars->unk174 = 11.0f;
                 yaw = fast_arc_tan(moby->pos.x - hit->moby->pos.x, moby->pos.y - hit->moby->pos.y);
                 v.q = hit->pos.q;
-                trooper_knockback_arc(&v, &yaw, &d->unk138, &d->unk13C);
-                trooper_start_knockback(moby, d->unk120, 3, 1, 0, yaw);
+                trooper_knockback_arc(&v, &yaw, &patrol_vars->unk138, &patrol_vars->unk13C);
+                trooper_start_knockback(moby, patrol_vars->unk120, 3, 1, 0, yaw);
                 if (moby->state < 0xC) {
                     moby->state = 9;
                 } else {
                     moby->state = 0x11;
                 }
-                d->unk117 = 0x78;
+                patrol_vars->unk117 = 0x78;
                 break;
             }
             case HIT_RESPONSE_DEATH:
             case HIT_RESPONSE_DEATH_KNOCKBACK: {
                 float yaw;
                 moby->flags &= ~0x1000;
-                d->unk130 = D_L11_001622D0 * frame_time_sq;
-                d->unk138 = D_L11_001622E0 * frame_time;
-                d->unk13C = D_L11_001622DC * frame_time;
-                d->unk170 = 7.5f;
-                d->unk174 = 11.0f;
+                patrol_vars->unk130 = D_L11_001622D0 * frame_time_sq;
+                patrol_vars->unk138 = D_L11_001622E0 * frame_time;
+                patrol_vars->unk13C = D_L11_001622DC * frame_time;
+                patrol_vars->unk170 = 7.5f;
+                patrol_vars->unk174 = 11.0f;
                 yaw = fast_arc_tan(moby->pos.x - hit->moby->pos.x, moby->pos.y - hit->moby->pos.y);
                 v.q = hit->pos.q;
-                trooper_knockback_arc(&v, &yaw, &d->unk138, &d->unk13C);
-                trooper_start_knockback(moby, d->unk120, 3, 1, 0, yaw);
+                trooper_knockback_arc(&v, &yaw, &patrol_vars->unk138, &patrol_vars->unk13C);
+                trooper_start_knockback(moby, patrol_vars->unk120, 3, 1, 0, yaw);
                 if (moby->state < 0xC) {
                     moby->state = 0xB;
                 } else {
                     moby->state = 0x12;
                 }
-                d->unk117 = 0xF0;
+                patrol_vars->unk117 = 0xF0;
                 FUN_L00_00257470(moby, 0, -1);
                 break;
             }
             case HIT_RESPONSE_COOLDOWN_NO_KNOCKBACK:
                 break;
             }
-            trooper_anim_update(moby, d->move);
+            trooper_anim_update(moby, patrol_vars->move);
         }
     }
     moby->hit_slot = 0xFF;
-    trooper_anim_finish(moby, d->move);
-    if (d->timer != 0) {
+    trooper_anim_finish(moby, patrol_vars->move);
+    if (patrol_vars->timer != 0) {
         if (moby->state == 2 || (moby->state == 3 && (moby->anim_flags & 2))) {
             moby->state = 0xA;
             if (moby->prev_seq != 2) {
@@ -222,32 +222,32 @@ void FUN_L11_00315968(struct Moby *moby) {
             }
         }
     }
-    if (d->retimer != 0) {
-        d->timer = FUN_001fa6d0(multiply_global_factor_ed64(random_float_between(180.0f, 240.0f)));
-        d->retimer = 0;
+    if (patrol_vars->retimer != 0) {
+        patrol_vars->timer = FUN_001fa6d0(multiply_global_factor_ed64(random_float_between(180.0f, 240.0f)));
+        patrol_vars->retimer = 0;
     }
-    fast_dec_timer(&d->timer);
-    if (d->timer != 0) {
-        d->reach = d->range + 64.0f;
+    fast_dec_timer(&patrol_vars->timer);
+    if (patrol_vars->timer != 0) {
+        patrol_vars->reach = patrol_vars->range + 64.0f;
     } else {
-        d->reach = d->range;
+        patrol_vars->reach = patrol_vars->range;
     }
-    path = path_table[d->path_index];
-    if (FUN_L00_0025ff38(moby, &d->goal, 0, 0, path + 0x10, *(s32 *)path, d->reach) != 2) {
-        Vec4f *p;
+    path = path_table[patrol_vars->path_index];
+    if (FUN_L00_0025ff38(moby, &patrol_vars->goal, 0, 0, path + 0x10, *(s32 *)path, patrol_vars->reach) != 2) {
+        Vec4f *goal_check_position;
         if (moby->state == 1) {
-            p = (Vec4f *)(path_table[d->path2_index] + 0x20);
+            goal_check_position = (Vec4f *)(path_table[patrol_vars->path2_index] + 0x20);
         } else {
-            p = &moby->pos;
+            goal_check_position = &moby->pos;
         }
-        qcopy(&v, p);
-        if (vector_distance(v.f, &d->goal.x) > d->reach || v.f[2] - d->goal.z > 3.0f) {
-            d->unk214 = 2;
+        qcopy(&v, goal_check_position);
+        if (vector_distance(v.f, &patrol_vars->goal.x) > patrol_vars->reach || v.f[2] - patrol_vars->goal.z > 3.0f) {
+            patrol_vars->unk214 = 2;
         }
     }
-    if (d->target == 0) {
-        d->target = hero.moby;
-        qcopy(&d->goal, &hero.motion.pos);
+    if (patrol_vars->target == 0) {
+        patrol_vars->target = hero.moby;
+        qcopy(&patrol_vars->goal, &hero.motion.pos);
     }
 }
 extern float D_6C_e[] __asm__("D_0015ED68") __attribute__((section(".sdata")));
