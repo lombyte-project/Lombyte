@@ -2404,7 +2404,7 @@ extern int D_L00_00161838_macro __asm__("D_L00_00161838") __attribute__((section
 /* Update ammunition pickup physics, collection, animation and scale.
    Animation states share one stack value; index reloads follow calls. */
 void devestator_ammo_update(struct Moby *m) __asm__("FUN_L00_002c53c0");
-void devestator_ammo_update(struct Moby *m) {
+void devestator_ammo_update(struct Moby *pickup_moby) {
     enum {
         AMMO_PICKUP_INITIALIZE = 0,
         AMMO_PICKUP_WAIT_FOR_COLLECTION = 1,
@@ -2412,7 +2412,7 @@ void devestator_ammo_update(struct Moby *m) {
         AMMO_PICKUP_PULSE_ALPHA = 3,
         AMMO_PICKUP_RESTORE_SCALE = 4
     };
-    AmmoPickup_2c53c0 *p;
+    AmmoPickup_2c53c0 *pickup_vars;
     unsigned int state;
     FxVec position;
     FxVec predicted;
@@ -2422,34 +2422,34 @@ void devestator_ammo_update(struct Moby *m) {
     float target;
     float step;
     float remaining;
-    p = (AmmoPickup_2c53c0 *)m->pvars;
-    FUN_001f9740_2c53c0(&p->timer);
-    state = m->state;
+    pickup_vars = (AmmoPickup_2c53c0 *)pickup_moby->pvars;
+    FUN_001f9740_2c53c0(&pickup_vars->timer);
+    state = pickup_moby->state;
     if (state == 1 || state == 4 || state == 3) {
-        magnitude = FUN_001f9af0_2c53c0(&p->velocity);
+        magnitude = FUN_001f9af0_2c53c0(&pickup_vars->velocity);
         if (magnitude != 0.0f) {
-            qcopy(&position, &m->pos);
+            qcopy(&position, &pickup_moby->pos);
             position.z += 0.5f;
             if (FUN_L00_001f0d60_2c53c0(0.4f, &position, 2, 0)) {
-                qcopy(&m->pos, &D_L00_00173E70_2c53c0);
-                m->pos.z -= 0.5f;
+                qcopy(&pickup_moby->pos, &D_L00_00173E70_2c53c0);
+                pickup_moby->pos.z -= 0.5f;
             }
         }
-        p->velocity.z -= frame_time_sq_macro * 4.9f;
-        FUN_001f9a10_2c53c0(&predicted, &m->pos, &p->velocity);
-        p->velocity.z -= frame_time_sq_macro * 4.9f;
-        qcopy(&position, &m->pos);
+        pickup_vars->velocity.z -= frame_time_sq_macro * 4.9f;
+        FUN_001f9a10_2c53c0(&predicted, &pickup_moby->pos, &pickup_vars->velocity);
+        pickup_vars->velocity.z -= frame_time_sq_macro * 4.9f;
+        qcopy(&position, &pickup_moby->pos);
         position.z += 0.1f;
         if (FUN_001efa68_2c53c0(&position, &predicted, 2, 0, 0)) {
-            FUN_001f99f8_2c53c0(&p->velocity);
-            qcopy(&m->pos, &D_L00_00173E60_2c53c0);
+            FUN_001f99f8_2c53c0(&pickup_vars->velocity);
+            qcopy(&pickup_moby->pos, &D_L00_00173E60_2c53c0);
         } else {
-            qcopy(&m->pos, &predicted);
+            qcopy(&pickup_moby->pos, &predicted);
         }
     }
-    switch (m->state) {
+    switch (pickup_moby->state) {
     case AMMO_PICKUP_INITIALIZE:
-        m->state = 1;
+        pickup_moby->state = 1;
         break;
     case AMMO_PICKUP_WAIT_FOR_COLLECTION: {
         struct Hero *player;
@@ -2469,31 +2469,31 @@ void devestator_ammo_update(struct Moby *m) {
         int random;
         int max_ammo;
         value_ptr = &value;
-        *value_ptr = (float)m->alpha;
+        *value_ptr = (float)pickup_moby->alpha;
         duration = FUN_001f96f8_2c53c0(30);
         FUN_00213ed8_2c53c0(value_ptr, 128.0f, (float)(128 / duration));
-        m->alpha = FUN_001fa6d0_2c53c0(*value_ptr);
-        if (p->timer > 0)
+        pickup_moby->alpha = FUN_001fa6d0_2c53c0(*value_ptr);
+        if (pickup_vars->timer > 0)
             return;
-        if (FUN_001f9af0_2c53c0(&p->velocity) != 0.0f)
+        if (FUN_001f9af0_2c53c0(&pickup_vars->velocity) != 0.0f)
             return;
         player = &hero;
         eligible = 1;
         height_delta =
-            FUN_001f99c0_2c53c0(m->pos.z - player->motion.pos.f[2]);
+            FUN_001f99c0_2c53c0(pickup_moby->pos.z - player->motion.pos.f[2]);
         if (player->reach_height < height_delta) {
             eligible = 0;
         } else {
-            distance = FUN_001f9b80_2c53c0(&m->pos, &player->motion.pos);
+            distance = FUN_001f9b80_2c53c0(&pickup_moby->pos, &player->motion.pos);
             if (player->reach_distance < distance)
                 eligible = 0;
         }
-        idx = p->weapon;
+        idx = pickup_vars->weapon;
         before = weapon_ammo_counts[idx];
         max_ammo = D_L00_001C40B0[idx].hE;
         if (before >= max_ammo)
             eligible = 0;
-        if (m->pos.z < p->resting_height - 2.0f)
+        if (pickup_moby->pos.z < pickup_vars->resting_height - 2.0f)
             eligible = 1;
         if (hero.health.hp == 0)
             eligible = 0;
@@ -2501,8 +2501,8 @@ void devestator_ammo_update(struct Moby *m) {
             goto pickup_failed;
 
         {
-            FUN_L00_00233e40_2c53c0(idx, p->amount);
-            sound_idx = p->weapon;
+            FUN_L00_00233e40_2c53c0(idx, pickup_vars->amount);
+            sound_idx = pickup_vars->weapon;
             after = weapon_ammo_counts[sound_idx];
             if (before < after) {
                 difference = after - before;
@@ -2513,26 +2513,26 @@ void devestator_ammo_update(struct Moby *m) {
                 }
                 FUN_L00_00263db0_2c53c0(sound, difference, -1);
             }
-            account_idx = p->weapon;
+            account_idx = pickup_vars->weapon;
             D_0013DE08[account_idx] += weapon_ammo_counts[account_idx] - before;
-            m->state = 2;
-            m->scale *= D_0015ED60_2c53c0 * 0.20000005f + 1.0f;
-            FUN_001f99f8_2c53c0(&p->velocity);
+            pickup_moby->state = 2;
+            pickup_moby->scale *= D_0015ED60_2c53c0 * 0.20000005f + 1.0f;
+            FUN_001f99f8_2c53c0(&pickup_vars->velocity);
             elapsed = D_L00_0015F5CC_2c53c0 - D_L00_00161838_macro;
-            p->rise_speed = D_0015ED6C_2c53c0 * 8.0f;
+            pickup_vars->rise_speed = D_0015ED6C_2c53c0 * 8.0f;
             random = FUN_001f99a8_2c53c0(elapsed);
             if (FUN_001f96f8_2c53c0(10) < random) {
-                FUN_L00_0028dc90_2c53c0(0, 0, (int)m, 0xD5);
+                FUN_L00_0028dc90_2c53c0(0, 0, (int)pickup_moby, 0xD5);
                 D_L00_00161838_macro = D_L00_0015F5CC_2c53c0;
             }
             return;
         }
     pickup_failed:
-        if (m->alpha < 0xFF)
-            ++m->alpha;
-        if (FUN_L00_00250430_2c53c0(m, hero.moby) <= -0.2f) {
-            m->state = 3;
-            p->recovery_timer = FUN_001f96f8_2c53c0(60);
+        if (pickup_moby->alpha < 0xFF)
+            ++pickup_moby->alpha;
+        if (FUN_L00_00250430_2c53c0(pickup_moby, hero.moby) <= -0.2f) {
+            pickup_moby->state = 3;
+            pickup_vars->recovery_timer = FUN_001f96f8_2c53c0(60);
         }
         return;
     }
@@ -2541,18 +2541,18 @@ void devestator_ammo_update(struct Moby *m) {
         float distance;
         float factor;
         float class_scale;
-        FUN_00213ed8_2c53c0(&p->rise_speed, 0.0f, frame_time_sq_macro * 24.0f);
-        m->pos.z += p->rise_speed;
-        limit = FUN_001f9af0_2c53c0(&p->velocity);
+        FUN_00213ed8_2c53c0(&pickup_vars->rise_speed, 0.0f, frame_time_sq_macro * 24.0f);
+        pickup_moby->pos.z += pickup_vars->rise_speed;
+        limit = FUN_001f9af0_2c53c0(&pickup_vars->velocity);
         FUN_00213ed8_2c53c0(&limit, D_0015ED6C_2c53c0 * 64.0f, frame_time_sq_macro * 24.0f);
-        FUN_001f9a28_2c53c0(&p->velocity, &hero.motion.unkD0, &m->pos);
-        if (m->scale == 0.0f || FUN_001f9af0_2c53c0(&p->velocity) < limit) {
-            FUN_0020c828_2c53c0(m);
+        FUN_001f9a28_2c53c0(&pickup_vars->velocity, &hero.motion.unkD0, &pickup_moby->pos);
+        if (pickup_moby->scale == 0.0f || FUN_001f9af0_2c53c0(&pickup_vars->velocity) < limit) {
+            FUN_0020c828_2c53c0(pickup_moby);
             return;
         }
-        FUN_001f9bf8_2c53c0(&p->velocity, &p->velocity, limit);
-        FUN_001f9a10_2c53c0(&m->pos, &m->pos, &p->velocity);
-        distance = FUN_001f9b48_2c53c0(&m->pos, &hero.motion.unkD0);
+        FUN_001f9bf8_2c53c0(&pickup_vars->velocity, &pickup_vars->velocity, limit);
+        FUN_001f9a10_2c53c0(&pickup_moby->pos, &pickup_moby->pos, &pickup_vars->velocity);
+        distance = FUN_001f9b48_2c53c0(&pickup_moby->pos, &hero.motion.unkD0);
         factor = (float)FUN_001f96f8_2c53c0(30);
         factor = factor * limit;
         factor = factor + 0.01f;
@@ -2562,8 +2562,8 @@ void devestator_ammo_update(struct Moby *m) {
         } else if (distance < 0.3f) {
             distance = 0.3f;
         }
-        class_scale = m->pclass->scale;
-        FUN_00213ed8_2c53c0(&m->scale, class_scale * distance, class_scale * 0.1f);
+        class_scale = pickup_moby->pclass->scale;
+        FUN_00213ed8_2c53c0(&pickup_moby->scale, class_scale * distance, class_scale * 0.1f);
         return;
     }
     case AMMO_PICKUP_PULSE_ALPHA: {
@@ -2575,7 +2575,7 @@ void devestator_ammo_update(struct Moby *m) {
         int random;
         int idx;
         phase = D_L00_0015F5CC_2c53c0 % 60;
-        value = (float)m->alpha;
+        value = (float)pickup_moby->alpha;
         angle = (float)phase / 60.0f;
         angle = angle * 6.28318f;
         angle = angle - 3.14159f;
@@ -2586,30 +2586,30 @@ void devestator_ammo_update(struct Moby *m) {
         value_ptr = &value;
         random = FUN_001f96f8_2c53c0(30);
         FUN_00213ed8_2c53c0(value_ptr, target, (float)(128 / random));
-        m->alpha = FUN_001fa6d0_2c53c0(*value_ptr);
-        if (FUN_L00_00250430_2c53c0(m, hero.moby) >= 0.0f) {
-            m->state = 1;
+        pickup_moby->alpha = FUN_001fa6d0_2c53c0(*value_ptr);
+        if (FUN_L00_00250430_2c53c0(pickup_moby, hero.moby) >= 0.0f) {
+            pickup_moby->state = 1;
             return;
         }
-        idx = p->weapon;
+        idx = pickup_vars->weapon;
         if (weapon_ammo_counts[idx] <
                 D_L00_001C40B0[idx].hE) {
-            m->state = 1;
+            pickup_moby->state = 1;
         }
         return;
     }
     case AMMO_PICKUP_RESTORE_SCALE:
-        current = m->scale;
-        target = m->pclass->scale;
+        current = pickup_moby->scale;
+        target = pickup_moby->pclass->scale;
         step = D_0015ED60_2c53c0 * 0.03f;
         current += (target - current) * step;
-        m->scale = current;
-        target = m->pclass->scale;
+        pickup_moby->scale = current;
+        target = pickup_moby->pclass->scale;
         remaining = (target - current) / target;
         if (remaining < 0.01f) {
-            m->scale = target;
-            m->state = 1;
-            m->collision = m->pclass->collision;
+            pickup_moby->scale = target;
+            pickup_moby->state = 1;
+            pickup_moby->collision = pickup_moby->pclass->collision;
         }
         break;
     }
