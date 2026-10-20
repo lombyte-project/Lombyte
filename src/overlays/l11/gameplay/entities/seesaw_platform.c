@@ -641,28 +641,28 @@ extern void enqueue_e088(void *, void *) __asm__("FUN_001f4600");
 
 /* Tile moby: claims a D_L11_001DA880 row on spawn (row 0 also sets up the shared light block), then moves
    up or down once its switch fires and throws random sparks; row 0 flushes the visible rows each frame. */
-void FUN_L11_0030e088(struct Moby *m) {
+void FUN_L11_0030e088(struct Moby *water_tile_moby) {
     enum {
         WATER_TILE_STATE_INITIALIZE = 0,
         WATER_TILE_STATE_FIND_NEIGHBORS = 1,
         WATER_TILE_STATE_APPROACH_UPPER_HEIGHT = 2,
         WATER_TILE_STATE_APPROACH_LOWER_HEIGHT = 3
     };
-    int *pv = (int *)m->pvars;
+    int *pv = (int *)water_tile_moby->pvars;
     int i;
     float tile_query_has_result;
 
-    switch (m->state) {
+    switch (water_tile_moby->state) {
     case WATER_TILE_STATE_INITIALIZE:
-        m->update_dist = 0xFF;
+        water_tile_moby->update_dist = 0xFF;
         pv[1] = D_L11_00161F64;
         D_L11_00161F64 = D_L11_00161F64 + 1;
         if (D_L11_00161F64 >= 0x80) {
             print_e088(D_L11_0021B4C0);
         }
-        m->update_dist = 0xFF;
-        m->flags |= 1;
-        m->scale = m->pclass->scale + m->pclass->scale;
+        water_tile_moby->update_dist = 0xFF;
+        water_tile_moby->flags |= 1;
+        water_tile_moby->scale = water_tile_moby->pclass->scale + water_tile_moby->pclass->scale;
         if (pv[1] == 0) {
             Light_e088 *l;
             float light_direction_angle;
@@ -696,31 +696,31 @@ void FUN_L11_0030e088(struct Moby *m) {
             D_L11_00161214 = 48.0f;
             D_L11_00161208 = 0;
         }
-        D_L11_001DA880[pv[1]].x = m->pos.x;
-        D_L11_001DA880[pv[1]].y = m->pos.y;
-        D_L11_001DA880[pv[1]].z = m->pos.z;
+        D_L11_001DA880[pv[1]].x = water_tile_moby->pos.x;
+        D_L11_001DA880[pv[1]].y = water_tile_moby->pos.y;
+        D_L11_001DA880[pv[1]].z = water_tile_moby->pos.z;
         D_L11_001DA880[pv[1]].unk14 = 0x38;
         D_L11_001DA880[pv[1]].unk18 = 0x39;
         D_L11_001DA880[pv[1]].unk1C = 0x1C;
         D_L11_001DA880[pv[1]].unk1D = 0x44;
         D_L11_001DA880[pv[1]].unk1E = 0xFFFF;
         pool_bind_tile(&D_L11_001DA880[pv[1]], D_L11_001DA740 + pv[1] * 16);
-        m->state = 1;
+        water_tile_moby->state = 1;
         break;
     case WATER_TILE_STATE_FIND_NEIGHBORS:
         D_L11_00161F64 = 0;
         FUN_L11_0030e730(pv[1]);
-        m->state = 2;
+        water_tile_moby->state = 2;
         break;
     case WATER_TILE_STATE_APPROACH_LOWER_HEIGHT:
-        if (m->command & 4) {
+        if (water_tile_moby->command & 4) {
             pv[2] = 1;
-            FUN_L01_0026e0e0(m->group, 2);
+            FUN_L01_0026e0e0(water_tile_moby->group, 2);
         }
-        m->command = 1;
+        water_tile_moby->command = 1;
         if (pv[2] != 0) {
-            approach_e088(&m->pos.z, pv, 132.36f, frame_time_sq * 4.0f, frame_time_sq * 4.0f, frame_time * 4.0f);
-            FUN_L11_0030e690(m);
+            approach_e088(&water_tile_moby->pos.z, pv, 132.36f, frame_time_sq * 4.0f, frame_time_sq * 4.0f, frame_time * 4.0f);
+            FUN_L11_0030e690(water_tile_moby);
         }
         if (random_below_e088(200) == 0) {
             float x = D_L11_001DA880[pv[1]].x + rand_range_e088(-4.0f, 4.0f);
@@ -730,14 +730,14 @@ void FUN_L11_0030e088(struct Moby *m) {
         }
         break;
     case WATER_TILE_STATE_APPROACH_UPPER_HEIGHT:
-        if (m->command & 8) {
+        if (water_tile_moby->command & 8) {
             pv[2] = 1;
-            FUN_L01_0026e0e0(m->group, 3);
+            FUN_L01_0026e0e0(water_tile_moby->group, 3);
         }
-        m->command = 2;
+        water_tile_moby->command = 2;
         if (pv[2] != 0) {
-            approach_e088(&m->pos.z, pv, 137.0f, frame_time_sq * 4.0f, frame_time_sq * 4.0f, frame_time * 4.0f);
-            FUN_L11_0030e690(m);
+            approach_e088(&water_tile_moby->pos.z, pv, 137.0f, frame_time_sq * 4.0f, frame_time_sq * 4.0f, frame_time * 4.0f);
+            FUN_L11_0030e690(water_tile_moby);
         }
         if (random_below_e088(200) == 0) {
             float x = D_L11_001DA880[pv[1]].x + rand_range_e088(-4.0f, 4.0f);
@@ -749,7 +749,7 @@ void FUN_L11_0030e088(struct Moby *m) {
     }
     if (pv[1] >= 0) {
         tile_query_has_result = 0.0f;
-        if (FUN_L01_00275690(64.0f, m) != -1) {
+        if (FUN_L01_00275690(64.0f, water_tile_moby) != -1) {
             tile_query_has_result = 1.0f;
         }
         if (tile_query_has_result == 0.0f) {
@@ -759,7 +759,7 @@ void FUN_L11_0030e088(struct Moby *m) {
         }
         if (pv[1] == 0) {
             pool_flush(D_L11_001DA880, 20);
-            enqueue_e088(FUN_L11_0030e708, m);
+            enqueue_e088(FUN_L11_0030e708, water_tile_moby);
         }
     }
 }
