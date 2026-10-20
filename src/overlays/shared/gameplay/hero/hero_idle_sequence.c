@@ -2478,7 +2478,7 @@ void FUN_L00_00209ec8(void) {
     char *g;
     char *base;
     float lateral_angle, r, planar_scale, alpha_fraction, theta, phi;
-    int t, c, col, life, n1, n2, k;
+    int t, alpha, col, life, n1, n2, k;
     OvlQuad *pt;
     g = D_0013F7EE;
     if (fast_dec_timer(g)) {
@@ -2501,10 +2501,10 @@ void FUN_L00_00209ec8(void) {
         alpha_fraction = 1.0f;
     if (alpha_fraction < 0.0f)
         alpha_fraction = 0.0f;
-    c = FUN_001fa6d0_209ec8(alpha_fraction * 240.0f);
-    c = c < 0xA1 ? c : 0xA0;
-    c = 0x1F < c ? c : 0x20;
-    col = (c << 24) | 0xC0F0;
+    alpha = FUN_001fa6d0_209ec8(alpha_fraction * 240.0f);
+    alpha = alpha < 0xA1 ? alpha : 0xA0;
+    alpha = 0x1F < alpha ? alpha : 0x20;
+    col = (alpha << 24) | 0xC0F0;
     life = FUN_001f96f8_209ec8(0x28);
     pt = w;
     for (k = 0x38; k >= 0; k--) {
