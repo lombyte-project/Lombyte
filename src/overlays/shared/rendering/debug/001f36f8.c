@@ -408,23 +408,23 @@ void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
 void copy_memory_aligned(void *, void *, s32) __asm__("FUN_001f9838");
 void FUN_L00_00250df8(void *);
 void FUN_L00_001f4490(void) {
-    DebugCameraBlock *a = &D_L00_00166C80;
+    DebugCameraBlock *debug_camera_block = &D_L00_00166C80;
     B001f4490 *b = &D_L00_0016C058;
-    struct Hero *c;
-    u8 *d;
-    f32 ang = fast_add_rotations(a->camera.angles[2], b->x88);
-    f32 s = fast_cos(ang);
-    c = &hero;
-    c->motion.pos.f[0] = a->camera.position[0] + s * b->x8c;
-    c->motion.pos.f[1] = a->camera.position[1] + fast_sin(ang) * b->x8c;
-    c->motion.pos.f[2] = a->camera.position[2] + b->x90;
-    c->motion.rot.f[2] = fast_add_rotations(a->camera.angles[2], b->x84);
-    euler_rotation_matrix(c, c->motion.rot.f);
-    d = *(u8 **)&c->moby;
-    qcopy(d + 0x10, &c->motion.pos);
-    qcopy(d + 0x40, c->motion.rot.f);
-    copy_memory_aligned(d + 0xC0, c, 0x30);
-    FUN_L00_00250df8(*(u8 **)&c->moby);
+    struct Hero *hero_state;
+    u8 *hero_moby;
+    f32 ang = fast_add_rotations(debug_camera_block->camera.angles[2], b->x88);
+    f32 angle_cosine = fast_cos(ang);
+    hero_state = &hero;
+    hero_state->motion.pos.f[0] = debug_camera_block->camera.position[0] + angle_cosine * b->x8c;
+    hero_state->motion.pos.f[1] = debug_camera_block->camera.position[1] + fast_sin(ang) * b->x8c;
+    hero_state->motion.pos.f[2] = debug_camera_block->camera.position[2] + b->x90;
+    hero_state->motion.rot.f[2] = fast_add_rotations(debug_camera_block->camera.angles[2], b->x84);
+    euler_rotation_matrix(hero_state, hero_state->motion.rot.f);
+    hero_moby = *(u8 **)&hero_state->moby;
+    qcopy(hero_moby + 0x10, &hero_state->motion.pos);
+    qcopy(hero_moby + 0x40, hero_state->motion.rot.f);
+    copy_memory_aligned(hero_moby + 0xC0, hero_state, 0x30);
+    FUN_L00_00250df8(*(u8 **)&hero_state->moby);
 }
 /* Ported from rac1-decomp (src/overlays/shared/draw_001F3A78.c: func_L00_001F4918). */
 #include "rnc/gameplay/state/game_globals.h"
