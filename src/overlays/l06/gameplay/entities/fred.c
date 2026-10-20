@@ -5865,35 +5865,35 @@ extern unsigned char *FUN_L06_00300c60(char *, float *, float *);
 extern float D_L06_0016204C __attribute__((sda));
 /* Breaks the moby apart: spawns a copy (class 0x43C) and throws 50
  * fragments out in random directions. */
-void FUN_L06_00300278(char *m) {
-    float p[4];
-    float d[4];
-    char *n;
-    float s;
-    float a;
+void FUN_L06_00300278(char *source_moby) {
+    float fragment_position[4];
+    float fragment_velocity[4];
+    char *spawned_moby;
+    float fragment_step_length;
+    float fragment_angle;
     int i;
 
-    *(int *)(*(char **)(m + 0x78) + 4) = 0;
-    n = create_moby_300278(0x43C);
-    *(short *)(n + 0x32) = 0x40;
-    n[0x31] = 1;
-    *(long long *)(n + 0x38) = *(long long *)(m + 0x38);
-    *(unsigned short *)(n + 0x34) = *(unsigned short *)(m + 0x34);
-    qcopy(n + 0x10, m + 0x10);
-    qcopy(n + 0x40, m + 0x40);
-    *(float *)(n + 0x2C) = *(float *)(m + 0x2C);
-    moby_init_300278(n);
-    *(unsigned short *)(m + 0x34) |= 1;
+    *(int *)(*(char **)(source_moby + 0x78) + 4) = 0;
+    spawned_moby = create_moby_300278(0x43C);
+    *(short *)(spawned_moby + 0x32) = 0x40;
+    spawned_moby[0x31] = 1;
+    *(long long *)(spawned_moby + 0x38) = *(long long *)(source_moby + 0x38);
+    *(unsigned short *)(spawned_moby + 0x34) = *(unsigned short *)(source_moby + 0x34);
+    qcopy(spawned_moby + 0x10, source_moby + 0x10);
+    qcopy(spawned_moby + 0x40, source_moby + 0x40);
+    *(float *)(spawned_moby + 0x2C) = *(float *)(source_moby + 0x2C);
+    moby_init_300278(spawned_moby);
+    *(unsigned short *)(source_moby + 0x34) |= 1;
     for (i = 0; i < 50; i++) {
-        s = rand_range_300278(1.0f, 6.0f) * frame_time;
-        a = rand_angle_300278();
-        d[0] = cos_300278(a) * 2.0f;
-        d[1] = sin_300278(a) * 2.0f;
-        d[2] = 0.0f;
-        vadd_300278(p, m + 0x10, d);
-        p[2] += rand_range_300278(D_L06_0016204C + 0.5f, D_L06_0016204C + 4.5f);
-        vnorm_300278(d, d, s);
-        FUN_L06_00300c60(m, p, d);
+        fragment_step_length = rand_range_300278(1.0f, 6.0f) * frame_time;
+        fragment_angle = rand_angle_300278();
+        fragment_velocity[0] = cos_300278(fragment_angle) * 2.0f;
+        fragment_velocity[1] = sin_300278(fragment_angle) * 2.0f;
+        fragment_velocity[2] = 0.0f;
+        vadd_300278(fragment_position, source_moby + 0x10, fragment_velocity);
+        fragment_position[2] += rand_range_300278(D_L06_0016204C + 0.5f, D_L06_0016204C + 4.5f);
+        vnorm_300278(fragment_velocity, fragment_velocity, fragment_step_length);
+        FUN_L06_00300c60(source_moby, fragment_position, fragment_velocity);
     }
 }
 
