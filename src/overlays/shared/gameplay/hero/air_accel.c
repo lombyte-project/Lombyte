@@ -1026,10 +1026,10 @@ extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 
 extern int D_L01_001742DC __attribute__((section(".data")));
 void FUN_L01_00232978(int flag) {
-    float s[4];
-    float p[4];
-    float t[4];
-    float q[4];
+    float slope_probe_start[4];
+    float slope_probe_end[4];
+    float material_probe_start[4];
+    float material_probe_end[4];
     struct Hero *g = &hero;
     float f2, f21, f20;
     int k, x;
@@ -1050,36 +1050,36 @@ void FUN_L01_00232978(int flag) {
         f2 = 0.0f;
         f21 = 0.7f;
     }
-    qcopy(s, &g->motion.pos);
-    s[2] += f2;
-    qcopy(t, &g->motion.pos);
-    t[2] += f2 * 0.3f;
+    qcopy(slope_probe_start, &g->motion.pos);
+    slope_probe_start[2] += f2;
+    qcopy(material_probe_start, &g->motion.pos);
+    material_probe_start[2] += f2 * 0.3f;
     if (flag != 0 || vector_length_xy(&g->motion.velocity) < 0.01f) {
-        p[0] = fast_cos(g->motion.rot.f[2]) * f21;
-        p[1] = fast_sin(g->motion.rot.f[2]) * f21;
-        p[2] = 0.0f;
-        q[0] = fast_cos(g->motion.rot.f[2]) * f21 * 1.4f;
-        q[1] = fast_sin(g->motion.rot.f[2]) * f21 * 1.4f;
-        q[2] = 0.0f;
+        slope_probe_end[0] = fast_cos(g->motion.rot.f[2]) * f21;
+        slope_probe_end[1] = fast_sin(g->motion.rot.f[2]) * f21;
+        slope_probe_end[2] = 0.0f;
+        material_probe_end[0] = fast_cos(g->motion.rot.f[2]) * f21 * 1.4f;
+        material_probe_end[1] = fast_sin(g->motion.rot.f[2]) * f21 * 1.4f;
+        material_probe_end[2] = 0.0f;
     } else {
-        qcopy(p, &g->motion.velocity);
-        p[2] = 0.0f;
-        fast_vec_scale(p, p, f21 / vector_length_xy(p));
-        qcopy(q, p);
-        fast_vec_scale(q, q, 1.4f);
+        qcopy(slope_probe_end, &g->motion.velocity);
+        slope_probe_end[2] = 0.0f;
+        fast_vec_scale(slope_probe_end, slope_probe_end, f21 / vector_length_xy(slope_probe_end));
+        qcopy(material_probe_end, slope_probe_end);
+        fast_vec_scale(material_probe_end, material_probe_end, 1.4f);
     }
-    add_vector_xyz(p, p, s);
+    add_vector_xyz(slope_probe_end, slope_probe_end, slope_probe_start);
     k = -1;
-    add_vector_xyz(q, q, t);
+    add_vector_xyz(material_probe_end, material_probe_end, material_probe_start);
     h1 = &hero;
-    if (FUN_001efa68(t, q, 4, (int)h1->moby, 0) != 0) {
+    if (FUN_001efa68(material_probe_start, material_probe_end, 4, (int)h1->moby, 0) != 0) {
         if (D_L01_001742DC > 0) {
             k = collision_hit_material();
         }
     }
     f20 = 0.0f;
     h2 = &hero;
-    if (FUN_001efa68(s, p, 4, (int)h2->moby, 0) != 0) {
+    if (FUN_001efa68(slope_probe_start, slope_probe_end, 4, (int)h2->moby, 0) != 0) {
         w = D_L01_001742C0_d;
         if (*(int *)(w + 0x1C) > 0) {
             f20 = fast_arc_tan(*(float *)(w + 0x48), vector_length_xy(w + 0x40));
