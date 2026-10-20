@@ -1689,10 +1689,10 @@ void robot_dog_update(char *moby) {
     float frac;
     Data2c5bb8 *data;
     int *path;
-    char *p;
-    char *m;
+    char *activation_path;
+    char *partner_moby;
     int idx;
-    float d;
+    float target_distance;
     float a;
 
     data = *(Data2c5bb8 **)(moby + 0x78);
@@ -1742,10 +1742,10 @@ void robot_dog_update(char *moby) {
         break;
     case ROBOT_DOG_WAIT_FOR_ACTIVATION:
         if (data->i270 != -1) {
-            p = D_L03_001B05B0_c5bb8[data->i270];
-            *(OvlQuad *)(moby + 0x10) = *(OvlQuad *)(p + 0x10);
-            *(float *)(moby + 0x48) = fast_arc_tan(*(float *)(p + 0x20) - *(float *)(p + 0x10),
-                                                   *(float *)(p + 0x24) - *(float *)(p + 0x14));
+            activation_path = D_L03_001B05B0_c5bb8[data->i270];
+            *(OvlQuad *)(moby + 0x10) = *(OvlQuad *)(activation_path + 0x10);
+            *(float *)(moby + 0x48) = fast_arc_tan(*(float *)(activation_path + 0x20) - *(float *)(activation_path + 0x10),
+                                                   *(float *)(activation_path + 0x24) - *(float *)(activation_path + 0x14));
             if ((random_integer_below(14) == 0 && is_point_inside_clip_volume_cf(((unsigned char *)moby)[0x21])) ||
                 is_point_inside_clip_volume(&tgt, data->i27C) ||
                 (FUN_001f9b48(&tgt, moby + 0x10) < data->f274 && absolute_float_c5bb8(tgt.pos[2] - *(float *)(moby + 0x18)) < 4.0f)) {
@@ -1767,8 +1767,8 @@ void robot_dog_update(char *moby) {
     case ROBOT_DOG_WAIT_FOR_PARTNER_RELEASE:
         if (random_integer_below(14) == 0) {
             idx = data->i248;
-            if (idx == -1 || (m = D_L03_0015FFD8_c5bb8 + (idx << 8)) == 0 || ((unsigned char *)m)[0x20] == 0xFE ||
-                ((unsigned char *)m)[0x20] == 0xFD || FUN_L03_002c6ca0((struct Moby *)m)) {
+            if (idx == -1 || (partner_moby = D_L03_0015FFD8_c5bb8 + (idx << 8)) == 0 || ((unsigned char *)partner_moby)[0x20] == 0xFE ||
+                ((unsigned char *)partner_moby)[0x20] == 0xFD || FUN_L03_002c6ca0((struct Moby *)partner_moby)) {
                 data->i23C = scale_game_frames((int)random_float_between(30.0f, 90.0f));
                 moby[0x20] = 4;
                 if (((unsigned char *)moby)[0x53] != 3) {
@@ -1798,8 +1798,8 @@ void robot_dog_update(char *moby) {
         if (fast_dec_timer(&data->i23C)) {
             data->i23C = scale_game_frames((int)random_float_between(30.0f, 90.0f));
         }
-        d = vector_distance(moby + 0x10, &tgt);
-        if (d < data->f234 * frame_time * 0.5f * FUN_L04_001f1978(40.0f) +
+        target_distance = vector_distance(moby + 0x10, &tgt);
+        if (target_distance < data->f234 * frame_time * 0.5f * FUN_L04_001f1978(40.0f) +
                     data->f234 * frame_time * FUN_L04_001f1978(10.0f) + 1.5f) {
             moby[0x20] = 6;
             if (((unsigned char *)moby)[0x53] != 5) {
@@ -1835,8 +1835,8 @@ void robot_dog_update(char *moby) {
         }
         if (random_integer_below(14) == 0) {
             idx = data->i248;
-            if (idx == -1 || (m = D_L03_0015FFD8_c5bb8 + (idx << 8)) == 0 || ((unsigned char *)m)[0x20] == 0xFE ||
-                ((unsigned char *)m)[0x20] == 0xFD || FUN_L03_002c6ca0((struct Moby *)m)) {
+            if (idx == -1 || (partner_moby = D_L03_0015FFD8_c5bb8 + (idx << 8)) == 0 || ((unsigned char *)partner_moby)[0x20] == 0xFE ||
+                ((unsigned char *)partner_moby)[0x20] == 0xFD || FUN_L03_002c6ca0((struct Moby *)partner_moby)) {
                 data->i270 = -1;
                 data->i23C = scale_game_frames((int)random_float_between(30.0f, 90.0f));
                 moby[0x20] = 4;
@@ -1890,8 +1890,8 @@ void robot_dog_update(char *moby) {
                 blend_moby_animation_c5bb8(moby, 1, 0, scale_game_frames(3));
             }
         } else if (data->i244 == 0) {
-            d = vector_distance(moby + 0x10, &tgt);
-            if (d < data->f234 * frame_time * 0.5f * FUN_L04_001f1978(40.0f) +
+            target_distance = vector_distance(moby + 0x10, &tgt);
+            if (target_distance < data->f234 * frame_time * 0.5f * FUN_L04_001f1978(40.0f) +
                         data->f234 * frame_time * FUN_L04_001f1978(10.0f) + 1.5f) {
                 moby[0x20] = 6;
                 if (((unsigned char *)moby)[0x53] != 5) {
