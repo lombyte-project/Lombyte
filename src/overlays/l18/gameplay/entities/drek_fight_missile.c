@@ -371,46 +371,46 @@ extern int D_L18_00162260 __attribute__((sda));
 extern int D_L18_00162264 __attribute__((sda));
 extern float D_L18_00162268 __attribute__((sda));
 extern float D_L18_0016226C __attribute__((sda));
-void FUN_L18_002f06c0(struct Moby *m) {
+void FUN_L18_002f06c0(struct Moby *group_moby) {
     enum {
         DREK_MISSILE_WANDER = 2,
         DREK_MISSILE_DIVE = 3,
         DREK_MISSILE_WAIT_TO_EXPLODE = 4
     };
     float v[4];
-    short *p;
-    unsigned char *o;
-    char *d;
-    float a;
+    short *group_entry;
+    unsigned char *missile_moby;
+    char *missile_vars;
+    float moving_phase_step;
     float b;
     int c;
     if (D_L18_00162238_gp != 0) {
         return;
     }
-    p = D_L18_001AC240_c7[m->group];
-    a = D_L18_00162258 * DEG_TO_RAD * D_0015ED6C_c7;
+    group_entry = D_L18_001AC240_c7[group_moby->group];
+    moving_phase_step = D_L18_00162258 * DEG_TO_RAD * D_0015ED6C_c7;
     b = D_L18_0016225C * DEG_TO_RAD * D_0015ED6C_c7;
     do {
-        o = D_L18_0015FFD8_c7 + ((*p & 0x7FFF) << 8);
-        if (*(short *)(o + 0xA6) == 0x54B) {
-            d = *(char **)(o + 0x78);
-            c = FUN_001fa6e0_c7(FUN_001f9de0_c7(*(float *)(d + 0x168)) * 0.5f + 0.5f,
+        missile_moby = D_L18_0015FFD8_c7 + ((*group_entry & 0x7FFF) << 8);
+        if (*(short *)(missile_moby + 0xA6) == 0x54B) {
+            missile_vars = *(char **)(missile_moby + 0x78);
+            c = FUN_001fa6e0_c7(FUN_001f9de0_c7(*(float *)(missile_vars + 0x168)) * 0.5f + 0.5f,
                                 D_L18_00162260, D_L18_00162264);
-            FUN_001f9bf8_c7(v, o + 0xC0, D_L18_0016226C);
-            FUN_001f9a10_c7(v, v, o + 0x10);
-            switch (o[0x20]) {
+            FUN_001f9bf8_c7(v, missile_moby + 0xC0, D_L18_0016226C);
+            FUN_001f9a10_c7(v, v, missile_moby + 0x10);
+            switch (missile_moby[0x20]) {
             case DREK_MISSILE_WANDER:
             case DREK_MISSILE_DIVE:
                 FUN_L00_00263618_c7(v, c, D_L18_00162268, 0.0f);
-                *(float *)(d + 0x168) = FUN_001fa580_c7(*(float *)(d + 0x168), a);
+                *(float *)(missile_vars + 0x168) = FUN_001fa580_c7(*(float *)(missile_vars + 0x168), moving_phase_step);
                 break;
             case DREK_MISSILE_WAIT_TO_EXPLODE:
                 FUN_L00_00263618_c7(v, c, D_L18_00162268, 0.0f);
-                *(float *)(d + 0x168) = FUN_001fa580_c7(*(float *)(d + 0x168), b);
+                *(float *)(missile_vars + 0x168) = FUN_001fa580_c7(*(float *)(missile_vars + 0x168), b);
                 break;
             }
         }
-    } while (*p++ >= 0);
+    } while (*group_entry++ >= 0);
 }
 #include "qcopy.h"
 
