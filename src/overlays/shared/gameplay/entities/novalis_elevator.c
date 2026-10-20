@@ -1681,57 +1681,57 @@ extern void clear_vector(void *) __asm__("func_001F99F8");
 void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 extern char D_L01_00174340_c[] __asm__("D_L01_001742C0");
 
-void FUN_L01_002eda00(char *m) {
+void FUN_L01_002eda00(char *moby) {
     enum {
         MOVE_UNTIL_COLLISION_OR_TIMEOUT = 1,
         BURST_AND_REMOVE = 2
     };
-    char *d = *(char **)(m + 0x78);
+    char *moby_vars = *(char **)(moby + 0x78);
     float prev[4];
     float z[4];
-    Hit_2eedd8 h;
+    Hit_2eedd8 hit_descriptor;
     float gz;
-    switch (((unsigned char *)m)[0x20]) {
+    switch (((unsigned char *)moby)[0x20]) {
     case MOVE_UNTIL_COLLISION_OR_TIMEOUT:
-        qcopy(prev, m + 0x10);
-        add_vector_xyz(m + 0x10, m + 0x10, d);
-        *(float *)(m + 0x48) = fast_arc_tan(*(float *)(d + 0), *(float *)(d + 4));
+        qcopy(prev, moby + 0x10);
+        add_vector_xyz(moby + 0x10, moby + 0x10, moby_vars);
+        *(float *)(moby + 0x48) = fast_arc_tan(*(float *)(moby_vars + 0), *(float *)(moby_vars + 4));
         clear_vector(z);
-        FUN_L00_00269958(m + 0x10, z, 0x6F00AFFF, 0xFF,
+        FUN_L00_00269958(moby + 0x10, z, 0x6F00AFFF, 0xFF,
                          scale_game_frames(FUN_L00_00257b90(0xF, 0x16)), 0x28,
                          FUN_L00_00257b90(0x14, 0x23), 1);
-        FUN_L00_00269958(m + 0x10, z, 0x1FFFFFFF, 0x4F4F4F,
+        FUN_L00_00269958(moby + 0x10, z, 0x1FFFFFFF, 0x4F4F4F,
                          scale_game_frames(FUN_L00_00257b90(0x1E, 0x3C)), 0x28,
                          FUN_L00_00257b90(0x32, 0x4B), 0);
-        gz = *(float *)(m + 0x18) - probe_ground_height(m + 0x10, 0, 0.5f);
-        if (gz < *(float *)(d + 0x18)) {
-            *(float *)(m + 0x18) = *(float *)(m + 0x18) + (*(float *)(d + 0x18) - gz);
-            *(int *)(d + 8) = 0;
-        } else if (*(float *)(m + 0x18) < hero.ground_point.f[2] + *(float *)(d + 0x18)) {
-            *(int *)(d + 8) = 0;
+        gz = *(float *)(moby + 0x18) - probe_ground_height(moby + 0x10, 0, 0.5f);
+        if (gz < *(float *)(moby_vars + 0x18)) {
+            *(float *)(moby + 0x18) = *(float *)(moby + 0x18) + (*(float *)(moby_vars + 0x18) - gz);
+            *(int *)(moby_vars + 8) = 0;
+        } else if (*(float *)(moby + 0x18) < hero.ground_point.f[2] + *(float *)(moby_vars + 0x18)) {
+            *(int *)(moby_vars + 8) = 0;
         } else {
-            *(float *)(d + 8) -= frame_time_sq * 10.8f;
+            *(float *)(moby_vars + 8) -= frame_time_sq * 10.8f;
         }
-        if (collision_line(m + 0x10, prev, 0, *(int *)(d + 0x10), 0) != 0) {
-            char *p = D_L01_00174340_c;
-            if (*(int *)(p + 0x18) != 0) {
-                make_hit_descriptor(&h, m, 0x10001, 1.0f, d);
-                set_vector_length_xy(&h, &h, 1.0f);
-                h.f8 = 1.0f;
-                h.fC = 5627.9248f;
-                h.b19 = 1;
-                h.s1A = *(unsigned short *)(m + 0xA6);
-                h.b18 = 0;
-                FUN_L00_00259a88(*(void **)(p + 0x18), &h);
+        if (collision_line(moby + 0x10, prev, 0, *(int *)(moby_vars + 0x10), 0) != 0) {
+            char *collision_result = D_L01_00174340_c;
+            if (*(int *)(collision_result + 0x18) != 0) {
+                make_hit_descriptor(&hit_descriptor, moby, 0x10001, 1.0f, moby_vars);
+                set_vector_length_xy(&hit_descriptor, &hit_descriptor, 1.0f);
+                hit_descriptor.f8 = 1.0f;
+                hit_descriptor.fC = 5627.9248f;
+                hit_descriptor.b19 = 1;
+                hit_descriptor.s1A = *(unsigned short *)(moby + 0xA6);
+                hit_descriptor.b18 = 0;
+                FUN_L00_00259a88(*(void **)(collision_result + 0x18), &hit_descriptor);
             }
-            m[0x20] = 2;
+            moby[0x20] = 2;
         }
-        if (tick_countdown_32_alt(d + 0x14) != 0)
-            m[0x20] = 2;
+        if (tick_countdown_32_alt(moby_vars + 0x14) != 0)
+            moby[0x20] = 2;
         break;
     case BURST_AND_REMOVE:
-        cart_burst(m, m + 0x10, -1, 0.25f, 13.0f);
-        mark_moby_for_removal(m);
+        cart_burst(moby, moby + 0x10, -1, 0.25f, 13.0f);
+        mark_moby_for_removal(moby);
         break;
     }
 }
