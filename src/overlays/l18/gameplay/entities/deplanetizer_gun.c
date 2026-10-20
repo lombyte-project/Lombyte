@@ -1306,30 +1306,30 @@ extern void FUN_L00_00258830(int, int, float, float, float, int);
 extern void FUN_L00_00261d78(float, void *, void *, void *);
 
 float FUN_L18_002fc4e0(char *self, float *src) {
-    QVec a;
+    QVec target_position;
     float v[4];
     float b[4];
     float z = 0.0f;
     float h = 0.5f;
-    char *o = *(char **)(self + 0x78);
+    char *moby_vars = *(char **)(self + 0x78);
     float dist;
-    *(u128 *)&a = *(u128 *)src;
+    *(u128 *)&target_position = *(u128 *)src;
     {
         float d = fast_add_rotations(
-            fast_arc_tan(a.v[0] - *(float *)(self + 0x10), a.v[1] - *(float *)(self + 0x14)),
-            *(float *)(o + 0x1EC));
-        approach_angle((float *)(self + 0x48), (float *)(o + 0x1E8), d, frame_time_sq * 6.2831855f,
+            fast_arc_tan(target_position.v[0] - *(float *)(self + 0x10), target_position.v[1] - *(float *)(self + 0x14)),
+            *(float *)(moby_vars + 0x1EC));
+        approach_angle((float *)(self + 0x48), (float *)(moby_vars + 0x1E8), d, frame_time_sq * 6.2831855f,
                          frame_time_sq * 6.2831855f, frame_time * 6.2831855f);
     }
     b[0] = z;
-    dist = vector_distance_xy((float *)(self + 0x10), a.v);
-    advance_accelerated_scalar(b, (float *)(o + 0x1F0), dist, frame_time_sq * 6.0f, frame_time_sq * 6.0f,
+    dist = vector_distance_xy((float *)(self + 0x10), target_position.v);
+    advance_accelerated_scalar(b, (float *)(moby_vars + 0x1F0), dist, frame_time_sq * 6.0f, frame_time_sq * 6.0f,
                                frame_time * 5.0f);
-    v[0] = fast_cos(*(float *)(self + 0x48)) * *(float *)(o + 0x1F0);
-    v[1] = fast_sin(*(float *)(self + 0x48)) * *(float *)(o + 0x1F0);
+    v[0] = fast_cos(*(float *)(self + 0x48)) * *(float *)(moby_vars + 0x1F0);
+    v[1] = fast_sin(*(float *)(self + 0x48)) * *(float *)(moby_vars + 0x1F0);
     v[2] = -(frame_time + frame_time);
     FUN_L00_00258830((int)self, (int)v, h, h, z, 0);
-    FUN_L00_00261d78(h, *(void **)(o + 0x1E0), self + 0x10, self + 0x10);
+    FUN_L00_00261d78(h, *(void **)(moby_vars + 0x1E0), self + 0x10, self + 0x10);
     return dist;
 }
 #include "qcopy.h"
