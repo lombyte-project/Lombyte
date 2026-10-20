@@ -165,7 +165,7 @@ extern void hero_set_state_2(int, int) __asm__("FUN_L00_002223f8");
 int hero_handle_jump_press(void) __asm__("FUN_L00_00229660");
 int hero_handle_jump_press(void) {
     int n, t, a;
-    int m;
+    int next_state;
 
     if (hero.state.current == 0xE)
         return 0;
@@ -173,9 +173,9 @@ int hero_handle_jump_press(void) {
     t = FUN_001f96f8_229660(5);
     if ((D_0013CAE0_229660 & 0xA) && n > 0 &&
         FUN_L00_00266e00_229660(0x40, (void *)0x1F000, t + n, n)) {
-        m = 0xB;
+        next_state = 0xB;
     found:
-        hero_set_state(m, 1);
+        hero_set_state(next_state, 1);
         return 1;
     }
     a = FUN_001f96f8_229660(9);
@@ -185,7 +185,7 @@ int hero_handle_jump_press(void) {
         if (FUN_L00_0020d498_229660(3) == 2 && D_0013D4C2_229660 != 0 && hero.unk22D8 == 0) {
             if ((2.5f < hero.wall_probe_distance || hero.unk250 < 0.7853982f) && 0.7f < hero.unk229C &&
                 frame_time * 0.9f < hero.motion.unk168) {
-                m = 0xA;
+                next_state = 0xA;
                 goto found;
             }
         }
@@ -193,15 +193,15 @@ int hero_handle_jump_press(void) {
             (2.5f < hero.wall_probe_distance || hero.unk254) && frame_time * 0.9f < hero.motion.unk168) {
             if (hero.unk1B8)
                 return 1;
-            m = 0x10;
+            next_state = 0x10;
             goto found;
         }
         if (FUN_L00_0020d498_229660(3) == 3 && hero.unk22D8 == 0) {
-            m = 0xD;
+            next_state = 0xD;
             goto found;
         }
         if (FUN_L00_0020d498_229660(3) == 2 && hero.unk22D8 == 0 && D_0013D4C2_229660) {
-            m = 0xF;
+            next_state = 0xF;
             goto found;
         }
         hero_set_state_2(7, 1);
