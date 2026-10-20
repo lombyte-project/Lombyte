@@ -50,20 +50,20 @@ extern void FUN_0020c828(void *);
 /* Walk the record list at D_L14_001ABF40_u[index] (terminated by a negative
  * entry) and flag the objects whose state byte at 0x20 is 1. */
 void FUN_L14_002b44a8(s32 index) {
-    u16 *p = D_L14_001ABF40_u[index];
+    u16 *list_entry = D_L14_001ABF40_u[index];
     u8 *base;
-    u8 *o;
+    u8 *listed_moby;
 
-    if (p == 0) {
+    if (list_entry == 0) {
         return;
     }
     base = D_L14_0015FFD8;
     do {
-        o = base + ((*p & 0x7FFF) << 8);
-        if (o[0x20] == 1) {
-            *(s16 *)(*(u8 **)(o + 0x78) + 0x88) = 1;
+        listed_moby = base + ((*list_entry & 0x7FFF) << 8);
+        if (listed_moby[0x20] == 1) {
+            *(s16 *)(*(u8 **)(listed_moby + 0x78) + 0x88) = 1;
         }
-    } while (*(s16 *)p++ >= 0);
+    } while (*(s16 *)list_entry++ >= 0);
 }
 
 /* Release the handle stored at 0x12 of the record, then hand the moby over. */
