@@ -2454,7 +2454,7 @@ void robot_dog_update(unsigned char *robot_dog_moby) {
     int r;
     int a;
     int b;
-    float tmp[4];
+    float heading_vector[4];
     float pos[4];
 
     r = 0;
@@ -2717,12 +2717,12 @@ void robot_dog_update(unsigned char *robot_dog_moby) {
                                     robot_dog_vars->v180[1] - *(float *)(robot_dog_moby + 0x14)),
                        *(float *)(robot_dog_moby + 0x48)) < 0.2617994f &&
                    robot_dog_vars->target != 0 && vector_distance(robot_dog_moby + 0x10, robot_dog_vars->v180) < 2.75f) {
-            tmp[0] = fast_cos_c(*(float *)(robot_dog_moby + 0x48)) * 0.2f;
-            tmp[1] = fast_sin_c(*(float *)(robot_dog_moby + 0x48)) * 0.2f;
-            tmp[2] = 0.0f;
+            heading_vector[0] = fast_cos_c(*(float *)(robot_dog_moby + 0x48)) * 0.2f;
+            heading_vector[1] = fast_sin_c(*(float *)(robot_dog_moby + 0x48)) * 0.2f;
+            heading_vector[2] = 0.0f;
             qcopy(pos, robot_dog_vars->v180);
             pos[2] += 0.75f;
-            spawn_nearby_effect((int)robot_dog_vars->target, (int)robot_dog_moby, 1, pos, tmp, 1.0f);
+            spawn_nearby_effect((int)robot_dog_vars->target, (int)robot_dog_moby, 1, pos, heading_vector, 1.0f);
         }
         break;
     case ROBOT_DOG_STATE_RETURN_HOME: {
@@ -2760,7 +2760,7 @@ void robot_dog_update(unsigned char *robot_dog_moby) {
     }
     case ROBOT_DOG_STATE_FALL_UNTIL_LANDING:
         if (mine_fall(robot_dog_moby, robot_dog_vars->a120) & 0x60) {
-            clear_vector(tmp);
+            clear_vector(heading_vector);
             robot_dog_moby[0x20] = 5;
             if (robot_dog_moby[0x53] != 3) {
                 blend_moby_animation_c(robot_dog_moby, 3, 0, scale_game_frames(10));
@@ -2776,7 +2776,7 @@ void robot_dog_update(unsigned char *robot_dog_moby) {
         *(unsigned short *)(robot_dog_moby + 0x34) &= 0xEFFF;
         if (mine_fall(robot_dog_moby, robot_dog_vars->a120) & 0x60) {
             float *zero;
-            clear_vector(tmp);
+            clear_vector(heading_vector);
             zero = D_L17_0015F580_macro;
             cart_burst(robot_dog_moby, robot_dog_moby + 0x10, -1, 0.5f, 13.0f);
             FUN_L00_00263fd8((char *)robot_dog_moby, 0x6CE, (float *)(robot_dog_moby + 0x10), robot_dog_moby + 0x40, 0, 0, 0.0f, zero,
