@@ -507,9 +507,6 @@ void FUN_L05_0030c0a8(unsigned char *m) {
     }
     }
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0030c220.s", FUN_L05_0030c220);
-#else
 extern void clear_vector(float *) __asm__("FUN_001f99f8");
 extern void subtract_vector_xyz_30c220(float *, const float *, const float *) __asm__("FUN_001f9a28");
 extern void normalize_vector_xyz_30c220(float *, float *, float) __asm__("FUN_001f9bf8");
@@ -517,7 +514,7 @@ extern void cross_vector_xyz_30c220(float *, float *, float *) __asm__("FUN_001f
 extern void rotation_vector_30c220(float *, float *) __asm__("FUN_001fa050");
 extern u64 get_effect_texture_30c220(int) __asm__("FUN_001f44b8");
 extern void draw_quad_30c220(void *, float *, int) __asm__("FUN_001f7d30");
-extern float D_L05_001D67B0[];
+extern float D_L05_001D67B0[][2];
 extern float D_L05_001D67D0[][4];
 extern float D_L05_001D6810[][4];
 extern float D_L05_001671C0_30c220[] __asm__("D_L05_001671C0");
@@ -532,7 +529,7 @@ extern int D_L05_00161D0C __attribute__((sda));
 typedef struct {
     float vertex[4][4];
     int color[4];
-    float texcoord[8];
+    float texcoord[4][2];
     u64 control[4];
 } Quad_30c220;
 
@@ -551,7 +548,7 @@ void FUN_L05_0030c220(struct Moby *m) {
     float sign;
     float pass;
     float offset_a_x, offset_a_z, offset_b_x, offset_b_z;
-    int i, j, color;
+    int i, j, k;
     float *vertex_a, *vertex_b;
     char *vars = (char *)m->pvars;
 
@@ -575,65 +572,47 @@ void FUN_L05_0030c220(struct Moby *m) {
             ((u64)(s64)D_L05_00161CFC << 4) |
             ((u64)(s64)D_L05_00161D00 << 6) |
             0x8000000000ULL;
+    b.control[0] = 0;
+    b.control[2] = 0xff9000000260ULL;
+    a.control[2] = 0xff9000000260ULL;
     b.control[1] = texture;
     a.control[1] = texture;
-    b.control[2] = 0xff9000000260ULL;
-    b.control[3] = flags;
-    a.control[2] = 0xff9000000260ULL;
-    a.control[3] = flags;
-    b.control[0] = 0;
     a.control[0] = 0;
-    {
-        float *texcoord_b = b.texcoord;
-        float *texcoord_a_v = a.texcoord + 1;
-        float *texcoord_b_v = b.texcoord + 1;
-        float *texcoord_a = a.texcoord;
-        float *texcoord = D_L05_001D67B0;
-        int count = 3;
-        do {
-            float u = texcoord[0];
-            float v = texcoord[1];
-            *texcoord_a = u;
-            *texcoord_a_v = v;
-            *texcoord_b = u;
-            *texcoord_b_v = v;
-            texcoord += 2;
-            texcoord_a += 2;
-            texcoord_a_v += 2;
-            texcoord_b += 2;
-            texcoord_b_v += 2;
-        } while (--count >= 0);
+    b.control[3] = flags;
+    a.control[3] = flags;
+    for (k = 0; k < 4; k++) {
+        float u = D_L05_001D67B0[k][0];
+        float v = D_L05_001D67B0[k][1];
+        a.texcoord[k][0] = u;
+        a.texcoord[k][1] = v;
+        b.texcoord[k][0] = u;
+        b.texcoord[k][1] = v;
     }
     for (i = 0; i < 10; i++) {
         pass = (float)i;
         j = 0;
-        vertex_a = a.vertex[0];
-        vertex_b = b.vertex[0];
         do {
+            vertex_a = a.vertex[j];
             qcopy(vertex_a, D_L05_001D67D0[j]);
             qcopy(b.vertex[j], D_L05_001D6810[j]);
             phase = (float)(i + (j & 1)) * 0.1f;
             sign = 1.0f;
             if (j > 1) sign = -1.0f;
-            color = fast_tween_color(D_L05_00161D04, D_L05_00161D08, phase);
-            b.color[j] = color;
-            a.color[j] = color;
+            a.color[j] = b.color[j] = fast_tween_color(D_L05_00161D04, D_L05_00161D08, phase);
             offset_a_x = phase * 8.0f * sign;
             offset_a_z = pass * 10.0f;
             offset_b_x = phase * 6.0f * sign;
             offset_b_z = pass * 12.0f;
             vertex_a[0] += offset_a_x;
             vertex_a[2] += offset_a_z;
+            vertex_b = b.vertex[j];
             vertex_b[0] += offset_b_x;
             vertex_b[2] += offset_b_z;
-            vertex_a += 4;
-            vertex_b += 4;
         } while (++j < 4);
         draw_quad_30c220(&a, matrix, 0);
         draw_quad_30c220(&b, matrix, 0);
     }
 }
-#endif
 #include "rnc/overlay/level_globals.h"
 typedef struct {
     u8 pad0[0x454];
