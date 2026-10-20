@@ -138,26 +138,26 @@ f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 
 Particle *pool_bubbles(u128 *pos, u128 *dir, f32 scale, f32 speed) __asm__("FUN_L01_00287c80");
 Particle *pool_bubbles(u128 *pos, u128 *dir, f32 scale, f32 speed) {
-    Particle *p;
+    Particle *particle;
     PartMotion *m;
     f32 r;
 
-    p = create_part(0x39);
-    if (p != NULL) {
-        qcopy(&p->pos, pos);
-        m = &p->m;
-        p->color = (random_integer_below(0x10) << 25) | 0x808080;
-        p->alpha = truncate_float_to_s32(12.0f) + 0x20;
-        p->kind = 0x48;
-        p->active = 1;
-        p->tex = *D_L01_001B25E4[0];
-        p->life = 0x80;
-        p->scale = scale * 210000.0f;
+    particle = create_part(0x39);
+    if (particle != NULL) {
+        qcopy(&particle->pos, pos);
+        m = &particle->m;
+        particle->color = (random_integer_below(0x10) << 25) | 0x808080;
+        particle->alpha = truncate_float_to_s32(12.0f) + 0x20;
+        particle->kind = 0x48;
+        particle->active = 1;
+        particle->tex = *D_L01_001B25E4[0];
+        particle->life = 0x80;
+        particle->scale = scale * 210000.0f;
         qcopy(&m->pos, dir);
         r = random_float_between(0.0f, 256.0f);
         m->size = r;
-        p->spin = truncate_float_to_s32(r);
+        particle->spin = truncate_float_to_s32(r);
         m->speed = speed;
     }
-    return p;
+    return particle;
 }
