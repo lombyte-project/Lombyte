@@ -951,24 +951,24 @@ void FUN_L05_00319690(char *moby) {
 extern float fast_sin(float) __asm__("FUN_001f9de0");
 
 void FUN_L05_00319740(char *moby) {
-    char *d = *(char **)(moby + 0x78);
-    float s, t, w;
-    qcopy(moby + 0x10, d + 0x60);
-    qcopy(moby + 0x40, d + 0x70);
-    s = fast_add_rotations(*(float *)(d + 0xC8), frame_time * 2.0943951f);
-    *(float *)(d + 0xC8) = s;
-    t = fast_sin(s);
+    char *moby_vars = *(char **)(moby + 0x78);
+    float wobble_phase, t, w;
+    qcopy(moby + 0x10, moby_vars + 0x60);
+    qcopy(moby + 0x40, moby_vars + 0x70);
+    wobble_phase = fast_add_rotations(*(float *)(moby_vars + 0xC8), frame_time * 2.0943951f);
+    *(float *)(moby_vars + 0xC8) = wobble_phase;
+    t = fast_sin(wobble_phase);
     w = frame_time * 1.6929693f;
     *(float *)(moby + 0x18) += t * 0.25f;
-    s = fast_add_rotations(*(float *)(d + 0xCC), w);
-    *(float *)(d + 0xCC) = s;
-    t = fast_add_rotations(*(float *)(moby + 0x44), fast_sin(s) * 0.08726646f);
+    wobble_phase = fast_add_rotations(*(float *)(moby_vars + 0xCC), w);
+    *(float *)(moby_vars + 0xCC) = wobble_phase;
+    t = fast_add_rotations(*(float *)(moby + 0x44), fast_sin(wobble_phase) * 0.08726646f);
     w = frame_time * 0.9250245f;
     *(float *)(moby + 0x44) = t;
-    s = fast_add_rotations(*(float *)(d + 0xD0), w);
-    *(float *)(d + 0xD0) = s;
+    wobble_phase = fast_add_rotations(*(float *)(moby_vars + 0xD0), w);
+    *(float *)(moby_vars + 0xD0) = wobble_phase;
     *(float *)(moby + 0x40) =
-        fast_add_rotations(*(float *)(moby + 0x40), fast_sin(s) * 0.08726646f);
+        fast_add_rotations(*(float *)(moby + 0x40), fast_sin(wobble_phase) * 0.08726646f);
     if (*(float *)(moby + 0x40) > 0.17453292f)
         *(float *)(moby + 0x40) = 0.17453292f;
     else if (*(float *)(moby + 0x40) < -0.17453292f)
