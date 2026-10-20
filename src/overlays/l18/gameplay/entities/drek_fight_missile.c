@@ -61,7 +61,7 @@ void drek_fight_missile_update(struct Moby *moby) {
         DREK_MISSILE_DIVE = 3,
         DREK_MISSILE_WAIT_TO_EXPLODE = 4
     };
-    char *d = (char *)moby->pvars;
+    char *missile_vars = (char *)moby->pvars;
     if (moby->state != 4) {
         moby->rot.x = fast_add_rotations(moby->rot.x,
                                   *(float *)&D_L18_00162210 * DEG_TO_RAD * frame_time);
@@ -74,16 +74,16 @@ void drek_fight_missile_update(struct Moby *moby) {
     case DREK_MISSILE_INITIALIZE: {
         float a = D_0015ED6C_a[1];
         float b = frame_time;
-        *(float *)(d + 0x158) = a * 10.0f;
-        *(float *)(d + 0x154) = b * 12.566371f;
-        *(float *)(d + 0x150) = a * 3.1415927f;
-        *(float *)(d + 0x15C) = b * 10.0f;
-        *(float *)(d + 0x168) = random_angle_radians();
+        *(float *)(missile_vars + 0x158) = a * 10.0f;
+        *(float *)(missile_vars + 0x154) = b * 12.566371f;
+        *(float *)(missile_vars + 0x150) = a * 3.1415927f;
+        *(float *)(missile_vars + 0x15C) = b * 10.0f;
+        *(float *)(missile_vars + 0x168) = random_angle_radians();
         moby->draw_dist = 0xFF;
-        qcopy(d + 0x120, &moby->pos);
-        *(float *)(d + 0x128) += 5.0f;
-        *(float *)(d + 0x128) = probe_ground_height(d + 0x120, 0, 0.5f);
-        FUN_L18_002f02e8(moby, d + 0x110);
+        qcopy(missile_vars + 0x120, &moby->pos);
+        *(float *)(missile_vars + 0x128) += 5.0f;
+        *(float *)(missile_vars + 0x128) = probe_ground_height(missile_vars + 0x120, 0, 0.5f);
+        FUN_L18_002f02e8(moby, missile_vars + 0x110);
         moby->state = 1;
         moby->flags |= 1;
         moby->visible = 0;
@@ -91,42 +91,42 @@ void drek_fight_missile_update(struct Moby *moby) {
         break;
     }
     case DREK_MISSILE_WANDER: {
-        char *p = d + 0x110;
-        if (FUN_L18_002f0120(moby, (float *)p)) {
-            FUN_L18_002f02e8(moby, p);
+        char *wander_target_position = missile_vars + 0x110;
+        if (FUN_L18_002f0120(moby, (float *)wander_target_position)) {
+            FUN_L18_002f02e8(moby, wander_target_position);
         }
         FUN_L18_002f0848(moby);
         if (random_integer_below(*(int *)&D_L18_00162234)) {
             return;
         }
         moby->state = 3;
-        *(float *)(d + 0x130) = fast_cos(moby->rot.z) * (*(float *)&D_L18_00162214_gp * frame_time);
-        *(float *)(d + 0x134) = fast_sin(moby->rot.z) * (*(float *)&D_L18_00162214_gp * frame_time);
-        *(float *)(d + 0x138) = *(float *)(d + 0x144);
-        *(int *)(d + 0x14C) = 0;
+        *(float *)(missile_vars + 0x130) = fast_cos(moby->rot.z) * (*(float *)&D_L18_00162214_gp * frame_time);
+        *(float *)(missile_vars + 0x134) = fast_sin(moby->rot.z) * (*(float *)&D_L18_00162214_gp * frame_time);
+        *(float *)(missile_vars + 0x138) = *(float *)(missile_vars + 0x144);
+        *(int *)(missile_vars + 0x14C) = 0;
         break;
     }
     case DREK_MISSILE_DIVE: {
         float v[4];
         float w[4];
-        subtract_vector_xyz(v, d + 0x120, &moby->pos);
+        subtract_vector_xyz(v, missile_vars + 0x120, &moby->pos);
         normalize_vector_xyz(v, v, *(float *)&D_L18_00162218 * frame_time);
-        approach_value_alt((float *)(d + 0x14C), 1.0f, frame_time);
-        lerp_vector(v, d + 0x130, v, *(float *)(d + 0x14C));
+        approach_value_alt((float *)(missile_vars + 0x14C), 1.0f, frame_time);
+        lerp_vector(v, missile_vars + 0x130, v, *(float *)(missile_vars + 0x14C));
         add_vector_xyz(&moby->pos, &moby->pos, v);
         moby->rot.z = fast_arc_tan(v[0], v[1]);
         moby->rot.y = -fast_arc_tan(vector_length_xy(v), v[2]);
         normalize_vector_xyz(w, &moby->rot_row0, 1.0f);
         add_vector_xyz(w, w, &moby->pos);
         FUN_L18_002f0848(moby);
-        if (w[2] < *(float *)(d + 0x128)) {
-            float t;
+        if (w[2] < *(float *)(missile_vars + 0x128)) {
+            float minimum_missile_height;
             func_0022ED80_2F0F78(1, 0, (int)moby);
             moby->state = 4;
-            *(int *)(d + 0x160) = scale_game_frames(0x5A);
-            t = *(float *)(d + 0x128) + 0.7f;
-            if (moby->pos.z < t) {
-                moby->pos.z = t;
+            *(int *)(missile_vars + 0x160) = scale_game_frames(0x5A);
+            minimum_missile_height = *(float *)(missile_vars + 0x128) + 0.7f;
+            if (moby->pos.z < minimum_missile_height) {
+                moby->pos.z = minimum_missile_height;
             }
         }
         break;
@@ -137,16 +137,16 @@ void drek_fight_missile_update(struct Moby *moby) {
             x = 0.87266463f;
         }
         FUN_L00_0025bc00(&moby->rot.y, 0, x, frame_time * 12.566371f);
-        if (tick_countdown_32_alt((int *)(d + 0x160))) {
+        if (tick_countdown_32_alt((int *)(missile_vars + 0x160))) {
             int i;
             char *pos = &moby->pos;
             moby->state = 2;
-            *(short *)(d + 0x164) = 0;
-            spawn_explosion(*(void **)(d + 0x16C), D_L18_0015F580, pos, 1.0f, 1.0f, 10, 3, 16, 1.5f, 0.5f, 9.0f, 1.0f, 2, 5.0f, 0, 0, -1, 0);
+            *(short *)(missile_vars + 0x164) = 0;
+            spawn_explosion(*(void **)(missile_vars + 0x16C), D_L18_0015F580, pos, 1.0f, 1.0f, 10, 3, 16, 1.5f, 0.5f, 9.0f, 1.0f, 2, 5.0f, 0, 0, -1, 0);
             qcopy(pos, D_L18_001677C0);
             moby->pos.z += 20.0f;
             for (i = 0; (float)i < 4.0f; i++) {
-                qcopy(d + 0x10 + i * 16, pos);
+                qcopy(missile_vars + 0x10 + i * 16, pos);
             }
         } else {
             FUN_L18_002f0848(moby);
