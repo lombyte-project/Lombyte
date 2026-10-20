@@ -1,14 +1,10 @@
 #include "types.h"
-#include "asm.h"
 #include "rnc/globals.h"
-
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/expected/asm/assembly/textbin/audio/voices/sound_update/FUN_0022ca50.s",
-            FUN_0022ca50);
-#else
-#include "rnc/globals.h"
-#include "types.h"
+#include "rnc/gameplay/camera/camera_globals.h"
+#include "rnc/gameplay/state/game_globals.h"
+#include "rnc/gameplay/state/options.h"
 #include "eetypes.h"
+#include "sda.h"
 #include "qcopy.h"
 #include "qzero.h"
 
@@ -77,16 +73,11 @@ typedef struct {
 
 extern VoiceRuntimeState D_0013E550;
 extern f32 D_0013F640[];
-extern s32 boot_level_active __asm__("D_0015F5E8");
-extern s32 game_mode __asm__("D_0015F604");
-extern s32 world_update_time __asm__("D_0015F60C");
-extern VoiceVector D_00187080;
-extern char camera_rows[] __asm__("D_00187290");
-extern s32 use_alt_fog __asm__("D_001872D4");
+extern s32 use_alt_fog[] __asm__("D_001872D4");
 
 extern s32 ComputeByteStringHash(u8 *, s32);
 extern int snd_get_doppler_pitch_mod(int arg0);
-extern void fill_transfer_words(void *, s32, s32) __asm__("func_001F97E8");
+extern void fill_transfer_words(void *, s32, s32) __asm__("FUN_001f97e8");
 extern void read_global_table_entry(void) __asm__("ReadGlobalTableEntry");
 extern s32 snd_flush_sound_commands(void) __asm__("FUN_0012dc80");
 extern void snd_set_master_volume(s32, s32) __asm__("FUN_0012e208");
@@ -151,9 +142,8 @@ s32 sound_update(void) {
     s32 pitch_bend;
     s32 handle;
     s32 command_flags;
-    u8 * volatile occlusion_history;
 
-    underwater = use_alt_fog;
+    underwater = use_alt_fog[0];
     water_height = 0.0f;
     if (underwater != 0) {
         water_height = D_0013F640[0];
@@ -178,7 +168,7 @@ s32 sound_update(void) {
     history_index = D_0013E550.listener_history_position + 1;
     history_index %= 4;
     D_0013E550.listener_history_position = history_index;
-    qcopy(&D_0013E550.listener_history[history_index], &D_00187080);
+    qcopy(&D_0013E550.listener_history[history_index], camera_position);
 
     listener_sample_count = 0;
     divisor = 18;
@@ -226,17 +216,20 @@ s32 sound_update(void) {
     fill_transfer_words(radial_velocities, 0, 0x78);
 
     for (slot_index = 0; slot_index < 30; slot_index++) {
-        if (D_0013E550.voices[slot_index].state != 7) {
-            if (D_0013E550.voices[slot_index].handle == 0) {
-                continue;
-            }
-            if (D_0013E550.voices[slot_index].handle == -1) {
-                continue;
+        {
+            s32 state = D_0013E550.voices[slot_index].state;
+            if (state != 7) {
+                if (D_0013E550.voices[slot_index].handle == 0) {
+                    continue;
+                }
+                if (D_0013E550.voices[slot_index].handle == -1) {
+                    continue;
+                }
             }
         }
         moby = D_0013E550.voices[slot_index].moby;
         owner_removed = 0;
-        /* The retail state check releases an owner in either removal state. */
+        /* Fakematch: the goto pair keeps retail's branch order for the two removal states. */
         if (moby != NULL) {
             u8 owner_state = moby->state;
             if (owner_state == 0xFE)
@@ -250,16 +243,21 @@ s32 sound_update(void) {
         if (owner_removed) {
             D_0013E550.voices[slot_index].moby = NULL;
         }
-        if (D_0013E550.voices[slot_index].state == 4 ||
-            (D_0013E550.voices[slot_index].state != 6 && owner_removed &&
-             D_0013E550.voices[slot_index].definition->source_state != 0)) {
-            voice_flags[slot_index] = 0x20;
-            continue;
+        {
+            s32 state = D_0013E550.voices[slot_index].state;
+            if (state == 4 ||
+                (state != 6 && owner_removed &&
+                 D_0013E550.voices[slot_index].definition->source_state != 0)) {
+                voice_flags[slot_index] = 0x20;
+                continue;
+            }
         }
-        if (game_mode != 0 && game_mode != 2 && game_mode != 6 &&
-            D_0013E550.voices[slot_index].state != 7) {
-            voice_flags[slot_index] = 0x10;
-            continue;
+        if (game_mode != 0 && game_mode != 2 && game_mode != 6) {
+            s32 state = D_0013E550.voices[slot_index].state;
+            if (state != 7) {
+                voice_flags[slot_index] = 0x10;
+                continue;
+            }
         }
 
         if (D_0013E550.voices[slot_index].moby != NULL &&
@@ -284,14 +282,14 @@ s32 sound_update(void) {
             qzero(&relative_velocity);
         }
         subtract_vector_xyz(&relative_velocity, &relative_velocity, &listener_velocity);
-        subtract_vector_xyz(&direction, &D_00187080, &D_0013E550.voices[slot_index].position);
+        subtract_vector_xyz(&direction, camera_position, &D_0013E550.voices[slot_index].position);
         normalize_vector_xyz(&direction, &direction, 1.0f);
         radial_velocities[slot_index] = dot_vectors_xyz(&direction, &relative_velocity);
 
         if (!(D_0013E550.voices[slot_index].flags & 0x10)) {
             distance_volume = calculate_voice_volume(&D_0013E550.voices[slot_index],
                                                      &D_0013E550.voices[slot_index].position);
-            voice_volumes[slot_index] = distance_volume * D_0013E550.voices[slot_index].volume / 1024;
+            volumes[slot_index] = distance_volume * D_0013E550.voices[slot_index].volume / 1024;
             if (!(D_0013E550.voices[slot_index].definition->attenuation_flags & 2)) {
                 voice_flags[slot_index] |= 8;
             }
@@ -301,7 +299,7 @@ s32 sound_update(void) {
         }
         if (underwater && !(D_0013E550.voices[slot_index].definition->attenuation_flags & 4) &&
             water_height < D_0013E550.voices[slot_index].position.f[2]) {
-            voice_volumes[slot_index] /= 2;
+            volumes[slot_index] /= 2;
         }
         voice_flags[slot_index] |= 1;
         if (distance_volume < 0x20 && voice_volumes[slot_index] < 0x20 &&
@@ -309,10 +307,14 @@ s32 sound_update(void) {
             voice_flags[slot_index] = 0x20;
             continue;
         }
-        if ((D_0013E550.voices[slot_index].flags & 1) != 1) {
-            voice_flags[slot_index] |= 2;
-            if (!(D_0013E550.voices[slot_index].flags & 0x20)) {
-                voice_flags[slot_index] |= 4;
+        {
+            s32 voice_flags_byte = D_0013E550.voices[slot_index].flags;
+            /* Fakematch: the xor test gives retail's xori/andi flag test. */
+            if ((voice_flags_byte ^ 1) & 1) {
+                voice_flags[slot_index] |= 2;
+                if (!(D_0013E550.voices[slot_index].flags & 0x20)) {
+                    voice_flags[slot_index] |= 4;
+                }
             }
         }
     }
@@ -322,64 +324,79 @@ s32 sound_update(void) {
         if (!(voice_flags[slot_index] & 8)) {
             continue;
         }
-        if (D_0013E550.voices[slot_index].state == 7) {
-            if ((game_mode != 0 && game_mode != 2) || boot_level_active != 0) {
-                continue;
-            }
-            occluded_samples = 0;
-            if (world_update_time != D_0013E550.occlusion_frame) {
-                for (sample_index = 0; sample_index < 6; sample_index++) {
-                    clamp_voice_position_to_collision(
-                        &D_0013E550.occlusion_samples[sample_index]);
+        {
+            s32 state = D_0013E550.voices[slot_index].state;
+            if (state == 7) {
+                if ((game_mode != 0 && game_mode != 2) || boot_level_active != 0) {
+                    continue;
                 }
-                D_0013E550.occlusion_frame = world_update_time;
-            }
-            for (history_offset = 0, sample_index = 0; history_offset < 36;
-                 history_offset += 6, sample_index++) {
-                D_0013E550.voices[slot_index].occlusion_history[history_offset] =
-                    test_voice_occlusion(&D_0013E550.voices[slot_index],
-                                         &D_0013E550.occlusion_samples[sample_index]);
-                for (repeat_index = 1; repeat_index < 6; repeat_index++) {
-                    D_0013E550.voices[slot_index].occlusion_history[history_offset + repeat_index] =
-                        D_0013E550.voices[slot_index].occlusion_history[history_offset];
+                occluded_samples = 0;
+                if (world_update_time != D_0013E550.occlusion_frame) {
+                    {
+                        VoiceVector *sample = D_0013E550.occlusion_samples;
+                        /* Fakematch: reusing previous_history_index as the counter keeps retail's registers. */
+                        for (previous_history_index = 0; previous_history_index < 6;
+                             previous_history_index++, sample++) {
+                            clamp_voice_position_to_collision(sample);
+                        }
+                    }
+                    D_0013E550.occlusion_frame = world_update_time;
                 }
-                if (D_0013E550.voices[slot_index].occlusion_history[history_offset]) {
-                    occluded_samples += 6;
-                }
-            }
-            if (occluded_samples >= 36) {
-                voice_volumes[slot_index] = 0;
-            } else if (occluded_samples >= 19) {
-                voice_volumes[slot_index] = (36 - occluded_samples) * voice_volumes[slot_index] / divisor;
-            }
-        } else {
-            if ((game_mode == 0 || game_mode == 2) && boot_level_active == 0) {
-                D_0013E550.voices[slot_index].occlusion_history_position =
-                    (D_0013E550.voices[slot_index].occlusion_history_position + 1) % 36;
-                /* Active sources test every other frame; other voices every fourth. */
-                command_flags = (slot_index ^ world_update_time) & 1;
-                if (!(D_0013E550.voices[slot_index].flags & 4)) {
-                    command_flags = ((world_update_time ^ slot_index) & 3) == 0;
-                }
-                if (command_flags) {
-                    D_0013E550.voices[slot_index].occlusion_history
-                        [D_0013E550.voices[slot_index].occlusion_history_position] =
+                for (history_offset = 0, sample_index = 0; history_offset < 36;
+                     history_offset += 6, sample_index++) {
+                    D_0013E550.voices[slot_index].occlusion_history[history_offset] =
                         test_voice_occlusion(&D_0013E550.voices[slot_index],
-                                             &listener_occlusion_position);
-                } else {
-                    D_0013E550.voices[slot_index].occlusion_history
-                        [D_0013E550.voices[slot_index].occlusion_history_position] =
-                        D_0013E550.voices[slot_index].occlusion_history
-                            [(D_0013E550.voices[slot_index].occlusion_history_position + 35) % 36];
+                                             &D_0013E550.occlusion_samples[sample_index]);
+                    {
+                        /* Fakematch: the byte index in a local keeps the copy's start address as
+                           (index + base) + 1, unflattened as retail's loop pass emits it. */
+                        s32 offset = slot_index * (s32)sizeof(VoiceSlot) + 0xB4;
+                        s32 index = history_offset + offset;
+                        for (repeat_index = 1; repeat_index < 6; repeat_index++) {
+                            ((u8 *)&D_0013E550)[index + repeat_index] =
+                                D_0013E550.voices[slot_index].occlusion_history[history_offset];
+                        }
+                    }
+                    if (D_0013E550.voices[slot_index].occlusion_history[history_offset]) {
+                        occluded_samples += 6;
+                    }
                 }
-            }
-            {
-                s32 occluded =
-                    ComputeByteStringHash(voices[slot_index].occlusion_history, 36);
-                if (occluded >= 36) {
+                if (occluded_samples >= 36) {
                     voice_volumes[slot_index] = 0;
-                } else if (occluded >= 19) {
-                    voice_volumes[slot_index] = (36 - occluded) * voice_volumes[slot_index] / divisor;
+                } else if (occluded_samples >= 19) {
+                    voice_volumes[slot_index] = (36 - occluded_samples) * voice_volumes[slot_index] / divisor;
+                }
+            } else {
+                if ((game_mode == 0 || game_mode == 2) && boot_level_active == 0) {
+                    D_0013E550.voices[slot_index].occlusion_history_position =
+                        (D_0013E550.voices[slot_index].occlusion_history_position + 1) % 36;
+                    /* Active sources test every other frame; other voices every fourth. */
+                    {
+                    s32 test_now = (slot_index ^ world_update_time) & 1;
+                    if (!(D_0013E550.voices[slot_index].flags & 4)) {
+                        test_now = (slot_index & 3) == (world_update_time & 3);
+                    }
+                    if (test_now) {
+                        D_0013E550.voices[slot_index].occlusion_history
+                            [D_0013E550.voices[slot_index].occlusion_history_position] =
+                            test_voice_occlusion(&D_0013E550.voices[slot_index],
+                                                 &listener_occlusion_position);
+                    } else {
+                        D_0013E550.voices[slot_index].occlusion_history
+                            [D_0013E550.voices[slot_index].occlusion_history_position] =
+                            D_0013E550.voices[slot_index].occlusion_history
+                                [(D_0013E550.voices[slot_index].occlusion_history_position + 35) % 36];
+                    }
+                    }
+                }
+                {
+                    s32 occluded =
+                        ComputeByteStringHash(voices[slot_index].occlusion_history, 36);
+                    if (occluded >= 36) {
+                        voice_volumes[slot_index] = 0;
+                    } else if (occluded >= 19) {
+                        voice_volumes[slot_index] = (36 - occluded) * voice_volumes[slot_index] / divisor;
+                    }
                 }
             }
         }
@@ -394,15 +411,18 @@ s32 sound_update(void) {
         handle = D_0013E550.voices[slot_index].handle;
         D_0013E550.voices[slot_index].handle = -1;
         if (command_flags & 0x20) {
-            if (D_0013E550.voices[slot_index].state == 7) {
-                D_0013E550.voices[slot_index].moby = NULL;
-                D_0013E550.voices[slot_index].owner_context = 0;
-                D_0013E550.voices[slot_index].state = 0;
-            } else {
-                snd_stop_sound(handle);
-                D_0013E550.voices[slot_index].state = 6;
-                snd_sound_is_still_playing_cb(handle, voice_update_callback,
-                                              &D_0013E550.voices[slot_index]);
+            {
+                s32 state = D_0013E550.voices[slot_index].state;
+                if (state == 7) {
+                    D_0013E550.voices[slot_index].moby = NULL;
+                    D_0013E550.voices[slot_index].owner_context = 0;
+                    D_0013E550.voices[slot_index].state = 0;
+                } else {
+                    snd_stop_sound(handle);
+                    D_0013E550.voices[slot_index].state = 6;
+                    snd_sound_is_still_playing_cb(handle, voice_update_callback,
+                                                  &D_0013E550.voices[slot_index]);
+                }
             }
         } else if (command_flags & 0x10) {
             snd_sound_is_still_playing_cb(handle, voice_update_callback,
@@ -426,16 +446,19 @@ s32 sound_update(void) {
                 parameter_mask |= 8;
                 pitch_modifier -= 0x5F4;
             }
-            if (D_0013E550.voices[slot_index].state != 7) {
-                snd_set_sound_params_cb(handle, parameter_mask, voice_volumes[slot_index], pan,
-                                        pitch_modifier, pitch_bend, voice_update_callback,
-                                        &D_0013E550.voices[slot_index]);
-            } else {
-                D_0013E550.voices[slot_index].state = 1;
-                snd_play_sound_vol_pan_pmpb(D_0013E550.voices[slot_index].definition->bank_handle,
-                                            D_0013E550.voices[slot_index].definition->sound_index,
-                                            voice_volumes[slot_index], pan, pitch_modifier, pitch_bend,
-                                            voice_start_callback, &D_0013E550.voices[slot_index]);
+            {
+                s32 state = D_0013E550.voices[slot_index].state;
+                if (state != 7) {
+                    snd_set_sound_params_cb(handle, parameter_mask, voice_volumes[slot_index], pan,
+                                            pitch_modifier, pitch_bend, voice_update_callback,
+                                            &D_0013E550.voices[slot_index]);
+                } else {
+                    D_0013E550.voices[slot_index].state = 1;
+                    snd_play_sound_vol_pan_pmpb(D_0013E550.voices[slot_index].definition->bank_handle,
+                                                D_0013E550.voices[slot_index].definition->sound_index,
+                                                voice_volumes[slot_index], pan, pitch_modifier, pitch_bend,
+                                                voice_start_callback, &D_0013E550.voices[slot_index]);
+                }
             }
         }
     }
@@ -447,4 +470,5 @@ s32 sound_update(void) {
     D_0013E550.pending_commands = 0;
     return 0;
 }
-#endif /* NON_MATCHING */
+
+extern __typeof__(sound_update) func_0022CA50 __attribute__((alias("FUN_0022ca50")));
