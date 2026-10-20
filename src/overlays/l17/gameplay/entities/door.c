@@ -883,7 +883,7 @@ extern int func_001F6F40_c_001f6b88(int, int, long, void *, int) __asm__("FUN_00
 
 void FUN_L17_002eb9a8(struct Moby *moby) {
     char *ship_vars = (char *)moby->pvars;
-    char *s;
+    char *screen_dimensions;
     int sp10;
     int sp14;
     long tex;
@@ -902,16 +902,16 @@ void FUN_L17_002eb9a8(struct Moby *moby) {
     int idx;
     float lock_fade_ratio;
     float k;
-    float m;
+    float lock_marker_fade_factor;
     float px;
     float py;
     float hp_display_step;
     float hp_display_step_magnitude;
 
     vu1_add_g_sregister(0x42, 0x8000000044L);
-    draw_textured_quad(0x170, (s = (char *)D_0013E500, *(int *)(s + 4)) - 0x90, 0x80, 0x80, 0, 0,
+    draw_textured_quad(0x170, (screen_dimensions = (char *)D_0013E500, *(int *)(screen_dimensions + 4)) - 0x90, 0x80, 0x80, 0, 0,
                        0x80, 0x80, 0x70808080, func_001F4868_l(*(int *)(ship_vars + 0x104) + 0x28));
-    draw_textured_quad(0x170, *(int *)(s + 4) - 0x90, 0x80, 0x80, 0, 0, 0x80, 0x80, 0x70808080,
+    draw_textured_quad(0x170, *(int *)(screen_dimensions + 4) - 0x90, 0x80, 0x80, 0, 0, 0x80, 0x80, 0x70808080,
                        func_001F4868_l(*(int *)(ship_vars + 0x104) + 0x29));
     vu1_add_g_sregister(0x42, 0x8000000048L);
     FUN_L17_002eb768((int)moby, ship_vars);
@@ -920,11 +920,11 @@ void FUN_L17_002eb9a8(struct Moby *moby) {
         if (*(int *)(ship_vars + 0x8C) > lock_hold_frames) {
             lock_fade_ratio = convert_integer_to_float(*(int *)(ship_vars + 0x8C) - lock_hold_frames);
             lock_fade_ratio = lock_fade_ratio / convert_integer_to_float(lock_fade_frames);
-            m = 2.0f * (1.0f - lock_fade_ratio);
+            lock_marker_fade_factor = 2.0f * (1.0f - lock_fade_ratio);
             k = lock_fade_ratio * 5.0f + 1.0f;
-            if (m > 1.0f)
-                m = 1.0f;
-            c = func_001FA898_r(m * 96.0f);
+            if (lock_marker_fade_factor > 1.0f)
+                lock_marker_fade_factor = 1.0f;
+            c = func_001FA898_r(lock_marker_fade_factor * 96.0f);
             func_L17_002EBF08_f(convert_integer_to_float(sp10), convert_integer_to_float(sp14), k,
                                 normalize_angle(convert_integer_to_float(D_L17_0015F5CC) / 30.0f), 0,
                                 0xFF, 0, c);
