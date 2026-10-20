@@ -20,7 +20,7 @@ extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 
 s32 actuator_calc_power(s32 *p1) __asm__("FUN_001e8d08");
 
-s32 actuator_calc_power(s32 *p1)
+s32 actuator_calc_power(s32 *output_power)
 {
     enum {
         ACTUATOR_WAVE_INACTIVE = 0,
@@ -31,22 +31,22 @@ s32 actuator_calc_power(s32 *p1)
         ACTUATOR_WAVE_COSINE = 5
     };
     s32 aa[3][4];
-    s32 *q2;
-    s32 *q1;
+    s32 *power_wave_counts;
+    s32 *scale_wave_counts;
     s32 i;
     s32 count;
 
     count = 0;
-    q1 = aa[1];
-    q2 = aa[2];
+    scale_wave_counts = aa[1];
+    power_wave_counts = aa[2];
     for (i = 0; i < 2; i++) {
-        p1[i] = 0;
+        output_power[i] = 0;
         aa[0][i] = 0;
         aa[1][i] = 0;
         aa[2][i] = 0;
     }
     for (i = 0; i < 8; i++) {
-        L00Entry *e;
+        L00Entry *wave_entry;
         s32 rem;
         s32 res;
         u16 v;
@@ -54,12 +54,12 @@ s32 actuator_calc_power(s32 *p1)
         if (actuator_wave[i].f00 == 0) {
             continue;
         }
-        e = &actuator_wave[i];
+        wave_entry = &actuator_wave[i];
         count++;
         v = actuator_wave[i].f06;
         actuator_wave[i].f06 = v - 1;
         if ((s16)v <= 0) {
-            e->f00 = 0;
+            wave_entry->f00 = 0;
         }
         if (actuator_wave[i].f04 != 0) {
             actuator_wave[i].f04 = actuator_wave[i].f04 - 1;
@@ -67,67 +67,67 @@ s32 actuator_calc_power(s32 *p1)
         }
         res = 0;
         actuator_wave[i].f08++;
-        rem = e->f08 % (e->f0a + e->f0c);
-        switch (e->f00) {
+        rem = wave_entry->f08 % (wave_entry->f0a + wave_entry->f0c);
+        switch (wave_entry->f00) {
         case ACTUATOR_WAVE_INACTIVE:
             break;
         case ACTUATOR_WAVE_RECTANGULAR:
-            if (rem < e->f0a) {
-                res = e->f0e + e->f0f;
+            if (rem < wave_entry->f0a) {
+                res = wave_entry->f0e + wave_entry->f0f;
             } else {
-                res = e->f0f;
+                res = wave_entry->f0f;
             }
             break;
         case ACTUATOR_WAVE_TRIANGULAR:
-            if (rem < e->f0a) {
-                res = (e->f0e * rem) / e->f0a;
+            if (rem < wave_entry->f0a) {
+                res = (wave_entry->f0e * rem) / wave_entry->f0a;
             } else {
-                res = (e->f0e * (e->f0c + e->f0a - rem)) / e->f0c;
+                res = (wave_entry->f0e * (wave_entry->f0c + wave_entry->f0a - rem)) / wave_entry->f0c;
             }
-            res = res + e->f0f;
+            res = res + wave_entry->f0f;
             break;
         case ACTUATOR_WAVE_RISING_RAMP:
-            if (rem < e->f0a) {
-                res = (e->f0e * rem) / e->f0a + e->f0f;
+            if (rem < wave_entry->f0a) {
+                res = (wave_entry->f0e * rem) / wave_entry->f0a + wave_entry->f0f;
             }
             break;
         case ACTUATOR_WAVE_FALLING_RAMP:
-            if (rem >= e->f0a) {
-                res = (e->f0e * (e->f0c + e->f0a - rem)) / e->f0c + e->f0f;
+            if (rem >= wave_entry->f0a) {
+                res = (wave_entry->f0e * (wave_entry->f0c + wave_entry->f0a - rem)) / wave_entry->f0c + wave_entry->f0f;
             }
             break;
         case ACTUATOR_WAVE_COSINE: {
             f32 f;
             f32 g;
-            if (rem < e->f0c) {
-                f = convert_integer_to_float(rem) * 3.1415927f / convert_integer_to_float(e->f0c);
+            if (rem < wave_entry->f0c) {
+                f = convert_integer_to_float(rem) * 3.1415927f / convert_integer_to_float(wave_entry->f0c);
             } else {
-                f = 3.1415927f - convert_integer_to_float(rem - e->f0c) * 3.1415927f / convert_integer_to_float(e->f0a);
+                f = 3.1415927f - convert_integer_to_float(rem - wave_entry->f0c) * 3.1415927f / convert_integer_to_float(wave_entry->f0a);
             }
             f = fast_cos(f);
-            g = convert_integer_to_float(e->f0e);
-            res = truncate_float_to_s32((f * g + g) * 0.5f) + e->f0f;
+            g = convert_integer_to_float(wave_entry->f0e);
+            res = truncate_float_to_s32((f * g + g) * 0.5f) + wave_entry->f0f;
             if (res >= 256) {
                 res = 255;
             }
             break;
         }
         }
-        if (e->f03 != 0) {
-            aa[0][e->f02] = aa[0][e->f02] + res;
-            { s32 *t = q1 + e->f02; *t = *t + 1; }
+        if (wave_entry->f03 != 0) {
+            aa[0][wave_entry->f02] = aa[0][wave_entry->f02] + res;
+            { s32 *t = scale_wave_counts + wave_entry->f02; *t = *t + 1; }
         } else {
-            p1[e->f02] = p1[e->f02] + res;
-            { s32 *t = q2 + e->f02; *t = *t + 1; }
+            output_power[wave_entry->f02] = output_power[wave_entry->f02] + res;
+            { s32 *t = power_wave_counts + wave_entry->f02; *t = *t + 1; }
         }
     }
     for (i = 0; i < 2; i++) {
-        if (q2[i] != 0) {
-            p1[i] = p1[i] / q2[i];
+        if (power_wave_counts[i] != 0) {
+            output_power[i] = output_power[i] / power_wave_counts[i];
         }
-        if (q1[i] != 0) {
-            aa[0][i] = aa[0][i] / q1[i];
-            p1[i] = (p1[i] * aa[0][i]) / 255;
+        if (scale_wave_counts[i] != 0) {
+            aa[0][i] = aa[0][i] / scale_wave_counts[i];
+            output_power[i] = (output_power[i] * aa[0][i]) / 255;
         }
     }
     return count;
