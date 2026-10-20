@@ -20,20 +20,20 @@ extern void refresh_moby_spatial_bounds_from_basis(void *) __asm__("FUN_0020e098
 void blend_moby_animation_u(MobyAnim *moby, int new_seq, int frame_index, int blend_frames) __asm__("FUN_00212f90");
 
 void FUN_L04_002a5a08(struct Moby *m) {
-    int *d;
+    int *animation_countdown;
     if (m != 0) {
         m->collision = 0;
-        d = (int *)m->pvars;
-        if (*d == 0) {
+        animation_countdown = (int *)m->pvars;
+        if (*animation_countdown == 0) {
             if (m->prev_seq != 1) {
                 blend_moby_animation_u(m, (void *)1, 0, (void *)scale_game_frames(3));
             }
-            *d = scale_game_frames((rand() + 0x1E) & 0xFF);
+            *animation_countdown = scale_game_frames((rand() + 0x1E) & 0xFF);
         }
         if ((m->anim_flags & 2) && m->prev_seq != 0) {
             blend_moby_animation_u(m, 0, 0, (void *)scale_game_frames(3));
         }
-        *d = *d - 1;
+        *animation_countdown = *animation_countdown - 1;
         refresh_moby_spatial_bounds_from_basis(m);
     }
 }
