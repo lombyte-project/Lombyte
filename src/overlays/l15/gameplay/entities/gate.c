@@ -732,7 +732,7 @@ void FUN_L15_002aa280(struct Moby *moby)
     u32 palette[4];
     u32 colors[4];
     Vec4 delta;
-    int spark, puff, pick, n;
+    int spark, puff, pick, hit_record_index;
     u32 *color;
     float size;
     void *debris;
@@ -740,8 +740,8 @@ void FUN_L15_002aa280(struct Moby *moby)
     if (D_001413F4[0] != 2 && moby->state == 1)
         return;
 
-    for (n = 0; n < 64; n++) {
-        char *entry = D_L15_00178700 + n * 0x40;
+    for (hit_record_index = 0; hit_record_index < 64; hit_record_index++) {
+        char *entry = D_L15_00178700 + hit_record_index * 0x40;
         if (*(struct Moby **)(entry + 0x34) != moby)
             continue;
         if ((*(u32 *)(entry + 0x24) & 0x80000) == 0)
