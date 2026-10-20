@@ -910,7 +910,7 @@ extern void draw_trail(void *, void *, void *, float, float) __asm__("FUN_L00_00
 extern short D_L18_00162578 __attribute__((sda));
 extern short D_L18_0016257C __attribute__((sda));
 extern short D_L18_00162580 __attribute__((sda));
-void FUN_L18_002fad28(M2 *m) {
+void FUN_L18_002fad28(M2 *moby) {
     enum {
         INITIALIZE_TRAIL_EFFECT = 0,
         UPDATE_TRAIL_EFFECT = 1
@@ -919,11 +919,11 @@ void FUN_L18_002fad28(M2 *m) {
     char buf2[16];
     char buf3[16];
     int idx;
-    char *p;
-    switch (m->state) {
+    char *trail_source_moby;
+    switch (moby->state) {
     case INITIALIZE_TRAIL_EFFECT:
-        m->v = 0xFF;
-        m->state = 1;
+        moby->v = 0xFF;
+        moby->state = 1;
         break;
     case UPDATE_TRAIL_EFFECT:
         if (D_L18_0015F5C4 == 2) {
@@ -934,9 +934,9 @@ void FUN_L18_002fad28(M2 *m) {
                     idx = 3;
                 if (D_L18_0016D260.n == 1)
                     idx = 4;
-                p = D_L18_0016D260.arr[idx];
-                moby_point_position(p, 8, buf);
-                moby_point_position(p, 9, buf2);
+                trail_source_moby = D_L18_0016D260.arr[idx];
+                moby_point_position(trail_source_moby, 8, buf);
+                moby_point_position(trail_source_moby, 9, buf2);
                 fast_vec_sub(buf3, buf, buf2);
                 fast_vec_normalize(buf3, buf3, *(float *)&D_L18_00162578);
                 draw_trail(buf, buf, buf3, *(float *)&D_L18_0016257C,
