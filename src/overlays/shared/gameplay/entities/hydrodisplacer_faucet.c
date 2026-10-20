@@ -469,40 +469,40 @@ void attach_manipulator(void *arg0, s32 arg1, void *arg2) __asm__("FUN_0020cb10"
 void enqueue_callback_list_1(s32 arg0, s32 arg1) __asm__("FUN_001f4600");
 
 void FUN_L05_0030c0a8(unsigned char *m);
-void FUN_L05_0030c0a8(unsigned char *m) {
+void FUN_L05_0030c0a8(unsigned char *moby) {
     enum {
         MOBY_WOBBLE_STATE_INITIALIZE = 0,
         MOBY_WOBBLE_STATE_ANIMATE = 1
     };
-    char *d = *(char **)(m + 0x78);
+    char *wobble_vars = *(char **)(moby + 0x78);
     float r, lo, hi;
-    switch (m[0x20]) {
+    switch (moby[0x20]) {
     case MOBY_WOBBLE_STATE_INITIALIZE:
-        *(float *)(d + 0x40) = *(float *)(m + 0x48);
-        *(float *)(d + 0x48) = random_angle_radians();
+        *(float *)(wobble_vars + 0x40) = *(float *)(moby + 0x48);
+        *(float *)(wobble_vars + 0x48) = random_angle_radians();
         r = random_angle_radians();
         lo = frame_time * 0.47123888f;
         hi = frame_time * 0.5235988f;
-        *(float *)(d + 0x44) = r;
+        *(float *)(wobble_vars + 0x44) = r;
         r = randf_sym(lo, hi);
         lo = frame_time * 0.20943951f;
         hi = frame_time * 0.2617994f;
-        *(float *)(d + 0x50) = r;
-        *(float *)(d + 0x4C) = randf_sym(lo, hi);
-        set_moby_color(m, 0x80, 0x80, 0x80);
-        attach_manipulator((char *)m, 0, d);
-        m[0x20] = 1;
+        *(float *)(wobble_vars + 0x50) = r;
+        *(float *)(wobble_vars + 0x4C) = randf_sym(lo, hi);
+        set_moby_color(moby, 0x80, 0x80, 0x80);
+        attach_manipulator((char *)moby, 0, wobble_vars);
+        moby[0x20] = 1;
         break;
     case MOBY_WOBBLE_STATE_ANIMATE: {
         float k = 0.5235988f;
-        float t;
-        enqueue_callback_list_1((void *)FUN_L05_0030c220, m);
-        t = fast_add_rotations(*(float *)(d + 0x44), *(float *)(d + 0x4C));
-        *(float *)(d + 0x44) = t;
-        *(float *)(m + 0x48) = fast_add_rotations(*(float *)(d + 0x40), fast_sin(t) * k);
-        t = fast_add_rotations(*(float *)(d + 0x48), *(float *)(d + 0x50));
-        *(float *)(d + 0x48) = t;
-        FUN_L00_001fff28(d + 0x10, 1, fast_sin(t) * k + k);
+        float wobble_phase;
+        enqueue_callback_list_1((void *)FUN_L05_0030c220, moby);
+        wobble_phase = fast_add_rotations(*(float *)(wobble_vars + 0x44), *(float *)(wobble_vars + 0x4C));
+        *(float *)(wobble_vars + 0x44) = wobble_phase;
+        *(float *)(moby + 0x48) = fast_add_rotations(*(float *)(wobble_vars + 0x40), fast_sin(wobble_phase) * k);
+        wobble_phase = fast_add_rotations(*(float *)(wobble_vars + 0x48), *(float *)(wobble_vars + 0x50));
+        *(float *)(wobble_vars + 0x48) = wobble_phase;
+        FUN_L00_001fff28(wobble_vars + 0x10, 1, fast_sin(wobble_phase) * k + k);
         break;
     }
     }
