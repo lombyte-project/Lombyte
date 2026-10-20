@@ -1339,45 +1339,45 @@ void FUN_00212f90_2e3a88(void *, int, int, int) __asm__("FUN_00212f90");
 extern float D_L00_00161C98 __attribute__((sda));
 extern float D_L00_00161C9C __attribute__((sda));
 void pterodactyl_update(unsigned char *m) __asm__("FUN_L00_002e3a88");
-void pterodactyl_update(unsigned char *m) {
+void pterodactyl_update(unsigned char *moby) {
     enum {
         PTERODACTYL_INITIALIZE = 0,
         PTERODACTYL_FOLLOW_PATH = 1
     };
-    D_2e3a88 *d = *(D_2e3a88 **)(m + 0x78);
-    int *p = vend_paths[d->path];
+    D_2e3a88 *moby_data = *(D_2e3a88 **)(moby + 0x78);
+    int *path = vend_paths[moby_data->path];
     float y;
-    switch (m[0x20]) {
+    switch (moby[0x20]) {
     case PTERODACTYL_INITIALIZE:
-        if (d->path == -1) {
-            FUN_0020c828_2e3a88(m);
+        if (moby_data->path == -1) {
+            FUN_0020c828_2e3a88(moby);
             return;
         }
         {
-            float a = distance_xyz(p + 4, p + 8);
-            float b = distance_xyz(p + 4, p + *p * 4);
-            d->f74 = D_L00_00161C98 * D_0015ED6C_2e3a88 / a;
-            d->i70 = FUN_001f99c0_2e3a88(a - b) < 0.1f;
+            float first_segment_length = distance_xyz(path + 4, path + 8);
+            float b = distance_xyz(path + 4, path + *path * 4);
+            moby_data->f74 = D_L00_00161C98 * D_0015ED6C_2e3a88 / first_segment_length;
+            moby_data->i70 = FUN_001f99c0_2e3a88(first_segment_length - b) < 0.1f;
         }
-        d->f6C = d->f68 * (float)*p;
-        m[0x20] = 1;
-        *(float *)(m + 0x2C) *= D_L00_00161C9C;
-        m[0x30] = 0xFF;
+        moby_data->f6C = moby_data->f68 * (float)*path;
+        moby[0x20] = 1;
+        *(float *)(moby + 0x2C) *= D_L00_00161C9C;
+        moby[0x30] = 0xFF;
     case PTERODACTYL_FOLLOW_PATH:
-        y = *(float *)(m + 0x18);
-        sample_camera_path(p, d->f6C, d->i70, m + 0x10, m + 0x40, 0);
-        *(float *)(m + 0x44) *= 0.5f;
-        *(float *)(m + 0x18) += d->f64;
-        d->f6C += d->f74;
-        if ((float)*p < d->f6C)
-            d->f6C -= (float)*p;
-        if (m[0x70] & 2) {
-            if (y < *(float *)(m + 0x18) || random_integer_below(3) != 0) {
-                if (m[0x53])
-                    FUN_00212f90_2e3a88(m, 0, 0, 10);
+        y = *(float *)(moby + 0x18);
+        sample_camera_path(path, moby_data->f6C, moby_data->i70, moby + 0x10, moby + 0x40, 0);
+        *(float *)(moby + 0x44) *= 0.5f;
+        *(float *)(moby + 0x18) += moby_data->f64;
+        moby_data->f6C += moby_data->f74;
+        if ((float)*path < moby_data->f6C)
+            moby_data->f6C -= (float)*path;
+        if (moby[0x70] & 2) {
+            if (y < *(float *)(moby + 0x18) || random_integer_below(3) != 0) {
+                if (moby[0x53])
+                    FUN_00212f90_2e3a88(moby, 0, 0, 10);
             } else {
-                if (m[0x53] != 1)
-                    FUN_00212f90_2e3a88(m, 1, 0, 10);
+                if (moby[0x53] != 1)
+                    FUN_00212f90_2e3a88(moby, 1, 0, 10);
             }
         }
         break;
