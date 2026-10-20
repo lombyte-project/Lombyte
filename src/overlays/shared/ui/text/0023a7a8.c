@@ -228,20 +228,20 @@ extern void FUN_L00_0023a640_23adb8(void) __asm__("FUN_L00_0023a640");
 
 void FUN_L00_0023adb8(void) {
     struct Hero *g;
-    int n, mode, k;
+    int weapon_item_id, mode, k;
     if (D_L00_0015F968_gp != 0) {
         return;
     }
     g = &hero;
-    n = g->items[0].item_id;
+    weapon_item_id = g->items[0].item_id;
     mode = g->vehicle_mode;
-    n = (&D_L00_001C40B0[0] + n)->h8 ? n : 0;
-    n = mode ? 0 : n;
-    if (n != 0) {
-        D_L00_0015F96C = n;
+    weapon_item_id = (&D_L00_001C40B0[0] + weapon_item_id)->h8 ? weapon_item_id : 0;
+    weapon_item_id = mode ? 0 : weapon_item_id;
+    if (weapon_item_id != 0) {
+        D_L00_0015F96C = weapon_item_id;
         *(volatile int *)&D_L00_0015F970 = FUN_001ff308_23adb8(
-            0x10, n + 60000, FUN_L00_0023a760_23adb8, FUN_L00_0023cdb8_23adb8,
-            FUN_L00_0023a7a8_23adb8, &weapon_ammo_counts[n], D_L00_001C40B0[n].hE);
+            0x10, weapon_item_id + 60000, FUN_L00_0023a760_23adb8, FUN_L00_0023cdb8_23adb8,
+            FUN_L00_0023a7a8_23adb8, &weapon_ammo_counts[weapon_item_id], D_L00_001C40B0[weapon_item_id].hE);
     } else if (k = -1, mode == 2) {
         if (D_L00_0015F970 != k) {
             FUN_001ff570_23adb8(D_L00_0015F970, 0);
