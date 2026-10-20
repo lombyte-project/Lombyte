@@ -1927,7 +1927,7 @@ void robot_qwark_update(struct Moby *m) {
     char *w;
     OvlVec4 vel;
     OvlVec4 pos;
-    float tmp[4];
+    float unused_vector_scratch[4];
 
     if (m->visible != 0 && FUN_001f9b48(&m->pos, D_L03_00166EC0) < 26.0f) {
         FUN_L00_0025a120(m);
@@ -1996,7 +1996,7 @@ void robot_qwark_update(struct Moby *m) {
         pos.f[0] = talker_cos(talker_rand_angle()) * talker_rand_range(0.0f, 0.5f) * talker_rand_range(0.0f, 1.0f);
         pos.f[1] = talker_sin(talker_rand_angle()) * talker_rand_range(0.0f, 0.5f) * talker_rand_range(0.0f, 1.0f);
         pos.f[2] = 0.0f;
-        FUN_L00_001ff290(tmp, &pos, &m->pos);
+        FUN_L00_001ff290(unused_vector_scratch, &pos, &m->pos);
         if (talker_rand_below(3) == 0) {
             FUN_L00_0026ced0(&pos, &vel, 0x20202020, 0x7F7F7F, scale_game_frames(FUN_L00_00257b90(0x3C, 0x78)),
                              157500.0f);
