@@ -971,28 +971,28 @@ extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int FUN_L00_0025fcb8(char *, char *, float);
 float absolute_float(float input) __asm__("func_001F99C0");
 
-void FUN_L12_00307ab8(struct Moby *m) {
-    char *d = (char *)m->pvars;
+void FUN_L12_00307ab8(struct Moby *spawner) {
+    char *spawner_data = (char *)spawner->pvars;
     char *pad;
-    if (m->state != 0) {
-        if (*(int *)(d + 0x38) != 0) {
-            *(short *)(d + 0xFE) = scale_game_frames(0xB4);
+    if (spawner->state != 0) {
+        if (*(int *)(spawner_data + 0x38) != 0) {
+            *(short *)(spawner_data + 0xFE) = scale_game_frames(0xB4);
         }
-        *(int *)(d + 0x38) = 0;
-        if (fast_dec_timer_s16(d + 0xFE)) {
-            *(float *)(d + 0xF8) = *(float *)(d + 0xF4);
+        *(int *)(spawner_data + 0x38) = 0;
+        if (fast_dec_timer_s16(spawner_data + 0xFE)) {
+            *(float *)(spawner_data + 0xF8) = *(float *)(spawner_data + 0xF4);
         } else {
-            *(float *)(d + 0xF8) = *(float *)(d + 0xF4) + 5.0f;
+            *(float *)(spawner_data + 0xF8) = *(float *)(spawner_data + 0xF4) + 5.0f;
         }
-        if (FUN_L00_0025fcb8(m, d + 0x70, *(float *)(d + 0xF8)) != 2) {
-            if (absolute_float(m->pos.z - *(float *)(d + 0x78)) > 3.0f) {
-                *(int *)(d + 0xB4) = 2;
+        if (FUN_L00_0025fcb8(spawner, spawner_data + 0x70, *(float *)(spawner_data + 0xF8)) != 2) {
+            if (absolute_float(spawner->pos.z - *(float *)(spawner_data + 0x78)) > 3.0f) {
+                *(int *)(spawner_data + 0xB4) = 2;
             }
         }
-        if (*(int *)(d + 0xB0) == 0) {
+        if (*(int *)(spawner_data + 0xB0) == 0) {
             pad = D_0013E533 + 0xE1D;
-            *(int *)(d + 0xB0) = *(int *)(pad + 0x2080);
-            qcopy(d + 0x70, pad + 0x80);
+            *(int *)(spawner_data + 0xB0) = *(int *)(pad + 0x2080);
+            qcopy(spawner_data + 0x70, pad + 0x80);
         }
     }
 }
