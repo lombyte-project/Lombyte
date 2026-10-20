@@ -147,14 +147,14 @@ extern void FUN_L01_002b4c28(void);
 
 extern L01Camera D_L01_0016CEC0;
 void FUN_L01_002b8f98(void) {
-    f32 m[4][4];
+    f32 scaled_translation_matrix[4][4];
     struct DmaTag *base;
-    u8 *p;
+    u8 *packet_write_cursor;
     L01Camera *camera;
 
-    set_scale_matrix(m, 1024.0f);
-    scale_vector_xyz(m[3], D_L01_00167240, -1024.0f);
-    m[3][3] = 1.0f;
+    set_scale_matrix(scaled_translation_matrix, 1024.0f);
+    scale_vector_xyz(scaled_translation_matrix[3], D_L01_00167240, -1024.0f);
+    scaled_translation_matrix[3][3] = 1.0f;
     if (D_L01_0015F5E0 != 7) {
         vu1_add_data_ref(font_vu_program, font_vu_program_tag[0]);
         D_L01_0015F5E0 = 7;
@@ -168,17 +168,17 @@ void FUN_L01_002b8f98(void) {
     base[1].addr = 0;
     base[1].vif0 = 0;
     base[1].vif1 = 0x6C0C43A4;
-    multiply_matrix(base + 2, D_L01_00167240 - 0x100, m);
-    multiply_matrix(base + 6, D_L01_00167240 - 0x80, m);
+    multiply_matrix(base + 2, D_L01_00167240 - 0x100, scaled_translation_matrix);
+    multiply_matrix(base + 6, D_L01_00167240 - 0x80, scaled_translation_matrix);
     base[10].tag = 0x8000;
     base[10].addr = 0x303EC000;
     base[10].vif0 = 0x412;
     camera = &D_L01_0016CEC0;
     *(f32 *)&base[10].vif1 = camera->f210;
-    p = (u8 *)(base + 11);
-    qcopy(p, camera->v190);
-    p = (u8 *)(base + 12);
-    qcopy(p, camera->v1A0);
+    packet_write_cursor = (u8 *)(base + 11);
+    qcopy(packet_write_cursor, camera->v190);
+    packet_write_cursor = (u8 *)(base + 12);
+    qcopy(packet_write_cursor, camera->v1A0);
     *(f32 *)&base[13].tag = camera->f22C;
     *(f32 *)&base[13].addr = camera->f228;
     base[13].vif0 = 0;
@@ -187,9 +187,9 @@ void FUN_L01_002b8f98(void) {
     base[14].vif0 = 0x15000000;
     base[14].tag = 0x3000000;
     base[14].vif1 = 0;
-    p = (u8 *)(base + 15);
-    l01_packet.tag->tag |= ((p - (u8 *)l01_packet.tag) >> 4) - 1;
-    l01_packet.bytes = p;
+    packet_write_cursor = (u8 *)(base + 15);
+    l01_packet.tag->tag |= ((packet_write_cursor - (u8 *)l01_packet.tag) >> 4) - 1;
+    l01_packet.bytes = packet_write_cursor;
     FUN_L01_002b4c28();
     l01_packet.tag->tag = 0x30000007;
     l01_packet.tag->addr = (u32)D_L01_001CAC80;
