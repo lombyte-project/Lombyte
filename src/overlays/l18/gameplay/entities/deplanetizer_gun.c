@@ -844,14 +844,14 @@ void FUN_L18_002fa888(int idx, int value) {
     unsigned short *table = (unsigned short *)D_L18_001AC240[idx];
 
     if (table != 0) {
-        unsigned short *p = table;
+        unsigned short *group_moby_entry = table;
         do {
-            unsigned char *moby = (unsigned char *)(((p[0] & 0x7FFF) << 8) + D_L18_0015FFD8);
+            unsigned char *moby = (unsigned char *)(((group_moby_entry[0] & 0x7FFF) << 8) + D_L18_0015FFD8);
 
             if (*(short *)(moby + 0xA6) == 0x630) {
                 moby[0xBC] = value;
             }
-        } while ((short)*p++ >= 0);
+        } while ((short)*group_moby_entry++ >= 0);
     }
 }
 
