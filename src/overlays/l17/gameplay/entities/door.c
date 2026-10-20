@@ -898,7 +898,7 @@ void FUN_L17_002eb9a8(struct Moby *moby) {
     int y;
     int ex;
     int ey;
-    int a;
+    int lock_marker_blink_value;
     int v;
     int lo;
     int hi;
@@ -933,11 +933,11 @@ void FUN_L17_002eb9a8(struct Moby *moby) {
                                 0xFF, 0, lock_marker_fade_byte);
             *(int *)(ship_vars + 0xEC) = 0;
         } else {
-            a = 0xFF;
+            lock_marker_blink_value = 0xFF;
             if ((*(int *)(ship_vars + 0x8C) / scale_game_frames(0x14)) & 1)
-                a = 0;
+                lock_marker_blink_value = 0;
             func_L17_002EBF08_f(convert_integer_to_float(sp10), convert_integer_to_float(sp14), 1.0f,
-                                0.0f, 0xFF, a, 0, 0x60);
+                                0.0f, 0xFF, lock_marker_blink_value, 0, 0x60);
             *(int *)(ship_vars + 0xEC) = *(int *)(ship_vars + 0x88);
         }
     }
