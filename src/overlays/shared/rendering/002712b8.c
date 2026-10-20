@@ -226,20 +226,20 @@ extern unsigned char *D_L00_001B213C __attribute__((section(".data")));
 unsigned char *FUN_L00_002678b8(int);
 int FUN_00213260(int);
 int FUN_001fa6d0(float);
-unsigned char *FUN_L00_00271b18(u128 *a, u128 *b, float x) {
-    unsigned char *m = FUN_L00_002678b8(0x2f);
-    if (m) {
-        qcopy(m + 0x10, a);
-        *(int *)(m + 4) = ((FUN_00213260(8) + 0x28) << 24) | 0x808080;
-        m[9] = FUN_001fa6d0(2.0f) + 0x20;
-        m[3] = 0x48;
-        m[1] = 0;
-        m[2] = *D_L00_001B213C;
-        *(float *)(m + 0xc) = x;
-        qcopy(m + 0x20, b);
-        m[8] = FUN_00213260(0x100);
+unsigned char *FUN_L00_00271b18(u128 *position, u128 *b, float x) {
+    unsigned char *particle = FUN_L00_002678b8(0x2f);
+    if (particle) {
+        qcopy(particle + 0x10, position);
+        *(int *)(particle + 4) = ((FUN_00213260(8) + 0x28) << 24) | 0x808080;
+        particle[9] = FUN_001fa6d0(2.0f) + 0x20;
+        particle[3] = 0x48;
+        particle[1] = 0;
+        particle[2] = *D_L00_001B213C;
+        *(float *)(particle + 0xc) = x;
+        qcopy(particle + 0x20, b);
+        particle[8] = FUN_00213260(0x100);
     }
-    return m;
+    return particle;
 }
 #define NOT_SDA
 
