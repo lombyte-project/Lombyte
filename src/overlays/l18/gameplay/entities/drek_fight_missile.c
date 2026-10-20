@@ -2588,17 +2588,17 @@ void drek_final_boss_robot_update(BossMoby *moby) {
 extern s32 D_L18_001623A8_gp __asm__("D_L18_001623A8") __attribute__((sda));
 
 void FUN_L18_002f5e18(struct Moby *moby) {
-    char *d = (char *)moby->pvars;
-    if (*(int *)(d + 0x3E4) == 0) {
+    char *moby_vars = (char *)moby->pvars;
+    if (*(int *)(moby_vars + 0x3E4) == 0) {
         char *a = D_0013E533 + 0xE1D;
         if (*(int *)(a + 0x300) != 0) {
-            *(int *)(d + 0x3E8) = *(int *)(a + 0x2FC);
+            *(int *)(moby_vars + 0x3E8) = *(int *)(a + 0x2FC);
         }
         if (*(int *)(a + 0x2084) == 0x77) {
-            char *t = *(char **)(d + 0x3E8);
-            *(int *)(d + 0x3E4) = 1;
-            if (t != 0) {
-                if (*(short *)(t + 0xA6) == 0x24B) {
+            char *latched_moby = *(char **)(moby_vars + 0x3E8);
+            *(int *)(moby_vars + 0x3E4) = 1;
+            if (latched_moby != 0) {
+                if (*(short *)(latched_moby + 0xA6) == 0x24B) {
                     *(int *)&D_L18_001623A8_gp = *(int *)&D_L18_001623A8_gp + 1;
                 }
             }
