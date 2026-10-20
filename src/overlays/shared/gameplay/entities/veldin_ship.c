@@ -3743,9 +3743,9 @@ unsigned char *FUN_L00_002d7e90(u128 *v, float scale_multiplier) {
 }
 void mark_moby_for_removal() __asm__("FUN_0020c828");
 /* Grows the float at 0x2C by 2.5% and lowers byte 0x23 by 3; removes the moby below 4. */
-void FUN_L00_002d7f38(u8 *m) {
-    *(f32 *)(m + 0x2C) *= 1.025f;
-    if ((u8)(m[0x23] -= 3) < 4)
+void FUN_L00_002d7f38(u8 *moby) {
+    *(f32 *)(moby + 0x2C) *= 1.025f;
+    if ((u8)(moby[0x23] -= 3) < 4)
         mark_moby_for_removal();
 }
 
