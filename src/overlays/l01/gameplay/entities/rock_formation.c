@@ -46,7 +46,7 @@ void rock_formation_update(struct Moby *rock_formation_moby) {
     DebrisHit *hit;
     s32 i;
     s32 j;
-    f32 s;
+    f32 offset_component_or_particle_size;
 
     hit = trooper_find_hit(rock_formation_moby, 0x10000, 0);
     rock_formation_moby->hit_slot = 0xFF;
@@ -65,18 +65,18 @@ void rock_formation_update(struct Moby *rock_formation_moby) {
                 pos.f[2] = random_float_between(-1.0f, 1.0f);
                 off.q = 0;
                 vel.q = pos.q;
-                s = random_float_between(-1.0f, 1.0f);
-                s *= fast_cos(rock_formation_moby->rot.z);
-                off.f[0] = s;
-                s = random_float_between(-0.3f, 0.3f);
-                s *= fast_sin(rock_formation_moby->rot.z);
-                off.f[1] = s;
+                offset_component_or_particle_size = random_float_between(-1.0f, 1.0f);
+                offset_component_or_particle_size *= fast_cos(rock_formation_moby->rot.z);
+                off.f[0] = offset_component_or_particle_size;
+                offset_component_or_particle_size = random_float_between(-0.3f, 0.3f);
+                offset_component_or_particle_size *= fast_sin(rock_formation_moby->rot.z);
+                off.f[1] = offset_component_or_particle_size;
                 off.f[2] = random_float_between(0.0f, 2.0f);
                 pos.q = off.q;
                 fast_vec_add(&pos, &pos, &rock_formation_moby->pos);
                 fast_vec_normalize(&vel, &vel, random_float_between(0.5f, 1.5f) * frame_time);
-                s = random_float_between(0.5f, 1.0f) * 210000.0f;
-                FUN_L00_0026ced0(&pos, &vel, 0x5F787878, 0x181818, s, scale_game_frames(FUN_L00_00257b90(30, 90)));
+                offset_component_or_particle_size = random_float_between(0.5f, 1.0f) * 210000.0f;
+                FUN_L00_0026ced0(&pos, &vel, 0x5F787878, 0x181818, offset_component_or_particle_size, scale_game_frames(FUN_L00_00257b90(30, 90)));
             }
         }
         for (j = 0; j < 40; j++) {
@@ -92,12 +92,12 @@ void rock_formation_update(struct Moby *rock_formation_moby) {
             pos.f[2] = random_float_between(-1.0f, 1.0f);
             off.q = 0;
             vel.q = pos.q;
-            s = random_float_between(-1.2f, 1.2f);
-            s *= fast_cos(rock_formation_moby->rot.z);
-            off.f[0] = s;
-            s = random_float_between(-0.4f, 0.4f);
-            s *= fast_sin(rock_formation_moby->rot.z);
-            off.f[1] = s;
+            offset_component_or_particle_size = random_float_between(-1.2f, 1.2f);
+            offset_component_or_particle_size *= fast_cos(rock_formation_moby->rot.z);
+            off.f[0] = offset_component_or_particle_size;
+            offset_component_or_particle_size = random_float_between(-0.4f, 0.4f);
+            offset_component_or_particle_size *= fast_sin(rock_formation_moby->rot.z);
+            off.f[1] = offset_component_or_particle_size;
             off.f[2] = random_float_between(0.5f, 2.0f);
             pos.q = off.q;
             fast_vec_add(&pos, &pos, &rock_formation_moby->pos);
