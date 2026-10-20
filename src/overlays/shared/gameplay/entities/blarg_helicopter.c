@@ -1850,98 +1850,98 @@ extern void FUN_L01_002fb4b8(void *);
 
 /* Activate the watcher and steer its body and head toward the player. */
 void qwark_rilgar_update(L03WatchMoby *m) __asm__("FUN_L03_002dc478");
-void qwark_rilgar_update(L03WatchMoby *m) {
+void qwark_rilgar_update(L03WatchMoby *moby) {
     enum {
         QWARK_RILGAR_INITIALIZE = 0,
         QWARK_RILGAR_WAIT_FOR_PLAYER_IN_REGION = 1,
         QWARK_RILGAR_POST_REGION_TRIGGER = 2
     };
     L03WatchScratch scratch;
-    L03WatchData *d = (L03WatchData *)m->data;
+    L03WatchData *watch_data = (L03WatchData *)moby->data;
     float rate;
     float head_rate;
     int tracking;
-    FUN_L01_002fb4b8(m);
-    if (m->near_flag) {
-        if (FUN_001f9b48(m->position, D_L03_00166EC0) < 30.0f) {
-            FUN_L00_0025a120(m);
-            m->flag7F = 24;
+    FUN_L01_002fb4b8(moby);
+    if (moby->near_flag) {
+        if (FUN_001f9b48(moby->position, D_L03_00166EC0) < 30.0f) {
+            FUN_L00_0025a120(moby);
+            moby->flag7F = 24;
         }
     }
-    switch (m->state) {
+    switch (moby->state) {
     case QWARK_RILGAR_INITIALIZE:
-        m->opacity = 0xFF;
-        if (d->region_a == -1)
+        moby->opacity = 0xFF;
+        if (watch_data->region_a == -1)
             debug_print(D_L03_001E3628);
-        if (d->region_c == -1)
+        if (watch_data->region_c == -1)
             debug_print(D_L03_001E3660);
-        if (d->region_b == -1) {
+        if (watch_data->region_b == -1) {
             debug_print(D_L03_001E3690);
         } else {
-            unsigned char *p = D_L03_0015FFD8;
-            if (p[d->region_b * 256 + 0x20] != 0) {
-                if (d->region_c != -1)
-                    p[d->region_c * 256 + 0x20] = 3;
-                FUN_0020c828(m);
+            unsigned char *moby_pool = D_L03_0015FFD8;
+            if (moby_pool[watch_data->region_b * 256 + 0x20] != 0) {
+                if (watch_data->region_c != -1)
+                    moby_pool[watch_data->region_c * 256 + 0x20] = 3;
+                FUN_0020c828(moby);
                 return;
             }
         }
-        m->state = 1;
+        moby->state = 1;
         break;
     case QWARK_RILGAR_WAIT_FOR_PLAYER_IN_REGION:
-        if (d->region_a != -1 && is_point_inside_clip_volume(&hero.motion.pos, d->region_a)) {
-            FUN_L00_00266858(m, 1);
-            m->state = 2;
+        if (watch_data->region_a != -1 && is_point_inside_clip_volume(&hero.motion.pos, watch_data->region_a)) {
+            FUN_L00_00266858(moby, 1);
+            moby->state = 2;
         }
         break;
     case QWARK_RILGAR_POST_REGION_TRIGGER:
-        m->state = 3;
+        moby->state = 3;
         break;
     }
     rate = 0.02f;
     head_rate = 0.3f;
     tracking = 0;
-    if (m->animation == 0) {
+    if (moby->animation == 0) {
         char *g = (char *)&hero.motion.pos;
         L03Player *q;
         tracking = 1;
-        if (vector_distance(m->position, g) < 8.0f &&
+        if (vector_distance(moby->position, g) < 8.0f &&
             (q = (L03Player *)(g - 0x80),
              fast_difference_between_rotations(
-                 m->yaw, fast_arc_tan(q->aim[0] - m->position[0], q->aim[1] - m->position[1]))) <
+                 moby->yaw, fast_arc_tan(q->aim[0] - moby->position[0], q->aim[1] - moby->position[1]))) <
                 1.5707964f) {
             if (fast_vec_length(g + 0x80) > 0.01f)
-                d->moving_timer = scale_game_frames(120);
+                watch_data->moving_timer = scale_game_frames(120);
             else
-                fast_dec_timer(&d->moving_timer);
-        } else if (d->moving_timer) {
-            d->moving_timer = 0;
-            qcopy(d->target, hero.motion.unkD0.f);
+                fast_dec_timer(&watch_data->moving_timer);
+        } else if (watch_data->moving_timer) {
+            watch_data->moving_timer = 0;
+            qcopy(watch_data->target, hero.motion.unkD0.f);
         }
-        if (fast_dec_timer(&d->target_timer)) {
+        if (fast_dec_timer(&watch_data->target_timer)) {
             float heading;
-            d->target_timer = FUN_001fa6d0(multiply_global_factor_ed64(random_float_between(180.0f, 300.0f)));
+            watch_data->target_timer = FUN_001fa6d0(multiply_global_factor_ed64(random_float_between(180.0f, 300.0f)));
             heading =
-                fast_add_rotations(m->yaw, random_float_between(-90.0f, 90.0f) * DEG_TO_RAD);
-            build_spherical_offset(d->target, 6.0f, heading,
+                fast_add_rotations(moby->yaw, random_float_between(-90.0f, 90.0f) * DEG_TO_RAD);
+            build_spherical_offset(watch_data->target, 6.0f, heading,
                                    random_float_between(0.0f, 30.0f) * DEG_TO_RAD);
-            fast_vec_add(d->target, d->target, m->position);
+            fast_vec_add(watch_data->target, watch_data->target, moby->position);
         }
-        if (d->moving_timer) {
+        if (watch_data->moving_timer) {
             qcopy(scratch.target, hero.motion.unkD0.f);
             rate = 0.04f;
             head_rate = 0.3f;
         } else {
-            qcopy(scratch.target, d->target);
+            qcopy(scratch.target, watch_data->target);
         }
     }
     if (tracking) {
         float yaw;
         float pitch;
-        qcopy(scratch.eye, m->position);
+        qcopy(scratch.eye, moby->position);
         scratch.eye[2] += 1.0f;
         fast_vec_sub(scratch.delta, scratch.target, scratch.eye);
-        yaw = fast_subtract_rotations(fast_arc_tan(scratch.delta[0], scratch.delta[1]), m->yaw);
+        yaw = fast_subtract_rotations(fast_arc_tan(scratch.delta[0], scratch.delta[1]), moby->yaw);
         pitch = -fast_arc_tan(vector_length_xy(scratch.delta), scratch.delta[2]);
         if (yaw > 1.5707964f)
             yaw = 1.5707964f;
@@ -1951,14 +1951,14 @@ void qwark_rilgar_update(L03WatchMoby *m) {
             pitch = 0.5235988f;
         else if (pitch < -0.5235988f)
             pitch = -0.5235988f;
-        d->pitch = pitch;
-        d->yaw = yaw * 0.6f;
-        d->head_yaw = yaw * 0.4f;
+        watch_data->pitch = pitch;
+        watch_data->yaw = yaw * 0.6f;
+        watch_data->head_yaw = yaw * 0.4f;
     }
     if (D_0015EDB0_b)
-        d->height = 2.75f;
-    update_joint_animation(rate * frame_scale_sq, head_rate * frame_scale_sq, m, d, 0);
-    update_joint_animation(rate * frame_scale_sq, head_rate * frame_scale_sq, m, (char *)d + 0x80, 1);
+        watch_data->height = 2.75f;
+    update_joint_animation(rate * frame_scale_sq, head_rate * frame_scale_sq, moby, watch_data, 0);
+    update_joint_animation(rate * frame_scale_sq, head_rate * frame_scale_sq, moby, (char *)watch_data + 0x80, 1);
 }
 extern void FUN_L02_002a4058(void *, int, float);
 extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
