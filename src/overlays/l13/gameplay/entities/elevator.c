@@ -1834,13 +1834,13 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
         }
         break;
     case ROBOSQUAWKER_STATE_DEATH_KNOCKBACK: {
-        int t;
+        int slot_reuse_delay_frames;
 
         robosquawker_moby->h34 &= 0xEFFF;
         if (mine_fall(robosquawker_moby, v->x120) & 0x140) {
             clear_u64_value(&va);
-            t = (int)((float)scale_game_frames_alt(1) * 60.0f);
-            if (FUN_L01_002efbf8(D_L13_001613B0, 3, t) >= 0) {
+            slot_reuse_delay_frames = (int)((float)scale_game_frames_alt(1) * 60.0f);
+            if (FUN_L01_002efbf8(D_L13_001613B0, 3, slot_reuse_delay_frames) >= 0) {
                 cart_burst(robosquawker_moby, &robosquawker_moby->pos, 4, 0.5f, 13.0f);
             }
             mark_moby_for_removal_c(robosquawker_moby);
