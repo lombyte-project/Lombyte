@@ -1009,8 +1009,8 @@ void FUN_L00_0020e698(void) {
         if (g->unkD08[0] != 0) {
             g->unkD14 = 1;
         } else if (g->state.current == 0) {
-            unsigned char *m = (unsigned char *)g->moby;
-            if (m[0x53] == g->unk2294) {
+            unsigned char *hero_moby = (unsigned char *)g->moby;
+            if (hero_moby[0x53] == g->unk2294) {
                 int r = hero_idle_sequence(0);
                 set_hero_animation(r, 0, -2.0f);
             }
