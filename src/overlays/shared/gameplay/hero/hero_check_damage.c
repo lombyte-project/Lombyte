@@ -595,7 +595,7 @@ void FUN_L00_0024f190_20da68(char *, char *) __asm__("FUN_L00_0024f190");
 void FUN_L00_0020da68(void) {
     int on, anim, r, hero_animation_id;
     float spd, t;
-    unsigned char *m;
+    unsigned char *animation_selector_data;
     char *animation_object;
     char *reloaded_animation_object;
     anim = 0;
@@ -603,10 +603,10 @@ void FUN_L00_0020da68(void) {
     on = 0;
     if (hero.unk2274) {
         on = 1;
-        m = FUN_002141f8_20da68(hero.unk2274);
+        animation_selector_data = FUN_002141f8_20da68(hero.unk2274);
         anim = 0x79;
-        if (m && m[0x3C]) {
-            anim = FUN_L00_0020da10_20da68(m[0x3C]);
+        if (animation_selector_data && animation_selector_data[0x3C]) {
+            anim = FUN_L00_0020da10_20da68(animation_selector_data[0x3C]);
             if (hero.state.control_mode == 1)
                 spd = 0.7f;
         }
