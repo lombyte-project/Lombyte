@@ -809,7 +809,7 @@ int FUN_001fa6d0_00272f68(float) __asm__("FUN_001fa6d0");
 extern unsigned char *D_L00_001B2080_lui[] __asm__("D_L00_001B2080") __attribute__((section(".data")));
 unsigned char *FUN_L00_00272f68(u128 *a, int c, unsigned char b, int idx, int flag, int n, int mode,
                                 float f);
-unsigned char *FUN_L00_00272f68(u128 *position, int c, unsigned char b, int idx, int flag, int lifetime_frames, int mode,
+unsigned char *FUN_L00_00272f68(u128 *position, int packed_color, unsigned char b, int idx, int flag, int lifetime_frames, int mode,
                                 float size_scale) {
     unsigned char *particle = p27fe00_alloc(0x3B);
     if (particle) {
@@ -818,7 +818,7 @@ unsigned char *FUN_L00_00272f68(u128 *position, int c, unsigned char b, int idx,
         if (mode == 1)
             subtract_vector_xyz(particle_data, position, D_0013F3D0);
         qcopy(particle + 0x10, position);
-        *(int *)(particle + 4) = c;
+        *(int *)(particle + 4) = packed_color;
         particle[9] = FUN_001fa6d0_00272f68(1.0f) + 0x20;
         particle[3] = flag ? 0x44 : 0x48;
         particle[8] = b;
