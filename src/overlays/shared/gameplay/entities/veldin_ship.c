@@ -1771,10 +1771,10 @@ void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__(
 
 /* Blends the moby to animation 6 when D_0013F350+0x2084 is 8. */
 void helipack_update(char *a) __asm__("FUN_L00_002d37d0");
-void helipack_update(char *a) {
+void helipack_update(char *moby) {
     if (*(int *)(D_0013E533 + 0x2EA1) == 8) {
-        if (*(unsigned char *)(a + 0x53) != 6) {
-            blend_moby_animation(a, 6, 0, scale_game_frames(10));
+        if (*(unsigned char *)(moby + 0x53) != 6) {
+            blend_moby_animation(moby, 6, 0, scale_game_frames(10));
         }
     }
 }
