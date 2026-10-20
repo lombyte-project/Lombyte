@@ -89,16 +89,14 @@ extern char D_L08_0017C720[];
 int hero_set_state(int a, int b) {
     enum {
         ENTER_IDLE = 0,
-        ENTER_ATTACK_COMBO = 0x13,
-        ENTER_DROWN = 0x6A,
-        ENTER_SLIP = 0x79
-    };
-    enum {
         HERO_STATE_DOUBLE_JUMP = 0xE,
+        ENTER_ATTACK_COMBO = 0x13,
         HERO_STATE_GRIND_JUMP = 0x29,
         HERO_STATE_GRIND_ATTACK = 0x2B,
         HERO_STATE_APPROACH_TARGET_POSE = 0x65,
-        HERO_STATE_AT_TARGET_POSE = 0x67
+        HERO_STATE_AT_TARGET_POSE = 0x67,
+        ENTER_DROWN = 0x6A,
+        ENTER_SLIP = 0x79
     };
     int old2088;
     char *moby;
