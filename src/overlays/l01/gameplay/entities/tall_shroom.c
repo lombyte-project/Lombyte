@@ -261,7 +261,7 @@ void FUN_L01_0030ba18(struct Moby *moby) {
     s32 grey;
     f32 s;
     u8 *puff;
-    u8 *q;
+    u8 *puff_data;
 
     v = (BlobVars *)moby->pvars;
     if (random_integer_below(2)) {
@@ -315,11 +315,11 @@ void FUN_L01_0030ba18(struct Moby *moby) {
         puff = spawn_puff(&moby->pos, 0.025f, 1.0f, 1.0f, n, &D_L01_0015F580, s, grey_intensity | ((grey_intensity << 16) | grey));
         if (puff != NULL) {
             puff[3] = 0x44;
-            q = puff + 0x20;
+            puff_data = puff + 0x20;
             *(s16 *)(puff + 0xA) = scale_game_frames(60);
-            *(s32 *)(q + 4) = 2;
-            q[0xA] = 0x60;
-            q[0xB] = puff[0xA];
+            *(s32 *)(puff_data + 4) = 2;
+            puff_data[0xA] = 0x60;
+            puff_data[0xB] = puff[0xA];
         }
     }
 }
