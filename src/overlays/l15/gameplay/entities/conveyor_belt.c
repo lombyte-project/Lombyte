@@ -486,7 +486,7 @@ extern char D_L15_001DB238[];
 int D_L15_001620D0[2] = {(int)D_L15_001DAD98, (int)D_L15_001DB238};
 
 void FUN_L15_002eac90(struct Moby *moby) {
-    RippleData *d = (RippleData *)moby->pvars;
+    RippleData *ripple_data = (RippleData *)moby->pvars;
     float scale;
     int r, g, b;
     int color;
@@ -497,21 +497,21 @@ void FUN_L15_002eac90(struct Moby *moby) {
     vu1_add_gs_register(0x42, ((long)D_L15_001620EC << 32) | 0x44);
     vu1_add_gs_register(8, 0);
     vu1_add_gs_register(0x14, ((long)0xFF90 << 32) | 0x260);
-    d->f0 = d->f4;
-    d->f4 = fast_add_rotations(d->f4,
+    ripple_data->f0 = ripple_data->f4;
+    ripple_data->f4 = fast_add_rotations(ripple_data->f4,
                                360.0f / multiply_global_factor_ed64(D_L15_001620FC) * DEG_TO_RAD * frame_time);
     get_moby_color(moby, &r, &g, &b);
     color = (D_L15_001620F4 << 24) | (b << 16) | (g << 8) | r;
     for (i = 0; i < 3; i++) {
         for (j = 0; j < D_L15_00162080[i]; j++) {
-            int *e = D_L15_001620C0 + i;
-            float *p = (float *)(*e + j * 12);
+            int *template_vertex_buffer_entry = D_L15_001620C0 + i;
+            float *p = (float *)(*template_vertex_buffer_entry + j * 12);
             float t = D_L15_00162100 *
                       fast_sin(fast_add_rotations(
                           wrap_angle(FUN_L00_00200260(square_root(p[0] * p[0] + p[1] * p[1]),
                                                       D_L15_001620F8) *
                                      6.2831855f / D_L15_001620F8),
-                          d->f4));
+                          ripple_data->f4));
             *(float *)(j * 12 + D_L15_00162090[i]) = p[0] + moby->pos.x;
             *(float *)(j * 12 + D_L15_00162090[i] + 4) = p[1] + moby->pos.y;
             *(float *)(j * 12 + D_L15_00162090[i] + 8) = p[2] + moby->pos.z + t;
