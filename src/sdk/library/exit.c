@@ -39,12 +39,12 @@ extern ExitReent *D_0012F76C __attribute__((section(".data")));
 extern void JumpToRfuStatus(int code);
 
 void exit(int code) {
-    struct _atexit *p;
+    struct _atexit *atexit_block;
     int n;
 
-    for (p = D_0012F76C->_atexit; p != 0; p = p->_next)
-        for (n = p->_ind; --n >= 0;)
-            (*p->_fns[n])();
+    for (atexit_block = D_0012F76C->_atexit; atexit_block != 0; atexit_block = atexit_block->_next)
+        for (n = atexit_block->_ind; --n >= 0;)
+            (*atexit_block->_fns[n])();
 
     if (D_0012F76C->__cleanup != 0)
         (*D_0012F76C->__cleanup)(D_0012F76C);
