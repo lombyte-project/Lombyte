@@ -2344,19 +2344,19 @@ extern void tick_countdown_32(int *arg0) __asm__("FUN_001f9740");
 #define B(p, o) (*(unsigned char *)((char *)(p) + (o)))
 #define FLAG    hero.ship_ammo
 
-void FUN_L13_002b95b8(int a, char *p) {
+void FUN_L13_002b95b8(int a, char *moby_vars) {
     char *g = 0;
     char *pad;
-    char *t;
+    char *current_target_moby;
     char *r;
     float v[4];
     if (!(D_L13_0015F5C4 >= 3 && D_L13_0015F5C4 <= 4)) {
-        tick_countdown_32((int *)(p + 0x8C));
+        tick_countdown_32((int *)(moby_vars + 0x8C));
     }
-    if (W(p, 0x8C) != 0 && P(p, 0x88) != 0 && H(P(p, 0x88), 0xA6) == W(p, 0x124) &&
-        B(P(p, 0x88), 0x20) != 0xFE && B(P(p, 0x88), 0x20) != 0xFD) {
+    if (W(moby_vars, 0x8C) != 0 && P(moby_vars, 0x88) != 0 && H(P(moby_vars, 0x88), 0xA6) == W(moby_vars, 0x124) &&
+        B(P(moby_vars, 0x88), 0x20) != 0xFE && B(P(moby_vars, 0x88), 0x20) != 0xFD) {
         pad = D_0013C940;
-        if (B(P(p, 0x88), 0x31) != 0) {
+        if (B(P(moby_vars, 0x88), 0x31) != 0) {
             if (W(pad, 0x1B4) & 0x2000) {
                 goto take;
             }
@@ -2368,41 +2368,41 @@ void FUN_L13_002b95b8(int a, char *p) {
     pad = D_0013C940;
     if (W(pad, 0x1B4) & 0x2000) {
     take:
-        g = P(p, 0x88);
+        g = P(moby_vars, 0x88);
     }
-    W(p, 0xEC) = 0;
-    W(p, 0x124) = -1;
-    W(p, 0x88) = 0;
+    W(moby_vars, 0xEC) = 0;
+    W(moby_vars, 0x124) = -1;
+    W(moby_vars, 0x88) = 0;
 skip:
     qcopy(v, D_L13_001670D0);
-    r = (char *)FUN_L13_002b8be0(a, p, D_L13_001670D0 - 0x10, v, 0.19634955f, 0.19634955f, 255.0f,
-                                 P(p, 0x88), g);
-    if ((r != P(p, 0x88) && W(p, 0x8C) >= 0x1F5) || FLAG == 0) {
-        W(p, 0xEC) = 0;
-        W(p, 0x124) = -1;
-        W(p, 0x88) = 0;
+    r = (char *)FUN_L13_002b8be0(a, moby_vars, D_L13_001670D0 - 0x10, v, 0.19634955f, 0.19634955f, 255.0f,
+                                 P(moby_vars, 0x88), g);
+    if ((r != P(moby_vars, 0x88) && W(moby_vars, 0x8C) >= 0x1F5) || FLAG == 0) {
+        W(moby_vars, 0xEC) = 0;
+        W(moby_vars, 0x124) = -1;
+        W(moby_vars, 0x88) = 0;
     }
-    if (r != 0 && (P(p, 0x88) == 0 || (H(P(p, 0x88), 0xA6) != 0x3EB && H(r, 0xA6) == 0x3EB)) &&
+    if (r != 0 && (P(moby_vars, 0x88) == 0 || (H(P(moby_vars, 0x88), 0xA6) != 0x3EB && H(r, 0xA6) == 0x3EB)) &&
         FLAG != 0) {
-        P(p, 0x88) = r;
-        W(p, 0x124) = H(r, 0xA6);
-        W(p, 0x8C) = W(p, 0x138);
+        P(moby_vars, 0x88) = r;
+        W(moby_vars, 0x124) = H(r, 0xA6);
+        W(moby_vars, 0x8C) = W(moby_vars, 0x138);
     }
-    if (r != P(p, 0x88)) {
-        W(p, 0x118) = W(p, 0x118) + 1;
-        if (scale_game_frames(0x3C) < W(p, 0x118)) {
-            W(p, 0xEC) = 0;
-            W(p, 0x124) = -1;
-            W(p, 0x88) = 0;
+    if (r != P(moby_vars, 0x88)) {
+        W(moby_vars, 0x118) = W(moby_vars, 0x118) + 1;
+        if (scale_game_frames(0x3C) < W(moby_vars, 0x118)) {
+            W(moby_vars, 0xEC) = 0;
+            W(moby_vars, 0x124) = -1;
+            W(moby_vars, 0x88) = 0;
         }
     } else {
-        W(p, 0x118) = 0;
+        W(moby_vars, 0x118) = 0;
     }
-    t = P(p, 0x88);
-    if (t != 0 && W(p, 0x84) == 0) {
-        if (H(t, 0xA6) != W(p, 0x124) || B(t, 0x20) == 0xFE || B(t, 0x20) == 0xFD) {
-            W(p, 0x88) = 0;
-            W(p, 0x124) = -1;
+    current_target_moby = P(moby_vars, 0x88);
+    if (current_target_moby != 0 && W(moby_vars, 0x84) == 0) {
+        if (H(current_target_moby, 0xA6) != W(moby_vars, 0x124) || B(current_target_moby, 0x20) == 0xFE || B(current_target_moby, 0x20) == 0xFD) {
+            W(moby_vars, 0x88) = 0;
+            W(moby_vars, 0x124) = -1;
         }
     }
 }
