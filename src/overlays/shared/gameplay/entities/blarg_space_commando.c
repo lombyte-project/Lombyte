@@ -898,17 +898,17 @@ extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void FUN_L06_002ff978(char *moby) {
     char *data = *(char **)(moby + 0x78);
-    int i, n;
-    for (i = 0; i < 15; i = n) {
+    int i, next_point_index;
+    for (i = 0; i < 15; i = next_point_index) {
         float f21, f22;
         int frame_count, second_frame_count, third_frame_count;
         int spark_position[4];
         float v[4], w[4];
-        char *p;
+        char *spark_source_point;
         int off = i * 16;
-        n = i + 1;
+        next_point_index = i + 1;
         if (*(float *)(data + off + 0x23C) < 0.99f &&
-            *(float *)(data - (-(n * 16)) + 0x23C) < 0.99f) {
+            *(float *)(data - (-(next_point_index * 16)) + 0x23C) < 0.99f) {
             continue;
         }
         if (D_L06_0016203C < random_float_between(0.0f, 1.0f)) {
@@ -938,8 +938,8 @@ void FUN_L06_002ff978(char *moby) {
         v[3] = D_L06_0016200C;
         scale_vector_xyz(w, w, 1.0f / (float)third_frame_count);
         w[3] = D_L06_00162010;
-        p = data + (off + 0x230);
-        lerp_vector(spark_position, p, p, random_float_between(0.0f, 1.0f));
+        spark_source_point = data + (off + 0x230);
+        lerp_vector(spark_position, spark_source_point, spark_source_point, random_float_between(0.0f, 1.0f));
         spawn_spark(spark_position, v, w, D_L06_00162004, D_L06_00162008, frame_count, second_frame_count, third_frame_count,
                      D_L06_00162040);
     }
