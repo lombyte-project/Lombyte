@@ -1590,7 +1590,7 @@ extern int FUN_L00_0028dc90(int, int, struct RailSpawnerMoby *, int);
 void FUN_L03_002db280(struct RailSpawnerMoby *moby) {
     struct RailSpawnerVars *vars = moby->vars;
     struct RailPath *path;
-    float d;
+    float spawn_distance;
     int i;
 
     if (moby->state == 0) {
@@ -1606,8 +1606,8 @@ void FUN_L03_002db280(struct RailSpawnerMoby *moby) {
         vars->timer = 0;
         moby->state = 1;
         vars->voice = -1;
-        for (d = 2.9f; d < path->count * path->pts[0].f[3]; d += 2.9f)
-            FUN_L03_002db198(path, d);
+        for (spawn_distance = 2.9f; spawn_distance < path->count * path->pts[0].f[3]; spawn_distance += 2.9f)
+            FUN_L03_002db198(path, spawn_distance);
         moby->unk30 = 0x60;
     }
     if (fast_dec_timer(&vars->timer)) {
