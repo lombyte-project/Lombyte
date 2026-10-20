@@ -164,6 +164,7 @@ void FUN_L16_002270c8(void) {
         HERO_STATE_HURT_ALT = 86,
         HERO_STATE_DYING_ALT = 87,
         HERO_STATE_SLIP_ALT = 88,
+        HERO_STATE_CIRCLE_HOLD_ALT = 89,
         HERO_STATE_APPROACH_TARGET_POSE = 101,
         HERO_STATE_AT_TARGET_POSE = 103,
         HERO_STATE_WATER_DEATH = 106,
@@ -2453,7 +2454,7 @@ void FUN_L16_002270c8(void) {
                     }
                     hero_set_state(0x53, 1);
                     break;
-                case 89:
+                case HERO_STATE_CIRCLE_HOLD_ALT:
                     if (hero.state_timer > scale_game_frames(0x2D) && !(controller_state.held & 0x20)) {
                         hero_set_state(0x53, 0);
                         set_hero_animation(0, 0, scale_game_frames(0x14));
