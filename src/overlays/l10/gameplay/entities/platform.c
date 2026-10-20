@@ -2325,26 +2325,26 @@ extern void FUN_L00_00262360_c(int,float *,float *,void *,float,float) __asm__("
 
 void FUN_L10_002dd3d8(char *moby) {
  float old[4],pos[4],a,b;
- char *d=*(char **)(moby+0x78);
+ char *effect_data=*(char **)(moby+0x78);
  *(OvlQuad *)old=*(OvlQuad *)(moby+0x10);
- ((EffectData *)d)->phase+=((EffectData *)d)->speed;
- ((EffectData *)d)->speed*=(((EffectData *)d)->growth-1.0f)*frame_scale+1.0f;
- FUN_L00_00262360_c(((EffectData *)d)->owner,&a,&b,moby+0x10,((EffectData *)d)->phase,((EffectData *)d)->size);
+ ((EffectData *)effect_data)->phase+=((EffectData *)effect_data)->speed;
+ ((EffectData *)effect_data)->speed*=(((EffectData *)effect_data)->growth-1.0f)*frame_scale+1.0f;
+ FUN_L00_00262360_c(((EffectData *)effect_data)->owner,&a,&b,moby+0x10,((EffectData *)effect_data)->phase,((EffectData *)effect_data)->size);
  *(float *)(moby+0x40)=random_angle_radians();
  *(float *)(moby+0x44)=random_angle_radians();
  *(float *)(moby+0x48)=random_angle_radians();
- if(fast_dec_timer((int *)(d+0x14))) {delete_moby(moby);return;}
- if(*(int *)(d+0x14)<truncate_float_to_s32(10.0f/(frame_time*5.0f))/2) {
-  float numerator=convert_integer_to_float(*(int *)(d+0x14));
+ if(fast_dec_timer((int *)(effect_data+0x14))) {delete_moby(moby);return;}
+ if(*(int *)(effect_data+0x14)<truncate_float_to_s32(10.0f/(frame_time*5.0f))/2) {
+  float numerator=convert_integer_to_float(*(int *)(effect_data+0x14));
   *(float *)(moby+0x2C)=*(float *)(*(char **)(moby+0x24)+0x24)*numerator/convert_integer_to_float(truncate_float_to_s32(10.0f/(frame_time*5.0f))/2)*0.5f;
- } else if((truncate_float_to_s32(10.0f/(frame_time*5.0f))/4)*3<*(int *)(d+0x14)) {
-  float numerator=convert_integer_to_float(truncate_float_to_s32(10.0f/(frame_time*5.0f))-*(int *)(d+0x14));
+ } else if((truncate_float_to_s32(10.0f/(frame_time*5.0f))/4)*3<*(int *)(effect_data+0x14)) {
+  float numerator=convert_integer_to_float(truncate_float_to_s32(10.0f/(frame_time*5.0f))-*(int *)(effect_data+0x14));
   *(float *)(moby+0x2C)=*(float *)(*(char **)(moby+0x24)+0x24)*numerator/convert_integer_to_float(truncate_float_to_s32(10.0f/(frame_time*5.0f))/4)*0.5f;
  }
  if(*(float *)(*(char **)(moby+0x24)+0x24)*0.25f<*(float *)(moby+0x2C)) {
-  int count=collect_mobies_in_sphere(moby+0x10,0.15f,16,*(void **)(d+0x10),0);
+  int count=collect_mobies_in_sphere(moby+0x10,0.15f,16,*(void **)(effect_data+0x10),0);
   *(OvlQuad *)pos=*(OvlQuad *)(moby+0x10);
-  send_blast_hits(*(void **)(d+0x10),pos,D_L10_00178380_u,count,0,0x810001,2,1,2.0f,1.0f,1.0f);
+  send_blast_hits(*(void **)(effect_data+0x10),pos,D_L10_00178380_u,count,0,0x810001,2,1,2.0f,1.0f,1.0f);
  }
 }
 #include "sda.h"
