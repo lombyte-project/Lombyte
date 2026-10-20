@@ -145,6 +145,9 @@ void FUN_L06_0023b440(void) {
         HERO_STATE_TARGET_POSE_REACHED = 103,
         HERO_STATE_DEATH_FALL = 119
     };
+    enum {
+        HERO_VEHICLE_MODE_NORMAL = 0
+    };
     unsigned char *moby;
     int prevSub;
     int prevState;
@@ -186,7 +189,7 @@ void FUN_L06_0023b440(void) {
                     (hero.unk20AC == 0 || hero.vehicle_mode == 1 || hero.unk1B2 != 0) &&
                     (hero.unk20A7 == 0 || hero.vehicle_mode == 1 || hero.unk1B2 != 0)) {
                     switch (hero.vehicle_mode) {
-                    case 0:
+                    case HERO_VEHICLE_MODE_NORMAL:
                     case 3: {
                         int id;
 
