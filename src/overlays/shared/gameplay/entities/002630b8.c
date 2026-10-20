@@ -317,12 +317,12 @@ void FUN_L00_00263ac8(float x, int owner_moby, int b, unsigned char *manipulator
     } else if (manipulator[1])
         detach_manipulator(owner_moby, manipulator);
 }
-void FUN_L00_00263b38(char *p, float x) {
+void FUN_L00_00263b38(char *destination, float x) {
     if (*(unsigned char *)0x15EDB7) {
-        *(float *)(p + 0x70) = x;
+        *(float *)(destination + 0x70) = x;
         return;
     }
-    *(float *)(p + 0x70) = 1.0f;
+    *(float *)(destination + 0x70) = 1.0f;
 }
 typedef struct {
     unsigned char pad0[4];
