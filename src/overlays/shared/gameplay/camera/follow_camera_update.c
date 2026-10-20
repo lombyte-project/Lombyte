@@ -1048,18 +1048,18 @@ extern void copy_matrix3x4(void *, void *) __asm__("FUN_001fa2b8");
 extern void FUN_L00_001ed580(void *, void *, void *);
 
 void FUN_L00_002eb278(void *arg) {
-    char *a = arg;
-    float m[16];
-    char *p = *(char **)(a + 0x70) + 0xB0;
-    FUN_L00_001ed580(a + 0x30, a + 0x50, p);
-    *(float *)(a + 0x50) = fast_add_rotations(*(float *)(a + 0x50), *(float *)(p + 0x18));
-    *(int *)(a + 0x40) = 0;
-    *(float *)(a + 0x44) = fast_add_rotations(*(float *)(a + 0x54), *(float *)(a + 0x5C));
-    *(float *)(a + 0x48) = fast_add_rotations(3.14159274101257324f, *(float *)(a + 0x50));
-    *(float *)(a + 0x48) = fast_add_rotations(*(float *)(a + 0x48), *(float *)(a + 0x60));
-    *(int *)(a + 0x4C) = 0;
-    euler_rotation_matrix(m, a + 0x40);
-    copy_matrix3x4(a, m);
+    char *camera_object = arg;
+    float rotation_matrix[16];
+    char *orbit_origin = *(char **)(camera_object + 0x70) + 0xB0;
+    FUN_L00_001ed580(camera_object + 0x30, camera_object + 0x50, orbit_origin);
+    *(float *)(camera_object + 0x50) = fast_add_rotations(*(float *)(camera_object + 0x50), *(float *)(orbit_origin + 0x18));
+    *(int *)(camera_object + 0x40) = 0;
+    *(float *)(camera_object + 0x44) = fast_add_rotations(*(float *)(camera_object + 0x54), *(float *)(camera_object + 0x5C));
+    *(float *)(camera_object + 0x48) = fast_add_rotations(3.14159274101257324f, *(float *)(camera_object + 0x50));
+    *(float *)(camera_object + 0x48) = fast_add_rotations(*(float *)(camera_object + 0x48), *(float *)(camera_object + 0x60));
+    *(int *)(camera_object + 0x4C) = 0;
+    euler_rotation_matrix(rotation_matrix, camera_object + 0x40);
+    copy_matrix3x4(camera_object, rotation_matrix);
 }
 #include "eetypes.h"
 #include "qcopy.h"
