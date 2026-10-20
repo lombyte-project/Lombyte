@@ -31,18 +31,18 @@ extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern void FUN_L00_00235c80(void *);
 extern s32 D_L05_0015FAFC;
 
-void FUN_L05_00262ae8(HudElemX *e) {
+void FUN_L05_00262ae8(HudElemX *hud_element) {
     s32 i;
-    s32 *p;
-    e->unk7C = scale_game_frames(0xB4) + 0x1E;
-    e->unk48 = 0;
-    e->unk4A = 0;
+    s32 *reset_slot;
+    hud_element->unk7C = scale_game_frames(0xB4) + 0x1E;
+    hud_element->unk48 = 0;
+    hud_element->unk4A = 0;
     i = 3;
-    p = &D_L05_0015FAFC;
+    reset_slot = &D_L05_0015FAFC;
     for (; i >= 0; i--) {
-        *p-- = -1;
+        *reset_slot-- = -1;
     }
-    FUN_L00_00235c80(e);
+    FUN_L00_00235c80(hud_element);
 }
 #include "rnc/gameplay/hero.h"
 
