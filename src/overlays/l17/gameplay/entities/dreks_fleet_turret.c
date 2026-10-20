@@ -829,7 +829,7 @@ extern void draw_geometry_quad(void *, void *, int);
 extern void wrap_angle_alt(void *, float, float, float) __asm__("FUN_00214db0");
 
 void FUN_L17_002d7cf0(struct Moby *moby) {
-    RingPrim q;
+    RingPrim quad_primitive;
     float mat[16];
     float scroll;
     int pass;
@@ -842,16 +842,16 @@ void FUN_L17_002d7cf0(struct Moby *moby) {
     euler_rotation_matrix(mat, &moby->rot.x);
     *(OvlQuad *)&mat[12] = *(OvlQuad *)&moby->pos;
     mat[15] = 1.0f;
-    q.tex = get_effect_texture(0x28);
-    q.q80 = 0xFF9000000260L;
-    q.alpha = (long)D_L17_00161B98 | ((long)D_L17_00161B9C << 2) | ((long)D_L17_00161BA0 << 4) |
+    quad_primitive.tex = get_effect_texture(0x28);
+    quad_primitive.q80 = 0xFF9000000260L;
+    quad_primitive.alpha = (long)D_L17_00161B98 | ((long)D_L17_00161B9C << 2) | ((long)D_L17_00161BA0 << 4) |
               ((long)D_L17_00161BA4 << 6) | 0x8000000000L;
-    q.z70 = 0;
+    quad_primitive.z70 = 0;
     for (pass = 0; pass < 2; pass++) {
         for (k = 0; k < 4; k++) {
             RingStep step = D_L17_00161BC0;
 
-            q.uv[k].y = D_L17_001D3F70[k].y + scroll * step.v[pass];
+            quad_primitive.uv[k].y = D_L17_001D3F70[k].y + scroll * step.v[pass];
         }
         for (i = 0; i < 3; i++) {
             for (j = 0; j < 4; j++) {
@@ -861,23 +861,23 @@ void FUN_L17_002d7cf0(struct Moby *moby) {
                 float *vj;
                 float radius;
 
-                q.uv[j].x = D_L17_001D3F70[j].x + scroll * step.v[pass];
+                quad_primitive.uv[j].x = D_L17_001D3F70[j].x + scroll * step.v[pass];
                 radius = 0.0f;
                 if (j != 0) {
                     radius = *(float *)&D_L17_00161B84;
                 }
-                vj = q.v[j];
+                vj = quad_primitive.v[j];
                 wrap_angle_alt(vj, radius, 1.5707964f,
                                build_spherical_offset_alt(*(float *)&D_L17_00161B7C * DEG_TO_RAD +
                                                           convert_integer_to_float(i) * 2.0943952f +
                                                           spread[j]));
                 vj[3] = 1.0f;
             }
-            q.rgba[3] = D_L17_00161BB8;
-            q.rgba[2] = D_L17_00161BB8;
-            q.rgba[1] = D_L17_00161BB8;
-            q.rgba[0] = D_L17_00161BB8;
-            draw_geometry_quad(&q, mat, 0);
+            quad_primitive.rgba[3] = D_L17_00161BB8;
+            quad_primitive.rgba[2] = D_L17_00161BB8;
+            quad_primitive.rgba[1] = D_L17_00161BB8;
+            quad_primitive.rgba[0] = D_L17_00161BB8;
+            draw_geometry_quad(&quad_primitive, mat, 0);
         }
     }
 }
