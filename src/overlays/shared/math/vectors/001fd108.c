@@ -13,19 +13,19 @@ extern char D_L00_0016EA40_001fe990[] __asm__("D_L00_0016EA40");
 float random_angle_radians() __asm__("FUN_00213308");
 /* Fills the first free 0x20-byte glints slot with v, b and x; returns its index or -1. */
 int FUN_L00_001fe990(u128 *v, int b, float x) {
-    u128 t;
-    u128 *tp = &t;
-    char *e;
+    u128 input_copy;
+    u128 *tp = &input_copy;
+    char *slot;
     int i;
     *tp = *v;
-    e = D_L00_0016EA40_001fe990;
-    for (i = 0; i < 16; i++, e += 0x20) {
-        if (*(short *)(e + 0x10) <= 0) {
-            qcopy(e, tp);
-            *(float *)(e + 0x1c) = x;
-            *(short *)(e + 0x10) = 0x18;
-            *(short *)(e + 0x14) = b;
-            *(float *)(e + 0x18) = random_angle_radians();
+    slot = D_L00_0016EA40_001fe990;
+    for (i = 0; i < 16; i++, slot += 0x20) {
+        if (*(short *)(slot + 0x10) <= 0) {
+            qcopy(slot, tp);
+            *(float *)(slot + 0x1c) = x;
+            *(short *)(slot + 0x10) = 0x18;
+            *(short *)(slot + 0x14) = b;
+            *(float *)(slot + 0x18) = random_angle_radians();
             return i;
         }
     }
