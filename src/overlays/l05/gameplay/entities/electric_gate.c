@@ -537,7 +537,7 @@ void drain_cover_update(DrainCoverMoby *moby) {
     char *entry;
     DrainCoverHero *hero;
     DrainCoverLid *lid;
-    float t;
+    float minimum_rise_height;
     float ang;
 
     qcopy(old_position, moby->pos);
@@ -566,9 +566,9 @@ void drain_cover_update(DrainCoverMoby *moby) {
         data->f9C = random_angle_radians_30e7f8();
         data->fA0 = random_float_between_30e7f8_init(70.0f, 120.0f) * 0.017453292f * frame_time;
         data->fA4 = random_float_between_30e7f8_init(70.0f, 120.0f) * 0.017453292f * frame_time;
-        t = data->f84 + 1.0f;
-        if (data->f80 <= t) {
-            data->f80 = t;
+        minimum_rise_height = data->f84 + 1.0f;
+        if (data->f80 <= minimum_rise_height) {
+            data->f80 = minimum_rise_height;
         }
         break;
     case DRAIN_COVER_WAIT_TO_RISE:
