@@ -9,7 +9,7 @@ and the stack through `0055` builds `66c253915a6fa851…`, the full stack throug
 `0056` `fc69951c0ec883e1…`, on the Linux cloud host (see the build notes below). That last stack still held
 `0034`, which is retired. The current stack (through `0056`, without `0034`)
 builds `c2b8e013b797f4ff…` there and gives the same objects (full-ELF gate
-PASS); with `0057` it builds `5241bdbb904a71a8…`, with `0058` `acd9a6aa2ac7a6ad…`. Check a rebuilt compiler by
+PASS); with `0057` it builds `5241bdbb904a71a8…`, with `0058` `acd9a6aa2ac7a6ad…`, with `0060` `67b4239227f5bdba…`. Check a rebuilt compiler by
 its output.
 
 - Archive: `gnu-ee-binutils-gcc-1.1.tar.gz`, 16,510,927 bytes
@@ -42,7 +42,8 @@ Apply with `git apply` at the root of the extracted archive, in this order:
 2. `0001`, `0015`, `0016`, `0019`, `0020`, `0021`, `0022`, `0025`, `0026`,
    `0027`, `0028`, `0029`, `0030`, `0031`, `0032`, `0033`, `0037`
 3. `0036`, `0044`, `0045`, `0046`, `0047`, `0048`, `0049`,
-   `0050`, `0051`, `0052`, `0053`, `0054`, `0055`, `0056`, `0057`, `0058`
+   `0050`, `0051`, `0052`, `0053`, `0054`, `0055`, `0056`, `0057`, `0058`,
+   `0060`
 
 Configure for `--target=mips64r5900-sf-elf --host=i686-linux-gnu
 --build=i686-linux-gnu --disable-nls --enable-languages=c --without-headers`
@@ -85,6 +86,19 @@ differs. `make` does not track header dependencies: after changing
 `mips.h`, remove `toplev.o` (or build from a fresh tree).
 
 ## Published patches
+
+- `0060-alias-static-chain-not-a-base.patch` SHA-256: `0bf0ab1423c33e674c7cc34b0286750e75777d42f52d540be9e53957bb7d3789`
+  - role: default. gcc 2.95.3's `alias.c` change (Richard Henderson,
+    2000-08-22): `init_alias_analysis` no longer marks the static chain
+    register (`$2`) and the incoming struct value register as known bases.
+    With the mark, the first set of `$2` after reload cleared the base, so
+    sched2 took every access through `$2` as a possible alias of the stack
+    saves and scheduled the prologue saves later than retail. Retail's SN
+    compiler is 2.95.3-based; SN's cc1 2.95.2 lacks the change and misses
+    both fixtures the same way. No built game-compiler unit, exception unit
+    or SN overlay unit compiled on this cc1 changes
+  - fixtures: `rendering/view/configure_graphics_projection`,
+    `FUN_L00_00268900`
 
 - `0059-gas-sdk-delay-slots.patch` SHA-256: `9ddacc9317ee7b26dd3b41b9462e7476d1714b36efa29cc13a55aa945ffe4be5`
   - role: SDK assembler only (gas). Fills an empty jump or branch delay slot
