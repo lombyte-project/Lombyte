@@ -430,7 +430,7 @@ extern float cubic_hermite_scalar(float, float, float, float, float) __asm__("FU
 void FUN_L14_00305680(struct Moby *moby) {
     int *unlock_sequence_data = (int *)moby->pvars;
     short *moby_id_cursor = (short *)D_L14_001ABF40[unlock_sequence_data[0]];
-    float t;
+    float height_blend_factor;
     float *saved_height_cursor;
     char *base;
     float x;
@@ -438,7 +438,7 @@ void FUN_L14_00305680(struct Moby *moby) {
         return;
     }
     x = convert_integer_to_float(unlock_sequence_data[1]) * ((float *)unlock_sequence_data)[2];
-    t = cubic_hermite_scalar(-1.0f, 0.0f, 1.0f, 0.0f, 1.0f - x);
+    height_blend_factor = cubic_hermite_scalar(-1.0f, 0.0f, 1.0f, 0.0f, 1.0f - x);
     base = D_L14_0015FFD8;
     saved_height_cursor = D_L14_001EE5E0;
     do {
@@ -446,7 +446,7 @@ void FUN_L14_00305680(struct Moby *moby) {
         float saved_height = *saved_height_cursor++;
         float lo = saved_height - 20.0f;
         *(unsigned short *)(target_moby + 0x34) &= 0xFFBE;
-        *(float *)(target_moby + 0x18) = lo + (saved_height - lo) * t;
+        *(float *)(target_moby + 0x18) = lo + (saved_height - lo) * height_blend_factor;
     } while (*moby_id_cursor++ >= 0);
 }
 extern u8 D_0014C050[];
