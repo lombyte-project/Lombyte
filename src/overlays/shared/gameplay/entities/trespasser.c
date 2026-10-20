@@ -1739,7 +1739,7 @@ extern void FUN_L00_0025f780(void *, void *, s32);
 
 u8 *FUN_L00_002c35c0(s32 value, u128 *position, u128 *other_position) {
     u8 *flags = item_text_variant;
-    u8 *m;
+    u8 *spawned_moby;
     u8 *data;
     u8 *candidate;
     s32 i;
@@ -1747,26 +1747,26 @@ u8 *FUN_L00_002c35c0(s32 value, u128 *position, u128 *other_position) {
     s32 current_value;
     f32 speed;
 
-    m = create_moby(flags[0x19] ? 0x76c : 0xcb);
-    if (m != 0) {
-        m[0x30] = 0xff;
-        *(u16 *)(m + 0x32) = 0xff;
-        m[0x31] = 1;
-        data = *(u8 **)(m + 0x78);
-        m[0x20] = 0;
-        qcopy(m + 0x10, position);
+    spawned_moby = create_moby(flags[0x19] ? 0x76c : 0xcb);
+    if (spawned_moby != 0) {
+        spawned_moby[0x30] = 0xff;
+        *(u16 *)(spawned_moby + 0x32) = 0xff;
+        spawned_moby[0x31] = 1;
+        data = *(u8 **)(spawned_moby + 0x78);
+        spawned_moby[0x20] = 0;
+        qcopy(spawned_moby + 0x10, position);
         qcopy(data + 0x10, other_position);
         speed = D_0015ED60_2c5be8 * -0.5f;
         *(s32 *)(data + 0x40) = value;
         *(u16 *)(data + 0x44) = 0;
         *(s32 *)(data + 0x54) = 0;
-        *(f32 *)(m + 0x2c) = *(f32 *)(*(u8 **)(m + 0x24) + 0x24) * (speed + 1.0f);
+        *(f32 *)(spawned_moby + 0x2c) = *(f32 *)(*(u8 **)(spawned_moby + 0x24) + 0x24) * (speed + 1.0f);
         *(f32 *)(data + 0x48) = (scale_ticks(flags[0x19]) + 1.0f) * 4.0f;
-        if (m[0x53] != 0)
-            blend_moby_animation(m, 0, 0, scale_game_frames(0));
-        *(s32 *)(m + 0x94) = 0;
-        *(s32 *)(m + 0x98) = -1;
-        *(f32 *)(m + 0x48) = FUN_002132a8_2c35c0(-3.14159274f, 3.14159274f);
+        if (spawned_moby[0x53] != 0)
+            blend_moby_animation(spawned_moby, 0, 0, scale_game_frames(0));
+        *(s32 *)(spawned_moby + 0x94) = 0;
+        *(s32 *)(spawned_moby + 0x98) = -1;
+        *(f32 *)(spawned_moby + 0x48) = FUN_002132a8_2c35c0(-3.14159274f, 3.14159274f);
         *(s32 *)(data + 0x58) = 0;
         *(s32 *)(data + 0x5c) = 0;
         while (D_L00_001B0830_lui[0] >= 6) {
@@ -1789,19 +1789,19 @@ u8 *FUN_L00_002c35c0(s32 value, u128 *position, u128 *other_position) {
                 candidate[0x20] = 6;
             }
         }
-        FUN_L00_00250df8(m);
-        FUN_L00_0025d1b8(m);
+        FUN_L00_00250df8(spawned_moby);
+        FUN_L00_0025d1b8(spawned_moby);
         *(u16 *)data = 0;
         data[8] = 0;
         data[9] = 0;
         data[7] = 0x80;
         *(u16 *)(data + 0x0c) = 4;
         *(u16 *)(data + 0x0e) = 0xf;
-        FUN_L00_0025f780(m, D_L00_001B0830_lui, 0x1f);
+        FUN_L00_0025f780(spawned_moby, D_L00_001B0830_lui, 0x1f);
         if (hero.unk20A5 != 0 || hero.unk20AF != 0)
-            *(u16 *)(m + 0x34) |= 0x41;
+            *(u16 *)(spawned_moby + 0x34) |= 0x41;
     }
-    return m;
+    return spawned_moby;
 }
 #include "qzero.h"
 
