@@ -2270,8 +2270,8 @@ void FUN_L00_00209540(int counter_reset_range, int lim) {
         v[1] = g->y + FUN_002132a8_00209540(lo, hi);
         v[2] = g->pos.x;
         {
-            float s = FUN_002132a8_00209540(0.4f, 0.6f);
-            FUN_L00_002715e8_00209540(v, &g->pos, -1, s, 5250.0f);
+            float random_effect_scale = FUN_002132a8_00209540(0.4f, 0.6f);
+            FUN_L00_002715e8_00209540(v, &g->pos, -1, random_effect_scale, 5250.0f);
         }
         g->cnt = FUN_00213260_00209540(counter_reset_range);
     }
