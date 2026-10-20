@@ -198,31 +198,31 @@ void FUN_L12_002bf770(int arg) {
     D_L12_001CBF40[arg].n[7] = 0xFF;
     for (i = 0; i < 17; i++) {
         if (arg != i) {
-            Ent *t = D_L12_001CBF40;
-            Ent *e = &t[arg];
-            float x = e->x - t[i].x;
-            float y = e->y - t[i].y;
+            Ent *slot_table = D_L12_001CBF40;
+            Ent *selected_slot = &slot_table[arg];
+            float x = selected_slot->x - slot_table[i].x;
+            float y = selected_slot->y - slot_table[i].y;
             if (absolute_float(x) < 0.1f) {
                 if (absolute_float(y - 16.0f) < 0.1f)
-                    e->n[0] = i;
+                    selected_slot->n[0] = i;
                 if (absolute_float(y + 16.0f) < 0.1f)
-                    e->n[2] = i;
+                    selected_slot->n[2] = i;
             } else if (absolute_float(y) < 0.1f) {
                 if (absolute_float(x - 16.0f) < 0.1f)
-                    e->n[1] = i;
+                    selected_slot->n[1] = i;
                 if (absolute_float(x + 16.0f) < 0.1f)
-                    e->n[3] = i;
+                    selected_slot->n[3] = i;
             } else {
                 if (absolute_float(x + 16.0f) < 0.1f) {
                     if (absolute_float(y - 16.0f) < 0.1f)
-                        e->n[5] = i;
+                        selected_slot->n[5] = i;
                     if (absolute_float(y + 16.0f) < 0.1f)
-                        e->n[7] = i;
+                        selected_slot->n[7] = i;
                 } else if (absolute_float(x - 16.0f) < 0.1f) {
                     if (absolute_float(y - 16.0f) < 0.1f)
-                        e->n[4] = i;
+                        selected_slot->n[4] = i;
                     if (absolute_float(y + 16.0f) < 0.1f)
-                        e->n[6] = i;
+                        selected_slot->n[6] = i;
                 }
             }
         }
