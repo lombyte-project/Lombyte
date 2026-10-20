@@ -125,21 +125,21 @@ extern s32 is_point_inside_clip_volume(void *, s32) __asm__("FUN_00214720");
 extern void FUN_L05_002f5190_2f5200(struct Moby *, TriggerVars_2f5200 *, s32, s32) __asm__("FUN_L05_002f5190");
 extern void FUN_L05_002f4f60_2f5200(s32, TriggerVars_2f5200 *, s32) __asm__("FUN_L05_002f4f60");
 
-void FUN_L05_002f5200(struct Moby *m) {
-    TriggerVars_2f5200 *v = (TriggerVars_2f5200 *)m->pvars;
+void FUN_L05_002f5200(struct Moby *trigger_moby) {
+    TriggerVars_2f5200 *v = (TriggerVars_2f5200 *)trigger_moby->pvars;
     Vec4 target;
     s32 inside;
     s32 i;
     s32 *path;
 
-    m->update_dist = 0xFF;
+    trigger_moby->update_dist = 0xFF;
     inside = 0;
     if (v->use_alt_target != 0) {
         qcopy(&target, &D_L05_001671C0_2f5200);
     } else {
         qcopy(&target, &hero.motion.pos);
     }
-    if (0.0f < v->radius && distance_xyz(&m->pos, &target) < v->radius) {
+    if (0.0f < v->radius && distance_xyz(&trigger_moby->pos, &target) < v->radius) {
         inside = 1;
     }
     if (!inside && v->path != -1) {
@@ -154,16 +154,16 @@ void FUN_L05_002f5200(struct Moby *m) {
             }
         }
     }
-    if ((inside && m->command == 0) || (!inside && m->command != 0) || m->state == 0) {
+    if ((inside && trigger_moby->command == 0) || (!inside && trigger_moby->command != 0) || trigger_moby->state == 0) {
         if (inside) {
-            m->command = 1;
+            trigger_moby->command = 1;
         } else {
-            m->command = 0;
+            trigger_moby->command = 0;
         }
-        m->state = m->command + 1;
+        trigger_moby->state = trigger_moby->command + 1;
         for (i = 0; i < 12; i++) {
             if (v->on_lists[i] != -1) {
-                FUN_L05_002f5190_2f5200(m, v, v->on_lists[i], inside);
+                FUN_L05_002f5190_2f5200(trigger_moby, v, v->on_lists[i], inside);
             }
         }
         for (i = 0; i < 11; i++) {
