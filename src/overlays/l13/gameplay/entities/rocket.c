@@ -1907,26 +1907,26 @@ extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 
-void FUN_L13_0030ad38(struct Moby *moby, float *p, float *q) {
-    float a, k;
+void FUN_L13_0030ad38(struct Moby *moby, float *mount_position, float *mount_rotation) {
+    float mount_offset_angle, k;
     char *base;
-    clear_u64_value(q);
+    clear_u64_value(mount_rotation);
     k = 2.25f;
     if ((moby->command >= 2 && (moby->command & 1)) ||
         (moby->state >= 2 && (moby->state & 1))) {
-        a = -1.5707964f;
-        q[0] = moby->rot.y;
+        mount_offset_angle = -1.5707964f;
+        mount_rotation[0] = moby->rot.y;
     } else {
-        a = 1.5707964f;
-        q[0] = -moby->rot.y;
+        mount_offset_angle = 1.5707964f;
+        mount_rotation[0] = -moby->rot.y;
     }
-    p[0] = fast_cos(a) * k;
-    p[1] = fast_sin(a) * k;
-    p[2] = 1.5f;
-    transform_vector_by_basis(p, p, &moby->rot_row0);
-    fast_vec_add(p, p, &moby->pos);
+    mount_position[0] = fast_cos(mount_offset_angle) * k;
+    mount_position[1] = fast_sin(mount_offset_angle) * k;
+    mount_position[2] = 1.5f;
+    transform_vector_by_basis(mount_position, mount_position, &moby->rot_row0);
+    fast_vec_add(mount_position, mount_position, &moby->pos);
     base = D_0013E533 + 0xE1D;
-    q[2] = fast_arc_tan(*(float *)(base + 0xD0) - p[0], *(float *)(base + 0xD4) - p[1]);
+    mount_rotation[2] = fast_arc_tan(*(float *)(base + 0xD0) - mount_position[0], *(float *)(base + 0xD4) - mount_position[1]);
 }
 
 #define NOT_SDA
