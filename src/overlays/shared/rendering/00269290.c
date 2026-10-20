@@ -2557,39 +2557,39 @@ int FUN_001f96f8_26f080(int) __asm__("FUN_001f96f8");
 extern unsigned char *D_L00_001B2108 __attribute__((section(".data")));
 unsigned char *FUN_L00_0026f080(void *pos, float *v, float x, float y);
 unsigned char *FUN_L00_0026f080(void *pos, float *v, float x, float y) {
-    unsigned char *m = FUN_L00_002678b8_26f080(0x22);
-    if (m) {
-        float *q = (float *)(m + 0x20);
-        int a;
-        *(int *)(m + 4) = 0x88A0A0A0;
-        m[9] = FUN_001fa6d0_26f080(4.0f) + 0x40;
-        m[1] = 0;
-        m[3] = 0x44;
-        q[3] = FUN_002132a8_26f080(0.75f, 1.25f) * x;
-        *(float *)(m + 0xC) = 5250.0f;
-        m[8] = FUN_L00_00257b90_26f080(-10, 10) - 0x80;
-        m[2] = *D_L00_001B2108;
-        a = FUN_001f96f8_26f080(0x46);
-        *(short *)(m + 0xA) = FUN_L00_00257b90_26f080(a, FUN_001f96f8_26f080(0x8C));
+    unsigned char *particle = FUN_L00_002678b8_26f080(0x22);
+    if (particle) {
+        float *particle_data = (float *)(particle + 0x20);
+        int minimum_lifetime;
+        *(int *)(particle + 4) = 0x88A0A0A0;
+        particle[9] = FUN_001fa6d0_26f080(4.0f) + 0x40;
+        particle[1] = 0;
+        particle[3] = 0x44;
+        particle_data[3] = FUN_002132a8_26f080(0.75f, 1.25f) * x;
+        *(float *)(particle + 0xC) = 5250.0f;
+        particle[8] = FUN_L00_00257b90_26f080(-10, 10) - 0x80;
+        particle[2] = *D_L00_001B2108;
+        minimum_lifetime = FUN_001f96f8_26f080(0x46);
+        *(short *)(particle + 0xA) = FUN_L00_00257b90_26f080(minimum_lifetime, FUN_001f96f8_26f080(0x8C));
         if (y == -1.0f) {
-            struct Hero *p = &hero;
-            if (p->state.current == 0x31) {
-                q[4] = p->motion.pos.f[2] + 0.4f;
+            struct Hero *hero_ptr = &hero;
+            if (hero_ptr->state.current == 0x31) {
+                particle_data[4] = hero_ptr->motion.pos.f[2] + 0.4f;
             } else {
-                q[4] = p->water_surface_z;
+                particle_data[4] = hero_ptr->water_surface_z;
             }
         } else {
-            q[4] = y;
+            particle_data[4] = y;
         }
-        q[5] = FUN_00213308_26f080();
-        q[6] = FUN_002132a8_26f080(frame_time * 1.7453293f, frame_time * 6.981317f);
-        q[7] = FUN_002132a8_26f080(frame_time * 0.5f, frame_time * 1.4f);
-        q[0] = v[0];
-        q[1] = v[1];
-        q[2] = v[2];
-        qcopy(m + 0x10, pos);
+        particle_data[5] = FUN_00213308_26f080();
+        particle_data[6] = FUN_002132a8_26f080(frame_time * 1.7453293f, frame_time * 6.981317f);
+        particle_data[7] = FUN_002132a8_26f080(frame_time * 0.5f, frame_time * 1.4f);
+        particle_data[0] = v[0];
+        particle_data[1] = v[1];
+        particle_data[2] = v[2];
+        qcopy(particle + 0x10, pos);
     }
-    return m;
+    return particle;
 }
 /* Updates a particle that swirls on a circle: fades with age, spins, and moves along its orbit. */
 /* Ported from rac1-decomp (src/overlays/shared/partupd_0026A130.c: func_L00_00270120), where it is exact; names translated to the US level program. */
