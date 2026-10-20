@@ -47,7 +47,7 @@ extern void FUN_L00_00212ff0(void);
 void FUN_L01_00233de0(void)
 {
     Vec4 old_pos;
-    Vec4 tmp;
+    Vec4 movement_vector_scratch;
     Vec4 projection_velocity;
     f32 limit;
     f32 d;
@@ -107,15 +107,15 @@ void FUN_L01_00233de0(void)
     }
     normalize_vector_xyz(&hero.motion.unk110, &hero.motion.velocity, d);
 
-    qcopy(&tmp, &hero.motion.velocity);
-    gravity_flatten(&tmp, &tmp);
+    qcopy(&movement_vector_scratch, &hero.motion.velocity);
+    gravity_flatten(&movement_vector_scratch, &movement_vector_scratch);
     gravity_flatten(&hero.motion.unk130, &hero.motion.unk130);
     normalize_vector_xyz(&hero.motion.unk130, &hero.motion.unk130, 1.0f);
-    d = dot_vectors_xyz(&hero.motion.unk130, &tmp);
+    d = dot_vectors_xyz(&hero.motion.unk130, &movement_vector_scratch);
     if (d < 0.0f) {
         d = 0.0f;
     }
-    normalize_vector_xyz(&hero.motion.unk130, &tmp, d);
+    normalize_vector_xyz(&hero.motion.unk130, &movement_vector_scratch, d);
 
     qcopy(&projection_velocity, &hero.motion.velocity);
     FUN_L00_00233ba0((float *)&projection_velocity, (float *)&projection_velocity, 0.0f);
@@ -130,14 +130,14 @@ void FUN_L01_00233de0(void)
     hero.motion.speed_xy = vector_length_xyz(&hero.motion.unk110);
     hero.motion.unk164 = vector_length_xy(&hero.motion.unk110);
     /* read through the address, as retail reloads the base register here */
-    tmp.q = (&hero.motion.unk110)->q;
-    hero.motion.unk168 = forward_component(&tmp);
+    movement_vector_scratch.q = (&hero.motion.unk110)->q;
+    hero.motion.unk168 = forward_component(&movement_vector_scratch);
     if (hero.motion.unk168 < 0.0f) {
         hero.motion.unk168 = 0.0f;
     }
 
     /* apply the push, keeping its w */
-    qcopy(&tmp, &hero.motion.pos);
+    qcopy(&movement_vector_scratch, &hero.motion.pos);
     if (vector_length_xyz(&hero.motion.platform_delta) > 0.0001f) {
         add_vector_xyz(&hero.motion.pos, &hero.motion.pos, &hero.motion.platform_delta);
         w = hero.motion.platform_delta.f[3];
@@ -148,7 +148,7 @@ void FUN_L01_00233de0(void)
         subtract_vector_xyz(&hero.motion.displacement, &hero.motion.pos, &old_pos);
         FUN_L00_00212ff0();
     }
-    subtract_vector_xyz(&hero.motion.platform_carry, &hero.motion.pos, &tmp);
+    subtract_vector_xyz(&hero.motion.platform_carry, &hero.motion.pos, &movement_vector_scratch);
     {
         /* push w moves to unk140.w; a block-local keeps retail's order */
         f32 push_w = hero.motion.platform_delta.f[3];
