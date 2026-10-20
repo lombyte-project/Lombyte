@@ -326,12 +326,12 @@ void refueling_station_update(struct Moby *moby) {
     };
     char *station_vars = (char *)moby->pvars;
     float v[4];
-    unsigned char *q;
+    unsigned char *removal_check_base;
     FUN_L09_00303b30(moby, station_vars, station_vars + 0x20);
     switch (moby->state) {
     case REFUELING_STATION_STATE_INITIALIZE:
         if (*(short *)(station_vars + 0x76) != -1 &&
-            (q = (unsigned char *)D_0013D388 + *(short *)(station_vars + 0x76))[0x39] != 0) {
+            (removal_check_base = (unsigned char *)D_0013D388 + *(short *)(station_vars + 0x76))[0x39] != 0) {
             mark_moby_for_removal(moby);
             return;
         }
