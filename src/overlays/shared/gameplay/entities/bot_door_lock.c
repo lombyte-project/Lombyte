@@ -368,21 +368,21 @@ void FUN_L06_0030bfa8(char *moby);
 void enqueue_callback_list_1(s32 arg0, s32 arg1) __asm__("FUN_001f4600");
 void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
-void FUN_L06_0030be60(char *m) {
+void FUN_L06_0030be60(char *moby) {
     enum {
         SPRITE_EFFECT_STATE_REMOVE = 0,
         SPRITE_EFFECT_STATE_ANIMATE = 1
     };
-    float *d = *(float **)(m + 0x78);
-    switch ((unsigned char)m[0x20]) {
+    float *effect_data = *(float **)(moby + 0x78);
+    switch ((unsigned char)moby[0x20]) {
     case SPRITE_EFFECT_STATE_REMOVE:
-        mark_moby_for_removal(m);
+        mark_moby_for_removal(moby);
         break;
     case SPRITE_EFFECT_STATE_ANIMATE:
-        enqueue_callback_list_1(FUN_L06_0030bfa8, m);
-        d[0] = d[0] + d[1];
-        if (2.0f < d[0]) {
-            mark_moby_for_removal(m);
+        enqueue_callback_list_1(FUN_L06_0030bfa8, moby);
+        effect_data[0] = effect_data[0] + effect_data[1];
+        if (2.0f < effect_data[0]) {
+            mark_moby_for_removal(moby);
         }
         break;
     }
