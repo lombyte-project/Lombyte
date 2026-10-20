@@ -20,26 +20,26 @@ unsigned char transition_update_movie_camera(void) {
     float *ang = (float *)(key + 0x10);
     char *pos;
     char *cam;
-    float m[16];
+    float camera_rotation_matrix[16];
 
     view_tan_half_fov = 0.63f;
     update_view_context();
     pos = D_00187080;
     qcopy(pos, key);
-    sceVu0UnitMatrix(m);
-    SceVu0RotMatrixX(m, m, *(float *)(key + 0x10));
-    SceVu0RotMatrixY(m, m, ang[1]);
-    sceVu0RotMatrixZ(m, m, ang[2]);
+    sceVu0UnitMatrix(camera_rotation_matrix);
+    SceVu0RotMatrixX(camera_rotation_matrix, camera_rotation_matrix, *(float *)(key + 0x10));
+    SceVu0RotMatrixY(camera_rotation_matrix, camera_rotation_matrix, ang[1]);
+    sceVu0RotMatrixZ(camera_rotation_matrix, camera_rotation_matrix, ang[2]);
     cam = pos - 0x140;
-    *(float *)(cam + 0x350) = -m[8];
-    *(float *)(cam + 0x360) = -m[0];
-    *(float *)(cam + 0x370) = m[4];
-    *(float *)(cam + 0x354) = -m[9];
-    *(float *)(cam + 0x364) = -m[1];
-    *(float *)(cam + 0x374) = m[5];
-    *(float *)(cam + 0x358) = -m[10];
-    *(float *)(cam + 0x368) = -m[2];
-    *(float *)(cam + 0x378) = m[6];
+    *(float *)(cam + 0x350) = -camera_rotation_matrix[8];
+    *(float *)(cam + 0x360) = -camera_rotation_matrix[0];
+    *(float *)(cam + 0x370) = camera_rotation_matrix[4];
+    *(float *)(cam + 0x354) = -camera_rotation_matrix[9];
+    *(float *)(cam + 0x364) = -camera_rotation_matrix[1];
+    *(float *)(cam + 0x374) = camera_rotation_matrix[5];
+    *(float *)(cam + 0x358) = -camera_rotation_matrix[10];
+    *(float *)(cam + 0x368) = -camera_rotation_matrix[2];
+    *(float *)(cam + 0x378) = camera_rotation_matrix[6];
     return flag;
 }
 
