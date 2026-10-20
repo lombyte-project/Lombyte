@@ -20,49 +20,49 @@ extern int f9770_269290(void *) __asm__("FUN_001f9770");
 extern void lerp_269290(void *, void *, void *, float) __asm__("FUN_001f9a40");
 extern void f7a08_269290(void *) __asm__("FUN_L00_00267a08");
 
-void FUN_L00_00269290(char *o) {
-    S_269290 *s = (S_269290 *)(o + 0x20);
+void FUN_L00_00269290(char *particle) {
+    S_269290 *particle_data = (S_269290 *)(particle + 0x20);
     float v[4] __attribute__((aligned(16)));
     float a[4] __attribute__((aligned(16)));
     float b[4] __attribute__((aligned(16)));
-    float t;
+    float phase_remaining_ratio;
 
     if (D_15F5CC_269290 & 1) {
-        *(unsigned char *)(o + 8) += 1;
+        *(unsigned char *)(particle + 8) += 1;
     }
-    if (s->h10 != 0) {
+    if (particle_data->h10 != 0) {
         *(volatile int *)0x10000000 = 0;
-        f4bc0_269290(v, s);
-        add_269290(o + 0x10, o + 0x10, v);
-        t = i2f_269290(*(short *)(o + 0xA)) / i2f_269290(s->h10);
-        *(int *)(o + 4) = lerpc_269290(s->w8 & 0xFFFFFF, s->w8, 1.0f - t);
-        *(float *)(o + 0xC) = (float)(s->h16 * 1000);
-        if (f9770_269290(o + 0xA)) {
-            s->h10 = 0;
-            *(short *)(o + 0xA) = s->h12;
+        f4bc0_269290(v, particle_data);
+        add_269290(particle + 0x10, particle + 0x10, v);
+        phase_remaining_ratio = i2f_269290(*(short *)(particle + 0xA)) / i2f_269290(particle_data->h10);
+        *(int *)(particle + 4) = lerpc_269290(particle_data->w8 & 0xFFFFFF, particle_data->w8, 1.0f - phase_remaining_ratio);
+        *(float *)(particle + 0xC) = (float)(particle_data->h16 * 1000);
+        if (f9770_269290(particle + 0xA)) {
+            particle_data->h10 = 0;
+            *(short *)(particle + 0xA) = particle_data->h12;
         }
-    } else if (s->h12 != 0) {
-        f4bc0_269290(a, s);
-        f4bc0_269290(b, o + 0x24);
-        t = i2f_269290(*(short *)(o + 0xA)) / i2f_269290(s->h12);
-        lerp_269290(v, b, a, t);
-        add_269290(o + 0x10, o + 0x10, v);
-        *(float *)(o + 0xC) = ((float)(s->h16 - s->h18) * t + (float)s->h18) * 1000.0f;
-        *(int *)(o + 4) = lerpc_269290(s->wC, s->w8, t);
-        if (f9770_269290(o + 0xA)) {
-            s->h12 = 0;
-            *(short *)(o + 0xA) = s->h14;
+    } else if (particle_data->h12 != 0) {
+        f4bc0_269290(a, particle_data);
+        f4bc0_269290(b, particle + 0x24);
+        phase_remaining_ratio = i2f_269290(*(short *)(particle + 0xA)) / i2f_269290(particle_data->h12);
+        lerp_269290(v, b, a, phase_remaining_ratio);
+        add_269290(particle + 0x10, particle + 0x10, v);
+        *(float *)(particle + 0xC) = ((float)(particle_data->h16 - particle_data->h18) * phase_remaining_ratio + (float)particle_data->h18) * 1000.0f;
+        *(int *)(particle + 4) = lerpc_269290(particle_data->wC, particle_data->w8, phase_remaining_ratio);
+        if (f9770_269290(particle + 0xA)) {
+            particle_data->h12 = 0;
+            *(short *)(particle + 0xA) = particle_data->h14;
         }
     } else {
         int c;
-        f4bc0_269290(v, o + 0x24);
-        add_269290(o + 0x10, o + 0x10, v);
-        c = s->wC & 0xFFFFFF;
-        *(int *)(o + 4) =
-            lerpc_269290(c, s->wC, i2f_269290(*(short *)(o + 0xA)) / i2f_269290(s->h14));
-        *(float *)(o + 0xC) = (float)(s->h18 * 1000);
-        if (f9770_269290(o + 0xA)) {
-            f7a08_269290(o);
+        f4bc0_269290(v, particle + 0x24);
+        add_269290(particle + 0x10, particle + 0x10, v);
+        c = particle_data->wC & 0xFFFFFF;
+        *(int *)(particle + 4) =
+            lerpc_269290(c, particle_data->wC, i2f_269290(*(short *)(particle + 0xA)) / i2f_269290(particle_data->h14));
+        *(float *)(particle + 0xC) = (float)(particle_data->h18 * 1000);
+        if (f9770_269290(particle + 0xA)) {
+            f7a08_269290(particle);
         }
     }
 }
