@@ -563,14 +563,14 @@ int FUN_L16_002e3fa0(struct Moby *moby) {
     float pos[4];
     float delta[4];
     char *data = (char *)moby->pvars;
-    float t = D_L16_00161D90 * frame_time;
+    float scaled_frame_time = D_L16_00161D90 * frame_time;
     int r;
     char *path;
     if (moby->state == 5)
         path = D_L16_001B0930[*(int *)(data + 0xDC)];
     else
         path = D_L16_001B0930[*(int *)(data + 0xD8)];
-    r = FUN_L00_0025d808_path54(path, pos, (float *)(data + 0xD0), (float *)(data + 0xD4), 0, t);
+    r = FUN_L00_0025d808_path54(path, pos, (float *)(data + 0xD0), (float *)(data + 0xD4), 0, scaled_frame_time);
     vendor_spring(&moby->pos.x, (float *)(data + 0xE4), pos[0], D_L16_00161D94_gp,
                      D_L16_00161D98_gp, 0.0f);
     vendor_spring(&moby->pos.y, (float *)(data + 0xE8), pos[1], D_L16_00161D94_gp,
