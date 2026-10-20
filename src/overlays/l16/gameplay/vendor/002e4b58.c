@@ -112,19 +112,19 @@ extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 
 void FUN_L16_002e4d88(struct Moby *moby) {
     char *moby_data = (char *)moby->pvars;
-    float wobble_phase, t, w;
+    float wobble_phase, wobble_value, w;
     qcopy(&moby->pos, moby_data + 0x60);
     qcopy(&moby->rot, moby_data + 0x70);
     wobble_phase = fast_add_rotations(*(float *)(moby_data + 0xb8), frame_time * 2.0943951f);
     *(float *)(moby_data + 0xb8) = wobble_phase;
-    t = fast_sin(wobble_phase);
+    wobble_value = fast_sin(wobble_phase);
     w = frame_time * 1.6929693f;
-    moby->pos.z += t * 0.25f;
+    moby->pos.z += wobble_value * 0.25f;
     wobble_phase = fast_add_rotations(*(float *)(moby_data + 0xbc), w);
     *(float *)(moby_data + 0xbc) = wobble_phase;
-    t = fast_add_rotations(moby->rot.y, fast_sin(wobble_phase) * 0.08726646f);
+    wobble_value = fast_add_rotations(moby->rot.y, fast_sin(wobble_phase) * 0.08726646f);
     w = frame_time * 0.9250245f;
-    moby->rot.y = t;
+    moby->rot.y = wobble_value;
     wobble_phase = fast_add_rotations(*(float *)(moby_data + 0xc0), w);
     *(float *)(moby_data + 0xc0) = wobble_phase;
     moby->rot.x =
