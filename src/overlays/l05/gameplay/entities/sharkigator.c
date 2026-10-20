@@ -512,7 +512,7 @@ void FUN_L05_002d6f48(unsigned char *moby);
 void FUN_L05_002d7020(char *moby) {
     char *v;
     int i;
-    int c;
+    int interpolated_glow_color;
     int current_frame;
     int k;
     int *last_queued_frame_ptr;
@@ -523,11 +523,11 @@ void FUN_L05_002d7020(char *moby) {
             moby_point_position(moby, i, v + 0x330 + i * 16);
         }
         *(float *)(v + 0x368) = rot_2d7020(*(float *)(v + 0x368), frame_time * 1.9198622f);
-        c = lerp_2d7020(sin_2d7020(*(float *)(v + 0x368)) * 0.5f + 0.5f, 0x1E1EB4, 0x1EB41E);
+        interpolated_glow_color = lerp_2d7020(sin_2d7020(*(float *)(v + 0x368)) * 0.5f + 0.5f, 0x1E1EB4, 0x1EB41E);
         current_frame = frame_number;
-        *(int *)(moby + 0x90) = c;
-        k = (c & 0xFF0000) | 0x30000000;
-        *(int *)(v + 0x360) = k | (c & 0xFF00) | (c & 0xFF);
+        *(int *)(moby + 0x90) = interpolated_glow_color;
+        k = (interpolated_glow_color & 0xFF0000) | 0x30000000;
+        *(int *)(v + 0x360) = k | (interpolated_glow_color & 0xFF00) | (interpolated_glow_color & 0xFF);
         if (current_frame != 0) {
             last_queued_frame_ptr = *(int **)(v + 0x364);
             if (current_frame != *last_queued_frame_ptr) {
