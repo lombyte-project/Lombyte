@@ -191,29 +191,29 @@ int FUN_001fa6d0_00269958(float) __asm__("FUN_001fa6d0");
 int FUN_001160d8_00269958(void) __asm__("FUN_001160d8");
 extern unsigned char *D_L00_001B2090 __attribute__((section(".data")));
 void FUN_L00_00269958(u128 *a, u128 *b, int c, int d, int n, int s1, int s2, int flag);
-void FUN_L00_00269958(u128 *a, u128 *b, int c, int d, int n, int scalar_base, int scalar_delta, int flag) {
-    unsigned char *m = FUN_L00_002678b8_00269958(4);
-    if (m) {
-        int *e;
-        unsigned char *p;
-        qcopy(m + 0x10, a);
-        p = m + 0x10;
-        *(int *)(m + 4) = c;
-        m[9] = FUN_001fa6d0_00269958(4.0f) - 0x60;
-        m[3] = flag ? 0x48 : 0x44;
-        m[1] = 0;
-        m[2] = *D_L00_001B2090;
-        m[8] = FUN_001160d8_00269958();
-        e = (int *)(m + 0x20);
-        *(int *)(m + 0xc) = 0;
-        qcopy(p, a);
-        qcopy(e, b);
-        *(short *)(m + 0xa) = n;
-        e[7] = n;
-        e[4] = c;
-        e[5] = d;
-        *(short *)((char *)e + 0x18) = scalar_delta;
-        *(short *)((char *)e + 0x1a) = scalar_base;
+void FUN_L00_00269958(u128 *spawn_position, u128 *b, int c, int d, int lifetime, int scalar_base, int scalar_delta, int flag) {
+    unsigned char *particle = FUN_L00_002678b8_00269958(4);
+    if (particle) {
+        int *particle_data;
+        unsigned char *particle_position;
+        qcopy(particle + 0x10, spawn_position);
+        particle_position = particle + 0x10;
+        *(int *)(particle + 4) = c;
+        particle[9] = FUN_001fa6d0_00269958(4.0f) - 0x60;
+        particle[3] = flag ? 0x48 : 0x44;
+        particle[1] = 0;
+        particle[2] = *D_L00_001B2090;
+        particle[8] = FUN_001160d8_00269958();
+        particle_data = (int *)(particle + 0x20);
+        *(int *)(particle + 0xc) = 0;
+        qcopy(particle_position, spawn_position);
+        qcopy(particle_data, b);
+        *(short *)(particle + 0xa) = lifetime;
+        particle_data[7] = lifetime;
+        particle_data[4] = c;
+        particle_data[5] = d;
+        *(short *)((char *)particle_data + 0x18) = scalar_delta;
+        *(short *)((char *)particle_data + 0x1a) = scalar_base;
     }
 }
 typedef struct {
