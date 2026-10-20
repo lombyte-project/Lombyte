@@ -882,13 +882,13 @@ extern int func_001F6F40_c(int, int, long, void *, int) __asm__("FUN_001f6af0");
 extern int func_001F6F40_c_001f6b88(int, int, long, void *, int) __asm__("FUN_001f6b88");
 
 void FUN_L17_002eb9a8(struct Moby *moby) {
-    char *d = (char *)moby->pvars;
+    char *ship_vars = (char *)moby->pvars;
     char *s;
     int sp10;
     int sp14;
     long tex;
     int i;
-    unsigned char n;
+    unsigned char ammo_capacity;
     unsigned char c;
     int j;
     int x;
@@ -900,42 +900,42 @@ void FUN_L17_002eb9a8(struct Moby *moby) {
     int lo;
     int hi;
     int idx;
-    float t;
+    float lock_fade_ratio;
     float k;
     float m;
     float px;
     float py;
-    float f;
-    float q;
+    float hp_display_step;
+    float hp_display_step_magnitude;
 
     vu1_add_g_sregister(0x42, 0x8000000044L);
     draw_textured_quad(0x170, (s = (char *)D_0013E500, *(int *)(s + 4)) - 0x90, 0x80, 0x80, 0, 0,
-                       0x80, 0x80, 0x70808080, func_001F4868_l(*(int *)(d + 0x104) + 0x28));
+                       0x80, 0x80, 0x70808080, func_001F4868_l(*(int *)(ship_vars + 0x104) + 0x28));
     draw_textured_quad(0x170, *(int *)(s + 4) - 0x90, 0x80, 0x80, 0, 0, 0x80, 0x80, 0x70808080,
-                       func_001F4868_l(*(int *)(d + 0x104) + 0x29));
+                       func_001F4868_l(*(int *)(ship_vars + 0x104) + 0x29));
     vu1_add_g_sregister(0x42, 0x8000000048L);
-    FUN_L17_002eb768((int)moby, d);
-    if (*(int *)(d + 0x88) != 0) {
-        FUN_L11_00311210(*(char **)(d + 0x88) + 0x10, &sp10, &sp14, 0);
-        if (*(int *)(d + 0x8C) > lock_hold_frames) {
-            t = convert_integer_to_float(*(int *)(d + 0x8C) - lock_hold_frames);
-            t = t / convert_integer_to_float(lock_fade_frames);
-            m = 2.0f * (1.0f - t);
-            k = t * 5.0f + 1.0f;
+    FUN_L17_002eb768((int)moby, ship_vars);
+    if (*(int *)(ship_vars + 0x88) != 0) {
+        FUN_L11_00311210(*(char **)(ship_vars + 0x88) + 0x10, &sp10, &sp14, 0);
+        if (*(int *)(ship_vars + 0x8C) > lock_hold_frames) {
+            lock_fade_ratio = convert_integer_to_float(*(int *)(ship_vars + 0x8C) - lock_hold_frames);
+            lock_fade_ratio = lock_fade_ratio / convert_integer_to_float(lock_fade_frames);
+            m = 2.0f * (1.0f - lock_fade_ratio);
+            k = lock_fade_ratio * 5.0f + 1.0f;
             if (m > 1.0f)
                 m = 1.0f;
             c = func_001FA898_r(m * 96.0f);
             func_L17_002EBF08_f(convert_integer_to_float(sp10), convert_integer_to_float(sp14), k,
                                 normalize_angle(convert_integer_to_float(D_L17_0015F5CC) / 30.0f), 0,
                                 0xFF, 0, c);
-            *(int *)(d + 0xEC) = 0;
+            *(int *)(ship_vars + 0xEC) = 0;
         } else {
             a = 0xFF;
-            if ((*(int *)(d + 0x8C) / scale_game_frames(0x14)) & 1)
+            if ((*(int *)(ship_vars + 0x8C) / scale_game_frames(0x14)) & 1)
                 a = 0;
             func_L17_002EBF08_f(convert_integer_to_float(sp10), convert_integer_to_float(sp14), 1.0f,
                                 0.0f, 0xFF, a, 0, 0x60);
-            *(int *)(d + 0xEC) = *(int *)(d + 0x88);
+            *(int *)(ship_vars + 0xEC) = *(int *)(ship_vars + 0x88);
         }
     }
     y = 0x40;
@@ -946,15 +946,15 @@ void FUN_L17_002eb9a8(struct Moby *moby) {
         } else {
             FUN_L11_00310ad0(x, y, 0.5f, D_L17_001D99E0, 0x19, 0xFFFFF3, 0x20004F00);
         }
-        n = hero.ship_ammo_max;
-        if (i == n >> 1) {
+        ammo_capacity = hero.ship_ammo_max;
+        if (i == ammo_capacity >> 1) {
             y = 0x2E;
             x += 0x1E;
         }
         y += 0x12;
     }
-    ex = *(int *)(d + 0xE0);
-    ey = *(int *)(d + 0xE4);
+    ex = *(int *)(ship_vars + 0xE0);
+    ey = *(int *)(ship_vars + 0xE4);
     tex = func_001F4868_l(0x11);
     append_rotated_sprite_quad(ex, ey, 40.0f, 40.0f, 0.0f, 0x3F, 0x3F, tex, 0xFFFFF3, 0xFF20FF20, 0,
                                0, 0.5f, 0.5f);
@@ -968,19 +968,19 @@ void FUN_L17_002eb9a8(struct Moby *moby) {
     if (moby->state == 8) {
         func_001F6F40_c_001f6b88(0x100, 0xC8, 0x80005080L, func_001FE540_id(0x523E), 0x64);
     }
-    f = hero.ship_hp - *(float *)(d + 0xF0);
-    f *= 0.2f;
-    q = absolute_float(f);
-    if (q > 1.0f)
-        f /= q;
-    *(float *)(d + 0xF0) += f;
-    v = func_001FA898_r(*(float *)(d + 0xF0) * 251.0f / hero.ship_hp_max) + 2;
+    hp_display_step = hero.ship_hp - *(float *)(ship_vars + 0xF0);
+    hp_display_step *= 0.2f;
+    hp_display_step_magnitude = absolute_float(hp_display_step);
+    if (hp_display_step_magnitude > 1.0f)
+        hp_display_step /= hp_display_step_magnitude;
+    *(float *)(ship_vars + 0xF0) += hp_display_step;
+    v = func_001FA898_r(*(float *)(ship_vars + 0xF0) * 251.0f / hero.ship_hp_max) + 2;
     if (v > 0xFD)
         v = 0xFD;
     if (v < 2)
         v = 2;
-    lo = *(int *)(d + 0xF4) <= v ? *(int *)(d + 0xF4) : v;
-    hi = *(int *)(d + 0xF4) < v ? v : *(int *)(d + 0xF4);
+    lo = *(int *)(ship_vars + 0xF4) <= v ? *(int *)(ship_vars + 0xF4) : v;
+    hi = *(int *)(ship_vars + 0xF4) < v ? v : *(int *)(ship_vars + 0xF4);
     for (j = lo; j <= hi; j++) {
         idx = (j & 0xE7) | ((j & 0x10) >> 1) | ((j & 8) << 1);
         if (j < v) {
@@ -989,7 +989,7 @@ void FUN_L17_002eb9a8(struct Moby *moby) {
             (*(int **)&D_L17_00162180)[idx] = 0x80000000;
         }
     }
-    *(int *)(d + 0xF4) = v;
+    *(int *)(ship_vars + 0xF4) = v;
 }
 #define NOT_SDA
 
