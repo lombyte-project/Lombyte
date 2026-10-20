@@ -3702,15 +3702,15 @@ extern float D_L00_001D15A0_lui[] __asm__("D_L00_001D15A0") __attribute__((secti
 extern float D_L00_001D31C0_lui[] __asm__("D_L00_001D31C0") __attribute__((section(".data")));
 extern float D_L00_001D4480_lui[] __asm__("D_L00_001D4480") __attribute__((section(".data")));
 extern u8 D_L00_001D2D10_lui[] __asm__("D_L00_001D2D10") __attribute__((section(".data")));
-void FUN_L00_002d7d58(char *m, int i) {
-    char *v = *(char **)(m + 0x78);
+void FUN_L00_002d7d58(char *spawner, int i) {
+    char *v = *(char **)(spawner + 0x78);
     float b;
-    V_2d7d58 *p;
-    float f = spread_k(0.0f, 1.0f);
-    p = &D_L00_001CB7E0_2d7d58[i];
-    p->x = f;
-    p->y = spread_k(0.0f, 1.0f);
-    p->z = spread_k(0.0f, 1.0f);
+    V_2d7d58 *particle_position;
+    float sampled_x = spread_k(0.0f, 1.0f);
+    particle_position = &D_L00_001CB7E0_2d7d58[i];
+    particle_position->x = sampled_x;
+    particle_position->y = spread_k(0.0f, 1.0f);
+    particle_position->z = spread_k(0.0f, 1.0f);
     b = *(float *)(v + 0x4C);
     D_L00_001D02E0_lui[i] =
         FUN_002132a8_2d7d58(*(float *)(v + 0x44), *(float *)(v + 0x44) + 2.0f);
