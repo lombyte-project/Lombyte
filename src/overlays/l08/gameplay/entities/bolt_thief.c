@@ -61,21 +61,21 @@ extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8")
 extern void FUN_L00_00250df8(void *);
 
 void *FUN_L08_002e1c98(struct Moby *parent, int oClass, int joint, int pjoint) {
-    unsigned char *m = func_0020D348_m(oClass);
+    unsigned char *child_moby = func_0020D348_m(oClass);
     float child_joint_position[4], parent_joint_position[4];
-    if (m != 0) {
-        m[0x30] = 0xFF;
-        *(short *)(m + 0x32) = 0xFF;
-        m[0x31] = 1;
-        *(unsigned short *)(m + 0x34) |= 0x4000;
-        *(long *)(m + 0x38) = *(long *)(*(char **)(D_0013E533 + 0x2E9D) + 0x38);
-        qcopy(m + 0x40, &parent->rot);
-        moby_point_position(m, joint, child_joint_position);
+    if (child_moby != 0) {
+        child_moby[0x30] = 0xFF;
+        *(short *)(child_moby + 0x32) = 0xFF;
+        child_moby[0x31] = 1;
+        *(unsigned short *)(child_moby + 0x34) |= 0x4000;
+        *(long *)(child_moby + 0x38) = *(long *)(*(char **)(D_0013E533 + 0x2E9D) + 0x38);
+        qcopy(child_moby + 0x40, &parent->rot);
+        moby_point_position(child_moby, joint, child_joint_position);
         moby_point_position(parent, pjoint, parent_joint_position);
-        fast_vec_sub(m + 0x10, parent_joint_position, child_joint_position);
-        FUN_L00_00250df8(m);
+        fast_vec_sub(child_moby + 0x10, parent_joint_position, child_joint_position);
+        FUN_L00_00250df8(child_moby);
     }
-    return m;
+    return child_moby;
 }
 /* builds a basis from a direction vector and writes the orientation into the moby */
 /* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002E0258.c: func_L08_002E6130), where it is exact; names translated to the US level program. */
