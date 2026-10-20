@@ -524,50 +524,50 @@ extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 
-void FUN_L08_002d3d78(char *m) {
-    char *s = *(char **)(m + 0x78);
-    float f = vector_length_xyz((float *)(s + 0x40)) - frame_time_sq * 6.0f;
+void FUN_L08_002d3d78(char *moby) {
+    char *data = *(char **)(moby + 0x78);
+    float movement_length = vector_length_xyz((float *)(data + 0x40)) - frame_time_sq * 6.0f;
     float lim = frame_time * 3.0f;
-    float t;
-    float d;
+    float target_height;
+    float vertical_step;
     float tmp[4];
     float *v;
-    if (lim < f) {
-        f = lim;
-    } else if (f < 0.0f) {
-        f = 0.0f;
+    if (lim < movement_length) {
+        movement_length = lim;
+    } else if (movement_length < 0.0f) {
+        movement_length = 0.0f;
     }
-    v = (float *)(s + 0x40);
-    normalize_vector_xyz(v, v, f);
-    add_vector_xyz((float *)(m + 0x10), (float *)(m + 0x10), v);
-    *(float *)(s + 0x204) = fast_add_rotations(*(float *)(s + 0x204), *(float *)(s + 0x20C));
-    t = *(float *)(s + 0x1C8) + *(float *)(s + 0x208) * fast_sin(*(float *)(s + 0x204));
-    if (*(short *)(s + 0x216))
-        t += *(float *)(s + 0x200);
-    d = t - *(float *)(m + 0x18);
+    v = (float *)(data + 0x40);
+    normalize_vector_xyz(v, v, movement_length);
+    add_vector_xyz((float *)(moby + 0x10), (float *)(moby + 0x10), v);
+    *(float *)(data + 0x204) = fast_add_rotations(*(float *)(data + 0x204), *(float *)(data + 0x20C));
+    target_height = *(float *)(data + 0x1C8) + *(float *)(data + 0x208) * fast_sin(*(float *)(data + 0x204));
+    if (*(short *)(data + 0x216))
+        target_height += *(float *)(data + 0x200);
+    vertical_step = target_height - *(float *)(moby + 0x18);
     {
         float l2 = frame_time * 3.0f;
-        if (l2 < d) {
-            d = l2;
+        if (l2 < vertical_step) {
+            vertical_step = l2;
         } else {
             l2 = -l2;
-            if (d < l2)
-                d = l2;
+            if (vertical_step < l2)
+                vertical_step = l2;
         }
     }
-    *(float *)(s + 0x48) = d;
-    qcopy(tmp, (float *)(m + 0x10));
+    *(float *)(data + 0x48) = vertical_step;
+    qcopy(tmp, (float *)(moby + 0x10));
     tmp[2] += 0.5f;
-    if (FUN_L08_002025d0(tmp, 0x190, 0, m, 0)) {
+    if (FUN_L08_002025d0(tmp, 0x190, 0, moby, 0)) {
         float z;
-        subtract_vector_xyz(tmp, D_L08_00174670, (float *)(m + 0x10));
+        subtract_vector_xyz(tmp, D_L08_00174670, (float *)(moby + 0x10));
         z = frame_time * 3.0f;
         if (z < tmp[2]) {
             tmp[2] = z;
         } else if (tmp[2] < -z) {
             tmp[2] = -z;
         }
-        add_vector_xyz((float *)(m + 0x10), (float *)(m + 0x10), tmp);
+        add_vector_xyz((float *)(moby + 0x10), (float *)(moby + 0x10), tmp);
     }
 }
 #define NOT_SDA
