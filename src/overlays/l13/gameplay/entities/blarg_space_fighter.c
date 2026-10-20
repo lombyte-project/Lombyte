@@ -438,7 +438,7 @@ void FUN_L13_002c25b8(unsigned char *moby) {
         SELECT_ATTACK_RESTART_OR_EXIT = 5,
         WAIT_TO_COMPLETE_ATTACK_EXIT_SEQUENCE = 6
     };
-    unsigned char *d = *(unsigned char **)(moby + 0x78);
+    unsigned char *moby_data = *(unsigned char **)(moby + 0x78);
     unsigned char *target;
     float scratch_vector[4], shot_direction_vector[4], z[4];
     float f;
@@ -446,45 +446,45 @@ void FUN_L13_002c25b8(unsigned char *moby) {
     float *pos;
     int index;
     FUN_L13_002c2d30(moby);
-    target = *(unsigned char **)(d + 0xB0);
+    target = *(unsigned char **)(moby_data + 0xB0);
     switch (moby[0x20]) {
     case UPDATE_INITIALIZE:
-        qcopy(d + 0xC0, moby + 0x10);
+        qcopy(moby_data + 0xC0, moby + 0x10);
         *(unsigned short *)(moby + 0x34) |= 0x5000;
-        *(float *)(d + 0x20) = 4.0f;
-        *(short *)(d + 0x24) = 4;
-        d[0x28] = 3;
-        *(float *)(d + 0xEC) = 15.0f;
-        d[0x58] = 50;
-        d[0x5A] = 0;
+        *(float *)(moby_data + 0x20) = 4.0f;
+        *(short *)(moby_data + 0x24) = 4;
+        moby_data[0x28] = 3;
+        *(float *)(moby_data + 0xEC) = 15.0f;
+        moby_data[0x58] = 50;
+        moby_data[0x5A] = 0;
         *(short *)(moby + 0x32) = 255;
         *(float *)(moby + 0x18) += 1.0f;
         if (moby[0x53] != 0) blend_moby_animation_c13(moby, 0, 0, 10);
         moby[0xBC] = 0;
-        *(unsigned char **)(d + 0xFC) = FUN_L13_003058a8(moby, 0);
-        *(unsigned char **)(d + 0xF8) = FUN_L13_003058a8(moby, 1);
-        if (*(int *)(d + 0xD4) != -1) moby[0x20] = 5;
+        *(unsigned char **)(moby_data + 0xFC) = FUN_L13_003058a8(moby, 0);
+        *(unsigned char **)(moby_data + 0xF8) = FUN_L13_003058a8(moby, 1);
+        if (*(int *)(moby_data + 0xD4) != -1) moby[0x20] = 5;
         else moby[0x20] = 2;
-        *(float *)(d + 0x100) = random_angle_radians_c();
-        *(float *)(d + 0x108) = random_angle_radians_c();
-        *(float *)(d + 0x10C) = random_angle_radians_c();
-        *(int *)(d + 0x110) = -1;
+        *(float *)(moby_data + 0x100) = random_angle_radians_c();
+        *(float *)(moby_data + 0x108) = random_angle_radians_c();
+        *(float *)(moby_data + 0x10C) = random_angle_radians_c();
+        *(int *)(moby_data + 0x110) = -1;
         break;
     case WAIT_TO_MOVE_TO_TABLE_POINT:
-        if (*(int *)(d + 0xB4) == 2) return;
+        if (*(int *)(moby_data + 0xB4) == 2) return;
         moby[0xBC] = 0;
         moby[0x20] = 6;
         break;
     case MOVE_TO_TABLE_POINT:
-        index = *(int *)(d + 0xD4) * 128;
+        index = *(int *)(moby_data + 0xD4) * 128;
         pos = (float *)(moby + 0x10);
         z[0] = 0.0f;
         f = distance_xyz(pos, D_L13_001600EC + index + 0x30);
-        subtract_vector_xyz(scratch_vector, D_L13_001600EC + *(int *)(d + 0xD4) * 128 + 0x30, pos);
-        advance_accelerated_scalar(f, frame_time_sq * 10.0f, frame_time_sq * 10.0f, frame_time * 20.0f, z, (float *)(d + 0xF0));
-        normalize_vector_xyz(scratch_vector, scratch_vector, *(float *)(d + 0xF0));
+        subtract_vector_xyz(scratch_vector, D_L13_001600EC + *(int *)(moby_data + 0xD4) * 128 + 0x30, pos);
+        advance_accelerated_scalar(f, frame_time_sq * 10.0f, frame_time_sq * 10.0f, frame_time * 20.0f, z, (float *)(moby_data + 0xF0));
+        normalize_vector_xyz(scratch_vector, scratch_vector, *(float *)(moby_data + 0xF0));
         add_vector_xyz(pos, pos, scratch_vector);
-        if (f < 0.1f && *(float *)(d + 0xF0) < 0.01f) {
+        if (f < 0.1f && *(float *)(moby_data + 0xF0) < 0.01f) {
             if (moby[0x53] != 0) blend_moby_animation_c13(moby, 0, 0, 10);
             moby[0xBC] = 0;
             moby[0x20] = 2;
@@ -493,9 +493,9 @@ void FUN_L13_002c25b8(unsigned char *moby) {
     case TRACK_TARGET_BEFORE_ATTACK:
         rot = (float *)(moby + 0x48);
         f = fast_arc_tan(*(float *)(target + 0x10) - *(float *)(moby + 0x10), *(float *)(target + 0x14) - *(float *)(moby + 0x14));
-        approach_angle(rot, (float *)(d + 0xDC), f, frame_time_sq * 4.712389f, frame_time_sq * 4.712389f, frame_time * 10.12291f);
-        if (*(int *)(d + 0xB4) == 2) return;
-        *(float *)(d + 0xEC) = 15.0f;
+        approach_angle(rot, (float *)(moby_data + 0xDC), f, frame_time_sq * 4.712389f, frame_time_sq * 4.712389f, frame_time * 10.12291f);
+        if (*(int *)(moby_data + 0xB4) == 2) return;
+        *(float *)(moby_data + 0xEC) = 15.0f;
         moby[0xBC] = 1;
         if (moby[0x53] != 1) blend_moby_animation_c13(moby, 1, 0, 0);
         moby[0x20] = 4;
@@ -503,13 +503,13 @@ void FUN_L13_002c25b8(unsigned char *moby) {
     case UPDATE_ATTACK_SEQUENCE:
         rot = (float *)(moby + 0x48);
         f = fast_arc_tan(*(float *)(target + 0x10) - *(float *)(moby + 0x10), *(float *)(target + 0x14) - *(float *)(moby + 0x14));
-        approach_angle(rot, (float *)(d + 0xDC), f, frame_time_sq * 12.566371f, frame_time_sq * 25.132742f, frame_time * 6.2831855f);
+        approach_angle(rot, (float *)(moby_data + 0xDC), f, frame_time_sq * 12.566371f, frame_time_sq * 25.132742f, frame_time * 6.2831855f);
         switch (moby[0xBC]) {
         case WAIT_FOR_ATTACK_START_ANIMATION:
             if (!(moby[0x70] & 2)) return;
             moby[0xBC] = 2;
             if (moby[0x53] != 2) blend_moby_animation_c13(moby, 2, 0, 2);
-            *(int *)(d + 0xE8) = 0;
+            *(int *)(moby_data + 0xE8) = 0;
             break;
         case WAIT_TO_BEGIN_ALTERNATING_FIRE:
             if (!(moby[0x70] & 2)) return;
@@ -517,33 +517,33 @@ void FUN_L13_002c25b8(unsigned char *moby) {
             if (moby[0x53] != 3) blend_moby_animation_c13(moby, 3, 0, 2);
             break;
         case FIRE_ALTERNATING_SHOTS:
-            if (tick_countdown_32_alt(d + 0xE8)) {
-                *(int *)(d + 0xE8) = scale_game_frames_alt(60);
-                if (*(int *)(d + 0xF4) != 0) moby_point_position(moby, 1, scratch_vector);
+            if (tick_countdown_32_alt(moby_data + 0xE8)) {
+                *(int *)(moby_data + 0xE8) = scale_game_frames_alt(60);
+                if (*(int *)(moby_data + 0xF4) != 0) moby_point_position(moby, 1, scratch_vector);
                 else moby_point_position(moby, 0, scratch_vector);
                 subtract_vector_xyz(shot_direction_vector, target + 0x10, scratch_vector);
                 normalize_vector_xyz(shot_direction_vector, shot_direction_vector, D_L13_0016149C * frame_time);
-                if (*(int *)(d + 0xF4) != 0) {
-                    if (*(void **)(d + 0xF8)) {
-                        FUN_L13_00305988(*(void **)(d + 0xF8), shot_direction_vector, target, *(float *)(d + 0xEC));
+                if (*(int *)(moby_data + 0xF4) != 0) {
+                    if (*(void **)(moby_data + 0xF8)) {
+                        FUN_L13_00305988(*(void **)(moby_data + 0xF8), shot_direction_vector, target, *(float *)(moby_data + 0xEC));
                         allocate_voice_for_target_entry(0, 0, (int)moby);
                     }
-                    *(unsigned char **)(d + 0xF8) = FUN_L13_003058a8(moby, 1);
-                    *(int *)(d + 0xF4) = 0;
+                    *(unsigned char **)(moby_data + 0xF8) = FUN_L13_003058a8(moby, 1);
+                    *(int *)(moby_data + 0xF4) = 0;
                 } else {
-                    if (*(void **)(d + 0xFC)) {
-                        FUN_L13_00305988(*(void **)(d + 0xFC), shot_direction_vector, target, *(float *)(d + 0xEC));
+                    if (*(void **)(moby_data + 0xFC)) {
+                        FUN_L13_00305988(*(void **)(moby_data + 0xFC), shot_direction_vector, target, *(float *)(moby_data + 0xEC));
                         allocate_voice_for_target_entry(0, 0, (int)moby);
                     }
-                    *(unsigned char **)(d + 0xFC) = FUN_L13_003058a8(moby, 0);
-                    *(int *)(d + 0xF4) = 1;
+                    *(unsigned char **)(moby_data + 0xFC) = FUN_L13_003058a8(moby, 0);
+                    *(int *)(moby_data + 0xF4) = 1;
                 }
 
-                *(float *)(d + 0xEC) += 5.0f;
-                if (vector_distance(moby + 0x10, target + 0x10) < *(float *)(d + 0xEC))
-                    *(float *)(d + 0xEC) = vector_distance(moby + 0x10, target + 0x10);
+                *(float *)(moby_data + 0xEC) += 5.0f;
+                if (vector_distance(moby + 0x10, target + 0x10) < *(float *)(moby_data + 0xEC))
+                    *(float *)(moby_data + 0xEC) = vector_distance(moby + 0x10, target + 0x10);
             }
-            if (*(int *)(d + 0xB4) != 2) return;
+            if (*(int *)(moby_data + 0xB4) != 2) return;
             if (moby[0x53] != 4) blend_moby_animation_c13(moby, 4, 0, 2);
             moby[0xBC] = 4;
             break;
@@ -553,7 +553,7 @@ void FUN_L13_002c25b8(unsigned char *moby) {
             if (moby[0x53] != 5) blend_moby_animation_c13(moby, 5, 0, 2);
             break;
         case SELECT_ATTACK_RESTART_OR_EXIT:
-            if (*(int *)(d + 0xB4) == 2) {
+            if (*(int *)(moby_data + 0xB4) == 2) {
                 if (moby[0x53] != 6) blend_moby_animation_c13(moby, 6, 0, 2);
                 moby[0xBC] = 6;
             } else {
@@ -563,7 +563,7 @@ void FUN_L13_002c25b8(unsigned char *moby) {
             break;
         case WAIT_TO_COMPLETE_ATTACK_EXIT_SEQUENCE:
             if (!(moby[0x70] & 2)) return;
-            if (*(int *)(d + 0xB4) == 2) {
+            if (*(int *)(moby_data + 0xB4) == 2) {
                 if (moby[0x53] != 0) blend_moby_animation_c13(moby, 0, 0, 2);
                 moby[0x20] = 2;
                 moby[0xBC] = 0;
@@ -578,8 +578,8 @@ void FUN_L13_002c25b8(unsigned char *moby) {
     case EMIT_EFFECT_AND_REMOVE:
         clear_u64_value(scratch_vector);
         func_L00_0025F4A8_alt(moby, scratch_vector, moby + 0x10, 0.0f, 0.0f, 10, 3, 16, 4.0f, 2.0f, 9.0f, 1.0f, 2, 15.0f, 1, 1, -1, 0);
-        if (*(void **)(d + 0xF8)) mark_moby_for_removal(*(void **)(d + 0xF8));
-        if (*(void **)(d + 0xFC)) mark_moby_for_removal(*(void **)(d + 0xFC));
+        if (*(void **)(moby_data + 0xF8)) mark_moby_for_removal(*(void **)(moby_data + 0xF8));
+        if (*(void **)(moby_data + 0xFC)) mark_moby_for_removal(*(void **)(moby_data + 0xFC));
         mark_moby_for_removal(moby);
         break;
     case WAIT_TO_RESUME_ATTACK_SEQUENCE:
