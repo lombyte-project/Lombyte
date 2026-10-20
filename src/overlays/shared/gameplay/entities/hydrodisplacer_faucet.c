@@ -750,15 +750,15 @@ typedef struct {
 
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 
-void FUN_L05_00318648(char *m, int b, void *initial_motion_step, void *local_rotation_offset, int a) {
-    Dat *d = *(Dat **)(m + 0x78);
-    m[0x20] = 1;
-    qcopy((char *)d + 0x30, initial_motion_step);
-    qcopy((char *)d + 0x10, local_rotation_offset);
-    d->id = scale_game_frames(a);
-    d->s[0] = random_float_between(-(frame_time * 4.1887903f), frame_time * 4.1887903f);
-    d->s[1] = random_float_between(-(frame_time * 4.1887903f), frame_time * 4.1887903f);
-    d->s[2] = random_float_between(-(frame_time * 4.1887903f), frame_time * 4.1887903f);
+void FUN_L05_00318648(char *moby, int b, void *initial_motion_step, void *local_rotation_offset, int lifetime_frames) {
+    Dat *moby_vars = *(Dat **)(moby + 0x78);
+    moby[0x20] = 1;
+    qcopy((char *)moby_vars + 0x30, initial_motion_step);
+    qcopy((char *)moby_vars + 0x10, local_rotation_offset);
+    moby_vars->id = scale_game_frames(lifetime_frames);
+    moby_vars->s[0] = random_float_between(-(frame_time * 4.1887903f), frame_time * 4.1887903f);
+    moby_vars->s[1] = random_float_between(-(frame_time * 4.1887903f), frame_time * 4.1887903f);
+    moby_vars->s[2] = random_float_between(-(frame_time * 4.1887903f), frame_time * 4.1887903f);
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002CF2C0.c: func_L05_00319C08), where it is exact; names translated to the US level program. */
 
