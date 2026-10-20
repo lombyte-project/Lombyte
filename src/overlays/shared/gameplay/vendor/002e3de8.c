@@ -27,13 +27,13 @@ extern short D_L10_00161E70 __attribute__((sda));
 void FUN_L10_002e3de8(char *moby) {
     float v[3];
     int g, h;
-    float a = random_angle_radians();
+    float offset_angle_radians = random_angle_radians();
     float b = random_float_between_alt(0.0f, *(float *)&D_L10_00161E70);
     float c = random_float_between_alt(0.0f, *(float *)&D_L10_00161E60);
     float d = random_float_between_alt(*(float *)&D_L10_00161E60, *(float *)&D_L10_00161E64);
     int e = random_int_between(*(int *)&D_L10_00161E68, *(int *)&D_L10_00161E6C);
-    v[0] = fast_cos(a) * b;
-    v[1] = fast_sin(a) * b;
+    v[0] = fast_cos(offset_angle_radians) * b;
+    v[1] = fast_sin(offset_angle_radians) * b;
     v[2] = 0.0f;
     fast_vec_add(v, v, (float *)(moby + 0x10));
     v[2] = v[2] + 0.025f;
