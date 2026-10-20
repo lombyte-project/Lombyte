@@ -305,7 +305,7 @@ void FUN_L18_002f0390(struct Moby *moby) {
     int i;
     int j;
     int k;
-    int n;
+    int trail_segment_index;
     int base;
 
     if (D_L18_00162238_gp != 0) {
@@ -341,14 +341,14 @@ void FUN_L18_002f0390(struct Moby *moby) {
             goto again;
         }
         data = (char *)missile_moby->pvars;
-        for (n = 0; n < *(short *)(data + 0x164); n++) {
-            base = (*(short *)(data + 0x166) - n + 15) & 15;
+        for (trail_segment_index = 0; trail_segment_index < *(short *)(data + 0x164); trail_segment_index++) {
+            base = (*(short *)(data + 0x166) - trail_segment_index + 15) & 15;
             if (D_L18_0016223C == 0) {
                 for (k = 0; k < 4; k++) {
-                    add_vector_xyz(&quads[n].positions[k], data + 0x10 + (((base + (k >> 1)) & 15) << 4),
+                    add_vector_xyz(&quads[trail_segment_index].positions[k], data + 0x10 + (((base + (k >> 1)) & 15) << 4),
                                    extra + ((k & 1) << 2));
                 }
-                draw_geometry_quad(&quads[n], 0, 0);
+                draw_geometry_quad(&quads[trail_segment_index], 0, 0);
             }
         }
     } while (*group_entry++ >= 0);
