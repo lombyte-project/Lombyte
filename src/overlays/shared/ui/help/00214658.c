@@ -955,7 +955,7 @@ void FUN_L00_00217118(float a, float b) {
     unsigned char *G;
     unsigned char *Q;
     float k, r;
-    unsigned char *e;
+    unsigned char *collision_hit_data;
     if (gravity_length_xy(P) == 0.0f)
         return;
     G = P - 0xE0;
@@ -986,8 +986,8 @@ void FUN_L00_00217118(float a, float b) {
     FUN_L00_00233810_217118(u, u, k);
     r = 1.0f;
     if (FUN_L00_001efc70_217118(t, u, 4, *(void **)(P + 0x2080), 0)) {
-        e = coll_hit;
-        if (*(int *)(e + 0x1C) > 0 && FUN_L00_00233d30_217118(e + 0x40) <= 0.87266463f)
+        collision_hit_data = coll_hit;
+        if (*(int *)(collision_hit_data + 0x1C) > 0 && FUN_L00_00233d30_217118(collision_hit_data + 0x40) <= 0.87266463f)
             r = 0.0f;
     }
     if (r != 0.0f)
