@@ -690,7 +690,7 @@ extern void fast_draw_quad_real(void *, void *, s32) __asm__("FUN_001f7d30");
 extern void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
 extern s64 get_effect_texture(s32) __asm__("FUN_001f44b8");
 
-void FUN_L00_002e1c78(GlowMoby *m) {
+void FUN_L00_002e1c78(GlowMoby *moby) {
     GlowQuad quad;
     GlowVec mat[4];
     GlowVec *src;
@@ -698,7 +698,7 @@ void FUN_L00_002e1c78(GlowMoby *m) {
     s32 i;
     f32 one;
 
-    qcopy(&mat[3], &m->vars->pos);
+    qcopy(&mat[3], &moby->vars->pos);
     one = 1.0f;
     mat[3].f[3] = one;
     subtract_vector_xyz(&mat[0], &glow_origin, &mat[3]);
