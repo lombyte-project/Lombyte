@@ -50,9 +50,9 @@ void pause_all_sounds(s32 mode) {
     }
     {
         struct MenuSystem *g = &menu_system;
-        char *a = D_001CE5B8;
+        char *menu_entry_base = D_001CE5B8;
         g->unkDC = mode == 0x23;
-        *(char **)(a + 0x38) = g->unkD8 ? D_001CE798 : D_001CE748;
+        *(char **)(menu_entry_base + 0x38) = g->unkD8 ? D_001CE798 : D_001CE748;
     }
     {
         struct MenuSystem *g = &menu_system;
