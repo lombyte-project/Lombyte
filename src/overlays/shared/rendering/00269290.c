@@ -100,13 +100,13 @@ void FUN_L00_002694f8(char *particle) {
     char *particle_data = particle + 0x20;
     float v[4];
     float reference_distance, reference_angle_delta;
-    int t, remaining_lifetime, k;
+    int collision_check_counter, remaining_lifetime, k;
     float *g;
     char *reference_position;
     char *B;
     char *pos;
-    t = *(int *)(particle_data + 0x1C);
-    if (t >= 3) {
+    collision_check_counter = *(int *)(particle_data + 0x1C);
+    if (collision_check_counter >= 3) {
         remaining_lifetime = *(short *)(particle + 0xA);
         pos = particle + 0x10;
         if (remaining_lifetime > func_001F9850(0x78) && coll_sphere(7.99f, pos, 0x12, 0)) {
@@ -118,9 +118,9 @@ void FUN_L00_002694f8(char *particle) {
         }
     } else {
         pos = particle + 0x10;
-        if (t < 0)
+        if (collision_check_counter < 0)
             goto after;
-        *(int *)(particle_data + 0x1C) = t + 1;
+        *(int *)(particle_data + 0x1C) = collision_check_counter + 1;
     }
     if (*(int *)(particle_data + 0x1C) >= 0) {
         g = D_L00_001CB7C0;
