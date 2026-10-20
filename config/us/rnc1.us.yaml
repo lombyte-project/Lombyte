@@ -1304,7 +1304,7 @@ segments:
           - [0x1046ac, textbin, text_gap_0020372c_after_fun_00203640]
           - [0x1046b0, c, rendering/register_object_render_class]
           - [0x104a84, textbin, text_gap_00203b04_after_fun_00203730]
-          - [0x104a88, c, assembly/textbin/rendering/register_shrub_render_class]
+          - [0x104a88, c, rendering/register_shrub_render_class]
           - [0x10505c, textbin, text_gap_002040dc_before_fun_002040e0]
           - [0x105060, c, rendering/initialize_tfrag_render_data]
           - [0x105330, c, world/streaming/load_level_chunk_from_disc]
