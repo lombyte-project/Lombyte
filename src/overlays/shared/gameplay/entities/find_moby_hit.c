@@ -5,8 +5,8 @@
 void probe_ground_height(void *, s32, f32) __asm__("FUN_00213508");
 /* Calls probe_ground_height(a, 0x20, 0.5f). */
 void FUN_L00_00259710(void *a);
-void FUN_L00_00259710(void *a) {
-    probe_ground_height(a, 0x20, 0.5f);
+void FUN_L00_00259710(void *position) {
+    probe_ground_height(position, 0x20, 0.5f);
 }
 #define NOT_SDA
 
