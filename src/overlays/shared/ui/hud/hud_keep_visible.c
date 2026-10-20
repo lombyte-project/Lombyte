@@ -637,7 +637,7 @@ extern s32 current_level_index __asm__("D_0015ED84");
 extern s32 measure_text_width_regular(u8 *, s32) __asm__("FUN_001f6250");
 extern void draw_hud_sprite(s32, s32, s32, s32, s32, s32) __asm__("FUN_001ffc30");
 extern void draw_hud_sprite_flipped(s32, s32, s32, s32, s32, s32) __asm__("FUN_001ffe18");
-extern void font_print_center_large(s32, s32, s32, u8 *, s32) __asm__("FUN_001f6af0");
+extern s32 font_print_center(s32, s32, s32, s32, s32) __asm__("FUN_001f6af0");
 extern f32 fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern char *get_help_message_text(s32) __asm__("FUN_001fdd10");
 extern s32 sprintf(char *, const char *, ...) __asm__("FUN_00116248");
@@ -694,8 +694,8 @@ int FUN_L00_00237200(HudElem *e) {
         frame = get_icon_frame(0x7580, 1);
         right = w + 0x20;
         draw_hud_sprite_flipped(frame, x + right, y, 0x20, 0x36, alpha);
-        font_print_center_large(0x100, text_y, text_color, D_L00_0017E530, -1);
-        font_print_center_large(0x100, y + 0x1b, text_color, &D_L00_0017E530[1] + i, -1);
+        font_print_center(0x100, text_y, text_color, (s32)D_L00_0017E530, -1);
+        font_print_center(0x100, y + 0x1b, text_color, (s32)(&D_L00_0017E530[1] + i), -1);
     } else {
         int width, left, right;
         s32 frame;
@@ -706,7 +706,7 @@ int FUN_L00_00237200(HudElem *e) {
         frame = get_icon_frame(0x7580, 1);
         right = width + 0x20;
         draw_hud_sprite_flipped(frame, left + right, y, 0x20, 0x20, alpha);
-        font_print_center_large(0x100, text_y, color, D_L00_0017E530, -1);
+        font_print_center(0x100, text_y, color, (s32)D_L00_0017E530, -1);
     }
     level = current_level_index;
     if (level == 5 || level == 0x10) {

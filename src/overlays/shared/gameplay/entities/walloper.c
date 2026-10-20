@@ -72,7 +72,7 @@ extern int FUN_L00_00259830(void *);
 extern int FUN_001efa68(Vec4 *, Vec4 *, int, void *, int);
 extern void collect_mobies_in_sphere(float, void *, int, void *, void *) __asm__("FUN_L00_001f2868");
 extern void FUN_0022da68(int, int, void *);
-extern char D_L00_0015F660_2BE3A8_lui[] __asm__("D_L00_0015F580");
+extern char D_L00_0015F580_lui[] __asm__("D_L00_0015F580");
 extern unsigned char *FUN_L00_00272060(void *, int, int, int, int, float *, float, float, float);
 
 typedef struct { Vec4 direction; int words[2]; u8 kind, mode; short id; float amount; int flag; } HitDescriptor_2b94d0;
@@ -389,7 +389,7 @@ next_candidate:;
     spin = FUN_L00_00257b90(1, 8); if (FUN_00213260(2)) spin = -spin;
     amplitude = random_float_between(0.15f, 3.0f);
     FUN_L00_00272060(v + 0x10, scale_game_frames(12), D_L00_001615F8 | 0x7f000000, 0, spin,
-                    (float *)D_L00_0015F660_2BE3A8_lui, amplitude * 0.1f, amplitude, 0.0f);
+                    (float *)D_L00_0015F580_lui, amplitude * 0.1f, amplitude, 0.0f);
 }
 #endif
 typedef struct {
@@ -2879,7 +2879,7 @@ void FUN_L00_002bf8b0(unsigned char *m, unsigned char *o, u128 *src) {
 
 typedef struct Cls_2C0CF8 {
     char pad0[0x24];
-    float f24;                    /* 0x24 */
+    float unk24;                  /* 0x24 */
 } Cls_2C0CF8;
 
 typedef struct Mob_2C0CF8 {
@@ -2956,7 +2956,7 @@ int FUN_L00_002bf9f0(Mob_2C0CF8 *moby, Blk_2C0CF8 *block, void *target, int chec
 
     can_halve = 1;
     func_001F9BF0_2C0CF8(jump, target, moby->pos);
-    func_L00_001FF5B0_2C0CF8(moby->f2C * 5.2f / moby->p24->f24, jump, jump);
+    func_L00_001FF5B0_2C0CF8(moby->f2C * 5.2f / moby->p24->unk24, jump, jump);
     func_001F9BD8_2C0CF8(land, moby->pos, jump);
     func_001F9C30_2C0CF8(half, jump, 0.5f);
     half_length = func_001F9CE8_2C0CF8(half);
@@ -2972,7 +2972,7 @@ int FUN_L00_002bf9f0(Mob_2C0CF8 *moby, Blk_2C0CF8 *block, void *target, int chec
         }
         return 0;
     }
-    if (moby->f2C * 3.0f / moby->p24->f24 < jump[2]) {
+    if (moby->f2C * 3.0f / moby->p24->unk24 < jump[2]) {
         if (can_halve) {
             return FUN_L00_002bf9f0(moby, block, half, 1);
         }
@@ -2988,18 +2988,18 @@ int FUN_L00_002bf9f0(Mob_2C0CF8 *moby, Blk_2C0CF8 *block, void *target, int chec
         }
         return 0;
     }
-    land[2] = land[2] + moby->f2C * 0.025f / moby->p24->f24;
+    land[2] = land[2] + moby->f2C * 0.025f / moby->p24->unk24;
     if (func_L00_002BFDB8_2C0CF8(moby, 6, land)) {
         if (can_halve) {
             return FUN_L00_002bf9f0(moby, block, half, 1);
         }
         return 0;
     }
-    land[2] = land[2] - moby->f2C * 0.025f / moby->p24->f24;
+    land[2] = land[2] - moby->f2C * 0.025f / moby->p24->unk24;
     qcopy_nc(from, moby->pos);
-    from[2] = from[2] + moby->f2C * 0.2f / moby->p24->f24;
+    from[2] = from[2] + moby->f2C * 0.2f / moby->p24->unk24;
     qcopy_nc(to, land);
-    to[2] = to[2] + moby->f2C * 0.2f / moby->p24->f24;
+    to[2] = to[2] + moby->f2C * 0.2f / moby->p24->unk24;
     if (check_line) {
         if (func_L00_001EFFF0_2C0CF8(from, to, 6, moby, 0) == 0) {
             if (can_halve) {

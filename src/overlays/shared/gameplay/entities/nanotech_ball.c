@@ -2904,7 +2904,6 @@ extern void FUN_L00_0025b6b8(void *,void *,void *,float);
 extern void FUN_L00_00267a08(void *);
 extern void FUN_L00_002dd8e8(void);
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void build_look_at_matrix_ddf60(void *, void *, float, void *) __asm__("FUN_00214890");
 extern void clear_u64_value(void *) __asm__("func_001F99F8");
 extern void cross_vectors_xyz(void *, void *, void *) __asm__("func_001F9AD8");
 extern void enqueue_callback_list_1_alt(void (*)(void),int) __asm__("FUN_001f4600");
@@ -2916,7 +2915,6 @@ extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F
 float absolute_float(float input) __asm__("func_001F99C0");
 s32 scale_frames_ddf60(s32) __asm__("FUN_001f96f8");
 void FUN_L00_002ddcb8(char *a, char *b);
-extern char hero_ddf60[] __asm__("D_0013F350");
 extern V41 vec30_41 __asm__("D_L00_00161B60") MACRO_ADDR;
 extern V41 vec40_41 __asm__("D_L00_00161B70") MACRO_ADDR;
 extern int tick41 __asm__("D_L00_00161B54") __attribute__((sda));
@@ -2937,21 +2935,21 @@ void FUN_L00_002ddf60(void *moby,void *position) {
 
 
     FUN_L00_002ddcb8(moby,position);
-    if((((Hero41 *)hero_ddf60)->camera_mode==30 || ((Hero41 *)hero_ddf60)->camera_mode==1) && (((Hero41 *)hero_ddf60)->moby->flags&1)) {
+    if((((Hero41 *)&hero)->camera_mode==30 || ((Hero41 *)&hero)->camera_mode==1) && (((Hero41 *)&hero)->moby->flags&1)) {
         qcopy(&orient[0],D_L00_00166FD0);
         qcopy(&orient[1],D_L00_00166FD0+16);
         qcopy(&orient[2],D_L00_00166FD0+32);
         orientation=&orient[0];
-    } else if(((Hero41 *)hero_ddf60)->special==1) {
+    } else if(((Hero41 *)&hero)->special==1) {
         fast_vec_scale(&orient[0],&((M41 *)moby)->basis[1],-1.0f);
         { M41 *m=moby;
         qcopy_nc(&orient[1],&m->basis[0]);
         qcopy_nc(&orient[2],&m->basis[2]); }
         orientation=&orient[0];
     } else {
-        qcopy(&orient[0],&((Hero41 *)hero_ddf60)->matrix[0]);
-        qcopy(&orient[1],&((Hero41 *)hero_ddf60)->matrix[1]);
-        qcopy(&orient[2],&((Hero41 *)hero_ddf60)->matrix[2]);
+        qcopy(&orient[0],&((Hero41 *)&hero)->matrix[0]);
+        qcopy(&orient[1],&((Hero41 *)&hero)->matrix[1]);
+        qcopy(&orient[2],&((Hero41 *)&hero)->matrix[2]);
         orientation=&orient[0];
     }
     fast_vec_normalize(&step,orientation,D_L00_00161B84);
@@ -2959,7 +2957,7 @@ void FUN_L00_002ddf60(void *moby,void *position) {
     qcopy(D_L00_001E5F40,position);
     fast_vec_normalize(&ray_end,orientation,D_L00_00161B84*10.0f);
     add_vector_xyz(&ray_end,&ray_end,position);
-    if(collision_line_ddf60(position,&ray_end,20,(int)((Hero41 *)hero_ddf60)->moby,0)) {
+    if(collision_line_ddf60(position,&ray_end,20,(int)((Hero41 *)&hero)->moby,0)) {
         int n,i,k;
         n=truncate_float_to_s32(vector_distance(D_L00_00173E60,position)/D_L00_00161B84);
         for(i=n;i<10;i++) {
@@ -2989,7 +2987,7 @@ void FUN_L00_002ddf60(void *moby,void *position) {
         tmp_a.f.z=0.1f; tmp_a.f.w=1.0f;
         tmp_b.f.x=1.0f; tmp_b.f.w=1.0f;
         angle=fast_add_rotations(D_L00_00161B80,random_float_between(45.0f,315.0f)*0.0174532924f);
-        build_look_at_matrix_ddf60(&vec40_41,&tmp_a,angle,&tmp_b);
+        func_002156E0_2D9EA0(&vec40_41,&tmp_a,angle,&tmp_b);
         D_L00_00161B80=angle;
         tick41=0;
     }
@@ -3018,7 +3016,7 @@ void FUN_L00_002ddf60(void *moby,void *position) {
         turn=FUN_L00_001eb328(&D_L00_001E5FE0[i],0.0f,target,0.06f,0.2f,0.0f);
         delta=fast_subtract_rotations(target,turn); }
         if(absolute_float(delta)>0.31415927f)turn=fast_add_rotations(turn,fast_subtract_rotations(delta,0.31415927f));
-        build_look_at_matrix_ddf60(&motion,&tmp_a,turn,&tmp_c);
+        func_002156E0_2D9EA0(&motion,&tmp_a,turn,&tmp_c);
         fast_vec_normalize(&tmp_d,&motion,D_L00_00161B84);
         lerp_vector(&motion,&motion,&tmp_d,1.0f);
         { float len=fast_vec_length(&motion);

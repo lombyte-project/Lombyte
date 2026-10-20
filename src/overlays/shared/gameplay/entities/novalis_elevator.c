@@ -2978,7 +2978,6 @@ typedef struct {
 
 
 extern s32 D_L01_00161B00;
-extern s32 D_L01_0015F5CC;
 extern char D_L01_0020B3E0[];
 extern s32 D_0015ED84;
 extern f32 D_0015ED60;
@@ -2992,8 +2991,7 @@ extern s32 FUN_L00_002591d0(struct Moby **, s32, s32, s32);
 extern s32 FUN_L00_002592b8(struct Moby **, struct Moby *, s32, s32);
 extern s32 FUN_001f96f8(s32);
 extern s32 FUN_L00_0028d8c0(struct Moby *, s32);
-extern s32 FUN_0022da68_s(s32, s32, struct Moby *) __asm__("FUN_0022da68");
-extern void FUN_0022da68_v(s32, s32, struct Moby *) __asm__("FUN_0022da68");
+extern int allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
 extern s32 FUN_001f9770(s16 *);
 extern f32 FUN_001f9b48(void *, void *);
 extern s32 FUN_00213260(s32);
@@ -3044,7 +3042,7 @@ void gunship_follow_path(struct Moby *m) {
     s32 frozen;
     s32 i;
     s32 never = 0;
-    f32 f20;
+    f32 path_speed;
     f32 f24;
 
     zero.q = 0;
@@ -3083,9 +3081,9 @@ void gunship_follow_path(struct Moby *m) {
         }
     }
     if ((m->oclass == 0x33 || m->oclass == 0x46A || m->oclass == 0x473 || m->oclass == 0x474)
-        && (D_L01_0015F5CC & 7) == (((s32)m >> 8) & 7) && v->unk13A <= 0 && m->state != 0
+        && (level_frame_count & 7) == (((s32)m >> 8) & 7) && v->unk13A <= 0 && m->state != 0
         && FUN_L00_0028d8c0(m, v->unk11E) == 0) {
-        v->unk11E = FUN_0022da68_s(0, 4, m);
+        v->unk11E = allocate_voice_for_target_entry(0, 4, m);
     }
     switch ((s16)(m->oclass - 0x33)) {
     case 0:
@@ -3095,7 +3093,7 @@ void gunship_follow_path(struct Moby *m) {
             if (!FUN_001f9770(&v->unk138))
                 break;
             if (FUN_001f9b48(&m->pos, D_L01_00167240) < 30.0f)
-                FUN_0022da68_s(1, 0, m);
+                allocate_voice_for_target_entry(1, 0, m);
         }
         v->unk138 = FUN_001f96f8(FUN_L00_00257b90(v->unk13C, v->unk13C + v->unk13E));
         break;
@@ -3104,7 +3102,7 @@ void gunship_follow_path(struct Moby *m) {
         if (v->unk138 != -1) {
             if (!FUN_001f9770(&v->unk138))
                 break;
-            FUN_0022da68_v((FUN_00213260(100) & 1) ? 1 : 2, 0, m);
+            FUN_0022da68((FUN_00213260(100) & 1) ? 1 : 2, 0, (char *)m);
         }
         v->unk138 = FUN_001f96f8(FUN_L00_00257b90(v->unk13C, v->unk13C + v->unk13E));
         break;
@@ -3230,8 +3228,8 @@ void gunship_follow_path(struct Moby *m) {
     }
     {
         f32 s = FUN_001f9de0(v->unk12C);
-        f20 = v->unkFC + v->unk124 * D_0015ED60 * s * D_0015ED60;
-        f24 = f20 / v->unkB0.v.w;
+        path_speed = v->unkFC + v->unk124 * D_0015ED60 * s * D_0015ED60;
+        f24 = path_speed / v->unkB0.v.w;
         v->unk12C = FUN_001fa580(v->unk12C, v->unk128 * D_0015ED60 * 0.017453292f);
     }
     v->unkE0.q = v->unkD0.q;
@@ -3239,7 +3237,7 @@ void gunship_follow_path(struct Moby *m) {
     if (!(v->unk120 & 0x40)) {
         f32 dd = FUN_001f9b48(&v->unkE0, &v->unkD0);
         if (dd != 0.0f) {
-            f24 = f24 * (f20 / dd);
+            f24 = f24 * (path_speed / dd);
             FUN_L01_0028ba80(v->unkF0 + f24, &v->unkD0, &v->unkB0, &v->unkC0, &v->unk90, &v->unkA0);
         }
     }

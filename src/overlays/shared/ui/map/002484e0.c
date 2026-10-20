@@ -31,7 +31,7 @@ typedef struct {
 
 extern s32 D_L00_00184218 NOT_SDA;
 extern s32 D_L00_0015FDF8 __attribute__((sda));
-extern MapBitGrid D_L00_001841F0_484e0 __asm__("D_L00_001841F0") NOT_SDA;
+extern MapBitGrid D_L00_001841F0_lui __asm__("D_L00_001841F0") NOT_SDA;
 extern MapFilter D_L00_00182BA0[19][16] NOT_SDA;
 extern MapFilterCallback D_L00_00183F90[19][8] NOT_SDA;
 extern s32 D_L00_001844A8[] NOT_SDA;
@@ -216,7 +216,7 @@ void FUN_L00_002484e0(f32 *position) {
         packed_row *= 16;
 
         for (column = column_start; column < column_end; column++) {
-            u8 *pixel = D_L00_001841F0_484e0.mask + row * 64 + column / 8;
+            u8 *pixel = D_L00_001841F0_lui.mask + row * 64 + column / 8;
             s32 bit;
             s32 test_column;
             s32 exclusion_offset;
@@ -230,14 +230,14 @@ void FUN_L00_002484e0(f32 *position) {
             }
             test_column = column - x + 16;
             exclusion_offset = exclusion_row * 4;
-            if ((D_L00_001841F0_484e0.exclusion[test_column / 8 + exclusion_offset] >> (test_column % 8)) & 1) {
+            if ((D_L00_001841F0_lui.exclusion[test_column / 8 + exclusion_offset] >> (test_column % 8)) & 1) {
                 continue;
             }
             {
                 u8 packed;
                 u8 selected;
                 FUN_L00_00249d80((column >> 5) + block_row);
-                packed = *(D_L00_001841F0_484e0.packed + ((column & 31) >> 1) + packed_row);
+                packed = *(D_L00_001841F0_lui.packed + ((column & 31) >> 1) + packed_row);
                 selected = (column & 1) ? packed >> 4 : packed & 15;
                 if (filters[selected] != 0) {
                     *pixel &= ~bit;

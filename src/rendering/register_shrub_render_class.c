@@ -4,7 +4,7 @@
 #include "qcopy.h"
 
 extern s32 registered_shrub_render_class_count __asm__("D_001603CC");
-extern s32 gs_texture_allocation_base __asm__("D_0015EE8C");
+#include "rnc/rendering/render_globals.h"
 #include "rnc/rendering/material_templates.h"
 extern s32 convert_float_to_word(f32) __asm__("func_001FA6D0");
 extern s32 highest_set_bit_index(s32) __asm__("func_001F97A0");

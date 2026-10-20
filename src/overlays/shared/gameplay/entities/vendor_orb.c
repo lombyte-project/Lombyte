@@ -1137,6 +1137,7 @@ void FUN_L00_002e2c88(int texture_id, int glow_texture_id, void *points, int alp
         {
             OvlVec4 *glow_dst = &quads[1].positions[0];
             glow = glow_src;
+            /* Fakematch: the empty loop stops regmove (see above). */
             do { } while (0);
             qcopy(glow_dst, glow);
         }
