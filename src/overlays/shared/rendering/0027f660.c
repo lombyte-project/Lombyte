@@ -164,42 +164,42 @@ extern void subtract_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a28"
 extern void transform_vector(void *, void *, void *) __asm__("func_001F9D20");
 extern unsigned char D_L01_001B2928_b[] __asm__("D_L01_001B2628");
 
-unsigned char *FUN_L01_0028a7a8(char *m, char *pos, float *vel, char *cfg, int flag) {
+unsigned char *FUN_L01_0028a7a8(char *source_moby, char *pos, float *vel, char *cfg, int flag) {
     float v[4];
     float mat[16];
-    unsigned char *p = FUN_L00_002678b8(74);
-    if (p) {
-        char *q;
-        p[9] = func_001FA898_r(4.0f) - 0x60;
+    unsigned char *particle = FUN_L00_002678b8(74);
+    if (particle) {
+        char *particle_data;
+        particle[9] = func_001FA898_r(4.0f) - 0x60;
         if (flag)
-            p[3] = 0x48;
+            particle[3] = 0x48;
         else
-            p[3] = 0x44;
-        p[1] = 0;
-        q = (char *)p + 0x20;
-        p[2] = **(unsigned char **)D_L01_001B2928_b;
-        p[8] = rand();
-        *(int *)(p + 0xc) = 0;
-        qcopy(p + 0x10, pos);
-        *(float *)q = vel[0];
-        *(float *)(q + 4) = vel[1];
-        *(float *)(q + 8) = vel[2];
-        subtract_vector_xyz_c(v, pos, m + 0x10);
+            particle[3] = 0x44;
+        particle[1] = 0;
+        particle_data = (char *)particle + 0x20;
+        particle[2] = **(unsigned char **)D_L01_001B2928_b;
+        particle[8] = rand();
+        *(int *)(particle + 0xc) = 0;
+        qcopy(particle + 0x10, pos);
+        *(float *)particle_data = vel[0];
+        *(float *)(particle_data + 4) = vel[1];
+        *(float *)(particle_data + 8) = vel[2];
+        subtract_vector_xyz_c(v, pos, source_moby + 0x10);
         qzero(mat);
         qzero(mat + 4);
         qzero(mat + 8);
         qzero(mat + 12);
-        transpose_rotation_matrix(mat, m + 0xc0);
+        transpose_rotation_matrix(mat, source_moby + 0xc0);
         transform_vector(v, v, mat);
-        *(float *)(q + 0x10) = v[0];
-        *(float *)(q + 0x14) = v[1];
-        *(float *)(q + 0x18) = v[2];
-        *(char **)(q + 0xc) = m;
-        *(char **)(q + 0x1c) = cfg;
-        *(short *)(p + 0xa) = *(unsigned short *)(cfg + 0xc);
-        *(int *)(p + 4) = *(int *)cfg;
+        *(float *)(particle_data + 0x10) = v[0];
+        *(float *)(particle_data + 0x14) = v[1];
+        *(float *)(particle_data + 0x18) = v[2];
+        *(char **)(particle_data + 0xc) = source_moby;
+        *(char **)(particle_data + 0x1c) = cfg;
+        *(short *)(particle + 0xa) = *(unsigned short *)(cfg + 0xc);
+        *(int *)(particle + 4) = *(int *)cfg;
     }
-    return p;
+    return particle;
 }
 /* Ported from rac1-decomp (src/overlays/shared/partupd_00280428.c: func_L01_0028C1D8), where it is exact; names translated to the US level program. */
 
