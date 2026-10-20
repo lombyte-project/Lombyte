@@ -442,43 +442,43 @@ struct Moby *spawn_debris_chunk(Vec4f *pos, Vec4f *vel, s32 oclass, s32 initial_
     u128 v;
     u128 *pp = &p;
     u128 *vp = &v;
-    struct Moby *m;
+    struct Moby *debris_moby;
     DebrisVars_2f8530 *pv;
     f32 r;
-    f32 s;
+    f32 initial_spin;
 
     p = *(u128 *)pos;
     v = *(u128 *)vel;
-    m = create_moby_local(oclass);
-    if (m != 0) {
-        pv = (DebrisVars_2f8530 *)m->pvars;
-        FUN_L00_0025d1b8_2f8530(m);
-        m->scale *= scale;
-        m->update_dist = 0xFF;
-        m->draw_dist = 0xFF;
-        m->visible = 1;
-        m->rot.x = random_float_between_2f8530(-3.1415927f, 3.1415927f);
-        m->rot.y = random_float_between_2f8530(-3.1415927f, 3.1415927f);
-        m->rot.z = random_float_between_2f8530(-3.1415927f, 3.1415927f);
-        qcopy(&m->pos, pp);
+    debris_moby = create_moby_local(oclass);
+    if (debris_moby != 0) {
+        pv = (DebrisVars_2f8530 *)debris_moby->pvars;
+        FUN_L00_0025d1b8_2f8530(debris_moby);
+        debris_moby->scale *= scale;
+        debris_moby->update_dist = 0xFF;
+        debris_moby->draw_dist = 0xFF;
+        debris_moby->visible = 1;
+        debris_moby->rot.x = random_float_between_2f8530(-3.1415927f, 3.1415927f);
+        debris_moby->rot.y = random_float_between_2f8530(-3.1415927f, 3.1415927f);
+        debris_moby->rot.z = random_float_between_2f8530(-3.1415927f, 3.1415927f);
+        qcopy(&debris_moby->pos, pp);
         qcopy(&pv->vel, vp);
         r = random_float_between_2f8530(D_0015ED6C_2f8530 * 1.5707964f,
                                         D_0015ED6C_2f8530 * 6.2831855f);
         if (rand_e50() & 1) {
-            s = -r * spin;
+            initial_spin = -r * spin;
         } else {
-            s = r * spin;
+            initial_spin = r * spin;
         }
         pv->unk10 = initial_timer;
         pv->unk28 = initial_timer;
         pv->scale = scale;
-        pv->spin = s;
+        pv->spin = initial_spin;
         pv->life = truncate_float_to_s32(scale_time(seconds * 60.0f));
         pv->unk20 = fade_out;
         pv->gravity = gravity * 9.8f * frame_time_sq;
-        upd_a(m);
+        upd_a(debris_moby);
     }
-    return m;
+    return debris_moby;
 }
 #include "rnc/overlay/collision.h"
 
