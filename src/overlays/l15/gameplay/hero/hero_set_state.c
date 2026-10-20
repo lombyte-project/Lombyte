@@ -85,6 +85,7 @@ extern char D_L15_0017C560[];
 int hero_set_state(int a, int b) {
     enum {
         HERO_STATE_VEHICLE_MODE_3_IDLE = 0x53,
+        HERO_STATE_VEHICLE_MODE_3_MOVE = 0x54,
         HERO_STATE_VEHICLE_MODE_2_IDLE = 0x5A,
         HERO_STATE_DROWNING = 0x6A
     };
@@ -1683,7 +1684,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(6, 0, (float)scale_game_frames(7));
         break;
     }
-    case 0x54: {
+    case HERO_STATE_VEHICLE_MODE_3_MOVE: {
         struct Hero *p = &hero;
         p->state.control_mode = 1;
         p->unk2284 = 0;
