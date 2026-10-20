@@ -1532,30 +1532,30 @@ void f2502f0_2bad40(char *, int, int, int) __asm__("FUN_L00_002502f0");
 void f250df8_2bad40(char *) __asm__("FUN_L00_00250df8");
 /* Spawns a child effect (moby 0xEB) on the parent: copies its position and rotation, then sets the colour, timers and scale. */
 char *FUN_L03_002bad40(struct Moby *parent, int unused, int color, int secondary_color, int timer_frames, float f, float scale) {
-    char *m = f20c4f8_2bad40(0xEB);
-    if (m) {
-        char *d = *(char **)(m + 0x78);
+    char *child_moby = f20c4f8_2bad40(0xEB);
+    if (child_moby) {
+        char *child_data = *(char **)(child_moby + 0x78);
         int r, g, b;
-        *(unsigned char *)(m + 0x30) = 0xFF;
-        *(short *)(m + 0x32) = 0x7F;
-        m[0x31] = 1;
-        *(float *)(m + 0x2C) *= scale;
-        *(char **)d = parent;
-        qcopy(m + 0x10, (char *)parent->pvars + 0xF0);
-        *(OvlQuad *)(m + 0x40) = *(OvlQuad *)&parent->rot;
-        *(float *)(m + 0x40) = f213308_2bad40();
-        *(short *)(d + 0xC) = timer_frames;
+        *(unsigned char *)(child_moby + 0x30) = 0xFF;
+        *(short *)(child_moby + 0x32) = 0x7F;
+        child_moby[0x31] = 1;
+        *(float *)(child_moby + 0x2C) *= scale;
+        *(char **)child_data = parent;
+        qcopy(child_moby + 0x10, (char *)parent->pvars + 0xF0);
+        *(OvlQuad *)(child_moby + 0x40) = *(OvlQuad *)&parent->rot;
+        *(float *)(child_moby + 0x40) = f213308_2bad40();
+        *(short *)(child_data + 0xC) = timer_frames;
         b = (color >> 16) & 0xFF;
         g = (color >> 8) & 0xFF;
         r = color & 0xFF;
-        *(short *)(d + 0xE) = timer_frames;
-        *(float *)(d + 0x14) = f;
-        *(int *)(d + 0x4) = color;
-        *(int *)(d + 0x8) = secondary_color;
-        f2502f0_2bad40(m, r, g, b);
-        f250df8_2bad40(m);
+        *(short *)(child_data + 0xE) = timer_frames;
+        *(float *)(child_data + 0x14) = f;
+        *(int *)(child_data + 0x4) = color;
+        *(int *)(child_data + 0x8) = secondary_color;
+        f2502f0_2bad40(child_moby, r, g, b);
+        f250df8_2bad40(child_moby);
     }
-    return m;
+    return child_moby;
 }
 
 typedef struct {
