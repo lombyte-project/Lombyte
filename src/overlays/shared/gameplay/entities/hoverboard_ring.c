@@ -252,7 +252,7 @@ void FUN_L05_0031cf58(char *m) {
     Pk_31e468 pk;
     float up[4];
     float M[4][4];
-    float t[4];
+    float sprite_offset[4];
     float w[4];
     u32 col;
     int j;
@@ -271,8 +271,8 @@ void FUN_L05_0031cf58(char *m) {
     pk.uv[5] = 0.0f;
     pk.uv[6] = 1.0f;
     pk.uv[7] = 1.0f;
-    scale_vector_xyz(t, m + 0xE0, *(float *)&D_L05_00161FC8_gp);
-    add_vector_xyz(M[3], m + 0x10, t);
+    scale_vector_xyz(sprite_offset, m + 0xE0, *(float *)&D_L05_00161FC8_gp);
+    add_vector_xyz(M[3], m + 0x10, sprite_offset);
     subtract_vector_xyz(M[0], D_L05_001671C0_lui, M[3]);
     normalize_vector_xyz(M[0], M[0], 1.0f);
     cross_vectors_xyz(M[1], M[0], up);
