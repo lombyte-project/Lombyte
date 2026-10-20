@@ -242,7 +242,7 @@ void codebot_update(struct Moby *moby) {
         CODEBOT_RECORD_COLLECTION = 2,
         CODEBOT_REMOVE = 3
     };
-    unsigned char *p;
+    unsigned char *collection_flags;
     if (current_level_index != 0xF) {
         moby->rot.z =
             fast_add_rotations(moby->rot.z, frame_time * 1.5707964f);
@@ -272,9 +272,9 @@ void codebot_update(struct Moby *moby) {
             if (D_L15_0015F5C4 != 2) {
                 queue_dialogue_message(0x426A, -1);
                 D_L15_0015F640 = scale_game_frames(0xB4);
-                p = D_0013D388_bd78;
-                p[2] = 1;
-                p[0x78] = 1;
+                collection_flags = D_0013D388_bd78;
+                collection_flags[2] = 1;
+                collection_flags[0x78] = 1;
                 moby->state = 3;
                 memcard_save_data(0, -1);
             }
