@@ -587,7 +587,7 @@ void FUN_001f9a10_26a9f0(void *, void *, void *) __asm__("FUN_001f9a10");
 extern unsigned char *D_L00_001B20AC __attribute__((section(".data")));
 void FUN_L00_0026a9f0(void *pos, void *dir, int col, int d, int n, int b1A, int b18, int b19,
                       float x, float y);
-void FUN_L00_0026a9f0(void *pos, void *dir, int col, int d, int lifetime, int b1A, int b18, int b19,
+void FUN_L00_0026a9f0(void *pos, void *dir, int col, int color_endpoint, int lifetime, int b1A, int b18, int b19,
                       float x, float y) {
     unsigned char *particle;
     unsigned char *q;
@@ -638,7 +638,7 @@ void FUN_L00_0026a9f0(void *pos, void *dir, int col, int d, int lifetime, int b1
     q[0x18] = b1A;
     *(float *)(q + 0x1C) = x;
     *(int *)(q + 0x10) = col;
-    *(int *)(q + 0x14) = d;
+    *(int *)(q + 0x14) = color_endpoint;
     q[0x1A] = b18;
     q[0x19] = b19;
 }
