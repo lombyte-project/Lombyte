@@ -926,18 +926,18 @@ extern u8 *D_L00_0015FFD8_c __asm__("D_L00_0015FFD8");
 extern u8 *D_L00_0015FFE0 __attribute__((sda));
 /* True for a moby inside the moby table whose class at 0xA6 is 0x1F4..0x21C. */
 s32 FUN_L00_0025e3b8(u8 *m);
-s32 FUN_L00_0025e3b8(u8 *m) {
+s32 FUN_L00_0025e3b8(u8 *moby) {
     u32 v;
-    if (m == 0) {
+    if (moby == 0) {
     bad:
         return 0;
     }
-    if (m < D_L00_0015FFD8_c) {
+    if (moby < D_L00_0015FFD8_c) {
         goto bad;
     }
-    if (m > D_L00_0015FFE0) {
+    if (moby > D_L00_0015FFE0) {
         goto bad;
     }
-    v = *(u16 *)(m + 0xA6);
+    v = *(u16 *)(moby + 0xA6);
     return (v - 0x1F4) < 0x29;
 }
