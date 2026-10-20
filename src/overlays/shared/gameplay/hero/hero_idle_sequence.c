@@ -1833,7 +1833,7 @@ extern void FUN_L00_0024eed8_00208a10(void *, int, void *, float,
 
 void FUN_L00_00208a10(void) {
     u128 v;
-    float f;
+    float second_position_offset;
     unsigned char *hero_moby;
     if (hero.unk20A5) {
         FUN_L00_00233210_00208a10();
@@ -1852,11 +1852,11 @@ void FUN_L00_00208a10(void) {
         FUN_L00_002336e8_00208a10(&v, &v, hero.unk224);
         FUN_L00_0024eed8_00208a10(((unsigned char *)hero.moby), 0, &v, hero.unk234,
                                   hero.capsule_top - hero.unk224);
-        f = hero.unk234 + 0.05f;
+        second_position_offset = hero.unk234 + 0.05f;
         qcopy(&v, &hero.motion.pos);
-        FUN_L00_002336e8_00208a10(&v, &v, f);
+        FUN_L00_002336e8_00208a10(&v, &v, second_position_offset);
         FUN_L00_0024eed8_00208a10(((unsigned char *)hero.moby), 1, &v, hero.unk234,
-                                  hero.capsule_top - f);
+                                  hero.capsule_top - second_position_offset);
     }
 }
 typedef union {
