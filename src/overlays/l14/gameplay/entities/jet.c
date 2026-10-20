@@ -73,7 +73,7 @@ void FUN_L14_002df138(u8 *moby) {
     f32 step;
     f32 ripple_point_index;
     f32 b;
-    f32 t;
+    f32 point_fraction_or_sweep_angle;
     f32 u;
     f32 sweep_point_index;
     s32 i;
@@ -89,7 +89,7 @@ void FUN_L14_002df138(u8 *moby) {
     moby_vars[0x1E8 / 4] = fast_add_rotations(moby_vars[0x1E8 / 4], 0.05236f);
     step = (360.0f / (integer_to_float_l14(10) * 0.5f)) * 0.017453292f;
     for (i = 0; i < 5; i++) {
-        t = integer_to_float_l14(i) / integer_to_float_l14(10);
+        point_fraction_or_sweep_angle = integer_to_float_l14(i) / integer_to_float_l14(10);
         if (i == 0) {
             b = 0.0f;
         } else {
@@ -122,10 +122,10 @@ void FUN_L14_002df138(u8 *moby) {
     for (i = 0; i < 19; i++) {
         sweep_point_index = (f32)i;
         moby_vars[(i * 4) + (0xA8 / 4)] = 0.0f;
-        t = normalize_angle(moby_vars[0x1E4 / 4] + (sweep_point_index * 0.99483764f));
+        point_fraction_or_sweep_angle = normalize_angle(moby_vars[0x1E4 / 4] + (sweep_point_index * 0.99483764f));
         u = fast_sin(normalize_angle(moby_vars[0x1E8 / 4] + (sweep_point_index * 0.20944f))) * 0.75f;
-        moby_vars[(i * 4) + (0xA8 / 4)] += (u * fast_sin(t)) + spread_l14(0.0f, 0.2f);
-        moby_vars[(i * 4) + (0xA4 / 4)] = fast_cos(t) * 0.5f;
+        moby_vars[(i * 4) + (0xA8 / 4)] += (u * fast_sin(point_fraction_or_sweep_angle)) + spread_l14(0.0f, 0.2f);
+        moby_vars[(i * 4) + (0xA4 / 4)] = fast_cos(point_fraction_or_sweep_angle) * 0.5f;
         moby_vars[(i * 4) + (0xA0 / 4)] = sweep_point_index * 0.39f;
         moby_vars[(i * 4) + (0xAC / 4)] = 1.0f;
     }
