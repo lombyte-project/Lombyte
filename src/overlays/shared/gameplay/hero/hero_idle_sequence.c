@@ -999,14 +999,14 @@ void FUN_L00_00206e00(void) {
         if (*(int *)(g + 0x208C) == 4) {
             int b = *(int *)(g + 0x2084);
             if (b == 0xB) {
-                int c = *(int *)(g + 0x450);
-                if (c == 0) {
+                int token_variant_selector = *(int *)(g + 0x450);
+                if (token_variant_selector == 0) {
                     input_token = 1;
                     if (D_0015EDB4[0]) input_token = 2;
-                } else if (c == 1) {
+                } else if (token_variant_selector == 1) {
                     input_token = 2;
                     if (D_0015EDB4[0]) input_token = 1;
-                } else if (c == 3) {
+                } else if (token_variant_selector == 3) {
                     input_token = 3;
                 }
             } else if (b == 0x11) {
