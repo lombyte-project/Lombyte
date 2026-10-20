@@ -294,17 +294,17 @@ void FUN_L00_0026daa0(void *, u32, s32, s32, f32);
 extern void FUN_L00_00250df8();
 
 BeamMoby *FUN_L01_002fa068(s32 owner, u128 *pos, u128 *target, s32 color) {
-    u128 p;
-    u128 t;
+    u128 position_copy;
+    u128 target_copy;
     BeamMoby *m;
     BeamVars *v;
     u128 *pp;
     u128 *tp;
 
-    pp = &p;
-    tp = &t;
-    p = *pos;
-    t = *target;
+    pp = &position_copy;
+    tp = &target_copy;
+    position_copy = *pos;
+    target_copy = *target;
     m = spawn_beam_moby(0x2D2);
     if (m != 0) {
         v = m->pvars;
