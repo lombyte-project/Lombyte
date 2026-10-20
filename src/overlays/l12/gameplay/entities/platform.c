@@ -2824,55 +2824,55 @@ extern void trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
 extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 float absolute_float(float input) __asm__("func_001F99C0");
 
-void FUN_L12_002eb220(struct Moby *m) {
+void FUN_L12_002eb220(struct Moby *moby) {
     int st;
     float fv;
     int res;
-    char *d;
+    char *vars;
     char *r;
-    float a, b, p, q;
-    d = (char *)m->pvars;
+    float hit_to_moby_angle, b, knockback_rotation_y, knockback_rotation_x;
+    vars = (char *)moby->pvars;
     fv = 0.0f;
-    r = find_moby_hit(m, 0x330000, 0);
-    res = hit_reaction(m, r, d + 0x20, 0, &st, &fv, 0, 4);
-    if (st != 1 && m->state != 6 &&
+    r = find_moby_hit(moby, 0x330000, 0);
+    res = hit_reaction(moby, r, vars + 0x20, 0, &st, &fv, 0, 4);
+    if (st != 1 && moby->state != 6 &&
         *(short *)(*(char **)(r + 0x20) + 0xA6) != 0xB8 &&
         *(short *)(*(char **)(r + 0x20) + 0xA6) != 0x199) {
-        float t;
+        float remaining_health;
         if (*(short *)(*(char **)(r + 0x20) + 0xA6) == 0x1CA)
             fv = 10.0f;
-        t = *(float *)(d + 0x20) - fv;
-        *(float *)(d + 0x20) = t;
-        if (res == 1 || t <= 0.0f) {
-            allocate_voice_for_target_entry(2, 0, (int)m);
-            m->state = 6;
+        remaining_health = *(float *)(vars + 0x20) - fv;
+        *(float *)(vars + 0x20) = remaining_health;
+        if (res == 1 || remaining_health <= 0.0f) {
+            allocate_voice_for_target_entry(2, 0, (int)moby);
+            moby->state = 6;
         } else if (res != 0xB) {
-            *(unsigned char *)(d + 0x67) = 0xB4;
-            trooper_anim_update(m, (short *)(d + 0x60));
-            if (*(float *)(r + 0x1C) == 5627.925f && m->state != 5) {
-                a = fast_arc_tan(m->pos.x - *(float *)(r + 0),
-                                 m->pos.y - *(float *)(r + 4));
-                b = fast_subtract_rotations(a, m->rot.z);
-                p = fast_cos(b) * 0.08726646f;
-                q = fast_sin(b) * -0.34906584f;
-                if (absolute_float(m->rot.x) < absolute_float(q)) {
-                    m->rot.x = q;
-                    *(float *)(d + 0x98) = 0.0f;
+            *(unsigned char *)(vars + 0x67) = 0xB4;
+            trooper_anim_update(moby, (short *)(vars + 0x60));
+            if (*(float *)(r + 0x1C) == 5627.925f && moby->state != 5) {
+                hit_to_moby_angle = fast_arc_tan(moby->pos.x - *(float *)(r + 0),
+                                 moby->pos.y - *(float *)(r + 4));
+                b = fast_subtract_rotations(hit_to_moby_angle, moby->rot.z);
+                knockback_rotation_y = fast_cos(b) * 0.08726646f;
+                knockback_rotation_x = fast_sin(b) * -0.34906584f;
+                if (absolute_float(moby->rot.x) < absolute_float(knockback_rotation_x)) {
+                    moby->rot.x = knockback_rotation_x;
+                    *(float *)(vars + 0x98) = 0.0f;
                 }
-                if (absolute_float(m->rot.y) < absolute_float(p)) {
-                    m->rot.y = p;
-                    *(float *)(d + 0x9C) = 0.0f;
+                if (absolute_float(moby->rot.y) < absolute_float(knockback_rotation_y)) {
+                    moby->rot.y = knockback_rotation_y;
+                    *(float *)(vars + 0x9C) = 0.0f;
                 }
-                *(float *)(d + 0x94) = frame_time * 4.0f;
-                *(short *)(d + 0x8E) = scale_game_frames(0x3C);
-                m->command = m->state;
-                m->state = 5;
-                allocate_voice_for_target_entry(1, 0, (int)m);
+                *(float *)(vars + 0x94) = frame_time * 4.0f;
+                *(short *)(vars + 0x8E) = scale_game_frames(0x3C);
+                moby->command = moby->state;
+                moby->state = 5;
+                allocate_voice_for_target_entry(1, 0, (int)moby);
             }
         }
     }
-    m->hit_slot = 0xFF;
-    trooper_anim_finish(m, d + 0x60);
+    moby->hit_slot = 0xFF;
+    trooper_anim_finish(moby, vars + 0x60);
 }
 /* Data of the second watcher (edwina_update): the L16 watcher layout with
  * the turret and base mobys it spawns at 0x164/0x168. */
