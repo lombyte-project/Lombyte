@@ -226,11 +226,11 @@ typedef struct {
 float FUN_001f99c0_0025da70(float) __asm__("FUN_001f99c0");
 void FUN_001f9b80_0025da70(Vec4_0025da70 *, Vec4_0025da70 *) __asm__("FUN_001f9b80");
 void FUN_001f9b48_0025da70(Vec4_0025da70 *, Vec4_0025da70 *) __asm__("FUN_001f9b48");
-void FUN_L00_0025da70(u128_0025da70 *a, u128_0025da70 *b, float lim) {
+void FUN_L00_0025da70(u128_0025da70 *first_point, u128_0025da70 *b, float lim) {
     Vec4_0025da70 v[2];
     Vec4_0025da70 *pa = &v[0];
     Vec4_0025da70 *pb = &v[1];
-    *(u128_0025da70 *)pa = *a;
+    *(u128_0025da70 *)pa = *first_point;
     *(u128_0025da70 *)pb = *b;
     if (0.0f < lim && FUN_001f99c0_0025da70(pa->z - pb->z) < lim) {
         FUN_001f9b80_0025da70(pa, pb);
