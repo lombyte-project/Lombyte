@@ -181,7 +181,7 @@ extern void FUN_L05_002f81b8_u(void *) __asm__("FUN_L05_002f81b8");
 void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
 void hydrodisplacer_faucet_update(char *m) __asm__("FUN_L05_002f8080");
-void hydrodisplacer_faucet_update(char *m) {
+void hydrodisplacer_faucet_update(char *faucet_moby) {
     enum {
         HYDRODISPLACER_FAUCET_ANIM_WAIT_FOR_LINK_FLAG_1 = 0,
         HYDRODISPLACER_FAUCET_ANIM_TRANSITION_TO_LINK_FLAG_2_WAIT = 1,
@@ -189,32 +189,32 @@ void hydrodisplacer_faucet_update(char *m) {
         HYDRODISPLACER_FAUCET_ANIM_TRANSITION_TO_LINK_FLAG_1_WAIT = 3
     };
     struct Hero *g = &hero;
-    int f = 0;
-    int *d = *(int **)(m + 0x78);
-    if (((char *)g->ground_moby) == m) {
-        f = g->state.control_mode == 0x13;
+    int hero_on_faucet_in_mode_13 = 0;
+    int *faucet_vars = *(int **)(faucet_moby + 0x78);
+    if (((char *)g->ground_moby) == faucet_moby) {
+        hero_on_faucet_in_mode_13 = g->state.control_mode == 0x13;
     }
-    switch ((unsigned char)m[0x53]) {
+    switch ((unsigned char)faucet_moby[0x53]) {
     case HYDRODISPLACER_FAUCET_ANIM_WAIT_FOR_LINK_FLAG_1:
-        if (d[0] >= 0 && (*(unsigned char *)(*(int *)&D_L05_0015FFD8 + d[0] * 256 + 0xBC) & 1) &&
-            !f)
-            blend_moby_animation(m, 1, 0, 0);
+        if (faucet_vars[0] >= 0 && (*(unsigned char *)(*(int *)&D_L05_0015FFD8 + faucet_vars[0] * 256 + 0xBC) & 1) &&
+            !hero_on_faucet_in_mode_13)
+            blend_moby_animation(faucet_moby, 1, 0, 0);
         break;
     case HYDRODISPLACER_FAUCET_ANIM_WAIT_FOR_LINK_FLAG_2:
-        if (d[0] >= 0 && (*(unsigned char *)(*(int *)&D_L05_0015FFD8 + d[0] * 256 + 0xBC) & 2) &&
-            !f)
-            blend_moby_animation(m, 3, 0, 0);
+        if (faucet_vars[0] >= 0 && (*(unsigned char *)(*(int *)&D_L05_0015FFD8 + faucet_vars[0] * 256 + 0xBC) & 2) &&
+            !hero_on_faucet_in_mode_13)
+            blend_moby_animation(faucet_moby, 3, 0, 0);
         break;
     case HYDRODISPLACER_FAUCET_ANIM_TRANSITION_TO_LINK_FLAG_1_WAIT:
-        if (m[0x70] & 2)
-            blend_moby_animation(m, 0, 0, 0);
+        if (faucet_moby[0x70] & 2)
+            blend_moby_animation(faucet_moby, 0, 0, 0);
         break;
     case HYDRODISPLACER_FAUCET_ANIM_TRANSITION_TO_LINK_FLAG_2_WAIT:
-        if (m[0x70] & 2)
-            blend_moby_animation(m, 2, 0, 0);
+        if (faucet_moby[0x70] & 2)
+            blend_moby_animation(faucet_moby, 2, 0, 0);
         break;
     }
-    FUN_L05_002f81b8_u(m);
+    FUN_L05_002f81b8_u(faucet_moby);
 }
 /* eases the pulse level of the moby that holds the focus and mixes its colour from two palettes */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002CF2C0.c: func_L05_002F95B0), where it is exact; names translated to the US level program. */
