@@ -186,7 +186,7 @@ extern short D_L06_00161ED8 __attribute__((sda));
 float FUN_L06_002f96f8(char *self) {
     char *owner = *(char **)(*(char **)(self + 0x78) + 0x160);
     float hi, lo, ang, dist, v[3];
-    short *p;
+    short *moby_index_cursor;
     if ((unsigned char)self[0x21] == 0xFF) {
         return fast_arc_tan(*(float *)(self + 0x10) - *(float *)(owner + 0x10),
                             *(float *)(self + 0x14) - *(float *)(owner + 0x14));
@@ -200,14 +200,14 @@ float FUN_L06_002f96f8(char *self) {
     v[1] = fast_sin(ang) * 2.0f;
     v[2] = 0.0f;
     fast_vec_add(v, v, D_0013E533 + 0xE9D);
-    p = D_L06_001ABFC0_p[(unsigned char)self[0x21]];
-    if (p == 0) {
+    moby_index_cursor = D_L06_001ABFC0_p[(unsigned char)self[0x21]];
+    if (moby_index_cursor == 0) {
         return 0.0f;
     }
     do {
-        int idx = *(unsigned short *)p & 0x7FFF;
-        char *e = (char *)(idx * 256 + (int)D_L06_0015FFD8);
-        if ((unsigned char)e[0x20] == 8 || FUN_001f9b48(e + 0x10, owner + 0x10) < dist) {
+        int idx = *(unsigned short *)moby_index_cursor & 0x7FFF;
+        char *listed_moby = (char *)(idx * 256 + (int)D_L06_0015FFD8);
+        if ((unsigned char)listed_moby[0x20] == 8 || FUN_001f9b48(listed_moby + 0x10, owner + 0x10) < dist) {
             float d = fast_arc_tan(
                 *(float *)(D_L06_0015FFD8 + idx * 256 + 0x10) - *(float *)(owner + 0x10),
                 *(float *)(D_L06_0015FFD8 + idx * 256 + 0x14) - *(float *)(owner + 0x14));
@@ -218,7 +218,7 @@ float FUN_L06_002f96f8(char *self) {
                 lo = r;
             }
         }
-    } while (*p++ >= 0);
+    } while (*moby_index_cursor++ >= 0);
     return fast_add_rotations(fast_add_rotations(lo, fast_difference_between_rotations(hi, lo) * 0.5f), ang);
 }
 extern int D_L06_001ABFC0[];
