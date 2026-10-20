@@ -2123,7 +2123,7 @@ void FUN_L18_002dc4b8(char *moby) {
     V_dc4b8 ang;
     float *moby_vars;
     int i, j, k;
-    int c;
+    int layer_color;
     float layer_phase, r, countdown_ticks_float, color_fade_weight, gi;
 
     moby_vars = *(float **)(moby + 0x78);
@@ -2141,10 +2141,10 @@ void FUN_L18_002dc4b8(char *moby) {
         layer_phase = moby_vars[1] + (float)i * 0.25f;
         r = moby_vars[0] + gi;
         layer_phase = layer_phase - (float)truncate_dc4b8(layer_phase);
-        c = tween_color_dc4b8(D_L18_00161CB8, D_L18_00161CBC, layer_phase);
+        layer_color = tween_color_dc4b8(D_L18_00161CB8, D_L18_00161CBC, layer_phase);
         color_fade_weight = layer_phase * D_L18_00161CD4;
         if (color_fade_weight > 1.0f) color_fade_weight = 1.0f;
-        c = tween_color_dc4b8(c & 0xFFFFFF, c, color_fade_weight);
+        layer_color = tween_color_dc4b8(layer_color & 0xFFFFFF, layer_color, color_fade_weight);
         countdown_ticks_float = itof_dc4b8(((int *)moby_vars)[2]);
         color_fade_weight = countdown_ticks_float / (float)scale_ticks_dc4b8(D_L18_00161C9C_v);
         if (color_fade_weight > 1.0f) {
@@ -2152,7 +2152,7 @@ void FUN_L18_002dc4b8(char *moby) {
         } else if (color_fade_weight < 0.0f) {
             color_fade_weight = 0.0f;
         }
-        c = tween_color_dc4b8(c & 0xFFFFFF, c, color_fade_weight);
+        layer_color = tween_color_dc4b8(layer_color & 0xFFFFFF, layer_color, color_fade_weight);
         for (j = 0; j < 4; j++) {
             float corner_angle;
             quad[i].uv[j].u = D_L18_001D4330[j * 2];
@@ -2163,7 +2163,7 @@ void FUN_L18_002dc4b8(char *moby) {
             quad[i].corner[j].f[0] = cos_dc4b8(corner_angle) * r;
             quad[i].corner[j].f[1] = sin_dc4b8(corner_angle) * r;
             quad[i].corner[j].f[3] = 1.0f;
-            quad[i].color[j] = c;
+            quad[i].color[j] = layer_color;
         }
     }
     clear_vector_dc4b8(&ang);
