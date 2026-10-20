@@ -48,7 +48,7 @@ void FUN_L13_003098d0(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     QuadPacket pk[2];
     f32 mat[4][4];
-    f32 tmp[4];
+    f32 corner_inset_offset[4];
     s32 i;
     s32 j;
     s32 off;
@@ -83,9 +83,9 @@ void FUN_L13_003098d0(struct Moby *moby) {
             /* The colour call in both arms: retail merges the two calls and
                leaves the address add in each arm. */
             if (j & 1) {
-                vector_subtract(tmp, v, data + 0x1F0);
-                normalize_vector_xyz(tmp, tmp, 0.5f);
-                vector_subtract(v, v, tmp);
+                vector_subtract(corner_inset_offset, v, data + 0x1F0);
+                normalize_vector_xyz(corner_inset_offset, corner_inset_offset, 0.5f);
+                vector_subtract(v, v, corner_inset_offset);
                 v[2] -= 0.125f;
                 pk[0].col[j] = fast_tween_color(*(f32 *)(data + off + 0x21C), D_L13_00161EA8,
                                                 D_L13_00161EAC);
