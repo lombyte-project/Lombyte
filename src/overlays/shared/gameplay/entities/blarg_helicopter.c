@@ -691,29 +691,29 @@ extern void FUN_L00_00250df8(void *);
 extern char *func_0020D348_m_2C59A0(int) __asm__("FUN_0020c4f8");
 
 char *FUN_L03_002c45d8(char *owner, float *pos, float *dir, short ang, int arg) {
-    char *m;
-    char *d;
-    m = func_0020D348_m_2C59A0(0x221);
-    if (m != 0) {
-        d = *(char **)(m + 0x78);
-        *(char **)(d + 0x10) = owner;
-        qcopy(m + 0x10, pos);
-        qcopy(d, dir);
-        *(float *)(m + 0x40) = random_float_between_alt(-3.1415927f, 3.1415927f);
-        *(float *)(m + 0x44) = random_float_between_alt(-3.1415927f, 3.1415927f);
-        *(int *)(d + 0x18) = 0;
-        *(short *)(d + 0x14) = scale_game_frames(500);
-        *(short *)(d + 0x16) = ang;
-        *(unsigned char *)(m + 0x30) = (*(unsigned char **)(d + 0x10))[0x30];
-        *(unsigned short *)(m + 0x32) = *(unsigned short *)(*(char **)(d + 0x10) + 0x32);
-        m[0x31] = 1;
-        m[0x20] = 0;
-        *(float *)(m + 0x2C) = *(float *)(*(char **)(m + 0x24) + 0x24) * 0.001f;
-        *(int *)(d + 0x1C) = arg;
-        *(int *)(d + 0x20) = 0;
-        FUN_L00_00250df8(m);
+    char *spawned_moby;
+    char *moby_pvars;
+    spawned_moby = func_0020D348_m_2C59A0(0x221);
+    if (spawned_moby != 0) {
+        moby_pvars = *(char **)(spawned_moby + 0x78);
+        *(char **)(moby_pvars + 0x10) = owner;
+        qcopy(spawned_moby + 0x10, pos);
+        qcopy(moby_pvars, dir);
+        *(float *)(spawned_moby + 0x40) = random_float_between_alt(-3.1415927f, 3.1415927f);
+        *(float *)(spawned_moby + 0x44) = random_float_between_alt(-3.1415927f, 3.1415927f);
+        *(int *)(moby_pvars + 0x18) = 0;
+        *(short *)(moby_pvars + 0x14) = scale_game_frames(500);
+        *(short *)(moby_pvars + 0x16) = ang;
+        *(unsigned char *)(spawned_moby + 0x30) = (*(unsigned char **)(moby_pvars + 0x10))[0x30];
+        *(unsigned short *)(spawned_moby + 0x32) = *(unsigned short *)(*(char **)(moby_pvars + 0x10) + 0x32);
+        spawned_moby[0x31] = 1;
+        spawned_moby[0x20] = 0;
+        *(float *)(spawned_moby + 0x2C) = *(float *)(*(char **)(spawned_moby + 0x24) + 0x24) * 0.001f;
+        *(int *)(moby_pvars + 0x1C) = arg;
+        *(int *)(moby_pvars + 0x20) = 0;
+        FUN_L00_00250df8(spawned_moby);
     }
-    return m;
+    return spawned_moby;
 }
 extern int fast_dec_timer(int *) __asm__("FUN_001f9740");
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
