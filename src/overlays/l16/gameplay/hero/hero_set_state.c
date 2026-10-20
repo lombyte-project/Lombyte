@@ -117,7 +117,8 @@ int hero_set_state(int a, int b) {
         HERO_STATE_VEHICLE_FALL_ALT = 0x58,
         HERO_STATE_GRAVITY_ALIGNED_STOP = 0x66,
         HERO_STATE_IDLE_ALT = 0x67,
-        HERO_STATE_DROWN = 0x6A
+        HERO_STATE_DROWN = 0x6A,
+        HERO_STATE_LAND_ALT = 0x81
     };
     int old2088;
     char *moby;
@@ -1144,7 +1145,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x81: {
+    case HERO_STATE_LAND_ALT: {
         struct Hero *p = &hero;
         int animation_timing_value = -2;
         p->state.control_mode = 1;
