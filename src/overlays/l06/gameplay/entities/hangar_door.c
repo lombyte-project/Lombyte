@@ -275,17 +275,17 @@ extern short *D_L06_001ABFC0_c[] __asm__("D_L06_001ABFC0");
 
 void FUN_L06_002fb090(char *moby) {
     char *data = *(char **)(moby + 0x78);
-    short *q = D_L06_001ABFC0_c[*(int *)(data + 0xF0)];
-    short *p;
-    if (q != 0) {
-        p = q;
+    short *moby_index_list = D_L06_001ABFC0_c[*(int *)(data + 0xF0)];
+    short *moby_index_cursor;
+    if (moby_index_list != 0) {
+        moby_index_cursor = moby_index_list;
         do {
-            int off = (*(unsigned short *)p & 0x7FFF) << 8;
+            int off = (*(unsigned short *)moby_index_cursor & 0x7FFF) << 8;
             float v[4];
             qcopy(v, (char *)(off + (int)D_L06_0015FFD8) + 0x10);
             v[2] = v[2] + random_float_between_alt(15.0f, 20.0f);
             FUN_L06_002e9d10((char *)((int)D_L06_0015FFD8 + off), v);
-        } while (*p++ >= 0);
+        } while (*moby_index_cursor++ >= 0);
     }
 }
 #include "qcopy.h"
