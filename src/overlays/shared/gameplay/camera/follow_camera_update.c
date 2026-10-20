@@ -830,7 +830,7 @@ void jet_mount(V_2eaaa0 *pa, V_2eaaa0 *pb, s32 mode, s32 w, s32 x) {
     u8 *camera_record = FUN_L00_001eb1f8_2eaaa0(5);
     V_2eaaa0 requested_position, b, saved_camera_position, saved_camera_rotation;
     u8 *camera_state;
-    u8 *e;
+    u8 *transition_state;
     u8 *target_position;
     qcopy(&requested_position, pa);
     qcopy(&b, pb);
@@ -838,7 +838,7 @@ void jet_mount(V_2eaaa0 *pa, V_2eaaa0 *pb, s32 mode, s32 w, s32 x) {
     qcopy(&saved_camera_rotation, &D_L00_00166DC0_2eaaa0[1]);
     FUN_001ebf10_2eaaa0(camera_record);
     camera_state = *(u8 **)(camera_record + 0x70);
-    e = camera_state + 0xE0;
+    transition_state = camera_state + 0xE0;
     target_position = camera_state + 0x80;
     camera_record[0x7C] = 7;
     camera_record[0x7D] = 1;
@@ -847,19 +847,19 @@ void jet_mount(V_2eaaa0 *pa, V_2eaaa0 *pb, s32 mode, s32 w, s32 x) {
     qcopy(camera_record + 0x40, &b);
     qcopy(target_position, &requested_position);
     qcopy(camera_state + 0x90, &b);
-    *(s32 *)(e + 0x40) = x;
+    *(s32 *)(transition_state + 0x40) = x;
     camera_record[0x88] = mode;
     if (mode != 2) {
         if (mode != 3)
             return;
-        *(f32 *)(e + 0x44) = 1.0f;
-        *(f32 *)(e + 0x48) = 0.0f;
+        *(f32 *)(transition_state + 0x44) = 1.0f;
+        *(f32 *)(transition_state + 0x48) = 0.0f;
         qcopy(camera_record + 0x30, &saved_camera_position);
         qcopy(camera_record + 0x40, &saved_camera_rotation);
         qcopy(camera_state + 0x110, &D_0013F3D0_2eaaa0);
         FUN_L00_001ed630_2eaaa0(camera_state + 0xFC, &saved_camera_position, &D_0013F3D0_2eaaa0);
     }
-    *(s32 *)(e + 4) = w;
+    *(s32 *)(transition_state + 4) = w;
     *(s32 *)(camera_state + 0xE0) = w;
 }
 extern char D_L00_00166C80_2eac18[] __asm__("D_L00_00166C80") __attribute__((section(".data")));
