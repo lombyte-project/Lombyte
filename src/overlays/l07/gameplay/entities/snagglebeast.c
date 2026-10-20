@@ -1840,8 +1840,8 @@ extern RopeParticle rope_particles[] __asm__("D_L07_0020C840");
 void FUN_L07_00317cb0(char *moby, void *anchor) {
     RopeVec step;
     RopeVec up;
-    RopeQuad c;
-    RopeQuad d;
+    RopeQuad rotation_input_vector;
+    RopeQuad rotation_axis;
     float r;
     int i;
     int j;
@@ -1855,20 +1855,20 @@ void FUN_L07_00317cb0(char *moby, void *anchor) {
     normalize_vector_xyz(step, moby + 0xC0, 2.8f);
     normalize_vector_xyz(up, moby + 0xE0, 1.0f);
     qcopy(rope_points, anchor);
-    pc = &c;
-    pd = &d;
+    pc = &rotation_input_vector;
+    pd = &rotation_axis;
     D_L07_0020DBC8[0] = 0;
     for (i = 1; i < 10; i++) {
         add_vector_xyz(rope_points[i], rope_previous_points[i], step);
         D_L07_0020DBC8[i] = 0;
     }
     clear_u64_value(D_L07_00161B90);
-    c.q = 0;
-    d.q = 0;
-    c.f[2] = 0.1f;
-    c.f[3] = 1.0f;
-    d.f[0] = 1.0f;
-    d.f[3] = 1.0f;
+    rotation_input_vector.q = 0;
+    rotation_axis.q = 0;
+    rotation_input_vector.f[2] = 0.1f;
+    rotation_input_vector.f[3] = 1.0f;
+    rotation_axis.f[0] = 1.0f;
+    rotation_axis.f[3] = 1.0f;
     r = random_angle_radians();
     build_look_at_matrix(D_L07_00161BA0, pc, pd, r);
     D_L07_00161BB0 = r;
