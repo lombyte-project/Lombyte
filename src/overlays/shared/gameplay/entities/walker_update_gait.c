@@ -65,14 +65,14 @@ float FUN_L00_002a15c8(char *walker_moby, char *b) {
     float s = *(float *)(b + 0xDC);
     float gap = *(float *)(walker_moby + 0x18) - *(float *)(b + 0x68);
     float c = *(float *)(b + 0xD8) + s * 0.5f;
-    float d = c * c + (s + s) * gap;
+    float discriminant_or_root = c * c + (s + s) * gap;
     float res;
-    if (d > 0.0f) {
-        d = square_root(d);
-        if (d <= c) {
-            res = c - d;
+    if (discriminant_or_root > 0.0f) {
+        discriminant_or_root = square_root(discriminant_or_root);
+        if (discriminant_or_root <= c) {
+            res = c - discriminant_or_root;
         } else {
-            res = c + d;
+            res = c + discriminant_or_root;
         }
         res = res / *(float *)(b + 0xDC);
     } else {
