@@ -24,9 +24,9 @@ void random_vector(float *out, float lo, float hi) {
 /* Cubic interpolation through four points a..d at t. */
 float cubic_hermite_scalar(float a, float b, float c, float d, float t) __asm__("FUN_L00_00257e20");
 float cubic_hermite_scalar(float a, float b, float c, float d, float t) {
-    float p = (d - c) - (a - b);
-    float q = (a - b) - p;
+    float cubic_coefficient = (d - c) - (a - b);
+    float quadratic_coefficient = (a - b) - cubic_coefficient;
     float t_squared = t * t;
     float t_cubed = t_squared * t;
-    return p * t_cubed + q * t_squared + (c - a) * t + b;
+    return cubic_coefficient * t_cubed + quadratic_coefficient * t_squared + (c - a) * t + b;
 }
