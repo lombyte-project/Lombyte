@@ -442,74 +442,74 @@ extern int D_L06_0015F5C4;
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 
 void hangar_door_update(char *m) __asm__("FUN_L06_002b4770");
-void hangar_door_update(char *m) {
+void hangar_door_update(char *door_moby) {
     enum {
         HANGAR_DOOR_INITIALIZE = 0,
         HANGAR_DOOR_POSITIVE_ANGLE_OFFSET = 1,
         HANGAR_DOOR_NEGATIVE_ANGLE_OFFSET = 2
     };
-    char *d = *(char **)(m + 0x78);
+    char *door_data = *(char **)(door_moby + 0x78);
     float z;
-    float a;
-    float s;
+    float position_angle_radians;
+    float pivot_offset_y;
     char *tb;
     if (D_L06_0015F5C4 == 6) {
-        if (*(int *)(d + 0x10) == 0) {
+        if (*(int *)(door_data + 0x10) == 0) {
             int x;
-            *(int *)(d + 0x10) = 0;
+            *(int *)(door_data + 0x10) = 0;
             x = *(int *)(ship_substate);
             if (x == 8) {
-                *(int *)(d + 0x10) = 1;
-                *(float *)(d + 0x18) = 0.3490658402442932f;
-                *(int *)(d + 0x14) = 0;
+                *(int *)(door_data + 0x10) = 1;
+                *(float *)(door_data + 0x18) = 0.3490658402442932f;
+                *(int *)(door_data + 0x14) = 0;
             } else if (x == 3) {
-                *(int *)(d + 0x10) = 1;
-                *(float *)(d + 0x14) = 0.3490658402442932f;
-                *(int *)(d + 0x18) = 0;
+                *(int *)(door_data + 0x10) = 1;
+                *(float *)(door_data + 0x14) = 0.3490658402442932f;
+                *(int *)(door_data + 0x18) = 0;
             }
         }
     } else {
-        *(int *)(d + 0x10) = 0;
+        *(int *)(door_data + 0x10) = 0;
     }
-    if (*(float *)(d + 0x18) != *(float *)(d + 0x14)) {
-        FUN_L00_0025be00((float *)(d + 0x18), (float *)(d + 8), *(float *)(d + 0x14),
+    if (*(float *)(door_data + 0x18) != *(float *)(door_data + 0x14)) {
+        FUN_L00_0025be00((float *)(door_data + 0x18), (float *)(door_data + 8), *(float *)(door_data + 0x14),
                          frame_time_sq * 1.5707964f, frame_time_sq * 1.5707964f, frame_time * 1.5707964f);
     }
-    switch (((unsigned char *)m)[0x20]) {
+    switch (((unsigned char *)door_moby)[0x20]) {
     case HANGAR_DOOR_INITIALIZE:
-        *(float *)(d + 0xC) = vector_distance(m + 0x10, D_L06_001600EC + *(int *)d * 0x80 + 0x30);
-        *(float *)(d + 4) = *(float *)(m + 0x48);
-        if (*(float *)(m + 0x44) != 0.0f) {
-            m[0x20] = 1;
+        *(float *)(door_data + 0xC) = vector_distance(door_moby + 0x10, D_L06_001600EC + *(int *)door_data * 0x80 + 0x30);
+        *(float *)(door_data + 4) = *(float *)(door_moby + 0x48);
+        if (*(float *)(door_moby + 0x44) != 0.0f) {
+            door_moby[0x20] = 1;
         } else {
-            m[0x20] = 2;
+            door_moby[0x20] = 2;
         }
         break;
     case HANGAR_DOOR_POSITIVE_ANGLE_OFFSET:
-        z = *(float *)(m + 0x18);
-        a = fast_add_rotations(*(float *)(d + 0x18), -1.5707950592041016f);
-        *(float *)(m + 0x10) = fast_cos(a) * *(float *)(d + 0xC);
-        s = fast_sin(a) * *(float *)(d + 0xC);
+        z = *(float *)(door_moby + 0x18);
+        position_angle_radians = fast_add_rotations(*(float *)(door_data + 0x18), -1.5707950592041016f);
+        *(float *)(door_moby + 0x10) = fast_cos(position_angle_radians) * *(float *)(door_data + 0xC);
+        pivot_offset_y = fast_sin(position_angle_radians) * *(float *)(door_data + 0xC);
         tb = D_L06_001600EC;
-        *(float *)(m + 0x14) = s;
-        *(int *)(m + 0x18) = 0;
-        tb += *(int *)d * 0x80;
-        add_vector_xyz(m + 0x10, m + 0x10, tb + 0x30);
-        *(float *)(m + 0x18) = z;
-        *(float *)(m + 0x48) = fast_add_rotations(*(float *)(d + 4), *(float *)(d + 0x18));
+        *(float *)(door_moby + 0x14) = pivot_offset_y;
+        *(int *)(door_moby + 0x18) = 0;
+        tb += *(int *)door_data * 0x80;
+        add_vector_xyz(door_moby + 0x10, door_moby + 0x10, tb + 0x30);
+        *(float *)(door_moby + 0x18) = z;
+        *(float *)(door_moby + 0x48) = fast_add_rotations(*(float *)(door_data + 4), *(float *)(door_data + 0x18));
         break;
     case HANGAR_DOOR_NEGATIVE_ANGLE_OFFSET:
-        z = *(float *)(m + 0x18);
-        a = fast_subtract_rotations(-1.5707950592041016f, *(float *)(d + 0x18));
-        *(float *)(m + 0x10) = fast_cos(a) * *(float *)(d + 0xC);
-        s = fast_sin(a) * *(float *)(d + 0xC);
+        z = *(float *)(door_moby + 0x18);
+        position_angle_radians = fast_subtract_rotations(-1.5707950592041016f, *(float *)(door_data + 0x18));
+        *(float *)(door_moby + 0x10) = fast_cos(position_angle_radians) * *(float *)(door_data + 0xC);
+        pivot_offset_y = fast_sin(position_angle_radians) * *(float *)(door_data + 0xC);
         tb = D_L06_001600EC;
-        *(float *)(m + 0x14) = s;
-        *(int *)(m + 0x18) = 0;
-        tb += *(int *)d * 0x80;
-        add_vector_xyz(m + 0x10, m + 0x10, tb + 0x30);
-        *(float *)(m + 0x18) = z;
-        *(float *)(m + 0x48) = fast_subtract_rotations(*(float *)(d + 4), *(float *)(d + 0x18));
+        *(float *)(door_moby + 0x14) = pivot_offset_y;
+        *(int *)(door_moby + 0x18) = 0;
+        tb += *(int *)door_data * 0x80;
+        add_vector_xyz(door_moby + 0x10, door_moby + 0x10, tb + 0x30);
+        *(float *)(door_moby + 0x18) = z;
+        *(float *)(door_moby + 0x48) = fast_subtract_rotations(*(float *)(door_data + 4), *(float *)(door_data + 0x18));
         break;
     }
 }
