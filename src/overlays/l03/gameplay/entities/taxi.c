@@ -507,7 +507,7 @@ extern void mine_spawn_drops(struct Moby *, void *) __asm__("FUN_L00_0025f800");
 
 /* l03 mine update: falls until it lands, sticks to or homes on its target, arms,
    and explodes on contact (debris, camera shake, blast) or shrinks away when old. */
-void FUN_L03_002cbea8(struct Moby *m) {
+void FUN_L03_002cbea8(struct Moby *mine_moby) {
     enum {
         MINE_IDLE = 0,
         MINE_FALL_UNTIL_LANDING = 1,
@@ -524,62 +524,62 @@ void FUN_L03_002cbea8(struct Moby *m) {
     };
     MineBlast blast = D_L03_001E32B0;
     MineVec tmp;
-    MineVars *v = (MineVars *)m->pvars;
+    MineVars *v = (MineVars *)mine_moby->pvars;
     struct Moby *target_moby;
     float dist;
     int nearby_moby_count;
     int i;
     int k;
 
-    FUN_L03_002cc828((unsigned char *)m);
+    FUN_L03_002cc828((unsigned char *)mine_moby);
     v->unk60 = 0;
     v->age++;
-    switch (m->state) {
+    switch (mine_moby->state) {
     case MINE_IDLE:
         break;
     case MINE_FALL_UNTIL_LANDING:
-        if (mine_fall(m, v) & 1) {
-            m->state = 3;
-            if (m->prev_seq != 1) {
-                mine_blend_anim(m, 1, 0, mine_frames(10));
+        if (mine_fall(mine_moby, v) & 1) {
+            mine_moby->state = 3;
+            if (mine_moby->prev_seq != 1) {
+                mine_blend_anim(mine_moby, 1, 0, mine_frames(10));
             }
             v->timer = mine_frames(60);
-        } else if (m->pos.z < 5.0f) {
-            mine_kill(m);
+        } else if (mine_moby->pos.z < 5.0f) {
+            mine_kill(mine_moby);
             return;
         }
         break;
     case MINE_HOME_ON_TARGET:
-        mine_vec_sub(tmp, &v->target->pos, &m->pos);
+        mine_vec_sub(tmp, &v->target->pos, &mine_moby->pos);
         if (mine_vec_len(tmp) < 0.25f) {
-            mine_kill(m);
+            mine_kill(mine_moby);
             return;
         }
         mine_set_len(tmp, tmp, frame_time * 14.0f);
         tmp[2] += frame_time * 4.0f;
-        mine_vec_add(&m->pos, &m->pos, tmp);
+        mine_vec_add(&mine_moby->pos, &mine_moby->pos, tmp);
         break;
     case MINE_ARM_AND_MONITOR_PROXIMITY:
         mine_tick(&v->timer);
         target_moby = v->target;
-        if (target_moby != 0 && target_moby->state != 0xFE && target_moby->state != 0xFD && mine_dist(&m->pos, &target_moby->pos) < 3.0f && v->timer == 0) {
-            m->state = 2;
-            mine_sound(2, 0, m);
+        if (target_moby != 0 && target_moby->state != 0xFE && target_moby->state != 0xFD && mine_dist(&mine_moby->pos, &target_moby->pos) < 3.0f && v->timer == 0) {
+            mine_moby->state = 2;
+            mine_sound(2, 0, mine_moby);
         }
         if (mine_frames(3600) < v->age &&
             (v->target == 0 || v->target->state == 0xFE || v->target->state == 0xFD || mine_frames(5400) < v->age)) {
-            m->state = 5;
+            mine_moby->state = 5;
         }
-        if (mine_dist(&hero.moby->pos, &m->pos) < 0.5f && mine_fabs(m->pos.z - hero.motion.pos.f[2]) < 0.25f) {
-            m->state = 4;
+        if (mine_dist(&hero.moby->pos, &mine_moby->pos) < 0.5f && mine_fabs(mine_moby->pos.z - hero.motion.pos.f[2]) < 0.25f) {
+            mine_moby->state = 4;
             break;
         }
-        nearby_moby_count = mine_find_mobys(&m->pos, 0x10, m, 0, 1.0f);
+        nearby_moby_count = mine_find_mobys(&mine_moby->pos, 0x10, mine_moby, 0, 1.0f);
         for (k = 0; k < nearby_moby_count; k++) {
             struct Moby *nearby_moby = D_L03_00178000[k];
 
             if ((nearby_moby->flags & 0x1000) && (nearby_moby != v->target || v->timer == 0)) {
-                m->state = 4;
+                mine_moby->state = 4;
                 break;
             }
         }
@@ -587,10 +587,10 @@ void FUN_L03_002cbea8(struct Moby *m) {
     case MINE_EXPLODE_AND_REMOVE: {
         int cnt;
 
-        dist = mine_dist(&m->pos, D_L03_00166EC0);
-        nearby_moby_count = mine_find_mobys(&m->pos, 0x10, m, 0, 2.0f);
-        *(OvlQuad *)tmp = *(OvlQuad *)&m->pos;
-        mine_blast_mobys(m, tmp, D_L03_00178000, nearby_moby_count, 0, 0x810001, 4, 1, 3.0f, 0.25f, 1.5f);
+        dist = mine_dist(&mine_moby->pos, D_L03_00166EC0);
+        nearby_moby_count = mine_find_mobys(&mine_moby->pos, 0x10, mine_moby, 0, 2.0f);
+        *(OvlQuad *)tmp = *(OvlQuad *)&mine_moby->pos;
+        mine_blast_mobys(mine_moby, tmp, D_L03_00178000, nearby_moby_count, 0, 0x810001, 4, 1, 3.0f, 0.25f, 1.5f);
         cnt = mine_ftoi(dist * 15.0f);
         for (i = 0; i < cnt; i++) {
             int kind = mine_rand_below(4);
@@ -613,7 +613,7 @@ void FUN_L03_002cbea8(struct Moby *m) {
                 r[0] = mine_cos(ang) * rr;
                 r[1] = mine_sin(ang) * rr;
                 r[2] = 0.0f;
-                mine_vec_add(r, r, &m->pos);
+                mine_vec_add(r, r, &mine_moby->pos);
                 r[2] -= rr * mine_cos(0.785398f);
                 dir[2] -= rr * frame_time * 8.0f;
                 switch (kind) {
@@ -640,19 +640,19 @@ void FUN_L03_002cbea8(struct Moby *m) {
                 }
             }
         }
-        mine_sound(0, 0, m);
+        mine_sound(0, 0, mine_moby);
         D_L03_00166D80_cbea8.shake = dist < 20.0f ? 0.4f - dist * 0.0175f : 0.050000012f;
         D_L03_00166D80_cbea8.shake_frames = mine_frames(0x19);
-        mine_camera_blast(&blast, &m->pos, 0, 0);
-        mine_spawn_drops(m, D_L03_001B08B0);
-        mine_kill(m);
+        mine_camera_blast(&blast, &mine_moby->pos, 0, 0);
+        mine_spawn_drops(mine_moby, D_L03_001B08B0);
+        mine_kill(mine_moby);
         return;
     }
     case MINE_SHRINK_AND_REMOVE:
-        m->scale *= frame_scale * -0.074f + 1.0f;
-        if (m->scale < m->pclass->scale * 0.01f) {
-            mine_spawn_drops(m, D_L03_001B08B0);
-            mine_kill(m);
+        mine_moby->scale *= frame_scale * -0.074f + 1.0f;
+        if (mine_moby->scale < mine_moby->pclass->scale * 0.01f) {
+            mine_spawn_drops(mine_moby, D_L03_001B08B0);
+            mine_kill(mine_moby);
         }
         break;
     }
