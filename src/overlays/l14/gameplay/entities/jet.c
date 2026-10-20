@@ -2720,7 +2720,7 @@ extern void memcard_save_data(int, int) __asm__("FUN_0020b178");
 
 /* Watcher moby update: gated by its collectable and trigger, then turns its head toward the hero or a random target. */
 void qwark_oltanis_update(L14WatchMoby *m) __asm__("FUN_L14_002fba20");
-void qwark_oltanis_update(L14WatchMoby *m) {
+void qwark_oltanis_update(L14WatchMoby *moby) {
     enum {
         QWARK_OLTANIS_STATE_INITIALIZE_DIALOGUE = 0,
         QWARK_OLTANIS_STATE_UPDATE_DIALOGUE = 1,
@@ -2728,119 +2728,119 @@ void qwark_oltanis_update(L14WatchMoby *m) {
         QWARK_OLTANIS_STATE_REMOVE = 3
     };
     L14WatchScratch scratch;
-    L14WatchData *d = (L14WatchData *)m->data;
+    L14WatchData *moby_vars = (L14WatchData *)moby->data;
     float rate;
     float head_rate;
     int tracking;
-    FUN_L02_002e0cd8(m);
-    if (m->near_flag) {
-        if (FUN_001f9b48(m->position, D_L14_001674C0) < 28.0f) {
-            FUN_L00_0025a120(m);
-            m->flag7F = 0x16;
+    FUN_L02_002e0cd8(moby);
+    if (moby->near_flag) {
+        if (FUN_001f9b48(moby->position, D_L14_001674C0) < 28.0f) {
+            FUN_L00_0025a120(moby);
+            moby->flag7F = 0x16;
         }
     }
-    switch (m->state) {
+    switch (moby->state) {
     case QWARK_OLTANIS_STATE_INITIALIZE_DIALOGUE: {
-        unsigned short id = m->hB2;
+        unsigned short id = moby->hB2;
         if (D_L14_001BB930.collected[(short)id] != 0 ||
             (D_0014C190_257218[current_level_index][(short)id >> 5] >> (id & 0x1F)) & 1) {
-            mark_moby_for_removal(m);
+            mark_moby_for_removal(moby);
             return;
         }
-        if (d->i44 == -1 || d->i48 == -1) {
-            mark_moby_for_removal(m);
+        if (moby_vars->i44 == -1 || moby_vars->i48 == -1) {
+            mark_moby_for_removal(moby);
             return;
         }
-        d->p20 = (void *)D_L14_00161F20;
-        initialize_npc_dialogue(m, d);
-        d->b8 = 1;
-        m->state = 1;
+        moby_vars->p20 = (void *)D_L14_00161F20;
+        initialize_npc_dialogue(moby, moby_vars);
+        moby_vars->b8 = 1;
+        moby->state = 1;
         break;
     }
     case QWARK_OLTANIS_STATE_UPDATE_DIALOGUE:
-        if (d->b8 == 1 && FUN_00214720_c(&hero.motion.pos, d->i40)) {
-            if (visited52[m->bB0 + current_level_index * 16] != 0xFF) {
-                char *t;
-                jet_clear_persistent(m->bB0);
-                t = D_L14_001600EC + d->i48 * 128;
-                jet_reset_camera(t + 0x30, t + 0x70);
+        if (moby_vars->b8 == 1 && FUN_00214720_c(&hero.motion.pos, moby_vars->i40)) {
+            if (visited52[moby->bB0 + current_level_index * 16] != 0xFF) {
+                char *camera_point;
+                jet_clear_persistent(moby->bB0);
+                camera_point = D_L14_001600EC + moby_vars->i48 * 128;
+                jet_reset_camera(camera_point + 0x30, camera_point + 0x70);
             }
-            FUN_L14_002ef578_c(D_L14_0015FFD8 + d->i44 * 256);
-            d->fC = 255.0f;
+            FUN_L14_002ef578_c(D_L14_0015FFD8 + moby_vars->i44 * 256);
+            moby_vars->fC = 255.0f;
         } else {
-            d->fC = 1.7f;
+            moby_vars->fC = 1.7f;
         }
-        if (update_npc_dialogue(m, d)) {
-            begin_dialogue_camera_transition(m, 3.0f);
-            m->state = 2;
+        if (update_npc_dialogue(moby, moby_vars)) {
+            begin_dialogue_camera_transition(moby, 3.0f);
+            moby->state = 2;
         }
         break;
     case QWARK_OLTANIS_STATE_POST_DIALOGUE:
         if (D_L14_0015F5C4 != 2) {
-            m->state = 1;
-            if ((unsigned)(d->sub - 3) < 2) {
-                if ((short)d->sub == 4)
+            moby->state = 1;
+            if ((unsigned)(moby_vars->sub - 3) < 2) {
+                if ((short)moby_vars->sub == 4)
                     FUN_L00_00263d40(0x53DD, -1);
                 else
                     FUN_L00_00263d40(0x36B3, -1);
                 FUN_L00_00260860(0x20, 1);
-                FUN_L14_002ef5a8(D_L14_0015FFD8 + d->i44 * 256);
-                D_0014C190_257218[D_0015ED84_m][(short)m->hB2 >> 5] |= 1 << (m->hB2 & 0x1F);
-                D_L14_001BABD0[(short)m->hB2 >> 5] |= 1 << (m->hB2 & 0x1F);
+                FUN_L14_002ef5a8(D_L14_0015FFD8 + moby_vars->i44 * 256);
+                D_0014C190_257218[D_0015ED84_m][(short)moby->hB2 >> 5] |= 1 << (moby->hB2 & 0x1F);
+                D_L14_001BABD0[(short)moby->hB2 >> 5] |= 1 << (moby->hB2 & 0x1F);
                 memcard_save_data(0, -1);
-                mark_moby_for_removal(m);
+                mark_moby_for_removal(moby);
                 return;
             }
         }
         break;
     case QWARK_OLTANIS_STATE_REMOVE:
-        mark_moby_for_removal(m);
+        mark_moby_for_removal(moby);
         return;
     }
     rate = 0.02f;
     head_rate = 0.3f;
     tracking = 0;
-    if (m->animation == 0) {
+    if (moby->animation == 0) {
         char *g = (char *)&hero.motion.pos;
-        L14Player *q;
+        L14Player *hero_data;
         tracking = 1;
-        if (vector_distance(m->position, g) < 8.0f &&
-            (q = (L14Player *)(g - 0x80),
+        if (vector_distance(moby->position, g) < 8.0f &&
+            (hero_data = (L14Player *)(g - 0x80),
              fast_difference_between_rotations(
-                 m->yaw, fast_arc_tan(q->aim[0] - m->position[0], q->aim[1] - m->position[1]))) <
+                 moby->yaw, fast_arc_tan(hero_data->aim[0] - moby->position[0], hero_data->aim[1] - moby->position[1]))) <
                 1.5707964f) {
             if (fast_vec_length(g + 0x80) > 0.01f)
-                d->moving_timer = scale_game_frames(120);
+                moby_vars->moving_timer = scale_game_frames(120);
             else
-                fast_dec_timer(&d->moving_timer);
-        } else if (d->moving_timer) {
-            d->moving_timer = 0;
-            qcopy(d->target, hero.motion.unkD0.f);
+                fast_dec_timer(&moby_vars->moving_timer);
+        } else if (moby_vars->moving_timer) {
+            moby_vars->moving_timer = 0;
+            qcopy(moby_vars->target, hero.motion.unkD0.f);
         }
-        if (fast_dec_timer(&d->target_timer)) {
+        if (fast_dec_timer(&moby_vars->target_timer)) {
             float heading;
-            d->target_timer = FUN_001fa6d0(multiply_global_factor_ed64(random_float_between(180.0f, 300.0f)));
+            moby_vars->target_timer = FUN_001fa6d0(multiply_global_factor_ed64(random_float_between(180.0f, 300.0f)));
             heading =
-                fast_add_rotations(m->yaw, random_float_between(-90.0f, 90.0f) * DEG_TO_RAD);
-            build_spherical_offset(d->target, 6.0f, heading,
+                fast_add_rotations(moby->yaw, random_float_between(-90.0f, 90.0f) * DEG_TO_RAD);
+            build_spherical_offset(moby_vars->target, 6.0f, heading,
                                    random_float_between(0.0f, 30.0f) * DEG_TO_RAD);
-            FUN_001f9a10_c(d->target, d->target, m->position);
+            FUN_001f9a10_c(moby_vars->target, moby_vars->target, moby->position);
         }
-        if (d->moving_timer) {
+        if (moby_vars->moving_timer) {
             qcopy(scratch.target, hero.motion.unkD0.f);
             rate = 0.04f;
             head_rate = 0.3f;
         } else {
-            qcopy(scratch.target, d->target);
+            qcopy(scratch.target, moby_vars->target);
         }
     }
     if (tracking) {
         float yaw;
         float pitch;
-        qcopy(scratch.eye, m->position);
+        qcopy(scratch.eye, moby->position);
         scratch.eye[2] += 1.0f;
         fast_vec_sub(scratch.delta, scratch.target, scratch.eye);
-        yaw = fast_subtract_rotations(fast_arc_tan(scratch.delta[0], scratch.delta[1]), m->yaw);
+        yaw = fast_subtract_rotations(fast_arc_tan(scratch.delta[0], scratch.delta[1]), moby->yaw);
         pitch = -fast_arc_tan(vector_length_xy(scratch.delta), scratch.delta[2]);
         if (yaw > 1.5707964f)
             yaw = 1.5707964f;
@@ -2850,14 +2850,14 @@ void qwark_oltanis_update(L14WatchMoby *m) {
             pitch = 0.5235988f;
         else if (pitch < -0.5235988f)
             pitch = -0.5235988f;
-        d->pitch = pitch;
-        d->yaw = yaw * 0.6f;
-        d->head_yaw = yaw * 0.4f;
+        moby_vars->pitch = pitch;
+        moby_vars->yaw = yaw * 0.6f;
+        moby_vars->head_yaw = yaw * 0.4f;
     }
     if (D_0015EDB0_b)
-        d->height = 2.75f;
-    update_joint_animation(rate * frame_scale_sq, head_rate * frame_scale_sq, m, d->body, 0);
-    update_joint_animation(rate * frame_scale_sq, head_rate * frame_scale_sq, m, d->head, 1);
+        moby_vars->height = 2.75f;
+    update_joint_animation(rate * frame_scale_sq, head_rate * frame_scale_sq, moby, moby_vars->body, 0);
+    update_joint_animation(rate * frame_scale_sq, head_rate * frame_scale_sq, moby, moby_vars->head, 1);
 }
 extern int cart_hit(struct Moby *, int, int) __asm__("FUN_L00_0025a420");
 extern void cart_burst(float, float, struct Moby *, void *, int) __asm__("FUN_L00_0025f090");
