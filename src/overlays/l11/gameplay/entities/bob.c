@@ -1331,17 +1331,17 @@ void teleporter_update(struct Moby *moby) {
         moby->state = 1;
         for (i = 0; i < 3; i++) {
             struct Hero *g = &hero;
-            char *c;
+            char *child_moby;
             slots[i] = create_moby_2518(0x13B);
             *(short *)(slots[i] + 0x32) = 0x40;
             slots[i][0x31] = 1;
             *(long *)(slots[i] + 0x38) = *(long *)(((char *)g->moby) + 0x38);
             *(unsigned short *)(slots[i] + 0x34) = moby->flags;
-            c = slots[i];
-            qcopy(c + 0x10, &moby->pos);
-            qcopy(c + 0x40, &moby->rot);
+            child_moby = slots[i];
+            qcopy(child_moby + 0x10, &moby->pos);
+            qcopy(child_moby + 0x40, &moby->rot);
             *(float *)(slots[i] + 0x48) =
-                fast_add_rotations_2518(*(float *)(c + 0x48), (float)i * 2.0943952f);
+                fast_add_rotations_2518(*(float *)(child_moby + 0x48), (float)i * 2.0943952f);
         }
         if (*(int *)(data + 8) >= 0 && D_0014C050_2518[*(int *)(data + 8) + D_0015ED84_2518 * 16] != 0xFF) {
             moby->visible = 0;
@@ -1409,28 +1409,28 @@ void teleporter_update(struct Moby *moby) {
             enqueue_callback_2518(FUN_L11_002f2d58_2518, moby);
             approach_value_2518((float *)(data + 0x3C), 0.0f, D_0015ED6C_2518 * 4.0f);
         } else {
-            char *t = D_L11_0015FFD8_2518 + (*(int *)data << 8);
+            char *destination_moby = D_L11_0015FFD8_2518 + (*(int *)data << 8);
             char *td;
             float v[4];
             if (*(int *)(data + 4) != -1 &&
                 D_0014C050_2518[*(int *)(data + 0xC) + D_0015ED84_2518 * 16] == 0xFF)
-                t = D_L11_0015FFD8_2518 + (*(int *)(data + 4) << 8);
-            td = *(char **)(t + 0x78);
-            qcopy(v, t + 0x10);
+                destination_moby = D_L11_0015FFD8_2518 + (*(int *)(data + 4) << 8);
+            td = *(char **)(destination_moby + 0x78);
+            qcopy(v, destination_moby + 0x10);
             v[2] += 0.2f;
-            FUN_L00_00216f90_2518(v, t + 0x40, 0, 1);
+            FUN_L00_00216f90_2518(v, destination_moby + 0x40, 0, 1);
             D_001413F5_2518 = 1;
             if (*(int *)(data + 0x30) != -1 && *(int *)(data + 0x34) != -1) {
                 FUN_L01_0027a248_2518(*(int *)(data + 0x30), *(int *)(data + 0x34));
             }
-            FUN_L11_002f3040_2518(t);
-            *(unsigned char *)(t + 0x20) = 4;
+            FUN_L11_002f3040_2518(destination_moby);
+            *(unsigned char *)(destination_moby + 0x20) = 4;
             *(float *)(td + 0x3C) = 0.0f;
             *(float *)(td + 0x28) = 0.0f;
             *(float *)(td + 0x2C) = 0.0f;
             *(float *)(td + 0x20) = 1.0f;
             *(float *)(td + 0x24) = 1.0f;
-            allocate_voice_2518(1, 0, (void *)t);
+            allocate_voice_2518(1, 0, (void *)destination_moby);
             moby->state = 1;
             *(float *)(data + 0x20) = 0.0f;
             *(float *)(data + 0x24) = 0.0f;
