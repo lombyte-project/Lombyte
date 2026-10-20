@@ -1984,9 +1984,9 @@ void FUN_L10_002da2c8(struct Moby *moby) {
         memcpy(scratch.order, D_L10_00161CA8, 10);
         for (pass = 0; pass < 10; pass++) {
             for (i = 0; i < random_integer_below(9); i++) {
-                unsigned char tmp = scratch.order[i + 1];
+                unsigned char saved_next_order_byte = scratch.order[i + 1];
                 scratch.order[i + 1] = scratch.order[i];
-                scratch.order[i] = tmp;
+                scratch.order[i] = saved_next_order_byte;
             }
         }
         copy_index = 0;
