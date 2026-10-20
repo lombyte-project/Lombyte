@@ -8,7 +8,7 @@ extern u64 get_frame_texture(s32) __asm__("func_001FFA10");
 
 void draw_hud_sprite(s32 id, s32 x, s32 y, s32 w, s32 h, s32 alpha) __asm__("FUN_001ffc30");
 
-void draw_hud_sprite(s32 id, s32 x, s32 y, s32 w, s32 h, s32 alpha) {
+void draw_hud_sprite(s32 id, s32 x, s32 y, s32 w, s32 height, s32 alpha) {
     struct HudTexPage *image_page;
     struct DmaTag *tag;
     u64 *sprite_packet_words;
@@ -35,7 +35,7 @@ void draw_hud_sprite(s32 id, s32 x, s32 y, s32 w, s32 h, s32 alpha) {
            ((u64)hud_state.z << 32);
     sprite_packet_words[7] = (th << 20) + (tw << 4);
     sprite_packet_words[8] = ((((x + w) << 4) + screen_extent.left) - 8) |
-           ((u64)((((y + h) << 4) + screen_extent.top) - 8) << 16) | ((u64)hud_state.z << 32);
+           ((u64)((((y + height) << 4) + screen_extent.top) - 8) << 16) | ((u64)hud_state.z << 32);
     sprite_packet_words[9] = 0;
     render_packet_cursor.tag = (struct DmaTag *)((u8 *)render_packet_cursor.tag + 0x50);
 }
