@@ -1308,16 +1308,16 @@ void FUN_L16_002270c8(void) {
                         }
                         if (hero.unk5BC != 0) {
                             if (hero.unk5C0 != 0) {
-                                float h;
+                                float rail_jump_solution_z;
                                 float t;
 
                                 hero_set_state(0x29, 1);
                                 hero.unk5C4 = 1;
-                                h = FUN_L00_0025abf0(hero.motion.pos.f, hero.unk550.f, 0,
+                                rail_jump_solution_z = FUN_L00_0025abf0(hero.motion.pos.f, hero.unk550.f, 0,
                                                      hero.motion.unk164, -hero.unk4A0);
                                 *(OvlQuad *)v1 = 0;
                                 *(OvlQuad *)v0 = 0;
-                                v1[2] = h;
+                                v1[2] = rail_jump_solution_z;
                                 t = FUN_L00_00259468(v0, v1, 0, hero.unk4A0);
                                 hero.unk48C = t + 0.05f;
                                 hero.unk430 = t;
