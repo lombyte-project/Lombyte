@@ -1652,65 +1652,65 @@ M_2cc360 *FUN_L00_002cc360(float *pos, float *rot, M_2cc360 **excl, float maxYaw
                            float maxDist) {
     M_2cc360 *best = 0;
     float bestScore = 1.0e9f;
-    M_2cc360 *m;
+    M_2cc360 *candidate_moby;
     float *info;
-    V_2cc360 t;
+    V_2cc360 aim_point;
     V_2cc360 *pp;
-    float d, ys, ps, score;
+    float candidate_distance, ys, ps, score;
     int i, found;
-    for (m = D_L00_0015FFE4_2cc360; m; m = m->next) {
-        if (m->h32 == 0)
+    for (candidate_moby = D_L00_0015FFE4_2cc360; candidate_moby; candidate_moby = candidate_moby->next) {
+        if (candidate_moby->h32 == 0)
             continue;
         if (excl) {
             found = 0;
             for (i = 0; i < 7; i++) {
-                if (excl[i] == m) {
+                if (excl[i] == candidate_moby) {
                     found = 1;
                     break;
                 }
             }
             if (found)
                 continue;
-        } else if (!m->b31) {
+        } else if (!candidate_moby->b31) {
             continue;
         }
-        info = c338_2cc360(m);
+        info = c338_2cc360(candidate_moby);
         if (!info)
             continue;
         if (info[0] < 0.0f)
             continue;
-        if (!(m->h34 & 0x1000))
+        if (!(candidate_moby->h34 & 0x1000))
             continue;
-        if (!m)
+        if (!candidate_moby)
             continue;
-        if (!m->c)
+        if (!candidate_moby->c)
             continue;
-        if (m->c->h46 != 5)
+        if (candidate_moby->c->h46 != 5)
             continue;
-        pp = &m->pos;
-        d = dist_2cc360(pos, pp);
-        if (!(d < maxDist))
+        pp = &candidate_moby->pos;
+        candidate_distance = dist_2cc360(pos, pp);
+        if (!(candidate_distance < maxDist))
             continue;
-        qcopy(&t, pp);
-        t.f[2] += info[4] + 0.1f;
-        ys = diffrot_2cc360(rot[2], atan_2cc360(t.f[0] - pos[0], t.f[1] - pos[1]));
+        qcopy(&aim_point, pp);
+        aim_point.f[2] += info[4] + 0.1f;
+        ys = diffrot_2cc360(rot[2], atan_2cc360(aim_point.f[0] - pos[0], aim_point.f[1] - pos[1]));
         ys = ys * ys;
         if (ys < maxYaw * maxYaw) {
-            ps = diffrot_2cc360(rot[1], atan_2cc360(d, t.f[2] - pos[2]));
+            ps = diffrot_2cc360(rot[1], atan_2cc360(candidate_distance, aim_point.f[2] - pos[2]));
             ps = ps * ps;
             if (!(ps < maxPitch * maxPitch))
                 continue;
-            if (5.0f < d) {
-                ys = ys * ps * d;
-                ys += d;
+            if (5.0f < candidate_distance) {
+                ys = ys * ps * candidate_distance;
+                ys += candidate_distance;
             } else {
-                ys = d / 5.0f;
+                ys = candidate_distance / 5.0f;
             }
             if (ys < bestScore) {
-                if (coll_2cc360(pos, &t, 2, m, 0))
+                if (coll_2cc360(pos, &aim_point, 2, candidate_moby, 0))
                     continue;
                 bestScore = ys;
-                best = m;
+                best = candidate_moby;
             }
         }
     }
