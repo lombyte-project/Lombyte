@@ -952,40 +952,40 @@ extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern void pos_273448(void *, s32, void *) __asm__("FUN_L00_0024f7c8");
 extern void vscl_273448(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void vadd_273448(void *, void *, void *) __asm__("FUN_001f9a10");
-void FUN_L00_00273448(P_273448 *p) {
+void FUN_L00_00273448(P_273448 *particle) {
     E_273448 *e;
     f32 lim;
     f32 a[4] __attribute__((aligned(16)));
     f32 v[4] __attribute__((aligned(16)));
-    if (p == 0) {
+    if (particle == 0) {
         return;
     }
-    e = &p->e;
-    if (tick_273448(&p->hA) || e->m == 0 || e->m->b20 < 0) {
+    e = &particle->e;
+    if (tick_273448(&particle->hA) || e->m == 0 || e->m->b20 < 0) {
         goto kill;
     }
     e->hC = (e->hC + 1) & 0xF;
-    if (p->unkC < 159600.0f) {
-        p->unkC += frame_scale * 3989.99976f;
-        if (159600.0f < p->unkC) {
-            p->unkC = 159600.0f;
+    if (particle->unkC < 159600.0f) {
+        particle->unkC += frame_scale * 3989.99976f;
+        if (159600.0f < particle->unkC) {
+            particle->unkC = 159600.0f;
         }
-    } else if (159600.0f < p->unkC) {
-        p->unkC -= frame_scale * 15959.999f;
-        if (p->unkC < 159600.0f) {
-            p->unkC = 159600.0f;
+    } else if (159600.0f < particle->unkC) {
+        particle->unkC -= frame_scale * 15959.999f;
+        if (particle->unkC < 159600.0f) {
+            particle->unkC = 159600.0f;
         }
     }
     e->unk8 += frame_scale * 0.001f;
-    p->b8 = truncate_float_to_s32(e->unk8 * 255.0f);
-    p->b2 = tab_273448[e->hC];
-    if (p->unkC <= 159600.0f || 0.0f < e->unk10) {
-        f32 *q = &e->unk4;
-        *q += q[3];
+    particle->b8 = truncate_float_to_s32(e->unk8 * 255.0f);
+    particle->b2 = tab_273448[e->hC];
+    if (particle->unkC <= 159600.0f || 0.0f < e->unk10) {
+        f32 *alpha_fraction_ptr = &e->unk4;
+        *alpha_fraction_ptr += alpha_fraction_ptr[3];
     }
     {
         f32 x;
-        if (p->unkC <= 159600.0f) {
+        if (particle->unkC <= 159600.0f) {
             x = e->unk4;
             lim = 0.3f;
         } else {
@@ -995,7 +995,7 @@ void FUN_L00_00273448(P_273448 *p) {
         if (!(lim < x)) {
             if (x < 0.0f) {
             kill:
-                free_effect_particle(p);
+                free_effect_particle(particle);
                 return;
             }
         } else {
@@ -1003,12 +1003,12 @@ void FUN_L00_00273448(P_273448 *p) {
             e->unk4 = x + e->unk10;
         }
     }
-    p->w4 = (p->w4 & 0xFFFFFF) + (truncate_float_to_s32(e->unk4 * 256.0f) << 24);
+    particle->w4 = (particle->w4 & 0xFFFFFF) + (truncate_float_to_s32(e->unk4 * 256.0f) << 24);
     e->unk14 += (1.0f - e->unk14) * (frame_scale * 0.175f);
     pos_273448(e->m, e->hE, a);
     subtract_vector_xyz(v, g_debug_camera, a);
     vscl_273448(v, v, e->unk14);
-    vadd_273448(p->pos, a, v);
+    vadd_273448(particle->pos, a, v);
 }
 /* Ported from rac1-decomp (src/overlays/shared/partupd_00272158.c: func_L00_002745A8), where it is exact; names translated to the US level program. */
 
