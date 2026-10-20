@@ -61,9 +61,9 @@ void FUN_L00_002a1538(u8 *gait_data) {
 
 extern float square_root(float) __asm__("FUN_001f9988");
 
-float FUN_L00_002a15c8(char *a, char *b) {
+float FUN_L00_002a15c8(char *walker_moby, char *b) {
     float s = *(float *)(b + 0xDC);
-    float gap = *(float *)(a + 0x18) - *(float *)(b + 0x68);
+    float gap = *(float *)(walker_moby + 0x18) - *(float *)(b + 0x68);
     float c = *(float *)(b + 0xD8) + s * 0.5f;
     float d = c * c + (s + s) * gap;
     float res;
