@@ -1777,7 +1777,7 @@ void pokitaru_boat_update(struct Moby *moby) {
     float diff[4];
     float spare_a[4];
     float spare_b[4];
-    float tmp[4];
+    float point_offset_from_boat[4];
 
     qcopy(start_pos, &moby->pos);
     qcopy(start_rot, &moby->rot);
@@ -1802,8 +1802,8 @@ void pokitaru_boat_update(struct Moby *moby) {
         tab_ac = D_L11_001B0EB0[pv->idx_ac];
         FUN_001fa2d8_309ac0(target, &moby->rot_row0);
         for (n = 0; n < tab_a8[0]; n++) {
-            subtract_vector_xyz(tmp, (char *)tab_a8 + 0x10 + n * 16, &moby->pos);
-            FUN_001f9d20_309ac0((char *)tab_ac + 0x10 + n * 16, tmp, target);
+            subtract_vector_xyz(point_offset_from_boat, (char *)tab_a8 + 0x10 + n * 16, &moby->pos);
+            FUN_001f9d20_309ac0((char *)tab_ac + 0x10 + n * 16, point_offset_from_boat, target);
         }
         path = D_L11_001B0EB0[pv->path_a0];
         pv->path_c4 = path;
