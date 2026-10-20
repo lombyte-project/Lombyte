@@ -357,31 +357,31 @@ int memcard_save_data(int slot, int flags) __asm__("FUN_0020b178");
 
 extern short D_L15_00162078 __attribute__((sda));
 void bolt_grabber_update(struct Moby *m) __asm__("FUN_L15_002ea748");
-void bolt_grabber_update(struct Moby *m) {
+void bolt_grabber_update(struct Moby *moby) {
     enum {
         BOLT_GRABBER_INITIALIZE = 0,
         BOLT_GRABBER_WAIT_FOR_PROXIMITY = 1,
         BOLT_GRABBER_FINALIZE_AND_SAVE = 2,
         BOLT_GRABBER_REMOVE = 3
     };
-    m->rot.z = fast_add_rotations(m->rot.z, frame_time * 1.5707964f);
-    m->scale = m->pclass->scale * *(float *)&D_L15_00162078;
-    switch (m->state) {
+    moby->rot.z = fast_add_rotations(moby->rot.z, frame_time * 1.5707964f);
+    moby->scale = moby->pclass->scale * *(float *)&D_L15_00162078;
+    switch (moby->state) {
     case BOLT_GRABBER_INITIALIZE:
-        FUN_L00_002d6bf0((char *)m);
+        FUN_L00_002d6bf0((char *)moby);
         if (D_0013D4FD[0xD] != 0) {
-            mark_moby_for_removal(m);
+            mark_moby_for_removal(moby);
             return;
         }
-        m->state = 1;
-        m->pos.z = m->pos.z + 1.0f;
+        moby->state = 1;
+        moby->pos.z = moby->pos.z + 1.0f;
         break;
     case BOLT_GRABBER_WAIT_FOR_PROXIMITY:
-        FUN_L10_00298940((char *)m);
-        if (vector_distance(&m->pos, &hero.motion.pos) < 3.0f) {
-            m->flags |= 0x41;
+        FUN_L10_00298940((char *)moby);
+        if (vector_distance(&moby->pos, &hero.motion.pos) < 3.0f) {
+            moby->flags |= 0x41;
             start_scene(5);
-            m->state = 2;
+            moby->state = 2;
         }
         break;
     case BOLT_GRABBER_FINALIZE_AND_SAVE:
@@ -390,11 +390,11 @@ void bolt_grabber_update(struct Moby *m) {
             D_L15_0015F640 = scale_game_frames(0xB4);
             FUN_L00_00260860(0x22, 1);
             memcard_save_data(0, -1);
-            m->state = 3;
+            moby->state = 3;
         }
         break;
     case BOLT_GRABBER_REMOVE:
-        mark_moby_for_removal(m);
+        mark_moby_for_removal(moby);
         break;
     }
 }
