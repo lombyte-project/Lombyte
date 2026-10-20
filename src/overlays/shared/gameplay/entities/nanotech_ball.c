@@ -2857,10 +2857,13 @@ typedef struct {
     M41 *moby; int camera_mode; u8 pad2088[0x240]; s16 special;
 } Hero41;
 
-typedef struct Particle41 {
-    u8 pad0[0xA]; s16 life; float size; V41 pos;
-    float unknown20; int mode; u8 pad28[2]; u8 r,g; u8 pad2C[4];
+typedef struct {
+    float unknown0; int mode; u8 pad8[2]; u8 r,g; u8 padC[4];
     V41 velocity; float acceleration;
+} Tail41;
+
+typedef struct Particle41 {
+    u8 pad0[0xA]; s16 life; float size; V41 pos; Tail41 tail;
 } Particle41;
 
 typedef struct {
@@ -2912,7 +2915,6 @@ extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F9CF8");
 float absolute_float(float input) __asm__("func_001F99C0");
 s32 scale_frames_ddf60(s32) __asm__("FUN_001f96f8");
-unsigned char *FUN_L00_0026d000(void *pos, int n, void *vel, int color, float r, float lo, float hi, float size);
 void FUN_L00_002ddcb8(char *a, char *b);
 extern char hero_ddf60[] __asm__("D_0013F350");
 extern V41 vec30_41 __asm__("D_L00_00161B60") MACRO_ADDR;
@@ -2922,17 +2924,16 @@ extern float wave41 __asm__("D_L00_00161B58") __attribute__((sda));
 extern V41 ring41[] __asm__("D_L00_001E6020");
 extern V41 ring41b[] __asm__("D_L00_001E5EE0");
 extern Entry41 entries41[] __asm__("D_L00_001E4C80");
-extern Particle41 *new_particle41(void *,int,void *,int,float,float,float,float) __asm__("FUN_L00_0026d000");
+extern Particle41 *new_particle41(void *,float,float,float,int,void *,float,int) __asm__("FUN_L00_0026d000");
 
 void FUN_L00_002ddf60(void *moby,void *position) {
     V41 step,up,orient[3],ray_end,start,end,axis,tmp_a,tmp_b,
-        cross_b,cross_a,basis,tmp_c,motion,tmp_d,tmp_e,interp,cross_c,basis_c,tmp_f,unused_a,unused_b;
+        frame[3],tmp_c,motion,tmp_d,tmp_e,interp,cross_c,basis_c,tmp_f,unused_a,unused_b;
     V41 *orientation;
-    int i,j,n,count,sparks,segment,next_ring;
+    int i,j,n,segment,next_ring;
     float t,angle,turn,delta,dot,length,radius,phase,amount,speed;
     Particle41 *p;
     V41 *anchor,*previous,*source;
-    Entry41 *entry;
 
 
     FUN_L00_002ddcb8(moby,position);
@@ -2959,14 +2960,14 @@ void FUN_L00_002ddf60(void *moby,void *position) {
     fast_vec_normalize(&ray_end,orientation,D_L00_00161B84*10.0f);
     add_vector_xyz(&ray_end,&ray_end,position);
     if(collision_line_ddf60(position,&ray_end,20,(int)((Hero41 *)hero_ddf60)->moby,0)) {
-        int n,i;
+        int n,i,k;
         n=truncate_float_to_s32(vector_distance(D_L00_00173E60,position)/D_L00_00161B84);
         for(i=n;i<10;i++) {
             if(D_L00_001E6008[i]>64)D_L00_001E6008[i]=64;
             D_L00_001E6008[i]=(u16)D_L00_001E6008[i]-4;
             if(D_L00_001E6008[i]<0)D_L00_001E6008[i]=0;
         }
-        for(i=n-1;i>=0;i--)D_L00_001E6008[i]=D_L00_001E6008[i+1]+32;
+        for(k=n-1;k>=0;k--)D_L00_001E6008[k]=D_L00_001E6008[k+1]+32;
     } else {
         int i;
         D_L00_001E6008[0]=(u16)D_L00_001E6008[0]+4;
@@ -2994,15 +2995,15 @@ void FUN_L00_002ddf60(void *moby,void *position) {
     }
     wave41=fast_add_rotations(wave41,0.1f);
     qcopy(&axis,&orient[2]);
-    qcopy(&basis,&axis);
-    cross_vectors_xyz(&cross_a,&step,&basis);
-    fast_vec_normalize(&cross_a,&cross_a,1.0f);
-    cross_vectors_xyz(&cross_b,&basis,&cross_a);
-    { 
-    for(j=19;j>=0;j--) {
-        fast_vec_scale(&tmp_a,&D_L00_001E4B40[19-j],0.1f);
-        transform_vector_by_basis(&tmp_a,&tmp_a,&cross_b);
-        add_vector_xyz(&ring41[19-j],D_L00_001E5F40,&tmp_a);
+    qcopy(&frame[2],&axis);
+    cross_vectors_xyz(&frame[1],&step,&frame[2]);
+    fast_vec_normalize(&frame[1],&frame[1],1.0f);
+    cross_vectors_xyz(&frame[0],&frame[2],&frame[1]);
+    { int k;
+    for(k=0;k<20;k++) {
+        fast_vec_scale(&tmp_a,&D_L00_001E4B40[k],0.1f);
+        transform_vector_by_basis(&tmp_a,&tmp_a,frame);
+        add_vector_xyz(&ring41[k],D_L00_001E5F40,&tmp_a);
     }
     }
     { int i;
@@ -3013,27 +3014,26 @@ void FUN_L00_002ddf60(void *moby,void *position) {
         qcopy(&tmp_b,&step);
         cross_vectors_xyz(&tmp_c,&tmp_b,&tmp_a);
         dot=fast_vec_dot(&tmp_a,&tmp_b);
-        angle=1.5707964f-fast_arc_sin(dot/(fast_vec_length(&tmp_a)*D_L00_00161B84));
-        turn=FUN_L00_001eb328(&D_L00_001E5FE0[i],0.0f,angle,0.06f,0.2f,0.0f);
-        angle=fast_subtract_rotations(angle,turn);
-        if(absolute_float(angle)>0.31415927f)turn=fast_add_rotations(turn,fast_subtract_rotations(angle,0.31415927f));
+        { float target=1.5707964f-fast_arc_sin(dot/(fast_vec_length(&tmp_a)*D_L00_00161B84));
+        turn=FUN_L00_001eb328(&D_L00_001E5FE0[i],0.0f,target,0.06f,0.2f,0.0f);
+        delta=fast_subtract_rotations(target,turn); }
+        if(absolute_float(delta)>0.31415927f)turn=fast_add_rotations(turn,fast_subtract_rotations(delta,0.31415927f));
         build_look_at_matrix_ddf60(&motion,&tmp_a,turn,&tmp_c);
         fast_vec_normalize(&tmp_d,&motion,D_L00_00161B84);
         lerp_vector(&motion,&motion,&tmp_d,1.0f);
         { float len=fast_vec_length(&motion);
         if(len>2.0f)fast_vec_scale(&motion,&motion,2.0f/len); }
-        amount=(float)i;
-        if(i>=6)lerp_vector(&motion,&motion,&tmp_a,amount/convert_integer_to_float(10)+0.0f);
+        if(i>=6)lerp_vector(&motion,&motion,&tmp_a,(float)i/convert_integer_to_float(10)+0.0f);
         add_vector_xyz(anchor,previous,&motion);
-        qcopy(&tmp_e,&step);
-        qcopy(&basis_c,&axis);
+        qcopy_nc(&tmp_e,&step);
+        qcopy_nc(&basis_c,&axis);
         fast_vec_normalize(&interp,&tmp_e,1.0f);
         cross_vectors_xyz(&cross_c,&interp,&basis_c);
         fast_vec_normalize(&cross_c,&cross_c,1.0f);
         cross_vectors_xyz(&basis_c,&cross_c,&interp);
         qcopy(&axis,&basis_c);
-        radius=amount*0.3f;
-        phase=amount*0.7f;
+        radius=(float)i*0.3f;
+        phase=(float)i*0.7f;
         { V41 *dst=ring41+i*20; unsigned int j;
         for(j=0;j<20;j++) {
             angle=radius+0.1f;
@@ -3047,33 +3047,34 @@ void FUN_L00_002ddf60(void *moby,void *position) {
     }
     }
     enqueue_callback_list_1_alt(FUN_L00_002dd8e8,(int)moby);
+    { int count,sparks;
     count=0; sparks=0;
     for(i=0;i<200;i++) {
         if(!entries41[i].particle && count<5) {
             for(segment=9;segment>=0 && D_L00_001E6008[segment]<64;segment--);
             if(segment>0) {
                 if(segment>=2 && sparks<2) {
-                    j=random_integer_below(20);
+                    { int k=random_integer_below(20);
                     amount=random_float_between(0.2f,1.0f);
-                    source=&ring41[j];
-                    lerp_vector(&tmp_a,source,source+segment*20,amount);
+                    k=(int)&ring41[k];
+                    lerp_vector(&tmp_a,(V41 *)k,(V41 *)k+segment*20,amount); }
                     lerp_vector(&tmp_c,D_L00_001E5F40,D_L00_001E5F40+segment*16,amount);
                     speed=random_float_between(60000.0f,180000.0f);
-                    p=new_particle41(&tmp_a,random_integer_below(5)+1,&tmp_b,0x404040,0.0f,1.0f,1.03f,speed);
+                    p=new_particle41(&tmp_a,0.0f,1.0f,1.03f,random_integer_below(5)+1,&tmp_b,speed,0x404040);
                     if(p) {
+                        Tail41 *tail=&p->tail;
                         subtract_vector_xyz(&motion,&tmp_a,&tmp_c);
                         sparks++;
-                        fast_vec_normalize(&p->velocity,&motion,0.01f);
-                        p->velocity.f.z+=0.02f;
+                        fast_vec_normalize(&tail->velocity,&motion,0.01f);
+                        tail->velocity.f.z+=0.02f;
                     }
                 }
                 qcopy(&tmp_a,D_L00_001E5F40+segment*16);
                 clear_u64_value(&tmp_b);
                 speed=random_float_between(60000.0f,180000.0f);
-                p=new_particle41(&tmp_a,6,&tmp_b,0x7F404040,0.0f,1.0f,1.0f,speed);
-                entries41[i].particle=p;
-                if(p) { p->life=200; p->mode=2; count++; p->r=127; p->g=200; }
-                entry=&entries41[i];
+                { Particle41 *main=new_particle41(&tmp_a,0.0f,1.0f,1.0f,6,&tmp_b,speed,0x7F404040);
+                entries41[i].particle=main;
+                if(main) { Tail41 *tail=&main->tail; main->life=200; tail->mode=2; count++; tail->r=127; tail->g=200; } }
                 entries41[i].segment=segment;
                 entries41[i].distance=0;
                 entries41[i].phase=0;
@@ -3083,7 +3084,7 @@ void FUN_L00_002ddf60(void *moby,void *position) {
             }
         }
         if(entries41[i].particle) {
-            entry=&entries41[i];
+
             subtract_vector_xyz(&tmp_a,D_L00_001E5F30+entries41[i].segment*16,D_L00_001E5F40+entries41[i].segment*16);
             length=fast_vec_length(&tmp_a);
             entries41[i].distance+=entries41[i].speed;
@@ -3098,14 +3099,14 @@ void FUN_L00_002ddf60(void *moby,void *position) {
                 }
             }
                 if(entries41[i].particle) {
-                entry=&entries41[i];
+
                 amount=entries41[i].distance/length;
                 if(entries41[i].segment==2)(entries41[i].particle)->life=100;
                 else if(entries41[i].segment<2) {
                     (entries41[i].particle)->life=truncate_float_to_s32((1.0f-amount)*100.0f);
                     if((entries41[i].particle)->life<61)(entries41[i].particle)->life=60;
                 }
-                entry=&entries41[i];
+
                 if(entries41[i].segment==1) {
                     subtract_vector_xyz(&tmp_b,position,&(entries41[i].particle)->pos);
                     fast_vec_normalize(&tmp_b,&tmp_b,entries41[i].speed);
@@ -3130,6 +3131,7 @@ void FUN_L00_002ddf60(void *moby,void *position) {
             }
         }
     }
+}
 }
 #endif
 #define NOT_SDA
