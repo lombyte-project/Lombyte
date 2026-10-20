@@ -328,8 +328,8 @@ void FUN_L02_002ee890(struct Moby *moby) {
         if (v == 0 || *(unsigned short *)(b + 0x238) == 0) {
             struct Hero *h = &hero;
             if (h->state.current == 0x72) {
-                char *p = ((char *)h->ground_moby);
-                if (p != 0 && *(short *)(p + 0xA6) == 0x267) {
+                char *ground_moby = ((char *)h->ground_moby);
+                if (ground_moby != 0 && *(short *)(ground_moby + 0xA6) == 0x267) {
                     if (v == 0) {
                         help_request(0x7DB, 0x46);
                     } else if (*(unsigned short *)(b + 0x238) == 0) {
