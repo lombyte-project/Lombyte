@@ -154,9 +154,9 @@ void FUN_L09_0021e8c0(char *list, int count, float unused, long tex0, long tex1)
             strip_vertex_count = ((Strip *)strip_entry)->idx[j + 1] - ((Strip *)strip_entry)->idx[j];
             src = (float *)(*(int *)(strip_entry + 0x14) + ((Strip *)strip_entry)->idx[j] * 8);
             for (c = 0; c < strip_vertex_count; c++) {
-                float f = *src++;
-                *b++ = f;
-                *first_scroll_destination++ = f;
+                float first_source_component = *src++;
+                *b++ = first_source_component;
+                *first_scroll_destination++ = first_source_component;
                 *first_scroll_destination++ = *src + first_scroll_offset;
                 *b++ = *src++ + second_scroll_offset;
             }
