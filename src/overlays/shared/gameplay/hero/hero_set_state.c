@@ -3060,7 +3060,7 @@ float absolute_float(float input) __asm__("FUN_001f99c0");
 
 int FUN_L00_002279b0(void) {
     struct Hero *hero_ptr = &hero;
-    struct Hero *q;
+    struct Hero *hero_depth_check_ptr;
     struct Hero *u;
     int r;
     float ray_start[4];
@@ -3092,9 +3092,9 @@ int FUN_L00_002279b0(void) {
                     }
                 }
             }
-            q = &hero;
-            if (q->motion.pos.f[2] < q->water_surface_z - 0.8f) {
-                if (q->state.control_mode != 4 || q->unk41E != 0) {
+            hero_depth_check_ptr = &hero;
+            if (hero_depth_check_ptr->motion.pos.f[2] < hero_depth_check_ptr->water_surface_z - 0.8f) {
+                if (hero_depth_check_ptr->state.control_mode != 4 || hero_depth_check_ptr->unk41E != 0) {
                     r = 1;
                 }
             }
