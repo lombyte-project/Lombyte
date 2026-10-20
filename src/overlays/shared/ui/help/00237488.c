@@ -1436,7 +1436,7 @@ void FUN_L05_00254608(void) {
     int near;
     int j;
     int k;
-    int m;
+    int comparison_opponent_index;
     float ang;
     float dir;
 
@@ -1563,8 +1563,8 @@ void FUN_L05_00254608(void) {
         if (hero.unk89A > hero.unk7A0[k] || (hero.unk7A0[k] == hero.unk89A && hero.unk898 > hero.unk7B0[k])) {
             hero.unk7C0[k] = 2;
         }
-        for (m = 0; m < race_pvars->f40; m++) {
-            if (hero.unk7A0[k] < hero.unk7A0[m] || (hero.unk7A0[k] == hero.unk7A0[m] && hero.unk7B0[k] < hero.unk7B0[m])) {
+        for (comparison_opponent_index = 0; comparison_opponent_index < race_pvars->f40; comparison_opponent_index++) {
+            if (hero.unk7A0[k] < hero.unk7A0[comparison_opponent_index] || (hero.unk7A0[k] == hero.unk7A0[comparison_opponent_index] && hero.unk7B0[k] < hero.unk7B0[comparison_opponent_index])) {
                 hero.unk7C0[k]++;
             }
         }
