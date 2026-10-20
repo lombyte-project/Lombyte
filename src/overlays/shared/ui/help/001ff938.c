@@ -220,8 +220,8 @@ void FUN_L15_00208ca8(void) {
     unsigned char *base = ((unsigned char *)&D_0013E533) + 0xE1D;
     unsigned char *b;
     int p;
-    void *q;
-    char *m;
+    void *moby_to_remove;
+    char *restored_hero_moby;
     if (base[0x20A4] == 2) {
         int v = *(short *)(base + 0x1634);
         if (v != -1) {
@@ -236,17 +236,17 @@ void FUN_L15_00208ca8(void) {
     if (p != 0) {
         *(unsigned short *)(p + 0x34) &= 0xFFF9;
     }
-    q = *(void **)(b + 0xA8C);
+    moby_to_remove = *(void **)(b + 0xA8C);
     *(int *)(b + 0xA84) = 0;
-    if (q != 0) {
-        mark_moby_for_removal(q);
+    if (moby_to_remove != 0) {
+        mark_moby_for_removal(moby_to_remove);
         *(int *)(b + 0xA8C) = 0;
     }
     FUN_L00_00206c08();
-    m = *(char **)(b + 0xA88);
-    *(char **)(b + 0x2080) = m;
-    qcopy(m + 0x10, b + 0x80);
-    *(int *)(m + 0x98) = 0;
+    restored_hero_moby = *(char **)(b + 0xA88);
+    *(char **)(b + 0x2080) = restored_hero_moby;
+    qcopy(restored_hero_moby + 0x10, b + 0x80);
+    *(int *)(restored_hero_moby + 0x98) = 0;
     *(float *)(b + 0xA94) = 1.0f;
     FUN_L00_00232628();
     if (*(int *)(b + 0x2084) != 100 || (D_L15_0015F5C4 != 2 && D_L15_0015F5C4 != 6)) {
