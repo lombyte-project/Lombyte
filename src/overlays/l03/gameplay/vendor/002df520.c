@@ -296,7 +296,7 @@ extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a
 /* places the camera behind the hero and rebuilds its orientation axes */
 void FUN_L03_002eb7e0(char *camera) {
     char *camera_data = *(char **)(camera + 0x70);
-    float *a = (float *)(camera_data + 0xB0);
+    float *camera_target_data = (float *)(camera_data + 0xB0);
     float *b = (float *)(camera_data + 0xF0);
     float *camera_look_direction = (float *)(camera_data + 0x100);
     float back[4];
@@ -309,7 +309,7 @@ void FUN_L03_002eb7e0(char *camera) {
     normalize_vector_xyz(back, b, -*(float *)(camera_data + 0xD0));
     add_vector_xyz(pos, &hero.motion.pos, side);
     add_vector_xyz(camera + 0x30, pos, back);
-    normalize_vector_xyz(look, &hero.gravity_dir, -a[5]);
+    normalize_vector_xyz(look, &hero.gravity_dir, -camera_target_data[5]);
     add_vector_xyz(look, &hero.motion.pos, look);
     subtract_vector_xyz(dir, look, camera + 0x30);
     normalize_vector_xyz(camera_look_direction, dir, 1.0f);
