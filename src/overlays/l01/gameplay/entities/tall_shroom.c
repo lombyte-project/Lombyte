@@ -449,7 +449,7 @@ void FUN_L01_0030c190(struct Moby *moby) {
     FxVec a;
     FxVec b;
     FxVec c;
-    FxVec d;
+    FxVec secondary_effect_position;
     struct Moby *cutscene_moby;
     char *splash;
     FxSpark *spark;
@@ -555,21 +555,21 @@ void FUN_L01_0030c190(struct Moby *moby) {
                     if (fx_cutscene.frame == scale_game_frames(118)) {
                         clear_vector(&c);
                         spawn_explosion(cutscene_moby, &c, &b, 0.0f, 0.0f, 3, 200, 200, 5.0f, 2.5f, 9.0f, 1.0f, -1, 60.0f, 0, 60, -1, 0);
-                        qcopy(&d, &b);
-                        d.f[2] = d.f[2] - 1.0f;
-                        spawn_explosion(cutscene_moby, &c, &d, 0.0f, 0.0f, 300, 2, 2, 1.0f, 0.5f, 9.0f, 1.0f, -1, 60.0f, 0, 0, -1, 0);
+                        qcopy(&secondary_effect_position, &b);
+                        secondary_effect_position.f[2] = secondary_effect_position.f[2] - 1.0f;
+                        spawn_explosion(cutscene_moby, &c, &secondary_effect_position, 0.0f, 0.0f, 300, 2, 2, 1.0f, 0.5f, 9.0f, 1.0f, -1, 60.0f, 0, 0, -1, 0);
                     }
                     enqueue_callback_list_1(render_environment_mapped_object, cutscene_moby);
                     moby_point_position(cutscene_moby, 1, &c);
-                    moby_point_position(cutscene_moby, 2, &d);
+                    moby_point_position(cutscene_moby, 2, &secondary_effect_position);
                     subtract_vector_xyz(&c, &c, &a);
-                    subtract_vector_xyz(&d, &d, &a);
+                    subtract_vector_xyz(&secondary_effect_position, &secondary_effect_position, &a);
                     scale_vector_xyz(&a, &a, 0.25f);
                     for (step = 0; step < 4; step++) {
                         draw_trail(&c, &c, &D_L01_0015F580, 150000.0f, 60000.0f);
-                        draw_trail(&d, &d, &D_L01_0015F580, 150000.0f, 60000.0f);
+                        draw_trail(&secondary_effect_position, &secondary_effect_position, &D_L01_0015F580, 150000.0f, 60000.0f);
                         add_vector_xyz(&c, &c, &a);
-                        add_vector_xyz(&d, &d, &a);
+                        add_vector_xyz(&secondary_effect_position, &secondary_effect_position, &a);
                     }
                 }
             }
