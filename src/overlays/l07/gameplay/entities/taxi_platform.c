@@ -2589,30 +2589,30 @@ extern int probe_world_sphere(void *, float, int, void *, void *) __asm__("FUN_L
 void FUN_L07_0030f308(char *moby, char *obj, int state, int anim, int seq, int frame, int next, int id,
                       float lo, float hi, float len, float scale, float radius) {
     float v[4];
-    float m[12];
-    float p[4];
-    float d;
+    float hit_descriptor[12];
+    float probe_center[4];
+    float interpolated_record_value;
     char *vel;
 
-    d = compute_interpolated_record_value(moby);
+    interpolated_record_value = compute_interpolated_record_value(moby);
     if (((unsigned char *)moby)[0x20] != state) {
         return;
     }
     if (((unsigned char *)moby)[0x52] != anim) {
         return;
     }
-    if (!(lo < d)) {
+    if (!(lo < interpolated_record_value)) {
         return;
     }
-    if (!(d < hi)) {
+    if (!(interpolated_record_value < hi)) {
         return;
     }
     vel = obj + 0xD0;
     fast_vec_normalize(v, vel, len);
     v[2] = 1.0f;
-    make_hit_descriptor((char *)m, (int)moby, 1, v, scale);
-    moby_point_position(moby, 0, p);
-    if (probe_world_sphere(p, radius, 0x21, moby, m) == 0) {
+    make_hit_descriptor((char *)hit_descriptor, (int)moby, 1, v, scale);
+    moby_point_position(moby, 0, probe_center);
+    if (probe_world_sphere(probe_center, radius, 0x21, moby, hit_descriptor) == 0) {
         return;
     }
     if (D_L07_00173ED8 != id) {
