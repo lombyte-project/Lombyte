@@ -1628,7 +1628,7 @@ void FUN_L00_00274e48(M_274e48 *particle) {
     R_274e48 *r = &particle->r;
     V_274e48 u, a, b;
     f32 d, k;
-    s32 c;
+    s32 color_without_alpha;
     if (D_L00_0015F5CC & 1)
         particle->b8++;
     d = distance_xyz(&particle->v10, &(*(V_274e48 *)D_0013F420));
@@ -1670,9 +1670,9 @@ void FUN_L00_00274e48(M_274e48 *particle) {
     } else {
         load_display_text_resource_entry(&u, (u8 *)r + 4);
         FUN_001f9a10_274e48(&particle->v10, &particle->v10, &u);
-        c = particle->i4 & 0xFFFFFF;
+        color_without_alpha = particle->i4 & 0xFFFFFF;
         particle->i4 =
-            FUN_001fa6e0_274e48(c, particle->i4, convert_integer_to_float(particle->hA) / convert_integer_to_float(r->h14));
+            FUN_001fa6e0_274e48(color_without_alpha, particle->i4, convert_integer_to_float(particle->hA) / convert_integer_to_float(r->h14));
         if (FUN_001f9770_274e48(&particle->hA))
             free_effect_particle(particle);
     }
