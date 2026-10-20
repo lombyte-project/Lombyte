@@ -17,18 +17,18 @@ s32 video_dec_flush(struct VideoDec *vd) __asm__("FUN_0023cd08");
 
 s32 video_dec_flush(struct VideoDec *vd) {
     struct Code4 code = D_00161218[0];
-    u32 p0;
-    s32 n0;
-    u32 p1;
-    s32 n1;
+    u32 destination_a;
+    s32 destination_a_len;
+    u32 destination_b;
+    s32 destination_b_len;
     s32 r;
 
-    video_dec_begin_put(vd, &p0, &n0, &p1, &n1);
-    if (n0 + n1 < 4) {
+    video_dec_begin_put(vd, &destination_a, &destination_a_len, &destination_b, &destination_b_len);
+    if (destination_a_len + destination_b_len < 4) {
         return 0;
     }
-    r = cpy2area((p0 & 0x0FFFFFFF) | 0x20000000, n0, (p1 & 0x0FFFFFFF) | 0x20000000,
-                                 n1, &code, 4, 0, 0);
+    r = cpy2area((destination_a & 0x0FFFFFFF) | 0x20000000, destination_a_len, (destination_b & 0x0FFFFFFF) | 0x20000000,
+                                 destination_b_len, &code, 4, 0, 0);
     video_dec_end_put(decoder_state + 0xD9048, r);
     vi_buf_flush(&vd->vi_buf);
     if (vd->state == 0) {
