@@ -2434,7 +2434,7 @@ extern int font_print_center_small(int, int, long, void *, int) __asm__("FUN_001
 
 void FUN_L13_002b97f8(char *moby) {
     char *moby_vars = *(char **)(moby + 0x78);
-    char *s;
+    char *screen_dimensions;
     unsigned char *base;
     unsigned char *g;
     unsigned char *h;
@@ -2443,7 +2443,7 @@ void FUN_L13_002b97f8(char *moby) {
     int sp14;
     int tex;
     int i;
-    unsigned char n;
+    unsigned char ammo_icon_count;
     unsigned char c;
     int j;
     int x;
@@ -2457,7 +2457,7 @@ void FUN_L13_002b97f8(char *moby) {
     int idx;
     float marker_transition_fraction;
     float k;
-    float m;
+    float marker_opacity_factor;
     float hud_health_step;
     float hud_health_step_magnitude;
 
@@ -2467,10 +2467,10 @@ void FUN_L13_002b97f8(char *moby) {
         if (*(int *)(moby_vars + 0x8C) > scale_game_frames_alt(0x1F4)) {
             marker_transition_fraction = convert_integer_to_float(*(int *)(moby_vars + 0x8C) - scale_game_frames_alt(0x1F4));
             marker_transition_fraction = marker_transition_fraction / convert_integer_to_float(scale_game_frames_alt(0x4B));
-            m = 2.0f * (1.0f - marker_transition_fraction);
+            marker_opacity_factor = 2.0f * (1.0f - marker_transition_fraction);
             k = marker_transition_fraction * 5.0f + 1.0f;
-            if (m > 1.0f) m = 1.0f;
-            c = func_001FA898_r(m * 96.0f);
+            if (marker_opacity_factor > 1.0f) marker_opacity_factor = 1.0f;
+            c = func_001FA898_r(marker_opacity_factor * 96.0f);
             func_L13_002B9590_f(convert_integer_to_float(sp10), convert_integer_to_float(sp14), k, normalize_angle(convert_integer_to_float(frame_count) / 30.0f), 0, 0xFF, 0, c);
             *(int *)(moby_vars + 0xEC) = 0;
         } else {
@@ -2483,16 +2483,16 @@ void FUN_L13_002b97f8(char *moby) {
     y = 0x40;
     x = 0x18;
     base = D_0013F350;
-    n = base[0x15F7];
-    for (i = 0; i < n; i++) {
+    ammo_icon_count = base[0x15F7];
+    for (i = 0; i < ammo_icon_count; i++) {
         g = D_0013F350;
         if (i < g[0x15F6]) {
             FUN_L11_00310ad0(x, y, 0.5f, D_L13_001CBC60, 0x19, 0xFFFFF3, 0x50008F00);
         } else {
             FUN_L11_00310ad0(x, y, 0.5f, D_L13_001CBC60, 0x19, 0xFFFFF3, 0x20004F00);
         }
-        n = g[0x15F7];
-        if (i == n >> 1) {
+        ammo_icon_count = g[0x15F7];
+        if (i == ammo_icon_count >> 1) {
             y = 0x2E;
             x += 0x1E;
         }
@@ -2527,9 +2527,9 @@ void FUN_L13_002b97f8(char *moby) {
             hp_bar_clut[0][idx] = 0x80000000;
         }
     }
-    s = (char *)D_0013E500;
-    draw_textured_quad_local(0x170, *(int *)(s + 4) - 0x90, 0x80, 0x80, 0, 0, 0x80, 0x80, 0x70808080, func_001F4868_l(*(int *)(moby_vars + 0x104) + 0x28));
-    draw_textured_quad_local(0x170, *(int *)(s + 4) - 0x90, 0x80, 0x80, 0, 0, 0x80, 0x80, 0x70808080, func_001F4868_l(*(int *)(moby_vars + 0x104) + 0x29));
+    screen_dimensions = (char *)D_0013E500;
+    draw_textured_quad_local(0x170, *(int *)(screen_dimensions + 4) - 0x90, 0x80, 0x80, 0, 0, 0x80, 0x80, 0x70808080, func_001F4868_l(*(int *)(moby_vars + 0x104) + 0x28));
+    draw_textured_quad_local(0x170, *(int *)(screen_dimensions + 4) - 0x90, 0x80, 0x80, 0, 0, 0x80, 0x80, 0x70808080, func_001F4868_l(*(int *)(moby_vars + 0x104) + 0x29));
     *(int *)(moby_vars + 0xF4) = v;
 }
 /* Builds a rotated offset vector from the moby, flips a facing flag on a pad press, and updates the aim. */
