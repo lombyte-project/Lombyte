@@ -428,8 +428,8 @@ extern float lift_length(void *) __asm__("FUN_001f9af0");
 extern void lift_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 
 void shuttle_update(struct Moby *m) __asm__("FUN_L14_002e7bd8");
-void shuttle_update(struct Moby *m) {
-    L14LiftVars *d;
+void shuttle_update(struct Moby *shuttle_moby) {
+    L14LiftVars *shuttle_vars;
     Vec4 old;
     Vec4 rot;
     Vec4 delta;
@@ -440,77 +440,77 @@ void shuttle_update(struct Moby *m) {
     f32 len;
     f32 max;
 
-    if (m == 0)
+    if (shuttle_moby == 0)
         return;
-    d = (L14LiftVars *)m->pvars;
-    if (d == 0)
+    shuttle_vars = (L14LiftVars *)shuttle_moby->pvars;
+    if (shuttle_vars == 0)
         return;
-    if (d->clip >= 0 && lift_inside(&hero.motion.pos, d->clip) != 0) {
-        m->collision = 0;
-        m->flags |= 0x41;
-        if (d->rider >= 0) {
-            struct Moby *r = &D_L14_0015FFD8_lift[d->rider];
+    if (shuttle_vars->clip >= 0 && lift_inside(&hero.motion.pos, shuttle_vars->clip) != 0) {
+        shuttle_moby->collision = 0;
+        shuttle_moby->flags |= 0x41;
+        if (shuttle_vars->rider >= 0) {
+            struct Moby *r = &D_L14_0015FFD8_lift[shuttle_vars->rider];
             r->collision = 0;
             r->flags = (r->flags | 0x41) & 0xEFFF;
         }
         return;
     }
-    if (m->collision == 0) {
-        m->flags &= 0xFFBE;
-        m->collision = m->pclass->collision;
-        if (d->rider >= 0) {
-            struct Moby *r = &D_L14_0015FFD8_lift[d->rider];
+    if (shuttle_moby->collision == 0) {
+        shuttle_moby->flags &= 0xFFBE;
+        shuttle_moby->collision = shuttle_moby->pclass->collision;
+        if (shuttle_vars->rider >= 0) {
+            struct Moby *r = &D_L14_0015FFD8_lift[shuttle_vars->rider];
             r->flags &= 0xFFBE;
             r->collision = r->pclass->collision;
             r->flags |= 0x1000;
         }
     }
-    qcopy(&old, &m->pos);
-    qcopy(&rot, &m->rot);
-    if (m->state == 0) {
-        qcopy(&m->pos, D_L14_001B0BB0_lift[d->path] + 0x10);
-        d->angle = 0.0f;
-        d->sound = -1;
-        d->h206 = 0;
-        attach_manipulator(m, 0, d->manip);
-        if (d->rider == -1) {
-            lift_print(D_L14_001FC840, m->save_id);
-            lift_remove(m);
+    qcopy(&old, &shuttle_moby->pos);
+    qcopy(&rot, &shuttle_moby->rot);
+    if (shuttle_moby->state == 0) {
+        qcopy(&shuttle_moby->pos, D_L14_001B0BB0_lift[shuttle_vars->path] + 0x10);
+        shuttle_vars->angle = 0.0f;
+        shuttle_vars->sound = -1;
+        shuttle_vars->h206 = 0;
+        attach_manipulator(shuttle_moby, 0, shuttle_vars->manip);
+        if (shuttle_vars->rider == -1) {
+            lift_print(D_L14_001FC840, shuttle_moby->save_id);
+            lift_remove(shuttle_moby);
             return;
         }
-        d->riding = 0;
-        d->from = d->height;
+        shuttle_vars->riding = 0;
+        shuttle_vars->from = shuttle_vars->height;
     }
-    gunship_follow_path(m);
-    rider = &D_L14_0015FFD8_lift[d->rider];
-    if (d->mode == 0x3039) {
-        if (d->anchor != -1)
-            FUN_L00_0024f7c8(m, d->anchor, &base);
+    gunship_follow_path(shuttle_moby);
+    rider = &D_L14_0015FFD8_lift[shuttle_vars->rider];
+    if (shuttle_vars->mode == 0x3039) {
+        if (shuttle_vars->anchor != -1)
+            FUN_L00_0024f7c8(shuttle_moby, shuttle_vars->anchor, &base);
         else
-            qcopy(&base, &m->pos);
-        euler_rotation_matrix(mat, &m->rot);
-        lift_xform(&off, d->offset, mat);
+            qcopy(&base, &shuttle_moby->pos);
+        euler_rotation_matrix(mat, &shuttle_moby->rot);
+        lift_xform(&off, shuttle_vars->offset, mat);
         lift_add(&rider->pos, &base, &off);
     }
-    if (d->sound == -1 || (voice_is_playing(m, d->sound) == 0 && d->sound == -1))
-        d->sound = lift_sound(0, 4, m);
-    d->angle = lift_add_rot(d->angle, 0.17453292f);
-    FUN_L00_001fff28(d->wobble, 0, d->angle);
-    lift_sub(&delta, &m->pos, &old);
-    update_entity_matrix(d->spring, &delta, &rot, &m->rot);
+    if (shuttle_vars->sound == -1 || (voice_is_playing(shuttle_moby, shuttle_vars->sound) == 0 && shuttle_vars->sound == -1))
+        shuttle_vars->sound = lift_sound(0, 4, shuttle_moby);
+    shuttle_vars->angle = lift_add_rot(shuttle_vars->angle, 0.17453292f);
+    FUN_L00_001fff28(shuttle_vars->wobble, 0, shuttle_vars->angle);
+    lift_sub(&delta, &shuttle_moby->pos, &old);
+    update_entity_matrix(shuttle_vars->spring, &delta, &rot, &shuttle_moby->rot);
     if (hero.state.control_mode == 13 && hero.unk964 == rider) {
-        if (d->riding == 0) {
-            d->riding = 1;
-            d->timer = lift_frames(D_L14_00161B8C);
-            d->timer_inv = 1.0f / lift_itof(d->timer);
+        if (shuttle_vars->riding == 0) {
+            shuttle_vars->riding = 1;
+            shuttle_vars->timer = lift_frames(D_L14_00161B8C);
+            shuttle_vars->timer_inv = 1.0f / lift_itof(shuttle_vars->timer);
         }
     } else {
-        if (d->riding == 1) {
-            if (hero.air_frames.s == 0 || hero.motion.pos.f[2] <= m->pos.z - 3.0f) {
-                d->riding = 0;
-                d->timer = lift_frames(D_L14_00161B90);
-                d->timer_inv = 1.0f / lift_itof(d->timer);
-                d->to = d->height;
+        if (shuttle_vars->riding == 1) {
+            if (hero.air_frames.s == 0 || hero.motion.pos.f[2] <= shuttle_moby->pos.z - 3.0f) {
+                shuttle_vars->riding = 0;
+                shuttle_vars->timer = lift_frames(D_L14_00161B90);
+                shuttle_vars->timer_inv = 1.0f / lift_itof(shuttle_vars->timer);
+                shuttle_vars->to = shuttle_vars->height;
             } else {
                 qcopy(&base, &hero.motion.pos);
                 lift_sub(&delta, &rider->pos, &base);
@@ -522,19 +522,19 @@ void shuttle_update(struct Moby *m) {
                 lift_normalize(&hero.motion.platform_delta, &delta, len);
             }
         }
-        if (d->riding == 0) {
-            lift_tick(&d->timer);
+        if (shuttle_vars->riding == 0) {
+            lift_tick(&shuttle_vars->timer);
             {
-                f32 t = lift_itof(d->timer) * d->timer_inv;
-                d->height = d->from + (d->to - d->from) * t;
+                f32 t = lift_itof(shuttle_vars->timer) * shuttle_vars->timer_inv;
+                shuttle_vars->height = shuttle_vars->from + (shuttle_vars->to - shuttle_vars->from) * t;
             }
             return;
         }
     }
-    lift_tick(&d->timer);
+    lift_tick(&shuttle_vars->timer);
     {
-        f32 t = lift_itof(d->timer) * d->timer_inv;
-        d->height = (d->from - 0.005f) * t + 0.005f;
+        f32 t = lift_itof(shuttle_vars->timer) * shuttle_vars->timer_inv;
+        shuttle_vars->height = (shuttle_vars->from - 0.005f) * t + 0.005f;
     }
 }
 typedef struct {
