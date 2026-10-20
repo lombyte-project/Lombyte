@@ -265,12 +265,12 @@ void FUN_L00_00205600(void) {
         if (g->rand_timer.range == 0) {
             g->rand_timer.deadline = D_L00_0015F5CC + scale_game_frames(30);
         } else if (D_L00_0015F5CC > g->rand_timer.deadline) {
-            int a, b;
+            int base_delay_frames, b;
             g->rand_timer.fired = 1;
-            a = scale_game_frames(20);
+            base_delay_frames = scale_game_frames(20);
             b = random_integer_below(g->rand_timer.range);
             g->rand_timer.deadline =
-                D_L00_0015F5CC + a + b + random_integer_below(g->rand_timer.range);
+                D_L00_0015F5CC + base_delay_frames + b + random_integer_below(g->rand_timer.range);
         }
     }
 }
