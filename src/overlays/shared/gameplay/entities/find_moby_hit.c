@@ -474,18 +474,18 @@ extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 
 float FUN_L00_0025abf0(float *a, float *b, float *out, float speed, float g);
-float FUN_L00_0025abf0(float *a, float *b, float *out, float speed, float g) {
-    Vc0 d;
-    float t;
-    subtract_vector_xyz(&d, b, a);
-    t = vector_length_xy(&d) / speed;
+float FUN_L00_0025abf0(float *start_position, float *b, float *out, float speed, float g) {
+    Vc0 displacement;
+    float travel_time;
+    subtract_vector_xyz(&displacement, b, start_position);
+    travel_time = vector_length_xy(&displacement) / speed;
     if (out) {
-        *out = t;
+        *out = travel_time;
     }
-    if (t == 0.0f) {
+    if (travel_time == 0.0f) {
         return 0.0f;
     }
-    return -((a[2] - b[2]) + g * (t * t) * 0.5f) / t;
+    return -((start_position[2] - b[2]) + g * (travel_time * travel_time) * 0.5f) / travel_time;
 }
 typedef union {
     u128 q;
