@@ -1488,22 +1488,22 @@ extern s32 random_integer_below_c(s32 arg0) __asm__("FUN_00213260");
 extern void blend_moby_animation(void *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
 char *FUN_L11_0031a7d8(int list) {
-    short *s = D_L11_001AC240[list];
+    short *moby_list_entry = D_L11_001AC240[list];
     float A[4], B[4], C[4], D[4], E[4], F[4];
-    char *m;
-    char *d;
+    char *selected_moby;
+    char *moby_vars;
     int idx;
 
     do {
-        idx = (*s & 0x7FFF) << 8;
+        idx = (*moby_list_entry & 0x7FFF) << 8;
         if (*(short *)(0xA6 + idx + D_L11_0015FFD8) != 0x527)
             continue;
         if (*(unsigned char *)(0x20 + idx + D_L11_0015FFD8) != 4)
             continue;
         if (random_integer_below_c(10))
             continue;
-        m = D_L11_0015FFD8 + idx;
-        d = *(char **)(m + 0x78);
+        selected_moby = D_L11_0015FFD8 + idx;
+        moby_vars = *(char **)(selected_moby + 0x78);
         qcopy(C, D_L11_001677D0);
         C[0] = 0;
         if (C[1] > 0.17453292f)
@@ -1512,27 +1512,27 @@ char *FUN_L11_0031a7d8(int list) {
             C[1] = -0.17453292f;
         euler_rotation_basis(D, C);
         {
-            float f = fast_add_rotations(0.7853982f, (float)*(int *)(d + 0x88) * 1.5707964f);
-            fast_vec_normalize(A, E, fast_sin(f) * 12.0f);
+            float placement_angle = fast_add_rotations(0.7853982f, (float)*(int *)(moby_vars + 0x88) * 1.5707964f);
+            fast_vec_normalize(A, E, fast_sin(placement_angle) * 12.0f);
             fast_vec_add(B, D_L11_001677C0, A);
-            fast_vec_normalize(A, F, fast_cos(f) * 12.0f);
+            fast_vec_normalize(A, F, fast_cos(placement_angle) * 12.0f);
         }
         fast_vec_add(B, B, A);
         fast_vec_normalize(A, D, 6.0f);
         fast_vec_add(B, B, A);
-        qcopy(d + 0xB0, D_0013E533 + 0xE9D);
-        qcopy(m + 0x10, B);
-        m[0x20] = 5;
-        m[0xBC] = 1;
-        *(float *)(d + 0x6C) = D_0015ED6C_n[1] * 20.0f;
-        *(float *)(d + 0x94) = 5.0f;
-        *(int *)(d + 0x98) = 0;
-        if (*(unsigned char *)(m + 0x53))
-            blend_moby_animation(m, 0, 0, scale_game_frames(10));
-        *(unsigned short *)(m + 0x34) &= 0xFFFE;
-        *(int *)(m + 0x94) = *(int *)(*(char **)(m + 0x24) + 0x10);
-        return m;
-    } while (*s++ >= 0);
+        qcopy(moby_vars + 0xB0, D_0013E533 + 0xE9D);
+        qcopy(selected_moby + 0x10, B);
+        selected_moby[0x20] = 5;
+        selected_moby[0xBC] = 1;
+        *(float *)(moby_vars + 0x6C) = D_0015ED6C_n[1] * 20.0f;
+        *(float *)(moby_vars + 0x94) = 5.0f;
+        *(int *)(moby_vars + 0x98) = 0;
+        if (*(unsigned char *)(selected_moby + 0x53))
+            blend_moby_animation(selected_moby, 0, 0, scale_game_frames(10));
+        *(unsigned short *)(selected_moby + 0x34) &= 0xFFFE;
+        *(int *)(selected_moby + 0x94) = *(int *)(*(char **)(selected_moby + 0x24) + 0x10);
+        return selected_moby;
+    } while (*moby_list_entry++ >= 0);
     return 0;
 }
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_0031BEF0), where it is exact; names translated to the US level program. */
