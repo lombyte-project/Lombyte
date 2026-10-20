@@ -20,19 +20,19 @@ extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void FUN_L00_0025d1b8(void *);
 extern void update_entity_matrix(char *, void *, void *, void *) __asm__("FUN_L00_00260738");
 
-void FUN_L04_002d3580(char *m) {
-    char *d = *(char **)(m + 0x78);
+void FUN_L04_002d3580(char *moby) {
+    char *moby_vars = *(char **)(moby + 0x78);
     float v[4];
-    fast_vec_sub(v, m + 0x10, d + 0xA0);
-    update_entity_matrix(d + 0x60, v, m + 0x40, m + 0x40);
-    qcopy(d + 0xA0, m + 0x10);
-    if (*(unsigned char *)(m + 0x20) == 0) {
-        *(int *)(d + 0x20) = 0;
-        *(short *)(d + 0x24) = 0;
-        d[0x28] = 4;
-        *(short *)(d + 0x3E) = 0xD;
-        FUN_L00_0025d1b8(m);
-        m[0x20] = 1;
+    fast_vec_sub(v, moby + 0x10, moby_vars + 0xA0);
+    update_entity_matrix(moby_vars + 0x60, v, moby + 0x40, moby + 0x40);
+    qcopy(moby_vars + 0xA0, moby + 0x10);
+    if (*(unsigned char *)(moby + 0x20) == 0) {
+        *(int *)(moby_vars + 0x20) = 0;
+        *(short *)(moby_vars + 0x24) = 0;
+        moby_vars[0x28] = 4;
+        *(short *)(moby_vars + 0x3E) = 0xD;
+        FUN_L00_0025d1b8(moby);
+        moby[0x20] = 1;
     }
 }
 extern int D_L04_0015FFD8;
