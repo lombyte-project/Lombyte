@@ -1240,9 +1240,9 @@ void FUN_L04_002c1d70(struct Moby *moby) {
     clear_vector(vec);
     idx = *(int *)(data + 0x238);
     if (idx != -1) {
-        char *e = (char *)D_0013E550_u + idx * 0x70;
-        if (*(char **)(e + 0x88) == moby) {
-            if (*(unsigned char *)(e + 0x74) != 0)
+        char *voice_slot_window = (char *)D_0013E550_u + idx * 0x70;
+        if (*(char **)(voice_slot_window + 0x88) == moby) {
+            if (*(unsigned char *)(voice_slot_window + 0x74) != 0)
                 release_voice_slot(idx);
         }
     }
