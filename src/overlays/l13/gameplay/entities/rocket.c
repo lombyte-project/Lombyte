@@ -2425,7 +2425,7 @@ extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern void set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");
 extern void FUN_L00_00250df8(void *);
 
-char *FUN_L13_0030c138(void *position, void *b, int duration_frames, int d) {
+char *FUN_L13_0030c138(void *position, void *b, int duration_frames, int effect_mode) {
     unsigned char *moby = (unsigned char *)func_0020D348_m(0x662);
     if (moby != 0) {
         char *data;
@@ -2444,12 +2444,12 @@ char *FUN_L13_0030c138(void *position, void *b, int duration_frames, int d) {
         *(float *)(data + 0x14) = random_float_between_alt(dd * 6.2831855f, dd * 12.566371f);
         *(short *)(data + 0x18) = duration_frames;
         *(short *)(data + 0x1A) = duration_frames;
-        if (d == 0) {
+        if (effect_mode == 0) {
             *(float *)(moby + 0x2C) = *(float *)(moby + 0x2C) * random_float_between_alt(0.5f, 0.75f);
         }
         *(float *)(data + 0x1C) = *(float *)(moby + 0x2C);
         *(float *)(moby + 0x2C) = *(float *)(moby + 0x2C) * random_float_between_alt(2.0f, 5.0f);
-        moby[0xBC] = d;
+        moby[0xBC] = effect_mode;
         FUN_L00_00250df8(moby);
     }
     return (char *)moby;
