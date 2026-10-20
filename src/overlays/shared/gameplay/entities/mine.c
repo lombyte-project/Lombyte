@@ -2007,7 +2007,7 @@ unsigned char *spawn_debris(void *pos, void *vel, int lifetime_frames, int flag,
     unsigned char *debris_moby = FUN_0020c4f8_2af450(0x7A);
     if (debris_moby) {
         unsigned char *v;
-        float a, d;
+        float rotation_x_increment, frame_time;
         v = *(unsigned char **)(debris_moby + 0x78);
         debris_moby[0x30] = 0xFF;
         *(short *)(debris_moby + 0x32) = 0xFF;
@@ -2016,10 +2016,10 @@ unsigned char *spawn_debris(void *pos, void *vel, int lifetime_frames, int flag,
         FUN_L00_002502f0_2af450(debris_moby, 0x7F, 0x7F, 0x7F);
         qcopy(debris_moby + 0x10, pos);
         qcopy(v, vel);
-        a = FUN_002132a8_2af450(D_0015ED6C_2af450 * 6.2831855f, D_0015ED6C_2af450 * 12.566371f);
-        d = D_0015ED6C_2af450;
-        *(float *)(v + 0x10) = a;
-        *(float *)(v + 0x14) = FUN_002132a8_2af450(d * 6.2831855f, d * 12.566371f);
+        rotation_x_increment = FUN_002132a8_2af450(D_0015ED6C_2af450 * 6.2831855f, D_0015ED6C_2af450 * 12.566371f);
+        frame_time = D_0015ED6C_2af450;
+        *(float *)(v + 0x10) = rotation_x_increment;
+        *(float *)(v + 0x14) = FUN_002132a8_2af450(frame_time * 6.2831855f, frame_time * 12.566371f);
         *(short *)(v + 0x18) = lifetime_frames;
         *(short *)(v + 0x1A) = lifetime_frames;
         if (flag == 0) {
