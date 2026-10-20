@@ -91,32 +91,32 @@ typedef u32 __ULong;
 #define Storeinc(a, b, c) (((u16 *)a)[1] = (u16)b, ((u16 *)a)[0] = (u16)c, a++)
 extern _Bigint *_Balloc(struct _reent *, s32);
 
-_Bigint *_multiply(struct _reent *ptr, _Bigint *a, _Bigint *b) {
-    _Bigint *c;
+_Bigint *_multiply(struct _reent *ptr, _Bigint *multiplicand, _Bigint *b) {
+    _Bigint *product;
     s32 k, wa, wb, wc;
     __ULong carry, y, z;
     __ULong *x, *xa, *xae, *xb, *xbe, *xc, *xc0;
     __ULong z2;
 
-    if (a->_wds < b->_wds) {
-        c = a;
-        a = b;
-        b = c;
+    if (multiplicand->_wds < b->_wds) {
+        product = multiplicand;
+        multiplicand = b;
+        b = product;
     }
-    k = a->_k;
-    wa = a->_wds;
+    k = multiplicand->_k;
+    wa = multiplicand->_wds;
     wb = b->_wds;
     wc = wa + wb;
-    if (wc > a->_maxwds)
+    if (wc > multiplicand->_maxwds)
         k++;
-    c = _Balloc(ptr, k);
-    for (x = c->_x, xa = x + wc; x < xa; x++)
+    product = _Balloc(ptr, k);
+    for (x = product->_x, xa = x + wc; x < xa; x++)
         *x = 0;
-    xa = a->_x;
+    xa = multiplicand->_x;
     xae = xa + wa;
     xb = b->_x;
     xbe = xb + wb;
-    xc0 = c->_x;
+    xc0 = product->_x;
     for (; xb < xbe; xb++, xc0++) {
         if (y = *xb & 0xffff) {
             x = xa;
@@ -146,8 +146,8 @@ _Bigint *_multiply(struct _reent *ptr, _Bigint *a, _Bigint *b) {
             *xc = z2;
         }
     }
-    for (xc0 = c->_x, xc = xc0 + wc; wc > 0 && !*--xc; --wc)
+    for (xc0 = product->_x, xc = xc0 + wc; wc > 0 && !*--xc; --wc)
         ;
-    c->_wds = wc;
-    return c;
+    product->_wds = wc;
+    return product;
 }
