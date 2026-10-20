@@ -180,14 +180,14 @@ void FUN_L00_0028e9c8(int);
 /* Sets D_L00_0015F5D8, keeps +0x22A8 >= 1, calls 00216050, sound_update, 002039a0, 0028e9c8. */
 void FUN_L00_0028ecd8(void) {
     struct Hero *g = &hero;
-    struct MusicStreamState *h;
+    struct MusicStreamState *music_state;
     if (g->health.hp <= 0)
         g->health.hp = 1;
     D_L00_0015F5D8 = 1;
     music_pause(0);
-    h = &music_stream_state;
-    if ((unsigned)((unsigned short)h->secondary.state - 6) >= 2)
-        h->secondary.state = 5;
+    music_state = &music_stream_state;
+    if ((unsigned)((unsigned short)music_state->secondary.state - 6) >= 2)
+        music_state->secondary.state = 5;
     sound_update();
     FUN_L00_002039a0();
     FUN_L00_0028e9c8(0);
