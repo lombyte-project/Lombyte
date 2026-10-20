@@ -591,7 +591,7 @@ extern unsigned short *D_L00_001AB840[];
 /* Iterator over the mobies of target's group: finds the next one whose
  * visibility matches the two flags; 0 when found, -1 at the end. */
 int FUN_L00_002592b8(char **out, char *target, int a, int b) {
-    int s;
+    int entry_sign_bit_set;
 
     *out = 0;
     if (target != D_L00_00160114) {
@@ -621,8 +621,8 @@ int FUN_L00_002592b8(char **out, char *target, int a, int b) {
         D_L00_00160110 = *D_L00_0016010C & 0x7FFF;
         D_L00_00160114 = D_L00_0015FFD8 + (D_L00_00160110 << 8);
         *out = D_L00_00160114;
-        s = *(signed char *)(D_L00_00160114 + 0x20) < 0;
-        if ((a == 0 && b == 0 && s == 0) || (a != 0 && (b == 0 || s != 0))) {
+        entry_sign_bit_set = *(signed char *)(D_L00_00160114 + 0x20) < 0;
+        if ((a == 0 && b == 0 && entry_sign_bit_set == 0) || (a != 0 && (b == 0 || entry_sign_bit_set != 0))) {
             return 0;
         }
     } while ((short)*D_L00_0016010C >= 0);
