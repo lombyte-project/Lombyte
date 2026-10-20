@@ -79,35 +79,35 @@ extern float D_L00_0017E3A0[];
 extern float D_L00_0017E400[];
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 
-void FUN_L00_00235ad8(HudElem *e, int *x, int *y, int t, int d) {
+void FUN_L00_00235ad8(HudElem *hud_element, int *x, int *y, int slide_index, int slide_step) {
     int dx = 0;
     int dy = 0;
-    float s;
+    float slide_scale;
 
-    if (e->unk7C != 0) {
-        t -= d;
+    if (hud_element->unk7C != 0) {
+        slide_index -= slide_step;
     } else {
-        t += d;
+        slide_index += slide_step;
     }
-    if (t < 0) {
-        t = 0;
+    if (slide_index < 0) {
+        slide_index = 0;
     }
-    if (t > 23) {
-        t = 23;
+    if (slide_index > 23) {
+        slide_index = 23;
     }
-    if (e->unk7C != 0) {
-        s = D_L00_0017E3A0[t];
+    if (hud_element->unk7C != 0) {
+        slide_scale = D_L00_0017E3A0[slide_index];
     } else {
-        s = D_L00_0017E400[t];
+        slide_scale = D_L00_0017E400[slide_index];
     }
-    if (e->flags & 1) {
-        dy = -truncate_float_to_s32(s * (convert_integer_to_float(e->h) + 52.0f) + 0.5f);
-    } else if (e->flags & 2) {
-        dy = truncate_float_to_s32(s * (convert_integer_to_float(e->h) + 52.0f) + 0.5f);
-    } else if (e->flags & 4) {
-        dx = -truncate_float_to_s32(s * (convert_integer_to_float(e->w) + 20.0f) + 0.5f);
-    } else if (e->flags & 8) {
-        dx = truncate_float_to_s32(s * (convert_integer_to_float(e->w) + 20.0f) + 0.5f);
+    if (hud_element->flags & 1) {
+        dy = -truncate_float_to_s32(slide_scale * (convert_integer_to_float(hud_element->h) + 52.0f) + 0.5f);
+    } else if (hud_element->flags & 2) {
+        dy = truncate_float_to_s32(slide_scale * (convert_integer_to_float(hud_element->h) + 52.0f) + 0.5f);
+    } else if (hud_element->flags & 4) {
+        dx = -truncate_float_to_s32(slide_scale * (convert_integer_to_float(hud_element->w) + 20.0f) + 0.5f);
+    } else if (hud_element->flags & 8) {
+        dx = truncate_float_to_s32(slide_scale * (convert_integer_to_float(hud_element->w) + 20.0f) + 0.5f);
     }
     *x += dx;
     *y += dy;
