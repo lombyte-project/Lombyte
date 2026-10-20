@@ -70,37 +70,37 @@ void process_menu_entry(void *callback_context, Menu *menu, s32 follow_entry_lin
     char buf[0x100];
     Suffixes sfx;
     char num[0x20];
-    MenuItem *e;
-    char *p;
+    MenuItem *entry;
+    char *substring_match;
     s32 ok;
     s32 next;
     u16 flags;
-    s16 n;
+    s16 linked_entry_index;
     s16 kind;
-    s32 t;
+    s32 bolt_threshold;
 
-    e = (MenuItem *)(menu->unk3C + menu->unk36 * 0x1C);
+    entry = (MenuItem *)(menu->unk3C + menu->unk36 * 0x1C);
     if (menu->unk3C == 0) {
         return;
     }
     if (follow_entry_link != 0) {
         menu->unk4 = menu->unk36;
         menu->unk38 = world_update_time;
-        n = e->unk6;
-        if (menu->unk36 != n) {
-            flags = e->unk10;
-            menu->unk36 = e->unk6;
-            e = (MenuItem *)(menu->unk3C + n * 0x1C);
-            menu->unk8 = *(u8 *)&e->unk10 & 1;
+        linked_entry_index = entry->unk6;
+        if (menu->unk36 != linked_entry_index) {
+            flags = entry->unk10;
+            menu->unk36 = entry->unk6;
+            entry = (MenuItem *)(menu->unk3C + linked_entry_index * 0x1C);
+            menu->unk8 = *(u8 *)&entry->unk10 & 1;
             if (flags & 4) {
                 D_001993C0[2] = (s32)callback_context;
                 D_001993C0[3] = (s32)menu;
-                if (e->unk4 & 0x4000) {
-                    noop_callback_n((s16)(e->unk4 ^ 0x4000));
+                if (entry->unk4 & 0x4000) {
+                    noop_callback_n((s16)(entry->unk4 ^ 0x4000));
                 } else {
                     remove_hud_item(D_00160070);
                     D_00160070 = -1;
-                    noop_callback_o((s16)e->unk4);
+                    noop_callback_o((s16)entry->unk4);
                 }
             }
         }
@@ -108,20 +108,20 @@ void process_menu_entry(void *callback_context, Menu *menu, s32 follow_entry_lin
     if (menu->unk36 == -1) {
         return;
     }
-    D_001993C0[5] = e->unk0;
-    kind = e->unk8;
+    D_001993C0[5] = entry->unk0;
+    kind = entry->unk8;
     if (kind == 6) {
         sfx = D_001E8680;
-        strcpy(SCRATCH, get_help_message_text(e->unk0));
-        p = FindSubstring(SCRATCH, D_00160088);
-        if (p != 0) {
-            p[1] = 's';
+        strcpy(SCRATCH, get_help_message_text(entry->unk0));
+        substring_match = FindSubstring(SCRATCH, D_00160088);
+        if (substring_match != 0) {
+            substring_match[1] = 's';
         }
-        t = D_001DFFB0[e->unkA].unk14;
-        sprintf(num, D_00160090, t / 1000, sfx.s[game_language % 6], t % 1000);
+        bolt_threshold = D_001DFFB0[entry->unkA].unk14;
+        sprintf(num, D_00160090, bolt_threshold / 1000, sfx.s[game_language % 6], bolt_threshold % 1000);
         sprintf(buf, SCRATCH, num);
     } else {
-        sprintf(buf, get_help_message_text(e->unk0));
+        sprintf(buf, get_help_message_text(entry->unk0));
     }
     if (D_001993C0[5] != 0) {
         copy_text_to_shared_buffer(buf);
@@ -129,46 +129,46 @@ void process_menu_entry(void *callback_context, Menu *menu, s32 follow_entry_lin
         remove_hud_item(D_00160070);
         D_00160070 = -1;
     }
-    if (e->unk8 == 0) {
+    if (entry->unk8 == 0) {
         return;
     }
     ok = 0;
-    switch (e->unk8) {
+    switch (entry->unk8) {
     case MENU_CONDITION_PURCHASE_PRICE_MET:
-        ok = !(current_bolt_count < D_001DFFB0[e->unkA].unk0);
+        ok = !(current_bolt_count < D_001DFFB0[entry->unkA].unk0);
         break;
     case MENU_CONDITION_ITEM_AVAILABLE:
-        ok = item_available[e->unkA] != 0;
+        ok = item_available[entry->unkA] != 0;
         break;
     case MENU_CONDITION_ITEM_AVAILABLE_NOT_ACQUIRED:
         ok = 0;
-        if (item_available[e->unkA] != 0) {
-            ok = items_acquired[e->unkA] == 0;
+        if (item_available[entry->unkA] != 0) {
+            ok = items_acquired[entry->unkA] == 0;
         }
         break;
     case MENU_CONDITION_ALTERNATE_ITEM_AVAILABLE:
-        ok = alternate_item_available[e->unkA] != 0;
+        ok = alternate_item_available[entry->unkA] != 0;
         break;
     case MENU_CONDITION_COUNT_DIFFERENCE_MET:
-        ok = !(compute_clamped_count_difference() < e->unkA);
+        ok = !(compute_clamped_count_difference() < entry->unkA);
         break;
     case MENU_CONDITION_BOLT_THRESHOLD_AND_COUNT_DIFFERENCE_MET:
-        ok = current_bolt_count >= D_001DFFB0[e->unkA].unk14 && compute_clamped_count_difference() >= 4;
+        ok = current_bolt_count >= D_001DFFB0[entry->unkA].unk14 && compute_clamped_count_difference() >= 4;
         break;
     default:
         ok = 0;
         break;
     }
     if (ok) {
-        next = e->unkC;
+        next = entry->unkC;
     } else {
-        next = e->unkE;
+        next = entry->unkE;
     }
     if (next != menu->unk36) {
         menu->unk36 = next;
         menu->unk38 = world_update_time_macro;
-        e = (MenuItem *)(menu->unk3C + next * 0x1C);
-        menu->unk8 = *(u8 *)&e->unk10 & 1;
+        entry = (MenuItem *)(menu->unk3C + next * 0x1C);
+        menu->unk8 = *(u8 *)&entry->unk10 & 1;
         process_menu_entry(callback_context, menu, 0);
     }
 }
