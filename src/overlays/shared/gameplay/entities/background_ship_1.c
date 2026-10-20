@@ -758,18 +758,18 @@ extern S D_L02_00167600;
 extern short D_L02_0016238C_gp __asm__("D_L02_0016238C") __attribute__((sda));
 
 void FUN_L02_002fa770(void) {
-    S *s = &D_L02_00167600;
-    s->c = 10000.0f;
-    if (s->b == 0) {
-        float v = s->d - *(float *)&D_L02_0016238C_gp;
-        s->d = v;
+    S *effect_state = &D_L02_00167600;
+    effect_state->c = 10000.0f;
+    if (effect_state->b == 0) {
+        float v = effect_state->d - *(float *)&D_L02_0016238C_gp;
+        effect_state->d = v;
         if (v < 0.0f) {
-            s->d = 0.0f;
+            effect_state->d = 0.0f;
         }
     } else {
-        s->b = 0;
+        effect_state->b = 0;
     }
-    s->a = 0;
+    effect_state->a = 0;
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A5218.c: func_L02_002FBC00), where it is exact; names translated to the US level program. */
 
