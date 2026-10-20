@@ -3238,7 +3238,7 @@ extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 #define P D_0013F350_20b960
 void FUN_L00_0020b960(void) {
     u8 save = P.b12ED;
-    s16 t = P.h12E0;
+    s16 saved_flag_selector = P.h12E0;
     f32 d;
     int target_state;
     fast_mem_zero16(&P.h12E0, 0x10);
@@ -3246,51 +3246,51 @@ void FUN_L00_0020b960(void) {
     P.h12E0 = -1;
     P.b20A9 = 0;
     P.h308 = 0;
-    if (t == -1)
+    if (saved_flag_selector == -1)
         return;
-    if (t == 2) {
+    if (saved_flag_selector == 2) {
         if (P.h30C == 0 || P.f2DC < 0.3f) {
             P.b12E7 = 1;
             if (P.b20A4 == 0 && P.p10E0 != 0 && *(s16 *)(P.p10E0 + 0xA6) == 0xAD)
                 P.h308 = 1;
         }
     }
-    if (t == 14) {
+    if (saved_flag_selector == 14) {
         P.b12E4 = 1;
         P.f22A4 = 0.2f;
         P.f2F0 = P.f2D8 + 0.2f;
     }
-    if (t == 0) {
+    if (saved_flag_selector == 0) {
         d = P.f2F0 - P.f2D8;
         P.f22A4 = d;
         if (d < 0.85f && 0.25f < d)
             P.b20A9 = 1;
         P.b12E4 = 1;
     }
-    if (t == 3)
+    if (saved_flag_selector == 3)
         P.b12E6 = 1;
     if (current_level_index == 13 && P.i2084 != 0x7B &&
         coll_sphere((u8 *)&P + 0xD0, 2, 0, P.f234 + 0.03f) &&
         FUN_001f0b58_20b960() == 11) {
         goto s7B;
     }
-    if (t == 11)
+    if (saved_flag_selector == 11)
         P.b12EB = 1;
-    if (t == 2)
+    if (saved_flag_selector == 2)
         P.b12E7 = 1;
-    if (t == 4)
+    if (saved_flag_selector == 4)
         P.b12E3 = 1;
-    if (t == 7)
+    if (saved_flag_selector == 7)
         P.b12E2 = 1;
-    if (t == 13)
+    if (saved_flag_selector == 13)
         P.b12EC = 1;
-    if (t == 1)
+    if (saved_flag_selector == 1)
         P.b12E5 = 1;
-    if (t == 8)
+    if (saved_flag_selector == 8)
         P.b12EA = 1;
-    if (t == 9)
+    if (saved_flag_selector == 9)
         P.b12EE = 1;
-    if (t == 12)
+    if (saved_flag_selector == 12)
         P.b12EA = 1;
     if (P.b12E3 && P.i300 && P.i208C != 0x10 && P.i208C != 0x14 && P.i208C != 7) {
         target_state = 0x31;
