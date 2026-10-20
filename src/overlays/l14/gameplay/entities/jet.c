@@ -3012,7 +3012,7 @@ extern int exhaust_ftoi(float) __asm__("FUN_001fa6d0");
 extern L14Puff *exhaust_puff(void *, f32, f32, f32, int, void *, f32, int) __asm__("FUN_L00_0026d000");
 
 /* Engine exhaust: two smoke puffs and three fading rings on each side of the moby. */
-void FUN_L14_002fc3e8(struct Moby *m) {
+void FUN_L14_002fc3e8(struct Moby *emitter_moby) {
     Vec4 step;
     Vec4 pos;
     Vec4 base;
@@ -3024,14 +3024,14 @@ void FUN_L14_002fc3e8(struct Moby *m) {
     int life;
     float size;
 
-    if (m->state == 0 || m->state == 2 || m->visible == 0)
+    if (emitter_moby->state == 0 || emitter_moby->state == 2 || emitter_moby->visible == 0)
         return;
-    exhaust_scale(&step, &m->rot_row0, D_L14_00161F30);
-    exhaust_add(&pos, &m->pos, &step);
-    exhaust_scale(&step, &m->rot_row2, D_L14_00161F38);
+    exhaust_scale(&step, &emitter_moby->rot_row0, D_L14_00161F30);
+    exhaust_add(&pos, &emitter_moby->pos, &step);
+    exhaust_scale(&step, &emitter_moby->rot_row2, D_L14_00161F38);
     exhaust_add(&pos, &pos, &step);
     qcopy(&base, &pos);
-    exhaust_scale(&step, &m->rot_row1, D_L14_00161F34);
+    exhaust_scale(&step, &emitter_moby->rot_row1, D_L14_00161F34);
     exhaust_add(&pos, &pos, &step);
     for (j = 0; j < 2; j++) {
         spin = exhaust_rand(16);
@@ -3039,7 +3039,7 @@ void FUN_L14_002fc3e8(struct Moby *m) {
         if (puff != 0) {
             L14PuffTail *tail = &puff->tail;
             puff->life = exhaust_frames(12);
-            puff->frame = (m->draw_dist >> 5 << 4) + exhaust_ftoi(4.0f);
+            puff->frame = (emitter_moby->draw_dist >> 5 << 4) + exhaust_ftoi(4.0f);
             tail->mode = 2;
             tail->tint = 0x7F;
             tail->fade = puff->life;
@@ -3047,14 +3047,14 @@ void FUN_L14_002fc3e8(struct Moby *m) {
     }
     spin = 16;
     size = 100000.0f;
-    exhaust_scale(&step, &m->rot_row0, D_L14_00161F3C);
+    exhaust_scale(&step, &emitter_moby->rot_row0, D_L14_00161F3C);
     exhaust_add(&pos, &pos, &step);
     life = exhaust_frames(2);
     for (i = 0; i < 3; i++) {
         puff = exhaust_puff(&pos, 0.05f, 1.0f, 1.0f, spin, D_L14_0015F580, size, 0x7FFFFFFF);
         if (puff != 0) {
             L14PuffTail *tail = &puff->tail;
-            puff->frame = (m->draw_dist >> 5 << 4) + exhaust_ftoi(4.0f);
+            puff->frame = (emitter_moby->draw_dist >> 5 << 4) + exhaust_ftoi(4.0f);
             puff->life = life;
             puff->shade = exhaust_rand(0xFF);
             tail->mode = 2;
@@ -3065,14 +3065,14 @@ void FUN_L14_002fc3e8(struct Moby *m) {
         life *= 2;
         size -= 20000.0f;
     }
-    exhaust_scale(&step, &m->rot_row1, D_L14_00161F34);
+    exhaust_scale(&step, &emitter_moby->rot_row1, D_L14_00161F34);
     exhaust_sub(&pos, &base, &step);
     for (j = 0; j < 2; j++) {
         spin = exhaust_rand(16);
         puff = exhaust_puff(&pos, 0.2f, 1.0f, 0.9f, exhaust_rand(2) == 0 ? spin : -spin, D_L14_0015F580, 200000.0f, D_L14_00161F44);
         if (puff != 0) {
             L14PuffTail *tail = &puff->tail;
-            puff->frame = (m->draw_dist >> 5 << 4) + exhaust_ftoi(4.0f);
+            puff->frame = (emitter_moby->draw_dist >> 5 << 4) + exhaust_ftoi(4.0f);
             puff->life = exhaust_frames(12);
             tail->mode = 2;
             tail->tint = 0x7F;
@@ -3081,14 +3081,14 @@ void FUN_L14_002fc3e8(struct Moby *m) {
     }
     spin = 16;
     size = 100000.0f;
-    exhaust_scale(&step, &m->rot_row0, D_L14_00161F3C);
+    exhaust_scale(&step, &emitter_moby->rot_row0, D_L14_00161F3C);
     exhaust_add(&pos, &pos, &step);
     life = exhaust_frames(2);
     for (i = 0; i < 3; i++) {
         puff = exhaust_puff(&pos, 0.05f, 1.0f, 1.0f, spin, D_L14_0015F580, size, 0x7FFFFFFF);
         if (puff != 0) {
             L14PuffTail *tail = &puff->tail;
-            puff->frame = (m->draw_dist >> 5 << 4) + exhaust_ftoi(4.0f);
+            puff->frame = (emitter_moby->draw_dist >> 5 << 4) + exhaust_ftoi(4.0f);
             puff->life = life;
             puff->shade = exhaust_rand(0xFF);
             tail->mode = 2;
