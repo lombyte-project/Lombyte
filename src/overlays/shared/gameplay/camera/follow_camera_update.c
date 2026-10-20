@@ -1028,12 +1028,12 @@ extern void FUN_L00_001ed6a8(void *, float);
 extern void FUN_L00_002eae20_u(void *) __asm__("FUN_L00_002eae20");
 
 /* Runs FUN_L00_002eae20; if word +0x120 of its object is set, clears 0x89 and calls 001ed6a8. */
-void FUN_L00_002eb218(char *a) {
-    char *p = *(char **)(a + 0x70) + 0xE0;
-    FUN_L00_002eae20_u(a);
-    if (*(int *)(p + 0x40) != 0) {
-        a[0x89] = 0;
-        FUN_L00_001ed6a8(a + 0x30, 0.5f);
+void FUN_L00_002eb218(char *camera_object) {
+    char *transition_state = *(char **)(camera_object + 0x70) + 0xE0;
+    FUN_L00_002eae20_u(camera_object);
+    if (*(int *)(transition_state + 0x40) != 0) {
+        camera_object[0x89] = 0;
+        FUN_L00_001ed6a8(camera_object + 0x30, 0.5f);
     }
 }
 #define NOT_SDA
