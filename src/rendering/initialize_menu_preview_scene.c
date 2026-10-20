@@ -53,7 +53,7 @@ void initialize_menu_preview_scene(void) __asm__("FUN_00218f98");
 
 void initialize_menu_preview_scene(void) {
     s32 i;
-    s32 a, b, c, d;
+    s32 a, b, help_text_buffer_start, d;
     menu_system.state = 2;
     menu_system.current = &D_001D45C8;
     menu_system.next = &D_001D45C8;
@@ -67,25 +67,25 @@ void initialize_menu_preview_scene(void) {
     game_frame_counter++;
     a = D_001940C0[1] + 0xA0000;
     b = D_001940C0[2] + 0xA0000;
-    c = a + 0x3C000;
+    help_text_buffer_start = a + 0x3C000;
     d = b + 0xE0000;
-    menu_system.unkFC = c + 0xC1000;
+    menu_system.unkFC = help_text_buffer_start + 0xC1000;
     menu_system.unk100 = d + 0x11800;
     current_vu_chain = 0xA0000;
     menu_system.unk104 = a;
     menu_system.unk10 = b;
-    menu_system.help_text_buffer = c;
+    menu_system.help_text_buffer = help_text_buffer_start;
     menu_system.unk10C = d;
     func_00225AC0__void(1);
     vu1_init_chain();
     menu_system.saved_texture_start = gs_texture_allocation_start;
     if (menu_system.current != 0) {
         for (i = 0; i < 14; i++) {
-            struct O2 *o = (struct O2 *)create_menu_preview_moby(0x472);
-            panel_slots[i] = o;
-            if (o != 0) {
+            struct O2 *preview_moby = (struct O2 *)create_menu_preview_moby(0x472);
+            panel_slots[i] = preview_moby;
+            if (preview_moby != 0) {
                 s32 k;
-                o->f34 &= 0xFFFD;
+                preview_moby->f34 &= 0xFFFD;
                 ((struct O2 *)panel_slots[i])->f74 = FUN_0023a2c0;
                 ((struct O2 *)panel_slots[i])->f10 = D_00186F40.f140;
                 ((struct O2 *)panel_slots[i])->f14 = D_00186F40.f144;
