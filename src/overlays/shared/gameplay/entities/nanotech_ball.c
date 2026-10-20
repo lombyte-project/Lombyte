@@ -100,19 +100,19 @@ O2d8138 *create_moby(int) __asm__("FUN_0020c4f8");
 #include "qcopy.h"
 /* Creates a class 0x326 moby linked to p at p's position; 0 when p's state is negative. */
 O2d8138 *FUN_L00_002d8138(P2d8138 *p) {
-    O2d8138 *o;
+    O2d8138 *spawned_moby;
     if (p->b20 < 0)
         return 0;
-    o = create_moby(0x326);
-    if (o) {
-        o->b30 = 0x40;
-        o->b20 = 0;
-        o->t78->p = p;
-        o->f94 = 0;
-        o->h34 |= 0x41;
-        qcopy(&o->q, &p->q);
+    spawned_moby = create_moby(0x326);
+    if (spawned_moby) {
+        spawned_moby->b30 = 0x40;
+        spawned_moby->b20 = 0;
+        spawned_moby->t78->p = p;
+        spawned_moby->f94 = 0;
+        spawned_moby->h34 |= 0x41;
+        qcopy(&spawned_moby->q, &p->q);
     }
-    return o;
+    return spawned_moby;
 }
 typedef unsigned int u128_2d81b8 __attribute__((mode(TI), aligned(16)));
 typedef union {
