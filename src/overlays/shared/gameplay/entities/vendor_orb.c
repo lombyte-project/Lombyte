@@ -1055,13 +1055,10 @@ void FUN_L00_002e2af0(char *m) {
         FUN_L00_002e2c88(texture_id, glow_texture_id, &D_L00_001E6E40[next_pane], 0x30, 0x10, i);
     }
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e2c88.s", FUN_L00_002e2c88);
-#else
 /* Builds the trail quad and its glow quad from the slot tables and draws them along the
    19 steps of points. */
 #include "rnc/rendering/geometry_quad.h"
-/* Ported from rac1-decomp (src/overlays/shared/vendor_002E1660.c: func_L00_002E4138), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002E1660.c: func_L00_002E4138). */
 typedef struct { OvlVec4 axis, unk10, position, unk30; } TrailSlot;
 extern TrailSlot D_L00_001E6D30[];
 extern float cubic_hermite_scalar(float, float, float, float, float) __asm__("FUN_L00_00257e20");
@@ -1131,31 +1128,21 @@ void FUN_L00_002e2c88(int texture_id, int glow_texture_id, void *points, int alp
 
     qcopy(&quads[0].positions[0], &width);
     fast_vec_scale(&quads[0].positions[1], &quads[0].positions[0], -1.0f);
-    qcopy(&quads[1].positions[0], &glow_width);
-    fast_vec_scale(&quads[1].positions[1], &quads[1].positions[0], -1.0f);
-    transform_vector_c(&from, &((OvlVec4 *)points)[0], transform);
-    transform_vector_c(&to, &((OvlVec4 *)points)[1], transform);
-    subtract_vector_xyz(&basis[0], &to, &from);
-    normalize_vector_xyz(&basis[0], &basis[0], 1.0f);
-    subtract_vector_xyz(&basis[1], D_L00_00166DC0, &from);
-    cross_vectors_xyz(&basis[2], &basis[1], &basis[0]);
-    normalize_vector_xyz(&basis[2], &basis[2], 1.0f);
-    cross_vectors_xyz(&basis[1], &basis[0], &basis[2]);
-    qcopy(&basis[3], &from);
-    transform_vector_c(&quads[0].positions[0], &quads[0].positions[0], basis);
-    transform_vector_c(&quads[0].positions[1], &quads[0].positions[1], basis);
-    transform_vector_c(&quads[1].positions[0], &quads[1].positions[0], basis);
-    transform_vector_c(&quads[1].positions[1], &quads[1].positions[1], basis);
-
-    i = 1;
-    do {
-        float taper, scroll;
-        qcopy(&quads[0].positions[2], &width);
-        fast_vec_scale(&quads[0].positions[3], &quads[0].positions[2], -1.0f);
-        qcopy(&quads[1].positions[2], &glow_width);
-        fast_vec_scale(&quads[1].positions[3], &quads[1].positions[2], -1.0f);
-        transform_vector_c(&from, &((OvlVec4 *)points)[i], transform);
-        transform_vector_c(&to, &((OvlVec4 *)points)[i + 1], transform);
+    {
+        /* Fakematch: plain C copies &glow_width here and in the loop and stores glow_width.f[2];
+           the pointer copies, the empty loop (it stops regmove) and the dead reset in the loop
+           make 2.95.2 copy the pointer to $v1 before this qcopy, as retail does. */
+        OvlVec4 *glow_src = &glow_width;
+        OvlVec4 *glow;
+        {
+            OvlVec4 *glow_dst = &quads[1].positions[0];
+            glow = glow_src;
+            do { } while (0);
+            qcopy(glow_dst, glow);
+        }
+        fast_vec_scale(&quads[1].positions[1], &quads[1].positions[0], -1.0f);
+        transform_vector_c(&from, &((OvlVec4 *)points)[0], transform);
+        transform_vector_c(&to, &((OvlVec4 *)points)[1], transform);
         subtract_vector_xyz(&basis[0], &to, &from);
         normalize_vector_xyz(&basis[0], &basis[0], 1.0f);
         subtract_vector_xyz(&basis[1], D_L00_00166DC0, &from);
@@ -1163,43 +1150,66 @@ void FUN_L00_002e2c88(int texture_id, int glow_texture_id, void *points, int alp
         normalize_vector_xyz(&basis[2], &basis[2], 1.0f);
         cross_vectors_xyz(&basis[1], &basis[0], &basis[2]);
         qcopy(&basis[3], &from);
-        transform_vector_c(&quads[0].positions[2], &quads[0].positions[2], basis);
-        transform_vector_c(&quads[0].positions[3], &quads[0].positions[3], basis);
-        transform_vector_c(&quads[1].positions[2], &quads[1].positions[2], basis);
-        transform_vector_c(&quads[1].positions[3], &quads[1].positions[3], basis);
-        if (i == 1) {
-            int saved_color = quads[0].colors[0];
-            int saved_glow_color = quads[1].colors[0];
-            quads[0].colors[0] = quads[0].colors[1] = 0xFFFFFF;
-            quads[1].colors[0] = quads[1].colors[1] = 0x7F4040;
-            fast_draw_quad_real(&quads[0], 0, 0);
-            fast_draw_quad_real(&quads[1], 0, 0);
-            quads[0].colors[0] = quads[0].colors[1] = quads[0].colors[2] = quads[0].colors[3] = saved_color;
-            quads[1].colors[0] = quads[1].colors[1] = quads[1].colors[2] = quads[1].colors[3] = saved_glow_color;
-        } else {
-            fast_draw_quad_real(&quads[0], 0, 0);
-            fast_draw_quad_real(&quads[1], 0, 0);
-        }
-        qcopy(&quads[0].positions[0], &quads[0].positions[2]);
-        qcopy(&quads[0].positions[1], &quads[0].positions[3]);
-        qcopy(&quads[1].positions[0], &quads[1].positions[2]);
-        qcopy(&quads[1].positions[1], &quads[1].positions[3]);
-        taper = cubic_hermite_scalar(-1.0f, zero, 1.0f, zero, convert_integer_to_float_c2(i) / convert_integer_to_float_c2(20));
-        scroll = D_L00_00161C78_f[slot];
-        quads[0].texture_coordinates[0][0] = scroll + zero;
-        quads[0].texture_coordinates[0][1] = zero;
-        quads[0].texture_coordinates[1][0] = scroll + zero;
-        quads[0].texture_coordinates[1][1] = 1.0f;
-        quads[0].texture_coordinates[2][0] = scroll + 1.0f;
-        quads[0].texture_coordinates[2][1] = zero;
-        quads[0].texture_coordinates[3][0] = scroll + 1.0f;
-        quads[0].texture_coordinates[3][1] = 1.0f;
-        width.f[2] = half_width + (0.05f - half_width) * taper;
-        glow_width.f[2] = width.f[2] + width.f[2];
-        i++;
-    } while (i < 19);
+        transform_vector_c(&quads[0].positions[0], &quads[0].positions[0], basis);
+        transform_vector_c(&quads[0].positions[1], &quads[0].positions[1], basis);
+        transform_vector_c(&quads[1].positions[0], &quads[1].positions[0], basis);
+        transform_vector_c(&quads[1].positions[1], &quads[1].positions[1], basis);
+
+        i = 1;
+        do {
+            float taper, scroll;
+            qcopy(&quads[0].positions[2], &width);
+            fast_vec_scale(&quads[0].positions[3], &quads[0].positions[2], -1.0f);
+            qcopy(&quads[1].positions[2], glow);
+            fast_vec_scale(&quads[1].positions[3], &quads[1].positions[2], -1.0f);
+            transform_vector_c(&from, &((OvlVec4 *)points)[i], transform);
+            transform_vector_c(&to, &((OvlVec4 *)points)[i + 1], transform);
+            subtract_vector_xyz(&basis[0], &to, &from);
+            normalize_vector_xyz(&basis[0], &basis[0], 1.0f);
+            subtract_vector_xyz(&basis[1], D_L00_00166DC0, &from);
+            cross_vectors_xyz(&basis[2], &basis[1], &basis[0]);
+            normalize_vector_xyz(&basis[2], &basis[2], 1.0f);
+            cross_vectors_xyz(&basis[1], &basis[0], &basis[2]);
+            qcopy(&basis[3], &from);
+            transform_vector_c(&quads[0].positions[2], &quads[0].positions[2], basis);
+            transform_vector_c(&quads[0].positions[3], &quads[0].positions[3], basis);
+            transform_vector_c(&quads[1].positions[2], &quads[1].positions[2], basis);
+            transform_vector_c(&quads[1].positions[3], &quads[1].positions[3], basis);
+            if (i == 1) {
+                int saved_color = quads[0].colors[0];
+                int saved_glow_color = quads[1].colors[0];
+                quads[0].colors[0] = quads[0].colors[1] = 0xFFFFFF;
+                quads[1].colors[0] = quads[1].colors[1] = 0x7F4040;
+                fast_draw_quad_real(&quads[0], 0, 0);
+                fast_draw_quad_real(&quads[1], 0, 0);
+                quads[0].colors[0] = quads[0].colors[1] = quads[0].colors[2] = quads[0].colors[3] = saved_color;
+                quads[1].colors[0] = quads[1].colors[1] = quads[1].colors[2] = quads[1].colors[3] = saved_glow_color;
+            } else {
+                fast_draw_quad_real(&quads[0], 0, 0);
+                fast_draw_quad_real(&quads[1], 0, 0);
+            }
+            qcopy(&quads[0].positions[0], &quads[0].positions[2]);
+            qcopy(&quads[0].positions[1], &quads[0].positions[3]);
+            qcopy(&quads[1].positions[0], &quads[1].positions[2]);
+            qcopy(&quads[1].positions[1], &quads[1].positions[3]);
+            taper = cubic_hermite_scalar(-1.0f, zero, 1.0f, zero, convert_integer_to_float_c2(i) / convert_integer_to_float_c2(20));
+            scroll = D_L00_00161C78_f[slot];
+            quads[0].texture_coordinates[0][0] = scroll + zero;
+            quads[0].texture_coordinates[0][1] = zero;
+            quads[0].texture_coordinates[1][0] = scroll + zero;
+            quads[0].texture_coordinates[1][1] = 1.0f;
+            quads[0].texture_coordinates[2][0] = scroll + 1.0f;
+            quads[0].texture_coordinates[2][1] = zero;
+            quads[0].texture_coordinates[3][0] = scroll + 1.0f;
+            quads[0].texture_coordinates[3][1] = 1.0f;
+            width.f[2] = half_width + (0.05f - half_width) * taper;
+            /* Fakematch: plain C stores glow_width.f[2]; the dead reset keeps glow_src live up to the loop. */
+            { OvlVec4 *next_glow = &glow_width; next_glow->f[2] = width.f[2] + width.f[2]; }
+            glow_src = &glow_width;
+            i++;
+        } while (i < 19);
+    }
 }
-#endif
 typedef struct {
     f32 v[4][4];
     s32 col[4];
