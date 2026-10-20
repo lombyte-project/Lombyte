@@ -140,6 +140,7 @@ void FUN_L03_0021c668(void) {
         HERO_STATE_JUMP_FROM_LEDGE = 28,
         HERO_STATE_LOOK_ALT = 30,
         HERO_STATE_FALL_ALT = 45,
+        HERO_STATE_SLIP_ALT = 88,
         HERO_STATE_TARGET_POSE_APPROACH = 101,
         HERO_STATE_TARGET_POSE_APPROACH_ANIMATION_WAIT = 102,
         HERO_STATE_TARGET_POSE_REACHED = 103,
@@ -1857,7 +1858,7 @@ void FUN_L03_0021c668(void) {
                         hero_set_state(0x54, 1);
                     }
                     break;
-                case 88:
+                case HERO_STATE_SLIP_ALT:
                     if (scale_game_frames(0x12C) < hero.state_timer) {
                         hero_respawn();
                     }
