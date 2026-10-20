@@ -722,14 +722,14 @@ void FUN_L13_002b4a58(struct Moby *moby, char *moby_vars) {
         r = hit_reaction(moby, hit_record, tm, 0, &k, 0, 0, 4);
         if (hit_record != 0) {
             if (*(int *)(hit_record + 0x24) & 0x800000) {
-                char *t = *(char **)(hit_record + 0x20);
-                if (t == 0) {
+                char *hit_source_moby = *(char **)(hit_record + 0x20);
+                if (hit_source_moby == 0) {
                     *(int *)(hit_record + 0x2C) = 0;
                     k = 1;
                 } else {
                     float f = fast_difference_between_rotations(
-                        fast_arc_tan(*(float *)(t + 0x10) - moby->pos.x,
-                                     *(float *)(t + 0x14) - moby->pos.y),
+                        fast_arc_tan(*(float *)(hit_source_moby + 0x10) - moby->pos.x,
+                                     *(float *)(hit_source_moby + 0x14) - moby->pos.y),
                         *(float *)(*(char **)(*(char **)(moby_vars + 0x70) + 0x78) + 0x54));
                     if (f < 1.65806282f) {
                         *(int *)(hit_record + 0x2C) = 0;
