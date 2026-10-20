@@ -365,32 +365,32 @@ extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 
 char *FUN_L09_002c2500(struct Moby *src, char *pos, int cls) {
-    char *m = func_0020D348_m(cls);
-    if (m) {
+    char *spawned_moby = func_0020D348_m(cls);
+    if (spawned_moby) {
         OvlQuad point_position;
         OvlQuad position_offset;
-        char *p = m + 0x10;
-        char *d;
-        ((unsigned char *)m)[0x30] = 0xFF;
-        *(short *)(m + 0x32) = 0xFF;
-        d = *(char **)(m + 0x78);
-        m[0x31] = 1;
-        m[0x20] = 1;
-        qcopy(p, pos);
-        qcopy(d + 0x10, pos);
-        *(char **)(d + 0x2C) = src;
-        FUN_L00_00250df8(m);
-        moby_point_position(m, 0, &point_position);
+        char *spawned_position = spawned_moby + 0x10;
+        char *spawned_vars;
+        ((unsigned char *)spawned_moby)[0x30] = 0xFF;
+        *(short *)(spawned_moby + 0x32) = 0xFF;
+        spawned_vars = *(char **)(spawned_moby + 0x78);
+        spawned_moby[0x31] = 1;
+        spawned_moby[0x20] = 1;
+        qcopy(spawned_position, pos);
+        qcopy(spawned_vars + 0x10, pos);
+        *(char **)(spawned_vars + 0x2C) = src;
+        FUN_L00_00250df8(spawned_moby);
+        moby_point_position(spawned_moby, 0, &point_position);
         subtract_vector_xyz(&position_offset, pos, &point_position);
         transform_vector_by_basis(&position_offset, &position_offset, &src->rot_row0);
-        add_vector_xyz(p, pos, &position_offset);
-        qcopy(m + 0x40, &src->rot);
-        *(OvlQuad *)(m + 0xC0) = *(OvlQuad *)&src->rot_row0;
-        *(OvlQuad *)(m + 0xD0) = *(OvlQuad *)&src->rot_row1;
-        *(OvlQuad *)(m + 0xE0) = *(OvlQuad *)&src->rot_row2;
-        FUN_L00_00250df8(m);
+        add_vector_xyz(spawned_position, pos, &position_offset);
+        qcopy(spawned_moby + 0x40, &src->rot);
+        *(OvlQuad *)(spawned_moby + 0xC0) = *(OvlQuad *)&src->rot_row0;
+        *(OvlQuad *)(spawned_moby + 0xD0) = *(OvlQuad *)&src->rot_row1;
+        *(OvlQuad *)(spawned_moby + 0xE0) = *(OvlQuad *)&src->rot_row2;
+        FUN_L00_00250df8(spawned_moby);
     }
-    return m;
+    return spawned_moby;
 }
 /* Ported from rac1-decomp (src/overlays/l09_gaspar/vendor_002C2B08.c: func_L09_002C37A0), where it is exact; names translated to the US level program. */
 
