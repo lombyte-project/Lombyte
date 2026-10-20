@@ -58,7 +58,7 @@ void FUN_L01_002aea70(char *vendor_moby, int lvl) {
     struct Hero *g2;
     struct MusicStreamState *music_state;
     struct MusicStreamState *qq;
-    int n;
+    int adjusted_address_base;
     int r;
     snd_pause_all_sounds_in_group(0x1D);
     music_pause(0);
@@ -85,12 +85,12 @@ void FUN_L01_002aea70(char *vendor_moby, int lvl) {
     fill_transfer_words_alt(c, 0, 0x1C0);
     fill_transfer_words_alt(D_L01_0017C7C0, 0, 0x40);
     calculate_dma_transfer_address();
-    n = D_L01_001611CC + (int)0xFFFC0000;
-    *(int *)(c + 0x58) = D_L01_00174280[1] + n;
+    adjusted_address_base = D_L01_001611CC + (int)0xFFFC0000;
+    *(int *)(c + 0x58) = D_L01_00174280[1] + adjusted_address_base;
     r = D_L01_001CA4A0[lvl];
-    *(int *)(c + 0x5C) = D_L01_00174280[2] + n;
+    *(int *)(c + 0x5C) = D_L01_00174280[2] + adjusted_address_base;
     D_L01_0015F3FC = 1.0f;
-    D_L01_001611CC = n;
+    D_L01_001611CC = adjusted_address_base;
     *(int *)&D_L01_0015F400 = 0;
     FUN_L00_0020fca8(0, 0);
     g->pending_item[0] = lvl;
