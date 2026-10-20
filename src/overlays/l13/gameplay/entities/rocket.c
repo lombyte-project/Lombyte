@@ -350,7 +350,7 @@ void FUN_L13_00306300(struct Moby *moby) {
     int stationary;
     unsigned char *base;
     char *ent;
-    struct L13Ent00178480 *e;
+    struct L13Ent00178480 *target_hit_entry;
 
     qcopy(&work.old_pos, &moby->pos);
     add_vector_xyz(&moby->pos, &moby->pos, data);
@@ -376,10 +376,10 @@ void FUN_L13_00306300(struct Moby *moby) {
                 work.hit[0x18] = 1;
                 *(unsigned short *)(work.hit + 0x1A) = *(unsigned short *)((char *)moby + 0xA6);
                 work.hit[0x19] = 1;
-                if ((unsigned char)ent[0xA4] == 0xFF || (e = &D_L13_00178400[(unsigned char)ent[0xA4]])->p34 != ent) {
+                if ((unsigned char)ent[0xA4] == 0xFF || (target_hit_entry = &D_L13_00178400[(unsigned char)ent[0xA4]])->p34 != ent) {
                     FUN_L00_00259a88(ent, work.hit);
                 } else {
-                    e->f2C += 1.0f;
+                    target_hit_entry->f2C += 1.0f;
                     D_L13_00178400[(unsigned char)ent[0xA4]].b28 = 1;
                     D_L13_00178400[(unsigned char)ent[0xA4]].b29 = 1;
                     D_L13_00178400[(unsigned char)ent[0xA4]].s2A = *(unsigned short *)((char *)moby + 0xA6);
