@@ -1022,7 +1022,7 @@ extern void FUN_L00_00250df8(void *);
 void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 extern char *func_0020D348_m(int) __asm__("FUN_0020c4f8");
 
-char *FUN_L14_002eccf0(void *spawn_position, float *b, int c, int d) {
+char *FUN_L14_002eccf0(void *spawn_position, float *b, int collision_ignore_moby, int d) {
     char *projectile_moby = func_0020D348_m(0x2A9);
     if (projectile_moby) {
         char *data;
@@ -1038,7 +1038,7 @@ char *FUN_L14_002eccf0(void *spawn_position, float *b, int c, int d) {
         qcopy(data, b);
         blend_moby_animation(projectile_moby, 1, 0, scale_game_frames(5));
         *(short *)(projectile_moby + 0x34) = 0x208;
-        *(int *)(data + 0x20) = c;
+        *(int *)(data + 0x20) = collision_ignore_moby;
         *(int *)(data + 0x24) = d;
         projectile_moby[0x23] = 0x10;
         FUN_L00_00250df8(projectile_moby);
