@@ -711,21 +711,21 @@ extern void draw_2ea048(void *) __asm__("FUN_00201f58");
 
 /* Draws the parts whose clip volumes contain the camera (all of them when
  * the override flag is set). */
-void FUN_L02_002ea048(struct Moby *m) {
-    int *d = (int *)m->pvars;
+void FUN_L02_002ea048(struct Moby *moby) {
+    int *clip_volume_indices = (int *)moby->pvars;
 
     FUN_L02_002a4818(0.0f, 260080.0f, 255.0f, 0.0f, 15, 15, 25, 30, 40, 64, D_L02_001F3E80);
-    if (D_L02_0015F608 != 0 || (d[0] != -1 && in_clip_2ea048(D_L02_001673C0, d[0]))) {
+    if (D_L02_0015F608 != 0 || (clip_volume_indices[0] != -1 && in_clip_2ea048(D_L02_001673C0, clip_volume_indices[0]))) {
         draw_2ea048(D_L02_001F3C00);
     }
-    if (D_L02_0015F608 != 0 || (d[1] != -1 && in_clip_2ea048(D_L02_001673C0, d[1]))) {
+    if (D_L02_0015F608 != 0 || (clip_volume_indices[1] != -1 && in_clip_2ea048(D_L02_001673C0, clip_volume_indices[1]))) {
         draw_2ea048(D_L02_001F3CD0);
         draw_2ea048(D_L02_001F3D30);
         draw_2ea048(D_L02_001F3D90);
         draw_2ea048(D_L02_001F3DD0);
         draw_2ea048(D_L02_001F3E10);
     }
-    if (D_L02_0015F608 != 0 || (d[2] != -1 && in_clip_2ea048(D_L02_001673C0, d[2]))) {
+    if (D_L02_0015F608 != 0 || (clip_volume_indices[2] != -1 && in_clip_2ea048(D_L02_001673C0, clip_volume_indices[2]))) {
         draw_2ea048(D_L02_001F3C60);
     }
     FUN_L02_002a47f8_c();
