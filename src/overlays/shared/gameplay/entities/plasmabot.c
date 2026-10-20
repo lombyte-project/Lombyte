@@ -57,21 +57,21 @@ void FUN_L14_002b3330(char *moby) {
 extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 
 void FUN_L14_002b3358(char *moby) {
-    char *d = *(char **)(moby + 0x78);
-    char *p;
+    char *moby_vars = *(char **)(moby + 0x78);
+    char *path;
     int i;
-    *(int *)(d + 0x250) = 0;
-    *(int *)(d + 0x24C) = 0;
-    *(float *)(d + 0x25C) = *(float *)(d + 0x250);
-    *(float *)(d + 0x258) = *(float *)(d + 0x250);
-    *(float *)(d + 0x254) = *(float *)(d + 0x250);
-    if (*(int *)(d + 0x240) == -1)
+    *(int *)(moby_vars + 0x250) = 0;
+    *(int *)(moby_vars + 0x24C) = 0;
+    *(float *)(moby_vars + 0x25C) = *(float *)(moby_vars + 0x250);
+    *(float *)(moby_vars + 0x258) = *(float *)(moby_vars + 0x250);
+    *(float *)(moby_vars + 0x254) = *(float *)(moby_vars + 0x250);
+    if (*(int *)(moby_vars + 0x240) == -1)
         return;
-    p = (char *)D_L14_001B0BB0[*(int *)(d + 0x240)];
-    for (i = 0; i < *(int *)p; i++) {
-        int o = i * 16;
-        *(float *)(p + o + 0x1C) =
-            fast_vec_dist(p + (o + 0x10), p + (((i + 1) % *(int *)p) * 16 + 0x10));
+    path = (char *)D_L14_001B0BB0[*(int *)(moby_vars + 0x240)];
+    for (i = 0; i < *(int *)path; i++) {
+        int point_offset = i * 16;
+        *(float *)(path + point_offset + 0x1C) =
+            fast_vec_dist(path + (point_offset + 0x10), path + (((i + 1) % *(int *)path) * 16 + 0x10));
     }
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B2A28.c: func_L14_002B47C8), where it is exact; names translated to the US level program. */
