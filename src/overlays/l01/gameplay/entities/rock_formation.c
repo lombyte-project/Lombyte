@@ -145,23 +145,23 @@ extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
 
 void fan_update(SwayMoby *m) __asm__("FUN_L01_002f9bf0");
-void fan_update(SwayMoby *m) {
+void fan_update(SwayMoby *fan_moby) {
     SwayVars *v;
-    CollQuery q;
+    CollQuery collision_query;
 
-    v = m->pvars;
-    if (m->state == 0) {
-        FUN_L00_0025d1b8(m);
-        m->state = 1;
+    v = fan_moby->pvars;
+    if (fan_moby->state == 0) {
+        FUN_L00_0025d1b8(fan_moby);
+        fan_moby->state = 1;
         v->sway = random_float_between(-1.0f, 1.0f);
         v->dir = (rand() & 1) ? 1.0f : -1.0f;
     }
-    q.moby = m;
-    q.flags = 0x10001;
-    q.x1c = 0;
-    clear_u64_value(&q);
-    q.x20 = 0;
-    collect_mobies_in_sphere(m->pos, 0x10, m, &q, 1.2f);
+    collision_query.moby = fan_moby;
+    collision_query.flags = 0x10001;
+    collision_query.x1c = 0;
+    clear_u64_value(&collision_query);
+    collision_query.x20 = 0;
+    collect_mobies_in_sphere(fan_moby->pos, 0x10, fan_moby, &collision_query, 1.2f);
     if (v->dir == v->sway) {
         if (fast_dec_timer(&v->timer)) {
             v->dir = -v->dir;
@@ -175,7 +175,7 @@ void fan_update(SwayMoby *m) {
     if (v->sway < -1.0f) {
         v->sway = -1.0f;
     }
-    m->rotz = fast_add_rotations(m->rotz, frame_time * -12.566371f * v->sway);
+    fan_moby->rotz = fast_add_rotations(fan_moby->rotz, frame_time * -12.566371f * v->sway);
 }
 typedef union {
     u128 q;
