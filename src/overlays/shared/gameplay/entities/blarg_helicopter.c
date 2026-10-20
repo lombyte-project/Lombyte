@@ -1434,7 +1434,7 @@ void statue_update(unsigned char *statue_moby) {
     };
     int flag = 0;
     float z;
-    char *p, *pos, *vel;
+    char *zero_vector, *pos, *vel;
     char *x = find_moby_hit(statue_moby, 0x10000, 0);
     switch (statue_moby[0x20]) {
     case STATUE_INITIALIZE:
@@ -1451,13 +1451,13 @@ void statue_update(unsigned char *statue_moby) {
     case STATUE_BREAK_APART:
         allocate_voice_for_target_entry(0, 0, (int)statue_moby);
         z = 0.0f;
-        p = D_L03_0015F580;
+        zero_vector = D_L03_0015F580;
         pos = statue_moby + 0x10;
         FUN_L01_002787a0(statue_moby);
         vel = statue_moby + 0x40;
-        FUN_L00_00263fd8(statue_moby, 0x727, pos, vel, 0, 0, z, p, p, p);
-        FUN_L00_00263fd8(statue_moby, 0x728, pos, vel, 0, 0, z, p, p, p);
-        FUN_L00_00263fd8(statue_moby, 0x729, pos, vel, 0, 0, z, p, p, p);
+        FUN_L00_00263fd8(statue_moby, 0x727, pos, vel, 0, 0, z, zero_vector, zero_vector, zero_vector);
+        FUN_L00_00263fd8(statue_moby, 0x728, pos, vel, 0, 0, z, zero_vector, zero_vector, zero_vector);
+        FUN_L00_00263fd8(statue_moby, 0x729, pos, vel, 0, 0, z, zero_vector, zero_vector, zero_vector);
         mark_moby_for_removal_c(statue_moby);
         break;
     }
