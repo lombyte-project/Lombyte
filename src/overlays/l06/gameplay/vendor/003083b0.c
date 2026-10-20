@@ -152,63 +152,63 @@ int D_L06_0016237C = 0x10019;
 
 extern f32 frame_time_macro __asm__("D_0015ED6C") __attribute__((section(".sdata")));
 /* Level 06 moby update: a spark emitter; state 4 bursts on a random timer, state 3 sprays continuously. */
-void FUN_L06_00308c68(struct Moby *m) {
+void FUN_L06_00308c68(struct Moby *emitter) {
     enum {
         SPARK_EMITTER_INITIALIZE = 0,
         SPARK_EMITTER_DELAYED_ACTION = 2,
         SPARK_EMITTER_RANDOMIZED_SPRAY = 3,
         SPARK_EMITTER_TIMED_BURSTS = 4
     };
-    SparkData *d = *(void **)&m->pvars;
+    SparkData *emitter_data = *(void **)&emitter->pvars;
     SparkVector position_test_vector;
     SparkVector rotation_based_spark_vector;
     SparkVector z_adjusted_spark_vector;
     SparkVector spark_vector_offset;
 
-    qcopy(&position_test_vector, &*(SparkVector *)&m->pos);
+    qcopy(&position_test_vector, &*(SparkVector *)&emitter->pos);
     position_test_vector.w = 3.0f;
     if (fast_bsphere_check(&position_test_vector, 64.0f) == -1) {
         return;
     }
-    switch (m->state) {
+    switch (emitter->state) {
     case SPARK_EMITTER_INITIALIZE:
-        copy_moby_rotation(&*(SparkVector *)&m->rot_row0, &*(SparkVector *)&m->rot);
-        if (d->f4 != 0) {
-            m->state = 1;
-        } else if (d->f0 != 0) {
-            m->state = 4;
+        copy_moby_rotation(&*(SparkVector *)&emitter->rot_row0, &*(SparkVector *)&emitter->rot);
+        if (emitter_data->f4 != 0) {
+            emitter->state = 1;
+        } else if (emitter_data->f0 != 0) {
+            emitter->state = 4;
         } else {
-            m->state = 3;
+            emitter->state = 3;
         }
         break;
     case SPARK_EMITTER_DELAYED_ACTION:
-        if (timer_step(&d->f28)) {
-            spark_action(m, &*(SparkVector *)&m->pos, -1, 0.333f, 13.0f);
-            if (d->f0 != 0) {
-                m->state = 4;
+        if (timer_step(&emitter_data->f28)) {
+            spark_action(emitter, &*(SparkVector *)&emitter->pos, -1, 0.333f, 13.0f);
+            if (emitter_data->f0 != 0) {
+                emitter->state = 4;
             } else {
-                m->state = 3;
+                emitter->state = 3;
             }
         }
         break;
     case SPARK_EMITTER_TIMED_BURSTS: {
-        int n = 1;
+        int spark_count = 1;
         int k;
-        if (timer_step(&d->f24)) {
-            n = 5;
-            d->f24 = truncate_float_to_s32(multiply_global_factor_ed64(random_float_between_alt(60.0f, 120.0f)));
+        if (timer_step(&emitter_data->f24)) {
+            spark_count = 5;
+            emitter_data->f24 = truncate_float_to_s32(multiply_global_factor_ed64(random_float_between_alt(60.0f, 120.0f)));
         }
-        if (random_integer_below(4) != 0 && n < 2) {
+        if (random_integer_below(4) != 0 && spark_count < 2) {
             return;
         }
-        for (k = 0; k < n; k++) {
+        for (k = 0; k < spark_count; k++) {
                 int c19, c18, c17, c16, c2;
                 float z;
-                normalize_vector_xyz(&rotation_based_spark_vector, &*(SparkVector *)&m->rot_row0, D_L06_001622F0 * (random_float_between_alt(-D_L06_001622FC, D_L06_001622FC) + 1.0f) * frame_time_macro);
+                normalize_vector_xyz(&rotation_based_spark_vector, &*(SparkVector *)&emitter->rot_row0, D_L06_001622F0 * (random_float_between_alt(-D_L06_001622FC, D_L06_001622FC) + 1.0f) * frame_time_macro);
                 z = D_L06_001622F4 * (random_float_between_alt(-D_L06_001622FC, D_L06_001622FC) + 1.0f) * frame_time_macro;
                 clear_u64_value(&z_adjusted_spark_vector);
                 z_adjusted_spark_vector.z = z;
-                normalize_vector_xyz(&spark_vector_offset, &*(SparkVector *)&m->rot_row1, random_float_between_alt(-D_L06_001622F8, D_L06_001622F8) * frame_time_macro);
+                normalize_vector_xyz(&spark_vector_offset, &*(SparkVector *)&emitter->rot_row1, random_float_between_alt(-D_L06_001622F8, D_L06_001622F8) * frame_time_macro);
                 add_vector_xyz(&z_adjusted_spark_vector, &z_adjusted_spark_vector, &spark_vector_offset);
                 rotation_based_spark_vector.w = random_float_between_alt(D_L06_00162310, D_L06_00162314);
                 z_adjusted_spark_vector.w = random_float_between_alt(D_L06_00162318, D_L06_0016231C);
@@ -217,20 +217,20 @@ void FUN_L06_00308c68(struct Moby *m) {
                 c17 = truncate_float_to_s32(multiply_global_factor_ed64((float)D_L06_00162300 * random_float_between_alt(0.0f, 1.0f) + 1.0f));
                 c16 = truncate_float_to_s32(multiply_global_factor_ed64((float)D_L06_00162304 * (random_float_between_alt(-D_L06_0016230C, D_L06_0016230C) + 1.0f)));
                 c2 = truncate_float_to_s32(multiply_global_factor_ed64((float)D_L06_00162308 * (random_float_between_alt(-D_L06_0016230C, D_L06_0016230C) + 1.0f)));
-                emit_spark(&*(SparkVector *)&m->pos, &rotation_based_spark_vector, &z_adjusted_spark_vector, c19, c18, c17, c16, c2, -1);
+                emit_spark(&*(SparkVector *)&emitter->pos, &rotation_based_spark_vector, &z_adjusted_spark_vector, c19, c18, c17, c16, c2, -1);
         }
         break;
     }
     case SPARK_EMITTER_RANDOMIZED_SPRAY:
-        if (timer_step(&d->f20)) {
+        if (timer_step(&emitter_data->f20)) {
             int cnt;
             int k;
-            d->f20 = truncate_float_to_s32(multiply_global_factor_ed64(random_float_between_alt((float)D_L06_00162374, (float)D_L06_00162378)));
+            emitter_data->f20 = truncate_float_to_s32(multiply_global_factor_ed64(random_float_between_alt((float)D_L06_00162374, (float)D_L06_00162378)));
             cnt = random_integer_below(7) ? 1 : random_integer_below(5) + 5;
             for (k = 0; k < cnt; k++) {
                     int c19, c18, c17, c16, c2;
                     random_vector(&spark_vector_offset, 0.0f, D_L06_00162340 * frame_time_macro);
-                    normalize_vector_xyz(&rotation_based_spark_vector, &*(SparkVector *)&m->rot_row0, D_L06_00162330 * (random_float_between_alt(-D_L06_0016233C, D_L06_0016233C) + 1.0f) * frame_time_macro);
+                    normalize_vector_xyz(&rotation_based_spark_vector, &*(SparkVector *)&emitter->rot_row0, D_L06_00162330 * (random_float_between_alt(-D_L06_0016233C, D_L06_0016233C) + 1.0f) * frame_time_macro);
                     add_vector_xyz(&rotation_based_spark_vector, &rotation_based_spark_vector, &spark_vector_offset);
                     normalize_vector_xyz(&z_adjusted_spark_vector, &rotation_based_spark_vector, D_L06_00162334 * (random_float_between_alt(-D_L06_0016233C, D_L06_0016233C) + 1.0f) * frame_time_macro);
                     z_adjusted_spark_vector.z = z_adjusted_spark_vector.z - D_L06_00162338 * frame_time_macro;
@@ -241,7 +241,7 @@ void FUN_L06_00308c68(struct Moby *m) {
                     c17 = truncate_float_to_s32(multiply_global_factor_ed64((float)D_L06_00162344 * random_float_between_alt(0.0f, 1.0f) + 1.0f));
                     c16 = truncate_float_to_s32(multiply_global_factor_ed64((float)D_L06_00162348 * (random_float_between_alt(-D_L06_00162350, D_L06_00162350) + 1.0f)));
                     c2 = truncate_float_to_s32(multiply_global_factor_ed64((float)D_L06_0016234C * (random_float_between_alt(-D_L06_00162350, D_L06_00162350) + 1.0f)));
-                    emit_spark(&*(SparkVector *)&m->pos, &rotation_based_spark_vector, &z_adjusted_spark_vector, c19, c18, c17, c16, c2, D_L06_0016237C);
+                    emit_spark(&*(SparkVector *)&emitter->pos, &rotation_based_spark_vector, &z_adjusted_spark_vector, c19, c18, c17, c16, c2, D_L06_0016237C);
             }
         }
         break;
