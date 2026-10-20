@@ -13,7 +13,7 @@
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 
-float FUN_L13_002ba088(int flag, int n, float x, float b, float end_value, float lo, float hi) {
+float FUN_L13_002ba088(int flag, int squaring_loop_limit, float x, float b, float end_value, float lo, float hi) {
     float t;
     float u;
     float r = 0.0f;
@@ -26,7 +26,7 @@ float FUN_L13_002ba088(int flag, int n, float x, float b, float end_value, float
         if (t > 1.0f) {
             t = 1.0f;
         }
-        for (i = 1; i < n; i++) {
+        for (i = 1; i < squaring_loop_limit; i++) {
             t = t * t;
         }
         u = 1.0f - t;
