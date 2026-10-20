@@ -11,7 +11,7 @@ s32 fade_menu_color(s32 delay, s32 from, s32 to) __asm__("FUN_0021b6d8");
 
 s32 fade_menu_color(s32 delay, s32 from, s32 to) {
     s32 now;
-    f32 t;
+    f32 tween_factor;
 
     if (delay < 0) {
         delay = 0;
@@ -24,11 +24,11 @@ s32 fade_menu_color(s32 delay, s32 from, s32 to) {
     }
     if (scale_game_frames(menu_fade_duration) >= delay) {
         now = scale_game_frames(menu_fade_duration);
-        t = 1.0f - (f32)(now - delay) / (f32)scale_game_frames(menu_fade_duration);
+        tween_factor = 1.0f - (f32)(now - delay) / (f32)scale_game_frames(menu_fade_duration);
     } else {
-        t = 1.0f;
+        tween_factor = 1.0f;
     }
-    return fast_tween_color(from, to, t);
+    return fast_tween_color(from, to, tween_factor);
 }
 
 extern __typeof__(fade_menu_color) func_0021B6D8 __attribute__((alias("FUN_0021b6d8")));
