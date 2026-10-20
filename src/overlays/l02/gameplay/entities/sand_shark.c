@@ -3396,22 +3396,22 @@ void tresspasser_door2_update(struct Moby *moby) {
     case TRESSPASSER_DOOR2_WAIT_FOR_LINKED_MOBY: {
         int id = *(int *)(data + 0x10);
         if (id >= 0) {
-            char *m = (char *)((id << 8) + *(int *)&D_L02_0015FFD8_c3);
-            int t = *(short *)(m + 0xA6);
-            if (t == 0x267 || t == 0x23F) {
-                if (((unsigned char *)m)[0x20] == 4)
+            char *linked_moby = (char *)((id << 8) + *(int *)&D_L02_0015FFD8_c3);
+            int linked_moby_class = *(short *)(linked_moby + 0xA6);
+            if (linked_moby_class == 0x267 || linked_moby_class == 0x23F) {
+                if (((unsigned char *)linked_moby)[0x20] == 4)
                     moby->state = 2;
             }
         }
         break;
     }
     case TRESSPASSER_DOOR2_SLIDE_TO_OFFSET_POSITION: {
-        float a[4];
+        float destination_position[4];
         float b[4];
         char *pos = &moby->pos;
-        normalize_vector_xyz(a, &moby->rot_row1, -2.0f);
-        add_vector_xyz(a, data, a);
-        subtract_vector_xyz(b, a, pos);
+        normalize_vector_xyz(destination_position, &moby->rot_row1, -2.0f);
+        add_vector_xyz(destination_position, data, destination_position);
+        subtract_vector_xyz(b, destination_position, pos);
         FUN_L00_0025f730(b, D_0015ED6C + D_0015ED6C);
         add_vector_xyz(pos, pos, b);
         if (vector_length_xyz(b) == 0.0f)
