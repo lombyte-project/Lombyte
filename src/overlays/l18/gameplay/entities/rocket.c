@@ -2713,7 +2713,7 @@ void FUN_L18_002ea598(struct Moby *moby) {
     float second_spark_vector[4];
     float scaled_target_direction[4];
     int i;
-    int c1, c2, a, b, c;
+    int c1, c2, spark_frame_count, b, third_spark_frame_count;
     float speed_min, speed_max, sink_min, sink_max;
     fast_vec_sub(scaled_target_direction, (void *)moby->pvars, &moby->pos);
     fast_vec_normalize(scaled_target_direction, scaled_target_direction, frame_time * 60.0f);
@@ -2725,11 +2725,11 @@ void FUN_L18_002ea598(struct Moby *moby) {
         FUN_L00_00257d78(first_spark_vector, speed_min, speed_max);
         fast_vec_scale(second_spark_vector, first_spark_vector, (*(float *)&(D_L18_00161F5C)));
         second_spark_vector[2] -= random_float_between(sink_min, sink_max);
-        a = func_001FA898_r(FUN_L04_001f1978(random_float_between(
+        spark_frame_count = func_001FA898_r(FUN_L04_001f1978(random_float_between(
             (*(float *)&(D_L18_00161F3C)), (*(float *)&(D_L18_00161F40)))));
         b = func_001FA898_r(FUN_L04_001f1978(random_float_between(
             (*(float *)&(D_L18_00161F44)), (*(float *)&(D_L18_00161F48)))));
-        c = func_001FA898_r(FUN_L04_001f1978(random_float_between(
+        third_spark_frame_count = func_001FA898_r(FUN_L04_001f1978(random_float_between(
             (*(float *)&(D_L18_00161F4C)), (*(float *)&(D_L18_00161F50)))));
         first_spark_vector[3] = random_float_between((*(float *)&(D_L18_00161F2C)),
                                           (*(float *)&(D_L18_00161F30)));
@@ -2741,7 +2741,7 @@ void FUN_L18_002ea598(struct Moby *moby) {
                           random_float_between(0.0f, 1.0f));
         c2 = FUN_001fa6e0((*(int *)&(D_L18_00161F24)), (*(int *)&(D_L18_00161F28)),
                           random_float_between(0.0f, 1.0f));
-        spawn_spark(spark_spawn_position, first_spark_vector, second_spark_vector, c1, c2, a, b, c, (*(int *)&(D_L18_00161F68)));
+        spawn_spark(spark_spawn_position, first_spark_vector, second_spark_vector, c1, c2, spark_frame_count, b, third_spark_frame_count, (*(int *)&(D_L18_00161F68)));
     }
 }
 extern void FUN_L06_0030bef8(void *, int, int, int);
