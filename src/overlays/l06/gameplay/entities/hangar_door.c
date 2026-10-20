@@ -817,12 +817,12 @@ void FUN_L06_002f4130(char *m) {
     char *pos = m + 0x10;
     int one = 1;
     char *moby_data;
-    int n;
+    int segment_travel_step_count;
     float f25, f27, cur, prev, ang, ra, rb;
     moby_data = *(char **)(m + 0x78);
-    n = func_001FA898_r(*(float *)&D_L06_00161CF0 / (*(float *)&spark_speed_gp * frame_time) *
+    segment_travel_step_count = func_001FA898_r(*(float *)&D_L06_00161CF0 / (*(float *)&spark_speed_gp * frame_time) *
                         0.25f);
-    f25 = *(float *)(moby_data + 0x80) * (float)n;
+    f25 = *(float *)(moby_data + 0x80) * (float)segment_travel_step_count;
     f27 = *(float *)&D_L06_00161CF0 * 0.25f;
     cur = *(float *)&D_L06_00161CF0;
     ang = fast_subtract_rotations(*(float *)(moby_data + 0x7C), f25 * 4.0f);
