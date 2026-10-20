@@ -3446,7 +3446,7 @@ extern float func_001FA888_2EAD50(int) __asm__("FUN_001fa6c0");
 extern int func_001F9908_2EAD50(int *) __asm__("FUN_001f9740");
 
 void gate_2_update(GateMoby_2EAD50 *m) __asm__("FUN_L10_002e9990");
-void gate_2_update(GateMoby_2EAD50 *m)
+void gate_2_update(GateMoby_2EAD50 *moby)
 {
     enum {
         GATE_STATE_INITIALIZE = 0,
@@ -3454,75 +3454,75 @@ void gate_2_update(GateMoby_2EAD50 *m)
         GATE_STATE_OPENING = 2,
         GATE_STATE_OPEN = 3
     };
-    GateVars_2EAD50 *d = m->vars;
+    GateVars_2EAD50 *vars = moby->vars;
     float v[3];
     Vec_2EAD50 out;
-    unsigned char st = m->state;
+    unsigned char st = moby->state;
 
     switch (st) {
     case GATE_STATE_INITIALIZE:
-        m->f30 = 0xFF;
-        d->home = m->pos;
+        moby->f30 = 0xFF;
+        vars->home = moby->pos;
         if (D_001413F4[0] != 0 ||
-            D_L10_001BB9C0_2EAD50.collected[(short)m->uid] != 0 ||
-            ((*(int *)(D_0014C190_c + ((((short)m->uid >> 5) * 4) + (current_level_index << 8))) >> (m->uid & 0x1F)) & 1) != 0) {
-            v[0] = func_001F9F90_2EAD50(fast_add_rotations(m->rotz, 3.14159265f)) * 1.5f;
-            v[1] = func_001F9FA8_2EAD50(fast_add_rotations(m->rotz, 3.14159265f)) * 1.5f;
+            D_L10_001BB9C0_2EAD50.collected[(short)moby->uid] != 0 ||
+            ((*(int *)(D_0014C190_c + ((((short)moby->uid >> 5) * 4) + (current_level_index << 8))) >> (moby->uid & 0x1F)) & 1) != 0) {
+            v[0] = func_001F9F90_2EAD50(fast_add_rotations(moby->rotz, 3.14159265f)) * 1.5f;
+            v[1] = func_001F9FA8_2EAD50(fast_add_rotations(moby->rotz, 3.14159265f)) * 1.5f;
             v[2] = 0.0f;
-            func_001F9BD8_2EAD50(&out, &d->home, v);
-            m->state = 3;
-            m->pos = out;
+            func_001F9BD8_2EAD50(&out, &vars->home, v);
+            moby->state = 3;
+            moby->pos = out;
         } else {
-            if (d->door > 0) {
-                (*(GateMoby_2EAD50 * *)&D_L10_0015FFD8_gp)[d->door].flags |= 2;
+            if (vars->door > 0) {
+                (*(GateMoby_2EAD50 * *)&D_L10_0015FFD8_gp)[vars->door].flags |= 2;
             }
-            m->state = 1;
+            moby->state = 1;
         }
         break;
     case GATE_STATE_CLOSED: {
         unsigned char *bits;
         if (D_001413F4[0] != 0 ||
-            D_L10_001BB9C0_2EAD50.collected[(short)m->uid] != 0 ||
-            ((*(int *)((bits = (char *)D_0014C190_c) + ((((short)m->uid >> 5) * 4) + (current_level_index << 8))) >> (m->uid & 0x1F)) & 1) != 0) {
-            m->pos = d->home;
-            m->state = 3;
-            if (d->door > 0) {
-                (*(GateMoby_2EAD50 * *)&D_L10_0015FFD8_gp)[d->door].flags &= 0xFFFD;
+            D_L10_001BB9C0_2EAD50.collected[(short)moby->uid] != 0 ||
+            ((*(int *)((bits = (char *)D_0014C190_c) + ((((short)moby->uid >> 5) * 4) + (current_level_index << 8))) >> (moby->uid & 0x1F)) & 1) != 0) {
+            moby->pos = vars->home;
+            moby->state = 3;
+            if (vars->door > 0) {
+                (*(GateMoby_2EAD50 * *)&D_L10_0015FFD8_gp)[vars->door].flags &= 0xFFFD;
             }
         } else if (D_0013DE4B_2EAD50[0] != 0) {
-            if (d->door > 0) {
-                (*(GateMoby_2EAD50 * *)&D_L10_0015FFD8_gp)[d->door].flags &= 0xFFFD;
+            if (vars->door > 0) {
+                (*(GateMoby_2EAD50 * *)&D_L10_0015FFD8_gp)[vars->door].flags &= 0xFFFD;
             }
-            *(int *)(bits + ((((short)m->uid >> 5) * 4) + (current_level_index << 8))) |= st << (m->uid & 0x1F);
-            D_L10_001BA950[(short)m->uid >> 5] |= st << (m->uid & 0x1F);
-            if (d->sound > 0) {
-                func_L10_002F6E10_2EAD50(d->sound);
+            *(int *)(bits + ((((short)moby->uid >> 5) * 4) + (current_level_index << 8))) |= st << (moby->uid & 0x1F);
+            D_L10_001BA950[(short)moby->uid >> 5] |= st << (moby->uid & 0x1F);
+            if (vars->sound > 0) {
+                func_L10_002F6E10_2EAD50(vars->sound);
             }
-            d->timer = func_001F9878_2EAD50(FUN_L04_001f1978(90.0f));
-            m->state = 2;
+            vars->timer = func_001F9878_2EAD50(FUN_L04_001f1978(90.0f));
+            moby->state = 2;
         }
         break;
     }
     case GATE_STATE_OPENING:
-        v[0] = func_001F9F90_2EAD50(fast_add_rotations(m->rotz, 3.14159265f)) * 1.5f *
-               func_001FA888_2EAD50(func_001F9878_2EAD50(FUN_L04_001f1978(90.0f)) - d->timer) /
+        v[0] = func_001F9F90_2EAD50(fast_add_rotations(moby->rotz, 3.14159265f)) * 1.5f *
+               func_001FA888_2EAD50(func_001F9878_2EAD50(FUN_L04_001f1978(90.0f)) - vars->timer) /
                FUN_L04_001f1978(90.0f);
-        v[1] = func_001F9FA8_2EAD50(fast_add_rotations(m->rotz, 3.14159265f)) * 1.5f *
-               func_001FA888_2EAD50(func_001F9878_2EAD50(FUN_L04_001f1978(90.0f)) - d->timer) /
+        v[1] = func_001F9FA8_2EAD50(fast_add_rotations(moby->rotz, 3.14159265f)) * 1.5f *
+               func_001FA888_2EAD50(func_001F9878_2EAD50(FUN_L04_001f1978(90.0f)) - vars->timer) /
                FUN_L04_001f1978(90.0f);
         v[2] = 0.0f;
-        func_001F9BD8_2EAD50(&out, &d->home, v);
-        m->pos = out;
-        if (func_001F9908_2EAD50(&d->timer)) {
-            m->state = 3;
+        func_001F9BD8_2EAD50(&out, &vars->home, v);
+        moby->pos = out;
+        if (func_001F9908_2EAD50(&vars->timer)) {
+            moby->state = 3;
         }
         break;
     case GATE_STATE_OPEN:
         if (D_001413F4[0] == 0 &&
-            D_L10_001BB9C0_2EAD50.collected[(short)m->uid] == 0 &&
-            (((*(int *)(D_0014C190_c + ((((short)m->uid >> 5) * 4) + (current_level_index << 8))) >> (m->uid & 0x1F)) ^ 1) & 1)) {
-            m->pos = d->home;
-            m->state = 0;
+            D_L10_001BB9C0_2EAD50.collected[(short)moby->uid] == 0 &&
+            (((*(int *)(D_0014C190_c + ((((short)moby->uid >> 5) * 4) + (current_level_index << 8))) >> (moby->uid & 0x1F)) ^ 1) & 1)) {
+            moby->pos = vars->home;
+            moby->state = 0;
         }
         break;
     }
