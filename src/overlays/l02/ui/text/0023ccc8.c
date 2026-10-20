@@ -55,11 +55,11 @@ s32 D_L02_0015F958 = 0x30;
 s32 D_L02_0015F95C = 0x46;
 
 /* Draws the counter: a stretched bar behind the icon and the count, on whichever side of the screen it sits. */
-s32 FUN_L02_0023cda8(HudElem *m) {
+s32 FUN_L02_0023cda8(HudElem *hud_element) {
     char text[16];
     int x;
     int y;
-    unsigned char *fade = m->cnt;
+    unsigned char *fade = hud_element->cnt;
     int left;
     f32 grow;
     f32 shade;
@@ -74,11 +74,11 @@ s32 FUN_L02_0023cda8(HudElem *m) {
     int bottom;
 
     if (fade[0] == 0) {
-        return m->w;
+        return hud_element->w;
     }
-    x = m->unk50;
-    y = m->unk54;
-    hud_screen_position(m, &x, &y);
+    x = hud_element->unk50;
+    y = hud_element->unk54;
+    hud_screen_position(hud_element, &x, &y);
     left = x < 0x101;
     if (left) {
         x = D_L02_0015F944;
@@ -99,9 +99,9 @@ s32 FUN_L02_0023cda8(HudElem *m) {
     } else if (shade < 0.0f) {
         shade = 0.0f;
     }
-    sprintf_alt(text, D_L02_0015F850, m->unk74);
+    sprintf_alt(text, D_L02_0015F850, hud_element->unk74);
     alpha = truncate_float_to_s32((f32)truncate_float_to_s32(grow * 128.0f) * 0.7f);
-    if (m->unk08 < 10) {
+    if (hud_element->unk08 < 10) {
         len = D_L02_0015F958;
     } else {
         len = D_L02_0015F95C;
@@ -126,9 +126,9 @@ s32 FUN_L02_0023cda8(HudElem *m) {
         draw_hud_sprite(frame, px - 0x20, y, 0x20, 0x20, alpha);
     }
     if (left) {
-        draw_hud_icon(m, m->icon, x, y, 0, 0x80);
+        draw_hud_icon(hud_element, hud_element->icon, x, y, 0, 0x80);
     } else {
-        draw_hud_icon(m, m->icon, x - 0x16, y, 0, 0x80);
+        draw_hud_icon(hud_element, hud_element->icon, x - 0x16, y, 0, 0x80);
     }
     bright = fast_tween_color(D_L02_0015F950, D_L02_0015F954, shade);
     dark = fast_tween_color(0, 0x80000000, shade);
@@ -139,5 +139,5 @@ s32 FUN_L02_0023cda8(HudElem *m) {
         font_print_right(x - 0x19, y + 9, dark, text, -1);
         font_print_right(x - 0x1A, y + 8, bright, text, -1);
     }
-    return m->w;
+    return hud_element->w;
 }
