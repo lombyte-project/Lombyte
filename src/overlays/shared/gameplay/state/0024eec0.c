@@ -107,24 +107,24 @@ SlotBuffer slot_buffers_l16[6] __asm__("D_L16_001871C0") = {{0}};
 SlotBuffer slot_buffers_l17[6] __asm__("D_L17_00187640") = {{0}};
 SlotBuffer slot_buffers_l18[6] __asm__("D_L18_00187740") = {{0}};
 
-Slot *FUN_L00_0024f028(char *o, int id) {
+Slot *FUN_L00_0024f028(char *owner, int id) {
     int i = 0;
-    Slot *s;
+    Slot *selected_slot;
     unsigned char *r;
     for (i = 0; i < 6 && D_L00_0018EB40[i].used != 0; i++) {
     }
-    s = &D_L00_0018EB40[i];
-    s->used = 1;
-    s->id = id;
+    selected_slot = &D_L00_0018EB40[i];
+    selected_slot->used = 1;
+    selected_slot->id = id;
     id = (short)id;
-    s->p10 = slot_buffers[i];
-    s->p14 = *(int *)(o + 0x24);
-    r = *(unsigned char **)(*(char **)(*(char **)(o + 0x24) + 0x1C) + id * 4 + 4);
-    s->s2 = r[2];
-    s->p0C = r + (r[0] + 4);
-    s->p1C = *(void **)(o + 0x60);
-    *(Slot **)(o + 0x60) = s;
-    return s;
+    selected_slot->p10 = slot_buffers[i];
+    selected_slot->p14 = *(int *)(owner + 0x24);
+    r = *(unsigned char **)(*(char **)(*(char **)(owner + 0x24) + 0x1C) + id * 4 + 4);
+    selected_slot->s2 = r[2];
+    selected_slot->p0C = r + (r[0] + 4);
+    selected_slot->p1C = *(void **)(owner + 0x60);
+    *(Slot **)(owner + 0x60) = selected_slot;
+    return selected_slot;
 }
 /* FUN_L00_0024f0e8: unlinks *slot from its owner's singly linked list
  * (head at owner+0x60, link at node+0x1C), frees the 0x40-byte node and
