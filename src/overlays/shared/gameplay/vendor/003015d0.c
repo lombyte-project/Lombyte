@@ -56,20 +56,20 @@ extern s32 D_L14_001620C8_gp __asm__("D_L14_001620C8") __attribute__((sda));
 extern int D_L14_001621A4_s __asm__("D_L14_001620D4") __attribute__((sda));
 
 extern int D_L14_001620D8 __attribute__((sda));
-void FUN_L14_003015d0(unsigned char *m) {
+void FUN_L14_003015d0(unsigned char *moby) {
     enum {
         BEAM_STATE_INITIALIZE = 0,
         BEAM_STATE_COUNTER_TRIGGERED_PULSES = 1,
         BEAM_STATE_WAIT_FOR_TIMED_PULSE = 2,
         BEAM_STATE_REPEAT_PULSES = 3
     };
-    D1224 *d = *(D1224 **)(m + 0x78);
+    D1224 *beam_vars = *(D1224 **)(moby + 0x78);
     float v[4] __attribute__((aligned(16)));
-    int s;
+    int beam_state;
     int arg;
-    if (m[0x20] != 0) {
-        qcopy(v, m + 0x10);
-        v[3] = d->f624;
+    if (moby[0x20] != 0) {
+        qcopy(v, moby + 0x10);
+        v[3] = beam_vars->f624;
         if (fast_bsphere_check(v, 52.0f) < 0) {
             return;
         }
@@ -77,59 +77,59 @@ void FUN_L14_003015d0(unsigned char *m) {
     if (D_L14_0016219C_s != 0) {
         return;
     }
-    s = m[0x20];
-    switch (s) {
+    beam_state = moby[0x20];
+    switch (beam_state) {
     case BEAM_STATE_INITIALIZE:
-        FUN_L14_003017f8((char *)m);
-        d->s10 = scale_game_frames(d->wC);
-        m[0x20] = 2;
-        d->f624 = vector_length_xyz(&D_L14_001600EC[d->w0].axis[1]);
-        d->s8 = 1;
-        d->sA = 1;
+        FUN_L14_003017f8((char *)moby);
+        beam_vars->s10 = scale_game_frames(beam_vars->wC);
+        moby[0x20] = 2;
+        beam_vars->f624 = vector_length_xyz(&D_L14_001600EC[beam_vars->w0].axis[1]);
+        beam_vars->s8 = 1;
+        beam_vars->sA = 1;
         break;
     case BEAM_STATE_COUNTER_TRIGGERED_PULSES:
         if (D_L14_00162188_s != 0) {
-            if (d->s12 == 0) {
+            if (beam_vars->s12 == 0) {
                 D_L14_00162188_s = D_L14_00162188_s - 1;
-                FUN_L14_003017f8((char *)m);
+                FUN_L14_003017f8((char *)moby);
             }
         }
         break;
     case BEAM_STATE_WAIT_FOR_TIMED_PULSE:
-        if (fast_dec_timer_s16(&d->s10) != 0) {
-            m[0x20] = 3;
-            d->s10 = scale_game_frames(d->s4);
-            FUN_L14_003017f8((char *)m);
+        if (fast_dec_timer_s16(&beam_vars->s10) != 0) {
+            moby[0x20] = 3;
+            beam_vars->s10 = scale_game_frames(beam_vars->s4);
+            FUN_L14_003017f8((char *)moby);
         }
         break;
     case BEAM_STATE_REPEAT_PULSES:
-        if (fast_dec_timer_s16(&d->s10) != 0) {
-            if (d->s6 != 0) {
-                m[0x20] = 2;
-                arg = d->s6;
+        if (fast_dec_timer_s16(&beam_vars->s10) != 0) {
+            if (beam_vars->s6 != 0) {
+                moby[0x20] = 2;
+                arg = beam_vars->s6;
             } else {
-                arg = d->s4;
+                arg = beam_vars->s4;
             }
-            d->s10 = scale_game_frames(arg);
-        } else if (d->s12 == 0) {
-            FUN_L14_003017f8((char *)m);
+            beam_vars->s10 = scale_game_frames(arg);
+        } else if (beam_vars->s12 == 0) {
+            FUN_L14_003017f8((char *)moby);
         }
         break;
     }
     if (D_L14_001620D8 == 0) {
-        if (vector_distance(m + 0x10, &hero.motion.pos) < 10.0f) {
-            FUN_L14_00302538((char *)m);
+        if (vector_distance(moby + 0x10, &hero.motion.pos) < 10.0f) {
+            FUN_L14_00302538((char *)moby);
         }
     }
-    if (d->s12 != 0) {
+    if (beam_vars->s12 != 0) {
         if (D_L14_001621A0_s == 0) {
-            FUN_L14_00301de8((char *)m);
+            FUN_L14_00301de8((char *)moby);
         }
-        if (*(int *)&D_L14_001620C8_gp < d->s12) {
+        if (*(int *)&D_L14_001620C8_gp < beam_vars->s12) {
             if (D_L14_001621A4_s != 0) {
                 return;
             }
-            enqueue_callback_list_1(FUN_L14_00301fa8, m);
+            enqueue_callback_list_1(FUN_L14_00301fa8, moby);
         }
     }
 }
