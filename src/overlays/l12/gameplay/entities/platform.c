@@ -365,7 +365,7 @@ void FUN_L12_002e19a8(void *pos) {
     float radial_spark_vector[4];
     float r;
     int i;
-    int a, b, c;
+    int frame_count, b, third_frame_count;
     *(OvlQuad *)v = *(OvlQuad *)pos;
     i = 0x1A;
     do {
@@ -388,13 +388,13 @@ void FUN_L12_002e19a8(void *pos) {
                 frame_time;
         vertical_spark_vector[3] = D_L12_001618A0;
         radial_spark_vector[3] = D_L12_001618A4;
-        a = func_001FA898_r(random_float_between_alt((float)D_L12_001618AC,
+        frame_count = func_001FA898_r(random_float_between_alt((float)D_L12_001618AC,
                                                      (float)D_L12_001618B0));
         b = func_001FA898_r(random_float_between_alt((float)D_L12_001618B4,
                                                      (float)D_L12_001618B8));
-        c = func_001FA898_r(random_float_between_alt((float)D_L12_001618BC,
+        third_frame_count = func_001FA898_r(random_float_between_alt((float)D_L12_001618BC,
                                                      (float)D_L12_001618C0));
-        spawn_spark(w, vertical_spark_vector, radial_spark_vector, D_L12_001618C4, D_L12_001618C8, a, b, c,
+        spawn_spark(w, vertical_spark_vector, radial_spark_vector, D_L12_001618C4, D_L12_001618C8, frame_count, b, third_frame_count,
                      D_L12_001618CC);
     } while (--i >= 0);
 }
