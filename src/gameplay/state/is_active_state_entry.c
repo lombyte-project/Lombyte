@@ -12,12 +12,12 @@ extern u8 D_0013E550[];
 s32 is_active_state_entry(s32 entry_index, s32 id) __asm__("FUN_001eb740");
 
 s32 is_active_state_entry(s32 entry_index, s32 id) {
-    struct StateEntry *e;
+    struct StateEntry *state_entry;
 
     if (entry_index >= 0) {
-        e = (struct StateEntry *)(entry_index * 0x70 + D_0013E550);
-        if (e->unk7E == id + D_0015F5B4) {
-            if ((u32)(e->unk74 - 1) < 2) {
+        state_entry = (struct StateEntry *)(entry_index * 0x70 + D_0013E550);
+        if (state_entry->unk7E == id + D_0015F5B4) {
+            if ((u32)(state_entry->unk74 - 1) < 2) {
                 return 1;
             }
         }
