@@ -463,10 +463,10 @@ void spawner_update(char *moby)
                 }
             }
             if (sel == 0) {
-                float s = *(float *)(spawner_vars + 0x80);
-                if (s < 3.0f)
-                    s = 3.0f;
-                FUN_L09_00277758_30ab80(target, s);
+                float target_offset_scale = *(float *)(spawner_vars + 0x80);
+                if (target_offset_scale < 3.0f)
+                    target_offset_scale = 3.0f;
+                FUN_L09_00277758_30ab80(target, target_offset_scale);
                 add_vector_xyz_30ab80(target, target, moby + 0x10);
             } else {
                 qcopy(target, sel + 0x30);
