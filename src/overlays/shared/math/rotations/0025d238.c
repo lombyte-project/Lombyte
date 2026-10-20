@@ -47,22 +47,22 @@ float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 void get_moby_color(void *, int *, int *, int *) __asm__("FUN_L00_00250320");
 void trooper_anim_update(void *a, S *s) __asm__("FUN_L00_0025d458");
-void trooper_anim_update(void *a, S *s) {
-    int old = s->cur;
-    if (old == 0 || s->flag != 0) {
-        s->cur = scale_game_frames(s->lo);
-        s->flag = 0;
+void trooper_anim_update(void *moby, S *animation_state) {
+    int old = animation_state->cur;
+    if (old == 0 || animation_state->flag != 0) {
+        animation_state->cur = scale_game_frames(animation_state->lo);
+        animation_state->flag = 0;
         if (old != 0) {
-            int n = scale_game_frames(s->lo);
-            s->cur = truncate_float_to_s32(n * (old / convert_integer_to_float(scale_game_frames(s->hi))));
-            if (s->cur <= 0)
-                s->cur = 1;
+            int scaled_duration_frames = scale_game_frames(animation_state->lo);
+            animation_state->cur = truncate_float_to_s32(scaled_duration_frames * (old / convert_integer_to_float(scale_game_frames(animation_state->hi))));
+            if (animation_state->cur <= 0)
+                animation_state->cur = 1;
         } else {
             int x, y, z;
-            get_moby_color(a, &x, &y, &z);
-            s->r = x;
-            s->g = y;
-            s->b = z;
+            get_moby_color(moby, &x, &y, &z);
+            animation_state->r = x;
+            animation_state->g = y;
+            animation_state->b = z;
         }
     }
 }
