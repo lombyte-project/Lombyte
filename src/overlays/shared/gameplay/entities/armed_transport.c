@@ -286,47 +286,47 @@ typedef struct {
 
 extern float D_L16_00161D78_gp __asm__("D_L16_00161D78") __attribute__((sda));
 /* Update interaction ownership, damage responses and pursuit tracking. */
-void FUN_L16_002e2b60(struct Moby *m) {
+void FUN_L16_002e2b60(struct Moby *transport_moby) {
     L16Hit_e hit;
-    char *d = (char *)m->pvars;
+    char *transport_data = (char *)transport_moby->pvars;
     float zero;
     char *record;
     int response;
 
-    m->scale = m->pclass->scale * D_L16_00161D78_gp;
-    if ((unsigned int)(m->state - 2) < 4) {
-        if (!voice_is_playing(m, *(int *)(d + 0x190)))
-            *(int *)(d + 0x190) = FUN_0022da68_i(0, 4, m);
-    } else if (voice_is_playing(m, *(int *)(d + 0x190))) {
-        int slot = *(int *)(d + 0x190);
+    transport_moby->scale = transport_moby->pclass->scale * D_L16_00161D78_gp;
+    if ((unsigned int)(transport_moby->state - 2) < 4) {
+        if (!voice_is_playing(transport_moby, *(int *)(transport_data + 0x190)))
+            *(int *)(transport_data + 0x190) = FUN_0022da68_i(0, 4, transport_moby);
+    } else if (voice_is_playing(transport_moby, *(int *)(transport_data + 0x190))) {
+        int slot = *(int *)(transport_data + 0x190);
         if (slot != -1) {
-            L16Slot_e *s = (L16Slot_e *)(D_0013E550 + slot * 0x70);
-            if (s->owner == m && s->active != 0)
+            L16Slot_e *voice_slot = (L16Slot_e *)(D_0013E550 + slot * 0x70);
+            if (voice_slot->owner == transport_moby && voice_slot->active != 0)
                 release_voice_slot(slot);
         }
-        *(int *)(d + 0x190) = -1;
+        *(int *)(transport_data + 0x190) = -1;
     }
     hit.amount = zero = 0.0f;
-    record = find_moby_hit(m, 0x330000, 0);
-    response = hit_reaction(m, record, d + 0x20, 0, &hit.status, &hit.amount, 0, 4);
-    if (hit.status != 1 && m->state != 8) {
-        *(float *)(d + 0x20) -= hit.amount;
-        if (*(float *)(d + 0x20) <= zero || (hero.vehicle_mode == 2 && hit.amount >= 2.0f))
+    record = find_moby_hit(transport_moby, 0x330000, 0);
+    response = hit_reaction(transport_moby, record, transport_data + 0x20, 0, &hit.status, &hit.amount, 0, 4);
+    if (hit.status != 1 && transport_moby->state != 8) {
+        *(float *)(transport_data + 0x20) -= hit.amount;
+        if (*(float *)(transport_data + 0x20) <= zero || (hero.vehicle_mode == 2 && hit.amount >= 2.0f))
             response = 1;
         if (response > 0) {
             if (response >= 3) {
                 if (response < 9) {
-                    FUN_0022da68_i(3, 0, m);
-                    *(unsigned char *)(d + 0x67) = 120;
-                    *(float *)(d + 0x188) =
+                    FUN_0022da68_i(3, 0, transport_moby);
+                    *(unsigned char *)(transport_data + 0x67) = 120;
+                    *(float *)(transport_data + 0x188) =
                         randf_sym(30.0f, 50.0f) * DEG_TO_RAD * frame_time;
                 }
             } else {
-                FUN_0022da68_i(3, 0, m);
+                FUN_0022da68_i(3, 0, transport_moby);
                 if (hero.vehicle_mode != 2)
-                    FUN_0022da68_i(2, 0, m);
+                    FUN_0022da68_i(2, 0, transport_moby);
                 {
-                    int *child = (int *)(d + 0xC0), count = 3;
+                    int *child = (int *)(transport_data + 0xC0), count = 3;
                     do {
                         char *pool = D_L16_0015FFD8_sda;
                         if (*child >= 0)
@@ -334,24 +334,24 @@ void FUN_L16_002e2b60(struct Moby *m) {
                         child++;
                     } while (--count >= 0);
                 }
-                m->state = 8;
-                *(int *)(d + 0x160) = scale_game_frames(90);
-                *(unsigned char *)(d + 0x67) = 120;
+                transport_moby->state = 8;
+                *(int *)(transport_data + 0x160) = scale_game_frames(90);
+                *(unsigned char *)(transport_data + 0x67) = 120;
             }
         }
-        trooper_anim_update(m, d + 0x60);
+        trooper_anim_update(transport_moby, transport_data + 0x60);
     }
-    m->hit_slot = 255;
-    trooper_anim_finish(m, d + 0x60);
-    if (*(int *)(d + 0xD0) != -1 && D_001413DC[0] != 22) {
-        char *path = D_L16_001B0930[*(int *)(d + 0xD0)];
-        FUN_L00_0025ff38(128.0f, m, d + 0x70, 0, 0, path + 0x10, *(int *)path);
+    transport_moby->hit_slot = 255;
+    trooper_anim_finish(transport_moby, transport_data + 0x60);
+    if (*(int *)(transport_data + 0xD0) != -1 && D_001413DC[0] != 22) {
+        char *path = D_L16_001B0930[*(int *)(transport_data + 0xD0)];
+        FUN_L00_0025ff38(128.0f, transport_moby, transport_data + 0x70, 0, 0, path + 0x10, *(int *)path);
     } else
-        *(int *)(d + 0xB4) = 2;
-    if (*(int *)(d + 0xB0) == 0) {
+        *(int *)(transport_data + 0xB4) = 2;
+    if (*(int *)(transport_data + 0xB0) == 0) {
         struct Hero *player = &hero;
-        *(int *)(d + 0xB0) = ((int)player->moby);
-        qcopy(d + 0x70, &player->motion.pos);
+        *(int *)(transport_data + 0xB0) = ((int)player->moby);
+        qcopy(transport_data + 0x70, &player->motion.pos);
     }
 }
 #define NOT_SDA
