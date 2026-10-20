@@ -1284,11 +1284,11 @@ void FUN_L14_003087c0(struct Moby *moby) {
         MOBY_UPDATE_DISTANCE_INITIALIZE = 0,
         MOBY_UPDATE_CUTSCENE_TARGET = 1
     };
-    int *d = (int *)moby->pvars;
+    int *moby_pvars = (int *)moby->pvars;
     unsigned v;
     int i;
-    if (d[0] != -1) {
-        if (FUN_L01_0026e008(d[0], -1) == 0) {
+    if (moby_pvars[0] != -1) {
+        if (FUN_L01_0026e008(moby_pvars[0], -1) == 0) {
             if (D_0013D408[0x17] == 0) {
                 D_0013D408[0x17] = 1;
                 allocate_voice_for_bank_entry(1, 0, 0);
