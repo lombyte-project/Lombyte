@@ -607,23 +607,23 @@ typedef struct {
     int t[4];
     float c[4];
 } M_2e0788;
-void FUN_L00_002e0788(unsigned char *p) {
+void FUN_L00_002e0788(unsigned char *moby) {
     OvlQuad v[2];
-    M_2e0788 *m = *(M_2e0788 **)(p + 0x78);
+    M_2e0788 *moby_data = *(M_2e0788 **)(moby + 0x78);
     float *a;
     int *t;
     int i, j, c;
     float f, g;
     j = 0;
-    p += 0x10;
-    fast_vec_sub(v, D_L00_00166DC0, p);
-    t = m->t;
-    a = m->a;
+    moby += 0x10;
+    fast_vec_sub(v, D_L00_00166DC0, moby);
+    t = moby_data->t;
+    a = moby_data->a;
     vscl_2e0788(v, v, -0.3f);
     vscl_2e0788(&v[1], v, 0.1f);
-    fast_vec_add(v, v, p);
+    fast_vec_add(v, v, moby);
     for (i = 3; i >= 0; i--) {
-        f = *a + m->b[j];
+        f = *a + moby_data->b[j];
         *a = f;
         if (f >= 255.0f) {
             *a = f - 255.0f;
@@ -631,13 +631,13 @@ void FUN_L00_002e0788(unsigned char *p) {
             *a = f + 255.0f;
         }
         if (f9740_2e0788(t)) {
-            m->t[j] = ticks_2e0788(0xff);
+            moby_data->t[j] = ticks_2e0788(0xff);
         }
         t++;
-        g = i2f_2e0788(ticks_2e0788(0xff) - m->t[j]);
+        g = i2f_2e0788(ticks_2e0788(0xff) - moby_data->t[j]);
         g = g / (float)ticks_2e0788(0xff);
         c = fast_tween_color(0x4040FFFF, 0x1040FFFF, f99c0_2e0788(0.5f - g));
-        spr_2e0788(v, c, f2i_2e0788(*a++), 0x35, 1, 2, 0, m->c[j]);
+        spr_2e0788(v, c, f2i_2e0788(*a++), 0x35, 1, 2, 0, moby_data->c[j]);
         j++;
         fast_vec_add(v, v, &v[1]);
     }
