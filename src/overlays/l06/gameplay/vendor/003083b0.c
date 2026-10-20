@@ -20,7 +20,7 @@ extern int FUN_L01_0026e008(int, int);
 /* Level 6 help hints: shows the help messages for the area and records how often and when each was due. */
 void FUN_L06_003083b0(struct Moby *moby) {
     int *vars = (int *)moby->pvars;
-    struct Moby *m;
+    struct Moby *indexed_moby;
     int i;
     int j;
     int elapsed;
@@ -60,8 +60,8 @@ void FUN_L06_003083b0(struct Moby *moby) {
     }
     if (is_point_inside_clip_volume_83b0(&hero.motion.pos, vars[8]) && FUN_L01_0026e008(vars[6], -1) == 0) {
         for (j = 0; j < 6; j++) {
-            m = (struct Moby *)(D_L06_0015FFD8_83b0 + (vars[j] << 8));
-            if (vars[j] != -1 && m != 0 && m->state != 0xFE && m->state != 0xFD && m->state != 1) {
+            indexed_moby = (struct Moby *)(D_L06_0015FFD8_83b0 + (vars[j] << 8));
+            if (vars[j] != -1 && indexed_moby != 0 && indexed_moby->state != 0xFE && indexed_moby->state != 0xFD && indexed_moby->state != 1) {
                 if (help_stats_83b0[0x28].count != 0) {
                     elapsed = scale_game_frames_83b0(D_0015EEA4) - help_stats_83b0[0x28].unk2 * 600;
                     if ((int)(scale_game_frames_83b0(18) * 60.0f) < elapsed || help_stats_83b0[0x28].unk2 * 600 == 0) {
@@ -79,7 +79,7 @@ void FUN_L06_003083b0(struct Moby *moby) {
                     help_stats_83b0[0x28].level_mask = help_stats_83b0[0x28].level_mask | (1 << current_level_index) | 0x80000000;
                 }
             }
-            if (m == 0 || m->state == 0xFE || m->state == 0xFD) {
+            if (indexed_moby == 0 || indexed_moby->state == 0xFE || indexed_moby->state == 0xFD) {
                 help_stats_83b0[0x28].count = 0xFFFF;
             }
         }
