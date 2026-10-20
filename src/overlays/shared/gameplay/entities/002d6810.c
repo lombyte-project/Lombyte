@@ -591,8 +591,8 @@ extern short D_L15_00161CDC;
 extern short D_L15_00161CDE;
 extern int D_L15_00161CE0;
 extern int D_L15_00161CE4;
-void FUN_L15_002d79e8(char *m) {
-    char *d = *(char **)(m + 0x78);
+void FUN_L15_002d79e8(char *moby) {
+    char *moby_vars = *(char **)(moby + 0x78);
     float v[4];
     float step[4];
     int i;
@@ -602,9 +602,9 @@ void FUN_L15_002d79e8(char *m) {
         D_L15_00161CE4 = 0;
         D_L15_00161CE0 = scale_frames_r(D_L15_00161C8C);
         D_L15_00161C60_r = 0x7F2020;
-        fast_vec_sub(v, d + 0x100, d + 0xF0);
+        fast_vec_sub(v, moby_vars + 0x100, moby_vars + 0xF0);
         fast_vec_normalize(step, v, D_L15_00161BFC / 20.0f);
-        qcopy(D_L15_001D3750_r, d + 0xF0);
+        qcopy(D_L15_001D3750_r, moby_vars + 0xF0);
         for (i = 1; i < 20; i++) {
             fast_vec_add(D_L15_001D3750_r[i], D_L15_001D3740_r[i], step);
             D_L15_001D39D0_r[i] = 0;
