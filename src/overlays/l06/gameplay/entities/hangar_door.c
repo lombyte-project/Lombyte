@@ -71,13 +71,13 @@ extern int D_L06_0015FFD8_d __asm__("D_L06_0015FFD8");
  * the US level program (data still reached through the MACRO_ADDR form). */
 /* Clears state 4 from every moby in the selected table. */
 void FUN_L06_002f45a0(int idx) {
-    short *p = D_L06_001ABFC0[idx];
+    short *moby_index_cursor = D_L06_001ABFC0[idx];
     do {
-        char *moby = (char *)(((*p & 0x7FFF) << 8) + (int)D_L06_0015FFD8_d);
+        char *moby = (char *)(((*moby_index_cursor & 0x7FFF) << 8) + (int)D_L06_0015FFD8_d);
         if ((unsigned char)moby[0x20] == 4) {
             moby[0x20] = 0;
         }
-    } while (*p++ >= 0);
+    } while (*moby_index_cursor++ >= 0);
 }
 
 extern int D_L06_001ABFC0[];
