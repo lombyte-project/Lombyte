@@ -839,34 +839,34 @@ typedef struct {
 extern int FUN_L00_0023aaa8(char *);
 extern s32 D_L00_0015F7F0_gp __asm__("D_L00_0015F7F0") __attribute__((sda));
 
-void FUN_L00_00239630(HudElem *e) {
-    unsigned char *c = e->cnt;
-    HudCounter *h;
+void FUN_L00_00239630(HudElem *hud_element) {
+    unsigned char *visibility_counters = hud_element->cnt;
+    HudCounter *animation_counters;
     HudCounter *g;
     int t;
     int max;
 
-    if (e->unk0C != 0) {
-        t = *e->unk0C;
-        e->unk78 = t > -1 ? t : 0;
-        h = e->unk80;
-        h->unk0 = (h->unk0 + 1) % 60;
-        h->unk2 += h->unk4;
-        h->unk4 += h->unk6;
-        if (h->unk4 > 60) {
-            h->unk4 = 60;
-        } else if (h->unk4 < -60) {
-            h->unk4 = -60;
+    if (hud_element->unk0C != 0) {
+        t = *hud_element->unk0C;
+        hud_element->unk78 = t > -1 ? t : 0;
+        animation_counters = hud_element->unk80;
+        animation_counters->unk0 = (animation_counters->unk0 + 1) % 60;
+        animation_counters->unk2 += animation_counters->unk4;
+        animation_counters->unk4 += animation_counters->unk6;
+        if (animation_counters->unk4 > 60) {
+            animation_counters->unk4 = 60;
+        } else if (animation_counters->unk4 < -60) {
+            animation_counters->unk4 = -60;
         }
-        if (h->unk2 >= 0x800) {
-            if (h->unk4 > 0) {
-                h->unk6 = -1;
+        if (animation_counters->unk2 >= 0x800) {
+            if (animation_counters->unk4 > 0) {
+                animation_counters->unk6 = -1;
             }
         }
-        if (h->unk2 >= 0x1000) {
-            h->unk2 = 0xFFF;
+        if (animation_counters->unk2 >= 0x1000) {
+            animation_counters->unk2 = 0xFFF;
         }
-        g = h;
+        g = animation_counters;
         if (g->unk2 < 0x7FF) {
             if (g->unk4 < 0) {
                 g->unk6 = 1;
@@ -875,31 +875,31 @@ void FUN_L00_00239630(HudElem *e) {
         if (g->unk2 < 0) {
             g->unk2 = 0;
         }
-        if (e->unk78 > e->unk08) {
-            e->unk78 = e->unk08;
+        if (hud_element->unk78 > hud_element->unk08) {
+            hud_element->unk78 = hud_element->unk08;
         }
     }
-    if (e->unk74 != e->unk78 || e->unk74 == 1) {
-        e->unk7C = scale_game_frames(0x78);
-        e->unk74 = e->unk78;
+    if (hud_element->unk74 != hud_element->unk78 || hud_element->unk74 == 1) {
+        hud_element->unk7C = scale_game_frames(0x78);
+        hud_element->unk74 = hud_element->unk78;
     }
-    if (e->unk7C >= scale_game_frames(5)) {
-        if (*(int *)&D_L00_0015F7F0_gp > c[0]) {
-            c[0]++;
-        } else if (c[1] < *(int *)&D_L00_0015F7F0_gp) {
-            c[1]++;
+    if (hud_element->unk7C >= scale_game_frames(5)) {
+        if (*(int *)&D_L00_0015F7F0_gp > visibility_counters[0]) {
+            visibility_counters[0]++;
+        } else if (visibility_counters[1] < *(int *)&D_L00_0015F7F0_gp) {
+            visibility_counters[1]++;
         }
     } else {
-        e->unk6C = 1;
-        if (c[1] != 0) {
-            c[1]--;
-        } else if (c[0] != 0) {
-            c[0]--;
+        hud_element->unk6C = 1;
+        if (visibility_counters[1] != 0) {
+            visibility_counters[1]--;
+        } else if (visibility_counters[0] != 0) {
+            visibility_counters[0]--;
         } else {
-            e->unk6C = -6;
+            hud_element->unk6C = -6;
         }
     }
-    FUN_L00_0023aaa8((char *)e + 0x40);
+    FUN_L00_0023aaa8((char *)hud_element + 0x40);
 }
 typedef struct {
     s16 x;
