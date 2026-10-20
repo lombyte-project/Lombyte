@@ -1637,8 +1637,8 @@ extern int D_L00_00173E58 __attribute__((section(".data")));
 char *FUN_L00_0025c338(int);
 /* True when FUN_L00_0025c338(D_L00_00173E58) is set and has flag 2 at 0x1E. */
 int FUN_L00_002a7de0(void) {
-    char *p = FUN_L00_0025c338(D_L00_00173E58);
-    if (p && (*(unsigned short *)(p + 0x1e) & 2))
+    char *flag_record = FUN_L00_0025c338(D_L00_00173E58);
+    if (flag_record && (*(unsigned short *)(flag_record + 0x1e) & 2))
         return 1;
     return 0;
 }
