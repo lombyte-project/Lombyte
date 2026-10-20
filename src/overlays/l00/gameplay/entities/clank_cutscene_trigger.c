@@ -165,7 +165,7 @@ extern void FUN_L00_0026ced0(void *, void *, s32, s32, s32, f32);
 extern VeldinLevelState D_L00_0016C860;
 
 void FUN_L00_0023e268(void) {
-    VeldinMoby *m;
+    VeldinMoby *particle_source_moby;
     VeldinMoby *mb;
     char *src;
     s32 i;
@@ -216,10 +216,10 @@ void FUN_L00_0023e268(void) {
         enqueue_callback_list_1((s32)FUN_L00_002935b8, (s32)D_L00_0016C860.unk188);
     }
     if (current_level_index == 14 && D_L00_0016C860.state == 0) {
-        m = D_L00_0016C860.unk17C;
-        if (m != 0 && (u32)(D_L00_0016C860.timer - 0x1C) < 6) {
-            FUN_L00_0023e008(m);
-            enqueue_callback_list_1((s32)FUN_L00_0023db30, (s32)m);
+        particle_source_moby = D_L00_0016C860.unk17C;
+        if (particle_source_moby != 0 && (u32)(D_L00_0016C860.timer - 0x1C) < 6) {
+            FUN_L00_0023e008(particle_source_moby);
+            enqueue_callback_list_1((s32)FUN_L00_0023db30, (s32)particle_source_moby);
         }
     }
     if (current_level_index == 15 && (u32)(D_L00_0016C860.state - 3) < 2) {
