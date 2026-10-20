@@ -1799,9 +1799,9 @@ extern void FUN_L00_002e48a0_c(void *out, float f) __asm__("FUN_L00_002e48a0");
 void FUN_L00_002e4930(char *camera) {
     char *camera_state = *(char **)(camera + 0x70);
     CamAttach *attach_state = (CamAttach *)(camera_state + 0x40);
-    char *q;
+    char *timer_camera_state;
     float inv, x, y;
-    int t;
+    int camera_timer_base_frames;
 
     if (attach_state->state == 0) {
         struct Hero *p0 = &hero;
@@ -1998,10 +1998,10 @@ void FUN_L00_002e4930(char *camera) {
             attach_state->state = 1;
             attach_state->timer = scale_game_frames(*(int *)&D_L00_00161D54_gp);
             r = 1.0f / convert_integer_to_float_c(attach_state->timer);
-            t = *(int *)&D_L00_00161D24_gp;
+            camera_timer_base_frames = *(int *)&D_L00_00161D24_gp;
             attach_state->invTimer = r;
-            q = *(char **)(camera + 0x70);
-            *(short *)(q + 0x20) = scale_game_frames(t);
+            timer_camera_state = *(char **)(camera + 0x70);
+            *(short *)(timer_camera_state + 0x20) = scale_game_frames(camera_timer_base_frames);
             qcopy(camera + 0x40, camera);
             return;
         }
