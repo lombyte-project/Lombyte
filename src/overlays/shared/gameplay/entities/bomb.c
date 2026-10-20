@@ -679,7 +679,8 @@ void FUN_L00_002c97e0(Moby *chicken_moby) {
         CHICKEN_STATE_IDLE = 1,
         CHICKEN_STATE_TURN_AWAY_FROM_HERO = 2,
         CHICKEN_STATE_FLEE_FROM_HERO = 3,
-        CHICKEN_STATE_CLOSE_RANGE_FLEE_FROM_HERO = 4
+        CHICKEN_STATE_CLOSE_RANGE_FLEE_FROM_HERO = 4,
+        CHICKEN_STATE_EMIT_FEATHERS = 5
     };
     Vec4A next_pos;
     Vec4A ahead;
@@ -932,7 +933,7 @@ void FUN_L00_002c97e0(Moby *chicken_moby) {
             }
         }
         break;
-    case 5:
+    case CHICKEN_STATE_EMIT_FEATHERS:
         if (FUN_L00_002dc9f0(chicken_moby, vars->unk10) != 0) {
             chicken_moby->state = 0;
             *(short *)(vars->unk14 + 0x68) = 0;
