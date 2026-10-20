@@ -482,12 +482,12 @@ void FUN_L18_002f9a98(void *moby) {
     char bone_world_position[16];
     char scaled_bone_offset[16];
     int color_cycle_frames = scale_game_frames(D_L18_00162460);
-    float f = convert_integer_to_float(game_frame % color_cycle_frames);
+    float color_cycle_value = convert_integer_to_float(game_frame % color_cycle_frames);
     int tweened_color;
-    f = f / convert_integer_to_float(color_cycle_frames);
-    f = f * 6.18318f;
-    f = fast_sin(f - 3.14159f);
-    tweened_color = fast_tween_color(D_L18_00162458, D_L18_0016245C, f * 0.5f + 0.5f);
+    color_cycle_value = color_cycle_value / convert_integer_to_float(color_cycle_frames);
+    color_cycle_value = color_cycle_value * 6.18318f;
+    color_cycle_value = fast_sin(color_cycle_value - 3.14159f);
+    tweened_color = fast_tween_color(D_L18_00162458, D_L18_0016245C, color_cycle_value * 0.5f + 0.5f);
     build_moby_bone_transform(moby, 1, b);
     scale_vector_xyz(scaled_bone_offset, bone_transform_row2, *(float *)&D_L18_00162500);
     subtract_vector_xyz(glow_position, bone_world_position, scaled_bone_offset);
