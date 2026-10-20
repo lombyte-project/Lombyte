@@ -2535,9 +2535,9 @@ extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern void free_effect_particle(void *) __asm__("FUN_L00_00267a08");
 
 /* Calls free_effect_particle on a once fast_dec_timer_s16(a + 10) returns non-zero. */
-void FUN_L00_0026f048(char *a) {
-    if (fast_dec_timer_s16(a + 10) != 0) {
-        free_effect_particle(a);
+void FUN_L00_0026f048(char *particle) {
+    if (fast_dec_timer_s16(particle + 10) != 0) {
+        free_effect_particle(particle);
     }
 }
 typedef struct {
