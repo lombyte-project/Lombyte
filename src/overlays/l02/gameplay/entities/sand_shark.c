@@ -1270,8 +1270,8 @@ void *FUN_L02_002d6210(struct Moby *moby) {
         moby->state = 9;
         idx = *(int *)((char *)moby->pvars + 0x288);
         if (idx >= 0) {
-            char *o = *(char **)(*(int *)&D_L02_0015FFD8_c + idx * 256 + 0x78);
-            (*(int *)(o + 0x14C))--;
+            char *spawner_vars = *(char **)(*(int *)&D_L02_0015FFD8_c + idx * 256 + 0x78);
+            (*(int *)(spawner_vars + 0x14C))--;
         }
     } else if (moby->state == 9) {
         moby->state = 1;
