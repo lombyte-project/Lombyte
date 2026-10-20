@@ -595,23 +595,23 @@ int FUN_L07_00313de8(unsigned char *m, unsigned char *obj, float *vec, int a, in
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 extern void update_joint_animation(char *, char *, int, float, float) __asm__("FUN_L00_002628d8");
 
-void FUN_L07_00313f60(char *moby, char *d, float *t) {
-    float a;
+void FUN_L07_00313f60(char *moby, char *moby_vars, float *target_position) {
+    float target_heading;
     float k;
     if (((unsigned char *)moby)[0x20] < 10) {
-        a = fast_arc_tan(t[0] - *(float *)(moby + 0x10), t[1] - *(float *)(moby + 0x14));
-        *(float *)(d + 0x268) = fast_subtract_rotations(a, *(float *)(moby + 0x48));
+        target_heading = fast_arc_tan(target_position[0] - *(float *)(moby + 0x10), target_position[1] - *(float *)(moby + 0x14));
+        *(float *)(moby_vars + 0x268) = fast_subtract_rotations(target_heading, *(float *)(moby + 0x48));
     } else {
-        *(int *)(d + 0x268) = 0;
+        *(int *)(moby_vars + 0x268) = 0;
     }
-    if (*(float *)(d + 0x268) > 1.3962634f) {
-        *(float *)(d + 0x268) = 1.3962634f;
-    } else if (*(float *)(d + 0x268) < -1.3962634f) {
-        *(float *)(d + 0x268) = -1.3962634f;
+    if (*(float *)(moby_vars + 0x268) > 1.3962634f) {
+        *(float *)(moby_vars + 0x268) = 1.3962634f;
+    } else if (*(float *)(moby_vars + 0x268) < -1.3962634f) {
+        *(float *)(moby_vars + 0x268) = -1.3962634f;
     }
     k = frame_scale_sq;
-    *(float *)(d + 0x264) = *(float *)(d + 0x1FC);
-    update_joint_animation(moby, d + 0x200, 0xB, k * 0.030f, k * 0.3f);
+    *(float *)(moby_vars + 0x264) = *(float *)(moby_vars + 0x1FC);
+    update_joint_animation(moby, moby_vars + 0x200, 0xB, k * 0.030f, k * 0.3f);
 }
 typedef struct {
     char pad0[0x44];
