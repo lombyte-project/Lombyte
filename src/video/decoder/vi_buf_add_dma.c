@@ -36,7 +36,7 @@ extern void sc_tag2(u64 *output, u32 high_word, u32 middle_word,
 s32 vi_buf_add_dma(ViBuf *f) __asm__("FUN_0023bf70");
 
 /* Append complete MPEG input blocks and restart channel 4 when needed. */
-s32 vi_buf_add_dma(ViBuf *f) {
+s32 vi_buf_add_dma(ViBuf *buffer) {
     s32 i;
     s32 index;
     s32 id;
@@ -47,9 +47,9 @@ s32 vi_buf_add_dma(ViBuf *f) {
     s32 consume;
     s32 read_start, read_n;
 
-    WaitSema(f->semaphore);
+    WaitSema(buffer->semaphore);
 
-    if (!f->isActive) {
+    if (!buffer->isActive) {
         err_message((s32)D_001E8B20);
         return 0;
     }
@@ -58,18 +58,18 @@ s32 vi_buf_add_dma(ViBuf *f) {
     d4chcr = *D4_CHCR;
     madr = *D4_MADR;
 
-    index = get_fifo_index(f, (s32)madr);
-    consume = (index + f->n - f->dmaStart) % f->n;
-    f->dmaStart = (f->dmaStart + consume) % f->n;
-    f->dmaN -= consume;
+    index = get_fifo_index(buffer, (s32)madr);
+    consume = (index + buffer->n - buffer->dmaStart) % buffer->n;
+    buffer->dmaStart = (buffer->dmaStart + consume) % buffer->n;
+    buffer->dmaN -= consume;
 
-    read_start = (f->dmaStart + f->dmaN) % f->n;
-    read_n = f->readBytes / VIBUF_ELM_SIZE;
-    f->readBytes %= VIBUF_ELM_SIZE;
+    read_start = (buffer->dmaStart + buffer->dmaN) % buffer->n;
+    read_n = buffer->readBytes / VIBUF_ELM_SIZE;
+    buffer->readBytes %= VIBUF_ELM_SIZE;
 
     if (read_n > 0) {
-        last = (f->dmaStart + f->dmaN - 1 + f->n) % f->n;
-        sc_tag2((u64 *)(f->tag + last), (u32)((u8 *)f->data + VIBUF_ELM_SIZE * last),
+        last = (buffer->dmaStart + buffer->dmaN - 1 + buffer->n) % buffer->n;
+        sc_tag2((u64 *)(buffer->tag + last), (u32)((u8 *)buffer->data + VIBUF_ELM_SIZE * last),
                        DMA_ID_REF, VIBUF_ELM_SIZE / 16);
         isNewData = 1;
     }
@@ -77,21 +77,21 @@ s32 vi_buf_add_dma(ViBuf *f) {
     index = read_start;
     for (i = 0; i < read_n; i++) {
         id = (i == read_n - 1) ? DMA_ID_REFE : DMA_ID_REF;
-        sc_tag2((u64 *)(f->tag + index), (u32)((u8 *)f->data + VIBUF_ELM_SIZE * index), id,
+        sc_tag2((u64 *)(buffer->tag + index), (u32)((u8 *)buffer->data + VIBUF_ELM_SIZE * index), id,
                        VIBUF_ELM_SIZE / 16);
-        index = (index + 1) % f->n;
+        index = (index + 1) % buffer->n;
     }
 
-    f->dmaN += read_n;
+    buffer->dmaN += read_n;
 
-    if (f->dmaN) {
+    if (buffer->dmaN) {
         if (isNewData) {
             d4chcr = (d4chcr & 0x0fffffff) | (DMA_ID_REF << 28);
         }
         set_d4_chcr(d4chcr | 0x100);
     }
 
-    SignalSema(f->semaphore);
+    SignalSema(buffer->semaphore);
 
     return 1;
 }
