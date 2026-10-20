@@ -2884,31 +2884,31 @@ extern float D_0015ED60_9408 __asm__("D_0015ED60");
 extern float dist_9408(void *, void *) __asm__("FUN_001f9b48");
 extern int FUN_L13_002e9160_c(char *, char *, int, int) __asm__("FUN_L13_002e9160");
 
-int FUN_L13_002e9408(struct Moby *m, char *d, int idx, int aim) {
+int FUN_L13_002e9408(struct Moby *moby, char *d, int idx, int aim) {
     char *path = D_L13_001B07B0_9408[*(int *)(&d[idx << 2] + 0xB0)];
     int r = 0;
     float ahead[4];
     float behind[4];
-    float a, b;
-    int n;
+    float ahead_distance_to_hero, b;
+    int next_node_index;
     int k;
     int dir;
     if (path != 0) {
-        n = *(short *)(d + 0x9C) + 1;
-        if (n >= *(int *)path) {
-            n = 0;
+        next_node_index = *(short *)(d + 0x9C) + 1;
+        if (next_node_index >= *(int *)path) {
+            next_node_index = 0;
         }
-        qcopy(ahead, path + n * 16 + 0x10);
-        a = dist_9408(ahead, &hero.motion.pos);
+        qcopy(ahead, path + next_node_index * 16 + 0x10);
+        ahead_distance_to_hero = dist_9408(ahead, &hero.motion.pos);
         k = *(short *)(d + 0x9C) - 1;
         if (k < 0) {
             k = *(int *)path - 1;
         }
         qcopy(behind, path + k * 16 + 0x10);
         b = dist_9408(behind, &hero.motion.pos);
-        if (a < b) {
+        if (ahead_distance_to_hero < b) {
             dir = -1;
-        } else if (b < a) {
+        } else if (b < ahead_distance_to_hero) {
             dir = 1;
         } else {
             dir = d[0x10C] == 1 ? 1 : -1;
@@ -2923,20 +2923,20 @@ int FUN_L13_002e9408(struct Moby *m, char *d, int idx, int aim) {
                 *(short *)(d + 0x9E) = cur;
             }
         } else {
-            float dist = dist_9408(&m->pos, &hero.motion.pos);
-            float s = 1.0f;
+            float dist = dist_9408(&moby->pos, &hero.motion.pos);
+            float target_speed_multiplier = 1.0f;
             float sp;
-            if (m->command == 4) {
-                s = 3.0f;
+            if (moby->command == 4) {
+                target_speed_multiplier = 3.0f;
             }
             sp = *(float *)(d + 0xAC);
-            sp += (s * 30.0f / dist - sp) * (D_0015ED60_9408 * 0.12f);
+            sp += (target_speed_multiplier * 30.0f / dist - sp) * (D_0015ED60_9408 * 0.12f);
             *(float *)(d + 0xAC) = sp;
             if (sp < 0.0f) {
                 *(float *)(d + 0xAC) = 0.0f;
             }
         }
-        r = FUN_L13_002e9160_c(m, d, idx, aim);
+        r = FUN_L13_002e9160_c(moby, d, idx, aim);
     }
     if (0.0f < *(float *)(path + (*(short *)(d + 0x9C) << 4) + 0x1C)) {
         r |= 2;
