@@ -2014,7 +2014,7 @@ void FUN_L00_002b57f0_u() __asm__("FUN_L00_002b57f0");
 void FUN_L00_00203b78();
 void mark_moby_for_removal() __asm__("FUN_0020c828");
 /* Clears the moby state word 4 and the 0x14 handle, calls release helpers, marks a for removal. */
-void FUN_L00_002b5b20(void *a, char **b) {
+void FUN_L00_002b5b20(void *missile_moby, char **b) {
     char *x = *(char **)(*b + 0x78);
     if (x)
         *(int *)(x + 4) = 0;
@@ -2022,9 +2022,9 @@ void FUN_L00_002b5b20(void *a, char **b) {
     FUN_L00_002eba18(*(int *)((char *)b + 0x14));
     *(int *)((char *)b + 0x14) = 0;
     hero_set_state(HERO_STATE_IDLE, 1);
-    FUN_L00_002b57f0_u(a, 1);
+    FUN_L00_002b57f0_u(missile_moby, 1);
     FUN_L00_00203b78();
-    mark_moby_for_removal(a);
+    mark_moby_for_removal(missile_moby);
     D_L00_00167014[0] = 0;
 }
 typedef unsigned int u128_2b5ba0 __attribute__((mode(TI), aligned(16)));
