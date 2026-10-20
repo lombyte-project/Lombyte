@@ -18,11 +18,11 @@ void FUN_L02_002ecc68(char *self) {
             char *data = *(char **)(cur + 0x78);
             if (*(short *)(cur + 0xA6) == *(short *)(self + 0xA6)) {
                 if ((*(int *)(data + 0xe0) & 0xFF) > 0x80) {
-                    char *q = data + 0x80;
+                    char *slot_position = data + 0x80;
                     int i;
                     for (i = 0x5; i >= 0; i--) {
-                        FUN_L00_00263618(q, *(int *)(data + 0xe0), 1.2f, 0.57f);
-                        q += 0x10;
+                        FUN_L00_00263618(slot_position, *(int *)(data + 0xe0), 1.2f, 0.57f);
+                        slot_position += 0x10;
                     }
                 }
             }
