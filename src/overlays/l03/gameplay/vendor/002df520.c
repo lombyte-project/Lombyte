@@ -387,7 +387,7 @@ extern void func_001F9BD8_ebb00(void *, void *, void *) __asm__("FUN_001f9a10");
 void FUN_L03_002ebb00(void *arg) {
     char *camera = arg;
     char *camera_data = *(char **)(camera + 0x70);
-    char *a = camera_data + 0xD0;
+    char *camera_offset_params = camera_data + 0xD0;
     char *b = camera_data + 0xF0;
     struct Hero *g = &hero;
     float camera_back_offset[4];
@@ -397,8 +397,8 @@ void FUN_L03_002ebb00(void *arg) {
     if (g->unk2284 != 0x50 || g->state.current == 0x11) {
         *(float *)(b + 0x34) = g->motion.pos.f[2];
     }
-    func_L00_001FF4B0_ebb00(gravity_offset, &hero.gravity_dir, -*(float *)(a + 0x10));
-    func_L00_001FF4B0_ebb00(camera_back_offset, b, -*(float *)a);
+    func_L00_001FF4B0_ebb00(gravity_offset, &hero.gravity_dir, -*(float *)(camera_offset_params + 0x10));
+    func_L00_001FF4B0_ebb00(camera_back_offset, b, -*(float *)camera_offset_params);
     hero_ptr = &hero;
     *(float *)camera_data =
         func_001EC120_ebb00(camera_data + 0x10, *(float *)camera_data, hero_ptr->motion.pos.f[0], *(float *)(camera_data + 0x20),
