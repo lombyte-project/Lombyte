@@ -9,19 +9,19 @@
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_0026E8E0.c: func_L01_0026E8E0), where it is exact; names translated to the US level program. */
 
 void FUN_L01_0026d930(char *p);
-void FUN_L01_0026d930(char *p) {
-    *(int *)(p + 0x0) = 0x280;
-    *(float *)(p + 0x4) = 1.0f;
-    *(float *)(p + 0x8) = 0.5f;
-    *(float *)(p + 0xC) = 0.5f;
-    *(int *)(p + 0x14) = 0;
-    *(int *)(p + 0x10) = 0;
-    *(int *)(p + 0x18) = 0;
-    *(float *)(p + 0x24) = 2.7f;
-    *(float *)(p + 0x20) = 0.3f;
-    *(float *)(p + 0x1C) = 0.3f;
-    *(float *)(p + 0x28) = 1.57f;
-    *(float *)(p + 0x2C) = 0.1f;
+void FUN_L01_0026d930(char *destination) {
+    *(int *)(destination + 0x0) = 0x280;
+    *(float *)(destination + 0x4) = 1.0f;
+    *(float *)(destination + 0x8) = 0.5f;
+    *(float *)(destination + 0xC) = 0.5f;
+    *(int *)(destination + 0x14) = 0;
+    *(int *)(destination + 0x10) = 0;
+    *(int *)(destination + 0x18) = 0;
+    *(float *)(destination + 0x24) = 2.7f;
+    *(float *)(destination + 0x20) = 0.3f;
+    *(float *)(destination + 0x1C) = 0.3f;
+    *(float *)(destination + 0x28) = 1.57f;
+    *(float *)(destination + 0x2C) = 0.1f;
 }
 
 #include "sda.h"
