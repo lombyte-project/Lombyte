@@ -2175,77 +2175,77 @@ f32 compute_interpolated_record_value_u(struct InterpolatedStateEntry *arg0) __a
 void mine_blend_color(void) __asm__("FUN_L00_002371e0");
 extern void func_L00_00237B70_anim(void *, int, int, int) __asm__("FUN_L00_002371e0");
 
-void FUN_L16_002d0058(L16LeapMoby_u *m) {
+void FUN_L16_002d0058(L16LeapMoby_u *leap_moby) {
     float root0, root1;
     float pitch;
-    L16LeapData_u *d = m->data;
+    L16LeapData_u *leap_data = leap_moby->data;
     pitch = 0.0f;
-    if (d->timer == 0) {
+    if (leap_data->timer == 0) {
         int next;
         float distance;
-        next = FUN_L00_0025d7a0(d->path, d->node, 1, 1) * 16;
-        distance = vector_distance_xy(d->path + (d->node * 16 + 0x10), d->path + (next + 0x10));
-        pitch = fast_arc_tan(distance, *(float *)(d->path + next + 0x18) -
-                                           ((L16LeapPath *)d->path)->points[d->node][2]);
+        next = FUN_L00_0025d7a0(leap_data->path, leap_data->node, 1, 1) * 16;
+        distance = vector_distance_xy(leap_data->path + (leap_data->node * 16 + 0x10), leap_data->path + (next + 0x10));
+        pitch = fast_arc_tan(distance, *(float *)(leap_data->path + next + 0x18) -
+                                           ((L16LeapPath *)leap_data->path)->points[leap_data->node][2]);
     }
-    FUN_L00_0025bc98(&m->pitch, &d->pitch_speed, 0, pitch, frame_scale_sq * 0.02f, frame_scale_sq * 0.3f,
+    FUN_L00_0025bc98(&leap_moby->pitch, &leap_data->pitch_speed, 0, pitch, frame_scale_sq * 0.02f, frame_scale_sq * 0.3f,
                      D_0015ED6C * 3.14159265f);
-    if (d->timer != 0) {
+    if (leap_data->timer != 0) {
         float duration;
         float acceleration;
-        if (m->next_animation != 5 && scale_game_frames(3) > d->timer) {
-            func_L00_00237B70_anim(m, 5, 4, scale_game_frames(5));
-            d->sequence = -1;
+        if (leap_moby->next_animation != 5 && scale_game_frames(3) > leap_data->timer) {
+            func_L00_00237B70_anim(leap_moby, 5, 4, scale_game_frames(5));
+            leap_data->sequence = -1;
         }
         acceleration = frame_time_sq * 21.0f * -0.5f;
         duration = 30.0f;
-        if (FUN_L00_002595a0(&root0, &root1, acceleration, d->vertical_speed - acceleration,
-                             d->height - d->target_height) > 0 &&
+        if (FUN_L00_002595a0(&root0, &root1, acceleration, leap_data->vertical_speed - acceleration,
+                             leap_data->height - leap_data->target_height) > 0 &&
             root0 > 0.0f) {
             duration = func_001FA898_caa18(root0);
         }
-        if (scale_game_frames(7) < d->timer && scale_game_frames(11) > d->timer &&
-            m->next_animation == 5 && (float)scale_game_frames(27) < duration) {
+        if (scale_game_frames(7) < leap_data->timer && scale_game_frames(11) > leap_data->timer &&
+            leap_moby->next_animation == 5 && (float)scale_game_frames(27) < duration) {
             short sequence;
             int chosen;
             chosen = random_int_between(0, 3) + 1;
-            d->sequence = chosen;
+            leap_data->sequence = chosen;
             sequence = chosen;
-            func_L00_00237B70_anim(m, sequence, 3, scale_game_frames(7));
+            func_L00_00237B70_anim(leap_moby, sequence, 3, scale_game_frames(7));
         }
-        if (d->sequence != -1) {
-            if (m->animation == m->next_animation) {
-                float frame = compute_interpolated_record_value_u(m);
+        if (leap_data->sequence != -1) {
+            if (leap_moby->animation == leap_moby->next_animation) {
+                float frame = compute_interpolated_record_value_u(leap_moby);
                 if (frame > 7.0f && frame < 20.0f && duration != 0.0f) {
                     float speed = 30.0f / duration;
                     if (speed > 1.7f)
                         speed = 1.7f;
                     if (speed < 0.3f)
                         speed = 0.3f;
-                    m->animation_speed = speed;
+                    leap_moby->animation_speed = speed;
                 }
             }
-            if (d->sequence != -1) {
+            if (leap_data->sequence != -1) {
                 if (duration < (float)scale_game_frames(5)) {
-                    func_L00_00237B70_anim(m, 5, 0x33, scale_game_frames(5));
-                    d->sequence = -1;
-                } else if (m->flags & 2) {
-                    func_L00_00237B70_anim(m, 5, 0x1C, scale_game_frames(7));
-                    d->sequence = -1;
+                    func_L00_00237B70_anim(leap_moby, 5, 0x33, scale_game_frames(5));
+                    leap_data->sequence = -1;
+                } else if (leap_moby->flags & 2) {
+                    func_L00_00237B70_anim(leap_moby, 5, 0x1C, scale_game_frames(7));
+                    leap_data->sequence = -1;
                 }
             }
         }
-        if (m->animation == m->next_animation && m->animation == 5 && duration != 0.0f) {
+        if (leap_moby->animation == leap_moby->next_animation && leap_moby->animation == 5 && duration != 0.0f) {
             float remaining;
             remaining = 50.0f;
-            remaining -= compute_interpolated_record_value_u(m);
+            remaining -= compute_interpolated_record_value_u(leap_moby);
             remaining /= duration;
-            m->animation_speed = remaining;
+            leap_moby->animation_speed = remaining;
         }
     } else {
-        m->animation_speed = 1.0f;
-        if ((m->flags & 2) && m->next_animation != 0) {
-            func_L00_00237B70_anim(m, 0, 0, scale_game_frames(8));
+        leap_moby->animation_speed = 1.0f;
+        if ((leap_moby->flags & 2) && leap_moby->next_animation != 0) {
+            func_L00_00237B70_anim(leap_moby, 0, 0, scale_game_frames(8));
         }
     }
 }
