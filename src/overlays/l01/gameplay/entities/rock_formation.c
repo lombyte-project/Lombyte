@@ -1522,24 +1522,24 @@ void pipe_update(struct Moby *moby) {
         }
         allocate_voice_for_target_entry(0, 0, (int)moby);
         for (k = 0x95; k >= 0;) {
-            float a, b;
+            float velocity_component_or_size, b;
             *(OvlQuad *)v = 0;
             v[0] = -0.2f;
             v[2] = 1.2f;
             k--;
             add_vector_xyz(v, v, &moby->pos);
-            a = fast_cos(random_angle_radians());
+            velocity_component_or_size = fast_cos(random_angle_radians());
             b = random_float_between(1.5f, 3.0f);
-            a = a * (b * frame_time);
-            w[0] = a;
-            a = fast_sin(random_angle_radians());
+            velocity_component_or_size = velocity_component_or_size * (b * frame_time);
+            w[0] = velocity_component_or_size;
+            velocity_component_or_size = fast_sin(random_angle_radians());
             b = random_float_between(1.5f, 3.0f);
-            a = a * (b * frame_time);
-            w[1] = a;
+            velocity_component_or_size = velocity_component_or_size * (b * frame_time);
+            w[1] = velocity_component_or_size;
             w[2] = 0;
             w[2] = random_float_between(w[2], 3.0f) * frame_time;
-            a = random_float_between(125000.0f, 175000.0f);
-            FUN_L00_0026ced0(v, w, 0x207F7F7F, 0x272727, a,
+            velocity_component_or_size = random_float_between(125000.0f, 175000.0f);
+            FUN_L00_0026ced0(v, w, 0x207F7F7F, 0x272727, velocity_component_or_size,
                              scale_game_frames(FUN_L00_00257b90(0x2D, 0x3C)));
         }
         FUN_L01_002ffa90_c(moby);
