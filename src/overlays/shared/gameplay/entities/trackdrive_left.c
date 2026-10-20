@@ -882,14 +882,14 @@ void FUN_L02_002da938(void *unused, f32 angle, f32 b, f32 end_distance, s32 colo
     u64_t packed_vertices[4];
     s32 vertex_colors[4];
     s32 vertex_uvs[4];
-    s32 t;
+    s32 unwrapped_uv_scroll;
     s32 off;
     s32 tex;
     f32 f24, f25, f26, f27, f28, f29, f30, f31;
     f32 trig_value;
 
-    t = truncate_float_to_s32((f32)D_L02_0015F5CC * D_L02_00161B60);
-    off = (t % 512) << 16;
+    unwrapped_uv_scroll = truncate_float_to_s32((f32)D_L02_0015F5CC * D_L02_00161B60);
+    off = (unwrapped_uv_scroll % 512) << 16;
     vertex_colors[3] = color;
     vertex_colors[2] = color;
     vertex_colors[1] = color;
