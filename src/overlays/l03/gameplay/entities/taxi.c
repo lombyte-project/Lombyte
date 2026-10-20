@@ -776,7 +776,7 @@ void FUN_L03_002d3198(struct Moby *m) {
     };
     struct RailTaxiVars *v = (struct RailTaxiVars *)m->pvars;
     Vec4 oldPos, oldRot, move;
-    struct RailPath *p;
+    struct RailPath *route_path;
     s32 i;
     s32 r;
 
@@ -823,13 +823,13 @@ void FUN_L03_002d3198(struct Moby *m) {
                 (is_point_inside_clip_volume(&hero.motion.pos, v->volume[r]) || v->route == r)) {
                 m->collision = m->pclass->collision;
                 if (v->out[r] != -1) {
-                    p = D_L03_001B05B0[v->out[r]];
-                    qcopy(&m->pos, &p->pts[0]);
-                    m->rot.z = taxi_atan2(p->pts[1].f[0] - m->pos.x, p->pts[1].f[1] - m->pos.y);
+                    route_path = D_L03_001B05B0[v->out[r]];
+                    qcopy(&m->pos, &route_path->pts[0]);
+                    m->rot.z = taxi_atan2(route_path->pts[1].f[0] - m->pos.x, route_path->pts[1].f[1] - m->pos.y);
                 } else if (v->back[r] != -1) {
-                    p = D_L03_001B05B0[v->back[r]];
-                    qcopy(&m->pos, &p->pts[0]);
-                    m->rot.z = taxi_atan2(p->pts[1].f[0] - m->pos.x, p->pts[1].f[1] - m->pos.y);
+                    route_path = D_L03_001B05B0[v->back[r]];
+                    qcopy(&m->pos, &route_path->pts[0]);
+                    m->rot.z = taxi_atan2(route_path->pts[1].f[0] - m->pos.x, route_path->pts[1].f[1] - m->pos.y);
                 }
                 m->command = r;
                 m->state = 2;
