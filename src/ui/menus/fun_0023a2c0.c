@@ -2,10 +2,10 @@
 extern void update_instance_attachment_points_and_lengths(void *) __asm__("func_0023A318");
 void FUN_0023a2c0(char *instance) {
     if (*(unsigned char *)(instance + 0x70) & 2) {
-        float o = 1.0f;
+        float field_54_value = 1.0f;
         if (0.0f < *(float *)(instance + 0x58))
-            o = 0.0f;
-        *(float *)(instance + 0x54) = o;
+            field_54_value = 0.0f;
+        *(float *)(instance + 0x54) = field_54_value;
         *(float *)(instance + 0x58) = 0.0f;
     }
     update_instance_attachment_points_and_lengths(instance);
