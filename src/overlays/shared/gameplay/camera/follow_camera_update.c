@@ -1112,10 +1112,10 @@ extern void FUN_L00_001eb0b0_c(void *) __asm__("FUN_L00_001eb0b0");
 extern void FUN_L00_001ff250(void *);
 extern void FUN_L00_002eb278_c(void *) __asm__("FUN_L00_002eb278");
 
-void FUN_L00_002eb3b0(S002eb3b0 *p) {
+void FUN_L00_002eb3b0(S002eb3b0 *camera_object) {
     Moby002eb3b0 *m;
-    p->m->fF0 = 0;
-    m = p->m;
+    camera_object->m->fF0 = 0;
+    m = camera_object->m;
     m->f9C = 0;
     m->fA8 = 0;
     m->fAC = 0;
@@ -1134,8 +1134,8 @@ void FUN_L00_002eb3b0(S002eb3b0 *p) {
     FUN_L00_001eb0b0_c((u8 *)m + 0x50);
     FUN_L00_001eb0b0_c(m);
     FUN_L00_001ff250((u8 *)m + 0x90);
-    FUN_L00_002eb278_c(p);
-    p->f7E = 0;
+    FUN_L00_002eb278_c(camera_object);
+    camera_object->f7E = 0;
 }
 float FUN_001fa580_2eb480(float, float) __asm__("FUN_001fa580");
 void FUN_001fa050_2eb480(void *, void *) __asm__("FUN_001fa050");
