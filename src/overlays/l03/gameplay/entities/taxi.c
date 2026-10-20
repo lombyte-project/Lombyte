@@ -1695,7 +1695,7 @@ void big_al_update(struct Moby *guide_moby) {
         BIG_AL_RESOLVE_DIALOGUE = 2
     };
     struct GuideVars *v = (struct GuideVars *)guide_moby->pvars;
-    struct Moby *t;
+    struct Moby *referenced_moby;
     struct Moby *reward_moby;
     Vec4 *g;
     struct Hero *hero_state;
@@ -1719,9 +1719,9 @@ void big_al_update(struct Moby *guide_moby) {
             v->turned = 1;
         }
         if (visited52[guide_moby->mission + current_level_index * 16] == 0xFF && v->link != -1) {
-            t = (struct Moby *)((v->link << 8) + D_L03_0015FFD8_i);
-            if (t->oclass == 0x3F4) {
-                *(s32 *)(t->pvars + 0x8C) = 1;
+            referenced_moby = (struct Moby *)((v->link << 8) + D_L03_0015FFD8_i);
+            if (referenced_moby->oclass == 0x3F4) {
+                *(s32 *)(referenced_moby->pvars + 0x8C) = 1;
             }
         }
         guide_moby->spawn_frame = *(u64 *)(D_001413D0_db558[0] + 0x38);
@@ -1734,9 +1734,9 @@ void big_al_update(struct Moby *guide_moby) {
         break;
     case BIG_AL_UPDATE_DIALOGUE:
         if (item_available[2] != 0 && v->reward != -1) {
-            t = (struct Moby *)((v->reward << 8) + D_L03_0015FFD8_i);
-            if (t->oclass == 0x3E5 && t->state == 0) {
-                t->state = 1;
+            referenced_moby = (struct Moby *)((v->reward << 8) + D_L03_0015FFD8_i);
+            if (referenced_moby->oclass == 0x3E5 && referenced_moby->state == 0) {
+                referenced_moby->state = 1;
                 D_L03_001BA6D0.collected[(s16)((struct Moby *)((v->reward << 8) + D_L03_0015FFD8_i))->save_id] =
                     ((struct Moby *)((v->reward << 8) + D_L03_0015FFD8_i))->mission + 2;
                 reward_moby = (struct Moby *)((v->reward << 8) + D_L03_0015FFD8_i);
@@ -1770,9 +1770,9 @@ void big_al_update(struct Moby *guide_moby) {
         if (v->talk.mode != 2) {
             jet_clear_persistent(guide_moby->mission);
             if (v->link != -1) {
-                t = (struct Moby *)((v->link << 8) + D_L03_0015FFD8_i);
-                if (t->oclass == 0x3F4) {
-                    *(s32 *)(t->pvars + 0x8C) = 1;
+                referenced_moby = (struct Moby *)((v->link << 8) + D_L03_0015FFD8_i);
+                if (referenced_moby->oclass == 0x3F4) {
+                    *(s32 *)(referenced_moby->pvars + 0x8C) = 1;
                 }
             }
             if (v->warp != -1) {
@@ -1786,9 +1786,9 @@ void big_al_update(struct Moby *guide_moby) {
         FUN_L00_00260860(2, 1);
         queue_dialogue_message(0xBC7, -1);
         if (v->reward != -1) {
-            t = (struct Moby *)((v->reward << 8) + D_L03_0015FFD8_i);
-            if (t->oclass == 0x3E5 && t->state == 0) {
-                t->state = 1;
+            referenced_moby = (struct Moby *)((v->reward << 8) + D_L03_0015FFD8_i);
+            if (referenced_moby->oclass == 0x3E5 && referenced_moby->state == 0) {
+                referenced_moby->state = 1;
                 D_L03_001BA6D0.collected[(s16)((struct Moby *)((v->reward << 8) + D_L03_0015FFD8_i))->save_id] =
                     ((struct Moby *)((v->reward << 8) + D_L03_0015FFD8_i))->mission + 2;
                 reward_moby = (struct Moby *)((v->reward << 8) + D_L03_0015FFD8_i);
