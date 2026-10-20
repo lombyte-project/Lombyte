@@ -1157,7 +1157,7 @@ int D_L16_001CEFD0[196] = RIBBON_COLORS;
 int D_L17_001CF850[196] = RIBBON_COLORS;
 int D_L18_001CF550[196] = RIBBON_COLORS;
 /* Draws the moby's beam: orients the moby along its child's two joints, draws three quads and a ribbon of 196 points. */
-void FUN_L00_002b3628(struct Moby *m) {
+void FUN_L00_002b3628(struct Moby *beam_moby) {
     Quad_2b3628 pk;
     Vec4A_2b3628 mtx[4];
     Vec4A_2b3628 out[2];
@@ -1170,7 +1170,7 @@ void FUN_L00_002b3628(struct Moby *m) {
     Vec4A_2b3628 billboard_up_axis;
     Vec4A_2b3628 billboard_origin;
     Vec4A_2b3628 ribbon_vertex_position;
-    Data_2b3628 *data = (Data_2b3628 *)m->pvars;
+    Data_2b3628 *data = (Data_2b3628 *)beam_moby->pvars;
     Child_2b3628 *child = data->child;
     int i;
 
@@ -1199,10 +1199,10 @@ void FUN_L00_002b3628(struct Moby *m) {
     mtx[1].w = 0.0f;
     qcopy(&mtx[3], &out[1]);
     mtx[3].w = 1.0f;
-    qcopy(&m->rot_row0, &mtx[0]);
-    qcopy(&m->rot_row1, &mtx[1]);
-    qcopy(&m->rot_row2, &mtx[2]);
-    qcopy(&m->pos, &mtx[3]);
+    qcopy(&beam_moby->rot_row0, &mtx[0]);
+    qcopy(&beam_moby->rot_row1, &mtx[1]);
+    qcopy(&beam_moby->rot_row2, &mtx[2]);
+    qcopy(&beam_moby->pos, &mtx[3]);
     func_001FA190_2b3628(idm);
     idm[3].w = 1.0f;
     idm[3].z = -0.075f;
