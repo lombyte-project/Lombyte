@@ -122,10 +122,10 @@ extern void FUN_L00_00211250_2215c8(void) __asm__("FUN_L00_00211250");
 extern Entry70_2215c8 D_L00_001798F0[];
 void FUN_L00_002215c8(void) {
     Vec4 sum;
-    Vec4 d;
+    Vec4 sample_delta;
     struct Moby *spawned_moby;
     s32 i;
-    s32 n;
+    s32 sample_index_base;
     s32 sample_count;
 
     if (hero.unk20AD == 0) {
@@ -210,13 +210,13 @@ void FUN_L00_002215c8(void) {
         clear_u64_value(&sum);
         sample_count = 8;
         for (i = 0; i < sample_count; i++) {
-            n = hero.unk21B0 - i;
+            sample_index_base = hero.unk21B0 - i;
             {
-                s32 a = (n + 0x1F) % 32;
-                s32 b = (n + 0x1E) % 32;
-                FUN_001f9a28_2215c8(&d, &hero.unk1B00[a], &hero.unk1B00[b]);
+                s32 sample_index = (sample_index_base + 0x1F) % 32;
+                s32 b = (sample_index_base + 0x1E) % 32;
+                FUN_001f9a28_2215c8(&sample_delta, &hero.unk1B00[sample_index], &hero.unk1B00[b]);
             }
-            add_vector_xyz(&sum, &sum, &d);
+            add_vector_xyz(&sum, &sum, &sample_delta);
         }
         scale_vector_xyz(&sum, &sum, 1.0f / (f32)sample_count);
         if (FUN_001f9af0_2215c8(&sum) < frame_time) {
