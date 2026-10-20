@@ -145,12 +145,12 @@ extern SpawnSound *suck_get_aim_height(struct Moby *) __asm__("FUN_002141f8");
 extern void debug_print() __asm__("FUN_001e93b0");
 
 /* Spawner: revives the first free pooled child (of class oclass, -1 = any) at a copy of at, counts the live children, returns the revived one or NULL. */
-struct Moby *FUN_L03_002bec60(struct Moby *m, Vec4 *at, s32 oclass)
+struct Moby *FUN_L03_002bec60(struct Moby *spawner_moby, Vec4 *at, s32 oclass)
 {
     Vec4 pos;
     Vec4 *src;
     Spawner *pv;
-    struct Moby *c;
+    struct Moby *current_moby;
     struct Moby *spawned;
     SpawnClass *cls;
     SpawnTarget *target;
@@ -162,7 +162,7 @@ struct Moby *FUN_L03_002bec60(struct Moby *m, Vec4 *at, s32 oclass)
 
     src = &pos;
     pos.q = at->q;
-    if (m == NULL || (pv = (Spawner *)m->pvars) == NULL) {
+    if (spawner_moby == NULL || (pv = (Spawner *)spawner_moby->pvars) == NULL) {
         return NULL;
     }
     pv->live = 0;
@@ -173,12 +173,12 @@ struct Moby *FUN_L03_002bec60(struct Moby *m, Vec4 *at, s32 oclass)
         if (idx == -1) {
             continue;
         }
-        c = &D_L03_0015FFD8_mb[idx];
-        if (c != NULL && c->state != 0xFE && c->state != 0xFD) {
+        current_moby = &D_L03_0015FFD8_mb[idx];
+        if (current_moby != NULL && current_moby->state != 0xFE && current_moby->state != 0xFD) {
             pv->live++;
             continue;
         }
-        if (oclass != -1 && oclass != c->oclass) {
+        if (oclass != -1 && oclass != current_moby->oclass) {
             continue;
         }
         if (found) {
@@ -186,51 +186,51 @@ struct Moby *FUN_L03_002bec60(struct Moby *m, Vec4 *at, s32 oclass)
         }
         pv->live++;
         found = 1;
-        qcopy(&c->pos, src);
-        c->pos.w = 0.0f;
-        c->state = 0;
-        c->command = 0;
-        cls = (SpawnClass *)c->pclass;
+        qcopy(&current_moby->pos, src);
+        current_moby->pos.w = 0.0f;
+        current_moby->state = 0;
+        current_moby->command = 0;
+        cls = (SpawnClass *)current_moby->pclass;
         flags = cls->flags;
-        c->flags = flags;
-        c->scale = cls->scale;
-        c->update_dist = m->update_dist;
-        c->draw_dist = m->draw_dist;
-        c->visible = found;
+        current_moby->flags = flags;
+        current_moby->scale = cls->scale;
+        current_moby->update_dist = spawner_moby->update_dist;
+        current_moby->draw_dist = spawner_moby->draw_dist;
+        current_moby->visible = found;
         if (cls->unk40 != 0) {
-            c->flags = flags | 0x10;
+            current_moby->flags = flags | 0x10;
         }
-        if (((SpawnClass *)c->pclass)->always_draw != 0) {
-            c->flags |= 0x400;
+        if (((SpawnClass *)current_moby->pclass)->always_draw != 0) {
+            current_moby->flags |= 0x400;
         }
-        c->unk71 = 0xFF;
-        c->occlusion = 0x7F80;
-        c->unk72 = 0xFF;
-        c->hit_slot = 0xFF;
+        current_moby->unk71 = 0xFF;
+        current_moby->occlusion = 0x7F80;
+        current_moby->unk72 = 0xFF;
+        current_moby->hit_slot = 0xFF;
         if (pv->options & 2) {
-            c->scale = ((SpawnClass *)c->pclass)->scale * 0.1f;
+            current_moby->scale = ((SpawnClass *)current_moby->pclass)->scale * 0.1f;
         }
-        set_moby_animation(c, 0, 0);
-        target = FUN_L00_002db890(c);
+        set_moby_animation(current_moby, 0, 0);
+        target = FUN_L00_002db890(current_moby);
         if (target != NULL) {
             target->unk94 = 0;
             target->unk68 = 0;
             target->unk6C = 0;
         }
-        if (m->unkB4 < c->unkB4) {
-            c->unkB4 = m->unkB4;
+        if (spawner_moby->unkB4 < current_moby->unkB4) {
+            current_moby->unkB4 = spawner_moby->unkB4;
         }
-        if (c->unkB4 <= 0) {
-            c->unkB4 = 1;
+        if (current_moby->unkB4 <= 0) {
+            current_moby->unkB4 = 1;
         }
-        m->unkB4 -= c->unkB4;
-        if (m->unkB4 < 0) {
-            m->unkB4 = 1;
+        spawner_moby->unkB4 -= current_moby->unkB4;
+        if (spawner_moby->unkB4 < 0) {
+            spawner_moby->unkB4 = 1;
         }
-        c->collision = ((SpawnClass *)c->pclass)->unk10;
-        FUN_L00_0025d1b8(c);
-        FUN_L00_00250df8(c);
-        spawned = c;
+        current_moby->collision = ((SpawnClass *)current_moby->pclass)->unk10;
+        FUN_L00_0025d1b8(current_moby);
+        FUN_L00_00250df8(current_moby);
+        spawned = current_moby;
         sound = suck_get_aim_height(spawned);
         if (sound != NULL) {
             sound->unk34 = 0;
@@ -238,13 +238,13 @@ struct Moby *FUN_L03_002bec60(struct Moby *m, Vec4 *at, s32 oclass)
             sound->timer = sound->duration;
         }
     }
-    for (c = D_L03_0015FFE4; c != NULL; c = c->next) {
-        if (c->oclass == 0x221 && c->state != 0xFE && c->state != 0xFD) {
+    for (current_moby = D_L03_0015FFE4; current_moby != NULL; current_moby = current_moby->next) {
+        if (current_moby->oclass == 0x221 && current_moby->state != 0xFE && current_moby->state != 0xFD) {
             pv->live++;
         }
     }
     if (spawned == NULL) {
-        debug_print(D_L03_001E2FA0, D_L03_0015F5CC, (s16)m->save_id, m->oclass);
+        debug_print(D_L03_001E2FA0, D_L03_0015F5CC, (s16)spawner_moby->save_id, spawner_moby->oclass);
     }
     return spawned;
 }
