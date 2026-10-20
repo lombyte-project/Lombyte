@@ -2531,7 +2531,7 @@ extern s32 D_0014E990[][16];
 extern s32 D_L00_0015F5A4;
 void hero_respawn(void) {
     s32 lvl = current_level_index;
-    char *m;
+    char *damage_source_moby;
     u32 t;
     D_0013DFD8[lvl]++;
     D_0015EEAC++;
@@ -2540,10 +2540,10 @@ void hero_respawn(void) {
         D_L00_0015F5A4 = 1;
     }
     FUN_L00_00203a28_211250();
-    m = ((char *)hero.unk2280);
-    if (m != 0 && *(u8 *)(m + 0xB0) != 0xFF) {
-        D_0014E990[current_level_index][*(u8 *)(m + 0xB0)]++;
-        D_0014EE90[*(u8 *)(m + 0xB0)]++;
+    damage_source_moby = ((char *)hero.unk2280);
+    if (damage_source_moby != 0 && *(u8 *)(damage_source_moby + 0xB0) != 0xFF) {
+        D_0014E990[current_level_index][*(u8 *)(damage_source_moby + 0xB0)]++;
+        D_0014EE90[*(u8 *)(damage_source_moby + 0xB0)]++;
     }
     fade_to_black(FUN_001f96f8_211250(0x10));
     hero.unk20B1 = 1;
