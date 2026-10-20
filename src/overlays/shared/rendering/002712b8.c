@@ -1279,20 +1279,20 @@ unsigned char *FUN_L00_002741a0(void *position, int color, float size_scale, flo
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void free_effect_particle(void *) __asm__("FUN_L00_00267a08");
 
-void FUN_L00_00274308(char *m) {
-    char *v = m + 0x20;
-    int t;
-    fast_vec_add(m + 0x10, m + 0x10, v);
-    *(float *)(m + 0xC) += *(float *)(v + 0x10);
-    m[8] += 1;
-    t = *(unsigned short *)(m + 0xA) - 1;
-    *(unsigned short *)(m + 0xA) = t;
-    if ((short)t == 0) {
-        *(int *)(m + 4) += 0xFF000000;
-        *(short *)(m + 0xA) = 2;
+void FUN_L00_00274308(char *particle) {
+    char *v = particle + 0x20;
+    int decremented_fade_timer;
+    fast_vec_add(particle + 0x10, particle + 0x10, v);
+    *(float *)(particle + 0xC) += *(float *)(v + 0x10);
+    particle[8] += 1;
+    decremented_fade_timer = *(unsigned short *)(particle + 0xA) - 1;
+    *(unsigned short *)(particle + 0xA) = decremented_fade_timer;
+    if ((short)decremented_fade_timer == 0) {
+        *(int *)(particle + 4) += 0xFF000000;
+        *(short *)(particle + 0xA) = 2;
     }
-    if ((*(int *)(m + 4) & 0xFF000000) == 0) {
-        free_effect_particle(m);
+    if ((*(int *)(particle + 4) & 0xFF000000) == 0) {
+        free_effect_particle(particle);
     }
 }
 extern unsigned char *D_L00_001B218C __attribute__((section(".data")));
