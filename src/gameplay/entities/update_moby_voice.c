@@ -19,14 +19,14 @@ void update_moby_voice(struct MobyVoiceFlags *moby) __asm__("FUN_0020c940");
 
 void update_moby_voice(struct MobyVoiceFlags *moby) {
     s32 idx;
-    struct MobyVoiceEntry *e;
+    struct MobyVoiceEntry *voice_slot;
 
     if (moby->unk7D != 0xFF) {
         idx = moby->unk7D;
-        e = (struct MobyVoiceEntry *)(idx * 0x70 + D_0013E550);
-        if (e->unk88 != (s32)moby) {
+        voice_slot = (struct MobyVoiceEntry *)(idx * 0x70 + D_0013E550);
+        if (voice_slot->unk88 != (s32)moby) {
             moby->unk7D = 0xFF;
-        } else if (e->unk7E != moby->unk7C) {
+        } else if (voice_slot->unk7E != moby->unk7C) {
             release_voice_slot(idx);
             moby->unk7D = 0xFF;
         }
