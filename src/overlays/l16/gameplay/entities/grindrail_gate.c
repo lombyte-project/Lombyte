@@ -1351,27 +1351,27 @@ extern float func_00214D88_7890(float *, float, float, float, float,
                                 float *) __asm__("FUN_00213f38");
 
 float FUN_L16_002e6428(void *m_v, void *t_v) {
-    char *m = m_v;
-    float *t = t_v;
-    char *d = *(char **)(m + 0x78);
+    char *moby = m_v;
+    float *target_position = t_v;
+    char *moby_data = *(char **)(moby + 0x78);
     float vel;
     float vec[4];
     float dist;
     float oldz;
-    float a = FUN_001f9e90_c(t[0] - *(float *)(m + 0x10), t[1] - *(float *)(m + 0x14));
-    a = fast_add_rotations(a, *(float *)(d + 0x1F8));
-    oldz = *(float *)(m + 0x18);
+    float target_yaw = FUN_001f9e90_c(target_position[0] - *(float *)(moby + 0x10), target_position[1] - *(float *)(moby + 0x14));
+    target_yaw = fast_add_rotations(target_yaw, *(float *)(moby_data + 0x1F8));
+    oldz = *(float *)(moby + 0x18);
     vel = 0.0f;
-    dist = FUN_001f9b48(m + 0x10, t);
-    FUN_L00_0025be00_c((float *)(m + 0x48), (float *)(d + 0x1F4), a, D_0015ED70_c * 12.566371f,
+    dist = FUN_001f9b48(moby + 0x10, target_position);
+    FUN_L00_0025be00_c((float *)(moby + 0x48), (float *)(moby_data + 0x1F4), target_yaw, D_0015ED70_c * 12.566371f,
                        D_0015ED70_c * 12.566371f, frame_time * 12.566371f);
     func_00214D88_7890(&vel, dist, D_0015ED70_c * 8.0f, D_0015ED70_c * 12.0f, frame_time * 4.0f,
-                       (float *)(d + 0x204));
-    normalize_vector_xyz(vec, m + 0xC0, *(float *)(d + 0x204));
-    vec[2] = *(float *)(d + 0x208) - D_0015ED70_c * 10.0f;
-    FUN_L00_00258830(m, vec, 0.5f, 0.5f, 0.0f, 0x10);
-    FUN_L00_00261d78(0.333f, *(void **)(d + 0x1F0), m + 0x10, m + 0x10);
-    *(float *)(d + 0x208) = oldz - *(float *)(m + 0x18);
+                       (float *)(moby_data + 0x204));
+    normalize_vector_xyz(vec, moby + 0xC0, *(float *)(moby_data + 0x204));
+    vec[2] = *(float *)(moby_data + 0x208) - D_0015ED70_c * 10.0f;
+    FUN_L00_00258830(moby, vec, 0.5f, 0.5f, 0.0f, 0x10);
+    FUN_L00_00261d78(0.333f, *(void **)(moby_data + 0x1F0), moby + 0x10, moby + 0x10);
+    *(float *)(moby_data + 0x208) = oldz - *(float *)(moby + 0x18);
     return dist;
 }
 
