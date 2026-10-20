@@ -2241,25 +2241,25 @@ extern int func_001F9908_i(void *) __asm__("FUN_001f9740");
 
 extern short D_L11_00162064 __attribute__((sda));
 int D_L11_00162068 = 30;
-void FUN_L11_003126f8(struct Moby *moby, char *d) {
-    if (func_001F9908_i(d + 0x84) && (*(int *)(D_0013A4E0 + 0x2610) & 0x28)) {
+void FUN_L11_003126f8(struct Moby *moby, char *ship_vars) {
+    if (func_001F9908_i(ship_vars + 0x84) && (*(int *)(D_0013A4E0 + 0x2610) & 0x28)) {
         if (hero.ship_ammo != 0) {
-            char a[16];
+            char projectile_spawn_position[16];
             char b[16];
-            int t = 0;
-            int v = (*(unsigned short *)(d + 0x6A) + 1) & 3;
-            *(unsigned short *)(d + 0x6A) = v;
-            moby_point_position(moby, v + 7, a);
-            fast_vec_normalize(b, d, 0.3f);
-            fast_vec_add(a, a, b);
-            if (*(int *)(d + 0x88) != 0 && !(500 < *(int *)(d + 0x8C)))
-                t = *(int *)(d + 0x88);
-            if (FUN_L11_00309378(moby, a, t, &moby->rot,
+            int projectile_target = 0;
+            int v = (*(unsigned short *)(ship_vars + 0x6A) + 1) & 3;
+            *(unsigned short *)(ship_vars + 0x6A) = v;
+            moby_point_position(moby, v + 7, projectile_spawn_position);
+            fast_vec_normalize(b, ship_vars, 0.3f);
+            fast_vec_add(projectile_spawn_position, projectile_spawn_position, b);
+            if (*(int *)(ship_vars + 0x88) != 0 && !(500 < *(int *)(ship_vars + 0x8C)))
+                projectile_target = *(int *)(ship_vars + 0x88);
+            if (FUN_L11_00309378(moby, projectile_spawn_position, projectile_target, &moby->rot,
                                  *(float *)&D_L11_00162064 * *(float *)&D_L11_00162090_gp,
                                  scale_game_frames(300))) {
                 func_0022ED80_i(2, 0, (int)moby);
                 hero.ship_ammo -= 1;
-                *(int *)(d + 0x84) = D_L11_00162068;
+                *(int *)(ship_vars + 0x84) = D_L11_00162068;
             }
         }
     }
