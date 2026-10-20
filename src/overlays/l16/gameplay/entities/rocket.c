@@ -2832,7 +2832,7 @@ s32 is_point_inside_clip_volume(s32 arg0, s32 arg1) __asm__("FUN_00214720");
 void mmr_q(struct Obj *obj) __asm__("FUN_0020c828");
 
 extern char D_0013F3D0[] __attribute__((section(".data")));
-void FUN_L16_002d5ef8(struct Moby *m) {
+void FUN_L16_002d5ef8(struct Moby *moby) {
     enum {
         SCENE_STATE_INITIALIZE = 0,
         SCENE_STATE_WAIT_FOR_TRIGGER = 1,
@@ -2843,67 +2843,67 @@ void FUN_L16_002d5ef8(struct Moby *m) {
         SCENE_STATE_HIDDEN_WAIT_FOR_LINKED_MOBYS = 6
     };
     float position[4], rotation[4];
-    L16SceneData_q *d = (L16SceneData_q *)m->pvars;
+    L16SceneData_q *scene_data = (L16SceneData_q *)moby->pvars;
     void *helper;
-    switch (m->state) {
+    switch (moby->state) {
     case SCENE_STATE_INITIALIZE:
-        if (d == 0 || d->trigger == -1) {
-            mmr_q(m);
+        if (scene_data == 0 || scene_data->trigger == -1) {
+            mmr_q(moby);
             return;
         }
-        if (d->hidden == -1) {
-            m->state = 5;
-            m->flags |= 1;
-            m->visible = 0;
-            m->collision = 0;
+        if (scene_data->hidden == -1) {
+            moby->state = 5;
+            moby->flags |= 1;
+            moby->visible = 0;
+            moby->collision = 0;
         } else {
-            m->state = 1;
-            FUN_L16_002d5ad0_q(d->helper, 1);
+            moby->state = 1;
+            FUN_L16_002d5ad0_q(scene_data->helper, 1);
         }
         break;
     case SCENE_STATE_WAIT_FOR_TRIGGER: {
         char *player = D_0013F3D0;
-        if (!is_point_inside_clip_volume(player, d->trigger))
+        if (!is_point_inside_clip_volume(player, scene_data->trigger))
             break;
-        d->timer_q = scale_game_frames_q(60);
-        m->state = 2;
-        if (d->camera >= 0)
-            *(unsigned short *)(player + 0x225A) = *(unsigned short *)&d->camera;
+        scene_data->timer_q = scale_game_frames_q(60);
+        moby->state = 2;
+        if (scene_data->camera >= 0)
+            *(unsigned short *)(player + 0x225A) = *(unsigned short *)&scene_data->camera;
         FUN_L00_002eaaa0_q(D_L16_001671C0_lui, D_L16_001671C0_lui + 0x10, 1, 0, 0);
-        helper = FUN_L16_002d5bc8_q(d->helper, 0);
+        helper = FUN_L16_002d5bc8_q(scene_data->helper, 0);
         goto notify;
     }
     case SCENE_STATE_WAIT_TO_HIDE:
-        if (d->camera >= 0)
-            *(unsigned short *)(D_0014162A_q) = *(unsigned short *)&d->camera;
-        if (tick_countdown_32_q(&d->timer_q)) {
-            m->state = 3;
-            d->timer_q = scale_game_frames_q(60);
-            m->visible = 0;
-            m->flags |= 1;
-            FUN_L16_002ceca8_q(d->path);
+        if (scene_data->camera >= 0)
+            *(unsigned short *)(D_0014162A_q) = *(unsigned short *)&scene_data->camera;
+        if (tick_countdown_32_q(&scene_data->timer_q)) {
+            moby->state = 3;
+            scene_data->timer_q = scale_game_frames_q(60);
+            moby->visible = 0;
+            moby->flags |= 1;
+            FUN_L16_002ceca8_q(scene_data->path);
         }
         break;
     case SCENE_STATE_WAIT_FOR_LINKED_MOBYS_AND_TIMER:
-        FUN_L16_002d6260_q(m, position, rotation);
+        FUN_L16_002d6260_q(moby, position, rotation);
         FUN_L00_002ea9d8_q(position);
         FUN_L00_002ea9d8_q_002eaa30(rotation);
-        if (d->camera >= 0)
-            *(unsigned short *)(D_0014162A_q) = *(unsigned short *)&d->camera;
-        if (FUN_L01_0026e008_q(d->path, -1))
+        if (scene_data->camera >= 0)
+            *(unsigned short *)(D_0014162A_q) = *(unsigned short *)&scene_data->camera;
+        if (FUN_L01_0026e008_q(scene_data->path, -1))
             break;
-        if (!tick_countdown_32_q(&d->timer_q))
+        if (!tick_countdown_32_q(&scene_data->timer_q))
             break;
-        m->visible = 1;
-        m->state = 4;
-        m->flags &= 0xFFFE;
+        moby->visible = 1;
+        moby->state = 4;
+        moby->flags &= 0xFFFE;
         FUN_L00_002eac18_q(3);
-        FUN_L00_00216f90_q(D_L16_001600EC_m + (d->pose << 7) + 0x30,
-                           D_L16_001600EC_m + (d->pose << 7) + 0x70, 0, 1);
-        FUN_L00_002598b0_q((int)m, 5.0f, D_L16_001600EC_m + (d->pose << 7) + 0x30, 0x10000, 50.0f,
+        FUN_L00_00216f90_q(D_L16_001600EC_m + (scene_data->pose << 7) + 0x30,
+                           D_L16_001600EC_m + (scene_data->pose << 7) + 0x70, 0, 1);
+        FUN_L00_002598b0_q((int)moby, 5.0f, D_L16_001600EC_m + (scene_data->pose << 7) + 0x30, 0x10000, 50.0f,
                            1.0f, 0, 1, 0);
-        ((L16ObjectiveEntry_q *)(D_0013D388 + d->objective))->complete = 1;
-        helper = FUN_L16_002d5ad0_q(d->helper, 0);
+        ((L16ObjectiveEntry_q *)(D_0013D388 + scene_data->objective))->complete = 1;
+        helper = FUN_L16_002d5ad0_q(scene_data->helper, 0);
     notify:
         if (helper)
             FUN_0022da68_q(1, 0, helper);
@@ -2911,22 +2911,22 @@ void FUN_L16_002d5ef8(struct Moby *m) {
     case SCENE_STATE_COMPLETE:
         break;
     case SCENE_STATE_HIDDEN_WAIT_FOR_TRIGGER:
-        if (is_point_inside_clip_volume(D_0013F3D0, d->trigger)) {
-            FUN_L16_002d5bc8_q(d->helper, 0);
-            FUN_L16_002ceca8_q(d->path);
-            m->state = 6;
+        if (is_point_inside_clip_volume(D_0013F3D0, scene_data->trigger)) {
+            FUN_L16_002d5bc8_q(scene_data->helper, 0);
+            FUN_L16_002ceca8_q(scene_data->path);
+            moby->state = 6;
         }
         break;
     case SCENE_STATE_HIDDEN_WAIT_FOR_LINKED_MOBYS: {
         char *player = D_0013F3D0;
-        if (is_point_inside_clip_volume(player, d->trigger) && d->camera >= 0)
-            *(unsigned short *)(player + 0x225A) = *(unsigned short *)&d->camera;
-        if (!FUN_L01_0026e008_q(d->path, -1)) {
-            m->state = 4;
-            helper = FUN_L16_002d5ad0_q(d->helper, 0);
+        if (is_point_inside_clip_volume(player, scene_data->trigger) && scene_data->camera >= 0)
+            *(unsigned short *)(player + 0x225A) = *(unsigned short *)&scene_data->camera;
+        if (!FUN_L01_0026e008_q(scene_data->path, -1)) {
+            moby->state = 4;
+            helper = FUN_L16_002d5ad0_q(scene_data->helper, 0);
             if (helper)
                 FUN_0022da68_q(1, 0, helper);
-            ((L16ObjectiveEntry_q *)(D_0013D388 + d->objective))->complete = 1;
+            ((L16ObjectiveEntry_q *)(D_0013D388 + scene_data->objective))->complete = 1;
         }
         break;
     }
