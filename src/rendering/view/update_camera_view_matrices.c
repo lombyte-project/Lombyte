@@ -28,9 +28,9 @@ void update_camera_view_matrices(void) {
     struct G *g;
     u8 *x;
     f32 *xf;
-    f32 a;
+    f32 homogeneous_offset_x;
     f32 b;
-    f32 c;
+    f32 homogeneous_offset_z;
 
     if (camera_position_publication_suppressed[0] == 0) {
         qcopy(&camera_basis_matrix[0].q, camera_rows);
@@ -63,21 +63,21 @@ void update_camera_view_matrices(void) {
     *(s32 *)&g->f[0x2C / 4] = 0;
     multiply_matrix(&g->f[0x40 / 4], x, g);
     multiply_matrix(&g->f[0x80 / 4], x + 0x40, g);
-    a = xf[0x1A0 / 4];
+    homogeneous_offset_x = xf[0x1A0 / 4];
     b = xf[0x1A4 / 4];
-    c = xf[0x1A8 / 4];
-    g->f[0x80 / 4] += g->f[0x8C / 4] * a;
+    homogeneous_offset_z = xf[0x1A8 / 4];
+    g->f[0x80 / 4] += g->f[0x8C / 4] * homogeneous_offset_x;
     g->f[0x84 / 4] += g->f[0x8C / 4] * b;
-    g->f[0x88 / 4] += g->f[0x8C / 4] * c;
-    g->f[0x90 / 4] += g->f[0x9C / 4] * a;
+    g->f[0x88 / 4] += g->f[0x8C / 4] * homogeneous_offset_z;
+    g->f[0x90 / 4] += g->f[0x9C / 4] * homogeneous_offset_x;
     g->f[0x94 / 4] += g->f[0x9C / 4] * b;
-    g->f[0x98 / 4] += g->f[0x9C / 4] * c;
-    g->f[0xA0 / 4] += g->f[0xAC / 4] * a;
+    g->f[0x98 / 4] += g->f[0x9C / 4] * homogeneous_offset_z;
+    g->f[0xA0 / 4] += g->f[0xAC / 4] * homogeneous_offset_x;
     g->f[0xA4 / 4] += g->f[0xAC / 4] * b;
-    g->f[0xA8 / 4] += g->f[0xAC / 4] * c;
-    g->f[0xB0 / 4] += g->f[0xBC / 4] * a;
+    g->f[0xA8 / 4] += g->f[0xAC / 4] * homogeneous_offset_z;
+    g->f[0xB0 / 4] += g->f[0xBC / 4] * homogeneous_offset_x;
     g->f[0xB4 / 4] += g->f[0xBC / 4] * b;
-    g->f[0xB8 / 4] += g->f[0xBC / 4] * c;
+    g->f[0xB8 / 4] += g->f[0xBC / 4] * homogeneous_offset_z;
     multiply_matrix(&g->f[0xC0 / 4], x + 0x80, g);
     scale_vector(&g->f[0x100 / 4], x + 0x80, xf[0x1C0 / 4]);
     scale_vector(&g->f[0x110 / 4], x + 0x90, xf[0x1C0 / 4]);
