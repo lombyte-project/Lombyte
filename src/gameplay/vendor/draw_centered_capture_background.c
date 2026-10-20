@@ -13,9 +13,9 @@ void draw_centered_capture_background(s32 w, s32 h) __asm__("FUN_001fb740");
 
 void draw_centered_capture_background(s32 w, s32 h) {
     struct DmaTag *tag;
-    u64 *q;
-    volatile u64 *c;
-    s32 n;
+    u64 *packet_header;
+    volatile u64 *sprite_corner_cursor;
+    s32 column_count;
     s32 i;
     s32 zero;
     s32 step;
@@ -24,43 +24,43 @@ void draw_centered_capture_background(s32 w, s32 h) {
     u64 lo;
     u64 hi;
 
-    n = w / 32;
+    column_count = w / 32;
     vu1_add_g_sregister(0x42, 0x800000004AULL);
-    render_packet_cursor.tag->tag = (n + 5) | 0x10000000;
+    render_packet_cursor.tag->tag = (column_count + 5) | 0x10000000;
     render_packet_cursor.tag->addr = 0;
     render_packet_cursor.tag->vif0 = 0;
-    render_packet_cursor.tag->vif1 = (n + 5) | 0x50000000;
+    render_packet_cursor.tag->vif1 = (column_count + 5) | 0x50000000;
     tag = render_packet_cursor.tag;
-    q = (u64 *)(tag + 1);
+    packet_header = (u64 *)(tag + 1);
     render_packet_cursor.tag = tag + 1;
     zero = 0;
-    q[zero] = 0x1000000000000001;
-    q[1] = 0xE;
-    q[2] = 0x32003;
-    q[3] = 0x47;
-    q[4] = 0x2400000000000001;
-    q[5] = 0x10;
-    q[6] = 0x146;
-    q[7] = 0x80008080;
-    q[8] = (n | 0x8000) | 0x2400000000000000;
-    q[9] = 0x44;
+    packet_header[zero] = 0x1000000000000001;
+    packet_header[1] = 0xE;
+    packet_header[2] = 0x32003;
+    packet_header[3] = 0x47;
+    packet_header[4] = 0x2400000000000001;
+    packet_header[5] = 0x10;
+    packet_header[6] = 0x146;
+    packet_header[7] = 0x80008080;
+    packet_header[8] = (column_count | 0x8000) | 0x2400000000000000;
+    packet_header[9] = 0x44;
     i = zero;
-    if (n > zero) {
+    if (column_count > zero) {
         lo = (u64)(0x8000 - h * 8) << 16;
         x = 0x8000 + -(w * 8);
-        c = (volatile u64 *)((u8 *)tag + 0x60);
+        sprite_corner_cursor = (volatile u64 *)((u8 *)tag + 0x60);
         y = 0x8200 + -(w * 8);
         hi = (u64)(h * 8 + 0x7FF0) << 16;
         do {
             step = 0x200;
-            *c++ = x | lo;
-            *c++ = y | hi;
+            *sprite_corner_cursor++ = x | lo;
+            *sprite_corner_cursor++ = y | hi;
             y += step;
             x += step;
             i++;
-        } while (i < n);
+        } while (i < column_count);
     }
-    render_packet_cursor.tag = render_packet_cursor.tag + (n + 5);
+    render_packet_cursor.tag = render_packet_cursor.tag + (column_count + 5);
 }
 
 extern __typeof__(draw_centered_capture_background) func_001FB740 __attribute__((alias("FUN_001fb740")));
