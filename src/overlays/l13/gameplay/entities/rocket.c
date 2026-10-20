@@ -1967,28 +1967,28 @@ int FUN_L13_0030ae68(int idx, int arg) {
 extern int is_point_inside_clip_volume_alt(void *, int) __asm__("FUN_00214720");
 
 void FUN_L13_0030af50(struct Moby *moby) {
-    char *d = (char *)moby->pvars;
-    int *p = (int *)d;
+    char *moby_vars = (char *)moby->pvars;
+    int *moby_list_index_cursor = (int *)moby_vars;
     int i;
     char *base;
     for (i = 0; i < 8; i++) {
-        if (*p != -1) {
-            if (FUN_L13_0030ae68(*p, -1) != 0)
+        if (*moby_list_index_cursor != -1) {
+            if (FUN_L13_0030ae68(*moby_list_index_cursor, -1) != 0)
                 return;
-            p++;
+            moby_list_index_cursor++;
         }
     }
     base = D_0013E533 + 0xE1D;
     if (*(int *)(base + 0x15F0) != 0 && *(int *)(base + 0x2084) == 0x32)
         return;
-    if (*(int *)(d + 0x28) != -1 &&
-        is_point_inside_clip_volume_alt(base + 0x80, *(int *)(d + 0x28)) == 0)
+    if (*(int *)(moby_vars + 0x28) != -1 &&
+        is_point_inside_clip_volume_alt(base + 0x80, *(int *)(moby_vars + 0x28)) == 0)
         return;
-    if (*(int *)(d + 0x20) != -1)
-        moby->state = d[0x20];
-    if (*(int *)(d + 0x24) == -1)
+    if (*(int *)(moby_vars + 0x20) != -1)
+        moby->state = moby_vars[0x20];
+    if (*(int *)(moby_vars + 0x24) == -1)
         return;
-    moby->command = d[0x24];
+    moby->command = moby_vars[0x24];
 }
 extern int D_L13_0015F5C4;
 extern int D_L13_0015FFD8_m __asm__("D_L13_0015FFD8");
