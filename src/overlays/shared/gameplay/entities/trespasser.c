@@ -584,7 +584,7 @@ float random_float_between(float, float) __asm__("FUN_002132a8");
 int rand(void) __asm__("FUN_001160d8");
 int scale_game_frames(int) __asm__("FUN_001f96f8");
 void FUN_L00_00269b70(float *, unsigned char, unsigned char, unsigned char, float, float, int);
-void FUN_L00_002c8078(unsigned char *m) {
+void FUN_L00_002c8078(unsigned char *moby) {
     enum {
         COLLISION_MATERIAL_WATER = 0
     };
@@ -602,7 +602,7 @@ void FUN_L00_002c8078(unsigned char *m) {
     case 12:
     case 13:
         for (i = 0; i < 20; i++) {
-            qcopy(v, m + 0x10);
+            qcopy(v, moby + 0x10);
             v[0] += random_float_between(-0.3f, 0.3f);
             v[1] += random_float_between(-0.3f, 0.3f);
             v[2] += random_float_between(-0.3f, 0.3f);
@@ -612,7 +612,7 @@ void FUN_L00_002c8078(unsigned char *m) {
             s = random_float_between(100000.0f, 800000.0f);
             FUN_L00_00269b70(v, r, g, b, s, 0.0f, scale_game_frames(rand() % 40 + 10));
         }
-        m[0x20] = 4;
+        moby[0x20] = 4;
         break;
     }
 }
