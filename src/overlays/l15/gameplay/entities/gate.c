@@ -77,7 +77,7 @@ extern int D_L15_001BAAD0[];
 extern s32 current_level_index __asm__("D_0015ED84");
 extern f32 frame_time __asm__("D_0015ED6C");
 
-void FUN_L15_0029aff0(struct Moby *m)
+void FUN_L15_0029aff0(struct Moby *gate_moby)
 {
     enum {
         GATE_INITIALIZE = 0,
@@ -86,7 +86,7 @@ void FUN_L15_0029aff0(struct Moby *m)
         GATE_OPEN = 3,
         GATE_CLOSING = 4
     };
-    MovingVars_29aff0 *d = (MovingVars_29aff0 *)m->pvars;
+    MovingVars_29aff0 *gate_vars = (MovingVars_29aff0 *)gate_moby->pvars;
     Vec4 offset;
     Vec4 pos;
     s32 slot;
@@ -95,16 +95,16 @@ void FUN_L15_0029aff0(struct Moby *m)
     u32 mask;
     u32 *bits;
 
-    switch (m->state) {
+    switch (gate_moby->state) {
     case GATE_INITIALIZE:
-        d->home.q = *(u128 *)&m->pos;
-        m->state = 1;
+        gate_vars->home.q = *(u128 *)&gate_moby->pos;
+        gate_moby->state = 1;
         return;
     case GATE_WAIT_TO_OPEN:
         trigger_active = 0;
-        d->travel = 0;
-        if (d->trigger != -1) {
-            struct Moby *other = (struct Moby *)((char *)*(s32 *)&D_L15_0015FFD8_d + d->trigger * 0x100);
+        gate_vars->travel = 0;
+        if (gate_vars->trigger != -1) {
+            struct Moby *other = (struct Moby *)((char *)*(s32 *)&D_L15_0015FFD8_d + gate_vars->trigger * 0x100);
             if (other->oclass == 0x4b9) {
                 if (other->state == 4) {
                     trigger_active = 1;
@@ -116,73 +116,73 @@ void FUN_L15_0029aff0(struct Moby *m)
             }
         }
 check_lock:
-        if (d->lock != 0) {
-            if (D_L15_001BB830_29aff0.collected[(s16)m->save_id] != 0 ||
-                ((*(s32 *)(D_0014C190 + (current_level_index * 0x100 + ((s16)m->save_id >> 5) * 4)) >> (m->save_id & 31)) & 1) != 0)
+        if (gate_vars->lock != 0) {
+            if (D_L15_001BB830_29aff0.collected[(s16)gate_moby->save_id] != 0 ||
+                ((*(s32 *)(D_0014C190 + (current_level_index * 0x100 + ((s16)gate_moby->save_id >> 5) * 4)) >> (gate_moby->save_id & 31)) & 1) != 0)
                 trigger_active = 1;
         }
-        if (is_point_inside_clip_volume(D_0013F3D0, d->open_volume)) {
-            m->state = 2;
+        if (is_point_inside_clip_volume(D_0013F3D0, gate_vars->open_volume)) {
+            gate_moby->state = 2;
         } else if (trigger_active) {
-            m->state = 2;
+            gate_moby->state = 2;
         }
         return;
     case GATE_OPENING:
-        if (((VoiceSlot_29aff0 *)(D_0013E550 + d->sound * 0x70))->owner != m ||
-            ((VoiceSlot_29aff0 *)(D_0013E550 + d->sound * 0x70))->active == 0)
-            d->sound = allocate_voice_for_target_entry(0, 4, (int)m);
-        if (d->duration < (d->travel = d->travel + (d->duration / 0.6f) * frame_time)) {
-            slot = d->sound;
+        if (((VoiceSlot_29aff0 *)(D_0013E550 + gate_vars->sound * 0x70))->owner != gate_moby ||
+            ((VoiceSlot_29aff0 *)(D_0013E550 + gate_vars->sound * 0x70))->active == 0)
+            gate_vars->sound = allocate_voice_for_target_entry(0, 4, (int)gate_moby);
+        if (gate_vars->duration < (gate_vars->travel = gate_vars->travel + (gate_vars->duration / 0.6f) * frame_time)) {
+            slot = gate_vars->sound;
             if (slot != -1) {
-                if (((VoiceSlot_29aff0 *)(D_0013E550 + slot * 0x70))->owner == m &&
+                if (((VoiceSlot_29aff0 *)(D_0013E550 + slot * 0x70))->owner == gate_moby &&
                     ((VoiceSlot_29aff0 *)(D_0013E550 + slot * 0x70))->active != 0)
                     release_voice_slot(slot);
             }
-            d->travel = d->duration;
-            d->sound = -1;
-            if (d->trigger != -1 || d->lock != 0) {
-                mask = 1U << (m->save_id & 31);
-                bits = (u32 *)(D_0014C190 + (((s16)m->save_id >> 5) * 4 + current_level_index * 0x100));
+            gate_vars->travel = gate_vars->duration;
+            gate_vars->sound = -1;
+            if (gate_vars->trigger != -1 || gate_vars->lock != 0) {
+                mask = 1U << (gate_moby->save_id & 31);
+                bits = (u32 *)(D_0014C190 + (((s16)gate_moby->save_id >> 5) * 4 + current_level_index * 0x100));
                 *bits |= mask;
-                D_L15_001BAAD0[((s16)m->save_id >> 5)] |= 1U << (m->save_id & 31);
-                m->state = 5;
+                D_L15_001BAAD0[((s16)gate_moby->save_id >> 5)] |= 1U << (gate_moby->save_id & 31);
+                gate_moby->state = 5;
             } else {
-                m->state = 3;
+                gate_moby->state = 3;
             }
         }
-        offset.f[0] = fast_cos(m->rot.z) * -d->travel;
-        offset.f[1] = fast_sin(m->rot.z) * -d->travel;
+        offset.f[0] = fast_cos(gate_moby->rot.z) * -gate_vars->travel;
+        offset.f[1] = fast_sin(gate_moby->rot.z) * -gate_vars->travel;
         offset.f[2] = 0.0f;
-        add_vector_xyz(&pos, &d->home, &offset);
-        *(u128 *)&m->pos = pos.q;
+        add_vector_xyz(&pos, &gate_vars->home, &offset);
+        *(u128 *)&gate_moby->pos = pos.q;
         return;
     case GATE_OPEN:
-        if (is_point_inside_clip_volume(D_0013F3D0, d->close_volume) ||
-            is_point_inside_clip_volume(D_L15_001673C0, d->close_volume))
+        if (is_point_inside_clip_volume(D_0013F3D0, gate_vars->close_volume) ||
+            is_point_inside_clip_volume(D_L15_001673C0, gate_vars->close_volume))
             return;
-        m->state = 4;
+        gate_moby->state = 4;
         return;
     case GATE_CLOSING:
-        if (((VoiceSlot_29aff0 *)(D_0013E550 + d->sound * 0x70))->owner != m ||
-            ((VoiceSlot_29aff0 *)(D_0013E550 + d->sound * 0x70))->active == 0)
-            d->sound = allocate_voice_for_target_entry(0, 4, (int)m);
-        if ((d->travel = d->travel - (d->duration / 0.6f) * frame_time) < 0.0f) {
-            slot = d->sound;
-            if (slot != -1 && ((VoiceSlot_29aff0 *)(D_0013E550 + slot * 0x70))->owner == m &&
+        if (((VoiceSlot_29aff0 *)(D_0013E550 + gate_vars->sound * 0x70))->owner != gate_moby ||
+            ((VoiceSlot_29aff0 *)(D_0013E550 + gate_vars->sound * 0x70))->active == 0)
+            gate_vars->sound = allocate_voice_for_target_entry(0, 4, (int)gate_moby);
+        if ((gate_vars->travel = gate_vars->travel - (gate_vars->duration / 0.6f) * frame_time) < 0.0f) {
+            slot = gate_vars->sound;
+            if (slot != -1 && ((VoiceSlot_29aff0 *)(D_0013E550 + slot * 0x70))->owner == gate_moby &&
                 ((VoiceSlot_29aff0 *)(D_0013E550 + slot * 0x70))->active != 0)
                 release_voice_slot(slot);
-            d->travel = 0;
-            d->sound = -1;
-            m->state = 1;
+            gate_vars->travel = 0;
+            gate_vars->sound = -1;
+            gate_moby->state = 1;
         }
-        offset.f[0] = fast_cos(m->rot.z) * -d->travel;
-        offset.f[1] = fast_sin(m->rot.z) * -d->travel;
+        offset.f[0] = fast_cos(gate_moby->rot.z) * -gate_vars->travel;
+        offset.f[1] = fast_sin(gate_moby->rot.z) * -gate_vars->travel;
         offset.f[2] = 0.0f;
-        add_vector_xyz(&pos, &d->home, &offset);
-        *(u128 *)&m->pos = pos.q;
-        if (is_point_inside_clip_volume(D_0013F3D0, d->open_volume) ||
-            is_point_inside_clip_volume(D_L15_001673C0, d->open_volume))
-            m->state = 2;
+        add_vector_xyz(&pos, &gate_vars->home, &offset);
+        *(u128 *)&gate_moby->pos = pos.q;
+        if (is_point_inside_clip_volume(D_0013F3D0, gate_vars->open_volume) ||
+            is_point_inside_clip_volume(D_L15_001673C0, gate_vars->open_volume))
+            gate_moby->state = 2;
         return;
     default:
         return;
