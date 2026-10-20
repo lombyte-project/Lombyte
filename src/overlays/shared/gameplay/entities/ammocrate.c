@@ -414,75 +414,75 @@ extern Tex_2E8040 D_L13_001B2680_2E8040 __asm__("D_L13_001B2380");
 extern V4_2E8040 D_L13_001741E0_2E8040 __asm__("D_L13_00174160");
 
 void FUN_L13_002e6c08(Moby *m);
-void FUN_L13_002e6c08(Moby *m) {
-    Rocket_2E8040 *d = *(void **)&m->pvars;
+void FUN_L13_002e6c08(Moby *rocket) {
+    Rocket_2E8040 *rocket_data = *(void **)&rocket->pvars;
     V4_2E8040 old;
     V4_2E8040 hitpos;
     V4_2E8040 tmp;
     V4_2E8040 vel;
     V4_2E8040 dir;
-    unsigned char *p;
+    unsigned char *spawned_effect;
     float t;
 
-    qcopy(&old, &*(V4_2E8040 *)&m->pos);
-    m->scale += (((Cls_2E8040 *)m->pclass)->scale - m->scale) * 0.1f;
+    qcopy(&old, &*(V4_2E8040 *)&rocket->pos);
+    rocket->scale += (((Cls_2E8040 *)rocket->pclass)->scale - rocket->scale) * 0.1f;
     *(Q_2E8040 *)&dir = 0;
     dir.x = func_002140F8_2E8040(-1.0f, 1.0f);
     dir.y = func_002140F8_2E8040(-1.0f, 1.0f);
     dir.z = func_002140F8_2E8040(-1.0f, 1.0f);
     *(Q_2E8040 *)&vel = *(Q_2E8040 *)&dir;
     func_L00_001FF4B0_2E8040(&vel, &vel, func_002140F8_2E8040(0.1f, 0.2f) * D_0015ED6C);
-    func_L00_001FF4B0_2E8040(&tmp, d, -func_002140F8_2E8040(D_0015ED6C * 0.1f, D_0015ED6C));
+    func_L00_001FF4B0_2E8040(&tmp, rocket_data, -func_002140F8_2E8040(D_0015ED6C * 0.1f, D_0015ED6C));
     func_001F9BD8_2E8040(&vel, &vel, &tmp);
-    p = spawn_particle(&*(V4_2E8040 *)&m->pos, (float *)&vel, func_001F9850_2E8040(6), 0x7F, 0xB0B0B0, 3, 40000.0f, 1000.0f, 1.0f, -0.0004f, 0.0f);
-    if (p != 0) {
-        p[3] = 0x48;
+    spawned_effect = spawn_particle(&*(V4_2E8040 *)&rocket->pos, (float *)&vel, func_001F9850_2E8040(6), 0x7F, 0xB0B0B0, 3, 40000.0f, 1000.0f, 1.0f, -0.0004f, 0.0f);
+    if (spawned_effect != 0) {
+        spawned_effect[3] = 0x48;
     }
     for (t = 0.0f; t < 1.0f; t += 0.33333334f) {
-        func_L00_001FF4B0_2E8040(&tmp, d, func_002140F8_2E8040(t, t + 0.33333334f) * d->speed);
-        func_001F9BD8_2E8040(&tmp, &tmp, &*(V4_2E8040 *)&m->pos);
-        p = spawn_particle(&tmp, (float *)&vel, func_001F9850_2E8040(0x3C), 0x7F, 0x606060, 3, 40000.0f, 1000.0f, 1.0f, -0.0002f, 0.0f);
-        if (p != 0) {
+        func_L00_001FF4B0_2E8040(&tmp, rocket_data, func_002140F8_2E8040(t, t + 0.33333334f) * rocket_data->speed);
+        func_001F9BD8_2E8040(&tmp, &tmp, &*(V4_2E8040 *)&rocket->pos);
+        spawned_effect = spawn_particle(&tmp, (float *)&vel, func_001F9850_2E8040(0x3C), 0x7F, 0x606060, 3, 40000.0f, 1000.0f, 1.0f, -0.0002f, 0.0f);
+        if (spawned_effect != 0) {
             Tex_2E8040 *tex = &D_L13_001B2680_2E8040;
-            p[2] = *tex->p5C;
-            p[3] = 0x48;
+            spawned_effect[2] = *tex->p5C;
+            spawned_effect[3] = 0x48;
         }
         *(Q_2E8040 *)&dir = 0;
         dir.z = 0.02f;
-        func_001F9EC0_2E8040(&dir, &dir, &*(V4_2E8040 *)&m->rot_row0);
-        func_002156E0_2E8040(&dir, &dir, &*(V4_2E8040 *)&m->rot_row0, func_00214158_2E8040());
-        p = spawn_burst(&tmp, &dir, 0x4F007FFF, 0x1FFFFFFF, func_001F9850_2E8040(5), 1, 20000.0f);
-        if (p != 0) {
-            p[3] = 0x48;
+        func_001F9EC0_2E8040(&dir, &dir, &*(V4_2E8040 *)&rocket->rot_row0);
+        func_002156E0_2E8040(&dir, &dir, &*(V4_2E8040 *)&rocket->rot_row0, func_00214158_2E8040());
+        spawned_effect = spawn_burst(&tmp, &dir, 0x4F007FFF, 0x1FFFFFFF, func_001F9850_2E8040(5), 1, 20000.0f);
+        if (spawned_effect != 0) {
+            spawned_effect[3] = 0x48;
         }
     }
-    if (d->target != 0 && !(d->target->flags & 0x1000) && (d->target->flags & 1) && *(int *)&d->target->collision == 0) {
-        d->target = 0;
+    if (rocket_data->target != 0 && !(rocket_data->target->flags & 0x1000) && (rocket_data->target->flags & 1) && *(int *)&rocket_data->target->collision == 0) {
+        rocket_data->target = 0;
     }
-    if (d->target != 0 && d->target->oclass == d->target_uid && d->target->state != 0xFE && d->target->state != 0xFD
-        && func_001F9D10_2E8040(&d->tpos, &*(V4_2E8040 *)&d->target->pos) < 3.0f) {
-        m->rot.z = angle_atan2(d->target->pos.x - m->pos.x, d->target->pos.y - m->pos.y);
-        m->rot.y = -angle_atan2(vector_distance(&*(V4_2E8040 *)&m->pos, &*(V4_2E8040 *)&d->target->pos), d->target->pos.z - m->pos.z);
-        qcopy(&d->tpos, &*(V4_2E8040 *)&d->target->pos);
+    if (rocket_data->target != 0 && rocket_data->target->oclass == rocket_data->target_uid && rocket_data->target->state != 0xFE && rocket_data->target->state != 0xFD
+        && func_001F9D10_2E8040(&rocket_data->tpos, &*(V4_2E8040 *)&rocket_data->target->pos) < 3.0f) {
+        rocket->rot.z = angle_atan2(rocket_data->target->pos.x - rocket->pos.x, rocket_data->target->pos.y - rocket->pos.y);
+        rocket->rot.y = -angle_atan2(vector_distance(&*(V4_2E8040 *)&rocket->pos, &*(V4_2E8040 *)&rocket_data->target->pos), rocket_data->target->pos.z - rocket->pos.z);
+        qcopy(&rocket_data->tpos, &*(V4_2E8040 *)&rocket_data->target->pos);
     } else {
-        approach_angle(&m->rot.z, m->rot.z, &d->yawv, frame_time_sq * 251.32741f, frame_time_sq * 251.32741f, D_0015ED6C * 2513.2742f);
-        approach_angle(&m->rot.y, m->rot.y, &d->pitchv, frame_time_sq * 251.32741f, frame_time_sq * 251.32741f, D_0015ED6C * 2513.2742f);
-        d->target = 0;
+        approach_angle(&rocket->rot.z, rocket->rot.z, &rocket_data->yawv, frame_time_sq * 251.32741f, frame_time_sq * 251.32741f, D_0015ED6C * 2513.2742f);
+        approach_angle(&rocket->rot.y, rocket->rot.y, &rocket_data->pitchv, frame_time_sq * 251.32741f, frame_time_sq * 251.32741f, D_0015ED6C * 2513.2742f);
+        rocket_data->target = 0;
     }
-    func_00215C00_2E8040(d, d->speed, m->rot.z, -m->rot.y);
-    func_001F9BD8_2E8040(&*(V4_2E8040 *)&m->pos, &*(V4_2E8040 *)&m->pos, d);
-    if (m->pos.x < 2.0f || m->pos.x > 1021.0f || m->pos.y < 2.0f || m->pos.y > 1021.0f || m->pos.z < 2.0f || m->pos.z > 1021.0f) {
-        func_0020D678_2E8040(m);
+    func_00215C00_2E8040(rocket_data, rocket_data->speed, rocket->rot.z, -rocket->rot.y);
+    func_001F9BD8_2E8040(&*(V4_2E8040 *)&rocket->pos, &*(V4_2E8040 *)&rocket->pos, rocket_data);
+    if (rocket->pos.x < 2.0f || rocket->pos.x > 1021.0f || rocket->pos.y < 2.0f || rocket->pos.y > 1021.0f || rocket->pos.z < 2.0f || rocket->pos.z > 1021.0f) {
+        func_0020D678_2E8040(rocket);
         return;
     }
-    moby_point_position(m, 1, &hitpos);
-    if (collision_line(&old, &hitpos, 0, d->owner, 0) != 0) {
+    moby_point_position(rocket, 1, &hitpos);
+    if (collision_line(&old, &hitpos, 0, rocket_data->owner, 0) != 0) {
         qcopy(&tmp, &D_L13_001741E0_2E8040);
-        spawn_explosion(m, d, &tmp, 2.0f, 10.0f, 10, 3, 0x10, 4.0f, 2.0f, 9.0f, 1.0f, 0, 20.0f, 0, 1, -1, 0);
-        func_0020D678_2E8040(m);
+        spawn_explosion(rocket, rocket_data, &tmp, 2.0f, 10.0f, 10, 3, 0x10, 4.0f, 2.0f, 9.0f, 1.0f, 0, 20.0f, 0, 1, -1, 0);
+        func_0020D678_2E8040(rocket);
         return;
     }
-    if (fast_dec_timer(&d->timer) != 0) {
-        func_0020D678_2E8040(m);
+    if (fast_dec_timer(&rocket_data->timer) != 0) {
+        func_0020D678_2E8040(rocket);
     }
 }
