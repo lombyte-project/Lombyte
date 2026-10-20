@@ -2624,8 +2624,8 @@ extern int FUN_L00_0025ff38(float a, char *m, char *b, int c, int d, int *e, int
 void FUN_L14_002b5530(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     if (moby->state != 0 && moby->state != 9) {
-        int *p = D_L14_001B0BB0[*(int *)(data + 0xD4)];
-        FUN_L00_0025ff38(255.0f, moby, data + 0x70, 0, 0, p + 4, *p);
+        int *bound_path = D_L14_001B0BB0[*(int *)(data + 0xD4)];
+        FUN_L00_0025ff38(255.0f, moby, data + 0x70, 0, 0, bound_path + 4, *bound_path);
         if (*(int *)(data + 0xB0) == 0) {
             *(int *)(data + 0xB0) = *(int *)(D_0013E533 + 0x2E9D);
         }
