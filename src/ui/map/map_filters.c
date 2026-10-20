@@ -88,8 +88,8 @@ int map_filter_l01_5(int arg0, float unused1, float unused2, float arg1) __asm__
 
 int map_filter_l01_5(int reveal_test_selector, float unused1, float unused2, float reveal_test_value) {
     if (reveal_test_selector < 0x100) {
-        struct Hero *s = &hero;
-        return s->state.control_mode == 17 || s->state.control_mode == 18 || s->base_condition == 1;
+        struct Hero *hero_ptr = &hero;
+        return hero_ptr->state.control_mode == 17 || hero_ptr->state.control_mode == 18 || hero_ptr->base_condition == 1;
     }
     return (reveal_test_value >= 95.0f) ? 1 : 0;
 }
