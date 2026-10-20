@@ -867,13 +867,13 @@ void FUN_L11_003180a0(struct Moby *moby, int table_index) {
     stride = *(int *)table / count;
     list = (u16 *)D_L11_001AC240[group];
     do {
-        struct Moby *m;
+        struct Moby *group_moby;
         idx = *list & 0x7FFF;
-        m = (struct Moby *)((idx << 8) + (u32)D_L11_0015FFD8);
-        if (m->oclass == 0x527) {
-            struct L11ChainVars *data = (struct L11ChainVars *)m->pvars;
+        group_moby = (struct Moby *)((idx << 8) + (u32)D_L11_0015FFD8);
+        if (group_moby->oclass == 0x527) {
+            struct L11ChainVars *data = (struct L11ChainVars *)group_moby->pvars;
             /* no memory clobber: lets the D_L11_0015FFD8 load be hoisted out of the loop as in retail */
-            qcopy_nc(&m->pos, table + offset * 16 + 0x10);
+            qcopy_nc(&group_moby->pos, table + offset * 16 + 0x10);
             data->count = offset;
             data->path_index = table_index;
             data->point = 0;
