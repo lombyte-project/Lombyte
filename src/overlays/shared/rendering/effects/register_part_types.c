@@ -250,19 +250,19 @@ unsigned char *create_part(int) __asm__("FUN_L00_002678b8");
 int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 int scale_game_frames(int) __asm__("FUN_001f96f8");
 void FUN_L00_00268f10(Vec4 *v, int c) {
-    unsigned char *m = create_part(1);
-    if (m) {
+    unsigned char *particle = create_part(1);
+    if (particle) {
         v->f[2] += 0.1f;
-        qcopy(m + 0x10, v);
-        *(int *)(m + 4) = (c << 24) | 0x907070;
-        m[9] = truncate_float_to_s32(2.0f) + 0x40;
-        m[3] = 0x48;
-        m[1] = 0;
-        m[2] = *D_L00_001B2084;
-        *(float *)(m + 0xc) = 31500.002f;
-        m[8] = 0xa0;
-        *(short *)(m + 0xa) = scale_game_frames(0x1b);
-        *(int *)(m + 0x20) = c;
+        qcopy(particle + 0x10, v);
+        *(int *)(particle + 4) = (c << 24) | 0x907070;
+        particle[9] = truncate_float_to_s32(2.0f) + 0x40;
+        particle[3] = 0x48;
+        particle[1] = 0;
+        particle[2] = *D_L00_001B2084;
+        *(float *)(particle + 0xc) = 31500.002f;
+        particle[8] = 0xa0;
+        *(short *)(particle + 0xa) = scale_game_frames(0x1b);
+        *(int *)(particle + 0x20) = c;
     }
 }
 int scale_game_frames(int) __asm__("FUN_001f96f8");
