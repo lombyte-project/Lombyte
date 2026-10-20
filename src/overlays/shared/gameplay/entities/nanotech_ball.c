@@ -3323,24 +3323,24 @@ extern int D_L00_00161B90 __attribute__((sda));
 extern int D_L00_00161B94 __attribute__((sda));
 extern float D_L00_00161B98 __attribute__((sda));
 void red_orb_update(char *m) __asm__("FUN_L00_002df4f8");
-void red_orb_update(char *m) {
+void red_orb_update(char *moby) {
     enum {
         RED_ORB_STATE_INITIALIZE_PHASE = 0,
         RED_ORB_STATE_PULSE_COLOR = 1
     };
-    char *p = *(char **)(m + 0x78);
-    unsigned char s = m[0x20];
+    char *orb_data = *(char **)(moby + 0x78);
+    unsigned char state = moby[0x20];
     float a;
     int c, hi, r, g, b, t;
-    switch (s) {
+    switch (state) {
     case RED_ORB_STATE_INITIALIZE_PHASE:
-        *(float *)p = *(float *)p * DEG_TO_RAD;
-        m[0x20] = 1;
+        *(float *)orb_data = *(float *)orb_data * DEG_TO_RAD;
+        moby[0x20] = 1;
         break;
     case RED_ORB_STATE_PULSE_COLOR:
-        a = fast_add_rotations(*(float *)p,
+        a = fast_add_rotations(*(float *)orb_data,
                                D_L00_00161B98 * DEG_TO_RAD * frame_time);
-        *(float *)p = a;
+        *(float *)orb_data = a;
         a = fast_sin(a);
         c = fast_tween_color(D_L00_00161B90, D_L00_00161B94, a * 0.5f + 0.5f);
         b = (c >> 16) & 0xFF;
@@ -3351,9 +3351,9 @@ void red_orb_update(char *m) {
             hi = 0x20;
         t = hi << 24 | b << 16;
         t |= g << 8;
-        *(int *)(p + 4) = t | r;
-        FUN_L00_002df4a8_u(m);
-        set_moby_color(m, c & 0xFF, (c >> 16) & 0xFF, (unsigned)c >> 24);
+        *(int *)(orb_data + 4) = t | r;
+        FUN_L00_002df4a8_u(moby);
+        set_moby_color(moby, c & 0xFF, (c >> 16) & 0xFF, (unsigned)c >> 24);
         break;
     }
 }
