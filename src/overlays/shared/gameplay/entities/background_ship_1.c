@@ -699,18 +699,18 @@ void FUN_L02_002f6598(float x, float y, float z) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A5218.c: func_L02_002F9ED8), where it is exact; names translated to the US level program. */
 
 void FUN_L02_002f8aa0(float a, float b, float c, float d, float e, float f);
-void FUN_L02_002f8aa0(float a, float b, float c, float d, float e, float f) {
+void FUN_L02_002f8aa0(float first_triplet_middle, float b, float first_triplet_last, float second_triplet_middle, float second_triplet_first, float second_triplet_last) {
     char *moby = D_L02_00167400_d;
     char *data = *(char **)(moby + 0x70);
     char *dst = data + 0x30;
-    *(float *)(dst + 0x20) = e;
-    *(float *)(dst + 0x24) = d;
-    *(float *)(dst + 0x28) = f;
+    *(float *)(dst + 0x20) = second_triplet_first;
+    *(float *)(dst + 0x24) = second_triplet_middle;
+    *(float *)(dst + 0x28) = second_triplet_last;
     {
         char *other = *(char **)(moby + 0x70);
         *(float *)(other + 0x10) = b;
-        *(float *)(other + 0x14) = a;
-        *(float *)(other + 0x18) = c;
+        *(float *)(other + 0x14) = first_triplet_middle;
+        *(float *)(other + 0x18) = first_triplet_last;
     }
 }
 typedef struct {
