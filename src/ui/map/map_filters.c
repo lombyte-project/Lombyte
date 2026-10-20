@@ -644,18 +644,18 @@ extern f32 vector_distance_xy(Vec4 *, Vec4 *) __asm__("func_001F9B80");
 s32 map_filter_l15_0(s32 x, s32 y) __asm__("func_00207A18");
 
 s32 map_filter_l15_0(s32 x, s32 y) {
-    Vec4 a;
+    Vec4 point_position;
     Vec4 b;
     s32 near;
 
     if (D_001A03A8[0] == 0) {
-        a.q = 0;
+        point_position.q = 0;
         b.q = 0;
-        a.f[0] = x;
-        a.f[1] = y;
+        point_position.f[0] = x;
+        point_position.f[1] = y;
         b.f[0] = 161.5f;
         b.f[1] = 249.0f;
-        near = vector_distance_xy(&a, &b) <= 35.0f;
+        near = vector_distance_xy(&point_position, &b) <= 35.0f;
     } else {
         near = 1;
     }
