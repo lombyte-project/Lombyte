@@ -917,49 +917,49 @@ extern char *func_L11_0031C210_5(void *, void *, void *, int, float) __asm__("FU
 extern void *func_L00_00265050_s(char *, int, void *, void *, int, int, float *, float *, float,
                                  float *) __asm__("FUN_L00_00263fd8");
 
-void FUN_L11_003181f0(struct Moby *m) {
+void FUN_L11_003181f0(struct Moby *moby) {
     enum {
         TANKER_LINK_EMIT_EFFECT_AND_SAVE_POSITION = 0,
         TANKER_LINK_BURST_AND_HIDE = 1
     };
-    char *d = (char *)m->pvars;
+    char *link_vars = (char *)moby->pvars;
     float v[4];
     float w[4];
     float r[4];
-    switch (m->state) {
+    switch (moby->state) {
     case TANKER_LINK_EMIT_EFFECT_AND_SAVE_POSITION:
-        if (func_001F9908_i(d + 0x28) == 0 && random_integer_below(*(int *)&D_L11_00162340) == 0 &&
-            m->visible != 0 && *(int *)&D_L11_0015FFBC >= 0x47) {
-            transform_vector_by_basis(v, &D_L11_00162350, &m->rot_row0);
-            add_vector_xyz(v, v, &m->pos);
+        if (func_001F9908_i(link_vars + 0x28) == 0 && random_integer_below(*(int *)&D_L11_00162340) == 0 &&
+            moby->visible != 0 && *(int *)&D_L11_0015FFBC >= 0x47) {
+            transform_vector_by_basis(v, &D_L11_00162350, &moby->rot_row0);
+            add_vector_xyz(v, v, &moby->pos);
             random_vector(r, 0.0f, *(float *)&D_L11_00162368 * D_0015ED6C_n[1]);
-            subtract_vector_xyz(w, &m->pos, d);
+            subtract_vector_xyz(w, &moby->pos, link_vars);
             w[2] -= D_0015ED6C_n[1] + D_0015ED6C_n[1];
             add_vector_xyz(w, w, r);
             func_L11_0031C210_5(
                 v, w, D_L11_00161E18, 0,
                 random_float_between(*(float *)&D_L11_00162360, *(float *)&D_L11_00162364));
         }
-        qcopy(d, &m->pos);
+        qcopy(link_vars, &moby->pos);
         break;
     case TANKER_LINK_BURST_AND_HIDE: {
-        char *p1 = &m->pos;
+        char *link_position = &moby->pos;
         float *dv;
-        char *p2;
-        cart_burst(m, p1, -1, 5.0f, 13.0f);
+        char *link_rotation;
+        cart_burst(moby, link_position, -1, 5.0f, 13.0f);
         scale_vector_xyz(
-            v, &m->rot_row0,
-            (dv = D_L11_0015F580, p2 = &m->rot, *(float *)&D_L11_0016236C * frame_scale));
+            v, &moby->rot_row0,
+            (dv = D_L11_0015F580, link_rotation = &moby->rot, *(float *)&D_L11_0016236C * frame_scale));
         v[2] += frame_scale * 0.08f;
-        func_L00_00265050_s(m, 0x785, p1, p2, scale_game_frames(0x5A), 0, v, dv, frame_time_sq * 12.0f,
+        func_L00_00265050_s(moby, 0x785, link_position, link_rotation, scale_game_frames(0x5A), 0, v, dv, frame_time_sq * 12.0f,
                             dv);
-        func_L00_00265050_s(m, 0x786, p1, p2, scale_game_frames(0x5A), 0, v, dv, frame_time_sq * 12.0f,
+        func_L00_00265050_s(moby, 0x786, link_position, link_rotation, scale_game_frames(0x5A), 0, v, dv, frame_time_sq * 12.0f,
                             dv);
-        func_L00_00265050_s(m, 0x787, p1, p2, scale_game_frames(0x5A), 0, v, dv, frame_time_sq * 12.0f,
+        func_L00_00265050_s(moby, 0x787, link_position, link_rotation, scale_game_frames(0x5A), 0, v, dv, frame_time_sq * 12.0f,
                             dv);
-        m->state = 2;
-        m->visible = 0;
-        m->flags |= 1;
+        moby->state = 2;
+        moby->visible = 0;
+        moby->flags |= 1;
         break;
     }
     }
