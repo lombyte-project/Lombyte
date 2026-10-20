@@ -14,18 +14,18 @@ extern G_7c410 D_0013C940_7c410 __asm__("D_0013C940");
 
 extern s32 D_L00_00184414 __attribute__((section(".data")));
 extern s32 current_level_index __asm__("D_0015ED84") __attribute__((sda));
-s32 FUN_L00_0027c410(s32 o) {
+s32 FUN_L00_0027c410(s32 object_address) {
     s32 flags_snapshot = D_0013C940_7c410.f1C4;
     s32 v;
     struct GameState *game_state;
     if (flags_snapshot & 0xD00) {
-        if (*(s32 *)(o + 0x30) & 0x20) {
+        if (*(s32 *)(object_address + 0x30) & 0x20) {
             D_L00_00184414 = current_level_index;
         }
         return -1;
     }
     if (flags_snapshot & 0x10) {
-        if (*(s32 *)(o + 0x30) & 0x20) {
+        if (*(s32 *)(object_address + 0x30) & 0x20) {
             D_L00_00184414 = current_level_index;
         }
         game_state = &D_L00_001B9CF0;
