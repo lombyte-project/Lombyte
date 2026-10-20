@@ -1846,7 +1846,7 @@ void FUN_L14_00315d48(char *cam) {
     float k;
     float x;
     float ang;
-    float a;
+    float current_key_heading_override;
     float b;
     float camera_placement_parameters[4];
     float unused[4];
@@ -2005,16 +2005,16 @@ void FUN_L14_00315d48(char *cam) {
     ang = add_rots_5d48(atan2_5d48(hero.moby->rot_row1.x, hero.moby->rot_row1.y), cur->f0);
     D_L14_001624BC = ang;
     if (side == 0) {
-        a = D_L14_001F6488[st->idx].t18;
+        current_key_heading_override = D_L14_001F6488[st->idx].t18;
         b = D_L14_001F6488[st->idx + 1].t18;
     } else if (side == 1) {
-        a = D_L14_001F6488[st->idx].t1C;
+        current_key_heading_override = D_L14_001F6488[st->idx].t1C;
         b = D_L14_001F6488[st->idx + 1].t1C;
     } else {
-        a = D_L14_001F6488[st->idx].t20;
+        current_key_heading_override = D_L14_001F6488[st->idx].t20;
         b = D_L14_001F6488[st->idx + 1].t20;
     }
-    if (b == 0.0f && a == 0.0f) {
+    if (b == 0.0f && current_key_heading_override == 0.0f) {
         b = (st->fC != 0.0f) ? st->fC : st->f8;
         st->f10 += (0.0f - st->f10) * D_L14_001624A4;
         ang = FUN_L00_0025b750(ang, b, ease_5d48(1.0f, 0.0f, 1.0f, 0.0f, st->f10));
@@ -2022,12 +2022,12 @@ void FUN_L14_00315d48(char *cam) {
         if (b != 0.0f) {
             st->f10 += (1.0f - st->f10) * D_L14_001624A4;
             ang = FUN_L00_0025b750(ang, b, ease_5d48(1.0f, 0.0f, 1.0f, 0.0f, st->f10));
-            st->f8 = a;
+            st->f8 = current_key_heading_override;
             st->fC = b;
         } else {
             st->f10 += (0.0f - st->f10) * D_L14_001624A4;
-            ang = FUN_L00_0025b750(ang, a, ease_5d48(1.0f, 0.0f, 1.0f, 0.0f, st->f10));
-            st->f8 = a;
+            ang = FUN_L00_0025b750(ang, current_key_heading_override, ease_5d48(1.0f, 0.0f, 1.0f, 0.0f, st->f10));
+            st->f8 = current_key_heading_override;
             st->fC = b;
         }
     }
