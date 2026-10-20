@@ -1421,14 +1421,14 @@ void FUN_L13_002f3778(struct Moby *moby) {
         unsigned int v = *(unsigned int *)(&hero.state.control_mode);
         if ((v < 2 || v == 9) ? D_L13_0015F5C4 == 0 : 0) {
             int idx = *(int *)(data + 4);
-            char *m;
+            char *linked_moby;
             if (idx != -1) {
-                m = D_L13_0015FFD8_m + (idx << 8);
-                if (m != 0 && *(short *)(m + 0xA6) == 0xAA) {
-                    int s = (unsigned char)m[0x20];
-                    if (s == 0xFE)
+                linked_moby = D_L13_0015FFD8_m + (idx << 8);
+                if (linked_moby != 0 && *(short *)(linked_moby + 0xA6) == 0xAA) {
+                    int linked_moby_state = (unsigned char)linked_moby[0x20];
+                    if (linked_moby_state == 0xFE)
                         goto join;
-                    if (s != 0xFD)
+                    if (linked_moby_state != 0xFD)
                         goto direct;
                 }
             }
