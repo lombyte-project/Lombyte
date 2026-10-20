@@ -1607,7 +1607,7 @@ void FUN_L01_002ffb28(SmokeMoby *self) {
     SmokeVars *v;
     Vec4 pos;
     Vec4 vel;
-    Vec4 tmp;
+    Vec4 local_velocity;
     f32 size;
     s32 i;
 
@@ -1617,12 +1617,12 @@ void FUN_L01_002ffb28(SmokeMoby *self) {
     }
     for (i = 0; i < 2; i++) {
         pos.q = 0;
-        tmp.q = 0;
+        local_velocity.q = 0;
         pos.f[0] = -0.2f;
         pos.f[2] = 1.2f;
-        tmp.f[0] = random_float_between(0.8f, 1.2f) * (frame_time * 3.0f);
-        tmp.f[2] = random_float_between(0.8f, 1.2f) * (frame_time + frame_time);
-        vel.q = tmp.q;
+        local_velocity.f[0] = random_float_between(0.8f, 1.2f) * (frame_time * 3.0f);
+        local_velocity.f[2] = random_float_between(0.8f, 1.2f) * (frame_time + frame_time);
+        vel.q = local_velocity.q;
         transform_vector_by_basis(&vel, &vel, self->mtx);
         fast_vec_add(&pos, &pos, &self->pos);
         size = random_float_between(125000.0f, 175000.0f);
