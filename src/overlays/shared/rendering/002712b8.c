@@ -1192,50 +1192,50 @@ void FUN_001f9a10_273ee0(void *, void *, void *) __asm__("FUN_001f9a10");
 int collision_line(void *, void *, int, void *, int) __asm__("FUN_001efa68");
 void clear_u64_value(void *) __asm__("FUN_001f99f8");
 int FUN_L00_0025bfe0_273ee0(float, float, float, float) __asm__("FUN_L00_0025bfe0");
-void FUN_L00_00273ee0(unsigned char *o) {
+void FUN_L00_00273ee0(unsigned char *particle) {
     u128 out[1];
-    float *c;
+    float *particle_data;
     unsigned char *b;
-    if (!o)
+    if (!particle)
         return;
-    c = (float *)(o + 0x20);
-    b = o + 0x10;
-    c[7] += frame_scale * 0.0f;
-    *(float *)(o + 0xC) += frame_scale * -100.0f;
-    FUN_001f9a10_273ee0(out, b, c);
-    if (*(float *)(o + 0x20) != 0.0f || c[1] != 0.0f || c[2] != 0.0f) {
-        if (collision_line(o + 0x10, out, 2, o, 0)) {
-            *(u128 *)(o + 0x10) = ((u128 *)&D_L00_00173E60)[0];
-            clear_u64_value(c);
-            *(float *)(o + 0xC) += *(float *)(o + 0xC);
+    particle_data = (float *)(particle + 0x20);
+    b = particle + 0x10;
+    particle_data[7] += frame_scale * 0.0f;
+    *(float *)(particle + 0xC) += frame_scale * -100.0f;
+    FUN_001f9a10_273ee0(out, b, particle_data);
+    if (*(float *)(particle + 0x20) != 0.0f || particle_data[1] != 0.0f || particle_data[2] != 0.0f) {
+        if (collision_line(particle + 0x10, out, 2, particle, 0)) {
+            *(u128 *)(particle + 0x10) = ((u128 *)&D_L00_00173E60)[0];
+            clear_u64_value(particle_data);
+            *(float *)(particle + 0xC) += *(float *)(particle + 0xC);
         } else {
-            *(u128 *)(o + 0x10) = out[0];
-            if (c[3] != 0.0f) {
-                c[2] += c[3];
+            *(u128 *)(particle + 0x10) = out[0];
+            if (particle_data[3] != 0.0f) {
+                particle_data[2] += particle_data[3];
             } else {
-                c[2] += frame_scale_sq * -0.006300000008195639f;
+                particle_data[2] += frame_scale_sq * -0.006300000008195639f;
             }
         }
     }
-    if (c[7] <= 0.0f || fast_dec_timer(o + 0xA) || *(float *)(o + 0xC) < 0.0f ||
+    if (particle_data[7] <= 0.0f || fast_dec_timer(particle + 0xA) || *(float *)(particle + 0xC) < 0.0f ||
         ((float *)out)[0] < 0.01f || ((float *)out)[1] < 0.01f || ((float *)out)[2] < 0.01f) {
-        free_effect_particle(o);
+        free_effect_particle(particle);
         return;
     }
-    c[4] += frame_scale * -0.01f;
-    if (c[4] < 0.0f)
-        c[4] = 0.0f;
-    c[5] += frame_scale * -0.030009999871253967f;
-    if (c[5] < 0.0f)
-        c[5] = 0.0f;
-    c[6] += frame_scale * -0.05f;
-    if (c[6] < 0.0f)
-        c[6] = 0.0f;
-    c[7] += frame_scale * 0.0f;
-    if (c[7] < 0.0f)
-        c[7] = 0.0f;
-    *(int *)(o + 4) = FUN_L00_0025bfe0_273ee0(c[4], c[5], c[6], c[7]);
-    o[8]--;
+    particle_data[4] += frame_scale * -0.01f;
+    if (particle_data[4] < 0.0f)
+        particle_data[4] = 0.0f;
+    particle_data[5] += frame_scale * -0.030009999871253967f;
+    if (particle_data[5] < 0.0f)
+        particle_data[5] = 0.0f;
+    particle_data[6] += frame_scale * -0.05f;
+    if (particle_data[6] < 0.0f)
+        particle_data[6] = 0.0f;
+    particle_data[7] += frame_scale * 0.0f;
+    if (particle_data[7] < 0.0f)
+        particle_data[7] = 0.0f;
+    *(int *)(particle + 4) = FUN_L00_0025bfe0_273ee0(particle_data[4], particle_data[5], particle_data[6], particle_data[7]);
+    particle[8]--;
 }
 extern int FUN_00213260_2741a0(int) __asm__("FUN_00213260");
 extern int FUN_001fa6d0_2741a0(float) __asm__("FUN_001fa6d0");
