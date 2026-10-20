@@ -618,15 +618,15 @@ typedef struct {
 } M_5cd0;
 
 int FUN_L16_002e5cd0(int idx) {
-    unsigned short *p = (unsigned short *)D_L16_001ABCC0_5cd0[idx];
-    if (p == 0) {
+    unsigned short *moby_index_entry = (unsigned short *)D_L16_001ABCC0_5cd0[idx];
+    if (moby_index_entry == 0) {
         return 0;
     }
     do {
-        if (((M_5cd0 *)D_L16_0015FFD8_sda)[*p & 0x7FFF].act == 0) {
+        if (((M_5cd0 *)D_L16_0015FFD8_sda)[*moby_index_entry & 0x7FFF].act == 0) {
             return 0;
         }
-    } while ((short)*p++ >= 0);
+    } while ((short)*moby_index_entry++ >= 0);
     return 1;
 }
 /* picks the nearest moby in a list (skipping class 0x5A3) and acts on it */
