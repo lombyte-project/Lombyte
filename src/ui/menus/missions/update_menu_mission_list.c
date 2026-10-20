@@ -14,20 +14,20 @@ extern s32 collect_mission_ids(void *, s32, void *, s32) __asm__("func_0020BC00"
 
 s32 update_menu_mission_list(struct MenuScreen *m) __asm__("FUN_0021c4c0");
 
-s32 update_menu_mission_list(struct MenuScreen *m) {
+s32 update_menu_mission_list(struct MenuScreen *menu_screen) {
     s32 old;
     s32 i;
     s32 prev;
     u32 pad;
-    s32 *p;
+    s32 *mission_choice_ptr;
     s32 *ch;
 
     {
         struct MenuScreen *owner = menu_system.current->focus;
         old = level_map_selection.level;
-        if (owner != m) {
+        if (owner != menu_screen) {
             if (old < 20) {
-                m->data.missions.choice[old] = -1;
+                menu_screen->data.missions.choice[old] = -1;
             }
             return 0;
         }
@@ -52,27 +52,27 @@ s32 update_menu_mission_list(struct MenuScreen *m) {
         }
     }
     if (level_map_selection.level != old) {
-        allocate_voice_for_target_entry(1, 0x11, m->moby);
+        allocate_voice_for_target_entry(1, 0x11, menu_screen->moby);
         update_mission_list();
     }
-    if (m->data.missions.count != 0) {
+    if (menu_screen->data.missions.count != 0) {
         pad = controller_state.pressed_unmasked;
-        ch = m->data.missions.choice;
-        prev = m->data.missions.choice[level_map_selection.level];
+        ch = menu_screen->data.missions.choice;
+        prev = menu_screen->data.missions.choice[level_map_selection.level];
         if (pad & 0x1000) {
-            m->data.missions.choice[level_map_selection.level] = (prev + m->data.missions.count - 1) % m->data.missions.count;
+            menu_screen->data.missions.choice[level_map_selection.level] = (prev + menu_screen->data.missions.count - 1) % menu_screen->data.missions.count;
         }
         if (pad & 0x4000) {
-            m->data.missions.choice[level_map_selection.level] = (m->data.missions.choice[level_map_selection.level] + 1) % m->data.missions.count;
+            menu_screen->data.missions.choice[level_map_selection.level] = (menu_screen->data.missions.choice[level_map_selection.level] + 1) % menu_screen->data.missions.count;
         }
-        if (m->data.missions.choice[level_map_selection.level] != prev) {
-            allocate_voice_for_target_entry(1, 0x11, m->moby);
+        if (menu_screen->data.missions.choice[level_map_selection.level] != prev) {
+            allocate_voice_for_target_entry(1, 0x11, menu_screen->moby);
         }
         if ((pad & 0x5000) || level_map_selection.level != old) {
-            m->data.missions.count = collect_mission_ids((void *)0x70000000, 0, (void *)0x70000100, 1);
-            p = &ch[level_map_selection.level];
-            D_001CF874[0] = ((u32 *)0x70000000)[*p];
-            D_001CF758[0] = ((u32 *)0x70000100)[*p];
+            menu_screen->data.missions.count = collect_mission_ids((void *)0x70000000, 0, (void *)0x70000100, 1);
+            mission_choice_ptr = &ch[level_map_selection.level];
+            D_001CF874[0] = ((u32 *)0x70000000)[*mission_choice_ptr];
+            D_001CF758[0] = ((u32 *)0x70000100)[*mission_choice_ptr];
         }
     }
     if (controller_state.pressed_unmasked & PAD_TRIANGLE) {
