@@ -2365,7 +2365,7 @@ extern float D_L00_001617AC __attribute__((sda));
 extern float D_L00_001617B0 __attribute__((sda));
 extern int D_L00_001617B8 __attribute__((sda));
 void FUN_L00_002be890(void *mv) {
-    char *m = mv;
+    char *moby_bytes = mv;
     Q_2be890 quad;
     V_2be890 mat[4];
     V_2be890 scaled_corner;
@@ -2389,7 +2389,7 @@ void FUN_L00_002be890(void *mv) {
     quad.unk64 = 0;
     quad.unk68 = 1.0f;
     quad.unk6C = 1.0f;
-    FUN_001f9bf8_2be890(&e, m + 0xD0, D_L00_001617B4);
+    FUN_001f9bf8_2be890(&e, moby_bytes + 0xD0, D_L00_001617B4);
     FUN_001f9a10_2be890(&mat[3], &D_L00_001DBF60_2be890, &e);
     FUN_001f9a28_2be890(&e, &(*(V_2be890 *)g_debug_camera), &mat[3]);
     FUN_001f9bf8_2be890(&mat[0], &e, 1.0f);
