@@ -21,27 +21,27 @@ int build_pause_item_list(void) __asm__("FUN_002215f8");
 
 int build_pause_item_list(void) {
     int i;
-    int n = 0;
+    int item_count = 0;
     char *m;
 
     for (i = 0; i < 15; i++) {
         int id = D_001CF120[i].id;
         if (item_available[id] != 0) {
-            Item0A *out = &D_001D60E0[n];
+            Item0A *out = &D_001D60E0[item_count];
             MenuItemInfo *rec = &menu_item_info[id];
             unsigned char b = item_text_variant[id];
-            int f = b != 0;
+            int has_text_variant = b != 0;
             out->a = rec->unk38;
-            out->b = f << 2;
+            out->b = has_text_variant << 2;
             out->c = 0;
             out->id = id;
             out->idx = i;
-            D_001D6178[n] = b ? rec->unk42 : rec->unk40;
-            n++;
+            D_001D6178[item_count] = b ? rec->unk42 : rec->unk40;
+            item_count++;
         }
     }
     m = D_001D0D00;
-    *(int *)(m + 0x40) = n;
+    *(int *)(m + 0x40) = item_count;
     return 0;
 }
 
