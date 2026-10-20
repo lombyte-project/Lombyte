@@ -1683,32 +1683,32 @@ extern short D_L14_00161CA4 __attribute__((sda));
 extern short D_L14_00161CA8 __attribute__((sda));
 extern short D_L14_00161CAC __attribute__((sda));
 extern short D_L14_00161CB0 __attribute__((sda));
-void FUN_L14_002ee6b0(float *pos, int n) {
+void FUN_L14_002ee6b0(float *pos, int spawn_pair_count) {
     float v[4];
-    float p2[4];
+    float saved_position[4];
     float a, f21, f20;
-    int s, r0, i, id;
+    int random_sign, r0, i, id;
     unsigned char *r;
-    if (n > 0) {
-    i = n;
+    if (spawn_pair_count > 0) {
+    i = spawn_pair_count;
     do {
         a = random_float_between_c(*(float *)&D_L14_00161CAC, *(float *)&D_L14_00161CB0);
-        s = random_integer_below(2);
-        if (s == 0) s--;
+        random_sign = random_integer_below(2);
+        if (random_sign == 0) random_sign--;
         f21 = random_angle_radians();
         f20 = random_float_between_c(0.34906584f, 1.5358897f);
         build_spherical_offset_c(v, random_float_between_c(*(float *)&D_L14_00161CA0, *(float *)&D_L14_00161CA4), f21, f20);
-        qcopy(p2, pos);
+        qcopy(saved_position, pos);
         pos[0] += FUN_L00_00257c48(0.0f, 0.15f);
         pos[1] += FUN_L00_00257c48(0.0f, 0.15f);
         pos[2] += FUN_L00_00257c48(0.0f, 0.15f);
         id = scale_game_frames_c(0x3C);
-        r = FUN_L00_00272060(pos, id, a * 0.1f, a, 0x7F7F2020, 0, s, v, *(float *)&D_L14_00161CA8);
+        r = FUN_L00_00272060(pos, id, a * 0.1f, a, 0x7F7F2020, 0, random_sign, v, *(float *)&D_L14_00161CA8);
         if (r != 0) {
             r[9] = func_001FA898_r(4.0f) + 0x70;
         }
-        s = -s;
-        r = FUN_L00_00272060(pos, scale_game_frames_c(0x3C), a * 0.07f, a * 0.7f, 0x7F7F7F7F, 1, s, v, *(float *)&D_L14_00161CA8);
+        random_sign = -random_sign;
+        r = FUN_L00_00272060(pos, scale_game_frames_c(0x3C), a * 0.07f, a * 0.7f, 0x7F7F7F7F, 1, random_sign, v, *(float *)&D_L14_00161CA8);
         if (r != 0) {
             r[9] = func_001FA898_r(4.0f) + 0x70;
         }
