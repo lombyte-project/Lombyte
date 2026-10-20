@@ -1620,35 +1620,35 @@ extern float D_L14_00161B34 __attribute__((sda));
 extern float D_L14_00161B38 __attribute__((sda));
 extern float D_L14_00161B3C __attribute__((sda));
 unsigned char *FUN_L14_002e0170(char *owner, float *scale, int mode) {
-    unsigned char *m = spawn_moby_2e0170(0x193);
+    unsigned char *spawned_moby = spawn_moby_2e0170(0x193);
     unsigned char *pos;
-    if (m != 0) {
-        char *d = *(char **)(m + 0x78);
+    if (spawned_moby != 0) {
+        char *spawned_vars = *(char **)(spawned_moby + 0x78);
         float vec[8];
-        pos = m + 0x10;
+        pos = spawned_moby + 0x10;
         qcopy(pos, owner + 0x10);
-        *(float *)(m + 0x48) = *(float *)(owner + 0x48);
-        m[0x20] = mode;
-        m[0x30] = 0xFF;
-        *(short *)(m + 0x32) = 0xFF;
-        m[0x31] = 1;
-        *(char **)d = owner;
-        if (m[0x20] == 0) {
+        *(float *)(spawned_moby + 0x48) = *(float *)(owner + 0x48);
+        spawned_moby[0x20] = mode;
+        spawned_moby[0x30] = 0xFF;
+        *(short *)(spawned_moby + 0x32) = 0xFF;
+        spawned_moby[0x31] = 1;
+        *(char **)spawned_vars = owner;
+        if (spawned_moby[0x20] == 0) {
             int index;
             char *path;
-            int *fields = (int *)d;
+            int *fields = (int *)spawned_vars;
             fields[1] = scale_game_frames_2e0170(90);
             path = race_paths_2e0170;
-            *(float *)(d + 8) = *scale * frame_time;
+            *(float *)(spawned_vars + 8) = *scale * frame_time;
             index = *(int *)(*(char **)(owner + 0x78) + 0x60);
             fields[5] = 0;
             fields[3] = index;
             fields[4] = 0;
             create_effect_2e0170(*(void **)(path + index * 0x20 + 0x10),
-                pos, vec, fields + 4, fields + 5, 0, 20.0f, 5.0f, *(float *)(d + 0x14));
+                pos, vec, fields + 4, fields + 5, 0, 20.0f, 5.0f, *(float *)(spawned_vars + 0x14));
         } else {
             float angle;
-            *(int *)(d + 4) = scale_game_frames_2e0170(200);
+            *(int *)(spawned_vars + 4) = scale_game_frames_2e0170(200);
             subtract_vector_2e0170(vec, pos, &hero.motion.pos);
             vec[2] = 0.0f;
             normalize_vector_2e0170(vec, vec,
@@ -1656,16 +1656,16 @@ unsigned char *FUN_L14_002e0170(char *owner, float *scale, int mode) {
                                        D_L14_00161B34 * D_0015ED60));
             cross_vectors_2e0170(vec + 4, &hero.gravity_dir, vec);
             angle = random_angle_2e0170(0.5759586691856384f, 1.3962633609771729f);
-            build_look_at_2e0170(d + 0x30, vec, &hero.gravity_dir, angle);
-            *(float *)(d + 0x38) = random_scaled_2e0170(D_L14_00161B38 * D_0015ED60,
+            build_look_at_2e0170(spawned_vars + 0x30, vec, &hero.gravity_dir, angle);
+            *(float *)(spawned_vars + 0x38) = random_scaled_2e0170(D_L14_00161B38 * D_0015ED60,
                 D_L14_00161B3C * D_0015ED60);
-            *(float *)(d + 0x20) = random_angle_2e0170(0.0f, 0.008726646f);
-            *(float *)(d + 0x24) = random_angle_2e0170(0.05235988f, 0.13962634f);
-            *(float *)(d + 0x28) = random_angle_2e0170(0.0f, 0.017453293f);
+            *(float *)(spawned_vars + 0x20) = random_angle_2e0170(0.0f, 0.008726646f);
+            *(float *)(spawned_vars + 0x24) = random_angle_2e0170(0.05235988f, 0.13962634f);
+            *(float *)(spawned_vars + 0x28) = random_angle_2e0170(0.0f, 0.017453293f);
         }
-        FUN_L00_00250df8(m);
+        FUN_L00_00250df8(spawned_moby);
     }
-    return m;
+    return spawned_moby;
 }
 /* Ported from rac1-decomp src/overlays/shared/vendor_002B2A28.c (func_L14_002E17B8) */
 /* Exhaust puffs from the moby's nozzle: two coloured sparks and three white puffs of shrinking size. */
