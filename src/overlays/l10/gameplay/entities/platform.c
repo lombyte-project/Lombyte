@@ -633,38 +633,38 @@ extern unsigned char D_0014C050_bf[] __asm__("D_0014C050");
 extern BfState D_L10_001BAA50;
 extern unsigned char D_L10_0015FC88[8];
 void gate_update(unsigned char *m) __asm__("FUN_L10_002befe8");
-void gate_update(unsigned char *m) {
+void gate_update(unsigned char *gate_moby) {
     enum {
         GATE_STATE_WAIT_FOR_SAVE_FLAG = 0,
         GATE_STATE_MOVING_TO_LOWER_Y = 1,
         GATE_STATE_AT_LOWER_Y = 2
     };
-    float *d = *(float **)(m + 0x78);
+    float *saved_position = *(float **)(gate_moby + 0x78);
     unsigned short id;
-    switch (m[0x20]) {
+    switch (gate_moby[0x20]) {
     case GATE_STATE_WAIT_FOR_SAVE_FLAG:
-        *(OvlQuad *)d = *(OvlQuad *)(m + 0x10);
-        id = *(unsigned short *)(m + 0xB2);
+        *(OvlQuad *)saved_position = *(OvlQuad *)(gate_moby + 0x10);
+        id = *(unsigned short *)(gate_moby + 0xB2);
         if (D_L10_001BB6B0_bf.collected[(short)id] != 0 ||
             (*(int *)(D_0014C190_bf + (((short)id >> 5) * 4 + (D_0015ED84_bf << 8))) >> (id & 0x1F)) & 1) {
-            m[0x20] = 1;
+            gate_moby[0x20] = 1;
         }
         break;
     case GATE_STATE_MOVING_TO_LOWER_Y:
-        *(float *)(m + 0x14) += D_0015ED6C_bf * -1.0f;
-        if (*(float *)(m + 0x14) <= d[1] + -3.75f) {
-            D_L10_001BAA50.collected[*(short *)(m + 0xB2)] = m[0xB0] + 2;
-            if (m[0xB0] == 0xFF || (D_L10_0015FC88[m[0xB0]] != 0xFF && D_0014C050_bf[m[0xB0] + (D_0015ED84_bf << 4)] == 0xFF)) {
-                D_L10_001BB6B0_bf.collected[*(short *)(m + 0xB2)] = m[0xB0] + 2;
+        *(float *)(gate_moby + 0x14) += D_0015ED6C_bf * -1.0f;
+        if (*(float *)(gate_moby + 0x14) <= saved_position[1] + -3.75f) {
+            D_L10_001BAA50.collected[*(short *)(gate_moby + 0xB2)] = gate_moby[0xB0] + 2;
+            if (gate_moby[0xB0] == 0xFF || (D_L10_0015FC88[gate_moby[0xB0]] != 0xFF && D_0014C050_bf[gate_moby[0xB0] + (D_0015ED84_bf << 4)] == 0xFF)) {
+                D_L10_001BB6B0_bf.collected[*(short *)(gate_moby + 0xB2)] = gate_moby[0xB0] + 2;
             }
-            m[0x20] = 2;
+            gate_moby[0x20] = 2;
             if (D_0015ED84_bf == 10) {
                 menu_item_enabled_68[0] = 1;
             }
         }
         break;
     case GATE_STATE_AT_LOWER_Y:
-        *(float *)(m + 0x14) = d[1] + -3.75f;
+        *(float *)(gate_moby + 0x14) = saved_position[1] + -3.75f;
         break;
     }
 }
