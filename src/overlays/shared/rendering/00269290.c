@@ -536,8 +536,8 @@ void FUN_L00_0026a6f0(unsigned char *particle) {
     *(float *)&particle_data[3] = FUN_001fa580_0026a6f0(*(float *)&particle_data[3], *(float *)&particle_data[2]);
     particle[8] = FUN_001fa6d0_0026a6f0(*(float *)&particle_data[3] * 128.0f / 3.1415927f) - 0x80;
     if (FUN_001f96f8_0026a6f0(D_L00_001601A4) * 3 / 4 < particle_data[0]) {
-        int t = FUN_001f96f8_0026a6f0(D_L00_001601A4);
-        v = particle_data[4] * (t - particle_data[0]) / (FUN_001f96f8_0026a6f0(D_L00_001601A4) / 4);
+        int scaled_fade_duration = FUN_001f96f8_0026a6f0(D_L00_001601A4);
+        v = particle_data[4] * (scaled_fade_duration - particle_data[0]) / (FUN_001f96f8_0026a6f0(D_L00_001601A4) / 4);
     } else if (particle_data[0] < FUN_001f96f8_0026a6f0(D_L00_001601A4) / 4) {
         v = particle_data[4] * particle_data[0] / (FUN_001f96f8_0026a6f0(D_L00_001601A4) / 4);
     } else {
