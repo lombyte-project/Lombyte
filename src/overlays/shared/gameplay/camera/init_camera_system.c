@@ -70,10 +70,10 @@ typedef struct {
 extern E5 D_L00_001EA880[];
 /* Index of id in the table that ends with -1 (the end index when it is missing). */
 s32 FUN_L00_001ed230(s32 id) {
-    s32 n = 0;
-    while (D_L00_001EA880[n].id != -1 && D_L00_001EA880[n].id != id)
-        n++;
-    return n;
+    s32 table_index = 0;
+    while (D_L00_001EA880[table_index].id != -1 && D_L00_001EA880[table_index].id != id)
+        table_index++;
+    return table_index;
 }
 #define NOT_SDA
 
