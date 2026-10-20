@@ -21,23 +21,23 @@ extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 extern unsigned char *D_L01_001B250C __attribute__((section(".data")));
 void FUN_L01_0027f660(char *pos, char *vel) {
-    unsigned char *p = FUN_L00_002678b8(10);
-    if (p != 0) {
-        char *q = (char *)p + 0x20;
-        qcopy(p + 0x10, pos);
-        *(int *)(p + 4) = FUN_L00_0025bfe0(0.425f, 0.425f, 0.225f, 1.0f);
-        p[9] = func_001FA898_r(8.0f) - 0x60;
-        p[1] = 0;
-        p[3] = 0x48;
-        *(float *)(p + 0xC) = random_float_between_alt(60900.0f, 90300.0f);
-        p[8] = 0;
-        p[2] = *D_L01_001B250C;
-        *(float *)(q + 0x10) = 0.425f;
-        *(float *)(q + 0x14) = 0.425f;
-        *(float *)(q + 0x18) = 0.225f;
-        *(float *)(q + 0x1C) = 1.0f;
-        *(short *)(p + 0xA) = scale_game_frames(0x57);
-        qcopy(q, vel);
+    unsigned char *particle = FUN_L00_002678b8(10);
+    if (particle != 0) {
+        char *particle_data = (char *)particle + 0x20;
+        qcopy(particle + 0x10, pos);
+        *(int *)(particle + 4) = FUN_L00_0025bfe0(0.425f, 0.425f, 0.225f, 1.0f);
+        particle[9] = func_001FA898_r(8.0f) - 0x60;
+        particle[1] = 0;
+        particle[3] = 0x48;
+        *(float *)(particle + 0xC) = random_float_between_alt(60900.0f, 90300.0f);
+        particle[8] = 0;
+        particle[2] = *D_L01_001B250C;
+        *(float *)(particle_data + 0x10) = 0.425f;
+        *(float *)(particle_data + 0x14) = 0.425f;
+        *(float *)(particle_data + 0x18) = 0.225f;
+        *(float *)(particle_data + 0x1C) = 1.0f;
+        *(short *)(particle + 0xA) = scale_game_frames(0x57);
+        qcopy(particle_data, vel);
     }
 }
 #ifndef NOT_SDA
