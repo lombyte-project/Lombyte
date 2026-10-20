@@ -2477,37 +2477,37 @@ extern float dist_2ce1f0(void *, void *) __asm__("FUN_001f9b80");
 /* Spawns moby 0x1DF at pos, aims it at the player and puts it in the first
  * free of six slots. */
 char *FUN_L00_002ce1f0(int a, void *pos) {
-    char *m = spawn_2ce1f0(0x1DF);
+    char *spawned_moby = spawn_2ce1f0(0x1DF);
     char *v;
     struct Hero *g;
 
-    if (m != 0) {
-        *(unsigned char *)(m + 0x30) = 0xFF;
-        *(short *)(m + 0x32) = 0xFF;
-        *(unsigned char *)(m + 0x31) = 1;
-        *(unsigned char *)(m + 0x20) = 2;
-        v = *(char **)(m + 0x78);
-        *(unsigned char *)(m + 0xBC) = 0;
-        qcopy(m + 0x10, pos);
+    if (spawned_moby != 0) {
+        *(unsigned char *)(spawned_moby + 0x30) = 0xFF;
+        *(short *)(spawned_moby + 0x32) = 0xFF;
+        *(unsigned char *)(spawned_moby + 0x31) = 1;
+        *(unsigned char *)(spawned_moby + 0x20) = 2;
+        v = *(char **)(spawned_moby + 0x78);
+        *(unsigned char *)(spawned_moby + 0xBC) = 0;
+        qcopy(spawned_moby + 0x10, pos);
         *(int *)(v + 0x44) = a;
         g = &hero;
         g->ammo_used++;
-        FUN_L00_00250df8(m);
-        FUN_L00_0025d1b8(m);
-        *(float *)(v + 0x28) = atan2_2ce1f0(*(float *)(m + 0x10) - g->motion.pos.f[0], *(float *)(m + 0x14) - g->motion.pos.f[1]);
-        *(float *)(v + 0x24) = atan2_2ce1f0(dist_2ce1f0(&g->motion.pos, m + 0x10), *(float *)(m + 0x18) - g->motion.pos.f[2]);
-        *(float *)(v + 0x20) = dist_2ce1f0(m + 0x10, &g->motion.pos);
+        FUN_L00_00250df8(spawned_moby);
+        FUN_L00_0025d1b8(spawned_moby);
+        *(float *)(v + 0x28) = atan2_2ce1f0(*(float *)(spawned_moby + 0x10) - g->motion.pos.f[0], *(float *)(spawned_moby + 0x14) - g->motion.pos.f[1]);
+        *(float *)(v + 0x24) = atan2_2ce1f0(dist_2ce1f0(&g->motion.pos, spawned_moby + 0x10), *(float *)(spawned_moby + 0x18) - g->motion.pos.f[2]);
+        *(float *)(v + 0x20) = dist_2ce1f0(spawned_moby + 0x10, &g->motion.pos);
         *(float *)(v + 0x3C) = g->motion.pos.f[2];
         for (*(short *)(v + 0x54) = 0; *(short *)(v + 0x54) < 6; (*(short *)(v + 0x54))++) {
             if (hero.unk2020[*(short *)(v + 0x54)] == 0) {
-                hero.unk2020[*(short *)(v + 0x54)] = m;
+                hero.unk2020[*(short *)(v + 0x54)] = spawned_moby;
                 break;
             }
         }
         *(short *)(v + 0x56) = 100;
-        *(int *)(m + 0x94) = 0;
+        *(int *)(spawned_moby + 0x94) = 0;
     }
-    return m;
+    return spawned_moby;
 }
 
 /* Ported from rac1-decomp (nonmatching/shared/func_L00_002CF808.c: func_L00_002CF808). */
