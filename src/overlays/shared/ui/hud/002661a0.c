@@ -151,14 +151,14 @@ int FUN_L05_00266320(HudElem *e) {
     return e->w;
 }
 
-int FUN_L05_00266710(HudElem *e) {
+int FUN_L05_00266710(HudElem *hud_element) {
     char buf[64];
     int y0, y1, y2;
     int frames, per_min, per_sec;
     int min, sec, hund;
     int x;
 
-    if (e->unk6C <= 0) {
+    if (hud_element->unk6C <= 0) {
         return 0;
     }
     /* written as -(row) + height: the plain `height - row` form folds the +10/+18 into the subtraction */
@@ -197,5 +197,5 @@ int FUN_L05_00266710(HudElem *e) {
     sprintf(buf, D_L05_0015FA70, min, sec, hund);
     FUN_L00_001fb470(x + 1, y2 + 1, 0x80000000, buf, -1);
     FUN_L00_001fb470(x, y2, D_L05_0015FA2C, buf, -1);
-    return e->w;
+    return hud_element->w;
 }
