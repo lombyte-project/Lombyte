@@ -2286,30 +2286,30 @@ extern int FUN_001fa6d0_dd(float) __asm__("FUN_001fa6d0");
 extern float FUN_002132a8_dd(float, float) __asm__("FUN_002132a8");
 extern void FUN_L00_0026daa0_dd(unsigned char *, int, int, int, float) __asm__("FUN_L00_0026daa0");
 
-unsigned char *FUN_L10_002dd270(int a, void *pos, int b, float x, float y, float z) {
-    unsigned char *o = FUN_0020c4f8_dd(0x442);
-    int *d;
-    float f;
-    if (o != 0) {
-        o[0x30] = 0xFF;
-        *(short *)(o + 0x32) = 0xFF;
-        o[0x31] = 1;
-        o[0x23] = 0x40;
-        o[0x20] = 0;
-        d = *(int **)(o + 0x78);
-        *(OvlQuad *)(o + 0x10) = *(OvlQuad *)pos;
-        glow_n(o, 0x7F, 0x40, 0);
-        f = 10.0f / (D_0015ED6C_dd * 5.0f);
-        d[0] = b;
-        ((float *)d)[1] = x;
-        ((float *)d)[2] = y;
-        ((float *)d)[3] = z;
-        d[4] = a;
-        d[5] = FUN_001fa6d0_dd(f);
-        ((float *)d)[6] = FUN_002132a8_dd(0.999f, 0.97f);
-        FUN_L00_0026daa0_dd(o, 0x1F4F7F7F, FUN_001fa6d0_dd(10.0f / (D_0015ED6C_dd * 5.0f)), -1, 126000.008f);
+unsigned char *FUN_L10_002dd270(int source_moby, void *pos, int b, float x, float y, float z) {
+    unsigned char *effect_moby = FUN_0020c4f8_dd(0x442);
+    int *effect_data;
+    float lifetime_frames;
+    if (effect_moby != 0) {
+        effect_moby[0x30] = 0xFF;
+        *(short *)(effect_moby + 0x32) = 0xFF;
+        effect_moby[0x31] = 1;
+        effect_moby[0x23] = 0x40;
+        effect_moby[0x20] = 0;
+        effect_data = *(int **)(effect_moby + 0x78);
+        *(OvlQuad *)(effect_moby + 0x10) = *(OvlQuad *)pos;
+        glow_n(effect_moby, 0x7F, 0x40, 0);
+        lifetime_frames = 10.0f / (D_0015ED6C_dd * 5.0f);
+        effect_data[0] = b;
+        ((float *)effect_data)[1] = x;
+        ((float *)effect_data)[2] = y;
+        ((float *)effect_data)[3] = z;
+        effect_data[4] = source_moby;
+        effect_data[5] = FUN_001fa6d0_dd(lifetime_frames);
+        ((float *)effect_data)[6] = FUN_002132a8_dd(0.999f, 0.97f);
+        FUN_L00_0026daa0_dd(effect_moby, 0x1F4F7F7F, FUN_001fa6d0_dd(10.0f / (D_0015ED6C_dd * 5.0f)), -1, 126000.008f);
     }
-    return o;
+    return effect_moby;
 }
 /* Advances an effect, scales its size over its lifetime and emits hits. */
 /* Ported from rac1-decomp (src/overlays/l10_orxon/vendor_00296BD8.c: func_L10_002DE798), where it is exact; names translated to the US level program. */
