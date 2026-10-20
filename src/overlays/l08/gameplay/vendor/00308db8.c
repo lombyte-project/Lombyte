@@ -26,10 +26,10 @@ void FUN_L08_00308db8(int pair_index) {
 extern Pair D_L08_001623F8[] __attribute__((section(".sdata")));
 extern int D_L08_001F4C18[];
 extern int D_L08_001F4C00[];
-void FUN_L08_00308e90(int a) {
+void FUN_L08_00308e90(int pair_index) {
     int i;
     for (i = 0; i < 0x6; i++) {
-        FUN_L08_00258090(D_L08_001F8560, D_L08_001F4C18[i], D_L08_001F01C8[i], &D_L08_001623F8[a]);
+        FUN_L08_00258090(D_L08_001F8560, D_L08_001F4C18[i], D_L08_001F01C8[i], &D_L08_001623F8[pair_index]);
         FUN_L00_001fde98(D_L08_001F01C8[i], D_L08_001F4C00[i], D_L08_001F4C48[i], D_L08_001F8560,
                          1);
     }
