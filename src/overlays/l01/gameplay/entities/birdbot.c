@@ -2616,14 +2616,14 @@ void stationary_ship_update(CarrierMoby *carrier_moby) {
     CarrierOffsets offs;
     s32 i;
     s32 j;
-    s32 n;
+    s32 volume_or_path_node_index;
     s32 k;
     f32 camera_target_yaw;
     f32 camera_node_yaw_delta;
 
     v = (CarrierVars *)carrier_moby->pvars;
-    n = v->volume;
-    if (n == -1) {
+    volume_or_path_node_index = v->volume;
+    if (volume_or_path_node_index == -1) {
         if (carrier_moby->prev_seq != 5) {
             blend_moby_animation_cf(carrier_moby, 5, 0, 0);
         }
@@ -2639,7 +2639,7 @@ void stationary_ship_update(CarrierMoby *carrier_moby) {
         carrier_moby->flags |= 0x41;
         return;
     case CARRIER_STATE_WAIT_FOR_TRIGGER:
-        if (is_point_inside_clip_volume(&hero.motion.pos, n) != 0) {
+        if (is_point_inside_clip_volume(&hero.motion.pos, volume_or_path_node_index) != 0) {
             v->state = 2;
             carrier_moby->flags &= ~0x41;
             if (v->camera != -1) {
@@ -2649,9 +2649,9 @@ void stationary_ship_update(CarrierMoby *carrier_moby) {
             }
             if (v->path != -1) {
                 carrier_path = (PePath *)D_L01_001B0930_u[v->path];
-                for (n = 0; n < carrier_path->count; n++) {
-                    if (carrier_path->pts[n].f[3] == 1.0f) {
-                        v->stop = n;
+                for (volume_or_path_node_index = 0; volume_or_path_node_index < carrier_path->count; volume_or_path_node_index++) {
+                    if (carrier_path->pts[volume_or_path_node_index].f[3] == 1.0f) {
+                        v->stop = volume_or_path_node_index;
                         break;
                     }
                 }
