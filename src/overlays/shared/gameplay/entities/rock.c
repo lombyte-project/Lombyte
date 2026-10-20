@@ -2085,12 +2085,12 @@ void FUN_L01_003097e8(L01Moby *moby) {
     }
 }
 void FUN_L01_00309838(char *parent_moby) {
-    char *p = *(char **)(parent_moby + 0x24);
+    char *parent_record = *(char **)(parent_moby + 0x24);
     char **child_slot;
     s32 i;
     s8 one;
     child_slot = (char **)(*(char **)(parent_moby + 0x78) + 0x14);
-    *(s32 *)(parent_moby + 0x94) = *(s32 *)(p + 0x10);
+    *(s32 *)(parent_moby + 0x94) = *(s32 *)(parent_record + 0x10);
     *(u16 *)(parent_moby + 0x34) &= 0xFFFE;
     *(s8 *)(parent_moby + 0x31) = 1;
     one = 1;
