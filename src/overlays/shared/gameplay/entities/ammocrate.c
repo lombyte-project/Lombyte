@@ -75,20 +75,20 @@ extern void scale_7d50(void *, void *, float) __asm__("FUN_001f9a68");
 extern int D_L13_001611C0;
 extern u128_7d50 D_L13_001608E0;
 extern u128_7d50 D_L13_001608F0;
-void FUN_L13_002b7d50(short *pts, int n, float x0, float y0, unsigned int col, unsigned long long prim, float scale, float ang) {
+void FUN_L13_002b7d50(short *pts, int point_count, float x0, float y0, unsigned int col, unsigned long long prim, float scale, float ang) {
     float mat[4][4];
     float rot[4];
     float w[4];
     float v[4];
-    int q = (n + 1) / 2 + 3;
+    int payload_qword_count = (point_count + 1) / 2 + 3;
     char *t;
-    unsigned long long *o;
+    unsigned long long *vertex_output;
     int x, y;
     int i;
-    *(int *)(D_L13_001611C0 + 0) = q | 0x10000000;
+    *(int *)(D_L13_001611C0 + 0) = payload_qword_count | 0x10000000;
     *(int *)(D_L13_001611C0 + 4) = 0;
     *(int *)(D_L13_001611C0 + 8) = 0;
-    *(int *)(D_L13_001611C0 + 12) = q | 0x50000000;
+    *(int *)(D_L13_001611C0 + 12) = payload_qword_count | 0x50000000;
     {
         char *packet_header = (char *)D_L13_001611C0;
         D_L13_001611C0 = (int)(packet_header + 0x10);
@@ -105,14 +105,14 @@ void FUN_L13_002b7d50(short *pts, int n, float x0, float y0, unsigned int col, u
         char *saved_packet_cursor = (char *)D_L13_001611C0;
         D_L13_001611C0 = (int)(saved_packet_cursor + 0x10);
         qcopy((void *)D_L13_001611C0, &D_L13_001608F0);
-        *(short *)(saved_packet_cursor + 0x10) = n - 0x8000;
+        *(short *)(saved_packet_cursor + 0x10) = point_count - 0x8000;
     }
     *(u128_7d50 *)rot = 0;
     rot[2] = ang;
     D_L13_001611C0 += 0x10;
-    o = (unsigned long long *)D_L13_001611C0;
+    vertex_output = (unsigned long long *)D_L13_001611C0;
     rotmat_7d50(mat, rot);
-    for (i = 0; i < n; i++) {
+    for (i = 0; i < point_count; i++) {
         *(u128_7d50 *)v = 0;
         v[0] = itof_7d50(pts[i * 2]);
         v[1] = itof_7d50(pts[i * 2 + 1]);
@@ -123,9 +123,9 @@ void FUN_L13_002b7d50(short *pts, int n, float x0, float y0, unsigned int col, u
         w[1] += y0;
         x = ftoi_7d50(w[0] * 16.0f);
         y = ftoi_7d50(w[1] * 16.0f);
-        o[i] = (unsigned long long)(x + D_0013E500_7d50[4] - 8) | ((unsigned long long)(y + D_0013E500_7d50[5] - 8) << 16) | ((unsigned long long)col << 32);
+        vertex_output[i] = (unsigned long long)(x + D_0013E500_7d50[4] - 8) | ((unsigned long long)(y + D_0013E500_7d50[5] - 8) << 16) | ((unsigned long long)col << 32);
     }
-    D_L13_001611C0 += ((n + 1) / 2) * 16;
+    D_L13_001611C0 += ((point_count + 1) / 2) * 16;
 }
 #include "rnc/gameplay/hero.h"
 #include "rnc/gameplay/entities/moby.h"
