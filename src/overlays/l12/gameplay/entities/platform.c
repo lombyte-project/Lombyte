@@ -1149,36 +1149,36 @@ extern float turn_k(float *, float, float *, int, float, float, float) __asm__("
 extern void add_k(void *, void *, void *) __asm__("FUN_001f9a10");
 
 extern float D_L12_00161918 __attribute__((sda));
-void FUN_L12_002e3c08(char *m, float *ang, void *target, int unused, int brake) {
-    char *d = *(char **)(m + 0x78);
+void FUN_L12_002e3c08(char *moby, float *ang, void *target, int unused, int brake) {
+    char *moby_vars = *(char **)(moby + 0x78);
     float v[4];
     float dist;
     float speed;
     float acc;
     float lim = 1.9198622f;
-    sub_k(v, target, m + 0x10);
+    sub_k(v, target, moby + 0x10);
     dist = len_k(v);
-    speed = len_k(d + 0x40);
+    speed = len_k(moby_vars + 0x40);
     if (brake) {
         if (speed == 0.0f)
             speed = D_0015ED6C_k * 0.01f;
-        acc = *(float *)(d + 0xD4) * D_0015ED70_k;
+        acc = *(float *)(moby_vars + 0xD4) * D_0015ED70_k;
         if (acc < speed * speed / (dist + dist))
             speed -= acc;
-        else if (speed < *(float *)(d + 0xD0) * D_0015ED6C_k)
+        else if (speed < *(float *)(moby_vars + 0xD0) * D_0015ED6C_k)
             speed += acc;
     } else {
-        if (speed < *(float *)(d + 0xD0) * D_0015ED6C_k)
-            speed += *(float *)(d + 0xD4) * D_0015ED70_k;
-        else if (*(float *)(d + 0xD0) * D_0015ED6C_k < speed)
-            speed -= *(float *)(d + 0xD4) * D_0015ED70_k;
+        if (speed < *(float *)(moby_vars + 0xD0) * D_0015ED6C_k)
+            speed += *(float *)(moby_vars + 0xD4) * D_0015ED70_k;
+        else if (*(float *)(moby_vars + 0xD0) * D_0015ED6C_k < speed)
+            speed -= *(float *)(moby_vars + 0xD4) * D_0015ED70_k;
     }
-    norm_k(d + 0x40, v, speed);
-    appr_k(m + 0x40, ang[0], diff_k(ang[0], *(float *)(m + 0x40)) / D_L12_00161918);
-    appr_k(m + 0x44, ang[1], diff_k(ang[1], *(float *)(m + 0x44)) / D_L12_00161918);
-    turn_k((float *)(m + 0x48), ang[2], (float *)(d + 0xF8), 0, D_0015ED64_k * 0.005f, D_0015ED64_k * 0.3f,
+    norm_k(moby_vars + 0x40, v, speed);
+    appr_k(moby + 0x40, ang[0], diff_k(ang[0], *(float *)(moby + 0x40)) / D_L12_00161918);
+    appr_k(moby + 0x44, ang[1], diff_k(ang[1], *(float *)(moby + 0x44)) / D_L12_00161918);
+    turn_k((float *)(moby + 0x48), ang[2], (float *)(moby_vars + 0xF8), 0, D_0015ED64_k * 0.005f, D_0015ED64_k * 0.3f,
            D_0015ED6C_k * lim);
-    add_k(m + 0x10, m + 0x10, d + 0x40);
+    add_k(moby + 0x10, moby + 0x10, moby_vars + 0x40);
 }
 /* Projects a moby's offset from a reference point into a 2D pair, or zeroes it. */
 /* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002C0310.c: func_L12_002E5138), where it is exact; names translated to the US level program. */
