@@ -583,27 +583,27 @@ extern void FUN_L00_002e20f8(int);
 extern void FUN_L00_002e2250(int, int);
 extern void FUN_L00_002e2af0(void);
 
-void FUN_L14_003039e0(unsigned char *m) {
+void FUN_L14_003039e0(unsigned char *moby) {
     enum {
         SLOT_UPDATE_STATE_INITIALIZE = 0,
         SLOT_UPDATE_STATE_PROCESS_SLOTS = 1
     };
     int i;
     int j;
-    int n;
+    int started_slot_count;
     int st;
 
-    switch (m[0x20]) {
+    switch (moby[0x20]) {
     case SLOT_UPDATE_STATE_INITIALIZE:
         for (j = 0; j < 3; j++) {
             D_L14_00162148[j] = 0;
             D_L14_001621D8[j] = 0;
         }
-        m[0x20] = 1;
-        m[0x30] = 0xFF;
+        moby[0x20] = 1;
+        moby[0x30] = 0xFF;
         break;
     case SLOT_UPDATE_STATE_PROCESS_SLOTS:
-        n = 0;
+        started_slot_count = 0;
         for (i = 0; i < 3; i++) {
             st = D_L14_00162148[i];
             if (st == 1) {
@@ -614,13 +614,13 @@ void FUN_L14_003039e0(unsigned char *m) {
             } else if (st == 4) {
                 FUN_L00_002e20f8(i);
             } else if (st != 0) {
-                n++;
+                started_slot_count++;
                 FUN_L00_002e2250(D_L14_001621D8[i], i);
                 D_L14_00162148[i] = 4;
             }
         }
-        if (n != 0) {
-            enqueue_callback_list_1(FUN_L00_002e2af0, m);
+        if (started_slot_count != 0) {
+            enqueue_callback_list_1(FUN_L00_002e2af0, moby);
         }
         break;
     }
