@@ -507,10 +507,10 @@ extern float adiff_20d6b0(float, float) __asm__("FUN_001fa688");
 extern float hdist_20d6b0(void *, void *) __asm__("FUN_001f9b80");
 extern int FUN_L00_0025e3b8_c(void *) __asm__("FUN_L00_0025e3b8");
 
-float FUN_L00_0020d6b0(char *o, float yaw, float range, float ylim, float plim, int *out) {
+float FUN_L00_0020d6b0(char *target_moby, float yaw, float range, float ylim, float plim, int *out) {
     float v[4] __attribute__((aligned(16)));
     struct Hero *g;
-    float d, a, s, p, m, r;
+    float target_distance, hero_yaw_error, angular_penalty, elevation_angle_error, m, r;
 
     *out = 0;
     qcopy(v, &hero.motion.pos);
@@ -518,32 +518,32 @@ float FUN_L00_0020d6b0(char *o, float yaw, float range, float ylim, float plim, 
     if (g->state.current == 0x14) {
         v[2] = g->ground_z.f;
     }
-    d = dist_20d6b0(v, o + 0x10);
-    if (range < d)
+    target_distance = dist_20d6b0(v, target_moby + 0x10);
+    if (range < target_distance)
         *out = 1;
-    a = adiff_20d6b0(atan2_20d6b0(*(float *)(o + 0x10) - v[0], *(float *)(o + 0x14) - v[1]), yaw);
-    s = a;
-    m = a;
-    p = adiff_20d6b0(atan2_20d6b0(hdist_20d6b0(v, o + 0x10), *(float *)(o + 0x18) - v[2]), 0.0f);
+    hero_yaw_error = adiff_20d6b0(atan2_20d6b0(*(float *)(target_moby + 0x10) - v[0], *(float *)(target_moby + 0x14) - v[1]), yaw);
+    angular_penalty = hero_yaw_error;
+    m = hero_yaw_error;
+    elevation_angle_error = adiff_20d6b0(atan2_20d6b0(hdist_20d6b0(v, target_moby + 0x10), *(float *)(target_moby + 0x18) - v[2]), 0.0f);
     if (g->state.current == 1 || g->state.current == 0x1E) {
-        C_20d6b0 *c = &player_camera;
+        C_20d6b0 *camera = &player_camera;
         float b = adiff_20d6b0(
-            atan2_20d6b0(*(float *)(o + 0x10) - c->v140[0], *(float *)(o + 0x14) - c->v140[1]),
-            c->f158);
-        p = adiff_20d6b0(
-            atan2_20d6b0(hdist_20d6b0(c->v140, o + 0x10), *(float *)(o + 0x18) - c->v140[2]),
-            -c->f154);
-        m = p;
-        s = b + p;
-        if (p < b)
+            atan2_20d6b0(*(float *)(target_moby + 0x10) - camera->v140[0], *(float *)(target_moby + 0x14) - camera->v140[1]),
+            camera->f158);
+        elevation_angle_error = adiff_20d6b0(
+            atan2_20d6b0(hdist_20d6b0(camera->v140, target_moby + 0x10), *(float *)(target_moby + 0x18) - camera->v140[2]),
+            -camera->f154);
+        m = elevation_angle_error;
+        angular_penalty = b + elevation_angle_error;
+        if (elevation_angle_error < b)
             m = b;
     }
     if (0.0f < ylim && ylim < m)
         *out = 1;
-    if (0.0f < plim && plim < p)
+    if (0.0f < plim && plim < elevation_angle_error)
         *out = 1;
-    r = d + s * d;
-    if (FUN_L00_0025e3b8_c(o))
+    r = target_distance + angular_penalty * target_distance;
+    if (FUN_L00_0025e3b8_c(target_moby))
         r += 7.0f;
     return r;
 }
