@@ -576,28 +576,28 @@ void FUN_L14_002eb388(struct Moby *m, int i, void *dir);
 
 extern f32 D_L14_00161C08 __attribute__((sda));
 extern s32 D_L14_00161C04 __attribute__((sda));
-void FUN_L14_002eaf88(struct Moby *m) {
-    L14WindVars *wind_vars = (L14WindVars *)m->pvars;
+void FUN_L14_002eaf88(struct Moby *wind_control_moby) {
+    L14WindVars *wind_vars = (L14WindVars *)wind_control_moby->pvars;
     float dir[4];
     char *pos;
-    struct Hero *h;
+    struct Hero *hero_base;
     int i;
 
-    if (m->state == 0) {
-        m->state = 1;
+    if (wind_control_moby->state == 0) {
+        wind_control_moby->state = 1;
         if (wind_vars->clip_push < 0) {
-            wind_print(D_L14_001FC980, m->save_id);
-            wind_remove(m);
+            wind_print(D_L14_001FC980, wind_control_moby->save_id);
+            wind_remove(wind_control_moby);
             return;
         }
         if (wind_vars->point < 0) {
-            wind_print(D_L14_001FC9E0, m->save_id);
-            wind_remove(m);
+            wind_print(D_L14_001FC9E0, wind_control_moby->save_id);
+            wind_remove(wind_control_moby);
             return;
         }
         if (wind_vars->clip_area < 0) {
-            wind_print(D_L14_001FCA38, m->save_id);
-            wind_remove(m);
+            wind_print(D_L14_001FCA38, wind_control_moby->save_id);
+            wind_remove(wind_control_moby);
             return;
         }
         wind_vars->pushing = 0;
@@ -606,28 +606,28 @@ void FUN_L14_002eaf88(struct Moby *m) {
         wind_vars->f1C = wind_length(D_L14_001600EC_w + (wind_vars->point << 7) + 0x20);
         wind_vars->period_timer = wind_frames(wind_vars->period);
         wind_vars->period_inv = 1.0f / wind_itof(wind_vars->period_timer);
-        dir[0] = wind_cos(m->rot.z);
-        dir[1] = wind_sin(m->rot.z);
+        dir[0] = wind_cos(wind_control_moby->rot.z);
+        dir[1] = wind_sin(wind_control_moby->rot.z);
         dir[2] = 0.0f;
         for (i = 0; i < 48; i++) {
-            FUN_L14_002eb388(m, i, dir);
+            FUN_L14_002eb388(wind_control_moby, i, dir);
         }
     }
     pos = (char *)&hero.motion.pos;
     if (wind_inside(pos, wind_vars->clip_area) != 0) {
-        D_L14_00162230.v = wind_cos(m->rot.z) * (D_L14_00161C08 * D_0015ED6C_w);
-        D_L14_00162234.v = wind_sin(m->rot.z) * (D_L14_00161C08 * D_0015ED6C_w);
+        D_L14_00162230.v = wind_cos(wind_control_moby->rot.z) * (D_L14_00161C08 * D_0015ED6C_w);
+        D_L14_00162234.v = wind_sin(wind_control_moby->rot.z) * (D_L14_00161C08 * D_0015ED6C_w);
         D_L14_00162238 = 0;
         D_L14_00162240 = 1.0f;
         /* Fakematch: storing the weight again is a no-op that reload's cse drops, but the
          * branch around it keeps the call's argument move out of the stores above, so it
          * lands in the call's delay slot as in retail. */
-        if (m != 0) {
+        if (wind_control_moby != 0) {
             D_L14_00162240 = 1.0f;
         }
-        FUN_L14_002eb568(m);
-        h = (struct Hero *)(pos - 0x80);
-        if (h->unk308 == 0 && h->unk2284 != 13 && (h->unk12E2 != 0 || h->frames_off_ground.s != 0) &&
+        FUN_L14_002eb568(wind_control_moby);
+        hero_base = (struct Hero *)(pos - 0x80);
+        if (hero_base->unk308 == 0 && hero_base->unk2284 != 13 && (hero_base->unk12E2 != 0 || hero_base->frames_off_ground.s != 0) &&
             wind_inside(pos, wind_vars->clip_push) != 0) {
             float t;
             float k;
@@ -637,8 +637,8 @@ void FUN_L14_002eaf88(struct Moby *m) {
             k = D_0015ED6C_w;
             t = 1.0f - t;
             t = t * (wind_vars->push * k);
-            dir[0] = wind_cos(m->rot.z) * t;
-            dir[1] = wind_sin(m->rot.z) * t;
+            dir[0] = wind_cos(wind_control_moby->rot.z) * t;
+            dir[1] = wind_sin(wind_control_moby->rot.z) * t;
             dir[2] = 0.0f;
             wind_add(pos + 0x70, pos + 0x70, dir);
             wind_vars->push_timer = wind_frames(D_L14_00161C04);
@@ -660,8 +660,8 @@ void FUN_L14_002eaf88(struct Moby *m) {
             }
         }
         t = (wind_vars->push * D_0015ED6C_w - 0.0f) * (wind_itof(wind_vars->push_timer) * wind_vars->push_inv) + 0.0f;
-        dir[0] = wind_cos(m->rot.z) * t;
-        dir[1] = wind_sin(m->rot.z) * t;
+        dir[0] = wind_cos(wind_control_moby->rot.z) * t;
+        dir[1] = wind_sin(wind_control_moby->rot.z) * t;
         dir[2] = 0.0f;
         wind_add(&hero.motion.platform_delta, &hero.motion.platform_delta, dir);
     }
