@@ -3068,38 +3068,38 @@ extern struct Moby *func_0020D348_m(int) __asm__("FUN_0020c4f8");
 
 unsigned char *FUN_L14_002bb310(struct Moby *owner, float angle, char *posp) {
     float vec[12];
-    unsigned char *m;
-    char *d;
+    unsigned char *spawned_moby;
+    char *spawned_vars;
     char *g;
     float *spawn_position = vec;
     float *launch_vector;
     *(OvlQuad *)spawn_position = *(OvlQuad *)posp;
-    m = (unsigned char *)func_0020D348_m(0x51);
-    if (m != 0) {
-        d = *(char **)(m + 0x78);
-        qcopy(m + 0x10, spawn_position);
+    spawned_moby = (unsigned char *)func_0020D348_m(0x51);
+    if (spawned_moby != 0) {
+        spawned_vars = *(char **)(spawned_moby + 0x78);
+        qcopy(spawned_moby + 0x10, spawn_position);
         launch_vector = vec + 4;
-        *(float *)(m + 0x48) = angle;
-        m[0x20] = 0;
-        m[0x30] = 0xFF;
-        *(short *)(m + 0x32) = 0xFF;
-        m[0x31] = 1;
+        *(float *)(spawned_moby + 0x48) = angle;
+        spawned_moby[0x20] = 0;
+        spawned_moby[0x30] = 0xFF;
+        *(short *)(spawned_moby + 0x32) = 0xFF;
+        spawned_moby[0x31] = 1;
         subtract_vector_xyz(launch_vector, spawn_position, &owner->pos);
         vec[6] = 0.0f;
         normalize_vector_xyz(launch_vector, launch_vector, random_float_between(frame_scale * 0.075f, frame_scale * 0.2f));
         g = (char *)&hero.gravity_dir;
         cross_vectors_xyz(vec + 8, g, launch_vector);
-        build_look_at_matrix(d, launch_vector, g, randf_sym(0.0f, 0.7853982f));
-        *(float *)(d + 8) = random_float_between(frame_scale * 0.05f, frame_scale * 0.32f);
-        *(float *)(d + 0x14) = randf_sym(0.0f, 0.034906585f);
-        *(float *)(d + 0x18) = randf_sym(0.0f, 0.034906585f);
-        *(float *)(d + 0x1C) = randf_sym(0.0f, 0.034906585f);
-        *(short *)(d + 0x10) = scale_game_frames(200);
-        *(char **)(d + 0x20) = owner;
-        *(short *)(d + 0x12) = -1;
-        FUN_L00_00250df8(m);
+        build_look_at_matrix(spawned_vars, launch_vector, g, randf_sym(0.0f, 0.7853982f));
+        *(float *)(spawned_vars + 8) = random_float_between(frame_scale * 0.05f, frame_scale * 0.32f);
+        *(float *)(spawned_vars + 0x14) = randf_sym(0.0f, 0.034906585f);
+        *(float *)(spawned_vars + 0x18) = randf_sym(0.0f, 0.034906585f);
+        *(float *)(spawned_vars + 0x1C) = randf_sym(0.0f, 0.034906585f);
+        *(short *)(spawned_vars + 0x10) = scale_game_frames(200);
+        *(char **)(spawned_vars + 0x20) = owner;
+        *(short *)(spawned_vars + 0x12) = -1;
+        FUN_L00_00250df8(spawned_moby);
     }
-    return m;
+    return spawned_moby;
 }
 
 /* One record of the level's path table (D_L14_0015F70C), 0x20 bytes apart. */
