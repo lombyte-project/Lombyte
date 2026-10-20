@@ -1529,29 +1529,29 @@ extern float FUN_001f9af0_002e4180(void *) __asm__("FUN_001f9af0");
 extern void FUN_001f9a68_002e4180(void *, void *, float) __asm__("FUN_001f9a68");
 extern void FUN_001f9a10_002e4180(void *, void *, void *) __asm__("FUN_001f9a10");
 
-int FUN_L00_002e4180(u128 *p, float r) {
-    u128 a;
-    u128 d;
-    char *e;
-    char *c;
+int FUN_L00_002e4180(u128 *input_position, float r) {
+    u128 lookup_position_copy;
+    u128 position_delta;
+    char *selected_record;
+    char *reference_position;
     char *v;
     float l, inv;
-    a = *p;
+    lookup_position_copy = *input_position;
     {
-        int *q = (int *)FUN_L00_001ee1b0_002e4180(&a);
-        if (q == 0)
+        int *lookup_result = (int *)FUN_L00_001ee1b0_002e4180(&lookup_position_copy);
+        if (lookup_result == 0)
             goto fail;
-        e = (char *)&D_L00_001600F4_002e4180[q[5]];
+        selected_record = (char *)&D_L00_001600F4_002e4180[lookup_result[5]];
     }
-    c = e + 0x30;
-    FUN_001f9a28_002e4180(&d, p, c);
-    l = FUN_001f9af0_002e4180(e);
-    inv = 1.0f / FUN_001f9af0_002e4180(&d);
+    reference_position = selected_record + 0x30;
+    FUN_001f9a28_002e4180(&position_delta, input_position, reference_position);
+    l = FUN_001f9af0_002e4180(selected_record);
+    inv = 1.0f / FUN_001f9af0_002e4180(&position_delta);
     v = D_L00_00173E70_002e4180;
-    FUN_001f9a68_002e4180(v, &d, (l + r) * inv);
-    FUN_001f9a68_002e4180(v - 0x10, &d, l * inv);
-    FUN_001f9a10_002e4180(v, v, c);
-    FUN_001f9a10_002e4180(v - 0x10, v - 0x10, c);
+    FUN_001f9a68_002e4180(v, &position_delta, (l + r) * inv);
+    FUN_001f9a68_002e4180(v - 0x10, &position_delta, l * inv);
+    FUN_001f9a10_002e4180(v, v, reference_position);
+    FUN_001f9a10_002e4180(v - 0x10, v - 0x10, reference_position);
     return 1;
 fail:
     return 0;
