@@ -2202,27 +2202,27 @@ void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_0021
 
 extern short D_L11_0016205C __attribute__((sda));
 int D_L11_00162060 = 4;
-void FUN_L11_003125a8(struct Moby *moby, char *obj, float p2, float p3) {
-    char a[16];
+void FUN_L11_003125a8(struct Moby *moby, char *obj, float aim_azimuth, float aim_elevation) {
+    char shot_direction[16];
     char b[16];
-    char c[16];
-    char d[16];
+    char muzzle_forward_offset[16];
+    char reticle_world_position[16];
 
-    build_spherical_offset((f32 *)a, *(float *)&D_L11_0016205C * *(float *)&D_L11_00162090_gp, p2,
-                           p3);
-    fast_vec_add(a, a, obj);
+    build_spherical_offset((f32 *)shot_direction, *(float *)&D_L11_0016205C * *(float *)&D_L11_00162090_gp, aim_azimuth,
+                           aim_elevation);
+    fast_vec_add(shot_direction, shot_direction, obj);
     if (FUN_001f9740_c(obj + 0x80) && (*(int *)(D_0013A4E0 + 0x2610) & 0x84)) {
-        fast_vec_normalize(c, a, 2.2f);
+        fast_vec_normalize(muzzle_forward_offset, shot_direction, 2.2f);
         moby_point_position(moby, 3 + (obj[0x61] & 1), b);
-        fast_vec_add(b, b, c);
-        FUN_L11_00308848(moby, a, b, 200.0f, -1.0f);
+        fast_vec_add(b, b, muzzle_forward_offset);
+        FUN_L11_00308848(moby, shot_direction, b, 200.0f, -1.0f);
         *(int *)(obj + 0x80) = D_L11_00162060;
         obj[0x61] ^= 1;
         FUN_0022da68_c(3, 0, (int)moby);
     }
-    fast_vec_normalize(a, a, 23.0f);
-    fast_vec_add(d, a, &moby->pos);
-    FUN_L11_00311210(d, obj + 0xE0, obj + 0xE4, 0);
+    fast_vec_normalize(shot_direction, shot_direction, 23.0f);
+    fast_vec_add(reticle_world_position, shot_direction, &moby->pos);
+    FUN_L11_00311210(reticle_world_position, obj + 0xE0, obj + 0xE4, 0);
 }
 /* on a pad press, fires the aimed shot and resets the cooldown */
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_00313BC0), where it is exact; names translated to the US level program. */
