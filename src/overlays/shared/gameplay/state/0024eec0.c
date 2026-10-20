@@ -293,7 +293,7 @@ void FUN_L00_0024f440_c(char *obj, int i, int j, Packet_24f440 *out) {
     int nb = (unsigned char)frame_table_container[8];
     int na = (unsigned char)u[8];
     Frame_24f440 *selected_frame;
-    unsigned short a;
+    unsigned short frame_header_a;
     int trailing_byte_count;
     int k;
     unsigned char *ix;
@@ -314,9 +314,9 @@ void FUN_L00_0024f440_c(char *obj, int i, int j, Packet_24f440 *out) {
         void *from = &((u64_24f440 *)selected_frame)[nb + 2];
 
         out->h6 = (k + 1) >> 1;
-        a = selected_frame->hA;
-        out->hA = a;
-        out->hC = (a + na) * 8;
+        frame_header_a = selected_frame->hA;
+        out->hA = frame_header_a;
+        out->hC = (frame_header_a + na) * 8;
         out->hE = selected_frame->hE;
         trailing_byte_count = selected_frame->qwc * 16 - nb * 8;
         if (trailing_byte_count != 0)
