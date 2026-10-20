@@ -1389,25 +1389,25 @@ extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 s32 random_integer_below(s32 arg0) __asm__("FUN_00213260");
 
 void FUN_L02_002ea7d0(char *moby) {
-    float *d = *(float **)(moby + 0x78);
-    int *q;
+    float *moby_data = *(float **)(moby + 0x78);
+    int *sprite_timers;
     int i;
 
     for (i = 0; i < 4; i++) {
-        d[i] = (float)random_integer_below(0xFF);
+        moby_data[i] = (float)random_integer_below(0xFF);
     }
-    d[4] = -1.0f;
-    d[5] = -2.25f;
-    d[6] = 1.25f;
-    d[7] = 2.5f;
-    q = (int *)(d + 8);
+    moby_data[4] = -1.0f;
+    moby_data[5] = -2.25f;
+    moby_data[6] = 1.25f;
+    moby_data[7] = 2.5f;
+    sprite_timers = (int *)(moby_data + 8);
     for (i = 0; i < 4; i++) {
-        q[i] = scale_game_frames(0x3F + i * 0x40);
+        sprite_timers[i] = scale_game_frames(0x3F + i * 0x40);
     }
-    d[12] = 2.5f;
-    d[13] = 3.0f;
-    d[15] = 2.5f;
-    d[14] = 3.0f;
+    moby_data[12] = 2.5f;
+    moby_data[13] = 3.0f;
+    moby_data[15] = 2.5f;
+    moby_data[14] = 3.0f;
 }
 #include "sda.h"
 typedef struct {
