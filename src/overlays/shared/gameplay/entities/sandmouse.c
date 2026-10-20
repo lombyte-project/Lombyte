@@ -176,7 +176,7 @@ extern void normalize_vector_xyz_bfa8(void *, void *, f32) __asm__("FUN_001f9bf8
 extern void transform_vector_bfa8(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void draw_geometry_quad_bfa8(void *, void *, s32) __asm__("FUN_001f7d30");
 
-void FUN_L01_0030bfa8(char *m) {
+void FUN_L01_0030bfa8(char *moby) {
     struct {
         GlowQuad_bfa8 quad;
         GlowVec_bfa8 src_corner[4];
@@ -187,18 +187,18 @@ void FUN_L01_0030bfa8(char *m) {
     GlowVec_bfa8 *basis;
     s32 i;
     f32 one;
-    OvlQuad q0, q1, q2, q3;
+    OvlQuad source_corner_0, source_corner_1, source_corner_2, source_corner_3;
 
     i = 3;
     one = 1.0f;
-    q0 = D_L01_0020B9D0[0].q;
-    q1 = D_L01_0020B9D0[1].q;
-    q2 = D_L01_0020B9D0[2].q;
-    q3 = D_L01_0020B9D0[3].q;
-    local.src_corner[0].q = q0;
-    local.src_corner[1].q = q1;
-    local.src_corner[2].q = q2;
-    local.src_corner[3].q = q3;
+    source_corner_0 = D_L01_0020B9D0[0].q;
+    source_corner_1 = D_L01_0020B9D0[1].q;
+    source_corner_2 = D_L01_0020B9D0[2].q;
+    source_corner_3 = D_L01_0020B9D0[3].q;
+    local.src_corner[0].q = source_corner_0;
+    local.src_corner[1].q = source_corner_1;
+    local.src_corner[2].q = source_corner_2;
+    local.src_corner[3].q = source_corner_3;
     local.quad.tex = get_effect_texture_bfa8(0xB);
     local.quad.unk88 = 0x8000000048L;
     local.quad.unk80 = 0xFF9000000260L;
@@ -212,11 +212,11 @@ void FUN_L01_0030bfa8(char *m) {
     local.quad.unk68 = one;
     local.quad.unk6C = one;
 
-    scale_vector_xyz_bfa8(&local.basis.offset, m + 0xc0, D_L01_00162064);
-    scale_vector_xyz_bfa8(&local.basis.partial, m + 0xe0, D_L01_0016206C);
+    scale_vector_xyz_bfa8(&local.basis.offset, moby + 0xc0, D_L01_00162064);
+    scale_vector_xyz_bfa8(&local.basis.partial, moby + 0xe0, D_L01_0016206C);
     add_vector_xyz_bfa8(&local.basis.offset, &local.basis.offset, &local.basis.partial);
     src = &local.basis.mat0;
-    add_vector_xyz_bfa8(&local.basis.point, &local.basis.offset, m + 0x10);
+    add_vector_xyz_bfa8(&local.basis.point, &local.basis.offset, moby + 0x10);
     subtract_vector_xyz_bfa8(src, D_L01_00167240, &local.basis.point);
     normalize_vector_xyz_bfa8(src, src, one);
     dst = &local.basis.mat1;
