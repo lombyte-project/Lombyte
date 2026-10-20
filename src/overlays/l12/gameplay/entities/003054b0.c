@@ -838,8 +838,8 @@ extern short *suck_get_aim_height(unsigned char *) __asm__("FUN_002141f8");
 
 void FUN_L12_003076e0(struct Moby *spawner) {
     char *spawner_data = (char *)spawner->pvars;
-    int *s = (int *)(spawner_data + (*(int *)(spawner_data + 0xF0) << 2));
-    struct Moby *spawned_moby = (struct Moby *)((unsigned char *)D_L12_0015FFD8_p + (s[0x30] << 8));
+    int *indexed_spawner_data = (int *)(spawner_data + (*(int *)(spawner_data + 0xF0) << 2));
+    struct Moby *spawned_moby = (struct Moby *)((unsigned char *)D_L12_0015FFD8_p + (indexed_spawner_data[0x30] << 8));
     struct MobyClass *moby_class;
     short *r;
     int i;
