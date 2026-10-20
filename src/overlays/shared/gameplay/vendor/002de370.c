@@ -53,25 +53,25 @@ extern void euler_rotation_matrix(float *, float *) __asm__("FUN_001fa050");
 void FUN_L03_002e8628(char *cam) {
     float v[4] __attribute__((aligned(16)));
     float mat[16] __attribute__((aligned(16)));
-    CamSub *a = &(*(CamInfo **)(cam + 0x70))->sub;
-    CamInfo *d;
+    CamSub *camera_subrecord = &(*(CamInfo **)(cam + 0x70))->sub;
+    CamInfo *camera_info;
     char *ent;
     int idx;
-    char *p;
-    a->x4C = 1.5f;
-    a->x40 = 0;
+    char *entry_subrecord;
+    camera_subrecord->x4C = 1.5f;
+    camera_subrecord->x40 = 0;
     (*(CamInfo **)(cam + 0x70))->x80 = 0;
-    d = *(CamInfo **)(cam + 0x70);
-    d->f4 = 0.02f;
-    d->f8 = 0.1f;
-    d->fC = 0;
+    camera_info = *(CamInfo **)(cam + 0x70);
+    camera_info->f4 = 0.02f;
+    camera_info->f8 = 0.1f;
+    camera_info->fC = 0;
     idx = *(short *)(cam + 0x84);
     ent = (char *)D_L03_0015EF50 + (idx << 5);
-    p = *(char **)(ent + 0x1C);
+    entry_subrecord = *(char **)(ent + 0x1C);
     if (idx < 0) {
         RaiseKernelTrap();
     } else {
-        a->x4C = *(float *)(p + 0x18);
+        camera_subrecord->x4C = *(float *)(entry_subrecord + 0x18);
     }
     qcopy(cam + 0x30, ent);
     qcopy(v, ent + 0x10);
