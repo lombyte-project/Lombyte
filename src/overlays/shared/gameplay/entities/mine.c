@@ -2120,23 +2120,23 @@ extern float g48_2afa48 __asm__("D_L00_00161448") __attribute__((sda));
 extern float g4c_2afa48 __asm__("D_L00_0016144C") __attribute__((sda));
 unsigned char *spawn_crate_debris(unsigned char *owner, void *vel, void *pos, void *rot, int type,
                                 int n, float lo, float hi) {
-    unsigned char *m = FUN_0020c4f8_2af8b0(type);
-    if (m) {
-        V_2af8b0 *v = *(V_2af8b0 **)(m + 0x78);
-        float a;
+    unsigned char *debris_moby = FUN_0020c4f8_2af8b0(type);
+    if (debris_moby) {
+        V_2af8b0 *v = *(V_2af8b0 **)(debris_moby + 0x78);
+        float scale_multiplier;
         v->o = owner;
-        m[0x30] = 0xFF;
-        *(short *)(m + 0x32) = 0x7E;
-        m[0x31] = 1;
-        *(long *)(m + 0x38) = *(long *)(owner + 0x38);
-        m[0x20] = 0;
-        *(float *)(m + 0x40) = FUN_00213308_2af8b0();
-        *(float *)(m + 0x44) = FUN_00213308_2af8b0();
-        *(float *)(m + 0x48) = FUN_00213308_2af8b0();
-        qcopy(m + 0x10, pos);
-        qcopy(m + 0x40, rot);
+        debris_moby[0x30] = 0xFF;
+        *(short *)(debris_moby + 0x32) = 0x7E;
+        debris_moby[0x31] = 1;
+        *(long *)(debris_moby + 0x38) = *(long *)(owner + 0x38);
+        debris_moby[0x20] = 0;
+        *(float *)(debris_moby + 0x40) = FUN_00213308_2af8b0();
+        *(float *)(debris_moby + 0x44) = FUN_00213308_2af8b0();
+        *(float *)(debris_moby + 0x48) = FUN_00213308_2af8b0();
+        qcopy(debris_moby + 0x10, pos);
+        qcopy(debris_moby + 0x40, rot);
         qcopy(v->p10, vel);
-        v->f4 = *(float *)(m + 0x18);
+        v->f4 = *(float *)(debris_moby + 0x18);
         {
             short t = FUN_001f96f8_2af8b0(0x14);
             v->i20 = 0;
@@ -2146,13 +2146,13 @@ unsigned char *spawn_crate_debris(unsigned char *owner, void *vel, void *pos, vo
                  DEG_TO_RAD * D_0015ED6C_2af8b0;
         v->f28 = FUN_L00_00257c48_2af8b0(g48_2afa48, g4c_2afa48) *
                  DEG_TO_RAD * D_0015ED6C_2af8b0;
-        a = FUN_002132a8_2af8b0(lo, hi);
-        *(float *)(m + 0x2C) *= a;
+        scale_multiplier = FUN_002132a8_2af8b0(lo, hi);
+        *(float *)(debris_moby + 0x2C) *= scale_multiplier;
         v->hc = n;
-        v->f8 = a * 0.25f;
-        FUN_L00_00250df8_2af8b0(m);
+        v->f8 = scale_multiplier * 0.25f;
+        FUN_L00_00250df8_2af8b0(debris_moby);
     }
-    return m;
+    return debris_moby;
 }
 #include "eetypes.h"
 #include "qcopy.h"
