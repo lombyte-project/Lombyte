@@ -2404,7 +2404,7 @@ char *FUN_L00_002cdf28(char *search_position, int *excl) {
         char *cls = *(char **)(candidate_moby + 0x24);
         int class_category = 0;
         float dist;
-        char *h;
+        char *class_callback_data;
         char *x;
         if (cls != 0)
             class_category = *(unsigned char *)(cls + 0x46);
@@ -2460,8 +2460,8 @@ char *FUN_L00_002cdf28(char *search_position, int *excl) {
     skip:
         if (!(dist < best))
             continue;
-        h = FUN_L00_002db890(candidate_moby);
-        if (h != 0 && *(short *)(h + 0x68) > 0)
+        class_callback_data = FUN_L00_002db890(candidate_moby);
+        if (class_callback_data != 0 && *(short *)(class_callback_data + 0x68) > 0)
             continue;
         x = (char *)FUN_002141f8_c(candidate_moby);
         qcopy(v, candidate_moby + 0x10);
