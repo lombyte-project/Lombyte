@@ -2153,77 +2153,77 @@ extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
 extern void transform_vector(void *, void *, void *) __asm__("func_001F9D20");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-int FUN_L13_002b8be0(int a, char *p, char *radar_origin_position, void *radar_rotation, float f0, float f1, float f2, char *cur, char *g) {
+int FUN_L13_002b8be0(int a, char *moby_vars, char *radar_origin_position, void *radar_rotation, float f0, float f1, float f2, char *cur, char *g) {
     float v[4];
     float mat[16];
     float u[4];
     int sx, sy, tx, ty;
-    char *m;
+    char *candidate_moby;
     char *ret;
     int best;
     int *scr;
-    int dx, dy, r, d2;
-    float ang, dist, h, k, s, t;
+    int dx, dy, r, screen_distance_squared;
+    float ang, dist, yaw_error, k, angular_error_magnitude, arrow_pulse_phase;
     char *tab;
 
-    m = D_L13_0015FFE4;
+    candidate_moby = D_L13_0015FFE4;
     ret = 0;
     best = 0x7FFFFFFF;
-    *(int *)(p + 0xE8) = 0;
-    while (m != 0) {
+    *(int *)(moby_vars + 0xE8) = 0;
+    while (candidate_moby != 0) {
         tab = D_L13_001CBD40;
         scr = (int *)(D_0013E500);
-        if ((((Moby_2B9E50 *)m)->f34 & 0x1000) && !(((Moby_2B9E50 *)m)->f34 & 3) && *(unsigned char *)(m + 0x31) != 0 &&
-            m != 0 && *(char **)(m + 0x24) != 0 && *(short *)(*(char **)(m + 0x24) + 0x46) == 5) {
-            FUN_L11_00311210(m + 0x10, &sx, &sy, 0);
-            dx = sx - *(int *)(p + 0xE0);
-            dy = sy - *(int *)(p + 0xE4);
+        if ((((Moby_2B9E50 *)candidate_moby)->f34 & 0x1000) && !(((Moby_2B9E50 *)candidate_moby)->f34 & 3) && *(unsigned char *)(candidate_moby + 0x31) != 0 &&
+            candidate_moby != 0 && *(char **)(candidate_moby + 0x24) != 0 && *(short *)(*(char **)(candidate_moby + 0x24) + 0x46) == 5) {
+            FUN_L11_00311210(candidate_moby + 0x10, &sx, &sy, 0);
+            dx = sx - *(int *)(moby_vars + 0xE0);
+            dy = sy - *(int *)(moby_vars + 0xE4);
             if (dx < 0) dx = -dx;
             if (dy < 0) dy = -dy;
             qcopy(v, D_L13_001672E0);
-            scale_vector_xyz(v, D_L13_001672E0, *(float *)(m + 0xC) / 1280.0f);
-            add_vector_xyz(v, v, m + 0x10);
+            scale_vector_xyz(v, D_L13_001672E0, *(float *)(candidate_moby + 0xC) / 1280.0f);
+            add_vector_xyz(v, v, candidate_moby + 0x10);
             FUN_L11_00311210(v, &tx, &ty, 0);
             tx -= sx;
             ty -= sy;
             r = func_001FA898_r(seg_sqrt(convert_integer_to_float(tx * tx + ty * ty))) + 0x1C;
             if (dx < r && dy < r) {
                 if (cur != 0) {
-                    if (m == cur) {
+                    if (candidate_moby == cur) {
                         best = 0;
-                        ret = m;
+                        ret = candidate_moby;
                     }
-                } else if (m != g) {
-                    d2 = dx * dx + dy * dy;
-                    if (d2 < best) {
-                        best = d2;
-                        ret = m;
+                } else if (candidate_moby != g) {
+                    screen_distance_squared = dx * dx + dy * dy;
+                    if (screen_distance_squared < best) {
+                        best = screen_distance_squared;
+                        ret = candidate_moby;
                     }
                 }
             }
         }
-        switch (*(short *)(m + 0xA6)) {
+        switch (*(short *)(candidate_moby + 0xA6)) {
         case 0xE0:
         case 0x4C2:
-            FUN_L13_002b89f8(radar_rotation, radar_origin_position, m, 2, 0x75808080, *(int *)(p + 0x104));
+            FUN_L13_002b89f8(radar_rotation, radar_origin_position, candidate_moby, 2, 0x75808080, *(int *)(moby_vars + 0x104));
             break;
         case 0xE4:
         case 0x4C4:
-            FUN_L13_002b89f8(radar_rotation, radar_origin_position, m, 2, 0x75808080, *(int *)(p + 0x104));
+            FUN_L13_002b89f8(radar_rotation, radar_origin_position, candidate_moby, 2, 0x75808080, *(int *)(moby_vars + 0x104));
             break;
         case 0x52:
-            FUN_L13_002b89f8(radar_rotation, radar_origin_position, m, 1, 0x75004080, *(int *)(p + 0x104));
+            FUN_L13_002b89f8(radar_rotation, radar_origin_position, candidate_moby, 1, 0x75004080, *(int *)(moby_vars + 0x104));
             break;
         case 0x53:
-            FUN_L13_002b89f8(radar_rotation, radar_origin_position, m, 1, 0x75007080, *(int *)(p + 0x104));
+            FUN_L13_002b89f8(radar_rotation, radar_origin_position, candidate_moby, 1, 0x75007080, *(int *)(moby_vars + 0x104));
             break;
         case 0x184:
         case 0x191:
         case 0x3EB:
         case 0x504:
-            project_to_screen(v, m + 0x10);
-            if (*(short *)(m + 0xA6) != 0x184) {
-                if (*(unsigned char *)(m + 0x31) != 0) {
+            project_to_screen(v, candidate_moby + 0x10);
+            if (*(short *)(candidate_moby + 0xA6) != 0x184) {
+                if (*(unsigned char *)(candidate_moby + 0x31) != 0) {
                     {
                         float x = (v[0] - scr[4]) * 0.0625f;
                         float y = (v[1] - scr[5]) * 0.0625f;
@@ -2238,9 +2238,9 @@ int FUN_L13_002b8be0(int a, char *p, char *radar_origin_position, void *radar_ro
                     }
                 }
             }
-            if (*(short *)(m + 0xA6) != 0x191) {
-                if (*(unsigned char *)(m + 0x31) == 0) {
-                    char *np = m + 0x10;
+            if (*(short *)(candidate_moby + 0xA6) != 0x191) {
+                if (*(unsigned char *)(candidate_moby + 0x31) == 0) {
+                    char *np = candidate_moby + 0x10;
                     int c;
                     transpose_rotation_matrix(mat, D_L13_001672D0);
                     subtract_vector_xyz(u, np, D_0013F3D0);
@@ -2253,17 +2253,17 @@ int FUN_L13_002b8be0(int a, char *p, char *radar_origin_position, void *radar_ro
                     u[0] += 256.0f;
                     u[1] += 208.0f;
                     dist = distance_xyz((char *)a + 0x10, np);
-                    h = absolute_float(fast_subtract_rotations(fast_arc_tan(*(float *)(m + 0x10) - *(float *)((char *)a + 0x10),
-                                                                      *(float *)(m + 0x14) - *(float *)((char *)a + 0x14)),
-                                                    *(float *)(p + 0x38)));
+                    yaw_error = absolute_float(fast_subtract_rotations(fast_arc_tan(*(float *)(candidate_moby + 0x10) - *(float *)((char *)a + 0x10),
+                                                                      *(float *)(candidate_moby + 0x14) - *(float *)((char *)a + 0x14)),
+                                                    *(float *)(moby_vars + 0x38)));
                     k = absolute_float(fast_subtract_rotations(-fast_arc_tan(vector_distance((char *)a + 0x10, np),
-                                                                       *(float *)(m + 0x18) - *(float *)((char *)a + 0x18)),
-                                                    *(float *)(p + 0x34)));
-                    s = seg_sqrt(h * h + k * k);
-                    t = fast_add_rotations(*(float *)(p + 0x114), 0.1f / (s / 3.1415927f));
-                    *(float *)(p + 0x114) = t;
-                    c = func_001FA898_r((fast_sin(t) + 1.4f) * 53.0f);
-                    if (h < 0.7853982f && k < 0.7853982f) {
+                                                                       *(float *)(candidate_moby + 0x18) - *(float *)((char *)a + 0x18)),
+                                                    *(float *)(moby_vars + 0x34)));
+                    angular_error_magnitude = seg_sqrt(yaw_error * yaw_error + k * k);
+                    arrow_pulse_phase = fast_add_rotations(*(float *)(moby_vars + 0x114), 0.1f / (angular_error_magnitude / 3.1415927f));
+                    *(float *)(moby_vars + 0x114) = arrow_pulse_phase;
+                    c = func_001FA898_r((fast_sin(arrow_pulse_phase) + 1.4f) * 53.0f);
+                    if (yaw_error < 0.7853982f && k < 0.7853982f) {
                         {
                             float x = (v[0] - scr[4]) * 0.0625f;
                             float y = (v[1] - scr[5]) * 0.0625f;
@@ -2280,17 +2280,17 @@ int FUN_L13_002b8be0(int a, char *p, char *radar_origin_position, void *radar_ro
                         FUN_L13_002b7d50(&D_L13_001613C8, 3, 0xFFFFF3, (c << 24) | 0x8000, u[0], u[1], 240.0f / dist + 1.5f, ang);
                     }
                 }
-                FUN_L13_002b89f8(radar_rotation, radar_origin_position, m, 0, 0x75808080, *(int *)(p + 0x104));
-                if (*(short *)(m + 0xA6) != 0x191) {
-                    *(int *)(p + 0xE8) = *(int *)(p + 0xE8) + 1;
+                FUN_L13_002b89f8(radar_rotation, radar_origin_position, candidate_moby, 0, 0x75808080, *(int *)(moby_vars + 0x104));
+                if (*(short *)(candidate_moby + 0xA6) != 0x191) {
+                    *(int *)(moby_vars + 0xE8) = *(int *)(moby_vars + 0xE8) + 1;
                 }
             }
             break;
         case 0x6F:
         case 0x4BE:
-            if (!(*(unsigned short *)(m + 0x34) & 1)) {
-                project_to_screen(v, m + 0x10);
-                if (*(unsigned char *)(m + 0x31) != 0) {
+            if (!(*(unsigned short *)(candidate_moby + 0x34) & 1)) {
+                project_to_screen(v, candidate_moby + 0x10);
+                if (*(unsigned char *)(candidate_moby + 0x31) != 0) {
                     {
                         float x = (v[0] - scr[4]) * 0.0625f;
                         float y = (v[1] - scr[5]) * 0.0625f;
@@ -2298,13 +2298,13 @@ int FUN_L13_002b8be0(int a, char *p, char *radar_origin_position, void *radar_ro
                         FUN_L13_002b7d50(D_L13_001CBD40, 0x1E, 0xFFFFF3, 0xFF00FF00, x, y, 1.0f, -ang);
                     }
                 }
-                FUN_L13_002b89f8(radar_rotation, radar_origin_position, m, 1, 0x75808080, *(int *)(p + 0x104));
+                FUN_L13_002b89f8(radar_rotation, radar_origin_position, candidate_moby, 1, 0x75808080, *(int *)(moby_vars + 0x104));
             }
             break;
         case 0x4BF:
-            if (!(*(unsigned short *)(m + 0x34) & 1) && *(unsigned char *)(m + 0x20) >= 2) {
-                project_to_screen(v, m + 0x10);
-                if (*(unsigned char *)(m + 0x31) != 0) {
+            if (!(*(unsigned short *)(candidate_moby + 0x34) & 1) && *(unsigned char *)(candidate_moby + 0x20) >= 2) {
+                project_to_screen(v, candidate_moby + 0x10);
+                if (*(unsigned char *)(candidate_moby + 0x31) != 0) {
                     {
                         float x = (v[0] - scr[4]) * 0.0625f;
                         float y = (v[1] - scr[5]) * 0.0625f;
@@ -2312,7 +2312,7 @@ int FUN_L13_002b8be0(int a, char *p, char *radar_origin_position, void *radar_ro
                         FUN_L13_002b7d50(D_L13_001CBD40, 0x1E, 0xFFFFF3, 0xFF00FF00, x, y, 1.0f, -ang);
                     }
                 }
-                FUN_L13_002b89f8(radar_rotation, radar_origin_position, m, 1, 0x75808080, *(int *)(p + 0x104));
+                FUN_L13_002b89f8(radar_rotation, radar_origin_position, candidate_moby, 1, 0x75808080, *(int *)(moby_vars + 0x104));
             }
             break;
         case 0x185: case 0x186: case 0x187: case 0x188:
@@ -2322,7 +2322,7 @@ int FUN_L13_002b8be0(int a, char *p, char *radar_origin_position, void *radar_ro
         case 0x538: case 0x539: case 0x53A:
             break;
         }
-        m = *(char **)(m + 0x28);
+        candidate_moby = *(char **)(candidate_moby + 0x28);
     }
     return (int)ret;
 }
