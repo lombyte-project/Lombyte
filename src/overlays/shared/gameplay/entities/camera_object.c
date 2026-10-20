@@ -243,7 +243,7 @@ void camera_object_update(char *camera_object) {
     char *object_position;
     char *pos;
     G_2a4e48 *P;
-    float f;
+    float dot_product_or_threshold;
 
     if (C->c != 0) {
         object_position = camera_object + 0x10;
@@ -251,23 +251,23 @@ void camera_object_update(char *camera_object) {
         pos = (char *)&hero.motion.pos;
         subtract_vector_xyz(difference_vector, object_position, pos);
         P = (G_2a4e48 *)(pos - 0x80);
-        f = dot_vectors_xyz(difference_vector, P->obj + 0xE0);
-        f9a68_2a4e48(scaled_vector, P->obj + 0xE0, f);
+        dot_product_or_threshold = dot_vectors_xyz(difference_vector, P->obj + 0xE0);
+        f9a68_2a4e48(scaled_vector, P->obj + 0xE0, dot_product_or_threshold);
         subtract_vector_xyz(difference_vector, difference_vector, scaled_vector);
-        if (absolute_float(f) < 2.5f) {
-            f = 0.1f;
-            if (vector_length_xyz(difference_vector) < f || fast_difference_between_rotations(P->f98, C->f158) < 2.3561945f ||
-                P->f164 < D_0015ED6C_2a4e48 * f) {
+        if (absolute_float(dot_product_or_threshold) < 2.5f) {
+            dot_product_or_threshold = 0.1f;
+            if (vector_length_xyz(difference_vector) < dot_product_or_threshold || fast_difference_between_rotations(P->f98, C->f158) < 2.3561945f ||
+                P->f164 < D_0015ED6C_2a4e48 * dot_product_or_threshold) {
                 *(float *)(camera_object + 0x18) = 15.0f;
                 *(float *)(camera_object + 0x14) = 15.0f;
                 *(float *)(camera_object + 0x10) = 15.0f;
             } else {
-                f = dot_vectors_xyz(object_position, P->obj + 0xE0);
-                f9a68_2a4e48(scaled_vector, P->obj + 0xE0, f);
+                dot_product_or_threshold = dot_vectors_xyz(object_position, P->obj + 0xE0);
+                f9a68_2a4e48(scaled_vector, P->obj + 0xE0, dot_product_or_threshold);
                 subtract_vector_xyz(difference_vector, object_position, scaled_vector);
-                f = dot_vectors_xyz(pos, P->obj + 0xE0);
+                dot_product_or_threshold = dot_vectors_xyz(pos, P->obj + 0xE0);
                 if (P->w208C != 0x11) {
-                    f9a68_2a4e48(scaled_vector, P->obj + 0xE0, f);
+                    f9a68_2a4e48(scaled_vector, P->obj + 0xE0, dot_product_or_threshold);
                     add_vector_xyz(object_position, difference_vector, scaled_vector);
                 }
             }
