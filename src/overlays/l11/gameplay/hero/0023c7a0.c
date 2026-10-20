@@ -402,6 +402,7 @@ extern s32 FUN_L00_00211870(f32);
 void FUN_L11_00246b70(void) {
     enum {
         HERO_STATE_CONSTRAIN_TO_TARGET_RADIUS = 0x26,
+        HERO_STATE_MOVE_DOWNHILL = 0x58,
         HERO_STATE_MOVE_TO_TARGET_POSITION = 0x65,
         HERO_STATE_BRAKE_AT_TARGET_POSITION = 0x66
     };
@@ -2099,7 +2100,7 @@ void FUN_L11_00246b70(void) {
             FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.velocity, frame_time_sq * 54.0f);
         }
         break;
-    case 0x58:
+    case HERO_STATE_MOVE_DOWNHILL:
         hero.motion.move_yaw = hero.downhill_yaw;
         hero.target_speed = frame_time * 5.5f;
         air_accel(frame_time_sq * 25.0f);
