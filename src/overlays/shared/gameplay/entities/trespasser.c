@@ -765,6 +765,11 @@ extern int FUN_L00_00259028(void *,void *,void *,void *);
 /* Updates an Agent of Doom's movement, target selection and detonation. */
 void doom_bot_update(struct Moby *moby) __asm__("FUN_L00_002bffa8");
 void doom_bot_update(struct Moby *moby) {
+    enum {
+        DOOM_BOT_ALIGN_TO_TARGET = 6,
+        DOOM_BOT_DETONATE = 11,
+        DOOM_BOT_RESET_TO_INITIALIZE = 15
+    };
     OvlVec4 scratch[4];
     float clearance;
     DoomBotVars *data;
@@ -1007,7 +1012,7 @@ void doom_bot_update(struct Moby *moby) {
         }
         goto Contact;
     }
-    case 6: {
+    case DOOM_BOT_ALIGN_TO_TARGET: {
         float heading=fast_arc_tan(data->target.f[0]-moby->pos.x,data->target.f[1]-moby->pos.y);
         float *velocity;
         DoomBotParams *hp;
@@ -1034,7 +1039,7 @@ void doom_bot_update(struct Moby *moby) {
         FUN_L00_002bec48((char*)data);
         absolute_float(moby->pos.z-z);
         goto Contact;
-    case 11: {
+    case DOOM_BOT_DETONATE: {
         if (!(moby->pos.x<2.0f) && !(moby->pos.x>1021.0f) &&
             !(moby->pos.y<2.0f) && !(moby->pos.y>1021.0f) &&
             !(moby->pos.z<2.0f) && !(moby->pos.z>1021.0f)) {
@@ -1092,7 +1097,7 @@ Contact:
         /* Fakematch: the zero term keeps data live so combine keeps the no-op update above. */
         moby->state=FUN_L00_002bfec8(moby)|((unsigned char)(int)data>>8);
         break;
-    case 15: moby->state=0; break;
+    case DOOM_BOT_RESET_TO_INITIALIZE: moby->state=0; break;
     default: moby->state=0; break;
     }
     if (moby->pos.x<2.0f || moby->pos.x>1021.0f ||
