@@ -1121,18 +1121,18 @@ extern short D_L11_0016239C __attribute__((sda));
 extern short D_L11_001623A0 __attribute__((sda));
 extern short D_L11_001623A4 __attribute__((sda));
 extern short D_L11_001623A8 __attribute__((sda));
-void FUN_L11_00318ed8(struct Moby *m) {
+void FUN_L11_00318ed8(struct Moby *source_moby) {
     float spark_position[4];
     float radial_offset[4];
     float row1_offset[4];
     float first_spark_vector[4];
     float second_spark_vector[4];
-    float s = random_float_between_alt(2.5f, 3.0f);
-    float a = random_angle_radians();
-    fast_vec_normalize(row1_offset, &m->rot_row1, s * fast_sin(a));
-    fast_vec_normalize(radial_offset, &m->rot_row2, s * fast_cos(a));
+    float radial_distance = random_float_between_alt(2.5f, 3.0f);
+    float radial_angle = random_angle_radians();
+    fast_vec_normalize(row1_offset, &source_moby->rot_row1, radial_distance * fast_sin(radial_angle));
+    fast_vec_normalize(radial_offset, &source_moby->rot_row2, radial_distance * fast_cos(radial_angle));
     fast_vec_add(radial_offset, radial_offset, row1_offset);
-    fast_vec_sub(spark_position, &m->pos, radial_offset);
+    fast_vec_sub(spark_position, &source_moby->pos, radial_offset);
     fast_vec_scale(first_spark_vector, radial_offset,
                  1.0f / (float)scale_game_frames(*(int *)&D_L11_00162394 + *(int *)&D_L11_00162398 +
                                             *(int *)&D_L11_0016239C));
