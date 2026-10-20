@@ -1977,36 +1977,36 @@ extern void FUN_L00_0025e450_2ccee0(void *, void *, void *, float, float, int, i
                                     int) __asm__("FUN_L00_0025e450");
 extern void FUN_0020c828_2ccee0(void *) __asm__("FUN_0020c828");
 
-unsigned char *FUN_L00_002ccee0(int a, V_2ccee0 *pos, unsigned char *tgt, float f12, float f13,
+unsigned char *FUN_L00_002ccee0(int owner_moby, V_2ccee0 *pos, unsigned char *tgt, float f12, float f13,
                                 float f14) {
     V_2ccee0 w;
-    V_2ccee0 s;
+    V_2ccee0 collision_start;
     V_2ccee0 dir;
     V_2ccee0 z;
-    unsigned char *m;
+    unsigned char *spawned_moby;
     unsigned char *v;
     unsigned char *r;
-    unsigned char *p;
-    float t;
+    unsigned char *collision_ignore_moby;
+    float random_range_limit;
     float f;
 
-    m = FUN_0020c4f8_2ccee0(0x1C9);
-    if (m != 0) {
-        v = *(unsigned char **)(m + 0x78);
-        m[0x30] = 0xFF;
-        *(short *)(m + 0x32) = 0xFF;
-        m[0x31] = 1;
-        *(float *)(m + 0x48) = f13;
-        *(float *)(m + 0x44) = f14;
-        m[0x20] = 0;
-        *(int *)(v + 0x20) = a;
-        qcopy(m + 0x10, pos);
+    spawned_moby = FUN_0020c4f8_2ccee0(0x1C9);
+    if (spawned_moby != 0) {
+        v = *(unsigned char **)(spawned_moby + 0x78);
+        spawned_moby[0x30] = 0xFF;
+        *(short *)(spawned_moby + 0x32) = 0xFF;
+        spawned_moby[0x31] = 1;
+        *(float *)(spawned_moby + 0x48) = f13;
+        *(float *)(spawned_moby + 0x44) = f14;
+        spawned_moby[0x20] = 0;
+        *(int *)(v + 0x20) = owner_moby;
+        qcopy(spawned_moby + 0x10, pos);
         qcopy(v + 0x10, pos);
         *(int *)(v + 0x34) = 0;
         *(int *)(v + 0x38) = 0;
         *(int *)(v + 0x30) = 0;
         *(unsigned char **)(v + 0x28) = tgt;
-        *(float *)(m + 0x2C) = *(float *)(*(unsigned char **)(m + 0x24) + 0x24) * 0.25f;
+        *(float *)(spawned_moby + 0x2C) = *(float *)(*(unsigned char **)(spawned_moby + 0x24) + 0x24) * 0.25f;
         if (tgt != 0) {
             *(int *)(v + 0x58) = *(short *)(tgt + 0xA6);
             r = FUN_002141f8_2ccee0(tgt);
@@ -2021,36 +2021,36 @@ unsigned char *FUN_L00_002ccee0(int a, V_2ccee0 *pos, unsigned char *tgt, float 
         *(int *)(v + 0x44) = 0;
         *(float *)(v + 0x48) = FUN_002132a8_2ccee0(-3.1415927f, 3.1415927f);
         f = FUN_002132a8_2ccee0(-3.1415927f, 3.1415927f);
-        t = D_0015ED60;
-        t *= 0.00967f;
+        random_range_limit = D_0015ED60;
+        random_range_limit *= 0.00967f;
         *(float *)(v + 0x4C) = f;
-        f = FUN_002132a8_2ccee0(-t, t);
-        t = D_0015ED60;
-        t *= 0.02406f;
+        f = FUN_002132a8_2ccee0(-random_range_limit, random_range_limit);
+        random_range_limit = D_0015ED60;
+        random_range_limit *= 0.02406f;
         *(float *)(v + 0x50) = f;
-        *(float *)(v + 0x54) = FUN_002132a8_2ccee0(-t, t);
-        FUN_L00_00250df8_2ccee0(m);
-        FUN_0022da68_2ccee0(1, 0, m);
+        *(float *)(v + 0x54) = FUN_002132a8_2ccee0(-random_range_limit, random_range_limit);
+        FUN_L00_00250df8_2ccee0(spawned_moby);
+        FUN_0022da68_2ccee0(1, 0, spawned_moby);
         z.q = 0;
         z.f[2] = D_0015ED6C_lui * 8.0f;
-        p = D_001413D0_2ccee0;
+        collision_ignore_moby = D_001413D0_2ccee0;
         dir.q = z.q;
-        s.q = ((V_2ccee0 *)(p + 0x10))->q;
-        s.f[2] = pos->f[2];
-        if (FUN_001efa68_2ccee0(&s, pos, 0, p, 0)) {
-            m[0xBC] = 2;
-            qcopy(m + 0x10, D_L00_00173E60_2ccee0);
-            FUN_00214db0_2ccee0(&w, *(float *)(v + 0x30), *(float *)(m + 0x48),
-                                -*(float *)(m + 0x44));
+        collision_start.q = ((V_2ccee0 *)(collision_ignore_moby + 0x10))->q;
+        collision_start.f[2] = pos->f[2];
+        if (FUN_001efa68_2ccee0(&collision_start, pos, 0, collision_ignore_moby, 0)) {
+            spawned_moby[0xBC] = 2;
+            qcopy(spawned_moby + 0x10, D_L00_00173E60_2ccee0);
+            FUN_00214db0_2ccee0(&w, *(float *)(v + 0x30), *(float *)(spawned_moby + 0x48),
+                                -*(float *)(spawned_moby + 0x44));
             FUN_L00_001ff660_2ccee0(&dir, &w, D_L00_00173E60_2ccee0 + 0x20);
             FUN_001f9bf8_2ccee0(&dir, &dir, D_0015ED6C_lui + D_0015ED6C_lui);
-            FUN_L00_0025e450_2ccee0(m, &dir, 0, 0.0f, 0.0f, 10, 3, 9, 4.0f, 2.0f, 9.0f, 1.0f, 0,
+            FUN_L00_0025e450_2ccee0(spawned_moby, &dir, 0, 0.0f, 0.0f, 10, 3, 9, 4.0f, 2.0f, 9.0f, 1.0f, 0,
                                     15.0f, 1, 1, -1, 0);
-            FUN_0020c828_2ccee0(m);
+            FUN_0020c828_2ccee0(spawned_moby);
             return 0;
         }
     }
-    return m;
+    return spawned_moby;
 }
 /* Rocket moby update: steers the rocket toward its target, moves it with collision retries, then checks hits and range. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C96D0.c: func_L00_002CE6A0), where it is exact; names translated to the US level program. */
