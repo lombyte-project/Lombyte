@@ -164,7 +164,7 @@ extern void hero_set_state_2(int, int) __asm__("FUN_L00_002223f8");
 
 int hero_handle_jump_press(void) __asm__("FUN_L00_00229660");
 int hero_handle_jump_press(void) {
-    int n, t, a;
+    int n, t, jump_press_history_limit;
     int next_state;
 
     if (hero.state.current == 0xE)
@@ -178,9 +178,9 @@ int hero_handle_jump_press(void) {
         hero_set_state(next_state, 1);
         return 1;
     }
-    a = FUN_001f96f8_229660(9);
+    jump_press_history_limit = FUN_001f96f8_229660(9);
     if (FUN_001f96f8_229660(6) < hero.state_timer) {
-        if (!FUN_L00_00266d60_229660(0x40, a, 0))
+        if (!FUN_L00_00266d60_229660(0x40, jump_press_history_limit, 0))
             return 0;
         if (FUN_L00_0020d498_229660(3) == 2 && D_0013D4C2_229660 != 0 && hero.unk22D8 == 0) {
             if ((2.5f < hero.wall_probe_distance || hero.unk250 < 0.7853982f) && 0.7f < hero.unk229C &&
