@@ -1981,59 +1981,59 @@ extern int FUN_L00_0025d808_2f05d8(void *, void *, void *, void *, int,
 
 extern short D_L14_00161D14 __attribute__((sda));
 int FUN_L14_002ef150(struct Moby *m) {
-    char *d = (char *)m->pvars;
+    char *moby_vars = (char *)m->pvars;
     float rot[4];
     float pos[4];
-    char *e;
+    char *selected_path;
     float total;
     float step;
-    float t;
-    float s;
+    float rotation_blend;
+    float x_rotation_blend;
     int r;
     if (m->command == 0) {
-        e = D_L14_001B0BB0_c3[*(int *)(d + 0xA0)];
-        total = *(float *)(d + 0xB4);
-        qcopy(rot, d + 0xE0);
+        selected_path = D_L14_001B0BB0_c3[*(int *)(moby_vars + 0xA0)];
+        total = *(float *)(moby_vars + 0xB4);
+        qcopy(rot, moby_vars + 0xE0);
     } else {
-        e = D_L14_001B0BB0_c3[*(int *)(d + 0xB8)];
-        total = *(float *)(d + 0xBC);
-        qcopy(rot, d + 0xF0);
+        selected_path = D_L14_001B0BB0_c3[*(int *)(moby_vars + 0xB8)];
+        total = *(float *)(moby_vars + 0xBC);
+        qcopy(rot, moby_vars + 0xF0);
     }
     step = *(float *)&D_L14_00161D14 * D_0015ED6C_c;
-    r = FUN_L00_0025d808_2f05d8(e, pos, d + 0xA4, d + 0xA8, 0, step * *(float *)(d + 0xAC));
-    FUN_L00_0025b8c0(&m->pos.x, (float *)(d + 0xC0), pos[0], 0.003f, 0.2f, 0.0f);
-    FUN_L00_0025b8c0(&m->pos.y, (float *)(d + 0xC4), pos[1], 0.003f, 0.2f, 0.0f);
-    FUN_L00_0025b8c0(&m->pos.z, (float *)(d + 0xC8), pos[2], 0.003f, 0.2f, 0.0f);
-    *(float *)(d + 0xB0) += step;
-    t = *(float *)(d + 0xB0) / total;
-    if (1.0f < t)
-        t = 1.0f;
+    r = FUN_L00_0025d808_2f05d8(selected_path, pos, moby_vars + 0xA4, moby_vars + 0xA8, 0, step * *(float *)(moby_vars + 0xAC));
+    FUN_L00_0025b8c0(&m->pos.x, (float *)(moby_vars + 0xC0), pos[0], 0.003f, 0.2f, 0.0f);
+    FUN_L00_0025b8c0(&m->pos.y, (float *)(moby_vars + 0xC4), pos[1], 0.003f, 0.2f, 0.0f);
+    FUN_L00_0025b8c0(&m->pos.z, (float *)(moby_vars + 0xC8), pos[2], 0.003f, 0.2f, 0.0f);
+    *(float *)(moby_vars + 0xB0) += step;
+    rotation_blend = *(float *)(moby_vars + 0xB0) / total;
+    if (1.0f < rotation_blend)
+        rotation_blend = 1.0f;
     if (r != 0)
-        t = 1.0f;
-    if (*(float *)(d + 0xAC) < 0.0f)
-        t = 1.0f - t;
-    if (0.0f < *(float *)(d + 0xAC)) {
-        s = 0.0f;
-        if (0.5f < t)
-            s = (t - 0.5f) + (t - 0.5f);
+        rotation_blend = 1.0f;
+    if (*(float *)(moby_vars + 0xAC) < 0.0f)
+        rotation_blend = 1.0f - rotation_blend;
+    if (0.0f < *(float *)(moby_vars + 0xAC)) {
+        x_rotation_blend = 0.0f;
+        if (0.5f < rotation_blend)
+            x_rotation_blend = (rotation_blend - 0.5f) + (rotation_blend - 0.5f);
     } else {
-        s = 1.0f;
-        if (t <= 0.5f)
-            s = t + t;
+        x_rotation_blend = 1.0f;
+        if (rotation_blend <= 0.5f)
+            x_rotation_blend = rotation_blend + rotation_blend;
     }
-    if (1.0f < s)
-        s = 1.0f;
-    m->rot.x = FUN_L00_0025b750(*(float *)(d + 0xD0), rot[0], s);
-    m->rot.y = FUN_L00_0025b750(*(float *)(d + 0xD4), rot[1], t);
-    m->rot.z = FUN_L00_0025b750(*(float *)(d + 0xD8), rot[2], t);
+    if (1.0f < x_rotation_blend)
+        x_rotation_blend = 1.0f;
+    m->rot.x = FUN_L00_0025b750(*(float *)(moby_vars + 0xD0), rot[0], x_rotation_blend);
+    m->rot.y = FUN_L00_0025b750(*(float *)(moby_vars + 0xD4), rot[1], rotation_blend);
+    m->rot.z = FUN_L00_0025b750(*(float *)(moby_vars + 0xD8), rot[2], rotation_blend);
     if (r != 0) {
-        if (0.0f < *(float *)(d + 0xAC)) {
-            int n = *(int *)e - 2;
-            *(int *)(d + 0xA4) = n;
-            *(float *)(d + 0xA8) = *(float *)(e + (n << 4) + 0x1C);
+        if (0.0f < *(float *)(moby_vars + 0xAC)) {
+            int last_segment_index = *(int *)selected_path - 2;
+            *(int *)(moby_vars + 0xA4) = last_segment_index;
+            *(float *)(moby_vars + 0xA8) = *(float *)(selected_path + (last_segment_index << 4) + 0x1C);
         } else {
-            *(int *)(d + 0xA4) = 0;
-            *(float *)(d + 0xA8) = 0.0f;
+            *(int *)(moby_vars + 0xA4) = 0;
+            *(float *)(moby_vars + 0xA8) = 0.0f;
         }
         return 1;
     }
