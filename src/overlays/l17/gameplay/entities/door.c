@@ -44,7 +44,7 @@ void door_update(struct Moby *door_moby) {
     float ang;
     float k;
     float k2;
-    float f;
+    float displacement_sample;
     int idx;
 
     if ((*(int *)(door_vars + ((0x18)))) == -1 || (*(int *)(door_vars + ((0x1C)))) == -1) {
@@ -69,10 +69,10 @@ void door_update(struct Moby *door_moby) {
             (*(int *)(door_vars + ((0x20)))) = allocate_voice_for_target_entry(0, 4, (int)door_moby);
         }
         k = frame_time * 3.0f;
-        f = (*(float *)(door_vars + ((0x14))));
+        displacement_sample = (*(float *)(door_vars + ((0x14))));
         if (door_moby->command == 0)
             k = -k;
-        (*(float *)(door_vars + ((0x14)))) = f + k;
+        (*(float *)(door_vars + ((0x14)))) = displacement_sample + k;
         if ((door_moby->oclass) == 0x55C || (door_moby->oclass) == 0x55D ||
             (door_moby->oclass) == 0x557 || (door_moby->oclass) == 0x559) {
             ang = fast_add_rotations(1.5707964f, door_moby->rot.z);
@@ -166,9 +166,9 @@ void door_update(struct Moby *door_moby) {
             door_moby->state = 2;
             break;
         }
-        f = absolute_float_c((*(float *)(door_vars + ((0x14)))));
+        displacement_sample = absolute_float_c((*(float *)(door_vars + ((0x14)))));
         k2 = frame_time * 3.0f;
-        if (f > k2) {
+        if (displacement_sample > k2) {
             float g = (*(float *)(door_vars + ((0x14))));
             float r;
             if (door_moby->command == 0) {
