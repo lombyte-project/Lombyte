@@ -685,19 +685,19 @@ void FUN_L11_00317820(struct Moby *moby) {
         int segment_start_index = chain_vars->offsets[i];
         int b = (segment_start_index + 1) % chain_path->count;
         int lookahead_point_index = (segment_start_index + 2) % chain_path->count;
-        float d0 = FUN_001f9b48(&chain_path->pts[segment_start_index], v);
-        float d1 = FUN_001f9b48(&chain_path->pts[b], v);
+        float segment_start_distance = FUN_001f9b48(&chain_path->pts[segment_start_index], v);
+        float segment_end_distance = FUN_001f9b48(&chain_path->pts[b], v);
         float segment_fraction;
         struct Moby *link;
         float yaw0, yaw1, pitch0;
         float *qa, *qb, *qc; /* the points as raw rows: [4], [5], [6] = x, y, z */
 
-        while (d1 > D_L11_00162324) {
+        while (segment_end_distance > D_L11_00162324) {
             segment_start_index = b;
             b = (segment_start_index + 1) % chain_path->count;
-            d0 = d1;
+            segment_start_distance = segment_end_distance;
             lookahead_point_index = (b + 1) % chain_path->count;
-            d1 = FUN_001f9b48(&chain_path->pts[b], v);
+            segment_end_distance = FUN_001f9b48(&chain_path->pts[b], v);
         }
         {
             float *q = (float *)(path + segment_start_index * 16);
@@ -712,8 +712,8 @@ void FUN_L11_00317820(struct Moby *moby) {
                 }
             }
         }
-        if (d0 > D_L11_00162324) {
-            segment_fraction = (d0 - D_L11_00162324) / (d0 - d1);
+        if (segment_start_distance > D_L11_00162324) {
+            segment_fraction = (segment_start_distance - D_L11_00162324) / (segment_start_distance - segment_end_distance);
         } else {
             segment_fraction = 0.0f;
         }
