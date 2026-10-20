@@ -363,7 +363,7 @@ s32 FUN_L05_00240ed0(s32 mode) {
     V_2133a8 w;
     s32 mask;
     s32 i;
-    u128_2133a8 *c;
+    u128_2133a8 *collision_result_base;
     f32 h;
     if (hero.unk1CC != 0) {
         return 1;
@@ -405,21 +405,21 @@ s32 FUN_L05_00240ed0(s32 mode) {
             if (!coll1_2133a8(&hero.motion.pos.q, mask, ((s32)hero.moby), frame_scale * 0.5f))
                 break;
         } else {
-            s32 a;
+            s32 collision_query_result;
             h = hero.capsule_top - hero.unk224;
             if (h < 0.05f) {
                 h = 0.05f;
             }
-            a = coll2_2133a8(&hero.motion.pos.q, mask, hero.unk234, ((s32)hero.moby), h);
-            if (!(a | FUN_L00_001f3170(&hero.motion.pos.q, hero.unk234)))
+            collision_query_result = coll2_2133a8(&hero.motion.pos.q, mask, hero.unk234, ((s32)hero.moby), h);
+            if (!(collision_query_result | FUN_L00_001f3170(&hero.motion.pos.q, hero.unk234)))
                 break;
         }
-        c = D_L05_00174270;
-        qcopy(&hero.motion.pos.q, c);
-        qcopy(&hero.unk200.q, c + 1);
-        qcopy(&hero.unk210.q, c - 1);
+        collision_result_base = D_L05_00174270;
+        qcopy(&hero.motion.pos.q, collision_result_base);
+        qcopy(&hero.unk200.q, collision_result_base + 1);
+        qcopy(&hero.unk210.q, collision_result_base - 1);
         hero.wall_hit = 1;
-        hero.coll_hit_moby = ((u8 **)c)[-6];
+        hero.coll_hit_moby = ((u8 **)collision_result_base)[-6];
     }
     vsub_2133a8(&hero.motion.pos.q, &hero.motion.pos.q, &v);
     vsub_2133a8(&w, &hero.motion.pos.q, &old);
