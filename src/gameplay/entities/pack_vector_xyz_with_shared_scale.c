@@ -8,30 +8,30 @@ void pack_vector_xyz_with_shared_scale(f32 *v, s32 *out) __asm__("FUN_00214a98")
 
 void pack_vector_xyz_with_shared_scale(f32 *v, s32 *out) {
     f32 buf[4];
-    f32 a;
+    f32 abs_x;
     f32 b;
-    f32 c;
-    f32 m;
-    s32 n;
-    f32 s;
+    f32 abs_z;
+    f32 max_abs_component;
+    s32 shared_scale_byte;
+    f32 component_encode_scale;
 
-    a = absolute_float(v[0]);
+    abs_x = absolute_float(v[0]);
     b = absolute_float(v[1]);
-    c = absolute_float(v[2]);
-    if (b < a) {
-        b = a;
+    abs_z = absolute_float(v[2]);
+    if (b < abs_x) {
+        b = abs_x;
     }
-    m = (c < b) ? b : c;
-    n = truncate_float_to_s32(m * 10000.0f / 63.0f);
-    n = (n < 0x100) ? n : 0xFF;
-    if (n <= 0) {
-        n = 1;
+    max_abs_component = (abs_z < b) ? b : abs_z;
+    shared_scale_byte = truncate_float_to_s32(max_abs_component * 10000.0f / 63.0f);
+    shared_scale_byte = (shared_scale_byte < 0x100) ? shared_scale_byte : 0xFF;
+    if (shared_scale_byte <= 0) {
+        shared_scale_byte = 1;
     }
-    buf[3] = (f32)n;
-    s = 1.0f / (buf[3] * 0.0001f);
-    buf[0] = v[0] * s + 127.0f;
-    buf[1] = v[1] * s + 127.0f;
-    buf[2] = v[2] * s + 127.0f;
+    buf[3] = (f32)shared_scale_byte;
+    component_encode_scale = 1.0f / (buf[3] * 0.0001f);
+    buf[0] = v[0] * component_encode_scale + 127.0f;
+    buf[1] = v[1] * component_encode_scale + 127.0f;
+    buf[2] = v[2] * component_encode_scale + 127.0f;
     *out = fast_vector_to_packed_chars(buf);
 }
 
