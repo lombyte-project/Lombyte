@@ -45,10 +45,10 @@ void FUN_L00_0024eed8(char *moby, int idx, void *v, float a, float b) {
 
 /* Offsets the point pairs of each of the a[4] + a[5] entries by dx, dy. */
 void FUN_L00_0024efb0(unsigned char *a, int dx, int dy);
-void FUN_L00_0024efb0(unsigned char *a, int dx, int dy) {
+void FUN_L00_0024efb0(unsigned char *moby_class, int dx, int dy) {
     int i;
-    int entry_count = a[4] + a[5];
-    int *entry_cursor = *(int **)a;
+    int entry_count = moby_class[4] + moby_class[5];
+    int *entry_cursor = *(int **)moby_class;
     for (i = 0; i < entry_count; i++, entry_cursor += 4) {
         unsigned short *point_pair_cursor = *(unsigned short **)entry_cursor;
         int point_pair_count = ((unsigned char *)point_pair_cursor)[2];
