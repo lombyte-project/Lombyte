@@ -106,7 +106,7 @@ extern char *D_L00_001611C0_23bac0 __asm__("D_L00_001611C0");
 extern int D_0013E500_23bac0[] __asm__("D_0013E500");
 extern G_23bac0 D_L00_0017E4D8_23bac0 __asm__("D_L00_0017E4D8") __attribute__((section(".data")));
 extern u64_23bac0 FUN_001ffa10_23bac0(int) __asm__("FUN_001ffa10");
-void FUN_L00_0023bac0(int id, int x, int y, int w, int h, int alpha) {
+void FUN_L00_0023bac0(int id, int x, int y, int w, int draw_height, int alpha) {
     u64_23bac0 *packet_words;
     int *coordinate_offsets;
     G_23bac0 *g = &D_L00_0017E4D8_23bac0;
@@ -133,11 +133,11 @@ void FUN_L00_0023bac0(int id, int x, int y, int w, int h, int alpha) {
            ((u64_23bac0)g->zc << 32);
     packet_words[9] = 0;
     packet_words[10] =
-        (u64_23bac0)(((x << 4) + coordinate_offsets[4] - 8) | (((u64_23bac0)(((y + h) << 4) + coordinate_offsets[5] - 8)) << 16)) |
+        (u64_23bac0)(((x << 4) + coordinate_offsets[4] - 8) | (((u64_23bac0)(((y + draw_height) << 4) + coordinate_offsets[5] - 8)) << 16)) |
         ((u64_23bac0)g->zc << 32);
     packet_words[11] = hh << 20;
     packet_words[12] = (u64_23bac0)((((x + w) << 4) + coordinate_offsets[4] - 8) |
-                         (((u64_23bac0)(((y + h) << 4) + coordinate_offsets[5] - 8)) << 16)) |
+                         (((u64_23bac0)(((y + draw_height) << 4) + coordinate_offsets[5] - 8)) << 16)) |
             ((u64_23bac0)g->zc << 32);
     packet_words[13] = 0;
     *(char *volatile *)&D_L00_001611C0_23bac0 += 0x70;
