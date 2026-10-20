@@ -101,12 +101,12 @@ void f2049f0_28e9c8(int) __asm__("FUN_002049f0");
 void f22ca50_28e9c8(void) __asm__("FUN_0022ca50");
 int f122298_28e9c8(int) __asm__("FUN_00122298");
 int f215b10_28e9c8(void) __asm__("FUN_00215b10");
-void FUN_L00_0028e9c8(int a) {
+void FUN_L00_0028e9c8(int audio_selection_mode) {
     O_28e9c8 *moby;
     int secondary_track_index, base_audio_selection_index, audio_stream_table_index, alternate_audio_stream_table_index, u;
     D_0013E030_28e9c8.x24 = -1;
     D_L00_0015F5D8 = 1;
-    D_0013E030_28e9c8.x20 = a;
+    D_0013E030_28e9c8.x20 = audio_selection_mode;
     D_0013E030_28e9c8.x8 = 0;
     memset_28e9c8(&D_L00_0016C860_28e9c8, 0, 0x1C0);
     memset_28e9c8(D_L00_0017C340, 0, 0x40);
@@ -127,7 +127,7 @@ void FUN_L00_0028e9c8(int a) {
         if (!(moby->st & 0x80) && (moby->type == 0x4A || moby->type == 0xCB))
             moby->flags |= 0x80;
     }
-    if (a == 0) {
+    if (audio_selection_mode == 0) {
         base_audio_selection_index = D_0013E030_28e9c8.x26;
         audio_stream_table_index = base_audio_selection_index + 1;
         secondary_track_index = base_audio_selection_index + 6;
