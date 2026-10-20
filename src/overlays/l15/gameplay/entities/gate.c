@@ -2372,9 +2372,9 @@ void ultramech_unlimited_update(UMoby *ultramech_moby) {
                     blend_moby_animation(ultramech_moby, 0, 0, scale_game_frames(0x14));
             }
         } else {
-            float h = compute_interpolated_record_value(ultramech_moby);
+            float melee_window_value = compute_interpolated_record_value(ultramech_moby);
             moby_point_position(ultramech_moby, 1, &attack_end);
-            if (h >= 17.0f && h <= 24.0f) {
+            if (melee_window_value >= 17.0f && melee_window_value <= 24.0f) {
                 qcopy(&attack_start, &ultramech_moby->pos);
                 attack_start.f[2] += 0.5f;
                 hit_direction.f[0] = fast_cos(ultramech_moby->rot.f[2]);
