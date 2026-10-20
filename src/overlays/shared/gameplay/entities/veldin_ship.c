@@ -1786,7 +1786,7 @@ void upd_a(void *) __asm__("FUN_L00_00250df8");
 void FUN_L00_0025d1b8_2d3838(void *) __asm__("FUN_L00_0025d1b8");
 
 unsigned char *mine_camera_blast(unsigned char *s, void *b, int c, void *d) __asm__("FUN_L00_002d3838");
-unsigned char *mine_camera_blast(unsigned char *blast_settings, void *b, int c, void *position_offset_override) {
+unsigned char *mine_camera_blast(unsigned char *blast_settings, void *b, int position_reference_moby, void *position_offset_override) {
     unsigned char *spawned_moby = create_moby_local(0x27F);
     if (spawned_moby) {
         unsigned char *blast_vars;
@@ -1801,7 +1801,7 @@ unsigned char *mine_camera_blast(unsigned char *blast_settings, void *b, int c, 
             qcopy(blast_vars, position_offset_override);
         else
             qcopy(blast_vars, blast_settings);
-        *(int *)(blast_vars + 0x20) = c;
+        *(int *)(blast_vars + 0x20) = position_reference_moby;
         *(unsigned short *)(spawned_moby + 0x32) = blast_settings[0x3C];
         blast_vars[0x24] = blast_settings[0x10];
         blast_vars[0x25] = blast_settings[0x11];
