@@ -419,7 +419,7 @@ void FUN_L08_002f1548(struct Moby *moby) {
     int i;
     float v[4];
     float w[4];
-    float d;
+    float distance;
 
     switch (moby->state) {
     case DRAW_ELEMENTS_INITIALIZE:
@@ -456,16 +456,16 @@ void FUN_L08_002f1548(struct Moby *moby) {
             w[2] = D_L08_00161DC8;
             w[3] = 1.0f;
             subtract_vector_xyz(w, D_L08_001675C0, w);
-            d = vector_length_xyz(w);
-            if (d <= 84.0f) {
+            distance = vector_length_xyz(w);
+            if (distance <= 84.0f) {
                 FUN_L08_002f12a0(0);
                 FUN_L08_002f1158(D_L08_001E8350, 0.52f, 0.62f, 0.06f, (void *)&D_L08_00161E28);
                 FUN_L08_002f12a0(2);
-                if (d < 20.0f) {
+                if (distance < 20.0f) {
                     *(unsigned char *)&D_L08_00161E08 = 0xFF;
-                } else if (d < 84.0f) {
+                } else if (distance < 84.0f) {
                     *(char *)&D_L08_00161E08 =
-                        func_001FA898_r((1.0f - (d - 20.0f) * 0.015625f) * 255.0f);
+                        func_001FA898_r((1.0f - (distance - 20.0f) * 0.015625f) * 255.0f);
                 } else {
                     *(char *)&D_L08_00161E08 = 0;
                 }
