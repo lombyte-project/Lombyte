@@ -227,7 +227,7 @@ extern void FUN_L01_002f8530(void *, void *, u32, s32, f32, f32, f32, f32, s32);
 extern s32 D_0014C190_257218[][64] __asm__("D_0014C190");
 void bridge_piece_1_update(BurstMoby *self) __asm__("FUN_L01_002f9d80");
 void bridge_piece_1_update(BurstMoby *self) {
-    BurstTarget *t;
+    BurstTarget *hit_result;
     BurstColors colors;
     BurstVec dir;
     BurstVec pos;
@@ -235,12 +235,12 @@ void bridge_piece_1_update(BurstMoby *self) {
     f32 ang;
     s32 i;
 
-    t = trooper_find_hit(self, 0x830000, 0);
+    hit_result = trooper_find_hit(self, 0x830000, 0);
     if (D_L01_001BB6B0.collected[self->id] != 0 ||
         (D_0014C190_257218[current_level_index][self->id >> 5] >> (self->id & 0x1F)) & 1) {
         mark_moby_for_removal(self);
     }
-    if (t != NULL && t->moby->oclass == 0x2AE) {
+    if (hit_result != NULL && hit_result->moby->oclass == 0x2AE) {
         for (i = 0; i < 20; i++) {
             colors = D_L01_00161C60;
             pos.q = 0;
