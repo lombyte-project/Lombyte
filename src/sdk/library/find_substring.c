@@ -1,22 +1,22 @@
 #include "types.h"
-char *FindSubstring(char *s, char *sub) {
+char *FindSubstring(char *search_string, char *sub) {
     s32 i;
 
-    if (*s == 0) {
-        return *sub == 0 ? s : 0;
+    if (*search_string == 0) {
+        return *sub == 0 ? search_string : 0;
     }
     do {
         i = 0;
         while (1) {
             if (sub[i] == 0) {
-                return s;
+                return search_string;
             }
-            if (sub[i] != s[i]) {
+            if (sub[i] != search_string[i]) {
                 break;
             }
             i++;
         }
-        s++;
-    } while (*s != 0);
+        search_string++;
+    } while (*search_string != 0);
     return 0;
 }
