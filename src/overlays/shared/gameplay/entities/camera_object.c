@@ -545,34 +545,34 @@ extern f32 D_L00_001613A4 __attribute__((sda));
 extern f32 D_L00_0016139C __attribute__((sda));
 extern f32 D_L00_001613A0 __attribute__((sda));
 void vendor_update(P_2a57a8 *p) __asm__("FUN_L00_002a57a8");
-void vendor_update(P_2a57a8 *p) {
+void vendor_update(P_2a57a8 *vendor_moby) {
     enum {
         VENDOR_INITIALIZE = 0,
         VENDOR_WAIT_FOR_HERO = 1,
         VENDOR_HERO_NEARBY = 2,
         VENDOR_ZERO_AUXILIARY_SCALE = 3
     };
-    Q_2a57a8 *q = p->q;
-    s32 i, a, b, c;
+    Q_2a57a8 *q = vendor_moby->q;
+    s32 i, interaction_allowed, b, help_message_succeeded;
     u8 *v;
-    f32 d, z;
+    f32 hero_distance, z;
 
     D_L00_001613A4 += 0.05f;
     if (D_L00_001613A4 > 3.14f)
         D_L00_001613A4 = -3.14f;
-    p->i90 =
+    vendor_moby->i90 =
         (((s32)(fast_sin(D_L00_001613A4) * 48.0f) + 0x60) * 0x10101) | 0x80000000;
-    switch (p->b20) {
+    switch (vendor_moby->b20) {
     case VENDOR_INITIALIZE:
-        p->b20 = 1;
+        vendor_moby->b20 = 1;
         q->i0 = 0;
         q->i4 = 0;
         q->mC = FUN_0020c4f8_2a57a8(0x477);
         q->mC->h34 |= 2;
         q->mC->h32 = 0x40;
-        q->mC->f10 = p->f10;
-        q->mC->f14 = p->f14;
-        q->mC->f18 = p->f18 + 2.95f;
+        q->mC->f10 = vendor_moby->f10;
+        q->mC->f14 = vendor_moby->f14;
+        q->mC->f18 = vendor_moby->f18 + 2.95f;
         q->mC->b73 = 0x20;
         q->f90 = 0.0f;
         for (i = 0; i < 2; i++) {
@@ -586,14 +586,14 @@ void vendor_update(P_2a57a8 *p) {
         if (q->f90 <= 0.0f)
             q->mC->h34 |= 1;
         if (!(D_L00_0015F5CC_2a57a8 & 7) &&
-            vector_distance(&p->f10, &hero_pos) <= 16.0f &&
-            FUN_001f99c0_2a57a8(p->f18 - hero_pos.f[2]) <= 8.0f) {
-            p->b20 = 2;
-            if (p->b53 != 1)
-                blend_moby_animation_u(p, 1, 0, 10);
+            vector_distance(&vendor_moby->f10, &hero_pos) <= 16.0f &&
+            FUN_001f99c0_2a57a8(vendor_moby->f18 - hero_pos.f[2]) <= 8.0f) {
+            vendor_moby->b20 = 2;
+            if (vendor_moby->b53 != 1)
+                blend_moby_animation_u(vendor_moby, 1, 0, 10);
             q->mC->h34 &= 0xFFFE;
         }
-        enqueue_callback_list_1(FUN_L00_002a5040_2a57a8, p);
+        enqueue_callback_list_1(FUN_L00_002a5040_2a57a8, vendor_moby);
         FUN_L00_001fff28_2a57a8((u8 *)q + 0x20, 2, D_L00_0016139C);
         FUN_L00_001fff28_2a57a8((u8 *)q + 0x60, 2, D_L00_001613A0);
         D_L00_0016139C = FUN_001fa580_2a57a8(D_L00_0016139C, 0.01f);
@@ -604,16 +604,16 @@ void vendor_update(P_2a57a8 *p) {
     case VENDOR_HERO_NEARBY:
         if (q->f90 < 1.0f)
             q->f90 += 0.1f;
-        d = vector_distance(&p->f10, &hero_pos);
-        z = FUN_001f99c0_2a57a8(p->f18 - hero_pos.f[2]);
-        if (!(D_L00_0015F5CC_2a57a8 & 7) && (d > 18.0f || z > 10.0f)) {
-            p->b20 = 1;
-            if (p->b53)
-                blend_moby_animation_u(p, 0, 0, 10);
+        hero_distance = vector_distance(&vendor_moby->f10, &hero_pos);
+        z = FUN_001f99c0_2a57a8(vendor_moby->f18 - hero_pos.f[2]);
+        if (!(D_L00_0015F5CC_2a57a8 & 7) && (hero_distance > 18.0f || z > 10.0f)) {
+            vendor_moby->b20 = 1;
+            if (vendor_moby->b53)
+                blend_moby_animation_u(vendor_moby, 0, 0, 10);
             break;
         }
-        enqueue_callback_list_1(FUN_L00_002a5040_2a57a8, p);
-        a = 1;
+        enqueue_callback_list_1(FUN_L00_002a5040_2a57a8, vendor_moby);
+        interaction_allowed = 1;
         b = 1;
         FUN_L00_001fff28_2a57a8((u8 *)q + 0x20, 2, D_L00_0016139C);
         FUN_L00_001fff28_2a57a8((u8 *)q + 0x60, 2, D_L00_001613A0);
@@ -622,35 +622,35 @@ void vendor_update(P_2a57a8 *p) {
         q->mC->f2C = q->f90 * q->mC->p24->f24 * 2.5f;
         upd_a(q->mC);
         if (hero_data.state.control_mode != 0 && hero_data.state.current != 3 && hero_data.state.control_mode != 1) {
-            a = 0;
+            interaction_allowed = 0;
             b = 0;
         }
         if (hero_data.state.current == 0x1D || hero_data.state.current == 0x32) {
-            a = 0;
+            interaction_allowed = 0;
             b = 0;
         }
         if (hero_data.vehicle_mode) {
-            a = 0;
+            interaction_allowed = 0;
             b = 0;
         }
-        if (p->b52 != 1)
-            a = 0;
-        if (d > 4.0f || z > 2.0f) {
-            a = 0;
+        if (vendor_moby->b52 != 1)
+            interaction_allowed = 0;
+        if (hero_distance > 4.0f || z > 2.0f) {
+            interaction_allowed = 0;
             b = 0;
         }
-        if (FUN_001fa688_2a57a8(hero_data.motion.rot.f[2], angle_atan2(p->f10 - hero_data.motion.pos.f[0],
-                                                                   p->f14 - hero_data.motion.pos.f[1])) >
+        if (FUN_001fa688_2a57a8(hero_data.motion.rot.f[2], angle_atan2(vendor_moby->f10 - hero_data.motion.pos.f[0],
+                                                                   vendor_moby->f14 - hero_data.motion.pos.f[1])) >
             1.5707964f) {
-            a = 0;
+            interaction_allowed = 0;
             b = 0;
         }
-        c = 0;
+        help_message_succeeded = 0;
         if (b)
-            c = try_set_help_message(1, 0x53E3) != 0;
-        if ((D_0013CAE4_2a57a8 & 0x10) && a && c) {
-            FUN_L00_0029a6b0_2a57a8(p);
-            p->b20 = 3;
+            help_message_succeeded = try_set_help_message(1, 0x53E3) != 0;
+        if ((D_0013CAE4_2a57a8 & 0x10) && interaction_allowed && help_message_succeeded) {
+            FUN_L00_0029a6b0_2a57a8(vendor_moby);
+            vendor_moby->b20 = 3;
         }
         break;
     case VENDOR_ZERO_AUXILIARY_SCALE:
