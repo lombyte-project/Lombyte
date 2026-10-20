@@ -536,54 +536,54 @@ extern void normalize_vector_xyz(void *, void *, float);
 extern void subtract_vector_xyz(void *dst, void *a, void *b);
 void enqueue_callback_list_1(int arg0, int arg1) __asm__("FUN_001f4600");
 
-void FUN_L14_002d7490(struct Moby *m) {
-    char *d = (char *)m->pvars;
-    float p[4];
+void FUN_L14_002d7490(struct Moby *moby) {
+    char *moby_data = (char *)moby->pvars;
+    float joint_position[4];
     float v[4];
     float w[4];
-    char *q;
+    char *particle;
     int i;
-    moby_point_position(m, 1, p);
-    subtract_vector_xyz(v, p, D_L14_001674C0);
+    moby_point_position(moby, 1, joint_position);
+    subtract_vector_xyz(v, joint_position, D_L14_001674C0);
     normalize_vector_xyz(v, v, -0.5f);
-    add_vector_xyz(d + 0xE0, p, v);
-    if ((unsigned int)(m->state - 3) < 3) {
-        p[2] += 1.0f;
-        if (*(int *)(d + 0xF0) == -1) {
-            *(int *)(d + 0xF0) = FUN_L00_0023e738(p, D_L14_00161A60, 0.0f, 0.5f, 0.5f, 1.0f);
+    add_vector_xyz(moby_data + 0xE0, joint_position, v);
+    if ((unsigned int)(moby->state - 3) < 3) {
+        joint_position[2] += 1.0f;
+        if (*(int *)(moby_data + 0xF0) == -1) {
+            *(int *)(moby_data + 0xF0) = FUN_L00_0023e738(joint_position, D_L14_00161A60, 0.0f, 0.5f, 0.5f, 1.0f);
         }
-        if (*(int *)(d + 0xF0) >= 0) {
-            char *e = D_L14_001809C0 + *(int *)(d + 0xF0) * 32;
-            qcopy(e + 0x10, p);
+        if (*(int *)(moby_data + 0xF0) >= 0) {
+            char *e = D_L14_001809C0 + *(int *)(moby_data + 0xF0) * 32;
+            qcopy(e + 0x10, joint_position);
             *(float *)(e + 0x1C) = D_L14_00161A60;
         }
-        p[2] -= 1.0f;
+        joint_position[2] -= 1.0f;
     }
     random_spherical_offset(w, 0.005f, 0.03f);
-    q = FUN_L00_00274948(p, w, 0x7F, m);
-    if (q != 0) {
-        *(float *)(q + 0xC) = random_float_between(6000.0f, 32000.0f);
+    particle = FUN_L00_00274948(joint_position, w, 0x7F, moby);
+    if (particle != 0) {
+        *(float *)(particle + 0xC) = random_float_between(6000.0f, 32000.0f);
     }
     for (i = 0; i < 3; i++) {
         char *e;
-        int t;
-        q = FUN_L00_00274948(p, D_L14_0015F580, 0x7F, m);
-        if (q == 0)
+        int lifetime_frames;
+        particle = FUN_L00_00274948(joint_position, D_L14_0015F580, 0x7F, moby);
+        if (particle == 0)
             continue;
-        e = q + 0x20;
+        e = particle + 0x20;
         if (i == 2 && random_integer_below(8) == 0) {
-            *(float *)(q + 0xC) = 180000.0f;
+            *(float *)(particle + 0xC) = 180000.0f;
         } else {
-            *(float *)(q + 0xC) = random_float_between(80000.0f, 120000.0f);
+            *(float *)(particle + 0xC) = random_float_between(80000.0f, 120000.0f);
         }
-        t = scale_game_frames(2);
-        *(short *)(q + 0xA) = t;
-        *(float *)(e + 0x10) = 1.0f / convert_integer_to_float((short)t);
+        lifetime_frames = scale_game_frames(2);
+        *(short *)(particle + 0xA) = lifetime_frames;
+        *(float *)(e + 0x10) = 1.0f / convert_integer_to_float((short)lifetime_frames);
         *(int *)(e + 0x18) = 0x7F7F7F;
         *(short *)(e + 0x16) = 3;
     }
-    moby_point_position(m, 6, d + 0x200);
-    enqueue_callback_list_1(FUN_L14_002d71f0, m);
+    moby_point_position(moby, 6, moby_data + 0x200);
+    enqueue_callback_list_1(FUN_L14_002d71f0, moby);
 }
 #include "qzero.h"
 extern void FUN_L14_002de2b8_call(struct Moby *, f32, f32) __asm__("FUN_L14_002de2b8");
