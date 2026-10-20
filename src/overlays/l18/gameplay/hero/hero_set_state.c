@@ -452,7 +452,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0x48, 0, (float)scale_game_frames(8));
         break;
     }
-    case 1: {
+    case HERO_STATE_LOOK: {
         struct Hero *p = &hero;
         int t;
         p->state.control_mode = 0;
