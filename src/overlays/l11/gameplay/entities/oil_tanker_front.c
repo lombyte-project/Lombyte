@@ -1051,7 +1051,7 @@ char *FUN_L11_00318d10(char *src, void *pos, int ticks) {
     char *mob = func_0020D348_m(0x511);
     if (mob != 0) {
         char *moby_vars;
-        unsigned char *p;
+        unsigned char *initialization_byte_cursor;
         int i, k, t;
         *(short *)(mob + 0x32) = 0x40;
         *(unsigned char *)(mob + 0x30) = 0xFF;
@@ -1064,17 +1064,17 @@ char *FUN_L11_00318d10(char *src, void *pos, int ticks) {
         qcopy(mob + 0x40, src + 0x40);
         clear_u64_value(moby_vars);
         *(char **)(moby_vars + 0x24) = src;
-        p = (unsigned char *)(moby_vars + 0x14);
+        initialization_byte_cursor = (unsigned char *)(moby_vars + 0x14);
         *(int *)(moby_vars + 0x20) = scale_game_frames(ticks);
         *(int *)(moby_vars + 0x28) = 5;
         euler_rotation_basis(mob + 0xC0, mob + 0x40);
-        for (i = 0, t = 10; i < 4; i++, t += 10, p++) {
-            p[-4] = random_integer_below(0xFF);
+        for (i = 0, t = 10; i < 4; i++, t += 10, initialization_byte_cursor++) {
+            initialization_byte_cursor[-4] = random_integer_below(0xFF);
             if (i * (i & 1))
-                p[0] = 0xFF;
+                initialization_byte_cursor[0] = 0xFF;
             else
-                p[0] = 1;
-            p[4] = t;
+                initialization_byte_cursor[0] = 1;
+            initialization_byte_cursor[4] = t;
         }
         for (k = 0x31; k >= 0; k--)
             FUN_L11_00318ed8_u(mob);
