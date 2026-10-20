@@ -17,7 +17,7 @@ void emit_textured_rectangle(f32 x, f32 y, f32 w, f32 h, s32 u, s32 v, s32 uw, s
     s32 u0_fixed;
     s32 vb;
     s32 ub;
-    long *p;
+    long *packet_words;
     struct DmaTag *base;
 
     if (x0 > 0x9000 || x1 < 0x7000 || y0 > 0x9000 || y1 < 0x7000) {
@@ -34,22 +34,22 @@ void emit_textured_rectangle(f32 x, f32 y, f32 w, f32 h, s32 u, s32 v, s32 uw, s
     base = render_packet_cursor.tag;
     render_packet_cursor.tag = base + 1;
     qcopy(base + 1, D_00160860);
-    p = (long *)(base + 2);
+    packet_words = (long *)(base + 2);
     render_packet_cursor.tag = base + 2;
-    p[0] = tex;
-    p[1] = 0x154;
-    p[2] = (u64)(0xA | ((long)u << 4) | ((long)ub << 14)) | ((long)v << 24) | ((long)vb << 34);
-    p[3] = rgba;
-    p[4] = (v << 20) + u0_fixed;
-    p[5] = x0 | ((long)y0 << 16) | ((long)0xFFFFF0 << 32);
-    p[6] = (v << 20) + u1_fixed;
-    p[7] = x1 | ((long)y0 << 16) | ((long)0xFFFFF0 << 32);
-    p[8] = (vb << 20) + u0_fixed;
-    p[9] = x0 | ((long)y1 << 16) | ((long)0xFFFFF0 << 32);
-    p[10] = (vb << 20) + u1_fixed;
-    p[11] = x1 | ((long)y1 << 16) | ((long)0xFFFFF0 << 32);
-    p[12] = 5;
-    p[13] = 0;
+    packet_words[0] = tex;
+    packet_words[1] = 0x154;
+    packet_words[2] = (u64)(0xA | ((long)u << 4) | ((long)ub << 14)) | ((long)v << 24) | ((long)vb << 34);
+    packet_words[3] = rgba;
+    packet_words[4] = (v << 20) + u0_fixed;
+    packet_words[5] = x0 | ((long)y0 << 16) | ((long)0xFFFFF0 << 32);
+    packet_words[6] = (v << 20) + u1_fixed;
+    packet_words[7] = x1 | ((long)y0 << 16) | ((long)0xFFFFF0 << 32);
+    packet_words[8] = (vb << 20) + u0_fixed;
+    packet_words[9] = x0 | ((long)y1 << 16) | ((long)0xFFFFF0 << 32);
+    packet_words[10] = (vb << 20) + u1_fixed;
+    packet_words[11] = x1 | ((long)y1 << 16) | ((long)0xFFFFF0 << 32);
+    packet_words[12] = 5;
+    packet_words[13] = 0;
     render_packet_cursor.tag = (struct DmaTag *)((u8 *)render_packet_cursor.tag + 0x70);
 }
 
