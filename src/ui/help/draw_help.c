@@ -59,13 +59,13 @@ void draw_help(void) {
     switch (((HelpState *)D_001996D0)->state) {
     case HELP_FRAME_OPENING:
         if (D_0015EF1D_b) {
-            int s = ((HelpState *)D_001996D0)->x04 * 4 + 8;
+            int frame_half_extent = ((HelpState *)D_001996D0)->x04 * 4 + 8;
 
-            ((HelpState *)D_001996D0)->pad[4] = s;
-            ((HelpState *)D_001996D0)->pad[5] = s;
+            ((HelpState *)D_001996D0)->pad[4] = frame_half_extent;
+            ((HelpState *)D_001996D0)->pad[5] = frame_half_extent;
             draw_ui_frame(
-                ((HelpState *)D_001996D0)->pad[3] - s, ((HelpState *)D_001996D0)->pad[3] + s,
-                ((HelpState *)D_001996D0)->pad[2] - s, ((HelpState *)D_001996D0)->pad[2] + s, 0x60);
+                ((HelpState *)D_001996D0)->pad[3] - frame_half_extent, ((HelpState *)D_001996D0)->pad[3] + frame_half_extent,
+                ((HelpState *)D_001996D0)->pad[2] - frame_half_extent, ((HelpState *)D_001996D0)->pad[2] + frame_half_extent, 0x60);
         }
         break;
     case HELP_PROMPT:
