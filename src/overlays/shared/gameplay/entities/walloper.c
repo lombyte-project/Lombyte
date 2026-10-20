@@ -667,24 +667,24 @@ void clear_u64_value() __asm__("FUN_001f99f8");
 void refresh_moby_spatial_bounds_from_basis() __asm__("FUN_0020e098");
 void FUN_L00_00250df8();
 u8 *FUN_L00_002bb360(u8 *src) {
-    u8 *m = create_moby(0xB3);
-    if (m) {
-        u8 *v = *(u8 **)(m + 0x78);
-        m[0x30] = 0xFF;
-        *(s16 *)(m + 0x32) = 0xFF;
-        m[0x31] = 1;
-        *(s16 *)(m + 0x34) = 0x204;
-        m[0x23] = 0x50;
-        m[0x20] = 0;
+    u8 *spawned_moby = create_moby(0xB3);
+    if (spawned_moby) {
+        u8 *v = *(u8 **)(spawned_moby + 0x78);
+        spawned_moby[0x30] = 0xFF;
+        *(s16 *)(spawned_moby + 0x32) = 0xFF;
+        spawned_moby[0x31] = 1;
+        *(s16 *)(spawned_moby + 0x34) = 0x204;
+        spawned_moby[0x23] = 0x50;
+        spawned_moby[0x20] = 0;
         *(u8 **)(v + 8) = src;
-        clear_u64_value(m + 0x40);
-        *(OvlQuad *)(m + 0xC0) = *(OvlQuad *)(src + 0xC0);
-        *(OvlQuad *)(m + 0xD0) = *(OvlQuad *)(src + 0xD0);
-        *(OvlQuad *)(m + 0xE0) = *(OvlQuad *)(src + 0xE0);
-        refresh_moby_spatial_bounds_from_basis(m);
-        FUN_L00_00250df8(m);
+        clear_u64_value(spawned_moby + 0x40);
+        *(OvlQuad *)(spawned_moby + 0xC0) = *(OvlQuad *)(src + 0xC0);
+        *(OvlQuad *)(spawned_moby + 0xD0) = *(OvlQuad *)(src + 0xD0);
+        *(OvlQuad *)(spawned_moby + 0xE0) = *(OvlQuad *)(src + 0xE0);
+        refresh_moby_spatial_bounds_from_basis(spawned_moby);
+        FUN_L00_00250df8(spawned_moby);
     }
-    return m;
+    return spawned_moby;
 }
 typedef struct {
     char pad[0x10B0];
