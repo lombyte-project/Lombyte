@@ -2638,19 +2638,19 @@ extern float FUN_001f9b48(void *, void *);
 
 void FUN_L14_002b55b0(struct Moby *moby) {
     char *data = (char *)moby->pvars;
-    char *p;
+    char *path;
     int i;
-    p = D_L14_001B0BB0[*(int *)(data + 0xD0)];
-    for (i = 0; i < *(int *)p - 1; i++) {
-        *(float *)(p + 0x1C + i * 0x10) = FUN_001f9b48(p + 0x10 + i * 0x10, p + 0x20 + i * 0x10);
+    path = D_L14_001B0BB0[*(int *)(data + 0xD0)];
+    for (i = 0; i < *(int *)path - 1; i++) {
+        *(float *)(path + 0x1C + i * 0x10) = FUN_001f9b48(path + 0x10 + i * 0x10, path + 0x20 + i * 0x10);
     }
-    p = D_L14_001B0BB0[*(int *)(data + 0x150)];
-    for (i = 0; i < *(int *)p - 1; i++) {
-        *(float *)(p + 0x1C + i * 0x10) = FUN_001f9b48(p + 0x10 + i * 0x10, p + 0x20 + i * 0x10);
+    path = D_L14_001B0BB0[*(int *)(data + 0x150)];
+    for (i = 0; i < *(int *)path - 1; i++) {
+        *(float *)(path + 0x1C + i * 0x10) = FUN_001f9b48(path + 0x10 + i * 0x10, path + 0x20 + i * 0x10);
     }
-    p = D_L14_001B0BB0[*(int *)(data + 0xDC)];
-    for (i = 0; i < *(int *)p - 1; i++) {
-        *(float *)(p + 0x1C + i * 0x10) = FUN_001f9b48(p + 0x10 + i * 0x10, p + 0x20 + i * 0x10);
+    path = D_L14_001B0BB0[*(int *)(data + 0xDC)];
+    for (i = 0; i < *(int *)path - 1; i++) {
+        *(float *)(path + 0x1C + i * 0x10) = FUN_001f9b48(path + 0x10 + i * 0x10, path + 0x20 + i * 0x10);
     }
     *(int *)(data + 0x10C) = 0;
 }
