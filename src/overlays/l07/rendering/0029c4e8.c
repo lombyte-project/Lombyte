@@ -55,7 +55,7 @@ extern f32 seg_fabs(f32) __asm__("FUN_001f99c0");
    from the surface (0 when within 1% of the radius). */
 f32 FUN_L07_0029e6d8(Vec4f *out, Vec4f *ref, Vec4f *center, Vec4f *a, Vec4f *b, f32 radius) {
     Vec4f w, dir, line_projection_point, lower_segment_point, upper_segment_point;
-    f32 t, lower_segment_t, upper_segment_t, h, dd, dist, e1, e2, eps;
+    f32 t, lower_segment_t, upper_segment_t, intersection_t_offset, dd, dist, e1, e2, eps;
     Vec4f *upper_segment_point_ptr;
 
     seg_vec_sub(&w, a, center);
@@ -66,14 +66,14 @@ f32 FUN_L07_0029e6d8(Vec4f *out, Vec4f *ref, Vec4f *center, Vec4f *a, Vec4f *b, 
     seg_vec_add(&line_projection_point, &line_projection_point, a);
     dist = seg_dist(&line_projection_point, center);
     if (dist < radius) {
-        h = seg_sqrt(radius * radius - dist * dist);
-        h /= seg_len(&dir);
-        lower_segment_t = t - h;
+        intersection_t_offset = seg_sqrt(radius * radius - dist * dist);
+        intersection_t_offset /= seg_len(&dir);
+        lower_segment_t = t - intersection_t_offset;
         if (lower_segment_t < 0.0f)
             lower_segment_t = 0.0f;
         else if (1.0f < lower_segment_t)
             lower_segment_t = 1.0f;
-        upper_segment_t = t + h;
+        upper_segment_t = t + intersection_t_offset;
         if (upper_segment_t < 0.0f)
             upper_segment_t = 0.0f;
         else if (1.0f < upper_segment_t)
