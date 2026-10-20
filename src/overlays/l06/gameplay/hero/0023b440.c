@@ -147,7 +147,8 @@ void FUN_L06_0023b440(void) {
         HERO_STATE_APPROACH_TARGET_POSE = 101,
         HERO_STATE_TARGET_POSE_APPROACH_TRANSITION = 102,
         HERO_STATE_TARGET_POSE_REACHED = 103,
-        HERO_STATE_DEATH_FALL = 119
+        HERO_STATE_DEATH_FALL = 119,
+        HERO_STATE_DEATH_DESCENT = 124
     };
     enum {
         HERO_VEHICLE_MODE_NORMAL = 0
@@ -777,7 +778,7 @@ void FUN_L06_0023b440(void) {
                         hero_set_state(0x65, 1);
                     }
                     break;
-                case 124:
+                case HERO_STATE_DEATH_DESCENT:
                     if (hero.unk2F4 - 1.2f > hero.motion.pos.f[2] ||
                         hero.state_timer > scale_game_frames(0x64)) {
                         hero_respawn();
