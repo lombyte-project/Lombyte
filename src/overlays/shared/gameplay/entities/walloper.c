@@ -2457,13 +2457,13 @@ int FUN_L00_002beab0(char *moby, int b, Vx *position_override) {
 
 
 /* Saves the moby's position, word 0x4C and float 0x5C into ((char *)&hero) at 0x1ED0. */
-void FUN_L00_002beb90(char *a) {
+void FUN_L00_002beb90(char *source_state) {
     struct Hero *g = &hero;
-    g->unk1ED0 = *(float *)(a + 0x40);
-    g->unk1ED4 = *(float *)(a + 0x44);
-    g->unk1ED8 = *(float *)(a + 0x48);
-    g->unk1F08 = *(int *)(a + 0x4C);
-    g->unk1EE4 = *(float *)(a + 0x5C);
+    g->unk1ED0 = *(float *)(source_state + 0x40);
+    g->unk1ED4 = *(float *)(source_state + 0x44);
+    g->unk1ED8 = *(float *)(source_state + 0x48);
+    g->unk1F08 = *(int *)(source_state + 0x4C);
+    g->unk1EE4 = *(float *)(source_state + 0x5C);
 }
 #define NOT_SDA
 
