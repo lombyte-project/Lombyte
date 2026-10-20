@@ -537,7 +537,7 @@ extern float D_L18_00161960 __attribute__((sda));
 extern void set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");
 extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 
-char *FUN_L18_002d5348(float *pos, float *dir, float *target, float a, float b, int frames, int kind) {
+char *FUN_L18_002d5348(float *pos, float *dir, float *target, float movement_rotation_z, float b, int frames, int kind) {
     char *moby = create_moby(0x234);
     if (moby != 0) {
         char *data;
@@ -551,7 +551,7 @@ char *FUN_L18_002d5348(float *pos, float *dir, float *target, float a, float b, 
         data = *(char **)(moby + 0x78);
         qcopy(data, dir);
         qcopy(data + 0x10, target);
-        *(float *)(data + 0x24) = a;
+        *(float *)(data + 0x24) = movement_rotation_z;
         *(float *)(data + 0x28) = b;
         *(int *)(data + 0x2C) = 0;
         *(int *)(data + 0x34) = frames;
