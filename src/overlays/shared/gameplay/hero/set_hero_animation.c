@@ -1226,21 +1226,21 @@ f32 FUN_L00_00233d30(f32 *v) {
         GRAVITY_MODE_DIRECTION_AXIS = 2
     };
     struct Hero *b = &hero;
-    V00233d30 t;
-    f32 d, z;
+    V00233d30 gravity_frame_vector;
+    f32 xy_length, z;
     switch (b->unk20B3) {
     case GRAVITY_MODE_WORLD_Z:
-        d = FUN_001f9b20_00233d30(v);
+        xy_length = FUN_001f9b20_00233d30(v);
         z = v[2];
         goto call;
     case GRAVITY_MODE_VECTOR_AXIS:
     case GRAVITY_MODE_DIRECTION_AXIS:
-        qcopy(&t, v);
-        FUN_001f9d20_00233d30(&t, &t, &b->unk40);
-        d = FUN_001f9b20_00233d30(&t);
-        z = t.f[2];
+        qcopy(&gravity_frame_vector, v);
+        FUN_001f9d20_00233d30(&gravity_frame_vector, &gravity_frame_vector, &b->unk40);
+        xy_length = FUN_001f9b20_00233d30(&gravity_frame_vector);
+        z = gravity_frame_vector.f[2];
     call:
-        return FUN_001f9e90_00233d30(z, d);
+        return FUN_001f9e90_00233d30(z, xy_length);
     }
     return 0.0f;
 }
