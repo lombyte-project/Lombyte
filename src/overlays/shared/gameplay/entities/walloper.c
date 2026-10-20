@@ -619,7 +619,7 @@ void FUN_L00_002bb0b0(void *mv) {
     Q_2bb0b0 quad;
     V_2bb0b0 mat[4];
     V_2bb0b0 *pos = *(V_2bb0b0 **)((char *)mv + 0x78);
-    unsigned int c;
+    unsigned int quad_color;
     float corner_scale;
     int i;
     quad.tex = tex_2bb0b0(0xB);
@@ -635,11 +635,11 @@ void FUN_L00_002bb0b0(void *mv) {
     cross_2bb0b0(&mat[1], &mat[0], &(*(V_2bb0b0 *)D_0013F5E0));
     fast_vec_normalize(&mat[1], &mat[1], -1.0f);
     cross_2bb0b0(&mat[2], &mat[1], &mat[0]);
-    c = D_L00_00161640;
-    quad.color[3] = c;
-    quad.color[2] = c;
-    quad.color[1] = c;
-    quad.color[0] = c;
+    quad_color = D_L00_00161640;
+    quad.color[3] = quad_color;
+    quad.color[2] = quad_color;
+    quad.color[1] = quad_color;
+    quad.color[0] = quad_color;
     corner_scale = D_L00_00161648 + rnd_2bb0b0(0.0f, 0.025f);
     for (i = 0; i < 4; i++) {
         vmul_2bb0b0(corner_scale, &quad.corner[i], &D_L00_001DB560[i]);
@@ -648,11 +648,11 @@ void FUN_L00_002bb0b0(void *mv) {
         quad.uv[i].v = D_L00_001DB5A0[i].v;
     }
     draw_2bb0b0(&quad, 0, 0);
-    c = D_L00_001615F8_2bb0b0;
-    quad.color[3] = c;
-    quad.color[2] = c;
-    quad.color[1] = c;
-    quad.color[0] = c;
+    quad_color = D_L00_001615F8_2bb0b0;
+    quad.color[3] = quad_color;
+    quad.color[2] = quad_color;
+    quad.color[1] = quad_color;
+    quad.color[0] = quad_color;
     corner_scale = D_L00_0016164C + rnd_2bb0b0(0.0f, 0.05f);
     for (i = 0; i < 4; i++) {
         vmul_2bb0b0(corner_scale, &quad.corner[i], &D_L00_001DB560[i]);
