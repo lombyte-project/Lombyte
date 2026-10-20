@@ -104,17 +104,17 @@ extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68
 
 void FUN_L06_002f5360(char *moby) {
     char *data = *(char **)(moby + 0x78);
-    char **p;
+    char **linked_moby_cursor;
     int i;
     moby[0xBC] = 1;
     if ((unsigned char)moby[0x20] == 2) {
         allocate_voice_for_target_entry(0, 0, (int)moby);
         moby[0x20] = 4;
-        p = (char **)(data + 0x24);
+        linked_moby_cursor = (char **)(data + 0x24);
         *(int *)(data + 0x14) = 0;
         *(int *)(data + 0x18) = 0;
         for (i = 6; i >= 0; i--) {
-            (*p++)[0x20] = 5;
+            (*linked_moby_cursor++)[0x20] = 5;
         }
     }
 }
