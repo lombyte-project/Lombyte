@@ -721,6 +721,11 @@ extern void jet_animate(struct Moby *, float) __asm__("FUN_L00_00259fe8");
 extern void FUN_L07_00312150(char *);
 void snagglebeast_update(unsigned char *moby) __asm__("FUN_L07_00314150");
 void snagglebeast_update(unsigned char *moby) {
+    enum {
+        SNAGGLEBEAST_INITIALIZE = 0,
+        SNAGGLEBEAST_TURN_TOWARD_TARGET = 7,
+        SNAGGLEBEAST_DEATH_EXPLOSION = 10
+    };
     Vec4 oldpos;
     ChaserSight sight;
     Vec4 position;
@@ -885,7 +890,7 @@ void snagglebeast_update(unsigned char *moby) {
                                             (*(short *)(data + 0x24) << 4) | 0xF);
     }
     switch (moby[0x20]) {
-    case 0:
+    case SNAGGLEBEAST_INITIALIZE:
         *(int *)&D_L07_00161B64 = 0;
         moby[0x20] = 1;
         moby[0xBC] = 0;
@@ -1257,7 +1262,7 @@ void snagglebeast_update(unsigned char *moby) {
         }
         break;
     }
-    case 7: {
+    case SNAGGLEBEAST_TURN_TOWARD_TARGET: {
         float diff;
         if (data[0x1F5] == 0) qcopy(data + 0xC0, ((char *)&hero) + 0x80);
         diff = fast_subtract_rotations(fast_arc_tan(*(float *)(data + 0xC0) - *(float *)(moby + 0x10), *(float *)(data + 0xC4) - *(float *)(moby + 0x14)), *(float *)(moby + 0x48));
@@ -1690,7 +1695,7 @@ void snagglebeast_update(unsigned char *moby) {
             break;
         }
         break;
-    case 10:
+    case SNAGGLEBEAST_DEATH_EXPLOSION:
         if (*(int *)(data + 0x1B0) != -1) {
             set_animation_parameter(*(int *)(data + 0x1B0), 0);
             *(int *)(data + 0x1B0) = -1;
