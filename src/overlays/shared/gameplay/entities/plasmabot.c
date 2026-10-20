@@ -816,22 +816,22 @@ void FUN_L14_002b2928(char *moby) {
         float g[8];
         u64 t[4];
     } pk;
-    Vec4_2b2928 m[4];
+    Vec4_2b2928 quad_transform[4];
     Vec4_2b2928 w;
     char *pp;
-    char *q;
+    char *nozzle_position;
     char *r;
     int i;
     int j;
-    int a;
+    int alpha;
 
-    qcopy(&m[3], data + 0x1E0);
-    m[3].f[3] = 1.0f;
-    subtract_vector_xyz_c3(&m[0], ((char *)&D_L14_001674C0), &m[3]);
-    fast_vec_normalize(&m[0], &m[0], 1.0f);
-    cross_vectors_xyz(&m[1], &m[0], D_0013F5E0);
-    fast_vec_normalize(&m[1], &m[1], -1.0f);
-    cross_vectors_xyz(&m[2], &m[1], &m[0]);
+    qcopy(&quad_transform[3], data + 0x1E0);
+    quad_transform[3].f[3] = 1.0f;
+    subtract_vector_xyz_c3(&quad_transform[0], ((char *)&D_L14_001674C0), &quad_transform[3]);
+    fast_vec_normalize(&quad_transform[0], &quad_transform[0], 1.0f);
+    cross_vectors_xyz(&quad_transform[1], &quad_transform[0], D_0013F5E0);
+    fast_vec_normalize(&quad_transform[1], &quad_transform[1], -1.0f);
+    cross_vectors_xyz(&quad_transform[2], &quad_transform[1], &quad_transform[0]);
     pk.t[1] = get_effect_texture(11);
     pk.t[3] = 0x8000000048ULL;
     pk.t[2] = 0xFF9000000260ULL;
@@ -850,81 +850,81 @@ void FUN_L14_002b2928(char *moby) {
     pk.g[7] = 1.0f;
     for (i = 0; i < 4; i++) {
         fast_vec_scale_c(&pk.o[i], &D_L14_001D8850_lui[i], 0.4f);
-        transform_vector(&pk.o[i], &pk.o[i], &m[0]);
+        transform_vector(&pk.o[i], &pk.o[i], &quad_transform[0]);
     }
     fast_draw_quad_real(&pk, 0, 0);
 
-    qcopy(&m[3], data + 0x200);
+    qcopy(&quad_transform[3], data + 0x200);
     pp = data + 0x220;
-    subtract_vector_xyz_c3(&m[0], ((char *)&D_L14_001674C0), &m[3]);
+    subtract_vector_xyz_c3(&quad_transform[0], ((char *)&D_L14_001674C0), &quad_transform[3]);
     r = data + 0x210;
-    q = data + 0x1F0;
-    fast_vec_normalize(&m[0], &m[0], 1.0f);
-    cross_vectors_xyz(&m[1], &m[0], D_0013F5E0);
-    fast_vec_normalize(&m[1], &m[1], -1.0f);
-    cross_vectors_xyz(&m[2], &m[1], &m[0]);
+    nozzle_position = data + 0x1F0;
+    fast_vec_normalize(&quad_transform[0], &quad_transform[0], 1.0f);
+    cross_vectors_xyz(&quad_transform[1], &quad_transform[0], D_0013F5E0);
+    fast_vec_normalize(&quad_transform[1], &quad_transform[1], -1.0f);
+    cross_vectors_xyz(&quad_transform[2], &quad_transform[1], &quad_transform[0]);
     pk.c[3] = 0x202020FF;
     pk.c[2] = 0x202020FF;
     pk.c[1] = 0x202020FF;
     pk.c[0] = 0x202020FF;
     for (j = 0; j < 4; j++) {
         fast_vec_scale_c(&pk.o[j], &D_L14_001D8850_lui[j], 0.2f);
-        transform_vector(&pk.o[j], &pk.o[j], &m[0]);
+        transform_vector(&pk.o[j], &pk.o[j], &quad_transform[0]);
     }
     fast_draw_quad_real(&pk, 0, 0);
 
-    qcopy(&m[3], q);
-    subtract_vector_xyz_c3(&m[0], ((char *)&D_L14_001674C0), &m[3]);
-    fast_vec_normalize(&m[0], &m[0], 1.0f);
-    cross_vectors_xyz(&m[1], &m[0], D_0013F5E0);
-    fast_vec_normalize(&m[1], &m[1], -1.0f);
-    cross_vectors_xyz(&m[2], &m[1], &m[0]);
-    fast_vec_scale_c(&w, &m[0], D_L14_001614AC_lui);
-    add_vector_xyz_c2(&m[3], &m[3], &w);
+    qcopy(&quad_transform[3], nozzle_position);
+    subtract_vector_xyz_c3(&quad_transform[0], ((char *)&D_L14_001674C0), &quad_transform[3]);
+    fast_vec_normalize(&quad_transform[0], &quad_transform[0], 1.0f);
+    cross_vectors_xyz(&quad_transform[1], &quad_transform[0], D_0013F5E0);
+    fast_vec_normalize(&quad_transform[1], &quad_transform[1], -1.0f);
+    cross_vectors_xyz(&quad_transform[2], &quad_transform[1], &quad_transform[0]);
+    fast_vec_scale_c(&w, &quad_transform[0], D_L14_001614AC_lui);
+    add_vector_xyz_c2(&quad_transform[3], &quad_transform[3], &w);
     pk.c[3] = 0x4020FF20;
     pk.c[2] = 0x4020FF20;
     pk.c[1] = 0x4020FF20;
     pk.c[0] = 0x4020FF20;
-    a = 0x40;
+    alpha = 0x40;
     for (j = 0; j < 4; j++) {
         fast_vec_scale_c(&pk.o[j], &D_L14_001D8850_lui[j], 0.2f);
-        transform_vector(&pk.o[j], &pk.o[j], &m[0]);
+        transform_vector(&pk.o[j], &pk.o[j], &quad_transform[0]);
     }
     fast_draw_quad_real(&pk, 0, 0);
 
-    qcopy(&m[3], r);
-    subtract_vector_xyz_c3(&m[0], ((char *)&D_L14_001674C0), &m[3]);
-    fast_vec_normalize(&m[0], &m[0], 1.0f);
-    cross_vectors_xyz(&m[1], &m[0], D_0013F5E0);
-    fast_vec_normalize(&m[1], &m[1], -1.0f);
-    cross_vectors_xyz(&m[2], &m[1], &m[0]);
-    fast_vec_scale_c(&w, &m[0], D_L14_001614BC_lui);
-    add_vector_xyz_c2(&m[3], &m[3], &w);
-    pk.c[3] = (a << 24) | 0xFF2020;
-    pk.c[2] = (a << 24) | 0xFF2020;
-    pk.c[1] = (a << 24) | 0xFF2020;
-    pk.c[0] = (a << 24) | 0xFF2020;
+    qcopy(&quad_transform[3], r);
+    subtract_vector_xyz_c3(&quad_transform[0], ((char *)&D_L14_001674C0), &quad_transform[3]);
+    fast_vec_normalize(&quad_transform[0], &quad_transform[0], 1.0f);
+    cross_vectors_xyz(&quad_transform[1], &quad_transform[0], D_0013F5E0);
+    fast_vec_normalize(&quad_transform[1], &quad_transform[1], -1.0f);
+    cross_vectors_xyz(&quad_transform[2], &quad_transform[1], &quad_transform[0]);
+    fast_vec_scale_c(&w, &quad_transform[0], D_L14_001614BC_lui);
+    add_vector_xyz_c2(&quad_transform[3], &quad_transform[3], &w);
+    pk.c[3] = (alpha << 24) | 0xFF2020;
+    pk.c[2] = (alpha << 24) | 0xFF2020;
+    pk.c[1] = (alpha << 24) | 0xFF2020;
+    pk.c[0] = (alpha << 24) | 0xFF2020;
     for (j = 0; j < 4; j++) {
         fast_vec_scale_c(&pk.o[j], &D_L14_001D8850_lui[j], D_L14_001614C0_lui);
-        transform_vector(&pk.o[j], &pk.o[j], &m[0]);
+        transform_vector(&pk.o[j], &pk.o[j], &quad_transform[0]);
     }
     fast_draw_quad_real(&pk, 0, 0);
 
-    qcopy(&m[3], pp);
-    subtract_vector_xyz_c3(&m[0], ((char *)&D_L14_001674C0), &m[3]);
-    fast_vec_normalize(&m[0], &m[0], 1.0f);
-    cross_vectors_xyz(&m[1], &m[0], D_0013F5E0);
-    fast_vec_normalize(&m[1], &m[1], -1.0f);
-    cross_vectors_xyz(&m[2], &m[1], &m[0]);
-    fast_vec_scale_c(&w, &m[0], D_L14_001614BC_lui);
-    add_vector_xyz_c2(&m[3], &m[3], &w);
-    pk.c[3] = (a << 24) | 0xFF2020;
-    pk.c[2] = (a << 24) | 0xFF2020;
-    pk.c[1] = (a << 24) | 0xFF2020;
-    pk.c[0] = (a << 24) | 0xFF2020;
+    qcopy(&quad_transform[3], pp);
+    subtract_vector_xyz_c3(&quad_transform[0], ((char *)&D_L14_001674C0), &quad_transform[3]);
+    fast_vec_normalize(&quad_transform[0], &quad_transform[0], 1.0f);
+    cross_vectors_xyz(&quad_transform[1], &quad_transform[0], D_0013F5E0);
+    fast_vec_normalize(&quad_transform[1], &quad_transform[1], -1.0f);
+    cross_vectors_xyz(&quad_transform[2], &quad_transform[1], &quad_transform[0]);
+    fast_vec_scale_c(&w, &quad_transform[0], D_L14_001614BC_lui);
+    add_vector_xyz_c2(&quad_transform[3], &quad_transform[3], &w);
+    pk.c[3] = (alpha << 24) | 0xFF2020;
+    pk.c[2] = (alpha << 24) | 0xFF2020;
+    pk.c[1] = (alpha << 24) | 0xFF2020;
+    pk.c[0] = (alpha << 24) | 0xFF2020;
     for (j = 0; j < 4; j++) {
         fast_vec_scale_c(&pk.o[j], &D_L14_001D8850_lui[j], D_L14_001614C0_lui);
-        transform_vector(&pk.o[j], &pk.o[j], &m[0]);
+        transform_vector(&pk.o[j], &pk.o[j], &quad_transform[0]);
     }
     fast_draw_quad_real(&pk, 0, 0);
 }
