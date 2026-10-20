@@ -2599,7 +2599,7 @@ extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 
 /* Rider carrier: waits for the hero in its clip volume, then follows its path carrying up to eight rider mobys (and steers its camera moby), drops them off one by one at the marked node and removes itself at the end of the path. */
 void stationary_ship_update(CarrierMoby *m) __asm__("FUN_L01_002f4960");
-void stationary_ship_update(CarrierMoby *m) {
+void stationary_ship_update(CarrierMoby *carrier_moby) {
     enum {
         CARRIER_STATE_INITIALIZE = 0,
         CARRIER_STATE_WAIT_FOR_TRIGGER = 1,
@@ -2610,7 +2610,7 @@ void stationary_ship_update(CarrierMoby *m) {
     };
     CarrierVars *v;
     CarrierCamVars *cv;
-    PePath *p;
+    PePath *carrier_path;
     CarrierMoby *tbl;
     CarrierRiderVars *rv;
     CarrierOffsets offs;
@@ -2618,14 +2618,14 @@ void stationary_ship_update(CarrierMoby *m) {
     s32 j;
     s32 n;
     s32 k;
-    f32 a;
-    f32 d;
+    f32 camera_target_yaw;
+    f32 camera_node_yaw_delta;
 
-    v = (CarrierVars *)m->pvars;
+    v = (CarrierVars *)carrier_moby->pvars;
     n = v->volume;
     if (n == -1) {
-        if (m->prev_seq != 5) {
-            blend_moby_animation_cf(m, 5, 0, 0);
+        if (carrier_moby->prev_seq != 5) {
+            blend_moby_animation_cf(carrier_moby, 5, 0, 0);
         }
         return;
     }
@@ -2635,22 +2635,22 @@ void stationary_ship_update(CarrierMoby *m) {
         v->state = 1;
         v->arrived = 0;
         v->keep = 0;
-        m->unk30 = 0xFF;
-        m->flags |= 0x41;
+        carrier_moby->unk30 = 0xFF;
+        carrier_moby->flags |= 0x41;
         return;
     case CARRIER_STATE_WAIT_FOR_TRIGGER:
         if (is_point_inside_clip_volume(&hero.motion.pos, n) != 0) {
             v->state = 2;
-            m->flags &= ~0x41;
+            carrier_moby->flags &= ~0x41;
             if (v->camera != -1) {
                 cv = (CarrierCamVars *)D_L01_0015FFD8_m[v->camera].pvars;
                 cv->frames = scale_game_frames(truncate_float_f49(v->seconds * 60.0f));
                 D_L01_0015FFD8_m[v->camera].unkBC = 1;
             }
             if (v->path != -1) {
-                p = (PePath *)D_L01_001B0930_u[v->path];
-                for (n = 0; n < p->count; n++) {
-                    if (p->pts[n].f[3] == 1.0f) {
+                carrier_path = (PePath *)D_L01_001B0930_u[v->path];
+                for (n = 0; n < carrier_path->count; n++) {
+                    if (carrier_path->pts[n].f[3] == 1.0f) {
                         v->stop = n;
                         break;
                     }
@@ -2659,48 +2659,48 @@ void stationary_ship_update(CarrierMoby *m) {
         }
         break;
     case CARRIER_STATE_FOLLOW_PATH:
-        gunship_follow_path((char *)m);
+        gunship_follow_path((char *)carrier_moby);
         if (v->camera != -1) {
             cv = (CarrierCamVars *)D_L01_0015FFD8_m[v->camera].pvars;
-            a = FUN_001f9e90_cf(m->pos.x - D_L01_00167100_c.x, m->pos.y - D_L01_00167100_c.y);
-            d = fast_subtract_rotations_f49(D_L01_001600EC_p[cv->node].yaw, a);
-            if (d < 0.0f) {
-                a = D_L01_001600EC_p[cv->node].yaw;
-            } else if (v->max_deg * 0.017453292f < d) {
-                a = fast_add_rotations(D_L01_001600EC_p[cv->node].yaw, -v->max_deg * 0.017453292f);
+            camera_target_yaw = FUN_001f9e90_cf(carrier_moby->pos.x - D_L01_00167100_c.x, carrier_moby->pos.y - D_L01_00167100_c.y);
+            camera_node_yaw_delta = fast_subtract_rotations_f49(D_L01_001600EC_p[cv->node].yaw, camera_target_yaw);
+            if (camera_node_yaw_delta < 0.0f) {
+                camera_target_yaw = D_L01_001600EC_p[cv->node].yaw;
+            } else if (v->max_deg * 0.017453292f < camera_node_yaw_delta) {
+                camera_target_yaw = fast_add_rotations(D_L01_001600EC_p[cv->node].yaw, -v->max_deg * 0.017453292f);
             }
             cv->x = D_L01_001600EC_p[cv->node].x;
             cv->y = D_L01_001600EC_p[cv->node].y;
-            cv->yaw = spring_turn(&v->turn, D_L01_00167100_c.yaw, a, frame_time_sq * 12.566371f,
+            cv->yaw = spring_turn(&v->turn, D_L01_00167100_c.yaw, camera_target_yaw, frame_time_sq * 12.566371f,
                                        frame_time_sq * 125.6637039f, frame_time * 3.1415927f);
         }
         if (v->path != -1) {
-            p = (PePath *)D_L01_001B0930_u[v->path];
+            carrier_path = (PePath *)D_L01_001B0930_u[v->path];
             k = v->node;
             if (k == v->stop && v->arrived == 0) {
-                if (m->prev_seq != 2) {
-                    blend_moby_animation_cf(m, 2, 0, scale_game_frames(0x14));
+                if (carrier_moby->prev_seq != 2) {
+                    blend_moby_animation_cf(carrier_moby, 2, 0, scale_game_frames(0x14));
                 }
                 v->timer = 0;
                 v->arrived = 1;
-            } else if (k == p->count - 2 && v->keep == 0) {
-                mark_moby_for_removal(m);
+            } else if (k == carrier_path->count - 2 && v->keep == 0) {
+                mark_moby_for_removal(carrier_moby);
                 return;
             }
         }
         break;
     }
     fast_dec_timer_s16(&v->timer);
-    if (v->arrived == 0 || v->timer != 0 || m->seq != 2) {
+    if (v->arrived == 0 || v->timer != 0 || carrier_moby->seq != 2) {
         for (i = 0; i < 8; i++) {
             offs = D_L01_0020B360;
             if (v->riders[i] != -1) {
                 if (v->state != 1) {
                     D_L01_0015FFD8_m[v->riders[i]].flags &= ~0x41;
                 }
-                transform_vector_f49(&offs.v[i], &offs.v[i], &m->unkC0);
-                fast_vec_add(&D_L01_0015FFD8_m[v->riders[i]].pos, &m->pos, &offs.v[i]);
-                qcopy_nc(&D_L01_0015FFD8_m[v->riders[i]].rot, &m->rot);
+                transform_vector_f49(&offs.v[i], &offs.v[i], &carrier_moby->unkC0);
+                fast_vec_add(&D_L01_0015FFD8_m[v->riders[i]].pos, &carrier_moby->pos, &offs.v[i]);
+                qcopy_nc(&D_L01_0015FFD8_m[v->riders[i]].rot, &carrier_moby->rot);
                 D_L01_0015FFD8_m[v->riders[i]].rot.z =
                     fast_add_rotations(D_L01_0015FFD8_m[v->riders[i]].rot.z, 3.1415927f);
                 advance_moby_animation(&D_L01_0015FFD8_m[v->riders[i]]);
@@ -2715,7 +2715,7 @@ void stationary_ship_update(CarrierMoby *m) {
             tbl = D_L01_0015FFD8_m;
             tbl[v->riders[j]].flags &= ~6;
             clear_vector(&tbl[v->riders[j]].rot);
-            D_L01_0015FFD8_m[v->riders[j]].rot.z = FUN_001f9e90_cf(hero.motion.pos.f[0] - m->pos.x, hero.motion.pos.f[1] - m->pos.y);
+            D_L01_0015FFD8_m[v->riders[j]].rot.z = FUN_001f9e90_cf(hero.motion.pos.f[0] - carrier_moby->pos.x, hero.motion.pos.f[1] - carrier_moby->pos.y);
             switch (D_L01_0015FFD8_m[v->riders[j]].oclass) {
             case 0x154:
                 D_L01_0015FFD8_m[v->riders[j]].state = 2;
@@ -2727,7 +2727,7 @@ void stationary_ship_update(CarrierMoby *m) {
                 rv = (CarrierRiderVars *)D_L01_0015FFD8_m[v->riders[j]].pvars;
                 rv->dropped = 1;
                 rv->drop_timer = scale_game_frames(0x1E);
-                subtract_vector_xyz(&rv->drop, &v->dropoff, &m->pos);
+                subtract_vector_xyz(&rv->drop, &v->dropoff, &carrier_moby->pos);
                 break;
             }
             v->riders[j] = -1;
@@ -2735,8 +2735,8 @@ void stationary_ship_update(CarrierMoby *m) {
             return;
         }
     }
-    if (m->prev_seq != 0) {
-        blend_moby_animation_cf(m, 0, 0, scale_game_frames(0x14));
+    if (carrier_moby->prev_seq != 0) {
+        blend_moby_animation_cf(carrier_moby, 0, 0, scale_game_frames(0x14));
     }
 }
 extern ScrollLayer D_L01_001E2FC0[];
