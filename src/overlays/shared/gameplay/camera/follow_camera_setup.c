@@ -962,8 +962,8 @@ extern float distance_xyz(void *, void *) __asm__("FUN_001f9b48");
 extern float FUN_L00_0025dcd8(V002e7530 *, V002e7530 *, V002e7530 *, V002e7530 *, float);
 extern int coll_sphere_2e7618(void *, int, int, float) __asm__("FUN_L00_001f0d60");
 
-int FUN_L00_002e7618(O002e7530 *o, V002e7530 *out, int step, float dist, float spd) {
-    V002e7530 delta, diff, start, hit, near, pos, temp, next;
+int FUN_L00_002e7618(O002e7530 *camera_moby, V002e7530 *out, int step, float dist, float spd) {
+    V002e7530 delta, diff, start, hit, near, pos, path_segment_point, next;
     V002e7530 *path;
     V002e7530 *orbit;
     u8 *range;
@@ -972,7 +972,7 @@ int FUN_L00_002e7618(O002e7530 *o, V002e7530 *out, int step, float dist, float s
     float lim, measure, radius;
     int found;
 
-    m = o->m;
+    m = camera_moby->m;
     g = *(u8 **)(current_follow_cam + 0x70);
     orbit = (V002e7530 *)(m + 0x130);
     range = m + 0x1d0;
@@ -984,34 +984,34 @@ int FUN_L00_002e7618(O002e7530 *o, V002e7530 *out, int step, float dist, float s
     qcopy(&near, &D_L00_00173E70);
     path = (V002e7530 *)(m + 0x90);
     add_vector_xyz_2e7618(&pos, path, orbit);
-    measure = FUN_L00_0025dcd8(&temp, &hit, path, &pos, 0.0f);
-    radius = distance_xyz(path, &temp) /
+    measure = FUN_L00_0025dcd8(&path_segment_point, &hit, path, &pos, 0.0f);
+    radius = distance_xyz(path, &path_segment_point) /
               (*(float *)((u8 *)orbit + 0x2c) - *(float *)(range + 0x30));
     radius = (follow_cam_min_distance_gp + (lim - follow_cam_min_distance_gp) * radius) * 0.75f;
     if (measure < radius) {
         found = 1;
-        FUN_L00_002e7530(o, &delta, &temp, &hit, &start, radius - measure, dist);
+        FUN_L00_002e7530(camera_moby, &delta, &path_segment_point, &hit, &start, radius - measure, dist);
         qcopy(out, &near);
         if (coll_sphere_2e7618(out, D_L00_0015EF5C, D_0013F350_2e7618.value, spd)) {
             subtract_vector_xyz_2e7618(&diff, &start, out);
             add_vector_xyz_2e7618(&hit, &D_L00_00173E60, &diff);
-            measure = FUN_L00_0025dcd8(&temp, &hit, path, &pos, 0.0f);
-            radius = distance_xyz(path, &temp) /
+            measure = FUN_L00_0025dcd8(&path_segment_point, &hit, path, &pos, 0.0f);
+            radius = distance_xyz(path, &path_segment_point) /
                       (*(float *)((u8 *)orbit + 0x2c) - *(float *)(range + 0x30));
             radius = (follow_cam_min_distance_gp + (lim - follow_cam_min_distance_gp) * radius) * 0.75f;
             if (measure < radius) {
-                FUN_L00_002e7530(o, &next, &temp, &hit, &start, radius - measure, dist);
+                FUN_L00_002e7530(camera_moby, &next, &path_segment_point, &hit, &start, radius - measure, dist);
                 add_vector_xyz_2e7618(&delta, &delta, &next);
                 qcopy(out, &D_L00_00173E70);
                 if (coll_sphere_2e7618(out, D_L00_0015EF5C, D_0013F350_2e7618.value, spd)) {
                     subtract_vector_xyz_2e7618(&diff, &start, out);
                     add_vector_xyz_2e7618(&hit, &D_L00_00173E60, &diff);
-                    measure = FUN_L00_0025dcd8(&temp, &hit, path, &pos, 0.0f);
-                    radius = distance_xyz(path, &temp) /
+                    measure = FUN_L00_0025dcd8(&path_segment_point, &hit, path, &pos, 0.0f);
+                    radius = distance_xyz(path, &path_segment_point) /
                               (*(float *)((u8 *)orbit + 0x2c) - *(float *)(range + 0x30));
                     radius = (follow_cam_min_distance_gp + (lim - follow_cam_min_distance_gp) * radius) * 0.75f;
                     if (measure < radius) {
-                        FUN_L00_002e7530(o, &next, &temp, &hit, &start, radius - measure, dist);
+                        FUN_L00_002e7530(camera_moby, &next, &path_segment_point, &hit, &start, radius - measure, dist);
                         add_vector_xyz_2e7618(&delta, &delta, &next);
                     }
                 }
