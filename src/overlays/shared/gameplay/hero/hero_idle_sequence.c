@@ -1675,7 +1675,7 @@ void FUN_L00_002080b0(void) {
     case ITEM_SINE_RED_GREEN_GLOW:
         if (scale_game_frames_2080b0(50) < hero.items[0].unk20) {
             float k, f;
-            int r, g, b, a, col, col1, bs, gs;
+            int r, g, b, sprite_alpha, col, col1, bs, gs;
             k = D_0015ED6C_gp * 3.14159274f;
             if (hero.unk20A8 != 0) k = D_0015ED6C_gp * 4.71238899f;
             f = fast_add_rotations_2080b0(hero.items[0].glow_phase, k);
@@ -1694,9 +1694,9 @@ void FUN_L00_002080b0(void) {
             col1 |= gs;
             col1 |= r;
             item_moby->glow_color = fast_tween_color_2080b0(item_moby->glow_color, col1, 0.13f);
-            a = hero.items[0].unk20 - scale_game_frames_2080b0(50);
-            if (a > 32) a = 32;
-            col = (a << 24) | bs | gs | r;
+            sprite_alpha = hero.items[0].unk20 - scale_game_frames_2080b0(50);
+            if (sprite_alpha > 32) sprite_alpha = 32;
+            col = (sprite_alpha << 24) | bs | gs | r;
             moby_point_position_2080b0(item_moby, 1, &v);
             queue_glow_sprite_2080b0(&v, col, 0.15f, 0.04f);
         }
