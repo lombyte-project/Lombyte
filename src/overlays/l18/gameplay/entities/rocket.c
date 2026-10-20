@@ -2044,7 +2044,7 @@ void FUN_L18_002dc0c8(struct Moby *moby, void *segment_start, void *segment_end)
     float buf[4];
     float v[4];
     float w[4];
-    char *d = (char *)moby->pvars;
+    char *moby_vars = (char *)moby->pvars;
     int col;
 
     lerp_vector(buf, segment_start, segment_end, 0.5f);
@@ -2055,7 +2055,7 @@ void FUN_L18_002dc0c8(struct Moby *moby, void *segment_start, void *segment_end)
     if (random_float_between(0.0f, 1.0f) < D_L18_00161C98) {
         lerp_vector(v, segment_start, segment_end, random_float_between(0.0f, 1.0f));
         fast_vec_sub(w, v, &moby->pos);
-        fast_vec_normalize(w, w, *(float *)(d + 0x20));
+        fast_vec_normalize(w, w, *(float *)(moby_vars + 0x20));
         col = FUN_001fa6e0(D_L18_00161C80, D_L18_00161C84,
                            random_float_between(0.0f, 1.0f));
         FUN_L00_002730e0(v, w, col, scale_game_frames(D_L18_00161C8C) & 0xFF,
