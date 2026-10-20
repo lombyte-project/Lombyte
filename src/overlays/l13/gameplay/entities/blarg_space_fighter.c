@@ -849,17 +849,17 @@ int FUN_L13_002c3ac8(char *pt, int *tbl, int start, float ref) {
     float bestd = 1e11f;
     while (i < *tbl / 2) {
         int j = (start + i) % *tbl;
-        float d = FUN_001f9b48(tbl + 4 + j * 4, pt);
-        float s = absolute_float(d - ref) + convert_integer_to_float(i) * 0.4f;
-        if (s < bestd + convert_integer_to_float(i) * 0.1f) {
-            bestd = d;
+        float candidate_distance = FUN_001f9b48(tbl + 4 + j * 4, pt);
+        float candidate_score = absolute_float(candidate_distance - ref) + convert_integer_to_float(i) * 0.4f;
+        if (candidate_score < bestd + convert_integer_to_float(i) * 0.1f) {
+            bestd = candidate_distance;
             best = j;
         }
         j = (*tbl + start - i) % *tbl;
-        d = FUN_001f9b48(tbl + 4 + j * 4, pt);
-        s = absolute_float(d - ref) + convert_integer_to_float(i) * 0.4f;
-        if (s < bestd) {
-            bestd = d;
+        candidate_distance = FUN_001f9b48(tbl + 4 + j * 4, pt);
+        candidate_score = absolute_float(candidate_distance - ref) + convert_integer_to_float(i) * 0.4f;
+        if (candidate_score < bestd) {
+            bestd = candidate_distance;
             best = j;
         }
         i++;
