@@ -505,7 +505,7 @@ int FUN_L05_002515d0(void) {
     int r;
     float ray_start[4];
     float ray_end[4];
-    float t;
+    float water_surface_tolerance;
     float scale;
     if ((unsigned)(hero_ptr->state.control_mode - 0x15) < 2) {
         return 0;
@@ -524,11 +524,11 @@ int FUN_L05_002515d0(void) {
                 }
             }
         } else if (hero_ptr->state.control_mode != 0x12 && hero_ptr->state.control_mode != 3) {
-            t = 0.2f;
-            if (t < absolute_float(hero_ptr->motion.velocity.f[2]) + 0.07f) {
-                t = absolute_float(hero_ptr->motion.velocity.f[2]) + 0.07f;
+            water_surface_tolerance = 0.2f;
+            if (water_surface_tolerance < absolute_float(hero_ptr->motion.velocity.f[2]) + 0.07f) {
+                water_surface_tolerance = absolute_float(hero_ptr->motion.velocity.f[2]) + 0.07f;
             }
-            if (absolute_float(hero_ptr->water_surface_z - (hero_ptr->motion.pos.f[2] + 0.45f)) < t) {
+            if (absolute_float(hero_ptr->water_surface_z - (hero_ptr->motion.pos.f[2] + 0.45f)) < water_surface_tolerance) {
                 if (hero_ptr->state.control_mode != 4 || hero_ptr->unk41E != 0) {
                     if (0.8f < hero_ptr->unk22A4 && hero_ptr->motion.displacement.f[2] < 0.0f) {
                         r = 1;
@@ -544,9 +544,9 @@ int FUN_L05_002515d0(void) {
         }
     }
     hero_ptr = &hero;
-    t = 0.27f;
-    if (t < absolute_float(hero_ptr->motion.velocity.f[2]) + 0.07f) {
-        t = absolute_float(hero_ptr->motion.velocity.f[2]);
+    water_surface_tolerance = 0.27f;
+    if (water_surface_tolerance < absolute_float(hero_ptr->motion.velocity.f[2]) + 0.07f) {
+        water_surface_tolerance = absolute_float(hero_ptr->motion.velocity.f[2]);
     }
     if (hero_ptr->state.current == 0x12) {
         if (hero_ptr->unk41E != 0) {
