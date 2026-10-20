@@ -2671,20 +2671,20 @@ extern u8 D_0014C050[][16] __attribute__((section(".data")));
 
 /* Kills a live moby: marks it in the level's spawn tables, starts its death sound and
  * clears its key out of the shared key table. */
-void FUN_L00_002d5830(struct Moby *m) {
-    KeyVars *v = (KeyVars *)m->pvars;
+void FUN_L00_002d5830(struct Moby *moby) {
+    KeyVars *v = (KeyVars *)moby->pvars;
     s32 i;
-    if (m->state != 1) {
+    if (moby->state != 1) {
         return;
     }
-    D_L00_001BA5D0.killed[(s16)m->save_id] = m->mission + 2;
-    if (m->mission == 0xFF || (mission_state[m->mission] != 0xFF && D_0014C050[current_level_index][m->mission] == 0xFF)) {
-        D_L00_001BB230.killed[(s16)m->save_id] = m->mission + 2;
+    D_L00_001BA5D0.killed[(s16)moby->save_id] = moby->mission + 2;
+    if (moby->mission == 0xFF || (mission_state[moby->mission] != 0xFF && D_0014C050[current_level_index][moby->mission] == 0xFF)) {
+        D_L00_001BB230.killed[(s16)moby->save_id] = moby->mission + 2;
     }
-    m->state = 2;
-    m->command = 1;
-    m->glow_color = 0x80208020;
-    allocate_voice_for_target_entry(0, 0, m);
+    moby->state = 2;
+    moby->command = 1;
+    moby->glow_color = 0x80208020;
+    allocate_voice_for_target_entry(0, 0, moby);
     if (v->table == -1) {
         return;
     }
