@@ -899,53 +899,53 @@ s32 is_point_inside_clip_volume(s32 arg0, s32 arg1) __asm__("FUN_00214720");
 
 extern float D_L16_0016198C __attribute__((sda));
 void conveyor_belt_update(struct Moby *m) __asm__("FUN_L16_002c9878");
-void conveyor_belt_update(struct Moby *m) {
+void conveyor_belt_update(struct Moby *moby) {
     enum {
         CONVEYOR_BELT_STATE_INITIALIZE = 0,
         CONVEYOR_BELT_STATE_APPROACH_BASE_SPEED = 1,
         CONVEYOR_BELT_STATE_APPROACH_NEGATED_SPEED = 2
     };
-    char *d = (char *)m->pvars;
+    char *conveyor_data = (char *)moby->pvars;
     float vec[4];
     float target;
     int one = 1;
-    switch (m->state) {
+    switch (moby->state) {
     case CONVEYOR_BELT_STATE_INITIALIZE:
-        *(int *)(d + 0x5C) |= 4;
-        m->visible = 0;
-        m->flags |= one;
-        if (*(int *)(d + 0x60) == -1) {
-            m->flags |= 2;
+        *(int *)(conveyor_data + 0x5C) |= 4;
+        moby->visible = 0;
+        moby->flags |= one;
+        if (*(int *)(conveyor_data + 0x60) == -1) {
+            moby->flags |= 2;
         } else {
-            m->state = 2;
+            moby->state = 2;
         }
-        *(int *)(d + 0x74) = -1;
+        *(int *)(conveyor_data + 0x74) = -1;
         break;
     case CONVEYOR_BELT_STATE_APPROACH_NEGATED_SPEED:
         target = -(D_L16_0016198C * D_0015ED6C);
-        if (*(float *)(d + 0x6C) != target) {
-            approach_value((float *)(d + 0x6C), target, D_0015ED70_c * 12.0f);
-            normalize_vector_xyz(vec, &m->rot_row0, *(float *)(d + 0x6C));
-            FUN_L16_002c9c38_c(m->group, vec);
+        if (*(float *)(conveyor_data + 0x6C) != target) {
+            approach_value((float *)(conveyor_data + 0x6C), target, D_0015ED70_c * 12.0f);
+            normalize_vector_xyz(vec, &moby->rot_row0, *(float *)(conveyor_data + 0x6C));
+            FUN_L16_002c9c38_c(moby->group, vec);
         }
-        if (is_point_inside_clip_volume(&hero.motion.pos, *(int *)(d + 0x68)))
-            m->state = one;
-        enqueue_callback_list_1_alt(FUN_L16_002c9cd0, m);
+        if (is_point_inside_clip_volume(&hero.motion.pos, *(int *)(conveyor_data + 0x68)))
+            moby->state = one;
+        enqueue_callback_list_1_alt(FUN_L16_002c9cd0, moby);
         break;
     case CONVEYOR_BELT_STATE_APPROACH_BASE_SPEED:
         target = D_L16_0016198C * D_0015ED6C;
-        if (*(float *)(d + 0x6C) != target) {
-            approach_value((float *)(d + 0x6C), target, D_0015ED70_c * 12.0f);
-            normalize_vector_xyz(vec, &m->rot_row0, *(float *)(d + 0x6C));
-            FUN_L16_002c9c38_c(m->group, vec);
+        if (*(float *)(conveyor_data + 0x6C) != target) {
+            approach_value((float *)(conveyor_data + 0x6C), target, D_0015ED70_c * 12.0f);
+            normalize_vector_xyz(vec, &moby->rot_row0, *(float *)(conveyor_data + 0x6C));
+            FUN_L16_002c9c38_c(moby->group, vec);
         }
-        if (is_point_inside_clip_volume(&hero.motion.pos, *(int *)(d + 0x64)))
-            m->state = 2;
-        enqueue_callback_list_1_alt(FUN_L16_002c9cd0, m);
+        if (is_point_inside_clip_volume(&hero.motion.pos, *(int *)(conveyor_data + 0x64)))
+            moby->state = 2;
+        enqueue_callback_list_1_alt(FUN_L16_002c9cd0, moby);
         break;
     }
-    if (m->state)
-        FUN_L16_002c9a50_u(m);
+    if (moby->state)
+        FUN_L16_002c9a50_u(moby);
 }
 #ifndef NOT_SDA
 #define NOT_SDA __attribute__((section(".data")))
