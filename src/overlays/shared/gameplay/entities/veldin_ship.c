@@ -959,23 +959,23 @@ extern s32 D_L00_0016C890[];
 extern void build_moby_bone_transform(void *, int, void *) __asm__("FUN_0020cca8");
 void enqueue_callback_list_1(void *, void *) __asm__("FUN_001f4600");
 void veldin_ship_update(M2d1e80 *m) __asm__("FUN_L00_002d1e80");
-void veldin_ship_update(M2d1e80 *m) {
-    s32 *v = m->vars;
-    if (m->state == 0) {
-        m->state = 1;
-        m->bc = 1;
+void veldin_ship_update(M2d1e80 *moby) {
+    s32 *v = moby->vars;
+    if (moby->state == 0) {
+        moby->state = 1;
+        moby->bc = 1;
         v[0x10] = 0;
     }
     if (D_L00_0015F5C4 == 2 && (D_L00_0016C890[0] < 3 || D_L00_0016C890[0] == 4)) {
-        m->vis = 0;
-        m->flags |= 1;
+        moby->vis = 0;
+        moby->flags |= 1;
     } else {
-        m->vis = 1;
-        m->flags &= 0xFFFE;
+        moby->vis = 1;
+        moby->flags &= 0xFFFE;
     }
-    build_moby_bone_transform(m, 0, v);
-    if (m->vis)
-        enqueue_callback_list_1(veldin_ship_draw, m);
+    build_moby_bone_transform(moby, 0, v);
+    if (moby->vis)
+        enqueue_callback_list_1(veldin_ship_draw, moby);
 }
 #include "rnc/input/pad_state.h"
 #include "rnc/gameplay/entities/moby.h"
