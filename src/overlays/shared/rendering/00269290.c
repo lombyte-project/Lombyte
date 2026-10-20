@@ -1537,34 +1537,34 @@ void FUN_001f9bf8_0026ccb0(void *, void *, float) __asm__("FUN_001f9bf8");
 int FUN_001f96f8_0026ccb0(int) __asm__("FUN_001f96f8");
 int FUN_L00_00257b90_0026ccb0(int, int) __asm__("FUN_L00_00257b90");
 void FUN_L00_0026cbb0_0026ccb0(void *, void *, s32, s32, f32, int, int) __asm__("FUN_L00_0026cbb0");
-void FUN_L00_0026ccb0(O_0026ccb0_0026ccb0 *o) {
-    S_0026ccb0_0026ccb0 *s = &o->s;
-    u128 *p;
+void FUN_L00_0026ccb0(O_0026ccb0_0026ccb0 *particle) {
+    S_0026ccb0_0026ccb0 *s = &particle->s;
+    u128 *particle_position;
     V_0026ccb0_0026ccb0 a, b, r;
-    V_0026ccb0_0026ccb0 *q;
-    f32 f;
-    if (FUN_001f9770_0026ccb0(&o->xa)) {
-        FUN_L00_00267a08_0026ccb0(o);
+    V_0026ccb0_0026ccb0 *spawn_velocity;
+    f32 particle_speed;
+    if (FUN_001f9770_0026ccb0(&particle->xa)) {
+        FUN_L00_00267a08_0026ccb0(particle);
     } else {
-        p = &o->p10;
-        o->xc = FUN_001fa6c0_0026ccb0(o->xa) * s->x1c / FUN_001fa6c0_0026ccb0(s->x18);
-        o->x4 = FUN_L00_002371e0_0026ccb0(
-            s->x14, s->x10, FUN_001fa6c0_0026ccb0(o->xa) / FUN_001fa6c0_0026ccb0(s->x18));
-        FUN_001f9a10_0026ccb0(p, p, s);
+        particle_position = &particle->p10;
+        particle->xc = FUN_001fa6c0_0026ccb0(particle->xa) * s->x1c / FUN_001fa6c0_0026ccb0(s->x18);
+        particle->x4 = FUN_L00_002371e0_0026ccb0(
+            s->x14, s->x10, FUN_001fa6c0_0026ccb0(particle->xa) / FUN_001fa6c0_0026ccb0(s->x18));
+        FUN_001f9a10_0026ccb0(particle_position, particle_position, s);
         s->v[2] -= frame_scale_sq * 0.001f;
-        qcopy(&a, p);
+        qcopy(&a, particle_position);
         if (s->x1a != 0 && (D_L00_0015F5CC_0026ccb0 & 1)) {
             *(u128 *)&r = 0;
             r.x = FUN_002132a8_0026ccb0(-1.0f, 1.0f);
             r.y = FUN_002132a8_0026ccb0(-1.0f, 1.0f);
             r.z = FUN_002132a8_0026ccb0(-1.0f, 1.0f);
             *(u128 *)&b = *(u128 *)&r;
-            f = FUN_001f9af0_0026ccb0(s);
-            q = &b;
-            FUN_001f9bf8_0026ccb0(q, q, f * FUN_002132a8_0026ccb0(0.21f, 0.25f));
-            FUN_001f9a10_0026ccb0(q, q, s);
-            FUN_001f9a68_0026ccb0(q, q, FUN_002132a8_0026ccb0(0.75f, 0.95f));
-            FUN_L00_0026cbb0_0026ccb0(p, q, o->x4, s->x14, o->xc,
+            particle_speed = FUN_001f9af0_0026ccb0(s);
+            spawn_velocity = &b;
+            FUN_001f9bf8_0026ccb0(spawn_velocity, spawn_velocity, particle_speed * FUN_002132a8_0026ccb0(0.21f, 0.25f));
+            FUN_001f9a10_0026ccb0(spawn_velocity, spawn_velocity, s);
+            FUN_001f9a68_0026ccb0(spawn_velocity, spawn_velocity, FUN_002132a8_0026ccb0(0.75f, 0.95f));
+            FUN_L00_0026cbb0_0026ccb0(particle_position, spawn_velocity, particle->x4, s->x14, particle->xc,
                                       FUN_001f96f8_0026ccb0(FUN_L00_00257b90_0026ccb0(15, 20)), 0);
         } else {
             FUN_001f9a68_0026ccb0(s, s, 0.96f);
