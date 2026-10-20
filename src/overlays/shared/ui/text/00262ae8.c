@@ -139,9 +139,9 @@ void FUN_L05_00262b58(HudCounter *element) {
         player->unk6E0[4] = 0;
         {
             int k;
-            s32 *p = &player->unk6E0[3];
+            s32 *reset_slot = &player->unk6E0[3];
             for (k = 3; k >= 0; k--) {
-                *p-- = 0;
+                *reset_slot-- = 0;
             }
         }
         {
