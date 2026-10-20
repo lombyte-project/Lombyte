@@ -1701,7 +1701,7 @@ extern OvlQuad D_L10_00167240;
 void mark_moby_for_removal_u(struct Obj *obj) __asm__("FUN_0020c828");
 
 void lab_door_update(unsigned char *m) __asm__("FUN_L10_002d90a8");
-void lab_door_update(unsigned char *m) {
+void lab_door_update(unsigned char *door_moby) {
     enum {
         LAB_DOOR_STATE_INITIALIZE = 0,
         LAB_DOOR_STATE_DESCENDING = 1,
@@ -1709,36 +1709,36 @@ void lab_door_update(unsigned char *m) {
         LAB_DOOR_STATE_RISING = 3,
         LAB_DOOR_STATE_AT_RAISED_HEIGHT = 4
     };
-    int *d = *(int **)(m + 0x78);
+    int *door_vars = *(int **)(door_moby + 0x78);
     OvlQuad v[2];
     int it;
     int flag;
     int hit;
-    if (d == 0) {
-        stub_printf(D_L10_001DD160, *(short *)(m + 0xA6), *(short *)(m + 0xB2));
-        mark_moby_for_removal_u(m);
+    if (door_vars == 0) {
+        stub_printf(D_L10_001DD160, *(short *)(door_moby + 0xA6), *(short *)(door_moby + 0xB2));
+        mark_moby_for_removal_u(door_moby);
         return;
     }
-    switch (m[0x20]) {
+    switch (door_moby[0x20]) {
     case LAB_DOOR_STATE_INITIALIZE:
-        *(OvlQuad *)d = *(OvlQuad *)(m + 0x10);
-        m[0x20] = 2;
+        *(OvlQuad *)door_vars = *(OvlQuad *)(door_moby + 0x10);
+        door_moby[0x20] = 2;
         break;
     case LAB_DOOR_STATE_DESCENDING:
         flag = 0;
         {
-            float f = *(float *)(m + 0x18) - 4.0f / multiply_global_factor_ed64(20.0f);
-            *(float *)(m + 0x18) = f;
-            if (f <= *(float *)(d + 2)) {
-                *(float *)(m + 0x18) = *(float *)(d + 2);
-                m[0x20] = 2;
+            float f = *(float *)(door_moby + 0x18) - 4.0f / multiply_global_factor_ed64(20.0f);
+            *(float *)(door_moby + 0x18) = f;
+            if (f <= *(float *)(door_vars + 2)) {
+                *(float *)(door_moby + 0x18) = *(float *)(door_vars + 2);
+                door_moby[0x20] = 2;
             }
         }
-        if (d[4] != -1) {
-            if (FUN_L00_002591d0(&it, d[4], 0, 0)) {
+        if (door_vars[4] != -1) {
+            if (FUN_L00_002591d0(&it, door_vars[4], 0, 0)) {
                 do {
                     v[0] = *(OvlQuad *)(it + 0x10);
-                    if (FUN_L10_002d9000_c(m, &v[0])) {
+                    if (FUN_L10_002d9000_c(door_moby, &v[0])) {
                         flag = 1;
                         break;
                     }
@@ -1748,30 +1748,30 @@ void lab_door_update(unsigned char *m) {
         hit = 0;
         if (flag == 0) {
             v[0] = D_L10_00167240;
-            if (FUN_L10_002d9000_c(m, &v[0]) == 0) {
+            if (FUN_L10_002d9000_c(door_moby, &v[0]) == 0) {
                 v[1] = *(OvlQuad *)&hero.motion.pos;
-                if (FUN_L10_002d9000_c(m, &v[1]) == 0)
+                if (FUN_L10_002d9000_c(door_moby, &v[1]) == 0)
                     goto done;
             }
         }
         hit = 1;
     done:
         if (hit)
-            m[0x20] = 3;
+            door_moby[0x20] = 3;
         break;
     case LAB_DOOR_STATE_AT_ORIGINAL_HEIGHT:
         break;
     case LAB_DOOR_STATE_RISING: {
         float f = 4.0f / multiply_global_factor_ed64(20.0f);
-        float g = *(float *)(m + 0x18) + f;
-        float h;
-        *(float *)(m + 0x18) = g;
-        h = *(float *)(d + 2) + 4.0f;
-        if (h <= g) {
-            *(float *)(m + 0x18) = h;
-            m[0x20] = 4;
-            if (d[5] != -1)
-                D_0013D388[d[5] + 0x4C] = 1;
+        float g = *(float *)(door_moby + 0x18) + f;
+        float raised_height;
+        *(float *)(door_moby + 0x18) = g;
+        raised_height = *(float *)(door_vars + 2) + 4.0f;
+        if (raised_height <= g) {
+            *(float *)(door_moby + 0x18) = raised_height;
+            door_moby[0x20] = 4;
+            if (door_vars[5] != -1)
+                D_0013D388[door_vars[5] + 0x4C] = 1;
         }
         break;
     }
