@@ -1189,8 +1189,8 @@ void fred_pokitaru_update(struct Moby *moby) {
         }
         if (alternate_item_available[1] == 0 && discount_purchase_pricing[0] == 0) {
             if (distance_xyz(&moby->pos, hero.motion.pos.f) < 4.0f) {
-                int t = scale_game_frames(D_0015EEA4) - usage_stats_f0e40[0x86].unk2 * 600;
-                if ((int)(scale_game_frames(18) * 60.0f) < t || usage_stats_f0e40[0x86].unk2 * 600 == 0) {
+                int help_frame_delta = scale_game_frames(D_0015EEA4) - usage_stats_f0e40[0x86].unk2 * 600;
+                if ((int)(scale_game_frames(18) * 60.0f) < help_frame_delta || usage_stats_f0e40[0x86].unk2 * 600 == 0) {
                     help_request(0x2B03, 0x86);
                 } else if (scale_game_frames(D_0015EEA4) / 600 > usage_stats_f0e40[0x86].unk2) {
                     usage_stats_f0e40[0x86].unk2 = scale_game_frames(D_0015EEA4) / 600;
