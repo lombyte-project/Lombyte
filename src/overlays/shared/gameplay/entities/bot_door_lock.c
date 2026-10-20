@@ -137,24 +137,24 @@ extern int trooper_play_sound(int i, int a1, int v, int k) __asm__("FUN_L00_0028
 extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern void jet_clear_persistent(int idx) __asm__("FUN_L00_002502a0");
 
-void FUN_L06_00307c48(unsigned char *a, unsigned char *m) {
-    switch (*(short *)(m + 0xA6)) {
+void FUN_L06_00307c48(unsigned char *lock_moby, unsigned char *target_moby) {
+    switch (*(short *)(target_moby + 0xA6)) {
     case 0x3F7:
     case 0x502:
-        if (m[0x20] == 2) {
-            m[0x20] = 3;
-            allocate_voice_for_target_entry(0, 0, (int)m);
+        if (target_moby[0x20] == 2) {
+            target_moby[0x20] = 3;
+            allocate_voice_for_target_entry(0, 0, (int)target_moby);
         }
         break;
     case 0x404:
-        if (m[0x20] == 1)
-            m[0x20] = 2;
+        if (target_moby[0x20] == 1)
+            target_moby[0x20] = 2;
         break;
     case 0x542:
-        m[0x20] = 2;
-        trooper_play_sound(0, 0, (int)m, 0x434);
-        m[0x30] = 0xFF;
-        jet_clear_persistent(a[0xB0]);
+        target_moby[0x20] = 2;
+        trooper_play_sound(0, 0, (int)target_moby, 0x434);
+        target_moby[0x30] = 0xFF;
+        jet_clear_persistent(lock_moby[0xB0]);
         break;
     }
 }
