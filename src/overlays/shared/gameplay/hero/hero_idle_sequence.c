@@ -2695,9 +2695,9 @@ void FUN_L00_0020a540(void) {
     G_a540 *g;
     G_a540 *h;
     P_a540 *p;
-    f32 f, t, k;
+    f32 f, random_blend_factor, k;
     s32 v;
-    s32 a;
+    s32 min_delay_frames;
 
     if (D_0015EDB3 != 0 && G.i1184 != 0) {
         P.fd0c = D_0015EE18;
@@ -2729,18 +2729,18 @@ void FUN_L00_0020a540(void) {
     if (G.p2274 != 0)
         return;
     if ((u32)(v - 1) < 2) {
-        a = scale_game_frames(40);
-        G.i1010 = FUN_L00_00257b90_a540(a, scale_game_frames(70));
+        min_delay_frames = scale_game_frames(40);
+        G.i1010 = FUN_L00_00257b90_a540(min_delay_frames, scale_game_frames(70));
     }
     if (tick_countdown_32_alt(&G.i1010) != 0) {
         G.f1004 = -random_float_between(-0.15707964f, 0.43633232f);
         G.f1008 = FUN_L00_00257c48_a540(0.34906584f, 0.99483764f);
-        t = random_float_between(0.0f, 1.0f);
-        G.f1014 = FUN_L00_0025b6a8_a540(0.015f, 0.007f, t);
-        G.f1018 = FUN_L00_0025b6a8_a540(0.29f, 0.3f, t);
-        a = scale_game_frames(90);
-        G.i1010 = FUN_L00_00257b90_a540(a, scale_game_frames(200));
-        G.i1010 += truncate_float_to_s32((f32)scale_game_frames(80) * t);
+        random_blend_factor = random_float_between(0.0f, 1.0f);
+        G.f1014 = FUN_L00_0025b6a8_a540(0.015f, 0.007f, random_blend_factor);
+        G.f1018 = FUN_L00_0025b6a8_a540(0.29f, 0.3f, random_blend_factor);
+        min_delay_frames = scale_game_frames(90);
+        G.i1010 = FUN_L00_00257b90_a540(min_delay_frames, scale_game_frames(200));
+        G.i1010 += truncate_float_to_s32((f32)scale_game_frames(80) * random_blend_factor);
     }
     if ((u32) * (u8 *)((char *)G.p2080 + 0x53) - 1 < 2) {
         if (0.34906584f < G.f1008)
