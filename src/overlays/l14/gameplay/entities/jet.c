@@ -17,27 +17,27 @@
  * func_L14_002E0480), where it is exact; names translated to the US level
  * program. */
 void FUN_L14_002df080(u8 *moby) {
-    f32 *d = *(f32 **)(moby + 0x78);
-    f32 *p = d;
+    f32 *moby_vars = *(f32 **)(moby + 0x78);
+    f32 *vector_cursor = moby_vars;
     s32 i;
     for (i = 0; i < 10; i++) {
-        p[0] = d[0x1F0 / 4] * (f32)i;
-        p[1] = p[2] = 0.0f;
-        p[3] = 1.0f;
-        p += 4;
+        vector_cursor[0] = moby_vars[0x1F0 / 4] * (f32)i;
+        vector_cursor[1] = vector_cursor[2] = 0.0f;
+        vector_cursor[3] = 1.0f;
+        vector_cursor += 4;
     }
     i = 0;
-    p = d;
+    vector_cursor = moby_vars;
     for (; i < 20; i++) {
-        p[0xA0 / 4] = (f32)i * 0.39f;
-        p[0xA4 / 4] = p[0xA8 / 4] = 0.0f;
-        p[0xAC / 4] = 1.0f;
-        p += 4;
+        vector_cursor[0xA0 / 4] = (f32)i * 0.39f;
+        vector_cursor[0xA4 / 4] = vector_cursor[0xA8 / 4] = 0.0f;
+        vector_cursor[0xAC / 4] = 1.0f;
+        vector_cursor += 4;
     }
-    d[0x1E0 / 4] = 0.0f;
-    d[0x1E4 / 4] = 0.0f;
-    d[0x1E8 / 4] = 0.0f;
-    d[0x1EC / 4] = 0.0f;
+    moby_vars[0x1E0 / 4] = 0.0f;
+    moby_vars[0x1E4 / 4] = 0.0f;
+    moby_vars[0x1E8 / 4] = 0.0f;
+    moby_vars[0x1EC / 4] = 0.0f;
 }
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
