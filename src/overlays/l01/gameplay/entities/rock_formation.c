@@ -512,18 +512,18 @@ extern u8 D_0013D388[];
 
 /* Removed once collected; when hit, bursts into 500 smoke puffs and 100 chunks, marks itself collected and sets D_0013D388[0xE] (an item-availability flag). */
 void destroyable_cave_wall_update(struct Moby *m) __asm__("FUN_L01_002fa800");
-void destroyable_cave_wall_update(struct Moby *m) {
+void destroyable_cave_wall_update(struct Moby *cave_wall_moby) {
     s32 i;
     s32 j;
     f32 s;
 
-    if (D_L01_001BB6B0.collected[(s16)m->save_id] != 0 ||
-        (D_0014C190_257218[current_level_index][(s16)m->save_id >> 5] >> (m->save_id & 0x1F)) & 1) {
-        mark_moby_for_removal(m);
+    if (D_L01_001BB6B0.collected[(s16)cave_wall_moby->save_id] != 0 ||
+        (D_0014C190_257218[current_level_index][(s16)cave_wall_moby->save_id >> 5] >> (cave_wall_moby->save_id & 0x1F)) & 1) {
+        mark_moby_for_removal(cave_wall_moby);
         return;
     }
-    if (trooper_find_hit(m, 0x800000, 0) != NULL) {
-        FUN_0022da68(0, 0, m);
+    if (trooper_find_hit(cave_wall_moby, 0x800000, 0) != NULL) {
+        FUN_0022da68(0, 0, cave_wall_moby);
         for (i = 0; i < 500; i++) {
             /* A block of its own: retail reuses these stack slots in the next loop. */
             {
@@ -538,14 +538,14 @@ void destroyable_cave_wall_update(struct Moby *m) {
                 off.q = 0;
                 vel.q = pos.q;
                 s = random_float_between(-4.0f, 4.0f);
-                s *= fast_cos(m->rot.z);
+                s *= fast_cos(cave_wall_moby->rot.z);
                 off.f[0] = s;
                 s = random_float_between(-1.0f, 1.0f);
-                s *= fast_sin(m->rot.z);
+                s *= fast_sin(cave_wall_moby->rot.z);
                 off.f[1] = s;
                 off.f[2] = random_float_between(0.0f, 8.0f);
                 pos.q = off.q;
-                fast_vec_add(&pos, &pos, &m->pos);
+                fast_vec_add(&pos, &pos, &cave_wall_moby->pos);
                 fast_vec_normalize(&vel, &vel, random_float_between(1.5f, 3.5f) * frame_time);
                 s = random_float_between(1.5f, 3.5f) * 210000.0f;
                 FUN_L00_0026ced0(&pos, &vel, 0x5F787878, 0x181818, s, scale_game_frames(FUN_L00_00257b90(120, 240)));
@@ -565,22 +565,22 @@ void destroyable_cave_wall_update(struct Moby *m) {
             off.q = 0;
             vel.q = pos.q;
             s = random_float_between(-4.0f, 4.0f);
-            s *= fast_cos(m->rot.z);
+            s *= fast_cos(cave_wall_moby->rot.z);
             off.f[0] = s;
             s = random_float_between(-1.0f, 1.0f);
-            s *= fast_sin(m->rot.z);
+            s *= fast_sin(cave_wall_moby->rot.z);
             off.f[1] = s;
             off.f[2] = random_float_between(1.0f, 8.0f);
             pos.q = off.q;
-            fast_vec_add(&pos, &pos, &m->pos);
+            fast_vec_add(&pos, &pos, &cave_wall_moby->pos);
             fast_vec_normalize(&vel, &vel, random_float_between(1.0f, 5.0f) * frame_time);
             spawn_debris_chunk(&pos, &vel, colors.c[random_integer_below(3)], random_float_between(0.05f, 0.15f),
                                FUN_L00_00257b90(60, 180), 1.0f, 1.0f, 0.75f, 0);
         }
-        D_0014C190_257218[current_level_index][(s16)m->save_id >> 5] |= 1 << (m->save_id & 0x1F);
-        moby_killed[(s16)m->save_id >> 5] |= 1 << (m->save_id & 0x1F);
+        D_0014C190_257218[current_level_index][(s16)cave_wall_moby->save_id >> 5] |= 1 << (cave_wall_moby->save_id & 0x1F);
+        moby_killed[(s16)cave_wall_moby->save_id >> 5] |= 1 << (cave_wall_moby->save_id & 0x1F);
         D_0013D388[0xE] = 1;
-        mark_moby_for_removal(m);
+        mark_moby_for_removal(cave_wall_moby);
     }
 }
 typedef struct {
