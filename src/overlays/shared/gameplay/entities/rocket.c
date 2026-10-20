@@ -63,30 +63,30 @@ extern float func_001F9D10_cc1b8(void *, void *) __asm__("FUN_001f9b48");
 extern float func_L00_001FF860_cc1b8(float, float) __asm__("FUN_001f9e90");
 extern float func_001F9CE8_cc1b8(void *) __asm__("FUN_001f9b20");
 extern void func_L00_00251E30_cc1b8(void *) __asm__("FUN_L00_00250df8");
-char *FUN_L10_002cc1b8(float scale, void *vel, void *pos, int a, int b, int c) {
-    char *m = (char *)func_0020D348_m_cc1b8(0x333);
-    char *d;
-    if (m) {
-        *(float *)(m + 0x2C) = *(float *)(m + 0x2C) * scale;
-        *(unsigned char *)(m + 0x30) = 0xFF;
-        *(short *)(m + 0x32) = 0x7E;
-        d = *(char **)(m + 0x78);
-        m[0x31] = 1;
-        m[0x20] = 1;
-        qcopy(m + 0x10, pos);
-        qcopy(d, vel);
-        *(int *)(d + 0x18) = func_001F9850_cc1b8(c);
-        *(int *)(d + 0x10) = a;
-        *(int *)(d + 0x14) = b;
-        *(int *)(d + 0x28) = 0;
-        *(float *)(d + 0x38) = func_001F9D10_cc1b8(m + 0x10, &hero.motion.pos);
-        *(int *)(d + 0x30) = 0;
-        *(int *)(d + 0x34) = 0;
-        *(float *)(m + 0x48) = func_L00_001FF860_cc1b8(*(float *)d, *(float *)(d + 4));
-        *(float *)(m + 0x44) = -func_L00_001FF860_cc1b8(func_001F9CE8_cc1b8(d), *(float *)(d + 8));
-        func_L00_00251E30_cc1b8(m);
+char *FUN_L10_002cc1b8(float scale, void *vel, void *pos, int owner, int b, int c) {
+    char *rocket = (char *)func_0020D348_m_cc1b8(0x333);
+    char *shot_data;
+    if (rocket) {
+        *(float *)(rocket + 0x2C) = *(float *)(rocket + 0x2C) * scale;
+        *(unsigned char *)(rocket + 0x30) = 0xFF;
+        *(short *)(rocket + 0x32) = 0x7E;
+        shot_data = *(char **)(rocket + 0x78);
+        rocket[0x31] = 1;
+        rocket[0x20] = 1;
+        qcopy(rocket + 0x10, pos);
+        qcopy(shot_data, vel);
+        *(int *)(shot_data + 0x18) = func_001F9850_cc1b8(c);
+        *(int *)(shot_data + 0x10) = owner;
+        *(int *)(shot_data + 0x14) = b;
+        *(int *)(shot_data + 0x28) = 0;
+        *(float *)(shot_data + 0x38) = func_001F9D10_cc1b8(rocket + 0x10, &hero.motion.pos);
+        *(int *)(shot_data + 0x30) = 0;
+        *(int *)(shot_data + 0x34) = 0;
+        *(float *)(rocket + 0x48) = func_L00_001FF860_cc1b8(*(float *)shot_data, *(float *)(shot_data + 4));
+        *(float *)(rocket + 0x44) = -func_L00_001FF860_cc1b8(func_001F9CE8_cc1b8(shot_data), *(float *)(shot_data + 8));
+        func_L00_00251E30_cc1b8(rocket);
     }
-    return m;
+    return rocket;
 }
 /* Homing shot: steers toward the hero along an intercept course, trails sparks, then bursts. */
 
