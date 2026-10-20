@@ -1790,16 +1790,16 @@ extern char *FUN_L00_001eb1f8(int);
 
 extern char *D_L01_00167280_lui __asm__("D_L01_00167280") __attribute__((section(".data")));
 void FUN_L01_00316e88(float a, float b) {
-    char *m = D_L01_00167280_lui;
-    char *t;
-    char *d;
-    if (*(short *)(m + 0x86) != 5)
-        t = FUN_L00_001eb1f8(5);
+    char *camera_candidate = D_L01_00167280_lui;
+    char *selected_camera;
+    char *destination;
+    if (*(short *)(camera_candidate + 0x86) != 5)
+        selected_camera = FUN_L00_001eb1f8(5);
     else
-        t = m;
-    d = *(char **)(t + 0x70) + 0xE0;
-    *(float *)(d + 0x44) = a;
-    *(float *)(d + 0x48) = b;
+        selected_camera = camera_candidate;
+    destination = *(char **)(selected_camera + 0x70) + 0xE0;
+    *(float *)(destination + 0x44) = a;
+    *(float *)(destination + 0x48) = b;
 }
 extern char *D_L00_0015F5F4;
 extern char D_0013E550[];
