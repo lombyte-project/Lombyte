@@ -253,36 +253,36 @@ void FUN_L01_0030bfa8(char *m) {
 extern char *func_0020D348_m(int);
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 
-char *FUN_L01_0030c898(char *owner, char *pos, float a, float b, float c, float d) {
-    OvlQuad p;
-    char *cp = (char *)&p;
-    char *m;
-    p = *(OvlQuad *)pos;
-    m = func_0020D348_m(0x661);
-    if (m) {
-        char *e = *(char **)(m + 0x78);
-        int t;
-        *(char **)(e + 0x10) = owner;
-        ((unsigned char *)m)[0x30] = 0xFF;
-        *(short *)(m + 0x32) = 0x7F;
-        m[0x31] = 1;
-        *(long *)(m + 0x38) = *(long *)(owner + 0x38);
-        *(float *)(m + 0x44) = d;
-        *(float *)(m + 0x48) = c;
-        *(int *)(m + 0x40) = 0;
-        qcopy(m + 0x10, cp);
-        *(float *)(e + 8) = a;
-        *(float *)(e + 0xC) = b;
-        *(int *)e = 0;
-        *(int *)(e + 4) = 0;
-        t = scale_game_frames(0x23);
-        *(short *)(e + 0x14) = t;
-        *(short *)(e + 0x16) = t;
-        m[0x23] = 0x40;
-        *(unsigned short *)(m + 0x34) |= 0xA00;
-        *(float *)(m + 0x2C) = *(float *)(m + 0x2C) * 0.5f;
+char *FUN_L01_0030c898(char *owner, char *pos, float target_yaw, float b, float initial_yaw, float initial_pitch) {
+    OvlQuad spawn_position_copy;
+    char *cp = (char *)&spawn_position_copy;
+    char *spawned_moby;
+    spawn_position_copy = *(OvlQuad *)pos;
+    spawned_moby = func_0020D348_m(0x661);
+    if (spawned_moby) {
+        char *moby_vars = *(char **)(spawned_moby + 0x78);
+        int lifetime_frames;
+        *(char **)(moby_vars + 0x10) = owner;
+        ((unsigned char *)spawned_moby)[0x30] = 0xFF;
+        *(short *)(spawned_moby + 0x32) = 0x7F;
+        spawned_moby[0x31] = 1;
+        *(long *)(spawned_moby + 0x38) = *(long *)(owner + 0x38);
+        *(float *)(spawned_moby + 0x44) = initial_pitch;
+        *(float *)(spawned_moby + 0x48) = initial_yaw;
+        *(int *)(spawned_moby + 0x40) = 0;
+        qcopy(spawned_moby + 0x10, cp);
+        *(float *)(moby_vars + 8) = target_yaw;
+        *(float *)(moby_vars + 0xC) = b;
+        *(int *)moby_vars = 0;
+        *(int *)(moby_vars + 4) = 0;
+        lifetime_frames = scale_game_frames(0x23);
+        *(short *)(moby_vars + 0x14) = lifetime_frames;
+        *(short *)(moby_vars + 0x16) = lifetime_frames;
+        spawned_moby[0x23] = 0x40;
+        *(unsigned short *)(spawned_moby + 0x34) |= 0xA00;
+        *(float *)(spawned_moby + 0x2C) = *(float *)(spawned_moby + 0x2C) * 0.5f;
     }
-    return m;
+    return spawned_moby;
 }
 typedef struct {
     OvlQuad dir;
