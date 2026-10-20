@@ -1381,15 +1381,15 @@ extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern short D_L05_00161EC0 __attribute__((sda));
 extern short D_L05_00161EC4 __attribute__((sda));
 extern short D_L05_00161EC8 __attribute__((sda));
-void FUN_L05_00315ee0(char *a, char *b, char *c) {
-    float t;
-    fast_vec_normalize(b, a + 0xC0, *(float *)&D_L05_00161EC8);
-    fast_vec_add(b, b, a + 0x10);
+void FUN_L05_00315ee0(char *lift_moby, char *b, char *camera_rotation) {
+    float pitch_degrees;
+    fast_vec_normalize(b, lift_moby + 0xC0, *(float *)&D_L05_00161EC8);
+    fast_vec_add(b, b, lift_moby + 0x10);
     *(float *)(b + 8) = *(float *)(b + 8) + *(float *)&D_L05_00161EC0;
-    clear_u64_value(c);
-    t = *(float *)&D_L05_00161EC4;
-    *(float *)(c + 8) = *(float *)(a + 0x48);
-    *(float *)(c + 4) = t * DEG_TO_RAD;
+    clear_u64_value(camera_rotation);
+    pitch_degrees = *(float *)&D_L05_00161EC4;
+    *(float *)(camera_rotation + 8) = *(float *)(lift_moby + 0x48);
+    *(float *)(camera_rotation + 4) = pitch_degrees * DEG_TO_RAD;
 }
 /* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_0030EB68.c: func_L05_00317438), where it is exact; names translated to the US level program. */
 
