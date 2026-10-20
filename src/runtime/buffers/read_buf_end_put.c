@@ -3,13 +3,13 @@
 
 void read_buf_end_put(s32 *buf, s32 n) __asm__("FUN_0023b990");
 
-void read_buf_end_put(s32 *buf, s32 n) {
-    s32 *p = (s32 *)((u8 *)buf + 0x50000);
-    s32 space = p[2] - p[1];
-    s32 m = (n < space) ? n : space;
+void read_buf_end_put(s32 *buf, s32 requested_byte_count) {
+    s32 *buffer_state = (s32 *)((u8 *)buf + 0x50000);
+    s32 space = buffer_state[2] - buffer_state[1];
+    s32 committed_byte_count = (requested_byte_count < space) ? requested_byte_count : space;
 
-    p[0] = (p[0] + m) % p[2];
-    p[1] += m;
+    buffer_state[0] = (buffer_state[0] + committed_byte_count) % buffer_state[2];
+    buffer_state[1] += committed_byte_count;
 }
 
 extern __typeof__(read_buf_end_put) func_0023B990 __attribute__((alias("FUN_0023b990")));
