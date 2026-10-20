@@ -1090,7 +1090,7 @@ extern void copy_moby_matrix(void *, void *) __asm__("FUN_001fa298");
 extern long get_effect_texture(int) __asm__("FUN_001f44b8");
 extern void draw_geometry_quad_l12(void *, void *, int) __asm__("FUN_001f7d30");
 
-void FUN_L12_00308350(struct Moby *m) {
+void FUN_L12_00308350(struct Moby *moby) {
     VendorDrawPacket packets[2] __attribute__((aligned(16)));
     float matrix[16] __attribute__((aligned(16)));
     long texture;
@@ -1098,8 +1098,8 @@ void FUN_L12_00308350(struct Moby *m) {
     int pass, row, vertex, corner;
     float jitter;
 
-    copy_moby_matrix(matrix, &m->rot_row0);
-    qcopy(&matrix[12], &m->pos);
+    copy_moby_matrix(matrix, &moby->rot_row0);
+    qcopy(&matrix[12], &moby->pos);
     matrix[15] = 1.0f;
     texture = get_effect_texture(0xE);
     packets[0].texture = packets[1].texture = texture;
