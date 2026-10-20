@@ -564,7 +564,7 @@ void FUN_L14_00228cd0(void) {
     Vec4 vector_and_hit_descriptor_scratch;
     Vec4 motion_vector_scratch;
     Vec4 m40[4];
-    Vec4 m80[4];
+    Vec4 transposed_yaw_matrix[4];
     Vec4 vC0;
     Vec4 vD0;
 
@@ -869,8 +869,8 @@ void FUN_L14_00228cd0(void) {
         clear_u64_value(&vector_and_hit_descriptor_scratch);
         vector_and_hit_descriptor_scratch.f[2] = hero.motion.rot.f[2];
         euler_rotation_matrix(m40, &vector_and_hit_descriptor_scratch);
-        transpose_rotation_matrix(m80, m40);
-        transform_vector(&vector_and_descriptor_scratch, &vector_and_descriptor_scratch, m80);
+        transpose_rotation_matrix(transposed_yaw_matrix, m40);
+        transform_vector(&vector_and_descriptor_scratch, &vector_and_descriptor_scratch, transposed_yaw_matrix);
         v10.f[0] = -fast_arc_tan(square_root(vector_and_descriptor_scratch.f[0] * vector_and_descriptor_scratch.f[0] + vector_and_descriptor_scratch.f[2] * vector_and_descriptor_scratch.f[2]), vector_and_descriptor_scratch.f[1]);
         v10.f[1] = fast_arc_tan(vector_and_descriptor_scratch.f[2], vector_and_descriptor_scratch.f[0]);
         FUN_L00_0025bc98(&hero.motion.rot.f[1], v10.f[1], &hero.motion.unkA0.f[1], 0, frame_scale_sq * 0.04f, frame_scale_sq * 0.2f,
@@ -1441,14 +1441,14 @@ void FUN_L14_00228cd0(void) {
         }
         FUN_L02_00220b80();
         if (hero.unk930 > 0.0f) {
-            Vec4 *p = &hero.move_impulse;
+            Vec4 *move_impulse_ptr = &hero.move_impulse;
             FUN_L00_002132b8(0.7f, 0.0f);
             vector_and_descriptor_scratch.q = hero.move_impulse.q;
             hero.target_speed += forward_component(&vector_and_descriptor_scratch);
             if (hero.target_speed < frame_time * 0.7f) {
                 hero.target_speed = frame_time * 0.7f;
             }
-            clear_u64_value(p);
+            clear_u64_value(move_impulse_ptr);
         }
         k = 1.0f;
         if (hero.state.step == 1 && hero.unk3BE == 0) {
@@ -2164,13 +2164,13 @@ void FUN_L14_00228cd0(void) {
             FUN_L00_00262608(&hero.trail.pos[0], state_timer_or_trail_value);
         }
         if (hero.state.current == HERO_STATE_PACK_LONG_JUMP && scale_game_frames(8) < hero.state_timer && hero.anim_frame < 28.0f) {
-            s32 n;
+            s32 nearby_moby_count;
             FUN_L00_00233660(&vector_and_descriptor_scratch, 0.8f, 0.0f, 0.3f);
-            n = collect_mobies_in_sphere(0.9f, &vector_and_descriptor_scratch, 0, MV(hero.moby), NULL);
-            if (n != 0) {
+            nearby_moby_count = collect_mobies_in_sphere(0.9f, &vector_and_descriptor_scratch, 0, MV(hero.moby), NULL);
+            if (nearby_moby_count != 0) {
                 s32 i;
                 fast_vec_scale(&v10, &hero.motion.displacement, 7.0f);
-                for (i = 0; i < n; i++) {
+                for (i = 0; i < nearby_moby_count; i++) {
                     if (FUN_L00_0025e3b8(D_L14_00178600[i]) != 0) {
                         spawn_nearby_effect(D_L14_00178600[i], MV(hero.moby), 0x10000, &hero.motion.pos, &v10,
                                          1.0f);
