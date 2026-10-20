@@ -178,11 +178,11 @@ void FUN_L14_00300e00(struct Moby *spark_moby)
           trail_particle = spawn_0e00(&t, 0.025f, one, one, spin, D_L14_0015F580, ((((float) spark_data->trail) / itof_0e00(frames_0e00(D_L14_0016208C_0e00))) * 45000.0f) + 5000.0f, 0x80808080);
           if (trail_particle != 0)
           {
-            char *q = trail_particle + 0x20;
+            char *trail_particle_subrecord = trail_particle + 0x20;
             *((short *) (trail_particle + 0xA)) = frames_0e00(0x78);
-            *((int *) (q + 4)) = 2;
-            q[0xA] = 0x7F;
-            q[0xB] = trail_particle[0xA];
+            *((int *) (trail_particle_subrecord + 4)) = 2;
+            trail_particle_subrecord[0xA] = 0x7F;
+            trail_particle_subrecord[0xB] = trail_particle[0xA];
           }
         }
 
