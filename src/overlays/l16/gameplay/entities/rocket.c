@@ -771,66 +771,66 @@ void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 extern L16SparkHitN D_L16_hitN __asm__("D_L16_00174240");
 extern int func_0022ED80_n(int, int, void *) __asm__("FUN_0022da68");
 
-void FUN_L16_002c5eb0(L16FallingMoby *m) {
+void FUN_L16_002c5eb0(L16FallingMoby *moby) {
     enum {
         BOMB_STATE_MOVING = 1,
         BOMB_STATE_RESTING = 2,
         BOMB_STATE_EXPLODE = 3
     };
     float previous[4], normal[4];
-    L16FallingData *d = m->data;
+    L16FallingData *bomb_data = moby->data;
 
-    switch (m->state) {
+    switch (moby->state) {
     case BOMB_STATE_MOVING:
         /* No pointer locals: m->position and d->velocity are written at each use and the compiler caches
            them itself (velocity formed in the argument register and copied to a saved one, the position
            copied a second time for the ground test). */
-        qcopy(previous, m->position);
-        add_vector_xyz(m->position, m->position, d->velocity);
-        if (func_L00_001EFFF0_spark(previous, m->position, 5, d->owner, 0)) {
+        qcopy(previous, moby->position);
+        add_vector_xyz(moby->position, moby->position, bomb_data->velocity);
+        if (func_L00_001EFFF0_spark(previous, moby->position, 5, bomb_data->owner, 0)) {
             normalize_vector_xyz_c(normal, D_L16_hitN.normal, 1.0f);
-            if (dot_vectors_xyz(normal, d->velocity) < 0.0f) {
-                FUN_L00_001ff660(d->velocity, d->velocity, normal);
-                scale_vector_xyz_c(d->velocity, d->velocity, 0.25f);
+            if (dot_vectors_xyz(normal, bomb_data->velocity) < 0.0f) {
+                FUN_L00_001ff660(bomb_data->velocity, bomb_data->velocity, normal);
+                scale_vector_xyz_c(bomb_data->velocity, bomb_data->velocity, 0.25f);
             }
         }
-        if (coll_sphere(0.333f, m->position, 2, 0)) {
+        if (coll_sphere(0.333f, moby->position, 2, 0)) {
             normalize_vector_xyz_c(normal, D_L16_hitN.normal, 0.333f);
-            if (dot_vectors_xyz(normal, d->velocity) < 0.0f) {
-                FUN_L00_001ff660(d->velocity, d->velocity, normal);
-                scale_vector_xyz_c(d->velocity, d->velocity, 0.25f);
+            if (dot_vectors_xyz(normal, bomb_data->velocity) < 0.0f) {
+                FUN_L00_001ff660(bomb_data->velocity, bomb_data->velocity, normal);
+                scale_vector_xyz_c(bomb_data->velocity, bomb_data->velocity, 0.25f);
             }
-            qcopy(m->position, D_L16_hitN.position);
-            m->position[2] += normal[2];
-            if (normal[2] >= 0.3f && vector_length_xyz_c(d->velocity) < D_0015ED6C * 0.25f) {
-                m->state = 2;
-                d->timer = scale_game_frames(90);
+            qcopy(moby->position, D_L16_hitN.position);
+            moby->position[2] += normal[2];
+            if (normal[2] >= 0.3f && vector_length_xyz_c(bomb_data->velocity) < D_0015ED6C * 0.25f) {
+                moby->state = 2;
+                bomb_data->timer = scale_game_frames(90);
             }
         }
-        if (tick_countdown_32_alt(&d->timer)) {
-            m->state = 3;
-        } else if (d->timer < scale_game_frames(45) && d->timer % scale_game_frames(10) == 0) {
-            d->reaction = 250;
-            trooper_anim_update(m, (short *)d);
+        if (tick_countdown_32_alt(&bomb_data->timer)) {
+            moby->state = 3;
+        } else if (bomb_data->timer < scale_game_frames(45) && bomb_data->timer % scale_game_frames(10) == 0) {
+            bomb_data->reaction = 250;
+            trooper_anim_update(moby, (short *)bomb_data);
         }
-        d->velocity[2] -= d->gravity;
+        bomb_data->velocity[2] -= bomb_data->gravity;
         break;
     case BOMB_STATE_RESTING:
-        if (tick_countdown_32_alt(&d->timer)) {
-            m->state = 3;
-        } else if (d->timer < scale_game_frames(61) && d->timer % scale_game_frames(20) == 0) {
-            d->reaction = 250;
-            trooper_anim_update(m, (short *)d);
+        if (tick_countdown_32_alt(&bomb_data->timer)) {
+            moby->state = 3;
+        } else if (bomb_data->timer < scale_game_frames(61) && bomb_data->timer % scale_game_frames(20) == 0) {
+            bomb_data->reaction = 250;
+            trooper_anim_update(moby, (short *)bomb_data);
         }
         break;
     case BOMB_STATE_EXPLODE:
-        func_0022ED80_n(0, 0, m);
-        spawn_explosion(m, (int)D_L16_0015F580n, 0, 1.5f, 1.0f, 7, 10, 20, 3.0f, 1.7f, 4.0f, -1,
+        func_0022ED80_n(0, 0, moby);
+        spawn_explosion(moby, (int)D_L16_0015F580n, 0, 1.5f, 1.0f, 7, 10, 20, 3.0f, 1.7f, 4.0f, -1,
                          1.0f, 7.0f, 0, 7, -1, 0);
-        mark_moby_for_removal(m);
+        mark_moby_for_removal(moby);
         return;
     }
-    trooper_anim_finish(m, d);
+    trooper_anim_finish(moby, bomb_data);
 }
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002CAA18), where it is exact; names translated to the US level program. */
 
