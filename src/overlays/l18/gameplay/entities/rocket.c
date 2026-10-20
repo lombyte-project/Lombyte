@@ -2553,14 +2553,14 @@ void FUN_L18_002e9e70(struct Moby *moby) {
         float buf[4];
         float buf2[4];
         float *position = &moby->pos.x;
-        float *q = moby_vars + 4;
+        float *arc_endpoint_position = moby_vars + 4;
         float lim = D_L18_00161EE0 * frame_time;
         float len;
         subtract_vector_xyz(buf, moby_vars, position);
         len = vector_length_xyz(buf);
         FUN_L18_002ea598_c(moby);
-        FUN_L00_00257d78(q, D_L18_00161ED8 * moby_vars[9], D_L18_00161ED8 * moby_vars[9]);
-        add_vector_xyz(q, q, position);
+        FUN_L00_00257d78(arc_endpoint_position, D_L18_00161ED8 * moby_vars[9], D_L18_00161ED8 * moby_vars[9]);
+        add_vector_xyz(arc_endpoint_position, arc_endpoint_position, position);
         FUN_L18_002eacd8(moby);
         FUN_L18_002eaea0_u(moby);
         enqueue_callback_list_1((void (*)(void))FUN_L15_002d8710, moby);
