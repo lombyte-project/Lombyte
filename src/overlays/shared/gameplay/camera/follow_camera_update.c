@@ -1342,70 +1342,70 @@ extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void subtract_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a28");
 
 void FUN_L00_002ebbd8(void *arg) {
-    char *m = arg;
+    char *camera_object = arg;
     char *g;
     int lvl0 = D_0015ED84;
     int lvl;
-    char *p = *(char **)(m + 0x70) + 0x40;
+    char *follow_block = *(char **)(camera_object + 0x70) + 0x40;
     float f;
     char *t, *q, *r, *w, *camera_data, *src;
     char *gg, *gg0, *h;
-    *(int *)(p + 0x40) = 0;
+    *(int *)(follow_block + 0x40) = 0;
     f = 1.5f;
     if (lvl0 == 0xE && (h = D_0013F350, (unsigned)(*(int *)(h + 0x2084) - 0x2C) < 2))
-        *(float *)(p + 0x4C) = 2.0f;
+        *(float *)(follow_block + 0x4C) = 2.0f;
     else
-        *(float *)(p + 0x4C) = 1.5f;
+        *(float *)(follow_block + 0x4C) = 1.5f;
     g = D_0013F350;
-    *(float *)(p + 0x48) = 0.20943951606750488f;
-    *(float *)(p + 0x58) = 0.001745329238474369f;
-    *(float *)(p + 0x5C) = -0.004363323096185923f;
-    *(int *)(p + 0x44) = *(int *)(g + 0x2080);
+    *(float *)(follow_block + 0x48) = 0.20943951606750488f;
+    *(float *)(follow_block + 0x58) = 0.001745329238474369f;
+    *(float *)(follow_block + 0x5C) = -0.004363323096185923f;
+    *(int *)(follow_block + 0x44) = *(int *)(g + 0x2080);
     {
-        char *q0 = *(char **)(m + 0x70);
+        char *q0 = *(char **)(camera_object + 0x70);
         *(float *)(q0 + 0xA0) = 4.639999866485596f;
         q0 += 0xA0;
         *(float *)(q0 + 4) = 0.5f;
         *(float *)(q0 + 0x10) = 2.0f;
         *(float *)(q0 + 0x14) = 0.05f;
     }
-    r = *(char **)(m + 0x70);
+    r = *(char **)(camera_object + 0x70);
     *(int *)(r + 0x18) = 0;
     *(float *)(r + 0x10) = 0.01f;
     *(float *)(r + 0x14) = 0.3f;
     *(short *)(r + 0x1E) = scale_game_frames_c(0x78);
     *(short *)(r + 0x1C) = 0;
     clear_u64_value_c(r);
-    q = *(char **)(m + 0x70);
+    q = *(char **)(camera_object + 0x70);
     t = q + 0x30;
     *(float *)(t + 4) = 0.02f;
     *(float *)(t + 8) = 0.2f;
     *(int *)(t + 0xC) = 0;
     *(int *)(q + 0x30) = 0;
-    camera_data = *(char **)(m + 0x70);
+    camera_data = *(char **)(camera_object + 0x70);
     w = camera_data + 0xB8;
     *(int *)(w + 4) = 0;
     gg0 = (char *)&D_L00_00166C80;
     src = *(char **)(gg0 + 0x184);
-    qcopy(m + 0x30, src + 0x30);
-    qcopy(m, src);
-    qcopy(m + 0x10, src + 0x10);
-    qcopy(m + 0x20, src + 0x20);
-    qcopy(m + 0x40, m);
-    *(short *)(m + 0x7E) = 0;
+    qcopy(camera_object + 0x30, src + 0x30);
+    qcopy(camera_object, src);
+    qcopy(camera_object + 0x10, src + 0x10);
+    qcopy(camera_object + 0x20, src + 0x20);
+    qcopy(camera_object + 0x40, camera_object);
+    *(short *)(camera_object + 0x7E) = 0;
     lvl = *(int *)(g + 0x2084);
     if ((unsigned)(lvl - 0x2C) < 2) {
-        *(float *)(p + 0x30) = fast_cos(*(float *)(g + 0x9AC));
-        *(float *)(p + 0x34) = fast_sin(*(float *)(g + 0x9AC));
-        *(int *)(p + 0x38) = 0;
+        *(float *)(follow_block + 0x30) = fast_cos(*(float *)(g + 0x9AC));
+        *(float *)(follow_block + 0x34) = fast_sin(*(float *)(g + 0x9AC));
+        *(int *)(follow_block + 0x38) = 0;
         *(float *)(camera_data + 0xB8) = *(float *)(g + 0x9AC);
         *(int *)(w + 8) = *(int *)(g + 0x994);
     } else {
-        subtract_vector_xyz_c(p + 0x30, *(char **)(g + 0x964) + 0x10, m + 0x30);
-        *(int *)(p + 0x38) = 0;
-        *(int *)(p + 0x3C) = 0;
-        fast_vec_normalize(p + 0x30, p + 0x30, 1.0f);
-        *(float *)(camera_data + 0xB8) = fast_arc_tan_c(*(float *)(p + 0x30), *(float *)(p + 0x34));
+        subtract_vector_xyz_c(follow_block + 0x30, *(char **)(g + 0x964) + 0x10, camera_object + 0x30);
+        *(int *)(follow_block + 0x38) = 0;
+        *(int *)(follow_block + 0x3C) = 0;
+        fast_vec_normalize(follow_block + 0x30, follow_block + 0x30, 1.0f);
+        *(float *)(camera_data + 0xB8) = fast_arc_tan_c(*(float *)(follow_block + 0x30), *(float *)(follow_block + 0x34));
         *(int *)(w + 8) = *(int *)(g + 0x964);
     }
     gg = (char *)&D_L00_00166C80;
