@@ -2084,21 +2084,21 @@ void FUN_L01_003097e8(L01Moby *moby) {
         }
     }
 }
-void FUN_L01_00309838(char *a) {
-    char *p = *(char **)(a + 0x24);
-    char **q;
+void FUN_L01_00309838(char *parent_moby) {
+    char *p = *(char **)(parent_moby + 0x24);
+    char **child_slot;
     s32 i;
     s8 one;
-    q = (char **)(*(char **)(a + 0x78) + 0x14);
-    *(s32 *)(a + 0x94) = *(s32 *)(p + 0x10);
-    *(u16 *)(a + 0x34) &= 0xFFFE;
-    *(s8 *)(a + 0x31) = 1;
+    child_slot = (char **)(*(char **)(parent_moby + 0x78) + 0x14);
+    *(s32 *)(parent_moby + 0x94) = *(s32 *)(p + 0x10);
+    *(u16 *)(parent_moby + 0x34) &= 0xFFFE;
+    *(s8 *)(parent_moby + 0x31) = 1;
     one = 1;
     for (i = 2; i >= 0; i--) {
-        if (*q != 0) {
-            *(u16 *)(*q + 0x34) &= 0xFFFE;
-            *(s8 *)(*q + 0x31) = one;
+        if (*child_slot != 0) {
+            *(u16 *)(*child_slot + 0x34) &= 0xFFFE;
+            *(s8 *)(*child_slot + 0x31) = one;
         }
-        q++;
+        child_slot++;
     }
 }
