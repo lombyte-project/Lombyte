@@ -427,39 +427,39 @@ extern void scale_vector_xyz(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
 char *FUN_L09_002ea528(struct Moby *owner, float *vec) {
     char *moby = func_0020D348_m(random_integer_below(4) + 0x107);
     if (moby != 0) {
-        char *d = *(char **)(moby + 0x78);
-        char *o = (char *)owner->pvars;
+        char *spawned_moby_vars = *(char **)(moby + 0x78);
+        char *owner_vars = (char *)owner->pvars;
         char *dv;
         float len;
-        *(float *)d = random_float_between(-2.0f, 2.0f);
-        *(float *)(d + 4) = random_float_between(-2.0f, 2.0f);
-        *(float *)(d + 8) = random_float_between(-2.0f, 2.0f);
-        dv = d + 0x20;
-        add_vector_xyz(dv, d, o);
-        normalize_vector_xyz(d, d, frame_time * 50.0f);
-        add_vector_xyz(d, d, vec);
-        scale_vector_xyz(d, d, frame_scale * -0.7f + 1.0f);
+        *(float *)spawned_moby_vars = random_float_between(-2.0f, 2.0f);
+        *(float *)(spawned_moby_vars + 4) = random_float_between(-2.0f, 2.0f);
+        *(float *)(spawned_moby_vars + 8) = random_float_between(-2.0f, 2.0f);
+        dv = spawned_moby_vars + 0x20;
+        add_vector_xyz(dv, spawned_moby_vars, owner_vars);
+        normalize_vector_xyz(spawned_moby_vars, spawned_moby_vars, frame_time * 50.0f);
+        add_vector_xyz(spawned_moby_vars, spawned_moby_vars, vec);
+        scale_vector_xyz(spawned_moby_vars, spawned_moby_vars, frame_scale * -0.7f + 1.0f);
         ((unsigned char *)moby)[0x30] = 0xFF;
         *(short *)(moby + 0x32) = 0xFF;
         moby[0x31] = 1;
-        *(int *)(d + 0x4C) = 2;
+        *(int *)(spawned_moby_vars + 0x4C) = 2;
         moby[0x23] = 0x7F;
         {
             float v = owner->scale * random_float_between(0.125f, 0.25f);
             *(float *)(moby + 0x2C) = v;
-            *(float *)(d + 0x50) = v;
+            *(float *)(spawned_moby_vars + 0x50) = v;
         }
-        *(float *)(d + 0x40) = random_float_between(-0.05235988f, 0.05235988f);
-        *(float *)(d + 0x44) = random_float_between(-0.05235988f, 0.05235988f);
+        *(float *)(spawned_moby_vars + 0x40) = random_float_between(-0.05235988f, 0.05235988f);
+        *(float *)(spawned_moby_vars + 0x44) = random_float_between(-0.05235988f, 0.05235988f);
         subtract_vector_xyz(moby + 0x10, dv, D_L09_00166F40);
         len = vector_length_xyz(moby + 0x10);
         if (100.0f < len) {
             normalize_vector_xyz(moby + 0x10, moby + 0x10, 100.0f);
             add_vector_xyz(moby + 0x10, moby + 0x10, D_L09_00166F40);
-            *(float *)(moby + 0x2C) = *(float *)(d + 0x50) * (100.0f / len);
+            *(float *)(moby + 0x2C) = *(float *)(spawned_moby_vars + 0x50) * (100.0f / len);
         } else {
             qcopy(moby + 0x10, dv);
-            *(float *)(moby + 0x2C) = *(float *)(d + 0x50);
+            *(float *)(moby + 0x2C) = *(float *)(spawned_moby_vars + 0x50);
         }
     }
     return moby;
