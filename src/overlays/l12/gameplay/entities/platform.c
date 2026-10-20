@@ -1501,9 +1501,9 @@ void platform_update(Moby *moby) {
         }
         break;
     case PLATFORM_TRACK_REFERENCED_MOBY_HEIGHT: {
-        Moby *o = (Moby *)((char *)(*(Moby * *)&D_L12_0015FFD8_p) + (data->fF0 << 8));
+        Moby *height_reference_moby = (Moby *)((char *)(*(Moby * *)&D_L12_0015FFD8_p) + (data->fF0 << 8));
         qcopy(angles, (*(float (*)[4])&moby->pos));
-        angles[2] = (*(float (*)[4])&o->pos)[2];
+        angles[2] = (*(float (*)[4])&height_reference_moby->pos)[2];
         clear_u64_value_c2(goal);
         goal[2] = (*(float (*)[4])&moby->rot)[2];
         if (FUN_L01_00277fb8(moby)) {
