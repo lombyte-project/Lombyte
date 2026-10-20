@@ -988,13 +988,13 @@ void FUN_L00_002d9810(Moby *moby) {
 }
 int collision_line(Vec4 *, Vec4 *, int, int, int) __asm__("FUN_001efa68");
 /* True when coll_line_fix returns 0 for the moby and (*(char * *)&D_001413D0_lui) positions, both raised by 0.5. */
-int FUN_L00_002d8980(char *a) {
-    Vec4 p, t;
-    qcopy(&p, a + 0x10);
-    p.f[2] += 0.5f;
-    qcopy(&t, (*(char * *)&D_001413D0_lui) + 0x10);
-    t.f[2] += 0.5f;
-    return collision_line(&p, &t, 0x12, 0, 0) == 0;
+int FUN_L00_002d8980(char *moby) {
+    Vec4 raised_moby_position, raised_target_position;
+    qcopy(&raised_moby_position, moby + 0x10);
+    raised_moby_position.f[2] += 0.5f;
+    qcopy(&raised_target_position, (*(char * *)&D_001413D0_lui) + 0x10);
+    raised_target_position.f[2] += 0.5f;
+    return collision_line(&raised_moby_position, &raised_target_position, 0x12, 0, 0) == 0;
 }
 /* False in modes 0, 1, 5, 12, and in modes 2 and 4 unless the state is 0x3C. */
 int FUN_L00_002d9f78(void) {
