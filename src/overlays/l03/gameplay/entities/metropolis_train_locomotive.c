@@ -1037,7 +1037,7 @@ void FUN_L03_0029caa8(char *moby, void *vel_in, int quiet) {
     int i;
     int j;
     int k;
-    float a;
+    float azimuth_angle;
     float b;
     int color;
     int color2;
@@ -1054,9 +1054,9 @@ void FUN_L03_0029caa8(char *moby, void *vel_in, int quiet) {
             scale_vector_xyz(vp, vp, 0.35f);
             for (i = 0; i < 2; i++) {
                 moby_point_position(moby, i, pos);
-                a = random_angle_radians();
+                azimuth_angle = random_angle_radians();
                 b = random_angle_radians();
-                build_spherical_offset(v, frame_time * 0.15f, a, b);
+                build_spherical_offset(v, frame_time * 0.15f, azimuth_angle, b);
                 add_vector_xyz(v, v, vp);
                 FUN_L00_0026ced0(pos, v, 0x8040C0F0, 0x808080, scale_game_frames(20), 84000.0f);
             }
@@ -1071,9 +1071,9 @@ void FUN_L03_0029caa8(char *moby, void *vel_in, int quiet) {
                 scale_vector_xyz(vp, vp, 0.7f);
                 for (j = 0; j < 10; j++) {
                     moby_point_position(moby, 0, pos);
-                    a = random_angle_radians();
+                    azimuth_angle = random_angle_radians();
                     b = random_angle_radians();
-                    build_spherical_offset(v, frame_time * 0.6f, a, b);
+                    build_spherical_offset(v, frame_time * 0.6f, azimuth_angle, b);
                     add_vector_xyz(v, v, vp);
                     FUN_L00_0026ced0(pos, v, 0x80808080, 0x808080, scale_game_frames(35), 105000.0f);
                 }
@@ -1087,9 +1087,9 @@ void FUN_L03_0029caa8(char *moby, void *vel_in, int quiet) {
                 scale_vector_xyz(vp, vp, 0.5f);
                 for (k = 0; k < 15; k++) {
                     moby_point_position(moby, 0, pos);
-                    a = random_angle_radians();
+                    azimuth_angle = random_angle_radians();
                     b = random_angle_radians();
-                    build_spherical_offset(v, frame_time * 1.2f, a, b);
+                    build_spherical_offset(v, frame_time * 1.2f, azimuth_angle, b);
                     add_vector_xyz(v, v, vp);
                     FUN_L00_0026ced0(pos, v, 0x80808080, 0x808080, scale_game_frames(45), 168000.0f);
                 }
