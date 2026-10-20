@@ -131,14 +131,14 @@ extern s32 D_001404D4[];
 extern s32 D_001403E0[];
 
 /* Returns D_001413D0[0] for a = 0, 2, 3, 4, D_001404D4[0] for 1, D_001403E0[0] for 5, else 0. */
-int FUN_L00_00205110(int a) {
-    if (a == 0 || a == 2 || a == 3 || a == 4) {
+int FUN_L00_00205110(int ease_kind) {
+    if (ease_kind == 0 || ease_kind == 2 || ease_kind == 3 || ease_kind == 4) {
         return D_001413D0[0];
     }
-    if (a == 1) {
+    if (ease_kind == 1) {
         return D_001404D4[0];
     }
-    if (a == 5) {
+    if (ease_kind == 5) {
         return D_001403E0[0];
     }
     return 0;
