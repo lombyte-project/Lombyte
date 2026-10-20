@@ -96,7 +96,9 @@ int hero_set_state(int a, int b) {
     enum {
         HERO_STATE_DOUBLE_JUMP = 0xE,
         HERO_STATE_GRIND_JUMP = 0x29,
-        HERO_STATE_GRIND_ATTACK = 0x2B
+        HERO_STATE_GRIND_ATTACK = 0x2B,
+        HERO_STATE_APPROACH_TARGET_POSE = 0x65,
+        HERO_STATE_AT_TARGET_POSE = 0x67
     };
     int old2088;
     char *moby;
@@ -180,7 +182,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x67: {
+    case HERO_STATE_AT_TARGET_POSE: {
         struct Hero *p = &hero;
         p->state.control_mode = 0;
         p->unk2284 = 0;
@@ -587,7 +589,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x65: {
+    case HERO_STATE_APPROACH_TARGET_POSE: {
         struct Hero *p = &hero;
         p->state.control_mode = 1;
         p->unk2284 = 0;
