@@ -991,17 +991,17 @@ extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern void build_moby_bone_transform(void *, int, void *) __asm__("FUN_0020cca8");
 extern void random_vector(float *, float, float) __asm__("FUN_L00_00257d78");
 
-void FUN_L16_002d4908(char *m) {
+void FUN_L16_002d4908(char *commando_moby) {
     float matrix[16], velocity[4], acceleration[4], scatter[4];
     int i;
-    if (*(unsigned char *)(m + 0x31) == 0 || *(unsigned char *)(m + 0x20) == 10)
+    if (*(unsigned char *)(commando_moby + 0x31) == 0 || *(unsigned char *)(commando_moby + 0x20) == 10)
         return;
     for (i = 0; i < 2; i++) {
         float speed, z;
         int color1, color2, time1, time2, time3;
         if (random_float_between_alt(0.0f, 1.0f) > 0.75f)
             continue;
-        build_moby_bone_transform(m, i + 4, matrix);
+        build_moby_bone_transform(commando_moby, i + 4, matrix);
         speed = (random_float_between_alt(-0.2f, 0.2f) + 1.0f) * -3.0f * frame_time;
         normalize_vector_xyz(velocity, matrix + 8, speed);
         {
