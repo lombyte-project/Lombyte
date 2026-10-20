@@ -1127,7 +1127,7 @@ extern float D_L14_00161478 __attribute__((sda));
 void FUN_L14_002ae0a8(struct Moby *m) {
     char *d = (char *)m->pvars;
     float mat[4][4];
-    float t[4];
+    float glow_position_offset[4];
     Pk_2ae0a8 pk;
     float v[4];
     float rot[4];
@@ -1135,8 +1135,8 @@ void FUN_L14_002ae0a8(struct Moby *m) {
     int i;
     qcopy(mat[3], d + 0xD0);
     mat[3][3] = 1.0f;
-    scale_e(t, d + 0xA0, D_L14_00161478);
-    add_e(mat[3], mat[3], t);
+    scale_e(glow_position_offset, d + 0xA0, D_L14_00161478);
+    add_e(mat[3], mat[3], glow_position_offset);
     pk.b = tex_e(0xB);
     pk.c = 0x0000FF9000000260ULL;
     pk.d = 0x8000000048ULL;
