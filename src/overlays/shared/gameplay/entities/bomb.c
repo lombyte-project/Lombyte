@@ -1306,7 +1306,7 @@ void FUN_L00_002cb418(Moby *shot_moby) {
     Vec4A start;
     Vec4A step;
     ShotQuery_2cb418 query;
-    Vec4A a;
+    Vec4A vector_scratch;
     Vec4A b;
     Vec4A spark_velocity;
     ShotVars_2cb418 *vars;
@@ -1376,10 +1376,10 @@ void FUN_L00_002cb418(Moby *shot_moby) {
                 b.x = random_float_between_2cb418(-1.0f, 1.0f);
                 b.y = random_float_between_2cb418(-1.0f, 1.0f);
                 b.z = random_float_between_2cb418(-1.0f, 1.0f);
-                *(u128 *)&a = *(u128 *)&b;
+                *(u128 *)&vector_scratch = *(u128 *)&b;
                 reflect_vector_2cb418(&b, &step, ((char *)D_L00_00173E60) + 0x20);
-                normalize_vector_xyz_2cb418(&a, &a, vector_length_xyz_2cb418(&b) * 0.5f);
-                add_vector_xyz_2cb418(&b, &b, &a);
+                normalize_vector_xyz_2cb418(&vector_scratch, &vector_scratch, vector_length_xyz_2cb418(&b) * 0.5f);
+                add_vector_xyz_2cb418(&b, &b, &vector_scratch);
                 normalize_vector_xyz_2cb418(&b, &b, random_float_between_2cb418(D_0015ED6C_lui * 3.0f, D_0015ED6C_lui * 6.0f));
                 spawn_spark_2cb418((Vec4A *)&shot_moby->pos, &b, 0x7F2F4F6F, random_int_between_2cb418(scale_game_frames_2cb418(10), scale_game_frames_2cb418(15)), 30000.0f);
             }
@@ -1405,9 +1405,9 @@ void FUN_L00_002cb418(Moby *shot_moby) {
                 mark_moby_for_removal_2cb418(shot_moby);
                 return;
             }
-            reflect_vector_2cb418(&a, &step, ((char *)D_L00_00173E60) + 0x20);
-            shot_moby->rot.z = atan2_f_2cb418(a.x, a.y);
-            shot_moby->rot.y = -atan2_f_2cb418(vector_length_xy_2cb418(&a), a.z);
+            reflect_vector_2cb418(&vector_scratch, &step, ((char *)D_L00_00173E60) + 0x20);
+            shot_moby->rot.z = atan2_f_2cb418(vector_scratch.x, vector_scratch.y);
+            shot_moby->rot.y = -atan2_f_2cb418(vector_length_xy_2cb418(&vector_scratch), vector_scratch.z);
             vars->yaw_rate = 0.0f;
             vars->pitch_rate = 0.0f;
             normalize_vector_xyz_2cb418(&b, ((char *)D_L00_00173E60) + 0x20, 0.05f);
@@ -1429,15 +1429,15 @@ void FUN_L00_002cb418(Moby *shot_moby) {
     }
     subtract_vector_xyz_2cb418(&step, &start, (Vec4A *)&shot_moby->pos);
     normalize_vector_xyz_2cb418(&step, &step, speed);
-    qcopy(&a, (Vec4A *)&shot_moby->pos);
+    qcopy(&vector_scratch, (Vec4A *)&shot_moby->pos);
     if (vars->follower != 0) {
-        qcopy((Vec4A *)&vars->follower->pos, &a);
+        qcopy((Vec4A *)&vars->follower->pos, &vector_scratch);
     }
     for (j = 0; j < 16; j++) {
         Moby *trail_moby = vars->trail[j];
         if (trail_moby != 0) {
-            add_vector_xyz_2cb418((Vec4A *)&trail_moby->pos, &a, &step);
-            qcopy(&a, (Vec4A *)&trail_moby->pos);
+            add_vector_xyz_2cb418((Vec4A *)&trail_moby->pos, &vector_scratch, &step);
+            qcopy(&vector_scratch, (Vec4A *)&trail_moby->pos);
             trail_moby->pos.x = trail_moby->pos.x + random_float_2cb418(0.0f, jitter);
             trail_moby->pos.y = trail_moby->pos.y + random_float_2cb418(0.0f, jitter);
             trail_moby->pos.z = trail_moby->pos.z + random_float_2cb418(0.0f, jitter);
