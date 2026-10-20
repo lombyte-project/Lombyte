@@ -119,9 +119,9 @@ void sky_particles_update(void) {
             }
         } else if (particle->b0 == 1) {
             int r = rand() >> 16;
-            int t = ((r & 0x1F00) << 10) - 0x202020;
+            int packed_color_offset = ((r & 0x1F00) << 10) - 0x202020;
             int c = *(int *)&particle->hC;
-            c += t;
+            c += packed_color_offset;
             c += (r & 0x1F0) << 6;
             c += (r & 0x1F) << 2;
             particle->w4 = c;
