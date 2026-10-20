@@ -1440,7 +1440,7 @@ void FUN_L18_002fc860(struct Moby *m) {
     float h;
     int c;
     int i;
-    float *p;
+    float *quad_vertex;
     h = *(float *)(d + 0x1F4) + 1.0f + D_L18_0016264C;
     w = 1.0f - *(float *)(d + 0x1F4) + D_L18_00162650;
     qcopy(mat[3], &m->pos);
@@ -1461,17 +1461,17 @@ void FUN_L18_002fc860(struct Moby *m) {
     for (i = 0; i < 4; i++) {
         pk.uv[i][0] = D_L18_001EFCD0[i][0];
         pk.uv[i][1] = D_L18_001EFCD0[i][1];
-        p = pk.m[i];
-        clear_g(p);
+        quad_vertex = pk.m[i];
+        clear_g(quad_vertex);
         if (i & 1)
-            p[2] = 1.0f;
+            quad_vertex[2] = 1.0f;
         else
-            p[2] = 0.0f;
+            quad_vertex[2] = 0.0f;
         if (i < 2)
-            p[1] = 1.0f;
+            quad_vertex[1] = 1.0f;
         else
-            p[1] = -1.0f;
-        p[3] = 1.0f;
+            quad_vertex[1] = -1.0f;
+        quad_vertex[3] = 1.0f;
         pk.col[i] = c;
     }
     draw_g(&pk, mat, 0);
