@@ -884,12 +884,12 @@ void FUN_L00_0025f780(int moby_address, short *list, short max) {
 extern s32 D_L00_0015FFD8_c2 __asm__("D_L00_0015FFD8");
 /* Removes moby p from the index list a by moving the last entry into its place. */
 void mine_spawn_drops(s32 p, s16 *a) __asm__("FUN_L00_0025f800");
-void mine_spawn_drops(s32 p, s16 *a) {
+void mine_spawn_drops(s32 moby_address, s16 *moby_index_list) {
     s32 i;
-    for (i = 1; i <= a[0]; i++) {
-        if (D_L00_0015FFD8_c2 + (a[i] << 8) == p) {
-            a[i] = a[a[0]];
-            a[0]--;
+    for (i = 1; i <= moby_index_list[0]; i++) {
+        if (D_L00_0015FFD8_c2 + (moby_index_list[i] << 8) == moby_address) {
+            moby_index_list[i] = moby_index_list[moby_index_list[0]];
+            moby_index_list[0]--;
             return;
         }
     }
