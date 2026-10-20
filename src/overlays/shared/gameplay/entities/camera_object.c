@@ -2622,7 +2622,7 @@ extern void FUN_L00_002a9c50_c(void) __asm__("FUN_L00_002a9c50");
 extern void enqueue_callback_list_1_alt(void (*)(void), void *) __asm__("FUN_001f4600");
 extern void scale_vector_xyz_c(void *, void *, float) __asm__("FUN_001f9a68");
 
-int FUN_L00_002aa2a8(char *trajectory_state, char *o, int mode) {
+int FUN_L00_002aa2a8(char *trajectory_state, char *moby, int mode) {
     float w[4];
     float B[4];
     float C[4];
@@ -2633,8 +2633,8 @@ int FUN_L00_002aa2a8(char *trajectory_state, char *o, int mode) {
     char *tmp;
     if (*(int *)(base + 0x2084) == 0x72) return 0;
     if (D_L00_0015F5C4_c != 0) return 0;
-    qcopy(C, o + 0x10);
-    if (*(unsigned char *)(o + 0x20) == 0) {
+    qcopy(C, moby + 0x10);
+    if (*(unsigned char *)(moby + 0x20) == 0) {
         w[0] = fast_cos(fast_add_rotations_c(-0.36196801f, fast_arc_tan(*(float *)(base + 0x670), *(float *)(base + 0x674)))) * 0.859039f;
         w[1] = fast_sin(fast_add_rotations_c(-0.36196801f, fast_arc_tan(*(float *)(base + 0x670), *(float *)(base + 0x674)))) * 0.859039f;
         *(int *)&w[2] = 0;
@@ -2647,7 +2647,7 @@ int FUN_L00_002aa2a8(char *trajectory_state, char *o, int mode) {
         x = scale_game_frames_alt(0x78);
     } else {
         tmp = *(char **)(*(char **)(trajectory_state + 0x30) + 0x78);
-        qcopy(w, o + 0x10);
+        qcopy(w, moby + 0x10);
         qcopy(B, trajectory_state);
         {
             short xs = *(short *)(trajectory_state + 0x34);
@@ -2674,7 +2674,7 @@ int FUN_L00_002aa2a8(char *trajectory_state, char *o, int mode) {
             add_vector_xyz(w, w, B);
             B[2] = B[2] - frame_time_sq * 9.8f;
         } while (--i >= 0);
-        if (FUN_001efa68(C, w, 0x12, (int)o, 0) == 0) continue;
+        if (FUN_001efa68(C, w, 0x12, (int)moby, 0) == 0) continue;
         if (collision_hit_material() == 0 && 0.0f < B[2]) continue;
         if (D_L00_00173E40_u[7] > 0) {
             qcopy(trajectory_state + 0x10, (char *)D_L00_00173E40_u + 0x20);
@@ -2687,7 +2687,7 @@ int FUN_L00_002aa2a8(char *trajectory_state, char *o, int mode) {
             if (FUN_L00_002603d0_u(D_L00_00173E58_c[0]) == 0) return 0;
         }
         if (mode != 2 || D_L00_00173E58_c[0] == 0 || FUN_L00_002603d0_u(D_L00_00173E58_c[0]) == 0) {
-            enqueue_callback_list_1_alt(FUN_L00_002a9c50_c, o);
+            enqueue_callback_list_1_alt(FUN_L00_002a9c50_c, moby);
         }
         {
             char *g = (char *)&D_L00_00166DC0;
