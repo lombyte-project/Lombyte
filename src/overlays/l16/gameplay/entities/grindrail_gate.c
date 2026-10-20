@@ -2716,10 +2716,10 @@ float *D_L16_00161F70[2] = {D_L16_001DD4A8, 0};
 extern float D_L16_001DDA88[];
 float *D_L16_00161F78[2] = {D_L16_001DDA88, 0};
 void FUN_L16_002e9270(void) {
-    int *a = (int *)D_L16_00161F40;
+    int *point_counts = (int *)D_L16_00161F40;
     int *b = (int *)D_L16_00161F60;
     int *c = (int *)D_L16_00161F68;
-    int *d = (int *)D_L16_00161F70;
+    int *direction_vectors = (int *)D_L16_00161F70;
     int *e = (int *)D_L16_00161F78;
     int i;
 
@@ -2730,8 +2730,8 @@ void FUN_L16_002e9270(void) {
     font_queue_vu_state();
     for (i = 0; i < 1; i++) {
         if (fast_bsphere_check(D_L16_00161F80_t[i], 512.0f) != -1) {
-            FUN_L16_002e8b98_t(a[i], d[i], b[i], c[i], D_L16_001DDC80);
-            FUN_L00_001fde98(a[i], b[i], e[i], D_L16_001DDC80, 1);
+            FUN_L16_002e8b98_t(point_counts[i], direction_vectors[i], b[i], c[i], D_L16_001DDC80);
+            FUN_L00_001fde98(point_counts[i], b[i], e[i], D_L16_001DDC80, 1);
         }
     }
 }
