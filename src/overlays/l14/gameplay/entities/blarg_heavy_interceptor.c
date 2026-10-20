@@ -1017,7 +1017,7 @@ void FUN_L14_002add48(char *moby) {
     float src[4][4];
     Pk_2add48 pk;
     float mat[4][4];
-    float t[4];
+    float quad_translation_offset[4];
     float dir[4];
     float v[4];
     float rot[4];
@@ -1027,12 +1027,12 @@ void FUN_L14_002add48(char *moby) {
     int r, g, b, a;
     u32 col;
     int i, j;
-    float *p;
+    float *beam_origin;
 
-    p = (float *)(d + 0x1D4);
-    src[3][0] = p[0];
-    src[3][1] = p[1];
-    src[3][2] = p[2] + 0.125f;
+    beam_origin = (float *)(d + 0x1D4);
+    src[3][0] = beam_origin[0];
+    src[3][1] = beam_origin[1];
+    src[3][2] = beam_origin[2] + 0.125f;
     src[3][3] = 1.0f;
     src[0][0] = fast_cos(*(float *)(d + 0x160));
     src[0][1] = fast_sin(*(float *)(d + 0x160));
@@ -1074,16 +1074,16 @@ void FUN_L14_002add48(char *moby) {
         pk.col[2] = col;
         pk.col[1] = col;
         pk.col[0] = col;
-        scale_b(t, dir, step);
+        scale_b(quad_translation_offset, dir, step);
         for (j = 0; j < 4; j++) {
             scale_b(pk.m[j], D_L14_001D8600[j], size);
             xform_b(pk.m[j], pk.m[j], mat);
-            add_b(pk.m[j], pk.m[j], t);
+            add_b(pk.m[j], pk.m[j], quad_translation_offset);
         }
         draw_b(&pk, 0, 0);
-        scale_b(t, dir, step * -2.0f);
+        scale_b(quad_translation_offset, dir, step * -2.0f);
         for (j = 0; j < 4; j++) {
-            add_b(pk.m[j], pk.m[j], t);
+            add_b(pk.m[j], pk.m[j], quad_translation_offset);
         }
         draw_b(&pk, 0, 0);
         r -= D_L14_00161454;
