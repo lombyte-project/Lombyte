@@ -36,8 +36,8 @@ void FUN_L02_0021b698(void) {
         if (g->frames_off_ground.s == 0 || g->ground_distance < 0.3f) {
             g->unk12E7 = 1;
             if (g->vehicle_mode == 0) {
-                char *p = (char *)g->items[1].moby;
-                if (p != 0 && *(short *)(p + 0xA6) == 0xAD)
+                char *slot_one_moby = (char *)g->items[1].moby;
+                if (slot_one_moby != 0 && *(short *)(slot_one_moby + 0xA6) == 0xAD)
                     g->unk308 = 1;
             }
         }
@@ -85,7 +85,7 @@ void FUN_L02_0021b698(void) {
     }
     {
         struct Hero *q = &hero;
-        struct Hero *h;
+        struct Hero *hero_ptr;
         if (q->selector_13 != 0 && q->state.current != 0x7F) {
             if (absolute_float(q->water_surface_z - (q->motion.pos.f[2] + 0.25f)) < 1.0f) {
                 if (q->water_surface_z - q->motion.pos.f[2] > 0.0f) {
@@ -97,15 +97,15 @@ void FUN_L02_0021b698(void) {
                 }
             }
         }
-        h = &hero;
-        if (h->selector_3 != 0 && h->state.current != 0x68 &&
-            h->state.current != 0x7B) {
-            if (absolute_float(h->unk2F4 - (h->motion.pos.f[2] + 0.25f)) < 1.0f) {
-                if (h->unk2F4 - h->motion.pos.f[2] > 0.0f) {
-                    if (h->state.current != 0x69 || h->unk41E != 0) {
-                        if (h->motion.displacement.f[2] < 0.0f) {
+        hero_ptr = &hero;
+        if (hero_ptr->selector_3 != 0 && hero_ptr->state.current != 0x68 &&
+            hero_ptr->state.current != 0x7B) {
+            if (absolute_float(hero_ptr->unk2F4 - (hero_ptr->motion.pos.f[2] + 0.25f)) < 1.0f) {
+                if (hero_ptr->unk2F4 - hero_ptr->motion.pos.f[2] > 0.0f) {
+                    if (hero_ptr->state.current != 0x69 || hero_ptr->unk41E != 0) {
+                        if (hero_ptr->motion.displacement.f[2] < 0.0f) {
                             FUN_L00_0020b930();
-                            if (h->health.hp == 0)
+                            if (hero_ptr->health.hp == 0)
                                 hero_set_state(0x7B, 1);
                             else
                                 hero_set_state(0x68, 1);
@@ -115,11 +115,11 @@ void FUN_L02_0021b698(void) {
                 }
             }
         }
-        h = &hero;
-        if (h->selector_11 != 0 && h->state.current != 0x7B) {
-            if (absolute_float(h->unk2F4 - (h->motion.pos.f[2] + 0.25f)) < 1.0f) {
-                if (h->unk2F4 - h->motion.pos.f[2] > 0.0f) {
-                    if (h->motion.displacement.f[2] < 0.0f) {
+        hero_ptr = &hero;
+        if (hero_ptr->selector_11 != 0 && hero_ptr->state.current != 0x7B) {
+            if (absolute_float(hero_ptr->unk2F4 - (hero_ptr->motion.pos.f[2] + 0.25f)) < 1.0f) {
+                if (hero_ptr->unk2F4 - hero_ptr->motion.pos.f[2] > 0.0f) {
+                    if (hero_ptr->motion.displacement.f[2] < 0.0f) {
                         FUN_L00_0020b930();
                         hero_set_state(0x7B, 1);
                     }
