@@ -1993,48 +1993,48 @@ extern int FUN_001f96f8_b45(int) __asm__("FUN_001f96f8");
 extern float FUN_001fa6c0_b45(short) __asm__("FUN_001fa6c0");
 
 int FUN_L14_002b4500(int index) {
-    short *p = D_L14_001ABF40_b45[index];
+    short *list_entry = D_L14_001ABF40_b45[index];
     unsigned char *base;
-    unsigned char *q;
-    unsigned char *o;
-    unsigned char *d;
+    unsigned char *checked_moby;
+    unsigned char *retracting_moby;
+    unsigned char *turret_vars;
     int st;
     int t;
-    float f;
+    float inverse_retract_frames;
     float g;
-    if (p == 0) {
+    if (list_entry == 0) {
         return 0;
     }
     base = D_L14_0015FFD8_b45;
     do {
-        st = *(unsigned short *)p & 0x7FFF;
-        q = base + (st << 8);
-        if ((*(unsigned char **)(q + 0x78))[0x8B] == 0) {
-            st = q[0x20];
+        st = *(unsigned short *)list_entry & 0x7FFF;
+        checked_moby = base + (st << 8);
+        if ((*(unsigned char **)(checked_moby + 0x78))[0x8B] == 0) {
+            st = checked_moby[0x20];
             if (st != 5 && st != 1) {
                 return 0;
             }
         }
-    } while (*p++ >= 0);
-    p = D_L14_001ABF40_b45[index];
+    } while (*list_entry++ >= 0);
+    list_entry = D_L14_001ABF40_b45[index];
     do {
-        t = *(unsigned short *)p & 0x7FFF;
-        o = D_L14_0015FFD0_m45[2] + (t << 8);
-        if (o[0x20] == 3) {
-            d = *(unsigned char **)(o + 0x78);
-            FUN_00212ed8_b45(o, 4, 0);
-            o[0x20] = 5;
+        t = *(unsigned short *)list_entry & 0x7FFF;
+        retracting_moby = D_L14_0015FFD0_m45[2] + (t << 8);
+        if (retracting_moby[0x20] == 3) {
+            turret_vars = *(unsigned char **)(retracting_moby + 0x78);
+            FUN_00212ed8_b45(retracting_moby, 4, 0);
+            retracting_moby[0x20] = 5;
             t = FUN_001f96f8_b45(D_L14_0016150C_b45);
-            *(short *)(d + 0x74) = t;
-            f = 1.0f / FUN_001fa6c0_b45(t);
-            g = 1.0f / (*(short *)(d + 0x74) * D_L14_00161510_b45);
-            *(float *)(d + 0x78) = f;
-            *(float *)(o + 0x58) = g;
-            *(float *)(d + 0x8C) = *(float *)(o + 0x48);
-            *(short *)(d + 0x88) = 0;
-            d[0x8B] = 0;
+            *(short *)(turret_vars + 0x74) = t;
+            inverse_retract_frames = 1.0f / FUN_001fa6c0_b45(t);
+            g = 1.0f / (*(short *)(turret_vars + 0x74) * D_L14_00161510_b45);
+            *(float *)(turret_vars + 0x78) = inverse_retract_frames;
+            *(float *)(retracting_moby + 0x58) = g;
+            *(float *)(turret_vars + 0x8C) = *(float *)(retracting_moby + 0x48);
+            *(short *)(turret_vars + 0x88) = 0;
+            turret_vars[0x8B] = 0;
         }
-    } while (*p++ >= 0);
+    } while (*list_entry++ >= 0);
     return 1;
 }
 
