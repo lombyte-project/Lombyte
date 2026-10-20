@@ -1154,7 +1154,7 @@ extern void engine_voice_set_volume(s32 voice, s32 volume) __asm__("FUN_L01_002a
 extern void engine_voice_set_pitch(s32 voice, s32 pitch) __asm__("FUN_L00_0028df38");
 
 /* Keeps the moby's engine voice playing, easing its volume and pitch toward the animation's levels. */
-void FUN_L04_002c1b80(struct Moby *m) {
+void FUN_L04_002c1b80(struct Moby *moby) {
     enum {
         CIRCULAR_SAW_ANIM_IDLE = 0,
         CIRCULAR_SAW_ANIM_MOVE_FORWARD = 1,
@@ -1165,17 +1165,17 @@ void FUN_L04_002c1b80(struct Moby *m) {
         CIRCULAR_SAW_ANIM_ALERT = 6,
         CIRCULAR_SAW_ANIM_ATTACK = 7
     };
-    EngineSoundVars *v = (EngineSoundVars *)m->pvars;
+    EngineSoundVars *v = (EngineSoundVars *)moby->pvars;
     f32 volume;
     f32 pitch;
 
-    if (m->state != 9) {
-        if (engine_voice_playing((long)m, v->voice) == 0 && m->prev_seq < 8) {
-            v->voice = engine_voice_start(0, 4, m);
+    if (moby->state != 9) {
+        if (engine_voice_playing((long)moby, v->voice) == 0 && moby->prev_seq < 8) {
+            v->voice = engine_voice_start(0, 4, moby);
             v->volume = engine_int_to_float(0x400);
             v->pitch = 0;
         }
-        switch (m->prev_seq) {
+        switch (moby->prev_seq) {
         case CIRCULAR_SAW_ANIM_IDLE:
             pitch = 0.0f;
             volume = engine_int_to_float(0x400) * 0.6f;
@@ -1206,7 +1206,7 @@ void FUN_L04_002c1b80(struct Moby *m) {
     release:
         if (v->voice != -1) {
             VoicePoolWindow *w = (VoicePoolWindow *)((u8 *)&voice_pool + v->voice * 0x70);
-            if (w->voice.owner == (VoiceMoby *)m && w->voice.state != 0)
+            if (w->voice.owner == (VoiceMoby *)moby && w->voice.state != 0)
                 engine_voice_release(v->voice);
         }
         v->voice = -1;
