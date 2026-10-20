@@ -32,7 +32,7 @@ void link_localized_display_text(void) {
     void *text;
     s32 screenY;
     s32 y0;
-    short w, h;
+    short w, rendered_text_height;
     s32 hHalf5;
 
     D_001996D0.state = 1;
@@ -46,8 +46,8 @@ void link_localized_display_text(void) {
     font_print_window_small(win, 0x80FFA888L, text, -1);
     screenY = screen_extent.height;
     w = win[6];
-    h = win[7];
-    hHalf5 = (h >> 1) + 5;
+    rendered_text_height = win[7];
+    hHalf5 = (rendered_text_height >> 1) + 5;
     y0 = screenY - 0x3C;
     box->pad[0] = (w >> 1) + 10;
     box->pad[1] = hHalf5;
