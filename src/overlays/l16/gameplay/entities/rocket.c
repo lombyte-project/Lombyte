@@ -33,7 +33,7 @@ extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void FUN_L00_00250df8(void *);
 extern char *func_0020D348_m(int) __asm__("FUN_0020c4f8");
 
-unsigned char *FUN_L16_002c6268(int a, void *pos, float *dir, int c, float f) {
+unsigned char *FUN_L16_002c6268(int owner, void *pos, float *dir, int fuse_frames, float gravity) {
     unsigned char *moby = (unsigned char *)func_0020D348_m(0x119);
     if (moby != 0) {
         char *data = *(char **)(moby + 0x78);
@@ -41,9 +41,9 @@ unsigned char *FUN_L16_002c6268(int a, void *pos, float *dir, int c, float f) {
         moby[0x31] = 1;
         moby[0x20] = 1;
         *(short *)(moby + 0x32) = 0xFF;
-        *(int *)(data + 0x20) = a;
-        *(float *)(data + 0x24) = f;
-        *(int *)(data + 0x28) = c;
+        *(int *)(data + 0x20) = owner;
+        *(float *)(data + 0x24) = gravity;
+        *(int *)(data + 0x28) = fuse_frames;
         *(short *)(data + 0xC) = scale_game_frames(5);
         *(short *)(data + 0xE) = scale_game_frames(0xF);
         qcopy(moby + 0x10, pos);
