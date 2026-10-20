@@ -3292,7 +3292,7 @@ extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern f32 resolve_camera_surface_height(void *, s32) __asm__("FUN_002135f0");
 
 void water_lily_update(HoverMoby *m) __asm__("FUN_L01_002f8268");
-void water_lily_update(HoverMoby *m) {
+void water_lily_update(HoverMoby *water_lily) {
     enum {
         WATER_LILY_STATE_INITIALIZE = 0,
         WATER_LILY_STATE_UPDATE_POSITION = 1
@@ -3302,56 +3302,56 @@ void water_lily_update(HoverMoby *m) {
     HoverVec old;
     HoverVec tgt;
     HoverVec step;
-    HoverVec d;
+    HoverVec vector_scratch;
     f32 ang;
     f32 dz;
     f32 lim;
 
-    old.q = m->pos.q;
-    v = m->pvars;
+    old.q = water_lily->pos.q;
+    v = water_lily->pvars;
     tgt.q = old.q;
     if (v == 0) {
         return;
     }
-    switch (m->state) {
+    switch (water_lily->state) {
     case WATER_LILY_STATE_INITIALIZE:
         *(u128 *)v = old.q;
-        m->state = 1;
+        water_lily->state = 1;
         break;
     case WATER_LILY_STATE_UPDATE_POSITION:
-        spring_axis_to(&m->pos.v.x, v->home_x, &v->vel_x, D_L01_00161BF0 * frame_time_sq,
+        spring_axis_to(&water_lily->pos.v.x, v->home_x, &v->vel_x, D_L01_00161BF0 * frame_time_sq,
                        D_L01_00161BF4, 3.0f);
-        spring_axis_to(&m->pos.v.y, v->home_y, &v->vel_y, D_L01_00161BF0 * frame_time_sq,
+        spring_axis_to(&water_lily->pos.v.y, v->home_y, &v->vel_y, D_L01_00161BF0 * frame_time_sq,
                        D_L01_00161BF4, 3.0f);
-        if (vector_distance(&m->pos, &hero.motion.pos) < D_L01_00161BF8) {
-            if (FUN_001f99c0(m->pos.v.z - hero.motion.pos.f[2]) < 0.7f) {
-                ang = fast_arc_tan(m->pos.v.x - hero.motion.pos.f[0],
-                                   m->pos.v.y - hero.motion.pos.f[1]);
-                m->pos.v.x = fast_cos(ang) * D_L01_00161BF8;
-                m->pos.v.y = fast_sin(ang) * D_L01_00161BF8;
-                m->pos.v.x += hero.motion.pos.f[0];
-                m->pos.v.y += hero.motion.pos.f[1];
+        if (vector_distance(&water_lily->pos, &hero.motion.pos) < D_L01_00161BF8) {
+            if (FUN_001f99c0(water_lily->pos.v.z - hero.motion.pos.f[2]) < 0.7f) {
+                ang = fast_arc_tan(water_lily->pos.v.x - hero.motion.pos.f[0],
+                                   water_lily->pos.v.y - hero.motion.pos.f[1]);
+                water_lily->pos.v.x = fast_cos(ang) * D_L01_00161BF8;
+                water_lily->pos.v.y = fast_sin(ang) * D_L01_00161BF8;
+                water_lily->pos.v.x += hero.motion.pos.f[0];
+                water_lily->pos.v.y += hero.motion.pos.f[1];
             }
         }
-        FUN_L00_00258490(m, &tgt, &m->pos, 3, 0.1f, D_L01_00161C00, 600.0f, 1.5707964f);
-        m->pos.v.x = tgt.v.x;
-        m->pos.v.y = tgt.v.y;
-        m->pos.v.z = old.v.z;
-        if (FUN_001f9b48(&old, &m->pos) > D_L01_00161BFC * frame_time_macro) {
-            fast_vec_sub(&d, &m->pos, &old);
-            step.q = d.q;
+        FUN_L00_00258490(water_lily, &tgt, &water_lily->pos, 3, 0.1f, D_L01_00161C00, 600.0f, 1.5707964f);
+        water_lily->pos.v.x = tgt.v.x;
+        water_lily->pos.v.y = tgt.v.y;
+        water_lily->pos.v.z = old.v.z;
+        if (FUN_001f9b48(&old, &water_lily->pos) > D_L01_00161BFC * frame_time_macro) {
+            fast_vec_sub(&vector_scratch, &water_lily->pos, &old);
+            step.q = vector_scratch.q;
             fast_vec_normalize(&step, &step, D_L01_00161BFC * frame_time_macro);
-            fast_vec_add(&d, &old, &step);
-            m->pos.q = d.q;
+            fast_vec_add(&vector_scratch, &old, &step);
+            water_lily->pos.q = vector_scratch.q;
         }
-        dz = resolve_camera_surface_height(&m->pos, 0) - m->pos.v.z;
+        dz = resolve_camera_surface_height(&water_lily->pos, 0) - water_lily->pos.v.z;
         lim = frame_time_macro * 3.0f;
         if (dz > lim) {
             dz = lim;
         } else if (dz < -lim) {
             dz = -lim;
         }
-        m->pos.v.z += dz;
+        water_lily->pos.v.z += dz;
         break;
     }
 }
