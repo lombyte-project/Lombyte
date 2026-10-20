@@ -1067,30 +1067,30 @@ typedef struct T00239d00 {
 extern s32 bolt_panel_open_steps_gp __asm__("D_L00_0015F824") __attribute__((sda));
 extern s32 bolt_text_fade_steps_gp __asm__("D_L00_0015F828") __attribute__((sda));
 extern s32 FUN_001f96f8_c(s32) __asm__("FUN_001f96f8");
-void FUN_L00_00239d00(T00239d00 *o) {
-    u8 *p = &o->a;
-    s32 n = 60;
-    s32 f;
-    f = current_bolt_count;
-    *(volatile s16 *)o->ctr = (*o->ctr + 1) % n;
-    if (o->frame != f) {
-        o->frame = f;
-        o->thr = FUN_001f96f8_c(90);
+void FUN_L00_00239d00(T00239d00 *hud_element) {
+    u8 *visibility_counters = &hud_element->a;
+    s32 icon_cycle_period = 60;
+    s32 bolt_count_snapshot;
+    bolt_count_snapshot = current_bolt_count;
+    *(volatile s16 *)hud_element->ctr = (*hud_element->ctr + 1) % icon_cycle_period;
+    if (hud_element->frame != bolt_count_snapshot) {
+        hud_element->frame = bolt_count_snapshot;
+        hud_element->thr = FUN_001f96f8_c(90);
     }
-    if (FUN_001f96f8_c(5) <= o->thr) {
-        if (o->a < bolt_panel_open_steps_gp) {
-            o->a++;
-        } else if (p[1] < bolt_text_fade_steps_gp) {
-            p[1]++;
+    if (FUN_001f96f8_c(5) <= hud_element->thr) {
+        if (hud_element->a < bolt_panel_open_steps_gp) {
+            hud_element->a++;
+        } else if (visibility_counters[1] < bolt_text_fade_steps_gp) {
+            visibility_counters[1]++;
         }
     } else {
-        o->state = 1;
-        if (p[1] != 0) {
-            p[1]--;
-        } else if (o->a != 0) {
-            o->a--;
+        hud_element->state = 1;
+        if (visibility_counters[1] != 0) {
+            visibility_counters[1]--;
+        } else if (hud_element->a != 0) {
+            hud_element->a--;
         } else {
-            o->state = -6;
+            hud_element->state = -6;
         }
     }
 }
