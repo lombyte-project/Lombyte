@@ -18,29 +18,29 @@ extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8")
 extern void FUN_L00_00250df8(void *);
 
 char *FUN_L13_003058a8(struct Moby *src, short cls) {
-    char *m = create_moby(0x4D1);
-    char *d;
+    char *moby = create_moby(0x4D1);
+    char *moby_vars;
     char *pos;
-    if (m != 0) {
-        d = *(char **)(m + 0x78);
-        m[0x31] = 1;
-        ((unsigned char *)m)[0x30] = 0xFF;
-        *(short *)(m + 0x32) = 0x7F;
-        m[0x20] = 1;
-        *(char **)(d + 0x20) = src;
-        *(short *)(d + 0x26) = cls;
-        *(short *)(d + 0x24) = 1;
-        pos = m + 0x10;
+    if (moby != 0) {
+        moby_vars = *(char **)(moby + 0x78);
+        moby[0x31] = 1;
+        ((unsigned char *)moby)[0x30] = 0xFF;
+        *(short *)(moby + 0x32) = 0x7F;
+        moby[0x20] = 1;
+        *(char **)(moby_vars + 0x20) = src;
+        *(short *)(moby_vars + 0x26) = cls;
+        *(short *)(moby_vars + 0x24) = 1;
+        pos = moby + 0x10;
         moby_point_position(src, cls, pos);
-        qcopy(m + 0x40, &src->rot);
-        *(OvlQuad *)(m + 0xC0) = *(OvlQuad *)&src->rot_row0;
-        *(OvlQuad *)(m + 0xD0) = *(OvlQuad *)&src->rot_row1;
-        *(OvlQuad *)(m + 0xE0) = *(OvlQuad *)&src->rot_row2;
-        qcopy(d + 0x10, pos);
-        *(int *)(m + 0x94) = 0;
-        FUN_L00_00250df8(m);
+        qcopy(moby + 0x40, &src->rot);
+        *(OvlQuad *)(moby + 0xC0) = *(OvlQuad *)&src->rot_row0;
+        *(OvlQuad *)(moby + 0xD0) = *(OvlQuad *)&src->rot_row1;
+        *(OvlQuad *)(moby + 0xE0) = *(OvlQuad *)&src->rot_row2;
+        qcopy(moby_vars + 0x10, pos);
+        *(int *)(moby + 0x94) = 0;
+        FUN_L00_00250df8(moby);
     }
-    return m;
+    return moby;
 }
 #define NOT_SDA
 
