@@ -1207,48 +1207,48 @@ extern void FUN_L00_002b5b20_302648(struct Moby *, void *) __asm__("FUN_L00_002b
 extern s32 D_L01_0015F30C __attribute__((sda));
 /* While the camera is in mode 0x1D, counts the frames the class 0xAC moby spends outside every zone.
  * Entering a zone resets the count; past a random threshold FUN_L00_002b5b20 runs on that moby. */
-void FUN_L01_00302648(struct Moby *m) {
-    ZoneVars_302648 *v = (ZoneVars_302648 *)m->pvars;
-    struct Moby *t = 0;
-    struct Moby *p;
+void FUN_L01_00302648(struct Moby *moby) {
+    ZoneVars_302648 *v = (ZoneVars_302648 *)moby->pvars;
+    struct Moby *target_moby = 0;
+    struct Moby *candidate_moby;
     s32 i;
     s32 *path;
 
-    m->update_dist = 0xFF;
+    moby->update_dist = 0xFF;
     if (D_001413D4_302648[0] != 0x1D) {
         v->count = 0;
         return;
     }
-    for (p = D_L01_0015FFE4_302648; p != 0; p = p->next) {
-        if (p->oclass == 0xAC) {
-            t = p;
+    for (candidate_moby = D_L01_0015FFE4_302648; candidate_moby != 0; candidate_moby = candidate_moby->next) {
+        if (candidate_moby->oclass == 0xAC) {
+            target_moby = candidate_moby;
             break;
         }
     }
-    if (t == 0 || t->oclass != 0xAC) {
+    if (target_moby == 0 || target_moby->oclass != 0xAC) {
         v->count = 0;
         return;
     }
     v->count++;
     for (i = 0; i < 20; i++) {
-        if (v->zones[i].path != -1 && t->pos.z > v->zones[i].zmin && t->pos.z < v->zones[i].zmax) {
+        if (v->zones[i].path != -1 && target_moby->pos.z > v->zones[i].zmin && target_moby->pos.z < v->zones[i].zmax) {
             path = D_L01_001B0930_302648[v->zones[i].path];
-            if (absolute_float_cf(&t->pos, path + 4, path[0])) {
+            if (absolute_float_cf(&target_moby->pos, path + 4, path[0])) {
                 v->count = 0;
                 break;
             }
         }
-        if (FUN_00214720_302648(&t->pos, v->zones[i].volume)) {
+        if (FUN_00214720_302648(&target_moby->pos, v->zones[i].volume)) {
             v->count = 0;
             break;
         }
     }
     if (v->count > 0) {
         if (D_L01_0015F30C) {
-            FUN_001f4600_302648(FUN_L01_00302438_302648, m);
+            FUN_001f4600_302648(FUN_L01_00302438_302648, moby);
         }
         if (scale_game_frames(90) < v->count) {
-            FUN_L00_002b5b20_302648(t, t->pvars);
+            FUN_L00_002b5b20_302648(target_moby, target_moby->pvars);
         }
     }
 }
