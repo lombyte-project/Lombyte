@@ -2252,9 +2252,9 @@ void FUN_L18_002df608(struct Moby *moby) {
         FUN_L00_002ea9d8_q_002eaa30(v + 4);
         approach_value((float *)(data + 0x6C), 0.0f, (*(float *)&D_L18_00161A6C) * 4.0f);
         {
-            float d = *(float *)(data + 0x60);
+            float transition_progress = *(float *)(data + 0x60);
             D_L18_0015F3FC_d = *(float *)(data + 0x6C);
-            if (1.0f <= d) {
+            if (1.0f <= transition_progress) {
                 D_L18_0015F404 = 0;
                 clear_u64_value(v + 8);
                 v[10] = *(float *)(data + 0x4C);
