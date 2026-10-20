@@ -1149,8 +1149,8 @@ unsigned char *mine_debris(void *spawn_position, void *b, int initial_color, int
         particle[3] = 0x44;
         particle[8] = FUN_001160d8_26bed0();
         {
-            unsigned char *t = D_L00_001B20C0;
-            particle[2] = *(k != 3 ? t + k : t);
+            unsigned char *particle_byte_table = D_L00_001B20C0;
+            particle[2] = *(k != 3 ? particle_byte_table + k : particle_byte_table);
         }
         particle_data = particle + 0x20;
         *(s16 *)(particle + 0xA) = lifetime;
