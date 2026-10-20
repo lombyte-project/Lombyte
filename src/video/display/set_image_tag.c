@@ -14,8 +14,8 @@ extern void *D_0015EEB8 MACRO_ADDR;
 void set_image_tag(void *p, int texbuf, int image_w,
                               int image_h) __asm__("FUN_0023b210");
 
-void set_image_tag(void *p, int texbuf, int image_w, int image_h) {
-    char *out = (char *)p;
+void set_image_tag(void *tag_buffer, int texbuf, int image_w, int image_h) {
+    char *out = (char *)tag_buffer;
     int mbx = image_w >> 4;
     int mby = image_h >> 4;
     int x, y;
