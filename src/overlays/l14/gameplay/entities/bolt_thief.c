@@ -650,12 +650,12 @@ void sam_update(L14WatchMoby *moby) {
     tracking = 0;
     if (moby->animation == 0) {
         char *g = (char *)&hero.motion.pos;
-        L14Player *q;
+        L14Player *hero_aim_view;
         tracking = 1;
         if (vector_distance(moby->position, g) < 8.0f &&
-            (q = (L14Player *)(g - 0x80),
+            (hero_aim_view = (L14Player *)(g - 0x80),
              fast_difference_between_rotations(
-                 moby->yaw, fast_arc_tan(q->aim[0] - moby->position[0], q->aim[1] - moby->position[1]))) <
+                 moby->yaw, fast_arc_tan(hero_aim_view->aim[0] - moby->position[0], hero_aim_view->aim[1] - moby->position[1]))) <
                 1.5707964f) {
             if (fast_vec_length(g + 0x80) > 0.01f)
                 moby_data->moving_timer = scale_game_frames(120);
