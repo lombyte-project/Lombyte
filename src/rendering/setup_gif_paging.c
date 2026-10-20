@@ -33,12 +33,12 @@ extern s32 gs_texture_allocation_start __asm__("D_0015EE78") MACRO_ADDR;
 extern s32 gs_texture_allocation_cursor __asm__("D_0015EE74") MACRO_ADDR;
 extern s32 gs_texture_allocation_base_macro __asm__("D_0015EE8C") MACRO_ADDR;
 void setup_gif_paging(int skip_paging_entry_reset) {
-    int *p = render_packet_cursor.words;
+    int *packet_cursor = render_packet_cursor.words;
     int i;
 
-    gif_page_marker_a = p;
-    p += 4;
-    render_packet_cursor.words = p;
+    gif_page_marker_a = packet_cursor;
+    packet_cursor += 4;
+    render_packet_cursor.words = packet_cursor;
     gs_texture_allocation_cursor = gs_texture_allocation_start;
     *(int *)&pending_texture_upload_count = 0;
     {
