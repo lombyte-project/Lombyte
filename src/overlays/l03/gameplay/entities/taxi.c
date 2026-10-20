@@ -667,23 +667,23 @@ extern void set_path_2cc888(void *, void *, int, int, int, float) __asm__("FUN_L
 
 /* Spawns a projectile moby (class 0x273) at pos, heading along dir,
  * owned by parent p. */
-char *FUN_L03_002cc888(char *p, void *pos, float *dir) {
-    char *m = create_moby_2cc888(0x273);
+char *FUN_L03_002cc888(char *parent_moby, void *pos, float *dir) {
+    char *spawned_moby = create_moby_2cc888(0x273);
     char *v;
-    float s;
+    float frame_scale_squared;
 
-    if (m == 0) {
+    if (spawned_moby == 0) {
         return 0;
     }
-    *(unsigned short *)(m + 0x32) = *(unsigned short *)(p + 0x32);
-    m[0x30] = p[0x32];
-    m[0x31] = 1;
-    *(long long *)(m + 0x38) = *(long long *)(p + 0x38);
-    qcopy(m + 0x10, pos);
-    v = *(char **)(m + 0x78);
-    s = frame_scale_sq;
-    *(float *)(v + 0x10) = s * 0.008f;
-    *(float *)(v + 0x14) = s * 0.0005f;
+    *(unsigned short *)(spawned_moby + 0x32) = *(unsigned short *)(parent_moby + 0x32);
+    spawned_moby[0x30] = parent_moby[0x32];
+    spawned_moby[0x31] = 1;
+    *(long long *)(spawned_moby + 0x38) = *(long long *)(parent_moby + 0x38);
+    qcopy(spawned_moby + 0x10, pos);
+    v = *(char **)(spawned_moby + 0x78);
+    frame_scale_squared = frame_scale_sq;
+    *(float *)(v + 0x10) = frame_scale_squared * 0.008f;
+    *(float *)(v + 0x14) = frame_scale_squared * 0.0005f;
     *(float *)(v + 0x18) = vlen_2cc888(dir);
     *(float *)(v + 0x1C) = dir[2];
     *(int *)(v + 0x20) = 0x400;
@@ -695,11 +695,11 @@ char *FUN_L03_002cc888(char *p, void *pos, float *dir) {
     *(float *)(v + 0x4C) = 0.01f;
     v[0x3D] = 0;
     *(int *)(v + 0x24) = 1;
-    set_path_2cc888(m, v, 0, 1, 0, atan2_2cc888(dir[0], dir[1]));
-    *(char **)(v + 0x68) = p;
+    set_path_2cc888(spawned_moby, v, 0, 1, 0, atan2_2cc888(dir[0], dir[1]));
+    *(char **)(v + 0x68) = parent_moby;
     *(int *)(v + 0x6C) = 0;
-    m[0x20] = 1;
-    return m;
+    spawned_moby[0x20] = 1;
+    return spawned_moby;
 }
 
 /* Test the observed halfword and byte range without inferring object identity. */
