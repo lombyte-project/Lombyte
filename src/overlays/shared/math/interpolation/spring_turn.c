@@ -409,7 +409,7 @@ s32 FUN_L00_00258b50(Obj *m, Ctl *c, void *v, Vec4 *out, f32 f);
 s32 FUN_L00_00258b50(Obj *moby, Ctl *movement_control, void *v, Vec4 *out, f32 f) {
     Vec4 save;
     Vec4 displacement;
-    Vec4 p;
+    Vec4 probe_or_direction;
     Vec4 q;
     Glob *g;
     s32 mask = 0;
@@ -453,9 +453,9 @@ s32 FUN_L00_00258b50(Obj *moby, Ctl *movement_control, void *v, Vec4 *out, f32 f
         movement_control->f18 = movement_control->f18 - frame_time_sq_gp * 9.0f;
     }
     lim = moby->pos.f[2] + 0.04f;
-    fast_vec_add(&p, &moby->pos, &displacement);
-    p.f[2] = moby->pos.f[2] - movement_control->f30;
-    if (FUN_L00_002583f0_c(&p, moby, movement_control->i38 & 0x20, movement_control->f08, movement_control->f0C)) {
+    fast_vec_add(&probe_or_direction, &moby->pos, &displacement);
+    probe_or_direction.f[2] = moby->pos.f[2] - movement_control->f30;
+    if (FUN_L00_002583f0_c(&probe_or_direction, moby, movement_control->i38 & 0x20, movement_control->f08, movement_control->f0C)) {
         g = &D_L00_00173E40_c;
         normal_elevation_angle = fast_arc_tan(g->v40.f[2], vector_length_xy(&g->v40));
         h1 = g->f28;
@@ -488,13 +488,13 @@ s32 FUN_L00_00258b50(Obj *moby, Ctl *movement_control, void *v, Vec4 *out, f32 f
 done:
     if (!(mask & 2)) {
         l2 = vector_length_xy(&displacement);
-        FUN_001f9a68_c(&p, &displacement, 1.0f / l2);
+        FUN_001f9a68_c(&probe_or_direction, &displacement, 1.0f / l2);
         r = FUN_L00_00258ad0_c(moby, &displacement, movement_control->f04, movement_control->i00, movement_control->f30, movement_control->i38);
         if (r & 2)
             movement_control->f18 = frame_scale * -0.01f;
         if (r & 1) {
             mask |= 1;
-            if (displacement.f[0] * p.f[0] + displacement.f[1] * p.f[1] < l2 * 0.2f)
+            if (displacement.f[0] * probe_or_direction.f[0] + displacement.f[1] * probe_or_direction.f[1] < l2 * 0.2f)
                 mask |= 2;
             ground_height = probe_ground_height(&moby->pos, 0, 0.5f);
             if (movement_control->f08 < save.f[2] - ground_height || movement_control->f0C < ground_height - save.f[2]) {
