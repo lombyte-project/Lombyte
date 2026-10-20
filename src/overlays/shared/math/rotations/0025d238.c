@@ -151,7 +151,7 @@ typedef struct { float x, y, z, w; } Pt_0025E860;
 typedef struct { int n; int pad[3]; Pt_0025E860 pt[1]; } Spline_0025E860;
 
 // Moves DIST along a spline from segment *IDX at offset *T, updates both, and writes the point reached to OUT; 1 when an end was passed.
-int FUN_L00_0025d808(Spline_0025E860 *s, float *out, int *idx, float *t, int loop, float dist) {
+int FUN_L00_0025d808(Spline_0025E860 *path, float *out, int *idx, float *segment_offset, int loop, float dist) {
     float v[4];
     int ret = 0;
     int dir = 1;
@@ -162,59 +162,59 @@ int FUN_L00_0025d808(Spline_0025E860 *s, float *out, int *idx, float *t, int loo
         dist = -dist;
         dir = -1;
     }
-    while (dist != 0.0f && (*idx != s->n - 1 || loop)) {
+    while (dist != 0.0f && (*idx != path->n - 1 || loop)) {
         int adv;
 
         i = *idx;
         if (dir == 1) {
-            adv = s->pt[i].w < *t + dist;
+            adv = path->pt[i].w < *segment_offset + dist;
         } else {
-            adv = *t < dist;
+            adv = *segment_offset < dist;
         }
         if (adv) {
             i += dir;
-            if (i >= s->n || i < 0) {
-                i = (i + s->n) % s->n;
+            if (i >= path->n || i < 0) {
+                i = (i + path->n) % path->n;
             }
             if (dir == 1) {
-                dist -= s->pt[*idx].w - *t;
-                *t = 0.0f;
+                dist -= path->pt[*idx].w - *segment_offset;
+                *segment_offset = 0.0f;
                 if (dist < 0.0f) {
                     dist = 0.0f;
                 }
             } else {
-                dist -= *t;
-                *t = s->pt[i].w;
+                dist -= *segment_offset;
+                *segment_offset = path->pt[i].w;
             }
-            if ((dir == 1 && *idx == s->n - 1) || (dir == -1 && *idx == 0)) {
+            if ((dir == 1 && *idx == path->n - 1) || (dir == -1 && *idx == 0)) {
                 ret = 1;
             }
             *idx = i;
         } else {
             if (dir == 1) {
-                *t = *t + dist;
+                *segment_offset = *segment_offset + dist;
             } else {
-                *t = *t - dist;
+                *segment_offset = *segment_offset - dist;
             }
             dist = 0.0f;
         }
     }
     i = *idx;
-    qcopy_nc(out, &s->pt[i]);
-    if (i == s->n - 1 && !loop) {
+    qcopy_nc(out, &path->pt[i]);
+    if (i == path->n - 1 && !loop) {
         if (dir == -1) {
             *idx = 0;
-            qcopy_nc(out, &s->pt[0]);
-            *t = 0.0f;
+            qcopy_nc(out, &path->pt[0]);
+            *segment_offset = 0.0f;
         }
         return 1;
     }
     j = i + 1;
-    if (j >= s->n) {
-        j %= s->n;
+    if (j >= path->n) {
+        j %= path->n;
     }
-    vec_sub_25d808(v, &s->pt[j], &s->pt[i]);
-    vec_scale_25d808(v, v, *t);
+    vec_sub_25d808(v, &path->pt[j], &path->pt[i]);
+    vec_scale_25d808(v, v, *segment_offset);
     vec_add_25d808(out, out, v);
     return ret;
 }
