@@ -629,74 +629,74 @@ extern int func_0022ED80_r(int, int, int) __asm__("FUN_0022da68");
 extern short D_L06_00161D24 __attribute__((sda));
 extern short D_L06_00161D28 __attribute__((sda));
 void toxic_gas_vent_update(char *m) __asm__("FUN_L06_002f3ad8");
-void toxic_gas_vent_update(char *m) {
+void toxic_gas_vent_update(char *vent_moby) {
     enum {
         VENT_INITIALIZE = 0,
         VENT_OSCILLATE = 1,
         VENT_TIMED_ACTIVE = 2,
         VENT_WAIT_FOR_ACTIVATION = 3
     };
-    char *d = *(char **)(m + 0x78);
-    float s;
-    if (*(int *)(d + 0x90) >= 0) {
-        if (is_point_inside_clip_volume(&hero.motion.pos, *(int *)(d + 0x90)) != 0) {
+    char *vent_data = *(char **)(vent_moby + 0x78);
+    float heading_offset_radians;
+    if (*(int *)(vent_data + 0x90) >= 0) {
+        if (is_point_inside_clip_volume(&hero.motion.pos, *(int *)(vent_data + 0x90)) != 0) {
             float x = *(float *)&D_L06_00161D24;
             float y = *(float *)&D_L06_00161D28;
-            *(float *)(d + 0x50) = x;
-            *(float *)(d + 0x54) = y;
+            *(float *)(vent_data + 0x50) = x;
+            *(float *)(vent_data + 0x54) = y;
         } else {
-            *(int *)(d + 0x50) = 0;
-            *(int *)(d + 0x54) = 0;
+            *(int *)(vent_data + 0x50) = 0;
+            *(int *)(vent_data + 0x54) = 0;
         }
     }
-    switch (((unsigned char *)m)[0x20]) {
+    switch (((unsigned char *)vent_moby)[0x20]) {
     case VENT_INITIALIZE:
-        if (*(int *)(d + 0x60) != 0) {
-            m[0x20] = 1;
-            *(float *)(d + 0x80) = 360.0f / *(float *)(d + 0x68) * DEG_TO_RAD * frame_time;
-            *(float *)(d + 0x7C) = *(float *)(d + 0x6C) * DEG_TO_RAD;
-            *(float *)(d + 0x84) = *(float *)(m + 0x48);
+        if (*(int *)(vent_data + 0x60) != 0) {
+            vent_moby[0x20] = 1;
+            *(float *)(vent_data + 0x80) = 360.0f / *(float *)(vent_data + 0x68) * DEG_TO_RAD * frame_time;
+            *(float *)(vent_data + 0x7C) = *(float *)(vent_data + 0x6C) * DEG_TO_RAD;
+            *(float *)(vent_data + 0x84) = *(float *)(vent_moby + 0x48);
         } else {
-            m[0x20] = 3;
-            *(int *)(d + 0x88) = scale_game_frames(
-                truncate_float_to_s32(*(float *)(d + 0x74) + *(float *)(d + 0x78) * 60.0f));
+            vent_moby[0x20] = 3;
+            *(int *)(vent_data + 0x88) = scale_game_frames(
+                truncate_float_to_s32(*(float *)(vent_data + 0x74) + *(float *)(vent_data + 0x78) * 60.0f));
         }
-        *(int *)(d + 0x94) = -1;
+        *(int *)(vent_data + 0x94) = -1;
         break;
     case VENT_OSCILLATE:
-        if (voice_is_playing(m, *(int *)(d + 0x94)) == 0) {
-            *(int *)(d + 0x94) = func_0022ED80_r(0, 4, (int)m);
+        if (voice_is_playing(vent_moby, *(int *)(vent_data + 0x94)) == 0) {
+            *(int *)(vent_data + 0x94) = func_0022ED80_r(0, 4, (int)vent_moby);
         }
-        FUN_L06_002f3d70(m);
-        FUN_L06_002f4130_c(m);
-        s = *(float *)(d + 0x64) * DEG_TO_RAD * fast_sin(*(float *)(d + 0x7C));
-        *(float *)(d + 0x7C) = fast_add_rotations(*(float *)(d + 0x7C), *(float *)(d + 0x80));
-        *(float *)(m + 0x48) = fast_add_rotations(*(float *)(d + 0x84), s);
+        FUN_L06_002f3d70(vent_moby);
+        FUN_L06_002f4130_c(vent_moby);
+        heading_offset_radians = *(float *)(vent_data + 0x64) * DEG_TO_RAD * fast_sin(*(float *)(vent_data + 0x7C));
+        *(float *)(vent_data + 0x7C) = fast_add_rotations(*(float *)(vent_data + 0x7C), *(float *)(vent_data + 0x80));
+        *(float *)(vent_moby + 0x48) = fast_add_rotations(*(float *)(vent_data + 0x84), heading_offset_radians);
         break;
     case VENT_TIMED_ACTIVE:
-        if (voice_is_playing(m, *(int *)(d + 0x94)) == 0) {
-            *(int *)(d + 0x94) = func_0022ED80_r(0, 4, (int)m);
+        if (voice_is_playing(vent_moby, *(int *)(vent_data + 0x94)) == 0) {
+            *(int *)(vent_data + 0x94) = func_0022ED80_r(0, 4, (int)vent_moby);
         }
-        FUN_L06_002f3d70(m);
-        FUN_L06_002f4390_c(m);
-        if (fast_dec_timer(d + 0x88) != 0) {
-            m[0x20] = 3;
-            *(int *)(d + 0x88) =
-                scale_game_frames(truncate_float_to_s32(*(float *)(d + 0x74) * 60.0f));
-            if (*(int *)(d + 0x94) != -1) {
-                char *e = ((char *)&D_0013E550) + *(int *)(d + 0x94) * 0x70;
-                if (*(char **)(e + 0x88) == m && ((unsigned char *)e)[0x74] != 0) {
-                    release_voice_slot(*(int *)(d + 0x94));
+        FUN_L06_002f3d70(vent_moby);
+        FUN_L06_002f4390_c(vent_moby);
+        if (fast_dec_timer(vent_data + 0x88) != 0) {
+            vent_moby[0x20] = 3;
+            *(int *)(vent_data + 0x88) =
+                scale_game_frames(truncate_float_to_s32(*(float *)(vent_data + 0x74) * 60.0f));
+            if (*(int *)(vent_data + 0x94) != -1) {
+                char *voice_slot = ((char *)&D_0013E550) + *(int *)(vent_data + 0x94) * 0x70;
+                if (*(char **)(voice_slot + 0x88) == vent_moby && ((unsigned char *)voice_slot)[0x74] != 0) {
+                    release_voice_slot(*(int *)(vent_data + 0x94));
                 }
             }
-            *(int *)(d + 0x94) = -1;
+            *(int *)(vent_data + 0x94) = -1;
         }
         break;
     case VENT_WAIT_FOR_ACTIVATION:
-        if (fast_dec_timer(d + 0x88) != 0) {
-            m[0x20] = 2;
-            *(int *)(d + 0x88) =
-                scale_game_frames(truncate_float_to_s32(*(float *)(d + 0x70) * 60.0f));
+        if (fast_dec_timer(vent_data + 0x88) != 0) {
+            vent_moby[0x20] = 2;
+            *(int *)(vent_data + 0x88) =
+                scale_game_frames(truncate_float_to_s32(*(float *)(vent_data + 0x70) * 60.0f));
         }
         break;
     }
