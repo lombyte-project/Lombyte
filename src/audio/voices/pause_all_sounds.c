@@ -68,9 +68,9 @@ void pause_all_sounds(s32 mode) {
         g->update_count = 0;
     }
     {
-        s32 m = *(volatile s32 *)&current_level_index;
-        if (m < 0x13) {
-            D_001A0314[0] = m;
+        s32 level_index_snapshot = *(volatile s32 *)&current_level_index;
+        if (level_index_snapshot < 0x13) {
+            D_001A0314[0] = level_index_snapshot;
         } else {
             D_001A0314[0] = 0;
         }
