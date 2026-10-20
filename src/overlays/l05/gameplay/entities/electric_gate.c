@@ -2111,28 +2111,28 @@ extern int D_L05_001612DC;
 extern float D_L05_001612EC;
 /* Two-state marker: arms the moby, then once its target is found copies the
  * target position and sets the bob height from the frame counter. */
-void FUN_L05_00318a68(char *m) {
+void FUN_L05_00318a68(char *moby) {
     enum {
         MOBY_INITIALIZE = 0,
         MOBY_CHECK_HERO_VOLUME = 1
     };
-    int state = *(unsigned char *)(m + 0x20);
-    int *v = *(int **)(m + 0x78);
-    char *t;
+    int state = *(unsigned char *)(moby + 0x20);
+    int *v = *(int **)(moby + 0x78);
+    char *hero_position;
 
     switch (state) {
     case MOBY_INITIALIZE:
-        *(unsigned char *)(m + 0x20) = 1;
-        *(unsigned short *)(m + 0x34) |= 1;
-        *(unsigned char *)(m + 0x30) = 0xFF;
-        *(int *)(m + 0x94) = 0;
+        *(unsigned char *)(moby + 0x20) = 1;
+        *(unsigned short *)(moby + 0x34) |= 1;
+        *(unsigned char *)(moby + 0x30) = 0xFF;
+        *(int *)(moby + 0x94) = 0;
         break;
     case MOBY_CHECK_HERO_VOLUME:
-        t = (char *)&hero.motion.pos;
-        if (find_318a68(t, *v) != 0) {
+        hero_position = (char *)&hero.motion.pos;
+        if (find_318a68(hero_position, *v) != 0) {
             D_L05_001612D8_318a68[1] = state;
-            qcopy(D_L05_001612E0_gp, t);
-            *(short *)(t + 0x15E) = 5;
+            qcopy(D_L05_001612E0_gp, hero_position);
+            *(short *)(hero_position + 0x15E) = 5;
             D_L05_001612EC = 48.0f;
             *(volatile float *)&D_L05_001612E8 = sin_318a68((float)(D_L05_0015F5C4_318a68[2] % 360) * 0.017444444f - 3.14f) * 0.25f + 59.5f;
         } else {
