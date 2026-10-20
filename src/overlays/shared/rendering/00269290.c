@@ -2948,7 +2948,7 @@ extern f32 rang_26fd28(void) __asm__("FUN_00213308");
 extern f32 rfb_26fd28(f32, f32) __asm__("FUN_002132a8");
 extern s32 rnd_26fd28(void) __asm__("FUN_001160d8");
 extern u8 *tex_26fd28 __asm__("D_L00_001B20B0") __attribute__((section(".data")));
-P_26fd28 *FUN_L00_0026fd28(u128 *pos, u128 *vel, u8 c, s32 d) {
+P_26fd28 *FUN_L00_0026fd28(u128 *pos, u128 *vel, u8 initial_flags, s32 d) {
     P_26fd28 *particle;
     E_26fd28 *e;
     f32 initial_rotation_phase;
@@ -2966,10 +2966,10 @@ P_26fd28 *FUN_L00_0026fd28(u128 *pos, u128 *vel, u8 c, s32 d) {
         e->f10 = initial_rotation_phase;
         particle->b8 = (s32)(initial_rotation_phase * 256.0f);
         particle->b2 = tex_26fd28[rnd_26fd28() & 7];
-        e->b18 = c;
+        e->b18 = initial_flags;
         e->h14 = 0;
         e->h16 = 0;
-        if (c < 5) {
+        if (initial_flags < 5) {
             particle->fC = rfb_26fd28(7000.0f, 10000.0f);
             lifetime_random_value = rnd_26fd28();
             {
