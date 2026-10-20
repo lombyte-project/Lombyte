@@ -1913,18 +1913,18 @@ s32 FUN_001fa6d0(f32);
 void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 s32 fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 void free_effect_particle(void *) __asm__("FUN_L00_00267a08");
-void FUN_L00_00275860(O00275860 *o) {
-    V00275860 t;
+void FUN_L00_00275860(O00275860 *particle) {
+    V00275860 velocity_xyz;
     f32 w, k;
-    t.q = o->vel.q;
-    w = t.f[3];
-    t.f[3] = 0.0f;
-    k = convert_integer_to_float(o->h) / w;
-    o->col = (FUN_001fa6d0(k * 38.0f) << 24) | 0x808080;
-    o->a = FUN_001fa6d0(k * 33.0f);
-    fast_vec_add(&o->pos, &o->pos, &t);
-    if (fast_dec_timer_s16(&o->h))
-        free_effect_particle(o);
+    velocity_xyz.q = particle->vel.q;
+    w = velocity_xyz.f[3];
+    velocity_xyz.f[3] = 0.0f;
+    k = convert_integer_to_float(particle->h) / w;
+    particle->col = (FUN_001fa6d0(k * 38.0f) << 24) | 0x808080;
+    particle->a = FUN_001fa6d0(k * 33.0f);
+    fast_vec_add(&particle->pos, &particle->pos, &velocity_xyz);
+    if (fast_dec_timer_s16(&particle->h))
+        free_effect_particle(particle);
 }
 extern int FUN_001fa6d0_275910(float) __asm__("FUN_001fa6d0");
 extern int FUN_00213260_275910(int) __asm__("FUN_00213260");
