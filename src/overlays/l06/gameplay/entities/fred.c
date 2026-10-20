@@ -528,10 +528,10 @@ void FUN_L06_002fd1a0(void) {
         normalize_other_2fd1a0(vec2, vec1);
         j = 0;
         do {
-            int a = D_L06_001F1220[i][j][0];
+            int vertex_index = D_L06_001F1220[i][j][0];
             int b = D_L06_001F1220[i][j][1];
             float u, v;
-            qcopy(&first.v[j], D_L06_001F0900[a]);
+            qcopy(&first.v[j], D_L06_001F0900[vertex_index]);
             qcopy(&second.v[j], &first.v[j]);
             u = D_L06_001F1540[b][0];
             v = D_L06_001F1540[b][1];
