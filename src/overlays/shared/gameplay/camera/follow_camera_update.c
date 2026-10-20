@@ -2181,35 +2181,35 @@ s32 FUN_L00_0028ddd8_2ed950(s32, s32, void *, s32) __asm__("FUN_L00_0028ddd8");
 s32 FUN_00213260_2ed950(s32) __asm__("FUN_00213260");
 s32 FUN_001f96f8_2ed950(s32) __asm__("FUN_001f96f8");
 void release_voice_slot(s32) __asm__("FUN_0022d798");
-void FUN_L00_002ed950(u8 *m) {
-    S_2ed950 *s = *(S_2ed950 **)(m + 8);
-    f32 d, r;
-    if (s->id < 0)
+void FUN_L00_002ed950(u8 *sound_emitter) {
+    S_2ed950 *playback_state = *(S_2ed950 **)(sound_emitter + 8);
+    f32 reference_distance, r;
+    if (playback_state->id < 0)
         return;
-    d = distance_xyz(D_L00_00166DC0_2ed950, m + 0x40);
-    r = *(f32 *)(m + 0xC);
-    if (d < r) {
-        E_2ed950 *e = ENT_2ed950(s->snd);
+    reference_distance = distance_xyz(D_L00_00166DC0_2ed950, sound_emitter + 0x40);
+    r = *(f32 *)(sound_emitter + 0xC);
+    if (reference_distance < r) {
+        E_2ed950 *e = ENT_2ed950(playback_state->snd);
         s32 fl = 0;
         s32 four = 4;
-        if (D_L00_0015F5F4_2ed950[s->id].b18)
+        if (D_L00_0015F5F4_2ed950[playback_state->id].b18)
             fl = four;
-        if (e->o == m && e->b74)
+        if (e->o == sound_emitter && e->b74)
             return;
-        if (!FUN_001f9740_2ed950(&s->wC))
+        if (!FUN_001f9740_2ed950(&playback_state->wC))
             return;
-        s->snd = FUN_L00_0028ddd8_2ed950(s->id, fl, m, 0x400);
-        if (s->w8 > 0) {
-            s->wC = FUN_001f96f8_2ed950(s->w4 + FUN_00213260_2ed950(s->w8 - s->w4)) * 60.0f;
+        playback_state->snd = FUN_L00_0028ddd8_2ed950(playback_state->id, fl, sound_emitter, 0x400);
+        if (playback_state->w8 > 0) {
+            playback_state->wC = FUN_001f96f8_2ed950(playback_state->w4 + FUN_00213260_2ed950(playback_state->w8 - playback_state->w4)) * 60.0f;
         }
-    } else if (r + 1.0f < d) {
-        s32 h = s->snd;
-        if (h != -1) {
-            E_2ed950 *e = ENT_2ed950(h);
-            if (e->o == m && e->b74)
-                release_voice_slot(h);
+    } else if (r + 1.0f < reference_distance) {
+        s32 voice_slot_index = playback_state->snd;
+        if (voice_slot_index != -1) {
+            E_2ed950 *e = ENT_2ed950(voice_slot_index);
+            if (e->o == sound_emitter && e->b74)
+                release_voice_slot(voice_slot_index);
         }
-        s->snd = -1;
+        playback_state->snd = -1;
     }
 }
 typedef struct {
