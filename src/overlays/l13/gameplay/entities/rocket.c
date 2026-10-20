@@ -2426,7 +2426,7 @@ char *FUN_L13_0030c138(void *position, void *b, int duration_frames, int d) {
     unsigned char *moby = (unsigned char *)func_0020D348_m(0x662);
     if (moby != 0) {
         char *data;
-        float r1, dd;
+        float rotation_x_increment, dd;
         data = *(char **)(moby + 0x78);
         moby[0x30] = 0xFF;
         *(short *)(moby + 0x32) = 0xFF;
@@ -2435,9 +2435,9 @@ char *FUN_L13_0030c138(void *position, void *b, int duration_frames, int d) {
         set_moby_color(moby, 0x20, 0x60, 0x10);
         qcopy(moby + 0x10, position);
         qcopy(data, b);
-        r1 = random_float_between_alt(frame_time * 6.2831855f, frame_time * 12.566371f);
+        rotation_x_increment = random_float_between_alt(frame_time * 6.2831855f, frame_time * 12.566371f);
         dd = frame_time;
-        *(float *)(data + 0x10) = r1;
+        *(float *)(data + 0x10) = rotation_x_increment;
         *(float *)(data + 0x14) = random_float_between_alt(dd * 6.2831855f, dd * 12.566371f);
         *(short *)(data + 0x18) = duration_frames;
         *(short *)(data + 0x1A) = duration_frames;
