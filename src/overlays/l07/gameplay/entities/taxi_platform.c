@@ -319,9 +319,9 @@ extern int D_L07_00173ED8 __attribute__((section(".data")));
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 
 int FUN_L07_0030f4d0(void *moby, int id, float scale) {
-    char temp[16];
-    moby_point_position(moby, 0, temp);
-    if (coll_sphere(scale, temp, 0x21, moby) && D_L07_00173ED8 == id) {
+    char collision_center[16];
+    moby_point_position(moby, 0, collision_center);
+    if (coll_sphere(scale, collision_center, 0x21, moby) && D_L07_00173ED8 == id) {
         return 1;
     }
     return 0;
