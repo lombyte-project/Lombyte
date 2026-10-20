@@ -415,12 +415,12 @@ void FUN_L05_00307010(char *moby) {
         FUN_L00_002591d0((int *)&l1, *(int *)(od + 0x44), 0, 0);
         while (l1) {
             if (*(short *)(l1 + 0xA6) == 0x473) {
-                float a[4];
+                float offset_test_position[4];
                 float m[16];
                 char *pos = l1;
-                qcopy(a, data + 0x200);
-                a[2] += 0.8f;
-                subtract_vector_xyz(v, pos + 0x10, a);
+                qcopy(offset_test_position, data + 0x200);
+                offset_test_position[2] += 0.8f;
+                subtract_vector_xyz(v, pos + 0x10, offset_test_position);
                 if (!(8.0f < vector_length_xyz(v))) {
                     set_identity_matrix(m);
                     transpose_rotation_matrix(m, l1 + 0xC0);
