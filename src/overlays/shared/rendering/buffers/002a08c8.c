@@ -15,14 +15,14 @@ extern int D_L00_001611D4;
 extern char D_L00_001E9530[];
 void FUN_L00_002a08c8(void) {
     int r;
-    int d;
+    int buffer_used_bytes;
     u32 *s;
-    d = D_L00_001611C0_002a08c8 - D_L00_001611B8[D_L00_001611D0];
+    buffer_used_bytes = D_L00_001611C0_002a08c8 - D_L00_001611B8[D_L00_001611D0];
     D_L00_001611A0_002a08c8 |= 0x1F;
     r = 0;
-    if (D_L00_001611D4 < d) {
-        D_L00_001611D4 = d;
-        if (D_L00_001611CC < d) {
+    if (D_L00_001611D4 < buffer_used_bytes) {
+        D_L00_001611D4 = buffer_used_bytes;
+        if (D_L00_001611CC < buffer_used_bytes) {
             FUN_001e93b0_002a08c8(D_L00_001E9530);
             r = 1;
         }
