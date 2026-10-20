@@ -14,20 +14,20 @@ extern int allocate_voice_slot(void *, int, int, int, int) __asm__("FUN_0022d7f0
 
 int trooper_play_sound(int i, int a1, int v, int k) __asm__("FUN_L00_0028dc90");
 int trooper_play_sound(int i, int voice_flags, int v, int k) {
-    char *t = D_L00_00197300[class_slot[k]];
-    char *e;
+    char *class_sound_data = D_L00_00197300[class_slot[k]];
+    char *voice_slot;
     int r;
-    if (t == 0) {
+    if (class_sound_data == 0) {
         return -1;
     }
-    if (i >= *(unsigned char *)(t + 0xD)) {
+    if (i >= *(unsigned char *)(class_sound_data + 0xD)) {
         return -1;
     }
-    r = allocate_voice_slot(*(char **)(t + 0x28) + i * 32, voice_flags, v, 0, 0x400);
+    r = allocate_voice_slot(*(char **)(class_sound_data + 0x28) + i * 32, voice_flags, v, 0, 0x400);
     if (r >= 0) {
-        e = D_0013E533 + 0x1D + r * 0x70;
-        *(int *)(e + 0x88) = v;
-        *(short *)(e + 0x7E) = i;
+        voice_slot = D_0013E533 + 0x1D + r * 0x70;
+        *(int *)(voice_slot + 0x88) = v;
+        *(short *)(voice_slot + 0x7E) = i;
     }
     return r;
 }
