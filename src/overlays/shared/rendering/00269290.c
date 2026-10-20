@@ -1608,36 +1608,36 @@ int FUN_001fa6d0_26d000(float) __asm__("FUN_001fa6d0");
 float FUN_L00_00257c48_26d000(float, float) __asm__("FUN_L00_00257c48");
 int FUN_001f96f8_26d000(int) __asm__("FUN_001f96f8");
 float FUN_002132a8_26d000(float, float) __asm__("FUN_002132a8");
-unsigned char *FUN_L00_0026d000(void *pos, int n, void *vel, int color, float r, float lo, float hi,
+unsigned char *FUN_L00_0026d000(void *pos, int spin_rate, void *vel, int color, float r, float lo, float hi,
                                 float size) {
-    unsigned char *m = FUN_L00_002678b8_26d000(0x17);
-    if (m) {
-        unsigned char *q;
+    unsigned char *particle = FUN_L00_002678b8_26d000(0x17);
+    if (particle) {
+        unsigned char *particle_data;
         float z;
-        qcopy(m + 0x10, pos);
-        *(int *)(m + 4) = color | 0x20000000;
+        qcopy(particle + 0x10, pos);
+        *(int *)(particle + 4) = color | 0x20000000;
         z = 0.0f;
-        q = m + 0x20;
-        m[9] = FUN_001fa6d0_26d000(4.0f) + 0x70;
-        m[3] = 0x48;
-        *(float *)(m + 0xC) = size;
-        m[1] = 0;
-        m[8] = 0;
-        m[2] = *D_L00_001B20DC;
-        *(float *)(m + 0x10) += FUN_L00_00257c48_26d000(z, r);
-        *(float *)(m + 0x14) += FUN_L00_00257c48_26d000(z, r);
-        *(float *)(m + 0x18) += FUN_L00_00257c48_26d000(z, r);
-        *(short *)(m + 0xA) = FUN_001f96f8_26d000(0xA);
-        *(int *)(q + 4) = 0;
-        *(int *)(q + 0) = color;
+        particle_data = particle + 0x20;
+        particle[9] = FUN_001fa6d0_26d000(4.0f) + 0x70;
+        particle[3] = 0x48;
+        *(float *)(particle + 0xC) = size;
+        particle[1] = 0;
+        particle[8] = 0;
+        particle[2] = *D_L00_001B20DC;
+        *(float *)(particle + 0x10) += FUN_L00_00257c48_26d000(z, r);
+        *(float *)(particle + 0x14) += FUN_L00_00257c48_26d000(z, r);
+        *(float *)(particle + 0x18) += FUN_L00_00257c48_26d000(z, r);
+        *(short *)(particle + 0xA) = FUN_001f96f8_26d000(0xA);
+        *(int *)(particle_data + 4) = 0;
+        *(int *)(particle_data + 0) = color;
         if (FUN_00213260_26d000(2))
-            *(short *)(q + 8) = FUN_001fa6d0_26d000(D_0015ED60_26d000 * n);
+            *(short *)(particle_data + 8) = FUN_001fa6d0_26d000(D_0015ED60_26d000 * spin_rate);
         else
-            *(short *)(q + 8) = FUN_001fa6d0_26d000(-n * D_0015ED60_26d000);
-        *(float *)(q + 0xC) = FUN_002132a8_26d000(lo, hi);
-        qcopy(q + 0x10, vel);
+            *(short *)(particle_data + 8) = FUN_001fa6d0_26d000(-spin_rate * D_0015ED60_26d000);
+        *(float *)(particle_data + 0xC) = FUN_002132a8_26d000(lo, hi);
+        qcopy(particle_data + 0x10, vel);
     }
-    return m;
+    return particle;
 }
 extern float D_0015ED60_26d1b0 __asm__("D_0015ED60");
 extern void FUN_001f9a10_26d1b0(void *, void *, void *) __asm__("FUN_001f9a10");
