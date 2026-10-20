@@ -1101,7 +1101,7 @@ void FUN_L01_002fd0e8(struct Moby *moby) {
     f32 bubble_path_fraction;
     f32 zero;
     u8 *tex;
-    s32 n;
+    s32 ripple_tile_index;
     s32 m;
     PoolTile *tiles;
 
@@ -1156,8 +1156,8 @@ void FUN_L01_002fd0e8(struct Moby *moby) {
         for (m = 0; m < 21; m++) {
             pool_bind_tile(&pool_tiles[m], tex + m * 16);
         }
-        for (n = 0; n < 21; n++) {
-            PoolTile *tile = &pool_tiles[n];
+        for (ripple_tile_index = 0; ripple_tile_index < 21; ripple_tile_index++) {
+            PoolTile *tile = &pool_tiles[ripple_tile_index];
             tiles = pool_tiles;
 
             for (j = 0; j < 2; j++) {
