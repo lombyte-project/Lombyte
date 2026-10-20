@@ -37,7 +37,7 @@ extern float D_L10_00161C08 __attribute__((sda));
 void bombthrower_grass_update(struct Moby *moby) __asm__("FUN_L10_002d8c00");
 void bombthrower_grass_update(struct Moby *moby) {
     char *data = (char *)moby->pvars;
-    float a[4];
+    float launch_offset[4];
     float b[4];
     if (moby->state == 0) {
         *(int *)data =
@@ -46,18 +46,18 @@ void bombthrower_grass_update(struct Moby *moby) {
     }
     if (FUN_001f9740((int *)data)) {
         float x = D_L10_00161BF8;
-        float p = random_float_between_alt(-x, x) * DEG_TO_RAD;
-        float q = fast_add_rotations(moby->rot.z, p);
+        float yaw_offset = random_float_between_alt(-x, x) * DEG_TO_RAD;
+        float launch_yaw = fast_add_rotations(moby->rot.z, yaw_offset);
         float r =
             random_float_between_alt(D_L10_00161BFC, D_L10_00161C00) *
             DEG_TO_RAD;
         build_spherical_offset(
-            a,
+            launch_offset,
             random_float_between_alt(D_L10_00161C04, D_L10_00161C08) *
                 frame_time,
-            q, r);
-        fast_vec_add(b, &moby->pos, a);
-        FUN_L10_002d8058_u(moby, b, a);
+            launch_yaw, r);
+        fast_vec_add(b, &moby->pos, launch_offset);
+        FUN_L10_002d8058_u(moby, b, launch_offset);
         allocate_voice_for_target_entry(0, 0, (int)moby);
         *(int *)data =
             scale_game_frames(random_int_between(D_L10_00161BF0, D_L10_00161BF4));
