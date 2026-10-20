@@ -48,11 +48,11 @@ int map_filter_l02_0(void) {
 int map_filter_l01_3(void *arg0, int arg1, float unused1, float unused2, float arg3) __asm__("func_002069D0");
 
 int map_filter_l01_3(void *unused_input, int reveal_test_selector, float unused1, float unused2, float reveal_test_value) {
-    struct Hero *s = &hero;
-    int b = s->state.control_mode == 16;
-    int a = s->state.control_mode == 17 || s->state.control_mode == 18 || s->base_condition == 1;
+    struct Hero *hero_ptr = &hero;
+    int b = hero_ptr->state.control_mode == 16;
+    int hero_state_blocks_low_range_reveal = hero_ptr->state.control_mode == 17 || hero_ptr->state.control_mode == 18 || hero_ptr->base_condition == 1;
 
-    if (reveal_test_selector < 0xC8 && reveal_test_value >= 39.5f && reveal_test_value <= 42.5f && !a) {
+    if (reveal_test_selector < 0xC8 && reveal_test_value >= 39.5f && reveal_test_value <= 42.5f && !hero_state_blocks_low_range_reveal) {
         return 1;
     }
     if (reveal_test_selector >= 0xC8 && reveal_test_value >= 87.0f && !b) {
