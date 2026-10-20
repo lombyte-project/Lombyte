@@ -2489,12 +2489,12 @@ void follow_camera_set_distance(s32 f, f32 a, f32 b) __asm__("FUN_L00_002e8450")
 void follow_camera_set_distance(s32 f, f32 distance, f32 b) {
     u8 *current_camera = vd_2e8450;
     if (*(s16 *)(current_camera + 0x86) == 0) {
-        u8 *q = *(u8 **)(current_camera + 0x70) + 0x130;
-        *(s16 *)(q + 0x3C) = 1;
-        *(f32 *)(q + 0x48) = b;
-        *(f32 *)(q + 0x40) = distance;
+        u8 *camera_distance_state = *(u8 **)(current_camera + 0x70) + 0x130;
+        *(s16 *)(camera_distance_state + 0x3C) = 1;
+        *(f32 *)(camera_distance_state + 0x48) = b;
+        *(f32 *)(camera_distance_state + 0x40) = distance;
         if (f)
-            *(f32 *)(q + 0x58) = distance;
+            *(f32 *)(camera_distance_state + 0x58) = distance;
     }
 }
 extern char *D_L00_00166E00_002e8490 __asm__("D_L00_00166E00");
