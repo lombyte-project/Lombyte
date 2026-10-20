@@ -431,34 +431,34 @@ struct Moby *FUN_L01_0030d308(struct Moby *moby, f32 *from, f32 *ang, f32 yawMax
     struct Moby *best = 0;
     f32 bestScore = 1.0e9f;
     s32 i;
-    struct Moby *t;
+    struct Moby *candidate_moby;
 
-    for (i = 0; (t = D_L01_001ABE80[i]) != 0; i++) {
+    for (i = 0; (candidate_moby = D_L01_001ABE80[i]) != 0; i++) {
         f32 *hp;
         s32 cls;
-        f32 dist, score, p2;
+        f32 dist, score, pitch_error_squared;
         struct Moby *hit;
 
-        if (t->draw_dist == 0) continue;
-        hp = FUN_002141f8_30d308(t);
-        if (t == 0 || t->pclass == 0) continue;
-        cls = ((TargetClass_30d308 *)t->pclass)->kind;
+        if (candidate_moby->draw_dist == 0) continue;
+        hp = FUN_002141f8_30d308(candidate_moby);
+        if (candidate_moby == 0 || candidate_moby->pclass == 0) continue;
+        cls = ((TargetClass_30d308 *)candidate_moby->pclass)->kind;
         if (cls != 5 || hp == 0 || !(0.0f < *hp)) continue;
-        dist = distance_xyz_30d308(from, &t->pos);
+        dist = distance_xyz_30d308(from, &candidate_moby->pos);
         if (!(dist < range)) continue;
-        qcopy(tp, &t->pos);
+        qcopy(tp, &candidate_moby->pos);
         tp[2] += 0.4f;
         score = fast_difference_between_rotations_30d308(ang[2], atan2_30d308(tp[0] - from[0], tp[1] - from[1]));
         score = score * score;
         if (!(score < yawMax * yawMax)) {
             if (!(dist < near) || !(score < nearYaw * nearYaw)) continue;
         }
-        p2 = fast_difference_between_rotations_30d308(ang[1], atan2_30d308(dist, tp[2] - from[2]));
-        p2 = p2 * p2;
-        if (!(p2 < pitchMax * pitchMax)) {
-            if (!(dist < near) || !(p2 < nearPitch * nearPitch)) continue;
+        pitch_error_squared = fast_difference_between_rotations_30d308(ang[1], atan2_30d308(dist, tp[2] - from[2]));
+        pitch_error_squared = pitch_error_squared * pitch_error_squared;
+        if (!(pitch_error_squared < pitchMax * pitchMax)) {
+            if (!(dist < near) || !(pitch_error_squared < nearPitch * nearPitch)) continue;
         }
-        score *= p2;
+        score *= pitch_error_squared;
         score *= FUN_001f9988_30d308(distance_xyz_30d308(from, tp));
         if (!(score < bestScore)) continue;
         if (collision_line_30d308(from, tp, 0, moby, 0)) {
@@ -469,7 +469,7 @@ struct Moby *FUN_L01_0030d308(struct Moby *moby, f32 *from, f32 *ang, f32 yawMax
             }
         }
         bestScore = score;
-        best = t;
+        best = candidate_moby;
     }
     return best;
 }
