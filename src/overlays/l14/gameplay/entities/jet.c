@@ -3522,49 +3522,49 @@ extern int FUN_L00_0025d808_2f05d8(void *, void *, void *, void *, int,
                                     float) __asm__("FUN_L00_0025d808");
 extern int *D_L14_001B0BB0[];
 
-int FUN_L14_002fd918(struct Moby *m) {
-    char *d = (char *)m->pvars;
+int FUN_L14_002fd918(struct Moby *moby) {
+    char *moby_vars = (char *)moby->pvars;
     float v[4];
     float w[4];
     float yaw;
     float t;
     int r;
-    r = FUN_L00_0025d808_2f05d8(D_L14_001B0BB0[*(int *)(d + 0x68)], v, d + 0x60, d + 0x64,
-                                 (unsigned int)*(int *)(d + 0x8C) >> 31,
+    r = FUN_L00_0025d808_2f05d8(D_L14_001B0BB0[*(int *)(moby_vars + 0x68)], v, moby_vars + 0x60, moby_vars + 0x64,
+                                 (unsigned int)*(int *)(moby_vars + 0x8C) >> 31,
                                  D_L14_00161F78 * D_0015ED6C_f2);
-    if (*(int *)(d + 0x8C) != 0 && (r != 0 || *(short *)(D_L14_00167500 + 0x86) != 0x13)) {
-        FUN_L13_00316f48(*(int *)(d + 0x90));
-        if (*(int *)(d + 0x6C) != -1) {
-            char *e = D_0013E550 + *(int *)(d + 0x6C) * 0x70;
-            if (*(char **)(e + 0x88) == m && ((unsigned char *)e)[0x74] != 0) {
-                release_voice_slot(*(int *)(d + 0x6C));
+    if (*(int *)(moby_vars + 0x8C) != 0 && (r != 0 || *(short *)(D_L14_00167500 + 0x86) != 0x13)) {
+        FUN_L13_00316f48(*(int *)(moby_vars + 0x90));
+        if (*(int *)(moby_vars + 0x6C) != -1) {
+            char *voice_entry = D_0013E550 + *(int *)(moby_vars + 0x6C) * 0x70;
+            if (*(char **)(voice_entry + 0x88) == moby && ((unsigned char *)voice_entry)[0x74] != 0) {
+                release_voice_slot(*(int *)(moby_vars + 0x6C));
             }
         }
-        *(int *)(d + 0x6C) = -1;
-        mark_moby_for_removal(m);
+        *(int *)(moby_vars + 0x6C) = -1;
+        mark_moby_for_removal(moby);
         return 1;
     }
-    FUN_L00_0025b8c0(&m->pos.x, (float *)(d + 0x70), v[0], D_L14_00161F7C, D_L14_00161F80,
+    FUN_L00_0025b8c0(&moby->pos.x, (float *)(moby_vars + 0x70), v[0], D_L14_00161F7C, D_L14_00161F80,
                      0.0f);
-    FUN_L00_0025b8c0(&m->pos.y, (float *)(d + 0x74), v[1], D_L14_00161F7C, D_L14_00161F80,
+    FUN_L00_0025b8c0(&moby->pos.y, (float *)(moby_vars + 0x74), v[1], D_L14_00161F7C, D_L14_00161F80,
                      0.0f);
-    FUN_L00_0025b8c0(&m->pos.z, (float *)(d + 0x78), v[2], D_L14_00161F7C, D_L14_00161F80,
+    FUN_L00_0025b8c0(&moby->pos.z, (float *)(moby_vars + 0x78), v[2], D_L14_00161F7C, D_L14_00161F80,
                      0.0f);
-    subtract_vector_xyz(w, v, &m->pos);
+    subtract_vector_xyz(w, v, &moby->pos);
     if (0.01f < absolute_float(w[0])) {
         if (0.01f < absolute_float(w[1])) {
             yaw = fast_arc_tan(w[0], w[1]);
-            t = fast_subtract_rotations(m->rot.z, yaw);
-            FUN_L00_00258278(m, (float *)(d + 0x88), yaw, D_L14_00161F7C, D_L14_00161F80, 0.0f);
+            t = fast_subtract_rotations(moby->rot.z, yaw);
+            FUN_L00_00258278(moby, (float *)(moby_vars + 0x88), yaw, D_L14_00161F7C, D_L14_00161F80, 0.0f);
             yaw = fast_arc_tan(vector_length_xy(w), w[2]);
-            FUN_L00_0025b8c0(&m->rot.y, (float *)(d + 0x84), -yaw, D_L14_00161F7C,
+            FUN_L00_0025b8c0(&moby->rot.y, (float *)(moby_vars + 0x84), -yaw, D_L14_00161F7C,
                              D_L14_00161F80, 0.0f);
             t = t / D_L14_00161F88;
             if (1.0f < t)
                 t = 1.0f;
             if (t < -1.0f)
                 t = -1.0f;
-            FUN_L00_0025b8c0(&m->rot.x, (float *)(d + 0x80), t * D_L14_00161F84, 0.003f,
+            FUN_L00_0025b8c0(&moby->rot.x, (float *)(moby_vars + 0x80), t * D_L14_00161F84, 0.003f,
                              D_L14_00161F80, 0.0f);
         }
     }
