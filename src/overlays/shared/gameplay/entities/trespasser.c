@@ -767,6 +767,8 @@ void doom_bot_update(struct Moby *moby) __asm__("FUN_L00_002bffa8");
 void doom_bot_update(struct Moby *moby) {
     enum {
         DOOM_BOT_INITIALIZE = 0,
+        DOOM_BOT_MOVE_HIGH_TURN_RATE = 4,
+        DOOM_BOT_MOVE_LOW_TURN_RATE = 5,
         DOOM_BOT_ALIGN_TO_TARGET = 6,
         DOOM_BOT_EXECUTE_JUMP = 7,
         DOOM_BOT_COLLISION_RECOVERY_FALL = 8,
@@ -883,7 +885,7 @@ void doom_bot_update(struct Moby *moby) {
     case 1: case 9: case 10:
         if (moby->anim_flags&2) moby->state=2;
         goto Contact;
-    case 2: case 3: case 4: case 5: {
+    case 2: case 3: case DOOM_BOT_MOVE_HIGH_TURN_RATE: case DOOM_BOT_MOVE_LOW_TURN_RATE: {
         target=data->target_moby;
         if (target && target->state!=0xFE && target->state!=0xFD) {
             height=target->pos.z;
