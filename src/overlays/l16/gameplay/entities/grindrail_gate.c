@@ -2004,16 +2004,16 @@ extern short *D_L16_001ABCC0[];
 void FUN_L16_002e7ba0(struct Moby *moby) {
     unsigned char *objects[16];
     unsigned char *previous;
-    L16WalkerData *d = (L16WalkerData *)moby->pvars;
+    L16WalkerData *walker_data = (L16WalkerData *)moby->pvars;
     short *list = D_L16_001ABCC0[moby->group];
     short count = 0, rank;
     int i;
     float period;
 
-    if (list == 0 || d->path_index == -1) {
+    if (list == 0 || walker_data->path_index == -1) {
         return;
     }
-    period = (float)*(int *)D_L16_001B0930[d->path_index] - 1.0f;
+    period = (float)*(int *)D_L16_001B0930[walker_data->path_index] - 1.0f;
     do {
         objects[count] = (unsigned char *)(D_L16_0015FFD8 + ((*(unsigned short *)list & 0x7FFF) << 8));
         count++;
