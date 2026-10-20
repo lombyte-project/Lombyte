@@ -1922,33 +1922,33 @@ extern float D_L18_00161C74 __attribute__((sda));
 extern float D_L18_00161C78 __attribute__((sda));
 extern float D_L18_00161C7C __attribute__((sda));
 void FUN_L18_002dba20(M_dba20 *moby) {
-    Q_dba20 q[4];
-    V_dba20 m[4];
+    Q_dba20 quad_packets[4];
+    V_dba20 draw_matrix[4];
     V_dba20 rot[3];
     V_dba20 rv;
-    D_dba20 *d = moby->data;
+    D_dba20 *moby_vars = moby->data;
     int j, k, n;
     int col;
 
-    unit_matrix_dba20(m);
-    qcopy(&m[3], &moby->pos);
-    m[3].f[2] += D_L18_00161C68;
-    m[3].f[3] = 1.0f;
+    unit_matrix_dba20(draw_matrix);
+    qcopy(&draw_matrix[3], &moby->pos);
+    draw_matrix[3].f[2] += D_L18_00161C68;
+    draw_matrix[3].f[3] = 1.0f;
     for (j = 0; j < 4; j++) {
         float fj;
-        float t, ang, rad;
-        q[j].tex = get_effect_texture_dba20(0xE);
-        q[j].unk70 = 0;
-        q[j].unk80 = 0xFF9000000260L;
-        q[j].unk88 = (long)D_L18_00161C48 | ((long)D_L18_00161C4C << 2) | ((long)D_L18_00161C50 << 4) | ((long)D_L18_00161C54 << 6) | 0x8000000000L;
-        t = d->f24 * D_L18_00161C74 + (float)j * 0.25f;
-        rad = d->f24 + D_L18_00161C70 * (float)j;
-        t = t - (float)truncate_dba20(t);
-        col = tween_color_dba20(D_L18_00161C5C, D_L18_00161C60, t);
-        ang = t * D_L18_00161C78;
+        float layer_phase, ang, rad;
+        quad_packets[j].tex = get_effect_texture_dba20(0xE);
+        quad_packets[j].unk70 = 0;
+        quad_packets[j].unk80 = 0xFF9000000260L;
+        quad_packets[j].unk88 = (long)D_L18_00161C48 | ((long)D_L18_00161C4C << 2) | ((long)D_L18_00161C50 << 4) | ((long)D_L18_00161C54 << 6) | 0x8000000000L;
+        layer_phase = moby_vars->f24 * D_L18_00161C74 + (float)j * 0.25f;
+        rad = moby_vars->f24 + D_L18_00161C70 * (float)j;
+        layer_phase = layer_phase - (float)truncate_dba20(layer_phase);
+        col = tween_color_dba20(D_L18_00161C5C, D_L18_00161C60, layer_phase);
+        ang = layer_phase * D_L18_00161C78;
         if (ang > 1.0f) ang = 1.0f;
         col = tween_color_dba20(col & 0xFFFFFF, col, ang);
-        ang = (d->f28 - d->f24) / (d->f20 * scale_time_dba20(D_L18_00161C7C));
+        ang = (moby_vars->f28 - moby_vars->f24) / (moby_vars->f20 * scale_time_dba20(D_L18_00161C7C));
         if (ang > 1.0f) {
             ang = 1.0f;
         } else if (ang < 0.0f) {
@@ -1957,31 +1957,31 @@ void FUN_L18_002dba20(M_dba20 *moby) {
         col = tween_color_dba20(col & 0xFFFFFF, col, ang);
         fj = (float)j;
         for (k = 0; k < 4; k++) {
-            float a;
-            q[j].uv[k].u = D_L18_001D4310[2 * k];
-            q[j].uv[k].v = D_L18_001D4310[2 * k + 1];
+            float corner_angle;
+            quad_packets[j].uv[k].u = D_L18_001D4310[2 * k];
+            quad_packets[j].uv[k].v = D_L18_001D4310[2 * k + 1];
             if (k & 1) {
-                q[j].corner[k].f[2] = t * D_L18_00161C6C;
+                quad_packets[j].corner[k].f[2] = layer_phase * D_L18_00161C6C;
             } else {
-                q[j].corner[k].f[2] = -t * D_L18_00161C6C;
+                quad_packets[j].corner[k].f[2] = -layer_phase * D_L18_00161C6C;
             }
-            a = add_rotations_dba20((float)(k >> 1) * (D_L18_00161C64 * 0.017453292f) - 3.14159f,
+            corner_angle = add_rotations_dba20((float)(k >> 1) * (D_L18_00161C64 * 0.017453292f) - 3.14159f,
                               D_L18_00161C64 * 0.25f * fj * 0.017453292f);
-            q[j].corner[k].f[0] = cos_dba20(a) * rad;
-            q[j].corner[k].f[1] = sin_dba20(a) * rad;
-            q[j].corner[k].f[3] = 1.0f;
-            q[j].color[k] = col;
+            quad_packets[j].corner[k].f[0] = cos_dba20(corner_angle) * rad;
+            quad_packets[j].corner[k].f[1] = sin_dba20(corner_angle) * rad;
+            quad_packets[j].corner[k].f[3] = 1.0f;
+            quad_packets[j].color[k] = col;
         }
     }
     clear_vector_dba20(&rv);
     rv.f[2] = D_L18_00161C64 * 0.017453292f;
     euler_basis_dba20(rot, &rv);
     for (n = 0; (float)n < 360.0f / D_L18_00161C64; n++) {
-        draw_quad_dba20(&q[0], m, 0);
-        draw_quad_dba20(&q[1], m, 0);
-        draw_quad_dba20(&q[2], m, 0);
-        draw_quad_dba20(&q[3], m, 0);
-        matrix_mul_dba20(m, m, rot);
+        draw_quad_dba20(&quad_packets[0], draw_matrix, 0);
+        draw_quad_dba20(&quad_packets[1], draw_matrix, 0);
+        draw_quad_dba20(&quad_packets[2], draw_matrix, 0);
+        draw_quad_dba20(&quad_packets[3], draw_matrix, 0);
+        matrix_mul_dba20(draw_matrix, draw_matrix, rot);
     }
 }
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002DD270), where it is exact; names translated to the US level program. */
