@@ -20,7 +20,7 @@ int FUN_L00_0025fcb8(char *query_moby, char *target_output, float best) {
     int res;
     int i;
     int j;
-    float d;
+    float candidate_distance_score;
 
     selected_moby = ((char *)g->moby);
     res = 0;
@@ -40,10 +40,10 @@ int FUN_L00_0025fcb8(char *query_moby, char *target_output, float best) {
             continue;
         if (*(unsigned char *)(candidate_moby + 0x20) != 3)
             continue;
-        d = FUN_001f9b80_25fcb8(query_moby + 0x10, candidate_moby + 0x10);
-        if (d < best) {
+        candidate_distance_score = FUN_001f9b80_25fcb8(query_moby + 0x10, candidate_moby + 0x10);
+        if (candidate_distance_score < best) {
             selected_moby = candidate_moby;
-            best = d;
+            best = candidate_distance_score;
             res = 1;
         }
     }
@@ -59,10 +59,10 @@ int FUN_L00_0025fcb8(char *query_moby, char *target_output, float best) {
             continue;
         if (*(unsigned char *)(candidate_moby + 0xBC) == 0)
             continue;
-        d = FUN_001f9b80_25fcb8(query_moby + 0x10, candidate_moby + 0x10);
-        if (d < best) {
+        candidate_distance_score = FUN_001f9b80_25fcb8(query_moby + 0x10, candidate_moby + 0x10);
+        if (candidate_distance_score < best) {
             selected_moby = candidate_moby;
-            best = d;
+            best = candidate_distance_score;
             res = 1;
         }
     }
