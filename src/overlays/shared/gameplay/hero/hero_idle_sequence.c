@@ -2332,7 +2332,7 @@ float FUN_00213308_209848(void) __asm__("FUN_00213308");
 int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 void FUN_L00_0026f548_209848(V_209848 *, V_209848 *, int, int) __asm__("FUN_L00_0026f548");
 int FUN_00213260_209848(int) __asm__("FUN_00213260");
-void FUN_L00_00209848(int n, int lim) {
+void FUN_L00_00209848(int counter_reset_range, int lim) {
     struct Hero *P = &hero;
     if (lim < ++P->unk906) {
         V_209848 spawn_position, v;
@@ -2355,7 +2355,7 @@ void FUN_L00_00209848(int n, int lim) {
         else
             FUN_L00_0026f548_209848(&spawn_position, &v, 1, k);
         {
-            short h = FUN_00213260_209848(n);
+            short h = FUN_00213260_209848(counter_reset_range);
             struct Hero *Q = &hero;
             Q->unk906 = h;
         }
