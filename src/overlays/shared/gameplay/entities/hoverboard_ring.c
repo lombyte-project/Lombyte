@@ -606,9 +606,9 @@ void FUN_L05_003298d8(Camera *cam) {
     Vec4 flat;
     Vec4 unit;
     Vec4 rot;
-    CameraOrbit *o = cam->orbit;
-    CameraFocus *focus = &o->focus;
-    f32 *spring = o->goal;
+    CameraOrbit *orbit = cam->orbit;
+    CameraFocus *focus = &orbit->focus;
+    f32 *spring = orbit->goal;
     f32 dot;
     f32 len;
     f32 ang;
@@ -616,8 +616,8 @@ void FUN_L05_003298d8(Camera *cam) {
     f32 tilt;
 
     normalize_vector_xyz(&up, &hero.gravity_dir, -1.0f);
-    if (o->mode == 0 && hero.unk88E != 0) {
-        o->mode = 1;
+    if (orbit->mode == 0 && hero.unk88E != 0) {
+        orbit->mode = 1;
         cross_vectors_xyz(&side, &hero.moby->rot_row2, &up);
         normalize_vector_xyz(&side, &side, 1.0f);
         cross_vectors_xyz(&fwd, &up, &side);
@@ -651,7 +651,7 @@ void FUN_L05_003298d8(Camera *cam) {
         }
         cam->pitch = pitch;
         cam->dist = vector_length_xyz(&rel);
-        qcopy(&o->focus.side, &fwd);
+        qcopy(&orbit->focus.side, &fwd);
         spring[0] = 3.1415927f;
         spring[1] = -1.5358897f;
         spring[2] = 5.0f;
@@ -665,7 +665,7 @@ void FUN_L05_003298d8(Camera *cam) {
         spring[8] = 0.005f;
         spring[11] = 0.2f;
     }
-    if (o->mode == 1) {
+    if (orbit->mode == 1) {
         normalize_vector_xyz(&side, &focus->side, cam->dist);
         rotate_about_axis(&side, &side, &up, cam->yaw);
         cross_vectors_xyz(&fwd, &side, &up);
@@ -676,8 +676,8 @@ void FUN_L05_003298d8(Camera *cam) {
         cam->pitch = rope_spring_turn(&spring[4], cam->pitch, spring[1], spring[7], spring[10], 0.0f);
         cam->dist = FUN_001ebd78(&spring[5], cam->dist, spring[2], spring[8], spring[11], 0.0f);
         if (hero.unk88E == 0) {
-            o->mode = 0;
-            scale_vector_xyz(o, o, -1.0f);
+            orbit->mode = 0;
+            scale_vector_xyz(orbit, orbit, -1.0f);
         }
     }
 }
