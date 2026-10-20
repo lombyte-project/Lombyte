@@ -7447,10 +7447,10 @@ void mark_moby_for_removal_c(struct Obj *obj) __asm__("FUN_0020c828");
 /* Marks every moby in the moby's list for removal; the list ends after its first negative entry. */
 void FUN_L06_00304028(char *moby) {
     char *data = *(char **)(moby + 0x78);
-    short *p = D_L06_001ABFC0_c[*(int *)(data + 0xCC)];
+    short *moby_list_entry = D_L06_001ABFC0_c[*(int *)(data + 0xCC)];
     do {
-        mark_moby_for_removal_c(D_L06_0015FFD8_u + ((*p & 0x7FFF) << 8));
-    } while (*p++ >= 0);
+        mark_moby_for_removal_c(D_L06_0015FFD8_u + ((*moby_list_entry & 0x7FFF) << 8));
+    } while (*moby_list_entry++ >= 0);
 }
 #include "rnc/gameplay/entities/moby.h"
 typedef struct {
