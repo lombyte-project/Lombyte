@@ -9,26 +9,26 @@ extern s32 sceSifResetIop(const char *arg, s32 mode);
 s32 sceSifRebootIop(const char *img) {
     const char *prefix = D_00152960;
     char param[80];
-    const char *p;
-    char *d;
+    const char *image_end;
+    char *command_write_cursor;
 
-    p = img;
-    while (*p) {
-        p++;
+    image_end = img;
+    while (*image_end) {
+        image_end++;
     }
-    if ((u32)(p + 11 - img) > 80) {
+    if ((u32)(image_end + 11 - img) > 80) {
         scePrintf(D_00152970, img);
         return 0;
     }
     sceSifInitRpc(0);
     InitializeRpcCommand();
-    d = param;
+    command_write_cursor = param;
     while (*prefix) {
-        *d++ = *prefix++;
+        *command_write_cursor++ = *prefix++;
     }
     while (*img) {
-        *d++ = *img++;
+        *command_write_cursor++ = *img++;
     }
-    *d = 0;
+    *command_write_cursor = 0;
     return sceSifResetIop(param, 0);
 }
