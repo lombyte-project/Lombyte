@@ -1089,18 +1089,18 @@ extern void random_vector(float *, float, float) __asm__("FUN_L00_00257d78");
 extern void FUN_L00_00269958(void *, void *, int, int, int, int, int, int);
 void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
 
-void FUN_L06_002ea498(char *m) {
+void FUN_L06_002ea498(char *moby) {
     float a[4];
     float b[4];
     int i;
     for (i = 19; i >= 0; i--) {
-        float r1 = random_angle_radians();
-        float r2 = random_angle_radians();
+        float azimuth_angle = random_angle_radians();
+        float elevation_angle = random_angle_radians();
         int t, u;
-        build_spherical_offset(a, frame_time * 1.8f, r1, r2);
+        build_spherical_offset(a, frame_time * 1.8f, azimuth_angle, elevation_angle);
         a[2] += frame_time * 0.9f;
         random_vector(b, 0.0f, 0.5f);
-        fast_vec_add(b, b, m + 0x10);
+        fast_vec_add(b, b, moby + 0x10);
         b[2] += 0.5f;
         t = scale_game_frames(random_int_between(0x14, 0x23));
         u = random_int_between(0x28, 0x3C);
