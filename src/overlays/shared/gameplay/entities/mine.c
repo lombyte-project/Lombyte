@@ -3026,10 +3026,10 @@ int random_bit_2b1de0(int) __asm__("FUN_00213260");
 
 extern V_2b1af0 D_0013F9B0;
 void FUN_L00_002b1de0(unsigned char *source_object) {
-    V_2b1af0 c;
+    V_2b1af0 particle_velocity;
     V_2b1af0 emission_offset;
     V_2b1af0 b;
-    V_2b1af0 d;
+    V_2b1af0 scaled_global_vector;
     int i;
     int j;
     int t;
@@ -3043,32 +3043,32 @@ void FUN_L00_002b1de0(unsigned char *source_object) {
     add_2b1af0(&b, source_object + 0x10, &emission_offset);
     for (i = 0; i < count_2b1de0(24.0f); i++) {
         angle = rnd_2b1af0(0.0f, 0.1308997f);
-        build_look_at_matrix(&c, &D_0013F9B0, (char *)&D_0013F9B0 - 0x20,
+        build_look_at_matrix(&particle_velocity, &D_0013F9B0, (char *)&D_0013F9B0 - 0x20,
                          (float)i * 0.2617994f + angle);
-        ff500_2b1af0(&c, &c, rndf_2b1af0(0.05f, 0.1f));
+        ff500_2b1af0(&particle_velocity, &particle_velocity, rndf_2b1af0(0.05f, 0.1f));
         t = rndi_2b1af0(0, 3);
         if (random_bit_2b1de0(2) != 0)
             t = -t;
         if (*(int *)((char *)&D_0013F9B0 - 0x360) != 0) {
-            scale_2b1af0(&d, (char *)&D_0013F9B0 - 0x560, 1.7f);
-            add_2b1af0(&c, &c, &d);
+            scale_2b1af0(&scaled_global_vector, (char *)&D_0013F9B0 - 0x560, 1.7f);
+            add_2b1af0(&particle_velocity, &particle_velocity, &scaled_global_vector);
         }
         {
             int low = fr_2b1af0(30);
             int high = fr_2b1af0(90);
-            spawn_particle(&b, &c, rndi_2b1af0(low, high), 30, 0xFFFFFF, t,
+            spawn_particle(&b, &particle_velocity, rndi_2b1af0(low, high), 30, 0xFFFFFF, t,
                          60000.0f, 3000.0f, 0.85f, -0.001f, 0.0f);
         }
     }
     for (j = 0; j < count_2b1de0(6.0f); j++) {
         angle = rndf_2b1af0(0.0f, 0.7853982f);
-        build_look_at_matrix(&c, &D_0013F9B0, (char *)&D_0013F9B0 - 0x20,
+        build_look_at_matrix(&particle_velocity, &D_0013F9B0, (char *)&D_0013F9B0 - 0x20,
                          (float)j * 1.0471976f + angle);
-        ff500_2b1af0(&c, &c, rndf_2b1af0(0.05f, 0.1f));
+        ff500_2b1af0(&particle_velocity, &particle_velocity, rndf_2b1af0(0.05f, 0.1f));
         {
             int low = fr_2b1af0(20);
             int high = fr_2b1af0(60);
-            spawn_burst(&b, &c, 0x4F007FFF, 0x1FFFFFFF,
+            spawn_burst(&b, &particle_velocity, 0x4F007FFF, 0x1FFFFFFF,
                          rndi_2b1af0(low, high), 1, 10000.0f);
         }
     }
