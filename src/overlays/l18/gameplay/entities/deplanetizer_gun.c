@@ -704,23 +704,23 @@ void FUN_L18_002fa250(void *first_position_source, void *b, void *effect_velocit
     char first_effect_position[16];
     char second_effect_position[16];
     int i;
-    char *m;
+    char *random_magnitude_or_effect;
     char *effect_data;
     int x;
     int k2, k7f;
     qcopy(first_effect_position, first_position_source);
     qcopy(second_effect_position, b);
     for (i = 1; i >= 0; i--) {
-        m = (char *)random_integer_below(16);
-        m = func_L00_0026DEA0_c(first_effect_position, random_integer_below(2) ? -(int)m : (int)m, effect_velocity_source, 0.0f, 1.0f, 0.9f,
+        random_magnitude_or_effect = (char *)random_integer_below(16);
+        random_magnitude_or_effect = func_L00_0026DEA0_c(first_effect_position, random_integer_below(2) ? -(int)random_magnitude_or_effect : (int)random_magnitude_or_effect, effect_velocity_source, 0.0f, 1.0f, 0.9f,
                                 f0, 0x7F204080);
-        effect_data = m + 0x20;
-        if (m) {
-            *(short *)(m + 0xA) = scale_game_frames(15);
-            m[9] = func_001FA898_r(4.0f) + 0x40;
+        effect_data = random_magnitude_or_effect + 0x20;
+        if (random_magnitude_or_effect) {
+            *(short *)(random_magnitude_or_effect + 0xA) = scale_game_frames(15);
+            random_magnitude_or_effect[9] = func_001FA898_r(4.0f) + 0x40;
             *(int *)(effect_data + 4) = 2;
             effect_data[0xA] = 0x7F;
-            effect_data[0xB] = m[0xA];
+            effect_data[0xB] = random_magnitude_or_effect[0xA];
         }
     }
     x = 16;
@@ -730,15 +730,15 @@ void FUN_L18_002fa250(void *first_position_source, void *b, void *effect_velocit
     do {
         int y = x;
         x = -x;
-        m = func_L00_0026DEA0_c(second_effect_position, y, effect_velocity_source, 0.0f, 1.0f, 0.97f, f1, 0x7FFFFFFF);
-        effect_data = m + 0x20;
-        if (m) {
-            m[9] = func_001FA898_r(4.0f) + 0x40;
-            *(short *)(m + 0xA) = scale_game_frames(4);
-            m[8] = random_integer_below(0xFF);
+        random_magnitude_or_effect = func_L00_0026DEA0_c(second_effect_position, y, effect_velocity_source, 0.0f, 1.0f, 0.97f, f1, 0x7FFFFFFF);
+        effect_data = random_magnitude_or_effect + 0x20;
+        if (random_magnitude_or_effect) {
+            random_magnitude_or_effect[9] = func_001FA898_r(4.0f) + 0x40;
+            *(short *)(random_magnitude_or_effect + 0xA) = scale_game_frames(4);
+            random_magnitude_or_effect[8] = random_integer_below(0xFF);
             *(int *)(effect_data + 4) = k2;
             effect_data[0xA] = k7f;
-            effect_data[0xB] = m[0xA];
+            effect_data[0xB] = random_magnitude_or_effect[0xA];
         }
     } while (--i >= 0);
 }
