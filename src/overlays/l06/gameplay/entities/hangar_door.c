@@ -1375,6 +1375,12 @@ struct BarrierVars {
 /* Beam barrier: pushes the hero back and counts the touches; once every linked
    moby is done it bursts into sparks and removes itself. */
 void FUN_L06_002f6470(struct Moby *moby) {
+    enum {
+        BEAM_BARRIER_INITIALIZE = 0,
+        BEAM_BARRIER_ACTIVE = 1,
+        BEAM_BARRIER_EMIT_SPARK_BURST = 2,
+        BEAM_BARRIER_REMOVE = 3
+    };
     struct BarrierVars *vars = (struct BarrierVars *)moby->pvars;
     unsigned char state = moby->state;
     struct {
@@ -1398,7 +1404,7 @@ void FUN_L06_002f6470(struct Moby *moby) {
     unsigned char life, random_byte;
 
     switch (state) {
-    case 0: {
+    case BEAM_BARRIER_INITIALIZE: {
         D_L06_00161E54 = 0x16;
         D_L06_00161E50 = 0x2D;
         D_L06_00161E40[1] = 0xB;
@@ -1410,7 +1416,7 @@ void FUN_L06_002f6470(struct Moby *moby) {
         moby->flags = moby->flags | 0x4000;
         return;
     }
-    case 1: {
+    case BEAM_BARRIER_ACTIVE: {
         fast_dec_timer_s16(&vars->touch_timer);
         if (voice_is_playing(moby, vars->voice) == 0)
             vars->voice = ((int (*)(int, int, int))allocate_voice_for_target_entry_alt)(0, 4, (int)moby);
@@ -1552,7 +1558,7 @@ void FUN_L06_002f6470(struct Moby *moby) {
         }
         return;
     }
-    case 2: {
+    case BEAM_BARRIER_EMIT_SPARK_BURST: {
         int spark;
         int segment_offset;
         rotation_matrix(work.matrix, &moby->rot);
@@ -1592,7 +1598,7 @@ void FUN_L06_002f6470(struct Moby *moby) {
         moby->state = 3;
         return;
     }
-    case 3:
+    case BEAM_BARRIER_REMOVE:
         mark_moby_for_removal(moby);
         return;
     }
