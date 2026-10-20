@@ -392,6 +392,7 @@ s32 FUN_L02_0022ee00(void)
         HERO_ITEM_HOLD_TO_FIRE = 15,
         HERO_ITEM_BUFFERED_ACTIVATE_WITH_VOICE = 18,
         HERO_ITEM_PRESS_TO_ACTIVATE = 21,
+        HERO_ITEM_CLASS_GATED_BUFFERED_ACTIVATE = 31,
         HERO_ITEM_BUFFERED_ACTIVATE = 32
     };
     s32 out0;
@@ -517,7 +518,7 @@ s32 FUN_L02_0022ee00(void)
         }
         break;
 
-    case 31:
+    case HERO_ITEM_CLASS_GATED_BUFFERED_ACTIVATE:
         if (hero.vehicle_mode == 0 && FUN_L00_0020fe30() != 0) {
             if (pad_pressed_within(buttons, scale_game_frames(7), NULL) != 0 && D_00141660 == 0x1F &&
                 hero.items[0].moby->oclass == 0x1E3 && hero.unk22DE == 0) {
