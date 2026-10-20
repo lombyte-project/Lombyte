@@ -47,7 +47,7 @@ void FUN_L02_002ec308(char *self);
 void FUN_L02_002ec3f0(char *moby) {
     int i;
     char *data;
-    char *p;
+    char *joint_position_out;
     int v;
     int r, g, b, c;
     int *q;
@@ -56,10 +56,10 @@ void FUN_L02_002ec3f0(char *moby) {
         return;
     }
     data = *(char **)(moby + 0x78);
-    p = data + 0x80;
+    joint_position_out = data + 0x80;
     for (i = 0; i < 3; i++) {
-        moby_point_position(moby, i + 3, p);
-        p += 0x10;
+        moby_point_position(moby, i + 3, joint_position_out);
+        joint_position_out += 0x10;
     }
     v = D_L02_0015F5CC;
     r = *(unsigned char *)(moby + 0x92);
