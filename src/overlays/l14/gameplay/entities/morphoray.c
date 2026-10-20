@@ -1842,7 +1842,7 @@ void FUN_L14_00315d48(char *cam) {
     CamAngles5d48 *cur = &data->cur;
     float *vel = data->vel;
     int side;
-    float t;
+    float key_interpolation_fraction;
     float k;
     float x;
     float ang;
@@ -1971,7 +1971,7 @@ void FUN_L14_00315d48(char *cam) {
         st->idx++;
     }
     if (D_L14_001F6488[st->idx + 1].n14 == 0x2710) {
-        t = 1.0f;
+        key_interpolation_fraction = 1.0f;
         st->idx--;
     } else {
         float num;
@@ -1987,20 +1987,20 @@ void FUN_L14_00315d48(char *cam) {
             den = D_L14_001F6488[st->idx + 1].t2C - D_L14_001F6488[st->idx].t2C;
             num = D_L14_001624C0 - D_L14_001F6488[st->idx].t2C;
         }
-        t = num / den;
+        key_interpolation_fraction = num / den;
     }
     k = D_L14_00162490;
-    x = FUN_L00_0025b750(D_L14_001F6488[st->idx].a0 * 0.017453292f, D_L14_001F6488[st->idx + 1].a0 * 0.017453292f, t);
+    x = FUN_L00_0025b750(D_L14_001F6488[st->idx].a0 * 0.017453292f, D_L14_001F6488[st->idx + 1].a0 * 0.017453292f, key_interpolation_fraction);
     cur->f0 = cam_interp_angle_5d48(vel, cur->f0, x, k, 0.2f, 0.0f);
     k = D_L14_00162494;
-    x = FUN_L00_0025b750(D_L14_001F6488[st->idx].a4 * 0.017453292f, D_L14_001F6488[st->idx + 1].a4 * 0.017453292f, t);
+    x = FUN_L00_0025b750(D_L14_001F6488[st->idx].a4 * 0.017453292f, D_L14_001F6488[st->idx + 1].a4 * 0.017453292f, key_interpolation_fraction);
     cur->f4 = cam_interp_angle_5d48(vel + 1, cur->f4, x, k, 0.2f, 0.0f);
-    cur->f8 = cam_interp_5d48(vel + 2, cur->f8, D_L14_001F6488[st->idx].a8 + (D_L14_001F6488[st->idx + 1].a8 - D_L14_001F6488[st->idx].a8) * t, D_L14_00162498, 0.2f, 0.0f);
+    cur->f8 = cam_interp_5d48(vel + 2, cur->f8, D_L14_001F6488[st->idx].a8 + (D_L14_001F6488[st->idx + 1].a8 - D_L14_001F6488[st->idx].a8) * key_interpolation_fraction, D_L14_00162498, 0.2f, 0.0f);
     k = D_L14_0016249C;
-    x = FUN_L00_0025b750(D_L14_001F6488[st->idx].aC * 0.017453292f, D_L14_001F6488[st->idx + 1].aC * 0.017453292f, t);
+    x = FUN_L00_0025b750(D_L14_001F6488[st->idx].aC * 0.017453292f, D_L14_001F6488[st->idx + 1].aC * 0.017453292f, key_interpolation_fraction);
     cur->fC = cam_interp_angle_5d48(vel + 3, cur->fC, x, k, 0.2f, 0.0f);
     k = D_L14_001624A0;
-    x = FUN_L00_0025b750(D_L14_001F6488[st->idx].a10 * 0.017453292f, D_L14_001F6488[st->idx + 1].a10 * 0.017453292f, t);
+    x = FUN_L00_0025b750(D_L14_001F6488[st->idx].a10 * 0.017453292f, D_L14_001F6488[st->idx + 1].a10 * 0.017453292f, key_interpolation_fraction);
     cur->f10 = cam_interp_angle_5d48(vel + 4, cur->f10, x, k, 0.2f, 0.0f);
     ang = add_rots_5d48(atan2_5d48(hero.moby->rot_row1.x, hero.moby->rot_row1.y), cur->f0);
     D_L14_001624BC = ang;
