@@ -2322,41 +2322,41 @@ void follow_camera_springs(void *cam) __asm__("FUN_L00_002e5830");
 void follow_camera_springs(void *cam) {
     f32 velocity[4], hero_pos[4], focus[4], up[4], lateral[4], look[4], base[4], probe[4], left[4], diff[4], mid[4];
     u8 *view = camera_view;
-    FollowCamState *s = FOLLOW_CAM_STATE((struct UpdateCam *)cam);
-    FollowCamTail *t = &s->tail;
-    FollowCamBlock *q = &s->follow;
+    FollowCamState *camera_state = FOLLOW_CAM_STATE((struct UpdateCam *)cam);
+    FollowCamTail *camera_tail = &camera_state->tail;
+    FollowCamBlock *follow_block = &camera_state->follow;
     f32 len, back;
 
     follow_cam_hero_position(cam, hero_pos);
     follow_cam_update_mode(cam);
     follow_cam_focus_velocity(cam, velocity);
-    qcopy(&s->follow.velocity, velocity);
-    qcopy(focus, q);
-    len = dot_vectors_xyz(view + 0x30, s->follow.offset);
+    qcopy(&camera_state->follow.velocity, velocity);
+    qcopy(focus, follow_block);
+    len = dot_vectors_xyz(view + 0x30, camera_state->follow.offset);
     scale_vector_xyz(up, view + 0x30, len);
-    subtract_vector_xyz(lateral, s->follow.offset, up);
-    up[0] = cam_interp_values(&s->follow.up_ease[0], up[0], q->velocity[0], q->up_stiffness, q->up_damping, 0.0f);
-    up[1] = cam_interp_values(&s->follow.up_ease[1], up[1], q->velocity[1], q->up_stiffness, q->up_damping, 0.0f);
-    up[2] = cam_interp_values(&s->follow.up_ease[2], up[2], q->velocity[2], q->up_stiffness, q->up_damping, 0.0f);
-    lateral[0] = cam_interp_values(&s->follow.lateral_ease[0], lateral[0], q->focus[0], q->lateral_stiffness, q->lateral_damping, 0.0f);
-    lateral[1] = cam_interp_values(&s->follow.lateral_ease[1], lateral[1], q->focus[1], q->lateral_stiffness, q->lateral_damping, 0.0f);
-    lateral[2] = cam_interp_values(&s->follow.lateral_ease[2], lateral[2], q->focus[2], q->lateral_stiffness, q->lateral_damping, 0.0f);
-    add_vector_xyz(q, q, s->follow.velocity);
-    add_vector_xyz(s->follow.offset, lateral, up);
-    scale_vector_xyz(look, view + 0x20, q->look_height);
-    if (q->blending_in) {
-        if (++q->blend_timer > scale_game_frames(follow_cam_blend_frames)) {
-            q->blend_timer = scale_game_frames(follow_cam_blend_frames);
+    subtract_vector_xyz(lateral, camera_state->follow.offset, up);
+    up[0] = cam_interp_values(&camera_state->follow.up_ease[0], up[0], follow_block->velocity[0], follow_block->up_stiffness, follow_block->up_damping, 0.0f);
+    up[1] = cam_interp_values(&camera_state->follow.up_ease[1], up[1], follow_block->velocity[1], follow_block->up_stiffness, follow_block->up_damping, 0.0f);
+    up[2] = cam_interp_values(&camera_state->follow.up_ease[2], up[2], follow_block->velocity[2], follow_block->up_stiffness, follow_block->up_damping, 0.0f);
+    lateral[0] = cam_interp_values(&camera_state->follow.lateral_ease[0], lateral[0], follow_block->focus[0], follow_block->lateral_stiffness, follow_block->lateral_damping, 0.0f);
+    lateral[1] = cam_interp_values(&camera_state->follow.lateral_ease[1], lateral[1], follow_block->focus[1], follow_block->lateral_stiffness, follow_block->lateral_damping, 0.0f);
+    lateral[2] = cam_interp_values(&camera_state->follow.lateral_ease[2], lateral[2], follow_block->focus[2], follow_block->lateral_stiffness, follow_block->lateral_damping, 0.0f);
+    add_vector_xyz(follow_block, follow_block, camera_state->follow.velocity);
+    add_vector_xyz(camera_state->follow.offset, lateral, up);
+    scale_vector_xyz(look, view + 0x20, follow_block->look_height);
+    if (follow_block->blending_in) {
+        if (++follow_block->blend_timer > scale_game_frames(follow_cam_blend_frames)) {
+            follow_block->blend_timer = scale_game_frames(follow_cam_blend_frames);
         }
-        lerp_vector((f32)q->blend_timer / convert_integer_to_float(scale_game_frames(follow_cam_blend_frames)), base, q, s->follow.offset);
-        add_vector_xyz(s->follow.look_target, look, base);
+        lerp_vector((f32)follow_block->blend_timer / convert_integer_to_float(scale_game_frames(follow_cam_blend_frames)), base, follow_block, camera_state->follow.offset);
+        add_vector_xyz(camera_state->follow.look_target, look, base);
     } else {
-        fast_dec_timer(&s->follow.blend_timer);
-        if (q->blend_timer < 0) {
-            q->blend_timer = 0;
+        fast_dec_timer(&camera_state->follow.blend_timer);
+        if (follow_block->blend_timer < 0) {
+            follow_block->blend_timer = 0;
         }
-        lerp_vector((f32)q->blend_timer / convert_integer_to_float(scale_game_frames(follow_cam_blend_frames)), base, q, s->follow.offset);
-        add_vector_xyz(s->follow.look_target, look, base);
+        lerp_vector((f32)follow_block->blend_timer / convert_integer_to_float(scale_game_frames(follow_cam_blend_frames)), base, follow_block, camera_state->follow.offset);
+        add_vector_xyz(camera_state->follow.look_target, look, base);
     }
     follow_cam_spring_offset(cam, look);
     if (hero.vehicle_mode == 2) {
@@ -2367,8 +2367,8 @@ void follow_camera_springs(void *cam) {
         scale_vector_xyz(look, view + 0x20, 0.5f);
     }
     add_vector_xyz(base, hero_pos, look);
-    scale_vector_xyz(look, view + 0x20, t->distance);
-    add_vector_xyz(q->eye, look, q);
+    scale_vector_xyz(look, view + 0x20, camera_tail->distance);
+    add_vector_xyz(follow_block->eye, look, follow_block);
     len = follow_cam_min_distance_gp + FOLLOW_CAM_STATE(current_follow_cam)->tail.zoom_range * FOLLOW_CAM_STATE(current_follow_cam)->tail.zoom_scale * (FOLLOW_CAM_STATE(current_follow_cam)->tail.zoom - 1.0f);
     scale_vector_xyz(probe, view + 0x20, 20.0f);
     add_vector_xyz(probe, base, probe);
@@ -2386,27 +2386,27 @@ void follow_camera_springs(void *cam) {
     if (vector_length_xyz(diff) < len + len) {
         add_vector_xyz(mid, left, probe);
         scale_vector_xyz(mid, mid, 0.5f);
-        qcopy(q->eye, mid);
-        subtract_vector_xyz(diff, mid, q);
+        qcopy(follow_block->eye, mid);
+        subtract_vector_xyz(diff, mid, follow_block);
         follow_cam_turn_towards(dot_vectors_xyz(diff, view + 0x20), 0.003f);
     } else {
         f32 reach;
-        subtract_vector_xyz(diff, left, q);
+        subtract_vector_xyz(diff, left, follow_block);
         back = vector_length_xyz(diff);
-        reach = t->distance;
+        reach = camera_tail->distance;
         if (back <= reach + len) {
             scale_vector_xyz(mid, view + 0x20, len);
             subtract_vector_xyz(mid, left, mid);
-            qcopy(q->eye, mid);
-            subtract_vector_xyz(diff, mid, q);
+            qcopy(follow_block->eye, mid);
+            subtract_vector_xyz(diff, mid, follow_block);
             follow_cam_turn_towards(dot_vectors_xyz(diff, view + 0x20), 0.003f);
         } else {
-            len = dot_vectors_xyz(q, view + 0x30);
+            len = dot_vectors_xyz(follow_block, view + 0x30);
             if (dot_vectors_xyz(probe, view + 0x30) < len) {
-                qcopy(probe, q);
+                qcopy(probe, follow_block);
             }
             scale_vector_xyz(look, view + 0x20, reach);
-            add_vector_xyz(q->eye, look, probe);
+            add_vector_xyz(follow_block->eye, look, probe);
         }
     }
 }
