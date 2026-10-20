@@ -29,19 +29,19 @@ static inline s32 IsInRegion(s32 tgt, s32 start, s32 len, s32 size) {
 
 s32 vi_buf_modify_pts(ViBuf *f, TimeStamp *new_ts) __asm__("FUN_0023c6b8");
 
-s32 vi_buf_modify_pts(ViBuf *f, TimeStamp *new_ts) {
+s32 vi_buf_modify_pts(ViBuf *video_buffer, TimeStamp *new_ts) {
     TimeStamp *ts;
     s32 rd;
     s32 datasize;
     s32 loop;
     s32 len;
 
-    rd = (f->wt_ts - f->count_ts + f->n_ts) % f->n_ts;
-    datasize = f->n << 11;
+    rd = (video_buffer->wt_ts - video_buffer->count_ts + video_buffer->n_ts) % video_buffer->n_ts;
+    datasize = video_buffer->n << 11;
     loop = 1;
-    if (f->count_ts > 0) {
+    if (video_buffer->count_ts > 0) {
         while (loop) {
-            ts = f->ts + rd;
+            ts = video_buffer->ts + rd;
             if (ts->len == 0 || new_ts->len == 0) {
                 break;
             }
@@ -59,12 +59,12 @@ s32 vi_buf_modify_pts(ViBuf *f, TimeStamp *new_ts) {
                         ts->pos = 0;
                         ts->len = 0;
                     }
-                    f->count_ts = f->count_ts - 1 > -1 ? f->count_ts - 1 : 0;
+                    video_buffer->count_ts = video_buffer->count_ts - 1 > -1 ? video_buffer->count_ts - 1 : 0;
                 }
             } else {
                 loop = 0;
             }
-            rd = (rd + 1) % f->n_ts;
+            rd = (rd + 1) % video_buffer->n_ts;
         }
     }
     return 0;
