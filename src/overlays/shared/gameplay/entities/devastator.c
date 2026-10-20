@@ -3178,7 +3178,7 @@ void FUN_L00_002b8438(char *moby) {
     float spark_random_vector[4];
     float spark_position[4];
     char *slots_base = *(char **)(moby + 0x78) + 4;
-    unsigned char *q = (unsigned char *)D_0013E520;
+    unsigned char *item_variant_bytes = (unsigned char *)D_0013E520;
     int i;
 
     for (i = 0; i < 15; i++) {
@@ -3193,7 +3193,7 @@ void FUN_L00_002b8438(char *moby) {
             set_vector_length_xy(vec, src, 1.0f);
             vec[2] = 1.0f;
             vec[3] = 5627.9248046875f;
-            make_hit_descriptor(buf, (int)moby, 0x10000, vec, convert_integer_to_float_c(q[0x10]) + 1.0f);
+            make_hit_descriptor(buf, (int)moby, 0x10000, vec, convert_integer_to_float_c(item_variant_bytes[0x10]) + 1.0f);
             *(unsigned char *)(buf + 0x18) = 5;
             *(unsigned char *)(buf + 0x19) = 1;
             *(unsigned short *)(buf + 0x1A) = *(unsigned short *)(moby + 0xA6);
@@ -3212,9 +3212,9 @@ void FUN_L00_002b8438(char *moby) {
                     spark_random_vector[2] = D_0015ED6C_c2 * 4.0f;
                     spark_random_vector[3] = *(float *)&D_L00_00161540;
                     c1 = fast_tween_color(*(int *)&D_L00_00161544, *(int *)&D_L00_00161548, random_float_between_c(0.0f, 1.0f));
-                    FUN_L00_0025c0e8(c1, q[0x10]);
+                    FUN_L00_0025c0e8(c1, item_variant_bytes[0x10]);
                     c2 = fast_tween_color(*(int *)&D_L00_0016154C, *(int *)&D_L00_00161550, random_float_between_c(0.0f, 1.0f));
-                    FUN_L00_0025c0e8(c2, q[0x10]);
+                    FUN_L00_0025c0e8(c2, item_variant_bytes[0x10]);
                     c3 = func_001FA898_r(multiply_global_factor_ed64(random_float_between_c((float)*(int *)&D_L00_00161554, (float)*(int *)&D_L00_00161558)));
                     c4 = func_001FA898_r(multiply_global_factor_ed64(random_float_between_c((float)*(int *)&D_L00_00161554, (float)*(int *)&D_L00_00161558)));
                     FUN_L00_00257d78(spark_position, 0.0f, f20 + f20);
