@@ -196,7 +196,7 @@ float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 void FUN_L00_00214ed8(float a, float b, float c) {
     struct Hero *g = &hero;
     float r;
-    char *p;
+    char *heading_target;
     if (g->unkA58 != 0)
         return;
     r = g->motion.rot.f[2];
@@ -206,10 +206,10 @@ void FUN_L00_00214ed8(float a, float b, float c) {
         g->unkA58 = 1;
         g->unkA54 = 0;
     }
-    p = FUN_L00_0020d8f8(a, r, b, c);
-    if (p != 0 && (g->unkA54 == 0 || g->unkA58 != 0)) {
-        g->unkA5C = fast_arc_tan(*(float *)(p + 0x10) - g->motion.pos.f[0], *(float *)(p + 0x14) - g->motion.pos.f[1]);
-        g->unkA54 = p;
+    heading_target = FUN_L00_0020d8f8(a, r, b, c);
+    if (heading_target != 0 && (g->unkA54 == 0 || g->unkA58 != 0)) {
+        g->unkA5C = fast_arc_tan(*(float *)(heading_target + 0x10) - g->motion.pos.f[0], *(float *)(heading_target + 0x14) - g->motion.pos.f[1]);
+        g->unkA54 = heading_target;
     } else {
         hero.unkA5C = r;
     }
