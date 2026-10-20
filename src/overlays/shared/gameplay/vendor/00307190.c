@@ -70,7 +70,7 @@ void FUN_L08_00307298(char *fire_bolt) {
     float prev[4];
     float sc[4];
     float off[4];
-    float tmp[4];
+    float unused_vector_argument[4];
     char *tracked_moby;
     switch (((unsigned char *)fire_bolt)[0x20]) {
     case FIRE_BOLT_STATE_FLYING:
@@ -84,7 +84,7 @@ void FUN_L08_00307298(char *fire_bolt) {
             float trail_velocity_scale = random_float_between_alt(0.95f, 0.985f);
             scale_vector_xyz(sc, bolt_data, trail_velocity_scale);
             normalize_vector_xyz(off, bolt_data, -0.1f);
-            FUN_L00_001ff290(tmp, off, fire_bolt + 0x10);
+            FUN_L00_001ff290(unused_vector_argument, off, fire_bolt + 0x10);
             trail_frame_count = scale_game_frames(random_int_between(0xF, 0x14));
             FUN_L00_00269958(off, sc, 0x6F00AFFF, 0xFF, trail_frame_count, 0x28,
                              scale_game_frames(random_int_between(7, 0xA)), 1);
