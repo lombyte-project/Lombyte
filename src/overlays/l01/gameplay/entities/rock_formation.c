@@ -1842,19 +1842,19 @@ extern void trooper_start_knockback(void *, void *, s32, s32, s32, f32) __asm__(
 s32 D_L01_00161E90 = 5;
 
 void beehive_update(SpawnerMoby *m) __asm__("FUN_L01_003021b8");
-void beehive_update(SpawnerMoby *m) {
+void beehive_update(SpawnerMoby *beehive_moby) {
     enum {
         BEEHIVE_INITIALIZE = 0,
         BEEHIVE_TRY_SPAWN_CLONE = 1
     };
-    SpawnerVars *v = m->pvars;
-    SpawnerMoby *n;
+    SpawnerVars *v = beehive_moby->pvars;
+    SpawnerMoby *spawned_clone;
     CloneAiVars *nv;
     f32 k;
 
-    switch (m->state) {
+    switch (beehive_moby->state) {
     case BEEHIVE_INITIALIZE:
-        m->state = 1;
+        beehive_moby->state = 1;
         break;
     case BEEHIVE_TRY_SPAWN_CLONE:
         if (v->src_id < 0) {
@@ -1867,9 +1867,9 @@ void beehive_update(SpawnerMoby *m) {
             break;
         }
         v->count++;
-        n = (SpawnerMoby *)FUN_L01_00302328((ClonedMoby *)m);
-        if (n != 0) {
-            nv = n->pvars;
+        spawned_clone = (SpawnerMoby *)FUN_L01_00302328((ClonedMoby *)beehive_moby);
+        if (spawned_clone != 0) {
+            nv = spawned_clone->pvars;
             k = 0.8f;
             nv->w84 = 8;
             nv->w80 = truncate_float_to_s32(nv->f250 * k * 1024.0f);
@@ -1879,10 +1879,10 @@ void beehive_update(SpawnerMoby *m) {
             nv->w78 = 0;
             nv->w7C = 0;
             trooper_start_knockback(
-                n, nv->path, 5, 8, 0,
-                fast_add_rotations(fast_arc_tan(hero.motion.pos.f[0] - m->x, hero.motion.pos.f[1] - m->y),
+                spawned_clone, nv->path, 5, 8, 0,
+                fast_add_rotations(fast_arc_tan(hero.motion.pos.f[0] - beehive_moby->x, hero.motion.pos.f[1] - beehive_moby->y),
                                    3.1415927f));
-            n->state = 9;
+            spawned_clone->state = 9;
         }
         break;
     }
