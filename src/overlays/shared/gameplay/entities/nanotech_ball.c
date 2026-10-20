@@ -1873,26 +1873,26 @@ void FUN_L00_00257470_002dbb20(void *, s32, s32) __asm__("FUN_L00_00257470");
 s32 FUN_001f96f8_002dbb20(s32) __asm__("FUN_001f96f8");
 void FUN_00212f90_002dbb20(void *, s32, s32, s32) __asm__("FUN_00212f90");
 extern u32 D_L00_00161B20[1] __attribute__((sda));
-s32 FUN_L00_002dbb20(u8 *m, OvlQuad *v) {
-    u8 *o = FUN_L00_002db890_002dbb20(m);
+s32 FUN_L00_002dbb20(u8 *moby, OvlQuad *v) {
+    u8 *suction_record = FUN_L00_002db890_002dbb20(moby);
     u8 *g;
-    if (o == 0)
+    if (suction_record == 0)
         return 0;
-    if (m != 0 && m[0x20] != 0xFE && m[0x20] != 0xFD && *(s16 *)(o + 0x68) != 8) {
-        qcopy(m + 0x10, v);
-        FUN_L00_002d9fd0_002dbb20(*(void **)(o + 0x60), m, D_L00_00161B20);
-        FUN_0020e098_002dbb20(m);
+    if (moby != 0 && moby[0x20] != 0xFE && moby[0x20] != 0xFD && *(s16 *)(suction_record + 0x68) != 8) {
+        qcopy(moby + 0x10, v);
+        FUN_L00_002d9fd0_002dbb20(*(void **)(suction_record + 0x60), moby, D_L00_00161B20);
+        FUN_0020e098_002dbb20(moby);
         g = D_001403E0_002dbb20;
         if (g != 0 && *(s16 *)(g + 0xA6) == 0x351) {
             FUN_0022da68_002dbb20(5, 0, g);
         }
-        FUN_L00_00257470_002dbb20(m, 0, -1);
-        *(s16 *)(o + 0x68) = 4;
-        if (m[0x53] != *(u8 *)(*(u8 **)(o + 0x70) + 4)) {
-            u8 c = *(u8 *)(*(u8 **)(o + 0x70) + 4);
-            FUN_00212f90_002dbb20(m, c, 0, FUN_001f96f8_002dbb20(10));
+        FUN_L00_00257470_002dbb20(moby, 0, -1);
+        *(s16 *)(suction_record + 0x68) = 4;
+        if (moby[0x53] != *(u8 *)(*(u8 **)(suction_record + 0x70) + 4)) {
+            u8 stored_animation = *(u8 *)(*(u8 **)(suction_record + 0x70) + 4);
+            FUN_00212f90_002dbb20(moby, stored_animation, 0, FUN_001f96f8_002dbb20(10));
         }
-        *(s32 *)(m + 0x2C) = 0;
+        *(s32 *)(moby + 0x2C) = 0;
         return 1;
     }
     return 0;
