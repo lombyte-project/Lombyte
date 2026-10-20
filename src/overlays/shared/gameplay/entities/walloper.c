@@ -2311,8 +2311,8 @@ void FUN_L00_002be650(void *unused) {
     quad.texture_coordinates[3][0] = 1.0f;
     quad.texture_coordinates[3][1] = 1.0f;
     {
-        int c = D_0013E535 != 0 ? D_L00_00161764 : D_L00_00161760;
-        color = c & 0xFFFFFF;
+        int selected_color = D_0013E535 != 0 ? D_L00_00161764 : D_L00_00161760;
+        color = selected_color & 0xFFFFFF;
     }
     origin = &position;
     for (i = 0; i < 3; i++) {
