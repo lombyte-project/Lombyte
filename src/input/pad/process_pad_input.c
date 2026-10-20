@@ -62,13 +62,13 @@ void process_pad_input(Pad *p, u8 *buf, s32 len) {
     }
     if (len >= 6) {
         for (i = 0; i < 4; i++) {
-            s32 d = buf[i + 2] - 0x7F;
-            if (d < 0)
-                d = -d;
-            if (d >= 0x30) {
-                float f = convert_integer_to_float(d - 0x30) / convert_integer_to_float(0x4C);
-                p->axes[i] = f;
-                if (f > 1.0f) {
+            s32 axis_center_distance = buf[i + 2] - 0x7F;
+            if (axis_center_distance < 0)
+                axis_center_distance = -axis_center_distance;
+            if (axis_center_distance >= 0x30) {
+                float scaled_axis_magnitude = convert_integer_to_float(axis_center_distance - 0x30) / convert_integer_to_float(0x4C);
+                p->axes[i] = scaled_axis_magnitude;
+                if (scaled_axis_magnitude > 1.0f) {
                     p->axes[i] = 1.0f;
                 }
                 if (buf[i + 2] < 0x7F) {
@@ -150,10 +150,10 @@ void process_pad_input(Pad *p, u8 *buf, s32 len) {
     p->hist_ang[p->idx] = ang;
     if (mag > 0.9f) {
         for (j = 1; j < scale_game_frames(4); j++) {
-            float m = p->hist_mag[(p->idx - j + 30) % 30];
-            if (m > 0.9f)
+            float historical_magnitude = p->hist_mag[(p->idx - j + 30) % 30];
+            if (historical_magnitude > 0.9f)
                 break;
-            if (m < 0.25f) {
+            if (historical_magnitude < 0.25f) {
                 p->pressed |= 0x10000;
                 break;
             }
@@ -176,8 +176,8 @@ void process_pad_input(Pad *p, u8 *buf, s32 len) {
     if (p->rep_rate) {
         cur = p->held;
         if (cur != 0 && cur == p->old) {
-            u8 t = --p->rep_timer;
-            if (0 == t || t == 0xFF) {
+            u8 repeat_timer_value = --p->rep_timer;
+            if (0 == repeat_timer_value || repeat_timer_value == 0xFF) {
                 p->rep_timer = p->rep_rate;
                 p->pressed = cur;
             }
