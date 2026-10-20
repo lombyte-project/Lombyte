@@ -733,7 +733,7 @@ void agnogg_ship_front_update(Moby_2FC140 *moby) {
         AGNOGG_SHIP_HOLD_TARGET_HEIGHT = 10
     };
     Data_2FC140 *data;
-    Link_2FC140 *q;
+    Link_2FC140 *linked_moby_data;
     int r16;
     int cnt;
     int flag;
@@ -780,17 +780,17 @@ void agnogg_ship_front_update(Moby_2FC140 *moby) {
                 moby->flags = moby->flags & 0xFFBE;
                 moby->f94 = moby->pclass->f10;
                 if (data->link != -1) {
-                    q = D_L01_00160058_2FC140[data->link].data;
-                    q->timer = scale_game_frames(0x1A4);
+                    linked_moby_data = D_L01_00160058_2FC140[data->link].data;
+                    linked_moby_data->timer = scale_game_frames(0x1A4);
                     D_L01_00160058_2FC140[data->link].fBC = 1;
-                    clear_u64_value(&D_L01_0016016C_2FC140[q->rec].b);
-                    clear_u64_value(&q->v);
-                    D_L01_0016016C_2FC140[q->rec].b.y = -angle_atan2(
-                        vector_distance(&D_L01_0016016C_2FC140[q->rec].a, &moby->pos),
-                        moby->pos.z - D_L01_0016016C_2FC140[q->rec].a.z);
-                    D_L01_0016016C_2FC140[q->rec].b.z = angle_atan2(
-                        moby->pos.x - D_L01_0016016C_2FC140[q->rec].a.x,
-                        moby->pos.y - D_L01_0016016C_2FC140[q->rec].a.y);
+                    clear_u64_value(&D_L01_0016016C_2FC140[linked_moby_data->rec].b);
+                    clear_u64_value(&linked_moby_data->v);
+                    D_L01_0016016C_2FC140[linked_moby_data->rec].b.y = -angle_atan2(
+                        vector_distance(&D_L01_0016016C_2FC140[linked_moby_data->rec].a, &moby->pos),
+                        moby->pos.z - D_L01_0016016C_2FC140[linked_moby_data->rec].a.z);
+                    D_L01_0016016C_2FC140[linked_moby_data->rec].b.z = angle_atan2(
+                        moby->pos.x - D_L01_0016016C_2FC140[linked_moby_data->rec].a.x,
+                        moby->pos.y - D_L01_0016016C_2FC140[linked_moby_data->rec].a.y);
                 }
                 moby->state = 2;
             }
@@ -799,13 +799,13 @@ void agnogg_ship_front_update(Moby_2FC140 *moby) {
     case AGNOGG_SHIP_DESCEND_TO_TARGET_HEIGHT:
         moby->pos.z = moby->pos.z - frame_time_macro * 5.0f;
         if (data->link != -1) {
-            q = D_L01_00160058_2FC140[data->link].data;
-            q->v.y = -angle_atan2(
-                vector_distance(&D_L01_0016016C_2FC140[q->rec].a, &moby->pos),
-                moby->pos.z - D_L01_0016016C_2FC140[q->rec].a.z);
-            q->v.z = angle_atan2(
-                moby->pos.x - D_L01_0016016C_2FC140[q->rec].a.x,
-                moby->pos.y - D_L01_0016016C_2FC140[q->rec].a.y);
+            linked_moby_data = D_L01_00160058_2FC140[data->link].data;
+            linked_moby_data->v.y = -angle_atan2(
+                vector_distance(&D_L01_0016016C_2FC140[linked_moby_data->rec].a, &moby->pos),
+                moby->pos.z - D_L01_0016016C_2FC140[linked_moby_data->rec].a.z);
+            linked_moby_data->v.z = angle_atan2(
+                moby->pos.x - D_L01_0016016C_2FC140[linked_moby_data->rec].a.x,
+                moby->pos.y - D_L01_0016016C_2FC140[linked_moby_data->rec].a.y);
         }
         if (moby->f53 == 0) {
             if (moby->pos.z - data->fC <= 0.0f) {
@@ -899,8 +899,8 @@ void agnogg_ship_front_update(Moby_2FC140 *moby) {
             }
         }
         if (data->f3C != -1) {
-            q = D_L01_00160058_2FC140[data->f3C].data;
-            q->timer = scale_game_frames(0xB4);
+            linked_moby_data = D_L01_00160058_2FC140[data->f3C].data;
+            linked_moby_data->timer = scale_game_frames(0xB4);
             D_L01_00160058_2FC140[data->f3C].fBC = 1;
             if (data->f34 != -1 && data->f38 != -1) {
                 D_L01_00160058_2FC140[data->f34].fBC = 2;
