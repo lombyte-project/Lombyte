@@ -88,6 +88,7 @@ int hero_set_state(int a, int b) {
     enum {
         HERO_STATE_GRIND_HURT = 0x42,
         HERO_STATE_VEHICLE_MODE_1_IDLE = 0x43,
+        HERO_STATE_VEHICLE_MODE_1_FALL = 0x45,
         HERO_STATE_VEHICLE_MODE_1_SLIP = 0x52,
         HERO_STATE_VEHICLE_MODE_3_IDLE = 0x53,
         HERO_STATE_VEHICLE_MODE_3_RUN = 0x54,
@@ -1534,7 +1535,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0xE, 0, (float)scale_game_frames(0xC));
         break;
     }
-    case 0x45: {
+    case HERO_STATE_VEHICLE_MODE_1_FALL: {
         struct Hero *p = &hero;
         p->state.control_mode = 2;
         p->unk2284 = 0;
