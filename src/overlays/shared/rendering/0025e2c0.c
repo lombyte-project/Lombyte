@@ -56,7 +56,7 @@ void load_display_text_resource_entry(void *arg0, s32 *arg1) __asm__("FUN_00214b
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 extern int *D_L15_001B2770 NOT_SDA;
-unsigned char *FUN_L15_002647f0(void *pos, float *p_vector, float *c_vector, int d, int e, int f, int g, int h,
+unsigned char *FUN_L15_002647f0(void *pos, float *p_vector, float *c_vector, int particle_color, int e, int f, int g, int h,
                                 char *owner) {
     unsigned char *r = create_part(0x47);
     if (r != 0) {
@@ -65,7 +65,7 @@ unsigned char *FUN_L15_002647f0(void *pos, float *p_vector, float *c_vector, int
         qcopy(r + 0x10, pos);
         packed_p_vector = (int *)(r + 0x20);
         packed_c_vector = (int *)(r + 0x24);
-        *(int *)(r + 4) = d;
+        *(int *)(r + 4) = particle_color;
         r[9] = func_001FA898_r(4.0f) + 0x40;
         r[3] = 0x44;
         r[1] = 0;
@@ -77,7 +77,7 @@ unsigned char *FUN_L15_002647f0(void *pos, float *p_vector, float *c_vector, int
         pack_vector_xyz_with_shared_scale(c_vector, packed_c_vector);
         load_display_text_resource_entry(p_vector_scratch, packed_p_vector);
         load_display_text_resource_entry(c_vector_scratch, packed_c_vector);
-        packed_p_vector[2] = d;
+        packed_p_vector[2] = particle_color;
         packed_p_vector[3] = e;
         *(short *)(packed_p_vector + 4) = f;
         *(short *)((char *)packed_p_vector + 0x12) = g;
