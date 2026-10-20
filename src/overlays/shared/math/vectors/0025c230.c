@@ -122,26 +122,26 @@ float *FUN_002141f8_0025c558(void *) __asm__("FUN_002141f8");
 void FUN_002130d8_0025c558(void *, int, int, int, int) __asm__("FUN_002130d8");
 void FUN_00212f90_0025c558(void *, int, int, int) __asm__("FUN_00212f90");
 void trooper_start_knockback(u8 *a, B_25c558 *b, int c, int d, int e, float f) __asm__("FUN_L00_0025c558");
-void trooper_start_knockback(u8 *a, B_25c558 *b, int c, int d, int e, float f) {
+void trooper_start_knockback(u8 *moby, B_25c558 *b, int c, int d, int e, float knockback_angle) {
     float *r;
-    b->f0 = FUN_001f9dc8_0025c558(f) * b->f18;
-    b->f4 = FUN_001f9de0_0025c558(f) * b->f18;
+    b->f0 = FUN_001f9dc8_0025c558(knockback_angle) * b->f18;
+    b->f4 = FUN_001f9de0_0025c558(knockback_angle) * b->f18;
     b->f8 = b->f1C;
     b->fC = 1.0f;
-    b->f40 = FUN_001fa580_0025c558(f, 3.1415927f);
+    b->f40 = FUN_001fa580_0025c558(knockback_angle, 3.1415927f);
     b->w44 = 0;
     b->h2C = FUN_001f96f8_0025c558(300);
     b->h3E = 0;
     b->b3C = 1;
-    r = FUN_002141f8_0025c558(a);
+    r = FUN_002141f8_0025c558(moby);
     if (r && *r == 0.0f) {
         b->w24 |= 0x20;
-        *(int *)(a + 0x94) = 0;
+        *(int *)(moby + 0x94) = 0;
     }
     if (b->w24 & 2)
-        FUN_002130d8_0025c558(a, c, e, d, 1);
+        FUN_002130d8_0025c558(moby, c, e, d, 1);
     else
-        FUN_00212f90_0025c558(a, c, e, d);
+        FUN_00212f90_0025c558(moby, c, e, d);
 }
 #include "rnc/math/vector.h"
 
