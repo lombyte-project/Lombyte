@@ -1103,15 +1103,15 @@ void FUN_L10_002e17c0(struct Moby *moby)
 
 extern int D_L10_00161E00 __attribute__((sda));
 void FUN_L10_002e1cb0(struct Moby *moby) {
-    short *p;
+    short *group_entry;
     if (moby->group != 0xFF) {
-        p = D_L10_001ABCC0[moby->group];
-        if (p != 0) {
+        group_entry = D_L10_001ABCC0[moby->group];
+        if (group_entry != 0) {
             do {
-                int idx = *(unsigned short *)p & 0x7FFF;
+                int idx = *(unsigned short *)group_entry & 0x7FFF;
                 ((char *)D_L10_0015FFD0_e[2])[(idx << 8) + 0xBC] =
                     scale_game_frames(D_L10_00161E00);
-            } while (*p++ >= 0);
+            } while (*group_entry++ >= 0);
         }
     }
 }
