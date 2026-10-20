@@ -1505,7 +1505,7 @@ void FUN_L03_002db020(struct Moby *m) {
     float a[4];
     float b[4];
     char *v;
-    char *p;
+    char *path;
     int i;
     float t;
 
@@ -1518,13 +1518,13 @@ void FUN_L03_002db020(struct Moby *m) {
     vadd_2db020(a, a, *(char **)(v + 0x60) + 0x10);
     i = ftoi_2db020(*(float *)(v + 0x64) / *(float *)(*(char **)(v + 0x60) + 0x1C));
     t = itof_2db020(i);
-    p = *(char **)(v + 0x60);
-    t = (*(float *)(v + 0x64) - t * *(float *)(p + 0x1C)) / *(float *)(p + 0x1C);
-    if (i >= *(int *)p - 2) {
+    path = *(char **)(v + 0x60);
+    t = (*(float *)(v + 0x64) - t * *(float *)(path + 0x1C)) / *(float *)(path + 0x1C);
+    if (i >= *(int *)path - 2) {
         kill_2db020(m);
         return;
     }
-    vsub_2db020(b, ((float (*)[4])p)[i + 2], ((float (*)[4])p)[i + 1]);
+    vsub_2db020(b, ((float (*)[4])path)[i + 2], ((float (*)[4])path)[i + 1]);
     vscale_2db020(b, b, t);
     vadd_2db020(&m->pos, b, (*(float (**)[4])(v + 0x60))[i + 1]);
     vsub_2db020(a, &m->pos, old);
