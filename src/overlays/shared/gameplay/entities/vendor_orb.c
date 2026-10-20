@@ -2617,7 +2617,7 @@ float FUN_L00_002e86b0(char *camera, float *input_direction, float lim) {
     float sign;
     float r = 0.0f;
     float z2;
-    float t;
+    float angle_blend_fraction;
 
     FUN_001f9a68_c4(b0, axis, fast_vec_dot(input_direction, axis));
     FUN_001f9a28(b1, input_direction, b0);
@@ -2643,11 +2643,11 @@ float FUN_L00_002e86b0(char *camera, float *input_direction, float lim) {
     if (lim != z2 && lim < absolute_float(r)) {
         return r;
     }
-    t = r / 1.5707964f;
-    if (t > 1.0f) {
-        t = 1.0f;
+    angle_blend_fraction = r / 1.5707964f;
+    if (angle_blend_fraction > 1.0f) {
+        angle_blend_fraction = 1.0f;
     }
-    *(float *)(blend_output_block + 0x1C) = cubic_hermite_scalar(-1.0f, 0.0f, 1.0f, 0.0f, t) * sign;
+    *(float *)(blend_output_block + 0x1C) = cubic_hermite_scalar(-1.0f, 0.0f, 1.0f, 0.0f, angle_blend_fraction) * sign;
     return r;
 }
 void FUN_001f9a28_c2(void *, void *, void *) __asm__("FUN_001f9a28");
