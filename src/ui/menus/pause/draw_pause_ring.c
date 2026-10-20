@@ -66,11 +66,11 @@ s32 draw_pause_ring(struct PauseState *pause_state) {
     radius = (f32)viewport_dimension * 0.5f - 40.0f;
     i = 0;
     do {
-        f32 t, x, y;
+        f32 slot_angle, x, y;
 
-        t = fast_normalize_angle((f32)i * 0.7853982f + -1.5707964f);
-        x = cx + fast_cos(t) * radius;
-        y = cy + fast_sin(t) * radius;
+        slot_angle = fast_normalize_angle((f32)i * 0.7853982f + -1.5707964f);
+        x = cx + fast_cos(slot_angle) * radius;
+        y = cy + fast_sin(slot_angle) * radius;
         if (i == pause_state->sel) {
             u64 color = ((SubtractIntegerWithClamp((game_frame_counter & 0x3F) - 0x20) + 0x40) * 0x10202) |
                         0x80000000;
