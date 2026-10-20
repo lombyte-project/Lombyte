@@ -3141,7 +3141,7 @@ extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a
 void FUN_L15_002a7628(char *moby) {
     float B[4];
     float A[4];
-    Quad q;
+    Quad effect_quad;
     float F[4];
     float E[4];
     float C[4];
@@ -3160,27 +3160,27 @@ void FUN_L15_002a7628(char *moby) {
     normalize_vector_xyz(A, A, 0.1f);
     cross_vectors_xyz(F, F, E);
     normalize_vector_xyz(F, F, 0.1f);
-    q.b = get_effect_texture_alt(0xE);
-    q.c = 0xFF9000000260L;
-    q.d = 0x8000000048L;
-    q.a = 0;
-    q.col[3] = 0x80243278;
-    q.col[2] = 0x80243278;
-    q.col[1] = 0x80243278;
-    q.col[0] = 0x80243278;
+    effect_quad.b = get_effect_texture_alt(0xE);
+    effect_quad.c = 0xFF9000000260L;
+    effect_quad.d = 0x8000000048L;
+    effect_quad.a = 0;
+    effect_quad.col[3] = 0x80243278;
+    effect_quad.col[2] = 0x80243278;
+    effect_quad.col[1] = 0x80243278;
+    effect_quad.col[0] = 0x80243278;
     for (i = 0; i < 4; i++) {
-        q.uv[i][0] = D_L15_001E27F0[i * 2];
-        q.uv[i][1] = D_L15_001E27F0[i * 2 + 1];
+        effect_quad.uv[i][0] = D_L15_001E27F0[i * 2];
+        effect_quad.uv[i][1] = D_L15_001E27F0[i * 2 + 1];
     }
     subtract_vector_xyz(D, C, A);
-    *(OvlQuad *)q.v[0] = *(OvlQuad *)D;
+    *(OvlQuad *)effect_quad.v[0] = *(OvlQuad *)D;
     add_vector_xyz(D, C, A);
-    *(OvlQuad *)q.v[1] = *(OvlQuad *)D;
+    *(OvlQuad *)effect_quad.v[1] = *(OvlQuad *)D;
     subtract_vector_xyz(D, d + 0x10, F);
-    *(OvlQuad *)q.v[2] = *(OvlQuad *)D;
+    *(OvlQuad *)effect_quad.v[2] = *(OvlQuad *)D;
     add_vector_xyz(D, d + 0x10, F);
-    *(OvlQuad *)q.v[3] = *(OvlQuad *)D;
-    draw_geometry_quad(&q, 0, 0);
+    *(OvlQuad *)effect_quad.v[3] = *(OvlQuad *)D;
+    draw_geometry_quad(&effect_quad, 0, 0);
 }
 typedef struct {
     Vec4 origin;
