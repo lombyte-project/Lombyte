@@ -3422,8 +3422,8 @@ void FUN_L00_00212ff0(void) {
             float y = absolute_float(globals->motion.velocity.f[2]) + 0.01f;
             if (x < y) {
                 if (globals->wall_hit != 0) {
-                    float d = vector_distance(&globals->unk210, &globals->motion.pos);
-                    if (globals->unk234 * 0.5f < d) {
+                    float distance_to_hero_position = vector_distance(&globals->unk210, &globals->motion.pos);
+                    if (globals->unk234 * 0.5f < distance_to_hero_position) {
                         globals->motion.pos.f[2] = globals->ground_z.f;
                         return;
                     }
