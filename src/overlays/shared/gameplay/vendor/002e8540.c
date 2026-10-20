@@ -17,9 +17,9 @@ typedef struct { char b[0x140]; } Pane_2e3fa0;
 extern char *D_L00_00166E00_002e8590[] __asm__("D_L00_00166E00");
 void follow_camera_set_up_spring(float a, float b) __asm__("FUN_L00_002e85d8");
 void follow_camera_set_up_spring(float a, float b) {
-    char *p = D_L00_00166E00_002e8590[0];
-    if (*(short *)(p + 0x86) == 0) {
-        char *q = *(char **)(p + 0x70) + 0x40;
+    char *camera_record = D_L00_00166E00_002e8590[0];
+    if (*(short *)(camera_record + 0x86) == 0) {
+        char *q = *(char **)(camera_record + 0x70) + 0x40;
         if (a != 0.0f)
             *(float *)(q + 0xe4) = a;
         if (b != 0.0f)
