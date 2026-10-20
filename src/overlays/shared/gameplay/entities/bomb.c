@@ -176,8 +176,13 @@ extern f32 probe_ground_height(void *, int, f32) __asm__("FUN_00213508");
 
 /* Six checked switch entries: state 5 shares the default state reset.
  * Case 2/3 shaped after rac1-decomp (nonmatching/shared/func_L00_002C9DC8.c). */
-void FUN_L00_002c89e8(struct Moby *m)
+void FUN_L00_002c89e8(struct Moby *thrown_moby)
 {
+    enum {
+        THROWN_MOBY_STATE_INITIALIZE = 0,
+        THROWN_MOBY_STATE_MOVE_WITH_COLLISION = 2,
+        THROWN_MOBY_STATE_FADE_OUT = 4
+    };
     Vec4 next_pos, start, end, probe;
     ThrowVars_2c8440 *vars;
     struct Moby *other;
@@ -190,25 +195,25 @@ void FUN_L00_002c89e8(struct Moby *m)
     s32 never = 0;
     struct Moby *last;
 
-    if (!m) return;
-    vars = (ThrowVars_2c8440 *)m->pvars;
+    if (!thrown_moby) return;
+    vars = (ThrowVars_2c8440 *)thrown_moby->pvars;
     if (!vars) return;
-    if (m->pos.x < 2.0f || 1021.0f < m->pos.x ||
-        m->pos.y < 2.0f || 1021.0f < m->pos.y ||
-        m->pos.z < 2.0f || 1021.0f < m->pos.z) goto remove;
-    if (hero.unk20A5 && m->state < 2)
-        m->flags |= 0x41;
+    if (thrown_moby->pos.x < 2.0f || 1021.0f < thrown_moby->pos.x ||
+        thrown_moby->pos.y < 2.0f || 1021.0f < thrown_moby->pos.y ||
+        thrown_moby->pos.z < 2.0f || 1021.0f < thrown_moby->pos.z) goto remove;
+    if (hero.unk20A5 && thrown_moby->state < 2)
+        thrown_moby->flags |= 0x41;
     else
-        m->flags &= 0xffbe;
+        thrown_moby->flags &= 0xffbe;
     if (vars->holder->oclass == 0xe5 && vars->unk46 == 0 && fast_vec_length(vars) > 0.0f) {
         if (!hero.ground_moby || !FUN_L00_002603d0((char *)hero.ground_moby))
-            FUN_L00_002c8440(vars, m, 1);
-        else if (!FUN_L00_002c8440(vars, m, 0))
-            FUN_L00_002c8440(vars, m, 2);
+            FUN_L00_002c8440(vars, thrown_moby, 1);
+        else if (!FUN_L00_002c8440(vars, thrown_moby, 0))
+            FUN_L00_002c8440(vars, thrown_moby, 2);
     }
-    switch (m->state) {
-    case 0:
-        m->state = 1;
+    switch (thrown_moby->state) {
+    case THROWN_MOBY_STATE_INITIALIZE:
+        thrown_moby->state = 1;
         vars->effect_timer = scale_game_frames(4);
         vars->timer = 0;
         vars->spawn_count = 0;
@@ -216,50 +221,50 @@ void FUN_L00_002c89e8(struct Moby *m)
     case 1: {
         vars->timer = 0;
         {
-            f32 class_scale = m->pclass->scale;
-            if (m->scale < class_scale * 0.25f)
-                m->scale = m->scale + class_scale * (frame_scale * 0.05f);
+            f32 class_scale = thrown_moby->pclass->scale;
+            if (thrown_moby->scale < class_scale * 0.25f)
+                thrown_moby->scale = thrown_moby->scale + class_scale * (frame_scale * 0.05f);
         }
         if (fast_dec_timer(&vars->effect_timer)) {
             vars->effect_timer = scale_game_frames(4);
-            if (!hero.unk20A5) FUN_L00_0026ed28(m);
+            if (!hero.unk20A5) FUN_L00_0026ed28(thrown_moby);
         }
         if (!hero.vehicle_mode && vars->holder && (vars->holder->state & 0xf0) != 0xf0 &&
             hero.items[0].moby && hero.items[0].moby->oclass == 0xe5) return;
         goto remove;
     }
-    case 2: {
+    case THROWN_MOBY_STATE_MOVE_WITH_COLLISION: {
         f32 size, speed, rest_speed, sink;
         f32 half = 0.5f;
         u8 *carry;
         struct Hero *player;
         size = convert_integer_to_float(D_0013E534) + 1.0f;
         {
-            f32 class_scale = m->pclass->scale;
-            if (m->scale < class_scale * half * size)
-                m->scale = m->scale + class_scale * (frame_scale * 0.05f) * size;
+            f32 class_scale = thrown_moby->pclass->scale;
+            if (thrown_moby->scale < class_scale * half * size)
+                thrown_moby->scale = thrown_moby->scale + class_scale * (frame_scale * 0.05f) * size;
         }
         if (fast_dec_timer(&vars->effect_timer)) {
             vars->effect_timer = scale_game_frames(4);
-            FUN_L00_0026ed28(m);
+            FUN_L00_0026ed28(thrown_moby);
         }
         vars->vel.f[2] -= frame_time_sq * 9.0f;
-        fast_vec_add(&next_pos, &m->pos, vars);
+        fast_vec_add(&next_pos, &thrown_moby->pos, vars);
         carry = (u8 *)&hero.motion.platform_carry;
-        FUN_L00_001ff290(&probe, &m->pos, carry);
-        qcopy_nc(&start, &m->pos);
-        sink = frame_scale * 0.15f * m->scale;
-        start.f[2] -= sink / m->pclass->scale;
+        FUN_L00_001ff290(&probe, &thrown_moby->pos, carry);
+        qcopy_nc(&start, &thrown_moby->pos);
+        sink = frame_scale * 0.15f * thrown_moby->scale;
+        start.f[2] -= sink / thrown_moby->pclass->scale;
         qcopy_nc(&end, &next_pos);
-        sink = sink / m->pclass->scale;
+        sink = sink / thrown_moby->pclass->scale;
         end.f[2] -= sink;
         qcopy_nc(&probe, &next_pos);
         probe.f[2] += size * 0.2f;
         player = (struct Hero *)(carry - 0x140);
         if (coll_sphere(size * 0.3f, &probe, 4, player->moby)) {
             collision_point = coll_hit.pad30;
-            qcopy_nc(&m->pos, collision_point);
-            m->pos.z -= size * 0.2f;
+            qcopy_nc(&thrown_moby->pos, collision_point);
+            thrown_moby->pos.z -= size * 0.2f;
             collision_point += 0x10;
             rest_speed = 0.01f;
             reflect_vector(vars, vars, collision_point);
@@ -271,8 +276,8 @@ void FUN_L00_002c89e8(struct Moby *m)
                 goto collision_miss;
             }
             collision_point = (u8 *)&coll_hit.point;
-            qcopy_nc(&m->pos, collision_point);
-            m->pos.z += (frame_scale * 0.15f * m->scale) / m->pclass->scale;
+            qcopy_nc(&thrown_moby->pos, collision_point);
+            thrown_moby->pos.z += (frame_scale * 0.15f * thrown_moby->scale) / thrown_moby->pclass->scale;
             collision_point += 0x20;
             rest_speed = 0.01f;
             reflect_vector(vars, vars, collision_point);
@@ -289,7 +294,7 @@ settle:
                     vars->timer = settled;
                     if (!coll_hit.moby || coll_hit.unk1C > 0 ||
                         (settled_frames = (s16)settled, scale_game_frames(240) < settled_frames)) {
-                        m->state = 3;
+                        thrown_moby->state = 3;
                         vars->timer = 0;
                     }
                 }
@@ -297,20 +302,20 @@ settle:
             if (hero.ground_moby && FUN_L00_002603d0((char *)hero.ground_moby))
                 fast_vec_add(vars, vars, &hero.motion.displacement);
         }
-        fast_vec_add(&m->pos, &m->pos, vars);
-        FUN_L00_002c8078(m);
+        fast_vec_add(&thrown_moby->pos, &thrown_moby->pos, vars);
+        FUN_L00_002c8078(thrown_moby);
         break;
 collision_miss:
-        qcopy_nc(&m->pos, &next_pos);
+        qcopy_nc(&thrown_moby->pos, &next_pos);
         return;
     }
     case 3: {
         f32 ground;
         /* Fakematch: reusing case 2's pointer here makes it cross a call, so it gets s0 there. */
-        collision_point = (u8 *)&m->pos;
+        collision_point = (u8 *)&thrown_moby->pos;
         ground = probe_ground_height(collision_point, 0, 0.5f);
         if (ground != 0.0f && coll_hit.moby)
-            FUN_L00_00260400(m, coll_hit.moby, collision_point, &m->rot, collision_point, &m->rot);
+            FUN_L00_00260400(thrown_moby, coll_hit.moby, collision_point, &thrown_moby->rot, collision_point, &thrown_moby->rot);
         if (fast_dec_timer_s16(&vars->timer)) {
             live_count = 0;
             for (other = (struct Moby *)D_L00_0015FFE4; other; other = other->next) {
@@ -331,37 +336,37 @@ collision_miss:
                 start.f[1] = frame_scale * 0.05f * start.f[1];
                 if (hero.ground_moby && FUN_L00_002603d0((char *)hero.ground_moby))
                     fast_vec_add(&start, &start, &hero.motion.displacement);
-                fast_vec_add(&next_pos, &start, &m->pos);
+                fast_vec_add(&next_pos, &start, &thrown_moby->pos);
                 FUN_L00_002bfe08(vars->holder, &next_pos, &start);
                 vars->timer = scale_game_frames(8);
                 {
                     s32 spawned = vars->spawn_count + 1;
                     vars->spawn_count = spawned;
-                    if (spawned > 3) m->state = 4;
+                    if (spawned > 3) thrown_moby->state = 4;
                 }
             }
         }
         if (vars->spawn_count < 2 && fast_dec_timer(&vars->effect_timer)) {
             vars->effect_timer = scale_game_frames(4);
-            FUN_L00_0026ed28(m);
+            FUN_L00_0026ed28(thrown_moby);
         }
         break;
     }
-    case 4: {
+    case THROWN_MOBY_STATE_FADE_OUT: {
         f32 ground;
-        m->alpha -= 4;
-        m->scale *= 0.92f;
-        ground = probe_ground_height(&m->pos, 0, 0.5f);
+        thrown_moby->alpha -= 4;
+        thrown_moby->scale *= 0.92f;
+        ground = probe_ground_height(&thrown_moby->pos, 0, 0.5f);
         if (ground != 0.0f && coll_hit.moby)
-            FUN_L00_00260400(m, coll_hit.moby, &m->pos, &m->rot, &m->pos, &m->rot);
-        if (m->alpha) return;
+            FUN_L00_00260400(thrown_moby, coll_hit.moby, &thrown_moby->pos, &thrown_moby->rot, &thrown_moby->pos, &thrown_moby->rot);
+        if (thrown_moby->alpha) return;
 remove:
-        mark_moby_for_removal(m);
+        mark_moby_for_removal(thrown_moby);
         break;
     }
     case 5:
     default:
-        m->state = 0;
+        thrown_moby->state = 0;
     }
 }
 /* 0x002c92d8, 112 bytes.
