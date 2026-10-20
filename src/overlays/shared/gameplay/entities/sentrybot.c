@@ -1538,39 +1538,39 @@ void FUN_L15_0029ae18(char *moby);
 void FUN_L15_0029af88(char *moby);
 
 void rocket_update(unsigned char *m) __asm__("FUN_L15_0029ac30");
-void rocket_update(unsigned char *m) {
-    char *d = *(char **)(m + 0x78);
+void rocket_update(unsigned char *moby) {
+    char *rocket_data = *(char **)(moby + 0x78);
     float next[4];
     float back[4];
     char col[0x30];
     float s;
-    if (*(int *)(d + 0x10) == 0) {
-        if (dist_y(m + 0x10, D_L15_001673C0_y) < 15.0f) {
-            sound_y(9, 0, m, 0x27E);
-            *(int *)(d + 0x10) = 1;
+    if (*(int *)(rocket_data + 0x10) == 0) {
+        if (dist_y(moby + 0x10, D_L15_001673C0_y) < 15.0f) {
+            sound_y(9, 0, moby, 0x27E);
+            *(int *)(rocket_data + 0x10) = 1;
         }
     }
-    if (m[0x20] != 0)
+    if (moby[0x20] != 0)
         return;
     s = 1.0f;
-    *(float *)(m + 0x40) = addrot_y(*(float *)(m + 0x40), D_0015ED6C * 6.2831855f);
-    add_y(next, m + 0x10, d);
-    scale_y(back, d, -2.0f);
-    add_y(back, back, m + 0x10);
+    *(float *)(moby + 0x40) = addrot_y(*(float *)(moby + 0x40), D_0015ED6C * 6.2831855f);
+    add_y(next, moby + 0x10, rocket_data);
+    scale_y(back, rocket_data, -2.0f);
+    add_y(back, back, moby + 0x10);
     if (hero.vehicle_mode == 2 && randbelow_y(5) != 0)
         s = 0.0f;
-    setupcol_y(col, m, 0x10003, s, d);
-    *(short *)(col + 0x1A) = *(short *)(m + 0xA6);
-    if (collide_y(back, next, 0x10, m, col) != 0 || tick_y(d + 0x14) != 0) {
-        if (D_L15_00174458_y[0] != *(int *)(d + 0x18)) {
-            sound_y(8, 0, m, 0x27E);
-            FUN_L15_0029af88((char *)m);
-            remove_y(m);
+    setupcol_y(col, moby, 0x10003, s, rocket_data);
+    *(short *)(col + 0x1A) = *(short *)(moby + 0xA6);
+    if (collide_y(back, next, 0x10, moby, col) != 0 || tick_y(rocket_data + 0x14) != 0) {
+        if (D_L15_00174458_y[0] != *(int *)(rocket_data + 0x18)) {
+            sound_y(8, 0, moby, 0x27E);
+            FUN_L15_0029af88((char *)moby);
+            remove_y(moby);
             return;
         }
     }
-    qcopy(m + 0x10, next);
-    FUN_L15_0029ae18((char *)m);
+    qcopy(moby + 0x10, next);
+    FUN_L15_0029ae18((char *)moby);
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_0029BFF8), where it is exact; names translated to the US level program. */
 
