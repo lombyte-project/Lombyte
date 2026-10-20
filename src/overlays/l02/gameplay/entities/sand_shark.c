@@ -105,7 +105,7 @@ void FUN_L02_002d3a50(void *moby, void *segment_start, void *b, int puff_count, 
     float scale;
     float size_delta_per_puff;
     unsigned char *dust_puff;
-    unsigned char *p;
+    unsigned char *dust_puff_extension;
 
     fast_vec_sub(step, b, segment_start);
     fast_vec_scale(step, step, 1.0f / (float)puff_count);
@@ -126,14 +126,14 @@ void FUN_L02_002d3a50(void *moby, void *segment_start, void *b, int puff_count, 
         vel[2] = random_float_between_alt(D_L02_001619D4 * 0.1f, D_L02_001619D4);
         dust_puff = FUN_L00_0026d000(pos, D_L02_001619DC, 1.0f, scale, spin, vel, size_delta_per_puff + sa * 210000.0f, r << 24 | color);
         if (dust_puff) {
-            p = dust_puff + 0x20;
+            dust_puff_extension = dust_puff + 0x20;
             if (random_integer_below(2)) {
                 dust_puff[3] = 0x44;
             }
             *(unsigned short *)(dust_puff + 0xA) = D_L02_001619E0;
-            *(int *)(p + 4) = 2;
-            p[0xA] = r;
-            p[0xB] = D_L02_001619E0;
+            *(int *)(dust_puff_extension + 4) = 2;
+            dust_puff_extension[0xA] = r;
+            dust_puff_extension[0xB] = D_L02_001619E0;
         }
     }
 }
