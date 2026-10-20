@@ -1390,7 +1390,7 @@ extern f32 D_L14_00161B20 __attribute__((sda));
 void FUN_L14_002de670(struct Moby *moby) {
     f32 *velocity = (f32 *)moby->pvars;
     s32 i;
-    s32 n;
+    s32 signed_particle_variation;
     s32 alpha;
     s32 color;
     f32 size;
@@ -1434,12 +1434,12 @@ void FUN_L14_002de670(struct Moby *moby) {
     FUN_L00_0026cbb0_de670(&moby->pos, D_L14_0015F580, 0x4F007FFF, 0x1FFFFFFF,
                          FUN_L00_00257b90(scale_game_frames(10), scale_game_frames(20)), 1, 60000.0f);
     for (i = 0; i < 2; i++) {
-        n = random_integer_below_de670(6);
-        if (random_integer_below_de670(2) != 0) n = -n;
+        signed_particle_variation = random_integer_below_de670(6);
+        if (random_integer_below_de670(2) != 0) signed_particle_variation = -signed_particle_variation;
         size = random_float_between_de670(40000.0f, 100000.0f);
         color = FUN_L00_00257b90(0x30, 0xFF);
         alpha = 0x60000000;
-        particle = FUN_L00_0026d000_de670(&moby->pos, 0.025f, 1.0f, 1.0f, n,
+        particle = FUN_L00_0026d000_de670(&moby->pos, 0.025f, 1.0f, 1.0f, signed_particle_variation,
                                        D_L14_0015F580, size,
                                        color | ((color << 16) | ((color << 8) | alpha)));
         if (particle != 0) {
