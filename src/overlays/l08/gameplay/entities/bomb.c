@@ -1368,7 +1368,7 @@ void FUN_L08_002da0f0(struct Moby *moby) {
     Vec4 v;
     char *r;
     int i;
-    int n;
+    int spray_random_value;
     float sc, sp;
 
     if (D_L08_00161970 == 0) {
@@ -1397,8 +1397,8 @@ void FUN_L08_002da0f0(struct Moby *moby) {
         v.f[0] = fast_cos(ang) * k;
         v.f[1] = fast_sin(ang) * k;
         v.f[2] = random_float_between(frame_time * 3.0f, frame_time * 6.5f);
-        n = FUN_L00_00257b90(0x5A, 0x78);
-        FUN_L00_0026f548(&pos, &v, random_integer_below(2), n);
+        spray_random_value = FUN_L00_00257b90(0x5A, 0x78);
+        FUN_L00_0026f548(&pos, &v, random_integer_below(2), spray_random_value);
     }
     for (i = 0; i < 16; i++) {
         unsigned char *splash;
