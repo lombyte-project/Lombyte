@@ -26,52 +26,52 @@ void FUN_L08_00272cb8(float *pos, int kind, float *vec, float scale) {
     float *vp = v;
     float w[4];
     float u[4];
-    unsigned char *p;
+    unsigned char *particle;
     int k2 = kind;
     int c;
-    float s;
+    float span_length;
     float f20;
     int k;
     *(OvlQuad *)v = *(OvlQuad *)vec;
-    p = create_part(0);
-    if (p != 0) {
+    particle = create_part(0);
+    if (particle != 0) {
         c = 0;
         k = k2;
         f20 = 0.0f;
-        s = f20;
+        span_length = f20;
         switch (k) {
         case PARTICLE_SHORT_SPAN:
             c = 0x14;
             f20 = 0.015f;
-            s = random_float_between_alt(0.01f, 1.0f);
+            span_length = random_float_between_alt(0.01f, 1.0f);
             break;
         case PARTICLE_MEDIUM_SPAN:
             c = 0xD;
             f20 = 0.5f;
-            s = random_float_between_alt(1.0f, 5.0f);
+            span_length = random_float_between_alt(1.0f, 5.0f);
             break;
         case PARTICLE_LONG_SPAN:
             c = 0xD;
             f20 = 1.0f;
             k = 1;
-            s = random_float_between_alt(20.0f, 30.0f);
+            span_length = random_float_between_alt(20.0f, 30.0f);
             break;
         }
         *(OvlQuad *)w = *(OvlQuad *)vp;
-        normalize_vector_xyz(w, w, s);
-        *(short *)(p + 0xA) = k2;
-        *(int *)(p + 4) = ((c >> 2) << 24) | 0x606060;
-        *(int *)(p + 0xC) = (c << 24) | 0x907070;
-        p[9] = func_001FA898_r(4.0f) + 0x60;
-        p[3] = 0x44;
-        p[1] = 3;
-        p[2] = D_L08_001B2880[k];
-        *(OvlQuad *)(p + 0x10) = *(OvlQuad *)pos;
+        normalize_vector_xyz(w, w, span_length);
+        *(short *)(particle + 0xA) = k2;
+        *(int *)(particle + 4) = ((c >> 2) << 24) | 0x606060;
+        *(int *)(particle + 0xC) = (c << 24) | 0x907070;
+        particle[9] = func_001FA898_r(4.0f) + 0x60;
+        particle[3] = 0x44;
+        particle[1] = 3;
+        particle[2] = D_L08_001B2880[k];
+        *(OvlQuad *)(particle + 0x10) = *(OvlQuad *)pos;
         add_vector_xyz(u, pos, w);
-        *(OvlQuad *)(p + 0x20) = *(OvlQuad *)u;
-        *(float *)(p + 0x1C) = f20;
-        *(float *)(p + 0x2C) = 1.0f;
-        *(OvlQuad *)(p + 0x30) = *(OvlQuad *)vp;
-        *(float *)(p + 0x3C) = scale;
+        *(OvlQuad *)(particle + 0x20) = *(OvlQuad *)u;
+        *(float *)(particle + 0x1C) = f20;
+        *(float *)(particle + 0x2C) = 1.0f;
+        *(OvlQuad *)(particle + 0x30) = *(OvlQuad *)vp;
+        *(float *)(particle + 0x3C) = scale;
     }
 }
