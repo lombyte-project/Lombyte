@@ -53,6 +53,7 @@ void update_mode_freeze(void) {
         FREEZE_MODE_VIDEO_MODE_TEST = 6
     };
     enum {
+        FREEZE_CHOICE_PREPARE_INPUT = 0,
         FREEZE_CHOICE_AWAIT_INPUT = 1
     };
     s32 video_mode;
@@ -165,7 +166,7 @@ void update_mode_freeze(void) {
 
     case 0:
         switch (freeze.unk1C) {
-        case 0:
+        case FREEZE_CHOICE_PREPARE_INPUT:
             if (freeze.unk20 < 8) {
                 freeze.unk20++;
             } else if (freeze.unk24 < 8) {
