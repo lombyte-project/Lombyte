@@ -499,7 +499,8 @@ void FUN_L00_001f4598(void) {
         DEBUG_COLUMN_OPTIONS = 1,
         DEBUG_COLUMN_DRAW_FLAGS = 2,
         DEBUG_COLUMN_ITEM_COUNTS = 3,
-        DEBUG_COLUMN_FOG = 4
+        DEBUG_COLUMN_FOG = 4,
+        DEBUG_COLUMN_CAMERA_ACTUATOR_AND_CAPTURE = 5
     };
     enum {
         DEBUG_OPTION_ROW_CONTROL_MODE = 0,
@@ -854,7 +855,7 @@ void FUN_L00_001f4598(void) {
         }
         update_fog();
         break;
-    case 5:
+    case DEBUG_COLUMN_CAMERA_ACTUATOR_AND_CAPTURE:
         if (g_debug_menu.selected_row == 0 && (D_0013C940.buttons.w.pressed & 0x50))
             g_debug_menu.battle_camera_enabled = !g_debug_menu.battle_camera_enabled;
         if (g_debug_menu.selected_row == 1 && (D_0013C940.buttons.w.pressed & 0x50))
