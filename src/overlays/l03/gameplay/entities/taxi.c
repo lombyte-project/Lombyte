@@ -46,11 +46,11 @@ extern float D_L03_00161B00 __attribute__((sda));
 extern void FUN_L00_00262b00(float, float, char *, float *, float *);
 extern void FUN_L00_00262b80(char *, char *, char *, float, float, float);
 
-void FUN_L03_002d3c40(struct Moby *m) {
-    char *moby_vars = (char *)m->pvars;
-    FUN_L00_00262b00(D_L03_00161AF0, D_L03_00161AF4 * DEG_TO_RAD * frame_time, m,
+void FUN_L03_002d3c40(struct Moby *taxi_moby) {
+    char *moby_vars = (char *)taxi_moby->pvars;
+    FUN_L00_00262b00(D_L03_00161AF0, D_L03_00161AF4 * DEG_TO_RAD * frame_time, taxi_moby,
                      (float *)(moby_vars + 0xEC), (float *)(moby_vars + 0xE8));
-    FUN_L00_00262b80(m, moby_vars + 0xF0, moby_vars + 0xF4, D_L03_00161AF8,
+    FUN_L00_00262b80(taxi_moby, moby_vars + 0xF0, moby_vars + 0xF4, D_L03_00161AF8,
                      D_L03_00161AFC * DEG_TO_RAD * frame_time,
                      D_L03_00161B00 * DEG_TO_RAD * frame_time);
 }
