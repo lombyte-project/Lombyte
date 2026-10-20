@@ -1,10 +1,10 @@
 /* Ported from rac1-decomp (src/game/pause.c, func_0021EF38). */
 int FUN_0021df30(void *destination) {
-    char *p = (char *)destination;
-    *(float *)(p + 0x38) = 3.14159274f;
-    *(int *)(p + 0x34) = 0;
-    *(int *)(p + 0x44) = 0;
-    *(int *)(p + 0x48) = 0;
+    char *destination_bytes = (char *)destination;
+    *(float *)(destination_bytes + 0x38) = 3.14159274f;
+    *(int *)(destination_bytes + 0x34) = 0;
+    *(int *)(destination_bytes + 0x44) = 0;
+    *(int *)(destination_bytes + 0x48) = 0;
     return 0;
 }
 
