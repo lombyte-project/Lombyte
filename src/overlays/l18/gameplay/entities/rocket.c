@@ -2990,7 +2990,7 @@ extern void spawn_ec290(void *, int, float, float, int, int, int, void *, float)
 extern f32 frame_scale_macro __asm__("D_0015ED60") __attribute__((section(".sdata")));
 void FUN_L18_002eaea0(void *moby) {
     V_ec290 s[10];
-    V_ec290 d[5];
+    V_ec290 side_arc_segment_offsets[5];
     unsigned char flag = *(unsigned char *)D_0013E533;
     char *data = *(char **)((char *)moby + 0x78);
     float scale;
@@ -3019,7 +3019,7 @@ void FUN_L18_002eaea0(void *moby) {
         float f21;
         float len;
         float len0;
-        float a;
+        float azimuth_angle;
         float b;
         f21 = *(float *)&D_L18_00162000
               + (*(float *)&D_L18_00162004 - *(float *)&D_L18_00162000) * (convert_integer_to_float(i) * 0.05f);
@@ -3027,9 +3027,9 @@ void FUN_L18_002eaea0(void *moby) {
         f21 = f21 + FUN_L00_00257c48(*(float *)&D_L18_00162040, *(float *)&D_L18_00162044);
         D_L18_001D9D00[0][i].f[2] = D_L18_001D9D00[0][i].f[2] - D_L18_001D9F80[i];
         D_L18_001D9F80[i] = f21;
-        a = random_angle_radians_c();
+        azimuth_angle = random_angle_radians_c();
         b = random_angle_radians_c();
-        build_spherical_offset(&s[1], scale, a, b);
+        build_spherical_offset(&s[1], scale, azimuth_angle, b);
         s[1].f[2] = s[1].f[2] * 0.5f;
         lerp_vector(&s[2], &s[3], &s[1], *(float *)&D_L18_0016208C);
         len0 = vector_length_xyz(&s[2]);
@@ -3060,20 +3060,20 @@ void FUN_L18_002eaea0(void *moby) {
         }
         if (i < 10) {
             float g;
-            float h;
+            float secondary_bolt_z_offset;
             float ang;
-            float m;
+            float secondary_bolt_lateral_offset;
             g = normalize_angle(*(float *)&D_L18_00162010 + (float)i * *(float *)&D_L18_00162018);
-            h = *(float *)&D_L18_0016201C
+            secondary_bolt_z_offset = *(float *)&D_L18_0016201C
                 * fast_sin_c(normalize_angle(*(float *)&D_L18_00162024 + (float)i * *(float *)&D_L18_0016202C));
             qcopy(&D_L18_001D9D00[1][i], &D_L18_001D9D00[0][i]);
-            h = h * fast_sin_c(g) + FUN_L00_00257c48(0.0f, 0.1f);
-            D_L18_001D9D00[1][i].f[2] = D_L18_001D9D00[1][i].f[2] + h;
-            D_L18_001DA110[i] = h;
+            secondary_bolt_z_offset = secondary_bolt_z_offset * fast_sin_c(g) + FUN_L00_00257c48(0.0f, 0.1f);
+            D_L18_001D9D00[1][i].f[2] = D_L18_001D9D00[1][i].f[2] + secondary_bolt_z_offset;
+            D_L18_001DA110[i] = secondary_bolt_z_offset;
             ang = fast_add_rotations(fast_arc_tan(s[1].f[0], s[1].f[1]), 1.5707964f);
-            m = *(float *)&D_L18_00162020 * fast_cos_c(g);
-            s[4].f[0] = fast_cos_c(ang) * m;
-            s[4].f[1] = fast_sin_c(ang) * m;
+            secondary_bolt_lateral_offset = *(float *)&D_L18_00162020 * fast_cos_c(g);
+            s[4].f[0] = fast_cos_c(ang) * secondary_bolt_lateral_offset;
+            s[4].f[1] = fast_sin_c(ang) * secondary_bolt_lateral_offset;
             s[4].f[2] = 0.0f;
             qcopy(&D_L18_001D9FD0[i], &s[4]);
             add_vector_xyz(&D_L18_001D9D00[1][i], &D_L18_001D9D00[1][i], &s[4]);
@@ -3119,14 +3119,14 @@ void FUN_L18_002eaea0(void *moby) {
         } else {
             int j;
             for (j = 1; j < 5; j++) {
-                subtract_vector_xyz(&d[j], (D_L18_001DA160[k].p + j), &D_L18_001DA150[k].p[j - 1]);
-                d[j].f[0] += FUN_L00_00257c48(0.0f, 0.1f);
-                d[j].f[1] += FUN_L00_00257c48(0.0f, 0.1f);
-                d[j].f[2] += FUN_L00_00257c48(0.0f, 0.1f);
+                subtract_vector_xyz(&side_arc_segment_offsets[j], (D_L18_001DA160[k].p + j), &D_L18_001DA150[k].p[j - 1]);
+                side_arc_segment_offsets[j].f[0] += FUN_L00_00257c48(0.0f, 0.1f);
+                side_arc_segment_offsets[j].f[1] += FUN_L00_00257c48(0.0f, 0.1f);
+                side_arc_segment_offsets[j].f[2] += FUN_L00_00257c48(0.0f, 0.1f);
             }
             qcopy(&D_L18_001DA160[k].p[0], &s[8]);
             for (j = 1; j < 5; j++) {
-                add_vector_xyz((D_L18_001DA160[k].p + j), &D_L18_001DA150[k].p[j - 1], &d[j]);
+                add_vector_xyz((D_L18_001DA160[k].p + j), &D_L18_001DA150[k].p[j - 1], &side_arc_segment_offsets[j]);
             }
             {
                 int x = D_L18_001620D0[k];
