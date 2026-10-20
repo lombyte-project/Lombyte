@@ -200,40 +200,40 @@ extern void update_joint_animation(float, float, void *, void *, int) __asm__("F
 
 /* Watcher update, same routine as commando_update with this level's states and data layout. */
 void bob_update(WM11 *m) __asm__("FUN_L11_002d0710");
-void bob_update(WM11 *m) {
+void bob_update(WM11 *moby) {
     enum {
         BOB_INITIALIZE = 0,
         BOB_CHECK_DIALOGUE = 1,
         BOB_WAIT_FOR_DIALOGUE_END = 2
     };
     WS11 scratch;
-    WD11 *d = (WD11 *)m->data;
+    WD11 *moby_vars = (WD11 *)moby->data;
     float rate;
     float head_rate;
     int tracking;
-    FUN_L05_00317398(m);
-    switch (m->state) {
+    FUN_L05_00317398(moby);
+    switch (moby->state) {
     case BOB_INITIALIZE:
         if (D_0013D4C3) {
-            m->state = 3;
+            moby->state = 3;
         } else {
-            m->state = 1;
+            moby->state = 1;
         }
-        initialize_npc_dialogue(m, d);
-        d->f0C = 3.7f;
+        initialize_npc_dialogue(moby, moby_vars);
+        moby_vars->f0C = 3.7f;
         break;
     case BOB_CHECK_DIALOGUE:
-        if (FUN_00214720(hero.motion.pos.f, d->region)) {
-            if (update_npc_dialogue(m, d)) {
-                begin_dialogue_camera_transition(m, 2.7f);
-                m->state = 2;
+        if (FUN_00214720(hero.motion.pos.f, moby_vars->region)) {
+            if (update_npc_dialogue(moby, moby_vars)) {
+                begin_dialogue_camera_transition(moby, 2.7f);
+                moby->state = 2;
             }
         }
         break;
     case BOB_WAIT_FOR_DIALOGUE_END:
         if (D_L11_0015F5C4 != 2) {
-            m->state = 1;
-            if (d->h04 == 2) {
+            moby->state = 1;
+            if (moby_vars->h04 == 2) {
                 FUN_L00_00260860(3, 1);
                 jet_reset_camera(hero.motion.pos.f, hero.motion.pos.f + 4);
                 memcard_save_data_d0710(0, -1);
@@ -246,45 +246,45 @@ void bob_update(WM11 *m) {
     rate = 0.02f;
     head_rate = 0.3f;
     tracking = 0;
-    if (m->animation == 0) {
+    if (moby->animation == 0) {
         char *player = D_0013E533 + 0xE9D;
         tracking = 1;
-        if (vector_distance(m->position, player) < 8.0f &&
+        if (vector_distance(moby->position, player) < 8.0f &&
             fast_difference_between_rotations(
-                m->yaw, fast_arc_tan(((WP11 *)(D_0013E533 + 0xE1D))->aim[0] - m->position[0],
-                                     ((WP11 *)(D_0013E533 + 0xE1D))->aim[1] - m->position[1])) <
+                moby->yaw, fast_arc_tan(((WP11 *)(D_0013E533 + 0xE1D))->aim[0] - moby->position[0],
+                                     ((WP11 *)(D_0013E533 + 0xE1D))->aim[1] - moby->position[1])) <
                 1.5707964f) {
             if (fast_vec_length(player + 0x80) > 0.01f)
-                d->moving_timer = scale_game_frames(120);
+                moby_vars->moving_timer = scale_game_frames(120);
             else
-                fast_dec_timer(&d->moving_timer);
-        } else if (d->moving_timer) {
-            d->moving_timer = 0;
-            qcopy(d->target, hero.motion.unkD0.f);
+                fast_dec_timer(&moby_vars->moving_timer);
+        } else if (moby_vars->moving_timer) {
+            moby_vars->moving_timer = 0;
+            qcopy(moby_vars->target, hero.motion.unkD0.f);
         }
-        if (fast_dec_timer(&d->target_timer)) {
+        if (fast_dec_timer(&moby_vars->target_timer)) {
             float heading;
-            d->target_timer =
+            moby_vars->target_timer =
                 truncate_float_to_s32(multiply_global_factor_ed64(random_float_between(180.0f, 300.0f)));
-            heading = fast_add_rotations(m->yaw, random_float_between(-90.0f, 90.0f) * DEG_TO_RAD);
-            FUN_00214db0(d->target, 6.0f, heading, random_float_between(0.0f, 30.0f) * DEG_TO_RAD);
-            fast_vec_add(d->target, d->target, m->position);
+            heading = fast_add_rotations(moby->yaw, random_float_between(-90.0f, 90.0f) * DEG_TO_RAD);
+            FUN_00214db0(moby_vars->target, 6.0f, heading, random_float_between(0.0f, 30.0f) * DEG_TO_RAD);
+            fast_vec_add(moby_vars->target, moby_vars->target, moby->position);
         }
-        if (d->moving_timer) {
+        if (moby_vars->moving_timer) {
             qcopy(scratch.target, hero.motion.unkD0.f);
             rate = 0.04f;
             head_rate = 0.3f;
         } else {
-            qcopy(scratch.target, d->target);
+            qcopy(scratch.target, moby_vars->target);
         }
     }
     if (tracking) {
         float yaw;
         float pitch;
-        qcopy(scratch.eye, m->position);
+        qcopy(scratch.eye, moby->position);
         scratch.eye[2] += 1.0f;
         fast_vec_sub(scratch.delta, scratch.target, scratch.eye);
-        yaw = fast_subtract_rotations(fast_arc_tan(scratch.delta[0], scratch.delta[1]), m->yaw);
+        yaw = fast_subtract_rotations(fast_arc_tan(scratch.delta[0], scratch.delta[1]), moby->yaw);
         pitch = -fast_arc_tan(vector_length_xy(scratch.delta), scratch.delta[2]);
         if (yaw > 1.5707964f)
             yaw = 1.5707964f;
@@ -294,13 +294,13 @@ void bob_update(WM11 *m) {
             pitch = 0.5235988f;
         else if (pitch < -0.5235988f)
             pitch = -0.5235988f;
-        d->pitch = pitch;
-        d->head_yaw = d->yaw = yaw * 0.5f;
+        moby_vars->pitch = pitch;
+        moby_vars->head_yaw = moby_vars->yaw = yaw * 0.5f;
     }
     if (big_head_cheat_enabled)
-        d->height = 2.75f;
-    update_joint_animation(rate * frame_scale_sq, head_rate * frame_scale_sq, m, d->body, 0);
-    update_joint_animation(rate * frame_scale_sq, head_rate * frame_scale_sq, m, d->head, 1);
+        moby_vars->height = 2.75f;
+    update_joint_animation(rate * frame_scale_sq, head_rate * frame_scale_sq, moby, moby_vars->body, 0);
+    update_joint_animation(rate * frame_scale_sq, head_rate * frame_scale_sq, moby, moby_vars->head, 1);
 }
 
 extern float distance_xyz(void *, void *) __asm__("FUN_001f9b48");
