@@ -1696,8 +1696,8 @@ void FUN_L00_00234b38(void *a) {
         for (i = 0; i < b->n; i++) {
             u8 *e = b->e[i];
             if (e != 0) {
-                s16 t = *(s16 *)(e + 0xA6);
-                if (t == 0x1B1 || t == 0x50A || t == 0x509) {
+                s16 object_type_id = *(s16 *)(e + 0xA6);
+                if (object_type_id == 0x1B1 || object_type_id == 0x50A || object_type_id == 0x509) {
                     *(f32 *)(e + 0x2C) = *(f32 *)(*(u8 **)(e + 0x24) + 0x24) * scale_factor;
                 }
             }
