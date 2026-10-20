@@ -555,7 +555,7 @@ extern char *D_L00_0015FFD8_2591d0 __asm__("D_L00_0015FFD8");
 int FUN_L00_002592b8_c(char **, char *) __asm__("FUN_L00_002592b8");
 /* Looks up table entry idx and makes it current; the flag test reads the
  * current entry back, as the original did. */
-int FUN_L00_002591d0(char **out, int idx, int a, int b) {
+int FUN_L00_002591d0(char **out, int idx, int include_sign_bit_set_entries, int b) {
     unsigned short *v;
     char *entry_address;
     int entry_sign_bit_set;
@@ -575,7 +575,7 @@ int FUN_L00_002591d0(char **out, int idx, int a, int b) {
     D_L00_00160114 = entry_address;
     *out = entry_address;
     entry_sign_bit_set = (unsigned)(*(char *volatile *)&D_L00_00160114)[0x20] >> 31;
-    if (!a) {
+    if (!include_sign_bit_set_entries) {
         if (b || entry_sign_bit_set) return FUN_L00_002592b8_c(out, D_L00_00160114);
     } else if (b && !entry_sign_bit_set) return FUN_L00_002592b8_c(out, D_L00_00160114);
     return 0;
