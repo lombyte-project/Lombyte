@@ -156,27 +156,27 @@ typedef struct O23cdb8 {
 extern s32 D_L00_0015F91C_gp __asm__("D_L00_0015F91C") __attribute__((sda));
 extern s32 D_L00_0015F920_gp __asm__("D_L00_0015F920") __attribute__((sda));
 s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
-void FUN_L00_0023cdb8(O23cdb8 *p) {
-    u8 *c = p->c;
-    s32 v = *p->src;
-    p->val = v;
-    if (p->max < v)
-        p->val = p->max;
+void FUN_L00_0023cdb8(O23cdb8 *value_state) {
+    u8 *c = value_state->c;
+    s32 v = *value_state->src;
+    value_state->val = v;
+    if (value_state->max < v)
+        value_state->val = value_state->max;
     else if (v < 0)
-        p->val = 0;
-    if (p->timer >= scale_game_frames(5)) {
-        p->timer = scale_game_frames(5);
+        value_state->val = 0;
+    if (value_state->timer >= scale_game_frames(5)) {
+        value_state->timer = scale_game_frames(5);
         if (c[0] < D_L00_0015F91C_gp)
             c[0]++;
         else if (c[1] < D_L00_0015F920_gp)
             c[1]++;
     } else {
-        p->f6C = 1;
+        value_state->f6C = 1;
         if (c[1] != 0)
             c[1]--;
         else if (c[0] != 0)
             c[0]--;
         else
-            p->f6C = -6;
+            value_state->f6C = -6;
     }
 }
