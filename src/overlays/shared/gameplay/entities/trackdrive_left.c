@@ -781,7 +781,7 @@ extern void FUN_L02_0020bc88(void *, void *, void *, s64, s32);
 extern void clear_vector(void *);
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-void FUN_L02_002da6c0(int p0, int p1, int sel, float a, float s) {
+void FUN_L02_002da6c0(int p0, int p1, int sel, float angle, float radial_distance) {
     enum {
         ARROW_STYLE_NEWLY_REACHED = 0,
         ARROW_STYLE_OCCUPIED = 1,
@@ -820,8 +820,8 @@ void FUN_L02_002da6c0(int p0, int p1, int sel, float a, float s) {
     col[2] = D_L02_00161B9C;
     col[1] = D_L02_00161B9C;
     col[0] = D_L02_00161B9C;
-    y = func_001FA898_r(fast_sin(a) * s * 16.0f);
-    x = func_001FA898_r(fast_cos(a) * s * 16.0f);
+    y = func_001FA898_r(fast_sin(angle) * radial_distance * 16.0f);
+    x = func_001FA898_r(fast_cos(angle) * radial_distance * 16.0f);
     v = (long)y + 0xFFFFF080000000L;
     v -= x << 16;
     v += 0x8000;
@@ -830,7 +830,7 @@ void FUN_L02_002da6c0(int p0, int p1, int sel, float a, float s) {
     xy[1] = v;
     xy[0] = v;
     clear_vector(ang);
-    ang[2] = -a;
+    ang[2] = -angle;
     euler_rotation_matrix(M, ang);
     multiply_matrix(M, M, D_L02_001D33B0);
     xy[0] += func_001FA898_r(M[0][0] * 16.0f) << 16;
