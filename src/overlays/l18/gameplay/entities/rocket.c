@@ -729,10 +729,10 @@ void FUN_L18_002d5918(struct Moby *moby) {
         }
         break;
     case STATE_POST_FLIGHT_SETTLING: {
-        float d = approach_value((float *)(data + 0x188), 0.0f, D_L18_00161994 * 2.0f * frame_time_sq);
-        moby->rot.y += d;
-        v[0] = fast_cos(moby->rot.z) * d;
-        v[1] = fast_sin(moby->rot.z) * d;
+        float settling_motion_step = approach_value((float *)(data + 0x188), 0.0f, D_L18_00161994 * 2.0f * frame_time_sq);
+        moby->rot.y += settling_motion_step;
+        v[0] = fast_cos(moby->rot.z) * settling_motion_step;
+        v[1] = fast_sin(moby->rot.z) * settling_motion_step;
         v[2] = 0.0f;
         add_vector_xyz(&moby->pos, &moby->pos, v);
         if (*(float *)(data + 0x188) == 0.0f) {
