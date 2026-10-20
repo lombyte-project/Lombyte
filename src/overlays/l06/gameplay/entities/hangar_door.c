@@ -406,23 +406,23 @@ void enqueue_callback_list_1(s32 arg0, s32 arg1) __asm__("FUN_001f4600");
 
 void FUN_L06_002fd088(char *moby) {
     int *data = *(int **)(moby + 0x78);
-    int *p;
+    int *clip_volume_index_cursor;
     int i;
     enqueue_callback_list_1((void *)FUN_L06_002fd460, moby);
-    p = data;
-    for (i = 0; i < 4; p++, i++) {
-        if (*p < 0)
+    clip_volume_index_cursor = data;
+    for (i = 0; i < 4; clip_volume_index_cursor++, i++) {
+        if (*clip_volume_index_cursor < 0)
             continue;
-        if (is_point_inside_clip_volume(D_L06_00167540, *p)) {
+        if (is_point_inside_clip_volume(D_L06_00167540, *clip_volume_index_cursor)) {
             enqueue_callback_list_1((void *)FUN_L06_002fd1a0, moby);
             break;
         }
     }
-    p = data + 0x10;
-    for (i = 0; i < 4; p++, i++) {
+    clip_volume_index_cursor = data + 0x10;
+    for (i = 0; i < 4; clip_volume_index_cursor++, i++) {
         char *g = (char *)D_0013E533 + 0xE1D;
         if (*(int *)(g + 0x208C) == 15 ||
-            (*p >= 0 && is_point_inside_clip_volume(D_L06_00167540, *p))) {
+            (*clip_volume_index_cursor >= 0 && is_point_inside_clip_volume(D_L06_00167540, *clip_volume_index_cursor))) {
             enqueue_callback_list_1((void *)FUN_L06_002fd748, moby);
             return;
         }
