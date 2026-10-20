@@ -84,33 +84,33 @@ typedef struct {
 } G_235310;
 extern G_235310 D_L00_0017E4D8 __attribute__((section(".data")));
 
-void FUN_L00_00235310(int n) {
-    int d = D_L00_0017E4D8.t->c[n];
+void FUN_L00_00235310(int group_index) {
+    int subtraction_amount = D_L00_0017E4D8.t->c[group_index];
     int i, j, s, end;
-    if (n == 0) {
+    if (group_index == 0) {
         for (j = 0; j < D_L00_0017E4D8.t->b[0]; j++) {
             D_L00_0017E4D8.a[j].s = 0;
         }
     }
-    if (n)
-        s = D_L00_0017E4D8.t->a[n - 1];
+    if (group_index)
+        s = D_L00_0017E4D8.t->a[group_index - 1];
     else
         s = 0;
-    end = D_L00_0017E4D8.t->a[n];
+    end = D_L00_0017E4D8.t->a[group_index];
     for (i = s; i < end; i++) {
-        D_L00_0017E4D8.b[i].v -= d;
+        D_L00_0017E4D8.b[i].v -= subtraction_amount;
         D_L00_0017E4D8.b[i].v |= 0x80000000;
     }
-    if (n)
-        s = D_L00_0017E4D8.t->b[n - 1];
+    if (group_index)
+        s = D_L00_0017E4D8.t->b[group_index - 1];
     else
         s = 0;
-    end = D_L00_0017E4D8.t->b[n];
+    end = D_L00_0017E4D8.t->b[group_index];
     for (i = s; i < end; i++) {
-        D_L00_0017E4D8.a[i].v -= d;
+        D_L00_0017E4D8.a[i].v -= subtraction_amount;
         D_L00_0017E4D8.a[i].v |= 0x80000000;
     }
-    D_L00_0017E4D8.t->c[n] = 0;
+    D_L00_0017E4D8.t->c[group_index] = 0;
 }
 extern volatile int D_L00_0015FA70;
 extern volatile int D_L00_0015FA74;
