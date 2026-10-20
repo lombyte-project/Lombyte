@@ -55,45 +55,45 @@ static inline s32 IsPtsInRegion(s32 tgt, s32 pos, s32 len, s32 size) {
 
 s32 vi_buf_get_ts(ViBuf *f, TimeStamp *ts) __asm__("FUN_0023c920");
 
-s32 vi_buf_get_ts(ViBuf *f, TimeStamp *ts) {
+s32 vi_buf_get_ts(ViBuf *video_buffer, TimeStamp *ts) {
     u32 d4madr = *D4_MADR;
     u32 ipubp = *IPU_BP;
-    s32 bp = f->env.ipubp & 0x7F;
+    s32 bp = video_buffer->env.ipubp & 0x7F;
     s32 fp = (ipubp >> 16) & 0x3;
     s32 ifc = (ipubp >> 8) & 0xF;
     u32 d4madr_next = d4madr - ((fp + ifc) << 4);
     u32 stop;
-    s32 datasize = VIBUF_ELM_SIZE * f->n;
+    s32 datasize = VIBUF_ELM_SIZE * video_buffer->n;
     s32 isEnd = 0;
     s32 tscount;
     s32 wt;
     s32 i;
 
-    WaitSema(f->sema);
+    WaitSema(video_buffer->sema);
 
     ts->pts = TS_NONE;
     ts->dts = TS_NONE;
 
-    stop = (d4madr_next + (bp >> 3) + datasize - (u32)f->data) % datasize;
+    stop = (d4madr_next + (bp >> 3) + datasize - (u32)video_buffer->data) % datasize;
 
-    tscount = f->count_ts;
-    wt = f->wt_ts;
+    tscount = video_buffer->count_ts;
+    wt = video_buffer->wt_ts;
 
     for (i = 0; i < tscount && !isEnd; i++) {
         s32 rd;
 
-        rd = (wt - tscount + f->n_ts + i) % f->n_ts;
-        if (IsPtsInRegion(stop, f->ts[rd].pos, f->ts[rd].len, datasize)) {
-            ts->pts = f->ts[rd].pts;
-            ts->dts = f->ts[rd].dts;
-            f->ts[rd].pts = TS_NONE;
-            f->ts[rd].dts = TS_NONE;
+        rd = (wt - tscount + video_buffer->n_ts + i) % video_buffer->n_ts;
+        if (IsPtsInRegion(stop, video_buffer->ts[rd].pos, video_buffer->ts[rd].len, datasize)) {
+            ts->pts = video_buffer->ts[rd].pts;
+            ts->dts = video_buffer->ts[rd].dts;
+            video_buffer->ts[rd].pts = TS_NONE;
+            video_buffer->ts[rd].dts = TS_NONE;
             isEnd = 1;
-            f->count_ts -= min(1, f->count_ts);
+            video_buffer->count_ts -= min(1, video_buffer->count_ts);
         }
     }
 
-    SignalSema(f->sema);
+    SignalSema(video_buffer->sema);
 
     return 1;
 }
