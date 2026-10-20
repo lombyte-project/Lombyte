@@ -2270,9 +2270,9 @@ void FUN_L07_0030e458(struct Moby *moby) {
     }
     if (FUN_001efa68(prev, &moby->pos, 0, *(int *)(moby_data + 0x10), 0) != 0 ||
         func_L00_001F10E0_f(0.1f, &moby->pos, 0, *(int *)(moby_data + 0x10)) != 0) {
-        char *o = D_L07_00173ED0[2];
-        if (o == 0 || (*(short *)(o + 0xA6) != 0x415 && *(short *)(o + 0xA6) != 0x419 &&
-                       *(short *)(o + 0xA6) != 0x452)) {
+        char *class_filter_moby = D_L07_00173ED0[2];
+        if (class_filter_moby == 0 || (*(short *)(class_filter_moby + 0xA6) != 0x415 && *(short *)(class_filter_moby + 0xA6) != 0x419 &&
+                       *(short *)(class_filter_moby + 0xA6) != 0x452)) {
             if (moby->visible != 0) {
                 func_L00_0025F4A8_alt(moby, moby_data, 0, 2.0f, 1.0f, 0, 3, 5, 0.0f, 0.0f, 1000.0f, 1.2f, 0,
                                       10.0f, 0, 1, -1, 0);
