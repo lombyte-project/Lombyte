@@ -2088,61 +2088,61 @@ void FUN_L03_002dccc0(struct Moby *m) {
         LIFT_WAIT_FOR_HERO_ANIMATION = 2,
         LIFT_FOLLOW_PATH = 3
     };
-    struct RailLiftVars *d = (struct RailLiftVars *)m->pvars;
+    struct RailLiftVars *lift_vars = (struct RailLiftVars *)m->pvars;
     Vec4 oldPos, oldRot, move;
     s32 hero_end, lift_end;
 
-    if (d->path[0] == -1 || d->path[1] == -1)
+    if (lift_vars->path[0] == -1 || lift_vars->path[1] == -1)
         return;
     FUN_L00_00266858(m, FUN_L03_002dcb30((unsigned char *)m));
     qcopy(&oldPos, &m->pos);
     oldRot.q = *(u128 *)&m->rot;
-    fast_dec_timer(&d->timer);
+    fast_dec_timer(&lift_vars->timer);
     switch (m->state) {
     case LIFT_INITIALIZE:
-        m->command = d->start_end;
-        qcopy(&m->pos, &D_L03_001B05B0[d->path[m->command]]->pts[0]);
-        d->hud = -1;
-        d->timer = 0;
+        m->command = lift_vars->start_end;
+        qcopy(&m->pos, &D_L03_001B05B0[lift_vars->path[m->command]]->pts[0]);
+        lift_vars->hud = -1;
+        lift_vars->timer = 0;
         m->state = 1;
         m->update_dist = 0xFF;
         m->draw_dist = 0xFF;
         break;
     case LIFT_WAIT_FOR_DEPARTURE:
-        hero_end = vec_dist(&hero.motion.pos, &D_L03_001B05B0[d->path[0]]->pts[0]) <
-                   vec_dist(&hero.motion.pos, &D_L03_001B05B0[d->path[1]]->pts[0]);
-        lift_end = vec_dist(&m->pos, &D_L03_001B05B0[d->path[0]]->pts[0]) <
-                   vec_dist(&m->pos, &D_L03_001B05B0[d->path[1]]->pts[0]);
-        if (!d->started) {
-            if (d->autostart || is_point_inside_clip_volume(&hero.motion.pos, d->volume)) {
+        hero_end = vec_dist(&hero.motion.pos, &D_L03_001B05B0[lift_vars->path[0]]->pts[0]) <
+                   vec_dist(&hero.motion.pos, &D_L03_001B05B0[lift_vars->path[1]]->pts[0]);
+        lift_end = vec_dist(&m->pos, &D_L03_001B05B0[lift_vars->path[0]]->pts[0]) <
+                   vec_dist(&m->pos, &D_L03_001B05B0[lift_vars->path[1]]->pts[0]);
+        if (!lift_vars->started) {
+            if (lift_vars->autostart || is_point_inside_clip_volume(&hero.motion.pos, lift_vars->volume)) {
                 m->collision = m->pclass->collision;
                 m->command = hero_end;
                 m->flags &= 0xFFBE;
-                *(u128 *)&m->pos = *(u128 *)&D_L03_001B05B0[d->path[hero_end]]->pts[0];
+                *(u128 *)&m->pos = *(u128 *)&D_L03_001B05B0[lift_vars->path[hero_end]]->pts[0];
                 m->state = 3;
-                d->unk64 = 1;
-                d->started = 1;
-                d->ready = 0;
+                lift_vars->unk64 = 1;
+                lift_vars->started = 1;
+                lift_vars->ready = 0;
                 break;
             }
         }
-        if (!d->started) {
+        if (!lift_vars->started) {
             m->collision = 0;
             m->flags |= 0x41;
-        } else if (d->ready && FUN_L01_00277fb8(m)) {
-            FUN_L03_002dcbc8((char *)m, d->help[m->command ^ 1]);
+        } else if (lift_vars->ready && FUN_L01_00277fb8(m)) {
+            FUN_L03_002dcbc8((char *)m, lift_vars->help[m->command ^ 1]);
             if ((D_0013CAE4 & 0x10) && D_L03_0015F594 == 8) {
                 FUN_L00_00233ee8(&m->pos, m->rot.z, 0);
                 m->command ^= 1;
-                d->unk64 = 1;
-                d->ready = 0;
+                lift_vars->unk64 = 1;
+                lift_vars->ready = 0;
                 m->state = 2;
             }
         } else if (hero_end != lift_end) {
             m->state = 3;
             m->command ^= 1;
-            d->unk64 = 1;
-            d->ready = 0;
+            lift_vars->unk64 = 1;
+            lift_vars->ready = 0;
         }
         break;
     case LIFT_WAIT_FOR_HERO_ANIMATION:
@@ -2154,15 +2154,15 @@ void FUN_L03_002dccc0(struct Moby *m) {
             hero.unk1F2 = 4;
             hero.unk1F4 = 4;
         }
-        if (FUN_L03_002d3918(m, d->path[m->command], &d->snd)) {
+        if (FUN_L03_002d3918(m, lift_vars->path[m->command], &lift_vars->snd)) {
             m->state = 1;
-            d->timer = scale_game_frames(0xF);
+            lift_vars->timer = scale_game_frames(0xF);
         }
         break;
     }
     FUN_L03_002dd0f0(m);
     vec_sub(&move, &m->pos, &oldPos);
-    update_entity_matrix(d->coll, &move, &oldRot, &m->rot);
-    if (!FUN_L01_00277fb8(m) && vector_distance(&m->pos, &hero.motion.pos) > 2.0f && d->timer == 0)
-        d->ready = 1;
+    update_entity_matrix(lift_vars->coll, &move, &oldRot, &m->rot);
+    if (!FUN_L01_00277fb8(m) && vector_distance(&m->pos, &hero.motion.pos) > 2.0f && lift_vars->timer == 0)
+        lift_vars->ready = 1;
 }
