@@ -330,10 +330,10 @@ extern int stick_direction_vs_facing(void) __asm__("FUN_L00_00221df8");
 /* scale_game_frames(12), or 0 when stick_direction_vs_facing returns 2. */
 int FUN_L00_00221d98(void) {
     int r = scale_game_frames(12);
-    int t = stick_direction_vs_facing();
-    if (t == 2) {
+    int stick_direction = stick_direction_vs_facing();
+    if (stick_direction == 2) {
         r = 0;
-    } else if (t == 3) {
+    } else if (stick_direction == 3) {
         r = scale_game_frames(12);
     }
     return r;
