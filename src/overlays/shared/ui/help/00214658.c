@@ -449,8 +449,8 @@ void xform_216130(void *, void *, void *) __asm__("FUN_001f9d20");
 float smooth_216130(float *, void *, float, float, float, float, int) __asm__("FUN_L00_0025bc98");
 void set_216130(void *, void *) __asm__("FUN_00214598");
 void FUN_L00_00216130(V_216130 *v, M_216130 *working_matrix, void *rotation_output, float a, float b, float c) {
-    M_216130 m0;
-    M_216130 m1;
+    M_216130 y_rotation_matrix;
+    M_216130 z_rotation_matrix;
     V_216130 r;
     V_216130 x;
     float smoothed_pitch;
@@ -471,16 +471,16 @@ void FUN_L00_00216130(V_216130 *v, M_216130 *working_matrix, void *rotation_outp
         r.f[0] = 0.0f;
         r.f[1] = 0.0f;
         r.f[2] = -roll;
-        fun_001fa070(&m1, &r);
-        mmul_216130(working_matrix, &m1, working_matrix);
-        xform_216130(&x, &x, &m1);
+        fun_001fa070(&z_rotation_matrix, &r);
+        mmul_216130(working_matrix, &z_rotation_matrix, working_matrix);
+        xform_216130(&x, &x, &z_rotation_matrix);
         yaw = atan2_216130(x.f[2], x.f[0]);
         r.f[0] = 0.0f;
         r.f[2] = 0.0f;
         r.f[1] = -yaw;
-        fun_001fa070(&m0, &r);
-        mmul_216130(working_matrix, &m0, working_matrix);
-        xform_216130(&x, &x, &m0);
+        fun_001fa070(&y_rotation_matrix, &r);
+        mmul_216130(working_matrix, &y_rotation_matrix, working_matrix);
+        xform_216130(&x, &x, &y_rotation_matrix);
     } else {
         roll = 0.0f;
         yaw = roll;
@@ -494,16 +494,16 @@ void FUN_L00_00216130(V_216130 *v, M_216130 *working_matrix, void *rotation_outp
         r.f[2] = smoothed_pitch;
     }
     r.f[1] = 0.0f;
-    fun_001fa070(&m1, &r);
-    mmul_216130(working_matrix, &m1, working_matrix);
+    fun_001fa070(&z_rotation_matrix, &r);
+    mmul_216130(working_matrix, &z_rotation_matrix, working_matrix);
     r.f[1] = yaw;
     r.f[2] = 0.0f;
-    fun_001fa070(&m0, &r);
-    mmul_216130(working_matrix, &m0, working_matrix);
+    fun_001fa070(&y_rotation_matrix, &r);
+    mmul_216130(working_matrix, &y_rotation_matrix, working_matrix);
     r.f[2] = roll;
     r.f[1] = 0.0f;
-    fun_001fa070(&m1, &r);
-    mmul_216130(working_matrix, &m1, working_matrix);
+    fun_001fa070(&z_rotation_matrix, &r);
+    mmul_216130(working_matrix, &z_rotation_matrix, working_matrix);
     if (rotation_output)
         set_216130(working_matrix, rotation_output);
     else
