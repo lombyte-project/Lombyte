@@ -3406,7 +3406,7 @@ void particle_spawner_smoke_fire_update(P *spawner) {
     u8 *tbl;
     V v, particle_vector, b;
     float g, sampled_particle_scalar;
-    int i, j, particle_start, e, col, r;
+    int i, j, particle_start, particle_end_or_emission_index, col, r;
     E *ent;
     E2 *sub;
 
@@ -3428,17 +3428,17 @@ void particle_spawner_smoke_fire_update(P *spawner) {
             q->f44 = 3.0f;
         q->f50 = fast_vec_length(&D_L00_001600EC[q->idx].v2) * 0.5f;
         particle_start = q->start = FUN_L00_002a4dc8(q->count + q->extra);
-        e = particle_start + q->count;
-        for (i = particle_start; i < e; i++) {
+        particle_end_or_emission_index = particle_start + q->count;
+        for (i = particle_start; i < particle_end_or_emission_index; i++) {
             r = FUN_00213260_c(2);
             D_L00_001CB7E0[i].w = 1.0f;
             D_L00_001D2860[i] = r;
             FUN_L00_002d7bf0(spawner, i);
             D_L00_001D5740[i] = 0;
         }
-        j = e;
-        e = e + q->extra;
-        for (i = j; i < e; i++) {
+        j = particle_end_or_emission_index;
+        particle_end_or_emission_index = particle_end_or_emission_index + q->extra;
+        for (i = j; i < particle_end_or_emission_index; i++) {
             r = FUN_00213260_c(2);
             D_L00_001CB7E0[i].w = 1.0f;
             D_L00_001D2860[i] = r;
@@ -3455,7 +3455,7 @@ void particle_spawner_smoke_fire_update(P *spawner) {
         if (fast_bsphere_check(&v, D_L00_001619E0) < 0)
             return;
         if (q->flag42 && vector_distance(&D_L00_00166DC0, &spawner->pos) < 128.0f) {
-            for (e = 0; e < D_L00_001619BC; e++) {
+            for (particle_end_or_emission_index = 0; particle_end_or_emission_index < D_L00_001619BC; particle_end_or_emission_index++) {
                 particle_vector.x = FUN_L00_00257c48(0.0f, 1.0f);
                 particle_vector.y = FUN_L00_00257c48(0.0f, 1.0f);
                 particle_vector.z = 1.0f;
