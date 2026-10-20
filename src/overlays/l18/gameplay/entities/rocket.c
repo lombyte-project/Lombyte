@@ -945,25 +945,25 @@ void FUN_L18_002d5f20(unsigned char *m) {
 
 extern int FUN_L00_002db8f8(void *);
 
-int FUN_L18_002d6108(struct Moby *m) {
-    char *d = (char *)m->pvars;
-    int r = FUN_L00_002db8f8(m);
+int FUN_L18_002d6108(struct Moby *moby) {
+    char *moby_vars = (char *)moby->pvars;
+    int r = FUN_L00_002db8f8(moby);
     if (r != 0) {
-        unsigned char s = m->state;
-        if ((unsigned)(s - 3) < 2) {
+        unsigned char current_state = moby->state;
+        if ((unsigned)(current_state - 3) < 2) {
             r = 2;
-            if (s != 4) {
-                m->command = s;
-                m->state = 4;
+            if (current_state != 4) {
+                moby->command = current_state;
+                moby->state = 4;
             }
         } else {
-            *(short *)(d + 0xC8) = 0;
+            *(short *)(moby_vars + 0xC8) = 0;
             r = 0;
         }
     } else {
-        long t = m->state;
+        long t = moby->state;
         if (t == 4) {
-            m->state = m->command;
+            moby->state = moby->command;
         }
     }
     return r;
