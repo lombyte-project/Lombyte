@@ -330,17 +330,17 @@ void FUN_L11_00309098(char *moby) {
     float r[4];
     char *data;
     char *pos;
-    int c;
+    int trail_color;
     if (moby == 0) return;
     data = *(char **)(moby + 0x78);
     if (data == 0) return;
     pos = moby + 0x10;
     qcopy(old, pos);
-    c = fast_tween_color(D_L11_00161DC0, D_L11_00161DC4, random_float_between(0.0f, 1.0f));
+    trail_color = fast_tween_color(D_L11_00161DC0, D_L11_00161DC4, random_float_between(0.0f, 1.0f));
     random_vector(trail_position, 0.0f, 0.1f);
     add_vector_xyz(trail_position, trail_position, pos);
     scale_vector_xyz(v, data, D_L11_00161DD0);
-    FUN_L00_0026dd20((char *)trail_position, (char *)v, c, scale_game_frames(D_L11_00161DC8), (float)D_L11_00161DCC);
+    FUN_L00_0026dd20((char *)trail_position, (char *)v, trail_color, scale_game_frames(D_L11_00161DC8), (float)D_L11_00161DCC);
     add_vector_xyz(pos, pos, data);
     make_hit_descriptor(hit, moby, 0x10000, *(float *)(data + 0x20), data);
     if (collision_line(old, pos, 0, *(void **)(data + 0x1C), hit)) {
