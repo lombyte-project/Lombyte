@@ -1959,7 +1959,7 @@ extern G D_0013F350_u __asm__("D_0013F350");
 u8 *FUN_L00_002db890_u(u8 *) __asm__("FUN_L00_002db890");
 s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
-s32 FUN_L00_002dbe20(u8 *m) {
+s32 FUN_L00_002dbe20(u8 *moby) {
     enum {
         SUCK_CANNON_INACTIVE = 0,
         SUCK_CANNON_ALIGNING_FOR_SUCTION = 1,
@@ -1970,30 +1970,30 @@ s32 FUN_L00_002dbe20(u8 *m) {
         SUCK_CANNON_ROLLING_PROJECTILE = 6,
         SUCK_CANNON_FALLING_AFTER_CANCEL = 7
     };
-    u8 *o = FUN_L00_002db890_u(m);
+    u8 *suction_record = FUN_L00_002db890_u(moby);
     s32 k;
-    if (o == 0)
+    if (suction_record == 0)
         return 0;
-    if (m == 0 || m[0x20] == 0xFE || m[0x20] == 0xFD)
+    if (moby == 0 || moby[0x20] == 0xFE || moby[0x20] == 0xFD)
         return 0;
-    k = *(s16 *)(o + 0x68);
+    k = *(s16 *)(suction_record + 0x68);
     if (k == 8)
         return 0;
     switch (k) {
     case SUCK_CANNON_BEING_PULLED_IN:
-        if (*(s16 *)(o + 0x6A) != -1) {
-            D_0013F350_u.slot[*(s16 *)(o + 0x6A)] = 0;
+        if (*(s16 *)(suction_record + 0x6A) != -1) {
+            D_0013F350_u.slot[*(s16 *)(suction_record + 0x6A)] = 0;
             if (D_0013F350_u.count > 0)
                 D_0013F350_u.count--;
         }
         /* fall through */
     case SUCK_CANNON_ALIGNING_FOR_SUCTION:
     case SUCK_CANNON_RISING_FOR_SUCTION: {
-        if (m[0x53] != *(u8 *)(*(u8 **)(o + 0x70) + 7)) {
-            u8 c = *(u8 *)(*(u8 **)(o + 0x70) + 7);
-            blend_moby_animation(m, c, 0, scale_game_frames(10));
+        if (moby[0x53] != *(u8 *)(*(u8 **)(suction_record + 0x70) + 7)) {
+            u8 cancel_animation = *(u8 *)(*(u8 **)(suction_record + 0x70) + 7);
+            blend_moby_animation(moby, cancel_animation, 0, scale_game_frames(10));
         }
-        *(s16 *)(o + 0x68) = 7;
+        *(s16 *)(suction_record + 0x68) = 7;
         return 0;
     }
     case SUCK_CANNON_STORED:
