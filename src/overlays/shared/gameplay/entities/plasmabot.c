@@ -1014,7 +1014,7 @@ void FUN_L14_002b2f60(char *moby) {
         switch (result) {
         case HIT_REACTION_STAGGER: case 4: case 5: case 6: case 7: case 8: case 9: case 10:
         {
-            char *p60 = state + 0x60;
+            char *reaction_motion_state = state + 0x60;
             int stagger_duration_frames;
             float frame_duration, g, k;
             FUN_L00_002e2040(moby);
@@ -1028,7 +1028,7 @@ void FUN_L14_002b2f60(char *moby) {
             *(float *)(state + 0x7C) = g;
             *(float *)(state + 0xB0) = 11.0f;
             *(float *)(state + 0xB4) = 29.0f;
-            func_L00_0025D5B0_i(moby, p60, fast_arc_tan(*(float *)(hit_info + 0x10), *(float *)(hit_info + 0x14)), 7, 1, 0);
+            func_L00_0025D5B0_i(moby, reaction_motion_state, fast_arc_tan(*(float *)(hit_info + 0x10), *(float *)(hit_info + 0x14)), 7, 1, 0);
         }
             ((unsigned char *)state)[0xC7] = 0xFA;
             break;
