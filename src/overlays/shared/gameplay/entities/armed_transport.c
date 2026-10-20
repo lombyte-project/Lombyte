@@ -452,48 +452,48 @@ extern short D_L16_00161E00 __attribute__((sda));
 extern short D_L16_00161E04 __attribute__((sda));
 extern short D_L16_00161E08 __attribute__((sda));
 void grindrail_barrier_update(struct Moby *m) __asm__("FUN_L16_002e5708");
-void grindrail_barrier_update(struct Moby *m) {
+void grindrail_barrier_update(struct Moby *barrier_moby) {
     enum {
         GRINDRAIL_BARRIER_STATE_INITIALIZE = 0,
         GRINDRAIL_BARRIER_STATE_COLLISION_ENABLED = 1,
         GRINDRAIL_BARRIER_STATE_COLLISION_DISABLED = 2
     };
-    char *d = (char *)m->pvars;
+    char *barrier_data = (char *)barrier_moby->pvars;
     float cycle;
     int i;
-    float *p;
-    switch (m->state) {
+    float *cardinal_angles;
+    switch (barrier_moby->state) {
     case GRINDRAIL_BARRIER_STATE_INITIALIZE:
-        m->state = 1;
-        m->update_dist = 0xFF;
+        barrier_moby->state = 1;
+        barrier_moby->update_dist = 0xFF;
         break;
     case GRINDRAIL_BARRIER_STATE_COLLISION_ENABLED:
-        cycle = *(float *)(d + 0xC) + *(float *)&D_L16_00161E04 * frame_time;
-        *(float *)(d + 0xC) = cycle;
+        cycle = *(float *)(barrier_data + 0xC) + *(float *)&D_L16_00161E04 * frame_time;
+        *(float *)(barrier_data + 0xC) = cycle;
         if (cycle > 1.0f)
-            *(float *)(d + 0xC) = cycle - 1.0f;
-        if (voice_is_playing(m, *(int *)(d + 0x24)) == 0) {
-            *(int *)(d + 0x24) = func_0022ED80_6B70(0, 4, m);
+            *(float *)(barrier_data + 0xC) = cycle - 1.0f;
+        if (voice_is_playing(barrier_moby, *(int *)(barrier_data + 0x24)) == 0) {
+            *(int *)(barrier_data + 0x24) = func_0022ED80_6B70(0, 4, barrier_moby);
         }
-        *(float *)(d + 8) = fast_add_rotations(*(float *)(d + 8), *(float *)&D_L16_00161E00 *
+        *(float *)(barrier_data + 8) = fast_add_rotations(*(float *)(barrier_data + 8), *(float *)&D_L16_00161E00 *
                                                                       DEG_TO_RAD * frame_time);
-        p = (float *)(d + 0x10);
+        cardinal_angles = (float *)(barrier_data + 0x10);
         for (i = 0; i < 4; i++) {
-            p[i] = fast_add_rotations(p[i],
+            cardinal_angles[i] = fast_add_rotations(cardinal_angles[i],
                                       ((float *)&D_L16_00161E08)[i] * DEG_TO_RAD * frame_time);
         }
-        if (m->visible)
-            enqueue_callback_list_1_alt(FUN_L16_002e58d8_u, m);
-        if (*(int *)(d + 0x20) != -1 && FUN_L16_002e5cd0(*(int *)(d + 0x20))) {
-            m->collision = 0;
-            m->state = 2;
-            FUN_L16_002e5d30_c(*(int *)(d + 0x20));
+        if (barrier_moby->visible)
+            enqueue_callback_list_1_alt(FUN_L16_002e58d8_u, barrier_moby);
+        if (*(int *)(barrier_data + 0x20) != -1 && FUN_L16_002e5cd0(*(int *)(barrier_data + 0x20))) {
+            barrier_moby->collision = 0;
+            barrier_moby->state = 2;
+            FUN_L16_002e5d30_c(*(int *)(barrier_data + 0x20));
         }
         break;
     case GRINDRAIL_BARRIER_STATE_COLLISION_DISABLED:
-        if (!FUN_L16_002e5cd0(*(int *)(d + 0x20))) {
-            m->state = 1;
-            m->collision = m->pclass->collision;
+        if (!FUN_L16_002e5cd0(*(int *)(barrier_data + 0x20))) {
+            barrier_moby->state = 1;
+            barrier_moby->collision = barrier_moby->pclass->collision;
         }
         break;
     }
