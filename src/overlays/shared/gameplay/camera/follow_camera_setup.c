@@ -646,10 +646,10 @@ extern void func_L00_002E58E0_2E8210(Moby_2E8210 *) __asm__("FUN_L00_002e4430");
 extern void func_L00_002E7B68_2E8210(int) __asm__("FUN_L00_002e66b8");
 
 void follow_camera_setup(Moby_2E8210 *m) __asm__("FUN_L00_002e6d60");
-void follow_camera_setup(Moby_2E8210 *m) {
+void follow_camera_setup(Moby_2E8210 *camera_moby) {
     CamA_2E8210 *a;
     CamB_2E8210 *b;
-    Cam_2E8210 *c;
+    Cam_2E8210 *camera_state;
     Cam_2E8210 *e;
     CamE_2E8210 *f;
     Cam_2E8210 *d;
@@ -659,13 +659,13 @@ void follow_camera_setup(Moby_2E8210 *m) {
     char *q3;
     Cam240_2E8210 *p240;
     int r;
-    float t;
+    float orbit_distance_shortfall;
     float v0[4];
     float orbit_offset_remainder[4];
 
     D_L00_00161D8C = 0;
     D_L00_00161D90 = 0;
-    a = &m->cam->a;
+    a = &camera_moby->cam->a;
     qcopy(a->pos, D_0013F4D0_2E8210);
     a->fB0 = 1.5f;
     a->iC0 = D_0013F450_2E8210.i2080;
@@ -682,7 +682,7 @@ void follow_camera_setup(Moby_2E8210 *m) {
     a->hDA = 0;
     a->iBC = 0;
 
-    b = &m->cam->b;
+    b = &camera_moby->cam->b;
     b->f2C = 4.64f;
     b->f48 = 0.003f;
     b->f54 = 0.003f;
@@ -698,14 +698,14 @@ void follow_camera_setup(Moby_2E8210 *m) {
     b->i44 = 0;
     b->i50 = 0;
 
-    c = m->cam;
-    c->h10 = 1;
-    c->h12 = 0;
-    c->h14 = 0;
-    c->h16 = 0;
+    camera_state = camera_moby->cam;
+    camera_state->h10 = 1;
+    camera_state->h12 = 0;
+    camera_state->h14 = 0;
+    camera_state->h16 = 0;
     D_L00_0015EF40 = 0.75f;
 
-    e = m->cam;
+    e = camera_moby->cam;
     e->e.h0 = 0;
     f = &e->e;
     f->i10 = 0;
@@ -714,7 +714,7 @@ void follow_camera_setup(Moby_2E8210 *m) {
     f->i14 = 0;
     f->i18 = 0;
 
-    q1 = (char *)m->cam;
+    q1 = (char *)camera_moby->cam;
     ((Cam_2E8210 *)q1)->p190.i0 = 0;
     q1 = (char *)&((Cam_2E8210 *)q1)->p190;
     ((Cam190_2E8210 *)q1)->f8 = 0.005f;
@@ -723,7 +723,7 @@ void follow_camera_setup(Moby_2E8210 *m) {
     ((Cam190_2E8210 *)q1)->i4 = 0;
     ((Cam190_2E8210 *)q1)->f14 = 14.2857f;
 
-    q2 = (char *)m->cam;
+    q2 = (char *)camera_moby->cam;
     ((Cam_2E8210 *)q2)->p1A8.flags = 0;
     q2 = (char *)&((Cam_2E8210 *)q2)->p1A8;
     ((Cam1A8_2E8210 *)q2)->f14 = D_L00_0015EF44;
@@ -736,7 +736,7 @@ void follow_camera_setup(Moby_2E8210 *m) {
     ((Cam1A8_2E8210 *)q2)->i20 = 0;
     ((Cam1A8_2E8210 *)q2)->i24 = 0;
 
-    q3 = (char *)m->cam;
+    q3 = (char *)camera_moby->cam;
     ((Cam_2E8210 *)q3)->p220.i0 = 0;
     q3 = (char *)&((Cam_2E8210 *)q3)->p220;
     ((Cam220_2E8210 *)q3)->i10 = 0;
@@ -745,7 +745,7 @@ void follow_camera_setup(Moby_2E8210 *m) {
     ((Cam220_2E8210 *)q3)->f8 = b->f2C;
     ((Cam220_2E8210 *)q3)->fC = D_L00_00161D1C_gp;
 
-    d = m->cam;
+    d = camera_moby->cam;
     r = scale_game_frames(0x7D0);
     g = &d->g;
     g->f30 = 0.0f;
@@ -760,38 +760,38 @@ void follow_camera_setup(Moby_2E8210 *m) {
     g->i48 = D_L00_0015EF60;
     clear_u64_value(d->g.v10);
 
-    p240 = &m->cam->p240;
+    p240 = &camera_moby->cam->p240;
     p240->h28 = 0;
     p240->i24 = 0;
     qcopy(p240->v0, D_0013F4D0_2E8210);
     qcopy(p240->v10, D_0013F4D0_2E8210);
 
-    if (m->b7D == 2) {
-        func_L00_002E80A8_2E8210(m);
-        qcopy(m->v40, m->v0);
+    if (camera_moby->b7D == 2) {
+        func_L00_002E80A8_2E8210(camera_moby);
+        qcopy(camera_moby->v40, camera_moby->v0);
         if (D_L00_00166F04_2E8210->h86 == 7 && D_0013F450_2E8210.h30C == 0) {
             e->e.h0 = 0;
         } else {
             f->h0 = scale_game_frames(D_L00_00161D24_gp);
         }
     } else {
-        func_L00_002E58E0_2E8210(m);
+        func_L00_002E58E0_2E8210(camera_moby);
         func_L00_002E7B68_2E8210(1);
     }
-    subtract_vector_xyz(b->v0, m->v30, a->f50);
+    subtract_vector_xyz(b->v0, camera_moby->v30, a->f50);
     qcopy(b->v10, b->v0);
-    qcopy(c->pos, m->v30);
-    qcopy(g->v20, m->v30);
+    qcopy(camera_state->pos, camera_moby->v30);
+    qcopy(g->v20, camera_moby->v30);
     scale_vector_xyz(v0, D_0013F6E0_2E8210, dot_vectors_xyz_c(b->v0, D_0013F6E0_2E8210));
     subtract_vector_xyz(orbit_offset_remainder, b->v0, v0);
-    t = b->f2C - func_001F9CB8_2E8210(orbit_offset_remainder);
-    g->f30 = t;
-    if (t < -0.1f) {
+    orbit_distance_shortfall = b->f2C - func_001F9CB8_2E8210(orbit_offset_remainder);
+    g->f30 = orbit_distance_shortfall;
+    if (orbit_distance_shortfall < -0.1f) {
         g->h3A = 1;
     }
     f->f8 = b->f30;
     f->f4 = a->fB0;
-    m->h7E = 0;
+    camera_moby->h7E = 0;
 }
 typedef struct {
     unsigned char p0[0x208C];
