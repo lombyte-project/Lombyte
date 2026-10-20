@@ -439,7 +439,7 @@ void FUN_L06_002291d0(int force) {
     V_2291d0 a, d1, b, d2;
     char *src;
     P_2291d0 *g;
-    f32 off, k, c, ang, t;
+    f32 off, k, secondary_vector_scale, ang, negative_horizontal_dot;
     int r;
 
     if (P.h308 != 0)
@@ -462,12 +462,12 @@ void FUN_L06_002291d0(int force) {
     b.f[2] += off * 0.3f;
     if (force || FUN_001f9b20_2291d0(src + 0x60) < 0.01f) {
         g = (P_2291d0 *)(src - 0x80);
-        c = 1.4f;
+        secondary_vector_scale = 1.4f;
         d1.f[0] = FUN_001f9dc8_2291d0(g->f98) * k;
         d1.f[1] = FUN_001f9de0_2291d0(g->f98) * k;
         *(s32 *)&d1.f[2] = 0;
-        d2.f[0] = FUN_001f9dc8_2291d0(g->f98) * k * c;
-        d2.f[1] = FUN_001f9de0_2291d0(g->f98) * k * c;
+        d2.f[0] = FUN_001f9dc8_2291d0(g->f98) * k * secondary_vector_scale;
+        d2.f[1] = FUN_001f9de0_2291d0(g->f98) * k * secondary_vector_scale;
         *(s32 *)&d2.f[2] = 0;
     } else {
         qcopy(&d1, src + 0x60);
@@ -488,9 +488,9 @@ void FUN_L06_002291d0(int force) {
         P.i240 = X.i18;
         *(s32 *)&X.v40.f[2] = 0;
         FUN_00125180_2291d0(&X.v40, &X.v40);
-        t = -P.vE0.f[0] * X.v40.f[0] - P.vE0.f[1] * X.v40.f[1];
-        if (0.0f < t) {
-            FUN_001f9a68_2291d0(&X.v40, &X.v40, t);
+        negative_horizontal_dot = -P.vE0.f[0] * X.v40.f[0] - P.vE0.f[1] * X.v40.f[1];
+        if (0.0f < negative_horizontal_dot) {
+            FUN_001f9a68_2291d0(&X.v40, &X.v40, negative_horizontal_dot);
             FUN_001f9a10_2291d0(&P.vE0, &P.vE0, &X.v40);
         }
     }
