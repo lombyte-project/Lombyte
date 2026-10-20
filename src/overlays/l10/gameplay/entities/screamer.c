@@ -2725,6 +2725,7 @@ extern char *D_L10_001B0930_5968[] __asm__("D_L10_001B0930");
 void FUN_L10_002e5968(struct Moby *m) {
     enum {
         LETHAL_HIT_RESPONSE = 1,
+        COLOR_UPDATE_ONLY_HIT_RESPONSE = 9,
         COLOR_EFFECT_ONLY_HIT_RESPONSE = 12,
         NO_REACTION_HIT_RESPONSE = 13
     };
@@ -2743,7 +2744,7 @@ void FUN_L10_002e5968(struct Moby *m) {
             r = 1;
         }
         switch (r) {
-        case 9:
+        case COLOR_UPDATE_ONLY_HIT_RESPONSE:
         case 10:
         case COLOR_EFFECT_ONLY_HIT_RESPONSE:
             d[0xC7] = 0xFA;
