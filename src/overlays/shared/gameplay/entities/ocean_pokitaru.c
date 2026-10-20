@@ -542,7 +542,7 @@ void FUN_L11_0030a908(struct Moby *moby) {
     int colA;
     int colB;
     int vertex_count;
-    float t;
+    float color_interpolation_scalar;
     float x;
     float y;
 
@@ -587,10 +587,10 @@ void FUN_L11_0030a908(struct Moby *moby) {
     }
     FUN_001f9a28_30a908(&first_strip_edge_delta, &strip_corners[1], &strip_corners[0]);
     FUN_001f9a28_30a908(&second_strip_edge_delta, &strip_corners[3], &strip_corners[2]);
-    t = 10.0f;
+    color_interpolation_scalar = 10.0f;
     for (i = 0; i < 12; i += 2) {
         float strip_fraction = FUN_001fa6c0_30a908(i) / 10.0f;
-        int col = FUN_001fa6e0_30a908(ocean_vars->f0, ocean_vars->f4, FUN_001fa6c0_30a908(i) / t);
+        int col = FUN_001fa6e0_30a908(ocean_vars->f0, ocean_vars->f4, FUN_001fa6c0_30a908(i) / color_interpolation_scalar);
         FUN_001f9a68_30a908(&scratch_vector, &first_strip_edge_delta, strip_fraction);
         D_L11_001D9E08[i] = col;
         D_L11_001DA310[i].u = 0.0f;
@@ -641,13 +641,13 @@ void FUN_L11_0030a908(struct Moby *moby) {
     FUN_00233980_30a908(0x47, 0x513F1);
     colA = ocean_vars->fC;
     colB = ocean_vars->f10;
-    t = 1.0f - (((Cam_30a908 *)D_L11_00167680)->z - tide_level_macro) / ocean_vars->f2C;
-    if (t > 1.0f) {
-        t = 1.0f;
+    color_interpolation_scalar = 1.0f - (((Cam_30a908 *)D_L11_00167680)->z - tide_level_macro) / ocean_vars->f2C;
+    if (color_interpolation_scalar > 1.0f) {
+        color_interpolation_scalar = 1.0f;
     }
-    if (t >= 0.0f) {
-        colA = FUN_001fa6e0_30a908(0, colA, t);
-        colB = FUN_001fa6e0_30a908(0, colB, t);
+    if (color_interpolation_scalar >= 0.0f) {
+        colA = FUN_001fa6e0_30a908(0, colA, color_interpolation_scalar);
+        colB = FUN_001fa6e0_30a908(0, colB, color_interpolation_scalar);
         for (layer = 0; layer < 2; layer++) {
             int id = layer + 0x28;
             FUN_00233980_30a908(6, FUN_001f44b8_30a908(ocean_vars->f1C + id));
@@ -682,11 +682,11 @@ void FUN_L11_0030a908(struct Moby *moby) {
                         scratch_vector.y = D_L11_001D9F08[i].y - ((Cam_30a908 *)D_L11_00167680)->y;
                         scratch_vector.z = D_L11_001D9F08[i].z - ((Cam_30a908 *)D_L11_00167680)->z;
                         scratch_vector.w = 1.0f;
-                        t = FUN_001f9b20_30a908(&scratch_vector) / (ocean_vars->f18 * 2.0f);
-                        if (t > 1.0f) {
-                            t = 1.0f;
+                        color_interpolation_scalar = FUN_001f9b20_30a908(&scratch_vector) / (ocean_vars->f18 * 2.0f);
+                        if (color_interpolation_scalar > 1.0f) {
+                            color_interpolation_scalar = 1.0f;
                         }
-                        D_L11_001DA208[i] = FUN_001fa6e0_30a908(colA, colB, t);
+                        D_L11_001DA208[i] = FUN_001fa6e0_30a908(colA, colB, color_interpolation_scalar);
                     }
                     vertex_count += 4;
                     if (vertex_count >= 0x40) {
