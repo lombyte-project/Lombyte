@@ -3331,7 +3331,7 @@ void red_orb_update(char *moby) {
     char *orb_data = *(char **)(moby + 0x78);
     unsigned char state = moby[0x20];
     float a;
-    int c, hi, r, g, b, t;
+    int c, hi, r, g, b, packed_color_without_red;
     switch (state) {
     case RED_ORB_STATE_INITIALIZE_PHASE:
         *(float *)orb_data = *(float *)orb_data * DEG_TO_RAD;
@@ -3349,9 +3349,9 @@ void red_orb_update(char *moby) {
         hi = 0x38;
         if (current_level_index == 0 || current_level_index == 0x12)
             hi = 0x20;
-        t = hi << 24 | b << 16;
-        t |= g << 8;
-        *(int *)(orb_data + 4) = t | r;
+        packed_color_without_red = hi << 24 | b << 16;
+        packed_color_without_red |= g << 8;
+        *(int *)(orb_data + 4) = packed_color_without_red | r;
         FUN_L00_002df4a8_u(moby);
         set_moby_color(moby, c & 0xFF, (c >> 16) & 0xFF, (unsigned)c >> 24);
         break;
