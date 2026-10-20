@@ -1269,49 +1269,49 @@ extern void sample_path(int a, char *pos, char *b, char *c, int d, float f) __as
 extern int FUN_L00_0025d808_2af688(void *, void *, void *, void *, int,
                                     float) __asm__("FUN_L00_0025d808");
 
-void FUN_L14_002ae448(struct Moby *m) {
-    char *d = (char *)m->pvars;
-    int *p;
+void FUN_L14_002ae448(struct Moby *moby) {
+    char *moby_vars = (char *)moby->pvars;
+    int *path;
     int i;
     float len;
-    p = D_L14_001B0BB0[*(int *)(d + 0x78)];
-    *(int *)(d + 0x16C) = 0;
-    for (i = 0; i < p[0]; i++) {
-        len = FUN_001f9b48((char *)p + (i * 16 + 0x10), (char *)p + (((i + 1) % p[0]) * 16 + 0x10));
-        *(float *)((char *)p + (i << 4) + 0x1C) = len;
-        if (i != p[0] - 1) {
-            *(float *)(d + 0x16C) += len;
+    path = D_L14_001B0BB0[*(int *)(moby_vars + 0x78)];
+    *(int *)(moby_vars + 0x16C) = 0;
+    for (i = 0; i < path[0]; i++) {
+        len = FUN_001f9b48((char *)path + (i * 16 + 0x10), (char *)path + (((i + 1) % path[0]) * 16 + 0x10));
+        *(float *)((char *)path + (i << 4) + 0x1C) = len;
+        if (i != path[0] - 1) {
+            *(float *)(moby_vars + 0x16C) += len;
         }
     }
-    p = D_L14_001B0BB0[*(int *)(d + 0x74)];
-    *(int *)(d + 0x190) = 0;
-    for (i = 0; i < p[0]; i++) {
-        len = FUN_001f9b48((char *)p + (i * 16 + 0x10), (char *)p + (((i + 1) % p[0]) * 16 + 0x10));
-        *(float *)((char *)p + (i << 4) + 0x1C) = len;
-        if (i != p[0] - 1) {
-            *(float *)(d + 0x190) += len;
+    path = D_L14_001B0BB0[*(int *)(moby_vars + 0x74)];
+    *(int *)(moby_vars + 0x190) = 0;
+    for (i = 0; i < path[0]; i++) {
+        len = FUN_001f9b48((char *)path + (i * 16 + 0x10), (char *)path + (((i + 1) % path[0]) * 16 + 0x10));
+        *(float *)((char *)path + (i << 4) + 0x1C) = len;
+        if (i != path[0] - 1) {
+            *(float *)(moby_vars + 0x190) += len;
         }
     }
-    p = D_L14_001B0BB0[*(int *)(d + 0x204)];
-    for (i = 0; i < p[0]; i++) {
-        *(float *)((char *)p + (i << 4) + 0x1C) =
-            FUN_001f9b48((char *)p + (i * 16 + 0x10), (char *)p + (((i + 1) % p[0]) * 16 + 0x10));
+    path = D_L14_001B0BB0[*(int *)(moby_vars + 0x204)];
+    for (i = 0; i < path[0]; i++) {
+        *(float *)((char *)path + (i << 4) + 0x1C) =
+            FUN_001f9b48((char *)path + (i * 16 + 0x10), (char *)path + (((i + 1) % path[0]) * 16 + 0x10));
     }
-    if (*(float *)(d + 0x210) != 0.0f) {
-        int *q = D_L14_001B0BB0[*(int *)(d + 0x78)];
-        *(int *)(d + 0x84) = 0;
-        *(float *)(d + 0x1CC) = 0.0f;
-        FUN_L00_0025d808_2af688(q, &m->pos, d + 0x84, d + 0x1CC, *(short *)(d + 0x8A),
-                                 *(float *)(d + 0x210) * *(float *)(d + 0x16C));
-        *(float *)(d + 0x8C) = 0.0f;
-        *(int *)(d + 0x80) = 0;
-        FUN_L00_0025d808_2af688(q, &m->pos, d + 0x80, d + 0x8C, *(short *)(d + 0x8A),
-                                 *(float *)(d + 0x210) * *(float *)(d + 0x190));
+    if (*(float *)(moby_vars + 0x210) != 0.0f) {
+        int *sampling_path = D_L14_001B0BB0[*(int *)(moby_vars + 0x78)];
+        *(int *)(moby_vars + 0x84) = 0;
+        *(float *)(moby_vars + 0x1CC) = 0.0f;
+        FUN_L00_0025d808_2af688(sampling_path, &moby->pos, moby_vars + 0x84, moby_vars + 0x1CC, *(short *)(moby_vars + 0x8A),
+                                 *(float *)(moby_vars + 0x210) * *(float *)(moby_vars + 0x16C));
+        *(float *)(moby_vars + 0x8C) = 0.0f;
+        *(int *)(moby_vars + 0x80) = 0;
+        FUN_L00_0025d808_2af688(sampling_path, &moby->pos, moby_vars + 0x80, moby_vars + 0x8C, *(short *)(moby_vars + 0x8A),
+                                 *(float *)(moby_vars + 0x210) * *(float *)(moby_vars + 0x190));
     } else {
-        *(int *)(d + 0x80) = 0;
-        *(int *)(d + 0x84) = 0;
-        *(float *)(d + 0x8C) = 0.0f;
-        *(float *)(d + 0x1CC) = 0.0f;
+        *(int *)(moby_vars + 0x80) = 0;
+        *(int *)(moby_vars + 0x84) = 0;
+        *(float *)(moby_vars + 0x8C) = 0.0f;
+        *(float *)(moby_vars + 0x1CC) = 0.0f;
     }
 }
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002AF918), where it is exact; names translated to the US level program. */
