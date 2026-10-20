@@ -172,7 +172,7 @@ void FUN_L00_0023e268(void) {
     s32 j;
     s32 k;
     s32 n;
-    f32 a;
+    f32 azimuth_angle;
     f32 b;
     s32 r;
     VeldinVec buf;
@@ -201,10 +201,10 @@ void FUN_L00_0023e268(void) {
             for (n = 0; n < 4; n++) {
                 clear_u64_value(&v);
                 moby_point_position(src, n % 2, &buf);
-                a = veldin_random_angle();
+                azimuth_angle = veldin_random_angle();
                 b = veldin_random_angle();
                 build_spherical_offset(
-                    v.f, veldin_random_range(frame_time * 0.7f, frame_time * 2.2f), a, b);
+                    v.f, veldin_random_range(frame_time * 0.7f, frame_time * 2.2f), azimuth_angle, b);
                 r = scale_game_frames(0xC);
                 FUN_L00_0026ced0(&buf, &v, 0x80808080, 0x808080,
                                  random_int_between(r, scale_game_frames(0x23)), 147000.0f);
