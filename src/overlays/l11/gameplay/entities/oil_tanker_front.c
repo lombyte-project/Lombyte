@@ -1703,16 +1703,16 @@ void FUN_L11_0031ae68(struct Moby *m, float *ground, int spark_count, int ground
         FUN_L00_0026f548(&m->pos, v, random_integer_below(2), k);
     }
     for (i = 0; i < ground_effect_count; i++) {
-        char *e;
+        char *spawned_ground_effect;
         random_vector(v, 1.0f, 1.0f);
         add_vector_xyz(v, v, &m->pos);
         v[2] = *ground + 0.05f;
-        e = func_L00_00272770_p(v, D_L11_0015F580, ground, random_float_between(3.0f, 6.0f),
+        spawned_ground_effect = func_L00_00272770_p(v, D_L11_0015F580, ground, random_float_between(3.0f, 6.0f),
                                 i == 0 ? 1.0f : -1.0f);
-        if (e != 0) {
-            e[9] = func_001FA898_r(4.0f) + 0x40;
-            *(short *)(e + 0xA) = func_001FA898_r(multiply_global_factor_ed64(random_float_between(30.0f, 90.0f)));
-            *(int *)(e + 4) = fast_tween_color(*(int *)&D_L11_00162420, *(int *)&D_L11_00162424,
+        if (spawned_ground_effect != 0) {
+            spawned_ground_effect[9] = func_001FA898_r(4.0f) + 0x40;
+            *(short *)(spawned_ground_effect + 0xA) = func_001FA898_r(multiply_global_factor_ed64(random_float_between(30.0f, 90.0f)));
+            *(int *)(spawned_ground_effect + 4) = fast_tween_color(*(int *)&D_L11_00162420, *(int *)&D_L11_00162424,
                                            random_float_between(0.0f, 1.0f));
         }
     }
