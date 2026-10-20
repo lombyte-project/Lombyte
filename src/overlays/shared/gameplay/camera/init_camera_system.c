@@ -108,7 +108,7 @@ void init_camera_system(void) __asm__("FUN_L00_001ed280");
 void init_camera_system(void) {
     char *g = (char *)&D_L00_00166C80_c;
     float *s, *d, *t, *u;
-    char *a;
+    char *current_camera_record;
     if (*(char **)(g + 0x180) != 0) {
         *(short *)(*(char **)(g + 0x180) + 0x8E) = 0;
         *(*(char **)(g + 0x180) + 0x7D) = 0;
@@ -121,10 +121,10 @@ void init_camera_system(void) {
     update_camera_tracking_state();
     camera_run_setup_to_new_cam(*(char **)(g + 0x180));
     backup_current_cam();
-    a = *(char **)(g + 0x180);
+    current_camera_record = *(char **)(g + 0x180);
     s = (float *)(g + 0x140);
-    qcopy(s, a + 0x30);
-    d = (float *)(a + 0x64);
+    qcopy(s, current_camera_record + 0x30);
+    d = (float *)(current_camera_record + 0x64);
     d[0] = s[0];
     d[1] = s[1];
     d[2] = s[2];
