@@ -85,20 +85,20 @@ extern int D_L01_001CB1B0[];
 void FUN_L01_002b80d0(float *m) {
     int i;
     float u0, first_v_offset, u1, second_v_offset;
-    float f;
+    float unwrapped_offset;
     float *src, *dst;
-    f = m[8] + m[10];
-    m[8] = f;
-    if (1.0f < f) {
-        m[8] = f - 1.0f;
+    unwrapped_offset = m[8] + m[10];
+    m[8] = unwrapped_offset;
+    if (1.0f < unwrapped_offset) {
+        m[8] = unwrapped_offset - 1.0f;
     }
     if (m[8] < 0.0f) {
         m[8] = m[8] + 1.0f;
     }
-    f = m[9] + m[11];
-    m[9] = f;
-    if (1.0f < f) {
-        m[9] = f - 1.0f;
+    unwrapped_offset = m[9] + m[11];
+    m[9] = unwrapped_offset;
+    if (1.0f < unwrapped_offset) {
+        m[9] = unwrapped_offset - 1.0f;
     }
     if (m[9] < 0.0f) {
         m[9] = m[9] + 1.0f;
