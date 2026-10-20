@@ -1846,7 +1846,7 @@ s32 FUN_L00_00244110(s32 full, s32 keep) {
     s32 sound_slot_count;
     s32 k;
     s32 c1, c2, c3, c4;
-    s32 m;
+    s32 moby_class_reference_index;
     char *sequence_offset_cursor;
     s32 sq;
     char *sp;
@@ -1926,12 +1926,12 @@ s32 FUN_L00_00244110(s32 full, s32 keep) {
         moby_class_reference_cursor = (char *)core_header + core_header[0x21];
         D_L00_00160010 = 0;
         D_L00_00160008 = core_header[0x20];
-        for (m = 0; m < core_header[0x20]; m++, moby_class_reference_cursor += 0x10) {
-            D_L00_001AFBC0[m] = *(s32 *)(moby_class_reference_cursor + 4);
-            D_L00_001AFC20[m] = base + *(s32 *)moby_class_reference_cursor;
-            D_L00_001AFC80[m] = *(s32 *)(moby_class_reference_cursor + 8);
+        for (moby_class_reference_index = 0; moby_class_reference_index < core_header[0x20]; moby_class_reference_index++, moby_class_reference_cursor += 0x10) {
+            D_L00_001AFBC0[moby_class_reference_index] = *(s32 *)(moby_class_reference_cursor + 4);
+            D_L00_001AFC20[moby_class_reference_index] = base + *(s32 *)moby_class_reference_cursor;
+            D_L00_001AFC80[moby_class_reference_index] = *(s32 *)(moby_class_reference_cursor + 8);
             { s32 o = D_L00_00197BC0[*(s32 *)(moby_class_reference_cursor + 4)] * 32 + 0x10;
-            qcopy(&D_L00_001AFCE0[m], (char *)core_header + core_header[7] + o); }
+            qcopy(&D_L00_001AFCE0[moby_class_reference_index], (char *)core_header + core_header[7] + o); }
         }
         for (i = 0, class_entry_cursor = (char *)core_header + core_header[9]; i < core_header[8]; i++, class_entry_cursor += 0x20)
             register_object_render_class(base + *(s32 *)class_entry_cursor, (char *)core_header + core_header[0x11], class_entry_cursor + 0x10, *(s32 *)(class_entry_cursor + 4));
