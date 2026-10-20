@@ -994,21 +994,21 @@ extern void FUN_L00_00258830(int, int, float, float, float, int);
 
 int FUN_L15_00299ae0(char *moby, float *point, float arg) {
     float *fp = (float *)(moby + 0x48);
-    char *d = *(char **)(moby + 0x78);
+    char *moby_data = *(char **)(moby + 0x78);
     float vec[4];
-    float a;
+    float target_heading;
     float ang;
-    a = fast_arc_tan(point[0] - *(float *)(moby + 0x10), point[1] - *(float *)(moby + 0x14));
-    approach_angle(fp, (float *)(d + 0x138), a, frame_time_sq * 12.566371f, frame_time_sq * 12.566371f,
+    target_heading = fast_arc_tan(point[0] - *(float *)(moby + 0x10), point[1] - *(float *)(moby + 0x14));
+    approach_angle(fp, (float *)(moby_data + 0x138), target_heading, frame_time_sq * 12.566371f, frame_time_sq * 12.566371f,
                      frame_time * 6.981317f);
     ang = fast_arc_tan(point[0] - *(float *)(moby + 0x10), point[1] - *(float *)(moby + 0x14));
     if (fast_difference_between_rotations(*(float *)(moby + 0x48), ang) < 0.7853982f) {
-        approach_value(d + 0x134, arg, frame_time_sq * 9.0f);
+        approach_value(moby_data + 0x134, arg, frame_time_sq * 9.0f);
     } else {
-        approach_value(d + 0x134, 0.0f, frame_time_sq * 9.0f);
+        approach_value(moby_data + 0x134, 0.0f, frame_time_sq * 9.0f);
     }
-    vec[0] = fast_cos(*(float *)(moby + 0x48)) * *(float *)(d + 0x134);
-    vec[1] = fast_sin(*(float *)(moby + 0x48)) * *(float *)(d + 0x134);
+    vec[0] = fast_cos(*(float *)(moby + 0x48)) * *(float *)(moby_data + 0x134);
+    vec[1] = fast_sin(*(float *)(moby + 0x48)) * *(float *)(moby_data + 0x134);
     vec[2] = -(frame_time * 0.5f);
     FUN_L00_00258830((int)moby, (int)vec, 0.5f, 0.5f, 0.0f, 0);
     return FUN_001f9b80((float *)(moby + 0x10), point) < 0.2f;
