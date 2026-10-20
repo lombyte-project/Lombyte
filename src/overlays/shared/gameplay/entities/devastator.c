@@ -2582,8 +2582,8 @@ void taunter_update(Moby *taunter_moby) {
     s32 voice_slot_index;
     s32 b;
     s32 i;
-    s32 r1;
-    s32 r2;
+    s32 next_entry_scaled_x;
+    s32 next_entry_scaled_y;
     u8 *voice_slot_window;
     s32 play_time_stat_value;
 
@@ -2638,9 +2638,9 @@ void taunter_update(Moby *taunter_moby) {
             taunter_vars->anim = allocate_voice_for_target_entry(taunter_vars->idx, 1, taunter_moby);
             i = taunter_vars->idx + 1;
             taunter_vars->idx = i;
-            r1 = truncate_float_to_s32(taunter_moby->cfg->tab[i].x * 10.0f);
-            r2 = truncate_float_to_s32(taunter_moby->cfg->tab[i].y * 10.0f);
-            if (!(taunter_vars->idx < taunter_moby->cfg->count && r1 == 0x1E && r2 == r1))
+            next_entry_scaled_x = truncate_float_to_s32(taunter_moby->cfg->tab[i].x * 10.0f);
+            next_entry_scaled_y = truncate_float_to_s32(taunter_moby->cfg->tab[i].y * 10.0f);
+            if (!(taunter_vars->idx < taunter_moby->cfg->count && next_entry_scaled_x == 0x1E && next_entry_scaled_y == next_entry_scaled_x))
                 taunter_vars->idx = 0;
             FUN_L00_002b6bc8(taunter_moby, taunter_vars->radius);
             taunter_vars->retry = 0;
