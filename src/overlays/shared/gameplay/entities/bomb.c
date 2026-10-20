@@ -1775,7 +1775,7 @@ extern int rand_2cc608(void) __asm__("FUN_001160d8");
 
 /* Ryno (class 454) update: target lock and reticle while held, then the eight-missile salvo state machine. */
 void ryno_update(struct Moby *m) __asm__("FUN_L00_002cc608");
-void ryno_update(struct Moby *m) {
+void ryno_update(struct Moby *ryno_moby) {
     enum {
         RYNO_STATE_INITIALIZE = 0,
         RYNO_STATE_WAIT_ANIMATION = 1,
@@ -1789,7 +1789,7 @@ void ryno_update(struct Moby *m) {
     Vec4 aim;
     Vec4 dir;
     Vec4 ofs;
-    Ryno_2cc608 *ryno_vars = *(Ryno_2cc608 **)&m->pvars;
+    Ryno_2cc608 *ryno_vars = *(Ryno_2cc608 **)&ryno_moby->pvars;
     struct Moby *r;
     Bounds_2cc608 *b;
     float yaw, pitch;
@@ -1797,14 +1797,14 @@ void ryno_update(struct Moby *m) {
 
     matcopy_2cc608(&cam, D_L00_00166C80);
     transpose_2cc608(&view, &cam);
-    if ((unsigned int)(m->state - 2) < 2) {
+    if ((unsigned int)(ryno_moby->state - 2) < 2) {
         if (timer32_2cc608(&ryno_vars->lock_timer) || ryno_vars->target == 0 || ryno_vars->target->state == 0xFE || ryno_vars->target->state == 0xFD) {
             ryno_vars->target = 0;
             ryno_vars->height = 0;
         }
         qcopy(aim.f, camera_rot_2cc608.f);
         aim.f[1] = -aim.f[1];
-        muzzle_2cc608(m, ryno_vars->slot, dir.f);
+        muzzle_2cc608(ryno_moby, ryno_vars->slot, dir.f);
         r = FUN_L00_002cc360_c(dir.f, aim.f, 0, 1.6981583f, 1.6981583f, 80.0f);
         if ((r != 0 && ryno_vars->target == 0) || ryno_vars->target == 0 || ryno_vars->target->state == 0xFE || ryno_vars->target->state == 0xFD || ryno_vars->target->visible == 0) {
             ryno_vars->height = 0;
@@ -1826,19 +1826,19 @@ void ryno_update(struct Moby *m) {
                 qcopy(aim.f, ((float *)&ryno_vars->target->pos));
                 f = f * 0.65f;
                 aim.f[2] = aim.f[2] + ryno_vars->height;
-                reticle_2cc608(m, 0xFF0FFF0F, fabs_2cc608(0.9f - f), 0.0f, aim.f, 0x23, -1, 90.0f, 4);
+                reticle_2cc608(ryno_moby, 0xFF0FFF0F, fabs_2cc608(0.9f - f), 0.0f, aim.f, 0x23, -1, 90.0f, 4);
             }
         }
     }
-    switch (m->state) {
+    switch (ryno_moby->state) {
     case RYNO_STATE_INITIALIZE:
         ryno_vars->target = 0;
         hero.items[0].unk1C = 0;
-        m->state = 1;
+        ryno_moby->state = 1;
         ryno_vars->track_timer = 0;
         break;
     case RYNO_STATE_WAIT_ANIMATION:
-        if (m->anim_flags & 2) m->state = 2;
+        if (ryno_moby->anim_flags & 2) ryno_moby->state = 2;
         break;
     case RYNO_STATE_READY_TO_FIRE:
         if (hero.state.current == 1) hud_2cc608(0x1E, 1);
@@ -1854,7 +1854,7 @@ void ryno_update(struct Moby *m) {
             s->stat[23].level_mask = s->stat[23].level_mask | (1 << D_0015ED84) | 0x80000000;
         }
         hero.items[0].unk1C = 2;
-        m->state = 4;
+        ryno_moby->state = 4;
         ryno_vars->shot_timer = 0;
         ryno_vars->slot = 0;
         ryno_vars->shots = 0;
@@ -1866,9 +1866,9 @@ void ryno_update(struct Moby *m) {
         ryno_vars->count = 0;
         break;
     case RYNO_STATE_READY_TO_FIRE_WITH_RETICLE:
-        reticle_2cc608(m, 0xFF0F0FFF, 1.0f, 0.0f, 0, 0x23, -1, 90.0f, 4);
+        reticle_2cc608(ryno_moby, 0xFF0F0FFF, 1.0f, 0.0f, 0, 0x23, -1, 90.0f, 4);
         if ((controller_state.held & 5) == 0) {
-            m->state = 2;
+            ryno_moby->state = 2;
             return;
         }
         if ((controller_state.pressed & hero.items[0].button_mask) == 0) return;
@@ -1883,7 +1883,7 @@ void ryno_update(struct Moby *m) {
             s->stat[23].level_mask = s->stat[23].level_mask | (1 << D_0015ED84) | 0x80000000;
         }
         hero.items[0].unk1C = 2;
-        m->state = 4;
+        ryno_moby->state = 4;
         ryno_vars->shot_timer = 0;
         ryno_vars->slot = 0;
         ryno_vars->shots = 0;
@@ -1917,13 +1917,13 @@ void ryno_update(struct Moby *m) {
             yaw = angle_2cc608(dir.f[0], dir.f[1]);
         }
         pitch = -angle_2cc608(length_2cc608(dir.f), dir.f[2]);
-        muzzle_2cc608(m, ryno_vars->slot, aim.f);
+        muzzle_2cc608(ryno_moby, ryno_vars->slot, aim.f);
         FUN_L00_0020e4c8();
-        FUN_L00_002ccee0_c(m, aim.f, ryno_vars->target, ryno_vars->height, yaw, pitch);
+        FUN_L00_002ccee0_c(ryno_moby, aim.f, ryno_vars->target, ryno_vars->height, yaw, pitch);
         if (ryno_vars->shots >= 7) {
             hero.items[0].unk1C = 0;
             FUN_L00_0020e698();
-            m->state = 5;
+            ryno_moby->state = 5;
             ryno_vars->shot_timer = ticks_2cc608(60);
             ryno_vars->track_timer = ticks_2cc608(60);
         }
@@ -1934,7 +1934,7 @@ void ryno_update(struct Moby *m) {
             ryno_vars->count = ryno_vars->count % 7;
             qcopy(aim.f, camera_rot_2cc608.f);
             aim.f[1] = -aim.f[1];
-            ryno_vars->target = FUN_L00_002cc360_c(((float *)&m->pos), aim.f, ryno_vars->recent, 3.1415927f, 3.1415927f, 100.0f);
+            ryno_vars->target = FUN_L00_002cc360_c(((float *)&ryno_moby->pos), aim.f, ryno_vars->recent, 3.1415927f, 3.1415927f, 100.0f);
             if (ryno_vars->target == 0 && ryno_vars->count > 0 && (rand_2cc608() & (ryno_vars->count + 1)) == 0) {
                 ryno_vars->target = ryno_vars->recent[rand_2cc608() % ryno_vars->count];
             }
@@ -1952,7 +1952,7 @@ void ryno_update(struct Moby *m) {
         if (timer16_2cc608(&ryno_vars->shot_timer) == 0) return;
         ryno_vars->shots = 0;
         ryno_vars->target = 0;
-        m->state = 2;
+        ryno_moby->state = 2;
         break;
     case 6:
     case 7:
