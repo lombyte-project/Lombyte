@@ -1696,8 +1696,8 @@ void FUN_L00_0029b4d8(int vendor_event) {
     unsigned char *auxiliary_moby;
     int auxiliary_moby_state;
     int moby_state;
-    int r0;
-    int r1;
+    int selection_variant_index;
+    int ready_variant_index;
     if (D_L00_00161188 == 0)
         return;
     b = D_L00_001CA4C0;
@@ -1709,22 +1709,22 @@ void FUN_L00_0029b4d8(int vendor_event) {
             if (random_integer_below(4) == 0) {
                 if (*(int *)(b + 0x30) + scale_game_frames(0x168) < D_L00_0015F3F8) {
                     *(int *)(b + 0x30) = D_L00_0015F3F8;
-                    r0 = random_integer_below(2);
-                    *(int *)(b + 0x3C) = r0;
+                    selection_variant_index = random_integer_below(2);
+                    *(int *)(b + 0x3C) = selection_variant_index;
                     D_L00_00161190 = 1;
                     D_L00_00161194 = 0;
-                    *(int *)(D_001516EC) = (r0 * 3 + 2) * 6 + *(int *)(b + 0x38) + 10000;
+                    *(int *)(D_001516EC) = (selection_variant_index * 3 + 2) * 6 + *(int *)(b + 0x38) + 10000;
                     auxiliary_moby[0x20] = 0xB;
                 }
             }
         }
         break;
     case VENDOR_AUXILIARY_MOBY_READY:
-        r1 = random_integer_below(2);
-        *(int *)(b + 0x3C) = r1;
+        ready_variant_index = random_integer_below(2);
+        *(int *)(b + 0x3C) = ready_variant_index;
         D_L00_00161190 = vendor_event;
         D_L00_00161194 = 0;
-        *(int *)(D_001516EC) = r1 * 0x12 + *(int *)(b + 0x38) + 10000;
+        *(int *)(D_001516EC) = ready_variant_index * 0x12 + *(int *)(b + 0x38) + 10000;
         if (auxiliary_moby[0x53] != vendor_event)
             blend_moby_animation(auxiliary_moby, 1, 0, 10);
         auxiliary_moby[0x20] = 10;
@@ -1733,8 +1733,8 @@ void FUN_L00_0029b4d8(int vendor_event) {
     case VENDOR_AMMO_PURCHASE:
         moby_state = auxiliary_moby[0x20];
         if (moby_state == 2 || moby_state == 0) {
-            char *q = D_L00_001CA4C0;
-            *(int *)(q + 0x34) = 0;
+            char *vendor_state = D_L00_001CA4C0;
+            *(int *)(vendor_state + 0x34) = 0;
         }
         break;
     }
