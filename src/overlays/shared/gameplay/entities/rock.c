@@ -1528,14 +1528,14 @@ void FUN_L01_00308550(char *moby) {
     tm = (int *)(moby_vars + 0x40);
     sz = (float *)(moby_vars + 0x50);
     for (i = 0; i < 4; i++) {
-        float a = ang[i] + spd[i];
+        float unwrapped_angle = ang[i] + spd[i];
         float pulse_progress;
         int c;
-        ang[i] = a;
-        if (255.0f <= a) {
-            ang[i] = a - 255.0f;
-        } else if (a <= 0.0f) {
-            ang[i] = a + 255.0f;
+        ang[i] = unwrapped_angle;
+        if (255.0f <= unwrapped_angle) {
+            ang[i] = unwrapped_angle - 255.0f;
+        } else if (unwrapped_angle <= 0.0f) {
+            ang[i] = unwrapped_angle + 255.0f;
         }
         if (fast_dec_timer((int *)(moby_vars + 0x40) + i)) {
             tm[i] = scale_game_frames(0xFF);
