@@ -2422,34 +2422,34 @@ extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern void set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");
 extern void FUN_L00_00250df8(void *);
 
-char *FUN_L13_0030c138(void *a, void *b, int c, int d) {
-    unsigned char *m = (unsigned char *)func_0020D348_m(0x662);
-    if (m != 0) {
+char *FUN_L13_0030c138(void *position, void *b, int duration_frames, int d) {
+    unsigned char *moby = (unsigned char *)func_0020D348_m(0x662);
+    if (moby != 0) {
         char *data;
         float r1, dd;
-        data = *(char **)(m + 0x78);
-        m[0x30] = 0xFF;
-        *(short *)(m + 0x32) = 0xFF;
-        m[0x31] = 1;
-        m[0x23] = random_int_between(0x40, 0x80);
-        set_moby_color(m, 0x20, 0x60, 0x10);
-        qcopy(m + 0x10, a);
+        data = *(char **)(moby + 0x78);
+        moby[0x30] = 0xFF;
+        *(short *)(moby + 0x32) = 0xFF;
+        moby[0x31] = 1;
+        moby[0x23] = random_int_between(0x40, 0x80);
+        set_moby_color(moby, 0x20, 0x60, 0x10);
+        qcopy(moby + 0x10, position);
         qcopy(data, b);
         r1 = random_float_between_alt(frame_time * 6.2831855f, frame_time * 12.566371f);
         dd = frame_time;
         *(float *)(data + 0x10) = r1;
         *(float *)(data + 0x14) = random_float_between_alt(dd * 6.2831855f, dd * 12.566371f);
-        *(short *)(data + 0x18) = c;
-        *(short *)(data + 0x1A) = c;
+        *(short *)(data + 0x18) = duration_frames;
+        *(short *)(data + 0x1A) = duration_frames;
         if (d == 0) {
-            *(float *)(m + 0x2C) = *(float *)(m + 0x2C) * random_float_between_alt(0.5f, 0.75f);
+            *(float *)(moby + 0x2C) = *(float *)(moby + 0x2C) * random_float_between_alt(0.5f, 0.75f);
         }
-        *(float *)(data + 0x1C) = *(float *)(m + 0x2C);
-        *(float *)(m + 0x2C) = *(float *)(m + 0x2C) * random_float_between_alt(2.0f, 5.0f);
-        m[0xBC] = d;
-        FUN_L00_00250df8(m);
+        *(float *)(data + 0x1C) = *(float *)(moby + 0x2C);
+        *(float *)(moby + 0x2C) = *(float *)(moby + 0x2C) * random_float_between_alt(2.0f, 5.0f);
+        moby[0xBC] = d;
+        FUN_L00_00250df8(moby);
     }
-    return (char *)m;
+    return (char *)moby;
 }
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
