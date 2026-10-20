@@ -788,8 +788,8 @@ void blarg_gun_update(char *moby)
     char *data = *(char **)(moby + 0x78);
     char buf[0x70];
     char *hs;
-    int n;
-    float t;
+    int joint_index;
+    float fade_decrement;
 
     switch ((unsigned char)moby[0x20]) {
     case BLARG_GUN_STATE_INITIALIZE:
@@ -798,9 +798,9 @@ void blarg_gun_update(char *moby)
         moby[0x20] = 2;
         break;
     case BLARG_GUN_STATE_MOVING:
-        n = *(int *)(data + 4);
-        if (n > 0) {
-            moby_point_position(moby, n, buf + 0x40);
+        joint_index = *(int *)(data + 4);
+        if (joint_index > 0) {
+            moby_point_position(moby, joint_index, buf + 0x40);
             *(float *)(moby + 0x40) = fast_add_rotations_c(*(float *)(moby + 0x40), *(float *)(data + 0x20));
             *(float *)(moby + 0x44) = fast_add_rotations_c(*(float *)(moby + 0x44), *(float *)(data + 0x24));
             *(float *)(moby + 0x48) = fast_add_rotations_c(*(float *)(moby + 0x48), *(float *)(data + 0x28));
@@ -833,10 +833,10 @@ void blarg_gun_update(char *moby)
             }
         }
         if (fast_dec_timer((int *)data)) {
-            t = 128.0f / (float)scale_game_frames(20);
+            fade_decrement = 128.0f / (float)scale_game_frames(20);
             *(int *)data = 0;
-            if (t <= (float)((unsigned char *)moby)[0x23]) {
-                ((unsigned char *)moby)[0x23] = ((unsigned char *)moby)[0x23] - (int)t;
+            if (fade_decrement <= (float)((unsigned char *)moby)[0x23]) {
+                ((unsigned char *)moby)[0x23] = ((unsigned char *)moby)[0x23] - (int)fade_decrement;
             } else {
                 mark_moby_for_removal(moby);
             }
