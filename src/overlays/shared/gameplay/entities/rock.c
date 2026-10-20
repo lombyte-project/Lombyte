@@ -1626,27 +1626,27 @@ extern int D_L01_00161F68 __attribute__((sda));
 extern int D_L01_00161F6C __attribute__((sda));
 extern float D_L01_00161F70 __attribute__((sda));
 extern float D_L01_00161F74 __attribute__((sda));
-void FUN_L01_003089f0(char *m) {
+void FUN_L01_003089f0(char *moby) {
     float v[4];
     float w[4];
     float u[4];
-    float t;
+    float frame_duration;
     int i;
-    int c;
+    int particle_lifetime;
     int c2;
-    if (*(unsigned char *)(m + 0x20) == 1) {
-        scale_vector_xyz(v, m, 0.0009765625f);
+    if (*(unsigned char *)(moby + 0x20) == 1) {
+        scale_vector_xyz(v, moby, 0.0009765625f);
     } else {
-        moby_point_position(m, 0, v);
+        moby_point_position(moby, 0, v);
     }
-    t = frame_time;
-    random_vector(w, D_L01_00161F54 * t, D_L01_00161F58 * t);
-    c = *(unsigned char *)&D_L01_00161F64;
-    FUN_L00_002730e0(v, w, D_L01_00161F68, c, random_integer_below_c(0xFF) & 0xFF, 0,
+    frame_duration = frame_time;
+    random_vector(w, D_L01_00161F54 * frame_duration, D_L01_00161F58 * frame_duration);
+    particle_lifetime = *(unsigned char *)&D_L01_00161F64;
+    FUN_L00_002730e0(v, w, D_L01_00161F68, particle_lifetime, random_integer_below_c(0xFF) & 0xFF, 0,
                      D_L01_00161F70);
     for (i = 2; i >= 0; i--) {
-        t = frame_time;
-        random_vector(u, D_L01_00161F5C * t, D_L01_00161F60 * t);
+        frame_duration = frame_time;
+        random_vector(u, D_L01_00161F5C * frame_duration, D_L01_00161F60 * frame_duration);
         add_vector_xyz(w, w, u);
         c2 = *(unsigned char *)&D_L01_00161F64;
         FUN_L00_002730e0(v, w, D_L01_00161F6C, c2, random_integer_below_c(0xFF) & 0xFF,
