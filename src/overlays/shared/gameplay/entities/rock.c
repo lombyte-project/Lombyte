@@ -889,7 +889,7 @@ extern void memcard_save_data(int, int) __asm__("FUN_0020b178");
 
 /* Watcher moby update with a level-specific state script, then turns its head toward the hero or a random target. */
 void the_plumber_update(L01WatchMoby *m) __asm__("FUN_L01_002ff118");
-void the_plumber_update(L01WatchMoby *m) {
+void the_plumber_update(L01WatchMoby *plumber_moby) {
     enum {
         PLUMBER_INITIALIZE = 0,
         PLUMBER_LEVEL_ONE_DIALOGUE = 1,
@@ -900,83 +900,83 @@ void the_plumber_update(L01WatchMoby *m) {
         PLUMBER_LEVEL_EIGHT_DIALOGUE_FINISHED = 6
     };
     L01WatchScratch scratch;
-    L01WatchData *d = (L01WatchData *)m->data;
+    L01WatchData *plumber_vars = (L01WatchData *)plumber_moby->data;
     float rate;
     float head_rate;
     int tracking;
-    if (!d)
+    if (!plumber_vars)
         return;
-    FUN_L01_002ff028_c(m);
-    if (m->near_flag) {
-        if (FUN_001f9b48(m->position, D_L01_00167240_c) < 32.0f) {
-            FUN_L00_0025a120(m);
-            m->flag7F = 0x1A;
+    FUN_L01_002ff028_c(plumber_moby);
+    if (plumber_moby->near_flag) {
+        if (FUN_001f9b48(plumber_moby->position, D_L01_00167240_c) < 32.0f) {
+            FUN_L00_0025a120(plumber_moby);
+            plumber_moby->flag7F = 0x1A;
         }
     }
-    switch (m->state) {
+    switch (plumber_moby->state) {
     case PLUMBER_INITIALIZE:
-        m->opacity = 0xFF;
-        d->i44 = 0;
+        plumber_moby->opacity = 0xFF;
+        plumber_vars->i44 = 0;
         if (D_0015ED84_m == 1) {
             if (D_0013DD42) {
-                mark_moby_for_removal(m);
+                mark_moby_for_removal(plumber_moby);
                 return;
             }
-            d->p20 = (void *)D_L01_0020B600;
-            m->state = 1;
+            plumber_vars->p20 = (void *)D_L01_0020B600;
+            plumber_moby->state = 1;
         } else if (D_0015ED84_m == 8) {
-            d->p20 = (void *)D_L01_00161D38;
-            m->state = 4;
+            plumber_vars->p20 = (void *)D_L01_00161D38;
+            plumber_moby->state = 4;
         } else {
-            d->p20 = (void *)D_L01_00161D48;
-            m->state = 7;
+            plumber_vars->p20 = (void *)D_L01_00161D48;
+            plumber_moby->state = 7;
         }
-        initialize_npc_dialogue(m, d);
+        initialize_npc_dialogue(plumber_moby, plumber_vars);
         break;
     case PLUMBER_LEVEL_ONE_DIALOGUE:
-        if (update_npc_dialogue(m, d)) {
-            begin_dialogue_camera_transition(m, 2.2f);
-            m->state = 2;
+        if (update_npc_dialogue(plumber_moby, plumber_vars)) {
+            begin_dialogue_camera_transition(plumber_moby, 2.2f);
+            plumber_moby->state = 2;
         }
         break;
     case PLUMBER_LEVEL_ONE_POST_DIALOGUE:
         if (cutscene_mode == 2)
             break;
-        if (D_0014C050_c[m->bB0 + D_0015ED84_c * 16] != 0xFF) {
-            jet_clear_persistent(m->bB0);
-            if (d->i4C != -1) {
-                char *t = D_L01_001600EC_c + d->i4C * 128;
-                jet_reset_camera(t + 0x30, t + 0x70);
+        if (D_0014C050_c[plumber_moby->bB0 + D_0015ED84_c * 16] != 0xFF) {
+            jet_clear_persistent(plumber_moby->bB0);
+            if (plumber_vars->i4C != -1) {
+                char *camera_record = D_L01_001600EC_c + plumber_vars->i4C * 128;
+                jet_reset_camera(camera_record + 0x30, camera_record + 0x70);
             }
         }
-        m->state = 1;
-        if (d->sub == 4) {
+        plumber_moby->state = 1;
+        if (plumber_vars->sub == 4) {
             unlock_planet(2);
             FUN_L00_00262d38(2);
-            m->state = 3;
-            FUN_L01_0029b0a0((char *)m + 0x20, 1, m, 1, D_L01_001BAAA0);
+            plumber_moby->state = 3;
+            FUN_L01_0029b0a0((char *)plumber_moby + 0x20, 1, plumber_moby, 1, D_L01_001BAAA0);
             memcard_save_data(0, -1);
         }
         break;
     case PLUMBER_REMOVE:
-        mark_moby_for_removal(m);
+        mark_moby_for_removal(plumber_moby);
         return;
     case PLUMBER_LEVEL_EIGHT_DIALOGUE:
-        if (update_npc_dialogue(m, d)) {
-            m->state = 5;
-            d->b8 = 0;
+        if (update_npc_dialogue(plumber_moby, plumber_vars)) {
+            plumber_moby->state = 5;
+            plumber_vars->b8 = 0;
         }
         break;
     case PLUMBER_LEVEL_EIGHT_POST_DIALOGUE:
         if (cutscene_mode == 2)
             break;
-        if (d->h6 == 2) {
+        if (plumber_vars->h6 == 2) {
             D_0013F350_w.f80 = 130.5f;
             D_0013F350_w.f84 = 299.5f;
             D_0013F350_w.f88 = 46.0f;
-            m->state = 6;
+            plumber_moby->state = 6;
         } else {
-            m->state = 4;
+            plumber_moby->state = 4;
         }
         break;
     case PLUMBER_LEVEL_EIGHT_DIALOGUE_FINISHED:
@@ -985,46 +985,46 @@ void the_plumber_update(L01WatchMoby *m) {
     rate = 0.02f;
     head_rate = 0.3f;
     tracking = 0;
-    if (m->animation == 0) {
+    if (plumber_moby->animation == 0) {
         char *g = (char *)&hero.motion.pos;
         L01Player *q;
         tracking = 1;
-        if (vector_distance(m->position, g) < 8.0f &&
+        if (vector_distance(plumber_moby->position, g) < 8.0f &&
             (q = (L01Player *)(g - 0x80),
              fast_difference_between_rotations(
-                 m->yaw, fast_arc_tan(q->aim[0] - m->position[0], q->aim[1] - m->position[1]))) <
+                 plumber_moby->yaw, fast_arc_tan(q->aim[0] - plumber_moby->position[0], q->aim[1] - plumber_moby->position[1]))) <
                 1.5707964f) {
             if (fast_vec_length(g + 0x80) > 0.01f)
-                d->moving_timer = scale_game_frames(120);
+                plumber_vars->moving_timer = scale_game_frames(120);
             else
-                tick_countdown_32(&d->moving_timer);
-        } else if (d->moving_timer) {
-            d->moving_timer = 0;
-            qcopy(d->target, hero.motion.unkD0.f);
+                tick_countdown_32(&plumber_vars->moving_timer);
+        } else if (plumber_vars->moving_timer) {
+            plumber_vars->moving_timer = 0;
+            qcopy(plumber_vars->target, hero.motion.unkD0.f);
         }
-        if (tick_countdown_32(&d->target_timer)) {
+        if (tick_countdown_32(&plumber_vars->target_timer)) {
             float heading;
-            d->target_timer = FUN_001fa6d0(multiply_global_factor_ed64(random_float_between(180.0f, 300.0f)));
-            heading = FUN_001fa580_c(m->yaw, random_float_between(-90.0f, 90.0f) * DEG_TO_RAD);
-            build_spherical_offset(d->target, 6.0f, heading,
+            plumber_vars->target_timer = FUN_001fa6d0(multiply_global_factor_ed64(random_float_between(180.0f, 300.0f)));
+            heading = FUN_001fa580_c(plumber_moby->yaw, random_float_between(-90.0f, 90.0f) * DEG_TO_RAD);
+            build_spherical_offset(plumber_vars->target, 6.0f, heading,
                                    random_float_between(0.0f, 30.0f) * DEG_TO_RAD);
-            add_vector_xyz(d->target, d->target, m->position);
+            add_vector_xyz(plumber_vars->target, plumber_vars->target, plumber_moby->position);
         }
-        if (d->moving_timer) {
+        if (plumber_vars->moving_timer) {
             qcopy(scratch.target, hero.motion.unkD0.f);
             rate = 0.04f;
             head_rate = 0.3f;
         } else {
-            qcopy(scratch.target, d->target);
+            qcopy(scratch.target, plumber_vars->target);
         }
     }
     if (tracking) {
         float yaw;
         float pitch;
-        qcopy(scratch.eye, m->position);
+        qcopy(scratch.eye, plumber_moby->position);
         scratch.eye[2] += 1.0f;
         fast_vec_sub(scratch.delta, scratch.target, scratch.eye);
-        yaw = fast_subtract_rotations(fast_arc_tan(scratch.delta[0], scratch.delta[1]), m->yaw);
+        yaw = fast_subtract_rotations(fast_arc_tan(scratch.delta[0], scratch.delta[1]), plumber_moby->yaw);
         pitch = -fast_arc_tan(vector_length_xy(scratch.delta), scratch.delta[2]);
         if (yaw > 1.5707964f)
             yaw = 1.5707964f;
@@ -1034,14 +1034,14 @@ void the_plumber_update(L01WatchMoby *m) {
             pitch = 0.5235988f;
         else if (pitch < -0.5235988f)
             pitch = -0.5235988f;
-        d->yaw = yaw * 0.5f;
-        d->pitch = pitch * 1.25f;
-        d->head_yaw = yaw * 0.5f;
+        plumber_vars->yaw = yaw * 0.5f;
+        plumber_vars->pitch = pitch * 1.25f;
+        plumber_vars->head_yaw = yaw * 0.5f;
     }
     if (D_0015EDB0_b)
-        d->height = 2.75f;
-    update_joint_animation(rate * frame_scale_sq, head_rate * frame_scale_sq, m, d->body, 0);
-    update_joint_animation(rate * frame_scale_sq, head_rate * frame_scale_sq, m, d->head, 1);
+        plumber_vars->height = 2.75f;
+    update_joint_animation(rate * frame_scale_sq, head_rate * frame_scale_sq, plumber_moby, plumber_vars->body, 0);
+    update_joint_animation(rate * frame_scale_sq, head_rate * frame_scale_sq, plumber_moby, plumber_vars->head, 1);
 }
 
 /* pvars of the respawning pickup spawn_point_update updates */
