@@ -1916,7 +1916,7 @@ extern V_208b60 D_L00_001AEB90;
 extern T_208b60 D_L00_0017C300[];
 void FUN_L00_00208b60(void) {
     V_208b60 v, w, x;
-    f32 k, rotation_step, planar_angle, c, s, probe_reference_z, hi, lo, sc;
+    f32 k, rotation_step, planar_angle, planar_cosine, planar_sine, probe_reference_z, hi, lo, sc;
     T_208b60 *t;
     V_208b60 *pw, *px;
     s32 i;
@@ -1937,12 +1937,12 @@ void FUN_L00_00208b60(void) {
     G.fD20 = fast_add_rotations(G.fD20, rotation_step);
     FUN_0020d510_208b60(G.m2080, &v);
     planar_angle = angle_atan2(v.f[0], v.f[1]);
-    c = FUN_001f9dc8_208b60(planar_angle);
-    s = FUN_001f9de0_208b60(planar_angle);
+    planar_cosine = FUN_001f9dc8_208b60(planar_angle);
+    planar_sine = FUN_001f9de0_208b60(planar_angle);
     {
         f32 direction_xy_scale = FUN_001f9dc8_208b60(G.fD20);
-        v.f[0] = c * direction_xy_scale;
-        v.f[1] = s * direction_xy_scale;
+        v.f[0] = planar_cosine * direction_xy_scale;
+        v.f[1] = planar_sine * direction_xy_scale;
     }
     v.f[2] = -FUN_001f9de0_208b60(G.fD20);
     qcopy(&D_L00_001AEB90, &v);
@@ -1973,8 +1973,8 @@ void FUN_L00_00208b60(void) {
         m = G.m2080;
         sc = m->fC * 0.0009765625f;
         FUN_001f9a68_208b60(pw, m, 0.0009765625f);
-        w.f[0] += c * t->x * sc;
-        w.f[1] += s * t->y * sc;
+        w.f[0] += planar_cosine * t->x * sc;
+        w.f[1] += planar_sine * t->y * sc;
         w.f[2] += t->z * sc;
         normalize_vector_xyz(px, &v, ((w.f[2] - probe_reference_z) + 0.5f) / -v.f[2]);
         FUN_001f9a10_208b60(px, pw, px);
