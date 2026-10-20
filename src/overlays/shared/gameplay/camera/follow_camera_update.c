@@ -1194,7 +1194,7 @@ int FUN_L00_002eb648(char *camera_object, char *target_moby) {
     u128 w[1];
     char *camera_state;
     float *c;
-    char *n;
+    char *target_private_data;
     u128 *pw;
     struct Hero *g;
     char *cam;
@@ -1208,21 +1208,21 @@ int FUN_L00_002eb648(char *camera_object, char *target_moby) {
     v[0] = 0;
     ((float *)v)[2] = 0.12f;
     ((float *)v)[0] = D_L00_00161DD4;
-    n = *(char **)(target_moby + 0x78);
+    target_private_data = *(char **)(target_moby + 0x78);
     FUN_001f9cf8_2eb648(v, v, target_moby + 0xC0);
     FUN_001f9a10_2eb648(w, target_moby + 0x10, v);
     pw = w;
-    if (*(int *)(n + 0x10) == -1) {
+    if (*(int *)(target_private_data + 0x10) == -1) {
         FUN_L00_001eb0c8_2eb648(c, camera_object + 0x50, 0.0f);
         c[2] = 6.0f;
         c[1] = c[3];
         c[3] = 0.0f;
         FUN_L00_002eb320_2eb648(camera_object, c, w, 0.0f);
     }
-    if (*(int *)(n + 0x10) > 0)
+    if (*(int *)(target_private_data + 0x10) > 0)
         goto pos;
-    *(float *)(camera_state + 0xAC) = FUN_001fa580_2eb648(*(float *)(camera_state + 0xAC), *(float *)(n + 0x18));
-    *(float *)(n + 0x18) *= 0.97f;
+    *(float *)(camera_state + 0xAC) = FUN_001fa580_2eb648(*(float *)(camera_state + 0xAC), *(float *)(target_private_data + 0x18));
+    *(float *)(target_private_data + 0x18) *= 0.97f;
     g = &hero_data;
     cam = D_L00_00166C80_2eb648;
     pp = &g->motion.pos;
@@ -1239,13 +1239,13 @@ int FUN_L00_002eb648(char *camera_object, char *target_moby) {
     if (x < 0.77f) {
         if (ang < 1.5707964f) {
             *(float *)(camera_state + 0x1C) -= 0.7f - x;
-            *(int *)(n + 4) = 0;
+            *(int *)(target_private_data + 4) = 0;
         } else {
             *(float *)(camera_state + 0x1C) += 0.7f - x;
         }
     } else {
-        *(float *)(camera_state + 0x1C) += *(float *)(n + 4);
-        *(float *)(n + 4) *= 0.97f;
+        *(float *)(camera_state + 0x1C) += *(float *)(target_private_data + 4);
+        *(float *)(target_private_data + 4) *= 0.97f;
     }
     qcopy(camera_state + 0x80, pw);
     return 0;
