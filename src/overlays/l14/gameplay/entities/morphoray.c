@@ -809,11 +809,11 @@ void button_update(struct Moby *moby) {
         BUTTON_INITIALIZE = 0,
         BUTTON_WAIT_FOR_HERO_TO_STAND = 1
     };
-    s32 *d = (s32 *)moby->pvars;
+    s32 *button_pvars = (s32 *)moby->pvars;
     s16 id;
     s32 i;
     s32 list;
-    char *p;
+    char *path_entry_base;
     f32 angle;
     s32 color;
     u32 shade;
@@ -821,24 +821,24 @@ void button_update(struct Moby *moby) {
 
     switch (moby->state) {
     case BUTTON_INITIALIZE:
-        *(f32 *)(d + 3) = random_angle_radians();
+        *(f32 *)(button_pvars + 3) = random_angle_radians();
         moby->pos.z -= 0.35f;
         id = (s16)moby->save_id;
         if (D_L14_001BB930.collected[id] != 0 ||
             (D_0014C190_257218[current_level_index][id >> 5] >> (moby->save_id & 31) & 1) != 0 ||
-            (d[2] != 0 && D_0014C050[moby->mission + current_level_index * 16] == 0xFF)) {
+            (button_pvars[2] != 0 && D_0014C050[moby->mission + current_level_index * 16] == 0xFF)) {
             moby->command = 2;
             moby->glow_color = 0x80208020;
             moby->state = 2;
-            list = d[0];
+            list = button_pvars[0];
             if (list != -1) {
                 i = 0;
                 if (*(s32 *)D_L14_001B0BB0[list] > 0) {
                     do {
-                        p = D_L14_001B0BB0[list] + i * 16;
-                        if (*(f32 *)(p + 0x1C) == ((f32 *)d)[1])
-                            *(s32 *)(p + 0x1C) = 0;
-                        list = d[0];
+                        path_entry_base = D_L14_001B0BB0[list] + i * 16;
+                        if (*(f32 *)(path_entry_base + 0x1C) == ((f32 *)button_pvars)[1])
+                            *(s32 *)(path_entry_base + 0x1C) = 0;
+                        list = button_pvars[0];
                         i++;
                     } while (i < *(s32 *)D_L14_001B0BB0[list]);
                 }
@@ -848,8 +848,8 @@ void button_update(struct Moby *moby) {
         }
         break;
     case BUTTON_WAIT_FOR_HERO_TO_STAND:
-        angle = fast_add_rotations(*(f32 *)(d + 3), frame_time * 6.2831855f);
-        *(f32 *)(d + 3) = angle;
+        angle = fast_add_rotations(*(f32 *)(button_pvars + 3), frame_time * 6.2831855f);
+        *(f32 *)(button_pvars + 3) = angle;
         color = truncate_float_to_s32((fast_sin(angle) * 4.0f - 3.0f) * 128.0f);
         if (color > 0x80) color = 0x80;
         else if (color < 0x20) color = 0x20;
@@ -864,15 +864,15 @@ void button_update(struct Moby *moby) {
             moby->command = 1;
             moby->glow_color = 0x80208020;
             allocate_voice_for_target_entry(0, 0, moby);
-            list = d[0];
+            list = button_pvars[0];
             if (list != -1) {
                 i = 0;
                 if (*(s32 *)D_L14_001B0BB0[list] > 0) {
                     do {
-                        p = D_L14_001B0BB0[list] + i * 16;
-                        if (*(f32 *)(p + 0x1C) == ((f32 *)d)[1])
-                            *(s32 *)(p + 0x1C) = 0;
-                        list = d[0];
+                        path_entry_base = D_L14_001B0BB0[list] + i * 16;
+                        if (*(f32 *)(path_entry_base + 0x1C) == ((f32 *)button_pvars)[1])
+                            *(s32 *)(path_entry_base + 0x1C) = 0;
+                        list = button_pvars[0];
                         i++;
                     } while (i < *(s32 *)D_L14_001B0BB0[list]);
                 }
