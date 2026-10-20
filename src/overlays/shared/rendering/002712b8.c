@@ -898,30 +898,30 @@ typedef struct {
 int FUN_001f9770_273298(s16 *) __asm__("FUN_001f9770");
 u32 FUN_001fa6e0_273298(u32, u32, f32) __asm__("FUN_001fa6e0");
 void FUN_001f9a10_273298(void *, void *, void *) __asm__("FUN_001f9a10");
-void FUN_L00_00273298(Part_273298 *p) {
-    V_273298 *v = (V_273298 *)((u8 *)p + 0x20);
-    float a;
+void FUN_L00_00273298(Part_273298 *particle) {
+    V_273298 *v = (V_273298 *)((u8 *)particle + 0x20);
+    float remaining_frames_minus_one;
     u32 c;
     if (v->w1C == 1) {
         struct Hero *g = &hero;
-        p->x = g->motion.pos.f[0] + v->x;
-        p->y = g->motion.pos.f[1] + v->y;
-        p->z = g->motion.pos.f[2] + v->z;
-        FUN_001f9a10_273298(&p->x, &p->x, v);
-        v->x = p->x - g->motion.pos.f[0];
-        v->y = p->y - g->motion.pos.f[1];
-        v->z = p->z - g->motion.pos.f[2];
+        particle->x = g->motion.pos.f[0] + v->x;
+        particle->y = g->motion.pos.f[1] + v->y;
+        particle->z = g->motion.pos.f[2] + v->z;
+        FUN_001f9a10_273298(&particle->x, &particle->x, v);
+        v->x = particle->x - g->motion.pos.f[0];
+        v->y = particle->y - g->motion.pos.f[1];
+        v->z = particle->z - g->motion.pos.f[2];
     } else {
-        FUN_001f9a10_273298(&p->x, &p->x, v);
+        FUN_001f9a10_273298(&particle->x, &particle->x, v);
     }
-    if (p->x < 2.0f || 1021.0f < p->x || p->y < 2.0f || 1021.0f < p->y || p->z < 2.0f ||
-        1021.0f < p->z || FUN_001f9770_273298(&p->hA)) {
-        free_effect_particle(p);
+    if (particle->x < 2.0f || 1021.0f < particle->x || particle->y < 2.0f || 1021.0f < particle->y || particle->z < 2.0f ||
+        1021.0f < particle->z || FUN_001f9770_273298(&particle->hA)) {
+        free_effect_particle(particle);
         return;
     }
-    c = p->w4 & 0xFFFFFF;
-    a = convert_integer_to_float(p->hA - 1);
-    p->w4 = FUN_001fa6e0_273298(c, p->w4, a / convert_integer_to_float(p->hA));
+    c = particle->w4 & 0xFFFFFF;
+    remaining_frames_minus_one = convert_integer_to_float(particle->hA - 1);
+    particle->w4 = FUN_001fa6e0_273298(c, particle->w4, remaining_frames_minus_one / convert_integer_to_float(particle->hA));
 }
 typedef struct {
     u8 pad0[0x20];
