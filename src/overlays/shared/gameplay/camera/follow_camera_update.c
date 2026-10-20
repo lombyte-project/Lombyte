@@ -2020,7 +2020,7 @@ void volume_camera_aim(struct UpdateCam *cam) __asm__("FUN_L00_002ed498");
 void volume_camera_aim(struct UpdateCam *cam) {
     CameraVec pos;
     CameraVec to_pos;
-    CameraVec tmp;
+    CameraVec gravity_offset;
     CameraVec level;
     AimCameraParams *params;
     struct UpdateCam *rec;
@@ -2063,8 +2063,8 @@ run:
         *(s32 *)&pos[3] = 0;
         fast_vec_sub(to_pos, pos, &hero.motion.pos);
         up = fast_vec_dot(to_pos, &hero.gravity_dir);
-        fast_vec_scale(tmp, &hero.gravity_dir, up);
-        fast_vec_sub(level, to_pos, tmp);
+        fast_vec_scale(gravity_offset, &hero.gravity_dir, up);
+        fast_vec_sub(level, to_pos, gravity_offset);
         params->distance = fast_vec_length(level);
         params->height = -up;
         angle = params->angle;
@@ -2086,12 +2086,12 @@ run:
         tail->unk15C = params->distance;
         tail->distance = params->height;
         follow->look_height = params->offset_scale;
-        fast_vec_scale(tmp, &hero.gravity_dir, -tail->distance);
-        fast_vec_add(state->follow.eye, &hero.motion.pos, tmp);
+        fast_vec_scale(gravity_offset, &hero.gravity_dir, -tail->distance);
+        fast_vec_add(state->follow.eye, &hero.motion.pos, gravity_offset);
         fast_vec_sub(tail->unk130, pos, state->follow.eye);
         qcopy(state->tail.unk140, tail->unk130);
-        fast_vec_scale(tmp, &hero.gravity_dir, -follow->look_height);
-        fast_vec_add(state->follow.look_target, &hero.motion.pos, tmp);
+        fast_vec_scale(gravity_offset, &hero.gravity_dir, -follow->look_height);
+        fast_vec_add(state->follow.look_target, &hero.motion.pos, gravity_offset);
         qcopy(state->follow.unkD0, state->follow.look_target);
         qcopy(follow->focus, &hero.motion.pos);
         qcopy(state->follow.offset, follow->focus);
