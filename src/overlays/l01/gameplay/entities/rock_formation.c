@@ -515,7 +515,7 @@ void destroyable_cave_wall_update(struct Moby *m) __asm__("FUN_L01_002fa800");
 void destroyable_cave_wall_update(struct Moby *cave_wall_moby) {
     s32 i;
     s32 j;
-    f32 s;
+    f32 offset_component_or_smoke_scale;
 
     if (D_L01_001BB6B0.collected[(s16)cave_wall_moby->save_id] != 0 ||
         (D_0014C190_257218[current_level_index][(s16)cave_wall_moby->save_id >> 5] >> (cave_wall_moby->save_id & 0x1F)) & 1) {
@@ -537,18 +537,18 @@ void destroyable_cave_wall_update(struct Moby *cave_wall_moby) {
                 pos.f[2] = random_float_between(-1.0f, 1.0f);
                 off.q = 0;
                 vel.q = pos.q;
-                s = random_float_between(-4.0f, 4.0f);
-                s *= fast_cos(cave_wall_moby->rot.z);
-                off.f[0] = s;
-                s = random_float_between(-1.0f, 1.0f);
-                s *= fast_sin(cave_wall_moby->rot.z);
-                off.f[1] = s;
+                offset_component_or_smoke_scale = random_float_between(-4.0f, 4.0f);
+                offset_component_or_smoke_scale *= fast_cos(cave_wall_moby->rot.z);
+                off.f[0] = offset_component_or_smoke_scale;
+                offset_component_or_smoke_scale = random_float_between(-1.0f, 1.0f);
+                offset_component_or_smoke_scale *= fast_sin(cave_wall_moby->rot.z);
+                off.f[1] = offset_component_or_smoke_scale;
                 off.f[2] = random_float_between(0.0f, 8.0f);
                 pos.q = off.q;
                 fast_vec_add(&pos, &pos, &cave_wall_moby->pos);
                 fast_vec_normalize(&vel, &vel, random_float_between(1.5f, 3.5f) * frame_time);
-                s = random_float_between(1.5f, 3.5f) * 210000.0f;
-                FUN_L00_0026ced0(&pos, &vel, 0x5F787878, 0x181818, s, scale_game_frames(FUN_L00_00257b90(120, 240)));
+                offset_component_or_smoke_scale = random_float_between(1.5f, 3.5f) * 210000.0f;
+                FUN_L00_0026ced0(&pos, &vel, 0x5F787878, 0x181818, offset_component_or_smoke_scale, scale_game_frames(FUN_L00_00257b90(120, 240)));
             }
         }
         for (j = 0; j < 100; j++) {
@@ -564,12 +564,12 @@ void destroyable_cave_wall_update(struct Moby *cave_wall_moby) {
             pos.f[2] = random_float_between(-1.0f, 1.0f);
             off.q = 0;
             vel.q = pos.q;
-            s = random_float_between(-4.0f, 4.0f);
-            s *= fast_cos(cave_wall_moby->rot.z);
-            off.f[0] = s;
-            s = random_float_between(-1.0f, 1.0f);
-            s *= fast_sin(cave_wall_moby->rot.z);
-            off.f[1] = s;
+            offset_component_or_smoke_scale = random_float_between(-4.0f, 4.0f);
+            offset_component_or_smoke_scale *= fast_cos(cave_wall_moby->rot.z);
+            off.f[0] = offset_component_or_smoke_scale;
+            offset_component_or_smoke_scale = random_float_between(-1.0f, 1.0f);
+            offset_component_or_smoke_scale *= fast_sin(cave_wall_moby->rot.z);
+            off.f[1] = offset_component_or_smoke_scale;
             off.f[2] = random_float_between(1.0f, 8.0f);
             pos.q = off.q;
             fast_vec_add(&pos, &pos, &cave_wall_moby->pos);
