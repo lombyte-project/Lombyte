@@ -606,11 +606,11 @@ extern void FUN_L01_00234358_2b438(f32) __asm__("FUN_L01_00234358");
 
 extern f32 D_L06_0017C550[];
 void FUN_L06_0022b438(void) {
-    HopVec_2b438 tmp;
+    HopVec_2b438 velocity_contribution;
     f32 x;
     f32 speed;
     f32 a;
-    f32 d;
+    f32 speed_decay_step;
     f32 arg;
     s32 state;
 
@@ -689,8 +689,8 @@ void FUN_L06_0022b438(void) {
                 hero.motion.velocity.f[1] = FUN_001f9de0_2b438(hero.motion.move_yaw) * (ED6C * 4.9f);
             } else {
                 FUN_L00_00233ba0_2b438(&hero.motion.velocity, &hero.motion.velocity, 0.0f);
-                FUN_001f9bf8_2b438(&tmp, &hero.motion.unk170, ED6C * 4.9f);
-                FUN_001f9a10_2b438(&hero.motion.velocity, &hero.motion.velocity, &tmp);
+                FUN_001f9bf8_2b438(&velocity_contribution, &hero.motion.unk170, ED6C * 4.9f);
+                FUN_001f9a10_2b438(&hero.motion.velocity, &hero.motion.velocity, &velocity_contribution);
             }
         }
         hero.ground_speed = hero.motion.unk164;
@@ -709,9 +709,9 @@ void FUN_L06_0022b438(void) {
         arg = ED70 * 20.0f;
         if (hero.target_speed < D_L06_0017C550[0] * ED6C * 0.2f) {
             if (hero.state.control_mode == 2) {
-                d = hero.unk944;
+                speed_decay_step = hero.unk944;
                 speed = FUN_001f9b20_2b438(&hero.motion.velocity);
-                approach_value_2b438(0.0f, d, &speed);
+                approach_value_2b438(0.0f, speed_decay_step, &speed);
                 FUN_001f9c48_2b438(hero.motion.velocity.f, hero.motion.velocity.f, speed);
                 return;
             }
