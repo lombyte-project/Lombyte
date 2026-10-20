@@ -2560,18 +2560,18 @@ extern u16 *D_L14_001ABF40[];
 extern struct Moby *D_L14_0015FFD8_12f0 __asm__("D_L14_0015FFD8");
 
 struct Moby *FUN_L14_002f12f0(struct Moby *moby, int tag) {
-    u16 *p;
+    u16 *group_entry_cursor;
     struct Moby *pool;
     int idx;
 
-    if (moby->group < D_L14_0015FFF4 && (p = D_L14_001ABF40[moby->group]) != 0) {
+    if (moby->group < D_L14_0015FFF4 && (group_entry_cursor = D_L14_001ABF40[moby->group]) != 0) {
         pool = D_L14_0015FFD8_12f0;
         do {
-            idx = *p & 0x7FFF;
+            idx = *group_entry_cursor & 0x7FFF;
             if (((struct TaggedVars *)pool[idx].pvars)->tag == tag) {
                 goto found;
             }
-        } while ((s16)*p++ >= 0);
+        } while ((s16)*group_entry_cursor++ >= 0);
     }
     return 0;
 found:
