@@ -48,43 +48,43 @@ extern FpNumber D_001596F0;
 #define IMPLICIT_1 0x1000000000000000ULL
 #define IMPLICIT_2 0x2000000000000000ULL
 
-FpNumber *_fpadd_parts(FpNumber *a, FpNumber *b, FpNumber *result) {
+FpNumber *_fpadd_parts(FpNumber *left_operand, FpNumber *b, FpNumber *result) {
     s64 tfraction;
     s32 a_normal_exp;
     s32 b_normal_exp;
     u64 a_fraction;
     u64 b_fraction;
 
-    if ((u32)a->class < 2) {
-        return a;
+    if ((u32)left_operand->class < 2) {
+        return left_operand;
     }
     if ((u32)b->class < 2) {
         return b;
     }
-    if ((a->class ^ 4) == 0) {
-        if ((b->class ^ 4) == 0 && a->sign != b->sign) {
+    if ((left_operand->class ^ 4) == 0) {
+        if ((b->class ^ 4) == 0 && left_operand->sign != b->sign) {
             return &D_001596F0;
         }
-        return a;
+        return left_operand;
     }
     if ((b->class ^ 4) == 0) {
         return b;
     }
     if ((b->class ^ 2) == 0) {
-        if ((a->class ^ 2) == 0) {
-            *result = *a;
-            result->sign = a->sign & b->sign;
+        if ((left_operand->class ^ 2) == 0) {
+            *result = *left_operand;
+            result->sign = left_operand->sign & b->sign;
             return result;
         }
-        return a;
+        return left_operand;
     }
-    if ((a->class ^ 2) == 0) {
+    if ((left_operand->class ^ 2) == 0) {
         return b;
     }
 
-    a_normal_exp = a->normal_exp;
+    a_normal_exp = left_operand->normal_exp;
     b_normal_exp = b->normal_exp;
-    a_fraction = a->fraction;
+    a_fraction = left_operand->fraction;
     b_fraction = b->fraction;
 
     {
@@ -114,8 +114,8 @@ FpNumber *_fpadd_parts(FpNumber *a, FpNumber *b, FpNumber *result) {
         }
     }
 
-    if (a->sign != b->sign) {
-        if (a->sign) {
+    if (left_operand->sign != b->sign) {
+        if (left_operand->sign) {
             tfraction = -a_fraction + b_fraction;
         } else {
             tfraction = a_fraction - b_fraction;
@@ -134,7 +134,7 @@ FpNumber *_fpadd_parts(FpNumber *a, FpNumber *b, FpNumber *result) {
             result->normal_exp--;
         }
     } else {
-        result->sign = a->sign;
+        result->sign = left_operand->sign;
         result->normal_exp = a_normal_exp;
         result->fraction = a_fraction + b_fraction;
     }
