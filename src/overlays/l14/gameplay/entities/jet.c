@@ -180,7 +180,7 @@ extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
 extern void subtract_vector_xyz_c2(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void transform_vector(void *, void *, void *) __asm__("func_001F9D20");
 
-void FUN_L14_002df510(struct Moby *m, void *path, int outer_alpha, int inner_alpha, int point_count) {
+void FUN_L14_002df510(struct Moby *ribbon_moby, void *path, int outer_alpha, int inner_alpha, int point_count) {
     V_DF510 *pts = (V_DF510 *)path;
     Q_DF510 layer_quads[2];
     V_DF510 w[2];
@@ -188,7 +188,7 @@ void FUN_L14_002df510(struct Moby *m, void *path, int outer_alpha, int inner_alp
     V_DF510 mat[4];
     V_DF510 wm[4];
     V_DF510 world_path_points[2];
-    char *moby_vars = (char *)m->pvars;
+    char *moby_vars = (char *)ribbon_moby->pvars;
     int c;
     int i;
 
@@ -228,18 +228,18 @@ void FUN_L14_002df510(struct Moby *m, void *path, int outer_alpha, int inner_alp
     w[0].z = 0.2f;
     w[1].z = 0.4f;
     w[1].w = 1.0f;
-    heading_vector.x = fast_cos_df510(m->rot.z);
-    heading_vector.y = fast_sin_df510(m->rot.z);
+    heading_vector.x = fast_cos_df510(ribbon_moby->rot.z);
+    heading_vector.y = fast_sin_df510(ribbon_moby->rot.z);
     heading_vector.z = 0.0f;
     qcopy(&mat[0], &heading_vector);
-    subtract_vector_xyz_c2(&mat[1], D_L14_001674C0, &m->pos);
+    subtract_vector_xyz_c2(&mat[1], D_L14_001674C0, &ribbon_moby->pos);
     scale_vector_xyz(&mat[1], &mat[1], 1.0f);
     cross_vectors_xyz(&mat[2], &mat[1], &mat[0]);
     normalize_vector_xyz(&mat[2], &mat[2], 1.0f);
     cross_vectors_xyz(&mat[0], &mat[2], &mat[1]);
-    qcopy(&mat[3], &m->pos);
-    euler_matrix_df510(&wm[0], &m->rot);
-    qcopy(&wm[3], &m->pos);
+    qcopy(&mat[3], &ribbon_moby->pos);
+    euler_matrix_df510(&wm[0], &ribbon_moby->rot);
+    qcopy(&wm[3], &ribbon_moby->pos);
     qcopy(&layer_quads[0].v[0], &w[0]);
     scale_vector_xyz(&layer_quads[0].v[1], &layer_quads[0].v[0], -1.0f);
     qcopy(&layer_quads[1].v[0], &w[1]);
