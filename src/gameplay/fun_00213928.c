@@ -67,7 +67,7 @@ s32 fun_00213928(O_25a478 *obj, P_25a478 *hit_record, Q_25a478 *q, u32 flags, s3
     s32 r;
     s32 kind;
     s32 res;
-    Q_25a478 *o;
+    Q_25a478 *object_state;
 
     *out = 0;
     if (kp) *kp = -1;
@@ -198,8 +198,8 @@ s32 fun_00213928(O_25a478 *obj, P_25a478 *hit_record, Q_25a478 *q, u32 flags, s3
     q->h16 = kind;
     if (fp) *fp = hit_record->f2C;
     if (r == 4) {
-        o = ReadStateField(obj);
-        if (o) o->b2E = 1;
+        object_state = ReadStateField(obj);
+        if (object_state) object_state->b2E = 1;
     } else {
         Q_25a478 *o2 = ReadStateField(obj);
         if (o2) o2->b2E = 0;
