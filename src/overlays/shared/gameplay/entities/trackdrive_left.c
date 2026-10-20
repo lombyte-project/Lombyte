@@ -1428,35 +1428,35 @@ extern unsigned char *func_L00_00273E08_ea8b0(void *, int, unsigned char, int, i
                                               float) __asm__("FUN_L00_00272f68");
 extern int func_001FA898_2ebce8_ea8b0(float) __asm__("FUN_001fa6d0");
 extern char D_L02_00167440_ea8b0[] __asm__("D_L02_001673C0");
-void FUN_L02_002ea8b0(char *m) {
-    L02SpriteData_ea8b0 *p = *(L02SpriteData_ea8b0 **)(m + 0x78);
+void FUN_L02_002ea8b0(char *moby) {
+    L02SpriteData_ea8b0 *sprite_data = *(L02SpriteData_ea8b0 **)(moby + 0x78);
     float d[4] __attribute__((aligned(16)));
     float e[4] __attribute__((aligned(16)));
     int i, col;
     float f;
 
-    *(float *)(m + 0x18) += 0.5f;
-    func_001F9BF0_ea8b0(d, D_L02_00167440_ea8b0, m + 0x10);
+    *(float *)(moby + 0x18) += 0.5f;
+    func_001F9BF0_ea8b0(d, D_L02_00167440_ea8b0, moby + 0x10);
     fast_vec_normalize(d, d, -0.3f);
     fast_vec_normalize(e, d, 0.1f);
-    func_001F9BD8_ea8b0(d, d, m + 0x10);
-    *(float *)(m + 0x18) -= 0.5f;
+    func_001F9BD8_ea8b0(d, d, moby + 0x10);
+    *(float *)(moby + 0x18) -= 0.5f;
     for (i = 0; i < 4; i++) {
-        float h = p->a[i] + p->b[i];
-        p->a[i] = h;
+        float h = sprite_data->a[i] + sprite_data->b[i];
+        sprite_data->a[i] = h;
         if (255.0f <= h) {
-            p->a[i] = h - 255.0f;
+            sprite_data->a[i] = h - 255.0f;
         } else if (h <= 0.0f) {
-            p->a[i] = h + 255.0f;
+            sprite_data->a[i] = h + 255.0f;
         }
-        if (func_001F9908_ea8b0(&p->c[i])) {
-            p->c[i] = func_001F9850_ea8b0(0xFF);
+        if (func_001F9908_ea8b0(&sprite_data->c[i])) {
+            sprite_data->c[i] = func_001F9850_ea8b0(0xFF);
         }
-        f = convert_integer_to_float(func_001F9850_ea8b0(0xFF) - p->c[i]);
+        f = convert_integer_to_float(func_001F9850_ea8b0(0xFF) - sprite_data->c[i]);
         f = f / (float)func_001F9850_ea8b0(0xFF);
         col = func_001FA8A8_2ebce8_ea8b0(0x4040FFFF, 0x1040FFFF, func_001F9B88_ea8b0(0.5f - f));
-        func_L00_00273E08_ea8b0(d, col, func_001FA898_2ebce8_ea8b0(p->a[i]) & 0xFF, 0x35, 1, 2, 0,
-                                p->d[i]);
+        func_L00_00273E08_ea8b0(d, col, func_001FA898_2ebce8_ea8b0(sprite_data->a[i]) & 0xFF, 0x35, 1, 2, 0,
+                                sprite_data->d[i]);
         func_001F9BD8_ea8b0(d, d, e);
     }
 }
