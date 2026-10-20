@@ -406,7 +406,7 @@ extern f32 probe_ground_height(void *, s32, f32) __asm__("FUN_00213508");
 extern f32 frame_time_sq_gp __asm__("D_0015ED70") __attribute__((sda));
 extern f32 frame_scale __asm__("D_0015ED60") __attribute__((sda));
 s32 FUN_L00_00258b50(Obj *m, Ctl *c, void *v, Vec4 *out, f32 f);
-s32 FUN_L00_00258b50(Obj *m, Ctl *c, void *v, Vec4 *out, f32 f) {
+s32 FUN_L00_00258b50(Obj *moby, Ctl *movement_control, void *v, Vec4 *out, f32 f) {
     Vec4 save;
     Vec4 displacement;
     Vec4 p;
@@ -424,58 +424,58 @@ s32 FUN_L00_00258b50(Obj *m, Ctl *c, void *v, Vec4 *out, f32 f) {
     f32 normal_elevation_angle;
     f32 l2;
 
-    sp = c->f1C * f;
-    lim = c->f24 * f;
-    fast_vec_sub(&displacement, v, &m->pos);
+    sp = movement_control->f1C * f;
+    lim = movement_control->f24 * f;
+    fast_vec_sub(&displacement, v, &moby->pos);
     len = vector_length_xy(&displacement);
-    save.q = m->pos.q;
+    save.q = moby->pos.q;
     speed_increment = sp * len;
     if (sp < speed_increment)
         speed_increment = sp;
-    c->f10 = c->f10 + speed_increment;
-    if (len < c->f10 * 10.0f)
-        c->f10 = c->f10 - c->f20 * c->f10;
-    if (lim < c->f10)
-        c->f10 = lim;
-    else if (c->f10 < -lim)
-        c->f10 = -lim;
-    if (c->i38 & 4) {
-        displacement.f[0] = FUN_001f9dc8_c(c->f4C) * c->f10;
-        displacement.f[1] = fast_sin(c->f4C) * c->f10;
+    movement_control->f10 = movement_control->f10 + speed_increment;
+    if (len < movement_control->f10 * 10.0f)
+        movement_control->f10 = movement_control->f10 - movement_control->f20 * movement_control->f10;
+    if (lim < movement_control->f10)
+        movement_control->f10 = lim;
+    else if (movement_control->f10 < -lim)
+        movement_control->f10 = -lim;
+    if (movement_control->i38 & 4) {
+        displacement.f[0] = FUN_001f9dc8_c(movement_control->f4C) * movement_control->f10;
+        displacement.f[1] = fast_sin(movement_control->f4C) * movement_control->f10;
     } else {
-        displacement.f[0] = FUN_001f9dc8_c(m->f48) * c->f10;
-        displacement.f[1] = fast_sin(m->f48) * c->f10;
+        displacement.f[0] = FUN_001f9dc8_c(moby->f48) * movement_control->f10;
+        displacement.f[1] = fast_sin(moby->f48) * movement_control->f10;
     }
-    if (c->i38 & 1) {
+    if (movement_control->i38 & 1) {
         displacement.f[2] = 0.0f;
     } else {
-        displacement.f[2] = c->f18;
-        c->f18 = c->f18 - frame_time_sq_gp * 9.0f;
+        displacement.f[2] = movement_control->f18;
+        movement_control->f18 = movement_control->f18 - frame_time_sq_gp * 9.0f;
     }
-    lim = m->pos.f[2] + 0.04f;
-    fast_vec_add(&p, &m->pos, &displacement);
-    p.f[2] = m->pos.f[2] - c->f30;
-    if (FUN_L00_002583f0_c(&p, m, c->i38 & 0x20, c->f08, c->f0C)) {
+    lim = moby->pos.f[2] + 0.04f;
+    fast_vec_add(&p, &moby->pos, &displacement);
+    p.f[2] = moby->pos.f[2] - movement_control->f30;
+    if (FUN_L00_002583f0_c(&p, moby, movement_control->i38 & 0x20, movement_control->f08, movement_control->f0C)) {
         g = &D_L00_00173E40_c;
         normal_elevation_angle = fast_arc_tan(g->v40.f[2], vector_length_xy(&g->v40));
         h1 = g->f28;
         if (0.5f < normal_elevation_angle && 0.1f < vector_length_xy(&displacement)) {
             {
                 fast_vec_normalize(&q, &displacement, 0.57f);
-                fast_vec_add(&q, &q, &m->pos);
-                q.f[2] = m->pos.f[2] - c->f30;
-                if (FUN_L00_002583f0_c(&q, m, c->i38 & 0x20, c->f08, c->f0C)) {
+                fast_vec_add(&q, &q, &moby->pos);
+                q.f[2] = moby->pos.f[2] - movement_control->f30;
+                if (FUN_L00_002583f0_c(&q, moby, movement_control->i38 & 0x20, movement_control->f08, movement_control->f0C)) {
                     h2 = g->f28;
                     if (!(0.5f <= fast_arc_tan(g->v40.f[2], vector_length_xy(&g->v40))))
                         goto done;
                     mask = 0x22;
-                    if (!(c->i38 & 8))
+                    if (!(movement_control->i38 & 8))
                         goto done;
                     if (!(h2 < lim))
                         goto done;
                 } else {
                     mask = 0x22;
-                    if (!(c->i38 & 8))
+                    if (!(movement_control->i38 & 8))
                         goto done;
                 }
                 if (h1 < lim)
@@ -483,31 +483,31 @@ s32 FUN_L00_00258b50(Obj *m, Ctl *c, void *v, Vec4 *out, f32 f) {
             }
         }
     } else {
-        mask = (c->i38 & 8) ? 8 : 0x22;
+        mask = (movement_control->i38 & 8) ? 8 : 0x22;
     }
 done:
     if (!(mask & 2)) {
         l2 = vector_length_xy(&displacement);
         FUN_001f9a68_c(&p, &displacement, 1.0f / l2);
-        r = FUN_L00_00258ad0_c(m, &displacement, c->f04, c->i00, c->f30, c->i38);
+        r = FUN_L00_00258ad0_c(moby, &displacement, movement_control->f04, movement_control->i00, movement_control->f30, movement_control->i38);
         if (r & 2)
-            c->f18 = frame_scale * -0.01f;
+            movement_control->f18 = frame_scale * -0.01f;
         if (r & 1) {
             mask |= 1;
             if (displacement.f[0] * p.f[0] + displacement.f[1] * p.f[1] < l2 * 0.2f)
                 mask |= 2;
-            ground_height = probe_ground_height(&m->pos, 0, 0.5f);
-            if (c->f08 < save.f[2] - ground_height || c->f0C < ground_height - save.f[2]) {
+            ground_height = probe_ground_height(&moby->pos, 0, 0.5f);
+            if (movement_control->f08 < save.f[2] - ground_height || movement_control->f0C < ground_height - save.f[2]) {
                 mask |= 0x22;
-                m->pos.q = save.q;
+                moby->pos.q = save.q;
             }
         }
         qcopy(out, &displacement);
     } else {
-        if ((c->i38 ^ 1) & 1)
-            c->f18 = frame_scale * -0.01f;
+        if ((movement_control->i38 ^ 1) & 1)
+            movement_control->f18 = frame_scale * -0.01f;
     }
-    if (len < c->f2C)
+    if (len < movement_control->f2C)
         mask |= 4;
     return mask;
 }
