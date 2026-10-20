@@ -1173,11 +1173,11 @@ void FUN_L11_00319028(struct Moby *moby) {
     for (i = 0; i < 4; i++) {
         int a =
             FUN_001fa6e0_q(*(int *)&D_L11_00162380, *(int *)&D_L11_00162384, (float)i * 0.333f);
-        unsigned char c;
+        unsigned char updated_effect_byte;
         effect_byte_cursor[0] += effect_byte_cursor[4];
-        c = func_001FA898_r_q((float)effect_byte_cursor[0]);
+        updated_effect_byte = func_001FA898_r_q((float)effect_byte_cursor[0]);
         FUN_L00_00272f68_q(*(float *)(data + 0x1C) * convert_integer_to_float_q(effect_byte_cursor[8]) * 0.025f, effect_position, a,
-                           c, 0x35, 1, 2, 0);
+                           updated_effect_byte, 0x35, 1, 2, 0);
         effect_byte_cursor++;
         add_vector_xyz_q(effect_position, effect_position, position_step);
     }
