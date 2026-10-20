@@ -682,7 +682,7 @@ void FUN_L02_002d92f0(char *moby) {
     char *g;
     float f;
     float lim;
-    struct Hero *p;
+    struct Hero *hero_ptr;
     func_L00_00250800_d92f0(moby, 0, v);
     g = (char *)&hero.motion.pos;
     fast_vec_sub(v, v, g);
@@ -696,8 +696,8 @@ void FUN_L02_002d92f0(char *moby) {
     } else if (f < -lim) {
         f = -lim;
     }
-    p = &hero;
-    p->motion.rot.f[2] = func_001FA748_d92f0(f, p->motion.rot.f[2]);
+    hero_ptr = &hero;
+    hero_ptr->motion.rot.f[2] = func_001FA748_d92f0(f, hero_ptr->motion.rot.f[2]);
 }
 
 /* Draws an elliptical arc from start_angle to end_angle (radii radius_x, radius_y, around the screen centre) as five sprite
