@@ -1819,7 +1819,7 @@ extern void transform_vector_by_basis(void *, void *, void *);
 
 void FUN_L00_00275510(char *particle) {
     char *particle_data = particle + 0x20;
-    char *d = *(char **)(particle_data + 0x1C);
+    char *appearance_parameters = *(char **)(particle_data + 0x1C);
     float local_velocity[3];
     float u[3];
     float w[3];
@@ -1827,8 +1827,8 @@ void FUN_L00_00275510(char *particle) {
     float velocity_decay_factor;
     float r;
     int k;
-    k = *(int *)(d + 0xC) - *(short *)(particle + 0xA);
-    r = convert_integer_to_float(*(short *)(d + 8) * k / *(int *)(d + 0xC) + *(short *)(d + 0xA));
+    k = *(int *)(appearance_parameters + 0xC) - *(short *)(particle + 0xA);
+    r = convert_integer_to_float(*(short *)(appearance_parameters + 8) * k / *(int *)(appearance_parameters + 0xC) + *(short *)(appearance_parameters + 0xA));
     velocity_decay_factor = frame_scale * -0.01999998f + 1.0f;
     *(float *)(particle + 0xC) = r * 1000.0f;
     local_velocity[0] = *(float *)(particle + 0x20);
@@ -1855,8 +1855,8 @@ void FUN_L00_00275510(char *particle) {
     }
     particle[8] = particle[8] + 1;
     *(int *)(particle + 4) =
-        mine_blend_color((float)*(short *)(particle + 0xA) / convert_integer_to_float(*(int *)(d + 0xC)),
-                            *(int *)(d + 4), *(int *)d);
+        mine_blend_color((float)*(short *)(particle + 0xA) / convert_integer_to_float(*(int *)(appearance_parameters + 0xC)),
+                            *(int *)(appearance_parameters + 4), *(int *)appearance_parameters);
     if (fast_dec_timer(particle + 0xA)) {
         free_effect_particle(particle);
     }
