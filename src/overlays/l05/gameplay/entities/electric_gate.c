@@ -1419,13 +1419,13 @@ extern int is_point_inside_clip_volume_alt(void *, int) __asm__("FUN_00214720");
 extern void FUN_L03_00291918(char *);
 
 void FUN_L05_00316070(char *moby) {
-    int *p = *(int **)(moby + 0x78);
+    int *clip_volume_index_cursor = *(int **)(moby + 0x78);
     int i;
     int none = 1;
-    for (i = 0; i < 8; p++, i++) {
-        if (*p == -1)
+    for (i = 0; i < 8; clip_volume_index_cursor++, i++) {
+        if (*clip_volume_index_cursor == -1)
             continue;
-        if (is_point_inside_clip_volume_alt(D_L05_001671C0, *p) != 0) {
+        if (is_point_inside_clip_volume_alt(D_L05_001671C0, *clip_volume_index_cursor) != 0) {
             none = 0;
             break;
         }
