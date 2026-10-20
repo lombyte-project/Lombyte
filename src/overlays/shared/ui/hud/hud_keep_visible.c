@@ -562,29 +562,29 @@ extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void clear_u64_value(void *) __asm__("func_001F99F8");
 extern void draw_hud_sprite_subpixel(s32, s32, s32, s32, s32, s32) __asm__("func_00200080");
 
-int FUN_L00_00236e50(HudElem *e) {
+int FUN_L00_00236e50(HudElem *hud_element) {
     float origin[4], direction[4], first_step[4], second_step[4], third_step[4], star_position[4];
     int x, y;
     float offset;
     s32 image;
     int star_width, i;
 
-    x = e->unk50;
-    y = e->unk54;
-    e->w = D_L00_0015F760;
-    e->h = D_L00_0015F764;
-    hud_screen_position(e, &x, &y);
-    FUN_L00_00235ad8(e, &x, &y, e->unk6C, 0);
-    image = get_icon_frame(*(int *)e, 0);
-    FUN_L00_0023bac0(image, x + e->unk48, y + e->unk4A, D_L00_0015F760, D_L00_0015F764, 0x80);
+    x = hud_element->unk50;
+    y = hud_element->unk54;
+    hud_element->w = D_L00_0015F760;
+    hud_element->h = D_L00_0015F764;
+    hud_screen_position(hud_element, &x, &y);
+    FUN_L00_00235ad8(hud_element, &x, &y, hud_element->unk6C, 0);
+    image = get_icon_frame(*(int *)hud_element, 0);
+    FUN_L00_0023bac0(image, x + hud_element->unk48, y + hud_element->unk4A, D_L00_0015F760, D_L00_0015F764, 0x80);
     {
         float center_x, center_y, half_w, half_h;
         half_w = (D_L00_0015F760 * D_L00_0015F768 * 0.5f) / 17.0f;
         half_h = -(D_L00_0015F764 * D_L00_0015F76C * 0.5f) / 116.0f;
         origin[2] = 1.0f;
         origin[3] = 1.0f;
-        center_x = D_L00_0015F760 * D_L00_0015F768 * 0.5f + (x + e->unk48);
-        center_y = D_L00_0015F764 * D_L00_0015F76C * 0.5f + (y + e->unk4A);
+        center_x = D_L00_0015F760 * D_L00_0015F768 * 0.5f + (x + hud_element->unk48);
+        center_y = D_L00_0015F764 * D_L00_0015F76C * 0.5f + (y + hud_element->unk4A);
         direction[0] = (center_x + (1.0f - D_L00_0015F768) * 0.5f * D_L00_0015F760) * 16.0f;
         direction[1] = (center_y + (1.0f - D_L00_0015F76C) * 0.5f * D_L00_0015F764) * 16.0f;
         direction[2] = 0.0f;
@@ -592,9 +592,9 @@ int FUN_L00_00236e50(HudElem *e) {
         origin[0] = half_w * 16.0f;
         origin[1] = half_h * 16.0f;
     }
-    offset = (10000 - e->unk74) / 10000.0f;
+    offset = (10000 - hud_element->unk74) / 10000.0f;
     offset = 116.0f - (offset + offset) * 116.0f;
-    image = get_icon_frame(*(int *)e, 1);
+    image = get_icon_frame(*(int *)hud_element, 1);
     clear_u64_value(first_step);
     clear_u64_value(second_step);
     clear_u64_value(third_step);
@@ -613,7 +613,7 @@ int FUN_L00_00236e50(HudElem *e) {
         fast_vec_add(star_position, star_position, direction);
         draw_hud_sprite_subpixel(image, (int)star_position[0], (int)star_position[1], star_width, star_width, 0x80);
     }
-    return e->w;
+    return hud_element->w;
 }
 void FUN_L00_00235ea0();
 /* Calls FUN_L00_00235ea0. */
