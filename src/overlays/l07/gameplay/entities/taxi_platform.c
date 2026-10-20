@@ -2251,42 +2251,42 @@ extern void func_L00_0025F4A8_alt(void *, void *, void *, float, float, int, int
                                   int) __asm__("FUN_L00_0025e450");
 
 extern char *D_L07_00173ED0[];
-void FUN_L07_0030e458(struct Moby *m) {
-    char *d = (char *)m->pvars;
+void FUN_L07_0030e458(struct Moby *moby) {
+    char *moby_data = (char *)moby->pvars;
     float prev[4];
-    qcopy(prev, &m->pos);
-    add_vector_xyz(&m->pos, &m->pos, d);
+    qcopy(prev, &moby->pos);
+    add_vector_xyz(&moby->pos, &moby->pos, moby_data);
     {
         float g = frame_time_sq * 9.8f;
         float r = frame_time * 6.2831855f;
-        *(float *)(d + 8) -= g;
-        m->rot.z += r;
+        *(float *)(moby_data + 8) -= g;
+        moby->rot.z += r;
     }
-    if (m->scale < m->pclass->scale * 2.8f) {
-        m->scale *= 1.2f;
+    if (moby->scale < moby->pclass->scale * 2.8f) {
+        moby->scale *= 1.2f;
     }
     if (D_L07_0015F5CC % 3 == 0) {
-        FUN_L07_0029b8d8(m, 0, 400000.0f, 5.0f);
+        FUN_L07_0029b8d8(moby, 0, 400000.0f, 5.0f);
     }
-    if (FUN_001efa68(prev, &m->pos, 0, *(int *)(d + 0x10), 0) != 0 ||
-        func_L00_001F10E0_f(0.1f, &m->pos, 0, *(int *)(d + 0x10)) != 0) {
+    if (FUN_001efa68(prev, &moby->pos, 0, *(int *)(moby_data + 0x10), 0) != 0 ||
+        func_L00_001F10E0_f(0.1f, &moby->pos, 0, *(int *)(moby_data + 0x10)) != 0) {
         char *o = D_L07_00173ED0[2];
         if (o == 0 || (*(short *)(o + 0xA6) != 0x415 && *(short *)(o + 0xA6) != 0x419 &&
                        *(short *)(o + 0xA6) != 0x452)) {
-            if (m->visible != 0) {
-                func_L00_0025F4A8_alt(m, d, 0, 2.0f, 1.0f, 0, 3, 5, 0.0f, 0.0f, 1000.0f, 1.2f, 0,
+            if (moby->visible != 0) {
+                func_L00_0025F4A8_alt(moby, moby_data, 0, 2.0f, 1.0f, 0, 3, 5, 0.0f, 0.0f, 1000.0f, 1.2f, 0,
                                       10.0f, 0, 1, -1, 0);
             } else {
-                allocate_voice_for_target_entry(0, 0, (int)m);
+                allocate_voice_for_target_entry(0, 0, (int)moby);
             }
-            mark_moby_for_removal(m);
+            mark_moby_for_removal(moby);
             return;
         }
     }
-    if (m->pos.x < 2.0f || 1021.0f < m->pos.x ||
-        m->pos.y < 2.0f || 1021.0f < m->pos.y ||
-        m->pos.z < 2.0f || 1021.0f < m->pos.z) {
-        mark_moby_for_removal(m);
+    if (moby->pos.x < 2.0f || 1021.0f < moby->pos.x ||
+        moby->pos.y < 2.0f || 1021.0f < moby->pos.y ||
+        moby->pos.z < 2.0f || 1021.0f < moby->pos.z) {
+        mark_moby_for_removal(moby);
     }
 }
 #include "rnc/gameplay/entities/moby.h"
