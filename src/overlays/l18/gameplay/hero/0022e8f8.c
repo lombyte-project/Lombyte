@@ -163,6 +163,7 @@ void FUN_L18_0022e8f8(void) {
         HERO_STATE_GRIND_JUMP = 41,
         HERO_STATE_GRIND_RAIL_TRANSFER = 42,
         HERO_STATE_GRIND_ATTACK = 43,
+        HERO_STATE_ITEM_BUTTON_RELEASE_WAIT_ANIMATION_EXIT = 48,
         HERO_STATE_SWIM = 51,
         HERO_STATE_SWIM_IDLE = 52,
         HERO_STATE_GRIND_COLLISION_RECOVERY = 66,
@@ -710,7 +711,7 @@ void FUN_L18_0022e8f8(void) {
                     }
                     hero_set_state(HERO_STATE_IDLE, 1);
                     break;
-                case 48:
+                case HERO_STATE_ITEM_BUTTON_RELEASE_WAIT_ANIMATION_EXIT:
                     if (controller_state.held & hero.items[0].button_mask) {
                         break;
                     }
