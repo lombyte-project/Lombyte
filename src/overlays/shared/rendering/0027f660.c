@@ -53,35 +53,35 @@ extern int func_002140B0_80970(int) __asm__("FUN_00213260");
 extern int func_001F9850_80970(int) __asm__("FUN_001f96f8");
 extern unsigned char *D_L01_001B2538 __attribute__((section(".data")));
 char *FUN_L01_00280970(int a, char *b) {
-    char *p = func_00218928_80970(0xE);
+    char *particle = func_00218928_80970(0xE);
     int r;
-    int *q;
-    if (p) {
-        qcopy(p + 0x10, b + 0x10);
-        *(float *)(p + 0x10) += func_L00_00258C80_80970(0.0f, 0.03f);
-        *(float *)(p + 0x14) += func_L00_00258C80_80970(0.0f, 0.03f);
-        *(float *)(p + 0x18) += func_L00_00258C80_80970(0.0f, 0.03f);
-        *(int *)(p + 4) = -1;
+    int *particle_data;
+    if (particle) {
+        qcopy(particle + 0x10, b + 0x10);
+        *(float *)(particle + 0x10) += func_L00_00258C80_80970(0.0f, 0.03f);
+        *(float *)(particle + 0x14) += func_L00_00258C80_80970(0.0f, 0.03f);
+        *(float *)(particle + 0x18) += func_L00_00258C80_80970(0.0f, 0.03f);
+        *(int *)(particle + 4) = -1;
         r = func_001FA898_r_80970(4.0f);
-        p[9] = r - 0x60;
-        p[1] = 0;
-        p[3] = 0x48;
-        *(float *)(p + 0xC) = 29400.0f;
-        p[8] = func_002140B0_80970(0xFF);
-        p[2] = *D_L01_001B2538;
-        *(short *)(p + 0xA) = func_001F9850_80970(6);
-        q = (int *)(p + 0x20);
-        q[2] = (int)b;
-        q[1] = 1;
+        particle[9] = r - 0x60;
+        particle[1] = 0;
+        particle[3] = 0x48;
+        *(float *)(particle + 0xC) = 29400.0f;
+        particle[8] = func_002140B0_80970(0xFF);
+        particle[2] = *D_L01_001B2538;
+        *(short *)(particle + 0xA) = func_001F9850_80970(6);
+        particle_data = (int *)(particle + 0x20);
+        particle_data[2] = (int)b;
+        particle_data[1] = 1;
         if (a == 0) {
-            q[0] = 0;
+            particle_data[0] = 0;
         } else if (func_002140B0_80970(2)) {
-            q[0] = a;
+            particle_data[0] = a;
         } else {
-            q[0] = -a;
+            particle_data[0] = -a;
         }
     }
-    return p;
+    return particle;
 }
 
 extern char *D_L01_001B25A4[];
