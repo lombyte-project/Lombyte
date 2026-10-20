@@ -2071,7 +2071,7 @@ void FUN_L00_002e4fe8(char *camera, float *out_focus_velocity) {
     struct Hero *pad;
     struct Hero *padb;
     struct Hero *padc;
-    char *q;
+    char *timer_camera_state;
     float x, y;
     int flag;
     g = D_L00_00166E10;
@@ -2089,8 +2089,8 @@ void FUN_L00_002e4fe8(char *camera, float *out_focus_velocity) {
         if (*(unsigned char *)(attach_state + 0xC4) != 0xB) {
             *(unsigned char *)(attach_state + 0xC4) = 0xB;
             qcopy(camera + 0x40, camera);
-            q = *(char **)(camera + 0x70);
-            *(short *)(q + 0x20) = FUN_001f96f8_c2(*(int *)&D_L00_00161D24_gp);
+            timer_camera_state = *(char **)(camera + 0x70);
+            *(short *)(timer_camera_state + 0x20) = FUN_001f96f8_c2(*(int *)&D_L00_00161D24_gp);
         }
         return;
     }
