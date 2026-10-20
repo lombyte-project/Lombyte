@@ -11,10 +11,10 @@ typedef struct __sFILE {
 #define __SOFF 0x1000
 extern s64 reentrant_syscall_with_three_arguments() __asm__("func_00114518");
 extern long reentrant_write() __asm__("func_001185D0");
-int __swrite(void *cookie, char const *buf, s32 n) {
+int __swrite(void *cookie, char const *buf, s32 byte_count) {
     register FILE *fp = (FILE *)cookie;
     if (fp->_flags & __SAPP)
         (void)reentrant_syscall_with_three_arguments(fp->_data, fp->_file, 0, 2);
     fp->_flags &= ~__SOFF;
-    return reentrant_write(fp->_data, fp->_file, buf, n);
+    return reentrant_write(fp->_data, fp->_file, buf, byte_count);
 }
