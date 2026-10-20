@@ -673,9 +673,9 @@ void FUN_L18_002d5768(struct Moby *m) {
     pk.c = 0x0000FF9000000260ULL;
     pk.a = 0;
     for (i = 0; i < 4; i++) {
-        float *p = pk.m[i];
-        add_vector_xyz(p, sparkle_quad_corners[i], d + 0x10);
-        p[3] = 1.0f;
+        float *quad_vertex = pk.m[i];
+        add_vector_xyz(quad_vertex, sparkle_quad_corners[i], d + 0x10);
+        quad_vertex[3] = 1.0f;
         pk.col[i] = col;
         pk.uv[i][0] = sparkle_quad_uvs[i * 2];
         pk.uv[i][1] = sparkle_quad_uvs[i * 2 + 1];
