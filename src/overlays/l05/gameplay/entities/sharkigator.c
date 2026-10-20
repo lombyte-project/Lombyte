@@ -1823,36 +1823,36 @@ extern f32 FUN_L05_00304058_u(s32, void *, void *, f32) __asm__("FUN_L05_0030405
 /* Walks m toward its next path node, steering `side` radians off the direct heading while
    FUN_L05_00303e50 reports the way blocked; slows near the goal and arms the stuck timer
    when it drifts off the path. */
-void FUN_L05_00303b08(struct Moby *m, s32 node, f32 side) {
-    PathWalkerVars *v = (PathWalkerVars *)m->pvars;
+void FUN_L05_00303b08(struct Moby *moby, s32 node, f32 side) {
+    PathWalkerVars *v = (PathWalkerVars *)moby->pvars;
     Vec4f dir, out, goal;
-    f32 a;
+    f32 offset_heading;
     f32 dist;
 
-    if ((((s32)m >> 8) & 3) == (frame_number & 3)) {
-        if (follow_path(&v->path, 1, v->path_pos, &m->pos, node, &v->goal, D_L05_00161A98_gp * 0.4f) == 0)
+    if ((((s32)moby >> 8) & 3) == (frame_number & 3)) {
+        if (follow_path(&v->path, 1, v->path_pos, &moby->pos, node, &v->goal, D_L05_00161A98_gp * 0.4f) == 0)
             v->mode = 2;
     }
     qcopy(&goal, &v->goal);
-    dist = vector_distance(&m->pos, &goal);
-    if (dist > 5.0f && side != 0.0f && FUN_L05_00303e50((char *)m, (float *)&goal, D_L05_00161A98_gp * 0.4f)) {
-        a = fast_add_rotations(fast_arc_tan(goal.x - m->pos.x, goal.y - m->pos.y), side);
-        approach_angle(&m->rot.z, a, &v->yaw_vel, frame_time_sq * 12.566371f, frame_time_sq * 12.566371f,
+    dist = vector_distance(&moby->pos, &goal);
+    if (dist > 5.0f && side != 0.0f && FUN_L05_00303e50((char *)moby, (float *)&goal, D_L05_00161A98_gp * 0.4f)) {
+        offset_heading = fast_add_rotations(fast_arc_tan(goal.x - moby->pos.x, goal.y - moby->pos.y), side);
+        approach_angle(&moby->rot.z, offset_heading, &v->yaw_vel, frame_time_sq * 12.566371f, frame_time_sq * 12.566371f,
                        frame_time * 25.132742f);
     } else {
-        approach_angle(&m->rot.z, fast_arc_tan(goal.x - m->pos.x, goal.y - m->pos.y), &v->yaw_vel,
+        approach_angle(&moby->rot.z, fast_arc_tan(goal.x - moby->pos.x, goal.y - moby->pos.y), &v->yaw_vel,
                        frame_time_sq * 12.566371f, frame_time_sq * 12.566371f, frame_time * 25.132742f);
     }
-    if (angle_diff(m->rot.z, fast_arc_tan(goal.x - m->pos.x, goal.y - m->pos.y)) < 1.5707964f && dist > 3.0f)
+    if (angle_diff(moby->rot.z, fast_arc_tan(goal.x - moby->pos.x, goal.y - moby->pos.y)) < 1.5707964f && dist > 3.0f)
         approach_value(&v->speed, frame_time * 6.0f, frame_time_sq * 6.0f);
     else
         approach_value(&v->speed, frame_time, frame_time_sq * 6.0f);
-    dir.x = fast_cos(m->rot.z) * 2.0f;
-    dir.y = fast_sin(m->rot.z) * 2.0f;
+    dir.x = fast_cos(moby->rot.z) * 2.0f;
+    dir.y = fast_sin(moby->rot.z) * 2.0f;
     dir.z = 0.0f;
-    FUN_L00_00258b50(m, v->move, &dir, &out, 1.0f);
+    FUN_L00_00258b50(moby, v->move, &dir, &out, 1.0f);
     if (v->stuck_timer == 0) {
-        if (FUN_L05_00304058_u(v->path, &m->pos, &m->pos, D_L05_00161A98_gp * 0.4f) > 2.0f)
+        if (FUN_L05_00304058_u(v->path, &moby->pos, &moby->pos, D_L05_00161A98_gp * 0.4f) > 2.0f)
             v->stuck_timer = scale_game_frames(5);
     }
 }
