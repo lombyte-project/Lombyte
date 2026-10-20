@@ -95,12 +95,12 @@ void FUN_L05_002f4f60(int index, int trigger_arg, int inside) {
 extern int *D_L05_001ABCC0[];
 extern void FUN_L05_002f4f60(int, int, int);
 
-void FUN_L05_002f5190(int a, int b, int i, int c) {
-    unsigned short *p = (unsigned short *)D_L05_001ABCC0[i];
-    if (p != 0) {
+void FUN_L05_002f5190(int a, int b, int i, int inside) {
+    unsigned short *moby_index_entry = (unsigned short *)D_L05_001ABCC0[i];
+    if (moby_index_entry != 0) {
         do {
-            FUN_L05_002f4f60(*p & 0x7FFF, b, c);
-        } while (*(short *)p++ >= 0);
+            FUN_L05_002f4f60(*moby_index_entry & 0x7FFF, b, inside);
+        } while (*(short *)moby_index_entry++ >= 0);
     }
 }
 #include "qcopy.h"
