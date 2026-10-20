@@ -502,35 +502,35 @@ extern void clamp_vector_length(void *, void *, float) __asm__("FUN_001f9c90");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern int FUN_L00_002583f0(void *, struct Moby *, int, float, float);
 
-int FUN_L07_00313af0(struct Moby *m, struct ChaserVars *d, Vec4 *goal, int mode, float range) {
+int FUN_L07_00313af0(struct Moby *chaser_moby, struct ChaserVars *chaser_vars, Vec4 *goal, int mode, float range) {
     float v[4];
     char *path;
-    struct Moby *o;
+    struct Moby *target_moby;
     int r;
     float dist;
 
-    dist = vector_distance(&m->pos, goal);
+    dist = vector_distance(&chaser_moby->pos, goal);
     r = 4;
-    path = D_L07_001B0530[d->path];
+    path = D_L07_001B0530[chaser_vars->path];
     if (range < dist) {
-        r = FUN_L00_00259028(m, d->nav, mode, d->navOut);
+        r = FUN_L00_00259028(chaser_moby, chaser_vars->nav, mode, chaser_vars->navOut);
         if (r == 2) {
-            subtract_vector_xyz(v, path + (FUN_L01_0028b510(&m->pos, path, 0.0f) * 16 + 0x10), &m->pos);
-            clamp_vector_length(v, v, d->pullSpeed);
-            add_vector_xyz(&m->pos, &m->pos, v);
+            subtract_vector_xyz(v, path + (FUN_L01_0028b510(&chaser_moby->pos, path, 0.0f) * 16 + 0x10), &chaser_moby->pos);
+            clamp_vector_length(v, v, chaser_vars->pullSpeed);
+            add_vector_xyz(&chaser_moby->pos, &chaser_moby->pos, v);
         }
     } else {
-        FUN_L00_00258278(m, fast_arc_tan(hero.motion.pos.f[0] - m->pos.x, hero.motion.pos.f[1] - m->pos.y),
-                           d->turn, frame_time_sq * 2.0943952f, frame_time_sq * 0.69813168f, D_0015ED6C * 2.0943952f);
+        FUN_L00_00258278(chaser_moby, fast_arc_tan(hero.motion.pos.f[0] - chaser_moby->pos.x, hero.motion.pos.f[1] - chaser_moby->pos.y),
+                           chaser_vars->turn, frame_time_sq * 2.0943952f, frame_time_sq * 0.69813168f, D_0015ED6C * 2.0943952f);
     }
-    if ((level_frame_count & 3) == 3 && FUN_L00_002583f0(&m->pos, m, 0, 0.1f, 1.0f)) {
-        o = D_L07_00173EC0.moby;
-        if (o != 0 && D_L07_00173EC0.count > 0 && o->oclass == 0x42D && o->command == 0) {
-            if (((struct ChaserTargetVars *)o->pvars)->sticky) {
-                subtract_vector_xyz(v, &o->pos, &m->pos);
+    if ((level_frame_count & 3) == 3 && FUN_L00_002583f0(&chaser_moby->pos, chaser_moby, 0, 0.1f, 1.0f)) {
+        target_moby = D_L07_00173EC0.moby;
+        if (target_moby != 0 && D_L07_00173EC0.count > 0 && target_moby->oclass == 0x42D && target_moby->command == 0) {
+            if (((struct ChaserTargetVars *)target_moby->pvars)->sticky) {
+                subtract_vector_xyz(v, &target_moby->pos, &chaser_moby->pos);
                 *(s32 *)&v[2] = 0;
                 scale_vector_xyz(v, v, 0.5f);
-                add_vector_xyz(&m->pos, &m->pos, v);
+                add_vector_xyz(&chaser_moby->pos, &chaser_moby->pos, v);
             }
             D_L07_00173EC0.moby->command = 1;
         }
