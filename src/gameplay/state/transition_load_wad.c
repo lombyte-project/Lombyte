@@ -180,7 +180,7 @@ void transition_load_wad(void)
   WadTex *new_var2;
   s32 k_800 = 0x800;
   register s32 adj;
-  s64 t;
+  s64 special_texture_state_base_bits;
   s64 u;
   intro_overlay_timer = 0;
   i = 0;
@@ -204,11 +204,11 @@ void transition_load_wad(void)
   FlushCache(0);
   hdr = (WadHeader *) D_001940C0.hdr;
   upload_texture_images(((u8 *) hdr) + hdr->x0, hdr->x8, ((u8 *) hdr) + hdr->xC);
-  t = ((s64) ((gs_texture_allocation_base + hdr->x70) >> 8)) | 0x1D308000;
+  special_texture_state_base_bits = ((s64) ((gs_texture_allocation_base + hdr->x70) >> 8)) | 0x1D308000;
   u = (((s64) ((gs_texture_allocation_base + hdr->x74) >> 8)) << 37) | (((s64) 0xB800) << 19);
   data = ((u8 *) hdr) + hdr->data;
   base = data + hdr->x60;
-  special_material_template[0] = (t | u) | (((s64) (-1)) << 63);
+  special_material_template[0] = (special_texture_state_base_bits | u) | (((s64) (-1)) << 63);
   special_material_template[1] = 0xFFA0000000E0;
   special_material_template[2] = 0x0040000400004000;
   tex = (WadTex *) (((u8 *) hdr) + hdr->x34);
