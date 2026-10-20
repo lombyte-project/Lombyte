@@ -645,23 +645,23 @@ void taxi_update(struct Moby *moby) {
         TAXI_BLEND_TO_DESTINATION_POSE = 5,
         TAXI_WAIT_FOR_ENABLE = 6
     };
-    char *d = (char *)moby->pvars;
+    char *taxi_data = (char *)moby->pvars;
     float previous_position[4], previous_rotation[4], position_delta[4], transposed_rotation_or_start_position[4], transition_end_position[4], transition_start_rotation[4], transition_end_rotation[4], hero_local_offset[4];
     struct Hero *g;
     struct Hero *g2;
     float z;
     char *m;
-    char *e;
+    char *voice_slot_base;
     L16PickupPose *tab;
     float *qa;
-    int h;
+    int voice_slot_index;
     int s;
     qcopy(previous_position, &moby->pos);
     qcopy(previous_rotation, &moby->rot);
     FUN_L00_00266858(moby, (moby->flags ^ 1) & 1);
     switch (moby->state) {
     case TAXI_INITIALIZE:
-        *(short *)(d + 0xAA) = -1;
+        *(short *)(taxi_data + 0xAA) = -1;
         FUN_L16_002e4900_c(moby);
         break;
     case TAXI_WAIT_FOR_DEPARTURE:
@@ -676,7 +676,7 @@ void taxi_update(struct Moby *moby) {
                 FUN_L05_00319690(moby);
                 if ((*(int *)(D_0013CAE4) & 0x10) && *(int *)&D_L16_0015F594 == 8) {
                     moby->state = 3;
-                    m = FUN_L05_00319598(moby, *(short *)(d + 0xAE));
+                    m = FUN_L05_00319598(moby, *(short *)(taxi_data + 0xAE));
                     if (m != 0) {
                         m[0x20] = 2;
                         *(unsigned short *)(m + 0x34) |= 1;
@@ -689,49 +689,49 @@ void taxi_update(struct Moby *moby) {
         break;
     case TAXI_BLEND_TO_PATH_START:
         advance_accelerated_scalar_c(1.0f, D_0015ED70_c2, D_0015ED70_c2, frame_time * 0.5f,
-                                     (float *)(d + 0xB0), (float *)(d + 0xB4));
+                                     (float *)(taxi_data + 0xB0), (float *)(taxi_data + 0xB4));
         qa = transposed_rotation_or_start_position;
-        s = *(int *)(d + 0x80 - (-(*(short *)(d + 0xAC) * 4)));
+        s = *(int *)(taxi_data + 0x80 - (-(*(short *)(taxi_data + 0xAC) * 4)));
         tab = D_L16_001600EC;
         qcopy(qa, tab[s].position);
         qcopy(transition_start_rotation, tab[s].direction);
         z = 0.0f;
-        func_00215CA8_f5848(z, *(int **)(d + 0xA4), 0, transition_end_position, transition_end_rotation, 0);
-        lerp_vector(d + 0x60, transposed_rotation_or_start_position, transition_end_position, *(float *)(d + 0xB0));
-        *(float *)(d + 0x74) = fast_add_rotations(
-            fast_subtract_rotations(transition_end_rotation[1], transition_start_rotation[1]) * *(float *)(d + 0xB0), transition_start_rotation[1]);
-        *(float *)(d + 0x78) = fast_add_rotations(
-            fast_subtract_rotations(transition_end_rotation[2], transition_start_rotation[2]) * *(float *)(d + 0xB0), transition_start_rotation[2]);
-        if (1.0f <= *(float *)(d + 0xB0)) {
-            *(float *)(d + 0xB0) = z;
-            *(float *)(d + 0xB4) = z;
+        func_00215CA8_f5848(z, *(int **)(taxi_data + 0xA4), 0, transition_end_position, transition_end_rotation, 0);
+        lerp_vector(taxi_data + 0x60, transposed_rotation_or_start_position, transition_end_position, *(float *)(taxi_data + 0xB0));
+        *(float *)(taxi_data + 0x74) = fast_add_rotations(
+            fast_subtract_rotations(transition_end_rotation[1], transition_start_rotation[1]) * *(float *)(taxi_data + 0xB0), transition_start_rotation[1]);
+        *(float *)(taxi_data + 0x78) = fast_add_rotations(
+            fast_subtract_rotations(transition_end_rotation[2], transition_start_rotation[2]) * *(float *)(taxi_data + 0xB0), transition_start_rotation[2]);
+        if (1.0f <= *(float *)(taxi_data + 0xB0)) {
+            *(float *)(taxi_data + 0xB0) = z;
+            *(float *)(taxi_data + 0xB4) = z;
             moby->state = 4;
         }
         break;
     case TAXI_FOLLOW_PATH:
         if (FUN_L05_003195f8(moby)) {
-            *(int *)(d + 0xB0) = 0;
-            *(int *)(d + 0xB4) = 0;
+            *(int *)(taxi_data + 0xB0) = 0;
+            *(int *)(taxi_data + 0xB4) = 0;
             moby->state = 5;
         }
         break;
     case TAXI_BLEND_TO_DESTINATION_POSE:
         advance_accelerated_scalar_c(1.0f, D_0015ED70_c2, D_0015ED70_c2, frame_time * 0.5f,
-                                     (float *)(d + 0xB0), (float *)(d + 0xB4));
+                                     (float *)(taxi_data + 0xB0), (float *)(taxi_data + 0xB4));
         qa = transition_end_position;
-        s = *(int *)(d + 0x80 - (-(*(short *)(d + 0xAE) * 4)));
+        s = *(int *)(taxi_data + 0x80 - (-(*(short *)(taxi_data + 0xAE) * 4)));
         tab = D_L16_001600EC;
         qcopy(qa, tab[s].position);
         qcopy(transition_end_rotation, tab[s].direction);
-        sample_camera_path_u(*(int **)(d + 0xA4), 0, transposed_rotation_or_start_position, transition_start_rotation, 0, (float)**(int **)(d + 0xA4));
-        lerp_vector(d + 0x60, transposed_rotation_or_start_position, transition_end_position, *(float *)(d + 0xB0));
-        *(float *)(d + 0x74) = fast_add_rotations(
-            fast_subtract_rotations(transition_end_rotation[1], transition_start_rotation[1]) * *(float *)(d + 0xB0), transition_start_rotation[1]);
-        *(float *)(d + 0x78) = fast_add_rotations(
-            fast_subtract_rotations(transition_end_rotation[2], transition_start_rotation[2]) * *(float *)(d + 0xB0), transition_start_rotation[2]);
-        if (1.0f <= *(float *)(d + 0xB0)) {
-            *(int *)(d + 0xB0) = 0;
-            *(int *)(d + 0xB4) = 0;
+        sample_camera_path_u(*(int **)(taxi_data + 0xA4), 0, transposed_rotation_or_start_position, transition_start_rotation, 0, (float)**(int **)(taxi_data + 0xA4));
+        lerp_vector(taxi_data + 0x60, transposed_rotation_or_start_position, transition_end_position, *(float *)(taxi_data + 0xB0));
+        *(float *)(taxi_data + 0x74) = fast_add_rotations(
+            fast_subtract_rotations(transition_end_rotation[1], transition_start_rotation[1]) * *(float *)(taxi_data + 0xB0), transition_start_rotation[1]);
+        *(float *)(taxi_data + 0x78) = fast_add_rotations(
+            fast_subtract_rotations(transition_end_rotation[2], transition_start_rotation[2]) * *(float *)(taxi_data + 0xB0), transition_start_rotation[2]);
+        if (1.0f <= *(float *)(taxi_data + 0xB0)) {
+            *(int *)(taxi_data + 0xB0) = 0;
+            *(int *)(taxi_data + 0xB4) = 0;
             moby->state = 1;
             FUN_L05_00319510(moby);
         }
@@ -754,21 +754,21 @@ void taxi_update(struct Moby *moby) {
         g2->unk1F2 = 2;
         g2->unk1F4 = 2;
         FUN_L05_003198e8(moby);
-        if (voice_is_playing(moby, *(short *)(d + 0xAA)) == 0) {
-            *(short *)(d + 0xAA) = func_0022ED80_i(0, 4, moby);
+        if (voice_is_playing(moby, *(short *)(taxi_data + 0xAA)) == 0) {
+            *(short *)(taxi_data + 0xAA) = func_0022ED80_i(0, 4, moby);
         }
-    } else if (voice_is_playing(moby, *(short *)(d + 0xAA)) != 0) {
-        h = *(short *)(d + 0xAA);
-        if (h != -1) {
-            e = D_0013E550 + h * 0x70;
-            if (*(char **)(e + 0x88) == moby && *(unsigned char *)(e + 0x74) != 0) {
-                release_voice_slot(h);
+    } else if (voice_is_playing(moby, *(short *)(taxi_data + 0xAA)) != 0) {
+        voice_slot_index = *(short *)(taxi_data + 0xAA);
+        if (voice_slot_index != -1) {
+            voice_slot_base = D_0013E550 + voice_slot_index * 0x70;
+            if (*(char **)(voice_slot_base + 0x88) == moby && *(unsigned char *)(voice_slot_base + 0x74) != 0) {
+                release_voice_slot(voice_slot_index);
             }
         }
-        *(short *)(d + 0xAA) = -1;
+        *(short *)(taxi_data + 0xAA) = -1;
     }
     subtract_vector_xyz(position_delta, &moby->pos, previous_position);
-    update_entity_matrix(d + 0x20, position_delta, previous_rotation, &moby->rot);
+    update_entity_matrix(taxi_data + 0x20, position_delta, previous_rotation, &moby->rot);
 }
 #include "sda.h"
 #include "qcopy.h"
