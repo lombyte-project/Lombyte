@@ -104,7 +104,7 @@ void FUN_L15_0020a7a0(void) {
     f32 f;
     s32 r;
     s32 i;
-    f32 a;
+    f32 surface_probe_angle;
     u8 *p;
 
     s32 k;
@@ -243,12 +243,12 @@ d1:
         hero.unk2E8.f = ground_displacement_or_angles.f[0];
     }
     for (i = 0; i < 2; i++) {
-        a = 1.5707964f;
+        surface_probe_angle = 1.5707964f;
         if (i == 1) {
-            a = -a;
+            surface_probe_angle = -surface_probe_angle;
         }
-        FUN_L00_002335c8(&surface_probe_endpoint, 0.2f, a, 0.45f);
-        FUN_L00_002335c8(&unused_probe_vector, 0.2f, a, -0.45f);
+        FUN_L00_002335c8(&surface_probe_endpoint, 0.2f, surface_probe_angle, 0.45f);
+        FUN_L00_002335c8(&unused_probe_vector, 0.2f, surface_probe_angle, -0.45f);
         if (FUN_001efa68_c(&surface_probe_endpoint, &shared_ray_endpoint, 0x22, (s32)hero.moby, 0)) {
             f = HH.point.f[2] - hero.ground_z.f;
             hero.unk2C0.f[i] = f;
