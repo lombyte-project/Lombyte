@@ -1194,8 +1194,8 @@ void decoy_glove_update(unsigned char *moby) {
     extern void mark_moby_for_removal();
     extern void transform_vector_alt();
     extern int allocate_voice_for_target_entry(int, int, void *);
-    char *d;
-    char *p;
+    char *glove_vars;
+    char *tracked_target_moby;
     char *g;
     float vb[4];
     float va[4];
@@ -1207,35 +1207,35 @@ void decoy_glove_update(unsigned char *moby) {
     u128_D3B20 loc;
 
     if (moby == 0) return;
-    d = *(char **)(moby + 0x78);
-    if (d == 0) return;
+    glove_vars = *(char **)(moby + 0x78);
+    if (glove_vars == 0) return;
     *(u128_D3B20 *)va = 0;
     va[1] = -0.19f;
     va[2] = -0.11f;
     FUN_L00_0024f7c8(moby, 0, vb);
     build_moby_bone_transform(moby, 0, vd);
     transform_vector_alt(vc, va, vd);
-    add_vector_xyz(d + 0x40, vb, vc);
+    add_vector_xyz(glove_vars + 0x40, vb, vc);
 
-    p = *(char **)(d + 0x50);
-    if (p) {
-        *(int *)(p + 0x98) = 1;
-        if (D_0013E539_lui && *(short *)(*(char **)(d + 0x50) + 0xA6) != 0x76C) {
+    tracked_target_moby = *(char **)(glove_vars + 0x50);
+    if (tracked_target_moby) {
+        *(int *)(tracked_target_moby + 0x98) = 1;
+        if (D_0013E539_lui && *(short *)(*(char **)(glove_vars + 0x50) + 0xA6) != 0x76C) {
             qzero(&loc);
-            mine_spawn_drops(*(char **)(d + 0x50), D_L00_001B0830);
-            ((void (*)(void *))mark_moby_for_removal)(*(char **)(d + 0x50));
-            *(int *)(d + 0x50) = FUN_L00_002c35c0(moby, d + 0x40, &loc);
+            mine_spawn_drops(*(char **)(glove_vars + 0x50), D_L00_001B0830);
+            ((void (*)(void *))mark_moby_for_removal)(*(char **)(glove_vars + 0x50));
+            *(int *)(glove_vars + 0x50) = FUN_L00_002c35c0(moby, glove_vars + 0x40, &loc);
         }
-        if (*(char **)(d + 0x50) != 0 &&
-            *(unsigned char *)(*(char **)(d + 0x50) + 0x20) != 0xFE &&
-            *(unsigned char *)(*(char **)(d + 0x50) + 0x20) != 0xFD)
+        if (*(char **)(glove_vars + 0x50) != 0 &&
+            *(unsigned char *)(*(char **)(glove_vars + 0x50) + 0x20) != 0xFE &&
+            *(unsigned char *)(*(char **)(glove_vars + 0x50) + 0x20) != 0xFD)
             goto target_valid;
     }
-    *(int *)(d + 0x50) = 0;
+    *(int *)(glove_vars + 0x50) = 0;
 target_valid:
     g = ((char *)&hero);
     if (*(int *)(g + 0x2084) == 1) FUN_L00_002223f8(0x1E, 1);
-    if (fast_dec_timer((int *)(d + 0x54))) {
+    if (fast_dec_timer((int *)(glove_vars + 0x54))) {
         if (*(unsigned char *)(g + 0x20AC) == 0) {
             if (*(unsigned char *)(g + 0x20A8) && *(int *)(g + 0x1BC) == scale_game_frames_c2(0x11)) goto L3D10;
             if (*(int *)(((char *)&D_0013CAE4)) & *(int *)(g + 0x10A0)) {
@@ -1251,12 +1251,12 @@ L3D10:
     FUN_L00_00233db8(-1, 1);
     moby[0x20] = 3;
 L3D34:
-    *(u128_D3B20 *)&loc = *(u128_D3B20 *)(d + 0x40);
-    FUN_L00_002d2158_c((int)moby, (void *)d, (float *)&loc);
+    *(u128_D3B20 *)&loc = *(u128_D3B20 *)(glove_vars + 0x40);
+    FUN_L00_002d2158_c((int)moby, (void *)glove_vars, (float *)&loc);
 
     switch (moby[0x20]) {
     case DECOY_GLOVE_INITIALIZE:
-        *(int *)(d + 0x50) = 0;
+        *(int *)(glove_vars + 0x50) = 0;
         if (!(moby[0x70] & 2)) moby[0x20] = 1; else moby[0x20] = 2;
     case DECOY_GLOVE_WAIT_FOR_MOBY_FLAG:
         if (moby[0x70] & 2) moby[0x20] = 2;
@@ -1264,19 +1264,19 @@ L3D34:
     case DECOY_GLOVE_TARGET_FOLLOW_AND_SPAWN:
         break;
     case DECOY_GLOVE_RELEASE_DECOY:
-        if (*(char **)(d + 0x50)) {
+        if (*(char **)(glove_vars + 0x50)) {
             char *stats = ((char *)&item_usage);
             if (*(unsigned short *)(stats + 0xC8) <= 0xFFFE) *(unsigned short *)(stats + 0xC8) = *(unsigned short *)(stats + 0xC8) + 1;
             if (scale_game_frames_c2(D_0015EEA4) / 600 > (int)*(unsigned short *)(stats + 0xCA))
                 *(unsigned short *)(stats + 0xCA) = scale_game_frames_c2(D_0015EEA4) / 600;
             *(unsigned int *)(stats + 0xCC) = (*(unsigned int *)(stats + 0xCC) | (1 << D_0015ED84)) | 0x80000000;
-            FUN_L00_002c3888((float *)(d + 0x40), *(char **)(d + 0x50), *(char **)(*(char **)(d + 0x50) + 0x78) + 0x10);
-            *(int *)(d + 0x50) = 0;
+            FUN_L00_002c3888((float *)(glove_vars + 0x40), *(char **)(glove_vars + 0x50), *(char **)(*(char **)(glove_vars + 0x50) + 0x78) + 0x10);
+            *(int *)(glove_vars + 0x50) = 0;
         } else {
             allocate_voice_for_target_entry(0, 0, (int)moby);
         }
         moby[0x20] = 4;
-        *(int *)(d + 0x54) = scale_game_frames_c2(0x14);
+        *(int *)(glove_vars + 0x54) = scale_game_frames_c2(0x14);
         break;
     case DECOY_GLOVE_WAIT_AFTER_RELEASE: {
         char *h = ((char *)&hero);
@@ -1292,18 +1292,18 @@ L3D34:
         break;
     }
 
-    if (*(char **)(d + 0x50)) {
-        qcopy(*(char **)(d + 0x50) + 0x10, d + 0x40);
+    if (*(char **)(glove_vars + 0x50)) {
+        qcopy(*(char **)(glove_vars + 0x50) + 0x10, glove_vars + 0x40);
         return;
     }
     if (FUN_L00_00233e98(-1)) {
         qzero(&loc);
-        *(int *)(d + 0x50) = FUN_L00_002c35c0(moby, d + 0x40, &loc);
+        *(int *)(glove_vars + 0x50) = FUN_L00_002c35c0(moby, glove_vars + 0x40, &loc);
     } else {
         char *h = ((char *)&hero);
         if (*(unsigned char *)(h + 0x20A8)) {
             qzero(&loc);
-            *(int *)(d + 0x50) = FUN_L00_002c35c0(moby, d + 0x40, &loc);
+            *(int *)(glove_vars + 0x50) = FUN_L00_002c35c0(moby, glove_vars + 0x40, &loc);
         }
     }
 }
