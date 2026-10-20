@@ -681,20 +681,20 @@ void FUN_L00_00259508(void *destination, void *b, void *velocity, int frame_coun
 }
 float FUN_001f99c0(float);
 float square_root(float) __asm__("FUN_001f9988");
-int FUN_L00_002595a0(float *r0, float *r1, float a, float b, float c) {
+int FUN_L00_002595a0(float *larger_root_output, float *smaller_root_output, float a, float b, float c) {
     float discriminant = b * b - a * 4.0f * c;
     float sqrt_abs_discriminant, root_swap_temp;
     if (discriminant == 0.0f) {
-        *r0 = -b / (a + a);
+        *larger_root_output = -b / (a + a);
         return 1;
     }
     sqrt_abs_discriminant = square_root(FUN_001f99c0(discriminant));
-    *r0 = (-b + sqrt_abs_discriminant) / (a + a);
-    *r1 = (-b - sqrt_abs_discriminant) / (a + a);
-    if (*r0 < *r1) {
-        root_swap_temp = *r0;
-        *r1 = root_swap_temp;
-        *r0 = (-b - sqrt_abs_discriminant) / (a + a);
+    *larger_root_output = (-b + sqrt_abs_discriminant) / (a + a);
+    *smaller_root_output = (-b - sqrt_abs_discriminant) / (a + a);
+    if (*larger_root_output < *smaller_root_output) {
+        root_swap_temp = *larger_root_output;
+        *smaller_root_output = root_swap_temp;
+        *larger_root_output = (-b - sqrt_abs_discriminant) / (a + a);
     }
     {
         int r = 0;
