@@ -1083,33 +1083,33 @@ extern void rotation_matrix(void *, void *) __asm__("FUN_001fa050");
 extern void mmul_2acbf0(void *, void *, void *) __asm__("FUN_001fa378");
 extern s64 get_effect_texture(s32) __asm__("FUN_001f44b8");
 extern void draw_geometry_quad(void *, void *, s32) __asm__("FUN_001f7d30");
-void FUN_L00_002acbf0(M_2acbf0_002acbf0 *m) {
+void FUN_L00_002acbf0(M_2acbf0_002acbf0 *moby) {
     Q_2acbf0_002acbf0 quad;
     V_2acbf0_002acbf0 mat[4];
     V_2acbf0_002acbf0 mz[4];
     V_2acbf0_002acbf0 rot;
     V_2acbf0_002acbf0 rz;
-    PV_2acbf0_002acbf0 *pv = m->pv;
+    PV_2acbf0_002acbf0 *pv = moby->pv;
     s32 i;
     s32 odd;
-    f32 a, t;
+    f32 polar_angle, t;
     if (D_L00_0015F5C4_002acbf0 == 2) {
         return;
     }
     for (i = 0; i < 2; i++) {
         odd = i & 1;
-        a = atan2_2acbf0(seg_sqrt(pv->f20 * pv->f20 + pv->f28 * pv->f28), pv->f24);
-        rot.f[0] = appr_2acbf0(-a, 1.57079637f);
+        polar_angle = atan2_2acbf0(seg_sqrt(pv->f20 * pv->f20 + pv->f28 * pv->f28), pv->f24);
+        rot.f[0] = appr_2acbf0(-polar_angle, 1.57079637f);
         rot.f[1] = atan2_2acbf0(pv->f28, pv->f20);
         rot.f[2] = 0.0f;
         rot.f[3] = 0.0f;
         rz.f[0] = 0.0f;
         t = FUN_001fa6c0_002acbf0(D_L00_0015F5CC_002acbf0 % FUN_001f96f8_002acbf0(180));
         {
-            f32 d = i2f_2acbf0(180.0f);
+            f32 scaled_rotation_period = i2f_2acbf0(180.0f);
             f32 r;
             t *= 6.28318548f;
-            r = fast_normalize_angle(t / d);
+            r = fast_normalize_angle(t / scaled_rotation_period);
             if (odd) {
                 r = -r;
             }
