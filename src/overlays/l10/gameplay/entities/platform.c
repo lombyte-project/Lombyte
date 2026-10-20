@@ -1120,7 +1120,7 @@ extern void FUN_L00_001ff660(void *, void *, void *);
 extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void scale_vector_xyz_c(void *, void *, float) __asm__("FUN_001f9a68");
 
-int FUN_L10_002d8170(char *m, char *c, float *previous_position) {
+int FUN_L10_002d8170(char *moby, char *motion_data, float *previous_position) {
     float v0[4] __attribute__((aligned(16)));
     float v10[4] __attribute__((aligned(16)));
     float v20[4] __attribute__((aligned(16)));
@@ -1128,7 +1128,7 @@ int FUN_L10_002d8170(char *m, char *c, float *previous_position) {
     float v40[4] __attribute__((aligned(16)));
     char *g;
     int w6;
-    float p, q, r, t, u;
+    float yaw_cosine, yaw_sine, r, t, u;
 
     float one = 1.0f;
     float k;
@@ -1136,69 +1136,69 @@ int FUN_L10_002d8170(char *m, char *c, float *previous_position) {
     *(u128 *)v0 = *(u128 *)previous_position;
     *(u128 *)v10 = 0;
     v10[2] = one;
-    if (*(short *)(c + 0x14) == 0) {
-      if (collision_line(v0, m + 0x10, 0x10, (int)m, 0)) {
+    if (*(short *)(motion_data + 0x14) == 0) {
+      if (collision_line(v0, moby + 0x10, 0x10, (int)moby, 0)) {
         g = D_L10_001742C0;
         w6 = *(int *)(g + 0x18);
         if (w6 != 0) {
-            subtract_vector_xyz(g + 0x40, m + 0x10, (void *)(w6 + 0x10));
-            qcopy(m + 0x10, g + 0x20);
+            subtract_vector_xyz(g + 0x40, moby + 0x10, (void *)(w6 + 0x10));
+            qcopy(moby + 0x10, g + 0x20);
             normalize_vector_xyz(v20, g + 0x40, D_0015ED70 * 9.7f);
-            add_vector_xyz(m + 0x10, m + 0x10, v20);
-            FUN_L00_001ff660(c, c, g + 0x40);
-            scale_vector_xyz_c(c, c, 0.35f);
+            add_vector_xyz(moby + 0x10, moby + 0x10, v20);
+            FUN_L00_001ff660(motion_data, motion_data, g + 0x40);
+            scale_vector_xyz_c(motion_data, motion_data, 0.35f);
             normalize_vector_xyz(v20, g + 0x40, one);
             dot_vectors_xyz(v20, v10);
             qcopy(v30, g + 0x40);
                 k = 0.052359879f;
-                p = fast_cos(*(float *)(m + 0x48));
-                q = fast_sin(*(float *)(m + 0x48));
-                v40[0] = v30[0] * p + v30[1] * q;
+                yaw_cosine = fast_cos(*(float *)(moby + 0x48));
+                yaw_sine = fast_sin(*(float *)(moby + 0x48));
+                v40[0] = v30[0] * yaw_cosine + v30[1] * yaw_sine;
                 k = 0.052359879f;
-                p = fast_cos(*(float *)(m + 0x48));
-                q = fast_sin(*(float *)(m + 0x48));
+                yaw_cosine = fast_cos(*(float *)(moby + 0x48));
+                yaw_sine = fast_sin(*(float *)(moby + 0x48));
                 v40[2] = v30[2];
-                v40[1] = v30[1] * p - v30[0] * q;
+                v40[1] = v30[1] * yaw_cosine - v30[0] * yaw_sine;
                 r = seg_sqrt(v40[0] * v40[0] + v40[2] * v40[2]);
                 t = FUN_001f9e90_u(r, v40[1]);
-                *(float *)(m + 0x40) = FUN_L00_00200510(*(float *)(m + 0x40), -t, k);
+                *(float *)(moby + 0x40) = FUN_L00_00200510(*(float *)(moby + 0x40), -t, k);
                 u = FUN_001f9e90_u(v40[2], v40[0]);
-                *(float *)(m + 0x44) = FUN_L00_00200510(*(float *)(m + 0x44), u, k);
-                allocate_voice_for_target_entry(1, 0, (int)m);
+                *(float *)(moby + 0x44) = FUN_L00_00200510(*(float *)(moby + 0x44), u, k);
+                allocate_voice_for_target_entry(1, 0, (int)moby);
             return 1;
         }
         if (*(int *)(g + 0x1C) > 0) {
-            qcopy(m + 0x10, g + 0x20);
+            qcopy(moby + 0x10, g + 0x20);
             normalize_vector_xyz(v20, g + 0x40, D_0015ED70 * 9.7f);
-            add_vector_xyz(m + 0x10, m + 0x10, v20);
-            FUN_L00_001ff660(c, c, g + 0x40);
-            scale_vector_xyz_c(c, c, 0.5f);
+            add_vector_xyz(moby + 0x10, moby + 0x10, v20);
+            FUN_L00_001ff660(motion_data, motion_data, g + 0x40);
+            scale_vector_xyz_c(motion_data, motion_data, 0.5f);
             normalize_vector_xyz(v20, g + 0x40, one);
             if (0.707f < dot_vectors_xyz(v20, v10)) {
-                r = probe_ground_height(m + 0x10, 0, 0.5f);
-                if (*(float *)(m + 0x18) < r) *(float *)(m + 0x18) = r;
-                if (*(float *)(c + 0x8) < 0.0f) *(float *)(c + 0x8) = *(float *)(c + 0x8) * -0.4f;
-                if (vector_length_xyz(c) < D_0015ED6C) {
-                    clear_u64_value((float *)c);
+                r = probe_ground_height(moby + 0x10, 0, 0.5f);
+                if (*(float *)(moby + 0x18) < r) *(float *)(moby + 0x18) = r;
+                if (*(float *)(motion_data + 0x8) < 0.0f) *(float *)(motion_data + 0x8) = *(float *)(motion_data + 0x8) * -0.4f;
+                if (vector_length_xyz(motion_data) < D_0015ED6C) {
+                    clear_u64_value((float *)motion_data);
                     return 3;
                 }
             }
             qcopy(v30, D_L10_00174300);
                 k = 0.052359879f;
-                p = fast_cos(*(float *)(m + 0x48));
-                q = fast_sin(*(float *)(m + 0x48));
-                v40[0] = v30[0] * p + v30[1] * q;
+                yaw_cosine = fast_cos(*(float *)(moby + 0x48));
+                yaw_sine = fast_sin(*(float *)(moby + 0x48));
+                v40[0] = v30[0] * yaw_cosine + v30[1] * yaw_sine;
                 k = 0.052359879f;
-                p = fast_cos(*(float *)(m + 0x48));
-                q = fast_sin(*(float *)(m + 0x48));
+                yaw_cosine = fast_cos(*(float *)(moby + 0x48));
+                yaw_sine = fast_sin(*(float *)(moby + 0x48));
                 v40[2] = v30[2];
-                v40[1] = v30[1] * p - v30[0] * q;
+                v40[1] = v30[1] * yaw_cosine - v30[0] * yaw_sine;
                 r = seg_sqrt(v40[0] * v40[0] + v40[2] * v40[2]);
                 t = FUN_001f9e90_u(r, v40[1]);
-                *(float *)(m + 0x40) = FUN_L00_00200510(*(float *)(m + 0x40), -t, k);
+                *(float *)(moby + 0x40) = FUN_L00_00200510(*(float *)(moby + 0x40), -t, k);
                 u = FUN_001f9e90_u(v40[2], v40[0]);
-                *(float *)(m + 0x44) = FUN_L00_00200510(*(float *)(m + 0x44), u, k);
-                allocate_voice_for_target_entry(1, 0, (int)m);
+                *(float *)(moby + 0x44) = FUN_L00_00200510(*(float *)(moby + 0x44), u, k);
+                allocate_voice_for_target_entry(1, 0, (int)moby);
             return 2;
         }
       }
