@@ -257,10 +257,10 @@ extern int random_int_between(int lo, int hi) __asm__("FUN_L00_00257b90");
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern void FUN_L00_0026ced0(void *, void *, u32, u32, f32, s32);
 
-void FUN_L01_002e6518(SplashMoby_u *m, u128 *origin) {
+void FUN_L01_002e6518(SplashMoby_u *moby, u128 *origin) {
     SplashVec base;
     SplashVec vel;
-    SplashVec tmp;
+    SplashVec vector_scratch;
     SplashVec rel;
     SplashColors inner;
     SplashColors outer;
@@ -273,21 +273,21 @@ void FUN_L01_002e6518(SplashMoby_u *m, u128 *origin) {
     base.q = *origin;
     bp = &base;
     for (i = 2; i >= 0; i--) {
-        tmp.q = 0;
-        tmp.f[0] = random_float_between(1.0f, -1.0f) * (frame_time * 0.2f);
-        tmp.f[1] = random_float_between(1.0f, -1.0f) * (frame_time * 0.2f);
-        tmp.f[2] = random_float_between(0.8f, 1.2f) * (frame_time * -7.0f);
-        vel.q = tmp.q;
+        vector_scratch.q = 0;
+        vector_scratch.f[0] = random_float_between(1.0f, -1.0f) * (frame_time * 0.2f);
+        vector_scratch.f[1] = random_float_between(1.0f, -1.0f) * (frame_time * 0.2f);
+        vector_scratch.f[2] = random_float_between(0.8f, 1.2f) * (frame_time * -7.0f);
+        vel.q = vector_scratch.q;
         inner = D_L01_0020AF50;
         outer = D_L01_0020AF68;
-        moby_point_position(m, 1, &tmp);
-        transform_vector_by_basis(&vel, &vel, m->mtx);
-        fast_vec_sub(&rel, &m->pos, bp);
+        moby_point_position(moby, 1, &vector_scratch);
+        transform_vector_by_basis(&vel, &vel, moby->mtx);
+        fast_vec_sub(&rel, &moby->pos, bp);
         fast_vec_add(&vel, &vel, &rel);
         c1 = &inner.c[random_integer_below(6)];
         c2 = &outer.c[random_integer_below(6)];
         size = random_float_between(105000.0f, 157500.0f);
-        FUN_L00_0026ced0(&tmp, &vel, *c1, *c2, size, scale_game_frames(random_int_between(5, 0xF)));
+        FUN_L00_0026ced0(&vector_scratch, &vel, *c1, *c2, size, scale_game_frames(random_int_between(5, 0xF)));
     }
 }
 #include "qcopy.h"
