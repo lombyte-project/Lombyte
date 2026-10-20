@@ -2141,11 +2141,11 @@ extern int D_001413D0[] __attribute__((section(".data")));
 void FUN_L00_0024f8f0(s32, s32, T00209240 *, void *);
 /* Calls 0024f8f0 with mode 9 and a copy of D_L00_001E7C10 on a, or on D_001413D0 when a is 0. */
 void FUN_L00_00209240(s32 moby_override) {
-    T00209240 t;
+    T00209240 matrix_input_copy;
     if (moby_override == 0)
         moby_override = (*(s32 *)D_001413D0);
-    t = D_L00_001E7C10;
-    FUN_L00_0024f8f0(moby_override, 9, &t, (((char *)&hero) + 0xac0));
+    matrix_input_copy = D_L00_001E7C10;
+    FUN_L00_0024f8f0(moby_override, 9, &matrix_input_copy, (((char *)&hero) + 0xac0));
 }
 /* A packed pose: after this header come three lists of 64-bit entries, four
    saturated s16 each. Rotations (quaternions * 32768) start with the root at
