@@ -135,7 +135,7 @@ void skids_agent_update(struct Moby *moby) {
         SKIDS_AGENT_END_CONVERSATION = 5
     };
     char *data = (char *)moby->pvars;
-    s32 t;
+    s32 usage_time_value;
     f32 fade;
     struct Moby *prop;
 
@@ -167,19 +167,19 @@ void skids_agent_update(struct Moby *moby) {
             moby->state = 2;
         } else if (items_owned[0x5] == 0 && vec_dist(&moby->pos, &hero.motion.pos) < 3.0f) {
             if (D_00141968[14].count != 0) {
-                t = scale_frames(D_0015EEA4) - D_00141968[14].unk2 * 600;
-                if ((int)(scale_frames(0x12) * 60.0f) < t || D_00141968[14].unk2 * 600 == 0) {
+                usage_time_value = scale_frames(D_0015EEA4) - D_00141968[14].unk2 * 600;
+                if ((int)(scale_frames(0x12) * 60.0f) < usage_time_value || D_00141968[14].unk2 * 600 == 0) {
                     give_reward(0x7D4, 0xE);
                 } else {
-                    t = scale_frames(D_0015EEA4) / 600;
-                    if (D_00141968[14].unk2 < t) {
+                    usage_time_value = scale_frames(D_0015EEA4) / 600;
+                    if (D_00141968[14].unk2 < usage_time_value) {
                         D_00141968[14].unk2 = scale_frames(D_0015EEA4) / 600;
                     }
                 }
             } else {
                 D_00141968[14].count++;
-                t = scale_frames(D_0015EEA4) / 600;
-                if (D_00141968[14].unk2 < t) {
+                usage_time_value = scale_frames(D_0015EEA4) / 600;
+                if (D_00141968[14].unk2 < usage_time_value) {
                     D_00141968[14].unk2 = scale_frames(D_0015EEA4) / 600;
                 }
                 D_00141968[14].level_mask = D_00141968[14].level_mask | (1 << current_level_index) | 0x80000000;
