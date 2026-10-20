@@ -786,21 +786,21 @@ s32 random_integer_below(s32 arg0) __asm__("FUN_00213260");
 void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
 char *FUN_L17_002f4fb8(int list) {
-    short *s = D_L17_001AC140[list];
+    short *moby_index_ptr = D_L17_001AC140[list];
     float A[4], B[4], C[4], D[4], E[4], F[4];
-    char *m;
-    char *d;
+    char *selected_moby;
+    char *moby_pvars;
     int idx;
     do {
-        idx = (*s & 0x7FFF) << 8;
+        idx = (*moby_index_ptr & 0x7FFF) << 8;
         if (*(short *)(0xA6 + idx + D_L17_0015FFD8) != 0x733)
             continue;
         if (*(unsigned char *)(0x20 + idx + D_L17_0015FFD8) != 4)
             continue;
         if (random_integer_below(10))
             continue;
-        m = D_L17_0015FFD8 + idx;
-        d = *(char **)(m + 0x78);
+        selected_moby = D_L17_0015FFD8 + idx;
+        moby_pvars = *(char **)(selected_moby + 0x78);
         qcopy(C, D_L17_001676D0);
         C[0] = 0;
         if (C[1] > 0.17453292f)
@@ -809,26 +809,26 @@ char *FUN_L17_002f4fb8(int list) {
             C[1] = -0.17453292f;
         euler_rotation_basis(D, C);
         {
-            float f = fast_add_rotations(0.7853982f, (float)*(int *)(d + 0x88) * 1.5707964f);
-            fast_vec_normalize(A, E, fast_sin(f) * 12.0f);
+            float offset_angle = fast_add_rotations(0.7853982f, (float)*(int *)(moby_pvars + 0x88) * 1.5707964f);
+            fast_vec_normalize(A, E, fast_sin(offset_angle) * 12.0f);
             fast_vec_add(B, D_L17_001676C0, A);
-            fast_vec_normalize(A, F, fast_cos(f) * 12.0f);
+            fast_vec_normalize(A, F, fast_cos(offset_angle) * 12.0f);
         }
         fast_vec_add(B, B, A);
         fast_vec_normalize(A, D, 6.0f);
         fast_vec_add(B, B, A);
-        qcopy(d + 0xB0, D_0013E533 + 0xE9D);
-        qcopy(m + 0x10, B);
-        m[0x20] = 5;
-        m[0xBC] = 1;
-        *(float *)(d + 0x6C) = frame_time * 20.0f;
-        *(float *)(d + 0x94) = 5.0f;
-        if (*(unsigned char *)(m + 0x53))
-            blend_moby_animation(m, 0, 0, scale_game_frames(10));
-        *(unsigned short *)(m + 0x34) &= 0xFFFE;
-        *(int *)(m + 0x94) = *(int *)(*(char **)(m + 0x24) + 0x10);
-        return m;
-    } while (*s++ >= 0);
+        qcopy(moby_pvars + 0xB0, D_0013E533 + 0xE9D);
+        qcopy(selected_moby + 0x10, B);
+        selected_moby[0x20] = 5;
+        selected_moby[0xBC] = 1;
+        *(float *)(moby_pvars + 0x6C) = frame_time * 20.0f;
+        *(float *)(moby_pvars + 0x94) = 5.0f;
+        if (*(unsigned char *)(selected_moby + 0x53))
+            blend_moby_animation(selected_moby, 0, 0, scale_game_frames(10));
+        *(unsigned short *)(selected_moby + 0x34) &= 0xFFFE;
+        *(int *)(selected_moby + 0x94) = *(int *)(*(char **)(selected_moby + 0x24) + 0x10);
+        return selected_moby;
+    } while (*moby_index_ptr++ >= 0);
     return 0;
 }
 /* UpdateMoby 1873: wait for a target, then play two effects and delete itself. */
