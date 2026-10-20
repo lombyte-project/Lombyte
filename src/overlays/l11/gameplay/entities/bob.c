@@ -2004,7 +2004,7 @@ struct DataA500 {
 };
 
 void FUN_L11_0030a500(struct Moby *moby) {
-    struct DataA500 *d = (struct DataA500 *)moby->pvars;
+    struct DataA500 *moby_vars = (struct DataA500 *)moby->pvars;
     float base[4];
     float pos[4];
     float vel[4];
@@ -2012,20 +2012,20 @@ void FUN_L11_0030a500(struct Moby *moby) {
     float step;
     float heading;
     int i;
-    int n;
+    int iterations_per_joint;
     int j;
     int k;
     float life;
 
     for (i = 0; i < 4; i++) {
-        if (!((u8 *)d)[i * 0x40 + 0x101])
-            attach_manipulator(moby, i, &d->parts[i]);
+        if (!((u8 *)moby_vars)[i * 0x40 + 0x101])
+            attach_manipulator(moby, i, &moby_vars->parts[i]);
         step = frame_time * 12.217304f;
         if (moby->state == 1)
             step = frame_time * 2.6179938f;
-        if (((u8 *)d)[i * 0x40 + 0x101]) {
-            d->angle[i] = fast_add_rotations(d->angle[i], step);
-            FUN_L00_001fff28(d->parts[i].joint, 0, d->angle[i]);
+        if (((u8 *)moby_vars)[i * 0x40 + 0x101]) {
+            moby_vars->angle[i] = fast_add_rotations(moby_vars->angle[i], step);
+            FUN_L00_001fff28(moby_vars->parts[i].joint, 0, moby_vars->angle[i]);
         }
     }
     if (vector_distance(&moby->pos, D_L11_001677C0) > 38.0f)
@@ -2036,8 +2036,8 @@ void FUN_L11_0030a500(struct Moby *moby) {
         return;
     for (j = 0; j < 4; j++) {
         moby_point_position(moby, j, base);
-        n = moby->state == 1 ? 1 : 2;
-        for (k = 0; k < n; k++) {
+        iterations_per_joint = moby->state == 1 ? 1 : 2;
+        for (k = 0; k < iterations_per_joint; k++) {
             pos[0] = base[0] + randf_sym(0.0f, 0.3f);
             pos[1] = base[1] + randf_sym(0.0f, 0.3f);
             pos[2] = base[2] + randf_sym(0.0f, 0.3f);
