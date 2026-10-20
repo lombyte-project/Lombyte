@@ -37,21 +37,21 @@ extern O_26e008 *D_L01_0015FFD8_26e008 __asm__("D_L01_0015FFD8");
 
 int FUN_L01_0026e008(int i, int st);
 int FUN_L01_0026e008(int i, int st) {
-    unsigned short *p;
-    int n = 0;
-    O_26e008 *o;
+    unsigned short *moby_index_entry;
+    int qualifying_moby_count = 0;
+    O_26e008 *moby;
 
     if (D_L01_001ABCC0_26e008[i] == 0) {
         return 0;
     }
-    p = D_L01_001ABCC0_26e008[i];
+    moby_index_entry = D_L01_001ABCC0_26e008[i];
     do {
-        o = (O_26e008 *)(((*p & 0x7FFF) << 8) + (int)D_L01_0015FFD8_26e008);
-        if (o->state >= 0 && (st == -1 || (unsigned char)o->state != st)) {
-            n++;
+        moby = (O_26e008 *)(((*moby_index_entry & 0x7FFF) << 8) + (int)D_L01_0015FFD8_26e008);
+        if (moby->state >= 0 && (st == -1 || (unsigned char)moby->state != st)) {
+            qualifying_moby_count++;
         }
-    } while ((short)*p++ >= 0);
-    return n;
+    } while ((short)*moby_index_entry++ >= 0);
+    return qualifying_moby_count;
 }
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_0026E8E0.c: func_L01_0026F040), where it is exact; names translated to the US level program. */
