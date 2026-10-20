@@ -9,25 +9,25 @@ void draw_hud_sprite_rect(s32 tex, s32 x0, s32 y0, s32 x1, s32 y1, s32 u0, s32 v
 
 void draw_hud_sprite_rect(s32 tex, s32 x0, s32 y0, s32 x1, s32 y1, s32 u0, s32 texture_v0, s32 u1, s32 texture_v1,
                           s32 alpha) {
-    u64 *q;
+    u64 *packet_words;
 
     render_packet_cursor.tag->tag = 0x10000005;
     render_packet_cursor.tag->addr = 0;
     render_packet_cursor.tag->vif0 = 0;
     render_packet_cursor.tag->vif1 = 0x50000005;
-    q = (u64 *)++render_packet_cursor.tag;
-    q[0] = (u64)0xE800 << 47 | 0x8001;
-    q[1] = 0x5353106;
-    q[2] = get_frame_texture(tex);
-    q[3] = 0x156;
-    q[4] = (u64)alpha << 24 | 0x7F7F7F;
-    q[5] = u0 | ((u64)texture_v0 << 16);
-    q[6] = (x0 + screen_extent.left - 8) | ((u64)(y0 + screen_extent.top - 8) << 16) |
+    packet_words = (u64 *)++render_packet_cursor.tag;
+    packet_words[0] = (u64)0xE800 << 47 | 0x8001;
+    packet_words[1] = 0x5353106;
+    packet_words[2] = get_frame_texture(tex);
+    packet_words[3] = 0x156;
+    packet_words[4] = (u64)alpha << 24 | 0x7F7F7F;
+    packet_words[5] = u0 | ((u64)texture_v0 << 16);
+    packet_words[6] = (x0 + screen_extent.left - 8) | ((u64)(y0 + screen_extent.top - 8) << 16) |
            ((u64)hud_state.z << 32);
-    q[7] = u1 | ((u64)texture_v1 << 16);
-    q[8] = (x1 + screen_extent.left - 8) | ((u64)(y1 + screen_extent.top - 8) << 16) |
+    packet_words[7] = u1 | ((u64)texture_v1 << 16);
+    packet_words[8] = (x1 + screen_extent.left - 8) | ((u64)(y1 + screen_extent.top - 8) << 16) |
            ((u64)hud_state.z << 32);
-    q[9] = 0;
+    packet_words[9] = 0;
     render_packet_cursor.tag += 5;
 }
 
