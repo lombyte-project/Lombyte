@@ -307,13 +307,13 @@ void FUN_L00_002e9aa0(int a) {
     int i, j, k;
     for (i = 0; i < 64; i++) {
         for (j = 0; j < 64; j++) {
-            char *p = (char *)D_L00_0015EF80_9aa0[i * 64 + j];
-            if (p != 0) {
-                p += (int)D_L00_0015EF80_9aa0;
-                for (k = 0; k < *(int *)p; k++) {
-                    if (((E_9aa0 *)(p + 16))[k].type == 5) {
-                        char *e = D_L00_001600F4_9aa0 + ((E_9aa0 *)(p + 16))[k].idx * 128;
-                        no_op_main_callback_alt(e + 0x30, FUN_001f9af0_9aa0(e));
+            char *grid_cell_block = (char *)D_L00_0015EF80_9aa0[i * 64 + j];
+            if (grid_cell_block != 0) {
+                grid_cell_block += (int)D_L00_0015EF80_9aa0;
+                for (k = 0; k < *(int *)grid_cell_block; k++) {
+                    if (((E_9aa0 *)(grid_cell_block + 16))[k].type == 5) {
+                        char *referenced_record = D_L00_001600F4_9aa0 + ((E_9aa0 *)(grid_cell_block + 16))[k].idx * 128;
+                        no_op_main_callback_alt(referenced_record + 0x30, FUN_001f9af0_9aa0(referenced_record));
                     }
                 }
             }
