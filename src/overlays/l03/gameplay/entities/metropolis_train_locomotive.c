@@ -33,7 +33,7 @@ void FUN_L03_0029d1b8(struct Moby *moby) {
     };
     char *data = (char *)moby->pvars;
     int r;
-    float f;
+    float distance_to_reference;
     switch (moby->oclass) {
     case 0x33:
     case 0x40:
@@ -51,8 +51,8 @@ void FUN_L03_0029d1b8(struct Moby *moby) {
             if (!fast_dec_timer_s16(data + 0x148)) {
                 break;
             }
-            f = FUN_001f9b48(&moby->pos, D_L03_00166EC0);
-            if (f > 15.0f && f < 90.0f) {
+            distance_to_reference = FUN_001f9b48(&moby->pos, D_L03_00166EC0);
+            if (distance_to_reference > 15.0f && distance_to_reference < 90.0f) {
                 allocate_voice_for_target_entry(0, 0, (int)moby);
             }
             x = scale_game_frames(0x898);
