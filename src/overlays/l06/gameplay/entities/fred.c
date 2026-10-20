@@ -7788,7 +7788,7 @@ void FUN_L06_003049f8(char *moby)
         UPDATE_VECTOR_STREAMS = 2,
         EMIT_PARTICLE_BURST = 3
     };
-    Data_305E38 *d = *(Data_305E38 **)(moby + 0x78);
+    Data_305E38 *vector_stream_vars = *(Data_305E38 **)(moby + 0x78);
     union {
         float tmp[30][4];
         struct {
@@ -7804,12 +7804,12 @@ void FUN_L06_003049f8(char *moby)
         *(float *)(moby + 0x2C) = *(float *)(*(char **)(moby + 0x24) + 0x24) * D_L06_00162210;
         D_L06_00162238 = 0x16;
         D_L06_00162234 = 0x2D;
-        d->timer[1] = 0xB;
-        d->timer[2] = 0x17;
-        d->timer[3] = 0x22;
-        d->timer[0] = 0;
-        d->f18 = -1;
-        if (d->f10 != -1) {
+        vector_stream_vars->timer[1] = 0xB;
+        vector_stream_vars->timer[2] = 0x17;
+        vector_stream_vars->timer[3] = 0x22;
+        vector_stream_vars->timer[0] = 0;
+        vector_stream_vars->f18 = -1;
+        if (vector_stream_vars->f10 != -1) {
             moby[0x20] = 1;
             *(int *)(moby + 0x94) = 0;
         } else {
@@ -7817,7 +7817,7 @@ void FUN_L06_003049f8(char *moby)
         }
         break;
     case WAIT_FOR_LINKED_MOBY: {
-        char *e = D_L06_0015FFD8_301070 + (d->f10 << 8);
+        char *e = D_L06_0015FFD8_301070 + (vector_stream_vars->f10 << 8);
         if (*(short *)(e + 0xA6) == 0x463 && (unsigned char)e[0x20] < 3) {
             return;
         }
@@ -7834,8 +7834,8 @@ void FUN_L06_003049f8(char *moby)
         int k;
         int l;
 
-        if (voice_is_playing(moby, d->f18) == 0) {
-            d->f18 = allocate_voice_for_target_entry(0, 4, moby);
+        if (voice_is_playing(moby, vector_stream_vars->f18) == 0) {
+            vector_stream_vars->f18 = allocate_voice_for_target_entry(0, 4, moby);
         }
         FUN_L06_00305000_c(moby);
         v = D_L06_001621F8 + D_L06_001621FC * D_0015ED6C;
@@ -7846,41 +7846,41 @@ void FUN_L06_003049f8(char *moby)
         f21 = D_L06_00162204 / 30.0f;
         f20 = -(D_L06_00162204 * 0.5f);
         for (i = 0; i < 4; i++) {
-            if (d->timer[i] == 0) {
+            if (vector_stream_vars->timer[i] == 0) {
                 for (j = 0; j < 30; j++) {
-                    FUN_L06_00217300(d->a[i][j]);
-                    d->a[i][j][0] = f20;
+                    FUN_L06_00217300(vector_stream_vars->a[i][j]);
+                    vector_stream_vars->a[i][j][0] = f20;
                     FUN_L00_00257d78(u.tmp[j], 0.0f, D_L06_00162200 * D_0015ED6C);
                     f20 += f21;
                 }
                 for (k = 1; k < 29; k++) {
-                    add_vector_xyz_c(d->b[i][k], u.tmp[k - 1], u.tmp[k]);
-                    add_vector_xyz_c(d->b[i][k], d->b[i][k], u.tmp[k + 1]);
-                    fast_vec_scale_c(d->b[i][k], d->b[i][k], 0.333f);
+                    add_vector_xyz_c(vector_stream_vars->b[i][k], u.tmp[k - 1], u.tmp[k]);
+                    add_vector_xyz_c(vector_stream_vars->b[i][k], vector_stream_vars->b[i][k], u.tmp[k + 1]);
+                    fast_vec_scale_c(vector_stream_vars->b[i][k], vector_stream_vars->b[i][k], 0.333f);
                 }
-                d->timer[i] = D_L06_00162234;
+                vector_stream_vars->timer[i] = D_L06_00162234;
             } else {
                 for (l = 1; l < 29; l++) {
-                    add_vector_xyz_c(d->a[i][l], d->a[i][l], d->b[i][l]);
+                    add_vector_xyz_c(vector_stream_vars->a[i][l], vector_stream_vars->a[i][l], vector_stream_vars->b[i][l]);
                 }
-                d->timer[i]--;
+                vector_stream_vars->timer[i]--;
             }
         }
         if (fast_vec_dist(moby + 0x10, ((char *)D_L06_00167540)) < 48.0f) {
             enqueue_callback_list_1((int)FUN_L06_00305170_c, moby);
         }
-        if (d->f14 >= 0 && *(unsigned char *)(D_L06_0015FFD8_301070 + 0xBC + (d->f14 << 8)) != 0) {
-            int h;
+        if (vector_stream_vars->f14 >= 0 && *(unsigned char *)(D_L06_0015FFD8_301070 + 0xBC + (vector_stream_vars->f14 << 8)) != 0) {
+            int voice_slot_index;
             *(int *)(moby + 0x94) = 0;
             moby[0x20] = 3;
-            h = d->f18;
-            if (h != -1) {
-                char *e = D_0013E550 + h * 0x70;
+            voice_slot_index = vector_stream_vars->f18;
+            if (voice_slot_index != -1) {
+                char *e = D_0013E550 + voice_slot_index * 0x70;
                 if (*(char **)(e + 0x88) == moby && *(unsigned char *)(e + 0x74) != 0) {
-                    release_voice_slot(h);
+                    release_voice_slot(voice_slot_index);
                 }
             }
-            d->f18 = -1;
+            vector_stream_vars->f18 = -1;
             allocate_voice_for_target_entry(1, 0, moby);
         }
         break;
@@ -7901,15 +7901,15 @@ void FUN_L06_003049f8(char *moby)
             for (j = 0; j < 50; j++) {
                 int color;
                 float scale;
-                int s;
+                int particle_lifetime_frames;
                 unsigned char life;
                 fast_vec_normalize_c(u.m.pos, u.m.b, FUN_L00_00257c48(0.0f, D_L06_00162204 * 0.75f));
                 add_vector_xyz_c(u.m.pos, u.m.pos, u.m.b + 12);
                 color = fast_tween_color(D_L06_00162214, D_L06_00162218, random_float_between(0.0f, 1.0f));
                 scale = random_float_between(D_L06_0016221C, D_L06_00162220);
-                s = truncate_float_to_s32_c(random_float_between((float)D_L06_00162224, (float)D_L06_00162228));
+                particle_lifetime_frames = truncate_float_to_s32_c(random_float_between((float)D_L06_00162224, (float)D_L06_00162228));
                 FUN_L00_00257d78(u.m.vel, D_L06_0016222C * D_0015ED6C, D_L06_00162230 * D_0015ED6C);
-                life = scale_game_frames(s);
+                life = scale_game_frames(particle_lifetime_frames);
                 func_L00_00273F80_r(u.m.pos, u.m.vel, color, scale, life, (unsigned char)random_integer_below(0xFF), 0);
             }
         }
