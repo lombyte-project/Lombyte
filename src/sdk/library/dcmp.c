@@ -9,15 +9,15 @@ typedef struct _Bigint {
     u32 _x[1];
 } _Bigint;
 
-s32 Dcmp(_Bigint *a, _Bigint *b) {
+s32 Dcmp(_Bigint *left_operand, _Bigint *b) {
     u32 *xa, *xa0, *xb, *xb0;
     s32 i, j;
 
-    i = a->_wds;
+    i = left_operand->_wds;
     j = b->_wds;
     if (i -= j)
         return i;
-    xa0 = a->_x;
+    xa0 = left_operand->_x;
     xa = xa0 + j;
     xb0 = b->_x;
     xb = xb0 + j;
