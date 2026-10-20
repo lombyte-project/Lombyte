@@ -2381,7 +2381,7 @@ void FUN_L00_002affa8(char *self, O *out, char *skip) {
     VU v;
     VU lv;
     char *candidate_moby;
-    s32 p;
+    s32 candidate_aim_record_address;
     s32 i;
     s32 flag;
     f32 best, yaw, pitch, dist, ang, z, angh, angv;
@@ -2407,20 +2407,20 @@ void FUN_L00_002affa8(char *self, O *out, char *skip) {
         opos = candidate_moby + 0x10;
         if (40.0f < FUN_001f9b48(&v, spos))
             goto next;
-        p = FUN_002141f8_u(candidate_moby);
-        if (p == 0)
+        candidate_aim_record_address = FUN_002141f8_u(candidate_moby);
+        if (candidate_aim_record_address == 0)
             goto np;
-        if (p <= 0x100000)
+        if (candidate_aim_record_address <= 0x100000)
             goto np;
-        if (0x3FFFFF < p)
+        if (0x3FFFFF < candidate_aim_record_address)
             goto np;
         {
-            f32 pf = *(f32 *)(p + 0x10);
+            f32 pf = *(f32 *)(candidate_aim_record_address + 0x10);
             z = v.f[2] + pf;
         }
         goto zset;
     np:
-        p = 0;
+        candidate_aim_record_address = 0;
         z = v.f[2] + 0.5f;
     zset:
         v.f[2] = z;
@@ -2449,8 +2449,8 @@ void FUN_L00_002affa8(char *self, O *out, char *skip) {
         fast_vec_add(&lv, &lv, spos);
         z = fast_arc_sin(FUN_001f9b48(&lv, &v) / (dist + dist));
         ang = ang + 1.5707964f;
-        if (ang < z + z && p != 0) {
-            ang = convert_integer_to_float(*(u8 *)(p + 0xA) << 3) * 0.125f;
+        if (ang < z + z && candidate_aim_record_address != 0) {
+            ang = convert_integer_to_float(*(u8 *)(candidate_aim_record_address + 0xA) << 3) * 0.125f;
             fast_arc_sin(ang / dist);
         }
         flag = 1;
@@ -2466,8 +2466,8 @@ void FUN_L00_002affa8(char *self, O *out, char *skip) {
                 goto next;
             z = 0.5f;
             out->owner = candidate_moby;
-            if (p != 0)
-                z = *(f32 *)(p + 0x10);
+            if (candidate_aim_record_address != 0)
+                z = *(f32 *)(candidate_aim_record_address + 0x10);
             out->f2C = angh;
             out->w38 = flag;
             out->f30 = pitch;
