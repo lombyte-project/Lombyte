@@ -79,12 +79,12 @@ void FUN_L14_002b3358(char *moby) {
 
 extern float D_L14_001614DC __attribute__((sda));
 void FUN_L14_002b3578(char *moby) {
-    float f = (D_L14_001614DC - 1.0f) * frame_scale + 1.0f;
-    char *d = *(char **)(moby + 0x78);
-    *(float *)(d + 0x254) = *(float *)(d + 0x254) * f;
-    *(float *)(d + 0x258) = *(float *)(d + 0x258) * f;
-    *(float *)(moby + 0x10) = *(float *)(moby + 0x10) + *(float *)(d + 0x254);
-    *(float *)(moby + 0x14) = *(float *)(moby + 0x14) + *(float *)(d + 0x258);
+    float planar_velocity_scale = (D_L14_001614DC - 1.0f) * frame_scale + 1.0f;
+    char *moby_vars = *(char **)(moby + 0x78);
+    *(float *)(moby_vars + 0x254) = *(float *)(moby_vars + 0x254) * planar_velocity_scale;
+    *(float *)(moby_vars + 0x258) = *(float *)(moby_vars + 0x258) * planar_velocity_scale;
+    *(float *)(moby + 0x10) = *(float *)(moby + 0x10) + *(float *)(moby_vars + 0x254);
+    *(float *)(moby + 0x14) = *(float *)(moby + 0x14) + *(float *)(moby_vars + 0x258);
 }
 /* steers the pitch angle of a moby toward a target and updates the joint */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B2A28.c: func_L14_002B4A00), where it is exact; names translated to the US level program. */
