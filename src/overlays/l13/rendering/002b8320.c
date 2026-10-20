@@ -8,18 +8,18 @@ extern void FUN_L11_00310cf8(float, float, float, float, float, int, int, int, i
                              int);
 
 /* Draws four quads a quarter turn apart; same routine as FUN_L11_00311048 with this level's texture. */
-void FUN_L13_002b8320(unsigned char a, unsigned char b, unsigned char c, unsigned char d, float x,
+void FUN_L13_002b8320(unsigned char red, unsigned char b, unsigned char blue, unsigned char alpha, float x,
                       float y, float size_scale, float ang) {
     int effect_texture;
     float w;
     effect_texture = get_effect_texture(0x37);
     w = size_scale * 20.0f;
-    FUN_L11_00310cf8(x, y, w, w, ang, 0x3F, 0x3F, effect_texture, 0xFFFFF3, a, b, c, d);
+    FUN_L11_00310cf8(x, y, w, w, ang, 0x3F, 0x3F, effect_texture, 0xFFFFF3, red, b, blue, alpha);
     ang = fast_add_rotations(ang, 1.5707964f);
-    FUN_L11_00310cf8(x, y, w, w, ang, 0x3F, 0x3F, effect_texture, 0xFFFFF3, a, b, c, d);
+    FUN_L11_00310cf8(x, y, w, w, ang, 0x3F, 0x3F, effect_texture, 0xFFFFF3, red, b, blue, alpha);
     ang = fast_add_rotations(ang, 1.5707964f);
-    FUN_L11_00310cf8(x, y, w, w, ang, 0x3F, 0x3F, effect_texture, 0xFFFFF3, a, b, c, d);
+    FUN_L11_00310cf8(x, y, w, w, ang, 0x3F, 0x3F, effect_texture, 0xFFFFF3, red, b, blue, alpha);
     ang = fast_add_rotations(ang, 1.5707964f);
-    FUN_L11_00310cf8(x, y, w, w, ang, 0x3F, 0x3F, effect_texture, 0xFFFFF3, a, b, c, d);
+    FUN_L11_00310cf8(x, y, w, w, ang, 0x3F, 0x3F, effect_texture, 0xFFFFF3, red, b, blue, alpha);
 }
 
