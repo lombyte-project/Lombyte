@@ -923,20 +923,20 @@ extern void update_joint_animation(char *, char *, int, float, float) __asm__("F
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
 
-void FUN_L16_002d4590(char *m) {
+void FUN_L16_002d4590(char *commando_moby) {
     float position[4], target[4], matrix[16], delta[4], aim[4], aimDelta[4], velocity[4];
-    char *d = *(char **)(m + 0x78);
-    if (*(int *)(d + 0x114) != 2) {
+    char *commando_data = *(char **)(commando_moby + 0x78);
+    if (*(int *)(commando_data + 0x114) != 2) {
         float *savedTarget, *savedMatrix;
         float yaw, pitch;
-        qcopy(position, m + 0x10);
+        qcopy(position, commando_moby + 0x10);
         position[2] += 2.0f;
-        if (*(short *)(*(char **)(d + 0x110) + 0xA6) == 0)
+        if (*(short *)(*(char **)(commando_data + 0x110) + 0xA6) == 0)
             qcopy(target, D_0013F420);
         else
-            qcopy(target, d + 0xD0);
+            qcopy(target, commando_data + 0xD0);
         savedTarget = target;
-        transpose_rotation_matrix(matrix, m + 0xC0);
+        transpose_rotation_matrix(matrix, commando_moby + 0xC0);
         subtract_vector_xyz(delta, savedTarget, position);
         transform_vector_by_basis(delta, delta, matrix);
         yaw = fast_arc_tan(delta[0], delta[1]);
@@ -951,15 +951,15 @@ void FUN_L16_002d4590(char *m) {
             pitch = -0.7853982f;
         {
             float halfYaw = yaw * 0.5f, halfPitch = pitch * 0.5f;
-            *(float *)(d + 0x198) = halfYaw;
-            *(float *)(d + 0x194) = halfPitch;
-            *(float *)(d + 0x218) = halfYaw;
-            *(float *)(d + 0x214) = halfPitch;
+            *(float *)(commando_data + 0x198) = halfYaw;
+            *(float *)(commando_data + 0x194) = halfPitch;
+            *(float *)(commando_data + 0x218) = halfYaw;
+            *(float *)(commando_data + 0x214) = halfPitch;
         }
-        if ((unsigned int)(*(unsigned char *)(m + 0x20) - 4) < 2) {
+        if ((unsigned int)(*(unsigned char *)(commando_moby + 0x20) - 4) < 2) {
             float yaw2, pitch2, bound;
-            normalize_vector_xyz(aim, m + 0xC0, 1.0f);
-            normalize_vector_xyz(velocity, m + 0xD0, 0.5f);
+            normalize_vector_xyz(aim, commando_moby + 0xC0, 1.0f);
+            normalize_vector_xyz(velocity, commando_moby + 0xD0, 0.5f);
             add_vector_xyz(aim, aim, position);
             add_vector_xyz(aim, aim, velocity);
             subtract_vector_xyz(aimDelta, savedTarget, aim);
@@ -974,13 +974,13 @@ void FUN_L16_002d4590(char *m) {
                 yaw2 = 0.34906584f;
             else if (yaw2 < -0.34906584f)
                 yaw2 = -0.34906584f;
-            *(float *)(d + 0x294) = pitch2;
-            *(float *)(d + 0x298) = yaw2;
+            *(float *)(commando_data + 0x294) = pitch2;
+            *(float *)(commando_data + 0x298) = yaw2;
         }
     }
-    update_joint_animation(m, d + 0x130, 1, frame_scale_sq * 0.03f, frame_scale_sq * 0.3f);
-    update_joint_animation(m, d + 0x1B0, 2, frame_scale_sq * 0.03f, frame_scale_sq * 0.3f);
-    update_joint_animation(m, d + 0x230, 3, frame_scale_sq * 0.03f, frame_scale_sq * 0.3f);
+    update_joint_animation(commando_moby, commando_data + 0x130, 1, frame_scale_sq * 0.03f, frame_scale_sq * 0.3f);
+    update_joint_animation(commando_moby, commando_data + 0x1B0, 2, frame_scale_sq * 0.03f, frame_scale_sq * 0.3f);
+    update_joint_animation(commando_moby, commando_data + 0x230, 3, frame_scale_sq * 0.03f, frame_scale_sq * 0.3f);
 }
 /* Emit randomized joint particles while the moby is active. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A1B58.c: func_L16_002D5CD0), where it is exact; names translated to the US level program. */
