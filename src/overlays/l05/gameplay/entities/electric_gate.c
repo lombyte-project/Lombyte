@@ -531,7 +531,7 @@ void drain_cover_update(DrainCoverMoby *moby) {
     float effect_velocity[4];
     float effect_position[4];
     float particle_position[4];
-    int r, g, bl, a, b;
+    int r, g, bl, particle_configuration, b;
     int i;
     int index;
     char *entry;
@@ -581,7 +581,7 @@ void drain_cover_update(DrainCoverMoby *moby) {
             FUN_L05_0030f218((char *)moby, data->home[2], D_L05_00161DE8 + data->home[2]);
             FUN_L05_0030f218((char *)moby, data->home[2], D_L05_00161DE8 + data->home[2]);
             if ((float)data->timer < (float)scale_game_frames_30e7f8(*(int *)&D_L05_00161DB8) * 0.2f) {
-                a = D_L05_00161DF4;
+                particle_configuration = D_L05_00161DF4;
                 b = D_L05_00161DF8;
                 r = convert_effect_value(scale_game_frames_float_30e7f8(random_float_between_30e7f8(10.0f, 20.0f)));
                 g = convert_effect_value(scale_game_frames_float_30e7f8(random_float_between_30e7f8(10.0f, 20.0f)));
@@ -597,7 +597,7 @@ void drain_cover_update(DrainCoverMoby *moby) {
                     add_vector(particle_position, moby->pos, particle_position);
                     particle_position[2] = random_float_between_30e7f8(moby->pos[2] - 0.25f, moby->pos[2] + 0.5f);
                     effect_velocity[3] = effect_position[3] = random_float_between_30e7f8(0.5f, 1.0f);
-                    emit_particle(particle_position, effect_velocity, effect_position, a, b, r, g, bl, 0x30);
+                    emit_particle(particle_position, effect_velocity, effect_position, particle_configuration, b, r, g, bl, 0x30);
                 }
             }
         }
