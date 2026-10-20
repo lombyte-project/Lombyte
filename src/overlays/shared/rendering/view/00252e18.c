@@ -13,14 +13,14 @@ extern short D_L04_001B09B0[] __attribute__((section(".data")));
 extern char *D_L04_001D1700[] __attribute__((section(".data")));
 extern struct Hero hero_lui __asm__("D_0013F350") __attribute__((section(".data")));
 int FUN_L04_00252e18(char *a, char *o, float best);
-int FUN_L04_00252e18(char *a, char *output_record, float best) {
+int FUN_L04_00252e18(char *reference_object, char *output_record, float best) {
     struct Hero *g = &hero_lui;
     char *selected_moby;
     char *candidate_moby;
     int res;
     int i;
     int j;
-    float d;
+    float candidate_comparison_value;
 
     selected_moby = ((char *)g->moby);
     res = 0;
@@ -40,10 +40,10 @@ int FUN_L04_00252e18(char *a, char *output_record, float best) {
             continue;
         if (*(unsigned char *)(candidate_moby + 0x20) != 3)
             continue;
-        d = FUN_001f9b80_25fcb8(a + 0x10, candidate_moby + 0x10);
-        if (d < best) {
+        candidate_comparison_value = FUN_001f9b80_25fcb8(reference_object + 0x10, candidate_moby + 0x10);
+        if (candidate_comparison_value < best) {
             selected_moby = candidate_moby;
-            best = d;
+            best = candidate_comparison_value;
             res = 1;
         }
     }
@@ -59,10 +59,10 @@ int FUN_L04_00252e18(char *a, char *output_record, float best) {
             continue;
         if (*(unsigned char *)(candidate_moby + 0xBC) == 0)
             continue;
-        d = FUN_001f9b80_25fcb8(a + 0x10, candidate_moby + 0x10);
-        if (d < best) {
+        candidate_comparison_value = FUN_001f9b80_25fcb8(reference_object + 0x10, candidate_moby + 0x10);
+        if (candidate_comparison_value < best) {
             selected_moby = candidate_moby;
-            best = d;
+            best = candidate_comparison_value;
             res = 1;
         }
     }
