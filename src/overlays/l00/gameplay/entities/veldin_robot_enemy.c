@@ -26,17 +26,17 @@ extern u16 D_00141850[];
 extern u16 D_00141968[];
 extern u8 *D_L00_0015FFD8 __attribute__((sda));
 
-void FUN_L00_002e0988(HelpMoby *m) {
+void FUN_L00_002e0988(HelpMoby *moby) {
     s32 *vars;
-    s32 *p;
+    s32 *target_index_ptr;
     s32 i;
-    HelpTarget *t;
+    HelpTarget *target_moby;
     struct Hero *g;
 
-    vars = m->vars;
-    if (m->state == 0) {
-        m->state = 1;
-        m->alpha = 0xFF;
+    vars = moby->vars;
+    if (moby->state == 0) {
+        moby->state = 1;
+        moby->alpha = 0xFF;
     }
     if (D_00141968[0x18 / 2] == 0) {
         help_request(3, 3);
@@ -63,11 +63,11 @@ void FUN_L00_002e0988(HelpMoby *m) {
     }
     if (D_00141968[0x8 / 2] == 0 && D_00141968[0x10 / 2] == 0) {
         g = &hero;
-        p = vars + 5;
+        target_index_ptr = vars + 5;
         for (i = 0; i < 4; i++) {
-            if (*p != -1) {
-                t = (HelpTarget *)(D_L00_0015FFD8 + (*p << 8));
-                if (t == 0 || t->state == 0xFE || t->state == 0xFD) {
+            if (*target_index_ptr != -1) {
+                target_moby = (HelpTarget *)(D_L00_0015FFD8 + (*target_index_ptr << 8));
+                if (target_moby == 0 || target_moby->state == 0xFE || target_moby->state == 0xFD) {
                     if (g->health.hp < 4) {
                         help_request(1, 1);
                     } else {
@@ -75,7 +75,7 @@ void FUN_L00_002e0988(HelpMoby *m) {
                     }
                 }
             }
-            p++;
+            target_index_ptr++;
         }
     }
 }
