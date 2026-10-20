@@ -3292,8 +3292,8 @@ void FUN_L18_002f7288(char *moby) {
     float y;
     float *first_scalar_value;
     float *second_scalar_value;
-    float *p2;
-    float *p3;
+    float *first_scalar_update_state;
+    float *second_scalar_update_state;
     unsigned char st;
 
     fast_dec_timer((int *)(boss_data + 0x360));
@@ -3317,13 +3317,13 @@ void FUN_L18_002f7288(char *moby) {
             y = D_L18_001623D4;
             first_scalar_value = (float *)(selected_scalar_record + 0x34);
             second_scalar_value = (float *)(selected_scalar_record + 0x38);
-            p2 = (float *)(boss_data + 0x378);
-            p3 = (float *)(boss_data + 0x37c);
+            first_scalar_update_state = (float *)(boss_data + 0x378);
+            second_scalar_update_state = (float *)(boss_data + 0x37c);
         } else {
             first_scalar_value = (float *)(selected_scalar_record + 0x34);
             second_scalar_value = (float *)(selected_scalar_record + 0x38);
-            p3 = (float *)(boss_data + 0x37c);
-            p2 = (float *)(boss_data + 0x378);
+            second_scalar_update_state = (float *)(boss_data + 0x37c);
+            first_scalar_update_state = (float *)(boss_data + 0x378);
             if (vector_distance(hero.motion.pos.f,
                              D_L18_001600EC + (*(int *)(boss_data + 0x344) << 7) + 0x30) < 28.0f) {
                 x = D_L18_001623D8;
@@ -3335,15 +3335,15 @@ void FUN_L18_002f7288(char *moby) {
         y = D_L18_001623E4;
         first_scalar_value = (float *)(selected_scalar_record + 0x34);
         second_scalar_value = (float *)(selected_scalar_record + 0x38);
-        p2 = (float *)(boss_data + 0x378);
-        p3 = (float *)(boss_data + 0x37c);
+        first_scalar_update_state = (float *)(boss_data + 0x378);
+        second_scalar_update_state = (float *)(boss_data + 0x37c);
     } else if (st == 0 || st == 10 || st == 11 || st == 1 || st == 0x1b) {
         int i;
         char *g;
         char *q;
         first_scalar_value = (float *)(selected_scalar_record + 0x34);
         second_scalar_value = (float *)(selected_scalar_record + 0x38);
-        for (i = 0, p2 = (float *)(boss_data + 0x378), p3 = (float *)(boss_data + 0x37c); i < 0x30; i++) {
+        for (i = 0, first_scalar_update_state = (float *)(boss_data + 0x378), second_scalar_update_state = (float *)(boss_data + 0x37c); i < 0x30; i++) {
             char *scanned_entry;
             if (*(int *)(boss_data + 0x3ec) == 0) {
                 char *pl;
@@ -3379,17 +3379,17 @@ void FUN_L18_002f7288(char *moby) {
     } else {
         first_scalar_value = (float *)(selected_scalar_record + 0x34);
         second_scalar_value = (float *)(selected_scalar_record + 0x38);
-        p2 = (float *)(boss_data + 0x378);
-        p3 = (float *)(boss_data + 0x37c);
+        first_scalar_update_state = (float *)(boss_data + 0x378);
+        second_scalar_update_state = (float *)(boss_data + 0x37c);
         if (*(float *)(boss_data + 0x38c) > 0.0f) {
             *(int *)(boss_data + 0x368) = queue_animation_update(0x16, 0xffff,
                      FUN_L00_00235d80, FUN_L00_00235ea0, FUN_L06_00249738,
                      boss_data + 0x36c, 0x15e);
         }
     }
-    advance_accelerated_scalar_7288(first_scalar_value, x, p2, *(float *)&D_L18_001623B4 * D_0015ED6C_e[1],
+    advance_accelerated_scalar_7288(first_scalar_value, x, first_scalar_update_state, *(float *)&D_L18_001623B4 * D_0015ED6C_e[1],
                      *(float *)&D_L18_001623B4 * D_0015ED6C_e[1], D_L18_001623B0 * D_0015ED6C_e[0]);
-    advance_accelerated_scalar_7288(second_scalar_value, y, p3, *(float *)&D_L18_001623B4 * D_0015ED6C_e[1],
+    advance_accelerated_scalar_7288(second_scalar_value, y, second_scalar_update_state, *(float *)&D_L18_001623B4 * D_0015ED6C_e[1],
                      *(float *)&D_L18_001623B4 * D_0015ED6C_e[1], D_L18_001623B0 * D_0015ED6C_e[0]);
 }
 
