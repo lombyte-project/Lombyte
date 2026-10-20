@@ -842,32 +842,32 @@ extern void FUN_L01_002787a0(void *);
 extern void FUN_L01_00278e20(void *, int);
 void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
-void FUN_L17_002f5260(struct Moby *m) {
+void FUN_L17_002f5260(struct Moby *moby) {
     enum {
         HIT_EFFECT_INITIALIZE = 0,
         HIT_EFFECT_WAIT_FOR_HIT = 1,
         HIT_EFFECT_EMIT_AND_REMOVE = 2
     };
     int flag = 0;
-    char *p = find_moby_hit(m, 0x10000, 0);
-    switch (m->state) {
+    char *hit_result = find_moby_hit(moby, 0x10000, 0);
+    switch (moby->state) {
     case HIT_EFFECT_INITIALIZE:
-        m->state = 1;
+        moby->state = 1;
         break;
     case HIT_EFFECT_WAIT_FOR_HIT:
-        if (p && *(float *)(p + 0x2C) > 0.0f)
+        if (hit_result && *(float *)(hit_result + 0x2C) > 0.0f)
             flag = 1;
         if (flag)
-            m->state = 2;
+            moby->state = 2;
         break;
     case HIT_EFFECT_EMIT_AND_REMOVE:
-        FUN_0022da68(0, 0, (int)m);
-        FUN_L00_00257470(m, 0, -1);
-        FUN_L01_002787a0(m);
-        FUN_L00_00263e30(m, 0x753, 1, 0x753, 1, 11, 2);
-        FUN_L00_00263e30(m, 0x756, 1, 0x756, 1, 1, 2);
-        FUN_L01_00278e20(m, 0x752);
-        mark_moby_for_removal(m);
+        FUN_0022da68(0, 0, (int)moby);
+        FUN_L00_00257470(moby, 0, -1);
+        FUN_L01_002787a0(moby);
+        FUN_L00_00263e30(moby, 0x753, 1, 0x753, 1, 11, 2);
+        FUN_L00_00263e30(moby, 0x756, 1, 0x756, 1, 1, 2);
+        FUN_L01_00278e20(moby, 0x752);
+        mark_moby_for_removal(moby);
         break;
     }
 }
