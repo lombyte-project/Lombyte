@@ -434,17 +434,17 @@ typedef struct {
 extern Ent *D_L10_0015FFD0_e[] __asm__("D_L10_0015FFD0") __attribute__((section(".sdata")));
 extern short *D_L10_001ABCC0[];
 
-void FUN_L10_002e0138(struct Moby *m) {
-    short *p;
-    if (m->group != 0xFF) {
-        p = D_L10_001ABCC0[m->group];
-        if (p != 0) {
+void FUN_L10_002e0138(struct Moby *moby) {
+    short *group_entry;
+    if (moby->group != 0xFF) {
+        group_entry = D_L10_001ABCC0[moby->group];
+        if (group_entry != 0) {
             do {
                 Ent *base = D_L10_0015FFD0_e[2];
-                Ent *e = (Ent *)((*(unsigned short *)p & 0x7FFF) * 256 + (int)base);
-                if (e->state == 1)
-                    e->state = 2;
-            } while (*p++ >= 0);
+                Ent *listed_entity = (Ent *)((*(unsigned short *)group_entry & 0x7FFF) * 256 + (int)base);
+                if (listed_entity->state == 1)
+                    listed_entity->state = 2;
+            } while (*group_entry++ >= 0);
         }
     }
 }
