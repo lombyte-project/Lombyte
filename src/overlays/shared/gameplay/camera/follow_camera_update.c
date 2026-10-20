@@ -1148,8 +1148,8 @@ float FUN_001ebd78_2eb480(void *, float, float, float, float, float) __asm__("FU
 void FUN_L00_002eb480(char *camera_object) {
     float rotation_matrix[16];
     char *camera_state = *(char **)(camera_object + 0x70);
-    char *d = camera_state + 0xB0;
-    F(camera_object, 0x50) = FUN_L00_001eb328_2eb480(camera_state, F(camera_object, 0x50), FUN_001fa580_2eb480(F(d, 0x18), F(camera_state, 0x14)),
+    char *orbit_origin = camera_state + 0xB0;
+    F(camera_object, 0x50) = FUN_L00_001eb328_2eb480(camera_state, F(camera_object, 0x50), FUN_001fa580_2eb480(F(orbit_origin, 0x18), F(camera_state, 0x14)),
                                          F(camera_state, 0x28), F(camera_state, 0x3C), F(camera_state, 0x50));
     F(camera_object, 0x54) =
         FUN_L00_001eb328_2eb480(camera_state + 4, F(camera_object, 0x54), F(camera_state, 0x18), F(camera_state, 0x2C), F(camera_state, 0x40), F(camera_state, 0x54));
@@ -1160,16 +1160,16 @@ void FUN_L00_002eb480(char *camera_object) {
     F(camera_object, 0x60) = FUN_L00_001eb328_2eb480(camera_state + 0x10, F(camera_object, 0x60), F(camera_state, 0x24), F(camera_state, 0x38), F(camera_state, 0x4C),
                                          F(camera_state, 0x60));
     if (*(int *)(camera_state + 0x9C) == 0) {
-        F(d, 0) =
-            FUN_001ebd78_2eb480(camera_state + 0x90, F(d, 0), F(camera_state, 0x80), F(camera_state, 0xA0), F(camera_state, 0xA4), F(camera_state, 0xA8));
-        F(d, 4) =
-            FUN_001ebd78_2eb480(camera_state + 0x94, F(d, 4), F(camera_state, 0x84), F(camera_state, 0xA0), F(camera_state, 0xA4), F(camera_state, 0xA8));
-        F(d, 8) =
-            FUN_001ebd78_2eb480(camera_state + 0x98, F(d, 8), F(camera_state, 0x88), F(camera_state, 0xA0), F(camera_state, 0xA4), F(camera_state, 0xA8));
+        F(orbit_origin, 0) =
+            FUN_001ebd78_2eb480(camera_state + 0x90, F(orbit_origin, 0), F(camera_state, 0x80), F(camera_state, 0xA0), F(camera_state, 0xA4), F(camera_state, 0xA8));
+        F(orbit_origin, 4) =
+            FUN_001ebd78_2eb480(camera_state + 0x94, F(orbit_origin, 4), F(camera_state, 0x84), F(camera_state, 0xA0), F(camera_state, 0xA4), F(camera_state, 0xA8));
+        F(orbit_origin, 8) =
+            FUN_001ebd78_2eb480(camera_state + 0x98, F(orbit_origin, 8), F(camera_state, 0x88), F(camera_state, 0xA0), F(camera_state, 0xA4), F(camera_state, 0xA8));
     } else {
-        qcopy(d, camera_state + 0x80);
+        qcopy(orbit_origin, camera_state + 0x80);
     }
-    FUN_L00_001ed580_2eb480(camera_object + 0x30, camera_object + 0x50, d);
+    FUN_L00_001ed580_2eb480(camera_object + 0x30, camera_object + 0x50, orbit_origin);
     F(camera_object, 0x40) = F(camera_state, 0xAC);
     F(camera_object, 0x44) = FUN_001fa580_2eb480(F(camera_object, 0x54), F(camera_object, 0x5C));
     F(camera_object, 0x48) = FUN_001fa580_2eb480(3.14159274101257324f, F(camera_object, 0x50));
