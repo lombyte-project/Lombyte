@@ -442,16 +442,16 @@ void draw_map_overlay(void) {
     }
 
     {
-        struct MapState *m = &level_map_selection;
+        struct MapState *map_state = &level_map_selection;
 
-        if (current_level_index == m->loaded) {
+        if (current_level_index == map_state->loaded) {
             s32 image_index;
             f32 scale;
             f32 angle;
             s32 flip;
 
             image_index = get_icon_frame(0xE99A, 5);
-            scale = ((m->zoom[m->loaded] * 4.0f + 10.0f) * 0.75f) / 13.0f;
+            scale = ((map_state->zoom[map_state->loaded] * 4.0f + 10.0f) * 0.75f) / 13.0f;
             angle = hero.motion.rot.f[2];
             flip = hero.state.control_mode == 0xF;
             if (flip) {
