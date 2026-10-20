@@ -361,7 +361,7 @@ extern float D_L00_0015F59C;
 void start_scene(int a) __asm__("FUN_L00_00298840");
 void start_scene(int scene_id) {
     O_298840 *moby;
-    int t, i;
+    int scene_buffer_base, i;
     if (scene_id < 0)
         return;
     if (hero.health.hp == 0) {
@@ -377,15 +377,15 @@ void start_scene(int scene_id) {
     memset_298840(D_L00_0017C380_lui, 0, 0x40);
     memset_298840(D_L00_0017C400_298840, 0, 0x40);
     memset_298840(D_L00_0017C3C0_298840, 0, 0x40);
-    t = D_L00_001611CC - 0x3C000;
+    scene_buffer_base = D_L00_001611CC - 0x3C000;
     D_L00_0016C860_298840.x30 = scene_id;
     D_L00_0015F59C = 1.0f;
     D_L00_0015F5A0_298840 = 0;
     D_L00_0016C860_298840.x34 = 0;
     D_L00_0016C860_298840.x3c = 0;
-    D_L00_001611CC = t;
-    D_L00_0016C860_298840.x58 = D_L00_00173E00_298840.x4 + t;
-    D_L00_0016C860_298840.x5c = D_L00_00173E00_298840.x8 + t;
+    D_L00_001611CC = scene_buffer_base;
+    D_L00_0016C860_298840.x58 = D_L00_00173E00_298840.x4 + scene_buffer_base;
+    D_L00_0016C860_298840.x5c = D_L00_00173E00_298840.x8 + scene_buffer_base;
     f2039a0_298840();
     fade_level = 1.0f;
     D_L00_0015F5C0_m[1] = 2;
