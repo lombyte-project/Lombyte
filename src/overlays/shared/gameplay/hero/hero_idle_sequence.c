@@ -1779,8 +1779,8 @@ extern int FUN_L00_0020d568(void);
 
 void FUN_L00_00208820(void) {
     OvlQuad v[1];
-    float m, f, d;
-    unsigned char *o;
+    float minimum_top_gap, f, top_gap;
+    unsigned char *hero_moby;
 
     ((unsigned char *)hero.moby)[0xA4] = 0xFF;
     if (hero.unk20A5) {
@@ -1796,30 +1796,30 @@ void FUN_L00_00208820(void) {
     upd_a(((unsigned char *)hero.moby));
     if (hero.unk1CC == 0 && *(int *)(((unsigned char *)hero.moby) + 0x94) != 0) {
         qcopy(v, &hero.motion.pos);
-        m = 0.05f;
+        minimum_top_gap = 0.05f;
         FUN_L00_002336e8(v, v, hero.unk224);
-        d = hero.capsule_top - hero.unk224;
-        if (d < m)
-            d = m;
-        FUN_L00_0024eed8(((unsigned char *)hero.moby), 0, v, hero.unk234, d);
-        f = hero.unk234 + m;
+        top_gap = hero.capsule_top - hero.unk224;
+        if (top_gap < minimum_top_gap)
+            top_gap = minimum_top_gap;
+        FUN_L00_0024eed8(((unsigned char *)hero.moby), 0, v, hero.unk234, top_gap);
+        f = hero.unk234 + minimum_top_gap;
         if (hero.state.control_mode == 4)
             f += 0.15f;
         if (FUN_L00_0020d568())
             f = hero.unk224;
         qcopy(v, &hero.motion.pos);
         FUN_L00_002336e8(v, v, f);
-        d = hero.capsule_top - f;
-        if (d < m)
-            d = m;
-        FUN_L00_0024eed8(((unsigned char *)hero.moby), 1, v, hero.unk234, d);
+        top_gap = hero.capsule_top - f;
+        if (top_gap < minimum_top_gap)
+            top_gap = minimum_top_gap;
+        FUN_L00_0024eed8(((unsigned char *)hero.moby), 1, v, hero.unk234, top_gap);
     }
-    o = ((unsigned char *)hero.moby);
-    if (*(short *)(o + 0xA6) == 0) {
+    hero_moby = ((unsigned char *)hero.moby);
+    if (*(short *)(hero_moby + 0xA6) == 0) {
         if (D_0015EDB5_208820) {
-            *(unsigned short *)(o + 0x34) |= 0x8000;
+            *(unsigned short *)(hero_moby + 0x34) |= 0x8000;
         } else {
-            *(unsigned short *)(o + 0x34) &= 0x7FFF;
+            *(unsigned short *)(hero_moby + 0x34) &= 0x7FFF;
         }
     }
 }
