@@ -37,6 +37,12 @@ extern s32 highest_set_bit_index(s32) __asm__("func_001F97A0");
 s32 upload_mip_texture(MipTextureHeader *tex, u64 *regs) __asm__("FUN_00202270");
 
 s32 upload_mip_texture(MipTextureHeader *tex, u64 *regs) {
+    enum {
+        PIXEL_FORMAT_32_BIT = 0,
+        PIXEL_FORMAT_16_BIT = 2,
+        PIXEL_FORMAT_8_BIT = 0x13,
+        PIXEL_FORMAT_4_BIT = 0x14
+    };
     MipTextureUpload upload;
     sceGsLoadImage load_image;
     s32 mip_index;
@@ -49,16 +55,16 @@ s32 upload_mip_texture(MipTextureHeader *tex, u64 *regs) {
 
     fill_transfer_words(&upload, 0, sizeof(upload));
     switch (tex->pixel_storage_format) {
-    case 0:
-    case 2:
+    case PIXEL_FORMAT_32_BIT:
+    case PIXEL_FORMAT_16_BIT:
         upload.palette_address = 0;
         upload.palette_size = 0;
         /* Fakematch: this always-true test gives case 0x13/0x14 a second predecessor. */
         header_byte = tex->pad0[0];
         if (header_byte >= 0)
             break;
-    case 0x13:
-    case 0x14:
+    case PIXEL_FORMAT_8_BIT:
+    case PIXEL_FORMAT_4_BIT:
         upload.palette_address = (s32)tex->data;
         if (tex->pixel_storage_format == 0x14) {
             if (tex->palette_storage_format == 0) {
@@ -79,16 +85,16 @@ s32 upload_mip_texture(MipTextureHeader *tex, u64 *regs) {
     upload.height_log2 = highest_set_bit_index(tex->height);
     upload.mip_addresses[0] = (s32)tex->data + upload.palette_size;
     switch (tex->pixel_storage_format) {
-    case 0:
+    case PIXEL_FORMAT_32_BIT:
         upload.mip_sizes[0] = tex->width * tex->height * 4;
         break;
-    case 2:
+    case PIXEL_FORMAT_16_BIT:
         upload.mip_sizes[0] = tex->width * tex->height * 2;
         break;
-    case 0x13:
+    case PIXEL_FORMAT_8_BIT:
         upload.mip_sizes[0] = tex->width * tex->height;
         break;
-    case 0x14:
+    case PIXEL_FORMAT_4_BIT:
         upload.mip_sizes[0] = (tex->width * tex->height) >> 1;
         break;
     }
