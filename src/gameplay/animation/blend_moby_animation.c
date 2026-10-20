@@ -36,13 +36,13 @@ extern void FUN_0020ede8(void *, int);
 void blend_moby_animation(MobyAnim *moby, int new_seq, int frame_index, int blend_frames) __asm__("FUN_00212f90");
 
 void blend_moby_animation(MobyAnim *moby, int new_seq, int frame_index, int blend_frames) {
-    int n = moby->pClass->seqs[new_seq]->nframes;
+    int frame_count = moby->pClass->seqs[new_seq]->nframes;
     int slot;
     unsigned char oldSeq;
     float scale;
 
-    if (frame_index >= n) {
-        frame_index = n - 1;
+    if (frame_index >= frame_count) {
+        frame_index = frame_count - 1;
     }
     if (*(float *)((char *)moby + 0x54) > 0.025f || *(int *)((char *)moby + 0x60) != 0 ||
         *(int *)((char *)moby + 0x64) != 0) {
