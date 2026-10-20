@@ -3264,19 +3264,19 @@ void FUN_L00_002df1e0(O_2df1e0 *p) {
 int FUN_L00_002591d0(void *, s32, s32, s32);
 int FUN_L00_002592b8(void *, s32, s32, s32);
 void FUN_L00_00263618(void *, void *, f32, f32);
-void FUN_L00_002df3d8(u8 *p) {
+void FUN_L00_002df3d8(u8 *reference_moby) {
     u8 *it[2] __attribute__((aligned(16)));
-    f32 s = 1.2f;
+    f32 quad_scale = 1.2f;
     if (current_level_index == 0 || current_level_index == 0x12) {
-        s = 1.0f;
+        quad_scale = 1.0f;
     }
-    FUN_L00_002591d0(it, p[0x21], 0, 0);
+    FUN_L00_002591d0(it, reference_moby[0x21], 0, 0);
     while (it[0] != 0) {
-        u8 *q = it[0];
-        if (q[0x31] != 0) {
-            void **m = *(void ***)(q + 0x78);
-            if (*(s16 *)(q + 0xA6) == *(s16 *)(p + 0xA6)) {
-                FUN_L00_00263618(q + 0x10, m[1], s, 0.5f);
+        u8 *candidate_moby = it[0];
+        if (candidate_moby[0x31] != 0) {
+            void **moby_data = *(void ***)(candidate_moby + 0x78);
+            if (*(s16 *)(candidate_moby + 0xA6) == *(s16 *)(reference_moby + 0xA6)) {
+                FUN_L00_00263618(candidate_moby + 0x10, moby_data[1], quad_scale, 0.5f);
             }
         }
         FUN_L00_002592b8(it, it[0], 0, 0);
