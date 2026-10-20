@@ -1563,7 +1563,7 @@ char *FUN_L14_002aef28(int index, int *ids);
 extern void FUN_L14_002add48(char *);
 extern void FUN_L14_002ada18(char *);
 void FUN_L14_002aee28(struct Moby *moby) {
-    char *d = (char *)moby->pvars;
+    char *moby_vars = (char *)moby->pvars;
     int i;
     int *out;
     {
@@ -1572,20 +1572,20 @@ void FUN_L14_002aee28(struct Moby *moby) {
             D_L14_001D8680[i] = v;
     }
     i = 0;
-    if (*(short *)(d + 0x20A) > 0) {
+    if (*(short *)(moby_vars + 0x20A) > 0) {
         int *ids = D_L14_001D8680_b;
         out = ids;
         do {
-            char *m = FUN_L14_002aef28(moby->group, ids);
+            char *selected_moby = FUN_L14_002aef28(moby->group, ids);
             char *md;
-            *out++ = *(short *)(m + 0xB2);
-            md = *(char **)(m + 0x78);
+            *out++ = *(short *)(selected_moby + 0xB2);
+            md = *(char **)(selected_moby + 0x78);
             if (*(int *)(md + 0x20C) & 8)
-                FUN_L14_002add48(m);
+                FUN_L14_002add48(selected_moby);
             if (*(int *)(md + 0x20C) & 2)
-                FUN_L14_002ada18(m);
+                FUN_L14_002ada18(selected_moby);
             i++;
-        } while (i < *(short *)(d + 0x20A));
+        } while (i < *(short *)(moby_vars + 0x20A));
     }
 }
 
