@@ -958,7 +958,7 @@ extern float fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
 
 void asteroid_update(struct Moby *m) __asm__("FUN_L09_002eb970");
 void asteroid_update(struct Moby *m) {
-    Data_2ECC50 *d = (*(Data_2ECC50 **)&m->pvars);
+    Data_2ECC50 *moby_vars = (*(Data_2ECC50 **)&m->pvars);
     Path_2ECC50 *path;
     float displacement_vector[4];
     float endpoint_offset[4];
@@ -966,24 +966,24 @@ void asteroid_update(struct Moby *m) {
     float dot;
     int i;
 
-    if (d->mode == 2) {
+    if (moby_vars->mode == 2) {
         FUN_L09_002ead30_c((unsigned char *)m);
         return;
     }
-    if (d->mode == 1) {
+    if (moby_vars->mode == 1) {
         FUN_L09_002eaea8_c((void *)m);
         return;
     }
-    if (m->command == 0 && d->init == 0) {
-        d->speed = D_0015ED6C_c * 10.0f;
-        d->centre[0] = d->centre[1] = d->centre[2] = 0.0f;
-        if (d->path >= 0) {
-            Path_2ECC50 *ring = D_L09_001B0930_2ECC50[d->path];
+    if (m->command == 0 && moby_vars->init == 0) {
+        moby_vars->speed = D_0015ED6C_c * 10.0f;
+        moby_vars->centre[0] = moby_vars->centre[1] = moby_vars->centre[2] = 0.0f;
+        if (moby_vars->path >= 0) {
+            Path_2ECC50 *ring = D_L09_001B0930_2ECC50[moby_vars->path];
             for (i = 0; i < ring->n; i++) {
-                add_vector_xyz(d->centre, d->centre, ring->pts[i]);
+                add_vector_xyz(moby_vars->centre, moby_vars->centre, ring->pts[i]);
             }
-            scale_vector_xyz_c2(d->centre, d->centre, 1.0f / (float)ring->n);
-            d->centre[2] = ring->pts[0][2] - 10.0f;
+            scale_vector_xyz_c2(moby_vars->centre, moby_vars->centre, 1.0f / (float)ring->n);
+            moby_vars->centre[2] = ring->pts[0][2] - 10.0f;
             for (i = 0; i < 23; i++) {
                 struct Moby *q = func_L09_002EBA58_2ECC50();
                 if (q != 0) {
@@ -998,10 +998,10 @@ void asteroid_update(struct Moby *m) {
                 if (q != 0) {
                     Data_2ECC50 *e = (*(Data_2ECC50 **)&q->pvars);
                     int n = random_integer_below_c3(ring->n - 2);
-                    float t = random_float_between_c3(0.0f, 1.0f);
+                    float segment_fraction = random_float_between_c3(0.0f, 1.0f);
                     e->node = n;
                     subtract_vector_xyz(displacement_vector, ring->pts[n + 1], ring->pts[n]);
-                    scale_vector_xyz_c2(displacement_vector, displacement_vector, t);
+                    scale_vector_xyz_c2(displacement_vector, displacement_vector, segment_fraction);
                     add_vector_xyz(e->target, displacement_vector, ring->pts[n]);
                     qcopy(((f32 *)&q->pos), e->target);
                     add_vector_xyz(((f32 *)&q->pos), ring->pts[0], e);
@@ -1010,7 +1010,7 @@ void asteroid_update(struct Moby *m) {
                 }
             }
         }
-        d->init = 1;
+        moby_vars->init = 1;
     }
     if (m->command == 0) {
         if (random_integer_below_c3(scale_game_frames(40)) == 0) {
@@ -1019,28 +1019,28 @@ void asteroid_update(struct Moby *m) {
     }
     m->update_dist = 0xFF;
     m->draw_dist = 0xFF;
-    if (d->path < 0) {
+    if (moby_vars->path < 0) {
         return;
     }
-    qcopy_nc(((f32 *)&m->pos), d->target);
-    path = D_L09_001B0930_2ECC50[d->path];
-    if (m->command == 0 && d->count < 50 && fast_dec_timer(&d->timer)) {
-        d->timer = scale_game_frames(15) + random_integer_below_c3(scale_game_frames(30));
+    qcopy_nc(((f32 *)&m->pos), moby_vars->target);
+    path = D_L09_001B0930_2ECC50[moby_vars->path];
+    if (m->command == 0 && moby_vars->count < 50 && fast_dec_timer(&moby_vars->timer)) {
+        moby_vars->timer = scale_game_frames(15) + random_integer_below_c3(scale_game_frames(30));
         func_L09_002EBD30_2ECC50(m);
     }
-    m->rot.x = fast_add_rotations_c2(m->rot.x, d->f40);
-    m->rot.y = fast_add_rotations_c2(m->rot.y, d->f44);
-    d->node = func_L09_00295880_2ECC50(m, path, ((f32 *)&m->pos), d->node, 1, d->speed);
-    if (d->node == path->n - 1) {
+    m->rot.x = fast_add_rotations_c2(m->rot.x, moby_vars->f40);
+    m->rot.y = fast_add_rotations_c2(m->rot.y, moby_vars->f44);
+    moby_vars->node = func_L09_00295880_2ECC50(m, path, ((f32 *)&m->pos), moby_vars->node, 1, moby_vars->speed);
+    if (moby_vars->node == path->n - 1) {
         if (m->command != 0) {
             (*(Data_2ECC50 **)&(*(Data_2ECC50 **)&m->pvars)->owner->pvars)->count--;
             mark_moby_for_removal_c2(m);
         } else {
-            d->node = 0;
+            moby_vars->node = 0;
             qcopy(((f32 *)&m->pos), path->pts[0]);
         }
     }
-    if (d->node == 0) {
+    if (moby_vars->node == 0) {
         subtract_vector_xyz(displacement_vector, path->pts[1], path->pts[0]);
         len = vector_length_xyz_c3(displacement_vector);
         normalize_vector_xyz_c3(displacement_vector, displacement_vector, 1.0f);
@@ -1053,7 +1053,7 @@ void asteroid_update(struct Moby *m) {
         if (m->alpha > 0x80) {
             m->alpha = 0x80;
         }
-    } else if (d->node == path->n - 2) {
+    } else if (moby_vars->node == path->n - 2) {
         subtract_vector_xyz(displacement_vector, path->pts[path->n - 2], path->pts[path->n - 1]);
         len = vector_length_xyz_c3(displacement_vector);
         normalize_vector_xyz_c3(displacement_vector, displacement_vector, 1.0f);
@@ -1069,10 +1069,10 @@ void asteroid_update(struct Moby *m) {
     } else {
         m->alpha = 0x80;
     }
-    qcopy(d->target, ((f32 *)&m->pos));
-    add_vector_xyz(((f32 *)&m->pos), ((f32 *)&m->pos), d);
+    qcopy(moby_vars->target, ((f32 *)&m->pos));
+    add_vector_xyz(((f32 *)&m->pos), ((f32 *)&m->pos), moby_vars);
     add_vector_xyz(((f32 *)&m->pos), ((f32 *)&m->pos), D_L09_00166F40);
-    subtract_vector_xyz(((f32 *)&m->pos), ((f32 *)&m->pos), d->centre);
+    subtract_vector_xyz(((f32 *)&m->pos), ((f32 *)&m->pos), moby_vars->centre);
 }
 /* spawns a moby of the given class at a source moby's position */
 /* Ported from rac1-decomp (src/overlays/l09_gaspar/vendor_002C2B08.c: func_L09_002EEEB0), where it is exact; names translated to the US level program. */
