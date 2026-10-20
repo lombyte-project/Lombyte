@@ -1060,8 +1060,8 @@ void FUN_L15_002c4f88(struct Moby *moby, SteeringVec_4f88 *goal, SteeringVec_4f8
     float limit;
     float facing;
     float angle;
-    float c;
-    float s;
+    float relative_heading_cosine;
+    float relative_heading_sine;
     float yaw_target;
     float pitch_target;
     float dx;
@@ -1119,10 +1119,10 @@ void FUN_L15_002c4f88(struct Moby *moby, SteeringVec_4f88 *goal, SteeringVec_4f8
     vars->delta.q = delta.q;
     angle = fast_arc_tan(vars->delta.f[0], vars->delta.f[1]);
     angle = fast_subtract_rotations(angle, moby->rot.z);
-    c = fast_cos(angle);
-    yaw_target = (vars->speed * 0.34906584f * c) / (frame_time * 10.0f);
-    s = fast_sin(angle);
-    pitch_target = (vars->speed * -0.34906584f * s) / (frame_time * 10.0f);
+    relative_heading_cosine = fast_cos(angle);
+    yaw_target = (vars->speed * 0.34906584f * relative_heading_cosine) / (frame_time * 10.0f);
+    relative_heading_sine = fast_sin(angle);
+    pitch_target = (vars->speed * -0.34906584f * relative_heading_sine) / (frame_time * 10.0f);
     moby->rot.y = spring_turn(&vars->yaw_velocity, moby->rot.y,
         yaw_target,
         frame_time_sq * 0.5235988f, frame_time_sq * 1.0471976f,
