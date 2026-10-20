@@ -935,47 +935,47 @@ int D_L16_00161DE4 = 600;
 int D_L16_00161DE8 = 0x80202020;
 int D_L16_00161DEC = 0x80808080;
 extern char D_0013F3D0[] __attribute__((section(".data")));
-void FUN_L16_002e5258(struct Moby *m) {
+void FUN_L16_002e5258(struct Moby *trigger_moby) {
     enum {
         GRINDRAIL_TRIGGER_INITIALIZE = 0,
         GRINDRAIL_TRIGGER_CHECK_LOCAL_BOUNDS = 1,
         GRINDRAIL_TRIGGER_WAIT_FOR_COMMAND_TIMEOUT = 2
     };
-    char *d = (char *)m->pvars;
+    char *command_timer = (char *)trigger_moby->pvars;
     char *g;
     float pos[16];
     float mat[4];
-    float f;
+    float glow_cycle_phase;
     int period = scale_game_frames_q(30);
-    f = convert_integer_to_float_q(D_L16_0015F5CC % period) / convert_integer_to_float_q(period);
-    m->glow_color = FUN_001fa6e0_q(fast_sin_q(f * 6.28318f - 3.14159f) * 0.5f + 0.5f,
+    glow_cycle_phase = convert_integer_to_float_q(D_L16_0015F5CC % period) / convert_integer_to_float_q(period);
+    trigger_moby->glow_color = FUN_001fa6e0_q(fast_sin_q(glow_cycle_phase * 6.28318f - 3.14159f) * 0.5f + 0.5f,
                                         D_L16_00161DE8, D_L16_00161DEC);
-    switch (m->state) {
+    switch (trigger_moby->state) {
     case GRINDRAIL_TRIGGER_INITIALIZE:
-        m->state = 1;
-        m->update_dist = 0xFF;
+        trigger_moby->state = 1;
+        trigger_moby->update_dist = 0xFF;
         break;
     case GRINDRAIL_TRIGGER_CHECK_LOCAL_BOUNDS:
         g = D_0013F3D0;
-        if (FUN_001f9b48_q(&m->pos, g) < 16.0f) {
-            FUN_001fa2d8_q(pos, &m->rot_row0);
-            subtract_vector_xyz_q(mat, g, &m->pos);
+        if (FUN_001f9b48_q(&trigger_moby->pos, g) < 16.0f) {
+            FUN_001fa2d8_q(pos, &trigger_moby->rot_row0);
+            subtract_vector_xyz_q(mat, g, &trigger_moby->pos);
             mat[3] = 0.0f;
             FUN_001f9d20_q(mat, mat, pos);
             if (D_L16_001D9768[0] < mat[0] && mat[0] < D_L16_001D9768[1] &&
                 D_L16_001D9768[2] < mat[1] && mat[1] < D_L16_001D9768[3] &&
                 D_L16_001D9768[4] < mat[2] && mat[2] < D_L16_001D9768[5]) {
-                func_0022ED80_66C0_q(1, 0, m);
-                m->command = 1;
-                m->state = 2;
-                *(int *)d = scale_game_frames_q(D_L16_00161DE4);
+                func_0022ED80_66C0_q(1, 0, trigger_moby);
+                trigger_moby->command = 1;
+                trigger_moby->state = 2;
+                *(int *)command_timer = scale_game_frames_q(D_L16_00161DE4);
             }
         }
         break;
     case GRINDRAIL_TRIGGER_WAIT_FOR_COMMAND_TIMEOUT:
-        if (tick_countdown_32_q((int *)d)) {
-            m->state = 1;
-            m->command = 0;
+        if (tick_countdown_32_q((int *)command_timer)) {
+            trigger_moby->state = 1;
+            trigger_moby->command = 0;
         }
         break;
     }
