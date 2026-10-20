@@ -62,26 +62,26 @@ void start_audio_stream_read(void *, s32, s32) __asm__("FUN_00216788");
 void update_audio_stream_until_idle(s32) __asm__("FUN_002168a8");
 void fade_to_black(s32) __asm__("FUN_001f4a58");
 void FUN_L00_00245610(s32 i, s32 p);
-void FUN_L00_00245610(s32 i, s32 p) {
+void FUN_L00_00245610(s32 i, s32 fade_frame_count) {
     s32 n;
-    s32 *e;
+    s32 *offset_entry;
     if (pal_mode == 0) {
         start_audio_stream_read(H245610.buf, T_245610.x[i].a, T_245610.x[i].b);
     } else {
         start_audio_stream_read(H245610.buf, T_245610.y[i].a, T_245610.y[i].b);
     }
-    if (p != 0) {
+    if (fade_frame_count != 0) {
         update_audio_stream_until_idle(0);
-        fade_to_black(p);
+        fade_to_black(fade_frame_count);
     }
     update_audio_stream_until_idle(1);
-    e = (s32 *)H245610.buf;
+    offset_entry = (s32 *)H245610.buf;
     n = 0;
-    if (e[1] != 0) {
+    if (offset_entry[1] != 0) {
         do {
-            H245610.ptr[n] = (s32)(H245610.buf + (e[0] + 0x800));
+            H245610.ptr[n] = (s32)(H245610.buf + (offset_entry[0] + 0x800));
             n++;
-            e += 2;
-        } while (n < 70 && e[1] != 0);
+            offset_entry += 2;
+        } while (n < 70 && offset_entry[1] != 0);
     }
 }
