@@ -3341,34 +3341,34 @@ extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa6
 
 /* Picks the path node to head for next: walks the path ring from the start and keeps the node best aligned
  * with the target direction, else the one nearest the target (but at least 16 units away). */
-void FUN_L03_002c9ca0(Moby2C8398 *m) {
+void FUN_L03_002c9ca0(Moby2C8398 *moby) {
     Tgt2C8398 target;
     float near[4];
     float pt[4];
     int seg;
     float dist;
-    Data2C8398 *d;
+    Data2C8398 *moby_data;
     PathF2C8398 *pf;
     int best;
     float best_ang;
     float best_dist;
     float ang;
 
-    d = m->data;
+    moby_data = moby->data;
     best = 0;
     best_ang = 0.0f;
-    pf = &d->pf;
+    pf = &moby_data->pf;
     best_dist = best_ang;
-    FUN_L03_0024e830((char *)m, (char *)&target, d->f270);
+    FUN_L03_0024e830((char *)moby, (char *)&target, moby_data->f270);
     seg = pf->idx;
-    FUN_L00_0025df68(pf->path, m->pos, near, &seg, &dist, 0, 999.0f, 5.0f, 0.0f);
+    FUN_L00_0025df68(pf->path, moby->pos, near, &seg, &dist, 0, 999.0f, 5.0f, 0.0f);
     pf->idx = 0;
     do {
         if (pf->idx != seg) {
             qcopy(pt, pf->path + 0x10 + pf->idx * 0x10);
-            ang = fast_arc_tan(pt[0] - m->pos[0], pt[1] - m->pos[1]);
+            ang = fast_arc_tan(pt[0] - moby->pos[0], pt[1] - moby->pos[1]);
             ang = fast_difference_between_rotations(
-                ang, fast_arc_tan(target.pos[0] - m->pos[0], target.pos[1] - m->pos[1]));
+                ang, fast_arc_tan(target.pos[0] - moby->pos[0], target.pos[1] - moby->pos[1]));
             dist = FUN_001f9b48(&target, pt);
             if (ang < 1.5707964f) {
                 if (best_ang < ang) {
