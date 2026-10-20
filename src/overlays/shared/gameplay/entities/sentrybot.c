@@ -2659,7 +2659,7 @@ void FUN_L15_002a2bf0(unsigned char *moby) {
         EMIT_SPARKS = 1,
         WAIT_FOR_EFFECT_TIMEOUT = 2
     };
-    unsigned char *d = *(unsigned char **)(moby + 0x78);
+    unsigned char *moby_data = *(unsigned char **)(moby + 0x78);
     float V[4];
     float W[16];
     float A[4];
@@ -2682,7 +2682,7 @@ void FUN_L15_002a2bf0(unsigned char *moby) {
         break;
     }
     case EMIT_SPARKS: {
-        int idx = *(int *)(d + 0x10);
+        int idx = *(int *)(moby_data + 0x10);
         if ((idx != -1 && (*(struct Moby **)&D_L15_0015FFD8_d)[idx].state == 2)
             || D_0014C050_c[(unsigned char)moby[0xB0] + (D_0015ED84 << 4)] == 0xFF) {
             func_L15_002A47B8_2A3DD0(moby);
@@ -2725,8 +2725,8 @@ void FUN_L15_002a2bf0(unsigned char *moby) {
                     int ra = func_002140B0_2A3DD0(0x10);
                     int rb = func_002140B0_2A3DD0(0x20);
                     int rc = func_002140B0_2A3DD0(0x20);
-                    int m = ((rb + 0x60) << 8) | 0x60000000;
-                    col = ((ra + 0x20) << 16) | m;
+                    int partial_spark_color = ((rb + 0x60) << 8) | 0x60000000;
+                    col = ((ra + 0x20) << 16) | partial_spark_color;
                     col |= rc + 0x60;
                 }
                 fa = func_001FA898_2A3DD0((float)(func_001F9850_2A3DD0(30) / 4));
@@ -2735,20 +2735,20 @@ void FUN_L15_002a2bf0(unsigned char *moby) {
                 func_L15_002655D0_2A3DD0(A, B, C, col, 0x60808080, fa, fb, fc, moby);
             } while (i >= 0);
             if (func_001F9B88_2A3DD0(V[1]) < hi && z < V[2] && V[2] < hi) {
-                func_001F9EC0_2A3DD0(d, V, moby + 0xC0);
-                func_001F9BD8_2A3DD0(d, d, moby + 0x10);
+                func_001F9EC0_2A3DD0(moby_data, V, moby + 0xC0);
+                func_001F9BD8_2A3DD0(moby_data, moby_data, moby + 0x10);
             } else {
-                qzero(d);
+                qzero(moby_data);
             }
             func_001F49B0_2A3DD0(func_L15_002A4318_2A3DD0, moby);
         }
         break;
     }
     case WAIT_FOR_EFFECT_TIMEOUT:
-        if ((*(int *)(d + 0x14))++ >= 0x3D) {
+        if ((*(int *)(moby_data + 0x14))++ >= 0x3D) {
             moby[0x20] = 3;
         } else {
-            qzero(d);
+            qzero(moby_data);
             func_001F49B0_2A3DD0(func_L15_002A4318_2A3DD0, moby);
         }
         break;
