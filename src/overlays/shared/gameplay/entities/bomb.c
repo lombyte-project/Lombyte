@@ -2390,30 +2390,30 @@ extern int FUN_002141f8_c(char *) __asm__("FUN_002141f8");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
 
-char *FUN_L00_002cdf28(char *a, int *excl) {
+char *FUN_L00_002cdf28(char *search_position, int *excl) {
     char *result = 0;
-    char *m;
+    char *candidate_moby;
     float best = 1e9f;
     float v[4];
-    for (m = (char *)D_L00_0015FFE4; m != 0; m = *(char **)(m + 0x28)) {
-        char *cls = *(char **)(m + 0x24);
-        int t = 0;
+    for (candidate_moby = (char *)D_L00_0015FFE4; candidate_moby != 0; candidate_moby = *(char **)(candidate_moby + 0x28)) {
+        char *cls = *(char **)(candidate_moby + 0x24);
+        int class_category = 0;
         float dist;
         char *h;
         char *x;
         if (cls != 0)
-            t = *(unsigned char *)(cls + 0x46);
-        if (m == 0 || *(unsigned char *)(m + 0x20) == 0xFE)
+            class_category = *(unsigned char *)(cls + 0x46);
+        if (candidate_moby == 0 || *(unsigned char *)(candidate_moby + 0x20) == 0xFE)
             continue;
-        if (*(unsigned char *)(m + 0x20) == 0xFD)
+        if (*(unsigned char *)(candidate_moby + 0x20) == 0xFD)
             continue;
-        if (t != 5 && t != 7 && t != 8)
+        if (class_category != 5 && class_category != 7 && class_category != 8)
             continue;
         if (excl != 0) {
             int found = 0;
             int i;
             for (i = 0; i < 9; i++) {
-                if (excl[i] == (int)m) {
+                if (excl[i] == (int)candidate_moby) {
                     found = 1;
                     break;
                 }
@@ -2421,22 +2421,22 @@ char *FUN_L00_002cdf28(char *a, int *excl) {
             if (found)
                 continue;
         }
-        if (t == 5 && (*(unsigned short *)(m + 0x34) & 0x1000) == 0)
+        if (class_category == 5 && (*(unsigned short *)(candidate_moby + 0x34) & 0x1000) == 0)
             continue;
-        if (*(unsigned char *)(m + 0x31) == 0) {
-            short c = *(short *)(m + 0xA6);
+        if (*(unsigned char *)(candidate_moby + 0x31) == 0) {
+            short c = *(short *)(candidate_moby + 0xA6);
             if (c != 0x350 && c != 0x31)
                 continue;
         }
-        dist = fast_vec_dist(a, m + 0x10);
-        if (*(short *)(m + 0xA6) == 0x4D6) {
-            normalize_vector_xyz(v, *(char **)(m + 0x78), dist);
-            add_vector_xyz(v, v, m + 0x10);
-            if (dist < fast_vec_dist(a, v))
+        dist = fast_vec_dist(search_position, candidate_moby + 0x10);
+        if (*(short *)(candidate_moby + 0xA6) == 0x4D6) {
+            normalize_vector_xyz(v, *(char **)(candidate_moby + 0x78), dist);
+            add_vector_xyz(v, v, candidate_moby + 0x10);
+            if (dist < fast_vec_dist(search_position, v))
                 continue;
         } else {
             float lim;
-            switch (t) {
+            switch (class_category) {
             case 5:
                 lim = 4.0f;
                 break;
@@ -2455,16 +2455,16 @@ char *FUN_L00_002cdf28(char *a, int *excl) {
     skip:
         if (!(dist < best))
             continue;
-        h = FUN_L00_002db890(m);
+        h = FUN_L00_002db890(candidate_moby);
         if (h != 0 && *(short *)(h + 0x68) > 0)
             continue;
-        x = (char *)FUN_002141f8_c(m);
-        qcopy(v, m + 0x10);
+        x = (char *)FUN_002141f8_c(candidate_moby);
+        qcopy(v, candidate_moby + 0x10);
         if (x != 0)
             v[2] = v[2] + (*(float *)(x + 0x10) + 0.05f);
-        if (collision_line(a, v, 6, (int)m, 0) == 0) {
+        if (collision_line(search_position, v, 6, (int)candidate_moby, 0) == 0) {
             best = dist;
-            result = m;
+            result = candidate_moby;
         }
     }
     return result;
