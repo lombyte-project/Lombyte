@@ -23,8 +23,8 @@ void draw_screen_effect(void) {
     s32 i;
     s16 height;
     u64 mask;
-    s32 c;
-    u64 e;
+    s32 background_color;
+    u64 background_alpha_state;
     s32 first_stripe_color;
     u64 e18;
     s32 second_stripe_color;
@@ -32,13 +32,13 @@ void draw_screen_effect(void) {
 
     i = 0;
     height = fs_aa_buffer.display_height;
-    e = screen_color_effect_now->enable;
-    if (e != 0) {
-        vu1_add_g_sregister(0x42, e & 0xFF000000FFULL);
+    background_alpha_state = screen_color_effect_now->enable;
+    if (background_alpha_state != 0) {
+        vu1_add_g_sregister(0x42, background_alpha_state & 0xFF000000FFULL);
     }
-    c = screen_color_effect_now->color;
-    if (c & 0xFF000000) {
-        draw_rect_overlay(0, height, 0, fs_aa_buffer.display_width, (u64)((s64)c << 0x20) >> 0x20);
+    background_color = screen_color_effect_now->color;
+    if (background_color & 0xFF000000) {
+        draw_rect_overlay(0, height, 0, fs_aa_buffer.display_width, (u64)((s64)background_color << 0x20) >> 0x20);
     }
     if (height > 0) {
         mask = 0xFF000000FFULL;
