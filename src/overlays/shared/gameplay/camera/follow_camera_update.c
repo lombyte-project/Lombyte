@@ -1067,17 +1067,17 @@ void FUN_L00_001eb0c8_002eb320(void *, void *, float) __asm__("FUN_L00_001eb0c8"
 void FUN_L00_001eb0b0_002eb320(void *) __asm__("FUN_L00_001eb0b0");
 void FUN_L00_001ff250_002eb320(void *) __asm__("FUN_L00_001ff250");
 void FUN_L00_002eb278_002eb320(char *) __asm__("FUN_L00_002eb278");
-void FUN_L00_002eb320(char *p, void *b, u128 *v, float x) {
-    char *m = *(char **)(p + 0x70);
-    char *d = m + 0xb0;
+void FUN_L00_002eb320(char *camera_object, void *b, u128 *v, float x) {
+    char *camera_state = *(char **)(camera_object + 0x70);
+    char *d = camera_state + 0xb0;
     qcopy(d, v);
-    qcopy(m + 0x80, v);
+    qcopy(camera_state + 0x80, v);
     *(float *)(d + 0x18) = x;
-    FUN_L00_001eb0c8_002eb320(m + 0x14, b, x);
-    FUN_L00_001eb0c8_002eb320(p + 0x50, b, 0.0f);
-    FUN_L00_001eb0b0_002eb320(m);
-    FUN_L00_001ff250_002eb320(m + 0x90);
-    FUN_L00_002eb278_002eb320(p);
+    FUN_L00_001eb0c8_002eb320(camera_state + 0x14, b, x);
+    FUN_L00_001eb0c8_002eb320(camera_object + 0x50, b, 0.0f);
+    FUN_L00_001eb0b0_002eb320(camera_state);
+    FUN_L00_001ff250_002eb320(camera_state + 0x90);
+    FUN_L00_002eb278_002eb320(camera_object);
 }
 typedef struct {
     u8 pad[0x28];
