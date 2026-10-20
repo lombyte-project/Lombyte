@@ -180,6 +180,7 @@ void FUN_L00_002c89e8(struct Moby *thrown_moby)
 {
     enum {
         THROWN_MOBY_STATE_INITIALIZE = 0,
+        THROWN_MOBY_STATE_GROW_TO_QUARTER_SCALE = 1,
         THROWN_MOBY_STATE_MOVE_WITH_COLLISION = 2,
         THROWN_MOBY_STATE_SPAWN_SEQUENCE = 3,
         THROWN_MOBY_STATE_FADE_OUT = 4,
@@ -220,7 +221,7 @@ void FUN_L00_002c89e8(struct Moby *thrown_moby)
         vars->timer = 0;
         vars->spawn_count = 0;
         break;
-    case 1: {
+    case THROWN_MOBY_STATE_GROW_TO_QUARTER_SCALE: {
         vars->timer = 0;
         {
             f32 class_scale = thrown_moby->pclass->scale;
