@@ -3403,7 +3403,7 @@ void particle_spawner_smoke_fire_update(P *spawner) {
     };
     Q *q = spawner->q;
     u8 *tbl;
-    V v, a, b;
+    V v, particle_vector, b;
     float g, f;
     int i, j, particle_start, e, col, r;
     E *ent;
@@ -3455,19 +3455,19 @@ void particle_spawner_smoke_fire_update(P *spawner) {
             return;
         if (q->flag42 && vector_distance(&D_L00_00166DC0, &spawner->pos) < 128.0f) {
             for (e = 0; e < D_L00_001619BC; e++) {
-                a.x = FUN_L00_00257c48(0.0f, 1.0f);
-                a.y = FUN_L00_00257c48(0.0f, 1.0f);
-                a.z = 1.0f;
-                a.w = 1.0f;
-                FUN_001f9d20(&b, &a, tbl);
+                particle_vector.x = FUN_L00_00257c48(0.0f, 1.0f);
+                particle_vector.y = FUN_L00_00257c48(0.0f, 1.0f);
+                particle_vector.z = 1.0f;
+                particle_vector.w = 1.0f;
+                FUN_001f9d20(&b, &particle_vector, tbl);
                 b.z += 0.5f;
-                a.x = FUN_L00_00257c48(0.0f, frame_time * 0.25f);
-                a.y = FUN_L00_00257c48(0.0f, frame_time * 0.25f);
-                a.z = q->unk20 * frame_time;
+                particle_vector.x = FUN_L00_00257c48(0.0f, frame_time * 0.25f);
+                particle_vector.y = FUN_L00_00257c48(0.0f, frame_time * 0.25f);
+                particle_vector.z = q->unk20 * frame_time;
                 f = random_float_between(q->unk24, q->unk28);
                 col = FUN_L00_00257b90(q->h2C, q->h2E) << 24 | D_L00_001619C8;
                 r = FUN_L00_00257b90(D_L00_001619C0, D_L00_001619C4);
-                ent = FUN_L00_0026d000(&b, r, D_L00_001619B4, 1.0f, &a, D_L00_001619B8, col, f);
+                ent = FUN_L00_0026d000(&b, r, D_L00_001619B4, 1.0f, &particle_vector, D_L00_001619B8, col, f);
                 if (ent) {
                     sub = &ent->sub;
                     ent->h0A = FUN_001f96f8_c(FUN_L00_00257b90(q->x30, q->x34));
