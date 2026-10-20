@@ -3307,7 +3307,7 @@ void FUN_L06_002fbfb0(char *moby) {
     char *data = *(char **)(moby + 0x78);
     char *child;
     float v[4];
-    float a, b;
+    float parent_distance, b;
     float phase_a, phase_b;
     float target_delta;
     float target_a, target_b, target_rot_a, target_rot_b;
@@ -3359,16 +3359,16 @@ void FUN_L06_002fbfb0(char *moby) {
     case MOVE_PAIR_TO_FIXED_OFFSETS:
         target_delta = FUN_001f9b48(moby + 0x10, data + 0x10);
         child = *(char **)(data + 0x40);
-        a = target_delta;
+        parent_distance = target_delta;
         b = FUN_001f9b48(child + 0x10, data + 0x10);
-        FUN_00213f38(&a, &((float *)data)[2], D_L06_00161F1C, frame_time_sq * 10.0f, frame_time_sq * 20.0f, frame_time * 5.0f);
+        FUN_00213f38(&parent_distance, &((float *)data)[2], D_L06_00161F1C, frame_time_sq * 10.0f, frame_time_sq * 20.0f, frame_time * 5.0f);
         FUN_00213f38(&b, &((float *)data)[0x11], D_L06_00161F20, frame_time_sq * 10.0f, frame_time_sq * 20.0f, frame_time * 5.0f);
-        fast_vec_normalize(v, data + 0x30, a);
+        fast_vec_normalize(v, data + 0x30, parent_distance);
         fast_vec_add(moby + 0x10, data + 0x10, v);
         fast_vec_normalize(v, data + 0x30, -b);
         fast_vec_add(*(char **)(data + 0x40) + 0x10, data + 0x10, v);
         FUN_L00_00250df8(*(char **)(data + 0x40));
-        if (absolute_float(a - D_L06_00161F1C) < 0.01f && absolute_float(b - D_L06_00161F20) < 0.01f) moby[0x20] = 5;
+        if (absolute_float(parent_distance - D_L06_00161F1C) < 0.01f && absolute_float(b - D_L06_00161F20) < 0.01f) moby[0x20] = 5;
         return;
     case ANIMATE_PAIR_WITH_TIMED_PHASES:
         target_delta = FUN_001f9b48(moby + 0x10, data + 0x10);
