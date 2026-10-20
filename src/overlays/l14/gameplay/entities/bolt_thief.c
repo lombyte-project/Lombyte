@@ -63,7 +63,7 @@ void FUN_L14_002fded0(Moby_2FF358 *source_moby) {
     Vec_2FF358 B;
     Vec_2FF358 C;
     Part_2FF358 *puff;
-    int i, j, n, puff_lifetime_frames, k, col;
+    int i, j, puff_signed_amount, puff_lifetime_frames, k, col;
     float puff_size;
 
     scale_vector_xyz(A, source_moby->right, D_L14_00161F90);
@@ -74,8 +74,8 @@ void FUN_L14_002fded0(Moby_2FF358 *source_moby) {
     scale_vector_xyz(A, source_moby->fwd, D_L14_00161F94);
     add_vector_xyz(B, B, A);
     for (i = 1; i >= 0; i--) {
-        n = func_002140B0_2FF358(0x10);
-        k = func_002140B0_2FF358(2) == 0 ? n : -n;
+        puff_signed_amount = func_002140B0_2FF358(0x10);
+        k = func_002140B0_2FF358(2) == 0 ? puff_signed_amount : -puff_signed_amount;
         puff = spawn_puff(B, 0.2f, 1.0f, 0.9f, k, &D_L14_0015F580, 200000.0f, D_L14_00161FA4);
         if (puff != 0) {
             struct PartSub_2FF358 *f = &puff->sub;
@@ -89,10 +89,10 @@ void FUN_L14_002fded0(Moby_2FF358 *source_moby) {
     scale_vector_xyz(A, source_moby->right, D_L14_00161F9C);
     puff_size = 100000.0f;
     add_vector_xyz(B, B, A);
-    n = 0x10;
+    puff_signed_amount = 0x10;
     puff_lifetime_frames = scale_game_frames(2);
     for (j = 0; j < 3; j++) {
-        puff = spawn_puff(B, 0.05f, 1.0f, 1.0f, n, &D_L14_0015F580, puff_size, 0x7FFFFFFF);
+        puff = spawn_puff(B, 0.05f, 1.0f, 1.0f, puff_signed_amount, &D_L14_0015F580, puff_size, 0x7FFFFFFF);
         if (puff != 0) {
             struct PartSub_2FF358 *f = &puff->sub;
 
@@ -102,7 +102,7 @@ void FUN_L14_002fded0(Moby_2FF358 *source_moby) {
             f->bA = 0x7F;
             f->bB = puff->life;
         }
-        n = -n;
+        puff_signed_amount = -puff_signed_amount;
         puff_lifetime_frames = puff_lifetime_frames << 1;
         puff_size = puff_size - 20000.0f;
     }
@@ -115,8 +115,8 @@ void FUN_L14_002fded0(Moby_2FF358 *source_moby) {
     if (func_002140B0_2FF358(3)) {
         Part_2FF358 *g;
 
-        n = func_002140B0_2FF358(4);
-        k = func_002140B0_2FF358(2) == 0 ? n : -n;
+        puff_signed_amount = func_002140B0_2FF358(4);
+        k = func_002140B0_2FF358(2) == 0 ? puff_signed_amount : -puff_signed_amount;
         g = spawn_puff(B, 0.05f, 1.0f, 1.0f, k, &D_L14_0015F580, puff_size, col);
         if (g != 0) {
             struct PartSub_2FF358 *f = &g->sub;
