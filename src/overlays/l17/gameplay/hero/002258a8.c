@@ -159,6 +159,7 @@ void FUN_L17_002258a8(void) {
         HERO_STATE_GRIND_RAIL_TRANSFER = 42,
         HERO_STATE_GRIND_ATTACK = 43,
         HERO_STATE_GRIND_OBSTACLE_JUMP = 66,
+        HERO_STATE_CIRCLE_RELEASE_WAIT = 89,
         HERO_STATE_APPROACH_TARGET_POSE = 101,
         HERO_STATE_TARGET_POSE_ANIMATION_WAIT = 102,
         HERO_STATE_AT_TARGET_POSE = 103,
@@ -2804,7 +2805,7 @@ void FUN_L17_002258a8(void) {
                     }
                     hero_set_state(0x53, 1);
                     break;
-                case 89:
+                case HERO_STATE_CIRCLE_RELEASE_WAIT:
                     if (hero.state_timer > scale_game_frames(0x2D) && !(controller_state.held & 0x20)) {
                         hero_set_state(0x53, 0);
                         set_hero_animation(0, 0, scale_game_frames(0x14));
