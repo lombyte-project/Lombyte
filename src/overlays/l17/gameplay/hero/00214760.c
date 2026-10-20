@@ -453,7 +453,7 @@ void FUN_L17_00214760(void) {
             FUN_L00_00217450();
         }
         break;
-    case 0x7F:
+    case HERO_STATE_SINK:
         if ((struct MobyView *)hero.unk6A4 == NULL) {
             struct MobyView *m = create_moby(0x52A);
             s32 h40 = 0x40;
