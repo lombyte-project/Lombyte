@@ -106,7 +106,7 @@ extern _Bigint *_Balloc(struct _reent *, s32);
 extern s32 _hi0bits(u32);
 extern s32 _lo0bits(u32 *);
 
-_Bigint *_d2b(struct _reent *ptr, f64 _d, s32 *e, s32 *bits) {
+_Bigint *_d2b(struct _reent *ptr, f64 _d, s32 *binary_exponent, s32 *bits) {
     double_union d;
     _Bigint *b;
     s32 de, i, k;
@@ -135,10 +135,10 @@ _Bigint *_d2b(struct _reent *ptr, f64 _d, s32 *e, s32 *bits) {
         k += 32;
     }
     if (de) {
-        *e = de - Bias - (P - 1) + k;
+        *binary_exponent = de - Bias - (P - 1) + k;
         *bits = P - k;
     } else {
-        *e = de - Bias - (P - 1) + 1 + k;
+        *binary_exponent = de - Bias - (P - 1) + 1 + k;
         *bits = 32 * i - _hi0bits(x[i - 1]);
     }
     return b;
