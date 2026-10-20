@@ -787,7 +787,7 @@ void moving_platform_small_update(char *moby) {
     char *vel;
     char *target;
     int idx;
-    int t;
+    int easing_frame_count;
     int next;
     int end;
     int count;
@@ -823,8 +823,8 @@ void moving_platform_small_update(char *moby) {
         if (fast_dec_timer(data + 0x100)) {
             *(float *)(data + 0x110) = FUN_001f9b48(*(char **)(pa + 0x10) + 0x10,
                                                     *(char **)(pa + 0x10) + **(int **)(pa + 0x10) * 0x10);
-            t = scale_game_frames(240);
-            *(float *)(data + 0x114) = *(float *)(data + 0x110) * 4.0f / convert_integer_to_float(t * scale_game_frames(240));
+            easing_frame_count = scale_game_frames(240);
+            *(float *)(data + 0x114) = *(float *)(data + 0x110) * 4.0f / convert_integer_to_float(easing_frame_count * scale_game_frames(240));
             *(int *)(data + 0x10C) = 0;
             moby[0x20] = 1;
         }
@@ -837,13 +837,13 @@ void moving_platform_small_update(char *moby) {
             !voice_is_playing(moby, *(int *)(data + 0x104))) {
             *(int *)(data + 0x104) = trooper_play_sound(0, 4, (int)moby, 0x389);
         }
-        t = ++*(int *)(data + 0x10C);
+        easing_frame_count = ++*(int *)(data + 0x10C);
         if (scale_game_frames(240) / 2 < *(int *)(data + 0x10C)) {
             speed = -speed;
-            t = scale_game_frames(240) - *(int *)(data + 0x10C);
+            easing_frame_count = scale_game_frames(240) - *(int *)(data + 0x10C);
             base = *(float *)(data + 0x110);
         }
-        base += speed * 0.5f * convert_integer_to_float(t * t);
+        base += speed * 0.5f * convert_integer_to_float(easing_frame_count * easing_frame_count);
         if (pb[4] < 0) {
             base = *(float *)(data + 0x110) - base;
         }
