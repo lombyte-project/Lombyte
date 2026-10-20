@@ -2848,26 +2848,26 @@ extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 
 void FUN_L14_002b5d18(struct Moby *moby) {
     float f = D_L14_00161540 * 1.5f;
-    char *d = (char *)moby->pvars;
-    char *p;
+    char *moby_vars = (char *)moby->pvars;
+    char *active_path;
     float v[4] __attribute__((aligned(16)));
-    *(int *)(d + 0xE8) = 0;
-    *(float *)(d + 0x160) = f;
-    *(int *)(d + 0xEC) = 0;
-    *(int *)(d + 0x164) = 0;
-    *(int *)(d + 0x168) = 0;
-    *(int *)(d + 0x16C) = 0;
-    *(int *)(d + 0xC0) = 0;
-    *(int *)(d + 0xC4) = 0;
-    if (*(int *)(d + 0x10C) == 0)
-        p = (char *)D_L14_001B0BB0[*(int *)(d + 0xD0)];
+    *(int *)(moby_vars + 0xE8) = 0;
+    *(float *)(moby_vars + 0x160) = f;
+    *(int *)(moby_vars + 0xEC) = 0;
+    *(int *)(moby_vars + 0x164) = 0;
+    *(int *)(moby_vars + 0x168) = 0;
+    *(int *)(moby_vars + 0x16C) = 0;
+    *(int *)(moby_vars + 0xC0) = 0;
+    *(int *)(moby_vars + 0xC4) = 0;
+    if (*(int *)(moby_vars + 0x10C) == 0)
+        active_path = (char *)D_L14_001B0BB0[*(int *)(moby_vars + 0xD0)];
     else
-        p = (char *)D_L14_001B0BB0[*(int *)(d + 0x150)];
-    qcopy(&moby->pos, p + 0x10);
-    fast_vec_sub(v, p + 0x20, &moby->pos);
+        active_path = (char *)D_L14_001B0BB0[*(int *)(moby_vars + 0x150)];
+    qcopy(&moby->pos, active_path + 0x10);
+    fast_vec_sub(v, active_path + 0x20, &moby->pos);
     moby->rot.z = fast_arc_tan(v[0], v[1]);
-    *(int *)(d + 0xE4) = 0;
-    clear_u64_value(d + 0xF0);
+    *(int *)(moby_vars + 0xE4) = 0;
+    clear_u64_value(moby_vars + 0xF0);
 }
 /* Exhaust puffs: two red sparks and three white puffs of shrinking size behind the moby. */
 extern int below_x(int) __asm__("FUN_00213260");
