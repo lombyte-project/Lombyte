@@ -1851,7 +1851,7 @@ extern float D_L14_00161FD0 __attribute__((sda));
 extern float D_L14_00161FD4 __attribute__((sda));
 extern float D_L14_00161FD8 __attribute__((sda));
 extern int D_L14_00161FE4 __attribute__((sda));
-void FUN_L14_002feca8(unsigned char *m) {
+void FUN_L14_002feca8(unsigned char *moby) {
     float off[4];
     float pos[4];
     int i;
@@ -1859,9 +1859,9 @@ void FUN_L14_002feca8(unsigned char *m) {
     int n;
     int life;
     float size;
-    scale_y(off, m + 0xC0, D_L14_00161FCC);
-    add_y(pos, m + 0x10, off);
-    scale_y(off, m + 0xE0, D_L14_00161FD0);
+    scale_y(off, moby + 0xC0, D_L14_00161FCC);
+    add_y(pos, moby + 0x10, off);
+    scale_y(off, moby + 0xE0, D_L14_00161FD0);
     add_y(pos, pos, off);
     for (i = 0; i < 2; i++) {
         P_eca8 *part;
@@ -1876,9 +1876,9 @@ void FUN_L14_002feca8(unsigned char *m) {
             tail->bB = part->hA;
         }
     }
-    scale_y(off, m + 0xC0, D_L14_00161FD4);
-    add_y(pos, m + 0x10, off);
-    scale_y(off, m + 0xE0, D_L14_00161FD8);
+    scale_y(off, moby + 0xC0, D_L14_00161FD4);
+    add_y(pos, moby + 0x10, off);
+    scale_y(off, moby + 0xE0, D_L14_00161FD8);
     add_y(pos, pos, off);
     n = 0x10;
     life = frames_y(2);
