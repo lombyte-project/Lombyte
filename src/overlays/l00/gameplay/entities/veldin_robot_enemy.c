@@ -481,12 +481,12 @@ extern f32 D_L00_00161BD8 __attribute__((sda));
 extern f32 D_L00_00161BDC __attribute__((sda));
 extern f32 D_L00_00161BE0 __attribute__((sda));
 
-void FUN_L00_002e1678(ElectroidMoby *m) {
+void FUN_L00_002e1678(ElectroidMoby *moby) {
     ElectroidVars *vars;
     void *anim;
     ElectroidHit *coll;
-    Path *a;
-    ElectroidMoby *t;
+    Path *path;
+    ElectroidMoby *candidate_target;
     ElectroidVec v;
     struct Hero *g;
     s32 hit;
@@ -495,8 +495,8 @@ void FUN_L00_002e1678(ElectroidMoby *m) {
     f32 unused;
     f32 range;
 
-    vars = m->vars;
-    if (m->state == 0) {
+    vars = moby->vars;
+    if (moby->state == 0) {
         return;
     }
     if (vars->unk38 != 0) {
@@ -506,9 +506,9 @@ void FUN_L00_002e1678(ElectroidMoby *m) {
     fast_dec_timer_s16(&vars->unk1DA);
     anim = vars->unk60;
     dmg = 0.0f;
-    coll = find_moby_hit(m, 0x330000, 0);
-    hit_reaction(m, coll, &vars->health, 0, &hit, &dmg, 0, 4);
-    if (hit != 1 && m->state != 8 && dmg != 0.0f) {
+    coll = find_moby_hit(moby, 0x330000, 0);
+    hit_reaction(moby, coll, &vars->health, 0, &hit, &dmg, 0, 4);
+    if (hit != 1 && moby->state != 8 && dmg != 0.0f) {
         vars->health -= dmg;
         vars->unk90 = 0x200;
         vars->unk80 = D_L00_00161BD4 * frame_time_sq;
@@ -521,43 +521,43 @@ void FUN_L00_002e1678(ElectroidMoby *m) {
         vars->unk98 = 0.5f;
         if (vars->health <= 0.0f) {
             vars->unk94 = 0x29;
-            m->flags &= ~0x1000;
+            moby->flags &= ~0x1000;
             v.q = coll->pos.q;
             trooper_knockback_arc(&v, &angle, &vars->unk88, &vars->unk8C);
-            trooper_start_knockback(m, vars->unk70, 0xB, 1, 0, angle);
+            trooper_start_knockback(moby, vars->unk70, 0xB, 1, 0, angle);
             vars->unkC0 = 7.0f;
             vars->unkC4 = 16.0f;
-            m->state = 8;
-            m->unk94 = 0;
+            moby->state = 8;
+            moby->unk94 = 0;
             vars->unk67 = 0x78;
-            trooper_anim_update(m, anim);
-            FUN_L00_00257470(m, 0, -1);
+            trooper_anim_update(moby, anim);
+            FUN_L00_00257470(moby, 0, -1);
         } else {
             vars->unk88 = D_L00_00161BDC * frame_time * 0.35f;
             vars->unk8C = D_L00_00161BE0 * frame_time * 0.5f;
             v.q = coll->pos.q;
             trooper_knockback_arc(&v, &unused, &vars->unk88, &vars->unk8C);
-            trooper_start_knockback(m, vars->unk70, 8, 1, 0, fast_arc_tan(coll->pos.f[0], coll->pos.f[1]));
+            trooper_start_knockback(moby, vars->unk70, 8, 1, 0, fast_arc_tan(coll->pos.f[0], coll->pos.f[1]));
             vars->unkC4 = vars->unkC0 = -1.0f;
-            m->state = 7;
+            moby->state = 7;
             vars->unk67 = 0xFA;
             vars->unk26 = scale_game_frames(0x3C);
-            trooper_anim_update(m, anim);
+            trooper_anim_update(moby, anim);
         }
-        FUN_L00_002e2040(m);
+        FUN_L00_002e2040(moby);
     }
-    m->unkA4 = 0xFF;
-    trooper_anim_finish(m, anim);
-    if (m->state == 1) {
-        a = D_L00_001B04B0[vars->unk1B4];
-        FUN_L00_0025ff38(m, &vars->targetPos, 0, 0, a->pts, a->count, 64.0f);
-    } else if (m->state != 5) {
+    moby->unkA4 = 0xFF;
+    trooper_anim_finish(moby, anim);
+    if (moby->state == 1) {
+        path = D_L00_001B04B0[vars->unk1B4];
+        FUN_L00_0025ff38(moby, &vars->targetPos, 0, 0, path->pts, path->count, 64.0f);
+    } else if (moby->state != 5) {
         range = D_L00_00161BD0;
         if (vars->unk1DA != 0) {
             range = 37.0f;
         }
-        if (FUN_L00_0025fcb8(m, range, &vars->targetPos) != 2 &&
-            range < vector_distance(&m->pos, &vars->targetPos)) {
+        if (FUN_L00_0025fcb8(moby, range, &vars->targetPos) != 2 &&
+            range < vector_distance(&moby->pos, &vars->targetPos)) {
             vars->unk114 = 2;
         }
     }
@@ -567,14 +567,14 @@ void FUN_L00_002e1678(ElectroidMoby *m) {
         qcopy(&vars->targetPos, &g->motion.pos);
     }
     if (vars->unk1BC >= 0) {
-        t = (ElectroidMoby *)(D_L00_0015FFD8 + (vars->unk1BC << 8));
-        if (t == 0 || t->state == 0xFE || t->state == 0xFD) {
+        candidate_target = (ElectroidMoby *)(D_L00_0015FFD8 + (vars->unk1BC << 8));
+        if (candidate_target == 0 || candidate_target->state == 0xFE || candidate_target->state == 0xFD) {
             vars->unk1BC = -1;
         } else {
-            range = vector_distance(&m->pos, &t->pos);
-            if (range < vector_distance(&m->pos, &vars->target->pos)) {
-                vars->target = t;
-                qcopy(&vars->targetPos, &t->pos);
+            range = vector_distance(&moby->pos, &candidate_target->pos);
+            if (range < vector_distance(&moby->pos, &vars->target->pos)) {
+                vars->target = candidate_target;
+                qcopy(&vars->targetPos, &candidate_target->pos);
                 vars->unk114 = 1;
             }
         }
