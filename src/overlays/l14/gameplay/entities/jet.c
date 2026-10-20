@@ -694,8 +694,8 @@ extern int D_L14_00161C30 __attribute__((sda));
 extern int D_L14_00161C34 __attribute__((sda));
 extern float D_L14_00161C38 __attribute__((sda));
 extern float D_L14_00161C3C __attribute__((sda));
-void FUN_L14_002eb388(struct Moby *m, int i, void *dir) {
-    Spk_k *spark_vars = (Spk_k *)m->pvars;
+void FUN_L14_002eb388(struct Moby *wind_control_moby, int i, void *dir) {
+    Spk_k *spark_vars = (Spk_k *)wind_control_moby->pvars;
     float fwd[4];
     float side[4];
     float up[4];
