@@ -313,7 +313,7 @@ void hero_update_movement(void) {
     Vec4 v20;
     Vec4 v30;
     Vec4 m40[4];
-    Vec4 m80[4];
+    Vec4 transposed_yaw_matrix[4];
     Vec4 vC0;
     Vec4 vD0;
 
@@ -1004,8 +1004,8 @@ void hero_update_movement(void) {
         clear_u64_value(&v20);
         v20.f[2] = hero.motion.rot.f[2];
         euler_rotation_matrix(m40, &v20);
-        transpose_rotation_matrix(m80, m40);
-        transform_vector(&v0, &v0, m80);
+        transpose_rotation_matrix(transposed_yaw_matrix, m40);
+        transform_vector(&v0, &v0, transposed_yaw_matrix);
         v10.f[0] = -fast_arc_tan(square_root(v0.f[0] * v0.f[0] + v0.f[2] * v0.f[2]), v0.f[1]);
         v10.f[1] = fast_arc_tan(v0.f[2], v0.f[0]);
         FUN_L00_0025bc98(&hero.motion.rot.f[1], v10.f[1], &hero.motion.unkA0.f[1], 0, frame_scale_sq * 0.04f, frame_scale_sq * 0.2f,
