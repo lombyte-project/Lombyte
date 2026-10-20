@@ -785,12 +785,12 @@ float absolute_float(float input) __asm__("func_001F99C0");
 void FUN_L02_002fa7c8(char *candidate_moby) {
     float v[4];
     char *g = D_L02_00167280_c;
-    char *p = *(char **)(g + 0x180);
+    char *selection_reference = *(char **)(g + 0x180);
     char *candidate_selection_state;
     float vector_distance;
     float accumulated_amount;
     float ang;
-    if (*(short *)(p + 0x86) == 0) {
+    if (*(short *)(selection_reference + 0x86) == 0) {
         if (!(0.05f < absolute_float(*(float *)(D_0013CA44)))) {
             candidate_selection_state = g + 0x380;
             subtract_vector_xyz(v, candidate_moby + 0x10, &hero.motion.pos);
@@ -799,17 +799,17 @@ void FUN_L02_002fa7c8(char *candidate_moby) {
                 if (0.0f < vector_distance) {
                     if (vector_distance < *(float *)(candidate_selection_state + 8)) {
                         if (0.0f < v[2]) {
-                            ang = 1.5707964f - fast_arc_sin(dot_vectors_xyz(p, v) / vector_distance);
+                            ang = 1.5707964f - fast_arc_sin(dot_vectors_xyz(selection_reference, v) / vector_distance);
                             if (ang < 1.1170107f) {
-                                subtract_vector_xyz(v, candidate_moby + 0x10, p + 0x30);
+                                subtract_vector_xyz(v, candidate_moby + 0x10, selection_reference + 0x30);
                                 vector_distance = vector_length_xyz(v);
                                 if (vector_distance == 0.0f) {
                                     vector_distance = 0.0001f;
                                 }
-                                ang = 1.5707964f - fast_arc_sin(dot_vectors_xyz(p, v) / vector_distance);
+                                ang = 1.5707964f - fast_arc_sin(dot_vectors_xyz(selection_reference, v) / vector_distance);
                                 if (ang < 0.62831855f) {
                                     accumulated_amount = *(float *)(candidate_selection_state + 0xC) + *(float *)&D_L02_0016238C;
-                                    *(char **)(g + 0x380) = p;
+                                    *(char **)(g + 0x380) = selection_reference;
                                     *(float *)(candidate_selection_state + 8) = vector_distance;
                                     *(char **)(candidate_selection_state + 4) = candidate_moby;
                                     *(float *)(candidate_selection_state + 0xC) = accumulated_amount;
