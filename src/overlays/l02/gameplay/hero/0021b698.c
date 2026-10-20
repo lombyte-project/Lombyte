@@ -967,14 +967,14 @@ void FUN_L02_00225c20(void) {
     } break;
     case HERO_STATE_SINK:
         if (((Moby *)hero.unk6A4) == 0) {
-            Moby *m;
+            Moby *spawned_sink_moby;
 
-            m = (Moby *)FUN_L00_00250df8_cf(0x52A);
-            hero.unk6A4 = (struct Moby *)m;
+            spawned_sink_moby = (Moby *)FUN_L00_00250df8_cf(0x52A);
+            hero.unk6A4 = (struct Moby *)spawned_sink_moby;
             if (((Moby *)hero.unk6A4) != 0) {
-                qcopy(m->f10, hero.motion.pos.f);
-                qcopy(m->f40, hero.motion.rot.f);
-                m->f32 = 0x40;
+                qcopy(spawned_sink_moby->f10, hero.motion.pos.f);
+                qcopy(spawned_sink_moby->f40, hero.motion.rot.f);
+                spawned_sink_moby->f32 = 0x40;
                 ((Moby *)hero.unk6A4)->f31 = 1;
                 ((Moby *)hero.unk6A4)->f30 = 0;
                 ((Moby *)hero.unk6A4)->f23 = 0;
@@ -1500,14 +1500,14 @@ void FUN_L02_00225c20(void) {
             }
             e = d - off;
             if (absolute_float(e) < range + 3.0f) {
-                float q;
+                float attack_speed_scale;
 
-                q = e / 0.9f;
-                if (q > cap) {
-                    q = cap;
+                attack_speed_scale = e / 0.9f;
+                if (attack_speed_scale > cap) {
+                    attack_speed_scale = cap;
                 }
-                if (q > 1.0f) {
-                    hero.speed_scale = q;
+                if (attack_speed_scale > 1.0f) {
+                    hero.speed_scale = attack_speed_scale;
                 }
             }
         }
