@@ -1017,7 +1017,8 @@ extern s32 FUN_L00_00211870(f32);
 void FUN_L06_0022e020(void) {
     enum {
         HERO_STATE_VEHICLE_MODE_1_HURT = 0x46,
-        HERO_STATE_VEHICLE_MODE_3_HURT = 0x56
+        HERO_STATE_VEHICLE_MODE_3_HURT = 0x56,
+        HERO_STATE_MOVE_TO_TARGET_POSITION = 0x65
     };
     struct MobyView *moby = (struct MobyView *)hero.moby;
     s32 sub = hero.state.step;
@@ -2530,7 +2531,7 @@ void FUN_L06_0022e020(void) {
         FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.velocity, 0.004f);
         break;
     }
-    case 0x65: {
+    case HERO_STATE_MOVE_TO_TARGET_POSITION: {
         f32 l;
         f32 k;
         FUN_001f9a28_c(&vector_or_hit_descriptor_scratch, &hero.unk1640, &hero.motion.pos);
