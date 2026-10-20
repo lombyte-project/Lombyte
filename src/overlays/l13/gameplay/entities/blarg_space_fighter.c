@@ -2021,16 +2021,16 @@ extern void func_L00_0025F4A8_s(void *, void *, void *, float, float, int, int, 
 void FUN_L13_002e1348(struct Moby *moby, char *blob_data, float scale_ratio) {
     float v[4];
     float split_spawn_position[4];
-    float a = scale_ratio * 7.0f;
+    float nearby_effect_scale = scale_ratio * 7.0f;
     float b;
     int i;
     b = scale_ratio * 10.0f;
     if (20.0f < distance_xyz(&moby->pos, &hero.motion.pos)) {
-        a = b = 0.0f;
+        nearby_effect_scale = b = 0.0f;
     }
     func_0022ED80_s(0, 0, (int)moby);
     if (*(short *)(blob_data + 0x4C) == 0) {
-        func_L00_0025F4A8_s(moby, D_L13_00160680, 0, a, b, func_001FA898_s(scale_ratio * 10.0f), func_001FA898_s(scale_ratio * 3.0f),
+        func_L00_0025F4A8_s(moby, D_L13_00160680, 0, nearby_effect_scale, b, func_001FA898_s(scale_ratio * 10.0f), func_001FA898_s(scale_ratio * 3.0f),
                             func_001FA898_s(scale_ratio * 16.0f), scale_ratio * 4.0f, scale_ratio + scale_ratio, 9.0f, 1.0f, -1, scale_ratio * 15.0f, 0, 1, -1, 0);
     }
     moby->unk72 = 0;
