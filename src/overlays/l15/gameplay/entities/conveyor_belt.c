@@ -2083,7 +2083,7 @@ extern float D_L15_00162270 __attribute__((sda));
 void FUN_L15_002edfc0(struct Moby *moby) {
     RingVars_2edfc0 *data = (RingVars_2edfc0 *)moby->pvars;
     unsigned int i;
-    unsigned int n;
+    unsigned int uv_vertex_index;
     int j;
     int k;
     int r;
@@ -2114,10 +2114,10 @@ void FUN_L15_002edfc0(struct Moby *moby) {
         D_L15_001E0020[i] = color;
     }
     for (j = 0; j < 2; j++) {
-        for (n = 0; n < 88; n++) {
+        for (uv_vertex_index = 0; uv_vertex_index < 88; uv_vertex_index++) {
             Quad4_2edfc0 uv_scroll_factors = D_L15_00162278;
-            D_L15_001DFD60[n][0] = D_L15_001DF520[n][0] + FUN_L00_00200260_2edfc0(scale * uv_scroll_factors.f[j][0], 1.0f);
-            D_L15_001DFD60[n][1] = D_L15_001DF520[n][1] + FUN_L00_00200260_2edfc0(scale * uv_scroll_factors.f[j][1], 1.0f);
+            D_L15_001DFD60[uv_vertex_index][0] = D_L15_001DF520[uv_vertex_index][0] + FUN_L00_00200260_2edfc0(scale * uv_scroll_factors.f[j][0], 1.0f);
+            D_L15_001DFD60[uv_vertex_index][1] = D_L15_001DF520[uv_vertex_index][1] + FUN_L00_00200260_2edfc0(scale * uv_scroll_factors.f[j][1], 1.0f);
         }
         FUN_001f76a0_2edfc0();
         for (k = 0; k < 1; k++) {
