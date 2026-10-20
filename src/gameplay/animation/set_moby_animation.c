@@ -32,11 +32,11 @@ extern void update_moby_animation_state(void *) __asm__("func_0020C880");
 void set_moby_animation(MobyAnim *m, int seq, int frame) __asm__("FUN_00212ed8");
 
 void set_moby_animation(MobyAnim *m, int seq, int frame) {
-    int n = m->pClass->seqs[seq]->nframes;
+    int frame_count = m->pClass->seqs[seq]->nframes;
 
     m->seq = seq;
-    if (frame >= n) {
-        frame = n - 1;
+    if (frame >= frame_count) {
+        frame = frame_count - 1;
     }
     m->frame = frame;
     m->nextFrame = frame + 1;
