@@ -60,29 +60,29 @@ extern int D_L00_0017E4D8_23b6c0[] __asm__("D_L00_0017E4D8") __attribute__((sect
 extern u64 FUN_001ffa10_23b6c0(int) __asm__("FUN_001ffa10");
 
 void FUN_L00_0023b6c0(int tex, int x, int y, int w, int h, int a) {
-    u64 *p;
-    int *s;
+    u64 *packet_words;
+    int *coordinate_offsets;
     int *g;
     *(int *)(D_L00_001611C0_23b6c0 + 0) = 0x10000005;
     *(int *)(D_L00_001611C0_23b6c0 + 4) = 0;
     *(int *)(D_L00_001611C0_23b6c0 + 8) = 0;
     *(int *)(D_L00_001611C0_23b6c0 + 12) = 0x50000005;
     D_L00_001611C0_23b6c0 += 0x10;
-    p = (u64 *)D_L00_001611C0_23b6c0;
-    p[0] = 0x7400000000008001ULL;
-    p[1] = 0x5353106;
-    p[2] = FUN_001ffa10_23b6c0(tex);
-    p[3] = 0x156;
-    p[4] = ((u64)a << 24) | 0x7F7F7F;
-    p[5] = 0;
-    s = D_0013E500_23b6c0;
+    packet_words = (u64 *)D_L00_001611C0_23b6c0;
+    packet_words[0] = 0x7400000000008001ULL;
+    packet_words[1] = 0x5353106;
+    packet_words[2] = FUN_001ffa10_23b6c0(tex);
+    packet_words[3] = 0x156;
+    packet_words[4] = ((u64)a << 24) | 0x7F7F7F;
+    packet_words[5] = 0;
+    coordinate_offsets = D_0013E500_23b6c0;
     g = D_L00_0017E4D8_23b6c0;
-    p[6] = (u64)(((x << 4) + s[4] - 8) | (((u64)((y << 4) + s[5] - 8)) << 16)) | ((u64)g[3] << 32);
-    p[7] = (h << 20) + (w << 4);
+    packet_words[6] = (u64)(((x << 4) + coordinate_offsets[4] - 8) | (((u64)((y << 4) + coordinate_offsets[5] - 8)) << 16)) | ((u64)g[3] << 32);
+    packet_words[7] = (h << 20) + (w << 4);
     x += w;
     y += h;
-    p[8] = (u64)(((x << 4) + s[4] - 8) | (((u64)((y << 4) + s[5] - 8)) << 16)) | ((u64)g[3] << 32);
-    p[9] = 0;
+    packet_words[8] = (u64)(((x << 4) + coordinate_offsets[4] - 8) | (((u64)((y << 4) + coordinate_offsets[5] - 8)) << 16)) | ((u64)g[3] << 32);
+    packet_words[9] = 0;
     *(char *volatile *)&D_L00_001611C0_23b6c0 += 0x50;
 }
 typedef unsigned long u64_23bac0;
