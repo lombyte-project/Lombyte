@@ -238,7 +238,7 @@ void FUN_L03_00292890(char *moby) {
     char *target;
     int next_id;
     int id;
-    float d;
+    float distance_margin_or_target_angle;
 
     data = *(Train292890 **)(moby + 0x78);
     coupling = D_L03_0015FFD8_292890 + (data->iC4 << 8);
@@ -258,9 +258,9 @@ void FUN_L03_00292890(char *moby) {
         }
         id = next_id;
         target = coupling + 0x10;
-        d = data->fDC - vector_distance(moby + 0x10, target);
-        *(float *)(coupling_data + 0xFC) = d;
-        if (d < 0.0f) {
+        distance_margin_or_target_angle = data->fDC - vector_distance(moby + 0x10, target);
+        *(float *)(coupling_data + 0xFC) = distance_margin_or_target_angle;
+        if (distance_margin_or_target_angle < 0.0f) {
             *(float *)(coupling_data + 0xFC) = 0.0f;
         }
         gunship_follow_path(coupling);
@@ -268,16 +268,16 @@ void FUN_L03_00292890(char *moby) {
                                fast_add_rotations(*(float *)(moby + 0x48), 3.1415927f), *(float *)(moby + 0x44));
         fast_vec_normalize(delta, delta, data->fC8);
         add_vector_xyz(moby + 0x10, moby + 0x10, delta);
-        d = fast_add_rotations(fast_arc_tan(*(float *)(coupling + 0x10) - *(float *)(moby + 0x10),
+        distance_margin_or_target_angle = fast_add_rotations(fast_arc_tan(*(float *)(coupling + 0x10) - *(float *)(moby + 0x10),
                                             *(float *)(coupling + 0x14) - *(float *)(moby + 0x14)),
                                3.1415927f);
         *(float *)(moby + 0x48) =
-            spring_turn(&data->fCC, *(float *)(moby + 0x48), d,
+            spring_turn(&data->fCC, *(float *)(moby + 0x48), distance_margin_or_target_angle,
                              (data->fC8 * 60.0f / data->fC0) * 0.25f * DEG_TO_RAD * frame_time_sq, (data->fC8 * 60.0f / data->fC0) * 0.5f * DEG_TO_RAD * frame_time_sq,
                              (data->fC8 * 60.0f / data->fC0) * frame_time);
-        d = fast_arc_tan(vector_distance(moby + 0x10, target), *(float *)(coupling + 0x18) - *(float *)(moby + 0x18));
+        distance_margin_or_target_angle = fast_arc_tan(vector_distance(moby + 0x10, target), *(float *)(coupling + 0x18) - *(float *)(moby + 0x18));
         *(float *)(moby + 0x44) =
-            spring_turn(&data->fD0, *(float *)(moby + 0x44), d,
+            spring_turn(&data->fD0, *(float *)(moby + 0x44), distance_margin_or_target_angle,
                              (data->fC8 * 60.0f / data->fC0) * 0.25f * DEG_TO_RAD * frame_time_sq, (data->fC8 * 60.0f / data->fC0) * 0.5f * DEG_TO_RAD * frame_time_sq,
                              (data->fC8 * 60.0f / data->fC0) * frame_time);
         moby_point_position(moby, 0, front);
