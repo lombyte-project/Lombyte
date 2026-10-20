@@ -513,45 +513,45 @@ extern T_2e03a0_2e03a0 D_L00_001BA5D0;
 extern T_2e03a0_2e03a0 D_L00_001BB230;
 extern s32 current_level_index_gp __asm__("D_0015ED84") __attribute__((sda));
 void pilots_helmet_update(M_2e03a0_2e03a0 *m) __asm__("FUN_L00_002e03a0");
-void pilots_helmet_update(M_2e03a0_2e03a0 *m) {
+void pilots_helmet_update(M_2e03a0_2e03a0 *moby) {
     enum {
         PILOTS_HELMET_INITIALIZE = 0,
         PILOTS_HELMET_WAIT_FOR_HERO_PROXIMITY = 1,
         PILOTS_HELMET_GRANT_REWARD = 2,
         PILOTS_HELMET_SAVE_AND_REMOVE = 3
     };
-    P_2e03a0_2e03a0 *p = m->p;
+    P_2e03a0_2e03a0 *p = moby->p;
     char *g;
     E_2e03a0_2e03a0 *e;
     u32 k;
     s32 n;
 
-    m->ang = FUN_001fa580_2e03a0(m->ang, D_0015ED6C_2e03a0 * 1.5707964f);
-    switch (m->state) {
+    moby->ang = FUN_001fa580_2e03a0(moby->ang, D_0015ED6C_2e03a0 * 1.5707964f);
+    switch (moby->state) {
     case PILOTS_HELMET_INITIALIZE:
-        FUN_L00_002d6bf0_2e03a0(m);
+        FUN_L00_002d6bf0_2e03a0(moby);
         if (p->fa_2e03a0 == -1)
-            stub_printf(D_L00_001EA1B0, m->h);
+            stub_printf(D_L00_001EA1B0, moby->h);
         if (item_available[7]) {
             stub_printf(D_L00_001EA1D8);
-            FUN_0020c828_2e03a0(m);
+            FUN_0020c828_2e03a0(moby);
             return;
         }
-        m->state = 1;
-        m->z += 1.0f;
+        moby->state = 1;
+        moby->z += 1.0f;
         break;
     case PILOTS_HELMET_WAIT_FOR_HERO_PROXIMITY:
-        FUN_L00_002e0788_2e03a0(m);
+        FUN_L00_002e0788_2e03a0(moby);
         g = (char *)&hero.motion.pos;
-        if (vector_distance((char *)m + 0x10, g) < 3.0f) {
+        if (vector_distance((char *)moby + 0x10, g) < 3.0f) {
             g -= 0x80;
-            if (FUN_001f99c0_2e03a0(m->z - *(f32 *)(g + 0x88)) < 2.0f && *(s32 *)(g + 0x22A8)) {
-                m->fl |= 0x41;
+            if (FUN_001f99c0_2e03a0(moby->z - *(f32 *)(g + 0x88)) < 2.0f && *(s32 *)(g + 0x22A8)) {
+                moby->fl |= 0x41;
                 if (p->fa_2e03a0 != -1)
                     start_scene(p->fa_2e03a0);
                 else
-                    stub_printf(D_L00_001EA1B0, m->h);
-                m->state = 2;
+                    stub_printf(D_L00_001EA1B0, moby->h);
+                moby->state = 2;
             }
         }
         break;
@@ -575,16 +575,16 @@ void pilots_helmet_update(M_2e03a0_2e03a0 *m) {
                     D_L00_0015FFD8_2e03a0[p->b].b0 + 2;
             }
         } else {
-            stub_printf(D_L00_001EA200, m->h);
+            stub_printf(D_L00_001EA200, moby->h);
         }
-        if (m->b0 != 0xFF)
-            FUN_L00_002502a0_2e03a0(m->b0);
+        if (moby->b0 != 0xFF)
+            FUN_L00_002502a0_2e03a0(moby->b0);
         D_00141410_2e03a0[0] = 7;
-        m->state = 3;
+        moby->state = 3;
         break;
     case PILOTS_HELMET_SAVE_AND_REMOVE:
         memcard_save_data(0, -1);
-        FUN_0020c828_2e03a0(m);
+        FUN_0020c828_2e03a0(moby);
         break;
     }
 }
