@@ -401,25 +401,25 @@ s32 FUN_001f96f8_b3058(s32) __asm__("FUN_001f96f8");
 void FUN_0022da68_b3058(s32, s32, void *) __asm__("FUN_0022da68");
 
 void visibomb_update(O_b3058 *o) __asm__("FUN_L00_002b3058");
-void visibomb_update(O_b3058 *o) {
+void visibomb_update(O_b3058 *visibomb_moby) {
     V_b3058 *v;
     struct Hero *g;
-    C_b3058 *c;
-    S_b3058 *s;
+    C_b3058 *controller;
+    S_b3058 *camera;
     R_b3058 *r;
-    f32 a, b;
+    f32 launch_yaw, b;
     s32 k;
     f32 t[4] __attribute__((aligned(16)));
     f32 u[4] __attribute__((aligned(16)));
 
-    if (o == 0) {
+    if (visibomb_moby == 0) {
         return;
     }
-    v = o->v;
+    v = visibomb_moby->v;
     FUN_001f9740_b3058(v);
-    c = &D_0013C940_b3058;
+    controller = &D_0013C940_b3058;
     g = &hero;
-    if (!(c->i1A4 & g->items[0].button_mask))
+    if (!(controller->i1A4 & g->items[0].button_mask))
         goto tail;
     if (v->i0 != 0)
         goto tail;
@@ -433,8 +433,8 @@ void visibomb_update(O_b3058 *o) {
         goto tail;
     if (g->state.current == 0x72 || g->state.current == 0x65)
         goto tail;
-    s = &D_L00_00166C80_b3058;
-    if (s->p180 != 0 && *(s16 *)(s->p180 + 0x86) == 5)
+    camera = &D_L00_00166C80_b3058;
+    if (camera->p180 != 0 && *(s16 *)(camera->p180 + 0x86) == 5)
         goto tail;
     if (g->grounded_frames == 0)
         goto tail;
@@ -442,27 +442,27 @@ void visibomb_update(O_b3058 *o) {
         goto tail;
     if (FUN_L00_00233db8_b3058(-1, 1) != 0) {
         b = 0.0f;
-        a = g->unk688;
+        launch_yaw = g->unk688;
         if (g->state.current == 1 && (*(u16 *)((u8 *)g->moby + 0x34) & 1)) {
-            a = FUN_001f9e90_b3058(s->f350, s->f354);
-            b = -FUN_001f9e90_b3058(FUN_001f9b20_b3058(&s->f350), s->f358);
-            FUN_001f9bf8_b3058(t, &s->f350, 0.3f);
-            FUN_001f9bf8_b3058(u, s->v370, -0.35f);
+            launch_yaw = FUN_001f9e90_b3058(camera->f350, camera->f354);
+            b = -FUN_001f9e90_b3058(FUN_001f9b20_b3058(&camera->f350), camera->f358);
+            FUN_001f9bf8_b3058(t, &camera->f350, 0.3f);
+            FUN_001f9bf8_b3058(u, camera->v370, -0.35f);
             FUN_001f9a10_b3058(t, t, u);
-            FUN_001f9a10_b3058(t, t, s->v140);
+            FUN_001f9a10_b3058(t, t, camera->v140);
         } else if (hero.unk22C8 == 1) {
-            b = FUN_001f9e90_b3058(FUN_001f9b20_b3058(o->vD0), o->fD8);
-            FUN_00214db0_b3058(t, 0.6f, a, -b);
-            FUN_001f9a10_b3058(t, t, o->v10);
+            b = FUN_001f9e90_b3058(FUN_001f9b20_b3058(visibomb_moby->vD0), visibomb_moby->fD8);
+            FUN_00214db0_b3058(t, 0.6f, launch_yaw, -b);
+            FUN_001f9a10_b3058(t, t, visibomb_moby->v10);
         } else {
-            FUN_00214db0_b3058(t, 0.6f, a, -b);
-            FUN_001f9a10_b3058(t, t, o->v10);
+            FUN_00214db0_b3058(t, 0.6f, launch_yaw, -b);
+            FUN_001f9a10_b3058(t, t, visibomb_moby->v10);
         }
-        if (o->b53 != 3) {
-            FUN_00212f90_b3058(o, 3, 0, 0);
+        if (visibomb_moby->b53 != 3) {
+            FUN_00212f90_b3058(visibomb_moby, 3, 0, 0);
         }
         FUN_L00_00203b18_b3058();
-        v->i4 = FUN_L00_002b58d8_b3058(o, t, a, b);
+        v->i4 = FUN_L00_002b58d8_b3058(visibomb_moby, t, launch_yaw, b);
         r = &D_00141680_b3058;
         if (r->u68 < 0xFFFF) {
             r->u68++;
@@ -472,14 +472,14 @@ void visibomb_update(O_b3058 *o) {
         }
         r->i6C = r->i6C | (1 << D_0015ED84_b3058) | 0x80000000;
         v->i0 = FUN_001f96f8_b3058(0x3C);
-    } else if (c->i1A4 & g->items[0].button_mask) {
-        FUN_0022da68_b3058(0, 0, o);
+    } else if (controller->i1A4 & g->items[0].button_mask) {
+        FUN_0022da68_b3058(0, 0, visibomb_moby);
     }
 tail:
-    if ((o->b70 & 2) && o->b53 != 1) {
-        FUN_00212f90_b3058(o, 1, 0, 0);
+    if ((visibomb_moby->b70 & 2) && visibomb_moby->b53 != 1) {
+        FUN_00212f90_b3058(visibomb_moby, 1, 0, 0);
     }
-    o->u34 |= 4;
+    visibomb_moby->u34 |= 4;
 }
 #include "qcopy.h"
 #include "rnc/overlay/quad.h"
