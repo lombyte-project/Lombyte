@@ -3159,51 +3159,51 @@ extern float D_L12_001619A8 __attribute__((sda));
 extern float D_L12_001619AC __attribute__((sda));
 extern float D_L12_001619B0 __attribute__((sda));
 void helicopter_update(char *m) __asm__("FUN_L12_002ebea8");
-void helicopter_update(char *m) {
+void helicopter_update(char *moby) {
     enum {
         HELICOPTER_INITIALIZE_PATH = 0,
         HELICOPTER_FOLLOW_PATH = 1
     };
-    char *d = *(char **)(m + 0x78);
+    char *moby_vars = *(char **)(moby + 0x78);
     float A[4];
     float B[4];
     float C[4];
     float E[4];
-    if (d != 0) {
-        int r = func_L01_00276680_i(m, convert_integer_to_float(*(short *)(m + 0x32)));
-        FUN_L12_002ebca8_c(m, r == -1);
-        switch ((unsigned char)m[0x20]) {
+    if (moby_vars != 0) {
+        int r = func_L01_00276680_i(moby, convert_integer_to_float(*(short *)(moby + 0x32)));
+        FUN_L12_002ebca8_c(moby, r == -1);
+        switch ((unsigned char)moby[0x20]) {
         case HELICOPTER_INITIALIZE_PATH:
-            if (*(int *)(d + 0x74) != -1) {
+            if (*(int *)(moby_vars + 0x74) != -1) {
                 char *tbl;
                 int idx;
                 int cnt;
-                FUN_L01_0028b410(d + 0x60);
-                tbl = D_L12_001B0930[*(int *)(d + 0x74)];
-                *(char **)(d + 0x70) = tbl;
-                idx = *(int *)(d + 0xA0);
+                FUN_L01_0028b410(moby_vars + 0x60);
+                tbl = D_L12_001B0930[*(int *)(moby_vars + 0x74)];
+                *(char **)(moby_vars + 0x70) = tbl;
+                idx = *(int *)(moby_vars + 0xA0);
                 cnt = *(int *)tbl - 1;
                 if (cnt < idx) idx = cnt;
-                qcopy((m + 0x10), tbl + idx * 16 + 0x10);
-                d[0x2A] = 0x10;
-                d[0x28] = 2;
-                d[0x2C] = 0x2C;
-                *(float *)(d + 0x30) = 1.4f;
-                d[0x2B] = 1;
-                *(int *)(d + 0x60) = idx;
-                m[0x20] = 1;
-                *(short *)(m + 0x32) = 0xAA;
-                *(unsigned short *)(m + 0x34) |= 0x1000;
+                qcopy((moby + 0x10), tbl + idx * 16 + 0x10);
+                moby_vars[0x2A] = 0x10;
+                moby_vars[0x28] = 2;
+                moby_vars[0x2C] = 0x2C;
+                *(float *)(moby_vars + 0x30) = 1.4f;
+                moby_vars[0x2B] = 1;
+                *(int *)(moby_vars + 0x60) = idx;
+                moby[0x20] = 1;
+                *(short *)(moby + 0x32) = 0xAA;
+                *(unsigned short *)(moby + 0x34) |= 0x1000;
             }
             break;
         case HELICOPTER_FOLLOW_PATH: {
-            char *p = d + 0x60;
-            int cur = *(int *)p;
-            char *tbl = *(char **)(p + 0x10);
-            int step = *(char *)(p + 4);
-            int n = *(int *)tbl;
-            int prev = (cur + n - step) % n;
-            int next = (cur + n + step) % n;
+            char *path_state = moby_vars + 0x60;
+            int cur = *(int *)path_state;
+            char *tbl = *(char **)(path_state + 0x10);
+            int step = *(char *)(path_state + 4);
+            int node_count = *(int *)tbl;
+            int prev = (cur + node_count - step) % node_count;
+            int next = (cur + node_count + step) % node_count;
             float h;
             float ang;
             qcopy(A, tbl + prev * 16 + 0x10);
@@ -3214,22 +3214,22 @@ void helicopter_update(char *m) {
             h = fast_arc_tan(A[0], A[1]);
             h = fast_subtract_rotations(h, fast_arc_tan(B[0], B[1]));
             ang = h / vector_length_xyz_c(A);
-            *(float *)(m + 0x40) = fast_add_rotations_c(*(float *)(m + 0x40),
-                fast_subtract_rotations(ang * D_L12_001619AC, *(float *)(m + 0x40)) / D_L12_001619B0);
-            if (distance_xyz(m + 0x10, C) < D_L12_001619A8 * D_0015ED6C) {
+            *(float *)(moby + 0x40) = fast_add_rotations_c(*(float *)(moby + 0x40),
+                fast_subtract_rotations(ang * D_L12_001619AC, *(float *)(moby + 0x40)) / D_L12_001619B0);
+            if (distance_xyz(moby + 0x10, C) < D_L12_001619A8 * D_0015ED6C) {
                 char *path;
-                *(int *)(d + 0x60) = next;
-                path = *(char **)(p + 0x10);
+                *(int *)(moby_vars + 0x60) = next;
+                path = *(char **)(path_state + 0x10);
                 if (next == *(int *)path - 1) {
-                    qcopy((m + 0x10), path + 0x10);
+                    qcopy((moby + 0x10), path + 0x10);
                 }
             }
-            subtract_vector_xyz_c(E, C, m + 0x10);
+            subtract_vector_xyz_c(E, C, moby + 0x10);
             normalize_vector_xyz(E, E, D_L12_001619A8 * D_0015ED6C);
-            add_vector_xyz_c2(m + 0x10, m + 0x10, E);
-            *(float *)(m + 0x48) = fast_add_rotations_c(*(float *)(m + 0x48),
-                fast_subtract_rotations(fast_arc_tan(E[0], E[1]), *(float *)(m + 0x48)) / D_L12_001619B0);
-            *(float *)(m + 0x44) = 0.52359879f;
+            add_vector_xyz_c2(moby + 0x10, moby + 0x10, E);
+            *(float *)(moby + 0x48) = fast_add_rotations_c(*(float *)(moby + 0x48),
+                fast_subtract_rotations(fast_arc_tan(E[0], E[1]), *(float *)(moby + 0x48)) / D_L12_001619B0);
+            *(float *)(moby + 0x44) = 0.52359879f;
             break;
         }
         }
