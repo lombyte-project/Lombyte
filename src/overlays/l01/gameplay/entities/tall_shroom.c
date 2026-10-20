@@ -457,7 +457,7 @@ void FUN_L01_0030c190(struct Moby *moby) {
     f32 r;
     s32 i;
     s32 j;
-    s32 n;
+    s32 debris_spawn_random_value;
     s32 color;
     s32 spread;
     s32 step;
@@ -506,8 +506,8 @@ void FUN_L01_0030c190(struct Moby *moby) {
                         b.f[0] = fast_cos(ang) * r;
                         b.f[1] = fast_sin(ang) * r;
                         b.f[2] = random_float_between(frame_time * 3.0f, frame_time * 6.5f);
-                        n = random_int_between(90, 120);
-                        spawn_debris_chunk(&a, &b, random_integer_below(2), n);
+                        debris_spawn_random_value = random_int_between(90, 120);
+                        spawn_debris_chunk(&a, &b, random_integer_below(2), debris_spawn_random_value);
                     }
                 }
             }
