@@ -1736,34 +1736,34 @@ typedef struct {
 f32 FUN_001fa6c0_0026d470(s32) __asm__("FUN_001fa6c0");
 s32 FUN_001fa6d0_0026d470(f32) __asm__("FUN_001fa6d0");
 void FUN_L00_00267a08_0026d470(void *) __asm__("FUN_L00_00267a08");
-void FUN_L00_0026d470(Part_26d470 *p) {
+void FUN_L00_0026d470(Part_26d470 *particle) {
     Src_26d470 *e;
-    Body_26d470 *s;
+    Body_26d470 *particle_data;
     float v;
-    u32 c;
-    if (!p)
+    u32 packed_rgb;
+    if (!particle)
         return;
-    e = p->body.e;
-    s = &p->body;
+    e = particle->body.e;
+    particle_data = &particle->body;
     if (e == 0 || (e->b1 & 0x80)) {
-        FUN_L00_00267a08_0026d470(p);
+        FUN_L00_00267a08_0026d470(particle);
         return;
     }
-    qcopy(&p->pos, &e->pos);
-    p->b8 = e->b8;
-    p->fC = e->fC * s->f4 + s->f8;
-    v = s->fC + s->f14;
-    s->fC = v;
+    qcopy(&particle->pos, &e->pos);
+    particle->b8 = e->b8;
+    particle->fC = e->fC * particle_data->f4 + particle_data->f8;
+    v = particle_data->fC + particle_data->f14;
+    particle_data->fC = v;
     if (v < 0.0f) {
-        s->fC = 0.0f;
+        particle_data->fC = 0.0f;
         return;
     }
     if (1.0f < v)
-        s->fC = 1.0f;
-    c = p->w4 & 0xFFFFFF;
-    p->w4 =
-        c | (FUN_001fa6d0_0026d470(
-                 (FUN_001fa6c0_0026d470(p->body.e->b7) * (s->f10 * 0.00390625f) + s->fC) * 256.0f)
+        particle_data->fC = 1.0f;
+    packed_rgb = particle->w4 & 0xFFFFFF;
+    particle->w4 =
+        packed_rgb | (FUN_001fa6d0_0026d470(
+                 (FUN_001fa6c0_0026d470(particle->body.e->b7) * (particle_data->f10 * 0.00390625f) + particle_data->fC) * 256.0f)
              << 24);
 }
 extern unsigned char *FUN_L00_002678b8_26d598(int) __asm__("FUN_L00_002678b8");
