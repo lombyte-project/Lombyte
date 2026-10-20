@@ -174,18 +174,18 @@ extern s32 D_0015ED84[];
 extern s32 D_L00_001791B8[] __attribute__((section(".data")));
 extern s32 D_L00_001C44B8[] __attribute__((section(".data")));
 s32 get_dialogue_entry(void *p) __asm__("FUN_L00_002667d0");
-s32 get_dialogue_entry(void *p) {
-    s32 n = D_0015ED84[0];
+s32 get_dialogue_entry(void *moby) {
+    s32 range_index = D_0015ED84[0];
     s32 lo;
     s32 hi;
     s32 i;
-    if ((u32)n >= 0x13) {
+    if ((u32)range_index >= 0x13) {
         return 0;
     }
-    lo = D_L00_001C44B8[n];
-    hi = D_L00_001C44B8[n + 1];
+    lo = D_L00_001C44B8[range_index];
+    hi = D_L00_001C44B8[range_index + 1];
     for (i = lo; i < hi; i++) {
-        if ((void *)D_L00_001791B8[i] == p) {
+        if ((void *)D_L00_001791B8[i] == moby) {
             return i;
         }
     }
