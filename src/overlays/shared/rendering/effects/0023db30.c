@@ -289,8 +289,8 @@ void FUN_001f9810_0023e738(void *, int) __asm__("FUN_001f9810");
 int FUN_L00_0023e738(u128 *v, float a, float b_0023e738, float c, float d, float e);
 int FUN_L00_0023e738(u128 *v, float a, float b_0023e738, float c, float d, float e) {
     int i;
-    T_0023e738 *t;
-    P_0023e738 *p;
+    T_0023e738 *slot_state;
+    P_0023e738 *parameter_entry;
     if (0.8f < D_L00_0015F5D4)
         return -1;
     for (i = 0; i < 8; i++)
@@ -298,17 +298,17 @@ int FUN_L00_0023e738(u128 *v, float a, float b_0023e738, float c, float d, float
             break;
     if (i == 8)
         return -1;
-    t = &D_L00_001804C0_0023e738[i];
-    p = &D_L00_001802C0_0023e738[i];
-    qcopy(&p->pos, v);
-    p->pos.f[3] = a;
-    p->x = c;
-    p->y = d;
-    p->z = e;
-    p->b_0023e738 = b_0023e738;
-    FUN_001f9810_0023e738(t, 0x30);
-    t->used = 1;
-    t->buf = (char *)D_L00_00180640[i];
+    slot_state = &D_L00_001804C0_0023e738[i];
+    parameter_entry = &D_L00_001802C0_0023e738[i];
+    qcopy(&parameter_entry->pos, v);
+    parameter_entry->pos.f[3] = a;
+    parameter_entry->x = c;
+    parameter_entry->y = d;
+    parameter_entry->z = e;
+    parameter_entry->b_0023e738 = b_0023e738;
+    FUN_001f9810_0023e738(slot_state, 0x30);
+    slot_state->used = 1;
+    slot_state->buf = (char *)D_L00_00180640[i];
     return i;
 }
 extern char D_L00_001802C0[];
