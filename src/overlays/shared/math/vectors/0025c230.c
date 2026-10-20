@@ -39,11 +39,11 @@ extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 
 /* Sets a to b plus c (normalised) scaled by s times the dot of c and b. */
 void FUN_L00_0025c2b0(void *a, void *b, void *c, float s);
-void FUN_L00_0025c2b0(void *a, void *b, void *c, float s) {
+void FUN_L00_0025c2b0(void *destination_vector, void *b, void *direction_vector, float projection_scale) {
     Vq scaled_vector, normalized_vector;
-    fast_vec_normalize(&normalized_vector, c, 1.0f);
-    fast_vec_scale(&scaled_vector, &normalized_vector, fast_vec_dot(&normalized_vector, b) * s);
-    subtract_vector_xyz(a, b, &scaled_vector);
+    fast_vec_normalize(&normalized_vector, direction_vector, 1.0f);
+    fast_vec_scale(&scaled_vector, &normalized_vector, fast_vec_dot(&normalized_vector, b) * projection_scale);
+    subtract_vector_xyz(destination_vector, b, &scaled_vector);
 }
 
 #define NOT_SDA
