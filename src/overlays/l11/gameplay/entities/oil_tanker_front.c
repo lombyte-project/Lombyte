@@ -1878,7 +1878,7 @@ void FUN_L11_0031e2f0(struct Moby *moby) {
     int i;
     float v[4];
     float w[4];
-    float d;
+    float effect_distance;
     char *s;
 
     switch (moby->state) {
@@ -1922,15 +1922,15 @@ void FUN_L11_0031e2f0(struct Moby *moby) {
         w[2] = D_L11_001624F0;
         w[3] = 1.0f;
         subtract_vector_xyz(w, s + 0x140, w);
-        d = vector_length_xyz(w);
-        if (d <= 35.0f) {
+        effect_distance = vector_length_xyz(w);
+        if (effect_distance <= 35.0f) {
             FUN_L08_002f12a0(0);
             FUN_L08_002f1158(D_L11_001FF758, 0.52f, 0.62f, 0.06f, (void *)D_L11_001625B0);
             FUN_L08_002f12a0(2);
-            if (d < 15.0f) {
+            if (effect_distance < 15.0f) {
                 D_L11_00162590 = 0xFF;
-            } else if (d < 35.0f) {
-                D_L11_0016258C[4] = func_001FA898_r((1.0f - (d - 15.0f) / 20.0f) * 255.0f);
+            } else if (effect_distance < 35.0f) {
+                D_L11_0016258C[4] = func_001FA898_r((1.0f - (effect_distance - 15.0f) / 20.0f) * 255.0f);
             } else {
                 D_L11_00162590 = 0;
             }
