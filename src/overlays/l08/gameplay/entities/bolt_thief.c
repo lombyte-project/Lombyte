@@ -370,7 +370,7 @@ void FUN_L08_002deee0(Moby *moby) {
     RData51_2E0258 *data = (*(RData51_2E0258 **)&moby->pvars);
     long texture;
     int segments;
-    int i, j, k, n, sign, color;
+    int i, j, k, indexed_target_slot, sign, color;
     int *indices;
     float sign_x, sign_y, angle, radius, fraction, next_angle;
     int outer_x, outer_y, inner_x, inner_y;
@@ -440,7 +440,7 @@ void FUN_L08_002deee0(Moby *moby) {
         }
     }
     indices = data->indices;
-    for (n = 0; n < 4; n++) {
+    for (indexed_target_slot = 0; indexed_target_slot < 4; indexed_target_slot++) {
         float angle, radius;
         if (((Moby *)D_L08_0015FFD8)[*indices].state < 0x7F) {
     color_words[0] = color_words[1] = color_words[2] = color_words[3] = D_L08_00161AD8;
