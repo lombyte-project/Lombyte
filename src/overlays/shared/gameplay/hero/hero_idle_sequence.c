@@ -956,7 +956,7 @@ s32 FUN_L00_0020d568_00206cf8(void) __asm__("FUN_L00_0020d568");
 s32 give_reward(s32, s32) __asm__("FUN_L00_00203908");
 extern u16 D_001418F0 __attribute__((section(".data")));
 void FUN_L00_00206cf8(void) {
-    s32 i, n;
+    s32 i, qualifying_item_count;
     if (help_stats.x3c0 == 0 && item_available[4] != 0 &&
         FUN_L00_0020d568_00206cf8() != 0) {
         give_reward(0x4E2E, 0x78);
@@ -969,13 +969,13 @@ void FUN_L00_00206cf8(void) {
         return;
     if (D_001418F0 != 0)
         return;
-    n = 0;
+    qualifying_item_count = 0;
     for (i = 0; i < 0x25; i++) {
         if (D_L00_00179AC0_00206cf8[i].x8 == 0 && i != 8 && i != 0x18 &&
             item_available[i] != 0)
-            n++;
+            qualifying_item_count++;
     }
-    if (n >= 9)
+    if (qualifying_item_count >= 9)
         give_reward(0x4E26, 0x50);
 }
 /* Ported from rac1-decomp (src/overlays/shared/help_00203E98.c: func_L00_00207418), where it is exact; names translated to the US level program. */
