@@ -2323,15 +2323,15 @@ unsigned char *FUN_L00_002afc70(unsigned char *owner, V_2afc70 *pos, unsigned ch
     return missile_moby;
 }
 /* Sums n steps of a value easing toward 20 * D_0015ED6C by a tenth (times D_0015ED64) per step. */
-float FUN_L00_002aff50(int n) {
+float FUN_L00_002aff50(int step_count) {
     float sum = 0.0f, v = sum;
-    if (n > 0) {
-        float t = frame_time * 20.0f;
+    if (step_count > 0) {
+        float target_value = frame_time * 20.0f;
         do {
-            v += (t - v) / 10.0f * frame_scale_sq;
-            n--;
+            v += (target_value - v) / 10.0f * frame_scale_sq;
+            step_count--;
             sum += v;
-        } while (n);
+        } while (step_count);
     }
     return sum;
 }
