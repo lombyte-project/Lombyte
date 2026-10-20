@@ -749,17 +749,17 @@ extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 
 float FUN_L16_002d3eb8(char *moby, float *target) {
     char *data = *(char **)(moby + 0x78);
-    char *p = data + 0x2C0;
-    float d = fast_vec_dist(p);
+    char *base_position = data + 0x2C0;
+    float distance = fast_vec_dist(base_position);
     float b = frame_time_sq * 4.0f;
     int zero[1];
     float vec[4];
     zero[0] = 0;
-    advance_accelerated_scalar((float *)zero, (float *)(data + 0x2D4), d, b, b, frame_time * 5.0f);
-    fast_vec_sub(vec, target, p);
+    advance_accelerated_scalar((float *)zero, (float *)(data + 0x2D4), distance, b, b, frame_time * 5.0f);
+    fast_vec_sub(vec, target, base_position);
     fast_vec_normalize(vec, vec, *(float *)(data + 0x2D4));
-    fast_vec_add(p, p, vec);
-    return d;
+    fast_vec_add(base_position, base_position, vec);
+    return distance;
 }
 /* Randomize the timers of active mobys in the selected linked group. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A1B58.c: func_L16_002D5340), where it is exact; names translated to the US level program. */
