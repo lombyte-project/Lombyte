@@ -1931,45 +1931,45 @@ extern int FUN_00213260_275910(int) __asm__("FUN_00213260");
 extern unsigned char *FUN_002141f8_275910(int) __asm__("FUN_002141f8");
 
 extern unsigned char *D_L00_001B21B8 __attribute__((section(".data")));
-unsigned char *FUN_L00_00275910(OvlQuad *pos, int s, int col, int mode, int b, float *vec, int h,
+unsigned char *FUN_L00_00275910(OvlQuad *pos, int lifetime_frames, int col, int mode, int b, float *vec, int h,
                                 float x, float y) {
-    unsigned char *m = p27fe00_alloc(0x4E);
-    if (m) {
+    unsigned char *particle = p27fe00_alloc(0x4E);
+    if (particle) {
         float *v;
-        unsigned char *q = m + 0x20;
-        qcopy(m + 0x10, pos);
-        *(int *)(m + 4) = col;
-        m[3] = 0x48;
-        m[9] = FUN_001fa6d0_275910(4.0f) + 0x20;
-        m[1] = 0;
-        m[2] = *D_L00_001B21B8;
-        *(short *)(m + 0xA) = s;
-        *(float *)(m + 0xC) = x * 210000.0f;
+        unsigned char *particle_data = particle + 0x20;
+        qcopy(particle + 0x10, pos);
+        *(int *)(particle + 4) = col;
+        particle[3] = 0x48;
+        particle[9] = FUN_001fa6d0_275910(4.0f) + 0x20;
+        particle[1] = 0;
+        particle[2] = *D_L00_001B21B8;
+        *(short *)(particle + 0xA) = lifetime_frames;
+        *(float *)(particle + 0xC) = x * 210000.0f;
         if (mode == 0) {
-            m[8] = 0;
+            particle[8] = 0;
         } else if (mode == 1) {
-            m[8] = 0x20;
+            particle[8] = 0x20;
         } else {
-            m[8] = FUN_00213260_275910(0xFF);
+            particle[8] = FUN_00213260_275910(0xFF);
         }
-        *(float *)(q + 0) = *(float *)(m + 0xC);
-        *(float *)(q + 4) = y * 210000.0f;
-        *(short *)(q + 8) = s;
-        q[0xA] = b;
-        q[0xB] = col >> 24;
-        *(int *)(q + 0x18) = h;
-        *(float *)(q + 0x1C) = 0;
+        *(float *)(particle_data + 0) = *(float *)(particle + 0xC);
+        *(float *)(particle_data + 4) = y * 210000.0f;
+        *(short *)(particle_data + 8) = lifetime_frames;
+        particle_data[0xA] = b;
+        particle_data[0xB] = col >> 24;
+        *(int *)(particle_data + 0x18) = h;
+        *(float *)(particle_data + 0x1C) = 0;
         if (h) {
             unsigned char *r = FUN_002141f8_275910(h);
             if (r)
-                *(float *)(q + 0x1C) = *(float *)(r + 0x10);
+                *(float *)(particle_data + 0x1C) = *(float *)(r + 0x10);
         }
-        v = (float *)(q + 0xC);
+        v = (float *)(particle_data + 0xC);
         v[0] = vec[0];
         v[1] = vec[1];
         v[2] = vec[2];
     }
-    return m;
+    return particle;
 }
 /* Ported from rac1-decomp (src/overlays/shared/partupd_00272158.c: func_L00_00276940), where it is exact; names translated to the US level program. */
 
