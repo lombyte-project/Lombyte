@@ -1503,7 +1503,7 @@ void floating_platform_update(struct Moby *moby) {
     char *data;
     float delta[4] __attribute__((aligned(16)));
     float old_rot[4] __attribute__((aligned(16)));
-    float t;
+    float tilt_rate_scale;
     float rate;
     float sink;
     float angle;
@@ -1531,17 +1531,17 @@ void floating_platform_update(struct Moby *moby) {
         if (tick_countdown_32((int *)(data + 0x7C)) == 0) {
             break;
         }
-        t = (convert_integer_to_float(D_L18_001623A8) - D_L18_00161A60) / (D_L18_00161A64 - D_L18_00161A60);
-        if (1.0f < t) {
-            t = 1.0f;
-        } else if (t < 0.0f) {
-            t = 0.0f;
+        tilt_rate_scale = (convert_integer_to_float(D_L18_001623A8) - D_L18_00161A60) / (D_L18_00161A64 - D_L18_00161A60);
+        if (1.0f < tilt_rate_scale) {
+            tilt_rate_scale = 1.0f;
+        } else if (tilt_rate_scale < 0.0f) {
+            tilt_rate_scale = 0.0f;
         }
-        t = 1.0f - t * 0.333f;
+        tilt_rate_scale = 1.0f - tilt_rate_scale * 0.333f;
         if (*(int *)(data + 0x84) != 0) {
-            rate = D_L18_00161A50 * t;
+            rate = D_L18_00161A50 * tilt_rate_scale;
         } else {
-            rate = D_L18_00161A58 * t;
+            rate = D_L18_00161A58 * tilt_rate_scale;
         }
         *(float *)(data + 0x6C) = rate * DEG_TO_RAD * frame_time;
         moby->state = 4;
