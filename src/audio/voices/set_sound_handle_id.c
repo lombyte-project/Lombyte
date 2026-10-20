@@ -9,15 +9,15 @@ extern void DebugPrint(char *, ...);
 void set_sound_handle_id(u32 id, s64 arg) __asm__("FUN_00216b68");
 
 void set_sound_handle_id(u32 id, s64 arg) {
-    struct Handle *h = (struct Handle *)(s32)arg;
+    struct Handle *playback_record = (struct Handle *)(s32)arg;
 
-    if (h != 0) {
-        if (h->id != 0xFFFFFFFF) {
+    if (playback_record != 0) {
+        if (playback_record->id != 0xFFFFFFFF) {
             DebugPrint(D_00160068);
         } else {
-            h->id = id;
+            playback_record->id = id;
             if (id == 0) {
-                h->state = 7;
+                playback_record->state = 7;
             }
         }
     }
