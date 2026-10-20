@@ -2492,7 +2492,7 @@ extern Moby *D_001ABA00_b6bc8[] __asm__("D_L00_001ABA00");
 extern s16 D_L00_001B07B0[] __asm__("D_L00_001B07B0");
 extern u8 *moby_table __asm__("D_L00_0015FFD8");
 
-s32 FUN_L00_002b6bc8(Moby *m, f32 radius) {
+s32 FUN_L00_002b6bc8(Moby *taunter_moby, f32 radius) {
     u128 velocity __attribute__((aligned(16)));
     union { u128 q; f32 f[4]; } pos __attribute__((aligned(16)));
     Moby *other;
@@ -2505,8 +2505,8 @@ s32 FUN_L00_002b6bc8(Moby *m, f32 radius) {
     f32 distance;
     f32 angle;
 
-    pos.q = *(u128 *)((u8 *)m + 0x10);
-    vars = m->vars;
+    pos.q = *(u128 *)((u8 *)taunter_moby + 0x10);
+    vars = taunter_moby->vars;
     limit = FUN_L00_00257b50_b6bc8(vars->pad14 > 0 ? vars->pad14 : 1);
     vars->pad14 = 0;
     other = D_001ABA00_b6bc8[0];
@@ -2529,9 +2529,9 @@ s32 FUN_L00_002b6bc8(Moby *m, f32 radius) {
                                                *(f32 *)((u8 *)other + 0x14) - g->motion.pos.f[1]));
                     if (angle < 0.9599311f) {
                         if (vars->pad14 == limit) {
-                            fast_vec_sub(&velocity, (u8 *)other + 0x10, (u8 *)m + 0x10);
+                            fast_vec_sub(&velocity, (u8 *)other + 0x10, (u8 *)taunter_moby + 0x10);
                             fast_vec_normalize(&velocity, &velocity, 1.5f);
-                            FUN_L00_00259bc8_b6bc8(other, m, 0x10000, &g->motion.pos, &velocity, 1.0f);
+                            FUN_L00_00259bc8_b6bc8(other, taunter_moby, 0x10000, &g->motion.pos, &velocity, 1.0f);
                             vars->frame = scale_game_frames(random_int_between(5, 0x2d));
                         }
                         vars->pad14++;
@@ -2545,7 +2545,7 @@ s32 FUN_L00_002b6bc8(Moby *m, f32 radius) {
                     if (angle < 0.9599311f) {
                         Moby *current = *(Moby **)(state + 0x18);
                         if (current == 0 || distance < vector_distance((u8 *)current + 0x10, (u8 *)other + 0x10)) {
-                            *(Moby **)(state + 0x18) = m;
+                            *(Moby **)(state + 0x18) = taunter_moby;
                             count++;
                         }
                     }
@@ -2565,7 +2565,7 @@ s32 FUN_L00_002b6bc8(Moby *m, f32 radius) {
                     fast_arc_tan(*(f32 *)((u8 *)other + 0x10) - hero.motion.pos.f[0],
                                            *(f32 *)((u8 *)other + 0x14) - hero.motion.pos.f[1]));
                 if (angle < 0.9599311f) {
-                    *(Moby **)((u8 *)vars + 0x78) = m;
+                    *(Moby **)((u8 *)vars + 0x78) = taunter_moby;
                     count++;
                 }
             }
