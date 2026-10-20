@@ -3147,16 +3147,16 @@ extern int D_L18_0015FFD8_d __asm__("D_L18_0015FFD8");
  * the US level program (data still reached through the MACRO_ADDR form). */
 // Walks a list of moby indices and resets the flags of each live moby.
 void FUN_L18_002f7028(int unused, int idx) {
-    short *p = D_L18_001AC240_u[idx];
-    if (p != 0) {
+    short *group_entry = D_L18_001AC240_u[idx];
+    if (group_entry != 0) {
         do {
-            unsigned char *m = D_L18_0015FFD8_d + ((*(unsigned short *)p & 0x7FFF) << 8);
-            if (m != 0 && m[0x20] != 0xFE && m[0x20] != 0xFD) {
-                m[0x31] = 1;
-                *(unsigned short *)(m + 0x34) &= 0xFFFE;
-                *(int *)(m + 0x94) = *(int *)(*(char **)(m + 0x24) + 0x10);
+            unsigned char *group_moby = D_L18_0015FFD8_d + ((*(unsigned short *)group_entry & 0x7FFF) << 8);
+            if (group_moby != 0 && group_moby[0x20] != 0xFE && group_moby[0x20] != 0xFD) {
+                group_moby[0x31] = 1;
+                *(unsigned short *)(group_moby + 0x34) &= 0xFFFE;
+                *(int *)(group_moby + 0x94) = *(int *)(*(char **)(group_moby + 0x24) + 0x10);
             }
-        } while (*p++ >= 0);
+        } while (*group_entry++ >= 0);
     }
 }
 
