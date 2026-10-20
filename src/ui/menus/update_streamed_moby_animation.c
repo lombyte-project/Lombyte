@@ -57,6 +57,9 @@ s32 update_streamed_moby_animation(MobyAnimationStream *stream) {
         ANIMATION_STREAM_FINISH_READ = 1,
         ANIMATION_STREAM_UPDATE_MOBY = 2
     };
+    enum {
+        STREAMED_MOBY_WAIT_SEQUENCE_RESTART = 6
+    };
     StreamedAnimationMoby *moby;
     AnimationTableHeader *header;
     StreamedClassResource **class_resource;
@@ -157,7 +160,7 @@ s32 update_streamed_moby_animation(MobyAnimationStream *stream) {
                 break;
             }
             break;
-        case 6:
+        case STREAMED_MOBY_WAIT_SEQUENCE_RESTART:
             moby->animation_frame_counter++;
             if (moby->animation_frame_counter > scale_game_frames(0xF0)) {
                 moby->animation_frame_counter = scale_game_frames(0xF0);
