@@ -9,8 +9,8 @@ void init_mem_slots(void) {
     int size = current_vu_chain;
     int level_zero_workspace_base = base + size;
     int b = level_zero_workspace_base + size;
-    int c = b + 0x64000;
-    int common_archive_base = c + 0x30000;
+    int memory_slot_four_base = b + 0x64000;
+    int common_archive_base = memory_slot_four_base + 0x30000;
     D_001940C0[0] = base;
     D_001940C0[5] = common_archive_base;
     D_001940C0[6] = common_archive_base;
@@ -19,7 +19,7 @@ void init_mem_slots(void) {
     D_001940C0[1] = base;
     D_001940C0[2] = level_zero_workspace_base;
     D_001940C0[3] = b;
-    D_001940C0[4] = c;
+    D_001940C0[4] = memory_slot_four_base;
     D_001940C0[10] = 0x7200000;
 }
 
