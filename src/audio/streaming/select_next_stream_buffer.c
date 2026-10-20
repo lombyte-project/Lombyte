@@ -7,15 +7,15 @@ s32 select_next_stream_buffer(s32 arg0) __asm__("FUN_00225c18");
 
 s32 select_next_stream_buffer(s32 require_low_flag_bit) {
     s32 i;
-    s32 f;
+    s32 selection_flags;
 
     for (i = 0; i < 5; i++) {
         if (require_low_flag_bit != 0) {
-            f = graphics_buffer_descriptors[i].flags ^ 1;
+            selection_flags = graphics_buffer_descriptors[i].flags ^ 1;
         } else {
-            f = graphics_buffer_descriptors[i].flags;
+            selection_flags = graphics_buffer_descriptors[i].flags;
         }
-        if (!(f & 1)) {
+        if (!(selection_flags & 1)) {
             if (graphics_buffer_descriptors[i].address != 0) {
                 if (!(graphics_buffer_descriptors[i].flags & 2)) {
                     graphics_buffer_descriptors[i].flags |= 2;
