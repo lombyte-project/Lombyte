@@ -901,7 +901,7 @@ void FUN_001f9a10_273298(void *, void *, void *) __asm__("FUN_001f9a10");
 void FUN_L00_00273298(Part_273298 *particle) {
     V_273298 *v = (V_273298 *)((u8 *)particle + 0x20);
     float remaining_frames_minus_one;
-    u32 c;
+    u32 color_without_alpha;
     if (v->w1C == 1) {
         struct Hero *g = &hero;
         particle->x = g->motion.pos.f[0] + v->x;
@@ -919,9 +919,9 @@ void FUN_L00_00273298(Part_273298 *particle) {
         free_effect_particle(particle);
         return;
     }
-    c = particle->w4 & 0xFFFFFF;
+    color_without_alpha = particle->w4 & 0xFFFFFF;
     remaining_frames_minus_one = convert_integer_to_float(particle->hA - 1);
-    particle->w4 = FUN_001fa6e0_273298(c, particle->w4, remaining_frames_minus_one / convert_integer_to_float(particle->hA));
+    particle->w4 = FUN_001fa6e0_273298(color_without_alpha, particle->w4, remaining_frames_minus_one / convert_integer_to_float(particle->hA));
 }
 typedef struct {
     u8 pad0[0x20];
