@@ -2869,15 +2869,15 @@ void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 void FUN_L00_00211cf8(float, float, float);
 extern float FUN_L00_0025bc98(char *, char *, int, float, float, float, float);
-void FUN_L00_00211d78(int a, float x, float y, float z) {
-    V4_211d78 t;
+void FUN_L00_00211d78(int rotation_direction, float x, float y, float z) {
+    V4_211d78 transformed_direction;
     float out;
     float zero = 0.0f;
     float r;
-    transform_vector(t, &hero.motion.unk170, hero.unk40);
-    r = fast_arc_tan(t[0], t[1]);
+    transform_vector(transformed_direction, &hero.motion.unk170, hero.unk40);
+    r = fast_arc_tan(transformed_direction[0], transformed_direction[1]);
     out = zero;
-    hero.motion.unk188 = FUN_L00_0025bc98((char *)&out, (char *)&hero.motion.unk184, a, r, x, y, z);
+    hero.motion.unk188 = FUN_L00_0025bc98((char *)&out, (char *)&hero.motion.unk184, rotation_direction, r, x, y, z);
     FUN_L00_00211cf8(zero, zero, out);
 }
 #define NOT_SDA
