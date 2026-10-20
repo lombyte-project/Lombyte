@@ -16,16 +16,16 @@ extern int D_L11_0015FFD8; /* no foreign declaration */
 extern short *D_L11_001AC240[];
 
 void FUN_L11_0030e690(char *moby) {
-    short *p = D_L11_001AC240[*(unsigned char *)(moby + 0x21)];
+    short *moby_index_cursor = D_L11_001AC240[*(unsigned char *)(moby + 0x21)];
     int base = D_L11_0015FFD8;
     do {
-        int i = (*p & 0x7FFF) * 256;
-        char *e = (char *)(i + base);
+        int i = (*moby_index_cursor & 0x7FFF) * 256;
+        char *linked_moby = (char *)(i + base);
         char *s;
-        *(float *)(e + 0x18) = *(float *)(moby + 0x18);
-        s = D_L11_001DA880 + *(int *)(*(char **)(e + 0x78) + 4) * 0x1190;
+        *(float *)(linked_moby + 0x18) = *(float *)(moby + 0x18);
+        s = D_L11_001DA880 + *(int *)(*(char **)(linked_moby + 0x78) + 4) * 0x1190;
         *(float *)(s + 8) = *(float *)(moby + 0x18);
-    } while (*p++ >= 0);
+    } while (*moby_index_cursor++ >= 0);
 }
 #include "rnc/gameplay/entities/moby.h"
 #include "rnc/math/vector.h"
