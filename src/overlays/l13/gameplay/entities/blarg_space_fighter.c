@@ -1833,8 +1833,8 @@ void forcefield_tower_update(struct Moby *moby) {
         TOWER_DESTRUCTION_WAIT_FOR_POINT_2_EFFECT = 1,
         TOWER_DESTRUCTION_WAIT_FOR_POINT_3_EFFECT = 2
     };
-    unsigned char *m = (unsigned char *)moby;
-    int *data = *(int **)(m + 0x78);
+    unsigned char *moby_bytes = (unsigned char *)moby;
+    int *data = *(int **)(moby_bytes + 0x78);
     float position[4];
     float velocity[4];
     float rotated[4];
@@ -1845,16 +1845,16 @@ void forcefield_tower_update(struct Moby *moby) {
     int blue;
     float scale;
     float threshold;
-    int state = m[0x20];
+    int state = moby_bytes[0x20];
 
     switch (state) {
     case TOWER_STATE_INITIALIZE: {
-        m[0xBC] = 0;
-        m[0x20] = 1;
-        if (m[0x30] < *(short *)(m + 0x32)) m[0x30] = m[0x32];
+        moby_bytes[0xBC] = 0;
+        moby_bytes[0x20] = 1;
+        if (moby_bytes[0x30] < *(short *)(moby_bytes + 0x32)) moby_bytes[0x30] = moby_bytes[0x32];
         data[0x70 / 4] = -1;
-        if ((*(int *)((char *)D_0014C190 + (current_level_index << 8) + (((short)*(unsigned short *)(m + 0xB2) >> 5) << 2))
-             >> (*(unsigned short *)(m + 0xB2) & 31)) & 1) {
+        if ((*(int *)((char *)D_0014C190 + (current_level_index << 8) + (((short)*(unsigned short *)(moby_bytes + 0xB2) >> 5) << 2))
+             >> (*(unsigned short *)(moby_bytes + 0xB2) & 31)) & 1) {
             linked_index = data[0x74 / 4];
             if (linked_index != -1) linked_state_flags[linked_index] = 1;
             mark_moby_for_removal(moby);
@@ -1863,7 +1863,7 @@ void forcefield_tower_update(struct Moby *moby) {
         moby_point_position(moby, 0, position);
         position[2] += 1.1f;
         FUN_L13_0030bfb0((char *)moby, position, 2.7f);
-        *(unsigned short *)(m + 0x34) &= 0xEFFF;
+        *(unsigned short *)(moby_bytes + 0x34) &= 0xEFFF;
         return;
     }
     case TOWER_STATE_ACTIVE: {
@@ -1880,7 +1880,7 @@ play_voice:
         position[2] += 8.7f;
         set_voice_position(data[0x70 / 4], position);
 voice_done:
-        if (m[0x31] != 0 && random_integer_below(9) == 0) {
+        if (moby_bytes[0x31] != 0 && random_integer_below(9) == 0) {
             red = (FUN_001160d8() + 0x30) & 0x3F;
             green = (FUN_001160d8() + 0x20) & 0x3F;
             blue = FUN_001160d8() & 0x2F;
@@ -1898,27 +1898,27 @@ voice_done:
         velocity[2] = D_0015ED6C * 8.0f;
         *(u128z *)position = *(u128z *)velocity;
         threshold = 1000.0f;
-        switch ((int)m[0xBC]) {
+        switch ((int)moby_bytes[0xBC]) {
         case TOWER_DESTRUCTION_WAIT_FOR_POINT_1_EFFECT: threshold = 8.5f; break;
         case TOWER_DESTRUCTION_WAIT_FOR_POINT_2_EFFECT: threshold = 17.0f; break;
         case TOWER_DESTRUCTION_WAIT_FOR_POINT_3_EFFECT: threshold = 17.0f; break;
         }
         if (threshold < 100.0f && is_value_within_interpolated_window(moby, threshold)) {
-            moby_point_position(moby, m[0xBC] + 1, velocity);
+            moby_point_position(moby, moby_bytes[0xBC] + 1, velocity);
             emit_effect_l13(moby, position, velocity, 0.0f, 0.0f, 10, 3, 16, 4.0f, 2.0f, 0.0f, 1.0f, -1, 20.0f, 1, 1, -1, 0);
-            m[0xBC]++;
+            moby_bytes[0xBC]++;
         }
-        if ((m[0x70] & 2) == 0) return;
+        if ((moby_bytes[0x70] & 2) == 0) return;
         emit_effect_l13(moby, position, 0, 0.0f, 0.0f, 10, 3, 16, 4.0f, 2.0f, 0.0f, 1.0f, -1, 20.0f, 1, 1, -1, 0);
         moby_point_position(moby, 3, velocity);
-        subtract_vector_xyz(velocity, velocity, m + 0x10);
+        subtract_vector_xyz(velocity, velocity, moby_bytes + 0x10);
         i = 4;
         do {
             i--;
             scale = random_float_between(0.0f, 3.0f);
             scale_vector_xyz(rotated, velocity, scale);
-            add_vector_xyz(rotated, rotated, m + 0x10);
-            FUN_L13_002ce688(m, rotated, 1);
+            add_vector_xyz(rotated, rotated, moby_bytes + 0x10);
+            FUN_L13_002ce688(moby_bytes, rotated, 1);
         } while (i >= 0);
         linked_index = data[0x74 / 4];
         if (linked_index != -1) linked_state_flags[linked_index] = 1;
