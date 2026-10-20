@@ -655,11 +655,11 @@ extern void FUN_L00_00211250_2348d0(void) __asm__("FUN_L00_00211250");
 extern Entry70_2348d0 D_L06_0017A070[];
 void FUN_L06_002348d0(void) {
     Vec4 sum;
-    Vec4 d;
-    struct Moby *m;
+    Vec4 history_delta;
+    struct Moby *spawned_moby;
     s32 i;
     s32 n;
-    s32 n8;
+    s32 sample_count;
 
     if (hero.unk20AD == 0) {
         FUN_L00_002165b8_2348d0();
@@ -717,12 +717,12 @@ void FUN_L06_002348d0(void) {
                 hero.unk20A6 = 1;
             }
         } else {
-            m = FUN_0020c4f8_2348d0(0x27A);
-            hero.unkA8C = m;
-            if (m != 0) {
-                qcopy(&m->pos, &hero.motion.pos);
-                qcopy(&m->rot, &hero.motion.rot);
-                m->draw_dist = 0x40;
+            spawned_moby = FUN_0020c4f8_2348d0(0x27A);
+            hero.unkA8C = spawned_moby;
+            if (spawned_moby != 0) {
+                qcopy(&spawned_moby->pos, &hero.motion.pos);
+                qcopy(&spawned_moby->rot, &hero.motion.rot);
+                spawned_moby->draw_dist = 0x40;
                 ((struct Moby *)hero.unkA8C)->visible = 1;
                 ((struct Moby *)hero.unkA8C)->glow_color = 0;
                 ((struct Moby *)hero.unkA8C)->spawn_frame = hero.moby->spawn_frame;
@@ -738,17 +738,17 @@ void FUN_L06_002348d0(void) {
     if (hero.air_frames.s != 0 && FUN_L00_00233a78_2348d0(&hero.motion.velocity) < 0.0f) {
         if (hero.unk21B4 != 0x20) goto skip;
         FUN_001f99f8_2348d0(&sum);
-        n8 = 8;
-        for (i = 0; i < n8; i++) {
+        sample_count = 8;
+        for (i = 0; i < sample_count; i++) {
             n = hero.unk21B0 - i;
             {
                 s32 a = (n + 0x1F) % 32;
                 s32 b = (n + 0x1E) % 32;
-                FUN_001f9a28_2348d0(&d, &hero.unk1B00[a], &hero.unk1B00[b]);
+                FUN_001f9a28_2348d0(&history_delta, &hero.unk1B00[a], &hero.unk1B00[b]);
             }
-            FUN_001f9a10_2348d0(&sum, &sum, &d);
+            FUN_001f9a10_2348d0(&sum, &sum, &history_delta);
         }
-        FUN_001f9a68_2348d0(&sum, &sum, 1.0f / (f32)n8);
+        FUN_001f9a68_2348d0(&sum, &sum, 1.0f / (f32)sample_count);
         if (FUN_001f9af0_2348d0(&sum) < frame_time) {
             hero.unk1E2++;
             goto skip;
