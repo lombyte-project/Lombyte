@@ -3447,7 +3447,7 @@ void FUN_L17_002f10c8(struct Moby *moby) {
     unsigned int i = 0;
     unsigned int off = 0;
     RingVars *data = (RingVars *)moby->pvars;
-    unsigned int n;
+    unsigned int uv_vertex_index;
     int j;
     int k;
     int color;
@@ -3488,12 +3488,12 @@ void FUN_L17_002f10c8(struct Moby *moby) {
         output_vertex += 3;
     } while (i < 45);
     for (j = 0; j < 2; j++) {
-        for (n = 0; n < 45; n++) {
+        for (uv_vertex_index = 0; uv_vertex_index < 45; uv_vertex_index++) {
             uv_scroll_factors = D_L17_00162390;
-            D_L17_001DDDC0[n][0] =
-                D_L17_001DD980[n][0] + FUN_L00_00200260(scale * uv_scroll_factors.f[j * 2], 1.0f);
-            D_L17_001DDDC0[n][1] =
-                D_L17_001DD980[n][1] + FUN_L00_00200260(scale * v_scroll_factors->f[j * 2], 1.0f);
+            D_L17_001DDDC0[uv_vertex_index][0] =
+                D_L17_001DD980[uv_vertex_index][0] + FUN_L00_00200260(scale * uv_scroll_factors.f[j * 2], 1.0f);
+            D_L17_001DDDC0[uv_vertex_index][1] =
+                D_L17_001DD980[uv_vertex_index][1] + FUN_L00_00200260(scale * v_scroll_factors->f[j * 2], 1.0f);
         }
         font_queue_vu_state();
         for (k = 0; k < 1; k++) {
