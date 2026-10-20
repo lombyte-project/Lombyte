@@ -2727,29 +2727,29 @@ extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern int *D_L16_001ABCC0[];
 
 void *FUN_L16_002d5bc8(int index, int secondary) {
-    short *p = (short *)D_L16_001ABCC0[index];
+    short *group_entry = (short *)D_L16_001ABCC0[index];
     char *nearest = 0;
     float distance = 1000.0f;
     char *moby;
     int *data;
-    float d;
-    if (!p)
+    float candidate_distance;
+    if (!group_entry)
         return 0;
     while (1) {
-        moby = D_L16_0015FFD8 + ((*(unsigned short *)p & 0x7FFF) << 8);
+        moby = D_L16_0015FFD8 + ((*(unsigned short *)group_entry & 0x7FFF) << 8);
         if (*(short *)(moby + 0xA6) != 0x287)
             continue;
-        d = fast_vec_dist(D_L16_001671C0, moby + 0x10);
+        candidate_distance = fast_vec_dist(D_L16_001671C0, moby + 0x10);
         data = *(int **)(moby + 0x78);
-        if (d < distance) {
-            distance = d;
+        if (candidate_distance < distance) {
+            distance = candidate_distance;
             nearest = moby;
         }
         moby[0x20] = 1;
         data[5] = 0;
         if (secondary)
             data[6] = 0;
-        if (*p++ < 0)
+        if (*group_entry++ < 0)
             return nearest;
     }
 }
