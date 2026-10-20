@@ -20,26 +20,26 @@ extern void FUN_L00_0028e180(void);
 void set_moby_animation(struct Obj *o, s32 sel, s32 idx) __asm__("FUN_00212ed8");
 
 extern s32 D_L00_00160540_gp __asm__("D_L00_00160540") __attribute__((sda));
-void FUN_L00_0028e8a0(char *m) {
+void FUN_L00_0028e8a0(char *moby) {
     char *g;
     int *src;
     D_L00_00160540_gp = 1;
     FUN_L00_0028e990_c();
     if (current_level_index == 0xD) {
-        char *q = D_0013E030_c;
-        *(float *)(q + 0x60) = 464.66f;
-        *(float *)(q + 0x64) = 580.68f;
-        *(float *)(q + 0x68) = 316.72f;
-        *(float *)(q + 0x78) = 2.77f;
+        char *global_record = D_0013E030_c;
+        *(float *)(global_record + 0x60) = 464.66f;
+        *(float *)(global_record + 0x64) = 580.68f;
+        *(float *)(global_record + 0x68) = 316.72f;
+        *(float *)(global_record + 0x78) = 2.77f;
     }
     g = D_0013E030_c;
-    *(short *)(g + 0x26) = *(unsigned short *)(m + 0xA6) - 0x213;
-    *(char **)g = m;
-    *(void **)(m + 0x74) = FUN_L00_0028e180;
-    *(unsigned short *)(m + 0x34) &= 0xFFFC;
-    *(int *)(m + 0x94) = *(int *)(*(int *)(m + 0x24) + 0x10);
-    set_moby_animation(m, 1, 0);
-    src = *(int **)(m + 0x78);
+    *(short *)(g + 0x26) = *(unsigned short *)(moby + 0xA6) - 0x213;
+    *(char **)g = moby;
+    *(void **)(moby + 0x74) = FUN_L00_0028e180;
+    *(unsigned short *)(moby + 0x34) &= 0xFFFC;
+    *(int *)(moby + 0x94) = *(int *)(*(int *)(moby + 0x24) + 0x10);
+    set_moby_animation(moby, 1, 0);
+    src = *(int **)(moby + 0x78);
     *(int *)(g + 0x30) = src[0];
     *(int *)(g + 0x34) = src[1];
     *(int *)(g + 0x38) = src[2];
