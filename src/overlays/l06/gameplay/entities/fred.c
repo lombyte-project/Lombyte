@@ -7084,12 +7084,12 @@ void FUN_L06_00302fd8(char *shuttle_moby) {
     switch (*(int *)(shuttle_vars + 0xBC)) {
     case SHUTTLE_AT_INITIAL_STOP: {
         int idx = current_level_index << 4;
-        int a = *(unsigned char *)(*(int *)(shuttle_vars + 0xF8) + idx + (int)visited52);
-        if (a != 0xFF) {
+        int primary_visit_byte = *(unsigned char *)(*(int *)(shuttle_vars + 0xF8) + idx + (int)visited52);
+        if (primary_visit_byte != 0xFF) {
             *(int *)(shuttle_vars + 0x9C) = 0;
         } else {
             int b = *(unsigned char *)(*(int *)(shuttle_vars + 0xFC) + idx + (int)visited52);
-            if (b == a) {
+            if (b == primary_visit_byte) {
                 *(int *)(shuttle_vars + 0x9C) = 3;
             } else {
                 *(int *)(shuttle_vars + 0x9C) = -1;
