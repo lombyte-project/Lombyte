@@ -154,7 +154,7 @@ void rocket_update(char *rocket) {
     float hv[4] __attribute__((aligned(16)));
     float tp[4] __attribute__((aligned(16)));
     float aim[4] __attribute__((aligned(16)));
-    float speed, a, b, discriminant_sqrt, r1, r2, intercept_time, yaw, pitch, dist;
+    float speed, a, b, discriminant_sqrt, intercept_time_plus_root, intercept_time_minus_root, intercept_time, yaw, pitch, dist;
     char *rocket_position;
     unsigned char *g;
     char *tg;
@@ -182,19 +182,19 @@ void rocket_update(char *rocket) {
             a = speed * speed - lensq_cc2e8(hv);
             b = (hv[0] * diff[0] + hv[1] * diff[1] + hv[2] * diff[2]) * -2.0f;
             discriminant_sqrt = sqrt_cc2e8(b * b - a * 4.0f * -lensq_cc2e8(diff));
-            r1 = (-b + discriminant_sqrt) / (a + a);
-            r2 = (-b - discriminant_sqrt) / (a + a);
-            if (r1 > 0.0f && r2 > 0.0f) {
-                if (r1 > r2)
-                    intercept_time = r1;
+            intercept_time_plus_root = (-b + discriminant_sqrt) / (a + a);
+            intercept_time_minus_root = (-b - discriminant_sqrt) / (a + a);
+            if (intercept_time_plus_root > 0.0f && intercept_time_minus_root > 0.0f) {
+                if (intercept_time_plus_root > intercept_time_minus_root)
+                    intercept_time = intercept_time_plus_root;
                 else
-                    intercept_time = r2;
-            } else if (r1 > 0.0f) {
-                intercept_time = r1;
+                    intercept_time = intercept_time_minus_root;
+            } else if (intercept_time_plus_root > 0.0f) {
+                intercept_time = intercept_time_plus_root;
             } else {
                 intercept_time = -1.0f;
-                if (r2 > 0.0f)
-                    intercept_time = r2;
+                if (intercept_time_minus_root > 0.0f)
+                    intercept_time = intercept_time_minus_root;
             }
             if (intercept_time > 0.0f) {
                 vscale_cc2e8(aim, hv, intercept_time);
