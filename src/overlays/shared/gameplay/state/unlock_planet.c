@@ -300,13 +300,13 @@ void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
 void matrix_to_euler(void *, void *) __asm__("FUN_00214598");
 #include "qcopy.h"
 void update_entity_matrix(char *out, OvlQuad *pos, void *m1, void *m2) __asm__("FUN_L00_00260738");
-void update_entity_matrix(char *out, OvlQuad *pos, void *m1, void *m2) {
-    M4 a, b, c;
-    euler_rotation_matrix(a, m1);
-    transpose_rotation_matrix(a, a);
-    euler_rotation_matrix(b, m2);
-    multiply_matrix(c, a, b);
-    matrix_to_euler(c, out);
+void update_entity_matrix(char *out, OvlQuad *pos, void *previous_rotation, void *current_rotation) {
+    M4 transposed_previous_rotation_matrix, b, relative_rotation_matrix;
+    euler_rotation_matrix(transposed_previous_rotation_matrix, previous_rotation);
+    transpose_rotation_matrix(transposed_previous_rotation_matrix, transposed_previous_rotation_matrix);
+    euler_rotation_matrix(b, current_rotation);
+    multiply_matrix(relative_rotation_matrix, transposed_previous_rotation_matrix, b);
+    matrix_to_euler(relative_rotation_matrix, out);
     qcopy(out + 0x10, pos);
 }
 extern u8 level_available[] __asm__("D_0013DD40");
