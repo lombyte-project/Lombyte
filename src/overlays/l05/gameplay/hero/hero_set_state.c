@@ -104,7 +104,8 @@ int hero_set_state(int a, int b) {
     enum {
         HERO_STATE_VEHICLE_IDLE = 0x53,
         HERO_STATE_VEHICLE_FALL = 0x55,
-        HERO_STATE_VEHICLE_HURT = 0x56
+        HERO_STATE_VEHICLE_HURT = 0x56,
+        HERO_STATE_VEHICLE_DYING = 0x57
     };
     int old2088;
     char *moby;
@@ -1867,7 +1868,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x57: {
+    case HERO_STATE_VEHICLE_DYING: {
         struct Hero *p = &hero;
         p->state.control_mode = 0x14;
         p->unk2284 = 0;
