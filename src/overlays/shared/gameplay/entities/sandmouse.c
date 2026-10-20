@@ -1687,7 +1687,7 @@ extern f32 fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
 void FUN_L01_00315de0(Camera *cam) {
     CameraPresetRow *rows = D_L01_0015EF50;
     Camera *src = D_L01_00167284;
-    CameraPreset *s = rows[cam->preset].preset;
+    CameraPreset *camera_preset = rows[cam->preset].preset;
     OvlVec4 at, delta, to_camera;
     s32 seg;
     f32 t;
@@ -1698,22 +1698,22 @@ void FUN_L01_00315de0(Camera *cam) {
     qcopy((char *)cam + 0x20, (char *)src + 0x20);
     qcopy((char *)cam + 0x40, cam);
 
-    if (s->track_path >= 0) {
+    if (camera_preset->track_path >= 0) {
         CameraPath *path;
         s32 i;
         s32 next;
-        path = D_L01_001B0930[s->track_path];
+        path = D_L01_001B0930[camera_preset->track_path];
         for (i = 0; i < path->count; i++) {
             next = (i + 1) % path->count;
             path->pts[i].f[3] = fast_vec_dist(&path->pts[i], &path->pts[next]);
         }
     }
 
-    *(s16 *)((char *)s + 0x36) = 0;
-    if (s->kind == 3) {
+    *(s16 *)((char *)camera_preset + 0x36) = 0;
+    if (camera_preset->kind == 3) {
         CameraPath *path;
         s32 next;
-        path = D_L01_001B0930[s->track_path];
+        path = D_L01_001B0930[camera_preset->track_path];
         seg = 0;
         t = 0.0f;
         if (FUN_L00_0025df68(path, &D_0013F3D0_315de0, &at, &seg, &t,
@@ -1726,7 +1726,7 @@ void FUN_L01_00315de0(Camera *cam) {
                 fast_vec_normalize(&delta, &delta, 1.0f);
                 fast_vec_sub(&to_camera, (char *)cam + 0x30, &D_0013F3D0_315de0);
                 if (0.0f < fast_vec_dot(&to_camera, &delta))
-                    *(s16 *)((char *)s + 0x36) = 1;
+                    *(s16 *)((char *)camera_preset + 0x36) = 1;
             }
         }
     }
