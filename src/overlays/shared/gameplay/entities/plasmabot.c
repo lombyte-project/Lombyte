@@ -1856,7 +1856,7 @@ void FUN_L14_002feca8(unsigned char *moby) {
     float pos[4];
     int i;
     int j;
-    int n;
+    int signed_particle_variation;
     int life;
     float size;
     scale_y(off, moby + 0xC0, D_L14_00161FCC);
@@ -1866,8 +1866,8 @@ void FUN_L14_002feca8(unsigned char *moby) {
     for (i = 0; i < 2; i++) {
         P_eca8 *part;
         T_eca8 *tail;
-        n = below_y(0x10);
-        part = puff_y(pos, 0.2f, 1.0f, 0.9f, below_y(2) == 0 ? n : -n, D_L14_0015F580_y, 100000.0f, D_L14_00161FE4);
+        signed_particle_variation = below_y(0x10);
+        part = puff_y(pos, 0.2f, 1.0f, 0.9f, below_y(2) == 0 ? signed_particle_variation : -signed_particle_variation, D_L14_0015F580_y, 100000.0f, D_L14_00161FE4);
         if (part) {
             tail = &part->tail;
             part->hA = frames_y(0xC);
@@ -1880,13 +1880,13 @@ void FUN_L14_002feca8(unsigned char *moby) {
     add_y(pos, moby + 0x10, off);
     scale_y(off, moby + 0xE0, D_L14_00161FD8);
     add_y(pos, pos, off);
-    n = 0x10;
+    signed_particle_variation = 0x10;
     life = frames_y(2);
     size = 80000.0f;
     for (j = 0; j < 3; j++) {
         P_eca8 *part;
         T_eca8 *tail;
-        part = puff_y(pos, 0.05f, 1.0f, 1.0f, n, D_L14_0015F580_y, size, 0x7FFFFFFF);
+        part = puff_y(pos, 0.05f, 1.0f, 1.0f, signed_particle_variation, D_L14_0015F580_y, size, 0x7FFFFFFF);
         if (part) {
             tail = &part->tail;
             part->hA = life;
@@ -1895,7 +1895,7 @@ void FUN_L14_002feca8(unsigned char *moby) {
             tail->bA = 0x7F;
             tail->bB = part->hA;
         }
-        n = -n;
+        signed_particle_variation = -signed_particle_variation;
         size -= 20000.0f;
         life *= 2;
     }
