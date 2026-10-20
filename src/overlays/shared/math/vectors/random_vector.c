@@ -9,10 +9,10 @@ float fast_sin(float) __asm__("FUN_001f9de0");
 void random_vector(float *out, float lo, float hi) __asm__("FUN_L00_00257d78");
 void random_vector(float *out, float lo, float hi) {
     float r = random_float_between(out, lo, hi);
-    float a = random_angle_radians();
+    float azimuth_angle = random_angle_radians();
     float b = random_angle_radians();
-    out[0] = fast_cos(a) * fast_sin(b) * r;
-    out[1] = fast_sin(a) * fast_sin(b) * r;
+    out[0] = fast_cos(azimuth_angle) * fast_sin(b) * r;
+    out[1] = fast_sin(azimuth_angle) * fast_sin(b) * r;
     out[2] = fast_cos(b) * r;
 }
 #define NOT_SDA
