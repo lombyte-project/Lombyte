@@ -79,7 +79,7 @@ void FUN_L18_002f88e8(struct Moby *moby) {
         UPDATE_SEQUENCE_EFFECTS = 1
     };
     union { EffectRadii radii; struct { Vec4 pos, velocity; } vectors; } scratch;
-    Vec4 direction, a, b;
+    Vec4 direction, interpolated_joint_zero_position, b;
     struct Moby *target;
     float radius, numerator, denominator, fraction, saved;
     float *data;
@@ -277,9 +277,9 @@ void FUN_L18_002f88e8(struct Moby *moby) {
                 moby_point_position(target, 2, &scratch.vectors.velocity);
                 for (i = 0; i < 12; i++) {
                     fraction = convert_integer_to_float(i) / 12.0f;
-                    interpolate_vector(&a, &scratch.vectors.pos, &D_L18_00162530, fraction);
+                    interpolate_vector(&interpolated_joint_zero_position, &scratch.vectors.pos, &D_L18_00162530, fraction);
                     interpolate_vector(&b, &scratch.vectors.velocity, &D_L18_00162540, fraction);
-                    FUN_L18_002fa250(&a, &a, D_L18_0015F580, D_L18_001624D0, D_L18_001624D0 * 0.4f);
+                    FUN_L18_002fa250(&interpolated_joint_zero_position, &interpolated_joint_zero_position, D_L18_0015F580, D_L18_001624D0, D_L18_001624D0 * 0.4f);
                     FUN_L18_002fa250(&b, &b, D_L18_0015F580, D_L18_001624D0, D_L18_001624D0 * 0.4f);
                 }
                 qcopy(&D_L18_00162530, &scratch.vectors.pos);
