@@ -153,13 +153,13 @@ extern int D_L06_0015FFD8_d __asm__("D_L06_0015FFD8");
 void FUN_L06_002f9698(char *arg) {
     short *table = D_L06_001ABFC0[(unsigned char)arg[0x21]];
     if (table != 0) {
-        short *p = table;
+        short *moby_index_cursor = table;
         do {
-            char *moby = (char *)(((*p & 0x7FFF) << 8) + (int)D_L06_0015FFD8_d);
+            char *moby = (char *)(((*moby_index_cursor & 0x7FFF) << 8) + (int)D_L06_0015FFD8_d);
             if ((unsigned char)moby[0x20] == 1) {
                 moby[0x20] = 2;
             }
-        } while (*p++ >= 0);
+        } while (*moby_index_cursor++ >= 0);
     }
 }
 
