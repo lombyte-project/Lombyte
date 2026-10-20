@@ -55,7 +55,7 @@ void FUN_L03_002df520(u8 *moby) {
         TUTORIAL_HINTS_UPDATE = 1
     };
     s32 *data = *(s32 **)(moby + 0x78);
-    struct Moby *m;
+    struct Moby *candidate_moby;
     s32 count;
     s32 i;
     s32 t;
@@ -120,9 +120,9 @@ void FUN_L03_002df520(u8 *moby) {
             }
         }
         count = 0;
-        for (m = D_L03_0015FFE4; m != 0; m = m->next) {
-            if (m->pclass != 0 && *(s16 *)((u8 *)m->pclass + 0x46) == 5 &&
-                vector_distance(&m->pos, &hero.motion.pos) < 8.0f) {
+        for (candidate_moby = D_L03_0015FFE4; candidate_moby != 0; candidate_moby = candidate_moby->next) {
+            if (candidate_moby->pclass != 0 && *(s16 *)((u8 *)candidate_moby->pclass + 0x46) == 5 &&
+                vector_distance(&candidate_moby->pos, &hero.motion.pos) < 8.0f) {
                 count++;
             }
         }
