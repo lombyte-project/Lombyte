@@ -1755,44 +1755,44 @@ extern int func_L00_00258BC8_2E17B8(int, int) __asm__("FUN_L00_00257b90");
 extern void func_L00_0026DA50_2E17B8(void *, void *, int, int, int, int, float) __asm__("FUN_L00_0026cbb0");
 extern Particle_2E17B8 *func_L00_0026DEA0_2E17B8(void *, float, float, float, int, void *, float, int) __asm__("FUN_L00_0026d000");
 
-void FUN_L14_002e03b8(Moby *m) {
+void FUN_L14_002e03b8(Moby *moby) {
     Vec4_2E17B8 pos;
     Vec4_2E17B8 dir;
     Vec4_2E17B8 vel;
     Vec4_2E17B8 off;
     Vars_2E17B8 *pv;
-    Particle_2E17B8 *p;
+    Particle_2E17B8 *particle;
     Particle_2E17B8 *e;
     ParticleFade_2E17B8 *fade;
     int i;
     int n;
-    int c;
+    int color_intensity;
     int alpha;
     float size;
 
-    pv = *(Vars_2E17B8 **)&m->pvars;
-    func_L00_001FF4B0_2E17B8(&dir, &*(Vec4_2E17B8 *)&m->rot_row2, 0.2f);
-    func_001F9BD8_2E17B8(&pos, &*(Vec4_2E17B8 *)&m->pos, &dir);
+    pv = *(Vars_2E17B8 **)&moby->pvars;
+    func_L00_001FF4B0_2E17B8(&dir, &*(Vec4_2E17B8 *)&moby->rot_row2, 0.2f);
+    func_001F9BD8_2E17B8(&pos, &*(Vec4_2E17B8 *)&moby->pos, &dir);
     func_002141A8_2E17B8(&vel, 0.005f, 0.03f);
-    p = func_L00_002757E8_2E17B8(&pos, &vel, 0x7F, m);
-    if (p != 0) {
-        p->life = func_002140F8_2E17B8(6000.0f, 32000.0f);
+    particle = func_L00_002757E8_2E17B8(&pos, &vel, 0x7F, moby);
+    if (particle != 0) {
+        particle->life = func_002140F8_2E17B8(6000.0f, 32000.0f);
     }
     for (i = 0; i < 3; i++) {
         float f;
         int color;
-        p = func_L00_002757E8_2E17B8(&pos, &D_L14_0015F580_c, 0x7F, m);
-        if (p == 0) {
+        particle = func_L00_002757E8_2E17B8(&pos, &D_L14_0015F580_c, 0x7F, moby);
+        if (particle == 0) {
             continue;
         }
-        fade = &p->fade;
+        fade = &particle->fade;
         if (i == 2 && func_002140B0_2E17B8(8) == 0) {
-            p->life = 180000.0f;
+            particle->life = 180000.0f;
         } else {
-            p->life = func_002140F8_2E17B8(80000.0f, 120000.0f);
+            particle->life = func_002140F8_2E17B8(80000.0f, 120000.0f);
         }
-        p->frames = func_001F9850_2E17B8(2);
-        f = 1.0f / func_001FA888_2E17B8(p->frames);
+        particle->frames = func_001F9850_2E17B8(2);
+        f = 1.0f / func_001FA888_2E17B8(particle->frames);
         color = 0x7F7F7F;
         fade->mode = 4;
         fade->color = color;
@@ -1802,18 +1802,18 @@ void FUN_L14_002e03b8(Moby *m) {
     vel.f[1] = pv->f1C;
     vel.f[2] = 0.0f;
     vel.f[3] = 1.0f;
-    if (m->state == 0) {
-        func_L00_001FF4B0_2E17B8(&dir, &*(Vec4_2E17B8 *)&m->rot_row2, 0.95f);
+    if (moby->state == 0) {
+        func_L00_001FF4B0_2E17B8(&dir, &*(Vec4_2E17B8 *)&moby->rot_row2, 0.95f);
     } else {
-        func_L00_001FF4B0_2E17B8(&dir, &*(Vec4_2E17B8 *)&m->rot_row2, 1.15f);
+        func_L00_001FF4B0_2E17B8(&dir, &*(Vec4_2E17B8 *)&moby->rot_row2, 1.15f);
         vel.f[2] = D_0015ED60 * 0.03f;
     }
-    func_001F9BD8_2E17B8(&pos, &*(Vec4_2E17B8 *)&m->pos, &dir);
-    off.f[0] = func_001F9F90_2E17B8(m->rot.z) * 0.3f;
-    off.f[1] = func_001F9FA8_2E17B8(m->rot.z) * 0.3f;
+    func_001F9BD8_2E17B8(&pos, &*(Vec4_2E17B8 *)&moby->pos, &dir);
+    off.f[0] = func_001F9F90_2E17B8(moby->rot.z) * 0.3f;
+    off.f[1] = func_001F9FA8_2E17B8(moby->rot.z) * 0.3f;
     off.f[2] = 0.0f;
     func_001F9BD8_2E17B8(&pos, &pos, &off);
-    if (m->state == 1) {
+    if (moby->state == 1) {
         pos.f[0] += func_L00_00258C80_2E17B8(0.0f, 0.1f);
         pos.f[1] += func_L00_00258C80_2E17B8(0.0f, 0.1f);
     }
@@ -1824,9 +1824,9 @@ void FUN_L14_002e03b8(Moby *m) {
         n = -n;
     }
     size = func_002140F8_2E17B8(60000.0f, 140000.0f);
-    c = func_L00_00258BC8_2E17B8(0x30, 0xFF);
+    color_intensity = func_L00_00258BC8_2E17B8(0x30, 0xFF);
     alpha = 0x60000000;
-    e = func_L00_0026DEA0_2E17B8(&pos, 0.025f, 1.0f, 1.0f, n, &vel, size, c | ((c << 16) | ((c << 8) | alpha)));
+    e = func_L00_0026DEA0_2E17B8(&pos, 0.025f, 1.0f, 1.0f, n, &vel, size, color_intensity | ((color_intensity << 16) | ((color_intensity << 8) | alpha)));
     if (e != 0) {
         ParticleFade_2E17B8 *ef;
         ef = &e->fade;
