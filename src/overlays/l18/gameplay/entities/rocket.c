@@ -1008,7 +1008,7 @@ void FUN_L18_002d62e8(struct Moby *moby) {
         STATE_SELECT_NEARER_PATH = 1
     };
     PathJunctionVars *vars = (PathJunctionVars *)moby->pvars;
-    s32 n;
+    s32 pair_or_node_index;
     s32 i;
     s32 j;
     s32 k;
@@ -1018,32 +1018,32 @@ void FUN_L18_002d62e8(struct Moby *moby) {
     case STATE_INITIALIZE_PATH_PAIRS:
         moby->state = 1;
         moby->update_dist = 0xFF;
-        n = 0;
+        pair_or_node_index = 0;
         do {
             for (i = 0; i < D_L18_0015F710; i++) {
                 if (D_L18_0015F70C[i].weight == 0.0f) {
                     continue;
                 }
-                vars->pair[n].first = &D_L18_0015F70C[i];
-                vars->weight[n].first = D_L18_0015F70C[i].weight;
+                vars->pair[pair_or_node_index].first = &D_L18_0015F70C[i];
+                vars->weight[pair_or_node_index].first = D_L18_0015F70C[i].weight;
                 for (j = 0; j < D_L18_0015F710; j++) {
                     if (D_L18_0015F70C[j].weight == 0.0f) {
                         continue;
                     }
                     if (FUN_001f9b48(&D_L18_0015F70C[i].path->points[0],
                                      &D_L18_0015F70C[j].path->points[D_L18_0015F70C[j].path->count - 1]) < 0.5f) {
-                        vars->pair[n].second = &D_L18_0015F70C[j];
-                        vars->weight[n].second = D_L18_0015F70C[j].weight;
+                        vars->pair[pair_or_node_index].second = &D_L18_0015F70C[j];
+                        vars->weight[pair_or_node_index].second = D_L18_0015F70C[j].weight;
                         D_L18_0015F70C[j].weight = 0.0f;
                         D_L18_0015F70C[i].weight = 0.0f;
-                        n++;
+                        pair_or_node_index++;
                         break;
                     }
                 }
             }
-        } while (n < 4);
-        for (n = 0; n < 2; n++) {
-            FUN_L18_002e22c0(D_L18_001600EC + vars->node[n] * 0x80 + 0x30);
+        } while (pair_or_node_index < 4);
+        for (pair_or_node_index = 0; pair_or_node_index < 2; pair_or_node_index++) {
+            FUN_L18_002e22c0(D_L18_001600EC + vars->node[pair_or_node_index] * 0x80 + 0x30);
         }
         break;
     case STATE_SELECT_NEARER_PATH:
