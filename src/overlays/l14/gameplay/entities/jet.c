@@ -2102,11 +2102,11 @@ void FUN_L14_002ef578(Level14VendorMoby *moby) {
 extern int D_0015ED84_m __asm__("D_0015ED84");
 extern int D_L14_001BABD0[];
 
-void FUN_L14_002ef5a8(Level14VendorMoby *m) {
-    m->state = 0;
-    m->data->field124 = 0;
-    D_0014C190_257218[D_0015ED84_m][(short)*(unsigned short *)((char *)m + 0xB2) >> 5] |= 1 << (*(unsigned short *)((char *)m + 0xB2) & 0x1F);
-    D_L14_001BABD0[(short)*(unsigned short *)((char *)m + 0xB2) >> 5] |= 1 << (*(unsigned short *)((char *)m + 0xB2) & 0x1F);
+void FUN_L14_002ef5a8(Level14VendorMoby *vendor_moby) {
+    vendor_moby->state = 0;
+    vendor_moby->data->field124 = 0;
+    D_0014C190_257218[D_0015ED84_m][(short)*(unsigned short *)((char *)vendor_moby + 0xB2) >> 5] |= 1 << (*(unsigned short *)((char *)vendor_moby + 0xB2) & 0x1F);
+    D_L14_001BABD0[(short)*(unsigned short *)((char *)vendor_moby + 0xB2) >> 5] |= 1 << (*(unsigned short *)((char *)vendor_moby + 0xB2) & 0x1F);
 }
 extern u8 D_L14_001E03B0[];
 extern u8 *D_L14_001B0BB0_u[] __asm__("D_L14_001B0BB0");
