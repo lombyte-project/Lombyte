@@ -317,56 +317,56 @@ extern void spawn_explosion(void *, void *, void *, float, float, int, int, int,
                                   int) __asm__("FUN_L00_0025e450");
 
 void refueling_station_update(struct Moby *m) __asm__("FUN_L09_00303d10");
-void refueling_station_update(struct Moby *m) {
+void refueling_station_update(struct Moby *moby) {
     enum {
         REFUELING_STATION_STATE_INITIALIZE = 0,
         REFUELING_STATION_STATE_WAIT_COMMAND = 1,
         REFUELING_STATION_STATE_EXPLOSION_DELAY = 2,
         REFUELING_STATION_STATE_EXPLODE = 3
     };
-    char *d = (char *)m->pvars;
+    char *station_vars = (char *)moby->pvars;
     float v[4];
     unsigned char *q;
-    FUN_L09_00303b30(m, d, d + 0x20);
-    switch (m->state) {
+    FUN_L09_00303b30(moby, station_vars, station_vars + 0x20);
+    switch (moby->state) {
     case REFUELING_STATION_STATE_INITIALIZE:
-        if (*(short *)(d + 0x76) != -1 &&
-            (q = (unsigned char *)D_0013D388 + *(short *)(d + 0x76))[0x39] != 0) {
-            mark_moby_for_removal(m);
+        if (*(short *)(station_vars + 0x76) != -1 &&
+            (q = (unsigned char *)D_0013D388 + *(short *)(station_vars + 0x76))[0x39] != 0) {
+            mark_moby_for_removal(moby);
             return;
         }
-        *(int *)(d + 0x7C) = -1;
-        m->state = 1;
+        *(int *)(station_vars + 0x7C) = -1;
+        moby->state = 1;
         break;
     case REFUELING_STATION_STATE_WAIT_COMMAND:
-        if ((D_L09_0015F5CC & 7) == (((int)m >> 8) & 7)) {
-            if (*(int *)(d + 0x7C) == -1 ||
-                (voice_is_playing(m, *(int *)(d + 0x7C)) == 0 && *(int *)(d + 0x7C) == -1)) {
-                *(int *)(d + 0x7C) = func_0022ED80_r(1, 4, m);
+        if ((D_L09_0015F5CC & 7) == (((int)moby >> 8) & 7)) {
+            if (*(int *)(station_vars + 0x7C) == -1 ||
+                (voice_is_playing(moby, *(int *)(station_vars + 0x7C)) == 0 && *(int *)(station_vars + 0x7C) == -1)) {
+                *(int *)(station_vars + 0x7C) = func_0022ED80_r(1, 4, moby);
             }
         }
-        if (m->command == 1) {
-            if (*(int *)(d + 0x78) != -1) {
-                unsigned char *o = (unsigned char *)(D_L09_0015FFD8_u + (*(int *)(d + 0x78) << 8));
+        if (moby->command == 1) {
+            if (*(int *)(station_vars + 0x78) != -1) {
+                unsigned char *o = (unsigned char *)(D_L09_0015FFD8_u + (*(int *)(station_vars + 0x78) << 8));
                 if (o[0x20] == 1)
                     o[0xBC] = o[0x20];
             }
-            *(short *)(d + 0x74) = scale_game_frames(0xA);
-            if (*(int *)(d + 0x7C) != -1) {
-                char *e = voice_pool + *(int *)(d + 0x7C) * 0x70;
-                if (*(char **)(e + 0x88) == m && ((unsigned char *)e)[0x74] != 0) {
-                    release_voice_slot(*(int *)(d + 0x7C));
+            *(short *)(station_vars + 0x74) = scale_game_frames(0xA);
+            if (*(int *)(station_vars + 0x7C) != -1) {
+                char *voice_entry = voice_pool + *(int *)(station_vars + 0x7C) * 0x70;
+                if (*(char **)(voice_entry + 0x88) == moby && ((unsigned char *)voice_entry)[0x74] != 0) {
+                    release_voice_slot(*(int *)(station_vars + 0x7C));
                 }
             }
-            *(int *)(d + 0x7C) = -1;
-            m->update_dist = 0xFF;
-            m->state = 2;
+            *(int *)(station_vars + 0x7C) = -1;
+            moby->update_dist = 0xFF;
+            moby->state = 2;
         }
         break;
     case REFUELING_STATION_STATE_EXPLOSION_DELAY:
-        if (fast_dec_timer_s16(d + 0x74)) {
-            if (*(int *)(d + 0x70) != -1) {
-                unsigned char *o = (unsigned char *)(D_L09_0015FFD8_u + (*(int *)(d + 0x70) << 8));
+        if (fast_dec_timer_s16(station_vars + 0x74)) {
+            if (*(int *)(station_vars + 0x70) != -1) {
+                unsigned char *o = (unsigned char *)(D_L09_0015FFD8_u + (*(int *)(station_vars + 0x70) << 8));
                 if (o != 0 && o[0x20] != 0xFE && o[0x20] != 0xFD &&
                     (*(short *)(o + 0xA6) == 0x494 || *(short *)(o + 0xA6) == 0x49D ||
                      *(short *)(o + 0xA6) == 0x4A0)) {
@@ -374,14 +374,14 @@ void refueling_station_update(struct Moby *m) {
                     o[0xBC] = 1;
                 }
             }
-            m->state = 3;
+            moby->state = 3;
         }
         break;
     case REFUELING_STATION_STATE_EXPLODE:
-        subtract_vector_xyz_c(v, D_L09_00166F40, &m->pos);
-        spawn_explosion(m, v, 0, 0.0f, 0.0f, 0x14, 9, 0x20, 10.0f, 7.0f, 20.0f, 2.0f, 0,
+        subtract_vector_xyz_c(v, D_L09_00166F40, &moby->pos);
+        spawn_explosion(moby, v, 0, 0.0f, 0.0f, 0x14, 9, 0x20, 10.0f, 7.0f, 20.0f, 2.0f, 0,
                               40.0f, 0, 1, -1, 0);
-        mark_moby_for_removal(m);
+        mark_moby_for_removal(moby);
         break;
     }
 }
