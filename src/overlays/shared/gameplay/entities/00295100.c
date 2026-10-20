@@ -2028,7 +2028,7 @@ extern void FUN_L00_0023a7a8_2ba78(void) __asm__("FUN_L00_0023a7a8");
 void FUN_L00_0029ba78(void) {
     u128 lv;
     s32 st;
-    s32 n, k, m;
+    s32 purchase_cost, k, last_row_index;
 
     st = vendor_menu.f5c;
     if (st == 0) {
@@ -2042,9 +2042,9 @@ void FUN_L00_0029ba78(void) {
         lv = 0;
         FUN_001f9a10_2ba78(&vendor_menu.f20[4].pos, &lv, &vendor_menu.f1c->pos);
         {
-            VendorMoby *p = vendor_menu.f20;
-            qcopy(&p[4].rot, &vendor_menu.f1c->rot);
-            FUN_00212ed8_2ba78(&p[4], 0, 0);
+            VendorMoby *menu_mobys = vendor_menu.f20;
+            qcopy(&menu_mobys[4].rot, &vendor_menu.f1c->rot);
+            FUN_00212ed8_2ba78(&menu_mobys[4], 0, 0);
         }
         if (((u8 *)vendor_menu.f20[4].pclass->slots[0])[0x10] < 2) {
             vendor_menu.f20[4].f58 = 0.0f;
@@ -2162,21 +2162,21 @@ void FUN_L00_0029ba78(void) {
                 FUN_0022da68_2ba78(0, 0, vendor_menu.f1c);
             } else if (CUR_ITEM.fD4 == 1) {
                 s32 i;
-                VendorItemInfo *t;
+                VendorItemInfo *selected_item_info;
 
-                if (weapon_ammo_counts[CUR_ITEM.fD0] < (t = &CUR_TB)->hE) {
-                    n = (vendor_menu.f40 ? t->hA : t->h8) * D_L00_00161E34;
-                    if (D_0015ED98 >= n) {
+                if (weapon_ammo_counts[CUR_ITEM.fD0] < (selected_item_info = &CUR_TB)->hE) {
+                    purchase_cost = (vendor_menu.f40 ? selected_item_info->hA : selected_item_info->h8) * D_L00_00161E34;
+                    if (D_0015ED98 >= purchase_cost) {
                         i = CUR_ITEM.fD0;
                         if (weapon_ammo_counts[i] > D_L00_001C40B0[i].hE) {
                             weapon_ammo_counts[i] = D_L00_001C40B0[i].hE;
                         }
                         k = D_L00_00161E34;
                         k -= FUN_L00_00233e40_2ba78(CUR_ITEM.fD0, k);
-                        n = (vendor_menu.f40 ? CUR_TB.hA : CUR_TB.h8) * k;
+                        purchase_cost = (vendor_menu.f40 ? CUR_TB.hA : CUR_TB.h8) * k;
                         ammo_bought_stats[CUR_ITEM.fD0] += k;
                         FUN_L00_0029b4d8_2ba78(3);
-                        D_0015ED98 = D_0015ED98 - n;
+                        D_0015ED98 = D_0015ED98 - purchase_cost;
                         FUN_L00_0029a400_2ba78(vendor_menu.f40 != 0);
                         set_scrolling_status_message(get_help_message_text(0x4F5F));
                         FUN_0022da68_2ba78(7, 0, vendor_menu.f1c);
@@ -2188,15 +2188,15 @@ void FUN_L00_0029ba78(void) {
                     FUN_0022da68_2ba78(0, 0, vendor_menu.f1c);
                 }
             } else {
-                n = D_0013D4E3[0] ? CUR_TB.f4 : CUR_TB.f0;
-                if (D_0015ED98 >= n) {
+                purchase_cost = D_0013D4E3[0] ? CUR_TB.f4 : CUR_TB.f0;
+                if (D_0015ED98 >= purchase_cost) {
                     FUN_L00_0029b4d8_2ba78(2);
                     FUN_L00_00260860_2ba78(CUR_ITEM.fD0, 1);
                     vendor_menu.f48 = CUR_ITEM.fD0;
                     if (CUR_ITEM.fD0 == 0x18) {
                         D_00141345[0] = 1;
                     }
-                    D_0015ED98 = D_0015ED98 - n;
+                    D_0015ED98 = D_0015ED98 - purchase_cost;
                     FUN_L00_0029a400_2ba78(vendor_menu.f40 != 0);
                     if (vendor_menu.f50 != -1) {
                         FUN_001ff570_2ba78(vendor_menu.f50, 0);
@@ -2209,9 +2209,9 @@ void FUN_L00_0029ba78(void) {
                                            FUN_L00_00235ea0_2ba78, FUN_L00_0023a7a8_2ba78,
                                            &weapon_ammo_counts[i], D_L00_001C40B0[i].hE);
                     } else {
-                        m = vendor_menu.f210 - 1;
-                        if (m < vendor_menu.f58) {
-                            vendor_menu.f58 = m;
+                        last_row_index = vendor_menu.f210 - 1;
+                        if (last_row_index < vendor_menu.f58) {
+                            vendor_menu.f58 = last_row_index;
                         }
                         FUN_L00_0029b680_2ba78();
                     }
