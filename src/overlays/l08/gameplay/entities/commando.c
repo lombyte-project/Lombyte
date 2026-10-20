@@ -220,36 +220,36 @@ extern char *D_L08_0015FFD8_g __asm__("D_L08_0015FFD8");
 extern int FUN_0022da68_c(int, int, char *) __asm__("FUN_0022da68");
 extern void FUN_00213ed8_c(char *, float, float) __asm__("FUN_00213ed8");
 
-void FUN_L08_002ea398(char *m)
+void FUN_L08_002ea398(char *moby)
 {
     enum {
         POSITION_BASELINE_INITIALIZE = 0,
         POSITION_FOLLOW_DRIVER = 1,
         POSITION_APPROACH_TARGET = 2
     };
-    char *d = *(char **)(m + 0x78);
-    char *o;
+    char *position_vars = *(char **)(moby + 0x78);
+    char *driver_moby;
     int i;
-    switch (*(u8 *)(m + 0x20)) {
+    switch (*(u8 *)(moby + 0x20)) {
     case POSITION_BASELINE_INITIALIZE:
-        *(float *)(d + 4) = *(float *)(m + 0x18);
-        *(u8 *)(m + 0x20) = 1;
+        *(float *)(position_vars + 4) = *(float *)(moby + 0x18);
+        *(u8 *)(moby + 0x20) = 1;
         break;
     case POSITION_FOLLOW_DRIVER:
-        i = *(int *)(d + 8);
+        i = *(int *)(position_vars + 8);
         if (i < 0) break;
-        o = (char *)((i << 8) + (int)D_L08_0015FFD8_g);
-        if (*(short *)(o + 0xA6) == 0x267 || *(short *)(o + 0xA6) == 0x23F) {
-            if (*(u8 *)(o + 0x20) != 4) break;
+        driver_moby = (char *)((i << 8) + (int)D_L08_0015FFD8_g);
+        if (*(short *)(driver_moby + 0xA6) == 0x267 || *(short *)(driver_moby + 0xA6) == 0x23F) {
+            if (*(u8 *)(driver_moby + 0x20) != 4) break;
             menu_item_enabled_41 = 1;
-            FUN_0022da68_c(0, 0, m);
-            *(u8 *)(m + 0x20) = 2;
+            FUN_0022da68_c(0, 0, moby);
+            *(u8 *)(moby + 0x20) = 2;
         } else {
-            FUN_00213ed8_c(m + 0x18, (*(float *)d - *(float *)(d + 4)) * **(float **)(o + 0x78) + *(float *)(d + 4), frame_time * 10.0f);
+            FUN_00213ed8_c(moby + 0x18, (*(float *)position_vars - *(float *)(position_vars + 4)) * **(float **)(driver_moby + 0x78) + *(float *)(position_vars + 4), frame_time * 10.0f);
         }
         break;
     case POSITION_APPROACH_TARGET:
-        FUN_00213ed8_c(m + 0x18, *(float *)d, frame_time * 10.0f);
+        FUN_00213ed8_c(moby + 0x18, *(float *)position_vars, frame_time * 10.0f);
         break;
     }
 }
