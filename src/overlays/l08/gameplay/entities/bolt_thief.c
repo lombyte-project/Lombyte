@@ -85,26 +85,26 @@ extern void euler_rotation_matrix(float *, float *) __asm__("FUN_001fa050");
 extern void matrix_to_euler(void *, void *) __asm__("FUN_00214598");
 extern void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
 
-void FUN_L08_002e4db8(struct Moby *a, float *v) {
-    float m[16];
-    float n[16];
+void FUN_L08_002e4db8(struct Moby *moby, float *v) {
+    float direction_basis_matrix[16];
+    float reconstructed_rotation_matrix[16];
     float r[4];
-    float s[4];
-    char *d = (char *)a->pvars;
+    float second_basis_vector[4];
+    char *pvars_cursor = (char *)moby->pvars;
     r[1] = v[2];
     r[2] = v[0];
     r[0] = -v[1];
     fast_vec_cross(r, v, r);
-    fast_vec_cross(s, r, v);
-    qcopy(m, r);
-    qcopy(m + 4, s);
-    qcopy(m + 8, v);
-    clear_u64_value(m + 12);
-    d += 0x10;
-    m[15] = 1.0f;
-    matrix_to_euler(m, d);
-    euler_rotation_matrix(n, (float *)d);
-    n[15] = 42.0f;
+    fast_vec_cross(second_basis_vector, r, v);
+    qcopy(direction_basis_matrix, r);
+    qcopy(direction_basis_matrix + 4, second_basis_vector);
+    qcopy(direction_basis_matrix + 8, v);
+    clear_u64_value(direction_basis_matrix + 12);
+    pvars_cursor += 0x10;
+    direction_basis_matrix[15] = 1.0f;
+    matrix_to_euler(direction_basis_matrix, pvars_cursor);
+    euler_rotation_matrix(reconstructed_rotation_matrix, (float *)pvars_cursor);
+    reconstructed_rotation_matrix[15] = 42.0f;
 }
 /* spawns the child mobys this object owns and fills its part table */
 /* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002E0258.c: func_L08_002E9B60), where it is exact; names translated to the US level program. */
