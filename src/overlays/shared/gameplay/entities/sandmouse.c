@@ -1889,15 +1889,15 @@ float absolute_float(float input) __asm__("func_001F99C0");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void FUN_L01_00319f18(char *moby) {
-    float a[4];
+    float hero_offset_from_box[4];
     float b[4];
     unsigned char *data = *(unsigned char **)(moby + 8);
-    subtract_vector_xyz(a, &hero.motion.pos, moby + 0x40);
-    a[3] = 0;
-    transform_vector_by_basis(b, a, moby + 0x50);
+    subtract_vector_xyz(hero_offset_from_box, &hero.motion.pos, moby + 0x40);
+    hero_offset_from_box[3] = 0;
+    transform_vector_by_basis(b, hero_offset_from_box, moby + 0x50);
     if (absolute_float(b[0]) <= 1.0f && absolute_float(b[1]) <= 1.0f && absolute_float(b[2]) <= 1.0f) {
-        float t = (b[0] + 1.0f) * 0.5f;
-        int v = func_001FA898_r(convert_integer_to_float(*(int *)(data + 4)) * t);
+        float box_x_fraction = (b[0] + 1.0f) * 0.5f;
+        int v = func_001FA898_r(convert_integer_to_float(*(int *)(data + 4)) * box_x_fraction);
         int w = *(int *)(data + 4);
         if (!(w < v))
             w = v;
