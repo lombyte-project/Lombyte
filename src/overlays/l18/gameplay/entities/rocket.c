@@ -1851,26 +1851,26 @@ extern short D_L18_00161BFC_d __asm__("D_L18_00161BFC") __attribute__((sda));
 
 extern float D_L18_00161BF8 __attribute__((sda));
 void FUN_L18_002db938(char *pos, float *vec, int arg, float fa, float fb) {
-    Obj *o = (Obj *)func_0020D348_m(0x270);
-    if (o != 0) {
-        Child *c;
+    Obj *spawned_moby = (Obj *)func_0020D348_m(0x270);
+    if (spawned_moby != 0) {
+        Child *moby_vars;
         int g;
-        o->b30 = 0xFF;
-        o->b31 = 1;
-        o->b20 = 0;
+        spawned_moby->b30 = 0xFF;
+        spawned_moby->b31 = 1;
+        spawned_moby->b20 = 0;
         g = *(int *)&D_L18_00161BFC_d;
-        o->f2C = o->f2C * D_L18_00161BF8;
-        o->s32 = 0xFF;
-        o->h34 |= 0x10;
-        o->f90 = g;
-        c = o->child;
-        qcopy(o->pos, pos);
-        o->f48 = fast_arc_tan(vec[0], vec[1]);
-        qcopy(c->v, vec);
-        c->f34 = arg;
-        c->f28 = fa;
-        c->f20 = fb;
-        c->f30 = 0;
+        spawned_moby->f2C = spawned_moby->f2C * D_L18_00161BF8;
+        spawned_moby->s32 = 0xFF;
+        spawned_moby->h34 |= 0x10;
+        spawned_moby->f90 = g;
+        moby_vars = spawned_moby->child;
+        qcopy(spawned_moby->pos, pos);
+        spawned_moby->f48 = fast_arc_tan(vec[0], vec[1]);
+        qcopy(moby_vars->v, vec);
+        moby_vars->f34 = arg;
+        moby_vars->f28 = fa;
+        moby_vars->f20 = fb;
+        moby_vars->f30 = 0;
     }
 }
 /* Ported from rac1-decomp nonmatching/l18_veldin2/func_L18_002DCE10.c (func_L18_002DCE10) */
