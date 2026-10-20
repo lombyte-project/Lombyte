@@ -2245,9 +2245,9 @@ void taxi_update(struct Moby *moby) {
         TAXI_STATE_WAIT_FOR_ITEM_GATE = 6,
         TAXI_STATE_BLEND_SAVED_POSE_TO_PATH_START = 7
     };
-    L14TaxiVars *d = (L14TaxiVars *)moby->pvars;
+    L14TaxiVars *taxi_vars = (L14TaxiVars *)moby->pvars;
     float previous_position[4], previous_rotation[4], position_delta[4], blend_from_position_or_rotation_matrix[4], blend_to_position[4], blend_from_rotation[4], blend_to_rotation[4], hero_relative_position[4];
-    float m80[16];
+    float taxi_inverse_rotation_matrix[16];
     int ticks = 10;
     int button = 0x10;
     int wrap = 0;
@@ -2257,8 +2257,8 @@ void taxi_update(struct Moby *moby) {
     FUN_L00_00266858(moby, (moby->flags ^ 1) & 1);
     switch (moby->state) {
     case TAXI_STATE_INITIALIZE:
-        d->hB0 = -1;
-        d->sound = -1;
+        taxi_vars->hB0 = -1;
+        taxi_vars->sound = -1;
         FUN_L14_002f1040(moby);
         break;
     case TAXI_STATE_WAIT_AT_STOP: {
@@ -2274,62 +2274,62 @@ void taxi_update(struct Moby *moby) {
                 if ((*(int *)D_0013CAE4 & button) && D_L14_0015F594 == 4) {
                     struct Moby *m;
                     moby->state = 3;
-                    m = FUN_L14_002f12f0(moby, d->target);
+                    m = FUN_L14_002f12f0(moby, taxi_vars->target);
                     if (m != 0) {
                         m->state = 2;
                         m->flags |= 1;
                         m->visible = 0;
                         m->collision = 0;
                     }
-                    d->hB0 = -1;
+                    taxi_vars->hB0 = -1;
                 }
             }
         } else {
-            if (d->clip[0] >= 0 && d->picked != 0 && taxi_inside(&hero.motion.pos, d->clip[0])) {
+            if (taxi_vars->clip[0] >= 0 && taxi_vars->picked != 0 && taxi_inside(&hero.motion.pos, taxi_vars->clip[0])) {
                 if (D_L14_0015F5CC < taxi_frames(ticks)) {
-                    d->target = 0;
-                    d->picked = 0;
-                    qcopy_nc(&moby->pos, D_L14_001600EC_taxi[d->points[d->picked]].pos);
-                    qcopy_nc(&moby->rot, D_L14_001600EC_taxi[d->points[d->picked]].rot);
+                    taxi_vars->target = 0;
+                    taxi_vars->picked = 0;
+                    qcopy_nc(&moby->pos, D_L14_001600EC_taxi[taxi_vars->points[taxi_vars->picked]].pos);
+                    qcopy_nc(&moby->rot, D_L14_001600EC_taxi[taxi_vars->points[taxi_vars->picked]].rot);
                     moby->state = 1;
-                    qcopy_nc(d->pos, D_L14_001600EC_taxi[d->points[d->picked]].pos);
-                    qcopy_nc(d->rot, D_L14_001600EC_taxi[d->points[d->picked]].rot);
+                    qcopy_nc(taxi_vars->pos, D_L14_001600EC_taxi[taxi_vars->points[taxi_vars->picked]].pos);
+                    qcopy_nc(taxi_vars->rot, D_L14_001600EC_taxi[taxi_vars->points[taxi_vars->picked]].rot);
                 } else {
-                    if (d->picked == 2) {
-                        d->picked = 3;
+                    if (taxi_vars->picked == 2) {
+                        taxi_vars->picked = 3;
                     } else {
-                        d->picked = 1;
+                        taxi_vars->picked = 1;
                     }
                     FUN_L14_002f1140(moby);
                     moby->state = 3;
                 }
             }
-            if (d->clip[1] >= 0 && d->picked != 1 && taxi_inside(&hero.motion.pos, d->clip[1])) {
+            if (taxi_vars->clip[1] >= 0 && taxi_vars->picked != 1 && taxi_inside(&hero.motion.pos, taxi_vars->clip[1])) {
                 if (D_L14_0015F5CC < taxi_frames(ticks)) {
-                    d->target = 1;
-                    d->picked = 1;
-                    qcopy_nc(&moby->pos, D_L14_001600EC_taxi[d->points[d->picked]].pos);
-                    qcopy_nc(&moby->rot, D_L14_001600EC_taxi[d->points[d->picked]].rot);
+                    taxi_vars->target = 1;
+                    taxi_vars->picked = 1;
+                    qcopy_nc(&moby->pos, D_L14_001600EC_taxi[taxi_vars->points[taxi_vars->picked]].pos);
+                    qcopy_nc(&moby->rot, D_L14_001600EC_taxi[taxi_vars->points[taxi_vars->picked]].rot);
                     moby->state = 1;
-                    qcopy_nc(d->pos, D_L14_001600EC_taxi[d->points[d->picked]].pos);
-                    qcopy_nc(d->rot, D_L14_001600EC_taxi[d->points[d->picked]].rot);
+                    qcopy_nc(taxi_vars->pos, D_L14_001600EC_taxi[taxi_vars->points[taxi_vars->picked]].pos);
+                    qcopy_nc(taxi_vars->rot, D_L14_001600EC_taxi[taxi_vars->points[taxi_vars->picked]].rot);
                 } else {
-                    d->picked = 0;
+                    taxi_vars->picked = 0;
                     FUN_L14_002f1140(moby);
                     moby->state = 3;
                 }
             }
-            if (d->clip[2] >= 0 && d->picked < 2 && taxi_inside(&hero.motion.pos, d->clip[2])) {
+            if (taxi_vars->clip[2] >= 0 && taxi_vars->picked < 2 && taxi_inside(&hero.motion.pos, taxi_vars->clip[2])) {
                 if (D_L14_0015F5CC < taxi_frames(ticks)) {
-                    d->target = 2;
-                    d->picked = 2;
-                    qcopy_nc(&moby->pos, D_L14_001600EC_taxi[d->points[d->picked]].pos);
-                    qcopy_nc(&moby->rot, D_L14_001600EC_taxi[d->points[d->picked]].rot);
+                    taxi_vars->target = 2;
+                    taxi_vars->picked = 2;
+                    qcopy_nc(&moby->pos, D_L14_001600EC_taxi[taxi_vars->points[taxi_vars->picked]].pos);
+                    qcopy_nc(&moby->rot, D_L14_001600EC_taxi[taxi_vars->points[taxi_vars->picked]].rot);
                     moby->state = 1;
-                    qcopy_nc(d->pos, D_L14_001600EC_taxi[d->points[d->picked]].pos);
-                    qcopy_nc(d->rot, D_L14_001600EC_taxi[d->points[d->picked]].rot);
+                    qcopy_nc(taxi_vars->pos, D_L14_001600EC_taxi[taxi_vars->points[taxi_vars->picked]].pos);
+                    qcopy_nc(taxi_vars->rot, D_L14_001600EC_taxi[taxi_vars->points[taxi_vars->picked]].rot);
                 } else {
-                    d->picked = 2;
+                    taxi_vars->picked = 2;
                     FUN_L14_002f1140(moby);
                     moby->state = 3;
                 }
@@ -2342,33 +2342,33 @@ void taxi_update(struct Moby *moby) {
         if (g->ground_moby == moby && g->air_frames.s == 0) {
             FUN_L00_002e8450(0, 7.0f, 0.002f);
         }
-        advance_accelerated_scalar_c(1.0f, frame_time_sq, frame_time_sq, frame_time * 0.5f, &d->t, &d->tv);
-        qcopy_nc(blend_from_position_or_rotation_matrix, D_L14_001600EC_taxi[d->points[d->picked]].pos);
-        qcopy_nc(blend_from_rotation, D_L14_001600EC_taxi[d->points[d->picked]].rot);
-        taxi_sample(0.0f, d->path, wrap, blend_to_position, blend_to_rotation, flags);
-        lerp_vector(d->pos, blend_from_position_or_rotation_matrix, blend_to_position, d->t);
-        d->rot[1] = taxi_add_rot(taxi_sub_rot(blend_to_rotation[1], blend_from_rotation[1]) * d->t, blend_from_rotation[1]);
-        d->rot[2] = taxi_add_rot(taxi_sub_rot(blend_to_rotation[2], blend_from_rotation[2]) * d->t, blend_from_rotation[2]);
-        if (1.0f <= d->t) {
-            d->t = 0.0f;
-            d->tv = 0.0f;
+        advance_accelerated_scalar_c(1.0f, frame_time_sq, frame_time_sq, frame_time * 0.5f, &taxi_vars->t, &taxi_vars->tv);
+        qcopy_nc(blend_from_position_or_rotation_matrix, D_L14_001600EC_taxi[taxi_vars->points[taxi_vars->picked]].pos);
+        qcopy_nc(blend_from_rotation, D_L14_001600EC_taxi[taxi_vars->points[taxi_vars->picked]].rot);
+        taxi_sample(0.0f, taxi_vars->path, wrap, blend_to_position, blend_to_rotation, flags);
+        lerp_vector(taxi_vars->pos, blend_from_position_or_rotation_matrix, blend_to_position, taxi_vars->t);
+        taxi_vars->rot[1] = taxi_add_rot(taxi_sub_rot(blend_to_rotation[1], blend_from_rotation[1]) * taxi_vars->t, blend_from_rotation[1]);
+        taxi_vars->rot[2] = taxi_add_rot(taxi_sub_rot(blend_to_rotation[2], blend_from_rotation[2]) * taxi_vars->t, blend_from_rotation[2]);
+        if (1.0f <= taxi_vars->t) {
+            taxi_vars->t = 0.0f;
+            taxi_vars->tv = 0.0f;
             moby->state = 4;
         }
         break;
     }
     case TAXI_STATE_BLEND_SAVED_POSE_TO_PATH_START: {
-        float f;
-        advance_accelerated_scalar_c(1.0f, frame_time_sq, frame_time_sq, frame_time * 0.5f, &d->t, &d->tv);
-        qcopy(blend_from_position_or_rotation_matrix, d->save_pos);
-        qcopy(blend_from_rotation, d->save_rot);
-        taxi_sample_f(d->path, wrap, blend_to_position, blend_to_rotation, flags, 0.0f);
-        f = cubic_hermite_scalar(1.0f, 0.0f, 1.0f, 0.0f, d->t);
-        lerp_vector(d->pos, blend_from_position_or_rotation_matrix, blend_to_position, f);
-        d->rot[1] = taxi_add_rot(taxi_sub_rot(blend_to_rotation[1], blend_from_rotation[1]) * f, blend_from_rotation[1]);
-        d->rot[2] = taxi_add_rot(taxi_sub_rot(blend_to_rotation[2], blend_from_rotation[2]) * f, blend_from_rotation[2]);
-        if (1.0f <= d->t) {
-            d->t = 0.0f;
-            d->tv = 0.0f;
+        float hermite_blend_fraction;
+        advance_accelerated_scalar_c(1.0f, frame_time_sq, frame_time_sq, frame_time * 0.5f, &taxi_vars->t, &taxi_vars->tv);
+        qcopy(blend_from_position_or_rotation_matrix, taxi_vars->save_pos);
+        qcopy(blend_from_rotation, taxi_vars->save_rot);
+        taxi_sample_f(taxi_vars->path, wrap, blend_to_position, blend_to_rotation, flags, 0.0f);
+        hermite_blend_fraction = cubic_hermite_scalar(1.0f, 0.0f, 1.0f, 0.0f, taxi_vars->t);
+        lerp_vector(taxi_vars->pos, blend_from_position_or_rotation_matrix, blend_to_position, hermite_blend_fraction);
+        taxi_vars->rot[1] = taxi_add_rot(taxi_sub_rot(blend_to_rotation[1], blend_from_rotation[1]) * hermite_blend_fraction, blend_from_rotation[1]);
+        taxi_vars->rot[2] = taxi_add_rot(taxi_sub_rot(blend_to_rotation[2], blend_from_rotation[2]) * hermite_blend_fraction, blend_from_rotation[2]);
+        if (1.0f <= taxi_vars->t) {
+            taxi_vars->t = 0.0f;
+            taxi_vars->tv = 0.0f;
             moby->state = 4;
         }
         break;
@@ -2379,46 +2379,46 @@ void taxi_update(struct Moby *moby) {
             FUN_L00_002e8450(0, 7.0f, 0.003f);
         }
         if (FUN_L05_003195f8((char *)moby)) {
-            d->t = 0.0f;
-            d->tv = 0.0f;
+            taxi_vars->t = 0.0f;
+            taxi_vars->tv = 0.0f;
             moby->state = 5;
         }
         break;
     }
     case TAXI_STATE_BLEND_PATH_END_TO_STOP: {
         struct Hero *g;
-        advance_accelerated_scalar_c(1.0f, frame_time_sq, frame_time_sq, frame_time * 0.25f, &d->t, &d->tv);
-        qcopy_nc(blend_to_position, D_L14_001600EC_taxi[d->points[d->target]].pos);
-        qcopy_nc(blend_to_rotation, D_L14_001600EC_taxi[d->points[d->target]].rot);
-        taxi_sample_f(d->path, wrap, blend_from_position_or_rotation_matrix, blend_from_rotation, flags, (float)*d->path);
-        lerp_vector(d->pos, blend_from_position_or_rotation_matrix, blend_to_position, d->t);
-        d->rot[1] = taxi_add_rot(taxi_sub_rot(blend_to_rotation[1], blend_from_rotation[1]) * d->t, blend_from_rotation[1]);
-        d->rot[2] = taxi_add_rot(taxi_sub_rot(blend_to_rotation[2], blend_from_rotation[2]) * d->t, blend_from_rotation[2]);
-        if (1.0f <= d->t) {
-            d->t = 0.0f;
-            d->tv = 0.0f;
+        advance_accelerated_scalar_c(1.0f, frame_time_sq, frame_time_sq, frame_time * 0.25f, &taxi_vars->t, &taxi_vars->tv);
+        qcopy_nc(blend_to_position, D_L14_001600EC_taxi[taxi_vars->points[taxi_vars->target]].pos);
+        qcopy_nc(blend_to_rotation, D_L14_001600EC_taxi[taxi_vars->points[taxi_vars->target]].rot);
+        taxi_sample_f(taxi_vars->path, wrap, blend_from_position_or_rotation_matrix, blend_from_rotation, flags, (float)*taxi_vars->path);
+        lerp_vector(taxi_vars->pos, blend_from_position_or_rotation_matrix, blend_to_position, taxi_vars->t);
+        taxi_vars->rot[1] = taxi_add_rot(taxi_sub_rot(blend_to_rotation[1], blend_from_rotation[1]) * taxi_vars->t, blend_from_rotation[1]);
+        taxi_vars->rot[2] = taxi_add_rot(taxi_sub_rot(blend_to_rotation[2], blend_from_rotation[2]) * taxi_vars->t, blend_from_rotation[2]);
+        if (1.0f <= taxi_vars->t) {
+            taxi_vars->t = 0.0f;
+            taxi_vars->tv = 0.0f;
             moby->state = 1;
             FUN_L05_00319510(moby);
         }
         g = &hero;
         if (g->ground_moby == moby && g->air_frames.s == 0) {
-            transpose_rotation_matrix(m80, &moby->rot_row0);
+            transpose_rotation_matrix(taxi_inverse_rotation_matrix, &moby->rot_row0);
             taxi_sub(hero_relative_position, &g->motion.pos, &moby->pos);
             hero_relative_position[3] = 0;
-            transform_vector(hero_relative_position, hero_relative_position, m80);
+            transform_vector(hero_relative_position, hero_relative_position, taxi_inverse_rotation_matrix);
             if (taxi_fabs(hero_relative_position[1]) < 1.2f) {
                 FUN_L14_002f13f8(moby);
                 if (*(int *)D_0013CAE4 & button) {
-                    qcopy(d->save_pos, d->pos);
-                    qcopy(d->save_rot, d->rot);
+                    qcopy(taxi_vars->save_pos, taxi_vars->pos);
+                    qcopy(taxi_vars->save_rot, taxi_vars->rot);
                     FUN_L14_002f1040(moby);
-                    d->picked = d->target;
+                    taxi_vars->picked = taxi_vars->target;
                     FUN_L14_002f1140(moby);
                     moby->state = 7;
-                    qcopy(d->pos, d->save_pos);
-                    qcopy(d->rot, d->save_rot);
+                    qcopy(taxi_vars->pos, taxi_vars->save_pos);
+                    qcopy(taxi_vars->rot, taxi_vars->save_rot);
                     {
-                        struct Moby *m = FUN_L14_002f12f0(moby, d->target);
+                        struct Moby *m = FUN_L14_002f12f0(moby, taxi_vars->target);
                         if (m != 0) {
                             m->state = 2;
                             m->flags |= 1;
@@ -2434,7 +2434,7 @@ void taxi_update(struct Moby *moby) {
     case TAXI_STATE_WAIT_FOR_ITEM_GATE: {
         unsigned char *t = visited52;
         int k = current_level_index * 16;
-        if (t[d->item_a + k] == 0xFF || t[d->item_b + k] == 0xFF) {
+        if (t[taxi_vars->item_a + k] == 0xFF || t[taxi_vars->item_b + k] == 0xFF) {
             unsigned short bits = moby->flags;
             int value = moby->pclass->collision;
             moby->visible = 1;
@@ -2453,21 +2453,21 @@ void taxi_update(struct Moby *moby) {
             g->unk1F4 = 2;
             FUN_L05_003198e8((char *)moby);
         }
-        if (voice_is_playing(moby, d->sound) == 0) {
-            d->sound = taxi_sound(0, 4, moby);
+        if (voice_is_playing(moby, taxi_vars->sound) == 0) {
+            taxi_vars->sound = taxi_sound(0, 4, moby);
         }
-    } else if (voice_is_playing(moby, d->sound) != 0) {
-        int h = d->sound;
-        if (h != -1) {
-            char *e = D_0013E550 + h * 0x70;
-            if (*(struct Moby **)(e + 0x88) == moby && *(unsigned char *)(e + 0x74) != 0) {
-                taxi_release(h);
+    } else if (voice_is_playing(moby, taxi_vars->sound) != 0) {
+        int voice_slot = taxi_vars->sound;
+        if (voice_slot != -1) {
+            char *voice_entry = D_0013E550 + voice_slot * 0x70;
+            if (*(struct Moby **)(voice_entry + 0x88) == moby && *(unsigned char *)(voice_entry + 0x74) != 0) {
+                taxi_release(voice_slot);
             }
         }
-        d->sound = -1;
+        taxi_vars->sound = -1;
     }
     taxi_sub(position_delta, &moby->pos, previous_position);
-    update_entity_matrix(d->spring, position_delta, previous_rotation, &moby->rot);
+    update_entity_matrix(taxi_vars->spring, position_delta, previous_rotation, &moby->rot);
 }
 extern float FUN_001f9b48_2f1040(void *, void *) __asm__("FUN_001f9b48");
 struct L14PathPoint {
