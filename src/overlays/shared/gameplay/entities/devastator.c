@@ -1313,7 +1313,7 @@ void FUN_L00_002b3c50(X *x) {
     V4 trail_sample_position;
     N *g;
     f32 trail_sample_spacing;
-    f32 q;
+    f32 effect_random_upper_bound;
     u32 col;
     s32 i;
     s32 trail_sample_limit;
@@ -1344,7 +1344,7 @@ void FUN_L00_002b3c50(X *x) {
         }
     }
     g->f00 = random_integer_below(FUN_001f96f8_c2(10));
-    q = 1.075f;
+    effect_random_upper_bound = 1.075f;
     col = 0x808080;
     l0.f[0] = 0.0f;
     l0.f[1] = 0.0f;
@@ -1360,15 +1360,15 @@ void FUN_L00_002b3c50(X *x) {
     l0.f[2] = 0.025f;
     if (hero.state.current == HERO_STATE_LAND) {
         col = 0xA0A0A0;
-        q = 1.0165f;
+        effect_random_upper_bound = 1.0165f;
         l0.f[2] -= D_0015ED6C_c * 5.0f;
     }
     if (hero.state.current == 0x81) {
         col = 0xA0A0A0;
-        q = 1.037f;
+        effect_random_upper_bound = 1.037f;
         l0.f[2] -= D_0015ED6C_c * 3.0f;
     }
-    spawned_effect = FUN_L00_0026d000(&emission_position, 0.05f, 1.01f, q, 30000.0f, 6, &l0, col);
+    spawned_effect = FUN_L00_0026d000(&emission_position, 0.05f, 1.01f, effect_random_upper_bound, 30000.0f, 6, &l0, col);
     if (spawned_effect)
         spawned_effect[3] = 0x44;
     if (g->f0C) {
@@ -1383,7 +1383,7 @@ void FUN_L00_002b3c50(X *x) {
         for (i = 1; i < trail_sample_limit; i++) {
             fast_vec_normalize(&trail_sample_position, &previous_position_delta, trail_sample_spacing * (f32)i);
             FUN_001f9a10_c(&trail_sample_position, &emission_position, &trail_sample_position);
-            spawned_effect = FUN_L00_0026d000(&trail_sample_position, 0.05f, 1.01f, q, 30000.0f, 6, &l0, col);
+            spawned_effect = FUN_L00_0026d000(&trail_sample_position, 0.05f, 1.01f, effect_random_upper_bound, 30000.0f, 6, &l0, col);
             if (spawned_effect)
                 spawned_effect[3] = 0x44;
         }
