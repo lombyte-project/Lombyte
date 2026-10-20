@@ -405,7 +405,7 @@ void FUN_L01_0028ba80(float t, void *out, void *start_point, void *end_point, vo
     fast_vec_scale(weighted_vector, end_point, b - twice_t_cubed);
     fast_vec_add(out, out, weighted_vector);
 }
-float FUN_L01_0028bb90(float a, float b, T_28b828 *path, int particles, void *moby) {
+float FUN_L01_0028bb90(float tangent_tension, float b, T_28b828 *path, int particles, void *moby) {
     OvlVec4 previousTangent;
     OvlVec4 nextTangent;
     OvlVec4 currentNode;
@@ -424,7 +424,7 @@ float FUN_L01_0028bb90(float a, float b, T_28b828 *path, int particles, void *mo
     }
     /* The SN ABI assigns float arguments independently of the integer arguments.
      * Keep the retail argument setup order without changing the shared helper. */
-    ((void (*)(void *, int *, float, float, int))FUN_L01_0028b8c8)(&nextTangent, (int *)path, a, b, 0);
+    ((void (*)(void *, int *, float, float, int))FUN_L01_0028b8c8)(&nextTangent, (int *)path, tangent_tension, b, 0);
 
     index = 0;
     while (index < count) {
@@ -442,7 +442,7 @@ float FUN_L01_0028bb90(float a, float b, T_28b828 *path, int particles, void *mo
         segmentLength = 0.0f;
         nextNode.q = *(OvlQuad *)((char *)path->f10 + nextIndex * 16 + 0x10);
         *(int *)path = index;
-        ((void (*)(void *, int *, float, float, int))FUN_L01_0028b8c8)(&nextTangent, (int *)path, a, b, 1);
+        ((void (*)(void *, int *, float, float, int))FUN_L01_0028b8c8)(&nextTangent, (int *)path, tangent_tension, b, 1);
         previousPoint.q = currentNode.q;
         step = t;
         do {
