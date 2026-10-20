@@ -346,7 +346,8 @@ extern s32 D_L03_0015F688_gp __asm__("D_L03_0015F688") __attribute__((sda));
 extern s32 D_L03_0015F68C_gp __asm__("D_L03_0015F68C") __attribute__((sda));
 void FUN_L03_0020ef60(void) {
     enum {
-        HERO_STATE_MOVE_TO_TARGET_POSITION = 0x65
+        HERO_STATE_MOVE_TO_TARGET_POSITION = 0x65,
+        HERO_STATE_FOLLOW_PATH = 0x74
     };
     struct MobyView *moby = MV(hero.moby);
     s32 sub = hero.state.step;
@@ -1639,7 +1640,7 @@ void FUN_L03_0020ef60(void) {
         AN.f110 = d * 3.5f;
         break;
     }
-    case 0x74: {
+    case HERO_STATE_FOLLOW_PATH: {
         s32 idx;
         s32 n;
         FUN_L00_0020d2f8(&spatial_scratch_or_hit_descriptor);
