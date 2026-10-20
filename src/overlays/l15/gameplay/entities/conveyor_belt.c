@@ -894,21 +894,21 @@ extern void upd_a(void *) __asm__("FUN_L00_00250df8");
 
 char *FUN_L15_002eb9e0(char *pos, char *vec) {
     char tmp[32] __attribute__((aligned(16)));
-    char *p = tmp;
-    char *m;
+    char *saved_position = tmp;
+    char *spawned_moby;
     *(OvlQuad *)tmp = *(OvlQuad *)pos;
     *(OvlQuad *)(tmp + 0x10) = *(OvlQuad *)vec;
-    m = func_0020D348_c(0x594);
-    if (m != 0) {
-        func_L00_0025E210_u(m);
-        *(unsigned char *)(m + 0x30) = 0xFF;
-        *(short *)(m + 0x32) = 0xFF;
-        m[0x31] = 1;
-        qcopy(m + 0x10, p);
-        *(OvlQuad *)(m + 0x40) = *(OvlQuad *)(tmp + 0x10);
-        upd_a(m);
+    spawned_moby = func_0020D348_c(0x594);
+    if (spawned_moby != 0) {
+        func_L00_0025E210_u(spawned_moby);
+        *(unsigned char *)(spawned_moby + 0x30) = 0xFF;
+        *(short *)(spawned_moby + 0x32) = 0xFF;
+        spawned_moby[0x31] = 1;
+        qcopy(spawned_moby + 0x10, saved_position);
+        *(OvlQuad *)(spawned_moby + 0x40) = *(OvlQuad *)(tmp + 0x10);
+        upd_a(spawned_moby);
     }
-    return m;
+    return spawned_moby;
 }
 /* Shows or hides every listed moby. */
 
