@@ -2683,15 +2683,15 @@ extern float FUN_L00_0025b8c0_c2(float *p, float *v, float t, float u1, float u2
 extern void FUN_L00_00258278(char *moby, float *vel, float target, float k, float d, float max);
 extern void func_L00_002592B0_2B6AA0(char *moby, float target, float *vel, float k, float d, float max) __asm__("FUN_L00_00258278");
 
-void FUN_L14_002b5850(char *moby, float *target, float a, float b, float c, float d, float e, float f, float g) {
+void FUN_L14_002b5850(char *moby, float *target, float target_heading, float b, float c, float d, float e, float f, float g) {
     int data;
-    int s = moby[0x20] & 0xFF;
-    if ((s >= 4 && s <= 6) || s == 8) {
+    int moby_state = moby[0x20] & 0xFF;
+    if ((moby_state >= 4 && moby_state <= 6) || moby_state == 8) {
         data = *(int *)(moby + 0x78);
         FUN_L00_0025b8c0_c2((float *)(moby + 0x10), (float *)(data + 0xF0), target[0], b, c, d);
         FUN_L00_0025b8c0_c2((float *)(moby + 0x14), (float *)(data + 0xF4), target[1], b, c, d);
         FUN_L00_0025b8c0_c2((float *)(moby + 0x18), (float *)(data + 0xF8), target[2], b, c, d);
-        func_L00_002592B0_2B6AA0(moby, a, (float *)(data + 0xE4), e, f, g);
+        func_L00_002592B0_2B6AA0(moby, target_heading, (float *)(data + 0xE4), e, f, g);
     }
 }
 typedef struct {
