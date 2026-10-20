@@ -587,7 +587,7 @@ void blarg_ship_update(struct Moby *moby) {
     char *moby_pvars = (char *)moby->pvars;
     float offset_angle;
     float len;
-    char *p;
+    char *firing_moby;
 
     FUN_L11_0031a1c0(moby);
     switch (moby->state) {
@@ -733,11 +733,11 @@ void blarg_ship_update(struct Moby *moby) {
                 subtract_vector_xyz(firing_target_delta, sB0, sA0);
                 normalize_vector_xyz(firing_direction, firing_target_delta, D_L17_001623E8 * frame_time);
                 add_vector_xyz(firing_direction, firing_direction, hero_position_delta);
-                p = FUN_L11_00308f48((int)moby, firing_direction, sA0, 128.0f, -1.0f, 10.0f);
-                if (p) {
+                firing_moby = FUN_L11_00308f48((int)moby, firing_direction, sA0, 128.0f, -1.0f, 10.0f);
+                if (firing_moby) {
                     subtract_vector_xyz(firing_direction, firing_direction, hero_position_delta);
-                    *(float *)(p + 0x44) = -fast_arc_tan(vector_length_xy(firing_direction), firing_direction[2]);
-                    *(float *)(p + 0x48) = fast_arc_tan(firing_direction[0], firing_direction[1]);
+                    *(float *)(firing_moby + 0x44) = -fast_arc_tan(vector_length_xy(firing_direction), firing_direction[2]);
+                    *(float *)(firing_moby + 0x48) = fast_arc_tan(firing_direction[0], firing_direction[1]);
                 }
             }
             if (moby->visible == 0) {
