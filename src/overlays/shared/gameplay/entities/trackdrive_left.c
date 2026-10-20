@@ -13,21 +13,21 @@ extern s32 D_L02_001612AC;
 extern float D_L02_001CB500[];
 void FUN_L02_002a4058(char *arg, int val, float scale) {
     int i;
-    float *p;
-    float *q;
+    float *destination;
+    float *source;
     float *base;
     arg[0x3F] = val;
     *(s32 *)(D_L02_001CB9C0 + 0x0) = D_L02_001612A0;
     *(s32 *)(D_L02_001CB9C0 + 0x4) = D_L02_001612A4;
     *(s32 *)(D_L02_001CB9C0 + 0x8) = D_L02_001612A8;
     *(s32 *)(D_L02_001CB9C0 + 0xC) = D_L02_001612AC;
-    p = (float *)(D_L02_001CB9C0 + 0x10);
+    destination = (float *)(D_L02_001CB9C0 + 0x10);
     base = D_L02_001CB500;
-    q = base + 4;
+    source = base + 4;
     for (i = 0xF7; i >= 0; i--) {
-        *p = *q * scale;
-        p++;
-        q++;
+        *destination = *source * scale;
+        destination++;
+        source++;
     }
 }
 #define NOT_SDA
