@@ -2767,7 +2767,7 @@ extern void FUN_L06_002f37d0_c(void *) __asm__("FUN_L06_002f37d0");
 extern int level_frame_count __asm__("D_L06_0015F5CC");
 
 void FUN_L06_002f38c8(char *obj) {
-    char *d;
+    char *moby_vars;
     int tint;
     int i;
     f32 f20;
@@ -2776,7 +2776,7 @@ void FUN_L06_002f38c8(char *obj) {
     if (*(unsigned char *)(obj + 0x21) == 0xFF) {
         return;
     }
-    d = *(char **)(obj + 0x78);
+    moby_vars = *(char **)(obj + 0x78);
     tint = 0x3228AAAA;
     if (*(unsigned char *)(obj + 0x20) == 3 || *(unsigned char *)(obj + 0x20) == 6) {
         tint = 0x3228AA28;
@@ -2786,8 +2786,8 @@ void FUN_L06_002f38c8(char *obj) {
         tint = 0x32AA2828;
     }
 
-    *(f32 *)(d + 0x28C) = add_angle(*(f32 *)(d + 0x28C), frame_time * 2.9670596f);
-    f20 = 0.5f * FUN_001f9de0_c(*(f32 *)(d + 0x28C)) + 1.0f;
+    *(f32 *)(moby_vars + 0x28C) = add_angle(*(f32 *)(moby_vars + 0x28C), frame_time * 2.9670596f);
+    f20 = 0.5f * FUN_001f9de0_c(*(f32 *)(moby_vars + 0x28C)) + 1.0f;
 
     r = tint & 0xFF;
     b = (tint >> 16) & 0xFF;
@@ -2813,15 +2813,15 @@ void FUN_L06_002f38c8(char *obj) {
     }
 
     for (i = 0; i < 3; i++) {
-        moby_point_position(obj, i + 1, d + 0x140 + i * 0x10);
+        moby_point_position(obj, i + 1, moby_vars + 0x140 + i * 0x10);
     }
     {
         int dv = level_frame_count;
-        *(int *)(d + 0x290) = *(int *)(obj + 0x90);
+        *(int *)(moby_vars + 0x290) = *(int *)(obj + 0x90);
         if (dv != 0) {
-            int *p = *(int **)(d + 0x294);
-            if (dv != *p) {
-                *p = dv;
+            int *last_effect_frame_ptr = *(int **)(moby_vars + 0x294);
+            if (dv != *last_effect_frame_ptr) {
+                *last_effect_frame_ptr = dv;
                 FUN_001f4600_c(FUN_L06_002f37d0_c, obj);
             }
         }
