@@ -2847,12 +2847,12 @@ extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 
 void FUN_L14_002b5d18(struct Moby *moby) {
-    float f = D_L14_00161540 * 1.5f;
+    float initial_spring_value = D_L14_00161540 * 1.5f;
     char *moby_vars = (char *)moby->pvars;
     char *active_path;
     float v[4] __attribute__((aligned(16)));
     *(int *)(moby_vars + 0xE8) = 0;
-    *(float *)(moby_vars + 0x160) = f;
+    *(float *)(moby_vars + 0x160) = initial_spring_value;
     *(int *)(moby_vars + 0xEC) = 0;
     *(int *)(moby_vars + 0x164) = 0;
     *(int *)(moby_vars + 0x168) = 0;
