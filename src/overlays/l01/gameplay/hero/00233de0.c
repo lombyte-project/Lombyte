@@ -521,7 +521,8 @@ void FUN_L01_002370b8(void) {
         HERO_STATE_DAMP_PLANAR_VELOCITY = 0x56,
         HERO_STATE_DOWNHILL_SLIDE = 0x58,
         HERO_STATE_MOVE_TO_TARGET_POSITION = 0x65,
-        HERO_STATE_BRAKE_AT_TARGET_POSITION = 0x66
+        HERO_STATE_BRAKE_AT_TARGET_POSITION = 0x66,
+        HERO_STATE_CLEAR_MOVEMENT_VELOCITY = 0x67
     };
     FVec4 vec[6];
     Moby *moby;
@@ -2166,7 +2167,7 @@ void FUN_L01_002370b8(void) {
         }
     } break;
     case HERO_STATE_FIDGET:
-    case 0x67:
+    case HERO_STATE_CLEAR_MOVEMENT_VELOCITY:
         clear_vector(hero.motion.velocity.f);
         break;
     case 0x53:
