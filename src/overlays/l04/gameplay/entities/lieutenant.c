@@ -503,15 +503,15 @@ extern int D_L04_0015F5C4;
 extern struct L04MissionState D_L04_0016C9E0;
 extern void cutscene_set_camera_target(int) __asm__("FUN_L00_002637f8");
 
-void FUN_L04_002e53a0(struct Moby *m) {
+void FUN_L04_002e53a0(struct Moby *moby) {
     enum {
         MODE_SLOT_STATE_INITIALIZE = 0,
         MODE_SLOT_STATE_DISPATCH_SELECTED_SLOT = 1
     };
-    switch (m->state) {
+    switch (moby->state) {
     case MODE_SLOT_STATE_INITIALIZE:
-        m->update_dist = 0xFF;
-        m->state = 1;
+        moby->update_dist = 0xFF;
+        moby->state = 1;
         break;
     case MODE_SLOT_STATE_DISPATCH_SELECTED_SLOT:
         if (D_L04_0015F5C4 == 2) {
