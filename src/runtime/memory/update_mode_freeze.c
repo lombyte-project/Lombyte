@@ -50,6 +50,7 @@ void update_mode_freeze(void) {
         VIDEO_MODE_TEST_AWAIT_TIMEOUT_ACK = 3
     };
     enum {
+        FREEZE_MODE_CONFIRM_CANCEL_CHOICE = 0,
         FREEZE_MODE_VIDEO_MODE_TEST = 6
     };
     enum {
@@ -166,7 +167,7 @@ void update_mode_freeze(void) {
         }
         break;
 
-    case 0:
+    case FREEZE_MODE_CONFIRM_CANCEL_CHOICE:
         switch (freeze.unk1C) {
         case FREEZE_CHOICE_PREPARE_INPUT:
             if (freeze.unk20 < 8) {
