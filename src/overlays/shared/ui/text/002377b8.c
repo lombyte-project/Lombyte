@@ -11,16 +11,16 @@ extern unsigned char D_0013E529[];
 void FUN_L00_00235ea0(char *);
 int scale_game_frames(int) __asm__("FUN_001f96f8");
 /* Sets p+8 to 10 or 5 by D_0013E529, then sets or caps the 0x7C timer by the hero mode. */
-void FUN_L00_002377b8(char *p) {
-    FUN_L00_00235ea0(p);
+void FUN_L00_002377b8(char *hud_element) {
+    FUN_L00_00235ea0(hud_element);
     if (D_0013E529[0] != 0)
-        *(int *)(p + 8) = 10;
+        *(int *)(hud_element + 8) = 10;
     else
-        *(int *)(p + 8) = 5;
+        *(int *)(hud_element + 8) = 5;
     if (hero.items[0].item_id == 9 && hero.vehicle_mode == 0) {
-        *(int *)(p + 0x7C) = scale_game_frames(0x78) + 30;
-    } else if (*(int *)(p + 0x7C) > 30) {
-        *(int *)(p + 0x7C) = 30;
+        *(int *)(hud_element + 0x7C) = scale_game_frames(0x78) + 30;
+    } else if (*(int *)(hud_element + 0x7C) > 30) {
+        *(int *)(hud_element + 0x7C) = 30;
     }
 }
 /* Draws a HUD gauge frame. */
