@@ -479,48 +479,48 @@ void build_look_at_matrix(void *, void *, void *, float) __asm__("FUN_00214890")
 float FUN_001fa580_c(float, float) __asm__("FUN_001fa580");
 float FUN_001fa5c8_c(float, float) __asm__("FUN_001fa5c8");
 int coll_sphere(void *, int, void *, float) __asm__("FUN_L00_001f0d60");
-void FUN_L00_002e9f38(u8 *o) {
+void FUN_L00_002e9f38(u8 *camera_object) {
     V up;
     V side;
-    V d;
+    V horizontal_view_offset;
     S_9f38 *st;
-    float t, r, k;
-    st = *(S_9f38 **)(o + 0x70);
-    FUN_L00_002e9cc0_c(o);
+    float rotation_input_target, r, k;
+    st = *(S_9f38 **)(camera_object + 0x70);
+    FUN_L00_002e9cc0_c(camera_object);
     FUN_001f9bf8_c(&up, ((u8 *)hero.moby) + 0xE0, 1.0f);
     if (D_L00_00166C80_c.s270 == 0 && hero.unk20A5 == 0)
         hero.unk20A5 = 1;
-    t = -D_0013C940.f108;
-    if (t == 0.0f)
-        t = -D_0013C940.f100;
-    if (t == 0.0f)
-        t = convert_integer_to_float((D_0013C940.i1A0 >> 15) & 1);
-    if (t == 0.0f)
-        t = -convert_integer_to_float((D_0013C940.i1A0 >> 13) & 1);
+    rotation_input_target = -D_0013C940.f108;
+    if (rotation_input_target == 0.0f)
+        rotation_input_target = -D_0013C940.f100;
+    if (rotation_input_target == 0.0f)
+        rotation_input_target = convert_integer_to_float((D_0013C940.i1A0 >> 15) & 1);
+    if (rotation_input_target == 0.0f)
+        rotation_input_target = -convert_integer_to_float((D_0013C940.i1A0 >> 13) & 1);
     r = FUN_001f99c0(st->a);
     k = D_L00_00161DC0 + (D_L00_00161DC4 - D_L00_00161DC0) * r;
-    st->a = r = FUN_001ebd78(st->a, t, D_L00_00161DC8, D_L00_00161DCC, D_L00_00161DD0, &st->va);
+    st->a = r = FUN_001ebd78(st->a, rotation_input_target, D_L00_00161DC8, D_L00_00161DCC, D_L00_00161DD0, &st->va);
     if (r != 0.0f)
-        build_look_at_matrix(o, o, &up, k * r);
+        build_look_at_matrix(camera_object, camera_object, &up, k * r);
     if (hero.motion.platform_carry.f[3] != 0.0f && hero.unk308 == 0)
-        build_look_at_matrix(o, o, &up, hero.motion.platform_carry.f[3]);
-    t = -D_0013C940.f10C;
-    if (t == 0.0f)
-        t = -D_0013C940.f104;
-    if (t == 0.0f)
-        t = convert_integer_to_float((D_0013C940.i1A0 >> 12) & 1);
-    if (t == 0.0f)
-        t = -convert_integer_to_float((D_0013C940.i1A0 >> 14) & 1);
+        build_look_at_matrix(camera_object, camera_object, &up, hero.motion.platform_carry.f[3]);
+    rotation_input_target = -D_0013C940.f10C;
+    if (rotation_input_target == 0.0f)
+        rotation_input_target = -D_0013C940.f104;
+    if (rotation_input_target == 0.0f)
+        rotation_input_target = convert_integer_to_float((D_0013C940.i1A0 >> 12) & 1);
+    if (rotation_input_target == 0.0f)
+        rotation_input_target = -convert_integer_to_float((D_0013C940.i1A0 >> 14) & 1);
     if (D_L00_00166C80_c.s270 != 0 && hero.state.prev == 2)
-        t = 0.0f;
+        rotation_input_target = 0.0f;
     if (D_0015EDDC == 0)
-        t = -t;
+        rotation_input_target = -rotation_input_target;
     r = FUN_001f99c0(st->b);
     k = D_L00_00161DC0 + (D_L00_00161DC4 - D_L00_00161DC0) * r;
-    st->b = FUN_001ebd78(st->b, t, D_L00_00161DC8, D_L00_00161DCC, D_L00_00161DD0, &st->vb);
+    st->b = FUN_001ebd78(st->b, rotation_input_target, D_L00_00161DC8, D_L00_00161DCC, D_L00_00161DD0, &st->vb);
     if (st->b != 0.0f) {
         float a, n, z;
-        fast_vec_cross(&side, o, &up);
+        fast_vec_cross(&side, camera_object, &up);
         a = k * st->b;
         n = FUN_001f99c0(FUN_001fa580_c(st->ang, a));
         if (1.1170107f < n && FUN_001f99c0(st->ang) < n)
@@ -530,28 +530,28 @@ void FUN_L00_002e9f38(u8 *o) {
         else
             st->z = FUN_001ebd78(st->z, 0.0f, 0.005f, 0.2f, 0.0f, &st->vz);
         z = 0.0f;
-        d.f[0] = *(float *)(o + 0);
-        d.f[1] = *(float *)(o + 4);
-        d.f[3] = z;
-        d.f[2] = z;
-        FUN_001f9bf8_c(&d, &d, st->z);
-        FUN_001f9a10_c(o + 0x30, o + 0x30, &d);
-        if (coll_sphere(o + 0x30, 0x12, ((u8 *)hero.moby), 0.3f))
+        horizontal_view_offset.f[0] = *(float *)(camera_object + 0);
+        horizontal_view_offset.f[1] = *(float *)(camera_object + 4);
+        horizontal_view_offset.f[3] = z;
+        horizontal_view_offset.f[2] = z;
+        FUN_001f9bf8_c(&horizontal_view_offset, &horizontal_view_offset, st->z);
+        FUN_001f9a10_c(camera_object + 0x30, camera_object + 0x30, &horizontal_view_offset);
+        if (coll_sphere(camera_object + 0x30, 0x12, ((u8 *)hero.moby), 0.3f))
             st->z = FUN_001ebd78(st->z, z, 0.005f, 0.2f, z, &st->vz);
         n = FUN_001fa580_c(st->ang, a);
         if (FUN_001f99c0(n) > 1.4660766f) {
-            float m = 1.4660766f;
+            float signed_pitch_limit = 1.4660766f;
             if (!(z < n))
-                m = -1.4660766f;
-            a = FUN_001fa5c8_c(m, st->ang);
+                signed_pitch_limit = -1.4660766f;
+            a = FUN_001fa5c8_c(signed_pitch_limit, st->ang);
         }
-        build_look_at_matrix(o, o, &side, a);
+        build_look_at_matrix(camera_object, camera_object, &side, a);
         st->ang = FUN_001fa580_c(st->ang, a);
     }
-    FUN_001f9bf8_c(o, o, 1.0f);
-    fast_vec_cross(o + 0x10, o, &up);
-    FUN_001f9bf8_c(o + 0x10, o + 0x10, 1.0f);
-    fast_vec_cross(o + 0x20, o + 0x10, o);
+    FUN_001f9bf8_c(camera_object, camera_object, 1.0f);
+    fast_vec_cross(camera_object + 0x10, camera_object, &up);
+    FUN_001f9bf8_c(camera_object + 0x10, camera_object + 0x10, 1.0f);
+    fast_vec_cross(camera_object + 0x20, camera_object + 0x10, camera_object);
 }
 /* FUN_L00_002ea488 -- camera-state steering: either replays the scripted
  * look (state 0x51 or the moby's own state) or steers toward the current
