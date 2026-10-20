@@ -3527,7 +3527,7 @@ int FUN_L14_002fd918(struct Moby *moby) {
     float v[4];
     float w[4];
     float yaw;
-    float t;
+    float yaw_error_factor;
     int r;
     r = FUN_L00_0025d808_2f05d8(D_L14_001B0BB0[*(int *)(moby_vars + 0x68)], v, moby_vars + 0x60, moby_vars + 0x64,
                                  (unsigned int)*(int *)(moby_vars + 0x8C) >> 31,
@@ -3554,17 +3554,17 @@ int FUN_L14_002fd918(struct Moby *moby) {
     if (0.01f < absolute_float(w[0])) {
         if (0.01f < absolute_float(w[1])) {
             yaw = fast_arc_tan(w[0], w[1]);
-            t = fast_subtract_rotations(moby->rot.z, yaw);
+            yaw_error_factor = fast_subtract_rotations(moby->rot.z, yaw);
             FUN_L00_00258278(moby, (float *)(moby_vars + 0x88), yaw, D_L14_00161F7C, D_L14_00161F80, 0.0f);
             yaw = fast_arc_tan(vector_length_xy(w), w[2]);
             FUN_L00_0025b8c0(&moby->rot.y, (float *)(moby_vars + 0x84), -yaw, D_L14_00161F7C,
                              D_L14_00161F80, 0.0f);
-            t = t / D_L14_00161F88;
-            if (1.0f < t)
-                t = 1.0f;
-            if (t < -1.0f)
-                t = -1.0f;
-            FUN_L00_0025b8c0(&moby->rot.x, (float *)(moby_vars + 0x80), t * D_L14_00161F84, 0.003f,
+            yaw_error_factor = yaw_error_factor / D_L14_00161F88;
+            if (1.0f < yaw_error_factor)
+                yaw_error_factor = 1.0f;
+            if (yaw_error_factor < -1.0f)
+                yaw_error_factor = -1.0f;
+            FUN_L00_0025b8c0(&moby->rot.x, (float *)(moby_vars + 0x80), yaw_error_factor * D_L14_00161F84, 0.003f,
                              D_L14_00161F80, 0.0f);
         }
     }
