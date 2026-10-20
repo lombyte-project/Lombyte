@@ -948,7 +948,7 @@ int FUN_L00_001efc70_217118(void *, void *, int, void *, int) __asm__("FUN_L00_0
 float FUN_L00_00233d30_217118(void *) __asm__("FUN_L00_00233d30");
 void FUN_L00_00213de8_217118(float) __asm__("FUN_L00_00213de8");
 
-void FUN_L00_00217118(float a, float b) {
+void FUN_L00_00217118(float velocity_scale, float b) {
     OvlQuad t[1];
     OvlQuad u[1];
     unsigned char *P = (&hero.motion.velocity);
@@ -966,9 +966,9 @@ void FUN_L00_00217118(float a, float b) {
     if (*(short *)(Q + 0x30E))
         return;
     if (*(int *)(Q + 0x2084) == 0x20)
-        a = 2.0f;
+        velocity_scale = 2.0f;
     Q += 0xE0;
-    FUN_001f9a68_217118(t, a, Q);
+    FUN_001f9a68_217118(t, velocity_scale, Q);
     if (0.0f < b && gravity_length_xy(t) < b) {
         FUN_L00_00233ba0_217118(t, t, 0.0f);
         FUN_L00_00233708_217118(t, t, b);
