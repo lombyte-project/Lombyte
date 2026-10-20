@@ -142,25 +142,25 @@ void FUN_L09_0021e8c0(char *list, int count, float unused, long tex0, long tex1)
         sp[i] = ((i * 0x89) & 0xF) * 0x20200 + 0x80787070;
     }
     for (i = 0; i < count; i++) {
-        char *e = list + i * 64;
-        idx = fast_bsphere_check(e, 256.0f);
+        char *strip_entry = list + i * 64;
+        idx = fast_bsphere_check(strip_entry, 256.0f);
         if (idx == -1)
             continue;
-        for (j = 0; j < *(int *)(e + 0x1C); j++) {
-            int n;
+        for (j = 0; j < *(int *)(strip_entry + 0x1C); j++) {
+            int strip_vertex_count;
             float *src;
-            float *a = (float *)0x70001000;
+            float *first_scroll_destination = (float *)0x70001000;
             float *b = (float *)0x70002000;
-            n = ((Strip *)e)->idx[j + 1] - ((Strip *)e)->idx[j];
-            src = (float *)(*(int *)(e + 0x14) + ((Strip *)e)->idx[j] * 8);
-            for (c = 0; c < n; c++) {
+            strip_vertex_count = ((Strip *)strip_entry)->idx[j + 1] - ((Strip *)strip_entry)->idx[j];
+            src = (float *)(*(int *)(strip_entry + 0x14) + ((Strip *)strip_entry)->idx[j] * 8);
+            for (c = 0; c < strip_vertex_count; c++) {
                 float f = *src++;
                 *b++ = f;
-                *a++ = f;
-                *a++ = *src + first_scroll_offset;
+                *first_scroll_destination++ = f;
+                *first_scroll_destination++ = *src + first_scroll_offset;
                 *b++ = *src++ + second_scroll_offset;
             }
-            FUN_L01_0021fa98(n, *(int *)(e + 0x10) + ((Strip *)e)->idx[j] * 12, 0x70000000,
+            FUN_L01_0021fa98(strip_vertex_count, *(int *)(strip_entry + 0x10) + ((Strip *)strip_entry)->idx[j] * 12, 0x70000000,
                              0x70001000, 0x70002000, idx == 0);
         }
     }
