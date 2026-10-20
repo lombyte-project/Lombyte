@@ -1284,7 +1284,7 @@ void FUN_L01_00314e98(Camera *cam) {
     Vec4 at;
     s32 seg;
     f32 t;
-    CameraPreset *s = D_L01_0015EF50[cam->preset].preset;
+    CameraPreset *preset = D_L01_0015EF50[cam->preset].preset;
     CameraControl *control;
     CameraFocus *focus;
     CameraSpring *spring;
@@ -1292,13 +1292,13 @@ void FUN_L01_00314e98(Camera *cam) {
     CameraView *view;
     CameraTrack *track;
     CameraBlend *blend;
-    CameraPath *a, *b, *c, *d;
-    s32 i, j, k, n, prev;
+    CameraPath *preset_path, *b, *look_path, *target_path;
+    s32 i, j, k, segment_count, prev;
 
     focus = &cam->orbit->focus;
     focus->dist = 1.5f;
     focus->state = 0;
-    if (s->kind == 3) {
+    if (preset->kind == 3) {
         focus->dist = 0.5f;
     }
     control = &cam->control;
@@ -1335,48 +1335,48 @@ void FUN_L01_00314e98(Camera *cam) {
     blend->unk8 = 0;
     blend->unkC = 0;
     blend->unk10 = 1;
-    if (s->kind == 2 && s->ready == 0) {
-        b = D_L01_001B0930[s->track_path];
-        d = D_L01_0015F70C[s->target].path;
-        a = D_L01_001B0930[s->path];
-        c = D_L01_001B0930[s->look_path];
-        s->ready = 1;
-        for (i = 0; i < a->count; i++) {
-            FUN_L00_0025df68(b, &a->pts[i], &at, &seg, &t, 0, 20.0f, 5.0f, 0.0f);
-            a->pts[i].f[0] = a->pts[i].f[3];
-            a->pts[i].f[3] = seg;
+    if (preset->kind == 2 && preset->ready == 0) {
+        b = D_L01_001B0930[preset->track_path];
+        target_path = D_L01_0015F70C[preset->target].path;
+        preset_path = D_L01_001B0930[preset->path];
+        look_path = D_L01_001B0930[preset->look_path];
+        preset->ready = 1;
+        for (i = 0; i < preset_path->count; i++) {
+            FUN_L00_0025df68(b, &preset_path->pts[i], &at, &seg, &t, 0, 20.0f, 5.0f, 0.0f);
+            preset_path->pts[i].f[0] = preset_path->pts[i].f[3];
+            preset_path->pts[i].f[3] = seg;
         }
-        prev = a->count - 1;
-        for (i = 0; i < a->count; i++) {
-            j = truncate_float_to_s32(a->pts[prev].f[3]);
-            n = truncate_float_to_s32(a->pts[i].f[3]) - j;
-            if (n < 0) {
-                n += b->count;
+        prev = preset_path->count - 1;
+        for (i = 0; i < preset_path->count; i++) {
+            j = truncate_float_to_s32(preset_path->pts[prev].f[3]);
+            segment_count = truncate_float_to_s32(preset_path->pts[i].f[3]) - j;
+            if (segment_count < 0) {
+                segment_count += b->count;
             }
             t = 0.0f;
-            for (k = 0; k < n; k++) {
+            for (k = 0; k < segment_count; k++) {
                 t += b->pts[(j + i) % b->count].f[3];
             }
-            a->pts[i].f[1] = t;
+            preset_path->pts[i].f[1] = t;
             prev = i;
         }
-        for (i = 0; i < c->count; i++) {
-            FUN_L00_0025df68(d, &c->pts[i], &at, &seg, &t, 0, 20.0f, 5.0f, 0.0f);
-            c->pts[i].f[0] = c->pts[i].f[3];
-            c->pts[i].f[3] = seg;
+        for (i = 0; i < look_path->count; i++) {
+            FUN_L00_0025df68(target_path, &look_path->pts[i], &at, &seg, &t, 0, 20.0f, 5.0f, 0.0f);
+            look_path->pts[i].f[0] = look_path->pts[i].f[3];
+            look_path->pts[i].f[3] = seg;
         }
-        prev = c->count - 1;
-        for (i = 0; i < c->count; i++) {
-            j = truncate_float_to_s32(c->pts[prev].f[3]);
-            n = truncate_float_to_s32(c->pts[i].f[3]) - j;
-            if (n < 0) {
-                n += d->count;
+        prev = look_path->count - 1;
+        for (i = 0; i < look_path->count; i++) {
+            j = truncate_float_to_s32(look_path->pts[prev].f[3]);
+            segment_count = truncate_float_to_s32(look_path->pts[i].f[3]) - j;
+            if (segment_count < 0) {
+                segment_count += target_path->count;
             }
             t = 0.0f;
-            for (k = 0; k < n; k++) {
-                t += d->pts[(j + i) % d->count].f[3];
+            for (k = 0; k < segment_count; k++) {
+                t += target_path->pts[(j + i) % target_path->count].f[3];
             }
-            c->pts[i].f[1] = t;
+            look_path->pts[i].f[1] = t;
             prev = i;
         }
     }
