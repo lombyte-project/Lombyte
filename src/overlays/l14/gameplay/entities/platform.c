@@ -640,7 +640,7 @@ void FUN_L14_002de2b8(char *moby, f32 unused_arg1, f32 unused_arg2) {
     char *g = (char *)((char *)((char *)&hero));
     float v[4];
     float up[4];
-    float d[4];
+    float direction_scratch[4];
     float ax[4];
     float len;
     float dt;
@@ -653,25 +653,25 @@ void FUN_L14_002de2b8(char *moby, f32 unused_arg1, f32 unused_arg2) {
 
     if ((*(char **)(g + 0x2FC) == moby && *(short *)(g + 0x30E) == 0) ||
         (*(char **)(g + 0x4F8) == moby && *(int *)(g + 0x208C) == 3)) {
-        char *p = (char *)((char *)((char *)&hero));
+        char *hero_data = (char *)((char *)((char *)&hero));
         *(char *)(moby + 0xBC) = 1;
-        if (absolute_float(*(float *)(p + 0x80) - *(float *)(moby + 0x10)) < 0.1f &&
-            absolute_float(*(float *)(p + 0x84) - *(float *)(moby + 0x14)) < 0.1f) {
+        if (absolute_float(*(float *)(hero_data + 0x80) - *(float *)(moby + 0x10)) < 0.1f &&
+            absolute_float(*(float *)(hero_data + 0x84) - *(float *)(moby + 0x14)) < 0.1f) {
             qcopy(v, up);
         } else {
-            subtract_vector_xyz(d, (char *)((char *)&D_0013F3D0), moby + 0x10);
-            d[2] = d[2] + D_L14_00161B04;
-            len = vector_length_xyz(d);
+            subtract_vector_xyz(direction_scratch, (char *)((char *)&D_0013F3D0), moby + 0x10);
+            direction_scratch[2] = direction_scratch[2] + D_L14_00161B04;
+            len = vector_length_xyz(direction_scratch);
             if (len == 0.0f) {
                 qcopy(v, up);
             } else {
-                dt = dot_vectors_xyz(up, d);
+                dt = dot_vectors_xyz(up, direction_scratch);
                 ang = 1.5707963705f - fast_arc_sin(dt / len);
                 lim = D_L14_00161B00 * 0.0174532924f;
                 if (lim < ang) {
                     ang = lim;
                 }
-                cross_vectors_xyz(ax, d, up);
+                cross_vectors_xyz(ax, direction_scratch, up);
                 build_look_at_matrix(v, up, ax, ang);
                 normalize_vector_xyz(v, v, 1.0f);
             }
@@ -697,10 +697,10 @@ void FUN_L14_002de2b8(char *moby, f32 unused_arg1, f32 unused_arg2) {
     vendor_spring((float *)(moby + 0xE8), (float *)(data + 0x68), v[2], 0.005f, 0.2f, 0.0f);
 
     normalize_vector_xyz(moby + 0xE0, moby + 0xE0, 1.0f);
-    *(u128_s07 *)d = 0;
-    d[0] = 1.0f;
-    d[3] = 1.0f;
-    cross_vectors_xyz(moby + 0xD0, d, moby + 0xE0);
+    *(u128_s07 *)direction_scratch = 0;
+    direction_scratch[0] = 1.0f;
+    direction_scratch[3] = 1.0f;
+    cross_vectors_xyz(moby + 0xD0, direction_scratch, moby + 0xE0);
     normalize_vector_xyz(moby + 0xD0, moby + 0xD0, 1.0f);
     cross_vectors_xyz(moby + 0xC0, moby + 0xE0, moby + 0xD0);
     *(float *)(moby + 0xCC) = 0.0f;
