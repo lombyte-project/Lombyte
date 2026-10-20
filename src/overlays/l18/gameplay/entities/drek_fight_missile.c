@@ -383,7 +383,7 @@ void FUN_L18_002f06c0(struct Moby *group_moby) {
     char *missile_vars;
     float moving_phase_step;
     float b;
-    int c;
+    int phase_blended_color;
     if (D_L18_00162238_gp != 0) {
         return;
     }
@@ -394,18 +394,18 @@ void FUN_L18_002f06c0(struct Moby *group_moby) {
         missile_moby = D_L18_0015FFD8_c7 + ((*group_entry & 0x7FFF) << 8);
         if (*(short *)(missile_moby + 0xA6) == 0x54B) {
             missile_vars = *(char **)(missile_moby + 0x78);
-            c = FUN_001fa6e0_c7(FUN_001f9de0_c7(*(float *)(missile_vars + 0x168)) * 0.5f + 0.5f,
+            phase_blended_color = FUN_001fa6e0_c7(FUN_001f9de0_c7(*(float *)(missile_vars + 0x168)) * 0.5f + 0.5f,
                                 D_L18_00162260, D_L18_00162264);
             FUN_001f9bf8_c7(v, missile_moby + 0xC0, D_L18_0016226C);
             FUN_001f9a10_c7(v, v, missile_moby + 0x10);
             switch (missile_moby[0x20]) {
             case DREK_MISSILE_WANDER:
             case DREK_MISSILE_DIVE:
-                FUN_L00_00263618_c7(v, c, D_L18_00162268, 0.0f);
+                FUN_L00_00263618_c7(v, phase_blended_color, D_L18_00162268, 0.0f);
                 *(float *)(missile_vars + 0x168) = FUN_001fa580_c7(*(float *)(missile_vars + 0x168), moving_phase_step);
                 break;
             case DREK_MISSILE_WAIT_TO_EXPLODE:
-                FUN_L00_00263618_c7(v, c, D_L18_00162268, 0.0f);
+                FUN_L00_00263618_c7(v, phase_blended_color, D_L18_00162268, 0.0f);
                 *(float *)(missile_vars + 0x168) = FUN_001fa580_c7(*(float *)(missile_vars + 0x168), b);
                 break;
             }
