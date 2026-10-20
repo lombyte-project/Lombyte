@@ -2015,13 +2015,13 @@ void FUN_L01_003094f0(char *moby) {
     }
     ring_half_height = 0.1f;
     if (*(float *)(moby_data + 0x34) < 1.15f) {
-        float t = (1.15f - *(float *)(moby_data + 0x34)) * 2.0f;
-        if (1.0f < t) {
-            t = 1.0f;
-        } else if (t < 0.0f) {
-            t = 0.0f;
+        float ring_half_height_increase = (1.15f - *(float *)(moby_data + 0x34)) * 2.0f;
+        if (1.0f < ring_half_height_increase) {
+            ring_half_height_increase = 1.0f;
+        } else if (ring_half_height_increase < 0.0f) {
+            ring_half_height_increase = 0.0f;
         }
-        ring_half_height = t + 0.1f;
+        ring_half_height = ring_half_height_increase + 0.1f;
         if (((unsigned char *)moby)[0x20] != 7 && ((unsigned char *)moby)[0x20] != 8) {
             if (*(float *)(moby_data + 0x34) < 0.65f) {
                 D_001413F5_c = 1;
