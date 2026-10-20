@@ -10,11 +10,11 @@ struct Out {
 s32 get_mpeg_timestamp(s32 arg0, struct Out *out) __asm__("FUN_0023d140");
 
 s32 get_mpeg_timestamp(s32 unused_parameter, struct Out *out) {
-    u64 tmp[3];
+    u64 timestamp_values[3];
 
-    vi_buf_get_ts(decoder_state + 0xD9090, tmp);
-    out->a = tmp[0];
-    out->b = tmp[1];
+    vi_buf_get_ts(decoder_state + 0xD9090, timestamp_values);
+    out->a = timestamp_values[0];
+    out->b = timestamp_values[1];
     return 1;
 }
 
