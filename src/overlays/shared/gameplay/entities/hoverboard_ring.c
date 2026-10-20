@@ -323,13 +323,13 @@ extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9
 
 void FUN_L05_00329358(char *moby) {
     float v[4];
-    char *d = *(char **)(moby + 0x70);
-    float *p = (float *)(d + 0x80);
+    char *orbit = *(char **)(moby + 0x70);
+    float *focus_position = (float *)(orbit + 0x80);
     *(OvlQuad *)v = 0;
     v[2] = 0.7f;
     transform_vector(v, v, &hero);
-    add_vector_xyz(p, &hero.motion.pos, v);
-    qcopy(d + 0x1D0, p);
+    add_vector_xyz(focus_position, &hero.motion.pos, v);
+    qcopy(orbit + 0x1D0, focus_position);
     if (current_level_index == 5) {
         float w[4];
         *(OvlQuad *)w = 0;
@@ -337,21 +337,21 @@ void FUN_L05_00329358(char *moby) {
         w[1] = 447.82f;
         w[2] = 63.37f;
         w[3] = 1.0f;
-        if (vector_distance(w, p) < 48.0f) {
-            if (p[2] < 62.4f) {
-                p[2] = 62.4f;
+        if (vector_distance(w, focus_position) < 48.0f) {
+            if (focus_position[2] < 62.4f) {
+                focus_position[2] = 62.4f;
             }
         } else {
-            if (p[2] < 67.2f) {
-                p[2] = 67.2f;
+            if (focus_position[2] < 67.2f) {
+                focus_position[2] = 67.2f;
             }
         }
     } else if (current_level_index == 0x10) {
-        if (p[2] < 77.5f) {
-            p[2] = 77.5f;
+        if (focus_position[2] < 77.5f) {
+            focus_position[2] = 77.5f;
         }
     }
-    normalize_vector_xyz(p + 8, &hero.gravity_dir, -1.0f);
+    normalize_vector_xyz(focus_position + 8, &hero.gravity_dir, -1.0f);
 }
 extern char *D_L05_00167200 __attribute__((section(".data")));
 void FUN_L05_003294c0(float spring_distance, float b, float focus_distance, float d, float e, float f, float g, float h) {
