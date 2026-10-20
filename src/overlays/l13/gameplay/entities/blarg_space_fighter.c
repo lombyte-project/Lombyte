@@ -441,7 +441,7 @@ void FUN_L13_002c25b8(unsigned char *moby) {
     unsigned char *moby_data = *(unsigned char **)(moby + 0x78);
     unsigned char *target;
     float scratch_vector[4], shot_direction_vector[4], z[4];
-    float f;
+    float distance_or_target_yaw;
     float *rot;
     float *pos;
     int index;
@@ -479,12 +479,12 @@ void FUN_L13_002c25b8(unsigned char *moby) {
         index = *(int *)(moby_data + 0xD4) * 128;
         pos = (float *)(moby + 0x10);
         z[0] = 0.0f;
-        f = distance_xyz(pos, D_L13_001600EC + index + 0x30);
+        distance_or_target_yaw = distance_xyz(pos, D_L13_001600EC + index + 0x30);
         subtract_vector_xyz(scratch_vector, D_L13_001600EC + *(int *)(moby_data + 0xD4) * 128 + 0x30, pos);
-        advance_accelerated_scalar(f, frame_time_sq * 10.0f, frame_time_sq * 10.0f, frame_time * 20.0f, z, (float *)(moby_data + 0xF0));
+        advance_accelerated_scalar(distance_or_target_yaw, frame_time_sq * 10.0f, frame_time_sq * 10.0f, frame_time * 20.0f, z, (float *)(moby_data + 0xF0));
         normalize_vector_xyz(scratch_vector, scratch_vector, *(float *)(moby_data + 0xF0));
         add_vector_xyz(pos, pos, scratch_vector);
-        if (f < 0.1f && *(float *)(moby_data + 0xF0) < 0.01f) {
+        if (distance_or_target_yaw < 0.1f && *(float *)(moby_data + 0xF0) < 0.01f) {
             if (moby[0x53] != 0) blend_moby_animation_c13(moby, 0, 0, 10);
             moby[0xBC] = 0;
             moby[0x20] = 2;
@@ -492,8 +492,8 @@ void FUN_L13_002c25b8(unsigned char *moby) {
         break;
     case TRACK_TARGET_BEFORE_ATTACK:
         rot = (float *)(moby + 0x48);
-        f = fast_arc_tan(*(float *)(target + 0x10) - *(float *)(moby + 0x10), *(float *)(target + 0x14) - *(float *)(moby + 0x14));
-        approach_angle(rot, (float *)(moby_data + 0xDC), f, frame_time_sq * 4.712389f, frame_time_sq * 4.712389f, frame_time * 10.12291f);
+        distance_or_target_yaw = fast_arc_tan(*(float *)(target + 0x10) - *(float *)(moby + 0x10), *(float *)(target + 0x14) - *(float *)(moby + 0x14));
+        approach_angle(rot, (float *)(moby_data + 0xDC), distance_or_target_yaw, frame_time_sq * 4.712389f, frame_time_sq * 4.712389f, frame_time * 10.12291f);
         if (*(int *)(moby_data + 0xB4) == 2) return;
         *(float *)(moby_data + 0xEC) = 15.0f;
         moby[0xBC] = 1;
@@ -502,8 +502,8 @@ void FUN_L13_002c25b8(unsigned char *moby) {
         break;
     case UPDATE_ATTACK_SEQUENCE:
         rot = (float *)(moby + 0x48);
-        f = fast_arc_tan(*(float *)(target + 0x10) - *(float *)(moby + 0x10), *(float *)(target + 0x14) - *(float *)(moby + 0x14));
-        approach_angle(rot, (float *)(moby_data + 0xDC), f, frame_time_sq * 12.566371f, frame_time_sq * 25.132742f, frame_time * 6.2831855f);
+        distance_or_target_yaw = fast_arc_tan(*(float *)(target + 0x10) - *(float *)(moby + 0x10), *(float *)(target + 0x14) - *(float *)(moby + 0x14));
+        approach_angle(rot, (float *)(moby_data + 0xDC), distance_or_target_yaw, frame_time_sq * 12.566371f, frame_time_sq * 25.132742f, frame_time * 6.2831855f);
         switch (moby[0xBC]) {
         case WAIT_FOR_ATTACK_START_ANIMATION:
             if (!(moby[0x70] & 2)) return;
