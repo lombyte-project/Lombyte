@@ -1617,36 +1617,36 @@ float fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
 void clear_u64_value(void *) __asm__("FUN_001f99f8");
 void FUN_L00_002e42c0_002e4430(void *, int) __asm__("FUN_L00_002e42c0");
 void follow_camera_reset(char *o) __asm__("FUN_L00_002e4430");
-void follow_camera_reset(char *o) {
-    V4_2e4430 m, a, b;
+void follow_camera_reset(char *camera) {
+    V4_2e4430 target_position, target_up_projection, b;
     char *g = D_L00_00166E10_002e4430;
     char *g30 = g + 0x30;
-    char *q = *(char **)(o + 0x70);
-    char *p, *r;
-    FUN_L00_002e42c0_002e4430(m, 0);
-    p = q + 0x40;
-    r = q + 0x130;
+    char *camera_state = *(char **)(camera + 0x70);
+    char *attach_state, *r;
+    FUN_L00_002e42c0_002e4430(target_position, 0);
+    attach_state = camera_state + 0x40;
+    r = camera_state + 0x130;
     {
-        float x = fast_vec_dot(m, g30);
-        FUN_001f9a68_002e4430(a, g30, x);
+        float x = fast_vec_dot(target_position, g30);
+        FUN_001f9a68_002e4430(target_up_projection, g30, x);
     }
-    FUN_001f9a28_002e4430(p, m, a);
-    qcopy(q + 0x50, a);
-    FUN_001f9a10_002e4430(p, p, q + 0x50);
+    FUN_001f9a28_002e4430(attach_state, target_position, target_up_projection);
+    qcopy(camera_state + 0x50, target_up_projection);
+    FUN_001f9a10_002e4430(attach_state, attach_state, camera_state + 0x50);
     g += 0x20;
-    FUN_001f9a68_002e4430(b, g, *(float *)(p + 0xB0));
-    FUN_001f9a10_002e4430(q + 0x80, b, p);
-    FUN_001f9a10_002e4430(q + 0xD0, b, p);
-    clear_u64_value(q + 0xE0);
-    p[0xC4] = 0;
-    *(float *)(p + 0xC8) = 1.0f;
-    p[0xC5] = 0;
-    *(s16 *)(p + 0xC6) = 0;
-    qcopy(q + 0xA0, p);
-    clear_u64_value(q + 0xB0);
-    clear_u64_value(q + 0xC0);
+    FUN_001f9a68_002e4430(b, g, *(float *)(attach_state + 0xB0));
+    FUN_001f9a10_002e4430(camera_state + 0x80, b, attach_state);
+    FUN_001f9a10_002e4430(camera_state + 0xD0, b, attach_state);
+    clear_u64_value(camera_state + 0xE0);
+    attach_state[0xC4] = 0;
+    *(float *)(attach_state + 0xC8) = 1.0f;
+    attach_state[0xC5] = 0;
+    *(s16 *)(attach_state + 0xC6) = 0;
+    qcopy(camera_state + 0xA0, attach_state);
+    clear_u64_value(camera_state + 0xB0);
+    clear_u64_value(camera_state + 0xC0);
     FUN_001f9a68_002e4430(b, g, *(float *)(r + 0x30));
-    FUN_001f9a10_002e4430(q + 0x90, b, p);
+    FUN_001f9a10_002e4430(camera_state + 0x90, b, attach_state);
 }
 /* angle between a direction and an axis, signed */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002E1660.c: func_L00_002E5A30), where it is exact; names translated to the US level program. */
