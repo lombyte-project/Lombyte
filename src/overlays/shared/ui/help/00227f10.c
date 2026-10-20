@@ -17,7 +17,7 @@ extern int hero_slot_item_id(int) __asm__("FUN_L00_0020d498");
 int FUN_L12_00227f10(int a) {
     char *base = D_0013E533 + 0xE1D;
     int i;
-    char *p;
+    char *item_table_entry;
     if (((unsigned char *)base)[0x20A4] == 3) {
         return 0;
     }
@@ -40,8 +40,8 @@ int FUN_L12_00227f10(int a) {
         return 0;
     }
     i = hero_slot_item_id(0) * 0x4C;
-    p = D_L12_00179F40 - (-i);
-    return *(int *)(p + 0x24);
+    item_table_entry = D_L12_00179F40 - (-i);
+    return *(int *)(item_table_entry + 0x24);
 }
 #include "eetypes.h"
 #include "qcopy.h"
