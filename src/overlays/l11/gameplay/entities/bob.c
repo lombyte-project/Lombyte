@@ -819,8 +819,8 @@ void FUN_L11_002d2088(struct Moby *moby, unsigned char state) {
         RESORT_OWNER_CHECK_PATH_COMPLETION_DIALOGUE = 12,
         RESORT_OWNER_CHECK_POST_PATH_DIALOGUE = 14
     };
-    char *d = (char *)moby->pvars;
-    float tmp[4];
+    char *moby_vars = (char *)moby->pvars;
+    float gate_target_offset[4];
 
     moby->state = state;
     switch (moby->state) {
@@ -832,65 +832,65 @@ void FUN_L11_002d2088(struct Moby *moby, unsigned char state) {
         if (moby->prev_seq != 0)
             FUN_00212f90(moby, 0, 0, scale_game_frames(0x14));
         if (moby->state == 14)
-            *(float *)(d + 0x2C) = 10.0f;
-        clear_u64_value(d + 0x130);
+            *(float *)(moby_vars + 0x2C) = 10.0f;
+        clear_u64_value(moby_vars + 0x130);
         if (moby->state == 14)
-            *(short *)(d + 0x56) = 2;
+            *(short *)(moby_vars + 0x56) = 2;
         break;
     case RESORT_OWNER_FOLLOW_HERO:
         if (moby->prev_seq != 2)
             FUN_00212f90(moby, 2, 0, scale_game_frames(0x14));
-        *(float *)(d + 0x154) = D_L11_001613D0 * frame_time;
+        *(float *)(moby_vars + 0x154) = D_L11_001613D0 * frame_time;
         break;
     case RESORT_OWNER_FOLLOW_DISTANT_HERO:
     case RESORT_OWNER_MOVE_TO_PATH_POINT:
         if (moby->prev_seq != 3)
             FUN_00212f90(moby, 3, 0, scale_game_frames(0x14));
-        *(float *)(d + 0x154) = D_L11_001613D4 * frame_time;
+        *(float *)(moby_vars + 0x154) = D_L11_001613D4 * frame_time;
         break;
     case RESORT_OWNER_JUMP_TO_TARGET:
         if (moby->prev_seq != 4)
             FUN_00212f90(moby, 4, 0, scale_game_frames(0x14));
-        clear_u64_value(d + 0x130);
+        clear_u64_value(moby_vars + 0x130);
         break;
     case RESORT_OWNER_MOVE_TO_GATE_TARGET:
         if (moby->prev_seq != 3)
             FUN_00212f90(moby, 3, 0, scale_game_frames(0x14));
         {
-            int *tbl = (int *)(d + 0xF0);
-            unsigned int idx = 0U < *(unsigned int *)(d + 0x158);
+            int *tbl = (int *)(moby_vars + 0xF0);
+            unsigned int idx = 0U < *(unsigned int *)(moby_vars + 0x158);
             int p;
             char *o;
             tbl += idx;
             p = *tbl;
             o = (char *)D_L11_0015FFD8;
             o += p << 8;
-            qcopy(d + 0x120, o + 0x10);
-            transform_vector_by_basis(tmp, &D_L11_001613E0, o + 0xC0);
-            fast_vec_add(d + 0x120, d + 0x120, tmp);
+            qcopy(moby_vars + 0x120, o + 0x10);
+            transform_vector_by_basis(gate_target_offset, &D_L11_001613E0, o + 0xC0);
+            fast_vec_add(moby_vars + 0x120, moby_vars + 0x120, gate_target_offset);
         }
         break;
     case RESORT_OWNER_WAIT_AT_GATE:
     case 16:
         if (moby->prev_seq != 0)
             FUN_00212f90(moby, 0, 0, scale_game_frames(0x14));
-        clear_u64_value(d + 0x130);
+        clear_u64_value(moby_vars + 0x130);
         break;
     case RESORT_OWNER_MOVE_TO_GATE_DEPARTURE_TARGET:
         if (moby->prev_seq != 3)
             FUN_00212f90(moby, 3, 0, scale_game_frames(0x14));
         {
-            int *tbl = (int *)(d + 0xF0);
-            unsigned int idx = 0U < *(unsigned int *)(d + 0x158);
+            int *tbl = (int *)(moby_vars + 0xF0);
+            unsigned int idx = 0U < *(unsigned int *)(moby_vars + 0x158);
             int p;
             char *o;
             tbl += idx;
             p = *tbl;
             o = (char *)D_L11_0015FFD8;
             o += p << 8;
-            qcopy(d + 0x120, o + 0x10);
-            transform_vector_by_basis(tmp, &D_L11_00161400, o + 0xC0);
-            fast_vec_add(d + 0x120, d + 0x120, tmp);
+            qcopy(moby_vars + 0x120, o + 0x10);
+            transform_vector_by_basis(gate_target_offset, &D_L11_00161400, o + 0xC0);
+            fast_vec_add(moby_vars + 0x120, moby_vars + 0x120, gate_target_offset);
         }
         break;
     default:
