@@ -862,7 +862,7 @@ extern float fast_sin(float) __asm__("func_001F9DE0");
 extern int coll_line_fix(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 extern f32 spark_speed_gp __asm__("D_L06_00161CEC") __attribute__((sda));
 
-void FUN_L06_002f4390(char *m) {
+void FUN_L06_002f4390(char *vent_moby) {
     struct {
         int pad0[2];
         float f8;
@@ -877,7 +877,7 @@ void FUN_L06_002f4390(char *m) {
     } q;
     float v[4];
     float w[4];
-    char *d;
+    char *vent_data;
     float sp;
     int fl;
 
@@ -885,8 +885,8 @@ void FUN_L06_002f4390(char *m) {
     if (hero.items[2].item_id != 6)
         fl = 0x10001;
     q.flags = fl;
-    d = *(char **)(m + 0x78);
-    q.owner = m;
+    vent_data = *(char **)(vent_moby + 0x78);
+    q.owner = vent_moby;
     q.f1C = 1.0f;
     q.i20 = 1;
     clear_u64_value(&q);
@@ -894,27 +894,27 @@ void FUN_L06_002f4390(char *m) {
     q.fC = 5627.9248046875f;
     q.b18 = 3;
     q.b19 = 1;
-    q.s1A = *(unsigned short *)(m + 0xA6);
-    sp = (*(float *)(d + 0x70) * 60.0f - (float)*(int *)(d + 0x88)) *
+    q.s1A = *(unsigned short *)(vent_moby + 0xA6);
+    sp = (*(float *)(vent_data + 0x70) * 60.0f - (float)*(int *)(vent_data + 0x88)) *
          (*(float *)&spark_speed_gp * frame_time);
     if (*(float *)&D_L06_00161CF0 < sp)
         sp = *(float *)&D_L06_00161CF0;
-    normalize_vector_xyz(v, m + 0xD0, 0.125f);
-    add_vector_xyz(v, v, m + 0x10);
+    normalize_vector_xyz(v, vent_moby + 0xD0, 0.125f);
+    add_vector_xyz(v, v, vent_moby + 0x10);
     v[2] = v[2] + 0.125f;
-    w[0] = fast_cos(*(float *)(m + 0x48)) * sp;
-    w[1] = fast_sin(*(float *)(m + 0x48)) * sp;
+    w[0] = fast_cos(*(float *)(vent_moby + 0x48)) * sp;
+    w[1] = fast_sin(*(float *)(vent_moby + 0x48)) * sp;
     w[2] = 0;
     add_vector_xyz(w, w, v);
-    coll_line_fix(v, w, 0, m, &q);
-    normalize_vector_xyz(v, m + 0xD0, -0.125f);
-    add_vector_xyz(v, v, m + 0x10);
+    coll_line_fix(v, w, 0, vent_moby, &q);
+    normalize_vector_xyz(v, vent_moby + 0xD0, -0.125f);
+    add_vector_xyz(v, v, vent_moby + 0x10);
     v[2] = v[2] + 0.125f;
-    w[0] = fast_cos(*(float *)(m + 0x48)) * sp;
-    w[1] = fast_sin(*(float *)(m + 0x48)) * sp;
+    w[0] = fast_cos(*(float *)(vent_moby + 0x48)) * sp;
+    w[1] = fast_sin(*(float *)(vent_moby + 0x48)) * sp;
     w[2] = 0;
     add_vector_xyz(w, w, v);
-    coll_line_fix(v, w, 0, m, &q);
+    coll_line_fix(v, w, 0, vent_moby, &q);
 }
 /* Puts a moby in state 2 and its seven linked mobys in state 3, resetting each one's heading. */
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002F68D0), where it is exact; names translated to the US level program. */
