@@ -81,49 +81,49 @@ s32 fast_dec_timer(void *) __asm__("FUN_001f9770");
 s32 FUN_001f96f8_25d538(s32) __asm__("FUN_001f96f8");
 void glow_n(s32, s32, s32, s32) __asm__("FUN_L00_002502f0");
 void trooper_anim_finish(s32 id, S_25d538 *s) __asm__("FUN_L00_0025d538");
-void trooper_anim_finish(s32 id, S_25d538 *s) {
-    f32 d, f;
+void trooper_anim_finish(s32 id, S_25d538 *animation_state) {
+    f32 phase_duration_frames, phase_progress;
     s32 r, g, b;
-    if (s->t == 0)
+    if (animation_state->t == 0)
         return;
-    if (fast_dec_timer(s)) {
-        if (s->phase != 0) {
-            glow_n(id, s->r0, s->g0, s->b0);
+    if (fast_dec_timer(animation_state)) {
+        if (animation_state->phase != 0) {
+            glow_n(id, animation_state->r0, animation_state->g0, animation_state->b0);
             return;
         }
-        s->phase = 1;
-        s->t = FUN_001f96f8_25d538(s->d1);
+        animation_state->phase = 1;
+        animation_state->t = FUN_001f96f8_25d538(animation_state->d1);
     }
-    if (s->phase == 0) {
-        d = convert_integer_to_float(FUN_001f96f8_25d538(s->d0));
-        f = (d - s->t) / d;
-        if (s->r1 != 0)
-            r = FUN_001fa6d0_25d538(s->r0 + (s->r1 - s->r0) * f);
+    if (animation_state->phase == 0) {
+        phase_duration_frames = convert_integer_to_float(FUN_001f96f8_25d538(animation_state->d0));
+        phase_progress = (phase_duration_frames - animation_state->t) / phase_duration_frames;
+        if (animation_state->r1 != 0)
+            r = FUN_001fa6d0_25d538(animation_state->r0 + (animation_state->r1 - animation_state->r0) * phase_progress);
         else
-            r = s->r0;
-        if (s->g1 != 0)
-            g = FUN_001fa6d0_25d538(s->g0 + (s->g1 - s->g0) * f);
+            r = animation_state->r0;
+        if (animation_state->g1 != 0)
+            g = FUN_001fa6d0_25d538(animation_state->g0 + (animation_state->g1 - animation_state->g0) * phase_progress);
         else
-            g = s->g0;
-        if (s->b1 != 0)
-            b = FUN_001fa6d0_25d538(s->b0 + (s->b1 - s->b0) * f);
+            g = animation_state->g0;
+        if (animation_state->b1 != 0)
+            b = FUN_001fa6d0_25d538(animation_state->b0 + (animation_state->b1 - animation_state->b0) * phase_progress);
         else
-            b = s->b0;
+            b = animation_state->b0;
     } else {
-        d = convert_integer_to_float(FUN_001f96f8_25d538(s->d1));
-        f = (d - s->t) / d;
-        if (s->r1 != 0)
-            r = FUN_001fa6d0_25d538(s->r1 + (s->r0 - s->r1) * f);
+        phase_duration_frames = convert_integer_to_float(FUN_001f96f8_25d538(animation_state->d1));
+        phase_progress = (phase_duration_frames - animation_state->t) / phase_duration_frames;
+        if (animation_state->r1 != 0)
+            r = FUN_001fa6d0_25d538(animation_state->r1 + (animation_state->r0 - animation_state->r1) * phase_progress);
         else
-            r = s->r0;
-        if (s->g1 != 0)
-            g = FUN_001fa6d0_25d538(s->g1 + (s->g0 - s->g1) * f);
+            r = animation_state->r0;
+        if (animation_state->g1 != 0)
+            g = FUN_001fa6d0_25d538(animation_state->g1 + (animation_state->g0 - animation_state->g1) * phase_progress);
         else
-            g = s->g0;
-        if (s->b1 != 0)
-            b = FUN_001fa6d0_25d538(s->b1 + (s->b0 - s->b1) * f);
+            g = animation_state->g0;
+        if (animation_state->b1 != 0)
+            b = FUN_001fa6d0_25d538(animation_state->b1 + (animation_state->b0 - animation_state->b1) * phase_progress);
         else
-            b = s->b0;
+            b = animation_state->b0;
     }
     glow_n(id, r, g, b);
 }
