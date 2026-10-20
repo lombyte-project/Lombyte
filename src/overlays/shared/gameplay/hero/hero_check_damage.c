@@ -2718,11 +2718,11 @@ float FUN_L00_00211830(void) {
 
 
 /* True when t is before the time at hero.anim_frame by at most the span hero.unkAAC. */
-int FUN_L00_00211870(float t) {
+int FUN_L00_00211870(float animation_frame_threshold) {
     float end = hero.anim_frame;
 
-    if (t < end) {
-        if (end - t <= hero.unkAAC) {
+    if (animation_frame_threshold < end) {
+        if (end - animation_frame_threshold <= hero.unkAAC) {
             return 1;
         }
     }
