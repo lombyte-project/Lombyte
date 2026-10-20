@@ -2091,25 +2091,25 @@ extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 s32 random_integer_below(s32 arg0) __asm__("FUN_00213260");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-void FUN_L00_002b5d00(char *m, int flag) {
+void FUN_L00_002b5d00(char *source_moby, int flag) {
     float elevated_spawn_position[4];
-    float d[4];
-    float n[4];
+    float view_origin_delta[4];
+    float particle_velocity[4];
     V6 A;
     V6 B;
     float len, extra, sc;
     int count, i, j;
 
-    qcopy(elevated_spawn_position, m + 0x10);
+    qcopy(elevated_spawn_position, source_moby + 0x10);
     elevated_spawn_position[2] += 0.3f;
     FUN_L00_0026b790(elevated_spawn_position, 1, 0x40808080, 0.3f, 1.01f, 1.075f, 0.05f, 50000.0f);
     for (j = 4; j >= 0; j--) {
         FUN_L00_0026b790(elevated_spawn_position, 1, 0x40808080, 0.3f, 1.01f, 1.07f, 0.05f, 50000.0f);
     }
     if (flag != 0) {
-        subtract_vector_xyz(d, D_L00_00166DC0, m + 0x10);
-        clear_u64_value(n);
-        len = fast_vec_length(d);
+        subtract_vector_xyz(view_origin_delta, D_L00_00166DC0, source_moby + 0x10);
+        clear_u64_value(particle_velocity);
+        len = fast_vec_length(view_origin_delta);
         if (len < 8.0f) {
             count = func_001FA898_r(len) + 2;
         } else {
@@ -2130,16 +2130,16 @@ void FUN_L00_002b5d00(char *m, int flag) {
                 pb = B.v + random_integer_below(6);
                 a = FUN_L00_00257b90(scale_game_frames(15), scale_game_frames(20));
                 b = FUN_L00_00257b90(scale_game_frames(25), scale_game_frames(30));
-                FUN_L00_0026a9f0(m + 0x10, n, *pa, *pb, a, b, 0, 0, 400000.0f, sc);
+                FUN_L00_0026a9f0(source_moby + 0x10, particle_velocity, *pa, *pb, a, b, 0, 0, 400000.0f, sc);
             } while (--i);
         }
         if (D_L00_0015F5D0 < 0.95f) {
-            spawn_glow_particle(m, m + 0x10, n, scale_game_frames(15), 0x7F, 0x7F, 0x7F, 0x20, 3.0f);
-            spawn_glow_particle(m, m + 0x10, n, scale_game_frames(24), 0x7F, 0x20, 0, 0x20, 2.0f);
+            spawn_glow_particle(source_moby, source_moby + 0x10, particle_velocity, scale_game_frames(15), 0x7F, 0x7F, 0x7F, 0x20, 3.0f);
+            spawn_glow_particle(source_moby, source_moby + 0x10, particle_velocity, scale_game_frames(24), 0x7F, 0x20, 0, 0x20, 2.0f);
         }
-        spawn_glow_particle(m, m + 0x10, n, scale_game_frames(20), 0x7F, 0x40, 0, 0x30, 3.0f);
-        spawn_glow_particle(m, m + 0x10, n, scale_game_frames(27), 0x60, 0x10, 0, 0x40, 2.0f);
-        spawn_glow_particle(m, m + 0x10, n, scale_game_frames(29), 0x20, 0, 0, 0x20, 1.0f);
+        spawn_glow_particle(source_moby, source_moby + 0x10, particle_velocity, scale_game_frames(20), 0x7F, 0x40, 0, 0x30, 3.0f);
+        spawn_glow_particle(source_moby, source_moby + 0x10, particle_velocity, scale_game_frames(27), 0x60, 0x10, 0, 0x40, 2.0f);
+        spawn_glow_particle(source_moby, source_moby + 0x10, particle_velocity, scale_game_frames(29), 0x20, 0, 0, 0x20, 1.0f);
     }
 }
 #include "rnc/input/pad_state.h"
