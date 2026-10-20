@@ -2840,8 +2840,8 @@ void FUN_L00_0020ac98(void) {
     char *best;
     float bestPri, bestDist;
     float v[8];
-    char *q;
-    char *info, *info2, *p, *selected_moby;
+    char *secondary_position;
+    char *info, *info2, *manipulator_table, *selected_moby;
     float yaw_delta, pitch, s;
     int mode = *(int *)(g1 + 0x208C);
     if (mode != 1 && mode != 4 && mode != 2 && mode != 7 && mode != 0) {
@@ -2898,10 +2898,10 @@ void FUN_L00_0020ac98(void) {
     if (*(int *)(g5 + 0x2274) == 0)
         return;
     FUN_L00_00233660(v, 0.0f, 0.0f, 1.2f);
-    q = (char *)&v[4];
-    qcopy(q, *(char **)(g5 + 0x2274) + 0x10);
+    secondary_position = (char *)&v[4];
+    qcopy(secondary_position, *(char **)(g5 + 0x2274) + 0x10);
     v[6] += 0.5f;
-    if (FUN_001efa68_ac98(v, q, 2, 0, 0))
+    if (FUN_001efa68_ac98(v, secondary_position, 2, 0, 0))
         *(int *)(g5 + 0x2274) = 0;
     selected_moby = *(char **)(g5 + 0x2274);
     if (selected_moby == 0)
@@ -2912,7 +2912,7 @@ void FUN_L00_0020ac98(void) {
         v[2] += (float)*(unsigned char *)(info2 + 0x3A) * 0.125f;
     FUN_L00_00233660(&v[4], 0.3f, 0.0f, 0.85f);
     yaw_delta = fast_subtract_rotations(FUN_001f9e90_c(v[0] - v[4], v[1] - v[5]), *(float *)(g5 + 0x98));
-    pitch = FUN_001f9e90_c(vector_distance(v, q), v[6] - v[2]);
+    pitch = FUN_001f9e90_c(vector_distance(v, secondary_position), v[6] - v[2]);
     if (yaw_delta > 1.02974427f)
         yaw_delta = 1.02974427f;
     else if (yaw_delta < -1.02974427f)
@@ -2930,11 +2930,11 @@ void FUN_L00_0020ac98(void) {
         pitch = 0.0f;
     }
     FUN_L00_0020a228(frame_scale_sq * 0.021f, frame_scale_sq * 0.27f);
-    p = D_L00_0017A780;
-    *(float *)(p + 0x274) = pitch;
-    *(float *)(p + 0x278) = yaw_delta * 0.7f;
+    manipulator_table = D_L00_0017A780;
+    *(float *)(manipulator_table + 0x274) = pitch;
+    *(float *)(manipulator_table + 0x278) = yaw_delta * 0.7f;
     FUN_L00_0020a210(frame_scale_sq * 0.014f, frame_scale_sq * 0.3f);
-    *(float *)(p + 0x1C8) = *(float *)(p + 0x278) * 0.55f;
+    *(float *)(manipulator_table + 0x1C8) = *(float *)(manipulator_table + 0x278) * 0.55f;
 }
 typedef struct {
     u8 p0[0x2C0];
