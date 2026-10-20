@@ -50,21 +50,21 @@ extern short D_L04_001618D0 __attribute__((sda));
 extern short D_L04_001618D4 __attribute__((sda));
 extern short D_L04_001618D8 __attribute__((sda));
 extern short D_L04_001618DC __attribute__((sda));
-void FUN_L04_002c46d0(char *a) {
-    FUN_L04_002c45b8(a, 0, 1, *(int *)&D_L04_001618C0);
-    FUN_L04_002c45b8(a, 2, 3, *(int *)&D_L04_001618C4);
-    FUN_L04_002c45b8(a, 4, 5, *(int *)&D_L04_001618C8);
-    FUN_L04_002c45b8(a, 5, 6, *(int *)&D_L04_001618CC);
-    FUN_L04_002c45b8(a, 6, 7, *(int *)&D_L04_001618D0);
-    FUN_L04_002c45b8(a, 8, 9, *(int *)&D_L04_001618C8);
-    FUN_L04_002c45b8(a, 9, 10, *(int *)&D_L04_001618CC);
-    FUN_L04_002c45b8(a, 10, 11, *(int *)&D_L04_001618D0);
-    FUN_L04_002c45b8(a, 12, 13, *(int *)&D_L04_001618D4);
-    FUN_L04_002c45b8(a, 14, 15, *(int *)&D_L04_001618D4);
-    FUN_L04_002c45b8(a, 16, 17, *(int *)&D_L04_001618D8);
-    FUN_L04_002c45b8(a, 20, 21, *(int *)&D_L04_001618D8);
-    FUN_L04_002c45b8(a, 18, 19, *(int *)&D_L04_001618DC);
-    FUN_L04_002c45b8(a, 22, 23, *(int *)&D_L04_001618DC);
+void FUN_L04_002c46d0(char *moby) {
+    FUN_L04_002c45b8(moby, 0, 1, *(int *)&D_L04_001618C0);
+    FUN_L04_002c45b8(moby, 2, 3, *(int *)&D_L04_001618C4);
+    FUN_L04_002c45b8(moby, 4, 5, *(int *)&D_L04_001618C8);
+    FUN_L04_002c45b8(moby, 5, 6, *(int *)&D_L04_001618CC);
+    FUN_L04_002c45b8(moby, 6, 7, *(int *)&D_L04_001618D0);
+    FUN_L04_002c45b8(moby, 8, 9, *(int *)&D_L04_001618C8);
+    FUN_L04_002c45b8(moby, 9, 10, *(int *)&D_L04_001618CC);
+    FUN_L04_002c45b8(moby, 10, 11, *(int *)&D_L04_001618D0);
+    FUN_L04_002c45b8(moby, 12, 13, *(int *)&D_L04_001618D4);
+    FUN_L04_002c45b8(moby, 14, 15, *(int *)&D_L04_001618D4);
+    FUN_L04_002c45b8(moby, 16, 17, *(int *)&D_L04_001618D8);
+    FUN_L04_002c45b8(moby, 20, 21, *(int *)&D_L04_001618D8);
+    FUN_L04_002c45b8(moby, 18, 19, *(int *)&D_L04_001618DC);
+    FUN_L04_002c45b8(moby, 22, 23, *(int *)&D_L04_001618DC);
 }
 
 /* sda.h here, after the unit's empty MACRO_ADDR: D_0015ED6C needs the real one */
