@@ -321,19 +321,19 @@ static inline u8 load_u8_0025a420(u8 *p) {
 }
 /* Returns the moby_hits entry linked from p+0xA4 when it matches mask; may unlink it. */
 struct Ent_z *find_moby_hit(u8 *p, s32 mask, s32 flag) __asm__("FUN_L00_0025a420");
-struct Ent_z *find_moby_hit(u8 *p, s32 mask, s32 flag) {
-    struct Ent_z *e;
-    u8 *a = p + 0xA4;
+struct Ent_z *find_moby_hit(u8 *owner_moby, s32 mask, s32 flag) {
+    struct Ent_z *hit_record;
+    u8 *a = owner_moby + 0xA4;
     u8 i = load_u8_0025a420(a);
     if (load_u8_0025a420(a) == 0xFF)
         return 0;
-    e = &D_L00_00178100_c[i];
-    if (e->f34 != p)
+    hit_record = &D_L00_00178100_c[i];
+    if (hit_record->f34 != owner_moby)
         return 0;
-    if (e->a[9] & mask)
-        return e;
+    if (hit_record->a[9] & mask)
+        return hit_record;
     if (!flag)
-        e->f34[0xA4] = 0xFF;
+        hit_record->f34[0xA4] = 0xFF;
     return 0;
 }
 typedef unsigned int u128_25a478 __attribute__((mode(TI), aligned(16)));
