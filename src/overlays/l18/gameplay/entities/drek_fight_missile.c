@@ -3505,13 +3505,13 @@ void FUN_L18_002f7880(struct Moby *moby) {
     char b[16];
     L18Q *boss_vars = (L18Q *)moby->pvars;
     int attached_glow_period_frames = scale_game_frames(*(int *)&D_L18_00162460_gp);
-    float f = convert_integer_to_float(game_frame % attached_glow_period_frames);
+    float attached_glow_cycle_value = convert_integer_to_float(game_frame % attached_glow_period_frames);
     int attached_glow_color;
     int i;
-    f = f / convert_integer_to_float(attached_glow_period_frames);
-    f = f * 6.18318f;
-    f = fast_sin(f - 3.14159f);
-    attached_glow_color = fast_tween_color(*(int *)&D_L18_00162458_gp, *(int *)&D_L18_0016245C_gp, f * 0.5f + 0.5f);
+    attached_glow_cycle_value = attached_glow_cycle_value / convert_integer_to_float(attached_glow_period_frames);
+    attached_glow_cycle_value = attached_glow_cycle_value * 6.18318f;
+    attached_glow_cycle_value = fast_sin(attached_glow_cycle_value - 3.14159f);
+    attached_glow_color = fast_tween_color(*(int *)&D_L18_00162458_gp, *(int *)&D_L18_0016245C_gp, attached_glow_cycle_value * 0.5f + 0.5f);
     moby_point_position(boss_vars->p3A0, 1, joint_world_position);
     FUN_L00_00263618(joint_world_position, attached_glow_color, *(float *)&D_L18_00162450_gp, *(float *)&D_L18_00162454_gp);
     moby_point_position(boss_vars->p3A0, 2, joint_world_position);
