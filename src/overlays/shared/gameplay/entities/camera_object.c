@@ -1589,29 +1589,29 @@ extern struct Hero hero_data2 __asm__("D_0013F350") __attribute__((section(".dat
 s32 FUN_001f96f8_002a7c70(s32) __asm__("FUN_001f96f8");
 void FUN_00212f90_002a7c70(void *, s32, s32, s32) __asm__("FUN_00212f90");
 void update_moby_animation_state(void *) __asm__("FUN_0020c880");
-void FUN_L00_002a7c70(O_002a7c70 *m) {
+void FUN_L00_002a7c70(O_002a7c70 *wrench_moby) {
     struct Hero *g = &hero_data2;
     if (g->state.current == 0x3B) {
-        u8 c = ((O_002a7c70 *)g->moby)->b53;
+        u8 hero_current_animation = ((O_002a7c70 *)g->moby)->b53;
         s32 k = 0xB;
-        if (c == 0x40)
+        if (hero_current_animation == 0x40)
             k = 0x13;
-        if (c == 0x41)
+        if (hero_current_animation == 0x41)
             k = 0x12;
         if (k == 0x12 || k == 0x13) {
-            m->b52 = k;
-            m->b53 = k;
-            m->f54 = ((O_002a7c70 *)g->moby)->f54;
-            m->b50 = ((O_002a7c70 *)g->moby)->b50;
-            m->b51 = ((O_002a7c70 *)g->moby)->b51;
+            wrench_moby->b52 = k;
+            wrench_moby->b53 = k;
+            wrench_moby->f54 = ((O_002a7c70 *)g->moby)->f54;
+            wrench_moby->b50 = ((O_002a7c70 *)g->moby)->b50;
+            wrench_moby->b51 = ((O_002a7c70 *)g->moby)->b51;
             if (((O_002a7c70 *)g->moby)->b52 != ((O_002a7c70 *)g->moby)->b53)
-                m->b50 = m->b51;
-            update_moby_animation_state(m);
+                wrench_moby->b50 = wrench_moby->b51;
+            update_moby_animation_state(wrench_moby);
         } else {
-            FUN_00212f90_002a7c70(m, k, 0, FUN_001f96f8_002a7c70(7));
+            FUN_00212f90_002a7c70(wrench_moby, k, 0, FUN_001f96f8_002a7c70(7));
         }
     } else if (g->state.prev == 0x3B && g->state_timer == 1) {
-        FUN_00212f90_002a7c70(m, 1, 0, FUN_001f96f8_002a7c70(0x11));
+        FUN_00212f90_002a7c70(wrench_moby, 1, 0, FUN_001f96f8_002a7c70(0x11));
     }
 }
 #define NOT_SDA
