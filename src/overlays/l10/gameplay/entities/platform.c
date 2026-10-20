@@ -1672,14 +1672,14 @@ extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
 
 extern float D_L10_00161C0C __attribute__((sda));
 extern float D_L10_00161C10 __attribute__((sda));
-int FUN_L10_002d9000(struct Moby *m, float *p) {
+int FUN_L10_002d9000(struct Moby *moby, float *world_point) {
     float a[4] __attribute__((aligned(16)));
     float t10[16] __attribute__((aligned(16)));
     float t50[4] __attribute__((aligned(16)));
     float t60[4] __attribute__((aligned(16)));
-    *(OvlQuad *)a = *(OvlQuad *)p;
-    transpose_rotation_matrix(t10, &m->rot_row0);
-    subtract_vector_xyz(t60, a, &m->pos);
+    *(OvlQuad *)a = *(OvlQuad *)world_point;
+    transpose_rotation_matrix(t10, &moby->rot_row0);
+    subtract_vector_xyz(t60, a, &moby->pos);
     *(OvlQuad *)t50 = *(OvlQuad *)t60;
     transform_vector(t50, t50, t10);
     if (absolute_float(t50[0]) < D_L10_00161C10) {
