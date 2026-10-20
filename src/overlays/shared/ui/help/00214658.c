@@ -448,7 +448,7 @@ void mmul_216130(void *, void *, void *) __asm__("FUN_001fa378");
 void xform_216130(void *, void *, void *) __asm__("FUN_001f9d20");
 float smooth_216130(float *, void *, float, float, float, float, int) __asm__("FUN_L00_0025bc98");
 void set_216130(void *, void *) __asm__("FUN_00214598");
-void FUN_L00_00216130(V_216130 *v, M_216130 *working_matrix, void *rotation_output, float a, float b, float c) {
+void FUN_L00_00216130(V_216130 *v, M_216130 *working_matrix, void *rotation_output, float pitch_smoothing_parameter, float b, float c) {
     M_216130 y_rotation_matrix;
     M_216130 z_rotation_matrix;
     V_216130 r;
@@ -489,7 +489,7 @@ void FUN_L00_00216130(V_216130 *v, M_216130 *working_matrix, void *rotation_outp
         r.f[2] = pitch;
         r.f[0] = 0.0f;
     } else {
-        smooth_216130(&smoothed_pitch, (&hero.motion.unkA0.f[1]), pitch, a, b, c, 0);
+        smooth_216130(&smoothed_pitch, (&hero.motion.unkA0.f[1]), pitch, pitch_smoothing_parameter, b, c, 0);
         r.f[0] = 0.0f;
         r.f[2] = smoothed_pitch;
     }
