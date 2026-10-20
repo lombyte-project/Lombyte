@@ -2080,7 +2080,7 @@ void FUN_L16_002e7e00(struct Moby *moby) {
         JOINT_TRAIL_INITIALIZE = 0,
         JOINT_TRAIL_EMIT = 1
     };
-    W a, b, c, d, e, f;
+    W joint_6_position, b, joint_4_position, joint_5_position, joint_6_trail_velocity, joint_7_trail_velocity;
     float k1 = 0.075f, k2 = 20000.0f, k3 = 1000.0f;
     float j1 = 0.075f, j2 = 20000.0f, j3 = 1000.0f;
     switch (moby->state) {
@@ -2092,17 +2092,17 @@ void FUN_L16_002e7e00(struct Moby *moby) {
         if (D_L16_0015F5C4 == 2) {
             char *g = D_L16_0016CC60;
             if (*(int *)(g + 0x30) == 0) {
-                char *p = *(char **)(g + 0x184);
-                moby_point_position(p, 6, a);
-                moby_point_position(p, 4, c);
-                subtract_vector_xyz(e, a, c);
-                normalize_vector_xyz(e, e, k1);
-                draw_trail(a, a, e, k2, k3);
-                moby_point_position(p, 7, b);
-                moby_point_position(p, 5, d);
-                subtract_vector_xyz(f, b, d);
-                normalize_vector_xyz(f, f, j1);
-                draw_trail(b, b, f, j2, j3);
+                char *joint_source_moby = *(char **)(g + 0x184);
+                moby_point_position(joint_source_moby, 6, joint_6_position);
+                moby_point_position(joint_source_moby, 4, joint_4_position);
+                subtract_vector_xyz(joint_6_trail_velocity, joint_6_position, joint_4_position);
+                normalize_vector_xyz(joint_6_trail_velocity, joint_6_trail_velocity, k1);
+                draw_trail(joint_6_position, joint_6_position, joint_6_trail_velocity, k2, k3);
+                moby_point_position(joint_source_moby, 7, b);
+                moby_point_position(joint_source_moby, 5, joint_5_position);
+                subtract_vector_xyz(joint_7_trail_velocity, b, joint_5_position);
+                normalize_vector_xyz(joint_7_trail_velocity, joint_7_trail_velocity, j1);
+                draw_trail(b, b, joint_7_trail_velocity, j2, j3);
             }
         }
         break;
