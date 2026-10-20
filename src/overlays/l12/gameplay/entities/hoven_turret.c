@@ -802,14 +802,14 @@ void hoven_turret_update(struct Moby *moby) {
             Vec_304920 v;
             float a;
             float b;
-            float c;
+            float randomized_view_pitch;
             float t;
 
             a = random_float_between_c(D_L12_00161E60, D_L12_00161E64);
             b = fast_add_rotations_c3(((Cam_304920 *)D_L12_00167180_304920)->f158, randf_sym(0.0f, 0.5235988f));
-            c = fast_add_rotations_c3(((Cam_304920 *)D_L12_00167180_304920)->f154, randf_sym(0.0f, 0.5235988f));
+            randomized_view_pitch = fast_add_rotations_c3(((Cam_304920 *)D_L12_00167180_304920)->f154, randf_sym(0.0f, 0.5235988f));
             qcopy(v, ((Cam_304920 *)D_L12_00167180_304920)->f140);
-            FUN_L00_00262cf0(v, v, a, b, c);
+            FUN_L00_00262cf0(v, v, a, b, randomized_view_pitch);
             t = random_float_between_c(0.5f, 1.3f);
             spawn_explosion(moby, D_L12_0015F580_f, v, 0.0f, 0.0f, 7, 0xF, 0x19, t, t * 0.57f, 10.0f, 3, 0.7f, 0.0f, 0, 0, -1, 0);
             data->fAE = scale_game_frames_alt(random_int_between(5, 0xD));
