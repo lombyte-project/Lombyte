@@ -189,10 +189,10 @@ void FUN_L00_002a4cd8(unsigned char *state_object) {
         break;
     }
 }
-int FUN_L00_002a4dc8(int a) {
-    int t = D_L00_00161390;
-    D_L00_00161390 = t + a;
-    return t;
+int FUN_L00_002a4dc8(int addend) {
+    int previous_value = D_L00_00161390;
+    D_L00_00161390 = previous_value + addend;
+    return previous_value;
 }
 #include "eetypes.h"
 #include "qcopy.h"
