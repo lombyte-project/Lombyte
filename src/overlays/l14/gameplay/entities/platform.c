@@ -26,31 +26,31 @@ extern int FUN_L00_0025df68(void *, void *, float *, int *, float *, int, float,
 extern float D_L14_00161A38_gp __asm__("D_L14_00161A38") __attribute__((sda));
 
 void FUN_L14_002d6358(struct Moby *m) {
-    char *d = (char *)m->pvars;
-    char *path = *(char **)(D_L14_0015F70C + *(int *)(d + 0x60) * 32 + 0x10);
+    char *moby_data = (char *)m->pvars;
+    char *path = *(char **)(D_L14_0015F70C + *(int *)(moby_data + 0x60) * 32 + 0x10);
     char *tg;
-    PathPos_2D7668 s;
+    PathPos_2D7668 nearest_path_position;
     int k;
     float z;
-    unsigned short n;
-    *(float *)(d + 0x74) = D_L14_00161A38_gp;
-    *(int *)(d + 0x68) = 0;
-    *(int *)(d + 0x64) = 0;
-    z = *(float *)(d + 0x68);
-    tg = (char *)D_L14_001B0BB0[*(int *)(d + 0x88)] + 0x30;
-    s.t = z;
-    s.i = 0;
-    FUN_L00_0025df68(path, tg, s.v, &s.i, &s.t, 0, 20.0f, 5.0f, z);
-    *(short *)(d + 0x8C) = s.i;
-    s.t = z;
-    s.i = 0;
-    FUN_L00_0025df68(path, (char *)D_L14_001B0BB0[*(int *)(d + 0x88)] + 0x20, s.v, &s.i, &s.t, 0,
+    unsigned short second_point_segment;
+    *(float *)(moby_data + 0x74) = D_L14_00161A38_gp;
+    *(int *)(moby_data + 0x68) = 0;
+    *(int *)(moby_data + 0x64) = 0;
+    z = *(float *)(moby_data + 0x68);
+    tg = (char *)D_L14_001B0BB0[*(int *)(moby_data + 0x88)] + 0x30;
+    nearest_path_position.t = z;
+    nearest_path_position.i = 0;
+    FUN_L00_0025df68(path, tg, nearest_path_position.v, &nearest_path_position.i, &nearest_path_position.t, 0, 20.0f, 5.0f, z);
+    *(short *)(moby_data + 0x8C) = nearest_path_position.i;
+    nearest_path_position.t = z;
+    nearest_path_position.i = 0;
+    FUN_L00_0025df68(path, (char *)D_L14_001B0BB0[*(int *)(moby_data + 0x88)] + 0x20, nearest_path_position.v, &nearest_path_position.i, &nearest_path_position.t, 0,
                      20.0f, 5.0f, z);
-    n = s.i;
-    *(short *)(d + 0x8E) = n;
-    *(float *)(d + 0x78) = z;
-    for (k = (short)n; k < *(short *)(d + 0x8C); k++) {
-        *(float *)(d + 0x78) += *(float *)(path + k * 16 + 0x1C);
+    second_point_segment = nearest_path_position.i;
+    *(short *)(moby_data + 0x8E) = second_point_segment;
+    *(float *)(moby_data + 0x78) = z;
+    for (k = (short)second_point_segment; k < *(short *)(moby_data + 0x8C); k++) {
+        *(float *)(moby_data + 0x78) += *(float *)(path + k * 16 + 0x1C);
     }
 }
 
