@@ -765,7 +765,7 @@ void FUN_L10_002c9958(struct Moby *moby, HitBox *box) {
     s32 count;
     s32 i;
     s32 j;
-    s32 n;
+    s32 point_moby_count;
 
     if (box->flags & 0x100) {
         return;
@@ -808,8 +808,8 @@ void FUN_L10_002c9958(struct Moby *moby, HitBox *box) {
             point.f[1] = 0.0f;
             transform_vector_by_basis(&point, &point, mat);
             fast_vec_add(&point, &point, &moby->pos);
-            n = collect_mobies_in_sphere(&point, box->margin_x, 0x10, moby, 0);
-            for (j = 0; j < n; j++) {
+            point_moby_count = collect_mobies_in_sphere(&point, box->margin_x, 0x10, moby, 0);
+            for (j = 0; j < point_moby_count; j++) {
                 if (D_L10_00178380_u[j] == other) {
                     FUN_L10_0024c7f0((unsigned char *)other, (int)moby, 0x10001, &point, box->strength);
                 }
