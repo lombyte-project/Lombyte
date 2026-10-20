@@ -78,17 +78,17 @@ extern char *D_L01_0015FFD8_e0e0 __asm__("D_L01_0015FFD8");
  * through an alias (same symbol, .sdata) beside its neighbour's declaration. */
 void FUN_L01_0026e0e0(int list, int state);
 void FUN_L01_0026e0e0(int list, int state) {
-    unsigned short *p;
-    unsigned short *q = (unsigned short *)D_L01_001ABCC0[list];
+    unsigned short *moby_index_entry;
+    unsigned short *moby_index_list = (unsigned short *)D_L01_001ABCC0[list];
 
-    if (q != 0) {
-        p = q;
+    if (moby_index_list != 0) {
+        moby_index_entry = moby_index_list;
         do {
-            char *m = (char *)(((*p & 0x7FFF) << 8) + (int)D_L01_0015FFD8_e0e0);
+            char *moby = (char *)(((*moby_index_entry & 0x7FFF) << 8) + (int)D_L01_0015FFD8_e0e0);
 
-            if (m[0x20] >= 0) {
-                m[0x20] = state;
+            if (moby[0x20] >= 0) {
+                moby[0x20] = state;
             }
-        } while (*(short *)p++ >= 0);
+        } while (*(short *)moby_index_entry++ >= 0);
     }
 }
