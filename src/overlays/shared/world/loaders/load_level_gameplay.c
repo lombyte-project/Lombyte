@@ -14,16 +14,16 @@ typedef struct {
 extern u8 *D_L00_00173E40 NOT_SDA;
 extern Tbl *D_L00_0015F618 __attribute__((sda));
 /* Sets D_L00_00173E40 from offset h[0] and turns the table at offset h[1] into pointers. */
-void FUN_L00_00241728(s32 *h) {
+void FUN_L00_00241728(s32 *offset_header) {
     s32 i;
-    Tbl *t;
-    if (h[0])
-        D_L00_00173E40 = (u8 *)h + h[0];
-    if (h[1]) {
-        t = (Tbl *)((u8 *)h + h[1]);
-        D_L00_0015F618 = t;
-        for (i = 0; i < t->n; i++) {
-            t->e[i].off = (s32)((u8 *)t + t->e[i].off);
+    Tbl *entry_table;
+    if (offset_header[0])
+        D_L00_00173E40 = (u8 *)offset_header + offset_header[0];
+    if (offset_header[1]) {
+        entry_table = (Tbl *)((u8 *)offset_header + offset_header[1]);
+        D_L00_0015F618 = entry_table;
+        for (i = 0; i < entry_table->n; i++) {
+            entry_table->e[i].off = (s32)((u8 *)entry_table + entry_table->e[i].off);
         }
     }
 }
