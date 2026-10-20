@@ -662,8 +662,8 @@ extern void FUN_L00_00212318(s32);
 extern f32 FUN_001f99c0(f32);
 
 void FUN_L00_002167d0(void) {
-    struct Hero *m;
-    struct Hero *q;
+    struct Hero *hero_state;
+    struct Hero *slope_hero_state;
     Vec4 *r;
     V4 target_velocity, target_velocity_before_impulse, saved_move_impulse, xy_velocity_scratch, slope_velocity_delta;
     f32 f20, f21, f22, impulse_step_factor, b, base_impulse_step, frame_duration, e, target_speed_y, k;
@@ -745,14 +745,14 @@ void FUN_L00_002167d0(void) {
     }
     r = &hero.motion.velocity;
     FUN_001f9a10_c(r, &hero.motion.unk130, &xy_velocity_scratch);
-    q = &hero;
-    if (0.0872664601f < q->ground_slope.f) {
-        f21 = FUN_001f9e90_c(q->unk270.f[0], q->unk270.f[1]);
+    slope_hero_state = &hero;
+    if (0.0872664601f < slope_hero_state->ground_slope.f) {
+        f21 = FUN_001f9e90_c(slope_hero_state->unk270.f[0], slope_hero_state->unk270.f[1]);
         f20 = frame_time;
         f20 = f20 * 8.0f;
-        f20 = f20 * q->ground_slope.f;
+        f20 = f20 * slope_hero_state->ground_slope.f;
         f20 = f20 / 0.785398185f;
-        f22 = frame_time_sq * 8.5f * q->ground_slope.f / 0.785398185f;
+        f22 = frame_time_sq * 8.5f * slope_hero_state->ground_slope.f / 0.785398185f;
         xy_velocity_scratch.f[0] = fast_cos(f21) * f20;
         xy_velocity_scratch.f[1] = fast_sin(f21) * f20;
         xy_velocity_scratch.f[2] = 0.0f;
@@ -765,15 +765,15 @@ void FUN_L00_002167d0(void) {
     }
     qcopy(&xy_velocity_scratch, &hero.motion.velocity);
     xy_velocity_scratch.f[2] = 0.0f;
-    m = &hero;
-    m->unk3B0 = fast_vec_dot(&xy_velocity_scratch, &target_velocity);
+    hero_state = &hero;
+    hero_state->unk3B0 = fast_vec_dot(&xy_velocity_scratch, &target_velocity);
     k = fast_vec_length(&target_velocity);
     if (0.0f < k) {
-        m->unk3B0 = m->unk3B0 / (k * (frame_time * 5.9f));
+        hero_state->unk3B0 = hero_state->unk3B0 / (k * (frame_time * 5.9f));
     }
     FUN_L00_00212318(0);
-    if (m->unk3B4.f < DEG_TO_RAD && 0.0872664601f < m->ground_pitch.f) {
-        fast_vec_scale(&hero.motion.velocity, &hero.motion.velocity, fast_cos(m->ground_pitch.f));
+    if (hero_state->unk3B4.f < DEG_TO_RAD && 0.0872664601f < hero_state->ground_pitch.f) {
+        fast_vec_scale(&hero.motion.velocity, &hero.motion.velocity, fast_cos(hero_state->ground_pitch.f));
     }
     hero.unk3B4.f = hero.ground_pitch.f;
     if (FUN_001f99c0(hero.motion.pos.f[2] - hero.ground_z.f) < 0.15f) {
