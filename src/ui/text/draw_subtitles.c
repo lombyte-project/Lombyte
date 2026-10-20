@@ -32,7 +32,7 @@ void draw_subtitles(void) __asm__("FUN_001f4be0");
 
 extern s32 game_language __asm__("D_0015ED88") MACRO_ADDR;
 void draw_subtitles(void) {
-    Subtitle *p;
+    Subtitle *subtitle;
     int lang;
     int idx;
 
@@ -41,11 +41,11 @@ void draw_subtitles(void) {
     }
     lang = game_language;
     idx = (lang >= 2 && lang <= 5) ? lang - 1 : 0;
-    for (p = (Subtitle *)D_0018CB20.subs; p->start >= 0; p++) {
-        if (D_0018CB20.time < p->start) {
+    for (subtitle = (Subtitle *)D_0018CB20.subs; subtitle->start >= 0; subtitle++) {
+        if (D_0018CB20.time < subtitle->start) {
             continue;
         }
-        if (p->end < D_0018CB20.time) {
+        if (subtitle->end < D_0018CB20.time) {
             continue;
         }
         {
@@ -55,7 +55,7 @@ void draw_subtitles(void) {
 
             font_set_window(win, 0xC8, 0x208, 0x28, 0x1D8, 0x100, screen_extent.height - 0x38, 0x12,
                                 7);
-            font_print_window_regular(win, 0x80B0B0B0, D_0018CB20.subs + p->text[idx], -1);
+            font_print_window_regular(win, 0x80B0B0B0, D_0018CB20.subs + subtitle->text[idx], -1);
             win[5] = screen_extent.height - 0x3C;
             w = win[6];
             h = win[7];
@@ -66,7 +66,7 @@ void draw_subtitles(void) {
             }
             draw_ui_frame(win[5] - hh, win[5] + hh, 0x100 - hw, 0x100 + hw, 0x60);
             win[9] &= ~4;
-            font_print_window_regular(win, 0x80B0B0B0, D_0018CB20.subs + p->text[idx], -1);
+            font_print_window_regular(win, 0x80B0B0B0, D_0018CB20.subs + subtitle->text[idx], -1);
             return;
         }
     }
