@@ -555,9 +555,9 @@ void transport_ship_update(void *moby) {
 extern void FUN_L04_00292370(void *, char *);
 extern void FUN_L04_002923b8(void *, char *);
 
-void FUN_L04_002d1418(void *m) {
-    char *d = *(char **)(m + 0x78);
-    char *p = d + 0x160;
+void FUN_L04_002d1418(void *moby) {
+    char *moby_vars = *(char **)(moby + 0x78);
+    char *p = moby_vars + 0x160;
     float speed;
     float angleHalf;
     float angleFull;
@@ -565,20 +565,20 @@ void FUN_L04_002d1418(void *m) {
     float amount;
     float frameScale;
     float otherScale;
-    *(int *)(d + 0x1d0) = *(int *)(*(char **)(*(char **)(m + 0x24) + 0x70) + 0x14);
-    *(int *)(d + 0x1d4) = *(int *)(*(char **)(*(char **)(m + 0x24) + 0x70) + 0x14);
-    *(int *)(d + 0x1d8) = *(int *)(*(char **)(*(char **)(m + 0x24) + 0x70) + 0x14);
-    *(int *)(d + 0x1dc) = *(int *)(*(char **)(*(char **)(m + 0x24) + 0x70) + 0x14);
-    *(int *)(d + 0x1e0) = *(int *)(*(char **)(*(char **)(m + 0x24) + 0x70) + 0x14);
-    *(int *)(d + 0x1e4) = *(int *)(*(char **)(*(char **)(m + 0x24) + 0x70) + 0x14);
-    *(int *)(d + 0x1e8) = *(int *)(*(char **)(*(char **)(m + 0x24) + 0x70) + 0x14);
-    *(int *)(d + 0x1ec) = *(int *)(*(char **)(*(char **)(m + 0x24) + 0x54) + 0x14);
-    *(int *)(d + 0x1f0) = *(int *)(*(char **)(*(char **)(m + 0x24) + 0x70) + 0x14);
-    *(int *)(d + 0x1f4) = *(int *)(*(char **)(*(char **)(m + 0x24) + 0x70) + 0x14);
-    *(int *)(d + 0x1f8) = *(int *)(*(char **)(*(char **)(m + 0x24) + 0x70) + 0x14);
-    *(int *)(d + 0x1fc) = *(int *)(*(char **)(*(char **)(m + 0x24) + 0x70) + 0x14);
-    *(int *)(d + 0x200) = *(int *)(*(char **)(*(char **)(m + 0x24) + 0x70) + 0x14);
-    FUN_L04_00292370(m, p);
+    *(int *)(moby_vars + 0x1d0) = *(int *)(*(char **)(*(char **)(moby + 0x24) + 0x70) + 0x14);
+    *(int *)(moby_vars + 0x1d4) = *(int *)(*(char **)(*(char **)(moby + 0x24) + 0x70) + 0x14);
+    *(int *)(moby_vars + 0x1d8) = *(int *)(*(char **)(*(char **)(moby + 0x24) + 0x70) + 0x14);
+    *(int *)(moby_vars + 0x1dc) = *(int *)(*(char **)(*(char **)(moby + 0x24) + 0x70) + 0x14);
+    *(int *)(moby_vars + 0x1e0) = *(int *)(*(char **)(*(char **)(moby + 0x24) + 0x70) + 0x14);
+    *(int *)(moby_vars + 0x1e4) = *(int *)(*(char **)(*(char **)(moby + 0x24) + 0x70) + 0x14);
+    *(int *)(moby_vars + 0x1e8) = *(int *)(*(char **)(*(char **)(moby + 0x24) + 0x70) + 0x14);
+    *(int *)(moby_vars + 0x1ec) = *(int *)(*(char **)(*(char **)(moby + 0x24) + 0x54) + 0x14);
+    *(int *)(moby_vars + 0x1f0) = *(int *)(*(char **)(*(char **)(moby + 0x24) + 0x70) + 0x14);
+    *(int *)(moby_vars + 0x1f4) = *(int *)(*(char **)(*(char **)(moby + 0x24) + 0x70) + 0x14);
+    *(int *)(moby_vars + 0x1f8) = *(int *)(*(char **)(*(char **)(moby + 0x24) + 0x70) + 0x14);
+    *(int *)(moby_vars + 0x1fc) = *(int *)(*(char **)(*(char **)(moby + 0x24) + 0x70) + 0x14);
+    *(int *)(moby_vars + 0x200) = *(int *)(*(char **)(*(char **)(moby + 0x24) + 0x70) + 0x14);
+    FUN_L04_00292370(moby, p);
     frameScale = frame_time_sq;
     otherScale = frame_time;
     angleFull = frameScale * 6.2831855f;
@@ -586,27 +586,27 @@ void FUN_L04_002d1418(void *m) {
     speed = frameScale * 9.8f;
     angleHalf = frameScale * 3.1415927f;
     amount = frameScale * 10.0f;
-    *(unsigned char *)(d + 0x214) = 7;
-    *(unsigned char *)(d + 0x210) = 0;
-    *(unsigned char *)(d + 0x211) = 0;
-    *(float *)(d + 0x23c) = speed;
-    *(float *)(d + 0x22c) = angleHalf;
-    *(float *)(d + 0x230) = angleFull;
-    *(float *)(d + 0x234) = angleOther;
-    *(float *)(d + 0x224) = amount;
-    *(unsigned char *)(d + 0x212) = 0xff;
-    *(unsigned char *)(d + 0x213) = 0x10;
-    *(unsigned char *)(d + 0x215) = 7;
-    *(unsigned char *)(d + 0x250) = 10;
-    *(unsigned char *)(d + 0x251) = 8;
-    *(unsigned char *)(d + 0x253) = 12;
-    *(unsigned char *)(d + 0x252) = 14;
-    *(unsigned char *)(d + 0x300) = 11;
-    *(unsigned char *)(d + 0x301) = 9;
-    *(unsigned char *)(d + 0x303) = 13;
-    *(unsigned char *)(d + 0x302) = 15;
-    *(float *)(d + 0x240) = 0.5f;
-    FUN_L04_002923b8(m, p);
+    *(unsigned char *)(moby_vars + 0x214) = 7;
+    *(unsigned char *)(moby_vars + 0x210) = 0;
+    *(unsigned char *)(moby_vars + 0x211) = 0;
+    *(float *)(moby_vars + 0x23c) = speed;
+    *(float *)(moby_vars + 0x22c) = angleHalf;
+    *(float *)(moby_vars + 0x230) = angleFull;
+    *(float *)(moby_vars + 0x234) = angleOther;
+    *(float *)(moby_vars + 0x224) = amount;
+    *(unsigned char *)(moby_vars + 0x212) = 0xff;
+    *(unsigned char *)(moby_vars + 0x213) = 0x10;
+    *(unsigned char *)(moby_vars + 0x215) = 7;
+    *(unsigned char *)(moby_vars + 0x250) = 10;
+    *(unsigned char *)(moby_vars + 0x251) = 8;
+    *(unsigned char *)(moby_vars + 0x253) = 12;
+    *(unsigned char *)(moby_vars + 0x252) = 14;
+    *(unsigned char *)(moby_vars + 0x300) = 11;
+    *(unsigned char *)(moby_vars + 0x301) = 9;
+    *(unsigned char *)(moby_vars + 0x303) = 13;
+    *(unsigned char *)(moby_vars + 0x302) = 15;
+    *(float *)(moby_vars + 0x240) = 0.5f;
+    FUN_L04_002923b8(moby, p);
 }
 #include "sda.h"
 
