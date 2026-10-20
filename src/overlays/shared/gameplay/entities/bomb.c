@@ -182,7 +182,8 @@ void FUN_L00_002c89e8(struct Moby *thrown_moby)
         THROWN_MOBY_STATE_INITIALIZE = 0,
         THROWN_MOBY_STATE_MOVE_WITH_COLLISION = 2,
         THROWN_MOBY_STATE_SPAWN_SEQUENCE = 3,
-        THROWN_MOBY_STATE_FADE_OUT = 4
+        THROWN_MOBY_STATE_FADE_OUT = 4,
+        THROWN_MOBY_STATE_RESET_TO_INITIALIZE = 5
     };
     Vec4 next_pos, start, end, probe;
     ThrowVars_2c8440 *vars;
@@ -365,7 +366,7 @@ remove:
         mark_moby_for_removal(thrown_moby);
         break;
     }
-    case 5:
+    case THROWN_MOBY_STATE_RESET_TO_INITIALIZE:
     default:
         thrown_moby->state = 0;
     }
