@@ -58,56 +58,56 @@ extern Part_2FF358 *spawn_puff(void *, float, float, float, int, void *, float, 
 extern int func_002140B0_2FF358(int) __asm__("FUN_00213260");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 
-void FUN_L14_002fded0(Moby_2FF358 *p) {
+void FUN_L14_002fded0(Moby_2FF358 *source_moby) {
     Vec_2FF358 A;
     Vec_2FF358 B;
     Vec_2FF358 C;
-    Part_2FF358 *e;
-    int i, j, n, m, k, col;
+    Part_2FF358 *puff;
+    int i, j, n, puff_lifetime_frames, k, col;
     float s;
 
-    scale_vector_xyz(A, p->right, D_L14_00161F90);
-    add_vector_xyz(B, p->pos, A);
-    scale_vector_xyz(A, p->up, D_L14_00161F98);
+    scale_vector_xyz(A, source_moby->right, D_L14_00161F90);
+    add_vector_xyz(B, source_moby->pos, A);
+    scale_vector_xyz(A, source_moby->up, D_L14_00161F98);
     add_vector_xyz(B, B, A);
     qcopy(C, B);
-    scale_vector_xyz(A, p->fwd, D_L14_00161F94);
+    scale_vector_xyz(A, source_moby->fwd, D_L14_00161F94);
     add_vector_xyz(B, B, A);
     for (i = 1; i >= 0; i--) {
         n = func_002140B0_2FF358(0x10);
         k = func_002140B0_2FF358(2) == 0 ? n : -n;
-        e = spawn_puff(B, 0.2f, 1.0f, 0.9f, k, &D_L14_0015F580, 200000.0f, D_L14_00161FA4);
-        if (e != 0) {
-            struct PartSub_2FF358 *f = &e->sub;
+        puff = spawn_puff(B, 0.2f, 1.0f, 0.9f, k, &D_L14_0015F580, 200000.0f, D_L14_00161FA4);
+        if (puff != 0) {
+            struct PartSub_2FF358 *f = &puff->sub;
 
-            e->life = scale_game_frames(0xC);
+            puff->life = scale_game_frames(0xC);
             f->f4 = 2;
             f->bA = 0x7F;
-            f->bB = e->life;
+            f->bB = puff->life;
         }
     }
-    scale_vector_xyz(A, p->right, D_L14_00161F9C);
+    scale_vector_xyz(A, source_moby->right, D_L14_00161F9C);
     s = 100000.0f;
     add_vector_xyz(B, B, A);
     n = 0x10;
-    m = scale_game_frames(2);
+    puff_lifetime_frames = scale_game_frames(2);
     for (j = 0; j < 3; j++) {
-        e = spawn_puff(B, 0.05f, 1.0f, 1.0f, n, &D_L14_0015F580, s, 0x7FFFFFFF);
-        if (e != 0) {
-            struct PartSub_2FF358 *f = &e->sub;
+        puff = spawn_puff(B, 0.05f, 1.0f, 1.0f, n, &D_L14_0015F580, s, 0x7FFFFFFF);
+        if (puff != 0) {
+            struct PartSub_2FF358 *f = &puff->sub;
 
-            e->life = m;
-            e->b8 = func_002140B0_2FF358(0xFF);
+            puff->life = puff_lifetime_frames;
+            puff->b8 = func_002140B0_2FF358(0xFF);
             f->f4 = 2;
             f->bA = 0x7F;
-            f->bB = e->life;
+            f->bB = puff->life;
         }
         n = -n;
-        m = m << 1;
+        puff_lifetime_frames = puff_lifetime_frames << 1;
         s = s - 20000.0f;
     }
     s = 300000.0f;
-    scale_vector_xyz(A, p->right, D_L14_00161FA0);
+    scale_vector_xyz(A, source_moby->right, D_L14_00161FA0);
     add_vector_xyz(B, C, A);
     col = random_int_between(0x40, 0x80);
     k = (col << 8) | 0x7F000000;
