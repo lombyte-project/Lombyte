@@ -951,72 +951,72 @@ f32 cam_interp_values(void *p, f32 to, f32 stiffness, f32 damping, f32 max,
                       f32 vel) __asm__("FUN_001ebd78");
 
 void FUN_L00_002eae20(void *arg) {
-    char *m = arg;
+    char *camera_object = arg;
     float mtx[16];
-    char *d = *(char **)(m + 0x70);
-    char *a = d + 0x30;
-    char *b = d + 0x80;
-    char *c = d + 0xE0;
-    int t = *(unsigned char *)(m + 0x88);
+    char *camera_state = *(char **)(camera_object + 0x70);
+    char *rotation_spring_state = camera_state + 0x30;
+    char *b = camera_state + 0x80;
+    char *transition_state = camera_state + 0xE0;
+    int t = *(unsigned char *)(camera_object + 0x88);
     if (t == 1) {
-        qcopy(m + 0x30, b);
-        qcopy(m + 0x40, d + 0x90);
+        qcopy(camera_object + 0x30, b);
+        qcopy(camera_object + 0x40, camera_state + 0x90);
     } else if (t == 2) {
         float u;
-        tick_countdown_32((int *)c);
-        u = (float)(*(int *)(c + 4) - *(int *)(d + 0xE0)) / convert_integer_to_float(*(int *)(c + 4));
-        FUN_L00_00257f70(m + 0x30, m + 0x30, b, u);
-        FUN_L00_00258050((float *)(m + 0x40), (float *)(m + 0x40), (float *)(d + 0x90), u);
+        tick_countdown_32((int *)transition_state);
+        u = (float)(*(int *)(transition_state + 4) - *(int *)(camera_state + 0xE0)) / convert_integer_to_float(*(int *)(transition_state + 4));
+        FUN_L00_00257f70(camera_object + 0x30, camera_object + 0x30, b, u);
+        FUN_L00_00258050((float *)(camera_object + 0x40), (float *)(camera_object + 0x40), (float *)(camera_state + 0x90), u);
     } else if (t == 3) {
-        if (tick_countdown_32((int *)c) != 0) {
-            qcopy(m + 0x30, b);
-            qcopy(m + 0x40, d + 0x90);
+        if (tick_countdown_32((int *)transition_state) != 0) {
+            qcopy(camera_object + 0x30, b);
+            qcopy(camera_object + 0x40, camera_state + 0x90);
         } else {
             float t, x, y, diff, z;
-            t = (float)(*(int *)(c + 4) - *(int *)(d + 0xE0)) /
-                convert_integer_to_float(*(int *)(c + 4));
-            FUN_L00_001ed630(d + 0xE8, b, &hero.motion.pos);
-            x = fast_subtract_rotations(F(c, 8), F(c, 0x1C));
+            t = (float)(*(int *)(transition_state + 4) - *(int *)(camera_state + 0xE0)) /
+                convert_integer_to_float(*(int *)(transition_state + 4));
+            FUN_L00_001ed630(camera_state + 0xE8, b, &hero.motion.pos);
+            x = fast_subtract_rotations(F(transition_state, 8), F(transition_state, 0x1C));
             y = fast_subtract_rotations(F(b, 0x18), D_L00_00166DD8);
             if ((x > 0.34906584f && y < -0.34906584f) || (x < -0.34906584f && y > 0.34906584f)) {
-                diff = F(c, 8) - F(c, 0x1C);
+                diff = F(transition_state, 8) - F(transition_state, 0x1C);
                 z = 0;
                 if (diff < z && y > z) {
                     diff = -diff;
                 } else if (diff > z && y < z) {
                     diff = -diff;
                 }
-                F(c, 0x1C) += cosine_interpolate_alt(0, diff, t);
+                F(transition_state, 0x1C) += cosine_interpolate_alt(0, diff, t);
             } else {
-                F(c, 0x1C) = FUN_L00_00257ef0(F(c, 0x1C), F(c, 8), t);
+                F(transition_state, 0x1C) = FUN_L00_00257ef0(F(transition_state, 0x1C), F(transition_state, 8), t);
             }
-            F(c, 0x24) = F(c, 0x24) + (F(c, 0x10) - F(c, 0x24)) *
-                                          cubic_hermite_scalar(F(c, 0x44), 0, 1.0f, F(c, 0x48), t);
-            F(c, 0x20) = FUN_L00_00257ef0(F(c, 0x20), F(c, 0xC), t);
-            FUN_L00_00257f70(c + 0x30, c + 0x30, &hero.motion.pos, t);
-            FUN_L00_001ed580(m + 0x30, c + 0x1C, c + 0x30);
-            FUN_L00_00258050((float *)(m + 0x40), (float *)(m + 0x40), (float *)(b + 0x10), t);
+            F(transition_state, 0x24) = F(transition_state, 0x24) + (F(transition_state, 0x10) - F(transition_state, 0x24)) *
+                                          cubic_hermite_scalar(F(transition_state, 0x44), 0, 1.0f, F(transition_state, 0x48), t);
+            F(transition_state, 0x20) = FUN_L00_00257ef0(F(transition_state, 0x20), F(transition_state, 0xC), t);
+            FUN_L00_00257f70(transition_state + 0x30, transition_state + 0x30, &hero.motion.pos, t);
+            FUN_L00_001ed580(camera_object + 0x30, transition_state + 0x1C, transition_state + 0x30);
+            FUN_L00_00258050((float *)(camera_object + 0x40), (float *)(camera_object + 0x40), (float *)(b + 0x10), t);
         }
     } else {
-        if (*(short *)(d + 0x1C) == 1) {
-            F(m, 0x30) =
-                cam_interp_values(d, F(m, 0x30), F(b, 0), F(d, 0x10), F(d, 0x14), F(d, 0x18));
-            F(m, 0x34) =
-                cam_interp_values(d + 4, F(m, 0x34), F(b, 4), F(d, 0x10), F(d, 0x14), F(d, 0x18));
-            F(m, 0x38) =
-                cam_interp_values(d + 8, F(m, 0x38), F(b, 8), F(d, 0x10), F(d, 0x14), F(d, 0x18));
+        if (*(short *)(camera_state + 0x1C) == 1) {
+            F(camera_object, 0x30) =
+                cam_interp_values(camera_state, F(camera_object, 0x30), F(b, 0), F(camera_state, 0x10), F(camera_state, 0x14), F(camera_state, 0x18));
+            F(camera_object, 0x34) =
+                cam_interp_values(camera_state + 4, F(camera_object, 0x34), F(b, 4), F(camera_state, 0x10), F(camera_state, 0x14), F(camera_state, 0x18));
+            F(camera_object, 0x38) =
+                cam_interp_values(camera_state + 8, F(camera_object, 0x38), F(b, 8), F(camera_state, 0x10), F(camera_state, 0x14), F(camera_state, 0x18));
         }
-        if (*(short *)(a + 0x2C) == 1) {
-            F(m, 0x40) =
-                rope_spring_turn(a, F(m, 0x40), F(b, 0x10), F(a, 0x20), F(a, 0x24), F(a, 0x28));
-            F(m, 0x44) = rope_spring_turn(d + 0x34, F(m, 0x44), F(b, 0x14), F(a, 0x20), F(a, 0x24),
-                                          F(a, 0x28));
-            F(m, 0x48) = rope_spring_turn(d + 0x38, F(m, 0x48), F(b, 0x18), F(a, 0x20), F(a, 0x24),
-                                          F(a, 0x28));
+        if (*(short *)(rotation_spring_state + 0x2C) == 1) {
+            F(camera_object, 0x40) =
+                rope_spring_turn(rotation_spring_state, F(camera_object, 0x40), F(b, 0x10), F(rotation_spring_state, 0x20), F(rotation_spring_state, 0x24), F(rotation_spring_state, 0x28));
+            F(camera_object, 0x44) = rope_spring_turn(camera_state + 0x34, F(camera_object, 0x44), F(b, 0x14), F(rotation_spring_state, 0x20), F(rotation_spring_state, 0x24),
+                                          F(rotation_spring_state, 0x28));
+            F(camera_object, 0x48) = rope_spring_turn(camera_state + 0x38, F(camera_object, 0x48), F(b, 0x18), F(rotation_spring_state, 0x20), F(rotation_spring_state, 0x24),
+                                          F(rotation_spring_state, 0x28));
         }
     }
-    euler_rotation_matrix(mtx, m + 0x40);
-    copy_matrix3x4(m, mtx);
+    euler_rotation_matrix(mtx, camera_object + 0x40);
+    copy_matrix3x4(camera_object, mtx);
 }
 #define NOT_SDA
 
