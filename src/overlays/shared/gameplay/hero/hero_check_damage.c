@@ -2253,7 +2253,7 @@ extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 
 void FUN_L00_00210b30(void) {
     struct Hero *g = &hero;
-    unsigned char *m;
+    unsigned char *vehicle_moby;
     if (g->vehicle_mode == 1) {
         g->health.unk22AC = g->health.hp;
         g->health.hp = g->health.unk22B0;
@@ -2277,9 +2277,9 @@ void FUN_L00_00210b30(void) {
     {
         struct Hero *g3 = &hero;
         g3->vehicle_mode = 0;
-        m = g3->unkA84;
-        if (m) {
-            *(u16 *)(m + 0x34) &= ~6;
+        vehicle_moby = g3->unkA84;
+        if (vehicle_moby) {
+            *(u16 *)(vehicle_moby + 0x34) &= ~6;
         }
         g3->unkA84 = 0;
         if (g3->unkA8C) {
@@ -2288,10 +2288,10 @@ void FUN_L00_00210b30(void) {
         }
         FUN_L00_00206c08_210b30();
         {
-            unsigned char *o = g3->unkA88;
-            g3->moby = (struct Moby *)o;
-            qcopy(o + 0x10, &g3->motion.pos);
-            *(int *)(o + 0x98) = 0;
+            unsigned char *restored_hero_moby = g3->unkA88;
+            g3->moby = (struct Moby *)restored_hero_moby;
+            qcopy(restored_hero_moby + 0x10, &g3->motion.pos);
+            *(int *)(restored_hero_moby + 0x98) = 0;
         }
         g3->unkA94 = 1.0f;
         FUN_L00_00232628_210b30();
