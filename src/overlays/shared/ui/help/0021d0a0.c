@@ -547,7 +547,7 @@ s32 FUN_L06_0022a1d0(s32 mode) {
     V_22a1d0 w;
     s32 mask;
     s32 i;
-    u128_22a1d0 *c;
+    u128_22a1d0 *collision_result_position;
     f32 h;
     if (hero.unk1CC != 0) {
         return 1;
@@ -581,21 +581,21 @@ s32 FUN_L06_0022a1d0(s32 mode) {
             if (!coll1_22a1d0(&hero.motion.pos.q, mask, hero.moby, frame_scale * 0.45f))
                 break;
         } else {
-            s32 a;
+            s32 collision_query_result;
             h = hero.capsule_top - hero.unk224;
             if (h < 0.05f) {
                 h = 0.05f;
             }
-            a = coll2_22a1d0(&hero.motion.pos.q, mask, hero.unk234, hero.moby, h);
-            if (!(a | coll3_22a1d0(&hero.motion.pos.q, hero.unk234)))
+            collision_query_result = coll2_22a1d0(&hero.motion.pos.q, mask, hero.unk234, hero.moby, h);
+            if (!(collision_query_result | coll3_22a1d0(&hero.motion.pos.q, hero.unk234)))
                 break;
         }
-        c = coll_22a1d0;
-        qcopy(&hero.motion.pos.q, c);
-        qcopy(&hero.unk200.q, c + 1);
-        qcopy(&hero.unk210.q, c - 1);
+        collision_result_position = coll_22a1d0;
+        qcopy(&hero.motion.pos.q, collision_result_position);
+        qcopy(&hero.unk200.q, collision_result_position + 1);
+        qcopy(&hero.unk210.q, collision_result_position - 1);
         hero.wall_hit = 1;
-        hero.coll_hit_moby = ((s32 *)c)[-6];
+        hero.coll_hit_moby = ((s32 *)collision_result_position)[-6];
     }
     vsub_22a1d0(&hero.motion.pos.q, &hero.motion.pos.q, &v);
     vsub_22a1d0(&w, &hero.motion.pos.q, &old);
