@@ -2570,9 +2570,9 @@ extern char *D_L00_00166E00_002e8620 __asm__("D_L00_00166E00") __attribute__((se
 /* Sets the short at +0x226 of D_L00_00166E00+0x70 while the short at 0x86 is 0. */
 void FUN_L00_002e8620(void);
 void FUN_L00_002e8620(void) {
-    char *p = D_L00_00166E00_002e8620;
-    if (*(short *)(p + 0x86) == 0) {
-        *(short *)(*(char **)(p + 0x70) + 0x226) = 1;
+    char *current_camera = D_L00_00166E00_002e8620;
+    if (*(short *)(current_camera + 0x86) == 0) {
+        *(short *)(*(char **)(current_camera + 0x70) + 0x226) = 1;
     }
 }
 extern u8 *vd_2e8648 __asm__("D_L00_00166E00") __attribute__((section(".data")));
