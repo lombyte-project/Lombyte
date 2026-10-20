@@ -589,15 +589,15 @@ void FUN_L18_002d5488(void *mobyp, void *vec) {
     float effect_vector[4];
     float effect_spawn_position[4];
     QU world_effect_direction;
-    unsigned char *p;
+    unsigned char *particle;
     FUN_L00_00257d78(effect_vector, frame_time * 0.1f, frame_time * 0.2f);
     scale_vector_xyz(effect_spawn_position, vec, random_float_between(0.0f, 1.0f));
     add_vector_xyz(effect_spawn_position, effect_spawn_position, moby + 0x10);
-    p = FUN_L00_002712b8(effect_spawn_position, effect_vector, scale_game_frames(0x14), 0x7F, 0x606060, 3, 40000.0f, 1000.0f,
+    particle = FUN_L00_002712b8(effect_spawn_position, effect_vector, scale_game_frames(0x14), 0x7F, 0x606060, 3, 40000.0f, 1000.0f,
                          1.0f, -0.0002f, 0.0f);
-    if (p != 0) {
-        p[2] = *(unsigned char *)D_L18_001B2DDC_c;
-        p[3] = 0x44;
+    if (particle != 0) {
+        particle[2] = *(unsigned char *)D_L18_001B2DDC_c;
+        particle[3] = 0x44;
     }
     world_effect_direction.q = 0;
     world_effect_direction.v[2] = 0.02f;
