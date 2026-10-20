@@ -2369,7 +2369,7 @@ void FUN_L00_002be890(void *mv) {
     Q_2be890 quad;
     V_2be890 mat[4];
     V_2be890 scaled_corner;
-    V_2be890 e;
+    V_2be890 offset_vector;
     int c;
     int i, j;
     quad.tex = FUN_001f44b8_2be890(11);
@@ -2389,10 +2389,10 @@ void FUN_L00_002be890(void *mv) {
     quad.unk64 = 0;
     quad.unk68 = 1.0f;
     quad.unk6C = 1.0f;
-    FUN_001f9bf8_2be890(&e, moby_bytes + 0xD0, D_L00_001617B4);
-    FUN_001f9a10_2be890(&mat[3], &D_L00_001DBF60_2be890, &e);
-    FUN_001f9a28_2be890(&e, &(*(V_2be890 *)g_debug_camera), &mat[3]);
-    FUN_001f9bf8_2be890(&mat[0], &e, 1.0f);
+    FUN_001f9bf8_2be890(&offset_vector, moby_bytes + 0xD0, D_L00_001617B4);
+    FUN_001f9a10_2be890(&mat[3], &D_L00_001DBF60_2be890, &offset_vector);
+    FUN_001f9a28_2be890(&offset_vector, &(*(V_2be890 *)g_debug_camera), &mat[3]);
+    FUN_001f9bf8_2be890(&mat[0], &offset_vector, 1.0f);
     FUN_001f9ad8_2be890(&mat[1], &mat[0], &(*(V_2be890 *)D_0013F5E0));
     FUN_001f9bf8_2be890(&mat[1], &mat[1], -1.0f);
     FUN_001f9ad8_2be890(&mat[2], &mat[1], &mat[0]);
