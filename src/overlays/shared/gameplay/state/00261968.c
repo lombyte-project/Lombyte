@@ -420,28 +420,28 @@ typedef struct {
     s32 x138;
 } O00262528;
 E00262528 *create_moby(s32) __asm__("FUN_0020c4f8");
-void FUN_L00_00262528(O00262528 *o, s32 a, s32 b) {
-    E00262528 *e;
-    if (o->x138 == 4)
+void FUN_L00_00262528(O00262528 *history_state, s32 a, s32 b) {
+    E00262528 *spawned_moby;
+    if (history_state->x138 == 4)
         return;
     if (b >= 9)
         return;
-    e = create_moby(o->x134->xa6);
-    if (e == 0)
+    spawned_moby = create_moby(history_state->x134->xa6);
+    if (spawned_moby == 0)
         return;
-    e->x32 = o->x134->x32;
-    e->x38 = o->x134->x38;
-    e->x31 = 1;
-    e->x34 = 0x80A;
-    e->x30 = 0;
-    e->x94 = 0;
-    if (e->xa6 == 0)
-        e->x72 = 0;
-    e->x23 = a;
-    o->x110[o->x138] = b;
-    o->x100[o->x138] = a;
-    o->x120[o->x138] = e;
-    o->x138++;
+    spawned_moby->x32 = history_state->x134->x32;
+    spawned_moby->x38 = history_state->x134->x38;
+    spawned_moby->x31 = 1;
+    spawned_moby->x34 = 0x80A;
+    spawned_moby->x30 = 0;
+    spawned_moby->x94 = 0;
+    if (spawned_moby->xa6 == 0)
+        spawned_moby->x72 = 0;
+    spawned_moby->x23 = a;
+    history_state->x110[history_state->x138] = b;
+    history_state->x100[history_state->x138] = a;
+    history_state->x120[history_state->x138] = spawned_moby;
+    history_state->x138++;
 }
 #include "qcopy.h"
 #include "rnc/overlay/quad.h"
