@@ -1145,37 +1145,37 @@ float FUN_L00_001eb328_2eb480(void *, float, float, float, float,
                               float) __asm__("FUN_L00_001eb328");
 float FUN_001ebd78_2eb480(void *, float, float, float, float, float) __asm__("FUN_001ebd78");
 #define F(p, o) (*(float *)((char *)(p) + (o)))
-void FUN_L00_002eb480(char *a) {
-    float m[16];
-    char *p = *(char **)(a + 0x70);
-    char *d = p + 0xB0;
-    F(a, 0x50) = FUN_L00_001eb328_2eb480(p, F(a, 0x50), FUN_001fa580_2eb480(F(d, 0x18), F(p, 0x14)),
-                                         F(p, 0x28), F(p, 0x3C), F(p, 0x50));
-    F(a, 0x54) =
-        FUN_L00_001eb328_2eb480(p + 4, F(a, 0x54), F(p, 0x18), F(p, 0x2C), F(p, 0x40), F(p, 0x54));
-    F(a, 0x58) =
-        FUN_001ebd78_2eb480(p + 8, F(a, 0x58), F(p, 0x1C), F(p, 0x30), F(p, 0x44), F(p, 0x58));
-    F(a, 0x5C) = FUN_L00_001eb328_2eb480(p + 0xC, F(a, 0x5C), F(p, 0x20), F(p, 0x34), F(p, 0x48),
-                                         F(p, 0x5C));
-    F(a, 0x60) = FUN_L00_001eb328_2eb480(p + 0x10, F(a, 0x60), F(p, 0x24), F(p, 0x38), F(p, 0x4C),
-                                         F(p, 0x60));
-    if (*(int *)(p + 0x9C) == 0) {
+void FUN_L00_002eb480(char *camera_object) {
+    float rotation_matrix[16];
+    char *camera_state = *(char **)(camera_object + 0x70);
+    char *d = camera_state + 0xB0;
+    F(camera_object, 0x50) = FUN_L00_001eb328_2eb480(camera_state, F(camera_object, 0x50), FUN_001fa580_2eb480(F(d, 0x18), F(camera_state, 0x14)),
+                                         F(camera_state, 0x28), F(camera_state, 0x3C), F(camera_state, 0x50));
+    F(camera_object, 0x54) =
+        FUN_L00_001eb328_2eb480(camera_state + 4, F(camera_object, 0x54), F(camera_state, 0x18), F(camera_state, 0x2C), F(camera_state, 0x40), F(camera_state, 0x54));
+    F(camera_object, 0x58) =
+        FUN_001ebd78_2eb480(camera_state + 8, F(camera_object, 0x58), F(camera_state, 0x1C), F(camera_state, 0x30), F(camera_state, 0x44), F(camera_state, 0x58));
+    F(camera_object, 0x5C) = FUN_L00_001eb328_2eb480(camera_state + 0xC, F(camera_object, 0x5C), F(camera_state, 0x20), F(camera_state, 0x34), F(camera_state, 0x48),
+                                         F(camera_state, 0x5C));
+    F(camera_object, 0x60) = FUN_L00_001eb328_2eb480(camera_state + 0x10, F(camera_object, 0x60), F(camera_state, 0x24), F(camera_state, 0x38), F(camera_state, 0x4C),
+                                         F(camera_state, 0x60));
+    if (*(int *)(camera_state + 0x9C) == 0) {
         F(d, 0) =
-            FUN_001ebd78_2eb480(p + 0x90, F(d, 0), F(p, 0x80), F(p, 0xA0), F(p, 0xA4), F(p, 0xA8));
+            FUN_001ebd78_2eb480(camera_state + 0x90, F(d, 0), F(camera_state, 0x80), F(camera_state, 0xA0), F(camera_state, 0xA4), F(camera_state, 0xA8));
         F(d, 4) =
-            FUN_001ebd78_2eb480(p + 0x94, F(d, 4), F(p, 0x84), F(p, 0xA0), F(p, 0xA4), F(p, 0xA8));
+            FUN_001ebd78_2eb480(camera_state + 0x94, F(d, 4), F(camera_state, 0x84), F(camera_state, 0xA0), F(camera_state, 0xA4), F(camera_state, 0xA8));
         F(d, 8) =
-            FUN_001ebd78_2eb480(p + 0x98, F(d, 8), F(p, 0x88), F(p, 0xA0), F(p, 0xA4), F(p, 0xA8));
+            FUN_001ebd78_2eb480(camera_state + 0x98, F(d, 8), F(camera_state, 0x88), F(camera_state, 0xA0), F(camera_state, 0xA4), F(camera_state, 0xA8));
     } else {
-        qcopy(d, p + 0x80);
+        qcopy(d, camera_state + 0x80);
     }
-    FUN_L00_001ed580_2eb480(a + 0x30, a + 0x50, d);
-    F(a, 0x40) = F(p, 0xAC);
-    F(a, 0x44) = FUN_001fa580_2eb480(F(a, 0x54), F(a, 0x5C));
-    F(a, 0x48) = FUN_001fa580_2eb480(3.14159274101257324f, F(a, 0x50));
-    F(a, 0x48) = FUN_001fa580_2eb480(F(a, 0x48), F(a, 0x60));
-    FUN_001fa050_2eb480(m, a + 0x40);
-    FUN_001fa2b8_2eb480(a, m);
+    FUN_L00_001ed580_2eb480(camera_object + 0x30, camera_object + 0x50, d);
+    F(camera_object, 0x40) = F(camera_state, 0xAC);
+    F(camera_object, 0x44) = FUN_001fa580_2eb480(F(camera_object, 0x54), F(camera_object, 0x5C));
+    F(camera_object, 0x48) = FUN_001fa580_2eb480(3.14159274101257324f, F(camera_object, 0x50));
+    F(camera_object, 0x48) = FUN_001fa580_2eb480(F(camera_object, 0x48), F(camera_object, 0x60));
+    FUN_001fa050_2eb480(rotation_matrix, camera_object + 0x40);
+    FUN_001fa2b8_2eb480(camera_object, rotation_matrix);
 }
 #undef F
 extern struct Hero hero_data __asm__("D_0013F350") __attribute__((section(".data")));
