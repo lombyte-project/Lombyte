@@ -27,7 +27,7 @@ extern f32 FUN_L00_00233a78_32b90(void *) __asm__("FUN_L00_00233a78");
 extern s32 FUN_L00_002595a0_32b90(f32 *, f32 *, f32, f32, f32) __asm__("FUN_L00_002595a0");
 
 extern u8 D_L02_00174480[] __attribute__((section(".data")));
-f32 FUN_L02_002360c8(f32 a, f32 b, f32 c) {
+f32 FUN_L02_002360c8(f32 a, f32 b, f32 target_z) {
     enum {
         HERO_TRAJECTORY_Z_AXIS_ACCELERATION = 0,
         HERO_TRAJECTORY_STORED_VECTOR_ACCELERATION = 1,
@@ -37,12 +37,12 @@ f32 FUN_L02_002360c8(f32 a, f32 b, f32 c) {
     V4_32b90 v;
     V4_32b90 vector_scratch;
     V4_32b90 hero_position_copy;
-    f32 o[6];
+    f32 quadratic_roots[6];
     f32 x, y, z;
 
     switch (hero.unk20B3) {
     case HERO_TRAJECTORY_Z_AXIS_ACCELERATION:
-        if (c < 0.0f) {
+        if (target_z < 0.0f) {
             FUN_001f9a68_32b90(t, &hero.motion.velocity, a);
             t[2] -= ((a * a + a) * 0.5f) * b;
             FUN_001f9a10_32b90(t, t, &hero.motion.pos);
@@ -51,15 +51,15 @@ f32 FUN_L02_002360c8(f32 a, f32 b, f32 c) {
             qcopy(&v, &hero.motion.pos);
             if (FUN_001efa68_32b90(&v, t, 0x324, 0, 0) != 0) {
                 if (FUN_L00_00233d30_32b90((f32 *)D_L02_00174480) <= 0.87266463f) {
-                    c = *(f32 *)(D_L02_00174480 - 0x18);
+                    target_z = *(f32 *)(D_L02_00174480 - 0x18);
                 }
             }
         }
-        if (c > 0.0f) {
-            if (FUN_L00_002595a0_32b90(&o[0], &o[1], b * -0.5f, hero.motion.velocity.f[2] - b * -0.5f,
-                                       hero.motion.pos.f[2] - c) > 0 &&
-                o[0] > 0.0f) {
-                return o[0];
+        if (target_z > 0.0f) {
+            if (FUN_L00_002595a0_32b90(&quadratic_roots[0], &quadratic_roots[1], b * -0.5f, hero.motion.velocity.f[2] - b * -0.5f,
+                                       hero.motion.pos.f[2] - target_z) > 0 &&
+                quadratic_roots[0] > 0.0f) {
+                return quadratic_roots[0];
             }
         }
         break;
@@ -79,8 +79,8 @@ f32 FUN_L02_002360c8(f32 a, f32 b, f32 c) {
             z = FUN_L00_00233a78_32b90(&hero.motion.velocity) - nb;
             x = FUN_L00_00233a78_32b90(&hero.motion.pos);
             y = FUN_L00_00233a78_32b90(&D_L02_00174460);
-            if (FUN_L00_002595a0_32b90(&o[2], &o[3], nb, z, x - y) > 0 && o[2] > 0.0f) {
-                return o[2];
+            if (FUN_L00_002595a0_32b90(&quadratic_roots[2], &quadratic_roots[3], nb, z, x - y) > 0 && quadratic_roots[2] > 0.0f) {
+                return quadratic_roots[2];
             }
         }
         break;
@@ -103,8 +103,8 @@ f32 FUN_L02_002360c8(f32 a, f32 b, f32 c) {
             z = FUN_L00_00233a78_32b90(&hero.motion.velocity) - nb;
             x = FUN_L00_00233a78_32b90(&hero.motion.pos);
             y = FUN_L00_00233a78_32b90(&D_L02_00174460);
-            if (FUN_L00_002595a0_32b90(&o[4], &o[5], nb, z, x - y) > 0 && o[4] > 0.0f) {
-                return o[4];
+            if (FUN_L00_002595a0_32b90(&quadratic_roots[4], &quadratic_roots[5], nb, z, x - y) > 0 && quadratic_roots[4] > 0.0f) {
+                return quadratic_roots[4];
             }
         }
         break;
