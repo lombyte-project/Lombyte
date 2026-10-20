@@ -3641,7 +3641,7 @@ extern V2b9310 D_L00_001DB5B0[];
 extern V2b9310 D_L00_001DB5C0[];
 /* Starts the beam when one is pending: lays 19 points from the moby toward its target and resets the segment state. */
 void FUN_L00_002b9310(char *moby) {
-    V2b9310 d;
+    V2b9310 beam_endpoint_delta;
     V2b9310 step;
     char *data;
     int i;
@@ -3655,8 +3655,8 @@ void FUN_L00_002b9310(char *moby) {
     D_L00_0016167C = 0;
     D_L00_00161678 = frames_2b9310(D_L00_00161624);
     D_L00_001615F8 = 0x7F2020;
-    vsub_2b9310(&d, data + 0x10, data);
-    vscale_2b9310(&step, &d, D_L00_00161594 / 20.0f);
+    vsub_2b9310(&beam_endpoint_delta, data + 0x10, data);
+    vscale_2b9310(&step, &beam_endpoint_delta, D_L00_00161594 / 20.0f);
     qcopy(D_L00_001DB5C0, data);
     for (i = 1; i < 20; i++) {
         vadd_2b9310(&D_L00_001DB5C0[i], &D_L00_001DB5B0[i], &step);
