@@ -3451,7 +3451,7 @@ void FUN_L07_00311bc8(char *moby) {
     char *moby_data;
     float prev[4];
     float v[4];
-    float t;
+    float tilt_descent_work_value;
     float g;
     if (moby == 0)
         return;
@@ -3498,11 +3498,11 @@ void FUN_L07_00311bc8(char *moby) {
         }
         break;
     case LEAF_ACCELERATED_FALL:
-        t = (1.3962634f - *(float *)(moby + 0x40)) * 0.05f;
-        *(float *)(moby + 0x40) += t;
-        t = fast_sin(t);
+        tilt_descent_work_value = (1.3962634f - *(float *)(moby + 0x40)) * 0.05f;
+        *(float *)(moby + 0x40) += tilt_descent_work_value;
+        tilt_descent_work_value = fast_sin(tilt_descent_work_value);
         g = frame_time_sq * 9.8f;
-        *(float *)(moby + 0x18) -= t + t;
+        *(float *)(moby + 0x18) -= tilt_descent_work_value + tilt_descent_work_value;
         *(float *)(moby_data + 0xA4) += g;
         *(float *)(moby + 0x18) -= *(float *)(moby_data + 0xA4);
         if (*(float *)(moby + 0x18) < 2.0f) {
