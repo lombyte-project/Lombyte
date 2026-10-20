@@ -3304,17 +3304,17 @@ extern int D_L06_00161EA4 __attribute__((sda));
 extern float D_L06_00161EA8 __attribute__((sda));
 extern float D_L06_00161EAC __attribute__((sda));
 extern unsigned char D_L06_00161E94 __attribute__((sda));
-void FUN_L06_002f7c68(char *m) {
+void FUN_L06_002f7c68(char *moby) {
     float buf[4];
     int i;
     for (i = 0x27; i >= 0; i--) {
-        float f;
+        float particle_scale;
         int r;
-        int c;
+        int particle_lifetime;
         int v;
         random_vector(buf, D_L06_00161E84 * frame_time,
                          D_L06_00161E88 * frame_time);
-        f = random_float_between_alt(D_L06_00161EA8, D_L06_00161EAC);
+        particle_scale = random_float_between_alt(D_L06_00161EA8, D_L06_00161EAC);
         if (random_integer_below(2) != 0) {
             r = fast_tween_color(D_L06_00161E98, D_L06_00161E9C,
                              random_float_between_alt(0.0f, 1.0f));
@@ -3322,9 +3322,9 @@ void FUN_L06_002f7c68(char *m) {
             r = fast_tween_color(D_L06_00161EA0, D_L06_00161EA4,
                              random_float_between_alt(0.0f, 1.0f));
         }
-        c = D_L06_00161E94;
+        particle_lifetime = D_L06_00161E94;
         v = random_integer_below(0xFF);
-        FUN_L00_002730e0(m + 0x10, f, buf, r, c, (unsigned char)v, 0);
+        FUN_L00_002730e0(moby + 0x10, particle_scale, buf, r, particle_lifetime, (unsigned char)v, 0);
     }
 }
 
