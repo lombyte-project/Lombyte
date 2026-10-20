@@ -23,9 +23,9 @@ extern s32 snd_reset_state_and_flush_commands() __asm__("func_0012EB00");
 void sound_stop_all_sounds(void) __asm__("FUN_0022dcd0");
 void sound_stop_all_sounds(void) {
     s32 i;
-    SndState *s;
+    SndState *sound_state;
     u128 *q;
-    s32 p;
+    s32 voice_clear_cursor;
     s32 end;
 
     snd_reset_state_and_flush_commands();
@@ -36,15 +36,15 @@ void sound_stop_all_sounds(void) {
     for (i = 0; i < 4; i++) {
         qzero(&D_0013E550.q[i]);
     }
-    s = &D_0013E550;
-    s->x40 = 0;
-    p = (s32)s;
-    end = p + 0xD20;
+    sound_state = &D_0013E550;
+    sound_state->x40 = 0;
+    voice_clear_cursor = (s32)sound_state;
+    end = voice_clear_cursor + 0xD20;
     do {
-        ((SndVoice *)p)[1].x0 = 0;
-        ((SndVoice *)p)[1].x4 = 0;
-        p += 0x70;
-    } while (p < end);
+        ((SndVoice *)voice_clear_cursor)[1].x0 = 0;
+        ((SndVoice *)voice_clear_cursor)[1].x4 = 0;
+        voice_clear_cursor += 0x70;
+    } while (voice_clear_cursor < end);
 }
 
 extern __typeof__(sound_stop_all_sounds) func_0022DCD0 __attribute__((alias("FUN_0022dcd0")));
