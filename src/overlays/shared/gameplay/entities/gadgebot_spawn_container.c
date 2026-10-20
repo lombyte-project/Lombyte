@@ -2661,16 +2661,16 @@ extern char *D_L06_001DAE60[];
 void FUN_L06_002f34d8(char *moby, char **current, f32 range);
 void FUN_L06_002f34d8(char *moby, char **current, f32 range) {
     Best_2f34d8 best;
-    char *m;
+    char *candidate_moby;
     s32 i;
     if (D_L06_00161CE8 != level_frame_count) {
         D_L06_00161CE8 = level_frame_count;
         D_L06_00161CE4 = 0;
-        for (i = 0; (m = D_L06_001AC180_2f34d8[i]) != 0; i++) {
-            if (*(s16 *)(m + 0xA6) == 0x359 && (u8)m[0x20] >= 2 && (u8)m[0x20] != 9) {
-                s32 n = D_L06_00161CE4;
-                D_L06_00161CE4 = n + 1;
-                D_L06_001DAE60[n] = m;
+        for (i = 0; (candidate_moby = D_L06_001AC180_2f34d8[i]) != 0; i++) {
+            if (*(s16 *)(candidate_moby + 0xA6) == 0x359 && (u8)candidate_moby[0x20] >= 2 && (u8)candidate_moby[0x20] != 9) {
+                s32 candidate_slot_index = D_L06_00161CE4;
+                D_L06_00161CE4 = candidate_slot_index + 1;
+                D_L06_001DAE60[candidate_slot_index] = candidate_moby;
             }
         }
     }
