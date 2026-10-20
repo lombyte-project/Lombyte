@@ -1778,7 +1778,7 @@ void volume_camera_swing(struct UpdateCam *cam) {
     s32 at_end;
     f32 total;
     f32 swing;
-    f32 t;
+    f32 lateral_spring_blend_fraction;
 
     params = camera_descriptors[cam->descriptor_index].params;
     if (params->type == 8 && FOLLOW_CAM_STATE(current_follow_cam)->tail.mode == 0) {
@@ -1944,10 +1944,10 @@ stop:
         if (params->timer >= scale_game_frames(120)) {
             follow_camera_set_lateral_spring(params->lateral_stiffness, params->lateral_damping);
         } else {
-            t = params->timer / convert_integer_to_float(scale_game_frames(120));
+            lateral_spring_blend_fraction = params->timer / convert_integer_to_float(scale_game_frames(120));
             follow_camera_set_lateral_spring(
-                params->start_lateral_stiffness + (params->lateral_stiffness - params->start_lateral_stiffness) * t,
-                params->start_lateral_damping + (params->lateral_damping - params->start_lateral_damping) * t);
+                params->start_lateral_stiffness + (params->lateral_stiffness - params->start_lateral_stiffness) * lateral_spring_blend_fraction,
+                params->start_lateral_damping + (params->lateral_damping - params->start_lateral_damping) * lateral_spring_blend_fraction);
         }
     }
     if (params->type == 1 || params->type == 7 || params->type == 10) {
