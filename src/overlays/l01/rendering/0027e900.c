@@ -109,22 +109,22 @@ extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern u8 *D_L01_001B25E0[];
 
 Particle *pool_bubble(u128 *pos, u128 *vel, f32 f) __asm__("FUN_L01_00287b00");
-Particle *pool_bubble(u128 *pos, u128 *vel, f32 f) {
+Particle *pool_bubble(u128 *pos, u128 *vel, f32 scale) {
     Particle *p;
-    s32 c;
+    s32 gray_channel;
     u32 col;
 
     p = create_part(0x38);
     if (p != 0) {
         qcopy(&p->pos, pos);
-        c = random_integer_below(0x10) * 2 + 0x60;
-        col = (c << 8) | 0x40000000;
-        p->color = (c << 16) | col | c;
+        gray_channel = random_integer_below(0x10) * 2 + 0x60;
+        col = (gray_channel << 8) | 0x40000000;
+        p->color = (gray_channel << 16) | col | gray_channel;
         p->alpha = truncate_float_to_s32(4.0f) + 0x20;
         p->kind = 0x48;
         p->active = 0;
         p->tex = *D_L01_001B25E0[0];
-        p->scale = f;
+        p->scale = scale;
         qcopy(&p->m.pos, vel);
         p->spin = random_integer_below(0x100);
     }
