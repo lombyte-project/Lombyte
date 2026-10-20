@@ -303,7 +303,7 @@ void crate_drop_bolts(u8 *crate_moby) {
     };
     T_2d0538 tmp;
     V_2d0538 trajectory_vector, adjusted_position, scratch_vector;
-    s32 n;
+    s32 drop_type_or_skip_spawn;
     f32 f54, f58;
     s32 cnt, i;
     u8 *b, *spawned_moby, *spawned_vars;
@@ -313,10 +313,10 @@ void crate_drop_bolts(u8 *crate_moby) {
     b = *(u8 **)(crate_moby + 0x78);
     crate_class = *(s16 *)(crate_moby + 0xA6);
     tmp = D_L00_001E9E30;
-    n = *(s16 *)(b + 0xC6) == 0;
+    drop_type_or_skip_spawn = *(s16 *)(b + 0xC6) == 0;
     if (crate_class == 0x1F5)
-        n = 0;
-    if (n) {
+        drop_type_or_skip_spawn = 0;
+    if (drop_type_or_skip_spawn) {
         clear_u64_value(&trajectory_vector);
         if (*(s32 *)(b + 0xF0)) {
             if (crate_moby)
@@ -338,46 +338,46 @@ void crate_drop_bolts(u8 *crate_moby) {
     if (crate_class != 0x1F5) {
         switch (*(u8 *)(b + 0xCB)) {
         case CRATE_DROP_FALLBACK_ITEM:
-            n = 10;
+            drop_type_or_skip_spawn = 10;
             break;
         case 6:
-            n = 11;
+            drop_type_or_skip_spawn = 11;
             break;
         case 8:
-            n = 13;
+            drop_type_or_skip_spawn = 13;
             break;
         case 3:
-            n = 15;
+            drop_type_or_skip_spawn = 15;
             break;
         case 2:
-            n = 16;
+            drop_type_or_skip_spawn = 16;
             break;
         case 5:
-            n = 17;
+            drop_type_or_skip_spawn = 17;
             break;
         case 10:
-            n = 19;
+            drop_type_or_skip_spawn = 19;
             break;
         case 4:
-            n = 20;
+            drop_type_or_skip_spawn = 20;
             break;
         case 11:
-            n = 23;
+            drop_type_or_skip_spawn = 23;
             break;
         case 7:
-            n = 24;
+            drop_type_or_skip_spawn = 24;
             break;
         case 9:
-            n = 25;
+            drop_type_or_skip_spawn = 25;
             break;
         case CRATE_DROP_AUTO_SELECT:
         default:
-            n = -1;
+            drop_type_or_skip_spawn = -1;
             break;
         }
-        cnt = FUN_L00_00257218_2d0538(crate_moby, &n);
+        cnt = FUN_L00_00257218_2d0538(crate_moby, &drop_type_or_skip_spawn);
         for (i = 0; i < cnt; i++) {
-            spawned_moby = FUN_L00_002c52a8_2d0538(crate_moby + 0x10, n, -1, 0);
+            spawned_moby = FUN_L00_002c52a8_2d0538(crate_moby + 0x10, drop_type_or_skip_spawn, -1, 0);
             if (!spawned_moby)
                 break;
             spawned_vars = *(u8 **)(spawned_moby + 0x78);
