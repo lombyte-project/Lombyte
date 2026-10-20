@@ -2122,13 +2122,13 @@ extern char *D_L15_0015EF50;
 extern float D_L15_0015F3FC;
 
 int FUN_L15_002f78e0(int slot) {
-    char *o;
+    char *slot_state_data;
     if (*(short *)(D_L15_00167400_lui + 0x86) != 0x13)
         return 1;
-    o = *(char **)(*(char **)(*(char **)(D_L15_0015EF50 + slot * 32 + 0x1C) + 4) + 0x70) + 0x40;
-    if (*(short *)(o + 0x14) == 1 && D_L15_0015F3FC != 0.0f)
+    slot_state_data = *(char **)(*(char **)(*(char **)(D_L15_0015EF50 + slot * 32 + 0x1C) + 4) + 0x70) + 0x40;
+    if (*(short *)(slot_state_data + 0x14) == 1 && D_L15_0015F3FC != 0.0f)
         return 1;
-    return *(short *)(o + 0x14) == 3;
+    return *(short *)(slot_state_data + 0x14) == 3;
 }
 /* tests several indexed conditions of a moby's entry in the table */
 /* Ported from rac1-decomp (src/overlays/l15_quartu/vendor_002EDB50.c: func_L15_002F99F8), where it is exact; names translated to the US level program. */
