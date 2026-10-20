@@ -2518,7 +2518,7 @@ extern int FUN_L00_0025a478_c(void *, void *, void *, int, int *, float *, int,
 extern void FUN_00212f90(void *, int, int, int);
 extern void FUN_L00_0025d458_c(void *, void *) __asm__("FUN_L00_0025d458");
 
-void FUN_L14_002b5290(struct Moby *m) {
+void FUN_L14_002b5290(struct Moby *hit_owner_moby) {
     enum {
         HIT_REACTION_NO_ACTION = 0,
         HIT_REACTION_LETHAL = 1,
@@ -2530,26 +2530,26 @@ void FUN_L14_002b5290(struct Moby *m) {
         HIT_REACTION_FLASH_RED = 10,
         HIT_REACTION_NONE = 11
     };
-    unsigned char *moby_vars = m->pvars;
+    unsigned char *moby_vars = hit_owner_moby->pvars;
     int loc0;
     float f4;
     char *hit_record;
     int k;
     float remaining_health;
-    if (m->state == 0 || m->state == 9)
+    if (hit_owner_moby->state == 0 || hit_owner_moby->state == 9)
         return;
-    m->scale = m->pclass->scale;
+    hit_owner_moby->scale = hit_owner_moby->pclass->scale;
     f4 = 0.0f;
-    hit_record = find_moby_hit(m, 0x330000, 0);
+    hit_record = find_moby_hit(hit_owner_moby, 0x330000, 0);
     if (hit_record != 0) {
         if (*(int *)(hit_record + 0x20) != 0) {
             int hit_object_class = *(short *)(*(int *)(hit_record + 0x20) + 0xA6);
-            if (hit_object_class == m->oclass || hit_object_class == 0x370)
+            if (hit_object_class == hit_owner_moby->oclass || hit_object_class == 0x370)
                 hit_record = 0;
         }
     }
-    k = FUN_L00_0025a478_c(m, hit_record, moby_vars + 0x20, 0, &loc0, &f4, 0, 4);
-    if (loc0 != 1 && m->state != 9) {
+    k = FUN_L00_0025a478_c(hit_owner_moby, hit_record, moby_vars + 0x20, 0, &loc0, &f4, 0, 4);
+    if (loc0 != 1 && hit_owner_moby->state != 9) {
         remaining_health = *(float *)(moby_vars + 0x20) - f4;
         *(float *)(moby_vars + 0x20) = remaining_health;
         if (remaining_health <= 0.0f)
@@ -2564,24 +2564,24 @@ void FUN_L14_002b5290(struct Moby *m) {
         case 6:
         case 7:
         case 8:
-            FUN_00212f90(m, 2, 0, 5);
-            m->anim_speed = 1.75f;
+            FUN_00212f90(hit_owner_moby, 2, 0, 5);
+            hit_owner_moby->anim_speed = 1.75f;
         case HIT_REACTION_RED_FLASH_ONLY:
         case HIT_REACTION_FLASH_RED:
             moby_vars[0x67] = 0xFA;
             break;
         case HIT_REACTION_LETHAL:
         case HIT_REACTION_DESTROY:
-            m->state = 9;
-            m->flags &= 0xEFFF;
+            hit_owner_moby->state = 9;
+            hit_owner_moby->flags &= 0xEFFF;
             moby_vars[0x67] = 0xFA;
-            FUN_L00_00257470(m, 0, -1);
+            FUN_L00_00257470(hit_owner_moby, 0, -1);
             break;
         }
-        FUN_L00_0025d458_c(m, moby_vars + 0x60);
+        FUN_L00_0025d458_c(hit_owner_moby, moby_vars + 0x60);
     }
-    m->hit_slot = 0xFF;
-    trooper_anim_finish(m, moby_vars + 0x60);
+    hit_owner_moby->hit_slot = 0xFF;
+    trooper_anim_finish(hit_owner_moby, moby_vars + 0x60);
 }
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002B6678), where it is exact; names translated to the US level program. */
 
