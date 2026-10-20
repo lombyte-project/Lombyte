@@ -80,12 +80,12 @@ void FUN_L00_00210c80_8(void *, s32, f32, f32) __asm__("FUN_L00_00210c80");
 
 extern OvlMobyEntry40 D_L17_00178A00[];
 s32 FUN_L17_0020dbe8(s32 arg) {
-    u8 *m;
+    u8 *hero_moby;
     OvlMobyEntry40 *tbl;
     u8 *mob;
     s32 flag;
     s32 id;
-    f32 a, b, e;
+    f32 a, b, frame_duration;
     OvlVec4 v;
 
     if (G.state.control_mode == 0x14) {
@@ -104,12 +104,12 @@ s32 FUN_L17_0020dbe8(s32 arg) {
         return 0;
     }
     G.unk2280 = 0;
-    m = (u8 *)G.moby;
-    if (m[0xA4] == 0xFF) {
+    hero_moby = (u8 *)G.moby;
+    if (hero_moby[0xA4] == 0xFF) {
         return 0;
     }
-    tbl = &D_L17_00178A00[m[0xA4]];
-    if (tbl->owner != m) {
+    tbl = &D_L17_00178A00[hero_moby[0xA4]];
+    if (tbl->owner != hero_moby) {
         return 0;
     }
     if ((tbl->unk24 ^ 1) & 1) {
@@ -186,12 +186,12 @@ s32 FUN_L17_0020dbe8(s32 arg) {
         } else {
             hero_set_state(HERO_STATE_HURT, 1);
         }
-        e = frame_time;
-        a = e * 5.7f;
-        b = e * 2.4f;
+        frame_duration = frame_time;
+        a = frame_duration * 5.7f;
+        b = frame_duration * 2.4f;
         if (G.unk12E7 != 0) {
             a = 0.0f;
-            b = e * 1.7f;
+            b = frame_duration * 1.7f;
         }
         FUN_L00_00210c80_8(&v, flag, a, b);
         if (flag != 0 && tbl->unk28 == 4) {
