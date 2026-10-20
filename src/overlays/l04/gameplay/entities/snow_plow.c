@@ -1787,12 +1787,12 @@ void FUN_L04_002e1d00(char *moby) {
     func_001F9BD8_298940(d, d, moby + 0x10);
     *(float *)(moby + 0x18) -= 0.25f;
     for (i = 0; i < 4; i++) {
-        float h = sprite_data->a[i] + sprite_data->b[i];
-        sprite_data->a[i] = h;
-        if (255.0f <= h) {
-            sprite_data->a[i] = h - 255.0f;
-        } else if (h <= 0.0f) {
-            sprite_data->a[i] = h + 255.0f;
+        float sprite_attribute_sum = sprite_data->a[i] + sprite_data->b[i];
+        sprite_data->a[i] = sprite_attribute_sum;
+        if (255.0f <= sprite_attribute_sum) {
+            sprite_data->a[i] = sprite_attribute_sum - 255.0f;
+        } else if (sprite_attribute_sum <= 0.0f) {
+            sprite_data->a[i] = sprite_attribute_sum + 255.0f;
         }
         if (func_001F9908_298940(&sprite_data->c[i])) {
             sprite_data->c[i] = func_001F9850_298940(0xFF);
