@@ -3389,7 +3389,7 @@ extern s32 D_L14_00161F74 __attribute__((sda));
 extern int FUN_L00_00257b90(int, int);
 
 /* Exhaust of the second engine moby: puffs and rings on both sides plus a grey puff in the middle. */
-void FUN_L14_002fd310(struct Moby *m) {
+void FUN_L14_002fd310(struct Moby *moby) {
     Vec4 step;
     Vec4 pos;
     Vec4 base;
@@ -3401,14 +3401,14 @@ void FUN_L14_002fd310(struct Moby *m) {
     int grey;
     float size;
 
-    if (m->state == 0 || m->state == 3 || m->state == 1)
+    if (moby->state == 0 || moby->state == 3 || moby->state == 1)
         return;
-    exhaust_scale(&step, &m->rot_row0, D_L14_00161F60);
-    exhaust_add(&pos, &m->pos, &step);
-    exhaust_scale(&step, &m->rot_row2, D_L14_00161F68);
+    exhaust_scale(&step, &moby->rot_row0, D_L14_00161F60);
+    exhaust_add(&pos, &moby->pos, &step);
+    exhaust_scale(&step, &moby->rot_row2, D_L14_00161F68);
     exhaust_add(&pos, &pos, &step);
     qcopy(&base, &pos);
-    exhaust_scale(&step, &m->rot_row1, D_L14_00161F64);
+    exhaust_scale(&step, &moby->rot_row1, D_L14_00161F64);
     exhaust_add(&pos, &pos, &step);
     for (j = 0; j < 2; j++) {
         spin = exhaust_rand(16);
@@ -3422,7 +3422,7 @@ void FUN_L14_002fd310(struct Moby *m) {
         }
     }
     size = 100000.0f;
-    exhaust_scale(&step, &m->rot_row0, D_L14_00161F6C);
+    exhaust_scale(&step, &moby->rot_row0, D_L14_00161F6C);
     exhaust_add(&pos, &pos, &step);
     spin = 16;
     life = exhaust_frames(2);
@@ -3441,25 +3441,25 @@ void FUN_L14_002fd310(struct Moby *m) {
         size -= 20000.0f;
     }
     size = 300000.0f;
-    exhaust_scale(&step, &m->rot_row0, D_L14_00161F70);
+    exhaust_scale(&step, &moby->rot_row0, D_L14_00161F70);
     exhaust_add(&pos, &base, &step);
     grey = FUN_L00_00257b90(0x40, 0x80);
     grey = 0x7F000000 | grey << 16 | grey << 8 | grey;
     if (exhaust_rand(3) != 0) {
-        L14Puff *p;
+        L14Puff *grey_puff;
         spin = exhaust_rand(4);
-        p = exhaust_puff(&pos, 0.05f, 1.0f, 1.0f, exhaust_rand(2) == 0 ? spin : -spin, D_L14_0015F580, size, grey);
-        if (p != 0) {
-            L14PuffTail *tail = &p->tail;
-            p->life = exhaust_frames(60);
+        grey_puff = exhaust_puff(&pos, 0.05f, 1.0f, 1.0f, exhaust_rand(2) == 0 ? spin : -spin, D_L14_0015F580, size, grey);
+        if (grey_puff != 0) {
+            L14PuffTail *tail = &grey_puff->tail;
+            grey_puff->life = exhaust_frames(60);
             if (exhaust_rand(2) != 0)
-                p->alpha = 0x44;
+                grey_puff->alpha = 0x44;
             tail->tint = 0x40;
             tail->mode = 2;
             tail->fade = exhaust_frames(60);
         }
     }
-    exhaust_scale(&step, &m->rot_row1, D_L14_00161F64);
+    exhaust_scale(&step, &moby->rot_row1, D_L14_00161F64);
     exhaust_sub(&pos, &base, &step);
     for (j = 0; j < 2; j++) {
         spin = exhaust_rand(16);
@@ -3473,7 +3473,7 @@ void FUN_L14_002fd310(struct Moby *m) {
         }
     }
     size = 100000.0f;
-    exhaust_scale(&step, &m->rot_row0, D_L14_00161F6C);
+    exhaust_scale(&step, &moby->rot_row0, D_L14_00161F6C);
     exhaust_add(&pos, &pos, &step);
     spin = 16;
     life = exhaust_frames(2);
