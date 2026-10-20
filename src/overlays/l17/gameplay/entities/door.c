@@ -267,7 +267,7 @@ void FUN_L17_002e8e08(struct Moby *moby) {
     char *r;
     int step;
     int hit;
-    int n;
+    int scaled_frame_blocks;
 
     switch (moby->state) {
     case DRONE_STATE_FLIGHT:
@@ -315,8 +315,8 @@ void FUN_L17_002e8e08(struct Moby *moby) {
                         unsigned char *rec = D_00141968_x_q;
                         if (*(unsigned short *)(rec + 0x458) == 0) {
                             (*(unsigned short *)(rec + 0x458))++;
-                            n = scale_game_frames_q(D_0015EEA4_q) / 600;
-                            if (*(unsigned short *)(rec + 0x45A) < n) {
+                            scaled_frame_blocks = scale_game_frames_q(D_0015EEA4_q) / 600;
+                            if (*(unsigned short *)(rec + 0x45A) < scaled_frame_blocks) {
                                 *(unsigned short *)(rec + 0x45A) =
                                     scale_game_frames_q(D_0015EEA4_q) / 600;
                             }
@@ -332,8 +332,8 @@ void FUN_L17_002e8e08(struct Moby *moby) {
                         unsigned char *rec = D_00141968_x_q;
                         if (*(unsigned short *)(rec + 0x458) == 0) {
                             (*(unsigned short *)(rec + 0x458))++;
-                            n = scale_game_frames_q(D_0015EEA4_q) / 600;
-                            if (*(unsigned short *)(rec + 0x45A) < n) {
+                            scaled_frame_blocks = scale_game_frames_q(D_0015EEA4_q) / 600;
+                            if (*(unsigned short *)(rec + 0x45A) < scaled_frame_blocks) {
                                 *(unsigned short *)(rec + 0x45A) =
                                     scale_game_frames_q(D_0015EEA4_q) / 600;
                             }
