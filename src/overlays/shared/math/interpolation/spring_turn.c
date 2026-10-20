@@ -522,25 +522,25 @@ int FUN_001f96f8_259028(int) __asm__("FUN_001f96f8");
 int FUN_L00_00258b50_259028(unsigned char *, char *, float *, void *,
                             float) __asm__("FUN_L00_00258b50");
 int FUN_L00_00259028(unsigned char *m, char *c, float *tgt, void *out);
-int FUN_L00_00259028(unsigned char *m, char *c, float *tgt, void *out) {
+int FUN_L00_00259028(unsigned char *m, char *movement_control, float *tgt, void *out) {
     int r = 0;
-    float a, d;
+    float target_heading, d;
     FUN_001f99f8_259028(out);
-    if (FUN_001f9b48_259028(m + 0x10, tgt) < *(float *)(c + 0x2C))
+    if (FUN_001f9b48_259028(m + 0x10, tgt) < *(float *)(movement_control + 0x2C))
         r = 4;
-    a = FUN_001f9e90_259028(tgt[0] - *(float *)(m + 0x10), tgt[1] - *(float *)(m + 0x14));
-    FUN_L00_00258278_259028(m, (float *)(c + 0x14), a, *(float *)(c + 0x3C), *(float *)(c + 0x40),
-                            *(float *)(c + 0x44));
-    d = FUN_001fa688_259028(a, *(float *)(m + 0x48));
-    if (*(float *)(c + 0x28) <= d)
+    target_heading = FUN_001f9e90_259028(tgt[0] - *(float *)(m + 0x10), tgt[1] - *(float *)(m + 0x14));
+    FUN_L00_00258278_259028(m, (float *)(movement_control + 0x14), target_heading, *(float *)(movement_control + 0x3C), *(float *)(movement_control + 0x40),
+                            *(float *)(movement_control + 0x44));
+    d = FUN_001fa688_259028(target_heading, *(float *)(m + 0x48));
+    if (*(float *)(movement_control + 0x28) <= d)
         r |= 0x10;
-    FUN_001f9740_259028(c + 0x48);
-    if (d < *(float *)(c + 0x28) && *(int *)(c + 0x48) < FUN_001f96f8_259028(4)) {
-        *(int *)(c + 0x48) = FUN_001f96f8_259028(4);
+    FUN_001f9740_259028(movement_control + 0x48);
+    if (d < *(float *)(movement_control + 0x28) && *(int *)(movement_control + 0x48) < FUN_001f96f8_259028(4)) {
+        *(int *)(movement_control + 0x48) = FUN_001f96f8_259028(4);
     }
-    if (*(int *)(c + 0x48) != 0) {
-        r |= FUN_L00_00258b50_259028(m, c, tgt, out,
-                                     (*(float *)(c + 0x28) - d) / *(float *)(c + 0x28));
+    if (*(int *)(movement_control + 0x48) != 0) {
+        r |= FUN_L00_00258b50_259028(m, movement_control, tgt, out,
+                                     (*(float *)(movement_control + 0x28) - d) / *(float *)(movement_control + 0x28));
         if (0.1f < d)
             r &= ~2;
     }
