@@ -31,7 +31,7 @@ extern s32 random_int_between(s32, s32) __asm__("FUN_L00_00257b90");
 void FUN_L00_00204c60(void) {
     s32 save[7];
     s32 i;
-    struct Moby *m;
+    struct Moby *candidate_moby;
     f32 z;
 
     for (i = 0; i < 7; i++)
@@ -41,10 +41,10 @@ void FUN_L00_00204c60(void) {
         save[i] = hero.items[i].item_id;
 
     for (i = 0; &D_L00_0015FFD8[i] < D_L00_0015FFDC; i++) {
-        m = &D_L00_0015FFD8[i];
-        if (m->oclass == 0) {
-            hero.moby = m;
-            z = probe_ground_height(&m->pos, 0, 0.5f);
+        candidate_moby = &D_L00_0015FFD8[i];
+        if (candidate_moby->oclass == 0) {
+            hero.moby = candidate_moby;
+            z = probe_ground_height(&candidate_moby->pos, 0, 0.5f);
             if (z > 0.0f)
                 hero.moby->pos.z = z;
             hero.moby->flags |= 2;
