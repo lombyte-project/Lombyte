@@ -50,9 +50,9 @@ extern int D_L06_0015FFD8_d __asm__("D_L06_0015FFD8");
  * the US level program (data still reached through the MACRO_ADDR form). */
 /* Switches every moby listed in a table into state 15 until a negative entry. */
 void FUN_L06_002e9e30(int index) {
-    short *p = D_L06_001ABFC0[index];
+    short *moby_index_cursor = D_L06_001ABFC0[index];
     do {
-        char *moby = D_L06_0015FFD8_d + ((*(unsigned short *)p & 0x7FFF) << 8);
+        char *moby = D_L06_0015FFD8_d + ((*(unsigned short *)moby_index_cursor & 0x7FFF) << 8);
         if ((unsigned char)moby[0x20] < 0x7F) {
             unsigned short flags = *(unsigned short *)(moby + 0x34);
             moby[0x20] = 15;
@@ -61,7 +61,7 @@ void FUN_L06_002e9e30(int index) {
             flags &= 0xEFFF;
             *(unsigned short *)(moby + 0x34) = flags;
         }
-    } while (*p++ >= 0);
+    } while (*moby_index_cursor++ >= 0);
 }
 
 extern int D_L06_001ABFC0[];
