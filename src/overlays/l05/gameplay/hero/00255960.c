@@ -145,6 +145,7 @@ void FUN_L05_00255960(void) {
         HERO_STATE_LEDGE_SHIMMY_POSITIVE_YAW_OFFSET = 26,
         HERO_STATE_LEDGE_SHIMMY_NEGATIVE_YAW_OFFSET = 27,
         HERO_STATE_LEDGE_JUMP = 28,
+        HERO_STATE_ANIMATION_END_IDLE_WAIT = 58,
         HERO_STATE_JUMP_ENABLED_RESPAWN_WAIT = 104,
         HERO_STATE_JUMP_FROM_RESPAWN_WAIT = 105,
         HERO_STATE_ANIMATION_END_RESPAWN_WAIT = 106,
@@ -626,7 +627,7 @@ void FUN_L05_00255960(void) {
                         hero_set_state(HERO_STATE_IDLE, 1);
                     }
                     break;
-                case 58:
+                case HERO_STATE_ANIMATION_END_IDLE_WAIT:
                     if (hero.unkA98 & 2) {
                         hero_set_state(HERO_STATE_IDLE, 1);
                     }
