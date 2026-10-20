@@ -14,15 +14,15 @@
 extern int allocate_voice_slot(void *, int, int, int, int) __asm__("FUN_0022d7f0");
 
 int play_voice(int a, int b, int c, int d) __asm__("FUN_L00_0028ddd8");
-int play_voice(int a, int b, int c, int d) {
+int play_voice(int voice_definition_index, int b, int sound_owner, int volume) {
     int r;
-    if (a >= D_L00_0015F5F0)
+    if (voice_definition_index >= D_L00_0015F5F0)
         return -1;
-    r = allocate_voice_slot(D_L00_0015F5F4 + a * 32, b, 0, c + 0x40, d);
+    r = allocate_voice_slot(D_L00_0015F5F4 + voice_definition_index * 32, b, 0, sound_owner + 0x40, volume);
     if (r >= 0) {
-        char *e = D_0013E533 + 0x1D + r * 0x70;
-        *(int *)(e + 0x8C) = c;
-        *(short *)(e + 0x7E) = a;
+        char *voice_slot = D_0013E533 + 0x1D + r * 0x70;
+        *(int *)(voice_slot + 0x8C) = sound_owner;
+        *(short *)(voice_slot + 0x7E) = voice_definition_index;
     }
     return r;
 }
