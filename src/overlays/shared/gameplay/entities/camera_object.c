@@ -2306,14 +2306,14 @@ void *FUN_L00_002a9aa0(int unused, float *pos) {
 }
 extern u8 *D_L00_001613C8 __attribute__((sda));
 void FUN_L00_002a9aa0_u(void *, OvlQuad *) __asm__("FUN_L00_002a9aa0");
-void FUN_L00_002a9b80(void *a, OvlQuad *v) {
+void FUN_L00_002a9b80(void *unused_creation_arg, OvlQuad *v) {
     OvlQuad position_copy = *v;
     u8 *moby;
     u8 *moby_vars;
     u8 *g;
     g = D_L00_001613C8;
     if (g == 0) {
-        FUN_L00_002a9aa0_u(a, &position_copy);
+        FUN_L00_002a9aa0_u(unused_creation_arg, &position_copy);
         g = D_L00_001613C8;
         if (g == 0)
             return;
