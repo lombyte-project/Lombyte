@@ -656,13 +656,13 @@ void FUN_L15_002eb108(struct Moby *moby) {
     int j;
     int k;
     int color;
-    Quad4 t;
+    Quad4 uv_scroll_factors;
     int r;
     int g;
     int b;
     float scale;
     Quad4 *p;
-    float *o;
+    float *output_vertex;
     scale = convert_integer_to_float(D_L15_0015F5CC) * (D_L15_0016216C * frame_time);
     vu1_add_gs_register(6, get_effect_texture(D_L15_00162158));
     vu1_add_gs_register(0x42, ((long)D_L15_00162154 << 32) | 0x44);
@@ -673,30 +673,30 @@ void FUN_L15_002eb108(struct Moby *moby) {
                                                       DEG_TO_RAD * frame_time);
     get_moby_color(moby, &r, &g, &b);
     /* The second float of each pair in t: p->f[0] is t.f[1], p->f[2] is t.f[3]. */
-    p = (Quad4 *)&t.f[1];
+    p = (Quad4 *)&uv_scroll_factors.f[1];
     color = (D_L15_0016215C << 24) | (b << 16) | (g << 8) | r;
-    o = D_L15_001DE200;
+    output_vertex = D_L15_001DE200;
     do {
-        float *s = &D_L15_001DDBA0[i * 3];
-        float x = s[0];
-        float y = s[1];
+        float *template_vertex = &D_L15_001DDBA0[i * 3];
+        float x = template_vertex[0];
+        float y = template_vertex[1];
         float rad = square_root(x * x + y * y);
         float a = FUN_L00_00200260(rad, D_L15_00162160);
         float w = wrap_angle(a * 6.2831855f / D_L15_00162160);
         float z = fast_sin(fast_add_rotations(w, data->angle));
-        o[0] = s[0] + moby->pos.x;
-        *(float *)((char *)D_L15_001DE200 + 4 + off) = s[1] + moby->pos.y;
-        o[2] = s[2] + moby->pos.z + D_L15_00162168 * z;
+        output_vertex[0] = template_vertex[0] + moby->pos.x;
+        *(float *)((char *)D_L15_001DE200 + 4 + off) = template_vertex[1] + moby->pos.y;
+        output_vertex[2] = template_vertex[2] + moby->pos.z + D_L15_00162168 * z;
         D_L15_001DE750[i] = color;
         i++;
         off += 12;
-        o += 3;
+        output_vertex += 3;
     } while (i < 68);
     for (j = 0; j < 2; j++) {
         for (n = 0; n < 68; n++) {
-            t = D_L15_00162170;
+            uv_scroll_factors = D_L15_00162170;
             D_L15_001DE530[n][0] =
-                D_L15_001DDED0[n][0] + FUN_L00_00200260(scale * t.f[j * 2], 1.0f);
+                D_L15_001DDED0[n][0] + FUN_L00_00200260(scale * uv_scroll_factors.f[j * 2], 1.0f);
             D_L15_001DE530[n][1] =
                 D_L15_001DDED0[n][1] + FUN_L00_00200260(scale * p->f[j * 2], 1.0f);
         }
