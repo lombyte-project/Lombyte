@@ -772,44 +772,44 @@ extern unsigned char *D_L18_0015FFD8;
 extern void FUN_L18_002f1fd8(struct Moby *);
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 
-void FUN_L18_002f1e68(struct Moby *m) {
+void FUN_L18_002f1e68(struct Moby *moby) {
     enum {
         GLOW_INITIALIZE = 0,
         GLOW_ACTIVE = 1,
         GLOW_FADE_OUT = 2
     };
-    int *d = (int *)m->pvars;
-    switch (m->state) {
+    int *moby_vars = (int *)moby->pvars;
+    switch (moby->state) {
     case GLOW_INITIALIZE:
-        m->state = 1;
-        ((float *)d)[3] = 1.0f;
+        moby->state = 1;
+        ((float *)moby_vars)[3] = 1.0f;
         break;
     case GLOW_ACTIVE:
-        enqueue_callback_list_1_alt((void (*)(void))FUN_L18_002f1fd8, m);
-        if (voice_is_playing(m, d[1]) == 0) {
-            d[1] = FUN_0022da68(0, 4, (int)m);
+        enqueue_callback_list_1_alt((void (*)(void))FUN_L18_002f1fd8, moby);
+        if (voice_is_playing(moby, moby_vars[1]) == 0) {
+            moby_vars[1] = FUN_0022da68(0, 4, (int)moby);
         }
-        if (d[0] != -1) {
-            unsigned char *o = D_L18_0015FFD8 + (d[0] << 8);
-            if (*(short *)(o + 0xA6) == 0x267 && o[0x20] >= 3) {
-                m->collision = 0;
-                m->state = 2;
-                if (voice_is_playing(m, d[1]) != 0) {
-                    int i = d[1];
+        if (moby_vars[0] != -1) {
+            unsigned char *linked_moby = D_L18_0015FFD8 + (moby_vars[0] << 8);
+            if (*(short *)(linked_moby + 0xA6) == 0x267 && linked_moby[0x20] >= 3) {
+                moby->collision = 0;
+                moby->state = 2;
+                if (voice_is_playing(moby, moby_vars[1]) != 0) {
+                    int i = moby_vars[1];
                     if (i != -1) {
-                        char *e = D_0013E550 + i * 0x70;
-                        if (*(unsigned char **)(e + 0x88) == m &&
-                            *(unsigned char *)(e + 0x74) != 0) {
+                        char *voice_slot_entry = D_0013E550 + i * 0x70;
+                        if (*(unsigned char **)(voice_slot_entry + 0x88) == moby &&
+                            *(unsigned char *)(voice_slot_entry + 0x74) != 0) {
                             release_voice_slot(i);
                         }
                     }
-                    d[1] = -1;
+                    moby_vars[1] = -1;
                 }
             }
         }
         break;
     case GLOW_FADE_OUT:
-        approach_value((float *)(d + 3), 0.0f, frame_time + frame_time);
+        approach_value((float *)(moby_vars + 3), 0.0f, frame_time + frame_time);
         break;
     }
 }
