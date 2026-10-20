@@ -3190,7 +3190,7 @@ void FUN_L18_002ec130(void *mv) {
     Vec130 mat[4];
     Vec130 *pos;
     unsigned int c;
-    float s;
+    float corner_scale;
     int i;
     pos = (Vec130 *)mv;
     quad.tex = tex_ec130(0xB);
@@ -3212,9 +3212,9 @@ void FUN_L18_002ec130(void *mv) {
     quad.color[2] = c;
     quad.color[1] = c;
     quad.color[0] = c;
-    s = D_L18_001620A8 + spread_k(0.0f, 0.025f);
+    corner_scale = D_L18_001620A8 + spread_k(0.0f, 0.025f);
     for (i = 0; i < 4; i++) {
-        vmul_ec130(s, &quad.corner[i], &D_L18_001D9CA0[i]);
+        vmul_ec130(corner_scale, &quad.corner[i], &D_L18_001D9CA0[i]);
         transform_vector(&quad.corner[i], &quad.corner[i], &mat[0]);
         quad.uv[i].u = D_L18_001D9CE0[i].u;
         quad.uv[i].v = D_L18_001D9CE0[i].v;
@@ -3225,9 +3225,9 @@ void FUN_L18_002ec130(void *mv) {
     quad.color[2] = c;
     quad.color[1] = c;
     quad.color[0] = c;
-    s = D_L18_001620AC + spread_k(0.0f, 0.05f);
+    corner_scale = D_L18_001620AC + spread_k(0.0f, 0.05f);
     for (i = 0; i < 4; i++) {
-        vmul_ec130(s, &quad.corner[i], &D_L18_001D9CA0[i]);
+        vmul_ec130(corner_scale, &quad.corner[i], &D_L18_001D9CA0[i]);
         transform_vector(&quad.corner[i], &quad.corner[i], &mat[0]);
         quad.uv[i].u = D_L18_001D9CE0[i].u;
         quad.uv[i].v = D_L18_001D9CE0[i].v;
