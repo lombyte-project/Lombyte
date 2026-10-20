@@ -3103,7 +3103,7 @@ extern void func_L00_00273F80_g(void *, void *, int, int, int, int, float) __asm
 void FUN_L06_002f7628(char *moby) {
     float pos[4];
     float step[4];
-    float a[4];
+    float spark_position[4];
     float b[4];
     Beam_2f8a58 *beam = *(Beam_2f8a58 **)(moby + 0x78);
     int i;
@@ -3112,7 +3112,7 @@ void FUN_L06_002f7628(char *moby) {
     normalize_vector_xyz(step, pos, 0.1f);
     add_vector_xyz(pos, pos, beam->tgt + 0x10);
     for (i = 0; i < 4; i++) {
-        float f;
+        float timer_progress;
         int c;
         beam->ph[i] += beam->spd[i];
         if (255.0f <= beam->ph[i]) {
@@ -3123,8 +3123,8 @@ void FUN_L06_002f7628(char *moby) {
         if (fast_dec_timer(&beam->t[i])) {
             beam->t[i] = scale_game_frames(0xFF);
         }
-        f = convert_integer_to_float(scale_game_frames(0xFF) - beam->t[i]) / (float)scale_game_frames(0xFF);
-        c = fast_tween_color(D_L06_00161E58, D_L06_00161E5C, absolute_float(0.5f - f));
+        timer_progress = convert_integer_to_float(scale_game_frames(0xFF) - beam->t[i]) / (float)scale_game_frames(0xFF);
+        c = fast_tween_color(D_L06_00161E58, D_L06_00161E5C, absolute_float(0.5f - timer_progress));
         func_L00_00273E08_g(pos, c, func_001FA898_g(beam->ph[i]), D_L06_00161E64, D_L06_00161E60, 2, 0,
                           beam->sz[i]);
         add_vector_xyz(pos, pos, step);
@@ -3132,12 +3132,12 @@ void FUN_L06_002f7628(char *moby) {
     if ((level_frame_count & 3) == 3 && ((unsigned char *)moby)[0x31] != 0) {
         float sgn = 1.0f;
         if (level_frame_count & 4) sgn = -1.0f;
-        clear_u64_value(a);
-        a[2] += sgn * 0.9f;
-        normalize_vector_xyz(b, a, -2.0f / (float)scale_game_frames(D_L06_00161E70));
-        add_vector_xyz(a, a, moby + 0x10);
-        a[2] += 0.85f;
-        func_L00_00273F80_g(a, b, D_L06_00161E68, (unsigned char)func_001FA898_g((float)scale_game_frames(D_L06_00161E70)),
+        clear_u64_value(spark_position);
+        spark_position[2] += sgn * 0.9f;
+        normalize_vector_xyz(b, spark_position, -2.0f / (float)scale_game_frames(D_L06_00161E70));
+        add_vector_xyz(spark_position, spark_position, moby + 0x10);
+        spark_position[2] += 0.85f;
+        func_L00_00273F80_g(spark_position, b, D_L06_00161E68, (unsigned char)func_001FA898_g((float)scale_game_frames(D_L06_00161E70)),
                           (unsigned char)random_integer_below(0xFF), 0, D_L06_00161E6C);
     }
 }
