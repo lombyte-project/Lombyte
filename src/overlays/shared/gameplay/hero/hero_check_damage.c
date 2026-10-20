@@ -2730,9 +2730,9 @@ int FUN_L00_00211870(float animation_frame_threshold) {
 }
 /* Clears hero.target_speed and unk194 as words. */
 void FUN_L00_002118b0(void) {
-    struct Hero *p = &hero;
-    *(int *)&p->target_speed = 0;
-    *(int *)&p->ground_speed = 0;
+    struct Hero *hero_state = &hero;
+    *(int *)&hero_state->target_speed = 0;
+    *(int *)&hero_state->ground_speed = 0;
 }
 typedef union {
     OvlQuad q;
