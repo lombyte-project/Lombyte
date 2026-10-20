@@ -1452,14 +1452,14 @@ s32 random_integer_below(s32 arg0) __asm__("FUN_00213260");
 void FUN_L01_00308380(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     float r;
-    float s;
+    float bobbing_sine;
     float k;
     moby->scale =
         moby->pclass->scale * *(float *)&D_L01_00161F10_gp;
     if (moby->state == 1) {
-        s = fast_sin(moby->rot.w);
+        bobbing_sine = fast_sin(moby->rot.w);
         moby->pos.z =
-            *(float *)(data + 0x18) + *(float *)&D_L01_00161F14_gp + *(float *)&D_L01_00161F18_gp * s;
+            *(float *)(data + 0x18) + *(float *)&D_L01_00161F14_gp + *(float *)&D_L01_00161F18_gp * bobbing_sine;
         moby->rot.x =
             fast_add_rotations(moby->rot.x, *(float *)(data + 0x68));
         moby->rot.y =
