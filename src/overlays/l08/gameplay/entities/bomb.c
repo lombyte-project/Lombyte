@@ -236,24 +236,24 @@ extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void FUN_L00_00250df8(void *);
 
 char *FUN_L08_002d22e0(int arg, char *pos, char *vec) {
-    char *m = func_0020D348_m(0xF8);
-    if (m != 0) {
-        char *d = *(char **)(m + 0x78);
-        *(unsigned char *)(m + 0x30) = 0xFF;
-        *(short *)(m + 0x32) = 0xFF;
-        m[0x31] = 1;
-        m[0x20] = 1;
-        *(int *)(d + 0x30) = arg;
-        *(int *)(d + 0x20) = scale_game_frames(300);
-        *(float *)(d + 0x2C) = 1.0f;
-        *(int *)(d + 0x24) = 0;
-        qcopy(m + 0x10, pos);
-        qcopy(d + 0x10, vec);
-        *(float *)(m + 0x40) = random_float_between(-180.0f, 180.0f) * DEG_TO_RAD;
-        *(float *)(m + 0x48) = fast_arc_tan(*(float *)vec, *(float *)(vec + 4)) + 1.5707964f;
-        FUN_L00_00250df8(m);
+    char *spawned_moby = func_0020D348_m(0xF8);
+    if (spawned_moby != 0) {
+        char *bomb_vars = *(char **)(spawned_moby + 0x78);
+        *(unsigned char *)(spawned_moby + 0x30) = 0xFF;
+        *(short *)(spawned_moby + 0x32) = 0xFF;
+        spawned_moby[0x31] = 1;
+        spawned_moby[0x20] = 1;
+        *(int *)(bomb_vars + 0x30) = arg;
+        *(int *)(bomb_vars + 0x20) = scale_game_frames(300);
+        *(float *)(bomb_vars + 0x2C) = 1.0f;
+        *(int *)(bomb_vars + 0x24) = 0;
+        qcopy(spawned_moby + 0x10, pos);
+        qcopy(bomb_vars + 0x10, vec);
+        *(float *)(spawned_moby + 0x40) = random_float_between(-180.0f, 180.0f) * DEG_TO_RAD;
+        *(float *)(spawned_moby + 0x48) = fast_arc_tan(*(float *)vec, *(float *)(vec + 4)) + 1.5707964f;
+        FUN_L00_00250df8(spawned_moby);
     }
-    return m;
+    return spawned_moby;
 }
 /* Bomb (class 248) update: fuse, bounce and blast state machine on the moby's state byte */
 /* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002B9438.c: func_L08_002D36F8), where it is exact; names translated to the US level program. */
