@@ -1604,13 +1604,13 @@ extern int D_L14_001D8680[];
 extern short *D_L14_001AC2C0_2B0168[] __asm__("D_L14_001ABF40");
 
 char *FUN_L14_002aef28(int index, int *ids) {
-    short *p = D_L14_001AC2C0_2B0168[index];
+    short *list_entry = D_L14_001AC2C0_2B0168[index];
     char *best = 0;
     float bestd = 0.0f;
-    if (p == 0)
+    if (list_entry == 0)
         return 0;
     do {
-        char *moby = (char *)D_L14_0015FFD0_e[2] + ((*(unsigned short *)p & 0x7FFF) << 8);
+        char *moby = (char *)D_L14_0015FFD0_e[2] + ((*(unsigned short *)list_entry & 0x7FFF) << 8);
         int found = 0;
         int i;
         for (i = 0; i < 20; i++) {
@@ -1620,13 +1620,13 @@ char *FUN_L14_002aef28(int index, int *ids) {
             }
         }
         if (!found) {
-            float d = vector_distance(D_L14_001674C0, moby + 0x10);
-            if (bestd < d) {
-                bestd = d;
+            float candidate_distance = vector_distance(D_L14_001674C0, moby + 0x10);
+            if (bestd < candidate_distance) {
+                bestd = candidate_distance;
                 best = moby;
             }
         }
-    } while (*p++ >= 0);
+    } while (*list_entry++ >= 0);
     return best;
 }
 #include "sda.h"
