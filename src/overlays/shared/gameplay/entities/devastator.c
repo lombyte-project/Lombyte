@@ -2043,29 +2043,29 @@ extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void refresh_moby_spatial_bounds_from_basis(void *) __asm__("FUN_0020e098");
 
-void FUN_L00_002b5ba0(unsigned char *m, unsigned char *o) {
-    M_2b5ba0 a, b, c;
+void FUN_L00_002b5ba0(unsigned char *source_moby, unsigned char *attachment_state) {
+    M_2b5ba0 combined_rotation, b, source_rotation;
     V_2b5ba0 k, r;
-    unsigned char *e = *(unsigned char **)(o + 0x20);
-    unsigned char *t;
-    if (e == 0)
+    unsigned char *attached_moby = *(unsigned char **)(attachment_state + 0x20);
+    unsigned char *attached_moby_vars;
+    if (attached_moby == 0)
         return;
     k.q = 0;
     k.f[1] = 0.11f;
-    t = *(unsigned char **)(e + 0x78);
-    if (0.45f < *(float *)(t + 0xC)) {
-        *(float *)(t + 0xC) = *(float *)(t + 0xC) - D_0015ED60_gp * 0.05f;
-    } else if (*(float *)(t + 0xC) < 0.45f) {
-        *(float *)(t + 0xC) = *(float *)(t + 0xC) + D_0015ED60_gp * 0.05f;
+    attached_moby_vars = *(unsigned char **)(attached_moby + 0x78);
+    if (0.45f < *(float *)(attached_moby_vars + 0xC)) {
+        *(float *)(attached_moby_vars + 0xC) = *(float *)(attached_moby_vars + 0xC) - D_0015ED60_gp * 0.05f;
+    } else if (*(float *)(attached_moby_vars + 0xC) < 0.45f) {
+        *(float *)(attached_moby_vars + 0xC) = *(float *)(attached_moby_vars + 0xC) + D_0015ED60_gp * 0.05f;
     }
-    *(float *)(*(unsigned char **)(o + 0x20) + 0x48) = frame_scale * -1.5707964f;
-    euler_rotation_matrix(&b, *(unsigned char **)(o + 0x20) + 0x40);
-    copy_matrix_rotation(&c, m + 0xC0);
-    multiply_matrix(&a, &c, &b);
-    copy_matrix3x4(*(unsigned char **)(o + 0x20) + 0xC0, &a);
-    transform_vector(&r, &k, &a);
-    fast_vec_add(*(unsigned char **)(o + 0x20) + 0x10, &r, m + 0x10);
-    refresh_moby_spatial_bounds_from_basis(*(unsigned char **)(o + 0x20));
+    *(float *)(*(unsigned char **)(attachment_state + 0x20) + 0x48) = frame_scale * -1.5707964f;
+    euler_rotation_matrix(&b, *(unsigned char **)(attachment_state + 0x20) + 0x40);
+    copy_matrix_rotation(&source_rotation, source_moby + 0xC0);
+    multiply_matrix(&combined_rotation, &source_rotation, &b);
+    copy_matrix3x4(*(unsigned char **)(attachment_state + 0x20) + 0xC0, &combined_rotation);
+    transform_vector(&r, &k, &combined_rotation);
+    fast_vec_add(*(unsigned char **)(attachment_state + 0x20) + 0x10, &r, source_moby + 0x10);
+    refresh_moby_spatial_bounds_from_basis(*(unsigned char **)(attachment_state + 0x20));
 }
 /* spawns a burst of sparks and glow flashes at a moby, scaled by its distance from the origin marker */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B33E8.c: func_L00_002B6FF0), where it is exact; names translated to the US level program. */
