@@ -542,29 +542,29 @@ P_2725d8 *FUN_L00_002678b8_c2(s32) __asm__("FUN_L00_002678b8");
 s32 FUN_001fa6d0(f32);
 void add_vector_xyz_cf(u8 *, u8 *, void *) __asm__("FUN_L00_0024f7c8");
 P_2725d8 *FUN_L00_002725d8(u8 *owner, u8 *attachment_point_selector, s32 color, s32 initial_size_bits, f32 primary_position_w, f32 secondary_position_w) {
-    P_2725d8 *p = FUN_L00_002678b8_c2(0x37);
+    P_2725d8 *particle = FUN_L00_002678b8_c2(0x37);
     /* Fakematch: the dead update gives a0 and a3 retail's saved registers. */
     initial_size_bits++;
     initial_size_bits--;
-    if (p) {
+    if (particle) {
         S_2725d8 *s;
-        p->w4 = color;
-        p->wC = initial_size_bits;
-        p->b9 = FUN_001fa6d0(0.4f) + 0x20;
-        p->b3 = 0x48;
-        p->b1 = 3;
-        p->b2 = *D_L00_001B215C;
-        add_vector_xyz_cf(owner, attachment_point_selector, p->v10);
-        qcopy(p->v20, p->v10);
-        p->unk2C = secondary_position_w;
-        *(f32 *)((u8 *)p + 0x1C) = primary_position_w;
-        s = &p->s;
-        p->s.o = owner;
+        particle->w4 = color;
+        particle->wC = initial_size_bits;
+        particle->b9 = FUN_001fa6d0(0.4f) + 0x20;
+        particle->b3 = 0x48;
+        particle->b1 = 3;
+        particle->b2 = *D_L00_001B215C;
+        add_vector_xyz_cf(owner, attachment_point_selector, particle->v10);
+        qcopy(particle->v20, particle->v10);
+        particle->unk2C = secondary_position_w;
+        *(f32 *)((u8 *)particle + 0x1C) = primary_position_w;
+        s = &particle->s;
+        particle->s.o = owner;
         s->k = *(s16 *)(owner + 0xA6);
         s->b = attachment_point_selector;
         s->f = primary_position_w;
     }
-    return p;
+    return particle;
 }
 typedef unsigned int u128_2726d8 __attribute__((mode(TI), aligned(16)));
 typedef struct {
