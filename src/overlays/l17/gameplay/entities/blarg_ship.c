@@ -278,15 +278,15 @@ extern struct {
     int pad1[81];
     int tbl[3];
 } D_L17_0016D160;
-void FUN_L17_002f2e78(struct Moby *m) {
+void FUN_L17_002f2e78(struct Moby *moby) {
     enum {
         MOBY_UPDATE_DISTANCE_INITIALIZE = 0,
         MOBY_GUARDED_TABLE_CALL = 1
     };
-    switch (m->state) {
+    switch (moby->state) {
     case MOBY_UPDATE_DISTANCE_INITIALIZE:
-        m->update_dist = 0xFF;
-        m->state = 1;
+        moby->update_dist = 0xFF;
+        moby->state = 1;
         break;
     case MOBY_GUARDED_TABLE_CALL:
         if (D_L17_0015F5C4 == 2) {
