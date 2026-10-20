@@ -2884,8 +2884,8 @@ extern float D_0015ED60_9408 __asm__("D_0015ED60");
 extern float dist_9408(void *, void *) __asm__("FUN_001f9b48");
 extern int FUN_L13_002e9160_c(char *, char *, int, int) __asm__("FUN_L13_002e9160");
 
-int FUN_L13_002e9408(struct Moby *moby, char *d, int idx, int aim) {
-    char *path = D_L13_001B07B0_9408[*(int *)(&d[idx << 2] + 0xB0)];
+int FUN_L13_002e9408(struct Moby *moby, char *path_following_data, int idx, int aim) {
+    char *path = D_L13_001B07B0_9408[*(int *)(&path_following_data[idx << 2] + 0xB0)];
     int r = 0;
     float ahead[4];
     float behind[4];
@@ -2894,13 +2894,13 @@ int FUN_L13_002e9408(struct Moby *moby, char *d, int idx, int aim) {
     int k;
     int dir;
     if (path != 0) {
-        next_node_index = *(short *)(d + 0x9C) + 1;
+        next_node_index = *(short *)(path_following_data + 0x9C) + 1;
         if (next_node_index >= *(int *)path) {
             next_node_index = 0;
         }
         qcopy(ahead, path + next_node_index * 16 + 0x10);
         ahead_distance_to_hero = dist_9408(ahead, &hero.motion.pos);
-        k = *(short *)(d + 0x9C) - 1;
+        k = *(short *)(path_following_data + 0x9C) - 1;
         if (k < 0) {
             k = *(int *)path - 1;
         }
@@ -2911,16 +2911,16 @@ int FUN_L13_002e9408(struct Moby *moby, char *d, int idx, int aim) {
         } else if (b < ahead_distance_to_hero) {
             dir = 1;
         } else {
-            dir = d[0x10C] == 1 ? 1 : -1;
+            dir = path_following_data[0x10C] == 1 ? 1 : -1;
         }
-        if (dir != (signed char)d[0x10C]) {
+        if (dir != (signed char)path_following_data[0x10C]) {
             float k = D_0015ED60_9408;
-            *(float *)(d + 0xAC) *= k * -0.100000024f + 1.0f;
-            if (*(float *)(d + 0xAC) < k * 0.15f) {
-                short cur = *(short *)(d + 0x9C);
-                d[0x10C] = dir;
-                *(short *)(d + 0x9C) = *(unsigned short *)(d + 0x9E);
-                *(short *)(d + 0x9E) = cur;
+            *(float *)(path_following_data + 0xAC) *= k * -0.100000024f + 1.0f;
+            if (*(float *)(path_following_data + 0xAC) < k * 0.15f) {
+                short cur = *(short *)(path_following_data + 0x9C);
+                path_following_data[0x10C] = dir;
+                *(short *)(path_following_data + 0x9C) = *(unsigned short *)(path_following_data + 0x9E);
+                *(short *)(path_following_data + 0x9E) = cur;
             }
         } else {
             float dist = dist_9408(&moby->pos, &hero.motion.pos);
@@ -2929,16 +2929,16 @@ int FUN_L13_002e9408(struct Moby *moby, char *d, int idx, int aim) {
             if (moby->command == 4) {
                 target_speed_multiplier = 3.0f;
             }
-            sp = *(float *)(d + 0xAC);
+            sp = *(float *)(path_following_data + 0xAC);
             sp += (target_speed_multiplier * 30.0f / dist - sp) * (D_0015ED60_9408 * 0.12f);
-            *(float *)(d + 0xAC) = sp;
+            *(float *)(path_following_data + 0xAC) = sp;
             if (sp < 0.0f) {
-                *(float *)(d + 0xAC) = 0.0f;
+                *(float *)(path_following_data + 0xAC) = 0.0f;
             }
         }
-        r = FUN_L13_002e9160_c(moby, d, idx, aim);
+        r = FUN_L13_002e9160_c(moby, path_following_data, idx, aim);
     }
-    if (0.0f < *(float *)(path + (*(short *)(d + 0x9C) << 4) + 0x1C)) {
+    if (0.0f < *(float *)(path + (*(short *)(path_following_data + 0x9C) << 4) + 0x1C)) {
         r |= 2;
     }
     return r;
