@@ -1106,10 +1106,10 @@ int FUN_L00_002da058(u8 *p, void *q, void *m_, void *r_, void *buf) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D9438.c: func_L00_002DB690), where it is exact; names translated to the US level program. */
 
 /* Calls the optional function reached through the moby pointer at +0x24 (slot 0xC); 1 if null. */
-int FUN_L00_002da1e0(char *a) {
-    int (*fn)(char *) = *(int (**)(char *))(*(char **)(*(char **)(a + 0x24) + 0x2C) + 0xC);
+int FUN_L00_002da1e0(char *moby) {
+    int (*fn)(char *) = *(int (**)(char *))(*(char **)(*(char **)(moby + 0x24) + 0x2C) + 0xC);
     if (fn != 0) {
-        return fn(a);
+        return fn(moby);
     }
     return 1;
 }
