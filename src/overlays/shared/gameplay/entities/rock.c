@@ -1500,8 +1500,8 @@ float absolute_float(float input) __asm__("func_001F99C0");
 extern float func_0020D830_m(void *) __asm__("FUN_0020c9e0");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-void FUN_L01_00308550(char *m) {
-    char *d = *(char **)(m + 0x78);
+void FUN_L01_00308550(char *moby) {
+    char *moby_vars = *(char **)(moby + 0x78);
     float dir[4];
     float pos[4];
     float step[4];
@@ -1511,11 +1511,11 @@ void FUN_L01_00308550(char *m) {
     float *spd;
     int *tm;
     float *sz;
-    if (((unsigned char *)m)[0x20] == 1) {
-        scale_vector_xyz(pos, m, 0.0009765625f);
+    if (((unsigned char *)moby)[0x20] == 1) {
+        scale_vector_xyz(pos, moby, 0.0009765625f);
     } else {
-        moby_point_position(m, 0, pos);
-        scale = (160.0f - func_0020D830_m(m)) / 160.0f * 16.0f;
+        moby_point_position(moby, 0, pos);
+        scale = (160.0f - func_0020D830_m(moby)) / 160.0f * 16.0f;
         if (1.0f < scale)
             scale = 1.0f;
     }
@@ -1523,13 +1523,13 @@ void FUN_L01_00308550(char *m) {
     normalize_vector_xyz(dir, dir, -0.3f);
     normalize_vector_xyz(step, dir, 0.1f);
     add_vector_xyz(dir, dir, pos);
-    ang = (float *)(d + 0x20);
-    spd = (float *)(d + 0x30);
-    tm = (int *)(d + 0x40);
-    sz = (float *)(d + 0x50);
+    ang = (float *)(moby_vars + 0x20);
+    spd = (float *)(moby_vars + 0x30);
+    tm = (int *)(moby_vars + 0x40);
+    sz = (float *)(moby_vars + 0x50);
     for (i = 0; i < 4; i++) {
         float a = ang[i] + spd[i];
-        float t;
+        float pulse_progress;
         int c;
         ang[i] = a;
         if (255.0f <= a) {
@@ -1537,11 +1537,11 @@ void FUN_L01_00308550(char *m) {
         } else if (a <= 0.0f) {
             ang[i] = a + 255.0f;
         }
-        if (fast_dec_timer((int *)(d + 0x40) + i)) {
+        if (fast_dec_timer((int *)(moby_vars + 0x40) + i)) {
             tm[i] = scale_game_frames(0xFF);
         }
-        t = convert_integer_to_float(scale_game_frames(0xFF) - tm[i]) / (float)scale_game_frames(0xFF);
-        c = fast_tween_color(D_L01_00161F3C, D_L01_00161F40, absolute_float(0.5f - t));
+        pulse_progress = convert_integer_to_float(scale_game_frames(0xFF) - tm[i]) / (float)scale_game_frames(0xFF);
+        c = fast_tween_color(D_L01_00161F3C, D_L01_00161F40, absolute_float(0.5f - pulse_progress));
         FUN_L00_00272f68(dir, c, func_001FA898_r(ang[i]), D_L01_00161F4C, D_L01_00161F48, 2, 0,
                          sz[i] * scale);
         add_vector_xyz(dir, dir, step);
