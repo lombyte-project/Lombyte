@@ -751,7 +751,7 @@ extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
 
-void FUN_L13_002c37e0(struct Moby *moby, unsigned char *d, float *fp) {
+void FUN_L13_002c37e0(struct Moby *moby, unsigned char *moby_data, float *fp) {
     enum {
         HIT_REACTION_NONE = 0,
         HIT_REACTION_LETHAL = 1,
@@ -769,8 +769,8 @@ void FUN_L13_002c37e0(struct Moby *moby, unsigned char *d, float *fp) {
     if (moby->state != 3) {
         int cnt;
         float vec[4];
-        char *t = find_moby_hit(moby, 0x330000, 0);
-        switch (hit_reaction(moby, t, fp, 0, &cnt, 0, 0, 4)) {
+        char *hit_record = find_moby_hit(moby, 0x330000, 0);
+        switch (hit_reaction(moby, hit_record, fp, 0, &cnt, 0, 0, 4)) {
         case HIT_REACTION_LETHAL:
         case HIT_REACTION_REMOVE:
             *fp = 0;
@@ -788,18 +788,18 @@ void FUN_L13_002c37e0(struct Moby *moby, unsigned char *d, float *fp) {
             break;
         }
         if (cnt >= 2) {
-            if (*fp <= *(float *)(t + 0x2C)) {
+            if (*fp <= *(float *)(hit_record + 0x2C)) {
                 *fp = 0;
                 moby->flags &= 0xEFFF;
-                d[0x67] = 0x78;
-                trooper_anim_update(moby, (short *)(d + 0x60));
+                moby_data[0x67] = 0x78;
+                trooper_anim_update(moby, (short *)(moby_data + 0x60));
                 moby->state = 3;
             } else {
-                *fp = *fp - *(float *)(t + 0x2C);
-                d[0x67] = 0xFA;
-                *(short *)(d + 0x26) = scale_game_frames(0x3C);
-                trooper_anim_update(moby, (short *)(d + 0x60));
-                normalize_vector_xyz(vec, t + 0x10, 0.1f);
+                *fp = *fp - *(float *)(hit_record + 0x2C);
+                moby_data[0x67] = 0xFA;
+                *(short *)(moby_data + 0x26) = scale_game_frames(0x3C);
+                trooper_anim_update(moby, (short *)(moby_data + 0x60));
+                normalize_vector_xyz(vec, hit_record + 0x10, 0.1f);
                 add_vector_xyz(&moby->pos, &moby->pos, vec);
                 random_vector(vec, -0.1f, 0.1f);
                 add_vector_xyz(&moby->pos, &moby->pos, vec);
@@ -809,7 +809,7 @@ void FUN_L13_002c37e0(struct Moby *moby, unsigned char *d, float *fp) {
             moby->hit_slot = 0xFF;
         }
     }
-    trooper_anim_finish(moby, d + 0x60);
+    trooper_anim_finish(moby, moby_data + 0x60);
 }
 /* steers a moby's pitch toward a target with a spring, then damps and clamps it */
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002C4C10), where it is exact; names translated to the US level program. */
