@@ -1448,29 +1448,29 @@ extern void FUN_0020cca8_274818(void *, int, void *) __asm__("FUN_0020cca8");
 extern float FUN_001fa6c0_274818(int) __asm__("FUN_001fa6c0");
 extern void FUN_001f9a10_274818(void *, void *, void *) __asm__("FUN_001f9a10");
 
-void FUN_L00_00274818(char *p) {
-    S_274818 *s = (S_274818 *)(p + 0x30);
-    char *o = s->o;
+void FUN_L00_00274818(char *particle) {
+    S_274818 *attachment_data = (S_274818 *)(particle + 0x30);
+    char *o = attachment_data->o;
     u128 a[4];
     u128 b;
-    float one, f, save, x;
+    float one, randomized_primary_position_w, save, x;
     char *v;
-    if (o == 0 || *(s16 *)(o + 0xA6) != s->h6 || (u8)o[0x20] == 0xFE || (u8)o[0x20] == 0xFD) {
-        free_effect_particle(p);
+    if (o == 0 || *(s16 *)(o + 0xA6) != attachment_data->h6 || (u8)o[0x20] == 0xFE || (u8)o[0x20] == 0xFD) {
+        free_effect_particle(particle);
         return;
     }
-    v = p + 0x10;
+    v = particle + 0x10;
     one = 1.0f;
-    f = s->unk8 * FUN_002132a8_274818(0.05f, one);
-    save = *(float *)(p + 0x2C);
-    FUN_L00_0024f7c8_274818(s->o, s->b4, v);
-    FUN_0020cca8_274818(s->o, s->b4, a);
-    x = FUN_001fa6c0_274818(s->b5);
+    randomized_primary_position_w = attachment_data->unk8 * FUN_002132a8_274818(0.05f, one);
+    save = *(float *)(particle + 0x2C);
+    FUN_L00_0024f7c8_274818(attachment_data->o, attachment_data->b4, v);
+    FUN_0020cca8_274818(attachment_data->o, attachment_data->b4, a);
+    x = FUN_001fa6c0_274818(attachment_data->b5);
     x = FUN_002132a8_274818(-x, x);
-    normalize_vector_xyz(&b, a, (x / 100.0f - one) * s->unkC);
-    FUN_001f9a10_274818(p + 0x20, v, &b);
-    *(float *)(p + 0x1C) = f;
-    *(float *)(p + 0x2C) = save;
+    normalize_vector_xyz(&b, a, (x / 100.0f - one) * attachment_data->unkC);
+    FUN_001f9a10_274818(particle + 0x20, v, &b);
+    *(float *)(particle + 0x1C) = randomized_primary_position_w;
+    *(float *)(particle + 0x2C) = save;
 }
 extern int FUN_001fa6d0_274948(float) __asm__("FUN_001fa6d0");
 extern float FUN_002132a8_274948(float, float) __asm__("FUN_002132a8");
