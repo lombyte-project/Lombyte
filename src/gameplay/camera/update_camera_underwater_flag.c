@@ -17,7 +17,7 @@ void update_camera_underwater_flag(void) __asm__("FUN_001ed7f0");
 extern s32 game_mode_macro __asm__("D_0015F604") MACRO_ADDR;
 void update_camera_underwater_flag(void) {
     char *cam = preview_camera;
-    float a[4];
+    float probe_start[4];
     float b[4];
     int i;
 
@@ -25,26 +25,26 @@ void update_camera_underwater_flag(void) {
         *(int *)(cam + 0x394) = 0;
         return;
     }
-    qcopy(a, cam + 0x140);
+    qcopy(probe_start, cam + 0x140);
     qcopy(b, cam + 0x140);
-    a[2] += 0.75f;
+    probe_start[2] += 0.75f;
     b[2] -= 0.75f;
     i = 0;
-    while (i < 6 && collision_line(a, b, 0x12, 0, 0) != 0) {
+    while (i < 6 && collision_line(probe_start, b, 0x12, 0, 0) != 0) {
         if (collision_hit_material() == 0) {
-            float h = resolve_camera_surface_height(D_00194120, 0) + 0.04f;
+            float submersion_height_threshold = resolve_camera_surface_height(D_00194120, 0) + 0.04f;
             char *c2 = preview_camera;
 
-            if (*(float *)(c2 + 0x148) < h) {
+            if (*(float *)(c2 + 0x148) < submersion_height_threshold) {
                 *(int *)(c2 + 0x394) = 1;
             } else {
                 *(int *)(c2 + 0x394) = 0;
             }
             return;
         }
-        qcopy(a, D_00194120);
+        qcopy(probe_start, D_00194120);
         i++;
-        a[2] -= 0.01f;
+        probe_start[2] -= 0.01f;
     }
 }
 
