@@ -437,7 +437,7 @@ extern f32 D_L14_001613A4_c618 __asm__("D_L14_001613A4") __attribute__((sda));
 
 extern Vec4 D_L14_00174560;
 void FUN_L14_002ac618(struct Moby *m);
-void FUN_L14_002ac618(struct Moby *m) {
+void FUN_L14_002ac618(struct Moby *moby) {
     enum {
         INTERCEPTOR_STATE_INITIALIZE = 0,
         INTERCEPTOR_STATE_PATROL_AND_SCAN = 1,
@@ -449,7 +449,7 @@ void FUN_L14_002ac618(struct Moby *m) {
         INTERCEPTOR_STATE_INITIALIZE_DEATH_FALL = 7,
         INTERCEPTOR_STATE_DEATH_FALL = 9
     };
-    char *d = (char *)m->pvars;
+    char *moby_vars = (char *)moby->pvars;
     float v[4];
     float w[4];
     int near_seg;
@@ -457,112 +457,112 @@ void FUN_L14_002ac618(struct Moby *m) {
     int path_seg;
     float path_t;
 
-    if ((u8)d[0x2E] == 2) {
-        *(int *)(d + 0x20C) = 0;
-        FUN_0020c828(m);
+    if ((u8)moby_vars[0x2E] == 2) {
+        *(int *)(moby_vars + 0x20C) = 0;
+        FUN_0020c828(moby);
         return;
     }
-    if (m->state == 8) {
-        FUN_L14_002aed50_c618(m);
-        add_draw_callback(FUN_L14_002aee28, m);
+    if (moby->state == 8) {
+        FUN_L14_002aed50_c618(moby);
+        add_draw_callback(FUN_L14_002aee28, moby);
         return;
     }
-    *(int *)(d + 0x20C) = 0;
-    if (m->anim_flags & 2) {
-        if (m->seq == m->prev_seq) {
-            if (m->seq == 2) {
-                blend_moby_animation_c618(m, 3, 0, 3);
+    *(int *)(moby_vars + 0x20C) = 0;
+    if (moby->anim_flags & 2) {
+        if (moby->seq == moby->prev_seq) {
+            if (moby->seq == 2) {
+                blend_moby_animation_c618(moby, 3, 0, 3);
             }
-            if (m->seq == 1) {
-                blend_moby_animation_c618(m, 2, 0, 10);
+            if (moby->seq == 1) {
+                blend_moby_animation_c618(moby, 2, 0, 10);
             }
         }
     }
-    FUN_L14_002ad8b8(m);
-    if (m->state > 0 && m->state < 7) {
-        if (FUN_001f9b48(&m->pos, D_L14_001674C0) < 40.0f) {
-            FUN_L00_0025a120(m);
+    FUN_L14_002ad8b8(moby);
+    if (moby->state > 0 && moby->state < 7) {
+        if (FUN_001f9b48(&moby->pos, D_L14_001674C0) < 40.0f) {
+            FUN_L00_0025a120(moby);
         }
-        *(s16 *)(d + 0x200) = 0;
+        *(s16 *)(moby_vars + 0x200) = 0;
     }
-    switch (m->state) {
+    switch (moby->state) {
     case INTERCEPTOR_STATE_INITIALIZE:
-        FUN_002141f8_c618(m)[0xE] = 1;
-        if (*(s16 *)(d + 0x1B6) == 1) {
-            m->flags = (m->flags | 0x41) & 0xEFFF;
-            m->collision = 0;
-            m->update_dist = 0xFF;
-            m->state = 8;
-            d[0x58] = truncate_float_to_s32(17.0f);
-            d[0x5A] = truncate_float_to_s32(6.0f);
-            *(s16 *)(d + 0x20A) = FUN_L14_002af048(m);
+        FUN_002141f8_c618(moby)[0xE] = 1;
+        if (*(s16 *)(moby_vars + 0x1B6) == 1) {
+            moby->flags = (moby->flags | 0x41) & 0xEFFF;
+            moby->collision = 0;
+            moby->update_dist = 0xFF;
+            moby->state = 8;
+            moby_vars[0x58] = truncate_float_to_s32(17.0f);
+            moby_vars[0x5A] = truncate_float_to_s32(6.0f);
+            *(s16 *)(moby_vars + 0x20A) = FUN_L14_002af048(moby);
             return;
         }
-        if (*(int *)(d + 0x74) == -1 || *D_L14_001B0BB0[*(int *)(d + 0x74)] == 0 ||
-            *(int *)(d + 0x78) == -1 || *D_L14_001B0BB0[*(int *)(d + 0x78)] == 0 ||
-            *(int *)(d + 0x70) < 0 ||
-            *(int *)(d + 0x204) == -1 || *D_L14_001B0BB0[*(int *)(d + 0x204)] == 0) {
-            FUN_0020c828(m);
+        if (*(int *)(moby_vars + 0x74) == -1 || *D_L14_001B0BB0[*(int *)(moby_vars + 0x74)] == 0 ||
+            *(int *)(moby_vars + 0x78) == -1 || *D_L14_001B0BB0[*(int *)(moby_vars + 0x78)] == 0 ||
+            *(int *)(moby_vars + 0x70) < 0 ||
+            *(int *)(moby_vars + 0x204) == -1 || *D_L14_001B0BB0[*(int *)(moby_vars + 0x204)] == 0) {
+            FUN_0020c828(moby);
             return;
         }
-        m->shadow_range = 0x20;
-        *(float *)(d + 0x20) = 4.0f;
-        *(s16 *)(d + 0x24) = 4;
-        d[0x28] = 3;
-        qcopy(&m->pos, (char *)D_L14_001B0BB0[*(int *)(d + 0x74)] + 0x10);
-        qcopy(d + 0x170, (char *)D_L14_001B0BB0[*(int *)(d + 0x78)] + 0x10);
-        FUN_L14_002ae448(m);
-        *(s16 *)(d + 0x88) = 1;
-        *(float *)(d + 0x21C) = -1.0f;
-        *(float *)(d + 0x180) = *(float *)(d + 0x184) = *(float *)(d + 0x188) = 0.0f;
-        *(float *)(d + 0x194) = *(float *)(d + 0x198) = *(float *)(d + 0x19C) = 0.0f;
-        *(float *)(d + 0x160) = 0.0f;
-        *(int *)(d + 0x20C) = 0;
-        *(float *)(d + 0x164) = 0.0f;
-        *(float *)(d + 0x1A0) = 0.0f;
-        *(float *)(d + 0x1A4) = 0.0f;
-        *(float *)(d + 0x1A8) = 0.0f;
-        *(float *)(d + 0x1AC) = 0.0f;
-        *(float *)(d + 0x1B0) = m->rot.z;
-        *(s16 *)(d + 0x1B4) = 0;
-        *(float *)(d + 0x1B8) = 0.0f;
-        memset_c618(d + 0xE0, 0, 0x40);
-        memset_c618(d + 0x120, 0, 0x40);
-        attach_manipulator_c618(m, 0, d + 0xE0);
-        attach_manipulator_c618(m, 1, d + 0x120);
-        *(float *)(d + 0x1C8) = *(float *)(d + 0x1C4) = 0.0f;
-        *(int *)(d + 0x18C) = 0;
-        m->state = 1;
-        m->command = 0;
+        moby->shadow_range = 0x20;
+        *(float *)(moby_vars + 0x20) = 4.0f;
+        *(s16 *)(moby_vars + 0x24) = 4;
+        moby_vars[0x28] = 3;
+        qcopy(&moby->pos, (char *)D_L14_001B0BB0[*(int *)(moby_vars + 0x74)] + 0x10);
+        qcopy(moby_vars + 0x170, (char *)D_L14_001B0BB0[*(int *)(moby_vars + 0x78)] + 0x10);
+        FUN_L14_002ae448(moby);
+        *(s16 *)(moby_vars + 0x88) = 1;
+        *(float *)(moby_vars + 0x21C) = -1.0f;
+        *(float *)(moby_vars + 0x180) = *(float *)(moby_vars + 0x184) = *(float *)(moby_vars + 0x188) = 0.0f;
+        *(float *)(moby_vars + 0x194) = *(float *)(moby_vars + 0x198) = *(float *)(moby_vars + 0x19C) = 0.0f;
+        *(float *)(moby_vars + 0x160) = 0.0f;
+        *(int *)(moby_vars + 0x20C) = 0;
+        *(float *)(moby_vars + 0x164) = 0.0f;
+        *(float *)(moby_vars + 0x1A0) = 0.0f;
+        *(float *)(moby_vars + 0x1A4) = 0.0f;
+        *(float *)(moby_vars + 0x1A8) = 0.0f;
+        *(float *)(moby_vars + 0x1AC) = 0.0f;
+        *(float *)(moby_vars + 0x1B0) = moby->rot.z;
+        *(s16 *)(moby_vars + 0x1B4) = 0;
+        *(float *)(moby_vars + 0x1B8) = 0.0f;
+        memset_c618(moby_vars + 0xE0, 0, 0x40);
+        memset_c618(moby_vars + 0x120, 0, 0x40);
+        attach_manipulator_c618(moby, 0, moby_vars + 0xE0);
+        attach_manipulator_c618(moby, 1, moby_vars + 0x120);
+        *(float *)(moby_vars + 0x1C8) = *(float *)(moby_vars + 0x1C4) = 0.0f;
+        *(int *)(moby_vars + 0x18C) = 0;
+        moby->state = 1;
+        moby->command = 0;
         break;
     case INTERCEPTOR_STATE_PATROL_AND_SCAN: {
         int found;
         int hit;
 
-        m->glow_color = 0xFF000000 | (D_L14_00161408 << 16) | (D_L14_00161404 << 8) | D_L14_00161400;
-        if (FUN_L14_002b4670(*(int *)(d + 0x70))) {
-            m->state = 3;
-            *(s16 *)(d + 0x1F2) = scale_game_frames(D_L14_001613D0);
+        moby->glow_color = 0xFF000000 | (D_L14_00161408 << 16) | (D_L14_00161404 << 8) | D_L14_00161400;
+        if (FUN_L14_002b4670(*(int *)(moby_vars + 0x70))) {
+            moby->state = 3;
+            *(s16 *)(moby_vars + 0x1F2) = scale_game_frames(D_L14_001613D0);
         }
-        *(s16 *)(d + 0x202) = 0;
-        *(s16 *)(d + 0x200) = 1;
+        *(s16 *)(moby_vars + 0x202) = 0;
+        *(s16 *)(moby_vars + 0x200) = 1;
         found = 0;
-        hit = FUN_L14_002aeba0(m, 1);
-        FUN_L14_002ae6d8(m);
-        FUN_L14_002ae7d8(m);
-        FUN_L14_002aea08_c618(m);
+        hit = FUN_L14_002aeba0(moby, 1);
+        FUN_L14_002ae6d8(moby);
+        FUN_L14_002ae7d8(moby);
+        FUN_L14_002aea08_c618(moby);
         if (hit) {
-            lerp_vector_c618(v, d + 0x90, d + 0xD0, 0.5f);
-            qcopy(w, d + 0x90);
-            FUN_001e93e8_c618(w, *(float *)(d + 0x214) * 0.8f);
-            FUN_001e93e8_c618(v, *(float *)(d + 0x214) * 0.48f);
-            if (FUN_L00_001f2868_c618(*(float *)(d + 0x214) * 0.48f, v, 0, 0, 0) ||
-                FUN_L00_001f2868_c618(*(float *)(d + 0x214) * 0.9f, w, 0, 0, 0)) {
+            lerp_vector_c618(v, moby_vars + 0x90, moby_vars + 0xD0, 0.5f);
+            qcopy(w, moby_vars + 0x90);
+            FUN_001e93e8_c618(w, *(float *)(moby_vars + 0x214) * 0.8f);
+            FUN_001e93e8_c618(v, *(float *)(moby_vars + 0x214) * 0.48f);
+            if (FUN_L00_001f2868_c618(*(float *)(moby_vars + 0x214) * 0.48f, v, 0, 0, 0) ||
+                FUN_L00_001f2868_c618(*(float *)(moby_vars + 0x214) * 0.9f, w, 0, 0, 0)) {
                 struct Moby *t = D_L14_00174540.target;
 
                 if ((char *)t == D_001413D0_c618 || (t != 0 && (t->oclass == 0xCB || t->oclass == 0x10E))) {
                     found = 1;
-                    *(struct Moby **)(d + 0x18C) = D_L14_00174540.target;
+                    *(struct Moby **)(moby_vars + 0x18C) = D_L14_00174540.target;
                 }
             }
         }
@@ -571,28 +571,28 @@ void FUN_L14_002ac618(struct Moby *m) {
         }
     }
     case INTERCEPTOR_STATE_ALERT_GROUP: {
-        s32 voice = *(s32 *)(d + 0x1D0);
+        s32 voice = *(s32 *)(moby_vars + 0x1D0);
 
         if (voice != -1) {
             VoicePoolWindow *slot = (VoicePoolWindow *)((u8 *)&voice_pool + voice * 0x70);
 
-            if ((struct Moby *)slot->voice.owner == m && slot->voice.state != 0) {
+            if ((struct Moby *)slot->voice.owner == moby && slot->voice.state != 0) {
                 release_voice_slot(voice);
             }
         }
-        *(s32 *)(d + 0x1D0) = -1;
-        FUN_L14_002b44a8(*(int *)(d + 0x70));
-        m->state = 3;
-        *(s16 *)(d + 0x1F2) = scale_game_frames(D_L14_001613D0);
+        *(s32 *)(moby_vars + 0x1D0) = -1;
+        FUN_L14_002b44a8(*(int *)(moby_vars + 0x70));
+        moby->state = 3;
+        *(s16 *)(moby_vars + 0x1F2) = scale_game_frames(D_L14_001613D0);
         break;
     }
     case INTERCEPTOR_STATE_TRACK_TARGET:
-        m->glow_color = 0xFF000000 | (D_L14_00161414 << 16) | (D_L14_00161410 << 8) | D_L14_0016140C;
-        if (*(struct Moby **)(d + 0x18C) != 0) {
-            *(s16 *)(d + 0x200) = 1;
-            *(s16 *)(d + 0x202) = 1;
-            FUN_L14_002aeba0(m, 1);
-            qcopy(v, &(*(struct Moby **)(d + 0x18C))->pos);
+        moby->glow_color = 0xFF000000 | (D_L14_00161414 << 16) | (D_L14_00161410 << 8) | D_L14_0016140C;
+        if (*(struct Moby **)(moby_vars + 0x18C) != 0) {
+            *(s16 *)(moby_vars + 0x200) = 1;
+            *(s16 *)(moby_vars + 0x202) = 1;
+            FUN_L14_002aeba0(moby, 1);
+            qcopy(v, &(*(struct Moby **)(moby_vars + 0x18C))->pos);
             v[2] += 0.5f;
             qcopy(w, v);
             w[2] -= 4.0f;
@@ -601,182 +601,182 @@ void FUN_L14_002ac618(struct Moby *m) {
             } else {
                 v[2] -= 0.5f;
             }
-            ease_c618((f32 *)(d + 0x170), v[0], (f32 *)(d + 0x180), 0.003f, 0.2f, 0.0f);
-            ease_c618((f32 *)(d + 0x174), v[1], (f32 *)(d + 0x184), 0.003f, 0.2f, 0.0f);
-            ease_c618((f32 *)(d + 0x178), v[2], (f32 *)(d + 0x188), 0.003f, 0.2f, 0.0f);
-            FUN_L14_002ae7d8(m);
-            if ((s8)(*(struct Moby **)(d + 0x18C))->state < 0 || fast_dec_timer_s16((s16 *)(d + 0x1F2))) {
-                *(float *)(d + 0x8C) = 0.0f;
-                *(int *)(d + 0x80) = 0;
-                *(s16 *)(d + 0x208) = 0;
-                m->state = 4;
+            ease_c618((f32 *)(moby_vars + 0x170), v[0], (f32 *)(moby_vars + 0x180), 0.003f, 0.2f, 0.0f);
+            ease_c618((f32 *)(moby_vars + 0x174), v[1], (f32 *)(moby_vars + 0x184), 0.003f, 0.2f, 0.0f);
+            ease_c618((f32 *)(moby_vars + 0x178), v[2], (f32 *)(moby_vars + 0x188), 0.003f, 0.2f, 0.0f);
+            FUN_L14_002ae7d8(moby);
+            if ((s8)(*(struct Moby **)(moby_vars + 0x18C))->state < 0 || fast_dec_timer_s16((s16 *)(moby_vars + 0x1F2))) {
+                *(float *)(moby_vars + 0x8C) = 0.0f;
+                *(int *)(moby_vars + 0x80) = 0;
+                *(s16 *)(moby_vars + 0x208) = 0;
+                moby->state = 4;
             }
         } else {
-            *(int *)(d + 0x80) = 0;
-            *(float *)(d + 0x8C) = 0.0f;
-            *(s16 *)(d + 0x208) = 0;
-            m->state = 4;
+            *(int *)(moby_vars + 0x80) = 0;
+            *(float *)(moby_vars + 0x8C) = 0.0f;
+            *(s16 *)(moby_vars + 0x208) = 0;
+            moby->state = 4;
         }
     case INTERCEPTOR_STATE_WAIT_FOR_GROUP_READY:
-        m->glow_color = 0xFF000000 | (D_L14_00161414 << 16) | (D_L14_00161410 << 8) | D_L14_0016140C;
-        qcopy(v, &m->pos);
+        moby->glow_color = 0xFF000000 | (D_L14_00161414 << 16) | (D_L14_00161410 << 8) | D_L14_0016140C;
+        qcopy(v, &moby->pos);
         v[3] = D_L14_0016139C;
-        if (fast_bsphere_check((u8 *)v, FUN_001fa6c0(m->draw_dist)) >= 0) {
+        if (fast_bsphere_check((u8 *)v, FUN_001fa6c0(moby->draw_dist)) >= 0) {
             float *p;
 
-            FUN_L00_0024f7c8_c618(m, 2, w);
-            p = (float *)(d + 0x1D4);
+            FUN_L00_0024f7c8_c618(moby, 2, w);
+            p = (float *)(moby_vars + 0x1D4);
             p[0] = w[0];
             p[1] = w[1];
             p[2] = w[2];
-            *(int *)(d + 0x20C) |= 8;
-            FUN_L14_002aea08_c618(m);
+            *(int *)(moby_vars + 0x20C) |= 8;
+            FUN_L14_002aea08_c618(moby);
         }
-        if (m->state == 4) {
-            if (m->prev_seq == 0) {
-                blend_moby_animation_c618(m, 2, 0, 5);
+        if (moby->state == 4) {
+            if (moby->prev_seq == 0) {
+                blend_moby_animation_c618(moby, 2, 0, 5);
             }
-            FUN_L14_002ae900(m, D_L14_001613F8, D_L14_001613F4, 1.0f);
-            if (*(float *)(d + 0x1C0) != 0.0f || *(float *)(d + 0x1BC) != 0.0f) {
-                ease_c618((f32 *)(d + 0x1C0), 0.0f, (f32 *)(d + 0x1C8), 0.004f, 0.2f, 0.0f);
-                ease_c618((f32 *)(d + 0x1BC), 0.0f, (f32 *)(d + 0x1C4), 0.004f, 0.2f, 0.0f);
-                if (absolute_float(*(float *)(d + 0x1C0)) < 0.0001f) {
-                    *(float *)(d + 0x1C0) = 0.0f;
+            FUN_L14_002ae900(moby, D_L14_001613F8, D_L14_001613F4, 1.0f);
+            if (*(float *)(moby_vars + 0x1C0) != 0.0f || *(float *)(moby_vars + 0x1BC) != 0.0f) {
+                ease_c618((f32 *)(moby_vars + 0x1C0), 0.0f, (f32 *)(moby_vars + 0x1C8), 0.004f, 0.2f, 0.0f);
+                ease_c618((f32 *)(moby_vars + 0x1BC), 0.0f, (f32 *)(moby_vars + 0x1C4), 0.004f, 0.2f, 0.0f);
+                if (absolute_float(*(float *)(moby_vars + 0x1C0)) < 0.0001f) {
+                    *(float *)(moby_vars + 0x1C0) = 0.0f;
                 }
-                if (absolute_float(*(float *)(d + 0x1BC)) < 0.0001f) {
-                    *(float *)(d + 0x1BC) = 0.0f;
+                if (absolute_float(*(float *)(moby_vars + 0x1BC)) < 0.0001f) {
+                    *(float *)(moby_vars + 0x1BC) = 0.0f;
                 }
-                FUN_L00_001fff28(d + 0xF0, 2, *(float *)(d + 0x1BC));
-                FUN_L00_001fff28(d + 0x130, 1, *(float *)(d + 0x1C0));
+                FUN_L00_001fff28(moby_vars + 0xF0, 2, *(float *)(moby_vars + 0x1BC));
+                FUN_L00_001fff28(moby_vars + 0x130, 1, *(float *)(moby_vars + 0x1C0));
             }
-            if (FUN_L14_002b4500(*(int *)(d + 0x70))) {
-                MoverPath *p = (MoverPath *)D_L14_001B0BB0[*(int *)(d + 0x204)];
+            if (FUN_L14_002b4500(*(int *)(moby_vars + 0x70))) {
+                MoverPath *p = (MoverPath *)D_L14_001B0BB0[*(int *)(moby_vars + 0x204)];
 
-                m->state = 5;
-                *(int *)(d + 0x80) = p->count - 2;
-                *(float *)(d + 0x8C) = p->points[*(int *)(d + 0x80)].f[3];
-                *(s16 *)(d + 0x208) = 0;
-                FUN_L14_002ae900(m, 0.01f, 5.0f, -1.0f);
-                blend_moby_animation_c618(m, 0, 0, scale_game_frames(10));
+                moby->state = 5;
+                *(int *)(moby_vars + 0x80) = p->count - 2;
+                *(float *)(moby_vars + 0x8C) = p->points[*(int *)(moby_vars + 0x80)].f[3];
+                *(s16 *)(moby_vars + 0x208) = 0;
+                FUN_L14_002ae900(moby, 0.01f, 5.0f, -1.0f);
+                blend_moby_animation_c618(moby, 0, 0, scale_game_frames(10));
             }
         }
         break;
     case INTERCEPTOR_STATE_FOLLOW_RETURN_PATH:
-        FUN_L14_002aea08_c618(m);
-        FUN_L14_002ae900(m, 0.01f, 5.0f, -1.0f);
-        if (*(s16 *)(d + 0x208) != 0) {
-            int *tab = D_L14_001B0BB0[*(int *)(d + 0x78)];
+        FUN_L14_002aea08_c618(moby);
+        FUN_L14_002ae900(moby, 0.01f, 5.0f, -1.0f);
+        if (*(s16 *)(moby_vars + 0x208) != 0) {
+            int *tab = D_L14_001B0BB0[*(int *)(moby_vars + 0x78)];
 
             near_seg = 0;
             near_t = 0.0f;
-            FUN_L00_0025df68_c618(tab, &m->pos, v, &near_seg, &near_t, 0, 40.0f, 5.0f, 0.0f);
-            *(int *)(d + 0x84) = near_seg;
-            *(float *)(d + 0x1CC) = near_t;
-            *(s16 *)(d + 0x200) = 0;
-            m->state = 6;
+            FUN_L00_0025df68_c618(tab, &moby->pos, v, &near_seg, &near_t, 0, 40.0f, 5.0f, 0.0f);
+            *(int *)(moby_vars + 0x84) = near_seg;
+            *(float *)(moby_vars + 0x1CC) = near_t;
+            *(s16 *)(moby_vars + 0x200) = 0;
+            moby->state = 6;
         }
         break;
     case INTERCEPTOR_STATE_REJOIN_PATROL: {
         int i;
-        int n;
+        int source_segment_index;
         float dist;
         char *seg;
         int *tab;
         float t;
         int dir;
 
-        FUN_L14_002aea08_c618(m);
-        n = *(int *)(d + 0x84);
-        seg = (char *)D_L14_001B0BB0[*(int *)(d + 0x78)];
+        FUN_L14_002aea08_c618(moby);
+        source_segment_index = *(int *)(moby_vars + 0x84);
+        seg = (char *)D_L14_001B0BB0[*(int *)(moby_vars + 0x78)];
         dist = 0.0f;
-        for (i = 0; i < n; i++) {
+        for (i = 0; i < source_segment_index; i++) {
             dist += *(float *)(seg + i * 16 + 0x1C);
         }
-        dist += *(float *)(d + 0x1CC);
-        tab = D_L14_001B0BB0[*(int *)(d + 0x74)];
-        t = dist / *(float *)(d + 0x16C) * *(float *)(d + 0x190);
-        dir = *(s16 *)(d + 0x8A);
+        dist += *(float *)(moby_vars + 0x1CC);
+        tab = D_L14_001B0BB0[*(int *)(moby_vars + 0x74)];
+        t = dist / *(float *)(moby_vars + 0x16C) * *(float *)(moby_vars + 0x190);
+        dir = *(s16 *)(moby_vars + 0x8A);
         path_seg = 0;
         path_t = 0.0f;
         FUN_L00_0025d808_c618(tab, v, &path_seg, &path_t, dir, t);
-        ease_c618(&m->pos.x, v[0], (f32 *)(d + 0x194), 0.005f, D_L14_001613A4_c618, 0.0f);
-        ease_c618(&m->pos.y, v[1], (f32 *)(d + 0x198), 0.005f, D_L14_001613A4_c618, 0.0f);
-        ease_c618(&m->pos.z, v[2], (f32 *)(d + 0x19C), 0.005f, D_L14_001613A4_c618, 0.0f);
-        FUN_L14_002aeba0(m, 0);
-        if (FUN_001f9b48(&m->pos, v) < 0.5f) {
-            m->state = 1;
+        ease_c618(&moby->pos.x, v[0], (f32 *)(moby_vars + 0x194), 0.005f, D_L14_001613A4_c618, 0.0f);
+        ease_c618(&moby->pos.y, v[1], (f32 *)(moby_vars + 0x198), 0.005f, D_L14_001613A4_c618, 0.0f);
+        ease_c618(&moby->pos.z, v[2], (f32 *)(moby_vars + 0x19C), 0.005f, D_L14_001613A4_c618, 0.0f);
+        FUN_L14_002aeba0(moby, 0);
+        if (FUN_001f9b48(&moby->pos, v) < 0.5f) {
+            moby->state = 1;
         }
-        FUN_L00_0025d808_c618(D_L14_001B0BB0[*(int *)(d + 0x78)], v, d + 0x84, d + 0x1CC, *(s16 *)(d + 0x8A), 0.0f);
-        ease_c618((f32 *)(d + 0x170), v[0], (f32 *)(d + 0x180), D_L14_001613A0_c618, D_L14_001613A4_c618, 0.0f);
-        ease_c618((f32 *)(d + 0x174), v[1], (f32 *)(d + 0x184), D_L14_001613A0_c618, D_L14_001613A4_c618, 0.0f);
-        ease_c618((f32 *)(d + 0x178), v[2], (f32 *)(d + 0x188), D_L14_001613A0_c618, D_L14_001613A4_c618, 0.0f);
+        FUN_L00_0025d808_c618(D_L14_001B0BB0[*(int *)(moby_vars + 0x78)], v, moby_vars + 0x84, moby_vars + 0x1CC, *(s16 *)(moby_vars + 0x8A), 0.0f);
+        ease_c618((f32 *)(moby_vars + 0x170), v[0], (f32 *)(moby_vars + 0x180), D_L14_001613A0_c618, D_L14_001613A4_c618, 0.0f);
+        ease_c618((f32 *)(moby_vars + 0x174), v[1], (f32 *)(moby_vars + 0x184), D_L14_001613A0_c618, D_L14_001613A4_c618, 0.0f);
+        ease_c618((f32 *)(moby_vars + 0x178), v[2], (f32 *)(moby_vars + 0x188), D_L14_001613A0_c618, D_L14_001613A4_c618, 0.0f);
         break;
     }
     case INTERCEPTOR_STATE_INITIALIZE_DEATH_FALL: {
         s32 voice;
         float ang;
 
-        *(s16 *)(d + 0x1F0) = scale_game_frames(D_L14_001613D4);
-        FUN_L14_002b44a8(*(int *)(d + 0x70));
-        voice = *(s32 *)(d + 0x1D0);
+        *(s16 *)(moby_vars + 0x1F0) = scale_game_frames(D_L14_001613D4);
+        FUN_L14_002b44a8(*(int *)(moby_vars + 0x70));
+        voice = *(s32 *)(moby_vars + 0x1D0);
         if (voice != -1) {
             VoicePoolWindow *slot = (VoicePoolWindow *)((u8 *)&voice_pool + voice * 0x70);
 
-            if ((struct Moby *)slot->voice.owner == m && slot->voice.state != 0) {
+            if ((struct Moby *)slot->voice.owner == moby && slot->voice.state != 0) {
                 release_voice_slot(voice);
             }
         }
-        *(s32 *)(d + 0x1D0) = -1;
-        FUN_L00_0025e450_c618(m, d + 0x40, &m->pos, 0.0f, 0.0f, 5, 2, 4, 4.0f, 2.0f, 9.0f, 1.0f, 1, 15.0f, 1, 5, -1, 0);
-        subtract_vector_c618(v, &m->pos, &hero.motion.pos);
+        *(s32 *)(moby_vars + 0x1D0) = -1;
+        FUN_L00_0025e450_c618(moby, moby_vars + 0x40, &moby->pos, 0.0f, 0.0f, 5, 2, 4, 4.0f, 2.0f, 9.0f, 1.0f, 1, 15.0f, 1, 5, -1, 0);
+        subtract_vector_c618(v, &moby->pos, &hero.motion.pos);
         v[2] = 0.0f;
         normalize_vector_c618(v, v, random_float_c618(D_L14_001613D8 * D_0015ED60_c618, D_L14_001613DC * D_0015ED60_c618));
         cross_vectors_c618(w, &hero.gravity_dir, v);
         ang = randf_sym(0.6981317f, 1.2217305f);
-        build_look_at_matrix_c618(d + 0x1E0, v, &hero.gravity_dir, ang);
-        *(float *)(d + 0x1E8) = random_float_c618(D_L14_001613E0 * D_0015ED60_c618, D_L14_001613E4 * D_0015ED60_c618);
-        m->scale *= 0.1f;
-        *(float *)(d + 0x140) = 10.0f;
-        *(float *)(d + 0x144) = 10.0f;
-        *(float *)(d + 0x148) = 10.0f;
-        *(float *)(d + 0x1F4) = randf_sym(0.0f, 0.08726646f);
-        *(float *)(d + 0x1F8) = randf_sym(0.0f, 0.08726646f);
-        *(float *)(d + 0x1FC) = randf_sym(0.0f, 0.08726646f);
-        m->rot.x = fast_add_rotations(m->rot.x, randf_sym(0.0f, 0.7853982f));
-        m->rot.y = fast_add_rotations(m->rot.y, randf_sym(0.0f, 0.7853982f));
-        m->state = 9;
-        FUN_L14_002aead8_c618(m);
+        build_look_at_matrix_c618(moby_vars + 0x1E0, v, &hero.gravity_dir, ang);
+        *(float *)(moby_vars + 0x1E8) = random_float_c618(D_L14_001613E0 * D_0015ED60_c618, D_L14_001613E4 * D_0015ED60_c618);
+        moby->scale *= 0.1f;
+        *(float *)(moby_vars + 0x140) = 10.0f;
+        *(float *)(moby_vars + 0x144) = 10.0f;
+        *(float *)(moby_vars + 0x148) = 10.0f;
+        *(float *)(moby_vars + 0x1F4) = randf_sym(0.0f, 0.08726646f);
+        *(float *)(moby_vars + 0x1F8) = randf_sym(0.0f, 0.08726646f);
+        *(float *)(moby_vars + 0x1FC) = randf_sym(0.0f, 0.08726646f);
+        moby->rot.x = fast_add_rotations(moby->rot.x, randf_sym(0.0f, 0.7853982f));
+        moby->rot.y = fast_add_rotations(moby->rot.y, randf_sym(0.0f, 0.7853982f));
+        moby->state = 9;
+        FUN_L14_002aead8_c618(moby);
         return;
     }
     case INTERCEPTOR_STATE_DEATH_FALL: {
         int i;
 
-        add_vector_c618(&m->pos, &m->pos, d + 0x1E0);
-        if (absolute_float(*(float *)(d + 0x1E0)) > D_L14_001613F0 * D_0015ED60_c618) {
-            *(float *)(d + 0x1E0) *= (D_L14_001613EC - 1.0f) * D_0015ED60_c618 + 1.0f;
+        add_vector_c618(&moby->pos, &moby->pos, moby_vars + 0x1E0);
+        if (absolute_float(*(float *)(moby_vars + 0x1E0)) > D_L14_001613F0 * D_0015ED60_c618) {
+            *(float *)(moby_vars + 0x1E0) *= (D_L14_001613EC - 1.0f) * D_0015ED60_c618 + 1.0f;
         }
-        if (absolute_float(*(float *)(d + 0x1E4)) > D_L14_001613F0 * D_0015ED60_c618) {
-            *(float *)(d + 0x1E4) *= (D_L14_001613EC - 1.0f) * D_0015ED60_c618 + 1.0f;
+        if (absolute_float(*(float *)(moby_vars + 0x1E4)) > D_L14_001613F0 * D_0015ED60_c618) {
+            *(float *)(moby_vars + 0x1E4) *= (D_L14_001613EC - 1.0f) * D_0015ED60_c618 + 1.0f;
         }
-        if (*(float *)(d + 0x1E8) > 0.0f) {
-            *(float *)(d + 0x1E8) *= (D_L14_001613EC - 1.0f) * D_0015ED60_c618 + 1.0f;
+        if (*(float *)(moby_vars + 0x1E8) > 0.0f) {
+            *(float *)(moby_vars + 0x1E8) *= (D_L14_001613EC - 1.0f) * D_0015ED60_c618 + 1.0f;
         }
-        *(float *)(d + 0x1E8) -= D_L14_001613E8 * frame_scale_sq;
-        m->rot.z = fast_add_rotations(m->rot.z, *(float *)(d + 0x1FC));
-        *(float *)(d + 0x140) = 10.0f;
-        *(float *)(d + 0x144) = 10.0f;
-        *(float *)(d + 0x148) = 10.0f;
-        if (m->pos.x < 2.0f || m->pos.x > 1021.0f || m->pos.y < 2.0f || m->pos.y > 1021.0f ||
-            m->pos.z < 2.0f || m->pos.z > 1021.0f) {
-            FUN_0020c828(m);
+        *(float *)(moby_vars + 0x1E8) -= D_L14_001613E8 * frame_scale_sq;
+        moby->rot.z = fast_add_rotations(moby->rot.z, *(float *)(moby_vars + 0x1FC));
+        *(float *)(moby_vars + 0x140) = 10.0f;
+        *(float *)(moby_vars + 0x144) = 10.0f;
+        *(float *)(moby_vars + 0x148) = 10.0f;
+        if (moby->pos.x < 2.0f || moby->pos.x > 1021.0f || moby->pos.y < 2.0f || moby->pos.y > 1021.0f ||
+            moby->pos.z < 2.0f || moby->pos.z > 1021.0f) {
+            FUN_0020c828(moby);
             return;
         }
-        if (fast_dec_timer_s16((s16 *)(d + 0x1F0)) || coll_sphere(0.5f, &m->pos, 0, m)) {
-            FUN_L00_0025e450_c618(m, d + 0x40, &m->pos, 2.0f, 1.0f, 5, 2, 4, 2.0f, 1.0f, 9.0f, 1.0f, 1, 15.0f, 1, 5, -1, 0);
-            FUN_0020c828(m);
+        if (fast_dec_timer_s16((s16 *)(moby_vars + 0x1F0)) || coll_sphere(0.5f, &moby->pos, 0, moby)) {
+            FUN_L00_0025e450_c618(moby, moby_vars + 0x40, &moby->pos, 2.0f, 1.0f, 5, 2, 4, 2.0f, 1.0f, 9.0f, 1.0f, 1, 15.0f, 1, 5, -1, 0);
+            FUN_0020c828(moby);
             return;
         }
-        FUN_L00_0026cbb0(&m->pos, D_L14_0015F580, 0x4F007FFF, 0x1FFFFFFF,
+        FUN_L00_0026cbb0(&moby->pos, D_L14_0015F580, 0x4F007FFF, 0x1FFFFFFF,
                          random_int_between(scale_game_frames(10), scale_game_frames(20)), 1, 60000.0f);
         for (i = 0; i < 2; i++) {
             int a = random_integer_below(6);
@@ -789,34 +789,34 @@ void FUN_L14_002ac618(struct Moby *m) {
             }
             size = random_float_c618(40000.0f, 100000.0f);
             c = random_int_between(0x30, 0xFF);
-            p = FUN_L00_0026d000_c618(&m->pos, 0.025f, 1.0f, 1.0f, a, D_L14_0015F580, size, c | (0x60000000 | (c << 16) | (c << 8)));
+            p = FUN_L00_0026d000_c618(&moby->pos, 0.025f, 1.0f, 1.0f, a, D_L14_0015F580, size, c | (0x60000000 | (c << 16) | (c << 8)));
             if (p != 0) {
-                unsigned char *q;
+                unsigned char *puff_tail;
 
                 p[3] = 0x44;
-                q = p + 0x20;
+                puff_tail = p + 0x20;
                 *(s16 *)(p + 0xA) = scale_game_frames(60);
-                *(int *)(q + 4) = 2;
-                q[0xA] = 0x60;
-                q[0xB] = p[0xA];
+                *(int *)(puff_tail + 4) = 2;
+                puff_tail[0xA] = 0x60;
+                puff_tail[0xB] = p[0xA];
             }
         }
-        FUN_L14_002aead8_c618(m);
+        FUN_L14_002aead8_c618(moby);
         return;
     }
     }
-    if ((s8)m->state >= 0 && m->prev_seq == 1) {
-        if (m->command == 1) {
-            FUN_L00_0025c398_c618(m, D_L14_0015F580, 0xFFFF);
+    if ((s8)moby->state >= 0 && moby->prev_seq == 1) {
+        if (moby->command == 1) {
+            FUN_L00_0025c398_c618(moby, D_L14_0015F580, 0xFFFF);
         }
     } else {
-        m->command = 0;
+        moby->command = 0;
     }
-    if (m->state == 1 && !voice_is_playing(m, *(s32 *)(d + 0x1D0))) {
-        *(s32 *)(d + 0x1D0) = allocate_voice_c618(0, 4, m);
+    if (moby->state == 1 && !voice_is_playing(moby, *(s32 *)(moby_vars + 0x1D0))) {
+        *(s32 *)(moby_vars + 0x1D0) = allocate_voice_c618(0, 4, moby);
     }
-    if ((m->state == 3 || m->state == 4) && !voice_is_playing(m, *(s32 *)(d + 0x1D0))) {
-        *(s32 *)(d + 0x1D0) = allocate_voice_c618(2, 4, m);
+    if ((moby->state == 3 || moby->state == 4) && !voice_is_playing(moby, *(s32 *)(moby_vars + 0x1D0))) {
+        *(s32 *)(moby_vars + 0x1D0) = allocate_voice_c618(2, 4, moby);
     }
 }
 /* per-frame update: runs the hit query, decays a timer, then dispatches on the hit result */
