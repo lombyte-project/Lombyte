@@ -2689,22 +2689,22 @@ extern int *D_L16_001ABCC0[];
 extern float D_L16_00161A80 __attribute__((sda));
 
 void *FUN_L16_002d5ad0(int index, int secondary) {
-    short *p = (short *)D_L16_001ABCC0[index];
+    short *group_entry = (short *)D_L16_001ABCC0[index];
     char *nearest = 0;
     float distance = 1000.0f;
     char *moby;
     float *data;
-    float d;
+    float candidate_distance;
     float g;
-    if (!p)
+    if (!group_entry)
         return 0;
     while (1) {
-        moby = D_L16_0015FFD8 + ((*(unsigned short *)p & 0x7FFF) << 8);
+        moby = D_L16_0015FFD8 + ((*(unsigned short *)group_entry & 0x7FFF) << 8);
         if (*(short *)(moby + 0xA6) != 0x287)
             continue;
-        d = fast_vec_dist(D_L16_001671C0, moby + 0x10);
-        if (d < distance) {
-            distance = d;
+        candidate_distance = fast_vec_dist(D_L16_001671C0, moby + 0x10);
+        if (candidate_distance < distance) {
+            distance = candidate_distance;
             nearest = moby;
         }
         data = *(float **)(moby + 0x78);
@@ -2713,7 +2713,7 @@ void *FUN_L16_002d5ad0(int index, int secondary) {
         data[5] = g;
         if (secondary)
             data[6] = g;
-        if (*p++ < 0)
+        if (*group_entry++ < 0)
             return nearest;
     }
 }
