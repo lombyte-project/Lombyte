@@ -1940,17 +1940,17 @@ extern int D_L13_0015FFD8_m __asm__("D_L13_0015FFD8");
 extern short *D_L13_001ABB40[];
 
 int FUN_L13_0030ae68(int idx, int arg) {
-    short *q = D_L13_001ABB40[idx];
-    short *p;
+    short *moby_id_list = D_L13_001ABB40[idx];
+    short *moby_id_cursor;
     int count = 0;
-    if (q == 0)
+    if (moby_id_list == 0)
         return 0;
-    p = q;
+    moby_id_cursor = moby_id_list;
     do {
-        int id = *p & 0x7FFF;
-        char *m = (char *)(id << 8) + (int)D_L13_0015FFD8_m;
-        if (m[0x20] >= 0) {
-            char *f = FUN_L00_002db890(m);
+        int id = *moby_id_cursor & 0x7FFF;
+        char *moby = (char *)(id << 8) + (int)D_L13_0015FFD8_m;
+        if (moby[0x20] >= 0) {
+            char *f = FUN_L00_002db890(moby);
             if (f == 0 || *(short *)(f + 0x68) < 4) {
                 if (arg == -1 ||
                     *(unsigned char *)((char *)(id << 8) + (int)D_L13_0015FFD8_m + 0x20) != arg) {
@@ -1958,7 +1958,7 @@ int FUN_L13_0030ae68(int idx, int arg) {
                 }
             }
         }
-    } while (*p++ >= 0);
+    } while (*moby_id_cursor++ >= 0);
     return count;
 }
 /* Checks the moby's trigger lists and copies the configured state bytes into it. */
