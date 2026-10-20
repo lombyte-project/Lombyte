@@ -21,9 +21,9 @@ void FUN_L00_00235ea0(HudElem *hud_element) {
     int v;
     int cap;
     int value_distance;
-    int n;
+    int easing_step;
     int x;
-    unsigned char t;
+    unsigned char easing_accumulator_value;
 
     if (hud_element->unk0C != 0) {
         v = *hud_element->unk0C;
@@ -43,25 +43,25 @@ void FUN_L00_00235ea0(HudElem *hud_element) {
             value_distance = x;
             value_distance = value_distance < 0 ? -value_distance : value_distance;
             if (value_distance != 0) {
-                n = truncate_float_to_s32(square_root(convert_integer_to_float(value_distance) / 25.0f) * 5.0f);
-                n = n < value_distance * scale_game_frames(2) / scale_game_frames(10)
+                easing_step = truncate_float_to_s32(square_root(convert_integer_to_float(value_distance) / 25.0f) * 5.0f);
+                easing_step = easing_step < value_distance * scale_game_frames(2) / scale_game_frames(10)
                         ? value_distance * scale_game_frames(2) / scale_game_frames(10)
-                        : n;
-                if (n >= 0x7A) {
-                    n = 0x79;
-                } else if (n <= 0) {
-                    n = 1;
+                        : easing_step;
+                if (easing_step >= 0x7A) {
+                    easing_step = 0x79;
+                } else if (easing_step <= 0) {
+                    easing_step = 1;
                 }
-                c[3] += n;
-                t = c[3];
-                if (scale_game_frames(2) < t) {
-                    n = c[3] / scale_game_frames(2);
+                c[3] += easing_step;
+                easing_accumulator_value = c[3];
+                if (scale_game_frames(2) < easing_accumulator_value) {
+                    easing_step = c[3] / scale_game_frames(2);
                     if (hud_element->unk78 < hud_element->unk74) {
-                        hud_element->unk74 = hud_element->unk74 - n;
+                        hud_element->unk74 = hud_element->unk74 - easing_step;
                     } else {
-                        hud_element->unk74 = hud_element->unk74 + n;
+                        hud_element->unk74 = hud_element->unk74 + easing_step;
                     }
-                    c[3] -= n * scale_game_frames(2);
+                    c[3] -= easing_step * scale_game_frames(2);
                 }
             }
         }
