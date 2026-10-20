@@ -1008,50 +1008,50 @@ extern void jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
 extern void FUN_L12_00308350(struct Moby *);
 
 /* Pvars: d[0] is the moby to watch, d[1] the voice slot held for this moby. */
-void FUN_L12_003081b0(struct Moby *m) {
+void FUN_L12_003081b0(struct Moby *moby) {
     enum {
         CHECK_PERSISTENT_REMOVAL = 0,
         QUEUE_DRAW_AND_MONITOR_LINKED_MOBY = 1
     };
-    int st = m->state;
+    int st = moby->state;
     int vis;
-    int *d = (int *)m->pvars;
+    int *moby_data = (int *)moby->pvars;
 
     switch (st) {
     case CHECK_PERSISTENT_REMOVAL:
-        if (m->mission != 0xFF && visited52[m->mission + current_level_index * 16] == 0xFF) {
-            mark_moby_for_removal(m);
+        if (moby->mission != 0xFF && visited52[moby->mission + current_level_index * 16] == 0xFF) {
+            mark_moby_for_removal(moby);
             break;
         }
-        m->state = 1;
+        moby->state = 1;
         break;
     case QUEUE_DRAW_AND_MONITOR_LINKED_MOBY:
         vis = 1;
-        if (FUN_L01_00275690(m, 48.0f) == -1) {
+        if (FUN_L01_00275690(moby, 48.0f) == -1) {
             vis = 0;
         }
         if (vis) {
-            enqueue_callback_list_1(FUN_L12_00308350, m);
+            enqueue_callback_list_1(FUN_L12_00308350, moby);
         }
-        if (d[1] == -1) {
-            d[1] = FUN_0022da68(0, 4, m);
+        if (moby_data[1] == -1) {
+            moby_data[1] = FUN_0022da68(0, 4, moby);
         }
-        if (d[0] >= 0) {
-            int i = d[1];
+        if (moby_data[0] >= 0) {
+            int i = moby_data[1];
             if (i != -1) {
-                char *e = ((char *)&voice_pool) + i * 0x70;
-                if (*(struct Moby **)(e + 0x88) == m && *(unsigned char *)(e + 0x74) != 0) {
+                char *voice_pool_entry = ((char *)&voice_pool) + i * 0x70;
+                if (*(struct Moby **)(voice_pool_entry + 0x88) == moby && *(unsigned char *)(voice_pool_entry + 0x74) != 0) {
                     release_voice_slot(i);
                 }
             }
-            d[1] = -1;
-            if (((unsigned char *)D_L12_0015FFD8_p)[(d[0] << 8) + 0x20] == 7) {
-                if (m->mission != 0xFF) {
-                    jet_clear_persistent(m->mission);
+            moby_data[1] = -1;
+            if (((unsigned char *)D_L12_0015FFD8_p)[(moby_data[0] << 8) + 0x20] == 7) {
+                if (moby->mission != 0xFF) {
+                    jet_clear_persistent(moby->mission);
                 }
-                FUN_0022da68(1, 0, m);
-                m->collision = 0;
-                m->state = 2;
+                FUN_0022da68(1, 0, moby);
+                moby->collision = 0;
+                moby->state = 2;
             }
         }
         break;
