@@ -523,8 +523,8 @@ void blarg_turret_update(Moby_2B5368 *turret_moby) {
             && (data->volume == -1 || is_point_inside_clip_volume(D_0013F420_2b0e80, data->volume) != 0)) {
             data->f68 = 8.0f;
             if (turret_moby->b53 != 1) {
-                int a = random_int_between(0, 3);
-                FUN_00212f90_2b0e80(turret_moby, 1, a, random_int_between(7, 13));
+                int animation_start_frame = random_int_between(0, 3);
+                FUN_00212f90_2b0e80(turret_moby, 1, animation_start_frame, random_int_between(7, 13));
             }
             turret_moby->state = 3;
         }
