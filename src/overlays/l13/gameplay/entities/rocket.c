@@ -1559,9 +1559,9 @@ void FUN_L13_00309e88(struct Moby *moby) {
     int cr, cg;
 
     struct Hero *g = &hero;
-    char *p = ((char *)g->ship_moby);
-    if (p != 0 && *(short *)(p + 0xA6) == 0x45 && (unsigned char)p[0x20] != 0xFE &&
-        (unsigned char)p[0x20] != 0xFD && g->state.current == 0x32)
+    char *ship_moby = ((char *)g->ship_moby);
+    if (ship_moby != 0 && *(short *)(ship_moby + 0xA6) == 0x45 && (unsigned char)ship_moby[0x20] != 0xFE &&
+        (unsigned char)ship_moby[0x20] != 0xFD && g->state.current == 0x32)
         return;
     b = (Bob_9e88 *)moby->pvars;
     if (b == 0)
@@ -1575,7 +1575,7 @@ void FUN_L13_00309e88(struct Moby *moby) {
         if (b->idx == 0) {
             Light_9e88 *l;
             char *tb;
-            float a;
+            float light_direction_angle;
             pool_init_tiles(Tiles_9e88, 22);
             pool_set_scale(1.0f);
             moby->update_dist = 0xFF;
@@ -1588,9 +1588,9 @@ void FUN_L13_00309e88(struct Moby *moby) {
             l->f14 = 1.0f;
             l->f18 = 0.9f;
             l->f20 = 0.1f;
-            a = fast_arc_tan(D_L13_001801C0[4], D_L13_001801C0[5]);
-            l->f30 = fast_cos(a) * 0.57735f;
-            l->f34 = fast_sin(a) * 0.57735f;
+            light_direction_angle = fast_arc_tan(D_L13_001801C0[4], D_L13_001801C0[5]);
+            l->f30 = fast_cos(light_direction_angle) * 0.57735f;
+            l->f34 = fast_sin(light_direction_angle) * 0.57735f;
             l->f38 = -0.57735f;
             l->i28 = 0x2D;
             l->i2C = 0x2E;
