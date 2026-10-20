@@ -105,7 +105,8 @@ int hero_set_state(int a, int b) {
     enum {
         HERO_STATE_LEDGE_HANG_ENTRY = 0x18,
         HERO_STATE_LEDGE_SHIMMY_YAW_PLUS_90 = 0x1A,
-        HERO_STATE_LEDGE_SHIMMY_YAW_MINUS_90 = 0x1B
+        HERO_STATE_LEDGE_SHIMMY_YAW_MINUS_90 = 0x1B,
+        HERO_STATE_WATER_SURFACE_IDLE = 0x37
     };
     int old2088;
     char *moby;
@@ -311,7 +312,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0x3C, 0, (float)t);
         break;
     }
-    case 0x37: {
+    case HERO_STATE_WATER_SURFACE_IDLE: {
         struct Hero *p = &hero;
         p->state.control_mode = 0x12;
         p->unk20A7 = 1;
