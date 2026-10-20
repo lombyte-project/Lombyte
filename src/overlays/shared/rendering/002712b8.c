@@ -1988,39 +1988,39 @@ static __inline__ void vcopy_276940(float *d, float *s) {
     *(int *)&d[3] = 0;
 }
 
-void FUN_L00_00275aa0(char *m) {
-    char *v = m + 0x20;
-    char *p;
+void FUN_L00_00275aa0(char *particle) {
+    char *v = particle + 0x20;
+    char *particle_position;
     float f4;
     float a[4] __attribute__((aligned(16)));
     float d[4] __attribute__((aligned(16)));
     float e[4] __attribute__((aligned(16)));
     float *w;
     int al;
-    m[8] += v[0xA];
-    if (*(short *)(v + 8) - *(short *)(m + 0xA) < 6) {
-        int c;
+    particle[8] += v[0xA];
+    if (*(short *)(v + 8) - *(short *)(particle + 0xA) < 6) {
+        int initial_alpha;
         int c2;
-        f4 = (float)(*(short *)(v + 8) - *(short *)(m + 0xA)) / 5.0f;
-        *(float *)(m + 0xC) = *(float *)(v + 4) + ((*(float *)(m + 0x20) + *(float *)(v + 4)) * 0.5f - *(float *)(v + 4)) * f4;
+        f4 = (float)(*(short *)(v + 8) - *(short *)(particle + 0xA)) / 5.0f;
+        *(float *)(particle + 0xC) = *(float *)(v + 4) + ((*(float *)(particle + 0x20) + *(float *)(v + 4)) * 0.5f - *(float *)(v + 4)) * f4;
         c2 = (unsigned char)v[0xB] >> 1;
-        c = (unsigned char)v[0xB];
-        al = truncate_float_to_s32_c((float)c + (float)(c2 - c) * f4);
+        initial_alpha = (unsigned char)v[0xB];
+        al = truncate_float_to_s32_c((float)initial_alpha + (float)(c2 - initial_alpha) * f4);
     } else {
-        f4 = (float)*(short *)(m + 0xA) / convert_integer_to_float(*(short *)(v + 8) - 6);
-        *(float *)(m + 0xC) = *(float *)(m + 0x20) + ((*(float *)(m + 0x20) + *(float *)(v + 4)) * 0.5f - *(float *)(m + 0x20)) * f4;
+        f4 = (float)*(short *)(particle + 0xA) / convert_integer_to_float(*(short *)(v + 8) - 6);
+        *(float *)(particle + 0xC) = *(float *)(particle + 0x20) + ((*(float *)(particle + 0x20) + *(float *)(v + 4)) * 0.5f - *(float *)(particle + 0x20)) * f4;
         al = truncate_float_to_s32_c((float)((unsigned char)v[0xB] >> 1) * f4 + 0.0f);
     }
-    p = m + 0x10;
-    *(int *)(m + 4) = (al << 24) | (*(int *)(m + 4) & 0xFFFFFF);
+    particle_position = particle + 0x10;
+    *(int *)(particle + 4) = (al << 24) | (*(int *)(particle + 4) & 0xFFFFFF);
     vcopy_276940(a, (float *)(v + 0xC));
-    add_vector_xyz_c(p, p, a);
+    add_vector_xyz_c(particle_position, particle_position, a);
     if (*(int *)(v + 0x18) != 0) {
-        subtract_vector_xyz(d, *(char **)(v + 0x18) + 0x10, p);
+        subtract_vector_xyz(d, *(char **)(v + 0x18) + 0x10, particle_position);
         if (d[0] <= 2.0f && d[1] <= 2.0f) {
             cross_vectors_xyz(e, d, ((unsigned char *)D_0013F5E0));
             fast_vec_normalize_c(e, e, *(float *)&D_L00_0016024C);
-            add_vector_xyz_c(p, p, e);
+            add_vector_xyz_c(particle_position, particle_position, e);
             if (d[0] <= 0.5f && d[1] <= 0.5f) {
                 fast_vec_normalize_c(a, d, 0.03f);
             } else {
@@ -2033,8 +2033,8 @@ void FUN_L00_00275aa0(char *m) {
             w[2] = a[2];
         }
     }
-    if (fast_dec_timer_s16(m + 0xA)) {
-        free_effect_particle(m);
+    if (fast_dec_timer_s16(particle + 0xA)) {
+        free_effect_particle(particle);
     }
 }
 extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
