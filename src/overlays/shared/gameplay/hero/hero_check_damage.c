@@ -596,8 +596,8 @@ void FUN_L00_0020da68(void) {
     int on, anim, r, hero_animation_id;
     float spd, t;
     unsigned char *m;
-    char *q;
-    char *q2;
+    char *animation_object;
+    char *reloaded_animation_object;
     anim = 0;
     spd = 1.0f;
     on = 0;
@@ -654,14 +654,14 @@ void FUN_L00_0020da68(void) {
             FUN_L00_0024f0e8_20da68((char *)hero.moby, (char **)&hero.unkD10);
         }
     }
-    q = hero.unkD10;
-    if (q && on) {
-        FUN_00213ed8_20da68(q + 8, spd, frame_scale * 0.05f);
-        q2 = hero.unkD10;
-        if ((unsigned char)q2[0x23] != anim) {
+    animation_object = hero.unkD10;
+    if (animation_object && on) {
+        FUN_00213ed8_20da68(animation_object + 8, spd, frame_scale * 0.05f);
+        reloaded_animation_object = hero.unkD10;
+        if ((unsigned char)reloaded_animation_object[0x23] != anim) {
             FUN_L00_0024f3e0_20da68((char *)hero.moby, hero.unkD10, anim, 0, FUN_001f96f8_20da68(8), 1);
         } else {
-            FUN_L00_0024f190_20da68((char *)hero.moby, q2);
+            FUN_L00_0024f190_20da68((char *)hero.moby, reloaded_animation_object);
         }
     }
 }
