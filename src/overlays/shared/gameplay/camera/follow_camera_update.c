@@ -336,16 +336,16 @@ extern void FUN_L00_002e9720_u(int) __asm__("FUN_L00_002e9720");
 extern void FUN_L00_002e9aa0(int);
 
 /* Runs eight FUN_L00_002e* steps on object a in order. */
-void FUN_L00_002e9bb0(int a) {
+void FUN_L00_002e9bb0(int camera_moby) {
     float v[2];
-    FUN_L00_002e9aa0(a);
-    follow_camera_auto_turn(a);
-    follow_camera_read_stick(a, &v[0], &v[1]);
-    follow_camera_turn_and_pitch(a, v[0], v[1]);
-    follow_camera_avoid_mobies(a);
-    FUN_L00_002e9720_u(a);
-    FUN_L00_002e8378(a);
-    FUN_L00_002e9010_u(a);
+    FUN_L00_002e9aa0(camera_moby);
+    follow_camera_auto_turn(camera_moby);
+    follow_camera_read_stick(camera_moby, &v[0], &v[1]);
+    follow_camera_turn_and_pitch(camera_moby, v[0], v[1]);
+    follow_camera_avoid_mobies(camera_moby);
+    FUN_L00_002e9720_u(camera_moby);
+    FUN_L00_002e8378(camera_moby);
+    FUN_L00_002e9010_u(camera_moby);
 }
 extern s32 opt_cam_yaw_rate __asm__("D_0015EDE4");
 extern f32 D_L00_00161DB0[2] __attribute__((sda));
