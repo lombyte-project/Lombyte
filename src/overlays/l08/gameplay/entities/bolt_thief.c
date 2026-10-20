@@ -1272,22 +1272,22 @@ typedef struct {
 
 /* Keeps the 33 linked parts glued to their anchors' joints and facing the moby, spins three of them (the middle
    one backwards), turns link 3 towards the hero, then updates every part. */
-void FUN_L08_002e2078(struct Moby *m) {
-    LinkedPartsVars *v = (LinkedPartsVars *)m->pvars;
+void FUN_L08_002e2078(struct Moby *moby) {
+    LinkedPartsVars *v = (LinkedPartsVars *)moby->pvars;
     PartLink *links = v->links;
-    float a[4];
+    float part_joint_position[4];
     float b[4];
-    float d[4];
+    float joint_alignment_offset[4];
     int i;
 
     for (i = 1; i < 34; i++) {
         struct Moby *part = v->links[i].part;
         if (part != 0) {
-            part->rot.z = m->rot.z;
-            moby_point_position(part, v->links[i].part_joint, a);
+            part->rot.z = moby->rot.z;
+            moby_point_position(part, v->links[i].part_joint, part_joint_position);
             moby_point_position(v->links[i].anchor, v->links[i].anchor_joint, b);
-            fast_vec_sub(d, b, a);
-            fast_vec_add(&part->pos, &part->pos, d);
+            fast_vec_sub(joint_alignment_offset, b, part_joint_position);
+            fast_vec_add(&part->pos, &part->pos, joint_alignment_offset);
         }
     }
     if (v->links[7].part != 0) {
