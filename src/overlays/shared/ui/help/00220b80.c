@@ -395,6 +395,7 @@ s32 FUN_L02_0022ee00(void)
         HERO_ITEM_BUFFERED_OR_TIMED_HOLD_ACTIVATE_WITH_VOICE = 20,
         HERO_ITEM_PRESS_TO_ACTIVATE = 21,
         HERO_ITEM_AMMO_GATED_BUFFERED_OR_TIMED_HOLD_ACTIVATE_WITH_VOICE = 24,
+        HERO_ITEM_BUFFERED_OR_TIMED_HOLD_ACTIVATE_WITH_EMPTY_AMMO_VOICE = 25,
         HERO_ITEM_CLASS_GATED_BUFFERED_ACTIVATE = 31,
         HERO_ITEM_BUFFERED_ACTIVATE = 32
     };
@@ -564,7 +565,7 @@ s32 FUN_L02_0022ee00(void)
     case HERO_ITEM_AMMO_GATED_BUFFERED_OR_TIMED_HOLD_ACTIVATE:
     case HERO_ITEM_BUFFERED_OR_TIMED_HOLD_ACTIVATE_WITH_VOICE:
     case HERO_ITEM_AMMO_GATED_BUFFERED_OR_TIMED_HOLD_ACTIVATE_WITH_VOICE:
-    case 25:
+    case HERO_ITEM_BUFFERED_OR_TIMED_HOLD_ACTIVATE_WITH_EMPTY_AMMO_VOICE:
         if ((hero.state.control_mode == 0 && hero.state.current != 0x1E) || hero.state.control_mode == 1 ||
             hero.state.control_mode == 0xC || hero.state.control_mode == 5 || hero.state.control_mode == 0xF ||
             (hero.state.control_mode == 4 && hero.unk4AC != 0) ||
