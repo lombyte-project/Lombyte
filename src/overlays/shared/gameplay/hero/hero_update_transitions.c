@@ -172,7 +172,8 @@ void hero_update_transitions(void) {
         HERO_STATE_GRIND_OBSTACLE_HOP = 66,
         HERO_STATE_APPROACH_TARGET_POSE = 101,
         HERO_STATE_AT_TARGET_POSE = 103,
-        HERO_STATE_DROWNING = 106
+        HERO_STATE_DROWNING = 106,
+        HERO_STATE_FALL_TO_RESPAWN = 119
     };
     enum {
         HERO_VEHICLE_MODE_NONE = 0
@@ -1873,7 +1874,7 @@ void hero_update_transitions(void) {
                         hero_set_state(0x74, 1);
                     }
                     break;
-                case 119:
+                case HERO_STATE_FALL_TO_RESPAWN:
                     if ((current_level_index == 3 && 5.0f > hero.motion.pos.f[2]) ||
                         (current_level_index == 6 && 50.0f > hero.motion.pos.f[2]) ||
                         (current_level_index == 0x10 && (77.0f > hero.motion.pos.f[2] ||
