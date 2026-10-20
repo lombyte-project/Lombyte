@@ -7701,7 +7701,7 @@ extern float D_L06_001621B4 __attribute__((sda));
 extern int D_L06_001621B8 __attribute__((sda));
 void FUN_L06_00304818(int unused, void *obj) {
     float pos[4];
-    V6 a;
+    V6 first_color_palette;
     V6 b;
     int i = 0;
     clear_u64_value(pos);
@@ -7715,10 +7715,10 @@ void FUN_L06_00304818(int unused, void *obj) {
             int r3;
             i++;
             s = random_float_between(8.0f, 10.0f);
-            a = D_L06_002019A0;
+            first_color_palette = D_L06_002019A0;
             b = D_L06_002019B8;
             s = s * frame_time;
-            pa = a.v + random_integer_below(6);
+            pa = first_color_palette.v + random_integer_below(6);
             pb = b.v + random_integer_below(6);
             f = D_L06_001621B4 * 400000.0f;
             random_frame_count = random_int_between(scale_game_frames(0xF), scale_game_frames(0x14));
