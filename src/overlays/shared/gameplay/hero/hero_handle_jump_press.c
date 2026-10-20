@@ -100,7 +100,7 @@ void FUN_L00_0025f730_002293a8(void *, f32) __asm__("FUN_L00_0025f730");
 s32 FUN_L00_00205000_002293a8(s32) __asm__("FUN_L00_00205000");
 void FUN_L00_002293a8(void) {
     u8 *b, *hero_run_base, *hero_stop_idle_base;
-    s32 n;
+    s32 animation_frames_or_id;
     b = D_0013F350_002293a8;
     *(s32 *)(b + 0x2284) = 0;
     if (b[0x12E2] != 0 && frame_time * 0.5f < *(f32 *)(b + 0x164)) {
@@ -122,10 +122,10 @@ void FUN_L00_002293a8(void) {
         }
         if (hero_set_state(HERO_STATE_RUN, 0)) {
             *(s32 *)(hero_run_base + 0x2088) = 1;
-            n = FUN_001f96f8_002293a8(8);
+            animation_frames_or_id = FUN_001f96f8_002293a8(8);
             if (FUN_001f96f8_002293a8(5) < *(s32 *)(hero_run_base + 0x418))
-                n = FUN_001f96f8_002293a8(14);
-            FUN_L00_002323b8_002293a8(4, D_L00_0015F6DC, (f32)n);
+                animation_frames_or_id = FUN_001f96f8_002293a8(14);
+            FUN_L00_002323b8_002293a8(4, D_L00_0015F6DC, (f32)animation_frames_or_id);
             *(s16 *)(hero_run_base + 0x3BC) = 1;
         }
         return;
@@ -143,8 +143,8 @@ void FUN_L00_002293a8(void) {
     if (FUN_001f96f8_002293a8(12) < *(s32 *)(hero_stop_idle_base + 0x418) || (*(s32 *)(hero_stop_idle_base + 0xA98) & 2)) {
         if (hero_set_state(HERO_STATE_IDLE, 0)) {
             if (FUN_L00_00205000_002293a8(0) == 0x54) {
-                n = FUN_L00_00205000_002293a8(0);
-                FUN_L00_002323b8_002293a8(n, 0, (f32)FUN_001f96f8_002293a8(15));
+                animation_frames_or_id = FUN_L00_00205000_002293a8(0);
+                FUN_L00_002323b8_002293a8(animation_frames_or_id, 0, (f32)FUN_001f96f8_002293a8(15));
             } else if (*(s32 *)(hero_stop_idle_base + 0xA98) & 2) {
                 FUN_L00_002323b8_002293a8(FUN_L00_00205000_002293a8(0), 0, -2.0f);
             }
