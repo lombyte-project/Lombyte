@@ -1301,7 +1301,7 @@ void FUN_L00_002cb418(Moby *m) {
     ShotQuery_2cb418 query;
     Vec4A a;
     Vec4A b;
-    Vec4A c;
+    Vec4A spark_velocity;
     ShotVars_2cb418 *vars;
     float yaw;
     float pitch;
@@ -1427,13 +1427,13 @@ void FUN_L00_002cb418(Moby *m) {
         qcopy((Vec4A *)&vars->follower->pos, &a);
     }
     for (j = 0; j < 16; j++) {
-        Moby *t = vars->trail[j];
-        if (t != 0) {
-            add_vector_xyz_2cb418((Vec4A *)&t->pos, &a, &step);
-            qcopy(&a, (Vec4A *)&t->pos);
-            t->pos.x = t->pos.x + random_float_2cb418(0.0f, jitter);
-            t->pos.y = t->pos.y + random_float_2cb418(0.0f, jitter);
-            t->pos.z = t->pos.z + random_float_2cb418(0.0f, jitter);
+        Moby *trail_moby = vars->trail[j];
+        if (trail_moby != 0) {
+            add_vector_xyz_2cb418((Vec4A *)&trail_moby->pos, &a, &step);
+            qcopy(&a, (Vec4A *)&trail_moby->pos);
+            trail_moby->pos.x = trail_moby->pos.x + random_float_2cb418(0.0f, jitter);
+            trail_moby->pos.y = trail_moby->pos.y + random_float_2cb418(0.0f, jitter);
+            trail_moby->pos.z = trail_moby->pos.z + random_float_2cb418(0.0f, jitter);
             scale_vector_xyz_2cb418(&step, &step, trail_decay);
         }
     }
@@ -1446,8 +1446,8 @@ void FUN_L00_002cb418(Moby *m) {
     if (len == 0.0f) {
         return;
     }
-    scale_vector_xyz_2cb418(&c, &b, random_float_between_2cb418(D_0015ED6C_lui * 0.5f, D_0015ED6C_lui + D_0015ED6C_lui) / len);
-    spawn_spark_2cb418((Vec4A *)&m->pos, &c, 0x7F2F4F6F, random_int_between_2cb418(scale_game_frames_2cb418(10), scale_game_frames_2cb418(15)), 30000.0f);
+    scale_vector_xyz_2cb418(&spark_velocity, &b, random_float_between_2cb418(D_0015ED6C_lui * 0.5f, D_0015ED6C_lui + D_0015ED6C_lui) / len);
+    spawn_spark_2cb418((Vec4A *)&m->pos, &spark_velocity, 0x7F2F4F6F, random_int_between_2cb418(scale_game_frames_2cb418(10), scale_game_frames_2cb418(15)), 30000.0f);
 }
 extern void FUN_00267a08_2cbcc0(void *) __asm__("FUN_L00_00267a08");
 extern f32 FUN_L00_00257be8_2cbcc0(f32, f32) __asm__("FUN_L00_00257be8");
