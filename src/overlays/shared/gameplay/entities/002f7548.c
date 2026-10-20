@@ -9,25 +9,25 @@ extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 s32 random_integer_below(s32 arg0) __asm__("FUN_00213260");
 
 void FUN_L06_002f7548(char *moby) {
-    float *d = *(float **)(moby + 0x78);
-    int *q;
+    float *holder_vars = *(float **)(moby + 0x78);
+    int *scaled_frame_counts;
     int i;
 
     for (i = 0; i < 4; i++) {
-        d[i] = (float)random_integer_below(0xFF);
+        holder_vars[i] = (float)random_integer_below(0xFF);
     }
-    d[4] = -2.0f;
-    d[5] = -4.25f;
-    d[6] = 2.25f;
-    d[7] = 4.5f;
-    q = (int *)(d + 8);
+    holder_vars[4] = -2.0f;
+    holder_vars[5] = -4.25f;
+    holder_vars[6] = 2.25f;
+    holder_vars[7] = 4.5f;
+    scaled_frame_counts = (int *)(holder_vars + 8);
     for (i = 0; i < 4; i++) {
-        q[i] = scale_game_frames(0x3F + i * 0x40);
+        scaled_frame_counts[i] = scale_game_frames(0x3F + i * 0x40);
     }
-    d[12] = 1.75f;
-    d[13] = 2.25f;
-    d[15] = 1.75f;
-    d[14] = 2.25f;
+    holder_vars[12] = 1.75f;
+    holder_vars[13] = 2.25f;
+    holder_vars[15] = 1.75f;
+    holder_vars[14] = 2.25f;
 }
 #include "qcopy.h"
 #include "sda.h"
