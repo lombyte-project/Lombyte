@@ -184,7 +184,7 @@ void setup_level_cameras(void) {
     char *g = (char *)&D_L00_00166C80;
     char *g1;
     char *q;
-    char *p1;
+    char *normalized_hero_vector;
     struct Hero *base;
     int i;
     int k;
@@ -200,12 +200,12 @@ void setup_level_cameras(void) {
     g1 = (char *)&D_L00_00166C80;
     base = &hero;
     q = g1 + 0x190;
-    p1 = g1 + 0x1B0;
+    normalized_hero_vector = g1 + 0x1B0;
     *(int *)(g1 + 0x184) = 0;
     *(short *)(g1 + 0x270) = 0;
-    normalize_vector_xyz(p1, (char *)(((int)base->moby) + 0xE0), 1.0f);
-    qcopy(g1 + 0x1C0, p1);
-    qcopy(g1 + 0x1D0, p1);
+    normalize_vector_xyz(normalized_hero_vector, (char *)(((int)base->moby) + 0xE0), 1.0f);
+    qcopy(g1 + 0x1C0, normalized_hero_vector);
+    qcopy(g1 + 0x1D0, normalized_hero_vector);
     clear_vector(g1 + 0x1E0);
     qcopy(g1 + 0x1F0, &base->motion.pos);
     {
@@ -228,13 +228,13 @@ void setup_level_cameras(void) {
     i = 0;
     if (D_L00_0015EF54 > 0) {
         do {
-            char *e;
+            char *level_camera_entry;
             char *r;
             Elem *el;
-            int h;
-            e = (char *)(i * 32);
-            e = D_L00_0015EF50 + (int)e;
-            r = *(char **)(e + 0x1C);
+            int camera_id;
+            level_camera_entry = (char *)(i * 32);
+            level_camera_entry = D_L00_0015EF50 + (int)level_camera_entry;
+            r = *(char **)(level_camera_entry + 0x1C);
             el = &D_L00_00167150[i];
             el->s84 = i;
             *(Elem **)(r + 4) = el;
@@ -248,10 +248,10 @@ void setup_level_cameras(void) {
             el->f78 = -1.0f;
             el->c7C = r[0x1C];
             el->i74 = (unsigned char)r[0x1F];
-            h = *(unsigned short *)(e + 0xC);
+            camera_id = *(unsigned short *)(level_camera_entry + 0xC);
             D_L00_00169890[i] = 1;
-            el->s86 = h;
-            el->s8C = FUN_L00_001ed230((short)h);
+            el->s86 = camera_id;
+            el->s8C = FUN_L00_001ed230((short)camera_id);
             i++;
         } while (i < D_L00_0015EF54);
     }
