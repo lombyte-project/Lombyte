@@ -724,7 +724,7 @@ int FUN_L00_0025b440(O_25b440 *moving_object, S_25b440 *arc_motion_state) {
         WAIT_AFTER_GROUND_CLAMP = 3
     };
     float v[4];
-    float t;
+    float prediction_time;
     float g;
 
     switch (arc_motion_state->state) {
@@ -747,8 +747,8 @@ int FUN_L00_0025b440(O_25b440 *moving_object, S_25b440 *arc_motion_state) {
         FUN_001f9a10_25b440(moving_object->pos, moving_object->pos, v);
         arc_motion_state->f10 -= arc_motion_state->f1C;
         if (arc_motion_state->f10 < 0.0f) {
-            t = FUN_001f96b0_25b440(arc_motion_state->f28 + arc_motion_state->f28 + 10.0f);
-            if (moving_object->z <= arc_motion_state->f8 - (arc_motion_state->f10 * t - arc_motion_state->f1C * 0.5f * t * t)) {
+            prediction_time = FUN_001f96b0_25b440(arc_motion_state->f28 + arc_motion_state->f28 + 10.0f);
+            if (moving_object->z <= arc_motion_state->f8 - (arc_motion_state->f10 * prediction_time - arc_motion_state->f1C * 0.5f * prediction_time * prediction_time)) {
                 FUN_00212f90_25b440(moving_object, arc_motion_state->b2E, 0, 10);
                 arc_motion_state->state = 2;
             }
