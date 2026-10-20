@@ -28,18 +28,18 @@ s32 obtain_all_gold_weapons_menu(struct MenuScreen *menu) __asm__("FUN_00222948"
 
 s32 obtain_all_gold_weapons_menu(struct MenuScreen *menu) {
     struct MenuPacket packet;
-    struct MenuPacket tmp;
+    struct MenuPacket text_window_template;
     void *tex;
     s32 icon;
     s16 end_y;
     s32 first_y = 4;
     s16 pos_x = 0x18;
 
-    memset(&tmp, 0, 0x18);
-    tmp.height = menu->height;
-    tmp.width = menu->width;
-    tmp.unk10 = 0x10;
-    packet = tmp;
+    memset(&text_window_template, 0, 0x18);
+    text_window_template.height = menu->height;
+    text_window_template.width = menu->width;
+    text_window_template.unk10 = 0x10;
+    packet = text_window_template;
     setup_gif_paging(0);
     draw_hud_sprite(get_icon_frame(0xE99A, 6), 4, 0xC, 0x10, 0x10, 0x80);
     packet.y = first_y;
