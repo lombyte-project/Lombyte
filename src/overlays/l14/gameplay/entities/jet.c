@@ -1980,8 +1980,8 @@ extern int FUN_L00_0025d808_2f05d8(void *, void *, void *, void *, int,
                                     float) __asm__("FUN_L00_0025d808");
 
 extern short D_L14_00161D14 __attribute__((sda));
-int FUN_L14_002ef150(struct Moby *m) {
-    char *moby_vars = (char *)m->pvars;
+int FUN_L14_002ef150(struct Moby *elevator_moby) {
+    char *moby_vars = (char *)elevator_moby->pvars;
     float rot[4];
     float pos[4];
     char *selected_path;
@@ -1990,7 +1990,7 @@ int FUN_L14_002ef150(struct Moby *m) {
     float rotation_blend;
     float x_rotation_blend;
     int r;
-    if (m->command == 0) {
+    if (elevator_moby->command == 0) {
         selected_path = D_L14_001B0BB0_c3[*(int *)(moby_vars + 0xA0)];
         total = *(float *)(moby_vars + 0xB4);
         qcopy(rot, moby_vars + 0xE0);
@@ -2001,9 +2001,9 @@ int FUN_L14_002ef150(struct Moby *m) {
     }
     step = *(float *)&D_L14_00161D14 * D_0015ED6C_c;
     r = FUN_L00_0025d808_2f05d8(selected_path, pos, moby_vars + 0xA4, moby_vars + 0xA8, 0, step * *(float *)(moby_vars + 0xAC));
-    FUN_L00_0025b8c0(&m->pos.x, (float *)(moby_vars + 0xC0), pos[0], 0.003f, 0.2f, 0.0f);
-    FUN_L00_0025b8c0(&m->pos.y, (float *)(moby_vars + 0xC4), pos[1], 0.003f, 0.2f, 0.0f);
-    FUN_L00_0025b8c0(&m->pos.z, (float *)(moby_vars + 0xC8), pos[2], 0.003f, 0.2f, 0.0f);
+    FUN_L00_0025b8c0(&elevator_moby->pos.x, (float *)(moby_vars + 0xC0), pos[0], 0.003f, 0.2f, 0.0f);
+    FUN_L00_0025b8c0(&elevator_moby->pos.y, (float *)(moby_vars + 0xC4), pos[1], 0.003f, 0.2f, 0.0f);
+    FUN_L00_0025b8c0(&elevator_moby->pos.z, (float *)(moby_vars + 0xC8), pos[2], 0.003f, 0.2f, 0.0f);
     *(float *)(moby_vars + 0xB0) += step;
     rotation_blend = *(float *)(moby_vars + 0xB0) / total;
     if (1.0f < rotation_blend)
@@ -2023,9 +2023,9 @@ int FUN_L14_002ef150(struct Moby *m) {
     }
     if (1.0f < x_rotation_blend)
         x_rotation_blend = 1.0f;
-    m->rot.x = FUN_L00_0025b750(*(float *)(moby_vars + 0xD0), rot[0], x_rotation_blend);
-    m->rot.y = FUN_L00_0025b750(*(float *)(moby_vars + 0xD4), rot[1], rotation_blend);
-    m->rot.z = FUN_L00_0025b750(*(float *)(moby_vars + 0xD8), rot[2], rotation_blend);
+    elevator_moby->rot.x = FUN_L00_0025b750(*(float *)(moby_vars + 0xD0), rot[0], x_rotation_blend);
+    elevator_moby->rot.y = FUN_L00_0025b750(*(float *)(moby_vars + 0xD4), rot[1], rotation_blend);
+    elevator_moby->rot.z = FUN_L00_0025b750(*(float *)(moby_vars + 0xD8), rot[2], rotation_blend);
     if (r != 0) {
         if (0.0f < *(float *)(moby_vars + 0xAC)) {
             int last_segment_index = *(int *)selected_path - 2;
