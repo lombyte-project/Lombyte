@@ -28,30 +28,30 @@ void FUN_L08_00272cb8(float *pos, int kind, float *vec, float scale) {
     float u[4];
     unsigned char *particle;
     int k2 = kind;
-    int c;
+    int color_high_byte;
     float span_length;
     float f20;
     int k;
     *(OvlQuad *)v = *(OvlQuad *)vec;
     particle = create_part(0);
     if (particle != 0) {
-        c = 0;
+        color_high_byte = 0;
         k = k2;
         f20 = 0.0f;
         span_length = f20;
         switch (k) {
         case PARTICLE_SHORT_SPAN:
-            c = 0x14;
+            color_high_byte = 0x14;
             f20 = 0.015f;
             span_length = random_float_between_alt(0.01f, 1.0f);
             break;
         case PARTICLE_MEDIUM_SPAN:
-            c = 0xD;
+            color_high_byte = 0xD;
             f20 = 0.5f;
             span_length = random_float_between_alt(1.0f, 5.0f);
             break;
         case PARTICLE_LONG_SPAN:
-            c = 0xD;
+            color_high_byte = 0xD;
             f20 = 1.0f;
             k = 1;
             span_length = random_float_between_alt(20.0f, 30.0f);
@@ -60,8 +60,8 @@ void FUN_L08_00272cb8(float *pos, int kind, float *vec, float scale) {
         *(OvlQuad *)w = *(OvlQuad *)vp;
         normalize_vector_xyz(w, w, span_length);
         *(short *)(particle + 0xA) = k2;
-        *(int *)(particle + 4) = ((c >> 2) << 24) | 0x606060;
-        *(int *)(particle + 0xC) = (c << 24) | 0x907070;
+        *(int *)(particle + 4) = ((color_high_byte >> 2) << 24) | 0x606060;
+        *(int *)(particle + 0xC) = (color_high_byte << 24) | 0x907070;
         particle[9] = func_001FA898_r(4.0f) + 0x60;
         particle[3] = 0x44;
         particle[1] = 3;
