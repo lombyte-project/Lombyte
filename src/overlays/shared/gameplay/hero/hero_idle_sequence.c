@@ -2624,16 +2624,16 @@ void FUN_L00_0020a318(void) {
 extern char D_0013F350_0020a500[] __asm__("D_0013F350");
 /* Clears the words at 0x1004/0x1008 of ((char *)&hero) and four 0x10-byte slots from 0x1024. */
 void FUN_L00_0020a500(void) {
-    char *p = D_0013F350_0020a500;
-    char *q;
+    char *hero_base = D_0013F350_0020a500;
+    char *slot_cursor;
     int i;
-    *(int *)(p + 0x1004) = 0;
-    *(int *)(p + 0x1008) = 0;
-    q = p;
+    *(int *)(hero_base + 0x1004) = 0;
+    *(int *)(hero_base + 0x1008) = 0;
+    slot_cursor = hero_base;
     for (i = 3; i >= 0; i--) {
-        *(int *)(q + 0x1024) = 0;
-        *(int *)(q + 0x1028) = 0;
-        q += 0x10;
+        *(int *)(slot_cursor + 0x1024) = 0;
+        *(int *)(slot_cursor + 0x1028) = 0;
+        slot_cursor += 0x10;
     }
 }
 typedef struct {
