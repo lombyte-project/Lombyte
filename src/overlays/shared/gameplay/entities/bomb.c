@@ -1034,16 +1034,16 @@ extern char *FUN_L00_002db890(char *);
 extern int FUN_L00_002dbc30(char *, int, int, float);
 extern int allocate_voice_for_target_entry(int, int, char *) __asm__("FUN_0022da68");
 
-int FUN_L00_002cae60(char *m, int a, int b, float target_height_offset) {
-    char *class_callback_data = FUN_L00_002db890(m);
-    int r = FUN_L00_002dbc30(m, a, b, target_height_offset);
+int FUN_L00_002cae60(char *moby, int a, int b, float target_height_offset) {
+    char *class_callback_data = FUN_L00_002db890(moby);
+    int r = FUN_L00_002dbc30(moby, a, b, target_height_offset);
     if (r != 0) {
-        m[0x20] = 5;
-    } else if ((unsigned char)m[0x20] == 5) {
-        m[0x20] = 1;
+        moby[0x20] = 5;
+    } else if ((unsigned char)moby[0x20] == 5) {
+        moby[0x20] = 1;
     }
     if (*(short *)(class_callback_data + 0x68) == 6) {
-        allocate_voice_for_target_entry(1, 0, m);
+        allocate_voice_for_target_entry(1, 0, moby);
     }
     return r;
 }
