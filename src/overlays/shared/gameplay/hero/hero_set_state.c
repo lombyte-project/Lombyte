@@ -3341,7 +3341,7 @@ int FUN_L00_00227fa0(void) {
     switch (D_0013F450_h228770.f10B8) {
     case ITEM_WRENCH:
         if (D_0013F450_h228770.f208C < 2U || (D_0013F450_h228770.f208C == 4 && D_0013F450_h228770.f418 != 0)) {
-            Moby_227fa0 *m;
+            Moby_227fa0 *equipped_item_moby;
 
             if (D_0013F450_h228770.f12EA != 0) {
                 break;
@@ -3349,14 +3349,14 @@ int FUN_L00_00227fa0(void) {
             if (!f_fun_l00_00266d60_227fa0(mask, f_fun_001f96f8_227fa0(7), &out[0])) {
                 break;
             }
-            m = D_0013F450_h228770.f1090;
-            if (m == 0) {
+            equipped_item_moby = D_0013F450_h228770.f1090;
+            if (equipped_item_moby == 0) {
                 break;
             }
-            if (!FUN_L00_00211360((char *)m)) {
+            if (!FUN_L00_00211360((char *)equipped_item_moby)) {
                 break;
             }
-            if (m->state != 0) {
+            if (equipped_item_moby->state != 0) {
                 break;
             }
             if ((D_0013CA40_p228770.f1A0 & 0xA) || ((D_0013F450_h228770.f2084 == 1 || D_0013F450_h228770.f2084 == 0x1E) && D_0013F450_h228770.f198 > f_fun_001f96f8_227fa0(0x14))) {
