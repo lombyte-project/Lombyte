@@ -125,7 +125,7 @@ s32 FUN_L14_00222aa8(s32 arg) {
     enum {
         HERO_VEHICLE_MODE_ON_FOOT = 0
     };
-    u8 *m;
+    u8 *hero_moby_bytes;
     OvlMobyEntry40 *tbl;
     u8 *mob;
     s32 flag;
@@ -149,12 +149,12 @@ s32 FUN_L14_00222aa8(s32 arg) {
         return 0;
     }
     G.unk2280 = 0;
-    m = (u8 *)G.moby;
-    if (m[0xA4] == 0xFF) {
+    hero_moby_bytes = (u8 *)G.moby;
+    if (hero_moby_bytes[0xA4] == 0xFF) {
         return 0;
     }
-    tbl = &D_L14_00178800[m[0xA4]];
-    if (tbl->owner != m) {
+    tbl = &D_L14_00178800[hero_moby_bytes[0xA4]];
+    if (tbl->owner != hero_moby_bytes) {
         return 0;
     }
     if ((tbl->unk24 ^ 1) & 1) {
