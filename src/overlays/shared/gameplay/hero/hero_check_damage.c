@@ -3485,13 +3485,13 @@ float fast_sin(float) __asm__("FUN_001f9de0");
 void FUN_001f9ab0(void *, Vec4_213350 *);
 /* dot_vectors_xyz of v with (cos, sin, 0) of the angle hero.motion.rot.z. */
 void FUN_L00_00213350(u128_213350 *v) {
-    u128_213350 a[2];
+    u128_213350 dot_operands[2];
     struct Hero *g = &hero;
-    a[0] = *v;
-    ((Vec4_213350 *)&a[1])->x = fast_cos(g->motion.rot.f[2]);
-    ((Vec4_213350 *)&a[1])->y = fast_sin(g->motion.rot.f[2]);
-    ((Vec4_213350 *)&a[1])->z = 0.0f;
-    FUN_001f9ab0(&a[0], (Vec4_213350 *)&a[1]);
+    dot_operands[0] = *v;
+    ((Vec4_213350 *)&dot_operands[1])->x = fast_cos(g->motion.rot.f[2]);
+    ((Vec4_213350 *)&dot_operands[1])->y = fast_sin(g->motion.rot.f[2]);
+    ((Vec4_213350 *)&dot_operands[1])->z = 0.0f;
+    FUN_001f9ab0(&dot_operands[0], (Vec4_213350 *)&dot_operands[1]);
 }
 typedef unsigned int u128_2133a8 __attribute__((mode(TI), aligned(16)));
 #include "qcopy.h"
