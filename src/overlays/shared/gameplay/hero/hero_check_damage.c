@@ -952,25 +952,25 @@ extern void FUN_L00_002323b8_c(s32, s32, f32) __asm__("FUN_L00_002323b8");
 
 void FUN_L00_0020e4c8(void);
 void FUN_L00_0020e4c8(void) {
-    s32 t, hero_animation_id, animation_step_divisor, slot_animation_id, i;
-    u8 *o;
+    s32 item_id, hero_animation_id, animation_step_divisor, slot_animation_id, i;
+    u8 *slot_animation_object;
     struct Hero *P;
-    t = FUN_L00_0020d498_c(0);
-    if (t == -1 || t == 0)
+    item_id = FUN_L00_0020d498_c(0);
+    if (item_id == -1 || item_id == 0)
         return;
     P = &hero;
-    P->unk2298 = t;
-    hero_animation_id = D_L00_00179AC0_c[t].unk24;
-    slot_animation_id = D_L00_00179AC0_c[t].animation;
+    P->unk2298 = item_id;
+    hero_animation_id = D_L00_00179AC0_c[item_id].unk24;
+    slot_animation_id = D_L00_00179AC0_c[item_id].animation;
     if ((s32)P->state.control_mode == 12)
-        slot_animation_id = D_L00_00179AC0_c[t].animation_mode_12;
+        slot_animation_id = D_L00_00179AC0_c[item_id].animation_mode_12;
     P->unk20A8 = 1;
     {
-        s32 k = D_L00_00179AC0_c[t].unk30;
+        s32 k = D_L00_00179AC0_c[item_id].unk30;
         P->unk20AA = k;
     }
     animation_step_divisor = FUN_001f96f8_c(10);
-    if (D_L00_00179AC0_c[t].unk18 == 0)
+    if (D_L00_00179AC0_c[item_id].unk18 == 0)
         animation_step_divisor = FUN_001f96f8_c(11);
     if (P->state.control_mode == 0 && P->unk22C8 == 0) {
         P->unk2294 = hero_animation_id;
@@ -983,13 +983,13 @@ void FUN_L00_0020e4c8(void) {
         if (hero.unkD08[i] != 0) {
             FUN_L00_0024f0e8((u8 *)hero.moby, &hero.unkD08[i]);
         }
-        o = FUN_L00_0024f028((u8 *)hero.moby, D_L00_0015F6A0_gp[i]);
-        hero.unkD08[i] = o;
-        if (o != 0) {
+        slot_animation_object = FUN_L00_0024f028((u8 *)hero.moby, D_L00_0015F6A0_gp[i]);
+        hero.unkD08[i] = slot_animation_object;
+        if (slot_animation_object != 0) {
             hero.unk2294 = slot_animation_id;
             hero.unkD14 = 0;
-            *(f32 *)(o + 8) = 1.0f;
-            FUN_L00_0024f3e0((u8 *)hero.moby, o, hero.unk2294, 0, animation_step_divisor, 1);
+            *(f32 *)(slot_animation_object + 8) = 1.0f;
+            FUN_L00_0024f3e0((u8 *)hero.moby, slot_animation_object, hero.unk2294, 0, animation_step_divisor, 1);
         }
     }
 }
