@@ -95,8 +95,8 @@ void FUN_L11_0023c7a0(void) {
         struct Hero *h = &hero;
         if (h->selector_13) {
             if (h->state.current != 0x7F) {
-                float e = absolute_float(h->water_surface_z - (h->motion.pos.f[2] + 0.25f));
-                if (e < 1.0f) {
+                float absolute_water_surface_z_difference = absolute_float(h->water_surface_z - (h->motion.pos.f[2] + 0.25f));
+                if (absolute_water_surface_z_difference < 1.0f) {
                     if (h->water_surface_z - h->motion.pos.f[2] > 0.0f) {
                         if (h->motion.displacement.f[2] < 0.0f) {
                             FUN_L00_0020b930();
