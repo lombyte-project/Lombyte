@@ -48,29 +48,29 @@ typedef union {
 void __unpack_d(FLOUnion *src, FpNumber *dst);
 
 u32 dptoul(u64 arg_a) {
-    FpNumber a;
+    FpNumber unpacked_value;
 
-    __unpack_d((FLOUnion *)&arg_a, &a);
-    if ((a.class ^ 2) == 0) {
+    __unpack_d((FLOUnion *)&arg_a, &unpacked_value);
+    if ((unpacked_value.class ^ 2) == 0) {
         return 0;
     }
-    if ((u32)a.class < 2) {
+    if ((u32)unpacked_value.class < 2) {
         return 0;
     }
-    if (a.sign) {
+    if (unpacked_value.sign) {
         return 0;
     }
-    if ((a.class ^ 4) == 0) {
+    if ((unpacked_value.class ^ 4) == 0) {
         return 0xFFFFFFFF;
     }
-    if (a.normal_exp < 0) {
+    if (unpacked_value.normal_exp < 0) {
         return 0;
     }
-    if (a.normal_exp > 31) {
+    if (unpacked_value.normal_exp > 31) {
         return 0xFFFFFFFF;
-    } else if (a.normal_exp > 60) {
-        return (s32)(a.fraction << (a.normal_exp - 60));
+    } else if (unpacked_value.normal_exp > 60) {
+        return (s32)(unpacked_value.fraction << (unpacked_value.normal_exp - 60));
     } else {
-        return (s32)(a.fraction >> (60 - a.normal_exp));
+        return (s32)(unpacked_value.fraction >> (60 - unpacked_value.normal_exp));
     }
 }
