@@ -3240,7 +3240,7 @@ void FUN_L00_0020b960(void) {
     u8 save = P.b12ED;
     s16 t = P.h12E0;
     f32 d;
-    int s;
+    int target_state;
     fast_mem_zero16(&P.h12E0, 0x10);
     P.b12ED = save;
     P.h12E0 = -1;
@@ -3293,24 +3293,24 @@ void FUN_L00_0020b960(void) {
     if (t == 12)
         P.b12EA = 1;
     if (P.b12E3 && P.i300 && P.i208C != 0x10 && P.i208C != 0x14 && P.i208C != 7) {
-        s = 0x31;
+        target_state = 0x31;
         goto call;
     }
     if (P.b12E5 && P.i300 && P.b20A4 == 1 && P.i2084 != 0x7D) {
-        s = 0x7D;
+        target_state = 0x7D;
         goto call;
     }
     if (P.b12E5 && P.i300 && (P.i2084 != 0x3C || P.h41E != 0)) {
         FUN_L00_0020b930_20b960();
         if (P.i22A8)
             goto call3c;
-        s = 0x7C;
+        target_state = 0x7C;
         goto call;
     }
     if (P.b12EC && P.i2084 != 0x7F && FUN_001f99c0_20b960(P.f2F0 - (P.f88 + 0.25f)) < 1.0f &&
         0.0f < P.f2F0 - P.f88 && P.f108 < 0.0f) {
         FUN_L00_0020b930_20b960();
-        s = 0x7F;
+        target_state = 0x7F;
         goto call;
     }
     if (P.b12E6 && P.i2084 != 0x68 && P.i2084 != 0x7B &&
@@ -3318,16 +3318,16 @@ void FUN_L00_0020b960(void) {
         (P.i2084 != 0x69 || P.h41E != 0) && P.f108 < 0.0f) {
         FUN_L00_0020b930_20b960();
         if (P.i22A8) {
-            s = 0x68;
+            target_state = 0x68;
             goto call;
         }
     s7B:
-        s = 0x7B;
+        target_state = 0x7B;
     call:
-        hero_set_state(s, 1);
+        hero_set_state(target_state, 1);
         return;
     call3c:
-        s = 0x3C;
+        target_state = 0x3C;
         goto call;
     }
     if (P.b12EB && P.i2084 != 0x7B && FUN_001f99c0_20b960(P.f2F4 - (P.f88 + 0.25f)) < 1.0f &&
