@@ -2633,18 +2633,18 @@ extern L16SingleSphere_2e8e80 D_L16_00161F60_bounds_2e8e80[] __asm__("D_L16_001D
 
 extern void FUN_L16_002e8d40_c(void *) __asm__("FUN_L16_002e8d40");
 extern void FUN_L16_002e97a0(void);
-void FUN_L16_002e8e80(struct Moby *m) {
+void FUN_L16_002e8e80(struct Moby *moby) {
     enum {
         MESH_RENDER_INITIALIZE_BOUNDING_SPHERES = 0,
         MESH_RENDER_QUEUE_CALLBACK = 1
     };
     int i, j;
     float maxx, maxy, maxz, minx, miny, minz;
-    float p[4];
+    float vertex_position[4];
     float *out;
     float *verts;
     int count;
-    switch (m->state) {
+    switch (moby->state) {
     case MESH_RENDER_INITIALIZE_BOUNDING_SPHERES: {
         for (i = 0; i <= 2; i++) {
             maxx = maxy = maxz = -1024.0f;
@@ -2682,19 +2682,19 @@ void FUN_L16_002e8e80(struct Moby *m) {
             for (j = 0; j < D_L16_00161EF0_gp[i]; j++) {
                 float dist;
                 out = (float *)(D_L16_00161F60_bounds_2e8e80 + i);
-                p[0] = ((float **)D_L16_00161F00_gp)[i][j * 3 + 0];
-                p[1] = ((float **)D_L16_00161F00_gp)[i][j * 3 + 1];
-                p[2] = ((float **)D_L16_00161F00_gp)[i][j * 3 + 2];
-                dist = FUN_001f9b48(p, out);
+                vertex_position[0] = ((float **)D_L16_00161F00_gp)[i][j * 3 + 0];
+                vertex_position[1] = ((float **)D_L16_00161F00_gp)[i][j * 3 + 1];
+                vertex_position[2] = ((float **)D_L16_00161F00_gp)[i][j * 3 + 2];
+                dist = FUN_001f9b48(vertex_position, out);
                 if (dist > out[3])
                     out[3] = dist;
             }
         }
-        m->state = 1;
+        moby->state = 1;
         break;
     }
     case MESH_RENDER_QUEUE_CALLBACK:
-        enqueue_callback_list_1_2e8e80(FUN_L16_002e8d40_c, m);
+        enqueue_callback_list_1_2e8e80(FUN_L16_002e8d40_c, moby);
         break;
     }
 }
