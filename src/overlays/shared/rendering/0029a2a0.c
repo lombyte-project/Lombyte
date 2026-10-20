@@ -15,22 +15,22 @@ extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 extern unsigned char *D_L07_001B21CC NOT_SDA;
 unsigned char *FUN_L07_0029a2a0(char *pos, char *vec) {
-    unsigned char *p = create_part(0x33);
-    if (p != 0) {
-        char *b = (char *)p + 0x20;
-        char *a = (char *)p + 0x10;
-        qcopy(a, pos);
+    unsigned char *particle = create_part(0x33);
+    if (particle != 0) {
+        char *b = (char *)particle + 0x20;
+        char *particle_position = (char *)particle + 0x10;
+        qcopy(particle_position, pos);
         qcopy(b, vec);
-        *(int *)(p + 4) = 0x5E806040;
-        p[9] = func_001FA898_r(4.0f) + 0x40;
-        p[3] = 0x48;
-        p[1] = 0;
-        p[8] = 0;
-        p[2] = *D_L07_001B21CC;
-        *(short *)(p + 0xA) = 0x78;
-        *(float *)(p + 0xC) = 6300.0f;
+        *(int *)(particle + 4) = 0x5E806040;
+        particle[9] = func_001FA898_r(4.0f) + 0x40;
+        particle[3] = 0x48;
+        particle[1] = 0;
+        particle[8] = 0;
+        particle[2] = *D_L07_001B21CC;
+        *(short *)(particle + 0xA) = 0x78;
+        *(float *)(particle + 0xC) = 6300.0f;
     }
-    return p;
+    return particle;
 }
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int rand(void);
