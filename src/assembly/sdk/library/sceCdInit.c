@@ -63,16 +63,16 @@ int sceCdInit(int init_mode) {
     }
     sceSifInitRpc(0);
     owner = GetThreadId();
+    D_00131300[0] = -1;
     *(volatile s32 *)D_001312E4 = 1;
     *(volatile s32 *)D_00159750 = owner;
-    D_00131304[0] = -1;
-    D_001312FC[0] = -1;
     D_001312F8[0] = -1;
     D_00131308[0] = -1;
+    D_00131304[0] = -1;
     D_0013130C[0] = -1;
     D_001312F4[0] = 0;
+    D_001312FC[0] = -1;
     D_00131310[0]++;
-    D_00131300[0] = -1;
     while (1) {
         bind_result = sceSifBindRpc(&D_00159968, 0x80000592, 0);
         if (bind_result < 0) {
