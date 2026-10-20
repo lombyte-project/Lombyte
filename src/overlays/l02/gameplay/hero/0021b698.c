@@ -809,7 +809,8 @@ extern s32 D_0013CB14[];
 void FUN_L02_00225c20(void) {
     enum {
         HERO_STATE_MOVE_TO_TARGET_POSITION = 0x65,
-        HERO_STATE_BRAKE_AT_TARGET_POSITION = 0x66
+        HERO_STATE_BRAKE_AT_TARGET_POSITION = 0x66,
+        HERO_STATE_SINK_BELOW_SURFACE = 0x68
     };
     FVec4 vec[14];
     Moby *moby;
@@ -2247,7 +2248,7 @@ void FUN_L02_00225c20(void) {
     case 0x67:
         clear_vector(hero.motion.velocity.f);
         break;
-    case 0x68: {
+    case HERO_STATE_SINK_BELOW_SURFACE: {
         clear_vector(hero.motion.velocity.f);
         hero.motion.velocity.f[2] = -((hero.unk1660 + 1) * 0.5f < hero.unk2F4 - hero.motion.pos.f[2]
                                   ? frame_time * 0.25f
