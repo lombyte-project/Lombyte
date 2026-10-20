@@ -1491,7 +1491,7 @@ extern char D_00141968[];
 extern L16ChallengePlayer D_0013E633_challenge __asm__("D_0013E533");
 
 void gadgetron_ceo_update(L16ChallengeMoby *m) __asm__("FUN_L16_002e6808");
-void gadgetron_ceo_update(L16ChallengeMoby *m) {
+void gadgetron_ceo_update(L16ChallengeMoby *ceo_moby) {
     enum {
         GADGETRON_CEO_INITIALIZE_DIALOGUE = 0,
         GADGETRON_CEO_POLL_DIALOGUE = 1,
@@ -1500,37 +1500,37 @@ void gadgetron_ceo_update(L16ChallengeMoby *m) {
         GADGETRON_CEO_WAIT_TO_SAVE = 4
     };
     L16ChallengeScratch scratch;
-    L16ChallengeData *d = m->data;
-    L16ChallengeActivation *activation = (L16ChallengeActivation *)d->activation;
+    L16ChallengeData *ceo_data = ceo_moby->data;
+    L16ChallengeActivation *activation = (L16ChallengeActivation *)ceo_data->activation;
     float rate, head_rate;
     int tracking;
-    if (m->visible && FUN_001f9b48(m->position, D_L16_001671C0) < 28.0f) {
-        FUN_L00_0025a120(m);
-        m->distance_class = 22;
+    if (ceo_moby->visible && FUN_001f9b48(ceo_moby->position, D_L16_001671C0) < 28.0f) {
+        FUN_L00_0025a120(ceo_moby);
+        ceo_moby->distance_class = 22;
     }
-    FUN_L02_002e0cd8(m);
-    switch (m->state) {
+    FUN_L02_002e0cd8(ceo_moby);
+    switch (ceo_moby->state) {
     case GADGETRON_CEO_INITIALIZE_DIALOGUE:
-        m->opacity = 255;
-        m->state = 1;
-        initialize_npc_dialogue(m, activation);
-        *(float *)((char *)d + 0x2C) = 3.7f;
-        d->initial_yaw = m->yaw;
+        ceo_moby->opacity = 255;
+        ceo_moby->state = 1;
+        initialize_npc_dialogue(ceo_moby, activation);
+        *(float *)((char *)ceo_data + 0x2C) = 3.7f;
+        ceo_data->initial_yaw = ceo_moby->yaw;
         if (*(int *)(D_0013D408 + 0x814) == 0)
-            m->yaw = fast_add_rotations(m->yaw, 3.14159265f);
-        FUN_L16_002e7168((char *)m);
+            ceo_moby->yaw = fast_add_rotations(ceo_moby->yaw, 3.14159265f);
+        FUN_L16_002e7168((char *)ceo_moby);
         break;
     case GADGETRON_CEO_POLL_DIALOGUE: {
         if (((L16ChallengePlayer *)((char *)&D_0013E633_challenge + 0xE1D))->mode != 15)
             D_L16_0015F638 = 115.0f;
         else
             D_L16_0015F638 = 100.0f;
-        if (update_npc_dialogue(m, (char *)d + 0x20)) {
-            m->yaw = d->initial_yaw;
-            begin_dialogue_camera_transition(3.5f, m);
-            m->state = 2;
+        if (update_npc_dialogue(ceo_moby, (char *)ceo_data + 0x20)) {
+            ceo_moby->yaw = ceo_data->initial_yaw;
+            begin_dialogue_camera_transition(3.5f, ceo_moby);
+            ceo_moby->state = 2;
         }
-        if (!D_0013D4DE && vector_distance(&hero.motion.pos, m->position) < 3.5f) {
+        if (!D_0013D4DE && vector_distance(&hero.motion.pos, ceo_moby->position) < 3.5f) {
             int elapsed, period;
             char *statistics;
             elapsed = scale_game_frames(freeze_stats_score_ref_b[14]);
@@ -1553,35 +1553,35 @@ void gadgetron_ceo_update(L16ChallengeMoby *m) {
             activation->previous = (unsigned short)activation->mode;
             activation->mode = 2;
             activation->pending = pending;
-            m->event = 0;
+            ceo_moby->event = 0;
             pose = D_L16_001D9840;
             FUN_L00_00216f90(pose, pose + 0x10, 0, 1);
             camera = (char *)hero.unk1D00;
             qcopy(camera, pose + 0x20);
             qcopy(camera + 0x10, pose + 0x30);
-            m->state = 3;
-            FUN_L16_002e70c0((char *)m);
+            ceo_moby->state = 3;
+            FUN_L16_002e70c0((char *)ceo_moby);
         }
         if (((L16ChallengePlayer *)((char *)&D_0013E633_challenge + 0xE1D))->mode == 22) {
-            m->state = 3;
-            FUN_L16_002e70c0((char *)m);
+            ceo_moby->state = 3;
+            FUN_L16_002e70c0((char *)ceo_moby);
         }
         break;
     }
     case GADGETRON_CEO_WAIT_AFTER_DIALOGUE:
         if (*(int *)&D_L16_0015F5C4 != 2) {
             int previous;
-            m->state = 1;
+            ceo_moby->state = 1;
             previous = activation->previous;
             if (previous == 4) {
                 FUN_L16_002923d0(0);
-                m->state = previous;
+                ceo_moby->state = previous;
             }
         }
         break;
     case GADGETRON_CEO_WAIT_TO_SAVE:
         if (*(int *)&D_L16_0015F5C4 == 0) {
-            m->state = 1;
+            ceo_moby->state = 1;
             FUN_L00_00260860(31, 1);
             memcard_save_data(0, -1);
         }
@@ -1601,14 +1601,14 @@ void gadgetron_ceo_update(L16ChallengeMoby *m) {
                 D_0015EE6C_p = player->points;
         }
         if (((L16ChallengePlayer *)((char *)&D_0013E633_challenge + 0xE1D))->mode == 0) {
-            m->state = 1;
-            FUN_L16_002e7168((char *)m);
+            ceo_moby->state = 1;
+            FUN_L16_002e7168((char *)ceo_moby);
         }
-        event = m->event;
+        event = ceo_moby->event;
         if (event == 1) {
-            m->state = event;
+            ceo_moby->state = event;
             FUN_L00_00216f90(D_L16_001D9860, D_L16_001D9860 + 0x10, 0, 1);
-            m->event = 0;
+            ceo_moby->event = 0;
             if (!D_0013D507) {
                 int pending;
                 unsigned short previous;
@@ -1619,18 +1619,18 @@ void gadgetron_ceo_update(L16ChallengeMoby *m) {
                 activation->pending = pending;
                 activation->flag = event;
             }
-            FUN_L16_002e7168((char *)m);
+            FUN_L16_002e7168((char *)ceo_moby);
         }
-        if (m->event == 2) {
-            m->state = 1;
+        if (ceo_moby->event == 2) {
+            ceo_moby->state = 1;
             FUN_L00_00216f90(D_L16_001D9860, D_L16_001D9860 + 0x10, 0, 1);
-            m->event = 0;
-            FUN_L16_002e7168((char *)m);
+            ceo_moby->event = 0;
+            FUN_L16_002e7168((char *)ceo_moby);
         }
-        if (m->event == 3) {
+        if (ceo_moby->event == 3) {
             char *camera;
             char *pose = D_L16_001D9840;
-            m->event = 0;
+            ceo_moby->event = 0;
             FUN_L00_00216f90(pose, pose + 0x10, 0, 1);
             camera = (char *)hero.unk1D00;
             qcopy(camera, pose + 0x20);
@@ -1642,50 +1642,50 @@ void gadgetron_ceo_update(L16ChallengeMoby *m) {
     rate = 0.02f;
     head_rate = 0.3f;
     tracking = 0;
-    if (m->animation == 0) {
+    if (ceo_moby->animation == 0) {
         char *player = (char *)&D_0013E633_challenge + 0xE9D;
         tracking = 1;
-        if (vector_distance(m->position, player) < 8.0f &&
+        if (vector_distance(ceo_moby->position, player) < 8.0f &&
             FUN_001f9e90_cf(
-                m->yaw,
+                ceo_moby->yaw,
                 FUN_001fa688_cf(
                     ((L16ChallengePlayer *)((char *)&D_0013E633_challenge + 0xE1D))->aim[0] -
-                        m->position[0],
+                        ceo_moby->position[0],
                     ((L16ChallengePlayer *)((char *)&D_0013E633_challenge + 0xE1D))->aim[1] -
-                        m->position[1])) < 1.5707964f) {
+                        ceo_moby->position[1])) < 1.5707964f) {
             if (vector_length_xyz(player + 0x80) > 0.01f)
-                d->moving_timer = scale_game_frames(120);
+                ceo_data->moving_timer = scale_game_frames(120);
             else
-                tick_countdown_32_c(&d->moving_timer);
-        } else if (d->moving_timer) {
-            d->moving_timer = 0;
-            qcopy(d->target, (char *)&D_0013E633_challenge + 0xEED);
+                tick_countdown_32_c(&ceo_data->moving_timer);
+        } else if (ceo_data->moving_timer) {
+            ceo_data->moving_timer = 0;
+            qcopy(ceo_data->target, (char *)&D_0013E633_challenge + 0xEED);
         }
-        if (tick_countdown_32_c(&d->target_timer)) {
+        if (tick_countdown_32_c(&ceo_data->target_timer)) {
             float heading;
-            d->target_timer =
+            ceo_data->target_timer =
                 random_float_between_cf(multiply_global_factor_ed64(truncate_float_to_s32_cf(180.0f, 300.0f)));
             heading =
-                fast_add_rotations(m->yaw, truncate_float_to_s32_cf(-90.0f, 90.0f) * DEG_TO_RAD);
-            build_spherical_offset(d->target, 6.0f, heading,
+                fast_add_rotations(ceo_moby->yaw, truncate_float_to_s32_cf(-90.0f, 90.0f) * DEG_TO_RAD);
+            build_spherical_offset(ceo_data->target, 6.0f, heading,
                                    truncate_float_to_s32_cf(0.0f, 30.0f) * DEG_TO_RAD);
-            add_vector_xyz(d->target, d->target, m->position);
+            add_vector_xyz(ceo_data->target, ceo_data->target, ceo_moby->position);
         }
-        if (d->moving_timer) {
+        if (ceo_data->moving_timer) {
             qcopy(scratch.target, (char *)&D_0013E633_challenge + 0xEED);
             rate = 0.04f;
             head_rate = 0.3f;
         } else {
-            qcopy(scratch.target, d->target);
+            qcopy(scratch.target, ceo_data->target);
         }
     }
     if (tracking) {
         float yaw;
         float pitch;
-        qcopy(scratch.eye, m->position);
+        qcopy(scratch.eye, ceo_moby->position);
         scratch.eye[2] += 1.0f;
         subtract_vector_xyz(scratch.delta, scratch.target, scratch.eye);
-        yaw = fast_subtract_rotations(FUN_001fa688_cf(scratch.delta[0], scratch.delta[1]), m->yaw);
+        yaw = fast_subtract_rotations(FUN_001fa688_cf(scratch.delta[0], scratch.delta[1]), ceo_moby->yaw);
         pitch = -FUN_001fa688_cf(vector_length_xy(scratch.delta), scratch.delta[2]);
         if (yaw > 1.5707964f)
             yaw = 1.5707964f;
@@ -1695,14 +1695,14 @@ void gadgetron_ceo_update(L16ChallengeMoby *m) {
             pitch = 0.5235988f;
         else if (pitch < -0.5235988f)
             pitch = -0.5235988f;
-        d->pitch = pitch;
-        d->yaw = yaw * 0.7f;
-        d->head_yaw = yaw * 0.3f;
+        ceo_data->pitch = pitch;
+        ceo_data->yaw = yaw * 0.7f;
+        ceo_data->head_yaw = yaw * 0.3f;
     }
     if (D_0015EDB0_b)
-        *(float *)((char *)d + 0x150) = 2.75f;
-    update_joint_animation(rate * frame_scale_sq, head_rate * frame_scale_sq, m, d->body, 0);
-    update_joint_animation(rate * frame_scale_sq, head_rate * frame_scale_sq, m, d->head, 1);
+        *(float *)((char *)ceo_data + 0x150) = 2.75f;
+    update_joint_animation(rate * frame_scale_sq, head_rate * frame_scale_sq, ceo_moby, ceo_data->body, 0);
+    update_joint_animation(rate * frame_scale_sq, head_rate * frame_scale_sq, ceo_moby, ceo_data->head, 1);
 }
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002E7C70.c: func_L16_002E8538), where it is exact; names translated to the US level program. */
 
