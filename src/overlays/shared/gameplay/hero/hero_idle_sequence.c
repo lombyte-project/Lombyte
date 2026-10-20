@@ -232,7 +232,7 @@ s32 FUN_L00_00205110_c(s32) __asm__("FUN_L00_00205110");
 void FUN_L00_00205538(void) {
     s32 i;
     char *tbl = (char *)D_L00_0017A680_c;
-    char *c = tbl + 0x90;
+    char *record_reset_destination = tbl + 0x90;
     char *b = tbl + 0x60;
     for (i = 0; i < 31; i++) {
         Ent *manipulator_record = &D_L00_0017A680_c[i];
@@ -244,8 +244,8 @@ void FUN_L00_00205538(void) {
         clear_u64_value(D_L00_0017A680_c[i].m40);
         clear_u64_value(b);
         b += sizeof(Ent);
-        clear_u64_value(c);
-        c += sizeof(Ent);
+        clear_u64_value(record_reset_destination);
+        record_reset_destination += sizeof(Ent);
         manipulator_record->scale = 1.0f;
     }
 }
