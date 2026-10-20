@@ -29,8 +29,8 @@ void FUN_L00_002a08c8(void) {
     }
     if (r == 0) {
         {
-            int *p = (int *)D_L00_001611C0_002a08c8;
-            *p = 0x70000000;
+            int *buffer_write_word = (int *)D_L00_001611C0_002a08c8;
+            *buffer_write_word = 0x70000000;
         }
         *(int *)(D_L00_001611C0_002a08c8 + 4) = 0;
         *(int *)(D_L00_001611C0_002a08c8 + 8) = 0;
