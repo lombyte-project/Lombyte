@@ -24,13 +24,13 @@ extern void FUN_L01_00262038(char *a, int i, int c, char *base);
 
 extern short D_L01_00161218 __attribute__((sda));
 extern short D_L01_0016121C __attribute__((sda));
-void FUN_L01_002b7f30(char *base, int n) {
+void FUN_L01_002b7f30(char *base, int record_count) {
     int i;
-    for (i = 0; i < n; i++) {
-        char *p = base + i * 0x1190;
-        if (*(unsigned short *)(p + 0x1E) != 0) {
+    for (i = 0; i < record_count; i++) {
+        char *current_record = base + i * 0x1190;
+        if (*(unsigned short *)(current_record + 0x1E) != 0) {
             int off = *(int *)&D_L01_00161218 * 0x5C0 + 0x50;
-            FUN_L01_00261c10((char *)0x70000000, p + off);
+            FUN_L01_00261c10((char *)0x70000000, current_record + off);
             FUN_L01_00262038((char *)0x70000000, i, *(int *)&D_L01_0016121C, base);
         }
     }
