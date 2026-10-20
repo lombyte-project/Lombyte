@@ -1782,7 +1782,7 @@ void ryno_update(struct Moby *m) {
     Vec4 aim;
     Vec4 dir;
     Vec4 ofs;
-    Ryno_2cc608 *d = *(Ryno_2cc608 **)&m->pvars;
+    Ryno_2cc608 *ryno_vars = *(Ryno_2cc608 **)&m->pvars;
     struct Moby *r;
     Bounds_2cc608 *b;
     float yaw, pitch;
@@ -1791,44 +1791,44 @@ void ryno_update(struct Moby *m) {
     matcopy_2cc608(&cam, D_L00_00166C80);
     transpose_2cc608(&view, &cam);
     if ((unsigned int)(m->state - 2) < 2) {
-        if (timer32_2cc608(&d->lock_timer) || d->target == 0 || d->target->state == 0xFE || d->target->state == 0xFD) {
-            d->target = 0;
-            d->height = 0;
+        if (timer32_2cc608(&ryno_vars->lock_timer) || ryno_vars->target == 0 || ryno_vars->target->state == 0xFE || ryno_vars->target->state == 0xFD) {
+            ryno_vars->target = 0;
+            ryno_vars->height = 0;
         }
         qcopy(aim.f, camera_rot_2cc608.f);
         aim.f[1] = -aim.f[1];
-        muzzle_2cc608(m, d->slot, dir.f);
+        muzzle_2cc608(m, ryno_vars->slot, dir.f);
         r = FUN_L00_002cc360_c(dir.f, aim.f, 0, 1.6981583f, 1.6981583f, 80.0f);
-        if ((r != 0 && d->target == 0) || d->target == 0 || d->target->state == 0xFE || d->target->state == 0xFD || d->target->visible == 0) {
-            d->height = 0;
-            d->target = r;
-            d->lock_timer = ticks_2cc608(20);
-            d->life = 1.0f;
-            b = bounds_2cc608(d->target);
+        if ((r != 0 && ryno_vars->target == 0) || ryno_vars->target == 0 || ryno_vars->target->state == 0xFE || ryno_vars->target->state == 0xFD || ryno_vars->target->visible == 0) {
+            ryno_vars->height = 0;
+            ryno_vars->target = r;
+            ryno_vars->lock_timer = ticks_2cc608(20);
+            ryno_vars->life = 1.0f;
+            b = bounds_2cc608(ryno_vars->target);
             if (b != 0) {
-                d->height = b->height;
-                d->life = b->radius;
+                ryno_vars->height = b->height;
+                ryno_vars->life = b->radius;
             }
         }
-        if (d->target != 0 && timer16_2cc608(&d->track_timer) && has_ammo_2cc608(-1)) {
-            if (d->target == 0 || d->target->state == 0xFE || d->target->state == 0xFD) {
-                d->target = 0;
-                d->height = 0;
+        if (ryno_vars->target != 0 && timer16_2cc608(&ryno_vars->track_timer) && has_ammo_2cc608(-1)) {
+            if (ryno_vars->target == 0 || ryno_vars->target->state == 0xFE || ryno_vars->target->state == 0xFD) {
+                ryno_vars->target = 0;
+                ryno_vars->height = 0;
             } else {
-                float f = distance_2cc608(camera_pos_2cc608, ((float *)&d->target->pos)) / 150.0f;
-                qcopy(aim.f, ((float *)&d->target->pos));
+                float f = distance_2cc608(camera_pos_2cc608, ((float *)&ryno_vars->target->pos)) / 150.0f;
+                qcopy(aim.f, ((float *)&ryno_vars->target->pos));
                 f = f * 0.65f;
-                aim.f[2] = aim.f[2] + d->height;
+                aim.f[2] = aim.f[2] + ryno_vars->height;
                 reticle_2cc608(m, 0xFF0FFF0F, fabs_2cc608(0.9f - f), 0.0f, aim.f, 0x23, -1, 90.0f, 4);
             }
         }
     }
     switch (m->state) {
     case RYNO_STATE_INITIALIZE:
-        d->target = 0;
+        ryno_vars->target = 0;
         hero.items[0].unk1C = 0;
         m->state = 1;
-        d->track_timer = 0;
+        ryno_vars->track_timer = 0;
         break;
     case RYNO_STATE_WAIT_ANIMATION:
         if (m->anim_flags & 2) m->state = 2;
@@ -1848,15 +1848,15 @@ void ryno_update(struct Moby *m) {
         }
         hero.items[0].unk1C = 2;
         m->state = 4;
-        d->shot_timer = 0;
-        d->slot = 0;
-        d->shots = 0;
+        ryno_vars->shot_timer = 0;
+        ryno_vars->slot = 0;
+        ryno_vars->shots = 0;
         FUN_L00_0020e4c8();
         {
             int k;
-            for (k = 6; k >= 0; k--) d->recent[k] = 0;
+            for (k = 6; k >= 0; k--) ryno_vars->recent[k] = 0;
         }
-        d->count = 0;
+        ryno_vars->count = 0;
         break;
     case RYNO_STATE_READY_TO_FIRE_WITH_RETICLE:
         reticle_2cc608(m, 0xFF0F0FFF, 1.0f, 0.0f, 0, 0x23, -1, 90.0f, 4);
@@ -1877,22 +1877,22 @@ void ryno_update(struct Moby *m) {
         }
         hero.items[0].unk1C = 2;
         m->state = 4;
-        d->shot_timer = 0;
-        d->slot = 0;
-        d->shots = 0;
+        ryno_vars->shot_timer = 0;
+        ryno_vars->slot = 0;
+        ryno_vars->shots = 0;
         FUN_L00_0020e4c8();
         {
             int k;
-            for (k = 6; k >= 0; k--) d->recent[k] = 0;
+            for (k = 6; k >= 0; k--) ryno_vars->recent[k] = 0;
         }
-        d->count = 0;
+        ryno_vars->count = 0;
         break;
     case RYNO_STATE_FIRE_SALVO:
-        if (timer16_2cc608(&d->shot_timer) == 0) return;
-        d->shot_timer = ticks_2cc608(9);
-        d->slot++;
-        d->slot = d->slot % 9;
-        d->shots++;
+        if (timer16_2cc608(&ryno_vars->shot_timer) == 0) return;
+        ryno_vars->shot_timer = ticks_2cc608(9);
+        ryno_vars->slot++;
+        ryno_vars->slot = ryno_vars->slot % 9;
+        ryno_vars->shots++;
         dir.q = 0;
         if (hero.state.current == 30) {
             dir.f[2] = 1.0f;
@@ -1910,41 +1910,41 @@ void ryno_update(struct Moby *m) {
             yaw = angle_2cc608(dir.f[0], dir.f[1]);
         }
         pitch = -angle_2cc608(length_2cc608(dir.f), dir.f[2]);
-        muzzle_2cc608(m, d->slot, aim.f);
+        muzzle_2cc608(m, ryno_vars->slot, aim.f);
         FUN_L00_0020e4c8();
-        FUN_L00_002ccee0_c(m, aim.f, d->target, d->height, yaw, pitch);
-        if (d->shots >= 7) {
+        FUN_L00_002ccee0_c(m, aim.f, ryno_vars->target, ryno_vars->height, yaw, pitch);
+        if (ryno_vars->shots >= 7) {
             hero.items[0].unk1C = 0;
             FUN_L00_0020e698();
             m->state = 5;
-            d->shot_timer = ticks_2cc608(60);
-            d->track_timer = ticks_2cc608(60);
+            ryno_vars->shot_timer = ticks_2cc608(60);
+            ryno_vars->track_timer = ticks_2cc608(60);
         }
-        d->life = d->life - 1.0f;
-        if (d->life <= 0.0f || d->target == 0 || d->target->state == 0xFE || d->target->state == 0xFD) {
-            d->recent[d->count] = d->target;
-            d->count++;
-            d->count = d->count % 7;
+        ryno_vars->life = ryno_vars->life - 1.0f;
+        if (ryno_vars->life <= 0.0f || ryno_vars->target == 0 || ryno_vars->target->state == 0xFE || ryno_vars->target->state == 0xFD) {
+            ryno_vars->recent[ryno_vars->count] = ryno_vars->target;
+            ryno_vars->count++;
+            ryno_vars->count = ryno_vars->count % 7;
             qcopy(aim.f, camera_rot_2cc608.f);
             aim.f[1] = -aim.f[1];
-            d->target = FUN_L00_002cc360_c(((float *)&m->pos), aim.f, d->recent, 3.1415927f, 3.1415927f, 100.0f);
-            if (d->target == 0 && d->count > 0 && (rand_2cc608() & (d->count + 1)) == 0) {
-                d->target = d->recent[rand_2cc608() % d->count];
+            ryno_vars->target = FUN_L00_002cc360_c(((float *)&m->pos), aim.f, ryno_vars->recent, 3.1415927f, 3.1415927f, 100.0f);
+            if (ryno_vars->target == 0 && ryno_vars->count > 0 && (rand_2cc608() & (ryno_vars->count + 1)) == 0) {
+                ryno_vars->target = ryno_vars->recent[rand_2cc608() % ryno_vars->count];
             }
-            d->height = 0;
-            d->lock_timer = ticks_2cc608(20);
-            d->life = 1.0f;
-            b = bounds_2cc608(d->target);
+            ryno_vars->height = 0;
+            ryno_vars->lock_timer = ticks_2cc608(20);
+            ryno_vars->life = 1.0f;
+            b = bounds_2cc608(ryno_vars->target);
             if (b != 0) {
-                d->height = b->height;
-                d->life = b->radius;
+                ryno_vars->height = b->height;
+                ryno_vars->life = b->radius;
             }
         }
         break;
     case RYNO_STATE_COOLDOWN:
-        if (timer16_2cc608(&d->shot_timer) == 0) return;
-        d->shots = 0;
-        d->target = 0;
+        if (timer16_2cc608(&ryno_vars->shot_timer) == 0) return;
+        ryno_vars->shots = 0;
+        ryno_vars->target = 0;
         m->state = 2;
         break;
     case 6:
