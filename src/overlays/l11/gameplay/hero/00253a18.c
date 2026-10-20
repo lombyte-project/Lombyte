@@ -123,6 +123,7 @@ extern int func_001F9908_r(int *) __asm__("FUN_001f9740");
 void FUN_L11_00253a18(void) {
     enum {
         HERO_STATE_ITEM_BUTTON_RELEASE_WAIT = 23,
+        HERO_STATE_LOOK_BUTTON_RELEASE_TO_IDLE = 30,
         HERO_STATE_ANIMATION_RECOVERY_WITH_JUMP_CANCEL = 35,
         HERO_STATE_ITEM_BUTTON_RELEASE_TO_IDLE_OR_FALL = 38,
         HERO_STATE_ITEM_BUTTON_RELEASE_WAIT_WITH_MINIMUM_DURATION = 44,
@@ -1900,7 +1901,7 @@ void FUN_L11_00253a18(void) {
                         hero_set_state(0x53, 0);
                     }
                     break;
-                case 30:
+                case HERO_STATE_LOOK_BUTTON_RELEASE_TO_IDLE:
                     if (hero.vehicle_mode == 0) {
                         if (hero.unk20AA == 0 || hero.unk20A5 != 0) {
                             if (controller_state.held & 0xA) {
