@@ -1194,16 +1194,16 @@ void FUN_L02_00225c20(void) {
             add_vector_xyz(hero.motion.velocity.f, hero.motion.velocity.f, vec[3]);
         }
         if (((Moby *)hero.unk994) != 0) {
-            unsigned char *p;
+            unsigned char *speed_limit_data;
 
-            p = ((Moby *)hero.unk994)->f78;
-            if (p != 0) {
+            speed_limit_data = ((Moby *)hero.unk994)->f78;
+            if (speed_limit_data != 0) {
                 float len;
                 float cur;
                 float lim;
 
                 cur = vector_length_xyz(hero.motion.velocity.f);
-                lim = *(float *)(p + 0xC);
+                lim = *(float *)(speed_limit_data + 0xC);
                 len = cur;
                 if (lim < cur) {
                     approach_value(&len, lim, frame_time_sq * 15.0f);
