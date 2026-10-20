@@ -410,17 +410,17 @@ extern float D_L14_001EE5E0[];
 extern unsigned short *D_L14_001ABF40[];
 
 void FUN_L14_00305600(struct Moby *moby) {
-    unsigned short *p = D_L14_001ABF40[*(int *)moby->pvars];
+    unsigned short *moby_id_cursor = D_L14_001ABF40[*(int *)moby->pvars];
     float *out;
-    if (p != 0) {
+    if (moby_id_cursor != 0) {
         int base = D_L14_0015FFD8;
         out = D_L14_001EE5E0;
         do {
-            float *f = (float *)(base + ((*p & 0x7FFF) << 8));
-            *out++ = f[6];
-            f[6] -= 20.0f;
-            *(unsigned short *)((char *)f + 0x34) |= 0x41;
-        } while (*(short *)p++ >= 0);
+            float *target_moby = (float *)(base + ((*moby_id_cursor & 0x7FFF) << 8));
+            *out++ = target_moby[6];
+            target_moby[6] -= 20.0f;
+            *(unsigned short *)((char *)target_moby + 0x34) |= 0x41;
+        } while (*(short *)moby_id_cursor++ >= 0);
     }
 }
 extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
