@@ -2976,14 +2976,14 @@ void spawn_particle(void *, void *, int, int, int, int, float, float, float, flo
                   float) __asm__("FUN_L00_002712b8");
 void spawn_burst(void *, void *, int, int, int, int, float) __asm__("FUN_L00_0026cbb0");
 extern P_2b1af0 D_0013F450;
-void FUN_L00_002b1af0(unsigned char *o) {
+void FUN_L00_002b1af0(unsigned char *source_object) {
     V_2b1af0 b;
     V_2b1af0 a;
-    V_2b1af0 c;
-    V_2b1af0 d;
+    V_2b1af0 emission_position;
+    V_2b1af0 particle_velocity;
     int i, j;
     int t;
-    if (o[0xBC] == 0)
+    if (source_object[0xBC] == 0)
         return;
     *(OvlQuad *)&a = 0;
     *(OvlQuad *)&b = 0;
@@ -2992,32 +2992,32 @@ void FUN_L00_002b1af0(unsigned char *o) {
     b.f[1] = 1.0f;
     b.f[3] = 1.0f;
     a.f[3] = 1.0f;
-    fast_subtract_rotations_cf(o + 0xBC);
-    transform_vector_by_basis(&a, &a, o + 0xC0);
-    add_2b1af0(&c, o + 0x10, &a);
-    transform_vector_by_basis(&b, &b, o + 0xC0);
+    fast_subtract_rotations_cf(source_object + 0xBC);
+    transform_vector_by_basis(&a, &a, source_object + 0xC0);
+    add_2b1af0(&emission_position, source_object + 0x10, &a);
+    transform_vector_by_basis(&b, &b, source_object + 0xC0);
     for (i = 1; i >= 0; i--) {
-        ff500_2b1af0(&d, &b, rndf_2b1af0(0.01f, 0.06f));
+        ff500_2b1af0(&particle_velocity, &b, rndf_2b1af0(0.01f, 0.06f));
         scale_2b1af0(&b, &D_0013F450.a, 0.7f);
         b.f[2] = 0.0f;
-        add_2b1af0(&d, &d, &b);
+        add_2b1af0(&particle_velocity, &particle_velocity, &b);
         scale_2b1af0(&b, &D_0013F450.b, 0.7f);
         b.f[2] = 0.0f;
-        add_2b1af0(&d, &d, &b);
+        add_2b1af0(&particle_velocity, &particle_velocity, &b);
         t = trunc_2b1af0(rnd_2b1af0(0.0f, 6.0f));
-        spawn_particle(&c, &d, fr_2b1af0(0x1E), 0x7F, 0xFFFFFF, t, 25000.0f, 300.0f, 0.98f, 0.0f,
+        spawn_particle(&emission_position, &particle_velocity, fr_2b1af0(0x1E), 0x7F, 0xFFFFFF, t, 25000.0f, 300.0f, 0.98f, 0.0f,
                      0.85f);
     }
     for (j = 0; j >= 0; j--) {
-        ff500_2b1af0(&d, &b, rndf_2b1af0(0.01f, 0.06f));
+        ff500_2b1af0(&particle_velocity, &b, rndf_2b1af0(0.01f, 0.06f));
         scale_2b1af0(&b, &D_0013F450.a, 0.55f);
         b.f[2] = 0.0f;
-        add_2b1af0(&d, &d, &b);
+        add_2b1af0(&particle_velocity, &particle_velocity, &b);
         scale_2b1af0(&b, &D_0013F450.b, 0.55f);
         b.f[2] = 0.0f;
-        add_2b1af0(&d, &d, &b);
+        add_2b1af0(&particle_velocity, &particle_velocity, &b);
         t = fr_2b1af0(0x14);
-        spawn_burst(&c, &d, 0x4F007FFF, 0x1FFFFFFF, rndi_2b1af0(t, fr_2b1af0(0x28)), 1, 10000.0f);
+        spawn_burst(&emission_position, &particle_velocity, 0x4F007FFF, 0x1FFFFFFF, rndi_2b1af0(t, fr_2b1af0(0x28)), 1, 10000.0f);
     }
 }
 void build_look_at_matrix(void *, void *, void *, float) __asm__("FUN_00214890");
