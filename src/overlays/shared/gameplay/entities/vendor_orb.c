@@ -1468,8 +1468,8 @@ void robot_arm_update(char *moby) {
         if (*(int *)(moby_data + 0x34) & 2) {
             FUN_L00_0025f3e8(moby, effect_offset_or_world_position, -1, *(float *)(moby_data + 0x2C) * 0.5f, 0.0f);
         } else {
-            float h = *(float *)(moby_data + 0x2C) * 0.5f;
-            spawn_explosion(moby, D_L00_0015F580, effect_offset_or_world_position, 0.0f, 0.0f, 5, *(float *)(moby_data + 0x2C), 3, h, 9.0f, 5, h, -1, 0.0f, 0, 0, -1, 0);
+            float half_collision_radius = *(float *)(moby_data + 0x2C) * 0.5f;
+            spawn_explosion(moby, D_L00_0015F580, effect_offset_or_world_position, 0.0f, 0.0f, 5, *(float *)(moby_data + 0x2C), 3, half_collision_radius, 9.0f, 5, half_collision_radius, -1, 0.0f, 0, 0, -1, 0);
         }
         mark_moby_for_removal(moby);
         return;
