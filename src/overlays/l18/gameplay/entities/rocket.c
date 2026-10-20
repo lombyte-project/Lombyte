@@ -2797,7 +2797,7 @@ void spawn_explosion_burst(void *arg) {
     FUN_L06_0030bef8(velocity, scale_ticks(30), 0x80806060, 0x801010);
     trooper_play_sound(0x10, 0, (int)arg, 0x58E);
     if (i < D_L18_00161F6C) {
-        int a, b, c;
+        int a, b, third_spark_frame_count;
         float angle, elevation, scale, speed;
         do {
             ++i;
@@ -2812,8 +2812,8 @@ void spawn_explosion_burst(void *arg) {
             scale = random_float_between(0.8f, 1.2f);
             a = truncate_float_to_s32((float)scale_ticks(D_L18_00161F80) * scale);
             b = truncate_float_to_s32((float)scale_ticks(D_L18_00161F84) * scale);
-            c = truncate_float_to_s32((float)scale_ticks(D_L18_00161F88) * scale);
-            spawn_spark(&moby->pos, velocity, offset, D_L18_00161F78, D_L18_00161F7C, a, b, c, *(int *)&D_L18_00161F68);
+            third_spark_frame_count = truncate_float_to_s32((float)scale_ticks(D_L18_00161F88) * scale);
+            spawn_spark(&moby->pos, velocity, offset, D_L18_00161F78, D_L18_00161F7C, a, b, third_spark_frame_count, *(int *)&D_L18_00161F68);
         } while (i < D_L18_00161F6C);
     }
     j = 0;
