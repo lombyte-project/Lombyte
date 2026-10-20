@@ -1827,7 +1827,7 @@ extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9
 extern char D_00173F60_alias[] __asm__("D_L00_00173E60");
 
 void FUN_L00_002c3888(float *pos,char *moby,void *vec) {
- float a[4],b[4],c[4];
+ float collision_start[4],b[4],rotated_normal[4];
  char *state=*(char **)(moby+0x78);
  struct Hero *camera;
  char *player;
@@ -1838,11 +1838,11 @@ void FUN_L00_002c3888(float *pos,char *moby,void *vec) {
  qcopy(moby+0x10,pos);
  camera = &hero;
  player=((char *)camera->moby);
- *(OvlQuad *)a=*(OvlQuad *)(player+0x10); a[2]=pos[2];
- subtract_vector_xyz(pos,pos,a);
+ *(OvlQuad *)collision_start=*(OvlQuad *)(player+0x10); collision_start[2]=pos[2];
+ subtract_vector_xyz(pos,pos,collision_start);
  normalize_vector_xyz(pos,pos,vector_length_xyz(pos)+0.2f);
- add_vector_xyz(pos,pos,a);
- if(FUN_001efa68(a,pos,0,((int)camera->moby),0)) {
+ add_vector_xyz(pos,pos,collision_start);
+ if(FUN_001efa68(collision_start,pos,0,((int)camera->moby),0)) {
   float smoothing;
   qcopy(moby+0x10,D_00173F60_alias); qzero(state+0x10);
   moby[0x20]=4;
@@ -1851,12 +1851,12 @@ void FUN_L00_002c3888(float *pos,char *moby,void *vec) {
   qcopy(b,D_L00_00173E40.vector);
   { float co,si;
   co=fast_cos(*(float *)(moby+0x48)); smoothing=0.1f; si=fast_sin(*(float *)(moby+0x48));
-  c[0]=b[0]*co+b[1]*si; }
+  rotated_normal[0]=b[0]*co+b[1]*si; }
   { float co,si;
   co=fast_cos(*(float *)(moby+0x48)); si=fast_sin(*(float *)(moby+0x48));
-  c[1]=b[1]*co-b[0]*si; c[2]=b[2]; }
-  *(float *)(state+0x4C)=-fast_arc_tan(square_root(c[0]*c[0]+c[2]*c[2]),c[1]);
-  *(float *)(state+0x50)=fast_arc_tan(c[2],c[0]);
+  rotated_normal[1]=b[1]*co-b[0]*si; rotated_normal[2]=b[2]; }
+  *(float *)(state+0x4C)=-fast_arc_tan(square_root(rotated_normal[0]*rotated_normal[0]+rotated_normal[2]*rotated_normal[2]),rotated_normal[1]);
+  *(float *)(state+0x50)=fast_arc_tan(rotated_normal[2],rotated_normal[0]);
   *(float *)(moby+0x40)=fast_add_rotations(*(float *)(moby+0x40),fast_subtract_rotations(*(float *)(state+0x4C),*(float *)(moby+0x40))*(frame_scale*smoothing));
   *(float *)(moby+0x44)=fast_add_rotations(*(float *)(moby+0x44),fast_subtract_rotations(*(float *)(state+0x50),*(float *)(moby+0x44))*(frame_scale*smoothing));
  } else moby[0x20]=2;
