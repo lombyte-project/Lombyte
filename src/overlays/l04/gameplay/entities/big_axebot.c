@@ -265,8 +265,8 @@ void FUN_L04_0029ecf8(struct Moby *moby) {
         s32 i;
         distance = 10000.0f;
         for (i = 0; i < data->count; i++) {
-            f32 d = vector_distance_29ecf8(&moby->pos, &data->children[i]->pos);
-            if (d < distance) distance = d;
+            f32 child_distance = vector_distance_29ecf8(&moby->pos, &data->children[i]->pos);
+            if (child_distance < distance) distance = child_distance;
         }
         speed = 0.0f;
         if (distance < 3.0f) speed = 3.0f - distance;
