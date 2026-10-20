@@ -98,7 +98,7 @@ void FUN_L00_00257470(unsigned char *moby, int flags, int arg) {
     float amt;
     int lvl;
     int k;
-    int d;
+    int amount_delta;
     int n;
     int call_flags;
     int r;
@@ -128,9 +128,9 @@ void FUN_L00_00257470(unsigned char *moby, int flags, int arg) {
     }
     if ((signed char)moby[0xB1] >= 0) {
         int n1 = *(short *)(moby + 0xB6);
-        d = n1 - D_0014D590_257470[D_0015ED84_257470b][moby[0xB1]][1];
+        amount_delta = n1 - D_0014D590_257470[D_0015ED84_257470b][moby[0xB1]][1];
         {
-            int x = (n1 + 1) / 2 < d ? d : 0;
+            int x = (n1 + 1) / 2 < amount_delta ? amount_delta : 0;
             if (x) {
                 amt = x;
             }
