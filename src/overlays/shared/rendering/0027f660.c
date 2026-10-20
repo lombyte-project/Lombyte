@@ -352,35 +352,35 @@ extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a
 extern void *func_001153FC_c(void *, int, unsigned int) __asm__("FUN_001153fc");
 
 void FUN_L01_0028b8c8(void *out, int *l, int idx, float a, float b) {
-    void *p[3];
+    void *neighboring_points[3];
     float weighted_incoming_delta[4];
     float weighted_outgoing_delta[4];
     float blended_delta[4];
-    float d1, d2, m, len;
+    float incoming_segment_distance, outgoing_segment_distance, delta_length_limit, len;
     float wa, wb;
-    func_001153FC_c(p, 0, 12);
-    p[0] = FUN_L01_0028b7b0(l, *l + idx - 1);
-    p[1] = FUN_L01_0028b7b0(l, *l + idx);
-    p[2] = FUN_L01_0028b7b0(l, *l + idx + 1);
+    func_001153FC_c(neighboring_points, 0, 12);
+    neighboring_points[0] = FUN_L01_0028b7b0(l, *l + idx - 1);
+    neighboring_points[1] = FUN_L01_0028b7b0(l, *l + idx);
+    neighboring_points[2] = FUN_L01_0028b7b0(l, *l + idx + 1);
     {
         wb = (1.0f - a) * (b + 1.0f) * 0.5f;
         wa = (1.0f - a) * (1.0f - b) * 0.5f;
     }
-    d1 = fast_vec_dist(p[0], p[1]);
-    d2 = fast_vec_dist(p[1], p[2]);
-    if (d1 < d2)
-        m = d1;
+    incoming_segment_distance = fast_vec_dist(neighboring_points[0], neighboring_points[1]);
+    outgoing_segment_distance = fast_vec_dist(neighboring_points[1], neighboring_points[2]);
+    if (incoming_segment_distance < outgoing_segment_distance)
+        delta_length_limit = incoming_segment_distance;
     else
-        m = d2;
-    subtract_vector_xyz(weighted_incoming_delta, p[1], p[0]);
+        delta_length_limit = outgoing_segment_distance;
+    subtract_vector_xyz(weighted_incoming_delta, neighboring_points[1], neighboring_points[0]);
     scale_vector_xyz(weighted_incoming_delta, weighted_incoming_delta, wb);
-    subtract_vector_xyz(weighted_outgoing_delta, p[2], p[1]);
+    subtract_vector_xyz(weighted_outgoing_delta, neighboring_points[2], neighboring_points[1]);
     scale_vector_xyz(weighted_outgoing_delta, weighted_outgoing_delta, wa);
     add_vector_xyz(blended_delta, weighted_incoming_delta, weighted_outgoing_delta);
-    m = m * 1.1f;
+    delta_length_limit = delta_length_limit * 1.1f;
     len = vector_length_xyz(blended_delta);
-    if (m < len) {
-        normalize_vector_xyz(out, blended_delta, m);
+    if (delta_length_limit < len) {
+        normalize_vector_xyz(out, blended_delta, delta_length_limit);
     } else {
         *(OvlQuad *)out = *(OvlQuad *)blended_delta;
     }
