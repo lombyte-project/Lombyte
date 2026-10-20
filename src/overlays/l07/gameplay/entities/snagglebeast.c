@@ -275,30 +275,30 @@ void *FUN_L07_00313350(void *unused, void *dp, void *op) {
     char *data = dp;
     int *out = op;
     int output_count = 0;
-    int a = *(int *)(data + 0x170);
-    int b, c, d, e, f;
-    if (a != -1)
-        out[output_count++] = a;
+    int output_candidate_0 = *(int *)(data + 0x170);
+    int b, output_candidate_2, output_candidate_3, output_candidate_4, output_candidate_5;
+    if (output_candidate_0 != -1)
+        out[output_count++] = output_candidate_0;
     b = *(int *)(data + 0x174);
     if (b != -1)
         out[output_count++] = b;
-    c = *(int *)(data + 0x178);
-    if (c != -1)
-        out[output_count++] = c;
+    output_candidate_2 = *(int *)(data + 0x178);
+    if (output_candidate_2 != -1)
+        out[output_count++] = output_candidate_2;
     if ((((unsigned char)data[0x19C] ^ 1) & 1)) {
-        d = *(int *)(data + 0x17C);
-        if (d != -1)
-            out[output_count++] = d;
+        output_candidate_3 = *(int *)(data + 0x17C);
+        if (output_candidate_3 != -1)
+            out[output_count++] = output_candidate_3;
     }
     if (!((unsigned char)data[0x19C] & 2)) {
-        e = *(int *)(data + 0x180);
-        if (e != -1)
-            out[output_count++] = e;
+        output_candidate_4 = *(int *)(data + 0x180);
+        if (output_candidate_4 != -1)
+            out[output_count++] = output_candidate_4;
     }
     if (!((unsigned char)data[0x19C] & 4)) {
-        f = *(int *)(data + 0x184);
-        if (f != -1)
-            out[output_count++] = f;
+        output_candidate_5 = *(int *)(data + 0x184);
+        if (output_candidate_5 != -1)
+            out[output_count++] = output_candidate_5;
     }
     return (void *)output_count;
 }
