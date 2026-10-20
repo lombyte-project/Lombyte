@@ -1193,7 +1193,7 @@ int FUN_L00_002eb648(char *camera_object, char *target_moby) {
     u128 v[1];
     u128 w[1];
     char *camera_state;
-    float *c;
+    float *camera_initialization_values;
     char *target_private_data;
     u128 *pw;
     struct Hero *g;
@@ -1202,7 +1202,7 @@ int FUN_L00_002eb648(char *camera_object, char *target_moby) {
     char *cp;
     float ang, hero_to_camera_distance, x;
     camera_state = *(char **)(camera_object + 0x70);
-    c = (float *)(camera_state + 0x64);
+    camera_initialization_values = (float *)(camera_state + 0x64);
     if (!target_moby)
         goto one;
     v[0] = 0;
@@ -1213,11 +1213,11 @@ int FUN_L00_002eb648(char *camera_object, char *target_moby) {
     FUN_001f9a10_2eb648(w, target_moby + 0x10, v);
     pw = w;
     if (*(int *)(target_private_data + 0x10) == -1) {
-        FUN_L00_001eb0c8_2eb648(c, camera_object + 0x50, 0.0f);
-        c[2] = 6.0f;
-        c[1] = c[3];
-        c[3] = 0.0f;
-        FUN_L00_002eb320_2eb648(camera_object, c, w, 0.0f);
+        FUN_L00_001eb0c8_2eb648(camera_initialization_values, camera_object + 0x50, 0.0f);
+        camera_initialization_values[2] = 6.0f;
+        camera_initialization_values[1] = camera_initialization_values[3];
+        camera_initialization_values[3] = 0.0f;
+        FUN_L00_002eb320_2eb648(camera_object, camera_initialization_values, w, 0.0f);
     }
     if (*(int *)(target_private_data + 0x10) > 0)
         goto pos;
