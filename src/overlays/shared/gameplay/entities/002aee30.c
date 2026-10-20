@@ -98,46 +98,46 @@ extern f32 frame_time_macro __asm__("D_0015ED6C") __attribute__((section(".sdata
  */
 struct Moby *FUN_L04_002aee30(struct Moby *owner, void *pos, void *dir, int life)
 {
-    struct Moby *m;
+    struct Moby *spawned_moby;
     ShotVars *vars;
     OvlQuad pos_q;
     OvlQuad dir_q;
-    Vec4f *p = (Vec4f *)&pos_q;
-    Vec4f *d = (Vec4f *)&dir_q;
+    Vec4f *position_copy = (Vec4f *)&pos_q;
+    Vec4f *direction_copy = (Vec4f *)&dir_q;
 
     pos_q = *(OvlQuad *)pos;
     dir_q = *(OvlQuad *)dir;
-    m = create_moby(0xB8);
-    if (m != 0) {
-        vars = (ShotVars *)m->pvars;
+    spawned_moby = create_moby(0xB8);
+    if (spawned_moby != 0) {
+        vars = (ShotVars *)spawned_moby->pvars;
         vars->owner = owner;
-        m->update_dist = 0xFF;
-        m->draw_dist = 0xFF;
-        m->visible = 1;
+        spawned_moby->update_dist = 0xFF;
+        spawned_moby->draw_dist = 0xFF;
+        spawned_moby->visible = 1;
         if (owner->oclass != 0xFF)
-            m->scale = m->scale * 0.5f;
-        m->rot.x = 0.0f;
-        m->rot.y = 0.0f;
-        m->rot.z = atan2_f(d->x, d->y);
-        qcopy(&m->pos, p);
-        qcopy(&vars->dir, d);
+            spawned_moby->scale = spawned_moby->scale * 0.5f;
+        spawned_moby->rot.x = 0.0f;
+        spawned_moby->rot.y = 0.0f;
+        spawned_moby->rot.z = atan2_f(direction_copy->x, direction_copy->y);
+        qcopy(&spawned_moby->pos, position_copy);
+        qcopy(&vars->dir, direction_copy);
         vars->spin = random_float_between(-(frame_time_macro * 1.5707964f), frame_time_macro * 1.5707964f);
         vars->unk14 = 0;
         vars->time = life;
         vars->time_max = life;
-        vars->hero_dist = fast_vec_dist(&m->pos, &hero.motion.pos);
+        vars->hero_dist = fast_vec_dist(&spawned_moby->pos, &hero.motion.pos);
         vars->unk24 = 0;
         vars->unk28 = 0;
         if (owner->oclass == 0xFF) {
-            FUN_L00_0026daa0(m, 0x2F7F4F4F, life * 5 / 4, -1, 100000.0f);
-            FUN_L00_0026daa0(m, 0x4F7F7F7F, life * 5 / 4, -1, 40000.0f);
+            FUN_L00_0026daa0(spawned_moby, 0x2F7F4F4F, life * 5 / 4, -1, 100000.0f);
+            FUN_L00_0026daa0(spawned_moby, 0x4F7F7F7F, life * 5 / 4, -1, 40000.0f);
         } else {
-            FUN_L00_0026daa0(m, 0x2F4F7F7F, life * 5 / 4, -1, 100000.0f);
-            FUN_L00_0026daa0(m, 0x4F6F7F7F, life * 5 / 4, -1, 40000.0f);
+            FUN_L00_0026daa0(spawned_moby, 0x2F4F7F7F, life * 5 / 4, -1, 100000.0f);
+            FUN_L00_0026daa0(spawned_moby, 0x4F6F7F7F, life * 5 / 4, -1, 40000.0f);
         }
-        FUN_L00_00250df8(m);
+        FUN_L00_00250df8(spawned_moby);
     }
-    return m;
+    return spawned_moby;
 }
 
 /* Optional query block for collision_line: a swept probe along dir. */
