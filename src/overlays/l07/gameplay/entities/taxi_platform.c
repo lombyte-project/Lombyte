@@ -350,7 +350,7 @@ extern void FUN_L00_0023e838(int);
 void FUN_L07_00312150(char *light_effect_state) {
     int color_phase_threshold;
     float phase_remaining_fraction;
-    int c;
+    int interpolated_packed_color;
     float *rgb_destination;
     if (fast_dec_timer_s16(light_effect_state + 0x284)) {
         if (*(short *)(light_effect_state + 0x280) != -1) {
@@ -363,16 +363,16 @@ void FUN_L07_00312150(char *light_effect_state) {
         if (color_phase_threshold < *(short *)(light_effect_state + 0x284)) {
             phase_remaining_fraction = convert_integer_to_float(*(short *)(light_effect_state + 0x284) - color_phase_threshold);
             phase_remaining_fraction /= convert_integer_to_float(*(short *)(light_effect_state + 0x286) - color_phase_threshold);
-            c = fast_tween_color(0, *(int *)(light_effect_state + 0x288), 1.0f - phase_remaining_fraction);
+            interpolated_packed_color = fast_tween_color(0, *(int *)(light_effect_state + 0x288), 1.0f - phase_remaining_fraction);
         } else {
             phase_remaining_fraction = convert_integer_to_float(*(short *)(light_effect_state + 0x284));
             phase_remaining_fraction /= convert_integer_to_float(color_phase_threshold);
-            c = fast_tween_color(*(int *)(light_effect_state + 0x288), *(int *)(light_effect_state + 0x28C), 1.0f - phase_remaining_fraction);
+            interpolated_packed_color = fast_tween_color(*(int *)(light_effect_state + 0x288), *(int *)(light_effect_state + 0x28C), 1.0f - phase_remaining_fraction);
         }
         rgb_destination = (float *)(D_L07_00180340 + *(short *)(light_effect_state + 0x280) * 32);
-        rgb_destination[0] = convert_integer_to_float(c & 0xFF) * 0.0078125f;
-        rgb_destination[1] = convert_integer_to_float((c >> 8) & 0xFF) * 0.0078125f;
-        rgb_destination[2] = convert_integer_to_float((c >> 16) & 0xFF) * 0.0078125f;
+        rgb_destination[0] = convert_integer_to_float(interpolated_packed_color & 0xFF) * 0.0078125f;
+        rgb_destination[1] = convert_integer_to_float((interpolated_packed_color >> 8) & 0xFF) * 0.0078125f;
+        rgb_destination[2] = convert_integer_to_float((interpolated_packed_color >> 16) & 0xFF) * 0.0078125f;
     }
 }
 /* steps a hit-effect emitter: orient, spawn a puff, and reseed the timer */
