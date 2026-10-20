@@ -45,14 +45,14 @@ void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 void FUN_L00_002d7f88(S_002d7f88 *self) {
-    D_002d7f88 *d = self->p78;
+    D_002d7f88 *moby_data = self->p78;
     O_002d7f88 *o;
     void *m;
     f32 t;
-    d->f4 += (D_L00_001616DC + D_L00_001616DC) * frame_time;
-    if (fast_dec_timer(d->v8) != 0 || D_L00_001616DC * 1.1f <= d->f4)
+    moby_data->f4 += (D_L00_001616DC + D_L00_001616DC) * frame_time;
+    if (fast_dec_timer(moby_data->v8) != 0 || D_L00_001616DC * 1.1f <= moby_data->f4)
         goto kill;
-    o = d->o;
+    o = moby_data->o;
     if (o == 0 || o->hA6 != 0xB9 || o->b20 == 0xFE || o->b20 == 0xFD) {
     kill:
         mark_moby_for_removal(self);
@@ -60,15 +60,15 @@ void FUN_L00_002d7f88(S_002d7f88 *self) {
     }
     m = o->p78;
     clear_u64_value(self->v10);
-    self->f14 = -d->f4;
-    transform_vector_by_basis(self->v10, self->v10, (u8 *)d->o + 0xC0);
+    self->f14 = -moby_data->f4;
+    transform_vector_by_basis(self->v10, self->v10, (u8 *)moby_data->o + 0xC0);
     fast_vec_add(self->v10, self->v10, m);
-    qcopy(&self->q40, &d->o->q40);
-    if (d->f4 > D_L00_001616DC) {
-        self->b23 = truncate_float_to_s32((1.0f - (d->f4 - D_L00_001616DC) * 10.0f) * 127.0f);
+    qcopy(&self->q40, &moby_data->o->q40);
+    if (moby_data->f4 > D_L00_001616DC) {
+        self->b23 = truncate_float_to_s32((1.0f - (moby_data->f4 - D_L00_001616DC) * 10.0f) * 127.0f);
     }
-    t = d->fC;
-    self->f2C = t * 0.1f + t * d->f4 / D_L00_001616DC;
+    t = moby_data->fC;
+    self->f2C = t * 0.1f + t * moby_data->f4 / D_L00_001616DC;
 }
 /* True when the moby state byte is 1. */
 int FUN_L00_002d8128(unsigned char *p) {
