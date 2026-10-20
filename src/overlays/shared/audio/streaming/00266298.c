@@ -82,14 +82,14 @@ extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 s32 update_npc_dialogue(struct Moby *moby, struct SceneTrigger *trigger) __asm__("FUN_L00_00266448");
 s32 update_npc_dialogue(struct Moby *moby, struct SceneTrigger *trigger)
 {
-    struct Hero *h = &hero;
+    struct Hero *hero_ptr = &hero;
     struct SceneEntry *entry;
     s32 index;
     s32 handle;
 
-    if (h->state.current == 0x1D)
+    if (hero_ptr->state.current == 0x1D)
         return 0;
-    if (h->health.hp == 0)
+    if (hero_ptr->health.hp == 0)
         return 0;
     if (trigger->initialised == 0)
         FUN_L00_002668a0_c(moby, trigger);
@@ -101,7 +101,7 @@ s32 update_npc_dialogue(struct Moby *moby, struct SceneTrigger *trigger)
         return 0;
     if (trigger->any_direction == 0xFF)
         return 0;
-    if (fast_vec_dist(&moby->pos, &h->motion.pos) > trigger->radius + trigger->radius)
+    if (fast_vec_dist(&moby->pos, &hero_ptr->motion.pos) > trigger->radius + trigger->radius)
         return 0;
 
     fun_00216c48(moby, trigger, 0);
@@ -109,13 +109,13 @@ s32 update_npc_dialogue(struct Moby *moby, struct SceneTrigger *trigger)
     if (trigger->any_direction == 0) {
         /* the moby must face the hero ... */
         if (fast_difference_between_rotations(
-                atan2_f(h->motion.pos.f[0] - moby->pos.x, h->motion.pos.f[1] - moby->pos.y),
+                atan2_f(hero_ptr->motion.pos.f[0] - moby->pos.x, hero_ptr->motion.pos.f[1] - moby->pos.y),
                 moby->rot.z) > trigger->radius)
             return 0;
         /* ... and the hero the moby, within 1.57 (about 90 degrees) */
         if (fast_difference_between_rotations(
-                atan2_f(moby->pos.x - h->motion.pos.f[0], moby->pos.y - h->motion.pos.f[1]),
-                h->motion.rot.f[2]) > 1.57f)
+                atan2_f(moby->pos.x - hero_ptr->motion.pos.f[0], moby->pos.y - hero_ptr->motion.pos.f[1]),
+                hero_ptr->motion.rot.f[2]) > 1.57f)
             return 0;
     }
 
