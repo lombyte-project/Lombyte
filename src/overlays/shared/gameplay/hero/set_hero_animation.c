@@ -1250,15 +1250,15 @@ extern s32 D_0013DEA0[];
 /* Moves amount from weapon_ammo_counts[idx] to D_0013DEA0[idx]; 0 if too little, else 1. */
 s32 use_ammo(s32 idx, s32 amount) __asm__("FUN_L00_00233db8");
 s32 use_ammo(s32 idx, s32 amount) {
-    s32 n;
+    s32 vendor_item_stride;
     s32 v;
-    VendorItemInfo *e;
-    n = 0x18;
+    VendorItemInfo *vendor_item_info;
+    vendor_item_stride = 0x18;
     if (idx == -1) {
         idx = D_00140408[0];
     }
-    e = (VendorItemInfo *)((u8 *)D_L00_001C40B0 + n * idx);
-    if (e->hE == 0) {
+    vendor_item_info = (VendorItemInfo *)((u8 *)D_L00_001C40B0 + vendor_item_stride * idx);
+    if (vendor_item_info->hE == 0) {
         return 1;
     }
     v = weapon_ammo_counts[idx];
