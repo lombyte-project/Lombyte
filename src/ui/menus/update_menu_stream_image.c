@@ -15,9 +15,9 @@ extern s64 register_8bit_texture(s32, s32, u8 *, u8 *, s32, s32) __asm__("FUN_00
 extern void FUN_0020b4a8(void);
 extern void fast_decompress(u8 *, s32) __asm__("FUN_0020b618");
 extern s32 start_audio_stream_read(u8 *, s32, s32) __asm__("FUN_00216788");
-extern s32 get_stream_buffer_size(s32) __asm__("FUN_00225d88");
-extern s32 mark_stream_buffer_read_active(s32) __asm__("FUN_00225dd8");
-extern s32 clear_record_flag_by_key(s32) __asm__("FUN_00225e20");
+extern s32 get_menu_stream_buffer_size(s32) __asm__("FUN_00225d88");
+extern s32 mark_menu_stream_buffer_read_active(s32) __asm__("FUN_00225dd8");
+extern s32 clear_menu_stream_buffer_read_active(s32) __asm__("FUN_00225e20");
 
 s32 update_menu_stream_image(struct MenuScreen *stream) __asm__("FUN_0021f990");
 
@@ -88,7 +88,7 @@ s32 update_menu_stream_image(struct MenuScreen *stream) {
         }
         read_destination = (u8 *)stream->data.stream.buffer[0];
         if (stream->data.stream.flags & 0x20) {
-            r = get_stream_buffer_size(stream->data.stream.buffer[0]) -
+            r = get_menu_stream_buffer_size(stream->data.stream.buffer[0]) -
                 (stream->data.stream.entries[idx].sector_count << 11);
             stream->data.stream.read_offset = r;
             read_destination += r;
@@ -101,7 +101,7 @@ s32 update_menu_stream_image(struct MenuScreen *stream) {
                                         stream->data.stream.entries[idx].sector_count);
         }
         if (r != 0) {
-            mark_stream_buffer_read_active(stream->data.stream.buffer[0]);
+            mark_menu_stream_buffer_read_active(stream->data.stream.buffer[0]);
             stream->data.stream.loaded_entry[0] = idx;
             stream->data.stream.state++;
         } else {
@@ -113,7 +113,7 @@ s32 update_menu_stream_image(struct MenuScreen *stream) {
         if (cd_read_active[0] != 0) {
             break;
         }
-        clear_record_flag_by_key(stream->data.stream.buffer[0]);
+        clear_menu_stream_buffer_read_active(stream->data.stream.buffer[0]);
         if (stream->data.stream.flags & 0x20) {
             fast_decompress((u8 *)stream->data.stream.buffer[0] + stream->data.stream.read_offset,
                          stream->data.stream.buffer[0]);

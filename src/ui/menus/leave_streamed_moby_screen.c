@@ -2,7 +2,7 @@
 #include "rnc/ui/menus/menu_screen.h"
 #include "rnc/audio/music/music_stream_state.h"
 extern s32 delete_moby() __asm__("FUN_00225530");
-extern s32 complete_stream_buffer_transfer() __asm__("func_00225CD8");
+extern s32 release_menu_stream_buffer() __asm__("func_00225CD8");
 s32 leave_streamed_moby_screen(struct MenuScreen *menu) __asm__("FUN_00225660");
 
 s32 leave_streamed_moby_screen(struct MenuScreen *menu) {
@@ -16,7 +16,7 @@ s32 leave_streamed_moby_screen(struct MenuScreen *menu) {
         *slot = delete_moby(*slot);
         slot += 1;
     } while (remaining >= 0);
-    menu->data.raw.unk3C = complete_stream_buffer_transfer(menu->data.raw.unk3C);
+    menu->data.raw.unk3C = release_menu_stream_buffer(menu->data.raw.unk3C);
     if ((u32)((u16)music_stream_state.secondary.state - 6) >= 2U) {
         music_stream_state.secondary.state = 5;
     }

@@ -113,7 +113,7 @@ struct MenuSaveSlotData {
 
 /* Confirm prompt screen (draw_prompt_box). Enter enter_menu_prompt clears
    menu_system.current->confirmed and takes the buffer; leave leave_menu_prompt
-   gives it back (complete_stream_buffer_transfer). */
+   gives it back (release_menu_stream_buffer). */
 struct MenuPromptData {
     u8 pad_30[0x24];
     s32 buffer;               /* 0x54: stream buffer */
@@ -169,7 +169,7 @@ struct MenuTextListData {
  * entry picked by `flags` into one of two buffers.
  * flags: entry source 1 fixed_entry, 2 D_001A0314[0], 4 focus grid cell,
  * 0x100 focus save slot; 0x20 read to the buffer end and decompress_wad;
- * 0x200 select_next_stream_buffer argument; 0x400 cycle 19 entries by
+ * 0x200 acquire_menu_stream_buffer argument; 0x400 cycle 19 entries by
  * elapsed_frames; 0x1000 add menu_language_resource_offsets[language].
  * state: 0/2 read the entry, 1/3 wait then unpack, -1 stopped.
  */

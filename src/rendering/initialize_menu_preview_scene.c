@@ -43,7 +43,7 @@ extern u8 D_001601D0 __attribute__((sda));
 extern s32 fast_vec_scale(s32, s32, f32) __asm__("FUN_001f9a68");
 extern void vu1_sync_chain(s32) __asm__("func_002337B0");
 extern s32 sceGsSyncV(s32);
-extern s32 initialize_graphics_buffer_descriptors() __asm__("FUN_00225ac0");
+extern s32 initialize_menu_stream_buffers() __asm__("FUN_00225ac0");
 extern void vu1_init_chain(void) __asm__("func_002335D0");
 extern struct O2 *create_menu_preview_moby() __asm__("func_00225490");
 extern s32 set_moby_animation() __asm__("func_00212ED8");

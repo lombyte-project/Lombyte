@@ -21,9 +21,9 @@ extern s32 start_audio_stream_read() __asm__("FUN_00216788");
  * declaration names the same symbol without the asm label, so the two calls
  * are not cross-jumped. */
 extern s32 FUN_00216788();
-extern s32 get_stream_buffer_size() __asm__("func_00225D88");
-extern s32 mark_stream_buffer_read_active() __asm__("FUN_00225dd8");
-extern s32 clear_record_flag_by_key() __asm__("FUN_00225e20");
+extern s32 get_menu_stream_buffer_size() __asm__("func_00225D88");
+extern s32 mark_menu_stream_buffer_read_active() __asm__("FUN_00225dd8");
+extern s32 clear_menu_stream_buffer_read_active() __asm__("FUN_00225e20");
 s32 update_menu_resource_stream(struct MenuScreen *stream) __asm__("FUN_0021fdc8");
 
 s32 update_menu_resource_stream(struct MenuScreen *stream) {
@@ -151,7 +151,7 @@ s32 update_menu_resource_stream(struct MenuScreen *stream) {
                     primary_read_address = primary_buffer;
                     if (stream->data.stream.flags & 0x20) {
                         primary_read_offset =
-                            get_stream_buffer_size(primary_buffer) -
+                            get_menu_stream_buffer_size(primary_buffer) -
                             (*(s32 *)((u8 *)(primary_entry_offset + (s32)stream->data.stream.entries) +
                                       0x4)
                              << 0xB);
@@ -172,7 +172,7 @@ s32 update_menu_resource_stream(struct MenuScreen *stream) {
                             primary_entry_alternate->sector_count);
                     }
                     if (primary_read_started != 0) {
-                        mark_stream_buffer_read_active(stream->data.stream.buffer[0]);
+                        mark_menu_stream_buffer_read_active(stream->data.stream.buffer[0]);
                         stream->data.stream.loaded_entry[0] = resource_index;
                         stream->data.stream.state = stream->data.stream.state + 1;
                     } else {
@@ -190,7 +190,7 @@ s32 update_menu_resource_stream(struct MenuScreen *stream) {
                     completed_buffer_slot = &stream->data.stream.buffer[0];
                     slot_index = stream->data.stream.state == 3;
                     completed_buffer_slot += slot_index;
-                    clear_record_flag_by_key(*completed_buffer_slot);
+                    clear_menu_stream_buffer_read_active(*completed_buffer_slot);
                     completed_buffer = *completed_buffer_slot;
                     decompress_wad(completed_buffer + stream->data.stream.read_offset, completed_buffer);
                     stream->data.stream.read_offset = 0;
@@ -216,7 +216,7 @@ s32 update_menu_resource_stream(struct MenuScreen *stream) {
                             secondary_read_address = secondary_buffer;
                             if (stream->data.stream.flags & 0x20) {
                                 secondary_read_offset =
-                                    get_stream_buffer_size(secondary_buffer) -
+                                    get_menu_stream_buffer_size(secondary_buffer) -
                                     (*(s32 *)((u8 *)(secondary_entry_offset +
                                                      (s32)stream->data.stream.entries) +
                                               0x4)
@@ -240,7 +240,7 @@ s32 update_menu_resource_stream(struct MenuScreen *stream) {
                                     secondary_entry_alternate->sector_count);
                             }
                             if (secondary_read_started != 0) {
-                                mark_stream_buffer_read_active(stream->data.stream.buffer[1]);
+                                mark_menu_stream_buffer_read_active(stream->data.stream.buffer[1]);
                                 stream->data.stream.loaded_entry[1] = resource_index;
                                 stream->data.stream.state = stream->data.stream.state + 1;
                             } else {
@@ -267,7 +267,7 @@ s32 update_menu_resource_stream(struct MenuScreen *stream) {
                             replacement_read_address = replacement_buffer;
                             if (stream->data.stream.flags & 0x20) {
                                 replacement_read_offset =
-                                    get_stream_buffer_size(replacement_buffer) -
+                                    get_menu_stream_buffer_size(replacement_buffer) -
                                     (*(s32 *)((u8 *)(replacement_entry_offset +
                                                      (s32)stream->data.stream.entries) +
                                               0x4)
@@ -292,7 +292,7 @@ s32 update_menu_resource_stream(struct MenuScreen *stream) {
                                     replacement_entry_alternate->sector_count);
                             }
                             if (replacement_read_started != 0) {
-                                mark_stream_buffer_read_active(stream->data.stream.buffer[0]);
+                                mark_menu_stream_buffer_read_active(stream->data.stream.buffer[0]);
                                 stream->data.stream.loaded_entry[0] = resource_index;
                                 stream->data.stream.state = stream->data.stream.state + 1;
                             } else {

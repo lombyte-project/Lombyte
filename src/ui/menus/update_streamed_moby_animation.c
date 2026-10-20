@@ -47,7 +47,7 @@ extern void decompress_wad(u8 *, u8 *) __asm__("FUN_0020b618");
 extern void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
 extern s32 continue_audio_stream_if_ready(void) __asm__("FUN_00215b10");
 extern s32 start_audio_stream_read(u8 *, s32, s32) __asm__("FUN_00216788");
-extern s32 mark_stream_buffer_read_active(u8 *) __asm__("FUN_00225dd8");
+extern s32 mark_menu_stream_buffer_read_active(u8 *) __asm__("FUN_00225dd8");
 
 s32 update_streamed_moby_animation(MobyAnimationStream *stream) __asm__("FUN_002256e8");
 
@@ -88,7 +88,7 @@ s32 update_streamed_moby_animation(MobyAnimationStream *stream) {
             stream->read_offset = table_index;
             stream->state = 1;
             animation_asset_read_active[0] = 1;
-            mark_stream_buffer_read_active(stream->buffer);
+            mark_menu_stream_buffer_read_active(stream->buffer);
             return 0;
         }
         stream->state = 3;

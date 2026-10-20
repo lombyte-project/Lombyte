@@ -1,5 +1,5 @@
 #include "types.h"
-#include "rnc/rendering/graphics_buffer.h"
+#include "rnc/ui/menus/stream_buffers.h"
 #include "rnc/storage/disc_table.h"
 #include "rnc/ui/menus/menu_system.h"
 
@@ -12,7 +12,7 @@ struct WordCell {
 
 
 extern s32 D_001D5CF8[];
-extern void initialize_graphics_buffer_descriptors(s32) __asm__("func_00225AC0");
+extern void initialize_menu_stream_buffers(s32) __asm__("func_00225AC0");
 extern s32 start_audio_stream_read(s32, s32, s32) __asm__("FUN_00216788");
 
 s32 enter_menu_help_text(struct MenuScreen *menu) __asm__("FUN_0021d1f8");
@@ -21,13 +21,13 @@ s32 enter_menu_help_text(struct MenuScreen *menu) {
     s32 i;
     struct MenuSystem *g;
 
-    initialize_graphics_buffer_descriptors(1);
+    initialize_menu_stream_buffers(1);
     menu->data.raw.unk54 = 0;
     menu->data.raw.unk38 = 0;
     g = &menu_system;
     for (i = 0; i < 5; i++) {
-        if (graphics_buffer_descriptors[i].address != 0 && (u32)graphics_buffer_descriptors[i].address < (u32)g->unk10C) {
-            graphics_buffer_descriptors[i].flags |= 2;
+        if (menu_stream_buffers[i].address != 0 && (u32)menu_stream_buffers[i].address < (u32)g->unk10C) {
+            menu_stream_buffers[i].flags |= MENU_STREAM_BUFFER_ALLOCATED;
         }
     }
     menu->data.raw.unk50 = 0;

@@ -42,8 +42,8 @@ extern s32 pick_next_map() __asm__("FUN_002050e8");
 extern void compose_bitmap_from_mask() __asm__("FUN_002053d8");
 extern void decode_map_mask() __asm__("FUN_00206710");
 extern s32 update_mission_list() __asm__("FUN_0020b950");
-extern s32 select_next_stream_buffer() __asm__("FUN_00225c18");
-extern s32 complete_stream_buffer_transfer() __asm__("FUN_00225cd8");
+extern s32 acquire_menu_stream_buffer() __asm__("FUN_00225c18");
+extern s32 release_menu_stream_buffer() __asm__("FUN_00225cd8");
 extern s32 start_audio_stream_read() __asm__("FUN_00216788");
 extern s32 stash_receive_data() __asm__("FUN_00232f20");
 extern s32 func_0020B618_l() __asm__("FUN_0020b618");
@@ -143,7 +143,7 @@ s32 draw_map_screen(struct MenuScreen *screen) {
         hdr = level_map_selection.hdr;
         pix = (u8 *)hdr + hdr->unk8;
         pal = (u8 *)hdr + hdr->unkC;
-        buf = select_next_stream_buffer(0);
+        buf = acquire_menu_stream_buffer(0);
         if (buf != 0) {
             base = (u8 *)level_map_selection.hdr;
             a = base + hdr->unk0 + 8;
@@ -175,7 +175,7 @@ s32 draw_map_screen(struct MenuScreen *screen) {
             FUN_0020b4a8();
         }
         if (buf != 0) {
-            complete_stream_buffer_transfer(buf);
+            release_menu_stream_buffer(buf);
         }
         level_map_selection.slot[0] = (s32)pix;
         level_map_selection.loaded = level_map_selection.level;

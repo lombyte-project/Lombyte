@@ -8,7 +8,7 @@ extern u8 preview_resource_ids[] __asm__("D_001D5D38");
 extern s32 LookupResourceEntry();
 extern void relocate_asset_entry_pointers() __asm__("FUN_002032e0");
 extern s32 decompress_wad() __asm__("func_0020B618");
-extern s32 get_stream_buffer_size() __asm__("func_00225D88");
+extern s32 get_menu_stream_buffer_size() __asm__("func_00225D88");
 extern s32 stash_receive_data() __asm__("func_00232F20");
 void load_preview_resource_bindings(s32 first_resource, s32 resource_count) __asm__("FUN_00226848");
 
@@ -65,7 +65,7 @@ void load_preview_resource_bindings(s32 first_resource, s32 resource_count) {
             buffer_address = *((s32 *)((u8 *)menu_system.unkB0 +
                                        buffer_offset));
             read_address =
-                (buffer_address + get_stream_buffer_size(buffer_address)) - compressed_size;
+                (buffer_address + get_menu_stream_buffer_size(buffer_address)) - compressed_size;
             stash_receive_data(read_address, resource_id, 0, -1, 0);
             decompress_wad(read_address, buffer_address);
             {

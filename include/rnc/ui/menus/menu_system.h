@@ -48,10 +48,10 @@ struct MenuPage {
  * - equipped: D_001863D8[id] +0 names the slot; draw_menu_item_grid draws the
  *   held item with frame +1; load_hand_gadget builds the preview mobys from
  *   slots 0..3; update_menu_grid_selection never clears slots 0 and 3.
- * - preview stream (0xA0-0xCF): buffers from select_next_stream_buffer(1) at
+ * - preview stream (0xA0-0xCF): buffers from acquire_menu_stream_buffer(1) at
  *   preview init; update_preview_animation_and_attachments reads animations at or above
  *   streamed_animation_base from the stream archive (id - base);
- *   pending_buffer is cleared by complete_stream_buffer_transfer and
+ *   pending_buffer is cleared by release_menu_stream_buffer and
  *   clear_preview_animation_queue.
  * - unkD4: 0 from saving_data_menu, 1/2 from saving_data_menu2 (flags
  *   0x2000); draw_prompt_box shows text 0x4FB3 for 0..2, 0x4FB5 for 3.

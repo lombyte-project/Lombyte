@@ -160,7 +160,7 @@ extern void update_view_context(void) __asm__("FUN_001f2d98");
 extern void reset_active_camera_position_and_basis(void) __asm__("FUN_00218d10");
 extern void update_camera_view_matrices(void) __asm__("FUN_001f2260");
 extern s32 sce_gs_sync_v(s32) __asm__("FUN_00122298");
-extern void initialize_graphics_buffer_descriptors(s32) __asm__("FUN_00225ac0");
+extern void initialize_menu_stream_buffers(s32) __asm__("FUN_00225ac0");
 extern Ent *create_menu_preview_moby(s32) __asm__("FUN_00225490");
 extern void FUN_L00_002468b8(void);
 extern void FUN_L00_00234fd0(s32);
@@ -269,7 +269,7 @@ void FUN_L00_00276368(void) {
         D_L00_001B9CF0.unk108 = first_b;
         D_L00_001B9CF0.unk10C = second_b;
         D_L00_001B9CF0.second_base = second_b;
-        initialize_graphics_buffer_descriptors(0);
+        initialize_menu_stream_buffers(0);
     } else {
         s32 first_a, second_a, first_b, second_b, first_c, second_c;
         first_a = D_L00_00173E00[1] + 0x60000;
@@ -285,7 +285,7 @@ void FUN_L00_00276368(void) {
         D_L00_001B9CF0.unk108 = first_b;
         D_L00_001B9CF0.unk10C = second_b;
         D_L00_001B9CF0.second_base = second_c;
-        initialize_graphics_buffer_descriptors(1);
+        initialize_menu_stream_buffers(1);
     }
     D_L00_0015F578 = 0x2000;
     vu1_init_chain();

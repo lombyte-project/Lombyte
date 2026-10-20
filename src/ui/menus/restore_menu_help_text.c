@@ -11,7 +11,7 @@ struct MenuHelpTextState {
 };
 
 extern s32 request_audio_stream_break() __asm__("FUN_002166e8");
-extern s32 initialize_graphics_buffer_descriptors() __asm__("func_00225AC0");
+extern s32 initialize_menu_stream_buffers() __asm__("func_00225AC0");
 s32 restore_menu_help_text(struct MenuHelpTextState *menu) __asm__("FUN_0021d2c8");
 
 s32 restore_menu_help_text(struct MenuHelpTextState *menu) {
@@ -21,7 +21,7 @@ s32 restore_menu_help_text(struct MenuHelpTextState *menu) {
     if ((cd_read_active[0] != 0) && (menu->load_state == 1)) {
         request_audio_stream_break();
     }
-    initialize_graphics_buffer_descriptors(1);
+    initialize_menu_stream_buffers(1);
     saved_text_table = menu->saved_text_table;
     if (saved_text_table != 0) {
         saved_text_count = menu->saved_text_count;

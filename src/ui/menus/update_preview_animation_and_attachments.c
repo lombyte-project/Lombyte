@@ -54,12 +54,12 @@ extern PreviewItemDefinition preview_item_definitions[] __asm__("D_001863D0");
 extern u8 attachment_update_callback[] __asm__("FUN_00224b68");
 
 extern void decompress_wad() __asm__("func_0020B618");
-extern s32 clear_record_flag_by_key(s32) __asm__("FUN_00225e20");
+extern s32 clear_menu_stream_buffer_read_active(s32) __asm__("FUN_00225e20");
 extern void relocate_asset_entry_pointers() __asm__("FUN_002032e0");
-extern s32 get_stream_buffer_size(s32) __asm__("FUN_00225d88");
+extern s32 get_menu_stream_buffer_size(s32) __asm__("FUN_00225d88");
 extern s32 start_audio_stream_read(s32, s32, s32) __asm__("FUN_00216788");
 extern void RaiseKernelTrap(void);
-extern s32 mark_stream_buffer_read_active(s32) __asm__("FUN_00225dd8");
+extern s32 mark_menu_stream_buffer_read_active(s32) __asm__("FUN_00225dd8");
 extern s32 advance_preview_animation_queue(void) __asm__("FUN_00226670");
 extern void clear_preview_resource_bindings(void) __asm__("FUN_002267b8");
 extern void load_preview_resource_bindings(s32, s32) __asm__("FUN_00226848");
@@ -102,7 +102,7 @@ s32 update_preview_animation_and_attachments(Moby *source_moby, Moby *primary_it
 
         decompress_wad(buffer_address + menu_system.read_offset, buffer_address);
         menu_system.read_offset = 0;
-        clear_record_flag_by_key(buffer_address);
+        clear_menu_stream_buffer_read_active(buffer_address);
         menu_system.loaded_animation[buffer_index] =
             preview_animation_requests[0].animation_id;
         preview_animation_requests[0].status = 2;
@@ -130,7 +130,7 @@ s32 update_preview_animation_and_attachments(Moby *source_moby, Moby *primary_it
                 s32 buffer_address = stream->stream_buffer[stream->read_buffer_index];
                 s32 read_size = disc_table.animation_streams[archive_index].size << 11;
                 s32 read_address =
-                    buffer_address + get_stream_buffer_size(buffer_address) - read_size;
+                    buffer_address + get_menu_stream_buffer_size(buffer_address) - read_size;
 
                 stream->read_offset = read_address - buffer_address;
                 if (start_audio_stream_read(
@@ -138,7 +138,7 @@ s32 update_preview_animation_and_attachments(Moby *source_moby, Moby *primary_it
                         disc_table.animation_streams[archive_index].size) == 0) {
                     RaiseKernelTrap();
                 }
-                mark_stream_buffer_read_active(buffer_address);
+                mark_menu_stream_buffer_read_active(buffer_address);
                 preview_animation_requests[0].status = 1;
                 stream->pending_buffer = stream->read_buffer_index + 1;
                 loaded_animation[stream->read_buffer_index] = 0xFF;
