@@ -22,7 +22,7 @@ int draw_menu_text_box(char *menu_text_box) {
     };
     short box[12];
     int ypos;
-    int n;
+    int text_start_y_offset;
     int i;
 
     vu1_add_g_sregister(0x47, 0x30000);
@@ -53,8 +53,8 @@ int draw_menu_text_box(char *menu_text_box) {
     case 16:
     case 17:
     case 18:
-        n = (*(int *)(menu_text_box + 0x3C) >> 4) - 4;
-        ypos = *(int *)(menu_text_box + 0x1C) - n;
+        text_start_y_offset = (*(int *)(menu_text_box + 0x3C) >> 4) - 4;
+        ypos = *(int *)(menu_text_box + 0x1C) - text_start_y_offset;
         for (i = 0; (*(int **)(menu_text_box + 0x34))[i] != -1; i++) {
             box[5] = ypos;
             box[11] = (*(int *)(menu_text_box + 0x3C) >> 4) & 0xF;
