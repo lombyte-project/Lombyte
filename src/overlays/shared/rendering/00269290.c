@@ -1964,27 +1964,27 @@ void FUN_L00_0024f7c8_0026dbe0(void *, int, V_0026dbe0 *) __asm__("FUN_L00_0024f
 void FUN_001f9a28_0026dbe0(V_0026dbe0 *, void *, V_0026dbe0 *) __asm__("FUN_001f9a28");
 void FUN_001f9bf8_0026dbe0(V_0026dbe0 *, V_0026dbe0 *, float) __asm__("FUN_001f9bf8");
 void FUN_001f9a10_0026dbe0(void *, V_0026dbe0 *, V_0026dbe0 *) __asm__("FUN_001f9a10");
-void FUN_L00_0026dbe0(unsigned char *p) {
-    E_0026dbe0 *e;
-    V_0026dbe0 a, b;
-    if (p == 0)
+void FUN_L00_0026dbe0(unsigned char *particle) {
+    E_0026dbe0 *particle_data;
+    V_0026dbe0 source_position, b;
+    if (particle == 0)
         return;
-    e = (E_0026dbe0 *)(p + 0x20);
-    if (FUN_001f9770_0026dbe0(p + 0x24) || e->o == 0 || e->o[0x20] < 0) {
-        FUN_L00_00267a08_0026dbe0(p);
-        return;
-    }
-    if (e->h4 < e->i8 / 5) {
-        *(int *)(p + 4) = (*(int *)(p + 4) & 0xFFFFFF) + ((e->iC * e->h4 / (e->i8 / 3)) << 24);
-    }
-    if (e->h6 == -1) {
-        qcopy(p + 0x10, *(char *volatile *)&e->o + 0x10);
+    particle_data = (E_0026dbe0 *)(particle + 0x20);
+    if (FUN_001f9770_0026dbe0(particle + 0x24) || particle_data->o == 0 || particle_data->o[0x20] < 0) {
+        FUN_L00_00267a08_0026dbe0(particle);
         return;
     }
-    FUN_L00_0024f7c8_0026dbe0(e->o, e->h6, &a);
-    FUN_001f9a28_0026dbe0(&b, D_L00_00166DC0_0026dbe0, &a);
+    if (particle_data->h4 < particle_data->i8 / 5) {
+        *(int *)(particle + 4) = (*(int *)(particle + 4) & 0xFFFFFF) + ((particle_data->iC * particle_data->h4 / (particle_data->i8 / 3)) << 24);
+    }
+    if (particle_data->h6 == -1) {
+        qcopy(particle + 0x10, *(char *volatile *)&particle_data->o + 0x10);
+        return;
+    }
+    FUN_L00_0024f7c8_0026dbe0(particle_data->o, particle_data->h6, &source_position);
+    FUN_001f9a28_0026dbe0(&b, D_L00_00166DC0_0026dbe0, &source_position);
     FUN_001f9bf8_0026dbe0(&b, &b, 0.4f);
-    FUN_001f9a10_0026dbe0(p + 0x10, &a, &b);
+    FUN_001f9a10_0026dbe0(particle + 0x10, &source_position, &b);
 }
 char *FUN_L00_002678b8_0026dd20(int) __asm__("FUN_L00_002678b8");
 int FUN_001160d8_0026dd20(void) __asm__("FUN_001160d8");
