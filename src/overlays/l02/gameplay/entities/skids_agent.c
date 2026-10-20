@@ -200,8 +200,8 @@ void skids_agent_update(struct Moby *moby) {
             if (*(s16 *)(data + 4) == 0) {
                 jet_clear_persistent(moby->mission);
                 if (*(s32 *)(data + 0x150) != -1) {
-                    char *p = D_L02_001600EC + (*(s32 *)(data + 0x150) << 7);
-                    jet_reset_camera(p + 0x30, p + 0x70);
+                    char *camera_transform_entry = D_L02_001600EC + (*(s32 *)(data + 0x150) << 7);
+                    jet_reset_camera(camera_transform_entry + 0x30, camera_transform_entry + 0x70);
                 }
             } else if (*(s16 *)(data + 4) == 2) {
                 moby->visible = 0;
