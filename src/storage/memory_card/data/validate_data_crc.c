@@ -4,10 +4,10 @@ s32 validate_data_crc(s32 *data) __asm__("FUN_0020ad38");
 
 s32 validate_data_crc(s32 *data) {
     s32 ret = 0;
-    s32 n = data[1];
+    s32 stored_crc = data[1];
     s32 k = data[0];
-    if (n != 0) {
-        ret = calculate_crc16(data + 2, k) == n;
+    if (stored_crc != 0) {
+        ret = calculate_crc16(data + 2, k) == stored_crc;
     }
     return ret;
 }
