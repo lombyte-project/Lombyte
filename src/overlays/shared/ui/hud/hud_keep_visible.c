@@ -274,29 +274,29 @@ void FUN_L00_00235ea0(e) HudElem *e;
 
 extern void FUN_L00_0023aaa8(void *);
 
-void FUN_L00_00236128(HudElem *e) {
-    unsigned char *c = e->cnt;
+void FUN_L00_00236128(HudElem *hud_element) {
+    unsigned char *c = hud_element->cnt;
     int v;
     int cap;
 
-    if (e->unk0C != 0) {
-        v = *e->unk0C;
-        cap = e->unk08;
+    if (hud_element->unk0C != 0) {
+        v = *hud_element->unk0C;
+        cap = hud_element->unk08;
         if (v < 0) {
             v = 0;
         }
-        e->unk78 = v;
+        hud_element->unk78 = v;
         if (cap < v) {
-            e->unk78 = cap;
+            hud_element->unk78 = cap;
         }
     }
-    if (e->unk74 != e->unk78) {
-        e->unk7C = scale_game_frames(0xB4);
-        if (e->unk6C >= 0x18) {
-            e->unk74 = e->unk78;
+    if (hud_element->unk74 != hud_element->unk78) {
+        hud_element->unk7C = scale_game_frames(0xB4);
+        if (hud_element->unk6C >= 0x18) {
+            hud_element->unk74 = hud_element->unk78;
         }
     }
-    if (e->unk7C >= scale_game_frames(5)) {
+    if (hud_element->unk7C >= scale_game_frames(5)) {
         if (c[0] < scale_game_frames(8)) {
             c[0]++;
         } else if (c[1] < scale_game_frames(8)) {
@@ -304,7 +304,7 @@ void FUN_L00_00236128(HudElem *e) {
         }
     } else {
         if (c[1] != 0 || c[0] != 0) {
-            e->unk6C = 1;
+            hud_element->unk6C = 1;
         }
         if (c[1] != 0) {
             c[1]--;
@@ -312,7 +312,7 @@ void FUN_L00_00236128(HudElem *e) {
             c[0]--;
         }
     }
-    FUN_L00_0023aaa8((char *)e + 0x40);
+    FUN_L00_0023aaa8((char *)hud_element + 0x40);
 }
 extern float star_init_limit0_gp __asm__("D_L00_0015F750") __attribute__((sda));
 extern float star_init_limit1_gp __asm__("D_L00_0015F754") __attribute__((sda));
