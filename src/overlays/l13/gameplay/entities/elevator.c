@@ -2153,7 +2153,7 @@ extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
 extern void transform_vector(void *, void *, void *) __asm__("func_001F9D20");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-int FUN_L13_002b8be0(int a, char *moby_vars, char *radar_origin_position, void *radar_rotation, float f0, float f1, float f2, char *cur, char *g) {
+int FUN_L13_002b8be0(int source_moby, char *moby_vars, char *radar_origin_position, void *radar_rotation, float f0, float f1, float f2, char *cur, char *g) {
     float v[4];
     float mat[16];
     float u[4];
@@ -2241,7 +2241,7 @@ int FUN_L13_002b8be0(int a, char *moby_vars, char *radar_origin_position, void *
             if (*(short *)(candidate_moby + 0xA6) != 0x191) {
                 if (*(unsigned char *)(candidate_moby + 0x31) == 0) {
                     char *np = candidate_moby + 0x10;
-                    int c;
+                    int arrow_alpha;
                     transpose_rotation_matrix(mat, D_L13_001672D0);
                     subtract_vector_xyz(u, np, D_0013F3D0);
                     transform_vector(u, u, mat);
@@ -2252,17 +2252,17 @@ int FUN_L13_002b8be0(int a, char *moby_vars, char *radar_origin_position, void *
                     ang = fast_add_rotations(fast_arc_tan(u[0], u[1]), 1.5707964f);
                     u[0] += 256.0f;
                     u[1] += 208.0f;
-                    dist = distance_xyz((char *)a + 0x10, np);
-                    yaw_error = absolute_float(fast_subtract_rotations(fast_arc_tan(*(float *)(candidate_moby + 0x10) - *(float *)((char *)a + 0x10),
-                                                                      *(float *)(candidate_moby + 0x14) - *(float *)((char *)a + 0x14)),
+                    dist = distance_xyz((char *)source_moby + 0x10, np);
+                    yaw_error = absolute_float(fast_subtract_rotations(fast_arc_tan(*(float *)(candidate_moby + 0x10) - *(float *)((char *)source_moby + 0x10),
+                                                                      *(float *)(candidate_moby + 0x14) - *(float *)((char *)source_moby + 0x14)),
                                                     *(float *)(moby_vars + 0x38)));
-                    k = absolute_float(fast_subtract_rotations(-fast_arc_tan(vector_distance((char *)a + 0x10, np),
-                                                                       *(float *)(candidate_moby + 0x18) - *(float *)((char *)a + 0x18)),
+                    k = absolute_float(fast_subtract_rotations(-fast_arc_tan(vector_distance((char *)source_moby + 0x10, np),
+                                                                       *(float *)(candidate_moby + 0x18) - *(float *)((char *)source_moby + 0x18)),
                                                     *(float *)(moby_vars + 0x34)));
                     angular_error_magnitude = seg_sqrt(yaw_error * yaw_error + k * k);
                     arrow_pulse_phase = fast_add_rotations(*(float *)(moby_vars + 0x114), 0.1f / (angular_error_magnitude / 3.1415927f));
                     *(float *)(moby_vars + 0x114) = arrow_pulse_phase;
-                    c = func_001FA898_r((fast_sin(arrow_pulse_phase) + 1.4f) * 53.0f);
+                    arrow_alpha = func_001FA898_r((fast_sin(arrow_pulse_phase) + 1.4f) * 53.0f);
                     if (yaw_error < 0.7853982f && k < 0.7853982f) {
                         {
                             float x = (v[0] - scr[4]) * 0.0625f;
@@ -2277,7 +2277,7 @@ int FUN_L13_002b8be0(int a, char *moby_vars, char *radar_origin_position, void *
                             FUN_L13_002b7d50(tab, 0x1E, 0xFFFFF3, 0x500000FF, x, y, 1.3f, -ang);
                         }
                     } else {
-                        FUN_L13_002b7d50(&D_L13_001613C8, 3, 0xFFFFF3, (c << 24) | 0x8000, u[0], u[1], 240.0f / dist + 1.5f, ang);
+                        FUN_L13_002b7d50(&D_L13_001613C8, 3, 0xFFFFF3, (arrow_alpha << 24) | 0x8000, u[0], u[1], 240.0f / dist + 1.5f, ang);
                     }
                 }
                 FUN_L13_002b89f8(radar_rotation, radar_origin_position, candidate_moby, 0, 0x75808080, *(int *)(moby_vars + 0x104));
