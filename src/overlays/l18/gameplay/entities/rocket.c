@@ -511,9 +511,9 @@ void FUN_L18_002d5050(struct Moby *moby) {
         moby_vars->c = moby_vars->c + 1;
         r = collision_line(previous_position, &moby->pos, 0, moby, 0);
         if (r) {
-            char *p = D_L18_00174858;
-            if (p != 0) {
-                short h = *(short *)(p + 0xA6);
+            char *collision_filter_moby = D_L18_00174858;
+            if (collision_filter_moby != 0) {
+                short h = *(short *)(collision_filter_moby + 0xA6);
                 if (h == 0x1DF) {
                     moby_vars->flags = moby_vars->flags & 4;
                 } else if (h != 0x1A3) {
