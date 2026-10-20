@@ -280,18 +280,18 @@ void FUN_L00_00237ba0(Obj *hud_element) {
         } else if (D_0013C940.w1D8 == 0 && (D_0013C940.w1C4 & 0xF000)) {
             int w;
             w = old;
-            if (D_0013C940.w1C4 & 0x1000) { int t; if (w == -1) t = D_L00_0017DC20; else t = D_L00_0015FAC0_c[D_L00_0015F72C][w].unk10; w = t; }
-            if (D_0013C940.w1C4 & 0x4000) { int t; if (w == -1) t = D_L00_0017DC24; else t = D_L00_0015FAC0_c[D_L00_0015F72C][w].unk14; w = t; }
-            if (D_0013C940.w1C4 & 0x8000) { int t; if (w == -1) t = D_L00_0017DC18; else t = D_L00_0015FAC0_c[D_L00_0015F72C][w].unk8; w = t; }
-            if (D_0013C940.w1C4 & 0x2000) { int t; if (w == -1) t = D_L00_0017DC1C; else t = D_L00_0015FAC0_c[D_L00_0015F72C][w].unkC; w = t; }
+            if (D_0013C940.w1C4 & 0x1000) { int slot_lookup; if (w == -1) slot_lookup = D_L00_0017DC20; else slot_lookup = D_L00_0015FAC0_c[D_L00_0015F72C][w].unk10; w = slot_lookup; }
+            if (D_0013C940.w1C4 & 0x4000) { int slot_lookup; if (w == -1) slot_lookup = D_L00_0017DC24; else slot_lookup = D_L00_0015FAC0_c[D_L00_0015F72C][w].unk14; w = slot_lookup; }
+            if (D_0013C940.w1C4 & 0x8000) { int slot_lookup; if (w == -1) slot_lookup = D_L00_0017DC18; else slot_lookup = D_L00_0015FAC0_c[D_L00_0015F72C][w].unk8; w = slot_lookup; }
+            if (D_0013C940.w1C4 & 0x2000) { int slot_lookup; if (w == -1) slot_lookup = D_L00_0017DC1C; else slot_lookup = D_L00_0015FAC0_c[D_L00_0015F72C][w].unkC; w = slot_lookup; }
             hud_element->w74 = w;
         }
         {
-            Ent *t = D_L00_0015FAC0_c[D_L00_0015F72C];
+            Ent *slot_lookup = D_L00_0015FAC0_c[D_L00_0015F72C];
             int cur = hud_element->w74;
-            if (t[cur].unk0 == 0 && slot_step != 0) {
+            if (slot_lookup[cur].unk0 == 0 && slot_step != 0) {
                 k = (cur + slot_step) % D_L00_0015FA90;
-                if (t[k].unk0 != 0) hud_element->w74 = k;
+                if (slot_lookup[k].unk0 != 0) hud_element->w74 = k;
             }
         }
     }
