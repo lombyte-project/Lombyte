@@ -542,41 +542,41 @@ void oil_tanker_front_update(struct Moby *moby) {
         OIL_TANKER_WAIT_FOR_CAMERA_MODE = 1,
         OIL_TANKER_FOLLOW_PATH_WITH_DAMAGE = 2
     };
-    struct L11ChainVars *d = (struct L11ChainVars *)moby->pvars;
+    struct L11ChainVars *chain_vars = (struct L11ChainVars *)moby->pvars;
 
     switch (moby->state) {
     case OIL_TANKER_INITIALIZE: {
         int i;
 
-        FUN_L11_003180a0(moby, d->path_index);
+        FUN_L11_003180a0(moby, chain_vars->path_index);
         if (visited52[moby->mission + current_level_index * 0x10] == 0xFF) {
             mark_moby_for_removal(moby);
             break;
         }
         moby->update_dist = 0xFF;
         moby->draw_dist = 0x200;
-        d->path = path_table[d->path_sel];
-        qcopy(&moby->pos, d->path + 0x10);
-        d->health = 80.0f;
-        d->count = 8;
-        d->sound = -1;
-        d->point = 0;
-        d->t = 0.0f;
+        chain_vars->path = path_table[chain_vars->path_sel];
+        qcopy(&moby->pos, chain_vars->path + 0x10);
+        chain_vars->health = 80.0f;
+        chain_vars->count = 8;
+        chain_vars->sound = -1;
+        chain_vars->point = 0;
+        chain_vars->t = 0.0f;
         moby->state = 1;
         for (i = 0; i < 8; i++) {
-            struct Moby *c;
-            d->links[i] = spawn_moby_class(0x4F1);
-            d->links[i]->draw_dist = 0x200;
-            d->links[i]->update_dist = 0xFF;
-            d->links[i]->visible = 1;
-            d->links[i]->spawn_frame = moby->spawn_frame;
-            d->links[i]->flags = moby->flags & 0xFFDF;
-            d->links[i]->scale = d->links[i]->pclass->scale * 2.0f;
-            c = d->links[i];
-            qcopy(&c->pos, &moby->pos);
-            qcopy(&c->rot, &moby->rot);
-            d->offsets[i] = *(u16 *)d->path - 100;
-            d->catchup[i] = 0.0f;
+            struct Moby *link;
+            chain_vars->links[i] = spawn_moby_class(0x4F1);
+            chain_vars->links[i]->draw_dist = 0x200;
+            chain_vars->links[i]->update_dist = 0xFF;
+            chain_vars->links[i]->visible = 1;
+            chain_vars->links[i]->spawn_frame = moby->spawn_frame;
+            chain_vars->links[i]->flags = moby->flags & 0xFFDF;
+            chain_vars->links[i]->scale = chain_vars->links[i]->pclass->scale * 2.0f;
+            link = chain_vars->links[i];
+            qcopy(&link->pos, &moby->pos);
+            qcopy(&link->rot, &moby->rot);
+            chain_vars->offsets[i] = *(u16 *)chain_vars->path - 100;
+            chain_vars->catchup[i] = 0.0f;
         }
         break;
     }
@@ -585,27 +585,27 @@ void oil_tanker_front_update(struct Moby *moby) {
             int i;
 
             moby->state = 2;
-            d->path = path_table[d->path_index];
-            d->point = 0;
+            chain_vars->path = path_table[chain_vars->path_index];
+            chain_vars->point = 0;
             for (i = 0; i < 8; i++) {
-                d->offsets[i] = *(u16 *)d->path - 100;
-                d->catchup[i] = 0.0f;
+                chain_vars->offsets[i] = *(u16 *)chain_vars->path - 100;
+                chain_vars->catchup[i] = 0.0f;
             }
         }
         /* fallthrough */
     case OIL_TANKER_FOLLOW_PATH_WITH_DAMAGE: {
         int i;
 
-        d->t += D_L11_00162320;
-        if (d->t > 1.0f) {
-            d->t -= 1.0f;
-            d->point = (d->point + 1) % *(s32 *)d->path;
+        chain_vars->t += D_L11_00162320;
+        if (chain_vars->t > 1.0f) {
+            chain_vars->t -= 1.0f;
+            chain_vars->point = (chain_vars->point + 1) % *(s32 *)chain_vars->path;
         }
         for (i = 0; i < 8; i++) {
-            float before = d->catchup[i];
-            approach_value(&d->catchup[i], 0.0f, frame_time * 5.0f);
-            if (before != 0.0f && d->catchup[i] == 0.0f && d->links[i] != 0) {
-                FUN_0022da68(0, 0, d->links[i]);
+            float before = chain_vars->catchup[i];
+            approach_value(&chain_vars->catchup[i], 0.0f, frame_time * 5.0f);
+            if (before != 0.0f && chain_vars->catchup[i] == 0.0f && chain_vars->links[i] != 0) {
+                FUN_0022da68(0, 0, chain_vars->links[i]);
             }
         }
         FUN_L11_00317678(moby);
@@ -613,8 +613,8 @@ void oil_tanker_front_update(struct Moby *moby) {
         if (moby->state == 2) {
             FUN_L11_00317c98(moby);
         }
-        if (voice_is_playing(moby, d->sound) == 0) {
-            d->sound = FUN_0022da68(0, 4, moby);
+        if (voice_is_playing(moby, chain_vars->sound) == 0) {
+            chain_vars->sound = FUN_0022da68(0, 4, moby);
         }
         break;
     }
