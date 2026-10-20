@@ -103,7 +103,7 @@ int f122298_28e9c8(int) __asm__("FUN_00122298");
 int f215b10_28e9c8(void) __asm__("FUN_00215b10");
 void FUN_L00_0028e9c8(int a) {
     O_28e9c8 *moby;
-    int secondary_track_index, n, m, m2, u;
+    int secondary_track_index, n, audio_stream_table_index, alternate_audio_stream_table_index, u;
     D_0013E030_28e9c8.x24 = -1;
     D_L00_0015F5D8 = 1;
     D_0013E030_28e9c8.x20 = a;
@@ -129,16 +129,16 @@ void FUN_L00_0028e9c8(int a) {
     }
     if (a == 0) {
         n = D_0013E030_28e9c8.x26;
-        m = n + 1;
+        audio_stream_table_index = n + 1;
         secondary_track_index = n + 6;
         if (current_level_index == 10 && n == 1 && D_0013D4C6_28e9c8 == 0) {
-            m = 0;
+            audio_stream_table_index = 0;
             secondary_track_index = 11;
         } else if (current_level_index == 14 && D_0013E030_28e9c8.x26 == 2) {
-            m = 8;
+            audio_stream_table_index = 8;
             secondary_track_index = 14;
         }
-        FUN_L00_00245610(m, fr_28e9c8(6));
+        FUN_L00_00245610(audio_stream_table_index, fr_28e9c8(6));
     } else {
         int k, r;
         n = D_0013E030_28e9c8.x26;
@@ -146,22 +146,22 @@ void FUN_L00_0028e9c8(int a) {
         secondary_track_index = n + 3;
         if (k)
             secondary_track_index = n;
-        m2 = n + 5;
+        alternate_audio_stream_table_index = n + 5;
         if (current_level_index == 10 && n == 1 && D_0013D4C6_28e9c8 == 0) {
             secondary_track_index = 10;
             if (k)
                 secondary_track_index = 9;
-            m2 = 4;
+            alternate_audio_stream_table_index = 4;
         } else if (current_level_index == 14 && D_0013E030_28e9c8.x26 == 2) {
             secondary_track_index = 13;
             if (D_0013E030_28e9c8.x2c)
                 secondary_track_index = 12;
-            m2 = 9;
+            alternate_audio_stream_table_index = 9;
         }
         r = 0;
         if (!D_0013E030_28e9c8.x2c)
             r = fr_28e9c8(6);
-        FUN_L00_00245610(m2, r);
+        FUN_L00_00245610(alternate_audio_stream_table_index, r);
     }
     music_stream_state.queued_secondary_track = secondary_track_index + 40000;
     f2049f0_28e9c8(0);
