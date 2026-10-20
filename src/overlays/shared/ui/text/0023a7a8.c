@@ -105,58 +105,58 @@ extern int D_L00_0015F5CC_23aaa8 __asm__("D_L00_0015F5CC");
 int FUN_001f96f8_23aaa8(int) __asm__("FUN_001f96f8");
 int FUN_00213260_23aaa8(int) __asm__("FUN_00213260");
 extern T_23aaa8 *D_L00_0017E4F4 __attribute__((section(".data")));
-int FUN_L00_0023aaa8(O_23aaa8 *o) {
+int FUN_L00_0023aaa8(O_23aaa8 *hud_frame_state) {
     enum {
         HUD_FRAME_MODE_STATIC = 0,
         HUD_FRAME_MODE_LOOP = 1,
         HUD_FRAME_MODE_PING_PONG = 2,
         HUD_FRAME_MODE_PING_PONG_RESTART = 3
     };
-    T_23aaa8 *t = &D_L00_0017E4F4[o->id];
+    T_23aaa8 *frame_sequence = &D_L00_0017E4F4[hud_frame_state->id];
     int r;
     int k, a;
     r = 0;
-    if (t->id != 0xFFFF) {
-        switch (o->mode) {
+    if (frame_sequence->id != 0xFFFF) {
+        switch (hud_frame_state->mode) {
         case HUD_FRAME_MODE_STATIC:
-            r = t->base;
+            r = frame_sequence->base;
             break;
         case HUD_FRAME_MODE_LOOP:
-            r = t->base + ((D_L00_0015F5CC_23aaa8 - o->start) / t->rate) % t->n;
+            r = frame_sequence->base + ((D_L00_0015F5CC_23aaa8 - hud_frame_state->start) / frame_sequence->rate) % frame_sequence->n;
             break;
         case HUD_FRAME_MODE_PING_PONG:
-            r = (D_L00_0015F5CC_23aaa8 - o->start) / t->rate;
-            k = t->n * 2;
+            r = (D_L00_0015F5CC_23aaa8 - hud_frame_state->start) / frame_sequence->rate;
+            k = frame_sequence->n * 2;
             r = r % (k - 2);
-            if (r >= t->n) {
+            if (r >= frame_sequence->n) {
                 int b = r + 2;
                 r = k - b;
             }
-            r += t->base;
+            r += frame_sequence->base;
             break;
         case HUD_FRAME_MODE_PING_PONG_RESTART:
-            if (o->start < D_L00_0015F5CC_23aaa8) {
-                int m;
-                r = (D_L00_0015F5CC_23aaa8 - o->start) / t->rate;
-                m = t->n * 2;
-                if (r < m - 2) {
-                    if (r >= t->n) {
+            if (hud_frame_state->start < D_L00_0015F5CC_23aaa8) {
+                int doubled_frame_count;
+                r = (D_L00_0015F5CC_23aaa8 - hud_frame_state->start) / frame_sequence->rate;
+                doubled_frame_count = frame_sequence->n * 2;
+                if (r < doubled_frame_count - 2) {
+                    if (r >= frame_sequence->n) {
                         int b = r + 2;
-                        r = m - b;
+                        r = doubled_frame_count - b;
                     }
-                    r += t->base;
+                    r += frame_sequence->base;
                 } else {
-                    r = t->base;
+                    r = frame_sequence->base;
                     a = FUN_001f96f8_23aaa8(0xA);
-                    o->start = t->n * 2 + a + FUN_00213260_23aaa8(FUN_001f96f8_23aaa8(0x1E));
+                    hud_frame_state->start = frame_sequence->n * 2 + a + FUN_00213260_23aaa8(FUN_001f96f8_23aaa8(0x1E));
                 }
             } else {
-                r = o->frame;
+                r = hud_frame_state->frame;
             }
             break;
         }
     }
-    o->frame = r;
+    hud_frame_state->frame = r;
     return r;
 }
 typedef struct E_23ac78 {
