@@ -1762,7 +1762,7 @@ void FUN_L14_002e03b8(Moby *moby) {
     Vec4_2E17B8 off;
     Vars_2E17B8 *pv;
     Particle_2E17B8 *particle;
-    Particle_2E17B8 *e;
+    Particle_2E17B8 *spawned_particle;
     ParticleFade_2E17B8 *fade;
     int i;
     int n;
@@ -1826,15 +1826,15 @@ void FUN_L14_002e03b8(Moby *moby) {
     size = func_002140F8_2E17B8(60000.0f, 140000.0f);
     color_intensity = func_L00_00258BC8_2E17B8(0x30, 0xFF);
     alpha = 0x60000000;
-    e = func_L00_0026DEA0_2E17B8(&pos, 0.025f, 1.0f, 1.0f, n, &vel, size, color_intensity | ((color_intensity << 16) | ((color_intensity << 8) | alpha)));
-    if (e != 0) {
+    spawned_particle = func_L00_0026DEA0_2E17B8(&pos, 0.025f, 1.0f, 1.0f, n, &vel, size, color_intensity | ((color_intensity << 16) | ((color_intensity << 8) | alpha)));
+    if (spawned_particle != 0) {
         ParticleFade_2E17B8 *ef;
-        ef = &e->fade;
-        e->b3 = 0x44;
-        e->frames = func_001F9850_2E17B8(0x3C);
+        ef = &spawned_particle->fade;
+        spawned_particle->b3 = 0x44;
+        spawned_particle->frames = func_001F9850_2E17B8(0x3C);
         ef->i4 = 2;
         ef->bA = 0x60;
-        ef->bB = e->frames;
+        ef->bB = spawned_particle->frames;
     }
 }
 /* Exhaust puffs from the moby's nozzle: two coloured sparks and three white puffs of shrinking size. */
