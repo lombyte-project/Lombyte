@@ -2986,38 +2986,38 @@ extern s32 play_moby_voice(s32, s32, struct Moby *) __asm__("FUN_0022da68");
 
 /* Follows a linked switch moby (class 0x118): mirrors its position value, loops a sound while it moves, plays a click at either end and swaps class 0x41C back to 0x1B0 when it reaches 1.0. */
 void eudora_bridge_update(struct Moby *m) __asm__("FUN_L04_002c6858");
-void eudora_bridge_update(struct Moby *m) {
+void eudora_bridge_update(struct Moby *moby) {
     enum {
         EUDORA_BRIDGE_STATE_INITIALIZE = 0,
         EUDORA_BRIDGE_STATE_FOLLOW_LINKED_SWITCH = 1,
         EUDORA_BRIDGE_STATE_RELEASE_MOVEMENT_VOICE = 2
     };
-    SwitchFollowerVars *v = (SwitchFollowerVars *)m->pvars;
-    f32 last = m->anim_time;
+    SwitchFollowerVars *v = (SwitchFollowerVars *)moby->pvars;
+    f32 last = moby->anim_time;
     struct Moby *other;
     f32 *pos;
     f32 cur;
 
     if (v == NULL) {
-        delete_moby(m);
+        delete_moby(moby);
         return;
     }
-    switch (m->state) {
+    switch (moby->state) {
     case EUDORA_BRIDGE_STATE_INITIALIZE:
-        blend_anim(m, 1, 0, scale_game_frames(300));
-        m->state = 1;
-        m->anim_speed = 0;
+        blend_anim(moby, 1, 0, scale_game_frames(300));
+        moby->state = 1;
+        moby->anim_speed = 0;
         v->voice = -1;
-        if (m->oclass == 0x1B0) {
-            m->oclass = 0x41C;
-            m->class_slot = D_L04_00197D40[0x41C];
-            m->pclass = D_L04_00197480[m->class_slot];
-            m->unk71 = 0xFF;
-            m->scale = ((MobyClassHeader *)m->pclass)->scale;
-            reset_moby_anim(m);
-            m->unk72 = ((MobyClassHeader *)m->pclass)->unkE;
-            m->collision = ((MobyClassHeader *)m->pclass)->unk10;
-            refresh_moby_spatial_bounds_from_basis(m);
+        if (moby->oclass == 0x1B0) {
+            moby->oclass = 0x41C;
+            moby->class_slot = D_L04_00197D40[0x41C];
+            moby->pclass = D_L04_00197480[moby->class_slot];
+            moby->unk71 = 0xFF;
+            moby->scale = ((MobyClassHeader *)moby->pclass)->scale;
+            reset_moby_anim(moby);
+            moby->unk72 = ((MobyClassHeader *)moby->pclass)->unkE;
+            moby->collision = ((MobyClassHeader *)moby->pclass)->unk10;
+            refresh_moby_spatial_bounds_from_basis(moby);
         }
         break;
     case EUDORA_BRIDGE_STATE_FOLLOW_LINKED_SWITCH:
@@ -3028,40 +3028,40 @@ void eudora_bridge_update(struct Moby *m) {
             break;
         pos = (f32 *)other->pvars;
         cur = *pos;
-        m->anim_time = cur;
+        moby->anim_time = cur;
         if (cur != last) {
             if (*pos == 1.0f || *pos == 0.0f) {
-                if (voice_is_playing(m, v->voice)) {
+                if (voice_is_playing(moby, v->voice)) {
                     s32 h = v->voice;
                     if (h != -1) {
                         char *e = (char *)D_0013E550_u + h * 0x70;
-                        if (*(struct Moby **)(e + 0x88) == m && *(u8 *)(e + 0x74) != 0)
+                        if (*(struct Moby **)(e + 0x88) == moby && *(u8 *)(e + 0x74) != 0)
                             release_voice_slot(h);
                     }
                     v->voice = -1;
                 }
-                play_moby_voice(1, 0, m);
-                if (m->oclass == 0x41C && *pos == 1.0f) {
-                    m->oclass = 0x1B0;
-                    m->class_slot = D_L04_00197D40[0x1B0];
-                    m->pclass = D_L04_00197480[m->class_slot];
-                    m->unk71 = 0xFF;
-                    m->scale = ((MobyClassHeader *)m->pclass)->scale;
-                    reset_moby_anim(m);
-                    m->unk72 = ((MobyClassHeader *)m->pclass)->unkE;
-                    m->collision = ((MobyClassHeader *)m->pclass)->unk10;
-                    refresh_moby_spatial_bounds_from_basis(m);
-                    m->state = 2;
+                play_moby_voice(1, 0, moby);
+                if (moby->oclass == 0x41C && *pos == 1.0f) {
+                    moby->oclass = 0x1B0;
+                    moby->class_slot = D_L04_00197D40[0x1B0];
+                    moby->pclass = D_L04_00197480[moby->class_slot];
+                    moby->unk71 = 0xFF;
+                    moby->scale = ((MobyClassHeader *)moby->pclass)->scale;
+                    reset_moby_anim(moby);
+                    moby->unk72 = ((MobyClassHeader *)moby->pclass)->unkE;
+                    moby->collision = ((MobyClassHeader *)moby->pclass)->unk10;
+                    refresh_moby_spatial_bounds_from_basis(moby);
+                    moby->state = 2;
                 }
-            } else if (!voice_is_playing(m, v->voice)) {
-                v->voice = play_moby_voice(0, 4, m);
+            } else if (!voice_is_playing(moby, v->voice)) {
+                v->voice = play_moby_voice(0, 4, moby);
             }
         } else {
-            if (voice_is_playing(m, v->voice)) {
+            if (voice_is_playing(moby, v->voice)) {
                 s32 h = v->voice;
                 if (h != -1) {
                     char *e = (char *)D_0013E550_u + h * 0x70;
-                    if (*(struct Moby **)(e + 0x88) == m && *(u8 *)(e + 0x74) != 0)
+                    if (*(struct Moby **)(e + 0x88) == moby && *(u8 *)(e + 0x74) != 0)
                         release_voice_slot(h);
                 }
                 v->voice = -1;
@@ -3069,11 +3069,11 @@ void eudora_bridge_update(struct Moby *m) {
         }
         break;
     case EUDORA_BRIDGE_STATE_RELEASE_MOVEMENT_VOICE:
-        if (voice_is_playing(m, v->voice)) {
+        if (voice_is_playing(moby, v->voice)) {
             s32 h = v->voice;
             if (h != -1) {
                 char *e = (char *)D_0013E550_u + h * 0x70;
-                if (*(struct Moby **)(e + 0x88) == m && *(u8 *)(e + 0x74) != 0)
+                if (*(struct Moby **)(e + 0x88) == moby && *(u8 *)(e + 0x74) != 0)
                     release_voice_slot(h);
             }
             v->voice = -1;
