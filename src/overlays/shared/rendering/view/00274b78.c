@@ -20,7 +20,7 @@ int FUN_L01_00274b78(char *source_entity, char *target_out, float best) {
     int res;
     int i;
     int j;
-    float d;
+    float candidate_metric;
 
     selected_entity = ((char *)g->moby);
     res = 0;
@@ -40,10 +40,10 @@ int FUN_L01_00274b78(char *source_entity, char *target_out, float best) {
             continue;
         if (*(unsigned char *)(candidate_entity + 0x20) != 3)
             continue;
-        d = FUN_001f9b80_25fcb8(source_entity + 0x10, candidate_entity + 0x10);
-        if (d < best) {
+        candidate_metric = FUN_001f9b80_25fcb8(source_entity + 0x10, candidate_entity + 0x10);
+        if (candidate_metric < best) {
             selected_entity = candidate_entity;
-            best = d;
+            best = candidate_metric;
             res = 1;
         }
     }
@@ -59,10 +59,10 @@ int FUN_L01_00274b78(char *source_entity, char *target_out, float best) {
             continue;
         if (*(unsigned char *)(candidate_entity + 0xBC) == 0)
             continue;
-        d = FUN_001f9b80_25fcb8(source_entity + 0x10, candidate_entity + 0x10);
-        if (d < best) {
+        candidate_metric = FUN_001f9b80_25fcb8(source_entity + 0x10, candidate_entity + 0x10);
+        if (candidate_metric < best) {
             selected_entity = candidate_entity;
-            best = d;
+            best = candidate_metric;
             res = 1;
         }
     }
