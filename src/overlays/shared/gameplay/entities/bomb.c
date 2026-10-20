@@ -1563,9 +1563,9 @@ unsigned char *FUN_L00_002cbf68(int unused, void *pos, float *vel) {
         *(float *)(spawned_moby + 0x44) = rnd_2cbf68(0.17453292f, 0.5235988f);
         *(float *)(spawned_moby + 0x40) = rndf_2cbf68(0.17453292f, 0.7853982f);
         {
-            float t = rndf_2cbf68(200.0f, 370.0f) * DEG_TO_RAD * D_0015ED6C_lui;
+            float x_rotation_step = rndf_2cbf68(200.0f, 370.0f) * DEG_TO_RAD * D_0015ED6C_lui;
             *(int *)(v + 0x24) = -1;
-            *(float *)(v + 0x2C) = t;
+            *(float *)(v + 0x2C) = x_rotation_step;
         }
         if (FUN_001160d8_2cbf68() & 1) {
             *(int *)(v + 0x24) = 1;
@@ -1576,9 +1576,9 @@ unsigned char *FUN_L00_002cbf68(int unused, void *pos, float *vel) {
         *(float *)(v + 0x10) = rnda_2cbf68();
         {
             float r = rnda_2cbf68();
-            float n = (float)D_L00_001618A4;
+            float base_lifetime = (float)D_L00_001618A4;
             *(float *)(v + 0x14) = r;
-            lifetime_lower_bound = rf_2cbf68(n * 0.7f);
+            lifetime_lower_bound = rf_2cbf68(base_lifetime * 0.7f);
         }
         b = rf_2cbf68((float)D_L00_001618A4 * 1.2f);
         *(int *)(v + 0x1C) = fr_2cbf68(rndi_2cbf68(lifetime_lower_bound, b));
