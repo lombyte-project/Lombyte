@@ -2586,10 +2586,10 @@ void follow_camera_start_slide(void) {
 }
 extern char *D_L00_00166E00_002e8680 __asm__("D_L00_00166E00") __attribute__((section(".data")));
 void FUN_L00_002e8680(void) {
-    char *p = D_L00_00166E00_002e8680;
-    if (*(short *)(p + 0x86) == 0) {
-        char *q = *(char **)(p + 0x70) + 0x1a8;
-        *(int *)(q + 0x10) |= 3;
+    char *current_camera = D_L00_00166E00_002e8680;
+    if (*(short *)(current_camera + 0x86) == 0) {
+        char *blend_output_block = *(char **)(current_camera + 0x70) + 0x1a8;
+        *(int *)(blend_output_block + 0x10) |= 3;
     }
 }
 /* Measures the signed angle between two offsets of an object's data relative to an axis, and (within the limit) stores a scaled blend in the object's data. */
