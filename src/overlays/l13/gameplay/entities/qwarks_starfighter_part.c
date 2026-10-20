@@ -1319,7 +1319,7 @@ void forcefield_update(unsigned char *moby) {
         FORCEFIELD_STATE_REMOVE = 3
     };
     char *forcefield_data = *(char **)(moby + 0x78);
-    int a;
+    int wrap_adjusted_step;
     switch (moby[0x20]) {
     case FORCEFIELD_STATE_INITIALIZE:
         moby[0x20] = 1;
@@ -1359,16 +1359,16 @@ void forcefield_update(unsigned char *moby) {
         mark_moby_for_removal(moby);
         return;
     }
-    a = 0xC0;
+    wrap_adjusted_step = 0xC0;
     *(short *)(forcefield_data + 0xC) += 0xC0;
     if (*(short *)(forcefield_data + 0xC) > 0x1000) {
         *(short *)(forcefield_data + 0xC) -= 0x1000;
-        a = -0xF40;
+        wrap_adjusted_step = -0xF40;
     } else if (*(short *)(forcefield_data + 0xC) < 0) {
         *(short *)(forcefield_data + 0xC) += 0x1000;
-        a = 0x10C0;
+        wrap_adjusted_step = 0x10C0;
     }
-    FUN_L00_0024efb0_c(*(void **)(moby + 0x24), a, 0);
+    FUN_L00_0024efb0_c(*(void **)(moby + 0x24), wrap_adjusted_step, 0);
 }
 #define NOT_SDA
 
