@@ -48,7 +48,7 @@ extern FpNumber D_001596F0;
 #define IMPLICIT_1 0x1000000000000000ULL
 #define IMPLICIT_2 0x2000000000000000ULL
 
-FpNumber *_fpadd_parts(FpNumber *a, FpNumber *b, FpNumber *tmp) {
+FpNumber *_fpadd_parts(FpNumber *a, FpNumber *b, FpNumber *result) {
     s64 tfraction;
     s32 a_normal_exp;
     s32 b_normal_exp;
@@ -72,9 +72,9 @@ FpNumber *_fpadd_parts(FpNumber *a, FpNumber *b, FpNumber *tmp) {
     }
     if ((b->class ^ 2) == 0) {
         if ((a->class ^ 2) == 0) {
-            *tmp = *a;
-            tmp->sign = a->sign & b->sign;
-            return tmp;
+            *result = *a;
+            result->sign = a->sign & b->sign;
+            return result;
         }
         return a;
     }
@@ -121,27 +121,27 @@ FpNumber *_fpadd_parts(FpNumber *a, FpNumber *b, FpNumber *tmp) {
             tfraction = a_fraction - b_fraction;
         }
         if (tfraction >= 0) {
-            tmp->sign = 0;
-            tmp->normal_exp = a_normal_exp;
-            tmp->fraction = tfraction;
+            result->sign = 0;
+            result->normal_exp = a_normal_exp;
+            result->fraction = tfraction;
         } else {
-            tmp->sign = 1;
-            tmp->normal_exp = a_normal_exp;
-            tmp->fraction = -tfraction;
+            result->sign = 1;
+            result->normal_exp = a_normal_exp;
+            result->fraction = -tfraction;
         }
-        while (tmp->fraction < IMPLICIT_1 && tmp->fraction) {
-            tmp->fraction <<= 1;
-            tmp->normal_exp--;
+        while (result->fraction < IMPLICIT_1 && result->fraction) {
+            result->fraction <<= 1;
+            result->normal_exp--;
         }
     } else {
-        tmp->sign = a->sign;
-        tmp->normal_exp = a_normal_exp;
-        tmp->fraction = a_fraction + b_fraction;
+        result->sign = a->sign;
+        result->normal_exp = a_normal_exp;
+        result->fraction = a_fraction + b_fraction;
     }
-    tmp->class = 3;
-    if (tmp->fraction >= IMPLICIT_2) {
-        LSHIFT(tmp->fraction);
-        tmp->normal_exp++;
+    result->class = 3;
+    if (result->fraction >= IMPLICIT_2) {
+        LSHIFT(result->fraction);
+        result->normal_exp++;
     }
-    return tmp;
+    return result;
 }
