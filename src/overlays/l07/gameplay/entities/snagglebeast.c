@@ -730,6 +730,7 @@ void snagglebeast_update(unsigned char *moby) {
         SNAGGLEBEAST_CAPTURE_HERO_AND_DRAIN_AMMO = 8,
         SNAGGLEBEAST_ROPE_ATTACK = 9,
         SNAGGLEBEAST_DEATH_EXPLOSION = 10,
+        SNAGGLEBEAST_APPLY_TIMED_DAMAGE_AND_SELECT_PATH = 14,
         SNAGGLEBEAST_POST_DEATH_CLEANUP = 16
     };
     enum {
@@ -1380,7 +1381,7 @@ void snagglebeast_update(unsigned char *moby) {
         }
         break;
     }
-    case 14:
+    case SNAGGLEBEAST_APPLY_TIMED_DAMAGE_AND_SELECT_PATH:
         scale_vector_xyz(data + 0x100, data + 0x100, 0.4f);
         add_vector_xyz(moby + 0x10, moby + 0x10, data + 0x100);
         if (FUN_0020c9e0(moby) < 168.0f) {
