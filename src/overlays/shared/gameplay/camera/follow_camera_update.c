@@ -1069,10 +1069,10 @@ void FUN_L00_001ff250_002eb320(void *) __asm__("FUN_L00_001ff250");
 void FUN_L00_002eb278_002eb320(char *) __asm__("FUN_L00_002eb278");
 void FUN_L00_002eb320(char *camera_object, void *b, u128 *v, float x) {
     char *camera_state = *(char **)(camera_object + 0x70);
-    char *d = camera_state + 0xb0;
-    qcopy(d, v);
+    char *orbit_origin = camera_state + 0xb0;
+    qcopy(orbit_origin, v);
     qcopy(camera_state + 0x80, v);
-    *(float *)(d + 0x18) = x;
+    *(float *)(orbit_origin + 0x18) = x;
     FUN_L00_001eb0c8_002eb320(camera_state + 0x14, b, x);
     FUN_L00_001eb0c8_002eb320(camera_object + 0x50, b, 0.0f);
     FUN_L00_001eb0b0_002eb320(camera_state);
