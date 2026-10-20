@@ -211,7 +211,7 @@ s32 FUN_L06_00252dd0(s32 full, s32 keep) {
     char *sequence_offset_cursor;
     s32 sq;
     char *sp;
-    char *q;
+    char *class_mapping_entry_cursor;
     s32 z;
     s32 ci;
     char *x;
@@ -284,14 +284,14 @@ s32 FUN_L06_00252dd0(s32 full, s32 keep) {
             }
         }
         D_L06_0016000C = -1;
-        q = (char *)level_header + level_header[0x21];
+        class_mapping_entry_cursor = (char *)level_header + level_header[0x21];
         D_L06_00160010 = 0;
         D_L06_00160008 = level_header[0x20];
-        for (m = 0; m < level_header[0x20]; m++, q += 0x10) {
-            D_L06_001B0340[m] = *(s32 *)(q + 4);
-            D_L06_001B03A0[m] = base + *(s32 *)q;
-            D_L06_001B0400[m] = *(s32 *)(q + 8);
-            { s32 o = D_L06_00198340[*(s32 *)(q + 4)] * 32 + 0x10;
+        for (m = 0; m < level_header[0x20]; m++, class_mapping_entry_cursor += 0x10) {
+            D_L06_001B0340[m] = *(s32 *)(class_mapping_entry_cursor + 4);
+            D_L06_001B03A0[m] = base + *(s32 *)class_mapping_entry_cursor;
+            D_L06_001B0400[m] = *(s32 *)(class_mapping_entry_cursor + 8);
+            { s32 o = D_L06_00198340[*(s32 *)(class_mapping_entry_cursor + 4)] * 32 + 0x10;
             qcopy(&D_L06_001B0460[m], (char *)level_header + level_header[7] + o); }
         }
         for (i = 0, class_entry_cursor = (char *)level_header + level_header[9]; i < level_header[8]; i++, class_entry_cursor += 0x20)
