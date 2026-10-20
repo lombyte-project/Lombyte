@@ -1457,7 +1457,7 @@ extern void FUN_L01_002b7fe0_2cd2b0(void *, int) __asm__("FUN_L01_002b7fe0");
 extern void FUN_L07_0030cd20_2cd2b0(void) __asm__("FUN_L07_0030cd20");
 
 void water_update(Moby_30D8E8 *m) __asm__("FUN_L07_0030c508");
-void water_update(Moby_30D8E8 *m) {
+void water_update(Moby_30D8E8 *water_moby) {
     enum {
         WATER_INITIALIZE = 0,
         WATER_APPROACH_HIGH_HEIGHT = 1,
@@ -1468,7 +1468,7 @@ void water_update(Moby_30D8E8 *m) {
         WATER_RISE_TO_HEIGHT_54 = 6,
         WATER_REMOVE_ABOVE_HIGH_HEIGHT = 7
     };
-    Data_30D8E8 *d = m->data;
+    Data_30D8E8 *water_data = water_moby->data;
     int i;
     int j;
     int k;
@@ -1476,17 +1476,17 @@ void water_update(Moby_30D8E8 *m) {
     float ang;
     float on;
 
-    if (d == 0) {
+    if (water_data == 0) {
         return;
     }
     if (D_L07_00161B38 != 0) {
         D_0013D4C0[4] = 0;
         D_0013D4EC[0] = 0;
     }
-    switch (m->state) {
+    switch (water_moby->state) {
     case WATER_INITIALIZE:
-        m->flags |= 0x81;
-        if (d->idx == 0) {
+        water_moby->flags |= 0x81;
+        if (water_data->idx == 0) {
             Cab_30D8E8 *cab;
             Dir_30D8E8 *dir;
             int (*p)[4];
@@ -1520,124 +1520,124 @@ void water_update(Moby_30D8E8 *m) {
             D_L07_00161208 = 0;
             for (i = 0; i < 0x24; i++) {
                 FUN_L01_002b7c68_2cd2b0(&D_L07_001DCE40_2cd2b0[i], p[i]);
-                D_L07_001DCE40_2cd2b0[d->idx].h1E = D_L07_00204680[d->idx];
+                D_L07_001DCE40_2cd2b0[water_data->idx].h1E = D_L07_00204680[water_data->idx];
             }
             for (k = 0; k < 0x24; k++) {
-                Rec_30D8E8 *t = D_L07_001DCE40_2cd2b0;
-                Rec_30D8E8 *r = &t[k];
+                Rec_30D8E8 *water_records = D_L07_001DCE40_2cd2b0;
+                Rec_30D8E8 *r = &water_records[k];
                 for (j = 0; j < 2; j++) {
                     float x = r->x + random_float_between(-6.0f, 6.0f);
                     float y = r->y + random_float_between(-6.0f, 6.0f);
-                    FUN_L01_002b8288_2cd2b0(t, 0x24, x, y, 2.0f, 0.2f);
+                    FUN_L01_002b8288_2cd2b0(water_records, 0x24, x, y, 2.0f, 0.2f);
                 }
             }
             for (n = 0; n < 0x24; n++) {
                 FUN_L07_0030cd48_2cd2b0(n);
             }
         }
-        if (d->fC != 0) {
-            m->state = 3;
-            d->timer = scale_game_frames_alt(0x3C);
-            if (m->pos[2] < d->lo) {
-                D_L07_001DCE40_2cd2b0[d->idx].h1E = 0;
+        if (water_data->fC != 0) {
+            water_moby->state = 3;
+            water_data->timer = scale_game_frames_alt(0x3C);
+            if (water_moby->pos[2] < water_data->lo) {
+                D_L07_001DCE40_2cd2b0[water_data->idx].h1E = 0;
             }
-        } else if (d->f8 != 0) {
-            m->state = 1;
+        } else if (water_data->f8 != 0) {
+            water_moby->state = 1;
         } else {
-            m->state = 2;
+            water_moby->state = 2;
         }
         break;
     case WATER_APPROACH_LOW_HEIGHT:
-        if (m->sub & 4) {
-            FUN_L01_0026e0e0_2cd2b0(m->f21, 1);
-        } else if (FUN_L07_00281ef8_2cd2b0(m, m->f21, 1, 0) && m->sub != 1) {
-            FUN_00213ed8_2cd2b0(&m->pos[2], d->lo, D_0015ED6C * 4.0f);
-            FUN_L01_0026e090_2cd2b0(m->f21, 1);
-        } else if (m->sub == 1) {
-            FUN_00213ed8_2cd2b0(&m->pos[2], d->lo, D_0015ED6C * 4.0f);
+        if (water_moby->sub & 4) {
+            FUN_L01_0026e0e0_2cd2b0(water_moby->f21, 1);
+        } else if (FUN_L07_00281ef8_2cd2b0(water_moby, water_moby->f21, 1, 0) && water_moby->sub != 1) {
+            FUN_00213ed8_2cd2b0(&water_moby->pos[2], water_data->lo, D_0015ED6C * 4.0f);
+            FUN_L01_0026e090_2cd2b0(water_moby->f21, 1);
+        } else if (water_moby->sub == 1) {
+            FUN_00213ed8_2cd2b0(&water_moby->pos[2], water_data->lo, D_0015ED6C * 4.0f);
         }
         if (random_integer_below(200) == 0) {
-            float x = D_L07_001DCE40_2cd2b0[d->idx].x + random_float_between(-4.0f, 4.0f);
+            float x = D_L07_001DCE40_2cd2b0[water_data->idx].x + random_float_between(-4.0f, 4.0f);
             float y = random_float_between(-4.0f, 4.0f);
-            Rec_30D8E8 *r = &D_L07_001DCE40_2cd2b0[d->idx];
+            Rec_30D8E8 *r = &D_L07_001DCE40_2cd2b0[water_data->idx];
             FUN_L00_002a3ec8_2cd2b0(r, 1, 1, x, r->y + y, 1.0f, -0.05f);
         }
         break;
     case WATER_APPROACH_HIGH_HEIGHT:
-        if (m->sub & 8) {
-            FUN_L01_0026e0e0_2cd2b0(m->f21, 2);
-        } else if (FUN_L07_00281ef8_2cd2b0(m, m->f21, 1, 0) && m->sub != 2) {
-            FUN_00213ed8_2cd2b0(&m->pos[2], d->hi, D_0015ED6C * 4.0f);
-            FUN_L01_0026e090_2cd2b0(m->f21, 2);
-        } else if (m->sub == 2) {
-            FUN_00213ed8_2cd2b0(&m->pos[2], d->hi, D_0015ED6C * 4.0f);
+        if (water_moby->sub & 8) {
+            FUN_L01_0026e0e0_2cd2b0(water_moby->f21, 2);
+        } else if (FUN_L07_00281ef8_2cd2b0(water_moby, water_moby->f21, 1, 0) && water_moby->sub != 2) {
+            FUN_00213ed8_2cd2b0(&water_moby->pos[2], water_data->hi, D_0015ED6C * 4.0f);
+            FUN_L01_0026e090_2cd2b0(water_moby->f21, 2);
+        } else if (water_moby->sub == 2) {
+            FUN_00213ed8_2cd2b0(&water_moby->pos[2], water_data->hi, D_0015ED6C * 4.0f);
         }
         if (random_integer_below(200) == 0) {
-            float x = D_L07_001DCE40_2cd2b0[d->idx].x + random_float_between(-4.0f, 4.0f);
+            float x = D_L07_001DCE40_2cd2b0[water_data->idx].x + random_float_between(-4.0f, 4.0f);
             float y = random_float_between(-4.0f, 4.0f);
-            Rec_30D8E8 *r = &D_L07_001DCE40_2cd2b0[d->idx];
+            Rec_30D8E8 *r = &D_L07_001DCE40_2cd2b0[water_data->idx];
             FUN_L00_002a3ec8_2cd2b0(r, 1, 1, x, r->y + y, 1.0f, -0.05f);
         }
         break;
     case WATER_WAIT_FOR_HERO_IN_VOLUME:
-        if (d->volume >= 0 && FUN_00214720_2cd2b0(&hero.motion.pos, d->volume)) {
-            d->f1C = 0;
-            FUN_L01_0026e0e0_2cd2b0(m->f21, 4);
+        if (water_data->volume >= 0 && FUN_00214720_2cd2b0(&hero.motion.pos, water_data->volume)) {
+            water_data->f1C = 0;
+            FUN_L01_0026e0e0_2cd2b0(water_moby->f21, 4);
         }
         break;
     case WATER_WAIT_BEFORE_RISING:
-        if (fast_dec_timer(&d->timer)) {
-            d->timer = scale_game_frames_alt(0x708);
-            m->state = 5;
+        if (fast_dec_timer(&water_data->timer)) {
+            water_data->timer = scale_game_frames_alt(0x708);
+            water_moby->state = 5;
         }
         break;
     case WATER_TIMED_RISE:
-        m->pos[2] += D_0015ED6C * 0.32f;
-        if (fast_dec_timer(&d->timer)) {
-            m->state = 6;
+        water_moby->pos[2] += D_0015ED6C * 0.32f;
+        if (fast_dec_timer(&water_data->timer)) {
+            water_moby->state = 6;
         }
         break;
     case WATER_RISE_TO_HEIGHT_54:
-        m->pos[2] += D_0015ED6C * 0.42f;
-        if (m->pos[2] >= 54.0f) {
-            m->state = 7;
+        water_moby->pos[2] += D_0015ED6C * 0.42f;
+        if (water_moby->pos[2] >= 54.0f) {
+            water_moby->state = 7;
         }
         break;
     case WATER_REMOVE_ABOVE_HIGH_HEIGHT:
-        if (d->hi < m->pos[2]) {
-            D_L07_001DCE40_2cd2b0[d->idx].h1E = 0;
-            mark_moby_for_removal_c2(m);
+        if (water_data->hi < water_moby->pos[2]) {
+            D_L07_001DCE40_2cd2b0[water_data->idx].h1E = 0;
+            mark_moby_for_removal_c2(water_moby);
             return;
         }
         break;
     }
-    if (d->idx < 0) {
+    if (water_data->idx < 0) {
         return;
     }
     {
         Cab_30D8E8 *cab = &D_L07_001CA900;
-        D_L07_001DCE40_2cd2b0[d->idx].b1C = cab->b3C;
-        D_L07_001DCE40_2cd2b0[d->idx].b1D = cab->b3D;
+        D_L07_001DCE40_2cd2b0[water_data->idx].b1C = cab->b3C;
+        D_L07_001DCE40_2cd2b0[water_data->idx].b1D = cab->b3D;
     }
-    D_L07_001DCE40_2cd2b0[d->idx].z = m->pos[2];
+    D_L07_001DCE40_2cd2b0[water_data->idx].z = water_moby->pos[2];
     on = 0.0f;
-    if (m->f94 != 0 && FUN_L01_00275690_2cd2b0(m, 48.0f) != -1) {
-        if (!(m->state >= 3 && m->state <= 7) || (m->pos[2] > d->lo && m->pos[2] < d->hi)) {
+    if (water_moby->f94 != 0 && FUN_L01_00275690_2cd2b0(water_moby, 48.0f) != -1) {
+        if (!(water_moby->state >= 3 && water_moby->state <= 7) || (water_moby->pos[2] > water_data->lo && water_moby->pos[2] < water_data->hi)) {
             on = 1.0f;
         }
     }
     if (on == 0.0f) {
-        D_L07_001DCE40_2cd2b0[d->idx].h1E = 0;
+        D_L07_001DCE40_2cd2b0[water_data->idx].h1E = 0;
     } else {
-        D_L07_001DCE40_2cd2b0[d->idx].h1E = D_L07_00204680[d->idx];
+        D_L07_001DCE40_2cd2b0[water_data->idx].h1E = D_L07_00204680[water_data->idx];
     }
-    if (d->idx == 0) {
+    if (water_data->idx == 0) {
         FUN_L01_002b7fe0_2cd2b0(D_L07_001DCE40_2cd2b0, 0x24);
-        enqueue_callback_list_1_c(FUN_L07_0030cd20_2cd2b0, m);
+        enqueue_callback_list_1_c(FUN_L07_0030cd20_2cd2b0, water_moby);
     }
-    if (d->idx == D_L07_00161B30) {
-        D_L07_001DCE40_2cd2b0[d->idx].h1E = D_L07_00161B34;
-        D_L07_00204680[d->idx] = D_L07_00161B34;
+    if (water_data->idx == D_L07_00161B30) {
+        D_L07_001DCE40_2cd2b0[water_data->idx].h1E = D_L07_00161B34;
+        D_L07_00204680[water_data->idx] = D_L07_00161B34;
     }
 }
 /* Level overlay code after unclassified; generated by `decomp overlays stubs`, stubs replaced by C as functions are matched. */
