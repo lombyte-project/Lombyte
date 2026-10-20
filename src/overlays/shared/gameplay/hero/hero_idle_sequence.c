@@ -2576,7 +2576,7 @@ void FUN_L00_0020a318(void) {
     char *hit_ease_table;
     char *hero_position;
     char *g2;
-    float f12, f13, f, state_frame_scale_squared, frame_scale_squared;
+    float f12, f13, distance_based_ease_value, state_frame_scale_squared, frame_scale_squared;
     *(short *)(g + 0x22C8) = 0;
     if (*(unsigned char *)(g + 0x20AB) == 0)
         return;
@@ -2608,17 +2608,17 @@ void FUN_L00_0020a318(void) {
     *(float *)(hit_ease_table + 0x6D4) = frame_scale_squared * 0.05f;
     *(float *)(hit_ease_table + 0x6D8) = frame_scale_squared * 0.3f;
     hero_position = (char *)((unsigned char *)&D_0013E533) + 0xE9D;
-    f = fast_vec_dist(hero_position, collision_hit_point);
+    distance_based_ease_value = fast_vec_dist(hero_position, collision_hit_point);
     g2 = (char *)((unsigned char *)&D_0013E533) + 0xE1D;
-    f = f - *(float *)(g2 + 0x234);
-    f = (1.29999995f - f) / 1.29999995f;
-    f = f * 1.25f;
-    f = f * -1.22173047f;
-    if (f > -0.523598790f)
-        f = -0.523598790f;
-    if (f < -1.22173047f)
-        f = -1.22173047f;
-    *(float *)(hit_ease_table + 0x694) = f;
+    distance_based_ease_value = distance_based_ease_value - *(float *)(g2 + 0x234);
+    distance_based_ease_value = (1.29999995f - distance_based_ease_value) / 1.29999995f;
+    distance_based_ease_value = distance_based_ease_value * 1.25f;
+    distance_based_ease_value = distance_based_ease_value * -1.22173047f;
+    if (distance_based_ease_value > -0.523598790f)
+        distance_based_ease_value = -0.523598790f;
+    if (distance_based_ease_value < -1.22173047f)
+        distance_based_ease_value = -1.22173047f;
+    *(float *)(hit_ease_table + 0x694) = distance_based_ease_value;
     *(short *)(g2 + 0x22C8) = 1;
 }
 extern char D_0013F350_0020a500[] __asm__("D_0013F350");
