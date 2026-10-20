@@ -23,7 +23,7 @@ void update_audio_stream_until_idle(s32) __asm__("FUN_002168a8");
 void fade_to_black(s32) __asm__("FUN_001f4a58");
 void FUN_L00_002454c8(s32 i);
 void FUN_L00_002454c8(s32 i) {
-    s32 n;
+    s32 pointer_index;
     s32 *offset_entry;
     if (pal_mode == 0) {
         start_audio_stream_read(D_L00_0016C860.buf, D_00137B80.x[i].a, D_00137B80.x[i].b);
@@ -34,13 +34,13 @@ void FUN_L00_002454c8(s32 i) {
     fade_to_black(4);
     update_audio_stream_until_idle(1);
     offset_entry = (s32 *)D_L00_0016C860.buf;
-    n = 0;
+    pointer_index = 0;
     if (offset_entry[1] != 0) {
         do {
-            D_L00_0016C860.ptr[n] = (s32)(D_L00_0016C860.buf + (offset_entry[0] + 0x800));
-            n++;
+            D_L00_0016C860.ptr[pointer_index] = (s32)(D_L00_0016C860.buf + (offset_entry[0] + 0x800));
+            pointer_index++;
             offset_entry += 2;
-        } while (n < 70 && offset_entry[1] != 0);
+        } while (pointer_index < 70 && offset_entry[1] != 0);
     }
 }
 typedef struct {
