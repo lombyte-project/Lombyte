@@ -327,12 +327,12 @@ extern void project_to_screen(f32 *, void *) __asm__("FUN_001f2070");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void FUN_L11_00311210(void *pt, int *outx, int *outy, int yoff) {
-    float p[4];
+    float projected_point[4];
     int *g;
-    project_to_screen(p, pt);
+    project_to_screen(projected_point, pt);
     g = (int *)(D_0013E05A + 0x4A6);
-    *outx = func_001FA898_r((p[0] - (float)g[4]) * 0.0625f);
-    *outy = func_001FA898_r((p[1] - (float)g[5]) * 0.0625f) + yoff;
+    *outx = func_001FA898_r((projected_point[0] - (float)g[4]) * 0.0625f);
+    *outy = func_001FA898_r((projected_point[1] - (float)g[5]) * 0.0625f) + yoff;
 }
 #include "qcopy.h"
 #include "rnc/overlay/quad.h"
