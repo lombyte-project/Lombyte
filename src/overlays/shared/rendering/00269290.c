@@ -241,15 +241,15 @@ void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 s32 mine_blend_color(s32, s32, f32) __asm__("FUN_L00_002371e0");
 s32 fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 void free_effect_particle(void *) __asm__("FUN_L00_00267a08");
-void FUN_L00_00269a70(O00269a70 *o) {
-    S00269a70 *s = &o->s;
-    o->xc = convert_integer_to_float(s->x18 * (s->x1c - o->xa) / s->x1c + s->x1a) * 1000.0f;
+void FUN_L00_00269a70(O00269a70 *particle) {
+    S00269a70 *s = &particle->s;
+    particle->xc = convert_integer_to_float(s->x18 * (s->x1c - particle->xa) / s->x1c + s->x1a) * 1000.0f;
     fast_vec_scale(s, s, D_0015ED60 * -0.019999980926513672f + 1.0f);
-    fast_vec_add(o->p10, o->p10, s);
-    o->x8++;
-    o->x4 = mine_blend_color(s->x14, s->x10, o->xa / convert_integer_to_float(s->x1c));
-    if (fast_dec_timer_s16(&o->xa))
-        free_effect_particle(o);
+    fast_vec_add(particle->p10, particle->p10, s);
+    particle->x8++;
+    particle->x4 = mine_blend_color(s->x14, s->x10, particle->xa / convert_integer_to_float(s->x1c));
+    if (fast_dec_timer_s16(&particle->xa))
+        free_effect_particle(particle);
 }
 
 #define NOT_SDA
