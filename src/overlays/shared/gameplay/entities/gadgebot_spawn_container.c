@@ -2145,15 +2145,15 @@ extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 
-float FUN_L06_002f2148(char *a, char *b, int c) {
-    float r = vector_distance(a + 0x10, b + 0x10);
+float FUN_L06_002f2148(char *moby, char *b, int c) {
+    float r = vector_distance(moby + 0x10, b + 0x10);
     float *g = (float *)D_L06_00167400;
     float t = fast_difference_between_rotations(
-        g[0x56], fast_arc_tan(*(float *)(b + 0x10) - *(float *)(a + 0x10),
-                              *(float *)(b + 0x14) - *(float *)(a + 0x14)));
+        g[0x56], fast_arc_tan(*(float *)(b + 0x10) - *(float *)(moby + 0x10),
+                              *(float *)(b + 0x14) - *(float *)(moby + 0x14)));
     float u = fast_difference_between_rotations(
-        *(float *)(a + 0x48), fast_arc_tan(*(float *)(b + 0x10) - *(float *)(a + 0x10),
-                                           *(float *)(b + 0x14) - *(float *)(a + 0x14)));
+        *(float *)(moby + 0x48), fast_arc_tan(*(float *)(b + 0x10) - *(float *)(moby + 0x10),
+                                           *(float *)(b + 0x14) - *(float *)(moby + 0x14)));
     r = r + u * 10.0f;
     r = r + t * 3.0f;
     if (((unsigned char *)b)[0x31] == 0) {
