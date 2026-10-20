@@ -481,12 +481,12 @@ int FUN_L00_0020d5d0(int mode, float *out) {
 
 float FUN_L00_0020d658(int back) {
     struct Hero *b = &hero;
-    int n = back < 32 ? back : 31;
+    int history_lookback = back < 32 ? back : 31;
 
-    if (b->unk21AC < n) {
-        n = b->unk21AC;
+    if (b->unk21AC < history_lookback) {
+        history_lookback = b->unk21AC;
     }
-    return b->unk2128[(b->unk21A8 - n + 31) % 32];
+    return b->unk2128[(b->unk21A8 - history_lookback + 31) % 32];
 }
 typedef struct {
     char p0[0x2084];
