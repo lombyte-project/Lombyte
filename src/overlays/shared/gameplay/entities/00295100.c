@@ -553,10 +553,10 @@ int FUN_L00_00298de8(void) {
     char *camera_position;
     char *camera_state;
     float k;
-    float f = v[3];
-    *(float *)(x + 0xB0) = f;
+    float unscaled_camera_value = v[3];
+    *(float *)(x + 0xB0) = unscaled_camera_value;
     if (D_0015EDB0_298de8)
-        *(float *)(x + 0xB0) = f * D_L00_0015F59C;
+        *(float *)(x + 0xB0) = unscaled_camera_value * D_L00_0015F59C;
     f1f2d98_298de8();
     camera_position = D_L00_00166C80_298de8 + 0x140;
     qcopy(camera_position, camera_key);
