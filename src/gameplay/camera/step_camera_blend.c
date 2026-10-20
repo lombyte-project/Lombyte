@@ -24,8 +24,8 @@ extern f32 frame_scale __asm__("D_0015ED60") MACRO_ADDR;
 int step_camera_blend(void *to_blend, void *cam_blend) {
     float *to = to_blend;
     float *cam = cam_blend;
-    float m[4];
-    float q[16];
+    float target_rotation_quaternion[4];
+    float blended_rotation_matrix[16];
     char *st;
     float t;
     float *rot;
@@ -42,13 +42,13 @@ int step_camera_blend(void *to_blend, void *cam_blend) {
     if (*(int *)(st + 0x14) == 0) {
         qcopy(D_00187080, cam + 16);
     }
-    extract_matrix_rotation_quaternion(m, to);
+    extract_matrix_rotation_quaternion(target_rotation_quaternion, to);
     rot = cam + 20;
     t = cosine_interpolate(0.0f, 1.0f, cam[0]);
-    quaternion_nlerp(rot, cam + 8, m, t);
-    quaternion_to_matrix(rot, q);
+    quaternion_nlerp(rot, cam + 8, target_rotation_quaternion, t);
+    quaternion_to_matrix(rot, blended_rotation_matrix);
     if (*(int *)(st + 0x14) == 0) {
-        copy_matrix3x4(camera_rows, q);
+        copy_matrix3x4(camera_rows, blended_rotation_matrix);
     }
     cam[3] += cam[4] * frame_scale;
     if (1.0f < cam[3]) {
