@@ -237,8 +237,8 @@ extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 
 void camera_object_update(char *o) __asm__("FUN_L00_002a4e48");
 void camera_object_update(char *camera_object) {
-    OvlQuad d[1];
-    OvlQuad e[1];
+    OvlQuad difference_vector[1];
+    OvlQuad scaled_vector[1];
     C_2a4e48 *C = &D_166C80_2a4e48;
     char *object_position;
     char *pos;
@@ -249,26 +249,26 @@ void camera_object_update(char *camera_object) {
         object_position = camera_object + 0x10;
         qcopy(object_position, C->c + 0x30);
         pos = (char *)&hero.motion.pos;
-        subtract_vector_xyz(d, object_position, pos);
+        subtract_vector_xyz(difference_vector, object_position, pos);
         P = (G_2a4e48 *)(pos - 0x80);
-        f = dot_vectors_xyz(d, P->obj + 0xE0);
-        f9a68_2a4e48(e, P->obj + 0xE0, f);
-        subtract_vector_xyz(d, d, e);
+        f = dot_vectors_xyz(difference_vector, P->obj + 0xE0);
+        f9a68_2a4e48(scaled_vector, P->obj + 0xE0, f);
+        subtract_vector_xyz(difference_vector, difference_vector, scaled_vector);
         if (absolute_float(f) < 2.5f) {
             f = 0.1f;
-            if (vector_length_xyz(d) < f || fast_difference_between_rotations(P->f98, C->f158) < 2.3561945f ||
+            if (vector_length_xyz(difference_vector) < f || fast_difference_between_rotations(P->f98, C->f158) < 2.3561945f ||
                 P->f164 < D_0015ED6C_2a4e48 * f) {
                 *(float *)(camera_object + 0x18) = 15.0f;
                 *(float *)(camera_object + 0x14) = 15.0f;
                 *(float *)(camera_object + 0x10) = 15.0f;
             } else {
                 f = dot_vectors_xyz(object_position, P->obj + 0xE0);
-                f9a68_2a4e48(e, P->obj + 0xE0, f);
-                subtract_vector_xyz(d, object_position, e);
+                f9a68_2a4e48(scaled_vector, P->obj + 0xE0, f);
+                subtract_vector_xyz(difference_vector, object_position, scaled_vector);
                 f = dot_vectors_xyz(pos, P->obj + 0xE0);
                 if (P->w208C != 0x11) {
-                    f9a68_2a4e48(e, P->obj + 0xE0, f);
-                    add_vector_xyz(object_position, d, e);
+                    f9a68_2a4e48(scaled_vector, P->obj + 0xE0, f);
+                    add_vector_xyz(object_position, difference_vector, scaled_vector);
                 }
             }
         }
