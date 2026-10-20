@@ -100,7 +100,7 @@ void FUN_L00_00257470(unsigned char *m, int flags, int arg) {
     int k;
     int d;
     int n;
-    int f;
+    int call_flags;
     int r;
     int cnt;
     unsigned char *g;
@@ -140,26 +140,26 @@ void FUN_L00_00257470(unsigned char *m, int flags, int arg) {
         }
         FUN_001e93b0_257470(D_L00_001E8F28, FUN_001fa6d0_257470(amt));
     }
-    f = 1;
+    call_flags = 1;
     if (flags & 0x100) {
-        f = 5;
+        call_flags = 5;
     }
     if (hero_lui.unk20B2 || (flags & 0x200)) {
-        f |= 2;
+        call_flags |= 2;
     }
     if (hero_lui.state.current == 0x10 &&
         FUN_001f9b48_257470(&hero_lui.motion.pos, m + 0x10) < 4.0f) {
-        f |= 2;
+        call_flags |= 2;
     }
     cnt = D_L00_0015FFBC;
     if (flags & 0x400) {
-        f |= 0x10;
+        call_flags |= 0x10;
     }
     if (cnt < 100 || (flags & 0x800)) {
-        f |= 8;
+        call_flags |= 8;
     }
     if (D_L00_0015FFBC < 50) {
-        f |= 2;
+        call_flags |= 2;
     }
     if (amt < 0.0f) {
         amt = 0.0f;
@@ -175,7 +175,7 @@ void FUN_L00_00257470(unsigned char *m, int flags, int arg) {
             int n2 = FUN_001fa6d0_257470(amt);
             int hi = n2 + r;
             n2 -= r;
-            FUN_L00_00260a88_257470(m, n2, hi, f, arg);
+            FUN_L00_00260a88_257470(m, n2, hi, call_flags, arg);
         }
     }
 }
