@@ -1043,25 +1043,25 @@ unsigned char *FUN_L00_00273708(void *a, int b, int c) {
 
 extern void free_effect_particle(void *) __asm__("FUN_L00_00267a08");
 
-void FUN_L00_00273800(char *a) {
-    char *s = a + 0x20;
+void FUN_L00_00273800(char *particle) {
+    char *particle_data = particle + 0x20;
     int w;
-    int t;
-    if (*(short *)(s + 2) == 1) {
+    int faded_alpha;
+    if (*(short *)(particle_data + 2) == 1) {
         return;
     }
-    if (*(short *)(s + 2) == 2) {
-        *(float *)(a + 0x10) = *(float *)(*(char **)(s + 4) + 0x10) + *(float *)(s + 0x10);
-        *(float *)(a + 0x14) = *(float *)(*(char **)(s + 4) + 0x14) + *(float *)(s + 0x14);
-        *(float *)(a + 0x18) = *(float *)(*(char **)(s + 4) + 0x18) + *(float *)(s + 0x18);
+    if (*(short *)(particle_data + 2) == 2) {
+        *(float *)(particle + 0x10) = *(float *)(*(char **)(particle_data + 4) + 0x10) + *(float *)(particle_data + 0x10);
+        *(float *)(particle + 0x14) = *(float *)(*(char **)(particle_data + 4) + 0x14) + *(float *)(particle_data + 0x14);
+        *(float *)(particle + 0x18) = *(float *)(*(char **)(particle_data + 4) + 0x18) + *(float *)(particle_data + 0x18);
     }
-    w = *(int *)(a + 4);
-    t = w >> 24;
-    t -= *(short *)(a + 0x20);
-    if (t <= 0) {
-        free_effect_particle(a);
+    w = *(int *)(particle + 4);
+    faded_alpha = w >> 24;
+    faded_alpha -= *(short *)(particle + 0x20);
+    if (faded_alpha <= 0) {
+        free_effect_particle(particle);
     } else {
-        *(int *)(a + 4) = (w & 0xFFFFFF) | (t << 24);
+        *(int *)(particle + 4) = (w & 0xFFFFFF) | (faded_alpha << 24);
     }
 }
 /* Spawns a type-64 particle at pos moving with vel, sprite size chosen by distance to the hero. */
