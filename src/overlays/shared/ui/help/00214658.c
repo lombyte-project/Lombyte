@@ -376,33 +376,33 @@ extern f32 absolute_float(f32) __asm__("FUN_001f99c0");
    +-1.4); needs the moby in item slot 3. */
 void FUN_L00_00215ef8(void)
 {
-    struct Hero *h = &hero;
+    struct Hero *hero_state = &hero;
     f32 scale;
-    f32 a;
+    f32 clamped_lean_input;
     f32 lean;
     f32 sway;
 
-    if (h->items[3].moby2 == 0)
+    if (hero_state->items[3].moby2 == 0)
         return;
     if (BYTE_0015EDB3 != 0)
         D_L00_0017B38C[0] = D_0015EE18;
-    scale = 1024.0f / h->items[3].moby2->scale;
-    if (h->state.current == 2) {
-        a = h->motion.unk188;
+    scale = 1024.0f / hero_state->items[3].moby2->scale;
+    if (hero_state->state.current == 2) {
+        clamped_lean_input = hero_state->motion.unk188;
         lean_state.fD04 = 0.02f;
         lean_state.fD08 = 0.35f;
-        if (a > 1.4f)
-            a = 1.4f;
-        else if (a < -1.4f)
-            a = -1.4f;
-        lean = -a * 1.2f;
+        if (clamped_lean_input > 1.4f)
+            clamped_lean_input = 1.4f;
+        else if (clamped_lean_input < -1.4f)
+            clamped_lean_input = -1.4f;
+        lean = -clamped_lean_input * 1.2f;
         if (lean > 1.3089969f)
             lean = 1.3089969f;
         else if (lean < -1.3089969f)
             lean = -1.3089969f;
         lean_state.fCC8 = lean;
         sway = 0.1f;
-        sway = absolute_float(a) * sway + sway;
+        sway = absolute_float(clamped_lean_input) * sway + sway;
         if (sway > 0.07f)
             sway = 0.07f;
         lean_state.fCF8 = sway * scale;
