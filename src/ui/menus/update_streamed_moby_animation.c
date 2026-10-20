@@ -58,6 +58,12 @@ s32 update_streamed_moby_animation(MobyAnimationStream *stream) {
         ANIMATION_STREAM_UPDATE_MOBY = 2
     };
     enum {
+        STREAMED_MOBY_WAIT_DIALOGUE_FOR_FIRST_ANIMATION = 0,
+        STREAMED_MOBY_WAIT_FIRST_ANIMATION_COMPLETION = 1,
+        STREAMED_MOBY_WAIT_DIALOGUE_FOR_SECOND_ANIMATION = 2,
+        STREAMED_MOBY_WAIT_SECOND_ANIMATION_COMPLETION = 3,
+        STREAMED_MOBY_WAIT_DIALOGUE_FOR_THIRD_ANIMATION = 4,
+        STREAMED_MOBY_WAIT_THIRD_ANIMATION_COMPLETION = 5,
         STREAMED_MOBY_WAIT_SEQUENCE_RESTART = 6
     };
     StreamedAnimationMoby *moby;
@@ -116,9 +122,9 @@ s32 update_streamed_moby_animation(MobyAnimationStream *stream) {
         /* Even phases queue dialogue; odd phases wait for animation completion. */
         moby = stream->moby;
         switch (moby->moby_state) {
-        case 0:
-        case 2:
-        case 4:
+        case STREAMED_MOBY_WAIT_DIALOGUE_FOR_FIRST_ANIMATION:
+        case STREAMED_MOBY_WAIT_DIALOGUE_FOR_SECOND_ANIMATION:
+        case STREAMED_MOBY_WAIT_DIALOGUE_FOR_THIRD_ANIMATION:
             dialogue_column = game_language - 1;
             if (dialogue_column < 0) {
                 dialogue_column = 0;
@@ -141,9 +147,9 @@ s32 update_streamed_moby_animation(MobyAnimationStream *stream) {
             moby->moby_state++;
             blend_moby_animation(moby, animation_index + 1, 0, scale_game_frames(0x18));
             break;
-        case 1:
-        case 3:
-        case 5:
+        case STREAMED_MOBY_WAIT_FIRST_ANIMATION_COMPLETION:
+        case STREAMED_MOBY_WAIT_SECOND_ANIMATION_COMPLETION:
+        case STREAMED_MOBY_WAIT_THIRD_ANIMATION_COMPLETION:
             if (moby->animation_frame_counter == 0 &&
                 moby->primary_animation == moby->secondary_animation) {
                 continue_audio_stream_if_ready();
