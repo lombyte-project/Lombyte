@@ -1232,7 +1232,7 @@ extern void func_L00_0025F4A8_alt(void *, void *, void *, float, float, int, int
                                   float, float, int, float, int, int, int,
                                   int) __asm__("FUN_L00_0025e450");
 
-void FUN_L17_002ec360(Moby *m, Obj *ship_vars) {
+void FUN_L17_002ec360(Moby *ship_moby, Obj *ship_vars) {
     W4 old;
     W4 vel;
     UQ_c4 dir;
@@ -1247,7 +1247,7 @@ void FUN_L17_002ec360(Moby *m, Obj *ship_vars) {
     float kb;
     float lenA;
     float lenB;
-    float d;
+    float distance_to_default_target;
     float e1, e2;
     float x, y;
     float half_fov, tn;
@@ -1265,26 +1265,26 @@ void FUN_L17_002ec360(Moby *m, Obj *ship_vars) {
     up.q = 0;
     dir.v[2] = frame_time * 8.0f * D_L17_001620A0_gp;
     up.v[2] = 1.0f;
-    m->flags &= 0xFEFF;
+    ship_moby->flags &= 0xFEFF;
     *(Q_c4 *)vel = dir.q;
-    if (m->bc == 0) {
+    if (ship_moby->bc == 0) {
         if (D_L17_00162000 < ship_vars->count) {
             pad = (char *)((char *)&D_0013C940);
             if (*(int *)(pad + 0x1B4) & 0x40) {
                 idx = ship_vars->i10C;
                 if (idx != -1) {
                     e = (char *)((char *)&D_0013E550) + idx * 0x70;
-                    if (*(char **)(e + 0x88) == (char *)m && *(unsigned char *)(e + 0x74) != 0) {
+                    if (*(char **)(e + 0x88) == (char *)ship_moby && *(unsigned char *)(e + 0x74) != 0) {
                         release_voice_slot(idx);
                     }
                 }
                 ship_vars->i10C = -1;
-                ship_vars->i10C = allocate_voice_for_target_entry_c4(1, 4, (int)m);
+                ship_vars->i10C = allocate_voice_for_target_entry_c4(1, 4, (int)ship_moby);
             } else if (*(int *)(pad + 0x1B8) & 0x40) {
                 idx = ship_vars->i10C;
                 if (idx != -1) {
                     e = (char *)((char *)&D_0013E550) + idx * 0x70;
-                    if (*(char **)(e + 0x88) == (char *)m && *(unsigned char *)(e + 0x74) != 0) {
+                    if (*(char **)(e + 0x88) == (char *)ship_moby && *(unsigned char *)(e + 0x74) != 0) {
                         release_voice_slot(idx);
                     }
                 }
@@ -1332,7 +1332,7 @@ void FUN_L17_002ec360(Moby *m, Obj *ship_vars) {
             ka = D_L17_001620B8;
             kb = D_L17_001620C8;
         }
-        FUN_L17_002edf10((char *)m, &horizontal_steering_input, &b);
+        FUN_L17_002edf10((char *)ship_moby, &horizontal_steering_input, &b);
         vendor_spring(&ship_vars->f6C, &ship_vars->f90, horizontal_steering_input, D_L17_001620AC, D_L17_001620B0, ka);
         vendor_spring(&ship_vars->f70, &ship_vars->f94, b, D_L17_001620BC, D_L17_001620C0, kb);
         FUN_L00_0025bc98((char *)&ship_vars->f30, (char *)&ship_vars->f98, 0, ship_vars->f6C * D_L17_0016208C,
@@ -1344,10 +1344,10 @@ void FUN_L17_002ec360(Moby *m, Obj *ship_vars) {
         } else if (ship_vars->f34 < -1.3962634f) {
             ship_vars->f34 = -1.3962634f;
         }
-        if (m->r44 > 1.3962634f) {
-            m->r44 = 1.3962634f;
-        } else if (m->r44 < -1.3962634f) {
-            m->r44 = -1.3962634f;
+        if (ship_moby->r44 > 1.3962634f) {
+            ship_moby->r44 = 1.3962634f;
+        } else if (ship_moby->r44 < -1.3962634f) {
+            ship_moby->r44 = -1.3962634f;
         }
     }
 
@@ -1365,24 +1365,24 @@ void FUN_L17_002ec360(Moby *m, Obj *ship_vars) {
         qcopy(target, D_L17_001621F0);
     }
 
-    d = vector_distance(m->pos, D_L17_001621F0);
+    distance_to_default_target = vector_distance(ship_moby->pos, D_L17_001621F0);
     ship_vars->f38 = FUN_L13_002ba088(
-        1, 5, d, ship_vars->f38, fast_arc_tan(target[0] - m->pos[0], target[1] - m->pos[1]), 50.0f, lenB);
-    m->r48 = FUN_L13_002ba088(
-        1, 5, d, m->r48, fast_arc_tan(target[0] - m->pos[0], target[1] - m->pos[1]), 50.0f, lenB);
-    e1 = absolute_float(target[2] - m->pos[2]);
+        1, 5, distance_to_default_target, ship_vars->f38, fast_arc_tan(target[0] - ship_moby->pos[0], target[1] - ship_moby->pos[1]), 50.0f, lenB);
+    ship_moby->r48 = FUN_L13_002ba088(
+        1, 5, distance_to_default_target, ship_moby->r48, fast_arc_tan(target[0] - ship_moby->pos[0], target[1] - ship_moby->pos[1]), 50.0f, lenB);
+    e1 = absolute_float(target[2] - ship_moby->pos[2]);
     ship_vars->f34 = FUN_L13_002ba088(1, 5, e1, ship_vars->f34,
-                              -fast_arc_tan(vector_distance(m->pos, target), target[2] - m->pos[2]),
+                              -fast_arc_tan(vector_distance(ship_moby->pos, target), target[2] - ship_moby->pos[2]),
                               50.0f, lenA);
-    e2 = absolute_float(target[2] - m->pos[2]);
-    m->r44 = FUN_L13_002ba088(1, 5, e2, m->r44,
-                              -fast_arc_tan(vector_distance(m->pos, target), target[2] - m->pos[2]),
+    e2 = absolute_float(target[2] - ship_moby->pos[2]);
+    ship_moby->r44 = FUN_L13_002ba088(1, 5, e2, ship_moby->r44,
+                              -fast_arc_tan(vector_distance(ship_moby->pos, target), target[2] - ship_moby->pos[2]),
                               50.0f, lenA);
     build_spherical_offset(dir.v, ship_vars->speed, ship_vars->f38, -ship_vars->f34);
     normalize_vector_xyz(ship_vars->v10, dir.v, 1.0f);
-    qcopy(old, m->pos);
-    if (m->bc == 0) {
-        add_vector_xyz(m->pos, m->pos, dir.v);
+    qcopy(old, ship_moby->pos);
+    if (ship_moby->bc == 0) {
+        add_vector_xyz(ship_moby->pos, ship_moby->pos, dir.v);
     }
     {
         float lo = D_L17_00162004;
@@ -1421,7 +1421,7 @@ void FUN_L17_002ec360(Moby *m, Obj *ship_vars) {
         diff[3] = 0.0f;
         vu_euler_rotation_basis(mat, (char *)&ship_vars->f30);
         transform_vector_by_basis(target, diff, mat);
-        add_vector_xyz(wr.e[0].v, m->pos, target);
+        add_vector_xyz(wr.e[0].v, ship_moby->pos, target);
         FUN_L00_002ea9d8(wr.e[0].v);
         wr.e[1].v[0] = fast_add_rotations(ship_vars->f30 * D_L17_00162048, ship_vars->f6C * D_L17_00162044);
         wr.e[1].v[1] = fast_subtract_rotations(fast_add_rotations(ship_vars->f34, D_L17_0016204C),
@@ -1444,15 +1444,15 @@ void FUN_L17_002ec360(Moby *m, Obj *ship_vars) {
     tn = fast_sin(half_fov) / fast_cos(half_fov);
     D_L17_0016D3F0 = tn;
     update_view_context();
-    m->r40 = fast_add_rotations(ship_vars->f30, ship_vars->f6C * D_L17_00162160);
-    m->r44 = fast_add_rotations(ship_vars->f34, -ship_vars->f70 * D_L17_00162164);
-    m->r48 = fast_add_rotations(ship_vars->f38, -ship_vars->f6C * D_L17_00162168);
-    if (coll_sphere(1.2f, m->pos, 0, m)) {
+    ship_moby->r40 = fast_add_rotations(ship_vars->f30, ship_vars->f6C * D_L17_00162160);
+    ship_moby->r44 = fast_add_rotations(ship_vars->f34, -ship_vars->f70 * D_L17_00162164);
+    ship_moby->r48 = fast_add_rotations(ship_vars->f38, -ship_vars->f6C * D_L17_00162168);
+    if (coll_sphere(1.2f, ship_moby->pos, 0, ship_moby)) {
         collision_result = D_L17_00174740;
         if (*(char **)(collision_result + 0x18) == 0 ||
             (hc = *(short *)(*(char **)(collision_result + 0x18) + 0xA6),
              hc != 0 && hc != 0x192 && hc != 0x4C2 && hc != 0x4C3 && hc != 0x52 && hc != 0x53)) {
-            qcopy(m->pos, collision_result + 0x30);
+            qcopy(ship_moby->pos, collision_result + 0x30);
             FUN_L00_001ff660(dir.v, dir.v, collision_result + 0x40);
             ship_vars->f38 = fast_add_rotations(
                 ship_vars->f38,
@@ -1473,25 +1473,25 @@ void FUN_L17_002ec360(Moby *m, Obj *ship_vars) {
                         FUN_L00_001ff660(vel, dir.v, collision_result + 0x40);
                         normalize_vector_xyz(vel, vel, frame_time + frame_time);
                         normalize_vector_xyz(up.v, collision_result + 0x40, 1.0f);
-                        func_L00_0025F4A8_alt(m, vel, 0, 8.0f, 100.0f, 0x1E, 0xA, 0x18, 16.0f, 8.0f,
+                        func_L00_0025F4A8_alt(ship_moby, vel, 0, 8.0f, 100.0f, 0x1E, 0xA, 0x18, 16.0f, 8.0f,
                                               9.0f, 1.0f, -1, 50.0f, 1, 1, -1, 0);
-                        m->state = 7;
+                        ship_moby->state = 7;
                     }
                     ship_vars->iDC = D_L17_0016215C;
                 }
             } else {
                 *(int *)&hero.ship_hp = 0;
-                func_L00_0025F4A8_alt(m, vel, 0, 8.0f, 100.0f, 0x1E, 0xA, 0x18, 16.0f, 8.0f, 9.0f,
+                func_L00_0025F4A8_alt(ship_moby, vel, 0, 8.0f, 100.0f, 0x1E, 0xA, 0x18, 16.0f, 8.0f, 9.0f,
                                       1.0f, -1, 50.0f, 1, 1, -1, 0);
                 ship_vars->s62 = D_L17_0016217C;
-                m->state = 7;
-                m->flags |= 0x41;
+                ship_moby->state = 7;
+                ship_moby->flags |= 0x41;
             }
         }
     }
-    enqueue_callback_list_1(FUN_L17_002eb9a8, m);
-    FUN_L17_002ec150((char *)m, (char *)ship_vars);
-    FUN_L17_002ec000((char *)m, (char *)ship_vars, fast_add_rotations(ship_vars->f28, -ship_vars->f6C / 7.0f),
+    enqueue_callback_list_1(FUN_L17_002eb9a8, ship_moby);
+    FUN_L17_002ec150((char *)ship_moby, (char *)ship_vars);
+    FUN_L17_002ec000((char *)ship_moby, (char *)ship_vars, fast_add_rotations(ship_vars->f28, -ship_vars->f6C / 7.0f),
                      -fast_add_rotations(ship_vars->f24, -(ship_vars->f70 / 7.0f) - 0.1f));
 }
 /* Per-frame update for the player's ship moby on Veldin Orbit: takes hits, boards and leaves the ship, and runs the flight states. */
