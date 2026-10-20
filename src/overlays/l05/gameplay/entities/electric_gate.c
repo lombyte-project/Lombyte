@@ -1023,7 +1023,7 @@ void FUN_L05_003150f0(struct Moby *emitter_moby) {
     struct EmitterVars *emitter_vars = (struct EmitterVars *)emitter_moby->pvars;
     float floor;
     float lim;
-    float a, b, c;
+    float particle_speed, b, third_particle_speed_sample;
     float scale;
     int kind;
     int big;
@@ -1082,16 +1082,16 @@ void FUN_L05_003150f0(struct Moby *emitter_moby) {
             qcopy(v, &emitter_moby->pos);
             fast_vec_normalize(u, &emitter_moby->rot_row1, random_float_between(-D_L05_00161EB4, D_L05_00161EB4));
             add_vector_xyz(v, v, u);
-            a = random_float_between(lim, D_L05_00161EA8);
+            particle_speed = random_float_between(lim, D_L05_00161EA8);
             b = random_float_between(lim, D_L05_00161EA8);
-            c = random_float_between(lim, D_L05_00161EA8);
-            if (a < b) {
-                a = b;
+            third_particle_speed_sample = random_float_between(lim, D_L05_00161EA8);
+            if (particle_speed < b) {
+                particle_speed = b;
             }
-            if (a < c) {
-                a = c;
+            if (particle_speed < third_particle_speed_sample) {
+                particle_speed = third_particle_speed_sample;
             }
-            fast_vec_normalize(w, &emitter_moby->rot_row0, a * frame_time);
+            fast_vec_normalize(w, &emitter_moby->rot_row0, particle_speed * frame_time);
             if (big) {
                 scale = D_L05_00161EA0;
                 kind = D_L05_00161E98;
