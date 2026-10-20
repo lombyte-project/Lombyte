@@ -1316,22 +1316,22 @@ extern int D_L18_0015FFD8; /* no foreign declaration */
 extern int D_L18_0015FFD8; /* no foreign declaration */
 
 char *FUN_L18_002d6c80(void *pos, int idx) {
-    short *p = (short *)D_L18_001AC240_c[idx];
+    short *moby_list_entry = (short *)D_L18_001AC240_c[idx];
     char *best = 0;
     float bestd = 255.0f;
-    if (p == 0)
+    if (moby_list_entry == 0)
         return 0;
     while (1) {
-        int off = (*p & 0x7FFF) << 8;
-        char *m = (char *)(off + (int)D_L18_0015FFD8);
-        if (*(short *)(m + 0xA6) == 0x247) {
-            float d = FUN_001f9b48(pos, m + 0x10);
-            if (d < bestd) {
-                bestd = d;
+        int off = (*moby_list_entry & 0x7FFF) << 8;
+        char *candidate_moby = (char *)(off + (int)D_L18_0015FFD8);
+        if (*(short *)(candidate_moby + 0xA6) == 0x247) {
+            float candidate_distance = FUN_001f9b48(pos, candidate_moby + 0x10);
+            if (candidate_distance < bestd) {
+                bestd = candidate_distance;
                 best = D_L18_0015FFD8 + off;
             }
         }
-        if (*p++ < 0)
+        if (*moby_list_entry++ < 0)
             return best;
     }
 }
