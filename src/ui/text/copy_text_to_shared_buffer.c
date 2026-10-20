@@ -8,11 +8,11 @@ extern u32 strlen(const char *);
 extern char *strcpy(char *, const char *);
 void copy_text_to_shared_buffer(char *s) __asm__("FUN_001ff658");
 
-void copy_text_to_shared_buffer(char *s) {
-    if (strlen(s) < 0x50) {
+void copy_text_to_shared_buffer(char *source_text) {
+    if (strlen(source_text) < 0x50) {
         *(struct Str19 *)message_text_buffer = message_too_long_label;
     }
-    strcpy(message_text_buffer, s);
+    strcpy(message_text_buffer, source_text);
 }
 
 extern __typeof__(copy_text_to_shared_buffer) func_001FF658 __attribute__((alias("FUN_001ff658")));
