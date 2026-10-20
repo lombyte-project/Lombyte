@@ -395,13 +395,13 @@ int FUN_L00_0020d540(void) {
 /* True when hero.state.control_mode is 0x11/0x12 or state.current is 0x6A, 0x75, 0x76 or 0x82. */
 s32 FUN_L00_0020d568(void);
 s32 FUN_L00_0020d568(void) {
-    struct Hero *p = &hero;
-    u32 a = p->state.control_mode;
+    struct Hero *hero_state = &hero;
+    u32 control_mode = hero_state->state.control_mode;
     u32 b;
-    if (a - 0x11 < 2) {
+    if (control_mode - 0x11 < 2) {
         goto one;
     }
-    b = p->state.current;
+    b = hero_state->state.current;
     if (b == 0x6A) {
         goto one;
     }
