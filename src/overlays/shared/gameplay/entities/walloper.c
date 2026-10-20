@@ -2676,8 +2676,8 @@ extern f32 fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern s32 FUN_001efa68_c(void *, void *, s32, void *, s32) __asm__("FUN_001efa68");
 extern f32 FUN_L00_002bec80_c(void *, void *) __asm__("FUN_L00_002bec80");
 
-f32 FUN_L00_002bf050(Mob *m, VU *pos, f32 *tgt, f32 *out, f32 ang, f32 arc, f32 step, f32 probe_height_offset, f32 r2,
-                     f32 r1) {
+f32 FUN_L00_002bf050(Mob *moby, VU *pos, f32 *tgt, f32 *out, f32 ang, f32 arc, f32 step, f32 probe_height_offset, f32 horizontal_probe_distance,
+                     f32 probe_start_horizontal_offset) {
     VU probe_start;
     VU probe_end;
     f32 da;
@@ -2698,11 +2698,11 @@ f32 FUN_L00_002bf050(Mob *m, VU *pos, f32 *tgt, f32 *out, f32 ang, f32 arc, f32 
     best = ang;
     sweep_probe_count = FUN_001fa6d0_c(step);
     bestDist = 0.0f;
-    x = m->p78;
+    x = moby->p78;
     bestDiff = 6.2831855f;
     *out = bestDist;
     if (tgt != 0) {
-        cur = FUN_001f9e90_c(tgt[0] - m->f10, tgt[1] - m->f14);
+        cur = FUN_001f9e90_c(tgt[0] - moby->f10, tgt[1] - moby->f14);
     } else {
         cur = ang;
     }
@@ -2711,18 +2711,18 @@ f32 FUN_L00_002bf050(Mob *m, VU *pos, f32 *tgt, f32 *out, f32 ang, f32 arc, f32 
     arc = fast_subtract_rotations(ang, arc);
 
     qcopy(&probe_start, pos);
-    probe_start.f[1] += fast_sin(cur) * r1;
-    probe_start.f[0] += fast_cos(cur) * r1;
+    probe_start.f[1] += fast_sin(cur) * probe_start_horizontal_offset;
+    probe_start.f[0] += fast_cos(cur) * probe_start_horizontal_offset;
     probe_start.f[2] += probe_height_offset;
     qcopy(&probe_end, pos);
-    probe_end.f[1] += fast_sin(cur) * r2;
-    probe_end.f[0] += fast_cos(cur) * r2;
+    probe_end.f[1] += fast_sin(cur) * horizontal_probe_distance;
+    probe_end.f[0] += fast_cos(cur) * horizontal_probe_distance;
     probe_end.f[2] += probe_height_offset + probe_height_offset;
-    if (FUN_001efa68_c(&probe_start, &probe_end, 4, m, 0) == 0) {
-        if (FUN_L00_002bec80_c(&probe_end, m) != 0.0f) {
+    if (FUN_001efa68_c(&probe_start, &probe_end, 4, moby, 0) == 0) {
+        if (FUN_L00_002bec80_c(&probe_end, moby) != 0.0f) {
             best = cur;
-            bestDist = r2;
-            *out = r2;
+            bestDist = horizontal_probe_distance;
+            *out = horizontal_probe_distance;
         }
     } else {
         if (D_L00_00173E58_bf == x->p38 || (D_L00_00173E58_bf != 0 && D_L00_00173E58_bf->p24 != 0 &&
@@ -2740,22 +2740,22 @@ f32 FUN_L00_002bf050(Mob *m, VU *pos, f32 *tgt, f32 *out, f32 ang, f32 arc, f32 
 
     for (i = 0; i < sweep_probe_count; i++) {
         qcopy(&probe_start, pos);
-        probe_start.f[1] += fast_sin(arc) * r1;
-        probe_start.f[0] += fast_cos(arc) * r1;
+        probe_start.f[1] += fast_sin(arc) * probe_start_horizontal_offset;
+        probe_start.f[0] += fast_cos(arc) * probe_start_horizontal_offset;
         probe_start.f[2] += probe_height_offset;
         qcopy(&probe_end, pos);
-        probe_end.f[1] += fast_sin(arc) * r2;
-        probe_end.f[0] += fast_cos(arc) * r2;
+        probe_end.f[1] += fast_sin(arc) * horizontal_probe_distance;
+        probe_end.f[0] += fast_cos(arc) * horizontal_probe_distance;
         probe_end.f[2] += probe_height_offset + probe_height_offset;
-        if (FUN_001efa68_c(&probe_start, &probe_end, 4, m, 0) == 0) {
-            if (FUN_L00_002bec80_c(&probe_end, m) != 0.0f) {
+        if (FUN_001efa68_c(&probe_start, &probe_end, 4, moby, 0) == 0) {
+            if (FUN_L00_002bec80_c(&probe_end, moby) != 0.0f) {
                 diff = fast_difference_between_rotations(arc, cur);
-                if (diff < bestDiff || bestDist < r2) {
+                if (diff < bestDiff || bestDist < horizontal_probe_distance) {
                     bestDiff = diff;
                     best = arc;
-                    bestDist = r2;
-                    if (*out < r2) {
-                        *out = r2;
+                    bestDist = horizontal_probe_distance;
+                    if (*out < horizontal_probe_distance) {
+                        *out = horizontal_probe_distance;
                     }
                 }
             }
@@ -2791,40 +2791,40 @@ f32 FUN_L00_002bf050(Mob *m, VU *pos, f32 *tgt, f32 *out, f32 ang, f32 arc, f32 
 
     ang = fast_subtract_rotations(best, 1.5707964f);
     qcopy(&probe_start, pos);
-    probe_start.f[1] += fast_sin(ang) * r1;
-    probe_start.f[0] += fast_cos(ang) * r1;
+    probe_start.f[1] += fast_sin(ang) * probe_start_horizontal_offset;
+    probe_start.f[0] += fast_cos(ang) * probe_start_horizontal_offset;
     probe_start.f[2] += probe_height_offset * 0.125f;
     qcopy(&probe_end, &probe_start);
-    probe_end.f[1] += fast_sin(best) * r2;
-    probe_end.f[0] += fast_cos(best) * r2;
+    probe_end.f[1] += fast_sin(best) * horizontal_probe_distance;
+    probe_end.f[0] += fast_cos(best) * horizontal_probe_distance;
     probe_end.f[2] += 0.12f;
-    if (FUN_001efa68_c(&probe_start, &probe_end, 4, m, 0) != 0) {
+    if (FUN_001efa68_c(&probe_start, &probe_end, 4, moby, 0) != 0) {
         if (D_L00_00173E58_bf != x->p38 &&
             !(D_L00_00173E58_bf != 0 && D_L00_00173E58_bf->p24 != 0 &&
               D_L00_00173E58_bf->p24->h46 == 5)) {
             hit_distance = fast_vec_dist(&probe_start, &D_L00_00173E60);
-            best = fast_add_rotations(best, (r2 - hit_distance) * 3.1415927f / (r2 * 3.0f));
+            best = fast_add_rotations(best, (horizontal_probe_distance - hit_distance) * 3.1415927f / (horizontal_probe_distance * 3.0f));
         }
     }
     ang = fast_add_rotations(ang, 3.1415927f);
     qcopy(&probe_start, pos);
-    probe_start.f[1] += fast_sin(ang) * r1;
-    probe_start.f[0] += fast_cos(ang) * r1;
+    probe_start.f[1] += fast_sin(ang) * probe_start_horizontal_offset;
+    probe_start.f[0] += fast_cos(ang) * probe_start_horizontal_offset;
     probe_start.f[2] += probe_height_offset * 0.125f;
     qcopy(&probe_end, &probe_start);
-    probe_end.f[1] += fast_sin(best) * r2;
-    probe_end.f[0] += fast_cos(best) * r2;
+    probe_end.f[1] += fast_sin(best) * horizontal_probe_distance;
+    probe_end.f[0] += fast_cos(best) * horizontal_probe_distance;
     probe_end.f[2] += 0.12f;
-    if (FUN_001efa68_c(&probe_start, &probe_end, 4, m, 0) != 0) {
+    if (FUN_001efa68_c(&probe_start, &probe_end, 4, moby, 0) != 0) {
         if (D_L00_00173E58_bf != x->p38 &&
             !(D_L00_00173E58_bf != 0 && D_L00_00173E58_bf->p24 != 0 &&
               D_L00_00173E58_bf->p24->h46 == 5)) {
             hit_distance = fast_vec_dist(&probe_start, &D_L00_00173E60);
-            best = fast_subtract_rotations(best, (r2 - hit_distance) * 3.1415927f / (r2 * 3.0f));
+            best = fast_subtract_rotations(best, (horizontal_probe_distance - hit_distance) * 3.1415927f / (horizontal_probe_distance * 3.0f));
         }
     }
-    if (2.5132742f < fast_difference_between_rotations(best, m->f48)) {
-        best = fast_add_rotations(m->f48, fast_subtract_rotations(best, m->f48) * 0.5f);
+    if (2.5132742f < fast_difference_between_rotations(best, moby->f48)) {
+        best = fast_add_rotations(moby->f48, fast_subtract_rotations(best, moby->f48) * 0.5f);
     }
     return best;
 }
