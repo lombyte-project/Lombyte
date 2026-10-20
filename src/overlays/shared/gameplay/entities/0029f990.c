@@ -115,7 +115,7 @@ void FUN_001f5450_29fcd0(int, int, int, int, int, int, int, int, long,
                          long) __asm__("FUN_001f5450");
 
 extern I3_29fcd0 D_L00_00161178 __attribute__((section(".data")));
-void FUN_L00_0029fcd0(void *m) {
+void FUN_L00_0029fcd0(void *moby) {
     OvlQuad first_edge[1];
     OvlQuad second_edge[1];
     OvlQuad base[1];
@@ -128,7 +128,7 @@ void FUN_L00_0029fcd0(void *m) {
     int x, y, w, h;
     float len;
     ids = D_L00_00161178;
-    FUN_0020cd48_29fcd0(m, 3, &ids, out);
+    FUN_0020cd48_29fcd0(moby, 3, &ids, out);
     qcopy(base, out);
     FUN_001f9a28_29fcd0(first_edge, &out[1], out);
     FUN_001f9a28_29fcd0(second_edge, &out[2], out);
@@ -150,12 +150,12 @@ void FUN_L00_0029fcd0(void *m) {
     FUN_00239690_29fcd0(9, 7, 1.0f);
     FUN_001fb740_29fcd0(0x200, 0x200);
     FUN_00233980_29fcd0(0x42, 0x8000000064L);
-    FUN_L00_0029ead8_29fcd0(m, x, y);
+    FUN_L00_0029ead8_29fcd0(moby, x, y);
     FUN_00239328_29fcd0(6, (float)x, (float)y);
     FUN_001f7978_29fcd0();
     FUN_001fb740_29fcd0(0x200, 0x200);
     FUN_00233980_29fcd0(0x42, 0x8000000064L);
-    FUN_0020d330_29fcd0(m, 1);
+    FUN_0020d330_29fcd0(moby, 1);
     FUN_001f5450_29fcd0(w, h, x, y, 0, 0, x, y, 0x80808080L, D_0015EED0_29fcd0);
 }
 /* Draws the four quads of the hologram cone, scrolling the texture coordinates. */
