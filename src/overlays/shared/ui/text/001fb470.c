@@ -9,7 +9,7 @@ extern void font_print(int, int, int, int, int, int, void *) __asm__("FUN_001f62
 
 /* font_print with effect texture 3 and D_L00_001C3890. */
 void FUN_L00_001fb470(int a, int b, int c, int d, int e);
-void FUN_L00_001fb470(int a, int b, int c, int d, int e) {
-    font_print(a, b, c, d, e, tex_1fb470(3), D_L00_001C3890);
+void FUN_L00_001fb470(int x, int b, int color, int text, int character_limit) {
+    font_print(x, b, color, text, character_limit, tex_1fb470(3), D_L00_001C3890);
 }
 
