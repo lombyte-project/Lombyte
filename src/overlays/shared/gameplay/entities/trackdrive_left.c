@@ -878,10 +878,10 @@ typedef unsigned long long u64_t;
         (dst) += (u64_t)q_;                                                                        \
     }
 
-void FUN_L02_002da938(void *unused, f32 a, f32 b, f32 c, s32 d) {
-    u64_t m[4];
+void FUN_L02_002da938(void *unused, f32 angle, f32 b, f32 end_distance, s32 color) {
+    u64_t packed_vertices[4];
     s32 vertex_colors[4];
-    s32 p4[4];
+    s32 vertex_uvs[4];
     s32 t;
     s32 off;
     s32 tex;
@@ -890,94 +890,94 @@ void FUN_L02_002da938(void *unused, f32 a, f32 b, f32 c, s32 d) {
 
     t = truncate_float_to_s32((f32)D_L02_0015F5CC * D_L02_00161B60);
     off = (t % 512) << 16;
-    vertex_colors[3] = d;
-    vertex_colors[2] = d;
-    vertex_colors[1] = d;
-    vertex_colors[0] = d;
-    p4[0] = (s32)(D_L02_00161AEC + off);
-    p4[1] = (s32)(D_L02_00161AF0 + off);
-    p4[2] = (s32)(D_L02_00161AF4 + off);
-    p4[3] = (s32)(D_L02_00161AF8 + off);
+    vertex_colors[3] = color;
+    vertex_colors[2] = color;
+    vertex_colors[1] = color;
+    vertex_colors[0] = color;
+    vertex_uvs[0] = (s32)(D_L02_00161AEC + off);
+    vertex_uvs[1] = (s32)(D_L02_00161AF0 + off);
+    vertex_uvs[2] = (s32)(D_L02_00161AF4 + off);
+    vertex_uvs[3] = (s32)(D_L02_00161AF8 + off);
 
-    f25 = fast_sin(a) * b;
-    f24 = fast_cos(a) * b;
-    f28 = fast_sin(a) * c;
-    f27 = fast_cos(a) * c;
-    trig_value = fast_cos(a);
+    f25 = fast_sin(angle) * b;
+    f24 = fast_cos(angle) * b;
+    f28 = fast_sin(angle) * end_distance;
+    f27 = fast_cos(angle) * end_distance;
+    trig_value = fast_cos(angle);
     f29 = f25 + trig_value * 2.0f;
-    trig_value = fast_cos(a);
+    trig_value = fast_cos(angle);
     f25 = f25 - trig_value * 2.0f;
-    trig_value = fast_sin(a);
+    trig_value = fast_sin(angle);
     f26 = f24 - trig_value * 2.0f;
-    trig_value = fast_sin(a);
+    trig_value = fast_sin(angle);
     f24 = f24 + trig_value * 2.0f;
-    trig_value = fast_cos(a);
+    trig_value = fast_cos(angle);
     f31 = f28 + trig_value * 2.0f;
-    trig_value = fast_cos(a);
+    trig_value = fast_cos(angle);
     f28 = f28 - trig_value * 2.0f;
-    trig_value = fast_sin(a);
+    trig_value = fast_sin(angle);
     f30 = f27 - trig_value * 2.0f;
-    trig_value = fast_sin(a);
+    trig_value = fast_sin(angle);
     f27 = f27 + trig_value * 2.0f;
 
-    m[3] = 0xFFFFF000000000ULL;
-    m[2] = 0xFFFFF000000000ULL;
-    m[1] = 0xFFFFF000000000ULL;
-    m[0] = 0xFFFFF000000000ULL;
+    packed_vertices[3] = 0xFFFFF000000000ULL;
+    packed_vertices[2] = 0xFFFFF000000000ULL;
+    packed_vertices[1] = 0xFFFFF000000000ULL;
+    packed_vertices[0] = 0xFFFFF000000000ULL;
 
-    NEG20(m[0], truncate_float_to_s32(f26));
-    LO4(m[0], truncate_float_to_s32(f29));
-    NEG20(m[1], truncate_float_to_s32(f24));
-    LO4(m[1], truncate_float_to_s32(f25));
-    NEG20(m[2], truncate_float_to_s32(f30));
-    LO4(m[2], truncate_float_to_s32(f31));
-    NEG20(m[3], truncate_float_to_s32(f27));
-    LO4(m[3], truncate_float_to_s32(f28));
+    NEG20(packed_vertices[0], truncate_float_to_s32(f26));
+    LO4(packed_vertices[0], truncate_float_to_s32(f29));
+    NEG20(packed_vertices[1], truncate_float_to_s32(f24));
+    LO4(packed_vertices[1], truncate_float_to_s32(f25));
+    NEG20(packed_vertices[2], truncate_float_to_s32(f30));
+    LO4(packed_vertices[2], truncate_float_to_s32(f31));
+    NEG20(packed_vertices[3], truncate_float_to_s32(f27));
+    LO4(packed_vertices[3], truncate_float_to_s32(f28));
 
     tex = FUN_001f44b8(D_L02_00161B64);
-    FUN_L02_0020bc88_u(m, p4, vertex_colors, tex, 0);
+    FUN_L02_0020bc88_u(packed_vertices, vertex_uvs, vertex_colors, tex, 0);
 
-    p4[0] = (s32)D_L02_00161AFC;
-    p4[1] = (s32)D_L02_00161B00;
-    p4[2] = (s32)D_L02_00161B04;
-    p4[3] = (s32)D_L02_00161B08;
+    vertex_uvs[0] = (s32)D_L02_00161AFC;
+    vertex_uvs[1] = (s32)D_L02_00161B00;
+    vertex_uvs[2] = (s32)D_L02_00161B04;
+    vertex_uvs[3] = (s32)D_L02_00161B08;
 
-    f25 = fast_sin(a) * b;
-    f24 = fast_cos(a) * b;
-    f28 = fast_sin(a) * c;
-    f27 = fast_cos(a) * c;
-    trig_value = fast_cos(a);
+    f25 = fast_sin(angle) * b;
+    f24 = fast_cos(angle) * b;
+    f28 = fast_sin(angle) * end_distance;
+    f27 = fast_cos(angle) * end_distance;
+    trig_value = fast_cos(angle);
     f29 = f25 + trig_value * 5.0f;
-    trig_value = fast_cos(a);
+    trig_value = fast_cos(angle);
     f25 = f25 - trig_value * 5.0f;
-    trig_value = fast_sin(a);
+    trig_value = fast_sin(angle);
     f26 = f24 - trig_value * 5.0f;
-    trig_value = fast_sin(a);
+    trig_value = fast_sin(angle);
     f24 = f24 + trig_value * 5.0f;
-    trig_value = fast_cos(a);
+    trig_value = fast_cos(angle);
     f31 = f28 + trig_value * 5.0f;
-    trig_value = fast_cos(a);
+    trig_value = fast_cos(angle);
     f28 = f28 - trig_value * 5.0f;
-    trig_value = fast_sin(a);
+    trig_value = fast_sin(angle);
     f30 = f27 - trig_value * 5.0f;
-    trig_value = fast_sin(a);
+    trig_value = fast_sin(angle);
     f27 = f27 + trig_value * 5.0f;
 
-    m[3] = 0xFFFFF000000000ULL;
-    m[2] = 0xFFFFF000000000ULL;
-    m[1] = 0xFFFFF000000000ULL;
-    m[0] = 0xFFFFF000000000ULL;
+    packed_vertices[3] = 0xFFFFF000000000ULL;
+    packed_vertices[2] = 0xFFFFF000000000ULL;
+    packed_vertices[1] = 0xFFFFF000000000ULL;
+    packed_vertices[0] = 0xFFFFF000000000ULL;
 
-    NEG20(m[0], truncate_float_to_s32(f26));
-    LO4(m[0], truncate_float_to_s32(f29));
-    NEG20(m[1], truncate_float_to_s32(f24));
-    LO4(m[1], truncate_float_to_s32(f25));
-    NEG20(m[2], truncate_float_to_s32(f30));
-    LO4(m[2], truncate_float_to_s32(f31));
-    NEG20(m[3], truncate_float_to_s32(f27));
-    LO4(m[3], truncate_float_to_s32(f28));
+    NEG20(packed_vertices[0], truncate_float_to_s32(f26));
+    LO4(packed_vertices[0], truncate_float_to_s32(f29));
+    NEG20(packed_vertices[1], truncate_float_to_s32(f24));
+    LO4(packed_vertices[1], truncate_float_to_s32(f25));
+    NEG20(packed_vertices[2], truncate_float_to_s32(f30));
+    LO4(packed_vertices[2], truncate_float_to_s32(f31));
+    NEG20(packed_vertices[3], truncate_float_to_s32(f27));
+    LO4(packed_vertices[3], truncate_float_to_s32(f28));
 
-    FUN_L02_0020bc88_u(m, p4, vertex_colors, tex, 0);
+    FUN_L02_0020bc88_u(packed_vertices, vertex_uvs, vertex_colors, tex, 0);
 }
 
 typedef struct { long a, b, c, d; } Q_2dae88;
