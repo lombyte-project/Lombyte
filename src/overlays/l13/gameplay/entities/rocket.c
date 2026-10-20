@@ -2393,23 +2393,23 @@ void mark_moby_for_removal_u(struct Obj *obj) __asm__("FUN_0020c828");
 void FUN_L13_0030c060(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     char *owner = *(char **)(data + 0x60);
-    char *p;
+    char *hit_record;
     char buf[0x30];
     if (owner == 0 || *(short *)(owner + 0xA6) != *(int *)(data + 0x64) ||
         (unsigned char)owner[0x20] == 0xFE || (unsigned char)owner[0x20] == 0xFD) {
         mark_moby_for_removal_u(moby);
         return;
     }
-    p = find_moby_hit(moby, -1, 0);
-    if (p != 0) {
-        qcopy(buf, p + 0x10);
-        *(int *)(buf + 0x10) = *(int *)(p + 0x20);
-        *(int *)(buf + 0x14) = *(int *)(p + 0x24);
-        buf[0x18] = p[0x28];
-        buf[0x19] = p[0x29];
-        *(short *)(buf + 0x1A) = *(short *)(p + 0x2A);
-        *(float *)(buf + 0x1C) = *(float *)(p + 0x2C);
-        *(int *)(buf + 0x20) = *(int *)(p + 0x30);
+    hit_record = find_moby_hit(moby, -1, 0);
+    if (hit_record != 0) {
+        qcopy(buf, hit_record + 0x10);
+        *(int *)(buf + 0x10) = *(int *)(hit_record + 0x20);
+        *(int *)(buf + 0x14) = *(int *)(hit_record + 0x24);
+        buf[0x18] = hit_record[0x28];
+        buf[0x19] = hit_record[0x29];
+        *(short *)(buf + 0x1A) = *(short *)(hit_record + 0x2A);
+        *(float *)(buf + 0x1C) = *(float *)(hit_record + 0x2C);
+        *(int *)(buf + 0x20) = *(int *)(hit_record + 0x30);
         FUN_L00_00259a88(*(void **)(data + 0x60), buf);
     }
     moby->hit_slot = 0xFF;
