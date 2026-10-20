@@ -350,12 +350,12 @@ void mark_moby_for_removal_a7220(void *obj) __asm__("FUN_0020c828");
 extern char *D_L18_001B2DDC_c __asm__("D_L18_001B2ADC") __attribute__((section(".data")));
 
 void FUN_L18_002a7220(char *moby) {
-    float a[4];
-    char c[0x30];
+    float next_position[4];
+    char hit_descriptor[0x30];
     float b[4];
-    float d[4];
-    float e[4];
-    float f[4];
+    float effect_vector[4];
+    float effect_spawn_position[4];
+    float world_effect_direction[4];
     char *data = *(char **)(moby + 0x78);
     float *p;
     float f20, f1;
@@ -375,7 +375,7 @@ void FUN_L18_002a7220(char *moby) {
             return;
         }
     }
-    add_vector_xyz(a, moby + 0x10, data);
+    add_vector_xyz(next_position, moby + 0x10, data);
     t = *(char **)(data + 0x14);
     if (t != 0 && *(short *)(t + 0xA6) == 0x2E && ((unsigned char *)t)[0x20] != 0xFE &&
         ((unsigned char *)t)[0x20] != 0xFD) {
@@ -386,29 +386,29 @@ void FUN_L18_002a7220(char *moby) {
     } else {
         normalize_vector_xyz(b, data, 2.0f);
     }
-    make_hit_descriptor(c, (int)moby, 1, b, 2.0f);
-    *(short *)(c + 0x1A) = *(unsigned short *)(moby + 0xA6);
-    if (collision_line(moby + 0x10, a, 0, *(void **)(data + 0x14), c) != 0 ||
+    make_hit_descriptor(hit_descriptor, (int)moby, 1, b, 2.0f);
+    *(short *)(hit_descriptor + 0x1A) = *(unsigned short *)(moby + 0xA6);
+    if (collision_line(moby + 0x10, next_position, 0, *(void **)(data + 0x14), hit_descriptor) != 0 ||
         fast_dec_timer_s16(data + 0x10) != 0) {
         func_L00_0025F4A8_alt(moby, data, moby + 0x10, 1.5f, 1.0f, 10, 6, 4, 1.0f, 0.5f, 9.0f, 0.5f,
                               0, 0.0f, 0, 0, -1, 0);
         mark_moby_for_removal_a7220(moby);
     } else {
         unsigned char *r;
-        qcopy(moby + 0x10, a);
-        FUN_L00_00257d78(d, frame_time * 0.1f, frame_time * 0.2f);
-        scale_vector_xyz(e, data, random_float_between(0.0f, 1.0f));
-        add_vector_xyz(e, e, moby + 0x10);
-        r = FUN_L00_002712b8(e, d, scale_game_frames(10), 0x7F, 0x606060, 3, 40000.0f, 1000.0f,
+        qcopy(moby + 0x10, next_position);
+        FUN_L00_00257d78(effect_vector, frame_time * 0.1f, frame_time * 0.2f);
+        scale_vector_xyz(effect_spawn_position, data, random_float_between(0.0f, 1.0f));
+        add_vector_xyz(effect_spawn_position, effect_spawn_position, moby + 0x10);
+        r = FUN_L00_002712b8(effect_spawn_position, effect_vector, scale_game_frames(10), 0x7F, 0x606060, 3, 40000.0f, 1000.0f,
                              1.0f, -0.0002f, 0.0f);
         if (r != 0) {
             r[2] = *D_L18_001B2DDC_c;
             r[3] = 0x44;
         }
-        *(OvlQuad *)f = 0;
-        f[2] = 0.02f;
-        transform_vector_by_basis(f, f, moby + 0xC0);
-        FUN_L00_0026cbb0(e, f, 0x4F007FFF, 0x1FFFFFFF, scale_game_frames(10), 1, 20000.0f);
+        *(OvlQuad *)world_effect_direction = 0;
+        world_effect_direction[2] = 0.02f;
+        transform_vector_by_basis(world_effect_direction, world_effect_direction, moby + 0xC0);
+        FUN_L00_0026cbb0(effect_spawn_position, world_effect_direction, 0x4F007FFF, 0x1FFFFFFF, scale_game_frames(10), 1, 20000.0f);
     }
 }
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002A87D0), where it is exact; names translated to the US level program. */
