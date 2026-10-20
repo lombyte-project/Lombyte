@@ -1813,11 +1813,11 @@ void toxic_crab_update(Moby2E30F8 *m) {
         break;
     case TOXIC_CRAB_STATE_FALL_TO_DEATH: {
         {
-            float tmp[4];
+            float fall_motion_scratch[4];
             int r;
 
             crab_data->f78 = crab_data->f78 - crab_data->f80;
-            FUN_L00_001ff290(tmp, m->pos, crab_data->v70);
+            FUN_L00_001ff290(fall_motion_scratch, m->pos, crab_data->v70);
             if (m->pos[2] < probe_ground_height(m->pos, 0, 0.5f)) {
                 int q;
                 float x;
