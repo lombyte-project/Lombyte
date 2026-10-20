@@ -1026,35 +1026,35 @@ extern int D_L15_0015FFD8_m __asm__("D_L15_0015FFD8");
 extern int D_L15_001ABE40[];
 
 int FUN_L15_00299ca0(void *mm) {
-    char *m = mm;
-    int idx = *(int *)(*(char **)(m + 0x78) + 0x128);
-    char *t;
+    char *moby = mm;
+    int idx = *(int *)(*(char **)(moby + 0x78) + 0x128);
+    char *linked_moby;
     float d;
-    short *p;
+    short *group_moby_entry;
     if (idx == -1)
         return 0;
-    t = (char *)D_L15_0015FFD8_m + (idx << 8);
-    if (*(int *)(*(char **)(t + 0x78) + 8) != 0)
+    linked_moby = (char *)D_L15_0015FFD8_m + (idx << 8);
+    if (*(int *)(*(char **)(linked_moby + 0x78) + 8) != 0)
         return 0;
-    if (((unsigned char *)m)[0x21] == 0xFF)
+    if (((unsigned char *)moby)[0x21] == 0xFF)
         return 1;
-    d = FUN_001f9b80((float *)(m + 0x10), (float *)(t + 0x10));
-    p = (short *)D_L15_001ABE40[((unsigned char *)m)[0x21]];
-    if (p == 0)
+    d = FUN_001f9b80((float *)(moby + 0x10), (float *)(linked_moby + 0x10));
+    group_moby_entry = (short *)D_L15_001ABE40[((unsigned char *)moby)[0x21]];
+    if (group_moby_entry == 0)
         return 1;
     do {
-        char *o = (char *)(((*(unsigned short *)p & 0x7FFF) << 8) + D_L15_0015FFD8_m);
-        if (((unsigned char *)o)[0x20] == 0xE)
+        char *listed_moby = (char *)(((*(unsigned short *)group_moby_entry & 0x7FFF) << 8) + D_L15_0015FFD8_m);
+        if (((unsigned char *)listed_moby)[0x20] == 0xE)
             return 0;
-        if (((unsigned char *)o)[0xBC] == 1) {
-            int j = *(int *)(*(char **)(o + 0x78) + 0x128);
+        if (((unsigned char *)listed_moby)[0xBC] == 1) {
+            int j = *(int *)(*(char **)(listed_moby + 0x78) + 0x128);
             if (j != -1) {
-                if (FUN_001f9b80((float *)(o + 0x10),
+                if (FUN_001f9b80((float *)(listed_moby + 0x10),
                                  (float *)((char *)D_L15_0015FFD8_m + (j << 8) + 0x10)) < d)
                     return 0;
             }
         }
-    } while (*p++ >= 0);
+    } while (*group_moby_entry++ >= 0);
     return 1;
 }
 #include "sda.h"
