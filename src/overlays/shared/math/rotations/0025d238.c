@@ -447,12 +447,12 @@ s32 FUN_L00_0025df68(s32 *path, OvlQuad *point, OvlQuad *nearest,
 extern f32 split_float_fraction(void *, f32) __asm__("FUN_L00_00200228");
 /* Wraps angle a into -pi..pi. */
 f32 normalize_angle(f32 a) __asm__("FUN_L00_0025e310");
-f32 normalize_angle(f32 a) {
+f32 normalize_angle(f32 angle_radians) {
     f32 out;
     f32 x;
     f32 pi = 3.14159274f;
     f32 tp = 6.2831855f;
-    x = a + pi;
+    x = angle_radians + pi;
     x /= tp;
     x = split_float_fraction(&out, x);
     x *= tp;
