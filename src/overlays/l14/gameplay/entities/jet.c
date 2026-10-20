@@ -189,7 +189,7 @@ void FUN_L14_002df510(struct Moby *ribbon_moby, void *path, int outer_alpha, int
     V_DF510 wm[4];
     V_DF510 world_path_points[2];
     char *moby_vars = (char *)ribbon_moby->pvars;
-    int c;
+    int inner_layer_color;
     int i;
 
     layer_quads[0].tex = get_effect_texture(0x2D);
@@ -198,11 +198,11 @@ void FUN_L14_002df510(struct Moby *ribbon_moby, void *path, int outer_alpha, int
     layer_quads[0].r70 = 0;
     layer_quads[0].col[0] = layer_quads[0].col[1] = layer_quads[0].col[2] = layer_quads[0].col[3] = (outer_alpha << 24) | 0x7F7F7F;
     layer_quads[1].tex = get_effect_texture(0x2C);
-    c = (inner_alpha << 24) | 0x7F4040;
-    layer_quads[1].col[3] = c;
-    layer_quads[1].col[2] = c;
-    layer_quads[1].col[1] = c;
-    layer_quads[1].col[0] = c;
+    inner_layer_color = (inner_alpha << 24) | 0x7F4040;
+    layer_quads[1].col[3] = inner_layer_color;
+    layer_quads[1].col[2] = inner_layer_color;
+    layer_quads[1].col[1] = inner_layer_color;
+    layer_quads[1].col[0] = inner_layer_color;
     layer_quads[1].r88 = layer_quads[0].r88;
     layer_quads[1].r80 = layer_quads[0].r80;
     layer_quads[1].r70 = layer_quads[0].r70;
