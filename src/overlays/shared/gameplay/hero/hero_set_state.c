@@ -670,7 +670,8 @@ int hero_set_state(int a, int b) {
         HERO_STATE_VEHICLE_MODE_3_IDLE = 0x53,
         HERO_STATE_VEHICLE_MODE_3_HURT = 0x56,
         HERO_STATE_VEHICLE_MODE_2_IDLE = 0x5A,
-        HERO_STATE_DROWN = 0x6A
+        HERO_STATE_DROWN = 0x6A,
+        HERO_STATE_WATER_SURFACE_HURT = 0x75
     };
     int old2088;
     char *moby;
@@ -945,7 +946,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x75:
+    case HERO_STATE_WATER_SURFACE_HURT:
     case 0x76: {
         struct Hero *p = &hero;
         char *r;
