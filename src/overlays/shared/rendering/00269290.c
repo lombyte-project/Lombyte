@@ -1085,20 +1085,20 @@ void FUN_L00_0026bca8(unsigned char *particle) {
     V26bca8 u, spawn_velocity, w;
     unsigned char *particle_data = particle + 0x20;
     unsigned char *particle_position;
-    float a, b;
+    float lifetime_size_scratch, b;
     if (FUN_001f9770_26bca8(particle + 0xA)) {
         FUN_L00_00267a08_26bca8(particle);
         return;
     }
     particle_position = particle + 0x10;
-    a = FUN_001fa6c0_26bca8(*(short *)(particle + 0xA));
+    lifetime_size_scratch = FUN_001fa6c0_26bca8(*(short *)(particle + 0xA));
     b = FUN_001fa6c0_26bca8(*(short *)(particle_data + 0x18));
-    a *= *(float *)(particle_data + 0x1C);
-    a /= b;
-    *(float *)(particle + 0xC) = a;
-    a = FUN_001fa6c0_26bca8(*(short *)(particle + 0xA));
+    lifetime_size_scratch *= *(float *)(particle_data + 0x1C);
+    lifetime_size_scratch /= b;
+    *(float *)(particle + 0xC) = lifetime_size_scratch;
+    lifetime_size_scratch = FUN_001fa6c0_26bca8(*(short *)(particle + 0xA));
     *(int *)(particle + 4) = FUN_L00_002371e0_26bca8(*(int *)(particle_data + 0x14), *(int *)(particle_data + 0x10),
-                                              a / FUN_001fa6c0_26bca8(*(short *)(particle_data + 0x18)));
+                                              lifetime_size_scratch / FUN_001fa6c0_26bca8(*(short *)(particle_data + 0x18)));
     FUN_001f9a10_26bca8(particle_position, particle_position, particle_data);
     *(float *)(particle_data + 8) -= D_0015ED70_26bca8 * 14.6f;
     qcopy(&u, particle_position);
