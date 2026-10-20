@@ -46,15 +46,15 @@ extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 
 /* True when p lies inside the unit box of D_L00_001600F4 entry idx. */
-int FUN_L00_0025faf0(float *p, int idx) {
+int FUN_L00_0025faf0(float *point, int idx) {
     float a[4] __attribute__((aligned(16)));
     float b[4] __attribute__((aligned(16)));
-    char *e;
+    char *volume_entry;
     if (idx >= 0) {
-        e = (char *)D_L00_001600F4 + idx * 128;
-        subtract_vector_xyz(a, p, e + 0x30);
+        volume_entry = (char *)D_L00_001600F4 + idx * 128;
+        subtract_vector_xyz(a, point, volume_entry + 0x30);
         a[3] = 0;
-        transform_vector_by_basis(b, a, e + 0x40);
+        transform_vector_by_basis(b, a, volume_entry + 0x40);
         if (fast_vec_length(b) < 1.0f)
             return 1;
     }
