@@ -11,7 +11,7 @@ void matrix_to_quaternion(void *arg0, void *arg1) __asm__("FUN_00214260");
 void matrix_to_quaternion(void *output_quaternion, void *rotation_matrix) {
     float *q = output_quaternion;
     float(*m)[4] = rotation_matrix;
-    QuatNext n = D_0015FFD8;
+    QuatNext next_axis_indices = D_0015FFD8;
     float mat[3][3];
     float trace;
     float s;
@@ -42,8 +42,8 @@ void matrix_to_quaternion(void *output_quaternion, void *rotation_matrix) {
         if (mat[2][2] > mat[i][i]) {
             i = 2;
         }
-        j = n.next[i];
-        k = n.next[j];
+        j = next_axis_indices.next[i];
+        k = next_axis_indices.next[j];
         s = square_root(mat[i][i] - (mat[j][j] + mat[k][k]) + 1.0f);
         q[i] = s * 0.5f;
         if (s != 0.0f) {
