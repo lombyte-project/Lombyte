@@ -494,6 +494,25 @@ extern u32 strlen(const char *);
 /* Debug menu input: moves between the columns and rows and changes the selected toggle, mode, item
    count or fog value; the last column records occlusion sample points to files. */
 void FUN_L00_001f4598(void) {
+    enum {
+        DEBUG_COLUMN_UPDATE_FLAGS = 0,
+        DEBUG_COLUMN_DRAW_FLAGS = 2,
+        DEBUG_COLUMN_ITEM_COUNTS = 3,
+        DEBUG_COLUMN_FOG = 4
+    };
+    enum {
+        DEBUG_OPTION_ROW_CONTROL_MODE = 0,
+        DEBUG_OPTION_ROW_PROFILER_MODE = 1,
+        DEBUG_OPTION_ROW_OCCLUSION_MODE = 2,
+        DEBUG_OPTION_ROW_BOOKMARK = 3,
+        DEBUG_OPTION_ROW_INVINCIBILITY = 4,
+        DEBUG_OPTION_ROW_DRAW_DISTANCE_OVERRIDE = 5,
+        DEBUG_OPTION_ROW_COLLISION_MODE = 6,
+        DEBUG_OPTION_ROW_TELEVISION_MODE = 7,
+        DEBUG_OPTION_ROW_SCREEN_MODE = 8,
+        DEBUG_OPTION_ROW_SCENE_INDEX = 9,
+        DEBUG_OPTION_ROW_SEGMENT_INDEX = 10
+    };
     DebugRowCounts row_counts;
     union {
         struct {
@@ -544,7 +563,7 @@ void FUN_L00_001f4598(void) {
     if (g_debug_menu.selected_row >= row_counts.rows[g_debug_menu.selected_column])
         g_debug_menu.selected_row = row_counts.rows[g_debug_menu.selected_column] - 1;
     switch (g_debug_menu.selected_column) {
-    case 0:
+    case DEBUG_COLUMN_UPDATE_FLAGS:
         if (D_0013C940.buttons.w.pressed & 0x40) {
             s32 flag = 1 << g_debug_menu.selected_row;
             g_debug_menu.update_flags ^= flag;
@@ -558,7 +577,7 @@ void FUN_L00_001f4598(void) {
         break;
     case 1:
         switch (g_debug_menu.selected_row) {
-        case 0:
+        case DEBUG_OPTION_ROW_CONTROL_MODE:
             if (D_0013C940.buttons.w.pressed & 0x50) {
                 if (D_0013C940.buttons.w.pressed & 0x40) {
                     if (++g_debug_menu.control_mode >= 4)
@@ -593,7 +612,7 @@ void FUN_L00_001f4598(void) {
                 }
             }
             break;
-        case 1:
+        case DEBUG_OPTION_ROW_PROFILER_MODE:
             if (D_0013C940.buttons.w.pressed & 0x40) {
                 if (++g_debug_menu.profiler_mode >= 8)
                     g_debug_menu.profiler_mode = 0;
@@ -603,7 +622,7 @@ void FUN_L00_001f4598(void) {
                     g_debug_menu.profiler_mode = 7;
             }
             break;
-        case 2:
+        case DEBUG_OPTION_ROW_OCCLUSION_MODE:
             if (!D_L00_0015F600) {
                 g_debug_menu.occlusion_mode = 0;
                 break;
@@ -617,15 +636,15 @@ void FUN_L00_001f4598(void) {
                     g_debug_menu.occlusion_mode = 2;
             }
             break;
-        case 3:
+        case DEBUG_OPTION_ROW_BOOKMARK:
             if (D_0013C940.buttons.w.pressed & 0x50)
                 g_debug_menu.bookmark_enabled = !g_debug_menu.bookmark_enabled;
             break;
-        case 4:
+        case DEBUG_OPTION_ROW_INVINCIBILITY:
             if (D_0013C940.buttons.w.pressed & 0x50)
                 g_debug_menu.invincibility_enabled = !g_debug_menu.invincibility_enabled;
             break;
-        case 5:
+        case DEBUG_OPTION_ROW_DRAW_DISTANCE_OVERRIDE:
             if (D_0013C940.buttons.w.pressed & 0x50) {
                 g_debug_menu.draw_distance_override = !g_debug_menu.draw_distance_override;
                 if (g_debug_menu.draw_distance_override) {
@@ -643,7 +662,7 @@ void FUN_L00_001f4598(void) {
                 }
             }
             break;
-        case 6:
+        case DEBUG_OPTION_ROW_COLLISION_MODE:
             if (D_0013C940.buttons.w.pressed & 0x40) {
                 if (++g_debug_menu.collision_mode >= 3)
                     g_debug_menu.collision_mode = 0;
@@ -653,11 +672,11 @@ void FUN_L00_001f4598(void) {
                     g_debug_menu.collision_mode = 2;
             }
             break;
-        case 7:
+        case DEBUG_OPTION_ROW_TELEVISION_MODE:
             if (D_0013C940.buttons.w.pressed & 0x50)
                 g_debug_menu.television_mode = !g_debug_menu.television_mode;
             break;
-        case 8:
+        case DEBUG_OPTION_ROW_SCREEN_MODE:
             if (D_0013C940.buttons.w.pressed & 0x50) {
                 g_debug_menu.screen_mode = !g_debug_menu.screen_mode;
                 if (g_debug_menu.screen_mode) {
@@ -676,7 +695,7 @@ void FUN_L00_001f4598(void) {
                 update_view_context();
             }
             break;
-        case 9:
+        case DEBUG_OPTION_ROW_SCENE_INDEX:
             if (D_0013C940.buttons.w.pressed & 0x50) {
                 if (D_0013C940.buttons.w.pressed & 0x40) {
                     g_debug_menu.scene_index++;
@@ -693,7 +712,7 @@ void FUN_L00_001f4598(void) {
             else
                 g_debug_menu.unknown_a4 = 0;
             break;
-        case 10:
+        case DEBUG_OPTION_ROW_SEGMENT_INDEX:
             if (D_0013C940.buttons.w.pressed & 0x50) {
                 if (D_0013C940.buttons.w.pressed & 0x40) {
                     g_debug_menu.segment_index++;
@@ -714,11 +733,11 @@ void FUN_L00_001f4598(void) {
             break;
         }
         break;
-    case 2:
+    case DEBUG_COLUMN_DRAW_FLAGS:
         if (D_0013C940.buttons.w.pressed & 0x40)
             g_debug_menu.draw_flags ^= 1 << g_debug_menu.selected_row;
         break;
-    case 3: {
+    case DEBUG_COLUMN_ITEM_COUNTS: {
         s32 *count;
         s32 limit = 999999;
         if (g_debug_menu.selected_row < 13) {
@@ -769,7 +788,7 @@ void FUN_L00_001f4598(void) {
         }
         break;
     }
-    case 4:
+    case DEBUG_COLUMN_FOG:
         if (g_debug_menu.selected_row == 0) {
             u64 buttons = D_0013C940.buttons.held_pressed;
             if (buttons & 0x800000040ULL)
