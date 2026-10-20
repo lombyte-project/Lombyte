@@ -6,16 +6,16 @@ s32 print_debug_text_centered(s32 x, s32 y, s32 color, u8 *text) __asm__("FUN_00
 
 s32 print_debug_text_centered(s32 x, s32 y, s32 color, u8 *text) {
     s32 width;
-    u8 *p;
-    u8 c;
+    u8 *text_cursor;
+    u8 character_offset;
     s32 idx;
 
     width = 0;
-    p = text;
-    while (*p != 0) {
-        c = *p++ - 0x20;
-        idx = c;
-        if (c >= 0x60) {
+    text_cursor = text;
+    while (*text_cursor != 0) {
+        character_offset = *text_cursor++ - 0x20;
+        idx = character_offset;
+        if (character_offset >= 0x60) {
             idx = 0x20;
         }
         width += font_char_widths[idx];
