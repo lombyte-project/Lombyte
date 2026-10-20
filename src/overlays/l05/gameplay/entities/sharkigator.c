@@ -1173,13 +1173,13 @@ void extermibot_update(unsigned char *moby) {
         moby_data[0x5A] = truncate_float_to_s32_c4(11.2f);
         FUN_L01_0026d930(moby_data + 0xD0);
         {
-        float q = D_L05_00161A98;
+        float movement_scale = D_L05_00161A98;
         *(float *)(moby_data + 0xDC) = 2.0f;
         *(float *)(moby_data + 0xD8) = 2.0f;
         {
-        int r0 = truncate_float_to_s32_c4(q * 409.6f);
+        int quantized_movement_scale = truncate_float_to_s32_c4(movement_scale * 409.6f);
         float e6 = D_0015ED6C * 6.0f;
-        *(int *)(moby_data + 0xD0) = r0;
+        *(int *)(moby_data + 0xD0) = quantized_movement_scale;
         *(float *)(moby_data + 0xF4) = e6;
         }
         }
