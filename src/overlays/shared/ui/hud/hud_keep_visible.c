@@ -187,15 +187,15 @@ s32 hud_keep_visible(s32 key, s32 val) __asm__("FUN_L00_00235e18");
 s32 hud_keep_visible(s32 key, s32 val) {
     s32 i;
     s32 r;
-    T_235e18 *e;
+    T_235e18 *hud_element;
     r = 1;
     for (i = 0; i < 13; i++) {
         if (D_L00_0017DC50_235e18[i].key == key)
             break;
     }
     if (i < 13 && D_L00_0017DC50_235e18[i].f68 == 0) {
-        e = D_L00_0017DC50_235e18 + i;
-        e->v = (val < e->v) ? e->v : val;
+        hud_element = D_L00_0017DC50_235e18 + i;
+        hud_element->v = (val < hud_element->v) ? hud_element->v : val;
         return 0;
     }
     return 1;
