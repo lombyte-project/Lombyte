@@ -10,21 +10,21 @@ extern void FUN_001f9810_8670(void *, int) __asm__("FUN_001f9810");
 extern void FUN_L00_00250df8_8670(void *) __asm__("FUN_L00_00250df8");
 
 char *FUN_L12_00308670(char *source_object) {
-    unsigned char *m = (unsigned char *)FUN_0020c4f8_8670(0x55B);
-    if (m != 0) {
-        char *d = *(char **)(m + 0x78);
-        m[0x30] = 0xFF;
-        *(short *)(m + 0x32) = 0x7F;
-        m[0x31] = 1;
-        m[0x20] = 0;
-        *(OvlQuad *)(m + 0x10) = *(OvlQuad *)(source_object + 0x10);
-        *(OvlQuad *)(m + 0x40) = *(OvlQuad *)(source_object + 0x40);
-        *(char **)(m + 0xB8) = source_object;
-        FUN_001f9810_8670(d, 0x20);
-        *(int *)(d + 0x10) = (int)(d + 0x20);
-        FUN_L00_00250df8_8670(m);
+    unsigned char *allocated_object = (unsigned char *)FUN_0020c4f8_8670(0x55B);
+    if (allocated_object != 0) {
+        char *object_data = *(char **)(allocated_object + 0x78);
+        allocated_object[0x30] = 0xFF;
+        *(short *)(allocated_object + 0x32) = 0x7F;
+        allocated_object[0x31] = 1;
+        allocated_object[0x20] = 0;
+        *(OvlQuad *)(allocated_object + 0x10) = *(OvlQuad *)(source_object + 0x10);
+        *(OvlQuad *)(allocated_object + 0x40) = *(OvlQuad *)(source_object + 0x40);
+        *(char **)(allocated_object + 0xB8) = source_object;
+        FUN_001f9810_8670(object_data, 0x20);
+        *(int *)(object_data + 0x10) = (int)(object_data + 0x20);
+        FUN_L00_00250df8_8670(allocated_object);
     }
-    return (char *)m;
+    return (char *)allocated_object;
 }
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern void allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
