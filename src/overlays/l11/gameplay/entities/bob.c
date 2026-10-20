@@ -962,21 +962,21 @@ struct TargetSets {
 
 /* 2 when a live moby of the current target groups is within 10 units, 1 when one is alive, else 0. */
 int FUN_L11_002d2460(struct Moby *moby) {
-    struct TargetSets *d = (struct TargetSets *)moby->pvars;
+    struct TargetSets *target_sets = (struct TargetSets *)moby->pvars;
     int found = 0;
     int i;
     int group;
-    short *p;
+    short *group_moby_entry;
 
     for (i = 0; i < 4; i++) {
-        group = d->sets[d->set][i].group;
+        group = target_sets->sets[target_sets->set][i].group;
         if (group < 0 || group > D_L11_0015FFF4)
             break;
-        p = D_L11_001AC240[group];
-        if (p == 0)
+        group_moby_entry = D_L11_001AC240[group];
+        if (group_moby_entry == 0)
             continue;
         do {
-            int offset = (*p & 0x7fff) << 8;
+            int offset = (*group_moby_entry & 0x7fff) << 8;
             struct Moby *other = (struct Moby *)(offset + D_L11_0015FFD8);
             if ((signed char)other->state >= 0) {
                 if (other->oclass != 0x4de || FUN_L11_00316128((char *)other) == 0) {
@@ -985,7 +985,7 @@ int FUN_L11_002d2460(struct Moby *moby) {
                         return 2;
                 }
             }
-        } while (*p++ >= 0);
+        } while (*group_moby_entry++ >= 0);
     }
     return found;
 }
