@@ -456,7 +456,7 @@ void update_birdbot_projectile(DropMoby *projectile) {
     Vec4 prev;
     DropProbe probe;
     u128 burst_position;
-    f32 a;
+    f32 scaled_ten;
     f32 b;
     f32 zero;
     f32 one;
@@ -469,10 +469,10 @@ void update_birdbot_projectile(DropMoby *projectile) {
     zero = 0.0f;
     one = 1.0f;
     ten = 10.0f;
-    a = multiply_global_factor_ed64(ten);
+    scaled_ten = multiply_global_factor_ed64(ten);
     b = multiply_global_factor_ed64(ten);
     b = b * multiply_global_factor_ed64(ten);
-    ((f32 *)&v->vel)[2] -= (a * zero + one) * 2.0f / b;
+    ((f32 *)&v->vel)[2] -= (scaled_ten * zero + one) * 2.0f / b;
     fast_vec_add(pos, pos, &v->vel);
     if (projectile->pos.f[0] < zero || projectile->pos.f[1] < zero || projectile->pos.f[2] < zero ||
         vector_distance(pos, D_L01_00167240) > 64.0f) {
