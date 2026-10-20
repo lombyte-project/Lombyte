@@ -1711,9 +1711,9 @@ void FUN_L00_002e46b8(char *camera) {
     FUN_001f9a10_c(camera_state, &translation_delta, camera_state);
     g = D_0013E533 + 0xE1D;
     if (*(short *)(g + 0x308) == 0) {
-        char *p = *(char **)(g + 0x2FC);
+        char *ground_moby = *(char **)(g + 0x2FC);
         char *q;
-        if (p == 0 || *(short *)(p + 0xA6) != 0x22D ||
+        if (ground_moby == 0 || *(short *)(ground_moby + 0xA6) != 0x22D ||
             ((q = b - 0x190), FUN_001f96f8_c(0x1E)) < *(int *)(q + 0x398)) {
             char *g2 = D_0013E533 + 0xE1D;
             *(float *)(*(char **)(camera + 0x70) + 0x1C8) = *(float *)(g2 + 0x14C);
