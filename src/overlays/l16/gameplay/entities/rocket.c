@@ -1042,21 +1042,21 @@ extern void draw_geometry_quad_u(void *, void *, int) __asm__("draw_geometry_qua
 extern int func_001FA8A8_caa18(int, int, float) __asm__("FUN_001fa6e0");
 extern int func_001FA898_caa18(float) __asm__("FUN_001fa6d0");
 
-void FUN_L16_002c9cd0(char *m) {
+void FUN_L16_002c9cd0(char *moby) {
     L16RibbonPacket_u packets[2];
-    char *d = *(char **)(m + 0x78);
-    float scale = vector_length_xyz(D_L16_001600EC_m + ((*(int *)(d + 0x60)) << 7)) * 2.001f;
+    char *conveyor_data = *(char **)(moby + 0x78);
+    float scale = vector_length_xyz(D_L16_001600EC_m + ((*(int *)(conveyor_data + 0x60)) << 7)) * 2.001f;
     int count = func_001FA898_caa18(scale);
     float step = 2.0f / scale;
     int period, tint, color, limit, j;
     float phase;
     long modebits, flags;
-    (*(float *)((char *)d + 0x70)) =
-        (*(float *)((char *)d + 0x70)) + (*(float *)((char *)d + 0x6C));
-    if ((*(float *)((char *)d + 0x70)) > 1.0f)
-        (*(float *)((char *)d + 0x70)) -= 1.0f;
-    else if ((*(float *)((char *)d + 0x70)) < 0.0f)
-        (*(float *)((char *)d + 0x70)) += 1.0f;
+    (*(float *)((char *)conveyor_data + 0x70)) =
+        (*(float *)((char *)conveyor_data + 0x70)) + (*(float *)((char *)conveyor_data + 0x6C));
+    if ((*(float *)((char *)conveyor_data + 0x70)) > 1.0f)
+        (*(float *)((char *)conveyor_data + 0x70)) -= 1.0f;
+    else if ((*(float *)((char *)conveyor_data + 0x70)) < 0.0f)
+        (*(float *)((char *)conveyor_data + 0x70)) += 1.0f;
     modebits = 0x8000000000L;
     period = scale_game_frames(120);
     flags = 0xFF9000000260L;
@@ -1081,7 +1081,7 @@ void FUN_L16_002c9cd0(char *m) {
         for (vertex = 0; vertex < 4; vertex++) {
             packets[0].uv[vertex].u = D_L16_001D2FF0[vertex][0];
             packets[0].uv[vertex].v = D_L16_001D2FF0[vertex][1];
-            packets[1].uv[vertex].u = D_L16_001D3010[vertex][0] - (*(float *)(d + 0x70));
+            packets[1].uv[vertex].u = D_L16_001D3010[vertex][0] - (*(float *)(conveyor_data + 0x70));
             packets[1].uv[vertex].v = D_L16_001D3010[vertex][1];
             packets[0].color[vertex] = tint;
             packets[1].color[vertex] = color;
@@ -1114,8 +1114,8 @@ void FUN_L16_002c9cd0(char *m) {
                 packets[1].color[1] = color;
                 packets[1].color[0] = color;
             }
-            draw_geometry_quad_u(&packets[0], D_L16_001600EC_m + ((*(int *)(d + 0x60)) << 7), 0);
-            draw_geometry_quad_u(&packets[1], D_L16_001600EC_m + ((*(int *)(d + 0x60)) << 7), 0);
+            draw_geometry_quad_u(&packets[0], D_L16_001600EC_m + ((*(int *)(conveyor_data + 0x60)) << 7), 0);
+            draw_geometry_quad_u(&packets[1], D_L16_001600EC_m + ((*(int *)(conveyor_data + 0x60)) << 7), 0);
             {
                 float *point = packets[0].point[0];
                 for (j = 3; j >= 0; j--) {
