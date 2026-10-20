@@ -37,7 +37,7 @@ f32 FUN_L06_00242950(f32 a, f32 b, f32 target_z) {
     V4_32b90 v;
     V4_32b90 vector_scratch;
     V4_32b90 hero_position_copy;
-    f32 o[6];
+    f32 quadratic_roots[6];
     f32 x, y, z;
 
     switch (hero.unk20B3) {
@@ -56,10 +56,10 @@ f32 FUN_L06_00242950(f32 a, f32 b, f32 target_z) {
             }
         }
         if (target_z > 0.0f) {
-            if (FUN_L00_002595a0_32b90(&o[0], &o[1], b * -0.5f, hero.motion.velocity.f[2] - b * -0.5f,
+            if (FUN_L00_002595a0_32b90(&quadratic_roots[0], &quadratic_roots[1], b * -0.5f, hero.motion.velocity.f[2] - b * -0.5f,
                                        hero.motion.pos.f[2] - target_z) > 0 &&
-                o[0] > 0.0f) {
-                return o[0];
+                quadratic_roots[0] > 0.0f) {
+                return quadratic_roots[0];
             }
         }
         break;
@@ -79,8 +79,8 @@ f32 FUN_L06_00242950(f32 a, f32 b, f32 target_z) {
             z = FUN_L00_00233a78_32b90(&hero.motion.velocity) - nb;
             x = FUN_L00_00233a78_32b90(&hero.motion.pos);
             y = FUN_L00_00233a78_32b90(&D_L06_001745E0);
-            if (FUN_L00_002595a0_32b90(&o[2], &o[3], nb, z, x - y) > 0 && o[2] > 0.0f) {
-                return o[2];
+            if (FUN_L00_002595a0_32b90(&quadratic_roots[2], &quadratic_roots[3], nb, z, x - y) > 0 && quadratic_roots[2] > 0.0f) {
+                return quadratic_roots[2];
             }
         }
         break;
@@ -103,8 +103,8 @@ f32 FUN_L06_00242950(f32 a, f32 b, f32 target_z) {
             z = FUN_L00_00233a78_32b90(&hero.motion.velocity) - nb;
             x = FUN_L00_00233a78_32b90(&hero.motion.pos);
             y = FUN_L00_00233a78_32b90(&D_L06_001745E0);
-            if (FUN_L00_002595a0_32b90(&o[4], &o[5], nb, z, x - y) > 0 && o[4] > 0.0f) {
-                return o[4];
+            if (FUN_L00_002595a0_32b90(&quadratic_roots[4], &quadratic_roots[5], nb, z, x - y) > 0 && quadratic_roots[4] > 0.0f) {
+                return quadratic_roots[4];
             }
         }
         break;
