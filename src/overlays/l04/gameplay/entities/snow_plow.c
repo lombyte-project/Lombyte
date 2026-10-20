@@ -819,7 +819,7 @@ void woodcut_bot_update(WBMoby *m) {
     };
     int excited = 0;
     WBData *d = m->d;
-    unsigned char *p120;
+    unsigned char *manipulator;
     short *tm;
     float *pos;
     unsigned char *p;
@@ -836,7 +836,7 @@ void woodcut_bot_update(WBMoby *m) {
     FUN_L00_0025fcb8(m, tgt, excited ? d->f3E8 * 2.0f : d->f3E8);
     p = &d->f120;
     FUN_L00_00263ac8(2.5f, m, 6, p);
-    p120 = p;
+    manipulator = p;
     pos = m->pos;
     if (m->f31 != 0 && FUN_001f9b48(pos, D_L04_00166F40) < 27.0f) {
         FUN_L00_0025a120(m);
@@ -974,24 +974,24 @@ void woodcut_bot_update(WBMoby *m) {
         if (m->anim == 4 && hd > 16.0f && hd < 27.0f) {
             WBJoints joints = D_L04_001DC450;
             float pts[6][4];
-            WBQuery s;
+            WBQuery melee_hit_query;
             float mid[4];
             int i;
 
-            s.f14 = 0x10001;
-            s.f1C = 1.0f;
-            s.m = m;
-            subtract_vector_xyz(&s, &hero.motion.pos, pos);
-            normalize_vector_xyz(&s, &s, frame_time * 5.0f);
-            s.f20 = 1;
+            melee_hit_query.f14 = 0x10001;
+            melee_hit_query.f1C = 1.0f;
+            melee_hit_query.m = m;
+            subtract_vector_xyz(&melee_hit_query, &hero.motion.pos, pos);
+            normalize_vector_xyz(&melee_hit_query, &melee_hit_query, frame_time * 5.0f);
+            melee_hit_query.f20 = 1;
             transform_scaled_vertex_batch(m, 6, &joints, pts);
             for (i = 0; i < 5; i++)
-                coll_line_fix(pts[i], pts[i + 1], 9, m, &s);
+                coll_line_fix(pts[i], pts[i + 1], 9, m, &melee_hit_query);
             add_vector_xyz(mid, pts[0], pts[4]);
             scale_vector_xyz(mid, mid, 0.5f);
-            collect_mobies_in_sphere(mid, FUN_001f9b48(pts[0], pts[4]) * 0.5f, 0x10, m, &s);
+            collect_mobies_in_sphere(mid, FUN_001f9b48(pts[0], pts[4]) * 0.5f, 0x10, m, &melee_hit_query);
             moby_point_position(m, 0x11, mid);
-            collect_mobies_in_sphere(mid, 0.5f, 0x10, m, &s);
+            collect_mobies_in_sphere(mid, 0.5f, 0x10, m, &melee_hit_query);
         }
     }
     fast_dec_timer_s16(tm);
@@ -1010,7 +1010,7 @@ void woodcut_bot_update(WBMoby *m) {
         d->f5A = 8;
         qcopy(d->f3B0, pos);
         if (d->f121 == 0)
-            attach_manipulator(m, 6, p120);
+            attach_manipulator(m, 6, manipulator);
         FUN_L04_002d1418(m);
         if (d->f3C0 != 0) {
             m->state = 3;
