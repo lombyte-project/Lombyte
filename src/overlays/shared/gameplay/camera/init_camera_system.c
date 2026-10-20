@@ -275,12 +275,12 @@ extern float fast_cos(float) __asm__("FUN_001f9dc8");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 
-void FUN_L00_001ed580(float *o, float *v, void *m) {
-    o[0] = v[2] * fast_cos(v[1]) * fast_cos(v[0]);
-    o[1] = v[2] * fast_cos(v[1]) * fast_sin(v[0]);
-    o[2] = v[2] * fast_sin(v[1]);
-    *(int *)(o + 3) = 0;
-    add_vector_xyz(o, o, m);
+void FUN_L00_001ed580(float *output_position, float *v, void *origin_position) {
+    output_position[0] = v[2] * fast_cos(v[1]) * fast_cos(v[0]);
+    output_position[1] = v[2] * fast_cos(v[1]) * fast_sin(v[0]);
+    output_position[2] = v[2] * fast_sin(v[1]);
+    *(int *)(output_position + 3) = 0;
+    add_vector_xyz(output_position, output_position, origin_position);
 }
 #define NOT_SDA
 
