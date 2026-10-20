@@ -575,9 +575,9 @@ void blarg_ship_update(struct Moby *moby) {
     float movement_target_position[4];
     float hero_position_delta[4];
     float clamped_euler_angles[4];
-    float m40[4];
-    float m50[4];
-    float m60[4];
+    float rotation_basis_row0[4];
+    float rotation_basis_row1[4];
+    float rotation_basis_row2[4];
     float hero_relative_position[4];
     float firing_target_delta[4];
     float firing_direction[4];
@@ -673,16 +673,16 @@ void blarg_ship_update(struct Moby *moby) {
         } else if (clamped_euler_angles[1] < -0.2617994f) {
             clamped_euler_angles[1] = -0.2617994f;
         }
-        vu_euler_rotation_basis(m40, clamped_euler_angles);
+        vu_euler_rotation_basis(rotation_basis_row0, clamped_euler_angles);
         subtract_vector_xyz(hero_position_delta, &hero.motion.pos, moby_pvars + 0xB0);
         qcopy(moby_pvars + 0xB0, &hero.motion.pos);
         add_vector_xyz(&moby->pos, &moby->pos, hero_position_delta);
         offset_angle = fast_add_rotations(0.7853982f, (float)*(int *)(moby_pvars + 0x88) * 1.5707964f);
-        normalize_vector_xyz(scratch_vector, m50, fast_sin(offset_angle) * 8.0f);
+        normalize_vector_xyz(scratch_vector, rotation_basis_row1, fast_sin(offset_angle) * 8.0f);
         add_vector_xyz(movement_target_position, D_L17_001676C0, scratch_vector);
-        normalize_vector_xyz(scratch_vector, m60, fast_cos(offset_angle) * 8.0f);
+        normalize_vector_xyz(scratch_vector, rotation_basis_row2, fast_cos(offset_angle) * 8.0f);
         add_vector_xyz(movement_target_position, movement_target_position, scratch_vector);
-        normalize_vector_xyz(scratch_vector, m40, 20.0f);
+        normalize_vector_xyz(scratch_vector, rotation_basis_row0, 20.0f);
         add_vector_xyz(movement_target_position, movement_target_position, scratch_vector);
         subtract_vector_xyz(scratch_vector, movement_target_position, &moby->pos);
         len = vector_length_xyz(scratch_vector);
