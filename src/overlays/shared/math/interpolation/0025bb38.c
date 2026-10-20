@@ -132,25 +132,25 @@ unsigned int FUN_L00_0025bfe0(float r, float g, float b, float a) {
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025D0E0), where it is exact; names translated to the US level program. */
 
 /* Swaps a/b, b/c and c/a as bits 1, 2 and 4 of mask select. */
-void FUN_L00_0025c088(int *a, int *b, int *c, int mask) {
+void FUN_L00_0025c088(int *red_channel, int *b, int *blue_channel, int mask) {
     int x, y;
     if (mask & 1) {
         x = *b;
-        y = *a;
-        *a = x;
+        y = *red_channel;
+        *red_channel = x;
         *b = y;
     }
     if (mask & 2) {
-        x = *c;
+        x = *blue_channel;
         y = *b;
         *b = x;
-        *c = y;
+        *blue_channel = y;
     }
     if (mask & 4) {
-        x = *a;
-        y = *c;
-        *c = x;
-        *a = y;
+        x = *red_channel;
+        y = *blue_channel;
+        *blue_channel = x;
+        *red_channel = y;
     }
 }
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025D140), where it is exact; names translated to the US level program. */
