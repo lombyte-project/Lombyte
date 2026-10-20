@@ -1919,10 +1919,10 @@ void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 
 void mushroom_underside_update(void *self) __asm__("FUN_L01_00307c48");
 void mushroom_underside_update(void *self) {
-    u8 *p;
+    u8 *hit;
 
-    p = trooper_find_hit(self, 0x10000, 0);
-    if (p != NULL && *(f32 *)(p + 0x2C) > 0.0f) {
+    hit = trooper_find_hit(self, 0x10000, 0);
+    if (hit != NULL && *(f32 *)(hit + 0x2C) > 0.0f) {
         mark_moby_for_removal(self);
     }
 }
