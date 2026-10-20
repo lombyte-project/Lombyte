@@ -80,9 +80,9 @@ extern void FUN_L00_0025fcb8(char *, float *, float);
 int FUN_L04_002c1e98(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     float vec[20];
-    float d0;
+    float target_distance;
     float s;
-    char *o;
+    char *other_moby;
     int flag = 0;
     if (*(int *)(data + 0x38) != 0 || *(short *)(data + 0x136) != 0) {
         flag = 1;
@@ -94,11 +94,11 @@ int FUN_L04_002c1e98(struct Moby *moby) {
         s = *(float *)(data + 0x140);
     }
     FUN_L00_0025fcb8(moby, vec, s);
-    d0 = vector_distance((float *)&moby->pos, vec);
-    for (o = D_L04_0015FFE4; o != 0; o = *(char **)(o + 0x28)) {
-        if (o != moby && *(short *)(o + 0xA6) == 0x154) {
-            float *q = (float *)(o + 0x10);
-            if (vector_distance((float *)&moby->pos, q) < 3.0f || vector_distance(q, vec) < d0) {
+    target_distance = vector_distance((float *)&moby->pos, vec);
+    for (other_moby = D_L04_0015FFE4; other_moby != 0; other_moby = *(char **)(other_moby + 0x28)) {
+        if (other_moby != moby && *(short *)(other_moby + 0xA6) == 0x154) {
+            float *other_position = (float *)(other_moby + 0x10);
+            if (vector_distance((float *)&moby->pos, other_position) < 3.0f || vector_distance(other_position, vec) < target_distance) {
                 return 0;
             }
         }
