@@ -52,18 +52,18 @@ extern void fill_transfer_words(u8 *, s32, s32) __asm__("func_001F97E8");
 
 void FUN_L00_001fea18(void) {
     int i;
-    P *p = glints;
-    for (i = 15; i >= 0; i--, p++) {
-        if (p->life > 0) {
-            p->f = fast_subtract_rotations(p->f, frame_time * 5.2359877f);
-            if (p->life > 12) {
-                p->ang = p->ang + 5;
+    P *glint_slot = glints;
+    for (i = 15; i >= 0; i--, glint_slot++) {
+        if (glint_slot->life > 0) {
+            glint_slot->f = fast_subtract_rotations(glint_slot->f, frame_time * 5.2359877f);
+            if (glint_slot->life > 12) {
+                glint_slot->ang = glint_slot->ang + 5;
             } else {
-                p->ang = p->ang - 5;
+                glint_slot->ang = glint_slot->ang - 5;
             }
-            p->life = p->life - 1;
-            if (p->life <= 0) {
-                fill_transfer_words(p, 0, 0x20);
+            glint_slot->life = glint_slot->life - 1;
+            if (glint_slot->life <= 0) {
+                fill_transfer_words(glint_slot, 0, 0x20);
             }
         }
     }
