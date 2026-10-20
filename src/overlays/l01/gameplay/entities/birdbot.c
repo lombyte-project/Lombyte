@@ -692,7 +692,7 @@ void FUN_L01_002e6518_c(SplashMoby *m, u128 *origin) __asm__("FUN_L01_002e6518")
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void birdbot_update(PeMoby *m) __asm__("FUN_L01_002e6bf0");
-void birdbot_update(PeMoby *m) {
+void birdbot_update(PeMoby *birdbot_moby) {
     enum {
         BIRDBOT_STATE_INITIALIZE = 0,
         BIRDBOT_STATE_TRACK_TARGET_AND_SELECT_ACTION = 1,
@@ -737,39 +737,39 @@ void birdbot_update(PeMoby *m) {
 
     flag = 0;
     res = 0;
-    v = m->vars;
+    v = birdbot_moby->vars;
     idx = v->main.idx;
-    frame = compute_interpolated_record_value(m);
+    frame = compute_interpolated_record_value(birdbot_moby);
     if (v->w38 != 0 || v->h1E2 != 0) {
         flag = 1;
     }
-    FUN_L00_00263ac8_u(2.5f, (int)m, 2, v->x200);
-    qcopy(&old, &m->pos);
+    FUN_L00_00263ac8_u(2.5f, (int)birdbot_moby, 2, v->x200);
+    qcopy(&old, &birdbot_moby->pos);
     if (v->w1C8 > 0) {
         v->w1C8--;
     }
-    if (m->state != 0) {
-        res = FUN_L01_002e6790(m, &idx);
+    if (birdbot_moby->state != 0) {
+        res = FUN_L01_002e6790(birdbot_moby, &idx);
     }
     r = flag ? v->f1A0 * 2.0f : v->f1A0;
-    FUN_L00_0025fcb8(m, &tgt, r);
-    hit = find_moby_hit(m, 0x210000, 0);
-    kind = FUN_L00_0025a478_u(m, hit, &v->f20, 0, &hits, &dmg, 0, 4);
+    FUN_L00_0025fcb8(birdbot_moby, &tgt, r);
+    hit = find_moby_hit(birdbot_moby, 0x210000, 0);
+    kind = FUN_L00_0025a478_u(birdbot_moby, hit, &v->f20, 0, &hits, &dmg, 0, 4);
     fast_dec_timer_s16(&v->h26);
     if (hit != 0 && v->h26 == 0) {
         if (hit->src != 0) {
             struct Hero *player = &hero;
 
             if (hit->src != player->items[0].moby) {
-                ang = FUN_001f9e90_cf(m->pos.f[0] - hit->src->pos.f[0],
-                                      m->pos.f[1] - hit->src->pos.f[1]);
+                ang = FUN_001f9e90_cf(birdbot_moby->pos.f[0] - hit->src->pos.f[0],
+                                      birdbot_moby->pos.f[1] - hit->src->pos.f[1]);
             } else {
-                ang = FUN_001f9e90_cf(m->pos.f[0] - player->motion.pos.f[0], m->pos.f[1] - player->motion.pos.f[1]);
+                ang = FUN_001f9e90_cf(birdbot_moby->pos.f[0] - player->motion.pos.f[0], birdbot_moby->pos.f[1] - player->motion.pos.f[1]);
             }
         } else {
             struct Hero *player = &hero;
 
-            ang = FUN_001f9e90_cf(m->pos.f[0] - player->motion.pos.f[0], m->pos.f[1] - player->motion.pos.f[1]);
+            ang = FUN_001f9e90_cf(birdbot_moby->pos.f[0] - player->motion.pos.f[0], birdbot_moby->pos.f[1] - player->motion.pos.f[1]);
         }
         v->h1E2 = scale_game_frames(0x258);
         v->f20 -= dmg;
@@ -797,11 +797,11 @@ void birdbot_update(PeMoby *m) {
             v->bAD = 0;
             *(u128 *)&va = *(u128 *)&hit->pos;
             FUN_L00_0025ab48_u(&va, &ang, &v->f88, &v->f8C);
-            FUN_L00_0025c558_u(ang, m, v->x70, 9, scale_game_frames(2), 0);
+            FUN_L00_0025c558_u(ang, birdbot_moby, v->x70, 9, scale_game_frames(2), 0);
             v->b67 = 0xB4;
-            m->state = 0xE;
-            m->h34 &= 0xEFFF;
-            FUN_L00_0025d458_u(m, (short *)v->x60);
+            birdbot_moby->state = 0xE;
+            birdbot_moby->h34 &= 0xEFFF;
+            FUN_L00_0025d458_u(birdbot_moby, (short *)v->x60);
             v->h26 = scale_game_frames(0x3C);
             break;
         case BIRDBOT_HIT_REACTION_NONFATAL_KNOCKBACK:
@@ -818,12 +818,12 @@ void birdbot_update(PeMoby *m) {
             v->bAD = 0;
             *(u128 *)&va = *(u128 *)&hit->pos;
             FUN_L00_0025ab48_u(&va, &ang, &v->f88, &v->f8C);
-            FUN_L00_0025c558_u(ang, m, v->x70, 0xC, 6, 0);
-            if (m->b53 != 0xB) {
-                blend_moby_animation_cf(m, 0xB, 0, scale_game_frames(6));
+            FUN_L00_0025c558_u(ang, birdbot_moby, v->x70, 0xC, 6, 0);
+            if (birdbot_moby->b53 != 0xB) {
+                blend_moby_animation_cf(birdbot_moby, 0xB, 0, scale_game_frames(6));
             }
-            m->state = 0xC;
-            FUN_L00_0025d458_u(m, (short *)v->x60);
+            birdbot_moby->state = 0xC;
+            FUN_L00_0025d458_u(birdbot_moby, (short *)v->x60);
             break;
         case BIRDBOT_HIT_REACTION_LOW_SPEED_NONFATAL_KNOCKBACK:
         case BIRDBOT_HIT_REACTION_LOW_SPEED_NONFATAL_KNOCKBACK_NO_BLEND:
@@ -838,19 +838,19 @@ void birdbot_update(PeMoby *m) {
             v->bAD = 0;
             *(u128 *)&va = *(u128 *)&hit->pos;
             FUN_L00_0025ab48_u(&va, &ang, &v->f88, &v->f8C);
-            FUN_L00_0025c558_u(ang, m, v->x70, 0xE, 6, 0);
-            m->state = 0xC;
-            FUN_L00_0025d458_u(m, (short *)v->x60);
+            FUN_L00_0025c558_u(ang, birdbot_moby, v->x70, 0xE, 6, 0);
+            birdbot_moby->state = 0xC;
+            FUN_L00_0025d458_u(birdbot_moby, (short *)v->x60);
             break;
         }
     }
-    m->bA4 = 0xFF;
+    birdbot_moby->bA4 = 0xFF;
     if (v->w38 != 0) {
         v->h1E2 = scale_game_frames(0x258);
     }
     v->w38 = 0;
     fast_dec_timer_s16(&v->h1E2);
-    switch (m->state) {
+    switch (birdbot_moby->state) {
     case BIRDBOT_STATE_INITIALIZE: {
         PeCursor *c;
         int i;
@@ -859,8 +859,8 @@ void birdbot_update(PeMoby *m) {
 
         c = &v->main;
         if (v->main.path_id == -1) {
-            DebugPrint(D_L01_0020AF80, m->hA6, m->hB2);
-            mark_moby_for_removal(m);
+            DebugPrint(D_L01_0020AF80, birdbot_moby->hA6, birdbot_moby->hB2);
+            mark_moby_for_removal(birdbot_moby);
             return;
         }
         v->main.path = (PePath *)D_L01_001B0930_u[v->main.path_id];
@@ -868,12 +868,12 @@ void birdbot_update(PeMoby *m) {
         if (v->side.path_id >= 0) {
             v->side.path = (PePath *)D_L01_001B0930_u[v->side.path_id];
             v->side.idx = 0;
-            qcopy(&m->pos, &v->side.path->pts[0]);
+            qcopy(&birdbot_moby->pos, &v->side.path->pts[0]);
         } else {
-            qcopy(&m->pos, &v->main.path->pts[0]);
+            qcopy(&birdbot_moby->pos, &v->main.path->pts[0]);
             if (v->w1B4 == 0) {
                 v->side.path = 0;
-                m->pos.f[2] += 20.0f;
+                birdbot_moby->pos.f[2] += 20.0f;
             }
         }
         v->h1AE = 0;
@@ -882,9 +882,9 @@ void birdbot_update(PeMoby *m) {
                 v->h1AE = 1;
             }
         }
-        m->h34 |= 0x1000;
+        birdbot_moby->h34 |= 0x1000;
         v->b29 = 0;
-        m->l38 = ((struct PeMoby *)hero.moby)->l38;
+        birdbot_moby->l38 = ((struct PeMoby *)hero.moby)->l38;
         v->b58 = 8;
         v->b5A = 8;
         FUN_L01_0026d930_u(v->xD0);
@@ -903,15 +903,15 @@ void birdbot_update(PeMoby *m) {
         v->b28 = 1;
         clear_vector(&v->v40);
         v->w1C8 = -1;
-        if (m->b53 != 0) {
-            blend_moby_animation_cf(m, 0, 0, scale_game_frames(5));
+        if (birdbot_moby->b53 != 0) {
+            blend_moby_animation_cf(birdbot_moby, 0, 0, scale_game_frames(5));
         }
-        v->h1E0 = m->h32;
-        if (m->pos.f[2] - probe_ground_height(&m->pos, 0, 0.5f) > 0.5f) {
-            m->w94 = 0;
-            m->h34 |= 0x41;
+        v->h1E0 = birdbot_moby->h32;
+        if (birdbot_moby->pos.f[2] - probe_ground_height(&birdbot_moby->pos, 0, 0.5f) > 0.5f) {
+            birdbot_moby->w94 = 0;
+            birdbot_moby->h34 |= 0x41;
         }
-        m->state = 2;
+        birdbot_moby->state = 2;
         break;
     }
     case BIRDBOT_STATE_TRACK_TARGET_AND_SELECT_ACTION: {
@@ -920,44 +920,44 @@ void birdbot_update(PeMoby *m) {
         float a;
 
         c = &v->main;
-        a = FUN_001f9e90_cf(tgt.pos.f[0] - m->pos.f[0], tgt.pos.f[1] - m->pos.f[1]);
-        FUN_L00_00258278_cf((char *)m, &v->f194, a, 0.02f, 0.3f, 0.1f);
+        a = FUN_001f9e90_cf(tgt.pos.f[0] - birdbot_moby->pos.f[0], tgt.pos.f[1] - birdbot_moby->pos.f[1]);
+        FUN_L00_00258278_cf((char *)birdbot_moby, &v->f194, a, 0.02f, 0.3f, 0.1f);
         tick_countdown_32(&v->w190);
-        d = vector_distance(&m->pos, &tgt);
+        d = vector_distance(&birdbot_moby->pos, &tgt);
         if ((flag ? d < v->f1A0 * 2.0f : d < v->f1A0) &&
-            absolute_float(m->pos.f[2] - tgt.pos.f[2]) < 2.0f && m->b31 != 0 &&
+            absolute_float(birdbot_moby->pos.f[2] - tgt.pos.f[2]) < 2.0f && birdbot_moby->b31 != 0 &&
             (!flag || res == 0) && v->w190 == 0 &&
-            fast_difference_between_rotations(m->rot.f[2], FUN_001f9e90_cf(tgt.pos.f[0] - m->pos.f[0],
-                                                      tgt.pos.f[1] - m->pos.f[1])) < 0.08726646f) {
-            moby_point_position(m, 0, &va);
-            *(u128 *)&vb = *(u128 *)&m->pos;
+            fast_difference_between_rotations(birdbot_moby->rot.f[2], FUN_001f9e90_cf(tgt.pos.f[0] - birdbot_moby->pos.f[0],
+                                                      tgt.pos.f[1] - birdbot_moby->pos.f[1])) < 0.08726646f) {
+            moby_point_position(birdbot_moby, 0, &va);
+            *(u128 *)&vb = *(u128 *)&birdbot_moby->pos;
             vb.f[2] = va.f[2];
-            if (collision_line(&vb, &va, 0, m, 0) == 0) {
+            if (collision_line(&vb, &va, 0, birdbot_moby, 0) == 0) {
                 v->h1A4 = 0;
                 v->f198 = 4.0f;
-                m->state = 6;
-                if (m->b53 != 4) {
-                    blend_moby_animation_cf(m, 4, 0, scale_game_frames(6));
+                birdbot_moby->state = 6;
+                if (birdbot_moby->b53 != 4) {
+                    blend_moby_animation_cf(birdbot_moby, 4, 0, scale_game_frames(6));
                 }
                 v->w190 = 0;
             } else {
                 v->w190 = scale_game_frames(0x3C);
             }
-        } else if (flag || (vector_distance(&m->pos, &tgt) < 4.0f &&
-                            absolute_float(m->pos.f[2] - tgt.pos.f[2]) < 6.0f)) {
-            if (res != 0 && FUN_001f9b48(&m->pos, (PeVec *)c->path + (idx + 1)) > 0.25f) {
+        } else if (flag || (vector_distance(&birdbot_moby->pos, &tgt) < 4.0f &&
+                            absolute_float(birdbot_moby->pos.f[2] - tgt.pos.f[2]) < 6.0f)) {
+            if (res != 0 && FUN_001f9b48(&birdbot_moby->pos, (PeVec *)c->path + (idx + 1)) > 0.25f) {
                 if (v->h1AC == 0 || c->idx < c->path->count - 1) {
                     int i;
                     float f;
 
-                    if (m->b53 != 8) {
-                        blend_moby_animation_cf(m, 8, 0, scale_game_frames(10));
+                    if (birdbot_moby->b53 != 8) {
+                        blend_moby_animation_cf(birdbot_moby, 8, 0, scale_game_frames(10));
                     }
                     i = idx;
                     f = *(float *)&D_L01_0016195C;
                     c->idx = i;
-                    m->f58 = f;
-                    m->state = 9;
+                    birdbot_moby->f58 = f;
+                    birdbot_moby->state = 9;
                 }
             }
         }
@@ -970,7 +970,7 @@ void birdbot_update(PeMoby *m) {
         break;
     }
     case BIRDBOT_STATE_WAIT_FOR_TRIGGER:
-        if (vector_distance(&m->pos, &tgt) < v->f1A8 ||
+        if (vector_distance(&birdbot_moby->pos, &tgt) < v->f1A8 ||
             is_point_inside_clip_volume(&hero.motion.pos, v->w1C0) != 0 || v->w1E8 != 0) {
             if (v->w1C4 != -1) {
                 char *p;
@@ -981,39 +981,39 @@ void birdbot_update(PeMoby *m) {
                 cutscene_active = 1;
                 v->w1C8 = scale_game_frames(0x168);
             }
-            m->w94 = *(int *)(m->w24 + 0x10);
-            m->h34 &= 0xFFBE;
-            if (m->b53 != 8) {
-                blend_moby_animation_cf(m, 8, 0, scale_game_frames(10));
+            birdbot_moby->w94 = *(int *)(birdbot_moby->w24 + 0x10);
+            birdbot_moby->h34 &= 0xFFBE;
+            if (birdbot_moby->b53 != 8) {
+                blend_moby_animation_cf(birdbot_moby, 8, 0, scale_game_frames(10));
             }
-            m->state = 3;
+            birdbot_moby->state = 3;
         }
         break;
     case BIRDBOT_STATE_DEPLOY:
         if (v->side.path != 0) {
-            PeCursor *s;
+            PeCursor *side_path_cursor;
             PePath *path;
             int next;
             float a;
 
-            s = &v->side;
-            next = (s->idx + s->path->count + s->dir) % s->path->count;
-            a = FUN_001f9e90_cf(s->path->pts[next].f[0] - m->pos.f[0],
-                                s->path->pts[next].f[1] - m->pos.f[1]);
-            FUN_L00_00258278_cf((char *)m, &v->f194, a, 0.01f, 0.3f, 0.1f);
-            path = s->path;
+            side_path_cursor = &v->side;
+            next = (side_path_cursor->idx + side_path_cursor->path->count + side_path_cursor->dir) % side_path_cursor->path->count;
+            a = FUN_001f9e90_cf(side_path_cursor->path->pts[next].f[0] - birdbot_moby->pos.f[0],
+                                side_path_cursor->path->pts[next].f[1] - birdbot_moby->pos.f[1]);
+            FUN_L00_00258278_cf((char *)birdbot_moby, &v->f194, a, 0.01f, 0.3f, 0.1f);
+            path = side_path_cursor->path;
             qcopy(&vb, &path->pts[next]);
-            if (s->idx == path->count - 1) {
-                if (m->b53 != 0) {
-                    blend_moby_animation_cf(m, 0, 0, scale_game_frames(5));
+            if (side_path_cursor->idx == path->count - 1) {
+                if (birdbot_moby->b53 != 0) {
+                    blend_moby_animation_cf(birdbot_moby, 0, 0, scale_game_frames(5));
                 }
-                m->state = 1;
+                birdbot_moby->state = 1;
             } else {
-                subtract_vector_xyz(&va, &vb, &m->pos);
+                subtract_vector_xyz(&va, &vb, &birdbot_moby->pos);
                 normalize_vector_xyz(&va, &va, frame_time * 5.0f);
-                add_vector_xyz(&m->pos, &m->pos, &va);
-                if (FUN_001f9b48(&vb, &m->pos) < 0.5f) {
-                    s->idx = next;
+                add_vector_xyz(&birdbot_moby->pos, &birdbot_moby->pos, &va);
+                if (FUN_001f9b48(&vb, &birdbot_moby->pos) < 0.5f) {
+                    side_path_cursor->idx = next;
                 }
             }
         } else if (v->w1E4 != -1) {
@@ -1023,13 +1023,13 @@ void birdbot_update(PeMoby *m) {
             float z;
 
             p = (char *)((v->w1E4 << 7) + (int)D_L01_001600EC);
-            a = FUN_001f9e90_cf(*(float *)(p + 0x30) - m->pos.f[0],
-                                *(float *)(p + 0x34) - m->pos.f[1]);
-            FUN_L00_00258278_cf((char *)m, &v->f194, a, 0.01f, 0.3f, 0.1f);
+            a = FUN_001f9e90_cf(*(float *)(p + 0x30) - birdbot_moby->pos.f[0],
+                                *(float *)(p + 0x34) - birdbot_moby->pos.f[1]);
+            FUN_L00_00258278_cf((char *)birdbot_moby, &v->f194, a, 0.01f, 0.3f, 0.1f);
             len = vector_length_xyz(&v->v1D0);
             z = v->v1D0.f[2];
             normalize_vector_xyz(&v->v1D0, &v->v1D0, len * 0.95f);
-            subtract_vector_xyz(&vb, D_L01_001600EC + (v->w1E4 << 7) + 0x30, &m->pos);
+            subtract_vector_xyz(&vb, D_L01_001600EC + (v->w1E4 << 7) + 0x30, &birdbot_moby->pos);
             normalize_vector_xyz(&vb, &vb, len * 0.05f);
             add_vector_xyz(&v->v1D0, &v->v1D0, &vb);
             if (frame_time * 10.0f < len) {
@@ -1042,29 +1042,29 @@ void birdbot_update(PeMoby *m) {
             if (fast_dec_timer_s16(&v->h1EC) == 0) {
                 v->v1D0.f[2] = z;
             }
-            add_vector_xyz(&m->pos, &m->pos, &v->v1D0);
-            if (FUN_001f9b48(&m->pos, D_L01_001600EC + (v->w1E4 << 7) + 0x30) <
+            add_vector_xyz(&birdbot_moby->pos, &birdbot_moby->pos, &v->v1D0);
+            if (FUN_001f9b48(&birdbot_moby->pos, D_L01_001600EC + (v->w1E4 << 7) + 0x30) <
                 frame_time * 10.0f) {
-                if (m->b53 != 0) {
-                    blend_moby_animation_cf(m, 0, 0, scale_game_frames(5));
+                if (birdbot_moby->b53 != 0) {
+                    blend_moby_animation_cf(birdbot_moby, 0, 0, scale_game_frames(5));
                 }
-                m->state = 1;
+                birdbot_moby->state = 1;
             }
         } else {
             clear_vector(&va);
-            va.f[2] = probe_ground_height(&m->pos, 0, 0.5f) - m->pos.f[2];
+            va.f[2] = probe_ground_height(&birdbot_moby->pos, 0, 0.5f) - birdbot_moby->pos.f[2];
             if (va.f[2] < -(frame_time * 10.0f)) {
                 va.f[2] = -(frame_time * 10.0f);
             }
-            add_vector_xyz(&m->pos, &m->pos, &va);
+            add_vector_xyz(&birdbot_moby->pos, &birdbot_moby->pos, &va);
             if (vector_length_xyz(&va) < frame_time) {
-                if (m->b53 != 0) {
-                    blend_moby_animation_cf(m, 0, 0, scale_game_frames(5));
+                if (birdbot_moby->b53 != 0) {
+                    blend_moby_animation_cf(birdbot_moby, 0, 0, scale_game_frames(5));
                 }
-                m->state = 1;
+                birdbot_moby->state = 1;
             }
         }
-        FUN_L01_002e6518_c((SplashMoby *)m, (u128 *)&old);
+        FUN_L01_002e6518_c((SplashMoby *)birdbot_moby, (u128 *)&old);
         break;
     case BIRDBOT_STATE_FIRE_BURST:
         if (v->f1CC < 14.0f && frame >= 14.0f) {
@@ -1072,8 +1072,8 @@ void birdbot_update(PeMoby *m) {
             float yaw;
             float pitch;
 
-            a = m->rot.f[2];
-            moby_point_position(m, 0, &va);
+            a = birdbot_moby->rot.f[2];
+            moby_point_position(birdbot_moby, 0, &va);
             qcopy(&v->v180, &va);
             if (fast_difference_between_rotations(FUN_001f9e90_cf(tgt.pos.f[0] - va.f[0], tgt.pos.f[1] - va.f[1]), a) <
                 0.08726646f) {
@@ -1084,97 +1084,97 @@ void birdbot_update(PeMoby *m) {
             subtract_vector_xyz(&vb, &v->v180, &va);
             normalize_vector_xyz(&vb, &vb, *(float *)&D_L01_00161950 * frame_time);
             vb.f[2] += 0.0f;
-            *(u128 *)&vc = *(u128 *)&m->pos;
+            *(u128 *)&vc = *(u128 *)&birdbot_moby->pos;
             vc.f[2] = va.f[2];
-            if (collision_line(&vc, &va, 0, m, 0) == 0) {
+            if (collision_line(&vc, &va, 0, birdbot_moby, 0) == 0) {
                 yaw = FUN_001f9e90_cf(vb.f[0], vb.f[1]);
                 pitch = FUN_001f9e90_cf(vector_length_xy_cf(&vb), vb.f[2]);
-                FUN_L01_002fa068(m, &va, &vb, yaw, pitch, func_001FA898_r(FUN_L04_001f1978(10.0f)));
+                FUN_L01_002fa068(birdbot_moby, &va, &vb, yaw, pitch, func_001FA898_r(FUN_L04_001f1978(10.0f)));
                 v->h1A4++;
             } else {
-                if (m->b53 != 0) {
-                    blend_moby_animation_cf(m, 0, 0, scale_game_frames(5));
+                if (birdbot_moby->b53 != 0) {
+                    blend_moby_animation_cf(birdbot_moby, 0, 0, scale_game_frames(5));
                 }
-                m->state = 1;
+                birdbot_moby->state = 1;
                 break;
             }
         }
         if (frame < 2.0f) {
-            if (v->h1A4 >= 4 || vector_distance(&m->pos, &tgt) > (flag ? v->f1A0 * 2.0f : v->f1A0) ||
-                absolute_float(m->pos.f[2] - tgt.pos.f[2]) > 6.0f) {
-                if (m->b53 != 5) {
-                    blend_moby_animation_cf(m, 5, 5, scale_game_frames(10));
+            if (v->h1A4 >= 4 || vector_distance(&birdbot_moby->pos, &tgt) > (flag ? v->f1A0 * 2.0f : v->f1A0) ||
+                absolute_float(birdbot_moby->pos.f[2] - tgt.pos.f[2]) > 6.0f) {
+                if (birdbot_moby->b53 != 5) {
+                    blend_moby_animation_cf(birdbot_moby, 5, 5, scale_game_frames(10));
                 }
-                m->f58 = 0.5f;
-                m->state = 7;
+                birdbot_moby->f58 = 0.5f;
+                birdbot_moby->state = 7;
             }
         }
         break;
     case BIRDBOT_STATE_RECOVER_FROM_BURST: {
         float a;
 
-        a = FUN_001f9e90_cf(tgt.pos.f[0] - m->pos.f[0], tgt.pos.f[1] - m->pos.f[1]);
-        FUN_L00_00258278_cf((char *)m, &v->f194, a, 0.02f, 0.3f, 0.1f);
-        if (m->b53 == 0) {
+        a = FUN_001f9e90_cf(tgt.pos.f[0] - birdbot_moby->pos.f[0], tgt.pos.f[1] - birdbot_moby->pos.f[1]);
+        FUN_L00_00258278_cf((char *)birdbot_moby, &v->f194, a, 0.02f, 0.3f, 0.1f);
+        if (birdbot_moby->b53 == 0) {
             if (tick_countdown_32(&v->w190) != 0) {
-                if (m->b53 != 5) {
-                    blend_moby_animation_cf(m, 5, 0, scale_game_frames(0xF));
+                if (birdbot_moby->b53 != 5) {
+                    blend_moby_animation_cf(birdbot_moby, 5, 0, scale_game_frames(0xF));
                 }
             }
-        } else if (m->b70 & 2) {
-            m->f58 = 1.0f;
-            if ((flag || (vector_distance(&m->pos, &tgt) < 8.0f &&
-                          absolute_float(m->pos.f[2] - tgt.pos.f[2]) < 6.0f)) &&
-                res != 0 && FUN_001f9b48(&m->pos, (PeVec *)v->main.path + (idx + 1)) > 0.25f) {
+        } else if (birdbot_moby->b70 & 2) {
+            birdbot_moby->f58 = 1.0f;
+            if ((flag || (vector_distance(&birdbot_moby->pos, &tgt) < 8.0f &&
+                          absolute_float(birdbot_moby->pos.f[2] - tgt.pos.f[2]) < 6.0f)) &&
+                res != 0 && FUN_001f9b48(&birdbot_moby->pos, (PeVec *)v->main.path + (idx + 1)) > 0.25f) {
                 v->main.idx = idx;
-                if (m->b53 != 8) {
-                    blend_moby_animation_cf(m, 8, 0, scale_game_frames(10));
+                if (birdbot_moby->b53 != 8) {
+                    blend_moby_animation_cf(birdbot_moby, 8, 0, scale_game_frames(10));
                 }
-                m->f58 = *(float *)&D_L01_0016195C;
-                m->state = 9;
+                birdbot_moby->f58 = *(float *)&D_L01_0016195C;
+                birdbot_moby->state = 9;
             } else {
                 float d;
 
-                d = vector_distance(&m->pos, &tgt);
+                d = vector_distance(&birdbot_moby->pos, &tgt);
                 if ((flag ? d < v->f1A0 * 2.0f : d < v->f1A0) &&
-                    absolute_float(m->pos.f[2] - tgt.pos.f[2]) < 2.0f && m->b31 != 0 &&
+                    absolute_float(birdbot_moby->pos.f[2] - tgt.pos.f[2]) < 2.0f && birdbot_moby->b31 != 0 &&
                     (!flag || res == 0) && v->w190 == 0 &&
-                    fast_difference_between_rotations(m->rot.f[2], FUN_001f9e90_cf(tgt.pos.f[0] - m->pos.f[0],
-                                                              tgt.pos.f[1] - m->pos.f[1])) <
+                    fast_difference_between_rotations(birdbot_moby->rot.f[2], FUN_001f9e90_cf(tgt.pos.f[0] - birdbot_moby->pos.f[0],
+                                                              tgt.pos.f[1] - birdbot_moby->pos.f[1])) <
                         0.08726646f) {
-                    moby_point_position(m, 0, &va);
-                    *(u128 *)&vb = *(u128 *)&m->pos;
+                    moby_point_position(birdbot_moby, 0, &va);
+                    *(u128 *)&vb = *(u128 *)&birdbot_moby->pos;
                     vb.f[2] = va.f[2];
-                    if (collision_line(&vb, &va, 0, m, 0) == 0) {
+                    if (collision_line(&vb, &va, 0, birdbot_moby, 0) == 0) {
                         v->h1A4 = 0;
                         v->f198 = 4.0f;
-                        m->state = 6;
-                        if (m->b53 != 4) {
-                            blend_moby_animation_cf(m, 4, 0, scale_game_frames(6));
+                        birdbot_moby->state = 6;
+                        if (birdbot_moby->b53 != 4) {
+                            blend_moby_animation_cf(birdbot_moby, 4, 0, scale_game_frames(6));
                         }
                         v->w190 = 0;
                         break;
                     }
                     v->w190 = scale_game_frames(0x3C);
                 }
-                if (m->b53 != 0) {
-                    blend_moby_animation_cf(m, 0, 0, scale_game_frames(5));
+                if (birdbot_moby->b53 != 0) {
+                    blend_moby_animation_cf(birdbot_moby, 0, 0, scale_game_frames(5));
                 }
-                m->state = 1;
+                birdbot_moby->state = 1;
             }
         }
         break;
     }
     case BIRDBOT_STATE_BEGIN_PATH_MOVEMENT:
-        m->f58 = 1.0f;
+        birdbot_moby->f58 = 1.0f;
         v->f1B8 = 0.0f;
         v->f1BC = 0.0f;
-        m->state = 0xA;
-        FUN_L01_002e6518_c((SplashMoby *)m, (u128 *)&old);
+        birdbot_moby->state = 0xA;
+        FUN_L01_002e6518_c((SplashMoby *)birdbot_moby, (u128 *)&old);
         break;
     case BIRDBOT_STATE_MOVE_TO_PATH_NODE: {
         PeCursor *c;
-        float h;
+        float path_node_height_offset;
 
         c = &v->main;
         if (v->h1AE != 0) {
@@ -1187,7 +1187,7 @@ void birdbot_update(PeMoby *m) {
             for (i = 0; i < c->path->count; i++) {
                 float d;
 
-                d = FUN_001f9b48(&c->path->pts[i], &m->pos);
+                d = FUN_001f9b48(&c->path->pts[i], &birdbot_moby->pos);
                 if (d < bd) {
                     bd = d;
                     best = i;
@@ -1198,150 +1198,150 @@ void birdbot_update(PeMoby *m) {
             v->h1A6 = c->idx;
         }
         qcopy(&va, &c->path->pts[v->h1A6]);
-        h = 0.8f;
-        va.f[2] += h;
+        path_node_height_offset = 0.8f;
+        va.f[2] += path_node_height_offset;
         FUN_L00_00258278_cf(
-            (char *)m, &v->f194, FUN_001f9e90_cf(va.f[0] - m->pos.f[0], va.f[1] - m->pos.f[1]),
+            (char *)birdbot_moby, &v->f194, FUN_001f9e90_cf(va.f[0] - birdbot_moby->pos.f[0], va.f[1] - birdbot_moby->pos.f[1]),
             frame_time_sq * 6.2831855f, frame_time_sq * 3.1415927f, frame_time * 6.2831855f);
-        if (fast_difference_between_rotations(m->rot.f[2], FUN_001f9e90_cf(va.f[0] - m->pos.f[0],
-                                                      va.f[1] - m->pos.f[1])) < 0.7853982f) {
+        if (fast_difference_between_rotations(birdbot_moby->rot.f[2], FUN_001f9e90_cf(va.f[0] - birdbot_moby->pos.f[0],
+                                                      va.f[1] - birdbot_moby->pos.f[1])) < 0.7853982f) {
             if (v->f1B8 < *(float *)&D_L01_00161954 * frame_time) {
                 v->f1B8 = v->f1B8 + *(float *)&D_L01_00161954 * frame_time_sq;
             }
             build_spherical_offset_cf(
-                &vb, v->f1B8, m->rot.f[2],
-                FUN_001f9e90_cf(vector_distance(&m->pos, &va), va.f[2] - m->pos.f[2]));
-            add_vector_xyz(&m->pos, &m->pos, &vb);
-            m->rot.f[1] = spring_turn(
-                &v->f1BC, m->rot.f[1],
+                &vb, v->f1B8, birdbot_moby->rot.f[2],
+                FUN_001f9e90_cf(vector_distance(&birdbot_moby->pos, &va), va.f[2] - birdbot_moby->pos.f[2]));
+            add_vector_xyz(&birdbot_moby->pos, &birdbot_moby->pos, &vb);
+            birdbot_moby->rot.f[1] = spring_turn(
+                &v->f1BC, birdbot_moby->rot.f[1],
                 v->f1B8 / (*(float *)&D_L01_00161954 * frame_time) * 0.5235988f,
                 frame_time_sq * 6.2831855f, frame_time_sq * 3.1415927f, frame_time * 4.712389f);
         }
         qcopy(&va, &c->path->pts[c->idx]);
-        va.f[2] += h;
-        if (FUN_001f9b48(&m->pos, &va) < 0.25f) {
-            m->state = 0xB;
+        va.f[2] += path_node_height_offset;
+        if (FUN_001f9b48(&birdbot_moby->pos, &va) < 0.25f) {
+            birdbot_moby->state = 0xB;
         }
-        FUN_L01_002e6518_c((SplashMoby *)m, (u128 *)&old);
+        FUN_L01_002e6518_c((SplashMoby *)birdbot_moby, (u128 *)&old);
         break;
     }
     case BIRDBOT_STATE_BRAKE_AND_FACE_TARGET:
         if (v->f1B8 > 0.0f && v->h1EE == 0) {
             v->f1B8 -= *(float *)&D_L01_00161954 * 3.0f * frame_time_sq;
-            va.f[0] = fast_cos(m->rot.f[2]) * v->f1B8;
-            va.f[1] = fast_sin(m->rot.f[2]) * v->f1B8;
+            va.f[0] = fast_cos(birdbot_moby->rot.f[2]) * v->f1B8;
+            va.f[1] = fast_sin(birdbot_moby->rot.f[2]) * v->f1B8;
             va.f[2] = 0.0f;
-            add_vector_xyz(&m->pos, &m->pos, &va);
-            m->rot.f[1] = spring_turn(
-                &v->f1BC, m->rot.f[1],
+            add_vector_xyz(&birdbot_moby->pos, &birdbot_moby->pos, &va);
+            birdbot_moby->rot.f[1] = spring_turn(
+                &v->f1BC, birdbot_moby->rot.f[1],
                 v->f1B8 / (*(float *)&D_L01_00161954 * frame_time) * 0.5235988f,
                 frame_time_sq * 6.2831855f, frame_time_sq * 3.1415927f, frame_time * 6.2831855f);
         } else {
             float a;
             float k;
 
-            a = FUN_001f9e90_cf(tgt.pos.f[0] - m->pos.f[0], tgt.pos.f[1] - m->pos.f[1]);
-            FUN_L00_00258278_cf((char *)m, &v->f194, a, 0.02f, 0.3f, 0.1f);
+            a = FUN_001f9e90_cf(tgt.pos.f[0] - birdbot_moby->pos.f[0], tgt.pos.f[1] - birdbot_moby->pos.f[1]);
+            FUN_L00_00258278_cf((char *)birdbot_moby, &v->f194, a, 0.02f, 0.3f, 0.1f);
             k = *(float *)&D_L01_00161954 * frame_time;
             v->f1B8 = 0.0f;
-            m->rot.f[1] = spring_turn(&v->f1BC, m->rot.f[1], v->f1B8 / k * 0.5235988f,
+            birdbot_moby->rot.f[1] = spring_turn(&v->f1BC, birdbot_moby->rot.f[1], v->f1B8 / k * 0.5235988f,
                                            frame_time_sq * 6.2831855f, frame_time_sq * 3.1415927f,
                                            frame_time * 6.2831855f);
         }
-        if (m->b53 != 0xA && v->f1B8 <= 0.0f &&
-            fast_difference_between_rotations(m->rot.f[2], FUN_001f9e90_cf(tgt.pos.f[0] - m->pos.f[0],
-                                                      tgt.pos.f[1] - m->pos.f[1])) < 0.034906585f) {
+        if (birdbot_moby->b53 != 0xA && v->f1B8 <= 0.0f &&
+            fast_difference_between_rotations(birdbot_moby->rot.f[2], FUN_001f9e90_cf(tgt.pos.f[0] - birdbot_moby->pos.f[0],
+                                                      tgt.pos.f[1] - birdbot_moby->pos.f[1])) < 0.034906585f) {
             v->f1B8 = 0.0f;
-            if (m->b53 != 0xA) {
-                blend_moby_animation_cf(m, 0xA, 0, scale_game_frames(3));
+            if (birdbot_moby->b53 != 0xA) {
+                blend_moby_animation_cf(birdbot_moby, 0xA, 0, scale_game_frames(3));
             }
-        } else if (m->b52 == 0xA && (m->b70 & 2)) {
-            if (m->b53 != 0) {
-                blend_moby_animation_cf(m, 0, 0, scale_game_frames(6));
+        } else if (birdbot_moby->b52 == 0xA && (birdbot_moby->b70 & 2)) {
+            if (birdbot_moby->b53 != 0) {
+                blend_moby_animation_cf(birdbot_moby, 0, 0, scale_game_frames(6));
             }
-            m->state = 1;
+            birdbot_moby->state = 1;
         }
-        FUN_L01_002e6518_c((SplashMoby *)m, (u128 *)&old);
+        FUN_L01_002e6518_c((SplashMoby *)birdbot_moby, (u128 *)&old);
         break;
     case BIRDBOT_STATE_NONFATAL_KNOCKBACK:
-        if (mine_fall(m, v->x70) & 0x40) {
-            if (FUN_001f9b48(&m->pos, (PeVec *)v->main.path + (idx + 1)) > 0.25f) {
+        if (mine_fall(birdbot_moby, v->x70) & 0x40) {
+            if (FUN_001f9b48(&birdbot_moby->pos, (PeVec *)v->main.path + (idx + 1)) > 0.25f) {
                 int i;
                 float f;
 
-                if (m->b53 != 8) {
-                    blend_moby_animation_cf(m, 8, 0, scale_game_frames(10));
+                if (birdbot_moby->b53 != 8) {
+                    blend_moby_animation_cf(birdbot_moby, 8, 0, scale_game_frames(10));
                 }
                 i = idx;
                 f = *(float *)&D_L01_0016195C;
                 v->main.idx = i;
-                m->f58 = f;
-                m->state = 9;
+                birdbot_moby->f58 = f;
+                birdbot_moby->state = 9;
                 return;
             }
-            if (m->b53 != 0) {
-                blend_moby_animation_cf(m, 0, 0, scale_game_frames(6));
+            if (birdbot_moby->b53 != 0) {
+                blend_moby_animation_cf(birdbot_moby, 0, 0, scale_game_frames(6));
             }
-            m->state = 1;
+            birdbot_moby->state = 1;
         }
-        if (m->pos.f[0] < 2.0f || m->pos.f[0] > 1021.0f || m->pos.f[1] < 2.0f ||
-            m->pos.f[1] > 1021.0f || m->pos.f[2] < 2.0f || m->pos.f[2] > 1021.0f) {
-            spawn_explosion(m, &v->v40, &m->pos, 0.0f, 0.0f, 5, 2, 4, 2.0f, 1.0f, 9.0f, 1.0f, 4,
+        if (birdbot_moby->pos.f[0] < 2.0f || birdbot_moby->pos.f[0] > 1021.0f || birdbot_moby->pos.f[1] < 2.0f ||
+            birdbot_moby->pos.f[1] > 1021.0f || birdbot_moby->pos.f[2] < 2.0f || birdbot_moby->pos.f[2] > 1021.0f) {
+            spawn_explosion(birdbot_moby, &v->v40, &birdbot_moby->pos, 0.0f, 0.0f, 5, 2, 4, 2.0f, 1.0f, 9.0f, 1.0f, 4,
                              15.0f, 1, 1, -1, 0);
-            FUN_L00_00257470(m, 0, -1);
-            mark_moby_for_removal(m);
+            FUN_L00_00257470(birdbot_moby, 0, -1);
+            mark_moby_for_removal(birdbot_moby);
             return;
         }
         break;
     case BIRDBOT_STATE_FATAL_KNOCKBACK:
-        m->h34 &= 0xEFFF;
-        if ((mine_fall(m, v->x70) & 6) || m->pos.f[0] < 2.0f || m->pos.f[0] > 1021.0f ||
-            m->pos.f[1] < 2.0f || m->pos.f[1] > 1021.0f || m->pos.f[2] < 2.0f ||
-            m->pos.f[2] > 1021.0f) {
-            spawn_explosion(m, &v->v40, &m->pos, 0.0f, 0.0f, 5, 2, 4, 2.0f, 1.0f, 9.0f, 1.0f, 4,
+        birdbot_moby->h34 &= 0xEFFF;
+        if ((mine_fall(birdbot_moby, v->x70) & 6) || birdbot_moby->pos.f[0] < 2.0f || birdbot_moby->pos.f[0] > 1021.0f ||
+            birdbot_moby->pos.f[1] < 2.0f || birdbot_moby->pos.f[1] > 1021.0f || birdbot_moby->pos.f[2] < 2.0f ||
+            birdbot_moby->pos.f[2] > 1021.0f) {
+            spawn_explosion(birdbot_moby, &v->v40, &birdbot_moby->pos, 0.0f, 0.0f, 5, 2, 4, 2.0f, 1.0f, 9.0f, 1.0f, 4,
                              15.0f, 1, 1, -1, 0);
-            FUN_L00_00263fd8_u((char *)m, 0x6C8, m->pos.f, &m->rot, 0, 0, 0.0f, D_L01_0015F580,
+            FUN_L00_00263fd8_u((char *)birdbot_moby, 0x6C8, birdbot_moby->pos.f, &birdbot_moby->rot, 0, 0, 0.0f, D_L01_0015F580,
                                D_L01_0015F580, D_L01_0015F580);
-            FUN_L00_00263fd8_u((char *)m, 0x6C9, m->pos.f, &m->rot, 0, 0, 0.0f, D_L01_0015F580,
+            FUN_L00_00263fd8_u((char *)birdbot_moby, 0x6C9, birdbot_moby->pos.f, &birdbot_moby->rot, 0, 0, 0.0f, D_L01_0015F580,
                                D_L01_0015F580, D_L01_0015F580);
-            FUN_L00_00263fd8_u((char *)m, 0x6CA, m->pos.f, &m->rot, 0, 0, 0.0f, D_L01_0015F580,
+            FUN_L00_00263fd8_u((char *)birdbot_moby, 0x6CA, birdbot_moby->pos.f, &birdbot_moby->rot, 0, 0, 0.0f, D_L01_0015F580,
                                D_L01_0015F580, D_L01_0015F580);
-            FUN_L00_00263fd8_u((char *)m, 0x6EA, m->pos.f, &m->rot, 0, 0, 0.0f, D_L01_0015F580,
+            FUN_L00_00263fd8_u((char *)birdbot_moby, 0x6EA, birdbot_moby->pos.f, &birdbot_moby->rot, 0, 0, 0.0f, D_L01_0015F580,
                                D_L01_0015F580, D_L01_0015F580);
-            FUN_L00_00257470(m, 0, -1);
-            mark_moby_for_removal(m);
+            FUN_L00_00257470(birdbot_moby, 0, -1);
+            mark_moby_for_removal(birdbot_moby);
             return;
         }
         break;
     }
-    trooper_anim_finish(m, v->x60);
+    trooper_anim_finish(birdbot_moby, v->x60);
     v->f1CC = frame;
-    if (m->state == 1 || m->state == 5 || m->state == 6 || m->state == 7 || m->state == 0xB) {
+    if (birdbot_moby->state == 1 || birdbot_moby->state == 5 || birdbot_moby->state == 6 || birdbot_moby->state == 7 || birdbot_moby->state == 0xB) {
         v->fE8 += frame_time_sq * 9.8f;
-        m->pos.f[2] -= v->fE8 - 2.0f;
-        ground = probe_ground_height(&m->pos, 0, 0.5f);
-        m->pos.f[2] -= 2.0f;
-        if (m->pos.f[2] < ground) {
-            m->pos.f[2] = ground;
+        birdbot_moby->pos.f[2] -= v->fE8 - 2.0f;
+        ground = probe_ground_height(&birdbot_moby->pos, 0, 0.5f);
+        birdbot_moby->pos.f[2] -= 2.0f;
+        if (birdbot_moby->pos.f[2] < ground) {
+            birdbot_moby->pos.f[2] = ground;
             v->fE8 = 0.0f;
         }
     } else {
-        ground = probe_ground_height(&m->pos, 0, 0.5f);
+        ground = probe_ground_height(&birdbot_moby->pos, 0, 0.5f);
     }
-    FUN_L01_0026eff8((char *)m, ground);
-    if (collision_hit_material() == 0 && m->pos.f[2] < ground + 1.0f) {
-        spawn_explosion(m, &v->v40, &m->pos, 0.0f, 0.0f, 5, 2, 4, 2.0f, 1.0f, 9.0f, 1.0f, 4, 15.0f,
+    FUN_L01_0026eff8((char *)birdbot_moby, ground);
+    if (collision_hit_material() == 0 && birdbot_moby->pos.f[2] < ground + 1.0f) {
+        spawn_explosion(birdbot_moby, &v->v40, &birdbot_moby->pos, 0.0f, 0.0f, 5, 2, 4, 2.0f, 1.0f, 9.0f, 1.0f, 4, 15.0f,
                          1, 1, -1, 0);
-        FUN_L00_00263fd8_u((char *)m, 0x6C8, m->pos.f, &m->rot, 0, 0, 0.0f, D_L01_0015F580,
+        FUN_L00_00263fd8_u((char *)birdbot_moby, 0x6C8, birdbot_moby->pos.f, &birdbot_moby->rot, 0, 0, 0.0f, D_L01_0015F580,
                            D_L01_0015F580, D_L01_0015F580);
-        FUN_L00_00263fd8_u((char *)m, 0x6C9, m->pos.f, &m->rot, 0, 0, 0.0f, D_L01_0015F580,
+        FUN_L00_00263fd8_u((char *)birdbot_moby, 0x6C9, birdbot_moby->pos.f, &birdbot_moby->rot, 0, 0, 0.0f, D_L01_0015F580,
                            D_L01_0015F580, D_L01_0015F580);
-        FUN_L00_00263fd8_u((char *)m, 0x6CA, m->pos.f, &m->rot, 0, 0, 0.0f, D_L01_0015F580,
+        FUN_L00_00263fd8_u((char *)birdbot_moby, 0x6CA, birdbot_moby->pos.f, &birdbot_moby->rot, 0, 0, 0.0f, D_L01_0015F580,
                            D_L01_0015F580, D_L01_0015F580);
-        FUN_L00_00263fd8_u((char *)m, 0x6EA, m->pos.f, &m->rot, 0, 0, 0.0f, D_L01_0015F580,
+        FUN_L00_00263fd8_u((char *)birdbot_moby, 0x6EA, birdbot_moby->pos.f, &birdbot_moby->rot, 0, 0, 0.0f, D_L01_0015F580,
                            D_L01_0015F580, D_L01_0015F580);
-        FUN_L00_00257470(m, 0, -1);
-        mark_moby_for_removal(m);
+        FUN_L00_00257470(birdbot_moby, 0, -1);
+        mark_moby_for_removal(birdbot_moby);
     }
 }
 #include "sda.h"
