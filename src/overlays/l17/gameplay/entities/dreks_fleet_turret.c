@@ -388,7 +388,7 @@ void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void dreks_fleet_turret_update(struct Moby *m) __asm__("FUN_L17_002cb310");
-void dreks_fleet_turret_update(struct Moby *m) {
+void dreks_fleet_turret_update(struct Moby *turret_moby) {
     enum {
         FLEET_TURRET_INITIALIZE = 0,
         FLEET_TURRET_WAIT_FOR_TARGET = 1,
@@ -398,36 +398,36 @@ void dreks_fleet_turret_update(struct Moby *m) {
     };
     float dir[4];
     float from[4];
-    Vars347 *d = (Vars347 *)m->pvars;
+    Vars347 *turret_vars = (Vars347 *)turret_moby->pvars;
 
-    FUN_L17_002cbc10(m);
-    switch (m->state) {
+    FUN_L17_002cbc10(turret_moby);
+    switch (turret_moby->state) {
     case FLEET_TURRET_INITIALIZE:
-        m->state = 1;
-        d->f20 = 15.0f;
-        d->s24 = 0xF;
-        FUN_L17_002cbd38(m);
-        if (visited52[m->mission + (current_level_index << 4)] == 0xFF) {
-            mark_moby_for_removal(m);
+        turret_moby->state = 1;
+        turret_vars->f20 = 15.0f;
+        turret_vars->s24 = 0xF;
+        FUN_L17_002cbd38(turret_moby);
+        if (visited52[turret_moby->mission + (current_level_index << 4)] == 0xFF) {
+            mark_moby_for_removal(turret_moby);
         }
         break;
     case FLEET_TURRET_WAIT_FOR_TARGET: {
         struct Hero *g = &hero;
         if (g->unk308 != 0) {
-            qcopy(dir, &m->pos);
+            qcopy(dir, &turret_moby->pos);
             dir[2] += 10.0f;
-            subtract_vector_xyz(from, D_L17_001600EC + (d->zone << 7) + 0x30, dir);
+            subtract_vector_xyz(from, D_L17_001600EC + (turret_vars->zone << 7) + 0x30, dir);
             scale_vector_xyz(from, from, 0.9f);
             add_vector_xyz(from, from, dir);
             from[2] += 0.5f;
-            if (collision_line(dir, from, 2, m, 0) == 0) {
-                m->state = 2;
+            if (collision_line(dir, from, 2, turret_moby, 0) == 0) {
+                turret_moby->state = 2;
             }
         } else if (g->state.current == 0x32) {
             char *v = ((char *)g->ship_moby);
             if (v != 0 && *(short *)(v + 0xA6) == 0x563) {
-                if (vector_distance(&m->pos, &g->motion.pos) < 254.0f) {
-                    m->state = 3;
+                if (vector_distance(&turret_moby->pos, &g->motion.pos) < 254.0f) {
+                    turret_moby->state = 3;
                 }
             }
         }
@@ -435,7 +435,7 @@ void dreks_fleet_turret_update(struct Moby *m) {
     }
     case FLEET_TURRET_AIM_AND_FIRE_AT_ZONE: {
         if (hero.unk308 == 0) {
-            m->state = 1;
+            turret_moby->state = 1;
         }
         {
             float j[8];
@@ -447,33 +447,33 @@ void dreks_fleet_turret_update(struct Moby *m) {
             float turn;
             float off;
 
-            transform_scaled_vertex_batch(m, 2, D_L17_00161980, (char *)j);
-            scale_vector_xyz(tmp, D_L17_001600EC + (d->zone << 7),
+            transform_scaled_vertex_batch(turret_moby, 2, D_L17_00161980, (char *)j);
+            scale_vector_xyz(tmp, D_L17_001600EC + (turret_vars->zone << 7),
                              random_float_between(0.0f, 1.0f));
-            add_vector_xyz(acc, tmp, D_L17_001600EC + (d->zone << 7) + 0x30);
-            scale_vector_xyz(tmp, D_L17_001600EC + (d->zone << 7) + 0x10,
+            add_vector_xyz(acc, tmp, D_L17_001600EC + (turret_vars->zone << 7) + 0x30);
+            scale_vector_xyz(tmp, D_L17_001600EC + (turret_vars->zone << 7) + 0x10,
                              random_float_between(0.0f, 1.0f));
             add_vector_xyz(acc, acc, tmp);
-            scale_vector_xyz(tmp, D_L17_001600EC + (d->zone << 7) + 0x20,
+            scale_vector_xyz(tmp, D_L17_001600EC + (turret_vars->zone << 7) + 0x20,
                              random_float_between(0.0f, 1.0f));
             add_vector_xyz(acc, acc, tmp);
             subtract_vector_xyz(dir, acc, j);
             qcopy(from, j + 4);
-            yaw = &m->rot.z;
+            yaw = &turret_moby->rot.z;
             ang = fast_arc_tan(dir[0], dir[1]);
             turn = frame_time_sq * 0.5235988f;
-            approach_angle(yaw, &d->yawvel, ang, turn, turn, frame_time * 1.0471976f);
-            d->fF4 = -fast_arc_tan(vector_length_xy(dir), dir[2]);
-            update_joint_animation(m, d->a90, 0, frame_scale_sq * 0.02f, frame_scale_sq * 0.3f);
-            off = fast_difference_between_rotations(d->fD4,
+            approach_angle(yaw, &turret_vars->yawvel, ang, turn, turn, frame_time * 1.0471976f);
+            turret_vars->fF4 = -fast_arc_tan(vector_length_xy(dir), dir[2]);
+            update_joint_animation(turret_moby, turret_vars->a90, 0, frame_scale_sq * 0.02f, frame_scale_sq * 0.3f);
+            off = fast_difference_between_rotations(turret_vars->fD4,
                                                     -fast_arc_tan(vector_length_xy(dir), dir[2]));
-            if (D_L17_0015F5CC % scale_game_frames(0x5A) == d->timer && off < 0.034906585f) {
+            if (D_L17_0015F5CC % scale_game_frames(0x5A) == turret_vars->timer && off < 0.034906585f) {
                 if (fast_difference_between_rotations(
-                        m->rot.z,
-                        fast_arc_tan(*(float *)(D_L17_001600EC + d->zone * 0x80 + 0x30) -
-                                         m->pos.x,
-                                     *(float *)(D_L17_001600EC + d->zone * 0x80 + 0x34) -
-                                         m->pos.y)) < 0.034906585f) {
+                        turret_moby->rot.z,
+                        fast_arc_tan(*(float *)(D_L17_001600EC + turret_vars->zone * 0x80 + 0x30) -
+                                         turret_moby->pos.x,
+                                     *(float *)(D_L17_001600EC + turret_vars->zone * 0x80 + 0x34) -
+                                         turret_moby->pos.y)) < 0.034906585f) {
                     char *p;
                     normalize_vector_xyz(j, dir, frame_time * 60.0f);
                     add_vector_xyz(j + 4, j, j + 4);
@@ -482,9 +482,9 @@ void dreks_fleet_turret_update(struct Moby *m) {
                     if (p != 0) {
                         p[9] = func_001FA898_r(4.0f) + 0x70;
                     }
-                    allocate_voice_for_target_entry(0, 0, (int)m);
-                    FUN_L17_002e94d8(m, (char *)from,
-                                     (float *)(D_L17_001600EC + (d->zone << 7) + 0x30),
+                    allocate_voice_for_target_entry(0, 0, (int)turret_moby);
+                    FUN_L17_002e94d8(turret_moby, (char *)from,
+                                     (float *)(D_L17_001600EC + (turret_vars->zone << 7) + 0x30),
                                      frame_time * 60.0f);
                 }
             }
@@ -495,7 +495,7 @@ void dreks_fleet_turret_update(struct Moby *m) {
         struct Hero *g = &hero;
         if (g->state.current != 0x32 || ((char *)g->ship_moby) == 0 ||
             *(short *)(((char *)g->ship_moby) + 0xA6) != 0x563) {
-            m->state = 1;
+            turret_moby->state = 1;
         } else {
             Aim347 aim;
             float j[8];
@@ -506,22 +506,22 @@ void dreks_fleet_turret_update(struct Moby *m) {
             float turn;
             float off;
 
-            transform_scaled_vertex_batch(m, 2, D_L17_00161980, (char *)j);
-            FUN_L00_0025fcb8(m, &aim, 512.0f);
+            transform_scaled_vertex_batch(turret_moby, 2, D_L17_00161980, (char *)j);
+            FUN_L00_0025fcb8(turret_moby, &aim, 512.0f);
             subtract_vector_xyz(dir, aim.pos, j);
             qcopy(from, j + 4);
-            yaw = &m->rot.z;
+            yaw = &turret_moby->rot.z;
             ang = fast_arc_tan(dir[0], dir[1]);
             turn = frame_time_sq * 0.5235988f;
-            approach_angle(yaw, &d->yawvel, ang, turn, turn, frame_time * 1.0471976f);
-            d->fF4 = -fast_arc_tan(vector_length_xy(dir), dir[2]);
-            update_joint_animation(m, d->a90, 0, frame_scale_sq * 0.02f, frame_scale_sq * 0.3f);
-            off = fast_difference_between_rotations(d->fD4,
+            approach_angle(yaw, &turret_vars->yawvel, ang, turn, turn, frame_time * 1.0471976f);
+            turret_vars->fF4 = -fast_arc_tan(vector_length_xy(dir), dir[2]);
+            update_joint_animation(turret_moby, turret_vars->a90, 0, frame_scale_sq * 0.02f, frame_scale_sq * 0.3f);
+            off = fast_difference_between_rotations(turret_vars->fD4,
                                                     -fast_arc_tan(vector_length_xy(dir), dir[2]));
-            if (tick_countdown_32_alt(&d->timer) && off < 0.034906585f) {
+            if (tick_countdown_32_alt(&turret_vars->timer) && off < 0.034906585f) {
                 if (fast_difference_between_rotations(
-                        m->rot.z, fast_arc_tan(aim.pos[0] - m->pos.x,
-                                                           aim.pos[1] - m->pos.y)) <
+                        turret_moby->rot.z, fast_arc_tan(aim.pos[0] - turret_moby->pos.x,
+                                                           aim.pos[1] - turret_moby->pos.y)) <
                     0.034906585f) {
                     if (collision_line(from, aim.pos, 2, ((char *)g->ship_moby), 0) == 0) {
                         char *p;
@@ -534,25 +534,25 @@ void dreks_fleet_turret_update(struct Moby *m) {
                         if (p != 0) {
                             p[9] = func_001FA898_r(4.0f) + 0x70;
                         }
-                        d->timer = scale_game_frames(0x5A) / 2;
-                        allocate_voice_for_target_entry(0, 0, (int)m);
-                        FUN_L17_002e94d8(m, (char *)from, tmp, frame_time * 60.0f);
+                        turret_vars->timer = scale_game_frames(0x5A) / 2;
+                        allocate_voice_for_target_entry(0, 0, (int)turret_moby);
+                        FUN_L17_002e94d8(turret_moby, (char *)from, tmp, frame_time * 60.0f);
                     }
                 }
             }
-            if (d->list != 0 && random_integer_below(0x1F4) == 0) {
-                FUN_L17_002f4fb8(d->list);
+            if (turret_vars->list != 0 && random_integer_below(0x1F4) == 0) {
+                FUN_L17_002f4fb8(turret_vars->list);
             }
         }
         break;
     }
     case FLEET_TURRET_DESTROY:
-        FUN_L00_00263fd8(m, 0x63A, &m->pos.x, &m->rot, 0, 0, 0.0f, D_L17_0015F580,
+        FUN_L00_00263fd8(turret_moby, 0x63A, &turret_moby->pos.x, &turret_moby->rot, 0, 0, 0.0f, D_L17_0015F580,
                          D_L17_0015F580, D_L17_0015F580);
-        FUN_L00_00263fd8(m, 0x63B, &m->pos.x, &m->rot, 0, 0, 0.0f, D_L17_0015F580,
+        FUN_L00_00263fd8(turret_moby, 0x63B, &turret_moby->pos.x, &turret_moby->rot, 0, 0, 0.0f, D_L17_0015F580,
                          D_L17_0015F580, D_L17_0015F580);
-        cart_burst(m, &m->pos, -1, 10.0f, 13.0f);
-        mark_moby_for_removal(m);
+        cart_burst(turret_moby, &turret_moby->pos, -1, 10.0f, 13.0f);
+        mark_moby_for_removal(turret_moby);
         break;
     }
 }
