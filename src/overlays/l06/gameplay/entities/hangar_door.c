@@ -590,24 +590,24 @@ int FUN_L06_002e9d10(void *m_, void *pos) {
 }
 /* Returns 0 while any listed class-0x33B moby is in a state other than 0xFE, 0xFD or 0x10; else 1. */
 int FUN_L06_002e9ea0(int index) {
-    unsigned short *p = (unsigned short *)D_L06_001ABFC0[index];
+    unsigned short *moby_index_cursor = (unsigned short *)D_L06_001ABFC0[index];
     char *base;
     char *moby;
-    if (p == 0)
+    if (moby_index_cursor == 0)
         return 1;
     base = (char *)D_L06_0015FFD8_d;
     for (;;) {
-        moby = base + ((*p & 0x7FFF) << 8);
+        moby = base + ((*moby_index_cursor & 0x7FFF) << 8);
         if (moby != 0 && *(short *)(moby + 0xA6) == 0x33B) {
-            unsigned char s = moby[0x20];
-            if (s != 0xFE) {
-                if (s != 0xFD) {
-                    if (s != 0x10)
+            unsigned char moby_state = moby[0x20];
+            if (moby_state != 0xFE) {
+                if (moby_state != 0xFD) {
+                    if (moby_state != 0x10)
                         return 0;
                 }
             }
         }
-        if ((short)*p++ < 0)
+        if ((short)*moby_index_cursor++ < 0)
             return 1;
     }
 }
