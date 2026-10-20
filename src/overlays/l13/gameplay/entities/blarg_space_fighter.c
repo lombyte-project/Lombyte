@@ -2830,52 +2830,52 @@ extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void FUN_L13_002e9018_c(void *, void *, float, float) __asm__("FUN_L13_002e9018");
 
-int FUN_L13_002e9160(struct Moby *m, char *d, int idx, int aim) {
-    char *path = D_L13_001B07B0[*(int *)(&d[idx << 2] + 0xB0)];
-    float a, seg, diff, t, yaw, pitch;
+int FUN_L13_002e9160(struct Moby *moby, char *moby_data, int idx, int aim) {
+    char *path = D_L13_001B07B0[*(int *)(&moby_data[idx << 2] + 0xB0)];
+    float distance_from_previous_node, seg, diff, steering_blend_factor, yaw, pitch;
     int wrapped = 0;
     float v[4];
-    a = FUN_001f9b48(path + (*(short *)(d + 0x9E) * 16 + 0x10), &m->pos);
-    seg = FUN_001f9b48(path + (*(short *)(d + 0x9E) * 16 + 0x10),
-                       path + (*(short *)(d + 0x9C) * 16 + 0x10));
-    diff = seg - a;
-    if (0.0f <= diff && diff < *(float *)(d + 0xAC)) {
-        *(short *)(d + 0x9E) = *(unsigned short *)(d + 0x9C);
-        *(short *)(d + 0x9C) = *(unsigned short *)(d + 0x9C) + ((signed char *)d)[0x10C];
-        if (*(short *)(d + 0x9C) >= *(int *)path) {
-            *(short *)(d + 0x9C) = 0;
+    distance_from_previous_node = FUN_001f9b48(path + (*(short *)(moby_data + 0x9E) * 16 + 0x10), &moby->pos);
+    seg = FUN_001f9b48(path + (*(short *)(moby_data + 0x9E) * 16 + 0x10),
+                       path + (*(short *)(moby_data + 0x9C) * 16 + 0x10));
+    diff = seg - distance_from_previous_node;
+    if (0.0f <= diff && diff < *(float *)(moby_data + 0xAC)) {
+        *(short *)(moby_data + 0x9E) = *(unsigned short *)(moby_data + 0x9C);
+        *(short *)(moby_data + 0x9C) = *(unsigned short *)(moby_data + 0x9C) + ((signed char *)moby_data)[0x10C];
+        if (*(short *)(moby_data + 0x9C) >= *(int *)path) {
+            *(short *)(moby_data + 0x9C) = 0;
             wrapped = 1;
         }
-        if (*(short *)(d + 0x9C) < 0) {
+        if (*(short *)(moby_data + 0x9C) < 0) {
             wrapped = 1;
-            *(short *)(d + 0x9C) = *(unsigned short *)path - 1;
+            *(short *)(moby_data + 0x9C) = *(unsigned short *)path - 1;
         }
-        t = 0.0f;
+        steering_blend_factor = 0.0f;
     } else {
-        t = a / seg;
+        steering_blend_factor = distance_from_previous_node / seg;
     }
-    if (t < 0.05f)
-        t = 0.05f;
-    if (1.0f < t)
-        t = 1.0f;
-    fast_vec_scale(d + 0x70, d + 0x70, 1.0f - t);
-    fast_vec_sub(v, path + (*(short *)(d + 0x9C) * 16 + 0x10), &m->pos);
-    fast_vec_normalize(v, v, *(float *)(d + 0xAC));
-    fast_vec_scale(v, v, t);
-    fast_vec_add(d + 0x70, d + 0x70, v);
-    fast_vec_normalize(d + 0x70, d + 0x70, *(float *)(d + 0xAC));
-    fast_vec_add(&m->pos, &m->pos, d + 0x70);
+    if (steering_blend_factor < 0.05f)
+        steering_blend_factor = 0.05f;
+    if (1.0f < steering_blend_factor)
+        steering_blend_factor = 1.0f;
+    fast_vec_scale(moby_data + 0x70, moby_data + 0x70, 1.0f - steering_blend_factor);
+    fast_vec_sub(v, path + (*(short *)(moby_data + 0x9C) * 16 + 0x10), &moby->pos);
+    fast_vec_normalize(v, v, *(float *)(moby_data + 0xAC));
+    fast_vec_scale(v, v, steering_blend_factor);
+    fast_vec_add(moby_data + 0x70, moby_data + 0x70, v);
+    fast_vec_normalize(moby_data + 0x70, moby_data + 0x70, *(float *)(moby_data + 0xAC));
+    fast_vec_add(&moby->pos, &moby->pos, moby_data + 0x70);
     yaw = fast_arc_tan(v[0], v[1]);
     pitch = -fast_arc_tan(vector_length_xy(v), v[2]);
-    if (m->state == 5) {
+    if (moby->state == 5) {
         struct Hero *g = &hero;
-        yaw = fast_arc_tan(g->motion.pos.f[0] - m->pos.x,
-                           g->motion.pos.f[1] - m->pos.y);
-        pitch = -fast_arc_tan(vector_distance(&m->pos, &g->motion.pos),
-                              g->motion.pos.f[2] - m->pos.z);
+        yaw = fast_arc_tan(g->motion.pos.f[0] - moby->pos.x,
+                           g->motion.pos.f[1] - moby->pos.y);
+        pitch = -fast_arc_tan(vector_distance(&moby->pos, &g->motion.pos),
+                              g->motion.pos.f[2] - moby->pos.z);
     }
     if (aim != 0)
-        FUN_L13_002e9018_c(m, d, yaw, pitch);
+        FUN_L13_002e9018_c(moby, moby_data, yaw, pitch);
     return wrapped;
 }
 /* Picks the racer's direction along its path from where the hero is, eases its speed, then steps it; bit 1 of the result is set past a marked node. */
