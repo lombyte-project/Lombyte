@@ -1615,7 +1615,7 @@ void FUN_L16_00214598(void) {
         }
         break;
     }
-    case 0x15: {
+    case HERO_STATE_CROUCH_SWING: {
         s32 jumping;
         hero.target_speed = 0.0f;
         if (hero.unkA9C != 0 || hero.anim_frame < D_L16_0017C088[hero.attack_record].f18) {
@@ -2509,7 +2509,7 @@ void FUN_L16_00214598(void) {
         }
         break;
     }
-    case 8: {
+    case HERO_STATE_LAND: {
         f32 sp;
         if (hero_slot_item_id(3) == 2) {
             if (hero.unk2228 != -1) {
