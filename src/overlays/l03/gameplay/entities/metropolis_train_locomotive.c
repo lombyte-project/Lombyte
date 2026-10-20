@@ -1693,7 +1693,7 @@ void robot_dog_update(char *moby) {
     char *partner_moby;
     int idx;
     float target_distance;
-    float a;
+    float initialization_multiplier_or_desired_heading;
 
     data = *(Data2c5bb8 **)(moby + 0x78);
     FUN_L03_0024e830(moby, (char *)&tgt, data->f230);
@@ -1719,12 +1719,12 @@ void robot_dog_update(char *moby) {
         data->f1A4 = data->f234 * frame_time;
         data->i1B8 |= 0x20;
         data->f1A8 = 2.0954423f;
-        a = FUN_L04_001f1978(6.0f);
+        initialization_multiplier_or_desired_heading = FUN_L04_001f1978(6.0f);
         data->f264 = 1.0f;
         data->i244 = 0;
         data->i26C = 0;
         data->i260 = 0;
-        data->f1AC = data->f1A4 * a;
+        data->f1AC = data->f1A4 * initialization_multiplier_or_desired_heading;
         data->b58 = 8;
         data->b5A = 7;
         if (FUN_001160d8() & 1) {
@@ -1778,8 +1778,8 @@ void robot_dog_update(char *moby) {
         }
         break;
     case ROBOT_DOG_TURN_TO_TARGET:
-        a = fast_arc_tan(tgt.pos[0] - *(float *)(moby + 0x10), tgt.pos[1] - *(float *)(moby + 0x14));
-        FUN_L00_00258278(moby, data->v220, a, 0.02f, 0.3f, 0.1f);
+        initialization_multiplier_or_desired_heading = fast_arc_tan(tgt.pos[0] - *(float *)(moby + 0x10), tgt.pos[1] - *(float *)(moby + 0x14));
+        FUN_L00_00258278(moby, data->v220, initialization_multiplier_or_desired_heading, 0.02f, 0.3f, 0.1f);
         if (((unsigned char *)moby)[0x70] & 2) {
             data->i23C = scale_game_frames((int)random_float_between(30.0f, 90.0f));
             moby[0x20] = 4;
@@ -1789,8 +1789,8 @@ void robot_dog_update(char *moby) {
         }
         break;
     case ROBOT_DOG_CHASE_TARGET:
-        a = fast_arc_tan(tgt.pos[0] - *(float *)(moby + 0x10), tgt.pos[1] - *(float *)(moby + 0x14));
-        FUN_L00_00258278(moby, data->v220, a, 0.05f, 0.3f, 0.2f);
+        initialization_multiplier_or_desired_heading = fast_arc_tan(tgt.pos[0] - *(float *)(moby + 0x10), tgt.pos[1] - *(float *)(moby + 0x14));
+        FUN_L00_00258278(moby, data->v220, initialization_multiplier_or_desired_heading, 0.05f, 0.3f, 0.2f);
         dir[0] = 2.0f * fast_cos(*(float *)(moby + 0x48));
         dir[1] = 2.0f * fast_sin(*(float *)(moby + 0x48));
         dir[2] = 0.0f;
@@ -1847,8 +1847,8 @@ void robot_dog_update(char *moby) {
         }
         break;
     case ROBOT_DOG_MELEE_ATTACK:
-        a = fast_arc_tan(tgt.pos[0] - *(float *)(moby + 0x10), tgt.pos[1] - *(float *)(moby + 0x14));
-        FUN_L00_00258278(moby, data->v220, a, 0.05f, 0.3f, 0.2f);
+        initialization_multiplier_or_desired_heading = fast_arc_tan(tgt.pos[0] - *(float *)(moby + 0x10), tgt.pos[1] - *(float *)(moby + 0x14));
+        FUN_L00_00258278(moby, data->v220, initialization_multiplier_or_desired_heading, 0.05f, 0.3f, 0.2f);
         dir[0] = 2.0f * fast_cos(*(float *)(moby + 0x48));
         dir[1] = 2.0f * fast_sin(*(float *)(moby + 0x48));
         dir[2] = 0.0f;
@@ -1878,8 +1878,8 @@ void robot_dog_update(char *moby) {
         }
         break;
     case ROBOT_DOG_RETURN_HOME:
-        a = fast_arc_tan(data->home[0] - *(float *)(moby + 0x10), data->home[1] - *(float *)(moby + 0x14));
-        FUN_L00_00258278(moby, data->v220, a, 0.02f, 0.3f, 0.1f);
+        initialization_multiplier_or_desired_heading = fast_arc_tan(data->home[0] - *(float *)(moby + 0x10), data->home[1] - *(float *)(moby + 0x14));
+        FUN_L00_00258278(moby, data->v220, initialization_multiplier_or_desired_heading, 0.02f, 0.3f, 0.1f);
         dir[0] = 2.0f * fast_cos(*(float *)(moby + 0x48));
         dir[1] = 2.0f * fast_sin(*(float *)(moby + 0x48));
         dir[2] = 0.0f;
