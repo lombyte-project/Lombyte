@@ -1437,73 +1437,73 @@ unsigned char *FUN_L00_002b46a8(int ign, V_2b46a8 *from, float *yaw, float *pitc
     V_2b46a8 src;
     V_2b46a8 tp;
     V_2b46a8 w;
-    unsigned char *m;
+    unsigned char *candidate_moby;
     unsigned char *r;
     unsigned char *best;
     float bestd;
-    float a;
+    float candidate_yaw;
     float b;
     float dy;
-    float d;
-    float e;
-    float s;
-    float t;
+    float candidate_distance;
+    float aim_angle_error;
+    float target_radius;
+    float target_angular_radius;
     struct Hero *g;
 
     best = 0;
     src.q = from->q;
     from = &src;
     bestd = 20.0f;
-    for (m = D_L00_0015FFE4_2b46a8; m != 0; m = *(unsigned char **)(m + 0x28)) {
-        if ((signed char)m[0x20] < 0) {
+    for (candidate_moby = D_L00_0015FFE4_2b46a8; candidate_moby != 0; candidate_moby = *(unsigned char **)(candidate_moby + 0x28)) {
+        if ((signed char)candidate_moby[0x20] < 0) {
             continue;
         }
-        qcopy(&tp, m + 0x10);
-        r = FUN_002141f8_2b46a8(m);
+        qcopy(&tp, candidate_moby + 0x10);
+        r = FUN_002141f8_2b46a8(candidate_moby);
         if (r != 0) {
             tp.f[2] += *(float *)(r + 0x10);
         } else {
             tp.f[2] += 0.5f;
         }
-        if (!(*(unsigned short *)(m + 0x34) & 0x1000)) {
+        if (!(*(unsigned short *)(candidate_moby + 0x34) & 0x1000)) {
             continue;
         }
-        a = FUN_001f9e90_2b46a8(tp.f[0] - from->f[0], tp.f[1] - from->f[1]);
+        candidate_yaw = FUN_001f9e90_2b46a8(tp.f[0] - from->f[0], tp.f[1] - from->f[1]);
         b = FUN_001f9e90_2b46a8(FUN_001f9b80_2b46a8(from, &tp), tp.f[2] - from->f[2]);
-        dy = FUN_001fa688_2b46a8(*yaw, a);
-        d = FUN_001f9b48_2b46a8(from, &tp);
-        if (bestd < d) {
+        dy = FUN_001fa688_2b46a8(*yaw, candidate_yaw);
+        candidate_distance = FUN_001f9b48_2b46a8(from, &tp);
+        if (bestd < candidate_distance) {
             continue;
         }
         g = &hero;
-        FUN_00214db0_2b46a8(&w, d, *yaw, *pitch + g->ground_pitch.f * 0.5f);
+        FUN_00214db0_2b46a8(&w, candidate_distance, *yaw, *pitch + g->ground_pitch.f * 0.5f);
         FUN_001f9a10_2b46a8(&w, &w, from);
-        e = FUN_001f9df8_2b46a8(FUN_001f9b48_2b46a8(&w, &tp) / (d + d));
-        e = e + e;
-        if (0.15707964f < e) {
-            r = FUN_002141f8_2b46a8(m);
+        aim_angle_error = FUN_001f9df8_2b46a8(FUN_001f9b48_2b46a8(&w, &tp) / (candidate_distance + candidate_distance));
+        aim_angle_error = aim_angle_error + aim_angle_error;
+        if (0.15707964f < aim_angle_error) {
+            r = FUN_002141f8_2b46a8(candidate_moby);
             if (r != 0) {
-                s = FUN_001fa6c0_2b46a8(r[0xA]) * 0.125f;
-                t = FUN_001f9df8_2b46a8(s / d);
-                if (s < d) {
-                    e -= t;
-                    if (e < 0.0f) {
-                        e = 0.0f;
+                target_radius = FUN_001fa6c0_2b46a8(r[0xA]) * 0.125f;
+                target_angular_radius = FUN_001f9df8_2b46a8(target_radius / candidate_distance);
+                if (target_radius < candidate_distance) {
+                    aim_angle_error -= target_angular_radius;
+                    if (aim_angle_error < 0.0f) {
+                        aim_angle_error = 0.0f;
                     }
                 }
             }
         }
-        if (e < 0.15707964f) {
+        if (aim_angle_error < 0.15707964f) {
             if (FUN_001efa68_2b46a8(D_L00_00166DC0_2b46a8, &tp, 6, ign, 0) ||
                 FUN_001efa68_2b46a8(from, &tp, 6, ign, 0)) {
                 return best;
             }
             *pitch = -b;
-            bestd = d;
+            bestd = candidate_distance;
             if (dy < 0.17453292f) {
-                *yaw = a;
+                *yaw = candidate_yaw;
             }
-            best = m;
+            best = candidate_moby;
         }
     }
     return best;
