@@ -1022,28 +1022,28 @@ extern void FUN_L00_00250df8(void *);
 void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 extern char *func_0020D348_m(int) __asm__("FUN_0020c4f8");
 
-char *FUN_L14_002eccf0(void *a, float *b, int c, int d) {
-    char *m = func_0020D348_m(0x2A9);
-    if (m) {
+char *FUN_L14_002eccf0(void *spawn_position, float *b, int c, int d) {
+    char *projectile_moby = func_0020D348_m(0x2A9);
+    if (projectile_moby) {
         char *data;
-        *(int *)(m + 0x40) = 0;
-        *(unsigned char *)(m + 0x30) = 0xFF;
-        *(short *)(m + 0x32) = 0x7F;
-        m[0x31] = 1;
-        data = *(char **)(m + 0x78);
-        *(float *)(m + 0x44) = -fast_arc_tan(vector_length_xy(b), b[2]);
-        *(float *)(m + 0x48) = fast_arc_tan(b[0], b[1]);
-        qcopy(m + 0x10, a);
-        qcopy(data + 0x10, a);
+        *(int *)(projectile_moby + 0x40) = 0;
+        *(unsigned char *)(projectile_moby + 0x30) = 0xFF;
+        *(short *)(projectile_moby + 0x32) = 0x7F;
+        projectile_moby[0x31] = 1;
+        data = *(char **)(projectile_moby + 0x78);
+        *(float *)(projectile_moby + 0x44) = -fast_arc_tan(vector_length_xy(b), b[2]);
+        *(float *)(projectile_moby + 0x48) = fast_arc_tan(b[0], b[1]);
+        qcopy(projectile_moby + 0x10, spawn_position);
+        qcopy(data + 0x10, spawn_position);
         qcopy(data, b);
-        blend_moby_animation(m, 1, 0, scale_game_frames(5));
-        *(short *)(m + 0x34) = 0x208;
+        blend_moby_animation(projectile_moby, 1, 0, scale_game_frames(5));
+        *(short *)(projectile_moby + 0x34) = 0x208;
         *(int *)(data + 0x20) = c;
         *(int *)(data + 0x24) = d;
-        m[0x23] = 0x10;
-        FUN_L00_00250df8(m);
+        projectile_moby[0x23] = 0x10;
+        FUN_L00_00250df8(projectile_moby);
     }
-    return m;
+    return projectile_moby;
 }
 /* Pvars of a flying bolt (same code as FUN_L07_0030b6a8, plus a sweep that skips class 0xFC mobys). */
 typedef struct {
