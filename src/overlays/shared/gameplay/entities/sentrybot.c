@@ -1151,41 +1151,41 @@ extern void FUN_L15_0029a248(char *, char *);
 typedef struct { char p[0x156]; short h156; } D_a0d0;
 
 void FUN_L15_0029a0d0(void *mp) {
-    unsigned char *m = mp;
-    char *d = *(char **)(m + 0x78);
+    unsigned char *source_moby = mp;
+    char *moby_data = *(char **)(source_moby + 0x78);
     float v[4];
     float w[4];
-    short *p;
+    short *group_moby_entry;
     int off;
-    char *o;
+    char *listed_moby;
     if (D_001413D4_a0[0] == 0x65) {
-        *(short *)(d + 0x156) = 0;
+        *(short *)(moby_data + 0x156) = 0;
         return;
     }
-    if (m[0x21] == 0xFF) {
-        *(short *)(d + 0x156) = FUN_001f96f8_a0(0xB4);
+    if (source_moby[0x21] == 0xFF) {
+        *(short *)(moby_data + 0x156) = FUN_001f96f8_a0(0xB4);
         return;
     }
-    p = D_L15_001ABE40_a0[m[0x21]];
-    if (p == 0) {
+    group_moby_entry = D_L15_001ABE40_a0[source_moby[0x21]];
+    if (group_moby_entry == 0) {
         return;
     }
-    qcopy(v, m + 0x10);
+    qcopy(v, source_moby + 0x10);
     v[2] += 1.0f;
     do {
-        off = (*(unsigned short *)p & 0x7FFF) << 8;
-        o = (char *)(off + D_L15_0015FFD8_a0);
-        if (o[0x20] >= 0 && *(short *)(o + 0xA6) == 0x2C) {
-            qcopy(w, o + 0x10);
+        off = (*(unsigned short *)group_moby_entry & 0x7FFF) << 8;
+        listed_moby = (char *)(off + D_L15_0015FFD8_a0);
+        if (listed_moby[0x20] >= 0 && *(short *)(listed_moby + 0xA6) == 0x2C) {
+            qcopy(w, listed_moby + 0x10);
             w[2] += 1.0f;
             if (FUN_001efa68_a0(w, v, 2, 0, 0) == 0) {
-                d = *(char **)((char *)(off + D_L15_0015FFD8_a0) + 0x78);
-                ((D_a0d0 *)d)->h156 = FUN_001f96f8_a0(300);
-                d[0x15B] = 0;
-                FUN_L15_0029a248((char *)m, (char *)(D_L15_0015FFD8_a0 + off));
+                moby_data = *(char **)((char *)(off + D_L15_0015FFD8_a0) + 0x78);
+                ((D_a0d0 *)moby_data)->h156 = FUN_001f96f8_a0(300);
+                moby_data[0x15B] = 0;
+                FUN_L15_0029a248((char *)source_moby, (char *)(D_L15_0015FFD8_a0 + off));
             }
         }
-    } while (*p++ >= 0);
+    } while (*group_moby_entry++ >= 0);
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_0029B428), where it is exact; names translated to the US level program. */
 
