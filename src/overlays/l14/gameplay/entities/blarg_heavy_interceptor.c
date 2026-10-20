@@ -905,7 +905,7 @@ extern void sreg_r(s32, s64) __asm__("FUN_00233980");
 extern void font_queue_vu_state(void) __asm__("FUN_001f76a0");
 
 void FUN_L14_002ada18(char *moby) {
-    char *d = *(char **)(moby + 0x78);
+    char *moby_vars = *(char **)(moby + 0x78);
     struct {
         float mat[4][4];    /* camera-facing frame */
         float verts[82][3]; /* ring vertices transformed by mat */
@@ -916,12 +916,12 @@ void FUN_L14_002ada18(char *moby) {
     int j;
 
     FUN_L14_002ae0a8((struct Moby *)moby);
-    qcopy(f.mat[0], d + 0xA0);
-    sub_r(f.mat[2], d + 0xD0, D_L14_001674C0_r);
+    qcopy(f.mat[0], moby_vars + 0xA0);
+    sub_r(f.mat[2], moby_vars + 0xD0, D_L14_001674C0_r);
     cross_r(f.mat[1], f.mat[0], f.mat[2]);
     normalize_r(f.mat[1], f.mat[1], 1.0f);
     cross_r(f.mat[2], f.mat[1], f.mat[0]);
-    qcopy(f.mat[3], d + 0xD0);
+    qcopy(f.mat[3], moby_vars + 0xD0);
     f.mat[3][3] = 1.0f;
     sreg_r(6, tex_r(0x16));
     sreg_r(0x42, 0x8000000048);
@@ -941,11 +941,11 @@ void FUN_L14_002ada18(char *moby) {
         o[0] = v[0];
         o[1] = v[1];
         o[2] = v[2];
-        if (*(short *)(d + 0x202) != 0) {
+        if (*(short *)(moby_vars + 0x202) != 0) {
             cols[i] = D_L14_001D80C8[i] & 0xFF0000FF;
         }
     }
-    if (*(short *)(d + 0x202) != 0) {
+    if (*(short *)(moby_vars + 0x202) != 0) {
         FUN_L00_001fde98(D_L14_00161418, f.verts, cols, D_L14_001D7E38, 1);
     } else {
         FUN_L00_001fde98(D_L14_00161418, f.verts, D_L14_001D80C8, D_L14_001D7E38, 1);
@@ -964,7 +964,7 @@ void FUN_L14_002ada18(char *moby) {
         o[1] = v[1];
         o[2] = v[2];
     }
-    if (*(short *)(d + 0x202) != 0) {
+    if (*(short *)(moby_vars + 0x202) != 0) {
         FUN_L00_001fde98(D_L14_00161418, f.verts, cols, D_L14_001D7E38, 1);
     } else {
         FUN_L00_001fde98(D_L14_00161418, f.verts, D_L14_001D80C8, D_L14_001D7E38, 1);
