@@ -94,13 +94,13 @@ void robot_head_update(char *self) {
         ROBOT_HEAD_SPAWN_AND_REMOVE = 2
     };
     int flag = 0;
-    char *o = find_moby_hit(self, 0x10000, 0);
+    char *hit_moby = find_moby_hit(self, 0x10000, 0);
     switch (((unsigned char *)self)[0x20]) {
     case ROBOT_HEAD_INITIALIZE:
         self[0x20] = 1;
         break;
     case ROBOT_HEAD_WAIT_FOR_HIT:
-        if (o != 0 && *(float *)(o + 0x2C) > 0.0f) {
+        if (hit_moby != 0 && *(float *)(hit_moby + 0x2C) > 0.0f) {
             flag = 1;
         }
         if (flag) {
@@ -108,7 +108,7 @@ void robot_head_update(char *self) {
         }
         break;
     case ROBOT_HEAD_SPAWN_AND_REMOVE: {
-        char *m;
+        char *spawned_moby;
         FUN_0022da68_c(0, 0, (int)self);
         FUN_L01_002787a0(self);
         FUN_L00_00263fd8(self, 0x68e, self + 0x10, self + 0x40, 0, 0, 0.0f, D_L07_0015F580,
@@ -117,14 +117,14 @@ void robot_head_update(char *self) {
                          D_L07_0015F580, D_L07_0015F580);
         FUN_L00_00263fd8(self, 0x690, self + 0x10, self + 0x40, 0, 0, 0.0f, D_L07_0015F580,
                          D_L07_0015F580, D_L07_0015F580);
-        m = mk_a(0x68d);
-        if (m != 0) {
-            m[0x31] = 1;
-            *(short *)(m + 0x32) = 0xFF;
-            qcopy(m + 0x10, self + 0x10);
-            qcopy(m + 0x40, self + 0x40);
-            *(long *)(m + 0x38) = *(long *)(self + 0x38);
-            upd_a(m);
+        spawned_moby = mk_a(0x68d);
+        if (spawned_moby != 0) {
+            spawned_moby[0x31] = 1;
+            *(short *)(spawned_moby + 0x32) = 0xFF;
+            qcopy(spawned_moby + 0x10, self + 0x10);
+            qcopy(spawned_moby + 0x40, self + 0x40);
+            *(long *)(spawned_moby + 0x38) = *(long *)(self + 0x38);
+            upd_a(spawned_moby);
         }
         mark_moby_for_removal_c_c(self);
         break;
