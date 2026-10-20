@@ -2398,7 +2398,7 @@ void FUN_L00_002a9c50(M_2a9c50 *moby) {
     PV_2a9c50 *pv = moby->pv;
     s32 i;
     s32 odd;
-    f32 direction_inclination, t;
+    f32 direction_inclination, spin_angle_numerator;
     if (D_L00_0015F5C4 == 2) {
         return;
     }
@@ -2410,12 +2410,12 @@ void FUN_L00_002a9c50(M_2a9c50 *moby) {
         rot.f[2] = 0.0f;
         rot.f[3] = 0.0f;
         spin_angles_x = 0.0f;
-        t = convert_integer_to_float(D_L00_0015F5CC % scale_game_frames(180));
+        spin_angle_numerator = convert_integer_to_float(D_L00_0015F5CC % scale_game_frames(180));
         {
             f32 spin_period = scale_time(180.0f);
             f32 r;
-            t *= 6.28318548f;
-            r = fast_normalize_angle(t / spin_period);
+            spin_angle_numerator *= 6.28318548f;
+            r = fast_normalize_angle(spin_angle_numerator / spin_period);
             if (odd) {
                 r = -r;
             }
