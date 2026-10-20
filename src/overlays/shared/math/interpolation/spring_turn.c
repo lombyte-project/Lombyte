@@ -287,14 +287,14 @@ extern int func_L00_001F10E0_l(void *, float, int, void *) __asm__("FUN_L00_001f
 
 int FUN_L00_00258830_c(char *m, char *v, int flags, float a, float b,
                        float c) __asm__("FUN_L00_00258830");
-int FUN_L00_00258830_c(char *m, char *v, int flags, float a, float b, float ground_probe_offset) {
+int FUN_L00_00258830_c(char *moving_object, char *v, int flags, float a, float b, float ground_probe_offset) {
     Vs original_position;
     Vs raised_position;
     Vs probe_end;
     Vs scaled_displacement;
     int r = 0;
     int fl = (flags * 2) & 0x20;
-    char *movement_position = m + 0x10;
+    char *movement_position = moving_object + 0x10;
     int i;
     char *collision_position;
 
@@ -306,29 +306,29 @@ int FUN_L00_00258830_c(char *m, char *v, int flags, float a, float b, float grou
         normalize_vector_xyz(&scaled_displacement, v, b);
         add_vector_xyz(&probe_end, &scaled_displacement, movement_position);
         probe_end.a[2] += a;
-        if (collision_line(&raised_position, &probe_end, fl, (int)m, 0)) {
+        if (collision_line(&raised_position, &probe_end, fl, (int)moving_object, 0)) {
             subtract_vector_xyz(movement_position, (char *)&D_94C8_60, &scaled_displacement);
             r = 1;
-            *(float *)(m + 0x18) -= a;
+            *(float *)(moving_object + 0x18) -= a;
         }
     }
-    for (i = 0, collision_position = m + 0x10; i < 6; i++) {
+    for (i = 0, collision_position = moving_object + 0x10; i < 6; i++) {
         qcopy(&raised_position, collision_position);
         raised_position.a[2] += a;
-        if (func_L00_001F10E0_l(&raised_position, b, fl | 4, m)) {
+        if (func_L00_001F10E0_l(&raised_position, b, fl | 4, moving_object)) {
             qcopy(collision_position, &D_L00_00173E70);
             r |= 1;
-            *(float *)(m + 0x18) -= a;
+            *(float *)(moving_object + 0x18) -= a;
         } else {
             break;
         }
     }
-    b = *(float *)(m + 0x18) - ground_probe_offset;
+    b = *(float *)(moving_object + 0x18) - ground_probe_offset;
     qcopy(&raised_position, collision_position);
     qcopy(&probe_end, collision_position);
     raised_position.a[2] += a;
     probe_end.a[2] = b - 0.05f;
-    if (collision_line(&raised_position, &probe_end, fl | 2, (int)m, 0)) {
+    if (collision_line(&raised_position, &probe_end, fl | 2, (int)moving_object, 0)) {
         if (D_L00_00173E40[7] > 0) {
             float g;
             r |= 2;
@@ -339,7 +339,7 @@ int FUN_L00_00258830_c(char *m, char *v, int flags, float a, float b, float grou
             }
             g = *(float *)((char *)D_L00_00173E40 + 0x28);
             if (b < g) {
-                *(float *)(m + 0x18) += (g - b) * 0.3f;
+                *(float *)(moving_object + 0x18) += (g - b) * 0.3f;
             }
         }
     }
