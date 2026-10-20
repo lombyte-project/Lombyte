@@ -177,16 +177,16 @@ extern void FUN_L00_0026dd20(void *, void *, u32, s32, f32);
  * within 3 units, dies off the arena, and on a hit (probing for its owner's
  * targets until the timer runs out) bursts into five sparks and is removed.
  */
-void FUN_L04_002af058(struct Moby *m)
+void FUN_L04_002af058(struct Moby *moby)
 {
     Vec4 old;
     CollisionProbe pr;
     Vec4 push;
     Vec4 r;
-    ShotVars *v = (ShotVars *)m->pvars;
+    ShotVars *v = (ShotVars *)moby->pvars;
     CollisionProbe *probe;
     f32 range;
-    f32 d;
+    f32 hero_distance;
     s32 i;
 
     range = 64.0f;
@@ -194,25 +194,25 @@ void FUN_L04_002af058(struct Moby *m)
         range = 128.0f;
     if (current_level_index == 12)
         range = 100.0f;
-    d = fast_vec_dist(&m->pos, &hero.motion.pos);
-    qcopy(&old, &m->pos);
-    add_vector_xyz(&m->pos, &m->pos, &v->dir);
-    if (v->unk28 == 0 && v->unk24 != 0 && v->hero_dist < d && d < 3.0f) {
-        allocate_voice_for_target_entry(0, 0, m);
+    hero_distance = fast_vec_dist(&moby->pos, &hero.motion.pos);
+    qcopy(&old, &moby->pos);
+    add_vector_xyz(&moby->pos, &moby->pos, &v->dir);
+    if (v->unk28 == 0 && v->unk24 != 0 && v->hero_dist < hero_distance && hero_distance < 3.0f) {
+        allocate_voice_for_target_entry(0, 0, moby);
         v->unk28 = 1;
     }
-    if (d < v->hero_dist)
+    if (hero_distance < v->hero_dist)
         v->unk24 = 1;
-    v->hero_dist = d;
-    if (m->pos.x < 0.0f || m->pos.y < 0.0f || m->pos.z < 0.0f
-        || range < vector_distance(&m->pos, D_L04_00166F40)) {
-        mark_moby_for_removal(m);
+    v->hero_dist = hero_distance;
+    if (moby->pos.x < 0.0f || moby->pos.y < 0.0f || moby->pos.z < 0.0f
+        || range < vector_distance(&moby->pos, D_L04_00166F40)) {
+        mark_moby_for_removal(moby);
         return;
     }
 
     probe = 0;
-    if (m->command == 0) {
-        pr.self = m;
+    if (moby->command == 0) {
+        pr.self = moby;
         if (v->owner->oclass == 0xFF || v->owner->oclass == 0x4B1) {
             pr.mask = 0x50001;
             pr.radius = 3.0f;
@@ -227,20 +227,20 @@ void FUN_L04_002af058(struct Moby *m)
         pr.dir.v.z = 1.0f;
         pr.dir.v.w = 5627.9248f;
         pr.unk19 = pr.unk18 = 1;
-        pr.oclass = m->oclass;
+        pr.oclass = moby->oclass;
     }
-    if (fast_dec_timer_s16(&v->time) && m->command == 0) {
-        m->command = 1;
+    if (fast_dec_timer_s16(&v->time) && moby->command == 0) {
+        moby->command = 1;
         v->time = v->time_max / 4;
-    } else if (v->time <= 0 && m->command != 0) {
-        mark_moby_for_removal(m);
+    } else if (v->time <= 0 && moby->command != 0) {
+        mark_moby_for_removal(moby);
         return;
     }
-    if (collision_line(&old, &m->pos, 0, v->owner, probe) == 0)
+    if (collision_line(&old, &moby->pos, 0, v->owner, probe) == 0)
         return;
 
-    qcopy(&m->pos, &D_L04_00173FE0);
-    if (m->command == 0) {
+    qcopy(&moby->pos, &D_L04_00173FE0);
+    if (moby->command == 0) {
         for (i = 0; i < 5; i++) {
             r.q = 0;
             r.f[0] = random_float_between(-1.0f, 1.0f);
@@ -251,11 +251,11 @@ void FUN_L04_002af058(struct Moby *m)
             normalize_vector_xyz(&push, &push, vector_length_xyz(&r) * 0.5f);
             add_vector_xyz(&push, &r, &push);
             normalize_vector_xyz(&push, &push, random_float_between(frame_time_macro * 3.0f, frame_time_macro * 6.0f));
-            FUN_L00_0026dd20(&m->pos, &push, 0x7F2F4F6F,
+            FUN_L00_0026dd20(&moby->pos, &push, 0x7F2F4F6F,
                              random_int_between(scale_game_frames(10), scale_game_frames(15)), 30000.0f);
         }
     }
-    mark_moby_for_removal(m);
+    mark_moby_for_removal(moby);
 }
 
 #define NOT_SDA
