@@ -1907,7 +1907,8 @@ void FUN_L02_00230988(void) {
         HERO_STATE_STOP_AT_TARGET = 102,
         HERO_STATE_IDLE_AT_TARGET = 103,
         HERO_STATE_WRENCH_COMBO_ALT = 112,
-        HERO_STATE_DEATH_FALL = 119
+        HERO_STATE_DEATH_FALL = 119,
+        HERO_STATE_DYING_ALT = 128
     };
     unsigned char *moby;
     int prevSub;
@@ -2226,7 +2227,7 @@ void FUN_L02_00230988(void) {
                 case HERO_STATE_VEHICLE_DYING:
                 case 98:
                 case 106:
-                case 128:
+                case HERO_STATE_DYING_ALT:
                 case 130:
                     if (hero.unkA98 & 2) {
                         hero_respawn();
