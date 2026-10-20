@@ -296,7 +296,7 @@ extern T_2d0538 D_L00_001E9E30;
 extern f32 D_L00_001618C8 __attribute__((sda));
 extern f32 D_L00_001618CC __attribute__((sda));
 extern f32 D_L00_001618D0 __attribute__((sda));
-void crate_drop_bolts(u8 *a) {
+void crate_drop_bolts(u8 *crate_moby) {
     enum {
         CRATE_DROP_AUTO_SELECT = 0,
         CRATE_DROP_FALLBACK_ITEM = 1
@@ -306,36 +306,36 @@ void crate_drop_bolts(u8 *a) {
     s32 n;
     f32 f54, f58;
     s32 cnt, i;
-    u8 *b, *p, *q;
-    s16 h;
-    f32 t, r, e;
+    u8 *b, *spawned_moby, *spawned_vars;
+    s16 crate_class;
+    f32 launch_angle, r, e;
 
-    b = *(u8 **)(a + 0x78);
-    h = *(s16 *)(a + 0xA6);
+    b = *(u8 **)(crate_moby + 0x78);
+    crate_class = *(s16 *)(crate_moby + 0xA6);
     tmp = D_L00_001E9E30;
     n = *(s16 *)(b + 0xC6) == 0;
-    if (h == 0x1F5)
+    if (crate_class == 0x1F5)
         n = 0;
     if (n) {
         clear_u64_value(&trajectory_vector);
         if (*(s32 *)(b + 0xF0)) {
-            if (a)
-                *(s16 *)(a + 0x36) = 0x7F80;
-            FUN_L00_00260400_2d0538(a, *(s32 *)(b + 0xF0), a + 0x10, a + 0x40, &adjusted_position, &scratch_vector);
-            fast_vec_sub(&trajectory_vector, &adjusted_position, a + 0x10);
+            if (crate_moby)
+                *(s16 *)(crate_moby + 0x36) = 0x7F80;
+            FUN_L00_00260400_2d0538(crate_moby, *(s32 *)(b + 0xF0), crate_moby + 0x10, crate_moby + 0x40, &adjusted_position, &scratch_vector);
+            fast_vec_sub(&trajectory_vector, &adjusted_position, crate_moby + 0x10);
         }
-        if (D_0015ED84 == 0xF && absolute_float(*(f32 *)(a + 0x10) - 166.0f) < 6.0f &&
-            absolute_float(*(f32 *)(a + 0x14) - 193.0f) < 6.0f) {
+        if (D_0015ED84 == 0xF && absolute_float(*(f32 *)(crate_moby + 0x10) - 166.0f) < 6.0f &&
+            absolute_float(*(f32 *)(crate_moby + 0x14) - 193.0f) < 6.0f) {
             s32 save = D_L00_0015F598;
             D_L00_0015F598 = 0;
-            mark_moby_for_removal_cf(a, 0x100, -1);
+            mark_moby_for_removal_cf(crate_moby, 0x100, -1);
             D_L00_0015F598 = save;
             return;
         }
-        mark_moby_for_removal_cf(a, 0x100, *(s32 *)(b + 0xC0));
+        mark_moby_for_removal_cf(crate_moby, 0x100, *(s32 *)(b + 0xC0));
         return;
     }
-    if (h != 0x1F5) {
+    if (crate_class != 0x1F5) {
         switch (*(u8 *)(b + 0xCB)) {
         case CRATE_DROP_FALLBACK_ITEM:
             n = 10;
@@ -375,50 +375,50 @@ void crate_drop_bolts(u8 *a) {
             n = -1;
             break;
         }
-        cnt = FUN_L00_00257218_2d0538(a, &n);
+        cnt = FUN_L00_00257218_2d0538(crate_moby, &n);
         for (i = 0; i < cnt; i++) {
-            p = FUN_L00_002c52a8_2d0538(a + 0x10, n, -1, 0);
-            if (!p)
+            spawned_moby = FUN_L00_002c52a8_2d0538(crate_moby + 0x10, n, -1, 0);
+            if (!spawned_moby)
                 break;
-            q = *(u8 **)(p + 0x78);
-            *(s16 *)(q + 4) = *(s16 *)(b + 0xC4);
-            t = FUN_00213308_2d0538();
+            spawned_vars = *(u8 **)(spawned_moby + 0x78);
+            *(s16 *)(spawned_vars + 4) = *(s16 *)(b + 0xC4);
+            launch_angle = FUN_00213308_2d0538();
             r = FUN_002132a8_2d0538(0.0f, D_L00_001618C8) * D_0015ED6C_2d0538;
-            *(f32 *)(q + 0x10) = fast_cos(t) * r;
+            *(f32 *)(spawned_vars + 0x10) = fast_cos(launch_angle) * r;
             {
-                f32 sn = fast_sin(t) * r;
+                f32 sn = fast_sin(launch_angle) * r;
                 {
                     f32 hi = D_L00_001618D0, lo = D_L00_001618CC;
-                    *(f32 *)(q + 0x18) = 0.0f;
-                    *(f32 *)(q + 0x14) = sn;
-                    *(f32 *)(q + 0x18) = FUN_002132a8_2d0538(lo, hi) * D_0015ED6C_2d0538;
+                    *(f32 *)(spawned_vars + 0x18) = 0.0f;
+                    *(f32 *)(spawned_vars + 0x14) = sn;
+                    *(f32 *)(spawned_vars + 0x18) = FUN_002132a8_2d0538(lo, hi) * D_0015ED6C_2d0538;
                 }
             }
             if (*(s32 *)(b + 0xC0) >= 0) {
                 s32 k = FUN_L00_002595a0_2d0538(
                     &f54, &f58, D_0015ED70 * 10.8f * -0.5f,
-                    *(f32 *)(q + 0x18) - D_0015ED70 * 10.8f * -0.5f,
-                    *(f32 *)(p + 0x18) -
+                    *(f32 *)(spawned_vars + 0x18) - D_0015ED70 * 10.8f * -0.5f,
+                    *(f32 *)(spawned_moby + 0x18) -
                         *(f32 *)(D_L00_001B04B0_2d0538[*(s32 *)(b + 0xC0)] + 0x18));
                 e = 120.0f;
                 if ((f32)k >= 1.0f && f54 > 0.0f && f54 < 120.0f)
                     e = f54;
-                scale_vector_xyz(&trajectory_vector, q + 0x10, e);
-                add_vector_xyz(&trajectory_vector, &trajectory_vector, a + 0x10);
-                FUN_L00_00261b48(*(s32 *)(b + 0xC0), a + 0x10, &trajectory_vector, &adjusted_position);
-                fast_vec_sub(&trajectory_vector, &adjusted_position, p + 0x10);
+                scale_vector_xyz(&trajectory_vector, spawned_vars + 0x10, e);
+                add_vector_xyz(&trajectory_vector, &trajectory_vector, crate_moby + 0x10);
+                FUN_L00_00261b48(*(s32 *)(b + 0xC0), crate_moby + 0x10, &trajectory_vector, &adjusted_position);
+                fast_vec_sub(&trajectory_vector, &adjusted_position, spawned_moby + 0x10);
                 trajectory_vector.f[2] = 0.0f;
                 normalize_vector_xyz(&scratch_vector, &trajectory_vector, 0.25f);
                 fast_vec_sub(&trajectory_vector, &trajectory_vector, &scratch_vector);
                 scale_vector_xyz(&trajectory_vector, &trajectory_vector, 1.0f / e);
-                *(f32 *)(q + 0x10) = trajectory_vector.f[0];
-                *(f32 *)(q + 0x14) = trajectory_vector.f[1];
+                *(f32 *)(spawned_vars + 0x10) = trajectory_vector.f[0];
+                *(f32 *)(spawned_vars + 0x14) = trajectory_vector.f[1];
             }
         }
     }
-    if (*(s16 *)(a + 0xB4))
-        *(s16 *)(a + 0xB4) = 0;
-    mark_moby_for_removal_cf(a, 0x100, -1);
+    if (*(s16 *)(crate_moby + 0xB4))
+        *(s16 *)(crate_moby + 0xB4) = 0;
+    mark_moby_for_removal_cf(crate_moby, 0x100, -1);
 }
 #include "qcopy.h"
 typedef struct V2d1428 {
