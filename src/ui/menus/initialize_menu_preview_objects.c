@@ -18,7 +18,7 @@ int initialize_menu_preview_objects(char *preview) __asm__("FUN_002240c8");
 
 int initialize_menu_preview_objects(char *preview) {
     char *object;
-    int *p;
+    int *resource_buffer_slot;
     int *object_variables;
     char *held_flag;
     int i, j;
@@ -36,10 +36,10 @@ int initialize_menu_preview_objects(char *preview) {
         g->loaded_animation[0] = 0xFF;
         g->loaded_animation[1] = 0xFF;
         g->read_buffer_index = 0;
-        p = g->unkB0;
+        resource_buffer_slot = g->unkB0;
         for (i = 2; i >= 0; i--) {
-            *p = select_next_stream_buffer(0);
-            p++;
+            *resource_buffer_slot = select_next_stream_buffer(0);
+            resource_buffer_slot++;
         }
     }
     {
