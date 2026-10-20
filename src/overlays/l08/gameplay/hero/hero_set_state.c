@@ -101,7 +101,8 @@ int hero_set_state(int a, int b) {
     enum {
         HERO_STATE_LEDGE_HANG = 0x19,
         HERO_STATE_GRIND_RAIL_TRANSFER = 0x2A,
-        HERO_STATE_GRIND_OBSTACLE_HOP = 0x42
+        HERO_STATE_GRIND_OBSTACLE_HOP = 0x42,
+        HERO_STATE_TARGET_POSE_STOP = 0x66
     };
     int old2088;
     char *moby;
@@ -651,7 +652,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x66: {
+    case HERO_STATE_TARGET_POSE_STOP: {
         struct Hero *p = &hero;
         char *v = (char *)&p->motion.unk110;
         p->state.control_mode = 1;
