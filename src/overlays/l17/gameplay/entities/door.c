@@ -3008,16 +3008,16 @@ extern void update_joint_animation(char *, char *, int, float, float) __asm__("F
 extern void subtract_vector_xyz(void *dst, void *a, void *b);
 
 void FUN_L17_002f00a0(struct Moby *moby) {
-    AimData_1BB0 *d = (AimData_1BB0 *)moby->pvars;
+    AimData_1BB0 *moby_vars = (AimData_1BB0 *)moby->pvars;
     float accel = 0.02f;
     float speed = 0.3f;
-    float tmp[4];
+    float aim_origin[4];
     float v[4];
     float yaw;
     float pitch;
-    qcopy(tmp, &moby->pos);
-    tmp[2] += 0.5f;
-    subtract_vector_xyz(v, (&hero.motion.unkD0), tmp);
+    qcopy(aim_origin, &moby->pos);
+    aim_origin[2] += 0.5f;
+    subtract_vector_xyz(v, (&hero.motion.unkD0), aim_origin);
     yaw = fast_subtract_rotations(fast_arc_tan(v[0], v[1]), moby->rot.z);
     pitch = -fast_arc_tan(vector_length_xy(v), v[2]);
     if (yaw > 1.0471976f) {
@@ -3030,9 +3030,9 @@ void FUN_L17_002f00a0(struct Moby *moby) {
     } else if (pitch < -0.5235988f) {
         pitch = -0.5235988f;
     }
-    d->part.pitch = pitch;
-    d->part.yaw = yaw;
-    update_joint_animation(moby, (char *)&d->part, 0, accel * frame_scale_sq, speed * frame_scale_sq);
+    moby_vars->part.pitch = pitch;
+    moby_vars->part.yaw = yaw;
+    update_joint_animation(moby, (char *)&moby_vars->part, 0, accel * frame_scale_sq, speed * frame_scale_sq);
 }
 
 #define NOT_SDA
