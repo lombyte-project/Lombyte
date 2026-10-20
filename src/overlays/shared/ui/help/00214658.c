@@ -861,12 +861,12 @@ extern int FUN_L00_00216de8();
 
 /* For each of eight timers that fast_dec_timer reports as 2, clears a field and calls 00216de8. */
 void FUN_L00_00216f10(void) {
-    char *p = (char *)&hero.unk21D8[0][2];
+    char *slot_timer_base = (char *)&hero.unk21D8[0][2];
     short *q = (short *)(&hero.unk21D8[0][3]);
     int i;
 
     for (i = 0; i < 8; i++) {
-        if (fast_dec_timer_s16(p + i * 8) == 2) {
+        if (fast_dec_timer_s16(slot_timer_base + i * 8) == 2) {
             q[i * 4 - 3] = 0;
             FUN_L00_00216de8(q[i * 4 - 2], q[i * 4]);
         }
