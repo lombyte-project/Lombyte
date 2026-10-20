@@ -11,8 +11,8 @@ static inline short pauseFlagState(void) {
    branch: jump.c turns an if into movz/movn only when its arm sets a
    full register, and the inline's short return value is a subreg. */
 int FUN_0021ddd0(char *state_owner) {
-    char *p = *(char **)(state_owner + 0x34);
-    *(short *)(p + 2) = pauseFlagState();
+    char *state_destination = *(char **)(state_owner + 0x34);
+    *(short *)(state_destination + 2) = pauseFlagState();
     return 0;
 }
 
