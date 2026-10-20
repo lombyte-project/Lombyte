@@ -1202,7 +1202,7 @@ extern void attach_2da710(void *, int, void *) __asm__("FUN_0020cb10");
 
 /* During the cutscene, nudges a camera value at two time windows and attaches
  * the shared manipulator to every listed moby of the same class as m. */
-void FUN_L03_002da710(struct Moby *m) {
+void FUN_L03_002da710(struct Moby *class_reference_moby) {
     char *shared_attachment_record;
     int i;
 
@@ -1214,7 +1214,7 @@ void FUN_L03_002da710(struct Moby *m) {
             D_L03_0015F5A0 = 0.2f;
         }
         for (i = 0; i < D_L03_0016C960.n; i++) {
-            if (*(short *)(D_L03_0016C960.list[i] + 0xA6) == m->oclass) {
+            if (*(short *)(D_L03_0016C960.list[i] + 0xA6) == class_reference_moby->oclass) {
                 shared_attachment_record = D_L03_0017C540;
                 if (((unsigned char *)shared_attachment_record)[1] == 0) {
                     attach_2da710(D_L03_0016C960.list[i], 0, shared_attachment_record);
