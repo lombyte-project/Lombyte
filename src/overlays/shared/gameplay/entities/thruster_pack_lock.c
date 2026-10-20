@@ -415,9 +415,6 @@ void FUN_L11_003112b8(void *m, char *t) {
         }
     }
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L11_003192c8.s", FUN_L11_003192c8);
-#else
 extern unsigned char D_0015EDB2;
 extern float D_L11_001F1490[];
 extern short D_L11_001623F0_d __asm__("D_L11_001623F0") __attribute__((sda));
@@ -447,6 +444,7 @@ int FUN_L11_003192c8(char *moby) {
     float base, blend;
     long skip;
     char *other, *trail;
+    int never = 0;
 
     if (*(unsigned char *)(moby + 0x21) == 0xFF) {
         return;
@@ -486,6 +484,11 @@ int FUN_L11_003192c8(char *moby) {
     list = D_L11_001AC240[*(unsigned char *)(moby + 0x21)];
     do {
         next_list = list + 1;
+        /* Fakematch: the never-taken call keeps more insns through gcse; its bigger expression
+           table orders the spill slots of the two hoisted stack addresses as retail. */
+        if (never) {
+            draw_packet(0, 0, 0);
+        }
         skip = 1;
         other = (char *)(((*list & 0x7FFF) << 8) + D_L11_0015FFD8);
         other_class = *(short *)(other + 0xA6);
@@ -509,7 +512,8 @@ int FUN_L11_003192c8(char *moby) {
                         next_side = side + 1;
                         for (corner = 0; corner < 4; corner++) {
                             int point = (slot + (corner >> 1)) % 16;
-                            add_vector_xyz(quads[segment].positions[corner], trail + 0xC0 + side * 0x100 + point * 16, offset[corner & 1]);
+                            add_vector_xyz(quads[segment].positions[corner], &((float (*)[16][4])(trail + 0xC0))[side][point][0],
+                                           offset[corner & 1]);
                         }
                         draw_packet(&quads[segment], 0, 0);
                         side = next_side;
@@ -522,7 +526,6 @@ int FUN_L11_003192c8(char *moby) {
         list = next_list;
     } while (more);
 }
-#endif
 /* Advances a trail ring buffer and records two offset points each fourth frame. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C99E0.c: func_L11_0031AAE0), where it is exact; names translated to the US level program. */
 

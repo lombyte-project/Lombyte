@@ -3025,8 +3025,8 @@ extern void FUN_001f99f8(void *);
 extern void FUN_L01_0027f660(QVec *, QVec *);
 extern void FUN_001f9a68(void *, void *, f32);
 extern void FUN_001f9a10(void *, void *, void *);
-extern void FUN_L00_0025e450(struct Moby *, QVec *, QVec *, s32, s32, s32, s32, s32,
-                             f32, f32, f32, f32, f32, f32, f32, s32, s32, s32);
+extern void FUN_L00_0025e450(struct Moby *, QVec *, QVec *, f32, f32, s32, s32, s32, f32, f32, f32, f32,
+                             s32, f32, s32, s32, s32, s32);
 
 void gunship_follow_path(struct Moby *m) __asm__("FUN_L01_002f5168");
 
@@ -3043,6 +3043,7 @@ void gunship_follow_path(struct Moby *m) {
     PathCursor *p;
     s32 frozen;
     s32 i;
+    s32 never = 0;
     f32 f20;
     f32 f24;
 
@@ -3327,11 +3328,15 @@ void gunship_follow_path(struct Moby *m) {
             FUN_001f9a10(&off[0], &off[0], src);
             v->unk13A = FUN_001f96f8(600);
             dir = &off[1];
+            /* Fakematch: the never-taken call keeps gcse from propagating &off[1] into the call, so dir
+               gets a1 before the class tests and &off[1] gets s0, as in retail. */
+            if (never)
+                dir = (QVec *)FUN_001f96f8(0);
             k = -1;
             if (m->oclass == 0x532 || m->oclass == 0x53B || m->oclass == 0x53C)
                 k = 1;
-            FUN_L00_0025e450(m, dir, &off[0], 0x14, 3, 4, k, 1,
-                             0.0f, 0.0f, 4.0f, 2.0f, 100000.0f, 3.0f, 15.0f, 1, -1, 0);
+            FUN_L00_0025e450(m, dir, &off[0], 0.0f, 0.0f, 0x14, 3, 4, 4.0f, 2.0f, 100000.0f, 3.0f, k, 15.0f, 1,
+                             1, -1, 0);
         }
     }
     D_L01_00160770 = (void *)gunship_follow_path;

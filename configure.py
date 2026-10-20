@@ -332,7 +332,6 @@ OVERLAY_SN_UNITS = {
     "shared/gameplay/entities/seeker.c",
     "shared/gameplay/entities/sentrybot.c",
     "shared/gameplay/entities/spawner.c",
-    "shared/gameplay/entities/thruster_pack_lock.c",
     "shared/gameplay/entities/timed_activation_pads.c",
     "shared/gameplay/entities/trackdrive_left.c",
     "shared/gameplay/entities/trespasser.c",
