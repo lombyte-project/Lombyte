@@ -1833,8 +1833,8 @@ void FUN_L15_002edbe0(struct Moby *moby) {
         float x = template_vertex[0];
         float y = template_vertex[1];
         float rad = FUN_001f9988_2edbe0(x * x + y * y);
-        float a = FUN_L00_00200260_2edbe0(rad, D_L15_001621F0);
-        float w = FUN_001fa610_2edbe0(a * 6.2831855f / D_L15_001621F0);
+        float radius_remainder = FUN_L00_00200260_2edbe0(rad, D_L15_001621F0);
+        float w = FUN_001fa610_2edbe0(radius_remainder * 6.2831855f / D_L15_001621F0);
         float z = FUN_001f9de0_2edbe0(FUN_001fa580_2edbe0(w, data->angle));
         D_L15_001DECB0[i][0] = D_L15_00162200 * template_vertex[0] + moby->pos.x;
         D_L15_001DECB0[i][1] = D_L15_00162200 * template_vertex[1] + moby->pos.y;
