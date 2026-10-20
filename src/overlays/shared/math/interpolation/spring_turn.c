@@ -557,9 +557,9 @@ int FUN_L00_002592b8_c(char **, char *) __asm__("FUN_L00_002592b8");
  * current entry back, as the original did. */
 int FUN_L00_002591d0(char **out, int idx, int a, int b) {
     unsigned short *v;
-    char *e;
-    int c;
-    int h;
+    char *entry_address;
+    int entry_sign_bit_set;
+    int entry_index;
     if (idx < 0 || D_L00_0015FFF4 < idx) {
         *out = 0;
         return -1;
@@ -569,15 +569,15 @@ int FUN_L00_002591d0(char **out, int idx, int a, int b) {
     v = D_L00_001AB840_2591d0[idx];
     D_L00_0016010C_2591d0 = v;
     if (v == 0) return -1;
-    h = *v & 0x7FFF;
-    D_L00_00160110 = h;
-    e = D_L00_0015FFD8_2591d0 + (h << 8);
-    D_L00_00160114 = e;
-    *out = e;
-    c = (unsigned)(*(char *volatile *)&D_L00_00160114)[0x20] >> 31;
+    entry_index = *v & 0x7FFF;
+    D_L00_00160110 = entry_index;
+    entry_address = D_L00_0015FFD8_2591d0 + (entry_index << 8);
+    D_L00_00160114 = entry_address;
+    *out = entry_address;
+    entry_sign_bit_set = (unsigned)(*(char *volatile *)&D_L00_00160114)[0x20] >> 31;
     if (!a) {
-        if (b || c) return FUN_L00_002592b8_c(out, D_L00_00160114);
-    } else if (b && !c) return FUN_L00_002592b8_c(out, D_L00_00160114);
+        if (b || entry_sign_bit_set) return FUN_L00_002592b8_c(out, D_L00_00160114);
+    } else if (b && !entry_sign_bit_set) return FUN_L00_002592b8_c(out, D_L00_00160114);
     return 0;
 }
 
