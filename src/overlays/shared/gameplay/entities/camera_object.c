@@ -1173,8 +1173,8 @@ void FUN_L00_002a6de8(char *moby, void *out1, void *out2) {
         BOLT_CLASS_TWENTY = 15
     };
     char *data = *(char **)(moby + 0x78);
-    float m0[12];
-    float m1[12];
+    float local_rotation_basis[12];
+    float base_rotation_basis[12];
     float local_rotation_angles[4];
     float rotated_position_offset[4];
     float A[4];
@@ -1229,10 +1229,10 @@ void FUN_L00_002a6de8(char *moby, void *out1, void *out2) {
     }
     qcopy(local_rotation_angles, data + 0x50);
     local_rotation_angles[1] = c2;
-    euler_rotation_basis(m0, local_rotation_angles);
-    euler_rotation_basis(m1, B);
-    multiply_matrix3x3(moby + 0xC0, m1, m0);
-    fast_vec_scale(moby + 0x10, &m1[8], c3);
+    euler_rotation_basis(local_rotation_basis, local_rotation_angles);
+    euler_rotation_basis(base_rotation_basis, B);
+    multiply_matrix3x3(moby + 0xC0, base_rotation_basis, local_rotation_basis);
+    fast_vec_scale(moby + 0x10, &base_rotation_basis[8], c3);
     fast_vec_scale(rotated_position_offset, moby + 0xC0, c4);
     fast_vec_add(moby + 0x10, moby + 0x10, rotated_position_offset);
     fast_vec_add(moby + 0x10, moby + 0x10, A);
@@ -1261,7 +1261,7 @@ void FUN_L00_002a6de8(char *moby, void *out1, void *out2) {
                 } else {
                     clear_u64_value(data + 0x20);
                 }
-                FUN_001f9bf8_u(C, &m1[8], D_0015ED6C);
+                FUN_001f9bf8_u(C, &base_rotation_basis[8], D_0015ED6C);
                 FUN_001f9bf8_u(D, (float *)(moby + 0xC0), D_0015ED6C);
                 fast_vec_add(C, C, D);
                 fast_vec_add(data + 0x20, data + 0x20, C);
