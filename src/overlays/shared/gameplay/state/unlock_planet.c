@@ -102,7 +102,7 @@ int FUN_L00_0025ff38(char *query_moby, char *target_output, float best, int *lis
     int j;
     int k;
     int ok;
-    float d;
+    float candidate_distance_score;
 
     selected_moby = (char *)g->moby;
     res = 0;
@@ -131,8 +131,8 @@ int FUN_L00_0025ff38(char *query_moby, char *target_output, float best, int *lis
         if (*(unsigned char *)(indexed_candidate + 0x20) == 0xFD) continue;
         if (*(unsigned char *)(indexed_candidate + 0x20) != 3) continue;
         ok = 1;
-        d = FUN_001f9b80_25fcb8(query_moby + 0x10, indexed_candidate + 0x10);
-        if (best <= d) {
+        candidate_distance_score = FUN_001f9b80_25fcb8(query_moby + 0x10, indexed_candidate + 0x10);
+        if (best <= candidate_distance_score) {
             ok = 0;
         } else if (n > 0) {
             for (k = 0; k < n - 1; k++) {
@@ -147,7 +147,7 @@ int FUN_L00_0025ff38(char *query_moby, char *target_output, float best, int *lis
         if (ok) {
             selected_moby = indexed_candidate;
             res = 1;
-            best = d;
+            best = candidate_distance_score;
         }
     }
     for (j = 0; j < 20; j++) {
@@ -158,8 +158,8 @@ int FUN_L00_0025ff38(char *query_moby, char *target_output, float best, int *lis
         if (*(unsigned char *)(listed_candidate + 0x20) == 0xFD) continue;
         if (*(unsigned char *)(listed_candidate + 0xBC) == 0) continue;
         ok = 1;
-        d = FUN_001f9b80_25fcb8(query_moby + 0x10, listed_candidate + 0x10);
-        if (best <= d) {
+        candidate_distance_score = FUN_001f9b80_25fcb8(query_moby + 0x10, listed_candidate + 0x10);
+        if (best <= candidate_distance_score) {
             ok = 0;
         } else if (n > 0) {
             for (k = 0; k < n - 1; k++) {
@@ -174,7 +174,7 @@ int FUN_L00_0025ff38(char *query_moby, char *target_output, float best, int *lis
         if (ok) {
             selected_moby = listed_candidate;
             res = 1;
-            best = d;
+            best = candidate_distance_score;
         }
     }
     if (selected_moby != 0) {
