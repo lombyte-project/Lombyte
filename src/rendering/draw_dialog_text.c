@@ -115,7 +115,7 @@ void draw_dialog_text(void) {
     setup_gif_paging(0);
     switch (freeze.state) {
     case FREEZE_SPLIT_TEXT_ICON_DIALOG: {
-        u8 *p;
+        u8 *text_cursor;
         s32 color;
         s32 tint;
         s32 y;
@@ -131,24 +131,24 @@ void draw_dialog_text(void) {
         box = D_001E78F0;
         color = fast_tween_color(D_0015F4F0, D_0015F4F4, alpha);
         strncpy(SCRATCHPAD, get_help_message_text(0x4E2B), 0x400);
-        p = SCRATCHPAD;
-        while (*p >= 2) {
-            p++;
+        text_cursor = SCRATCHPAD;
+        while (*text_cursor >= 2) {
+            text_cursor++;
         }
-        if (*p == 1) {
+        if (*text_cursor == 1) {
             do {
-                *p++ = 0;
-            } while (*p == 1);
+                *text_cursor++ = 0;
+            } while (*text_cursor == 1);
         }
         font_print_window(&box, color, SCRATCHPAD, -1, get_effect_texture(1), normal_font_metrics);
         pivot = 272.0f;
         box.flags |= 4;
         y = box.anchor_y;
         y += box.rendered_height;
-        font_print_window(&box, color, p, -1, get_effect_texture(1), normal_font_metrics);
+        font_print_window(&box, color, text_cursor, -1, get_effect_texture(1), normal_font_metrics);
         box.flags ^= 4;
         box.anchor_y = 0x136 - box.rendered_height;
-        font_print_window(&box, color, p, -1, get_effect_texture(1), normal_font_metrics);
+        font_print_window(&box, color, text_cursor, -1, get_effect_texture(1), normal_font_metrics);
         tint = fast_tween_color(0x20FFFF, 0x8020FFFF,
                             1.0f - (f32)freeze.unk24 / (f32)scale_game_frames(30));
         font_print_center(0x100, 0x140, tint, get_help_message_text(0x524A), -1);
@@ -169,7 +169,7 @@ void draw_dialog_text(void) {
         s32 mid;
         s32 tint;
         s32 y;
-        s32 h;
+        s32 dialog_height;
         f32 alpha;
 
         text = freeze_default_text;
@@ -272,9 +272,9 @@ void draw_dialog_text(void) {
         }
         box = (struct TextRegion){0, screen_extent.height, 0x60, 0x1A0, 0x100, 0x68, 0, 0, 0x10, 5};
         font_print_window_regular(&box, 0, text, -1);
-        h = box.rendered_height + 0x28;
-        y = (screen_extent.height - h) >> 1;
-        box.bottom = y + h;
+        dialog_height = box.rendered_height + 0x28;
+        y = (screen_extent.height - dialog_height) >> 1;
+        box.bottom = y + dialog_height;
         box.anchor_y = y + 4;
         box.top = y;
         alpha = 1.0f - (f32)freeze.timer / (f32)scale_game_frames(30);
@@ -345,7 +345,7 @@ void draw_dialog_text(void) {
         s32 sec;
         s32 hund;
         f32 scale;
-        f32 f;
+        f32 color_blend_fraction;
 
         pulse = fast_tween_color(D_0015F524, D_0015F528,
                              fast_sin((f32)(game_frame_counter % freeze_wave_period) / convert_integer_to_float(freeze_wave_period) * 6.28318f - 3.14159f) *
@@ -361,15 +361,15 @@ void draw_dialog_text(void) {
         c2 = D_0015F534;
         c3 = D_0015F53C;
         if (freeze.unk24 != 0) {
-            f = (f32)freeze.unk24 * 0.125f;
-            if (f > 1.0f) {
-                f = 1.0f;
-            } else if (f < 0.0f) {
-                f = 0.0f;
+            color_blend_fraction = (f32)freeze.unk24 * 0.125f;
+            if (color_blend_fraction > 1.0f) {
+                color_blend_fraction = 1.0f;
+            } else if (color_blend_fraction < 0.0f) {
+                color_blend_fraction = 0.0f;
             }
-            c1 = fast_tween_color(D_0015F52C, D_0015F530, f);
-            c2 = fast_tween_color(D_0015F534, D_0015F538, f);
-            c3 = fast_tween_color(D_0015F53C, D_0015F540, f);
+            c1 = fast_tween_color(D_0015F52C, D_0015F530, color_blend_fraction);
+            c2 = fast_tween_color(D_0015F534, D_0015F538, color_blend_fraction);
+            c3 = fast_tween_color(D_0015F53C, D_0015F540, color_blend_fraction);
         }
         if (hero.unk89A < 3) {
             draw_outlined_rect(D_0015F4FC - truncate_float_to_s32((f32)D_0015F504 * scale),
