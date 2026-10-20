@@ -43,9 +43,9 @@ void FUN_L08_00305138(struct Moby *moby) {
             D_L08_0015F5A0 = -0.3f;
         }
         for (i = 0; i < D_L08_0016D060.n; i++) {
-            char *o = D_L08_0016D060.objs[i];
-            if (*(short *)(o + 0xA6) == moby->oclass && D_L08_0017CC40[1] == 0) {
-                attach_manipulator(o, 0, D_L08_0017CC40);
+            char *candidate_moby = D_L08_0016D060.objs[i];
+            if (*(short *)(candidate_moby + 0xA6) == moby->oclass && D_L08_0017CC40[1] == 0) {
+                attach_manipulator(candidate_moby, 0, D_L08_0017CC40);
                 *(float *)(D_L08_0017CC40 + 0x20) = 2.75f;
                 *(float *)(D_L08_0017CC40 + 0x24) = 2.75f;
                 *(float *)(D_L08_0017CC40 + 0x28) = 2.75f;
