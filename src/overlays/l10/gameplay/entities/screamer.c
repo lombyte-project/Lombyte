@@ -2334,7 +2334,7 @@ extern float D_L10_00161E48 __attribute__((sda));
 float FUN_L10_002e4840(struct Moby *self) {
     char *owner = *(char **)(self->pvars + 0x160);
     float hi, lo, ang, dist, v[3];
-    short *p;
+    short *group_entry;
     if (self->group == 0xFF) {
         return fast_arc_tan(self->pos.x - *(float *)(owner + 0x10),
                             self->pos.y - *(float *)(owner + 0x14));
@@ -2348,10 +2348,10 @@ float FUN_L10_002e4840(struct Moby *self) {
     v[1] = fast_sin(ang) * 2.0f;
     v[2] = 0.0f;
     fast_vec_add(v, v, ((unsigned char *)&D_0013E533) + 0xE9D);
-    p = D_L10_001ABCC0[self->group];
-    if (p != 0) {
+    group_entry = D_L10_001ABCC0[self->group];
+    if (group_entry != 0) {
         do {
-            int idx = *(unsigned short *)p & 0x7FFF;
+            int idx = *(unsigned short *)group_entry & 0x7FFF;
             if (D_L10_0015FFD0_e[2][idx].state == 5 ||
                 FUN_001f9b48(&D_L10_0015FFD0_e[2][idx].x, owner + 0x10) < dist) {
                 float d = fast_arc_tan(D_L10_0015FFD0_e[2][idx].x - *(float *)(owner + 0x10),
@@ -2363,7 +2363,7 @@ float FUN_L10_002e4840(struct Moby *self) {
                     lo = r;
                 }
             }
-        } while (*p++ >= 0);
+        } while (*group_entry++ >= 0);
     }
     return fast_add_rotations(
         fast_add_rotations(lo, fast_difference_between_rotations(hi, lo) * 0.5f), ang);
