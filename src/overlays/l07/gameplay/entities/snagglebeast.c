@@ -323,6 +323,7 @@ extern char D_0013E5C4[];
 
 void FUN_L07_00313420(char *moby, char *data, float *health) {
     enum {
+        SNAGGLEBEAST_HIT_KIND_FORCE_UNIT_DAMAGE = 0x79,
         SNAGGLEBEAST_HIT_KIND_REDUCED_DAMAGE = 0x131
     };
     char *hit;
@@ -346,7 +347,7 @@ void FUN_L07_00313420(char *moby, char *data, float *health) {
                 unsigned short kind = *(unsigned short *)(hit + 0x2a);
                 switch (kind) {
                 case SNAGGLEBEAST_HIT_KIND_REDUCED_DAMAGE: *(float *)(hit + 0x2c) = 0.2f; break;
-                case 0x79: case 0xba: *(float *)(hit + 0x2c) = 1.0f; break;
+                case SNAGGLEBEAST_HIT_KIND_FORCE_UNIT_DAMAGE: case 0xba: *(float *)(hit + 0x2c) = 1.0f; break;
                 }
             }
             owner = *(char **)(hit + 0x20);
