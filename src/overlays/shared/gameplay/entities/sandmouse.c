@@ -309,54 +309,54 @@ extern f32 D_L01_00167240_30c9a8[] __asm__("D_L01_00167240");
 extern OvlQuad D_0013F3D0_30c9a8 __asm__("D_0013F3D0");
 
 extern OvlQuad D_L01_001742E0;
-void FUN_L01_0030c9a8(char *m) {
-    char *e = *(char **)(m + 0x78);
+void FUN_L01_0030c9a8(char *moby) {
+    char *moby_vars = *(char **)(moby + 0x78);
     f32 *pos;
     OvlVec4 old_pos;
     OvlVec4 offset;
     DropProbe_30c9a8 probe;
     f32 desired_yaw, desired_pitch;
     f32 pitch_k, pitch_d, pitch_max;
-    f32 height = *(f32 *)(*(char **)(m + 0x24) + 0x24);
+    f32 height = *(f32 *)(*(char **)(moby + 0x24) + 0x24);
 
-    if (*(f32 *)(m + 0x2c) < height)
-        *(f32 *)(m + 0x2c) += frame_scale * 0.21f * height;
+    if (*(f32 *)(moby + 0x2c) < height)
+        *(f32 *)(moby + 0x2c) += frame_scale * 0.21f * height;
 
-    if (*(s16 *)(e + 0x14) < scale_game_frames(0x23) - scale_game_frames(1)) {
-        desired_yaw = *(f32 *)(e + 8);
-        desired_pitch = *(f32 *)(e + 0xc);
+    if (*(s16 *)(moby_vars + 0x14) < scale_game_frames(0x23) - scale_game_frames(1)) {
+        desired_yaw = *(f32 *)(moby_vars + 8);
+        desired_pitch = *(f32 *)(moby_vars + 0xc);
     } else {
-        desired_yaw = *(f32 *)(m + 0x48);
-        desired_pitch = *(f32 *)(m + 0x44);
+        desired_yaw = *(f32 *)(moby + 0x48);
+        desired_pitch = *(f32 *)(moby + 0x44);
     }
-    pos = (f32 *)(m + 0x10);
-    desired_yaw = spring_turn((f32 *)e, *(f32 *)(m + 0x48), desired_yaw,
+    pos = (f32 *)(moby + 0x10);
+    desired_yaw = spring_turn((f32 *)moby_vars, *(f32 *)(moby + 0x48), desired_yaw,
                                             frame_time_sq * 4.712389f,
                                             frame_time_sq * 3.1415927f,
                                             frame_time * 3.1415927f);
     pitch_d = frame_time_sq * 3.1415927f;
     pitch_k = frame_time_sq * 4.712389f;
     pitch_max = frame_time * 3.1415927f;
-    *(f32 *)(m + 0x48) = desired_yaw;
+    *(f32 *)(moby + 0x48) = desired_yaw;
     {
-        f32 pitch_result = spring_turn((f32 *)(e + 4), *(f32 *)(m + 0x44), desired_pitch,
+        f32 pitch_result = spring_turn((f32 *)(moby_vars + 4), *(f32 *)(moby + 0x44), desired_pitch,
                                                 pitch_k, pitch_d, pitch_max);
         pitch_max = frame_time * 40.0f;
-        *(f32 *)(m + 0x44) = pitch_result;
+        *(f32 *)(moby + 0x44) = pitch_result;
         build_spherical_offset_30c9a8(offset.f, pitch_max,
-                                       *(f32 *)(m + 0x48), -pitch_result);
+                                       *(f32 *)(moby + 0x48), -pitch_result);
     }
     qcopy(&old_pos, pos);
     fast_vec_add(pos, pos, &offset);
-    if (*(f32 *)(m + 0x10) < 2.0f || *(f32 *)(m + 0x10) > 1021.0f ||
-        *(f32 *)(m + 0x14) < 2.0f || *(f32 *)(m + 0x14) > 1021.0f ||
-        *(f32 *)(m + 0x18) < 2.0f || *(f32 *)(m + 0x18) > 1021.0f ||
-        *(f32 *)(m + 0x10) < 0.0f || *(f32 *)(m + 0x14) < 0.0f || *(f32 *)(m + 0x18) < 0.0f ||
+    if (*(f32 *)(moby + 0x10) < 2.0f || *(f32 *)(moby + 0x10) > 1021.0f ||
+        *(f32 *)(moby + 0x14) < 2.0f || *(f32 *)(moby + 0x14) > 1021.0f ||
+        *(f32 *)(moby + 0x18) < 2.0f || *(f32 *)(moby + 0x18) > 1021.0f ||
+        *(f32 *)(moby + 0x10) < 0.0f || *(f32 *)(moby + 0x14) < 0.0f || *(f32 *)(moby + 0x18) < 0.0f ||
         distance_xyz_30c9a8(pos, D_L01_00167240_30c9a8) > 64.0f) {
-        mark_moby_for_removal_30c9a8(m);
+        mark_moby_for_removal_30c9a8(moby);
         return;
     }
-    probe.owner = m;
+    probe.owner = moby;
     probe.flags = 0x10001;
     probe.scale = 0.5f;
     probe.count = 1;
@@ -366,22 +366,22 @@ void FUN_L01_0030c9a8(char *m) {
     ((f32 *)&probe.dir)[3] = 5627.9248f;
     probe.b28 = 1;
     probe.b29 = 1;
-    probe.id = *(u16 *)(m + 0xa6);
-    if (is_timer_active_30c9a8(e + 0x14)) {
-        mark_moby_for_removal_30c9a8(m);
+    probe.id = *(u16 *)(moby + 0xa6);
+    if (is_timer_active_30c9a8(moby_vars + 0x14)) {
+        mark_moby_for_removal_30c9a8(moby);
         return;
     }
     {
-        if (!collision_line_30c9a8(&old_pos, pos, 0, *(void **)(e + 0x10), &probe))
+        if (!collision_line_30c9a8(&old_pos, pos, 0, *(void **)(moby_vars + 0x10), &probe))
             return;
         if (!collision_hit_material()) {
-            if (*(s16 *)(e + 0x14) > scale_game_frames(3))
-                *(s16 *)(e + 0x14) = scale_game_frames(3);
+            if (*(s16 *)(moby_vars + 0x14) > scale_game_frames(3))
+                *(s16 *)(moby_vars + 0x14) = scale_game_frames(3);
             return;
         }
         qcopy(pos, &D_L01_001742E0);
     }
-    mark_moby_for_removal_30c9a8(m);
+    mark_moby_for_removal_30c9a8(moby);
 }
 #define NOT_SDA
 
