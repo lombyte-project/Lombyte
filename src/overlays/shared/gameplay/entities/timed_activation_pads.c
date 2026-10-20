@@ -82,7 +82,7 @@ void timed_activation_pads_update(unsigned char *moby)
         PAD_WAIT_FOR_FLASH_ACTIVATION = 5
     };
     char *pad_data;
-    char *p;
+    char *activation_reference_data;
     float activation_offset[4];
     float transposed_pad_rotation[16];
     int flag;
@@ -104,14 +104,14 @@ void timed_activation_pads_update(unsigned char *moby)
     }
 
     if (*(int *)(pad_data + 0x8) == 0) {
-        p = (char *)D_0013E633_30D370;
-        if (*(short *)(p + 0x30E) == 0)
-            flag = *(unsigned char **)(p + 0x2FC) == moby;
+        activation_reference_data = (char *)D_0013E633_30D370;
+        if (*(short *)(activation_reference_data + 0x30E) == 0)
+            flag = *(unsigned char **)(activation_reference_data + 0x2FC) == moby;
         if (0.7853982f < absolute_float(*(float *)(moby + 0x44))) {
-            if (vector_distance(moby + 0x10, p + 0x80) < 2.0f) {
-                if (*(int *)(p + 0x2084) == 0x11) {
-                    if (*(float *)(p + 0xAA8) < 7.0f) {
-                        subtract_vector_xyz(activation_offset, moby + 0x10, p + 0x80);
+            if (vector_distance(moby + 0x10, activation_reference_data + 0x80) < 2.0f) {
+                if (*(int *)(activation_reference_data + 0x2084) == 0x11) {
+                    if (*(float *)(activation_reference_data + 0xAA8) < 7.0f) {
+                        subtract_vector_xyz(activation_offset, moby + 0x10, activation_reference_data + 0x80);
                         func_001FA190_30D370(transposed_pad_rotation);
                         func_001FA4A0_30D370(transposed_pad_rotation, moby + 0xC0);
                         transform_vector(activation_offset, activation_offset, transposed_pad_rotation);
