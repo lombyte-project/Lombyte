@@ -1554,7 +1554,7 @@ void FUN_L13_00309e88(struct Moby *moby) {
         BOBBING_PLATFORM_UPDATE = 1
     };
     Bob_9e88 *b;
-    float f;
+    float height_half_span_or_tile_enabled;
     int i, j, k, n;
     int cr, cg;
 
@@ -1625,10 +1625,10 @@ void FUN_L13_00309e88(struct Moby *moby) {
     }
     case BOBBING_PLATFORM_UPDATE: {
         struct Hero *hero_context;
-        f = b->top;
-        f -= b->bottom;
-        f *= 0.5f;
-        moby->pos.z = b->bottom + (fast_cos(b->angle) * f + f);
+        height_half_span_or_tile_enabled = b->top;
+        height_half_span_or_tile_enabled -= b->bottom;
+        height_half_span_or_tile_enabled *= 0.5f;
+        moby->pos.z = b->bottom + (fast_cos(b->angle) * height_half_span_or_tile_enabled + height_half_span_or_tile_enabled);
         hero_context = &hero;
         if (hero_context->state.control_mode != 0x14 && hero_context->state.control_mode != 0x19 &&
             hero_context->state.current != 0x3D && hero_context->state.current != 0x7B &&
@@ -1646,11 +1646,11 @@ void FUN_L13_00309e88(struct Moby *moby) {
     }
     }
     if (b->idx >= 0) {
-        f = 0.0f;
+        height_half_span_or_tile_enabled = 0.0f;
         (Tiles_9e88 + b->idx)->z = moby->pos.z;
         if (FUN_L01_00275690(48.0f, moby) != -1)
-            f = 1.0f;
-        if (f == 0.0f)
+            height_half_span_or_tile_enabled = 1.0f;
+        if (height_half_span_or_tile_enabled == 0.0f)
             Tiles_9e88[b->idx].c1E = 0;
         else
             Tiles_9e88[b->idx].c1E = D_L13_001F1E20[b->idx];
