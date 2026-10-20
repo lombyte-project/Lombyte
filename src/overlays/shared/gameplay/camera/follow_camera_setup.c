@@ -1210,7 +1210,7 @@ void follow_camera_avoid_mobies(u8 *camera_moby) {
     u8 *nearby_moby;
     s32 nearby_moby_count;
     s32 i;
-    s32 t;
+    s32 nearby_moby_type_id;
     s32 s;
     f32 probe_diameter;
     f32 f;
@@ -1242,8 +1242,8 @@ void follow_camera_avoid_mobies(u8 *camera_moby) {
             if (FUN_L00_00259830(nearby_moby) && !any) {
                 goto next;
             }
-            t = *(s16 *)(nearby_moby + 0xA6);
-            if (t != 0x72 && t != 0xB && t != 0x2C && t != 0x9A && t != 0xFF && t != 0x392 && t != 0x452 && t != 0x353) {
+            nearby_moby_type_id = *(s16 *)(nearby_moby + 0xA6);
+            if (nearby_moby_type_id != 0x72 && nearby_moby_type_id != 0xB && nearby_moby_type_id != 0x2C && nearby_moby_type_id != 0x9A && nearby_moby_type_id != 0xFF && nearby_moby_type_id != 0x392 && nearby_moby_type_id != 0x452 && nearby_moby_type_id != 0x353) {
                 D_L00_001E75C0[cnt] = nearby_moby;
                 cnt++;
                 *(s32 *)(nearby_moby + 0x94) = 0;
