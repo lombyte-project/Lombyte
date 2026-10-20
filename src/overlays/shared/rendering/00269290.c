@@ -3141,12 +3141,12 @@ void FUN_L00_0026ff10(Moby_26ff10 *particle) {
     }
     if (pv->f18 & 8) {
         f32 d = D_0015ED60_26ff10;
-        f32 n;
+        f32 decayed_particle_scalar;
         kk2 = 8.0f / (d * 0.443f);
         pv->f16++;
-        n = particle->f0C - 260000.0f / (f32)kk2 * d * 1.25f;
-        particle->f0C = n;
-        if (n <= 0.0f) {
+        decayed_particle_scalar = particle->f0C - 260000.0f / (f32)kk2 * d * 1.25f;
+        particle->f0C = decayed_particle_scalar;
+        if (decayed_particle_scalar <= 0.0f) {
         kill:
             FUN_L00_00267a08_26ff10(particle);
             return;
