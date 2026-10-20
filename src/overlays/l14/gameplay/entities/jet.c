@@ -1771,7 +1771,7 @@ typedef struct {
 extern s32 D_0014C190_257218[][64] __asm__("D_0014C190");
 /* Vendor platform update: rides its two rails between the trigger volumes, with hum and motor sounds. */
 void elevator_update(struct Moby *m) __asm__("FUN_L14_002ee8d8");
-void elevator_update(struct Moby *m) {
+void elevator_update(struct Moby *elevator_moby) {
     enum {
         ELEVATOR_STATE_INITIALIZE = 0,
         ELEVATOR_STATE_WAIT_FOR_RIDER = 1,
@@ -1779,143 +1779,143 @@ void elevator_update(struct Moby *m) {
         ELEVATOR_STATE_SETTLE_AT_ENDPOINT = 3,
         ELEVATOR_STATE_WAIT_FOR_RIDER_EXIT = 4
     };
-    L14VendorVars *d = (L14VendorVars *)m->pvars;
+    L14VendorVars *elevator_vars = (L14VendorVars *)elevator_moby->pvars;
     Vec4 old;
     Vec4 rot;
     Vec4 delta;
     float level;
 
-    if (m->state != 0 && m->command == 2 && d->dir < 0.0f) {
-        int *path = (int *)D_L14_001B0BB0_v[d->path2];
-        d->dir = -d->dir;
-        d->segment = *path - 2;
-        d->along = *(float *)((char *)path + (d->segment << 4) + 0x1C);
-        m->command = 1;
+    if (elevator_moby->state != 0 && elevator_moby->command == 2 && elevator_vars->dir < 0.0f) {
+        int *path = (int *)D_L14_001B0BB0_v[elevator_vars->path2];
+        elevator_vars->dir = -elevator_vars->dir;
+        elevator_vars->segment = *path - 2;
+        elevator_vars->along = *(float *)((char *)path + (elevator_vars->segment << 4) + 0x1C);
+        elevator_moby->command = 1;
     }
-    qcopy(&old, &m->pos);
-    qcopy(&rot, &m->rot);
-    switch (m->state) {
+    qcopy(&old, &elevator_moby->pos);
+    qcopy(&rot, &elevator_moby->rot);
+    switch (elevator_moby->state) {
     case ELEVATOR_STATE_INITIALIZE: {
         u16 id;
-        m->command = 0;
-        m->state = 1;
-        FUN_L14_002eef60(m);
-        qcopy(&m->pos, D_L14_001B0BB0_v[d->path] + 0x10);
-        qcopy(&m->rot, d->rot);
-        id = m->save_id;
+        elevator_moby->command = 0;
+        elevator_moby->state = 1;
+        FUN_L14_002eef60(elevator_moby);
+        qcopy(&elevator_moby->pos, D_L14_001B0BB0_v[elevator_vars->path] + 0x10);
+        qcopy(&elevator_moby->rot, elevator_vars->rot);
+        id = elevator_moby->save_id;
         if (D_L14_001BB930_v.collected[(short)id] == 0 &&
             (((D_0014C190_257218[current_level_index][(short)id >> 5] >> (id & 0x1F)) ^ 1) & 1) &&
-            visited52[d->item + current_level_index * 16] == 0xFF)
-            d->bought = 1;
+            visited52[elevator_vars->item + current_level_index * 16] == 0xFF)
+            elevator_vars->bought = 1;
         else
-            d->bought = 0;
-        m->update_dist = 0xFF;
-        m->glow_color = 0x80303030;
-        d->motor = -1;
-        d->motor_volume = -1;
-        d->hum_volume = -1;
-        d->i138 = 0;
+            elevator_vars->bought = 0;
+        elevator_moby->update_dist = 0xFF;
+        elevator_moby->glow_color = 0x80303030;
+        elevator_vars->motor = -1;
+        elevator_vars->motor_volume = -1;
+        elevator_vars->hum_volume = -1;
+        elevator_vars->i138 = 0;
         break;
     }
     case ELEVATOR_STATE_WAIT_FOR_RIDER:
-        FUN_L14_002ef6f0(m);
-        if (d->clip_a >= 0 && vendor_inside(&hero.motion.pos, d->clip_a) != 0) {
-            m->command = 0;
-            d->dir = -1.0f;
-            d->segment = 0;
-            d->along = 0;
+        FUN_L14_002ef6f0(elevator_moby);
+        if (elevator_vars->clip_a >= 0 && vendor_inside(&hero.motion.pos, elevator_vars->clip_a) != 0) {
+            elevator_moby->command = 0;
+            elevator_vars->dir = -1.0f;
+            elevator_vars->segment = 0;
+            elevator_vars->along = 0;
         }
-        if (d->clip_b >= 0 && vendor_inside(&hero.motion.pos, d->clip_b) != 0) {
+        if (elevator_vars->clip_b >= 0 && vendor_inside(&hero.motion.pos, elevator_vars->clip_b) != 0) {
             char **e;
-            m->command = 0;
-            e = &D_L14_001B0BB0_v[d->path];
-            d->segment = **(int **)e - 2;
-            d->along = *(float *)(*e + (d->segment << 4) + 0x1C);
-            d->dir = 1.0f;
+            elevator_moby->command = 0;
+            e = &D_L14_001B0BB0_v[elevator_vars->path];
+            elevator_vars->segment = **(int **)e - 2;
+            elevator_vars->along = *(float *)(*e + (elevator_vars->segment << 4) + 0x1C);
+            elevator_vars->dir = 1.0f;
         }
-        if (d->clip_c >= 0 && vendor_inside(&hero.motion.pos, d->clip_c) != 0) {
+        if (elevator_vars->clip_c >= 0 && vendor_inside(&hero.motion.pos, elevator_vars->clip_c) != 0) {
             char **e;
-            m->command = 1;
-            e = &D_L14_001B0BB0_v[d->path2];
-            d->segment = **(int **)e - 2;
-            d->along = *(float *)(*e + (d->segment << 4) + 0x1C);
-            d->dir = 1.0f;
+            elevator_moby->command = 1;
+            e = &D_L14_001B0BB0_v[elevator_vars->path2];
+            elevator_vars->segment = **(int **)e - 2;
+            elevator_vars->along = *(float *)(*e + (elevator_vars->segment << 4) + 0x1C);
+            elevator_vars->dir = 1.0f;
         }
-        if (hero.ground_moby == m && hero.frames_off_ground.s == 0 &&
-            vendor_distance(&hero.motion.pos, &m->pos) < 1.0f) {
-            int voice = vendor_sound(1, 0, m);
+        if (hero.ground_moby == elevator_moby && hero.frames_off_ground.s == 0 &&
+            vendor_distance(&hero.motion.pos, &elevator_moby->pos) < 1.0f) {
+            int voice = vendor_sound(1, 0, elevator_moby);
             if (voice >= 0) {
-                if (d->hum_volume < 0)
-                    d->hum_volume = *(int *)(D_0013E550 + 0xF0);
-                vendor_volume(voice, d->hum_volume);
+                if (elevator_vars->hum_volume < 0)
+                    elevator_vars->hum_volume = *(int *)(D_0013E550 + 0xF0);
+                vendor_volume(voice, elevator_vars->hum_volume);
             }
-            if (d->dir == -1.0f) {
-                if (d->bought != 0)
-                    m->command = 2;
+            if (elevator_vars->dir == -1.0f) {
+                if (elevator_vars->bought != 0)
+                    elevator_moby->command = 2;
                 else
-                    m->command = 0;
+                    elevator_moby->command = 0;
             }
-            m->state = 2;
-            d->travelled = 0;
-            d->dir = -d->dir;
+            elevator_moby->state = 2;
+            elevator_vars->travelled = 0;
+            elevator_vars->dir = -elevator_vars->dir;
         }
         break;
     case ELEVATOR_STATE_FOLLOW_PATH:
-        if (voice_is_playing(m, d->motor) == 0) {
-            d->motor = vendor_sound(0, 4, m);
-            if (d->motor != 0) {
-                if (d->motor_volume < 0)
-                    d->motor_volume = *(int *)(D_0013E550 + 0x80);
-                vendor_volume(d->motor, d->motor_volume);
+        if (voice_is_playing(elevator_moby, elevator_vars->motor) == 0) {
+            elevator_vars->motor = vendor_sound(0, 4, elevator_moby);
+            if (elevator_vars->motor != 0) {
+                if (elevator_vars->motor_volume < 0)
+                    elevator_vars->motor_volume = *(int *)(D_0013E550 + 0x80);
+                vendor_volume(elevator_vars->motor, elevator_vars->motor_volume);
             }
         }
-        m->glow_color = fast_tween_color(m->glow_color, 0x80808040, 0.1f);
-        if (FUN_L14_002ef150(m) != 0) {
-            m->state = 3;
-            d->level = d->motor_volume;
+        elevator_moby->glow_color = fast_tween_color(elevator_moby->glow_color, 0x80808040, 0.1f);
+        if (FUN_L14_002ef150(elevator_moby) != 0) {
+            elevator_moby->state = 3;
+            elevator_vars->level = elevator_vars->motor_volume;
         }
-        FUN_L14_002ef630((u8 *)m);
-        vendor_sub(&delta, &m->pos, &old);
-        update_entity_matrix(d->spring, &delta, &rot, &m->rot);
+        FUN_L14_002ef630((u8 *)elevator_moby);
+        vendor_sub(&delta, &elevator_moby->pos, &old);
+        update_entity_matrix(elevator_vars->spring, &delta, &rot, &elevator_moby->rot);
         break;
     case ELEVATOR_STATE_SETTLE_AT_ENDPOINT:
-        if (vendor_length(d->vel) >= 0.001f) {
-            if (voice_is_playing(m, d->motor) == 0)
-                d->motor = vendor_sound(0, 4, m);
-            level = vendor_itof(d->level);
-            vendor_spring(&level, vendor_itof(d->motor_volume) * 0.25f, &d->level_vel, 0.003f, 0.2f, 0.0f);
-            d->level = vendor_ftoi(level);
-            if (d->motor >= 0)
-                vendor_volume(d->motor, d->level);
-            FUN_L14_002ef630((u8 *)m);
+        if (vendor_length(elevator_vars->vel) >= 0.001f) {
+            if (voice_is_playing(elevator_moby, elevator_vars->motor) == 0)
+                elevator_vars->motor = vendor_sound(0, 4, elevator_moby);
+            level = vendor_itof(elevator_vars->level);
+            vendor_spring(&level, vendor_itof(elevator_vars->motor_volume) * 0.25f, &elevator_vars->level_vel, 0.003f, 0.2f, 0.0f);
+            elevator_vars->level = vendor_ftoi(level);
+            if (elevator_vars->motor >= 0)
+                vendor_volume(elevator_vars->motor, elevator_vars->level);
+            FUN_L14_002ef630((u8 *)elevator_moby);
         } else {
             int voice;
-            FUN_L14_002ef6f0(m);
-            if (d->motor != -1) {
-                char *e = D_0013E550 + d->motor * 0x70;
-                if (*(struct Moby **)(e + 0x88) == m && ((u8 *)e)[0x74] != 0)
-                    vendor_release(d->motor);
+            FUN_L14_002ef6f0(elevator_moby);
+            if (elevator_vars->motor != -1) {
+                char *e = D_0013E550 + elevator_vars->motor * 0x70;
+                if (*(struct Moby **)(e + 0x88) == elevator_moby && ((u8 *)e)[0x74] != 0)
+                    vendor_release(elevator_vars->motor);
             }
-            d->motor = -1;
-            voice = vendor_sound(1, 0, m);
+            elevator_vars->motor = -1;
+            voice = vendor_sound(1, 0, elevator_moby);
             if (voice >= 0)
-                vendor_volume(voice, d->hum_volume / 3);
-            m->state = 4;
-            if (hero.ground_moby != m)
-                m->state = 1;
+                vendor_volume(voice, elevator_vars->hum_volume / 3);
+            elevator_moby->state = 4;
+            if (hero.ground_moby != elevator_moby)
+                elevator_moby->state = 1;
         }
         break;
     case ELEVATOR_STATE_WAIT_FOR_RIDER_EXIT:
-        FUN_L14_002ef6f0(m);
-        if (hero.ground_moby != m)
-            m->state = 1;
+        FUN_L14_002ef6f0(elevator_moby);
+        if (hero.ground_moby != elevator_moby)
+            elevator_moby->state = 1;
         break;
     }
-    if (m->state != 2 && m->state != 0) {
-        FUN_L14_002ef3e0(m);
-        if (hero.ground_moby == m) {
-            vendor_sub(&delta, &m->pos, &old);
-            update_entity_matrix(d->spring, &delta, &rot, &m->rot);
+    if (elevator_moby->state != 2 && elevator_moby->state != 0) {
+        FUN_L14_002ef3e0(elevator_moby);
+        if (hero.ground_moby == elevator_moby) {
+            vendor_sub(&delta, &elevator_moby->pos, &old);
+            update_entity_matrix(elevator_vars->spring, &delta, &rot, &elevator_moby->rot);
         }
     }
 }
