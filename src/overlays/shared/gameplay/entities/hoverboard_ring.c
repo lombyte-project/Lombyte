@@ -528,35 +528,35 @@ extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 /* Resets the camera from its preset (row cam->preset of D_L05_0015EF50): distances,
    angle limits and damping, cleared velocities, then places it. */
 void FUN_L05_003296e0(Camera *cam) {
-    CameraPreset *s = D_L05_0015EF50[cam->preset].preset;
-    CameraOrbit *d;
+    CameraPreset *preset = D_L05_0015EF50[cam->preset].preset;
+    CameraOrbit *orbit_state;
     CameraFocus *focus;
     CameraSpring *spring;
     CameraOrbit *orbit;
     CameraTrack *track;
     CameraView *view;
 
-    s->unk48 = 0;
-    d = cam->orbit;
-    d->spring_dist = s->spring_dist;
-    d->spring_height = s->spring_height;
-    d->dist = s->dist;
-    d->unk190 = s->unk34;
-    d->unk194 = s->unk38;
-    d->unk18C = s->unk3C;
-    clear_u64_value(&d->unk1B0);
-    clear_u64_value(&d->unk1C0);
+    preset->unk48 = 0;
+    orbit_state = cam->orbit;
+    orbit_state->spring_dist = preset->spring_dist;
+    orbit_state->spring_height = preset->spring_height;
+    orbit_state->dist = preset->dist;
+    orbit_state->unk190 = preset->unk34;
+    orbit_state->unk194 = preset->unk38;
+    orbit_state->unk18C = preset->unk3C;
+    clear_u64_value(&orbit_state->unk1B0);
+    clear_u64_value(&orbit_state->unk1C0);
     focus = &cam->orbit->focus;
     focus->state = 5;
     focus->unk44 = D_001413D0[0];
-    focus->dist = d->dist;
+    focus->dist = orbit_state->dist;
     focus->max_angle = 0.209439516f;
     focus->unk58 = 0.00174532924f;
     focus->unk5C = -0.0043633231f;
     spring = &cam->orbit->spring;
-    spring->dist = d->spring_dist;
+    spring->dist = orbit_state->spring_dist;
     spring->unk4 = 0.5f;
-    spring->height = d->spring_height;
+    spring->height = orbit_state->spring_height;
     orbit = cam->orbit;
     orbit->unk10 = 0.01f;
     orbit->unk14 = 0.2f;
@@ -567,9 +567,9 @@ void FUN_L05_003296e0(Camera *cam) {
     clear_u64_value(track);
     clear_u64_value(&track->accel);
     track->unk40 = 0;
-    track->unk10 = s->unk0;
-    track->unk34 = s->unk20;
-    track->unk38 = s->unk24;
+    track->unk10 = preset->unk0;
+    track->unk34 = preset->unk20;
+    track->unk38 = preset->unk24;
     track->unk3C = 0;
     view = &cam->orbit->view;
     view->unk20 = 0.8f;
@@ -578,8 +578,8 @@ void FUN_L05_003296e0(Camera *cam) {
     view->unk28 = 0;
     view->unk2C = 0;
     clear_u64_value(view);
-    FUN_L05_003294c0(s->spring_dist, s->spring_height, s->dist, s->unk34,
-                     s->unk38, s->unk3C, s->unk40, s->unk44);
+    FUN_L05_003294c0(preset->spring_dist, preset->spring_height, preset->dist, preset->unk34,
+                     preset->unk38, preset->unk3C, preset->unk40, preset->unk44);
     FUN_L05_00329540((char *)cam);
     cam->unk7E = 0;
 }
