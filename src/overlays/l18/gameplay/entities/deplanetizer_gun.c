@@ -478,8 +478,8 @@ extern short D_L18_00162500 __attribute__((sda));
 void FUN_L18_002f9a98(void *moby) {
     char glow_position[16];
     char b[32];
-    char c[16];
-    char d[16];
+    char bone_transform_row2[16];
+    char bone_world_position[16];
     char scaled_bone_offset[16];
     int color_cycle_frames = scale_game_frames(D_L18_00162460);
     float f = convert_integer_to_float(game_frame % color_cycle_frames);
@@ -489,12 +489,12 @@ void FUN_L18_002f9a98(void *moby) {
     f = fast_sin(f - 3.14159f);
     tweened_color = fast_tween_color(D_L18_00162458, D_L18_0016245C, f * 0.5f + 0.5f);
     build_moby_bone_transform(moby, 1, b);
-    scale_vector_xyz(scaled_bone_offset, c, *(float *)&D_L18_00162500);
-    subtract_vector_xyz(glow_position, d, scaled_bone_offset);
+    scale_vector_xyz(scaled_bone_offset, bone_transform_row2, *(float *)&D_L18_00162500);
+    subtract_vector_xyz(glow_position, bone_world_position, scaled_bone_offset);
     FUN_L00_00263618(glow_position, tweened_color, D_L18_00162450, D_L18_00162454);
     build_moby_bone_transform(moby, 2, b);
-    scale_vector_xyz(scaled_bone_offset, c, *(float *)&D_L18_00162500);
-    subtract_vector_xyz(glow_position, d, scaled_bone_offset);
+    scale_vector_xyz(scaled_bone_offset, bone_transform_row2, *(float *)&D_L18_00162500);
+    subtract_vector_xyz(glow_position, bone_world_position, scaled_bone_offset);
     FUN_L00_00263618(glow_position, tweened_color, D_L18_00162450, D_L18_00162454);
 }
 /* Draws the moby's two glow quads facing the camera, in the inner and outer tints. */
