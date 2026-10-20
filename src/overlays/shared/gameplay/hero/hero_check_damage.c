@@ -2835,10 +2835,10 @@ void FUN_L00_00211be8(void) {
     }
     if (hero.state.current == 0x73) {
         float v = hero.target_speed * 0.8f;
-        float m = frame_time * 2.5f;
+        float minimum_target_speed = frame_time * 2.5f;
         hero.target_speed = v;
-        if (v < m)
-            hero.target_speed = m;
+        if (v < minimum_target_speed)
+            hero.target_speed = minimum_target_speed;
     }
 }
 #define NOT_SDA
