@@ -2516,38 +2516,38 @@ void FUN_L14_002f1140(struct Moby *moby) {
         TAXI_STOP_RETURN_FEEDER_ORIGIN = 2,
         TAXI_STOP_RETURN_FEEDER_DESTINATION = 3
     };
-    char *d = (char *)moby->pvars;
-    char *p;
+    char *taxi_vars = (char *)moby->pvars;
+    char *selected_path;
     float inv, a, b, r;
-    switch (*(short *)(d + 0xB4)) {
+    switch (*(short *)(taxi_vars + 0xB4)) {
     case TAXI_STOP_RETURN_HUB:
-        *(char **)(d + 0xAC) = D_L14_001B0BB0_c2[*(int *)(d + 0x94)];
-        *(short *)(d + 0xB6) = 1;
+        *(char **)(taxi_vars + 0xAC) = D_L14_001B0BB0_c2[*(int *)(taxi_vars + 0x94)];
+        *(short *)(taxi_vars + 0xB6) = 1;
         break;
     case TAXI_STOP_HUB_OUTBOUND_DESTINATION:
-        *(char **)(d + 0xAC) = D_L14_001B0BB0_c2[*(int *)(d + 0x98)];
-        *(short *)(d + 0xB6) = 0;
+        *(char **)(taxi_vars + 0xAC) = D_L14_001B0BB0_c2[*(int *)(taxi_vars + 0x98)];
+        *(short *)(taxi_vars + 0xB6) = 0;
         break;
     case TAXI_STOP_RETURN_FEEDER_ORIGIN:
-        *(char **)(d + 0xAC) = D_L14_001B0BB0_c2[*(int *)(d + 0x9C)];
-        *(short *)(d + 0xB6) = 3;
+        *(char **)(taxi_vars + 0xAC) = D_L14_001B0BB0_c2[*(int *)(taxi_vars + 0x9C)];
+        *(short *)(taxi_vars + 0xB6) = 3;
         break;
     case TAXI_STOP_RETURN_FEEDER_DESTINATION:
-        *(char **)(d + 0xAC) = D_L14_001B0BB0_c2[*(int *)(d + 0xA0)];
-        *(short *)(d + 0xB6) = 0;
+        *(char **)(taxi_vars + 0xAC) = D_L14_001B0BB0_c2[*(int *)(taxi_vars + 0xA0)];
+        *(short *)(taxi_vars + 0xB6) = 0;
         break;
     case 4:
         break;
     }
-    p = *(char **)(d + 0xAC);
-    r = FUN_001f9b48(p + 0x10, p + 0x20);
+    selected_path = *(char **)(taxi_vars + 0xAC);
+    r = FUN_001f9b48(selected_path + 0x10, selected_path + 0x20);
     a = D_0015ED6C_u * 5.0f;
     b = frame_time_sq * 2.5f;
-    inv = 1.0f / (r * (float)**(int **)(d + 0xAC));
-    *(int *)(d + 0xC4) = 0;
-    *(int *)(d + 0xC0) = 0;
-    *(float *)(d + 0xD4) = a * inv;
-    *(float *)(d + 0xD8) = b * inv;
+    inv = 1.0f / (r * (float)**(int **)(taxi_vars + 0xAC));
+    *(int *)(taxi_vars + 0xC4) = 0;
+    *(int *)(taxi_vars + 0xC0) = 0;
+    *(float *)(taxi_vars + 0xD4) = a * inv;
+    *(float *)(taxi_vars + 0xD8) = b * inv;
 }
 /* Finds the moby in this moby's group list whose vars tag at 0xB4 matches, or returns null. */
 struct TaggedVars {
