@@ -1185,7 +1185,7 @@ extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 void FUN_L12_003093c8(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     char *base;
-    char *p;
+    char *hero_position;
     char *q;
     if (D_L12_0015F5CC != 0 && D_L12_0015F5C4 == 0) {
         base = D_0013D388;
@@ -1193,13 +1193,13 @@ void FUN_L12_003093c8(struct Moby *moby) {
             mark_moby_for_removal(moby);
             return;
         }
-        p = (char *)&hero.motion.pos;
-        if (is_point_inside_clip_volume(p, *(int *)data) != 0) {
+        hero_position = (char *)&hero.motion.pos;
+        if (is_point_inside_clip_volume(hero_position, *(int *)data) != 0) {
             *(char *)(*(int *)(data + 4) + base + 0x5C) = 1;
-            qcopy(D_L12_0016CCF0, p);
+            qcopy(D_L12_0016CCF0, hero_position);
             q = D_L12_0016CCF0 - 0x10;
-            *(float *)(q + 0x18) = *(float *)(p + 0x258);
-            qcopy(D_L12_0016CCF0 + 0x10, p + 0x10);
+            *(float *)(q + 0x18) = *(float *)(hero_position + 0x258);
+            qcopy(D_L12_0016CCF0 + 0x10, hero_position + 0x10);
             *(short *)(q + 0x46) = 1;
             start_scene(*(int *)(data + 8));
         }
