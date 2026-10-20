@@ -1934,7 +1934,7 @@ extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern s32 rand();
 
-char *FUN_L13_002e1140(char *owner, char *pos, char *vec, int remaining_split_count, float f) {
+char *FUN_L13_002e1140(char *owner, char *pos, char *vec, int remaining_split_count, float scale) {
     enum {
         SPIN_AXIS_X = 0,
         SPIN_AXIS_Y = 1,
@@ -1942,45 +1942,45 @@ char *FUN_L13_002e1140(char *owner, char *pos, char *vec, int remaining_split_co
     };
     char *moby = func_0020D348_m(0x584);
     if (moby != 0) {
-        char *d;
+        char *moby_data;
         float r;
         ((unsigned char *)moby)[0x30] = 0xFF;
-        d = *(char **)(moby + 0x78);
+        moby_data = *(char **)(moby + 0x78);
         *(unsigned short *)(moby + 0x32) = *(unsigned short *)(owner + 0x32);
         moby[0x31] = 1;
         moby[0x20] = 2;
         moby[0xBC] = 0;
         moby[0x72] = 0;
         qcopy(moby + 0x10, pos);
-        qcopy(d, vec);
-        *(float *)(moby + 0x2C) = f;
-        *(char **)(d + 0x48) = owner;
-        *(int *)(d + 0x40) = 1;
-        *(short *)(d + 0x4C) = scale_game_frames(0x1E);
-        *(short *)(d + 0x4E) = remaining_split_count;
+        qcopy(moby_data, vec);
+        *(float *)(moby + 0x2C) = scale;
+        *(char **)(moby_data + 0x48) = owner;
+        *(int *)(moby_data + 0x40) = 1;
+        *(short *)(moby_data + 0x4C) = scale_game_frames(0x1E);
+        *(short *)(moby_data + 0x4E) = remaining_split_count;
         *(int *)(moby + 0x94) = 0;
         r = random_float_between_alt(-30.0f, 30.0f) * DEG_TO_RAD * frame_time;
         switch (rand() % 3) {
         case SPIN_AXIS_X:
-            *(float *)(d + 0x30) = r;
+            *(float *)(moby_data + 0x30) = r;
             break;
         case SPIN_AXIS_Y:
-            *(float *)(d + 0x34) = r;
+            *(float *)(moby_data + 0x34) = r;
             break;
         case SPIN_AXIS_Z:
-            *(float *)(d + 0x38) = r;
+            *(float *)(moby_data + 0x38) = r;
             break;
         }
         r = random_float_between_alt(-180.0f, 180.0f) * DEG_TO_RAD * frame_time;
         switch (rand() % 3) {
         case SPIN_AXIS_X:
-            *(float *)(d + 0x30) = r;
+            *(float *)(moby_data + 0x30) = r;
             break;
         case SPIN_AXIS_Y:
-            *(float *)(d + 0x34) = r;
+            *(float *)(moby_data + 0x34) = r;
             break;
         case SPIN_AXIS_Z:
-            *(float *)(d + 0x38) = r;
+            *(float *)(moby_data + 0x38) = r;
             break;
         }
         *(float *)(moby + 0x40) = random_angle_radians();
