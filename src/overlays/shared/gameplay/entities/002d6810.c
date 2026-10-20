@@ -157,6 +157,8 @@ void electric_water_update(struct Moby *moby) __asm__("FUN_L15_002d6810");
 void electric_water_update(struct Moby *moby) {
     enum {
         ELECTRIC_WATER_INITIALIZE = 0,
+        ELECTRIC_WATER_ON = 1,
+        ELECTRIC_WATER_OFF = 2,
         ELECTRIC_WATER_SWITCH_DISABLED = 3
     };
     float tmp[4];
@@ -221,7 +223,7 @@ void electric_water_update(struct Moby *moby) {
         vars->voice1 = -1;
         break;
 
-    case 1:
+    case ELECTRIC_WATER_ON:
         inside = 0;
         wet = FUN_L15_002d6770();
         if (fast_dec_timer_s16(&vars->on_timer) != 0) {
@@ -374,7 +376,7 @@ void electric_water_update(struct Moby *moby) {
             }
         }
         /* fall through: the hum and the switches, as in state 2 */
-    case 2:
+    case ELECTRIC_WATER_OFF:
         nearest = 0;
         for (near_lamp = 0; near_lamp < 3; near_lamp++) {
             if (vars->lamps[near_lamp] == -1) {
