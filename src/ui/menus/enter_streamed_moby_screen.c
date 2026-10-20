@@ -7,32 +7,32 @@ extern void func_00225AB8(void *);
 /* sets up a pause-menu helper moby in front of the camera */
 int enter_streamed_moby_screen(char *h) __asm__("FUN_00225588");
 
-int enter_streamed_moby_screen(char *h) {
-    char *m;
+int enter_streamed_moby_screen(char *screen_state) {
+    char *preview_moby;
     int r;
-    m = func_00226720_a(0x7A5);
-    *(int *)(h + 0x34) = 0;
-    if (m != 0) {
-        char *d;
+    preview_moby = func_00226720_a(0x7A5);
+    *(int *)(screen_state + 0x34) = 0;
+    if (preview_moby != 0) {
+        char *moby_sidecar;
         char *g = preview_camera;
-        *(char **)(h + 0x44) = m;
-        *(short *)(m + 0x34) = 0;
-        *(float *)(m + 0x10) = *(float *)(g + 0x140) + 2.2f;
-        *(float *)(m + 0x14) = *(float *)(g + 0x144) + 0.0f;
-        *(float *)(m + 0x18) = *(float *)(g + 0x148) + -1.6f;
-        d = *(char **)(m + 0x78);
-        *(void **)(m + 0x74) = func_00225AB8;
-        *(float *)(m + 0x48) = 3.1415927f;
-        *(char **)d = h;
-        *(int *)(d + 4) = 0;
-        *(int *)(d + 8) = 0;
+        *(char **)(screen_state + 0x44) = preview_moby;
+        *(short *)(preview_moby + 0x34) = 0;
+        *(float *)(preview_moby + 0x10) = *(float *)(g + 0x140) + 2.2f;
+        *(float *)(preview_moby + 0x14) = *(float *)(g + 0x144) + 0.0f;
+        *(float *)(preview_moby + 0x18) = *(float *)(g + 0x148) + -1.6f;
+        moby_sidecar = *(char **)(preview_moby + 0x78);
+        *(void **)(preview_moby + 0x74) = func_00225AB8;
+        *(float *)(preview_moby + 0x48) = 3.1415927f;
+        *(char **)moby_sidecar = screen_state;
+        *(int *)(moby_sidecar + 4) = 0;
+        *(int *)(moby_sidecar + 8) = 0;
     } else {
-        *(int *)(h + 0x34) = 3;
+        *(int *)(screen_state + 0x34) = 3;
     }
     r = select_next_stream_buffer(1);
-    *(int *)(h + 0x3C) = r;
+    *(int *)(screen_state + 0x3C) = r;
     if (r == 0) {
-        *(int *)(h + 0x34) = 3;
+        *(int *)(screen_state + 0x34) = 3;
     }
     return 0;
 }
