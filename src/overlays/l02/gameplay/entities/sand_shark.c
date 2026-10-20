@@ -2974,27 +2974,27 @@ void FUN_L02_002def80(struct Moby *moby) {
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 
 void FUN_L02_002df0b0(struct Moby *moby) {
-    char *d = (char *)moby->pvars;
-    char *a = *(char **)(d + 0x84);
+    char *transport_pod_vars = (char *)moby->pvars;
+    char *rail_a = *(char **)(transport_pod_vars + 0x84);
     float k, k2;
     float r;
-    qcopy(a + 0x10, &moby->pos);
-    qcopy(*(char **)(d + 0x88) + 0x10, &moby->pos);
+    qcopy(rail_a + 0x10, &moby->pos);
+    qcopy(*(char **)(transport_pod_vars + 0x88) + 0x10, &moby->pos);
     k = *(float *)&D_L02_00161C3C;
-    *(float *)(a + 0x18) = moby->pos.z + *(float *)(d + 0x94);
-    *(int *)(d + 0x8C) = 0;
-    *(float *)(*(char **)(d + 0x88) + 0x18) = moby->pos.z + *(float *)(d + 0x98);
-    *(int *)(d + 0x90) = 0;
+    *(float *)(rail_a + 0x18) = moby->pos.z + *(float *)(transport_pod_vars + 0x94);
+    *(int *)(transport_pod_vars + 0x8C) = 0;
+    *(float *)(*(char **)(transport_pod_vars + 0x88) + 0x18) = moby->pos.z + *(float *)(transport_pod_vars + 0x98);
+    *(int *)(transport_pod_vars + 0x90) = 0;
     r = fast_add_rotations(moby->rot.z,
-                     (*(float *)(*(char **)(d + 0x84) + 0x18) - moby->pos.z) * k *
+                     (*(float *)(*(char **)(transport_pod_vars + 0x84) + 0x18) - moby->pos.z) * k *
                          DEG_TO_RAD);
     k2 = *(float *)&D_L02_00161C3C;
-    *(float *)(*(char **)(d + 0x84) + 0x48) = r;
-    *(float *)(*(char **)(d + 0x88) + 0x48) = fast_add_rotations(
+    *(float *)(*(char **)(transport_pod_vars + 0x84) + 0x48) = r;
+    *(float *)(*(char **)(transport_pod_vars + 0x88) + 0x48) = fast_add_rotations(
         moby->rot.z,
-        (*(float *)(*(char **)(d + 0x88) + 0x18) - moby->pos.z) * k2 * DEG_TO_RAD);
-    FUN_L00_00250df8(*(char **)(d + 0x84));
-    FUN_L00_00250df8(*(char **)(d + 0x88));
+        (*(float *)(*(char **)(transport_pod_vars + 0x88) + 0x18) - moby->pos.z) * k2 * DEG_TO_RAD);
+    FUN_L00_00250df8(*(char **)(transport_pod_vars + 0x84));
+    FUN_L00_00250df8(*(char **)(transport_pod_vars + 0x88));
 }
 /* State machine for a moby that picks a new animation each time the previous one finishes. */
 /* Ported from rac1-decomp (src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002E05E0), where it is exact; names translated to the US level program. */
