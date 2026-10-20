@@ -900,62 +900,62 @@ extern char *D_L05_001B0CB0_x[] __asm__("D_L05_001B0930");
 extern int func_001F9908_v(void *) __asm__("FUN_001f9740");
 
 void amoeboid_update(struct Moby *m) __asm__("FUN_L05_002dac80");
-void amoeboid_update(struct Moby *m) {
+void amoeboid_update(struct Moby *moby) {
     enum {
         AMOEBOID_INITIALIZE = 0,
         AMOEBOID_FOLLOW_PATH = 1,
         AMOEBOID_WAIT_FOR_HERO_TO_LEAVE = 2
     };
-    char *d = (char *)m->pvars;
+    char *moby_data = (char *)moby->pvars;
     float dir[4];
-    FUN_L05_002daf58_c(m);
-    switch (m->state) {
+    FUN_L05_002daf58_c(moby);
+    switch (moby->state) {
     case AMOEBOID_INITIALIZE:
-        m->state = 1;
-        m->update_dist = 0x40;
-        if (m->prev_seq != 0)
-            blend_moby_animation_c(m, 0, 0, 0);
-        if (*(int *)(d + 0xB0) == -1 || *(int *)D_L05_001B0CB0_x[*(int *)(d + 0xB0)] == 0) {
-            mark_moby_for_removal(m);
+        moby->state = 1;
+        moby->update_dist = 0x40;
+        if (moby->prev_seq != 0)
+            blend_moby_animation_c(moby, 0, 0, 0);
+        if (*(int *)(moby_data + 0xB0) == -1 || *(int *)D_L05_001B0CB0_x[*(int *)(moby_data + 0xB0)] == 0) {
+            mark_moby_for_removal(moby);
             return;
         }
-        FUN_L01_0026d930(d + 0x60);
-        *(float *)(d + 0x6C) = 1.0f;
-        *(float *)(d + 0x68) = 1.0f;
+        FUN_L01_0026d930(moby_data + 0x60);
+        *(float *)(moby_data + 0x6C) = 1.0f;
+        *(float *)(moby_data + 0x68) = 1.0f;
         {
             int r = truncate_float_to_s32_c(409.6f);
             float f = frame_time * 4.0f;
-            *(int *)(d + 0x60) = r;
-            *(float *)(d + 0x84) = f;
+            *(int *)(moby_data + 0x60) = r;
+            *(float *)(moby_data + 0x84) = f;
         }
         break;
     case AMOEBOID_FOLLOW_PATH: {
-        char *p = D_L05_001B0CB0_x[*(int *)(d + 0xB0)] + *(int *)(d + 0xB4) * 16;
-        float yaw = fast_arc_tan(*(float *)(p + 0x10) - m->pos.x,
-                                 *(float *)(p + 0x14) - m->pos.y);
-        FUN_L00_0025be00(&m->rot.z, (float *)(d + 0xBC), yaw, frame_time_sq * 1.0471976f,
+        char *path_node_base = D_L05_001B0CB0_x[*(int *)(moby_data + 0xB0)] + *(int *)(moby_data + 0xB4) * 16;
+        float yaw = fast_arc_tan(*(float *)(path_node_base + 0x10) - moby->pos.x,
+                                 *(float *)(path_node_base + 0x14) - moby->pos.y);
+        FUN_L00_0025be00(&moby->rot.z, (float *)(moby_data + 0xBC), yaw, frame_time_sq * 1.0471976f,
                          frame_time_sq * 1.0471976f, frame_time * 3.1415927f);
-        dir[0] = fast_cos_c(m->rot.z);
-        dir[1] = fast_sin_c(m->rot.z);
+        dir[0] = fast_cos_c(moby->rot.z);
+        dir[1] = fast_sin_c(moby->rot.z);
         dir[2] = 0.0f;
-        FUN_L00_00258b50(m, d + 0x60, dir, d + 0x40, 1.0f);
-        if (func_001F9908_v(d + 0xB8) != 0 ||
-            vector_distance(&m->pos, D_L05_001B0CB0_x[*(int *)(d + 0xB0)] +
-                                       (*(int *)(d + 0xB4) * 16 + 0x10)) < 1.0f) {
-            int r = random_integer_below_c(*(int *)D_L05_001B0CB0_x[*(int *)(d + 0xB0)]);
-            *(int *)(d + 0xB4) =
-                (*(int *)(d + 0xB4) + r) % *(int *)D_L05_001B0CB0_x[*(int *)(d + 0xB0)];
-            *(int *)(d + 0xB8) = scale_game_frames(600);
+        FUN_L00_00258b50(moby, moby_data + 0x60, dir, moby_data + 0x40, 1.0f);
+        if (func_001F9908_v(moby_data + 0xB8) != 0 ||
+            vector_distance(&moby->pos, D_L05_001B0CB0_x[*(int *)(moby_data + 0xB0)] +
+                                       (*(int *)(moby_data + 0xB4) * 16 + 0x10)) < 1.0f) {
+            int r = random_integer_below_c(*(int *)D_L05_001B0CB0_x[*(int *)(moby_data + 0xB0)]);
+            *(int *)(moby_data + 0xB4) =
+                (*(int *)(moby_data + 0xB4) + r) % *(int *)D_L05_001B0CB0_x[*(int *)(moby_data + 0xB0)];
+            *(int *)(moby_data + 0xB8) = scale_game_frames(600);
         }
-        FUN_L05_002db018_c(m);
+        FUN_L05_002db018_c(moby);
         break;
     }
     case AMOEBOID_WAIT_FOR_HERO_TO_LEAVE:
-        if (48.0f < vector_distance(&m->pos, &hero.motion.pos)) {
-            m->state = 1;
-            m->visible = 1;
-            m->flags &= 0xFFFE;
-            m->collision = m->pclass->collision;
+        if (48.0f < vector_distance(&moby->pos, &hero.motion.pos)) {
+            moby->state = 1;
+            moby->visible = 1;
+            moby->flags &= 0xFFFE;
+            moby->collision = moby->pclass->collision;
         }
         break;
     }
