@@ -1654,12 +1654,12 @@ void update_hoverboard_girl_cutscene_instances(char *arg) {
             char *moby = D_L05_0016CC60.m[i];
             if (*(short *)(moby + 0xA6) == *(short *)(arg + 0xA6)) {
                 if (D_0015EDB0[0] != 0) {
-                    unsigned char *q = D_L05_0017C8A0;
-                    if (q[1] == 0) {
-                        attach_manipulator(moby, 0, q);
-                        *(float *)(q + 0x20) = 2.75f;
-                        *(float *)(q + 0x24) = 2.75f;
-                        *(float *)(q + 0x28) = 2.75f;
+                    unsigned char *manipulator = D_L05_0017C8A0;
+                    if (manipulator[1] == 0) {
+                        attach_manipulator(moby, 0, manipulator);
+                        *(float *)(manipulator + 0x20) = 2.75f;
+                        *(float *)(manipulator + 0x24) = 2.75f;
+                        *(float *)(manipulator + 0x28) = 2.75f;
                     }
                 }
                 if (*(int *)&breast_growth_count_gp != 0) {
