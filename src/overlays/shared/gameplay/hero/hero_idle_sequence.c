@@ -2370,35 +2370,35 @@ extern float FUN_002132a8_209a40(float, float) __asm__("FUN_002132a8");
 extern void FUN_L00_0024f7c8_209a40(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern int random_integer_below_cf(void *, void *, float, float) __asm__("FUN_L00_0026f080");
 
-void FUN_L00_00209a40(int n, int mode) {
+void FUN_L00_00209a40(int iteration_count, int mode) {
     float pos[4];
     V_209a40 v;
     int i;
-    struct Hero *p;
+    struct Hero *hero_state;
     V_209a40 *src;
 
-    for (i = 0; i < n; i++) {
-        p = &hero;
-        src = (V_209a40 *)&p->motion.displacement;
+    for (i = 0; i < iteration_count; i++) {
+        hero_state = &hero;
+        src = (V_209a40 *)&hero_state->motion.displacement;
         if (mode == 0) {
-            pos[0] = p->motion.pos.f[0] + FUN_002132a8_209a40(-0.1f, 0.1f);
-            pos[1] = p->motion.pos.f[1] + FUN_002132a8_209a40(-0.1f, 0.1f);
-            pos[2] = p->motion.pos.f[2] + FUN_002132a8_209a40(-0.5f, 0.1f);
+            pos[0] = hero_state->motion.pos.f[0] + FUN_002132a8_209a40(-0.1f, 0.1f);
+            pos[1] = hero_state->motion.pos.f[1] + FUN_002132a8_209a40(-0.1f, 0.1f);
+            pos[2] = hero_state->motion.pos.f[2] + FUN_002132a8_209a40(-0.5f, 0.1f);
         } else if (mode == 1) {
             if (!(i & 1)) {
-                FUN_L00_0024f7c8_209a40(p->moby, 0, pos);
+                FUN_L00_0024f7c8_209a40(hero_state->moby, 0, pos);
             } else {
-                FUN_L00_0024f7c8_209a40(p->moby, 0xE, pos);
+                FUN_L00_0024f7c8_209a40(hero_state->moby, 0xE, pos);
             }
         } else if (mode == 2) {
             if (!(i & 1)) {
-                FUN_L00_0024f7c8_209a40(p->moby, 0x17, pos);
+                FUN_L00_0024f7c8_209a40(hero_state->moby, 0x17, pos);
             } else {
-                FUN_L00_0024f7c8_209a40(p->moby, 0x16, pos);
+                FUN_L00_0024f7c8_209a40(hero_state->moby, 0x16, pos);
             }
         }
         qcopy(&v, src);
-        if (p->state.current == 0x34) {
+        if (hero_state->state.current == 0x34) {
             scale_vector_xyz(&v, &v, 1.15f);
         } else {
             scale_vector_xyz(&v, &v, 0.7f);
