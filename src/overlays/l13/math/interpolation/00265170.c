@@ -30,16 +30,16 @@ extern int D_L13_0015FFE0_d __asm__("D_L13_0015FFE0");
  * the US level program (data still reached through the MACRO_ADDR form). */
 // Sets flag bits and a data pointer on every live object in the pool whose id appears in a zero-terminated list.
 void jet_group_switch(short *ids, int a, int b, int c) __asm__("FUN_L13_002651c8");
-void jet_group_switch(short *ids, int a, int b, int c) {
+void jet_group_switch(short *ids, int clear_flag_bit_1, int b, int copy_data_pointer) {
     char *moby;
     for (moby = D_L13_0015FFD8_d; moby <= D_L13_0015FFE0_d; moby += 0x100) {
         int n;
         for (n = 0; ids[n] != 0 && ids[n] < 0x800 && n < 0xE0; n++) {
             if (*(short *)(moby + 0xA6) == ids[n] && moby[0x20] >= 0) {
                 unsigned short object_flags;
-                if (a != -1) {
+                if (clear_flag_bit_1 != -1) {
                     object_flags = *(unsigned short *)(moby + 0x34);
-                    if (a != 0)
+                    if (clear_flag_bit_1 != 0)
                         object_flags &= 0xFFFD;
                     else
                         object_flags |= 2;
@@ -56,8 +56,8 @@ void jet_group_switch(short *ids, int a, int b, int c) {
                     }
                     *(unsigned short *)(moby + 0x34) = object_flags;
                 }
-                if (c != -1) {
-                    if (c != 0)
+                if (copy_data_pointer != -1) {
+                    if (copy_data_pointer != 0)
                         *(int *)(moby + 0x94) = *(int *)(*(char **)(moby + 0x24) + 0x10);
                     else
                         *(int *)(moby + 0x94) = 0;
