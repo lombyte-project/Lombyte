@@ -132,7 +132,7 @@ void blarg_space_commando_update(struct Moby *moby) {
     s32 *route;
     Vec4 position_or_movement_vector;
     Vec4 b;
-    Vec4 c;
+    Vec4 movement_output_or_hit_vector_or_path_point;
     ShotInfo shot;
     s32 near;
     s32 hit;
@@ -231,7 +231,7 @@ void blarg_space_commando_update(struct Moby *moby) {
             b.f[0] = fast_cos(moby->rot.z) * dist;
             b.f[1] = fast_sin(moby->rot.z) * dist;
             b.f[2] = 0.0f;
-            FUN_L00_00258b50(moby, &vars->ctl, &b, &c, 1.0f);
+            FUN_L00_00258b50(moby, &vars->ctl, &b, &movement_output_or_hit_vector_or_path_point, 1.0f);
         }
         break;
     case BLARG_COMMANDO_STATE_RANGED_ATTACK_WINDUP:
@@ -296,11 +296,11 @@ void blarg_space_commando_update(struct Moby *moby) {
             moby->anim_speed = D_L06_00161FCC;
         }
         if (cur_frame >= 9.0f && cur_frame <= 15.0f) {
-            c.f[0] = fast_cos(moby->rot.z);
-            c.f[1] = fast_sin(moby->rot.z);
-            c.f[2] = 1.0f;
-            c.f[3] = 5627.925f;
-            make_hit_descriptor(&shot, moby, 1, &c, 1.0f);
+            movement_output_or_hit_vector_or_path_point.f[0] = fast_cos(moby->rot.z);
+            movement_output_or_hit_vector_or_path_point.f[1] = fast_sin(moby->rot.z);
+            movement_output_or_hit_vector_or_path_point.f[2] = 1.0f;
+            movement_output_or_hit_vector_or_path_point.f[3] = 5627.925f;
+            make_hit_descriptor(&shot, moby, 1, &movement_output_or_hit_vector_or_path_point, 1.0f);
             shot.unk18 = 0;
             shot.unk19 = 1;
             shot.oclass = moby->oclass;
@@ -332,8 +332,8 @@ void blarg_space_commando_update(struct Moby *moby) {
         position_or_movement_vector.f[2] = 0.0f;
         FUN_L00_00258b50(moby, &vars->ctl, &position_or_movement_vector, &b, 1.0f);
         FUN_L00_00261d78(vars->path, &moby->pos, &moby->pos, 0.75f);
-        if (FUN_L00_00261b48(vars->path, &moby->pos, &target->pos, &c) != 0 &&
-            FUN_001f9b48(&moby->pos, &c) < 0.8f) {
+        if (FUN_L00_00261b48(vars->path, &moby->pos, &target->pos, &movement_output_or_hit_vector_or_path_point) != 0 &&
+            FUN_001f9b48(&moby->pos, &movement_output_or_hit_vector_or_path_point) < 0.8f) {
             near = 1;
         }
         if (vars->unk188 == 0) {
@@ -356,11 +356,11 @@ void blarg_space_commando_update(struct Moby *moby) {
         b.f[2] += 1.5f;
         frame = compute_interpolated_record_value(moby);
         if (frame >= 9.0f && frame <= 15.0f) {
-            c.f[0] = fast_cos(moby->rot.z);
-            c.f[1] = fast_sin(moby->rot.z);
-            c.f[2] = 1.0f;
-            c.f[3] = 5627.925f;
-            make_hit_descriptor(&shot, moby, 1, &c, 1.0f);
+            movement_output_or_hit_vector_or_path_point.f[0] = fast_cos(moby->rot.z);
+            movement_output_or_hit_vector_or_path_point.f[1] = fast_sin(moby->rot.z);
+            movement_output_or_hit_vector_or_path_point.f[2] = 1.0f;
+            movement_output_or_hit_vector_or_path_point.f[3] = 5627.925f;
+            make_hit_descriptor(&shot, moby, 1, &movement_output_or_hit_vector_or_path_point, 1.0f);
             shot.unk18 = 0;
             shot.unk19 = 1;
             shot.oclass = moby->oclass;
