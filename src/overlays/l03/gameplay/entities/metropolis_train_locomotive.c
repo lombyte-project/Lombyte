@@ -1348,7 +1348,7 @@ void red_ship_1_update(char *moby) {
     int *path;
     int flag;
     int found;
-    int n;
+    int advanced_path_node_index;
     int r;
     int idx;
     unsigned char *voice_slot_entry;
@@ -1494,11 +1494,11 @@ void red_ship_1_update(char *moby) {
         cur = data + 0xA0;
         if (*(float *)(data + 0x100) >= 1.0f) {
             *(float *)(data + 0x100) -= 1.0f;
-            n = FUN_L01_0028b878(pm);
+            advanced_path_node_index = FUN_L01_0028b878(pm);
             *(OvlQuad *)(data + 0x90) = *(OvlQuad *)(data + 0xA0);
             FUN_L01_0028b8c8(cur, (int *)pm, 1, *(float *)(data + 0x104), *(float *)(data + 0x108));
             *(OvlQuad *)(data + 0xB0) = *(OvlQuad *)(data + 0xC0);
-            *(OvlQuad *)(data + 0xC0) = *(OvlQuad *)(*(char **)(pm + 0x10) + FUN_L01_0028b828(pm, n + 1) * 0x10 + 0x10);
+            *(OvlQuad *)(data + 0xC0) = *(OvlQuad *)(*(char **)(pm + 0x10) + FUN_L01_0028b828(pm, advanced_path_node_index + 1) * 0x10 + 0x10);
         }
         step = (*(float *)(data + 0x10C) + *(float *)(data + 0x134) * fast_sin(*(float *)(data + 0x13C))) /
                *(float *)(data + 0xBC);
