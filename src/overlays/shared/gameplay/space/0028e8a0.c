@@ -227,7 +227,7 @@ s32 FUN_0020b178_0028ed58(s32, s32) __asm__("FUN_0020b178");
 extern s32 D_L00_00160570[1] __attribute__((sda));
 void FUN_L00_0028ed58(s32 target_level_index) {
     A_0028ed58 *shared_state_record = &D_0013E030_0028ed58;
-    C_0028ed58 *c;
+    C_0028ed58 *shared_result_record;
     s32 shared_table_offset;
     (&D_L00_0015F5C4)[5] = 1; /* D_L00_0015F5D8: the unit declares it sda */
     D_L00_0015F5C4 = 6;
@@ -237,18 +237,18 @@ void FUN_L00_0028ed58(s32 target_level_index) {
     shared_state_record->h24 = -1;
     FUN_002335a0_0028ed58();
     shared_table_offset = D_L00_001611CC - 0x60000;
-    c = &D_L00_0016C860_0028ed58;
-    c->i58 = D_L00_00173E00_0028ed58.i4 + shared_table_offset;
-    c->i5C = D_L00_00173E00_0028ed58.i8 + shared_table_offset;
+    shared_result_record = &D_L00_0016C860_0028ed58;
+    shared_result_record->i58 = D_L00_00173E00_0028ed58.i4 + shared_table_offset;
+    shared_result_record->i5C = D_L00_00173E00_0028ed58.i8 + shared_table_offset;
     D_L00_001611CC = shared_table_offset;
     if (current_level_index == target_level_index) {
         s32 divisor;
         FUN_L00_0028e9c8_0028ed58(8);
         divisor = pal_mode ? 0x50 : 0x60;
-        c->i34 = FUN_001f96f8_0028ed58(D_L00_00160570[shared_state_record->h26]);
-        c->i3C = c->i34 / divisor;
-        FUN_002049f0_0028ed58(c->i3C);
-        c->i38 = c->i34 % divisor;
+        shared_result_record->i34 = FUN_001f96f8_0028ed58(D_L00_00160570[shared_state_record->h26]);
+        shared_result_record->i3C = shared_result_record->i34 / divisor;
+        FUN_002049f0_0028ed58(shared_result_record->i3C);
+        shared_result_record->i38 = shared_result_record->i34 % divisor;
     } else {
         FUN_0020b178_0028ed58(0, target_level_index);
         D_L00_0015F5C0 = target_level_index;
