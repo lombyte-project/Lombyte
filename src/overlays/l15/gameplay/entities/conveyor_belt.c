@@ -1487,27 +1487,27 @@ extern int D_0015EEA4_macro __asm__("D_0015EEA4") __attribute__((section(".sdata
 extern s32 current_level_index_macro __asm__("D_0015ED84") __attribute__((section(".sdata")));
 /* Quartu moby update (class 1469): hint and dialogue triggers from the hero's zones, with the play-time
    records of the two hint messages. */
-void FUN_L15_002ed398(struct Moby *m) {
+void FUN_L15_002ed398(struct Moby *moby) {
     enum {
         HINT_DIALOGUE_INITIALIZE = 0,
         HINT_DIALOGUE_CHECK_TRIGGERS = 1
     };
-    Talk_2ed398 *t = (struct Talk_2ed398 *)m->pvars;
-    int st = m->state;
-    struct Moby *e;
+    Talk_2ed398 *hint_dialogue_data = (struct Talk_2ed398 *)moby->pvars;
+    int st = moby->state;
+    struct Moby *npc_moby;
     int i, j, found, npc, pick;
 
     switch (st) {
     case HINT_DIALOGUE_INITIALIZE:
-        m->update_dist = 0xFF;
-        t->wait = scale_game_frames_2ed398(0x4B0);
-        m->state = 1;
+        moby->update_dist = 0xFF;
+        hint_dialogue_data->wait = scale_game_frames_2ed398(0x4B0);
+        moby->state = 1;
         break;
     case HINT_DIALOGUE_CHECK_TRIGGERS:
-        if (t->npc[0] != -1) {
-            e = (struct Moby *)(moby_list_2ed398 + (t->npc[0] << 8));
-            if (e != 0 && e->oclass == 0x4E && e->state != 0xFE && e->state != 0xFD && e->state != 3
-                && is_point_inside_clip_volume_2ed398(&hero.motion.pos, t->zone[3]) != 0
+        if (hint_dialogue_data->npc[0] != -1) {
+            npc_moby = (struct Moby *)(moby_list_2ed398 + (hint_dialogue_data->npc[0] << 8));
+            if (npc_moby != 0 && npc_moby->oclass == 0x4E && npc_moby->state != 0xFE && npc_moby->state != 0xFD && npc_moby->state != 3
+                && is_point_inside_clip_volume_2ed398(&hero.motion.pos, hint_dialogue_data->zone[3]) != 0
                 && (hero.state.control_mode < 2u || hero.state.control_mode == 9)
                 && ((Help_2ed398 *)D_L15_00179A10)->busy == 0 && ((Help_2ed398 *)D_L15_00179A10)->cur == -1) {
                 if (D_0013D4DF_2ed398[0] == 0) {
@@ -1550,7 +1550,7 @@ void FUN_L15_002ed398(struct Moby *m) {
             show_help_message_2ed398(0x3A9F, 0x89);
             D_L15_0015F5A4 = 0;
         }
-        if (is_point_inside_clip_volume_2ed398(&hero.motion.pos, t->vol54) != 0
+        if (is_point_inside_clip_volume_2ed398(&hero.motion.pos, hint_dialogue_data->vol54) != 0
             && hero.vehicle_mode == 3 && hero.unk22E0 == 0
             && D_L15_00161AC0_macro == 0 && *(unsigned short *)(D_00141680_2ed398 + 0x728) == 0) {
             show_help_message_2ed398(0x3A9E, 0x88);
@@ -1559,43 +1559,43 @@ void FUN_L15_002ed398(struct Moby *m) {
         npc = -1;
         found = 0;
         for (i = 0; i < 1; i++) {
-            if (is_point_inside_clip_volume_2ed398(&hero.motion.pos, t->zone[i]) != 0) {
-                pick = t->zone[i];
-                npc = t->npc[i];
+            if (is_point_inside_clip_volume_2ed398(&hero.motion.pos, hint_dialogue_data->zone[i]) != 0) {
+                pick = hint_dialogue_data->zone[i];
+                npc = hint_dialogue_data->npc[i];
                 found = 1;
                 break;
             }
         }
         if (found != 0) {
-            t->hold3C = t->hold3C + 1;
+            hint_dialogue_data->hold3C = hint_dialogue_data->hold3C + 1;
         } else {
-            t->hold3C = 0;
-            t->last = -1;
+            hint_dialogue_data->hold3C = 0;
+            hint_dialogue_data->last = -1;
         }
         if (npc != -1) {
-            e = (struct Moby *)(moby_list_2ed398 + (npc << 8));
-            if (e != 0 && e->oclass == 0x4E && e->state != 0xFE && e->state != 0xFD && e->state != 3
-                && t->hold3C > t->wait && pick != -1 && pick != t->last
+            npc_moby = (struct Moby *)(moby_list_2ed398 + (npc << 8));
+            if (npc_moby != 0 && npc_moby->oclass == 0x4E && npc_moby->state != 0xFE && npc_moby->state != 0xFD && npc_moby->state != 3
+                && hint_dialogue_data->hold3C > hint_dialogue_data->wait && pick != -1 && pick != hint_dialogue_data->last
                 && (hero.state.control_mode < 2u || hero.state.control_mode == 9)
                 && ((Help_2ed398 *)D_L15_00179A10)->busy == 0 && ((Help_2ed398 *)D_L15_00179A10)->cur == -1
                 && D_0013D4DF_2ed398[0] != 0) {
-                t->wait = scale_game_frames_2ed398(0x708);
+                hint_dialogue_data->wait = scale_game_frames_2ed398(0x708);
                 if (*(int *)(D_00141680_2ed398 + 0x6D4) >= 0) {
                     show_help_message_2ed398(0x3A9A, 0x7D);
                 }
-                t->last = pick;
-                t->hold3C = 0;
+                hint_dialogue_data->last = pick;
+                hint_dialogue_data->hold3C = 0;
             }
         }
         if (hero.moby->seq == 0xC && hero.vehicle_mode == 2) {
             ((Items_2ed398 *)D_0013D388_2ed398)->f6F = 1;
         }
-        if (is_point_inside_clip_volume_2ed398(&hero.motion.pos, t->vol1C) != 0 && hero.vehicle_mode == 2
+        if (is_point_inside_clip_volume_2ed398(&hero.motion.pos, hint_dialogue_data->vol1C) != 0 && hero.vehicle_mode == 2
             && ((Items_2ed398 *)D_0013D388_2ed398)->f6F == 0 && ((Help_2ed398 *)D_L15_00179A10)->busy == 0
             && ((Help_2ed398 *)D_L15_00179A10)->cur == -1 && *(int *)(D_00141680_2ed398 + 0x6EC) >= 0) {
             show_help_message_2ed398(0x3A9C, 0x80);
         }
-        if (is_point_inside_clip_volume_2ed398(&hero.motion.pos, t->vol20[0]) != 0 && ((Help_2ed398 *)D_L15_00179A10)->busy == 0
+        if (is_point_inside_clip_volume_2ed398(&hero.motion.pos, hint_dialogue_data->vol20[0]) != 0 && ((Help_2ed398 *)D_L15_00179A10)->busy == 0
             && ((Help_2ed398 *)D_L15_00179A10)->cur == -1 && D_0013D4C4[0] == 0
             && !(*(unsigned int *)(D_00141680_2ed398 + 0x6FC) & (1 << current_level_index_macro))) {
             show_help_message_2ed398(0x3A9D, 0x82);
@@ -1603,32 +1603,32 @@ void FUN_L15_002ed398(struct Moby *m) {
         pick = -1;
         found = 0;
         for (j = 0; j < 3; j++) {
-            if (is_point_inside_clip_volume_2ed398(&hero.motion.pos, t->vol20[j]) != 0) {
+            if (is_point_inside_clip_volume_2ed398(&hero.motion.pos, hint_dialogue_data->vol20[j]) != 0) {
                 found = 1;
-                if (t->last != t->vol20[j]) {
-                    pick = t->vol20[j];
+                if (hint_dialogue_data->last != hint_dialogue_data->vol20[j]) {
+                    pick = hint_dialogue_data->vol20[j];
                 }
                 break;
             }
         }
         if (found == 0) {
-            t->hold38 = 0;
-            t->last = -1;
+            hint_dialogue_data->hold38 = 0;
+            hint_dialogue_data->last = -1;
         } else {
-            t->hold38 = t->hold38 + 1;
+            hint_dialogue_data->hold38 = hint_dialogue_data->hold38 + 1;
             if (hero.state.current == 0x35) {
-                t->hold38 = 0;
-                t->last = -1;
+                hint_dialogue_data->hold38 = 0;
+                hint_dialogue_data->last = -1;
             }
         }
-        if (scale_game_frames_2ed398(0xE10) < t->hold38 && pick != -1 && FUN_L00_0020d568_2ed398() != 0
+        if (scale_game_frames_2ed398(0xE10) < hint_dialogue_data->hold38 && pick != -1 && FUN_L00_0020d568_2ed398() != 0
             && ((Help_2ed398 *)D_L15_00179A10)->busy == 0 && ((Help_2ed398 *)D_L15_00179A10)->cur == -1
             && D_0013D4C4[0] != 0) {
             show_help_message_2ed398(0x4E2E, 0x78);
-            t->last = pick;
-            t->hold38 = 0;
+            hint_dialogue_data->last = pick;
+            hint_dialogue_data->hold38 = 0;
         }
-        if (((Items_2ed398 *)D_0013D388_2ed398)->f6E == 0 && is_point_inside_clip_volume_2ed398(&hero.motion.pos, t->vol2C) != 0) {
+        if (((Items_2ed398 *)D_0013D388_2ed398)->f6E == 0 && is_point_inside_clip_volume_2ed398(&hero.motion.pos, hint_dialogue_data->vol2C) != 0) {
             ((Items_2ed398 *)D_0013D388_2ed398)->f6E = 1;
         }
         break;
