@@ -1649,9 +1649,9 @@ extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 void FUN_L18_002d88b8(struct Moby *moby) {
     float v[4];
     float world_emission_direction[4];
-    float a[4];
+    float first_spark_vector[4];
     float b[4];
-    float c[4];
+    float spark_vector_offset[4];
     int spark_count;
     float r;
     float ang;
@@ -1670,22 +1670,22 @@ void FUN_L18_002d88b8(struct Moby *moby) {
     set_vector_unit_z(world_emission_direction);
     transform_vector_by_basis(world_emission_direction, world_emission_direction, mat);
     for (i = 0; i < spark_count; i++) {
-        FUN_L00_00257d78(c, 0.0f, (*(float *)&(D_L18_00161A78)) * frame_time);
-        normalize_vector_xyz(a, world_emission_direction,
+        FUN_L00_00257d78(spark_vector_offset, 0.0f, (*(float *)&(D_L18_00161A78)) * frame_time);
+        normalize_vector_xyz(first_spark_vector, world_emission_direction,
                              (*(float *)&(D_L18_00161A68)) *
                                  (random_float_between(-(*(float *)&(D_L18_00161A74)),
                                                            (*(float *)&(D_L18_00161A74))) +
                                   1.0f) *
                                  frame_time);
-        add_vector_xyz(a, a, c);
-        normalize_vector_xyz(b, a,
+        add_vector_xyz(first_spark_vector, first_spark_vector, spark_vector_offset);
+        normalize_vector_xyz(b, first_spark_vector,
                              (*(float *)&(D_L18_00161A6C_gp)) *
                                  (random_float_between(-(*(float *)&(D_L18_00161A74)),
                                                            (*(float *)&(D_L18_00161A74))) +
                                   1.0f) *
                                  frame_time);
         b[2] = b[2] - (*(float *)&(D_L18_00161A70)) * frame_time;
-        a[3] =
+        first_spark_vector[3] =
             random_float_between((*(float *)&(D_L18_00161A8C)), (*(float *)&(D_L18_00161A90)));
         b[3] =
             random_float_between((*(float *)&(D_L18_00161A94)), (*(float *)&(D_L18_00161A98)));
@@ -1703,7 +1703,7 @@ void FUN_L18_002d88b8(struct Moby *moby) {
                                           (random_float_between(-(*(float *)&(D_L18_00161A88)),
                                                                     (*(float *)&(D_L18_00161A88))) +
                                            1.0f)));
-        spawn_spark(v, a, b, i0, i1, i2, i3, i4, (*(int *)&(D_L18_00161AB4)));
+        spawn_spark(v, first_spark_vector, b, i0, i1, i2, i3, i4, (*(int *)&(D_L18_00161AB4)));
     }
 }
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002DC850), where it is exact; names translated to the US level program. */
