@@ -2803,18 +2803,18 @@ extern int *D_L14_001B0BB0[];
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 
 void FUN_L14_002b5c30(struct Moby *moby) {
-    Mover_5c30 *d = (Mover_5c30 *)moby->pvars;
-    int *p;
-    int n;
-    if (d->alt == 0)
-        p = D_L14_001B0BB0[d->pathA];
+    Mover_5c30 *mover_vars = (Mover_5c30 *)moby->pvars;
+    int *active_path;
+    int penultimate_node_index;
+    if (mover_vars->alt == 0)
+        active_path = D_L14_001B0BB0[mover_vars->pathA];
     else
-        p = D_L14_001B0BB0[d->pathB];
-    n = *p - 2;
-    d->node = n;
-    d->w = *(float *)((n << 4) + (char *)p + 0x1C);
-    d->t = 0;
-    clear_u64_value(d->off);
+        active_path = D_L14_001B0BB0[mover_vars->pathB];
+    penultimate_node_index = *active_path - 2;
+    mover_vars->node = penultimate_node_index;
+    mover_vars->w = *(float *)((penultimate_node_index << 4) + (char *)active_path + 0x1C);
+    mover_vars->t = 0;
+    clear_u64_value(mover_vars->off);
 }
 extern u8 D_0013E550[];
 extern void release_voice_slot(s32 idx) __asm__("FUN_0022d798");
