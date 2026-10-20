@@ -542,6 +542,7 @@ void break_crate(M2d1428 *moby, s32 hit, s32 source) {
         CRATE_VARIANT_MISSION_THRESHOLD_GATED = 1,
         CRATE_VARIANT_DAMAGE_FLAG_GATED = 2,
         CRATE_VARIANT_IMPACT_TRIGGERED = 5,
+        CRATE_VARIANT_CLASS_OVERRIDE_BREAK_SOUND = 6,
         CRATE_VARIANT_INITIAL_DAMAGE_STAGE = 7,
         CRATE_VARIANT_SECOND_DAMAGE_STAGE = 8,
         CRATE_VARIANT_PENULTIMATE_DAMAGE_STAGE = 9,
@@ -605,7 +606,7 @@ void break_crate(M2d1428 *moby, s32 hit, s32 source) {
         case CRATE_VARIANT_OPTIONAL_QUARTER_TURN: case CRATE_VARIANT_CONDITIONAL_RESPAWN_START: kind = 0x165; break;
         case 4: kind = 0x168; break;
         case CRATE_VARIANT_IMPACT_TRIGGERED: kind = 0x16B; break;
-        case 6: kind = 0x16E; break;
+        case CRATE_VARIANT_CLASS_OVERRIDE_BREAK_SOUND: kind = 0x16E; break;
         case CRATE_VARIANT_INITIAL_DAMAGE_STAGE: case CRATE_VARIANT_SECOND_DAMAGE_STAGE: case CRATE_VARIANT_PENULTIMATE_DAMAGE_STAGE: case CRATE_VARIANT_FINAL_DAMAGE_STAGE: kind = 0x171; break;
         default: kind = 0x95; break;
         }
