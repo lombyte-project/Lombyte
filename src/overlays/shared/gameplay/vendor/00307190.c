@@ -21,26 +21,26 @@ extern void FUN_L00_00250df8(void *);
 
 char *FUN_L08_00307190(char *pos, char *dir, int a2, int a3, int a4, int a5);
 char *FUN_L08_00307190(char *pos, char *dir, int collision_ignore_moby, int tracked_moby, int lifetime_frames, int burst_mode) {
-    char *m = func_0020D348_m(0x50C);
-    if (m != 0) {
-        char *d;
-        *(unsigned char *)(m + 0x30) = 0xFF;
-        *(short *)(m + 0x32) = 0x7E;
-        d = *(char **)(m + 0x78);
-        m[0x31] = 1;
-        m[0x20] = 1;
-        qcopy(m + 0x10, dir);
-        qcopy(d, pos);
-        *(int *)(d + 0x18) = scale_game_frames(lifetime_frames);
-        *(int *)(d + 0x10) = collision_ignore_moby;
-        *(int *)(d + 0x14) = tracked_moby;
-        *(int *)(d + 0x2C) = burst_mode;
-        *(int *)(d + 0x28) = 0;
-        *(float *)(m + 0x48) = fast_arc_tan(*(float *)d, *(float *)(d + 4));
-        *(float *)(m + 0x44) = -fast_arc_tan(vector_length_xy(d), *(float *)(d + 8));
-        FUN_L00_00250df8(m);
+    char *spawned_moby = func_0020D348_m(0x50C);
+    if (spawned_moby != 0) {
+        char *moby_data;
+        *(unsigned char *)(spawned_moby + 0x30) = 0xFF;
+        *(short *)(spawned_moby + 0x32) = 0x7E;
+        moby_data = *(char **)(spawned_moby + 0x78);
+        spawned_moby[0x31] = 1;
+        spawned_moby[0x20] = 1;
+        qcopy(spawned_moby + 0x10, dir);
+        qcopy(moby_data, pos);
+        *(int *)(moby_data + 0x18) = scale_game_frames(lifetime_frames);
+        *(int *)(moby_data + 0x10) = collision_ignore_moby;
+        *(int *)(moby_data + 0x14) = tracked_moby;
+        *(int *)(moby_data + 0x2C) = burst_mode;
+        *(int *)(moby_data + 0x28) = 0;
+        *(float *)(spawned_moby + 0x48) = fast_arc_tan(*(float *)moby_data, *(float *)(moby_data + 4));
+        *(float *)(spawned_moby + 0x44) = -fast_arc_tan(vector_length_xy(moby_data), *(float *)(moby_data + 8));
+        FUN_L00_00250df8(spawned_moby);
     }
-    return m;
+    return spawned_moby;
 }
 /* Fire bolt: flies along its velocity with a smoke trail (while the level is not underwater), damaging what it hits. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D3DF8.c: func_L08_00308758), where it is exact; names translated to the US level program. */
