@@ -1733,11 +1733,11 @@ unsigned char *FUN_L00_00275158(void *position, void *b, int n, float f) {
 extern void free_effect_particle(void *) __asm__("FUN_L00_00267a08");
 
 /* Adds byte 0x38 to byte 8; calls free_effect_particle once the float at 0xC is <= 0. */
-void FUN_L00_002752e0(char *a) {
-    *(unsigned char *)(a + 8) = *(unsigned char *)(a + 8) + *(unsigned char *)(a + 0x38);
-    if (*(float *)(a + 0xC) <= 0.0f) {
-        *(float *)(a + 0xC) = 0.0f;
-        free_effect_particle(a);
+void FUN_L00_002752e0(char *particle) {
+    *(unsigned char *)(particle + 8) = *(unsigned char *)(particle + 8) + *(unsigned char *)(particle + 0x38);
+    if (*(float *)(particle + 0xC) <= 0.0f) {
+        *(float *)(particle + 0xC) = 0.0f;
+        free_effect_particle(particle);
     }
 }
 typedef union {
