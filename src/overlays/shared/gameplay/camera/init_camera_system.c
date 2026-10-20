@@ -297,15 +297,15 @@ extern void subtract_vector_xyz(float *) __asm__("FUN_001f9a28");
 extern void fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 
 /* Fills a from a subtract_vector_xyz result: two fast_arc_tan angles and its length. */
-int FUN_L00_001ed630(float *a) {
+int FUN_L00_001ed630(float *angles_and_distance) {
     W v;
-    float t;
+    float xy_angle;
     subtract_vector_xyz(v);
-    a[1] = fast_arc_tan(vector_length_xy(v), v[2]);
-    t = fast_arc_tan(v[0], v[1]);
-    fast_subtract_rotations(t, a[0]);
-    a[0] = t;
-    a[2] = fast_vec_length(v);
+    angles_and_distance[1] = fast_arc_tan(vector_length_xy(v), v[2]);
+    xy_angle = fast_arc_tan(v[0], v[1]);
+    fast_subtract_rotations(xy_angle, angles_and_distance[0]);
+    angles_and_distance[0] = xy_angle;
+    angles_and_distance[2] = fast_vec_length(v);
     return 0;
 }
 #include "qcopy.h"
