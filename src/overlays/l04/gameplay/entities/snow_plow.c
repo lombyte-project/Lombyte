@@ -1433,29 +1433,29 @@ extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 extern char *D_L04_0015FFD0[] __attribute__((section(".sdata")));
 void FUN_L04_002d6f68(char *moby) {
-    int *p = *(int **)(moby + 0x78);
-    int *t = D_L04_001B0630[p[2]];
+    int *moby_vars = *(int **)(moby + 0x78);
+    int *path_data = D_L04_001B0630[moby_vars[2]];
     char *base = D_L04_0015FFD0[2];
-    int o0 = p[0] * 256;
+    int o0 = moby_vars[0] * 256;
     float *src = *(float **)(base + o0 + 0x78);
-    char *dst = base + p[1] * 256;
-    float a[4];
+    char *dst = base + moby_vars[1] * 256;
+    float weighted_first_point[4];
     float b[4];
     float f, g;
     int idx;
-    int n = 1;
+    int second_point_index = 1;
     float one = 1.0f;
 
-    f = convert_integer_to_float(t[0] - 1);
+    f = convert_integer_to_float(path_data[0] - 1);
     g = (one - src[0]) * f;
     f = FUN_L00_00200260(g, one);
     idx = func_001FA898_r(g);
     if (f == 0.0f)
-        n = 0;
-    n += idx;
-    scale_vector_xyz(a, (char *)t + (idx * 16 + 0x10), one - f);
-    scale_vector_xyz(b, (char *)t + (n * 16 + 0x10), f);
-    add_vector_xyz(moby + 0x10, a, b);
+        second_point_index = 0;
+    second_point_index += idx;
+    scale_vector_xyz(weighted_first_point, (char *)path_data + (idx * 16 + 0x10), one - f);
+    scale_vector_xyz(b, (char *)path_data + (second_point_index * 16 + 0x10), f);
+    add_vector_xyz(moby + 0x10, weighted_first_point, b);
     qcopy(dst + 0x10, moby + 0x10);
 }
 extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
