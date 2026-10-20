@@ -4,10 +4,10 @@
 
 /* Returns the pointer at +8 of the moby data when flag 0x20 at 0x34 is set, else 0. */
 char *FUN_L00_002603d0(char *m);
-char *FUN_L00_002603d0(char *m) {
-    if (m == 0)
+char *FUN_L00_002603d0(char *moby) {
+    if (moby == 0)
         return 0;
-    if ((*(u16 *)(m + 0x34) & 0x20) == 0)
+    if ((*(u16 *)(moby + 0x34) & 0x20) == 0)
         return 0;
-    return *(char **)(*(char **)(m + 0x78) + 8);
+    return *(char **)(*(char **)(moby + 0x78) + 8);
 }
