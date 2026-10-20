@@ -48,7 +48,7 @@ void relocate_sky_definition(struct SpriteFile *sky_definition) {
     s32 i;
     s32 k;
     s32 j;
-    s32 a;
+    s32 serialized_palette_offset;
     s32 b;
     s32 texture_width;
     s32 texture_height;
@@ -64,11 +64,11 @@ void relocate_sky_definition(struct SpriteFile *sky_definition) {
     }
     src = (s32 *)D_0016045C->sprites;
     for (i = 0; i < D_0016045C->nsprites; i++) {
-        a = *src++;
+        serialized_palette_offset = *src++;
         b = *src++;
         texture_width = *src++;
         texture_height = *src++;
-        ((struct Sprite *)D_0016045C->sprites)[i].y = a >> 4;
+        ((struct Sprite *)D_0016045C->sprites)[i].y = serialized_palette_offset >> 4;
         ((struct Sprite *)D_0016045C->sprites)[i].x = b >> 4;
         ((struct Sprite *)D_0016045C->sprites)[i].w = log2dim(texture_width);
         ((struct Sprite *)D_0016045C->sprites)[i].h = log2dim(texture_height);
