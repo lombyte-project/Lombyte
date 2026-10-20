@@ -248,10 +248,10 @@ extern int D_L06_0015FFD8_d __asm__("D_L06_0015FFD8");
  * the US level program (data still reached through the MACRO_ADDR form). */
 // Resets every moby of a list that is in state 0x12.
 void FUN_L06_002f99b0(int index) {
-    short *p = D_L06_001ABFC0[index];
-    if (p != 0) {
+    short *moby_index_cursor = D_L06_001ABFC0[index];
+    if (moby_index_cursor != 0) {
         do {
-            char *moby = (char *)((*(unsigned short *)p & 0x7FFF) << 8) + (int)D_L06_0015FFD8_d;
+            char *moby = (char *)((*(unsigned short *)moby_index_cursor & 0x7FFF) << 8) + (int)D_L06_0015FFD8_d;
             if ((unsigned char)moby[0x20] == 0x12) {
                 unsigned short flags = *(unsigned short *)(moby + 0x34);
                 moby[0x20] = 0;
@@ -260,7 +260,7 @@ void FUN_L06_002f99b0(int index) {
                 *(int *)(moby + 0x94) = *(int *)(*(char **)(moby + 0x24) + 0x10);
                 *(unsigned short *)(moby + 0x34) = flags;
             }
-        } while (*p++ >= 0);
+        } while (*moby_index_cursor++ >= 0);
     }
 }
 
