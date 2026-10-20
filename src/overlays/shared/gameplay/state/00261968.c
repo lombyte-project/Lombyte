@@ -544,7 +544,7 @@ void FUN_L00_00259f50_2628d8(void *, void *) __asm__("FUN_L00_00259f50");
 void FUN_001f99f8_2628d8(void *) __asm__("FUN_001f99f8");
 
 void update_joint_animation(void *m, unsigned char *p, int c, float fa, float fb) __asm__("FUN_L00_002628d8");
-void update_joint_animation(void *moby, unsigned char *joint_animation_state, int c, float fa, float fb) {
+void update_joint_animation(void *moby, unsigned char *joint_animation_state, int joint_index, float fa, float fb) {
     unsigned char *previous_moby = *(unsigned char **)(joint_animation_state + 0x78);
     float uniform_scale;
     if (!previous_moby) {
@@ -568,7 +568,7 @@ void update_joint_animation(void *moby, unsigned char *joint_animation_state, in
     FUN_L00_0025bc98_2628d8(joint_animation_state + 0x44, joint_animation_state + 0x54, *(float *)(joint_animation_state + 0x64), fa, fb, 0.0f, 0);
     FUN_L00_0025bc98_2628d8(joint_animation_state + 0x48, joint_animation_state + 0x58, *(float *)(joint_animation_state + 0x68), fa, fb, 0.0f, 0);
     if (!joint_animation_state[1])
-        FUN_0020cb10_2628d8(moby, c, joint_animation_state);
+        FUN_0020cb10_2628d8(moby, joint_index, joint_animation_state);
     FUN_L00_00259f50_2628d8(joint_animation_state + 0x10, joint_animation_state + 0x40);
     uniform_scale = *(float *)(joint_animation_state + 0x70);
     *(float *)(joint_animation_state + 0x20) = uniform_scale;
