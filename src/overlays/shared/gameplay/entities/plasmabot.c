@@ -141,24 +141,24 @@ extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 
 void FUN_L14_002fe900(char *moby) {
     char *data = *(char **)(moby + 0x78);
-    char *p;
+    char *path;
     int i;
-    p = D_L14_001B0BB0[*(int *)(data + 0xD8)];
-    for (i = 0; i < *(int *)p - 1; i++) {
-        *(float *)(p + 0x1C + i * 0x10) = fast_vec_dist(p + 0x10 + i * 0x10, p + 0x20 + i * 0x10);
+    path = D_L14_001B0BB0[*(int *)(data + 0xD8)];
+    for (i = 0; i < *(int *)path - 1; i++) {
+        *(float *)(path + 0x1C + i * 0x10) = fast_vec_dist(path + 0x10 + i * 0x10, path + 0x20 + i * 0x10);
     }
     *(int *)(data + 0xD0) = 0;
     *(int *)(data + 0xD4) = 0;
-    qcopy(moby + 0x10, p + 0x10);
-    *(float *)(moby + 0x48) = fast_arc_tan(*(float *)(p + 0x20) - *(float *)(p + 0x10),
-                                           *(float *)(p + 0x24) - *(float *)(p + 0x14));
+    qcopy(moby + 0x10, path + 0x10);
+    *(float *)(moby + 0x48) = fast_arc_tan(*(float *)(path + 0x20) - *(float *)(path + 0x10),
+                                           *(float *)(path + 0x24) - *(float *)(path + 0x14));
     *(float *)(data + 0xF0) = *(float *)(data + 0xE4) = *(float *)(data + 0xE8) =
         *(float *)(data + 0xEC) = 0.0f;
     if (*(int *)(data + 0xFC) != 1) {
-        p = D_L14_001B0BB0[*(int *)(data + 0xDC)];
-        for (i = 0; i < *(int *)p - 1; i++) {
-            *(float *)(p + 0x1C + i * 0x10) =
-                fast_vec_dist(p + 0x10 + i * 0x10, p + 0x20 + i * 0x10);
+        path = D_L14_001B0BB0[*(int *)(data + 0xDC)];
+        for (i = 0; i < *(int *)path - 1; i++) {
+            *(float *)(path + 0x1C + i * 0x10) =
+                fast_vec_dist(path + 0x10 + i * 0x10, path + 0x20 + i * 0x10);
         }
     }
 }
