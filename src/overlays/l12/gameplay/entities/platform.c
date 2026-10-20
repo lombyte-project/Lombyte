@@ -1039,8 +1039,8 @@ void FUN_L12_002e3528(struct Moby *moby) {
         }
     }
     if (vars->call_enabled != 0 && moby->state != 9) {
-        s16 n = ++vars->call_timer;
-        if (scale_game_frames_e3528(0x3C) * 15 < n && moby->visible == 0 && moby->group < 0xFF &&
+        s16 updated_call_timer = ++vars->call_timer;
+        if (scale_game_frames_e3528(0x3C) * 15 < updated_call_timer && moby->visible == 0 && moby->group < 0xFF &&
             FUN_L01_0026e008(moby->group, -1) >= 4 && random_integer_below_e3528(0x45) == 0) {
             v.f[0] = fast_cos_e3528(fast_add_rotations_e3528(moby->rot.z, 3.1415927f));
             v.f[1] = fast_sin_e3528(fast_add_rotations_e3528(moby->rot.z, 3.1415927f));
