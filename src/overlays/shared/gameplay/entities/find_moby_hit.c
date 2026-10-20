@@ -35,8 +35,8 @@ int point_in_path_xy(float *p, float *v, int n) {
     return r;
 }
 /* True when the pointer at a+0x94 is set and its word at +8 is non-zero. */
-int FUN_L00_00259830(char *a) {
-    char *p = *(char **)(a + 0x94);
+int FUN_L00_00259830(char *moby) {
+    char *p = *(char **)(moby + 0x94);
     if (p && *(int *)(p + 8))
         return 1;
     return 0;
