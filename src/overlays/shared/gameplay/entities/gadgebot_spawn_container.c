@@ -127,7 +127,7 @@ void gadgebot_spawn_container_update(unsigned char *moby) {
     char *hit_record = find_moby_hit(moby, 0x10000, 0);
     float raised_position_snapshot[4];
     int frame_count_snapshot;
-    float f;
+    float color_pulse_value;
 
     moby[0xA4] = 0xFF;
     switch (moby[0x20]) {
@@ -136,12 +136,12 @@ void gadgebot_spawn_container_update(unsigned char *moby) {
         break;
     case GADGEBOT_CONTAINER_PULSE_AND_HANDLE_HITS:
         frame_count_snapshot = level_frame_count;
-        f = (float)(frame_count_snapshot % 150) / 150.0f * 2.0f * 3.14159274f;
-        if (f > 3.14159274f) {
-            f -= 6.28318548f;
+        color_pulse_value = (float)(frame_count_snapshot % 150) / 150.0f * 2.0f * 3.14159274f;
+        if (color_pulse_value > 3.14159274f) {
+            color_pulse_value -= 6.28318548f;
         }
-        f = (fast_sin(f) + 1.0f) * 0.5f;
-        *(int *)(moby + 0x90) = fast_tween_color(0x80464646, 0x80828282, f);
+        color_pulse_value = (fast_sin(color_pulse_value) + 1.0f) * 0.5f;
+        *(int *)(moby + 0x90) = fast_tween_color(0x80464646, 0x80828282, color_pulse_value);
         if (hit_record != 0) {
             FUN_L06_002d8178(moby, hit_record);
         }
