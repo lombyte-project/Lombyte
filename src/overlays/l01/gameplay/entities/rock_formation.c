@@ -1102,7 +1102,7 @@ void FUN_L01_002fd0e8(struct Moby *moby) {
     f32 zero;
     u8 *tex;
     s32 ripple_tile_index;
-    s32 m;
+    s32 bind_tile_index;
     PoolTile *tiles;
 
     volumes = (s32 *)moby->pvars;
@@ -1153,8 +1153,8 @@ void FUN_L01_002fd0e8(struct Moby *moby) {
         D_L01_00161214 = 48.0f;
         pool_draw_tiles = pool_tiles;
         pool_draw_tex = pool_tile_tex;
-        for (m = 0; m < 21; m++) {
-            pool_bind_tile(&pool_tiles[m], tex + m * 16);
+        for (bind_tile_index = 0; bind_tile_index < 21; bind_tile_index++) {
+            pool_bind_tile(&pool_tiles[bind_tile_index], tex + bind_tile_index * 16);
         }
         for (ripple_tile_index = 0; ripple_tile_index < 21; ripple_tile_index++) {
             PoolTile *tile = &pool_tiles[ripple_tile_index];
