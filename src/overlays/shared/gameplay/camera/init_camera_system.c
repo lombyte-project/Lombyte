@@ -33,20 +33,20 @@ float FUN_001fa5c8_001eb328(float, float) __asm__("FUN_001fa5c8");
 float FUN_001f99c0_001eb328(float) __asm__("FUN_001f99c0");
 float FUN_001fa580_001eb328(float, float) __asm__("FUN_001fa580");
 float rope_spring_turn(float *p, float a, float b, float c, float d, float lim) __asm__("FUN_L00_001eb328");
-float rope_spring_turn(float *p, float a, float b, float c, float d, float lim) {
+float rope_spring_turn(float *spring_state, float a, float b, float response_gain, float damping_factor, float lim) {
     float t = FUN_001fa5c8_001eb328(b, a);
-    *p = *p + (c * t - d * *p);
+    *spring_state = *spring_state + (response_gain * t - damping_factor * *spring_state);
     if (lim != 0.0f) {
-        if (*p > lim)
-            *p = lim;
-        else if (*p < -lim)
-            *p = -lim;
+        if (*spring_state > lim)
+            *spring_state = lim;
+        else if (*spring_state < -lim)
+            *spring_state = -lim;
     }
-    if (*p > FUN_001f99c0_001eb328(t))
-        *p = FUN_001f99c0_001eb328(t);
-    else if (*p < -FUN_001f99c0_001eb328(t))
-        *p = -FUN_001f99c0_001eb328(t);
-    return FUN_001fa580_001eb328(a, *p);
+    if (*spring_state > FUN_001f99c0_001eb328(t))
+        *spring_state = FUN_001f99c0_001eb328(t);
+    else if (*spring_state < -FUN_001f99c0_001eb328(t))
+        *spring_state = -FUN_001f99c0_001eb328(t);
+    return FUN_001fa580_001eb328(a, *spring_state);
 }
 typedef struct {
     char pad[0x7D];
