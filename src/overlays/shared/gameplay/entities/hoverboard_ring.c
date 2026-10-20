@@ -39,9 +39,9 @@ void hoverboard_ring_update(char *moby) {
         if (fast_bsphere_check((char *)v, 128.0f) != -1) {
             if (hero.state.control_mode == 0x16) {
                 for (i = 0; i < 3; i++) {
-                    float a = random_angle_radians();
+                    float first_random_angle = random_angle_radians();
                     float b = random_angle_radians();
-                    FUN_L00_002743a8(a, b, (int)moby, D_L05_0015F580, scale_game_frames(0x28), 1,
+                    FUN_L00_002743a8(first_random_angle, b, (int)moby, D_L05_0015F580, scale_game_frames(0x28), 1,
                                      0x7F, 0);
                 }
             }
