@@ -2310,10 +2310,10 @@ void FUN_L00_00209638(int seed, int limit) {
             v[1] -= fast_sin(hero_state->motion.rot.f[2]) * (D_0015ED6C * 1.5f);
             {
                 float r = FUN_002132a8_209638(0.4f, 0.5f);
-                float d = -2.0f;
+                float effect_side_value = -2.0f;
                 if (i == 0)
-                    d = 2.0f;
-                FUN_L00_002718d0_209638(pos, v, &hero_state->water_surface_z, r, d);
+                    effect_side_value = 2.0f;
+                FUN_L00_002718d0_209638(pos, v, &hero_state->water_surface_z, r, effect_side_value);
             }
             if (seed) {
                 hero_state->unk908 = FUN_00213260_209638(seed);
