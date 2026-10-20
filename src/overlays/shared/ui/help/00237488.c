@@ -1664,14 +1664,14 @@ int FUN_L05_002551b8(void) {
 }
 int FUN_L05_002551d0(void) {
     struct Hero *hero_ptr = &hero;
-    int f = hero_ptr->unk8CE;
+    int hero_variant_selector = hero_ptr->unk8CE;
     if (hero_ptr->unk884 == 0) {
         int r = 0x7D;
-        if (f == 0)
+        if (hero_variant_selector == 0)
             r = 0x52;
         return r;
     }
-    { return f == 0 ? 0x68 : 0x7E; }
+    { return hero_variant_selector == 0 ? 0x68 : 0x7E; }
 }
 #define NOT_SDA
 
