@@ -36,13 +36,13 @@ s32 sceDmaReset(s32 enable_dma) {
     status = *(volatile u32 *)0x1000E000 & 1;
     for (i = 9; i >= 0; i--) {
         if (DmaChannelsUsed[9 - i] != 0) {
-            sceDmaChan *p = DmaChannels[9 - i];
-            p->chcr = 0;
-            p->tadr = 0;
-            p->madr = 0;
-            p->asr1 = 0;
-            p->asr0 = 0;
-            p->sadr = 0;
+            sceDmaChan *dma_channel = DmaChannels[9 - i];
+            dma_channel->chcr = 0;
+            dma_channel->tadr = 0;
+            dma_channel->madr = 0;
+            dma_channel->asr1 = 0;
+            dma_channel->asr0 = 0;
+            dma_channel->sadr = 0;
         }
     }
     *(volatile u32 *)0x1000E010 = 0xFF1F;
