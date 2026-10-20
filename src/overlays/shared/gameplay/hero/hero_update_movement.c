@@ -1161,7 +1161,7 @@ void hero_update_movement(void) {
         }
         break;
     }
-    case 0x14: {
+    case HERO_STATE_WRENCH_SLAM: {
         s32 t1;
         s32 t2;
         f32 r;
@@ -1312,7 +1312,7 @@ void hero_update_movement(void) {
         }
         break;
     }
-    case 0x13: {
+    case HERO_STATE_WRENCH_COMBO: {
         struct HeroTableRow2C *tb;
         if (hero.unk12E2 != 0) {
             FUN_L00_002167d0();
