@@ -854,34 +854,34 @@ float absolute_float(float input) __asm__("func_001F99C0");
 extern int func_001FA8A8_caa18(int, int, float) __asm__("FUN_001fa6e0");
 extern int func_001FA898_caa18(float) __asm__("FUN_001fa6d0");
 
-void FUN_L16_002c9650(struct Moby *m) {
-    L16SpriteData *p = (L16SpriteData *)m->pvars;
+void FUN_L16_002c9650(struct Moby *moby) {
+    L16SpriteData *sprite_data = (L16SpriteData *)moby->pvars;
     float d[4] __attribute__((aligned(16)));
     float e[4] __attribute__((aligned(16)));
     int i, col;
-    float f;
+    float elapsed_cycle_fraction;
 
-    m->pos.z += 0.1f;
-    fast_vec_sub(d, D_L16_001671C0, &m->pos);
+    moby->pos.z += 0.1f;
+    fast_vec_sub(d, D_L16_001671C0, &moby->pos);
     fast_vec_normalize(d, d, -0.3f);
     fast_vec_normalize(e, d, 0.1f);
-    fast_vec_add(d, d, &m->pos);
-    m->pos.z -= 0.1f;
+    fast_vec_add(d, d, &moby->pos);
+    moby->pos.z -= 0.1f;
     for (i = 0; i < 4; i++) {
-        float h = p->a[i] + p->b[i];
-        p->a[i] = h;
+        float h = sprite_data->a[i] + sprite_data->b[i];
+        sprite_data->a[i] = h;
         if (255.0f <= h) {
-            p->a[i] = h - 255.0f;
+            sprite_data->a[i] = h - 255.0f;
         } else if (h <= 0.0f) {
-            p->a[i] = h + 255.0f;
+            sprite_data->a[i] = h + 255.0f;
         }
-        if (FUN_001f9740_c(&p->c[i])) {
-            p->c[i] = scale_game_frames(0xFF);
+        if (FUN_001f9740_c(&sprite_data->c[i])) {
+            sprite_data->c[i] = scale_game_frames(0xFF);
         }
-        f = convert_integer_to_float(scale_game_frames(0xFF) - p->c[i]);
-        f = f / (float)scale_game_frames(0xFF);
-        col = func_001FA8A8_caa18(0x4040FFFF, 0x1040FFFF, absolute_float(0.5f - f));
-        FUN_L00_00272f68(d, col, func_001FA898_caa18(p->a[i]) & 0xFF, 0x35, 1, 2, 0, p->d[i]);
+        elapsed_cycle_fraction = convert_integer_to_float(scale_game_frames(0xFF) - sprite_data->c[i]);
+        elapsed_cycle_fraction = elapsed_cycle_fraction / (float)scale_game_frames(0xFF);
+        col = func_001FA8A8_caa18(0x4040FFFF, 0x1040FFFF, absolute_float(0.5f - elapsed_cycle_fraction));
+        FUN_L00_00272f68(d, col, func_001FA898_caa18(sprite_data->a[i]) & 0xFF, 0x35, 1, 2, 0, sprite_data->d[i]);
         fast_vec_add(d, d, e);
     }
 }
