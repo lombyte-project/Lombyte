@@ -3103,14 +3103,14 @@ void FUN_L12_002ebca8(struct Moby *moby, int flag) {
     char *moby_vars = (char *)moby->pvars;
     float explosion_position[4];
     float b[4];
-    unsigned char *q;
+    unsigned char *help_message_state;
     if (find_moby_hit(moby, 0xA30000, 0) != 0) {
         if (hero.state.current != 0x32) {
             D_0015EE04 += 1;
             if (D_0015EE04 >= 5) {
-                q = (unsigned char *)(D_0013D408);
-                if (q[0x15] == 0) {
-                    q[0x15] = 1;
+                help_message_state = (unsigned char *)(D_0013D408);
+                if (help_message_state[0x15] == 0) {
+                    help_message_state[0x15] = 1;
                     allocate_voice_for_bank_entry(1, 0, 0);
                     FUN_L00_00263d40(0x53D6, -1);
                 }
