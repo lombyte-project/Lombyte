@@ -223,10 +223,10 @@ void FUN_L10_002e91b8(unsigned char *moby) {
 extern char *D_L10_0015EF50;
 
 void FUN_L10_002f5a50(int i) {
-    unsigned char *q;
-    q = *(unsigned char **)(D_L10_0015EF50 + i * 0x20 + 0x1C);
-    q[0x38] = 1;
-    q[0x39] = 0;
+    unsigned char *descriptor_record;
+    descriptor_record = *(unsigned char **)(D_L10_0015EF50 + i * 0x20 + 0x1C);
+    descriptor_record[0x38] = 1;
+    descriptor_record[0x39] = 0;
 }
 extern char *D_L10_0015EF50;
 extern char *D_L10_001B0930_5a78[] __asm__("D_L10_001B0930");
