@@ -2812,7 +2812,7 @@ int mine_blend_color(int, int, float) __asm__("FUN_L00_002371e0");
 void FUN_L00_0026fa00(char *particle) {
     V4 position_offset;
     int *particle_data = (int *)(particle + 0x20);
-    int n, k;
+    int color_blend_peak_ticks, k;
     if (fast_dec_timer_s16(particle + 0xA)) {
         free_effect_particle(particle);
         return;
@@ -2823,10 +2823,10 @@ void FUN_L00_0026fa00(char *particle) {
     else
         fast_vec_scale(position_offset, position_offset, 0.25f);
     fast_vec_add(particle + 0x10, particle_data, position_offset);
-    n = particle_data[5];
-    k = *(short *)(particle + 0xA) - n;
+    color_blend_peak_ticks = particle_data[5];
+    k = *(short *)(particle + 0xA) - color_blend_peak_ticks;
     k = k < 0 ? -k : k;
-    *(int *)(particle + 4) = mine_blend_color(0, particle_data[4], (float)(n - k) / (float)n);
+    *(int *)(particle + 4) = mine_blend_color(0, particle_data[4], (float)(color_blend_peak_ticks - k) / (float)color_blend_peak_ticks);
 }
 typedef struct {
     float v[4];
