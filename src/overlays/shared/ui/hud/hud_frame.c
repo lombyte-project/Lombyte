@@ -24,13 +24,13 @@ typedef struct {
 extern G0023b120 D_L00_0017E4D8;
 void draw_hud_sprite(s32, s32, s32, s32, s32, s32) __asm__("FUN_001ffc30");
 void hud_frame(O0023b120 *o, s32 id, s32 x, s32 y, u32 flags, s32 extra) __asm__("FUN_L00_0023b120");
-void hud_frame(O0023b120 *o, s32 id, s32 x, s32 y, u32 flags, s32 extra) {
+void hud_frame(O0023b120 *hud_element, s32 id, s32 x, s32 y, u32 flags, s32 extra) {
     s32 w0, h0, w, h;
     R0023b120 *r;
     if (id < 0)
         return;
-    x += o->x;
-    y += o->y;
+    x += hud_element->x;
+    y += hud_element->y;
     r = &D_L00_0017E4D8.rec[D_L00_0017E4D8.tab[id].k];
     w0 = 1 << r->lw;
     h0 = 1 << r->lh;
