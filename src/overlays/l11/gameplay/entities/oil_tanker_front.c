@@ -307,8 +307,8 @@ short FUN_L11_00316090(struct Moby *self) {
 }
 /* True when the moby is in state 0x14, 0xB, 0x12 or 0xC. */
 s32 FUN_L11_00316128(const u8 *moby) {
-    u32 s = moby[0x20];
-    if (s == 0x14 || s == 0xB || s == 0x12 || s == 0xC) {
+    u32 moby_state = moby[0x20];
+    if (moby_state == 0x14 || moby_state == 0xB || moby_state == 0x12 || moby_state == 0xC) {
         return 1;
     }
     return 0;
