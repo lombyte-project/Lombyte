@@ -1469,37 +1469,37 @@ extern float D_L14_00161B0C __attribute__((sda));
 extern float D_L14_00161B10 __attribute__((sda));
 extern float D_L14_00161B14 __attribute__((sda));
 unsigned char *FUN_L14_002dea98(char *owner, char *pos) {
-    unsigned char *m = func_0020D348_m(0x145);
-    char *d;
+    unsigned char *spawned_moby = func_0020D348_m(0x145);
+    char *spawned_vars;
     char *g;
     float vec[8];
-    if (m != 0) {
-        d = *(char **)(m + 0x78);
-        *(char **)(d + 0x24) = owner;
-        qcopy(m + 0x10, pos);
-        *(float *)(m + 0x48) = *(float *)(owner + 0x48);
-        m[0x20] = 0;
-        m[0x30] = 0xFF;
-        *(short *)(m + 0x32) = 0xFF;
-        m[0x31] = 1;
+    if (spawned_moby != 0) {
+        spawned_vars = *(char **)(spawned_moby + 0x78);
+        *(char **)(spawned_vars + 0x24) = owner;
+        qcopy(spawned_moby + 0x10, pos);
+        *(float *)(spawned_moby + 0x48) = *(float *)(owner + 0x48);
+        spawned_moby[0x20] = 0;
+        spawned_moby[0x30] = 0xFF;
+        *(short *)(spawned_moby + 0x32) = 0xFF;
+        spawned_moby[0x31] = 1;
         g = (char *)&hero.motion.pos;
-        subtract_vector_xyz(vec, m + 0x10, g);
+        subtract_vector_xyz(vec, spawned_moby + 0x10, g);
         g = g + 0x210;
         vec[2] = 0.0f;
         normalize_vector_xyz(vec, vec,
                              random_float_between_alt(D_L14_00161B08 * frame_scale,
                                                       D_L14_00161B0C * frame_scale));
         cross_vectors_xyz(vec + 4, g, vec);
-        build_look_at_matrix(d, vec, g, FUN_L00_00257c48(0.34906584f, 1.0471976f));
-        *(float *)(d + 8) = random_float_between_alt(D_L14_00161B10 * frame_scale,
+        build_look_at_matrix(spawned_vars, vec, g, FUN_L00_00257c48(0.34906584f, 1.0471976f));
+        *(float *)(spawned_vars + 8) = random_float_between_alt(D_L14_00161B10 * frame_scale,
                                                      D_L14_00161B14 * frame_scale);
-        *(float *)(d + 0x10) = FUN_L00_00257c48(0.0f, 0.008726646f);
-        *(float *)(d + 0x14) = FUN_L00_00257c48(0.05235988f, 0.13962634f);
-        *(float *)(d + 0x18) = FUN_L00_00257c48(0.0f, DEG_TO_RAD);
-        *(int *)(d + 0x20) = scale_game_frames(200);
-        FUN_L00_00250df8(m);
+        *(float *)(spawned_vars + 0x10) = FUN_L00_00257c48(0.0f, 0.008726646f);
+        *(float *)(spawned_vars + 0x14) = FUN_L00_00257c48(0.05235988f, 0.13962634f);
+        *(float *)(spawned_vars + 0x18) = FUN_L00_00257c48(0.0f, DEG_TO_RAD);
+        *(int *)(spawned_vars + 0x20) = scale_game_frames(200);
+        FUN_L00_00250df8(spawned_moby);
     }
-    return m;
+    return spawned_moby;
 }
 extern void FUN_L14_002e03b8(struct Moby *);
 extern s32 D_001413D0_dfd10 __asm__("D_001413D0") __attribute__((section(".data")));
