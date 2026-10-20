@@ -144,16 +144,16 @@ extern float D_L00_00173E68_2d81b8 __asm__("D_L00_00173E68") __attribute__((sect
 extern float frame_time_sq __asm__("D_0015ED70");
 int FUN_001efa68_2d81b8(void *, void *, int, void *, int) __asm__("FUN_001efa68");
 int FUN_L00_0025e3b8_2d81b8(void *) __asm__("FUN_L00_0025e3b8");
-void FUN_L00_002d81b8(unsigned char *m) {
-    V_2d81b8 a, b;
-    D_2d81b8 *d = *(D_2d81b8 **)(m + 0x78);
+void FUN_L00_002d81b8(unsigned char *moby) {
+    V_2d81b8 probe_start_position, b;
+    D_2d81b8 *moby_data = *(D_2d81b8 **)(moby + 0x78);
     int hit = 0;
     float z, f;
-    qcopy(&a, m + 0x10);
-    a.f[2] += 0.5f;
-    qcopy(&b, &a);
+    qcopy(&probe_start_position, moby + 0x10);
+    probe_start_position.f[2] += 0.5f;
+    qcopy(&b, &probe_start_position);
     b.f[2] -= 1.5f;
-    if (FUN_001efa68_2d81b8(&a, &b, 2, m, 0)) {
+    if (FUN_001efa68_2d81b8(&probe_start_position, &b, 2, moby, 0)) {
         z = D_L00_00173E68_2d81b8;
         hit = 1;
     } else {
@@ -163,49 +163,49 @@ void FUN_L00_002d81b8(unsigned char *m) {
         G_2d81b8 *g = &(*(G_2d81b8 *)D_L00_00173E40_lui);
         if (g->o) {
             if (FUN_L00_0025e3b8_2d81b8(g->o)) {
-                *(float *)(m + 0x10) = d->f10 = g->o->x;
-                *(float *)(m + 0x14) = d->f14 = g->o->y;
+                *(float *)(moby + 0x10) = moby_data->f10 = g->o->x;
+                *(float *)(moby + 0x14) = moby_data->f14 = g->o->y;
                 {
                     float t = g->f28;
-                    *(float *)(m + 0x18) = t;
-                    d->f18 = t + 0.5f;
+                    *(float *)(moby + 0x18) = t;
+                    moby_data->f18 = t + 0.5f;
                 }
-            } else if (d->hA) {
-                *(float *)(m + 0x10) = d->f10 = g->o->x + d->f70;
-                *(float *)(m + 0x14) = d->f14 = g->o->y + d->f74;
+            } else if (moby_data->hA) {
+                *(float *)(moby + 0x10) = moby_data->f10 = g->o->x + moby_data->f70;
+                *(float *)(moby + 0x14) = moby_data->f14 = g->o->y + moby_data->f74;
                 {
-                    float t = g->o->z + d->f78;
-                    *(float *)(m + 0x18) = t;
-                    d->f18 = t + 0.5f;
+                    float t = g->o->z + moby_data->f78;
+                    *(float *)(moby + 0x18) = t;
+                    moby_data->f18 = t + 0.5f;
                 }
             } else {
-                d->hA = 1;
-                d->f70 = *(float *)(m + 0x10) - g->o->x;
-                d->f74 = *(float *)(m + 0x14) - g->o->y;
-                d->f78 = *(float *)(m + 0x18) - g->o->z;
+                moby_data->hA = 1;
+                moby_data->f70 = *(float *)(moby + 0x10) - g->o->x;
+                moby_data->f74 = *(float *)(moby + 0x14) - g->o->y;
+                moby_data->f78 = *(float *)(moby + 0x18) - g->o->z;
             }
         }
     }
-    f = *(float *)(m + 0x18);
+    f = *(float *)(moby + 0x18);
     if (f <= z) {
-        m[0xBC] = 0;
-        if (d->hA)
-            d->f78 += z - f;
-        *(float *)(m + 0x18) = z;
-        *(int *)&d->f50 = 0;
+        moby[0xBC] = 0;
+        if (moby_data->hA)
+            moby_data->f78 += z - f;
+        *(float *)(moby + 0x18) = z;
+        *(int *)&moby_data->f50 = 0;
     } else {
-        float c, acc;
-        m[0xBC] = 1;
+        float capped_fall_step, acc;
+        moby[0xBC] = 1;
         acc = frame_time_sq * 9.8f;
-        *(float *)(m + 0x18) = f - d->f50;
-        d->f50 += acc;
-        if (0.3f < d->f50)
-            c = 0.3f;
+        *(float *)(moby + 0x18) = f - moby_data->f50;
+        moby_data->f50 += acc;
+        if (0.3f < moby_data->f50)
+            capped_fall_step = 0.3f;
         else
-            c = d->f50;
-        d->f50 = c;
-        if (d->hA)
-            d->f78 -= c;
+            capped_fall_step = moby_data->f50;
+        moby_data->f50 = capped_fall_step;
+        if (moby_data->hA)
+            moby_data->f78 -= capped_fall_step;
     }
 }
 typedef struct {
