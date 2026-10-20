@@ -127,7 +127,7 @@ typedef struct {
 } G002583f0;
 extern G002583f0 D_L00_00173E40_u __asm__("D_L00_00173E40");
 s32 collision_line(void *, void *, s32, s32, s32) __asm__("FUN_001efa68");
-s32 FUN_L00_002583f0(void *pos, s32 a, s32 flag, f32 up, f32 down) {
+s32 FUN_L00_002583f0(void *pos, s32 moby, s32 flag, f32 up, f32 down) {
     V002583f0 raised_pos, lowered_pos;
     s32 r;
     qcopy(&raised_pos, pos);
@@ -136,7 +136,7 @@ s32 FUN_L00_002583f0(void *pos, s32 a, s32 flag, f32 up, f32 down) {
     lowered_pos.f[2] -= down;
     if (lowered_pos.f[2] < 0.0f)
         lowered_pos.f[2] = 0.0f;
-    r = collision_line(&raised_pos, &lowered_pos, 0x22, a, 0);
+    r = collision_line(&raised_pos, &lowered_pos, 0x22, moby, 0);
     if (D_L00_00173E40_u.x1c < 0)
         r = 0;
     if (flag && D_L00_00173E40_u.x18 != 0)
