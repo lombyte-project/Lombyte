@@ -682,10 +682,10 @@ void FUN_L11_00317820(struct Moby *moby) {
     fast_vec_normalize(v, &moby->rot_row0, D_L11_00162328);
     fast_vec_add(v, v, &moby->pos);
     for (i = 0; i < chain_vars->count; i++) {
-        int a = chain_vars->offsets[i];
-        int b = (a + 1) % chain_path->count;
-        int c = (a + 2) % chain_path->count;
-        float d0 = FUN_001f9b48(&chain_path->pts[a], v);
+        int segment_start_index = chain_vars->offsets[i];
+        int b = (segment_start_index + 1) % chain_path->count;
+        int lookahead_point_index = (segment_start_index + 2) % chain_path->count;
+        float d0 = FUN_001f9b48(&chain_path->pts[segment_start_index], v);
         float d1 = FUN_001f9b48(&chain_path->pts[b], v);
         float segment_fraction;
         struct Moby *link;
@@ -693,14 +693,14 @@ void FUN_L11_00317820(struct Moby *moby) {
         float *qa, *qb, *qc; /* the points as raw rows: [4], [5], [6] = x, y, z */
 
         while (d1 > D_L11_00162324) {
-            a = b;
-            b = (a + 1) % chain_path->count;
+            segment_start_index = b;
+            b = (segment_start_index + 1) % chain_path->count;
             d0 = d1;
-            c = (b + 1) % chain_path->count;
+            lookahead_point_index = (b + 1) % chain_path->count;
             d1 = FUN_001f9b48(&chain_path->pts[b], v);
         }
         {
-            float *q = (float *)(path + a * 16);
+            float *q = (float *)(path + segment_start_index * 16);
 
             if (q[7] == 42.0f) {
                 u8 *lv = chain_vars->links[i]->pvars;
@@ -717,7 +717,7 @@ void FUN_L11_00317820(struct Moby *moby) {
         } else {
             segment_fraction = 0.0f;
         }
-        chain_vars->offsets[i] = a;
+        chain_vars->offsets[i] = segment_start_index;
         chain_vars->frac[i] = segment_fraction;
         if (chain_vars->catchup[i] != 0.0f) {
             float catchup_adjusted_progress = segment_fraction - chain_vars->catchup[i];
@@ -727,23 +727,23 @@ void FUN_L11_00317820(struct Moby *moby) {
                 k--;
                 catchup_adjusted_progress += 1.0f;
             }
-            a = (a + k + chain_path->count) % chain_path->count;
+            segment_start_index = (segment_start_index + k + chain_path->count) % chain_path->count;
             b = (b + k + chain_path->count) % chain_path->count;
-            c = (c + k + chain_path->count) % chain_path->count;
+            lookahead_point_index = (lookahead_point_index + k + chain_path->count) % chain_path->count;
             segment_fraction = catchup_adjusted_progress;
         }
         link = chain_vars->links[i];
-        lerp_vector(&link->pos, &chain_path->pts[a], &chain_path->pts[b], segment_fraction);
+        lerp_vector(&link->pos, &chain_path->pts[segment_start_index], &chain_path->pts[b], segment_fraction);
         qcopy(v, &chain_vars->links[i]->pos);
-        qa = (float *)(path + a * 16);
+        qa = (float *)(path + segment_start_index * 16);
         qb = (float *)(path + b * 16);
-        qc = (float *)(path + c * 16);
+        qc = (float *)(path + lookahead_point_index * 16);
         yaw0 = fast_arc_tan(qa[4] - qb[4], qa[5] - qb[5]);
         yaw1 = fast_arc_tan(qb[4] - qc[4], qb[5] - qc[5]);
-        pitch0 = -fast_arc_tan(vector_distance(&chain_path->pts[b].x, &chain_path->pts[a].x),
+        pitch0 = -fast_arc_tan(vector_distance(&chain_path->pts[b].x, &chain_path->pts[segment_start_index].x),
                                qa[6] - qb[6]);
         chain_vars->links[i]->rot.y = fast_add_rotations(
-            fast_subtract_rotations(-fast_arc_tan(vector_distance(&chain_path->pts[c].x, &chain_path->pts[b].x),
+            fast_subtract_rotations(-fast_arc_tan(vector_distance(&chain_path->pts[lookahead_point_index].x, &chain_path->pts[b].x),
                                                   qb[6] - qc[6]),
                                     pitch0) * segment_fraction,
             pitch0);
