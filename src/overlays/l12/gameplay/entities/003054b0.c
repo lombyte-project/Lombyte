@@ -654,7 +654,7 @@ void planetbuster_maximus_part_update(char *moby) {
         }
         break;
     case PLANETBUSTER_WAIT_FOR_PATH_TRIGGER: {
-        char *h;
+        char *clip_test_position;
         int r;
         if (is_point_inside_clip_volume_c(D_L12_00167240, *(int *)(moby_data + 0x624))) {
             int i;
@@ -673,9 +673,9 @@ void planetbuster_maximus_part_update(char *moby) {
                 if (s != -1) ((M34_7DB0 *)(base + (s << 8)))->flags &= ~0x41;
             }
         }
-        h = D_0013F3D0;
-        r = is_point_inside_clip_volume_c(h, *(int *)(moby_data + 0x628));
-        if (*(float *)(h + 8) > 52.0f && r == 0) {
+        clip_test_position = D_0013F3D0;
+        r = is_point_inside_clip_volume_c(clip_test_position, *(int *)(moby_data + 0x628));
+        if (*(float *)(clip_test_position + 8) > 52.0f && r == 0) {
             approach_value((float *)(moby + 0x18), *(float *)(moby_data + 0x618), D_0015ED6C_gp + D_0015ED6C_gp);
         } else {
             float add = 3.0f;
