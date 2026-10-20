@@ -2590,11 +2590,11 @@ extern s32 D_L18_001623A8_gp __asm__("D_L18_001623A8") __attribute__((sda));
 void FUN_L18_002f5e18(struct Moby *moby) {
     char *moby_vars = (char *)moby->pvars;
     if (*(int *)(moby_vars + 0x3E4) == 0) {
-        char *a = D_0013E533 + 0xE1D;
-        if (*(int *)(a + 0x300) != 0) {
-            *(int *)(moby_vars + 0x3E8) = *(int *)(a + 0x2FC);
+        char *latch_source_data = D_0013E533 + 0xE1D;
+        if (*(int *)(latch_source_data + 0x300) != 0) {
+            *(int *)(moby_vars + 0x3E8) = *(int *)(latch_source_data + 0x2FC);
         }
-        if (*(int *)(a + 0x2084) == 0x77) {
+        if (*(int *)(latch_source_data + 0x2084) == 0x77) {
             char *latched_moby = *(char **)(moby_vars + 0x3E8);
             *(int *)(moby_vars + 0x3E4) = 1;
             if (latched_moby != 0) {
