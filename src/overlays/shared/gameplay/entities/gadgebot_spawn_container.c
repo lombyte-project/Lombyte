@@ -1622,7 +1622,7 @@ void gadgebot_update(GbMoby *moby) {
             }
         }
         for (j = 0; j < 8; j++) {
-            GbMoby *m;
+            GbMoby *referenced_moby;
             int *ta;
             int *tb;
 
@@ -1636,8 +1636,8 @@ void gadgebot_update(GbMoby *moby) {
             }
             ta = &gadgebot_vars->unk2A0[j];
             tb = &gadgebot_vars->unk2C0[j];
-            m = &(*(GbMoby * *)&D_L06_0015FFD8)[*ta];
-            if (m->cls_id == 0x3F7 && m->state != 4 &&
+            referenced_moby = &(*(GbMoby * *)&D_L06_0015FFD8)[*ta];
+            if (referenced_moby->cls_id == 0x3F7 && referenced_moby->state != 4 &&
                 is_point_inside_clip_volume(((GbMoby *)hero.moby)->pos, *tb) != 0 &&
                 is_point_inside_clip_volume(moby->pos, *tb) == 0) {
                 moby->state = 4;
