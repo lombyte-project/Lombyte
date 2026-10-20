@@ -200,7 +200,7 @@ void FUN_L16_0020ffb0(void) {
     s32 r;
     s32 i;
     f32 side_probe_angle;
-    u8 *p;
+    u8 *hit_moby_record;
 
     s32 k;
     f32 g;
@@ -268,8 +268,8 @@ void FUN_L16_0020ffb0(void) {
                 FUN_L00_002334d0((u8 *)&HH.point, (u8 *)&HH.point, 1.0f);
             }
         }
-        p = suck_get_aim_height(HH.moby);
-        if (p != 0 && (*(u16 *)(p + 0x1E) & 8)) {
+        hit_moby_record = suck_get_aim_height(HH.moby);
+        if (hit_moby_record != 0 && (*(u16 *)(hit_moby_record + 0x1E) & 8)) {
             hero.unk30A = 1;
         }
     }
