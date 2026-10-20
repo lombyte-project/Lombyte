@@ -354,7 +354,7 @@ void FUN_L05_00329358(char *moby) {
     normalize_vector_xyz(focus_position + 8, &hero.gravity_dir, -1.0f);
 }
 extern char *D_L05_00167200 __attribute__((section(".data")));
-void FUN_L05_003294c0(float spring_distance, float b, float focus_distance, float airborne_spring_distance, float airborne_spring_height, float airborne_focus_distance, float g, float h) {
+void FUN_L05_003294c0(float spring_distance, float b, float focus_distance, float airborne_spring_distance, float airborne_spring_height, float airborne_focus_distance, float g, float position_spring_coefficient) {
     char *camera = D_L05_00167200;
     char *orbit = *(char **)(camera + 0x70);
 
@@ -370,10 +370,10 @@ void FUN_L05_003294c0(float spring_distance, float b, float focus_distance, floa
     } else {
         *(float *)(orbit + 0x10) = g;
     }
-    if (h < 0.0f) {
+    if (position_spring_coefficient < 0.0f) {
         *(float *)(orbit + 0x14) = 0.2f;
     } else {
-        *(float *)(orbit + 0x14) = h;
+        *(float *)(orbit + 0x14) = position_spring_coefficient;
     }
 }
 /* Places the camera moby relative to the hero's target and builds its look-at basis. */
