@@ -935,28 +935,28 @@ extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 
-void FUN_L17_002f54d8(int n, V3 *b, V3 *a, int unused, float *out) {
+void FUN_L17_002f54d8(int vertex_count, V3 *b, V3 *vertex_positions, int unused, float *out) {
     V4 normalized_position_delta;
-    V4 p;
+    V4 vertex_position;
     V4 r;
-    V4 q;
+    V4 normalized_input_direction;
     int i;
-    for (i = 0; i < n; i++) {
-        float d;
+    for (i = 0; i < vertex_count; i++) {
+        float direction_dot_product;
         float len;
-        p.w = 1.0f;
-        p.v.x = a[i].x;
-        p.v.y = a[i].y;
-        p.v.z = a[i].z;
-        fast_vec_sub(&normalized_position_delta, &p, D_L17_001676C0);
+        vertex_position.w = 1.0f;
+        vertex_position.v.x = vertex_positions[i].x;
+        vertex_position.v.y = vertex_positions[i].y;
+        vertex_position.v.z = vertex_positions[i].z;
+        fast_vec_sub(&normalized_position_delta, &vertex_position, D_L17_001676C0);
         fast_vec_normalize(&normalized_position_delta, &normalized_position_delta, 1.0f);
-        q.w = 1.0f;
-        q.v.x = b[i].x;
-        q.v.y = b[i].y;
-        q.v.z = b[i].z;
-        fast_vec_normalize(&q, &q, 1.0f);
-        d = fast_vec_dot(&q, &normalized_position_delta);
-        fast_vec_scale(&r, &q, d + d);
+        normalized_input_direction.w = 1.0f;
+        normalized_input_direction.v.x = b[i].x;
+        normalized_input_direction.v.y = b[i].y;
+        normalized_input_direction.v.z = b[i].z;
+        fast_vec_normalize(&normalized_input_direction, &normalized_input_direction, 1.0f);
+        direction_dot_product = fast_vec_dot(&normalized_input_direction, &normalized_position_delta);
+        fast_vec_scale(&r, &normalized_input_direction, direction_dot_product + direction_dot_product);
         fast_vec_sub(&r, &normalized_position_delta, &r);
         fast_vec_normalize(&r, &r, 1.0f);
         r.v.z = r.v.z + 1.0f;
