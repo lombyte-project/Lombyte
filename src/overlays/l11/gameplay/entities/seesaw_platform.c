@@ -1292,7 +1292,7 @@ extern int frames_fe50(int) __asm__("FUN_001f96f8");
 extern void update_fe50(void *, void *) __asm__("FUN_L00_0025d538");
 char D_L11_0021B530[] = "Moby class %d Damage Received: %f\n";
 
-void FUN_L11_0030fe50(struct Moby *m, unsigned char *d, float *t) {
+void FUN_L11_0030fe50(struct Moby *moby, unsigned char *private_data, float *health) {
     enum {
         HIT_REACTION_NONE = 0,
         HIT_REACTION_DEATH = 1,
@@ -1303,15 +1303,15 @@ void FUN_L11_0030fe50(struct Moby *m, unsigned char *d, float *t) {
     };
     int out;
     char *info;
-    if (m->state != 4) {
-        info = info_fe50(m, 0x330000, 0);
+    if (moby->state != 4) {
+        info = info_fe50(moby, 0x330000, 0);
         if (info != 0) {
-            print_fe50(D_L11_0021B530, m->oclass, ftoi_fe50(*(float *)(info + 0x2C)));
+            print_fe50(D_L11_0021B530, moby->oclass, ftoi_fe50(*(float *)(info + 0x2C)));
         }
-        switch (hit_fe50(m, info, t, 0, &out, 0, 0, 4)) {
+        switch (hit_fe50(moby, info, health, 0, &out, 0, 0, 4)) {
         case HIT_REACTION_DEATH:
         case HIT_REACTION_DEATH_KNOCKBACK:
-            *t = 0.0f;
+            *health = 0.0f;
             break;
         case HIT_REACTION_NONE:
         case HIT_REACTION_KNOCKBACK:
@@ -1320,33 +1320,33 @@ void FUN_L11_0030fe50(struct Moby *m, unsigned char *d, float *t) {
             break;
         }
         if (out >= 2) {
-            if (*t <= *(float *)(info + 0x2C)) {
-                unsigned char *s;
-                *t = 0.0f;
-                m->flags &= 0xEFFF;
-                d[0x67] = 0x78;
-                sound_fe50(m, d + 0x60);
-                if (m->prev_seq != 2) {
-                    blend_fe50(m, 2, 0, 3);
+            if (*health <= *(float *)(info + 0x2C)) {
+                unsigned char *owner_moby;
+                *health = 0.0f;
+                moby->flags &= 0xEFFF;
+                private_data[0x67] = 0x78;
+                sound_fe50(moby, private_data + 0x60);
+                if (moby->prev_seq != 2) {
+                    blend_fe50(moby, 2, 0, 3);
                 }
-                s = *(unsigned char **)(d + 0x70);
-                if (s != 0 && s[0x20] != 0xFE && s[0x20] != 0xFD) {
-                    s[0x20] = 3;
+                owner_moby = *(unsigned char **)(private_data + 0x70);
+                if (owner_moby != 0 && owner_moby[0x20] != 0xFE && owner_moby[0x20] != 0xFD) {
+                    owner_moby[0x20] = 3;
                 }
-                m->state = 3;
+                moby->state = 3;
             } else {
-                *t -= *(float *)(info + 0x2C);
-                d[0x67] = 0xFA;
-                *(short *)(d + 0x26) = frames_fe50(0x3C);
-                sound_fe50(m, d + 0x60);
-                if (m->prev_seq != 4) {
-                    blend_fe50(m, 4, 0, 3);
+                *health -= *(float *)(info + 0x2C);
+                private_data[0x67] = 0xFA;
+                *(short *)(private_data + 0x26) = frames_fe50(0x3C);
+                sound_fe50(moby, private_data + 0x60);
+                if (moby->prev_seq != 4) {
+                    blend_fe50(moby, 4, 0, 3);
                 }
             }
         }
-        m->hit_slot = 0xFF;
+        moby->hit_slot = 0xFF;
     }
-    update_fe50(m, d + 0x60);
+    update_fe50(moby, private_data + 0x60);
 }
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_003114F0), where it is exact; names translated to the US level program. */
 
