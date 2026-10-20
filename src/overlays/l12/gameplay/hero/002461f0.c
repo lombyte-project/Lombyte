@@ -126,6 +126,7 @@ void FUN_L12_002461f0(void) {
         HERO_STATE_ITEM_BUTTON_RELEASE_WAIT = 23,
         HERO_STATE_LOOK_RELEASE_WAIT = 30,
         HERO_STATE_ITEM_MOBY_FRAME_EXIT_WAIT = 32,
+        HERO_STATE_JUMP_CANCEL_FRAME_EXIT_WAIT = 35,
         HERO_STATE_ITEM_ANIMATION_RELEASE_GATE = 46,
         HERO_STATE_ITEM_BUTTON_RELEASE_SEQUENCE_EXIT_WAIT = 48,
         HERO_STATE_CIRCLE_RELEASE_WAIT = 89,
@@ -2045,7 +2046,7 @@ void FUN_L12_002461f0(void) {
                         hero_set_state(HERO_STATE_IDLE, 0);
                     }
                     break;
-                case 35:
+                case HERO_STATE_JUMP_CANCEL_FRAME_EXIT_WAIT:
                     if (19.0f < hero.anim_frame &&
                         pad_pressed_within(0x40, scale_game_frames(0xB), 0)) {
                         if (controller_state.held & 0xA) {
