@@ -153,7 +153,8 @@ void FUN_L05_00255960(void) {
         HERO_STATE_BELOW_LEVEL_RESPAWN_WAIT = 119,
         HERO_STATE_HEIGHT_OR_TIMEOUT_RESPAWN_WAIT = 123,
         HERO_STATE_FATAL_HURT_RESPAWN_WAIT = 124,
-        HERO_STATE_TIMED_RESPAWN_WAIT = 127
+        HERO_STATE_TIMED_RESPAWN_WAIT = 127,
+        HERO_STATE_DELAYED_JUMP_OR_R1_REPEAT_EXIT_WAIT = 129
     };
     unsigned char *moby;
     int prevSub;
@@ -1382,7 +1383,7 @@ void FUN_L05_00255960(void) {
                         return;
                     }
                     break;
-                case 129:
+                case HERO_STATE_DELAYED_JUMP_OR_R1_REPEAT_EXIT_WAIT:
                     if (hero.on_slip_ground != 0 && hero.ground_distance < 0.5f) {
                         hero_set_state(HERO_STATE_SLIP, 1);
                         break;
