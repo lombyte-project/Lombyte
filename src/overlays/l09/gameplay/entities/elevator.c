@@ -466,28 +466,28 @@ extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8")
 char *FUN_L09_003041d0(char *self, char *pos, int bone) {
     char *best = 0;
     float bestd = 1000000000.0f;
-    char tmp[16];
+    char query_position[16];
     char vec[16];
-    char *m;
-    char *tp = tmp;
-    *(OvlQuad *)tmp = *(OvlQuad *)pos;
-    for (m = D_L09_0015FFE4; m != 0; m = *(char **)(m + 0x28)) {
-        if (m == self)
+    char *candidate_moby;
+    char *tp = query_position;
+    *(OvlQuad *)query_position = *(OvlQuad *)pos;
+    for (candidate_moby = D_L09_0015FFE4; candidate_moby != 0; candidate_moby = *(char **)(candidate_moby + 0x28)) {
+        if (candidate_moby == self)
             continue;
-        if (m != 0 && *(unsigned char *)(m + 0x20) != 0xFE &&
-            *(unsigned char *)(m + 0x20) != 0xFD) {
-            if (*(short *)(m + 0xA6) == 0x49D || *(short *)(m + 0xA6) == 0x494 ||
-                *(short *)(m + 0xA6) == 0x4A0) {
-                float d;
+        if (candidate_moby != 0 && *(unsigned char *)(candidate_moby + 0x20) != 0xFE &&
+            *(unsigned char *)(candidate_moby + 0x20) != 0xFD) {
+            if (*(short *)(candidate_moby + 0xA6) == 0x49D || *(short *)(candidate_moby + 0xA6) == 0x494 ||
+                *(short *)(candidate_moby + 0xA6) == 0x4A0) {
+                float candidate_distance;
                 if (bone != -1) {
-                    moby_point_position(m, bone, vec);
-                    d = FUN_001f9b48(tp, vec);
+                    moby_point_position(candidate_moby, bone, vec);
+                    candidate_distance = FUN_001f9b48(tp, vec);
                 } else {
-                    d = FUN_001f9b48(tp, m + 0x10);
+                    candidate_distance = FUN_001f9b48(tp, candidate_moby + 0x10);
                 }
-                if (d < bestd) {
-                    bestd = d;
-                    best = m;
+                if (candidate_distance < bestd) {
+                    bestd = candidate_distance;
+                    best = candidate_moby;
                 }
             }
         }
