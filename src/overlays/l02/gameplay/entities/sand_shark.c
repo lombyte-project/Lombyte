@@ -3439,16 +3439,16 @@ void sandshark_egg_update(struct Moby *moby) {
     };
     float u[4];
     float v[4];
-    char *d = (char *)moby->pvars;
+    char *egg_vars = (char *)moby->pvars;
     int i;
     float *vp;
     int r;
     int s;
-    char *c;
+    char *linked_moby;
     switch (moby->state) {
     case SANDSHARK_EGG_FALL_UNTIL_LANDING:
         clear_vector(u);
-        if (mine_fall(moby, d) & 1) {
+        if (mine_fall(moby, egg_vars) & 1) {
             moby->state = 2;
         }
         vp = v;
@@ -3466,14 +3466,14 @@ void sandshark_egg_update(struct Moby *moby) {
         } while (i >= 0);
         break;
     case SANDSHARK_EGG_HANDOFF_TO_LINKED_MOBY:
-        c = *(char **)(d + 0x60);
-        qcopy(c + 0x10, &moby->pos);
-        c[0x20] = 0x11;
-        blend_moby_animation_c(*(char **)(d + 0x60), 5, 0, 1);
-        *(int *)(*(char **)(d + 0x60) + 0x94) =
-            *(int *)(*(char **)(*(char **)(d + 0x60) + 0x24) + 0x10);
-        *(float *)(*(char **)(d + 0x60) + 0x58) = 1.0f;
-        FUN_L00_00250df8(*(char **)(d + 0x60));
+        linked_moby = *(char **)(egg_vars + 0x60);
+        qcopy(linked_moby + 0x10, &moby->pos);
+        linked_moby[0x20] = 0x11;
+        blend_moby_animation_c(*(char **)(egg_vars + 0x60), 5, 0, 1);
+        *(int *)(*(char **)(egg_vars + 0x60) + 0x94) =
+            *(int *)(*(char **)(*(char **)(egg_vars + 0x60) + 0x24) + 0x10);
+        *(float *)(*(char **)(egg_vars + 0x60) + 0x58) = 1.0f;
+        FUN_L00_00250df8(*(char **)(egg_vars + 0x60));
         mark_moby_for_removal(moby);
         break;
     }
