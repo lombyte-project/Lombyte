@@ -1992,10 +1992,10 @@ extern void FUN_L18_002dc0c8_u(char *moby, void *a1, void *a2) __asm__("FUN_L18_
 void FUN_L18_002dbe80(struct Moby *moby) {
     char hit[0x30];
     float v[4];
-    float a[4];
+    float segment_start[4];
     float b[4];
-    char *d = (char *)moby->pvars;
-    float p, q, step;
+    char *moby_vars = (char *)moby->pvars;
+    float segment_start_angle, segment_end_angle, step;
     int i;
 
     fast_vec_sub(v, &hero.motion.pos, &moby->pos);
@@ -2004,25 +2004,25 @@ void FUN_L18_002dbe80(struct Moby *moby) {
     v[2] = frame_time * 4.0f;
     make_hit_descriptor(hit, (int)moby, 0x10001, v, 3.0f);
     step = 1.0f / convert_integer_to_float(0x40) * 6.28318f;
-    p = -3.14159f;
-    q = fast_add_rotations(p, step);
+    segment_start_angle = -3.14159f;
+    segment_end_angle = fast_add_rotations(segment_start_angle, step);
     for (i = 0x3F; i >= 0; i--) {
-        a[0] = fast_cos(p) * *(float *)(d + 0x24);
-        a[1] = fast_sin(p) * *(float *)(d + 0x24);
-        a[2] = 0.0f;
-        b[0] = fast_cos(q) * *(float *)(d + 0x24);
-        b[1] = fast_sin(q) * *(float *)(d + 0x24);
+        segment_start[0] = fast_cos(segment_start_angle) * *(float *)(moby_vars + 0x24);
+        segment_start[1] = fast_sin(segment_start_angle) * *(float *)(moby_vars + 0x24);
+        segment_start[2] = 0.0f;
+        b[0] = fast_cos(segment_end_angle) * *(float *)(moby_vars + 0x24);
+        b[1] = fast_sin(segment_end_angle) * *(float *)(moby_vars + 0x24);
         b[2] = 0.0f;
-        fast_vec_add(a, a, &moby->pos);
-        a[2] += 0.5f;
+        fast_vec_add(segment_start, segment_start, &moby->pos);
+        segment_start[2] += 0.5f;
         fast_vec_add(b, b, &moby->pos);
         b[2] += 0.5f;
-        collision_line(a, b, 1, *(void **)(d + 0x34), hit);
-        if (*(float *)(d + 0x24) < 3.0f) {
-            FUN_L18_002dc0c8_u(moby, a, b);
+        collision_line(segment_start, b, 1, *(void **)(moby_vars + 0x34), hit);
+        if (*(float *)(moby_vars + 0x24) < 3.0f) {
+            FUN_L18_002dc0c8_u(moby, segment_start, b);
         }
-        p = fast_add_rotations(p, step);
-        q = fast_add_rotations(q, step);
+        segment_start_angle = fast_add_rotations(segment_start_angle, step);
+        segment_end_angle = fast_add_rotations(segment_end_angle, step);
     }
 }
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002DD4B8), where it is exact; names translated to the US level program. */
