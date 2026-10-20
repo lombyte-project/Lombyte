@@ -9,28 +9,28 @@ s32 complete_stream_buffer_transfer(s32 stream_id) __asm__("FUN_00225cd8");
 s32 complete_stream_buffer_transfer(s32 stream_id) {
     s32 i;
     u8 *base;
-    s32 *p;
+    s32 *buffer_flags;
 
     /* base is a separate local so the +4 (flags) stays its own addiu. */
     base = (u8 *)graphics_buffer_descriptors;
-    p = (s32 *)(base + 4);
+    buffer_flags = (s32 *)(base + 4);
     i = 0;
     while (i < 5) {
-        if (p[-1] == stream_id) {
-            if ((*p & 2) != 0) {
-                if ((*p & 4) != 0) {
-                    *p ^= 4;
+        if (buffer_flags[-1] == stream_id) {
+            if ((*buffer_flags & 2) != 0) {
+                if ((*buffer_flags & 4) != 0) {
+                    *buffer_flags ^= 4;
                     if (menu_system.pending_buffer != 0) {
                         request_audio_stream_break(stream_id);
                         menu_system.pending_buffer = 0;
                     }
                 }
-                *p &= -3;
+                *buffer_flags &= -3;
                 return 0;
             }
         }
         i++;
-        p += 2;
+        buffer_flags += 2;
     }
     return 0;
 }
