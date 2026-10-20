@@ -201,24 +201,24 @@ void FUN_001f9a10_002719f0(void *, void *, void *) __asm__("FUN_001f9a10");
 int FUN_001fa6d0_002719f0(float) __asm__("FUN_001fa6d0");
 float absolute_float(float) __asm__("FUN_001f99c0");
 void FUN_L00_00267a08_002719f0(unsigned char *) __asm__("FUN_L00_00267a08");
-void FUN_L00_002719f0(unsigned char *p) {
-    float *v = (float *)(p + 0x20);
-    FUN_001f9a10_002719f0(p + 0x10, p + 0x10, v);
-    *(float *)(p + 0xc) += 5880.0f;
+void FUN_L00_002719f0(unsigned char *particle) {
+    float *v = (float *)(particle + 0x20);
+    FUN_001f9a10_002719f0(particle + 0x10, particle + 0x10, v);
+    *(float *)(particle + 0xc) += 5880.0f;
     v[5] *= 0.98f;
     v[4] += v[5];
-    p[8] = FUN_001fa6d0_002719f0(v[4]);
+    particle[8] = FUN_001fa6d0_002719f0(v[4]);
     if (*(float **)(v + 6) != 0) {
-        if (absolute_float(*(float *)(p + 0x18) - **(float **)(v + 6)) < 0.2f) {
-            *(float *)(p + 0x18) = **(float **)(v + 6) + 0.02f;
+        if (absolute_float(*(float *)(particle + 0x18) - **(float **)(v + 6)) < 0.2f) {
+            *(float *)(particle + 0x18) = **(float **)(v + 6) + 0.02f;
         }
     }
-    if (--*(short *)(p + 0xa) == 0) {
-        *(short *)(p + 0xa) = 1;
-        *(int *)(p + 4) += 0xFF000000;
+    if (--*(short *)(particle + 0xa) == 0) {
+        *(short *)(particle + 0xa) = 1;
+        *(int *)(particle + 4) += 0xFF000000;
     }
-    if ((*(int *)(p + 4) & 0xFF000000) == 0)
-        FUN_L00_00267a08_002719f0(p);
+    if ((*(int *)(particle + 4) & 0xFF000000) == 0)
+        FUN_L00_00267a08_002719f0(particle);
 }
 #include "eetypes.h"
 #include "qcopy.h"
