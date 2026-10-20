@@ -35,9 +35,9 @@ void FUN_L01_002b7f30(char *base, int record_count) {
         }
     }
     {
-        int a = *(int *)&D_L01_00161218;
+        int saved_source_slot_index = *(int *)&D_L01_00161218;
         int b = *(int *)&D_L01_0016121C;
-        *(int *)&D_L01_0016121C = a;
+        *(int *)&D_L01_0016121C = saved_source_slot_index;
         *(int *)&D_L01_00161218 = b;
     }
 }
