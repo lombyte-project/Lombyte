@@ -109,35 +109,35 @@ float fast_cos(float) __asm__("FUN_001f9dc8");
 float fast_sin(float) __asm__("FUN_001f9de0");
 extern unsigned char *D_L00_001B2134 __attribute__((section(".data")));
 unsigned char *FUN_L00_002715e8(void *pos, int x, int color, float size, float w) {
-    unsigned char *m = p27fe00_alloc(0x2D);
-    if (m) {
-        unsigned char *q;
-        float a, r;
+    unsigned char *particle = p27fe00_alloc(0x2D);
+    if (particle) {
+        unsigned char *particle_data;
+        float drift_angle_radians, r;
         int c;
-        qcopy(m + 0x10, pos);
+        qcopy(particle + 0x10, pos);
         if (color == -1) {
             c = ((FUN_00213260_2715e8(6) + 0x14) << 24) | 0x808080;
         } else {
             c = color;
         }
-        q = m + 0x20;
-        *(int *)(m + 4) = c;
-        m[9] = FUN_001fa6d0_2715e8(2.0f) + 0x20;
-        m[3] = 0x48;
-        m[1] = 1;
-        m[2] = *D_L00_001B2134;
-        m[8] = rand_e50();
-        *(short *)(m + 0xA) = 4;
-        *(float *)(m + 0xC) = size * 210000.0f;
-        a = random_angle_radians();
+        particle_data = particle + 0x20;
+        *(int *)(particle + 4) = c;
+        particle[9] = FUN_001fa6d0_2715e8(2.0f) + 0x20;
+        particle[3] = 0x48;
+        particle[1] = 1;
+        particle[2] = *D_L00_001B2134;
+        particle[8] = rand_e50();
+        *(short *)(particle + 0xA) = 4;
+        *(float *)(particle + 0xC) = size * 210000.0f;
+        drift_angle_radians = random_angle_radians();
         r = FUN_002132a8_2715e8(0.0015f, 0.0025f);
-        *(float *)(q + 0) = fast_cos(a) * r;
-        *(float *)(q + 4) = fast_sin(a) * r;
-        *(int *)(q + 0x14) = x;
-        *(float *)(q + 0x10) = w;
-        *(int *)(q + 8) = 0;
+        *(float *)(particle_data + 0) = fast_cos(drift_angle_radians) * r;
+        *(float *)(particle_data + 4) = fast_sin(drift_angle_radians) * r;
+        *(int *)(particle_data + 0x14) = x;
+        *(float *)(particle_data + 0x10) = w;
+        *(int *)(particle_data + 8) = 0;
     }
-    return m;
+    return particle;
 }
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void free_effect_particle(void *) __asm__("FUN_L00_00267a08");
