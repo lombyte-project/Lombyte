@@ -1506,28 +1506,28 @@ extern void add_vector_xyz(void *, void *, void *);
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 
 void pipe_update(struct Moby *m) __asm__("FUN_L01_002ff860");
-void pipe_update(struct Moby *m) {
-    char *d = (char *)m->pvars;
-    char *t = find_moby_hit(m, 0x10000, 0);
-    m->hit_slot = 0xFF;
-    if (t != 0 && 0.0f < *(float *)(t + 0x2C)) {
+void pipe_update(struct Moby *moby) {
+    char *pipe_vars = (char *)moby->pvars;
+    char *hit = find_moby_hit(moby, 0x10000, 0);
+    moby->hit_slot = 0xFF;
+    if (hit != 0 && 0.0f < *(float *)(hit + 0x2C)) {
         float v[4];
         float w[4];
-        int n = random_integer_below(*(int *)(d + 4) - *(int *)d + 1) + *(int *)d;
+        int random_countdown = random_integer_below(*(int *)(pipe_vars + 4) - *(int *)pipe_vars + 1) + *(int *)pipe_vars;
         int k;
-        if (n > 0) {
+        if (random_countdown > 0) {
             do {
-                n--;
-            } while (n != 0);
+                random_countdown--;
+            } while (random_countdown != 0);
         }
-        allocate_voice_for_target_entry(0, 0, (int)m);
+        allocate_voice_for_target_entry(0, 0, (int)moby);
         for (k = 0x95; k >= 0;) {
             float a, b;
             *(OvlQuad *)v = 0;
             v[0] = -0.2f;
             v[2] = 1.2f;
             k--;
-            add_vector_xyz(v, v, &m->pos);
+            add_vector_xyz(v, v, &moby->pos);
             a = fast_cos(random_angle_radians());
             b = random_float_between(1.5f, 3.0f);
             a = a * (b * frame_time);
@@ -1542,8 +1542,8 @@ void pipe_update(struct Moby *m) {
             FUN_L00_0026ced0(v, w, 0x207F7F7F, 0x272727, a,
                              scale_game_frames(FUN_L00_00257b90(0x2D, 0x3C)));
         }
-        FUN_L01_002ffa90_c(m);
-        mark_moby_for_removal(m);
+        FUN_L01_002ffa90_c(moby);
+        mark_moby_for_removal(moby);
     }
 }
 typedef struct {
