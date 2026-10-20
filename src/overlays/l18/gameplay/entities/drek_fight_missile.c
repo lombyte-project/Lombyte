@@ -1029,12 +1029,12 @@ extern unsigned char *D_L18_0015FFD8;
 void FUN_L18_002f2598(void *source_moby) {
     unsigned char *source_moby_bytes = source_moby;
     short *group_entry = D_L18_001AC240_c[source_moby_bytes[0x21]];
-    E *e = D_L18_001DB500;
+    E *height_records = D_L18_001DB500;
     do {
         Mx *group_moby = (Mx *)(((*(unsigned short *)group_entry & 0x7FFF) << 8) + (int)D_L18_0015FFD8);
         group_moby->f = *(float *)(source_moby_bytes + 0x18);
         if (group_moby->kind == 0x57A) {
-            e[group_moby->l->idx].f = *(float *)(source_moby_bytes + 0x18);
+            height_records[group_moby->l->idx].f = *(float *)(source_moby_bytes + 0x18);
         }
     } while (*group_entry++ >= 0);
 }
