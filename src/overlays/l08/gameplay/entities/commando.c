@@ -996,8 +996,8 @@ void FUN_L08_002f5e58(struct Moby *m) {
 }
 #endif
 
-void FUN_L08_002f70a0(struct Moby *m) {
-    FlickerLightVars *d;
+void FUN_L08_002f70a0(struct Moby *moby) {
+    FlickerLightVars *light_vars;
     Vec4 pos;
     f32 view, dist, fade;
     s32 hidden;
@@ -1005,76 +1005,76 @@ void FUN_L08_002f70a0(struct Moby *m) {
     Vec4f *at;
     int i;
 
-    if (m == NULL)
+    if (moby == NULL)
         return;
-    d = (FlickerLightVars *)m->pvars;
-    if (d == NULL)
+    light_vars = (FlickerLightVars *)moby->pvars;
+    if (light_vars == NULL)
         return;
     hidden = 0;
-    at = &m->pos;
-    if (m->state == 0) {
-        d->light = -1;
-        d->unkF8 = d->unkF3;
-        qcopy(&d->light_pos, at);
-        if (d->period_a == 0.0f) {
+    at = &moby->pos;
+    if (moby->state == 0) {
+        light_vars->light = -1;
+        light_vars->unkF8 = light_vars->unkF3;
+        qcopy(&light_vars->light_pos, at);
+        if (light_vars->period_a == 0.0f) {
             DebugPrint(D_L08_001FC220);
-            d->period_a = 1.0f;
-        } else if (8.0f < d->period_b) {
-            DebugPrint(D_L08_001FC250, d->period_b);
+            light_vars->period_a = 1.0f;
+        } else if (8.0f < light_vars->period_b) {
+            DebugPrint(D_L08_001FC250, light_vars->period_b);
         }
-        if (d->period_b == 0.0f) {
+        if (light_vars->period_b == 0.0f) {
             DebugPrint(D_L08_001FC2A0);
-            d->period_b = 1.0f;
-        } else if (8.0f < d->period_a) {
-            DebugPrint(D_L08_001FC2D0, d->period_a);
+            light_vars->period_b = 1.0f;
+        } else if (8.0f < light_vars->period_a) {
+            DebugPrint(D_L08_001FC2D0, light_vars->period_a);
         }
         for (i = 0; i < 8; i++) {
-            d->levels_a[i] = random_float_between(d->jitter, 1.0f);
-            d->levels_b[i] = random_float_between(d->jitter, 1.0f);
+            light_vars->levels_a[i] = random_float_between(light_vars->jitter, 1.0f);
+            light_vars->levels_b[i] = random_float_between(light_vars->jitter, 1.0f);
         }
-        m->state = 1;
+        moby->state = 1;
     }
-    m->scale = m->pclass->scale * (d->size_x > d->size_y ? d->size_x : d->size_y) * 0.25f;
-    view = convert_integer_to_float(m->draw_dist);
+    moby->scale = moby->pclass->scale * (light_vars->size_x > light_vars->size_y ? light_vars->size_x : light_vars->size_y) * 0.25f;
+    view = convert_integer_to_float(moby->draw_dist);
     dist = FUN_001f9b48(at, D_L08_001675C0);
-    fade = view - d->fade_range;
+    fade = view - light_vars->fade_range;
     if (fade < 0.0f)
         fade = 0.0f;
     if (view < dist) {
-        d->intensity = 0.0f;
+        light_vars->intensity = 0.0f;
         hidden = 1;
     } else {
         if (fade < dist) {
             dist -= fade;
-            dist /= d->fade_range;
+            dist /= light_vars->fade_range;
             fade = 1.0f - dist;
         } else
             fade = 1.0f;
-        d->intensity = fade;
+        light_vars->intensity = fade;
     }
     pos.q = *(u128 *)at;
-    pos.f[3] = convert_integer_to_float(d->radius);
-    if ((m->visible != 0 || fast_bsphere_check((char *)&pos, 255.0f) != -1) && !hidden) {
-        enqueue_callback_list_1(FUN_L08_002f5e58, m);
-        if (d->flags & 4) {
-            if (d->light == -1) {
-                d->light = FUN_L00_0023e738(d->light_pos.f, (f32)d->radius,
-                                            convert_integer_to_float(d->falloff) / 100.0f,
-                                            d->intensity * convert_integer_to_float(d->red) / 100.0f,
-                                            d->intensity * convert_integer_to_float(d->green) / 100.0f,
-                                            d->intensity * convert_integer_to_float(d->blue) / 100.0f);
+    pos.f[3] = convert_integer_to_float(light_vars->radius);
+    if ((moby->visible != 0 || fast_bsphere_check((char *)&pos, 255.0f) != -1) && !hidden) {
+        enqueue_callback_list_1(FUN_L08_002f5e58, moby);
+        if (light_vars->flags & 4) {
+            if (light_vars->light == -1) {
+                light_vars->light = FUN_L00_0023e738(light_vars->light_pos.f, (f32)light_vars->radius,
+                                            convert_integer_to_float(light_vars->falloff) / 100.0f,
+                                            light_vars->intensity * convert_integer_to_float(light_vars->red) / 100.0f,
+                                            light_vars->intensity * convert_integer_to_float(light_vars->green) / 100.0f,
+                                            light_vars->intensity * convert_integer_to_float(light_vars->blue) / 100.0f);
             } else {
-                l = &D_L08_00180AC0[d->light];
-                l->red = d->intensity * convert_integer_to_float(d->red) / 100.0f;
-                l->green = d->intensity * convert_integer_to_float(d->green) / 100.0f;
-                l->blue = d->intensity * convert_integer_to_float(d->blue) / 100.0f;
+                l = &D_L08_00180AC0[light_vars->light];
+                l->red = light_vars->intensity * convert_integer_to_float(light_vars->red) / 100.0f;
+                l->green = light_vars->intensity * convert_integer_to_float(light_vars->green) / 100.0f;
+                l->blue = light_vars->intensity * convert_integer_to_float(light_vars->blue) / 100.0f;
             }
         }
-    } else if (d->light != -1) {
-        FUN_L00_0023e838(d->light);
-        d->light = -1;
+    } else if (light_vars->light != -1) {
+        FUN_L00_0023e838(light_vars->light);
+        light_vars->light = -1;
     }
-    d->flags |= 2;
+    light_vars->flags |= 2;
 }
 
 extern int D_L08_0015F5C4;
