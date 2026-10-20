@@ -37,8 +37,8 @@ void attach_manipulator(MobyAttachOwner *owner, s32 slot_index, Manipulator *man
 
         r = *(u8 **)((u8 *)(*(s32 *)((u8 *)owner->unk24 + 0x1C) + manip->unk0 * 4) + 4);
         {
-            u8 n = *r;
-            manip->unk4 = (void *)((r[n + 4] << 6) + 0x70000000);
+            u8 record_byte_offset = *r;
+            manip->unk4 = (void *)((r[record_byte_offset + 4] << 6) + 0x70000000);
         }
         manip->unk8 = owner->unk64;
         owner->unk64 = manip;
