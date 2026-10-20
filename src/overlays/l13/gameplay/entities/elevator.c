@@ -2575,7 +2575,7 @@ void FUN_L13_002b9f58(struct Moby *moby, char *obj) {
             char projectile_spawn_position[16];
             char b[16];
             float projectile_scale;
-            int h;
+            int projectile_frame_count;
             char *pos = &moby->rot;
             short t = (*(unsigned short *)(obj + 0x6A) + 1) & 3;
             *(short *)(obj + 0x6A) = t;
@@ -2583,8 +2583,8 @@ void FUN_L13_002b9f58(struct Moby *moby, char *obj) {
             fast_vec_normalize(b, obj, 0.3f);
             fast_vec_add(projectile_spawn_position, projectile_spawn_position, b);
             projectile_scale = frame_time * 100.0f;
-            h = scale_game_frames(300);
-            if (FUN_L13_002e6a58(moby, projectile_spawn_position, projectile_scale, *(int *)(obj + 0xEC), pos, h) != 0) {
+            projectile_frame_count = scale_game_frames(300);
+            if (FUN_L13_002e6a58(moby, projectile_spawn_position, projectile_scale, *(int *)(obj + 0xEC), pos, projectile_frame_count) != 0) {
                 allocate_voice_for_target_entry(2, 0, (int)moby);
                 u[0x15F6]--;
                 *(int *)(obj + 0x84) = scale_game_frames(30);
