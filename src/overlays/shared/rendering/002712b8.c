@@ -251,17 +251,17 @@ extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern void free_effect_particle(void *) __asm__("FUN_L00_00267a08");
 
-void FUN_L00_00271be8(char *m) {
-    char *v = m + 0x20;
-    int t;
+void FUN_L00_00271be8(char *particle) {
+    char *v = particle + 0x20;
+    int faded_color;
     fast_vec_scale(v, v, 0.975f);
-    fast_vec_add(m + 0x10, m + 0x10, v);
-    *(float *)(m + 0xC) += 14700.0f;
-    m[8] += v[0x10];
-    t = *(int *)(m + 4) + 0xFE000000;
-    *(int *)(m + 4) = t;
-    if (t < 0) {
-        free_effect_particle(m);
+    fast_vec_add(particle + 0x10, particle + 0x10, v);
+    *(float *)(particle + 0xC) += 14700.0f;
+    particle[8] += v[0x10];
+    faded_color = *(int *)(particle + 4) + 0xFE000000;
+    *(int *)(particle + 4) = faded_color;
+    if (faded_color < 0) {
+        free_effect_particle(particle);
     }
 }
 #define NOT_SDA
