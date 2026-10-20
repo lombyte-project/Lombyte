@@ -129,32 +129,32 @@ extern G_259a88 D_L00_00173E40_259a88 __asm__("D_L00_00173E40") __attribute__((s
 extern T_259a88 D_L00_00178100_259a88[] __asm__("D_L00_00178100") __attribute__((section(".data")));
 void FUN_001f99f8_259a88(void *) __asm__("FUN_001f99f8");
 void FUN_L00_00259a88(unsigned char *m, L_259a88 *src);
-void FUN_L00_00259a88(unsigned char *m, L_259a88 *src) {
+void FUN_L00_00259a88(unsigned char *owner_moby, L_259a88 *src) {
     L_259a88 l;
     int i = D_L00_00173E40_259a88.idx;
-    T_259a88 *e;
+    T_259a88 *hit_record;
     ((u128_259a88 *)&l)[0] = ((u128_259a88 *)src)[0];
     ((u128_259a88 *)&l)[1] = ((u128_259a88 *)src)[1];
     ((u128_259a88 *)&l)[2] = ((u128_259a88 *)src)[2];
     src = &l;
-    if (m[0xA4] != 0xFF) {
-        T_259a88 *c = &D_L00_00178100_259a88[m[0xA4]];
-        if (c->owner == m && l.f < c->f)
+    if (owner_moby[0xA4] != 0xFF) {
+        T_259a88 *existing_hit = &D_L00_00178100_259a88[owner_moby[0xA4]];
+        if (existing_hit->owner == owner_moby && l.f < existing_hit->f)
             return;
     }
-    e = &D_L00_00178100_259a88[i];
-    FUN_001f99f8_259a88(e);
+    hit_record = &D_L00_00178100_259a88[i];
+    FUN_001f99f8_259a88(hit_record);
     qcopy(&D_L00_00178100_259a88[i].b, &src->v);
-    e->x = src->x;
-    e->y = src->y;
-    e->b0 = src->b0;
-    e->b1 = src->b1;
-    e->s = src->s;
-    e->f = src->f;
-    e->flag = src->flag;
-    e->owner = m;
-    e->z = 0;
-    m[0xA4] = i;
+    hit_record->x = src->x;
+    hit_record->y = src->y;
+    hit_record->b0 = src->b0;
+    hit_record->b1 = src->b1;
+    hit_record->s = src->s;
+    hit_record->f = src->f;
+    hit_record->flag = src->flag;
+    hit_record->owner = owner_moby;
+    hit_record->z = 0;
+    owner_moby[0xA4] = i;
     D_L00_00173E40_259a88.idx = (i + 1) & 0x3F;
 }
 #include "eetypes.h"
