@@ -1995,35 +1995,35 @@ extern void copy_matrix_rotation(void *, void *) __asm__("FUN_001fa298");
 extern void draw_geometry_quad(void *, int, int) __asm__("func_001F7D30");
 
 void FUN_L01_003094f0(char *moby) {
-    Quad_30a8c8 q;
-    float m[12];
+    Quad_30a8c8 quad;
+    float rotation_matrix[12];
     float pos[4];
-    char *d;
-    float h;
+    char *moby_data;
+    float ring_half_height;
     int i, j, nj;
-    d = *(char **)(moby + 0x78);
-    copy_matrix_rotation(m, moby + 0xC0);
+    moby_data = *(char **)(moby + 0x78);
+    copy_matrix_rotation(rotation_matrix, moby + 0xC0);
     qcopy(pos, moby + 0x10);
-    q.g[1] = get_effect_texture(D_L01_00161FC8);
-    q.g[3] = (long)D_L01_00161FB8 | ((long)D_L01_00161FBC << 2) | ((long)D_L01_00161FC0 << 4) | ((long)D_L01_00161FC4 << 6) | (0x8000L << 24);
-    q.g[2] = 0xFF9000000260UL;
-    q.g[0] = 0;
+    quad.g[1] = get_effect_texture(D_L01_00161FC8);
+    quad.g[3] = (long)D_L01_00161FB8 | ((long)D_L01_00161FBC << 2) | ((long)D_L01_00161FC0 << 4) | ((long)D_L01_00161FC4 << 6) | (0x8000L << 24);
+    quad.g[2] = 0xFF9000000260UL;
+    quad.g[0] = 0;
     for (i = 0; i < 4; i++) {
-        q.uv[i * 2] = D_L01_00201630[i * 2];
-        *(&q.uv[i * 2] + 1) = D_L01_00201630[i * 2 + 1];
-        q.c[i] = D_L01_00161FCC;
+        quad.uv[i * 2] = D_L01_00201630[i * 2];
+        *(&quad.uv[i * 2] + 1) = D_L01_00201630[i * 2 + 1];
+        quad.c[i] = D_L01_00161FCC;
     }
-    h = 0.1f;
-    if (*(float *)(d + 0x34) < 1.15f) {
-        float t = (1.15f - *(float *)(d + 0x34)) * 2.0f;
+    ring_half_height = 0.1f;
+    if (*(float *)(moby_data + 0x34) < 1.15f) {
+        float t = (1.15f - *(float *)(moby_data + 0x34)) * 2.0f;
         if (1.0f < t) {
             t = 1.0f;
         } else if (t < 0.0f) {
             t = 0.0f;
         }
-        h = t + 0.1f;
+        ring_half_height = t + 0.1f;
         if (((unsigned char *)moby)[0x20] != 7 && ((unsigned char *)moby)[0x20] != 8) {
-            if (*(float *)(d + 0x34) < 0.65f) {
+            if (*(float *)(moby_data + 0x34) < 0.65f) {
                 D_001413F5_c = 1;
             } else {
                 D_001413F5_c = 0;
@@ -2032,24 +2032,24 @@ void FUN_L01_003094f0(char *moby) {
     }
     for (j = 0; j < 32; j = nj) {
         int k;
-        float *p;
+        float *vertex;
         k = 0;
         nj = j + 1;
-        p = q.v;
+        vertex = quad.v;
         for (; k < 4;) {
-            float a = (float)(j + k / 2) * 6.28318f * 0.03125f - 3.14159f;
-            p[0] = fast_cos(a) * *(float *)(d + 0x34);
-            p[1] = fast_sin(a) * *(float *)(d + 0x34);
-            p[2] = 0.0f;
+            float vertex_angle = (float)(j + k / 2) * 6.28318f * 0.03125f - 3.14159f;
+            vertex[0] = fast_cos(vertex_angle) * *(float *)(moby_data + 0x34);
+            vertex[1] = fast_sin(vertex_angle) * *(float *)(moby_data + 0x34);
+            vertex[2] = 0.0f;
             if (k++ & 1) {
-                p[2] = D_L01_00161FD0 + h + p[2];
+                vertex[2] = D_L01_00161FD0 + ring_half_height + vertex[2];
             } else {
-                p[2] = D_L01_00161FD0 - h + p[2];
+                vertex[2] = D_L01_00161FD0 - ring_half_height + vertex[2];
             }
-            p[3] = 1.0f;
-            p += 4;
+            vertex[3] = 1.0f;
+            vertex += 4;
         }
-        draw_geometry_quad(&q, m, 0);
+        draw_geometry_quad(&quad, rotation_matrix, 0);
     }
 }
 /* Mark the parent and its three attached objects active. */
