@@ -656,7 +656,7 @@ void follow_camera_setup(Moby_2E8210 *camera_moby) {
     CamG_2E8210 *g;
     char *q1;
     char *q2;
-    char *q3;
+    char *camera_override_state;
     Cam240_2E8210 *p240;
     int r;
     float orbit_distance_shortfall;
@@ -736,14 +736,14 @@ void follow_camera_setup(Moby_2E8210 *camera_moby) {
     ((Cam1A8_2E8210 *)q2)->i20 = 0;
     ((Cam1A8_2E8210 *)q2)->i24 = 0;
 
-    q3 = (char *)camera_moby->cam;
-    ((Cam_2E8210 *)q3)->p220.i0 = 0;
-    q3 = (char *)&((Cam_2E8210 *)q3)->p220;
-    ((Cam220_2E8210 *)q3)->i10 = 0;
-    ((Cam220_2E8210 *)q3)->h4 = 0;
-    ((Cam220_2E8210 *)q3)->h6 = 0;
-    ((Cam220_2E8210 *)q3)->f8 = b->f2C;
-    ((Cam220_2E8210 *)q3)->fC = D_L00_00161D1C_gp;
+    camera_override_state = (char *)camera_moby->cam;
+    ((Cam_2E8210 *)camera_override_state)->p220.i0 = 0;
+    camera_override_state = (char *)&((Cam_2E8210 *)camera_override_state)->p220;
+    ((Cam220_2E8210 *)camera_override_state)->i10 = 0;
+    ((Cam220_2E8210 *)camera_override_state)->h4 = 0;
+    ((Cam220_2E8210 *)camera_override_state)->h6 = 0;
+    ((Cam220_2E8210 *)camera_override_state)->f8 = b->f2C;
+    ((Cam220_2E8210 *)camera_override_state)->fC = D_L00_00161D1C_gp;
 
     camera_state_base = camera_moby->cam;
     r = scale_game_frames(0x7D0);
