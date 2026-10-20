@@ -2565,27 +2565,8 @@ typedef struct {
     f32 amount;               /* 0x1C: read back after the hit */
 } BombHit_2CF808;
 
-extern struct Hero D_0013F450_C9820 __asm__("D_0013F350");
-extern s32 D_L00_0015F6A8_2C9820 __asm__("D_L00_0015F5C4");
-extern CollisionHit_2C9820 D_L00_00173F40_C9820 __asm__("D_L00_00173E40");
-extern f32 D_0015EE60_2CF808 __asm__("D_0015ED60");
-extern f32 D_0015EE6C_2CF808 __asm__("D_0015ED6C");
-extern f32 D_0015EE70_2CF808 __asm__("D_0015ED70");
-extern Vec4 D_L00_00166EC0_2CF808 __asm__("D_L00_00166DC0");
-extern Vec4 D_L00_00173F70_2CF808 __asm__("D_L00_00173E70");
-extern f32 func_001FA748_2CF808(f32, f32) __asm__("FUN_001fa580");
-extern f32 func_001FA790_2CF808(f32, f32) __asm__("FUN_001fa5c8");
-extern f32 func_001FA888_2CF808(s32) __asm__("FUN_001fa6c0");
-extern s32 func_001FA898_2CF808(f32) __asm__("FUN_001fa6d0");
-extern f32 func_001F9D48_2CF808(void *, void *) __asm__("FUN_001f9b80");
-extern f32 func_L00_001FF860_2CF808(f32, f32) __asm__("FUN_001f9e90");
-extern f32 func_001F9F90_2CF808(f32) __asm__("FUN_001f9dc8");
-extern f32 func_001F9FA8_2CF808(f32) __asm__("FUN_001f9de0");
-extern void func_001FA218_2CF808(void *, void *) __asm__("FUN_001fa050");
-extern void func_001F9EE8_2CF808(void *, void *, void *) __asm__("FUN_001f9d20");
-extern void func_L00_001FF500_2CF808(void *, void *, f32) __asm__("FUN_001f9c48");
-extern void func_L00_001FF548_2CF808(void *, void *, f32) __asm__("FUN_001f9c90");
-extern s32 func_001F9938_2CF808(void *) __asm__("FUN_001f9770");
+extern Vec4 D_L00_00173E70;
+extern void clamp_vector_length(void *, void *, f32) __asm__("FUN_001f9c90");
 extern s32 func_L00_001F10E0_2CF808(f32, void *, s32, void *) __asm__("FUN_L00_001f0d60");
 extern s32 func_L00_00259868_2CF808(f32, f32, f32, void *, void *, s32) __asm__("FUN_L00_00258830");
 extern void func_L00_0025A890_2CF808(void *, void *, s32, f32) __asm__("FUN_L00_00259858");
@@ -2594,15 +2575,8 @@ extern void func_L00_0025B040_2CF808(f32, void *) __asm__("FUN_L00_00259fe8");
 extern void *func_L00_0025B478_2CF808(void *, s32, s32) __asm__("FUN_L00_0025a420");
 extern f32 func_L00_00259148_2CF808(f32, f32, f32, f32, f32, f32 *) __asm__("FUN_L00_00258110");
 extern void func_L00_0025F4A8_2CF808(void *, void *, void *, f32, f32, s32, s32, s32, f32, f32, f32, s32, f32, f32, s32, s32, s32, s32) __asm__("FUN_L00_0025e450");
-extern void func_0022ED80_2CF808(s32, s32, void *) __asm__("FUN_0022da68");
-extern s32 func_001160D8_2CF808(void) __asm__("FUN_001160d8");
-extern void func_0020D678_2CF808(void *) __asm__("FUN_0020c828");
 extern struct Moby *func_L00_002CF3D8_2CF808(void *, void *) __asm__("FUN_L00_002cdf28");
-extern char *func_L00_0025D390_2CF808(void *) __asm__("FUN_002141f8");
 extern void func_L00_002CF328_2CF808(void *) __asm__("FUN_L00_002cde78");
-extern void func_001F9BD8_2CF808(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void func_001F9BF0_2CF808(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void func_001F9C30_2CF808(void *, void *, f32) __asm__("FUN_001f9a68");
 
 void FUN_L00_002ce358(struct Moby *m) {
     DroneVars_2CF808 *v = (DroneVars_2CF808 *)m->pvars;
@@ -2618,57 +2592,57 @@ void FUN_L00_002ce358(struct Moby *m) {
     struct Moby *drone;
     s32 k, n;
 
-    if (D_L00_0015F6A8_2C9820 == 2 || D_L00_0015F6A8_2C9820 == 5 ||
-        D_L00_0015F6A8_2C9820 == 6 || D_0013F450_C9820.state.current == 0x32) {
+    if (D_L00_0015F5C4_2c8440 == 2 || D_L00_0015F5C4_2c8440 == 5 ||
+        D_L00_0015F5C4_2c8440 == 6 || hero.state.current == 0x32) {
         m->flags |= 0x41;
         return;
     }
     m->flags &= 0xFFBE;
     if (m->state < 5) {
-        ((DroneSlots_2CF808 *)&D_0013F450_C9820)->counter++;
-        if (((DroneSlots_2CF808 *)&D_0013F450_C9820)->ammo_used < ((DroneSlots_2CF808 *)&D_0013F450_C9820)->counter) {
+        ((DroneSlots_2CF808 *)&hero)->counter++;
+        if (((DroneSlots_2CF808 *)&hero)->ammo_used < ((DroneSlots_2CF808 *)&hero)->counter) {
             closest = 0;
             count = 0;
             distance = 1000000.0f;
-            ((DroneSlots_2CF808 *)&D_0013F450_C9820)->counter = 1;
-            ((DroneSlots_2CF808 *)&D_0013F450_C9820)->ammo_capacity = 0;
-            ((DroneSlots_2CF808 *)&D_0013F450_C9820)->phase = func_001FA748_2CF808(((DroneSlots_2CF808 *)&D_0013F450_C9820)->phase, D_0015EE60_2CF808 * 0.05f);
+            ((DroneSlots_2CF808 *)&hero)->counter = 1;
+            ((DroneSlots_2CF808 *)&hero)->ammo_capacity = 0;
+            ((DroneSlots_2CF808 *)&hero)->phase = fast_add_rotations(((DroneSlots_2CF808 *)&hero)->phase, frame_scale * 0.05f);
             for (k = 0; k < 6; k++) {
-                drone = ((DroneSlots_2CF808 *)&D_0013F450_C9820)->slots[k];
+                drone = ((DroneSlots_2CF808 *)&hero)->slots[k];
                 if (drone != 0) {
                     if (drone->oclass == 0x1DF) {
                         if (drone->state == 0xFE) {
-                            ((DroneSlots_2CF808 *)&D_0013F450_C9820)->slots[k] = 0;
+                            ((DroneSlots_2CF808 *)&hero)->slots[k] = 0;
                         } else if (drone->state == 0xFD) {
-                            ((DroneSlots_2CF808 *)&D_0013F450_C9820)->slots[k] = 0;
+                            ((DroneSlots_2CF808 *)&hero)->slots[k] = 0;
                         } else {
-                            ((DroneSlots_2CF808 *)&D_0013F450_C9820)->exclusions[count] = *(struct Moby **)(drone->pvars + 0x30);
+                            ((DroneSlots_2CF808 *)&hero)->exclusions[count] = *(struct Moby **)(drone->pvars + 0x30);
                             count++;
                             if (drone->state < 4)
-                                ((DroneSlots_2CF808 *)&D_0013F450_C9820)->ammo_capacity++;
+                                ((DroneSlots_2CF808 *)&hero)->ammo_capacity++;
                             if (count > 8)
                                 break;
                         }
                     } else {
-                        ((DroneSlots_2CF808 *)&D_0013F450_C9820)->slots[k] = 0;
+                        ((DroneSlots_2CF808 *)&hero)->slots[k] = 0;
                     }
                 }
             }
             for (n = count; n < 9; n++)
-                ((DroneSlots_2CF808 *)&D_0013F450_C9820)->exclusions[n] = 0;
-            other = func_L00_002CF3D8_2CF808(&D_0013F450_C9820.motion, ((DroneSlots_2CF808 *)&D_0013F450_C9820)->exclusions);
+                ((DroneSlots_2CF808 *)&hero)->exclusions[n] = 0;
+            other = func_L00_002CF3D8_2CF808(&hero.motion, ((DroneSlots_2CF808 *)&hero)->exclusions);
             if (other != 0) {
                 char *h;
-                h = func_L00_0025D390_2CF808(other);
+                h = suck_get_aim_height(other);
                 qcopy(&old_pos, &other->pos);
                 if (h != 0)
                     old_pos.f[2] += *(f32 *)(h + 0x10);
                 for (i = 0; i < 6; i++) {
-                    drone = ((DroneSlots_2CF808 *)&D_0013F450_C9820)->slots[i];
+                    drone = ((DroneSlots_2CF808 *)&hero)->slots[i];
                     if (drone != 0) {
                         struct Moby *t = *(struct Moby **)(drone->pvars + 0x30);
                         if (t == 0 || t->state == 0xFE || t->state == 0xFD) {
-                            f32 d = func_001F9D48_2CF808(&drone->pos, &old_pos);
+                            f32 d = vector_distance(&drone->pos, &old_pos);
                             if (d < distance) {
                                 closest = drone;
                                 distance = d;
@@ -2681,27 +2655,27 @@ void FUN_L00_002ce358(struct Moby *m) {
                     char *h2;
                     assigned->target = other;
                     assigned->target_oclass = other->oclass;
-                    h2 = func_L00_0025D390_2CF808(other);
+                    h2 = suck_get_aim_height(other);
                     qcopy(&old_pos, &other->pos);
                     if (h2 != 0)
                         old_pos.f[2] += *(f32 *)(h2 + 0x10);
                     qcopy(&assigned->offset, &old_pos);
                     closest->state = 3;
-                    random = func_001160D8_2CF808() % 3;
-                    func_0022ED80_2CF808(random + (random > 0), 0, m);
-                    ((DroneSlots_2CF808 *)&D_0013F450_C9820)->exclusions[count] = assigned->target;
+                    random = rand_2cc608() % 3;
+                    allocate_voice_for_target_entry(random + (random > 0), 0, m);
+                    ((DroneSlots_2CF808 *)&hero)->exclusions[count] = assigned->target;
                 }
             }
         }
         {
-            s32 capacity = ((DroneSlots_2CF808 *)&D_0013F450_C9820)->ammo_used;
+            s32 capacity = ((DroneSlots_2CF808 *)&hero)->ammo_used;
             s32 divisor = capacity ? capacity : 1;
             s32 next = capacity + 1;
-            s32 counter = ((DroneSlots_2CF808 *)&D_0013F450_C9820)->counter;
+            s32 counter = ((DroneSlots_2CF808 *)&hero)->counter;
             if (next == 0)
                 next = 1;
-            v->desired_yaw = func_001FA888_2CF808(counter) / (f32)divisor * 6.2831855f - 3.1415927f;
-            v->pitch = (func_001FA888_2CF808((counter * (next / 5)) % next) / (f32)divisor * 6.2831855f - 3.1415927f) * 0.25f;
+            v->desired_yaw = convert_integer_to_float(counter) / (f32)divisor * 6.2831855f - 3.1415927f;
+            v->pitch = (convert_integer_to_float((counter * (next / 5)) % next) / (f32)divisor * 6.2831855f - 3.1415927f) * 0.25f;
         }
         {
             void *hit = func_L00_0025B478_2CF808(m, 1, 0);
@@ -2710,7 +2684,7 @@ void FUN_L00_002ce358(struct Moby *m) {
                 s32 cat = h && *(char **)(h + 0x24) ? *(s16 *)(*(char **)(h + 0x24) + 0x46) : 0;
                 if (cat > 8) goto dispatch_state;
                 if (cat >= 5) {
-                    if (hit == 0 || h == 0 || *(s16 *)(h + 0xA6) != 0x4D6 || func_001F9938_2CF808(&v->health))
+                    if (hit == 0 || h == 0 || *(s16 *)(h + 0xA6) != 0x4D6 || fast_dec_timer_s16(&v->health))
                         m->state = 4;
                 }
             }
@@ -2732,58 +2706,58 @@ state2:
         qcopy(&old_pos, &m->pos);
         func_L00_002CF328_2CF808(m);
         {
-            f32 step = D_0015EE60_2CF808 * 0.05f;
+            f32 step = frame_scale * 0.05f;
             m->scale += (m->pclass->scale - m->scale) * step;
             v->strength = v->strength + (1.0f - v->strength) * step;
         }
-        f = func_001FA748_2CF808(v->desired_yaw, ((DroneSlots_2CF808 *)&D_0013F450_C9820)->phase);
-        distance = func_001FA790_2CF808(f, v->yaw);
-        v->yaw = func_001FA748_2CF808(v->yaw, distance * (D_0015EE60_2CF808 * 0.05f));
-        distance = func_001FA790_2CF808(v->pitch, v->elevation);
-        v->elevation = func_001FA748_2CF808(v->elevation, distance * (D_0015EE60_2CF808 * 0.01f));
-        direction.f[0] = func_001F9F90_2CF808(v->yaw) * v->strength;
-        direction.f[1] = func_001F9FA8_2CF808(v->yaw) * v->strength;
+        f = fast_add_rotations(v->desired_yaw, ((DroneSlots_2CF808 *)&hero)->phase);
+        distance = fast_subtract_rotations(f, v->yaw);
+        v->yaw = fast_add_rotations(v->yaw, distance * (frame_scale * 0.05f));
+        distance = fast_subtract_rotations(v->pitch, v->elevation);
+        v->elevation = fast_add_rotations(v->elevation, distance * (frame_scale * 0.01f));
+        direction.f[0] = fast_cos(v->yaw) * v->strength;
+        direction.f[1] = fast_sin(v->yaw) * v->strength;
         direction.f[2] = 0.0f;
         rotated.f[0] = 0.0f;
         rotated.f[1] = v->elevation;
         rotated.f[2] = 0.0f;
         rotated.f[3] = 0.0f;
-        func_001FA218_2CF808(matrix, &rotated);
-        func_001F9EE8_2CF808(&direction, &direction, matrix);
-        func_001F9BD8_2CF808(&target_pos, &D_0013F450_C9820.motion, (u8 *)D_0013F450_C9820.moby + 0xE0);
+        euler_rotation_matrix(matrix, &rotated);
+        apply_mat4_2cc608(&direction, &direction, matrix);
+        add_vector_xyz(&target_pos, &hero.motion, (u8 *)hero.moby + 0xE0);
         target_pos.f[0] += direction.f[0];
         target_pos.f[1] += direction.f[1];
-        v->height = v->height + (target_pos.f[2] - v->height) * (D_0015EE60_2CF808 * 0.05f);
+        v->height = v->height + (target_pos.f[2] - v->height) * (frame_scale * 0.05f);
         target_pos.f[2] = v->height + direction.f[2];
-        func_001F9BF0_2CF808(&target_pos, &target_pos, &m->pos);
-        func_L00_001FF548_2CF808(&target_pos, &target_pos, D_0015EE6C_2CF808 * 10.0f);
+        subtract_vector_xyz_2c8440(&target_pos, &target_pos, &m->pos);
+        clamp_vector_length(&target_pos, &target_pos, frame_time * 10.0f);
         if (func_L00_00259868_2CF808(0.0f, 0.18f, 0.0f, m, &target_pos, 0) & 1) {
             if (!m->visible) {
-                Vec4 *hitv = &D_L00_00166EC0_2CF808;
-                func_001F9BD8_2CF808(&m->pos, hitv, hitv + 0x23);
-                func_001F9BF0_2CF808(&m->pos, &m->pos, hitv + 0x21);
+                Vec4 *hitv = &D_L00_00166DC0_2c8440;
+                add_vector_xyz(&m->pos, hitv, hitv + 0x23);
+                subtract_vector_xyz_2c8440(&m->pos, &m->pos, hitv + 0x21);
             }
         }
         qcopy(&collision_data[0], &m->pos);
         if (func_L00_001F10E0_2CF808(0.2f, &collision_data[0], 0, m)) {
-            if (((struct Moby *)D_L00_00173F40_C9820.moby) && ((struct Moby *)D_L00_00173F40_C9820.moby)->oclass == 0 && ((struct Moby *)D_L00_00173F40_C9820.moby)->state != 0xFE && ((struct Moby *)D_L00_00173F40_C9820.moby)->state != 0xFD)
+            if (((struct Moby *)coll_hit.moby) && ((struct Moby *)coll_hit.moby)->oclass == 0 && ((struct Moby *)coll_hit.moby)->state != 0xFE && ((struct Moby *)coll_hit.moby)->state != 0xFD)
                 goto update_rotations;
-            category = ((struct Moby *)D_L00_00173F40_C9820.moby) && ((struct Moby *)D_L00_00173F40_C9820.moby)->pclass ? *(u8 *)((u8 *)((struct Moby *)D_L00_00173F40_C9820.moby)->pclass + 0x46) : 0;
-            if (((struct Moby *)D_L00_00173F40_C9820.moby) && ((struct Moby *)D_L00_00173F40_C9820.moby)->state != 0xFE && ((struct Moby *)D_L00_00173F40_C9820.moby)->state != 0xFD &&
+            category = ((struct Moby *)coll_hit.moby) && ((struct Moby *)coll_hit.moby)->pclass ? *(u8 *)((u8 *)((struct Moby *)coll_hit.moby)->pclass + 0x46) : 0;
+            if (((struct Moby *)coll_hit.moby) && ((struct Moby *)coll_hit.moby)->state != 0xFE && ((struct Moby *)coll_hit.moby)->state != 0xFD &&
                 (category == 5 || category == 7 || category == 8)) {
                 func_L00_0025A890_2CF808(((BombHit_2CF808 *)&direction), m, 0x10000, 1.0f);
-                func_L00_001FF500_2CF808(((BombHit_2CF808 *)&direction), &v->position, 1.0f);
+                set_vector_length_xy(((BombHit_2CF808 *)&direction), &v->position, 1.0f);
                 ((BombHit_2CF808 *)&direction)->direction.f[2] = 1.0f;
                 ((BombHit_2CF808 *)&direction)->direction.f[3] = 5627.925f;
                 ((BombHit_2CF808 *)&direction)->kind = 1;
                 ((BombHit_2CF808 *)&direction)->mode = 2;
                 ((BombHit_2CF808 *)&direction)->oclass = m->oclass;
-                func_L00_0025AAC0_2CF808((struct Moby *)D_L00_00173F40_C9820.moby, ((BombHit_2CF808 *)&direction));
+                func_L00_0025AAC0_2CF808((struct Moby *)coll_hit.moby, ((BombHit_2CF808 *)&direction));
                 if (category == 5) {
-                    if (D_L00_00173F40_C9820.moby && ((struct Moby *)D_L00_00173F40_C9820.moby)->oclass == 0x4D6 && (health = v->health) > 0) {
-                        random = func_001FA898_2CF808(((BombHit_2CF808 *)&direction)->amount);
+                    if (coll_hit.moby && ((struct Moby *)coll_hit.moby)->oclass == 0x4D6 && (health = v->health) > 0) {
+                        random = truncate_float_to_s32(((BombHit_2CF808 *)&direction)->amount);
                         if (random > 0)
-                            random = health - func_001FA898_2CF808(((BombHit_2CF808 *)&direction)->amount);
+                            random = health - truncate_float_to_s32(((BombHit_2CF808 *)&direction)->amount);
                         else
                             random = health - 1;
                         v->health = random;
@@ -2795,12 +2769,12 @@ state2:
             }
         }
 update_rotations:
-        func_001F9BF0_2CF808(&v->position, &m->pos, &old_pos);
+        subtract_vector_xyz_2c8440(&v->position, &m->pos, &old_pos);
         {
-            f32 yaw = func_L00_001FF860_2CF808(m->pos.x - old_pos.f[0], m->pos.y - old_pos.f[1]);
-            f32 pitch = -func_L00_001FF860_2CF808(func_001F9D48_2CF808(&old_pos, &m->pos), m->pos.z - old_pos.f[2]);
-            m->rot.z = func_L00_00259148_2CF808(m->rot.z, yaw, D_0015EE70_2CF808 * 6.2831855f, D_0015EE70_2CF808 * 3.1415927f, D_0015EE6C_2CF808 * 6.2831855f, &v->yaw_velocity);
-            m->rot.y = func_L00_00259148_2CF808(m->rot.y, pitch, D_0015EE70_2CF808 * 6.2831855f, D_0015EE70_2CF808 * 3.1415927f, D_0015EE6C_2CF808 * 6.2831855f, &v->pitch_velocity);
+            f32 yaw = fast_arc_tan(m->pos.x - old_pos.f[0], m->pos.y - old_pos.f[1]);
+            f32 pitch = -fast_arc_tan(vector_distance(&old_pos, &m->pos), m->pos.z - old_pos.f[2]);
+            m->rot.z = func_L00_00259148_2CF808(m->rot.z, yaw, frame_time_sq * 6.2831855f, frame_time_sq * 3.1415927f, frame_time * 6.2831855f, &v->yaw_velocity);
+            m->rot.y = func_L00_00259148_2CF808(m->rot.y, pitch, frame_time_sq * 6.2831855f, frame_time_sq * 3.1415927f, frame_time * 6.2831855f, &v->pitch_velocity);
         }
         goto update_effects;
     }
@@ -2809,42 +2783,42 @@ state3:
         struct MobyClass *pclass = m->pclass;
         m->collision = pclass->collision;
         qcopy(&old_pos, &m->pos);
-        m->scale += (pclass->scale - m->scale) * (D_0015EE60_2CF808 * 0.05f);
+        m->scale += (pclass->scale - m->scale) * (frame_scale * 0.05f);
         m->collision = pclass->collision;
         func_L00_002CF328_2CF808(m);
         target = v->target;
         if (target != 0 && target->oclass == v->target_oclass && target->state != 0xFE && target->state != 0xFD) {
-            char *h = func_L00_0025D390_2CF808(target);
+            char *h = suck_get_aim_height(target);
             qcopy(&target_pos, &v->target->pos);
             if (h != 0)
                 target_pos.f[2] += *(f32 *)(h + 0x10);
-            func_001F9BF0_2CF808(&direction, &target_pos, &v->offset);
-            func_001F9C30_2CF808(&direction, &direction, 3.1f);
-            func_001F9BD8_2CF808(&rotated, &target_pos, &direction);
-            func_001F9BF0_2CF808(&v->position, &rotated, &m->pos);
-            func_001F9C30_2CF808(&v->position, &v->position, D_0015EE60_2CF808 * -0.8f + 1.0f);
-            func_001F9BD8_2CF808(&m->pos, &m->pos, &v->position);
+            subtract_vector_xyz_2c8440(&direction, &target_pos, &v->offset);
+            scale_vector_xyz_2c8440(&direction, &direction, 3.1f);
+            add_vector_xyz(&rotated, &target_pos, &direction);
+            subtract_vector_xyz_2c8440(&v->position, &rotated, &m->pos);
+            scale_vector_xyz_2c8440(&v->position, &v->position, frame_scale * -0.8f + 1.0f);
+            add_vector_xyz(&m->pos, &m->pos, &v->position);
             qcopy(&v->offset, &target_pos);
             qcopy(&collision_data[0], &m->pos);
             if (func_L00_001F10E0_2CF808(0.25f, &collision_data[0], 0, m)) {
-                struct Moby *hm = (struct Moby *)D_L00_00173F40_C9820.moby;
+                struct Moby *hm = (struct Moby *)coll_hit.moby;
                 if (!hm || hm->state == 0xFE || hm->state == 0xFD || hm != v->target || hm->oclass == 0) {
-                    qcopy(&m->pos, &D_L00_00173F70_2CF808);
+                    qcopy(&m->pos, &D_L00_00173E70);
                 } else {
                     s32 cat2 = hm->pclass ? *(u8 *)((u8 *)hm->pclass + 0x46) : 0;
                     func_L00_0025A890_2CF808(((BombHit_2CF808 *)&direction), m, 0x10000, 1.0f);
-                    func_L00_001FF500_2CF808(((BombHit_2CF808 *)&direction), &v->position, 1.0f);
+                    set_vector_length_xy(((BombHit_2CF808 *)&direction), &v->position, 1.0f);
                     ((BombHit_2CF808 *)&direction)->direction.f[2] = 1.0f;
                     ((BombHit_2CF808 *)&direction)->direction.f[3] = 5627.925f;
                     ((BombHit_2CF808 *)&direction)->kind = 1;
                     ((BombHit_2CF808 *)&direction)->mode = 2;
                     ((BombHit_2CF808 *)&direction)->oclass = m->oclass;
-                    func_L00_0025AAC0_2CF808((struct Moby *)D_L00_00173F40_C9820.moby, ((BombHit_2CF808 *)&direction));
+                    func_L00_0025AAC0_2CF808((struct Moby *)coll_hit.moby, ((BombHit_2CF808 *)&direction));
                     if (cat2 == 5) {
-                        if (D_L00_00173F40_C9820.moby && ((struct Moby *)D_L00_00173F40_C9820.moby)->oclass == 0x4D6 && (health = v->health) > 0) {
-                            random = func_001FA898_2CF808(((BombHit_2CF808 *)&direction)->amount);
+                        if (coll_hit.moby && ((struct Moby *)coll_hit.moby)->oclass == 0x4D6 && (health = v->health) > 0) {
+                            random = truncate_float_to_s32(((BombHit_2CF808 *)&direction)->amount);
                             if (random > 0)
-                                random = health - func_001FA898_2CF808(((BombHit_2CF808 *)&direction)->amount);
+                                random = health - truncate_float_to_s32(((BombHit_2CF808 *)&direction)->amount);
                             else
                                 random = health - 1;
                             v->health = random;
@@ -2861,8 +2835,8 @@ state3:
             v->target_oclass = -1;
             v->target = 0;
         }
-        m->rot.z = func_L00_001FF860_2CF808(m->pos.x - old_pos.f[0], m->pos.y - old_pos.f[1]);
-        m->rot.y = -func_L00_001FF860_2CF808(func_001F9D48_2CF808(&old_pos, &m->pos), m->pos.z - old_pos.f[2]);
+        m->rot.z = fast_arc_tan(m->pos.x - old_pos.f[0], m->pos.y - old_pos.f[1]);
+        m->rot.y = -fast_arc_tan(vector_distance(&old_pos, &m->pos), m->pos.z - old_pos.f[2]);
         goto update_effects;
     }
 state4:
@@ -2873,14 +2847,14 @@ state4:
         if (target->state == 0xFE) goto fade_clear;
         if (target->state == 0xFD) goto fade_clear;
         {
-            char *h = func_L00_0025D390_2CF808(target);
+            char *h = suck_get_aim_height(target);
             qcopy(&old_pos, &v->target->pos);
             if (h != 0)
                 old_pos.f[2] += *(f32 *)(h + 0x10);
-            func_001F9BF0_2CF808(&v->position, &old_pos, &m->pos);
-            func_001F9C30_2CF808(&v->position, &v->position, D_0015EE60_2CF808 * -0.8f + 1.0f);
-            func_L00_001FF548_2CF808(&v->position, &v->position, D_0015EE60_2CF808 * 0.9f);
-            func_001F9BD8_2CF808(&m->pos, &m->pos, &v->position);
+            subtract_vector_xyz_2c8440(&v->position, &old_pos, &m->pos);
+            scale_vector_xyz_2c8440(&v->position, &v->position, frame_scale * -0.8f + 1.0f);
+            clamp_vector_length(&v->position, &v->position, frame_scale * 0.9f);
+            add_vector_xyz(&m->pos, &m->pos, &v->position);
         }
         goto fade_alpha;
 fade_clear:
@@ -2893,9 +2867,9 @@ fade_alpha:
     }
 state5:
     {
-        ((DroneSlots_2CF808 *)&D_0013F450_C9820)->ammo_used--;
-        ((DroneSlots_2CF808 *)&D_0013F450_C9820)->slots[v->slot] = 0;
-        func_0020D678_2CF808(m);
+        ((DroneSlots_2CF808 *)&hero)->ammo_used--;
+        ((DroneSlots_2CF808 *)&hero)->slots[v->slot] = 0;
+        mark_moby_for_removal(m);
         return;
     }
 update_effects:

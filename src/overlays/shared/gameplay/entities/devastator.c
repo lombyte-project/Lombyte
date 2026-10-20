@@ -2884,22 +2884,22 @@ extern f32 D_L00_00161520 __attribute__((sda));
 extern f32 D_L00_00161524 __attribute__((sda));
 extern f32 D_L00_00161528 __attribute__((sda));
 extern s32 D_L00_00161530 __attribute__((sda));
-extern f32 D_L00_001601E8_2b77f0 __asm__("D_L00_001601E8");
+extern f32 D_L00_001601E8;
 
 void FUN_L00_002b8230(unsigned char *);
 void FUN_L00_002b8438(char *);
-extern f32 FUN_0020c9e0_2b77f0(struct Moby *) __asm__("FUN_0020c9e0");
+extern f32 compute_interpolated_record_value(struct Moby *) __asm__("FUN_0020c9e0");
 extern struct Moby *FUN_L00_002bb360_2b77f0(struct Moby *) __asm__("FUN_L00_002bb360");
-extern void lerp_vector_2b77f0(void *, void *, void *, f32) __asm__("FUN_001f9a40");
+extern void lerp_vector(void *, void *, void *, f32) __asm__("FUN_001f9a40");
 extern s16 FUN_L00_0023e5e0_2b77f0(void *, f32, f32, s32) __asm__("FUN_L00_0023e5e0");
-extern s16 FUN_0022da68_2b77f0(s32, s32, struct Moby *) __asm__("FUN_0022da68");
+extern s16 FUN_0022da68(s32, s32, struct Moby *);
 extern s32 FUN_L00_0028d8c0_2b77f0(struct Moby *, s32) __asm__("FUN_L00_0028d8c0");
-extern void normalize_vector_2b77f0(void *, void *, f32) __asm__("FUN_001f9bf8");
+extern void normalize_vector_xyz(void *, void *, float) __asm__("FUN_001f9bf8");
 extern f32 advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("FUN_00213f38");
 extern void FUN_L00_00257d78_2b77f0(void *, f32, f32) __asm__("FUN_L00_00257d78");
 extern void *FUN_L00_0026b230_2b77f0(void *, void *, s32, f32) __asm__("FUN_L00_0026b230");
 extern void FUN_L00_002b8798_2b77f0(struct Moby *, void *) __asm__("FUN_L00_002b8798");
-extern void scale_vector_2b77f0(void *, void *, f32) __asm__("FUN_001f9c48");
+extern void set_vector_length_xy(void *, void *, float) __asm__("FUN_001f9c48");
 extern void FUN_L00_0026d598_2b77f0(void *, void *, s32) __asm__("FUN_L00_0026d598");
 extern void FUN_001fa030_2b77f0(void *, void *) __asm__("FUN_001fa030");
 extern void FUN_001fa328_2b77f0(void *, void *, void *) __asm__("FUN_001fa328");
@@ -2934,7 +2934,7 @@ void pyrocitor_update(struct Moby *moby) {
             moby->state = 2;
         if (moby->seq != 0)
             break;
-        if (FUN_0020c9e0_2b77f0(moby) > 10.0f && (controller_state.held & hero.items[0].button_mask) &&
+        if (compute_interpolated_record_value(moby) > 10.0f && (controller_state.held & hero.items[0].button_mask) &&
             moby->prev_seq != 1)
             blend_moby_animation_2b2100(moby, 1, 0, scale_game_frames_2b2100(5));
         break;
@@ -2947,7 +2947,7 @@ void pyrocitor_update(struct Moby *moby) {
             }
         }
         if (v->light != -1) {
-            lerp_vector_2b77f0(&lights_2b2100[v->light], &lights_2b2100[v->light], &D_L00_0015F580_2b77f0, 0.1f);
+            lerp_vector(&lights_2b2100[v->light], &lights_2b2100[v->light], &D_L00_0015F580_2b77f0, 0.1f);
             if (fast_vec_length(&lights_2b2100[v->light]) < 0.001f) {
                 FUN_L00_0023e838_2b2100(v->light);
                 /* Fakematch: the dead test on moby keeps the s6/s7 assignment of retail. */
@@ -2961,12 +2961,12 @@ void pyrocitor_update(struct Moby *moby) {
             if (v->light == -1)
                 v->light = FUN_L00_0023e5e0_2b77f0(&moby->pos, 7.5f, 0.0f, 0);
         } else if ((controller_state_lui.pressed & hero.items[0].button_mask) && !FUN_L00_00233e98_2b2100(-1)) {
-            FUN_0022da68_2b77f0(0, 0, moby);
+            FUN_0022da68(0, 0, moby);
         }
         break;
     case 3:
         if (!FUN_L00_0028d8c0_2b77f0(moby, v->voice))
-            v->voice = FUN_0022da68_2b77f0(1, 4, moby);
+            v->voice = FUN_0022da68(1, 4, moby);
         if (v->light != -1 && moby->state == 3) {
             dir.q = 0;
             dir.f.x = 2.0f;
@@ -2974,9 +2974,9 @@ void pyrocitor_update(struct Moby *moby) {
             transform_vector_by_basis_2b2100(&dir, &dir, hero.basis);
             add_vector_xyz_2b2100(&lights_2b2100[v->light].pos, &hero.motion.pos, &dir);
             lights_2b2100[v->light].pos.f.w = 7.5f;
-            lerp_vector_2b77f0(&scratch, &D_L00_001614F0, &D_L00_00161500,
+            lerp_vector(&scratch, &D_L00_001614F0, &D_L00_00161500,
                 fast_sin_2b2100(((f32)(D_L00_0015F5CC % 120) / 120.0f) * 6.28318f - 3.14159f) * 0.5f + 0.5f);
-            lerp_vector_2b77f0(&lights_2b2100[v->light], &lights_2b2100[v->light], &scratch, 0.1f);
+            lerp_vector(&lights_2b2100[v->light], &lights_2b2100[v->light], &scratch, 0.1f);
         }
         pos_out = vel_out = 0.0f;
         speed = convert_integer_to_float_2b2100(item_text_variant[16]) * 4.0f;
@@ -2985,13 +2985,13 @@ void pyrocitor_update(struct Moby *moby) {
         else
             gate = 0;
         if (hero.state.current == 1 && (moby->flags & 1)) {
-            normalize_vector_2b77f0(&scratch, camera_2b2100 + 0x370, -1.0f);
+            normalize_vector_xyz(&scratch, camera_2b2100 + 0x370, -1.0f);
             add_vector_xyz_2b2100(&scratch, &scratch, camera_2b2100 + 0x140);
-            normalize_vector_2b77f0(&dir, camera_2b2100 + 0x350, D_L00_00161520 + speed + 0.75f);
+            normalize_vector_xyz(&dir, camera_2b2100 + 0x350, D_L00_00161520 + speed + 0.75f);
             add_vector_xyz_2b2100(&endpoint, &dir, &scratch);
         } else {
             qcopy(&scratch, &pos);
-            normalize_vector_2b77f0(&dir, &hero.unk670, D_L00_00161520 + speed + 0.75f);
+            normalize_vector_xyz(&dir, &hero.unk670, D_L00_00161520 + speed + 0.75f);
             add_vector_xyz_2b2100(&endpoint, &dir, &pos);
         }
         if (collision_segment_hits_2b2100(&hero.motion.unkD0, &scratch, 2, 0, 0)) {
@@ -3003,10 +3003,10 @@ void pyrocitor_update(struct Moby *moby) {
         } else {
             length = D_L00_00161520 + speed;
         }
-        accel = D_L00_001601E8_2b77f0 * frame_time_sq;
+        accel = D_L00_001601E8 * frame_time_sq;
         damping = D_L00_00161514 * frame_time;
         advance_accelerated_scalar(&pos_out, &vel_out, length, 1.0f, accel, damping);
-        normalize_vector_2b77f0(&dir, &dir, vel_out);
+        normalize_vector_xyz(&dir, &dir, vel_out);
         initial_count = D_L00_00161518;
         extra = D_L00_0016151C;
         if (length < 4.0f || (moby->flags & 1))
@@ -3036,7 +3036,7 @@ void pyrocitor_update(struct Moby *moby) {
         hit.scale = convert_integer_to_float_2b2100(item_text_variant[16]) + 1.0f;
         hit.point.q = dir.q;
         hit.mode = 1;
-        scale_vector_2b77f0(&hit.point, &hit.point, 1.0f);
+        set_vector_length_xy(&hit.point, &hit.point, 1.0f);
         hit.point.f.z = 1.0f;
         hit.point.f.w = 5627.9248f;
         hit.mode = 1;
@@ -3069,7 +3069,7 @@ void pyrocitor_update(struct Moby *moby) {
             }
             v->voice = -1;
             if (!ready)
-                FUN_0022da68_2b77f0(0, 0, moby);
+                FUN_0022da68(0, 0, moby);
         }
         break;
     }
