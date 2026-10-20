@@ -666,7 +666,7 @@ void FUN_L00_002167d0(void) {
     struct Hero *slope_hero_state;
     Vec4 *r;
     V4 target_velocity, target_velocity_before_impulse, saved_move_impulse, xy_velocity_scratch, slope_velocity_delta;
-    f32 f20, f21, f22, impulse_step_factor, b, base_impulse_step, frame_duration, e, target_speed_y, k;
+    f32 f20, f21, f22, impulse_step_factor, b, base_impulse_step, frame_duration, impulse_gate_or_target_length, target_speed_y, k;
 
     FUN_L00_002118c8_c(0, 1.0f);
     f20 = 0.2f;
@@ -717,13 +717,13 @@ void FUN_L00_002167d0(void) {
     if (frame_time * 5.9f < hero.motion.speed_xy) {
         f21 = frame_time_sq * 13.0f;
     }
-    e = hero.unk930;
+    impulse_gate_or_target_length = hero.unk930;
     f22 = 0.0f;
-    if (f22 < e) {
+    if (f22 < impulse_gate_or_target_length) {
         f20 = -fast_vec_dot(&target_velocity_before_impulse, &saved_move_impulse);
-        e = fast_vec_length(&target_velocity_before_impulse);
-        if (f22 < e) {
-            f20 = f20 / e;
+        impulse_gate_or_target_length = fast_vec_length(&target_velocity_before_impulse);
+        if (f22 < impulse_gate_or_target_length) {
+            f20 = f20 / impulse_gate_or_target_length;
         }
         b = vector_length_xy(&saved_move_impulse);
         impulse_step_factor = (b - f20) / b;
