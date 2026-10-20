@@ -419,16 +419,16 @@ void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 float square_root(float) __asm__("FUN_001f9988");
 float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 void FUN_L00_00216078(Vec4 *v, float *out) {
-    Vec4 m0[4];
-    Vec4 m1[4];
-    Vec4 t;
-    Vec4 *tp = &t;
+    Vec4 rotation_matrix[4];
+    Vec4 transposed_rotation_matrix[4];
+    Vec4 transformed_vector;
+    Vec4 *tp = &transformed_vector;
     qcopy(tp, v);
-    euler_rotation_matrix(m0, D_001413D0 + 0x40);
-    transpose_rotation_matrix(m1, m0);
-    transform_vector(tp, tp, m1);
-    out[0] = fast_arc_tan(square_root(t.f[0] * t.f[0] + t.f[2] * t.f[2]), t.f[1]);
-    out[1] = -fast_arc_tan(t.f[2], t.f[0]);
+    euler_rotation_matrix(rotation_matrix, D_001413D0 + 0x40);
+    transpose_rotation_matrix(transposed_rotation_matrix, rotation_matrix);
+    transform_vector(tp, tp, transposed_rotation_matrix);
+    out[0] = fast_arc_tan(square_root(transformed_vector.f[0] * transformed_vector.f[0] + transformed_vector.f[2] * transformed_vector.f[2]), transformed_vector.f[1]);
+    out[1] = -fast_arc_tan(transformed_vector.f[2], transformed_vector.f[0]);
 }
 typedef struct {
     float f[4];
