@@ -1805,26 +1805,26 @@ extern s32 FUN_0022da68(s32, s32, struct Moby *);
 
 /* Floor plate: lit and opening its door while a moby (other than class 0x3EF) rests on it, dark and closing it otherwise. */
 void button_update(struct Moby *m) __asm__("FUN_L10_002d92b8");
-void button_update(struct Moby *m) {
-    FloorPlateVars *v = (FloorPlateVars *)m->pvars;
+void button_update(struct Moby *moby) {
+    FloorPlateVars *v = (FloorPlateVars *)moby->pvars;
     s32 pressed = 0;
     struct Moby *door;
     struct Moby *other;
     s32 i;
-    f32 h;
-    s32 n;
+    f32 ground_height;
+    s32 nearby_moby_count;
 
     if (v->door == -1) {
-        FUN_L00_002502f0_u(m, 8, 8, 8);
+        FUN_L00_002502f0_u(moby, 8, 8, 8);
         return;
     }
     door = &D_L10_0015FFD8[v->door];
-    n = collect_mobies_in_sphere(&m->pos, 1.0f, 0, m, NULL);
-    if (n != 0) {
-        for (i = 0; i < n; i++) {
+    nearby_moby_count = collect_mobies_in_sphere(&moby->pos, 1.0f, 0, moby, NULL);
+    if (nearby_moby_count != 0) {
+        for (i = 0; i < nearby_moby_count; i++) {
             other = nearby_mobys[i];
-            h = probe_ground_height(&other->pos, 0, 0.5f);
-            if (ground_hit.moby == m && fabsf_fast(h - nearby_mobys[i]->pos.z) < 0.1f) {
+            ground_height = probe_ground_height(&other->pos, 0, 0.5f);
+            if (ground_hit.moby == moby && fabsf_fast(ground_height - nearby_mobys[i]->pos.z) < 0.1f) {
                 if (nearby_mobys[i]->oclass != 0x3EF) {
                     pressed = 1;
                 }
@@ -1832,7 +1832,7 @@ void button_update(struct Moby *m) {
         }
     }
     FUN_001f9740(&v->sound_timer);
-    if (D_0014C050[current_level_index][m->mission] == 0xFF) {
+    if (D_0014C050[current_level_index][moby->mission] == 0xFF) {
         pressed = 1;
     }
     if (pressed || v->held != 0) {
@@ -1845,21 +1845,21 @@ void button_update(struct Moby *m) {
             door->state = 3;
             if (v->sound_timer == 0) {
                 FUN_0022da68(0, 0, door);
-                FUN_0022da68(0, 0, m);
+                FUN_0022da68(0, 0, moby);
                 v->sound_timer = scale_game_frames(30);
             }
         }
-        FUN_L00_002502f0_u(m, 0x7F, 0x7F, 0x7F);
+        FUN_L00_002502f0_u(moby, 0x7F, 0x7F, 0x7F);
     } else {
         if (door->state == 4) {
             door->state = 1;
             if (v->sound_timer == 0) {
                 FUN_0022da68(1, 0, door);
-                FUN_0022da68(0, 0, m);
+                FUN_0022da68(0, 0, moby);
                 v->sound_timer = scale_game_frames(30);
             }
         }
-        FUN_L00_002502f0_u(m, 8, 8, 8);
+        FUN_L00_002502f0_u(moby, 8, 8, 8);
     }
 }
 /* Ported from rac1-decomp src/overlays/l10_orxon/vendor_00296BD8.c (func_L10_002DB278) */
