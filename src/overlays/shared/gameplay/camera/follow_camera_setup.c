@@ -1072,7 +1072,7 @@ int FUN_L00_002e7a30(unsigned char *camera_moby) {
     V_2e7a30 position_delta;
     unsigned char *base;
     unsigned char *orbit;
-    unsigned char *e;
+    unsigned char *camera_collision_state;
     struct Hero *g;
     unsigned char *target;
     int i;
@@ -1085,13 +1085,13 @@ int FUN_L00_002e7a30(unsigned char *camera_moby) {
     base = *(unsigned char **)(camera_moby + 0x70);
     target = base + 0x40;
     orbit = base + 0x130;
-    e = base + 0x1D0;
+    camera_collision_state = base + 0x1D0;
     qcopy(dir, orbit);
     dist = 0.0f;
     qcopy(pos, base + 0x90);
     spd = follow_cam_min_distance_gp;
     FUN_001f9bf8_2e7a30(ndir, dir, 1.0f);
-    for (i = 0; i < truncate_float_to_s32(*(float *)(e + 0x40) - 1.0f); i++) {
+    for (i = 0; i < truncate_float_to_s32(*(float *)(camera_collision_state + 0x40) - 1.0f); i++) {
         if (i > 0 && FUN_L00_002e4290_2e7a30(pos) == 0) {
             g = &hero_data;
             if (FUN_L00_001f0d60_2e7a30(pos, D_L00_0015EF5C, ((int)g->moby), spd) &&
@@ -1110,25 +1110,25 @@ int FUN_L00_002e7a30(unsigned char *camera_moby) {
                             int collision_hold_frames = scale_game_frames(0x884);
                             float retraction_increment = D_L00_00161CB8 * frame_scale;
                             lim = D_L00_00161CC8_gp;
-                            *(short *)(e + 0x34) = collision_hold_frames;
-                            *(float *)(e + 0x30) += retraction_increment;
+                            *(short *)(camera_collision_state + 0x34) = collision_hold_frames;
+                            *(float *)(camera_collision_state + 0x30) += retraction_increment;
                             cf = *(float *)(orbit + 0x2C);
-                            if (cf - *(float *)(e + 0x30) < lim) {
-                                *(float *)(e + 0x30) = cf - lim;
+                            if (cf - *(float *)(camera_collision_state + 0x30) < lim) {
+                                *(float *)(camera_collision_state + 0x30) = cf - lim;
                             }
                         }
                     }
                     subtract_vector_xyz(position_delta, pos, target + 0x50);
-                    FUN_001f9bf8_2e7a30(orbit, position_delta, *(float *)(orbit + 0x2C) - *(float *)(e + 0x30));
+                    FUN_001f9bf8_2e7a30(orbit, position_delta, *(float *)(orbit + 0x2C) - *(float *)(camera_collision_state + 0x30));
                     FUN_001f9bf8_2e7a30(ndir, orbit, 1.0f);
                 }
             }
         }
         {
             float tot = *(float *)(orbit + 0x2C);
-            orbit_distance_ratio = (tot - *(float *)(e + 0x30)) / tot;
+            orbit_distance_ratio = (tot - *(float *)(camera_collision_state + 0x30)) / tot;
         }
-        spd += *(float *)(e + 0x44) * *(float *)(e + 0x3C);
+        spd += *(float *)(camera_collision_state + 0x44) * *(float *)(camera_collision_state + 0x3C);
         dist += spd;
         scale_vector_xyz(step, ndir, spd * orbit_distance_ratio);
         add_vector_xyz(pos, pos, step);
