@@ -1690,39 +1690,39 @@ typedef struct {
 } Q_275158;
 
 extern unsigned char *D_L00_001B21A0 __attribute__((section(".data")));
-unsigned char *FUN_L00_00275158(void *a, void *b, int n, float f) {
-    unsigned char *m = p27fe00_alloc(0x48);
-    if (m) {
-        Q_275158 *q;
-        qcopy(m + 0x10, a);
-        *(int *)(m + 4) = 0x7FFFFFFF;
-        m[9] = FUN_001fa6d0_275158(4.0f) + 0x40;
-        m[3] = 0x48;
-        m[1] = 0;
+unsigned char *FUN_L00_00275158(void *position, void *b, int n, float f) {
+    unsigned char *particle = p27fe00_alloc(0x48);
+    if (particle) {
+        Q_275158 *particle_data;
+        qcopy(particle + 0x10, position);
+        *(int *)(particle + 4) = 0x7FFFFFFF;
+        particle[9] = FUN_001fa6d0_275158(4.0f) + 0x40;
+        particle[3] = 0x48;
+        particle[1] = 0;
         if (n >= 0) {
-            *(float *)(m + 0xC) = FUN_002132a8_275158(20000.0f, 40000.0f);
+            *(float *)(particle + 0xC) = FUN_002132a8_275158(20000.0f, 40000.0f);
         } else {
-            *(float *)(m + 0xC) = FUN_002132a8_275158(40000.0f, 80000.0f);
+            *(float *)(particle + 0xC) = FUN_002132a8_275158(40000.0f, 80000.0f);
         }
-        q = (Q_275158 *)(m + 0x20);
-        m[8] = FUN_00213260_275158(8) + 0x1C;
-        m[2] = *D_L00_001B21A0;
-        q->n = n;
-        qcopy(q, b);
-        q->i14 = 0;
-        q->i18 = FUN_00213260_275158(0xC) - 6;
-        ((float *)q)[3] = f;
-        q->unk1C = *(float *)(m + 0xC) * 0.1f;
+        particle_data = (Q_275158 *)(particle + 0x20);
+        particle[8] = FUN_00213260_275158(8) + 0x1C;
+        particle[2] = *D_L00_001B21A0;
+        particle_data->n = n;
+        qcopy(particle_data, b);
+        particle_data->i14 = 0;
+        particle_data->i18 = FUN_00213260_275158(0xC) - 6;
+        ((float *)particle_data)[3] = f;
+        particle_data->unk1C = *(float *)(particle + 0xC) * 0.1f;
         if (n >= 0) {
-            q->unk1C = *(float *)(m + 0xC) * 0.05f;
+            particle_data->unk1C = *(float *)(particle + 0xC) * 0.05f;
             if (FUN_00213260_275158(0x1E) == 0) {
-                q->i14 = -0x28;
+                particle_data->i14 = -0x28;
             } else if (FUN_00213260_275158(0x1E) == 0) {
-                q->i14 = -1;
+                particle_data->i14 = -1;
             }
         }
     }
-    return m;
+    return particle;
 }
 #define NOT_SDA
 
