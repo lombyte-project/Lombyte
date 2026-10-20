@@ -94,7 +94,8 @@ int hero_set_state(int a, int b) {
         HERO_STATE_IDLE_MOTION_CLEARED = 0x67,
         HERO_STATE_DROWN = 0x6A,
         HERO_STATE_PATH_MOTION_ENTRY = 0x74,
-        HERO_STATE_DYING_MOTION_CAPPED = 0x80
+        HERO_STATE_DYING_MOTION_CAPPED = 0x80,
+        HERO_STATE_DYING_HEALTH_CLEARED = 0x82
     };
     int old2088;
     char *moby;
@@ -451,7 +452,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0x5F, 0, (float)scale_game_frames(0xA));
         break;
     }
-    case 0x82: {
+    case HERO_STATE_DYING_HEALTH_CLEARED: {
         struct Hero *p = &hero;
         p->state.control_mode = 0x14;
         p->unk20A7 = 1;
