@@ -496,7 +496,7 @@ DATA_OVERLAYS = {
     "textbin/world/data/select_world_object_resource_tables": (0x1CBBE0, 0xCCB60, 1152),
     "ui/menus/render_level_effects_and_screen_sprites": (0x1CE2C0, 0xCF240, 56),
     "textbin/gameplay/gadgets/load_hand_gadget": (0x1D52E8, 0xD6268, 1776),
-    "assembly/textbin/ui/menus/update_preview_animation_and_attachments": (0x1D6080, 0xD7000, 56),
+    "ui/menus/update_preview_animation_and_attachments": (0x1D6080, 0xD7000, 56),
     "rendering/register_shrub_render_class": (0x1D8030, 0xD8FB0, 128),
     "gameplay/fun_0022e1b0": (0x1D9890, 0xDA810, 384),
     "rendering/effects/build_resident_indexed_texture_warp_meshes": (0x1D9A10, 0xDA990, 32),
