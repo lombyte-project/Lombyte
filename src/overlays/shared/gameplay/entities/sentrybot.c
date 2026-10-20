@@ -2516,29 +2516,29 @@ extern int D_L15_0015FFD8;
 void blend_moby_animation_u(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
 int FUN_L15_002a2868(int idx, void *pos) {
-    short *p = (short *)D_L15_001ABE40[idx];
+    short *group_moby_entry = (short *)D_L15_001ABE40[idx];
     struct Hero *g = &hero;
     do {
-        unsigned char *m = (unsigned char *)D_L15_0015FFD8 + ((*(unsigned short *)p & 0x7FFF) << 8);
-        unsigned char state = m[0x20];
+        unsigned char *listed_moby = (unsigned char *)D_L15_0015FFD8 + ((*(unsigned short *)group_moby_entry & 0x7FFF) << 8);
+        unsigned char state = listed_moby[0x20];
         if (state == 1) {
             char *data;
-            m[0x20] = 2;
-            if (m[0x53] != 0)
-                blend_moby_animation_u(m, 0, 0, 0);
-            *(unsigned short *)(m + 0x34) |= 1;
-            m[0x31] = 0;
-            data = *(char **)(m + 0x78);
-            *(int *)(m + 0x94) = *(int *)(*(char **)(m + 0x24) + 0x10);
+            listed_moby[0x20] = 2;
+            if (listed_moby[0x53] != 0)
+                blend_moby_animation_u(listed_moby, 0, 0, 0);
+            *(unsigned short *)(listed_moby + 0x34) |= 1;
+            listed_moby[0x31] = 0;
+            data = *(char **)(listed_moby + 0x78);
+            *(int *)(listed_moby + 0x94) = *(int *)(*(char **)(listed_moby + 0x24) + 0x10);
             *(float *)(data + 0x64) = random_float_between_alt(-15.0f, 15.0f) * DEG_TO_RAD;
             *(int *)(data + 0x68) = scale_game_frames(0x3C);
-            qcopy(m + 0x10, pos);
-            *(float *)(m + 0x18) -= 1.0f;
-            *(float *)(m + 0x48) = fast_arc_tan(g->motion.pos.f[0] - *(float *)(m + 0x10),
-                                                g->motion.pos.f[1] - *(float *)(m + 0x14));
+            qcopy(listed_moby + 0x10, pos);
+            *(float *)(listed_moby + 0x18) -= 1.0f;
+            *(float *)(listed_moby + 0x48) = fast_arc_tan(g->motion.pos.f[0] - *(float *)(listed_moby + 0x10),
+                                                g->motion.pos.f[1] - *(float *)(listed_moby + 0x14));
             return 1;
         }
-    } while (*p++ > -1);
+    } while (*group_moby_entry++ > -1);
     return 0;
 }
 #include "rnc/gameplay/entities/moby.h"
