@@ -12,7 +12,7 @@ extern s32 sceSifCallRpc();
 #define SIFCMD ((struct SifLoadModuleArgs *)D_00158200)
 s32 _sceSifLoadModuleBuffer(s32 iop_address, s32 size, s32 src, s32 *result_out) {
     s32 var_2_18;
-    s32 temp;
+    s32 rpc_return_value;
 
     var_2_18 = 0xFFFF0000;
     if (_lf_bind() < 0) {
@@ -36,7 +36,7 @@ s32 _sceSifLoadModuleBuffer(s32 iop_address, s32 size, s32 src, s32 *result_out)
     if (sceSifCallRpc(D_00158400, 6, 0, D_00158200, 0x200, D_00158200, 8, 0, 0) < 0) {
         return 0xFFFEFFFF;
     }
-    temp = SIFCMD->unk0;
+    rpc_return_value = SIFCMD->unk0;
     *result_out = SIFCMD->unk4;
-    return temp;
+    return rpc_return_value;
 }
