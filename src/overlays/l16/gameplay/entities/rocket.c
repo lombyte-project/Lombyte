@@ -868,12 +868,12 @@ void FUN_L16_002c9650(struct Moby *moby) {
     fast_vec_add(d, d, &moby->pos);
     moby->pos.z -= 0.1f;
     for (i = 0; i < 4; i++) {
-        float h = sprite_data->a[i] + sprite_data->b[i];
-        sprite_data->a[i] = h;
-        if (255.0f <= h) {
-            sprite_data->a[i] = h - 255.0f;
-        } else if (h <= 0.0f) {
-            sprite_data->a[i] = h + 255.0f;
+        float unwrapped_sprite_value = sprite_data->a[i] + sprite_data->b[i];
+        sprite_data->a[i] = unwrapped_sprite_value;
+        if (255.0f <= unwrapped_sprite_value) {
+            sprite_data->a[i] = unwrapped_sprite_value - 255.0f;
+        } else if (unwrapped_sprite_value <= 0.0f) {
+            sprite_data->a[i] = unwrapped_sprite_value + 255.0f;
         }
         if (FUN_001f9740_c(&sprite_data->c[i])) {
             sprite_data->c[i] = scale_game_frames(0xFF);
