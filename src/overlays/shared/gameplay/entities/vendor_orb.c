@@ -1696,19 +1696,19 @@ extern void FUN_001f9a10_c(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void FUN_001f9a28(float *, float *, float *);
 extern void FUN_001f9a68_c(void *, void *, float) __asm__("FUN_001f9a68");
 
-void FUN_L00_002e46b8(char *a) {
+void FUN_L00_002e46b8(char *camera) {
     Vq4 translation_delta;
     Vq4 camera_translation_adjustment, lateral_displacement;
     char *b = D_L00_00166E10;
-    char *m = *(char **)(a + 0x70);
-    char *m40 = m + 0x40;
+    char *camera_state = *(char **)(camera + 0x70);
+    char *attach_state = camera_state + 0x40;
     char *g, *g3;
     qcopy(&translation_delta, D_0013E533 + 0xF5D);
-    FUN_001f9a10_c(a + 0x30, &translation_delta, a + 0x30);
-    FUN_001f9a10_c(m + 0xA0, &translation_delta, m + 0xA0);
-    FUN_001f9a10_c(m40, &translation_delta, m40);
-    FUN_001f9a10_c(m + 0xD0, &translation_delta, m + 0xD0);
-    FUN_001f9a10_c(m, &translation_delta, m);
+    FUN_001f9a10_c(camera + 0x30, &translation_delta, camera + 0x30);
+    FUN_001f9a10_c(camera_state + 0xA0, &translation_delta, camera_state + 0xA0);
+    FUN_001f9a10_c(attach_state, &translation_delta, attach_state);
+    FUN_001f9a10_c(camera_state + 0xD0, &translation_delta, camera_state + 0xD0);
+    FUN_001f9a10_c(camera_state, &translation_delta, camera_state);
     g = D_0013E533 + 0xE1D;
     if (*(short *)(g + 0x308) == 0) {
         char *p = *(char **)(g + 0x2FC);
@@ -1716,25 +1716,25 @@ void FUN_L00_002e46b8(char *a) {
         if (p == 0 || *(short *)(p + 0xA6) != 0x22D ||
             ((q = b - 0x190), FUN_001f96f8_c(0x1E)) < *(int *)(q + 0x398)) {
             char *g2 = D_0013E533 + 0xE1D;
-            *(float *)(*(char **)(a + 0x70) + 0x1C8) = *(float *)(g2 + 0x14C);
+            *(float *)(*(char **)(camera + 0x70) + 0x1C8) = *(float *)(g2 + 0x14C);
         }
     }
     g3 = D_0013E533 + 0xE1D;
     if ((unsigned)(*(int *)(g3 + 0x2084) - 0xB) < 2) {
-        char *m2 = *(char **)(a + 0x70);
+        char *reloaded_camera_state = *(char **)(camera + 0x70);
         char *camera_up_axis = b + 0x30;
         float translation_up_component;
-        *(short *)(m2 + 0x10) = 0;
+        *(short *)(reloaded_camera_state + 0x10) = 0;
         FUN_001f9a68_c(&camera_translation_adjustment, b + 0x80, *(float *)(b + 0xA4));
         translation_up_component = fast_vec_dot(camera_up_axis, &translation_delta);
         FUN_001f9a68_c(&lateral_displacement, camera_up_axis, translation_up_component);
         FUN_001f9a28((float *)&lateral_displacement, (float *)&translation_delta, (float *)&lateral_displacement);
         FUN_001f9a28((float *)&camera_translation_adjustment, (float *)&camera_translation_adjustment, (float *)&lateral_displacement);
-        FUN_001f9a10_c(a + 0x30, &camera_translation_adjustment, a + 0x30);
-        FUN_001f9a10_c(m40 + 0x60, &camera_translation_adjustment, m40 + 0x60);
-        FUN_001f9a10_c(m40, &camera_translation_adjustment, m40);
-        FUN_001f9a10_c(m40 + 0x90, &camera_translation_adjustment, m40 + 0x90);
-        FUN_001f9a10_c(m2, &camera_translation_adjustment, m2);
+        FUN_001f9a10_c(camera + 0x30, &camera_translation_adjustment, camera + 0x30);
+        FUN_001f9a10_c(attach_state + 0x60, &camera_translation_adjustment, attach_state + 0x60);
+        FUN_001f9a10_c(attach_state, &camera_translation_adjustment, attach_state);
+        FUN_001f9a10_c(attach_state + 0x90, &camera_translation_adjustment, attach_state + 0x90);
+        FUN_001f9a10_c(reloaded_camera_state, &camera_translation_adjustment, reloaded_camera_state);
     }
 }
 typedef float V4[4] __attribute__((aligned(16)));
