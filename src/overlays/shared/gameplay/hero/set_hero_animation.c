@@ -1678,16 +1678,16 @@ void FUN_0020cb10_00234b38(void *, s32, void *) __asm__("FUN_0020cb10");
 void FUN_L00_00234a50_00234b38(void *) __asm__("FUN_L00_00234a50");
 void FUN_L00_00234b38(void *a) {
     f32 scale_factor = D_0015EE14;
-    A_00234b38 *q;
+    A_00234b38 *scale_state;
     s32 level_index;
     if (D_L00_0015F5C4_00234b38[0] == 6 && 1.33f < scale_factor)
         scale_factor = 1.33f;
-    q = &D_L00_0017C340_00234b38;
-    if (q->b1 == 0) {
-        FUN_0020cb10_00234b38(a, 0x18, q);
-        q->f20 = scale_factor;
-        q->f24 = scale_factor;
-        q->f28 = scale_factor;
+    scale_state = &D_L00_0017C340_00234b38;
+    if (scale_state->b1 == 0) {
+        FUN_0020cb10_00234b38(a, 0x18, scale_state);
+        scale_state->f20 = scale_factor;
+        scale_state->f24 = scale_factor;
+        scale_state->f28 = scale_factor;
     }
     level_index = current_level_index;
     if (level_index == 2 || level_index == 9 || level_index == 11 || level_index == 13) {
