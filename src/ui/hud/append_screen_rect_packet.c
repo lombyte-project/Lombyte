@@ -6,26 +6,26 @@ void append_screen_rect_packet(s32 x0, s32 y0, s32 x1, s32 y1, u64 prim,
                                s32 pixels) __asm__("FUN_00200e08");
 
 void append_screen_rect_packet(s32 x0, s32 y0, s32 x1, s32 y1, u64 prim, s32 pixels) {
-    u64 *q;
+    u64 *packet_words;
 
     render_packet_cursor.tag->tag = 0x10000003;
     render_packet_cursor.tag->addr = 0;
     render_packet_cursor.tag->vif0 = 0;
     render_packet_cursor.tag->vif1 = 0x50000003;
-    q = (u64 *)render_packet_cursor.tag++;
-    q[2] = (u64)0x8800 << 47 | 1;
-    q[3] = 0x4410;
-    q[4] = 0x46;
-    q[5] = prim;
+    packet_words = (u64 *)render_packet_cursor.tag++;
+    packet_words[2] = (u64)0x8800 << 47 | 1;
+    packet_words[3] = 0x4410;
+    packet_words[4] = 0x46;
+    packet_words[5] = prim;
     if (pixels != 0) {
-        q[6] = (x0 + screen_extent.left - 8) | ((u64)(y0 + screen_extent.top - 8) << 16) |
+        packet_words[6] = (x0 + screen_extent.left - 8) | ((u64)(y0 + screen_extent.top - 8) << 16) |
                (u64)0xFFFFF000 << 24;
-        q[7] = (x1 + screen_extent.left - 8) | ((u64)(y1 + screen_extent.top - 8) << 16) |
+        packet_words[7] = (x1 + screen_extent.left - 8) | ((u64)(y1 + screen_extent.top - 8) << 16) |
                (u64)0xFFFFF000 << 24;
     } else {
-        q[6] = ((x0 << 4) + screen_extent.left - 0x10) |
+        packet_words[6] = ((x0 << 4) + screen_extent.left - 0x10) |
                ((u64)((y0 << 4) + screen_extent.top - 0x10) << 16) | (u64)0xFFFFF000 << 24;
-        q[7] = ((x1 << 4) + screen_extent.left - 0x10) |
+        packet_words[7] = ((x1 << 4) + screen_extent.left - 0x10) |
                ((u64)((y1 << 4) + screen_extent.top - 0x10) << 16) | (u64)0xFFFFF000 << 24;
     }
     render_packet_cursor.tag += 3;
