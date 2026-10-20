@@ -44,8 +44,8 @@ extern f32 vendor_spring(f32 *value, f32 target, f32 *speed, f32 accel, f32 dece
 
 /* Grind rail: measures its paths once, then while the hero is in control mode 0x10 snaps it to the nearest path
    point in range and pulls it along, faster on level 1 the more rail is left. */
-void FUN_L01_002f6328(struct Moby *m) {
-    RailVars *d = (RailVars *)m->pvars;
+void FUN_L01_002f6328(struct Moby *rail_moby) {
+    RailVars *rail_vars = (RailVars *)rail_moby->pvars;
     RailPath *path;
     RailPath *best_path;
     Vec4 best_pt;
@@ -63,27 +63,27 @@ void FUN_L01_002f6328(struct Moby *m) {
     f32 rate;
     s32 i, j, k, n, end;
 
-    if (d == 0 || d->paths[0] == -1 || d->count == 0) {
+    if (rail_vars == 0 || rail_vars->paths[0] == -1 || rail_vars->count == 0) {
         return;
     }
-    if (d->ready == 0) {
-        d->ready = 1;
-        for (i = 0; i < d->count; i++) {
-            RailPath *p = D_L01_001B0930[d->paths[i]];
-            for (j = 0; j < p->count - 1; j++) {
-                p->pts[j].f[3] = FUN_001f9b48(&p->pts[j], &p->pts[j + 1]);
+    if (rail_vars->ready == 0) {
+        rail_vars->ready = 1;
+        for (i = 0; i < rail_vars->count; i++) {
+            RailPath *measured_path = D_L01_001B0930[rail_vars->paths[i]];
+            for (j = 0; j < measured_path->count - 1; j++) {
+                measured_path->pts[j].f[3] = FUN_001f9b48(&measured_path->pts[j], &measured_path->pts[j + 1]);
             }
-            p->pts[j].f[3] = FUN_001f9b48(&p->pts[j], &p->pts[0]);
+            measured_path->pts[j].f[3] = FUN_001f9b48(&measured_path->pts[j], &measured_path->pts[0]);
         }
-        m->update_dist = 0xFF;
+        rail_moby->update_dist = 0xFF;
     }
     if (hero.state.control_mode != 0x10) {
         return;
     }
     best = 9999.0f;
     best_path = 0;
-    for (k = 0; k < d->count; k++) {
-        path = D_L01_001B0930[d->paths[k]];
+    for (k = 0; k < rail_vars->count; k++) {
+        path = D_L01_001B0930[rail_vars->paths[k]];
         FUN_L00_0025df68(path, &hero.motion.pos, &pt, &seg, &t, 0, 999.0f, 5.0f, 0.0f);
         dist = vector_distance(&hero.motion.pos, &pt);
         if (dist < best) {
@@ -98,7 +98,7 @@ void FUN_L01_002f6328(struct Moby *m) {
         return;
     }
     end = sample_path(best_path, &pt, &best_seg, &best_t, 0, 0.3f);
-    if (d->range < best) {
+    if (rail_vars->range < best) {
         return;
     }
     if (D_0015ED84 == 1) {
@@ -107,13 +107,13 @@ void FUN_L01_002f6328(struct Moby *m) {
             left += best_path->pts[n].f[3];
         }
         if (left < 8.0f) {
-            d->speed = frame_time * 3.0f;
+            rail_vars->speed = frame_time * 3.0f;
         } else if (left < 15.0f) {
-            d->speed = frame_time * 4.0f;
+            rail_vars->speed = frame_time * 4.0f;
         } else if (left < 30.0f) {
-            d->speed = frame_time * 5.0f;
+            rail_vars->speed = frame_time * 5.0f;
         } else {
-            d->speed = frame_time * 9.0f;
+            rail_vars->speed = frame_time * 9.0f;
         }
     }
     if (end == 0) {
@@ -121,10 +121,10 @@ void FUN_L01_002f6328(struct Moby *m) {
         hero.unk9D4 = fast_arc_tan(vector_length_xy(&dir), dir.f[2]);
         hero.unk9D0 = fast_arc_tan(dir.f[0], dir.f[1]);
         dir.i[2] = 0;
-        if (hero.unk9DC < d->speed) {
-            approach_value(&hero.unk9DC, d->speed, frame_time_sq * 6.0f);
+        if (hero.unk9DC < rail_vars->speed) {
+            approach_value(&hero.unk9DC, rail_vars->speed, frame_time_sq * 6.0f);
         } else {
-            approach_value(&hero.unk9DC, d->speed, frame_time_sq * 6.0f);
+            approach_value(&hero.unk9DC, rail_vars->speed, frame_time_sq * 6.0f);
         }
         if (0.001f < fast_vec_length(&dir)) {
             fast_vec_normalize(&hero.motion.platform_delta, &dir, hero.unk9DC);
