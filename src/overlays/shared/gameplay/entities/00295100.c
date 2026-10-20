@@ -1151,19 +1151,19 @@ extern void relocate_asset_entry_pointers_alt(char *arg0, int idx) __asm__("FUN_
 extern unsigned char D_L00_00197BCC __attribute__((section(".data")));
 void FUN_L00_0029a330(void) {
     int i;
-    int *p;
+    int *entry_offset_cursor;
     char *base;
     int v;
     v = D_L00_001CA4C0_d[6] + 0x80000;
     FlushCache(0);
     fast_decompress(v, D_L00_001CA4C0_d[6]);
     FlushCache(0);
-    p = (int *)D_L00_001CA4C0_d[6];
+    entry_offset_cursor = (int *)D_L00_001CA4C0_d[6];
     base = D_L00_00197300_d[D_L00_00197BCC];
     for (i = 0; i < 16; i++) {
-        int e = *p++;
-        if (e) {
-            *(int *)(base + 0x48 + i * 4) = D_L00_001CA4C0_d[6] + e;
+        int entry_offset = *entry_offset_cursor++;
+        if (entry_offset) {
+            *(int *)(base + 0x48 + i * 4) = D_L00_001CA4C0_d[6] + entry_offset;
             relocate_asset_entry_pointers_alt(base, i);
         }
     }
