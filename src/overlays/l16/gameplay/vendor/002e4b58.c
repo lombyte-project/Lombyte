@@ -144,17 +144,17 @@ extern char D_L16_001D96E0[];
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 
-void FUN_L16_002e4f30(struct Moby *a) {
-    char *data = (char *)a->pvars;
+void FUN_L16_002e4f30(struct Moby *moby) {
+    char *data = (char *)moby->pvars;
     int idx = *(int *)(data + 0xa0);
     if (idx != -1) {
-        char *p = D_L16_001B0930[idx];
-        if (*(int *)p == 7) {
+        char *table_entry = D_L16_001B0930[idx];
+        if (*(int *)table_entry == 7) {
             int i;
             struct Hero *g;
             for (i = 0; i < 7; i++) {
-                transform_vector_by_basis(p + 0x10 + i * 16, D_L16_001D96E0 + i * 16, &a->rot_row0);
-                add_vector_xyz(p + 0x10 + i * 16, p + 0x10 + i * 16, &a->pos);
+                transform_vector_by_basis(table_entry + 0x10 + i * 16, D_L16_001D96E0 + i * 16, &moby->rot_row0);
+                add_vector_xyz(table_entry + 0x10 + i * 16, table_entry + 0x10 + i * 16, &moby->pos);
             }
             g = &hero;
             *(unsigned short *)&g->unk22DA = *(unsigned short *)(data + 0xa0);
