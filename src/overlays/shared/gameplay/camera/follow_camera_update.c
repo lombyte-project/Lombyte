@@ -763,7 +763,7 @@ void FUN_L00_002ea810(A_2ea810 *arg) {
     float b2[4];
     float *v;
     float len;
-    float f;
+    float dot_product_or_asin_result;
 
     if (hero.unk2284 == 0x51 || hero.unk2284 == 4) {
         return;
@@ -776,18 +776,18 @@ void FUN_L00_002ea810(A_2ea810 *arg) {
         return;
     }
     v = Q.v1C0;
-    f = FUN_001f9ab0_2ea810(v, arg);
-    FUN_001f9a68_2ea810(b0, v, f);
+    dot_product_or_asin_result = FUN_001f9ab0_2ea810(v, arg);
+    FUN_001f9a68_2ea810(b0, v, dot_product_or_asin_result);
     FUN_001f9a28_2ea810(b1, arg, b0);
-    f = FUN_001f9ab0_2ea810(v, ((char *)hero.moby) + 0xC0);
-    FUN_001f9a68_2ea810(b0, v, f);
+    dot_product_or_asin_result = FUN_001f9ab0_2ea810(v, ((char *)hero.moby) + 0xC0);
+    FUN_001f9a68_2ea810(b0, v, dot_product_or_asin_result);
     FUN_001f9a28_2ea810(b2, ((char *)hero.moby) + 0xC0, b0);
     len = FUN_001f9af0_2ea810(b2);
     if (len != 0.0f) {
         len *= FUN_001f9af0_2ea810(b1);
         if (len != 0.0f) {
-            f = FUN_001f9df8_2ea810(FUN_001f9ab0_2ea810(b2, b1) / len);
-            if (1.5707964f - f >= 1.3962634f) {
+            dot_product_or_asin_result = FUN_001f9df8_2ea810(FUN_001f9ab0_2ea810(b2, b1) / len);
+            if (1.5707964f - dot_product_or_asin_result >= 1.3962634f) {
                 Q.s270 = 0;
                 arg->s7E = 4;
                 return;
