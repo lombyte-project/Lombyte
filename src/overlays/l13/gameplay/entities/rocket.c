@@ -1624,15 +1624,15 @@ void FUN_L13_00309e88(struct Moby *moby) {
         break;
     }
     case BOBBING_PLATFORM_UPDATE: {
-        struct Hero *h;
+        struct Hero *hero_context;
         f = b->top;
         f -= b->bottom;
         f *= 0.5f;
         moby->pos.z = b->bottom + (fast_cos(b->angle) * f + f);
-        h = &hero;
-        if (h->state.control_mode != 0x14 && h->state.control_mode != 0x19 &&
-            h->state.current != 0x3D && h->state.current != 0x7B &&
-            h->state.current != 0x7C)
+        hero_context = &hero;
+        if (hero_context->state.control_mode != 0x14 && hero_context->state.control_mode != 0x19 &&
+            hero_context->state.current != 0x3D && hero_context->state.current != 0x7B &&
+            hero_context->state.current != 0x7C)
             b->angle = fast_add_rotations(b->angle, b->speed);
         Tiles_9e88[b->idx].c1C = D_L13_001CAB80.c3C;
         Tiles_9e88[b->idx].c1D = D_L13_001CAB80.c3D;
