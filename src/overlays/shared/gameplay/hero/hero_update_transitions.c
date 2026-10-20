@@ -165,6 +165,7 @@ void hero_update_transitions(void) {
         HERO_STATE_LEDGE_HANG = 25,
         HERO_STATE_LEDGE_SHIMMY_YAW_PLUS_90 = 26,
         HERO_STATE_LEDGE_SHIMMY_YAW_MINUS_90 = 27,
+        HERO_STATE_LEDGE_HANG_JUMP = 28,
         HERO_STATE_GRIND_JUMP = 41,
         HERO_STATE_GRIND_RAIL_TRANSFER = 42,
         HERO_STATE_GRIND_ATTACK = 43,
@@ -2022,7 +2023,7 @@ void hero_update_transitions(void) {
                 case HERO_STATE_PACK_LONG_JUMP:
                 case 17:
                 case 18:
-                case 28:
+                case HERO_STATE_LEDGE_HANG_JUMP:
                 case 60:
                 case 105:
                     if (hero.unk4AE != 0) {
