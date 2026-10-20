@@ -503,22 +503,22 @@ void FUN_L00_00267a08_0026a5b8(unsigned char *) __asm__("FUN_L00_00267a08");
 float FUN_001fa6c0_0026a5b8(int) __asm__("FUN_001fa6c0");
 int FUN_001fa6e0_0026a5b8(int, int, float) __asm__("FUN_001fa6e0");
 int FUN_001f96f8_0026a5b8(int) __asm__("FUN_001f96f8");
-void FUN_L00_0026a5b8(unsigned char *p) {
-    int *e = (int *)(p + 0x20);
-    FUN_001f9a10_0026a5b8(p + 0x10, p + 0x10, e);
-    if (FUN_001f9770_0026a5b8(p + 0xa)) {
-        FUN_L00_00267a08_0026a5b8(p);
+void FUN_L00_0026a5b8(unsigned char *particle) {
+    int *particle_data = (int *)(particle + 0x20);
+    FUN_001f9a10_0026a5b8(particle + 0x10, particle + 0x10, particle_data);
+    if (FUN_001f9770_0026a5b8(particle + 0xa)) {
+        FUN_L00_00267a08_0026a5b8(particle);
         return;
     }
-    *(float *)(p + 0xc) += *(float *)&e[7];
-    *(int *)(p + 4) =
-        FUN_001fa6e0_0026a5b8(e[5], e[4], *(short *)(p + 0xa) / FUN_001fa6c0_0026a5b8(e[6]));
-    if (*(short *)(p + 0xa) < FUN_001f96f8_0026a5b8(6)) {
-        unsigned char a = p[7];
-        *(int *)(p + 4) = (*(int *)(p + 4) & 0xFFFFFF) |
-                          ((*(short *)(p + 0xa) * a / FUN_001f96f8_0026a5b8(6)) << 24);
+    *(float *)(particle + 0xc) += *(float *)&particle_data[7];
+    *(int *)(particle + 4) =
+        FUN_001fa6e0_0026a5b8(particle_data[5], particle_data[4], *(short *)(particle + 0xa) / FUN_001fa6c0_0026a5b8(particle_data[6]));
+    if (*(short *)(particle + 0xa) < FUN_001f96f8_0026a5b8(6)) {
+        unsigned char alpha_before_fade = particle[7];
+        *(int *)(particle + 4) = (*(int *)(particle + 4) & 0xFFFFFF) |
+                          ((*(short *)(particle + 0xa) * alpha_before_fade / FUN_001f96f8_0026a5b8(6)) << 24);
     }
-    p[2] = D_L00_001B20A0_0026a5b8[(e[6] - *(short *)(p + 0xa)) * 10 / e[6]];
+    particle[2] = D_L00_001B20A0_0026a5b8[(particle_data[6] - *(short *)(particle + 0xa)) * 10 / particle_data[6]];
 }
 int FUN_001f9740_0026a6f0(void *) __asm__("FUN_001f9740");
 void FUN_L00_00267a08_0026a6f0(unsigned char *) __asm__("FUN_L00_00267a08");
