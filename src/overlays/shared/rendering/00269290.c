@@ -3044,10 +3044,10 @@ extern void FUN_L00_00267a08_26ff10(Moby_26ff10 *) __asm__("FUN_L00_00267a08");
 extern f32 FUN_001fa6c0_26ff10(s32) __asm__("FUN_001fa6c0");
 extern s32 FUN_001fa6d0_26ff10(f32) __asm__("FUN_001fa6d0");
 
-void FUN_L00_0026ff10(Moby_26ff10 *p) {
+void FUN_L00_0026ff10(Moby_26ff10 *particle) {
     VV_26ff10 v0u;
     VV_26ff10 v1u;
-    S_26ff10 c;
+    S_26ff10 collision_parameters;
     f32 collision_offset[4];
     PV_26ff10 *pv;
     Moby_26ff10 *r;
@@ -3057,53 +3057,53 @@ void FUN_L00_0026ff10(Moby_26ff10 *p) {
     s64 hit;
     s32 k, mode, kk2, t;
     void *aux, *col, *pa, *pb;
-    f32 f, g, s;
+    f32 f, g, alpha_factor;
 
-    pv = &p->pv;
-    if (p->h0A != 0 && FUN_001f9770_26ff10(&p->h0A) != 0) {
+    pv = &particle->pv;
+    if (particle->h0A != 0 && FUN_001f9770_26ff10(&particle->h0A) != 0) {
         f32 sp, lo, hi, sc, zero, nsp;
         pv->f18 |= 0x88;
         lo = 0.5f;
-        sp = p->f0C / 900000.0f;
+        sp = particle->f0C / 900000.0f;
         hi = 0.7f;
         sc = 0.2f;
-        p->f0C = p->f0C * 0.8f;
+        particle->f0C = particle->f0C * 0.8f;
         zero = 0.0f;
         f = FUN_002132a8_26ff10(lo, hi);
         nsp = -sp;
         FUN_001f9a68_26ff10(v0u.f, pv, f);
-        v1u.f[0] = p->posv.f[0] + FUN_002132a8_26ff10(nsp, sp);
-        v1u.f[1] = p->posv.f[1] + FUN_002132a8_26ff10(nsp, sp);
-        v1u.f[2] = p->posv.f[2] + FUN_002132a8_26ff10(nsp, sp);
-        v0u.f[0] = v0u.f[0] + FUN_002132a8_26ff10(-p->pv.x * sc, p->pv.x * sc);
+        v1u.f[0] = particle->posv.f[0] + FUN_002132a8_26ff10(nsp, sp);
+        v1u.f[1] = particle->posv.f[1] + FUN_002132a8_26ff10(nsp, sp);
+        v1u.f[2] = particle->posv.f[2] + FUN_002132a8_26ff10(nsp, sp);
+        v0u.f[0] = v0u.f[0] + FUN_002132a8_26ff10(-particle->pv.x * sc, particle->pv.x * sc);
         v0u.f[1] = v0u.f[1] + FUN_002132a8_26ff10(-pv->y * sc, pv->y * sc);
         v0u.f[2] = v0u.f[2] + FUN_002132a8_26ff10(-pv->z * sc, zero);
         r = FUN_L00_0026fd28_26ff10(v1u.f, v0u.f, 0x88, pv->f1C);
         if (r != 0) {
             r->h0A = FUN_001f96f8_26ff10(2);
-            r->f0C = p->f0C;
+            r->f0C = particle->f0C;
         }
         FUN_001f9a68_26ff10(pv, pv, FUN_002132a8_26ff10(lo, hi));
-        p->pv.x = p->pv.x + FUN_002132a8_26ff10(-p->pv.x * sc, p->pv.x * sc);
+        particle->pv.x = particle->pv.x + FUN_002132a8_26ff10(-particle->pv.x * sc, particle->pv.x * sc);
         pv->y = pv->y + FUN_002132a8_26ff10(-pv->y * sc, pv->y * sc);
         pv->z = pv->z + FUN_002132a8_26ff10(-pv->z * sc, zero);
-        p->posv.f[0] = p->posv.f[0] + FUN_002132a8_26ff10(nsp, sp);
-        p->posv.f[1] = p->posv.f[1] + FUN_002132a8_26ff10(nsp, sp);
-        p->posv.f[2] = p->posv.f[2] + FUN_002132a8_26ff10(nsp, sp);
+        particle->posv.f[0] = particle->posv.f[0] + FUN_002132a8_26ff10(nsp, sp);
+        particle->posv.f[1] = particle->posv.f[1] + FUN_002132a8_26ff10(nsp, sp);
+        particle->posv.f[2] = particle->posv.f[2] + FUN_002132a8_26ff10(nsp, sp);
     }
     tab = D_L00_001B20B0_26ff10;
-    p->b02 = tab[(p->h0A + pv->f16 + (p->b02 - tab[0])) & 7];
-    FUN_001f9a10_26ff10(v0u.f, p->posv.f, pv);
+    particle->b02 = tab[(particle->h0A + pv->f16 + (particle->b02 - tab[0])) & 7];
+    FUN_001f9a10_26ff10(v0u.f, particle->posv.f, pv);
     k = pv->f14;
     if (FUN_001f96f8_26ff10(3) < k) {
-        FUN_001f9a28_26ff10(v1u.f, p->posv.f, pv);
+        FUN_001f9a28_26ff10(v1u.f, particle->posv.f, pv);
     } else {
-        v1u.q_26ff10 = p->posv.q_26ff10;
+        v1u.q_26ff10 = particle->posv.q_26ff10;
     }
-    FUN_001f9a68_26ff10(&c, &c, 0.01f);
+    FUN_001f9a68_26ff10(&collision_parameters, &collision_parameters, 0.01f);
     fl = pv->f18;
     if (fl & 8) {
-        if ((p->f04 & 0xFF000000) == 0)
+        if ((particle->f04 & 0xFF000000) == 0)
             goto kill;
         pv->f18 = fl | 8;
         col = pv->f1C;
@@ -3112,15 +3112,15 @@ void FUN_L00_0026ff10(Moby_26ff10 *p) {
         mode = 4;
         aux = 0;
     } else {
-        c.f10 = pv->f1C;
-        c.f14 = 0x10001;
-        c.f1C = 1.0f;
-        c.v_26ff10.q_26ff10 = *(U128 *)pv;
+        collision_parameters.f10 = pv->f1C;
+        collision_parameters.f14 = 0x10001;
+        collision_parameters.f1C = 1.0f;
+        collision_parameters.v_26ff10.q_26ff10 = *(U128 *)pv;
         if (fl & 0x40)
-            FUN_001f99f8_26ff10(&c);
-        c.unk20 = 1;
+            FUN_001f99f8_26ff10(&collision_parameters);
+        collision_parameters.unk20 = 1;
         col = pv->f1C;
-        aux = &c;
+        aux = &collision_parameters;
         pa = v1u.f;
         pb = v0u.f;
         mode = 0;
@@ -3131,30 +3131,30 @@ void FUN_L00_0026ff10(Moby_26ff10 *p) {
         FUN_L00_001ff660_26ff10(pv, pv, D_L00_00173E80_26ff10);
         FUN_001f9a68_26ff10(pv, pv, 0.02f);
         FUN_001f9bf8_26ff10(collision_offset, D_L00_00173E80_26ff10, 0.055f);
-        FUN_001f9a10_26ff10(p->posv.f, D_L00_00173E80_26ff10 - 8, collision_offset);
-        if (p->f0C < 200000.0f && (pv->f18 & 8) == 0) {
-            p->f0C = p->f0C + p->f0C;
+        FUN_001f9a10_26ff10(particle->posv.f, D_L00_00173E80_26ff10 - 8, collision_offset);
+        if (particle->f0C < 200000.0f && (pv->f18 & 8) == 0) {
+            particle->f0C = particle->f0C + particle->f0C;
         }
         pv->f18 |= 8;
     } else {
-        qcopy(p->posv.f, v0u.f);
+        qcopy(particle->posv.f, v0u.f);
     }
     if (pv->f18 & 8) {
         f32 d = D_0015ED60_26ff10;
         f32 n;
         kk2 = 8.0f / (d * 0.443f);
         pv->f16++;
-        n = p->f0C - 260000.0f / (f32)kk2 * d * 1.25f;
-        p->f0C = n;
+        n = particle->f0C - 260000.0f / (f32)kk2 * d * 1.25f;
+        particle->f0C = n;
         if (n <= 0.0f) {
         kill:
-            FUN_L00_00267a08_26ff10(p);
+            FUN_L00_00267a08_26ff10(particle);
             return;
         }
     } else {
         f32 d = D_0015ED60_26ff10;
         kk2 = 8.0f / (d * 0.443f);
-        p->f0C = p->f0C + 260000.0f / (f32)kk2 * d;
+        particle->f0C = particle->f0C + 260000.0f / (f32)kk2 * d;
     }
     f = FUN_001fa6c0_26ff10(pv->f14);
     {
@@ -3162,16 +3162,16 @@ void FUN_L00_0026ff10(Moby_26ff10 *p) {
         f32 kk;
         kk2 = 8.0f / (d * 0.443f);
         kk = (f32)kk2;
-        s = 0.08f / kk * d * (f / kk) + 0.08f;
-        if (s < 0.0f)
-            s = 0.0f;
-        if (0.08f < s)
-            s = 0.08f;
+        alpha_factor = 0.08f / kk * d * (f / kk) + 0.08f;
+        if (alpha_factor < 0.0f)
+            alpha_factor = 0.0f;
+        if (0.08f < alpha_factor)
+            alpha_factor = 0.08f;
     }
     if (pv->f18 & 8) {
-        s = s / ((f32)pv->f16 / 7.0f + 1.0f);
+        alpha_factor = alpha_factor / ((f32)pv->f16 / 7.0f + 1.0f);
     }
-    p->f04 = (p->f04 & 0xFFFFFF) | (FUN_001fa6d0_26ff10(s * 256.0f) << 24);
+    particle->f04 = (particle->f04 & 0xFFFFFF) | (FUN_001fa6d0_26ff10(alpha_factor * 256.0f) << 24);
     pv->z = pv->z + frame_scale_sq * 0.008f;
     t = pv->f14;
     if (FUN_001f96f8_26ff10(25) < t || (pv->f18 & 8)) {
@@ -3193,7 +3193,7 @@ void FUN_L00_0026ff10(Moby_26ff10 *p) {
         pv->t = pv->t - 1.0f;
     if (pv->t < 0.0f)
         pv->t = pv->t + 1.0f;
-    p->f08 = (s32)(pv->t * 256.0f);
+    particle->f08 = (s32)(pv->t * 256.0f);
 }
 #define NOT_SDA
 
