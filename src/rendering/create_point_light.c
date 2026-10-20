@@ -48,7 +48,7 @@ void create_point_light(s32 i) {
     Vec sphere;
     TieInstance *tie;
     ShrubInstance *shrub;
-    Obj40 *m;
+    Obj40 *object_record_cursor;
     s32 tie_index;
     s32 n2;
     s32 shrub_index;
@@ -87,19 +87,19 @@ void create_point_light(s32 i) {
         if (instance_index_cursor < end) {
             slot->n1 = slot->c0;
             scale_vector(&sphere, &sphere, 1024.0f);
-            m = D_00160E8C;
-            for (n2 = 0; n2 < D_00160E90; n2++, m++) {
-                if (FUN_001f9bb0(&sphere, m)) {
+            object_record_cursor = D_00160E8C;
+            for (n2 = 0; n2 < D_00160E90; n2++, object_record_cursor++) {
+                if (FUN_001f9bb0(&sphere, object_record_cursor)) {
                     *instance_index_cursor++ = n2;
-                    v = m->lights;
+                    v = object_record_cursor->lights;
                     if (v == 0xFFFF) {
-                        m->lights = i | 0xFFF0;
+                        object_record_cursor->lights = i | 0xFFF0;
                     } else if ((v & 0xFFF0) == 0xFFF0) {
-                        m->lights = (v & 0xFF0F) | (i << 4);
+                        object_record_cursor->lights = (v & 0xFF0F) | (i << 4);
                     } else if ((v & 0xFF00) == 0xFF00) {
-                        m->lights = (v & 0xF0FF) | (i << 8);
+                        object_record_cursor->lights = (v & 0xF0FF) | (i << 8);
                     } else if ((v & 0xF000) == 0xF000) {
-                        m->lights = (v & 0x0FFF) | (i << 12);
+                        object_record_cursor->lights = (v & 0x0FFF) | (i << 12);
                     } else {
                         instance_index_cursor--;
                     }
