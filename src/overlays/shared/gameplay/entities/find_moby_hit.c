@@ -508,6 +508,10 @@ extern float FUN_002132a8_25aca0(float, float) __asm__("FUN_002132a8");
 extern float FUN_00213308_25aca0(void) __asm__("FUN_00213308");
 
 int FUN_L00_0025aca0(float density, unsigned char *entity, int maximum, Vec4_25aca0 *out, int mask) {
+    enum {
+        SHAPE_INDEXED_CENTER_SPHERE = 2,
+        SHAPE_ENDPOINT_SEGMENT_WITH_BALL_OFFSET = 4
+    };
     float weights[20];
     unsigned char *entries[20];
     Vec4_25aca0 first, second, third, fourth, fifth;
@@ -545,7 +549,7 @@ int FUN_L00_0025aca0(float density, unsigned char *entity, int maximum, Vec4_25a
                     switch (type) {
                     case 0:
                     case 1:
-                    case 2: {
+                    case SHAPE_INDEXED_CENTER_SPHERE: {
                         if (type < 2) {
                             qcopy(&first, (void *)((entry + 0x10)));
                             FUN_001f9a80_25aca0(*(float *)(entity + 0x2c) * 0.0009765625f, &first, &first);
@@ -571,7 +575,7 @@ int FUN_L00_0025aca0(float density, unsigned char *entity, int maximum, Vec4_25a
                           weights[count] = radius * 4.187743f * radius * radius + radius * 1.5707964f * radius * extent;
                         break;
                     }
-                    case 4: {
+                    case SHAPE_ENDPOINT_SEGMENT_WITH_BALL_OFFSET: {
                         FUN_001251e8_25aca0(*(float *)(entity + 0x2c) * 0.0009765625f, &first, (void *)(0x70000000 + (*(short *)list << 4)));
                         FUN_001251e8_25aca0(*(float *)(entity + 0x2c) * 0.0009765625f, &second, (void *)(0x70000000 + (*(short *)(list + 2) << 4)));
                         FUN_001f9a28_25aca0(&third, &first, &second);
@@ -602,7 +606,7 @@ int FUN_L00_0025aca0(float density, unsigned char *entity, int maximum, Vec4_25a
         switch (type = *entry) {
         case 0:
         case 1:
-        case 2: {
+        case SHAPE_INDEXED_CENTER_SPHERE: {
             float radius, extent;
             if (type < 2) {
                 qcopy(&first, (void *)((entry + 0x10)));
@@ -651,7 +655,7 @@ int FUN_L00_0025aca0(float density, unsigned char *entity, int maximum, Vec4_25a
             FUN_001f9a10_25aca0(&out[emitted], &first, &second);
             break;
         }
-        case 4: {
+        case SHAPE_ENDPOINT_SEGMENT_WITH_BALL_OFFSET: {
             float extent, weight;
             list = entry + 4;
             FUN_001251e8_25aca0(*(float *)(entity + 0x2c), &first, (void *)(0x70000000 + (*(short *)list << 4)));
