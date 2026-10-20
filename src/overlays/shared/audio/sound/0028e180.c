@@ -28,57 +28,57 @@ extern void enqueue_callback_list_1_alt(void (*)(void), void *) __asm__("FUN_001
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 s32 try_set_help_message(s32 arg0, s32 arg1) __asm__("FUN_00215130");
 
-void FUN_L00_0028e180(unsigned char *m) {
-    char *d = *(char **)(m + 0x78);
-    float *p;
-    float tmp[4];
+void FUN_L00_0028e180(unsigned char *moby) {
+    char *d = *(char **)(moby + 0x78);
+    float *moby_position;
+    float proximity_test_position[4];
     int v;
     int one;
     unsigned char *q;
 
-    if (m[0x20] != 0x2A) {
-        if (m[0x31] != 0) {
-            m[0xBC] += 2;
-            v = (int)(fast_cos(convert_integer_to_float((unsigned char)m[0xBC] - 0x80) *
+    if (moby[0x20] != 0x2A) {
+        if (moby[0x31] != 0) {
+            moby[0xBC] += 2;
+            v = (int)(fast_cos(convert_integer_to_float((unsigned char)moby[0xBC] - 0x80) *
                                0.024543693f) *
                       50.0f) +
                 0x96;
-            if (*(short *)(m + 0xA6) == 0x215) {
-                *(int *)(m + 0x90) = (v >> 1) | (v << 8) | (v << 16);
+            if (*(short *)(moby + 0xA6) == 0x215) {
+                *(int *)(moby + 0x90) = (v >> 1) | (v << 8) | (v << 16);
             } else {
-                *(int *)(m + 0x90) = v | (v << 8) | (v << 16);
+                *(int *)(moby + 0x90) = v | (v << 8) | (v << 16);
             }
-            enqueue_callback_list_1_alt(render_environment_mapped_object, m);
-            if (vector_distance(m + 0x10, D_L00_00166DC0) < 32.0f) {
-                enqueue_callback_list_1_alt(draw_light_flare, m);
+            enqueue_callback_list_1_alt(render_environment_mapped_object, moby);
+            if (vector_distance(moby + 0x10, D_L00_00166DC0) < 32.0f) {
+                enqueue_callback_list_1_alt(draw_light_flare, moby);
             }
         }
-        p = (float *)(m + 0x10);
+        moby_position = (float *)(moby + 0x10);
         if (*(short *)(d + 0xC) != 0) {
-            transform_vector_by_basis(tmp, D_L00_001BD880 + ship_index[0] * 16, m + 0xC0);
-            add_vector_xyz(tmp, tmp, p);
-            if (FUN_001f9b48(tmp, &hero.motion.pos) > 4.1f) {
+            transform_vector_by_basis(proximity_test_position, D_L00_001BD880 + ship_index[0] * 16, moby + 0xC0);
+            add_vector_xyz(proximity_test_position, proximity_test_position, moby_position);
+            if (FUN_001f9b48(proximity_test_position, &hero.motion.pos) > 4.1f) {
                 *(short *)(d + 0xC) = 0;
             }
         } else {
             q = (unsigned char *)(&hero.motion.pos);
-            if (vector_distance(p, q) < 6.0f) {
-                transform_vector_by_basis(tmp, D_L00_001BD880 + ship_index[0] * 16, m + 0xC0);
-                add_vector_xyz(tmp, tmp, p);
-                if (FUN_001f9b48(tmp, q) < 4.0f) {
+            if (vector_distance(moby_position, q) < 6.0f) {
+                transform_vector_by_basis(proximity_test_position, D_L00_001BD880 + ship_index[0] * 16, moby + 0xC0);
+                add_vector_xyz(proximity_test_position, proximity_test_position, moby_position);
+                if (FUN_001f9b48(proximity_test_position, q) < 4.0f) {
                     *(short *)(d + 0xC) = 1;
                 }
             }
         }
-        if (*(unsigned short *)(m + 0x34) & 1) {
+        if (*(unsigned short *)(moby + 0x34) & 1) {
             *(short *)(d + 0xC) = 0;
         }
         if (*(short *)(d + 0xC) != 0) {
             int r = try_set_help_message(2, 0x53E4) != 0;
             if ((*(int *)(((char *)&D_0013CAE4)) & 0x10) && r) {
                 if (current_level_index == 10 && hero.vehicle_mode == 1) {
-                    m[0x20] = 0x2A;
-                    *(unsigned short *)(m + 0x34) |= 0x41;
+                    moby[0x20] = 0x2A;
+                    *(unsigned short *)(moby + 0x34) |= 0x41;
                     start_scene(9);
                 } else {
                     FUN_L00_002644e0(2);
@@ -103,8 +103,8 @@ void FUN_L00_0028e180(unsigned char *m) {
                 start_scene(6);
                 q[0x4B] = 1;
             } else {
-                m[0x20] = 0;
-                *(unsigned short *)(m + 0x34) &= 0xFFBE;
+                moby[0x20] = 0;
+                *(unsigned short *)(moby + 0x34) &= 0xFFBE;
                 one = 1;
                 ship_index[1] = one;
                 D_L00_0015F630 = one;
