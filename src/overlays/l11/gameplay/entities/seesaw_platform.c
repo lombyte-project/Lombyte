@@ -1839,30 +1839,30 @@ void FUN_L11_00311be8(void *moby, void *a1, void *a2);
 void *FUN_L11_00311948(void *moby, char *ship_vars, float *reference_position, float *reference_rotation, float f0, float f1, float f2, void *current_target, int unused_parameter) {
     void *best = 0;
     float bestd = 1000.0f;
-    short *p;
+    short *moby_list_entry;
     void *list[12];
     FUN_L11_00311be8(moby, ship_vars + 0xE8, ship_vars + 0xEA);
     if (current_target != 0) {
         if (FUN_L11_00311a88_u(moby, current_target) < bestd)
             return current_target;
     }
-    p = D_L11_001AC240[*(short *)(ship_vars + 0x108)];
-    if (p == 0)
+    moby_list_entry = D_L11_001AC240[*(short *)(ship_vars + 0x108)];
+    if (moby_list_entry == 0)
         return 0;
     do {
-        char *m = (char *)(((*(unsigned short *)p & 0x7FFF) << 8) + D_L11_0015FFD8);
-        if (m[0x20] >= 0) {
-            int n = FUN_L11_00318050(m, list);
+        char *listed_moby = (char *)(((*(unsigned short *)moby_list_entry & 0x7FFF) << 8) + D_L11_0015FFD8);
+        if (listed_moby[0x20] >= 0) {
+            int moby_count = FUN_L11_00318050(listed_moby, list);
             int i;
-            for (i = 1; i < n; i++) {
-                float d = FUN_L11_00311a88_u(moby, list[i]);
-                if (d < bestd) {
+            for (i = 1; i < moby_count; i++) {
+                float reticle_distance_sq = FUN_L11_00311a88_u(moby, list[i]);
+                if (reticle_distance_sq < bestd) {
                     best = list[i];
-                    bestd = d;
+                    bestd = reticle_distance_sq;
                 }
             }
         }
-    } while (*p++ >= 0);
+    } while (*moby_list_entry++ >= 0);
     return best;
 }
 /* squared distance from a point to a projected target, or a large value when out of range */
