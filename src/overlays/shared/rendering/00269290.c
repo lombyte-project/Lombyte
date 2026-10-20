@@ -2136,10 +2136,10 @@ extern void FUN_L00_00267a08_26e150(void *) __asm__("FUN_L00_00267a08");
 extern int FUN_001fa6d0_26e150(float) __asm__("FUN_001fa6d0");
 extern void FUN_001f9a10_26e150(void *, void *, void *) __asm__("FUN_001f9a10");
 
-void FUN_L00_0026e150(M_26e150 *m) {
-    struct Q_26e150 *q = &m->q;
+void FUN_L00_0026e150(M_26e150 *particle) {
+    struct Q_26e150 *q = &particle->q;
     float vel = q->vel;
-    float s;
+    float alpha_before_reversal;
     float d;
 
     if (0.0f < vel) {
@@ -2149,25 +2149,25 @@ void FUN_L00_0026e150(M_26e150 *m) {
     } else {
         d = D_0015ED60_26e150;
         q->size = q->size + d * 0.007f * vel * 0.2f;
-        m->fC += d * 5460.0f;
+        particle->fC += d * 5460.0f;
     }
-    if (q->size <= 0.0244f || FUN_001f9770_26e150(m->cA) != 0) {
-        FUN_L00_00267a08_26e150(m);
+    if (q->size <= 0.0244f || FUN_001f9770_26e150(particle->cA) != 0) {
+        FUN_L00_00267a08_26e150(particle);
         return;
     }
-    s = q->size;
-    if (0.12f <= s) {
+    alpha_before_reversal = q->size;
+    if (0.12f <= alpha_before_reversal) {
         q->vel = -q->vel;
-        q->size = s + D_0015ED60_26e150 * 0.007f * q->vel;
+        q->size = alpha_before_reversal + D_0015ED60_26e150 * 0.007f * q->vel;
     }
-    m->fC += D_0015ED60_26e150 * 5460.0f;
-    m->i4 = (m->i4 & 0xFFFFFF) | (FUN_001fa6d0_26e150(q->size * 255.0f) << 24);
+    particle->fC += D_0015ED60_26e150 * 5460.0f;
+    particle->i4 = (particle->i4 & 0xFFFFFF) | (FUN_001fa6d0_26e150(q->size * 255.0f) << 24);
     q->phase += D_0015ED60_26e150 * 0.002f;
     if (1.0f < q->phase) {
         q->phase -= 1.0f;
     }
-    m->b8 = (int)(q->phase * 255.0f);
-    FUN_001f9a10_26e150(m->pos, m->pos, q->dv);
+    particle->b8 = (int)(q->phase * 255.0f);
+    FUN_001f9a10_26e150(particle->pos, particle->pos, q->dv);
 }
 typedef struct {
     u8 pad0[0x20];
