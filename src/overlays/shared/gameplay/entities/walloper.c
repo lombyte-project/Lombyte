@@ -2368,7 +2368,7 @@ void FUN_L00_002be890(void *mv) {
     char *m = mv;
     Q_2be890 quad;
     V_2be890 mat[4];
-    V_2be890 t;
+    V_2be890 scaled_corner;
     V_2be890 e;
     int c;
     int i, j;
@@ -2397,8 +2397,8 @@ void FUN_L00_002be890(void *mv) {
     FUN_001f9bf8_2be890(&mat[1], &mat[1], -1.0f);
     FUN_001f9ad8_2be890(&mat[2], &mat[1], &mat[0]);
     for (i = 3; i >= 0; i--) {
-        FUN_001f9a68_2be890(D_L00_001617AC, &t, &D_L00_001DBF20[3 - i]);
-        FUN_001f9d20_2be890(&quad.corner[3 - i], &t, &mat[0]);
+        FUN_001f9a68_2be890(D_L00_001617AC, &scaled_corner, &D_L00_001DBF20[3 - i]);
+        FUN_001f9d20_2be890(&quad.corner[3 - i], &scaled_corner, &mat[0]);
     }
     FUN_001f7d30_2be890(&quad, 0, 0);
     quad.color[3] = -1;
@@ -2406,8 +2406,8 @@ void FUN_L00_002be890(void *mv) {
     quad.color[1] = -1;
     quad.color[0] = -1;
     for (j = 3; j >= 0; j--) {
-        FUN_001f9a68_2be890(D_L00_001617B0, &t, &D_L00_001DBF20[3 - j]);
-        FUN_001f9d20_2be890(&quad.corner[3 - j], &t, &mat[0]);
+        FUN_001f9a68_2be890(D_L00_001617B0, &scaled_corner, &D_L00_001DBF20[3 - j]);
+        FUN_001f9d20_2be890(&quad.corner[3 - j], &scaled_corner, &mat[0]);
     }
     FUN_001f7d30_2be890(&quad, 0, 0);
 }
