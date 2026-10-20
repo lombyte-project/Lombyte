@@ -104,6 +104,7 @@ void level_draw_dialog_text(void) {
         FREEZE_DIALOG_FORMATTED_BODY_CENTERED_BUTTON = 5,
         FREEZE_DIALOG_FLAG_GATED_PAIRED_BUTTONS = 12,
         FREEZE_DIALOG_UNCONDITIONAL_PAIRED_BUTTONS = 13,
+        FREEZE_DIALOG_PLAIN_BODY_CENTERED_BUTTON = 17,
         FREEZE_DIALOG_CONDITIONAL_FORMATTED_BODY = 19,
         FREEZE_DIALOG_PLAIN_BODY_PAIRED_BUTTONS = 23,
         FREEZE_DIALOG_FORMATTED_BODY_PAIRED_BUTTONS = 24
@@ -204,7 +205,7 @@ void level_draw_dialog_text(void) {
         case 15:
             text = get_help_message_text(0x4FB8);
             break;
-        case 17:
+        case FREEZE_DIALOG_PLAIN_BODY_CENTERED_BUTTON:
             mid = 0x524A;
             text = get_help_message_text(0x4FBA);
             break;
