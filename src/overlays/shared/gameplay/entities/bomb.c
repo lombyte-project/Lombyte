@@ -671,7 +671,8 @@ void FUN_L00_002c97e0(Moby *chicken_moby) {
         CHICKEN_STATE_INITIALIZE = 0,
         CHICKEN_STATE_IDLE = 1,
         CHICKEN_STATE_TURN_AWAY_FROM_HERO = 2,
-        CHICKEN_STATE_FLEE_FROM_HERO = 3
+        CHICKEN_STATE_FLEE_FROM_HERO = 3,
+        CHICKEN_STATE_CLOSE_RANGE_FLEE_FROM_HERO = 4
     };
     Vec4A next_pos;
     Vec4A ahead;
@@ -894,7 +895,7 @@ void FUN_L00_002c97e0(Moby *chicken_moby) {
             }
         }
         break;
-    case 4:
+    case CHICKEN_STATE_CLOSE_RANGE_FLEE_FROM_HERO:
         if (fast_dec_timer_s16(&vars->flee_timer) != 0 && vector_distance(&chicken_moby->pos, &hero.motion.pos) > size * 4.0f) {
             FUN_L00_00258278(chicken_moby, &vars->turn_speed, flee_angle, frame_time_sq * 0.7853982f, frame_time_sq * 1.5707964f, frame_time * 0.7853982f);
             ahead.x = fast_cos(chicken_moby->rot.z) * frame_time * size;
