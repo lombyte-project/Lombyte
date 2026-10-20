@@ -33,57 +33,57 @@ extern void music_channel_ready_callback(int, long) __asm__("FUN_00216990");
    range test works on the loaded halfword as retail's does. */
 void music_update_stream(MusicPlaying *p) __asm__("FUN_002160a8");
 
-void music_update_stream(MusicPlaying *p) {
-    int h;
+void music_update_stream(MusicPlaying *music_stream) {
+    int sound_handle;
 
-    if (p->state != 9 && p->handle != 0 && p->handle != 0xFFFFFFFF) {
-        if (p->state == 5) {
-            if (p->handle != 0) {
-                snd_stop_sound(p->handle);
-                p->state = 6;
+    if (music_stream->state != 9 && music_stream->handle != 0 && music_stream->handle != 0xFFFFFFFF) {
+        if (music_stream->state == 5) {
+            if (music_stream->handle != 0) {
+                snd_stop_sound(music_stream->handle);
+                music_stream->state = 6;
             } else {
-                p->state = 0;
+                music_stream->state = 0;
             }
-        } else if (p->state == 6) {
-            if (p->handle == 0) {
-                p->state = 0;
+        } else if (music_stream->state == 6) {
+            if (music_stream->handle == 0) {
+                music_stream->state = 0;
             }
         }
-        if (p->handle == 0) {
+        if (music_stream->handle == 0) {
             return;
         }
-        if (p->fade & 0x8000) {
-            if (!(p->state & 0x8000)) {
-                snd_pause_vag_stream(p->handle);
-                p->state |= 0x8000;
+        if (music_stream->fade & 0x8000) {
+            if (!(music_stream->state & 0x8000)) {
+                snd_pause_vag_stream(music_stream->handle);
+                music_stream->state |= 0x8000;
             }
-            if (fast_dec_timer_s16(&p->fadeT) == 2) {
-                p->fade = 4;
+            if (fast_dec_timer_s16(&music_stream->fadeT) == 2) {
+                music_stream->fade = 4;
             }
-        } else if (p->state & 0x8000) {
-            snd_continue_vag_stream((void *)p->handle);
-            p->state ^= 0x8000;
+        } else if (music_stream->state & 0x8000) {
+            snd_continue_vag_stream((void *)music_stream->handle);
+            music_stream->state ^= 0x8000;
         }
-        if (p->state & 0x8000) {
+        if (music_stream->state & 0x8000) {
             return;
         }
-        if (p->state == 1 || p->state == 8 || p->state == 9) {
+        if (music_stream->state == 1 || music_stream->state == 8 || music_stream->state == 9) {
             return;
         }
-        if (p->state != 2 && p->state != 3) {
-            h = p->handle;
-            p->handle = 0xFFFFFFFF;
-            snd_get_vag_stream_time_remaining_cb(h, music_remaining_time_callback,
-                                                 (long)(unsigned int)p);
-            snd_sound_is_still_playing_cb(h, set_sound_handle_id, (long)(unsigned int)p);
+        if (music_stream->state != 2 && music_stream->state != 3) {
+            sound_handle = music_stream->handle;
+            music_stream->handle = 0xFFFFFFFF;
+            snd_get_vag_stream_time_remaining_cb(sound_handle, music_remaining_time_callback,
+                                                 (long)(unsigned int)music_stream);
+            snd_sound_is_still_playing_cb(sound_handle, set_sound_handle_id, (long)(unsigned int)music_stream);
             return;
         }
-        if (p->handle != 0xFFFFFFFF && p->state == 2) {
-            snd_is_vag_stream_buffered_cb(p->handle, music_channel_ready_callback,
-                                          (long)(unsigned int)p);
+        if (music_stream->handle != 0xFFFFFFFF && music_stream->state == 2) {
+            snd_is_vag_stream_buffered_cb(music_stream->handle, music_channel_ready_callback,
+                                          (long)(unsigned int)music_stream);
         }
-    } else if (p->state == 7 || p->handle == 0) {
-        p->state = 0;
+    } else if (music_stream->state == 7 || music_stream->handle == 0) {
+        music_stream->state = 0;
     }
 }
 
