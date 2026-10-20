@@ -2850,14 +2850,14 @@ extern void FUN_L00_00267a08_26fb00(void *) __asm__("FUN_L00_00267a08");
 extern void FUN_001f9a10_26fb00(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void FUN_001f9a68_26fb00(void *, void *, float) __asm__("FUN_001f9a68");
 
-void FUN_L00_0026fb00(P_26fb00 *p) {
-    Q_26fb00 *q = &p->q;
+void FUN_L00_0026fb00(P_26fb00 *particle) {
+    Q_26fb00 *q = &particle->q;
     float zero, x, y;
-    if (FUN_001f9770_26fb00(&p->ha)) {
+    if (FUN_001f9770_26fb00(&particle->ha)) {
         goto kill;
     }
-    p->fc += q->f10;
-    p->b8++;
+    particle->fc += q->f10;
+    particle->b8++;
     zero = 0.0f;
     x = q->f14 - D_0015ED60_26fb00 * 0.01f;
     q->f14 = x;
@@ -2865,14 +2865,14 @@ void FUN_L00_0026fb00(P_26fb00 *p) {
     if (!(x < zero))
         y = x;
     q->f14 = y;
-    p->c4 &= 0xFFFFFF;
-    p->c4 |= FUN_001fa6d0_26fb00(q->f14 * 255.0f) << 24;
+    particle->c4 &= 0xFFFFFF;
+    particle->c4 |= FUN_001fa6d0_26fb00(q->f14 * 255.0f) << 24;
     if (q->f14 <= zero) {
     kill:
-        FUN_L00_00267a08_26fb00(p);
+        FUN_L00_00267a08_26fb00(particle);
         return;
     }
-    FUN_001f9a10_26fb00(p->v10, p->v10, q);
+    FUN_001f9a10_26fb00(particle->v10, particle->v10, q);
     FUN_001f9a68_26fb00(q, q, D_0015ED60_26fb00 * -0.019999981f + 1.0f);
 }
 typedef struct {
