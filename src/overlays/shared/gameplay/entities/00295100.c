@@ -774,7 +774,7 @@ void FUN_L00_002995d0(s32, s32, s32);
 void hero_respawn() __asm__("FUN_L00_00211250");
 void FUN_L00_00299460(s32 i) {
     s32 a, b;
-    struct Hero *s;
+    struct Hero *hero_ptr;
     if (i < 0)
         return;
     if (D_0015ED80) {
@@ -784,10 +784,10 @@ void FUN_L00_00299460(s32 i) {
         a = D_00137B80.x[i].a;
         b = D_00137B80.x[i].b;
     }
-    s = &hero;
-    if (s->health.hp == 0) {
+    hero_ptr = &hero;
+    if (hero_ptr->health.hp == 0) {
         hero_respawn();
-    } else if (s->unk20B1 == 0) {
+    } else if (hero_ptr->unk20B1 == 0) {
         FUN_L00_002995d0(a, b, game_language);
     }
 }
