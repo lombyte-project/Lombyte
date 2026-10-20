@@ -154,34 +154,34 @@ extern E_231ff8 D_L00_0015F6B8_00231ff8[1] __asm__("D_L00_0015F6B8") __attribute
 int FUN_L00_002050b8_00231ff8(int) __asm__("FUN_L00_002050b8");
 int FUN_L00_0020d498_00231ff8(int) __asm__("FUN_L00_0020d498");
 int random_int_between(int, int) __asm__("FUN_L00_00257b90");
-int FUN_L00_00231ff8(int a, int *b, int *c) {
+int FUN_L00_00231ff8(int input_animation_id, int *b, int *out_secondary_animation_id) {
     int idx[20];
-    E_231ff8 *t;
-    int n = 0;
-    int v = FUN_L00_002050b8_00231ff8(a);
+    E_231ff8 *animation_table;
+    int match_count = 0;
+    int v = FUN_L00_002050b8_00231ff8(input_animation_id);
     if (FUN_L00_0020d498_00231ff8(3) == 2)
-        t = D_L00_0017BBF0_00231ff8;
+        animation_table = D_L00_0017BBF0_00231ff8;
     else if (FUN_L00_0020d498_00231ff8(3) == 3)
-        t = D_L00_0017BBD0_00231ff8;
+        animation_table = D_L00_0017BBD0_00231ff8;
     else {
-        t = D_L00_0015F6B8_00231ff8;
+        animation_table = D_L00_0015F6B8_00231ff8;
         if (FUN_L00_0020d498_00231ff8(3) != 4)
-            t = 0;
+            animation_table = 0;
     }
-    if (t) {
+    if (animation_table) {
         int j = 0;
-        while (t[j].h0 != -1) {
-            if (v == t[j].h0) {
-                idx[n] = j;
-                n++;
+        while (animation_table[j].h0 != -1) {
+            if (v == animation_table[j].h0) {
+                idx[match_count] = j;
+                match_count++;
             }
             j++;
         }
     }
-    if (n != 0) {
-        int k = idx[random_int_between(0, n - 1)];
-        *b = t[k].b2;
-        *c = t[k].b3;
+    if (match_count != 0) {
+        int k = idx[random_int_between(0, match_count - 1)];
+        *b = animation_table[k].b2;
+        *out_secondary_animation_id = animation_table[k].b3;
         return 1;
     } else {
         *b = 1;
