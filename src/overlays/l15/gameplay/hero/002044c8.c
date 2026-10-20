@@ -628,6 +628,7 @@ void FUN_L15_0020ed50(void) {
         HERO_ATTACK_RECORD_POINT_4_HIT_QUERY = 1
     };
     enum {
+        HERO_COMBO_KIND_ANIMATION_GATED_TARGET_SPEED = 0,
         HERO_COMBO_KIND_STAGED_TARGET_SPEED_REDUCTION = 1
     };
     struct MobyView *moby = (struct MobyView *)hero.moby;
@@ -1580,7 +1581,7 @@ void FUN_L15_0020ed50(void) {
             }
         }
         switch (tb->kind) {
-        case 0:
+        case HERO_COMBO_KIND_ANIMATION_GATED_TARGET_SPEED:
             if (hero.anim_frame < 18.0f) {
                 hero.target_speed = frame_time * 4.4f * hero.speed_scale;
             }
