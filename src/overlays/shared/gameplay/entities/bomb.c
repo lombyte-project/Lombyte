@@ -2369,13 +2369,13 @@ void FUN_L00_002cdcc0(void) {
 
 extern int FUN_L00_002725d8(void *, int, float, float, unsigned, unsigned);
 
-void FUN_L00_002cde78(char *m) {
-    char *p = *(char **)(m + 0x78);
-    if (*(int *)(p + 0x4C) == 0) {
-        *(int *)(p + 0x4C) = FUN_L00_002725d8(m, 0, 0.05f, 0.01f, 0x80808080, 0x10808080);
+void FUN_L00_002cde78(char *owner_moby) {
+    char *moby_vars = *(char **)(owner_moby + 0x78);
+    if (*(int *)(moby_vars + 0x4C) == 0) {
+        *(int *)(moby_vars + 0x4C) = FUN_L00_002725d8(owner_moby, 0, 0.05f, 0.01f, 0x80808080, 0x10808080);
     }
-    if (*(int *)(p + 0x50) == 0) {
-        *(int *)(p + 0x50) = FUN_L00_002725d8(m, 1, 0.05f, 0.01f, 0x80808080, 0x10808080);
+    if (*(int *)(moby_vars + 0x50) == 0) {
+        *(int *)(moby_vars + 0x50) = FUN_L00_002725d8(owner_moby, 1, 0.05f, 0.01f, 0x80808080, 0x10808080);
     }
 }
 /* Exact match: tools/ps2eeas_nops.py keeps the hazard nop after the label the branch lands on. */
