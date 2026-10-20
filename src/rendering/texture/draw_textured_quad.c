@@ -12,7 +12,7 @@ void draw_textured_quad(s32 x, s32 y, s32 w, s32 h, s32 u, s32 v, s32 uw, s32 vh
 void draw_textured_quad(s32 x, s32 y, s32 w, s32 h, s32 u, s32 v, s32 uw, s32 vh, s64 color,
                         s64 extra) {
     struct DmaTag *tag;
-    u64 *q;
+    u64 *packet_words;
     s32 sx;
     s32 sy;
     s32 x1;
@@ -39,20 +39,20 @@ void draw_textured_quad(s32 x, s32 y, s32 w, s32 h, s32 u, s32 v, s32 uw, s32 vh
     tag = render_packet_cursor.tag;
     render_packet_cursor.tag = tag + 1;
     qcopy(tag + 1, textured_quad_header);
-    q = (u64 *)(tag + 2);
+    packet_words = (u64 *)(tag + 2);
     render_packet_cursor.tag = tag + 2;
-    q[0] = extra;
-    q[1] = 0x154;
-    q[2] = color;
-    q[3] = (v << 20) + u0;
-    q[4] = x0 | ((u64)y0 << 16) | 0xFFFFF000000000;
-    q[5] = (v << 20) + u1;
-    q[6] = x1 | ((u64)y0 << 16) | 0xFFFFF000000000;
-    q[7] = (texture_v_end << 20) + u0;
-    q[8] = x0 | ((u64)y1 << 16) | 0xFFFFF000000000;
-    q[9] = (texture_v_end << 20) + u1;
-    q[10] = x1 | ((u64)y1 << 16) | 0xFFFFF000000000;
-    q[11] = 0;
+    packet_words[0] = extra;
+    packet_words[1] = 0x154;
+    packet_words[2] = color;
+    packet_words[3] = (v << 20) + u0;
+    packet_words[4] = x0 | ((u64)y0 << 16) | 0xFFFFF000000000;
+    packet_words[5] = (v << 20) + u1;
+    packet_words[6] = x1 | ((u64)y0 << 16) | 0xFFFFF000000000;
+    packet_words[7] = (texture_v_end << 20) + u0;
+    packet_words[8] = x0 | ((u64)y1 << 16) | 0xFFFFF000000000;
+    packet_words[9] = (texture_v_end << 20) + u1;
+    packet_words[10] = x1 | ((u64)y1 << 16) | 0xFFFFF000000000;
+    packet_words[11] = 0;
     render_packet_cursor.tag = (struct DmaTag *)((u8 *)render_packet_cursor.tag + 0x60);
 }
 
