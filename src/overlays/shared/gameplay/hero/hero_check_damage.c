@@ -209,10 +209,10 @@ void find_grind_rail(void) __asm__("FUN_L00_0020cf58");
 void find_grind_rail(void) {
     V_cf58 proximity_or_rail_point, proximity_or_query_position, third_proximity_point;
 
-    s32 a, b, e;
+    s32 rail_owner, b, rail_kind;
     f32 c;
-    s32 s;
-    f32 d;
+    s32 control_mode;
+    f32 height_above_rail;
     if (D_0013D4DD_cf58 == 0)
         return;
     hero.grind_rail = 0;
@@ -258,32 +258,32 @@ void find_grind_rail(void) {
         if (14.0f < FUN_001f9b48_c(&hero.motion.pos, &proximity_or_rail_point))
             return;
     }
-    s = hero.state.control_mode;
-    if (s != 2 && s != 0 && s != 1) {
+    control_mode = hero.state.control_mode;
+    if (control_mode != 2 && control_mode != 0 && control_mode != 1) {
         if ((u32)(hero.state.current - 41) < 2 &&
             (hero.unk570 != 0 || hero.unk5C4 != 0)) {
         } else {
-            if (s != 4)
+            if (control_mode != 4)
                 return;
             if (hero.unk41E == 0 && hero.unk1CA == 0)
                 return;
         }
     }
     *(OvlQuad *)&proximity_or_query_position = *(OvlQuad *)&hero.motion.pos;
-    if (!nearest_rail_point((OvlQuad *)&proximity_or_query_position, &a, &proximity_or_rail_point, &b, &c, &e, 0, 0))
+    if (!nearest_rail_point((OvlQuad *)&proximity_or_query_position, &rail_owner, &proximity_or_rail_point, &b, &c, &rail_kind, 0, 0))
         return;
-    if (hero.state.current == 41 && hero.unk5C4 != 0 && a == hero.unk560)
+    if (hero.state.current == 41 && hero.unk5C4 != 0 && rail_owner == hero.unk560)
         return;
-    d = hero.motion.pos.f[2] - proximity_or_rail_point.z;
-    if (!(-0.5f < d))
+    height_above_rail = hero.motion.pos.f[2] - proximity_or_rail_point.z;
+    if (!(-0.5f < height_above_rail))
         return;
-    if (!(d < 0.57f) && hero.unk1CA == 0)
+    if (!(height_above_rail < 0.57f) && hero.unk1CA == 0)
         return;
     qcopy(&hero.unk500, &proximity_or_rail_point);
-    hero.unk560 = a;
+    hero.unk560 = rail_owner;
     hero.unk564 = b;
     hero.unk568 = c;
-    hero.unk584 = e;
+    hero.unk584 = rail_kind;
     hero.grind_rail = 1;
 }
 #define NOT_SDA
