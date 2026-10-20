@@ -266,19 +266,19 @@ extern float FUN_001f99c0_00259fe8(float) __asm__("FUN_001f99c0");
 
 extern E_259fe8_00259fe8 D_L00_0016E080[] __attribute__((section(".data")));
 void jet_animate(unsigned char *m, float r) __asm__("FUN_L00_00259fe8");
-void jet_animate(unsigned char *m, float r) {
-    float h, y;
-    if (m[0x31] == 0)
+void jet_animate(unsigned char *moby, float r) {
+    float ground_height, y;
+    if (moby[0x31] == 0)
         return;
     if (D_L00_0015F434 >= 32)
         return;
-    qcopy(&D_L00_0016E080[D_L00_0015F434].u_00259fe8.a_00259fe8, m + 0x10);
-    h = FUN_00213508_00259fe8(m + 0x10, 0, 0.5f);
+    qcopy(&D_L00_0016E080[D_L00_0015F434].u_00259fe8.a_00259fe8, moby + 0x10);
+    ground_height = FUN_00213508_00259fe8(moby + 0x10, 0, 0.5f);
     if (FUN_001f0b58_00259fe8() == 0)
         return;
-    D_L00_0016E080[D_L00_0015F434].u_00259fe8.f[2] = h + 0.025f;
+    D_L00_0016E080[D_L00_0015F434].u_00259fe8.f[2] = ground_height + 0.025f;
     qcopy(&D_L00_0016E080[D_L00_0015F434].b, &D_L00_00173E80_00259fe8);
-    y = (8.0f - FUN_001f99c0_00259fe8(*(float *)(m + 0x18) - h)) * 0.125f;
+    y = (8.0f - FUN_001f99c0_00259fe8(*(float *)(moby + 0x18) - ground_height)) * 0.125f;
     if (y < 0.25f)
         y = 0.25f;
     D_L00_0016E080[D_L00_0015F434].u_00259fe8.f[3] = r * y;
