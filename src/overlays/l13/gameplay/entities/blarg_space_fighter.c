@@ -631,7 +631,7 @@ void FUN_L13_002c2d30(unsigned char *moby) {
     char *r;
     int st;
     int flag;
-    int r2;
+    int target_selection_status;
     float damage_amount;
     float downward_effect_z;
     float fl;
@@ -726,9 +726,9 @@ void FUN_L13_002c2d30(unsigned char *moby) {
     }
     {
         char *ptr = D_L13_001B07B0[*(int *)(moby_data + 0xD0)];
-        r2 = FUN_L00_0025ff38(*(float *)(moby_data + 0xD8), moby, moby_data + 0x70, 0, 0, ptr + 0x10, *(int *)ptr);
+        target_selection_status = FUN_L00_0025ff38(*(float *)(moby_data + 0xD8), moby, moby_data + 0x70, 0, 0, ptr + 0x10, *(int *)ptr);
     }
-    if (r2 != 2) {
+    if (target_selection_status != 2) {
         if (*(float *)(moby_data + 0xD8) < vector_distance(moby + 0x10, moby_data + 0x70) ||
             8.0f < FUN_001f99c0(*(float *)(moby + 0x18) - *(float *)(moby_data + 0x78))) {
             *(int *)(moby_data + 0xB4) = 2;
