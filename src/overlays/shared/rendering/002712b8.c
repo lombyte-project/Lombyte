@@ -1626,20 +1626,20 @@ s32 FUN_001f9770_274e48(void *) __asm__("FUN_001f9770");
 void lerp_vector(void *, void *, void *, f32) __asm__("FUN_001f9a40");
 void FUN_L00_00274e48(M_274e48 *particle) {
     R_274e48 *r = &particle->r;
-    V_274e48 u, a, b;
+    V_274e48 u, motion_vector_scratch, b;
     f32 d, k;
     s32 color_without_alpha;
     if (D_L00_0015F5CC & 1)
         particle->b8++;
     d = distance_xyz(&particle->v10, &(*(V_274e48 *)D_0013F420));
     if (d < 5.0f && 0.0f < r->p18[2]) {
-        subtract_vector_xyz(&a, r->p18, &particle->v10);
-        if (0.5f < vector_length_xyz(&a)) {
-            FUN_001f9bf8_274e48(&a, &a, 0.1f / d);
-            FUN_001f9a10_274e48(&particle->v10, &particle->v10, &a);
+        subtract_vector_xyz(&motion_vector_scratch, r->p18, &particle->v10);
+        if (0.5f < vector_length_xyz(&motion_vector_scratch)) {
+            FUN_001f9bf8_274e48(&motion_vector_scratch, &motion_vector_scratch, 0.1f / d);
+            FUN_001f9a10_274e48(&particle->v10, &particle->v10, &motion_vector_scratch);
         } else {
-            FUN_001f9bf8_274e48(&a, &a, 0.005f);
-            pack_vector_xyz_with_shared_scale(&a, (u8 *)r + 4);
+            FUN_001f9bf8_274e48(&motion_vector_scratch, &motion_vector_scratch, 0.005f);
+            pack_vector_xyz_with_shared_scale(&motion_vector_scratch, (u8 *)r + 4);
         }
     }
     d = (2.5f - (d - 0.5f)) / 2.5f;
@@ -1659,9 +1659,9 @@ void FUN_L00_00274e48(M_274e48 *particle) {
             particle->hA = r->h12;
         }
     } else if (r->h12) {
-        load_display_text_resource_entry(&a, r);
+        load_display_text_resource_entry(&motion_vector_scratch, r);
         load_display_text_resource_entry(&b, (u8 *)r + 4);
-        lerp_vector(&u, &b, &a, convert_integer_to_float(particle->hA) / convert_integer_to_float(r->h12));
+        lerp_vector(&u, &b, &motion_vector_scratch, convert_integer_to_float(particle->hA) / convert_integer_to_float(r->h12));
         FUN_001f9a10_274e48(&particle->v10, &particle->v10, &u);
         if (FUN_001f9770_274e48(&particle->hA)) {
             r->h12 = 0;
