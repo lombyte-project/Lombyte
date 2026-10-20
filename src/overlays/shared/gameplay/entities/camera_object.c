@@ -2247,26 +2247,26 @@ extern char *func_0020D348_m(int);
 extern void set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");
 
 void *FUN_L00_002a99b0(int unused, void *pos, int c, float scale, float a, float b) {
-    char *m = func_0020D348_m(0x593);
-    if (m != 0) {
-        char *d;
-        float s;
-        qcopy(m + 0x10, pos);
-        set_moby_color(m, 0x80, 0x80, 0x70);
-        d = *(char **)(m + 0x78);
-        s = scale + scale;
-        *(float *)d = a;
-        *(float *)(m + 0x2C) = s;
-        *(float *)(m + 0x2C) = s * *(float *)(*(char **)(m + 0x24) + 0x24);
-        *(int *)(d + 4) = c;
-        *(int *)(d + 8) = c;
-        *(float *)(d + 0xC) = b;
-        *(unsigned char *)(m + 0x30) = 0xFF;
-        *(short *)(m + 0x32) = 0xFF;
-        *(unsigned char *)(m + 0x31) = 1;
-        *(unsigned char *)(m + 0x20) = 0;
+    char *spawned_moby = func_0020D348_m(0x593);
+    if (spawned_moby != 0) {
+        char *moby_vars;
+        float doubled_scale;
+        qcopy(spawned_moby + 0x10, pos);
+        set_moby_color(spawned_moby, 0x80, 0x80, 0x70);
+        moby_vars = *(char **)(spawned_moby + 0x78);
+        doubled_scale = scale + scale;
+        *(float *)moby_vars = a;
+        *(float *)(spawned_moby + 0x2C) = doubled_scale;
+        *(float *)(spawned_moby + 0x2C) = doubled_scale * *(float *)(*(char **)(spawned_moby + 0x24) + 0x24);
+        *(int *)(moby_vars + 4) = c;
+        *(int *)(moby_vars + 8) = c;
+        *(float *)(moby_vars + 0xC) = b;
+        *(unsigned char *)(spawned_moby + 0x30) = 0xFF;
+        *(short *)(spawned_moby + 0x32) = 0xFF;
+        *(unsigned char *)(spawned_moby + 0x31) = 1;
+        *(unsigned char *)(spawned_moby + 0x20) = 0;
     }
-    return m;
+    return spawned_moby;
 }
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A5138.c: func_L00_002AAD40), where it is exact; names translated to the US level program. */
