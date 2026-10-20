@@ -528,9 +528,9 @@ void metropolis_train_locomotive_update(char *moby) {
     int i;
     int i6;
     float lim;
-    char *m6;
+    char *linked_moby;
     int n;
-    char *p0;
+    char *second_path;
     u32 mode;
     int ident;
 
@@ -562,17 +562,17 @@ void metropolis_train_locomotive_update(char *moby) {
         data->fDC = 20.0f;
         data->fC8 = data->fC0 = data->fC0 * frame_time;
         if (data->iAC != -1) {
-            p0 = D_L03_001B05B0_292e98[data->iAC];
+            second_path = D_L03_001B05B0_292e98[data->iAC];
             data->iD4 = -1;
             n = 0;
-            if (*(int *)p0 > 0) {
-                if (*(float *)(p0 + n * 0x10 + 0x1C) == 1.0f) {
+            if (*(int *)second_path > 0) {
+                if (*(float *)(second_path + n * 0x10 + 0x1C) == 1.0f) {
                     data->iD4 = n;
                 } else {
                 next:
                     n++;
-                    if (n < *(int *)p0) {
-                        if (*(float *)((n << 4) + p0 + 0x1C) != 1.0f) {
+                    if (n < *(int *)second_path) {
+                        if (*(float *)((n << 4) + second_path + 0x1C) != 1.0f) {
                             goto next;
                         }
                         data->iD4 = n;
@@ -731,11 +731,11 @@ void metropolis_train_locomotive_update(char *moby) {
     case TRAIN_WAIT_FOR_RESET_VOLUME:
         if (is_point_inside_clip_volume(&hero.motion, data->iB0)) {
             for (i6 = 0; i6 < 8; i6++) {
-                m6 = D_L03_0015FFD8_292e98 + (data->ids[i6] << 8);
-                if (data->ids[i6] != -1 && m6 != 0 && ((unsigned char *)m6)[0x20] != 0xFE &&
-                    ((unsigned char *)m6)[0x20] != 0xFD && *(short *)(m6 + 0xA6) == 0x23E &&
-                    ((unsigned char *)m6)[0x20] == 0x10) {
-                    m6[0x20] = 0x11;
+                linked_moby = D_L03_0015FFD8_292e98 + (data->ids[i6] << 8);
+                if (data->ids[i6] != -1 && linked_moby != 0 && ((unsigned char *)linked_moby)[0x20] != 0xFE &&
+                    ((unsigned char *)linked_moby)[0x20] != 0xFD && *(short *)(linked_moby + 0xA6) == 0x23E &&
+                    ((unsigned char *)linked_moby)[0x20] == 0x10) {
+                    linked_moby[0x20] = 0x11;
                 }
             }
             data->fC8 = data->fC0;
