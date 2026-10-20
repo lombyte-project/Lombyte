@@ -104,6 +104,7 @@ void FUN_L11_00315968(struct Moby *moby) {
         HIT_RESPONSE_KNOCKBACK_VARIANT = 5,
         HIT_RESPONSE_KNOCKBACK_REACTION = 6,
         HIT_RESPONSE_KNOCKBACK_ARC = 7,
+        HIT_RESPONSE_KNOCKBACK_MOTION = 8,
         HIT_RESPONSE_NON_KNOCKBACK_REACTION = 9,
         HIT_RESPONSE_NON_KNOCKBACK_REACTION_ALTERNATE = 10,
         HIT_RESPONSE_COOLDOWN_NO_KNOCKBACK = 11
@@ -165,7 +166,7 @@ void FUN_L11_00315968(struct Moby *moby) {
             case HIT_RESPONSE_KNOCKBACK_VARIANT:
             case HIT_RESPONSE_KNOCKBACK_REACTION:
             case HIT_RESPONSE_KNOCKBACK_ARC:
-            case 8: {
+            case HIT_RESPONSE_KNOCKBACK_MOTION: {
                 float yaw;
                 d->unk138 = D_L11_001622D8 * frame_time;
                 d->unk13C = D_L11_001622D4 * frame_time;
