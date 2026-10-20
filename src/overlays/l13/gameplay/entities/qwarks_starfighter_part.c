@@ -1436,9 +1436,9 @@ void FUN_L13_002f3778(struct Moby *moby) {
             p = menu_item_enabled_115 + 0xB9;
             if (p[0xB] != 0 || p[0xD] != 0) {
                 unsigned char *q = ((char *)&D_00141968);
-                unsigned int h = *(unsigned short *)(q + 0x378);
-                if (h <= 0xFFFE) {
-                    *(unsigned short *)(q + 0x378) = h + 1;
+                unsigned int saturating_count = *(unsigned short *)(q + 0x378);
+                if (saturating_count <= 0xFFFE) {
+                    *(unsigned short *)(q + 0x378) = saturating_count + 1;
                 }
                 if (scale_game_frames(D_0015EEA4) / 600 > *(unsigned short *)(q + 0x37A)) {
                     *(unsigned short *)(q + 0x37A) = scale_game_frames(D_0015EEA4) / 600;
