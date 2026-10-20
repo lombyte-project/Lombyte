@@ -779,17 +779,17 @@ void FUN_L14_002ac618(struct Moby *moby) {
         FUN_L00_0026cbb0(&moby->pos, D_L14_0015F580, 0x4F007FFF, 0x1FFFFFFF,
                          random_int_between(scale_game_frames(10), scale_game_frames(20)), 1, 60000.0f);
         for (i = 0; i < 2; i++) {
-            int a = random_integer_below(6);
+            int signed_puff_random_value = random_integer_below(6);
             float size;
             int c;
             unsigned char *p;
 
             if (random_integer_below(2)) {
-                a = -a;
+                signed_puff_random_value = -signed_puff_random_value;
             }
             size = random_float_c618(40000.0f, 100000.0f);
             c = random_int_between(0x30, 0xFF);
-            p = FUN_L00_0026d000_c618(&moby->pos, 0.025f, 1.0f, 1.0f, a, D_L14_0015F580, size, c | (0x60000000 | (c << 16) | (c << 8)));
+            p = FUN_L00_0026d000_c618(&moby->pos, 0.025f, 1.0f, 1.0f, signed_puff_random_value, D_L14_0015F580, size, c | (0x60000000 | (c << 16) | (c << 8)));
             if (p != 0) {
                 unsigned char *puff_tail;
 
