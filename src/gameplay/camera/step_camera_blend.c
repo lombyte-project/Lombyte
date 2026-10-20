@@ -27,25 +27,25 @@ int step_camera_blend(void *to_blend, void *cam_blend) {
     float target_rotation_quaternion[4];
     float blended_rotation_matrix[16];
     char *st;
-    float t;
+    float eased_blend_factor;
     float *rot;
 
     if (cam[3] == 1.0f && cam[0] == 1.0f) {
         return 1;
     }
-    t = cosine_interpolate(0.0f, 1.0f, cam[3]);
+    eased_blend_factor = cosine_interpolate(0.0f, 1.0f, cam[3]);
     add_vector_xyz(cam + 12, D_0013F490, cam + 12);
     st = occl_cam_state;
-    cam[16] = cam[12] + (to[12] - cam[12]) * t;
-    cam[17] = cam[13] + (to[13] - cam[13]) * t;
-    cam[18] = cam[14] + (to[14] - cam[14]) * t;
+    cam[16] = cam[12] + (to[12] - cam[12]) * eased_blend_factor;
+    cam[17] = cam[13] + (to[13] - cam[13]) * eased_blend_factor;
+    cam[18] = cam[14] + (to[14] - cam[14]) * eased_blend_factor;
     if (*(int *)(st + 0x14) == 0) {
         qcopy(D_00187080, cam + 16);
     }
     extract_matrix_rotation_quaternion(target_rotation_quaternion, to);
     rot = cam + 20;
-    t = cosine_interpolate(0.0f, 1.0f, cam[0]);
-    quaternion_nlerp(rot, cam + 8, target_rotation_quaternion, t);
+    eased_blend_factor = cosine_interpolate(0.0f, 1.0f, cam[0]);
+    quaternion_nlerp(rot, cam + 8, target_rotation_quaternion, eased_blend_factor);
     quaternion_to_matrix(rot, blended_rotation_matrix);
     if (*(int *)(st + 0x14) == 0) {
         copy_matrix3x4(camera_rows, blended_rotation_matrix);
