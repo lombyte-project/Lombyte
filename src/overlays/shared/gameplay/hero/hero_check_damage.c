@@ -3020,7 +3020,7 @@ extern void FUN_001f9a10_002121c0(void *, void *, void *) __asm__("FUN_001f9a10"
 void FUN_L00_002121c0(void) {
     struct Hero *g = &hero;
     V_2121c0_002121c0 v;
-    float d, x;
+    float inward_velocity_component, x;
     if (g->air_frames.s == 0)
         return;
     if (!(g->ground_distance < 0.15f))
@@ -3036,9 +3036,9 @@ void FUN_L00_002121c0(void) {
     qcopy(&v, &g->unk200);
     v.f[2] = 0.0f;
     FUN_00125180_002121c0(&v, &v);
-    d = -g->motion.velocity.f[0] * v.f[0] - g->motion.velocity.f[1] * v.f[1];
-    if (0.0f < d) {
-        FUN_001f9a68_002121c0(&v, &v, d);
+    inward_velocity_component = -g->motion.velocity.f[0] * v.f[0] - g->motion.velocity.f[1] * v.f[1];
+    if (0.0f < inward_velocity_component) {
+        FUN_001f9a68_002121c0(&v, &v, inward_velocity_component);
         FUN_001f9a10_002121c0(&g->motion.velocity, &g->motion.velocity, &v);
         x = frame_time_sq * 54.0f;
         g->motion.velocity.f[2] -= x + x;
