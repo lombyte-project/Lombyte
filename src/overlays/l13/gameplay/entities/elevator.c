@@ -1154,7 +1154,7 @@ void FUN_L13_002b4ff0(struct Moby *m, char *d);
 extern int func_001F9908_i(void *) __asm__("FUN_001f9740");
 
 void robosquawker_update(RsMoby *m) __asm__("FUN_L13_002b50d8");
-void robosquawker_update(RsMoby *m) {
+void robosquawker_update(RsMoby *robosquawker_moby) {
     enum {
         ROBOSQUAWKER_STATE_INITIALIZE = 0,
         ROBOSQUAWKER_STATE_GROUND_IDLE = 1,
@@ -1185,40 +1185,40 @@ void robosquawker_update(RsMoby *m) {
     int hits;
     float dmg;
     float ang;
-    float h;
+    float flight_step_length;
     float out;
     RsHit *hit;
     RsTargetMoby *tm;
 
-    v = m->vars;
-    FUN_L00_00263ac8(2.5f, (int)m, 0, v->x230);
-    if (m->b31 != 0) {
-        if (distance_xyz(&m->pos, D_L13_001670C0) < 28.0f) {
-            FUN_L00_0025a120(m);
-            m->b7F = 0x16;
+    v = robosquawker_moby->vars;
+    FUN_L00_00263ac8(2.5f, (int)robosquawker_moby, 0, v->x230);
+    if (robosquawker_moby->b31 != 0) {
+        if (distance_xyz(&robosquawker_moby->pos, D_L13_001670C0) < 28.0f) {
+            FUN_L00_0025a120(robosquawker_moby);
+            robosquawker_moby->b7F = 0x16;
         }
     }
     if (D_L13_0015F5C4 == 2) {
-        m->w94 = 0;
-        m->h34 |= 0x41;
+        robosquawker_moby->w94 = 0;
+        robosquawker_moby->h34 |= 0x41;
         return;
     }
-    m->w94 = *(int *)(m->w24 + 0x10);
-    m->h34 &= 0xFFBE;
-    FUN_L13_0026bd00(m, &tgt, v->f1FC + 4.0f);
+    robosquawker_moby->w94 = *(int *)(robosquawker_moby->w24 + 0x10);
+    robosquawker_moby->h34 &= 0xFFBE;
+    FUN_L13_0026bd00(robosquawker_moby, &tgt, v->f1FC + 4.0f);
     tm = tgt.moby;
     if (tm == 0 || (v->h214 == 0 && v->w22C != -1 && is_point_inside_clip_volume(&tgt, v->w22C) == 0)) {
         tgt.moby = 0;
         tm = 0;
         qzero(&tgt);
     }
-    qcopy(&old, &m->pos);
+    qcopy(&old, &robosquawker_moby->pos);
     if (v->w38 != 0) {
         v->h214 = scale_game_frames_alt(0xF0);
     }
     v->w38 = 0;
     fast_dec_timer_s16(&v->h208);
-    if (m->state != 0) {
+    if (robosquawker_moby->state != 0) {
         if (fast_dec_timer_s16(&v->h214) != 0) {
             v->f1FC = v->v1D0.f[3];
         } else {
@@ -1226,18 +1226,18 @@ void robosquawker_update(RsMoby *m) {
         }
     }
     dmg = 0.0f;
-    hit = FUN_L00_0025a420(m, 0x330000, 0);
-    fun_00213928(m, hit, &v->f20, 0, &hits, &dmg, 0, 4);
+    hit = FUN_L00_0025a420(robosquawker_moby, 0x330000, 0);
+    fun_00213928(robosquawker_moby, hit, &v->f20, 0, &hits, &dmg, 0, 4);
     fast_dec_timer_s16(&v->h26);
-    if (v->h26 < scale_game_frames_alt(0x2D) && hit != 0 && m->state != 0x63) {
+    if (v->h26 < scale_game_frames_alt(0x2D) && hit != 0 && robosquawker_moby->state != 0x63) {
         if (hit->src->hA6 >= 0xB0 && hit->src->hA6 <= 0xB1 && v->h26 != 0) {
             hit->f2C = 0.0f;
         }
-        if (m->b21 != 0xFF) {
-            FUN_L01_0026e090(m->b21, 1);
+        if (robosquawker_moby->b21 != 0xFF) {
+            FUN_L01_0026e090(robosquawker_moby->b21, 1);
         }
         if (hit->f2C != 0.0f) {
-            ang = fast_arc_tan(m->pos.f[0] - tgt.pos.f[0], m->pos.f[1] - tgt.pos.f[1]);
+            ang = fast_arc_tan(robosquawker_moby->pos.f[0] - tgt.pos.f[0], robosquawker_moby->pos.f[1] - tgt.pos.f[1]);
             v->f148 = 0.5f;
             v->w140 = 0x202;
             v->f20 -= hit->f2C;
@@ -1248,48 +1248,48 @@ void robosquawker_update(RsMoby *m) {
             v->w144 = 9;
             v->b15D = 0;
             if (v->f20 <= 0.0f) {
-                m->h34 &= 0xEFFF;
+                robosquawker_moby->h34 &= 0xEFFF;
                 v->f138 = frame_time * 10.0f;
                 v->f13C = frame_time * 5.5f;
                 *(u128 *)&va = *(u128 *)&hit->pos;
                 trooper_knockback_arc(&va, &ang, &v->f138, &v->f13C);
-                trooper_start_knockback(m, v->x120, ang, (rand() & 1) + 9, 1, 0);
+                trooper_start_knockback(robosquawker_moby, v->x120, ang, (rand() & 1) + 9, 1, 0);
                 v->f170 = 11.0f;
                 v->f174 = 18.0f;
-                m->state = 0x63;
+                robosquawker_moby->state = 0x63;
                 FUN_L13_002b4fb8((Level13VendorMoby *)v);
                 v->x110[7] = 0x78;
-                trooper_anim_update(m, (short *)v->x110);
-                FUN_L00_00257470(m, 0, -1);
+                trooper_anim_update(robosquawker_moby, (short *)v->x110);
+                FUN_L00_00257470(robosquawker_moby, 0, -1);
             } else {
                 *(u128 *)&va = *(u128 *)&hit->pos;
                 trooper_knockback_arc(&va, &ang, &v->f138, &v->f13C);
-                trooper_start_knockback(m, v->x120, ang, (rand() & 1) + 9, 1, 0);
+                trooper_start_knockback(robosquawker_moby, v->x120, ang, (rand() & 1) + 9, 1, 0);
                 v->f170 = 5.0f;
                 v->f174 = 10.0f;
-                m->state = 6;
+                robosquawker_moby->state = 6;
                 FUN_L13_002b4fb8((Level13VendorMoby *)v);
                 *(unsigned char *)&v->x110[7] = 0xFA;
                 v->h26 = scale_game_frames_alt(0x3C);
-                trooper_anim_update(m, (short *)v->x110);
+                trooper_anim_update(robosquawker_moby, (short *)v->x110);
             }
         }
     }
-    m->bA4 = 0xFF;
-    switch (m->state) {
+    robosquawker_moby->bA4 = 0xFF;
+    switch (robosquawker_moby->state) {
     case ROBOSQUAWKER_STATE_INITIALIZE:
-        qcopy(&v->v1D0, &m->pos);
+        qcopy(&v->v1D0, &robosquawker_moby->pos);
         v->v1D0.f[3] = v->f1FC;
         if (v->h20A != 0) {
-            m->state = 1;
-            if (m->b53 != 3) {
-                blend_moby_animation_c(m, 3, 0, 0);
+            robosquawker_moby->state = 1;
+            if (robosquawker_moby->b53 != 3) {
+                blend_moby_animation_c(robosquawker_moby, 3, 0, 0);
             }
         } else {
-            m->state = 0xE;
-            m->pos.f[2] += 6.0f;
-            if (m->b53 != 0) {
-                blend_moby_animation_c(m, 0, 0, 0);
+            robosquawker_moby->state = 0xE;
+            robosquawker_moby->pos.f[2] += 6.0f;
+            if (robosquawker_moby->b53 != 0) {
+                blend_moby_animation_c(robosquawker_moby, 0, 0, 0);
             }
         }
         v->h214 = 0;
@@ -1306,53 +1306,53 @@ void robosquawker_update(RsMoby *m) {
         v->f1A4 = v->f204 * frame_time;
         v->w1B8 |= 0x30;
         if (rand() & 1) {
-            m->h34 |= 0x8000;
+            robosquawker_moby->h34 |= 0x8000;
         }
         v->pD0 = &D_L13_001613A0;
         if (v->w220 != -1) {
-            v->w224 = FUN_L01_0028b510(&m->pos, D_L13_001B07B0[v->w220], 0.0f);
+            v->w224 = FUN_L01_0028b510(&robosquawker_moby->pos, D_L13_001B07B0[v->w220], 0.0f);
         }
         break;
     case ROBOSQUAWKER_STATE_FLIGHT_IDLE: {
         float d;
 
-        FUN_L13_002b4f28((unsigned char *)m, (char *)v);
-        subtract_vector_xyz(&va, &tgt, &m->pos);
-        d = probe_ground_height(&m->pos, 0x120, 0.5f);
+        FUN_L13_002b4f28((unsigned char *)robosquawker_moby, (char *)v);
+        subtract_vector_xyz(&va, &tgt, &robosquawker_moby->pos);
+        d = probe_ground_height(&robosquawker_moby->pos, 0x120, 0.5f);
         if (d > 1.0f
             && vector_length_xy(&va) < v->f1FC + 4.0f
-            && absolute_float(m->pos.f[2] - tgt.pos.f[2]) < 10.0f
+            && absolute_float(robosquawker_moby->pos.f[2] - tgt.pos.f[2]) < 10.0f
             && random_integer_below(0x13) == 0) {
-            if (m->b53 != 0) {
-                blend_moby_animation_c(m, 0, 0, scale_game_frames_alt(3));
+            if (robosquawker_moby->b53 != 0) {
+                blend_moby_animation_c(robosquawker_moby, 0, 0, scale_game_frames_alt(3));
             }
-            m->state = 0x11;
+            robosquawker_moby->state = 0x11;
             FUN_L13_002b4fb8((Level13VendorMoby *)v);
-        } else if (d > 1.0f && m->bBC == 1 && random_integer_below(4) == 0) {
+        } else if (d > 1.0f && robosquawker_moby->bBC == 1 && random_integer_below(4) == 0) {
             if (random_integer_below(0x100) & 1) {
                 v->f1F8 = -v->f1F8;
             }
             v->f1F4 = v->f1F8 * 0.017453292f;
             v->w210 = scale_game_frames_alt((int)random_float_between(30.0f, 90.0f));
-            if (m->b53 != 0) {
-                blend_moby_animation_c(m, 0, 0, scale_game_frames_alt(3));
+            if (robosquawker_moby->b53 != 0) {
+                blend_moby_animation_c(robosquawker_moby, 0, 0, scale_game_frames_alt(3));
             }
             FUN_L13_002b4fb8((Level13VendorMoby *)v);
-            m->state = 0x11;
+            robosquawker_moby->state = 0x11;
             clear_u64_value(&v->v40);
-            m->bBC = 0;
+            robosquawker_moby->bBC = 0;
         } else if (v->w220 != -1) {
             char *path;
 
             path = D_L13_001B07B0[v->w220];
-            if (distance_xyz(&m->pos, path + (v->w224 * 16 + 16)) < 0.25f) {
+            if (distance_xyz(&robosquawker_moby->pos, path + (v->w224 * 16 + 16)) < 0.25f) {
                 v->w224 += 1;
                 if (v->w224 >= *(int *)path) {
                     v->w224 = 0;
                 }
             }
             qcopy(&v->v1E0, path + v->w224 * 16 + 16);
-            m->state = 0x12;
+            robosquawker_moby->state = 0x12;
         } else if (func_001F9908_i(&v->w20C) != 0) {
             int i;
 
@@ -1372,44 +1372,44 @@ void robosquawker_update(RsMoby *m) {
                     break;
                 }
             }
-            if (m->b53 != 0) {
-                blend_moby_animation_c(m, 0, 0, scale_game_frames_alt(3));
+            if (robosquawker_moby->b53 != 0) {
+                blend_moby_animation_c(robosquawker_moby, 0, 0, scale_game_frames_alt(3));
             }
-            m->state = 0xF;
+            robosquawker_moby->state = 0xF;
         }
         break;
     }
     case ROBOSQUAWKER_STATE_FLY_TO_RANDOM_POINT: {
         float a;
 
-        a = fast_arc_tan(v->v1E0.f[0] - m->pos.f[0], v->v1E0.f[1] - m->pos.f[1]);
-        FUN_L00_00258278((char *)m, &v->f1F0, a, 0.03f, 0.6f, 0.09f);
-        h = vector_length_xyz(&v->v40);
-        m->f58 = h * 20.0f + 1.0f;
-        subtract_vector_xyz(&v->v40, &v->v1E0, &m->pos);
+        a = fast_arc_tan(v->v1E0.f[0] - robosquawker_moby->pos.f[0], v->v1E0.f[1] - robosquawker_moby->pos.f[1]);
+        FUN_L00_00258278((char *)robosquawker_moby, &v->f1F0, a, 0.03f, 0.6f, 0.09f);
+        flight_step_length = vector_length_xyz(&v->v40);
+        robosquawker_moby->f58 = flight_step_length * 20.0f + 1.0f;
+        subtract_vector_xyz(&v->v40, &v->v1E0, &robosquawker_moby->pos);
         if (vector_length_xyz(&v->v40) > 1.0f) {
-            approach_value(&h, frame_time * 4.0f, frame_time_sq * 6.0f);
+            approach_value(&flight_step_length, frame_time * 4.0f, frame_time_sq * 6.0f);
         } else {
-            approach_value(&h, frame_time, frame_time_sq * 8.0f);
+            approach_value(&flight_step_length, frame_time, frame_time_sq * 8.0f);
         }
-        FUN_L00_0025f730(&v->v40, h);
-        add_vector_xyz(&va, &v->v40, &m->pos);
-        if (coll_sphere(1.2f, &va, 0, m) != 0) {
+        FUN_L00_0025f730(&v->v40, flight_step_length);
+        add_vector_xyz(&va, &v->v40, &robosquawker_moby->pos);
+        if (coll_sphere(1.2f, &va, 0, robosquawker_moby) != 0) {
             clear_u64_value(&v->v40);
-            if (m->b53 != 0) {
-                blend_moby_animation_c(m, 0, 0, scale_game_frames_alt(3));
+            if (robosquawker_moby->b53 != 0) {
+                blend_moby_animation_c(robosquawker_moby, 0, 0, scale_game_frames_alt(3));
             }
-            m->state = 0xE;
+            robosquawker_moby->state = 0xE;
         } else {
-            qcopy(&m->pos, &va);
+            qcopy(&robosquawker_moby->pos, &va);
         }
-        if (distance_xyz(&m->pos, &v->v1E0) < h || h == 0.0f) {
-            if (m->b53 != 0) {
-                blend_moby_animation_c(m, 0, 0, scale_game_frames_alt(3));
+        if (distance_xyz(&robosquawker_moby->pos, &v->v1E0) < flight_step_length || flight_step_length == 0.0f) {
+            if (robosquawker_moby->b53 != 0) {
+                blend_moby_animation_c(robosquawker_moby, 0, 0, scale_game_frames_alt(3));
             }
-            m->state = 0xE;
+            robosquawker_moby->state = 0xE;
         }
-        FUN_L13_002b4f28((unsigned char *)m, (char *)v);
+        FUN_L13_002b4f28((unsigned char *)robosquawker_moby, (char *)v);
         break;
     }
     case ROBOSQUAWKER_STATE_FOLLOW_FLIGHT_PATH: {
@@ -1418,13 +1418,13 @@ void robosquawker_update(RsMoby *m) {
         float d;
 
         path = D_L13_001B07B0[v->w220];
-        a = fast_arc_tan(v->v1E0.f[0] - m->pos.f[0], v->v1E0.f[1] - m->pos.f[1]);
-        FUN_L00_00258278((char *)m, &v->f1F0, a, 0.018f, 0.8f, 0.09f);
-        subtract_vector_xyz(&v->v40, &v->v1E0, &m->pos);
+        a = fast_arc_tan(v->v1E0.f[0] - robosquawker_moby->pos.f[0], v->v1E0.f[1] - robosquawker_moby->pos.f[1]);
+        FUN_L00_00258278((char *)robosquawker_moby, &v->f1F0, a, 0.018f, 0.8f, 0.09f);
+        subtract_vector_xyz(&v->v40, &v->v1E0, &robosquawker_moby->pos);
         FUN_L00_0025f730(&v->v40, frame_time * 4.0f);
-        add_vector_xyz(&va, &v->v40, &m->pos);
-        m->f58 = vector_length_xyz(&v->v40) * 20.0f + 1.0f;
-        if (coll_sphere(1.2f, &va, 0, m) != 0) {
+        add_vector_xyz(&va, &v->v40, &robosquawker_moby->pos);
+        robosquawker_moby->f58 = vector_length_xyz(&v->v40) * 20.0f + 1.0f;
+        if (coll_sphere(1.2f, &va, 0, robosquawker_moby) != 0) {
             int i;
 
             v->w20C = scale_game_frames_alt(0x78);
@@ -1443,14 +1443,14 @@ void robosquawker_update(RsMoby *m) {
                     break;
                 }
             }
-            if (m->b53 != 0) {
-                blend_moby_animation_c(m, 0, 0, scale_game_frames_alt(3));
+            if (robosquawker_moby->b53 != 0) {
+                blend_moby_animation_c(robosquawker_moby, 0, 0, scale_game_frames_alt(3));
             }
-            m->state = 0xF;
+            robosquawker_moby->state = 0xF;
         } else {
-            qcopy(&m->pos, &va);
+            qcopy(&robosquawker_moby->pos, &va);
         }
-        d = distance_xyz(&m->pos, &v->v1E0);
+        d = distance_xyz(&robosquawker_moby->pos, &v->v1E0);
         if (d < vector_length_xyz(&v->v40)) {
             float g;
 
@@ -1460,58 +1460,58 @@ void robosquawker_update(RsMoby *m) {
             }
             qcopy(&v->v1E0, path + v->w224 * 16 + 16);
             v->v1E0.f[2] = v->v1E0.f[2] + random_float_between(-0.2f, 0.2f);
-            g = probe_ground_height(&m->pos, 0x120, 0.5f);
+            g = probe_ground_height(&robosquawker_moby->pos, 0x120, 0.5f);
             if (g > 1.0f
                 && vector_length_xy(&vb) < v->f1FC + 4.0f
-                && absolute_float(m->pos.f[2] - tgt.pos.f[2]) < 10.0f
+                && absolute_float(robosquawker_moby->pos.f[2] - tgt.pos.f[2]) < 10.0f
                 && random_integer_below(0x13) == 0) {
-                if (m->b53 != 0) {
-                    blend_moby_animation_c(m, 0, 0, scale_game_frames_alt(3));
+                if (robosquawker_moby->b53 != 0) {
+                    blend_moby_animation_c(robosquawker_moby, 0, 0, scale_game_frames_alt(3));
                 }
                 qzero(&v->v40);
-                m->state = 0x11;
+                robosquawker_moby->state = 0x11;
                 FUN_L13_002b4fb8((Level13VendorMoby *)v);
-            } else if (g > 1.0f && m->bBC == 1 && random_integer_below(4) == 0) {
+            } else if (g > 1.0f && robosquawker_moby->bBC == 1 && random_integer_below(4) == 0) {
                 if (random_integer_below(0x100) & 1) {
                     v->f1F8 = -v->f1F8;
                 }
                 v->f1F4 = v->f1F8 * 0.017453292f;
                 v->w210 = scale_game_frames_alt((int)random_float_between(30.0f, 90.0f));
-                if (m->b53 != 0) {
-                    blend_moby_animation_c(m, 0, 0, scale_game_frames_alt(3));
+                if (robosquawker_moby->b53 != 0) {
+                    blend_moby_animation_c(robosquawker_moby, 0, 0, scale_game_frames_alt(3));
                 }
                 FUN_L13_002b4fb8((Level13VendorMoby *)v);
                 qzero(&v->v40);
-                m->state = 0x11;
+                robosquawker_moby->state = 0x11;
                 clear_u64_value(&v->v40);
-                m->bBC = 0;
+                robosquawker_moby->bBC = 0;
             }
         }
-        FUN_L13_002b4f28((unsigned char *)m, (char *)v);
+        FUN_L13_002b4f28((unsigned char *)robosquawker_moby, (char *)v);
         break;
     }
     case ROBOSQUAWKER_STATE_LAND: {
         float g;
 
-        g = probe_ground_height(&m->pos, 0x120, 0.5f);
+        g = probe_ground_height(&robosquawker_moby->pos, 0x120, 0.5f);
         approach_value(&v->v40.f[2], -(frame_time * 8.0f), frame_time_sq * 10.8f);
-        FUN_L00_00258830(m, &v->v40, 0.6f, 0.5f, 0.0f, 0);
-        if (m->b53 != 2
-            && m->pos.f[2] - g <= frame_time * 8.0f * FUN_L04_001f1978(45.0f)
-            && m->b53 != 2) {
-            blend_moby_animation_c(m, 2, 0, scale_game_frames_alt(5));
+        FUN_L00_00258830(robosquawker_moby, &v->v40, 0.6f, 0.5f, 0.0f, 0);
+        if (robosquawker_moby->b53 != 2
+            && robosquawker_moby->pos.f[2] - g <= frame_time * 8.0f * FUN_L04_001f1978(45.0f)
+            && robosquawker_moby->b53 != 2) {
+            blend_moby_animation_c(robosquawker_moby, 2, 0, scale_game_frames_alt(5));
         }
-        if (m->pos.f[2] <= g) {
-            m->pos.f[2] = g;
+        if (robosquawker_moby->pos.f[2] <= g) {
+            robosquawker_moby->pos.f[2] = g;
             if (random_integer_below(0x100) & 1) {
                 v->f1F8 = -v->f1F8;
             }
             v->f1F4 = v->f1F8 * 0.017453292f;
             v->w210 = scale_game_frames_alt((int)random_float_between(30.0f, 90.0f));
-            m->state = 3;
+            robosquawker_moby->state = 3;
             clear_u64_value(&v->v40);
-            if (m->b53 != 5) {
-                blend_moby_animation_c(m, 5, 0, scale_game_frames_alt(3));
+            if (robosquawker_moby->b53 != 5) {
+                blend_moby_animation_c(robosquawker_moby, 5, 0, scale_game_frames_alt(3));
             }
         }
         break;
@@ -1519,151 +1519,151 @@ void robosquawker_update(RsMoby *m) {
     case ROBOSQUAWKER_STATE_TAKEOFF: {
         float g;
 
-        g = probe_ground_height(&m->pos, 0x120, 0.5f);
-        if (m->pos.f[2] - g < 3.0f) {
+        g = probe_ground_height(&robosquawker_moby->pos, 0x120, 0.5f);
+        if (robosquawker_moby->pos.f[2] - g < 3.0f) {
             approach_value(&v->v40.f[2], frame_time * 8.0f, frame_time_sq * 10.8f);
         } else {
             approach_value(&v->v40.f[2], frame_time, frame_time_sq * 10.8f);
         }
-        FUN_L00_00258830(m, &v->v40, 0.6f, 0.5f, 0.0f, 0);
-        m->f58 = 6.0f - (m->pos.f[2] - g) / 6.0f * 5.0f;
-        if (g + 6.0f <= m->pos.f[2]) {
-            m->pos.f[2] = g + 6.0f;
-            if (m->b53 != 0) {
-                blend_moby_animation_c(m, 0, 0, scale_game_frames_alt(3));
+        FUN_L00_00258830(robosquawker_moby, &v->v40, 0.6f, 0.5f, 0.0f, 0);
+        robosquawker_moby->f58 = 6.0f - (robosquawker_moby->pos.f[2] - g) / 6.0f * 5.0f;
+        if (g + 6.0f <= robosquawker_moby->pos.f[2]) {
+            robosquawker_moby->pos.f[2] = g + 6.0f;
+            if (robosquawker_moby->b53 != 0) {
+                blend_moby_animation_c(robosquawker_moby, 0, 0, scale_game_frames_alt(3));
             }
-            m->state = 0xE;
+            robosquawker_moby->state = 0xE;
             clear_u64_value(&v->v40);
         }
-        FUN_L13_002b4f28((unsigned char *)m, (char *)v);
+        FUN_L13_002b4f28((unsigned char *)robosquawker_moby, (char *)v);
         break;
     }
     case ROBOSQUAWKER_STATE_GROUND_IDLE:
-        subtract_vector_xyz(&va, &tgt, &m->pos);
+        subtract_vector_xyz(&va, &tgt, &robosquawker_moby->pos);
         if (vector_length_xyz(&va) < v->f1FC + 4.0f
-            && absolute_float(m->pos.f[2] - tgt.pos.f[2]) < 8.0f
+            && absolute_float(robosquawker_moby->pos.f[2] - tgt.pos.f[2]) < 8.0f
             && random_integer_below(0x13) == 0) {
-            m->state = 2;
-            if (m->b53 != 4) {
-                blend_moby_animation_c(m, 4, 0, scale_game_frames_alt(3));
+            robosquawker_moby->state = 2;
+            if (robosquawker_moby->b53 != 4) {
+                blend_moby_animation_c(robosquawker_moby, 4, 0, scale_game_frames_alt(3));
             }
-        } else if (m->bBC == 1 && random_integer_below(0x13) == 0) {
+        } else if (robosquawker_moby->bBC == 1 && random_integer_below(0x13) == 0) {
             if (random_integer_below(0x100) & 1) {
                 v->f1F8 = -v->f1F8;
             }
             v->f1F4 = v->f1F8 * 0.017453292f;
             v->w210 = scale_game_frames_alt((int)random_float_between(30.0f, 90.0f));
-            m->state = 3;
-            if (m->b53 != 5) {
-                blend_moby_animation_c(m, 5, 0, scale_game_frames_alt(3));
+            robosquawker_moby->state = 3;
+            if (robosquawker_moby->b53 != 5) {
+                blend_moby_animation_c(robosquawker_moby, 5, 0, scale_game_frames_alt(3));
             }
-            m->bBC = 0;
+            robosquawker_moby->bBC = 0;
         } else if (vector_length_xyz(&va) > v->f1FC + 6.0f && v->h20A == 0) {
             qzero(&v->v40);
-            m->state = 0x10;
-            if (m->b53 != 0) {
-                blend_moby_animation_c(m, 0, 0, scale_game_frames_alt(3));
+            robosquawker_moby->state = 0x10;
+            if (robosquawker_moby->b53 != 0) {
+                blend_moby_animation_c(robosquawker_moby, 0, 0, scale_game_frames_alt(3));
             }
         }
-        FUN_L13_002b4ff0((char *)m, (char *)v);
+        FUN_L13_002b4ff0((char *)robosquawker_moby, (char *)v);
         break;
     case ROBOSQUAWKER_STATE_WAIT_FOR_CLOSE_TARGET:
-        subtract_vector_xyz(&va, &tgt, &m->pos);
+        subtract_vector_xyz(&va, &tgt, &robosquawker_moby->pos);
         if (vector_length_xyz(&va) < v->f1FC - 4.0f
-            && absolute_float(m->pos.f[2] - tgt.pos.f[2]) < 8.0f
+            && absolute_float(robosquawker_moby->pos.f[2] - tgt.pos.f[2]) < 8.0f
             && random_integer_below(0x13) == 0) {
-            m->state = 2;
-            m->pos.f[2] += 1.0f;
-            if (m->b53 != 4) {
-                blend_moby_animation_c(m, 4, 0, scale_game_frames_alt(3));
+            robosquawker_moby->state = 2;
+            robosquawker_moby->pos.f[2] += 1.0f;
+            if (robosquawker_moby->b53 != 4) {
+                blend_moby_animation_c(robosquawker_moby, 4, 0, scale_game_frames_alt(3));
             }
         }
         break;
     case ROBOSQUAWKER_STATE_PREPARE_HOME_HOP: {
         float a;
 
-        a = fast_arc_tan(v->v1D0.f[0] - m->pos.f[0], v->v1D0.f[1] - m->pos.f[1]);
-        FUN_L00_00258278((char *)m, &v->f1F0, a, 0.05f, 0.3f, 0.2f);
+        a = fast_arc_tan(v->v1D0.f[0] - robosquawker_moby->pos.f[0], v->v1D0.f[1] - robosquawker_moby->pos.f[1]);
+        FUN_L00_00258278((char *)robosquawker_moby, &v->f1F0, a, 0.05f, 0.3f, 0.2f);
         subtract_vector_xyz(&va, &tgt, &v->v1D0);
-        if ((vector_length_xyz(&va) < v->f1FC && absolute_float(v->v1D0.f[2] - tgt.pos.f[2]) < 8.0f) || m->bBC == 2) {
-            if (m->b21 != 0xFF) {
-                FUN_L01_0026e090(m->b21, 2);
+        if ((vector_length_xyz(&va) < v->f1FC && absolute_float(v->v1D0.f[2] - tgt.pos.f[2]) < 8.0f) || robosquawker_moby->bBC == 2) {
+            if (robosquawker_moby->b21 != 0xFF) {
+                FUN_L01_0026e090(robosquawker_moby->b21, 2);
             }
-            if (m->b53 != (rand() & 1) + 9) {
-                blend_moby_animation_c(m, (rand() & 1) + 9, 0, scale_game_frames_alt(3));
+            if (robosquawker_moby->b53 != (rand() & 1) + 9) {
+                blend_moby_animation_c(robosquawker_moby, (rand() & 1) + 9, 0, scale_game_frames_alt(3));
             }
             v->f134 = 0.0f;
             v->f130 = D_L13_0016139C;
             v->f138 = D_L13_00161398 * frame_time;
-            v->f13C = FUN_L00_0025abf0(&m->pos, &v->v1D0, &out, D_L13_00161398 * frame_time, -D_L13_0016139C);
+            v->f13C = FUN_L00_0025abf0(&robosquawker_moby->pos, &v->v1D0, &out, D_L13_00161398 * frame_time, -D_L13_0016139C);
             v->w144 = 0xD;
             v->b15D = 0;
-            trooper_start_knockback(m, v->x120, m->rot.f[2], (rand() & 1) + 9, 1, 0);
+            trooper_start_knockback(robosquawker_moby, v->x120, robosquawker_moby->rot.f[2], (rand() & 1) + 9, 1, 0);
             v->f170 = 5.0f;
             v->f174 = 10.0f;
-            FUN_L13_002b4f28((unsigned char *)m, (char *)v);
-            m->state = 0xB;
+            FUN_L13_002b4f28((unsigned char *)robosquawker_moby, (char *)v);
+            robosquawker_moby->state = 0xB;
         }
         break;
     }
     case ROBOSQUAWKER_STATE_HOME_HOP:
-        if (mine_fall(m, v->x120) & 1) {
+        if (mine_fall(robosquawker_moby, v->x120) & 1) {
             FUN_L13_002b4fb8((Level13VendorMoby *)v);
             qzero(v->x120);
-            m->state = 3;
+            robosquawker_moby->state = 3;
             if (random_integer_below(0x100) & 1) {
                 v->f1F8 = -v->f1F8;
             }
             v->f1F4 = v->f1F8 * 0.017453292f;
             v->w210 = scale_game_frames_alt((int)random_float_between(30.0f, 90.0f));
-            if (m->b53 != 5) {
-                blend_moby_animation_c(m, 5, 8, scale_game_frames_alt(3));
+            if (robosquawker_moby->b53 != 5) {
+                blend_moby_animation_c(robosquawker_moby, 5, 8, scale_game_frames_alt(3));
             }
             return;
-        } else if (m->pos.f[2] < 5.0f) {
-            FUN_L00_00257470(m, 0, -1);
-            mark_moby_for_removal_c(m);
+        } else if (robosquawker_moby->pos.f[2] < 5.0f) {
+            FUN_L00_00257470(robosquawker_moby, 0, -1);
+            mark_moby_for_removal_c(robosquawker_moby);
             return;
         }
         break;
     case ROBOSQUAWKER_STATE_FACE_AWAY_WAIT_FOR_CHASE: {
         float a;
 
-        a = fast_arc_tan(m->pos.f[0] - tgt.pos.f[0], m->pos.f[1] - tgt.pos.f[1]);
-        FUN_L00_00258278((char *)m, &v->f1F0, a, 0.02f, 0.3f, 0.1f);
-        subtract_vector_xyz(&va, &tgt, &m->pos);
+        a = fast_arc_tan(robosquawker_moby->pos.f[0] - tgt.pos.f[0], robosquawker_moby->pos.f[1] - tgt.pos.f[1]);
+        FUN_L00_00258278((char *)robosquawker_moby, &v->f1F0, a, 0.02f, 0.3f, 0.1f);
+        subtract_vector_xyz(&va, &tgt, &robosquawker_moby->pos);
         if (vector_length_xyz(&va) < v->f1FC
-            && absolute_float(m->pos.f[2] - tgt.pos.f[2]) < 8.0f
+            && absolute_float(robosquawker_moby->pos.f[2] - tgt.pos.f[2]) < 8.0f
             && random_integer_below(0x13) == 0) {
-            if (m->b21 != 0xFF) {
-                FUN_L01_0026e090(m->b21, 1);
+            if (robosquawker_moby->b21 != 0xFF) {
+                FUN_L01_0026e090(robosquawker_moby->b21, 1);
             }
             if (random_integer_below(0x100) & 1) {
                 v->f1F8 = -v->f1F8;
             }
             v->f1F4 = v->f1F8 * 0.017453292f;
             v->w210 = scale_game_frames_alt((int)random_float_between(30.0f, 90.0f));
-            m->state = 3;
-            if (m->b53 != 5) {
-                blend_moby_animation_c(m, 5, 0, scale_game_frames_alt(3));
+            robosquawker_moby->state = 3;
+            if (robosquawker_moby->b53 != 5) {
+                blend_moby_animation_c(robosquawker_moby, 5, 0, scale_game_frames_alt(3));
             }
-            m->bBC = 0;
-        } else if (m->bBC == 1 && random_integer_below(0x13) == 0) {
+            robosquawker_moby->bBC = 0;
+        } else if (robosquawker_moby->bBC == 1 && random_integer_below(0x13) == 0) {
             if (random_integer_below(0x100) & 1) {
                 v->f1F8 = -v->f1F8;
             }
             v->f1F4 = v->f1F8 * 0.017453292f;
             v->w210 = scale_game_frames_alt((int)random_float_between(30.0f, 90.0f));
-            m->state = 3;
-            if (m->b53 != 5) {
-                blend_moby_animation_c(m, 5, 0, scale_game_frames_alt(3));
+            robosquawker_moby->state = 3;
+            if (robosquawker_moby->b53 != 5) {
+                blend_moby_animation_c(robosquawker_moby, 5, 0, scale_game_frames_alt(3));
             }
-            m->bBC = 0;
+            robosquawker_moby->bBC = 0;
         }
-        if (m->b53 == 4 && (m->b70 & 2)) {
-            blend_moby_animation_c(m, 3, 0, scale_game_frames_alt(3));
+        if (robosquawker_moby->b53 == 4 && (robosquawker_moby->b70 & 2)) {
+            blend_moby_animation_c(robosquawker_moby, 3, 0, scale_game_frames_alt(3));
         }
-        FUN_L13_002b4ff0((char *)m, (char *)v);
+        FUN_L13_002b4ff0((char *)robosquawker_moby, (char *)v);
         break;
     }
     case ROBOSQUAWKER_STATE_CHASE_TARGET: {
@@ -1672,47 +1672,47 @@ void robosquawker_update(RsMoby *m) {
         float a;
         float d;
 
-        r = absolute_float(m->pos.f[2] - tgt.pos.f[2]);
-        r = r / vector_distance(&m->pos, &tgt);
+        r = absolute_float(robosquawker_moby->pos.f[2] - tgt.pos.f[2]);
+        r = r / vector_distance(&robosquawker_moby->pos, &tgt);
         if (v->w21C != -1) {
-            FUN_L01_0028b5e0(m, D_L13_001B07B0[v->w21C], &tgt, &vb);
+            FUN_L01_0028b5e0(robosquawker_moby, D_L13_001B07B0[v->w21C], &tgt, &vb);
         } else {
             qcopy(&vb, &tgt);
         }
-        a = fast_arc_tan(vb.f[0] - m->pos.f[0], vb.f[1] - m->pos.f[1]) + v->f1F4;
-        FUN_L00_00258278((char *)m, &v->f1F0, a, 0.05f, 0.3f, 0.2f);
-        va.f[0] = fast_cos(m->rot.f[2]) * 2.0f;
-        va.f[1] = fast_sin(m->rot.f[2]) * 2.0f;
+        a = fast_arc_tan(vb.f[0] - robosquawker_moby->pos.f[0], vb.f[1] - robosquawker_moby->pos.f[1]) + v->f1F4;
+        FUN_L00_00258278((char *)robosquawker_moby, &v->f1F0, a, 0.05f, 0.3f, 0.2f);
+        va.f[0] = fast_cos(robosquawker_moby->rot.f[2]) * 2.0f;
+        va.f[1] = fast_sin(robosquawker_moby->rot.f[2]) * 2.0f;
         va.f[2] = 0.0f;
-        res = FUN_L00_00258b50(m, &v->w180, &va, &vb, 1.0f);
+        res = FUN_L00_00258b50(robosquawker_moby, &v->w180, &va, &vb, 1.0f);
         if (func_001F9908_i(&v->w210) != 0) {
             v->w210 = scale_game_frames_alt((int)random_float_between(30.0f, 90.0f));
             v->f1F4 = -v->f1F4;
         }
         subtract_vector_xyz(&vc, &tgt, &v->v1D0);
-        d = vector_distance(&m->pos, &tgt);
+        d = vector_distance(&robosquawker_moby->pos, &tgt);
         if ((d < 1.5f
              || (tgt.moby != 0 && tgt.moby->hA6 == 0x10E && tgt.moby->state != 0xFE && tgt.moby->state != 0xFD && d < 2.3f))
             && !(res & 2)) {
-            m->state = 4;
-            if (m->b53 != 6) {
-                blend_moby_animation_c(m, 6, 0, scale_game_frames_alt(3));
+            robosquawker_moby->state = 4;
+            if (robosquawker_moby->b53 != 6) {
+                blend_moby_animation_c(robosquawker_moby, 6, 0, scale_game_frames_alt(3));
             }
         } else {
             if (r > 1.0f || (res & 2)) {
-                m->pos.f[0] = old.f[0];
-                m->pos.f[1] = old.f[1];
+                robosquawker_moby->pos.f[0] = old.f[0];
+                robosquawker_moby->pos.f[1] = old.f[1];
             }
-            if (vector_length_xyz(&vc) < v->f1FC + 4.0f && absolute_float(m->pos.f[2] - tgt.pos.f[2]) < 8.0f) {
-                if (m->b21 != 0xFF) {
-                    FUN_L01_0026e090(m->b21, 1);
+            if (vector_length_xyz(&vc) < v->f1FC + 4.0f && absolute_float(robosquawker_moby->pos.f[2] - tgt.pos.f[2]) < 8.0f) {
+                if (robosquawker_moby->b21 != 0xFF) {
+                    FUN_L01_0026e090(robosquawker_moby->b21, 1);
                 }
-            } else if (m->bBC != 1) {
-                m->state = 5;
+            } else if (robosquawker_moby->bBC != 1) {
+                robosquawker_moby->state = 5;
             }
         }
-        m->bBC = 0;
-        FUN_L13_002b4ff0((char *)m, (char *)v);
+        robosquawker_moby->bBC = 0;
+        FUN_L13_002b4ff0((char *)robosquawker_moby, (char *)v);
         break;
     }
     case ROBOSQUAWKER_STATE_PECK_ATTACK: {
@@ -1724,42 +1724,42 @@ void robosquawker_update(RsMoby *m) {
         float da;
         float g;
 
-        a = fast_arc_tan(tgt.pos.f[0] - m->pos.f[0], tgt.pos.f[1] - m->pos.f[1]);
-        FUN_L00_00258278((char *)m, &v->f1F0, a, 0.05f, 0.3f, 0.2f);
-        same = m->b52 == m->b53;
-        hh = compute_interpolated_record_value(m);
-        dz = absolute_float(m->pos.f[2] - tgt.pos.f[2]);
-        d = vector_distance(&m->pos, &tgt);
-        da = fast_difference_between_rotations(fast_arc_tan(tgt.pos.f[0] - m->pos.f[0], tgt.pos.f[1] - m->pos.f[1]), m->rot.f[2]);
+        a = fast_arc_tan(tgt.pos.f[0] - robosquawker_moby->pos.f[0], tgt.pos.f[1] - robosquawker_moby->pos.f[1]);
+        FUN_L00_00258278((char *)robosquawker_moby, &v->f1F0, a, 0.05f, 0.3f, 0.2f);
+        same = robosquawker_moby->b52 == robosquawker_moby->b53;
+        hh = compute_interpolated_record_value(robosquawker_moby);
+        dz = absolute_float(robosquawker_moby->pos.f[2] - tgt.pos.f[2]);
+        d = vector_distance(&robosquawker_moby->pos, &tgt);
+        da = fast_difference_between_rotations(fast_arc_tan(tgt.pos.f[0] - robosquawker_moby->pos.f[0], tgt.pos.f[1] - robosquawker_moby->pos.f[1]), robosquawker_moby->rot.f[2]);
         if (same
             && absolute_float(hh - 13.0f) < 0.2f
             && dz < 1.5f
             && (d < 2.0f
                 || (tgt.moby != 0 && tgt.moby->hA6 == 0x10E && tgt.moby->state != 0xFE && tgt.moby->state != 0xFD && d < 2.6f))
             && da < 0.2617994f) {
-            va.f[0] = fast_cos(m->rot.f[2]) * 0.2f;
-            va.f[1] = fast_sin(m->rot.f[2]) * 0.2f;
+            va.f[0] = fast_cos(robosquawker_moby->rot.f[2]) * 0.2f;
+            va.f[1] = fast_sin(robosquawker_moby->rot.f[2]) * 0.2f;
             va.f[2] = 0.0f;
             qcopy(&vb, &tgt);
             vb.f[2] += 0.75f;
             if (tm != 0) {
-                spawn_nearby_effect(tm, (int)m, 1, &vb, &va, 1.0f);
+                spawn_nearby_effect(tm, (int)robosquawker_moby, 1, &vb, &va, 1.0f);
             }
         }
-        if ((m->b70 & 2) && vector_distance(&m->pos, &tgt) > 1.5f) {
-            m->state = 3;
-            if (m->b53 != 5) {
-                blend_moby_animation_c(m, 5, 0, scale_game_frames_alt(3));
+        if ((robosquawker_moby->b70 & 2) && vector_distance(&robosquawker_moby->pos, &tgt) > 1.5f) {
+            robosquawker_moby->state = 3;
+            if (robosquawker_moby->b53 != 5) {
+                blend_moby_animation_c(robosquawker_moby, 5, 0, scale_game_frames_alt(3));
             }
         }
-        g = probe_ground_height(&m->pos, 0x120, 0.5f);
+        g = probe_ground_height(&robosquawker_moby->pos, 0x120, 0.5f);
         v->f198 -= frame_time_sq * 9.8f;
-        m->pos.f[2] += v->f198;
-        if (m->pos.f[2] < g) {
+        robosquawker_moby->pos.f[2] += v->f198;
+        if (robosquawker_moby->pos.f[2] < g) {
             v->f198 = 0.0f;
-            m->pos.f[2] = g;
+            robosquawker_moby->pos.f[2] = g;
         }
-        FUN_L13_002b4ff0((char *)m, (char *)v);
+        FUN_L13_002b4ff0((char *)robosquawker_moby, (char *)v);
         break;
     }
     case ROBOSQUAWKER_STATE_RETURN_HOME: {
@@ -1767,68 +1767,68 @@ void robosquawker_update(RsMoby *m) {
         float a;
 
         if (v->w21C != -1) {
-            FUN_L01_0028b5e0(m, D_L13_001B07B0[v->w21C], &v->v1D0, &vb);
+            FUN_L01_0028b5e0(robosquawker_moby, D_L13_001B07B0[v->w21C], &v->v1D0, &vb);
         } else {
             qcopy(&vb, &v->v1D0);
         }
-        a = fast_arc_tan(vb.f[0] - m->pos.f[0], vb.f[1] - m->pos.f[1]);
-        FUN_L00_00258278((char *)m, &v->f1F0, a, 0.02f, 0.3f, 0.1f);
-        va.f[0] = fast_cos(m->rot.f[2]) * 2.0f;
-        va.f[1] = fast_sin(m->rot.f[2]) * 2.0f;
+        a = fast_arc_tan(vb.f[0] - robosquawker_moby->pos.f[0], vb.f[1] - robosquawker_moby->pos.f[1]);
+        FUN_L00_00258278((char *)robosquawker_moby, &v->f1F0, a, 0.02f, 0.3f, 0.1f);
+        va.f[0] = fast_cos(robosquawker_moby->rot.f[2]) * 2.0f;
+        va.f[1] = fast_sin(robosquawker_moby->rot.f[2]) * 2.0f;
         va.f[2] = 0.0f;
-        res = FUN_L00_00258b50(m, &v->w180, &va, &vb, 1.0f);
-        if (vector_distance(&m->pos, &v->v1D0) < 2.0f) {
-            m->state = 1;
-            if (m->b53 != 3) {
-                blend_moby_animation_c(m, 3, 0, scale_game_frames_alt(3));
+        res = FUN_L00_00258b50(robosquawker_moby, &v->w180, &va, &vb, 1.0f);
+        if (vector_distance(&robosquawker_moby->pos, &v->v1D0) < 2.0f) {
+            robosquawker_moby->state = 1;
+            if (robosquawker_moby->b53 != 3) {
+                blend_moby_animation_c(robosquawker_moby, 3, 0, scale_game_frames_alt(3));
             }
         }
         subtract_vector_xyz(&vc, &tgt, &v->v1D0);
         if (vector_length_xyz(&vc) < v->f1FC) {
-            if (m->b21 != 0xFF) {
-                FUN_L01_0026e090(m->b21, 1);
+            if (robosquawker_moby->b21 != 0xFF) {
+                FUN_L01_0026e090(robosquawker_moby->b21, 1);
             }
-            m->state = 3;
-            if (m->b53 != 5) {
-                blend_moby_animation_c(m, 5, 0, scale_game_frames_alt(3));
+            robosquawker_moby->state = 3;
+            if (robosquawker_moby->b53 != 5) {
+                blend_moby_animation_c(robosquawker_moby, 5, 0, scale_game_frames_alt(3));
             }
-        } else if (m->bBC == 1) {
-            m->state = 3;
-            if (m->b53 != 5) {
-                blend_moby_animation_c(m, 5, 0, scale_game_frames_alt(3));
+        } else if (robosquawker_moby->bBC == 1) {
+            robosquawker_moby->state = 3;
+            if (robosquawker_moby->b53 != 5) {
+                blend_moby_animation_c(robosquawker_moby, 5, 0, scale_game_frames_alt(3));
             }
         } else if (res & 2) {
-            m->pos.f[0] = old.f[0];
-            m->pos.f[1] = old.f[1];
-            m->state = 0xC;
-            if (m->b53 != 4) {
-                blend_moby_animation_c(m, 4, 0, scale_game_frames_alt(3));
+            robosquawker_moby->pos.f[0] = old.f[0];
+            robosquawker_moby->pos.f[1] = old.f[1];
+            robosquawker_moby->state = 0xC;
+            if (robosquawker_moby->b53 != 4) {
+                blend_moby_animation_c(robosquawker_moby, 4, 0, scale_game_frames_alt(3));
             }
         }
-        FUN_L13_002b4ff0((char *)m, (char *)v);
-        m->bBC = 0;
+        FUN_L13_002b4ff0((char *)robosquawker_moby, (char *)v);
+        robosquawker_moby->bBC = 0;
         break;
     }
     case ROBOSQUAWKER_STATE_DAMAGE_KNOCKBACK:
-        if (mine_fall(m, v->x120) & 1) {
+        if (mine_fall(robosquawker_moby, v->x120) & 1) {
             qzero(v->x120);
-            m->state = 3;
-            if (m->b53 != 5) {
-                blend_moby_animation_c(m, 5, 0, scale_game_frames_alt(3));
+            robosquawker_moby->state = 3;
+            if (robosquawker_moby->b53 != 5) {
+                blend_moby_animation_c(robosquawker_moby, 5, 0, scale_game_frames_alt(3));
             }
             return;
-        } else if (m->pos.f[2] < 5.0f) {
-            FUN_L00_00257470(m, 0, -1);
-            mark_moby_for_removal_c(m);
+        } else if (robosquawker_moby->pos.f[2] < 5.0f) {
+            FUN_L00_00257470(robosquawker_moby, 0, -1);
+            mark_moby_for_removal_c(robosquawker_moby);
             return;
         }
         break;
     case ROBOSQUAWKER_STATE_RECOVER_TO_FLIGHT_IDLE:
         FUN_L13_002b4fb8((Level13VendorMoby *)v);
-        if (FUN_L00_002dc9f0(m, v->x120) != 0) {
-            m->state = 0xE;
-            if (m->b53 != 0) {
-                blend_moby_animation_c(m, 0, 0, 0);
+        if (FUN_L00_002dc9f0(robosquawker_moby, v->x120) != 0) {
+            robosquawker_moby->state = 0xE;
+            if (robosquawker_moby->b53 != 0) {
+                blend_moby_animation_c(robosquawker_moby, 0, 0, 0);
             }
             v->hC8 = 0;
         }
@@ -1836,17 +1836,17 @@ void robosquawker_update(RsMoby *m) {
     case ROBOSQUAWKER_STATE_DEATH_KNOCKBACK: {
         int t;
 
-        m->h34 &= 0xEFFF;
-        if (mine_fall(m, v->x120) & 0x140) {
+        robosquawker_moby->h34 &= 0xEFFF;
+        if (mine_fall(robosquawker_moby, v->x120) & 0x140) {
             clear_u64_value(&va);
             t = (int)((float)scale_game_frames_alt(1) * 60.0f);
             if (FUN_L01_002efbf8(D_L13_001613B0, 3, t) >= 0) {
-                cart_burst(m, &m->pos, 4, 0.5f, 13.0f);
+                cart_burst(robosquawker_moby, &robosquawker_moby->pos, 4, 0.5f, 13.0f);
             }
-            mark_moby_for_removal_c(m);
+            mark_moby_for_removal_c(robosquawker_moby);
             return;
-        } else if (m->pos.f[2] < 0.0f) {
-            mark_moby_for_removal_c(m);
+        } else if (robosquawker_moby->pos.f[2] < 0.0f) {
+            mark_moby_for_removal_c(robosquawker_moby);
             return;
         }
         break;
@@ -1856,32 +1856,32 @@ void robosquawker_update(RsMoby *m) {
         int res;
         float a;
 
-        r = absolute_float(m->pos.f[2] - tgt.pos.f[2]);
-        r = r / vector_distance(&m->pos, &tgt);
+        r = absolute_float(robosquawker_moby->pos.f[2] - tgt.pos.f[2]);
+        r = r / vector_distance(&robosquawker_moby->pos, &tgt);
         if (v->w21C != -1) {
-            FUN_L01_0028b5e0(m, D_L13_001B07B0[v->w21C], &v->v1D0, &vb);
+            FUN_L01_0028b5e0(robosquawker_moby, D_L13_001B07B0[v->w21C], &v->v1D0, &vb);
         } else {
             qcopy(&vb, &v->v1D0);
         }
-        a = fast_arc_tan(vb.f[0] - m->pos.f[0], vb.f[1] - m->pos.f[1]);
-        FUN_L00_00258278((char *)m, &v->f1F0, a, 0.05f, 0.3f, 0.2f);
-        va.f[0] = fast_cos(m->rot.f[2]) * 2.0f;
-        va.f[1] = fast_sin(m->rot.f[2]) * 2.0f;
+        a = fast_arc_tan(vb.f[0] - robosquawker_moby->pos.f[0], vb.f[1] - robosquawker_moby->pos.f[1]);
+        FUN_L00_00258278((char *)robosquawker_moby, &v->f1F0, a, 0.05f, 0.3f, 0.2f);
+        va.f[0] = fast_cos(robosquawker_moby->rot.f[2]) * 2.0f;
+        va.f[1] = fast_sin(robosquawker_moby->rot.f[2]) * 2.0f;
         va.f[2] = 0.0f;
-        res = FUN_L00_00258b50(m, &v->w180, &va, &vb, 1.0f);
+        res = FUN_L00_00258b50(robosquawker_moby, &v->w180, &va, &vb, 1.0f);
         subtract_vector_xyz(&vc, &tgt, &v->v1D0);
-        if (vector_distance(&m->pos, &tgt) < 1.5f && r <= 1.0f) {
-            m->state = 4;
-            if (m->b53 != 6) {
-                blend_moby_animation_c(m, 6, 0, scale_game_frames_alt(3));
+        if (vector_distance(&robosquawker_moby->pos, &tgt) < 1.5f && r <= 1.0f) {
+            robosquawker_moby->state = 4;
+            if (robosquawker_moby->b53 != 6) {
+                blend_moby_animation_c(robosquawker_moby, 6, 0, scale_game_frames_alt(3));
             }
         } else if (r <= 1.0f && !(res & 2)) {
-            m->state = 5;
-            if (m->b53 != 5) {
-                blend_moby_animation_c(m, 5, 0, scale_game_frames_alt(3));
+            robosquawker_moby->state = 5;
+            if (robosquawker_moby->b53 != 5) {
+                blend_moby_animation_c(robosquawker_moby, 5, 0, scale_game_frames_alt(3));
             }
         } else {
-            if (m->b70 & 2) {
+            if (robosquawker_moby->b70 & 2) {
                 int anim;
 
                 anim = 4;
@@ -1889,82 +1889,82 @@ void robosquawker_update(RsMoby *m) {
                 if (random_integer_below(4) != 0) {
                     anim = 3;
                 }
-                blend_moby_animation_c(m, anim, 0, scale_game_frames_alt(3));
+                blend_moby_animation_c(robosquawker_moby, anim, 0, scale_game_frames_alt(3));
             }
             if (random_integer_below(0x63) == 0) {
                 qzero(&v->v40);
-                m->state = 0x10;
-                if (m->b53 != 0) {
-                    blend_moby_animation_c(m, 0, 0, scale_game_frames_alt(3));
+                robosquawker_moby->state = 0x10;
+                if (robosquawker_moby->b53 != 0) {
+                    blend_moby_animation_c(robosquawker_moby, 0, 0, scale_game_frames_alt(3));
                 }
             }
         }
-        m->bBC = 0;
+        robosquawker_moby->bBC = 0;
         break;
     }
     case ROBOSQUAWKER_STATE_WALK_FORWARD_AVOID_MOBYS: {
-        RsOther *o;
+        RsOther *candidate_moby;
         float g;
 
-        if (m->b52 != 5 && m->b53 != 5) {
-            blend_moby_animation_c(m, 5, 0, scale_game_frames_alt(3));
+        if (robosquawker_moby->b52 != 5 && robosquawker_moby->b53 != 5) {
+            blend_moby_animation_c(robosquawker_moby, 5, 0, scale_game_frames_alt(3));
         }
-        va.f[0] = fast_cos(m->rot.f[2]) * (v->f204 * frame_time);
-        va.f[1] = fast_sin(m->rot.f[2]) * (v->f204 * frame_time);
+        va.f[0] = fast_cos(robosquawker_moby->rot.f[2]) * (v->f204 * frame_time);
+        va.f[1] = fast_sin(robosquawker_moby->rot.f[2]) * (v->f204 * frame_time);
         va.f[2] = 0.0f;
-        add_vector_xyz(&vb, &m->pos, &va);
-        for (o = (RsOther *)D_L13_0015FFE4; o != 0; o = o->next) {
-            if (o == (RsOther *)m) {
+        add_vector_xyz(&vb, &robosquawker_moby->pos, &va);
+        for (candidate_moby = (RsOther *)D_L13_0015FFE4; candidate_moby != 0; candidate_moby = candidate_moby->next) {
+            if (candidate_moby == (RsOther *)robosquawker_moby) {
                 continue;
             }
-            if (o->state < 0) {
+            if (candidate_moby->state < 0) {
                 continue;
             }
-            if (o->hA6 != 0 && o->hA6 != 0x3F) {
+            if (candidate_moby->hA6 != 0 && candidate_moby->hA6 != 0x3F) {
                 continue;
             }
-            if (vector_distance(&vb, &o->pos) < 2.0f) {
+            if (vector_distance(&vb, &candidate_moby->pos) < 2.0f) {
                 float z;
                 float a;
                 float d;
 
-                z = m->pos.f[2];
-                a = fast_arc_tan(o->pos.f[0] - m->pos.f[0], o->pos.f[1] - m->pos.f[1]);
-                a = fast_subtract_rotations(m->rot.f[2], a);
+                z = robosquawker_moby->pos.f[2];
+                a = fast_arc_tan(candidate_moby->pos.f[0] - robosquawker_moby->pos.f[0], candidate_moby->pos.f[1] - robosquawker_moby->pos.f[1]);
+                a = fast_subtract_rotations(robosquawker_moby->rot.f[2], a);
                 d = frame_time * 1.5707964f;
                 if (!(a > 0.0f)) {
                     d = -d;
                 }
-                m->rot.f[2] = fast_add_rotations(m->rot.f[2], d);
-                subtract_vector_xyz(&vb, &m->pos, &o->pos);
+                robosquawker_moby->rot.f[2] = fast_add_rotations(robosquawker_moby->rot.f[2], d);
+                subtract_vector_xyz(&vb, &robosquawker_moby->pos, &candidate_moby->pos);
                 normalize_vector_xyz(&vb, &vb, 2.0f);
-                add_vector_xyz(&vb, &vb, &o->pos);
+                add_vector_xyz(&vb, &vb, &candidate_moby->pos);
                 vb.f[2] = z;
             }
         }
-        qcopy(&m->pos, &vb);
-        g = probe_ground_height(&m->pos, 0x120, 0.5f);
+        qcopy(&robosquawker_moby->pos, &vb);
+        g = probe_ground_height(&robosquawker_moby->pos, 0x120, 0.5f);
         v->f198 -= frame_time_sq * 9.8f;
-        m->pos.f[2] += v->f198;
-        if (m->pos.f[2] < g) {
+        robosquawker_moby->pos.f[2] += v->f198;
+        if (robosquawker_moby->pos.f[2] < g) {
             v->f198 = 0.0f;
-            m->pos.f[2] = g;
+            robosquawker_moby->pos.f[2] = g;
         }
-        if (v->p218 == 0 || vector_distance(&m->pos, v->p218 + 0x10) > convert_integer_to_float(v->h216)) {
-            m->state = 5;
-            if (m->b53 != 5) {
-                blend_moby_animation_c(m, 5, 0, scale_game_frames_alt(3));
+        if (v->p218 == 0 || vector_distance(&robosquawker_moby->pos, v->p218 + 0x10) > convert_integer_to_float(v->h216)) {
+            robosquawker_moby->state = 5;
+            if (robosquawker_moby->b53 != 5) {
+                blend_moby_animation_c(robosquawker_moby, 5, 0, scale_game_frames_alt(3));
             }
         }
-        m->bBC = 0;
+        robosquawker_moby->bBC = 0;
         break;
     }
     }
-    trooper_anim_finish(m, v->x110);
-    if (m->pos.f[0] < 2.0f || m->pos.f[0] > 1021.0f
-        || m->pos.f[1] < 2.0f || m->pos.f[1] > 1021.0f
-        || m->pos.f[2] < 2.0f || m->pos.f[2] > 1021.0f) {
-        mark_moby_for_removal_c(m);
+    trooper_anim_finish(robosquawker_moby, v->x110);
+    if (robosquawker_moby->pos.f[0] < 2.0f || robosquawker_moby->pos.f[0] > 1021.0f
+        || robosquawker_moby->pos.f[1] < 2.0f || robosquawker_moby->pos.f[1] > 1021.0f
+        || robosquawker_moby->pos.f[2] < 2.0f || robosquawker_moby->pos.f[2] > 1021.0f) {
+        mark_moby_for_removal_c(robosquawker_moby);
         return;
     }
 }
