@@ -258,7 +258,7 @@ extern int D_L00_00161838;
 int FUN_L00_002c5be8(char *pickup_moby) {
     int *pickup_vars = *(int **)(pickup_moby + 0x78);
     int before;
-    float f;
+    float excess_ammo_amount;
     int ammo_added;
 
     if (*(unsigned char *)(pickup_moby + 0x20) == 2) {
@@ -266,7 +266,7 @@ int FUN_L00_002c5be8(char *pickup_moby) {
         return 0;
     }
     before = weapon_ammo_counts[pickup_vars[2]];
-    f = f33e40_2c5be8(pickup_vars[2], pickup_vars[0]);
+    excess_ammo_amount = f33e40_2c5be8(pickup_vars[2], pickup_vars[0]);
     if (before >= weapon_ammo_counts[pickup_vars[2]]) {
         goto fail;
     }
@@ -274,7 +274,7 @@ int FUN_L00_002c5be8(char *pickup_moby) {
     FUN_L00_00263db0(ammo_added == 1 ? ((E_2c5be8 *)(pickup_vars[2] * 0x4C + (char *)D_179AC0_2c5be8))->h36
                          : ((E_2c5be8 *)(pickup_vars[2] * 0x4C + (char *)D_179AC0_2c5be8))->h34,
                   ammo_added, -1);
-    if (f < (float)pickup_vars[0]) {
+    if (excess_ammo_amount < (float)pickup_vars[0]) {
         D_0013DE08[pickup_vars[2]] += weapon_ammo_counts[pickup_vars[2]] - before;
         *(unsigned char *)(pickup_moby + 0x20) = 2;
         *(float *)(pickup_moby + 0x2C) *= D_0015ED60_2c5be8 * 0.200000048f + 1.0f;
