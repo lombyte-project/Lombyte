@@ -1443,41 +1443,41 @@ extern f32 FUN_L00_0025abf0(void *, void *, f32, f32, s32);
 
 void aim_throw_arc(V2c2488 *pos, V2c2488 *tgt, f32 *out, f32 speed, f32 unused, f32 range) __asm__("FUN_L00_002c2488");
 void aim_throw_arc(V2c2488 *pos, V2c2488 *tgt, f32 *out, f32 speed, f32 unused, f32 range) {
-    V2c2488 t;
+    V2c2488 effective_target_position;
     V2c2488 u;
     f32 ang;
-    f32 s;
+    f32 horizontal_speed;
     f32 k;
     f32 v;
     struct Hero *P;
     if (range < dist(pos, tgt)) {
-        sub_2c(&t, tgt, pos);
-        scale_2c(&t, &t, range - 0.01f);
-        add_2c(&t, &t, pos);
+        sub_2c(&effective_target_position, tgt, pos);
+        scale_2c(&effective_target_position, &effective_target_position, range - 0.01f);
+        add_2c(&effective_target_position, &effective_target_position, pos);
     } else {
-        t.q = tgt->q;
+        effective_target_position.q = tgt->q;
     }
-    ang = atan(t.f[0] - pos->f[0], t.f[1] - pos->f[1]);
+    ang = atan(effective_target_position.f[0] - pos->f[0], effective_target_position.f[1] - pos->f[1]);
     P = &hero;
-    if (adiff(P->motion.rot.f[2], ang) > 0.87266463f || dist2(pos, &t) < 1.5f) {
+    if (adiff(P->motion.rot.f[2], ang) > 0.87266463f || dist2(pos, &effective_target_position) < 1.5f) {
         ang = P->motion.rot.f[2];
         u.f[0] = cos_2c(ang) * 1.5f;
         u.f[1] = sin_2c(P->motion.rot.f[2]) * 1.5f;
         u.i[2] = 0;
         add_2c(&u, &u, pos);
-        t.f[0] = u.f[0];
-        t.f[1] = u.f[1];
+        effective_target_position.f[0] = u.f[0];
+        effective_target_position.f[1] = u.f[1];
     }
-    s = D_0015ED6C * 8.5f;
-    out[0] = cos_2c(ang) * s;
-    out[1] = sin_2c(ang) * s;
+    horizontal_speed = D_0015ED6C * 8.5f;
+    out[0] = cos_2c(ang) * horizontal_speed;
+    out[1] = sin_2c(ang) * horizontal_speed;
     *(s32 *)&out[2] = 0;
-    out[2] = FUN_L00_0025abf0(pos, &t, s, -speed, 0);
+    out[2] = FUN_L00_0025abf0(pos, &effective_target_position, horizontal_speed, -speed, 0);
     if (D_0013CAE0[0] & 5) {
         k = scale_ticks(D_0013E52A[0]) * 2.5f + 8.5f;
-        k = k / s;
+        k = k / horizontal_speed;
     } else {
-        k = 8.5f / s;
+        k = 8.5f / horizontal_speed;
     }
     v = speed * k * 0.5f;
     if (v < out[2]) {
