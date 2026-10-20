@@ -1661,15 +1661,15 @@ extern s32 D_0014C190[][64];
 extern void FUN_L01_0026e0e0(char *arg, int val);
 
 void FUN_L01_00308b28(char *moby) {
-    int d = D_0015ED84 << 8;
-    unsigned char t;
-    *(int *)((u8 *)D_0014C190 + (((short)*(unsigned short *)(moby + 0xB2) >> 5) * 4 + d)) |=
+    int level_bitset_byte_offset = D_0015ED84 << 8;
+    unsigned char moby_group_index;
+    *(int *)((u8 *)D_0014C190 + (((short)*(unsigned short *)(moby + 0xB2) >> 5) * 4 + level_bitset_byte_offset)) |=
         1 << (*(unsigned short *)(moby + 0xB2) & 0x1F);
     moby_killed[(short)*(unsigned short *)(moby + 0xB2) >> 5] |=
         1 << (*(unsigned short *)(moby + 0xB2) & 0x1F);
-    t = *(unsigned char *)(moby + 0x21);
-    if (t != 0xFF)
-        FUN_L01_0026e0e0((char *)t, 1);
+    moby_group_index = *(unsigned char *)(moby + 0x21);
+    if (moby_group_index != 0xFF)
+        FUN_L01_0026e0e0((char *)moby_group_index, 1);
     else
         moby[0x20] = 1;
 }
