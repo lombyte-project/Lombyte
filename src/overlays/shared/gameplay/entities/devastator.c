@@ -101,16 +101,16 @@ extern int FUN_001f9770_2b2100(short *) __asm__("FUN_001f9770");
 
 extern float D_L00_0017ACF4_lui __asm__("D_L00_0017ACF4") __attribute__((section(".data")));
 void devastator_update(struct Moby *m) __asm__("FUN_L00_002b2100");
-void devastator_update(struct Moby *m) {
+void devastator_update(struct Moby *devastator_moby) {
     Matrix3_2b2100 rotation;
     Matrix4_2b2100 inverse;
     Vec_2b2100 velocity;
     Vec_2b2100 launch;
     Vec_2b2100 point;
     Vec_2b2100 probe;
-    Devastator_2b2100 *data = (Devastator_2b2100 *)m->pvars;
+    Devastator_2b2100 *data = (Devastator_2b2100 *)devastator_moby->pvars;
     struct Moby *best;
-    struct Moby *o;
+    struct Moby *candidate_moby;
     AimInfo_2b2100 *r;
     UsageStat_2b2100 *stats;
     Hit_2b2100 *hit;
@@ -119,11 +119,11 @@ void devastator_update(struct Moby *m) {
     float a, b, c;
     int i;
 
-    FUN_L00_002b1af0_2b2100(m);
+    FUN_L00_002b1af0_2b2100(devastator_moby);
     height = 0.75f;
     limit = 10000.0f;
-    if ((unsigned char)m->state == 0) {
-        m->state = 1;
+    if ((unsigned char)devastator_moby->state == 0) {
+        devastator_moby->state = 1;
         data->light = -1;
         data->glow = 0;
     }
@@ -138,7 +138,7 @@ void devastator_update(struct Moby *m) {
         velocity.f.z = 70.0f;
         transform_vector_2b2100(&velocity, &velocity, &inverse);
         add_vector_xyz_2b2100(&launch, view_origin_2b2100, &velocity);
-        if (collision_segment_hits_2b2100(view_origin_2b2100, &launch, 0, (int)m, 0)) {
+        if (collision_segment_hits_2b2100(view_origin_2b2100, &launch, 0, (int)devastator_moby, 0)) {
             hit = (Hit_2b2100 *)collision_hit_2b2100;
             if (hit->moby && (hit->moby->flags & 0x1000)) {
                 data->target = hit->moby;
@@ -146,15 +146,15 @@ void devastator_update(struct Moby *m) {
                 data->target_height = hit->pos.f.z - data->target->pos.z;
             }
         }
-        FUN_L00_001edf60_2b2100((int)m, 0xFF180A65, 1.0f,
+        FUN_L00_001edf60_2b2100((int)devastator_moby, 0xFF180A65, 1.0f,
             0, fast_normalize_angle_2b2100(convert_integer_to_float_2b2100(D_L00_0015F5CC_2b2100 % scale_game_frames_2b2100(240)) * 360.0f / FUN_001f96b0_2b2100(240.0f) * 0.017453292f),
             0x27, -1, 90.0f, 4);
         if (data->target && !data->cooldown && FUN_L00_00233e98_2b2100(-1)) {
-            float d = distance_xyz_2b2100(view_origin_2b2100, &data->target->pos) / 100.0f;
+            float scaled_target_distance = distance_xyz_2b2100(view_origin_2b2100, &data->target->pos) / 100.0f;
             qcopy(&point, &data->target->pos);
             point.f.z += data->target_height;
-            size = absolute_float_2b2100(0.9f - d * 0.57f);
-            FUN_L00_001edf60_2b2100((int)m, 0xFF0FFF0F, size,
+            size = absolute_float_2b2100(0.9f - scaled_target_distance * 0.57f);
+            FUN_L00_001edf60_2b2100((int)devastator_moby, 0xFF0FFF0F, size,
                 &point, fast_normalize_angle_2b2100(convert_integer_to_float_2b2100(D_L00_0015F5CC_2b2100 % scale_game_frames_2b2100(240)) * -360.0f / FUN_001f96b0_2b2100(240.0f) * 0.017453292f),
                 0x27, -1, 90.0f, 4);
         }
@@ -164,10 +164,10 @@ void devastator_update(struct Moby *m) {
         data->target_timer = scale_game_frames_2b2100(20);
         data->target_height = collision_hit_z_2b2100 - data->target->pos.z;
     }
-    if (D_L00_0015F5C4 != 2 && !data->cooldown && !hero.unk20AC && m->seq < 2 &&
+    if (D_L00_0015F5C4 != 2 && !data->cooldown && !hero.unk20AC && devastator_moby->seq < 2 &&
         (pad_input_2b2100.held & hero.items[0].button_mask) && scale_game_frames_2b2100(22) < hero.items[0].unk20) {
         velocity.q = 0;
-        if (m->prev_seq == 0) blend_moby_animation_2b2100(m, 1, 0, scale_game_frames_2b2100(4));
+        if (devastator_moby->prev_seq == 0) blend_moby_animation_2b2100(devastator_moby, 1, 0, scale_game_frames_2b2100(4));
         if (hero.state.current == 30 && (hero.moby->flags & 1)) {
             velocity.f.z = frame_time_2b2100 * 10.0f;
             transform_vector_2b2100(&velocity, &velocity, &inverse);
@@ -191,27 +191,27 @@ void devastator_update(struct Moby *m) {
                 add_vector_xyz_2b2100(&launch, &launch, view_origin_2b2100);
                 if (data->target) height = data->target_height;
             } else {
-                FUN_L00_0024f7c8_2b2100(m, 0, &launch);
+                FUN_L00_0024f7c8_2b2100(devastator_moby, 0, &launch);
                 i = 0;
-                o = D_L00_001ABA00_2b2100[i];
-                while (o) {
-                    if ((*(signed char *)&o->state) >= 0) {
-                        qcopy(&point, &o->pos);
-                        r = get_moby_aim_info_2b2100(o);
+                candidate_moby = D_L00_001ABA00_2b2100[i];
+                while (candidate_moby) {
+                    if ((*(signed char *)&candidate_moby->state) >= 0) {
+                        qcopy(&point, &candidate_moby->pos);
+                        r = get_moby_aim_info_2b2100(candidate_moby);
                         if (r) point.f.z += r->height;
                         else point.f.z += 0.5f;
-                        if ((o->flags & 0x1000) && o && ((Class_2b2100 *)o->pclass) && ((Class_2b2100 *)o->pclass)->category == 5) {
+                        if ((candidate_moby->flags & 0x1000) && candidate_moby && ((Class_2b2100 *)candidate_moby->pclass) && ((Class_2b2100 *)candidate_moby->pclass)->category == 5) {
                             float tyaw, tpitch, distance, spread, off;
                             tyaw = atan2_fast_2b2100(point.f.x - launch.f.x, point.f.y - launch.f.y);
                             tpitch = atan2_fast_2b2100(distance_xy_2b2100(&launch, &point), point.f.z - launch.f.z);
                             distance = distance_xyz_2b2100(&launch, &point);
                             if (distance < 2.5f) {
                                 struct Moby *cam = hero.moby;
-                                if (fast_difference_between_rotations_2b2100(cam->rot.z, atan2_fast_2b2100(o->pos.x - hero.motion.pos.f[0], o->pos.y - hero.motion.pos.f[1])) < 1.0471976f &&
+                                if (fast_difference_between_rotations_2b2100(cam->rot.z, atan2_fast_2b2100(candidate_moby->pos.x - hero.motion.pos.f[0], candidate_moby->pos.y - hero.motion.pos.f[1])) < 1.0471976f &&
                                     absolute_float_2b2100(tpitch) < 0.7853982f) {
                                     limit = distance;
                                     pitch = -tpitch;
-                                    best = o;
+                                    best = candidate_moby;
                                     yaw = tyaw;
                                     break;
                                 }
@@ -232,8 +232,8 @@ void devastator_update(struct Moby *m) {
                                     }
                                 }
                                 if (off < spread + 0.17453292f) {
-                                    if (!collision_segment_hits_2b2100(view_origin_2b2100, &point, 6, (int)m, 0)) {
-                                        best = o;
+                                    if (!collision_segment_hits_2b2100(view_origin_2b2100, &point, 6, (int)devastator_moby, 0)) {
+                                        best = candidate_moby;
                                         limit = distance;
                                         pitch = -tpitch;
                                         yaw = tyaw;
@@ -248,12 +248,12 @@ void devastator_update(struct Moby *m) {
                         }
                     }
                     i++;
-                    o = D_L00_001ABA00_2b2100[i];
+                    candidate_moby = D_L00_001ABA00_2b2100[i];
                 }
             }
-            allocate_voice_for_target_entry_2b2100(0, 0, (int)m);
+            allocate_voice_for_target_entry_2b2100(0, 0, (int)devastator_moby);
             data->glow = scale_game_frames_2b2100(5) + scale_game_frames_2b2100(10);
-            if (hero.state.current != 30) FUN_L00_002b1de0_2b2100(m);
+            if (hero.state.current != 30) FUN_L00_002b1de0_2b2100(devastator_moby);
             stats = (UsageStat_2b2100 *)usage_stats_2b2100;
             if (stats->uses < 65535) stats->uses++;
             if (scale_game_frames_2b2100(D_0015EEA4) / 600 > stats->longest)
@@ -261,14 +261,14 @@ void devastator_update(struct Moby *m) {
             stats->levels = (stats->levels | (1 << level_index_2b2100)) | 0x80000000;
             if (hero.unk22C8 == 1 && hero.state.current != 30) {
                 pitch = D_L00_0017ACF4_lui;
-                yaw = m->rot.z;
+                yaw = devastator_moby->rot.z;
                 r = get_moby_aim_info_2b2100(data->target);
                 if (r) height = r->height;
-                FUN_L00_002afc70_2b2100(m, &launch, data->target, yaw, pitch, height, yaw, pitch);
+                FUN_L00_002afc70_2b2100(devastator_moby, &launch, data->target, yaw, pitch, height, yaw, pitch);
             } else if (limit < 2.0f) {
                 r = get_moby_aim_info_2b2100(data->target);
                 if (r) height = r->height;
-                FUN_L00_002afc70_2b2100(m, &launch, data->target, yaw, pitch, height, yaw, pitch);
+                FUN_L00_002afc70_2b2100(devastator_moby, &launch, data->target, yaw, pitch, height, yaw, pitch);
             } else {
                 if (!data->target) {
                     if (best) {
@@ -287,7 +287,7 @@ void devastator_update(struct Moby *m) {
                         pitch0 -= hero.ground_pitch.f * 0.5f;
                     }
                 }
-                FUN_L00_002afc70_2b2100(m, &launch, data->target, yaw, pitch, height, yaw0, pitch0);
+                FUN_L00_002afc70_2b2100(devastator_moby, &launch, data->target, yaw, pitch, height, yaw0, pitch0);
             }
             if (hero.state.control_mode == 0 || (hero.state.current == 2 && hero.unk229C < 0.7f)) {
                 FUN_L00_002323b8_2b2100(0x36, 1, (float)scale_game_frames_2b2100(10));
@@ -295,11 +295,11 @@ void devastator_update(struct Moby *m) {
                 FUN_L00_0020e4c8_2b2100();
             }
         } else {
-            allocate_voice_for_target_entry_2b2100(1, 0, (int)m);
+            allocate_voice_for_target_entry_2b2100(1, 0, (int)devastator_moby);
         }
         data->cooldown = scale_game_frames_2b2100(35);
     }
-    if (m->seq != 2 && data->glow > 0) {
+    if (devastator_moby->seq != 2 && data->glow > 0) {
         if (data->glow > scale_game_frames_2b2100(10)) {
             a = convert_integer_to_float_2b2100(scale_game_frames_2b2100(5) + scale_game_frames_2b2100(10) - data->glow) / (float)scale_game_frames_2b2100(5);
             b = convert_integer_to_float_2b2100(scale_game_frames_2b2100(5) + scale_game_frames_2b2100(10) - data->glow) * 0.8f / (float)scale_game_frames_2b2100(5);
@@ -309,19 +309,19 @@ void devastator_update(struct Moby *m) {
             b = convert_integer_to_float_2b2100(data->glow) * 0.8f / (float)scale_game_frames_2b2100(10);
             c = convert_integer_to_float_2b2100(data->glow) * 0.5f / (float)scale_game_frames_2b2100(10);
         }
-        FUN_L00_0024f7c8_2b2100(m, 0, &velocity);
+        FUN_L00_0024f7c8_2b2100(devastator_moby, 0, &velocity);
         velocity.f.x += fast_cos_2b2100(atan2_fast_2b2100(hero.unk670, hero.unk674));
         velocity.f.y += fast_sin_2b2100(atan2_fast_2b2100(hero.unk670, hero.unk674));
         velocity.f.z += 0.3f;
         if (data->light == -1) {
             data->light = FUN_L00_0023e738_2b2100(&velocity, 7.0f, 0.0f, a, b, c);
         } else {
-            Light_2b2100 *e = &lights_2b2100[data->light];
-            qcopy(&e->pos, &velocity);
-            e->pos.f.w = 7.0f;
-            e->x = a;
-            e->y = b;
-            e->z = c;
+            Light_2b2100 *muzzle_light = &lights_2b2100[data->light];
+            qcopy(&muzzle_light->pos, &velocity);
+            muzzle_light->pos.f.w = 7.0f;
+            muzzle_light->x = a;
+            muzzle_light->y = b;
+            muzzle_light->z = c;
         }
         FUN_001f9770_2b2100(&data->glow);
     } else if (data->light != -1) {
@@ -329,7 +329,7 @@ void devastator_update(struct Moby *m) {
         data->light = -1;
         data->glow = 0;
     }
-    if (m->prev_seq == 2) {
+    if (devastator_moby->prev_seq == 2) {
         FUN_L00_0023e838_2b2100(data->light);
         data->light = -1;
         data->glow = 0;
