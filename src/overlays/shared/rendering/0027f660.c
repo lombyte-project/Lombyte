@@ -351,7 +351,7 @@ extern void scale_vector_xyz(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 extern void *func_001153FC_c(void *, int, unsigned int) __asm__("FUN_001153fc");
 
-void FUN_L01_0028b8c8(void *out, int *l, int idx, float a, float b) {
+void FUN_L01_0028b8c8(void *out, int *l, int idx, float tangent_tension, float b) {
     void *neighboring_points[3];
     float weighted_incoming_delta[4];
     float weighted_outgoing_delta[4];
@@ -363,8 +363,8 @@ void FUN_L01_0028b8c8(void *out, int *l, int idx, float a, float b) {
     neighboring_points[1] = FUN_L01_0028b7b0(l, *l + idx);
     neighboring_points[2] = FUN_L01_0028b7b0(l, *l + idx + 1);
     {
-        wb = (1.0f - a) * (b + 1.0f) * 0.5f;
-        wa = (1.0f - a) * (1.0f - b) * 0.5f;
+        wb = (1.0f - tangent_tension) * (b + 1.0f) * 0.5f;
+        wa = (1.0f - tangent_tension) * (1.0f - b) * 0.5f;
     }
     incoming_segment_distance = fast_vec_dist(neighboring_points[0], neighboring_points[1]);
     outgoing_segment_distance = fast_vec_dist(neighboring_points[1], neighboring_points[2]);
