@@ -2498,10 +2498,10 @@ void follow_camera_set_distance(s32 f, f32 distance, f32 b) {
     }
 }
 extern char *D_L00_00166E00_002e8490 __asm__("D_L00_00166E00");
-void FUN_L00_002e8490(float f) {
+void FUN_L00_002e8490(float camera_state_value) {
     char *current_camera = D_L00_00166E00_002e8490;
     if (*(short *)(current_camera + 0x86) == 0) {
-        *(float *)(*(char **)(current_camera + 0x70) + 0x22C) = f;
+        *(float *)(*(char **)(current_camera + 0x70) + 0x22C) = camera_state_value;
     }
 }
 extern char *D_L00_00166E00_002e84b8 __asm__("D_L00_00166E00") __attribute__((section(".data")));
