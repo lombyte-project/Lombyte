@@ -1766,7 +1766,7 @@ s32 FUN_L00_00233f38_0020fe30(void) __asm__("FUN_L00_00233f38");
 s32 FUN_L00_0020fe30(void);
 s32 FUN_L00_0020fe30(void) {
     struct Hero *b;
-    u32 s;
+    u32 control_mode;
     if (FUN_L00_00233f38_0020fe30())
         return 0;
     if (D_L00_0015F5C4)
@@ -1774,8 +1774,8 @@ s32 FUN_L00_0020fe30(void) {
     b = &hero;
     if (b->vehicle_mode)
         return 0;
-    s = b->state.control_mode;
-    if (s < 3 || s == 4)
+    control_mode = b->state.control_mode;
+    if (control_mode < 3 || control_mode == 4)
         return b->base_condition == 0;
     return 0;
 }
