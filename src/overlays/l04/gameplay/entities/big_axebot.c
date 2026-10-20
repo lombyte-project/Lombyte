@@ -1708,18 +1708,18 @@ void circular_saw_enemy_update(M_35F0 *moby) {
     if (moby->state == 7 && moby->f52 == 7 && hd > 15.0f && hd < 44.0f) {
         int i;
         for (i = 0; i < 4; i++) {
-            S_35F0 p;
+            S_35F0 melee_hit_parameters;
             V4_35F0 jp;
             I4_35F0 joints = D_L04_00161890;
             {
                 moby_point_position(moby, joints.v[i], jp);
-                p.moby = moby;
-                p.f14 = 0x10001;
-                p.f1C = 1.0f;
-                subtract_vector_xyz(p.v, &hero.motion.pos, moby->pos);
-                normalize_vector_xyz(p.v, p.v, frame_time * 10.0f);
-                p.f20 = 1;
-                collect_mobies_in_sphere(jp, 0x10, moby, &p, 0.5f);
+                melee_hit_parameters.moby = moby;
+                melee_hit_parameters.f14 = 0x10001;
+                melee_hit_parameters.f1C = 1.0f;
+                subtract_vector_xyz(melee_hit_parameters.v, &hero.motion.pos, moby->pos);
+                normalize_vector_xyz(melee_hit_parameters.v, melee_hit_parameters.v, frame_time * 10.0f);
+                melee_hit_parameters.f20 = 1;
+                collect_mobies_in_sphere(jp, 0x10, moby, &melee_hit_parameters, 0.5f);
                 if (D_L04_00173FC0.f18 == tgt) {
                     data->f146 =
                         data->f146 < scale_game_frames(0x3C) ? data->f146 : scale_game_frames(0x3C);
@@ -2056,15 +2056,15 @@ void circular_saw_enemy_update(M_35F0 *moby) {
         {
             if (vector_distance(moby->pos, dest) >= frame_time * 3.0f * 2.0f) {
                 float rel = fast_subtract_rotations(ang, moby->rot);
-                float q = fast_add_rotations(rel, 0.3926991f);
+                float biased_relative_yaw = fast_add_rotations(rel, 0.3926991f);
                 float dir;
-                if (q < 0.0f) {
-                    q += 6.2831855f;
+                if (biased_relative_yaw < 0.0f) {
+                    biased_relative_yaw += 6.2831855f;
                 }
                 if (fast_difference_between_rotations(
                         wrap_angle(wrap_angle(convert_integer_to_float(data->f14C) * 1.5707964f)),
                         rel) > 1.7453293f) {
-                    data->f14C = truncate_float_to_s32(q * 1.999f / 3.1415927f);
+                    data->f14C = truncate_float_to_s32(biased_relative_yaw * 1.999f / 3.1415927f);
                     anim = tbl.v[data->f14C];
                 }
                 dir = wrap_angle(convert_integer_to_float(data->f14C) * 1.5707964f);
