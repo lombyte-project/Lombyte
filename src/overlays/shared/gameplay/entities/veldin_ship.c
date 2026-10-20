@@ -1922,12 +1922,12 @@ void FUN_L00_002d3a10(unsigned char *moby) {
         return;
     }
     {
-        unsigned char *s = moby + 0x10;
-        qcopy(&tp, s);
+        unsigned char *position_or_sphere_ptr = moby + 0x10;
+        qcopy(&tp, position_or_sphere_ptr);
         tp.w = *(float *)(vars + 0x60);
-        moby_position = s;
-        s = (unsigned char *)&tp;
-        r = fast_bsphere_check(s, 255.0f);
+        moby_position = position_or_sphere_ptr;
+        position_or_sphere_ptr = (unsigned char *)&tp;
+        r = fast_bsphere_check(position_or_sphere_ptr, 255.0f);
     }
     if (r != -1) {
         if (*(unsigned char **)(vars + 0x20) != 0) {
