@@ -87,6 +87,7 @@ int hero_set_state(int a, int b) {
         HERO_STATE_VEHICLE_FALL = 0x55,
         HERO_STATE_VEHICLE_HURT = 0x56,
         HERO_STATE_VEHICLE_DYING = 0x57,
+        HERO_STATE_IDLE_CLEAR_MOTION = 0x67,
         HERO_STATE_WATER_DEATH = 0x6A
     };
     int old2088;
@@ -178,7 +179,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x67: {
+    case HERO_STATE_IDLE_CLEAR_MOTION: {
         struct Hero *p = &hero;
         p->state.control_mode = 0;
         p->unk2284 = 0;
