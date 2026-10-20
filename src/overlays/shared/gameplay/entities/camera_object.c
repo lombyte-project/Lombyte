@@ -1908,18 +1908,18 @@ static __inline__ unsigned char *voice_slot(int slot) { return D_0013E550+slot*0
 static __inline__ WrenchHero *sweep_hero(void) { return (WrenchHero*)((char*)sweep_end()-0xA00); }
 
 void wrench_update(WrenchMoby *m) __asm__("FUN_L00_002a84c8");
-void wrench_update(WrenchMoby *m) {
+void wrench_update(WrenchMoby *wrench_moby) {
     enum {
         WRENCH_NORMAL = 0,
         WRENCH_THROW_OUTBOUND = 10,
         WRENCH_THROW_RETURNING = 11
     };
-    WrenchVars *d=m->data;
+    WrenchVars *wrench_vars=wrench_moby->data;
     WrenchScratch work;
     WrenchHero *player=wrench_hero();
     player->wrench_state=0;
     if (player->mode==3) return;
-    switch (m->state) {
+    switch (wrench_moby->state) {
     case WRENCH_NORMAL: {
         int player_state;
         int anim;
@@ -1928,70 +1928,70 @@ void wrench_update(WrenchMoby *m) {
         int active;
         int reaction;
         float difference,yaw;
-        m->parent=player->moby;
+        wrench_moby->parent=player->moby;
         player_state=player->state;
         if (player_state==1) {
             if (*(int*)(((char *)&D_0013CAE0))&0xA)
-                draw_target_reticle((int)m,0xFF917267,1.0f,0.0f,0,0x25,-1,90.0f,4);
-            d->aim_hit=0;
+                draw_target_reticle((int)wrench_moby,0xFF917267,1.0f,0.0f,0,0x25,-1,90.0f,4);
+            wrench_vars->aim_hit=0;
             build_spherical_offset(work.v[0],10.0f,player_camera.yaw,-player_camera.pitch);
             add_vector_xyz(work.v[0],work.v[0],player_camera.position);
             if (FUN_001efa68(player_camera.position,work.v[0],4,(int)player->moby,0)) {
-                d->aim_hit=player_state; qcopy(d->target,collision_hit.position);
+                wrench_vars->aim_hit=player_state; qcopy(wrench_vars->target,collision_hit.position);
             }
         }
-        enqueue_callback_list_1_alt(FUN_L00_002a7780_cb,m);
-        anim=m->current_animation;
+        enqueue_callback_list_1_alt(FUN_L00_002a7780_cb,wrench_moby);
+        anim=wrench_moby->current_animation;
         if ((unsigned char)anim!=0) {
             if ((unsigned char)anim==14) {
-                if (m->animation_flags&2) blend_moby_animation(m,1,0,scale_game_frames_alt(5));
+                if (wrench_moby->animation_flags&2) blend_moby_animation(wrench_moby,1,0,scale_game_frames_alt(5));
                 return;
             } else if (wrench_hero()->alternate) {
-                if (combo_step(anim)>=2U) blend_moby_animation(m,15,0,scale_game_frames_alt(4));
-                else if ((m->animation_flags&2) && (unsigned char)anim==15)
-                    blend_moby_animation(m,16,0,scale_game_frames_alt(5));
+                if (combo_step(anim)>=2U) blend_moby_animation(wrench_moby,15,0,scale_game_frames_alt(4));
+                else if ((wrench_moby->animation_flags&2) && (unsigned char)anim==15)
+                    blend_moby_animation(wrench_moby,16,0,scale_game_frames_alt(5));
                 return;
             } else if (combo_step(anim)<2U) {
-                blend_moby_animation(m,14,0,scale_game_frames_alt(2)); return;
+                blend_moby_animation(wrench_moby,14,0,scale_game_frames_alt(2)); return;
             }
         }
-        if ((m->animation_flags&2) && wrench_hero()->state!=0x3B && m->current_animation!=1)
-            blend_moby_animation(m,1,0,scale_game_frames_alt(5));
-        FUN_L00_002a7c70_c((char*)m);
+        if ((wrench_moby->animation_flags&2) && wrench_hero()->state!=0x3B && wrench_moby->current_animation!=1)
+            blend_moby_animation(wrench_moby,1,0,scale_game_frames_alt(5));
+        FUN_L00_002a7c70_c((char*)wrench_moby);
         {
         int current_state=wrench_hero()->state;
         if (current_state!=19 && current_state!=33 && current_state!=43 && current_state!=112 && current_state!=20) {
-            int current=m->current_animation;
-            if ((unsigned int)current>=3 && m->current_animation<6)
-                blend_moby_animation(m,1,0,scale_game_frames_alt(4));
+            int current=wrench_moby->current_animation;
+            if ((unsigned int)current>=3 && wrench_moby->current_animation<6)
+                blend_moby_animation(wrench_moby,1,0,scale_game_frames_alt(4));
         }
         }
         player_moby=wrench_hero()->moby;
         if (player_moby->current_animation!=player_moby->animation || (int)player_moby->frame_end-player_moby->frame>=3)
-            d->animation_count++;
-        m->animation_scale=wrench_hero()->animation_scale;
+            wrench_vars->animation_count++;
+        wrench_moby->animation_scale=wrench_hero()->animation_scale;
         attack=&attack_records[wrench_hero()->attack_index];
         if (wrench_hero()->move_mode!=6 && wrench_hero()->state!=43) break;
         active=1; reaction=0;
         if (wrench_hero()->blocked || wrench_hero()->animation_frame<(float)attack->first_frame || (float)attack->last_frame<wrench_hero()->animation_frame) active=0;
         {
             int reset=0;
-            if (d->previous_count!=d->animation_count) {
+            if (wrench_vars->previous_count!=wrench_vars->animation_count) {
                 WrenchMoby *pm=wrench_hero()->moby;
-                int a=pm->animation;
-                if (a==pm->current_animation) {
-                    if (a==23) reset=0.0f<=wrench_hero()->animation_frame;
-                    else if (a==24) reset=0.0f<=wrench_hero()->animation_frame;
-                    else if (a==25) reset=12.0f<=wrench_hero()->animation_frame;
-                    else if (a==43) reset=23.0f<=wrench_hero()->animation_frame;
+                int player_animation=pm->animation;
+                if (player_animation==pm->current_animation) {
+                    if (player_animation==23) reset=0.0f<=wrench_hero()->animation_frame;
+                    else if (player_animation==24) reset=0.0f<=wrench_hero()->animation_frame;
+                    else if (player_animation==25) reset=12.0f<=wrench_hero()->animation_frame;
+                    else if (player_animation==43) reset=23.0f<=wrench_hero()->animation_frame;
                 }
             }
-            if (reset) { d->hit_blend=1.0f; d->previous_count=d->animation_count; }
+            if (reset) { wrench_vars->hit_blend=1.0f; wrench_vars->previous_count=wrench_vars->animation_count; }
         }
         difference=0.0f; yaw=wrench_hero()->yaw;
         qcopy(wrench_hero()->previous_end,wrench_hero()->sweep_end);
         qcopy(wrench_hero()->previous_start,wrench_hero()->sweep_start);
-        moby_point_position(m,1,wrench_hero()->sweep_end);
+        moby_point_position(wrench_moby,1,wrench_hero()->sweep_end);
         moby_point_position(wrench_hero()->moby,0,wrench_hero()->sweep_start);
         if (wrench_hero()->state==19 || wrench_hero()->state==112 || wrench_hero()->state==43) {
             yaw=fast_arc_tan(wrench_hero()->sweep_end[0]-wrench_hero()->position[0],wrench_hero()->sweep_end[1]-wrench_hero()->position[1]);
@@ -2016,32 +2016,32 @@ void wrench_update(WrenchMoby *m) {
             FUN_L00_002a8418(work.v[2]); add_vector_xyz(work.v[1],work.v[1],work.v[2]);
             if (!sweep_hero()->attack_cooldown && FUN_001efa68(work.v[0],work.v[1],2,0,0) && collision_hit_material()) {
                 if (!collision_hit.moby || FUN_L00_0025e368((char*)collision_hit.moby)) {
-                    sweep_hero()->attack_cooldown=1; allocate_voice_for_target_entry_alt(2,0,(int)m); FUN_L00_002a8028((char*)m);
+                    sweep_hero()->attack_cooldown=1; allocate_voice_for_target_entry_alt(2,0,(int)wrench_moby); FUN_L00_002a8028((char*)wrench_moby);
                     if (collision_hit.moby) {
                         work.v[3][0]=fast_cos(yaw); work.v[3][1]=fast_sin(yaw); work.v[3][2]=0.0f;
-                        spawn_nearby_effect(collision_hit.moby,(int)m,0x10000,collision_hit.position,work.v[3],1.0f);
+                        spawn_nearby_effect(collision_hit.moby,(int)wrench_moby,0x10000,collision_hit.position,work.v[3],1.0f);
                     }
                 }
             }
         }
         if (wrench_hero()->state==20 && FUN_L00_00211870(27.0f)) {
-            allocate_voice_for_target_entry_alt(2,0,(int)m);
+            allocate_voice_for_target_entry_alt(2,0,(int)wrench_moby);
             qcopy(work.v[0],wrench_hero()->sweep_end); qcopy(work.v[1],work.v[0]);
             FUN_L00_002336e8(work.v[0],work.v[0],0.7f); FUN_L00_002336e8(work.v[1],work.v[1],-0.9f);
-            if (FUN_001efa68(work.v[0],work.v[1],2,0,0)) FUN_L00_002a8028((char*)m);
+            if (FUN_001efa68(work.v[0],work.v[1],2,0,0)) FUN_L00_002a8028((char*)wrench_moby);
         }
         if (active) {
             int count=1;
             float scale=1.0f,radius;
             if (wrench_hero()->state==20) { scale=1.55f; count=2; }
             work.v[3][0]=fast_cos(yaw); work.v[3][1]=fast_sin(yaw); work.v[3][2]=0.0f;
-            make_hit_descriptor(work.v[0],m,0x10000,(float)count,work.v[3]); set_vector_length_xy(work.v[0],work.v[0],scale);
-            work.query.force=1.0f; work.query.range=5627.925f; work.query.enabled=1; work.query.class_id=m->class_id; work.query.flags=0;
+            make_hit_descriptor(work.v[0],wrench_moby,0x10000,(float)count,work.v[3]); set_vector_length_xy(work.v[0],work.v[0],scale);
+            work.query.force=1.0f; work.query.range=5627.925f; work.query.enabled=1; work.query.class_id=wrench_moby->class_id; work.query.flags=0;
             if (sweep_hit_segment(wrench_hero()->sweep_start,wrench_hero()->sweep_end,wrench_hero()->previous_start,wrench_hero()->previous_end,wrench_hero()->moby,&work,5) && collision_hit.moby) {
                 if (FUN_L00_002a7de0()) reaction=1;
                 else if (!wrench_hero()->attack_cooldown) {
                     if (!collision_hit.moby || !collision_hit.moby->model || collision_hit.moby->model->kind!=20) {
-                        wrench_hero()->attack_cooldown=1; allocate_voice_for_target_entry_alt(FUN_L00_002a7d90(),0,(int)m); FUN_L00_002a8028((char*)m);
+                        wrench_hero()->attack_cooldown=1; allocate_voice_for_target_entry_alt(FUN_L00_002a7d90(),0,(int)wrench_moby); FUN_L00_002a8028((char*)wrench_moby);
                     }
                 }
             }
@@ -2053,7 +2053,7 @@ void wrench_update(WrenchMoby *m) {
             if (sweep_hero()->state==20) radius=0.47f;
             if (collide_sphere(work.v[4],radius,0,sweep_hero()->moby,work.v[0]) && (!D_L00_00177F00[0] || !D_L00_00177F00[0]->model || D_L00_00177F00[0]->model->kind!=18)) {
                 if (FUN_L00_002a7de0()) reaction=1;
-                else if (!wrench_hero()->attack_cooldown) { wrench_hero()->attack_cooldown=1; allocate_voice_for_target_entry_alt(FUN_L00_002a7d90(),0,(int)m); FUN_L00_002a8028((char*)m); }
+                else if (!wrench_hero()->attack_cooldown) { wrench_hero()->attack_cooldown=1; allocate_voice_for_target_entry_alt(FUN_L00_002a7d90(),0,(int)wrench_moby); FUN_L00_002a8028((char*)wrench_moby); }
             }
         }
         if (reaction) {
@@ -2073,40 +2073,40 @@ void wrench_update(WrenchMoby *m) {
         char *control=((char *)&D_00140B00);
         WrenchHero *control_player=(WrenchHero*)(control-0x17B0);
         FUN_L00_00262608(control,0);
-        m->parent=control_player->moby; control_player->wrench_state=2;
-        if (m->state==10 && control_player->thrown_sound==-1) control_player->thrown_sound=allocate_voice_for_target_entry_alt(14,4,(int)control_player->moby);
+        wrench_moby->parent=control_player->moby; control_player->wrench_state=2;
+        if (wrench_moby->state==10 && control_player->thrown_sound==-1) control_player->thrown_sound=allocate_voice_for_target_entry_alt(14,4,(int)control_player->moby);
         }
-        FUN_L00_00262480((char*)m,0.0f,0.0f,D_0015ED6C*24.434608f);
-        if (wrench_hero()->attack_cooldown && tick_countdown_32_alt(&d->timer)) wrench_hero()->attack_cooldown=0;
-        position=m->position;
+        FUN_L00_00262480((char*)wrench_moby,0.0f,0.0f,D_0015ED6C*24.434608f);
+        if (wrench_hero()->attack_cooldown && tick_countdown_32_alt(&wrench_vars->timer)) wrench_hero()->attack_cooldown=0;
+        position=wrench_moby->position;
         if (!wrench_hero()->no_ground_adjust) {
             float ground=probe_ground_height(position,0,0.5f);
-            if (m->position[2]-ground<0.8f) {
+            if (wrench_moby->position[2]-ground<0.8f) {
                 ground+=0.55f;
-                if (m->position[2]<ground) approach_value_alt(&m->position[2],ground,D_0015ED6C*4.0f);
-                else approach_value_alt(&m->position[2],ground,D_0015ED6C);
+                if (wrench_moby->position[2]<ground) approach_value_alt(&wrench_moby->position[2],ground,D_0015ED6C*4.0f);
+                else approach_value_alt(&wrench_moby->position[2],ground,D_0015ED6C);
             }
         }
         qcopy(work.v[0],position);
-        if (m->state==10) {
+        if (wrench_moby->state==10) {
             qcopy(work.v[1],hero_velocity());
             scale_vector_xyz(work.v[1],work.v[1],0.7f);
             add_vector_xyz(position,position,work.v[1]);
-            normalize_vector_xyz(work.v[1],d->direction,d->speed); add_vector_xyz(position,position,work.v[1]);
-            d->acceleration+=frame_time_cube*170.0f;
-            approach_value_alt(&d->speed,0.0f,d->acceleration);
-            if (d->speed==0.0f) m->state=11;
+            normalize_vector_xyz(work.v[1],wrench_vars->direction,wrench_vars->speed); add_vector_xyz(position,position,work.v[1]);
+            wrench_vars->acceleration+=frame_time_cube*170.0f;
+            approach_value_alt(&wrench_vars->speed,0.0f,wrench_vars->acceleration);
+            if (wrench_vars->speed==0.0f) wrench_moby->state=11;
         } else {
             int arrived=0;
             float length,steps;
-            FUN_L00_002a82c0((char*)m);
+            FUN_L00_002a82c0((char*)wrench_moby);
             subtract_vector_xyz(work.v[1],((char *)&D_001403C0),position);
-            d->acceleration+=frame_time_sq*0.9f; d->speed+=d->acceleration;
-            length=vector_length_xyz(work.v[1]); steps=d->speed; steps=length/steps;
-            if (steps<(float)scale_game_frames_alt(5) && m->current_animation!=1) blend_moby_animation(m,1,0,scale_game_frames_alt(5));
-            if (length<=d->speed) { d->speed=length; arrived=1; }
-            normalize_vector_xyz(work.v[1],work.v[1],d->speed); add_vector_xyz(position,position,work.v[1]);
-            if (length/d->speed<(float)scale_game_frames_alt(4) && wrench_hero()->selected_weapon!=-1) {
+            wrench_vars->acceleration+=frame_time_sq*0.9f; wrench_vars->speed+=wrench_vars->acceleration;
+            length=vector_length_xyz(work.v[1]); steps=wrench_vars->speed; steps=length/steps;
+            if (steps<(float)scale_game_frames_alt(5) && wrench_moby->current_animation!=1) blend_moby_animation(wrench_moby,1,0,scale_game_frames_alt(5));
+            if (length<=wrench_vars->speed) { wrench_vars->speed=length; arrived=1; }
+            normalize_vector_xyz(work.v[1],work.v[1],wrench_vars->speed); add_vector_xyz(position,position,work.v[1]);
+            if (length/wrench_vars->speed<(float)scale_game_frames_alt(4) && wrench_hero()->selected_weapon!=-1) {
                 int sound;
                 FUN_L00_00232640(2); wrench_hero()->weapon_animation=26;
                 sound=wrench_hero()->thrown_sound;
@@ -2118,29 +2118,29 @@ void wrench_update(WrenchMoby *m) {
                 FUN_L00_00216de8(5,0);
                 sound=wrench_hero()->thrown_sound;
                 if (sound!=-1) { unsigned char *audio=voice_slot(sound); if (*(WrenchMoby**)(audio+0x88)==wrench_hero()->moby && audio[0x74]) release_voice_slot(sound); }
-                wrench_hero()->thrown_sound=-1; FUN_L00_00262840((char*)wrench_hero()+0x17B0); wrench_hero()->thrown=0; m->state=0;
+                wrench_hero()->thrown_sound=-1; FUN_L00_00262840((char*)wrench_hero()+0x17B0); wrench_hero()->thrown=0; wrench_moby->state=0;
             }
         }
         collided=0;
         if (FUN_001efa68(work.v[0],position,2,0,0) && collision_hit_material() && (!collision_hit.moby || !FUN_L00_0025e3b8((int)collision_hit.moby))) collided=collision_hit.surface!=0;
-        if (collided || d->collision) {
-            d->collision=0;
-            if (!wrench_hero()->attack_cooldown) { d->timer=scale_game_frames_alt(30); wrench_hero()->attack_cooldown=1; allocate_voice_for_target_entry_alt(2,0,(int)m); }
-            if (m->state==10) { FUN_L00_002a8028((char*)m); d->speed*=0.5f; m->state=11; }
+        if (collided || wrench_vars->collision) {
+            wrench_vars->collision=0;
+            if (!wrench_hero()->attack_cooldown) { wrench_vars->timer=scale_game_frames_alt(30); wrench_hero()->attack_cooldown=1; allocate_voice_for_target_entry_alt(2,0,(int)wrench_moby); }
+            if (wrench_moby->state==10) { FUN_L00_002a8028((char*)wrench_moby); wrench_vars->speed*=0.5f; wrench_moby->state=11; }
         }
-        radius=1.2f; if (m->state==11) radius=-0.37f;
-        normalize_vector_xyz(work.v[4],d->direction,radius);
-        make_hit_descriptor(work.v[1],m,0x10000,1.0f,work.v[4]);
+        radius=1.2f; if (wrench_moby->state==11) radius=-0.37f;
+        normalize_vector_xyz(work.v[4],wrench_vars->direction,radius);
+        make_hit_descriptor(work.v[1],wrench_moby,0x10000,1.0f,work.v[4]);
         work.shifted.query.force=1.0f; work.shifted.query.range=5627.925f;
         work.shifted.query.enabled=1; work.shifted.query.class_id=wrench_hero()->hit_index+1; work.shifted.query.flags=0;
-        moby_point_position(m,1,work.v[5]);
-        if (collide_sphere(work.v[5],0.4f,0,wrench_hero()->moby,work.v[1]) || (moby_point_position(m,0,work.v[5]),collide_sphere(work.v[5],0.4f,0,wrench_hero()->moby,work.v[1]))) {
+        moby_point_position(wrench_moby,1,work.v[5]);
+        if (collide_sphere(work.v[5],0.4f,0,wrench_hero()->moby,work.v[1]) || (moby_point_position(wrench_moby,0,work.v[5]),collide_sphere(work.v[5],0.4f,0,wrench_hero()->moby,work.v[1]))) {
             if (!wrench_hero()->attack_cooldown && collision_hit.moby && (!collision_hit.moby->model || collision_hit.moby->model->kind!=20)) {
                 MobyHitState *hit=(MobyHitState*)suck_get_aim_height(collision_hit.moby);
                 if (!hit || hit->hit_count<2 || hit->hit_index!=work.shifted.query.class_id) {
                     work.q[7]=*(WrenchQuad*)collision_hit.moby->position;
                     FUN_L00_0025b6b8(work.v[6],work.v[5],work.v[7],0.5f); FUN_L00_002a7e20(work.v[6],5);
-                    d->timer=scale_game_frames_alt(30); wrench_hero()->attack_cooldown=1; allocate_voice_for_target_entry_alt(FUN_L00_002a7d90(),0,(int)m);
+                    wrench_vars->timer=scale_game_frames_alt(30); wrench_hero()->attack_cooldown=1; allocate_voice_for_target_entry_alt(FUN_L00_002a7d90(),0,(int)wrench_moby);
                 }
             }
         }
