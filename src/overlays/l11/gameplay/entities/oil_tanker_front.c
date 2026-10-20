@@ -769,60 +769,60 @@ void FUN_L11_00318488(struct Moby *);
 
 /* Drops the chain's damaged links: takes the hits, shrinks the chain as its health falls and blows the head up when no link is left. */
 void FUN_L11_00317c98(struct Moby *moby) {
-    struct L11ChainVars *d = (struct L11ChainVars *)moby->pvars;
+    struct L11ChainVars *chain_vars = (struct L11ChainVars *)moby->pvars;
     int i;
     int idx = -1;
     float total = 0.0f;
     float vec[4];
 
-    for (i = 0; i < d->count; i++) {
-        struct Moby *hit = find_moby_hit(d->links[i], -1, 0);
+    for (i = 0; i < chain_vars->count; i++) {
+        struct Moby *hit = find_moby_hit(chain_vars->links[i], -1, 0);
         if (hit != 0) {
             idx = i;
             total += hit->scale;
-            d->links[i]->hit_slot = 0xFF;
+            chain_vars->links[i]->hit_slot = 0xFF;
         }
     }
-    approach_value(&d->health, 0.0f, total);
-    if (total != 0.0f && d->health / 80.0f * 8.0f <= (float)(d->count - 1)) {
+    approach_value(&chain_vars->health, 0.0f, total);
+    if (total != 0.0f && chain_vars->health / 80.0f * 8.0f <= (float)(chain_vars->count - 1)) {
         struct Moby *src;
         struct Moby *dst;
         *(u16 *)D_00141C18 = 0xFFFF;
-        d->count--;
-        FUN_L11_00318488(d->links[d->count]);
-        src = d->links[idx];
-        dst = d->links[d->count];
+        chain_vars->count--;
+        FUN_L11_00318488(chain_vars->links[chain_vars->count]);
+        src = chain_vars->links[idx];
+        dst = chain_vars->links[chain_vars->count];
         qcopy(&dst->pos, &src->pos);
         qcopy(&dst->rot, &src->rot);
         FUN_0022da68(1, 0, dst);
-        if (idx < d->count) {
-            float diff = d->offsets[idx] - d->offsets[idx + 1];
+        if (idx < chain_vars->count) {
+            float diff = chain_vars->offsets[idx] - chain_vars->offsets[idx + 1];
             int j;
-            for (j = idx; j < d->count; j++) {
-                d->catchup[j] = d->catchup[j + 1];
+            for (j = idx; j < chain_vars->count; j++) {
+                chain_vars->catchup[j] = chain_vars->catchup[j + 1];
             }
-            d->catchup[idx] += diff;
-            if (d->catchup[idx] < 0.0f) {
-                d->catchup[idx] += (float)*(s32 *)d->path;
+            chain_vars->catchup[idx] += diff;
+            if (chain_vars->catchup[idx] < 0.0f) {
+                chain_vars->catchup[idx] += (float)*(s32 *)chain_vars->path;
             }
         }
         {
             int k;
-            for (k = idx; k < d->count; k++) {
-                d->offsets[k] = d->offsets[k + 1];
+            for (k = idx; k < chain_vars->count; k++) {
+                chain_vars->offsets[k] = chain_vars->offsets[k + 1];
             }
         }
-        if (d->count == 0) {
-            char *p1 = (char *)&moby->pos;
+        if (chain_vars->count == 0) {
+            char *head_position = (char *)&moby->pos;
             float *dv;
-            char *p2;
-            fast_vec_scale(vec, &moby->rot_row0, (dv = D_L11_0015F580, p2 = (char *)&moby->rot, D_L11_00162330 * frame_scale));
+            char *head_rotation;
+            fast_vec_scale(vec, &moby->rot_row0, (dv = D_L11_0015F580, head_rotation = (char *)&moby->rot, D_L11_00162330 * frame_scale));
             vec[2] += frame_scale * 0.08f;
             FUN_0022da68(2, 0, moby);
-            cart_burst(moby, p1, -1, 3.0f, 13.0f);
-            FUN_L00_00263fd8((char *)moby, 0x602, (float *)p1, p2, scale_game_frames(0x5A), 0, vec, dv, frame_time_sq * 12.0f, dv);
-            FUN_L00_00263fd8((char *)moby, 0x603, (float *)p1, p2, scale_game_frames(0x5A), 0, vec, dv, frame_time_sq * 12.0f, dv);
-            FUN_L00_00263fd8((char *)moby, 0x784, (float *)p1, p2, scale_game_frames(0x5A), 0, vec, dv, frame_time_sq * 12.0f, dv);
+            cart_burst(moby, head_position, -1, 3.0f, 13.0f);
+            FUN_L00_00263fd8((char *)moby, 0x602, (float *)head_position, head_rotation, scale_game_frames(0x5A), 0, vec, dv, frame_time_sq * 12.0f, dv);
+            FUN_L00_00263fd8((char *)moby, 0x603, (float *)head_position, head_rotation, scale_game_frames(0x5A), 0, vec, dv, frame_time_sq * 12.0f, dv);
+            FUN_L00_00263fd8((char *)moby, 0x784, (float *)head_position, head_rotation, scale_game_frames(0x5A), 0, vec, dv, frame_time_sq * 12.0f, dv);
             mark_moby_for_removal(moby);
         }
     }
