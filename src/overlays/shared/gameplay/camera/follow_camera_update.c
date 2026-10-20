@@ -374,16 +374,16 @@ extern void FUN_001f9bf8_002e9cc0(void *, void *, float) __asm__("FUN_001f9bf8")
 extern void FUN_001f9a68_002e9cc0(void *, void *, float) __asm__("FUN_001f9a68");
 extern void FUN_001f9a10_002e9cc0(void *, void *, void *) __asm__("FUN_001f9a10");
 
-void FUN_L00_002e9cc0(char *p) {
+void FUN_L00_002e9cc0(char *camera_object) {
     char a[16] __attribute__((aligned(16)));
     char b[16] __attribute__((aligned(16)));
     struct Hero *g = &hero;
-    int m;
+    int vehicle_mode;
     FUN_001f9bf8_002e9cc0(a, ((char *)g->moby) + 0xE0, 1.0f);
-    m = g->vehicle_mode;
-    if (m == 2) {
+    vehicle_mode = g->vehicle_mode;
+    if (vehicle_mode == 2) {
         FUN_001f9a68_002e9cc0(b, a, 9.5f);
-    } else if (m == 1) {
+    } else if (vehicle_mode == 1) {
         if (D_0015EDB3_002e9cc0) {
             FUN_001f9a68_002e9cc0(b, a, 1.2f);
         } else {
@@ -392,9 +392,9 @@ void FUN_L00_002e9cc0(char *p) {
     } else {
         FUN_001f9a68_002e9cc0(b, a, 1.6f);
     }
-    p += 0x30;
-    FUN_001f9a10_002e9cc0(p, &hero.motion.pos, b);
-    FUN_001f9a10_002e9cc0(p, &hero.motion.platform_carry, p);
+    camera_object += 0x30;
+    FUN_001f9a10_002e9cc0(camera_object, &hero.motion.pos, b);
+    FUN_001f9a10_002e9cc0(camera_object, &hero.motion.platform_carry, camera_object);
 }
 #include "eetypes.h"
 #include "qcopy.h"
