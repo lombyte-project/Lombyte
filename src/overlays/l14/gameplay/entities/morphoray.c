@@ -1346,7 +1346,7 @@ void FUN_L14_00314f00(char *camera) {
     u128 stand;
     char *rec = *(char **)(D_L14_0015EF50 + *(short *)(camera + 0x84) * 32 + 0x1C);
     char *camera_saved_state;
-    char *p2;
+    char *fov_stops_state_base;
     char *path;
     char *initial_camera_transform;
     int *camera_run;
@@ -1369,8 +1369,8 @@ void FUN_L14_00314f00(char *camera) {
     camera_run[4] = 0;
     *(short *)(camera_run + 5) = 0;
     *((short *)(camera_run + 5) + 1) = scale_game_frames_4f00(*(short *)(rec + 0x3A));
-    p2 = *(char **)(camera + 0x70);
-    st = (Stops_4f00 *)(p2 + 0x58);
+    fov_stops_state_base = *(char **)(camera + 0x70);
+    st = (Stops_4f00 *)(fov_stops_state_base + 0x58);
     {
         int k;
         for (k = 0; k < 8; k++) {
