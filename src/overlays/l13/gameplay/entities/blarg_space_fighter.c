@@ -135,11 +135,11 @@ extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F
 extern void func_L00_0025F4A8_alt(void *, void *, void *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 
 void FUN_L13_002c1528(Moby_2C27B0 *m);
-void FUN_L13_002c1528(Moby_2C27B0 *m) {
-    Rocket_2C27B0 *d = m->data;
+void FUN_L13_002c1528(Moby_2C27B0 *rocket_moby) {
+    Rocket_2C27B0 *rocket_data = rocket_moby->data;
     V4_2C27B0 old;
     V4_2C27B0 hitpos;
-    V4_2C27B0 tmp;
+    V4_2C27B0 scratch_vector;
     V4_2C27B0 vel;
     V4_2C27B0 dir;
     Hit_2C27B0 *hit;
@@ -147,12 +147,12 @@ void FUN_L13_002c1528(Moby_2C27B0 *m) {
     float yaw;
     float pitch;
 
-    qcopy(&old, &m->pos);
-    m->scale += (m->cls->scale - m->scale) * 0.1f;
-    hit = (Hit_2C27B0 *)find_moby_hit(m, 0xA30000, 0);
+    qcopy(&old, &rocket_moby->pos);
+    rocket_moby->scale += (rocket_moby->cls->scale - rocket_moby->scale) * 0.1f;
+    hit = (Hit_2C27B0 *)find_moby_hit(rocket_moby, 0xA30000, 0);
     if (hit != 0 && hit->owner != 0 && hit->owner->cls_id != 0x52) {
-        func_L00_0025F4A8_alt(m, d, 0, 0.0f, 0.0f, 5, 2, 7, 0.0f, 0.0f, 0.0f, 1.0f, 1, 0.0f, 0, 1, -1, 0);
-        mark_moby_for_removal(m);
+        func_L00_0025F4A8_alt(rocket_moby, rocket_data, 0, 0.0f, 0.0f, 5, 2, 7, 0.0f, 0.0f, 0.0f, 1.0f, 1, 0.0f, 0, 1, -1, 0);
+        mark_moby_for_removal(rocket_moby);
         return;
     }
     *(Q_2C27B0 *)&dir = 0;
@@ -161,99 +161,99 @@ void FUN_L13_002c1528(Moby_2C27B0 *m) {
     dir.z = random_float_between(-1.0f, 1.0f);
     *(Q_2C27B0 *)&vel = *(Q_2C27B0 *)&dir;
     normalize_vector_xyz(&vel, &vel, random_float_between(0.1f, 0.2f) * D_0015ED6C);
-    normalize_vector_xyz(&tmp, d, -random_float_between(D_0015ED6C * 0.1f, D_0015ED6C));
-    add_vector_xyz(&vel, &vel, &tmp);
-    FUN_L00_002712b8(&m->pos, (float *)&vel, scale_game_frames_alt(6), 0x7F, 0xB0B0B0, 3, 80000.0f, 1000.0f, 1.0f, -0.0004f, 0.0f);
+    normalize_vector_xyz(&scratch_vector, rocket_data, -random_float_between(D_0015ED6C * 0.1f, D_0015ED6C));
+    add_vector_xyz(&vel, &vel, &scratch_vector);
+    FUN_L00_002712b8(&rocket_moby->pos, (float *)&vel, scale_game_frames_alt(6), 0x7F, 0xB0B0B0, 3, 80000.0f, 1000.0f, 1.0f, -0.0004f, 0.0f);
     for (t = 0.0f; t < 1.0f; t += 0.33333334f) {
-        unsigned char *p;
-        normalize_vector_xyz(&tmp, d, random_float_between(t, t + 0.33333334f) * d->speed);
-        add_vector_xyz(&tmp, &tmp, &m->pos);
-        p = FUN_L00_002712b8(&tmp, (float *)&vel, scale_game_frames_alt(0x3C), 0x7F, 0x606060, 3, 80000.0f, 1000.0f, 1.0f, -0.0002f, 0.0f);
-        if (p != 0) {
+        unsigned char *particle;
+        normalize_vector_xyz(&scratch_vector, rocket_data, random_float_between(t, t + 0.33333334f) * rocket_data->speed);
+        add_vector_xyz(&scratch_vector, &scratch_vector, &rocket_moby->pos);
+        particle = FUN_L00_002712b8(&scratch_vector, (float *)&vel, scale_game_frames_alt(0x3C), 0x7F, 0x606060, 3, 80000.0f, 1000.0f, 1.0f, -0.0002f, 0.0f);
+        if (particle != 0) {
             Tex_2C27B0 *tex = &D_L13_001B2380;
-            p[2] = *tex->p5C;
-            p[3] = 0x44;
+            particle[2] = *tex->p5C;
+            particle[3] = 0x44;
         }
         *(Q_2C27B0 *)&dir = 0;
         dir.z = 0.02f;
-        transform_vector_by_basis(&dir, &dir, &m->mat);
-        build_look_at_matrix(&dir, &dir, &m->mat, random_angle_radians_c());
-        FUN_L00_0026cbb0(&tmp, &dir, 0x4F007FFF, 0x1FFFFFFF, scale_game_frames_alt(5), 1, 40000.0f);
+        transform_vector_by_basis(&dir, &dir, &rocket_moby->mat);
+        build_look_at_matrix(&dir, &dir, &rocket_moby->mat, random_angle_radians_c());
+        FUN_L00_0026cbb0(&scratch_vector, &dir, 0x4F007FFF, 0x1FFFFFFF, scale_game_frames_alt(5), 1, 40000.0f);
     }
-    if (d->target != 0 && d->target->state != 0xFE && d->target->state != 0xFD
-        && distance_xyz(&d->tpos, &d->target->pos) < 3.0f) {
+    if (rocket_data->target != 0 && rocket_data->target->state != 0xFE && rocket_data->target->state != 0xFD
+        && distance_xyz(&rocket_data->tpos, &rocket_data->target->pos) < 3.0f) {
         Hero_2C27B0 *h = (Hero_2C27B0 *)(D_0013F350);
-        if (h->veh != 0 && h->veh->cls_id == 0x45 && d->owner->state != 5) {
+        if (h->veh != 0 && h->veh->cls_id == 0x45 && rocket_data->owner->state != 5) {
             Veh_2C27B0 *vd = h->veh->data;
             float a = fast_add_rotations_c(h->veh->rot.z, vd->f90);
             float b = fast_add_rotations_c(h->veh->rot.y, vd->f94);
-            build_spherical_offset_c(&tmp, distance_xyz(&m->pos, &h->veh->pos) / (d->speed + 24.0f) * vd->f64, a, -b);
-            add_vector_xyz(&tmp, &tmp, &h->veh->pos);
-            yaw = fast_arc_tan(tmp.x - m->pos.x, tmp.y - m->pos.y);
-            pitch = -fast_arc_tan(vector_distance(&m->pos, &tmp), tmp.z - m->pos.z);
+            build_spherical_offset_c(&scratch_vector, distance_xyz(&rocket_moby->pos, &h->veh->pos) / (rocket_data->speed + 24.0f) * vd->f64, a, -b);
+            add_vector_xyz(&scratch_vector, &scratch_vector, &h->veh->pos);
+            yaw = fast_arc_tan(scratch_vector.x - rocket_moby->pos.x, scratch_vector.y - rocket_moby->pos.y);
+            pitch = -fast_arc_tan(vector_distance(&rocket_moby->pos, &scratch_vector), scratch_vector.z - rocket_moby->pos.z);
         } else {
-            yaw = fast_arc_tan(d->target->pos.x - m->pos.x, d->target->pos.y - m->pos.y);
-            pitch = -fast_arc_tan(vector_distance(&m->pos, &d->target->pos), d->target->pos.z - m->pos.z);
+            yaw = fast_arc_tan(rocket_data->target->pos.x - rocket_moby->pos.x, rocket_data->target->pos.y - rocket_moby->pos.y);
+            pitch = -fast_arc_tan(vector_distance(&rocket_moby->pos, &rocket_data->target->pos), rocket_data->target->pos.z - rocket_moby->pos.z);
         }
-        if (fast_difference_between_rotations(yaw, m->rot.z) < 1.0471976f) {
-            d->speed += (d->maxspeed - d->speed) * 0.05f;
+        if (fast_difference_between_rotations(yaw, rocket_moby->rot.z) < 1.0471976f) {
+            rocket_data->speed += (rocket_data->maxspeed - rocket_data->speed) * 0.05f;
         }
-        approach_angle(&m->rot.z, &d->yawv, yaw, frame_time_sq * 12.566371f, frame_time_sq * 12.566371f, D_0015ED6C * 25.132742f);
-        approach_angle(&m->rot.y, &d->pitchv, pitch, frame_time_sq * 12.566371f, frame_time_sq * 12.566371f, D_0015ED6C * 25.132742f);
-        qcopy(&d->tpos, &d->target->pos);
+        approach_angle(&rocket_moby->rot.z, &rocket_data->yawv, yaw, frame_time_sq * 12.566371f, frame_time_sq * 12.566371f, D_0015ED6C * 25.132742f);
+        approach_angle(&rocket_moby->rot.y, &rocket_data->pitchv, pitch, frame_time_sq * 12.566371f, frame_time_sq * 12.566371f, D_0015ED6C * 25.132742f);
+        qcopy(&rocket_data->tpos, &rocket_data->target->pos);
     } else {
-        approach_angle(&m->rot.z, &d->yawv, m->rot.z, frame_time_sq * 12.566371f, frame_time_sq * 12.566371f, D_0015ED6C * 25.132742f);
-        approach_angle(&m->rot.y, &d->pitchv, m->rot.y, frame_time_sq * 12.566371f, frame_time_sq * 12.566371f, D_0015ED6C * 25.132742f);
-        d->target = 0;
+        approach_angle(&rocket_moby->rot.z, &rocket_data->yawv, rocket_moby->rot.z, frame_time_sq * 12.566371f, frame_time_sq * 12.566371f, D_0015ED6C * 25.132742f);
+        approach_angle(&rocket_moby->rot.y, &rocket_data->pitchv, rocket_moby->rot.y, frame_time_sq * 12.566371f, frame_time_sq * 12.566371f, D_0015ED6C * 25.132742f);
+        rocket_data->target = 0;
     }
-    if (scale_game_frames_alt(0x78) < d->timer) {
-        build_spherical_offset_c(d, d->speed, m->rot.z, -m->rot.y);
+    if (scale_game_frames_alt(0x78) < rocket_data->timer) {
+        build_spherical_offset_c(rocket_data, rocket_data->speed, rocket_moby->rot.z, -rocket_moby->rot.y);
     } else {
-        float k = convert_integer_to_float(d->timer) / convert_integer_to_float(scale_game_frames_alt(0x78));
+        float k = convert_integer_to_float(rocket_data->timer) / convert_integer_to_float(scale_game_frames_alt(0x78));
         if (1.0f < k) {
             k = 1.0f;
         } else if (k < 0.0f) {
             k = 0.0f;
         }
         k = k * k;
-        build_spherical_offset_c(&tmp, d->speed * k, m->rot.z, -m->rot.y);
-        scale_vector_xyz(d, d, 1.0f - k);
-        add_vector_xyz(d, d, &tmp);
+        build_spherical_offset_c(&scratch_vector, rocket_data->speed * k, rocket_moby->rot.z, -rocket_moby->rot.y);
+        scale_vector_xyz(rocket_data, rocket_data, 1.0f - k);
+        add_vector_xyz(rocket_data, rocket_data, &scratch_vector);
     }
-    add_vector_xyz(&m->pos, &m->pos, d);
-    if (m->pos.x < 2.0f || 1021.0f < m->pos.x || m->pos.y < 2.0f || 1021.0f < m->pos.y
-        || m->pos.z < 2.0f || 1021.0f < m->pos.z) {
-        mark_moby_for_removal(m);
+    add_vector_xyz(&rocket_moby->pos, &rocket_moby->pos, rocket_data);
+    if (rocket_moby->pos.x < 2.0f || 1021.0f < rocket_moby->pos.x || rocket_moby->pos.y < 2.0f || 1021.0f < rocket_moby->pos.y
+        || rocket_moby->pos.z < 2.0f || 1021.0f < rocket_moby->pos.z) {
+        mark_moby_for_removal(rocket_moby);
         return;
     }
-    moby_point_position(m, 1, &hitpos);
-    if (collision_line(&old, &hitpos, 0, m, 0) != 0) {
+    moby_point_position(rocket_moby, 1, &hitpos);
+    if (collision_line(&old, &hitpos, 0, rocket_moby, 0) != 0) {
         Moby_2C27B0 *o = D_L13_00174158;
-        if (o == 0 || (o != d->owner && o->cls_id != 0x504 && o->cls_id != 0x534 && o->cls_id != 0x535
+        if (o == 0 || (o != rocket_data->owner && o->cls_id != 0x504 && o->cls_id != 0x534 && o->cls_id != 0x535
                        && o->cls_id != 0x536 && o->cls_id != 0x537 && o->cls_id != 0x538 && o->cls_id != 0x539
                        && o->cls_id != 0x53A && o->cls_id != 0x52 && o->cls_id != 0x53 && o->cls_id != 0x191
                        && o->cls_id != 0x184 && o->cls_id != 0x185 && o->cls_id != 0x186 && o->cls_id != 0x187
                        && o->cls_id != 0x188 && o->cls_id != 0x189 && o->cls_id != 0x18A && o->cls_id != 0x18B
                        && o->cls_id != 0x18C && o->cls_id != 0x18F && o->cls_id != 0x190)) {
-            func_L00_0025F4A8_alt(m, d, 0, 5.0f, 10.0f, 0x14, 5, 0x10, 7.0f, 4.0f, 1.0f, 1.0f, 0, 15.0f, 1, 1, -1, 0);
-            mark_moby_for_removal(m);
+            func_L00_0025F4A8_alt(rocket_moby, rocket_data, 0, 5.0f, 10.0f, 0x14, 5, 0x10, 7.0f, 4.0f, 1.0f, 1.0f, 0, 15.0f, 1, 1, -1, 0);
+            mark_moby_for_removal(rocket_moby);
             return;
         }
-    } else if (coll_sphere(1.5f, &m->pos, 0, m) != 0) {
+    } else if (coll_sphere(1.5f, &rocket_moby->pos, 0, rocket_moby) != 0) {
         Moby_2C27B0 *o = D_L13_00174158;
-        if (o == 0 || (o != d->owner && o->cls_id != 0x504 && o->cls_id != 0x534 && o->cls_id != 0x535
+        if (o == 0 || (o != rocket_data->owner && o->cls_id != 0x504 && o->cls_id != 0x534 && o->cls_id != 0x535
                        && o->cls_id != 0x536 && o->cls_id != 0x537 && o->cls_id != 0x538 && o->cls_id != 0x539
                        && o->cls_id != 0x53A && o->cls_id != 0x52 && o->cls_id != 0x53 && o->cls_id != 0x191
                        && o->cls_id != 0x184 && o->cls_id != 0x185 && o->cls_id != 0x186 && o->cls_id != 0x187
                        && o->cls_id != 0x188 && o->cls_id != 0x189 && o->cls_id != 0x18A && o->cls_id != 0x18B
                        && o->cls_id != 0x18C && o->cls_id != 0x18F && o->cls_id != 0x190)) {
-            func_L00_0025F4A8_alt(m, d, 0, 5.0f, 10.0f, 0x14, 5, 0x10, 7.0f, 4.0f, 1.0f, 1.0f, 0, 15.0f, 1, 1, -1, 0);
-            mark_moby_for_removal(m);
+            func_L00_0025F4A8_alt(rocket_moby, rocket_data, 0, 5.0f, 10.0f, 0x14, 5, 0x10, 7.0f, 4.0f, 1.0f, 1.0f, 0, 15.0f, 1, 1, -1, 0);
+            mark_moby_for_removal(rocket_moby);
             return;
         }
     }
-    if (tick_countdown_32_alt(&d->timer) != 0 || (m->b31 == 0 && d->owner != 0 && d->owner->b31 != 0)) {
-        mark_moby_for_removal(m);
+    if (tick_countdown_32_alt(&rocket_data->timer) != 0 || (rocket_moby->b31 == 0 && rocket_data->owner != 0 && rocket_data->owner->b31 != 0)) {
+        mark_moby_for_removal(rocket_moby);
     }
 }
 #define NOT_SDA
