@@ -889,7 +889,7 @@ void FUN_L17_002eb9a8(struct Moby *moby) {
     long tex;
     int i;
     unsigned char ammo_capacity;
-    unsigned char c;
+    unsigned char lock_marker_fade_byte;
     int j;
     int x;
     int y;
@@ -924,10 +924,10 @@ void FUN_L17_002eb9a8(struct Moby *moby) {
             k = lock_fade_ratio * 5.0f + 1.0f;
             if (lock_marker_fade_factor > 1.0f)
                 lock_marker_fade_factor = 1.0f;
-            c = func_001FA898_r(lock_marker_fade_factor * 96.0f);
+            lock_marker_fade_byte = func_001FA898_r(lock_marker_fade_factor * 96.0f);
             func_L17_002EBF08_f(convert_integer_to_float(sp10), convert_integer_to_float(sp14), k,
                                 normalize_angle(convert_integer_to_float(D_L17_0015F5CC) / 30.0f), 0,
-                                0xFF, 0, c);
+                                0xFF, 0, lock_marker_fade_byte);
             *(int *)(ship_vars + 0xEC) = 0;
         } else {
             a = 0xFF;
