@@ -886,7 +886,7 @@ extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 
 void homing_mine_spawner_update(struct Moby *m) __asm__("FUN_L12_00307840");
-void homing_mine_spawner_update(struct Moby *m) {
+void homing_mine_spawner_update(struct Moby *spawner) {
     enum {
         HOMING_MINE_SPAWNER_CLEAR_LINKED_MOBYS = 0,
         HOMING_MINE_SPAWNER_WAIT_FOR_PROXIMITY = 1,
@@ -895,65 +895,65 @@ void homing_mine_spawner_update(struct Moby *m) {
         HOMING_MINE_SPAWNER_WAIT_FOR_POSTSPAWN_ANIMATION = 4,
         HOMING_MINE_SPAWNER_SPAWN_SEQUENCE_COMPLETE = 5
     };
-    char *d = (char *)m->pvars;
+    char *spawner_data = (char *)spawner->pvars;
     int *slots;
     int i;
-    FUN_L12_00307ab8(m);
-    slots = (int *)(d + 0xC0);
-    switch (m->state) {
+    FUN_L12_00307ab8(spawner);
+    slots = (int *)(spawner_data + 0xC0);
+    switch (spawner->state) {
     case HOMING_MINE_SPAWNER_CLEAR_LINKED_MOBYS:
         for (i = 0; i < 12; i++) {
             if (slots[i] != -1) {
-                char *o = (D_L12_0015FFD8_p + (slots[i] << 8));
-                if (o != 0 && ((unsigned char *)o)[0x20] != 0xFE &&
-                    ((unsigned char *)o)[0x20] != 0xFD) {
-                    mark_moby_for_removal(o);
+                char *linked_moby = (D_L12_0015FFD8_p + (slots[i] << 8));
+                if (linked_moby != 0 && ((unsigned char *)linked_moby)[0x20] != 0xFE &&
+                    ((unsigned char *)linked_moby)[0x20] != 0xFD) {
+                    mark_moby_for_removal(linked_moby);
                 }
             }
         }
-        m->state = 1;
+        spawner->state = 1;
         break;
     case HOMING_MINE_SPAWNER_WAIT_FOR_PROXIMITY:
-        if (*(int *)(d + 0xB4) != 2) {
-            if (vector_distance(&m->pos, d + 0x70) < *(float *)(d + 0xF8)) {
-                m->state = 2;
+        if (*(int *)(spawner_data + 0xB4) != 2) {
+            if (vector_distance(&spawner->pos, spawner_data + 0x70) < *(float *)(spawner_data + 0xF8)) {
+                spawner->state = 2;
             }
         }
         break;
     case HOMING_MINE_SPAWNER_WAIT_FOR_PRESPAWN_ANIMATION:
-        if (m->prev_seq != 1) {
-            blend_moby_animation(m, 1, 0, scale_game_frames(2));
+        if (spawner->prev_seq != 1) {
+            blend_moby_animation(spawner, 1, 0, scale_game_frames(2));
         }
-        if (m->anim_flags & 2) {
-            if (m->prev_seq != 2) {
-                blend_moby_animation(m, 2, 0, scale_game_frames(2));
+        if (spawner->anim_flags & 2) {
+            if (spawner->prev_seq != 2) {
+                blend_moby_animation(spawner, 2, 0, scale_game_frames(2));
             }
-            m->state = 3;
+            spawner->state = 3;
         }
         break;
     case HOMING_MINE_SPAWNER_SPAWN_LINKED_MOBYS:
-        if (fast_dec_timer_s16(d + 0xFC)) {
-            if (slots[*(int *)(d + 0xF0)] != -1) {
-                FUN_L12_003076e0(m);
-                m->command = m->command == 0;
-                *(short *)(d + 0xFC) = scale_game_frames(0x28);
+        if (fast_dec_timer_s16(spawner_data + 0xFC)) {
+            if (slots[*(int *)(spawner_data + 0xF0)] != -1) {
+                FUN_L12_003076e0(spawner);
+                spawner->command = spawner->command == 0;
+                *(short *)(spawner_data + 0xFC) = scale_game_frames(0x28);
             }
-            *(int *)(d + 0xF0) += 1;
+            *(int *)(spawner_data + 0xF0) += 1;
         }
-        if (*(int *)(d + 0xF0) == 12 || slots[*(int *)(d + 0xF0)] == -1) {
-            m->state = 4;
+        if (*(int *)(spawner_data + 0xF0) == 12 || slots[*(int *)(spawner_data + 0xF0)] == -1) {
+            spawner->state = 4;
         }
         break;
     case HOMING_MINE_SPAWNER_WAIT_FOR_POSTSPAWN_ANIMATION:
-        m->flags &= 0xEFFF;
-        if (m->prev_seq != 3) {
-            blend_moby_animation(m, 3, 0, scale_game_frames(2));
+        spawner->flags &= 0xEFFF;
+        if (spawner->prev_seq != 3) {
+            blend_moby_animation(spawner, 3, 0, scale_game_frames(2));
         }
-        if (m->anim_flags & 2) {
-            if (m->prev_seq != 0) {
-                blend_moby_animation(m, 0, 0, scale_game_frames(2));
+        if (spawner->anim_flags & 2) {
+            if (spawner->prev_seq != 0) {
+                blend_moby_animation(spawner, 0, 0, scale_game_frames(2));
             }
-            m->state = 5;
+            spawner->state = 5;
         }
         break;
     case HOMING_MINE_SPAWNER_SPAWN_SEQUENCE_COMPLETE:
