@@ -1452,8 +1452,8 @@ void FUN_L18_002d7fd0(struct Moby *arg) {
         arg->state = 3;
         idx = data[0x70 / 4];
         if (idx != -1) {
-            unsigned char *e = (unsigned char *)D_0013E550 + idx * 0x70;
-            if (*(unsigned char **)(e + 0x88) == arg && e[0x74]) {
+            unsigned char *voice_slot_entry = (unsigned char *)D_0013E550 + idx * 0x70;
+            if (*(unsigned char **)(voice_slot_entry + 0x88) == arg && voice_slot_entry[0x74]) {
                 release_voice_slot(idx);
             }
         }
