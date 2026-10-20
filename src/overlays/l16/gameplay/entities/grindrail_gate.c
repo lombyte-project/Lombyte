@@ -824,32 +824,32 @@ void FUN_L16_002e4a58(struct Moby *moby) {
         TAXI_DEPART_FROM_SECOND_STOP = 1,
         TAXI_DEPART_FROM_THIRD_STOP = 2
     };
-    char *d = (char *)moby->pvars;
-    char *p;
+    char *taxi_data = (char *)moby->pvars;
+    char *selected_path;
     float inv, a, b, r;
-    switch (*(short *)(d + 0xAC)) {
+    switch (*(short *)(taxi_data + 0xAC)) {
     case TAXI_DEPART_FROM_FIRST_STOP:
-        *(char **)(d + 0xA4) = D_L16_001B0930[*(int *)(d + 0x90)];
-        *(short *)(d + 0xAE) = 1;
+        *(char **)(taxi_data + 0xA4) = D_L16_001B0930[*(int *)(taxi_data + 0x90)];
+        *(short *)(taxi_data + 0xAE) = 1;
         break;
     case TAXI_DEPART_FROM_SECOND_STOP:
-        *(char **)(d + 0xA4) = D_L16_001B0930[*(int *)(d + 0x94)];
-        *(short *)(d + 0xAE) = 0;
+        *(char **)(taxi_data + 0xA4) = D_L16_001B0930[*(int *)(taxi_data + 0x94)];
+        *(short *)(taxi_data + 0xAE) = 0;
         break;
     case TAXI_DEPART_FROM_THIRD_STOP:
-        *(char **)(d + 0xA4) = D_L16_001B0930[*(int *)(d + 0x9C)];
-        *(short *)(d + 0xAE) = 1;
+        *(char **)(taxi_data + 0xA4) = D_L16_001B0930[*(int *)(taxi_data + 0x9C)];
+        *(short *)(taxi_data + 0xAE) = 1;
         break;
     }
-    p = *(char **)(d + 0xA4);
-    r = FUN_001f9b48(p + 0x10, p + 0x20);
+    selected_path = *(char **)(taxi_data + 0xA4);
+    r = FUN_001f9b48(selected_path + 0x10, selected_path + 0x20);
     a = frame_time * 20.0f;
     b = frame_time_sq * 5.0f;
-    inv = 1.0f / (r * (float)**(int **)(d + 0xA4));
-    *(int *)(d + 0xB4) = 0;
-    *(int *)(d + 0xB0) = 0;
-    *(float *)(d + 0xC4) = a * inv;
-    *(float *)(d + 0xC8) = b * inv;
+    inv = 1.0f / (r * (float)**(int **)(taxi_data + 0xA4));
+    *(int *)(taxi_data + 0xB4) = 0;
+    *(int *)(taxi_data + 0xB0) = 0;
+    *(float *)(taxi_data + 0xC4) = a * inv;
+    *(float *)(taxi_data + 0xC8) = b * inv;
 }
 /* Moves the moby through its trigger states and checks its local bounds. */
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002E6478), where it is exact; names translated to the US level program. */
