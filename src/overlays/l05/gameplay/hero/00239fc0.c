@@ -153,7 +153,7 @@ void FUN_L05_002402a8(void) {
     f32 f;
     s32 r;
     s32 i;
-    f32 a;
+    f32 side_probe_angle;
     u8 *p;
 
     s32 k;
@@ -305,12 +305,12 @@ d1:
         hero.unk2E8.f = ground_vector_scratch.f[0];
     }
     for (i = 0; i < 2; i++) {
-        a = 1.5707964f;
+        side_probe_angle = 1.5707964f;
         if (i == 1) {
-            a = -a;
+            side_probe_angle = -side_probe_angle;
         }
-        FUN_L00_002335c8(&side_probe_endpoint, 0.2f, a, 0.45f);
-        FUN_L00_002335c8(&unused_probe_vector, 0.2f, a, -0.45f);
+        FUN_L00_002335c8(&side_probe_endpoint, 0.2f, side_probe_angle, 0.45f);
+        FUN_L00_002335c8(&unused_probe_vector, 0.2f, side_probe_angle, -0.45f);
         if (collision_line(&side_probe_endpoint, &shared_probe_endpoint, 0x22, (s32)hero.moby, 0)) {
             f = HH.point.f[2] - hero.ground_z.f;
             hero.unk2C0.f[i] = f;
