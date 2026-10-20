@@ -2538,7 +2538,7 @@ void FUN_L08_002e4e90(struct Moby *moby, float *out, float *rot) {
     float v[4];
     char *data = (char *)moby->pvars;
     float sx, sy, sz;
-    float t;
+    float basis_tilt_radians;
     switch (moby->oclass) {
     case MOBY_CLASS_FIVE_BOLT_PICKUP:
         sx = D_L08_00161C68 * D_L08_00161CB8;
@@ -2560,9 +2560,9 @@ void FUN_L08_002e4e90(struct Moby *moby, float *out, float *rot) {
     normalize_vector_xyz(u, b, -fast_sin(*(float *)(data + 0x60)));
     normalize_vector_xyz(v, b + 4, fast_cos(*(float *)(data + 0x60)));
     add_vector_xyz(dir, u, v);
-    t = sx * DEG_TO_RAD;
-    normalize_vector_xyz(u, dir, fast_cos(t));
-    normalize_vector_xyz(v, b + 8, fast_sin(t));
+    basis_tilt_radians = sx * DEG_TO_RAD;
+    normalize_vector_xyz(u, dir, fast_cos(basis_tilt_radians));
+    normalize_vector_xyz(v, b + 8, fast_sin(basis_tilt_radians));
     add_vector_xyz(up, u, v);
     normalize_vector_xyz(u, b, -fast_cos(*(float *)(data + 0x60)));
     normalize_vector_xyz(v, b + 4, -fast_sin(*(float *)(data + 0x60)));
