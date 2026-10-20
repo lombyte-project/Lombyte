@@ -69,7 +69,7 @@ gap is a patch that was dropped. The kinds:
 | [0054](0054-r5900-assembler-pads-loops.patch) | retail | `cc1` does not pad R5900 short loops: `Ps2EeAs` does | `ui/hud/get_icon_frame`, `video/decoder/video_dec_flush` |
 | [0055](0055-r5900-no-second-hilo.patch) | retail | the second HI/LO pair stays fixed: no `mult1`/`div1` in game code | `textbin/fun_001fe980`, `textbin/fun_00214260` |
 | [0056](0056-sda-extern-before-use.patch) | retail | `.extern` of an `sda` variable at its first use, so `Ps2EeAs` knows its size | `textbin/fun_00206b78`, `textbin/fun_0022e8c8` |
-| [0057](0057-reorg-sticky-volatile-set.patch) | upstream | reorg keeps a volatile store's flag when a plain store follows | gcc-2.95.2, Mark Mitchell 1999-05-06: "Make volatil monotonically increasing" |
+| [0057](0057-reorg-sticky-volatile-set.patch) | upstream | reorg keeps a volatile store's flag when a plain store follows | part of gcc-2.95.2, Mark Mitchell 1999-05-06: "Make volatil monotonically increasing" |
 | [0058](0058-reorg-trap-if-sets-volatile.patch) | upstream | reorg moves nothing across a conditional trap | gcc-2.95.2, Mark Mitchell 1999-05-04: "Handle ... TRAP_IF ... just like in mark_referenced_resources" |
 | [0060](0060-alias-static-chain-not-a-base.patch) | upstream | the static chain and struct value registers are not alias bases | gcc-2.95.3, Richard Henderson 2000-08-22 (`alias.c`) |
 | [0061](0061-copy-rtx-if-shared-virtual-mems.patch) | upstream | a stack MEM is not shared | gcc-2.95.3, Jeff Law 1999-08-30 (`emit-rtl.c`) |
