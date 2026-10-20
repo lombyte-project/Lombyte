@@ -1395,9 +1395,9 @@ extern void FUN_L03_00291918(char *moby);
 extern void FUN_L09_002c1978(void *, void *, int);
 
 void FUN_L09_002ef750(void) {
-    int t = D_L09_0015F5CC;
-    int texture_sequence_step = t / 20;
-    float texture_sequence_position = (float)t / 20.0f;
+    int texture_sequence_numerator = D_L09_0015F5CC;
+    int texture_sequence_step = texture_sequence_numerator / 20;
+    float texture_sequence_position = (float)texture_sequence_numerator / 20.0f;
     float b = (float)texture_sequence_step;
     FUN_L09_0021e8c0(D_L09_001F3080, 0x6C, texture_sequence_position - b, (texture_sequence_step & 15) + 0x2C, ((texture_sequence_step + 1) & 15) + 0x2C);
     FUN_L03_00291918(D_L09_001FC740);
