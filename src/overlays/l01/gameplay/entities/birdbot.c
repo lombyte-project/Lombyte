@@ -153,7 +153,7 @@ extern void FUN_L01_0027e900(void *, void *, f32, f32, f32, f32, f32, f32, f32, 
 void FUN_L01_002bd100(EmitterMoby *self) {
     Emitter *v;
     EmitVec out;
-    EmitVec p;
+    EmitVec position_scratch;
     EmitVec off;
     union {
         struct {
@@ -170,9 +170,9 @@ void FUN_L01_002bd100(EmitterMoby *self) {
 
     v = self->vars;
     if (current_level_index == 1) {
-        p.q = self->pos.q;
-        p.f[3] = 20.0f;
-        if (fast_bsphere_check(&p, 240.0f) == -1) {
+        position_scratch.q = self->pos.q;
+        position_scratch.f[3] = 20.0f;
+        if (fast_bsphere_check(&position_scratch, 240.0f) == -1) {
             return;
         }
     }
@@ -180,7 +180,7 @@ void FUN_L01_002bd100(EmitterMoby *self) {
     if (v->timer <= 0) {
         v->timer = v->delay;
         for (i = 0; i < v->count; i++) {
-            p.q = self->pos.q;
+            position_scratch.q = self->pos.q;
             off.f[0] = random_float_between(-v->spread[0], v->spread[0]);
             off.f[1] = random_float_between(-v->spread[1], v->spread[2]);
             off.f[2] = random_float_between(-v->spread[2], v->spread[2]);
@@ -188,7 +188,7 @@ void FUN_L01_002bd100(EmitterMoby *self) {
                 euler_rotation_matrix(&u.rot.m, self->rot);
                 transform_vector(&off, &off, &u.rot.m);
             }
-            fast_vec_add(&p, &p, &off);
+            fast_vec_add(&position_scratch, &position_scratch, &off);
             if (v->flags & 0x1000) {
                 u.rot.ang.f[0] =
                     random_float_between(-v->vel_range[0], v->vel_range[0]) * 3.1415927f / 180.0f;
@@ -204,7 +204,7 @@ void FUN_L01_002bd100(EmitterMoby *self) {
                 euler_rotation_matrix(&u.rot.m, &u.rot.ang);
                 transform_vector(&out, &v->vel, &u.rot.m);
                 size = random_float_between(v->size_min, v->size_max);
-                FUN_L01_0027e900(v, &p, out.f[0], out.f[1], out.f[2], size,
+                FUN_L01_0027e900(v, &position_scratch, out.f[0], out.f[1], out.f[2], size,
                                  random_float_between(v->life_min, v->life_max), v->fade[0],
                                  v->fade[1], v->fade[2], v->fade[3], v->tex, v->blend, v->alpha,
                                  0xFF);
@@ -217,7 +217,7 @@ void FUN_L01_002bd100(EmitterMoby *self) {
                     transform_vector(&u.lin.vel, &u.lin.vel, &u.lin.m);
                 }
                 size = random_float_between(v->size_min, v->size_max);
-                FUN_L01_0027e900(v, &p, u.lin.vel.f[0], u.lin.vel.f[1], u.lin.vel.f[2], size,
+                FUN_L01_0027e900(v, &position_scratch, u.lin.vel.f[0], u.lin.vel.f[1], u.lin.vel.f[2], size,
                                  random_float_between(v->life_min, v->life_max), v->fade[0],
                                  v->fade[1], v->fade[2], v->fade[3], v->tex, v->blend, v->alpha,
                                  0xFF);
