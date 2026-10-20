@@ -1362,12 +1362,12 @@ void FUN_L00_002ebbd8(void *arg) {
     *(float *)(follow_block + 0x5C) = -0.004363323096185923f;
     *(int *)(follow_block + 0x44) = *(int *)(g + 0x2080);
     {
-        char *q0 = *(char **)(camera_object + 0x70);
-        *(float *)(q0 + 0xA0) = 4.639999866485596f;
-        q0 += 0xA0;
-        *(float *)(q0 + 4) = 0.5f;
-        *(float *)(q0 + 0x10) = 2.0f;
-        *(float *)(q0 + 0x14) = 0.05f;
+        char *distance_tuning_cursor = *(char **)(camera_object + 0x70);
+        *(float *)(distance_tuning_cursor + 0xA0) = 4.639999866485596f;
+        distance_tuning_cursor += 0xA0;
+        *(float *)(distance_tuning_cursor + 4) = 0.5f;
+        *(float *)(distance_tuning_cursor + 0x10) = 2.0f;
+        *(float *)(distance_tuning_cursor + 0x14) = 0.05f;
     }
     r = *(char **)(camera_object + 0x70);
     *(int *)(r + 0x18) = 0;
