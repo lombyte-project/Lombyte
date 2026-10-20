@@ -8,7 +8,7 @@ extern void fill_transfer_words(void *, s32, s32) __asm__("func_001F97E8");
 void detach_manipulator(struct Moby *moby, struct Manip *manip) __asm__("FUN_0020cb88");
 
 void detach_manipulator(struct Moby *moby, struct Manip *manip) {
-    struct Manip *p;
+    struct Manip *previous_manip;
 
     if (manip == 0) {
         return;
@@ -16,12 +16,12 @@ void detach_manipulator(struct Moby *moby, struct Manip *manip) {
     if (moby->manips == manip) {
         moby->manips = manip->next;
     } else {
-        p = moby->manips;
-        while (p->next != 0 && p->next != manip) {
-            p = p->next;
+        previous_manip = moby->manips;
+        while (previous_manip->next != 0 && previous_manip->next != manip) {
+            previous_manip = previous_manip->next;
         }
-        if (p->next == manip) {
-            p->next = manip->next;
+        if (previous_manip->next == manip) {
+            previous_manip->next = manip->next;
         }
     }
     fill_transfer_words(manip, 0, 0x40);
