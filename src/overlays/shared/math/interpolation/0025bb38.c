@@ -70,17 +70,17 @@ extern void FUN_L00_0025bc00_25be00(float *, void *, float, float) __asm__("FUN_
 
 float approach_angle(float *cur, float *vel, float target, float lim, float accel, float maxv) __asm__("FUN_L00_0025be00");
 float approach_angle(float *cur, float *vel, float target, float lim, float accel, float maxv) {
-    float d;
+    float angle_error;
     float v;
     float stop;
     float t;
 
-    d = FUN_001fa5c8_25be00(target, *cur);
+    angle_error = FUN_001fa5c8_25be00(target, *cur);
     v = *vel;
-    if (v * d >= 0.0f && d != 0.0f) {
+    if (v * angle_error >= 0.0f && angle_error != 0.0f) {
         stop = v * v / accel * 0.5f;
-        if (FUN_001f99c0_25be00(d) < stop) {
-            maxv = FUN_001f99c0_25be00(d);
+        if (FUN_001f99c0_25be00(angle_error) < stop) {
+            maxv = FUN_001f99c0_25be00(angle_error);
             maxv += FUN_001f99c0_25be00(*vel);
             if (stop < maxv) {
                 FUN_00213ed8_25be00(0.0f, accel, vel);
@@ -88,20 +88,20 @@ float approach_angle(float *cur, float *vel, float target, float lim, float acce
                 FUN_00213ed8_25be00(0.0f, accel * 1.1f, vel);
             }
         } else {
-            t = FUN_001f9988_25be00((accel + accel) * d);
+            t = FUN_001f9988_25be00((accel + accel) * angle_error);
             if (maxv < t) {
                 t = maxv;
             }
-            if (d < 0.0f) {
+            if (angle_error < 0.0f) {
                 FUN_L00_0025bc00_25be00(vel, 0, -t, lim);
             } else {
                 FUN_L00_0025bc00_25be00(vel, 0, t, lim);
             }
         }
-        maxv = FUN_001f99c0_25be00(d);
+        maxv = FUN_001f99c0_25be00(angle_error);
         if (!(FUN_001f99c0_25be00(*vel) < maxv)) {
             *cur = target;
-            return d;
+            return angle_error;
         }
     } else {
         FUN_L00_0025bc00_25be00(vel, 0, 0.0f, accel);
