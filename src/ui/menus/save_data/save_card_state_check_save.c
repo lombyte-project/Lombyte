@@ -5,10 +5,10 @@ extern int mode_freeze_state __asm__("D_0015EEB0") MACRO_ADDR;
 void save_card_state_check_save(void) __asm__("FUN_00208bc0");
 
 void save_card_state_check_save(void) {
-    struct MemoryCardState *s = &memory_card_state;
-    if (s->state == 2 && s->pending_state < 0) {
-        s->pending_state = 7;
-        s->pending_card = 0;
+    struct MemoryCardState *card_state = &memory_card_state;
+    if (card_state->state == 2 && card_state->pending_state < 0) {
+        card_state->pending_state = 7;
+        card_state->pending_card = 0;
         mode_freeze_state = 0xB;
     }
 }
