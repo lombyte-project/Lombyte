@@ -1131,7 +1131,7 @@ extern s32 D_L00_0015F844 __attribute__((sda));
 extern s32 D_L00_0015F848 __attribute__((sda));
 extern char D_L00_0015F858[] __attribute__((section(".data")));
 extern char D_L00_0015F860[] __attribute__((section(".data")));
-int FUN_L00_00239df8(HudElem *m)
+int FUN_L00_00239df8(HudElem *hud_element)
 {
     char buf[16];
     s16 *frame;
@@ -1139,20 +1139,20 @@ int FUN_L00_00239df8(HudElem *m)
     int apostrophe;
     int off;
     int panel_x, cap_x, icon_x;
-    int y, x, digits, alpha, n, slide, color, shadow, sx, sy, i, dx, dy;
+    int y, x, digits, alpha, bolt_count_quotient, slide, color, shadow, sx, sy, i, dx, dy;
     f32 open, text;
 
-    frame = m->unk80;
+    frame = hud_element->unk80;
     /* the byte offset kept in a local is load-bearing (retail tests m + off) */
     off = 0x70;
-    if (camera_secondary_mode == 50 || ((u8 *)m)[off] == 0)
-        return m->w;
+    if (camera_secondary_mode == 50 || ((u8 *)hud_element)[off] == 0)
+        return hud_element->w;
 
-    fade = m->cnt;
+    fade = hud_element->cnt;
     y = pal_mode_reload[0] ? 10 : 18;
-    x = m->unk50;
+    x = hud_element->unk50;
 
-    open = convert_integer_to_float(m->cnt[0]) / convert_integer_to_float(bolt_panel_open_steps_gp);
+    open = convert_integer_to_float(hud_element->cnt[0]) / convert_integer_to_float(bolt_panel_open_steps_gp);
     if (1.0f < open)
         open = 1.0f;
     else if (open < 0.0f)
@@ -1168,7 +1168,7 @@ int FUN_L00_00239df8(HudElem *m)
     cap_x = x - 0xC;
     icon_x = x - 0x20;
     alpha = truncate_float_to_s32((f32)truncate_float_to_s32(open * 128.0f) * 0.7f);
-    for (n = current_bolt_count; n >= 10; n /= 10)
+    for (bolt_count_quotient = current_bolt_count; bolt_count_quotient >= 10; bolt_count_quotient /= 10)
         digits++;
     apostrophe = 0;
 
@@ -1178,7 +1178,7 @@ int FUN_L00_00239df8(HudElem *m)
     panel_x -= slide;
     draw_hud_sprite(get_icon_frame(0x7580, 0), panel_x, y, slide + 0x10, 32, alpha);
     draw_hud_sprite(get_icon_frame(0x7580, 1), panel_x - 0x20, y, 32, 32, alpha);
-    draw_hud_icon(m, get_icon_frame(0x754F, *frame >> 1), icon_x, y, 0, 0x80);
+    draw_hud_icon(hud_element, get_icon_frame(0x754F, *frame >> 1), icon_x, y, 0, 0x80);
 
     /* the count, shadow first */
     color = fast_tween_color(bolt_text_color_clear, bolt_text_color_opaque, text);
@@ -1199,7 +1199,7 @@ int FUN_L00_00239df8(HudElem *m)
         font_print_right(sx - digit_width * i + 2, sy + 2, shadow, buf, -1);
         font_print_right(sx - digit_width * i, sy, color, buf, -1);
     }
-    return m->w;
+    return hud_element->w;
 }
 #include "sda.h"
 extern s32 D_00141398 NOT_SDA;
