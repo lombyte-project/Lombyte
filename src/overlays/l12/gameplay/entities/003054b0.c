@@ -1277,15 +1277,15 @@ extern void FUN_L08_002f0c18(int);
 extern void vu1_add_g_sregister(s32, unsigned long) __asm__("func_00233980");
 void font_queue_vu_state(void) __asm__("FUN_001f76a0");
 
-void FUN_L12_0030be68(struct Moby *m) {
-    int *d = (int *)m->pvars;
+void FUN_L12_0030be68(struct Moby *moby) {
+    int *moby_data = (int *)moby->pvars;
     int i;
     font_queue_vu_state();
     vu1_add_g_sregister(0x42, 0x7F00000064L);
     vu1_add_g_sregister(8, 0);
     vu1_add_g_sregister(0x14, 0xFF9000000260L);
     vu1_add_g_sregister(0x47, 0x5360A);
-    if (is_point_inside_clip_volume(D_L12_00167240, d[0])) {
+    if (is_point_inside_clip_volume(D_L12_00167240, moby_data[0])) {
         vu1_add_g_sregister(6, get_effect_texture(0x2C));
         for (i = 0; i < 10; i++) {
             FUN_L08_00258090(D_L12_00208B00, D_L12_00205A08[i], D_L12_001FBD10[i], D_L12_00162108);
