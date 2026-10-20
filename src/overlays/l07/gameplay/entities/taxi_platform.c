@@ -1290,51 +1290,51 @@ extern struct Moby *debris_target __asm__("D_L07_00173ED8") __attribute__((secti
 extern char debris_far_point[] __asm__("D_L07_00166E40");
 
 /* Debris update: moves and spins it, bursts it on impact, removes it out of bounds. */
-void FUN_L07_0030bbc8(struct Moby *m) {
-    Vec4f *pos = &m->pos;
-    DebrisVars *d = (DebrisVars *)m->pvars;
+void FUN_L07_0030bbc8(struct Moby *moby) {
+    Vec4f *pos = &moby->pos;
+    DebrisVars *debris_vars = (DebrisVars *)moby->pvars;
     Vec4 old;
     float size;
 
     qcopy(&old, pos);
-    add_vector_xyz(pos, pos, d);
-    d->vel.z -= frame_time_sq * 9.8f;
-    m->rot.y = fast_add_rotations(m->rot.y, d->spin_y);
-    m->rot.z = fast_add_rotations(m->rot.z, d->spin_z);
-    if (collision_line(&old, pos, 0, d->ignore, NULL) != 0 || coll_sphere(0.5f, pos, 0, d->ignore) != 0) {
+    add_vector_xyz(pos, pos, debris_vars);
+    debris_vars->vel.z -= frame_time_sq * 9.8f;
+    moby->rot.y = fast_add_rotations(moby->rot.y, debris_vars->spin_y);
+    moby->rot.z = fast_add_rotations(moby->rot.z, debris_vars->spin_z);
+    if (collision_line(&old, pos, 0, debris_vars->ignore, NULL) != 0 || coll_sphere(0.5f, pos, 0, debris_vars->ignore) != 0) {
         if (debris_target == NULL || (u16)(debris_target->oclass - 0x371) >= 2) {
-            if (m->visible != 0 || vector_distance(pos, &hero.motion.pos) < 5.0f) {
+            if (moby->visible != 0 || vector_distance(pos, &hero.motion.pos) < 5.0f) {
                 size = 0.0f;
-                if (d->variant % 3 == 0) {
+                if (debris_vars->variant % 3 == 0) {
                     size = 10.0f;
                 }
                 if (vector_distance(pos, debris_far_point) > 50.0f) {
-                    if (d->variant & 1) {
-                        spawn_explosion(m, d, 0, 2.0f, 1.0f, 1, 2, 3, 0.0f, 0.0f, 1000.0f, 1.3f, -1,
+                    if (debris_vars->variant & 1) {
+                        spawn_explosion(moby, debris_vars, 0, 2.0f, 1.0f, 1, 2, 3, 0.0f, 0.0f, 1000.0f, 1.3f, -1,
                                         size, 0, 1, -1, 0);
                     } else {
-                        spawn_explosion(m, d, 0, 2.0f, 1.0f, 0, 2, 3, 0.0f, 0.0f, 1000.0f, 1.2f, 0,
+                        spawn_explosion(moby, debris_vars, 0, 2.0f, 1.0f, 0, 2, 3, 0.0f, 0.0f, 1000.0f, 1.2f, 0,
                                         size, 0, 1, -1, 0);
                     }
                 } else {
-                    if (d->variant & 1) {
-                        spawn_explosion(m, d, 0, 2.0f, 1.0f, 0, 2, 4, 0.0f, 1.0f, 1000.0f, 1.0f, 0,
+                    if (debris_vars->variant & 1) {
+                        spawn_explosion(moby, debris_vars, 0, 2.0f, 1.0f, 0, 2, 4, 0.0f, 1.0f, 1000.0f, 1.0f, 0,
                                         size, 0, 1, -1, 0);
                     } else {
-                        spawn_explosion(m, d, 0, 2.0f, 1.0f, 1, 2, 4, 0.0f, 0.0f, 1000.0f, 1.0f, 0,
+                        spawn_explosion(moby, debris_vars, 0, 2.0f, 1.0f, 1, 2, 4, 0.0f, 0.0f, 1000.0f, 1.0f, 0,
                                         size, 0, 1, -1, 0);
                     }
                 }
             } else {
-                play_moby_sound(0, 0, m);
+                play_moby_sound(0, 0, moby);
             }
-            mark_moby_for_removal(m);
+            mark_moby_for_removal(moby);
             return;
         }
     }
-    if (m->pos.x < 2.0f || m->pos.x > 1021.0f || m->pos.y < 2.0f || m->pos.y > 1021.0f ||
-        m->pos.z < 2.0f || m->pos.z > 1021.0f) {
-        mark_moby_for_removal(m);
+    if (moby->pos.x < 2.0f || moby->pos.x > 1021.0f || moby->pos.y < 2.0f || moby->pos.y > 1021.0f ||
+        moby->pos.z < 2.0f || moby->pos.z > 1021.0f) {
+        mark_moby_for_removal(moby);
     }
 }
 /* Ported from rac1-decomp src/overlays/l07_umbris/vendor_002CE470.c (func_L07_0030D8E8) */
