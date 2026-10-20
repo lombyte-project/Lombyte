@@ -1390,17 +1390,17 @@ extern int D_L18_001AC240[];
 extern int D_L18_0015FFD8;
 
 short FUN_L18_002fc7e0(int idx) {
-    unsigned short *p = (unsigned short *)D_L18_001AC240[idx];
+    unsigned short *group_moby_entry = (unsigned short *)D_L18_001AC240[idx];
     short n = 0;
     int base;
-    if (p == 0)
+    if (group_moby_entry == 0)
         return 0;
     base = D_L18_0015FFD8;
     while (1) {
-        unsigned char *moby = (unsigned char *)(base + ((p[0] & 0x7FFF) << 8));
+        unsigned char *moby = (unsigned char *)(base + ((group_moby_entry[0] & 0x7FFF) << 8));
         if (*(short *)(moby + 0xA6) == 0x772 && moby[0x20] != 8)
             n++;
-        if ((short)*p++ < 0)
+        if ((short)*group_moby_entry++ < 0)
             return n;
     }
     return n;
