@@ -1565,8 +1565,8 @@ extern u8 *D_L01_001600EC;
 void FUN_L01_003087e0(char *moby) {
     char *data = *(char **)(moby + 0x78);
     V4_3087e0 v;
-    V4_3087e0 m;
-    V4_3087e0 a;
+    V4_3087e0 output_rotation;
+    V4_3087e0 start_rotation;
     V4_3087e0 b;
     f32 t;
     f32 f22;
@@ -1587,24 +1587,24 @@ void FUN_L01_003087e0(char *moby) {
         v.z = 0.0f;
         add_vector_xyz(&v.x, &v.x, (f32 *)(&g->motion.pos));
         v.z += 1.0f;
-        clear_u64_value(&m.x);
-        m.z = FUN_001fa580_c(ang, 3.141590118408203f);
-        m.y = f22 * -0.17000000178813934f;
+        clear_u64_value(&output_rotation.x);
+        output_rotation.z = FUN_001fa580_c(ang, 3.141590118408203f);
+        output_rotation.y = f22 * -0.17000000178813934f;
     } else {
         lerp_vector(&v.x, D_L01_001600EC + *(s32 *)(data + 4) * 128 + 0x30,
                      D_L01_001600EC + *(s32 *)(data + 8) * 128 + 0x30, f22);
         {
             u8 *base = D_L01_001600EC;
 
-            qcopy(&a, base + *(s32 *)(data + 4) * 128 + 0x70);
+            qcopy(&start_rotation, base + *(s32 *)(data + 4) * 128 + 0x70);
             qcopy(&b, base + *(s32 *)(data + 8) * 128 + 0x70);
         }
-        m.z = FUN_001fa580_c(fast_subtract_rotations(b.z, a.z) * f22, a.z);
-        m.y = FUN_001fa580_c(fast_subtract_rotations(b.y, a.y) * f22, a.y);
-        m.x = FUN_001fa580_c(fast_subtract_rotations(b.x, a.x) * f22, a.x);
+        output_rotation.z = FUN_001fa580_c(fast_subtract_rotations(b.z, start_rotation.z) * f22, start_rotation.z);
+        output_rotation.y = FUN_001fa580_c(fast_subtract_rotations(b.y, start_rotation.y) * f22, start_rotation.y);
+        output_rotation.x = FUN_001fa580_c(fast_subtract_rotations(b.x, start_rotation.x) * f22, start_rotation.x);
     }
     FUN_L00_002ea9d8(&v.x);
-    FUN_L00_002eaa30(&m.x);
+    FUN_L00_002eaa30(&output_rotation.x);
 }
 #include "sda.h"
 
