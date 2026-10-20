@@ -1343,7 +1343,7 @@ void red_ship_1_update(char *moby) {
     char *cur;
     char *cur0;
     char *pos0;
-    char *p;
+    char *path_node_base;
     char *group_member_data;
     int *path;
     int flag;
@@ -1434,9 +1434,9 @@ void red_ship_1_update(char *moby) {
                 }
             }
             *(float *)(pm + 0xC) = FUN_001f9b48(pos0, *(char **)(pm + 0x10) + (*(int *)pm * 0x10 + 0x10));
-            p = *(char **)(pm + 0x10) + *(int *)pm * 0x10;
-            *(float *)(pm + 0x18) = fast_arc_tan(*(float *)(p + 0x10) - *(float *)(moby + 0x10),
-                                                 *(float *)(p + 0x14) - *(float *)(moby + 0x14));
+            path_node_base = *(char **)(pm + 0x10) + *(int *)pm * 0x10;
+            *(float *)(pm + 0x18) = fast_arc_tan(*(float *)(path_node_base + 0x10) - *(float *)(moby + 0x10),
+                                                 *(float *)(path_node_base + 0x14) - *(float *)(moby + 0x14));
             pm[5] = 2;
             *(int *)(pm + 0x8) = 0;
             *(int *)(pm + 0x1C) = 0;
