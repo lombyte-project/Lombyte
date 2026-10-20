@@ -107,7 +107,7 @@ void camera_run_setup_to_new_cam(struct Moby *cam) __asm__("FUN_001ebec8");
 void init_camera_system(void) __asm__("FUN_L00_001ed280");
 void init_camera_system(void) {
     char *g = (char *)&D_L00_00166C80_c;
-    float *s, *d, *t, *u;
+    float *camera_vector_snapshot, *camera_record_vector_destination, *t, *u;
     char *current_camera_record;
     if (*(char **)(g + 0x180) != 0) {
         *(short *)(*(char **)(g + 0x180) + 0x8E) = 0;
@@ -122,12 +122,12 @@ void init_camera_system(void) {
     camera_run_setup_to_new_cam(*(char **)(g + 0x180));
     backup_current_cam();
     current_camera_record = *(char **)(g + 0x180);
-    s = (float *)(g + 0x140);
-    qcopy(s, current_camera_record + 0x30);
-    d = (float *)(current_camera_record + 0x64);
-    d[0] = s[0];
-    d[1] = s[1];
-    d[2] = s[2];
+    camera_vector_snapshot = (float *)(g + 0x140);
+    qcopy(camera_vector_snapshot, current_camera_record + 0x30);
+    camera_record_vector_destination = (float *)(current_camera_record + 0x64);
+    camera_record_vector_destination[0] = camera_vector_snapshot[0];
+    camera_record_vector_destination[1] = camera_vector_snapshot[1];
+    camera_record_vector_destination[2] = camera_vector_snapshot[2];
     t = (float *)(D_0013E533 + 0xE9D);
     u = (float *)(g + 0x190);
     u[0] = t[0];
