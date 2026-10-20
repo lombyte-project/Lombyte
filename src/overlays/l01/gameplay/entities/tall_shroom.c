@@ -255,7 +255,7 @@ void FUN_L01_0030ba18(struct Moby *moby) {
     BlobVars *v;
     s32 hit;
     s32 i;
-    s32 n;
+    s32 signed_puff_variation;
     s32 grey_intensity;
     s32 alpha;
     s32 grey;
@@ -305,14 +305,14 @@ void FUN_L01_0030ba18(struct Moby *moby) {
                FUN_L00_00257b90(scale_game_frames(10), scale_game_frames(20)), 1);
     alpha = 0x60000000;
     for (i = 0; i < 2; i++) {
-        n = random_integer_below(6);
+        signed_puff_variation = random_integer_below(6);
         if (random_integer_below(2)) {
-            n = -n;
+            signed_puff_variation = -signed_puff_variation;
         }
         s = random_float_between(40000.0f, 100000.0f);
         grey_intensity = FUN_L00_00257b90(0x30, 0xFF);
         grey = (grey_intensity << 8) | alpha;
-        puff = spawn_puff(&moby->pos, 0.025f, 1.0f, 1.0f, n, &D_L01_0015F580, s, grey_intensity | ((grey_intensity << 16) | grey));
+        puff = spawn_puff(&moby->pos, 0.025f, 1.0f, 1.0f, signed_puff_variation, &D_L01_0015F580, s, grey_intensity | ((grey_intensity << 16) | grey));
         if (puff != NULL) {
             puff[3] = 0x44;
             puff_data = puff + 0x20;
