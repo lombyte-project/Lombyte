@@ -1081,42 +1081,42 @@ int FUN_L00_00257b90_26bca8(int, int) __asm__("FUN_L00_00257b90");
 int FUN_001f96f8_26bca8(int) __asm__("FUN_001f96f8");
 unsigned char *FUN_L00_0026bb70_26bca8(void *, void *, int, int, float, int, int, int,
                                        int) __asm__("FUN_L00_0026bb70");
-void FUN_L00_0026bca8(unsigned char *m) {
-    V26bca8 u, t, w;
-    unsigned char *o = m + 0x20;
-    unsigned char *p;
+void FUN_L00_0026bca8(unsigned char *particle) {
+    V26bca8 u, spawn_velocity, w;
+    unsigned char *particle_data = particle + 0x20;
+    unsigned char *particle_position;
     float a, b;
-    if (FUN_001f9770_26bca8(m + 0xA)) {
-        FUN_L00_00267a08_26bca8(m);
+    if (FUN_001f9770_26bca8(particle + 0xA)) {
+        FUN_L00_00267a08_26bca8(particle);
         return;
     }
-    p = m + 0x10;
-    a = FUN_001fa6c0_26bca8(*(short *)(m + 0xA));
-    b = FUN_001fa6c0_26bca8(*(short *)(o + 0x18));
-    a *= *(float *)(o + 0x1C);
+    particle_position = particle + 0x10;
+    a = FUN_001fa6c0_26bca8(*(short *)(particle + 0xA));
+    b = FUN_001fa6c0_26bca8(*(short *)(particle_data + 0x18));
+    a *= *(float *)(particle_data + 0x1C);
     a /= b;
-    *(float *)(m + 0xC) = a;
-    a = FUN_001fa6c0_26bca8(*(short *)(m + 0xA));
-    *(int *)(m + 4) = FUN_L00_002371e0_26bca8(*(int *)(o + 0x14), *(int *)(o + 0x10),
-                                              a / FUN_001fa6c0_26bca8(*(short *)(o + 0x18)));
-    FUN_001f9a10_26bca8(p, p, o);
-    *(float *)(o + 8) -= D_0015ED70_26bca8 * 14.6f;
-    qcopy(&u, p);
-    if (*(short *)(o + 0x1A) && (D_L00_0015F5CC_26bca8 & 1)) {
+    *(float *)(particle + 0xC) = a;
+    a = FUN_001fa6c0_26bca8(*(short *)(particle + 0xA));
+    *(int *)(particle + 4) = FUN_L00_002371e0_26bca8(*(int *)(particle_data + 0x14), *(int *)(particle_data + 0x10),
+                                              a / FUN_001fa6c0_26bca8(*(short *)(particle_data + 0x18)));
+    FUN_001f9a10_26bca8(particle_position, particle_position, particle_data);
+    *(float *)(particle_data + 8) -= D_0015ED70_26bca8 * 14.6f;
+    qcopy(&u, particle_position);
+    if (*(short *)(particle_data + 0x1A) && (D_L00_0015F5CC_26bca8 & 1)) {
         w.q = 0;
         w.f[0] = FUN_002132a8_26bca8(-1.0f, 1.0f);
         w.f[1] = FUN_002132a8_26bca8(-1.0f, 1.0f);
         w.f[2] = FUN_002132a8_26bca8(-1.0f, 1.0f);
-        t.q = w.q;
-        b = FUN_001f9af0_26bca8(o);
-        FUN_001f9bf8_26bca8(&t, &t, b * FUN_002132a8_26bca8(0.15f, 0.25f));
-        FUN_001f9a10_26bca8(&t, &t, o);
-        FUN_001f9a68_26bca8(&t, &t, FUN_002132a8_26bca8(0.75f, 0.95f));
-        FUN_L00_0026bb70_26bca8(p, &t, *(int *)(m + 4), *(int *)(o + 0x14),
-                                *(float *)(m + 0xC),
-                                FUN_001f96f8_26bca8(FUN_L00_00257b90_26bca8(0xF, 0x1E)), 0, m[2], m[3]);
+        spawn_velocity.q = w.q;
+        b = FUN_001f9af0_26bca8(particle_data);
+        FUN_001f9bf8_26bca8(&spawn_velocity, &spawn_velocity, b * FUN_002132a8_26bca8(0.15f, 0.25f));
+        FUN_001f9a10_26bca8(&spawn_velocity, &spawn_velocity, particle_data);
+        FUN_001f9a68_26bca8(&spawn_velocity, &spawn_velocity, FUN_002132a8_26bca8(0.75f, 0.95f));
+        FUN_L00_0026bb70_26bca8(particle_position, &spawn_velocity, *(int *)(particle + 4), *(int *)(particle_data + 0x14),
+                                *(float *)(particle + 0xC),
+                                FUN_001f96f8_26bca8(FUN_L00_00257b90_26bca8(0xF, 0x1E)), 0, particle[2], particle[3]);
     } else {
-        FUN_001f9a68_26bca8(o, o, 0.96f);
+        FUN_001f9a68_26bca8(particle_data, particle_data, 0.96f);
     }
 }
 extern float D_L00_0015F5D0;
