@@ -1085,33 +1085,33 @@ void FUN_L00_0026a9f0(void *pos, void *dir, int col, int d, int n, int b1A, int 
 extern void func_L00_0026B890_2E2A38(void *, void *, int, int, int, int, int, int, float, float) __asm__("FUN_L00_0026a9f0");
 extern char *func_00219780_2E2A38(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
 
-void FUN_L08_002e16c0(Moby_2E2A38 *m) {
+void FUN_L08_002e16c0(Moby_2E2A38 *debris_moby) {
     enum {
         FALLING_DEBRIS_INITIALIZE = 1,
         FALLING_DEBRIS_BEFORE_BURST = 2,
         FALLING_DEBRIS_AFTER_BURST = 3
     };
-    Data_2E2A38 *d = m->data;
+    Data_2E2A38 *debris_data = debris_moby->data;
     float particle_primary_vector[4];
     Pair_2E2A38 tab;
     float particle_secondary_vector[4];
     float particle_spawn_position[4];
     int i;
 
-    switch (m->state) {
+    switch (debris_moby->state) {
     case FALLING_DEBRIS_INITIALIZE:
-        d->spin_x = random_float_between_c2(-(D_0015ED6C_gp * 1.5707964f), D_0015ED6C_gp * 1.5707964f);
-        d->spin_y = random_float_between_c2(-(D_0015ED6C_gp * 1.5707964f), D_0015ED6C_gp * 1.5707964f);
-        d->life = (int)random_float_between_c2((float)scale_game_frames_alt(0x5A), (float)scale_game_frames_alt(0x96));
-        m->state = 2;
+        debris_data->spin_x = random_float_between_c2(-(D_0015ED6C_gp * 1.5707964f), D_0015ED6C_gp * 1.5707964f);
+        debris_data->spin_y = random_float_between_c2(-(D_0015ED6C_gp * 1.5707964f), D_0015ED6C_gp * 1.5707964f);
+        debris_data->life = (int)random_float_between_c2((float)scale_game_frames_alt(0x5A), (float)scale_game_frames_alt(0x96));
+        debris_moby->state = 2;
     case FALLING_DEBRIS_BEFORE_BURST:
-        d->vel[2] -= D_0015ED70 * 10.8f * 0.5f;
-        add_vector_xyz(m->pos, m->pos, d);
-        m->rot[0] = fast_add_rotations_c(m->rot[0], d->spin_x);
-        m->rot[1] = fast_add_rotations_c(m->rot[1], d->spin_y);
-        if (m->pos[0] < 8.0f || m->pos[1] < 8.0f || m->pos[0] > 500.0f || m->pos[1] > 500.0f ||
-            m->pos[2] > 500.0f) {
-            mark_moby_for_removal_c(m);
+        debris_data->vel[2] -= D_0015ED70 * 10.8f * 0.5f;
+        add_vector_xyz(debris_moby->pos, debris_moby->pos, debris_data);
+        debris_moby->rot[0] = fast_add_rotations_c(debris_moby->rot[0], debris_data->spin_x);
+        debris_moby->rot[1] = fast_add_rotations_c(debris_moby->rot[1], debris_data->spin_y);
+        if (debris_moby->pos[0] < 8.0f || debris_moby->pos[1] < 8.0f || debris_moby->pos[0] > 500.0f || debris_moby->pos[1] > 500.0f ||
+            debris_moby->pos[2] > 500.0f) {
+            mark_moby_for_removal_c(debris_moby);
             return;
         }
         if (random_integer_below_c(3) == 0) {
@@ -1129,16 +1129,16 @@ void FUN_L08_002e16c0(Moby_2E2A38 *m) {
                 int lo = scale_game_frames_alt(25);
                 b = FUN_L00_00257b90(lo, scale_game_frames_alt(30));
             }
-            func_L00_0026B890_2E2A38(m->pos, particle_primary_vector, 0x2F3F3F7F, *q, a, b, 0, 0, 400000.0f,
+            func_L00_0026B890_2E2A38(debris_moby->pos, particle_primary_vector, 0x2F3F3F7F, *q, a, b, 0, 0, 400000.0f,
                                      random_float_between_c2(8.0f, 16.0f) * D_0015ED6C_gp);
         }
-        if (m->pos[2] < 15.2f) {
+        if (debris_moby->pos[2] < 15.2f) {
             for (i = 0; i < D_L08_00161C00; i++) {
                 float ang = random_angle_radians_c();
                 int c1;
                 int c2;
                 int c3;
-                qcopy(particle_spawn_position, m->pos);
+                qcopy(particle_spawn_position, debris_moby->pos);
                 particle_spawn_position[0] += random_float_between_c2(-3.0f, 3.0f);
                 particle_spawn_position[1] += random_float_between_c2(-3.0f, 3.0f);
                 particle_primary_vector[2] = D_L08_00161C0C * D_0015ED6C_gp;
@@ -1154,17 +1154,17 @@ void FUN_L08_002e16c0(Moby_2E2A38 *m) {
                 c3 = truncate_float_to_s32_c2(FUN_001f96b0_c(random_float_between_c2((float)D_L08_00161C24, (float)(D_L08_00161C24 * 2))));
                 func_00219780_2E2A38(particle_spawn_position, particle_primary_vector, particle_secondary_vector, D_L08_00161C04, D_L08_00161C08, c1, c2, c3, -1);
             }
-            m->state = 3;
+            debris_moby->state = 3;
         }
         break;
     case FALLING_DEBRIS_AFTER_BURST:
-        d->vel[2] -= D_0015ED70 * 10.8f * 0.5f;
-        add_vector_xyz(m->pos, m->pos, d);
-        m->rot[0] = fast_add_rotations_c(m->rot[0], d->spin_x);
-        m->rot[1] = fast_add_rotations_c(m->rot[1], d->spin_y);
-        if (m->pos[0] < 8.0f || m->pos[1] < 8.0f || m->pos[2] < 8.0f || m->pos[0] > 500.0f ||
-            m->pos[1] > 500.0f) {
-            mark_moby_for_removal_c(m);
+        debris_data->vel[2] -= D_0015ED70 * 10.8f * 0.5f;
+        add_vector_xyz(debris_moby->pos, debris_moby->pos, debris_data);
+        debris_moby->rot[0] = fast_add_rotations_c(debris_moby->rot[0], debris_data->spin_x);
+        debris_moby->rot[1] = fast_add_rotations_c(debris_moby->rot[1], debris_data->spin_y);
+        if (debris_moby->pos[0] < 8.0f || debris_moby->pos[1] < 8.0f || debris_moby->pos[2] < 8.0f || debris_moby->pos[0] > 500.0f ||
+            debris_moby->pos[1] > 500.0f) {
+            mark_moby_for_removal_c(debris_moby);
         }
         break;
     }
