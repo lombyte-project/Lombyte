@@ -1778,100 +1778,100 @@ extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_002
 extern unsigned char D_0013DD47 __attribute__((section(".data")));
 /* Watcher moby update (variant of shady_salesman_update): turns its head toward the hero or a random target. */
 void qwarks_bouncer_update(WM_c *m) __asm__("FUN_L05_00317470");
-void qwarks_bouncer_update(WM_c *m) {
+void qwarks_bouncer_update(WM_c *bouncer_moby) {
     enum {
         QWARKS_BOUNCER_INITIALIZE = 0,
         QWARKS_BOUNCER_UPDATE_DIALOGUE = 1
     };
     L16WatchScratch_c scratch;
-    WD2 *d = (WD2 *)m->data;
+    WD2 *bouncer_data = (WD2 *)bouncer_moby->data;
     float rate;
     float head_rate;
     int tracking;
-    FUN_L05_00317398(m);
-    if (!d)
+    FUN_L05_00317398(bouncer_moby);
+    if (!bouncer_data)
         return;
-    switch (m->state) {
+    switch (bouncer_moby->state) {
     case QWARKS_BOUNCER_INITIALIZE:
         if (D_0013DD47) {
-            FUN_0020c828_c(m);
+            FUN_0020c828_c(bouncer_moby);
             return;
         }
-        d->ptr20 = (void *)D_L05_00161EF0;
-        m->state = 1;
-        FUN_L00_002668a0_c(m, d);
-        d->fC = 3.7f;
-        initialize_moby_grounding(m);
+        bouncer_data->ptr20 = (void *)D_L05_00161EF0;
+        bouncer_moby->state = 1;
+        FUN_L00_002668a0_c(bouncer_moby, bouncer_data);
+        bouncer_data->fC = 3.7f;
+        initialize_moby_grounding(bouncer_moby);
         break;
     case QWARKS_BOUNCER_UPDATE_DIALOGUE:
-        if (FUN_L00_00266448_c(m, d))
-            FUN_L01_002783a8_c(m, 2.5f);
-        if (d->sub == 5) {
+        if (FUN_L00_00266448_c(bouncer_moby, bouncer_data))
+            FUN_L01_002783a8_c(bouncer_moby, 2.5f);
+        if (bouncer_data->sub == 5) {
             unlock_planet(7);
             FUN_0020b178_c(0, -1);
-            FUN_0020c828_c(m);
+            FUN_0020c828_c(bouncer_moby);
             return;
         }
-        if (m->animation == 0 && FUN_001f9740_c(&d->idle_timer)) {
-            int a = 2;
-            d->idle_timer = random_float_between_cf_c(
+        if (bouncer_moby->animation == 0 && FUN_001f9740_c(&bouncer_data->idle_timer)) {
+            int idle_animation = 2;
+            bouncer_data->idle_timer = random_float_between_cf_c(
                 FUN_001f96b0_c(truncate_float_to_s32_cf_c(1200.0f, 2400.0f)));
             if (random_integer_below(2))
-                a = 1;
-            if (m->animation != a)
-                FUN_00212f90_c(m, a, 0, FUN_001f96f8_c(10));
-        } else if ((m->flags70 & 2) && m->animation) {
-            FUN_00212f90_c(m, 0, 0, FUN_001f96f8_c(10));
+                idle_animation = 1;
+            if (bouncer_moby->animation != idle_animation)
+                FUN_00212f90_c(bouncer_moby, idle_animation, 0, FUN_001f96f8_c(10));
+        } else if ((bouncer_moby->flags70 & 2) && bouncer_moby->animation) {
+            FUN_00212f90_c(bouncer_moby, 0, 0, FUN_001f96f8_c(10));
         }
         break;
     }
     rate = 0.02f;
     head_rate = 0.3f;
     tracking = 0;
-    if (m->animation == 0) {
+    if (bouncer_moby->animation == 0) {
         char *player = (char *)&D_0013E633_watch_c + 0xE9D;
         tracking = 1;
-        if (FUN_001f9b80_c(m->position, player) < 8.0f &&
+        if (FUN_001f9b80_c(bouncer_moby->position, player) < 8.0f &&
             FUN_001f9e90_cf_c(
-                m->yaw, FUN_001fa688_cf_c(
+                bouncer_moby->yaw, FUN_001fa688_cf_c(
                             ((L16WatchPlayer_c *)((char *)&D_0013E633_watch_c + 0xE1D))->aim[0] -
-                                m->position[0],
+                                bouncer_moby->position[0],
                             ((L16WatchPlayer_c *)((char *)&D_0013E633_watch_c + 0xE1D))->aim[1] -
-                                m->position[1])) < 1.5707964f) {
+                                bouncer_moby->position[1])) < 1.5707964f) {
             if (vector_length_xyz_c(player + 0x80) > 0.01f)
-                d->moving_timer = scale_game_frames_c(120);
+                bouncer_data->moving_timer = scale_game_frames_c(120);
             else
-                tick_countdown_32_c(&d->moving_timer);
-        } else if (d->moving_timer) {
-            d->moving_timer = 0;
-            qcopy(d->target, (char *)&D_0013E633_watch_c + 0xEED);
+                tick_countdown_32_c(&bouncer_data->moving_timer);
+        } else if (bouncer_data->moving_timer) {
+            bouncer_data->moving_timer = 0;
+            qcopy(bouncer_data->target, (char *)&D_0013E633_watch_c + 0xEED);
         }
-        if (tick_countdown_32_c(&d->target_timer)) {
+        if (tick_countdown_32_c(&bouncer_data->target_timer)) {
             float heading;
-            d->target_timer = random_float_between_cf_c(
+            bouncer_data->target_timer = random_float_between_cf_c(
                 FUN_001f96b0_c(truncate_float_to_s32_cf_c(180.0f, 300.0f)));
-            heading = fast_add_rotations_c(m->yaw, truncate_float_to_s32_cf_c(-90.0f, 90.0f) *
+            heading = fast_add_rotations_c(bouncer_moby->yaw, truncate_float_to_s32_cf_c(-90.0f, 90.0f) *
                                                        DEG_TO_RAD);
-            build_spherical_offset(d->target, 6.0f, heading,
+            build_spherical_offset(bouncer_data->target, 6.0f, heading,
                                    truncate_float_to_s32_cf_c(0.0f, 30.0f) * DEG_TO_RAD);
-            add_vector_xyz_c(d->target, d->target, m->position);
+            add_vector_xyz_c(bouncer_data->target, bouncer_data->target, bouncer_moby->position);
         }
-        if (d->moving_timer) {
+        if (bouncer_data->moving_timer) {
             qcopy(scratch.target, (char *)&D_0013E633_watch_c + 0xEED);
             rate = 0.04f;
             head_rate = 0.3f;
         } else {
-            qcopy(scratch.target, d->target);
+            qcopy(scratch.target, bouncer_data->target);
         }
     }
     if (tracking) {
         float yaw;
         float pitch;
-        qcopy(scratch.eye, m->position);
+        qcopy(scratch.eye, bouncer_moby->position);
         scratch.eye[2] += 1.0f;
         subtract_vector_xyz_c(scratch.delta, scratch.target, scratch.eye);
         yaw = fast_subtract_rotations_c(FUN_001fa688_cf_c(scratch.delta[0], scratch.delta[1]),
-                                        m->yaw);
+                                        bouncer_moby->yaw);
         pitch = -FUN_001fa688_cf_c(vector_length_xy_c(scratch.delta), scratch.delta[2]);
         if (yaw > 1.5707964f)
             yaw = 1.5707964f;
@@ -1881,13 +1881,13 @@ void qwarks_bouncer_update(WM_c *m) {
             pitch = 0.5235988f;
         else if (pitch < -0.5235988f)
             pitch = -0.5235988f;
-        d->pitch = pitch;
-        d->head_yaw = d->yaw = yaw * 0.5f;
+        bouncer_data->pitch = pitch;
+        bouncer_data->head_yaw = bouncer_data->yaw = yaw * 0.5f;
     }
     if (D_0015EDB0_b_c)
-        d->height = 2.75f;
-    FUN_L00_002628d8_c(rate * frame_scale_sq, head_rate * frame_scale_sq, m, d->body, 0);
-    FUN_L00_002628d8_c(rate * frame_scale_sq, head_rate * frame_scale_sq, m, d->head, 1);
+        bouncer_data->height = 2.75f;
+    FUN_L00_002628d8_c(rate * frame_scale_sq, head_rate * frame_scale_sq, bouncer_moby, bouncer_data->body, 0);
+    FUN_L00_002628d8_c(rate * frame_scale_sq, head_rate * frame_scale_sq, bouncer_moby, bouncer_data->head, 1);
 }
 /* Level overlay code after gameplay/vendor; generated by `decomp overlays stubs`, stubs replaced by C as functions are matched. */
 
