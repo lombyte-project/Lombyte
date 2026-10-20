@@ -697,13 +697,13 @@ void FUN_L00_0026ac78(char *particle) {
             float C = (A * 3.0f + B * 8.0f * x) / (x * -8.0f);
             float F = convert_integer_to_float(*(short *)(particle + 0xA));
             float s = square_root(B * B - C * 4.0f * (A - F));
-            float r2 = (-B + s) / (C + C);
-            float r1 = (-B - s) / (C + C);
+            float quadratic_root_plus = (-B + s) / (C + C);
+            float quadratic_root_minus = (-B - s) / (C + C);
             float reference_distance;
-            if (r1 < r2)
-                *(float *)(particle + 0xC) = r2;
+            if (quadratic_root_minus < quadratic_root_plus)
+                *(float *)(particle + 0xC) = quadratic_root_plus;
             else
-                *(float *)(particle + 0xC) = r1;
+                *(float *)(particle + 0xC) = quadratic_root_minus;
             reference_distance = fast_vec_dist(particle + 0x10, D_L00_00166DC0);
             if (reference_distance < 10.0f) {
                 *(float *)(particle + 0xC) *= reference_distance * 0.075f + 0.25f;
