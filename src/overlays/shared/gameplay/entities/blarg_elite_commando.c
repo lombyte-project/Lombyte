@@ -125,7 +125,7 @@ extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern float D_L16_001613E0 __attribute__((sda));
 extern float D_L16_001613E4 __attribute__((sda));
 
-char *FUN_L16_002a0dc0(char *owner, char *vec, void *pos, void *vel, int c, float unused) {
+char *FUN_L16_002a0dc0(char *owner, char *vec, void *pos, void *vel, int blend_duration_ticks, float unused) {
     char *spawned_moby = (char *)func_0020D348_m(0x32);
     char *moby_data;
     float len, x, random_angle_radians, y;
@@ -140,8 +140,8 @@ char *FUN_L16_002a0dc0(char *owner, char *vec, void *pos, void *vel, int c, floa
         moby_data = *(char **)(spawned_moby + 0x78);
         qcopy(moby_data, vec);
         qcopy(moby_data + 0x10, vel);
-        *(int *)(moby_data + 0x30) = c;
-        *(int *)(moby_data + 0x20) = c;
+        *(int *)(moby_data + 0x30) = blend_duration_ticks;
+        *(int *)(moby_data + 0x20) = blend_duration_ticks;
         len = fast_vec_length(vec);
         x = D_L16_001613E0;
         *(float *)(moby_data + 0x24) = len;
