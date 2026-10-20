@@ -570,7 +570,7 @@ extern void memcard_save_data(int, int) __asm__("FUN_0020b178");
 extern s32 D_0014C190_257218[][64] __asm__("D_0014C190");
 /* Watcher moby update: gated by its collectable and trigger, primes a camera target, then turns its head toward the hero. */
 void sam_update(L14WatchMoby *m) __asm__("FUN_L14_002fefe0");
-void sam_update(L14WatchMoby *m) {
+void sam_update(L14WatchMoby *moby) {
     enum {
         SAM_STATE_INITIALIZE = 0,
         SAM_STATE_DIALOGUE = 1,
@@ -578,118 +578,118 @@ void sam_update(L14WatchMoby *m) {
         SAM_STATE_REMOVE = 3
     };
     L14WatchScratch scratch;
-    L14WatchData *d = (L14WatchData *)m->data;
+    L14WatchData *moby_data = (L14WatchData *)moby->data;
     float rate;
     float head_rate;
     int tracking;
-    FUN_L02_002e0cd8(m);
-    switch (m->state) {
+    FUN_L02_002e0cd8(moby);
+    switch (moby->state) {
     case SAM_STATE_INITIALIZE: {
         unsigned short id;
         if (D_0013DD4F) {
-            mark_moby_for_removal(m);
+            mark_moby_for_removal(moby);
             return;
         }
-        id = m->hB2;
+        id = moby->hB2;
         if (D_L14_001BB930.collected[(short)id] != 0 ||
             (D_0014C190_257218[current_level_index][(short)id >> 5] >> (id & 0x1F)) & 1) {
-            mark_moby_for_removal(m);
+            mark_moby_for_removal(moby);
             return;
         }
-        if (d->i44 == -1 || d->i48 == -1) {
-            mark_moby_for_removal(m);
+        if (moby_data->i44 == -1 || moby_data->i48 == -1) {
+            mark_moby_for_removal(moby);
             return;
         }
-        d->p20 = (void *)D_L14_00161FE8;
-        initialize_npc_dialogue(m, d);
-        m->state = 1;
-        d->b8 = 1;
+        moby_data->p20 = (void *)D_L14_00161FE8;
+        initialize_npc_dialogue(moby, moby_data);
+        moby->state = 1;
+        moby_data->b8 = 1;
         break;
     }
     case SAM_STATE_DIALOGUE:
-        if (d->b8 == 1 && is_point_inside_clip_volume(&hero.motion.pos, d->i40)) {
-            if (visited52[m->bB0 + current_level_index * 16] != 0xFF) {
+        if (moby_data->b8 == 1 && is_point_inside_clip_volume(&hero.motion.pos, moby_data->i40)) {
+            if (visited52[moby->bB0 + current_level_index * 16] != 0xFF) {
                 char *t;
-                jet_clear_persistent(m->bB0);
-                t = D_L14_001600EC + d->i44 * 128;
+                jet_clear_persistent(moby->bB0);
+                t = D_L14_001600EC + moby_data->i44 * 128;
                 jet_reset_camera(t + 0x30, t + 0x70);
             }
-            d->fC = 255.0f;
+            moby_data->fC = 255.0f;
         } else {
-            d->fC = 3.0f;
+            moby_data->fC = 3.0f;
         }
-        if (update_npc_dialogue(m, d)) {
-            char *t = D_L14_001600EC + d->i48 * 128;
+        if (update_npc_dialogue(moby, moby_data)) {
+            char *t = D_L14_001600EC + moby_data->i48 * 128;
             D_L14_0016CF60.h46 = 1;
             qcopy(D_L14_0016CF60.q10, t + 0x30);
             clear_u64_value((char *)&D_L14_0016CF60 + 0x20);
             D_L14_0016CF60.f28 = *(float *)(t + 0x78);
-            m->state = 2;
+            moby->state = 2;
         }
         break;
     case SAM_STATE_POST_DIALOGUE_WAIT:
         if (D_L14_0015F5C4 != 2) {
-            m->state = 1;
-            if ((short)d->sub == 4) {
+            moby->state = 1;
+            if ((short)moby_data->sub == 4) {
                 unlock_planet(0xF);
                 FUN_L00_00262d38(0xF);
-                D_0014C190_257218[D_0015ED84_m][(short)m->hB2 >> 5] |= 1 << (m->hB2 & 0x1F);
-                D_L14_001BABD0[(short)m->hB2 >> 5] |= 1 << (m->hB2 & 0x1F);
+                D_0014C190_257218[D_0015ED84_m][(short)moby->hB2 >> 5] |= 1 << (moby->hB2 & 0x1F);
+                D_L14_001BABD0[(short)moby->hB2 >> 5] |= 1 << (moby->hB2 & 0x1F);
                 memcard_save_data(0, -1);
-                mark_moby_for_removal(m);
+                mark_moby_for_removal(moby);
                 return;
             }
         }
         break;
     case SAM_STATE_REMOVE:
-        mark_moby_for_removal(m);
+        mark_moby_for_removal(moby);
         return;
     }
     rate = 0.02f;
     head_rate = 0.3f;
     tracking = 0;
-    if (m->animation == 0) {
+    if (moby->animation == 0) {
         char *g = (char *)&hero.motion.pos;
         L14Player *q;
         tracking = 1;
-        if (vector_distance(m->position, g) < 8.0f &&
+        if (vector_distance(moby->position, g) < 8.0f &&
             (q = (L14Player *)(g - 0x80),
              fast_difference_between_rotations(
-                 m->yaw, fast_arc_tan(q->aim[0] - m->position[0], q->aim[1] - m->position[1]))) <
+                 moby->yaw, fast_arc_tan(q->aim[0] - moby->position[0], q->aim[1] - moby->position[1]))) <
                 1.5707964f) {
             if (fast_vec_length(g + 0x80) > 0.01f)
-                d->moving_timer = scale_game_frames(120);
+                moby_data->moving_timer = scale_game_frames(120);
             else
-                fast_dec_timer(&d->moving_timer);
-        } else if (d->moving_timer) {
-            d->moving_timer = 0;
-            qcopy(d->target, hero.motion.unkD0.f);
+                fast_dec_timer(&moby_data->moving_timer);
+        } else if (moby_data->moving_timer) {
+            moby_data->moving_timer = 0;
+            qcopy(moby_data->target, hero.motion.unkD0.f);
         }
-        if (fast_dec_timer(&d->target_timer)) {
+        if (fast_dec_timer(&moby_data->target_timer)) {
             float heading;
-            d->target_timer =
+            moby_data->target_timer =
                 truncate_float_to_s32(multiply_global_factor_ed64(random_float_between(180.0f, 300.0f)));
             heading =
-                fast_add_rotations(m->yaw, random_float_between(-90.0f, 90.0f) * DEG_TO_RAD);
-            build_spherical_offset(d->target, 6.0f, heading,
+                fast_add_rotations(moby->yaw, random_float_between(-90.0f, 90.0f) * DEG_TO_RAD);
+            build_spherical_offset(moby_data->target, 6.0f, heading,
                                    random_float_between(0.0f, 30.0f) * DEG_TO_RAD);
-            fast_vec_add(d->target, d->target, m->position);
+            fast_vec_add(moby_data->target, moby_data->target, moby->position);
         }
-        if (d->moving_timer) {
+        if (moby_data->moving_timer) {
             qcopy(scratch.target, hero.motion.unkD0.f);
             rate = 0.04f;
             head_rate = 0.3f;
         } else {
-            qcopy(scratch.target, d->target);
+            qcopy(scratch.target, moby_data->target);
         }
     }
     if (tracking) {
         float yaw;
         float pitch;
-        qcopy(scratch.eye, m->position);
+        qcopy(scratch.eye, moby->position);
         scratch.eye[2] += 1.0f;
         fast_vec_sub(scratch.delta, scratch.target, scratch.eye);
-        yaw = fast_subtract_rotations(fast_arc_tan(scratch.delta[0], scratch.delta[1]), m->yaw);
+        yaw = fast_subtract_rotations(fast_arc_tan(scratch.delta[0], scratch.delta[1]), moby->yaw);
         pitch = -fast_arc_tan(vector_length_xy(scratch.delta), scratch.delta[2]);
         if (yaw > 1.5707964f)
             yaw = 1.5707964f;
@@ -699,12 +699,12 @@ void sam_update(L14WatchMoby *m) {
             pitch = 0.5235988f;
         else if (pitch < -0.5235988f)
             pitch = -0.5235988f;
-        d->pitch = pitch;
-        d->yaw = yaw * 0.6f;
-        d->head_yaw = yaw * 0.4f;
+        moby_data->pitch = pitch;
+        moby_data->yaw = yaw * 0.6f;
+        moby_data->head_yaw = yaw * 0.4f;
     }
     if (D_0015EDB0_b)
-        d->height = 2.75f;
-    update_joint_animation(rate * frame_scale_sq, head_rate * frame_scale_sq, m, d->body, 0);
-    update_joint_animation(rate * frame_scale_sq, head_rate * frame_scale_sq, m, d->head, 1);
+        moby_data->height = 2.75f;
+    update_joint_animation(rate * frame_scale_sq, head_rate * frame_scale_sq, moby, moby_data->body, 0);
+    update_joint_animation(rate * frame_scale_sq, head_rate * frame_scale_sq, moby, moby_data->head, 1);
 }
