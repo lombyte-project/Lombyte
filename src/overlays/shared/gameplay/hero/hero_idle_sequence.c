@@ -1177,12 +1177,12 @@ void FUN_L00_002072c8(void) {
     for (i = 0; i < 7; i++) {
         for (j = 0; j < 2; j++) {
             char *e = g + i * 0x50;
-            int p = *(int *)(e + 0x1090);
+            int destination_moby = *(int *)(e + 0x1090);
             if (j == 1) {
-                p = *(int *)(e + 0x1094);
+                destination_moby = *(int *)(e + 0x1094);
             }
-            if (p != 0) {
-                *(long *)(p + 0x38) = *(long *)(*(int *)(g + 0x2080) + 0x38);
+            if (destination_moby != 0) {
+                *(long *)(destination_moby + 0x38) = *(long *)(*(int *)(g + 0x2080) + 0x38);
             }
         }
     }
