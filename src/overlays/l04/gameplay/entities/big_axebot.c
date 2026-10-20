@@ -2357,6 +2357,7 @@ void blarg_trooper_update(struct Moby *moby) {
         BLARG_TROOPER_HIT_REACTION_START_KNOCKBACK_RECOVERY = 4,
         BLARG_TROOPER_HIT_REACTION_KNOCKBACK_RECOVERY = 5,
         BLARG_TROOPER_HIT_REACTION_RECOIL_RECOVERY = 6,
+        BLARG_TROOPER_HIT_REACTION_NO_ADDITIONAL_RESPONSE = 7,
         BLARG_TROOPER_HIT_REACTION_IGNORED = 11
     };
     struct {
@@ -2531,7 +2532,7 @@ void blarg_trooper_update(struct Moby *moby) {
             trooper_knockback_arc(st.w.p.v70, &ang2, data + 0xF4, &one);
             moby->rot.z = fast_add_rotations(3.1415927f, ang2);
             break;
-        case 7:
+        case BLARG_TROOPER_HIT_REACTION_NO_ADDITIONAL_RESPONSE:
         case 8:
         case 9:
         case 10:
