@@ -1210,8 +1210,8 @@ extern void update_joint_animation(char *, char *, int, float, float) __asm__("F
 extern void subtract_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a28");
 
 void FUN_L15_0029a2a8(void *mv) {
-    char *m = mv;
-    char *d = *(char **)(m + 0x78);
+    char *moby = mv;
+    char *moby_data = *(char **)(moby + 0x78);
     float tgt[4];
     float pos[4];
     float dir[4];
@@ -1219,23 +1219,23 @@ void FUN_L15_0029a2a8(void *mv) {
     float k2 = 0.3f;
     float yaw, pitch;
     int have = 0;
-    if (*(short *)(d + 0x194) != 0 && *(char **)(d + 0x190) != 0) {
-        qcopy(tgt, *(char **)(d + 0x190) + 0x10);
+    if (*(short *)(moby_data + 0x194) != 0 && *(char **)(moby_data + 0x190) != 0) {
+        qcopy(tgt, *(char **)(moby_data + 0x190) + 0x10);
         have = 1;
-    } else if (*(short *)(d + 0x19C) != 0 && *(char **)(d + 0x198) != 0) {
-        qcopy(tgt, *(char **)(d + 0x198) + 0x10);
+    } else if (*(short *)(moby_data + 0x19C) != 0 && *(char **)(moby_data + 0x198) != 0) {
+        qcopy(tgt, *(char **)(moby_data + 0x198) + 0x10);
         have = 1;
-    } else if (((unsigned char *)d)[0x19F] != 0) {
-        qcopy(tgt, d + 0x100);
+    } else if (((unsigned char *)moby_data)[0x19F] != 0) {
+        qcopy(tgt, moby_data + 0x100);
         have = 1;
     }
     if (have) {
-        qcopy(pos, m + 0x10);
+        qcopy(pos, moby + 0x10);
         pos[2] += 1.0f;
         subtract_vector_xyz_c(dir, tgt, pos);
-        yaw = fast_subtract_rotations(fast_arc_tan(dir[0], dir[1]), *(float *)(m + 0x48));
+        yaw = fast_subtract_rotations(fast_arc_tan(dir[0], dir[1]), *(float *)(moby + 0x48));
         pitch = -fast_arc_tan(vector_length_xy_c(dir), dir[2]);
-        if ((unsigned int)(((unsigned char *)m)[0x20] - 0x10) < 2) {
+        if ((unsigned int)(((unsigned char *)moby)[0x20] - 0x10) < 2) {
             if (1.5707964f < yaw)
                 yaw = 1.5707964f;
             else if (yaw < -1.5707964f)
@@ -1254,23 +1254,23 @@ void FUN_L15_0029a2a8(void *mv) {
         pitch = 0.0f;
         yaw = pitch;
     }
-    if ((unsigned int)(((unsigned char *)m)[0x20] - 0x10) < 2) {
-        *(float *)(d + 0x288) = yaw;
+    if ((unsigned int)(((unsigned char *)moby)[0x20] - 0x10) < 2) {
+        *(float *)(moby_data + 0x288) = yaw;
         if (1.0471976f < yaw)
-            *(float *)(d + 0x288) = 1.0471976f;
+            *(float *)(moby_data + 0x288) = 1.0471976f;
         else if (yaw < -1.0471976f)
-            *(float *)(d + 0x288) = -1.0471976f;
-        *(float *)(d + 0x208) = yaw - *(float *)(d + 0x288);
+            *(float *)(moby_data + 0x288) = -1.0471976f;
+        *(float *)(moby_data + 0x208) = yaw - *(float *)(moby_data + 0x288);
     } else {
-        *(float *)(d + 0x208) = yaw * 0.7f;
-        *(float *)(d + 0x288) = yaw * 0.3f;
+        *(float *)(moby_data + 0x208) = yaw * 0.7f;
+        *(float *)(moby_data + 0x288) = yaw * 0.3f;
     }
     {
-        float e = frame_scale_sq;
-        *(float *)(d + 0x204) = pitch;
-        update_joint_animation(m, d + 0x1A0, 1, k1 * e, k2 * e);
+        float cached_frame_scale_sq = frame_scale_sq;
+        *(float *)(moby_data + 0x204) = pitch;
+        update_joint_animation(moby, moby_data + 0x1A0, 1, k1 * cached_frame_scale_sq, k2 * cached_frame_scale_sq);
     }
-    update_joint_animation(m, d + 0x220, 0, k1 * frame_scale_sq, k2 * frame_scale_sq);
+    update_joint_animation(moby, moby_data + 0x220, 0, k1 * frame_scale_sq, k2 * frame_scale_sq);
 }
 extern float D_L15_001613EC __attribute__((sda));
 extern float D_L15_001613F0 __attribute__((sda));
