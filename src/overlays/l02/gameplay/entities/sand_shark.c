@@ -930,19 +930,19 @@ extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void FUN_L02_002d5728(char *arg) {
-    short *p;
+    short *group_ids;
     if (((unsigned char *)arg)[0x21] != 0xFF) {
-        p = (short *)D_L02_001ABE40[((unsigned char *)arg)[0x21]];
+        group_ids = (short *)D_L02_001ABE40[((unsigned char *)arg)[0x21]];
         do {
-            char *o = (char *)D_L02_0015FFD8 + ((*(unsigned short *)p & 0x7FFF) << 8);
-            if (*(short *)(o + 0xA6) == 0x244) {
-                char *d = *(char **)(o + 0x78);
-                float f = multiply_global_factor_ed64(random_float_between_alt(240.0f, 300.0f));
-                if ((float)*(short *)(d + 0x25E) < f) {
-                    *(short *)(d + 0x25E) = func_001FA898_r(f);
+            char *group_moby = (char *)D_L02_0015FFD8 + ((*(unsigned short *)group_ids & 0x7FFF) << 8);
+            if (*(short *)(group_moby + 0xA6) == 0x244) {
+                char *group_moby_vars = *(char **)(group_moby + 0x78);
+                float proposed_timer_duration = multiply_global_factor_ed64(random_float_between_alt(240.0f, 300.0f));
+                if ((float)*(short *)(group_moby_vars + 0x25E) < proposed_timer_duration) {
+                    *(short *)(group_moby_vars + 0x25E) = func_001FA898_r(proposed_timer_duration);
                 }
             }
-        } while (*p++ >= 0);
+        } while (*group_ids++ >= 0);
     }
 }
 
