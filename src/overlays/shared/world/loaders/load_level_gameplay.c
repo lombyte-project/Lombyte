@@ -1492,14 +1492,14 @@ char *load_level_gameplay(int skip_gameplay_read) {
     }
     if (D_L00_0015F600 != 0 && hdr->f8C != 0) {
         int *q = (int *)((char *)hdr + hdr->f8C);
-        int *q0;
+        int *object_mapping_header;
         int tfrag_mapping_count;
         int n2;
         int moby_mapping_count;
         int bad1 = 1;
         int bad2;
 
-        q0 = q;
+        object_mapping_header = q;
         tfrag_mapping_count = q[0];
         n2 = q[1];
         moby_mapping_count = q[2];
@@ -1575,7 +1575,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
         } else {
             int i;
 
-            q = q0 + 4;
+            q = object_mapping_header + 4;
             for (i = 0; i < tfrag_mapping_count; i++) {
                 int w = q[0];
 
@@ -1588,7 +1588,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
             int cnt = 0;
             int k = 0;
 
-            q = &q0[tfrag_mapping_count * 2 + 4];
+            q = &object_mapping_header[tfrag_mapping_count * 2 + 4];
             for (t = D_L00_00160FC0; t != D_L00_00160FC4; t++) {
                 int id = t->f18;
                 int j;
@@ -1612,7 +1612,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
         } else {
             int i;
 
-            q = &q0[tfrag_mapping_count * 2 + 4];
+            q = &object_mapping_header[tfrag_mapping_count * 2 + 4];
             for (i = 0; i < n2; i++) {
                 int w = q[0];
 
