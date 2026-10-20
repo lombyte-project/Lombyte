@@ -94,21 +94,21 @@ extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 extern float approach_angle(float *, float *, float, float, float, float) __asm__("FUN_L00_0025be00");
 extern void FUN_L00_001fff28(void *, int, float);
 
-void FUN_L14_002b37b0(char *a, float x) {
-    char *d = *(char **)(a + 0x78);
-    float s = -*(float *)(d + 0x268);
-    float r = fast_subtract_rotations(x, *(float *)(a + 0x48));
-    s = fast_add_rotations(s, -r);
-    if (s > 1.2217304706573486f)
-        s = 1.2217304706573486f;
-    else if (s < -1.2217304706573486f)
-        s = -1.2217304706573486f;
+void FUN_L14_002b37b0(char *moby, float x) {
+    char *moby_vars = *(char **)(moby + 0x78);
+    float target_joint_angle = -*(float *)(moby_vars + 0x268);
+    float r = fast_subtract_rotations(x, *(float *)(moby + 0x48));
+    target_joint_angle = fast_add_rotations(target_joint_angle, -r);
+    if (target_joint_angle > 1.2217304706573486f)
+        target_joint_angle = 1.2217304706573486f;
+    else if (target_joint_angle < -1.2217304706573486f)
+        target_joint_angle = -1.2217304706573486f;
     {
         float k = frame_time_sq * 12.566370964050293f;
-        approach_angle((float *)(d + 0x270), (float *)(d + 0x274), s, k, k,
+        approach_angle((float *)(moby_vars + 0x270), (float *)(moby_vars + 0x274), target_joint_angle, k, k,
                          frame_time * 6.2831854820251465f);
     }
-    FUN_L00_001fff28(d + 0x130, 2, *(float *)(d + 0x270));
+    FUN_L00_001fff28(moby_vars + 0x130, 2, *(float *)(moby_vars + 0x270));
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B2A28.c: func_L14_002B4AE0), where it is exact; names translated to the US level program. */
 
