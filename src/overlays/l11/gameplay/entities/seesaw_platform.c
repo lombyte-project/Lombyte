@@ -1365,8 +1365,8 @@ void FUN_L11_00310028(struct Moby *moby) {
     };
     char *data = (char *)moby->pvars;
     char *u = data + 0x20;
-    unsigned char *t = *(unsigned char **)(data + 0x70);
-    if (t == 0 || t[0x20] == 0xFE || t[0x20] == 0xFD) {
+    unsigned char *owner_moby = *(unsigned char **)(data + 0x70);
+    if (owner_moby == 0 || owner_moby[0x20] == 0xFE || owner_moby[0x20] == 0xFD) {
         if (moby->state < 3) {
             moby->state = 4;
         }
