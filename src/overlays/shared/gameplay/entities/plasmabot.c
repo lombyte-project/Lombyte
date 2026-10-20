@@ -723,7 +723,7 @@ extern void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
 extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 
 /* Ship engine effects: puffs exhaust particles from joint 1 and places the nozzle and beam points from joints 7 and 2. */
-void FUN_L14_002b2600(struct Moby *m)
+void FUN_L14_002b2600(struct Moby *moby)
 {
     Vec4 pos;
     Vec4 dir;
@@ -733,44 +733,44 @@ void FUN_L14_002b2600(struct Moby *m)
     Vec4 dy;
     Vec4 dz;
     ShipVars *pv;
-    Particle *p;
+    Particle *particle;
     ParticleFade *fade;
     s32 i;
-    f32 f;
+    f32 inverse_lifetime_frames;
 
-    pv = (ShipVars *)m->pvars;
-    enqueue_callback_list_1(FUN_L14_002b3a20_c, m);
-    moby_point_position(m, 1, &pos);
+    pv = (ShipVars *)moby->pvars;
+    enqueue_callback_list_1(FUN_L14_002b3a20_c, moby);
+    moby_point_position(moby, 1, &pos);
     fast_vec_sub(&dir, &pos, &D_L14_001674C0);
     fast_vec_normalize(&dir, &dir, -0.5f);
     fast_vec_add(&pv->exhaust, &pos, &dir);
     FUN_00213358(&vel, 0.005f, 0.03f);
-    p = FUN_L00_00274948(&pos, &vel, 0x7F, m);
-    if (p != NULL) {
-        p->life = FUN_002132a8(6000.0f, 32000.0f);
+    particle = FUN_L00_00274948(&pos, &vel, 0x7F, moby);
+    if (particle != NULL) {
+        particle->life = FUN_002132a8(6000.0f, 32000.0f);
     }
     for (i = 0; i < 3; i++) {
-        p = FUN_L00_00274948(&pos, D_L14_0015F580, 0x7F, m);
-        if (p == NULL) {
+        particle = FUN_L00_00274948(&pos, D_L14_0015F580, 0x7F, moby);
+        if (particle == NULL) {
             continue;
         }
-        fade = &p->fade;
+        fade = &particle->fade;
         if (i == 2 && FUN_00213260(8) == 0) {
-            p->life = 180000.0f;
+            particle->life = 180000.0f;
         } else {
-            p->life = FUN_002132a8(80000.0f, 120000.0f);
+            particle->life = FUN_002132a8(80000.0f, 120000.0f);
         }
-        p->frames = scale_game_frames(2);
-        f = 1.0f / convert_integer_to_float(p->frames);
+        particle->frames = scale_game_frames(2);
+        inverse_lifetime_frames = 1.0f / convert_integer_to_float(particle->frames);
         fade->mode = 3;
         fade->color = 0x7F7F7F;
-        fade->scale = f;
+        fade->scale = inverse_lifetime_frames;
     }
-    moby_point_position(m, 6, &pv->joint6);
-    build_moby_bone_transform(m, 7, mat);
+    moby_point_position(moby, 6, &pv->joint6);
+    build_moby_bone_transform(moby, 7, mat);
     fast_vec_scale(&dx, &mat[0], D_L14_001614A8);
     fast_vec_add(&pv->nozzle, &mat[3], &dx);
-    build_moby_bone_transform(m, 2, mat);
+    build_moby_bone_transform(moby, 2, mat);
     fast_vec_scale(&dx, &mat[0], D_L14_001614B0);
     fast_vec_scale(&dy, &mat[1], D_L14_001614B4);
     fast_vec_scale(&dz, &mat[2], D_L14_001614B8);
@@ -779,7 +779,7 @@ void FUN_L14_002b2600(struct Moby *m)
     fast_vec_add(&pv->beam_start, &pv->beam_start, &dz);
     fast_vec_scale(&dy, &dy, -2.0f);
     fast_vec_add(&pv->beam_end, &pv->beam_start, &dy);
-    enqueue_callback_list_1(FUN_L14_002b2928_u, m);
+    enqueue_callback_list_1(FUN_L14_002b2928_u, moby);
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B2A28.c: func_L14_002B3B78), where it is exact; names translated to the US level program. */
 
