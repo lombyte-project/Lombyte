@@ -322,6 +322,9 @@ extern char *D_L07_001600EC;
 extern char D_0013E5C4[];
 
 void FUN_L07_00313420(char *moby, char *data, float *health) {
+    enum {
+        SNAGGLEBEAST_HIT_KIND_REDUCED_DAMAGE = 0x131
+    };
     char *hit;
     char *owner;
     struct { int contact; float threshold; } scratch;
@@ -342,7 +345,7 @@ void FUN_L07_00313420(char *moby, char *data, float *health) {
             if (0.0f < *(float *)(hit + 0x2c)) {
                 unsigned short kind = *(unsigned short *)(hit + 0x2a);
                 switch (kind) {
-                case 0x131: *(float *)(hit + 0x2c) = 0.2f; break;
+                case SNAGGLEBEAST_HIT_KIND_REDUCED_DAMAGE: *(float *)(hit + 0x2c) = 0.2f; break;
                 case 0x79: case 0xba: *(float *)(hit + 0x2c) = 1.0f; break;
                 }
             }
