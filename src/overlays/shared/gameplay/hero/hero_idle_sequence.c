@@ -3061,7 +3061,7 @@ extern f32 FUN_001f9b80_20b5b8(void *, void *) __asm__("FUN_001f9b80");
 void FUN_L00_0020b5b8(void) {
     V4_20b5b8 v, w, z;
     struct Hero *g;
-    struct Hero *h;
+    struct Hero *hero_state;
     struct Hero *k2;
     u8 *pz;
     s32 prediction_frames;
@@ -3141,26 +3141,26 @@ void FUN_L00_0020b5b8(void) {
         return;
     }
     {
-        S2_20b5b8 *q2;
+        S2_20b5b8 *collision_result;
         k2->unk460.q = *(u128_20b5b8 *)pz;
-        q2 = (S2_20b5b8 *)(pz - 0x40);
-        f = angle_atan2(q2->x, q2->y);
+        collision_result = (S2_20b5b8 *)(pz - 0x40);
+        f = angle_atan2(collision_result->x, collision_result->y);
     }
     k2->unk460.f[3] = f;
     if (k2->state.control_mode != 4 && k2->state.prev_control_mode != 4 && k2->state.prev2_control_mode != 4) {
         return;
     }
-    h = &hero;
-    if (h->unk22B4 != 0) {
-        f = FUN_001fa688_20b5b8(h->unk470.f[3], h->unk460.f[3]);
+    hero_state = &hero;
+    if (hero_state->unk22B4 != 0) {
+        f = FUN_001fa688_20b5b8(hero_state->unk470.f[3], hero_state->unk460.f[3]);
         if (f < 2.9670596f) {
             return;
         }
     }
-    if (h->state.current == 0x11) {
-        h->unk1B4 = scale_game_frames(7);
+    if (hero_state->state.current == 0x11) {
+        hero_state->unk1B4 = scale_game_frames(7);
     } else {
-        h->unk1B4 = scale_game_frames(6);
+        hero_state->unk1B4 = scale_game_frames(6);
     }
 }
 #define NOT_SDA
