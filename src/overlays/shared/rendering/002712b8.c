@@ -649,57 +649,57 @@ int FUN_001fa6d0_2729c8(float) __asm__("FUN_001fa6d0");
 float FUN_002132a8_2729c8(float, float) __asm__("FUN_002132a8");
 void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 extern unsigned char *D_L00_001B2168 __attribute__((section(".data")));
-unsigned char *FUN_L00_002729c8(void *pos, unsigned char a, unsigned char b, unsigned char c,
-                                unsigned char d, unsigned char e, int g, float x, float y) {
+unsigned char *FUN_L00_002729c8(void *pos, unsigned char particle_mode, unsigned char b, unsigned char c,
+                                unsigned char d, unsigned char emitted_lifetime_frames, int g, float x, float y) {
     enum {
         PARTICLE_MODE_COLOR_TWEEN_THEN_EMIT = 0,
         PARTICLE_MODE_COLOR_TWEEN_ONLY = 1,
         PARTICLE_MODE_EMITTED_PARTICLE = 2
     };
-    unsigned char *m = p27fe00_alloc(0x3A);
-    if (m) {
-        unsigned char *q;
-        float r, t, u;
+    unsigned char *particle = p27fe00_alloc(0x3A);
+    if (particle) {
+        unsigned char *particle_data;
+        float r, azimuth_angle, u;
         int k;
         int mode;
-        qcopy(m + 0x10, pos);
-        q = m + 0x20;
-        m[9] = FUN_001fa6d0_2729c8(0.0f) + 0x70;
-        m[1] = 0;
-        m[3] = 0x44;
-        m[2] = D_L00_001B2168[rand_e50() & 7];
-        *(float *)(m + 0xC) = 21000.0f;
-        m[8] = rand_e50();
-        q[0x10] = a;
-        q[0x12] = c;
-        q[0x13] = d;
-        *(int *)(q + 0x18) = g;
-        *(float *)(q + 0x1C) = x;
-        q[0x11] = b;
-        q[0x15] = e;
-        mode = q[0x10];
+        qcopy(particle + 0x10, pos);
+        particle_data = particle + 0x20;
+        particle[9] = FUN_001fa6d0_2729c8(0.0f) + 0x70;
+        particle[1] = 0;
+        particle[3] = 0x44;
+        particle[2] = D_L00_001B2168[rand_e50() & 7];
+        *(float *)(particle + 0xC) = 21000.0f;
+        particle[8] = rand_e50();
+        particle_data[0x10] = particle_mode;
+        particle_data[0x12] = c;
+        particle_data[0x13] = d;
+        *(int *)(particle_data + 0x18) = g;
+        *(float *)(particle_data + 0x1C) = x;
+        particle_data[0x11] = b;
+        particle_data[0x15] = emitted_lifetime_frames;
+        mode = particle_data[0x10];
         switch (mode) {
         case PARTICLE_MODE_COLOR_TWEEN_THEN_EMIT:
         case PARTICLE_MODE_COLOR_TWEEN_ONLY:
-            *(short *)(m + 0xA) = b;
-            *(int *)(m + 4) = 0xFF808080;
-            q[0x14] = 0;
+            *(short *)(particle + 0xA) = b;
+            *(int *)(particle + 4) = 0xFF808080;
+            particle_data[0x14] = 0;
             break;
         case PARTICLE_MODE_EMITTED_PARTICLE:
             r = FUN_002132a8_2729c8(3.0f, 9.0f) * y * frame_time;
-            t = random_angle_radians();
+            azimuth_angle = random_angle_radians();
             u = FUN_002132a8_2729c8(1.3439035f, 1.7976891f);
-            build_spherical_offset(q, r, t, u);
-            *(float *)(m + 0xC) = 42000.0f;
+            build_spherical_offset(particle_data, r, azimuth_angle, u);
+            *(float *)(particle + 0xC) = 42000.0f;
             k = (rand_e50() & 0x1F) + 0x10;
-            q[0x16] = k;
-            *(int *)(m + 4) = (q[0x16] << 24) | 0x808080;
-            *(short *)(m + 0xA) = e;
-            q[0x14] = mode;
+            particle_data[0x16] = k;
+            *(int *)(particle + 4) = (particle_data[0x16] << 24) | 0x808080;
+            *(short *)(particle + 0xA) = emitted_lifetime_frames;
+            particle_data[0x14] = mode;
             break;
         }
     }
-    return m;
+    return particle;
 }
 typedef float V_272bc0[4] __attribute__((aligned(16)));
 typedef struct {
