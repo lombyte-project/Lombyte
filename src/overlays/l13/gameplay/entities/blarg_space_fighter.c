@@ -2522,7 +2522,7 @@ void FUN_L13_002e84d8(struct Moby *moby) {
         FADE_OUT = 3,
         REMOVE_MOBY = 4
     };
-    int *d = (int *)moby->pvars;
+    int *moby_data = (int *)moby->pvars;
     int old;
     int step;
 
@@ -2535,18 +2535,18 @@ void FUN_L13_002e84d8(struct Moby *moby) {
         float fade = frame_scale * 0.02f;
         moby->scale +=
             (moby->pclass->scale * 4.0f - moby->scale) * 0.1f;
-        ((float *)d)[1] += fade;
-        if (((float *)d)[1] >= 1.0f) {
-            ((float *)d)[1] = 1.0f;
+        ((float *)moby_data)[1] += fade;
+        if (((float *)moby_data)[1] >= 1.0f) {
+            ((float *)moby_data)[1] = 1.0f;
             moby->state = 2;
         }
-        moby->alpha = truncate_float_to_s32(((float *)d)[1] * 60.0f);
+        moby->alpha = truncate_float_to_s32(((float *)moby_data)[1] * 60.0f);
         break;
     }
     case WAIT_FOR_OWNER_REMOVAL:
         moby->scale +=
             (moby->pclass->scale * 4.0f - moby->scale) * 0.1f;
-        if (d[0] == 0 || ((unsigned char *)d[0])[0x20] == 0xFE || ((unsigned char *)d[0])[0x20] == 0xFD) {
+        if (moby_data[0] == 0 || ((unsigned char *)moby_data[0])[0x20] == 0xFE || ((unsigned char *)moby_data[0])[0x20] == 0xFD) {
             moby->state = 3;
         }
         break;
@@ -2554,27 +2554,27 @@ void FUN_L13_002e84d8(struct Moby *moby) {
         float fade = frame_scale * 0.02f;
         moby->scale +=
             (moby->pclass->scale - moby->scale) * 0.1f;
-        ((float *)d)[1] -= fade;
-        if (((float *)d)[1] <= 0.0f) {
-            ((float *)d)[1] = 0.0f;
+        ((float *)moby_data)[1] -= fade;
+        if (((float *)moby_data)[1] <= 0.0f) {
+            ((float *)moby_data)[1] = 0.0f;
             moby->state = 4;
         }
-        moby->alpha = truncate_float_to_s32(((float *)d)[1] * 60.0f);
+        moby->alpha = truncate_float_to_s32(((float *)moby_data)[1] * 60.0f);
         break;
     }
     case REMOVE_MOBY:
         mark_moby_for_removal(moby);
         return;
     }
-    old = d[2];
+    old = moby_data[2];
     step = -0x40;
-    d[2] = old + step;
-    if (d[2] > 0x1000) {
+    moby_data[2] = old + step;
+    if (moby_data[2] > 0x1000) {
         step = -0x1040;
-        d[2] = old + step;
-    } else if (d[2] < 0) {
+        moby_data[2] = old + step;
+    } else if (moby_data[2] < 0) {
         step = 0xFC0;
-        d[2] = old + step;
+        moby_data[2] = old + step;
     }
     FUN_L00_0024efb0(moby->pclass, 0, step);
 }
