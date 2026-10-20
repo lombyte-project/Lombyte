@@ -2489,11 +2489,11 @@ void blarg_trooper_update(struct Moby *moby) {
             {
                 float a = frame_time_sq * 37.0f;
                 float b = frame_time * 17.0f;
-                float c = frame_time_sq * 20.0f;
+                float fatal_knockback_horizontal_speed_adjustment = frame_time_sq * 20.0f;
                 float d = frame_time * 13.0f;
                 *(float *)(data + 0x80) = a;
                 *(float *)(data + 0x88) = b;
-                *(float *)(data + 0x84) = c;
+                *(float *)(data + 0x84) = fatal_knockback_horizontal_speed_adjustment;
                 *(float *)(data + 0x8C) = d;
             }
             *(OvlQuad *)st.w.p.v70 = *(OvlQuad *)(hit + 0x10);
