@@ -2249,35 +2249,35 @@ extern int FUN_001efa68_2afc70(void *, void *, int, void *, int) __asm__("FUN_00
 extern void FUN_L00_00250df8_2afc70(void *) __asm__("FUN_L00_00250df8");
 extern void FUN_L00_0025f780_2afc70(void *, void *, int) __asm__("FUN_L00_0025f780");
 
-unsigned char *FUN_L00_002afc70(unsigned char *a, V_2afc70 *pos, unsigned char *tgt, float f12,
+unsigned char *FUN_L00_002afc70(unsigned char *owner, V_2afc70 *pos, unsigned char *tgt, float f12,
                                 float f13, float f14, float f15, float f16) {
-    V_2afc70 tmp;
-    unsigned char *m;
+    V_2afc70 collision_start;
+    unsigned char *missile_moby;
     unsigned char *v;
     unsigned char *r;
-    float t;
-    int n;
+    float default_desired_speed;
+    int turn_period;
     float x;
 
-    m = FUN_0020c4f8_2afc70(0x99);
-    if (m != 0) {
-        v = *(unsigned char **)(m + 0x78);
-        m[0x30] = 0xFF;
-        *(short *)(m + 0x32) = 0xFF;
-        m[0x31] = 1;
-        *(float *)(m + 0x48) = f15;
-        *(float *)(m + 0x44) = f16;
-        m[0x20] = 0;
-        *(unsigned char **)(v + 0x10) = a;
-        qcopy(m + 0x10, pos);
-        t = D_0015ED6C_2afc70 * 20.0f;
+    missile_moby = FUN_0020c4f8_2afc70(0x99);
+    if (missile_moby != 0) {
+        v = *(unsigned char **)(missile_moby + 0x78);
+        missile_moby[0x30] = 0xFF;
+        *(short *)(missile_moby + 0x32) = 0xFF;
+        missile_moby[0x31] = 1;
+        *(float *)(missile_moby + 0x48) = f15;
+        *(float *)(missile_moby + 0x44) = f16;
+        missile_moby[0x20] = 0;
+        *(unsigned char **)(v + 0x10) = owner;
+        qcopy(missile_moby + 0x10, pos);
+        default_desired_speed = D_0015ED6C_2afc70 * 20.0f;
         *(int *)(v + 0x38) = 1;
         *(float *)(v + 0x48) = 70.0f;
-        *(float *)(v + 0x34) = t;
+        *(float *)(v + 0x34) = default_desired_speed;
         *(int *)(v + 0x24) = 0;
         *(int *)(v + 0x28) = 0;
         *(unsigned char **)(v + 0x18) = tgt;
-        *(float *)(v + 0x20) = t / 3.0f;
+        *(float *)(v + 0x20) = default_desired_speed / 3.0f;
         if (tgt != 0) {
             r = FUN_002141f8_2afc70(tgt);
             if (r != 0) {
@@ -2302,25 +2302,25 @@ unsigned char *FUN_L00_002afc70(unsigned char *a, V_2afc70 *pos, unsigned char *
             *(float *)(v + 8) += f14;
         }
         x = FUN_001f9af0_2afc70(D_0013F490_2afc70);
-        n = FUN_001f96f8_2afc70(D_0015ED6C_2afc70 * 0.1f < x ? 0x3C : 0xF);
-        *(short *)(v + 0x3E) = n;
-        *(short *)(v + 0x3C) = n;
-        if (a != 0 && a[0x20] != 0xFE && a[0x20] != 0xFD) {
-            tmp.q = ((V_2afc70 *)(a + 0x10))->q;
+        turn_period = FUN_001f96f8_2afc70(D_0015ED6C_2afc70 * 0.1f < x ? 0x3C : 0xF);
+        *(short *)(v + 0x3E) = turn_period;
+        *(short *)(v + 0x3C) = turn_period;
+        if (owner != 0 && owner[0x20] != 0xFE && owner[0x20] != 0xFD) {
+            collision_start.q = ((V_2afc70 *)(owner + 0x10))->q;
         } else {
-            qcopy(&tmp, &hero_pos);
-            tmp.f[2] += 0.6f;
+            qcopy(&collision_start, &hero_pos);
+            collision_start.f[2] += 0.6f;
         }
-        tmp.f[2] = pos->f[2];
-        if (FUN_001efa68_2afc70(&tmp, pos, 0, D_001413D0_2afc70, 0)) {
-            m[0xBC] = 1;
-            qcopy(m + 0x10, D_L00_00173E60_2afc70);
+        collision_start.f[2] = pos->f[2];
+        if (FUN_001efa68_2afc70(&collision_start, pos, 0, D_001413D0_2afc70, 0)) {
+            missile_moby[0xBC] = 1;
+            qcopy(missile_moby + 0x10, D_L00_00173E60_2afc70);
         }
-        FUN_L00_00250df8_2afc70(m);
-        FUN_L00_0025f780_2afc70(m, D_L00_001B0770_lui, 0x1F);
-        *(float *)(m + 0x2C) += *(float *)(m + 0x2C);
+        FUN_L00_00250df8_2afc70(missile_moby);
+        FUN_L00_0025f780_2afc70(missile_moby, D_L00_001B0770_lui, 0x1F);
+        *(float *)(missile_moby + 0x2C) += *(float *)(missile_moby + 0x2C);
     }
-    return m;
+    return missile_moby;
 }
 /* Sums n steps of a value easing toward 20 * D_0015ED6C by a tenth (times D_0015ED64) per step. */
 float FUN_L00_002aff50(int n) {
