@@ -38,15 +38,15 @@ float FUN_L04_0024c660(float *dst, float *segment_start, float *b, float *query_
     float segment_direction[4];
     float perpendicular_direction_xy[4];
     float query_to_start_offset[4];
-    float d3[4];
+    float perpendicular_offset_point_xy[4];
     float det, t, r;
 
     subtract_vector_xyz(segment_direction, b, segment_start);
     subtract_vector_xyz(query_to_start_offset, segment_start, query_point);
-    d3[0] = segment_direction[1];
-    d3[1] = -segment_direction[0];
-    add_vector_xyz(d3, query_point, d3);
-    subtract_vector_xyz(perpendicular_direction_xy, query_point, d3);
+    perpendicular_offset_point_xy[0] = segment_direction[1];
+    perpendicular_offset_point_xy[1] = -segment_direction[0];
+    add_vector_xyz(perpendicular_offset_point_xy, query_point, perpendicular_offset_point_xy);
+    subtract_vector_xyz(perpendicular_direction_xy, query_point, perpendicular_offset_point_xy);
     det = segment_direction[1] * perpendicular_direction_xy[0] - segment_direction[0] * perpendicular_direction_xy[1];
     if (absolute_float(det) < 0.0001f) {
         qcopy(dst, segment_start);
