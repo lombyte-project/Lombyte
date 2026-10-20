@@ -90,7 +90,7 @@ void electric_gate_update(char *gate_moby) {
     char *pos;
     char *voice_position_base;
     char *voice_owner;
-    float d;
+    float gate_reference_distance;
     int idx;
     switch (state) {
     case ELECTRIC_GATE_INITIALIZE:
@@ -115,8 +115,8 @@ void electric_gate_update(char *gate_moby) {
                     if (*(short *)(voice_owner + 0xA6) == 0x346) {
                         if (voice_owner != gate_moby) {
                             if (*(unsigned char *)(voice_owner + 0x20) == state) {
-                                d = FUN_001f9b48(pos, tab);
-                                if (!(d < FUN_001f9b48(voice_owner + 0x10, tab)))
+                                gate_reference_distance = FUN_001f9b48(pos, tab);
+                                if (!(gate_reference_distance < FUN_001f9b48(voice_owner + 0x10, tab)))
                                     goto after;
                             }
                             voice_position_base = base + 0x90;
