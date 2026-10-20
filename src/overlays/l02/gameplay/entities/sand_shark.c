@@ -3444,7 +3444,7 @@ void sandshark_egg_update(struct Moby *moby) {
     int i;
     float *vp;
     int r;
-    int s;
+    int random_effect_value;
     char *linked_moby;
     switch (moby->state) {
     case SANDSHARK_EGG_FALL_UNTIL_LANDING:
@@ -3460,9 +3460,9 @@ void sandshark_egg_update(struct Moby *moby) {
             v[0] += random_float_between_alt(-0.15f, 0.15f);
             v[1] += random_float_between_alt(-0.15f, 0.15f);
             r = scale_game_frames(random_int_between(0x14, 0x28));
-            s = random_int_between(0x14, 0x28);
+            random_effect_value = random_int_between(0x14, 0x28);
             FUN_L00_00269958(vp, u, D_L02_00161C9C, D_L02_00161CA0, r, 0x28,
-                             s, 1);
+                             random_effect_value, 1);
             i--;
         } while (i >= 0);
         break;
