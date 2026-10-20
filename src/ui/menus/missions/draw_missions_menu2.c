@@ -48,7 +48,7 @@ s32 draw_missions_menu2(struct MissionsMenu *menu) {
     s32 flag;
     s32 col;
     s32 step;
-    s32 h;
+    s32 wrapped_text_result;
     s32 bit;
     s32 y;
     u32 *mission_id_cursor;
@@ -70,12 +70,12 @@ s32 draw_missions_menu2(struct MissionsMenu *menu) {
             if (flag) {
                 disable_global_flag();
             }
-            h = font_print_wrapped_small(0x10, off, menu->unk20 - 0x11, 0x3E8, col,
+            wrapped_text_result = font_print_wrapped_small(0x10, off, menu->unk20 - 0x11, 0x3E8, col,
                                          get_help_message_text(*mission_id_cursor), -1);
             if (flag) {
                 enable_global_flag();
             }
-            step = (h >= 0x11) ? 2 : 1;
+            step = (wrapped_text_result >= 0x11) ? 2 : 1;
             if (step == 2) {
                 y = off + 0x10;
             }
