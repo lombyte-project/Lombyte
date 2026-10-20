@@ -18,9 +18,9 @@ extern void font_print_small(s32, s32, u64, s32, s32) __asm__("func_001F65B0");
 
 s32 draw_missions_menu(struct Menu *m) __asm__("FUN_0021f368");
 
-s32 draw_missions_menu(struct Menu *m) {
+s32 draw_missions_menu(struct Menu *menu) {
     s32 w;
-    s32 t;
+    s32 text_width;
     s32 x;
     s32 y;
     s32 step;
@@ -29,33 +29,33 @@ s32 draw_missions_menu(struct Menu *m) {
     vu1_add_g_sregister(0x47, 0xB);
     setup_gif_paging(0);
     w = measure_text_width_small(get_help_message_text(0x4EEE), -1);
-    t = measure_text_width_small(get_help_message_text(0x4EFA), -1);
-    if (t >= w) {
-        w = t;
+    text_width = measure_text_width_small(get_help_message_text(0x4EFA), -1);
+    if (text_width >= w) {
+        w = text_width;
     }
     if (current_level_index != 0) {
-        t = measure_text_width_small(get_help_message_text(0x4EEF), -1);
-        if (t >= w) {
-            w = t;
+        text_width = measure_text_width_small(get_help_message_text(0x4EEF), -1);
+        if (text_width >= w) {
+            w = text_width;
         }
     }
-    t = measure_text_width_small(get_help_message_text(0x4EFB), -1);
-    if (t >= w) {
-        w = t;
+    text_width = measure_text_width_small(get_help_message_text(0x4EFB), -1);
+    if (text_width >= w) {
+        w = text_width;
     }
-    t = measure_text_width_small(get_help_message_text(0x4EFC), -1);
-    if (t >= w) {
-        w = t;
+    text_width = measure_text_width_small(get_help_message_text(0x4EFC), -1);
+    if (text_width >= w) {
+        w = text_width;
     }
-    t = measure_text_width_small(get_help_message_text(0x4EE0), -1);
-    if (t >= w) {
-        w = t;
+    text_width = measure_text_width_small(get_help_message_text(0x4EE0), -1);
+    if (text_width >= w) {
+        w = text_width;
     }
-    x = (m->w - w) >> 1;
+    x = (menu->w - w) >> 1;
     if (x < 2) {
         x = 2;
     }
-    step = m->h / (current_level_index != 0 ? 7 : 6);
+    step = menu->h / (current_level_index != 0 ? 7 : 6);
     disable_global_flag();
     y = step - 6;
     font_print_small(x, y, 0x80FFA888, get_help_message_text(0x4EEE), -1);
