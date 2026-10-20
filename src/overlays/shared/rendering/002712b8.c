@@ -1372,7 +1372,7 @@ void FUN_001f9cf8_274518(void *, void *, void *) __asm__("FUN_001f9cf8");
 f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
 void FUN_L00_00274518(M_274518 *particle) {
     R_274518 *r = &particle->r;
-    V_274518 a, b, rotation_angles;
+    V_274518 position_offset_scratch, b, rotation_angles;
     V_274518 mat[4];
     u8 *spawned_particle;
     f32 k1, k2, z;
@@ -1382,11 +1382,11 @@ void FUN_L00_00274518(M_274518 *particle) {
             goto kill;
         if (r->iC == 0)
             return;
-        a.x = particle->r.unk0;
-        a.y = r->unk4;
-        a.z = r->unk8;
-        FUN_001f9a68_274518(&a, &a, convert_integer_to_float(r->h18));
-        FUN_001f9a10_274518(particle->v10, r->iC + 0x10, &a);
+        position_offset_scratch.x = particle->r.unk0;
+        position_offset_scratch.y = r->unk4;
+        position_offset_scratch.z = r->unk8;
+        FUN_001f9a68_274518(&position_offset_scratch, &position_offset_scratch, convert_integer_to_float(r->h18));
+        FUN_001f9a10_274518(particle->v10, r->iC + 0x10, &position_offset_scratch);
         return;
     }
     if (FUN_001f9770_274518(&particle->hA))
@@ -1402,12 +1402,12 @@ void FUN_L00_00274518(M_274518 *particle) {
         z = 0.0f;
         FUN_L00_002743a8_274518(0, particle->v10, FUN_001f96f8_274518(10), z, z, 0, particle->b7, 0);
     } else {
-        a.x = r->unk0;
-        a.y = r->unk4;
-        a.z = r->unk8;
+        position_offset_scratch.x = r->unk0;
+        position_offset_scratch.y = r->unk4;
+        position_offset_scratch.z = r->unk8;
         z = 0.0f;
         spawned_particle = FUN_L00_002743a8_274518((s32)r->iC, particle->v10, FUN_001f96f8_274518(10), z, z, 0, particle->b7,
-                                    &a);
+                                    &position_offset_scratch);
         if (spawned_particle)
             *(s16 *)(spawned_particle + 0x38) = r->h18;
     }
@@ -1415,11 +1415,11 @@ void FUN_L00_00274518(M_274518 *particle) {
         return;
     qcopy(particle->v10, r->iC + 0x10);
     k1 = 2.25f;
-    a.x = FUN_001f9dc8_274518(r->unk10) * k1;
+    position_offset_scratch.x = FUN_001f9dc8_274518(r->unk10) * k1;
     k2 = 0.28f;
-    a.y = FUN_001f9de0_274518(r->unk10) * k1;
-    a.z = a.x;
-    a.x = 0.0f;
+    position_offset_scratch.y = FUN_001f9de0_274518(r->unk10) * k1;
+    position_offset_scratch.z = position_offset_scratch.x;
+    position_offset_scratch.x = 0.0f;
     b.x = FUN_001f9dc8_274518(r->unk14) * k2;
     b.y = FUN_001f9de0_274518(r->unk14) * k2;
     b.z = b.x;
@@ -1428,9 +1428,9 @@ void FUN_L00_00274518(M_274518 *particle) {
     rotation_angles.y = r->unk10;
     rotation_matrix(mat, &rotation_angles);
     transform_vector(&b, &b, mat);
-    FUN_001f9a10_274518(&a, &a, &b);
-    FUN_001f9cf8_274518(&a, &a, r->iC + 0xC0);
-    FUN_001f9a10_274518(particle->v10, particle->v10, &a);
+    FUN_001f9a10_274518(&position_offset_scratch, &position_offset_scratch, &b);
+    FUN_001f9cf8_274518(&position_offset_scratch, &position_offset_scratch, r->iC + 0xC0);
+    FUN_001f9a10_274518(particle->v10, particle->v10, &position_offset_scratch);
     r->unk10 = fast_add_rotations(r->unk10, frame_time * 0.9599310755729675f);
     r->unk14 = fast_add_rotations(r->unk14, frame_time * 4.363323211669922f);
 }
