@@ -1013,54 +1013,54 @@ extern void func_L16_002E6B48_6908(void *) __asm__("FUN_L16_002e56e0");
 extern int func_0022ED80_6908(int, int, void *) __asm__("FUN_0022da68");
 
 void grindrail_button_update(struct Moby *m) __asm__("FUN_L16_002e54a0");
-void grindrail_button_update(struct Moby *m) {
+void grindrail_button_update(struct Moby *button_moby) {
     enum {
         GRINDRAIL_BUTTON_INITIALIZE_GLOW_PHASE = 0,
         GRINDRAIL_BUTTON_CHECK_ACTIVATION = 1
     };
-    char *d = (char *)m->pvars;
+    char *button_data = (char *)button_moby->pvars;
     char *g;
     char *base;
     float v[4];
-    float f;
-    switch (m->state) {
+    float glow_blend_factor;
+    switch (button_moby->state) {
     case GRINDRAIL_BUTTON_INITIALIZE_GLOW_PHASE:
-        m->state = 1;
-        *(float *)d = random_angle_radians_alt();
+        button_moby->state = 1;
+        *(float *)button_data = random_angle_radians_alt();
         break;
     case GRINDRAIL_BUTTON_CHECK_ACTIVATION:
-        if (tick_countdown_32((int *)(d + 4))) {
+        if (tick_countdown_32((int *)(button_data + 4))) {
             g = (char *)&hero.motion.pos;
-            if (vector_distance(&m->pos, g) < 4.0f) {
+            if (vector_distance(&button_moby->pos, g) < 4.0f) {
                 base = g - 0x80;
                 if (*(int *)(base + 0x2084) == 0x28 && *(int *)(base + 0x5A8) != -1) {
-                    transform_vector_by_basis(v, &D_L16_00161DF0, &m->rot_row0);
-                    fast_vec_add(v, v, &m->pos);
+                    transform_vector_by_basis(v, &D_L16_00161DF0, &button_moby->rot_row0);
+                    fast_vec_add(v, v, &button_moby->pos);
                     fast_vec_sub(v, v, g);
                     transform_vector_by_basis(v, v, g - 0x40);
                     if (absolute_float(v[1]) < 0.1f) {
                         if ((v[0] > 0.0f && *(int *)(base + 0x5A8) == 3) ||
                             (v[0] < 0.0f && *(int *)(base + 0x5A8) == 2)) {
-                            func_L16_002E6B48_6908(m);
-                            func_0022ED80_6908(1, 0, m);
+                            func_L16_002E6B48_6908(button_moby);
+                            func_0022ED80_6908(1, 0, button_moby);
                         }
                     }
                 }
             }
         }
-        if (find_moby_hit(m, 0x330000, 0)) {
-            func_L16_002E6B48_6908(m);
-            func_0022ED80_6908(0, 0, m);
-            m->hit_slot = 0xFF;
+        if (find_moby_hit(button_moby, 0x330000, 0)) {
+            func_L16_002E6B48_6908(button_moby);
+            func_0022ED80_6908(0, 0, button_moby);
+            button_moby->hit_slot = 0xFF;
         }
         break;
     }
-    *(float *)d = fast_add_rotations(*(float *)d, frame_time * 12.566371f);
-    f = (fast_sin(*(float *)d) + 1.0f) * 0.5f;
-    if (m->command) {
-        m->glow_color = FUN_001fa6e0_u(f, 0x80208020, 0x80202020);
+    *(float *)button_data = fast_add_rotations(*(float *)button_data, frame_time * 12.566371f);
+    glow_blend_factor = (fast_sin(*(float *)button_data) + 1.0f) * 0.5f;
+    if (button_moby->command) {
+        button_moby->glow_color = FUN_001fa6e0_u(glow_blend_factor, 0x80208020, 0x80202020);
     } else {
-        m->glow_color = FUN_001fa6e0_u(f, 0x80202080, 0x80202020);
+        button_moby->glow_color = FUN_001fa6e0_u(glow_blend_factor, 0x80202080, 0x80202020);
     }
 }
 #define NOT_SDA
