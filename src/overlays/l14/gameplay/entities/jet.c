@@ -258,7 +258,7 @@ void FUN_L14_002df510(struct Moby *m, void *path, int outer_alpha, int inner_alp
     transform_vector(&layer_quads[1].v[0], &layer_quads[1].v[0], &mat[0]);
     transform_vector(&layer_quads[1].v[1], &layer_quads[1].v[1], &mat[0]);
     for (i = 1; i < point_count; i++) {
-        float f;
+        float outer_half_width;
         qcopy(&layer_quads[0].v[2], &w[0]);
         scale_vector_xyz(&layer_quads[0].v[3], &layer_quads[0].v[2], -1.0f);
         qcopy(&layer_quads[1].v[2], &w[1]);
@@ -318,9 +318,9 @@ void FUN_L14_002df510(struct Moby *m, void *path, int outer_alpha, int inner_alp
         qcopy(&layer_quads[0].v[1], &layer_quads[0].v[3]);
         qcopy(&layer_quads[1].v[0], &layer_quads[1].v[2]);
         qcopy(&layer_quads[1].v[1], &layer_quads[1].v[3]);
-        f = cubic_hermite_scalar(-1.0f, 0.0f, 1.0f, 0.0f, convert_integer_to_float(i) / convert_integer_to_float(point_count)) * 0.0f + 0.2f;
-        w[0].z = f;
-        w[1].z = 2.0f * f;
+        outer_half_width = cubic_hermite_scalar(-1.0f, 0.0f, 1.0f, 0.0f, convert_integer_to_float(i) / convert_integer_to_float(point_count)) * 0.0f + 0.2f;
+        w[0].z = outer_half_width;
+        w[1].z = 2.0f * outer_half_width;
         layer_quads[0].uv[0][0] = *(float *)(moby_vars + 0x1EC) + 0.0f;
         layer_quads[0].uv[0][1] = 0.0f;
         layer_quads[0].uv[1][0] = *(float *)(moby_vars + 0x1EC) + 0.0f;
