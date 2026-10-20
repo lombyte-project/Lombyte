@@ -24,7 +24,7 @@ s32 pcm_callback(void *mp, struct CbDataStr *cb, struct AudioBuf *ab) {
     u8 *ps;
     u8 *end;
     s32 len;
-    s32 n;
+    s32 first_source_byte_count;
     s32 ret;
     s32 rest;
 
@@ -34,13 +34,13 @@ s32 pcm_callback(void *mp, struct CbDataStr *cb, struct AudioBuf *ab) {
     if (ps >= end) {
         ps -= ab->size;
     }
-    n = end - ps;
-    if (len < n) {
-        n = len;
+    first_source_byte_count = end - ps;
+    if (len < first_source_byte_count) {
+        first_source_byte_count = len;
     }
-    rest = len - n;
+    rest = len - first_source_byte_count;
     audio_dec_begin_put(D_0016120C + 0xD9100, &ptr0, &len0, &ptr1, &len1);
-    ret = cpy2area(ptr0, len0, ptr1, len1, ps, n, ab, rest);
+    ret = cpy2area(ptr0, len0, ptr1, len1, ps, first_source_byte_count, ab, rest);
     audio_dec_end_put(D_0016120C + 0xD9100, ret);
     return ret > 0;
 }
