@@ -3280,8 +3280,8 @@ extern float D_L18_001623CC __attribute__((sda));
 extern float D_L18_001623E4 __attribute__((sda));
 /* Ported from rac1-decomp src/overlays/l18_veldin2/vendor_002F2AE0.c (func_L18_002F86E8) */
 void FUN_L18_002f7288(char *moby) {
-    char *d = *(char **)(moby + 0x78);
-    char *t = *(char **)(D_L18_0015EF50 + *(int *)(d + 0x224) * 32 + 0x1c);
+    char *boss_data = *(char **)(moby + 0x78);
+    char *t = *(char **)(D_L18_0015EF50 + *(int *)(boss_data + 0x224) * 32 + 0x1c);
     float f;
     float x;
     float y;
@@ -3291,8 +3291,8 @@ void FUN_L18_002f7288(char *moby) {
     float *p3;
     unsigned char st;
 
-    fast_dec_timer((int *)(d + 0x360));
-    f = vector_distance(hero.motion.pos.f, d + 0x3c0);
+    fast_dec_timer((int *)(boss_data + 0x360));
+    f = vector_distance(hero.motion.pos.f, boss_data + 0x3c0);
     if (f > D_L18_001623BC) {
         f = D_L18_001623BC;
     } else if (f < D_L18_001623B8) {
@@ -3306,21 +3306,21 @@ void FUN_L18_002f7288(char *moby) {
     if (st == 0x13) {
         char *g = D_0013E533 + 0xe1d;
         if ((*(int *)(g + 0x208c) == 0xf || *(int *)(g + 0x2084) == 0x42) &&
-            *(int *)(d + 0x364) == 0 && *(float *)(d + 0x390) <= 25.0f &&
-            *(int *)(d + 0x360) == 0) {
+            *(int *)(boss_data + 0x364) == 0 && *(float *)(boss_data + 0x390) <= 25.0f &&
+            *(int *)(boss_data + 0x360) == 0) {
             x = D_L18_001623D0;
             y = D_L18_001623D4;
             p0 = (float *)(t + 0x34);
             p1 = (float *)(t + 0x38);
-            p2 = (float *)(d + 0x378);
-            p3 = (float *)(d + 0x37c);
+            p2 = (float *)(boss_data + 0x378);
+            p3 = (float *)(boss_data + 0x37c);
         } else {
             p0 = (float *)(t + 0x34);
             p1 = (float *)(t + 0x38);
-            p3 = (float *)(d + 0x37c);
-            p2 = (float *)(d + 0x378);
+            p3 = (float *)(boss_data + 0x37c);
+            p2 = (float *)(boss_data + 0x378);
             if (vector_distance(hero.motion.pos.f,
-                             D_L18_001600EC + (*(int *)(d + 0x344) << 7) + 0x30) < 28.0f) {
+                             D_L18_001600EC + (*(int *)(boss_data + 0x344) << 7) + 0x30) < 28.0f) {
                 x = D_L18_001623D8;
                 y = D_L18_001623DC_target;
             }
@@ -3330,34 +3330,34 @@ void FUN_L18_002f7288(char *moby) {
         y = D_L18_001623E4;
         p0 = (float *)(t + 0x34);
         p1 = (float *)(t + 0x38);
-        p2 = (float *)(d + 0x378);
-        p3 = (float *)(d + 0x37c);
+        p2 = (float *)(boss_data + 0x378);
+        p3 = (float *)(boss_data + 0x37c);
     } else if (st == 0 || st == 10 || st == 11 || st == 1 || st == 0x1b) {
         int i;
         char *g;
         char *q;
         p0 = (float *)(t + 0x34);
         p1 = (float *)(t + 0x38);
-        for (i = 0, p2 = (float *)(d + 0x378), p3 = (float *)(d + 0x37c); i < 0x30; i++) {
-            char *m;
-            if (*(int *)(d + 0x3ec) == 0) {
+        for (i = 0, p2 = (float *)(boss_data + 0x378), p3 = (float *)(boss_data + 0x37c); i < 0x30; i++) {
+            char *scanned_entry;
+            if (*(int *)(boss_data + 0x3ec) == 0) {
                 char *pl;
                 g = D_0013E533 + 0xe1d;
                 pl = *(char **)(g + 0x2fc);
                 if (pl != 0 && *(short *)(pl + 0xa6) == 0x24b) {
-                    *(int *)(d + 0x3ec) = 1;
+                    *(int *)(boss_data + 0x3ec) = 1;
                 }
             }
             if (D_L18_0016A290[i] != 0) {
-                m = D_L18_00167B50 + i * 0xa0;
-                if (*(short *)(m + 0x86) == 0x12) {
-                    FUN_L06_00316330(m);
-                    if (*(int *)(d + 0x368) != -1) {
-                        set_animation_parameter(*(int *)(d + 0x368), 0);
-                        *(int *)(d + 0x368) = -1;
+                scanned_entry = D_L18_00167B50 + i * 0xa0;
+                if (*(short *)(scanned_entry + 0x86) == 0x12) {
+                    FUN_L06_00316330(scanned_entry);
+                    if (*(int *)(boss_data + 0x368) != -1) {
+                        set_animation_parameter(*(int *)(boss_data + 0x368), 0);
+                        *(int *)(boss_data + 0x368) = -1;
                     }
                     if (*(unsigned char *)(moby + 0x20) >= 2) {
-                        if (*(int *)(d + 0x3ec) != 0 || D_L18_001623A0_gp != 0) {
+                        if (*(int *)(boss_data + 0x3ec) != 0 || D_L18_001623A0_gp != 0) {
                             char *w;
                             q = D_L18_00167680;
                             w = *(char **)(q + 0x180);
@@ -3374,12 +3374,12 @@ void FUN_L18_002f7288(char *moby) {
     } else {
         p0 = (float *)(t + 0x34);
         p1 = (float *)(t + 0x38);
-        p2 = (float *)(d + 0x378);
-        p3 = (float *)(d + 0x37c);
-        if (*(float *)(d + 0x38c) > 0.0f) {
-            *(int *)(d + 0x368) = queue_animation_update(0x16, 0xffff,
+        p2 = (float *)(boss_data + 0x378);
+        p3 = (float *)(boss_data + 0x37c);
+        if (*(float *)(boss_data + 0x38c) > 0.0f) {
+            *(int *)(boss_data + 0x368) = queue_animation_update(0x16, 0xffff,
                      FUN_L00_00235d80, FUN_L00_00235ea0, FUN_L06_00249738,
-                     d + 0x36c, 0x15e);
+                     boss_data + 0x36c, 0x15e);
         }
     }
     advance_accelerated_scalar_7288(p0, x, p2, *(float *)&D_L18_001623B4 * D_0015ED6C_e[1],
