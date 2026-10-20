@@ -130,7 +130,7 @@ s32 FUN_L14_00222aa8(s32 arg) {
     u8 *mob;
     s32 flag;
     s32 id;
-    f32 a, b, e;
+    f32 horizontal_knockback_scale, b, knockback_scale;
     OvlVec4 v;
 
     if (G.state.control_mode == 0x14) {
@@ -199,14 +199,14 @@ s32 FUN_L14_00222aa8(s32 arg) {
             return 1;
         }
         hero_set_state(HERO_STATE_HURT, 1);
-        e = D_0015ED6C_8;
-        a = e * 5.7f;
-        b = e * 2.4f;
+        knockback_scale = D_0015ED6C_8;
+        horizontal_knockback_scale = knockback_scale * 5.7f;
+        b = knockback_scale * 2.4f;
         if (G.unk12E7 != 0) {
-            a = 0.0f;
-            b = e * 1.7f;
+            horizontal_knockback_scale = 0.0f;
+            b = knockback_scale * 1.7f;
         }
-        FUN_L00_00210c80_8(&v, flag, a, b);
+        FUN_L00_00210c80_8(&v, flag, horizontal_knockback_scale, b);
         if (flag != 0 && tbl->unk28 == 4) {
             v.f[2] += v.f[2];
         }
