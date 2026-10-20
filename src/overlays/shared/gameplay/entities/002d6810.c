@@ -1011,33 +1011,33 @@ extern void FUN_0022da68_s(int, int, void *) __asm__("FUN_0022da68");
 extern void remove_s(void *) __asm__("FUN_0020c828");
 extern void FUN_L07_0029b8d8(void *, float, int, float);
 
-void FUN_L15_002e4380(unsigned char *m) {
-    char *d = *(char **)(m + 0x78);
+void FUN_L15_002e4380(unsigned char *moby) {
+    char *moby_vars = *(char **)(moby + 0x78);
     float next[4];
     char col[0x30];
     char *hit;
-    if (d == 0) {
-        remove_s(m);
+    if (moby_vars == 0) {
+        remove_s(moby);
         return;
     }
-    if (m[0x20] != 0)
+    if (moby[0x20] != 0)
         return;
-    *(float *)(m + 0x40) = addrot_s(*(float *)(m + 0x40), frame_time * 6.2831855f);
-    add_s(next, m + 0x10, d);
-    setupcol_s(col, m, 1, 2.0f, d);
-    *(short *)(col + 0x1A) = *(short *)(m + 0xA6);
-    if (collide_s(m + 0x10, next, 0, m, col) != 0 || near_s(m + 0x10, 0, m, 0.3f) != 0 || tick_s(d + 0x38) != 0) {
+    *(float *)(moby + 0x40) = addrot_s(*(float *)(moby + 0x40), frame_time * 6.2831855f);
+    add_s(next, moby + 0x10, moby_vars);
+    setupcol_s(col, moby, 1, 2.0f, moby_vars);
+    *(short *)(col + 0x1A) = *(short *)(moby + 0xA6);
+    if (collide_s(moby + 0x10, next, 0, moby, col) != 0 || near_s(moby + 0x10, 0, moby, 0.3f) != 0 || tick_s(moby_vars + 0x38) != 0) {
         hit = (char *)D_L15_00174458_s[0];
-        if (hit != 0 && (int)hit != *(int *)(d + 0x3C)) {
+        if (hit != 0 && (int)hit != *(int *)(moby_vars + 0x3C)) {
             if (*(short *)(hit + 0xA6) != 0x4E)
-                spark_s(m, 0.5f, m + 0x10, 1, 2.0f, 0.0f, 0, 1, 0);
-            blast_s(m, m + 0x10, 0.5f, 13.0f, -1);
-            FUN_0022da68_s(0, 0, m);
-            remove_s(m);
+                spark_s(moby, 0.5f, moby + 0x10, 1, 2.0f, 0.0f, 0, 1, 0);
+            blast_s(moby, moby + 0x10, 0.5f, 13.0f, -1);
+            FUN_0022da68_s(0, 0, moby);
+            remove_s(moby);
             return;
         }
     }
-    qcopy(m + 0x10, next);
+    qcopy(moby + 0x10, next);
     if (D_L15_0015F5CC_s % 3 == 0)
-        FUN_L07_0029b8d8(m, 30000.0f, 0, 0.1f);
+        FUN_L07_0029b8d8(moby, 30000.0f, 0, 0.1f);
 }
