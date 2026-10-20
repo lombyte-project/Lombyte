@@ -102,6 +102,11 @@ int hero_set_state(int a, int b) {
         ENTER_DROWN = 0x6A,
         ENTER_SLIP = 0x79
     };
+    enum {
+        HERO_STATE_LEDGE_HANG_ENTRY = 0x18,
+        HERO_STATE_LEDGE_SHIMMY_YAW_PLUS_90 = 0x1A,
+        HERO_STATE_LEDGE_SHIMMY_YAW_MINUS_90 = 0x1B
+    };
     int old2088;
     char *moby;
     int old20A7;
@@ -879,7 +884,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x18: {
+    case HERO_STATE_LEDGE_HANG_ENTRY: {
         struct Hero *p = &hero;
         p->state.control_mode = 3;
         p->unk2284 = 0xD;
@@ -909,7 +914,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0x21, 0, (float)scale_game_frames(6));
         break;
     }
-    case 0x1A: {
+    case HERO_STATE_LEDGE_SHIMMY_YAW_PLUS_90: {
         struct Hero *p = &hero;
         p->state.control_mode = 3;
         p->unk2284 = 0xD;
@@ -918,7 +923,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0x24, 0, (float)scale_game_frames(6));
         break;
     }
-    case 0x1B: {
+    case HERO_STATE_LEDGE_SHIMMY_YAW_MINUS_90: {
         struct Hero *p = &hero;
         p->state.control_mode = 3;
         p->unk2284 = 0xD;
