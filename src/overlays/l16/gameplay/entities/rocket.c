@@ -1582,84 +1582,84 @@ extern void normalize_vector_xyz_c2(void *, void *, f32) __asm__("FUN_001f9bf8")
 
 /* Per-frame update of a hit-point moby: handles a hit (respawn at the spawn point or removal when out of lives) and its state timers. */
 void FUN_L16_002ce9f0(void *moby) {
-    L16HitMoby *m = moby;
+    L16HitMoby *hit_moby = moby;
     float matrix[16];
     int status;
     float amount;
-    L16HitData *d;
+    L16HitData *hit_data;
     char *record;
 
-    if (m->state == 1) {
+    if (hit_moby->state == 1) {
         return;
     }
-    d = m->data;
-    if (d->substate == 2) {
-        d->substate = 1;
-        d->health = 2.0f;
-        d->timer = scale_game_frames(60);
-        FUN_L00_00257470(m, 0, -1);
-        m->flags &= 0xEFFF;
-        d->lives--;
-        if (d->lives != -1) {
-            m->state = 11;
-            qcopy(m->position, d->spawn);
-            d->timer = scale_game_frames(60);
+    hit_data = hit_moby->data;
+    if (hit_data->substate == 2) {
+        hit_data->substate = 1;
+        hit_data->health = 2.0f;
+        hit_data->timer = scale_game_frames(60);
+        FUN_L00_00257470(hit_moby, 0, -1);
+        hit_moby->flags &= 0xEFFF;
+        hit_data->lives--;
+        if (hit_data->lives != -1) {
+            hit_moby->state = 11;
+            qcopy(hit_moby->position, hit_data->spawn);
+            hit_data->timer = scale_game_frames(60);
         } else {
-            if (d->child) {
-                mark_moby_for_removal_c2(d->child);
+            if (hit_data->child) {
+                mark_moby_for_removal_c2(hit_data->child);
             }
-            mark_moby_for_removal_c2(m);
+            mark_moby_for_removal_c2(hit_moby);
         }
         return;
     }
-    if (d->frame != D_L16_0015F5CC) {
-        FUN_L16_002cee70_c((char *)m);
+    if (hit_data->frame != D_L16_0015F5CC) {
+        FUN_L16_002cee70_c((char *)hit_moby);
     }
     amount = 0.0f;
-    record = find_moby_hit(m, 0x330000, 0);
-    hit_reaction(m, record, &d->health, 0, &status, &amount, 0, 4);
-    if (status != 1 && m->state != 10 && m->state != 11) {
-        d->health -= amount;
-        if (d->health <= 0.0f) {
-            m->state = 10;
+    record = find_moby_hit(hit_moby, 0x330000, 0);
+    hit_reaction(hit_moby, record, &hit_data->health, 0, &status, &amount, 0, 4);
+    if (status != 1 && hit_moby->state != 10 && hit_moby->state != 11) {
+        hit_data->health -= amount;
+        if (hit_data->health <= 0.0f) {
+            hit_moby->state = 10;
         } else {
-            if (m->state != 9) {
-                d->next_state = m->state;
-                d->next_anim = m->animation;
+            if (hit_moby->state != 9) {
+                hit_data->next_state = hit_moby->state;
+                hit_data->next_anim = hit_moby->animation;
             }
             {
-                float x = m->position[0], y = m->position[1];
+                float x = hit_moby->position[0], y = hit_moby->position[1];
                 struct Hero *player = &hero;
-                d->heading = FUN_001f9e90_c2(player->motion.pos.f[0] - x, player->motion.pos.f[1] - y);
+                hit_data->heading = FUN_001f9e90_c2(player->motion.pos.f[0] - x, player->motion.pos.f[1] - y);
             }
-            m->state = 9;
+            hit_moby->state = 9;
             /* No pointer local for the reaction record anywhere: d->reaction is written at each call and the
                compiler caches it itself (formed before the hit query, and formed again here with a copy after
                the call). It only forms it again here when this place cannot be reached along one straight path
                from the hit query, that is when the animation test has two arms while its common-subexpression
                pass runs: the else arm below is what supplies the second one. The assignment is dead and leaves
                no instruction; without it the function is two instructions short (see NOTES.md). */
-            if (m->animation != 8) {
-                blend_moby_animation_c(m, 8, 2, 1);
+            if (hit_moby->animation != 8) {
+                blend_moby_animation_c(hit_moby, 8, 2, 1);
             } else {
                 record = 0;
             }
-            d->reaction_time = 120;
-            trooper_anim_update(m, d->reaction);
+            hit_data->reaction_time = 120;
+            trooper_anim_update(hit_moby, hit_data->reaction);
         }
     }
-    m->opacity = 255;
-    trooper_anim_finish(m, d->reaction);
-    if (d->child) {
-        moby_point_position(m, D_L16_001619C8_gp, d->child->position);
-        build_moby_bone_transform((char *)m, D_L16_001619C8_gp, (char *)matrix);
-        copy_matrix3x4(d->child->matrix[0], matrix);
-        normalize_vector_xyz_c2(d->child->matrix[0], d->child->matrix[0], 1.0f);
-        normalize_vector_xyz_c2(d->child->matrix[1], d->child->matrix[1], 1.0f);
-        normalize_vector_xyz_c2(d->child->matrix[2], d->child->matrix[2], 1.0f);
-        FUN_L00_00250df8(d->child);
+    hit_moby->opacity = 255;
+    trooper_anim_finish(hit_moby, hit_data->reaction);
+    if (hit_data->child) {
+        moby_point_position(hit_moby, D_L16_001619C8_gp, hit_data->child->position);
+        build_moby_bone_transform((char *)hit_moby, D_L16_001619C8_gp, (char *)matrix);
+        copy_matrix3x4(hit_data->child->matrix[0], matrix);
+        normalize_vector_xyz_c2(hit_data->child->matrix[0], hit_data->child->matrix[0], 1.0f);
+        normalize_vector_xyz_c2(hit_data->child->matrix[1], hit_data->child->matrix[1], 1.0f);
+        normalize_vector_xyz_c2(hit_data->child->matrix[2], hit_data->child->matrix[2], 1.0f);
+        FUN_L00_00250df8(hit_data->child);
     }
-    trooper_anim_finish(m, d->reaction);
+    trooper_anim_finish(hit_moby, hit_data->reaction);
 }
 #include "sda.h"
 
