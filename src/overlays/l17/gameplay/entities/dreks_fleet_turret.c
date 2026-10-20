@@ -283,20 +283,20 @@ extern struct {
     float a, b;
 } D_L17_001E6620_a95b8[4] __asm__("D_L17_001E6320");
 void FUN_L17_002a95b8(struct Moby *moby) {
-    char *d = (char *)moby->pvars;
+    char *moby_vars = (char *)moby->pvars;
     S_a95b8 s;
     char m1[16];
     char m2[16];
     char m3[16];
     char m0[16];
     int i;
-    func_001F9BF0_a95b8(m3, d + 0x10, d + 0x20);
-    func_001F9BF0_a95b8(m1, d + 0x10, D_L17_001676C0);
-    func_001F9BF0_a95b8(m2, d + 0x20, D_L17_001676C0);
+    func_001F9BF0_a95b8(m3, moby_vars + 0x10, moby_vars + 0x20);
+    func_001F9BF0_a95b8(m1, moby_vars + 0x10, D_L17_001676C0);
+    func_001F9BF0_a95b8(m2, moby_vars + 0x20, D_L17_001676C0);
     func_001F9CA0_a95b8(m1, m1, m3);
-    func_L00_001FF4B0_a95b8(m1, m1, *(float *)(d + 0x4C));
+    func_L00_001FF4B0_a95b8(m1, m1, *(float *)(moby_vars + 0x4C));
     func_001F9CA0_a95b8(m2, m2, m3);
-    func_L00_001FF4B0_a95b8(m2, m2, *(float *)(d + 0x4C));
+    func_L00_001FF4B0_a95b8(m2, m2, *(float *)(moby_vars + 0x4C));
     s.z78 = func_001F4868_a95b8(0xE);
     s.q80 = 0xFF9000000260L;
     s.q88 = 0x8000000048L;
@@ -309,13 +309,13 @@ void FUN_L17_002a95b8(struct Moby *moby) {
         s.f[i].a = D_L17_001E6620_a95b8[i].a;
         s.f[i].b = D_L17_001E6620_a95b8[i].b;
     }
-    func_001F9BF0_a95b8(m0, d + 0x10, m1);
+    func_001F9BF0_a95b8(m0, moby_vars + 0x10, m1);
     *(OvlQuad *)(s.pad + 0) = *(OvlQuad *)m0;
-    func_001F9BD8_a95b8(m0, d + 0x10, m1);
+    func_001F9BD8_a95b8(m0, moby_vars + 0x10, m1);
     *(OvlQuad *)(s.pad + 0x10) = *(OvlQuad *)m0;
-    func_001F9BF0_a95b8(m0, d + 0x20, m2);
+    func_001F9BF0_a95b8(m0, moby_vars + 0x20, m2);
     *(OvlQuad *)(s.pad + 0x20) = *(OvlQuad *)m0;
-    func_001F9BD8_a95b8(m0, d + 0x20, m2);
+    func_001F9BD8_a95b8(m0, moby_vars + 0x20, m2);
     *(OvlQuad *)(s.pad + 0x30) = *(OvlQuad *)m0;
     func_L00_001FD1D8_a95b8(&s, 0, 0);
 }
