@@ -494,7 +494,7 @@ struct Moby *FUN_L00_002c9348(State *source_state) {
     Sub *moby_vars;
     Loc loc;
     struct Moby *previous_slot_moby;
-    void *q;
+    void *source_record;
     Opt *color_options;
     f32 g;
     f32 c1;
@@ -547,9 +547,9 @@ struct Moby *FUN_L00_002c9348(State *source_state) {
         moby_vars->unk74 = D_0013E520[0x15];
         spawned_moby->command = moby_vars->unk74;
         FUN_L00_00257470(source_state, 0, -1);
-        q = suck_get_aim_height(source_state);
-        if (q != NULL && *(u8 *)((u8 *)q + 0xE) == 1) {
-            *(u8 *)((u8 *)q + 0xE) = 2;
+        source_record = suck_get_aim_height(source_state);
+        if (source_record != NULL && *(u8 *)((u8 *)source_record + 0xE) == 1) {
+            *(u8 *)((u8 *)source_record + 0xE) = 2;
         } else {
             mark_moby_for_removal(source_state);
         }
