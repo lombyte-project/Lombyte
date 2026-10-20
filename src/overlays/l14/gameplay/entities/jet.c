@@ -2044,12 +2044,12 @@ int FUN_L14_002ef150(struct Moby *m) {
 
 extern char *D_L14_001B0BB0_c4[] __asm__("D_L14_001B0BB0");
 
-void FUN_L14_002ef3e0(struct Moby *m) {
-    char *moby_vars = (char *)m->pvars;
+void FUN_L14_002ef3e0(struct Moby *elevator_moby) {
+    char *moby_vars = (char *)elevator_moby->pvars;
     float pos[4];
     float rot[4];
     char *selected_path;
-    if (m->command == 0) {
+    if (elevator_moby->command == 0) {
         selected_path = D_L14_001B0BB0_c4[*(int *)(moby_vars + 0xA0)];
         qcopy(rot, moby_vars + 0xE0);
     } else {
@@ -2061,13 +2061,13 @@ void FUN_L14_002ef3e0(struct Moby *m) {
     } else {
         qcopy(pos, selected_path + 0x10);
     }
-    FUN_L00_0025b8c0(&m->pos.x, (float *)(moby_vars + 0xC0), pos[0], 0.003f, 0.2f, 0.0f);
-    FUN_L00_0025b8c0(&m->pos.y, (float *)(moby_vars + 0xC4), pos[1], 0.003f, 0.2f, 0.0f);
-    FUN_L00_0025b8c0(&m->pos.z, (float *)(moby_vars + 0xC8), pos[2], 0.003f, 0.2f, 0.0f);
+    FUN_L00_0025b8c0(&elevator_moby->pos.x, (float *)(moby_vars + 0xC0), pos[0], 0.003f, 0.2f, 0.0f);
+    FUN_L00_0025b8c0(&elevator_moby->pos.y, (float *)(moby_vars + 0xC4), pos[1], 0.003f, 0.2f, 0.0f);
+    FUN_L00_0025b8c0(&elevator_moby->pos.z, (float *)(moby_vars + 0xC8), pos[2], 0.003f, 0.2f, 0.0f);
     if (0.0f < *(float *)(moby_vars + 0xAC)) {
-        FUN_L00_0025b8c0(&m->rot.x, (float *)(moby_vars + 0x100), rot[0], 0.003f, 0.2f, 0.0f);
-        FUN_L00_0025b8c0(&m->rot.y, (float *)(moby_vars + 0x104), rot[1], 0.003f, 0.2f, 0.0f);
-        FUN_L00_0025b8c0(&m->rot.z, (float *)(moby_vars + 0x108), rot[2], 0.003f, 0.2f, 0.0f);
+        FUN_L00_0025b8c0(&elevator_moby->rot.x, (float *)(moby_vars + 0x100), rot[0], 0.003f, 0.2f, 0.0f);
+        FUN_L00_0025b8c0(&elevator_moby->rot.y, (float *)(moby_vars + 0x104), rot[1], 0.003f, 0.2f, 0.0f);
+        FUN_L00_0025b8c0(&elevator_moby->rot.z, (float *)(moby_vars + 0x108), rot[2], 0.003f, 0.2f, 0.0f);
     }
 }
 #define NOT_SDA
