@@ -68,12 +68,12 @@ void FUN_L14_002b44a8(s32 index) {
 
 /* Release the handle stored at 0x12 of the record, then hand the moby over. */
 void FUN_L14_002bb4d8(u8 *self) {
-    u8 *p = *(u8 **)(self + 0x78);
-    s16 v = *(s16 *)(p + 0x12);
+    u8 *debris_vars = *(u8 **)(self + 0x78);
+    s16 v = *(s16 *)(debris_vars + 0x12);
 
     if (v != -1) {
         FUN_L00_0023e838(v);
-        *(s16 *)(p + 0x12) = -1;
+        *(s16 *)(debris_vars + 0x12) = -1;
     }
     FUN_0020c828(self);
 }
