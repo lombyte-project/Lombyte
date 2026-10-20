@@ -1785,60 +1785,60 @@ void upd_a(void *) __asm__("FUN_L00_00250df8");
 void FUN_L00_0025d1b8_2d3838(void *) __asm__("FUN_L00_0025d1b8");
 
 unsigned char *mine_camera_blast(unsigned char *s, void *b, int c, void *d) __asm__("FUN_L00_002d3838");
-unsigned char *mine_camera_blast(unsigned char *s, void *b, int c, void *d) {
-    unsigned char *m = create_moby_local(0x27F);
-    if (m) {
-        unsigned char *q;
-        m[0x30] = 0xFF;
-        *(unsigned short *)(m + 0x34) |= 1;
-        m[0x31] = 1;
-        q = *(unsigned char **)(m + 0x78);
-        m[0x20] = 0;
-        m[0xBC] = 0;
-        qcopy(m + 0x10, b);
+unsigned char *mine_camera_blast(unsigned char *blast_settings, void *b, int c, void *d) {
+    unsigned char *spawned_moby = create_moby_local(0x27F);
+    if (spawned_moby) {
+        unsigned char *blast_vars;
+        spawned_moby[0x30] = 0xFF;
+        *(unsigned short *)(spawned_moby + 0x34) |= 1;
+        spawned_moby[0x31] = 1;
+        blast_vars = *(unsigned char **)(spawned_moby + 0x78);
+        spawned_moby[0x20] = 0;
+        spawned_moby[0xBC] = 0;
+        qcopy(spawned_moby + 0x10, b);
         if (d)
-            qcopy(q, d);
+            qcopy(blast_vars, d);
         else
-            qcopy(q, s);
-        *(int *)(q + 0x20) = c;
-        *(unsigned short *)(m + 0x32) = s[0x3C];
-        q[0x24] = s[0x10];
-        q[0x25] = s[0x11];
-        q[0x26] = s[0x12];
-        q[0x27] = s[0x13];
-        q[0x28] = s[0x14];
-        q[0x29] = s[0x15];
-        q[0x68] = s[0x3D];
-        *(unsigned short *)(q + 0x6C) = *(unsigned short *)(s + 0x40);
-        q[0x2A] = s[0x16];
-        q[0x2B] = s[0x17];
-        q[0x2C] = s[0x18];
-        q[0x2D] = s[0x19];
-        q[0x2E] = s[0x1A];
-        q[0x69] = s[0x3E];
-        *(unsigned short *)(q + 0x6E) = *(unsigned short *)(s + 0x42);
-        q[0x2F] = s[0x1B];
-        q[0x30] = s[0x1C];
-        q[0x31] = s[0x1D];
-        q[0x32] = s[0x1E];
-        q[0x33] = s[0x1F];
-        q[0x6A] = s[0x3F];
-        *(unsigned short *)(q + 0x70) = *(unsigned short *)(s + 0x44);
-        *(float *)(q + 0x34) = *(float *)(s + 0x20);
-        *(float *)(q + 0x38) = *(float *)(s + 0x24);
-        *(float *)(q + 0x3C) = *(float *)(s + 0x28);
-        *(float *)(q + 0x40) = *(float *)(s + 0x2C);
-        *(float *)(q + 0x44) = *(float *)(s + 0x30);
-        q[0x6B] = s[0x48];
-        *(unsigned short *)(q + 0x72) = *(unsigned short *)(s + 0x46);
-        *(int *)(q + 0x48) = *(int *)(s + 0x34);
-        *(int *)(q + 0x4C) = *(int *)(s + 0x38);
-        q[0x1C] = s[0x49];
-        *(int *)(q + 0x64) = -1;
-        upd_a(m);
-        FUN_L00_0025d1b8_2d3838(m);
+            qcopy(blast_vars, blast_settings);
+        *(int *)(blast_vars + 0x20) = c;
+        *(unsigned short *)(spawned_moby + 0x32) = blast_settings[0x3C];
+        blast_vars[0x24] = blast_settings[0x10];
+        blast_vars[0x25] = blast_settings[0x11];
+        blast_vars[0x26] = blast_settings[0x12];
+        blast_vars[0x27] = blast_settings[0x13];
+        blast_vars[0x28] = blast_settings[0x14];
+        blast_vars[0x29] = blast_settings[0x15];
+        blast_vars[0x68] = blast_settings[0x3D];
+        *(unsigned short *)(blast_vars + 0x6C) = *(unsigned short *)(blast_settings + 0x40);
+        blast_vars[0x2A] = blast_settings[0x16];
+        blast_vars[0x2B] = blast_settings[0x17];
+        blast_vars[0x2C] = blast_settings[0x18];
+        blast_vars[0x2D] = blast_settings[0x19];
+        blast_vars[0x2E] = blast_settings[0x1A];
+        blast_vars[0x69] = blast_settings[0x3E];
+        *(unsigned short *)(blast_vars + 0x6E) = *(unsigned short *)(blast_settings + 0x42);
+        blast_vars[0x2F] = blast_settings[0x1B];
+        blast_vars[0x30] = blast_settings[0x1C];
+        blast_vars[0x31] = blast_settings[0x1D];
+        blast_vars[0x32] = blast_settings[0x1E];
+        blast_vars[0x33] = blast_settings[0x1F];
+        blast_vars[0x6A] = blast_settings[0x3F];
+        *(unsigned short *)(blast_vars + 0x70) = *(unsigned short *)(blast_settings + 0x44);
+        *(float *)(blast_vars + 0x34) = *(float *)(blast_settings + 0x20);
+        *(float *)(blast_vars + 0x38) = *(float *)(blast_settings + 0x24);
+        *(float *)(blast_vars + 0x3C) = *(float *)(blast_settings + 0x28);
+        *(float *)(blast_vars + 0x40) = *(float *)(blast_settings + 0x2C);
+        *(float *)(blast_vars + 0x44) = *(float *)(blast_settings + 0x30);
+        blast_vars[0x6B] = blast_settings[0x48];
+        *(unsigned short *)(blast_vars + 0x72) = *(unsigned short *)(blast_settings + 0x46);
+        *(int *)(blast_vars + 0x48) = *(int *)(blast_settings + 0x34);
+        *(int *)(blast_vars + 0x4C) = *(int *)(blast_settings + 0x38);
+        blast_vars[0x1C] = blast_settings[0x49];
+        *(int *)(blast_vars + 0x64) = -1;
+        upd_a(spawned_moby);
+        FUN_L00_0025d1b8_2d3838(spawned_moby);
     }
-    return m;
+    return spawned_moby;
 }
 /* moby class 639 update: runs its state machine and eases its tracked values toward their targets */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D1168.c: func_L00_002D4EC0), where it is exact; names translated to the US level program. */
