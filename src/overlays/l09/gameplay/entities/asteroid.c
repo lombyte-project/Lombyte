@@ -707,33 +707,33 @@ void FUN_L09_002eaea8(Moby *m) {
     float collision_probe_offset[4];
     float position_or_movement_step[4];
     float offset_position[4];
-    Data_2EC188 *d = (*(Data_2EC188 **)&m->pvars);
+    Data_2EC188 *moby_vars = (*(Data_2EC188 **)&m->pvars);
     float len;
-    float t;
+    float updated_rotation_x;
 
-    subtract_vector_xyz(movement_step, d->target, d->pos);
+    subtract_vector_xyz(movement_step, moby_vars->target, moby_vars->pos);
     normalize_vector_xyz(collision_probe_offset, movement_step, 25.0f);
-    normalize_vector_xyz(movement_step, movement_step, d->f54);
-    add_vector_xyz(d->pos, d->pos, movement_step);
-    subtract_vector_xyz(((f32 *)&m->pos), d->pos, D_L09_00166F40);
+    normalize_vector_xyz(movement_step, movement_step, moby_vars->f54);
+    add_vector_xyz(moby_vars->pos, moby_vars->pos, movement_step);
+    subtract_vector_xyz(((f32 *)&m->pos), moby_vars->pos, D_L09_00166F40);
     len = vector_length_xyz(((f32 *)&m->pos));
-    if (len > 100.0f && d->pos[2] > 27.0f) {
+    if (len > 100.0f && moby_vars->pos[2] > 27.0f) {
         normalize_vector_xyz(((f32 *)&m->pos), ((f32 *)&m->pos), 100.0f);
         add_vector_xyz(((f32 *)&m->pos), ((f32 *)&m->pos), D_L09_00166F40);
-        m->scale = d->f50 * (100.0f / len);
+        m->scale = moby_vars->f50 * (100.0f / len);
     } else {
-        qcopy(((f32 *)&m->pos), d->pos);
-        m->scale = d->f50;
+        qcopy(((f32 *)&m->pos), moby_vars->pos);
+        m->scale = moby_vars->f50;
     }
-    t = fast_add_rotations_c(m->rot.x, d->f40);
-    m->rot.x = t;
-    m->rot.y = fast_add_rotations_c(t, d->f44);
+    updated_rotation_x = fast_add_rotations_c(m->rot.x, moby_vars->f40);
+    m->rot.x = updated_rotation_x;
+    m->rot.y = fast_add_rotations_c(updated_rotation_x, moby_vars->f44);
     if (m->state == 0) {
-        if (d->pos[2] < 100.0f && d->pos[0] < 500.0f && d->pos[1] < 500.0f) {
+        if (moby_vars->pos[2] < 100.0f && moby_vars->pos[0] < 500.0f && moby_vars->pos[1] < 500.0f) {
             position_or_movement_step[0] = random_float_between_c2(-5.0f, 5.0f);
             position_or_movement_step[1] = random_float_between_c2(-5.0f, 5.0f);
             position_or_movement_step[2] = random_float_between_c2(-5.0f, 5.0f);
-            add_vector_xyz(position_or_movement_step, position_or_movement_step, d->pos);
+            add_vector_xyz(position_or_movement_step, position_or_movement_step, moby_vars->pos);
             add_vector_xyz(offset_position, position_or_movement_step, collision_probe_offset);
             if (FUN_001efa68(position_or_movement_step, offset_position, 4, (int)m, 0) != 0 && D_L09_00173FE8 > 26.5f) {
                 float scaled_movement_step[4];
@@ -766,17 +766,17 @@ void FUN_L09_002eaea8(Moby *m) {
                         int lo = scale_game_frames(25), hi = scale_game_frames(30);
                         b = FUN_L00_00257b90(lo, hi);
                     }
-                    FUN_L00_0026a9f0(d->pos, scaled_movement_step, *pa, *pb, a, b, 0, 0, 400000.0f, sc);
+                    FUN_L00_0026a9f0(moby_vars->pos, scaled_movement_step, *pa, *pb, a, b, 0, 0, 400000.0f, sc);
                 }
                 for (i = 9; i >= 0; i--) {
                     FUN_L09_002ea528_c((char *)m, movement_step);
                 }
-                d->f58 = h = trooper_play_sound(6, 0, (int)m, 0xC1);
+                moby_vars->f58 = h = trooper_play_sound(6, 0, (int)m, 0xC1);
                 if (h != 0) {
                     vendor_volume(h, 0x800);
                 }
                 if (((Hero_2EC188 *)(D_0013F350))->f2084 != 0x32) {
-                    float dist = distance_xyz(d->pos, D_L09_00166F40);
+                    float dist = distance_xyz(moby_vars->pos, D_L09_00166F40);
                     if (dist < 15.0f) {
                         Cam_2EC188 *c = (Cam_2EC188 *)((char *)D_L09_00166F40 - 0x140);
                         c->f160 = (64.0f - dist) * 0.01f;
@@ -787,22 +787,22 @@ void FUN_L09_002eaea8(Moby *m) {
                 return;
             }
         }
-        if (d->target[2] == 25.0f) {
-            if (d->pos[2] < 27.0f) {
+        if (moby_vars->target[2] == 25.0f) {
+            if (moby_vars->pos[2] < 27.0f) {
                 int j;
-                qcopy(position_or_movement_step, d->pos);
+                qcopy(position_or_movement_step, moby_vars->pos);
                 position_or_movement_step[2] = 25.0f;
                 for (j = 4; j >= 0; j--) {
-                    FUN_L09_002efe48_c(m, position_or_movement_step, movement_step, d->f50 * 4.0f, d->f50 * 12.0f);
+                    FUN_L09_002efe48_c(m, position_or_movement_step, movement_step, moby_vars->f50 * 4.0f, moby_vars->f50 * 12.0f);
                 }
-                d->f54 = d->f54 * (frame_scale_macro * -0.100000024f + 1.0f);
-                if (d->f58 <= 0) {
-                    d->f58 = trooper_play_sound(0, 0, (int)m, 0x107);
+                moby_vars->f54 = moby_vars->f54 * (frame_scale_macro * -0.100000024f + 1.0f);
+                if (moby_vars->f58 <= 0) {
+                    moby_vars->f58 = trooper_play_sound(0, 0, (int)m, 0x107);
                 }
             }
         }
-        if (d->pos[2] < d->target[2]) {
-            if (d->target[2] > 26.5f) {
+        if (moby_vars->pos[2] < moby_vars->target[2]) {
+            if (moby_vars->target[2] > 26.5f) {
                 V6_2EC188 A;
                 V6_2EC188 B;
                 float extra;
@@ -825,7 +825,7 @@ void FUN_L09_002eaea8(Moby *m) {
                     offset_position[0] = random_float_between_c2(-3.0f, 3.0f);
                     offset_position[1] = random_float_between_c2(-3.0f, 3.0f);
                     offset_position[2] = random_float_between_c2(-3.0f, 3.0f);
-                    add_vector_xyz(offset_position, offset_position, d->pos);
+                    add_vector_xyz(offset_position, offset_position, moby_vars->pos);
                     pa = &A.v[random_integer_below_c2(6)];
                     pb = &B.v[random_integer_below_c2(6)];
                     {
@@ -841,12 +841,12 @@ void FUN_L09_002eaea8(Moby *m) {
                 for (i = 9; i >= 0; i--) {
                     FUN_L09_002ea528_c((char *)m, movement_step);
                 }
-                d->f58 = h = trooper_play_sound(6, 0, (int)m, 0xC1);
+                moby_vars->f58 = h = trooper_play_sound(6, 0, (int)m, 0xC1);
                 if (h != 0) {
                     vendor_volume(h, 0x800);
                 }
                 if (((Hero_2EC188 *)(D_0013F350))->f2084 != 0x32) {
-                    float dist = distance_xyz(d->pos, D_L09_00166F40);
+                    float dist = distance_xyz(moby_vars->pos, D_L09_00166F40);
                     if (dist < 15.0f) {
                         Cam_2EC188 *c = (Cam_2EC188 *)((char *)D_L09_00166F40 - 0x140);
                         c->f160 = (64.0f - dist) * 0.01f;
@@ -858,14 +858,14 @@ void FUN_L09_002eaea8(Moby *m) {
         }
     } else {
         m->state++;
-        if (d->target[2] == 25.0f) {
+        if (moby_vars->target[2] == 25.0f) {
             int j;
             m->draw_dist = 0;
             m->visible = 0;
-            qcopy(position_or_movement_step, d->pos);
+            qcopy(position_or_movement_step, moby_vars->pos);
             position_or_movement_step[2] = 25.0f;
             for (j = 1; j >= 0; j--) {
-                FUN_L09_002efe48_c(m, position_or_movement_step, movement_step, d->f50 * 4.0f, d->f50 * 12.0f);
+                FUN_L09_002efe48_c(m, position_or_movement_step, movement_step, moby_vars->f50 * 4.0f, moby_vars->f50 * 12.0f);
             }
             if (m->state > scale_game_frames(10)) {
                 mark_moby_for_removal(m);
@@ -892,7 +892,7 @@ void FUN_L09_002eaea8(Moby *m) {
                 offset_position[0] = random_float_between_c2(-1.0f, 1.0f);
                 offset_position[1] = random_float_between_c2(-1.0f, 1.0f);
                 offset_position[2] = random_float_between_c2(-1.0f, 1.0f);
-                add_vector_xyz(offset_position, offset_position, d->pos);
+                add_vector_xyz(offset_position, offset_position, moby_vars->pos);
                 pa = &A.v[random_integer_below_c2(6)];
                 pb = &B.v[random_integer_below_c2(6)];
                 {
