@@ -208,12 +208,12 @@ void FUN_L00_00205168(struct HeroEase *e) {
 extern struct HeroEase D_L00_0017A680_002054e8[] __asm__("D_L00_0017A680");
 /* Runs FUN_L00_00205168 on each entry of D_L00_0017A680 (0x1550 bytes). */
 void FUN_L00_002054e8(void) {
-    struct HeroEase *p = D_L00_0017A680_002054e8;
-    struct HeroEase *end = (struct HeroEase *)((u8 *)p + 0x1550);
+    struct HeroEase *ease_record = D_L00_0017A680_002054e8;
+    struct HeroEase *end = (struct HeroEase *)((u8 *)ease_record + 0x1550);
     do {
-        FUN_L00_00205168(p);
-        p++;
-    } while ((s32)p < (s32)end);
+        FUN_L00_00205168(ease_record);
+        ease_record++;
+    } while ((s32)ease_record < (s32)end);
 }
 typedef struct {
     u8 unk0;
