@@ -126,13 +126,13 @@ void sentrybot_update(unsigned char *moby) {
     unsigned char *data;
     char *target;
     int flag;
-    int a;
+    int clip_volume_index;
     int lvl;
     int tick;
     int alpha;
-    int n;
+    int color_pulse_period_frames;
     int color;
-    float s;
+    float color_pulse_sine;
 
     if (D_L15_00161414 != 0)
         return;
@@ -141,15 +141,15 @@ void sentrybot_update(unsigned char *moby) {
         *(unsigned short *)(moby + 0x34) |= 0x41;
         return;
     }
-    a = *(int *)(data + 0x2D0);
+    clip_volume_index = *(int *)(data + 0x2D0);
     flag = 0;
-    if (a != -1) {
-        flag = is_point_inside_clip_volume(D_L15_001673C0, a) == 0;
+    if (clip_volume_index != -1) {
+        flag = is_point_inside_clip_volume(D_L15_001673C0, clip_volume_index) == 0;
         if (*(int *)(data + 0x2D4) != -1) {
             flag &= is_point_inside_clip_volume(D_L15_001673C0, *(int *)(data + 0x2D4)) == 0;
         }
     } else if (*(int *)(data + 0x2D8) != -1) {
-        flag = is_point_inside_clip_volume(D_L15_001673C0, a);
+        flag = is_point_inside_clip_volume(D_L15_001673C0, clip_volume_index);
         if (*(int *)(data + 0x2DC) != -1) {
             flag |= is_point_inside_clip_volume(D_L15_001673C0, *(int *)(data + 0x2DC));
         }
@@ -884,18 +884,18 @@ void sentrybot_update(unsigned char *moby) {
         hero.unk22E0 = lvl;
     }
     alpha = 0x80;
-    n = scale_game_frames(0xAA);
+    color_pulse_period_frames = scale_game_frames(0xAA);
     if (lvl == 2) {
-        n = scale_game_frames(0x32);
+        color_pulse_period_frames = scale_game_frames(0x32);
     } else if (lvl == 1) {
-        n = scale_game_frames(0x5A);
+        color_pulse_period_frames = scale_game_frames(0x5A);
     }
-    s = fast_sin((float)(D_L15_0015F5CC % n) / convert_integer_to_float(n) * 2.0f * 3.1415927f +
+    color_pulse_sine = fast_sin((float)(D_L15_0015F5CC % color_pulse_period_frames) / convert_integer_to_float(color_pulse_period_frames) * 2.0f * 3.1415927f +
                  -3.1415927f);
     {
-        int r0 = func_001FA898_r(s * 20.0f);
-        int g0 = func_001FA898_r(s * 70.0f);
-        int b0 = func_001FA898_r(s * 10.0f);
+        int r0 = func_001FA898_r(color_pulse_sine * 20.0f);
+        int g0 = func_001FA898_r(color_pulse_sine * 70.0f);
+        int b0 = func_001FA898_r(color_pulse_sine * 10.0f);
         int cr = r0 + 0x32;
         int cb = b0 + 0x14;
         int cg = g0 + 0xB4;
@@ -911,11 +911,11 @@ void sentrybot_update(unsigned char *moby) {
     }
     *(int *)(moby + 0x90) = fast_tween_color(*(int *)(moby + 0x90), color, 0.1f);
     {
-        unsigned char *p = data + 0x2A0;
+        unsigned char *effect_position = data + 0x2A0;
         int i;
         for (i = 0; i < 3; i++) {
-            moby_point_position(moby, i + 4, p);
-            p += 0x10;
+            moby_point_position(moby, i + 4, effect_position);
+            effect_position += 0x10;
         }
     }
     enqueue_callback_list_1((void (*)(void))FUN_L15_0029aba8, moby);
