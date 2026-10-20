@@ -161,6 +161,7 @@ void FUN_L16_002270c8(void) {
         HERO_STATE_RUN_ALT = 84,
         HERO_STATE_FALL_ALT = 85,
         HERO_STATE_HURT_ALT = 86,
+        HERO_STATE_DYING_ALT = 87,
         HERO_STATE_SLIP_ALT = 88,
         HERO_STATE_APPROACH_TARGET_POSE = 101,
         HERO_STATE_AT_TARGET_POSE = 103,
@@ -490,7 +491,7 @@ void FUN_L16_002270c8(void) {
                     break;
                 case HERO_STATE_DYING:
                 case 71:
-                case 87:
+                case HERO_STATE_DYING_ALT:
                 case 98:
                 case HERO_STATE_WATER_DEATH:
                 case 128:
