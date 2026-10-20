@@ -2641,70 +2641,70 @@ extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int FUN_L00_002595a0(float *, float *, float, float, float);
 extern float FUN_0020c9e0(struct Moby *);
 
-void FUN_L05_00307570(struct Moby *m) {
+void FUN_L05_00307570(struct Moby *moby) {
     float root0, root1;
-    struct LeapVars *d = (struct LeapVars *)m->pvars;
+    struct LeapVars *leap_data = (struct LeapVars *)moby->pvars;
 
-    if (d->timer != 0) {
+    if (leap_data->timer != 0) {
         float duration;
         float acceleration;
-        if (m->prev_seq != 5 && scale_game_frames(3) >= d->timer) {
-            FUN_L05_00307480(m, 5, 1, scale_game_frames(5));
-            d->sequence = -1;
+        if (moby->prev_seq != 5 && scale_game_frames(3) >= leap_data->timer) {
+            FUN_L05_00307480(moby, 5, 1, scale_game_frames(5));
+            leap_data->sequence = -1;
         }
         acceleration = frame_time_sq * 21.0f * -0.5f;
         duration = 30.0f;
-        if (FUN_L00_002595a0(&root0, &root1, acceleration, d->verticalSpeed - acceleration,
-                             d->height - d->targetHeight) > 0 &&
+        if (FUN_L00_002595a0(&root0, &root1, acceleration, leap_data->verticalSpeed - acceleration,
+                             leap_data->height - leap_data->targetHeight) > 0 &&
             root0 > 0.0f) {
             duration = FUN_001fa6d0(root0);
         }
-        if (scale_game_frames(7) < d->timer && scale_game_frames(11) > d->timer && m->prev_seq == 5 &&
+        if (scale_game_frames(7) < leap_data->timer && scale_game_frames(11) > leap_data->timer && moby->prev_seq == 5 &&
             (float)scale_game_frames(27) < duration) {
             short sequence;
             int chosen;
             chosen = random_int_between(0, 3) + 1;
-            d->sequence = chosen;
+            leap_data->sequence = chosen;
             sequence = chosen;
-            FUN_L05_00307480(m, sequence, 1, scale_game_frames(7));
+            FUN_L05_00307480(moby, sequence, 1, scale_game_frames(7));
         }
-        if (d->sequence != -1) {
-            if (m->seq == m->prev_seq) {
-                float frame = FUN_0020c9e0(m);
+        if (leap_data->sequence != -1) {
+            if (moby->seq == moby->prev_seq) {
+                float frame = FUN_0020c9e0(moby);
                 if (frame > 7.0f && frame < 20.0f && duration != 0.0f) {
                     float speed = 30.0f / duration;
                     if (speed > 1.7f)
                         speed = 1.7f;
                     if (speed < 0.3f)
                         speed = 0.3f;
-                    m->anim_speed = speed;
+                    moby->anim_speed = speed;
                 }
             }
-            if (d->sequence != -1) {
+            if (leap_data->sequence != -1) {
                 if (duration < (float)scale_game_frames(9)) {
-                    FUN_L05_00307480(m, 5, 3, scale_game_frames(7));
-                    d->sequence = -1;
-                } else if (m->anim_flags & 2) {
-                    FUN_L05_00307480(m, 5, 2, scale_game_frames(7));
-                    d->sequence = -1;
+                    FUN_L05_00307480(moby, 5, 3, scale_game_frames(7));
+                    leap_data->sequence = -1;
+                } else if (moby->anim_flags & 2) {
+                    FUN_L05_00307480(moby, 5, 2, scale_game_frames(7));
+                    leap_data->sequence = -1;
                 }
             }
         }
-        if (m->seq == m->prev_seq && m->seq == 5 && duration != 0.0f) {
+        if (moby->seq == moby->prev_seq && moby->seq == 5 && duration != 0.0f) {
             float remaining;
             remaining = 25.0f;
-            remaining -= FUN_0020c9e0(m);
+            remaining -= FUN_0020c9e0(moby);
             remaining /= duration * 0.5f;
-            m->anim_speed = remaining;
+            moby->anim_speed = remaining;
         }
     } else {
-        m->anim_speed = 1.0f;
-        if ((m->anim_flags & 2) && m->prev_seq != 0) {
-            FUN_L05_00307480(m, 0, 0, scale_game_frames(8));
+        moby->anim_speed = 1.0f;
+        if ((moby->anim_flags & 2) && moby->prev_seq != 0) {
+            FUN_L05_00307480(moby, 0, 0, scale_game_frames(8));
         }
     }
-    if (d->rider != 0)
-        d->rider->anim_speed = m->anim_speed;
+    if (leap_data->rider != 0)
+        leap_data->rider->anim_speed = moby->anim_speed;
 }
 #include "sda.h"
 
