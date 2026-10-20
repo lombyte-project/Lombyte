@@ -9,7 +9,7 @@ and the stack through `0055` builds `66c253915a6fa851…`, the full stack throug
 `0056` `fc69951c0ec883e1…`, on the Linux cloud host (see the build notes below). That last stack still held
 `0034`, which is retired. The current stack (through `0056`, without `0034`)
 builds `c2b8e013b797f4ff…` there and gives the same objects (full-ELF gate
-PASS); with `0057` it builds `5241bdbb904a71a8…`, with `0058` `acd9a6aa2ac7a6ad…`, with `0060` `67b4239227f5bdba…`. Check a rebuilt compiler by
+PASS); with `0057` it builds `5241bdbb904a71a8…`, with `0058` `acd9a6aa2ac7a6ad…`, with `0060` `67b4239227f5bdba…`, with `0062` `1dc6124edb443133…`. Check a rebuilt compiler by
 its output.
 
 - Archive: `gnu-ee-binutils-gcc-1.1.tar.gz`, 16,510,927 bytes
@@ -43,7 +43,7 @@ Apply with `git apply` at the root of the extracted archive, in this order:
    `0027`, `0028`, `0029`, `0030`, `0031`, `0032`, `0033`, `0037`
 3. `0036`, `0044`, `0045`, `0046`, `0047`, `0048`, `0049`,
    `0050`, `0051`, `0052`, `0053`, `0054`, `0055`, `0056`, `0057`, `0058`,
-   `0060`
+   `0060`, `0061`, `0062`
 
 Configure for `--target=mips64r5900-sf-elf --host=i686-linux-gnu
 --build=i686-linux-gnu --disable-nls --enable-languages=c --without-headers`
@@ -86,6 +86,26 @@ differs. `make` does not track header dependencies: after changing
 `mips.h`, remove `toplev.o` (or build from a fresh tree).
 
 ## Published patches
+
+- `0062-reload-reg-unavailable.patch` SHA-256: `9bddaf0912802fba0a322dcfaace0ec3626da4a11b9f5c698b60cebab7a7c2c0`
+  - role: default. gcc 2.95.3's `reload1.c` change (Bernd Schmidt,
+    2000-01-12, superseding the 1999-11-04 `reload_reg_free_for_value_p`
+    fix): registers outside the insn's spill set go into a separate
+    `reload_reg_unavailable` set, so reload neither inherits nor picks
+    them as reload registers. No built game-compiler, exception or SN
+    overlay unit compiled on this cc1 changes
+  - fixtures: `ui/menus/update_preview_animation_and_attachments` (the
+    rotation copy reloads its address into `$5` again)
+- `0061-copy-rtx-if-shared-virtual-mems.patch` SHA-256: `4f21bbdd604aa90367775c96d39aea13c14fe21217e4e1f2fc24ee7d9470d928`
+  - role: default. gcc 2.95.3's `emit-rtl.c` change (Jeff Law,
+    1999-08-30): `copy_rtx_if_shared` no longer shares a MEM whose address
+    is a virtual stack or incoming-argument register. A shared stack
+    parameter MEM made its REG_EQUIV note pointer-equal to the load, and
+    combine moved the load across the stores in between. Of every built
+    unit only `audio/streaming/snd_play_vag_stream_by_loc_ex_cb` changes:
+    its plain C now matches and its fakematch is gone
+  - fixtures: `rendering/append_power_of_two_textured_screen_sprite`,
+    `audio/streaming/snd_play_vag_stream_by_loc_ex_cb`
 
 - `0060-alias-static-chain-not-a-base.patch` SHA-256: `0bf0ab1423c33e674c7cc34b0286750e75777d42f52d540be9e53957bb7d3789`
   - role: default. gcc 2.95.3's `alias.c` change (Richard Henderson,
