@@ -2065,25 +2065,25 @@ s32 FUN_001f96f8_26de90(s32) __asm__("FUN_001f96f8");
 void FUN_001f9cf8_26de90(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern u8 *D_L00_001B20F0 __attribute__((section(".data")));
 void FUN_L00_0026de90(void *pos, void *dir, f32 size) {
-    M_26de90 *m;
-    V_26de90 a, d, t;
+    M_26de90 *particle;
+    V_26de90 transformed_spawn_offset, spawn_offset, local_velocity;
     X_26de90 x;
     s32 r, g, b;
     Q_26de90 *q;
-    m = FUN_L00_002678b8_26de90(0x1C);
-    if (m) {
-        q = &m->q;
-        d.f[0] = FUN_002132a8_26de90(-0.03f, 0.03f);
-        d.f[1] = FUN_002132a8_26de90(-0.03f, 0.03f);
-        d.f[2] = 0.0f;
+    particle = FUN_L00_002678b8_26de90(0x1C);
+    if (particle) {
+        q = &particle->q;
+        spawn_offset.f[0] = FUN_002132a8_26de90(-0.03f, 0.03f);
+        spawn_offset.f[1] = FUN_002132a8_26de90(-0.03f, 0.03f);
+        spawn_offset.f[2] = 0.0f;
         if (dir) {
             FUN_001fa298_26de90(&x, dir);
-            FUN_001f9d20_26de90(&a, &d, &x);
-            FUN_001f9a10_26de90(&m->v10, &a, pos);
+            FUN_001f9d20_26de90(&transformed_spawn_offset, &spawn_offset, &x);
+            FUN_001f9a10_26de90(&particle->v10, &transformed_spawn_offset, pos);
         } else {
-            FUN_001f9a10_26de90(&m->v10, &d, pos);
+            FUN_001f9a10_26de90(&particle->v10, &spawn_offset, pos);
         }
-        m->v10.f[2] -= 0.05f;
+        particle->v10.f[2] -= 0.05f;
         r = FUN_001160d8_26de90() % 0x60;
         if (!r)
             r = 1;
@@ -2091,22 +2091,22 @@ void FUN_L00_0026de90(void *pos, void *dir, f32 size) {
         if (!g)
             g = 1;
         b = FUN_001160d8_26de90() % g % 0x30;
-        m->i4 = (r + 0x8F) | ((g + 0x8F) << 8) | ((b + 0x6F) << 16);
-        m->b9 = FUN_001fa6d0_26de90(4.0f) + 0x40;
-        m->b3 = 0x48;
-        m->b1 = 0;
-        m->b8 = 0;
-        m->b2 = *D_L00_001B20F0;
+        particle->i4 = (r + 0x8F) | ((g + 0x8F) << 8) | ((b + 0x6F) << 16);
+        particle->b9 = FUN_001fa6d0_26de90(4.0f) + 0x40;
+        particle->b3 = 0x48;
+        particle->b1 = 0;
+        particle->b8 = 0;
+        particle->b2 = *D_L00_001B20F0;
         q->q4 = FUN_002132a8_26de90(0.0f, 0.0223456f) + 1e-05f;
-        m->fC = FUN_002132a8_26de90(10080.0f, 19950.0f);
+        particle->fC = FUN_002132a8_26de90(10080.0f, 19950.0f);
         q->q8 = 0.0f;
-        m->hA = FUN_001f96f8_26de90(0xFC);
+        particle->hA = FUN_001f96f8_26de90(0xFC);
         q->qC = 1.0f;
-        qzero(&t);
+        qzero(&local_velocity);
         if (dir) {
-            t.f[0] = size;
-            t.f[2] = -0.0025f;
-            FUN_001f9cf8_26de90(&q->v30, &t, dir);
+            local_velocity.f[0] = size;
+            local_velocity.f[2] = -0.0025f;
+            FUN_001f9cf8_26de90(&q->v30, &local_velocity, dir);
         } else {
             q->v30.f[0] = FUN_002132a8_26de90(-size, size);
             q->v30.f[1] = FUN_002132a8_26de90(-size, size);
