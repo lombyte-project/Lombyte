@@ -663,7 +663,7 @@ extern void FUN_L00_00207430(void *);
    reached or skipped) or steps each of its mobys between two keyframes. */
 void FUN_L00_00298f90(void) {
     VendorCutscene *cs;
-    VendorMoby *m;
+    VendorMoby *cutscene_moby;
     s32 done;
     s32 last;
     s32 i;
@@ -725,29 +725,29 @@ void FUN_L00_00298f90(void) {
         }
         last = FUN_L00_00298de8();
         for (i = 0; i < D_L00_0016C860.h44; i++) {
-            m = D_L00_0016C860.f178[i];
+            cutscene_moby = D_L00_0016C860.f178[i];
             id = D_L00_0016C860.f38 >> 1;
-            m->frame = id;
-            m->next_frame = id + 1;
-            update_moby_animation_state(m);
-            m->blend = convert_integer_to_float(D_L00_0016C860.f38 & 1) * 0.5f;
+            cutscene_moby->frame = id;
+            cutscene_moby->next_frame = id + 1;
+            update_moby_animation_state(cutscene_moby);
+            cutscene_moby->blend = convert_integer_to_float(D_L00_0016C860.f38 & 1) * 0.5f;
             if (last && (D_L00_0016C860.f38 & 1)) {
-                m->blend = 1.0f;
+                cutscene_moby->blend = 1.0f;
             }
-            keys = m->keys;
-            fast_vec_scale(a, &keys[m->frame], 1.0f - m->blend);
-            fast_vec_scale(b, &keys[m->next_frame], m->blend);
-            add_vector_xyz(&m->pos, a, b);
-            m->b71 = 0xFF;
-            FUN_L00_00250df8(m);
-            if (m->b7F) {
-                update_moby_shadow_range(m);
+            keys = cutscene_moby->keys;
+            fast_vec_scale(a, &keys[cutscene_moby->frame], 1.0f - cutscene_moby->blend);
+            fast_vec_scale(b, &keys[cutscene_moby->next_frame], cutscene_moby->blend);
+            add_vector_xyz(&cutscene_moby->pos, a, b);
+            cutscene_moby->b71 = 0xFF;
+            FUN_L00_00250df8(cutscene_moby);
+            if (cutscene_moby->b7F) {
+                update_moby_shadow_range(cutscene_moby);
             }
-            if (m->oclass == 0) {
-                FUN_L00_00234b38(m);
+            if (cutscene_moby->oclass == 0) {
+                FUN_L00_00234b38(cutscene_moby);
             }
-            if (m->oclass == 10 || m->oclass == 0x1A3 || m->oclass == 0x555) {
-                FUN_L00_00207430(m);
+            if (cutscene_moby->oclass == 10 || cutscene_moby->oclass == 0x1A3 || cutscene_moby->oclass == 0x555) {
+                FUN_L00_00207430(cutscene_moby);
             }
         }
     }
