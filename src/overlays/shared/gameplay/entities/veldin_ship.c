@@ -3146,7 +3146,7 @@ void infobot_update(struct Moby *moby)
         moby->rot.x = spring_turn_2d5de8(moby->rot.x, tilt_x, D_0015ED70 * 1.0471976f, D_0015ED70 * 2.0943952f, D_0015ED6C * 1.5707964f, &infobot->spin[0]);
         break;
     case INFOBOT_ORBIT_PATH_ENDPOINT: {
-        Path *p = D_L00_001B04B0[infobot->path];
+        Path *orbit_path = D_L00_001B04B0[infobot->path];
         FUN_L00_002d6cd0_2d5de8(moby);
         infobot->sway = infobot->sway + D_0015ED6C;
         if (1.0f < infobot->sway) {
@@ -3158,9 +3158,9 @@ void infobot_update(struct Moby *moby)
         offset.v.z = 0.0f;
         heading = fast_add_rotations(infobot->bob, 1.5707964f);
         moby->rot.z = spring_turn_2d5de8(moby->rot.z, heading, D_0015ED6C * 25.132742f, D_0015ED6C * 25.132742f, D_0015ED6C * 12.566371f, &infobot->spin[2]);
-        fast_vec_add(&step, &offset, &p->pts[p->count - 1]);
+        fast_vec_add(&step, &offset, &orbit_path->pts[orbit_path->count - 1]);
         MPOS(moby)->q = step.q;
-        if (FUN_001f9b48(&D_0013F3D0, &p->pts[p->count - 1]) < 2.0f && D_0013F3D0.active != 0) {
+        if (FUN_001f9b48(&D_0013F3D0, &orbit_path->pts[orbit_path->count - 1]) < 2.0f && D_0013F3D0.active != 0) {
             moby->state = 8;
         }
         moby->rot.y = spring_turn_2d5de8(moby->rot.y, 0.0f, D_0015ED70 * 0.5235988f, D_0015ED70 * 1.0471976f, D_0015ED6C * 0.7853982f, &infobot->spin[1]);
