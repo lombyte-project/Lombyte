@@ -1689,20 +1689,20 @@ extern void add_vector_xyz(void *, void *, void *);
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 extern char *func_L00_00272770_p(void *, void *, void *, float, float) __asm__("FUN_L00_002718d0");
 
-void FUN_L11_0031ae68(struct Moby *m, float *ground, int n1, int n2) {
+void FUN_L11_0031ae68(struct Moby *m, float *ground, int spark_count, int ground_effect_count) {
     float v[4];
     int i;
-    for (i = 0; i < n1; i++) {
-        float a = random_angle_radians();
+    for (i = 0; i < spark_count; i++) {
+        float emission_angle = random_angle_radians();
         float r = random_float_between(D_0015ED6C_n[1] * 0.0f, D_0015ED6C_n[1] * 6.0f);
         int k;
-        v[0] = fast_cos(a) * r;
-        v[1] = fast_sin(a) * r;
+        v[0] = fast_cos(emission_angle) * r;
+        v[1] = fast_sin(emission_angle) * r;
         v[2] = random_float_between(D_0015ED6C_n[1] * 3.0f, D_0015ED6C_n[1] * 6.5f);
         k = random_int_between(0x5A, 0x78);
         FUN_L00_0026f548(&m->pos, v, random_integer_below(2), k);
     }
-    for (i = 0; i < n2; i++) {
+    for (i = 0; i < ground_effect_count; i++) {
         char *e;
         random_vector(v, 1.0f, 1.0f);
         add_vector_xyz(v, v, &m->pos);
