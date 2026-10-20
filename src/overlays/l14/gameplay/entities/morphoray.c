@@ -479,8 +479,8 @@ void morphoray_update(struct Moby *moby) {
         MORPHORAY_WAIT_TO_REMOVE = 2,
         MORPHORAY_APPROACH_ZERO_AND_REMOVE = 3
     };
-    u8 *o = (u8 *)moby;
-    u8 *d = (u8 *)moby->pvars;
+    u8 *moby_bytes = (u8 *)moby;
+    u8 *morphoray_pvars = (u8 *)moby->pvars;
     f32 v[4];
     u8 state = moby->state;
 
@@ -491,29 +491,29 @@ void morphoray_update(struct Moby *moby) {
             return;
         }
         FUN_L14_00305a38((void *)moby);
-        probe_ground_height(o + 0x10, 0, 0.5f);
+        probe_ground_height(moby_bytes + 0x10, 0, 0.5f);
         moby->rot.x = 0.0f;
         moby->rot.y = -1.5707964f;
         moby->pos.z = D_L14_00174568[0] + D_L14_001621E8;
-        qcopy(d, o + 0x10);
+        qcopy(morphoray_pvars, moby_bytes + 0x10);
         moby->state = 1;
         break;
     case MORPHORAY_WAIT_FOR_HERO:
-        *(f32 *)(o + 0x48) = fast_add_rotations(*(f32 *)(o + 0x48), D_L14_001621EC);
-        qcopy(o + 0x10, d);
-        scale_vector_xyz(v, o + 0xd0, D_L14_001621F0);
-        add_vector_xyz(o + 0x10, o + 0x10, v);
+        *(f32 *)(moby_bytes + 0x48) = fast_add_rotations(*(f32 *)(moby_bytes + 0x48), D_L14_001621EC);
+        qcopy(moby_bytes + 0x10, morphoray_pvars);
+        scale_vector_xyz(v, moby_bytes + 0xd0, D_L14_001621F0);
+        add_vector_xyz(moby_bytes + 0x10, moby_bytes + 0x10, v);
         FUN_L14_00305b18(moby);
         if (D_L14_0015F5CC % 10 != 0)
             return;
-        if (!(vector_distance_xy(o + 0x10, hero.motion.pos.f) < 1.0f))
+        if (!(vector_distance_xy(moby_bytes + 0x10, hero.motion.pos.f) < 1.0f))
             return;
-        if (!(absolute_float(*(f32 *)(o + 0x18) - hero.motion.pos.f[2]) < 2.0f))
+        if (!(absolute_float(*(f32 *)(moby_bytes + 0x18) - hero.motion.pos.f[2]) < 2.0f))
             return;
         if (D_0013D4D5 != 0)
-            *(s32 *)(d + 0x18) = state;
+            *(s32 *)(morphoray_pvars + 0x18) = state;
         else
-            *(s32 *)(d + 0x18) = 0;
+            *(s32 *)(morphoray_pvars + 0x18) = 0;
         FUN_L00_00260860(0x15, 1);
         start_scene(6);
         moby->state = 2;
@@ -524,7 +524,7 @@ void morphoray_update(struct Moby *moby) {
                 jet_clear_persistent(moby->mission);
                 memcard_save_data(0, -1);
             }
-            if (*(s32 *)(d + 0x18) != 0)
+            if (*(s32 *)(morphoray_pvars + 0x18) != 0)
                 queue_dialogue_message(0x53e0, -1);
             else
                 queue_dialogue_message(0x36b2, -1);
@@ -532,11 +532,11 @@ void morphoray_update(struct Moby *moby) {
             mark_moby_for_removal(moby);
             return;
         }
-        *(u16 *)(o + 0x34) |= 0x41;
+        *(u16 *)(moby_bytes + 0x34) |= 0x41;
         break;
     case MORPHORAY_APPROACH_ZERO_AND_REMOVE:
-        approach_value((f32 *)(o + 0x2c), 0.0f, *(f32 *)(*(u8 **)(o + 0x24) + 0x24) * 0.02f);
-        if (*(f32 *)(o + 0x2c) == 0.0f)
+        approach_value((f32 *)(moby_bytes + 0x2c), 0.0f, *(f32 *)(*(u8 **)(moby_bytes + 0x24) + 0x24) * 0.02f);
+        if (*(f32 *)(moby_bytes + 0x2c) == 0.0f)
             mark_moby_for_removal(moby);
         break;
     }
