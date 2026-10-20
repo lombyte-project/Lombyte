@@ -76,8 +76,8 @@ extern int hero_slot_item_id(int) __asm__("FUN_L00_0020d498");
 int hero_idle_sequence(int a) __asm__("FUN_L00_00205000");
 int hero_idle_sequence(int a) {
     struct Hero *g = &hero;
-    int c = g->vehicle_mode;
-    if (c == 2 || (c < 3 ? c == 1 : c == 3)) {
+    int vehicle_mode = g->vehicle_mode;
+    if (vehicle_mode == 2 || (vehicle_mode < 3 ? vehicle_mode == 1 : vehicle_mode == 3)) {
         return 0;
     }
     {
