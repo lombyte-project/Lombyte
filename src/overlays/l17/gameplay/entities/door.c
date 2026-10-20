@@ -466,7 +466,7 @@ void FUN_L17_002eaae0(char *rot, char *from, char *moby, int icon, long color, i
     float len;
     float side;
     int x, y;
-    IconEC5D0 *t;
+    IconEC5D0 *radar_icon_definition;
 
     qzero(turn);
     turn[2] = *(float *)(rot + 8);
@@ -485,18 +485,18 @@ void FUN_L17_002eaae0(char *rot, char *from, char *moby, int icon, long color, i
     y = func_001FA898_r(-pos[1]);
     if (len < 46.0f) {
         if (len > 38.0f) {
-            float f;
+            float alpha_distance_product;
             len = 46.0f - len;
-            f = convert_integer_to_float(((unsigned long)color >> 24) & 0xFF) * len;
+            alpha_distance_product = convert_integer_to_float(((unsigned long)color >> 24) & 0xFF) * len;
             color &= 0xFFFFFF;
-            color = (func_001FA898_r(f * 0.125f) << 24) | color;
+            color = (func_001FA898_r(alpha_distance_product * 0.125f) << 24) | color;
         }
-        t = &D_L17_001D9B38[icon];
+        radar_icon_definition = &D_L17_001D9B38[icon];
         y -= 0x50;
         y += *(int *)(frame_size);
         x += 0x1B0;
-        draw_textured_quad(x - t->x, y - t->y, t->w, t->h, t->u, t->v, t->w, t->h, color,
-                           get_effect_texture(tex + 0x28 + t->tex));
+        draw_textured_quad(x - radar_icon_definition->x, y - radar_icon_definition->y, radar_icon_definition->w, radar_icon_definition->h, radar_icon_definition->u, radar_icon_definition->v, radar_icon_definition->w, radar_icon_definition->h, color,
+                           get_effect_texture(tex + 0x28 + radar_icon_definition->tex));
     }
 }
 /* Walks the moby list: picks the on-screen target, marks targetable mobys and points an arrow at the nearest pickup. */
