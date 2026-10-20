@@ -117,62 +117,62 @@ extern OvlVec4 D_L09_00173FE0;
  * from the hero until the timer runs out) bursts into five sparks and a
  * flash, damages around the hit and is removed.
  */
-void FUN_L09_00307d68(struct Moby *m)
+void FUN_L09_00307d68(struct Moby *projectile_moby)
 {
     OvlVec4 old;
     CollisionProbe_307d68 pr;
     OvlVec4 push;
     OvlVec4 r;
-    ShotVars_307ba8 *v = (ShotVars_307ba8 *)m->pvars;
+    ShotVars_307ba8 *v = (ShotVars_307ba8 *)projectile_moby->pvars;
     CollisionProbe_307d68 *probe;
-    f32 d;
+    f32 distance_to_hero;
     s32 i;
 
-    d = distance_307d68(&m->pos, &D_0013F3D0_307d68);
-    qcopy(&old, &m->pos);
-    add_vector_xyz_307d68(&m->pos, &m->pos, &v->vel);
-    if (v->unk28 == 0 && v->unk24 != 0 && v->dist < d && d < 3.0f) {
-        allocate_voice_307d68(0, 0, m);
+    distance_to_hero = distance_307d68(&projectile_moby->pos, &D_0013F3D0_307d68);
+    qcopy(&old, &projectile_moby->pos);
+    add_vector_xyz_307d68(&projectile_moby->pos, &projectile_moby->pos, &v->vel);
+    if (v->unk28 == 0 && v->unk24 != 0 && v->dist < distance_to_hero && distance_to_hero < 3.0f) {
+        allocate_voice_307d68(0, 0, projectile_moby);
         v->unk28 = 1;
     }
-    if (d < v->dist)
+    if (distance_to_hero < v->dist)
         v->unk24 = 1;
-    v->dist = d;
-    if (m->pos.x < 2.0f || 1021.0f < m->pos.x || m->pos.y < 2.0f || 1021.0f < m->pos.y
-        || m->pos.z < 2.0f || 1021.0f < m->pos.z
-        || 255.0f < FUN_001f9b80_307d68(&m->pos, &D_L09_00166F40_307d68)) {
-        mark_moby_for_removal_307d68(m);
+    v->dist = distance_to_hero;
+    if (projectile_moby->pos.x < 2.0f || 1021.0f < projectile_moby->pos.x || projectile_moby->pos.y < 2.0f || 1021.0f < projectile_moby->pos.y
+        || projectile_moby->pos.z < 2.0f || 1021.0f < projectile_moby->pos.z
+        || 255.0f < FUN_001f9b80_307d68(&projectile_moby->pos, &D_L09_00166F40_307d68)) {
+        mark_moby_for_removal_307d68(projectile_moby);
         return;
     }
 
     probe = 0;
-    if (m->command == 0) {
+    if (projectile_moby->command == 0) {
         pr.mask = 0x70001;
         pr.radius = 3.0f;
-        pr.self = m;
+        pr.self = projectile_moby;
         pr.unk20 = 1;
         qcopy(&pr.dir, &v->vel);
-        subtract_vector_xyz_307d68(&pr.dir, &m->pos, &D_0013F3D0_307d68);
+        subtract_vector_xyz_307d68(&pr.dir, &projectile_moby->pos, &D_0013F3D0_307d68);
         FUN_001f9c48_307d68(&pr.dir, &pr.dir, 1.0f);
         probe = &pr;
         pr.dir.f[2] = 1.0f;
         pr.dir.f[3] = 5627.9248f;
         pr.unk18 = 1;
         pr.unk19 = 3;
-        pr.oclass = m->oclass;
+        pr.oclass = projectile_moby->oclass;
     }
-    if (tick_countdown_16_307d68(&v->life) && m->command == 0) {
-        m->command = 1;
+    if (tick_countdown_16_307d68(&v->life) && projectile_moby->command == 0) {
+        projectile_moby->command = 1;
         v->life = v->life_max / 4;
-    } else if (v->life <= 0 && m->command != 0) {
-        mark_moby_for_removal_307d68(m);
+    } else if (v->life <= 0 && projectile_moby->command != 0) {
+        mark_moby_for_removal_307d68(projectile_moby);
         return;
     }
-    if (collision_line_307d68(&old, &m->pos, 0, v->owner, probe) == 0)
+    if (collision_line_307d68(&old, &projectile_moby->pos, 0, v->owner, probe) == 0)
         return;
 
-    qcopy(&m->pos, &D_L09_00173FE0);
-    if (m->command == 0) {
+    qcopy(&projectile_moby->pos, &D_L09_00173FE0);
+    if (projectile_moby->command == 0) {
         for (i = 0; i < 5; i++) {
             r.q = 0;
             r.f[0] = random_float_between_307d68(-1.0f, 1.0f);
@@ -183,13 +183,13 @@ void FUN_L09_00307d68(struct Moby *m)
             normalize_vector_xyz_307d68(&push, &push, vector_length_xyz_307d68(&r) * 0.5f);
             add_vector_xyz_307d68(&push, &r, &push);
             normalize_vector_xyz_307d68(&push, &push, random_float_between_307d68(frame_time * 3.0f, frame_time * 6.0f));
-            FUN_L00_0026dd20_307d68(&m->pos, &push, 0x7F2F4F6F,
+            FUN_L00_0026dd20_307d68(&projectile_moby->pos, &push, 0x7F2F4F6F,
                                     random_int_between_307d68(scale_game_frames_307d68(10), scale_game_frames_307d68(15)), 60000.0f);
         }
     }
-    FUN_L00_0025e450_307d68(m, v, 0, 0.0f, 0.0f, 4, 3, 6, 1.1f, 0.6f, 1.0f, -1, 0.9f, 0.0f, 0, 1, -1, 0);
-    FUN_L00_001f2868_307d68(1.1f, &m->pos, 0x10, m, probe);
-    mark_moby_for_removal_307d68(m);
+    FUN_L00_0025e450_307d68(projectile_moby, v, 0, 0.0f, 0.0f, 4, 3, 6, 1.1f, 0.6f, 1.0f, -1, 0.9f, 0.0f, 0, 1, -1, 0);
+    FUN_L00_001f2868_307d68(1.1f, &projectile_moby->pos, 0x10, projectile_moby, probe);
+    mark_moby_for_removal_307d68(projectile_moby);
 }
 extern s32 FUN_L00_002591d0_30a778(struct Moby **, s32, s32, s32) __asm__("FUN_L00_002591d0");
 extern void FUN_00212ed8_30a778(struct Moby *, s32, s32) __asm__("FUN_00212ed8");
