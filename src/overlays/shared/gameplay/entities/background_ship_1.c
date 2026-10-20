@@ -782,38 +782,38 @@ extern short D_L02_0016238C;
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 float absolute_float(float input) __asm__("func_001F99C0");
 
-void FUN_L02_002fa7c8(char *m) {
+void FUN_L02_002fa7c8(char *candidate_moby) {
     float v[4];
     char *g = D_L02_00167280_c;
     char *p = *(char **)(g + 0x180);
     char *h;
-    float d;
-    float f;
+    float vector_distance;
+    float accumulated_amount;
     float ang;
     if (*(short *)(p + 0x86) == 0) {
         if (!(0.05f < absolute_float(*(float *)(D_0013CA44)))) {
             h = g + 0x380;
-            subtract_vector_xyz(v, m + 0x10, &hero.motion.pos);
-            d = vector_length_xyz(v);
-            if (d < 22.0f) {
-                if (0.0f < d) {
-                    if (d < *(float *)(h + 8)) {
+            subtract_vector_xyz(v, candidate_moby + 0x10, &hero.motion.pos);
+            vector_distance = vector_length_xyz(v);
+            if (vector_distance < 22.0f) {
+                if (0.0f < vector_distance) {
+                    if (vector_distance < *(float *)(h + 8)) {
                         if (0.0f < v[2]) {
-                            ang = 1.5707964f - fast_arc_sin(dot_vectors_xyz(p, v) / d);
+                            ang = 1.5707964f - fast_arc_sin(dot_vectors_xyz(p, v) / vector_distance);
                             if (ang < 1.1170107f) {
-                                subtract_vector_xyz(v, m + 0x10, p + 0x30);
-                                d = vector_length_xyz(v);
-                                if (d == 0.0f) {
-                                    d = 0.0001f;
+                                subtract_vector_xyz(v, candidate_moby + 0x10, p + 0x30);
+                                vector_distance = vector_length_xyz(v);
+                                if (vector_distance == 0.0f) {
+                                    vector_distance = 0.0001f;
                                 }
-                                ang = 1.5707964f - fast_arc_sin(dot_vectors_xyz(p, v) / d);
+                                ang = 1.5707964f - fast_arc_sin(dot_vectors_xyz(p, v) / vector_distance);
                                 if (ang < 0.62831855f) {
-                                    f = *(float *)(h + 0xC) + *(float *)&D_L02_0016238C;
+                                    accumulated_amount = *(float *)(h + 0xC) + *(float *)&D_L02_0016238C;
                                     *(char **)(g + 0x380) = p;
-                                    *(float *)(h + 8) = d;
-                                    *(char **)(h + 4) = m;
-                                    *(float *)(h + 0xC) = f;
-                                    if (1.0f < f) {
+                                    *(float *)(h + 8) = vector_distance;
+                                    *(char **)(h + 4) = candidate_moby;
+                                    *(float *)(h + 0xC) = accumulated_amount;
+                                    if (1.0f < accumulated_amount) {
                                         *(float *)(h + 0xC) = 1.0f;
                                     }
                                 }
