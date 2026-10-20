@@ -241,12 +241,12 @@ void handle_pause_input(void) {
         hud_keep_visible(x, FUN_001f96f8_c(0xB4));
     }
     if (D_L00_00184214) {
-        struct UsageStats *h = &usage_stats;
-        if (h->stat[9].count < 0xFFFF)
-            h->stat[9].count++;
-        if (FUN_001f96f8_c(D_0015EEA4) / 600 > h->stat[9].unk2)
-            h->stat[9].unk2 = FUN_001f96f8_c(D_0015EEA4) / 600;
-        h->stat[9].level_mask = h->stat[9].level_mask | (1 << current_level_index) | 0x80000000;
+        struct UsageStats *usage_stats_ptr = &usage_stats;
+        if (usage_stats_ptr->stat[9].count < 0xFFFF)
+            usage_stats_ptr->stat[9].count++;
+        if (FUN_001f96f8_c(D_0015EEA4) / 600 > usage_stats_ptr->stat[9].unk2)
+            usage_stats_ptr->stat[9].unk2 = FUN_001f96f8_c(D_0015EEA4) / 600;
+        usage_stats_ptr->stat[9].level_mask = usage_stats_ptr->stat[9].level_mask | (1 << current_level_index) | 0x80000000;
     }
     if (D_L00_0015F630) {
         D_L00_0015F630 = 0;
