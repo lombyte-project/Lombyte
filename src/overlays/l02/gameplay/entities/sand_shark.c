@@ -3505,11 +3505,11 @@ void rocks_update(struct Moby *moby) {
         ROCKS_INITIALIZE = 0,
         ROCKS_WAIT_FOR_HIT = 1
     };
-    char *h;
+    char *hit_record;
     int i;
     int j;
 
-    h = find_moby_hit(moby, 0x800000, 0);
+    hit_record = find_moby_hit(moby, 0x800000, 0);
     switch (moby->state) {
     case ROCKS_INITIALIZE:
         if (menu_item_enabled_9) {
@@ -3519,7 +3519,7 @@ void rocks_update(struct Moby *moby) {
         }
         break;
     case ROCKS_WAIT_FOR_HIT:
-        if (h) {
+        if (hit_record) {
             menu_item_enabled_9 = 1;
             FUN_0022da68(0, 0, (int)moby);
             /* Statement-expression bodies: their temporaries share stack slots with the second loop's, as in retail. */
