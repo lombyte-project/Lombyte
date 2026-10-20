@@ -1326,6 +1326,8 @@ void helicopter_update(struct Moby *moby) {
         HELICOPTER_INITIALIZE = 0,
         HELICOPTER_WAIT_FOR_ACTIVATION = 1,
         HELICOPTER_FOLLOW_ENTRY_PATH = 2,
+        HELICOPTER_APPROACH_AREA_PATH = 3,
+        HELICOPTER_HOLD_POSITION_WAIT_FOR_TARGET = 4,
         HELICOPTER_ENGAGE_AND_FIRE = 5,
         HELICOPTER_RECOIL = 6,
         HELICOPTER_DEATH_EFFECTS = 7,
@@ -1511,7 +1513,7 @@ void helicopter_update(struct Moby *moby) {
         }
         break;
     }
-    case 3: {
+    case HELICOPTER_APPROACH_AREA_PATH: {
         UPath *path;
         int i;
         float best = 9999.999f;
@@ -1541,7 +1543,7 @@ void helicopter_update(struct Moby *moby) {
         }
         break;
     }
-    case 4: {
+    case HELICOPTER_HOLD_POSITION_WAIT_FOR_TARGET: {
         UPath *path;
         path = D_L15_001B0AB0[vars->area_path];
         move.q = *(u128 *)&moby->pos;
