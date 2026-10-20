@@ -797,8 +797,8 @@ end:
     idx = *(int *)(data + 0x204);
     if (idx >= 0) {
         if (idx != -1) {
-            char *e = D_0013E633 - 0xE80 + idx * 0x70;
-            if (*(char **)(e + 0x88) == moby && *(unsigned char *)(e + 0x74) != 0) {
+            char *voice_slot_entry = D_0013E633 - 0xE80 + idx * 0x70;
+            if (*(char **)(voice_slot_entry + 0x88) == moby && *(unsigned char *)(voice_slot_entry + 0x74) != 0) {
                 release_voice_slot(idx);
             }
         }
