@@ -951,7 +951,7 @@ void FUN_L15_002d8e48(void *mv) {
     V2d8e48 mat[4];
     V2d8e48 *pos;
     unsigned int c;
-    float s;
+    float quad_scale;
     int i;
     pos = *(V2d8e48 **)((char *)mv + 0x78);
     quad.tex = tex_2d8e48(0xB);
@@ -973,9 +973,9 @@ void FUN_L15_002d8e48(void *mv) {
     quad.color[2] = c;
     quad.color[1] = c;
     quad.color[0] = c;
-    s = D_L15_00161CB4 + rnd_2d8e48(0.0f, 0.025f);
+    quad_scale = D_L15_00161CB4 + rnd_2d8e48(0.0f, 0.025f);
     for (i = 0; i < 4; i++) {
-        fast_vec_scale(s, &quad.corner[i], &D_L15_001D36F0[i]);
+        fast_vec_scale(quad_scale, &quad.corner[i], &D_L15_001D36F0[i]);
         xform_2d8e48(&quad.corner[i], &quad.corner[i], &mat[0]);
         quad.uv[i].u = D_L15_001D3730[i].u;
         quad.uv[i].v = D_L15_001D3730[i].v;
@@ -986,9 +986,9 @@ void FUN_L15_002d8e48(void *mv) {
     quad.color[2] = c;
     quad.color[1] = c;
     quad.color[0] = c;
-    s = D_L15_00161CB8 + rnd_2d8e48(0.0f, 0.05f);
+    quad_scale = D_L15_00161CB8 + rnd_2d8e48(0.0f, 0.05f);
     for (i = 0; i < 4; i++) {
-        fast_vec_scale(s, &quad.corner[i], &D_L15_001D36F0[i]);
+        fast_vec_scale(quad_scale, &quad.corner[i], &D_L15_001D36F0[i]);
         xform_2d8e48(&quad.corner[i], &quad.corner[i], &mat[0]);
         quad.uv[i].u = D_L15_001D3730[i].u;
         quad.uv[i].v = D_L15_001D3730[i].v;
