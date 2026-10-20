@@ -1147,21 +1147,21 @@ extern char *D_L14_0015FFD8_3920 __asm__("D_L14_0015FFD8");
 
 int FUN_L14_002b3920(int moby_list_index) {
     int count = 0;
-    short *p;
+    short *moby_list_entry;
 
     if (moby_list_index == -1)
         return 0;
-    p = D_L14_001ABF40_3920[moby_list_index];
-    if (p == 0)
+    moby_list_entry = D_L14_001ABF40_3920[moby_list_index];
+    if (moby_list_entry == 0)
         return 0;
     do {
-        unsigned short v = *(unsigned short *)p;
+        unsigned short v = *(unsigned short *)moby_list_entry;
         unsigned char *other = (unsigned char *)(D_L14_0015FFD8_3920 + ((v & 0x7FFF) << 8));
         if (*(short *)(other + 0xA6) == 0x1C) {
             if ((unsigned char)(other[0x20] - 5) <= 1)
                 count++;
         }
-    } while (*p++ >= 0);
+    } while (*moby_list_entry++ >= 0);
     return count;
 }
 /* Returns 0 if any listed moby of class 0x1C is in state 2, else 1. */
