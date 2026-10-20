@@ -431,23 +431,23 @@ f32 cam_interp_values(void *p, f32 to, f32 stiffness, f32 damping, f32 max,
                       f32 vel) __asm__("FUN_001ebd78");
 
 void FUN_L03_002ebc58(void *arg) {
-    char *m = arg;
-    char *d = *(char **)(m + 0x70);
-    float *p = (float *)(d + 0xB0);
-    float a[4];
+    char *camera = arg;
+    char *camera_data = *(char **)(camera + 0x70);
+    float *p = (float *)(camera_data + 0xB0);
+    float look_direction[4];
     float b[4];
-    float c[4];
-    qcopy(b, d);
-    p[2] = cam_interp_values(d + 0xBC, p[2], hero.motion.pos.f[2],
+    float look_offset[4];
+    qcopy(b, camera_data);
+    p[2] = cam_interp_values(camera_data + 0xBC, p[2], hero.motion.pos.f[2],
                              *(float *)&D_L03_00161E70, *(float *)&D_L03_00161E74, 0.0f);
-    normalize_vector_xyz(c, D_L03_00166F40, p[5]);
-    add_vector_xyz(b, c, b);
-    subtract_vector_xyz(a, b, m + 0x30);
-    normalize_vector_xyz(m, a, 1.0f);
-    qcopy(m + 0x40, m);
-    cross_vectors_xyz(m + 0x10, m, D_L03_00166F40 - 0x10);
-    normalize_vector_xyz(m + 0x10, m + 0x10, 1.0f);
-    cross_vectors_xyz(m + 0x20, m + 0x10, m);
+    normalize_vector_xyz(look_offset, D_L03_00166F40, p[5]);
+    add_vector_xyz(b, look_offset, b);
+    subtract_vector_xyz(look_direction, b, camera + 0x30);
+    normalize_vector_xyz(camera, look_direction, 1.0f);
+    qcopy(camera + 0x40, camera);
+    cross_vectors_xyz(camera + 0x10, camera, D_L03_00166F40 - 0x10);
+    normalize_vector_xyz(camera + 0x10, camera + 0x10, 1.0f);
+    cross_vectors_xyz(camera + 0x20, camera + 0x10, camera);
 }
 
 
