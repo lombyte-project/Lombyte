@@ -1009,8 +1009,8 @@ void FUN_L00_00217368(int voice_target, int entry_count) {
             *(int *)(hero_base + 0xA64) = 1;
         }
         for (i = 0; i < entry_count; i++) {
-            int *m = D_L00_00177F00[i];
-            int entry_type = (m && (m = (int *)m[9])) ? *(short *)((char *)m + 0x46) : 0;
+            int *entry_type_lookup_pointer = D_L00_00177F00[i];
+            int entry_type = (entry_type_lookup_pointer && (entry_type_lookup_pointer = (int *)entry_type_lookup_pointer[9])) ? *(short *)((char *)entry_type_lookup_pointer + 0x46) : 0;
             if (entry_type == 5 || entry_type == 9) {
                 float v[4] __attribute__((aligned(16)));
                 qcopy(v, (char *)D_L00_00177F00[i] + 0x10);
