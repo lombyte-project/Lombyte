@@ -145,6 +145,7 @@ void FUN_L05_00255960(void) {
         HERO_STATE_LEDGE_SHIMMY_NEGATIVE_YAW_OFFSET = 27,
         HERO_STATE_LEDGE_JUMP = 28,
         HERO_STATE_JUMP_ENABLED_RESPAWN_WAIT = 104,
+        HERO_STATE_JUMP_FROM_RESPAWN_WAIT = 105,
         HERO_STATE_ANIMATION_END_RESPAWN_WAIT = 106,
         HERO_STATE_BELOW_LEVEL_RESPAWN_WAIT = 119,
         HERO_STATE_HEIGHT_OR_TIMEOUT_RESPAWN_WAIT = 123,
@@ -1518,7 +1519,7 @@ void FUN_L05_00255960(void) {
                 case 18:
                 case HERO_STATE_LEDGE_JUMP:
                 case 60:
-                case 105:
+                case HERO_STATE_JUMP_FROM_RESPAWN_WAIT:
                     if (hero.unk4AE != 0) {
                         int t = FUN_L00_00221d98();
                         if (t > 0 && (hero.state_timer < t || hero.unk418 != 0) &&
