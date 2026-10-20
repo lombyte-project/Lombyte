@@ -2696,57 +2696,57 @@ extern int collision_hit_material(void) __asm__("FUN_001f0b58");
 extern void FUN_L00_002715e8(void *, int, int, float, float);
 extern void FUN_L00_002741a0(void *, int, float, float);
 
-void FUN_L00_0026f660(char *m) {
-    char *b = m + 0x20;
+void FUN_L00_0026f660(char *particle) {
+    char *b = particle + 0x20;
     int mode = *(int *)(b + 0x10);
-    V tmp;
-    char *q;
+    V next_position;
+    char *particle_position;
 
     if (mode == 0) {
-        fast_vec_add(m + 0x10, m + 0x10, b);
+        fast_vec_add(particle + 0x10, particle + 0x10, b);
     } else if (mode == 1) {
-        q = m + 0x10;
-        fast_vec_add(&tmp, q, b);
-        if (func_L00_001EFFF0(q, &tmp, 2, 0, 0)) {
+        particle_position = particle + 0x10;
+        fast_vec_add(&next_position, particle_position, b);
+        if (func_L00_001EFFF0(particle_position, &next_position, 2, 0, 0)) {
             if (collision_hit_material() == 0) {
                 FUN_L00_002715e8(&D_L00_00173E60, 0, -1, 0.2f, 5250.0f);
             }
-            free_effect_particle(m);
+            free_effect_particle(particle);
             return;
         }
-        qcopy(q, &tmp);
+        qcopy(particle_position, &next_position);
     } else if (mode == 3) {
         float lim;
-        q = m + 0x10;
-        fast_vec_add(q, q, b);
+        particle_position = particle + 0x10;
+        fast_vec_add(particle_position, particle_position, b);
         lim = hero.water_surface_z;
-        if (*(float *)(m + 0x18) < lim) {
-            *(float *)(m + 0x18) = lim;
-            FUN_L00_002715e8(q, 0, -1, 0.2f, 5250.0f);
-            free_effect_particle(m);
+        if (*(float *)(particle + 0x18) < lim) {
+            *(float *)(particle + 0x18) = lim;
+            FUN_L00_002715e8(particle_position, 0, -1, 0.2f, 5250.0f);
+            free_effect_particle(particle);
             return;
         }
     } else {
-        q = m + 0x10;
-        fast_vec_add(&tmp, q, b);
-        if (func_L00_001EFFF0(q, &tmp, 2, 0, 0)) {
+        particle_position = particle + 0x10;
+        fast_vec_add(&next_position, particle_position, b);
+        if (func_L00_001EFFF0(particle_position, &next_position, 2, 0, 0)) {
             if (collision_hit_material() != 0) {
                 int *d = D_L00_00173E40;
                 *(float *)((char *)d + 0x28) += 0.05f;
                 FUN_L00_002741a0(d + 8, -1, 0.25f, 3150.0f);
             }
-            free_effect_particle(m);
+            free_effect_particle(particle);
             return;
         }
-        qcopy(q, &tmp);
+        qcopy(particle_position, &next_position);
     }
     *(float *)(b + 8) -= *(float *)(b + 0x1C);
-    *(unsigned char *)(m + 8) += 2;
+    *(unsigned char *)(particle + 8) += 2;
     *(int *)(b + 0x14) -= 1;
-    if (*(int *)(b + 0x14) <= 0 || *(float *)(m + 0x18) < *(float *)(b + 0x18)) {
-        *(int *)(m + 4) += 0xF0000000;
-        if (*(int *)(m + 4) < 0) {
-            free_effect_particle(m);
+    if (*(int *)(b + 0x14) <= 0 || *(float *)(particle + 0x18) < *(float *)(b + 0x18)) {
+        *(int *)(particle + 4) += 0xF0000000;
+        if (*(int *)(particle + 4) < 0) {
+            free_effect_particle(particle);
         }
     }
 }
