@@ -3066,29 +3066,29 @@ void FUN_L17_002f0210(struct Moby *moby) {
         ROBOT_DOG_STATE_FALL_THEN_REMOVE = 15
     };
     char *data;
-    int n;
+    int glow_pulse_period_frames;
     int alpha;
     int mode;
     int i;
     int x, y, z;
     int r, g, b;
-    float f;
+    float glow_pulse_sine;
     int color;
 
     /* Period and base colour by state range; both ranges have the same values in this build. */
     if (moby->state < 16) {
-        n = 0xAA;
+        glow_pulse_period_frames = 0xAA;
         r = 0x32;
         g = 0xB4;
         b = 0x14;
     } else {
-        n = 0xAA;
+        glow_pulse_period_frames = 0xAA;
         r = 0x32;
         g = 0xB4;
         b = 0x14;
     }
     data = (char *)moby->pvars;
-    n = scale_game_frames(n);
+    glow_pulse_period_frames = scale_game_frames(glow_pulse_period_frames);
     alpha = 0x80;
     mode = 0;
     switch (moby->state) {
@@ -3113,15 +3113,15 @@ void FUN_L17_002f0210(struct Moby *moby) {
     }
     if (mode >= 0) {
         if (mode == 2) {
-            n = scale_game_frames(0x32);
+            glow_pulse_period_frames = scale_game_frames(0x32);
         } else if (mode == 1) {
-            n = scale_game_frames(0x5A);
+            glow_pulse_period_frames = scale_game_frames(0x5A);
         }
-        f = fast_sin(((float)(D_L17_0015F5CC % n) / convert_integer_to_float(n)) * 2.0f * 3.1415927f +
+        glow_pulse_sine = fast_sin(((float)(D_L17_0015F5CC % glow_pulse_period_frames) / convert_integer_to_float(glow_pulse_period_frames)) * 2.0f * 3.1415927f +
                      -3.1415927f);
-        x = func_001FA898_r(f * 20.0f);
-        y = func_001FA898_r(f * 70.0f);
-        z = func_001FA898_r(f * 10.0f);
+        x = func_001FA898_r(glow_pulse_sine * 20.0f);
+        y = func_001FA898_r(glow_pulse_sine * 70.0f);
+        z = func_001FA898_r(glow_pulse_sine * 10.0f);
         r += x;
         g += y;
         b += z;
