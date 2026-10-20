@@ -33,7 +33,7 @@ void draw_light_quads(void) __asm__("FUN_001f4880");
 
 extern LightRec D_0018E340[];
 void draw_light_quads(void) {
-    FRow m[4];
+    FRow quad_vertices[4];
     int colors[4];
     float uv[4][2];
     unsigned long pkt[4];
@@ -51,24 +51,24 @@ void draw_light_quads(void) {
         colors[j] = 0x40808080;
     }
     for (i = 0; i < effect_quad_count; i++) {
-        float s;
+        float radius;
         int k;
 
         qcopy(&dir, &D_0018E340[i].dir);
         fast_vec_normalize(&dir, &dir, 1.0f);
-        s = D_0018E340[i].pos.v[3];
+        radius = D_0018E340[i].pos.v[3];
         for (k = 0; k < 4; k++) {
             float cx = D_0018CAA0[k].v[0];
             float vx = dir.v[0];
             float cy = D_0018CAA0[k].v[1];
-            float d = cx * vx + cy * dir.v[1];
+            float corner_normal_dot = cx * vx + cy * dir.v[1];
 
-            qcopy(&m[k], &D_0018E340[i].pos);
-            m[k].v[0] += (cx - vx * d) * s;
-            m[k].v[1] += (cy - dir.v[1] * d) * s;
-            m[k].v[2] -= dir.v[2] * d * s;
+            qcopy(&quad_vertices[k], &D_0018E340[i].pos);
+            quad_vertices[k].v[0] += (cx - vx * corner_normal_dot) * radius;
+            quad_vertices[k].v[1] += (cy - dir.v[1] * corner_normal_dot) * radius;
+            quad_vertices[k].v[2] -= dir.v[2] * corner_normal_dot * radius;
         }
-        fast_draw_quad_real(m, 0, 0);
+        fast_draw_quad_real(quad_vertices, 0, 0);
     }
 }
 
