@@ -3309,7 +3309,7 @@ void FUN_L00_00270948(M_270948 *particle) {
     C_270948 collision_parameters;
     E_270948 *e = &particle->e;
     M_270948 *spawned_particle;
-    f32 r, nr, a, s;
+    f32 r, nr, alpha_factor, s;
     s32 hit;
     u8 fl;
 
@@ -3381,15 +3381,15 @@ void FUN_L00_00270948(M_270948 *particle) {
     s = FUN_001fa6c0_c(e->h14);
     {
         f32 d = (f32)(s32)(8.0f / (D_0015ED60 * 0.443f));
-        a = 0.08f / d * D_0015ED60 * (s / d) + 0.08f;
+        alpha_factor = 0.08f / d * D_0015ED60 * (s / d) + 0.08f;
     }
-    if (a < 0.0f)
-        a = 0.0f;
-    if (0.08f < a)
-        a = 0.08f;
+    if (alpha_factor < 0.0f)
+        alpha_factor = 0.0f;
+    if (0.08f < alpha_factor)
+        alpha_factor = 0.08f;
     if (e->b18 & 8)
-        a /= (f32)e->h16 / 7.0f + 1.0f;
-    particle->x4 = (particle->x4 & 0xFFFFFF) | (FUN_001fa6d0_c(a * 256.0f) << 24);
+        alpha_factor /= (f32)e->h16 / 7.0f + 1.0f;
+    particle->x4 = (particle->x4 & 0xFFFFFF) | (FUN_001fa6d0_c(alpha_factor * 256.0f) << 24);
     e->v.f[2] += frame_scale_sq * 0.008f;
     if (e->h14 > FUN_001f96f8_c(0x19) || (e->b18 & 8)) {
         e->v.f[0] *= 0.95f;
