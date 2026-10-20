@@ -5,8 +5,8 @@
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/gameplay/vendor/render_vendor_buy_label_pass/FUN_00238f08.s", FUN_00238f08);
 #else
-/* Near miss, 14 rows: the argument setup order at the first call and one extra %hi for
-   vendor_item_prices. */
+/* Near miss, 5 rows: retail computes the %hi of vendor_item_prices once before the first
+   purchase_kind test; this computes it in the ammo test and copies it for the other path. */
 /* Ported from rac1-decomp (src/game/vendor.c: func_0023A220). */
 #include "sda.h"
 #include "rnc/gameplay/state/item_state.h"
@@ -43,6 +43,7 @@ void render_vendor_buy_label_pass(char *unused, int width, int height) {
     struct VendorState *vendor;
     int message_id;
     int price;
+    int saved;
     /* Fakematch: the entry size in a variable keeps a multiply in the first test. */
     int pricing_size = sizeof(struct VendorItemPricing);
 
@@ -61,7 +62,11 @@ void render_vendor_buy_label_pass(char *unused, int width, int height) {
                                               vendor_state.entries[vendor_state.selected_entry]
                                                       .item_index *
                                                   pricing_size))
-                    ->ammo_capacity) {
+                    ->ammo_capacity &&
+            /* Fakematch: a load/store pair that reload_cse deletes; it fixes the call argument
+               order. */
+            (saved = vendor_state.discount_ammo_pricing,
+             vendor_state.discount_ammo_pricing = saved, 1)) {
             message_id = 0x5233;
         } else {
             vendor = &vendor_state;
