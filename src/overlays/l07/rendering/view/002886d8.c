@@ -20,7 +20,7 @@ int get_target_sight(char *source_moby, char *sight_out, float best) {
     int res;
     int i;
     int j;
-    float d;
+    float candidate_metric;
 
     target_moby = ((char *)g->moby);
     res = 0;
@@ -40,10 +40,10 @@ int get_target_sight(char *source_moby, char *sight_out, float best) {
             continue;
         if (*(unsigned char *)(candidate_moby + 0x20) != 3)
             continue;
-        d = FUN_001f9b80_25fcb8(source_moby + 0x10, candidate_moby + 0x10);
-        if (d < best) {
+        candidate_metric = FUN_001f9b80_25fcb8(source_moby + 0x10, candidate_moby + 0x10);
+        if (candidate_metric < best) {
             target_moby = candidate_moby;
-            best = d;
+            best = candidate_metric;
             res = 1;
         }
     }
@@ -59,10 +59,10 @@ int get_target_sight(char *source_moby, char *sight_out, float best) {
             continue;
         if (*(unsigned char *)(candidate_moby + 0xBC) == 0)
             continue;
-        d = FUN_001f9b80_25fcb8(source_moby + 0x10, candidate_moby + 0x10);
-        if (d < best) {
+        candidate_metric = FUN_001f9b80_25fcb8(source_moby + 0x10, candidate_moby + 0x10);
+        if (candidate_metric < best) {
             target_moby = candidate_moby;
-            best = d;
+            best = candidate_metric;
             res = 1;
         }
     }
