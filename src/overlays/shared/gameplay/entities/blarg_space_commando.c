@@ -632,29 +632,29 @@ extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
 
 extern float D_L06_00161FD4 __attribute__((sda));
 extern int D_L06_00161FD8 __attribute__((sda));
-void FUN_L06_002ff100(char *m) {
-    char *d = *(char **)(m + 0x78);
+void FUN_L06_002ff100(char *moby) {
+    char *vars = *(char **)(moby + 0x78);
     float v[4];
     int i;
-    probe_ground_height(m + 0x10, 0, 0.5f);
-    normalize_vector_xyz(d + 0x220, D_L06_00174600_d, 1.0f);
-    add_vector_xyz_cf(m, 0, d + 0x210);
-    *(float *)(d + 0x218) = *(float *)(m + 0x18);
+    probe_ground_height(moby + 0x10, 0, 0.5f);
+    normalize_vector_xyz(vars + 0x220, D_L06_00174600_d, 1.0f);
+    add_vector_xyz_cf(moby, 0, vars + 0x210);
+    *(float *)(vars + 0x218) = *(float *)(moby + 0x18);
     for (i = 0; i < 16; i++) {
-        float f = convert_integer_to_float(i) * 0.0625f - 0.5f;
-        f = f * (D_L06_00161FD4 * 0.017453292f);
-        v[0] = fast_cos(fast_add_rotations(f, *(float *)(m + 0x48))) * 0.2f;
-        v[1] = fast_sin_c(fast_add_rotations(f, *(float *)(m + 0x48))) * 0.2f;
+        float angle_offset = convert_integer_to_float(i) * 0.0625f - 0.5f;
+        angle_offset = angle_offset * (D_L06_00161FD4 * 0.017453292f);
+        v[0] = fast_cos(fast_add_rotations(angle_offset, *(float *)(moby + 0x48))) * 0.2f;
+        v[1] = fast_sin_c(fast_add_rotations(angle_offset, *(float *)(moby + 0x48))) * 0.2f;
         v[2] = 0.15f;
-        add_vector_xyz((float *)(d + 0x230 + i * 16), (float *)(d + 0x210), v);
+        add_vector_xyz((float *)(vars + 0x230 + i * 16), (float *)(vars + 0x210), v);
         if (i == 0 || i == 15) {
-            float *w = (float *)(d + 0x23C + i * 16);
+            float *w = (float *)(vars + 0x23C + i * 16);
             *w = *w = 0.0f;
         } else {
-            *(float *)(d + 0x23C + i * 16) = 1.0f;
+            *(float *)(vars + 0x23C + i * 16) = 1.0f;
         }
     }
-    *(float *)(d + 0x21C) = (float)scale_game_frames(D_L06_00161FD8);
+    *(float *)(vars + 0x21C) = (float)scale_game_frames(D_L06_00161FD8);
 }
 /* Shared moby update: steps the timer at 0x21C, spaces 16 entries, and runs the pair checks. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002FF000.c: func_L06_003006F8), where it is exact; names translated to the US level program. */
