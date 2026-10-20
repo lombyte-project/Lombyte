@@ -720,18 +720,18 @@ extern void FUN_L00_002e9ef0_v(void) __asm__("FUN_L00_002e9ef0");
 /* Sets s to 1 (2 if set), resets D_L00_00166C80, calls 002e9ef0, allocates a voice for its p. */
 void FUN_L00_002ea7a0(void) {
     S *g = &D_L00_00166C80;
-    S *h;
+    S *camera_globals;
     if (g->s == 0)
         g->s = 1;
     else
         g->s = 2;
-    h = &D_L00_00166C80;
-    h->c = 0;
-    h->f1 = 0.05f;
-    h->f0 = 0.05f;
+    camera_globals = &D_L00_00166C80;
+    camera_globals->c = 0;
+    camera_globals->f1 = 0.05f;
+    camera_globals->f0 = 0.05f;
     FUN_L00_002e9ef0_v();
-    if (h->p != 0)
-        allocate_voice_for_target_entry(0, 0, h->p);
+    if (camera_globals->p != 0)
+        allocate_voice_for_target_entry(0, 0, camera_globals->p);
 }
 typedef struct {
     unsigned char pad0[0x1C0];
