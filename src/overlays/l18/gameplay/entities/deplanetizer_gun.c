@@ -1487,11 +1487,11 @@ extern unsigned short *D_L18_001AC240_c[] __asm__("D_L18_001AC240");
 extern void FUN_L00_00263618(void *, int, float, float);
 
 void FUN_L18_002fca98(struct Moby *moby) {
-    unsigned short *p = D_L18_001AC240_c[moby->group];
-    if (p != 0) {
+    unsigned short *group_moby_entry = D_L18_001AC240_c[moby->group];
+    if (group_moby_entry != 0) {
         while (1) {
-            unsigned char *obj = D_L18_0015FFD8 + ((p[0] & 0x7FFF) << 8);
-            unsigned short *next = p + 1;
+            unsigned char *obj = D_L18_0015FFD8 + ((group_moby_entry[0] & 0x7FFF) << 8);
+            unsigned short *next = group_moby_entry + 1;
             if (*(short *)(obj + 0xA6) == 0x772 && obj[0x20] != 0 && obj[0x20] < 6) {
                 int i;
                 int col = (*(int *)(obj + 0x90) & 0xFFFFFF) + (*(int *)&D_L18_00162654 << 24);
@@ -1501,9 +1501,9 @@ void FUN_L18_002fca98(struct Moby *moby) {
                     FUN_L00_00263618(v, col, 0.175f, 0.08f);
                 }
             }
-            if (*(short *)p < 0)
+            if (*(short *)group_moby_entry < 0)
                 break;
-            p = next;
+            group_moby_entry = next;
         }
     }
 }
