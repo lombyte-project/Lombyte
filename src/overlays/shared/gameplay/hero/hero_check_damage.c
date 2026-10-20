@@ -3827,6 +3827,9 @@ static inline struct Hero *hero_ptr(void) { return &hero; }
 
 /* Steers the velocity's xy toward the move yaw at the target speed. */
 void FUN_L00_00213e68(f32 step) {
+    enum {
+        GRAVITY_MODE_WORLD_DOWN = 0
+    };
     struct Hero *player = &hero;
     f32 delta[4];
     Vec4 impulse;
@@ -3835,7 +3838,7 @@ void FUN_L00_00213e68(f32 step) {
     Vec4 *velocity;
 
     switch (player->unk20B3) {
-    case 0:
+    case GRAVITY_MODE_WORLD_DOWN:
         yaw = player->motion.move_yaw;
         speed = player->target_speed;
         if (player->state.control_mode == 4) {
