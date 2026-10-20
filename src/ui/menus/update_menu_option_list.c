@@ -13,17 +13,17 @@ extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 
 s32 update_menu_option_list(struct MenuScreen *m) __asm__("FUN_00220e28");
 
-s32 update_menu_option_list(struct MenuScreen *m) {
+s32 update_menu_option_list(struct MenuScreen *menu_screen) {
     s32 active;
     s32 old;
-    s32 t;
+    s32 remaining_fade_frames;
     s32 v;
 
-    active = menu_system.current->focus == m;
-    if (m->data.options.fade_timer != 0) {
-        t = m->data.options.fade_timer - 1;
-        v = t < 5 ? t : 4;
-        m->data.options.fade_timer = t;
+    active = menu_system.current->focus == menu_screen;
+    if (menu_screen->data.options.fade_timer != 0) {
+        remaining_fade_frames = menu_screen->data.options.fade_timer - 1;
+        v = remaining_fade_frames < 5 ? remaining_fade_frames : 4;
+        menu_screen->data.options.fade_timer = remaining_fade_frames;
         sequence = (f32)v * 0.25f;
         return 0;
     }
@@ -40,29 +40,29 @@ s32 update_menu_option_list(struct MenuScreen *m) {
             return -1;
         }
     }
-    old = m->data.options.selection;
+    old = menu_screen->data.options.selection;
     if ((controller_state.pressed_unmasked & PAD_UP) && old != 0) {
-        m->data.options.selection = old - 1;
+        menu_screen->data.options.selection = old - 1;
     }
-    if ((controller_state.pressed_unmasked & PAD_DOWN) && m->data.options.list[m->data.options.selection + 1].unk0 != 0) {
-        m->data.options.selection = m->data.options.selection + 1;
+    if ((controller_state.pressed_unmasked & PAD_DOWN) && menu_screen->data.options.list[menu_screen->data.options.selection + 1].unk0 != 0) {
+        menu_screen->data.options.selection = menu_screen->data.options.selection + 1;
     }
     if (controller_state.pressed_unmasked & PAD_CROSS) {
-        allocate_voice_for_target_entry(0, 0x11, m->moby);
-        if (m->data.options.list[m->data.options.selection].flags & 1) {
+        allocate_voice_for_target_entry(0, 0x11, menu_screen->moby);
+        if (menu_screen->data.options.list[menu_screen->data.options.selection].flags & 1) {
             if (requested_video_mode != 0) {
                 mode_freeze_init(6, menu_system.current);
             } else {
                 fade_to_black(4);
-                m->data.options.fade_timer = scale_game_frames(0x10);
+                menu_screen->data.options.fade_timer = scale_game_frames(0x10);
                 requested_video_mode = requested_video_mode == 0;
             }
-        } else if (m->data.options.list[m->data.options.selection].flag != 0) {
-            *m->data.options.list[m->data.options.selection].flag = *m->data.options.list[m->data.options.selection].flag == 0;
+        } else if (menu_screen->data.options.list[menu_screen->data.options.selection].flag != 0) {
+            *menu_screen->data.options.list[menu_screen->data.options.selection].flag = *menu_screen->data.options.list[menu_screen->data.options.selection].flag == 0;
         }
     }
-    if (m->data.options.selection != old) {
-        allocate_voice_for_target_entry(1, 0x11, m->moby);
+    if (menu_screen->data.options.selection != old) {
+        allocate_voice_for_target_entry(1, 0x11, menu_screen->moby);
     }
     return 0;
 }
