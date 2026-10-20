@@ -1727,9 +1727,9 @@ void machinegun_turret_update(char *moby) {
     float m80[16];
     float g0;
     float phase_angle, sine_input_angle, sine_scale, target_heading;
-    int r, rem, sel, c17, m52, d80;
-    char *p16;
-    char *p6;
+    int r, rem, sel, c17, m52, aiming_cuboid_index;
+    char *aiming_offset_vector;
+    char *aiming_base_point;
 
     data = *(char **)(moby + 0x78);
     func_L14_002B5590_2B4E40((unsigned char *)moby);
@@ -1829,13 +1829,13 @@ void machinegun_turret_update(char *moby) {
         phase_angle = func_001FA748_2B4E40(*(float *)(data + 0x8C), g0);
         *(float *)(data + 0x8C) = phase_angle;
         sine_input_angle = func_001FA748_2B4E40(phase_angle, *(float *)(data + 0x84) * 0.01745329238474369f);
-        d80 = *(int *)(data + 0x80);
-        p16 = D_L14_001600EC + (d80 << 7) + 0x10;
+        aiming_cuboid_index = *(int *)(data + 0x80);
+        aiming_offset_vector = D_L14_001600EC + (aiming_cuboid_index << 7) + 0x10;
         sine_scale = func_001F9FA8_2B4E40(sine_input_angle);
-        func_001F9C30_2B4E40(target_point_scratch, p16, sine_scale);
-        d80 = *(int *)(data + 0x80);
-        p6 = D_L14_001600EC + (d80 << 7) + 0x30;
-        func_001F9BD8_2B4E40(target_point_scratch, target_point_scratch, p6);
+        func_001F9C30_2B4E40(target_point_scratch, aiming_offset_vector, sine_scale);
+        aiming_cuboid_index = *(int *)(data + 0x80);
+        aiming_base_point = D_L14_001600EC + (aiming_cuboid_index << 7) + 0x30;
+        func_001F9BD8_2B4E40(target_point_scratch, target_point_scratch, aiming_base_point);
         target_heading = func_L00_001FF860_2B4E40(target_point_scratch[0] - *(float *)(moby + 0x10), target_point_scratch[1] - *(float *)(moby + 0x14));
         *(float *)(moby + 0x48) = target_heading;
         func_001F9938_2B4E40(data + 0x9C);
