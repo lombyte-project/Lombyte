@@ -428,7 +428,7 @@ float FUN_L01_0028bb90(float tangent_tension, float b, T_28b828 *path, int parti
 
     index = 0;
     while (index < count) {
-        float t;
+        float segment_parameter;
         float step;
         float segmentLength;
         int nextIndex;
@@ -437,23 +437,23 @@ float FUN_L01_0028bb90(float tangent_tension, float b, T_28b828 *path, int parti
         if (particles) {
             draw_number(1.0f, &currentNode, (int)moby, index % 15 + 2, 0x80108010, 0x7f, -1, 0xff);
         }
-        t = 0.05f;
+        segment_parameter = 0.05f;
         nextIndex = FUN_L01_0028b828(path, index + 1);
         segmentLength = 0.0f;
         nextNode.q = *(OvlQuad *)((char *)path->f10 + nextIndex * 16 + 0x10);
         *(int *)path = index;
         ((void (*)(void *, int *, float, float, int))FUN_L01_0028b8c8)(&nextTangent, (int *)path, tangent_tension, b, 1);
         previousPoint.q = currentNode.q;
-        step = t;
+        step = segment_parameter;
         do {
             if (particles) {
                 draw_number(0.2f, &previousPoint, (int)moby, 0, 0x80404080, 0x7f, -1, 0xff);
             }
-            FUN_L01_0028ba80(t, &point, &currentNode, &nextNode, &previousTangent, &nextTangent);
-            t += step;
+            FUN_L01_0028ba80(segment_parameter, &point, &currentNode, &nextNode, &previousTangent, &nextTangent);
+            segment_parameter += step;
             segmentLength += fast_vec_dist(&previousPoint, &point);
             previousPoint.q = point.q;
-        } while (t <= 1.0f);
+        } while (segment_parameter <= 1.0f);
         total += segmentLength;
         {
             char *nodeData = (char *)path->f10;
