@@ -2579,9 +2579,9 @@ extern u8 *vd_2e8648 __asm__("D_L00_00166E00") __attribute__((section(".data")))
 /* Sets the byte at +0x116 of D_L00_00166E00+0x70 while the short at 0x86 is 0. */
 void follow_camera_start_slide(void) __asm__("FUN_L00_002e8648");
 void follow_camera_start_slide(void) {
-    u8 *p = vd_2e8648;
-    if (*(s16 *)(p + 0x86) == 0) {
-        *(u8 *)(*(u8 **)(p + 0x70) + 0x116) = 1;
+    u8 *current_camera = vd_2e8648;
+    if (*(s16 *)(current_camera + 0x86) == 0) {
+        *(u8 *)(*(u8 **)(current_camera + 0x70) + 0x116) = 1;
     }
 }
 extern char *D_L00_00166E00_002e8680 __asm__("D_L00_00166E00") __attribute__((section(".data")));
