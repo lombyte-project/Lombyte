@@ -2137,19 +2137,19 @@ void circular_saw_enemy_update(M_35F0 *moby) {
     }
     if (vector_distance(moby->pos, D_L04_00166F40) < 20.0f) {
         V4_35F0 b;
-        V4_35F0 a;
+        V4_35F0 joint_position_scratch;
         int alt;
         {
-            *(OvlQuad *)a = 0;
-            a[0] = random_float_between(1.0f, -1.0f) * (frame_time * 0.1f);
-            a[1] = random_float_between(1.0f, -1.0f) * (frame_time * 0.1f);
-            a[2] = random_float_between(0.8f, 1.2f) * (frame_time * -2.5f);
-            *(OvlQuad *)b = *(OvlQuad *)a;
+            *(OvlQuad *)joint_position_scratch = 0;
+            joint_position_scratch[0] = random_float_between(1.0f, -1.0f) * (frame_time * 0.1f);
+            joint_position_scratch[1] = random_float_between(1.0f, -1.0f) * (frame_time * 0.1f);
+            joint_position_scratch[2] = random_float_between(0.8f, 1.2f) * (frame_time * -2.5f);
+            *(OvlQuad *)b = *(OvlQuad *)joint_position_scratch;
             alt = random_integer_below(100) & 1;
-            moby_point_position(moby, 0, a);
+            moby_point_position(moby, 0, joint_position_scratch);
             transform_vector_by_basis(b, b, moby->fC0);
             FUN_L00_0026ced0(
-                a, b, alt ? 0x400F0F7F : 0x407F7F7F, 0x272727,
+                joint_position_scratch, b, alt ? 0x400F0F7F : 0x407F7F7F, 0x272727,
                 random_float_between(75000.0f, 100000.0f),
                 scale_game_frames(alt ? random_int_between(10, 15) : random_int_between(20, 30)));
         }
