@@ -52,7 +52,7 @@ extern int func_001FA898_r_80970(float) __asm__("FUN_001fa6d0");
 extern int func_002140B0_80970(int) __asm__("FUN_00213260");
 extern int func_001F9850_80970(int) __asm__("FUN_001f96f8");
 extern unsigned char *D_L01_001B2538 __attribute__((section(".data")));
-char *FUN_L01_00280970(int a, char *b) {
+char *FUN_L01_00280970(int particle_value, char *b) {
     char *particle = func_00218928_80970(0xE);
     int r;
     int *particle_data;
@@ -73,12 +73,12 @@ char *FUN_L01_00280970(int a, char *b) {
         particle_data = (int *)(particle + 0x20);
         particle_data[2] = (int)b;
         particle_data[1] = 1;
-        if (a == 0) {
+        if (particle_value == 0) {
             particle_data[0] = 0;
         } else if (func_002140B0_80970(2)) {
-            particle_data[0] = a;
+            particle_data[0] = particle_value;
         } else {
-            particle_data[0] = -a;
+            particle_data[0] = -particle_value;
         }
     }
     return particle;
