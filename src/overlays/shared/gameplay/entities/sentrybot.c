@@ -118,6 +118,7 @@ void sentrybot_update(unsigned char *moby) {
         SENTRYBOT_ANIM_TURN_AROUND = 12
     };
     enum {
+        SENTRYBOT_ALERT_IDLE = 12,
         SENTRYBOT_WAIT_FOR_ANIMATION_THEN_EMIT_WITH_NEGATIVE_JOINT_AIM = 16,
         SENTRYBOT_EMIT_WITH_NEGATIVE_JOINT_AIM = 17,
         SENTRYBOT_WAIT_FOR_ANIMATION_THEN_EMIT_WITH_POSITIVE_JOINT_AIM = 18,
@@ -758,7 +759,7 @@ void sentrybot_update(unsigned char *moby) {
             data[0x19E] = 0;
         }
         break;
-    case 12:
+    case SENTRYBOT_ALERT_IDLE:
         if (hero.state.current == 0x65) {
             moby[0x20] = 9;
             if (moby[0x53] != 0xD)
