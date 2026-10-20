@@ -137,6 +137,7 @@ void FUN_L01_00242930(void) {
         HERO_STATE_LATERAL_MOVE_NEGATIVE_YAW = 27,
         HERO_STATE_LOOK_HOLD_IDLE_EXIT = 30,
         HERO_STATE_ANIMATION_COMPLETION_IDLE_WAIT = 33,
+        HERO_STATE_ANIMATION_FRAME_IDLE_EXIT_JUMP_WINDOW = 35,
         HERO_STATE_ITEM_BUTTON_HOLD_ANIMATION_WAIT = 46,
         HERO_STATE_ITEM_BUTTON_HOLD_ANIMATION_DEPENDENT_EXIT = 48,
         HERO_STATE_TARGET_POSE_APPROACH = 101,
@@ -1879,7 +1880,7 @@ void FUN_L01_00242930(void) {
                         hero_set_state(HERO_STATE_IDLE, 0);
                     }
                     break;
-                case 35:
+                case HERO_STATE_ANIMATION_FRAME_IDLE_EXIT_JUMP_WINDOW:
                     if (19.0f < hero.anim_frame &&
                         pad_pressed_within(0x40, scale_game_frames(0xB), 0)) {
                         if (controller_state.held & 0xA) {
