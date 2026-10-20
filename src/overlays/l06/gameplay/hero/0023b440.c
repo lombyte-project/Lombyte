@@ -135,6 +135,7 @@ extern float D_L06_00167558_lui __asm__("D_L06_00167558") __attribute__((section
 void FUN_L06_0023b440(void) {
     enum {
         HERO_STATE_DOUBLE_JUMP = 14,
+        HERO_STATE_ITEM_BUTTON_HOLD = 23,
         HERO_STATE_LEDGE_HANG_ENTRY = 24,
         HERO_STATE_LEDGE_HANG = 25,
         HERO_STATE_LEDGE_SHIMMY_POSITIVE_YAW_SIDE = 26,
@@ -548,7 +549,7 @@ void FUN_L06_0023b440(void) {
                         }
                     }
                     break;
-                case 23:
+                case HERO_STATE_ITEM_BUTTON_HOLD:
                     if (controller_state.held & hero.items[0].button_mask) {
                         break;
                     }
