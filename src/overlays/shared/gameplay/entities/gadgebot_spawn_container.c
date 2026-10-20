@@ -2999,60 +2999,60 @@ extern char D_0014171B_86b8[] __asm__("D_0014C190");
 #include "rnc/gameplay/state/game_globals.h"
 
 void energy_sphere_holder_update(char *m) __asm__("FUN_L06_002f7288");
-void energy_sphere_holder_update(char *m) {
+void energy_sphere_holder_update(char *holder_moby) {
     enum {
         ENERGY_SPHERE_HOLDER_INITIALIZE = 0,
         ENERGY_SPHERE_HOLDER_HANDLE_HITS_AND_UPDATE_BEAM = 1
     };
-    char *d = *(char **)(m + 0x78);
-    char *o;
-    unsigned char *q;
-    switch (((unsigned char *)m)[0x20]) {
+    char *holder_vars = *(char **)(holder_moby + 0x78);
+    char *spawned_moby;
+    unsigned char *visited_table;
+    switch (((unsigned char *)holder_moby)[0x20]) {
     case ENERGY_SPHERE_HOLDER_INITIALIZE:
-        if ((*(int *)(current_level_index * 256 + ((short)*(unsigned short *)(m + 0xB2) >> 5) * 4 +
+        if ((*(int *)(current_level_index * 256 + ((short)*(unsigned short *)(holder_moby + 0xB2) >> 5) * 4 +
                       D_0014171B_86b8) >>
-                 (*(unsigned short *)(m + 0xB2) & 0x1F) &
+                 (*(unsigned short *)(holder_moby + 0xB2) & 0x1F) &
              1) &&
-            (current_level_index != 10 || (q = (unsigned char *)((char *)visited52),
-                                    (q + ((unsigned char *)m)[0xB0]))[0xA0] == 0xFF)) {
-            m[0x20] = 2;
-            m[0xBC] = 1;
+            (current_level_index != 10 || (visited_table = (unsigned char *)((char *)visited52),
+                                    (visited_table + ((unsigned char *)holder_moby)[0xB0]))[0xA0] == 0xFF)) {
+            holder_moby[0x20] = 2;
+            holder_moby[0xBC] = 1;
             break;
         }
-        o = func_0020D348_m(0x410);
-        o[0x30] = 0x40;
-        o[0x31] = 1;
-        *(short *)(o + 0x32) = 0x40;
-        *(long *)(o + 0x38) = *(long *)(m + 0x38);
-        *(unsigned short *)(o + 0x34) = *(unsigned short *)(m + 0x34) | 0x5000;
-        qcopy(o + 0x10, m + 0x10);
-        *(float *)(o + 0x40) = random_angle_radians_alt();
-        *(float *)(o + 0x44) = random_angle_radians_alt();
-        *(float *)(o + 0x48) = random_angle_radians_alt();
-        *(float *)(o + 0x18) += 0.85f;
-        *(char **)(d + 0x40) = o;
-        m[0x20] = 1;
-        FUN_L06_002f7548(m);
-        *(int *)(current_level_index * 256 + ((short)*(unsigned short *)(m + 0xB2) >> 5) * 4 +
-                 D_0014171B_86b8) &= ~(1 << (*(unsigned short *)(m + 0xB2) & 0x1F));
-        D_L06_001BAC50[(short)*(unsigned short *)(m + 0xB2) >> 5] &=
-            ~(1 << (*(unsigned short *)(m + 0xB2) & 0x1F));
+        spawned_moby = func_0020D348_m(0x410);
+        spawned_moby[0x30] = 0x40;
+        spawned_moby[0x31] = 1;
+        *(short *)(spawned_moby + 0x32) = 0x40;
+        *(long *)(spawned_moby + 0x38) = *(long *)(holder_moby + 0x38);
+        *(unsigned short *)(spawned_moby + 0x34) = *(unsigned short *)(holder_moby + 0x34) | 0x5000;
+        qcopy(spawned_moby + 0x10, holder_moby + 0x10);
+        *(float *)(spawned_moby + 0x40) = random_angle_radians_alt();
+        *(float *)(spawned_moby + 0x44) = random_angle_radians_alt();
+        *(float *)(spawned_moby + 0x48) = random_angle_radians_alt();
+        *(float *)(spawned_moby + 0x18) += 0.85f;
+        *(char **)(holder_vars + 0x40) = spawned_moby;
+        holder_moby[0x20] = 1;
+        FUN_L06_002f7548(holder_moby);
+        *(int *)(current_level_index * 256 + ((short)*(unsigned short *)(holder_moby + 0xB2) >> 5) * 4 +
+                 D_0014171B_86b8) &= ~(1 << (*(unsigned short *)(holder_moby + 0xB2) & 0x1F));
+        D_L06_001BAC50[(short)*(unsigned short *)(holder_moby + 0xB2) >> 5] &=
+            ~(1 << (*(unsigned short *)(holder_moby + 0xB2) & 0x1F));
         break;
     case ENERGY_SPHERE_HOLDER_HANDLE_HITS_AND_UPDATE_BEAM: {
-        char *h = find_moby_hit(m, 0x330000, 0);
-        if (h != 0) {
-            spawn_nearby_effect(*(void **)(d + 0x40), *(int *)(h + 0x20), 0x10000, h, h + 0x10, 1.0f);
-            ((unsigned char *)m)[0xA4] = 0xFF;
+        char *hit = find_moby_hit(holder_moby, 0x330000, 0);
+        if (hit != 0) {
+            spawn_nearby_effect(*(void **)(holder_vars + 0x40), *(int *)(hit + 0x20), 0x10000, hit, hit + 0x10, 1.0f);
+            ((unsigned char *)holder_moby)[0xA4] = 0xFF;
         }
-        if ((*(char **)(d + 0x40))[0x20] < 0) {
-            m[0xBC] = 1;
-            m[0x20] = 2;
-            *(int *)(current_level_index * 256 + ((short)*(unsigned short *)(m + 0xB2) >> 5) * 4 +
-                     D_0014171B_86b8) |= 1 << (*(unsigned short *)(m + 0xB2) & 0x1F);
-            D_L06_001BAC50[(short)*(unsigned short *)(m + 0xB2) >> 5] |=
-                1 << (*(unsigned short *)(m + 0xB2) & 0x1F);
+        if ((*(char **)(holder_vars + 0x40))[0x20] < 0) {
+            holder_moby[0xBC] = 1;
+            holder_moby[0x20] = 2;
+            *(int *)(current_level_index * 256 + ((short)*(unsigned short *)(holder_moby + 0xB2) >> 5) * 4 +
+                     D_0014171B_86b8) |= 1 << (*(unsigned short *)(holder_moby + 0xB2) & 0x1F);
+            D_L06_001BAC50[(short)*(unsigned short *)(holder_moby + 0xB2) >> 5] |=
+                1 << (*(unsigned short *)(holder_moby + 0xB2) & 0x1F);
         } else {
-            FUN_L06_002f7628(m);
+            FUN_L06_002f7628(holder_moby);
         }
         break;
     }
