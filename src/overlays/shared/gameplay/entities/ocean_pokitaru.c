@@ -322,11 +322,11 @@ extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
    five sparks and removes itself, otherwise it shrinks when its timer runs out and is removed once tiny. */
 void FUN_L11_00309098(char *moby) {
     float old[4];
-    float p[4];
+    float trail_position[4];
     float v[4];
     float hit[4];
     float pad[4][2];
-    float q[4];
+    float spark_velocity[4];
     float r[4];
     char *data;
     char *pos;
@@ -337,10 +337,10 @@ void FUN_L11_00309098(char *moby) {
     pos = moby + 0x10;
     qcopy(old, pos);
     c = fast_tween_color(D_L11_00161DC0, D_L11_00161DC4, random_float_between(0.0f, 1.0f));
-    random_vector(p, 0.0f, 0.1f);
-    add_vector_xyz(p, p, pos);
+    random_vector(trail_position, 0.0f, 0.1f);
+    add_vector_xyz(trail_position, trail_position, pos);
     scale_vector_xyz(v, data, D_L11_00161DD0);
-    FUN_L00_0026dd20((char *)p, (char *)v, c, scale_game_frames(D_L11_00161DC8), (float)D_L11_00161DCC);
+    FUN_L00_0026dd20((char *)trail_position, (char *)v, c, scale_game_frames(D_L11_00161DC8), (float)D_L11_00161DCC);
     add_vector_xyz(pos, pos, data);
     make_hit_descriptor(hit, moby, 0x10000, *(float *)(data + 0x20), data);
     if (collision_line(old, pos, 0, *(void **)(data + 0x1C), hit)) {
@@ -350,12 +350,12 @@ void FUN_L11_00309098(char *moby) {
             r[0] = random_float_between(-1.0f, 1.0f);
             r[1] = random_float_between(-1.0f, 1.0f);
             r[2] = random_float_between(-1.0f, 1.0f);
-            *(OvlQuad *)q = *(OvlQuad *)r;
+            *(OvlQuad *)spark_velocity = *(OvlQuad *)r;
             FUN_L00_001ff660(r, data, D_L11_00174880);
-            normalize_vector_xyz(q, q, vector_length_xyz(r) * 0.5f);
-            add_vector_xyz(q, r, q);
-            normalize_vector_xyz(q, q, random_float_between(frame_time * 5.0f, frame_time * 9.0f));
-            FUN_L00_0026dd20(moby + 0x10, (char *)q, 0x7F2F4F6F, random_int_between(scale_game_frames(10), scale_game_frames(15)), 90000.0f);
+            normalize_vector_xyz(spark_velocity, spark_velocity, vector_length_xyz(r) * 0.5f);
+            add_vector_xyz(spark_velocity, r, spark_velocity);
+            normalize_vector_xyz(spark_velocity, spark_velocity, random_float_between(frame_time * 5.0f, frame_time * 9.0f));
+            FUN_L00_0026dd20(moby + 0x10, (char *)spark_velocity, 0x7F2F4F6F, random_int_between(scale_game_frames(10), scale_game_frames(15)), 90000.0f);
         }
         mark_moby_for_removal(moby);
         return;
