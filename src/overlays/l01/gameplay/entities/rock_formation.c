@@ -1889,30 +1889,30 @@ void beehive_update(SpawnerMoby *m) {
 }
 
 ClonedMoby *FUN_L01_00302328(ClonedMoby *src) {
-    ClonedMoby *m;
+    ClonedMoby *destination_moby;
     ClonedVars *v;
 
-    m = 0;
-    FUN_L00_002591d0(&m, *(s32 *)src->pvars, 0, 0);
-    v = m->pvars;
-    m->b30 = 0x80;
-    m->h32 = 0x80;
-    m->d38 = src->d38;
-    m->b31 = 1;
-    m->w94 = m->mclass->w10;
-    m->flags |= 0x1020;
-    m->scale = m->mclass->f24;
+    destination_moby = 0;
+    FUN_L00_002591d0(&destination_moby, *(s32 *)src->pvars, 0, 0);
+    v = destination_moby->pvars;
+    destination_moby->b30 = 0x80;
+    destination_moby->h32 = 0x80;
+    destination_moby->d38 = src->d38;
+    destination_moby->b31 = 1;
+    destination_moby->w94 = destination_moby->mclass->w10;
+    destination_moby->flags |= 0x1020;
+    destination_moby->scale = destination_moby->mclass->f24;
     {
-        ClonedMoby *d = m;
-        qcopy(&d->pos, &src->pos);
-        qcopy(&d->rot, &src->rot);
+        ClonedMoby *transform_destination = destination_moby;
+        qcopy(&transform_destination->pos, &src->pos);
+        qcopy(&transform_destination->rot, &src->rot);
     }
     v->f20 = 3.0f;
     v->f250 = 1.0f;
     v->w170 = truncate_float_to_s32(819.2f);
     v->f224 = 30.0f;
-    FUN_L00_00250df8(m);
-    return m;
+    FUN_L00_00250df8(destination_moby);
+    return destination_moby;
 }
 void *trooper_find_hit(void *, s32, s32) __asm__("FUN_L00_0025a420");
 void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
