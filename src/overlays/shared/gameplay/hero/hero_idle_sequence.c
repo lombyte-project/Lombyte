@@ -2572,8 +2572,8 @@ extern void *D_L00_00173E58_d __asm__("D_L00_00173E58") __attribute__((section("
 
 void FUN_L00_0020a318(void) {
     char *g = (char *)((unsigned char *)&D_0013E533) + 0xE1D;
-    char *p;
-    char *p2;
+    char *state_ease_table;
+    char *hit_ease_table;
     char *hero_position;
     char *g2;
     float f12, f13, f, state_frame_scale_squared, frame_scale_squared;
@@ -2583,11 +2583,11 @@ void FUN_L00_0020a318(void) {
     if (hero_slot_item_id(0) == 0x1A)
         return;
     if (*(int *)(g + 0x2084) == 0x81) {
-        p = D_L00_0017A680_d;
+        state_ease_table = D_L00_0017A680_d;
         state_frame_scale_squared = frame_scale_sq;
-        *(float *)(p + 0x694) = -0.349065840f;
-        *(float *)(p + 0x6D4) = state_frame_scale_squared * 0.05f;
-        *(float *)(p + 0x6D8) = state_frame_scale_squared * 0.3f;
+        *(float *)(state_ease_table + 0x694) = -0.349065840f;
+        *(float *)(state_ease_table + 0x6D4) = state_frame_scale_squared * 0.05f;
+        *(float *)(state_ease_table + 0x6D8) = state_frame_scale_squared * 0.3f;
     }
     f13 = 1.29999995f;
     if (*(short *)(g + 0x22C8) != 0)
@@ -2604,9 +2604,9 @@ void FUN_L00_0020a318(void) {
         }
     }
     frame_scale_squared = frame_scale_sq;
-    p2 = D_L00_0017A680_d;
-    *(float *)(p2 + 0x6D4) = frame_scale_squared * 0.05f;
-    *(float *)(p2 + 0x6D8) = frame_scale_squared * 0.3f;
+    hit_ease_table = D_L00_0017A680_d;
+    *(float *)(hit_ease_table + 0x6D4) = frame_scale_squared * 0.05f;
+    *(float *)(hit_ease_table + 0x6D8) = frame_scale_squared * 0.3f;
     hero_position = (char *)((unsigned char *)&D_0013E533) + 0xE9D;
     f = fast_vec_dist(hero_position, collision_hit_point);
     g2 = (char *)((unsigned char *)&D_0013E533) + 0xE1D;
@@ -2618,7 +2618,7 @@ void FUN_L00_0020a318(void) {
         f = -0.523598790f;
     if (f < -1.22173047f)
         f = -1.22173047f;
-    *(float *)(p2 + 0x694) = f;
+    *(float *)(hit_ease_table + 0x694) = f;
     *(short *)(g2 + 0x22C8) = 1;
 }
 extern char D_0013F350_0020a500[] __asm__("D_0013F350");
