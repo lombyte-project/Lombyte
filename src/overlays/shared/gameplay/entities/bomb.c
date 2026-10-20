@@ -57,7 +57,7 @@ extern s32 FUN_001f0b58_2c8440(void) __asm__("FUN_001f0b58");
  */
 s32 FUN_L00_002c8440(ThrowVars_2c8440 *v, struct Moby *thrown_moby, s32 mode)
 {
-    Vec4 simulated_position, simulated_velocity, a, q, w;
+    Vec4 simulated_position, simulated_velocity, position_scratch, q, w;
     s32 prediction_timer;
     s32 found = 0;
     s32 i;
@@ -66,7 +66,7 @@ s32 FUN_L00_002c8440(ThrowVars_2c8440 *v, struct Moby *thrown_moby, s32 mode)
         return 0;
     if (D_L00_0015F5C4_2c8440 != 0)
         return 0;
-    qcopy(&a, &thrown_moby->pos);
+    qcopy(&position_scratch, &thrown_moby->pos);
     if (thrown_moby->state == 1) {
         simulated_position.f[0] = FUN_001f9dc8_2c8440(fast_add_rotations_2c8440(-0.36196801066398620605f, atan2_f_2c8440(hero.unk670, hero.unk674))) * 0.85903900861740112305f;
         simulated_position.f[1] = FUN_001f9de0_2c8440(fast_add_rotations_2c8440(-0.36196801066398620605f, atan2_f_2c8440(hero.unk670, hero.unk674))) * 0.85903900861740112305f;
@@ -113,12 +113,12 @@ s32 FUN_L00_002c8440(ThrowVars_2c8440 *v, struct Moby *thrown_moby, s32 mode)
         }
     }
     while (!tick_countdown_2c8440(&prediction_timer) && !found) {
-        qcopy(&a, &simulated_position);
+        qcopy(&position_scratch, &simulated_position);
         for (i = 9; i >= 0; i--) {
             add_vector_xyz_2c8440(&simulated_position, &simulated_position, &simulated_velocity);
             simulated_velocity.f[2] -= D_0015ED70 * 9.0f;
         }
-        if (!collision_line_2c8440(&a, &simulated_position, 0x10, thrown_moby, 0))
+        if (!collision_line_2c8440(&position_scratch, &simulated_position, 0x10, thrown_moby, 0))
             continue;
         if (!FUN_001f0b58_2c8440() && 0.0f < simulated_velocity.f[2])
             continue;
@@ -148,9 +148,9 @@ s32 FUN_L00_002c8440(ThrowVars_2c8440 *v, struct Moby *thrown_moby, s32 mode)
     if (mode != 2 || coll_hit.moby == 0 || !FUN_L00_002603d0_2c8440(coll_hit.moby))
         FUN_001f4600_2c8440(FUN_L00_002c7df8_2c8440, thrown_moby);
     v->normal.q = coll_hit_normal_2c8440.q;
-    subtract_vector_xyz_2c8440(&a, &v->landing, &D_L00_00166DC0_2c8440);
-    scale_vector_xyz_2c8440(&a, &a, 0.94999998807907104492f);
-    add_vector_xyz_2c8440(&v->landing, &a, &D_L00_00166DC0_2c8440);
+    subtract_vector_xyz_2c8440(&position_scratch, &v->landing, &D_L00_00166DC0_2c8440);
+    scale_vector_xyz_2c8440(&position_scratch, &position_scratch, 0.94999998807907104492f);
+    add_vector_xyz_2c8440(&v->landing, &position_scratch, &D_L00_00166DC0_2c8440);
     return 1;
 ret0:
     /* a second return 0 block, as in retail */
