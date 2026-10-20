@@ -612,10 +612,10 @@ typedef struct {
 
 extern float D_L18_0016196C __attribute__((sda));
 
-void FUN_L18_002d5610(void *m, void *src) {
-    char *moby = m;
-    float q[4];
-    float *qp = q;
+void FUN_L18_002d5610(void *moby_object, void *src) {
+    char *moby = moby_object;
+    float movement_step_copy[4];
+    float *qp = movement_step_copy;
     int flags;
     float a, b, c, d, e;
     *(OvlQuad *)qp = *(OvlQuad *)src;
