@@ -361,12 +361,12 @@ void FUN_L14_00305408(unsigned char *moby) {
         UNLOCK_SEQUENCE_WAIT_FOR_TRIGGER = 1,
         UNLOCK_SEQUENCE_COUNTDOWN = 2
     };
-    int *d = *(int **)(moby + 0x78);
+    int *unlock_sequence_data = *(int **)(moby + 0x78);
     short id;
 
     switch (moby[0x20]) {
     case UNLOCK_SEQUENCE_INITIALIZE:
-        if (d[3] < 0 || d[0] < 0 || d[4] < 0) {
+        if (unlock_sequence_data[3] < 0 || unlock_sequence_data[0] < 0 || unlock_sequence_data[4] < 0) {
             mark_moby_for_removal(moby);
             return;
         }
@@ -383,20 +383,20 @@ void FUN_L14_00305408(unsigned char *moby) {
         FUN_L14_00305600((char *)moby);
         break;
     case UNLOCK_SEQUENCE_WAIT_FOR_TRIGGER:
-        if (((unsigned char *)D_L14_0015FFD8)[d[3] * 0x100 + 0x20] != 2) {
+        if (((unsigned char *)D_L14_0015FFD8)[unlock_sequence_data[3] * 0x100 + 0x20] != 2) {
             return;
         }
         D_0014C190_257218[current_level_index][*(short *)(moby + 0xB2) >> 5] |= 1 << (*(unsigned short *)(moby + 0xB2) & 0x1F);
         D_L14_001BABD0[*(short *)(moby + 0xB2) >> 5] |= 1 << (*(unsigned short *)(moby + 0xB2) & 0x1F);
         moby[0x20] = 2;
-        d[1] = scale_game_frames(0x78);
-        ((float *)d)[2] = 1.0f / convert_integer_to_float(d[1]);
-        FUN_L10_002f5a50(d[4]);
+        unlock_sequence_data[1] = scale_game_frames(0x78);
+        ((float *)unlock_sequence_data)[2] = 1.0f / convert_integer_to_float(unlock_sequence_data[1]);
+        FUN_L10_002f5a50(unlock_sequence_data[4]);
         break;
     case UNLOCK_SEQUENCE_COUNTDOWN:
-        fast_dec_timer(&d[1]);
+        fast_dec_timer(&unlock_sequence_data[1]);
         FUN_L14_00305680((char *)moby);
-        if (d[1] == 0) {
+        if (unlock_sequence_data[1] == 0) {
             moby[0x20] = 3;
         }
         break;
