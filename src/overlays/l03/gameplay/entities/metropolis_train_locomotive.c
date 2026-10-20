@@ -1336,7 +1336,7 @@ void red_ship_1_update(char *moby) {
     float old_rot[4];
     float old_pos[4];
     float vec[4];
-    float tmp[4];
+    float position_delta[4];
     char *item;
     char *data;
     char *pm;
@@ -1344,14 +1344,14 @@ void red_ship_1_update(char *moby) {
     char *cur0;
     char *pos0;
     char *p;
-    char *d;
+    char *group_member_data;
     int *path;
     int flag;
     int found;
     int n;
     int r;
     int idx;
-    unsigned char *e;
+    unsigned char *voice_slot_entry;
     float f;
     float step;
 
@@ -1387,9 +1387,9 @@ void red_ship_1_update(char *moby) {
             if (!found) {
                 FUN_L00_002591d0((int *)&item, ((unsigned char *)moby)[0x21], 0, 0);
                 while (item != 0) {
-                    d = *(char **)(item + 0x78);
+                    group_member_data = *(char **)(item + 0x78);
                     item[0x20] = 3;
-                    *(short *)(d + 0x12C) = scale_game_frames(5);
+                    *(short *)(group_member_data + 0x12C) = scale_game_frames(5);
                     FUN_L00_002592b8((int *)&item, (int)item, 0, 0);
                 }
             }
@@ -1476,8 +1476,8 @@ void red_ship_1_update(char *moby) {
         }
         idx = *(int *)(data + 0x150);
         if (idx != -1) {
-            e = (unsigned char *)D_0013E550_29dba8 + idx * 0x70;
-            if (*(char **)(e + 0x88) == moby && e[0x74]) {
+            voice_slot_entry = (unsigned char *)D_0013E550_29dba8 + idx * 0x70;
+            if (*(char **)(voice_slot_entry + 0x88) == moby && voice_slot_entry[0x74]) {
                 release_voice_slot(idx);
             }
         }
@@ -1518,8 +1518,8 @@ void red_ship_1_update(char *moby) {
         if (!flag) {
             FUN_L03_0029c8a8(moby, cur);
         }
-        subtract_vector_xyz(tmp, cur, old_pos);
-        *(OvlQuad *)vec = *(OvlQuad *)tmp;
+        subtract_vector_xyz(position_delta, cur, old_pos);
+        *(OvlQuad *)vec = *(OvlQuad *)position_delta;
         FUN_L03_0029caa8(moby, vec, flag);
         FUN_L03_0029d2e0(moby, vec, flag);
         break;
