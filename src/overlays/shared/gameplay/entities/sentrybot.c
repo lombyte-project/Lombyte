@@ -1120,24 +1120,24 @@ extern int D_L15_0015FFD8;
 extern int D_L15_001ABE40[];
 
 int FUN_L15_00299ff8(void *arg) {
-    unsigned char *m = arg;
-    unsigned short *p;
-    char *d;
-    if (m[0x21] == 0xFF)
+    unsigned char *moby = arg;
+    unsigned short *group_moby_entry;
+    char *moby_data;
+    if (moby[0x21] == 0xFF)
         return 1;
-    p = (unsigned short *)D_L15_001ABE40[m[0x21]];
-    d = *(char **)(m + 0x78);
-    if (p == 0)
+    group_moby_entry = (unsigned short *)D_L15_001ABE40[moby[0x21]];
+    moby_data = *(char **)(moby + 0x78);
+    if (group_moby_entry == 0)
         return 1;
     do {
-        unsigned char *o = (unsigned char *)(((*p & 0x7FFF) << 8) + D_L15_0015FFD8);
-        if (*(short *)(o + 0xA6) == 0x2C && o != 0 && o[0x20] != 0xFE && o[0x20] != 0xFD && o[0xBC] == 0) {
-            char *od = *(char **)(o + 0x78);
+        unsigned char *listed_moby = (unsigned char *)(((*group_moby_entry & 0x7FFF) << 8) + D_L15_0015FFD8);
+        if (*(short *)(listed_moby + 0xA6) == 0x2C && listed_moby != 0 && listed_moby[0x20] != 0xFE && listed_moby[0x20] != 0xFD && listed_moby[0xBC] == 0) {
+            char *od = *(char **)(listed_moby + 0x78);
             if (*(int *)(od + 0x144) == 0 && *(int *)(od + 0x124) != -1 &&
-                *(int *)(od + 0x13C) >= *(int *)(d + 0x13C))
+                *(int *)(od + 0x13C) >= *(int *)(moby_data + 0x13C))
                 return 0;
         }
-    } while ((short)*p++ >= 0);
+    } while ((short)*group_moby_entry++ >= 0);
     return 1;
 }
 /* Wakes every linked switch that can see this moby, or rearms the timer when there is no list. */
