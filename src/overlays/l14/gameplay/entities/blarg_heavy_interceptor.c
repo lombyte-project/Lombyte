@@ -2950,8 +2950,8 @@ extern char *FUN_L00_0026cbb0(void *, void *, int, int, int, int, float);
 extern int FUN_L00_0023e738(float *, float, float, float, float, float);
 extern PuffParticle *spawn_puff_d(void *, float, float, float, int, void *, float, int) __asm__("FUN_L00_0026d000");
 
-void FUN_L14_002bac78(struct Moby *m) {
-    char *d = (char *)m->pvars;
+void FUN_L14_002bac78(struct Moby *moby) {
+    char *debris_vars = (char *)moby->pvars;
     float joint[4];
     float ofs[4];
     float at[4];
@@ -2962,81 +2962,81 @@ void FUN_L14_002bac78(struct Moby *m) {
     int c;
     float size;
     float bright;
-    u8 *p;
-    u8 *q;
+    u8 *puff_particle;
+    u8 *puff_tail;
     float *l;
     float range = 3.0f;
     float green = 0.8f;
     float blue = 0.2f;
 
-    if (tick_countdown_16_d(d + 0x10) != 0)
-        { FUN_L14_002bb4d8((u8 *)m); return; }
-    add_d(&m->pos, &m->pos, d);
-    if (abs_d(*(float *)(d + 0x0)) > D_L14_001615D8 * frame_scale)
-        *(float *)(d + 0x0) *= (D_L14_001615D4 - 1.0f) * frame_scale + 1.0f;
-    if (abs_d(*(float *)(d + 0x4)) > D_L14_001615D8 * frame_scale)
-        *(float *)(d + 0x4) *= (D_L14_001615D4 - 1.0f) * frame_scale + 1.0f;
-    if (*(float *)(d + 0x8) > 0.0f)
-        *(float *)(d + 0x8) *= (D_L14_001615D4 - 1.0f) * frame_scale + 1.0f;
-    *(float *)(d + 0x8) -= D_L14_001615D0 * frame_scale_sq;
-    if (m->pos.x < 2.0f || m->pos.x > 1021.0f || m->pos.y < 2.0f || m->pos.y > 1021.0f || m->pos.z < 2.0f ||
-        m->pos.z > 1021.0f)
-        { FUN_L14_002bb4d8((u8 *)m); return; }
-    if (coll_sphere(0.75f, &m->pos, 0, 0) != 0 ||
-        (abs_d(m->pos.x - hero.motion.pos.f[0]) < 10.0f && abs_d(m->pos.y - hero.motion.pos.f[1]) < 10.0f)) {
+    if (tick_countdown_16_d(debris_vars + 0x10) != 0)
+        { FUN_L14_002bb4d8((u8 *)moby); return; }
+    add_d(&moby->pos, &moby->pos, debris_vars);
+    if (abs_d(*(float *)(debris_vars + 0x0)) > D_L14_001615D8 * frame_scale)
+        *(float *)(debris_vars + 0x0) *= (D_L14_001615D4 - 1.0f) * frame_scale + 1.0f;
+    if (abs_d(*(float *)(debris_vars + 0x4)) > D_L14_001615D8 * frame_scale)
+        *(float *)(debris_vars + 0x4) *= (D_L14_001615D4 - 1.0f) * frame_scale + 1.0f;
+    if (*(float *)(debris_vars + 0x8) > 0.0f)
+        *(float *)(debris_vars + 0x8) *= (D_L14_001615D4 - 1.0f) * frame_scale + 1.0f;
+    *(float *)(debris_vars + 0x8) -= D_L14_001615D0 * frame_scale_sq;
+    if (moby->pos.x < 2.0f || moby->pos.x > 1021.0f || moby->pos.y < 2.0f || moby->pos.y > 1021.0f || moby->pos.z < 2.0f ||
+        moby->pos.z > 1021.0f)
+        { FUN_L14_002bb4d8((u8 *)moby); return; }
+    if (coll_sphere(0.75f, &moby->pos, 0, 0) != 0 ||
+        (abs_d(moby->pos.x - hero.motion.pos.f[0]) < 10.0f && abs_d(moby->pos.y - hero.motion.pos.f[1]) < 10.0f)) {
         clear_d(joint);
-        trooper_play_sound(1, 0, m, (*(struct Moby **)(d + 0x20))->oclass);
-        e450_b78(m, joint, &m->pos, 2.0f, 4.0f, 5, 2, 4, 1.0f, 0.5f, 9.0f, 1.0f, -1, 5.0f, 0, 2,
+        trooper_play_sound(1, 0, moby, (*(struct Moby **)(debris_vars + 0x20))->oclass);
+        e450_b78(moby, joint, &moby->pos, 2.0f, 4.0f, 5, 2, 4, 1.0f, 0.5f, 9.0f, 1.0f, -1, 5.0f, 0, 2,
                          -1, 0);
-        FUN_L14_002bb4d8((u8 *)m);
+        FUN_L14_002bb4d8((u8 *)moby);
         return;
     }
-    m->rot.x = add_rot_d(m->rot.x, *(float *)(d + 0x14));
-    m->rot.y = add_rot_d(m->rot.y, *(float *)(d + 0x18));
-    m->rot.z = add_rot_d(m->rot.z, *(float *)(d + 0x1C));
-    FUN_L00_0024f7c8(m, 0, joint);
+    moby->rot.x = add_rot_d(moby->rot.x, *(float *)(debris_vars + 0x14));
+    moby->rot.y = add_rot_d(moby->rot.y, *(float *)(debris_vars + 0x18));
+    moby->rot.z = add_rot_d(moby->rot.z, *(float *)(debris_vars + 0x1C));
+    FUN_L00_0024f7c8(moby, 0, joint);
     size = randf_sym(0.01f, 0.5f);
-    scale_d(ofs, (char *)m + 0xC0, size);
+    scale_d(ofs, (char *)moby + 0xC0, size);
     add_d(at, joint, ofs);
-    sub_d(dir, joint, &m->pos);
+    sub_d(dir, joint, &moby->pos);
     normalize_d(dir, dir, 0.05f);
     FUN_L00_0026cbb0(at, dir, 0x4F007FFF, 0x1FFFFFFF, random_int_between(frames_d(10), frames_d(20)), 1, 40000.0f);
     for (i = 0; i < 3; i++) {
         if (i != 2) {
-            scale_d(ofs, (char *)m + 0xC0, randf_sym(0.01f, 0.5f));
-            add_d(at, &m->pos, ofs);
-            scale_d(ofs, (char *)m + 0xD0, randf_sym(0.01f, 0.5f));
-            add_d(at, &m->pos, ofs);
+            scale_d(ofs, (char *)moby + 0xC0, randf_sym(0.01f, 0.5f));
+            add_d(at, &moby->pos, ofs);
+            scale_d(ofs, (char *)moby + 0xD0, randf_sym(0.01f, 0.5f));
+            add_d(at, &moby->pos, ofs);
         }
         n = rand_below_d(6);
         if (rand_below_d(2) != 0)
             n = -n;
         size = rand_between_d(20000.0f, 100000.0f);
         c = random_int_between(0x10, 0xFF);
-        p = (u8 *)spawn_puff_d(at, 0.025f, 1.0f, 1.0f, n, D_L14_0015F580, size,
+        puff_particle = (u8 *)spawn_puff_d(at, 0.025f, 1.0f, 1.0f, n, D_L14_0015F580, size,
                          c | (0x60000000 | (c << 16) | (c << 8)));
-        if (p != NULL) {
-            p[3] = 0x44;
-            q = p + 0x20;
-            *(s16 *)(p + 0xA) = frames_d(60);
-            q[0xA] = 0x60;
-            *(s32 *)(q + 4) = 2;
-            q[0xB] = p[0xA];
+        if (puff_particle != NULL) {
+            puff_particle[3] = 0x44;
+            puff_tail = puff_particle + 0x20;
+            *(s16 *)(puff_particle + 0xA) = frames_d(60);
+            puff_tail[0xA] = 0x60;
+            *(s32 *)(puff_tail + 4) = 2;
+            puff_tail[0xB] = puff_particle[0xA];
         }
     }
     bright = 1.0f;
-    sub_d(push, joint, &m->pos);
+    sub_d(push, joint, &moby->pos);
     scale_d(push, push, 2.5f);
-    add_d(at, &m->pos, push);
+    add_d(at, &moby->pos, push);
     if (rand_below_d(2) != 0)
-        scale_d(push, (char *)m + 0xE0, -1.0f);
+        scale_d(push, (char *)moby + 0xE0, -1.0f);
     else
-        qcopy(push, (char *)m + 0xE0);
+        qcopy(push, (char *)moby + 0xE0);
     add_d(at, at, push);
-    if (*(short *)(d + 0x12) == -1) {
-        *(short *)(d + 0x12) = FUN_L00_0023e738(at, range, 0.0f, bright, green, blue);
+    if (*(short *)(debris_vars + 0x12) == -1) {
+        *(short *)(debris_vars + 0x12) = FUN_L00_0023e738(at, range, 0.0f, bright, green, blue);
     } else {
-        l = (float *)(D_L14_001809C0 + *(short *)(d + 0x12) * 32);
+        l = (float *)(D_L14_001809C0 + *(short *)(debris_vars + 0x12) * 32);
         qcopy(l + 4, at);
         l[7] = range;
         l[0] = bright;
