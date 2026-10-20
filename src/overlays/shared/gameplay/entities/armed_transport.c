@@ -536,18 +536,18 @@ extern void draw_geometry_quad(void *, int, int) __asm__("func_001F7D30");
 extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
 extern void vu_euler_rotation_basis(void *, void *) __asm__("func_001FA030");
 
-void FUN_L16_002e58d8(char *m) {
+void FUN_L16_002e58d8(char *barrier_moby) {
     RingQuad quad;
     float transform[4][4], rotation[4];
-    RingData *data = *(RingData **)(m + 0x78);
-    float scale = *(float *)(m + 0x2C) / *(float *)(*(char **)(m + 0x24) + 0x24);
+    RingData *data = *(RingData **)(barrier_moby + 0x78);
+    float scale = *(float *)(barrier_moby + 0x2C) / *(float *)(*(char **)(barrier_moby + 0x24) + 0x24);
     float *u, *v;
     float *angles;
     int *color_base;
     float phase, angle_step, phase_step;
     int i;
-    qcopy(rotation, m + 0x40);
-    qcopy(transform[3], m + 0x10);
+    qcopy(rotation, barrier_moby + 0x40);
+    qcopy(transform[3], barrier_moby + 0x10);
     quad.texture = get_effect_texture(*(int *)&D_L16_00161E38);
     u = &quad.uv[0][0];
     v = &quad.uv[0][1];
