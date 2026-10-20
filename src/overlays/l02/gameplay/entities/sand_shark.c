@@ -3341,18 +3341,18 @@ void tresspasser_door1_update(struct Moby *moby) {
         TRESSPASSER_DOOR1_WAIT_FOR_LINKED_MOBY = 1,
         TRESSPASSER_DOOR1_SLIDE_TO_OFFSET_POSITION = 2
     };
-    char *d = (char *)moby->pvars;
-    float a[4];
+    char *door_vars = (char *)moby->pvars;
+    float destination_position[4];
     float b[4];
     switch (moby->state) {
     case TRESSPASSER_DOOR1_CAPTURE_START_POSITION:
-        qcopy(d, &moby->pos);
+        qcopy(door_vars, &moby->pos);
         moby->state = 1;
         break;
     case TRESSPASSER_DOOR1_WAIT_FOR_LINKED_MOBY:
-        if (*(int *)(d + 0x10) >= 0) {
+        if (*(int *)(door_vars + 0x10) >= 0) {
             unsigned char *o =
-                (unsigned char *)((*(int *)(d + 0x10) << 8) + *(int *)&D_L02_0015FFD8_c2);
+                (unsigned char *)((*(int *)(door_vars + 0x10) << 8) + *(int *)&D_L02_0015FFD8_c2);
             short c = *(short *)(o + 0xA6);
             if (c == 0x267 || c == 0x23F) {
                 if (o[0x20] == 4) {
@@ -3363,9 +3363,9 @@ void tresspasser_door1_update(struct Moby *moby) {
         }
         break;
     case TRESSPASSER_DOOR1_SLIDE_TO_OFFSET_POSITION:
-        normalize_vector_xyz(a, &moby->rot_row1, 2.0f);
-        add_vector_xyz(a, d, a);
-        subtract_vector_xyz(b, a, &moby->pos);
+        normalize_vector_xyz(destination_position, &moby->rot_row1, 2.0f);
+        add_vector_xyz(destination_position, door_vars, destination_position);
+        subtract_vector_xyz(b, destination_position, &moby->pos);
         FUN_L00_0025f730(b, D_0015ED6C + D_0015ED6C);
         add_vector_xyz(&moby->pos, &moby->pos, b);
         if (vector_length_xyz(b) == 0.0f) {
