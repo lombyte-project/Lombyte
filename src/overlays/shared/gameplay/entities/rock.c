@@ -1568,15 +1568,15 @@ void FUN_L01_003087e0(char *moby) {
     V4_3087e0 output_rotation;
     V4_3087e0 start_rotation;
     V4_3087e0 b;
-    f32 t;
+    f32 record_value;
     f32 f22;
 
     if (*(unsigned char *)(moby + 0x52) == 1) {
-        t = compute_interpolated_record_value(moby);
+        record_value = compute_interpolated_record_value(moby);
     } else {
-        t = 170.0f;
+        record_value = 170.0f;
     }
-    f22 = t / 170.0f;
+    f22 = record_value / 170.0f;
     if (*(s32 *)(data + 4) == -1 || *(s32 *)(data + 8) == -1) {
         f32 ang;
         f32 five = 5.0f;
