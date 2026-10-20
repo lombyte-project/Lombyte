@@ -729,7 +729,7 @@ extern void FUN_L00_00262d38_v(int) __asm__("FUN_L00_00262d38");
 extern void enqueue_callback_list_1(void (*)(void), void *) __asm__("FUN_001f4600");
 void FUN_L15_002eb6b8(void);
 
-void FUN_L15_002eb4c0(struct Moby *m) {
+void FUN_L15_002eb4c0(struct Moby *moby) {
     enum {
         CUTSCENE_TRIGGER_WAIT_FOR_CONDITIONS = 0,
         CUTSCENE_TRIGGER_START_SECOND_SCENE = 1,
@@ -737,36 +737,36 @@ void FUN_L15_002eb4c0(struct Moby *m) {
         CUTSCENE_TRIGGER_FINALIZE_AND_SAVE = 3,
         CUTSCENE_TRIGGER_COMPLETED = 4
     };
-    char *d = (char *)m->pvars;
-    m->update_dist = 0x80;
-    switch (m->state) {
+    char *trigger_data = (char *)moby->pvars;
+    moby->update_dist = 0x80;
+    switch (moby->state) {
     case CUTSCENE_TRIGGER_WAIT_FOR_CONDITIONS:
-        if (D_0014C050_v[m->mission + current_level_index * 16] == 0xFF)
+        if (D_0014C050_v[moby->mission + current_level_index * 16] == 0xFF)
             break;
         if (D_L15_00161AC0 != 0)
             break;
-        if (is_point_inside_clip_volume(&hero.motion.pos, *(int *)d) == 0)
+        if (is_point_inside_clip_volume(&hero.motion.pos, *(int *)trigger_data) == 0)
             break;
-        if (D_L15_0015FFD8_v[(*(int *)(d + 8) << 8) + 0x20] != 3)
+        if (D_L15_0015FFD8_v[(*(int *)(trigger_data + 8) << 8) + 0x20] != 3)
             break;
         start_scene_p(3);
-        m->state = 2;
-        FUN_L00_002502a0_v(m->mission);
+        moby->state = 2;
+        FUN_L00_002502a0_v(moby->mission);
         FUN_L00_00232fe8_v();
         break;
     case CUTSCENE_TRIGGER_WAIT_FOR_FIRST_SCENE:
         if (D_L15_0015F5C4 != 2) {
             FUN_L00_00299460_v(0x11);
-            m->state = 1;
+            moby->state = 1;
         }
         break;
     case CUTSCENE_TRIGGER_START_SECOND_SCENE:
         if (D_L15_0015F5C4 != 2) {
             start_scene_p(4);
-            m->state = 3;
+            moby->state = 3;
             FUN_L00_002330d0_v();
-            if (*(int *)(d + 4) != -1) {
-                char *o = D_L15_001600EC + (*(int *)(d + 4) << 7);
+            if (*(int *)(trigger_data + 4) != -1) {
+                char *o = D_L15_001600EC + (*(int *)(trigger_data + 4) << 7);
                 FUN_L00_00216f90_v(o + 0x30, o + 0x70, 0, 1);
             }
         }
@@ -774,20 +774,20 @@ void FUN_L15_002eb4c0(struct Moby *m) {
     case CUTSCENE_TRIGGER_FINALIZE_AND_SAVE:
         if (D_L15_0015F5C4 != 2) {
             FUN_L00_002607d0_v(0x11);
-            if (*(int *)(d + 4) != -1) {
-                char *o = D_L15_001600EC + (*(int *)(d + 4) << 7);
+            if (*(int *)(trigger_data + 4) != -1) {
+                char *o = D_L15_001600EC + (*(int *)(trigger_data + 4) << 7);
                 FUN_L00_00284e50_v(o + 0x30, o + 0x70);
             }
             FUN_L00_00262d38_v(0x11);
             memcard_save_data(0, -1);
-            m->state = 4;
+            moby->state = 4;
         }
         break;
     case CUTSCENE_TRIGGER_COMPLETED:
         break;
     }
     if (D_L15_0015F5C4 == 2)
-        enqueue_callback_list_1(FUN_L15_002eb6b8, m);
+        enqueue_callback_list_1(FUN_L15_002eb6b8, moby);
 }
 #define NOT_SDA __attribute__((section(".data")))
 
