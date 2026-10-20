@@ -1903,7 +1903,7 @@ extern void FUN_L00_002c31c0(void);
  */
 s32 FUN_L00_002c3af8(ThrowVars *v, struct Moby *thrown_moby, s32 mode)
 {
-    Vec4 predicted_position, predicted_velocity, a, q, w;
+    Vec4 predicted_position, predicted_velocity, position_scratch, q, w;
     s32 prediction_countdown;
     s32 found = 0;
     s32 i;
@@ -1912,7 +1912,7 @@ s32 FUN_L00_002c3af8(ThrowVars *v, struct Moby *thrown_moby, s32 mode)
         return 0;
     if (D_L00_0015F5C4 != 0)
         return 0;
-    qcopy(&a, &thrown_moby->pos);
+    qcopy(&position_scratch, &thrown_moby->pos);
     if (thrown_moby->state == 1) {
         predicted_position.f[0] = fast_cos(fast_add_rotations(-0.36196801066398620605f, atan2_f(hero.unk670, hero.unk674))) * 0.85903900861740112305f;
         predicted_position.f[1] = fast_sin(fast_add_rotations(-0.36196801066398620605f, atan2_f(hero.unk670, hero.unk674))) * 0.85903900861740112305f;
@@ -1959,12 +1959,12 @@ s32 FUN_L00_002c3af8(ThrowVars *v, struct Moby *thrown_moby, s32 mode)
         }
     }
     while (!tick_countdown(&prediction_countdown) && !found) {
-        qcopy(&a, &predicted_position);
+        qcopy(&position_scratch, &predicted_position);
         for (i = 9; i >= 0; i--) {
             add_vector_xyz(&predicted_position, &predicted_position, &predicted_velocity);
             predicted_velocity.f[2] -= frame_time_sq_macro * 9.0f;
         }
-        if (!collision_line(&a, &predicted_position, 0x10, thrown_moby, 0))
+        if (!collision_line(&position_scratch, &predicted_position, 0x10, thrown_moby, 0))
             continue;
         if (!collision_hit_material() && 0.0f < predicted_velocity.f[2])
             continue;
@@ -1994,9 +1994,9 @@ s32 FUN_L00_002c3af8(ThrowVars *v, struct Moby *thrown_moby, s32 mode)
     if (mode != 2 || coll_hit.moby == 0 || !FUN_L00_002603d0(coll_hit.moby))
         FUN_001f4600(FUN_L00_002c31c0, thrown_moby);
     v->normal.q = coll_hit_normal.q;
-    subtract_vector_xyz(&a, &v->landing, &D_L00_00166DC0);
-    scale_vector_xyz(&a, &a, 0.94999998807907104492f);
-    add_vector_xyz(&v->landing, &a, &D_L00_00166DC0);
+    subtract_vector_xyz(&position_scratch, &v->landing, &D_L00_00166DC0);
+    scale_vector_xyz(&position_scratch, &position_scratch, 0.94999998807907104492f);
+    add_vector_xyz(&v->landing, &position_scratch, &D_L00_00166DC0);
     return 1;
 ret0:
     /* a second return 0 block, as in retail */
