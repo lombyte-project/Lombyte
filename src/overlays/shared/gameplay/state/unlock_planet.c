@@ -92,7 +92,7 @@ int FUN_L00_0025fcb8(char *query_moby, char *target_output, float best) {
 extern int FUN_00214720_25ff38(void *, int) __asm__("FUN_00214720");
 extern int FUN_L00_00259740_25ff38(void *, void *, int) __asm__("FUN_L00_00259740");
 int FUN_L00_0025ff38(char *a, char *o, float best, int *list, int n, float *v, int nv);
-int FUN_L00_0025ff38(char *query_moby, char *target_output, float best, int *list, int n, float *v, int nv) {
+int FUN_L00_0025ff38(char *query_moby, char *target_output, float best, int *list, int exclusion_list_bound, float *v, int nv) {
     struct Hero *g = &hero_lui;
     char *selected_moby;
     char *indexed_candidate;
@@ -109,8 +109,8 @@ int FUN_L00_0025ff38(char *query_moby, char *target_output, float best, int *lis
     if (g->state.control_mode == 0x18 || g->state.current == 0x72) {
         selected_moby = 0;
         res = 2;
-    } else if (n > 0) {
-        for (k = 0; k < n - 1; k++) {
+    } else if (exclusion_list_bound > 0) {
+        for (k = 0; k < exclusion_list_bound - 1; k++) {
             if (FUN_00214720_25ff38(&hero_lui.motion.pos, list[k]) != 0) {
                 selected_moby = 0;
                 res = 2;
@@ -134,8 +134,8 @@ int FUN_L00_0025ff38(char *query_moby, char *target_output, float best, int *lis
         candidate_distance_score = FUN_001f9b80_25fcb8(query_moby + 0x10, indexed_candidate + 0x10);
         if (best <= candidate_distance_score) {
             ok = 0;
-        } else if (n > 0) {
-            for (k = 0; k < n - 1; k++) {
+        } else if (exclusion_list_bound > 0) {
+            for (k = 0; k < exclusion_list_bound - 1; k++) {
                 if (FUN_00214720_25ff38(indexed_candidate + 0x10, list[k]) != 0) {
                     ok = 0;
                     break;
@@ -161,8 +161,8 @@ int FUN_L00_0025ff38(char *query_moby, char *target_output, float best, int *lis
         candidate_distance_score = FUN_001f9b80_25fcb8(query_moby + 0x10, listed_candidate + 0x10);
         if (best <= candidate_distance_score) {
             ok = 0;
-        } else if (n > 0) {
-            for (k = 0; k < n - 1; k++) {
+        } else if (exclusion_list_bound > 0) {
+            for (k = 0; k < exclusion_list_bound - 1; k++) {
                 if (FUN_00214720_25ff38(listed_candidate + 0x10, list[k]) != 0) {
                     ok = 0;
                     break;
