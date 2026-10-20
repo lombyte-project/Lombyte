@@ -6091,10 +6091,10 @@ void FUN_L06_00300df0(char *moby) {
 
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002FE5D0.c: func_L06_003023C8), where it is exact; names translated to the US level program. */
 
-void FUN_L06_00300f70(char *arg, void *a, void *b) {
+void FUN_L06_00300f70(char *arg, void *linear_velocity, void *b) {
     char *dst = *(char **)(arg + 0x78);
     arg[0x20] = 2;
-    qcopy(dst, a);
+    qcopy(dst, linear_velocity);
     qcopy(dst + 0x10, b);
 }
 #include "rnc/gameplay/entities/moby.h"
