@@ -1677,20 +1677,20 @@ extern B_00234b38 D_L00_0016C860_00234b38 __asm__("D_L00_0016C860")
 void FUN_0020cb10_00234b38(void *, s32, void *) __asm__("FUN_0020cb10");
 void FUN_L00_00234a50_00234b38(void *) __asm__("FUN_L00_00234a50");
 void FUN_L00_00234b38(void *a) {
-    f32 s = D_0015EE14;
+    f32 scale_factor = D_0015EE14;
     A_00234b38 *q;
-    s32 m;
-    if (D_L00_0015F5C4_00234b38[0] == 6 && 1.33f < s)
-        s = 1.33f;
+    s32 level_index;
+    if (D_L00_0015F5C4_00234b38[0] == 6 && 1.33f < scale_factor)
+        scale_factor = 1.33f;
     q = &D_L00_0017C340_00234b38;
     if (q->b1 == 0) {
         FUN_0020cb10_00234b38(a, 0x18, q);
-        q->f20 = s;
-        q->f24 = s;
-        q->f28 = s;
+        q->f20 = scale_factor;
+        q->f24 = scale_factor;
+        q->f28 = scale_factor;
     }
-    m = current_level_index;
-    if (m == 2 || m == 9 || m == 11 || m == 13) {
+    level_index = current_level_index;
+    if (level_index == 2 || level_index == 9 || level_index == 11 || level_index == 13) {
         B_00234b38 *b = &D_L00_0016C860_00234b38;
         s32 i;
         for (i = 0; i < b->n; i++) {
@@ -1698,7 +1698,7 @@ void FUN_L00_00234b38(void *a) {
             if (e != 0) {
                 s16 t = *(s16 *)(e + 0xA6);
                 if (t == 0x1B1 || t == 0x50A || t == 0x509) {
-                    *(f32 *)(e + 0x2C) = *(f32 *)(*(u8 **)(e + 0x24) + 0x24) * s;
+                    *(f32 *)(e + 0x2C) = *(f32 *)(*(u8 **)(e + 0x24) + 0x24) * scale_factor;
                 }
             }
         }
