@@ -21,16 +21,16 @@ extern float D_L08_0016146C __attribute__((sda));
 void FUN_L08_002b8228(struct Moby *moby) {
     float a = D_L08_00161468;
     float b = D_L08_0016146C;
-    char *d;
+    char *moby_vars;
     moby->rot.x = 0.0f;
     moby->rot.y = 0.5235988f;
     moby->rot.z = 0.0f;
-    d = (char *)moby->pvars;
-    *(float *)(d + 0xC) = random_float_between(a, b);
-    *(int *)(d + 0x28) = 0;
-    *(float *)(d + 8) = moby->pos.z;
+    moby_vars = (char *)moby->pvars;
+    *(float *)(moby_vars + 0xC) = random_float_between(a, b);
+    *(int *)(moby_vars + 0x28) = 0;
+    *(float *)(moby_vars + 8) = moby->pos.z;
     FUN_L00_0025d1b8(moby);
-    *(int *)(d + 0x24) = FUN_L08_00279f00(moby);
+    *(int *)(moby_vars + 0x24) = FUN_L08_00279f00(moby);
 }
 /* Ported from rac1-decomp src/overlays/l08_batalia/vendor_002B9438.c (func_L08_002B94B0) */
 
