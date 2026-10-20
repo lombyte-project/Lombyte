@@ -1537,30 +1537,30 @@ extern void clear_2db198(void *) __asm__("FUN_001f99f8");
 /* Spawns a path mover (class 0x382, moved by FUN_L03_002db020) on path, dist
  * units along it, facing the path's last point. */
 struct Moby *FUN_L03_002db198(struct RailPath *path, float dist) {
-    struct Moby *m = func_0020D348_m(0x382);
+    struct Moby *spawned_moby = func_0020D348_m(0x382);
     u8 *v;
     u8 *move;
     Vec4 *end;
 
-    if (m != 0) {
-        m->update_dist = 0x80;
-        m->draw_dist = 0x40;
-        m->visible = 1;
-        m->state = 0;
-        v = m->pvars;
-        m->flags |= 0x20;
-        FUN_L00_0025d1b8(m);
-        qcopy(&m->pos, &path->pts[0]);
-        clear_2db198(&m->rot);
+    if (spawned_moby != 0) {
+        spawned_moby->update_dist = 0x80;
+        spawned_moby->draw_dist = 0x40;
+        spawned_moby->visible = 1;
+        spawned_moby->state = 0;
+        v = spawned_moby->pvars;
+        spawned_moby->flags |= 0x20;
+        FUN_L00_0025d1b8(spawned_moby);
+        qcopy(&spawned_moby->pos, &path->pts[0]);
+        clear_2db198(&spawned_moby->rot);
         end = (Vec4 *)((u8 *)path + (path->count - 1) * 16) + 1;
-        m->rot.z = fast_arc_tan(end->f[0] - m->pos.x, end->f[1] - m->pos.y);
+        spawned_moby->rot.z = fast_arc_tan(end->f[0] - spawned_moby->pos.x, end->f[1] - spawned_moby->pos.y);
         move = v + 0x20;
         *(float *)(v + 0x64) = dist;
         *(struct RailPath **)(v + 0x60) = path;
         *(u8 **)(v + 0x8) = move;
-        FUN_L00_00250df8(m);
+        FUN_L00_00250df8(spawned_moby);
     }
-    return m;
+    return spawned_moby;
 }
 struct RailSpawnerVars {
     s32 path;         /* index into D_L03_001B05B0, -1 for none */
