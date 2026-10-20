@@ -285,8 +285,8 @@ s32 FUN_L00_002d8510(M_2d8510 *moby) {
     O_2d8510 *effect_data;
     V_2d8510 effect_position, b;
     s32 i, ret, c, hi, al;
-    f32 z, t, f;
-    u8 *p;
+    f32 z, t, unwrapped_effect_value;
+    u8 *effect_record;
     effect_data = moby->p78;
     FUN_001f9a28_2d8510(&effect_position, &(*(V_2d8510 *)g_debug_camera), &moby->v10);
     ret = 0;
@@ -299,11 +299,11 @@ s32 FUN_L00_002d8510(M_2d8510 *moby) {
             continue;
         if (effect_data->h58[i] > FUN_001f96f8_2d8510(0x30))
             ret = 1;
-        f = effect_data->f60[i] += D_L00_00161A90[i];
-        if (255.0f <= f)
-            effect_data->f60[i] = f - 255.0f;
-        else if (f <= 0.0f)
-            effect_data->f60[i] = f + 255.0f;
+        unwrapped_effect_value = effect_data->f60[i] += D_L00_00161A90[i];
+        if (255.0f <= unwrapped_effect_value)
+            effect_data->f60[i] = unwrapped_effect_value - 255.0f;
+        else if (unwrapped_effect_value <= 0.0f)
+            effect_data->f60[i] = unwrapped_effect_value + 255.0f;
         t = FUN_001fa6c0_2d8510(FUN_001f96f8_2d8510(0xFF) - effect_data->h58[i]);
         t = t / (f32)FUN_001f96f8_2d8510(0xFF);
         c = FUN_001fa6e0_2d8510(D_L00_00161A7C, D_L00_00161A80,
@@ -313,15 +313,15 @@ s32 FUN_L00_002d8510(M_2d8510 *moby) {
         al = FUN_001fa6d0_2d8510(FUN_001fa6c0_2d8510(hi) * (1.0f - t)) << 24;
         c = al | (c & 0xFFFFFF);
         effect_position.z = z + D_L00_00161AB0[i];
-        p = FUN_L00_00272f68_2d8510(&effect_position, c, FUN_001fa6d0_2d8510(effect_data->f60[i]), D_L00_00161A88, 0,
+        effect_record = FUN_L00_00272f68_2d8510(&effect_position, c, FUN_001fa6d0_2d8510(effect_data->f60[i]), D_L00_00161A88, 0,
                                     2, 1, D_L00_00161AA0[i] * t);
-        if (p)
-            p[2] = *D_L00_001B2080_2d8510.pF8;
-        p = FUN_L00_00272f68_2d8510(&effect_position, al | 0xFFFFFF, FUN_001fa6d0_2d8510(effect_data->f60[i]),
+        if (effect_record)
+            effect_record[2] = *D_L00_001B2080_2d8510.pF8;
+        effect_record = FUN_L00_00272f68_2d8510(&effect_position, al | 0xFFFFFF, FUN_001fa6d0_2d8510(effect_data->f60[i]),
                                     D_L00_00161A88, D_L00_00161A84, 2, 1,
                                     D_L00_00161AA0[i] * (t * 0.7f));
-        if (p)
-            p[2] = *D_L00_001B2080_2d8510.pF8;
+        if (effect_record)
+            effect_record[2] = *D_L00_001B2080_2d8510.pF8;
         fast_vec_add(&effect_position, &effect_position, &b);
     }
     return ret;
