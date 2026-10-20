@@ -540,7 +540,7 @@ int FUN_L07_00313af0(struct Moby *chaser_moby, struct ChaserVars *chaser_vars, V
 /* eases the chaser speed up with the gap to its target */
 struct ChaserSpeed { u8 pad0[0x80]; f32 base; u8 pad84[0x10]; f32 rate; u8 pad98[0x124]; f32 rate2; };
 struct ChaserAnim { u8 pad0[0x58]; f32 speed; };
-float FUN_L07_00313d30(struct ChaserAnim *a, struct ChaserSpeed *s, float x, float y, float k)
+float FUN_L07_00313d30(struct ChaserAnim *chaser_anim, struct ChaserSpeed *chaser_speed, float x, float y, float k)
 {
     float r = frame_scale * 0.06f;
     if (y < x) {
@@ -552,9 +552,9 @@ float FUN_L07_00313d30(struct ChaserAnim *a, struct ChaserSpeed *s, float x, flo
         r = r * (frame_scale * 0.1f - frame_scale * 0.06f);
         r = r + frame_scale * 0.06f;
     }
-    s->rate2 = r;
-    s->rate = r;
-    a->speed = s->base / (frame_scale * 0.06f) * k;
+    chaser_speed->rate2 = r;
+    chaser_speed->rate = r;
+    chaser_anim->speed = chaser_speed->base / (frame_scale * 0.06f) * k;
     return r;
 }
 /* latches onto a target when it is turned toward enough, then picks a turn animation */
