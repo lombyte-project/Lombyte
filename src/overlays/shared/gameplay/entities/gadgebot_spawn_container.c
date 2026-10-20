@@ -2632,17 +2632,17 @@ int FUN_L06_002f32f0(char *moby, int flag)
 /* Scores a candidate target and keeps it if it beats the best so far. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D9548.c: func_L06_002F4818), where it is exact; names translated to the US level program. */
 
-void FUN_L06_002f33e8(char *a, char *b, char *c, int *out, float *best, float thresh) {
-    float dist = vector_distance(a + 0x10, c + 0x10);
+void FUN_L06_002f33e8(char *moby, char *b, char *candidate_moby, int *out, float *best, float thresh) {
+    float dist = vector_distance(moby + 0x10, candidate_moby + 0x10);
     if (!(thresh < dist)) {
-        float ang = fast_arc_tan(*(float *)(c + 0x10) - *(float *)(a + 0x10),
-                                 *(float *)(c + 0x14) - *(float *)(a + 0x14));
-        float v = dist + fast_difference_between_rotations(*(float *)(a + 0x48), ang) * 5.0f;
-        if (c == b) {
+        float ang = fast_arc_tan(*(float *)(candidate_moby + 0x10) - *(float *)(moby + 0x10),
+                                 *(float *)(candidate_moby + 0x14) - *(float *)(moby + 0x14));
+        float v = dist + fast_difference_between_rotations(*(float *)(moby + 0x48), ang) * 5.0f;
+        if (candidate_moby == b) {
             v -= 2.0f;
         }
         if (v < *best) {
-            *out = (int)c;
+            *out = (int)candidate_moby;
             *best = v;
         }
     }
