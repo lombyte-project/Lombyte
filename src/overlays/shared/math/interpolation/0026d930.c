@@ -61,13 +61,13 @@ extern unsigned short *D_L01_001ABCC0[];
 
 void FUN_L01_0026e090(int i, int v);
 void FUN_L01_0026e090(int i, int v) {
-    unsigned short *t = D_L01_001ABCC0[i];
-    unsigned short *p;
-    if (t != 0) {
-        p = t;
+    unsigned short *moby_index_list = D_L01_001ABCC0[i];
+    unsigned short *moby_index_entry;
+    if (moby_index_list != 0) {
+        moby_index_entry = moby_index_list;
         do {
-            D_L01_0015FFD8[(*p & 0x7FFF) * 256 + 0xBC] = v;
-        } while (*(short *)p++ >= 0);
+            D_L01_0015FFD8[(*moby_index_entry & 0x7FFF) * 256 + 0xBC] = v;
+        } while (*(short *)moby_index_entry++ >= 0);
     }
 }
 extern char *D_L01_0015FFD8_e0e0 __asm__("D_L01_0015FFD8");
