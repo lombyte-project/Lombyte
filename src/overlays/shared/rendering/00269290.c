@@ -2770,33 +2770,33 @@ typedef struct {
     u128 v10;
 } Q_26f898;
 
-void FUN_L00_0026f898(unsigned char *p) {
-    u128 t;
-    Q_26f898 *q;
-    float c;
-    FUN_001f9a28_26f898(&t, &D_L00_00166DC0_26f898, p + 0x30);
-    q = (Q_26f898 *)(p + 0x20);
-    if (1.0f < FUN_001f9af0_26f898(&t)) {
-        FUN_001f9bf8_26f898(&t, &t, 0.25f);
+void FUN_L00_0026f898(unsigned char *particle) {
+    u128 position_offset;
+    Q_26f898 *particle_data;
+    float angle_sine;
+    FUN_001f9a28_26f898(&position_offset, &D_L00_00166DC0_26f898, particle + 0x30);
+    particle_data = (Q_26f898 *)(particle + 0x20);
+    if (1.0f < FUN_001f9af0_26f898(&position_offset)) {
+        FUN_001f9bf8_26f898(&position_offset, &position_offset, 0.25f);
     } else {
-        FUN_001f9a68_26f898(&t, &t, 0.25f);
+        FUN_001f9a68_26f898(&position_offset, &position_offset, 0.25f);
     }
-    FUN_001f9a10_26f898(p + 0x10, &q->v10, &t);
-    q->ang = FUN_001fa580_26f898(q->ang, *(float *)((char *)q + 0x1C));
-    c = FUN_001f9de0_26f898(q->ang);
-    if (FUN_001f9770_26f898(p + 0xA) && (c < q->lim || c < -0.9f)) {
+    FUN_001f9a10_26f898(particle + 0x10, &particle_data->v10, &position_offset);
+    particle_data->ang = FUN_001fa580_26f898(particle_data->ang, *(float *)((char *)particle_data + 0x1C));
+    angle_sine = FUN_001f9de0_26f898(particle_data->ang);
+    if (FUN_001f9770_26f898(particle + 0xA) && (angle_sine < particle_data->lim || angle_sine < -0.9f)) {
         goto kill;
     }
-    if (*q->flag == 0) {
+    if (*particle_data->flag == 0) {
     kill:
-        *q->flag = 0;
-        FUN_L00_00267a08_26f898(p);
+        *particle_data->flag = 0;
+        FUN_L00_00267a08_26f898(particle);
         return;
     }
-    if (q->lim < c) {
-        *(int *)(p + 4) = FUN_L00_002371e0_26f898(0, q->arg, (c - q->lim) / (1.0f - q->lim));
+    if (particle_data->lim < angle_sine) {
+        *(int *)(particle + 4) = FUN_L00_002371e0_26f898(0, particle_data->arg, (angle_sine - particle_data->lim) / (1.0f - particle_data->lim));
     } else {
-        *(int *)(p + 4) = 0;
+        *(int *)(particle + 4) = 0;
     }
 }
 typedef float V4[4] __attribute__((aligned(16)));
