@@ -1297,7 +1297,7 @@ extern f32 D_L00_00161890[2];
 extern f32 jitter __asm__("D_L00_0016187C") __attribute__((sda));
 extern f32 trail_speed __asm__("D_L00_00161880") __attribute__((sda));
 extern f32 trail_decay __asm__("D_L00_00161884") __attribute__((sda));
-void FUN_L00_002cb418(Moby *m) {
+void FUN_L00_002cb418(Moby *shot_moby) {
     Vec4A start;
     Vec4A step;
     ShotQuery_2cb418 query;
@@ -1313,59 +1313,59 @@ void FUN_L00_002cb418(Moby *m) {
     int j;
     int left;
 
-    vars = *(ShotVars_2cb418 **)&m->pvars;
-    m->rot.y = fast_add_rotations_2cb418(m->rot.y, -D_L00_00161894[0]);
+    vars = *(ShotVars_2cb418 **)&shot_moby->pvars;
+    shot_moby->rot.y = fast_add_rotations_2cb418(shot_moby->rot.y, -D_L00_00161894[0]);
     if (vector_length_xyz_2cb418(vars) < 0.1f) {
         if (vars->timer < scale_game_frames_2cb418(0x23) - scale_game_frames_2cb418(1) && vars->bounces == 0) {
             yaw = vars->rest_yaw;
             pitch = vars->rest_pitch;
         } else {
-            yaw = m->rot.z;
-            pitch = m->rot.y;
+            yaw = shot_moby->rot.z;
+            pitch = shot_moby->rot.y;
         }
     } else {
-        yaw = atan2_f_2cb418(vars->target_x - m->pos.x, vars->target_y - m->pos.y);
-        pitch = -atan2_f_2cb418(vector_distance_2cb418((Vec4A *)&m->pos, vars), vars->target_z - m->pos.z);
+        yaw = atan2_f_2cb418(vars->target_x - shot_moby->pos.x, vars->target_y - shot_moby->pos.y);
+        pitch = -atan2_f_2cb418(vector_distance_2cb418((Vec4A *)&shot_moby->pos, vars), vars->target_z - shot_moby->pos.z);
     }
     if (vector_length_xyz_2cb418(vars) < 0.1f) {
-        m->rot.z = turn_toward_2cb418(&vars->yaw_rate, m->rot.z, yaw, D_0015ED70_lui * 6.2831855f, D_0015ED70_lui * 3.1415927f, D_0015ED6C_lui * 6.2831855f);
-        m->rot.y = turn_toward_2cb418(&vars->pitch_rate, m->rot.y, pitch, D_0015ED70_lui * 6.2831855f, D_0015ED70_lui * 3.1415927f, D_0015ED6C_lui * 6.2831855f);
+        shot_moby->rot.z = turn_toward_2cb418(&vars->yaw_rate, shot_moby->rot.z, yaw, D_0015ED70_lui * 6.2831855f, D_0015ED70_lui * 3.1415927f, D_0015ED6C_lui * 6.2831855f);
+        shot_moby->rot.y = turn_toward_2cb418(&vars->pitch_rate, shot_moby->rot.y, pitch, D_0015ED70_lui * 6.2831855f, D_0015ED70_lui * 3.1415927f, D_0015ED6C_lui * 6.2831855f);
     } else {
-        m->rot.z = turn_toward_2cb418(&vars->yaw_rate, m->rot.z, yaw, D_0015ED70_lui * 6.2831855f, D_0015ED70_lui * 3.1415927f, D_0015ED6C_lui * 4.712389f);
-        m->rot.y = turn_toward_2cb418(&vars->pitch_rate, m->rot.y, pitch, D_0015ED70_lui * 6.2831855f, D_0015ED70_lui * 3.1415927f, D_0015ED6C_lui * 4.712389f);
+        shot_moby->rot.z = turn_toward_2cb418(&vars->yaw_rate, shot_moby->rot.z, yaw, D_0015ED70_lui * 6.2831855f, D_0015ED70_lui * 3.1415927f, D_0015ED6C_lui * 4.712389f);
+        shot_moby->rot.y = turn_toward_2cb418(&vars->pitch_rate, shot_moby->rot.y, pitch, D_0015ED70_lui * 6.2831855f, D_0015ED70_lui * 3.1415927f, D_0015ED6C_lui * 4.712389f);
     }
-    build_spherical_offset_2cb418(&step, D_0015ED6C_lui * 40.0f, m->rot.z, -m->rot.y);
-    qcopy(&start, (Vec4A *)&m->pos);
-    add_vector_xyz_2cb418((Vec4A *)&m->pos, (Vec4A *)&m->pos, &step);
-    if (m->pos.x < 0.0f || m->pos.y < 0.0f || m->pos.z < 0.0f
-        || vector_distance_2cb418((Vec4A *)&m->pos, D_L00_00166DC0_2cb418) > 64.0f) {
-        FUN_L00_002cbcc0_2cb418(m, 0);
-        mark_moby_for_removal_2cb418(m);
+    build_spherical_offset_2cb418(&step, D_0015ED6C_lui * 40.0f, shot_moby->rot.z, -shot_moby->rot.y);
+    qcopy(&start, (Vec4A *)&shot_moby->pos);
+    add_vector_xyz_2cb418((Vec4A *)&shot_moby->pos, (Vec4A *)&shot_moby->pos, &step);
+    if (shot_moby->pos.x < 0.0f || shot_moby->pos.y < 0.0f || shot_moby->pos.z < 0.0f
+        || vector_distance_2cb418((Vec4A *)&shot_moby->pos, D_L00_00166DC0_2cb418) > 64.0f) {
+        FUN_L00_002cbcc0_2cb418(shot_moby, 0);
+        mark_moby_for_removal_2cb418(shot_moby);
         return;
     }
     query.flags = 0x10001;
     query.radius = 0.25f;
-    query.moby = m;
+    query.moby = shot_moby;
     query.i20 = 1;
-    subtract_vector_xyz_2cb418(&query, (Vec4A *)&m->pos, D_0013F3D0);
+    subtract_vector_xyz_2cb418(&query, (Vec4A *)&shot_moby->pos, D_0013F3D0);
     FUN_001f9c48_2cb418(&query, &query, 1.0f);
     query.dir.z = 1.0f;
     query.b18 = 1;
     query.b19 = 1;
     query.dir.w = 5627.9248f;
-    query.oclass = m->oclass;
+    query.oclass = shot_moby->oclass;
     if (tick_timer_2cb418(&vars->timer) != 0) {
-        FUN_L00_002cbcc0_2cb418(m, 0);
-        mark_moby_for_removal_2cb418(m);
+        FUN_L00_002cbcc0_2cb418(shot_moby, 0);
+        mark_moby_for_removal_2cb418(shot_moby);
         return;
     }
-    if (collide_line_2cb418(&start, (Vec4A *)&m->pos, 0, vars->ignore, &query) != 0) {
+    if (collide_line_2cb418(&start, (Vec4A *)&shot_moby->pos, 0, vars->ignore, &query) != 0) {
         if (FUN_001f0b58_2cb418() == 0) {
             if (vars->timer > scale_game_frames_2cb418(3)) {
                 vars->timer = scale_game_frames_2cb418(3);
             }
         } else {
-            qcopy((Vec4A *)&m->pos, ((char *)D_L00_00173E60));
+            qcopy((Vec4A *)&shot_moby->pos, ((char *)D_L00_00173E60));
             for (i = 0; i < 5; i++) {
                 *(u128 *)&b = 0;
                 b.x = random_float_between_2cb418(-1.0f, 1.0f);
@@ -1376,11 +1376,11 @@ void FUN_L00_002cb418(Moby *m) {
                 normalize_vector_xyz_2cb418(&a, &a, vector_length_xyz_2cb418(&b) * 0.5f);
                 add_vector_xyz_2cb418(&b, &b, &a);
                 normalize_vector_xyz_2cb418(&b, &b, random_float_between_2cb418(D_0015ED6C_lui * 3.0f, D_0015ED6C_lui * 6.0f));
-                spawn_spark_2cb418((Vec4A *)&m->pos, &b, 0x7F2F4F6F, random_int_between_2cb418(scale_game_frames_2cb418(10), scale_game_frames_2cb418(15)), 30000.0f);
+                spawn_spark_2cb418((Vec4A *)&shot_moby->pos, &b, 0x7F2F4F6F, random_int_between_2cb418(scale_game_frames_2cb418(10), scale_game_frames_2cb418(15)), 30000.0f);
             }
             if (D_0013E520_2cb418[15] == 0) {
-                FUN_L00_002cbcc0_2cb418(m, 0);
-                mark_moby_for_removal_2cb418(m);
+                FUN_L00_002cbcc0_2cb418(shot_moby, 0);
+                mark_moby_for_removal_2cb418(shot_moby);
                 return;
             }
             vars->bounces++;
@@ -1396,24 +1396,24 @@ void FUN_L00_002cb418(Moby *m) {
                 break;
             }
             if (D_0013E520_2cb418[15] + 5 < vars->bounces) {
-                FUN_L00_002cbcc0_2cb418(m, 1);
-                mark_moby_for_removal_2cb418(m);
+                FUN_L00_002cbcc0_2cb418(shot_moby, 1);
+                mark_moby_for_removal_2cb418(shot_moby);
                 return;
             }
             reflect_vector_2cb418(&a, &step, ((char *)D_L00_00173E60) + 0x20);
-            m->rot.z = atan2_f_2cb418(a.x, a.y);
-            m->rot.y = -atan2_f_2cb418(vector_length_xy_2cb418(&a), a.z);
+            shot_moby->rot.z = atan2_f_2cb418(a.x, a.y);
+            shot_moby->rot.y = -atan2_f_2cb418(vector_length_xy_2cb418(&a), a.z);
             vars->yaw_rate = 0.0f;
             vars->pitch_rate = 0.0f;
             normalize_vector_xyz_2cb418(&b, ((char *)D_L00_00173E60) + 0x20, 0.05f);
-            add_vector_xyz_2cb418((Vec4A *)&m->pos, ((char *)D_L00_00173E60), &b);
+            add_vector_xyz_2cb418((Vec4A *)&shot_moby->pos, ((char *)D_L00_00173E60), &b);
             if (D_001403E0_2cb418 != 0 && D_001403E0_2cb418->oclass == 0xA8
                 && D_001403E0_2cb418->state != 0xFE && D_001403E0_2cb418->state != 0xFD) {
                 play_sound_2cb418(4, 0, D_001403E0_2cb418);
             }
         }
     }
-    m->rot.y = fast_add_rotations_2cb418(m->rot.y, D_L00_00161890[1]);
+    shot_moby->rot.y = fast_add_rotations_2cb418(shot_moby->rot.y, D_L00_00161890[1]);
     left = vars->life - vars->timer;
     if (left < scale_game_frames_2cb418(13)) {
         speed = int_to_float_2cb418(left);
@@ -1422,9 +1422,9 @@ void FUN_L00_002cb418(Moby *m) {
     } else {
         speed = trail_speed;
     }
-    subtract_vector_xyz_2cb418(&step, &start, (Vec4A *)&m->pos);
+    subtract_vector_xyz_2cb418(&step, &start, (Vec4A *)&shot_moby->pos);
     normalize_vector_xyz_2cb418(&step, &step, speed);
-    qcopy(&a, (Vec4A *)&m->pos);
+    qcopy(&a, (Vec4A *)&shot_moby->pos);
     if (vars->follower != 0) {
         qcopy((Vec4A *)&vars->follower->pos, &a);
     }
@@ -1449,7 +1449,7 @@ void FUN_L00_002cb418(Moby *m) {
         return;
     }
     scale_vector_xyz_2cb418(&spark_velocity, &b, random_float_between_2cb418(D_0015ED6C_lui * 0.5f, D_0015ED6C_lui + D_0015ED6C_lui) / len);
-    spawn_spark_2cb418((Vec4A *)&m->pos, &spark_velocity, 0x7F2F4F6F, random_int_between_2cb418(scale_game_frames_2cb418(10), scale_game_frames_2cb418(15)), 30000.0f);
+    spawn_spark_2cb418((Vec4A *)&shot_moby->pos, &spark_velocity, 0x7F2F4F6F, random_int_between_2cb418(scale_game_frames_2cb418(10), scale_game_frames_2cb418(15)), 30000.0f);
 }
 extern void FUN_00267a08_2cbcc0(void *) __asm__("FUN_L00_00267a08");
 extern f32 FUN_L00_00257be8_2cbcc0(f32, f32) __asm__("FUN_L00_00257be8");
