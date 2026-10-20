@@ -1174,7 +1174,7 @@ unsigned char *spawn_bomb(int owner, void *pos) {
         V_2ace70 u, random_rotation;
         unsigned char *v = *(unsigned char **)(bomb_moby + 0x78);
         struct Hero *g;
-        float a;
+        float frame_scaled_random_angle;
         random_rotation.q = 0;
         random_rotation.f[0] = FUN_002132a8_2ace70(-3.1415927f, 3.1415927f);
         random_rotation.f[1] = FUN_002132a8_2ace70(-3.1415927f, 3.1415927f);
@@ -1194,10 +1194,10 @@ unsigned char *spawn_bomb(int owner, void *pos) {
         qcopy(bomb_moby + 0x10, pos);
         FUN_001f99f8_2ace70(v);
         qcopy(bomb_moby + 0x40, &u);
-        a = FUN_002132a8_2ace70(D_0015ED6C_2ace70 * 1.0471976f, D_0015ED6C_2ace70 * 3.1415927f);
+        frame_scaled_random_angle = FUN_002132a8_2ace70(D_0015ED6C_2ace70 * 1.0471976f, D_0015ED6C_2ace70 * 3.1415927f);
         {
             float frame_time = D_0015ED6C_2ace70;
-            *(float *)(v + 0x58) = a;
+            *(float *)(v + 0x58) = frame_scaled_random_angle;
             *(float *)(v + 0x5C) = FUN_002132a8_2ace70(frame_time * 1.0471976f, frame_time * 3.1415927f);
         }
         FUN_L00_00250df8_2ace70(bomb_moby);
