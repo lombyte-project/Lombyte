@@ -533,11 +533,11 @@ void FUN_L14_002b17d8(char *moby) {
                 blend_moby_animation(moby, 3, 0, scale_game_frames(0x14));
             }
             {
-                int n = *(int *)(data + 0x24C) - 1;
+                int index = *(int *)(data + 0x24C) - 1;
                 char *path;
-                *(int *)(data + 0x24C) = n;
+                *(int *)(data + 0x24C) = index;
                 path = (char *)D_L14_001B0BB0[*(int *)(data + 0x240)];
-                *(float *)(data + 0x250) = *(float *)(path + (n << 4) + 0x1C);
+                *(float *)(data + 0x250) = *(float *)(path + (index << 4) + 0x1C);
             }
             *(float *)(data + 0x27C) = -1.0f;
             *(float *)(data + 0x254) = *(float *)(data + 0x258) = *(float *)(data + 0x25C) = 0.0f;
@@ -628,12 +628,12 @@ void FUN_L14_002b17d8(char *moby) {
         }
         break;
     case PLASMABOT_WAIT_ANIMATION_BEFORE_RESUMING_AIM: {
-        long n = ((unsigned char *)moby)[0x52];
-        if ((moby[0x70] & 2) && (unsigned char)n == ((unsigned char *)moby)[0x53]) {
-            if ((unsigned char)n != 7) goto check_next;
+        long index = ((unsigned char *)moby)[0x52];
+        if ((moby[0x70] & 2) && (unsigned char)index == ((unsigned char *)moby)[0x53]) {
+            if ((unsigned char)index != 7) goto check_next;
             goto idle;
         }
-        if ((unsigned char)n == 7) break;
+        if ((unsigned char)index == 7) break;
     check_next:
         if (((unsigned char *)moby)[0x53] == 7) break;
     idle:
