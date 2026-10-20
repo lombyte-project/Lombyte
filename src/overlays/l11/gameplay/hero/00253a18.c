@@ -125,6 +125,7 @@ void FUN_L11_00253a18(void) {
         HERO_STATE_ITEM_BUTTON_RELEASE_WAIT = 23,
         HERO_STATE_LOOK_BUTTON_RELEASE_TO_IDLE = 30,
         HERO_STATE_ITEM_ANIMATION_RECOVERY_TO_IDLE = 32,
+        HERO_STATE_ANIMATION_COMPLETION_TO_IDLE = 33,
         HERO_STATE_ANIMATION_RECOVERY_WITH_JUMP_CANCEL = 35,
         HERO_STATE_ITEM_BUTTON_RELEASE_TO_IDLE_OR_FALL = 38,
         HERO_STATE_ITEM_BUTTON_RELEASE_WAIT_WITH_MINIMUM_DURATION = 44,
@@ -743,7 +744,7 @@ void FUN_L11_00253a18(void) {
                         }
                     }
                     break;
-                case 33:
+                case HERO_STATE_ANIMATION_COMPLETION_TO_IDLE:
                 case HERO_STATE_WALL_BONK:
                     if (hero.unkA98 & 2) {
                         hero_set_state(HERO_STATE_IDLE, 1);
