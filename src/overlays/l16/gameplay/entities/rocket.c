@@ -1708,22 +1708,22 @@ extern float D_L16_001619DC;
 extern void FUN_L16_002cef60();
 
 void FUN_L16_002cee70(struct Moby *moby) {
-    short *p;
-    float f;
-    char *m;
+    short *group_entry;
+    float angle_increment;
+    char *group_moby;
     char *data;
     if (moby->group != 0xFF) {
-        f = D_L16_001619DC * DEG_TO_RAD * D_0015ED6C;
-        p = (short *)D_L16_001ABCC0_c2[moby->group];
+        angle_increment = D_L16_001619DC * DEG_TO_RAD * D_0015ED6C;
+        group_entry = (short *)D_L16_001ABCC0_c2[moby->group];
         do {
         again:
-            m = (char *)(((*(unsigned short *)p & 0x7FFF) << 8) + (int)D_L16_0015FFD8);
-            if (*(short *)(m + 0xA6) != 0x21D)
+            group_moby = (char *)(((*(unsigned short *)group_entry & 0x7FFF) << 8) + (int)D_L16_0015FFD8);
+            if (*(short *)(group_moby + 0xA6) != 0x21D)
                 goto again;
-            data = *(char **)(m + 0x78);
+            data = *(char **)(group_moby + 0x78);
             *(int *)(data + 0x118) = D_L16_0015F5CC;
-            *(float *)(data + 0x11C) = fast_add_rotations(*(float *)(data + 0x11C), f);
-        } while (*p++ >= 0);
+            *(float *)(data + 0x11C) = fast_add_rotations(*(float *)(data + 0x11C), angle_increment);
+        } while (*group_entry++ >= 0);
         enqueue_callback_list_1_alt(FUN_L16_002cef60, moby);
     }
 }
