@@ -1041,13 +1041,13 @@ void FUN_L14_002b2f60(char *moby) {
             }
             *(unsigned short *)(moby + 0x34) &= 0xEFFF;
             {
-                int r80 = truncate_float_to_s32(*(float *)(state + 0x88) * 1024.0f);
+                int scaled_previous_motion_parameter = truncate_float_to_s32(*(float *)(state + 0x88) * 1024.0f);
                 float k = frame_time * 10.0f;
                 *(float *)(state + 0x88) = 0.3f;
                 *(float *)(state + 0x78) = k;
                 *(float *)(state + 0x7C) = k;
                 *(float *)(state + 0xB0) = 9.0f;
-                *(int *)(state + 0x80) = r80;
+                *(int *)(state + 0x80) = scaled_previous_motion_parameter;
                 *(float *)(state + 0xB4) = 15.0f;
             }
             y = fast_arc_tan(*(float *)(hit_info + 0x10), *(float *)(hit_info + 0x14));
