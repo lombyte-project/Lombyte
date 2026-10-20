@@ -1750,8 +1750,8 @@ void FUN_L18_002db460(struct Moby *moby) {
         STATE_REMOVE = 3
     };
     float v[4];
-    float a[4];
-    float c[4];
+    float second_spark_vector[4];
+    float spark_vector_offset[4];
     float w[4];
     float *moby_vars = (float *)moby->pvars;
     int i;
@@ -1766,15 +1766,15 @@ void FUN_L18_002db460(struct Moby *moby) {
         float *cc;
         i = 0;
         for (; i < D_L18_00161C40; i++) {
-            cc = c;
+            cc = spark_vector_offset;
             scale_vector_xyz(v, moby_vars, D_L18_00161C08);
             FUN_L00_00257d78(cc, 0.0f, D_L18_00161C0C * frame_time);
             add_vector_xyz(v, cc, v);
             FUN_L00_00257d78(w, 0.0f, 0.5f);
             add_vector_xyz(w, w, &moby->pos);
-            clear_vector(a);
+            clear_vector(second_spark_vector);
             v[3] = random_float_between(D_L18_00161C20, D_L18_00161C24);
-            a[3] = random_float_between(D_L18_00161C28, D_L18_00161C2C);
+            second_spark_vector[3] = random_float_between(D_L18_00161C28, D_L18_00161C2C);
             i0 = FUN_001fa6e0(D_L18_00161C30, D_L18_00161C34,
                               random_float_between(0.0f, 1.0f));
             i1 = FUN_001fa6e0(D_L18_00161C38, D_L18_00161C3C,
@@ -1789,8 +1789,8 @@ void FUN_L18_002db460(struct Moby *moby) {
                 (float)D_L18_00161C18 *
                 (random_float_between(-D_L18_00161C1C, D_L18_00161C1C) +
                  1.0f)));
-            a[2] = a[2] - D_L18_00161C04 * frame_time_sq * (float)i3;
-            spawn_spark(w, v, a, i0, i1, i2, i3, i4, D_L18_00161C44);
+            second_spark_vector[2] = second_spark_vector[2] - D_L18_00161C04 * frame_time_sq * (float)i3;
+            spawn_spark(w, v, second_spark_vector, i0, i1, i2, i3, i4, D_L18_00161C44);
         }
         moby_vars[12] = fast_add_rotations(moby_vars[12], frame_time * 18.849556f);
         {
