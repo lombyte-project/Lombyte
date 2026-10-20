@@ -1431,7 +1431,7 @@ extern s32 current_bolt_count_macro __asm__("D_0015ED98") __attribute__((section
 void FUN_L05_00254608(void) {
     float v0[4] __attribute__((aligned(16)));
     float v1[4] __attribute__((aligned(16)));
-    Data_254608 *d;
+    Data_254608 *race_pvars;
     Path_254608 *path;
     int near;
     int j;
@@ -1444,11 +1444,11 @@ void FUN_L05_00254608(void) {
     if (((struct Moby *)hero.unk86C) == 0) {
         return;
     }
-    d = (Data_254608 *)((struct Moby *)hero.unk86C)->pvars;
-    if (d->unk20 == -1) {
+    race_pvars = (Data_254608 *)((struct Moby *)hero.unk86C)->pvars;
+    if (race_pvars->unk20 == -1) {
         return;
     }
-    path = ((Path_254608 * *)D_L05_001B0930)[d->unk20];
+    path = ((Path_254608 * *)D_L05_001B0930)[race_pvars->unk20];
     hero.unk8B4 = (void *)path;
     if (D_0015ED84_lui == 0x10) {
         *(u128_254608 *)v0 = 0;
@@ -1535,7 +1535,7 @@ void FUN_L05_00254608(void) {
     } else if (hero.unk8AF == 0) {
         hero.unk8AE = 0;
     }
-    for (j = 0; j < d->f40; j++) {
+    for (j = 0; j < race_pvars->f40; j++) {
         int i;
         int n1;
         int next;
@@ -1544,7 +1544,7 @@ void FUN_L05_00254608(void) {
         n1 = path->n + 1;
         next = (i + n1) % path->n;
         ang = angle_atan2_254608(path->p[next].x - path->p[i].x, path->p[next].y - path->p[i].y);
-        qcopy(v0, D_L05_0015FFD8_254608[d->f2C[j]].pos);
+        qcopy(v0, D_L05_0015FFD8_254608[race_pvars->f2C[j]].pos);
         if (fast_difference_between_rotations_254608(ang, angle_atan2_254608(v0[0] - path->p[i].x, v0[1] - path->p[i].y)) < 1.5707964f) {
             hero.unk7B0[j] = next;
             if (next == 0) {
@@ -1553,17 +1553,17 @@ void FUN_L05_00254608(void) {
         }
     }
     hero.unk8C0 = 1;
-    for (j = 0; j < d->f40; j++) {
+    for (j = 0; j < race_pvars->f40; j++) {
         if (hero.unk89A < hero.unk7A0[j] || (hero.unk7A0[j] == hero.unk89A && hero.unk7B0[j] >= hero.unk898)) {
             hero.unk8C0++;
         }
     }
-    for (k = 0; k < d->f40; k++) {
+    for (k = 0; k < race_pvars->f40; k++) {
         hero.unk7C0[k] = 1;
         if (hero.unk89A > hero.unk7A0[k] || (hero.unk7A0[k] == hero.unk89A && hero.unk898 > hero.unk7B0[k])) {
             hero.unk7C0[k] = 2;
         }
-        for (m = 0; m < d->f40; m++) {
+        for (m = 0; m < race_pvars->f40; m++) {
             if (hero.unk7A0[k] < hero.unk7A0[m] || (hero.unk7A0[k] == hero.unk7A0[m] && hero.unk7B0[k] < hero.unk7B0[m])) {
                 hero.unk7C0[k]++;
             }
@@ -1581,27 +1581,27 @@ void FUN_L05_00254608(void) {
         D_0015EE3C_macro++;
     }
     if (D_0015ED84_lui == 5) {
-        int t;
+        int fast_finish_threshold_frames;
 
         if (pal_mode != 0) {
-            t = FUN_001f96f8_254608(0x1680);
+            fast_finish_threshold_frames = FUN_001f96f8_254608(0x1680);
         } else {
-            t = FUN_001f96f8_254608(0x1644);
+            fast_finish_threshold_frames = FUN_001f96f8_254608(0x1644);
         }
-        if (t >= hero.unk894) {
+        if (fast_finish_threshold_frames >= hero.unk894) {
             if (((Flags_254608 *)D_0013D408_254608)->f9 == 0) {
                 ((Flags_254608 *)D_0013D408_254608)->f9 = 1;
                 allocate_voice_for_bank_entry_254608(1, 0, 0);
                 queue_dialogue_message_254608(0x53D6, -1);
             }
         }
-        if (d->f28 == -1) {
+        if (race_pvars->f28 == -1) {
             return;
         }
         if (*(D_0013D388_254608) == 0 && hero.unk8C0 == 1) {
-            D_L05_0015FFD8_254608[d->f28].fBC = 1;
+            D_L05_0015FFD8_254608[race_pvars->f28].fBC = 1;
         } else {
-            hero.unk890 = (u8 *)(&D_L05_0015FFD8_254608[d->f28]);
+            hero.unk890 = (u8 *)(&D_L05_0015FFD8_254608[race_pvars->f28]);
             mode_freeze_init_254608(0, 0);
         }
         if (freeze_stats_time_ref_macro[0] == 0) {
@@ -1615,20 +1615,20 @@ void FUN_L05_00254608(void) {
             freeze_stats_score_ref_a_macro[0] = hero.unk8A8;
             current_bolt_count_macro += 0x3E8;
         }
-        D_L05_0015FFD8_254608[d->f28].f30 = 0xFF;
+        D_L05_0015FFD8_254608[race_pvars->f28].f30 = 0xFF;
         if (hero.unk880 != -1) {
             set_animation_parameter_254608(hero.unk880, 0);
             hero.unk880 = -1;
         }
         func_001FFFA0_254608();
     } else if (D_0015ED84_lui == 0x10) {
-        if (d->f28 == -1) {
+        if (race_pvars->f28 == -1) {
             return;
         }
         if (D_0013D4DF_254608 == 0 && hero.unk8C0 == 1) {
-            D_L05_0015FFD8_254608[d->f28].fBC = 1;
+            D_L05_0015FFD8_254608[race_pvars->f28].fBC = 1;
         } else {
-            hero.unk890 = (u8 *)(&D_L05_0015FFD8_254608[d->f28]);
+            hero.unk890 = (u8 *)(&D_L05_0015FFD8_254608[race_pvars->f28]);
             mode_freeze_init_254608(0, 0);
         }
         if (freeze_stats_time_ref_macro[1] == 0) {
@@ -1642,7 +1642,7 @@ void FUN_L05_00254608(void) {
             freeze_stats_score_ref_a_macro[1] = hero.unk8A8;
             current_bolt_count_macro += 0x3E8;
         }
-        D_L05_0015FFD8_254608[d->f28].f30 = 0xFF;
+        D_L05_0015FFD8_254608[race_pvars->f28].f30 = 0xFF;
         if (hero.unk880 != -1) {
             set_animation_parameter_254608(hero.unk880, 0);
             hero.unk880 = -1;
