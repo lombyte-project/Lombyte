@@ -132,11 +132,11 @@ void FUN_L00_00258830_2c40a0(void *, void *, f32, f32, f32, int) __asm__("FUN_L0
 void FUN_L00_002c40a0(S_2c40a0 *self) {
     O_2c40a0 *moby_vars = self->p78;
     P_2c40a0 *P = &D_0013F350_2c40a0;
-    s16 h = P->h1E2;
+    s16 proximity_response_gate = P->h1E2;
     f32 v[4];
     f32 horizontal_separation_error, len, g;
     if (moby_vars->i68 == 0) {
-        if (h == 0)
+        if (proximity_response_gate == 0)
             return;
         if (!(FUN_001f9b80_2c40a0(P->v80, self->v10) < 1.0f))
             return;
@@ -149,7 +149,7 @@ void FUN_L00_002c40a0(S_2c40a0 *self) {
     horizontal_separation_error = FUN_001f9b20_2c40a0(v) - 1.4f;
     if (horizontal_separation_error > 0.0f)
         horizontal_separation_error = 0.0f;
-    if (h == 0)
+    if (proximity_response_gate == 0)
         horizontal_separation_error = 0.0f;
     FUN_L00_0025b8c0_2c40a0(&horizontal_separation_error, 0.0f, &moby_vars->f60, frame_scale_sq * 0.02f, frame_scale_sq * 0.3f,
                             D_0015ED6C_2c40a0 * 4.0f);
