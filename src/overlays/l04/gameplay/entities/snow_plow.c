@@ -1625,45 +1625,45 @@ extern int allocate_voice_for_target_entry(int, int, struct Moby *) __asm__("FUN
 
 extern s32 D_0014C190_257218[][64] __asm__("D_0014C190");
 void upper_door_update(struct Moby *m) __asm__("FUN_L04_002e17d8");
-void upper_door_update(struct Moby *m) {
+void upper_door_update(struct Moby *moby) {
     enum {
         UPPER_DOOR_INITIALIZE = 0,
         UPPER_DOOR_WAIT_FOR_ACTIVATION = 1,
         UPPER_DOOR_MOVE_VERTICAL = 2
     };
-    struct RiserVars *d = (struct RiserVars *)m->pvars;
-    struct Moby *t;
+    struct RiserVars *riser_vars = (struct RiserVars *)moby->pvars;
+    struct Moby *trigger_moby;
     s16 idx;
     u16 id;
 
-    switch (m->state) {
+    switch (moby->state) {
     case UPPER_DOOR_INITIALIZE:
-        d->baseZ = m->pos.z;
-        m->state = 1;
+        riser_vars->baseZ = moby->pos.z;
+        moby->state = 1;
         break;
     case UPPER_DOOR_WAIT_FOR_ACTIVATION:
-        id = m->save_id;
+        id = moby->save_id;
         idx = id;
         if (D_L04_001BB3B0.collected[idx] == 0 && !((D_0014C190_257218[current_level_index][idx >> 5] >> (id & 0x1F)) & 1)) {
-            if (d->trigger == -1)
+            if (riser_vars->trigger == -1)
                 break;
-            t = (struct Moby *)((d->trigger << 8) + D_L04_0015FFD8);
-            if (!((t->oclass == 0x267 && t->state == 4) || (t->oclass == 0x4A6 && t->state == 2)))
+            trigger_moby = (struct Moby *)((riser_vars->trigger << 8) + D_L04_0015FFD8);
+            if (!((trigger_moby->oclass == 0x267 && trigger_moby->state == 4) || (trigger_moby->oclass == 0x4A6 && trigger_moby->state == 2)))
                 return;
         }
-        if (m->oclass == 0x44D || m->oclass == 0x5FC)
-            trooper_play_sound(0, 0, m, 0x44D);
-        m->state = 2;
-        d->timer = scale_game_frames(60);
+        if (moby->oclass == 0x44D || moby->oclass == 0x5FC)
+            trooper_play_sound(0, 0, moby, 0x44D);
+        moby->state = 2;
+        riser_vars->timer = scale_game_frames(60);
         break;
     case UPPER_DOOR_MOVE_VERTICAL:
-        m->pos.z += riser_rise_speed(m) * frame_time;
-        if (fast_dec_timer(&d->timer)) {
-            D_0014C190_257218[current_level_index][(s16)m->save_id >> 5] |= 1 << (m->save_id & 0x1F);
-            D_L04_001BA650[(s16)m->save_id >> 5] |= 1 << (m->save_id & 0x1F);
-            if (m->oclass == 0x44D)
-                allocate_voice_for_target_entry(1, 0, m);
-            m->state = 3;
+        moby->pos.z += riser_rise_speed(moby) * frame_time;
+        if (fast_dec_timer(&riser_vars->timer)) {
+            D_0014C190_257218[current_level_index][(s16)moby->save_id >> 5] |= 1 << (moby->save_id & 0x1F);
+            D_L04_001BA650[(s16)moby->save_id >> 5] |= 1 << (moby->save_id & 0x1F);
+            if (moby->oclass == 0x44D)
+                allocate_voice_for_target_entry(1, 0, moby);
+            moby->state = 3;
         }
         break;
     }
