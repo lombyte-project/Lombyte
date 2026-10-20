@@ -52,7 +52,7 @@ extern s32 light_ties() __asm__("func_00237370");
 void transition_default_draw(s32 *arg0) __asm__("FUN_001eb410");
 
 void transition_default_draw(s32 *unused_parameter) {
-    s32 n;
+    s32 language_overlay_index;
 
     if (D_0016045C == 0 || D_0016045C->unk4 != 0) {
         append_gif_transfer_packet();
@@ -98,12 +98,12 @@ void transition_default_draw(s32 *unused_parameter) {
                            (long)(intro_overlay_alpha << 24 | 0x808080), D_0015EF48);
     }
     if (language_intro_overlay_alpha != 0) {
-        n = game_language - 1;
-        if (n < 0) {
-            n = 0;
+        language_overlay_index = game_language - 1;
+        if (language_overlay_index < 0) {
+            language_overlay_index = 0;
         }
         draw_textured_quad(0xA0, screen_extent.height - 0x50, 0xC0, 0x60, 0, 0, 0x100, 0x80,
-                           (long)(language_intro_overlay_alpha << 24 | 0x808080), get_effect_texture(n + 4));
+                           (long)(language_intro_overlay_alpha << 24 | 0x808080), get_effect_texture(language_overlay_index + 4));
     }
     do_gif_paging();
     if (sequence > 0.0f) {
