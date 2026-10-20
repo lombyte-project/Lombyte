@@ -653,93 +653,93 @@ extern char D_L01_001672C0_c[] __asm__("D_L01_00167240");
 extern char D_0014171B_c[] __asm__("D_0014C190");
 extern int stub_printf(void *, int, int) __asm__("FUN_001e93b0");
 
-void FUN_L01_002fb5b0(char *m) {
+void FUN_L01_002fb5b0(char *moby) {
     enum {
         CUTSCENE_TRIGGER_INITIALIZE = 0,
         CUTSCENE_TRIGGER_WAIT_FOR_TRIGGER = 1,
         CUTSCENE_TRIGGER_ACTIVE = 2,
         CUTSCENE_TRIGGER_WAIT_FOR_REARM = 3
     };
-    char *d = *(char **)(m + 0x78);
+    char *trigger_vars = *(char **)(moby + 0x78);
     float a[4];
     float b[4];
-    func_L01_002FC890_m(m);
-    switch (((unsigned char *)m)[0x20]) {
+    func_L01_002FC890_m(moby);
+    switch (((unsigned char *)moby)[0x20]) {
     case CUTSCENE_TRIGGER_INITIALIZE:
-        if (*(int *)(d + 0x24) == -1) {
-            stub_printf(D_L01_0020B550, *(short *)(m + 0xA6), *(unsigned short *)(m + 0xA8));
-            mark_moby_for_removal(m);
+        if (*(int *)(trigger_vars + 0x24) == -1) {
+            stub_printf(D_L01_0020B550, *(short *)(moby + 0xA6), *(unsigned short *)(moby + 0xA8));
+            mark_moby_for_removal(moby);
             return;
         }
-        *(int *)(d + 0x2C) = scale_game_frames(*(int *)(d + 0x2C));
-        m[0x20] = 1;
+        *(int *)(trigger_vars + 0x2C) = scale_game_frames(*(int *)(trigger_vars + 0x2C));
+        moby[0x20] = 1;
         {
             int ff = 0xFF;
-            *(short *)(m + 0x32) = ff;
-            ((unsigned char *)m)[0x30] = ff;
+            *(short *)(moby + 0x32) = ff;
+            ((unsigned char *)moby)[0x30] = ff;
         }
         break;
     case CUTSCENE_TRIGGER_WAIT_FOR_TRIGGER: {
         char *g;
-        if (D_L01_001BB9C0_s.collected[(short)*(unsigned short *)(m + 0xB2)] != 0) {
-            m[0x20] = 1;
+        if (D_L01_001BB9C0_s.collected[(short)*(unsigned short *)(moby + 0xB2)] != 0) {
+            moby[0x20] = 1;
             break;
         }
-        if ((*(int *)((((short)*(unsigned short *)(m + 0xB2) >> 5) << 2) + (D_0015ED84 << 8) +
+        if ((*(int *)((((short)*(unsigned short *)(moby + 0xB2) >> 5) << 2) + (D_0015ED84 << 8) +
                       D_0014171B_c) >>
-             (*(unsigned short *)(m + 0xB2) & 0x1F)) &
+             (*(unsigned short *)(moby + 0xB2) & 0x1F)) &
             1) {
-            m[0x20] = 1;
+            moby[0x20] = 1;
             break;
         }
         g = (char *)&hero.motion.pos;
-        if (is_point_inside_clip_volume(g, *(int *)(d + 0x20)) == 0 &&
-            ((unsigned char *)m)[0xBC] != 1)
+        if (is_point_inside_clip_volume(g, *(int *)(trigger_vars + 0x20)) == 0 &&
+            ((unsigned char *)moby)[0xBC] != 1)
             break;
         qcopy(a, D_L01_001672C0_c);
         qcopy(b, D_L01_001672C0_c + 0x10);
-        if (*(int *)(d + 0x28) == -1) {
+        if (*(int *)(trigger_vars + 0x28) == -1) {
             FUN_L00_00216f90(g, g + 0x10, 0x72, 1);
         } else {
-            char *o = D_L01_001600EC_q + *(int *)(d + 0x28) * 128;
+            char *o = D_L01_001600EC_q + *(int *)(trigger_vars + 0x28) * 128;
             FUN_L00_00216f90(o + 0x30, o + 0x70, 0x72, 1);
         }
-        if (*(int *)(d + 0x30) != 0) {
-            jet_mount(a, b, 2, *(int *)(d + 0x34), 0);
+        if (*(int *)(trigger_vars + 0x30) != 0) {
+            jet_mount(a, b, 2, *(int *)(trigger_vars + 0x34), 0);
         } else {
-            char *o = D_L01_001600EC_q + *(int *)(d + 0x24) * 128;
+            char *o = D_L01_001600EC_q + *(int *)(trigger_vars + 0x24) * 128;
             jet_mount(o + 0x30, o + 0x70, 0, 0, 0);
         }
         cutscene_active = 1;
-        m[0x20] = 2;
-        m[0xBC] = 1;
+        moby[0x20] = 2;
+        moby[0xBC] = 1;
         {
-            int o = *(int *)(d + 0x24) << 7;
+            int o = *(int *)(trigger_vars + 0x24) << 7;
             char *t = D_L01_001600EC_q;
-            qcopy(d, (char *)(o + (int)t) + 0x30);
-            qcopy(d + 0x10, (char *)(o + (int)t) + 0x70);
+            qcopy(trigger_vars, (char *)(o + (int)t) + 0x30);
+            qcopy(trigger_vars + 0x10, (char *)(o + (int)t) + 0x70);
         }
         break;
     }
     case CUTSCENE_TRIGGER_ACTIVE:
-        if (fast_dec_timer(d + 0x2C) != 0 || ((unsigned char *)m)[0xBC] != 1) {
-            if (*(int *)(d + 0x30) != 0) {
+        if (fast_dec_timer(trigger_vars + 0x2C) != 0 || ((unsigned char *)moby)[0xBC] != 1) {
+            if (*(int *)(trigger_vars + 0x30) != 0) {
                 FUN_L00_002eac18(2);
             } else {
                 FUN_L00_002eac18(0);
             }
             FUN_L01_002405a0();
             cutscene_active = 0;
-            m[0x20] = 3;
-            m[0xBC] = 0;
+            moby[0x20] = 3;
+            moby[0xBC] = 0;
         } else {
-            FUN_L00_002ea9d8(d);
-            FUN_L00_002eaa30(d + 0x10);
+            FUN_L00_002ea9d8(trigger_vars);
+            FUN_L00_002eaa30(trigger_vars + 0x10);
         }
         break;
     case CUTSCENE_TRIGGER_WAIT_FOR_REARM:
-        if (((unsigned char *)m)[0xBC] == 1)
-            m[0x20] = ((unsigned char *)m)[0xBC];
+        if (((unsigned char *)moby)[0xBC] == 1)
+            moby[0x20] = ((unsigned char *)moby)[0xBC];
         break;
     }
 }
