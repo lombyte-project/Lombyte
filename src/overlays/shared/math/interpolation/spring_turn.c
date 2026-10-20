@@ -682,23 +682,23 @@ void FUN_L00_00259508(void *a, void *b, void *c, int d, float f) {
 float FUN_001f99c0(float);
 float square_root(float) __asm__("FUN_001f9988");
 int FUN_L00_002595a0(float *r0, float *r1, float a, float b, float c) {
-    float d = b * b - a * 4.0f * c;
-    float s, t;
-    if (d == 0.0f) {
+    float discriminant = b * b - a * 4.0f * c;
+    float sqrt_abs_discriminant, root_swap_temp;
+    if (discriminant == 0.0f) {
         *r0 = -b / (a + a);
         return 1;
     }
-    s = square_root(FUN_001f99c0(d));
-    *r0 = (-b + s) / (a + a);
-    *r1 = (-b - s) / (a + a);
+    sqrt_abs_discriminant = square_root(FUN_001f99c0(discriminant));
+    *r0 = (-b + sqrt_abs_discriminant) / (a + a);
+    *r1 = (-b - sqrt_abs_discriminant) / (a + a);
     if (*r0 < *r1) {
-        t = *r0;
-        *r1 = t;
-        *r0 = (-b - s) / (a + a);
+        root_swap_temp = *r0;
+        *r1 = root_swap_temp;
+        *r0 = (-b - sqrt_abs_discriminant) / (a + a);
     }
     {
         int r = 0;
-        if (0.0f < d)
+        if (0.0f < discriminant)
             r = 2;
         return r;
     }
