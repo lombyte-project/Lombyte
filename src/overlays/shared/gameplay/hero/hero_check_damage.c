@@ -510,7 +510,7 @@ extern int FUN_L00_0025e3b8_c(void *) __asm__("FUN_L00_0025e3b8");
 float FUN_L00_0020d6b0(char *target_moby, float yaw, float range, float ylim, float plim, int *out) {
     float v[4] __attribute__((aligned(16)));
     struct Hero *g;
-    float target_distance, hero_yaw_error, angular_penalty, elevation_angle_error, m, r;
+    float target_distance, hero_yaw_error, angular_penalty, elevation_angle_error, angular_limit_error, r;
 
     *out = 0;
     qcopy(v, &hero.motion.pos);
@@ -523,7 +523,7 @@ float FUN_L00_0020d6b0(char *target_moby, float yaw, float range, float ylim, fl
         *out = 1;
     hero_yaw_error = adiff_20d6b0(atan2_20d6b0(*(float *)(target_moby + 0x10) - v[0], *(float *)(target_moby + 0x14) - v[1]), yaw);
     angular_penalty = hero_yaw_error;
-    m = hero_yaw_error;
+    angular_limit_error = hero_yaw_error;
     elevation_angle_error = adiff_20d6b0(atan2_20d6b0(hdist_20d6b0(v, target_moby + 0x10), *(float *)(target_moby + 0x18) - v[2]), 0.0f);
     if (g->state.current == 1 || g->state.current == 0x1E) {
         C_20d6b0 *camera = &player_camera;
@@ -533,12 +533,12 @@ float FUN_L00_0020d6b0(char *target_moby, float yaw, float range, float ylim, fl
         elevation_angle_error = adiff_20d6b0(
             atan2_20d6b0(hdist_20d6b0(camera->v140, target_moby + 0x10), *(float *)(target_moby + 0x18) - camera->v140[2]),
             -camera->f154);
-        m = elevation_angle_error;
+        angular_limit_error = elevation_angle_error;
         angular_penalty = b + elevation_angle_error;
         if (elevation_angle_error < b)
-            m = b;
+            angular_limit_error = b;
     }
-    if (0.0f < ylim && ylim < m)
+    if (0.0f < ylim && ylim < angular_limit_error)
         *out = 1;
     if (0.0f < plim && plim < elevation_angle_error)
         *out = 1;
