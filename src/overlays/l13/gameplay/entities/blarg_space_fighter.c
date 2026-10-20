@@ -3162,7 +3162,7 @@ extern void func_L00_0028EBF0_2EAE80(int) __asm__("FUN_0022d798");
 extern void func_L00_0025E590_2EAE80(void *, void *) __asm__("FUN_L00_0025d538");
 extern int func_L13_002E9B30_2EAE80(void *, void *, int, int) __asm__("FUN_L13_002e86f8");
 
-void FUN_L13_002e9a48(Moby_2EAE80 *m, Data_2EAE80 *d) {
+void FUN_L13_002e9a48(Moby_2EAE80 *moby, Data_2EAE80 *moby_data) {
     enum {
         DAMAGE_STAGE_SKIP_LINE_QUEUE = 0,
         DAMAGE_STAGE_QUEUE_RANDOM_LINE = 1,
@@ -3190,44 +3190,44 @@ void FUN_L13_002e9a48(Moby_2EAE80 *m, Data_2EAE80 *d) {
     Hit_2EAE80 *r;
     Sub_2EAE80 *dd;
 
-    if (m->state < 6) {
-        dd = &d->sub;
+    if (moby->state < 6) {
+        dd = &moby_data->sub;
         mode = 0;
         rf = 0;
         k6 = 6.0f;
         step = (float)dd->h4 / k6;
-        hi = (k6 - func_001FA888_2EAE80(m->bBC)) * step;
-        if (m->bBC >= 5) {
-            hi = (k6 - func_001FA888_2EAE80(m->bBC - 1)) * step;
+        hi = (k6 - func_001FA888_2EAE80(moby->bBC)) * step;
+        if (moby->bBC >= 5) {
+            hi = (k6 - func_001FA888_2EAE80(moby->bBC - 1)) * step;
         }
         lo = hi + step * 0.3f;
-        if (d->first != 0) {
-            r = func_L00_0025B478_2EAE80(d->first, 0x230000, 0);
-            func_L00_0025B4D0_2EAE80(m, r, dd, 0, &hit, 0, 0, 4);
+        if (moby_data->first != 0) {
+            r = func_L00_0025B478_2EAE80(moby_data->first, 0x230000, 0);
+            func_L00_0025B4D0_2EAE80(moby, r, dd, 0, &hit, 0, 0, 4);
             if (r != 0 && r->target != 0 &&
                 (r->target->oclass == 0x52 || r->target->oclass == 0x53 || r->target->oclass == 0xD4)) {
-                d->first->bA4 = 0xFF;
+                moby_data->first->bA4 = 0xFF;
             } else if (hit >= 2) {
                 if (0.0f < r->f2C && r->h2A == 0x3F1) {
                     r->f2C = 0.3f;
                 }
-                if (r != 0 && m->bBC == 7) {
+                if (r != 0 && moby->bBC == 7) {
                     r->f2C = r->f2C * 1.5f;
                 }
                 if (dd->f0 <= r->f2C) {
-                    func_L13_002EAC18_2EAE80(m, d, dd, r);
+                    func_L13_002EAC18_2EAE80(moby, moby_data, dd, r);
                     mode = 3;
-                    d->first->bA4 = 0xFF;
+                    moby_data->first->bA4 = 0xFF;
                 } else {
                     dd->f0 = dd->f0 - r->f2C;
-                    d->b67 = 0xFA;
+                    moby_data->b67 = 0xFA;
                     mode = 1;
-                    d->sub.h6 = func_001F9850_2EAE80(0);
-                    func_L00_0025E4B0_2EAE80(m, d->q60);
-                    d->first->bA4 = 0xFF;
+                    moby_data->sub.h6 = func_001F9850_2EAE80(0);
+                    func_L00_0025E4B0_2EAE80(moby, moby_data->q60);
+                    moby_data->first->bA4 = 0xFF;
                 }
-                if (m->state == 7) {
-                    m->bBC++;
+                if (moby->state == 7) {
+                    moby->bBC++;
                     rf = 1;
                     {
                         Vars_2EAE80 *v = (*(Moby_2EAE80 **)D_00140940)->vars;
@@ -3238,22 +3238,22 @@ void FUN_L13_002e9a48(Moby_2EAE80 *m, Data_2EAE80 *d) {
                         v->f118 = 0;
                     }
                 } else if (dd->f0 < hi) {
-                    int tv = D_L13_001D3478[m->bBC - 1];
+                    int tv = D_L13_001D3478[moby->bBC - 1];
 
                     if (tv != -1) {
-                        func_0022ED80_2EAE80(7, 0, m);
-                        func_L13_002EAAB8_2EAE80(m, d, tv);
+                        func_0022ED80_2EAE80(7, 0, moby);
+                        func_L13_002EAAB8_2EAE80(moby, moby_data, tv);
                     }
-                    if (m->state == 5) {
-                        m->state = 4;
+                    if (moby->state == 5) {
+                        moby->state = 4;
                     }
-                    m->bBC++;
-                    if (d->i11C != -1) {
-                        if (((Voice_2EAE80 *)(D_0013E550 + d->i11C * 0x70))->f88 == m &&
-                            ((Voice_2EAE80 *)(D_0013E550 + d->i11C * 0x70))->b74 != 0) {
-                            func_L00_0028EBF0_2EAE80(d->i11C);
+                    moby->bBC++;
+                    if (moby_data->i11C != -1) {
+                        if (((Voice_2EAE80 *)(D_0013E550 + moby_data->i11C * 0x70))->f88 == moby &&
+                            ((Voice_2EAE80 *)(D_0013E550 + moby_data->i11C * 0x70))->b74 != 0) {
+                            func_L00_0028EBF0_2EAE80(moby_data->i11C);
                         }
-                        d->i11C = -1;
+                        moby_data->i11C = -1;
                     }
                     rf = 1;
                     {
@@ -3264,29 +3264,29 @@ void FUN_L13_002e9a48(Moby_2EAE80 *m, Data_2EAE80 *d) {
                         v->f8C = 0;
                         v->f118 = 0;
                     }
-                    d->h138 = 0;
-                    d->b148 = 0;
+                    moby_data->h138 = 0;
+                    moby_data->b148 = 0;
                     mode = 2;
-                    if (m->bBC == 7) {
-                        for (j = m->bBC - 1; j < 10; j++) {
-                            func_L13_002EAAB8_2EAE80(m, d, D_L13_001D3478[j]);
+                    if (moby->bBC == 7) {
+                        for (j = moby->bBC - 1; j < 10; j++) {
+                            func_L13_002EAAB8_2EAE80(moby, moby_data, D_L13_001D3478[j]);
                         }
-                        func_0022ED80_2EAE80(7, 0, m);
+                        func_0022ED80_2EAE80(7, 0, moby);
                     }
                 } else if (dd->f0 < lo) {
-                    d->b148 = 1;
+                    moby_data->b148 = 1;
                 }
             }
         }
         for (i = 0; i < 11 && mode == 0; i++) {
-            if (d->list[i] == 0) {
+            if (moby_data->list[i] == 0) {
                 continue;
             }
-            r = func_L00_0025B478_2EAE80(d->list[i], 0x230000, 0);
-            func_L00_0025B4D0_2EAE80(m, r, dd, 0, &hit, 0, 0, 4);
+            r = func_L00_0025B478_2EAE80(moby_data->list[i], 0x230000, 0);
+            func_L00_0025B4D0_2EAE80(moby, r, dd, 0, &hit, 0, 0, 4);
             if (r != 0 && r->target != 0 &&
                 (r->target->oclass == 0x52 || r->target->oclass == 0x53 || r->target->oclass == 0xD4)) {
-                d->list[i]->bA4 = 0xFF;
+                moby_data->list[i]->bA4 = 0xFF;
                 continue;
             }
             if (hit < 2) {
@@ -3302,23 +3302,23 @@ void FUN_L13_002e9a48(Moby_2EAE80 *m, Data_2EAE80 *d) {
                     break;
                 }
             }
-            if (r != 0 && m->bBC == 7) {
+            if (r != 0 && moby->bBC == 7) {
                 r->f2C = r->f2C * 1.5f;
             }
             if (dd->f0 <= r->f2C) {
-                func_L13_002EAC18_2EAE80(m, d, dd, r);
+                func_L13_002EAC18_2EAE80(moby, moby_data, dd, r);
                 mode = 3;
-                d->list[i]->bA4 = 0xFF;
+                moby_data->list[i]->bA4 = 0xFF;
             } else {
                 dd->f0 = dd->f0 - r->f2C;
-                d->b67 = 0xFA;
+                moby_data->b67 = 0xFA;
                 mode = 1;
-                d->sub.h6 = func_001F9850_2EAE80(0);
-                func_L00_0025E4B0_2EAE80(m, d->q60);
-                d->list[i]->bA4 = 0xFF;
+                moby_data->sub.h6 = func_001F9850_2EAE80(0);
+                func_L00_0025E4B0_2EAE80(moby, moby_data->q60);
+                moby_data->list[i]->bA4 = 0xFF;
             }
-            if (m->state == 7) {
-                m->bBC++;
+            if (moby->state == 7) {
+                moby->bBC++;
                 rf = 1;
                 {
                     Vars_2EAE80 *v = ((Hero_2EAE80 *)D_0013F450_2EAE80)->f15F0->vars;
@@ -3329,22 +3329,22 @@ void FUN_L13_002e9a48(Moby_2EAE80 *m, Data_2EAE80 *d) {
                     v->f118 = 0;
                 }
             } else if (dd->f0 < hi) {
-                int tv = D_L13_001D3478[m->bBC - 1];
+                int tv = D_L13_001D3478[moby->bBC - 1];
 
                 if (tv != -1) {
-                    func_L13_002EAAB8_2EAE80(m, d, tv);
+                    func_L13_002EAAB8_2EAE80(moby, moby_data, tv);
                 }
-                func_0022ED80_2EAE80(7, 0, m);
-                if (m->state == 5) {
-                    m->state = 4;
+                func_0022ED80_2EAE80(7, 0, moby);
+                if (moby->state == 5) {
+                    moby->state = 4;
                 }
-                m->bBC++;
-                if (d->i11C != -1) {
-                    if (((Voice_2EAE80 *)(D_0013E550 + d->i11C * 0x70))->f88 == m &&
-                        ((Voice_2EAE80 *)(D_0013E550 + d->i11C * 0x70))->b74 != 0) {
-                        func_L00_0028EBF0_2EAE80(d->i11C);
+                moby->bBC++;
+                if (moby_data->i11C != -1) {
+                    if (((Voice_2EAE80 *)(D_0013E550 + moby_data->i11C * 0x70))->f88 == moby &&
+                        ((Voice_2EAE80 *)(D_0013E550 + moby_data->i11C * 0x70))->b74 != 0) {
+                        func_L00_0028EBF0_2EAE80(moby_data->i11C);
                     }
-                    d->i11C = -1;
+                    moby_data->i11C = -1;
                 }
                 rf = 1;
                 {
@@ -3355,56 +3355,56 @@ void FUN_L13_002e9a48(Moby_2EAE80 *m, Data_2EAE80 *d) {
                     v->f8C = 0;
                     v->f118 = 0;
                 }
-                d->h138 = 0;
-                d->b148 = 0;
+                moby_data->h138 = 0;
+                moby_data->b148 = 0;
                 mode = 2;
-                if (m->bBC == 7) {
-                    for (k = m->bBC - 1; k < 10; k++) {
-                        func_L13_002EAAB8_2EAE80(m, d, D_L13_001D3478[k]);
+                if (moby->bBC == 7) {
+                    for (k = moby->bBC - 1; k < 10; k++) {
+                        func_L13_002EAAB8_2EAE80(moby, moby_data, D_L13_001D3478[k]);
                     }
-                    func_0022ED80_2EAE80(7, 0, m);
+                    func_0022ED80_2EAE80(7, 0, moby);
                 }
             } else if (dd->f0 < lo) {
-                d->b148 = 1;
+                moby_data->b148 = 1;
             }
         }
         if (mode > 0) {
             if (rf != 0) {
-                switch (m->bBC - 1) {
+                switch (moby->bBC - 1) {
                 case DAMAGE_STAGE_SKIP_LINE_QUEUE:
                     break;
                 case DAMAGE_STAGE_QUEUE_RANDOM_LINE:
-                    func_L13_002E9B30_2EAE80(m, d, 0xC, 4);
+                    func_L13_002E9B30_2EAE80(moby, moby_data, 0xC, 4);
                     break;
                 case DAMAGE_STAGE_START_TIMER_AND_QUEUE_LINE:
-                    d->f100 = func_001F9850_2EAE80(0x78);
-                    func_L13_002E9B30_2EAE80(m, d, 0x10, 1);
+                    moby_data->f100 = func_001F9850_2EAE80(0x78);
+                    func_L13_002E9B30_2EAE80(moby, moby_data, 0x10, 1);
                     break;
                 case DAMAGE_STAGE_QUEUE_SINGLE_LINE:
-                    func_L13_002E9B30_2EAE80(m, d, 0x11, 1);
+                    func_L13_002E9B30_2EAE80(moby, moby_data, 0x11, 1);
                     break;
                 case DAMAGE_STAGE_SKIP_LINE_QUEUE_ALTERNATE:
                     break;
                 case DAMAGE_STAGE_QUEUE_ALTERNATE_SINGLE_LINE:
-                    func_L13_002E9B30_2EAE80(m, d, 0x13, 1);
+                    func_L13_002E9B30_2EAE80(moby, moby_data, 0x13, 1);
                     break;
                 case DAMAGE_STAGE_QUEUE_LATE_SINGLE_LINE:
-                    func_L13_002E9B30_2EAE80(m, d, 0x16, 1);
+                    func_L13_002E9B30_2EAE80(moby, moby_data, 0x16, 1);
                     break;
                 case DAMAGE_STAGE_SKIP_LINE_QUEUE_SECOND_ALTERNATE:
                     break;
                 }
-            } else if (m->bBC == 7 && d->b148 != 0) {
-                if (!(d->h138 & 1) && func_L13_002E9B30_2EAE80(m, d, 0x14, 2) != 0) {
-                    d->h138 |= 1;
+            } else if (moby->bBC == 7 && moby_data->b148 != 0) {
+                if (!(moby_data->h138 & 1) && func_L13_002E9B30_2EAE80(moby, moby_data, 0x14, 2) != 0) {
+                    moby_data->h138 |= 1;
                 }
-                if (!(d->h138 & 2) && func_L13_002E9B30_2EAE80(m, d, 0x14, 2) != 0) {
-                    d->h138 |= 2;
+                if (!(moby_data->h138 & 2) && func_L13_002E9B30_2EAE80(moby, moby_data, 0x14, 2) != 0) {
+                    moby_data->h138 |= 2;
                 }
             }
         }
     }
-    func_L00_0025E590_2EAE80(m, d->q60);
+    func_L00_0025E590_2EAE80(moby, moby_data->q60);
 }
 /* Steers a moby toward the hero: scales by distance and orients it with the hero's angles. */
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002EB768), where it is exact; names translated to the US level program. */
