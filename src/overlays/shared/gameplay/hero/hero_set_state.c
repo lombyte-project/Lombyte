@@ -661,6 +661,7 @@ extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 extern char D_L00_0017BF20[];
 int hero_set_state(int a, int b) {
     enum {
+        HERO_STATE_GRAPPLE_SWING_ENTRY = 0x2C,
         HERO_STATE_WATER_SURFACE_ENTRY = 0x37,
         HERO_STATE_VEHICLE_MODE_1_IDLE = 0x43,
         HERO_STATE_VEHICLE_MODE_3_IDLE = 0x53,
@@ -1351,7 +1352,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0x30, 1, (float)scale_game_frames(5));
         break;
     }
-    case 0x2C: {
+    case HERO_STATE_GRAPPLE_SWING_ENTRY: {
         struct Hero *p = &hero;
         char *d;
         p->state.control_mode = 0xE;
