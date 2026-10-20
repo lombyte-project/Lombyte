@@ -496,6 +496,7 @@ extern u32 strlen(const char *);
 void FUN_L00_001f4598(void) {
     enum {
         DEBUG_COLUMN_UPDATE_FLAGS = 0,
+        DEBUG_COLUMN_OPTIONS = 1,
         DEBUG_COLUMN_DRAW_FLAGS = 2,
         DEBUG_COLUMN_ITEM_COUNTS = 3,
         DEBUG_COLUMN_FOG = 4
@@ -575,7 +576,7 @@ void FUN_L00_001f4598(void) {
             }
         }
         break;
-    case 1:
+    case DEBUG_COLUMN_OPTIONS:
         switch (g_debug_menu.selected_row) {
         case DEBUG_OPTION_ROW_CONTROL_MODE:
             if (D_0013C940.buttons.w.pressed & 0x50) {
