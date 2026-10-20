@@ -232,14 +232,14 @@ extern P002668a0 *D_L00_001B1678[];
 extern s32 D_L00_0015F5CC;
 extern s32 FUN_L00_002667d0_c(void *) __asm__("FUN_L00_002667d0");
 s32 initialize_npc_dialogue(void *p, u8 *out_p) __asm__("FUN_L00_002668a0");
-s32 initialize_npc_dialogue(void *p, u8 *out_p) {
+s32 initialize_npc_dialogue(void *moby, u8 *out_p) {
     Out002668a0 *out;
     s32 i;
     unsigned long long k;
-    P002668a0 *q;
+    P002668a0 *dialogue_entries;
 
     out = (Out002668a0 *)out_p;
-    i = FUN_L00_002667d0_c(p);
+    i = FUN_L00_002667d0_c(moby);
     if (i == -1) {
         return -1;
     }
@@ -250,10 +250,10 @@ s32 initialize_npc_dialogue(void *p, u8 *out_p) {
     out->f38 = D_L00_0015F5CC;
     out->f04 = -1;
     out->f36 = 0;
-    q = D_L00_001B1678[i];
-    out->f3C = (u32)q;
-    if (D_0013D5B0_c[i].d != 0 && q->f08 == 0) {
-        out->f36 = q->f06;
+    dialogue_entries = D_L00_001B1678[i];
+    out->f3C = (u32)dialogue_entries;
+    if (D_0013D5B0_c[i].d != 0 && dialogue_entries->f08 == 0) {
+        out->f36 = dialogue_entries->f06;
     }
     out->f08 = ((u8 *)out->f3C)[out->f36 * 0x1C + (k = 0x10)] & 1;
     return i;
