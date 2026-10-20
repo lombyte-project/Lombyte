@@ -292,9 +292,9 @@ void FUN_L00_0024f440_c(char *obj, int i, int j, Packet_24f440 *out) {
     char *u = *(char **)(obj + 0x14);
     int nb = (unsigned char)t[8];
     int na = (unsigned char)u[8];
-    Frame_24f440 *s;
+    Frame_24f440 *selected_frame;
     unsigned short a;
-    int n;
+    int trailing_byte_count;
     int k;
     unsigned char *ix;
     u64_24f440 *src;
@@ -304,34 +304,34 @@ void FUN_L00_0024f440_c(char *obj, int i, int j, Packet_24f440 *out) {
         char **tt = (char **)(t + 0x48);
         char *r = tt[i];
         Frame_24f440 **ss = (Frame_24f440 **)(r + 0x1C);
-        s = ss[j];
+        selected_frame = ss[j];
     }
     section(out, ((na + 3) * 8) & 0xFF0);
-    k = na + s->hA;
-    k += s->hE;
+    k = na + selected_frame->hA;
+    k += selected_frame->hE;
     out->h8 = na * 8;
     {
-        void *from = &((u64_24f440 *)s)[nb + 2];
+        void *from = &((u64_24f440 *)selected_frame)[nb + 2];
 
         out->h6 = (k + 1) >> 1;
-        a = s->hA;
+        a = selected_frame->hA;
         out->hA = a;
         out->hC = (a + na) * 8;
-        out->hE = s->hE;
-        n = s->qwc * 16 - nb * 8;
-        if (n != 0)
-            FUN_001f9838_24f440(&((u64_24f440 *)out)[na + 2], from, n);
+        out->hE = selected_frame->hE;
+        trailing_byte_count = selected_frame->qwc * 16 - nb * 8;
+        if (trailing_byte_count != 0)
+            FUN_001f9838_24f440(&((u64_24f440 *)out)[na + 2], from, trailing_byte_count);
     }
     ix = (unsigned char *)(*(char **)(*(char **)(obj + 0x18) + 0x1C) + 4);
-    src = s->q;
+    src = selected_frame->q;
     if (nb != 0) {
-        int c = nb;
+        int remaining_scatter_count = nb;
         do {
-            c--;
+            remaining_scatter_count--;
             ((u64_24f440 *)out)[*ix + 2] = *src;
             ix++;
             src++;
-        } while (c != 0);
+        } while (remaining_scatter_count != 0);
     }
     q = (u64_24f440 *)((char *)out + out->h6 * 16);
     if (*q == 0)
