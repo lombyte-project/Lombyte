@@ -67,14 +67,14 @@ extern int tick_countdown_32(void *);
 extern void lerp_vector(void *, void *, void *, float) __asm__("FUN_001f9a40");
 extern char *D_L14_001B0F30_a[] __asm__("D_L14_001B0BB0");
 
-int FUN_L14_002d64d0(struct Moby *m) {
-    char *moby_data = (char *)m->pvars;
+int FUN_L14_002d64d0(struct Moby *racer_moby) {
+    char *moby_data = (char *)racer_moby->pvars;
     char *ent = *(char **)((char *)((*(int *)(moby_data + 0x60) << 5) + (int)D_L14_0015F70C) + 0x10);
     int ok;
     float remaining_frames;
     ok = tick_countdown_32(moby_data + 0x6C) != 0;
     remaining_frames = convert_integer_to_float(*(int *)(moby_data + 0x6C));
-    lerp_vector(&m->pos, ent + 0x10, D_L14_001B0F30_a[*(int *)(moby_data + 0x84)] + 0x10,
+    lerp_vector(&racer_moby->pos, ent + 0x10, D_L14_001B0F30_a[*(int *)(moby_data + 0x84)] + 0x10,
                  remaining_frames * *(float *)(moby_data + 0x70));
     return ok;
 }
