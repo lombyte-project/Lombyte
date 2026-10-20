@@ -423,7 +423,7 @@ void FUN_L05_002d1e30(char *moby) {
     char *spawned_effect;
     float opposite_heading;
     int i;
-    float *h;
+    float *spawn_height_ptr;
 
     data = *(char **)(moby + 0x78);
     if (tick_2d1e30(data + 0x84) == 0) {
@@ -435,8 +435,8 @@ void FUN_L05_002d1e30(char *moby) {
         fast_vec_scale(v, moby + 0xD0, rand_2d1e30(-0.5f, 0.5f));
         vadd_2d1e30(v, v, moby + 0x10);
         v[2] = D_L05_001612E8 + 0.05f;
-        h = &D_L05_001612E8;
-        spawned_effect = spawn_2d1e30(v, D_L05_0015F580_macro, h, rand_2d1e30(0.7f, 1.0f), i == 0 ? 2.0f : -2.0f);
+        spawn_height_ptr = &D_L05_001612E8;
+        spawned_effect = spawn_2d1e30(v, D_L05_0015F580_macro, spawn_height_ptr, rand_2d1e30(0.7f, 1.0f), i == 0 ? 2.0f : -2.0f);
         if (spawned_effect != 0) {
             *(short *)(spawned_effect + 0xA) = frames_2d1e30(15);
         }
