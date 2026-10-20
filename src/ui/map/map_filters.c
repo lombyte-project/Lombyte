@@ -200,14 +200,14 @@ s32 region_enabled NOT_SDA = 0;
 s32 map_filter_l07_1(s32 px, s32 py, f32 unused1, f32 unused2, f32 arg3) __asm__("func_00206E18");
 
 s32 map_filter_l07_1(s32 px, s32 py, f32 unused1, f32 unused2, f32 reveal_test_value) {
-    struct Hero *s = &hero;
-    s32 a = s->state.control_mode == 17 || s->state.control_mode == 18 || s->base_condition == 1;
+    struct Hero *hero_ptr = &hero;
+    s32 hero_state_allows_polygon_reveal = hero_ptr->state.control_mode == 17 || hero_ptr->state.control_mode == 18 || hero_ptr->base_condition == 1;
 
     if (point_is_clockwise(px, py, 0x93, 0x168, 0x182, 0x168) != 0 && py >= 0x135 &&
         D_001A03A8[0] != 0 && reveal_test_value >= 47.7f) {
         return 1;
     }
-    if (!a) {
+    if (!hero_state_allows_polygon_reveal) {
         return 0;
     }
     if (point_is_clockwise(px, py, 0xC5, 0x9A, 0x13C, 0xE1) != 0 &&
