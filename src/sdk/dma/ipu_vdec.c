@@ -19,7 +19,7 @@ extern void _dispatchMpegCbNodata(void *cb);
 #define IPU_BP   ((volatile u32 *)0x10002020)
 #define IPU_TOP  ((u64 *)0x10002030)
 
-s32 _ipuVdec(MpegDec *d, s32 tbl) {
+s32 _ipuVdec(MpegDec *decoder, s32 tbl) {
     s32 i;
     s32 j;
     u32 cmd;
@@ -31,29 +31,29 @@ s32 _ipuVdec(MpegDec *d, s32 tbl) {
     j = 0;
     while ((*IPU_CTRL & 0x80004000) == 0x80000000) {
         if (j++ > 5000) {
-            _dispatchMpegCbNodata(d->cbData);
+            _dispatchMpegCbNodata(decoder->cbData);
             j = 0;
         }
     }
     cmd = (tbl << 26) | 0x30000000;
     *(volatile u32 *)IPU_CMD = cmd;
-    d->unk818 = IpuCommandTable[(s32)cmd >> 28];
+    decoder->unk818 = IpuCommandTable[(s32)cmd >> 28];
     r = *IPU_CMD;
     while (r < 0) {
         if (i++ > 5000) {
-            _dispatchMpegCbNodata(d->cbData);
+            _dispatchMpegCbNodata(decoder->cbData);
             i = 0;
         }
         r = *IPU_CMD;
     }
     bp = *IPU_BP;
     top = *IPU_TOP;
-    d->unk838 = top;
+    decoder->unk838 = top;
     if (top < 0) {
-        d->unk83C = -(bp & 0x1F) & 0x1F;
+        decoder->unk83C = -(bp & 0x1F) & 0x1F;
     } else {
-        d->unk83C = 32;
+        decoder->unk83C = 32;
     }
-    d->unk11C = (s32)r == 0;
+    decoder->unk11C = (s32)r == 0;
     return (s16)r;
 }
