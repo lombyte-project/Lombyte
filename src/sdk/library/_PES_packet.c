@@ -138,17 +138,17 @@ s32 _PES_packet(s32 error_context, struct PES_BS *bs, struct PES_HDR *hdr) {
         }
         {
             s32 n = hdr->unk8 - len;
-            s32 m;
+            s32 payload_bytes_to_skip;
             hdr->unk24 = n - 3;
             hdr->unk20 = (s32)bs->stamp;
             if (hdr->unk0 == ((u64)0xBD00 << 0x18)) {
                 hdr->unk0 |= (u64)(u32)_sysbitGet(bs, 0x20);
-                m = n - 7;
+                payload_bytes_to_skip = n - 7;
             } else {
-                m = n - 3;
+                payload_bytes_to_skip = n - 3;
             }
-            if (m != 0) {
-                _sysbitJump(bs, m);
+            if (payload_bytes_to_skip != 0) {
+                _sysbitJump(bs, payload_bytes_to_skip);
             }
         }
     } else if (hdr->unk0 == ((u64)0xBC00 << 0x18) || hdr->unk0 == ((u64)0xBF00 << 0x18) ||
