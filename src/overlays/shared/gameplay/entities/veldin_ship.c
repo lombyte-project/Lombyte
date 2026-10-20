@@ -3264,8 +3264,8 @@ extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern int f2i_2d6cd0(float) __asm__("FUN_001fa6d0");
 extern void FUN_L00_00272f68(void *, int, int, int, int, int, int, float);
 
-void FUN_L00_002d6cd0(char *o) {
-    P_2d6cd0 *p = *(P_2d6cd0 **)(o + 0x78);
+void FUN_L00_002d6cd0(char *moby) {
+    P_2d6cd0 *vars = *(P_2d6cd0 **)(moby + 0x78);
     union {
         OvlQuad q;
         float f[4];
@@ -3275,34 +3275,34 @@ void FUN_L00_002d6cd0(char *o) {
     int i, col;
     float f;
 
-    if (*(unsigned short *)(o + 0x34) & 1) {
+    if (*(unsigned short *)(moby + 0x34) & 1) {
         return;
     }
-    v.q = *(OvlQuad *)(o + 0x10);
+    v.q = *(OvlQuad *)(moby + 0x10);
     v.f[2] += 0.333000004f;
-    fast_vec_sub(d, camera_position, o + 0x10);
+    fast_vec_sub(d, camera_position, moby + 0x10);
     ff500_2d6cd0(d, d, -0.3f);
     ff500_2d6cd0(e, d, 0.1f);
-    add_vector_xyz(d, d, o + 0x10);
+    add_vector_xyz(d, d, moby + 0x10);
     v.f[2] -= 0.333000004f;
     for (i = 0; i < 4; i++) {
         {
-            float h = p->a[i] + p->b[i];
-            p->a[i] = h;
+            float h = vars->a[i] + vars->b[i];
+            vars->a[i] = h;
             if (255.0f <= h) {
-                p->a[i] = h - 255.0f;
+                vars->a[i] = h - 255.0f;
             } else if (h <= 0.0f) {
-                p->a[i] = h + 255.0f;
+                vars->a[i] = h + 255.0f;
             }
         }
-        if (fast_dec_timer(&p->c[i])) {
-            p->c[i] = scale_game_frames(0xFF);
+        if (fast_dec_timer(&vars->c[i])) {
+            vars->c[i] = scale_game_frames(0xFF);
         }
-        f = i2f_2d6cd0(scale_game_frames(0xFF) - p->c[i]);
+        f = i2f_2d6cd0(scale_game_frames(0xFF) - vars->c[i]);
         f = f / (float)scale_game_frames(0xFF);
         col = fast_tween_color(0x4040FFFF, 0x1040FFFF, fabs_2d6cd0(0.5f - f));
         if (D_15F5C4_2d6cd0 != 2) {
-            FUN_L00_00272f68(d, col, f2i_2d6cd0(p->a[i]) & 0xFF, 0x35, 1, 2, 0, p->d[i]);
+            FUN_L00_00272f68(d, col, f2i_2d6cd0(vars->a[i]) & 0xFF, 0x35, 1, 2, 0, vars->d[i]);
         }
         add_vector_xyz(d, d, e);
     }
