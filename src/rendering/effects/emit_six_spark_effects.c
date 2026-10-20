@@ -19,14 +19,14 @@ extern s32 spawn_spark(void *, void *, void *, s32, s32, s32, s32, s32, s32) __a
 void emit_six_spark_effects(u8 *m, f32 z) __asm__("FUN_0022f5b0");
 
 extern f32 frame_time __asm__("D_0015ED6C") MACRO_ADDR;
-void emit_six_spark_effects(u8 *m, f32 z) {
+void emit_six_spark_effects(u8 *source_object, f32 z) {
     Vec4 vel;
     Vec4 vel2;
     Vec4 pos;
     s32 i;
-    s32 a;
+    s32 frame_count;
     s32 b;
-    s32 c;
+    s32 third_frame_base_count;
 
     for (i = 0; i < 6; i++) {
         vel.f[0] = random_float_between(-frame_time, frame_time);
@@ -36,13 +36,13 @@ void emit_six_spark_effects(u8 *m, f32 z) {
         qcopy(&vel2, &vel);
         vel2.f[3] = 0.6f;
         qcopy(&pos, &D_001D9B60[level_render_state.content_variant][i]);
-        transform_vector_by_basis(&pos, &pos, m + 0xC0);
-        add_vector_xyz(&pos, &pos, m + 0x10);
-        a = scale_game_frames(4);
+        transform_vector_by_basis(&pos, &pos, source_object + 0xC0);
+        add_vector_xyz(&pos, &pos, source_object + 0x10);
+        frame_count = scale_game_frames(4);
         b = scale_game_frames(4);
-        c = scale_game_frames(4);
-        spawn_spark(&pos, &vel, &vel2, 0x24C0C0C0, 0x14C0C0C0, a, b,
-                      c + random_integer_below(scale_game_frames(4)), -1);
+        third_frame_base_count = scale_game_frames(4);
+        spawn_spark(&pos, &vel, &vel2, 0x24C0C0C0, 0x14C0C0C0, frame_count, b,
+                      third_frame_base_count + random_integer_below(scale_game_frames(4)), -1);
     }
 }
 
