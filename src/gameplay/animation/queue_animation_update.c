@@ -26,7 +26,7 @@ extern void apply_pending_animation(struct Anim *) __asm__("func_001FF418");
 s32 queue_animation_update(s32 chan, s32 id, s32 fn, s32 d, s32 e, s32 c,
                            s32 b) __asm__("FUN_001ff308");
 
-s32 queue_animation_update(s32 chan, s32 id, s32 fn, s32 d, s32 e, s32 c, s32 b) {
+s32 queue_animation_update(s32 chan, s32 id, s32 fn, s32 d, s32 e, s32 animation_context, s32 b) {
     s32 slot = chan & 0xF;
     s32 mode = chan & 0xFFF0;
     struct Anim *anim = &hud_chan_slots[slot];
@@ -34,9 +34,9 @@ s32 queue_animation_update(s32 chan, s32 id, s32 fn, s32 d, s32 e, s32 c, s32 b)
     if (game_mode == 5 && slot != 2 && slot != 0) {
         return 0;
     }
-    if (anim->next_c != c || anim->next_b != b || anim->next_id != id || anim->next_mode != mode ||
+    if (anim->next_c != animation_context || anim->next_b != b || anim->next_id != id || anim->next_mode != mode ||
         anim->next_fn != fn || anim->next_d != d || anim->next_e != e) {
-        anim->next_c = c;
+        anim->next_c = animation_context;
         anim->serial = hud_state.serial++;
         anim->next_b = b;
         anim->next_id = id;
