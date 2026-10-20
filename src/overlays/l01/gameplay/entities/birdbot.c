@@ -347,7 +347,7 @@ extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa6
  * nearest node and its two neighbours are scored (distance, or heading change for slow movers) and the best one
  * is written to *idx. Returns nonzero when the pick differs from the nearest node. */
 int FUN_L01_002e6790(void *arg, int *idx) {
-    PathPickMoby *m = arg;
+    PathPickMoby *path_follower_moby = arg;
     PathPickTarget target;
     SplashVec pt;
     PathPickVars *v;
@@ -365,7 +365,7 @@ int FUN_L01_002e6790(void *arg, int *idx) {
     f32 r;
     f32 dist;
 
-    v = m->vars;
+    v = path_follower_moby->vars;
     fast = 0;
     f = &v->follow;
     if (v->w38 != 0 || v->h1E2 != 0) {
@@ -374,7 +374,7 @@ int FUN_L01_002e6790(void *arg, int *idx) {
     r = fast ? v->radius * 2.0f : v->radius;
     prev = 0;
     next = 0;
-    FUN_L01_00274b78(m, &target, r);
+    FUN_L01_00274b78(path_follower_moby, &target, r);
     best_d = 10000.0f;
     best_a = 0.0f;
     best = 0;
@@ -392,7 +392,7 @@ int FUN_L01_002e6790(void *arg, int *idx) {
     last = 0;
     for (i = 0; i < f->path->count; i++) {
         if (v->stops_only == 0 || f->path->pts[i].w == 1.0f) {
-            dist = vector_distance(&f->path->pts[i], &m->pos);
+            dist = vector_distance(&f->path->pts[i], &path_follower_moby->pos);
             if (dist < best_d) {
                 prev = last;
                 best_d = dist;
@@ -426,10 +426,10 @@ int FUN_L01_002e6790(void *arg, int *idx) {
                 }
             } else {
                 qcopy(&pt, &f->path->pts[*idx]);
-                node_target_heading_difference = fast_difference_between_rotations(fast_arc_tan(pt.f[0] - m->pos.f[0], pt.f[1] - m->pos.f[1]),
-                                                      fast_arc_tan(target.pos.f[0] - m->pos.f[0],
-                                                                   target.pos.f[1] - m->pos.f[1]));
-                candidate_node_distance = FUN_001f9b48(&m->pos, &pt);
+                node_target_heading_difference = fast_difference_between_rotations(fast_arc_tan(pt.f[0] - path_follower_moby->pos.f[0], pt.f[1] - path_follower_moby->pos.f[1]),
+                                                      fast_arc_tan(target.pos.f[0] - path_follower_moby->pos.f[0],
+                                                                   target.pos.f[1] - path_follower_moby->pos.f[1]));
+                candidate_node_distance = FUN_001f9b48(&path_follower_moby->pos, &pt);
                 if (v->stops_only == 0 || pt.f[3] == 1.0f) {
                     if (node_target_heading_difference < 1.5707964f) {
                         if (best_a < node_target_heading_difference) {
