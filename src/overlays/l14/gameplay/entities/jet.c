@@ -69,13 +69,13 @@ void FUN_L14_002df458(struct Moby *);
  * - rp is formed as an integer sum so fold keeps `d` as the last operand
  *   (`addu a0, v0, s1`), the way loop.c's giv init would have emitted it. */
 void FUN_L14_002df138(u8 *moby) {
-    f32 *d = *(f32 **)(moby + 0x78);
+    f32 *moby_vars = *(f32 **)(moby + 0x78);
     f32 step;
-    f32 a;
+    f32 ripple_point_index;
     f32 b;
     f32 t;
     f32 u;
-    f32 c;
+    f32 sweep_point_index;
     s32 i;
     s32 j;
     s32 k;
@@ -84,27 +84,27 @@ void FUN_L14_002df138(u8 *moby) {
     f32 sixteen;
     f32 one;
     j = 4;
-    d[0x1E0 / 4] = fast_add_rotations(d[0x1E0 / 4], 0.17453292f);
-    d[0x1E4 / 4] = fast_subtract_rotations(d[0x1E4 / 4], 0.80285144f);
-    d[0x1E8 / 4] = fast_add_rotations(d[0x1E8 / 4], 0.05236f);
+    moby_vars[0x1E0 / 4] = fast_add_rotations(moby_vars[0x1E0 / 4], 0.17453292f);
+    moby_vars[0x1E4 / 4] = fast_subtract_rotations(moby_vars[0x1E4 / 4], 0.80285144f);
+    moby_vars[0x1E8 / 4] = fast_add_rotations(moby_vars[0x1E8 / 4], 0.05236f);
     step = (360.0f / (integer_to_float_l14(10) * 0.5f)) * 0.017453292f;
     for (i = 0; i < 5; i++) {
         t = integer_to_float_l14(i) / integer_to_float_l14(10);
         if (i == 0) {
             b = 0.0f;
         } else {
-            a = (f32)i;
-            b = fast_sin(normalize_angle(d[0x1E0 / 4] + (a * step))) * 0.1f;
+            ripple_point_index = (f32)i;
+            b = fast_sin(normalize_angle(moby_vars[0x1E0 / 4] + (ripple_point_index * step))) * 0.1f;
             b += spread_l14(0.0f, 0.2f);
         }
-        d[(i * 4) + 2] = b;
-        d[(i * 4) + 1] = 0.0f;
-        d[(i * 4) + 0] = (d[0x1F0 / 4] * ((f32)i)) + 1.6f;
-        d[(i * 4) + 3] = 1.0f;
+        moby_vars[(i * 4) + 2] = b;
+        moby_vars[(i * 4) + 1] = 0.0f;
+        moby_vars[(i * 4) + 0] = (moby_vars[0x1F0 / 4] * ((f32)i)) + 1.6f;
+        moby_vars[(i * 4) + 3] = 1.0f;
     }
     k = 5;
-    rp = (f32 *)((j * 16) + (u32)(d + 2));
-    wp = &d[20];
+    rp = (f32 *)((j * 16) + (u32)(moby_vars + 2));
+    wp = &moby_vars[20];
     sixteen = 1.6f;
     one = 1.0f;
     /* Fakematch: the extra loop level rematerialises the 4 and ranks the read
@@ -113,21 +113,21 @@ void FUN_L14_002df138(u8 *moby) {
         for (; k < 10; k++) {
             wp[2] = *rp;
             wp[1] = 0.0f;
-            wp[0] = (d[0x1F0 / 4] * ((f32)k)) + sixteen;
+            wp[0] = (moby_vars[0x1F0 / 4] * ((f32)k)) + sixteen;
             wp[3] = one;
             wp += 4;
             rp -= 4;
         }
     } while (0);
     for (i = 0; i < 19; i++) {
-        c = (f32)i;
-        d[(i * 4) + (0xA8 / 4)] = 0.0f;
-        t = normalize_angle(d[0x1E4 / 4] + (c * 0.99483764f));
-        u = fast_sin(normalize_angle(d[0x1E8 / 4] + (c * 0.20944f))) * 0.75f;
-        d[(i * 4) + (0xA8 / 4)] += (u * fast_sin(t)) + spread_l14(0.0f, 0.2f);
-        d[(i * 4) + (0xA4 / 4)] = fast_cos(t) * 0.5f;
-        d[(i * 4) + (0xA0 / 4)] = c * 0.39f;
-        d[(i * 4) + (0xAC / 4)] = 1.0f;
+        sweep_point_index = (f32)i;
+        moby_vars[(i * 4) + (0xA8 / 4)] = 0.0f;
+        t = normalize_angle(moby_vars[0x1E4 / 4] + (sweep_point_index * 0.99483764f));
+        u = fast_sin(normalize_angle(moby_vars[0x1E8 / 4] + (sweep_point_index * 0.20944f))) * 0.75f;
+        moby_vars[(i * 4) + (0xA8 / 4)] += (u * fast_sin(t)) + spread_l14(0.0f, 0.2f);
+        moby_vars[(i * 4) + (0xA4 / 4)] = fast_cos(t) * 0.5f;
+        moby_vars[(i * 4) + (0xA0 / 4)] = sweep_point_index * 0.39f;
+        moby_vars[(i * 4) + (0xAC / 4)] = 1.0f;
     }
     enqueue_callback_l14(FUN_L14_002df458, moby);
 }
