@@ -3018,7 +3018,7 @@ void crane_update(struct Moby *moby) {
         CRANE_ANIM_TRANSITION_BACK_TO_RANDOM_WAIT = 5,
         CRANE_ANIM_TRANSITION_TO_RESTART_WAIT = 7
     };
-    int *d = (int *)moby->pvars;
+    int *crane_vars = (int *)moby->pvars;
     moby->anim_speed = *(float *)&D_L02_00161C68;
     switch (moby->prev_seq) {
     case CRANE_ANIM_TRANSITION_TO_RANDOM_WAIT:
@@ -3031,14 +3031,14 @@ void crane_update(struct Moby *moby) {
             if (moby->prev_seq != moby->command) {
                 blend_moby_animation(moby, moby->command, 0, 0);
             }
-            idx = d[0];
+            idx = crane_vars[0];
             if (idx != -1) {
-                char *e = D_0013E550 + idx * 0x70;
-                if (*(unsigned char **)(e + 0x88) == moby && ((unsigned char *)e)[0x74] != 0) {
+                char *voice_slot = D_0013E550 + idx * 0x70;
+                if (*(unsigned char **)(voice_slot + 0x88) == moby && ((unsigned char *)voice_slot)[0x74] != 0) {
                     release_voice_slot(idx);
                 }
             }
-            d[0] = -1;
+            crane_vars[0] = -1;
             FUN_0022da68(1, 0, (int)moby);
             moby->command = func_001FA898_r(multiply_global_factor_ed64(random_float_between_alt(180.0f, 240.0f)));
         }
@@ -3049,7 +3049,7 @@ void crane_update(struct Moby *moby) {
                 blend_moby_animation(moby, 1, 0, scale_game_frames(10));
             }
             moby->command = 2;
-            d[0] = FUN_0022da68(0, 4, (int)moby);
+            crane_vars[0] = FUN_0022da68(0, 4, (int)moby);
         }
         break;
     case CRANE_ANIM_WAIT_FOR_RANDOM_TRANSITION:
@@ -3065,7 +3065,7 @@ void crane_update(struct Moby *moby) {
                 }
                 moby->command = 0;
             }
-            d[0] = FUN_0022da68(0, 4, (int)moby);
+            crane_vars[0] = FUN_0022da68(0, 4, (int)moby);
         }
         break;
     case CRANE_ANIM_WAIT_FOR_TRANSITION_TO_RANDOM_WAIT:
@@ -3074,7 +3074,7 @@ void crane_update(struct Moby *moby) {
                 blend_moby_animation(moby, 5, 0, scale_game_frames(10));
             }
             moby->command = 2;
-            d[0] = FUN_0022da68(0, 4, (int)moby);
+            crane_vars[0] = FUN_0022da68(0, 4, (int)moby);
         }
         break;
     }
