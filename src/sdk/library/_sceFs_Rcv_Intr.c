@@ -52,7 +52,7 @@ void _sceFs_Rcv_Intr(s32 *arg) {
         FS_COMPLETION_COPY_DIRENT = 11,
         FS_COMPLETION_COPY_STAT = 12
     };
-    FsRcvHead h;
+    FsRcvHead completion_header;
     FsRcvHead *src;
     FsRcvBuf *bs;
     union {
@@ -62,12 +62,12 @@ void _sceFs_Rcv_Intr(s32 *arg) {
     FsRcvRead *r;
     u8 *pkt;
     u8 *base;
-    u8 *d;
+    u8 *read_destination;
     u32 *bank = D_0012FC90;
     s32 idx;
     s32 i;
     s64 ret;
-    u32 n;
+    u32 copy_byte_count;
     u32 addr;
 
     idx = D_0012FC98[0] != 0 ? arg[3] : 0;
@@ -77,26 +77,26 @@ void _sceFs_Rcv_Intr(s32 *arg) {
     addr += (u32)idx * 0x440;
     pkt = (u8 *)(addr | 0x20000000);
     src = (FsRcvHead *)pkt;
-    h.ret = src->ret;
-    h.func = src->func;
-    h.dest = src->dest;
-    h.size = src->size;
-    if (h.ret.v >= 0) {
-        memcpy((void *)h.dest.v, pkt + 0x10, h.size.v);
+    completion_header.ret = src->ret;
+    completion_header.func = src->func;
+    completion_header.dest = src->dest;
+    completion_header.size = src->size;
+    if (completion_header.ret.v >= 0) {
+        memcpy((void *)completion_header.dest.v, pkt + 0x10, completion_header.size.v);
     }
-    switch (h.func.v) {
+    switch (completion_header.func.v) {
     case FS_COMPLETION_COPY_READ_BUFFERS:
         r = (FsRcvRead *)(pkt + 0x14);
         if (r->n1 > 0) {
-            d = r->d1;
+            read_destination = r->d1;
             for (i = 0; i < r->n1; i++) {
-                d[i] = r->buf1[i];
+                read_destination[i] = r->buf1[i];
             }
         }
         if (r->n2 > 0) {
-            d = r->d2;
+            read_destination = r->d2;
             for (i = 0; i < r->n2; i++) {
-                d[i] = r->buf2[i];
+                read_destination[i] = r->buf2[i];
             }
         }
         break;
@@ -114,18 +114,18 @@ void _sceFs_Rcv_Intr(s32 *arg) {
         bs = (FsRcvBuf *)(pkt + 0x14);
         u.b.dest = bs->dest;
         u.b.size = bs->size;
-        n = u.b.size.v;
-        if (n > 0x400) {
+        copy_byte_count = u.b.size.v;
+        if (copy_byte_count > 0x400) {
             u.b.size.v = 0x400;
-            n = 0x400;
+            copy_byte_count = 0x400;
         }
-        memcpy((void *)u.b.dest.v, pkt + 0x1C, n);
+        memcpy((void *)u.b.dest.v, pkt + 0x1C, copy_byte_count);
         break;
     }
-    if (h.ret.v < 0) {
-        u32 semaphore = 0u - (u32)h.ret.v;
+    if (completion_header.ret.v < 0) {
+        u32 semaphore = 0u - (u32)completion_header.ret.v;
         ret = (s32)semaphore;
-        h.ret.v = (s32)semaphore;
+        completion_header.ret.v = (s32)semaphore;
         for (i = 0; i < 32; i++) {
             if (D_0012FC10[i] == ret) {
                 /* volatile keeps the store ahead of the branch, out of its delay slot */
@@ -135,5 +135,5 @@ void _sceFs_Rcv_Intr(s32 *arg) {
         }
         return;
     }
-    iSignalSema(h.ret.v);
+    iSignalSema(completion_header.ret.v);
 }
