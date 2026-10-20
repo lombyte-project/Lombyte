@@ -2514,9 +2514,9 @@ void FUN_L00_0026ee48(unsigned char *particle) {
     if (b->f18 < 0.0f)
         b->f18 = 0.0f;
     {
-        int c = FUN_L00_0025bfe0_26ee48(b->f10, b->f14, b->f18, b->f4);
+        int packed_color = FUN_L00_0025bfe0_26ee48(b->f10, b->f14, b->f18, b->f4);
         float phase_increment = D_0015ED60_26ee48 * 0.0011f;
-        *(int *)(particle + 4) = c;
+        *(int *)(particle + 4) = packed_color;
         b->fC += phase_increment;
     }
     if (1.0f < b->fC)
