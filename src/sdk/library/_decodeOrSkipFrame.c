@@ -7,35 +7,35 @@ extern s32 _updateRefImage(struct MpegDecoder *a0, s32 a1);
 s32 _decodeOrSkipFrame(struct sceMpeg *decoder, s32 skip_comparison_value, s32 skip_threshold) {
     s32 ret;
     s32 flag;
-    s32 t;
-    struct MpegDecoder *tmp;
+    s32 decode_succeeded;
+    struct MpegDecoder *mpeg_decoder;
     flag = 0;
-    tmp = decoder->sys;
+    mpeg_decoder = decoder->sys;
     if ((skip_threshold == -1) || (skip_comparison_value < skip_threshold)) {
-        if (tmp->unk8 == 0) {
+        if (mpeg_decoder->unk8 == 0) {
             decoder->frameCount = 0;
-            tmp->unk8 = 1;
+            mpeg_decoder->unk8 = 1;
         }
-        if (_updateRefImage(tmp, 0) == 0) {
-            t = 0;
+        if (_updateRefImage(mpeg_decoder, 0) == 0) {
+            decode_succeeded = 0;
         } else {
-            t = 0;
-            t = _decPicture(tmp) != t;
+            decode_succeeded = 0;
+            decode_succeeded = _decPicture(mpeg_decoder) != decode_succeeded;
         }
-        ret = t;
+        ret = decode_succeeded;
     } else {
         flag = 1;
-        ret = _updateRefImage(tmp, 0);
+        ret = _updateRefImage(mpeg_decoder, 0);
         _dispatchMpegCbNodata(decoder);
     }
-    _outputFrame(tmp, tmp->frame_count, tmp->unk4);
-    if ((tmp->picture_structure != 3) && (flag == 0)) {
-        tmp->second_field = (s32)(tmp->second_field == 0);
+    _outputFrame(mpeg_decoder, mpeg_decoder->frame_count, mpeg_decoder->unk4);
+    if ((mpeg_decoder->picture_structure != 3) && (flag == 0)) {
+        mpeg_decoder->second_field = (s32)(mpeg_decoder->second_field == 0);
     }
-    decoder->frameCount = (s32)(tmp->frame_count - tmp->frame_base);
-    if (tmp->second_field == 0) {
-        tmp->frame_count = (s32)(tmp->frame_count + 1);
-        tmp->unk4 = (s32)(tmp->unk4 + 1);
+    decoder->frameCount = (s32)(mpeg_decoder->frame_count - mpeg_decoder->frame_base);
+    if (mpeg_decoder->second_field == 0) {
+        mpeg_decoder->frame_count = (s32)(mpeg_decoder->frame_count + 1);
+        mpeg_decoder->unk4 = (s32)(mpeg_decoder->unk4 + 1);
     }
     return ret;
 }
