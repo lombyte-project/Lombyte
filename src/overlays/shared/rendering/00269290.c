@@ -1475,7 +1475,7 @@ extern void *FUN_L00_002678b8_c(int) __asm__("FUN_L00_002678b8");
 
 extern unsigned char *D_L00_001B20D4 __attribute__((section(".data")));
 char *FUN_L00_0026cbb0(void *pos, void *dir, int c, int d, int n, int k, float f);
-char *FUN_L00_0026cbb0(void *pos, void *dir, int initial_color, int final_color, int lifetime, int k, float f) {
+char *FUN_L00_0026cbb0(void *pos, void *dir, int initial_color, int final_color, int lifetime, int k, float initial_particle_scalar) {
     char *particle;
     char *particle_data;
     int v;
@@ -1487,7 +1487,7 @@ char *FUN_L00_0026cbb0(void *pos, void *dir, int initial_color, int final_color,
         *(int *)(particle + 4) = initial_color;
         v = truncate_float_to_s32(4.0f) - 0x60;
         particle[1] = 0;
-        *(float *)(particle + 0xC) = f;
+        *(float *)(particle + 0xC) = initial_particle_scalar;
         particle[3] = 0x48;
         particle[9] = v;
         particle[8] = rand();
@@ -1495,7 +1495,7 @@ char *FUN_L00_0026cbb0(void *pos, void *dir, int initial_color, int final_color,
         particle[2] = *D_L00_001B20D4;
         *(short *)(particle + 0xA) = lifetime;
         *(short *)(particle_data + 0x18) = lifetime;
-        *(float *)(particle_data + 0x1C) = f;
+        *(float *)(particle_data + 0x1C) = initial_particle_scalar;
         *(int *)(particle_data + 0x10) = initial_color;
         *(int *)(particle_data + 0x14) = final_color;
         *(short *)(particle_data + 0x1A) = k;
