@@ -894,7 +894,7 @@ s32 FUN_L00_0020d498_0020e360(s32) __asm__("FUN_L00_0020d498");
 u8 *FUN_L00_0024f028_0020e360(u8 *, s32) __asm__("FUN_L00_0024f028");
 s32 FUN_001f96f8_0020e360(s32) __asm__("FUN_001f96f8");
 void FUN_L00_0024f3e0_0020e360(u8 *, u8 *, s32, s32, s32, s32) __asm__("FUN_L00_0024f3e0");
-void FUN_L00_0020e360(s32 a, s32 b) {
+void FUN_L00_0020e360(s32 suppress_slot_animation_creation, s32 b) {
     s32 item_id_or_animation_id, i;
     u8 *slot_animation_object;
     if (hero.vehicle_mode)
@@ -903,7 +903,7 @@ void FUN_L00_0020e360(s32 a, s32 b) {
         return;
     if (!hero.unk20AA)
         return;
-    if (a)
+    if (suppress_slot_animation_creation)
         return;
     if (!b)
         return;
