@@ -7,15 +7,15 @@ extern void vu1_add_g_sregister(s32, u64) __asm__("func_00233980");
 void reset_gs_registers(void) __asm__("FUN_001f3868");
 
 void reset_gs_registers(void) {
-    struct DmaTag *p;
+    struct DmaTag *initial_packet_tag;
 
     render_packet_cursor.tag->tag = 0x30000013;
     render_packet_cursor.tag->addr = (u32)reset_gs_regs_fixed;
     render_packet_cursor.tag->vif0 = 0;
     render_packet_cursor.tag->vif1 = 0x50000013;
-    p = render_packet_cursor.tag;
-    render_packet_cursor.tag = p + 1;
-    p[1].tag = 0x3000000B;
+    initial_packet_tag = render_packet_cursor.tag;
+    render_packet_cursor.tag = initial_packet_tag + 1;
+    initial_packet_tag[1].tag = 0x3000000B;
     render_packet_cursor.tag->addr = (u32)&draw_environment;
     render_packet_cursor.tag->vif0 = 0;
     render_packet_cursor.tag->vif1 = 0x5000000B;
