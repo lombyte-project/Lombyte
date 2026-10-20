@@ -2035,7 +2035,7 @@ void FUN_L11_00311d50(struct Moby *moby) {
     s32 rx;
     s32 ry;
     s64 tex;
-    f32 t;
+    f32 remaining_lock_fade_fraction;
     f32 grow;
     f32 fade;
     u8 alpha;
@@ -2060,10 +2060,10 @@ void FUN_L11_00311d50(struct Moby *moby) {
     if (list != NULL) {
         do {
             /* D_L11_0015FFD8 holds the address of the level's moby array */
-            struct Moby *m = (struct Moby *)(((*list & 0x7FFF) << 8) + D_L11_0015FFD8);
+            struct Moby *listed_moby = (struct Moby *)(((*list & 0x7FFF) << 8) + D_L11_0015FFD8);
 
-            if (m->state < 0x80) {
-                s32 count = FUN_L11_00318050((char *)m, found);
+            if (listed_moby->state < 0x80) {
+                s32 count = FUN_L11_00318050((char *)listed_moby, found);
 
                 for (i = 0; i < count; i++) {
                     FUN_L11_00311710((char *)D_L11_001677D0, (char *)(D_L11_001677D0 - 4), found[i], 0,
@@ -2105,9 +2105,9 @@ void FUN_L11_00311d50(struct Moby *moby) {
     if (vars->target != NULL) {
         FUN_L11_00311210(&vars->target->pos, &sx, &sy, 0);
         if (vars->lock_timer > lock_hold_frames) {
-            t = convert_integer_to_float(vars->lock_timer - lock_hold_frames) / convert_integer_to_float(lock_fade_frames);
-            fade = 2.0f * (1.0f - t);
-            grow = t * 5.0f + 1.0f;
+            remaining_lock_fade_fraction = convert_integer_to_float(vars->lock_timer - lock_hold_frames) / convert_integer_to_float(lock_fade_frames);
+            fade = 2.0f * (1.0f - remaining_lock_fade_fraction);
+            grow = remaining_lock_fade_fraction * 5.0f + 1.0f;
             if (fade > 1.0f) {
                 fade = 1.0f;
             }
