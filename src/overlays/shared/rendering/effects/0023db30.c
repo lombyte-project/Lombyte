@@ -175,15 +175,15 @@ extern unsigned char *FUN_L00_00272060(float *, int, float, float, float, int, i
                                   void *);
 extern int rf_23e008(float) __asm__("FUN_001fa6d0");
 
-void FUN_L00_0023e008(void *p) {
+void FUN_L00_0023e008(void *moby) {
     OvlQuad dir[1];
     OvlQuad old[1];
     float pos[4] __attribute__((aligned(16)));
     int i;
     unsigned char *r;
-    getpos_23e008(p, 0, pos);
+    getpos_23e008(moby, 0, pos);
     for (i = 3; i >= 0; i--) {
-        float s = rndf_23e008(0.15f, 0.5f);
+        float particle_size_scale = rndf_23e008(0.15f, 0.5f);
         int k = rndi_23e008(2);
         float a, b;
         if (k == 0)
@@ -195,11 +195,11 @@ void FUN_L00_0023e008(void *p) {
         pos[0] += rnd_23e008(0.0f, 0.15f);
         pos[1] += rnd_23e008(0.0f, 0.15f);
         pos[2] += rnd_23e008(0.0f, 0.15f);
-        r = FUN_L00_00272060(pos, fr_23e008(0x3C), s * 0.1f, s, 0.009f, 0x7F7F2020, 0, k, dir);
+        r = FUN_L00_00272060(pos, fr_23e008(0x3C), particle_size_scale * 0.1f, particle_size_scale, 0.009f, 0x7F7F2020, 0, k, dir);
         if (r)
             r[9] = rf_23e008(4.0f) + 0x70;
         k = -k;
-        r = FUN_L00_00272060(pos, fr_23e008(0x3C), s * 0.07f, s * 0.7f, 0.009f, 0x7F7F7F7F, 1, k, dir);
+        r = FUN_L00_00272060(pos, fr_23e008(0x3C), particle_size_scale * 0.07f, particle_size_scale * 0.7f, 0.009f, 0x7F7F7F7F, 1, k, dir);
         if (r)
             r[9] = rf_23e008(4.0f) + 0x70;
     }
