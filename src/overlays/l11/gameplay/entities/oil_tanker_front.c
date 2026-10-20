@@ -1963,8 +1963,8 @@ extern void FUN_L08_002f0c18(int);
 extern void font_queue_vu_state(void) __asm__("FUN_001f76a0");
 extern void vu1_add_g_sregister(int, long) __asm__("FUN_00233980");
 
-void FUN_L11_0031e930(struct Moby *m) {
-    int *d = (int *)m->pvars;
+void FUN_L11_0031e930(struct Moby *moby) {
+    int *moby_vars = (int *)moby->pvars;
     int flag = 0;
     char *cam;
     vu1_add_g_sregister(0x42, 0x8000000044L);
@@ -1973,9 +1973,9 @@ void FUN_L11_0031e930(struct Moby *m) {
     vu1_add_g_sregister(0x47, 0x513F1L);
     font_queue_vu_state();
     cam = D_L11_00167680;
-    if (*(float *)(cam + 0x148) > 255.0f || is_point_inside_clip_volume(cam + 0x140, d[0]) ||
-        is_point_inside_clip_volume(cam + 0x140, d[1]) ||
-        is_point_inside_clip_volume(cam + 0x140, d[2])) {
+    if (*(float *)(cam + 0x148) > 255.0f || is_point_inside_clip_volume(cam + 0x140, moby_vars[0]) ||
+        is_point_inside_clip_volume(cam + 0x140, moby_vars[1]) ||
+        is_point_inside_clip_volume(cam + 0x140, moby_vars[2])) {
         flag = 1;
     }
     if (flag) {
