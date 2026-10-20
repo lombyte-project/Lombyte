@@ -1009,13 +1009,13 @@ extern void scale_vector_xyz(void *, void *, float);
 extern void subtract_vector_xyz(void *, void *, void *);
 extern void vu1_add_g_sregister(int, long) __asm__("FUN_00233980");
 
-void FUN_L00_002bbbc8(void *mv, int a, int b, int n, float sx, float sy, float sz) {
-    char *m = mv;
+void FUN_L00_002bbbc8(void *mv, int a, int b, int point_count, float sx, float sy, float sz) {
+    char *point_bytes = mv;
     RW q[4];
     RT t;
     RW q2[4];
     RT u;
-    RW w120, w130, w140, w150, r160, r170, segment_start_camera_offset, b190, s1A0, s1B0;
+    RW w120, w130, w140, w150, adjusted_segment_start, adjusted_segment_end, segment_start_camera_offset, b190, s1A0, s1B0;
     int i, col0, col1;
     float len, len0, l0, l1;
     t.q0 = get_effect_texture(*(int *)&D_L00_001616B0);
@@ -1052,29 +1052,29 @@ void FUN_L00_002bbbc8(void *mv, int a, int b, int n, float sx, float sy, float s
     t.f[5] = 0;
     t.f[6] = 1.0f;
     t.f[7] = 1.0f;
-    subtract_vector_xyz(w140, m, D_L00_00166DC0);
-    subtract_vector_xyz(w150, m + 0x10, m);
+    subtract_vector_xyz(w140, point_bytes, D_L00_00166DC0);
+    subtract_vector_xyz(w150, point_bytes + 0x10, point_bytes);
     cross_vectors_xyz(w120, w150, w140);
     len0 = vector_length_xyz(w120);
     if (len0 != 0)
         len0 = 1.0f / len0;
     scale_vector_xyz(w120, w120, sx * len0);
-    add_vector_xyz(q[0], m, w120);
-    subtract_vector_xyz(q[1], m, w120);
-    for (i = 1; i < n - 1; i++) {
-        subtract_vector_xyz(w140, m + i * 16, D_L00_00166DC0);
-        subtract_vector_xyz(w150, m + i * 16 + 16, m + i * 16);
+    add_vector_xyz(q[0], point_bytes, w120);
+    subtract_vector_xyz(q[1], point_bytes, w120);
+    for (i = 1; i < point_count - 1; i++) {
+        subtract_vector_xyz(w140, point_bytes + i * 16, D_L00_00166DC0);
+        subtract_vector_xyz(w150, point_bytes + i * 16 + 16, point_bytes + i * 16);
         cross_vectors_xyz(w120, w150, w140);
         len = vector_length_xyz(w120);
         if (len != 0)
             len = 1.0f / len;
         scale_vector_xyz(w120, w120, sx * len);
-        add_vector_xyz(q[2], m + i * 16, w120);
-        subtract_vector_xyz(q[3], m + i * 16, w120);
+        add_vector_xyz(q[2], point_bytes + i * 16, w120);
+        subtract_vector_xyz(q[3], point_bytes + i * 16, w120);
         if (i == 1) {
             t.c[1] = *(int *)&D_L00_00161680;
             t.c[0] = *(int *)&D_L00_00161680;
-        } else if (i == n - 2) {
+        } else if (i == point_count - 2) {
             t.c[3] = *(int *)&D_L00_00161680;
             t.c[2] = *(int *)&D_L00_00161680;
         } else if (i == 2) {
@@ -1085,9 +1085,9 @@ void FUN_L00_002bbbc8(void *mv, int a, int b, int n, float sx, float sy, float s
         qcopy(q[0], q[2]);
         qcopy(q[1], q[3]);
     }
-    for (i = 0; i < n - 1; i++) {
-        subtract_vector_xyz(segment_start_camera_offset, m + i * 16, D_L00_00166DC0);
-        subtract_vector_xyz(b190, m + i * 16 + 16, D_L00_00166DC0);
+    for (i = 0; i < point_count - 1; i++) {
+        subtract_vector_xyz(segment_start_camera_offset, point_bytes + i * 16, D_L00_00166DC0);
+        subtract_vector_xyz(b190, point_bytes + i * 16 + 16, D_L00_00166DC0);
         l0 = vector_length_xyz(segment_start_camera_offset);
         l1 = vector_length_xyz(b190);
         if (l1 < l0) {
@@ -1101,26 +1101,26 @@ void FUN_L00_002bbbc8(void *mv, int a, int b, int n, float sx, float sy, float s
             else
                 scale_vector_xyz(segment_start_camera_offset, segment_start_camera_offset, l1 / l0);
         }
-        add_vector_xyz(r160, D_L00_00166DC0, segment_start_camera_offset);
-        add_vector_xyz(r170, D_L00_00166DC0, b190);
-        subtract_vector_xyz(w150, r170, r160);
+        add_vector_xyz(adjusted_segment_start, D_L00_00166DC0, segment_start_camera_offset);
+        add_vector_xyz(adjusted_segment_end, D_L00_00166DC0, b190);
+        subtract_vector_xyz(w150, adjusted_segment_end, adjusted_segment_start);
         scale_vector_xyz(s1B0, w150, sz);
-        subtract_vector_xyz(r160, r160, s1B0);
-        add_vector_xyz(r170, r170, s1B0);
-        subtract_vector_xyz(s1A0, D_L00_00166DC0, r160);
+        subtract_vector_xyz(adjusted_segment_start, adjusted_segment_start, s1B0);
+        add_vector_xyz(adjusted_segment_end, adjusted_segment_end, s1B0);
+        subtract_vector_xyz(s1A0, D_L00_00166DC0, adjusted_segment_start);
         cross_vectors_xyz(w120, s1A0, w150);
         len = vector_length_xyz(w120);
         if (len != 0)
             len = 1.0f / len;
         scale_vector_xyz(w130, w120, sy * len);
-        add_vector_xyz(q2[0], r160, w130);
-        subtract_vector_xyz(q2[1], r160, w130);
-        add_vector_xyz(q2[2], r170, w130);
-        subtract_vector_xyz(q2[3], r170, w130);
+        add_vector_xyz(q2[0], adjusted_segment_start, w130);
+        subtract_vector_xyz(q2[1], adjusted_segment_start, w130);
+        add_vector_xyz(q2[2], adjusted_segment_end, w130);
+        subtract_vector_xyz(q2[3], adjusted_segment_end, w130);
         if (i == 0) {
             u.c[1] = *(int *)&D_L00_00161684;
             u.c[0] = *(int *)&D_L00_00161684;
-        } else if (i == n - 2) {
+        } else if (i == point_count - 2) {
             u.c[3] = *(int *)&D_L00_00161684;
             u.c[2] = *(int *)&D_L00_00161684;
         } else if (i == 1) {
