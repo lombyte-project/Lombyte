@@ -165,7 +165,7 @@ void follow_camera_pull_back(char *camera_object, float *x, float *y) {
     C_2e9518 *C = &D_166E10_2e9518;
     char *v = *(char **)(camera_object + 0x70);
     S_2e9518 *pull_back_state = (S_2e9518 *)(v + 0x220);
-    char *t = v + 0x130;
+    char *reference_orbit_state = v + 0x130;
     float k, pull_back_target, interpolated_pull_back_value;
 
     if (pull_back_state->h6 == 0) {
@@ -179,7 +179,7 @@ void follow_camera_pull_back(char *camera_object, float *x, float *y) {
             if (1.0f < k)
                 k = 1.0f;
             pull_back_target = D_001413F4_2e9518 == 1 ? 4.0f : pull_back_state->fC;
-            interpolated_pull_back_value = *(float *)(t + 0x58) + (pull_back_target - *(float *)(t + 0x58)) * k;
+            interpolated_pull_back_value = *(float *)(reference_orbit_state + 0x58) + (pull_back_target - *(float *)(reference_orbit_state + 0x58)) * k;
             if (pull_back_state->f8 < interpolated_pull_back_value)
                 pull_back_state->f8 = interpolated_pull_back_value;
             pitch_s(0, pull_back_state->f8, 0.003f);
@@ -190,7 +190,7 @@ void follow_camera_pull_back(char *camera_object, float *x, float *y) {
     }
     if (pull_back_state->h4 != 0) {
         pull_back_state->h4 = 0;
-        pull_back_state->f8 = *(float *)(t + 0x58);
+        pull_back_state->f8 = *(float *)(reference_orbit_state + 0x58);
     }
     *x = D_L00_00161CEC;
     *y = D_L00_00161CF0;
