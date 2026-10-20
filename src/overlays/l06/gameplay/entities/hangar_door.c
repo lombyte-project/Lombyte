@@ -727,7 +727,7 @@ extern float spark_spread __asm__("D_L06_00161D20") __attribute__((sda));
 extern float spark_dir __asm__("D_L06_00161CF4") __attribute__((sda));
 extern float spark_vel __asm__("D_L06_00161CF8") __attribute__((sda));
 extern float spark_drift __asm__("D_L06_00161D18") __attribute__((sda));
-void FUN_L06_002f3d70(char *m) {
+void FUN_L06_002f3d70(char *vent_moby) {
     Vec4 mat[4];
     Vec4 at;
     Vec4 dir;
@@ -735,11 +735,11 @@ void FUN_L06_002f3d70(char *m) {
     Vec4 offset;
     Vec4 vel;
     Vec4 sphere;
-    Vec4 *pos = (Vec4 *)(m + 0x10);
+    Vec4 *pos = (Vec4 *)(vent_moby + 0x10);
     int life;
     int fade;
     int frames;
-    int t;
+    int sampled_frame_count;
 
     qcopy(&sphere, pos);
     sphere.f[3] = 4.0f;
@@ -751,7 +751,7 @@ void FUN_L06_002f3d70(char *m) {
         return;
     }
     qcopy(&at, pos);
-    rotation_matrix(mat, m + 0x40);
+    rotation_matrix(mat, vent_moby + 0x40);
     clear_u64_value(&dir);
     dir.f[0] = spark_speed_gp * frame_time;
     transform_vector(&dir, &dir, mat);
@@ -762,10 +762,10 @@ void FUN_L06_002f3d70(char *m) {
 
     life = truncate_float_to_s32(scale_time(random_float_between(spark_life_min, spark_life_max)));
     fade = truncate_float_to_s32(scale_time(random_float_between(spark_fade_min, spark_fade_max)));
-    t = truncate_float_to_s32(scale_time(random_float_between(spark_life_min, spark_life_max)));
-    if (life < t) life = t;
-    t = truncate_float_to_s32(scale_time(random_float_between(spark_fade_min, spark_life_max)));
-    if (fade < t) fade = t;
+    sampled_frame_count = truncate_float_to_s32(scale_time(random_float_between(spark_life_min, spark_life_max)));
+    if (life < sampled_frame_count) life = sampled_frame_count;
+    sampled_frame_count = truncate_float_to_s32(scale_time(random_float_between(spark_fade_min, spark_life_max)));
+    if (fade < sampled_frame_count) fade = sampled_frame_count;
     frames = truncate_float_to_s32(scale_game_frames(spark_frames));
 
     scale_vector_xyz(&offset, &dir, random_float_between(0.0f, 1.0f));
